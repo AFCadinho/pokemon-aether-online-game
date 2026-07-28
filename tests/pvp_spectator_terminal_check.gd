@@ -23,9 +23,18 @@ func _init() -> void:
 	)
 	_check(
 		battle_source.contains("func _finish_spectator_terminal_message(message: Dictionary) -> void:") \
+			and battle_source.contains('str(message.get("winnerSide", ""))') \
+			and battle_source.contains('str(message.get("loserSide", ""))') \
+			and battle_source.contains('finish_result["winner"] = winner_side') \
 			and battle_source.contains('"skipPartyBattleSync": true') \
 			and battle_source.contains('"localPartyDefeated": false'),
-		"spectator terminal handling finishes locally without participant persistence"
+		"spectator terminal handling preserves the public winner without participant persistence"
+	)
+	_check(
+		battle_source.contains("if allows_gameplay_persistence or _is_spectator_battle():") \
+			and battle_source.contains('current_action_panel.set_message(message)') \
+			and battle_source.contains('battle_result_title.text = "%s Wins" % winner_name if winner_name != "" else "Battle Over"'),
+		"spectator winner appears in the battle log, battle text, and result screen"
 	)
 	_check(
 		battle_source.contains("if battle_finished:") \

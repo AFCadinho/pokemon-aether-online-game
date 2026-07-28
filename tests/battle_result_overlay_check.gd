@@ -20,6 +20,7 @@ func _init() -> void:
 	_check(source.contains("func _on_battle_result_continue_pressed() -> void:"), "Continue closes the result screen")
 	_check(source.contains("battle_result_title.text = \"Victory\""), "result screen supports a local victory")
 	_check(source.contains("battle_result_title.text = \"Defeat\""), "result screen supports a local defeat")
+	_check(source.contains('battle_result_title.text = "%s Wins" % winner_name if winner_name != "" else "Battle Over"'), "spectator result title names the public winner")
 	_check(source.contains("PvpBattleRealtimeService.is_local_terminal_winner("), "result screen resolves both winner sides and Showdown display names")
 	quit(1 if failed else 0)
 

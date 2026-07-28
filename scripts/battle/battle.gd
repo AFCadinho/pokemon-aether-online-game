@@ -3195,7 +3195,7 @@ func _finish_battle(result: Dictionary) -> void:
 	pvp_pending_render_ack_completion.clear()
 	var allows_gameplay_persistence := PvpBattleRealtimeService.allows_gameplay_persistence_for_terminal(result)
 	_warn_if_pvp_finish_has_pending_render_work(result)
-	if allows_gameplay_persistence:
+	if allows_gameplay_persistence or _is_spectator_battle():
 		_add_pvp_victory_message_if_needed(result)
 	battle_finished = true
 	_sync_party_rail_interaction()
@@ -3240,6 +3240,8 @@ func _show_pvp_battle_result(result: Dictionary) -> void:
 
 	var is_no_contest := bool(result.get("noContest", false))
 	var winner_identity := PvpBattleRealtimeService.normalize_terminal_winner(result.get("winner", battle_state.get_winner()))
+	var winner_name := _resolve_pvp_winner_name(result)
+	var loser_name := _resolve_pvp_loser_name(result, winner_name)
 	var local_state_player_id := _get_local_state_player_id()
 	var local_won := PvpBattleRealtimeService.is_local_terminal_winner(
 		winner_identity,
@@ -3250,7 +3252,7 @@ func _show_pvp_battle_result(result: Dictionary) -> void:
 		battle_result_title.text = "No Contest"
 		battle_result_title.modulate = Color("f5df9a")
 	elif _is_spectator_battle():
-		battle_result_title.text = "Battle Over"
+		battle_result_title.text = "%s Wins" % winner_name if winner_name != "" else "Battle Over"
 		battle_result_title.modulate = Color("f5df9a")
 	elif local_won:
 		battle_result_title.text = "Victory"
@@ -3259,8 +3261,6 @@ func _show_pvp_battle_result(result: Dictionary) -> void:
 		battle_result_title.text = "Defeat"
 		battle_result_title.modulate = Color("ff7a7a")
 
-	var winner_name := _resolve_pvp_winner_name(result)
-	var loser_name := _resolve_pvp_loser_name(result, winner_name)
 	if is_no_contest:
 		battle_result_summary.text = "The battle ended without a winner."
 	elif winner_name != "" and loser_name != "":
@@ -3385,7 +3385,9 @@ func _add_pvp_victory_message_if_needed(result: Dictionary) -> void:
 
 	var message := "🏆 %s won the battle!" % winner_name
 	_add_battle_log_message(message)
-	_add_pvp_victory_system_chat_message(_format_pvp_victory_system_chat_message(result, winner_name))
+	current_action_panel.set_message(message)
+	if not _is_spectator_battle():
+		_add_pvp_victory_system_chat_message(_format_pvp_victory_system_chat_message(result, winner_name))
 	pvp_victory_message_added = true
 
 func _add_pvp_victory_system_chat_message(message: String) -> void:
@@ -10902,12 +10904,19 @@ func _finish_spectator_terminal_message(message: Dictionary) -> void:
 	)).strip_edges().to_lower()
 	if end_reason == "":
 		end_reason = "forfeit" if message_type == "pvp.forfeit" else "ended"
-	_finish_battle({
+	var winner_side := _get_pvp_state_player_id_for_raw_player_id(str(message.get("winnerSide", "")))
+	var loser_side := _get_pvp_state_player_id_for_raw_player_id(str(message.get("loserSide", "")))
+	var finish_result := {
 		"reason": end_reason,
 		"terminalSource": message_type,
 		"localPartyDefeated": false,
 		"skipPartyBattleSync": true,
-	})
+	}
+	if winner_side != "":
+		finish_result["winner"] = winner_side
+	if loser_side != "":
+		finish_result["forfeitingPlayerId"] = loser_side
+	_finish_battle(finish_result)
 
 
 func _finish_pvp_infrastructure_no_contest(message: Dictionary) -> void:
