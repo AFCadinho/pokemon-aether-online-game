@@ -9,6 +9,7 @@
 
 **Changed**
 
+- Moved Guild emblems into Trainer name cards, where they render as compact icons to the left of the name without increasing the card height.
 - Redesigned private battle rooms with separate Create, Join, and Spectate flows, clearer waiting status, room-code sharing, an option to allow spectators, and a way for the host to cancel an open room.
 - Simplified the battle action area by removing retired Fight and Party image buttons and keeping the current contextual controls visible.
 

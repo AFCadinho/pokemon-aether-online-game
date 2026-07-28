@@ -7,6 +7,7 @@ signal interaction_requested(player_state: Dictionary, world_position: Vector2)
 const PLAYER_SCENE: PackedScene = preload("res://scenes/player.tscn")
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 const GuildEmblemTexture := preload("res://scripts/ui/guild_emblem_texture.gd")
+const NameplateLayout := preload("res://scripts/ui/nameplate_layout.gd")
 const MapChatBubbleScript := preload("res://scripts/world/map_chat_bubble.gd")
 const TILE_SIZE := 32
 const TILE_MOVE_DURATION := 0.22
@@ -35,10 +36,7 @@ const ROLE_BADGE_TEXT_HEIGHT := 13.0
 const ROLE_BADGE_DEFAULT_WIDTH := 30.0
 const NAMEPLATE_MIN_NAME_WIDTH := 44.0
 const NAMEPLATE_MAX_NAME_WIDTH := 132.0
-const GUILD_EMBLEM_DISPLAY_SIZE := 24.0
-const NAMEPLATE_NAME_HEIGHT := 22.0
 const NAMEPLATE_LAYER_GAP := 2.0
-const NAMEPLATE_STACK_BOTTOM := 63.0
 const BODY_SPRITE_NAME := "BodySprite"
 const UNEQUIPPED_APPEARANCE_PART_META := "unequipped_appearance_part"
 const ACTIVITY_BASE_SPRITE_OFFSET_META := "activity_base_sprite_offset"
@@ -718,17 +716,26 @@ func _sync_nameplate_layout() -> void:
 		NAMEPLATE_MIN_NAME_WIDTH,
 		NAMEPLATE_MAX_NAME_WIDTH
 	)
+	var card_layout := NameplateLayout.calculate_name_card(name_width, has_guild_emblem)
+	var label_rect: Rect2 = card_layout.get("labelRect", Rect2())
+	var background_rect: Rect2 = card_layout.get("backgroundRect", Rect2())
+	var emblem_rect: Rect2 = card_layout.get("emblemRect", Rect2())
 
-	nameplate_label.offset_left = NAMEPLATE_CENTER_X - (name_width * 0.5)
-	nameplate_label.offset_right = nameplate_label.offset_left + name_width
-	nameplate_label.offset_top = NAMEPLATE_STACK_BOTTOM - NAMEPLATE_NAME_HEIGHT
-	nameplate_label.offset_bottom = NAMEPLATE_STACK_BOTTOM
+	nameplate_label.offset_left = label_rect.position.x
+	nameplate_label.offset_right = label_rect.end.x
+	nameplate_label.offset_top = label_rect.position.y
+	nameplate_label.offset_bottom = label_rect.end.y
 	nameplate_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	if nameplate_background != null:
-		nameplate_background.offset_left = nameplate_label.offset_left - 5.0
-		nameplate_background.offset_right = nameplate_label.offset_right + 5.0
-		nameplate_background.offset_top = nameplate_label.offset_top + 2.0
-		nameplate_background.offset_bottom = nameplate_label.offset_bottom - 2.0
+		nameplate_background.offset_left = background_rect.position.x
+		nameplate_background.offset_right = background_rect.end.x
+		nameplate_background.offset_top = background_rect.position.y
+		nameplate_background.offset_bottom = background_rect.end.y
+	if has_guild_emblem:
+		guild_emblem.offset_left = emblem_rect.position.x
+		guild_emblem.offset_right = emblem_rect.end.x
+		guild_emblem.offset_top = emblem_rect.position.y
+		guild_emblem.offset_bottom = emblem_rect.end.y
 
 	var next_layer_bottom := nameplate_label.offset_top - NAMEPLATE_LAYER_GAP
 	if has_role_badge:
@@ -742,12 +749,6 @@ func _sync_nameplate_layout() -> void:
 		role_badge_label.offset_right = badge_width - 1.0
 		role_badge_label.offset_top = 0.0
 		role_badge_label.offset_bottom = ROLE_BADGE_TEXT_HEIGHT
-		next_layer_bottom = role_badge_panel.offset_top - NAMEPLATE_LAYER_GAP
-	if has_guild_emblem:
-		guild_emblem.offset_left = NAMEPLATE_CENTER_X - (GUILD_EMBLEM_DISPLAY_SIZE * 0.5)
-		guild_emblem.offset_right = guild_emblem.offset_left + GUILD_EMBLEM_DISPLAY_SIZE
-		guild_emblem.offset_bottom = next_layer_bottom
-		guild_emblem.offset_top = guild_emblem.offset_bottom - GUILD_EMBLEM_DISPLAY_SIZE
 
 
 func _get_label_text_width(label: Label) -> float:
