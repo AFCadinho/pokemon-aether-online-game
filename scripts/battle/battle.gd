@@ -9075,19 +9075,25 @@ func _pvp_local_decision_allows_choice(local_state_player_id := "") -> bool:
 func _local_player_needs_force_switch_ui() -> bool:
 	var candidate_player_ids := _get_force_switch_candidate_player_ids(_get_local_state_player_id(), "p1")
 	for player_id in candidate_player_ids:
-		if (
-			_is_pvp_battle()
-			and pvp_last_phase == "awaiting_force_switch"
-			and _player_active_fainted_with_available_switch(player_id)
-		):
-			return true
-		if _is_pvp_battle() and _player_request_is_waiting(player_id):
-			return false
+		var request_is_waiting := false
+		var decision_allows_choice := true
+		if _is_pvp_battle():
+			request_is_waiting = _player_request_is_waiting(player_id)
+			decision_allows_choice = _pvp_local_decision_allows_choice(player_id)
+			if request_is_waiting or not decision_allows_choice:
+				return false
 
 		if force_switch_flow.player_needs_force_switch(player_id):
 			return true
 
 		if _is_pvp_battle():
+			if BattleForceSwitchFlow.should_infer_pvp_force_switch_from_fainted_active(
+				pvp_last_phase,
+				request_is_waiting,
+				decision_allows_choice,
+				_player_active_fainted_with_available_switch(player_id)
+			):
+				return true
 			continue
 
 		if _player_active_fainted_with_available_switch(player_id):
