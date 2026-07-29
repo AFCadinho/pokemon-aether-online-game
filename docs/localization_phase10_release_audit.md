@@ -13,7 +13,7 @@ approval.
 
 The following gates pass:
 
-- the English, Dutch, and Brazilian Portuguese client catalogs contain 2,174 matching
+- the English, Dutch, and Brazilian Portuguese client catalogs contain 2,464 matching
   keys;
 - the three launcher catalogs contain 133 matching keys;
 - catalog JSON, non-empty values, key parity, and named placeholders have no errors;
@@ -21,7 +21,7 @@ The following gates pass:
 - local signs, NPC metadata/dialogue contracts, canonical content overlays, item
   overlays, backend error contracts, login, migrated gameplay domains, battles, and
   the launcher pass their domain checks;
-- all 137 project checks pass;
+- all 138 project checks pass;
 - the standalone launcher localization runtime check passes.
 
 Run the repeatable catalog and completeness audit with:
@@ -40,13 +40,13 @@ The strict command currently exits with status 1, as intended.
 
 ## Open technical gates
 
-The static completeness scan started at 400 candidates and currently reports 202
+The static completeness scan started at 400 candidates and currently reports 128
 candidates at player-facing text sinks:
 
 | Source | Candidates |
 | --- | ---: |
-| `scripts/ui/ui_overlay.gd` | 102 |
-| `scenes/interface/ui_overlay.tscn` | 66 |
+| `scripts/ui/ui_overlay.gd` | 53 |
+| `scenes/interface/ui_overlay.tscn` | 41 |
 | `scripts/ui/fishing_action_controller.gd` | 11 |
 | `scripts/world/world.gd` | 11 |
 | `scripts/world/player.gd` | 5 |
@@ -57,8 +57,6 @@ Preview values, abbreviations, player data, and decorative text can be intention
 However, direct inspection confirms real remaining English in at least these surfaces:
 
 - Item Dex and Wild Pokémon presentation;
-- personal/global buff presentation;
-- chat tabs, context controls, tooltips, and empty states;
 - Fishing loadout, rod requirements, prompts, and failures;
 - several blackout, capture, reward, field-move, and progression system messages;
 - move-learning and evolution prompts that still build formatted English directly.
@@ -77,6 +75,12 @@ Phase 10C migrated the private and public Trainer Card, currency wallet, role an
 Gym Badge states, appearance editor, wardrobe feedback, cosmetic names, natural
 color palettes, and live locale switching. Its focused runtime, layout, appearance,
 and badge checks pass, and it reduced the open list by another 34 candidates.
+
+Phase 10D migrated chat tabs and context selection, PM and Guild states, chat input
+and feedback, channel prefixes, the Social launcher, personal buffs, global
+community buffs, contribution feedback, and live locale switching. Its focused
+runtime, chat, badge, hotbar, and layout checks pass, and it reduced the open list
+by another 74 candidates.
 
 The raw candidate list can be printed with `--limit 0`. Every remaining candidate must be
 migrated to a semantic key or documented as an intentional exclusion before the
@@ -104,7 +108,7 @@ but cannot replace them.
 
 ## Required remediation order
 
-1. Migrate or classify the remaining 202 static-scan candidates, one functional domain at a
+1. Migrate or classify the remaining 128 static-scan candidates, one functional domain at a
    time, with runtime locale-switch tests.
 2. Add full-flow layout checks for all supported locales and resolutions, including
    long-text and empty/error states.

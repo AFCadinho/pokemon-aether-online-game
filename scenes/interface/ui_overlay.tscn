@@ -391,7 +391,7 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.59607846, 0.627451, 0.69803923, 1)
 theme_override_font_sizes/font_size = 11
-text = "No buffs active"
+text = "ui.buff.none"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -403,7 +403,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.8980392, 0.8392157, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 11
-text = "3 buffs active"
+text = "ui.buff.preview_active"
 theme_override_styles/normal = SubResource("StyleBoxFlat_personal_buff_slot")
 theme_override_styles/hover = SubResource("StyleBoxFlat_personal_buff_slot_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_personal_buff_slot_hover")
@@ -450,14 +450,14 @@ size_flags_horizontal = 3
 layout_mode = 2
 theme_override_colors/font_color = Color(0.92156863, 0.9019608, 0.96862745, 1)
 theme_override_font_sizes/font_size = 11
-text = "EXP Boost"
+text = "ui.buff.preview_exp.name"
 text_overrun_behavior = 3
 
 [node name="DescriptionLabel" type="Label" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot1/Content/Details"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.6156863, 0.6784314, 0.7607843, 1)
 theme_override_font_sizes/font_size = 9
-text = "Double experience from battles."
+text = "ui.buff.preview_exp.description"
 text_overrun_behavior = 3
 
 [node name="TimeLabel" type="Label" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot1/Content"]
@@ -495,7 +495,7 @@ custom_minimum_size = Vector2(28, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7607843, 0.627451, 1, 1)
 theme_override_font_sizes/font_size = 10
-text = "EG"
+text = ""
 vertical_alignment = 1
 
 [node name="Details" type="VBoxContainer" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot2/Content"]
@@ -506,14 +506,14 @@ size_flags_horizontal = 3
 layout_mode = 2
 theme_override_colors/font_color = Color(0.92156863, 0.9019608, 0.96862745, 1)
 theme_override_font_sizes/font_size = 11
-text = "Egg Power"
+text = "ui.buff.preview_egg.name"
 text_overrun_behavior = 3
 
 [node name="DescriptionLabel" type="Label" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot2/Content/Details"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.6156863, 0.6784314, 0.7607843, 1)
 theme_override_font_sizes/font_size = 9
-text = "Faster Egg progress while active."
+text = "ui.buff.preview_egg.description"
 text_overrun_behavior = 3
 
 [node name="TimeLabel" type="Label" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot2/Content"]
@@ -551,7 +551,7 @@ custom_minimum_size = Vector2(28, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7607843, 0.627451, 1, 1)
 theme_override_font_sizes/font_size = 10
-text = "RN"
+text = ""
 vertical_alignment = 1
 
 [node name="Details" type="VBoxContainer" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot3/Content"]
@@ -562,14 +562,14 @@ size_flags_horizontal = 3
 layout_mode = 2
 theme_override_colors/font_color = Color(0.92156863, 0.9019608, 0.96862745, 1)
 theme_override_font_sizes/font_size = 11
-text = "Run Power"
+text = "ui.buff.preview_run.name"
 text_overrun_behavior = 3
 
 [node name="DescriptionLabel" type="Label" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot3/Content/Details"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.6156863, 0.6784314, 0.7607843, 1)
 theme_override_font_sizes/font_size = 9
-text = "Move faster outside battle."
+text = "ui.buff.preview_run.description"
 text_overrun_behavior = 3
 
 [node name="TimeLabel" type="Label" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot3/Content"]
@@ -680,21 +680,21 @@ custom_minimum_size = Vector2(70, 28)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8980392, 0.90588236, 0.92156863, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_riyyd")
-text = "General"
+text = "ui.chat.tab.general"
 
 [node name="TradeButton" type="Button" parent="Control/ChatTabsPanel/TabRow" unique_id=609304235]
 custom_minimum_size = Vector2(70, 28)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8980392, 0.90588236, 0.92156863, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_riyyd")
-text = "Trade"
+text = "ui.chat.tab.trade"
 
 [node name="SystemButton" type="Button" parent="Control/ChatTabsPanel/TabRow" unique_id=1479272996]
 custom_minimum_size = Vector2(70, 28)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8980392, 0.90588236, 0.92156863, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_riyyd")
-text = "System"
+text = "ui.chat.tab.system"
 
 [node name="ChatPanel" type="PanelContainer" parent="Control" unique_id=228485371]
 custom_minimum_size = Vector2(360, 190)
@@ -735,7 +735,7 @@ theme_override_constants/separation = 4
 visible = false
 custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
-text = "Hello"
+text = ""
 fit_content = true
 scroll_active = false
 
@@ -749,11 +749,11 @@ size_flags_horizontal = 3
 
 [node name="DevPokemonButton" type="Button" parent="Control/ChatPanel/MarginContainer/VBoxContainer/InputRow" unique_id=2075498917]
 layout_mode = 2
-text = "Pokemon"
+text = "ui.chat.pokemon"
 
 [node name="SendButton" type="Button" parent="Control/ChatPanel/MarginContainer/VBoxContainer/InputRow" unique_id=676409170]
 layout_mode = 2
-text = "Send"
+text = "ui.chat.send"
 
 [node name="DevPokemonPopup" type="PanelContainer" parent="Control" unique_id=1288104280]
 visible = false
@@ -1093,14 +1093,14 @@ alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.91764706, 0.96862745, 1, 1)
 theme_override_font_sizes/font_size = 17
-text = "Global EXP Boost"
+text = "ui.buff.global_exp.name"
 text_overrun_behavior = 3
 
 [node name="StatusLabel" type="Label" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/Header/Heading"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3764706, 0.827451, 1, 1)
 theme_override_font_sizes/font_size = 11
-text = "COMMUNITY GOAL"
+text = "ui.buff.community_goal"
 
 [node name="CloseButton" type="Button" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/Header"]
 custom_minimum_size = Vector2(30, 30)
@@ -1112,7 +1112,7 @@ text = "×"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.78431374, 0.8235294, 0.8862745, 1)
 theme_override_font_sizes/font_size = 12
-text = "When funded, the entire server earns double Pokémon experience."
+text = "ui.buff.global_exp.description"
 autowrap_mode = 2
 
 [node name="GoalPanel" type="PanelContainer" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content"]
@@ -1160,7 +1160,7 @@ visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(0.52156866, 0.9490196, 0.6117647, 1)
 theme_override_font_sizes/font_size = 13
-text = "Active server-wide · 18m remaining"
+text = "ui.buff.preview_server_remaining"
 horizontal_alignment = 1
 
 [node name="DonationSection" type="VBoxContainer" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content"]
@@ -1171,7 +1171,7 @@ theme_override_constants/separation = 6
 layout_mode = 2
 theme_override_colors/font_color = Color(0.59607846, 0.6509804, 0.7294118, 1)
 theme_override_font_sizes/font_size = 11
-text = "Choose how many Pokédollars you want to contribute."
+text = "ui.buff.contribution_hint"
 
 [node name="DonationRow" type="HBoxContainer" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection"]
 layout_mode = 2
@@ -1200,7 +1200,7 @@ custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_default_cursor_shape = 2
-text = "Contribute"
+text = "ui.buff.contribute"
 
 [node name="OptionsPanel" type="PanelContainer" parent="Control" unique_id=1882847732]
 custom_minimum_size = Vector2(368, 0)
@@ -1823,18 +1823,18 @@ theme_override_constants/separation = 1
 [node name="Title" type="Label" parent="Control/SocialsMenu/MarginContainer/VBoxContainer/Header/Heading" unique_id=1908866577]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
-text = "Social"
+text = "ui.social.title"
 
 [node name="Subtitle" type="Label" parent="Control/SocialsMenu/MarginContainer/VBoxContainer/Header/Heading"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "Stay connected with other trainers"
+text = "ui.social.subtitle"
 
 [node name="CloseButton" type="Button" parent="Control/SocialsMenu/MarginContainer/VBoxContainer/Header" unique_id=686062249]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-tooltip_text = "Close"
+tooltip_text = "common.close"
 text = "×"
 
 [node name="FriendListButton" type="Button" parent="Control/SocialsMenu/MarginContainer/VBoxContainer" unique_id=206924973]

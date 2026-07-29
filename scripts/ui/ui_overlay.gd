@@ -59,12 +59,12 @@ const CHAT_TAB_DEFAULT_ORDER: Array[String] = [
 	CHAT_TAB_GUILD,
 ]
 const CHAT_TAB_LABELS := {
-	CHAT_TAB_ALL: "All",
-	CHAT_TAB_GENERAL: "General",
-	CHAT_TAB_MAP: "Map",
-	CHAT_TAB_SYSTEM: "System",
-	CHAT_TAB_PM: "PM",
-	CHAT_TAB_GUILD: "Guild",
+	CHAT_TAB_ALL: "ui.chat.tab.all",
+	CHAT_TAB_GENERAL: "ui.chat.tab.general",
+	CHAT_TAB_MAP: "ui.chat.tab.map",
+	CHAT_TAB_SYSTEM: "ui.chat.tab.system",
+	CHAT_TAB_PM: "ui.chat.tab.pm",
+	CHAT_TAB_GUILD: "ui.chat.tab.guild",
 }
 const CHAT_CATEGORY_USER := "user"
 const CHAT_CATEGORY_SYSTEM := "system"
@@ -1407,6 +1407,8 @@ func _on_locale_changed(_locale: String) -> void:
 	_refresh_pc_localized_ui()
 	_refresh_pvp_localized_ui()
 	_refresh_trainer_card_localized_ui()
+	_refresh_chat_localized_ui()
+	_refresh_buffs_localized_ui()
 	_refresh_dev_world_time_selector()
 	_refresh_dev_world_weather_selector()
 	if staff_impersonate_token_input != null and not staff_impersonate_in_flight:
@@ -9210,6 +9212,12 @@ func _setup_status_docks() -> void:
 	global_buff_amount_10000_button.pressed.connect(_select_global_buff_contribution.bind(10000))
 	global_buff_amount_25000_button.pressed.connect(_select_global_buff_contribution.bind(25000))
 	global_buff_contribute_button.pressed.connect(_on_global_buff_contribute_pressed)
+	_set_localized_control_property(personal_buffs_empty_label, "text", "ui.buff.none")
+	_set_localized_control_property(global_buff_details_close_button, "tooltip_text", "common.close")
+	var contribution_hint := global_buff_donation_section.get_node_or_null("HintLabel") as Label
+	if contribution_hint != null:
+		_set_localized_control_property(contribution_hint, "text", "ui.buff.contribution_hint")
+	_set_localized_control_property(global_buff_contribute_button, "text", "ui.buff.contribute")
 	for child: Node in global_buff_slots.get_children():
 		var button := child as Button
 		if button == null:
@@ -9230,8 +9238,8 @@ func _setup_status_docks() -> void:
 		{
 			"id": "global_exp",
 			"icon": GLOBAL_EXP_BUFF_ICON,
-			"name": "Global EXP Boost",
-			"description": "When funded, the entire server earns double Pokémon experience.",
+			"name_key": "ui.buff.global_exp.name",
+			"description_key": "ui.buff.global_exp.description",
 			"state": "funding",
 			"current": 0,
 			"goal": 100000,
@@ -9240,8 +9248,8 @@ func _setup_status_docks() -> void:
 		{
 			"id": "global_ev",
 			"icon": GLOBAL_EV_BUFF_ICON,
-			"name": "Global EV Boost",
-			"description": "The entire server earns double Effort Values while this buff is active.",
+			"name_key": "ui.buff.global_ev.name",
+			"description_key": "ui.buff.global_ev.description",
 			"state": "funding",
 			"current": 0,
 			"goal": 100000,
@@ -9250,8 +9258,8 @@ func _setup_status_docks() -> void:
 		{
 			"id": "global_shiny",
 			"icon": GLOBAL_SHINY_BUFF_ICON,
-			"name": "Global Shiny Boost",
-			"description": "When funded, the entire server receives increased Shiny encounter odds.",
+			"name_key": "ui.buff.global_shiny.name",
+			"description_key": "ui.buff.global_shiny.description",
 			"state": "funding",
 			"current": 0,
 			"goal": 100000,
@@ -9260,8 +9268,8 @@ func _setup_status_docks() -> void:
 		{
 			"id": "global_rare_encounter",
 			"icon": GLOBAL_RARE_ENCOUNTER_BUFF_ICON,
-			"name": "Rare Encounter Boost",
-			"description": "When funded, rarer Pokémon become more likely to appear for the entire server.",
+			"name_key": "ui.buff.global_rare.name",
+			"description_key": "ui.buff.global_rare.description",
 			"state": "funding",
 			"current": 0,
 			"goal": 100000,
@@ -9350,8 +9358,8 @@ func _current_aether_blessing_buff() -> Dictionary:
 		return {
 			"id": "aether_blessing",
 			"label": "AE",
-			"name": "Aether Blessing",
-			"description": "Supporter recognition without battle advantages.",
+			"name_key": "ui.buff.aether_blessing.name",
+			"description_key": "ui.buff.aether_blessing.description",
 			"remaining": _format_aether_blessing_remaining(remaining_seconds),
 			"compactRemaining": _format_aether_blessing_remaining(remaining_seconds, true),
 			"expiresAt": expires_at,
@@ -9409,9 +9417,12 @@ func _render_personal_buffs(buffs: Array) -> void:
 			if badge_label != null:
 				badge_label.text = "+"
 			if name_label != null:
-				name_label.text = "%d more buffs" % (buffs.size() - slot_count + 1)
+				name_label.text = LocalizationManager.text(
+					"ui.buff.more",
+					{"count": buffs.size() - slot_count + 1}
+				)
 			if description_label != null:
-				description_label.text = "Hover for the complete list."
+				description_label.text = LocalizationManager.text("ui.buff.hover_complete")
 			if time_label != null:
 				time_label.text = ""
 			_apply_personal_buff_row_visual(button, {})
@@ -9422,9 +9433,9 @@ func _render_personal_buffs(buffs: Array) -> void:
 		if badge_label != null:
 			badge_label.text = str(buff.get("label", "?")).strip_edges().left(3)
 		if name_label != null:
-			name_label.text = str(buff.get("name", "Buff"))
+			name_label.text = _localized_buff_name(buff)
 		if description_label != null:
-			description_label.text = str(buff.get("description", "")).strip_edges()
+			description_label.text = _localized_buff_description(buff)
 		if time_label != null:
 			time_label.text = str(
 				buff.get("compactRemaining", buff.get("remaining", ""))
@@ -9470,9 +9481,13 @@ func _refresh_personal_buffs_compact_state() -> void:
 	personal_buffs_summary_button.visible = has_active_buffs
 	personal_buff_slots.visible = has_active_buffs and personal_buffs_expanded
 	if has_active_buffs:
-		var noun := "buff" if active_count == 1 else "buffs"
 		var toggle_marker := "▴" if personal_buffs_expanded else "▾"
-		personal_buffs_summary_button.text = "%d %s active  %s" % [active_count, noun, toggle_marker]
+		personal_buffs_summary_button.text = LocalizationManager.plural(
+			"ui.buff.active.one",
+			"ui.buff.active.many",
+			active_count,
+			{"marker": toggle_marker}
+		)
 		personal_buffs_summary_button.tooltip_text = _personal_buffs_summary_tooltip()
 	else:
 		personal_buffs_summary_button.tooltip_text = ""
@@ -9488,31 +9503,43 @@ func _refresh_personal_buffs_compact_state() -> void:
 	personal_buffs_panel.custom_minimum_size.y = panel_height
 	personal_buffs_panel.offset_top = personal_buffs_panel.offset_bottom - panel_height
 func _personal_buffs_summary_tooltip() -> String:
-	var lines: Array[String] = ["%d personal %s active" % [active_personal_buffs.size(), "boost" if active_personal_buffs.size() == 1 else "boosts"]]
+	var lines: Array[String] = [LocalizationManager.plural(
+		"ui.buff.personal_active.one",
+		"ui.buff.personal_active.many",
+		active_personal_buffs.size()
+	)]
 	for buff_value: Variant in active_personal_buffs:
 		var buff := buff_value as Dictionary
-		var description := str(buff.get("description", "")).strip_edges()
+		var description := _localized_buff_description(buff)
 		var remaining := str(buff.get("remaining", "")).strip_edges()
 		lines.append("")
-		lines.append(str(buff.get("name", "Boost")))
+		lines.append(_localized_buff_name(buff))
 		if description != "":
 			lines.append(description)
 		if remaining != "":
-			lines.append("Remaining: %s" % remaining)
-	lines.append("Click to hide details" if personal_buffs_expanded else "Click to show details")
+			lines.append(LocalizationManager.text("ui.buff.remaining", {"remaining": remaining}))
+	lines.append(LocalizationManager.text(
+		"ui.buff.hide_details" if personal_buffs_expanded else "ui.buff.show_details"
+	))
 	return "\n".join(lines)
 
 func _global_buff_tooltip(buff: Dictionary) -> String:
-	var lines: Array[String] = [str(buff.get("name", "Community Boost"))]
+	var lines: Array[String] = [_localized_buff_name(buff)]
 	if str(buff.get("state", "funding")) == "active":
-		lines.append("ACTIVE · %s remaining" % str(buff.get("remaining", "")))
+		lines.append(LocalizationManager.text(
+			"ui.buff.active_remaining",
+			{"remaining": str(buff.get("remaining", ""))}
+		))
 	else:
 		var current := maxi(int(buff.get("current", 0)), 0)
 		var goal := maxi(int(buff.get("goal", 100000)), 1)
 		if current == 0:
-			lines.append("Waiting for community contributions")
-		lines.append("$%s of $%s contributed" % [_format_money(current), _format_money(goal)])
-	lines.append("Click for details")
+			lines.append(LocalizationManager.text("ui.buff.waiting_contributions"))
+		lines.append(LocalizationManager.text(
+			"ui.buff.contributed",
+			{"current": _format_money(current), "goal": _format_money(goal)}
+		))
+	lines.append(LocalizationManager.text("ui.buff.click_details"))
 	return "\n".join(lines)
 
 func _on_global_buff_hover_changed(button: Button, hovered: bool) -> void:
@@ -9595,21 +9622,50 @@ func _apply_buff_tray_group_visibility(panel: PanelContainer, tray_available: bo
 	)
 
 func _buff_tooltip(buff: Dictionary) -> String:
-	var lines: Array[String] = [str(buff.get("name", "Boost"))]
-	var description := str(buff.get("description", "")).strip_edges()
+	var lines: Array[String] = [_localized_buff_name(buff)]
+	var description := _localized_buff_description(buff)
 	if description != "":
 		lines.append(description)
 	var remaining := str(buff.get("remaining", "")).strip_edges()
 	if remaining != "":
-		lines.append("Remaining: %s" % remaining)
+		lines.append(LocalizationManager.text("ui.buff.remaining", {"remaining": remaining}))
 	return "\n".join(lines)
 
 func _buff_overflow_tooltip(buffs: Array, start_index: int) -> String:
 	var names: Array[String] = []
 	for buff_index in range(start_index, buffs.size()):
 		var buff: Dictionary = buffs[buff_index] as Dictionary
-		names.append(str(buff.get("name", "Boost")))
-	return "More active boosts:\n%s" % "\n".join(names)
+		names.append(_localized_buff_name(buff))
+	return LocalizationManager.text("ui.buff.more_active", {"names": "\n".join(names)})
+
+func _localized_buff_name(buff: Dictionary) -> String:
+	var key := str(buff.get("name_key", "")).strip_edges()
+	if key != "":
+		return LocalizationManager.text(key)
+	return str(buff.get("name", LocalizationManager.text("ui.buff.generic")))
+
+func _localized_buff_description(buff: Dictionary) -> String:
+	var key := str(buff.get("description_key", "")).strip_edges()
+	if key != "":
+		return LocalizationManager.text(key)
+	return str(buff.get("description", "")).strip_edges()
+
+func _refresh_buffs_localized_ui() -> void:
+	if personal_buffs_panel != null:
+		LocalizationManager.localize_tree(personal_buffs_panel)
+	_refresh_personal_buffs_from_entitlements()
+	if global_buff_slots != null:
+		for child: Node in global_buff_slots.get_children():
+			var button := child as Button
+			if button == null:
+				continue
+			var buff := button.get_meta("buff_data", {}) as Dictionary
+			if not buff.is_empty():
+				button.tooltip_text = _global_buff_tooltip(buff)
+	if global_buff_details_panel != null:
+		LocalizationManager.localize_tree(global_buff_details_panel)
+	if not selected_global_buff.is_empty():
+		_render_global_buff_details()
 
 func _on_global_buff_button_pressed(button: Button) -> void:
 	var buff: Dictionary = button.get_meta("buff_data", {}) as Dictionary
@@ -9631,12 +9687,14 @@ func _render_global_buff_details() -> void:
 	var goal := maxi(int(selected_global_buff.get("goal", 100000)), 1)
 	var progress := clampf(float(current) / float(goal) * 100.0, 0.0, 100.0)
 	global_buff_details_icon.texture = _global_buff_icon_for(selected_global_buff)
-	global_buff_details_title.text = str(selected_global_buff.get("name", "Global Buff"))
-	global_buff_details_description.text = str(selected_global_buff.get("description", ""))
+	global_buff_details_title.text = _localized_buff_name(selected_global_buff)
+	global_buff_details_description.text = _localized_buff_description(selected_global_buff)
 	global_buff_details_progress.value = 100.0 if active else progress
 	global_buff_details_progress_label.text = "$%s / $%s" % [_format_money(current), _format_money(goal)]
 	global_buff_details_percent_label.text = "%d%%" % roundi(100.0 if active else progress)
-	global_buff_details_status.text = "ACTIVE SERVER BUFF" if active else "COMMUNITY GOAL"
+	global_buff_details_status.text = LocalizationManager.text(
+		"ui.buff.active_server" if active else "ui.buff.community_goal"
+	)
 	global_buff_details_status.add_theme_color_override(
 		"font_color",
 		Color("#85f29c") if active else Color("#60d3ff")
@@ -9651,7 +9709,10 @@ func _render_global_buff_details() -> void:
 		)
 	)
 	global_buff_details_active_label.visible = active
-	global_buff_details_active_label.text = "Active server-wide · %s remaining" % str(selected_global_buff.get("remaining", ""))
+	global_buff_details_active_label.text = LocalizationManager.text(
+		"ui.buff.server_remaining",
+		{"remaining": str(selected_global_buff.get("remaining", ""))}
+	)
 	global_buff_donation_section.visible = not active
 	_refresh_global_buff_contribution_buttons()
 	if global_buff_details_panel != null:
@@ -9676,8 +9737,10 @@ func _on_global_buff_contribute_pressed() -> void:
 	if selected_global_buff.is_empty() or str(selected_global_buff.get("state", "funding")) == "active":
 		return
 	_add_chat_message(
-		"Community contributions are not connected yet. Selected contribution: $%s."
-		% _format_money(selected_global_buff_contribution)
+		LocalizationManager.text(
+			"ui.buff.contribution_unavailable",
+			{"amount": _format_money(selected_global_buff_contribution)}
+		)
 	)
 
 func _hide_global_buff_details() -> void:
@@ -20711,7 +20774,7 @@ func _setup_chat_resize_button() -> void:
 	chat_resize_button.icon = CHAT_RESIZE_ICON
 	chat_resize_button.expand_icon = true
 	chat_resize_button.add_theme_constant_override("icon_max_width", 16)
-	chat_resize_button.tooltip_text = "Drag to resize chat"
+	_set_localized_control_property(chat_resize_button, "tooltip_text", "ui.chat.resize")
 	chat_resize_button.mouse_default_cursor_shape = Control.CURSOR_FDIAGSIZE
 	chat_resize_button.focus_mode = Control.FOCUS_NONE
 	chat_resize_button.z_index = UI_BASE_Z_INDEX
@@ -20755,6 +20818,10 @@ func _setup_chat_surface_ui() -> void:
 	)
 	chat_tabs_panel.add_child(chat_tabs_background)
 	chat_tabs_panel.move_child(chat_tabs_background, 0)
+	_set_localized_control_property(general_chat_tab_button, "text", "ui.chat.tab.general")
+	_set_localized_control_property(trade_chat_tab_button, "text", "ui.chat.tab.trade")
+	_set_localized_control_property(system_chat_tab_button, "text", "ui.chat.tab.system")
+	_set_localized_control_property(send_button, "text", "ui.chat.send")
 
 
 func _on_chat_resize_button_gui_input(event: InputEvent) -> void:
@@ -20788,7 +20855,7 @@ func _register_collapsible_panel(
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	button.z_index = UI_BASE_Z_INDEX
 	button.text = _collapsible_button_glyph(side, false)
-	button.tooltip_text = "Collapse"
+	_set_localized_control_property(button, "tooltip_text", "ui.chat.collapse")
 	button.focus_mode = Control.FOCUS_NONE
 	_apply_collapsible_button_style(button, side, false)
 	button.pressed.connect(_on_collapsible_panel_button_pressed.bind(panel_id))
@@ -20845,7 +20912,11 @@ func _apply_collapsible_panel_state(panel_id: String) -> void:
 			companion.visible = group_visible and bool(companion.get_meta("group_available", true))
 	button.visible = available
 	button.text = _collapsible_button_glyph(str(state.get("side", "right")), collapsed)
-	button.tooltip_text = "Expand" if collapsed else "Collapse"
+	_set_localized_control_property(
+		button,
+		"tooltip_text",
+		"ui.chat.expand" if collapsed else "ui.chat.collapse"
+	)
 	_apply_collapsible_button_style(button, str(state.get("side", "right")), collapsed)
 	if collapsed and panel_id == "staff_actions":
 		dev_actions_popup.visible = false
@@ -21391,7 +21462,7 @@ func _finish_party_drag(global_position: Vector2) -> void:
 		PlayerSave.party[target_index] = PlayerSave.party[source_index]
 		PlayerSave.party[source_index] = dragged_pokemon
 		PlayerSave.party_changed.emit()
-		_add_chat_message("Could not save party order. Please report this to staff.")
+		_add_chat_message(LocalizationManager.text("ui.chat.error.party_order"))
 		push_warning("UIOverlay: party swap failed: %s" % str(result.get("error", "Unknown error")))
 
 func _try_offer_party_drag_to_trade(global_position: Vector2) -> bool:
@@ -21458,7 +21529,10 @@ func _create_pending_chat_pokemon_button(pokemon_payload: Dictionary, index: int
 	var button := Button.new()
 	button.custom_minimum_size = Vector2(44, 34)
 	button.focus_mode = Control.FOCUS_NONE
-	button.tooltip_text = "Gift: %s. Click to remove." % species_name
+	button.tooltip_text = LocalizationManager.text(
+		"ui.chat.attachment.remove",
+		{"pokemon": species_name}
+	)
 	button.pressed.connect(_remove_pending_chat_pokemon_attachment.bind(index))
 	_apply_button_style(button)
 
@@ -21535,7 +21609,7 @@ func _setup_pm_chat_ui() -> void:
 
 	pm_tab_button = Button.new()
 	pm_tab_button.custom_minimum_size = Vector2(70, 28)
-	pm_tab_button.text = "PM"
+	_set_localized_control_property(pm_tab_button, "text", "ui.chat.tab.pm")
 	pm_tab_button.focus_mode = Control.FOCUS_NONE
 	pm_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_PM))
 	$Control/ChatTabsPanel/TabRow.add_child(pm_tab_button)
@@ -21550,8 +21624,8 @@ func _setup_pm_chat_ui() -> void:
 	pm_chat_container.add_theme_constant_override("separation", 8)
 
 	var global_empty_state := _create_chat_empty_state(
-		"No private messages yet",
-		"Open a trainer card or use /pm username in chat to start a conversation."
+		LocalizationManager.text("ui.chat.pm.empty_title"),
+		LocalizationManager.text("ui.chat.pm.empty_hint")
 	)
 	pm_empty_state = global_empty_state.get("container") as CenterContainer
 	pm_empty_title_label = global_empty_state.get("title") as Label
@@ -21625,9 +21699,9 @@ func _setup_guild_chat_ui() -> void:
 	guild_chat_tab_button = Button.new()
 	guild_chat_tab_button.name = "GuildButton"
 	guild_chat_tab_button.custom_minimum_size = Vector2(70, 28)
-	guild_chat_tab_button.text = "Guild"
+	_set_localized_control_property(guild_chat_tab_button, "text", "ui.chat.tab.guild")
 	guild_chat_tab_button.focus_mode = Control.FOCUS_NONE
-	guild_chat_tab_button.tooltip_text = "Chat with members of your guild"
+	_set_localized_control_property(guild_chat_tab_button, "tooltip_text", "ui.chat.guild.tooltip")
 	guild_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_GUILD))
 	$Control/ChatTabsPanel/TabRow.add_child(guild_chat_tab_button)
 	_apply_button_style(guild_chat_tab_button, "primary")
@@ -21735,9 +21809,9 @@ func _rebuild_chat_context_options() -> void:
 
 	var primary_tab := _active_primary_chat_tab_id()
 	if primary_tab == CHAT_TAB_GENERAL:
-		_add_chat_context_option("Global", CHAT_TAB_GENERAL, active_chat_tab == CHAT_TAB_GENERAL)
-		_add_chat_context_option("Trade", CHAT_TAB_TRADE, active_chat_tab == CHAT_TAB_TRADE)
-		_add_chat_context_option("Help", CHAT_TAB_HELP, active_chat_tab == CHAT_TAB_HELP)
+		_add_chat_context_option(LocalizationManager.text("ui.chat.channel.global"), CHAT_TAB_GENERAL, active_chat_tab == CHAT_TAB_GENERAL)
+		_add_chat_context_option(LocalizationManager.text("ui.chat.tab.trade"), CHAT_TAB_TRADE, active_chat_tab == CHAT_TAB_TRADE)
+		_add_chat_context_option(LocalizationManager.text("ui.chat.tab.help"), CHAT_TAB_HELP, active_chat_tab == CHAT_TAB_HELP)
 		_refresh_chat_context_scroll_size()
 		return
 	if primary_tab != CHAT_TAB_PM:
@@ -21828,41 +21902,44 @@ func _refresh_chat_context_selector() -> void:
 	chat_context_selector_button.disabled = false
 	match primary_tab:
 		CHAT_TAB_ALL:
-			chat_context_selector_button.text = "To: Global"
+			chat_context_selector_button.text = LocalizationManager.text("ui.chat.context.to_global")
 			chat_context_selector_button.disabled = true
-			chat_context_selector_button.tooltip_text = "You are viewing all chats. New messages are sent to Global."
+			chat_context_selector_button.tooltip_text = LocalizationManager.text("ui.chat.context.all_tooltip")
 		CHAT_TAB_GENERAL:
-			var channel_label := "Global"
+			var channel_label := LocalizationManager.text("ui.chat.channel.global")
 			if active_chat_tab == CHAT_TAB_TRADE:
-				channel_label = "Trade"
+				channel_label = LocalizationManager.text("ui.chat.tab.trade")
 			elif active_chat_tab == CHAT_TAB_HELP:
-				channel_label = "Help"
-			chat_context_selector_button.text = "%s  ▴" % channel_label
-			chat_context_selector_button.tooltip_text = "Choose Global, Trade, or Help chat"
+				channel_label = LocalizationManager.text("ui.chat.tab.help")
+			chat_context_selector_button.text = LocalizationManager.text(
+				"ui.chat.context.selector",
+				{"channel": channel_label}
+			)
+			chat_context_selector_button.tooltip_text = LocalizationManager.text("ui.chat.context.choose_channel")
 		CHAT_TAB_MAP:
-			chat_context_selector_button.text = "Map"
+			chat_context_selector_button.text = LocalizationManager.text("ui.chat.tab.map")
 			chat_context_selector_button.disabled = true
-			chat_context_selector_button.tooltip_text = "Only nearby trainers on this map can see these messages"
+			chat_context_selector_button.tooltip_text = LocalizationManager.text("ui.chat.map.visibility")
 		CHAT_TAB_PM:
 			if active_pm_user_id != 0 and pm_conversations_by_user_id.has(active_pm_user_id):
 				var conversation := _dictionary_from_value(pm_conversations_by_user_id.get(active_pm_user_id, {}))
 				var user := _dictionary_from_value(conversation.get("user", {}))
 				chat_context_selector_button.text = "%s  ▴" % _pm_conversation_title(user, 0)
 			else:
-				chat_context_selector_button.text = "Select PM  ▴"
+				chat_context_selector_button.text = LocalizationManager.text("ui.chat.context.select_pm")
 			chat_context_selector_button.disabled = pm_conversations_by_user_id.is_empty()
 			chat_context_selector_button.tooltip_text = (
-				"No PM conversations yet"
+				LocalizationManager.text("ui.chat.pm.no_conversations")
 				if pm_conversations_by_user_id.is_empty()
-				else "Choose private conversation"
+				else LocalizationManager.text("ui.chat.pm.choose_conversation")
 			)
 		CHAT_TAB_GUILD:
-			chat_context_selector_button.text = "Guild"
+			chat_context_selector_button.text = LocalizationManager.text("ui.chat.tab.guild")
 			chat_context_selector_button.disabled = guild_chat_membership.is_empty()
 			chat_context_selector_button.tooltip_text = (
-				"Chat with members of your guild"
+				LocalizationManager.text("ui.chat.guild.tooltip")
 				if not guild_chat_membership.is_empty()
-				else "Join a guild to use Guild chat"
+				else LocalizationManager.text("ui.chat.guild.join_required")
 			)
 
 
@@ -21873,9 +21950,9 @@ func _setup_all_chat_tab() -> void:
 	all_chat_tab_button = Button.new()
 	all_chat_tab_button.name = "AllButton"
 	all_chat_tab_button.custom_minimum_size = Vector2(70, 28)
-	all_chat_tab_button.text = "All"
+	_set_localized_control_property(all_chat_tab_button, "text", "ui.chat.tab.all")
 	all_chat_tab_button.focus_mode = Control.FOCUS_NONE
-	all_chat_tab_button.tooltip_text = "Show messages from every chat"
+	_set_localized_control_property(all_chat_tab_button, "tooltip_text", "ui.chat.all.tooltip")
 	all_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_ALL))
 	$Control/ChatTabsPanel/TabRow.add_child(all_chat_tab_button)
 	_apply_button_style(all_chat_tab_button, "primary")
@@ -21889,9 +21966,9 @@ func _setup_map_chat_tab() -> void:
 	map_chat_tab_button = Button.new()
 	map_chat_tab_button.name = "MapButton"
 	map_chat_tab_button.custom_minimum_size = Vector2(70, 28)
-	map_chat_tab_button.text = "Map"
+	_set_localized_control_property(map_chat_tab_button, "text", "ui.chat.tab.map")
 	map_chat_tab_button.focus_mode = Control.FOCUS_NONE
-	map_chat_tab_button.tooltip_text = "Chat with trainers on your current map"
+	_set_localized_control_property(map_chat_tab_button, "tooltip_text", "ui.chat.map.tooltip")
 	map_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_MAP))
 	$Control/ChatTabsPanel/TabRow.add_child(map_chat_tab_button)
 	_apply_button_style(map_chat_tab_button, "primary")
@@ -21904,7 +21981,7 @@ func _setup_help_chat_tab() -> void:
 
 	help_chat_tab_button = Button.new()
 	help_chat_tab_button.custom_minimum_size = Vector2(70, 28)
-	help_chat_tab_button.text = "Help"
+	_set_localized_control_property(help_chat_tab_button, "text", "ui.chat.tab.help")
 	help_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	help_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_HELP))
 	$Control/ChatTabsPanel/TabRow.add_child(help_chat_tab_button)
@@ -21934,7 +22011,7 @@ func _setup_chat_tab_settings_ui() -> void:
 	chat_settings_button.text = "⋯"
 	chat_settings_button.custom_minimum_size = Vector2(32, 28)
 	chat_settings_button.focus_mode = Control.FOCUS_NONE
-	chat_settings_button.tooltip_text = "Chat settings"
+	_set_localized_control_property(chat_settings_button, "tooltip_text", "ui.chat.settings.tooltip")
 	chat_settings_button.pressed.connect(_on_chat_settings_button_pressed)
 	tab_row.add_child(chat_settings_button)
 	_apply_button_style(chat_settings_button)
@@ -21966,7 +22043,7 @@ func _setup_chat_tab_settings_ui() -> void:
 	content.add_child(header)
 
 	var title := Label.new()
-	title.text = "Chat tabs"
+	_set_localized_control_property(title, "text", "ui.chat.settings.title")
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.add_theme_font_size_override("font_size", 15)
 	title.add_theme_color_override("font_color", UI_TEXT)
@@ -21977,14 +22054,14 @@ func _setup_chat_tab_settings_ui() -> void:
 	close_button.text = "×"
 	close_button.custom_minimum_size = Vector2(28, 26)
 	close_button.focus_mode = Control.FOCUS_NONE
-	close_button.tooltip_text = "Close"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.pressed.connect(_hide_chat_settings_popup)
 	_apply_button_style(close_button)
 	_apply_compact_chat_settings_button_style(close_button)
 	header.add_child(close_button)
 
 	var description := Label.new()
-	description.text = "Choose visible main tabs and their order."
+	_set_localized_control_property(description, "text", "ui.chat.settings.description")
 	description.add_theme_font_size_override("font_size", 11)
 	description.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	content.add_child(description)
@@ -22003,7 +22080,7 @@ func _setup_chat_tab_settings_ui() -> void:
 	content.add_child(footer)
 
 	var saved_label := Label.new()
-	saved_label.text = "Saved automatically"
+	_set_localized_control_property(saved_label, "text", "ui.chat.settings.saved_automatically")
 	saved_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	saved_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	saved_label.add_theme_font_size_override("font_size", 10)
@@ -22012,10 +22089,10 @@ func _setup_chat_tab_settings_ui() -> void:
 
 	var reset_button := Button.new()
 	reset_button.name = "ResetButton"
-	reset_button.text = "Reset"
+	_set_localized_control_property(reset_button, "text", "ui.chat.settings.reset")
 	reset_button.custom_minimum_size = Vector2(62, 28)
 	reset_button.focus_mode = Control.FOCUS_NONE
-	reset_button.tooltip_text = "Restore the default chat tabs"
+	_set_localized_control_property(reset_button, "tooltip_text", "ui.chat.settings.reset_tooltip")
 	reset_button.pressed.connect(_on_chat_tab_settings_reset_pressed)
 	_apply_button_style(reset_button)
 	_apply_compact_chat_settings_button_style(reset_button)
@@ -22040,6 +22117,34 @@ func _apply_compact_chat_settings_button_style(button: Button) -> void:
 		compact_style.content_margin_bottom = 3
 		button.add_theme_stylebox_override(style_name, compact_style)
 
+func _chat_tab_label(tab_id: String) -> String:
+	var key := str(CHAT_TAB_LABELS.get(tab_id, ""))
+	return LocalizationManager.text(key) if key != "" else tab_id.capitalize()
+
+func _refresh_chat_localized_ui() -> void:
+	if chat_panel != null:
+		LocalizationManager.localize_tree(chat_panel)
+	if chat_tabs_panel != null:
+		LocalizationManager.localize_tree(chat_tabs_panel)
+	if chat_settings_popup != null:
+		LocalizationManager.localize_tree(chat_settings_popup)
+		_render_chat_tab_settings_rows()
+	if socials_menu != null:
+		LocalizationManager.localize_tree(socials_menu)
+	for state_value: Variant in collapsible_panels.values():
+		var state := state_value as Dictionary
+		var button := state.get("button") as Button
+		if button != null:
+			_set_localized_control_property(
+				button,
+				"tooltip_text",
+				"ui.chat.expand" if bool(state.get("collapsed", false)) else "ui.chat.collapse"
+			)
+	_refresh_pending_chat_pokemon_attachment_preview()
+	_apply_chat_tab_state()
+	if chat_context_popup != null and chat_context_popup.visible:
+		_rebuild_chat_context_options()
+
 
 func _render_chat_tab_settings_rows() -> void:
 	if chat_settings_rows == null:
@@ -22050,23 +22155,24 @@ func _render_chat_tab_settings_rows() -> void:
 
 	for order_index: int in range(chat_tab_order.size()):
 		var tab_id := chat_tab_order[order_index]
+		var tab_label := _chat_tab_label(tab_id)
 		var row := HBoxContainer.new()
-		row.name = "%sRow" % str(CHAT_TAB_LABELS.get(tab_id, tab_id))
+		row.name = "%sRow" % tab_id.capitalize()
 		row.custom_minimum_size = Vector2(0, 30)
 		row.add_theme_constant_override("separation", 5)
 		chat_settings_rows.add_child(row)
 
 		var visibility_toggle := CheckButton.new()
 		visibility_toggle.name = "VisibilityToggle"
-		visibility_toggle.text = str(CHAT_TAB_LABELS.get(tab_id, tab_id))
+		visibility_toggle.text = tab_label
 		visibility_toggle.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		visibility_toggle.focus_mode = Control.FOCUS_NONE
 		visibility_toggle.set_pressed_no_signal(bool(chat_tab_visibility.get(tab_id, true)))
 		visibility_toggle.disabled = tab_id in [CHAT_TAB_ALL, CHAT_TAB_GENERAL]
 		visibility_toggle.tooltip_text = (
-			"%s always stays visible." % str(CHAT_TAB_LABELS.get(tab_id, tab_id))
+			LocalizationManager.text("ui.chat.settings.always_visible", {"tab": tab_label})
 			if visibility_toggle.disabled
-			else "Show or hide this chat tab."
+			else LocalizationManager.text("ui.chat.settings.toggle_tab")
 		)
 		visibility_toggle.add_theme_font_size_override("font_size", 13)
 		visibility_toggle.add_theme_color_override("font_color", UI_TEXT)
@@ -22080,7 +22186,7 @@ func _render_chat_tab_settings_rows() -> void:
 		move_up_button.custom_minimum_size = Vector2(28, 26)
 		move_up_button.focus_mode = Control.FOCUS_NONE
 		move_up_button.disabled = order_index == 0
-		move_up_button.tooltip_text = "Move tab left"
+		_set_localized_control_property(move_up_button, "tooltip_text", "ui.chat.settings.move_left")
 		move_up_button.pressed.connect(_on_chat_tab_move_pressed.bind(tab_id, -1))
 		_apply_button_style(move_up_button)
 		_apply_compact_chat_settings_button_style(move_up_button)
@@ -22092,7 +22198,7 @@ func _render_chat_tab_settings_rows() -> void:
 		move_down_button.custom_minimum_size = Vector2(28, 26)
 		move_down_button.focus_mode = Control.FOCUS_NONE
 		move_down_button.disabled = order_index == chat_tab_order.size() - 1
-		move_down_button.tooltip_text = "Move tab right"
+		_set_localized_control_property(move_down_button, "tooltip_text", "ui.chat.settings.move_right")
 		move_down_button.pressed.connect(_on_chat_tab_move_pressed.bind(tab_id, 1))
 		_apply_button_style(move_down_button)
 		_apply_compact_chat_settings_button_style(move_down_button)
@@ -22218,7 +22324,7 @@ func _reorder_chat_tab_buttons() -> void:
 func open_private_message_conversation(user: Dictionary) -> void:
 	var conversation_key: int = _pm_conversation_key_from_user(user)
 	if conversation_key == 0:
-		_add_chat_message("Could not open PM conversation: missing username.")
+		_add_chat_message(LocalizationManager.text("ui.chat.pm.missing_username"))
 		return
 
 	_ensure_pm_conversation(user)
@@ -22278,17 +22384,17 @@ func _render_active_pm_conversation() -> void:
 		pm_message_area.visible = has_conversations
 	if not has_conversations:
 		if pm_empty_title_label != null:
-			pm_empty_title_label.text = "No private messages yet"
+			pm_empty_title_label.text = LocalizationManager.text("ui.chat.pm.empty_title")
 		if pm_empty_hint_label != null:
-			pm_empty_hint_label.text = "Open a trainer card or use /pm username in chat to start a conversation."
+			pm_empty_hint_label.text = LocalizationManager.text("ui.chat.pm.empty_hint")
 		return
 
 	if active_pm_user_id == 0 or not pm_conversations_by_user_id.has(active_pm_user_id):
 		if pm_active_conversation_label != null:
 			pm_active_conversation_label.visible = false
 		_show_pm_message_empty_state(
-			"Select a conversation",
-			"Choose a trainer from the PM menu below."
+			LocalizationManager.text("ui.chat.pm.select_title"),
+			LocalizationManager.text("ui.chat.pm.select_hint")
 		)
 		return
 
@@ -22300,8 +22406,8 @@ func _render_active_pm_conversation() -> void:
 	var messages: Array = _array_from_variant(conversation.get("messages", []))
 	if messages.is_empty():
 		_show_pm_message_empty_state(
-			"No messages yet",
-			"Send the first message below."
+			LocalizationManager.text("ui.chat.pm.no_messages_title"),
+			LocalizationManager.text("ui.chat.pm.no_messages_hint")
 		)
 		return
 
@@ -22333,7 +22439,7 @@ func _create_pm_message_row(message: Dictionary) -> Control:
 	row.add_theme_constant_override("separation", 4)
 
 	var outgoing: bool = bool(message.get("outgoing", false))
-	var label: String = "You" if outgoing else str(message.get("displayName", message.get("username", "Trainer")))
+	var label: String = LocalizationManager.text("ui.chat.you") if outgoing else str(message.get("displayName", message.get("username", LocalizationManager.text("ui.trainer_card.trainer"))))
 	var name_color: String = "#7fd6ff" if outgoing else CHAT_DEFAULT_NAME_COLOR
 
 	var name_label := RichTextLabel.new()
@@ -22371,9 +22477,9 @@ func _create_pm_message_row(message: Dictionary) -> Control:
 	return row
 
 func _pm_conversation_title(user: Dictionary, unread: int) -> String:
-	var title := str(user.get("displayName", user.get("username", "Trainer"))).strip_edges()
+	var title := str(user.get("displayName", user.get("username", LocalizationManager.text("ui.trainer_card.trainer")))).strip_edges()
 	if title == "":
-		title = str(user.get("username", "Trainer"))
+		title = str(user.get("username", LocalizationManager.text("ui.trainer_card.trainer")))
 	if unread > 0:
 		return "%s (%s)" % [title, unread]
 	return title
@@ -22398,7 +22504,7 @@ func _recalculate_pm_total_unread() -> void:
 func _refresh_pm_tab_label() -> void:
 	if pm_tab_button == null:
 		return
-	pm_tab_button.text = "PM"
+	pm_tab_button.text = LocalizationManager.text("ui.chat.tab.pm")
 	if pm_tab_attention_badge != null:
 		pm_tab_attention_badge.visible = pm_total_unread_count > 0 and pm_tab_button.visible
 	if pm_context_selector_attention_badge != null:
@@ -22512,27 +22618,27 @@ func _apply_chat_tab_state() -> void:
 			attachment_button.visible = input_active
 	chat_input.editable = input_active
 	if active_chat_tab == CHAT_TAB_PM:
-		chat_input.placeholder_text = "Private message"
+		chat_input.placeholder_text = LocalizationManager.text("ui.chat.input.private")
 	elif active_chat_tab == CHAT_TAB_ALL:
-		chat_input.placeholder_text = "All messages · reply sends to Global"
+		chat_input.placeholder_text = LocalizationManager.text("ui.chat.input.all")
 	elif active_chat_tab == CHAT_TAB_MAP:
-		chat_input.placeholder_text = "Only trainers on this map can see this"
+		chat_input.placeholder_text = LocalizationManager.text("ui.chat.input.map")
 	elif active_chat_tab == CHAT_TAB_TRADE:
-		chat_input.placeholder_text = "Trade chat has a 2 minute cooldown"
+		chat_input.placeholder_text = LocalizationManager.text("ui.chat.input.trade")
 	elif active_chat_tab == CHAT_TAB_HELP:
-		chat_input.placeholder_text = "Help chat has a 5 minute cooldown"
+		chat_input.placeholder_text = LocalizationManager.text("ui.chat.input.help")
 	elif active_chat_tab == CHAT_TAB_GUILD:
 		chat_input.placeholder_text = (
-			"Checking guild membership..."
+			LocalizationManager.text("ui.chat.input.guild_checking")
 			if guild_chat_membership_loading
 			else (
-				"Message your guild"
+				LocalizationManager.text("ui.chat.input.guild")
 				if not guild_chat_membership.is_empty()
-				else "Join a guild to use Guild chat"
+				else LocalizationManager.text("ui.chat.guild.join_required")
 			)
 		)
 	else:
-		chat_input.placeholder_text = "" if input_active else "System messages only"
+		chat_input.placeholder_text = "" if input_active else LocalizationManager.text("ui.chat.input.system")
 	send_button.disabled = not input_active
 	if not input_active:
 		chat_input.release_focus()
@@ -22616,13 +22722,13 @@ func _submit_chat_input_async() -> void:
 
 	chat_input.clear()
 	if text.begins_with("/"):
-		_add_chat_message("Command not recognized.")
+		_add_chat_message(LocalizationManager.text("ui.chat.error.command_unknown"))
 		chat_submit_in_progress = false
 		_keep_chat_input_focused()
 		return
 
 	if not ChatRealtimeService.send_chat_message(text, _get_active_chat_channel(), pokemon_attachments):
-		_add_chat_message("Chat is reconnecting. Please try again in a moment.")
+		_add_chat_message(LocalizationManager.text("ui.chat.error.reconnecting"))
 	else:
 		_clear_pending_chat_pokemon_attachments()
 	chat_submit_in_progress = false
@@ -22636,22 +22742,23 @@ func _open_pm_from_chat_command(text: String) -> void:
 	var command_text := text.strip_edges()
 	var username := command_text.substr(3).strip_edges()
 	if username == "":
-		_add_chat_message("Usage: /pm username")
+		_add_chat_message(LocalizationManager.text("ui.chat.pm.usage"))
 		return
 	if username.contains(" "):
 		username = username.split(" ", false, 1)[0].strip_edges()
 	if username == "":
-		_add_chat_message("Usage: /pm username")
+		_add_chat_message(LocalizationManager.text("ui.chat.pm.usage"))
 		return
 
 	var result: Dictionary = await SocialService.validate_private_message_target(username)
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not open PM: %s" % str(result.get("error", "Player is not available.")))
+		push_warning("Could not open PM: %s" % str(result.get("error", "Player is not available.")))
+		_add_chat_message(LocalizationManager.text("ui.chat.pm.open_failed"))
 		return
 
 	var user: Dictionary = _dictionary_from_value(result.get("user", {}))
 	if user.is_empty():
-		_add_chat_message("Could not open PM: player not found.")
+		_add_chat_message(LocalizationManager.text("ui.chat.pm.player_not_found"))
 		return
 
 	chat_input.clear()
@@ -22659,7 +22766,7 @@ func _open_pm_from_chat_command(text: String) -> void:
 
 func _share_party_to_chat() -> void:
 	if PlayerSave.party.is_empty():
-		_add_chat_message("You need a Pokemon in your party first.")
+		_add_chat_message(LocalizationManager.text("ui.chat.error.party_required"))
 		return
 
 	var attachments: Array[Dictionary] = []
@@ -22673,11 +22780,11 @@ func _share_party_to_chat() -> void:
 
 	chat_input.clear()
 	if not ChatRealtimeService.send_chat_message("", _get_active_chat_channel(), attachments):
-		_add_chat_message("Chat is reconnecting. Please try again in a moment.")
+		_add_chat_message(LocalizationManager.text("ui.chat.error.reconnecting"))
 
 func _share_party_to_pm() -> void:
 	if PlayerSave.party.is_empty():
-		_add_pm_notice(active_pm_user_id, "You need a Pokemon in your party first.")
+		_add_pm_notice(active_pm_user_id, LocalizationManager.text("ui.chat.error.party_required"))
 		return
 
 	var attachments: Array[Dictionary] = []
@@ -22717,7 +22824,7 @@ func _submit_pm_input_async(text: String) -> void:
 
 func _submit_pm_message_with_attachments(text: String, pokemon_attachments: Array[Dictionary]) -> void:
 	if active_pm_user_id == 0 or not pm_conversations_by_user_id.has(active_pm_user_id):
-		_show_pm_empty_state("Select a PM conversation first.")
+		_show_pm_empty_state(LocalizationManager.text("ui.chat.pm.select_first"))
 		return
 	if text.length() > 300:
 		text = text.substr(0, 300)
@@ -22728,7 +22835,7 @@ func _submit_pm_message_with_attachments(text: String, pokemon_attachments: Arra
 	var user: Dictionary = _dictionary_from_value(conversation.get("user", {}))
 	var target_username: String = str(user.get("username", "")).strip_edges()
 	if target_username == "":
-		_add_pm_notice(target_pm_user_id, "Could not send PM: missing username.")
+		_add_pm_notice(target_pm_user_id, LocalizationManager.text("ui.chat.pm.missing_username"))
 		return
 	var sender_username: String = str(AuthService.current_user.get("username", "you"))
 	var sender_display_name: String = AuthService.get_display_name()
@@ -22736,7 +22843,8 @@ func _submit_pm_message_with_attachments(text: String, pokemon_attachments: Arra
 	chat_input.clear()
 	var result: Dictionary = await SocialService.send_private_message(target_username, target_body, pokemon_attachments)
 	if not bool(result.get("success", false)):
-		_add_pm_notice(target_pm_user_id, str(result.get("error", "Private message could not be sent.")))
+		push_warning("Could not send PM: %s" % str(result.get("error", "Private message could not be sent.")))
+		_add_pm_notice(target_pm_user_id, LocalizationManager.text("ui.chat.pm.send_failed"))
 		return
 
 	var message: Dictionary = _dictionary_from_value(result.get("message", {}))
@@ -22786,13 +22894,13 @@ func _show_pm_empty_state(text: String) -> void:
 	_clear_children(pm_message_list)
 	if pm_conversations_by_user_id.is_empty():
 		if pm_empty_title_label != null:
-			pm_empty_title_label.text = "Private messages"
+			pm_empty_title_label.text = LocalizationManager.text("ui.chat.pm.title")
 		if pm_empty_hint_label != null:
 			pm_empty_hint_label.text = text
 		return
 	if pm_active_conversation_label != null and active_pm_user_id == 0:
 		pm_active_conversation_label.visible = false
-	_show_pm_message_empty_state("Private messages", text)
+	_show_pm_message_empty_state(LocalizationManager.text("ui.chat.pm.title"), text)
 
 func _keep_chat_input_focused() -> void:
 	_restore_chat_input_focus.call_deferred()
@@ -34494,20 +34602,27 @@ func _create_chat_channel_prefix(channel: String, target_user_id: int = 0) -> Bu
 	prefix.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	prefix.add_theme_font_size_override("font_size", 11)
 	var prefix_color := Color("#70859b")
+	var prefix_key := "ui.chat.prefix.global"
+	var tooltip_key := "ui.chat.open.global"
 	match channel:
 		CHAT_CHANNEL_MAP:
-			prefix.text = "[Map]"
+			prefix_key = "ui.chat.prefix.map"
+			tooltip_key = "ui.chat.open.map"
 		CHAT_CHANNEL_TRADE:
-			prefix.text = "[Trade]"
+			prefix_key = "ui.chat.prefix.trade"
+			tooltip_key = "ui.chat.open.trade"
 		CHAT_CHANNEL_HELP:
-			prefix.text = "[Help]"
+			prefix_key = "ui.chat.prefix.help"
+			tooltip_key = "ui.chat.open.help"
 		CHAT_TAB_PM:
-			prefix.text = "[PM]"
+			prefix_key = "ui.chat.prefix.pm"
+			tooltip_key = "ui.chat.open.pm"
 		CHAT_TAB_GUILD:
-			prefix.text = "[Guild]"
+			prefix_key = "ui.chat.prefix.guild"
+			tooltip_key = "ui.chat.open.guild"
 		_:
-			prefix.text = "[Global]"
 			prefix_color = Color("#d8b767")
+	_set_localized_control_property(prefix, "text", prefix_key)
 	var empty_style := StyleBoxEmpty.new()
 	for state: String in ["normal", "hover", "pressed", "focus"]:
 		prefix.add_theme_stylebox_override(state, empty_style)
@@ -34516,10 +34631,10 @@ func _create_chat_channel_prefix(channel: String, target_user_id: int = 0) -> Bu
 	prefix.add_theme_color_override("font_pressed_color", prefix_color.lightened(0.4))
 	prefix.visible = active_chat_tab == CHAT_TAB_ALL
 	if channel == CHAT_TAB_PM and target_user_id != 0:
-		prefix.tooltip_text = "Open this private conversation"
+		_set_localized_control_property(prefix, "tooltip_text", "ui.chat.open.private")
 		prefix.pressed.connect(_on_all_pm_channel_pressed.bind(target_user_id))
 	else:
-		prefix.tooltip_text = "Open %s chat" % prefix.text.trim_prefix("[").trim_suffix("]")
+		_set_localized_control_property(prefix, "tooltip_text", tooltip_key)
 		prefix.pressed.connect(_on_all_channel_badge_pressed.bind(channel))
 	return prefix
 
@@ -34665,7 +34780,10 @@ func _create_chat_pokemon_attachment_button(pokemon_payload: Dictionary) -> Cont
 	button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	button.focus_mode = Control.FOCUS_NONE
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	button.tooltip_text = "View %s summary" % species_name
+	button.tooltip_text = LocalizationManager.text(
+		"ui.chat.attachment.view",
+		{"pokemon": species_name}
+	)
 	button.pressed.connect(_open_readonly_pokemon_summary.bind(pokemon_payload))
 	var transparent_style := _make_button_style(Color("#00000000"), Color("#00000000"), 0, 0)
 	button.add_theme_stylebox_override("normal", transparent_style)
