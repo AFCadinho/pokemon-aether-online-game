@@ -217,7 +217,8 @@ func _init() -> void:
 	)
 	_check_equal(
 		battle_source.contains("func _is_spectator_battle() -> bool:") \
-			and battle_source.contains('current_action_panel.set_message("Spectating • read-only")') \
+			and battle_source.contains('return "Waiting for both players..."') \
+			and battle_source.contains('return "Watching the battle live"') \
 			and battle_source.contains("action_buttons.visible = false") \
 			and battle_source.contains('action_buttons.set_action_visible("run", false)') \
 			and battle_source.contains("spectator_action_panel.visible = true") \
@@ -240,7 +241,7 @@ func _init() -> void:
 	)
 	_check_equal(
 		battle_source.contains("func _run_pvp_spectator_team_preview() -> Dictionary:") \
-			and battle_source.contains("Spectating team preview • waiting for both players") \
+			and battle_source.contains('current_action_panel.set_message("Waiting for both players...")') \
 			and battle_source.contains("_seed_spectator_leads_from_team_preview_events(display_response)") \
 			and battle_source.contains("_build_spectator_lead_event_from_public_ident(player_id, public_ident)") \
 			and battle_source.contains('for ident_key in ["target", "actor", "pokemon", "sourceTarget", "fromIdent", "toIdent"]') \

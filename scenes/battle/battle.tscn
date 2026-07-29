@@ -352,6 +352,67 @@ bg_color = Color(0.19607843, 0.047058824, 0.03137255, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_utility_exit_hover"]
 bg_color = Color(0.13725491, 0.047058824, 0.039215688, 0.98)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_spectator_card"]
+content_margin_left = 18.0
+content_margin_top = 8.0
+content_margin_right = 10.0
+content_margin_bottom = 8.0
+bg_color = Color(0.011764706, 0.03529412, 0.07450981, 0.96)
+border_width_left = 2
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.105882354, 0.46666667, 0.7607843, 0.9)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0, 0, 0, 0.28)
+shadow_size = 6
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_spectator_switch_normal"]
+content_margin_left = 14.0
+content_margin_right = 14.0
+bg_color = Color(0.023529412, 0.10980392, 0.2, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.1764706, 0.57254905, 0.8509804, 0.9)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_spectator_switch_hover"]
+content_margin_left = 14.0
+content_margin_right = 14.0
+bg_color = Color(0.03529412, 0.2, 0.34509805, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.38431373, 0.84313726, 1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_spectator_leave_normal"]
+content_margin_left = 14.0
+content_margin_right = 14.0
+bg_color = Color(0.101960786, 0.03529412, 0.047058824, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5529412, 0.1764706, 0.22352941, 0.9)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m7fqn"]
 bg_color = Color(0.008, 0.022, 0.055, 0.92)
 border_width_left = 1
@@ -1945,43 +2006,65 @@ compact_mode = true
 layout_mode = 2
 compact_mode = true
 
-[node name="SpectatorActionPanel" type="HBoxContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack"]
+[node name="SpectatorActionPanel" type="PanelContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack"]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(0, 58)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_spectator_card")
+
+[node name="SpectatorContent" type="HBoxContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/SpectatorActionPanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
 alignment = 1
 
-[node name="SpectatorPerspectiveLabel" type="Label" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/SpectatorActionPanel"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(230, 42)
+[node name="SpectatorLiveIndicator" type="Label" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/SpectatorActionPanel/SpectatorContent"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.82, 0.9, 1, 1)
-theme_override_font_sizes/font_size = 16
-text = "View: Admin on the left"
+theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "●"
 vertical_alignment = 1
 
-[node name="SpectatorSwitchSidesButton" type="Button" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/SpectatorActionPanel"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(150, 42)
+[node name="SpectatorViewDetails" type="VBoxContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/SpectatorActionPanel/SpectatorContent"]
 layout_mode = 2
-mouse_default_cursor_shape = 2
-theme_override_font_sizes/font_size = 15
-theme_override_styles/normal = SubResource("StyleBoxFlat_utility_segment_normal")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_utility_bag_pressed")
-theme_override_styles/hover = SubResource("StyleBoxFlat_utility_bag_hover")
-theme_override_styles/focus = SubResource("StyleBoxFlat_utility_bag_hover")
-text = "Switch Sides"
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+alignment = 1
 
-[node name="SpectatorLeaveButton" type="Button" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/SpectatorActionPanel"]
+[node name="SpectatorModeLabel" type="Label" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/SpectatorActionPanel/SpectatorContent/SpectatorViewDetails"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
+theme_override_font_sizes/font_size = 11
+text = "SPECTATOR MODE"
+
+[node name="SpectatorPerspectiveLabel" type="Label" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/SpectatorActionPanel/SpectatorContent/SpectatorViewDetails"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(130, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.86, 0.92, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "Admin is shown on the left"
+vertical_alignment = 1
+
+[node name="SpectatorSwitchSidesButton" type="Button" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/SpectatorActionPanel/SpectatorContent"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(142, 38)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 15
-theme_override_styles/normal = SubResource("StyleBoxFlat_utility_segment_normal")
+theme_override_styles/normal = SubResource("StyleBoxFlat_spectator_switch_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_utility_bag_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_spectator_switch_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_spectator_switch_hover")
+text = "Switch View"
+
+[node name="SpectatorLeaveButton" type="Button" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/SpectatorActionPanel/SpectatorContent"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(128, 38)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 15
+theme_override_styles/normal = SubResource("StyleBoxFlat_spectator_leave_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_utility_exit_pressed")
 theme_override_styles/hover = SubResource("StyleBoxFlat_utility_exit_hover")
 theme_override_styles/focus = SubResource("StyleBoxFlat_utility_exit_hover")

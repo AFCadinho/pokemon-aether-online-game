@@ -5599,7 +5599,13 @@ func _enter_spectator_controls() -> void:
 	bag_drawer.visible = false
 	forfeit_confirm_dialog.visible = false
 	current_action_view = ActionView.NONE
-	current_action_panel.set_message("Spectating • read-only")
+	current_action_panel.set_message(_get_spectator_status_message())
+
+
+func _get_spectator_status_message() -> String:
+	if team_preview_lead_selection_active:
+		return "Waiting for both players..."
+	return "Watching the battle live"
 
 
 func _on_spectator_switch_sides_pressed() -> void:
@@ -5639,7 +5645,7 @@ func _remember_spectator_raw_response(response: Dictionary) -> void:
 func _update_spectator_perspective_label() -> void:
 	if not _is_spectator_battle():
 		return
-	spectator_perspective_label.text = "View: %s on the left" % _get_player_display_name("p1")
+	spectator_perspective_label.text = "%s is shown on the left" % _get_player_display_name("p1")
 
 
 func _swap_spectator_public_knowledge_sides() -> void:
@@ -6462,7 +6468,7 @@ func _run_pvp_spectator_team_preview() -> Dictionary:
 	player_party_grid.visible = true
 	opponent_party_grid.visible = true
 	_enter_spectator_controls()
-	current_action_panel.set_message("Spectating team preview • waiting for both players")
+	current_action_panel.set_message("Waiting for both players...")
 
 	while team_preview_lead_selection_active and not battle_finished:
 		var message: Dictionary = await _wait_for_next_pvp_realtime_update(0.25)
