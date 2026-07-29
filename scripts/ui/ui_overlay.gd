@@ -19106,7 +19106,7 @@ func _format_identifier_display_name(raw_value: String) -> String:
 
 	return " ".join(words)
 
-func _get_summary_move_name(move_value: Variant) -> String:
+func _get_summary_move_source_name(move_value: Variant) -> String:
 	if move_value is Dictionary:
 		var move_data: Dictionary = move_value as Dictionary
 		var move_name: String = str(move_data.get("name", "")).strip_edges()
@@ -19115,6 +19115,11 @@ func _get_summary_move_name(move_value: Variant) -> String:
 		return _format_move_name(str(move_data.get("id", move_data.get("move", ""))))
 
 	return _format_move_name(str(move_value))
+
+
+func _get_summary_move_name(move_value: Variant) -> String:
+	var source_name := _get_summary_move_source_name(move_value)
+	return _localized_content_name("moves", _get_summary_move_id(move_value), source_name)
 
 func _get_summary_move_type(move_value: Variant) -> String:
 	if not (move_value is Dictionary):
@@ -19158,9 +19163,9 @@ func _get_summary_move_type(move_value: Variant) -> String:
 			if indexed_type != "":
 				return indexed_type
 
-	var fallback_metadata: Dictionary = _lookup_summary_move_metadata(_get_summary_move_name(move_value))
+	var fallback_metadata: Dictionary = _lookup_summary_move_metadata(_get_summary_move_source_name(move_value))
 	var fallback_metadata_type: String = str(fallback_metadata.get("type", "")).strip_edges()
-	return fallback_metadata_type if fallback_metadata_type != "" else _lookup_summary_move_type(_get_summary_move_name(move_value))
+	return fallback_metadata_type if fallback_metadata_type != "" else _lookup_summary_move_type(_get_summary_move_source_name(move_value))
 
 func _lookup_summary_move_type(move_key: String) -> String:
 	var normalized_key: String = _normalize_summary_move_lookup_key(move_key)
@@ -19311,7 +19316,7 @@ func _get_summary_ability_description_text(ability_value: String) -> String:
 	)).strip_edges()
 	if description == "":
 		description = str(_get_first_dictionary_value(metadata, ["desc", "description"], "")).strip_edges()
-	return description
+	return _localized_content_description("abilities", ability_value, description)
 
 func _get_summary_ability_display_name(ability_value: String) -> String:
 	var cleaned: String = ability_value.strip_edges()
@@ -19320,10 +19325,8 @@ func _get_summary_ability_display_name(ability_value: String) -> String:
 
 	var metadata: Dictionary = _lookup_summary_ability_metadata(cleaned)
 	var metadata_name: String = str(_get_first_dictionary_value(metadata, ["name", "displayName", "display_name"], "")).strip_edges()
-	if metadata_name != "":
-		return metadata_name
-
-	return _format_identifier_display_name(cleaned)
+	var fallback_name := metadata_name if metadata_name != "" else _format_identifier_display_name(cleaned)
+	return _localized_content_name("abilities", cleaned, fallback_name)
 
 func _normalize_summary_move_lookup_key(value: String) -> String:
 	var normalized_key: String = value.strip_edges().to_lower()
@@ -19398,7 +19401,7 @@ func _get_summary_move_description_text(move_value: Variant) -> String:
 	)).strip_edges()
 	if description == "":
 		description = str(_get_summary_move_data_value(move_value, ["desc", "description"], "")).strip_edges()
-	return description
+	return _localized_content_description("moves", _get_summary_move_id(move_value), description)
 
 func _get_summary_move_data_value(move_value: Variant, keys: Array[String], fallback: Variant) -> Variant:
 	if not (move_value is Dictionary):
@@ -25396,10 +25399,18 @@ func _add_pokedex_ability_rows(abilities: Array, target: VBoxContainer = null) -
 		var ability_name := str(ability.get("name", ability.get("id", ""))).strip_edges()
 		if ability_name == "":
 			continue
+		var ability_id := str(ability.get("id", ability_name))
 		var slot := str(ability.get("slot", "")).strip_edges()
 		var label := _format_pokedex_ability_slot_label(slot)
-		var ability_row := _create_pokedex_info_line(label, ability_name)
-		var ability_description := _get_summary_ability_description_text(ability_name)
+		var ability_row := _create_pokedex_info_line(
+			label,
+			_localized_content_name("abilities", ability_id, ability_name)
+		)
+		var ability_description := _localized_content_description(
+			"abilities",
+			ability_id,
+			_get_summary_ability_description_text(ability_name)
+		)
 		if ability_description != "":
 			ability_row.tooltip_text = ability_description
 		target_stack.add_child(ability_row)
@@ -25822,6 +25833,13 @@ func _pokedex_move_matches_query(move: Dictionary, normalized_query: String, sou
 		str(move.get("category", "")),
 		source_label,
 	]
+	var move_id := str(move.get("id", move.get("move", move.get("name", ""))))
+	for localized_term: String in _content_search_terms(
+		"moves",
+		move_id,
+		str(move.get("name", move_id))
+	):
+		values.append(localized_term)
 	if move.has("level"):
 		values.append("level")
 		values.append(str(int(move.get("level", 1))))
@@ -26252,6 +26270,25 @@ func _content_search_terms(kind: String, content_id: String, fallback_name: Stri
 	if content_localization != null and content_localization.has_method("search_terms"):
 		return content_localization.call("search_terms", kind, content_id, fallback_name)
 	return [content_id, fallback_name]
+
+
+func _localized_content_name(kind: String, content_id: String, fallback_name: String) -> String:
+	var content_localization := _get_content_localization()
+	if content_localization != null and content_localization.has_method("display_name"):
+		return str(content_localization.call("display_name", kind, content_id, fallback_name))
+	return fallback_name
+
+
+func _localized_content_description(kind: String, content_id: String, fallback_description: String) -> String:
+	var content_localization := _get_content_localization()
+	if content_localization != null and content_localization.has_method("short_description"):
+		return str(content_localization.call(
+			"short_description",
+			kind,
+			content_id,
+			fallback_description
+		))
+	return fallback_description
 
 
 func _get_content_localization() -> Node:
@@ -28516,10 +28553,11 @@ func _pc_pokemon_matches_filters(pokemon_response: Dictionary) -> bool:
 		str(payload.get("held_item_id", "")),
 	])
 	var nature_search_terms: Array = _content_search_terms("natures", nature, nature)
+	var ability_search_terms: Array = _content_search_terms("abilities", ability, ability)
 	return _pc_filter_matches_value(pc_filter_species_input, [species]) \
 		and _pc_filter_matches_value(pc_filter_type_input, types) \
 		and _pc_filter_matches_value(pc_filter_nature_input, nature_search_terms) \
-		and _pc_filter_matches_value(pc_filter_ability_input, [ability]) \
+		and _pc_filter_matches_value(pc_filter_ability_input, ability_search_terms) \
 		and _pc_filter_matches_value(pc_filter_move_input, moves) \
 		and _pc_filter_matches_value(pc_filter_item_input, [held_item])
 
@@ -28529,12 +28567,23 @@ func _pc_payload_move_search_fields(payload: Dictionary) -> Array[String]:
 	for move_value: Variant in _array_from_variant(payload.get("moves", payload.get("moveSlots", []))):
 		if move_value is Dictionary:
 			var move_entry: Dictionary = move_value as Dictionary
+			var move_id := str(move_entry.get(
+				"id",
+				move_entry.get("move", move_entry.get("moveId", move_entry.get("move_id", move_entry.get("name", ""))))
+			))
+			var fallback_name := str(move_entry.get("name", move_id))
+			for localized_term: String in _content_search_terms("moves", move_id, fallback_name):
+				if not fields.has(localized_term):
+					fields.append(localized_term)
 			for key: String in ["name", "move", "id", "moveId", "move_id"]:
 				var move_name := str(move_entry.get(key, "")).strip_edges()
-				if move_name != "":
+				if move_name != "" and not fields.has(move_name):
 					fields.append(move_name)
 		else:
-			fields.append(str(move_value).strip_edges())
+			var move_id := str(move_value).strip_edges()
+			for localized_term: String in _content_search_terms("moves", move_id, move_id):
+				if not fields.has(localized_term):
+					fields.append(localized_term)
 	return fields
 
 

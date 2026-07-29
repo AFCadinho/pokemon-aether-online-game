@@ -17,7 +17,7 @@ Initial locales: English (`en`), Dutch (`nl`), Brazilian Portuguese (`pt-BR`)
 | Phase 4: shared game interface | Complete; all 11 functional domains are migrated |
 | Phase 5: battle localization | Complete; battle UI, dynamic events, timers, field state, results, and calculator are migrated |
 | Phase 6: world signs and NPC dialogue | Complete; signs, Game Content dialogue, NPC display overlays, locale caches, and fallback are active |
-| Phase 7: Pokémon and item content | In progress; item, type, and nature overlays plus localized type/nature search are active |
+| Phase 7: Pokémon and item content | In progress; item, type, nature, and current trainer/gym move and ability overlays are active |
 | Phases 8-10 | Planned |
 
 ## Goal
@@ -365,6 +365,14 @@ types, natures, species, moves, abilities, and statuses. The initial complete ca
 cover all 18 types and 25 natures. Pokémon Summary, Pokédex, move learning, PC filters,
 battle party hover, and the damage calculator resolve type and nature presentation
 through this service while retaining canonical type and nature values internally.
+
+The next content slice covers all 65 moves and 20 abilities explicitly used by the
+current Route 1 and Alpha Gym trainer rosters. English, Dutch, and Brazilian Portuguese
+overlays provide names and short descriptions. Pokémon Summary, Pokédex move search,
+PC filters, battle move slots, move hover cards, and Pokémon hover cards resolve these
+presentation fields through the shared service. The catalogs contain no power,
+accuracy, PP, type, category, or ability mechanics. Full local indexes (919 moves and
+376 abilities) remain a later Phase 7 migration together with species overlays.
 
 ### Acceptance criteria
 

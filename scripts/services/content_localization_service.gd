@@ -55,6 +55,54 @@ func nature_name(nature_id: String, fallback_name: String = "", locale: String =
 	return display_name("natures", nature_id, fallback_name, locale)
 
 
+func short_description(
+	kind: String,
+	content_id: String,
+	fallback_description: String = "",
+	locale: String = ""
+) -> String:
+	var normalized_kind := _normalize_kind(kind)
+	var normalized_id := normalize_id(content_id)
+	if normalized_kind.is_empty() or normalized_id.is_empty():
+		return fallback_description
+
+	var normalized_locale := _normalized_locale(locale)
+	var localized_entry := _catalog_entry(normalized_locale, normalized_kind, normalized_id)
+	var english_entry := _catalog_entry(DEFAULT_LOCALE, normalized_kind, normalized_id)
+	var localized_description := str(localized_entry.get("shortDesc", "")).strip_edges()
+	if not localized_description.is_empty():
+		return localized_description
+	var english_description := str(english_entry.get("shortDesc", "")).strip_edges()
+	if not english_description.is_empty():
+		return english_description
+	return fallback_description
+
+
+func localize_metadata(
+	kind: String,
+	content_id: String,
+	metadata: Dictionary,
+	locale: String = ""
+) -> Dictionary:
+	var localized := metadata.duplicate(true)
+	var source_name := str(localized.get("_i18n_source_name", localized.get("name", ""))).strip_edges()
+	var source_description := str(localized.get(
+		"_i18n_source_short_desc",
+		localized.get("shortDesc", localized.get("short_desc", localized.get("description", "")))
+	)).strip_edges()
+	localized["_i18n_source_name"] = source_name
+	localized["_i18n_source_short_desc"] = source_description
+	localized["name"] = display_name(kind, content_id, source_name, locale)
+	var translated_description := short_description(kind, content_id, source_description, locale)
+	if localized.has("shortDesc") or not translated_description.is_empty():
+		localized["shortDesc"] = translated_description
+	if localized.has("short_desc"):
+		localized["short_desc"] = translated_description
+	if localized.has("description"):
+		localized["description"] = translated_description
+	return localized
+
+
 func search_terms(
 	kind: String,
 	content_id: String,
@@ -144,6 +192,10 @@ func _load_catalog(locale: String, path: String) -> Dictionary:
 			if name.is_empty():
 				push_error("ContentLocalization: missing %s name for %s in %s" % [kind, content_id, locale])
 				continue
-			entries[content_id] = {"name": name}
+			var normalized_entry := {"name": name}
+			var short_description_value := str((entry_value as Dictionary).get("shortDesc", "")).strip_edges()
+			if not short_description_value.is_empty():
+				normalized_entry["shortDesc"] = short_description_value
+			entries[content_id] = normalized_entry
 		catalog[kind] = entries
 	return catalog

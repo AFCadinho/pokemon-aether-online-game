@@ -190,7 +190,11 @@ func _set_abilities(abilities: Array[String], confirmed_ability: String = "") ->
 	if confirmed_ability != "":
 		ability_row.visible = true
 		ability_label.text = _t("battle.hover.ability")
-		ability_value_label.text = _format_display_name(confirmed_ability)
+		ability_value_label.text = _localized_content_name(
+			"abilities",
+			confirmed_ability,
+			_format_display_name(confirmed_ability)
+		)
 		return
 
 	ability_row.visible = not abilities.is_empty()
@@ -201,7 +205,7 @@ func _set_abilities(abilities: Array[String], confirmed_ability: String = "") ->
 	)
 	var ability_text: PackedStringArray = []
 	for ability in abilities:
-		ability_text.append(ability)
+		ability_text.append(_localized_content_name("abilities", ability, ability))
 
 	ability_value_label.text = " / ".join(ability_text)
 
@@ -315,13 +319,26 @@ func _format_move_text(move_value: Variant) -> String:
 	if move_value is Dictionary:
 		var move_data: Dictionary = move_value
 		var move_name: String = str(move_data.get("name", move_data.get("move", move_data.get("id", ""))))
+		var move_id := str(move_data.get(
+			"id",
+			move_data.get("move", move_data.get("moveId", move_data.get("move_id", move_name)))
+		))
+		move_name = _localized_content_name("moves", move_id, move_name)
 		var pp_text: String = _format_pp_text(move_data)
 		if pp_text != "":
 			return "• %s (%s)" % [move_name, pp_text]
 
 		return "• %s" % move_name
 
-	return "• %s" % str(move_value)
+	var move_name := str(move_value)
+	return "• %s" % _localized_content_name("moves", move_name, move_name)
+
+
+func _localized_content_name(kind: String, content_id: String, fallback_name: String) -> String:
+	var content_localization := get_node_or_null("/root/ContentLocalization")
+	if content_localization != null and content_localization.has_method("display_name"):
+		return str(content_localization.call("display_name", kind, content_id, fallback_name))
+	return fallback_name
 
 
 func _format_pp_text(move_data: Dictionary) -> String:

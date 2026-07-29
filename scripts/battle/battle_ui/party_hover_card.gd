@@ -177,7 +177,11 @@ func _set_pokemon_data(pokemon_data: Dictionary) -> void:
 	_set_type_icons(pokemon_data)
 	_set_hp(pokemon_data)
 	ability_value_label.text = _format_value(
-		str(pokemon_data.get("ability", "")),
+		_localized_content_name(
+			"abilities",
+			str(pokemon_data.get("ability", "")),
+			str(pokemon_data.get("ability", ""))
+		),
 		_t("common.unknown")
 	)
 	item_value_label.text = _format_value(
@@ -216,6 +220,13 @@ func _localized_nature_name(nature: String) -> String:
 	if content_localization != null and content_localization.has_method("nature_name"):
 		return str(content_localization.call("nature_name", nature, nature))
 	return nature
+
+
+func _localized_content_name(kind: String, content_id: String, fallback_name: String) -> String:
+	var content_localization := _get_content_localization()
+	if content_localization != null and content_localization.has_method("display_name"):
+		return str(content_localization.call("display_name", kind, content_id, fallback_name))
+	return fallback_name
 
 
 func _get_content_localization() -> Node:
@@ -401,9 +412,21 @@ func _set_moves(moves_value: Variant) -> void:
 func _get_move_display_name(move_data: Variant) -> String:
 	if move_data is Dictionary:
 		var move_dictionary := move_data as Dictionary
-		return str(move_dictionary.get("name", move_dictionary.get("move", "")))
+		var fallback_name := str(move_dictionary.get(
+			"name",
+			move_dictionary.get("move", move_dictionary.get("id", ""))
+		))
+		var move_id := str(move_dictionary.get(
+			"id",
+			move_dictionary.get(
+				"move",
+				move_dictionary.get("moveId", move_dictionary.get("move_id", fallback_name))
+			)
+		))
+		return _localized_content_name("moves", move_id, fallback_name)
 
-	return str(move_data)
+	var move_name := str(move_data)
+	return _localized_content_name("moves", move_name, move_name)
 
 
 func _get_move_pp_text(move_data: Variant) -> String:

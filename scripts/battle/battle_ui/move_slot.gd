@@ -41,7 +41,7 @@ func set_move_data(move_data: Dictionary) -> void:
 	modulate = DISABLED_MODULATE if disabled else Color.WHITE
 	tooltip_text = str(move_data.get("disabledReason", "")) if disabled else ""
 	
-	move_name_label.text = str(move_data.get("name", ""))
+	move_name_label.text = _localized_move_name(move_data)
 	
 	var current_pp_value = move_data.get("pp", 0)
 	var current_pp := 0
@@ -228,6 +228,21 @@ func _normalize_move_lookup_key(value: String) -> String:
 		normalized_key = normalized_key.replace("--", "-")
 
 	return normalized_key
+
+
+func _localized_move_name(move_data: Dictionary) -> String:
+	var fallback_name := str(move_data.get(
+		"name",
+		move_data.get("move", move_data.get("id", ""))
+	)).strip_edges()
+	var move_id := str(move_data.get(
+		"id",
+		move_data.get("move", move_data.get("moveId", move_data.get("move_id", fallback_name)))
+	))
+	var content_localization := get_node_or_null("/root/ContentLocalization")
+	if content_localization != null and content_localization.has_method("display_name"):
+		return str(content_localization.call("display_name", "moves", move_id, fallback_name))
+	return fallback_name
 	
 func set_empty() -> void:
 	visible = true

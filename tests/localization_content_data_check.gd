@@ -46,9 +46,18 @@ func _check_catalogs() -> void:
 		catalogs[locale] = parsed as Dictionary if parsed is Dictionary else {}
 
 	var english: Dictionary = catalogs.get("en", {})
-	for kind: String in ["types", "natures"]:
+	var expected_sizes := {
+		"types": 18,
+		"natures": 25,
+		"moves": 65,
+		"abilities": 20,
+	}
+	for kind: String in expected_sizes:
 		var english_entries: Dictionary = english.get(kind, {})
-		_check(english_entries.size() == (18 if kind == "types" else 25), "English %s catalog is complete" % kind)
+		_check(
+			english_entries.size() == int(expected_sizes.get(kind, 0)),
+			"English %s catalog is complete" % kind
+		)
 		var english_ids: Array = english_entries.keys()
 		english_ids.sort()
 		for locale: String in CATALOG_PATHS:
@@ -60,16 +69,37 @@ func _check_catalogs() -> void:
 				var content_id := str(content_id_value)
 				var entry: Dictionary = entries.get(content_id, {})
 				_check(not str(entry.get("name", "")).strip_edges().is_empty(), "%s %s %s has a name" % [locale, kind, content_id])
+				if kind in ["moves", "abilities"]:
+					_check(
+						not str(entry.get("shortDesc", "")).strip_edges().is_empty(),
+						"%s %s %s has a short description" % [locale, kind, content_id]
+					)
 
 
 func _check_runtime_resolution() -> void:
 	localization_manager.call("set_locale", "nl")
 	_check(content_localization.call("type_name", "fire", "Fire") == "Vuur", "Dutch type name resolves by canonical ID")
 	_check(content_localization.call("nature_name", "Adamant", "Adamant") == "Vastberaden", "Dutch nature resolves by canonical value")
+	_check(
+		content_localization.call("display_name", "moves", "water-pulse", "Water Pulse") == "Waterpuls",
+		"Dutch move name resolves by canonical ID"
+	)
+	_check(
+		content_localization.call("short_description", "abilities", "static", "") == "Kan aanvallers die contact maken verlammen.",
+		"Dutch ability description resolves by canonical ID"
+	)
 
 	localization_manager.call("set_locale", "pt_BR")
 	_check(content_localization.call("type_name", "water", "Water") == "Água", "Portuguese type name resolves by canonical ID")
 	_check(content_localization.call("nature_name", "Jolly", "Jolly") == "Alegre", "Portuguese nature resolves by canonical value")
+	_check(
+		content_localization.call("display_name", "abilities", "water-absorb", "Water Absorb") == "Absorção de Água",
+		"Portuguese ability name resolves by canonical ID"
+	)
+	_check(
+		content_localization.call("short_description", "moves", "thunder-wave", "") == "Paralisa o alvo.",
+		"Portuguese move description resolves by canonical ID"
+	)
 
 	_check(
 		content_localization.call("display_name", "moves", "future-move", "Future Move") == "Future Move",
@@ -94,6 +124,31 @@ func _check_search_terms_preserve_canonical_values() -> void:
 	_check(canonical_pokemon.types == ["fire"], "type localization does not mutate Pokémon mechanics")
 	_check(canonical_pokemon.nature == "Adamant", "nature localization does not mutate Pokémon mechanics")
 	_check(canonical_pokemon.level == 50, "content localization does not alter unrelated mechanics")
+
+	var canonical_move := {
+		"id": "water-pulse",
+		"name": "Water Pulse",
+		"shortDesc": "May confuse the target.",
+		"basePower": 60,
+		"accuracy": 100,
+		"pp": 20,
+		"type": "Water",
+		"category": "Special",
+	}
+	var localized_move: Dictionary = content_localization.call(
+		"localize_metadata",
+		"moves",
+		"water-pulse",
+		canonical_move
+	)
+	_check(localized_move.name == "Waterpuls", "metadata overlay localizes the move name")
+	_check(localized_move.shortDesc == "Kan het doel in verwarring brengen.", "metadata overlay localizes the move description")
+	for mechanics_key: String in ["id", "basePower", "accuracy", "pp", "type", "category"]:
+		_check(
+			localized_move.get(mechanics_key) == canonical_move.get(mechanics_key),
+			"metadata overlay preserves move mechanic %s" % mechanics_key
+		)
+	_check(canonical_move.name == "Water Pulse", "metadata overlay does not mutate its source dictionary")
 
 
 func _check_runtime_consumers() -> void:
@@ -123,8 +178,43 @@ func _check_runtime_consumers() -> void:
 		overlay.call("_pc_pokemon_matches_filters", {"pokemon": {"types": ["fire"]}}),
 		"PC type filter accepts the localized type name"
 	)
+	var ability_filter := LineEdit.new()
+	ability_filter.text = "waterabsorptie"
+	overlay.set("pc_filter_type_input", null)
+	overlay.set("pc_filter_ability_input", ability_filter)
+	_check(
+		overlay.call("_pc_pokemon_matches_filters", {"pokemon": {"ability": "water-absorb"}}),
+		"PC ability filter accepts the localized ability name"
+	)
+	var move_filter := LineEdit.new()
+	move_filter.text = "waterpuls"
+	overlay.set("pc_filter_ability_input", null)
+	overlay.set("pc_filter_move_input", move_filter)
+	_check(
+		overlay.call("_pc_pokemon_matches_filters", {
+			"pokemon": {
+				"moves": [{"id": "water-pulse", "name": "Water Pulse"}],
+			},
+		}),
+		"PC move filter accepts the localized move name"
+	)
+	_check(
+		overlay.call("_get_summary_move_name", {"id": "water-pulse", "name": "Water Pulse"}) == "Waterpuls",
+		"Pokémon Summary displays a localized move name"
+	)
+	_check(
+		overlay.call("_get_summary_ability_display_name", "water-absorb") == "Waterabsorptie",
+		"Pokémon Summary displays a localized ability name"
+	)
+	var pokedex_move := {"id": "water-pulse", "name": "Water Pulse", "type": "water"}
+	_check(
+		overlay.call("_pokedex_move_matches_query", pokedex_move, "waterpuls", "Level"),
+		"Pokédex move search accepts the localized move name"
+	)
 	nature_filter.free()
 	type_filter.free()
+	ability_filter.free()
+	move_filter.free()
 	for loader_property: String in ["pokemon_summary_sprite_loader", "pokedex_sprite_loader"]:
 		var loader := overlay.get(loader_property) as Node
 		if loader != null:
@@ -145,6 +235,17 @@ func _check_runtime_consumers() -> void:
 		party_hover_text.contains("func _get_content_localization() -> Node:"),
 		"battle party hover resolves nature presentation through the shared resolver"
 	)
+	for battle_script_path: String in [
+		"res://scripts/battle/battle_ui/move_slot.gd",
+		"res://scripts/battle/battle_ui/move_hover_card.gd",
+		"res://scripts/battle/battle_ui/party_hover_card.gd",
+		"res://scripts/battle/battle_ui/pokemon_hover_card.gd",
+	]:
+		var battle_script_text := FileAccess.get_file_as_string(battle_script_path)
+		_check(
+			battle_script_text.contains("\"moves\""),
+			"%s resolves localized move presentation" % battle_script_path.get_file()
+		)
 
 
 func _check(condition: bool, label: String) -> void:

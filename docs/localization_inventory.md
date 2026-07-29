@@ -209,7 +209,9 @@ Phase 6 now includes:
 
 ## Next implementation slice
 
-Continue Phase 7 with locale overlays and localized search for canonical moves,
-abilities, and species. The shared resolver, all 18 types, all 25 natures, and their
-current display/search consumers are complete. Raw backend errors remain Phase 8 work
+Continue Phase 7 with species overlays and the remaining move and ability indexes.
+The shared resolver, all 18 types, all 25 natures, and all 65 moves and 20 abilities
+explicitly used by the current Route 1 and Alpha Gym trainer rosters are complete.
+Their Summary, Pokédex, PC, and battle display/search consumers now use the shared
+resolver without changing canonical mechanics. Raw backend errors remain Phase 8 work
 and are handled through stable error-code mappings.
