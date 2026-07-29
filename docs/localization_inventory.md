@@ -1,6 +1,6 @@
 # PokeAether localization inventory
 
-Status: baseline inventory
+Status: active migration inventory
 
 Baseline commit: `96be89e3a`
 
@@ -20,9 +20,21 @@ keys and placeholders.
 
 ## Current baseline
 
-The login and settings pilot is complete. The three client catalogs currently contain
-119 matching keys. Language selection is available before login and in the shared
-settings menu, is stored locally, updates at runtime, and falls back to English.
+The login/settings pilot and the first two shared-interface slices are complete. The
+three client catalogs currently contain 253 matching keys. Language selection is
+available before login and in the shared settings menu, is stored locally, updates at
+runtime, and falls back to English.
+
+Completed client domains:
+
+- login and settings;
+- loading, main navigation, location, time, and weather;
+- Party slots and Pokémon Summary interface chrome, including runtime status, EV,
+  move-order, Poké Ball, and held-item messages.
+
+Pokémon, move, ability, nature, type, and item display data remain in their canonical
+English data sources until the Pokémon Data overlay phase. The translated Summary
+changes only the surrounding interface and grammar.
 
 The remaining client surface is substantial:
 
@@ -164,14 +176,12 @@ dialog, tooltip, chat system message, or notification.
 
 ## Next implementation slice
 
-The first post-pilot slice is intentionally small:
+The next recommended slice is Bag and hotbar interface chrome:
 
-- common control keys reused outside login/settings;
-- loading-screen text;
-- main navigation labels and tooltips;
-- location/time/weather labels owned entirely by the client;
-- general client-generated notifications touched by those controls;
-- runtime refresh and layout tests for the migrated controls.
+- Bag headings, categories, search, empty states, item-action controls, and local
+  validation messages;
+- hotbar assignment and interaction hints owned by the client;
+- runtime refresh and layout checks in Dutch and Brazilian Portuguese.
 
-Mail, social, battle, Pokémon data, and server-owned content are explicitly outside
-this slice.
+Item names and descriptions, market/shop data, battle text, Pokémon data, and
+server-owned messages remain outside that slice.

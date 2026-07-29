@@ -1376,6 +1376,7 @@ func _on_locale_changed(_locale: String) -> void:
 	_refresh_location_label()
 	_refresh_utc_time_label(UTC_TIME_REFRESH_INTERVAL_SECONDS, true)
 	_refresh_location_weather(WorldPresenceService.current_weather_state)
+	_refresh_party()
 
 
 func _play_mail_notification_sound() -> void:
@@ -12470,7 +12471,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	)
 	sprite_frame.mouse_filter = Control.MOUSE_FILTER_STOP
 	sprite_frame.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	sprite_frame.tooltip_text = "Switch between the front and back view"
+	_set_localized_control_property(sprite_frame, "tooltip_text", "ui.pokemon_summary.switch_sprite_view")
 	sprite_frame.gui_input.connect(_on_pokemon_summary_sprite_frame_gui_input.bind(card_key))
 	left_stack.add_child(sprite_frame)
 
@@ -12544,7 +12545,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_ball_button = Button.new()
 	pokemon_summary_ball_button.text = ""
 	pokemon_summary_ball_button.pressed.connect(_on_pokemon_summary_ball_button_pressed.bind(card_key))
-	pokemon_summary_ball_button.tooltip_text = "Change this Pokémon's Poké Ball"
+	_set_localized_control_property(pokemon_summary_ball_button, "tooltip_text", "ui.pokemon_summary.ball.change_tooltip")
 	pokemon_summary_ball_button.focus_mode = Control.FOCUS_NONE
 	pokemon_summary_ball_button.flat = true
 	pokemon_summary_ball_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -12592,7 +12593,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_level_badge_panel.add_child(level_badge_margin)
 
 	pokemon_summary_level_badge_label = Label.new()
-	pokemon_summary_level_badge_label.text = "Lv -"
+	pokemon_summary_level_badge_label.text = LocalizationManager.text("ui.pokemon_summary.level_empty")
 	pokemon_summary_level_badge_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	pokemon_summary_level_badge_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	pokemon_summary_level_badge_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -12630,7 +12631,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	title_row.add_child(pokemon_summary_shiny_badge)
 
 	pokemon_summary_title_label = Label.new()
-	pokemon_summary_title_label.text = "Pokemon"
+	pokemon_summary_title_label.text = LocalizationManager.text("ui.pokemon_summary.title")
 	pokemon_summary_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_make_label_clip_width(pokemon_summary_title_label)
 	pokemon_summary_title_label.add_theme_font_size_override("font_size", 14)
@@ -12641,7 +12642,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	title_row.add_child(pokemon_summary_title_label)
 
 	pokemon_summary_meta_label = Label.new()
-	pokemon_summary_meta_label.text = "Lv -"
+	pokemon_summary_meta_label.text = LocalizationManager.text("ui.pokemon_summary.level_empty")
 	pokemon_summary_meta_label.custom_minimum_size = Vector2(38, 0)
 	pokemon_summary_meta_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_make_label_clip_width(pokemon_summary_meta_label)
@@ -12654,7 +12655,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	identity_stack.add_child(identity_meta_row)
 
 	pokemon_summary_id_label = Label.new()
-	pokemon_summary_id_label.text = "ID: -"
+	pokemon_summary_id_label.text = LocalizationManager.text("ui.pokemon_summary.id_empty")
 	pokemon_summary_id_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_make_label_clip_width(pokemon_summary_id_label)
 	pokemon_summary_id_label.add_theme_font_size_override("font_size", 9)
@@ -12666,7 +12667,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	left_stack.add_child(hp_row)
 
 	pokemon_summary_hp_label = Label.new()
-	pokemon_summary_hp_label.text = "HP -"
+	pokemon_summary_hp_label.text = LocalizationManager.text("ui.pokemon_summary.hp_empty")
 	pokemon_summary_hp_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pokemon_summary_hp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	pokemon_summary_hp_label.add_theme_font_size_override("font_size", 11)
@@ -12698,7 +12699,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	ball_picker_margin.add_child(ball_picker_stack)
 
 	pokemon_summary_ball_search_input = LineEdit.new()
-	pokemon_summary_ball_search_input.placeholder_text = "Search Poké Ball..."
+	_set_localized_control_property(pokemon_summary_ball_search_input, "placeholder_text", "ui.pokemon_summary.ball.search")
 	pokemon_summary_ball_search_input.clear_button_enabled = true
 	pokemon_summary_ball_search_input.custom_minimum_size = Vector2(0, 28)
 	pokemon_summary_ball_search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -12784,7 +12785,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_held_item_slot_button = Button.new()
 	pokemon_summary_held_item_slot_button.text = ""
 	pokemon_summary_held_item_slot_button.pressed.connect(_on_pokemon_summary_held_item_slot_pressed.bind(card_key))
-	pokemon_summary_held_item_slot_button.tooltip_text = "Give or take a held item"
+	_set_localized_control_property(pokemon_summary_held_item_slot_button, "tooltip_text", "ui.pokemon_summary.held_item.manage_tooltip")
 	pokemon_summary_held_item_slot_button.focus_mode = Control.FOCUS_NONE
 	pokemon_summary_held_item_slot_button.flat = true
 	pokemon_summary_held_item_slot_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -12815,7 +12816,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	picker_margin.add_child(item_picker_stack)
 
 	pokemon_summary_item_search_input = LineEdit.new()
-	pokemon_summary_item_search_input.placeholder_text = "Search held item..."
+	_set_localized_control_property(pokemon_summary_item_search_input, "placeholder_text", "ui.pokemon_summary.held_item.search")
 	pokemon_summary_item_search_input.clear_button_enabled = true
 	pokemon_summary_item_search_input.custom_minimum_size = Vector2(0, 28)
 	pokemon_summary_item_search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -12911,7 +12912,9 @@ func _add_pokemon_summary_owner_bar(layout: VBoxContainer, card_key: String) -> 
 	header_margin.add_child(header_row)
 
 	pokemon_summary_trainer_label = Label.new()
-	pokemon_summary_trainer_label.text = "Trainer's Pokemon"
+	pokemon_summary_trainer_label.text = LocalizationManager.text("ui.pokemon_summary.trainer_pokemon", {
+		"trainer": LocalizationManager.text("ui.pokemon_summary.trainer_fallback"),
+	})
 	pokemon_summary_trainer_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pokemon_summary_trainer_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	pokemon_summary_trainer_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -12930,7 +12933,7 @@ func _add_pokemon_summary_owner_bar(layout: VBoxContainer, card_key: String) -> 
 	close_button.size_flags_horizontal = Control.SIZE_SHRINK_END
 	close_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	close_button.focus_mode = Control.FOCUS_NONE
-	close_button.tooltip_text = "Close"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	close_button.pressed.connect(_hide_pokemon_summary_popup.bind(card_key))
 	close_button.add_theme_stylebox_override("normal", _make_pokemon_summary_button_style(Color("#0e2138f0"), Color("#5a82ad"), true))
@@ -12996,7 +12999,7 @@ func _add_pokemon_summary_header(layout: VBoxContainer, card_key: String) -> voi
 	header_margin.add_child(header)
 
 	pokemon_summary_title_label = Label.new()
-	pokemon_summary_title_label.text = "Pokemon Summary"
+	pokemon_summary_title_label.text = LocalizationManager.text("ui.pokemon_summary.title")
 	pokemon_summary_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pokemon_summary_title_label.size_flags_stretch_ratio = 1.0
 	_make_label_clip_width(pokemon_summary_title_label)
@@ -13023,7 +13026,7 @@ func _add_pokemon_summary_header(layout: VBoxContainer, card_key: String) -> voi
 	header.add_child(title_row)
 
 	pokemon_summary_id_label = Label.new()
-	pokemon_summary_id_label.text = "ID: -"
+	pokemon_summary_id_label.text = LocalizationManager.text("ui.pokemon_summary.id_empty")
 	pokemon_summary_id_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	pokemon_summary_id_label.size_flags_horizontal = Control.SIZE_SHRINK_END
 	pokemon_summary_id_label.custom_minimum_size = Vector2(50, 0)
@@ -13060,7 +13063,7 @@ func _add_pokemon_summary_header(layout: VBoxContainer, card_key: String) -> voi
 	meta_block.add_child(pokemon_summary_meta_label)
 
 	pokemon_summary_trainer_label = Label.new()
-	pokemon_summary_trainer_label.text = "Original Trainer: -"
+	pokemon_summary_trainer_label.text = LocalizationManager.text("ui.pokemon_summary.original_trainer_value", {"trainer": "-"})
 	pokemon_summary_trainer_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_make_label_clip_width(pokemon_summary_trainer_label)
 	pokemon_summary_trainer_label.add_theme_font_size_override("font_size", 9)
@@ -13070,6 +13073,7 @@ func _add_pokemon_summary_header(layout: VBoxContainer, card_key: String) -> voi
 
 	var close_button := Button.new()
 	close_button.text = "X"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.custom_minimum_size = Vector2(26, 24)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_pokemon_summary_popup.bind(card_key))
@@ -13086,7 +13090,7 @@ func _create_pokemon_summary_shiny_badge() -> PanelContainer:
 	var badge := PanelContainer.new()
 	badge.visible = false
 	badge.custom_minimum_size = Vector2(16, 16)
-	badge.tooltip_text = "Shiny Pokémon"
+	_set_localized_control_property(badge, "tooltip_text", "ui.party.shiny")
 	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var badge_style := StyleBoxFlat.new()
 	badge_style.bg_color = Color("#15191fee")
@@ -13124,10 +13128,10 @@ func _create_pokemon_summary_shiny_badge() -> PanelContainer:
 	return badge
 
 func _add_pokemon_summary_tab_buttons(tab_column: HBoxContainer, card_key: String) -> void:
-	var general_tab := _create_pokemon_summary_tab_button("general", "Info", POKEMON_SUMMARY_ACCENT, card_key)
-	var iv_tab := _create_pokemon_summary_tab_button("ivs", "IVs", Color("#1fb6ff"), card_key)
-	var ev_tab := _create_pokemon_summary_tab_button("evs", "EVs", Color("#ffb347"), card_key)
-	var moves_tab := _create_pokemon_summary_tab_button("moves", "Moves", Color("#ff7b54"), card_key)
+	var general_tab := _create_pokemon_summary_tab_button("general", "ui.pokemon_summary.tab.info", POKEMON_SUMMARY_ACCENT, card_key)
+	var iv_tab := _create_pokemon_summary_tab_button("ivs", "ui.pokemon_summary.tab.ivs", Color("#1fb6ff"), card_key)
+	var ev_tab := _create_pokemon_summary_tab_button("evs", "ui.pokemon_summary.tab.evs", Color("#ffb347"), card_key)
+	var moves_tab := _create_pokemon_summary_tab_button("moves", "ui.pokemon_summary.tab.moves", Color("#ff7b54"), card_key)
 	tab_column.add_child(general_tab)
 	tab_column.add_child(iv_tab)
 	tab_column.add_child(ev_tab)
@@ -13167,7 +13171,7 @@ func _setup_pokemon_summary_ev_allocate_popup() -> void:
 	layout.add_child(header)
 
 	pokemon_summary_ev_allocate_stat_label = Label.new()
-	pokemon_summary_ev_allocate_stat_label.text = "Allocate EVs"
+	pokemon_summary_ev_allocate_stat_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocate")
 	pokemon_summary_ev_allocate_stat_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pokemon_summary_ev_allocate_stat_label.add_theme_font_size_override("font_size", 16)
 	pokemon_summary_ev_allocate_stat_label.add_theme_color_override("font_color", Color("#f5df9a"))
@@ -13175,6 +13179,7 @@ func _setup_pokemon_summary_ev_allocate_popup() -> void:
 
 	var close_button := Button.new()
 	close_button.text = "X"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.custom_minimum_size = Vector2(34, 30)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_pokemon_summary_ev_allocate_popup)
@@ -13200,25 +13205,29 @@ func _setup_pokemon_summary_ev_allocate_popup() -> void:
 	layout.add_child(pokemon_summary_ev_allocate_status_label)
 
 	pokemon_summary_ev_allocate_confirm_button = Button.new()
-	pokemon_summary_ev_allocate_confirm_button.text = "Confirm"
+	_set_localized_control_property(pokemon_summary_ev_allocate_confirm_button, "text", "common.confirm")
 	pokemon_summary_ev_allocate_confirm_button.custom_minimum_size = Vector2(0, 34)
 	pokemon_summary_ev_allocate_confirm_button.focus_mode = Control.FOCUS_NONE
 	pokemon_summary_ev_allocate_confirm_button.pressed.connect(_on_summary_ev_allocate_confirm_pressed)
 	layout.add_child(pokemon_summary_ev_allocate_confirm_button)
 	_apply_button_style(pokemon_summary_ev_allocate_confirm_button, "primary")
 
-func _create_pokemon_summary_tab_button(tab_id: String, label_text: String, accent_color: Color, card_key: String = "") -> Button:
+func _create_pokemon_summary_tab_button(tab_id: String, label_key: String, accent_color: Color, card_key: String = "") -> Button:
 	var button := Button.new()
-	button.text = label_text
+	_set_localized_control_property(button, "text", label_key)
 	button.custom_minimum_size = Vector2(POKEMON_SUMMARY_TAB_COLUMN_WIDTH, 28)
 	button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	button.focus_mode = Control.FOCUS_NONE
-	button.tooltip_text = label_text
+	_set_localized_control_property(button, "tooltip_text", label_key)
 	button.pressed.connect(_on_pokemon_summary_tab_selected.bind(tab_id, card_key))
 	pokemon_summary_tab_buttons[tab_id] = button
 	_apply_summary_tab_style(button, false, accent_color)
 	return button
+
+func _set_localized_control_property(control: Control, property_name: String, key: String) -> void:
+	control.set_meta("i18n_source_%s" % property_name, key)
+	control.set(property_name, LocalizationManager.text(key))
 
 func _on_pokemon_summary_tab_selected(tab_id: String, card_key: String = "") -> void:
 	_apply_pokemon_summary_card_context(card_key)
@@ -16445,6 +16454,7 @@ func _refresh_open_pokemon_summary_cards() -> void:
 		if pokemon_summary_popup == null or not pokemon_summary_popup.visible:
 			continue
 		_refresh_pokemon_summary()
+		_refresh_pokemon_summary_ev_allocate_translation()
 	_store_active_pokemon_summary_card_context()
 
 func _show_pokemon_summary(slot_index: int) -> void:
@@ -16523,13 +16533,17 @@ func _refresh_pokemon_summary() -> void:
 	var summary_id: String = str(pokemon.owned_pokemon_id) if pokemon.owned_pokemon_id > 0 else ""
 	if summary_id == "":
 		summary_id = pokemon.instance_id.strip_edges()
-	pokemon_summary_id_label.text = "ID: %s" % summary_id if summary_id != "" else "ID: -"
+	pokemon_summary_id_label.text = (
+		LocalizationManager.text("ui.pokemon_summary.id", {"id": summary_id})
+		if summary_id != ""
+		else LocalizationManager.text("ui.pokemon_summary.id_empty")
+	)
 	pokemon_summary_id_label.tooltip_text = pokemon_summary_id_label.text
 	pokemon_summary_shiny_badge.visible = pokemon.shiny
 	if pokemon_summary_shiny_badge_label != null:
 		pokemon_summary_shiny_badge_label.text = "*"
 	pokemon_summary_trainer_label.text = _get_pokemon_summary_current_trainer_title_text(pokemon)
-	var level_text := "Lv %s" % str(max(pokemon.level, 1))
+	var level_text := LocalizationManager.text("ui.pokemon_summary.level", {"level": max(pokemon.level, 1)})
 	pokemon_summary_meta_label.text = level_text
 	if pokemon_summary_level_badge_label != null:
 		pokemon_summary_level_badge_label.text = level_text
@@ -16543,13 +16557,20 @@ func _refresh_pokemon_summary() -> void:
 	_set_pokemon_summary_ball_button(pokemon)
 
 	_set_pokemon_summary_held_item_slot(pokemon)
+	if pokemon_summary_ball_picker != null and pokemon_summary_ball_picker.visible:
+		_refresh_pokemon_summary_ball_picker(pokemon)
+	if pokemon_summary_item_picker != null and pokemon_summary_item_picker.visible:
+		_refresh_pokemon_summary_item_picker()
 	if _is_pokemon_summary_readonly():
 		_hide_pokemon_summary_ev_allocate_popup()
 		pokemon_summary_item_picker.visible = false
 		pokemon_summary_ball_picker.visible = false
 	pokemon_summary_hp_bar.max_value = max(pokemon.max_hp, 1)
 	pokemon_summary_hp_bar.value = clamp(pokemon.current_hp, 0, pokemon.max_hp)
-	pokemon_summary_hp_label.text = "HP %s / %s" % [max(pokemon.current_hp, 0), max(pokemon.max_hp, 1)]
+	pokemon_summary_hp_label.text = LocalizationManager.text("ui.pokemon_summary.hp", {
+		"current": max(pokemon.current_hp, 0),
+		"max": max(pokemon.max_hp, 1),
+	})
 	_set_pokemon_summary_status_icon(pokemon.status)
 	_refresh_pokemon_summary_tab_buttons()
 	_render_pokemon_summary_content(pokemon)
@@ -16697,21 +16718,15 @@ func _get_pokemon_summary_status_icon_texture(status_key: String) -> Texture2D:
 	return atlas_texture
 
 func _get_pokemon_summary_status_tooltip(status_key: String) -> String:
-	match status_key:
-		"psn":
-			return "Poisoned"
-		"tox":
-			return "Badly poisoned"
-		"brn":
-			return "Burned"
-		"par":
-			return "Paralyzed"
-		"slp":
-			return "Asleep"
-		"frz":
-			return "Frozen"
-
-	return ""
+	var key := str({
+		"psn": "pokemon.status.poisoned",
+		"tox": "pokemon.status.badly_poisoned",
+		"brn": "pokemon.status.burned",
+		"par": "pokemon.status.paralyzed",
+		"slp": "pokemon.status.asleep",
+		"frz": "pokemon.status.frozen",
+	}.get(status_key, ""))
+	return LocalizationManager.text(key) if key != "" else ""
 
 func _load_pokemon_type_icon(type_name: String) -> Texture2D:
 	var normalized_type: String = type_name.strip_edges().to_lower().replace(" ", "-").replace("_", "-")
@@ -16837,7 +16852,14 @@ func _render_pokemon_summary_general(pokemon: Pokemon) -> void:
 	top_metrics.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pokemon_summary_content_stack.add_child(top_metrics)
 	top_metrics.add_child(_create_summary_experience_metric_card(pokemon, Color("#62d7ff"), 148.0))
-	top_metrics.add_child(_create_summary_metric_card("Happiness", "Happiness progress is not tracked yet.", 0, 255, Color("#f2cf78"), 148.0))
+	top_metrics.add_child(_create_summary_metric_card(
+		LocalizationManager.text("ui.pokemon_summary.happiness"),
+		LocalizationManager.text("ui.pokemon_summary.happiness_untracked"),
+		0,
+		255,
+		Color("#f2cf78"),
+		148.0
+	))
 
 	var info_grid := GridContainer.new()
 	info_grid.columns = 2
@@ -16845,9 +16867,9 @@ func _render_pokemon_summary_general(pokemon: Pokemon) -> void:
 	info_grid.add_theme_constant_override("v_separation", 7)
 	info_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pokemon_summary_content_stack.add_child(info_grid)
-	info_grid.add_child(_create_summary_field_card("Original Trainer", _get_pokemon_summary_original_trainer_text(pokemon), Color("#9eb7d8"), false, 148.0))
+	info_grid.add_child(_create_summary_field_card(LocalizationManager.text("ui.pokemon_summary.original_trainer"), _get_pokemon_summary_original_trainer_text(pokemon), Color("#9eb7d8"), false, 148.0))
 	info_grid.add_child(_create_summary_field_card(
-		"Ability",
+		LocalizationManager.text("ui.pokemon_summary.ability"),
 		_get_summary_ability_display_name(pokemon.ability),
 		Color("#ffb15f"),
 		false,
@@ -16856,10 +16878,10 @@ func _render_pokemon_summary_general(pokemon: Pokemon) -> void:
 		Color(0, 0, 0, 0),
 		_get_summary_ability_description_text(pokemon.ability)
 	))
-	info_grid.add_child(_create_summary_field_card("Nature", _default_text(pokemon.nature), Color("#f2cf78"), false, 148.0))
-	info_grid.add_child(_create_summary_field_card("Location", _get_pokemon_summary_location_text(pokemon), Color("#62d7ff"), false, 148.0))
-	info_grid.add_child(_create_summary_field_card("Caught Date", _get_pokemon_summary_caught_date_text(pokemon), Color("#d9ecff"), false, 148.0))
-	info_grid.add_child(_create_summary_field_card("Caught Level", _get_pokemon_summary_caught_level_text(pokemon), Color("#d9ecff"), false, 148.0))
+	info_grid.add_child(_create_summary_field_card(LocalizationManager.text("ui.pokemon_summary.nature"), _default_text(pokemon.nature), Color("#f2cf78"), false, 148.0))
+	info_grid.add_child(_create_summary_field_card(LocalizationManager.text("ui.pokemon_summary.location"), _get_pokemon_summary_location_text(pokemon), Color("#62d7ff"), false, 148.0))
+	info_grid.add_child(_create_summary_field_card(LocalizationManager.text("ui.pokemon_summary.caught_date"), _get_pokemon_summary_caught_date_text(pokemon), Color("#d9ecff"), false, 148.0))
+	info_grid.add_child(_create_summary_field_card(LocalizationManager.text("ui.pokemon_summary.caught_level"), _get_pokemon_summary_caught_level_text(pokemon), Color("#d9ecff"), false, 148.0))
 
 	var stat_grid := GridContainer.new()
 	stat_grid.columns = 3
@@ -16946,8 +16968,18 @@ func _create_summary_experience_metric_card(pokemon: Pokemon, accent_color: Colo
 	var next_level_remaining: int = max(next_level_exp - current_exp, 0) if has_next_level_range else 0
 	var target_level: int = min(pokemon.level + 1, 100)
 	var value_text := str(current_exp) if current_exp > 0 or has_next_level_range else "-"
-	var detail_text := "%s EXP to Lv. %s" % [next_level_remaining, target_level] if has_next_level_range else "Max level"
-	var tooltip_text := "Current experience: %s\n%s" % [value_text, detail_text]
+	var detail_text := (
+		LocalizationManager.text("ui.pokemon_summary.exp_to_level", {
+			"exp": next_level_remaining,
+			"level": target_level,
+		})
+		if has_next_level_range
+		else LocalizationManager.text("ui.pokemon_summary.max_level")
+	)
+	var tooltip_text := LocalizationManager.text("ui.pokemon_summary.current_experience", {
+		"experience": value_text,
+		"detail": detail_text,
+	})
 
 	var stack := VBoxContainer.new()
 	stack.custom_minimum_size = Vector2(min_width, 30)
@@ -17037,13 +17069,13 @@ func _get_pokemon_origin_summary_text(pokemon: Pokemon) -> String:
 	if location_name == "":
 		location_name = pokemon.location.strip_edges()
 	if location_name == "":
-		location_name = "Unknown Location"
+		location_name = LocalizationManager.text("ui.pokemon_summary.unknown_location")
 
 	var parts: Array[String] = [location_name]
 	if method != "":
 		parts.append(_format_pokemon_origin_method(method))
 	if met_level > 0:
-		parts.append("Lv %s" % met_level)
+		parts.append(LocalizationManager.text("ui.pokemon_summary.level", {"level": met_level}))
 	return " - ".join(parts)
 
 func _get_pokemon_summary_location_text(pokemon: Pokemon) -> String:
@@ -17053,7 +17085,7 @@ func _get_pokemon_summary_location_text(pokemon: Pokemon) -> String:
 	if location_name == "":
 		location_name = pokemon.location.strip_edges()
 	if location_name == "":
-		location_name = "Unknown Location"
+		location_name = LocalizationManager.text("ui.pokemon_summary.unknown_location")
 	if region_name != "" and region_name.to_lower() != "unknown" and region_name != location_name:
 		return "%s - %s" % [region_name, location_name]
 	return location_name
@@ -17081,8 +17113,8 @@ func _get_pokemon_summary_current_trainer_title_text(_pokemon: Pokemon) -> Strin
 		PlayerSave.player_name
 	)).strip_edges()
 	if trainer_name == "":
-		trainer_name = "Trainer"
-	return "%s's Pokemon" % trainer_name
+		trainer_name = LocalizationManager.text("ui.pokemon_summary.trainer_fallback")
+	return LocalizationManager.text("ui.pokemon_summary.trainer_pokemon", {"trainer": trainer_name})
 
 func _get_pokemon_summary_original_trainer_text(pokemon: Pokemon) -> String:
 	var origin: Dictionary = pokemon.origin
@@ -17104,7 +17136,7 @@ func _get_pokemon_summary_original_trainer_text(pokemon: Pokemon) -> String:
 		if current_player_id != "" and original_trainer_user_id == current_player_id:
 			return PlayerSave.player_name
 
-		return "Trainer #%s" % original_trainer_user_id
+		return LocalizationManager.text("ui.pokemon_summary.trainer_number", {"id": original_trainer_user_id})
 
 	return "-"
 
@@ -17130,20 +17162,20 @@ func _get_pokemon_summary_caught_date_text(pokemon: Pokemon) -> String:
 func _format_pokemon_origin_method(method: String) -> String:
 	match method.strip_edges().to_lower():
 		"gift":
-			return "Gift"
+			return LocalizationManager.text("ui.pokemon_summary.origin.gift")
 		"caught":
-			return "Caught"
+			return LocalizationManager.text("ui.pokemon_summary.origin.caught")
 		"generated":
-			return "Generated"
+			return LocalizationManager.text("ui.pokemon_summary.origin.generated")
 		"npc_trade":
-			return "NPC Trade"
+			return LocalizationManager.text("ui.pokemon_summary.origin.npc_trade")
 		"chest":
-			return "Chest"
+			return LocalizationManager.text("ui.pokemon_summary.origin.chest")
 		_:
 			return method.capitalize()
 
 func _render_pokemon_summary_ivs(pokemon: Pokemon) -> void:
-	_add_summary_section_title("Individual Values", Color("#62d7ff"))
+	_add_summary_section_title(LocalizationManager.text("ui.pokemon_summary.ivs.title"), Color("#62d7ff"))
 	var grid := GridContainer.new()
 	grid.columns = 2
 	grid.add_theme_constant_override("h_separation", 6)
@@ -17158,7 +17190,7 @@ func _render_pokemon_summary_ivs(pokemon: Pokemon) -> void:
 
 func _render_pokemon_summary_evs(pokemon: Pokemon) -> void:
 	var allocated_total: int = _get_summary_ev_total(pokemon.evs)
-	_add_summary_section_title("Allocated EVs (%s/510)" % allocated_total, POKEMON_SUMMARY_ACCENT)
+	_add_summary_section_title(LocalizationManager.text("ui.pokemon_summary.evs.allocated", {"total": allocated_total}), POKEMON_SUMMARY_ACCENT)
 	var grid := GridContainer.new()
 	grid.columns = 3
 	grid.add_theme_constant_override("h_separation", 6)
@@ -17175,11 +17207,11 @@ func _render_pokemon_summary_evs(pokemon: Pokemon) -> void:
 			value,
 			stat.get("color", UI_BORDER_FOCUS) as Color
 		))
-	_add_summary_section_title("Stored EVs", POKEMON_SUMMARY_ACCENT)
+	_add_summary_section_title(LocalizationManager.text("ui.pokemon_summary.evs.stored"), POKEMON_SUMMARY_ACCENT)
 	pokemon_summary_content_stack.add_child(_create_summary_stored_evs_panel(pokemon.evs, pokemon.stored_evs))
 
 func _render_pokemon_summary_moves_tab(pokemon: Pokemon) -> void:
-	_add_summary_section_title("Moves", POKEMON_SUMMARY_ACCENT)
+	_add_summary_section_title(LocalizationManager.text("ui.pokemon_summary.tab.moves"), POKEMON_SUMMARY_ACCENT)
 	for move_index in range(4):
 		var move_value: Variant = {}
 		var move_name: String = "-"
@@ -17316,7 +17348,7 @@ func _create_summary_ev_box(stat_id: String, label_text: String, value: int, col
 	if panel is Button:
 		var button: Button = panel as Button
 		button.focus_mode = Control.FOCUS_NONE
-		button.tooltip_text = "Assign training points to %s" % label_text
+		button.tooltip_text = LocalizationManager.text("ui.pokemon_summary.evs.assign_to_stat", {"stat": label_text})
 		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		button.pressed.connect(_on_summary_allocated_ev_pressed.bind(stat_id, label_text, pokemon_summary_active_card_key))
 		button.add_theme_stylebox_override("normal", _make_panel_style(Color("#081321ef"), Color(color.r, color.g, color.b, 0.42), 7, 1))
@@ -17405,7 +17437,7 @@ func _create_summary_ev_total_panel(total_evs: int) -> Control:
 	stack.add_child(row)
 
 	var title := Label.new()
-	title.text = "TOTAL"
+	title.text = LocalizationManager.text("ui.pokemon_summary.evs.total").to_upper()
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.add_theme_font_size_override("font_size", 10)
 	title.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
@@ -17427,7 +17459,10 @@ func _create_summary_ev_total_panel(total_evs: int) -> Control:
 	bar.show_percentage = false
 	bar.custom_minimum_size = Vector2(0, 8)
 	bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	bar.tooltip_text = "Training points assigned: %s/%s" % [clamped_total, POKEMON_EV_TOTAL_LIMIT]
+	bar.tooltip_text = LocalizationManager.text("ui.pokemon_summary.evs.training_assigned", {
+		"current": clamped_total,
+		"max": POKEMON_EV_TOTAL_LIMIT,
+	})
 	bar.add_theme_stylebox_override("background", _make_panel_style(Color("#050912e8"), Color("#263b58"), 3, 1))
 	bar.add_theme_stylebox_override("fill", _make_panel_style(Color("#62d7ff"), Color("#62d7ff"), 3, 0))
 	stack.add_child(bar)
@@ -17440,7 +17475,11 @@ func _create_summary_ev_training_row(stat_id: String, label_text: String, value:
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(0, 31)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	panel.tooltip_text = "%s training points: %s/%s" % [label_text, clamped_value, POKEMON_EV_STAT_LIMIT]
+	panel.tooltip_text = LocalizationManager.text("ui.pokemon_summary.evs.stat_training_points", {
+		"stat": label_text,
+		"current": clamped_value,
+		"max": POKEMON_EV_STAT_LIMIT,
+	})
 	panel.add_theme_stylebox_override(
 		"panel",
 		_make_panel_style(
@@ -17518,7 +17557,11 @@ func _create_summary_stored_evs_panel(allocated_evs: Dictionary, stored_evs: Dic
 		stored_total += int(stored_evs.get(stat_id, 0))
 
 	var total_label := Label.new()
-	total_label.text = "AVAILABLE: %s    TOTAL CAPACITY: %s / %s" % [stored_total, allocated_total + stored_total, POKEMON_EV_TOTAL_LIMIT]
+	total_label.text = LocalizationManager.text("ui.pokemon_summary.evs.available_capacity", {
+		"available": stored_total,
+		"current": allocated_total + stored_total,
+		"max": POKEMON_EV_TOTAL_LIMIT,
+	})
 	total_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	total_label.add_theme_font_size_override("font_size", 10)
 	total_label.add_theme_color_override("font_color", Color("#f5df9a"))
@@ -17583,8 +17626,12 @@ func _on_summary_allocated_ev_pressed(stat_id: String, label_text: String, card_
 	var max_value: int = min(252, current_value + stored_for_stat, current_value + total_room)
 
 	pokemon_summary_ev_allocate_stat_id = stat_id
-	pokemon_summary_ev_allocate_stat_label.text = "Allocate %s EVs" % label_text
-	pokemon_summary_ev_allocate_current_label.text = "Current: %s    Allocated: %s / 510    Stored for stat: %s" % [current_value, allocated_total, stored_for_stat]
+	pokemon_summary_ev_allocate_stat_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocate_stat", {"stat": label_text})
+	pokemon_summary_ev_allocate_current_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocate_current", {
+		"current": current_value,
+		"allocated": allocated_total,
+		"stored": stored_for_stat,
+	})
 	pokemon_summary_ev_allocate_input.min_value = current_value
 	pokemon_summary_ev_allocate_input.max_value = max(current_value, max_value)
 	pokemon_summary_ev_allocate_input.value = current_value
@@ -17599,6 +17646,32 @@ func _hide_pokemon_summary_ev_allocate_popup() -> void:
 		_deactivate_ui_panel(pokemon_summary_ev_allocate_popup)
 	pokemon_summary_ev_allocate_stat_id = ""
 
+func _refresh_pokemon_summary_ev_allocate_translation() -> void:
+	if pokemon_summary_ev_allocate_popup == null:
+		return
+	if not pokemon_summary_ev_allocate_popup.visible:
+		pokemon_summary_ev_allocate_stat_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocate")
+		return
+	if pokemon_summary_selected_slot < 0 or pokemon_summary_selected_slot >= PlayerSave.party.size():
+		return
+	var pokemon: Pokemon = PlayerSave.party[pokemon_summary_selected_slot]
+	var stat_id := pokemon_summary_ev_allocate_stat_id
+	if pokemon == null or stat_id == "":
+		return
+	var current_value: int = int(pokemon.evs.get(stat_id, 0))
+	var allocated_total: int = _get_summary_ev_total(pokemon.evs)
+	var stored_for_stat: int = clampi(int(pokemon.stored_evs.get(stat_id, 0)), 0, POKEMON_EV_STAT_LIMIT)
+	pokemon_summary_ev_allocate_stat_label.text = LocalizationManager.text(
+		"ui.pokemon_summary.evs.allocate_stat",
+		{"stat": _summary_stat_label(stat_id)}
+	)
+	pokemon_summary_ev_allocate_current_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocate_current", {
+		"current": current_value,
+		"allocated": allocated_total,
+		"stored": stored_for_stat,
+	})
+	_refresh_summary_ev_allocate_status()
+
 func _on_summary_ev_allocate_value_changed(_value: float) -> void:
 	_refresh_summary_ev_allocate_status()
 
@@ -17611,7 +17684,7 @@ func _on_summary_ev_allocate_confirm_pressed() -> void:
 
 	var pokemon: Pokemon = PlayerSave.party[pokemon_summary_selected_slot]
 	if pokemon == null or pokemon.owned_pokemon_id <= 0:
-		pokemon_summary_ev_allocate_status_label.text = "This Pokémon can’t be changed right now."
+		pokemon_summary_ev_allocate_status_label.text = LocalizationManager.text("ui.pokemon_summary.readonly_error")
 		pokemon_summary_ev_allocate_status_label.add_theme_color_override("font_color", UI_DANGER)
 		return
 
@@ -17619,24 +17692,24 @@ func _on_summary_ev_allocate_confirm_pressed() -> void:
 	var requested_value: int = int(pokemon_summary_ev_allocate_input.value)
 	pokemon_summary_ev_allocate_confirm_button.disabled = true
 	pokemon_summary_ev_allocate_input.editable = false
-	pokemon_summary_ev_allocate_status_label.text = "Allocating EVs..."
+	pokemon_summary_ev_allocate_status_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocating")
 	pokemon_summary_ev_allocate_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 
 	var result: Dictionary = await PlayerPartyStateService.allocate_pokemon_evs(pokemon.owned_pokemon_id, stat_id, requested_value)
 	pokemon_summary_ev_allocate_input.editable = true
 	if not bool(result.get("success", false)):
-		pokemon_summary_ev_allocate_status_label.text = str(result.get("error", "Could not allocate EVs."))
+		pokemon_summary_ev_allocate_status_label.text = str(result.get("error", LocalizationManager.text("ui.pokemon_summary.evs.allocate_failed")))
 		pokemon_summary_ev_allocate_status_label.add_theme_color_override("font_color", UI_DANGER)
 		_refresh_summary_ev_allocate_status()
 		return
 
 	var allocation: Dictionary = _staff_dictionary_from_variant(result.get("allocation", {}))
 	var added_value: int = max(int(allocation.get("addedValue", 0)), 0)
-	_add_chat_message("%s allocated +%s %s EVs." % [
-		str(allocation.get("species", pokemon.species)),
-		added_value,
-		_summary_stat_label(stat_id),
-	])
+	_add_chat_message(LocalizationManager.text("ui.pokemon_summary.evs.allocated_message", {
+		"pokemon": str(allocation.get("species", pokemon.species)),
+		"amount": added_value,
+		"stat": _summary_stat_label(stat_id),
+	}))
 	_hide_pokemon_summary_ev_allocate_popup()
 	_refresh_open_pokemon_summary_cards()
 
@@ -17658,13 +17731,13 @@ func _refresh_summary_ev_allocate_status() -> void:
 	var error_text := ""
 
 	if requested_value < current_value:
-		error_text = "Value cannot be lower than the current allocated EVs."
+		error_text = LocalizationManager.text("ui.pokemon_summary.evs.error.below_current")
 	elif requested_value > 252:
-		error_text = "A stat cannot exceed 252 EVs."
+		error_text = LocalizationManager.text("ui.pokemon_summary.evs.error.stat_limit")
 	elif requested_allocated_total > 510:
-		error_text = "Allocated EVs cannot exceed 510 total."
+		error_text = LocalizationManager.text("ui.pokemon_summary.evs.error.total_limit")
 	elif added_value > stored_for_stat:
-		error_text = "Not enough stored %s EVs available." % _summary_stat_label(stat_id)
+		error_text = LocalizationManager.text("ui.pokemon_summary.evs.error.not_enough_stored", {"stat": _summary_stat_label(stat_id)})
 
 	if error_text != "":
 		pokemon_summary_ev_allocate_status_label.text = error_text
@@ -17672,7 +17745,10 @@ func _refresh_summary_ev_allocate_status() -> void:
 		pokemon_summary_ev_allocate_confirm_button.disabled = true
 		return
 
-	pokemon_summary_ev_allocate_status_label.text = "Will allocate +%s EVs. New allocated total: %s / 510." % [max(added_value, 0), requested_allocated_total]
+	pokemon_summary_ev_allocate_status_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocation_preview", {
+		"amount": max(added_value, 0),
+		"total": requested_allocated_total,
+	})
 	pokemon_summary_ev_allocate_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	pokemon_summary_ev_allocate_confirm_button.disabled = added_value <= 0
 
@@ -17724,9 +17800,11 @@ func _create_summary_move_card(
 	panel.connect("direct_action_requested", Callable(self, "_on_pokemon_summary_direct_move_requested"))
 	panel.custom_minimum_size = Vector2(0, 50)
 	if can_reorder:
-		panel.tooltip_text = "%s\nDrag to reorder moves." % description_text if description_text != "" else "Drag to reorder moves."
+		var reorder_hint := LocalizationManager.text("ui.pokemon_summary.moves.drag_to_reorder")
+		panel.tooltip_text = "%s\n%s" % [description_text, reorder_hint] if description_text != "" else reorder_hint
 	elif _is_world_battle_active() and move_id != "":
-		panel.tooltip_text = "%s\nMove order cannot be changed during a battle." % description_text if description_text != "" else "Move order cannot be changed during a battle."
+		var battle_hint := LocalizationManager.text("ui.pokemon_summary.moves.reorder_during_battle")
+		panel.tooltip_text = "%s\n%s" % [description_text, battle_hint] if description_text != "" else battle_hint
 	else:
 		panel.tooltip_text = description_text
 	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#081321ef"), POKEMON_SUMMARY_ACCENT_FAINT, 8, 1))
@@ -17795,7 +17873,7 @@ func _create_summary_move_card(
 		direct_action_button.disabled = not can_reorder
 		direct_action_button.modulate = Color.WHITE if can_reorder else Color(1, 1, 1, 0.38)
 		direct_action_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-		direct_action_button.tooltip_text = "Use %s while exploring." % move_name
+		direct_action_button.tooltip_text = LocalizationManager.text("ui.pokemon_summary.moves.use_while_exploring", {"move": move_name})
 		direct_action_button.pressed.connect(Callable(panel, "request_direct_action"))
 		top_row.add_child(direct_action_button)
 
@@ -17804,7 +17882,7 @@ func _create_summary_move_card(
 	meta_row.add_theme_constant_override("separation", 8)
 	stack.add_child(meta_row)
 	meta_row.add_child(_create_summary_move_meta_label("PP", pp_text, Color("#ff5da8"), description_text))
-	meta_row.add_child(_create_summary_move_meta_label("Power", power_text, Color("#f2cf78"), description_text))
+	meta_row.add_child(_create_summary_move_meta_label(LocalizationManager.text("ui.pokemon_summary.moves.power"), power_text, Color("#f2cf78"), description_text))
 	meta_row.add_child(_create_summary_move_meta_label("ACC", accuracy_text, Color("#d9ecff"), description_text))
 	_set_control_tree_mouse_filter(margin, Control.MOUSE_FILTER_IGNORE)
 	if direct_action_button != null:
@@ -17818,9 +17896,9 @@ func _on_pokemon_summary_direct_move_requested(card_key: String, pokemon_id: int
 		return
 	var result: Dictionary = await FieldMoveService.use_direct_field_move(move_id, pokemon_id)
 	if not bool(result.get("success", false)):
-		_add_chat_message(str(result.get("error", "That overworld move cannot be used right now.")))
+		_add_chat_message(str(result.get("error", LocalizationManager.text("ui.pokemon_summary.moves.field_move_unavailable"))))
 		return
-	_add_chat_message(str(result.get("message", "%s was used." % _format_move_name(move_id))))
+	_add_chat_message(str(result.get("message", LocalizationManager.text("ui.pokemon_summary.moves.used", {"move": _format_move_name(move_id)}))))
 
 func _on_pokemon_summary_move_reorder_drag_started(card_key: String, pokemon_id: int, source_move_id: String) -> void:
 	if not _apply_pokemon_summary_card_context(card_key):
@@ -17885,7 +17963,7 @@ func _on_pokemon_summary_move_reorder_requested(card_key: String, pokemon_id: in
 	var move_ids: Array[String] = _get_summary_move_ids(reordered_moves)
 	if move_ids.is_empty() or move_ids.size() != reordered_moves.size():
 		_render_pokemon_summary_content(pokemon)
-		_add_chat_message("Could not reorder moves because the move data is invalid.")
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.moves.invalid_reorder_data"))
 		return
 	if move_ids == original_move_ids:
 		_render_pokemon_summary_content(pokemon)
@@ -17904,7 +17982,7 @@ func _on_pokemon_summary_move_reorder_requested(card_key: String, pokemon_id: in
 	if rollback_pokemon != null:
 		rollback_pokemon.moves = original_moves
 	_refresh_open_pokemon_summary_cards()
-	_add_chat_message("Could not save the new move order. The previous order was restored.")
+	_add_chat_message(LocalizationManager.text("ui.pokemon_summary.moves.reorder_failed"))
 	push_warning("UIOverlay: move reorder failed: %s" % str(result.get("error", "Unknown error")))
 
 func _on_pokemon_summary_move_reorder_drag_finished(
@@ -18021,12 +18099,12 @@ func _render_stat_bar_list(values: Dictionary, max_value: int, use_actual_max: b
 
 func _summary_stat_order() -> Array[Dictionary]:
 	return [
-		{"id": "hp", "label": "HP", "color": Color("#ff5d69")},
-		{"id": "atk", "label": "ATK", "color": Color("#ffb347")},
-		{"id": "def", "label": "DEF", "color": Color("#ffd95d")},
-		{"id": "spa", "label": "SP.ATK", "color": Color("#38bdf8")},
-		{"id": "spd", "label": "SP.DEF", "color": Color("#73e26d")},
-		{"id": "spe", "label": "SPEED", "color": Color("#e879f9")},
+		{"id": "hp", "label": LocalizationManager.text("pokemon.stat.hp"), "color": Color("#ff5d69")},
+		{"id": "atk", "label": LocalizationManager.text("pokemon.stat.attack"), "color": Color("#ffb347")},
+		{"id": "def", "label": LocalizationManager.text("pokemon.stat.defense"), "color": Color("#ffd95d")},
+		{"id": "spa", "label": LocalizationManager.text("pokemon.stat.special_attack"), "color": Color("#38bdf8")},
+		{"id": "spd", "label": LocalizationManager.text("pokemon.stat.special_defense"), "color": Color("#73e26d")},
+		{"id": "spe", "label": LocalizationManager.text("pokemon.stat.speed"), "color": Color("#e879f9")},
 	]
 
 func _summary_stat_label(stat_id: String) -> String:
@@ -18056,14 +18134,7 @@ func _refresh_pokemon_summary_stats(pokemon: Pokemon) -> void:
 	for child: Node in pokemon_summary_stats_list.get_children():
 		child.queue_free()
 
-	var stat_order: Array[Dictionary] = [
-		{"id": "hp", "label": "HP", "color": Color("#ff5d69")},
-		{"id": "atk", "label": "ATK", "color": Color("#ffb347")},
-		{"id": "def", "label": "DEF", "color": Color("#ffd95d")},
-		{"id": "spa", "label": "SP.ATK", "color": Color("#38bdf8")},
-		{"id": "spd", "label": "SP.DEF", "color": Color("#73e26d")},
-		{"id": "spe", "label": "SPEED", "color": Color("#e879f9")},
-	]
+	var stat_order: Array[Dictionary] = _summary_stat_order()
 	var max_stat: int = 1
 	for stat_value: Variant in stat_order:
 		var stat: Dictionary = stat_value
@@ -18116,7 +18187,7 @@ func _refresh_pokemon_summary_moves(pokemon: Pokemon) -> void:
 		child.queue_free()
 
 	var title := Label.new()
-	title.text = "Moves"
+	title.text = LocalizationManager.text("ui.pokemon_summary.tab.moves")
 	title.add_theme_font_size_override("font_size", 14)
 	title.add_theme_color_override("font_color", UI_MONEY)
 	pokemon_summary_moves_list.add_child(title)
@@ -18156,7 +18227,11 @@ func _set_pokemon_summary_ball_button(pokemon: Pokemon) -> void:
 	pokemon_summary_ball_icon.modulate = Color(1, 1, 1, 0.45) if ball_texture == null else Color(1, 1, 1, 1)
 	pokemon_summary_ball_button.disabled = _is_pokemon_summary_readonly()
 	pokemon_summary_ball_button.mouse_default_cursor_shape = Control.CURSOR_ARROW if _is_pokemon_summary_readonly() else Control.CURSOR_POINTING_HAND
-	pokemon_summary_ball_button.tooltip_text = "You can view this Pokémon, but not change it here." if _is_pokemon_summary_readonly() else "Current Poké Ball: %s. Click to change it." % _item_name_from_id(ball_item_id)
+	pokemon_summary_ball_button.tooltip_text = (
+		LocalizationManager.text("ui.pokemon_summary.readonly_tooltip")
+		if _is_pokemon_summary_readonly()
+		else LocalizationManager.text("ui.pokemon_summary.ball.current_tooltip", {"ball": _item_name_from_id(ball_item_id)})
+	)
 
 func _on_pokemon_summary_ball_button_pressed(card_key: String = "") -> void:
 	_apply_pokemon_summary_card_context(card_key)
@@ -18164,11 +18239,11 @@ func _on_pokemon_summary_ball_button_pressed(card_key: String = "") -> void:
 		return
 	var pokemon_value: Variant = _get_selected_summary_pokemon()
 	if not (pokemon_value is Pokemon):
-		_add_chat_message("This Pokémon can’t be changed right now.")
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.readonly_error"))
 		return
 	var pokemon: Pokemon = pokemon_value as Pokemon
 	if pokemon.owned_pokemon_id <= 0:
-		_add_chat_message("This Pokémon can’t be changed right now.")
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.readonly_error"))
 		return
 
 	await _ensure_bag_inventory_loaded()
@@ -18209,12 +18284,16 @@ func _refresh_pokemon_summary_ball_picker(pokemon: Pokemon) -> void:
 
 	if added_count <= 0:
 		var empty_label := Label.new()
-		empty_label.text = "No matching Poké Balls." if query != "" else "No Poké Balls in your bag."
+		empty_label.text = (
+			LocalizationManager.text("ui.pokemon_summary.ball.no_matches")
+			if query != ""
+			else LocalizationManager.text("ui.pokemon_summary.ball.none_in_bag")
+		)
 		empty_label.add_theme_font_size_override("font_size", 12)
 		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		pokemon_summary_ball_list.add_child(empty_label)
 	elif query == "" and has_more_matches:
-		pokemon_summary_ball_list.add_child(_create_summary_picker_hint("Search to narrow Poké Balls."))
+		pokemon_summary_ball_list.add_child(_create_summary_picker_hint(LocalizationManager.text("ui.pokemon_summary.ball.search_hint")))
 
 func _on_pokemon_summary_ball_search_changed(_text: String) -> void:
 	var pokemon_value: Variant = _get_selected_summary_pokemon()
@@ -18259,11 +18338,11 @@ func _on_pokemon_summary_ball_selected(item_id: String, card_key: String = "") -
 		return
 	var pokemon_value: Variant = _get_selected_summary_pokemon()
 	if not (pokemon_value is Pokemon):
-		_add_chat_message("This Pokémon can’t be changed right now.")
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.readonly_error"))
 		return
 	var pokemon: Pokemon = pokemon_value as Pokemon
 	if pokemon.owned_pokemon_id <= 0:
-		_add_chat_message("This Pokémon can’t be changed right now.")
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.readonly_error"))
 		return
 
 	var current_ball_item_id := _get_pokemon_ball_item_id(pokemon)
@@ -18273,15 +18352,12 @@ func _on_pokemon_summary_ball_selected(item_id: String, card_key: String = "") -
 	pokemon_summary_pending_ball_item_id = item_id
 	pokemon_summary_pending_ball_card_key = card_key
 	_show_ui_confirm_popup(
-		"Change Poké Ball",
-		"Change this Pokemon's Poké Ball from %s to %s?\n\n%s will not be returned to your Bag, and %s will be consumed."
-			% [
-				_item_name_from_id(current_ball_item_id),
-				_item_name_from_id(item_id),
-				_item_name_from_id(current_ball_item_id),
-				_item_name_from_id(item_id),
-			],
-		"Change Ball",
+		LocalizationManager.text("ui.pokemon_summary.ball.confirm_title"),
+		LocalizationManager.text("ui.pokemon_summary.ball.confirm_message", {
+			"current_ball": _item_name_from_id(current_ball_item_id),
+			"new_ball": _item_name_from_id(item_id),
+		}),
+		LocalizationManager.text("ui.pokemon_summary.ball.confirm_action"),
 		Callable(self, "_on_pokemon_summary_ball_change_confirmed"),
 		Vector2i(480, 0)
 	)
@@ -18301,16 +18377,18 @@ func _apply_pokemon_summary_ball_change(item_id: String, card_key: String = "") 
 		return
 	var pokemon_value: Variant = _get_selected_summary_pokemon()
 	if not (pokemon_value is Pokemon):
-		_add_chat_message("This Pokémon can’t be changed right now.")
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.readonly_error"))
 		return
 	var pokemon: Pokemon = pokemon_value as Pokemon
 	if pokemon.owned_pokemon_id <= 0:
-		_add_chat_message("This Pokémon can’t be changed right now.")
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.readonly_error"))
 		return
 
 	var result: Dictionary = await PlayerPartyStateService.set_pokemon_ball(pokemon.owned_pokemon_id, item_id)
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not change Poké Ball: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.ball.change_failed", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
 
 	bag_inventory_items = _normalize_bag_inventory_items(result.get("inventory", []))
@@ -18327,18 +18405,20 @@ func _on_pokemon_summary_held_item_slot_pressed(card_key: String = "") -> void:
 		return
 	var pokemon_value: Variant = _get_selected_summary_pokemon()
 	if not (pokemon_value is Pokemon):
-		_add_chat_message("This Pokémon can’t be changed right now.")
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.readonly_error"))
 		return
 	var pokemon: Pokemon = pokemon_value as Pokemon
 	if pokemon.owned_pokemon_id <= 0:
-		_add_chat_message("This Pokémon can’t be changed right now.")
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.readonly_error"))
 		return
 
 	var held_item_id: String = _get_pokemon_held_item_id(pokemon)
 	if held_item_id != "":
 		var result: Dictionary = await PlayerPartyStateService.take_pokemon_held_item(pokemon.owned_pokemon_id)
 		if not bool(result.get("success", false)):
-			_add_chat_message("Could not take item: %s" % str(result.get("error", "Unknown error")))
+			_add_chat_message(LocalizationManager.text("ui.pokemon_summary.held_item.take_failed", {
+				"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+			}))
 			return
 		bag_inventory_items = _normalize_bag_inventory_items(result.get("inventory", []))
 		bag_inventory_loaded = true
@@ -18371,12 +18451,20 @@ func _set_pokemon_summary_held_item_slot(pokemon: Pokemon) -> void:
 		pokemon_summary_held_item_slot_name_label.text = _item_name_from_id(held_item_id)
 		pokemon_summary_held_item_slot_name_label.tooltip_text = pokemon_summary_held_item_slot_name_label.text
 		if pokemon_summary_held_item_slot_button != null:
-			pokemon_summary_held_item_slot_button.tooltip_text = "You can view this Pokémon, but not change it here." if _is_pokemon_summary_readonly() else "Take this held item"
+			pokemon_summary_held_item_slot_button.tooltip_text = (
+				LocalizationManager.text("ui.pokemon_summary.readonly_tooltip")
+				if _is_pokemon_summary_readonly()
+				else LocalizationManager.text("ui.pokemon_summary.held_item.take_tooltip")
+			)
 	else:
-		pokemon_summary_held_item_slot_name_label.text = "No held item"
+		pokemon_summary_held_item_slot_name_label.text = LocalizationManager.text("ui.pokemon_summary.held_item.none")
 		pokemon_summary_held_item_slot_name_label.tooltip_text = pokemon_summary_held_item_slot_name_label.text
 		if pokemon_summary_held_item_slot_button != null:
-			pokemon_summary_held_item_slot_button.tooltip_text = "You can view this Pokémon, but not change it here." if _is_pokemon_summary_readonly() else "Give this Pokémon an item"
+			pokemon_summary_held_item_slot_button.tooltip_text = (
+				LocalizationManager.text("ui.pokemon_summary.readonly_tooltip")
+				if _is_pokemon_summary_readonly()
+				else LocalizationManager.text("ui.pokemon_summary.held_item.give_tooltip")
+			)
 	if pokemon_summary_held_item_slot_button != null:
 		pokemon_summary_held_item_slot_button.disabled = _is_pokemon_summary_readonly()
 		pokemon_summary_held_item_slot_button.mouse_default_cursor_shape = Control.CURSOR_ARROW if _is_pokemon_summary_readonly() else Control.CURSOR_POINTING_HAND
@@ -18410,12 +18498,16 @@ func _refresh_pokemon_summary_item_picker() -> void:
 
 	if added_count <= 0:
 		var empty_label := Label.new()
-		empty_label.text = "No matching held items." if query != "" else "No held items in your bag."
+		empty_label.text = (
+			LocalizationManager.text("ui.pokemon_summary.held_item.no_matches")
+			if query != ""
+			else LocalizationManager.text("ui.pokemon_summary.held_item.none_in_bag")
+		)
 		empty_label.add_theme_font_size_override("font_size", 12)
 		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		pokemon_summary_item_list.add_child(empty_label)
 	elif query == "" and has_more_matches:
-		pokemon_summary_item_list.add_child(_create_summary_picker_hint("Search to narrow held items."))
+		pokemon_summary_item_list.add_child(_create_summary_picker_hint(LocalizationManager.text("ui.pokemon_summary.held_item.search_hint")))
 
 func _on_pokemon_summary_item_search_changed(_text: String) -> void:
 	_refresh_pokemon_summary_item_picker()
@@ -18438,16 +18530,18 @@ func _on_pokemon_summary_item_selected(item_id: String, card_key: String = "") -
 		return
 	var pokemon_value: Variant = _get_selected_summary_pokemon()
 	if not (pokemon_value is Pokemon):
-		_add_chat_message("This Pokémon can’t be changed right now.")
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.readonly_error"))
 		return
 	var pokemon: Pokemon = pokemon_value as Pokemon
 	if pokemon.owned_pokemon_id <= 0:
-		_add_chat_message("This Pokémon can’t be changed right now.")
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.readonly_error"))
 		return
 
 	var result: Dictionary = await PlayerPartyStateService.give_pokemon_held_item(pokemon.owned_pokemon_id, item_id)
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not give item: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.held_item.give_failed", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
 
 	bag_inventory_items = _normalize_bag_inventory_items(result.get("inventory", []))
@@ -18782,7 +18876,7 @@ func _get_summary_move_power_text(move_value: Variant) -> String:
 func _get_summary_move_accuracy_text(move_value: Variant) -> String:
 	var accuracy_value: Variant = _get_summary_move_data_value(move_value, ["accuracy", "acc"], null)
 	if accuracy_value is bool:
-		return "Always" if bool(accuracy_value) else "-"
+		return LocalizationManager.text("ui.pokemon_summary.moves.always") if bool(accuracy_value) else "-"
 	if accuracy_value == null or str(accuracy_value).strip_edges() == "":
 		return "-"
 
