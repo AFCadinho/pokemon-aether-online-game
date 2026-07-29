@@ -16,17 +16,17 @@ const OPTION_ID_BY_SPRITE_STYLE: Dictionary = {
 }
 const GEN5_SPRITE_MISSING_KEY := "ui.settings.sprite.not_installed"
 const LOGIN_SCENE_PATH := "res://scenes/interface/login_screen.tscn"
-const MINIMUM_MENU_SIZE := Vector2(700, 600)
+const MINIMUM_MENU_SIZE := Vector2(700, 540)
 const NAVIGATION_WIDTH := 168.0
-const UI_BG := Color("#070b14f2")
-const UI_SLOT_BG := Color("#0d1625e6")
-const UI_INPUT_BG := Color("#050912e8")
-const UI_BORDER := Color("#d8b767")
+const UI_BG := Color("#07111ff7")
+const UI_SLOT_BG := Color("#0d1c30eb")
+const UI_INPUT_BG := Color("#050d1aed")
+const UI_BORDER := Color("#7aa7f4")
 const UI_BORDER_SOFT := Color("#315070")
 const UI_BORDER_FOCUS := Color("#7aa7f4")
-const UI_TEXT := Color("#f4f0de")
-const UI_MUTED_TEXT := Color("#aeb8c5")
-const UI_SECTION_TEXT := Color("#d8b767")
+const UI_TEXT := Color("#f1f5fb")
+const UI_MUTED_TEXT := Color("#aebbc9")
+const UI_SECTION_TEXT := Color("#b980ff")
 const UI_PURPLE_HOVER := Color("#b980ff")
 const UI_DANGER := Color("#ff6b74")
 const UI_DANGER_BG := Color("#2a1015e8")
@@ -234,7 +234,7 @@ func _setup_tabs() -> void:
 	content_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	content_panel.add_theme_stylebox_override(
 		"panel",
-		_make_panel_style(Color("#08111ee8"), UI_BORDER_SOFT, 12, 1)
+		_make_panel_style(Color("#081522e8"), Color("#315070cc"), 12, 1)
 	)
 	settings_workspace.add_child(content_panel)
 	content_panel.add_child(tab_container)
@@ -791,7 +791,7 @@ func _apply_premium_styles() -> void:
 	if settings_navigation_panel != null:
 		settings_navigation_panel.add_theme_stylebox_override(
 			"panel",
-			_make_panel_style(Color("#0b1728e8"), Color("#274563"), 12, 1)
+			_make_panel_style(Color("#091727e8"), Color("#315070cc"), 12, 1)
 		)
 	if tab_container != null:
 		tab_container.add_theme_constant_override("tab_separation", 4)
@@ -843,7 +843,7 @@ func _apply_styles_recursive(node: Node) -> void:
 func _apply_label_style(label: Label) -> void:
 	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	if label.name == "TitleLabel":
-		label.add_theme_color_override("font_color", UI_SECTION_TEXT)
+		label.add_theme_color_override("font_color", UI_TEXT)
 		label.add_theme_font_size_override("font_size", 21)
 		return
 	var localization_key := str(label.get_meta("i18n_text_key", ""))
@@ -932,16 +932,16 @@ func _apply_button_style(button: Button, variant: String = "default") -> void:
 func _apply_navigation_button_style(button: Button, selected: bool) -> void:
 	if button == null:
 		return
-	var normal_bg := Color("#172b48f2") if selected else Color(0, 0, 0, 0)
-	var normal_border := UI_BORDER_FOCUS if selected else Color(0, 0, 0, 0)
+	var normal_bg := Color("#201b3fed") if selected else Color(0, 0, 0, 0)
+	var normal_border := UI_PURPLE_HOVER if selected else Color(0, 0, 0, 0)
 	button.add_theme_color_override("font_color", UI_TEXT if selected else UI_MUTED_TEXT)
 	button.add_theme_color_override("font_hover_color", UI_TEXT)
 	button.add_theme_color_override("font_pressed_color", UI_TEXT)
 	button.add_theme_font_size_override("font_size", 14)
 	button.add_theme_stylebox_override("normal", _make_button_style(normal_bg, normal_border, 8, 1 if selected else 0))
-	button.add_theme_stylebox_override("hover", _make_button_style(Color("#132641e8"), UI_BORDER_SOFT, 8, 1))
-	button.add_theme_stylebox_override("pressed", _make_button_style(Color("#0b1729f2"), UI_BORDER_FOCUS, 8, 1))
-	button.add_theme_stylebox_override("focus", _make_button_style(normal_bg, UI_BORDER_FOCUS, 8, 1))
+	button.add_theme_stylebox_override("hover", _make_button_style(Color("#171b35e8"), UI_PURPLE_HOVER, 8, 1))
+	button.add_theme_stylebox_override("pressed", _make_button_style(Color("#12152bf2"), UI_PURPLE_HOVER, 8, 1))
+	button.add_theme_stylebox_override("focus", _make_button_style(normal_bg, UI_PURPLE_HOVER, 8, 1))
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 
@@ -1007,18 +1007,18 @@ func _make_panel_style(background_color: Color, border_color: Color, corner_radi
 
 
 func _make_gold_panel_style(corner_radius: int, border_width: int) -> StyleBoxFlat:
-	var style := _make_panel_style(UI_BG, UI_BORDER, corner_radius, border_width)
-	style.shadow_color = Color(0, 0, 0, 0.38)
-	style.shadow_size = 10
+	var style := _make_panel_style(UI_BG, UI_BORDER_SOFT, corner_radius, border_width)
+	style.shadow_color = Color("#3f2b8a55")
+	style.shadow_size = 16
 	style.shadow_offset = Vector2(0, 4)
 	return style
 
 
 func _make_glass_panel_style(corner_radius: int, border_width: int) -> StyleBoxFlat:
-	var style := _make_panel_style(UI_BG, Color("#75613bcc"), corner_radius, border_width)
-	style.shadow_color = Color(0, 0, 0, 0.38)
-	style.shadow_size = 10
-	style.shadow_offset = Vector2(0, 4)
+	var style := _make_panel_style(UI_BG, Color("#506f9acc"), corner_radius, border_width)
+	style.shadow_color = Color("#4b2ca866")
+	style.shadow_size = 24
+	style.shadow_offset = Vector2(0, 8)
 	return style
 
 
