@@ -18,6 +18,7 @@
 
 **Fixed**
 
+- Fixed defeated players sometimes respawning on invalid map tiles instead of beside their last healing NPC. A late position autosave could overwrite the server's blackout destination before the client finished teleporting.
 - Fixed Guild invitations being visible only after opening the Guild window. Incoming invitations now open a dialog with Accept and Decline actions while playing.
 - Fixed several PvP synchronization issues that could leave both players waiting, apply an outdated snapshot, briefly restore old HP, or stop the battle controls from responding after reconnecting.
 - Fixed Mimikyu's Disguised and Busted forms losing their party-slot identity in PvP, which could prevent its Trainer from selecting an action.

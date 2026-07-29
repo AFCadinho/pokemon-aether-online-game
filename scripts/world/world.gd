@@ -285,9 +285,15 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 	_apply_camera_limits_for_map(target_map)
 
 	await get_tree().physics_frame
+	position_result = _position_player_at_authorized_teleport_state(target_map, state)
+	if not bool(position_result.get("success", false)):
+		if changes_map:
+			await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
+		_mark_authorized_teleport_apply_failed()
+		return position_result
+	_apply_camera_limits_for_map(target_map)
 	if changes_map:
 		await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
-	is_loading_map = false
 	last_presence_position_signature = ""
 	has_pending_player_position_save = false
 	var ack_result: Dictionary = await _ack_authorized_teleport_state(state)
@@ -300,6 +306,7 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 	last_saved_position_signature = _get_current_player_position_signature(true)
 	authorized_teleport_apply_failed_autosave_blocked = false
 	authorized_teleport_in_progress = false
+	is_loading_map = false
 	_publish_world_presence(true)
 	if authorized_teleport_locked_overworld:
 		GameState.unlock_overworld_input()
@@ -842,6 +849,7 @@ func _apply_camera_limits_for_map(map: Node) -> void:
 	camera.limit_right = ceili(rect.position.x + rect.size.x)
 	camera.limit_bottom = ceili(rect.position.y + rect.size.y)
 	camera.reset_smoothing()
+	camera.force_update_scroll()
 
 
 func _get_map_visual_bounds(map: Node) -> Dictionary:
@@ -2088,7 +2096,7 @@ func _forfeit_current_non_pvp_battle_for_pvp_match() -> void:
 			]
 		)
 	
-func end_wild_battle() -> void:
+func end_wild_battle(keep_overworld_locked := false) -> void:
 	if battle_instance != null and battle_instance.has_signal("battle_ended"):
 		var ended_callback := Callable(self, "_on_battle_ended")
 		if battle_instance.is_connected("battle_ended", ended_callback):
@@ -2100,7 +2108,14 @@ func end_wild_battle() -> void:
 	active_wild_pokemon_species = ""
 	active_trainer_name = ""
 	_save_player_activity_state_deferred("idle")
-	_unlock_overworld_after_battle()
+	if keep_overworld_locked:
+		if player.has_method("reset_movement_state"):
+			player.reset_movement_state()
+		_sync_player_activity_state_for_current_tile()
+		player.set_process(true)
+		player.set_physics_process(true)
+	else:
+		_unlock_overworld_after_battle()
 	MusicManager.play_overworld_music()
 	
 func _on_battle_ended(result: Dictionary) -> void:
@@ -2110,7 +2125,9 @@ func _on_battle_ended(result: Dictionary) -> void:
 	var reward_battle_id := active_battle_id
 	var reward_species := active_wild_pokemon_species
 	var reward_trainer_name := active_trainer_name
-	end_wild_battle()
+	if should_respawn_after_loss:
+		_begin_blackout_respawn_transition()
+	end_wild_battle(should_respawn_after_loss)
 	_notify_caught_pokemon_if_needed(result)
 	if should_respawn_after_loss:
 		await _respawn_after_battle_loss()
@@ -2139,7 +2156,18 @@ func _should_respawn_after_battle_loss(result: Dictionary, battle_kind: String) 
 	return winner not in ["p1", "player 1", "player1"] and bool(result.get("localPartyDefeated", _is_current_party_defeated()))
 
 
+func _begin_blackout_respawn_transition() -> void:
+	authorized_teleport_in_progress = true
+	authorized_teleport_locked_overworld = true
+	has_pending_player_position_save = false
+	if not GameState.overworld_input_locked:
+		GameState.lock_overworld_input()
+
+
 func _respawn_after_battle_loss() -> void:
+	while is_saving_player_position:
+		await get_tree().process_frame
+
 	var result: Dictionary = await PlayerGameStateService.respawn_player()
 	if not bool(result.get("success", false)):
 		push_warning("World: respawn after battle loss failed: %s" % str(result.get("error", "Unknown error")))

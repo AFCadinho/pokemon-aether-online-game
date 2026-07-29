@@ -27,6 +27,7 @@ const DEFAULT_HEAL_ANIMATION_DURATION_SECONDS := 0.8
 @export var heal_animation_name := &"heal_down"
 @export var respawn_point_id := ""
 @export var respawn_marker_path: NodePath = ^"RespawnMarker"
+@export var respawn_spawn_marker := "HealNPC"
 @export_enum("up", "down", "left", "right") var respawn_facing_direction := "down"
 
 
@@ -246,6 +247,7 @@ func _build_respawn_point_payload() -> Dictionary:
 		},
 		"facingDirection": respawn_facing_direction,
 		"markerId": marker_id,
+		"spawnMarker": respawn_spawn_marker.strip_edges(),
 	}
 
 
