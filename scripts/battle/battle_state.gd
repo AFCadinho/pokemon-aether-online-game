@@ -1485,13 +1485,15 @@ func _get_party_hp_snapshot_key(pokemon_data: Dictionary, team_index := -1, fall
 	if pokemon_key != "":
 		return "pokemonKey:%s" % pokemon_key
 
+	var ident := str(pokemon_data.get("ident", fallback_ident)).strip_edges()
+	var player_id := _get_player_id_from_ident(ident)
 	for key in ["metadataSlot", "metadata_slot", "partySlot", "party_slot", "slot", "position"]:
 		if not pokemon_data.has(key):
 			continue
 
 		var slot := _safe_int(pokemon_data.get(key), -1)
 		if slot >= 0:
-			return "slot:%s" % slot
+			return "%s:slot:%s" % [player_id, slot] if player_id != "" else "slot:%s" % slot
 
 	for key in ["instanceId", "instance_id", "ownedPokemonId", "owned_pokemon_id", "pokemonId", "pokemon_id"]:
 		var value := str(pokemon_data.get(key, "")).strip_edges()
@@ -1499,11 +1501,11 @@ func _get_party_hp_snapshot_key(pokemon_data: Dictionary, team_index := -1, fall
 			return "%s:%s" % [key, value]
 
 	if team_index >= 0:
-		return "index:%s" % team_index
+		return "%s:index:%s" % [player_id, team_index] if player_id != "" else "index:%s" % team_index
 
-	var ident := _normalize_battle_ident(str(pokemon_data.get("ident", fallback_ident)))
-	if ident != "":
-		return "ident:%s" % ident
+	var normalized_ident := _normalize_battle_ident(ident)
+	if normalized_ident != "":
+		return "ident:%s" % normalized_ident
 
 	return ""
 

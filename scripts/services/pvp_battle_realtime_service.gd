@@ -227,6 +227,16 @@ func _build_join_payload() -> Dictionary:
 	return payload
 
 
+func seed_spectator_event_cursor(response: Dictionary) -> void:
+	if active_viewer_role != "spectator" or not response.has("eventSeq"):
+		return
+	last_spectator_event_seq = max(
+		last_spectator_event_seq,
+		_nonnegative_int(response.get("eventSeq", 0))
+	)
+	spectator_cursor_valid = true
+
+
 func disconnect_room() -> void:
 	should_reconnect = false
 	connecting = false

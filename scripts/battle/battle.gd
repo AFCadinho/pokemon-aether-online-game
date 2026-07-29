@@ -9389,6 +9389,11 @@ func _connect_pvp_realtime(local_player_id: String, battle_id: String, initial_r
 		pvp_match_id,
 		pvp_viewer_role
 	)
+	if _is_spectator_battle():
+		# The HTTP bootstrap already supplied and consumed the public history.
+		# Seed its cursor before the deferred websocket join packet is sent so
+		# reconnect/bootstrap delivery starts after that history.
+		PvpBattleRealtimeService.seed_spectator_event_cursor(initial_response)
 
 func _on_pvp_render_batch_completed(completion: Dictionary) -> void:
 	_trace_pvp_flow("render_completed", {}, "completion=%s" % JSON.stringify(completion))

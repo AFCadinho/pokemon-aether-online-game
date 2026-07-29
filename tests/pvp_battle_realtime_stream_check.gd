@@ -231,6 +231,12 @@ func _init() -> void:
 		"battle observer mode is read-only and provides a safe leave action"
 	)
 	_check_equal(
+		realtime_source.contains("func seed_spectator_event_cursor(response: Dictionary) -> void:") \
+			and battle_source.contains("PvpBattleRealtimeService.seed_spectator_event_cursor(initial_response)"),
+		true,
+		"spectator websocket joins continue after the HTTP bootstrap history cursor"
+	)
+	_check_equal(
 		battle_source.contains("func _on_spectator_switch_sides_pressed() -> void:") \
 			and battle_source.contains('action_flow.set_local_player_id("p2" if spectator_sides_swapped else "p1")') \
 			and battle_source.contains("spectator_latest_raw_response") \

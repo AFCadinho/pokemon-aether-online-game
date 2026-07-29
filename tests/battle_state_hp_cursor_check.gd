@@ -10,6 +10,7 @@ func _init() -> void:
 	_check_percentage_damage_survives_a_quiet_turn()
 	_check_public_lead_switches_activate_team_preview_rosters()
 	_check_public_base_ident_resolves_unique_preview_form()
+	_check_public_hp_memory_is_scoped_per_player()
 	quit(1 if failed else 0)
 
 
@@ -118,6 +119,46 @@ func _check_percentage_damage_survives_a_quiet_turn() -> void:
 		"109/341",
 		"the canonical condition remains on the known HP scale"
 	)
+
+
+func _check_public_hp_memory_is_scoped_per_player() -> void:
+	var state = BattleStateScript.new()
+	var public_snapshot := {
+		"success": true,
+		"battleId": "spectator-cross-side-hp-test",
+		"requests": {
+			"p1": {"side": {"pokemon": [{
+				"ident": "p1: Cinderace",
+				"species": "Cinderace",
+				"active": false,
+				"condition": "100/100",
+				"hp": 100,
+				"maxHp": 100,
+				"fainted": false,
+			}]}},
+			"p2": {"side": {"pokemon": [{
+				"ident": "p2: Landorus-Therian",
+				"species": "Landorus-Therian",
+				"active": false,
+				"condition": "0 fnt",
+				"hp": 0,
+				"maxHp": 100,
+				"fainted": true,
+			}]}},
+		},
+		"events": [],
+	}
+
+	# Public spectator rosters intentionally omit private Pokemon keys and party
+	# slots. Reapplying a snapshot must still keep equal array positions on the
+	# two opposing teams in separate HP-memory namespaces.
+	state.load_from_api_response(public_snapshot, false)
+	state.load_from_api_response(public_snapshot, false)
+	var cinderace: Dictionary = state.get_player_team("p1")[0]
+	var landorus: Dictionary = state.get_player_team("p2")[0]
+	_check_equal(bool(cinderace.get("fainted", false)), false, "p1 Cinderace does not inherit p2 Landorus's faint")
+	_check_equal(str(cinderace.get("condition", "")), "100/100", "p1 Cinderace retains its own public HP")
+	_check_equal(bool(landorus.get("fainted", false)), true, "p2 Landorus remains fainted")
 
 
 func _check_public_lead_switches_activate_team_preview_rosters() -> void:
