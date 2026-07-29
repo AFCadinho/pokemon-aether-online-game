@@ -4,6 +4,11 @@ class_name SignTextServiceNode
 
 const DEFAULT_LOCALE := "en"
 const SIGN_TEXT_ROOT := "res://data/world_text/signs"
+const SIGN_DIRECTORY_BY_LOCALE: Dictionary = {
+	"en": "en",
+	"nl": "nl",
+	"pt_BR": "pt-BR",
+}
 
 var sign_catalog_cache: Dictionary = {}
 
@@ -21,11 +26,15 @@ func get_sign(sign_id: String, map_id: String = "", locale: String = "") -> Dict
 	var catalog := _load_sign_catalog(normalized_locale)
 	var entries: Dictionary = catalog.get("entries", {})
 	if not entries.has(normalized_sign_id):
-		return {
-			"success": false,
-			"error": "Sign text not found",
-			"metadata": {},
-		}
+		var fallback_catalog := _load_sign_catalog(DEFAULT_LOCALE)
+		var fallback_entries: Dictionary = fallback_catalog.get("entries", {})
+		if not fallback_entries.has(normalized_sign_id):
+			return {
+				"success": false,
+				"error": "Sign text not found",
+				"metadata": {},
+			}
+		entries = fallback_entries
 
 	var metadata: Dictionary = (entries[normalized_sign_id] as Dictionary).duplicate(true)
 	var expected_map_id := map_id.strip_edges()
@@ -66,7 +75,8 @@ func _load_sign_catalog(locale: String) -> Dictionary:
 		return sign_catalog_cache[normalized_locale]
 
 	var entries: Dictionary = {}
-	var root_path := "%s/%s" % [SIGN_TEXT_ROOT, normalized_locale]
+	var directory_name := str(SIGN_DIRECTORY_BY_LOCALE.get(normalized_locale, DEFAULT_LOCALE))
+	var root_path := "%s/%s" % [SIGN_TEXT_ROOT, directory_name]
 	_collect_sign_entries(root_path, entries)
 
 	var catalog := {
@@ -152,8 +162,22 @@ func _normalize_sign_metadata(sign: Dictionary, region_id: String, map_id: Strin
 
 
 func _normalize_locale(locale: String) -> String:
-	var normalized := locale.strip_edges().to_lower()
-	return DEFAULT_LOCALE if normalized.is_empty() else normalized
+	if locale.strip_edges().is_empty():
+		var localization_manager := get_node_or_null("/root/LocalizationManager") if is_inside_tree() else null
+		if localization_manager != null:
+			return str(localization_manager.get("current_locale"))
+		return DEFAULT_LOCALE
+
+	var localization_manager := get_node_or_null("/root/LocalizationManager") if is_inside_tree() else null
+	if localization_manager != null and localization_manager.has_method("normalize_locale"):
+		return str(localization_manager.call("normalize_locale", locale))
+
+	var normalized := locale.strip_edges().replace("-", "_").to_lower()
+	if normalized.begins_with("nl"):
+		return "nl"
+	if normalized.begins_with("pt"):
+		return "pt_BR"
+	return DEFAULT_LOCALE
 
 
 func _get_string_array(value: Variant) -> Array[String]:

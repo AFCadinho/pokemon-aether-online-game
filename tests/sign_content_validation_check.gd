@@ -12,6 +12,7 @@ const SIGN_SCENE_SUFFIXES: Array[String] = [
 	"/scenes/world/interactables/large_sign_interactable.tscn",
 ]
 const SIGN_DATA_ROOT := "res://data/world_text/signs"
+const SUPPORTED_LOCALES: Array[String] = ["en", "nl", "pt-br"]
 const LOCAL_CONTENT_SOURCES: Array[String] = ["", "local"]
 const VALID_CONTENT_SOURCES: Dictionary = {
 	"local": true,
@@ -53,6 +54,7 @@ func _init() -> void:
 
 	_check_placed_signs()
 	_check_sign_catalog_entries_are_referenced_by_valid_maps()
+	_check_supported_locale_catalog_parity()
 
 	quit(1 if failed else 0)
 
@@ -130,6 +132,20 @@ func _check_sign_catalog_entries_are_referenced_by_valid_maps() -> void:
 			var map_id := str(entry.get("mapId", "")).strip_edges()
 			_check_true(map_id != "", "sign catalog entry %s:%s has mapId" % [locale, sign_id])
 			_check_true(valid_map_ids.has(map_id), "sign catalog entry %s:%s references a known mapId: %s" % [locale, sign_id, map_id])
+
+
+func _check_supported_locale_catalog_parity() -> void:
+	var english_catalog: Dictionary = sign_catalogs.get("en", {})
+	_check_true(not english_catalog.is_empty(), "English sign catalog is available")
+
+	for locale: String in SUPPORTED_LOCALES:
+		var catalog: Dictionary = sign_catalogs.get(locale, {})
+		_check_true(not catalog.is_empty(), "%s sign catalog is available" % locale)
+		_check_equal(
+			_sorted_keys(catalog),
+			_sorted_keys(english_catalog),
+			"%s sign IDs match the English catalog" % locale
+		)
 
 
 func _load_sign_catalogs() -> Dictionary:
@@ -232,6 +248,14 @@ func _get_locale_from_path(path: String) -> String:
 
 	var locale := remainder.substr(0, slash_index).strip_edges().to_lower()
 	return "en" if locale.is_empty() else locale
+
+
+func _sorted_keys(dictionary: Dictionary) -> Array[String]:
+	var keys: Array[String] = []
+	for key_value: Variant in dictionary.keys():
+		keys.append(str(key_value))
+	keys.sort()
+	return keys
 
 
 func _parse_ext_resources(text: String) -> Dictionary:
@@ -398,6 +422,14 @@ func _check_true(condition: bool, message: String) -> void:
 		return
 
 	_fail(message)
+
+
+func _check_equal(actual: Variant, expected: Variant, message: String) -> void:
+	if actual == expected:
+		print("PASS %s" % message)
+		return
+
+	_fail("%s expected=%s actual=%s" % [message, str(expected), str(actual)])
 
 
 func _fail(message: String) -> void:
