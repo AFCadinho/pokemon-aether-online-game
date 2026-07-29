@@ -135,9 +135,9 @@ func _init() -> void:
 	)
 	_check(
 		player_source.contains('"hair": Vector2(0.0, -7.0)')
-		and player_source.contains('"eyes": Vector2(0.0, -6.0)')
+		and player_source.contains('"eyes": Vector2(0.0, -10.0)')
 		and remote_player_source.contains('"headgear": Vector2(0.0, -7.0)')
-		and remote_player_source.contains('"eyebrows": Vector2(0.0, -6.0)'),
+		and remote_player_source.contains('"eyebrows": Vector2(0.0, -10.0)'),
 		"down-facing fishing aligns static head layers with the raised fishing body"
 	)
 	_check(
