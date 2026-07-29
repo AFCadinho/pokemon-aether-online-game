@@ -1,54 +1,54 @@
 # Changelog
 
-## Unreleased
+## 0.3.37 - 2026-07-29
 
 **Added**
 
-- Added three male and two female tradeable Chroma hairstyles to the Aether Gift Store.
-- Added spectator mode for private PvP battle rooms. Hosts can choose whether viewers are allowed, and spectators can join with the room code without affecting the battle.
-- Spectators can switch between both Trainers' perspectives, inspect information that has been revealed during the battle, and leave at any time.
-- Joining a battle already in progress now immediately shows the complete Battle Log and current battlefield, including form changes, HP, status conditions, and fainted Pokémon, without replaying earlier animations.
-- Spectator mode supports Team Preview, live battles, forfeits, and the final result screen.
-- Added Fishing Levels and Fishing XP earned by winning wild encounters started with a rod.
-- Added a styled rod loadout to the overworld action bar for viewing progression, regional requirements, and selecting an available rod.
-- Added a Fishing Guru in Pallet Town who awards the Old Rod. New players no longer receive a rod automatically.
-- Fishing is now available while Surfing, using the same active rod and progression requirements.
+- Added five tradeable Chroma hairstyles to the Aether Gift Store: three for male Trainers and two for female Trainers.
+- You can now watch private PvP battles when the room host allows spectators. Join with the room code without affecting the battle.
+- Spectators can view the battle from either Trainer's side, check everything revealed during the fight, and leave whenever they want.
+- When joining a battle already underway, spectators now see the current battlefield and full Battle Log right away.
+- Spectator mode works from Team Preview through the final result, including forfeits.
+- Added Fishing Levels and Fishing XP. Win wild battles started by fishing to earn XP.
+- Added a rod selector to the action bar. It shows your Fishing Level, regional requirements, and the rods you can use.
+- Added a Fishing Guru in Pallet Town who gives you the Old Rod. New Trainers no longer start with a rod automatically.
+- You can now fish while Surfing, using your selected rod and its normal requirements.
 
 **Changed**
 
-- Upgraded the Aether Atelier with the complete Appearance Wear collection, outfit switching, a combined live preview, and one total fee based only on changed Chroma colours.
-- Grouped Aether Atelier Appearance Wear items by slot and corrected the customization catalog heading.
-- Removed the obsolete Adinho eyebrow overlay and the temporary scalp-fill layer that caused dark pixels across Chroma hairstyles.
-- Gift Store Chroma purchases now include the selected preview colour as the item's permanent base colour, including Chroma components inside outfit boxes.
-- Redesigned Pokémon Storage with a clearer Party and Box workspace, larger Pokémon artwork, quieter empty slots, restrained type accents, and clearer mouse feedback for buttons, dragging, and valid drop targets.
-- Storage boxes can now be renamed and navigated through compact tabs or a complete box selector.
-- Storage search now works across every box, with additional filters for species, type, nature, Ability, move, and held item.
-- Storage hover cards now show held items, moves, stats with nature adjustments, EVs, and IVs in a compact matching design.
-- Fishing rods now carry across regions, while usage depends on Fishing Level and badges earned in the current region. Old Rod requires Level 1 and no badges, Good Rod Level 10 and three badges, and Super Rod Level 25 and six badges.
-- Fishing rod ownership, selection, and regional eligibility are now validated by the server.
-- The rod loadout now includes a No Rod option. The fishing action highlights only while a rod is active, and the water-side fishing prompt follows that selection.
-- Moved Guild emblems into Trainer name cards, where they render as compact icons to the left of the name without increasing the card height.
-- Redesigned private battle rooms with separate Create, Join, and Spectate flows, clearer waiting status, room-code sharing, an option to allow spectators, and a way for the host to cancel an open room.
-- Improved the spectator dashboard with a clearer perspective indicator, larger controls, and better waiting messages.
-- Simplified the battle action area by removing retired Fight and Party image buttons and keeping the current contextual controls visible.
+- The Aether Atelier now includes the full Appearance Wear collection. You can switch outfits, preview all changes together, and pay once for the Chroma colours you changed.
+- Appearance Wear is now grouped more clearly by equipment slot in the Aether Atelier.
+- Chroma hairstyles now look cleaner, without the dark pixels and unwanted eyebrow layer some styles showed.
+- Chroma items bought from the Gift Store now keep the colour you chose, including Chroma items found in outfit boxes.
+- Pokémon Storage has a clearer Party and Box layout, larger Pokémon artwork, and easier-to-use drag-and-drop controls.
+- You can rename storage boxes and move between them with tabs or the full box selector.
+- Storage search now covers all boxes and can filter by Pokémon, type, nature, Ability, move, or held item.
+- Hovering over a Pokémon in Storage now also shows its held item, moves, stats, EVs, and IVs in an easier-to-read card.
+- Your rods travel with you between regions, but each region has its own requirements: Old Rod needs Fishing Level 1 and no Badges; Good Rod needs Level 10 and three Badges; Super Rod needs Level 25 and six Badges.
+- Rod ownership, selection, and regional requirements are now checked more reliably.
+- You can now choose No Rod. Fishing is only highlighted when a rod is selected, and the water-side prompt matches your choice.
+- Guild emblems now appear as small icons beside Trainer names without making name cards taller.
+- Private battle rooms now have clearer Create, Join, and Spectate options, better waiting information, room-code sharing, spectator settings, and an option for the host to cancel an open room.
+- The spectator screen now makes it clearer whose side you are viewing, with larger controls and better waiting messages.
+- Battle controls are now simpler and show only the actions that are currently available.
 
 **Fixed**
 
-- Fixed the first Pokémon Storage hover card after starting the game sometimes stretching to nearly the full window height.
-- Fixed valid fishing attempts falling through to the generic “report this to staff” message even when the player owned an Old Rod.
-- Fixed local and remote fishing poses, including duplicated Surf limbs and misaligned hair, headgear, eyes, facial hair, and accessories while facing down.
-- Fixed the Adinho outfit reverting to the standard clothes while fishing, Surfing, or using a mount.
-- Fixed defeated players sometimes respawning on invalid map tiles instead of beside their last healing NPC. A late position autosave could overwrite the server's blackout destination before the client finished teleporting.
-- Fixed Guild invitations being visible only after opening the Guild window. Incoming invitations now open a dialog with Accept and Decline actions while playing.
-- Fixed several PvP synchronization issues that could leave both players waiting, apply an outdated snapshot, briefly restore old HP, or stop the battle controls from responding after reconnecting.
-- Fixed Mimikyu's Disguised and Busted forms losing their party-slot identity in PvP, which could prevent its Trainer from selecting an action.
-- Fixed the battle controls remaining available while the opponent was choosing a forced replacement.
-- Fixed battle action controls appearing at the wrong time during or immediately after Team Preview, including when late lead events still needed to be shown.
-- Fixed spectators seeing missing, incorrect, or outdated active Pokémon during Team Preview, switching, form changes, reconnect recovery, and event playback.
-- Fixed spectator party hover cards targeting the wrong side and opposing Pokémon sprites sometimes freezing while status effects were shown.
-- Fixed spectator battles not finishing correctly after a forfeit or not showing the winning Trainer on the result screen.
-- Fixed the female Aether Blossom outfit failing to save when an older appearance still contained a null hair colour.
-- Removed misplaced Pallet Town signs and overworld Pokémon from Viridian City.
+- Fixed the first Pokémon Storage info card after logging in sometimes becoming almost as tall as the whole window.
+- Fixed fishing sometimes showing an incorrect error message even when you owned an Old Rod.
+- Fixed fishing poses while Surfing, including duplicate limbs and misplaced hair, headgear, eyes, facial hair, and accessories.
+- Fixed the Adinho outfit changing back to standard clothes while fishing, Surfing, or riding a mount.
+- Fixed defeated Trainers sometimes returning to an invalid spot instead of their last healing location.
+- Guild invitations now appear straight away, so you can accept or decline them while playing.
+- Fixed several PvP issues that could leave both Trainers waiting, briefly show old HP, or make controls stop responding after reconnecting.
+- Fixed Mimikyu's Disguised and Busted forms sometimes preventing its Trainer from choosing an action in PvP.
+- Fixed battle controls sometimes remaining available while the other Trainer was choosing a replacement Pokémon.
+- Fixed battle controls sometimes appearing at the wrong time during or just after Team Preview.
+- Fixed spectator views sometimes showing missing, incorrect, or out-of-date Pokémon during Team Preview, switching, form changes, reconnecting, or battle playback.
+- Fixed spectator info cards sometimes showing the wrong Trainer's Pokémon, and opposing Pokémon occasionally freezing while a status effect was displayed.
+- Fixed spectator battles sometimes not ending properly after a forfeit or not showing the winning Trainer.
+- Fixed the female Aether Blossom outfit sometimes failing to save for Trainers with an older saved appearance.
+- Removed misplaced signs and overworld Pokémon from Viridian City.
 
 ## 0.3.35 - 2026-07-27
 
