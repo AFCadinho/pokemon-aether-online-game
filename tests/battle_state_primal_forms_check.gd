@@ -10,6 +10,7 @@ func _init() -> void:
 	_check_primal_form("Kyogre", "Blue Orb", "Kyogre-Primal")
 	_check_event_species_is_preserved("Groudon-Primal")
 	_check_event_species_is_preserved("Kyogre-Primal")
+	_check_late_join_snapshot_preserves_public_mega_form()
 
 	quit(1 if failed else 0)
 
@@ -79,6 +80,48 @@ func _check_event_species_is_preserved(expected_species: String) -> void:
 		state.get_active_pokemon_species("p1"),
 		expected_species,
 		"%s event species is preserved" % expected_species
+	)
+
+
+func _check_late_join_snapshot_preserves_public_mega_form() -> void:
+	var state = BattleStateScript.new()
+	var snapshot := {
+		"battleId": "late-spectator-mega-test",
+		"requests": {
+			"p1": {
+				"active": [{}],
+				"side": {
+					"pokemon": [{
+						"ident": "p1a: Charizard",
+						"species": "Charizard",
+						"displaySpecies": "Charizard-Mega-Y",
+						"active": true,
+					}],
+				},
+			},
+		},
+		"events": [{
+			"type": "mega",
+			"target": "p1a: Charizard",
+			"species": "Charizard-Mega-Y",
+		}],
+	}
+
+	state.load_from_api_response(snapshot, false)
+	_check_equal(
+		state.get_active_pokemon_species("p1"),
+		"Charizard",
+		"animated history bootstrap rewinds the deferred Mega form"
+	)
+
+	var canonical_snapshot: Dictionary = snapshot.duplicate(true)
+	canonical_snapshot["events"] = []
+	canonical_snapshot["eventBatches"] = []
+	state.load_from_api_response(canonical_snapshot, false)
+	_check_equal(
+		state.get_active_pokemon_species("p1"),
+		"Charizard-Mega-Y",
+		"late spectator canonical snapshot preserves the public Mega form"
 	)
 
 

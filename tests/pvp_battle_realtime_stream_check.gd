@@ -255,6 +255,15 @@ func _init() -> void:
 		true,
 		"spectators seed public leads before the intro and continuously drain live battle updates"
 	)
+	_check_equal(
+		battle_source.contains("func _apply_spectator_late_join_snapshot(response: Dictionary) -> bool:") \
+			and battle_source.contains('canonical_snapshot["events"] = []') \
+			and battle_source.contains('canonical_snapshot["eventBatches"] = []') \
+			and battle_source.contains('"spectator_late_join_snapshot"') \
+			and battle_source.contains("var response_event_seq := _get_pvp_response_event_seq_end(response)"),
+		true,
+		"late spectators consume historical cursors and render only the canonical current snapshot"
+	)
 
 	service.active_room_code = "ROOM"
 	service.active_player_id = "p1"

@@ -5521,6 +5521,18 @@ func setup_pvp_battle_from_response(
 			"Go! %s!" % _get_active_display_species("p1"),
 			"%s sent out %s!" % [_get_player_display_name("p2"), _get_active_display_species("p2")],
 		])
+	elif _is_spectator_battle():
+		# A spectator entering an active battle needs the canonical state now,
+		# not the pre-event rewind used for an animated battle intro. History is
+		# restored into the log above and its cursor is marked as consumed, so
+		# render the current snapshot directly without replaying summons, turns,
+		# switches, damage, or form changes.
+		if not _apply_spectator_late_join_snapshot(api_response):
+			return
+		_show_battle_controls_after_initial_events()
+		_set_battle_actions_ready(false)
+		_enter_spectator_controls()
+		return
 	var player_species := _get_original_active_player_species(_get_active_display_species("p1"))
 	var opponent_species := _get_active_display_species("p2")
 	# A realtime Team Preview completion can arrive in the same frame as the
@@ -5539,6 +5551,26 @@ func setup_pvp_battle_from_response(
 	_set_battle_actions_ready(not _is_spectator_battle())
 	if _is_spectator_battle():
 		_enter_spectator_controls()
+
+
+func _apply_spectator_late_join_snapshot(response: Dictionary) -> bool:
+	var canonical_snapshot := response.duplicate(true)
+	canonical_snapshot["events"] = []
+	canonical_snapshot["eventBatches"] = []
+	if not _apply_api_response(
+		canonical_snapshot,
+		false,
+		"spectator_late_join_snapshot"
+	):
+		return false
+
+	_update_battle_status_panels()
+	_update_party_slots()
+	_update_vs_panel_names()
+	_update_battle_presentation("snapshot_reconciliation")
+	var display_snapshot := action_flow.map_response_for_local_player(canonical_snapshot)
+	_remember_spectator_canonical_response(display_snapshot)
+	return true
 
 
 func _notify_pvp_entry_ready(entry_ready_callback: Callable) -> void:
@@ -6910,7 +6942,11 @@ func _restore_battle_log_from_history_response(response: Dictionary) -> bool:
 			restored_count += 1
 
 	if restored_count > 0:
-		var response_event_seq := _get_int_from_variant(response.get("eventSeq", -1), -1)
+		# Spectator bootstrap projections may expose the durable cursor only on
+		# their latest event batch. Treat that boundary as consumed as well, or
+		# the next live snapshot promotes the complete history to a catch-up
+		# animation batch.
+		var response_event_seq := _get_pvp_response_event_seq_end(response)
 		if response_event_seq >= 0:
 			pvp_event_queue.last_rendered_seq = max(pvp_event_queue.last_rendered_seq, response_event_seq)
 			last_rendered_event_seq = max(last_rendered_event_seq, response_event_seq)
