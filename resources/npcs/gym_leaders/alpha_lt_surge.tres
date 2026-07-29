@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="GymLeaderDefinition" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/npcs/gym_leader_definition.gd" id="1_definition"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/gym_leaders/alpha_lt_surge_frames.tres" id="2_frames"]
+[ext_resource type="Texture2D" path="res://assets/gym_badges/kanto_badges/Thunder_Badge.png" id="3_badge"]
+
+[resource]
+script = ExtResource("1_definition")
+npc_id = "kanto_alpha_gym_lt_surge"
+trainer_id = "kanto_alpha_gym_lt_surge"
+display_name = "Alpha Trial · Lt. Surge"
+sprite_frames = ExtResource("2_frames")
+badge_region = "kanto"
+badge_id = "thunder"
+badge_display_name = "Thunder Badge"
+badge_icon_texture = ExtResource("3_badge")
+required_badge_ids = Array[String](["cascade"])

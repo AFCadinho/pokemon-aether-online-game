@@ -3,6 +3,12 @@ extends SceneTree
 const PEWTER_SCENE := "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn"
 const GYM_LEADER_SCENE := "res://scenes/npcs/gym_leader_npc.tscn"
 const GYM_LEADER_SCRIPT := "res://scripts/world/npcs/gym_leader_npc.gd"
+const GYM_LEADER_DEFINITION_SCRIPT := "res://scripts/world/npcs/gym_leader_definition.gd"
+const GYM_LEADER_DEFINITIONS := [
+	"res://resources/npcs/gym_leaders/alpha_brock.tres",
+	"res://resources/npcs/gym_leaders/alpha_misty.tres",
+	"res://resources/npcs/gym_leaders/alpha_lt_surge.tres",
+]
 
 var failed := false
 
@@ -13,8 +19,14 @@ func _init() -> void:
 
 func _run() -> void:
 	_check(ResourceLoader.exists(GYM_LEADER_SCENE), "reusable Gym Leader NPC scene exists")
+	_check(ResourceLoader.exists(GYM_LEADER_DEFINITION_SCRIPT), "typed Gym Leader definition exists")
+	for definition_path: String in GYM_LEADER_DEFINITIONS:
+		_check(ResourceLoader.exists(definition_path), "%s exists" % definition_path.get_file())
+		var definition := load(definition_path)
+		_check(definition != null, "%s loads" % definition_path.get_file())
 	var leader_source := FileAccess.get_file_as_string(GYM_LEADER_SCRIPT)
 	_check(leader_source.contains("extends TrainerNPC"), "Gym Leader reuses the trainer battle flow")
+	_check(leader_source.contains("GymLeaderDefinition"), "Gym Leader consumes a typed definition")
 	_check(leader_source.contains("required_badge_ids"), "Gym Leader supports ordered badge trials")
 	_check(leader_source.contains("dialogue_rematch"), "Gym Leader supports badge-aware rematch dialogue")
 
@@ -43,6 +55,7 @@ func _run() -> void:
 			continue
 		leaders[node_name] = leader
 		var values: Array = expected[node_name]
+		_check(leader.get("definition") != null, "%s uses a bundled definition" % node_name)
 		_check(str(leader.get("trainer_id")) == str(values[0]), "%s uses its server trainer id" % node_name)
 		_check(str(leader.get("badge_id")) == str(values[1]), "%s advertises its canonical badge" % node_name)
 		_check(int(leader.get("sight_range_tiles")) == 0, "%s starts only through deliberate interaction" % node_name)

@@ -2,20 +2,43 @@ extends TrainerNPC
 
 class_name GymLeaderNPC
 
-@export var badge_region := "kanto"
-@export var badge_id := ""
-@export var badge_display_name := "Gym Badge"
-@export var badge_icon_texture: Texture2D
-@export var required_badge_ids: Array[String] = []
+const GymLeaderDefinitionResource := preload("res://scripts/world/npcs/gym_leader_definition.gd")
+
+@export var definition: GymLeaderDefinitionResource
+
+var badge_region := "kanto"
+var badge_id := ""
+var badge_display_name := "Gym Badge"
+var badge_icon_texture: Texture2D
+var required_badge_ids: Array[String] = []
 
 var badge_marker: Sprite2D
 
 
 func _ready() -> void:
+	_apply_definition()
 	super._ready()
 	_setup_badge_marker()
 	if not PlayerSave.gym_badges_changed.is_connected(_refresh_badge_marker):
 		PlayerSave.gym_badges_changed.connect(_refresh_badge_marker)
+
+
+func _apply_definition() -> void:
+	if definition == null:
+		push_warning("GymLeaderNPC: No GymLeaderDefinition configured.")
+		return
+
+	npc_id = definition.npc_id
+	trainer_id = definition.trainer_id
+	display_name = definition.display_name
+	dialogue_id = definition.dialogue_id
+	npc_sprite_frames = definition.sprite_frames
+	mugshot = definition.mugshot
+	badge_region = definition.badge_region
+	badge_id = definition.badge_id
+	badge_display_name = definition.badge_display_name
+	badge_icon_texture = definition.badge_icon_texture
+	required_badge_ids = definition.required_badge_ids.duplicate()
 
 
 func show_intro_dialogue() -> void:

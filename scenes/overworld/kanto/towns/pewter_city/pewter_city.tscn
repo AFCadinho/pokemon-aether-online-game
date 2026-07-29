@@ -13,13 +13,10 @@
 [ext_resource type="Texture2D" uid="uid://dr2fy1qoutvvi" path="res://assets/tilesets/dirt path.png" id="9_iv6v0"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="12_vw642"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/building_window_light.tscn" id="13_4hm78"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/gym_leader_npc.tscn" id="14_gym_leader"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/gym_leaders/alpha_brock_frames.tres" id="15_brock_frames"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/gym_leaders/alpha_misty_frames.tres" id="16_misty_frames"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/gym_leaders/alpha_lt_surge_frames.tres" id="17_surge_frames"]
-[ext_resource type="Texture2D" path="res://assets/gym_badges/kanto_badges/Boulder_Badge.png" id="18_boulder_badge"]
-[ext_resource type="Texture2D" path="res://assets/gym_badges/kanto_badges/Cascade_Badge.png" id="19_cascade_badge"]
-[ext_resource type="Texture2D" path="res://assets/gym_badges/kanto_badges/Thunder_Badge.png" id="20_thunder_badge"]
+[ext_resource type="PackedScene" uid="uid://ds0lg7oj5khbm" path="res://scenes/npcs/gym_leader_npc.tscn" id="14_gym_leader"]
+[ext_resource type="Resource" path="res://resources/npcs/gym_leaders/alpha_brock.tres" id="15_brock"]
+[ext_resource type="Resource" path="res://resources/npcs/gym_leaders/alpha_misty.tres" id="16_misty"]
+[ext_resource type="Resource" path="res://resources/npcs/gym_leaders/alpha_lt_surge.tres" id="17_surge"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2mtwu"]
 size = Vector2(32, 32)
@@ -295,43 +292,17 @@ allowed_dialogue_id = "kanto_pallet_town_north_guard_default"
 npc_id = "kanto_pallet_town_north_guard"
 npc_sprite_frames = SubResource("SpriteFrames_2pdw6")
 
-[node name="AlphaGymBrock" parent="Entities/NPCs" instance=ExtResource("14_gym_leader")]
+[node name="AlphaGymBrock" parent="Entities/NPCs" unique_id=101151216 instance=ExtResource("14_gym_leader")]
 position = Vector2(464, 624)
-npc_id = "kanto_alpha_gym_brock"
-display_name = "Alpha Trial · Brock"
-facing_direction = Vector2(0, 1)
-npc_sprite_frames = ExtResource("15_brock_frames")
-trainer_id = "kanto_alpha_gym_brock"
-badge_region = "kanto"
-badge_id = "boulder"
-badge_display_name = "Boulder Badge"
-badge_icon_texture = ExtResource("18_boulder_badge")
+definition = ExtResource("15_brock")
 
-[node name="AlphaGymMisty" parent="Entities/NPCs" instance=ExtResource("14_gym_leader")]
+[node name="AlphaGymMisty" parent="Entities/NPCs" unique_id=142669909 instance=ExtResource("14_gym_leader")]
 position = Vector2(656, 624)
-npc_id = "kanto_alpha_gym_misty"
-display_name = "Alpha Trial · Misty"
-facing_direction = Vector2(0, 1)
-npc_sprite_frames = ExtResource("16_misty_frames")
-trainer_id = "kanto_alpha_gym_misty"
-badge_region = "kanto"
-badge_id = "cascade"
-badge_display_name = "Cascade Badge"
-badge_icon_texture = ExtResource("19_cascade_badge")
-required_badge_ids = Array[String](["boulder"])
+definition = ExtResource("16_misty")
 
-[node name="AlphaGymLtSurge" parent="Entities/NPCs" instance=ExtResource("14_gym_leader")]
+[node name="AlphaGymLtSurge" parent="Entities/NPCs" unique_id=451315257 instance=ExtResource("14_gym_leader")]
 position = Vector2(816, 624)
-npc_id = "kanto_alpha_gym_lt_surge"
-display_name = "Alpha Trial · Lt. Surge"
-facing_direction = Vector2(0, 1)
-npc_sprite_frames = ExtResource("17_surge_frames")
-trainer_id = "kanto_alpha_gym_lt_surge"
-badge_region = "kanto"
-badge_id = "thunder"
-badge_display_name = "Thunder Badge"
-badge_icon_texture = ExtResource("20_thunder_badge")
-required_badge_ids = Array[String](["cascade"])
+definition = ExtResource("17_surge")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=913732015]
 

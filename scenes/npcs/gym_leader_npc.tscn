@@ -1,7 +1,7 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://ds0lg7oj5khbm"]
 
-[ext_resource type="Script" path="res://scripts/world/npcs/gym_leader_npc.gd" id="1_script"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/generic_npc_fallback_frames.tres" id="2_frames"]
+[ext_resource type="Script" uid="uid://cx1cncs7fwsc3" path="res://scripts/world/npcs/gym_leader_npc.gd" id="1_script"]
+[ext_resource type="SpriteFrames" uid="uid://phqssxcvumu3" path="res://assets/npcs/generic_npc_fallback_frames.tres" id="2_frames"]
 
 [sub_resource type="RectangleShape2D" id="InteractionShape"]
 size = Vector2(64, 72)
@@ -9,29 +9,29 @@ size = Vector2(64, 72)
 [sub_resource type="RectangleShape2D" id="VisionShape"]
 size = Vector2(32, 32)
 
-[node name="GymLeaderNPC" type="Node2D"]
+[node name="GymLeaderNPC" type="Node2D" unique_id=1371259751]
 script = ExtResource("1_script")
-npc_sprite_frames = ExtResource("2_frames")
 sight_range_tiles = 0
+npc_sprite_frames = ExtResource("2_frames")
 
-[node name="Look" type="Node2D" parent="."]
+[node name="Look" type="Node2D" parent="." unique_id=2025941471]
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Look"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Look" unique_id=457987200]
 position = Vector2(0, -16)
 sprite_frames = ExtResource("2_frames")
 animation = &"default"
 
-[node name="InteractionArea" type="Area2D" parent="."]
+[node name="InteractionArea" type="Area2D" parent="." unique_id=1691254713]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=153407873]
 shape = SubResource("InteractionShape")
 
-[node name="VisionArea" type="Area2D" parent="."]
+[node name="VisionArea" type="Area2D" parent="." unique_id=1091827487]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="VisionArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="VisionArea" unique_id=750073372]
 shape = SubResource("VisionShape")
 
-[node name="FeetMarker" type="Marker2D" parent="."]
+[node name="FeetMarker" type="Marker2D" parent="." unique_id=285221563]
 
 [connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
 [connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]
