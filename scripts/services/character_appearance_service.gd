@@ -109,6 +109,9 @@ const SKIN_TONE_SWATCHES: Array[Dictionary] = [
 ]
 const FRAME_COLUMNS := 4
 const FRAME_ROWS := 4
+const SURF_FISH_BODY_CUTOFFS: Array[int] = [43, 49, 49, 45]
+const SURF_FISH_DOWN_ROD_X_MIN := 28
+const SURF_FISH_DOWN_ROD_X_MAX := 35
 const IDLE_ANIMATION_SPEED := 5.0
 const WALK_ANIMATION_SPEED := 7.5
 const NON_SELECTABLE_BODY_DIRECTORIES: Array[String] = ["run", "running", "fish", "ride", "surf", "mount"]
@@ -634,7 +637,39 @@ static func get_part_frames(category: String, part_id: String, gender: String = 
 			return cached_value as SpriteFrames
 		return null
 
-	var texture: Texture2D = _load_part_texture_for_movement(normalized_category, normalized_part_id, normalized_gender, normalized_movement_style)
+	var texture: Texture2D
+	if (
+		normalized_movement_style == BODY_MOVEMENT_SURF_FISH
+		and normalized_category == TOP_CATEGORY
+	):
+		var fishing_texture := _load_part_texture_for_movement(
+			normalized_category,
+			normalized_part_id,
+			normalized_gender,
+			BODY_MOVEMENT_FISH
+		)
+		var riding_texture := _load_part_texture_for_movement(
+			normalized_category,
+			normalized_part_id,
+			normalized_gender,
+			BODY_MOVEMENT_RIDE
+		)
+		if fishing_texture != null and riding_texture != null:
+			var combined_frames := _build_surf_fishing_layer_frames(
+				fishing_texture,
+				riding_texture,
+				false
+			)
+			_part_frames_cache[cache_key] = combined_frames
+			return combined_frames
+		texture = fishing_texture
+	else:
+		texture = _load_part_texture_for_movement(
+			normalized_category,
+			normalized_part_id,
+			normalized_gender,
+			normalized_movement_style
+		)
 	if texture == null:
 		_part_frames_cache[cache_key] = null
 		return null
@@ -787,7 +822,32 @@ static func get_body_frames(body_id: String, gender: String = "", movement_style
 			return cached_value as SpriteFrames
 		return null
 
-	var texture: Texture2D = _load_body_texture_for_movement(normalized_body_id, normalized_gender, normalized_movement_style)
+	var texture: Texture2D
+	if normalized_movement_style == BODY_MOVEMENT_SURF_FISH:
+		var fishing_texture := _load_body_texture_for_movement(
+			normalized_body_id,
+			normalized_gender,
+			BODY_MOVEMENT_FISH
+		)
+		var riding_texture := _load_body_texture_for_movement(
+			normalized_body_id,
+			normalized_gender,
+			BODY_MOVEMENT_RIDE
+		)
+		if fishing_texture != null and riding_texture != null:
+			var combined_frames := _build_surf_fishing_body_frames(
+				fishing_texture,
+				riding_texture
+			)
+			_body_frames_cache[cache_key] = combined_frames
+			return combined_frames
+		texture = fishing_texture
+	else:
+		texture = _load_body_texture_for_movement(
+			normalized_body_id,
+			normalized_gender,
+			normalized_movement_style
+		)
 	var fallback_body_id: String = _get_fallback_body_id(normalized_gender)
 	if texture == null and normalized_body_id != fallback_body_id:
 		texture = _load_body_texture_for_movement(fallback_body_id, normalized_gender, normalized_movement_style)
@@ -1096,6 +1156,61 @@ static func _build_sprite_frames(texture: Texture2D) -> SpriteFrames:
 	_add_walk_animation(sprite_frames, texture, frame_size, "walk_up", 3)
 
 	return sprite_frames
+
+
+static func _build_surf_fishing_body_frames(
+	fishing_texture: Texture2D,
+	riding_texture: Texture2D
+) -> SpriteFrames:
+	return _build_surf_fishing_layer_frames(fishing_texture, riding_texture, true)
+
+
+static func _build_surf_fishing_layer_frames(
+	fishing_texture: Texture2D,
+	riding_texture: Texture2D,
+	preserve_down_rod: bool
+) -> SpriteFrames:
+	var fishing_image := _get_texture_image(fishing_texture)
+	var riding_image := _get_texture_image(riding_texture)
+	if fishing_image == null or riding_image == null:
+		return _build_sprite_frames(fishing_texture)
+	if fishing_image.get_size() != riding_image.get_size():
+		return _build_sprite_frames(fishing_texture)
+
+	var texture_size := fishing_image.get_size()
+	var frame_width := maxi(floori(float(texture_size.x) / float(FRAME_COLUMNS)), 1)
+	var frame_height := maxi(floori(float(texture_size.y) / float(FRAME_ROWS)), 1)
+	var combined_image := Image.create(
+		texture_size.x,
+		texture_size.y,
+		false,
+		Image.FORMAT_RGBA8
+	)
+	for y: int in range(texture_size.y):
+		var row := mini(floori(float(y) / float(frame_height)), FRAME_ROWS - 1)
+		var local_y := y % frame_height
+		var cutoff := roundi(
+			float(SURF_FISH_BODY_CUTOFFS[row]) * float(frame_height) / 64.0
+		)
+		for x: int in range(texture_size.x):
+			var local_x := x % frame_width
+			var fishing_pixel := fishing_image.get_pixel(x, y)
+			var use_fishing_pixel := local_y <= cutoff
+			if (
+				preserve_down_rod
+				and row == 0
+				and local_x >= roundi(float(SURF_FISH_DOWN_ROD_X_MIN) * float(frame_width) / 64.0)
+				and local_x <= roundi(float(SURF_FISH_DOWN_ROD_X_MAX) * float(frame_width) / 64.0)
+				and fishing_pixel.a > 0.001
+			):
+				use_fishing_pixel = true
+			combined_image.set_pixel(
+				x,
+				y,
+				fishing_pixel if use_fishing_pixel else riding_image.get_pixel(x, y)
+			)
+
+	return _build_sprite_frames(ImageTexture.create_from_image(combined_image))
 
 
 static func _build_tinted_sprite_frames(base_frames: SpriteFrames, tint_color: Color, preserve_luminance: bool) -> SpriteFrames:

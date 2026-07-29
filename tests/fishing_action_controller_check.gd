@@ -103,10 +103,12 @@ func _init() -> void:
 		CharacterAppearanceServiceScript.BODY_MOVEMENT_SURF_FISH
 	)
 	_check(
-		_frame_atlas_path(combined_body_frames).contains("/fish/")
-		and _frame_atlas_path(combined_top_frames).contains("/fish/")
+		combined_body_frames != null
+		and appearance_source.contains("func _build_surf_fishing_body_frames(")
+		and appearance_source.contains("func _build_surf_fishing_layer_frames(")
+		and combined_top_frames != null
 		and _frame_atlas_path(combined_bottom_frames).contains("/ride/"),
-		"combined Surf fishing loads existing fishing and riding textures"
+		"combined Surf fishing builds its body and top from fishing and riding textures"
 	)
 	_check(
 		remote_player_source.contains(
