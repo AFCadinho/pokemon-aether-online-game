@@ -31,10 +31,10 @@ func _init() -> void:
 		and script_source.contains("_refresh_location_weather(weather_state)"),
 		"authoritative developer weather responses refresh the card"
 	)
-	_check(script_source.contains('time_of_day_label.text = "Morning"'), "morning has a readable status")
-	_check(script_source.contains('time_of_day_label.text = "Afternoon"'), "afternoon has a readable status")
-	_check(script_source.contains('time_of_day_label.text = "Evening"'), "evening has a readable status")
-	_check(script_source.contains('time_of_day_label.text = "Night"'), "night has a readable status")
+	_check(script_source.contains('"ui.world.time.morning"'), "morning has a localized readable status")
+	_check(script_source.contains('"ui.world.time.afternoon"'), "afternoon has a localized readable status")
+	_check(script_source.contains('"ui.world.time.evening"'), "evening has a localized readable status")
+	_check(script_source.contains('"ui.world.time.night"'), "night has a localized readable status")
 
 	quit(1 if failed else 0)
 

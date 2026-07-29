@@ -1174,6 +1174,9 @@ func _ready() -> void:
 	add_to_group("ui_overlay")
 	layer = UI_OVERLAY_BASE_LAYER
 	root_control.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
+		LocalizationManager.locale_changed.connect(_on_locale_changed)
+	LocalizationManager.localize_tree(self)
 	_setup_player_status_card()
 	_setup_status_docks()
 	_setup_trainer_card_popup()
@@ -1366,6 +1369,14 @@ func _ready() -> void:
 	if settings_menu.has_signal("closed"):
 		settings_menu.closed.connect(_on_settings_menu_closed)
 	settings_menu.gui_input.connect(_on_focusable_overlay_panel_gui_input.bind(settings_menu))
+
+
+func _on_locale_changed(_locale: String) -> void:
+	LocalizationManager.localize_tree(self)
+	_refresh_location_label()
+	_refresh_utc_time_label(UTC_TIME_REFRESH_INTERVAL_SECONDS, true)
+	_refresh_location_weather(WorldPresenceService.current_weather_state)
+
 
 func _play_mail_notification_sound() -> void:
 	if mail_notification_sound == null:
@@ -8138,13 +8149,13 @@ func _refresh_location_weather(weather_state: Dictionary) -> void:
 	var weather: String = str(weather_state.get("weather", "clear")).strip_edges().to_lower()
 	match weather:
 		"rain":
-			weather_label.text = "Rain"
+			weather_label.text = LocalizationManager.text("ui.world.weather.rain")
 			weather_label.add_theme_color_override("font_color", Color("#62d7ff"))
 		"snow":
-			weather_label.text = "Snow"
+			weather_label.text = LocalizationManager.text("ui.world.weather.snow")
 			weather_label.add_theme_color_override("font_color", Color("#d9f3ff"))
 		_:
-			weather_label.text = "Clear"
+			weather_label.text = LocalizationManager.text("ui.world.weather.clear")
 			weather_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 
 func _get_current_encounter_area_id() -> String:
@@ -8414,17 +8425,17 @@ func _clear_wild_pokemon_content() -> void:
 func _get_current_map_region_name() -> String:
 	var current_map: Node = GameState.current_map as Node
 	if current_map == null:
-		return "Unknown"
+		return LocalizationManager.text("ui.world.location.unknown_region")
 	if current_map.has_method("get_map_region_name"):
 		var region_name: String = str(current_map.call("get_map_region_name")).strip_edges()
 		if region_name != "":
 			return region_name
-	return "Unknown"
+	return LocalizationManager.text("ui.world.location.unknown_region")
 
 func _get_current_map_display_name() -> String:
 	var current_map: Node = GameState.current_map as Node
 	if current_map == null:
-		return "Unknown Location"
+		return LocalizationManager.text("ui.world.location.unknown")
 	if current_map.has_method("get_map_display_name"):
 		var display_name: String = str(current_map.call("get_map_display_name")).strip_edges()
 		if display_name != "":
@@ -8434,7 +8445,7 @@ func _get_current_map_display_name() -> String:
 func _format_map_name(raw_name: String) -> String:
 	var readable: String = raw_name.replace("_", " ").strip_edges()
 	if readable == "":
-		return "Unknown Location"
+		return LocalizationManager.text("ui.world.location.unknown")
 	return readable
 
 func _refresh_utc_time_label(delta: float, force := false) -> void:
@@ -8448,6 +8459,10 @@ func _refresh_utc_time_label(delta: float, force := false) -> void:
 	var date_time: Dictionary = WorldTimeService.get_utc_datetime()
 	var hour: int = int(date_time.get("hour", 0))
 	var minute: int = int(date_time.get("minute", 0))
+	if LocalizationManager.current_locale != "en":
+		time_label.text = "%02d:%02d" % [hour, minute]
+		_refresh_time_of_day_label(hour)
+		return
 	var period: String = "AM" if hour < 12 else "PM"
 	var display_hour: int = hour % 12
 	if display_hour == 0:
@@ -8459,16 +8474,16 @@ func _refresh_time_of_day_label(hour: int) -> void:
 	if time_of_day_label == null:
 		return
 	if hour >= 5 and hour < 11:
-		time_of_day_label.text = "Morning"
+		time_of_day_label.text = LocalizationManager.text("ui.world.time.morning")
 		time_of_day_label.add_theme_color_override("font_color", Color("#ffd45a"))
 	elif hour >= 11 and hour < 17:
-		time_of_day_label.text = "Afternoon"
+		time_of_day_label.text = LocalizationManager.text("ui.world.time.afternoon")
 		time_of_day_label.add_theme_color_override("font_color", Color("#f3c969"))
 	elif hour >= 17 and hour < 21:
-		time_of_day_label.text = "Evening"
+		time_of_day_label.text = LocalizationManager.text("ui.world.time.evening")
 		time_of_day_label.add_theme_color_override("font_color", Color("#ff9f68"))
 	else:
-		time_of_day_label.text = "Night"
+		time_of_day_label.text = LocalizationManager.text("ui.world.time.night")
 		time_of_day_label.add_theme_color_override("font_color", Color("#7aa7f4"))
 
 func _input(event: InputEvent) -> void:

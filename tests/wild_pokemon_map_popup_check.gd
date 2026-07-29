@@ -11,7 +11,7 @@ func _init() -> void:
 	var script_source := FileAccess.get_file_as_string(OVERLAY_SCRIPT_PATH)
 
 	_check_contains(scene_source, '[node name="WildPokemonButton"', "location bar has a wild Pokémon button")
-	_check_contains(scene_source, 'tooltip_text = "Wild Pokémon on this map"', "wild Pokémon button has a tooltip")
+	_check_contains(scene_source, 'tooltip_text = "ui.navigation.wild_pokemon"', "wild Pokémon button has a localized tooltip")
 	_check_contains(script_source, "func _get_current_encounter_area_id()", "overlay resolves the current encounter area")
 	_check_contains(script_source, "EncounterMetadataService.get_encounter_area_metadata(area_id)", "popup loads encounter metadata")
 	_check_contains(script_source, "func _render_wild_pokemon_metadata", "popup renders encounter metadata")

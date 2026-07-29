@@ -114,7 +114,7 @@ func _init() -> void:
 		and disable_icon_focus_block.contains("button.focus_mode = Control.FOCUS_NONE"),
 		"toolbar menu buttons cannot retain Space-triggerable keyboard focus"
 	)
-	_check(scene_source.contains('path="res://assets/ui/clan.svg" id="16_guild"') and scene_source.contains('tooltip_text = "Open Guilds"'), "Guilds use a three-member group crest instead of a guild building")
+	_check(scene_source.contains('path="res://assets/ui/clan.svg" id="16_guild"') and scene_source.contains('tooltip_text = "ui.navigation.guilds"'), "Guilds use a three-member group crest with a localized tooltip")
 	_check(scene_source.contains('path="res://assets/ui/follower_toggle.svg" id="10_follower"'), "Follower toggle shows a trainer and companion")
 	_check(scene_source.contains('path="res://assets/ui/running_shoes_toggle.svg" id="11_running_shoe"'), "Running Shoes use a dedicated speed-toggle icon")
 	_check(scene_source.contains('path="res://assets/ui/town_map_navigation.svg" id="3_riyyd"'), "Town Map uses a navigation-focused map icon")

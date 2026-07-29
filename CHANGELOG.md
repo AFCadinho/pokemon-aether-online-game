@@ -4,7 +4,7 @@
 
 **Added**
 
-- Added language selection for English, Dutch, and Brazilian Portuguese to the login screen and in-game settings. This first localization milestone translates both interfaces.
+- Added language selection for English, Dutch, and Brazilian Portuguese. Localization currently covers login, settings, loading, main overworld navigation tooltips, and local time and weather status.
 - Added five tradeable Chroma hairstyles to the Aether Gift Store: three for male Trainers and two for female Trainers.
 - You can now watch private PvP battles when the room host allows spectators. Join with the room code without affecting the battle.
 - Spectators can view the battle from either Trainer's side, check everything revealed during the fight, and leave whenever they want.

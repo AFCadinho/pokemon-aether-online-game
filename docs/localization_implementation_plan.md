@@ -14,7 +14,8 @@ Initial locales: English (`en`), Dutch (`nl`), Brazilian Portuguese (`pt-BR`)
 | Phase 1: Godot localization foundation | Complete in commit `96be89e3a` |
 | Phase 2: login and settings pilot | Complete in commit `96be89e3a` |
 | Phase 3: automated guardrails | In progress; catalog, placeholder, fallback, persistence, and pilot layout checks are active |
-| Phases 4-10 | Planned |
+| Phase 4: shared game interface | In progress |
+| Phases 5-10 | Planned |
 
 ## Goal
 

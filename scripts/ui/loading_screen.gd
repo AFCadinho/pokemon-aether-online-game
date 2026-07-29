@@ -12,14 +12,20 @@ const UI_GOLD := Color("#d8b767")
 const UI_SUCCESS := Color("#58dfa2")
 
 var status_label: Label
+var session_label: Label
+var title_label: Label
 var loading_spinner: Control
 var spinner_tween: Tween
 var stage_panels: Array[PanelContainer] = []
 var stage_labels: Array[Label] = []
+var status_translation_key := "ui.loading.loading_profile"
+var active_stage_index := 0
 
 
 func _ready() -> void:
 	_build_layout()
+	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
+		LocalizationManager.locale_changed.connect(_on_locale_changed)
 	_prepare_world.call_deferred()
 
 
@@ -65,8 +71,8 @@ func _build_layout() -> void:
 	layout.add_theme_constant_override("separation", 14)
 	margin.add_child(layout)
 
-	var session_label := Label.new()
-	session_label.text = "●  SECURE TRAINER SESSION"
+	session_label = Label.new()
+	session_label.text = LocalizationManager.text("ui.loading.secure_session")
 	session_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	session_label.add_theme_font_size_override("font_size", 10)
 	session_label.add_theme_color_override("font_color", UI_SUCCESS)
@@ -79,15 +85,15 @@ func _build_layout() -> void:
 	logo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	layout.add_child(logo)
 
-	var title := Label.new()
-	title.text = "Preparing your adventure"
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 26)
-	title.add_theme_color_override("font_color", UI_TEXT)
-	layout.add_child(title)
+	title_label = Label.new()
+	title_label.text = LocalizationManager.text("ui.loading.preparing")
+	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title_label.add_theme_font_size_override("font_size", 26)
+	title_label.add_theme_color_override("font_color", UI_TEXT)
+	layout.add_child(title_label)
 
 	status_label = Label.new()
-	status_label.text = "Loading your trainer profile..."
+	status_label.text = LocalizationManager.text(status_translation_key)
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	status_label.add_theme_font_size_override("font_size", 14)
 	status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -103,10 +109,21 @@ func _build_layout() -> void:
 	stages.alignment = BoxContainer.ALIGNMENT_CENTER
 	stages.add_theme_constant_override("separation", 8)
 	layout.add_child(stages)
-	for stage_text: String in ["TRAINER", "PARTY", "WORLD"]:
-		_add_stage_indicator(stages, stage_text)
+	for stage_key: String in [
+		"ui.loading.stage.trainer",
+		"ui.loading.stage.party",
+		"ui.loading.stage.world",
+	]:
+		_add_stage_indicator(stages, stage_key)
 	_refresh_stage_indicators(0)
 	_start_spinner_animation.call_deferred()
+
+
+func _on_locale_changed(_locale: String) -> void:
+	session_label.text = LocalizationManager.text("ui.loading.secure_session")
+	title_label.text = LocalizationManager.text("ui.loading.preparing")
+	status_label.text = LocalizationManager.text(status_translation_key)
+	_refresh_stage_indicators(active_stage_index)
 
 
 func _prepare_world() -> void:
@@ -114,7 +131,7 @@ func _prepare_world() -> void:
 		_return_to_login("Your session expired. Please sign in again.")
 		return
 
-	_set_loading_status("Loading your trainer profile...", 0)
+	_set_loading_status("ui.loading.loading_profile", 0)
 	var profile_response: Dictionary = await PlayerGameStateService.load_player_profile()
 	var saved_state: Dictionary = {}
 	if bool(profile_response.get("success", false)):
@@ -138,7 +155,7 @@ func _prepare_world() -> void:
 		"hasSavedState": not saved_state.is_empty(),
 	})
 
-	_set_loading_status("Opening the path to your adventure...", 2)
+	_set_loading_status("ui.loading.opening_path", 2)
 	var world_scene: PackedScene = await _load_world_scene_threaded()
 	if world_scene == null:
 		_return_to_login("Could not load the world. Please contact staff.")
@@ -223,7 +240,7 @@ func _apply_profile_response(profile_response: Dictionary) -> void:
 
 
 func _load_legacy_world_state() -> void:
-	_set_loading_status("Restoring your Pokémon party...", 1)
+	_set_loading_status("ui.loading.restoring_party", 1)
 	var party_response: Dictionary = await PlayerPartyStateService.load_party()
 	if not bool(party_response.get("success", false)):
 		push_warning("LoadingScreen: player party load failed: %s" % str(party_response.get("error", "Unknown error")))
@@ -234,7 +251,7 @@ func _load_legacy_world_state() -> void:
 	else:
 		PlayerSave.replace_party_from_state([])
 
-	_set_loading_status("Finding your last location...", 2)
+	_set_loading_status("ui.loading.finding_location", 2)
 
 
 func _apply_saved_appearance_state(state: Dictionary) -> void:
@@ -297,14 +314,15 @@ func _create_aura_texture() -> GradientTexture2D:
 	return texture
 
 
-func _add_stage_indicator(parent: HBoxContainer, stage_text: String) -> void:
+func _add_stage_indicator(parent: HBoxContainer, translation_key: String) -> void:
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(104, 30)
 	parent.add_child(panel)
 	stage_panels.append(panel)
 
 	var label := Label.new()
-	label.text = stage_text
+	label.text = LocalizationManager.text(translation_key)
+	label.set_meta("translation_key", translation_key)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 10)
@@ -312,16 +330,18 @@ func _add_stage_indicator(parent: HBoxContainer, stage_text: String) -> void:
 	stage_labels.append(label)
 
 
-func _set_loading_status(message: String, active_stage: int) -> void:
-	status_label.text = message
+func _set_loading_status(translation_key: String, active_stage: int) -> void:
+	status_translation_key = translation_key
+	status_label.text = LocalizationManager.text(status_translation_key)
 	_refresh_stage_indicators(active_stage)
 
 
 func _refresh_stage_indicators(active_stage: int) -> void:
+	active_stage_index = active_stage
 	for index in range(stage_panels.size()):
 		var panel := stage_panels[index]
 		var label := stage_labels[index]
-		var base_text := label.text.trim_prefix("✓ ").trim_prefix("● ").trim_prefix("○ ")
+		var base_text := LocalizationManager.text(str(label.get_meta("translation_key", "")))
 		if index < active_stage:
 			label.text = "✓ %s" % base_text
 			label.add_theme_color_override("font_color", UI_SUCCESS)
