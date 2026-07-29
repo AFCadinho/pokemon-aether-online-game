@@ -52,6 +52,20 @@ func _run() -> void:
 	await process_frame
 
 	_check(str(popup.get("active_mode")) == "dye", "Atelier switches to Character Customization")
+	var catalog_caption := popup.get("catalog_caption_label") as Label
+	_check(
+		catalog_caption != null and catalog_caption.text == "APPEARANCE WEAR",
+		"Character Customization labels the catalog as Appearance Wear"
+	)
+	var catalog_list := popup.get("outfit_list") as VBoxContainer
+	var section_labels: Array[String] = []
+	for child: Node in catalog_list.get_children():
+		if child is Label:
+			section_labels.append((child as Label).text)
+	_check(
+		section_labels == ["FACEGEAR", "TOP", "BOTTOM"],
+		"Appearance Wear parts use a stable slot order with section headings"
+	)
 	_check(
 		str(popup.get("selected_chroma_item_id")) == "adinho-chroma-shirt",
 		"Atelier selects a worn Chroma item"

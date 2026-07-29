@@ -23,6 +23,15 @@ const PREVIEW_SIZE := Vector2i(160, 176)
 const PREVIEW_POSITION := Vector2(80, 108)
 const PREVIEW_SCALE := Vector2(2.5, 2.5)
 const PREVIEW_DIRECTIONS := ["down", "left", "right", "up"]
+const APPEARANCE_WEAR_SLOT_ORDER := [
+	"hair",
+	"headgear",
+	"facial_hair",
+	"facegear",
+	"top",
+	"bottom",
+	"shoes",
+]
 
 var atelier_service: AetherAtelierServiceNode
 var outfits: Array[Dictionary] = []
@@ -43,6 +52,7 @@ var dye_tab_button: Button
 var money_label: Label
 var search_input: LineEdit
 var catalog_summary_label: Label
+var catalog_caption_label: Label
 var outfit_list: VBoxContainer
 var detail_icon: TextureRect
 var preview_container: SubViewportContainer
@@ -226,11 +236,11 @@ func _build_catalog_panel() -> Control:
 	var stack := VBoxContainer.new()
 	stack.add_theme_constant_override("separation", 8)
 	margin.add_child(stack)
-	var caption := Label.new()
-	caption.text = "OUTFIT BOXES"
-	caption.add_theme_font_size_override("font_size", 10)
-	caption.add_theme_color_override("font_color", UI_PURPLE)
-	stack.add_child(caption)
+	catalog_caption_label = Label.new()
+	catalog_caption_label.text = "OUTFIT BOXES"
+	catalog_caption_label.add_theme_font_size_override("font_size", 10)
+	catalog_caption_label.add_theme_color_override("font_color", UI_PURPLE)
+	stack.add_child(catalog_caption_label)
 	var scroll := ScrollContainer.new()
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -434,14 +444,28 @@ func _apply_catalog(result: Dictionary) -> void:
 func _render_outfit_list() -> void:
 	for child: Node in outfit_list.get_children():
 		child.queue_free()
+	catalog_caption_label.text = (
+		"APPEARANCE WEAR"
+		if active_mode == "dye"
+		else "OUTFIT BOXES"
+	)
 	var search_text := search_input.text.strip_edges().to_lower()
 	var visible_count := 0
 	if active_mode == "dye":
-		for item: Dictionary in chroma_items:
-			if not _chroma_item_matches_search(item, search_text):
+		for slot: String in APPEARANCE_WEAR_SLOT_ORDER:
+			var slot_items: Array[Dictionary] = []
+			for item: Dictionary in chroma_items:
+				if (
+					str(item.get("slot", "")) == slot
+					and _chroma_item_matches_search(item, search_text)
+				):
+					slot_items.append(item)
+			if slot_items.is_empty():
 				continue
-			visible_count += 1
-			outfit_list.add_child(_create_chroma_item_card(item))
+			outfit_list.add_child(_create_wear_slot_heading(slot))
+			for item: Dictionary in slot_items:
+				visible_count += 1
+				outfit_list.add_child(_create_chroma_item_card(item))
 		catalog_summary_label.text = "%d of %d wear items" % [
 			visible_count,
 			chroma_items.size(),
@@ -469,6 +493,18 @@ func _render_outfit_list() -> void:
 		empty_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		empty_label.add_theme_color_override("font_color", UI_MUTED)
 		outfit_list.add_child(empty_label)
+
+
+func _create_wear_slot_heading(slot: String) -> Label:
+	var heading := Label.new()
+	heading.text = str(slot).replace("_", " ").to_upper()
+	heading.add_theme_font_size_override("font_size", 10)
+	heading.add_theme_color_override("font_color", UI_PURPLE)
+	heading.add_theme_constant_override("outline_size", 2)
+	heading.add_theme_color_override("font_outline_color", UI_BG)
+	heading.custom_minimum_size = Vector2(0, 24)
+	heading.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
+	return heading
 
 
 func _create_outfit_card(outfit: Dictionary) -> Button:
