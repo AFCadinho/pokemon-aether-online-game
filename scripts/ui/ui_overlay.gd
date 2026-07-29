@@ -127,10 +127,10 @@ const PVP_RANKED_DEFAULT_FORMAT_KEY := "aether-ou"
 const PVP_RANKED_DEFAULT_FORMAT_NAME := "Aether OU"
 const PVP_MATCH_COUNTDOWN_SECONDS := 10.0
 const PVP_LEADERBOARD_SCOPES: Array[Dictionary] = [
-	{"id": "daily", "label": "Daily"},
-	{"id": "weekly", "label": "Weekly"},
-	{"id": "monthly", "label": "Monthly"},
-	{"id": "all_time", "label": "All Time"},
+	{"id": "daily", "label_key": "ui.pvp.leaderboard.scope.daily"},
+	{"id": "weekly", "label_key": "ui.pvp.leaderboard.scope.weekly"},
+	{"id": "monthly", "label_key": "ui.pvp.leaderboard.scope.monthly"},
+	{"id": "all_time", "label_key": "ui.pvp.leaderboard.scope.all_time"},
 ]
 const FRIENDLIST_POPUP_SCENE: PackedScene = preload("res://scenes/interface/friendlist_popup.tscn")
 const GUILD_POPUP_SCENE: PackedScene = preload("res://scenes/interface/guild_popup.tscn")
@@ -707,9 +707,13 @@ var pvp_banlists_result: Dictionary = PvpRankedBanlists.not_loaded()
 var pvp_banlist_category_open: Dictionary = {}
 var pvp_banlist_category_search: Dictionary = {}
 var pvp_leaderboard_in_flight := false
+var pvp_leaderboard_entries: Array = []
 var pvp_leaderboard_scope_select: OptionButton
 var pvp_active_leaderboard_scope := "all_time"
 var pvp_history_in_flight := false
+var pvp_history_matches: Array = []
+var pvp_history_user_id := 0
+var pvp_live_entries: Array = []
 var pvp_ranked_team_validation_in_flight := false
 var pvp_ranked_queue_join_preparing := false
 var pvp_ranked_team_validation_request_seq := 0
@@ -720,6 +724,10 @@ var pvp_poll_in_flight := false
 var pvp_polling_active := false
 var pvp_poll_elapsed := 0.0
 var pvp_battle_starting := false
+var pvp_room_status_translation_key := "ui.pvp.room.ready"
+var pvp_room_status_translation_values: Dictionary = {}
+var pvp_queue_status_translation_key := "ui.pvp.queue.ready"
+var pvp_queue_status_translation_values: Dictionary = {}
 var pvp_room_dragging := false
 var pvp_room_drag_offset := Vector2.ZERO
 var staff_tools_popup: PanelContainer
@@ -1392,6 +1400,7 @@ func _on_locale_changed(_locale: String) -> void:
 	_refresh_pokedex_localized_ui()
 	_refresh_mail_localized_ui()
 	_refresh_pc_localized_ui()
+	_refresh_pvp_localized_ui()
 	_refresh_dev_world_time_selector()
 	_refresh_dev_world_weather_selector()
 	if staff_impersonate_token_input != null and not staff_impersonate_in_flight:
@@ -1441,6 +1450,56 @@ func _refresh_pc_localized_ui() -> void:
 	if pc_box_grid != null:
 		_render_pc_box()
 	_set_pc_status(pc_status_translation_key, pc_status_translation_values)
+
+
+func _refresh_pvp_localized_ui() -> void:
+	if pvp_room_popup == null:
+		return
+	LocalizationManager.localize_tree(pvp_room_popup)
+	if pvp_mode_menu != null:
+		LocalizationManager.localize_tree(pvp_mode_menu)
+	if pvp_queue_compact_panel != null:
+		LocalizationManager.localize_tree(pvp_queue_compact_panel)
+	if pvp_match_countdown_overlay != null:
+		LocalizationManager.localize_tree(pvp_match_countdown_overlay)
+
+	for tab_container: TabContainer in [pvp_ranked_tabs, pvp_ranked_rules_tabs, pvp_ranked_battles_tabs]:
+		_refresh_pvp_tab_titles(tab_container)
+	_refresh_pvp_leaderboard_scope_options()
+	_render_pvp_team_preview()
+	_refresh_pvp_team_validator()
+	_render_pvp_banlists()
+	_render_pvp_live_battles(pvp_live_entries)
+	if not pvp_leaderboard_entries.is_empty():
+		_render_pvp_leaderboard(pvp_leaderboard_entries)
+	_render_pvp_history_matches(pvp_history_matches, pvp_history_user_id)
+	_refresh_pvp_room_form_title()
+	if pvp_room_code_label != null:
+		var room_code := pvp_active_room_code if pvp_active_room_code != "" else "-"
+		pvp_room_code_label.text = LocalizationManager.text(
+			"ui.pvp.room.spectating"
+			if pvp_room_selected_mode == "spectate" and pvp_active_room_code != ""
+			else "ui.pvp.room.code",
+			{"code": room_code}
+		)
+	if pvp_match_countdown_active:
+		_update_pvp_match_countdown_text()
+	elif pvp_match_countdown_status_label != null:
+		pvp_match_countdown_status_label.text = LocalizationManager.text("ui.pvp.countdown.soon")
+	_refresh_pvp_allow_spectators_checkbox(
+		pvp_allow_spectators_check != null and pvp_allow_spectators_check.button_pressed
+	)
+	_refresh_pvp_queue_buttons(_current_pvp_queue_status_for_buttons())
+	_refresh_pvp_queue_compact_panel(0.0)
+	_refresh_pvp_button_tooltip()
+	if pvp_room_status_translation_key != "":
+		_set_pvp_status_key(pvp_room_status_translation_key, pvp_room_status_translation_values)
+	if pvp_queue_status_translation_key != "":
+		_set_pvp_queue_status_key(pvp_queue_status_translation_key, pvp_queue_status_translation_values)
+	if pvp_popup_title_label != null:
+		pvp_popup_title_label.text = _pvp_popup_title_for_section(_current_pvp_section_name())
+	if pvp_popup_subtitle_label != null:
+		pvp_popup_subtitle_label.text = _pvp_popup_subtitle_for_section(_current_pvp_section_name())
 
 
 func _play_mail_notification_sound() -> void:
@@ -4602,7 +4661,7 @@ func _setup_pvp_room_popup() -> void:
 	header.add_child(header_heading)
 
 	var title := Label.new()
-	title.text = "Ranked"
+	_set_localized_control_property(title, "text", "ui.pvp.mode.ranked")
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title.add_theme_font_size_override("font_size", 20)
 	title.add_theme_color_override("font_color", UI_TEXT)
@@ -4610,7 +4669,10 @@ func _setup_pvp_room_popup() -> void:
 	pvp_popup_title_label = title
 
 	var subtitle := Label.new()
-	subtitle.text = "Competitive matchmaking · Aether OU"
+	subtitle.text = LocalizationManager.text(
+		"ui.pvp.popup.ranked_subtitle",
+		{"format": pvp_active_format_name}
+	)
 	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	subtitle.add_theme_font_size_override("font_size", 11)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -4623,7 +4685,7 @@ func _setup_pvp_room_popup() -> void:
 
 	var minimize_button := Button.new()
 	minimize_button.text = "-"
-	minimize_button.tooltip_text = "Minimize"
+	_set_localized_control_property(minimize_button, "tooltip_text", "ui.pvp.minimize")
 	minimize_button.custom_minimum_size = Vector2(30, 30)
 	minimize_button.focus_mode = Control.FOCUS_NONE
 	minimize_button.pressed.connect(_minimize_pvp_room_popup)
@@ -4632,7 +4694,7 @@ func _setup_pvp_room_popup() -> void:
 
 	var close_button := Button.new()
 	close_button.text = "×"
-	close_button.tooltip_text = "Close"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.custom_minimum_size = Vector2(30, 30)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_pvp_room_popup)
@@ -4708,7 +4770,7 @@ func _setup_pvp_room_popup() -> void:
 	var team_header := HBoxContainer.new()
 	team_header.add_theme_constant_override("separation", 8)
 	team_layout.add_child(team_header)
-	team_header.add_child(_create_pvp_section_title("Selected Team"))
+	team_header.add_child(_create_pvp_section_title("ui.pvp.team.selected"))
 
 	var team_header_spacer := Control.new()
 	team_header_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -4726,14 +4788,14 @@ func _setup_pvp_room_popup() -> void:
 	team_source_badge.add_child(team_source_badge_margin)
 
 	var team_source_badge_label := Label.new()
-	team_source_badge_label.text = "CURRENT PARTY"
+	_set_localized_control_property(team_source_badge_label, "text", "ui.pvp.team.current")
 	team_source_badge_label.add_theme_font_size_override("font_size", 10)
 	team_source_badge_label.add_theme_color_override("font_color", Color("#60d3ff"))
 	team_source_badge_margin.add_child(team_source_badge_label)
 
 	pvp_team_source_select = OptionButton.new()
 	pvp_team_source_select.visible = false
-	pvp_team_source_select.add_item("Current Party")
+	pvp_team_source_select.add_item(LocalizationManager.text("ui.pvp.team.current_option"))
 	pvp_team_source_select.set_item_metadata(0, "party")
 	pvp_team_source_select.item_selected.connect(_on_pvp_team_source_selected)
 	team_layout.add_child(pvp_team_source_select)
@@ -4762,13 +4824,13 @@ func _setup_pvp_room_popup() -> void:
 	validator_margin.add_child(validator_layout)
 
 	var validator_heading := Label.new()
-	validator_heading.text = "TEAM VALIDATION"
+	_set_localized_control_property(validator_heading, "text", "ui.pvp.team.validation")
 	validator_heading.add_theme_font_size_override("font_size", 10)
 	validator_heading.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	validator_layout.add_child(validator_heading)
 
 	pvp_team_validator_status_label = Label.new()
-	pvp_team_validator_status_label.text = "Checking current party..."
+	pvp_team_validator_status_label.text = LocalizationManager.text("ui.pvp.team.checking_current")
 	pvp_team_validator_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pvp_team_validator_status_label.add_theme_font_size_override("font_size", 15)
 	pvp_team_validator_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -4801,10 +4863,10 @@ func _setup_pvp_room_popup() -> void:
 	var matchmaking_layout := VBoxContainer.new()
 	matchmaking_layout.add_theme_constant_override("separation", 12)
 	matchmaking_margin.add_child(matchmaking_layout)
-	matchmaking_layout.add_child(_create_pvp_section_title("Ranked Matchmaking"))
+	matchmaking_layout.add_child(_create_pvp_section_title("ui.pvp.matchmaking.title"))
 
 	var format_caption := Label.new()
-	format_caption.text = "FORMAT"
+	_set_localized_control_property(format_caption, "text", "ui.pvp.matchmaking.format")
 	format_caption.add_theme_font_size_override("font_size", 10)
 	format_caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	matchmaking_layout.add_child(format_caption)
@@ -4818,7 +4880,7 @@ func _setup_pvp_room_popup() -> void:
 
 	pvp_mode_select = OptionButton.new()
 	pvp_mode_select.visible = false
-	pvp_mode_select.add_item("Ranked")
+	pvp_mode_select.add_item(LocalizationManager.text("ui.pvp.mode.ranked"))
 	pvp_mode_select.set_item_metadata(0, "ranked")
 	pvp_mode_select.item_selected.connect(_on_pvp_mode_selected)
 	matchmaking_layout.add_child(pvp_mode_select)
@@ -4828,7 +4890,7 @@ func _setup_pvp_room_popup() -> void:
 	])
 
 	var queue_note := Label.new()
-	queue_note.text = "Your selected team is checked by the server before matchmaking begins."
+	_set_localized_control_property(queue_note, "text", "ui.pvp.matchmaking.note")
 	queue_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	queue_note.add_theme_font_size_override("font_size", 11)
 	queue_note.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -4859,7 +4921,7 @@ func _setup_pvp_room_popup() -> void:
 	queue_status_row.add_child(pvp_queue_status_spinner_label)
 
 	pvp_queue_status_label = Label.new()
-	pvp_queue_status_label.text = "Ready to search."
+	pvp_queue_status_label.text = LocalizationManager.text("ui.pvp.queue.ready")
 	pvp_queue_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_queue_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pvp_queue_status_label.add_theme_color_override("font_color", UI_TEXT)
@@ -4874,7 +4936,7 @@ func _setup_pvp_room_popup() -> void:
 	matchmaking_layout.add_child(queue_actions)
 
 	pvp_join_queue_button = Button.new()
-	pvp_join_queue_button.text = "Find Match"
+	pvp_join_queue_button.text = LocalizationManager.text("ui.pvp.queue.find")
 	pvp_join_queue_button.custom_minimum_size = Vector2(0, 46)
 	pvp_join_queue_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_join_queue_button.focus_mode = Control.FOCUS_NONE
@@ -4882,28 +4944,28 @@ func _setup_pvp_room_popup() -> void:
 	queue_actions.add_child(pvp_join_queue_button)
 
 	pvp_leave_queue_button = Button.new()
-	pvp_leave_queue_button.text = "Leave Queue"
+	_set_localized_control_property(pvp_leave_queue_button, "text", "ui.pvp.queue.leave")
 	pvp_leave_queue_button.custom_minimum_size = Vector2(0, 46)
 	pvp_leave_queue_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_leave_queue_button.focus_mode = Control.FOCUS_NONE
 	pvp_leave_queue_button.visible = false
 	pvp_leave_queue_button.disabled = true
-	pvp_leave_queue_button.tooltip_text = "Stop searching for an opponent"
+	_set_localized_control_property(pvp_leave_queue_button, "tooltip_text", "ui.pvp.queue.leave_tooltip")
 	pvp_leave_queue_button.pressed.connect(_on_pvp_leave_queue_pressed)
 	queue_actions.add_child(pvp_leave_queue_button)
 
 	pvp_reconnect_battle_button = Button.new()
-	pvp_reconnect_battle_button.text = "Reconnect Battle"
+	_set_localized_control_property(pvp_reconnect_battle_button, "text", "ui.pvp.queue.reconnect")
 	pvp_reconnect_battle_button.custom_minimum_size = Vector2(0, 46)
 	pvp_reconnect_battle_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_reconnect_battle_button.focus_mode = Control.FOCUS_NONE
 	pvp_reconnect_battle_button.visible = false
-	pvp_reconnect_battle_button.tooltip_text = "Return to your current ranked battle"
+	_set_localized_control_property(pvp_reconnect_battle_button, "tooltip_text", "ui.pvp.queue.reconnect_tooltip")
 	pvp_reconnect_battle_button.pressed.connect(_on_pvp_reconnect_battle_pressed)
 	queue_actions.add_child(pvp_reconnect_battle_button)
 
 	var integrity_note := Label.new()
-	integrity_note.text = "Fair play is enforced. Wintrading and ladder manipulation can result in a ranked ban."
+	_set_localized_control_property(integrity_note, "text", "ui.pvp.queue.integrity")
 	integrity_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	integrity_note.add_theme_font_size_override("font_size", 10)
 	integrity_note.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -4932,13 +4994,13 @@ func _setup_pvp_room_popup() -> void:
 	room_margin.add_child(room_layout)
 
 	var room_heading := Label.new()
-	room_heading.text = "Private battle room"
+	_set_localized_control_property(room_heading, "text", "ui.pvp.room.title")
 	room_heading.add_theme_font_size_override("font_size", 19)
 	room_heading.add_theme_color_override("font_color", Color("#f3e1a5"))
 	room_layout.add_child(room_heading)
 
 	var room_intro := Label.new()
-	room_intro.text = "Create a room to battle a friend directly, or enter a code to join one."
+	_set_localized_control_property(room_intro, "text", "ui.pvp.room.intro")
 	room_intro.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	room_intro.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	room_layout.add_child(room_intro)
@@ -4963,7 +5025,7 @@ func _setup_pvp_room_popup() -> void:
 	room_status_margin.add_child(room_status_layout)
 
 	pvp_room_code_label = Label.new()
-	pvp_room_code_label.text = "ROOM CODE  ·  -"
+	pvp_room_code_label.text = LocalizationManager.text("ui.pvp.room.code", {"code": "-"})
 	pvp_room_code_label.add_theme_font_size_override("font_size", 15)
 	pvp_room_code_label.add_theme_color_override("font_color", Color("#f5df9a"))
 	room_status_layout.add_child(pvp_room_code_label)
@@ -4973,7 +5035,7 @@ func _setup_pvp_room_popup() -> void:
 	room_status_layout.add_child(room_status_row)
 
 	pvp_room_status_label = Label.new()
-	pvp_room_status_label.text = "Ready."
+	pvp_room_status_label.text = LocalizationManager.text("ui.pvp.room.ready")
 	pvp_room_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pvp_room_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	pvp_room_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -4986,7 +5048,7 @@ func _setup_pvp_room_popup() -> void:
 	room_status_row.add_child(pvp_room_wait_spinner_label)
 
 	var room_choice_label := Label.new()
-	room_choice_label.text = "WHAT WOULD YOU LIKE TO DO?"
+	_set_localized_control_property(room_choice_label, "text", "ui.pvp.room.choice")
 	room_choice_label.add_theme_font_size_override("font_size", 11)
 	room_choice_label.add_theme_color_override("font_color", Color("#87bce8"))
 	room_layout.add_child(room_choice_label)
@@ -4996,21 +5058,21 @@ func _setup_pvp_room_popup() -> void:
 	room_layout.add_child(pvp_room_mode_selector)
 
 	pvp_room_create_mode_button = Button.new()
-	pvp_room_create_mode_button.text = "Create Room"
+	_set_localized_control_property(pvp_room_create_mode_button, "text", "ui.pvp.room.create")
 	pvp_room_create_mode_button.custom_minimum_size = Vector2(130, 38)
 	pvp_room_create_mode_button.focus_mode = Control.FOCUS_NONE
 	pvp_room_create_mode_button.pressed.connect(_on_pvp_room_mode_selected.bind("create"))
 	pvp_room_mode_selector.add_child(pvp_room_create_mode_button)
 
 	pvp_room_join_mode_button = Button.new()
-	pvp_room_join_mode_button.text = "Join Room"
+	_set_localized_control_property(pvp_room_join_mode_button, "text", "ui.pvp.room.join")
 	pvp_room_join_mode_button.custom_minimum_size = Vector2(118, 38)
 	pvp_room_join_mode_button.focus_mode = Control.FOCUS_NONE
 	pvp_room_join_mode_button.pressed.connect(_on_pvp_room_mode_selected.bind("join"))
 	pvp_room_mode_selector.add_child(pvp_room_join_mode_button)
 
 	pvp_room_spectate_mode_button = Button.new()
-	pvp_room_spectate_mode_button.text = "Spectate"
+	_set_localized_control_property(pvp_room_spectate_mode_button, "text", "ui.pvp.room.spectate")
 	pvp_room_spectate_mode_button.custom_minimum_size = Vector2(104, 38)
 	pvp_room_spectate_mode_button.focus_mode = Control.FOCUS_NONE
 	pvp_room_spectate_mode_button.pressed.connect(_on_pvp_room_mode_selected.bind("spectate"))
@@ -5027,7 +5089,7 @@ func _setup_pvp_room_popup() -> void:
 	pvp_room_form.add_child(pvp_room_form_title)
 
 	pvp_room_code_input = LineEdit.new()
-	pvp_room_code_input.placeholder_text = "Enter a room code"
+	_set_localized_control_property(pvp_room_code_input, "placeholder_text", "ui.pvp.room.enter_code")
 	pvp_room_code_input.max_length = 12
 	pvp_room_code_input.custom_minimum_size = Vector2(0, 34)
 	pvp_room_form.add_child(pvp_room_code_input)
@@ -5035,7 +5097,7 @@ func _setup_pvp_room_popup() -> void:
 
 	pvp_allow_spectators_check = CheckBox.new()
 	pvp_allow_spectators_check.button_pressed = false
-	pvp_allow_spectators_check.tooltip_text = "Anyone with this room code may watch after the battle starts."
+	_set_localized_control_property(pvp_allow_spectators_check, "tooltip_text", "ui.pvp.room.spectators_tooltip")
 	pvp_allow_spectators_check.add_theme_constant_override("h_separation", 8)
 	pvp_allow_spectators_check.add_theme_icon_override("unchecked", _pvp_spectators_checkbox_icon(false, false))
 	pvp_allow_spectators_check.add_theme_icon_override("unchecked_hover", _pvp_spectators_checkbox_icon(false, true))
@@ -5052,40 +5114,40 @@ func _setup_pvp_room_popup() -> void:
 	pvp_room_form.add_child(actions)
 
 	pvp_create_room_button = Button.new()
-	pvp_create_room_button.text = "Create Room"
+	_set_localized_control_property(pvp_create_room_button, "text", "ui.pvp.room.create")
 	pvp_create_room_button.custom_minimum_size = Vector2(112, 34)
-	pvp_create_room_button.tooltip_text = "Create a private room and share its code"
+	_set_localized_control_property(pvp_create_room_button, "tooltip_text", "ui.pvp.room.create_tooltip")
 	pvp_create_room_button.focus_mode = Control.FOCUS_NONE
 	pvp_create_room_button.pressed.connect(_on_pvp_create_room_pressed)
 	actions.add_child(pvp_create_room_button)
 
 	pvp_cancel_room_button = Button.new()
-	pvp_cancel_room_button.text = "Cancel Room"
+	_set_localized_control_property(pvp_cancel_room_button, "text", "ui.pvp.room.cancel")
 	pvp_cancel_room_button.custom_minimum_size = Vector2(112, 34)
 	pvp_cancel_room_button.focus_mode = Control.FOCUS_NONE
-	pvp_cancel_room_button.tooltip_text = "Close your room and stop waiting for an opponent"
+	_set_localized_control_property(pvp_cancel_room_button, "tooltip_text", "ui.pvp.room.cancel_tooltip")
 	pvp_cancel_room_button.visible = false
 	pvp_cancel_room_button.pressed.connect(_on_pvp_cancel_room_pressed)
 	actions.add_child(pvp_cancel_room_button)
 
 	pvp_join_room_button = Button.new()
-	pvp_join_room_button.text = "Join Room"
+	_set_localized_control_property(pvp_join_room_button, "text", "ui.pvp.room.join")
 	pvp_join_room_button.custom_minimum_size = Vector2(100, 34)
-	pvp_join_room_button.tooltip_text = "Join the room code above"
+	_set_localized_control_property(pvp_join_room_button, "tooltip_text", "ui.pvp.room.join_tooltip")
 	pvp_join_room_button.focus_mode = Control.FOCUS_NONE
 	pvp_join_room_button.pressed.connect(_on_pvp_join_room_pressed)
 	actions.add_child(pvp_join_room_button)
 
 	pvp_spectate_room_button = Button.new()
-	pvp_spectate_room_button.text = "Spectate"
+	_set_localized_control_property(pvp_spectate_room_button, "text", "ui.pvp.room.spectate")
 	pvp_spectate_room_button.custom_minimum_size = Vector2(92, 34)
-	pvp_spectate_room_button.tooltip_text = "Watch a room that allows spectators"
+	_set_localized_control_property(pvp_spectate_room_button, "tooltip_text", "ui.pvp.room.spectate_tooltip")
 	pvp_spectate_room_button.focus_mode = Control.FOCUS_NONE
 	pvp_spectate_room_button.pressed.connect(_on_pvp_spectate_room_pressed)
 	actions.add_child(pvp_spectate_room_button)
 
 	pvp_copy_code_button = Button.new()
-	pvp_copy_code_button.text = "Copy"
+	_set_localized_control_property(pvp_copy_code_button, "text", "ui.pvp.room.copy")
 	pvp_copy_code_button.custom_minimum_size = Vector2(72, 34)
 	pvp_copy_code_button.focus_mode = Control.FOCUS_NONE
 	pvp_copy_code_button.disabled = true
@@ -5131,13 +5193,13 @@ func _setup_pvp_room_popup() -> void:
 	bans_tab.add_child(bans_header)
 
 	pvp_bans_status_label = Label.new()
-	pvp_bans_status_label.text = "Loading..."
+	pvp_bans_status_label.text = LocalizationManager.text("ui.pvp.bans.loading")
 	pvp_bans_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_bans_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	bans_header.add_child(pvp_bans_status_label)
 
 	pvp_bans_refresh_button = Button.new()
-	pvp_bans_refresh_button.text = "Refresh"
+	_set_localized_control_property(pvp_bans_refresh_button, "text", "ui.pvp.bans.refresh")
 	pvp_bans_refresh_button.custom_minimum_size = Vector2(92, 32)
 	pvp_bans_refresh_button.focus_mode = Control.FOCUS_NONE
 	pvp_bans_refresh_button.pressed.connect(_on_pvp_bans_refresh_pressed)
@@ -5190,7 +5252,7 @@ func _setup_pvp_room_popup() -> void:
 	live_tab.add_child(live_header)
 
 	pvp_live_status_label = Label.new()
-	pvp_live_status_label.text = "Live ranked battles"
+	_set_localized_control_property(pvp_live_status_label, "text", "ui.pvp.live.title")
 	pvp_live_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_live_status_label.add_theme_color_override("font_color", UI_TEXT)
 	live_header.add_child(pvp_live_status_label)
@@ -5198,10 +5260,10 @@ func _setup_pvp_room_popup() -> void:
 	var live_columns := HBoxContainer.new()
 	live_columns.add_theme_constant_override("separation", 10)
 	live_tab.add_child(live_columns)
-	live_columns.add_child(_create_pvp_leaderboard_header_label("Battle", 0, HORIZONTAL_ALIGNMENT_LEFT, true))
-	live_columns.add_child(_create_pvp_leaderboard_header_label("Players", 180, HORIZONTAL_ALIGNMENT_LEFT))
-	live_columns.add_child(_create_pvp_leaderboard_header_label("Status", 100, HORIZONTAL_ALIGNMENT_RIGHT))
-	live_columns.add_child(_create_pvp_leaderboard_header_label("Started", 110, HORIZONTAL_ALIGNMENT_RIGHT))
+	live_columns.add_child(_create_pvp_leaderboard_header_label("ui.pvp.live.column.battle", 0, HORIZONTAL_ALIGNMENT_LEFT, true))
+	live_columns.add_child(_create_pvp_leaderboard_header_label("ui.pvp.live.column.players", 180, HORIZONTAL_ALIGNMENT_LEFT))
+	live_columns.add_child(_create_pvp_leaderboard_header_label("ui.pvp.live.column.status", 100, HORIZONTAL_ALIGNMENT_RIGHT))
+	live_columns.add_child(_create_pvp_leaderboard_header_label("ui.pvp.live.column.started", 110, HORIZONTAL_ALIGNMENT_RIGHT))
 
 	var live_scroll := ScrollContainer.new()
 	live_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -5249,13 +5311,16 @@ func _setup_pvp_room_popup() -> void:
 	leaderboard_header.add_child(leaderboard_heading)
 
 	var leaderboard_title := Label.new()
-	leaderboard_title.text = "Aether OU Ladder"
+	_set_localized_control_property(leaderboard_title, "text", "ui.pvp.leaderboard.title")
 	leaderboard_title.add_theme_font_size_override("font_size", 18)
 	leaderboard_title.add_theme_color_override("font_color", UI_TEXT)
 	leaderboard_heading.add_child(leaderboard_title)
 
 	pvp_leaderboard_status_label = Label.new()
-	pvp_leaderboard_status_label.text = "All Time standings · Win +10 · Loss -10"
+	pvp_leaderboard_status_label.text = LocalizationManager.text(
+		"ui.pvp.leaderboard.status",
+		{"period": _pvp_leaderboard_scope_label("all_time"), "win": "+10", "loss": "-10"}
+	)
 	pvp_leaderboard_status_label.add_theme_font_size_override("font_size", 11)
 	pvp_leaderboard_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	leaderboard_heading.add_child(pvp_leaderboard_status_label)
@@ -5266,7 +5331,7 @@ func _setup_pvp_room_popup() -> void:
 	leaderboard_header.add_child(leaderboard_scope_stack)
 
 	var leaderboard_scope_caption := Label.new()
-	leaderboard_scope_caption.text = "PERIOD"
+	_set_localized_control_property(leaderboard_scope_caption, "text", "ui.pvp.leaderboard.period")
 	leaderboard_scope_caption.add_theme_font_size_override("font_size", 9)
 	leaderboard_scope_caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	leaderboard_scope_stack.add_child(leaderboard_scope_caption)
@@ -5276,7 +5341,7 @@ func _setup_pvp_room_popup() -> void:
 	pvp_leaderboard_scope_select.focus_mode = Control.FOCUS_NONE
 	for scope_index in range(PVP_LEADERBOARD_SCOPES.size()):
 		var scope: Dictionary = PVP_LEADERBOARD_SCOPES[scope_index]
-		pvp_leaderboard_scope_select.add_item(str(scope.get("label", "")))
+		pvp_leaderboard_scope_select.add_item(LocalizationManager.text(str(scope.get("label_key", ""))))
 		pvp_leaderboard_scope_select.set_item_metadata(scope_index, str(scope.get("id", "")))
 	pvp_leaderboard_scope_select.select(_pvp_leaderboard_scope_index(pvp_active_leaderboard_scope))
 	pvp_leaderboard_scope_select.item_selected.connect(_on_pvp_leaderboard_scope_selected)
@@ -5284,10 +5349,10 @@ func _setup_pvp_room_popup() -> void:
 	leaderboard_scope_stack.add_child(pvp_leaderboard_scope_select)
 
 	pvp_leaderboard_refresh_button = Button.new()
-	pvp_leaderboard_refresh_button.text = "Refresh"
+	_set_localized_control_property(pvp_leaderboard_refresh_button, "text", "ui.pvp.leaderboard.refresh")
 	pvp_leaderboard_refresh_button.custom_minimum_size = Vector2(88, 36)
 	pvp_leaderboard_refresh_button.focus_mode = Control.FOCUS_NONE
-	pvp_leaderboard_refresh_button.tooltip_text = "Update leaderboard"
+	_set_localized_control_property(pvp_leaderboard_refresh_button, "tooltip_text", "ui.pvp.leaderboard.refresh_tooltip")
 	pvp_leaderboard_refresh_button.pressed.connect(_on_pvp_leaderboard_refresh_pressed)
 	leaderboard_header.add_child(pvp_leaderboard_refresh_button)
 
@@ -5314,11 +5379,11 @@ func _setup_pvp_room_popup() -> void:
 	var leaderboard_columns := HBoxContainer.new()
 	leaderboard_columns.add_theme_constant_override("separation", 10)
 	leaderboard_table_layout.add_child(leaderboard_columns)
-	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("RANK", 54, HORIZONTAL_ALIGNMENT_CENTER))
-	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("Player", 0, HORIZONTAL_ALIGNMENT_LEFT, true))
-	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("Points", 96, HORIZONTAL_ALIGNMENT_RIGHT))
-	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("Record", 104, HORIZONTAL_ALIGNMENT_RIGHT))
-	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("Win Rate", 86, HORIZONTAL_ALIGNMENT_RIGHT))
+	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("ui.pvp.leaderboard.column.rank", 54, HORIZONTAL_ALIGNMENT_CENTER))
+	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("ui.pvp.leaderboard.column.player", 0, HORIZONTAL_ALIGNMENT_LEFT, true))
+	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("ui.pvp.leaderboard.column.points", 96, HORIZONTAL_ALIGNMENT_RIGHT))
+	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("ui.pvp.leaderboard.column.record", 104, HORIZONTAL_ALIGNMENT_RIGHT))
+	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("ui.pvp.leaderboard.column.win_rate", 86, HORIZONTAL_ALIGNMENT_RIGHT))
 
 	var leaderboard_scroll := ScrollContainer.new()
 	leaderboard_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -5331,8 +5396,8 @@ func _setup_pvp_room_popup() -> void:
 	pvp_leaderboard_list.add_theme_constant_override("separation", 6)
 	leaderboard_scroll.add_child(pvp_leaderboard_list)
 	_render_pvp_leaderboard_state(
-		"Leaderboard not loaded",
-		"Open Ranked to fetch the latest standings."
+		LocalizationManager.text("ui.pvp.leaderboard.not_loaded"),
+		LocalizationManager.text("ui.pvp.leaderboard.not_loaded_detail")
 	)
 
 	var history_tab_page := _create_pvp_ranked_tab_page("My History", 8)
@@ -5349,13 +5414,13 @@ func _setup_pvp_room_popup() -> void:
 	history_tab.add_child(history_header)
 
 	pvp_history_status_label = Label.new()
-	pvp_history_status_label.text = "Recent matches"
+	pvp_history_status_label.text = LocalizationManager.text("ui.pvp.history.recent")
 	pvp_history_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_history_status_label.add_theme_color_override("font_color", UI_TEXT)
 	history_header.add_child(pvp_history_status_label)
 
 	pvp_history_refresh_button = Button.new()
-	pvp_history_refresh_button.text = "Refresh"
+	_set_localized_control_property(pvp_history_refresh_button, "text", "ui.pvp.bans.refresh")
 	pvp_history_refresh_button.custom_minimum_size = Vector2(92, 32)
 	pvp_history_refresh_button.focus_mode = Control.FOCUS_NONE
 	pvp_history_refresh_button.pressed.connect(_on_pvp_history_refresh_pressed)
@@ -5395,6 +5460,8 @@ func _setup_pvp_room_popup() -> void:
 	_apply_button_style(pvp_bans_refresh_button)
 	_apply_button_style(pvp_leaderboard_refresh_button)
 	_apply_button_style(pvp_history_refresh_button)
+	for tab_container: TabContainer in [pvp_ranked_tabs, pvp_ranked_rules_tabs, pvp_ranked_battles_tabs]:
+		_refresh_pvp_tab_titles(tab_container)
 	_render_pvp_banlists()
 	_render_pvp_banlists.call_deferred()
 	_refresh_pvp_queue_buttons(_current_pvp_queue_status_for_buttons())
@@ -5444,20 +5511,20 @@ func _setup_pvp_mode_menu() -> void:
 	header.add_child(heading_stack)
 
 	var title := Label.new()
-	title.text = "PvP Battles"
+	_set_localized_control_property(title, "text", "ui.pvp.title")
 	title.add_theme_font_size_override("font_size", 18)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	heading_stack.add_child(title)
 
 	var subtitle := Label.new()
-	subtitle.text = "Choose how you want to battle"
+	_set_localized_control_property(subtitle, "text", "ui.pvp.choose_mode")
 	subtitle.add_theme_font_size_override("font_size", 12)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	heading_stack.add_child(subtitle)
 
 	pvp_mode_close_button = Button.new()
 	pvp_mode_close_button.text = "×"
-	pvp_mode_close_button.tooltip_text = "Close"
+	_set_localized_control_property(pvp_mode_close_button, "tooltip_text", "common.close")
 	pvp_mode_close_button.custom_minimum_size = Vector2(32, 32)
 	pvp_mode_close_button.focus_mode = Control.FOCUS_NONE
 	pvp_mode_close_button.pressed.connect(_hide_pvp_mode_menu)
@@ -5465,8 +5532,8 @@ func _setup_pvp_mode_menu() -> void:
 	header.add_child(pvp_mode_close_button)
 
 	pvp_mode_ranked_button = _create_pvp_mode_menu_button(
-		"Ranked",
-		"Competitive matchmaking",
+		"ui.pvp.mode.ranked",
+		"ui.pvp.mode.competitive",
 		PVP_MODE_RANKED_ICON,
 		Color("#f0cc70")
 	)
@@ -5474,8 +5541,8 @@ func _setup_pvp_mode_menu() -> void:
 	layout.add_child(pvp_mode_ranked_button)
 
 	pvp_mode_casual_button = _create_pvp_mode_menu_button(
-		"Custom / Casual",
-		"Create or join a private battle",
+		"ui.pvp.mode.custom",
+		"ui.pvp.mode.private",
 		PVP_MODE_CUSTOM_ICON,
 		Color("#60d3ff")
 	)
@@ -5483,16 +5550,16 @@ func _setup_pvp_mode_menu() -> void:
 	layout.add_child(pvp_mode_casual_button)
 
 	pvp_mode_tournaments_button = _create_pvp_mode_menu_button(
-		"Tournaments",
-		"Scheduled competitive events",
+		"ui.pvp.mode.tournaments",
+		"ui.pvp.mode.scheduled",
 		PVP_MODE_TOURNAMENT_ICON,
 		Color("#b28ae8"),
-		"COMING SOON"
+		"ui.pvp.mode.coming_soon"
 	)
 	pvp_mode_tournaments_button.disabled = true
 	pvp_mode_tournaments_button.modulate = Color(1, 1, 1, 0.58)
 	pvp_mode_tournaments_button.mouse_default_cursor_shape = Control.CURSOR_ARROW
-	pvp_mode_tournaments_button.tooltip_text = "Tournaments are coming soon."
+	_set_localized_control_property(pvp_mode_tournaments_button, "tooltip_text", "ui.pvp.mode.tournaments_soon")
 	pvp_mode_tournaments_button.pressed.connect(_on_pvp_mode_tournaments_pressed)
 	layout.add_child(pvp_mode_tournaments_button)
 
@@ -5623,7 +5690,10 @@ func _configure_launcher_card_button(
 
 		var badge_label := Label.new()
 		badge_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		badge_label.text = badge_text
+		if LocalizationManager.has_key(badge_text, LocalizationManager.DEFAULT_LOCALE):
+			_set_localized_control_property(badge_label, "text", badge_text)
+		else:
+			badge_label.text = badge_text
 		badge_label.add_theme_font_size_override("font_size", 10)
 		badge_label.add_theme_color_override("font_color", Color("#c9afd9"))
 		badge_margin.add_child(badge_label)
@@ -5791,10 +5861,61 @@ func _configure_tool_tile_button(
 func _create_pvp_ranked_tab_page(tab_name: String, top_margin: int = 12) -> MarginContainer:
 	var page := MarginContainer.new()
 	page.name = tab_name
+	var tab_key := _pvp_tab_key(tab_name)
+	if tab_key != "":
+		page.set_meta("i18n_tab_key", tab_key)
 	page.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	page.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	page.add_theme_constant_override("margin_top", top_margin)
 	return page
+
+
+func _pvp_tab_key(tab_name: String) -> String:
+	match tab_name:
+		"Play":
+			return "ui.pvp.tab.play"
+		"Rules":
+			return "ui.pvp.tab.rules"
+		"Battles":
+			return "ui.pvp.tab.battles"
+		"Leaderboard":
+			return "ui.pvp.tab.leaderboard"
+		"Format":
+			return "ui.pvp.tab.format"
+		"Banlist":
+			return "ui.pvp.tab.banlist"
+		"Live":
+			return "ui.pvp.tab.live"
+		"My History":
+			return "ui.pvp.tab.history"
+	return ""
+
+
+func _refresh_pvp_tab_titles(tab_container: TabContainer) -> void:
+	if tab_container == null:
+		return
+	for index in range(tab_container.get_tab_count()):
+		var page := tab_container.get_child(index)
+		if page == null:
+			continue
+		var key := str(page.get_meta("i18n_tab_key", ""))
+		if key != "":
+			tab_container.set_tab_title(index, LocalizationManager.text(key))
+
+
+func _refresh_pvp_leaderboard_scope_options() -> void:
+	if pvp_leaderboard_scope_select == null:
+		return
+	var selected_scope := pvp_active_leaderboard_scope
+	pvp_leaderboard_scope_select.clear()
+	for index in range(PVP_LEADERBOARD_SCOPES.size()):
+		var scope: Dictionary = PVP_LEADERBOARD_SCOPES[index]
+		pvp_leaderboard_scope_select.add_item(
+			LocalizationManager.text(str(scope.get("label_key", "")))
+		)
+		pvp_leaderboard_scope_select.set_item_metadata(index, str(scope.get("id", "")))
+	pvp_leaderboard_scope_select.select(_pvp_leaderboard_scope_index(selected_scope))
+
 
 func _create_pvp_ruleset_panel() -> Control:
 	var panel := PanelContainer.new()
@@ -5814,19 +5935,19 @@ func _create_pvp_ruleset_panel() -> Control:
 	margin.add_child(layout)
 
 	var title := Label.new()
-	title.text = "Ruleset"
+	_set_localized_control_property(title, "text", "ui.pvp.rules.title")
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 20)
 	title.add_theme_color_override("font_color", Color("#f5df9a"))
 	layout.add_child(title)
 
 	var rules: Array[Dictionary] = [
-		{"title": "Format", "body": "Aether OU. Queue selection decides casual or ranked processing."},
-		{"title": "Species", "body": "Prevents having 2 or more of the same Pokemon on a team."},
-		{"title": "OHKO", "body": "Prevents one-hit KO moves from being used."},
-		{"title": "Evasion", "body": "Prevents moves that boost evasion from being used."},
-		{"title": "Timers", "body": "Server-authoritative timers are enforced by the PvP foundation."},
-		{"title": "Disconnects", "body": "Reconnect grace is tracked server-side; expired grace can end the match."},
+		{"title": "ui.pvp.rules.format.title", "body": "ui.pvp.rules.format.body"},
+		{"title": "ui.pvp.rules.species.title", "body": "ui.pvp.rules.species.body"},
+		{"title": "ui.pvp.rules.ohko.title", "body": "ui.pvp.rules.ohko.body"},
+		{"title": "ui.pvp.rules.evasion.title", "body": "ui.pvp.rules.evasion.body"},
+		{"title": "ui.pvp.rules.timers.title", "body": "ui.pvp.rules.timers.body"},
+		{"title": "ui.pvp.rules.disconnects.title", "body": "ui.pvp.rules.disconnects.body"},
 	]
 	for rule: Dictionary in rules:
 		layout.add_child(_create_pvp_ruleset_row(str(rule["title"]), str(rule["body"])))
@@ -5854,13 +5975,19 @@ func _create_pvp_ruleset_row(title_text: String, body_text: String) -> Control:
 	margin.add_child(layout)
 
 	var title := Label.new()
-	title.text = title_text
+	if LocalizationManager.has_key(title_text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(title, "text", title_text)
+	else:
+		title.text = title_text
 	title.add_theme_font_size_override("font_size", 16)
 	title.add_theme_color_override("font_color", Color("#cfe8ff"))
 	layout.add_child(title)
 
 	var body := Label.new()
-	body.text = body_text
+	if LocalizationManager.has_key(body_text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(body, "text", body_text)
+	else:
+		body.text = body_text
 	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	body.add_theme_color_override("font_color", UI_TEXT)
 	layout.add_child(body)
@@ -5869,7 +5996,10 @@ func _create_pvp_ruleset_row(title_text: String, body_text: String) -> Control:
 
 func _create_pvp_section_title(title_text: String) -> Label:
 	var label := Label.new()
-	label.text = title_text
+	if LocalizationManager.has_key(title_text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(label, "text", title_text)
+	else:
+		label.text = title_text
 	label.add_theme_font_size_override("font_size", 16)
 	label.add_theme_color_override("font_color", Color("#f5df9a"))
 	return label
@@ -5899,12 +6029,18 @@ func _create_pvp_info_row(title_text: String, body_text: String) -> Control:
 	margin.add_child(layout)
 
 	var title := Label.new()
-	title.text = title_text
+	if LocalizationManager.has_key(title_text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(title, "text", title_text)
+	else:
+		title.text = title_text
 	title.add_theme_color_override("font_color", Color("#cfe8ff"))
 	layout.add_child(title)
 
 	var body := Label.new()
-	body.text = body_text
+	if LocalizationManager.has_key(body_text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(body, "text", body_text)
+	else:
+		body.text = body_text
 	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	body.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	layout.add_child(body)
@@ -5936,7 +6072,10 @@ func _create_pvp_team_preview_slot(pokemon: Pokemon, slot_index: int) -> Control
 
 	if pokemon == null:
 		icon.modulate = Color(1, 1, 1, 0.18)
-		panel.tooltip_text = "Empty slot %d" % [slot_index + 1]
+		panel.tooltip_text = LocalizationManager.text(
+			"ui.pvp.team.empty_slot",
+			{"number": slot_index + 1}
+		)
 		return panel
 
 	icon.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
@@ -5961,10 +6100,10 @@ func _create_pvp_tournaments_placeholder() -> Control:
 	layout.add_theme_constant_override("separation", 10)
 	margin.add_child(layout)
 
-	layout.add_child(_create_pvp_section_title("Tournaments"))
-	layout.add_child(_create_pvp_info_row("Status", "Tournament support is not live yet. This section is reserved for brackets, best-of series and scheduled events."))
-	layout.add_child(_create_pvp_info_row("Foundation", "Future tournament battles will use the same PvP match, ownership, reconnect, settlement and history systems as ranked."))
-	layout.add_child(_create_pvp_info_row("Next Work", "The next backend step is a tournament domain with brackets, check-in, series rules and spectator support."))
+	layout.add_child(_create_pvp_section_title("ui.pvp.mode.tournaments"))
+	layout.add_child(_create_pvp_info_row("ui.pvp.tournaments.status", "ui.pvp.tournaments.status_body"))
+	layout.add_child(_create_pvp_info_row("ui.pvp.tournaments.foundation", "ui.pvp.tournaments.foundation_body"))
+	layout.add_child(_create_pvp_info_row("ui.pvp.tournaments.next", "ui.pvp.tournaments.next_body"))
 
 	var spacer := Control.new()
 	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -9657,7 +9796,7 @@ func _setup_pvp_queue_compact_panel() -> void:
 	row.add_child(text_stack)
 
 	pvp_queue_compact_status_label = Label.new()
-	pvp_queue_compact_status_label.text = "Ranked Queue"
+	pvp_queue_compact_status_label.text = LocalizationManager.text("ui.pvp.queue.compact_title")
 	pvp_queue_compact_status_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	pvp_queue_compact_status_label.add_theme_font_size_override("font_size", 13)
 	pvp_queue_compact_status_label.add_theme_color_override("font_color", UI_TEXT)
@@ -9670,7 +9809,7 @@ func _setup_pvp_queue_compact_panel() -> void:
 	text_stack.add_child(pvp_queue_compact_time_label)
 
 	pvp_queue_compact_open_button = Button.new()
-	pvp_queue_compact_open_button.text = "Open"
+	_set_localized_control_property(pvp_queue_compact_open_button, "text", "ui.pvp.queue.open")
 	pvp_queue_compact_open_button.custom_minimum_size = Vector2(58, 30)
 	pvp_queue_compact_open_button.focus_mode = Control.FOCUS_NONE
 	pvp_queue_compact_open_button.pressed.connect(_on_pvp_queue_compact_open_pressed)
@@ -9678,7 +9817,7 @@ func _setup_pvp_queue_compact_panel() -> void:
 	row.add_child(pvp_queue_compact_open_button)
 
 	pvp_queue_compact_leave_button = Button.new()
-	pvp_queue_compact_leave_button.text = "Leave"
+	_set_localized_control_property(pvp_queue_compact_leave_button, "text", "ui.pvp.queue.leave_short")
 	pvp_queue_compact_leave_button.custom_minimum_size = Vector2(62, 30)
 	pvp_queue_compact_leave_button.focus_mode = Control.FOCUS_NONE
 	pvp_queue_compact_leave_button.pressed.connect(_on_pvp_queue_compact_leave_pressed)
@@ -9761,7 +9900,7 @@ func _setup_pvp_match_countdown_overlay() -> void:
 
 	var title := Label.new()
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	title.text = "RANKED MATCH FOUND"
+	_set_localized_control_property(title, "text", "ui.pvp.countdown.title")
 	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	title.add_theme_font_size_override("font_size", 20)
 	title.add_theme_color_override("font_color", UI_MONEY)
@@ -9769,7 +9908,7 @@ func _setup_pvp_match_countdown_overlay() -> void:
 
 	pvp_match_countdown_status_label = Label.new()
 	pvp_match_countdown_status_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	pvp_match_countdown_status_label.text = "Finish your action now. PvP starts soon."
+	pvp_match_countdown_status_label.text = LocalizationManager.text("ui.pvp.countdown.soon")
 	pvp_match_countdown_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pvp_match_countdown_status_label.add_theme_font_size_override("font_size", 16)
 	pvp_match_countdown_status_label.add_theme_color_override("font_color", UI_TEXT)
@@ -9777,7 +9916,10 @@ func _setup_pvp_match_countdown_overlay() -> void:
 
 	pvp_match_countdown_timer_label = Label.new()
 	pvp_match_countdown_timer_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	pvp_match_countdown_timer_label.text = "10s"
+	pvp_match_countdown_timer_label.text = LocalizationManager.text(
+		"ui.pvp.countdown.timer",
+		{"seconds": 10}
+	)
 	pvp_match_countdown_timer_label.custom_minimum_size = Vector2(86, 0)
 	pvp_match_countdown_timer_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	pvp_match_countdown_timer_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -30945,24 +31087,27 @@ func _open_pvp_popup_section(section_name: String) -> void:
 func _pvp_popup_title_for_section(section_name: String) -> String:
 	match section_name:
 		"Ranked":
-			return "Ranked"
+			return LocalizationManager.text("ui.pvp.mode.ranked")
 		"Tournaments":
-			return "Tournaments"
+			return LocalizationManager.text("ui.pvp.mode.tournaments")
 		"Custom / Casual":
-			return "Custom / Casual"
+			return LocalizationManager.text("ui.pvp.mode.custom")
 		_:
-			return "PvP"
+			return LocalizationManager.text("ui.pvp.title")
 
 func _pvp_popup_subtitle_for_section(section_name: String) -> String:
 	match section_name:
 		"Ranked":
-			return "Competitive matchmaking · %s" % pvp_active_format_name
+			return LocalizationManager.text(
+				"ui.pvp.popup.ranked_subtitle",
+				{"format": pvp_active_format_name}
+			)
 		"Tournaments":
-			return "Scheduled competitive events"
+			return LocalizationManager.text("ui.pvp.mode.scheduled")
 		"Custom / Casual":
-			return "Create or join a private battle"
+			return LocalizationManager.text("ui.pvp.mode.private")
 		_:
-			return "Choose how you want to battle"
+			return LocalizationManager.text("ui.pvp.choose_mode")
 
 func _pvp_popup_icon_for_section(section_name: String) -> Texture2D:
 	match section_name:
@@ -30981,6 +31126,19 @@ func _select_pvp_root_tab(section_name: String) -> void:
 		if child != null and _pvp_root_tab_matches_section(child.name, section_name):
 			pvp_root_tabs.current_tab = index
 			return
+
+
+func _current_pvp_section_name() -> String:
+	if pvp_root_tabs == null or pvp_root_tabs.get_child_count() == 0:
+		return "Ranked"
+	var page := pvp_root_tabs.get_child(pvp_root_tabs.current_tab)
+	if page == null:
+		return "Ranked"
+	var tab_name := str(page.name)
+	if tab_name == "Custom _ Casual" or tab_name == "Custom Casual":
+		return "Custom / Casual"
+	return tab_name
+
 
 func _pvp_root_tab_matches_section(tab_name: String, section_name: String) -> bool:
 	if tab_name == section_name:
@@ -31072,7 +31230,7 @@ func _select_first_pvp_queue_for_mode(mode: String) -> bool:
 		if pvp_active_queue_entry_id != "" or pvp_active_queue_match_id != "":
 			_refresh_pvp_queue_buttons(pvp_active_queue_status)
 		else:
-			_set_pvp_queue_status("Queue Status: idle")
+			_set_pvp_queue_status_key("ui.pvp.queue.ready")
 			_refresh_pvp_queue_buttons("idle")
 		return true
 	return false
@@ -31109,9 +31267,12 @@ func _refresh_pvp_team_validator() -> void:
 	var warnings: Array[String] = []
 	var party_size: int = PlayerSave.party.size()
 	if party_size <= 0:
-		issues.append("Your current party is empty.")
+		issues.append(LocalizationManager.text("ui.pvp.validation.empty_party"))
 	elif party_size > MAX_PARTY_SIZE:
-		issues.append("Your party has more than %d Pokemon." % MAX_PARTY_SIZE)
+		issues.append(LocalizationManager.text(
+			"ui.pvp.validation.too_many",
+			{"count": MAX_PARTY_SIZE}
+		))
 
 	var species_counts: Dictionary = {}
 	for pokemon: Pokemon in PlayerSave.party:
@@ -31123,28 +31284,29 @@ func _refresh_pvp_team_validator() -> void:
 	for species_key: String in species_counts.keys():
 		var count: int = int(species_counts[species_key])
 		if count > 1:
-			issues.append("Species Clause: %s appears %d times." % [
-				_format_pvp_species_display_name(species_key),
-				count,
-			])
+			issues.append(LocalizationManager.text(
+				"ui.pvp.validation.species_clause",
+				{"pokemon": _format_pvp_species_display_name(species_key), "count": count}
+			))
 
 	if pvp_team_source_select != null and pvp_team_source_select.selected > 0:
-		issues.append("PvP team slots are not available yet. Select Current Party.")
+		issues.append(LocalizationManager.text("ui.pvp.validation.party_only"))
 
 	if pvp_active_queue_id == "":
-		warnings.append("No queue is selected.")
+		warnings.append(LocalizationManager.text("ui.pvp.validation.no_queue"))
 
 	if issues.is_empty() and not _is_selected_pvp_queue_ranked():
 		if pvp_team_validator_status_label != null:
-			pvp_team_validator_status_label.text = "Eligible for the selected queue."
+			pvp_team_validator_status_label.text = LocalizationManager.text("ui.pvp.validation.eligible")
 			pvp_team_validator_status_label.add_theme_color_override("font_color", Color("#62e36e"))
 		_set_pvp_validator_visual_state("valid")
 	elif not issues.is_empty():
 		if pvp_team_validator_status_label != null:
-			pvp_team_validator_status_label.text = "Team not allowed · %d %s" % [
-				issues.size(),
-				"issue" if issues.size() == 1 else "issues",
-			]
+			pvp_team_validator_status_label.text = LocalizationManager.plural(
+				"ui.pvp.validation.issue.one",
+				"ui.pvp.validation.issue.many",
+				issues.size()
+			)
 			pvp_team_validator_status_label.add_theme_color_override("font_color", Color("#ff7979"))
 		_set_pvp_validator_visual_state("invalid")
 
@@ -31157,47 +31319,52 @@ func _refresh_pvp_team_validator() -> void:
 		]
 		if not server_is_authoritative:
 			for issue: String in issues:
-				pvp_team_validator_list.add_child(_create_pvp_validator_row("Issue", issue, Color("#ff7979")))
+				pvp_team_validator_list.add_child(_create_pvp_validator_row(LocalizationManager.text("ui.pvp.validation.label.issue"), issue, Color("#ff7979")))
 			for warning: String in warnings:
-				pvp_team_validator_list.add_child(_create_pvp_validator_row("Note", warning, Color("#f5df9a")))
+				pvp_team_validator_list.add_child(_create_pvp_validator_row(LocalizationManager.text("ui.pvp.validation.label.note"), warning, Color("#f5df9a")))
 		if issues.is_empty():
 			_render_pvp_ranked_server_validation()
 		elif pvp_team_validator_status_label != null:
-			pvp_team_validator_status_label.text = "Team not allowed · %d %s" % [
-				issues.size(),
-				"issue" if issues.size() == 1 else "issues",
-			]
+			pvp_team_validator_status_label.text = LocalizationManager.plural(
+				"ui.pvp.validation.issue.one",
+				"ui.pvp.validation.issue.many",
+				issues.size()
+			)
 	else:
 		for issue: String in issues:
-			pvp_team_validator_list.add_child(_create_pvp_validator_row("Local", issue, Color("#f5df9a")))
+			pvp_team_validator_list.add_child(_create_pvp_validator_row(LocalizationManager.text("ui.pvp.validation.label.local"), issue, Color("#f5df9a")))
 		for warning: String in warnings:
-			pvp_team_validator_list.add_child(_create_pvp_validator_row("Note", warning, Color("#f5df9a")))
+			pvp_team_validator_list.add_child(_create_pvp_validator_row(LocalizationManager.text("ui.pvp.validation.label.note"), warning, Color("#f5df9a")))
 		if issues.is_empty() and warnings.is_empty():
-			pvp_team_validator_list.add_child(_create_pvp_validator_row("Allowed", "No validation issues found.", Color("#62e36e")))
+			pvp_team_validator_list.add_child(_create_pvp_validator_row(
+				LocalizationManager.text("ui.pvp.validation.label.allowed"),
+				LocalizationManager.text("ui.pvp.validation.none"),
+				Color("#62e36e")
+			))
 	_refresh_pvp_queue_buttons(_current_pvp_queue_status_for_buttons())
 
 func _render_pvp_ranked_server_validation() -> void:
 	var server_state := str(pvp_ranked_team_validation_result.get("state", "")).strip_edges()
-	var server_message := PvpRankedTeamValidation.display_message(pvp_ranked_team_validation_result)
 	match server_state:
 		PvpRankedTeamValidation.STATE_VALID:
 			_set_pvp_validator_visual_state("valid")
 			if pvp_team_validator_status_label != null:
-				pvp_team_validator_status_label.text = "Ranked Ready"
+				pvp_team_validator_status_label.text = LocalizationManager.text("ui.pvp.validation.ranked_ready")
 				pvp_team_validator_status_label.add_theme_color_override("font_color", Color("#62e36e"))
 			pvp_team_validator_list.add_child(_create_pvp_validator_row(
-				"Allowed",
-				"Team is allowed in %s." % pvp_active_format_name,
+				LocalizationManager.text("ui.pvp.validation.label.allowed"),
+				LocalizationManager.text("ui.pvp.validation.allowed_format", {"format": pvp_active_format_name}),
 				Color("#62e36e")
 			))
 		PvpRankedTeamValidation.STATE_INVALID:
 			_set_pvp_validator_visual_state("invalid")
 			var server_issues := PvpRankedTeamValidation.display_issues(pvp_ranked_team_validation_result)
 			if pvp_team_validator_status_label != null:
-				pvp_team_validator_status_label.text = "Team not allowed · %d %s" % [
-					server_issues.size(),
-					"issue" if server_issues.size() == 1 else "issues",
-				]
+				pvp_team_validator_status_label.text = LocalizationManager.plural(
+					"ui.pvp.validation.issue.one",
+					"ui.pvp.validation.issue.many",
+					server_issues.size()
+				)
 				pvp_team_validator_status_label.add_theme_color_override("font_color", Color("#ff7979"))
 			for issue: Dictionary in server_issues:
 				pvp_team_validator_list.add_child(_create_pvp_validator_row(
@@ -31208,29 +31375,37 @@ func _render_pvp_ranked_server_validation() -> void:
 		PvpRankedTeamValidation.STATE_CHECKING:
 			_set_pvp_validator_visual_state("checking")
 			if pvp_team_validator_status_label != null:
-				pvp_team_validator_status_label.text = "Checking ranked team..."
+				pvp_team_validator_status_label.text = LocalizationManager.text("ui.pvp.validation.checking")
 				pvp_team_validator_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-			pvp_team_validator_list.add_child(_create_pvp_validator_row("Checking", server_message, UI_MUTED_TEXT))
+			pvp_team_validator_list.add_child(_create_pvp_validator_row(
+				LocalizationManager.text("ui.pvp.validation.label.checking"),
+				LocalizationManager.text("ui.pvp.validation.checking"),
+				UI_MUTED_TEXT
+			))
 		PvpRankedTeamValidation.STATE_ERROR:
 			_set_pvp_validator_visual_state("invalid")
 			if pvp_team_validator_status_label != null:
-				pvp_team_validator_status_label.text = "Server validation unavailable."
+				pvp_team_validator_status_label.text = LocalizationManager.text("ui.pvp.validation.unavailable")
 				pvp_team_validator_status_label.add_theme_color_override("font_color", Color("#ff7979"))
 			var errors := PvpRankedTeamValidation.display_errors(pvp_ranked_team_validation_result)
 			for error: String in errors:
-				pvp_team_validator_list.add_child(_create_pvp_validator_row("Error", error, Color("#ff7979")))
+				pvp_team_validator_list.add_child(_create_pvp_validator_row(LocalizationManager.text("ui.pvp.validation.label.error"), error, Color("#ff7979")))
 		_:
 			_set_pvp_validator_visual_state("checking")
 			if pvp_team_validator_status_label != null:
-				pvp_team_validator_status_label.text = "Checking current party..."
+				pvp_team_validator_status_label.text = LocalizationManager.text("ui.pvp.team.checking_current")
 				pvp_team_validator_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-			pvp_team_validator_list.add_child(_create_pvp_validator_row("Checking", "Server validation pending.", UI_MUTED_TEXT))
+			pvp_team_validator_list.add_child(_create_pvp_validator_row(
+				LocalizationManager.text("ui.pvp.validation.label.checking"),
+				LocalizationManager.text("ui.pvp.validation.pending"),
+				UI_MUTED_TEXT
+			))
 
 func _pvp_ranked_validation_issue_label(issue: Dictionary) -> String:
 	var slot := int(issue.get("slot", 0))
 	if slot > 0:
-		return "Slot %d" % slot
-	return "Rule"
+		return LocalizationManager.text("ui.pvp.validation.slot", {"number": slot})
+	return LocalizationManager.text("ui.pvp.validation.label.rule")
 
 func _pvp_ranked_validation_issue_message(issue: Dictionary) -> String:
 	var code := str(issue.get("code", "")).strip_edges()
@@ -31239,31 +31414,40 @@ func _pvp_ranked_validation_issue_message(issue: Dictionary) -> String:
 	var value := _pvp_validation_issue_value(issue)
 	match code:
 		"banned_pokemon":
-			return "%s is banned." % (pokemon_name if pokemon_name != "" else value)
+			return LocalizationManager.text(
+				"ui.pvp.validation.banned_pokemon",
+				{"pokemon": pokemon_name if pokemon_name != "" else value}
+			)
 		"banned_item":
 			var item_id := str(issue.get("value", issue.get("normalizedValue", "")))
-			return "%s holds banned item: %s." % [
-				_pvp_issue_subject(pokemon_name, slot),
-				ItemLocalization.display_name(item_id, value),
-			]
+			return LocalizationManager.text("ui.pvp.validation.banned_item", {
+				"pokemon": _pvp_issue_subject(pokemon_name, slot),
+				"item": ItemLocalization.display_name(item_id, value),
+			})
 		"banned_move":
 			var move_id := str(issue.get("value", issue.get("normalizedValue", "")))
-			return "%s has banned move: %s." % [
-				_pvp_issue_subject(pokemon_name, slot),
-				_localized_content_name("moves", move_id, value),
-			]
+			return LocalizationManager.text("ui.pvp.validation.banned_move", {
+				"pokemon": _pvp_issue_subject(pokemon_name, slot),
+				"move": _localized_content_name("moves", move_id, value),
+			})
 		"banned_ability":
 			var ability_id := str(issue.get("value", issue.get("normalizedValue", "")))
-			return "%s has banned ability: %s." % [
-				_pvp_issue_subject(pokemon_name, slot),
-				_localized_content_name("abilities", ability_id, value),
-			]
+			return LocalizationManager.text("ui.pvp.validation.banned_ability", {
+				"pokemon": _pvp_issue_subject(pokemon_name, slot),
+				"ability": _localized_content_name("abilities", ability_id, value),
+			})
 		"species_clause_duplicate":
 			var slots_text := _pvp_validation_slots_text(issue.get("slots", []))
 			var species := _format_pvp_species_display_name(
 				str(issue.get("species", value))
 			).strip_edges()
-			return "Species Clause: %s appears more than once%s." % [species, " in %s" % slots_text if slots_text != "" else ""]
+			return LocalizationManager.text("ui.pvp.validation.species_duplicate", {
+				"pokemon": species,
+				"slots": LocalizationManager.text(
+					"ui.pvp.validation.in_slots",
+					{"slots": slots_text}
+				) if slots_text != "" else "",
+			})
 	var message := str(issue.get("message", "")).strip_edges()
 	return message if message != "" else code.replace("_", " ").capitalize()
 
@@ -31271,14 +31455,14 @@ func _pvp_validation_issue_value(issue: Dictionary) -> String:
 	var value := str(issue.get("value", "")).strip_edges()
 	if value == "":
 		value = str(issue.get("normalizedValue", "")).strip_edges()
-	return _format_identifier_display_name(value) if value != "" else "Unknown"
+	return _format_identifier_display_name(value) if value != "" else LocalizationManager.text("ui.pvp.validation.unknown")
 
 func _pvp_issue_subject(pokemon_name: String, slot: int) -> String:
 	if pokemon_name != "":
 		return pokemon_name
 	if slot > 0:
-		return "Slot %d" % slot
-	return "Pokemon"
+		return LocalizationManager.text("ui.pvp.validation.slot", {"number": slot})
+	return LocalizationManager.text("ui.storage.fallback_pokemon")
 
 func _pvp_party_slot_display_name(slot: int) -> String:
 	if slot <= 0 or slot > PlayerSave.party.size():
@@ -31327,7 +31511,7 @@ func _pvp_validation_slots_text(slots_value: Variant) -> String:
 	for slot_value: Variant in slots_value as Array:
 		var slot := int(slot_value)
 		if slot > 0:
-			labels.append("Slot %d" % slot)
+			labels.append(LocalizationManager.text("ui.pvp.validation.slot", {"number": slot}))
 	return ", ".join(labels)
 
 func _refresh_pvp_ranked_team_validation(force: bool = false) -> void:
@@ -31448,13 +31632,13 @@ func _should_confirm_pvp_queue_leave_on_popup_close() -> bool:
 
 func _show_pvp_queue_close_confirm() -> void:
 	_show_ui_confirm_popup(
-		"Leave ranked queue?",
-		"You are currently in the ranked queue. Closing this window will leave the queue.",
-		"Leave Queue",
+		LocalizationManager.text("ui.pvp.queue.leave_confirm_title"),
+		LocalizationManager.text("ui.pvp.queue.leave_confirm_body"),
+		LocalizationManager.text("ui.pvp.queue.leave"),
 		Callable(self, "_confirm_close_pvp_room_and_leave_queue"),
 		Vector2i(480, 178),
 		true,
-		"Stay in Queue"
+		LocalizationManager.text("ui.pvp.queue.stay")
 	)
 
 func _confirm_close_pvp_room_and_leave_queue() -> void:
@@ -31464,15 +31648,15 @@ func _confirm_close_pvp_room_and_leave_queue() -> void:
 
 func _heal_party_before_pvp(action_label: String = "PvP") -> bool:
 	if PlayerSave.party.is_empty():
-		_set_pvp_queue_status("Queue Status: add at least one Pokemon before joining PvP.")
-		_set_pvp_status("Add at least one Pokemon before starting PvP.")
+		_set_pvp_queue_status_key("ui.pvp.queue.add_pokemon")
+		_set_pvp_status_key("ui.pvp.queue.add_pokemon")
 		return false
 	var result: Dictionary = await PartyHealService.heal_current_party_and_save()
 	if bool(result.get("success", false)):
 		return true
 	var error := str(result.get("error", "Unknown error"))
-	_set_pvp_queue_status("Queue Status: could not prepare team: %s" % error)
-	_set_pvp_status("Could not prepare team for %s: %s" % [action_label, error])
+	_set_pvp_queue_status_key("ui.pvp.queue.prepare_failed")
+	_set_pvp_status_key("ui.pvp.queue.prepare_failed")
 	push_warning("UIOverlay: could not heal party before %s: %s" % [action_label, error])
 	return false
 
@@ -31486,21 +31670,33 @@ func _on_pvp_room_mode_selected(mode: String) -> void:
 	pvp_spectate_room_button.visible = mode == "spectate"
 	pvp_cancel_room_button.visible = false
 	pvp_copy_code_button.visible = false
-	match mode:
+	_refresh_pvp_room_form_title()
+	_set_pvp_status_key("ui.pvp.room.ready")
+
+
+func _refresh_pvp_room_form_title() -> void:
+	if pvp_room_form_title == null:
+		return
+	if pvp_room_selected_mode == "create" and pvp_active_room_code != "":
+		pvp_room_form_title.text = LocalizationManager.text("ui.pvp.room.form_share")
+		return
+	match pvp_room_selected_mode:
 		"create":
-			pvp_room_form_title.text = "CREATE A PRIVATE ROOM"
+			pvp_room_form_title.text = LocalizationManager.text("ui.pvp.room.form_create")
 		"join":
-			pvp_room_form_title.text = "ENTER A ROOM CODE TO JOIN"
+			pvp_room_form_title.text = LocalizationManager.text("ui.pvp.room.form_join")
 		"spectate":
-			pvp_room_form_title.text = "ENTER A ROOM CODE TO SPECTATE"
-	_set_pvp_status("Ready.")
+			pvp_room_form_title.text = LocalizationManager.text("ui.pvp.room.form_spectate")
+		_:
+			pvp_room_form_title.text = ""
 
 func _on_pvp_create_room_pressed() -> void:
 	if pvp_battle_starting:
 		return
 	if not await _heal_party_before_pvp("PvP room"):
 		return
-	_set_pvp_room_busy(true, "Creating room...")
+	_set_pvp_room_busy(true)
+	_set_pvp_status_key("ui.pvp.room.creating")
 	var request := _create_pvp_request_node()
 	var response: Dictionary = await BattleApiClient.create_pvp_room(
 		request,
@@ -31511,15 +31707,16 @@ func _on_pvp_create_room_pressed() -> void:
 	_set_pvp_room_busy(false)
 
 	if not bool(response.get("success", false)):
-		_set_pvp_status("Could not create room: %s" % str(response.get("error", "Unknown error")))
+		_set_pvp_status_key("ui.pvp.room.create_failed")
+		push_warning("UIOverlay: PVP room creation failed: %s" % str(response.get("error", "Unknown error")))
 		return
 
 	pvp_active_room_code = str(response.get("roomCode", "")).strip_edges()
-	pvp_room_code_label.text = "ROOM CODE  ·  %s" % pvp_active_room_code
+	pvp_room_code_label.text = LocalizationManager.text("ui.pvp.room.code", {"code": pvp_active_room_code})
 	pvp_copy_code_button.disabled = pvp_active_room_code == ""
 	pvp_room_mode_selector.visible = false
 	pvp_room_form.visible = true
-	pvp_room_form_title.text = "YOUR ROOM IS READY TO SHARE"
+	pvp_room_form_title.text = LocalizationManager.text("ui.pvp.room.form_share")
 	pvp_room_code_input.visible = false
 	pvp_allow_spectators_check.visible = false
 	pvp_create_room_button.visible = false
@@ -31527,7 +31724,7 @@ func _on_pvp_create_room_pressed() -> void:
 	pvp_spectate_room_button.visible = false
 	pvp_cancel_room_button.visible = pvp_active_room_code != ""
 	pvp_copy_code_button.visible = pvp_active_room_code != ""
-	_set_pvp_status("Waiting for another player...")
+	_set_pvp_status_key("ui.pvp.room.waiting")
 	if pvp_active_room_code != "":
 		_start_pvp_room_polling()
 
@@ -31537,7 +31734,10 @@ func _on_pvp_allow_spectators_toggled(allowed: bool) -> void:
 func _refresh_pvp_allow_spectators_checkbox(allowed: bool) -> void:
 	if pvp_allow_spectators_check == null:
 		return
-	pvp_allow_spectators_check.text = "Allow private spectators  ·  %s" % ("ON" if allowed else "OFF")
+	pvp_allow_spectators_check.text = LocalizationManager.text(
+		"ui.pvp.room.allow_spectators",
+		{"state": LocalizationManager.text("ui.pvp.state.on" if allowed else "ui.pvp.state.off")}
+	)
 	pvp_allow_spectators_check.add_theme_color_override(
 		"font_color",
 		Color("#9be7b1") if allowed else Color("#f1c3a1")
@@ -31565,36 +31765,39 @@ func _pvp_spectators_checkbox_icon(checked: bool, hovered: bool) -> ImageTexture
 func _on_pvp_cancel_room_pressed() -> void:
 	if pvp_battle_starting or pvp_active_room_code == "":
 		return
-	_set_pvp_room_busy(true, "Cancelling room...")
+	_set_pvp_room_busy(true)
+	_set_pvp_status_key("ui.pvp.room.cancelling")
 	var request := _create_pvp_request_node()
 	var response: Dictionary = await BattleApiClient.cancel_pvp_room(request, pvp_active_room_code)
 	request.queue_free()
 	_set_pvp_room_busy(false)
 	if not bool(response.get("success", false)):
-		_set_pvp_status("Could not cancel room: %s" % str(response.get("error", "Unknown error")))
+		_set_pvp_status_key("ui.pvp.room.cancel_failed")
+		push_warning("UIOverlay: PVP room cancellation failed: %s" % str(response.get("error", "Unknown error")))
 		return
 	pvp_polling_active = false
 	pvp_poll_in_flight = false
 	pvp_poll_elapsed = 0.0
 	pvp_active_room_code = ""
-	pvp_room_code_label.text = "ROOM CODE  ·  -"
+	pvp_room_code_label.text = LocalizationManager.text("ui.pvp.room.code", {"code": "-"})
 	pvp_copy_code_button.disabled = true
 	pvp_room_mode_selector.visible = true
 	pvp_room_form.visible = false
 	pvp_room_selected_mode = ""
-	_set_pvp_status("Room cancelled.")
+	_set_pvp_status_key("ui.pvp.room.cancelled")
 
 func _on_pvp_join_room_pressed() -> void:
 	if pvp_battle_starting:
 		return
 	var room_code := pvp_room_code_input.text.strip_edges().to_upper()
 	if room_code == "":
-		_set_pvp_status("Enter a room code first.")
+		_set_pvp_status_key("ui.pvp.room.enter_code_first")
 		return
 	if not await _heal_party_before_pvp("PvP room"):
 		return
 
-	_set_pvp_room_busy(true, "Joining room...")
+	_set_pvp_room_busy(true)
+	_set_pvp_status_key("ui.pvp.room.joining")
 	var request := _create_pvp_request_node()
 	var response: Dictionary = await BattleApiClient.join_pvp_room(
 		request,
@@ -31607,16 +31810,17 @@ func _on_pvp_join_room_pressed() -> void:
 	if not bool(response.get("success", false)):
 		if _can_reconnect_to_started_pvp_room(response):
 			pvp_active_room_code = str(response.get("roomCode", room_code)).strip_edges()
-			pvp_room_code_label.text = "ROOM CODE  ·  %s" % pvp_active_room_code
+			pvp_room_code_label.text = LocalizationManager.text("ui.pvp.room.code", {"code": pvp_active_room_code})
 			pvp_copy_code_button.disabled = pvp_active_room_code == ""
-			_set_pvp_status("Room already started. Reconnecting...")
+			_set_pvp_status_key("ui.pvp.room.reconnecting")
 			await _start_pvp_battle_from_response(_normalize_started_pvp_reconnect_response(response))
 			return
-		_set_pvp_status("Could not join room: %s" % str(response.get("error", "Unknown error")))
+		_set_pvp_status_key("ui.pvp.room.join_failed")
+		push_warning("UIOverlay: PVP room join failed: %s" % str(response.get("error", "Unknown error")))
 		return
 
 	pvp_active_room_code = str(response.get("roomCode", room_code)).strip_edges()
-	pvp_room_code_label.text = "ROOM CODE  ·  %s" % pvp_active_room_code
+	pvp_room_code_label.text = LocalizationManager.text("ui.pvp.room.code", {"code": pvp_active_room_code})
 	pvp_copy_code_button.disabled = pvp_active_room_code == ""
 	await _start_pvp_battle_from_response(response)
 
@@ -31625,21 +31829,23 @@ func _on_pvp_spectate_room_pressed() -> void:
 		return
 	var room_code := pvp_room_code_input.text.strip_edges().to_upper()
 	if room_code == "":
-		_set_pvp_status("Enter a room code first.")
+		_set_pvp_status_key("ui.pvp.room.enter_code_first")
 		return
-	_set_pvp_room_busy(true, "Opening spectator view...")
+	_set_pvp_room_busy(true)
+	_set_pvp_status_key("ui.pvp.room.spectator_opening")
 	var request := _create_pvp_request_node()
 	var response: Dictionary = await BattleApiClient.spectate_pvp_room(request, room_code)
 	request.queue_free()
 	_set_pvp_room_busy(false)
 	if not bool(response.get("success", false)):
-		_set_pvp_status("Could not spectate room: %s" % str(response.get("error", "Spectating is unavailable.")))
+		_set_pvp_status_key("ui.pvp.room.spectator_failed")
+		push_warning("UIOverlay: PVP spectate failed: %s" % str(response.get("error", "Spectating is unavailable.")))
 		return
 	if not _spectator_response_has_public_teams(response):
-		_set_pvp_status("The public team preview is not available yet. Try again shortly.")
+		_set_pvp_status_key("ui.pvp.room.preview_unavailable")
 		return
 	pvp_active_room_code = room_code
-	pvp_room_code_label.text = "SPECTATING  ·  %s" % room_code
+	pvp_room_code_label.text = LocalizationManager.text("ui.pvp.room.spectating", {"code": room_code})
 	pvp_copy_code_button.disabled = false
 	await _start_pvp_battle_from_response(response)
 
@@ -31670,12 +31876,12 @@ func _on_pvp_join_queue_pressed() -> void:
 		await _refresh_pvp_ranked_team_validation(true)
 		if not PvpRankedTeamValidation.allows_ranked_join(pvp_ranked_team_validation_result):
 			pvp_ranked_queue_join_preparing = false
-			_set_pvp_queue_status("Queue Status: team validation failed.")
+			_set_pvp_queue_status_key("ui.pvp.queue.validation_failed")
 			_refresh_pvp_team_validator()
 			return
 	pvp_ranked_queue_join_preparing = false
-	_set_pvp_room_busy(true, "Joining queue...")
-	_set_pvp_queue_status("Queue Status: joining...")
+	_set_pvp_room_busy(true)
+	_set_pvp_queue_status_key("ui.pvp.queue.joining")
 	var request := _create_pvp_request_node()
 	var response: Dictionary = await BattleApiClient.join_pvp_queue(
 		request,
@@ -31686,7 +31892,8 @@ func _on_pvp_join_queue_pressed() -> void:
 	_set_pvp_room_busy(false)
 
 	if not bool(response.get("success", false)):
-		_set_pvp_queue_status("Queue Status: join failed: %s" % str(response.get("error", "Unknown error")))
+		_set_pvp_queue_status_key("ui.pvp.queue.join_failed")
+		push_warning("UIOverlay: PVP queue join failed: %s" % str(response.get("error", "Unknown error")))
 		var validation_value: Variant = response.get("validation", {})
 		if validation_value is Dictionary:
 			pvp_ranked_team_validation_result = PvpRankedTeamValidation.normalize_response(validation_value as Dictionary)
@@ -31695,7 +31902,7 @@ func _on_pvp_join_queue_pressed() -> void:
 
 	var entry: Dictionary = _pvp_queue_entry_from_response(response)
 	if entry.is_empty():
-		_set_pvp_queue_status("Queue Status: joined, but server returned no entry.")
+		_set_pvp_queue_status_key("ui.pvp.queue.no_entry")
 		return
 
 	_update_pvp_queue_state_from_entry(entry)
@@ -31807,7 +32014,7 @@ func _on_pvp_queue_selected(index: int) -> void:
 		pvp_banlists_loaded = false
 		pvp_banlists_result = PvpRankedBanlists.not_loaded()
 	_select_pvp_mode_by_queue_id(pvp_active_queue_id)
-	_set_pvp_queue_status("Queue Status: idle")
+	_set_pvp_queue_status_key("ui.pvp.queue.ready")
 	_refresh_pvp_queue_buttons("idle")
 	_refresh_pvp_team_validator()
 	_refresh_pvp_ranked_team_validation.call_deferred(true)
@@ -31879,8 +32086,16 @@ func _refresh_pvp_banlists(force: bool = false) -> void:
 
 func _render_pvp_banlists() -> void:
 	if pvp_bans_status_label != null:
-		pvp_bans_status_label.text = PvpRankedBanlists.display_message(pvp_banlists_result)
 		var state := str(pvp_banlists_result.get("state", "")).strip_edges()
+		match state:
+			PvpRankedBanlists.STATE_READY:
+				pvp_bans_status_label.text = LocalizationManager.text("ui.pvp.bans.loaded")
+			PvpRankedBanlists.STATE_ERROR:
+				pvp_bans_status_label.text = LocalizationManager.text("ui.pvp.bans.failed")
+			PvpRankedBanlists.STATE_LOADING:
+				pvp_bans_status_label.text = LocalizationManager.text("ui.pvp.bans.loading")
+			_:
+				pvp_bans_status_label.text = LocalizationManager.text("ui.pvp.bans.not_loaded")
 		var color := UI_MUTED_TEXT
 		if state == PvpRankedBanlists.STATE_READY:
 			color = UI_TEXT
@@ -31920,8 +32135,8 @@ func _create_pvp_banlist_metadata_panel(metadata: Dictionary) -> Control:
 	grid.add_theme_constant_override("v_separation", 8)
 	margin.add_child(grid)
 
-	grid.add_child(_create_pvp_banlist_metadata_field("Format", _pvp_banlist_metadata_value(metadata, "formatName", _pvp_banlist_metadata_value(metadata, "formatId", "Unknown"))))
-	grid.add_child(_create_pvp_banlist_metadata_field("Last Updated", _pvp_banlist_updated_label(_pvp_banlist_metadata_value(metadata, "updatedAt", ""))))
+	grid.add_child(_create_pvp_banlist_metadata_field(LocalizationManager.text("ui.pvp.bans.format"), _pvp_banlist_metadata_value(metadata, "formatName", _pvp_banlist_metadata_value(metadata, "formatId", LocalizationManager.text("ui.pvp.validation.unknown")))))
+	grid.add_child(_create_pvp_banlist_metadata_field(LocalizationManager.text("ui.pvp.bans.updated"), _pvp_banlist_updated_label(_pvp_banlist_metadata_value(metadata, "updatedAt", ""))))
 	return panel
 
 func _create_pvp_banlist_metadata_field(title_text: String, body_text: String) -> Control:
@@ -31948,10 +32163,10 @@ func _render_pvp_banlist_categories() -> void:
 		child.queue_free()
 	var state := str(pvp_banlists_result.get("state", "")).strip_edges()
 	if state == PvpRankedBanlists.STATE_LOADING:
-		pvp_bans_list.add_child(_create_pvp_banlist_state_label("Loading..."))
+		pvp_bans_list.add_child(_create_pvp_banlist_state_label(LocalizationManager.text("ui.pvp.bans.loading")))
 		return
 	if state == PvpRankedBanlists.STATE_ERROR:
-		pvp_bans_list.add_child(_create_pvp_banlist_state_label("Failed to load banlists."))
+		pvp_bans_list.add_child(_create_pvp_banlist_state_label(LocalizationManager.text("ui.pvp.bans.failed")))
 		return
 	for category_value: String in PvpRankedBanlists.CATEGORIES:
 		pvp_bans_list.add_child(_create_pvp_banlist_category_panel(category_value))
@@ -31978,7 +32193,7 @@ func _create_pvp_banlist_category_panel(category: String) -> Control:
 	var is_open := bool(pvp_banlist_category_open.get(category, true))
 
 	var header_button := Button.new()
-	header_button.text = "%s %s (%d)" % ["v" if is_open else ">", PvpRankedBanlists.category_label(category), bans.size()]
+	header_button.text = "%s %s (%d)" % ["v" if is_open else ">", _pvp_ban_category_label(category), bans.size()]
 	header_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	header_button.focus_mode = Control.FOCUS_NONE
 	header_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -31990,7 +32205,10 @@ func _create_pvp_banlist_category_panel(category: String) -> Control:
 		return panel
 
 	var search_input := LineEdit.new()
-	search_input.placeholder_text = "Search %s bans" % PvpRankedBanlists.category_label(category)
+	search_input.placeholder_text = LocalizationManager.text(
+		"ui.pvp.bans.search",
+		{"category": _pvp_ban_category_label(category)}
+	)
 	search_input.text = str(pvp_banlist_category_search.get(category, ""))
 	search_input.clear_button_enabled = true
 	search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -32010,7 +32228,9 @@ func _populate_pvp_banlist_category_items(category: String, items_list: VBoxCont
 		child.queue_free()
 	var bans := PvpRankedBanlists.category_bans(pvp_banlists_result, category)
 	if bans.is_empty():
-		items_list.add_child(_create_pvp_banlist_state_label(PvpRankedBanlists.empty_message(category)))
+		items_list.add_child(_create_pvp_banlist_state_label(
+			LocalizationManager.text("ui.pvp.bans.empty.%s" % category)
+		))
 		return
 	var query := str(pvp_banlist_category_search.get(category, "")).strip_edges().to_lower()
 	var matches := 0
@@ -32023,7 +32243,7 @@ func _populate_pvp_banlist_category_items(category: String, items_list: VBoxCont
 		label.add_theme_color_override("font_color", UI_TEXT)
 		items_list.add_child(label)
 	if matches == 0:
-		items_list.add_child(_create_pvp_banlist_state_label("No matching bans."))
+		items_list.add_child(_create_pvp_banlist_state_label(LocalizationManager.text("ui.pvp.bans.no_matches")))
 
 func _pvp_ban_matches_search(ban: Dictionary, query: String) -> bool:
 	if query == "":
@@ -32031,6 +32251,14 @@ func _pvp_ban_matches_search(ban: Dictionary, query: String) -> bool:
 	var label := str(ban.get("label", "")).strip_edges().to_lower()
 	var id := str(ban.get("id", "")).strip_edges().to_lower()
 	return label.find(query) >= 0 or id.find(query) >= 0
+
+
+func _pvp_ban_category_label(category: String) -> String:
+	var key := "ui.pvp.bans.category.%s" % category
+	return LocalizationManager.text(key) if LocalizationManager.has_key(
+		key,
+		LocalizationManager.DEFAULT_LOCALE
+	) else category.capitalize()
 
 func _on_pvp_banlist_category_toggled(category: String) -> void:
 	pvp_banlist_category_open[category] = not bool(pvp_banlist_category_open.get(category, true))
@@ -32054,7 +32282,7 @@ func _pvp_banlist_metadata_value(metadata: Dictionary, key: String, fallback: St
 func _pvp_banlist_updated_label(value: String) -> String:
 	var cleaned := value.strip_edges()
 	if cleaned == "":
-		return "Not updated"
+		return LocalizationManager.text("ui.pvp.bans.not_updated")
 	var without_zone := cleaned.trim_suffix("Z")
 	var dot_index := without_zone.find(".")
 	if dot_index >= 0:
@@ -32082,15 +32310,16 @@ func _on_pvp_leaderboard_refresh_pressed() -> void:
 	await _refresh_pvp_leaderboard()
 
 func _render_pvp_live_battles(entries: Array) -> void:
+	pvp_live_entries = entries.duplicate(true)
 	if pvp_live_list == null:
 		return
 	for child in pvp_live_list.get_children():
 		child.queue_free()
 	if pvp_live_status_label != null:
-		pvp_live_status_label.text = "Live ranked battles"
+		pvp_live_status_label.text = LocalizationManager.text("ui.pvp.live.title")
 	if entries.is_empty():
 		var empty_label := Label.new()
-		empty_label.text = "No live ranked battles."
+		empty_label.text = LocalizationManager.text("ui.pvp.live.empty")
 		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		pvp_live_list.add_child(empty_label)
 		return
@@ -32114,10 +32343,13 @@ func _refresh_pvp_leaderboard() -> void:
 		pvp_leaderboard_refresh_button.disabled = true
 	var scope_label := _pvp_leaderboard_scope_label(pvp_active_leaderboard_scope)
 	if pvp_leaderboard_status_label != null:
-		pvp_leaderboard_status_label.text = "Updating %s standings..." % scope_label.to_lower()
+		pvp_leaderboard_status_label.text = LocalizationManager.text(
+			"ui.pvp.leaderboard.updating",
+			{"period": scope_label.to_lower()}
+		)
 	_render_pvp_leaderboard_state(
-		"Updating leaderboard",
-		"Fetching the latest %s standings." % scope_label.to_lower()
+		LocalizationManager.text("ui.pvp.leaderboard.updating_title"),
+		LocalizationManager.text("ui.pvp.leaderboard.updating_detail", {"period": scope_label.to_lower()})
 	)
 	var request := _create_pvp_request_node()
 	var response: Dictionary = await BattleApiClient.get_pvp_leaderboard(request, 50, 0, pvp_active_format_key, pvp_active_leaderboard_scope)
@@ -32128,10 +32360,10 @@ func _refresh_pvp_leaderboard() -> void:
 
 	if not bool(response.get("success", false)):
 		if pvp_leaderboard_status_label != null:
-			pvp_leaderboard_status_label.text = "Could not load leaderboard."
+			pvp_leaderboard_status_label.text = LocalizationManager.text("ui.pvp.leaderboard.failed")
 		_render_pvp_leaderboard_state(
-			"Leaderboard unavailable",
-			"The standings could not be loaded. Try Refresh again.",
+			LocalizationManager.text("ui.pvp.leaderboard.unavailable"),
+			LocalizationManager.text("ui.pvp.leaderboard.unavailable_detail"),
 			UI_DANGER
 		)
 		return
@@ -32144,11 +32376,14 @@ func _refresh_pvp_leaderboard() -> void:
 		var points_policy: Dictionary = policy_value as Dictionary if policy_value is Dictionary else {}
 		var win_points := _pvp_history_variant_to_int(points_policy.get("win", 10))
 		var loss_points := _pvp_history_variant_to_int(points_policy.get("loss", -10))
-		pvp_leaderboard_status_label.text = "%s standings · Win %s · Loss %s" % [
-			scope_label,
-			_pvp_leaderboard_point_delta(win_points),
-			_pvp_leaderboard_point_delta(loss_points),
-		]
+		pvp_leaderboard_status_label.text = LocalizationManager.text(
+			"ui.pvp.leaderboard.status",
+			{
+				"period": scope_label,
+				"win": _pvp_leaderboard_point_delta(win_points),
+				"loss": _pvp_leaderboard_point_delta(loss_points),
+			}
+		)
 	_render_pvp_leaderboard(entries)
 
 func _pvp_leaderboard_scope_index(scope: String) -> int:
@@ -32162,8 +32397,11 @@ func _pvp_leaderboard_scope_label(scope: String) -> String:
 	var normalized_scope := scope.strip_edges()
 	for entry: Dictionary in PVP_LEADERBOARD_SCOPES:
 		if str(entry.get("id", "")).strip_edges() == normalized_scope:
-			return str(entry.get("label", "All Time"))
-	return "All Time"
+			return LocalizationManager.text(str(entry.get(
+				"label_key",
+				"ui.pvp.leaderboard.scope.all_time"
+			)))
+	return LocalizationManager.text("ui.pvp.leaderboard.scope.all_time")
 
 func _apply_pvp_leaderboard_scope_style(option: OptionButton) -> void:
 	var normal := _make_button_style(UI_SURFACE_INTERACTIVE, UI_BORDER_SUBTLE, 7, 1)
@@ -32185,12 +32423,16 @@ func _apply_pvp_leaderboard_scope_style(option: OptionButton) -> void:
 	option.add_theme_font_size_override("font_size", 13)
 
 func _render_pvp_leaderboard(entries: Array) -> void:
+	pvp_leaderboard_entries = entries.duplicate(true)
 	if pvp_leaderboard_list == null:
 		return
 	if entries.is_empty():
 		_render_pvp_leaderboard_state(
-			"No ranked results yet",
-			"Complete a ranked battle to appear in the %s standings." % _pvp_leaderboard_scope_label(pvp_active_leaderboard_scope)
+			LocalizationManager.text("ui.pvp.leaderboard.empty"),
+			LocalizationManager.text(
+				"ui.pvp.leaderboard.empty_detail",
+				{"period": _pvp_leaderboard_scope_label(pvp_active_leaderboard_scope)}
+			)
 		)
 		return
 	for child in pvp_leaderboard_list.get_children():
@@ -32226,7 +32468,7 @@ func _render_pvp_leaderboard_state(title_text: String, detail_text: String, acce
 	center.add_child(content)
 
 	var marker := Label.new()
-	marker.text = "LADDER"
+	marker.text = LocalizationManager.text("ui.pvp.leaderboard.marker")
 	marker.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	marker.add_theme_font_size_override("font_size", 9)
 	marker.add_theme_color_override("font_color", accent)
@@ -32259,14 +32501,17 @@ func _create_pvp_leaderboard_row(entry: Dictionary) -> Control:
 	panel.custom_minimum_size = Vector2(0, 56 if rank > 0 and rank <= 3 else 50)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.add_theme_stylebox_override("panel", _make_pvp_leaderboard_row_style(rank, is_current_player))
-	panel.tooltip_text = "%s\nRank #%d · %d points\n%d wins · %d losses · %d battles" % [
-		_pvp_leaderboard_display_name(entry),
-		rank,
-		points,
-		wins,
-		losses,
-		games_played,
-	]
+	panel.tooltip_text = LocalizationManager.text(
+		"ui.pvp.leaderboard.tooltip",
+		{
+			"player": _pvp_leaderboard_display_name(entry),
+			"rank": rank,
+			"points": points,
+			"wins": wins,
+			"losses": losses,
+			"battles": games_played,
+		}
+	)
 
 	var margin := MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 8)
@@ -32289,7 +32534,10 @@ func _create_pvp_leaderboard_row(entry: Dictionary) -> Control:
 		_pvp_leaderboard_points_color(points)
 	))
 	row.add_child(_create_pvp_leaderboard_value_label(
-		"%dW · %dL" % [wins, losses],
+		LocalizationManager.text(
+			"ui.pvp.leaderboard.record",
+			{"wins": wins, "losses": losses}
+		),
 		104,
 		HORIZONTAL_ALIGNMENT_RIGHT
 	))
@@ -32380,7 +32628,7 @@ func _create_pvp_leaderboard_player_cell(entry: Dictionary, games_played: int, i
 		you_badge.add_child(you_margin)
 
 		var you_label := Label.new()
-		you_label.text = "YOU"
+		you_label.text = LocalizationManager.text("ui.pvp.leaderboard.you")
 		you_label.add_theme_font_size_override("font_size", 9)
 		you_label.add_theme_color_override("font_color", Color("#8fe7ff"))
 		you_margin.add_child(you_label)
@@ -32390,7 +32638,11 @@ func _create_pvp_leaderboard_player_cell(entry: Dictionary, games_played: int, i
 	name_row.add_child(name_spacer)
 
 	var games_label := Label.new()
-	games_label.text = "%d %s" % [games_played, "battle" if games_played == 1 else "battles"]
+	games_label.text = LocalizationManager.plural(
+		"ui.pvp.leaderboard.battle.one",
+		"ui.pvp.leaderboard.battle.many",
+		games_played
+	)
 	games_label.add_theme_font_size_override("font_size", 10)
 	games_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	cell.add_child(games_label)
@@ -32419,6 +32671,8 @@ func _pvp_leaderboard_point_delta(points: int) -> String:
 
 func _create_pvp_leaderboard_header_label(text: String, width: float, alignment: HorizontalAlignment, expand: bool = false) -> Label:
 	var label := _create_pvp_leaderboard_value_label(text, width, alignment, UI_MUTED_TEXT, expand)
+	if LocalizationManager.has_key(text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(label, "text", text)
 	label.add_theme_font_size_override("font_size", 10)
 	return label
 
@@ -32445,7 +32699,7 @@ func _pvp_leaderboard_display_name(entry: Dictionary) -> String:
 	if display_name != "":
 		return display_name
 	var username := str(entry.get("username", "")).strip_edges()
-	return username if username != "" else "Player"
+	return username if username != "" else LocalizationManager.text("ui.pvp.player")
 
 func _pvp_leaderboard_win_rate(value: Variant) -> String:
 	if typeof(value) == TYPE_INT or typeof(value) == TYPE_FLOAT:
@@ -32462,7 +32716,7 @@ func _refresh_pvp_match_history() -> void:
 	if pvp_history_refresh_button != null:
 		pvp_history_refresh_button.disabled = true
 	if pvp_history_status_label != null:
-		pvp_history_status_label.text = "Loading recent matches..."
+		pvp_history_status_label.text = LocalizationManager.text("ui.pvp.history.loading")
 	var request := _create_pvp_request_node()
 	var response: Dictionary = await BattleApiClient.get_pvp_match_history(request, 20, 0, pvp_active_format_key)
 	request.queue_free()
@@ -32472,7 +32726,7 @@ func _refresh_pvp_match_history() -> void:
 
 	if not bool(response.get("success", false)):
 		if pvp_history_status_label != null:
-			pvp_history_status_label.text = "Could not load match history."
+			pvp_history_status_label.text = LocalizationManager.text("ui.pvp.history.failed")
 		_render_pvp_history_matches([], 0)
 		return
 
@@ -32480,10 +32734,12 @@ func _refresh_pvp_match_history() -> void:
 	var matches: Array = matches_value as Array if matches_value is Array else []
 	var user_id := _pvp_history_variant_to_user_id(response.get("userId", 0))
 	if pvp_history_status_label != null:
-		pvp_history_status_label.text = "Recent matches"
+		pvp_history_status_label.text = LocalizationManager.text("ui.pvp.history.recent")
 	_render_pvp_history_matches(matches, user_id)
 
 func _render_pvp_history_matches(matches: Array, user_id: int) -> void:
+	pvp_history_matches = matches.duplicate(true)
+	pvp_history_user_id = user_id
 	if pvp_history_list == null:
 		return
 	for child in pvp_history_list.get_children():
@@ -32491,7 +32747,7 @@ func _render_pvp_history_matches(matches: Array, user_id: int) -> void:
 
 	if matches.is_empty():
 		var empty_label := Label.new()
-		empty_label.text = "No PvP matches yet."
+		empty_label.text = LocalizationManager.text("ui.pvp.history.empty")
 		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		pvp_history_list.add_child(empty_label)
 		return
@@ -32536,14 +32792,14 @@ func _create_pvp_history_card(match: Dictionary, user_id: int) -> Control:
 	var opponent_label := Label.new()
 	opponent_label.text = _pvp_history_opponent_name(match, user_id)
 	if opponent_label.text == "":
-		opponent_label.text = "Opponent"
+		opponent_label.text = LocalizationManager.text("ui.pvp.history.opponent")
 	opponent_label.add_theme_color_override("font_color", UI_TEXT)
 	result_block.add_child(opponent_label)
 
 	var meta_label := Label.new()
 	meta_label.text = _pvp_history_mode_label(match)
 	if meta_label.text == "":
-		meta_label.text = "PvP"
+		meta_label.text = LocalizationManager.text("ui.pvp.title")
 	meta_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	result_block.add_child(meta_label)
 
@@ -32612,15 +32868,21 @@ func _create_pvp_history_card(match: Dictionary, user_id: int) -> Control:
 		time_block.add_child(battle_id_row)
 
 		var battle_id_label := Label.new()
-		battle_id_label.text = "ID: %s" % _pvp_history_short_battle_id(battle_id)
-		battle_id_label.tooltip_text = "Battle code: %s" % battle_id
+		battle_id_label.text = LocalizationManager.text(
+			"ui.pvp.history.battle_id",
+			{"id": _pvp_history_short_battle_id(battle_id)}
+		)
+		battle_id_label.tooltip_text = LocalizationManager.text(
+			"ui.pvp.history.battle_code",
+			{"code": battle_id}
+		)
 		battle_id_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		battle_id_label.add_theme_font_size_override("font_size", 11)
 		battle_id_row.add_child(battle_id_label)
 
 		var copy_battle_id_button := Button.new()
-		copy_battle_id_button.text = "Copy"
-		copy_battle_id_button.tooltip_text = "Copy the full battle code"
+		copy_battle_id_button.text = LocalizationManager.text("ui.pvp.room.copy")
+		copy_battle_id_button.tooltip_text = LocalizationManager.text("ui.pvp.history.copy_code")
 		copy_battle_id_button.custom_minimum_size = Vector2(62, 24)
 		copy_battle_id_button.focus_mode = Control.FOCUS_NONE
 		copy_battle_id_button.pressed.connect(
@@ -32649,7 +32911,7 @@ func _pvp_history_short_battle_id(battle_id: String) -> String:
 func _on_pvp_history_copy_battle_id_pressed(battle_id: String, button: Button) -> void:
 	DisplayServer.clipboard_set(battle_id)
 	if is_instance_valid(button):
-		button.text = "Copied"
+		button.text = LocalizationManager.text("ui.pvp.room.copied")
 
 func _create_pvp_history_team_strip(team: Array) -> Control:
 	var strip := HBoxContainer.new()
@@ -32658,7 +32920,7 @@ func _create_pvp_history_team_strip(team: Array) -> Control:
 	strip.alignment = BoxContainer.ALIGNMENT_CENTER
 	if team.is_empty():
 		var empty_label := Label.new()
-		empty_label.text = "Team unavailable"
+		empty_label.text = LocalizationManager.text("ui.pvp.history.team_unavailable")
 		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		strip.add_child(empty_label)
 		return strip
@@ -32727,7 +32989,7 @@ func _pvp_history_outcome_summary(match: Dictionary, user_id: int) -> String:
 	var parts: Array[String] = []
 	if reason != "":
 		parts.append(reason)
-	return " · ".join(parts) if not parts.is_empty() else str(match.get("status", "PvP match")).capitalize()
+	return " · ".join(parts) if not parts.is_empty() else LocalizationManager.text("ui.pvp.history.fallback_match")
 
 func _pvp_history_title(match: Dictionary, user_id: int) -> String:
 	var opponent_name := _pvp_history_opponent_name(match, user_id)
@@ -32756,15 +33018,21 @@ func _pvp_history_detail(match: Dictionary, user_id: int) -> String:
 	var reason := _pvp_history_reason_label(match)
 	var settled_at := _pvp_history_time_label(str(match.get("settledAt", match.get("endedAt", ""))).strip_edges())
 	var final_seq := _pvp_history_seq_label(match.get("finalEventSeq", null))
-	var result_text := "Result pending"
+	var result_text := LocalizationManager.text("ui.pvp.history.pending")
 	if user_id > 0 and winner_user_id == user_id and opponent_name != "":
-		result_text = "You defeated %s" % opponent_name
+		result_text = LocalizationManager.text("ui.pvp.history.you_defeated", {"opponent": opponent_name})
 	elif user_id > 0 and loser_user_id == user_id and opponent_name != "":
-		result_text = "You lost to %s" % opponent_name
+		result_text = LocalizationManager.text("ui.pvp.history.you_lost", {"opponent": opponent_name})
 	elif winner_name != "":
-		result_text = "%s defeated %s" % [winner_name, loser_name if loser_name != "" else "opponent"]
+		result_text = LocalizationManager.text("ui.pvp.history.player_defeated", {
+			"winner": winner_name,
+			"loser": loser_name if loser_name != "" else LocalizationManager.text("ui.pvp.history.opponent_lower"),
+		})
 	if reason != "":
-		result_text = "%s by %s" % [result_text, reason]
+		result_text = LocalizationManager.text(
+			"ui.pvp.history.by_reason",
+			{"result": result_text, "reason": reason}
+		)
 	if final_seq != "":
 		result_text = "%s · %s" % [result_text, final_seq]
 	if settled_at != "":
@@ -32775,17 +33043,17 @@ func _pvp_history_result_label(match: Dictionary, user_id: int) -> String:
 	var winner_user_id := _pvp_history_variant_to_user_id(match.get("winnerUserId", 0))
 	var loser_user_id := _pvp_history_variant_to_user_id(match.get("loserUserId", 0))
 	if user_id > 0 and winner_user_id == user_id:
-		return "Victory"
+		return LocalizationManager.text("ui.pvp.history.victory")
 	if user_id > 0 and loser_user_id == user_id:
-		return "Defeat"
+		return LocalizationManager.text("ui.pvp.history.defeat")
 	var status := str(match.get("status", "")).strip_edges()
-	return status.capitalize() if status != "" else "Pending"
+	return status.capitalize() if status != "" else LocalizationManager.text("ui.pvp.history.pending")
 
 func _pvp_history_result_color(result_label: String) -> Color:
 	var normalized := result_label.strip_edges().to_lower()
-	if normalized == "win" or normalized == "victory":
+	if normalized == "win" or normalized == "victory" or normalized == LocalizationManager.text("ui.pvp.history.victory").to_lower():
 		return Color("#65e38b")
-	if normalized == "loss" or normalized == "defeat":
+	if normalized == "loss" or normalized == "defeat" or normalized == LocalizationManager.text("ui.pvp.history.defeat").to_lower():
 		return Color("#ff7a7a")
 	return Color("#f5df9a")
 
@@ -32805,19 +33073,23 @@ func _pvp_history_mode_label(match: Dictionary) -> String:
 	var mode := str(match.get("mode", "")).strip_edges().to_lower()
 	if mode == "":
 		return ""
+	if mode == "ranked":
+		return LocalizationManager.text("ui.pvp.mode.ranked")
+	if mode == "casual" or mode == "custom":
+		return LocalizationManager.text("ui.pvp.mode.custom")
 	return mode.capitalize()
 
 func _pvp_history_reason_label(match: Dictionary) -> String:
 	var reason := str(match.get("reason", "")).strip_edges().to_lower()
 	match reason:
 		"battle_end":
-			return "Battle End"
+			return LocalizationManager.text("ui.pvp.history.battle_end")
 		"forfeit":
-			return "Forfeit"
+			return LocalizationManager.text("ui.pvp.history.forfeit")
 		"timeout":
-			return "Timeout"
+			return LocalizationManager.text("ui.pvp.history.timeout")
 		"disconnect":
-			return "Disconnect"
+			return LocalizationManager.text("ui.pvp.history.disconnect")
 		_:
 			return reason.replace("_", " ").capitalize() if reason != "" else ""
 
@@ -32825,7 +33097,7 @@ func _pvp_history_seq_label(value: Variant) -> String:
 	var text := str(value).strip_edges()
 	if text == "" or text.to_lower() == "<null>" or text.to_lower() == "null":
 		return ""
-	return "Event #%s" % text
+	return LocalizationManager.text("ui.pvp.history.event", {"number": text})
 
 func _pvp_history_time_label(value: String) -> String:
 	if value == "":
@@ -32859,9 +33131,9 @@ func _pvp_history_duration_label(value: Variant) -> String:
 	if seconds <= 0:
 		return ""
 	if seconds < 60:
-		return "%d sec" % seconds
+		return LocalizationManager.text("ui.pvp.history.seconds", {"count": seconds})
 	var minutes := int(ceil(float(seconds) / 60.0))
-	return "%d min" % minutes
+	return LocalizationManager.text("ui.pvp.history.minutes", {"count": minutes})
 
 func _pvp_history_participant_name(match: Dictionary, user_id: int) -> String:
 	if user_id <= 0:
@@ -32899,7 +33171,8 @@ func _leave_pvp_queue(queue_id: String, show_status: bool = true) -> bool:
 		return false
 	pvp_queue_leave_in_flight = true
 	if show_status:
-		_set_pvp_room_busy(true, "Leaving queue...")
+		_set_pvp_room_busy(true)
+		_set_pvp_queue_status_key("ui.pvp.queue.leaving")
 	var request := _create_pvp_request_node()
 	var response: Dictionary = await BattleApiClient.leave_pvp_queue(request, normalized_queue_id)
 	request.queue_free()
@@ -32909,7 +33182,8 @@ func _leave_pvp_queue(queue_id: String, show_status: bool = true) -> bool:
 
 	if not bool(response.get("success", false)):
 		if show_status:
-			_set_pvp_queue_status("Queue Status: leave failed: %s" % str(response.get("error", "Unknown error")))
+			_set_pvp_queue_status_key("ui.pvp.queue.leave_failed")
+			push_warning("UIOverlay: PVP queue leave failed: %s" % str(response.get("error", "Unknown error")))
 		return false
 
 	if pvp_active_queue_id == normalized_queue_id:
@@ -32923,7 +33197,7 @@ func _leave_pvp_queue(queue_id: String, show_status: bool = true) -> bool:
 		if pvp_poll_timer != null:
 			pvp_poll_timer.stop()
 		if show_status:
-			_set_pvp_queue_status("Queue Status: left queue.")
+			_set_pvp_queue_status_key("ui.pvp.queue.left")
 		_refresh_pvp_queue_buttons("idle")
 		_refresh_pvp_queue_compact_panel(0.0)
 	return true
@@ -32941,13 +33215,12 @@ func _open_pvp_queue_match(auto_open: bool) -> void:
 	if auto_open and pvp_queue_auto_open_in_flight:
 		return
 	if pvp_active_queue_match_id == "":
-		_set_pvp_queue_status("Queue Status: no matched battle yet.")
+		_set_pvp_queue_status_key("ui.pvp.queue.no_match")
 		return
 
 	pvp_queue_auto_open_in_flight = auto_open
-	var busy_message := "Starting matched battle..." if auto_open else "Opening queue battle..."
-	_set_pvp_room_busy(true, busy_message)
-	_set_pvp_queue_status("Queue Status: starting matched battle..." if auto_open else "Queue Status: opening battle...")
+	_set_pvp_room_busy(true)
+	_set_pvp_queue_status_key("ui.pvp.queue.starting" if auto_open else "ui.pvp.queue.opening")
 	var request := _create_pvp_request_node()
 	var response: Dictionary = await BattleApiClient.start_pvp_match_battle(request, pvp_active_queue_match_id)
 	request.queue_free()
@@ -32959,7 +33232,8 @@ func _open_pvp_queue_match(auto_open: bool) -> void:
 			return
 		await _cancel_ranked_battle_entry_transition()
 		_clear_pvp_match_countdown(true)
-		_set_pvp_queue_status("Queue Status: could not start battle: %s" % str(response.get("error", "Unknown error")))
+		_set_pvp_queue_status_key("ui.pvp.queue.start_failed")
+		push_warning("UIOverlay: PVP matched battle start failed: %s" % str(response.get("error", "Unknown error")))
 		_refresh_pvp_queue_buttons("matched")
 		return
 
@@ -32993,7 +33267,10 @@ func _begin_pvp_match_countdown(match_id: String, starts_at: String = "") -> voi
 	_position_pvp_match_countdown_overlay()
 	_play_pvp_match_countdown_flash()
 	_update_pvp_match_countdown_text()
-	_set_pvp_queue_status("Queue Status: match found. Starting in %ds..." % int(ceil(pvp_match_countdown_remaining)))
+	_set_pvp_queue_status_key(
+		"ui.pvp.queue.match_countdown",
+		{"seconds": int(ceil(pvp_match_countdown_remaining))}
+	)
 	_refresh_pvp_queue_buttons("matched")
 	_refresh_pvp_queue_compact_panel(0.0)
 
@@ -33032,10 +33309,16 @@ func _refresh_pvp_match_countdown(delta: float) -> void:
 func _update_pvp_match_countdown_text() -> void:
 	var remaining_seconds: int = maxi(0, int(ceil(pvp_match_countdown_remaining)))
 	if pvp_match_countdown_timer_label != null:
-		pvp_match_countdown_timer_label.text = "%ds" % remaining_seconds
+		pvp_match_countdown_timer_label.text = LocalizationManager.text(
+			"ui.pvp.countdown.timer",
+			{"seconds": remaining_seconds}
+		)
 	if pvp_match_countdown_status_label != null:
-		pvp_match_countdown_status_label.text = "Finish your action now. PvP starts in %d seconds." % remaining_seconds
-	_set_pvp_queue_status("Queue Status: match found. Starting in %ds..." % remaining_seconds)
+		pvp_match_countdown_status_label.text = LocalizationManager.text(
+			"ui.pvp.countdown.seconds",
+			{"seconds": remaining_seconds}
+		)
+	_set_pvp_queue_status_key("ui.pvp.queue.match_countdown", {"seconds": remaining_seconds})
 
 func _finish_pvp_match_countdown() -> void:
 	if not pvp_match_countdown_active:
@@ -33083,25 +33366,25 @@ func _on_pvp_reconnect_battle_pressed() -> void:
 	if pvp_battle_starting:
 		return
 
-	_set_pvp_room_busy(true, "Checking active battle...")
-	_set_pvp_queue_status("Queue Status: checking active battle...")
+	_set_pvp_room_busy(true)
+	_set_pvp_queue_status_key("ui.pvp.queue.checking_active")
 	var active_request := _create_pvp_request_node()
 	var active_response: Dictionary = await BattleApiClient.get_active_pvp_match(active_request)
 	active_request.queue_free()
 
 	if not bool(active_response.get("success", false)):
 		_set_pvp_room_busy(false)
-		_set_pvp_queue_status("Queue Status: no active battle found.")
+		_set_pvp_queue_status_key("ui.pvp.queue.no_active")
 		return
 
 	var match_id := str(active_response.get("matchId", "")).strip_edges()
 	if match_id == "":
 		_set_pvp_room_busy(false)
-		_set_pvp_queue_status("Queue Status: active battle has no match id.")
+		_set_pvp_queue_status_key("ui.pvp.queue.no_match_id")
 		return
 
 	pvp_active_queue_match_id = match_id
-	_set_pvp_queue_status("Queue Status: reconnecting...")
+	_set_pvp_queue_status_key("ui.pvp.queue.reconnecting")
 	var start_request := _create_pvp_request_node()
 	var start_response: Dictionary = await BattleApiClient.start_pvp_match_battle(start_request, match_id)
 	start_request.queue_free()
@@ -33110,7 +33393,8 @@ func _on_pvp_reconnect_battle_pressed() -> void:
 	if not bool(start_response.get("success", false)):
 		if await _recover_already_bound_pvp_queue_match(start_response):
 			return
-		_set_pvp_queue_status("Queue Status: reconnect failed: %s" % str(start_response.get("error", "Unknown error")))
+		_set_pvp_queue_status_key("ui.pvp.queue.reconnect_failed")
+		push_warning("UIOverlay: PVP reconnect failed: %s" % str(start_response.get("error", "Unknown error")))
 		return
 
 	if str(start_response.get("roomCode", "")).strip_edges() == "":
@@ -33121,7 +33405,7 @@ func _recover_already_bound_pvp_queue_match(error_response: Dictionary) -> bool:
 	var error_text := str(error_response.get("error", error_response.get("detail", ""))).strip_edges().to_lower()
 	if not error_text.contains("already bound"):
 		return false
-	_set_pvp_queue_status("Queue Status: matched battle already exists. Reconnecting...")
+	_set_pvp_queue_status_key("ui.pvp.queue.already_exists")
 	var active_request := _create_pvp_request_node()
 	var active_response: Dictionary = await BattleApiClient.get_active_pvp_match(active_request)
 	active_request.queue_free()
@@ -33171,7 +33455,7 @@ func _on_pvp_copy_code_pressed() -> void:
 	if pvp_active_room_code == "":
 		return
 	DisplayServer.clipboard_set(pvp_active_room_code)
-	_set_pvp_status("Room code copied.")
+	_set_pvp_status_key("ui.pvp.room.code_copied")
 
 func _on_pvp_poll_timeout() -> void:
 	if pvp_queue_polling_active:
@@ -33211,10 +33495,12 @@ func _refresh_pvp_queue_compact_panel(delta: float = 0.0) -> void:
 	_position_pvp_queue_compact_panel()
 	var has_match := pvp_active_queue_match_id.strip_edges() != ""
 	if pvp_queue_compact_status_label != null:
-		pvp_queue_compact_status_label.text = "Match found" if has_match else "Ranked Queue"
+		pvp_queue_compact_status_label.text = LocalizationManager.text(
+			"ui.pvp.queue.match_found" if has_match else "ui.pvp.queue.compact_title"
+		)
 	if pvp_queue_compact_time_label != null:
 		var elapsed_seconds := _pvp_queue_elapsed_seconds()
-		pvp_queue_compact_time_label.text = "Ready" if has_match else _format_pvp_queue_elapsed(elapsed_seconds)
+		pvp_queue_compact_time_label.text = LocalizationManager.text("ui.pvp.queue.ready_short") if has_match else _format_pvp_queue_elapsed(elapsed_seconds)
 	if pvp_queue_compact_spinner_label != null:
 		pvp_queue_compact_spinner_label.text = spinner_text
 	if pvp_queue_compact_open_button != null:
@@ -33251,9 +33537,12 @@ func _refresh_pvp_button_tooltip() -> void:
 		return
 	var queue_label := PVP_RANKED_DEFAULT_FORMAT_NAME
 	if pvp_ranked_queue_has_waiting_player:
-		pvp_button.tooltip_text = "PvP Battles (%s) · Player waiting" % queue_label
+		pvp_button.tooltip_text = LocalizationManager.text(
+			"ui.pvp.queue.player_waiting",
+			{"format": queue_label}
+		)
 		return
-	pvp_button.tooltip_text = "PvP Battles"
+	pvp_button.tooltip_text = LocalizationManager.text("ui.pvp.title")
 
 
 func _refresh_pvp_queue_button_animation(delta: float) -> void:
@@ -33335,7 +33624,8 @@ func _poll_pvp_queue_status() -> void:
 	pvp_queue_poll_in_flight = false
 
 	if not bool(response.get("success", false)):
-		_set_pvp_queue_status("Queue Status: check failed: %s" % str(response.get("error", "Unknown error")))
+		_set_pvp_queue_status_key("ui.pvp.queue.check_failed")
+		push_warning("UIOverlay: PVP queue status check failed: %s" % str(response.get("error", "Unknown error")))
 		return
 
 	var entry: Dictionary = _latest_relevant_pvp_queue_entry(response)
@@ -33349,7 +33639,7 @@ func _poll_pvp_queue_status() -> void:
 		pvp_active_queue_starts_at = ""
 		pvp_queue_compact_minimized = false
 		pvp_queue_wait_started_msec = 0
-		_set_pvp_queue_status("Queue Status: idle")
+		_set_pvp_queue_status_key("ui.pvp.queue.ready")
 		_refresh_pvp_queue_buttons("idle")
 		_refresh_pvp_queue_compact_panel(0.0)
 		return
@@ -33407,11 +33697,14 @@ func _update_pvp_queue_state_from_entry(entry: Dictionary) -> void:
 		pvp_queue_polling_active = false
 		if pvp_poll_timer != null:
 			pvp_poll_timer.stop()
-		_set_pvp_queue_status("Queue Status: match found.")
+		_set_pvp_queue_status_key("ui.pvp.queue.match_found")
 	elif status == "waiting":
-		_set_pvp_queue_status("Queue Status: searching for opponent...")
+		_set_pvp_queue_status_key("ui.pvp.queue.searching")
 	else:
-		_set_pvp_queue_status("Queue Status: %s" % (status if status != "" else "unknown"))
+		_set_pvp_queue_status_key(
+			"ui.pvp.queue.status_unknown",
+			{"status": status if status != "" else LocalizationManager.text("ui.pvp.validation.unknown")}
+		)
 	_refresh_pvp_queue_buttons(status)
 	_refresh_pvp_queue_compact_panel(0.0)
 
@@ -33428,25 +33721,25 @@ func _refresh_pvp_queue_buttons(status: String) -> void:
 		PvpRankedTeamValidation.STATE_CHECKING,
 	]
 	var has_visible_validation_issues := (
-		pvp_team_validator_status_label != null
-		and pvp_team_validator_status_label.text.begins_with("Team not allowed")
+		str(pvp_ranked_team_validation_result.get("state", "")).strip_edges()
+		== PvpRankedTeamValidation.STATE_INVALID
 	)
 	pvp_join_queue_button.visible = not is_waiting and not has_match
 	pvp_leave_queue_button.visible = is_waiting and not has_match
 	pvp_join_queue_button.disabled = pvp_battle_starting or is_waiting or has_match or ranked_blocked
 	pvp_leave_queue_button.disabled = pvp_battle_starting or not is_waiting
 	if ranked_blocked and has_visible_validation_issues:
-		pvp_join_queue_button.text = "Team Not Ready"
-		pvp_join_queue_button.tooltip_text = "Fix the team issues shown above before finding a match"
+		pvp_join_queue_button.text = LocalizationManager.text("ui.pvp.queue.team_not_ready")
+		pvp_join_queue_button.tooltip_text = LocalizationManager.text("ui.pvp.queue.fix_team")
 	elif validation_pending:
-		pvp_join_queue_button.text = "Checking Team..."
-		pvp_join_queue_button.tooltip_text = "Checking whether your team can enter ranked battles..."
+		pvp_join_queue_button.text = LocalizationManager.text("ui.pvp.queue.checking_team")
+		pvp_join_queue_button.tooltip_text = LocalizationManager.text("ui.pvp.queue.checking_team_tooltip")
 	elif ranked_blocked:
-		pvp_join_queue_button.text = "Team Not Ready"
-		pvp_join_queue_button.tooltip_text = "Your team is not ready for ranked battles yet"
+		pvp_join_queue_button.text = LocalizationManager.text("ui.pvp.queue.team_not_ready")
+		pvp_join_queue_button.tooltip_text = LocalizationManager.text("ui.pvp.queue.team_not_ready_tooltip")
 	else:
-		pvp_join_queue_button.text = "Find Match"
-		pvp_join_queue_button.tooltip_text = "Search for a ranked opponent"
+		pvp_join_queue_button.text = LocalizationManager.text("ui.pvp.queue.find")
+		pvp_join_queue_button.tooltip_text = LocalizationManager.text("ui.pvp.queue.find_tooltip")
 	if pvp_queue_select != null:
 		pvp_queue_select.disabled = pvp_battle_starting or is_waiting or has_match
 	if pvp_mode_select != null:
@@ -33465,12 +33758,13 @@ func _poll_pvp_room() -> void:
 	pvp_poll_in_flight = false
 
 	if not bool(response.get("success", false)):
-		_set_pvp_status("Room check failed: %s" % str(response.get("error", "Unknown error")))
+		_set_pvp_status_key("ui.pvp.room.check_failed")
+		push_warning("UIOverlay: PVP room check failed: %s" % str(response.get("error", "Unknown error")))
 		return
 
 	var status := str(response.get("status", "waiting"))
 	if status != "started":
-		_set_pvp_status("Waiting for another player...")
+		_set_pvp_status_key("ui.pvp.room.waiting")
 		return
 
 	await _start_pvp_battle_from_response(response)
@@ -33492,7 +33786,8 @@ func _request_pvp_room_poll() -> void:
 	)
 	if error != OK:
 		pvp_poll_in_flight = false
-		_set_pvp_status("Room check failed to start: %s" % error_string(error))
+		_set_pvp_status_key("ui.pvp.room.check_failed")
+		push_warning("UIOverlay: PVP room check request failed to start: %s" % error_string(error))
 
 func _on_pvp_room_poll_completed(
 	result: int,
@@ -33505,25 +33800,28 @@ func _on_pvp_room_poll_completed(
 		return
 
 	if result != HTTPRequest.RESULT_SUCCESS:
-		_set_pvp_status("Room check failed: %s" % result)
+		_set_pvp_status_key("ui.pvp.room.check_failed")
+		push_warning("UIOverlay: PVP room poll transport failed: %s" % result)
 		return
 
 	var parsed: Variant = JSON.parse_string(body.get_string_from_utf8())
 	if not (parsed is Dictionary):
-		_set_pvp_status("Room check failed: invalid response (%s)." % response_code)
+		_set_pvp_status_key("ui.pvp.room.check_failed")
+		push_warning("UIOverlay: PVP room poll returned invalid response (%s)." % response_code)
 		return
 
 	var response: Dictionary = parsed as Dictionary
 	if not bool(response.get("success", false)):
-		_set_pvp_status("Room check failed: %s" % str(response.get("error", response.get("detail", "Unknown error"))))
+		_set_pvp_status_key("ui.pvp.room.check_failed")
+		push_warning("UIOverlay: PVP room poll failed: %s" % str(response.get("error", response.get("detail", "Unknown error"))))
 		return
 
 	var status := str(response.get("status", "waiting"))
 	if status != "started":
-		_set_pvp_status("Waiting for another player...")
+		_set_pvp_status_key("ui.pvp.room.waiting")
 		return
 
-	_set_pvp_status("Opponent joined. Starting battle...")
+	_set_pvp_status_key("ui.pvp.room.opponent_joined")
 	await _start_pvp_battle_from_response(response)
 
 func _start_pvp_battle_from_response(response: Dictionary) -> void:
@@ -33532,12 +33830,12 @@ func _start_pvp_battle_from_response(response: Dictionary) -> void:
 	pvp_battle_starting = true
 	if pvp_poll_timer != null:
 		pvp_poll_timer.stop()
-	_set_pvp_status("Starting battle...")
+	_set_pvp_status_key("ui.pvp.battle.starting")
 
 	var world := get_tree().get_first_node_in_group("world")
 	if world == null or not world.has_method("start_pvp_battle_from_response"):
 		await _cancel_ranked_battle_entry_transition()
-		_set_pvp_status("Could not start PvP battle from this scene.")
+		_set_pvp_status_key("ui.pvp.battle.scene_unavailable")
 		pvp_battle_starting = false
 		return
 
@@ -33551,7 +33849,7 @@ func _start_pvp_battle_from_response(response: Dictionary) -> void:
 		if popup_was_visible and pvp_room_popup != null:
 			pvp_room_popup.visible = true
 			_activate_ui_panel(pvp_room_popup)
-		_set_pvp_status("Could not start PvP battle.")
+		_set_pvp_status_key("ui.pvp.battle.start_failed")
 		_clear_pvp_match_countdown(true)
 		pvp_battle_starting = false
 		return
@@ -33568,14 +33866,14 @@ func _start_pvp_battle_from_response(response: Dictionary) -> void:
 	pvp_queue_auto_open_in_flight = false
 	pvp_polling_active = false
 	pvp_poll_elapsed = 0.0
-	pvp_room_code_label.text = "ROOM CODE  ·  -"
+	pvp_room_code_label.text = LocalizationManager.text("ui.pvp.room.code", {"code": "-"})
 	pvp_copy_code_button.disabled = true
 	if pvp_room_mode_selector != null:
 		pvp_room_mode_selector.visible = true
 	if pvp_room_form != null:
 		pvp_room_form.visible = false
 	pvp_room_selected_mode = ""
-	_set_pvp_queue_status("Queue Status: idle")
+	_set_pvp_queue_status_key("ui.pvp.queue.ready")
 	_refresh_pvp_queue_buttons("idle")
 	_refresh_pvp_queue_compact_panel(0.0)
 	pvp_battle_starting = false
@@ -33585,7 +33883,7 @@ func _create_pvp_request_node() -> HTTPRequest:
 	add_child(request)
 	return request
 
-func _set_pvp_room_busy(is_busy: bool, message: String = "") -> void:
+func _set_pvp_room_busy(is_busy: bool) -> void:
 	pvp_create_room_button.disabled = is_busy
 	if pvp_room_create_mode_button != null:
 		pvp_room_create_mode_button.disabled = is_busy
@@ -33613,26 +33911,20 @@ func _set_pvp_room_busy(is_busy: bool, message: String = "") -> void:
 		pvp_team_source_select.disabled = is_busy
 	if pvp_reconnect_battle_button != null:
 		pvp_reconnect_battle_button.disabled = is_busy
-	if message != "":
-		_set_pvp_status(message)
 
-func _set_pvp_status(message: String) -> void:
+
+func _set_pvp_status_key(key: String, values: Dictionary = {}) -> void:
+	pvp_room_status_translation_key = key
+	pvp_room_status_translation_values = values.duplicate(true)
 	if pvp_room_status_label != null:
-		pvp_room_status_label.text = message
+		pvp_room_status_label.text = LocalizationManager.text(key, values)
 
-func _set_pvp_queue_status(message: String) -> void:
+func _set_pvp_queue_status_key(key: String, values: Dictionary = {}) -> void:
+	pvp_queue_status_translation_key = key
+	pvp_queue_status_translation_values = values.duplicate(true)
 	if pvp_queue_status_label != null:
-		var display_message := message.strip_edges()
-		if display_message.begins_with("Queue Status:"):
-			display_message = display_message.trim_prefix("Queue Status:").strip_edges()
-		match display_message.to_lower():
-			"idle":
-				display_message = "Ready to search."
-			"searching for opponent...":
-				display_message = "Searching for an opponent..."
-			"match found.":
-				display_message = "Match found."
-		pvp_queue_status_label.text = display_message
+		pvp_queue_status_label.text = LocalizationManager.text(key, values)
+
 
 func _on_map_button_pressed() -> void:
 	_add_chat_message("Town Map is not implemented yet.")
