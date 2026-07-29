@@ -242,8 +242,8 @@ static func _normalize_encounter_type(encounter_type: String) -> String:
 	var normalized_type := encounter_type.strip_edges().to_lower()
 	if normalized_type == "":
 		return DEFAULT_ENCOUNTER_TYPE
-	if normalized_type == "fishing":
-		return "fish"
+	if normalized_type == "fishing" or normalized_type == "fish":
+		return "old_rod"
 	return normalized_type
 
 

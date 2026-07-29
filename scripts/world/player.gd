@@ -149,6 +149,11 @@ const SAND_FOOTPRINT_LAYER_OFFSETS := {
 const ENCOUNTER_TYPE_GRASS := "grass"
 const ENCOUNTER_TYPE_SURF := "surf"
 const ENCOUNTER_TYPE_FISH := "fish"
+const FISHING_ENCOUNTER_TYPES := {
+	1: "old_rod",
+	2: "good_rod",
+	3: "super_rod",
+}
 const FISHING_STATE_NONE := "none"
 const FISHING_STATE_CAST := "cast"
 const FISHING_STATE_WAITING := "waiting"
@@ -1333,6 +1338,7 @@ func _finish_fishing_activity() -> void:
 
 	var should_check_fishing_encounter := fishing_activity_state == FISHING_STATE_REEL_SUCCESS
 	var fishing_encounter_position := _get_facing_tile_position()
+	var fishing_encounter_type := _fishing_encounter_type_for_tier(fishing_activity_tier)
 
 	fishing_activity_active = false
 	fishing_activity_time_left = 0.0
@@ -1343,7 +1349,10 @@ func _finish_fishing_activity() -> void:
 	GameState.unlock_overworld_input()
 
 	if should_check_fishing_encounter:
-		check_for_wild_encounter(ENCOUNTER_TYPE_FISH, fishing_encounter_position)
+		check_for_wild_encounter(fishing_encounter_type, fishing_encounter_position)
+
+func _fishing_encounter_type_for_tier(fishing_tier: int) -> String:
+	return str(FISHING_ENCOUNTER_TYPES.get(clampi(fishing_tier, 1, 3), "old_rod"))
 
 func _is_facing_water_tile() -> bool:
 	return last_direction != Vector2.ZERO and _is_water_tile_at(_get_facing_tile_position())
@@ -1861,7 +1870,13 @@ func check_for_wild_encounter(encounter_type: String, check_position: Vector2 = 
 
 func _does_repel_block_encounter(encounter_type: String) -> bool:
 	var normalized_type := encounter_type.strip_edges().to_lower()
-	return normalized_type != ENCOUNTER_TYPE_FISH and normalized_type != "fishing"
+	return normalized_type not in [
+		ENCOUNTER_TYPE_FISH,
+		"fishing",
+		"old_rod",
+		"good_rod",
+		"super_rod",
+	]
 
 func _is_ui_typing() -> bool:
 	if _is_text_input_control(get_viewport().gui_get_focus_owner()):

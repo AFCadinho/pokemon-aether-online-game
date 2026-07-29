@@ -15,6 +15,7 @@ const DEV_CLEAR_ITEMS_ENDPOINT := "/game/dev/inventory/items"
 const ITEM_SEARCH_ENDPOINT := "/game/items/search?q=%s"
 const DEV_ITEM_SEARCH_ENDPOINT := "/game/dev/items/search?q=%s"
 const REQUEST_TIMEOUT_SECONDS := 8.0
+const FishingRodRulesScript := preload("res://scripts/services/fishing_rod_rules.gd")
 
 
 func load_inventory() -> Dictionary:
@@ -32,12 +33,15 @@ func load_inventory() -> Dictionary:
 		""
 	)
 	if not bool(response.get("success", false)):
+		_set_fishing_access_from_items([])
 		return response
 
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	var items := _array_from_value(body.get("items", []))
+	_set_fishing_access_from_items(items)
 	return {
 		"success": true,
-		"items": _array_from_value(body.get("items", [])),
+		"items": items,
 	}
 
 
@@ -274,9 +278,11 @@ func dev_add_item(item_id: String, quantity: int) -> Dictionary:
 		return response
 
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	var items := _array_from_value(body.get("items", []))
+	_set_fishing_access_from_items(items)
 	return {
 		"success": true,
-		"items": _array_from_value(body.get("items", [])),
+		"items": items,
 	}
 
 
@@ -329,10 +335,18 @@ func dev_clear_inventory() -> Dictionary:
 		return response
 
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	var items := _array_from_value(body.get("items", []))
+	_set_fishing_access_from_items(items)
 	return {
 		"success": true,
-		"items": _array_from_value(body.get("items", [])),
+		"items": items,
 	}
+
+
+func _set_fishing_access_from_items(items: Array) -> void:
+	var tier := FishingRodRulesScript.resolve_tier(items)
+	GameState.fishing_tier = tier
+	GameState.fishing_unlocked = tier > 0
 
 
 func _request_json(url: String, method: HTTPClient.Method, headers: PackedStringArray, body: String) -> Dictionary:

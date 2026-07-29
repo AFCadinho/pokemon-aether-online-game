@@ -8,7 +8,9 @@ extends Node2D
 @export var region_id := "kanto"
 @export var encounter_area_id := "kanto_pallet_town"
 @export_range(0.0, 1.0, 0.01) var surf_encounter_chance := 0.1
-@export_range(0.0, 1.0, 0.01) var fish_encounter_chance := 1.0
+@export_range(0.0, 1.0, 0.01) var old_rod_encounter_chance := 1.0
+@export_range(0.0, 1.0, 0.01) var good_rod_encounter_chance := 1.0
+@export_range(0.0, 1.0, 0.01) var super_rod_encounter_chance := 1.0
 @export_file("*.ogg") var music_track_path := "res://assets/music/overworld/kanto/towns/pallet_town.ogg"
 
 const TILE_SIZE := 32.0
@@ -77,7 +79,13 @@ func get_wild_encounter_chance(encounter_type: String = "grass") -> float:
 		"surf":
 			return surf_encounter_chance
 		"fish", "fishing":
-			return fish_encounter_chance
+			return old_rod_encounter_chance
+		"old_rod":
+			return old_rod_encounter_chance
+		"good_rod":
+			return good_rod_encounter_chance
+		"super_rod":
+			return super_rod_encounter_chance
 		_:
 			return 0.0
 
@@ -117,8 +125,9 @@ func _load_encounter_area_metadata() -> void:
 	var metadata: Dictionary = response.get("metadata", {})
 	var encounter_types: Dictionary = metadata.get("encounterTypes", {})
 	surf_encounter_chance = _metadata_encounter_chance(encounter_types, "surf", surf_encounter_chance)
-	fish_encounter_chance = _metadata_encounter_chance(encounter_types, "fish", fish_encounter_chance)
-	fish_encounter_chance = _metadata_encounter_chance(encounter_types, "fishing", fish_encounter_chance)
+	old_rod_encounter_chance = _metadata_encounter_chance(encounter_types, "old_rod", old_rod_encounter_chance)
+	good_rod_encounter_chance = _metadata_encounter_chance(encounter_types, "good_rod", good_rod_encounter_chance)
+	super_rod_encounter_chance = _metadata_encounter_chance(encounter_types, "super_rod", super_rod_encounter_chance)
 
 
 func _metadata_encounter_chance(encounter_types: Dictionary, encounter_type: String, fallback: float) -> float:

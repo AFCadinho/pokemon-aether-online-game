@@ -96,10 +96,19 @@ func _ready() -> void:
 	_ensure_map_transition_overlay()
 	_ensure_remote_players_container()
 	_connect_world_presence_signals()
+	await _load_fishing_access()
 	await _setup_initial_world_state()
 	_normalize_map_depth_layer_z_indices(GameState.current_map)
 	if GameState.gameplay_reset_in_progress:
 		GameState.finish_gameplay_reset()
+
+
+func _load_fishing_access() -> void:
+	var inventory_result: Dictionary = await InventoryService.load_inventory()
+	if not bool(inventory_result.get("success", false)):
+		push_warning("World: fishing inventory load failed: %s" % str(
+			inventory_result.get("error", "Unknown error")
+		))
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -1940,7 +1949,7 @@ func start_triggered_wild_battle_for_area(area_id: String, encounter_type: Strin
 		push_warning("World.start_triggered_wild_battle_for_area failed: %s" % str(response.get("error", "Unknown error")))
 		await _cancel_wild_encounter_transition()
 		_abort_battle_start()
-		await GameErrorDialogService.show_report_to_staff_message()
+		await _show_wild_encounter_start_error(response)
 		return
 	active_battle_id = str(response.get("battleId", ""))
 	_save_player_activity_state_deferred("battle", _get_current_activity_context())
@@ -1983,6 +1992,20 @@ func start_triggered_wild_battle_for_area(area_id: String, encounter_type: Strin
 		PlayerSave.party[0],
 		response
 	)
+
+
+func _show_wild_encounter_start_error(response: Dictionary) -> void:
+	var error_code := WildEncounterErrorRules.error_code(response)
+	var message_lines := WildEncounterErrorRules.message_lines(response)
+	match error_code:
+		"fishing_rod_not_owned":
+			await GameErrorDialogService.show_message(message_lines)
+			await _load_fishing_access()
+		_:
+			if not message_lines.is_empty():
+				await GameErrorDialogService.show_message(message_lines)
+			else:
+				await GameErrorDialogService.show_report_to_staff_message()
 
 func start_trainer_battle(trainer_data: Dictionary) -> bool:
 	if is_in_battle:

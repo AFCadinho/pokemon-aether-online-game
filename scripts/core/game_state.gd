@@ -15,8 +15,8 @@ var repel_enabled := false
 var show_follower := true
 var running_shoes_enabled := false
 var selected_role_badge := ""
-var fishing_unlocked := true
-var fishing_tier := 1
+var fishing_unlocked := false
+var fishing_tier := 0
 var surf_unlocked := true
 var gameplay_reset_in_progress := false
 
@@ -38,8 +38,8 @@ func reset_gameplay_runtime_state() -> void:
 	show_follower = true
 	running_shoes_enabled = false
 	selected_role_badge = ""
-	fishing_unlocked = true
-	fishing_tier = 1
+	fishing_unlocked = false
+	fishing_tier = 0
 	surf_unlocked = true
 
 func finish_gameplay_reset() -> void:

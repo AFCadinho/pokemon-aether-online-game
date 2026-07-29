@@ -23,9 +23,11 @@ func _init() -> void:
 	_check_equal(str(surf_encounter.get("area_id", "")), "kanto_pallet_town", "Pallet Town surf area")
 	_check_equal(str(surf_encounter.get("encounter_type", "")), "surf", "Pallet Town surf type")
 
-	var fish_encounter := MapEncounterProvider.resolve_wild_encounter(pallet_town, Vector2(320.0, 896.0), "fishing")
-	_check_true(bool(fish_encounter.get("available", false)), "Pallet Town fishing encounter resolves")
-	_check_equal(str(fish_encounter.get("encounter_type", "")), "fish", "Pallet Town fishing alias")
+	var old_rod_encounter := MapEncounterProvider.resolve_wild_encounter(pallet_town, Vector2(320.0, 896.0), "fishing")
+	_check_true(bool(old_rod_encounter.get("available", false)), "Pallet Town fishing encounter resolves")
+	_check_equal(str(old_rod_encounter.get("encounter_type", "")), "old_rod", "Pallet Town fishing alias")
+	_check_float_approx(float(pallet_town.call("get_wild_encounter_chance", "good_rod")), 1.0, "Pallet Town Good Rod chance")
+	_check_float_approx(float(pallet_town.call("get_wild_encounter_chance", "super_rod")), 1.0, "Pallet Town Super Rod chance")
 
 	pallet_town.free()
 	quit(1 if failed else 0)

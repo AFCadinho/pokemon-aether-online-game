@@ -57,6 +57,8 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/pvp_spectator_terminal_check.gd",
 	"res://tests/pvp_battle_history_reference_check.gd",
 	"res://tests/map_encounter_provider_check.gd",
+	"res://tests/fishing_inventory_check.gd",
+	"res://tests/wild_encounter_error_rules_check.gd",
 	"res://tests/wild_encounter_transition_check.gd",
 	"res://tests/pallet_town_encounter_check.gd",
 	"res://tests/route_2_viridian_forest_encounter_check.gd",

@@ -63,8 +63,8 @@ func _check_fishing_alias() -> void:
 	regions.add_child(_make_region("fishing_a", Rect2(0.0, 0.0, 32.0, 32.0), "test_fish", "fish", 1.0))
 
 	var encounter := MapEncounterProvider.resolve_wild_encounter(map, Vector2(16.0, 16.0), "fishing")
-	_check_true(bool(encounter.get("available", false)), "fishing should resolve to fish encounter type")
-	_check_equal(str(encounter.get("encounter_type", "")), "fish", "fishing alias encounter type")
+	_check_true(bool(encounter.get("available", false)), "fishing should resolve to Old Rod encounter type")
+	_check_equal(str(encounter.get("encounter_type", "")), "old_rod", "fishing alias encounter type")
 	map.free()
 
 
