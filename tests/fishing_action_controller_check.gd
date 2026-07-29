@@ -33,6 +33,11 @@ func _init() -> void:
 		"players without a rod can still inspect the fishing progression panel"
 	)
 	_check(
+		controller_source.contains('button.add_theme_constant_override("icon_max_width", 32)')
+		and not controller_source.contains("button.icon_max_width ="),
+		"rod buttons size icons through the supported Button theme constant"
+	)
+	_check(
 		world_source.contains("await _refresh_fishing_progression()")
 		and world_source.contains('reward.get("fishingProgression", {})')
 		and world_source.contains('"Fishing Level increased to %d!"'),

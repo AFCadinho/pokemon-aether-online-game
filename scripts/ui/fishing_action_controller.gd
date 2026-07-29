@@ -135,7 +135,8 @@ func _rebuild_rod_buttons() -> void:
 		var item_id := str(rod.get("itemId", "")).strip_edges().to_lower()
 		var button := Button.new()
 		button.icon = ROD_ICONS.get(item_id)
-		button.icon_max_width = 32
+		button.expand_icon = true
+		button.add_theme_constant_override("icon_max_width", 32)
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		button.text = _rod_button_text(rod)
