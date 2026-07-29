@@ -188,8 +188,8 @@ const MAIL_POPUP_SIZE := Vector2(920, 600)
 const MAIL_COMPOSE_POPUP_SIZE := Vector2(720, 650)
 const PC_POPUP_SIZE := Vector2(1160, 720)
 const PC_BOX_SLOTS_PER_ROW := 6
-const PC_BOX_SLOT_SIZE := Vector2(116, 76)
-const PC_PARTY_SLOT_SIZE := Vector2(248, 66)
+const PC_BOX_SLOT_SIZE := Vector2(118, 80)
+const PC_PARTY_SLOT_SIZE := Vector2(232, 68)
 const PC_BOX_TABS_VISIBLE := 5
 const PC_ACCENT := Color("#60d3ff")
 const PC_ACCENT_SOFT := Color("#60d3ff88")
@@ -966,6 +966,7 @@ var pc_box_title_label: Label
 var pc_box_capacity_label: Label
 var pc_status_label: Label
 var pc_pokemon_hover_card: PartyHoverCard
+var pc_pokemon_hover_generation := 0
 var pc_close_button: Button
 var pc_release_mode_button: Button
 var pc_release_drop_panel: PanelContainer
@@ -1911,20 +1912,20 @@ func _setup_pc_ui() -> void:
 	pc_popup.add_child(margin)
 
 	var stack := VBoxContainer.new()
-	stack.add_theme_constant_override("separation", 12)
+	stack.add_theme_constant_override("separation", 10)
 	margin.add_child(stack)
 
 	var header := HBoxContainer.new()
 	header.name = "StorageHeader"
-	header.custom_minimum_size = Vector2(0, 50)
-	header.add_theme_constant_override("separation", 12)
+	header.custom_minimum_size = Vector2(0, 46)
+	header.add_theme_constant_override("separation", 10)
 	header.mouse_filter = Control.MOUSE_FILTER_STOP
 	header.gui_input.connect(_on_pc_header_gui_input)
 	stack.add_child(header)
 
 	var icon_frame := PanelContainer.new()
 	icon_frame.name = "StorageIconFrame"
-	icon_frame.custom_minimum_size = Vector2(46, 46)
+	icon_frame.custom_minimum_size = Vector2(42, 42)
 	icon_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	icon_frame.add_theme_stylebox_override("panel", _make_pc_icon_frame_style())
 	header.add_child(icon_frame)
@@ -1955,7 +1956,7 @@ func _setup_pc_ui() -> void:
 	title.text = "Pokémon Storage"
 	title.mouse_filter = Control.MOUSE_FILTER_STOP
 	title.gui_input.connect(_on_pc_header_gui_input)
-	title.add_theme_font_size_override("font_size", 21)
+	title.add_theme_font_size_override("font_size", 20)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	title_stack.add_child(title)
 
@@ -1963,22 +1964,22 @@ func _setup_pc_ui() -> void:
 	subtitle.text = "Organize your party and stored Pokémon"
 	subtitle.mouse_filter = Control.MOUSE_FILTER_STOP
 	subtitle.gui_input.connect(_on_pc_header_gui_input)
-	subtitle.add_theme_font_size_override("font_size", 12)
+	subtitle.add_theme_font_size_override("font_size", 11)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	title_stack.add_child(subtitle)
 
 	pc_release_mode_button = Button.new()
-	pc_release_mode_button.text = "Release Mode"
-	pc_release_mode_button.custom_minimum_size = Vector2(118, 36)
+	pc_release_mode_button.text = "Release"
+	pc_release_mode_button.custom_minimum_size = Vector2(90, 34)
 	pc_release_mode_button.focus_mode = Control.FOCUS_NONE
 	pc_release_mode_button.tooltip_text = "Choose Pokémon to release"
 	pc_release_mode_button.pressed.connect(_on_pc_release_mode_button_pressed)
-	_apply_button_style(pc_release_mode_button, "danger")
+	_apply_button_style(pc_release_mode_button, "secondary")
 	header.add_child(pc_release_mode_button)
 
 	pc_close_button = Button.new()
 	pc_close_button.text = "×"
-	pc_close_button.custom_minimum_size = Vector2(38, 36)
+	pc_close_button.custom_minimum_size = Vector2(36, 34)
 	pc_close_button.focus_mode = Control.FOCUS_NONE
 	pc_close_button.tooltip_text = "Close Pokémon Storage"
 	pc_close_button.pressed.connect(_on_pc_close_button_pressed)
@@ -1988,25 +1989,25 @@ func _setup_pc_ui() -> void:
 	var body := HBoxContainer.new()
 	body.name = "StorageWorkspace"
 	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	body.add_theme_constant_override("separation", 14)
+	body.add_theme_constant_override("separation", 10)
 	stack.add_child(body)
 
 	var party_panel := PanelContainer.new()
 	party_panel.name = "PartyPanel"
-	party_panel.custom_minimum_size = Vector2(272, 0)
+	party_panel.custom_minimum_size = Vector2(256, 0)
 	party_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	party_panel.add_theme_stylebox_override("panel", _make_pc_workspace_panel_style())
 	body.add_child(party_panel)
 
 	var party_margin := MarginContainer.new()
-	party_margin.add_theme_constant_override("margin_left", 11)
-	party_margin.add_theme_constant_override("margin_top", 11)
-	party_margin.add_theme_constant_override("margin_right", 11)
-	party_margin.add_theme_constant_override("margin_bottom", 11)
+	party_margin.add_theme_constant_override("margin_left", 10)
+	party_margin.add_theme_constant_override("margin_top", 10)
+	party_margin.add_theme_constant_override("margin_right", 10)
+	party_margin.add_theme_constant_override("margin_bottom", 10)
 	party_panel.add_child(party_margin)
 
 	var party_stack := VBoxContainer.new()
-	party_stack.add_theme_constant_override("separation", 7)
+	party_stack.add_theme_constant_override("separation", 8)
 	party_margin.add_child(party_stack)
 
 	var party_section_label := _create_pc_section_caption("YOUR PARTY")
@@ -2017,9 +2018,9 @@ func _setup_pc_ui() -> void:
 	party_stack.add_child(party_heading_row)
 
 	var party_title := Label.new()
-	party_title.text = "Ready Team"
+	party_title.text = "Current Team"
 	party_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	party_title.add_theme_font_size_override("font_size", 17)
+	party_title.add_theme_font_size_override("font_size", 16)
 	party_title.add_theme_color_override("font_color", UI_TEXT)
 	party_heading_row.add_child(party_title)
 
@@ -2030,15 +2031,9 @@ func _setup_pc_ui() -> void:
 	pc_party_count_label.add_theme_color_override("font_color", PC_ACCENT)
 	party_heading_row.add_child(pc_party_count_label)
 
-	var party_help := Label.new()
-	party_help.text = "Click to inspect  ·  Drag to move"
-	party_help.add_theme_font_size_override("font_size", 10)
-	party_help.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	party_stack.add_child(party_help)
-
 	pc_party_list = VBoxContainer.new()
 	pc_party_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	pc_party_list.add_theme_constant_override("separation", 6)
+	pc_party_list.add_theme_constant_override("separation", 7)
 	party_stack.add_child(pc_party_list)
 
 	var box_panel := PanelContainer.new()
@@ -2049,14 +2044,14 @@ func _setup_pc_ui() -> void:
 	body.add_child(box_panel)
 
 	var box_margin := MarginContainer.new()
-	box_margin.add_theme_constant_override("margin_left", 11)
-	box_margin.add_theme_constant_override("margin_top", 11)
-	box_margin.add_theme_constant_override("margin_right", 11)
-	box_margin.add_theme_constant_override("margin_bottom", 11)
+	box_margin.add_theme_constant_override("margin_left", 10)
+	box_margin.add_theme_constant_override("margin_top", 10)
+	box_margin.add_theme_constant_override("margin_right", 10)
+	box_margin.add_theme_constant_override("margin_bottom", 10)
 	box_panel.add_child(box_margin)
 
 	var box_stack := VBoxContainer.new()
-	box_stack.add_theme_constant_override("separation", 8)
+	box_stack.add_theme_constant_override("separation", 7)
 	box_margin.add_child(box_stack)
 
 	var box_header := HBoxContainer.new()
@@ -2074,7 +2069,7 @@ func _setup_pc_ui() -> void:
 	pc_box_title_label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	pc_box_title_label.mouse_filter = Control.MOUSE_FILTER_STOP
 	pc_box_title_label.gui_input.connect(_on_pc_box_title_gui_input)
-	pc_box_title_label.add_theme_font_size_override("font_size", 18)
+	pc_box_title_label.add_theme_font_size_override("font_size", 17)
 	pc_box_title_label.add_theme_color_override("font_color", UI_TEXT)
 	var box_title_row := HBoxContainer.new()
 	box_title_row.add_theme_constant_override("separation", 4)
@@ -2108,7 +2103,7 @@ func _setup_pc_ui() -> void:
 
 	pc_box_tab_prev_button = Button.new()
 	pc_box_tab_prev_button.text = "‹"
-	pc_box_tab_prev_button.custom_minimum_size = Vector2(36, 34)
+	pc_box_tab_prev_button.custom_minimum_size = Vector2(34, 32)
 	pc_box_tab_prev_button.focus_mode = Control.FOCUS_NONE
 	pc_box_tab_prev_button.tooltip_text = "Previous box"
 	pc_box_tab_prev_button.pressed.connect(_on_pc_box_step_pressed.bind(-1))
@@ -2117,7 +2112,7 @@ func _setup_pc_ui() -> void:
 
 	pc_box_tab_next_button = Button.new()
 	pc_box_tab_next_button.text = "›"
-	pc_box_tab_next_button.custom_minimum_size = Vector2(36, 34)
+	pc_box_tab_next_button.custom_minimum_size = Vector2(34, 32)
 	pc_box_tab_next_button.focus_mode = Control.FOCUS_NONE
 	pc_box_tab_next_button.tooltip_text = "Next box"
 	pc_box_tab_next_button.pressed.connect(_on_pc_box_step_pressed.bind(1))
@@ -2126,7 +2121,7 @@ func _setup_pc_ui() -> void:
 
 	pc_box_selector_button = Button.new()
 	pc_box_selector_button.text = "☷"
-	pc_box_selector_button.custom_minimum_size = Vector2(36, 34)
+	pc_box_selector_button.custom_minimum_size = Vector2(34, 32)
 	pc_box_selector_button.focus_mode = Control.FOCUS_NONE
 	pc_box_selector_button.tooltip_text = "Show all boxes"
 	pc_box_selector_button.pressed.connect(_toggle_pc_box_selector)
@@ -2154,7 +2149,7 @@ func _setup_pc_ui() -> void:
 	box_stack.add_child(search_row)
 
 	pc_search_input = LineEdit.new()
-	pc_search_input.placeholder_text = "Search all boxes by species, type, ability or held item"
+	pc_search_input.placeholder_text = "Search Pokémon across all boxes…"
 	pc_search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pc_search_input.custom_minimum_size = Vector2(0, 38)
 	pc_search_input.clear_button_enabled = true
@@ -2164,8 +2159,8 @@ func _setup_pc_ui() -> void:
 	search_row.add_child(pc_search_input)
 
 	pc_filter_button = Button.new()
-	pc_filter_button.text = "Filters"
-	pc_filter_button.custom_minimum_size = Vector2(82, 38)
+	pc_filter_button.text = "Filter"
+	pc_filter_button.custom_minimum_size = Vector2(72, 38)
 	pc_filter_button.focus_mode = Control.FOCUS_NONE
 	pc_filter_button.toggle_mode = true
 	pc_filter_button.tooltip_text = "Filter by multiple criteria"
@@ -2175,7 +2170,7 @@ func _setup_pc_ui() -> void:
 
 	pc_search_results_label = Label.new()
 	pc_search_results_label.text = "ALL BOXES"
-	pc_search_results_label.custom_minimum_size = Vector2(94, 0)
+	pc_search_results_label.custom_minimum_size = Vector2(78, 0)
 	pc_search_results_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	pc_search_results_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	pc_search_results_label.add_theme_font_size_override("font_size", 10)
@@ -2194,7 +2189,7 @@ func _setup_pc_ui() -> void:
 	filter_margin.add_theme_constant_override("margin_bottom", 8)
 	pc_filter_panel.add_child(filter_margin)
 	var filter_grid := GridContainer.new()
-	filter_grid.columns = 2
+	filter_grid.columns = 3
 	filter_grid.add_theme_constant_override("h_separation", 8)
 	filter_grid.add_theme_constant_override("v_separation", 6)
 	filter_margin.add_child(filter_grid)
@@ -2234,7 +2229,7 @@ func _setup_pc_ui() -> void:
 	pc_box_grid.columns = PC_BOX_SLOTS_PER_ROW
 	pc_box_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pc_box_grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	pc_box_grid.add_theme_constant_override("h_separation", 7)
+	pc_box_grid.add_theme_constant_override("h_separation", 6)
 	pc_box_grid.add_theme_constant_override("v_separation", 6)
 	pc_box_scroll.add_child(pc_box_grid)
 
@@ -2297,7 +2292,7 @@ func _setup_pc_ui() -> void:
 	status_row.add_child(status_dot)
 
 	pc_status_label = Label.new()
-	pc_status_label.text = "Drag Pokémon to move them · Click a Pokémon to inspect it"
+	pc_status_label.text = "Drag to move  ·  Click to inspect"
 	pc_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pc_status_label.add_theme_font_size_override("font_size", 11)
 	pc_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -2320,16 +2315,16 @@ func _make_pc_outer_style() -> StyleBoxFlat:
 	var style := _make_panel_style(UI_SURFACE_BASE, PC_ACCENT_SOFT, 13, 1)
 	style.border_width_top = 2
 	style.shadow_color = Color("#0000008f")
-	style.shadow_size = 18
-	style.shadow_offset = Vector2(0, 8)
+	style.shadow_size = 14
+	style.shadow_offset = Vector2(0, 6)
 	return style
 
 
 func _make_pc_workspace_panel_style() -> StyleBoxFlat:
-	var style := _make_panel_style(UI_SURFACE_RAISED, UI_BORDER_SUBTLE, 10, 1)
-	style.shadow_color = Color("#00000032")
-	style.shadow_size = 6
-	style.shadow_offset = Vector2(0, 2)
+	var style := _make_panel_style(Color("#091724e8"), Color("#28445a73"), 9, 1)
+	style.shadow_color = Color("#0000001f")
+	style.shadow_size = 2
+	style.shadow_offset = Vector2(0, 1)
 	return style
 
 
@@ -2342,10 +2337,9 @@ func _make_pc_icon_frame_style() -> StyleBoxFlat:
 
 
 func _make_pc_grid_frame_style() -> StyleBoxFlat:
-	var style := _make_panel_style(UI_SURFACE_INSET, Color("#24445e99"), 9, 1)
-	style.shadow_color = Color("#00000024")
-	style.shadow_size = 4
-	style.shadow_offset = Vector2(0, 1)
+	var style := _make_panel_style(Color("#05101bd6"), Color("#28445a5c"), 8, 1)
+	style.shadow_color = Color.TRANSPARENT
+	style.shadow_size = 0
 	return style
 
 
@@ -2356,9 +2350,9 @@ func _make_pc_release_zone_style() -> StyleBoxFlat:
 
 
 func _make_pc_status_style() -> StyleBoxFlat:
-	var style := _make_panel_style(Color("#06111dd9"), Color("#28496399"), 8, 1)
-	style.border_width_left = 2
-	style.border_color = Color("#3d7596aa")
+	var style := _make_panel_style(Color("#06111da8"), Color("#28496355"), 7, 1)
+	style.border_width_left = 0
+	style.border_color = Color("#28496355")
 	return style
 
 
@@ -26726,7 +26720,7 @@ func _refresh_pc_state(load_all_boxes: bool = false) -> void:
 	_render_pc_party()
 	_render_pc_box()
 	if _pc_search_query() == "":
-		pc_status_label.text = "Drag Pokémon to move them · Click a Pokémon to inspect it"
+		pc_status_label.text = "Drag to move  ·  Click to inspect"
 
 
 func _update_pc_all_boxes_cache(box_state: Dictionary) -> void:
@@ -26758,7 +26752,7 @@ func _refresh_pc_box_tabs() -> void:
 	for index in range(pc_box_tab_page_start, visible_end):
 		var button := Button.new()
 		button.text = _pc_box_display_name(index)
-		button.custom_minimum_size = Vector2(78, 32)
+		button.custom_minimum_size = Vector2(76, 30)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.focus_mode = Control.FOCUS_NONE
 		button.tooltip_text = "Box %d: %s" % [index + 1, _pc_box_display_name(index)]
@@ -26967,7 +26961,7 @@ func _finish_pc_box_inline_rename() -> void:
 
 
 func _apply_pc_box_tab_style(button: Button, selected: bool) -> void:
-	var normal_bg := Color("#0c2235f2") if selected else Color("#07111ed8")
+	var normal_bg := Color("#10283cf2") if selected else Color("#07111e99")
 	var hover_bg := UI_SURFACE_HOVER
 	var pressed_bg := UI_SURFACE_PRESSED
 	var border := PC_ACCENT_SOFT if selected else Color("#29465e99")
@@ -26976,8 +26970,8 @@ func _apply_pc_box_tab_style(button: Button, selected: bool) -> void:
 	button.add_theme_color_override("font_color", font_color)
 	button.add_theme_color_override("font_hover_color", UI_TEXT)
 	button.add_theme_color_override("font_pressed_color", UI_TEXT)
-	button.add_theme_font_size_override("font_size", 12)
-	var normal_style := _make_button_style(normal_bg, border, 7, 1)
+	button.add_theme_font_size_override("font_size", 11)
+	var normal_style := _make_button_style(normal_bg, border, 6, 1)
 	if selected:
 		normal_style.border_width_left = 0
 		normal_style.border_width_top = 0
@@ -26985,9 +26979,9 @@ func _apply_pc_box_tab_style(button: Button, selected: bool) -> void:
 		normal_style.border_width_bottom = 2
 		normal_style.border_color = PC_ACCENT
 	button.add_theme_stylebox_override("normal", normal_style)
-	button.add_theme_stylebox_override("hover", _make_button_style(hover_bg, hover_border, 7, 1))
-	button.add_theme_stylebox_override("pressed", _make_button_style(pressed_bg, hover_border, 7, 1))
-	button.add_theme_stylebox_override("focus", _make_button_style(hover_bg, PC_ACCENT, 7, 1))
+	button.add_theme_stylebox_override("hover", _make_button_style(hover_bg, hover_border, 6, 1))
+	button.add_theme_stylebox_override("pressed", _make_button_style(pressed_bg, hover_border, 6, 1))
+	button.add_theme_stylebox_override("focus", _make_button_style(hover_bg, PC_ACCENT, 6, 1))
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 
@@ -27214,10 +27208,10 @@ func _create_pc_box_pokemon_slot_button(title_text: String, level: int, shiny: b
 	stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stack.anchor_right = 1.0
 	stack.anchor_bottom = 1.0
-	stack.offset_left = 7
+	stack.offset_left = 6
 	stack.offset_top = 4
-	stack.offset_right = -7
-	stack.offset_bottom = -5
+	stack.offset_right = -6
+	stack.offset_bottom = -4
 	stack.alignment = BoxContainer.ALIGNMENT_CENTER
 	stack.add_theme_constant_override("separation", 1)
 	button.add_child(stack)
@@ -27235,7 +27229,7 @@ func _create_pc_box_pokemon_slot_button(title_text: String, level: int, shiny: b
 	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	badge.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	badge.add_theme_font_size_override("font_size", 9)
-	badge.add_theme_color_override("font_color", PC_ACCENT if occupied else Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.62))
+	badge.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.82 if occupied else 0.48))
 	meta_row.add_child(badge)
 
 	if occupied and shiny:
@@ -27253,12 +27247,12 @@ func _create_pc_box_pokemon_slot_button(title_text: String, level: int, shiny: b
 
 	var icon := TextureRect.new()
 	icon.name = "PokemonIcon"
-	icon.custom_minimum_size = Vector2(44, 38)
+	icon.custom_minimum_size = Vector2(48, 42)
 	icon.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.texture = texture if texture != null else PokemonAssets.load_unknown_icon()
-	icon.modulate = Color.WHITE if occupied else Color(1, 1, 1, 0.15)
+	icon.modulate = Color.WHITE if occupied else Color(1, 1, 1, 0.08)
 	stack.add_child(icon)
 
 	var footer := HBoxContainer.new()
@@ -27269,10 +27263,10 @@ func _create_pc_box_pokemon_slot_button(title_text: String, level: int, shiny: b
 
 	var title := Label.new()
 	title.name = "PokemonName"
-	title.text = _pc_compact_text(title_text, 12) if occupied else "EMPTY"
+	title.text = _pc_compact_text(title_text, 12) if occupied else ""
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title.add_theme_font_size_override("font_size", 10 if occupied else 9)
+	title.add_theme_font_size_override("font_size", 11)
 	title.add_theme_color_override("font_color", UI_TEXT if occupied else Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.56))
 	title.clip_text = true
 	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -27324,22 +27318,22 @@ func _create_pc_pokemon_slot_button(title_text: String, subtitle_text: String, s
 	badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	badge.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	badge.add_theme_font_size_override("font_size", 10)
-	badge.add_theme_color_override("font_color", PC_ACCENT if occupied else UI_MUTED_TEXT)
+	badge.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.9 if occupied else 0.55))
 	row.add_child(badge)
 
 	var icon_stack := VBoxContainer.new()
 	icon_stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	icon_stack.custom_minimum_size = Vector2(42, 0)
+	icon_stack.custom_minimum_size = Vector2(46, 0)
 	icon_stack.alignment = BoxContainer.ALIGNMENT_CENTER
 	row.add_child(icon_stack)
 
 	var icon := TextureRect.new()
 	icon.name = "PokemonIcon"
-	icon.custom_minimum_size = Vector2(40, 40)
+	icon.custom_minimum_size = Vector2(44, 44)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.texture = texture if texture != null else PokemonAssets.load_unknown_icon()
-	icon.modulate = Color.WHITE if occupied else Color(1, 1, 1, 0.16)
+	icon.modulate = Color.WHITE if occupied else Color(1, 1, 1, 0.08)
 	icon_stack.add_child(icon)
 
 	var text_stack := VBoxContainer.new()
@@ -27373,7 +27367,7 @@ func _create_pc_pokemon_slot_button(title_text: String, subtitle_text: String, s
 	title.text = _pc_compact_text(title_text, 14)
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title.add_theme_font_size_override("font_size", 13)
+	title.add_theme_font_size_override("font_size", 12)
 	title.add_theme_color_override("font_color", UI_TEXT if occupied else UI_MUTED_TEXT)
 	title.clip_text = true
 	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -27382,7 +27376,7 @@ func _create_pc_pokemon_slot_button(title_text: String, subtitle_text: String, s
 	var subtitle := Label.new()
 	subtitle.text = subtitle_text if occupied else "Open party slot"
 	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	subtitle.add_theme_font_size_override("font_size", 11)
+	subtitle.add_theme_font_size_override("font_size", 10)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	subtitle.clip_text = true
 	subtitle.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -27466,23 +27460,25 @@ func _show_pc_pokemon_hover(button: PcPokemonSlotButton, pokemon_data: Dictionar
 		return
 	if pc_dragging or pc_move_in_progress or pokemon_data.is_empty():
 		return
+	pc_pokemon_hover_generation += 1
+	var hover_generation := pc_pokemon_hover_generation
 	pc_pokemon_hover_card.show_for_pokemon(pokemon_data)
 	pc_pokemon_hover_card.position_near_rect(button.get_global_rect(), get_viewport().get_visible_rect().size)
-	pc_pokemon_hover_card.call_deferred(
-		"deferred_position_pc_pokemon_hover",
-		button
-	)
+	call_deferred("_deferred_position_pc_pokemon_hover", button, hover_generation)
 
 
-func _deferred_position_pc_pokemon_hover(button: Control) -> void:
+func _deferred_position_pc_pokemon_hover(button: Control, hover_generation: int) -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
+	if hover_generation != pc_pokemon_hover_generation:
+		return
 	if pc_pokemon_hover_card == null or not pc_pokemon_hover_card.visible or not is_instance_valid(button):
 		return
 	pc_pokemon_hover_card.position_near_rect(button.get_global_rect(), get_viewport().get_visible_rect().size)
 
 
 func _hide_pc_pokemon_hover() -> void:
+	pc_pokemon_hover_generation += 1
 	if pc_pokemon_hover_card != null:
 		pc_pokemon_hover_card.hide_card()
 
@@ -27494,19 +27490,21 @@ func _apply_pc_pokemon_slot_style(button: Button, occupied: bool, selected: bool
 		var primary_type: String = str(types[0]).strip_edges()
 		if primary_type != "":
 			var type_background: Color = TypeColors.get_slot_background(primary_type, UI_SURFACE_INTERACTIVE)
-			background = type_background.lerp(UI_SURFACE_INTERACTIVE, 0.38)
-			border = TypeColors.get_slot_border(primary_type, UI_BORDER_SUBTLE)
+			background = UI_SURFACE_INTERACTIVE.lerp(type_background, 0.10)
+			border = UI_BORDER_SUBTLE.lerp(TypeColors.get_slot_border(primary_type, UI_BORDER_SUBTLE), 0.62)
 	if selected:
 		border = PC_ACCENT
 	var hover_border := PC_ACCENT if selected else border.lightened(0.22)
-	var normal_bg: Color = background.lightened(0.04) if selected else background
-	var hover_bg: Color = background.lightened(0.10)
+	var normal_bg: Color = background.lightened(0.06) if selected else background
+	var hover_bg: Color = background.lightened(0.07)
 	var pressed_bg: Color = background.darkened(0.08)
 	var normal_style := _make_button_style(normal_bg, border, 8, 1)
 	if selected:
 		normal_style.border_width_left = 3
+	elif occupied:
+		normal_style.border_width_left = 2
 	var hover_style := _make_button_style(hover_bg, hover_border, 8, 1)
-	hover_style.border_width_left = 3
+	hover_style.border_width_left = 3 if selected else 2
 	button.add_theme_stylebox_override("normal", normal_style)
 	button.add_theme_stylebox_override("hover", hover_style)
 	button.add_theme_stylebox_override("pressed", _make_button_style(pressed_bg, hover_border, 8, 1))
@@ -27984,10 +27982,10 @@ func _refresh_pc_release_controls() -> void:
 	if pc_release_drop_panel != null:
 		pc_release_drop_panel.visible = pc_release_mode_active
 	if pc_release_mode_button != null:
-		pc_release_mode_button.text = "Cancel Release" if pc_release_mode_active else "Release Mode"
+		pc_release_mode_button.text = "Cancel" if pc_release_mode_active else "Release"
 		pc_release_mode_button.disabled = pc_release_in_progress
 		pc_release_mode_button.tooltip_text = "Stop choosing Pokémon to release" if pc_release_mode_active else "Choose Pokémon to release"
-		_apply_button_style(pc_release_mode_button, "danger")
+		_apply_button_style(pc_release_mode_button, "danger" if pc_release_mode_active else "secondary")
 	pc_release_hint_label.text = "Releasing..." if pc_release_in_progress else "Drop a Pokémon here to release it"
 
 

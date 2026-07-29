@@ -91,6 +91,8 @@ func _check_ui_overlay_wrapper_exists() -> void:
 	_check_equal(source.contains("PC_PARTY_HOVER_CARD_SCENE"), true, "UIOverlay reuses the battle party hover card in Pokemon Storage")
 	_check_equal(source.contains("func _connect_pc_pokemon_hover"), true, "UIOverlay connects occupied PC slots to Pokemon hover details")
 	_check_equal(source.contains("position_near_rect(button.get_global_rect()"), true, "PC hover details are positioned beside their storage slot")
+	_check_equal(source.contains('call_deferred("_deferred_position_pc_pokemon_hover", button, hover_generation)'), true, "PC hover details are remeasured after their first visible layout")
+	_check_equal(source.contains('pc_pokemon_hover_card.call_deferred("deferred_position_pc_pokemon_hover"'), false, "PC hover layout does not defer a missing method on the card")
 	_check_equal(source.contains("pokemon.to_persistence_dict()"), true, "Party storage slots provide complete Pokemon hover data")
 	_check_equal(source.contains("party_drag_visual = party_drag_source_slot.duplicate() as Control"), true, "UIOverlay drags whole normal party slot preview")
 	_check_equal(source.contains("func _handle_pc_drag_input"), true, "UIOverlay uses custom PC drag input")

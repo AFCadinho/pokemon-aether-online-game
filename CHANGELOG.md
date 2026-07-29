@@ -11,6 +11,7 @@
 
 **Changed**
 
+- Refreshed Pokémon Storage with quieter surfaces, clearer box and party hierarchy, larger Pokémon artwork, compact filters, restrained type accents, and a matching storage hover card.
 - Moved Guild emblems into Trainer name cards, where they render as compact icons to the left of the name without increasing the card height.
 - Redesigned private battle rooms with separate Create, Join, and Spectate flows, clearer waiting status, room-code sharing, an option to allow spectators, and a way for the host to cancel an open room.
 - Improved the spectator dashboard with a clearer perspective indicator, larger controls, and better waiting messages.

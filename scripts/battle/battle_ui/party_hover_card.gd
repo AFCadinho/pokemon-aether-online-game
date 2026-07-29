@@ -31,6 +31,7 @@ var iv_value_label: Label
 var ev_value_label: Label
 var show_ivs := false
 var show_evs := false
+var storage_visuals := false
 
 
 func _ready() -> void:
@@ -61,6 +62,8 @@ func _ready() -> void:
 	var details_index := $MarginContainer/VBoxContainer/SeperationLabel2.get_index() + 1
 	content.move_child(ev_value_label, details_index)
 	content.move_child(iv_value_label, details_index + 1)
+	if storage_visuals:
+		_apply_storage_visuals()
 	hide_card()
 
 
@@ -78,14 +81,43 @@ func set_show_ivs(enabled: bool) -> void:
 func set_show_storage_details(enabled: bool) -> void:
 	show_ivs = enabled
 	show_evs = enabled
+	storage_visuals = enabled
 	if iv_value_label != null:
 		iv_value_label.visible = enabled
 	if ev_value_label != null:
 		ev_value_label.visible = enabled
+	if is_node_ready():
+		_apply_storage_visuals()
 
 
 func hide_card() -> void:
 	visible = false
+
+
+func _apply_storage_visuals() -> void:
+	if not storage_visuals:
+		return
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color("#06111df5")
+	style.border_color = Color("#60d3ff73")
+	style.border_width_left = 2
+	style.border_width_top = 1
+	style.border_width_right = 1
+	style.border_width_bottom = 1
+	style.corner_radius_top_left = 8
+	style.corner_radius_top_right = 8
+	style.corner_radius_bottom_right = 8
+	style.corner_radius_bottom_left = 8
+	style.expand_margin_left = 6.0
+	style.expand_margin_top = 5.0
+	style.expand_margin_right = 6.0
+	style.expand_margin_bottom = 5.0
+	style.shadow_color = Color("#00000073")
+	style.shadow_size = 8
+	style.shadow_offset = Vector2(0, 3)
+	add_theme_stylebox_override("panel", style)
+	name_label.add_theme_font_size_override("font_size", 19)
+	($MarginContainer/VBoxContainer as VBoxContainer).add_theme_constant_override("separation", 3)
 
 
 func position_near_mouse(mouse_position: Vector2, viewport_size: Vector2) -> void:
