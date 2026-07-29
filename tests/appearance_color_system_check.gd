@@ -34,6 +34,26 @@ func _run() -> void:
 			APPEARANCE.is_tintable_part("hair", hairstyle_id),
 			"%s supports Chroma colours" % hairstyle_id
 		)
+		var base_hairstyle_frames := APPEARANCE.get_part_frames(
+			"hair",
+			hairstyle_id,
+			hairstyle_gender
+		)
+		var covered_hairstyle_frames := APPEARANCE.get_tinted_part_frames(
+			"hair",
+			hairstyle_id,
+			hairstyle_gender,
+			APPEARANCE.BODY_MOVEMENT_DEFAULT,
+			Color("#6b4632"),
+			true
+		)
+		_check(
+			_count_new_scalp_cover_pixels(
+				base_hairstyle_frames,
+				covered_hairstyle_frames
+			) > 0,
+			"%s covers exposed base-head pixels" % hairstyle_id
+		)
 	_check(APPEARANCE.SKIN_TONE_SWATCHES.size() >= 13, "skin palette includes Default plus twelve curated tones")
 	_check(
 		str(APPEARANCE.SKIN_TONE_SWATCHES[0].get("label", "")) == "Default"
@@ -294,6 +314,31 @@ func _count_opaque_colours(image: Image, exclude_near_black: bool = false) -> in
 				continue
 			colours[pixel.to_html(false)] = true
 	return colours.size()
+
+
+func _count_new_scalp_cover_pixels(
+	base_frames: SpriteFrames,
+	covered_frames: SpriteFrames
+) -> int:
+	if base_frames == null or covered_frames == null:
+		return 0
+	var base_image := APPEARANCE._get_texture_image(
+		base_frames.get_frame_texture(&"idle_down", 0)
+	)
+	var covered_image := APPEARANCE._get_texture_image(
+		covered_frames.get_frame_texture(&"idle_down", 0)
+	)
+	if base_image == null or covered_image == null:
+		return 0
+	var count := 0
+	for y: int in range(8, 28):
+		for x: int in range(20, 44):
+			if (
+				base_image.get_pixel(x, y).a <= 0.001
+				and covered_image.get_pixel(x, y).a > 0.001
+			):
+				count += 1
+	return count
 
 
 func _count_changed_pixels(first: Image, second: Image) -> int:
