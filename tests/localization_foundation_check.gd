@@ -208,10 +208,17 @@ func _check_login_scene_translation() -> void:
 	if language_options != null and settings_manager != null:
 		var original_settings_locale := str(settings_manager.get("locale"))
 		settings_manager.set("locale", "nl")
+		LanguageSelectorStyle.configure_login_compact(language_options)
 		login.set("language_options_button", language_options)
 		login.call("_apply_language_options_to_control")
 		_check(language_options.item_count == 3, "login language selector lists three locales")
 		_check(language_options.get_item_icon(0) != null, "login language selector displays flags")
+		_check(language_options.text == "NL", "login language selector uses the compact locale code")
+		_check(
+			language_options.custom_minimum_size == Vector2(104, 38)
+			and language_options.size_flags_horizontal == Control.SIZE_SHRINK_END,
+			"login language selector stays visually secondary"
+		)
 		_check(
 			str(language_options.get_item_metadata(language_options.selected)) == "nl",
 			"login language selector reflects the saved locale"

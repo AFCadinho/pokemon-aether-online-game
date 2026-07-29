@@ -47,6 +47,42 @@ static func configure(button: OptionButton) -> void:
 	_configure_popup(button.get_popup())
 
 
+static func configure_login_compact(button: OptionButton) -> void:
+	configure(button)
+	if button == null:
+		return
+	button.custom_minimum_size = Vector2(104, 38)
+	button.size_flags_horizontal = Control.SIZE_SHRINK_END
+	button.add_theme_constant_override("icon_max_width", 22)
+	button.add_theme_constant_override("h_separation", 7)
+	button.add_theme_constant_override("arrow_margin", 9)
+	button.add_theme_font_size_override("font_size", 13)
+	button.add_theme_color_override("font_color", Color("#e3e8f0"))
+	button.add_theme_color_override("font_hover_color", Color.WHITE)
+	button.add_theme_stylebox_override(
+		"normal",
+		_compact_button_style(Color("#050a14d6"), Color("#293c52cc"))
+	)
+	button.add_theme_stylebox_override(
+		"hover",
+		_compact_button_style(Color("#0b1424ee"), Color("#536f8fe6"))
+	)
+	button.add_theme_stylebox_override(
+		"pressed",
+		_compact_button_style(Color("#10182bf2"), Color("#7568a8e6"))
+	)
+	button.add_theme_stylebox_override(
+		"focus",
+		_compact_button_style(Color("#07111fed"), Color("#7aa7f4"), 2)
+	)
+
+
+static func apply_compact_label(button: OptionButton, locale: String) -> void:
+	if button == null:
+		return
+	button.text = _locale_code(locale)
+
+
 static func add_locale_item(
 	button: OptionButton,
 	locale: String,
@@ -119,4 +155,17 @@ static func _popup_style() -> StyleBoxFlat:
 	style.shadow_color = Color(0, 0, 0, 0.52)
 	style.shadow_size = 12
 	style.shadow_offset = Vector2(0, 5)
+	return style
+
+
+static func _compact_button_style(
+	background: Color,
+	border: Color,
+	border_width: int = 1
+) -> StyleBoxFlat:
+	var style := _button_style(background, border, border_width)
+	style.content_margin_left = 9
+	style.content_margin_top = 6
+	style.content_margin_right = 9
+	style.content_margin_bottom = 6
 	return style

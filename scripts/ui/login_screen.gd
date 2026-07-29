@@ -63,7 +63,7 @@ var loading_language_options := false
 func _ready() -> void:
 	MusicManager.play_login_music()
 	_apply_remember_me_style()
-	LanguageSelectorStyle.configure(language_options_button)
+	LanguageSelectorStyle.configure_login_compact(language_options_button)
 	language_options_button.item_selected.connect(_on_language_selected)
 	login_button.pressed.connect(_on_login_button_pressed)
 	register_link_button.pressed.connect(_on_register_link_pressed)
@@ -240,6 +240,10 @@ func _apply_language_options_to_control() -> void:
 			selected_index = index
 	if language_options_button.item_count > 0:
 		language_options_button.select(selected_index)
+		LanguageSelectorStyle.apply_compact_label(
+			language_options_button,
+			str(language_options_button.get_item_metadata(selected_index))
+		)
 	loading_language_options = was_loading_options
 
 
