@@ -8,10 +8,15 @@
 - Spectators can switch between both Trainers' perspectives, inspect information that has been revealed during the battle, and leave at any time.
 - Joining a battle already in progress now immediately shows the complete Battle Log and current battlefield, including form changes, HP, status conditions, and fainted Pokémon, without replaying earlier animations.
 - Spectator mode supports Team Preview, live battles, forfeits, and the final result screen.
+- Added Fishing Levels and Fishing XP earned by winning wild encounters started with a rod.
+- Added a styled rod loadout to the overworld action bar for viewing progression, regional requirements, and selecting an available rod.
+- Added a Fishing Guru in Pallet Town who awards the Old Rod. New players no longer receive a rod automatically.
 
 **Changed**
 
 - Refreshed Pokémon Storage with quieter surfaces, clearer box and party hierarchy, larger Pokémon artwork, compact filters, restrained type accents, and a matching storage hover card.
+- Fishing rods now carry across regions, while usage depends on Fishing Level and badges earned in the current region. Old Rod requires Level 1 and no badges, Good Rod Level 10 and three badges, and Super Rod Level 25 and six badges.
+- Fishing rod ownership, selection, and regional eligibility are now validated by the server.
 - Moved Guild emblems into Trainer name cards, where they render as compact icons to the left of the name without increasing the card height.
 - Redesigned private battle rooms with separate Create, Join, and Spectate flows, clearer waiting status, room-code sharing, an option to allow spectators, and a way for the host to cancel an open room.
 - Improved the spectator dashboard with a clearer perspective indicator, larger controls, and better waiting messages.
@@ -19,6 +24,7 @@
 
 **Fixed**
 
+- Fixed valid fishing attempts falling through to the generic “report this to staff” message even when the player owned an Old Rod.
 - Fixed defeated players sometimes respawning on invalid map tiles instead of beside their last healing NPC. A late position autosave could overwrite the server's blackout destination before the client finished teleporting.
 - Fixed Guild invitations being visible only after opening the Guild window. Incoming invitations now open a dialog with Accept and Decline actions while playing.
 - Fixed several PvP synchronization issues that could leave both players waiting, apply an outdated snapshot, briefly restore old HP, or stop the battle controls from responding after reconnecting.
