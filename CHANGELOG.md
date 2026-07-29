@@ -4,13 +4,16 @@
 
 **Added**
 
-- Added spectator mode for private PvP battle rooms that allow viewers. Spectators can enter a room code, watch the battle without affecting it, switch which Trainer appears on the left, inspect publicly revealed party information, and leave at any time.
-- Added spectator support for Team Preview, live battle events, forfeits, and the final result screen.
+- Added spectator mode for private PvP battle rooms. Hosts can choose whether viewers are allowed, and spectators can join with the room code without affecting the battle.
+- Spectators can switch between both Trainers' perspectives, inspect information that has been revealed during the battle, and leave at any time.
+- Joining a battle already in progress now immediately shows the complete Battle Log and current battlefield, including form changes, HP, status conditions, and fainted Pokémon, without replaying earlier animations.
+- Spectator mode supports Team Preview, live battles, forfeits, and the final result screen.
 
 **Changed**
 
 - Moved Guild emblems into Trainer name cards, where they render as compact icons to the left of the name without increasing the card height.
 - Redesigned private battle rooms with separate Create, Join, and Spectate flows, clearer waiting status, room-code sharing, an option to allow spectators, and a way for the host to cancel an open room.
+- Improved the spectator dashboard with a clearer perspective indicator, larger controls, and better waiting messages.
 - Simplified the battle action area by removing retired Fight and Party image buttons and keeping the current contextual controls visible.
 
 **Fixed**
