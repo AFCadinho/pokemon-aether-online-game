@@ -18,7 +18,7 @@ func _init() -> void:
 		"overworld overlay installs the fishing action controller"
 	)
 	_check(
-		controller_source.contains('actions_row.add_child(slot)')
+		controller_source.contains("actions_row.add_child(action_slot)")
 		and controller_source.contains('action_button.pressed.connect(_toggle_popup)'),
 		"action bar exposes a clickable rod selector"
 	)
@@ -36,6 +36,21 @@ func _init() -> void:
 		controller_source.contains('button.add_theme_constant_override("icon_max_width", 32)')
 		and not controller_source.contains("button.icon_max_width ="),
 		"rod buttons size icons through the supported Button theme constant"
+	)
+	_check(
+		controller_source.contains("popup.z_index = POPUP_Z_INDEX")
+		and controller_source.contains("popup.move_to_front()"),
+		"fishing selector renders above the action bars"
+	)
+	_check(
+		controller_source.contains('action_slot.add_theme_stylebox_override("panel", style)')
+		and controller_source.contains('popup.add_theme_stylebox_override("panel", _make_popup_style())'),
+		"fishing action and selector use dedicated styled surfaces"
+	)
+	_check(
+		controller_source.contains("experience_bar = ProgressBar.new()")
+		and controller_source.contains("func _apply_rod_button_style("),
+		"fishing selector presents styled XP and rod states"
 	)
 	_check(
 		world_source.contains("await _refresh_fishing_progression()")
