@@ -2,7 +2,7 @@ class_name DonatorStorePopup
 extends PanelContainer
 
 signal closed
-signal purchase_requested(item_id: String)
+signal purchase_requested(item_id: String, chroma_colors: Dictionary)
 
 const GEM_ICON: Texture2D = preload("res://assets/ui/donator_gem.svg")
 const STYLE_ICON: Texture2D = preload("res://assets/ui/store_style.svg")
@@ -1130,7 +1130,7 @@ func _create_character_preview_panel() -> Control:
 	custom_color_row.add_child(character_preview_hex_input)
 
 	character_preview_note_label = Label.new()
-	character_preview_note_label.text = "Preview only · your equipped outfit is unchanged"
+	character_preview_note_label.text = "Selected Chroma colours are included with your purchase"
 	character_preview_note_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	character_preview_note_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	character_preview_note_label.add_theme_font_size_override("font_size", 10)
@@ -1604,7 +1604,7 @@ func _refresh_character_preview() -> void:
 		)
 	if character_preview_note_label != null:
 		character_preview_note_label.text = (
-			"Preview only · your equipped outfit is unchanged"
+			"Selected Chroma colours are included with your purchase"
 			if not preview_parts.is_empty()
 			else "Choose a cosmetic to try it on"
 		)
@@ -2083,7 +2083,25 @@ func _on_purchase_pressed() -> void:
 	if selected_item_id == "" or purchase_button.disabled:
 		return
 	set_purchase_in_progress(true)
-	purchase_requested.emit(selected_item_id)
+	purchase_requested.emit(selected_item_id, _selected_purchase_chroma_colors())
+
+
+func _selected_purchase_chroma_colors() -> Dictionary:
+	var colors := {}
+	var item := _catalog_item(selected_item_id)
+	for preview_part: Dictionary in _preview_parts_for_item(item):
+		var slot := CharacterAppearanceService.normalize_part_category(
+			str(preview_part.get("slot", ""))
+		)
+		var tint_key := str(preview_part.get("tint", "")).strip_edges()
+		if slot == "" or tint_key == "":
+			continue
+		var normalized := CharacterAppearanceService.normalize_hex_color_code(
+			str(character_preview_colors.get(tint_key, ""))
+		)
+		if normalized != "":
+			colors[slot] = normalized
+	return colors
 
 
 func _apply_category_button_style(button: Button, active: bool) -> void:

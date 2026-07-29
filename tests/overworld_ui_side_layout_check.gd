@@ -273,8 +273,8 @@ func _init() -> void:
 	_check(donator_store_script_source.contains("func set_gem_balance(amount: int)") and donator_store_script_source.contains('balance_label.text = "%s Aether Gems"'), "Donator Store labels its authoritative Aether Gem balance")
 	_check(
 		donator_store_script_source.contains("authoritative_gem_prices")
-		and donator_store_script_source.contains("purchase_requested.emit(selected_item_id)")
-		and script_source.contains("DonatorStoreService.purchase_item(item_id)"),
+		and donator_store_script_source.contains("purchase_requested.emit(selected_item_id, _selected_purchase_chroma_colors())")
+		and script_source.contains("DonatorStoreService.purchase_item(item_id, chroma_colors)"),
 		"Donator Store purchases use the authoritative Aether Gem checkout"
 	)
 	_check(

@@ -28,7 +28,11 @@ func load_store() -> Dictionary:
 	}
 
 
-func purchase_item(item_id: String, request_id: String = "") -> Dictionary:
+func purchase_item(
+	item_id: String,
+	chroma_colors: Dictionary = {},
+	request_id: String = "",
+) -> Dictionary:
 	var normalized_item_id := item_id.strip_edges().to_lower().replace("_", "-").replace(" ", "-")
 	if not AuthService.is_authenticated():
 		return {"success": false, "error": "Not authenticated."}
@@ -46,6 +50,7 @@ func purchase_item(item_id: String, request_id: String = "") -> Dictionary:
 		JSON.stringify({
 			"itemId": normalized_item_id,
 			"requestId": normalized_request_id,
+			"chromaColors": chroma_colors,
 		})
 	)
 	if not bool(response.get("success", false)):

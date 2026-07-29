@@ -9227,10 +9227,10 @@ func _load_donator_store_state() -> void:
 	donator_store_popup.apply_store_state(wallet, result.get("store", {}) as Dictionary)
 
 
-func _on_donator_store_purchase_requested(item_id: String) -> void:
+func _on_donator_store_purchase_requested(item_id: String, chroma_colors: Dictionary) -> void:
 	if donator_store_popup == null:
 		return
-	var result: Dictionary = await DonatorStoreService.purchase_item(item_id)
+	var result: Dictionary = await DonatorStoreService.purchase_item(item_id, chroma_colors)
 	if not bool(result.get("success", false)):
 		donator_store_popup.show_store_error(
 			"Purchase failed: %s" % str(result.get("error", "Unknown error"))

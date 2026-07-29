@@ -238,12 +238,27 @@ func _run() -> void:
 	store.call("_select_cosmetic_subcategory", "top")
 	_check(store.product_buttons.has("adinho-chroma-shirt"), "Chroma shirt remains listed in the Top tab")
 	store.call("_select_product", "adinho-chroma-shirt")
+	store.call("_select_character_preview_color", "#7a46c5")
 	var shirt_preview: Dictionary = store.call("_current_character_preview_appearance")
 	_check(shirt_preview.get("top", "") == "Adinho_Shirt_Chroma", "selected Chroma shirt is the only clothing applied to the preview")
 	_check(
 		shirt_preview.get("bottom", "") == "Trousers" and shirt_preview.get("shoes", "") == "Shoes",
 		"starter bottom and shoes remain while previewing a shirt"
 	)
+	_check(
+		store.call("_selected_purchase_chroma_colors") == {"top": "#7a46c5"},
+		"Chroma purchase includes the selected permanent base colour"
+	)
+
+	store.call("_select_cosmetic_filter_group", "outfits")
+	store.call("_select_product", "adinho-classic-outfit")
+	store.call("_select_character_preview_color", "#2b5f64")
+	_check(
+		store.call("_selected_purchase_chroma_colors")
+			== {"hair": "#2b5f64", "facial_hair": "#2b5f64"},
+		"outfit box purchase includes base colours for every Chroma component"
+	)
+	store.call("_select_cosmetic_filter_group", "items")
 
 	store.call("_select_cosmetic_subcategory", "bottom")
 	_check(store.product_buttons.has("adinho-chroma-trousers"), "grayscale trousers are sold separately")
