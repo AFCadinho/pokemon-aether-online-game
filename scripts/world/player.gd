@@ -266,6 +266,7 @@ func set_activity_style(style: String) -> void:
 	set_idle_frame()
 	_sync_activity_layer_offsets()
 	_apply_activity_visual_offset()
+	get_tree().call_group("world", "_publish_world_presence", true)
 
 func clear_activity_style() -> void:
 	set_activity_style(CharacterAppearanceService.BODY_MOVEMENT_DEFAULT)
@@ -300,7 +301,7 @@ func can_fish_here() -> bool:
 		return false
 	if int(GameState.fishing_tier) <= 0:
 		return false
-	if fishing_activity_active or surf_activity_active or is_moving:
+	if fishing_activity_active or is_moving:
 		return false
 	if GameState.is_overworld_input_locked() or _is_ui_typing():
 		return false
@@ -1281,7 +1282,11 @@ func _start_fishing_activity(fishing_tier: int = 1) -> void:
 	_clear_input_buffer()
 	_clear_held_direction()
 	GameState.lock_overworld_input()
-	set_activity_style(CharacterAppearanceService.BODY_MOVEMENT_FISH)
+	set_activity_style(
+		CharacterAppearanceService.BODY_MOVEMENT_SURF_FISH
+		if surf_activity_active
+		else CharacterAppearanceService.BODY_MOVEMENT_FISH
+	)
 	_sync_fishing_bite_prompt_visibility()
 	_debug_activity_layer_offsets("fishing-start")
 	_spawn_water_ripple_effect(_get_fishing_ripple_position(), "fish_cast", false)
@@ -1352,7 +1357,10 @@ func _finish_fishing_activity() -> void:
 	fishing_activity_time_left = 0.0
 	fishing_activity_tier = 0
 	fishing_activity_state = FISHING_STATE_NONE
-	clear_activity_style()
+	if surf_activity_active:
+		set_activity_style(CharacterAppearanceService.BODY_MOVEMENT_SURF)
+	else:
+		clear_activity_style()
 	_sync_fishing_bite_prompt_visibility()
 	GameState.unlock_overworld_input()
 
@@ -2236,6 +2244,8 @@ func _restore_activity_visual_offset() -> void:
 
 func _get_activity_visual_offset() -> Vector2:
 	var normalized_style: String = CharacterAppearanceService.normalize_movement_style(activity_style)
+	if normalized_style == CharacterAppearanceService.BODY_MOVEMENT_SURF_FISH:
+		normalized_style = CharacterAppearanceService.BODY_MOVEMENT_FISH
 	var style_offsets: Variant = ACTIVITY_VISUAL_OFFSETS.get(normalized_style, {})
 	if not style_offsets is Dictionary:
 		return Vector2.ZERO
@@ -2255,6 +2265,8 @@ func _restore_sprite_base_offset(sprite: AnimatedSprite2D) -> void:
 func _get_activity_layer_offset(category: String) -> Vector2:
 	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category)
 	var normalized_style: String = CharacterAppearanceService.normalize_movement_style(body_sprite_frames_movement_style)
+	if normalized_style == CharacterAppearanceService.BODY_MOVEMENT_SURF_FISH:
+		normalized_style = CharacterAppearanceService.BODY_MOVEMENT_FISH
 	var style_offsets: Variant = ACTIVITY_LAYER_OFFSETS.get(normalized_style, {})
 	if not style_offsets is Dictionary:
 		return Vector2.ZERO

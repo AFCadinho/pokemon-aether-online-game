@@ -117,6 +117,7 @@ const BODY_MOVEMENT_RUN := "run"
 const BODY_MOVEMENT_FISH := "fish"
 const BODY_MOVEMENT_RIDE := "ride"
 const BODY_MOVEMENT_SURF := "surf"
+const BODY_MOVEMENT_SURF_FISH := "surf_fish"
 const BODY_MOVEMENT_MOUNT := "mount"
 const LAYERED_PART_CATEGORIES: Array[String] = [
 	HAIR_CATEGORY,
@@ -841,6 +842,8 @@ static func normalize_movement_style(movement_style: String) -> String:
 	var normalized: String = movement_style.strip_edges().to_lower()
 	if normalized == BODY_MOVEMENT_RUN:
 		return BODY_MOVEMENT_RUN
+	if normalized == BODY_MOVEMENT_SURF_FISH or normalized == "surf-fish":
+		return BODY_MOVEMENT_SURF_FISH
 	if normalized == BODY_MOVEMENT_FISH or normalized == "fishing":
 		return BODY_MOVEMENT_FISH
 	if normalized == BODY_MOVEMENT_RIDE \
@@ -851,12 +854,23 @@ static func normalize_movement_style(movement_style: String) -> String:
 	return BODY_MOVEMENT_DEFAULT
 
 
+static func resolve_layer_movement_style(movement_style: String, category: String = BODY_CATEGORY) -> String:
+	var normalized_style := normalize_movement_style(movement_style)
+	if normalized_style != BODY_MOVEMENT_SURF_FISH:
+		return normalized_style
+
+	var normalized_category := normalize_part_category(category)
+	if normalized_category == BOTTOM_CATEGORY or normalized_category == SHOES_CATEGORY:
+		return BODY_MOVEMENT_RIDE
+	return BODY_MOVEMENT_FISH
+
+
 static func _normalize_movement_style(movement_style: String) -> String:
 	return normalize_movement_style(movement_style)
 
 
 static func _load_body_texture_for_movement(body_id: String, gender: String, movement_style: String) -> Texture2D:
-	var normalized_movement_style: String = _normalize_movement_style(movement_style)
+	var normalized_movement_style := resolve_layer_movement_style(movement_style, BODY_CATEGORY)
 	if normalized_movement_style != BODY_MOVEMENT_DEFAULT:
 		var movement_texture: Texture2D = _load_body_texture(_get_movement_body_id(body_id, normalized_movement_style), gender)
 		if movement_texture != null:
@@ -982,7 +996,7 @@ static func _is_selectable_body_id(body_id: String) -> bool:
 
 
 static func _load_part_texture_for_movement(category: String, part_id: String, gender: String, movement_style: String) -> Texture2D:
-	var normalized_movement_style: String = _normalize_movement_style(movement_style)
+	var normalized_movement_style := resolve_layer_movement_style(movement_style, category)
 	if normalized_movement_style != BODY_MOVEMENT_DEFAULT:
 		var movement_part_id: String = _get_movement_body_id(part_id, normalized_movement_style)
 		var movement_texture: Texture2D = _load_part_texture(category, movement_part_id, gender)
