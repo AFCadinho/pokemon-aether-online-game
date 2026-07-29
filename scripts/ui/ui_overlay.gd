@@ -928,6 +928,7 @@ var mail_compose_party_pokemon: Array[Pokemon] = []
 var mail_selected_item_attachments: Array[Dictionary] = []
 var mail_selected_pokemon_ids: Array[int] = []
 var mail_selected_item_for_attachment: Dictionary = {}
+var mail_inventory_load_state := "idle"
 var socials_attention_sources: Dictionary = {}
 var socials_friend_list_attention_badge: Panel
 var socials_mail_attention_badge: Panel
@@ -1150,6 +1151,9 @@ var pokedex_search_request_id := 0
 var pokedex_detail_request_id := 0
 var pokedex_search_debounce_timer: Timer
 var pokedex_species_list_icon_cache: Dictionary = {}
+var pokedex_results_state := "idle"
+var pokedex_results_owned_total := 0
+var pokedex_results_dex_total := 0
 var pokedex_dragging := false
 var pokedex_drag_offset := Vector2.ZERO
 var wild_pokemon_popup: PanelContainer
@@ -1381,6 +1385,8 @@ func _on_locale_changed(_locale: String) -> void:
 	_refresh_party()
 	_refresh_bag_localized_ui()
 	_refresh_market_localized_ui()
+	_refresh_pokedex_localized_ui()
+	_refresh_mail_localized_ui()
 
 
 func _play_mail_notification_sound() -> void:
@@ -1669,7 +1675,7 @@ func _setup_mail_workspace_structure() -> void:
 	header.add_child(heading)
 	header.move_child(heading, 1)
 	title_label.reparent(heading)
-	title_label.text = "Mailbox"
+	_set_localized_control_property(title_label, "text", "ui.mail.title")
 	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title_label.add_theme_font_size_override("font_size", 21)
@@ -1677,16 +1683,16 @@ func _setup_mail_workspace_structure() -> void:
 
 	var subtitle := Label.new()
 	subtitle.name = "Subtitle"
-	subtitle.text = "Messages, deliveries and trainer gifts"
+	_set_localized_control_property(subtitle, "text", "ui.mail.subtitle")
 	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	subtitle.add_theme_font_size_override("font_size", 11)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	heading.add_child(subtitle)
 
-	mail_compose_button.text = "+  New Mail"
+	_set_localized_control_property(mail_compose_button, "text", "ui.mail.new")
 	mail_compose_button.custom_minimum_size = Vector2(132, 38)
 	mail_close_button.text = "×"
-	mail_close_button.tooltip_text = "Close mailbox"
+	_set_localized_control_property(mail_close_button, "tooltip_text", "ui.mail.close")
 	mail_close_button.custom_minimum_size = Vector2(38, 38)
 	mail_close_button.add_theme_font_size_override("font_size", 18)
 
@@ -1695,6 +1701,8 @@ func _setup_mail_workspace_structure() -> void:
 	tab_row.add_theme_constant_override("separation", 6)
 	mail_inbox_button.custom_minimum_size = Vector2(124, 36)
 	mail_sent_button.custom_minimum_size = Vector2(124, 36)
+	_set_localized_control_property(mail_inbox_button, "text", "ui.mail.inbox")
+	_set_localized_control_property(mail_sent_button, "text", "ui.mail.sent")
 	for button: Button in [
 		mail_compose_button,
 		mail_close_button,
@@ -1711,7 +1719,7 @@ func _setup_mail_workspace_structure() -> void:
 	tab_row.add_child(tab_spacer)
 
 	var mailbox_hint := Label.new()
-	mailbox_hint.text = "Select a message to read it"
+	_set_localized_control_property(mailbox_hint, "text", "ui.mail.select_hint")
 	mailbox_hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	mailbox_hint.add_theme_font_size_override("font_size", 11)
 	mailbox_hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -1729,11 +1737,12 @@ func _setup_mail_workspace_structure() -> void:
 	mail_list.add_theme_constant_override("separation", 7)
 
 	var inbox_label: Label = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailListPanel/MarginContainer/MailListScroll/MailList/InboxLabel
-	inbox_label.text = "INBOX"
+	inbox_label.text = LocalizationManager.text("ui.mail.inbox").to_upper()
 	inbox_label.add_theme_font_size_override("font_size", 10)
 	inbox_label.add_theme_color_override("font_color", Color("#60d3ff"))
 
 	mail_empty_inbox_label.custom_minimum_size = Vector2(0, 84)
+	mail_empty_inbox_label.text = LocalizationManager.text("ui.mail.empty.inbox")
 	mail_empty_inbox_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	mail_empty_inbox_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	mail_empty_inbox_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -1750,7 +1759,7 @@ func _setup_mail_workspace_structure() -> void:
 
 	var message_caption := Label.new()
 	message_caption.name = "MessageCaption"
-	message_caption.text = "MESSAGE"
+	_set_localized_control_property(message_caption, "text", "ui.mail.message")
 	message_caption.add_theme_font_size_override("font_size", 10)
 	message_caption.add_theme_color_override("font_color", Color("#60d3ff"))
 	detail_stack.add_child(message_caption)
@@ -1771,7 +1780,7 @@ func _setup_mail_workspace_structure() -> void:
 	mail_body_label.custom_minimum_size = Vector2(0, body_label_margin)
 
 	var attachment_title: Label = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/AttachmentTitle
-	attachment_title.text = "ATTACHMENTS"
+	attachment_title.text = LocalizationManager.text("ui.mail.attachments")
 	attachment_title.add_theme_font_size_override("font_size", 10)
 	attachment_title.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	var attachment_scroll: ScrollContainer = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/AttachmentScroll
@@ -1791,6 +1800,9 @@ func _setup_mail_workspace_structure() -> void:
 	mail_reply_button.custom_minimum_size = Vector2(92, 38)
 	mail_delete_button.reparent(action_row)
 	mail_delete_button.custom_minimum_size = Vector2(104, 38)
+	_set_localized_control_property(mail_claim_button, "text", "ui.mail.claim_attachments")
+	_set_localized_control_property(mail_reply_button, "text", "ui.mail.reply")
+	_set_localized_control_property(mail_delete_button, "text", "ui.mail.delete")
 
 func _setup_mail_compose_workspace_structure() -> void:
 	if bool(mail_compose_popup.get_meta("workspace_structure_ready", false)):
@@ -1817,41 +1829,71 @@ func _setup_mail_compose_workspace_structure() -> void:
 	var header: HBoxContainer = title_label.get_parent() as HBoxContainer
 	header.custom_minimum_size = Vector2(0, 42)
 	header.add_theme_constant_override("separation", 8)
-	title_label.text = "Compose Mail"
+	_set_localized_control_property(title_label, "text", "ui.mail.compose.title")
 	title_label.add_theme_font_size_override("font_size", 21)
 	title_label.add_theme_color_override("font_color", UI_TEXT)
-	mail_compose_help_button.tooltip_text = "View mail rules and delivery fees"
+	_set_localized_control_property(
+		mail_compose_help_button,
+		"tooltip_text",
+		"ui.mail.compose.rules_tooltip"
+	)
 	_apply_button_style(mail_compose_help_button)
 
 	mail_compose_close_button.reparent(header)
 	mail_compose_close_button.text = "×"
-	mail_compose_close_button.tooltip_text = "Close composer"
+	_set_localized_control_property(
+		mail_compose_close_button,
+		"tooltip_text",
+		"ui.mail.compose.close"
+	)
 	mail_compose_close_button.custom_minimum_size = Vector2(36, 34)
 	mail_compose_close_button.add_theme_font_size_override("font_size", 18)
 
 	var subtitle := Label.new()
 	subtitle.name = "Subtitle"
-	subtitle.text = "Send a message or safely deliver items and Pokémon."
+	_set_localized_control_property(subtitle, "text", "ui.mail.compose.subtitle")
 	subtitle.add_theme_font_size_override("font_size", 11)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	layout.add_child(subtitle)
 	layout.move_child(subtitle, header.get_index() + 1)
 
-	_add_mail_compose_field_caption(layout, mail_compose_recipient_input, "TO")
-	_add_mail_compose_field_caption(layout, mail_compose_subject_input, "SUBJECT")
-	_add_mail_compose_field_caption(layout, mail_compose_body_input, "MESSAGE")
+	_add_mail_compose_field_caption(layout, mail_compose_recipient_input, "ui.mail.compose.to")
+	_add_mail_compose_field_caption(layout, mail_compose_subject_input, "ui.mail.compose.subject")
+	_add_mail_compose_field_caption(layout, mail_compose_body_input, "ui.mail.message")
+	_set_localized_control_property(
+		mail_compose_recipient_input,
+		"placeholder_text",
+		"ui.mail.compose.recipient_placeholder"
+	)
+	_set_localized_control_property(
+		mail_compose_subject_input,
+		"placeholder_text",
+		"ui.mail.compose.subject_placeholder"
+	)
+	_set_localized_control_property(
+		mail_compose_body_input,
+		"placeholder_text",
+		"ui.mail.compose.message_placeholder"
+	)
 	mail_compose_recipient_input.custom_minimum_size = Vector2(0, 38)
 	mail_compose_subject_input.custom_minimum_size = Vector2(0, 38)
 	mail_compose_body_input.custom_minimum_size = Vector2(0, 112)
 
 	var attachments_title: Label = $Control/MailComposePopup/MarginContainer/VBoxContainer/AttachmentsTitle
-	attachments_title.text = "ATTACHMENTS"
+	_set_localized_control_property(attachments_title, "text", "ui.mail.attachments")
 	attachments_title.add_theme_font_size_override("font_size", 10)
 	attachments_title.add_theme_color_override("font_color", Color("#60d3ff"))
 	var item_row: HBoxContainer = $Control/MailComposePopup/MarginContainer/VBoxContainer/ItemAttachmentRow
 	var pokemon_row: HBoxContainer = $Control/MailComposePopup/MarginContainer/VBoxContainer/PokemonAttachmentRow
-	_add_mail_compose_field_caption(layout, item_row, "FROM YOUR BAG")
-	_add_mail_compose_field_caption(layout, pokemon_row, "FROM YOUR PARTY")
+	_add_mail_compose_field_caption(layout, item_row, "ui.mail.compose.from_bag")
+	_add_mail_compose_field_caption(layout, pokemon_row, "ui.mail.compose.from_party")
+	_set_localized_control_property(
+		mail_item_search_input,
+		"placeholder_text",
+		"ui.mail.compose.item_search"
+	)
+	_set_localized_control_property(mail_add_item_button, "text", "ui.mail.compose.add_item")
+	_set_localized_control_property(mail_add_pokemon_button, "text", "ui.mail.compose.add_pokemon")
 	mail_item_search_input.custom_minimum_size = Vector2(300, 36)
 	mail_item_quantity.custom_minimum_size = Vector2(88, 36)
 	mail_add_item_button.custom_minimum_size = Vector2(112, 36)
@@ -1874,13 +1916,13 @@ func _setup_mail_compose_workspace_structure() -> void:
 
 	var button_row: HBoxContainer = $Control/MailComposePopup/MarginContainer/VBoxContainer/ButtonRow
 	button_row.add_theme_constant_override("separation", 8)
-	mail_compose_send_button.text = "Send Mail"
+	_set_localized_control_property(mail_compose_send_button, "text", "ui.mail.compose.send")
 	mail_compose_send_button.custom_minimum_size = Vector2(136, 40)
 
-func _add_mail_compose_field_caption(layout: VBoxContainer, target: Control, caption_text: String) -> void:
+func _add_mail_compose_field_caption(layout: VBoxContainer, target: Control, caption_key: String) -> void:
 	var caption := Label.new()
-	caption.name = "%sCaption" % caption_text.to_pascal_case().replace(" ", "")
-	caption.text = caption_text
+	caption.name = "%sCaption" % target.name
+	_set_localized_control_property(caption, "text", caption_key)
 	caption.add_theme_font_size_override("font_size", 9)
 	caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	var target_index: int = target.get_index()
@@ -2406,7 +2448,11 @@ func _setup_mail_compose_help_button() -> void:
 	mail_compose_help_button.text = "?"
 	mail_compose_help_button.custom_minimum_size = Vector2(32, 30)
 	mail_compose_help_button.focus_mode = Control.FOCUS_NONE
-	mail_compose_help_button.tooltip_text = "Mail rules\nMessage only: 50\nWith gifts: 400\nWait 2 minutes between mails\nUp to 5 kinds of items and 5 Pokémon\nPokémon must not be holding an item"
+	_set_localized_control_property(
+		mail_compose_help_button,
+		"tooltip_text",
+		"ui.mail.rules.summary"
+	)
 	mail_compose_help_button.pressed.connect(_toggle_mail_compose_help_popup)
 	header.add_child(mail_compose_help_button)
 	_apply_button_style(mail_compose_help_button, "primary")
@@ -2437,28 +2483,28 @@ func _setup_mail_compose_help_popup() -> void:
 	margin.add_child(layout)
 
 	var title := Label.new()
-	title.text = "Mail Rules"
+	_set_localized_control_property(title, "text", "ui.mail.rules.title")
 	title.add_theme_font_size_override("font_size", 18)
 	title.add_theme_color_override("font_color", Color("#f5df9a"))
 	layout.add_child(title)
 
-	for line in [
-		"Base fee: 50",
-		"With attachments: 400",
-		"Cooldown: 2 minutes",
-		"Max item stacks: 5",
-		"Max Pokemon: 5",
-		"Pokemon cannot hold items.",
+	for line_key in [
+		"ui.mail.rules.base_fee",
+		"ui.mail.rules.attachments_fee",
+		"ui.mail.rules.cooldown",
+		"ui.mail.rules.max_item_stacks",
+		"ui.mail.rules.max_pokemon",
+		"ui.mail.rules.no_held_items",
 	]:
 		var label := Label.new()
-		label.text = line
+		_set_localized_control_property(label, "text", line_key)
 		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		label.add_theme_font_size_override("font_size", 13)
 		label.add_theme_color_override("font_color", UI_TEXT)
 		layout.add_child(label)
 
 	var close_button := Button.new()
-	close_button.text = "Close"
+	_set_localized_control_property(close_button, "text", "common.close")
 	close_button.custom_minimum_size = Vector2(0, 32)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_mail_compose_help_popup)
@@ -7637,7 +7683,7 @@ func _setup_pokedex_popup() -> void:
 	header.add_child(heading)
 
 	var title_label := Label.new()
-	title_label.text = "Pokédex"
+	_set_localized_control_property(title_label, "text", "ui.pokedex.title")
 	title_label.mouse_default_cursor_shape = Control.CURSOR_MOVE
 	title_label.gui_input.connect(_on_pokedex_header_gui_input)
 	title_label.add_theme_font_size_override("font_size", 20)
@@ -7645,14 +7691,14 @@ func _setup_pokedex_popup() -> void:
 	heading.add_child(title_label)
 
 	var subtitle_label := Label.new()
-	subtitle_label.text = "Species research and habitat data"
+	_set_localized_control_property(subtitle_label, "text", "ui.pokedex.subtitle")
 	subtitle_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	subtitle_label.add_theme_font_size_override("font_size", 11)
 	subtitle_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	heading.add_child(subtitle_label)
 
 	var header_hint := Label.new()
-	header_hint.text = "Search · inspect · compare"
+	_set_localized_control_property(header_hint, "text", "ui.pokedex.header_hint")
 	header_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	header_hint.add_theme_font_size_override("font_size", 10)
 	header_hint.add_theme_color_override(
@@ -7663,7 +7709,7 @@ func _setup_pokedex_popup() -> void:
 
 	var close_button := Button.new()
 	close_button.text = "×"
-	close_button.tooltip_text = "Close"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.custom_minimum_size = Vector2(34, 34)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_pokedex_popup)
@@ -7698,18 +7744,22 @@ func _setup_pokedex_popup() -> void:
 	browser_stack.add_child(browser_header)
 
 	var browser_label := Label.new()
-	browser_label.text = "SPECIES INDEX"
+	_set_localized_control_property(browser_label, "text", "ui.pokedex.species_index")
 	browser_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	browser_label.add_theme_font_size_override("font_size", 10)
 	browser_label.add_theme_color_override("font_color", POKEDEX_ACCENT)
 	browser_header.add_child(browser_label)
 
 	pokedex_results_count_label = Label.new()
-	pokedex_results_count_label.text = "Loading..."
+	pokedex_results_count_label.text = LocalizationManager.text("common.loading")
 	pokedex_results_count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	pokedex_results_count_label.add_theme_font_size_override("font_size", 10)
 	pokedex_results_count_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	pokedex_results_count_label.tooltip_text = "Unique species registered to your Trainer ID"
+	_set_localized_control_property(
+		pokedex_results_count_label,
+		"tooltip_text",
+		"ui.pokedex.registered_tooltip"
+	)
 	browser_header.add_child(pokedex_results_count_label)
 
 	var dex_selector_row := HBoxContainer.new()
@@ -7717,7 +7767,7 @@ func _setup_pokedex_popup() -> void:
 	browser_stack.add_child(dex_selector_row)
 
 	var dex_selector_label := Label.new()
-	dex_selector_label.text = "DEX"
+	_set_localized_control_property(dex_selector_label, "text", "ui.pokedex.dex")
 	dex_selector_label.custom_minimum_size = Vector2(38, 0)
 	dex_selector_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	dex_selector_label.add_theme_font_size_override("font_size", 10)
@@ -7729,9 +7779,9 @@ func _setup_pokedex_popup() -> void:
 	pokedex_dex_selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pokedex_dex_selector.custom_minimum_size = Vector2(0, 36)
 	pokedex_dex_selector.focus_mode = Control.FOCUS_NONE
-	pokedex_dex_selector.add_item("National Dex")
+	pokedex_dex_selector.add_item(LocalizationManager.text("ui.pokedex.dex.national"))
 	pokedex_dex_selector.set_item_metadata(0, "national")
-	pokedex_dex_selector.add_item("Kanto Dex")
+	pokedex_dex_selector.add_item(LocalizationManager.text("ui.pokedex.dex.kanto"))
 	pokedex_dex_selector.set_item_metadata(1, "kanto")
 	pokedex_dex_selector.item_selected.connect(_on_pokedex_dex_selected)
 	_apply_pokedex_dex_selector_style(pokedex_dex_selector)
@@ -7742,7 +7792,7 @@ func _setup_pokedex_popup() -> void:
 	browser_stack.add_child(variant_selector_row)
 
 	var variant_selector_label := Label.new()
-	variant_selector_label.text = "VIEW"
+	_set_localized_control_property(variant_selector_label, "text", "ui.pokedex.view")
 	variant_selector_label.custom_minimum_size = Vector2(38, 0)
 	variant_selector_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	variant_selector_label.add_theme_font_size_override("font_size", 10)
@@ -7753,12 +7803,16 @@ func _setup_pokedex_popup() -> void:
 	variant_button_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	variant_button_row.add_theme_constant_override("separation", 5)
 	variant_selector_row.add_child(variant_button_row)
-	variant_button_row.add_child(_create_pokedex_variant_button("normal", "Normal"))
-	variant_button_row.add_child(_create_pokedex_variant_button("shiny", "✦ Shiny"))
+	variant_button_row.add_child(_create_pokedex_variant_button("normal", "ui.pokedex.variant.normal"))
+	variant_button_row.add_child(_create_pokedex_variant_button("shiny", "ui.pokedex.variant.shiny"))
 	_refresh_pokedex_variant_buttons()
 
 	pokedex_search_input = LineEdit.new()
-	pokedex_search_input.placeholder_text = "Search by name or number..."
+	_set_localized_control_property(
+		pokedex_search_input,
+		"placeholder_text",
+		"ui.pokedex.search"
+	)
 	pokedex_search_input.clear_button_enabled = true
 	pokedex_search_input.custom_minimum_size = Vector2(0, 36)
 	pokedex_search_input.text_changed.connect(_on_pokedex_search_changed)
@@ -7827,7 +7881,7 @@ func _setup_pokedex_popup() -> void:
 	detail_header.add_child(title_stack)
 
 	var record_label := Label.new()
-	record_label.text = "SPECIES RECORD"
+	_set_localized_control_property(record_label, "text", "ui.pokedex.species_record")
 	record_label.add_theme_font_size_override("font_size", 10)
 	record_label.add_theme_color_override("font_color", POKEDEX_ACCENT)
 	title_stack.add_child(record_label)
@@ -7841,7 +7895,7 @@ func _setup_pokedex_popup() -> void:
 	pokedex_name_row.add_child(pokedex_owned_icon)
 
 	pokedex_name_label = Label.new()
-	pokedex_name_label.text = "Select a species"
+	pokedex_name_label.text = LocalizationManager.text("ui.pokedex.select_species")
 	pokedex_name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pokedex_name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	pokedex_name_label.add_theme_font_size_override("font_size", 25)
@@ -7849,7 +7903,7 @@ func _setup_pokedex_popup() -> void:
 	pokedex_name_row.add_child(pokedex_name_label)
 
 	pokedex_meta_label = Label.new()
-	pokedex_meta_label.text = "No species selected."
+	pokedex_meta_label.text = LocalizationManager.text("ui.pokedex.no_species_selected")
 	pokedex_meta_label.add_theme_font_size_override("font_size", 11)
 	pokedex_meta_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	title_stack.add_child(pokedex_meta_label)
@@ -7867,7 +7921,9 @@ func _setup_pokedex_popup() -> void:
 	pokedex_sprite_panel.custom_minimum_size = Vector2(190, 138)
 	pokedex_sprite_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	pokedex_sprite_panel.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	pokedex_sprite_panel.tooltip_text = "Show the back view"
+	pokedex_sprite_panel.tooltip_text = LocalizationManager.text("ui.pokedex.sprite.show_view", {
+		"side": LocalizationManager.text("ui.pokedex.side.back"),
+	})
 	var sprite_stage_style := _make_panel_style(UI_SURFACE_INSET, Color("#653642aa"), 11, 1)
 	sprite_stage_style.shadow_color = Color(POKEDEX_ACCENT.r, POKEDEX_ACCENT.g, POKEDEX_ACCENT.b, 0.12)
 	sprite_stage_style.shadow_size = 8
@@ -7941,15 +7997,15 @@ func _setup_pokedex_popup() -> void:
 	tab_row.add_theme_constant_override("separation", 4)
 	tab_margin.add_child(tab_row)
 
-	var general_tab := _create_pokedex_tab_button("general", "General")
+	var general_tab := _create_pokedex_tab_button("general", "ui.pokedex.tab.general")
 	tab_row.add_child(general_tab)
-	var moves_tab := _create_pokedex_tab_button("moves", "Moves")
+	var moves_tab := _create_pokedex_tab_button("moves", "ui.pokedex.tab.moves")
 	tab_row.add_child(moves_tab)
-	var locations_tab := _create_pokedex_tab_button("locations", "Locations")
+	var locations_tab := _create_pokedex_tab_button("locations", "ui.pokedex.tab.locations")
 	tab_row.add_child(locations_tab)
-	var evolutions_tab := _create_pokedex_tab_button("evolutions", "Evolutions")
+	var evolutions_tab := _create_pokedex_tab_button("evolutions", "ui.pokedex.tab.evolutions")
 	tab_row.add_child(evolutions_tab)
-	var drops_tab := _create_pokedex_tab_button("drops", "Drops")
+	var drops_tab := _create_pokedex_tab_button("drops", "ui.pokedex.tab.drops")
 	tab_row.add_child(drops_tab)
 	_refresh_pokedex_tab_buttons()
 
@@ -8024,10 +8080,10 @@ func _make_pokedex_dex_popup_panel_style() -> StyleBoxFlat:
 	style.shadow_offset = Vector2(0, 5)
 	return style
 
-func _create_pokedex_variant_button(variant_id: String, label_text: String) -> Button:
+func _create_pokedex_variant_button(variant_id: String, label_key: String) -> Button:
 	var button := Button.new()
 	button.name = "PokedexVariant_%s" % variant_id
-	button.text = label_text
+	_set_localized_control_property(button, "text", label_key)
 	button.custom_minimum_size = Vector2(0, 32)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.focus_mode = Control.FOCUS_NONE
@@ -8057,10 +8113,40 @@ func _refresh_pokedex_variant_buttons() -> void:
 		button.add_theme_color_override("font_pressed_color", UI_TEXT)
 		button.add_theme_font_size_override("font_size", 11)
 
+func _refresh_pokedex_results_count_copy() -> void:
+	if pokedex_results_count_label == null:
+		return
+	match pokedex_results_state:
+		"loading":
+			pokedex_results_count_label.text = LocalizationManager.text("ui.pokedex.searching")
+		"unavailable":
+			pokedex_results_count_label.text = LocalizationManager.text("common.unavailable")
+		"loaded":
+			pokedex_results_count_label.text = LocalizationManager.text("ui.pokedex.owned_count", {
+				"owned": pokedex_results_owned_total,
+				"total": pokedex_results_dex_total,
+			})
+		_:
+			pokedex_results_count_label.text = LocalizationManager.text("common.loading")
+
+func _refresh_pokedex_localized_ui() -> void:
+	if pokedex_popup == null:
+		return
+	LocalizationManager.localize_tree(pokedex_popup)
+	if pokedex_dex_selector != null and pokedex_dex_selector.item_count >= 2:
+		pokedex_dex_selector.set_item_text(0, LocalizationManager.text("ui.pokedex.dex.national"))
+		pokedex_dex_selector.set_item_text(1, LocalizationManager.text("ui.pokedex.dex.kanto"))
+	_refresh_pokedex_results_count_copy()
+	_set_pokedex_header_from_species(pokedex_selected_species)
+	_refresh_pokedex_detail()
+
 func _position_pokedex_popup() -> void:
 	if pokedex_popup == null:
 		return
-	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
+	var viewport := get_viewport()
+	if viewport == null:
+		return
+	var viewport_size: Vector2 = viewport.get_visible_rect().size
 	var popup_size := Vector2(
 		min(POKEDEX_SIZE.x, max(viewport_size.x - 32.0, 360.0)),
 		min(POKEDEX_SIZE.y, max(viewport_size.y - 32.0, 360.0))
@@ -24241,14 +24327,15 @@ func _refresh_pokedex_results() -> void:
 		query = pokedex_search_input.text.strip_edges()
 
 	var loading_label := Label.new()
-	loading_label.text = "Searching species..."
+	_set_localized_control_property(loading_label, "text", "ui.pokedex.searching_species")
 	loading_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	loading_label.custom_minimum_size = Vector2(0, 44)
 	loading_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	loading_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	pokedex_results_list.add_child(loading_label)
+	pokedex_results_state = "loading"
 	if pokedex_results_count_label != null:
-		pokedex_results_count_label.text = "Searching..."
+		_refresh_pokedex_results_count_copy()
 
 	pokedex_search_request_id += 1
 	var request_id := pokedex_search_request_id
@@ -24267,14 +24354,14 @@ func _refresh_pokedex_results() -> void:
 
 	if not bool(search_result.get("success", false)):
 		var error_label := Label.new()
-		error_label.text = "Could not load species."
+		_set_localized_control_property(error_label, "text", "ui.pokedex.load_failed")
 		error_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		error_label.custom_minimum_size = Vector2(0, 44)
 		error_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		error_label.add_theme_color_override("font_color", UI_DANGER)
 		pokedex_results_list.add_child(error_label)
-		if pokedex_results_count_label != null:
-			pokedex_results_count_label.text = "Unavailable"
+		pokedex_results_state = "unavailable"
+		_refresh_pokedex_results_count_copy()
 		return
 
 	var species_results: Array = _array_from_variant(search_result.get("species", []))
@@ -24292,7 +24379,7 @@ func _refresh_pokedex_results() -> void:
 
 	if count == 0:
 		var empty_label := Label.new()
-		empty_label.text = "No species match this search."
+		_set_localized_control_property(empty_label, "text", "ui.pokedex.empty_search")
 		empty_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		empty_label.custom_minimum_size = Vector2(0, 44)
 		empty_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -24301,9 +24388,10 @@ func _refresh_pokedex_results() -> void:
 	elif pokedex_selected_species_id == "" and pokedex_selected_species.is_empty() and first_species_id != "":
 		await _on_pokedex_species_selected(first_species_id)
 	if pokedex_results_count_label != null:
-		var owned_total := int(search_result.get("ownedTotal", 0))
-		var dex_total := int(search_result.get("dexTotal", count))
-		pokedex_results_count_label.text = "OWNED %d / %d" % [owned_total, dex_total]
+		pokedex_results_owned_total = int(search_result.get("ownedTotal", 0))
+		pokedex_results_dex_total = int(search_result.get("dexTotal", count))
+		pokedex_results_state = "loaded"
+		_refresh_pokedex_results_count_copy()
 		pokedex_results_count_label.add_theme_color_override(
 			"font_color",
 			POKEDEX_SHINY_ACCENT if pokedex_shiny_mode else POKEDEX_ACCENT
@@ -24388,7 +24476,10 @@ func _create_pokedex_species_button(species: Dictionary) -> Control:
 
 	var meta_label := Label.new()
 	meta_label.name = "Meta"
-	meta_label.text = type_text if type_text != "" else "Unknown type"
+	if type_text != "":
+		meta_label.text = type_text
+	else:
+		_set_localized_control_property(meta_label, "text", "ui.pokedex.unknown_type")
 	meta_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	meta_label.add_theme_font_size_override("font_size", 10)
 	meta_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -24405,7 +24496,11 @@ func _create_owned_pokeball_icon(icon_size: Vector2) -> TextureRect:
 	owned_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	owned_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	owned_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	owned_icon.tooltip_text = "Registered to your Trainer ID"
+	_set_localized_control_property(
+		owned_icon,
+		"tooltip_text",
+		"ui.pokedex.registered_tooltip"
+	)
 	return owned_icon
 
 func _style_pokedex_species_button(button: Button, selected: bool) -> void:
@@ -24486,21 +24581,21 @@ func _on_pokedex_species_selected(species_id: String) -> void:
 
 	pokedex_detail_request_id += 1
 	var detail_request_id := pokedex_detail_request_id
-	_set_pokedex_detail_message("Loading species...")
+	_set_pokedex_detail_message(LocalizationManager.text("ui.pokedex.loading_species"))
 	var detail_result: Dictionary = await PokedexService.get_species_detail(normalized_species_id)
 	if detail_request_id != pokedex_detail_request_id:
 		return
 	if not bool(detail_result.get("success", false)):
 		pokedex_selected_species = {}
 		_set_pokedex_header_from_species({})
-		_set_pokedex_detail_message("Could not load species.")
+		_set_pokedex_detail_message(LocalizationManager.text("ui.pokedex.load_failed"))
 		return
 
 	var species_value: Variant = detail_result.get("species", {})
 	if typeof(species_value) != TYPE_DICTIONARY:
 		pokedex_selected_species = {}
 		_set_pokedex_header_from_species({})
-		_set_pokedex_detail_message("Species detail is empty.")
+		_set_pokedex_detail_message(LocalizationManager.text("ui.pokedex.detail_empty"))
 		return
 
 	pokedex_selected_species = species_value
@@ -24511,10 +24606,10 @@ func _on_pokedex_species_selected(species_id: String) -> void:
 	_set_pokedex_header_from_species(pokedex_selected_species)
 	_refresh_pokedex_detail()
 
-func _create_pokedex_tab_button(tab_id: String, label_text: String) -> Button:
+func _create_pokedex_tab_button(tab_id: String, label_key: String) -> Button:
 	var button := Button.new()
 	button.name = "PokedexTab_%s" % tab_id
-	button.text = label_text
+	_set_localized_control_property(button, "text", label_key)
 	button.custom_minimum_size = Vector2(0, 34)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.focus_mode = Control.FOCUS_NONE
@@ -24552,16 +24647,19 @@ func _set_pokedex_header_from_species(species: Dictionary) -> void:
 		return
 
 	if species.is_empty():
-		pokedex_name_label.text = "Select a species"
+		pokedex_name_label.text = LocalizationManager.text("ui.pokedex.select_species")
 		if pokedex_owned_icon != null:
 			pokedex_owned_icon.visible = false
-		pokedex_meta_label.text = "No species selected."
+		pokedex_meta_label.text = LocalizationManager.text("ui.pokedex.no_species_selected")
 		_clear_pokedex_species_sprite()
 		_refresh_pokedex_type_row([])
 		_refresh_pokedex_header_stats({})
 		return
 
-	var species_name := str(species.get("name", species.get("id", "Unknown")))
+	var species_name := str(species.get(
+		"name",
+		species.get("id", LocalizationManager.text("common.unknown"))
+	))
 	var national_number := int(species.get("nationalDexNumber", 0))
 	var rarity := str(species.get("rarity", "")).strip_edges()
 	var meta_parts: Array[String] = []
@@ -24578,7 +24676,11 @@ func _set_pokedex_header_from_species(species: Dictionary) -> void:
 			str(species.get("id", species_name)),
 			pokedex_shiny_mode
 		)
-	pokedex_meta_label.text = " / ".join(meta_parts) if not meta_parts.is_empty() else "Species data"
+	pokedex_meta_label.text = (
+		" / ".join(meta_parts)
+		if not meta_parts.is_empty()
+		else LocalizationManager.text("ui.pokedex.species_data")
+	)
 	_set_pokedex_species_sprite(species)
 	_refresh_pokedex_type_row(_array_from_variant(species.get("types", [])))
 	var stats_value: Variant = species.get("baseStats", {})
@@ -24605,7 +24707,7 @@ func _clear_pokedex_species_sprite() -> void:
 		pokedex_sprite.texture = null
 		pokedex_sprite.visible = true
 	if pokedex_sprite_panel != null:
-		pokedex_sprite_panel.tooltip_text = "Select a Pokémon"
+		pokedex_sprite_panel.tooltip_text = LocalizationManager.text("ui.pokedex.sprite.select")
 
 func _set_pokedex_species_sprite(species: Dictionary) -> void:
 	if pokedex_animated_sprite == null or pokedex_sprite == null:
@@ -24644,7 +24746,10 @@ func _set_pokedex_species_sprite(species: Dictionary) -> void:
 		pokedex_sprite.texture = _load_pokedex_species_texture(species)
 
 	if pokedex_sprite_panel != null:
-		pokedex_sprite_panel.tooltip_text = "Show the %s view" % ("front" if _get_pokedex_sprite_side() == "back" else "back")
+		var target_side := "front" if _get_pokedex_sprite_side() == "back" else "back"
+		pokedex_sprite_panel.tooltip_text = LocalizationManager.text("ui.pokedex.sprite.show_view", {
+			"side": LocalizationManager.text("ui.pokedex.side.%s" % target_side),
+		})
 
 func _pokedex_species_sprite_candidates(species: Dictionary) -> Array[String]:
 	var candidates: Array[String] = []
@@ -24826,14 +24931,14 @@ func _refresh_pokedex_header_stats(stats: Dictionary) -> void:
 		child.queue_free()
 
 	var caption := Label.new()
-	caption.text = "BASE STATS"
+	_set_localized_control_property(caption, "text", "ui.pokedex.base_stats")
 	caption.add_theme_font_size_override("font_size", 9)
 	caption.add_theme_color_override("font_color", POKEDEX_ACCENT)
 	pokedex_header_stats_stack.add_child(caption)
 
 	if stats.is_empty():
 		var empty_label := Label.new()
-		empty_label.text = "Select a species to compare stats."
+		_set_localized_control_property(empty_label, "text", "ui.pokedex.stats.select")
 		empty_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		empty_label.add_theme_font_size_override("font_size", 11)
 		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -24890,7 +24995,7 @@ func _create_pokedex_header_stat_total_row(total: int) -> Control:
 	row.add_theme_constant_override("separation", 6)
 
 	var label := Label.new()
-	label.text = "TOTAL"
+	_set_localized_control_property(label, "text", "common.total")
 	label.custom_minimum_size = Vector2(48, 0)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -24919,7 +25024,7 @@ func _refresh_pokedex_detail() -> void:
 		child.queue_free()
 
 	if pokedex_selected_species.is_empty():
-		_set_pokedex_detail_message("Search and select a Pokemon to view its data.")
+		_set_pokedex_detail_message(LocalizationManager.text("ui.pokedex.detail.select"))
 		return
 
 	match pokedex_active_tab:
@@ -24930,7 +25035,7 @@ func _refresh_pokedex_detail() -> void:
 		"evolutions":
 			_build_pokedex_evolutions_tab()
 		"drops":
-			_build_pokedex_placeholder_tab("Drops", [])
+			_build_pokedex_placeholder_tab(LocalizationManager.text("ui.pokedex.tab.drops"), [])
 		_:
 			_build_pokedex_moves_tab()
 
@@ -24957,7 +25062,7 @@ func _set_pokedex_detail_message(message: String) -> void:
 	center.add_child(stack)
 
 	var caption := Label.new()
-	caption.text = "POKÉDEX STATUS"
+	_set_localized_control_property(caption, "text", "ui.pokedex.status")
 	caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	caption.add_theme_font_size_override("font_size", 10)
 	caption.add_theme_color_override("font_color", POKEDEX_ACCENT)
@@ -24971,7 +25076,10 @@ func _set_pokedex_detail_message(message: String) -> void:
 	stack.add_child(label)
 
 func _build_pokedex_general_tab() -> void:
-	var profile_card := _create_pokedex_dossier_card("Species Profile", "Biology and training overview")
+	var profile_card := _create_pokedex_dossier_card(
+		LocalizationManager.text("ui.pokedex.profile.title"),
+		LocalizationManager.text("ui.pokedex.profile.subtitle")
+	)
 	pokedex_detail_stack.add_child(profile_card.get("panel") as Control)
 	var profile_content: VBoxContainer = profile_card.get("content") as VBoxContainer
 	var profile_facts := GridContainer.new()
@@ -24980,27 +25088,37 @@ func _build_pokedex_general_tab() -> void:
 	profile_facts.add_theme_constant_override("v_separation", 6)
 	profile_content.add_child(profile_facts)
 	profile_facts.add_child(_create_pokedex_profile_fact(
-		"EGG GROUPS",
+		LocalizationManager.text("ui.pokedex.profile.egg_groups"),
 		_format_pokedex_value_list(_array_from_variant(pokedex_selected_species.get("eggGroups", pokedex_selected_species.get("egg_groups", []))))
 	))
 	profile_facts.add_child(_create_pokedex_profile_fact(
-		"GROWTH RATE",
-		_format_identifier_display_name(str(pokedex_selected_species.get("growthRate", ""))) if str(pokedex_selected_species.get("growthRate", "")).strip_edges() != "" else "Unknown"
+		LocalizationManager.text("ui.pokedex.profile.growth_rate"),
+		_format_identifier_display_name(str(pokedex_selected_species.get("growthRate", "")))
+		if str(pokedex_selected_species.get("growthRate", "")).strip_edges() != ""
+		else LocalizationManager.text("common.unknown")
 	))
 	profile_facts.add_child(_create_pokedex_profile_fact(
-		"BASE EXP",
+		LocalizationManager.text("ui.pokedex.profile.base_exp"),
 		str(int(pokedex_selected_species.get("baseExperience", 0)))
 	))
 
-	var abilities_card := _create_pokedex_dossier_card("Abilities", "Hover an ability for its effect")
+	var abilities_card := _create_pokedex_dossier_card(
+		LocalizationManager.text("ui.pokedex.abilities.title"),
+		LocalizationManager.text("ui.pokedex.abilities.subtitle")
+	)
 	pokedex_detail_stack.add_child(abilities_card.get("panel") as Control)
 	var abilities_content: VBoxContainer = abilities_card.get("content") as VBoxContainer
 	var abilities := _array_from_variant(pokedex_selected_species.get("abilities", []))
 	var added_abilities := _add_pokedex_ability_rows(abilities, abilities_content)
 	if added_abilities <= 0:
-		abilities_content.add_child(_create_pokedex_muted_message("No abilities available."))
+		abilities_content.add_child(_create_pokedex_muted_message(
+			LocalizationManager.text("ui.pokedex.abilities.empty")
+		))
 
-	var training_card := _create_pokedex_dossier_card("Effort Values", "Stats gained after defeating this species")
+	var training_card := _create_pokedex_dossier_card(
+		LocalizationManager.text("ui.pokedex.evs.title"),
+		LocalizationManager.text("ui.pokedex.evs.subtitle")
+	)
 	pokedex_detail_stack.add_child(training_card.get("panel") as Control)
 	var training_content: VBoxContainer = training_card.get("content") as VBoxContainer
 	training_content.add_child(_create_pokedex_ev_yield_panel(_get_pokedex_ev_yield()))
@@ -25028,13 +25146,13 @@ func _add_pokedex_ability_rows(abilities: Array, target: VBoxContainer = null) -
 func _format_pokedex_ability_slot_label(slot: String) -> String:
 	match slot.strip_edges().to_lower():
 		"primary":
-			return "Ability 1"
+			return LocalizationManager.text("ui.pokedex.ability.primary")
 		"secondary":
-			return "Ability 2"
+			return LocalizationManager.text("ui.pokedex.ability.secondary")
 		"hidden":
-			return "Hidden Ability"
+			return LocalizationManager.text("ui.pokedex.ability.hidden")
 		_:
-			return "Ability"
+			return LocalizationManager.text("ui.pokedex.ability.default")
 
 func _get_pokedex_ev_yield() -> Dictionary:
 	var yield_value: Variant = pokedex_selected_species.get("evYield", pokedex_selected_species.get("ev_yield", {}))
@@ -25071,20 +25189,26 @@ func _create_pokedex_ev_yield_panel(ev_yield: Dictionary) -> Control:
 	stack.add_child(header)
 
 	var title := Label.new()
-	title.text = "EV YIELD"
+	title.text = LocalizationManager.text("ui.pokedex.evs.yield")
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.add_theme_font_size_override("font_size", 10)
 	title.add_theme_color_override("font_color", POKEDEX_ACCENT)
 	header.add_child(title)
 
 	var total_label := Label.new()
-	total_label.text = "%d total" % total if total > 0 else "Unknown"
+	total_label.text = (
+		LocalizationManager.text("ui.pokedex.evs.total", {"total": total})
+		if total > 0
+		else LocalizationManager.text("common.unknown")
+	)
 	total_label.add_theme_font_size_override("font_size", 11)
 	total_label.add_theme_color_override("font_color", Color("#f2ead2") if total > 0 else UI_MUTED_TEXT)
 	header.add_child(total_label)
 
 	if total <= 0:
-		stack.add_child(_create_pokedex_muted_message("No EV yield data available."))
+		stack.add_child(_create_pokedex_muted_message(
+			LocalizationManager.text("ui.pokedex.evs.empty")
+		))
 		return panel
 
 	var chip_row := HBoxContainer.new()
@@ -25130,17 +25254,23 @@ func _create_pokedex_ev_yield_chip(label_text: String, value: int, color: Color)
 func _build_pokedex_placeholder_tab(title_text: String, entries: Array) -> void:
 	pokedex_detail_stack.add_child(_create_pokedex_detail_section_title(title_text))
 	if entries.is_empty():
-		pokedex_detail_stack.add_child(_create_pokedex_muted_message("%s data is not available yet." % title_text))
+		pokedex_detail_stack.add_child(_create_pokedex_muted_message(
+			LocalizationManager.text("ui.pokedex.data_unavailable", {"section": title_text})
+		))
 		return
 	for entry_value: Variant in entries:
 		pokedex_detail_stack.add_child(_create_pokedex_muted_message(str(entry_value)))
 
 func _build_pokedex_locations_tab() -> void:
-	pokedex_detail_stack.add_child(_create_pokedex_detail_section_title("Wild Locations"))
+	pokedex_detail_stack.add_child(_create_pokedex_detail_section_title(
+		LocalizationManager.text("ui.pokedex.locations.title")
+	))
 
 	var locations := _array_from_variant(pokedex_selected_species.get("locations", []))
 	if locations.is_empty():
-		pokedex_detail_stack.add_child(_create_pokedex_muted_message("No known wild locations."))
+		pokedex_detail_stack.add_child(_create_pokedex_muted_message(
+			LocalizationManager.text("ui.pokedex.locations.empty")
+		))
 		return
 
 	for location_value: Variant in locations:
@@ -25164,9 +25294,16 @@ func _create_pokedex_location_row(location: Dictionary) -> Control:
 	row.add_theme_constant_override("separation", 12)
 	margin.add_child(row)
 
-	var area_name := str(location.get("areaName", location.get("areaId", "Unknown Area"))).strip_edges()
+	var area_name := str(location.get(
+		"areaName",
+		location.get("areaId", LocalizationManager.text("ui.pokedex.locations.unknown_area"))
+	)).strip_edges()
 	var area_label := Label.new()
-	area_label.text = area_name if area_name != "" else "Unknown Area"
+	area_label.text = (
+		area_name
+		if area_name != ""
+		else LocalizationManager.text("ui.pokedex.locations.unknown_area")
+	)
 	area_label.custom_minimum_size = Vector2(210, 0)
 	area_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	area_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -25179,17 +25316,27 @@ func _create_pokedex_location_row(location: Dictionary) -> Control:
 	encounter_stack.add_theme_constant_override("separation", 1)
 	row.add_child(encounter_stack)
 
-	var encounter_type := str(location.get("encounterType", "Wild")).strip_edges()
+	var encounter_type := str(location.get(
+		"encounterType",
+		LocalizationManager.text("ui.pokedex.locations.wild")
+	)).strip_edges()
 	var level_text := _format_pokedex_location_level_range(location)
 	var method_label := Label.new()
-	method_label.text = "%s - %s" % [encounter_type if encounter_type != "" else "Wild", level_text]
+	method_label.text = "%s - %s" % [
+		encounter_type
+		if encounter_type != ""
+		else LocalizationManager.text("ui.pokedex.locations.wild"),
+		level_text,
+	]
 	method_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	method_label.add_theme_font_size_override("font_size", 12)
 	method_label.add_theme_color_override("font_color", UI_TEXT)
 	encounter_stack.add_child(method_label)
 
 	var rarity_label := Label.new()
-	rarity_label.text = "Rarity: %s" % _get_pokedex_selected_rarity_label()
+	rarity_label.text = LocalizationManager.text("ui.pokedex.locations.rarity", {
+		"rarity": _get_pokedex_selected_rarity_label(),
+	})
 	rarity_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	rarity_label.add_theme_font_size_override("font_size", 10)
 	rarity_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -25202,19 +25349,30 @@ func _format_pokedex_location_level_range(location: Dictionary) -> String:
 	var min_level: int = max(1, int(location.get("minLevel", location.get("min_level", 1))))
 	var max_level: int = max(min_level, int(location.get("maxLevel", location.get("max_level", min_level))))
 	if min_level == max_level:
-		return "Lv. %d" % min_level
-	return "Lv. %d-%d" % [min_level, max_level]
+		return LocalizationManager.text("ui.pokedex.level", {"level": min_level})
+	return LocalizationManager.text("ui.pokedex.level_range", {
+		"minimum": min_level,
+		"maximum": max_level,
+	})
 
 func _get_pokedex_selected_rarity_label() -> String:
 	var rarity := str(pokedex_selected_species.get("rarity", "")).strip_edges()
-	return _format_identifier_display_name(rarity) if rarity != "" else "Unknown"
+	return (
+		_format_identifier_display_name(rarity)
+		if rarity != ""
+		else LocalizationManager.text("common.unknown")
+	)
 
 func _build_pokedex_evolutions_tab() -> void:
-	pokedex_detail_stack.add_child(_create_pokedex_detail_section_title("Evolves Into"))
+	pokedex_detail_stack.add_child(_create_pokedex_detail_section_title(
+		LocalizationManager.text("ui.pokedex.evolutions.title")
+	))
 
 	var evolutions := _array_from_variant(pokedex_selected_species.get("evolutions", []))
 	if evolutions.is_empty():
-		pokedex_detail_stack.add_child(_create_pokedex_muted_message("No known evolutions."))
+		pokedex_detail_stack.add_child(_create_pokedex_muted_message(
+			LocalizationManager.text("ui.pokedex.evolutions.empty")
+		))
 		return
 
 	for evolution_value: Variant in evolutions:
@@ -25239,7 +25397,10 @@ func _create_pokedex_evolution_row(evolution: Dictionary) -> Control:
 	margin.add_child(row)
 
 	var name_label := Label.new()
-	name_label.text = str(evolution.get("speciesName", evolution.get("speciesId", "Unknown")))
+	name_label.text = str(evolution.get(
+		"speciesName",
+		evolution.get("speciesId", LocalizationManager.text("common.unknown"))
+	))
 	name_label.custom_minimum_size = Vector2(180, 0)
 	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -25254,17 +25415,24 @@ func _create_pokedex_evolution_row(evolution: Dictionary) -> Control:
 
 	var trigger_text := _format_pokedex_evolution_trigger(evolution)
 	var trigger_label := Label.new()
-	trigger_label.text = "Trigger: %s" % trigger_text
+	trigger_label.text = LocalizationManager.text("ui.pokedex.evolutions.trigger", {
+		"trigger": trigger_text,
+	})
 	trigger_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	trigger_label.add_theme_font_size_override("font_size", 12)
 	trigger_label.add_theme_color_override("font_color", UI_TEXT)
 	detail_stack.add_child(trigger_label)
 
-	var condition_text := str(evolution.get("condition", "Unknown condition")).strip_edges()
+	var condition_text := str(evolution.get(
+		"condition",
+		LocalizationManager.text("ui.pokedex.evolutions.unknown_condition")
+	)).strip_edges()
 	if condition_text == "":
-		condition_text = "Unknown condition"
+		condition_text = LocalizationManager.text("ui.pokedex.evolutions.unknown_condition")
 	var condition_label := Label.new()
-	condition_label.text = "Condition: %s" % condition_text
+	condition_label.text = LocalizationManager.text("ui.pokedex.evolutions.condition", {
+		"condition": condition_text,
+	})
 	condition_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	condition_label.add_theme_font_size_override("font_size", 10)
 	condition_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -25279,16 +25447,16 @@ func _format_pokedex_evolution_trigger(evolution: Dictionary) -> String:
 	var normalized_method := method.strip_edges().to_lower().replace("_", "-")
 	var normalized_trigger := trigger.strip_edges().to_lower().replace("_", "-")
 	if normalized_method == "item" or normalized_trigger == "use-item" or normalized_trigger == "item":
-		return "Item"
+		return LocalizationManager.text("ui.pokedex.evolutions.item")
 	if trigger != "":
 		return _format_pokedex_evolution_label(trigger)
 	if method != "":
 		return _format_pokedex_evolution_label(method)
-	return "Unknown"
+	return LocalizationManager.text("common.unknown")
 
 func _format_pokedex_evolution_label(value: String) -> String:
 	var text := value.strip_edges().replace("_", " ").replace("-", " ")
-	return text.capitalize() if text != "" else "Unknown"
+	return text.capitalize() if text != "" else LocalizationManager.text("common.unknown")
 
 func _build_pokedex_moves_tab() -> void:
 	var moves_value: Variant = pokedex_selected_species.get("moves", {})
@@ -25296,15 +25464,15 @@ func _build_pokedex_moves_tab() -> void:
 	pokedex_detail_stack.add_child(_create_pokedex_move_search_input())
 
 	var sections := [
-		{"key": "levelUp", "title": "Level-Up Moves", "empty": "No level-up moves available.", "column": "Lv", "source": ""},
-		{"key": "egg", "title": "Egg Moves", "empty": "No egg moves available.", "column": "Learn", "source": "Egg"},
-		{"key": "tm", "title": "TM Moves", "empty": "No TM moves available.", "column": "Learn", "source": "TM"},
-		{"key": "tutor", "title": "Tutor Moves", "empty": "No tutor moves available.", "column": "Learn", "source": "Tutor"},
-		{"key": "special", "title": "Special Moves", "empty": "No special moves available.", "column": "Learn", "source": "Special"},
-		{"key": "event", "title": "Event Moves", "empty": "No event moves available.", "column": "Learn", "source": "Event"},
-		{"key": "legacy", "title": "Legacy Moves", "empty": "No legacy moves available.", "column": "Learn", "source": "Legacy"},
-		{"key": "legacyEvent", "title": "Legacy Event Moves", "empty": "No legacy event moves available.", "column": "Learn", "source": "Legacy Event"},
-		{"key": "preEvolution", "title": "Pre-Evolution Moves", "empty": "No pre-evolution moves available.", "column": "Learn", "source": "Pre-Evo"},
+		{"key": "levelUp", "i18n": "level_up", "column": "ui.pokedex.moves.level", "source": ""},
+		{"key": "egg", "i18n": "egg", "column": "ui.pokedex.moves.learn", "source": "ui.pokedex.moves.source.egg"},
+		{"key": "tm", "i18n": "tm", "column": "ui.pokedex.moves.learn", "source": "ui.pokedex.moves.source.tm"},
+		{"key": "tutor", "i18n": "tutor", "column": "ui.pokedex.moves.learn", "source": "ui.pokedex.moves.source.tutor"},
+		{"key": "special", "i18n": "special", "column": "ui.pokedex.moves.learn", "source": "ui.pokedex.moves.source.special"},
+		{"key": "event", "i18n": "event", "column": "ui.pokedex.moves.learn", "source": "ui.pokedex.moves.source.event"},
+		{"key": "legacy", "i18n": "legacy", "column": "ui.pokedex.moves.learn", "source": "ui.pokedex.moves.source.legacy"},
+		{"key": "legacyEvent", "i18n": "legacy_event", "column": "ui.pokedex.moves.learn", "source": "ui.pokedex.moves.source.legacy_event"},
+		{"key": "preEvolution", "i18n": "pre_evolution", "column": "ui.pokedex.moves.learn", "source": "ui.pokedex.moves.source.pre_evolution"},
 	]
 	var added_any_section := false
 	var available_move_count := 0
@@ -25315,34 +25483,41 @@ func _build_pokedex_moves_tab() -> void:
 		var section: Dictionary = section_value
 		var raw_bucket_moves := _array_from_variant(moves.get(str(section.get("key", "")), []))
 		available_move_count += raw_bucket_moves.size()
+		var source_label := LocalizationManager.text(str(section.get("source", ""))) \
+			if not str(section.get("source", "")).is_empty() else ""
 		var bucket_moves := _filter_pokedex_move_bucket(
 			raw_bucket_moves,
 			normalized_query,
-			str(section.get("source", ""))
+			source_label
 		)
 		if bucket_moves.is_empty() and (normalized_query != "" or str(section.get("key", "")) != "levelUp"):
 			continue
 		if added_any_section:
 			pokedex_detail_stack.add_child(_create_pokedex_section_spacer())
 		added_any_section = true
+		var section_i18n := str(section.get("i18n", ""))
 		_add_pokedex_move_section(
-			str(section.get("title", "")),
+			LocalizationManager.text("ui.pokedex.moves.section.%s" % section_i18n),
 			bucket_moves,
-			str(section.get("column", "")),
-			str(section.get("source", "")),
-			str(section.get("empty", "No moves available."))
+			LocalizationManager.text(str(section.get("column", ""))),
+			source_label,
+			LocalizationManager.text("ui.pokedex.moves.empty.%s" % section_i18n)
 		)
 
 	if not added_any_section:
 		if available_move_count <= 0:
-			pokedex_detail_stack.add_child(_create_pokedex_muted_message("No moves available."))
+			pokedex_detail_stack.add_child(_create_pokedex_muted_message(
+				LocalizationManager.text("ui.pokedex.moves.empty.all")
+			))
 		else:
-			pokedex_detail_stack.add_child(_create_pokedex_muted_message("No moves match your search."))
+			pokedex_detail_stack.add_child(_create_pokedex_muted_message(
+				LocalizationManager.text("ui.pokedex.moves.empty.search")
+			))
 
 func _create_pokedex_move_search_input() -> Control:
 	var search_input := LineEdit.new()
 	pokedex_move_search_input = search_input
-	search_input.placeholder_text = "Search moves..."
+	search_input.placeholder_text = LocalizationManager.text("ui.pokedex.moves.search")
 	search_input.text = pokedex_move_search_text
 	search_input.custom_minimum_size = Vector2(0, 32)
 	search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -25417,12 +25592,12 @@ func _create_pokedex_move_header_row(first_column_label: String) -> Control:
 	var header := HBoxContainer.new()
 	header.add_theme_constant_override("separation", 7)
 	header.add_child(_create_pokedex_move_header_label(first_column_label, 54))
-	header.add_child(_create_pokedex_move_header_label("Move", 172))
-	header.add_child(_create_pokedex_move_header_label("Type", 92))
-	header.add_child(_create_pokedex_move_header_label("Category", 92))
-	header.add_child(_create_pokedex_move_header_label("Power", 52))
-	header.add_child(_create_pokedex_move_header_label("Acc", 52))
-	header.add_child(_create_pokedex_move_header_label("PP", 42))
+	header.add_child(_create_pokedex_move_header_label(LocalizationManager.text("ui.pokedex.moves.move"), 172))
+	header.add_child(_create_pokedex_move_header_label(LocalizationManager.text("ui.pokedex.moves.type"), 92))
+	header.add_child(_create_pokedex_move_header_label(LocalizationManager.text("ui.pokedex.moves.category"), 92))
+	header.add_child(_create_pokedex_move_header_label(LocalizationManager.text("ui.pokedex.moves.power"), 52))
+	header.add_child(_create_pokedex_move_header_label(LocalizationManager.text("ui.pokedex.moves.accuracy"), 52))
+	header.add_child(_create_pokedex_move_header_label(LocalizationManager.text("ui.pokedex.moves.pp"), 42))
 	return header
 
 func _create_pokedex_move_section_title(title_text: String, move_count: int) -> Control:
@@ -28965,7 +29140,9 @@ func _on_mail_claim_button_pressed() -> void:
 
 	var result: Dictionary = await MailService.claim_mail(selected_mail_id)
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not claim mail: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.mail.error.claim", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
 
 	var party_value: Variant = result.get("party", [])
@@ -28993,7 +29170,9 @@ func _on_mail_attachment_claim_pressed(attachment_id: int) -> void:
 
 	var result: Dictionary = await MailService.claim_mail_attachment(selected_mail_id, attachment_id)
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not claim attachment: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.mail.error.claim_attachment", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
 
 	var party_value: Variant = result.get("party", [])
@@ -29047,30 +29226,46 @@ func _emit_mail_claim_messages(previous_attachments: Array, claimed_mail: Dictio
 
 		match attachment_type:
 			"item":
-				var item_name: String = str(payload.get("name", payload.get("itemId", "Item")))
+				var item_id := str(payload.get("itemId", ""))
+				var item_name: String = ItemLocalization.display_name(
+					item_id,
+					str(payload.get("name", item_id if not item_id.is_empty() else LocalizationManager.text("ui.market.item_fallback")))
+				)
 				var quantity: int = int(payload.get("quantity", 1))
-				_add_chat_message("Received %sx %s." % [quantity, item_name])
+				_add_chat_message(LocalizationManager.text("ui.mail.message.received_item", {
+					"quantity": quantity,
+					"item": item_name,
+				}))
 			"pokemon":
 				var pokemon_payload: Dictionary = {}
 				var pokemon_value: Variant = payload.get("pokemon", {})
 				if pokemon_value is Dictionary:
 					pokemon_payload = pokemon_value as Dictionary
-				var species: String = str(pokemon_payload.get("species", "Pokemon"))
+				var species: String = str(pokemon_payload.get(
+					"species",
+					LocalizationManager.text("ui.mail.pokemon_fallback")
+				))
 				var level: int = int(pokemon_payload.get("level", 1))
 				var location: Dictionary = {}
 				if pokemon_claim_index >= 0 and pokemon_claim_index < storage_locations.size():
 					location = PokemonStorageService.normalize_storage_location(storage_locations[pokemon_claim_index])
 				pokemon_claim_index += 1
 				if location.is_empty():
-					_add_chat_message("Received Pokemon: %s (Lv. %s)." % [species, level])
+					_add_chat_message(LocalizationManager.text("ui.mail.message.received_pokemon", {
+						"pokemon": species,
+						"level": level,
+					}))
 				else:
-					_add_chat_message("Received Pokemon: %s (Lv. %s), sent to %s." % [
-						species,
-						level,
-						PokemonStorageService.storage_location_label(location),
-					])
+					_add_chat_message(LocalizationManager.text(
+						"ui.mail.message.received_pokemon_storage",
+						{
+							"pokemon": species,
+							"level": level,
+							"location": PokemonStorageService.storage_location_label(location),
+						}
+					))
 			_:
-				_add_chat_message("Mail attachment claimed.")
+				_add_chat_message(LocalizationManager.text("ui.mail.message.attachment_claimed"))
 
 func _on_mail_delete_button_pressed() -> void:
 	if selected_mail_id <= 0:
@@ -29078,7 +29273,9 @@ func _on_mail_delete_button_pressed() -> void:
 
 	var result: Dictionary = await MailService.delete_mail(selected_mail_id, active_mail_box)
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not delete mail: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.mail.error.delete", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
 
 	selected_mail_id = -1
@@ -29087,7 +29284,7 @@ func _on_mail_delete_button_pressed() -> void:
 		selected_mail_id = int(mailbox_messages[0].get("id", -1))
 	_refresh_mailbox()
 	_refresh_mail_attention_from_messages(mailbox_messages)
-	_add_chat_message("Mail deleted.")
+	_add_chat_message(LocalizationManager.text("ui.mail.message.deleted"))
 
 func _prepare_mail_attachment_options() -> void:
 	mail_compose_inventory_items.clear()
@@ -29097,21 +29294,28 @@ func _prepare_mail_attachment_options() -> void:
 	_load_mail_item_attachment_options()
 
 func _load_mail_item_attachment_options() -> void:
-	mail_item_search_input.text = "Loading bag..."
+	mail_inventory_load_state = "loading"
+	mail_item_search_input.text = LocalizationManager.text("ui.mail.compose.loading_bag")
 	mail_item_search_input.editable = false
 	mail_add_item_button.disabled = true
 	_clear_mail_item_suggestions()
 
 	var result: Dictionary = await InventoryService.load_inventory()
 	if not bool(result.get("success", false)):
+		mail_inventory_load_state = "error"
 		mail_item_search_input.text = ""
-		mail_item_search_input.placeholder_text = "Could not load bag"
+		mail_item_search_input.placeholder_text = LocalizationManager.text("ui.mail.compose.bag_load_failed")
 		return
 
+	mail_inventory_load_state = "loaded"
 	mail_compose_inventory_items = _normalize_bag_inventory_items(result.get("items", []))
 	mail_item_search_input.text = ""
 	mail_item_search_input.editable = true
-	mail_item_search_input.placeholder_text = "Search items in your bag" if not mail_compose_inventory_items.is_empty() else "No items in bag"
+	mail_item_search_input.placeholder_text = LocalizationManager.text(
+		"ui.mail.compose.item_search"
+		if not mail_compose_inventory_items.is_empty()
+		else "ui.mail.compose.no_items"
+	)
 	mail_add_item_button.disabled = true
 
 func _on_mail_item_search_changed(_text: String) -> void:
@@ -29192,7 +29396,7 @@ func _refresh_mail_pokemon_attachment_options() -> void:
 		mail_pokemon_option.add_item("%s Lv. %s" % [pokemon.species, pokemon.level], mail_compose_party_pokemon.size() - 1)
 
 	if mail_compose_party_pokemon.is_empty():
-		mail_pokemon_option.add_item("No eligible Pokemon", -1)
+		mail_pokemon_option.add_item(LocalizationManager.text("ui.mail.compose.no_eligible_pokemon"), -1)
 		mail_pokemon_option.disabled = true
 		mail_add_pokemon_button.disabled = true
 	else:
@@ -29203,7 +29407,7 @@ func _on_mail_add_item_attachment_pressed() -> void:
 	if mail_selected_item_for_attachment.is_empty():
 		return
 	if mail_selected_item_attachments.size() >= 5:
-		_add_chat_message("You can attach up to 5 item stacks.")
+		_add_chat_message(LocalizationManager.text("ui.mail.error.item_limit"))
 		return
 
 	var item: Dictionary = mail_selected_item_for_attachment
@@ -29231,10 +29435,10 @@ func _on_mail_add_item_attachment_pressed() -> void:
 
 func _on_mail_add_pokemon_attachment_pressed() -> void:
 	if mail_selected_pokemon_ids.size() >= 5:
-		_add_chat_message("You can attach up to 5 Pokemon.")
+		_add_chat_message(LocalizationManager.text("ui.mail.error.pokemon_limit"))
 		return
 	if mail_selected_pokemon_ids.size() >= max(PlayerSave.party.size() - 1, 0):
-		_add_chat_message("You must keep at least one Pokemon in your party.")
+		_add_chat_message(LocalizationManager.text("ui.mail.error.keep_pokemon"))
 		return
 
 	var selected_index: int = mail_pokemon_option.selected
@@ -29256,7 +29460,7 @@ func _refresh_mail_attachment_summary() -> void:
 	var has_attachments: bool = not mail_selected_item_attachments.is_empty() or not mail_selected_pokemon_ids.is_empty()
 	if not has_attachments:
 		var empty_label := Label.new()
-		empty_label.text = "No attachments selected\nYou can also send mail without an attachment."
+		empty_label.text = LocalizationManager.text("ui.mail.compose.no_attachments")
 		empty_label.custom_minimum_size = Vector2(0, 56)
 		empty_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		empty_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -29267,12 +29471,18 @@ func _refresh_mail_attachment_summary() -> void:
 
 	for attachment: Dictionary in mail_selected_item_attachments:
 		var item_id: String = str(attachment.get("itemId", "")).strip_edges()
-		var item_name: String = str(attachment.get("name", item_id if item_id != "" else "Item"))
+		var item_name: String = ItemLocalization.display_name(
+			item_id,
+			str(attachment.get(
+				"name",
+				item_id if item_id != "" else LocalizationManager.text("ui.market.item_fallback")
+			))
+		)
 		var quantity: int = max(int(attachment.get("quantity", 1)), 1)
 		mail_selected_attachments_list.add_child(_create_mail_compose_attachment_row(
 			_load_item_icon(item_id),
 			item_name,
-			"Item stack  ·  x%s" % quantity,
+			LocalizationManager.text("ui.mail.compose.item_stack", {"quantity": quantity}),
 			_on_mail_remove_item_attachment_pressed.bind(item_id)
 		))
 
@@ -29282,16 +29492,16 @@ func _refresh_mail_attachment_summary() -> void:
 			mail_selected_attachments_list.add_child(_create_mail_compose_attachment_row(
 				PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny),
 				pokemon.species,
-				"Pokémon  ·  Lv. %s" % pokemon.level,
+				LocalizationManager.text("ui.mail.compose.pokemon_level", {"level": pokemon.level}),
 				_on_mail_remove_pokemon_attachment_pressed.bind(pokemon_id)
 			))
 
 	var limit_label := Label.new()
-	limit_label.text = "ITEM STACKS  %s/5     ·     POKÉMON  %s/5     ·     PARTY KEPT  %s" % [
-		mail_selected_item_attachments.size(),
-		mail_selected_pokemon_ids.size(),
-		max(PlayerSave.party.size() - mail_selected_pokemon_ids.size(), 0),
-	]
+	limit_label.text = LocalizationManager.text("ui.mail.compose.limits", {
+		"items": mail_selected_item_attachments.size(),
+		"pokemon": mail_selected_pokemon_ids.size(),
+		"remaining": max(PlayerSave.party.size() - mail_selected_pokemon_ids.size(), 0),
+	})
 	limit_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	limit_label.add_theme_font_size_override("font_size", 9)
 	limit_label.add_theme_color_override("font_color", Color("#79d9ff"))
@@ -29346,10 +29556,10 @@ func _create_mail_compose_attachment_row(
 	heading.add_child(detail)
 
 	var remove_button := Button.new()
-	remove_button.text = "Remove"
+	remove_button.text = LocalizationManager.text("common.remove")
 	remove_button.custom_minimum_size = Vector2(74, 30)
 	remove_button.focus_mode = Control.FOCUS_NONE
-	remove_button.tooltip_text = "Remove this gift"
+	remove_button.tooltip_text = LocalizationManager.text("ui.mail.compose.remove_gift")
 	remove_button.pressed.connect(remove_callback)
 	_apply_button_style(remove_button)
 	remove_button.add_theme_font_size_override("font_size", 11)
@@ -29380,7 +29590,7 @@ func _get_party_pokemon_by_owned_id(owned_pokemon_id: int) -> Pokemon:
 
 func _on_mail_compose_send_button_pressed() -> void:
 	if not mail_selected_pokemon_ids.is_empty() and mail_selected_pokemon_ids.size() >= PlayerSave.party.size():
-		_add_chat_message("You must keep at least one Pokemon in your party.")
+		_add_chat_message(LocalizationManager.text("ui.mail.error.keep_pokemon"))
 		return
 
 	var result: Dictionary = await MailService.send_mail(
@@ -29391,7 +29601,9 @@ func _on_mail_compose_send_button_pressed() -> void:
 		mail_selected_pokemon_ids
 	)
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not send mail: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.mail.error.send", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
 
 	var party_value: Variant = result.get("party", [])
@@ -29414,9 +29626,11 @@ func _on_mail_compose_send_button_pressed() -> void:
 	var sent_mail: Dictionary = result.get("sent", {}) as Dictionary
 	var fee_paid: int = int(sent_mail.get("feePaid", sent_mail.get("fee_paid", 0)))
 	if fee_paid > 0:
-		_add_chat_message("Mail sent. Paid %s." % _format_money(fee_paid))
+		_add_chat_message(LocalizationManager.text("ui.mail.message.sent_paid", {
+			"amount": _format_money(fee_paid),
+		}))
 	else:
-		_add_chat_message("Mail sent.")
+		_add_chat_message(LocalizationManager.text("ui.mail.message.sent"))
 	_load_mailbox()
 
 func _on_mail_compose_close_button_pressed() -> void:
@@ -29427,7 +29641,9 @@ func _on_mail_compose_close_button_pressed() -> void:
 func _load_mailbox() -> void:
 	var result: Dictionary = await MailService.load_mail(active_mail_box)
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not load mail: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.mail.error.load", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
 
 	mailbox_messages = _normalize_mailbox_messages(result.get("mail", []))
@@ -29468,6 +29684,44 @@ func _refresh_mailbox() -> void:
 	_refresh_mail_detail()
 	_set_mail_popup_size.call_deferred()
 
+func _refresh_mail_localized_ui() -> void:
+	if mail_popup != null:
+		LocalizationManager.localize_tree(mail_popup)
+	if mail_compose_popup != null:
+		LocalizationManager.localize_tree(mail_compose_popup)
+	if mail_compose_help_popup != null:
+		LocalizationManager.localize_tree(mail_compose_help_popup)
+	if mail_compose_body_input != null:
+		mail_compose_body_input.placeholder_text = LocalizationManager.text(
+			"ui.mail.compose.message_placeholder"
+		)
+	if mail_item_search_input != null:
+		match mail_inventory_load_state:
+			"loading":
+				mail_item_search_input.text = LocalizationManager.text("ui.mail.compose.loading_bag")
+			"error":
+				mail_item_search_input.placeholder_text = LocalizationManager.text(
+					"ui.mail.compose.bag_load_failed"
+				)
+			"loaded":
+				mail_item_search_input.placeholder_text = LocalizationManager.text(
+					"ui.mail.compose.item_search"
+					if not mail_compose_inventory_items.is_empty()
+					else "ui.mail.compose.no_items"
+				)
+			_:
+				mail_item_search_input.placeholder_text = LocalizationManager.text(
+					"ui.mail.compose.item_search"
+				)
+	if mail_list != null:
+		_refresh_mail_list()
+	if mail_subject_label != null:
+		_refresh_mail_detail()
+	if mail_selected_attachments_list != null:
+		_refresh_mail_attachment_summary()
+	if mail_pokemon_option != null and mail_compose_popup != null and mail_compose_popup.visible:
+		_refresh_mail_pokemon_attachment_options()
+
 func _refresh_mail_list() -> void:
 	if mail_list == null:
 		return
@@ -29478,36 +29732,61 @@ func _refresh_mail_list() -> void:
 		child.queue_free()
 
 	var list_title: Label = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailListPanel/MarginContainer/MailListScroll/MailList/InboxLabel
-	list_title.text = "%s  ·  %s" % ["SENT" if active_mail_box == "sent" else "INBOX", mailbox_messages.size()]
+	list_title.text = LocalizationManager.text(
+		"ui.mail.list.sent" if active_mail_box == "sent" else "ui.mail.list.inbox",
+		{"count": mailbox_messages.size()}
+	)
 	mail_empty_inbox_label.visible = mailbox_messages.is_empty()
 	mail_empty_inbox_label.text = (
-		"No sent messages yet.\nMessages you send will appear here."
+		LocalizationManager.text("ui.mail.empty.sent")
 		if active_mail_box == "sent"
-		else "Your inbox is empty.\nNew deliveries will appear here."
+		else LocalizationManager.text("ui.mail.empty.inbox")
 	)
 	for mail: Dictionary in mailbox_messages:
 		var button := Button.new()
 		var mail_id: int = int(mail.get("id", -1))
-		var subject: String = str(mail.get("subject", "Mail")).strip_edges()
-		var sender: String = str(mail.get("senderDisplayName", mail.get("senderUsername", "Unknown"))).strip_edges()
+		var subject: String = str(mail.get("subject", LocalizationManager.text("ui.mail.fallback"))).strip_edges()
+		var sender: String = str(mail.get(
+			"senderDisplayName",
+			mail.get("senderUsername", LocalizationManager.text("common.unknown"))
+		)).strip_edges()
 		var sender_username: String = str(mail.get("senderUsername", "")).strip_edges()
-		var recipient: String = str(mail.get("recipientUsername", "Unknown")).strip_edges()
+		var recipient: String = str(mail.get(
+			"recipientUsername",
+			LocalizationManager.text("common.unknown")
+		)).strip_edges()
 		var attachment_count: int = _array_from_variant(mail.get("attachments", [])).size()
 		var is_unread: bool = active_mail_box == "inbox" and not _mail_message_is_read(mail)
 		var contact_text: String = (
-			"To  @%s" % (recipient if recipient != "" else "unknown")
+			LocalizationManager.text("ui.mail.contact.to", {
+				"username": recipient
+				if recipient != ""
+				else LocalizationManager.text("common.unknown").to_lower(),
+			})
 			if active_mail_box == "sent"
-			else "From  %s%s" % [
-				sender if sender != "" else "Unknown",
-				"  ·  @%s" % sender_username if sender_username != "" else "",
-			]
+			else LocalizationManager.text("ui.mail.contact.from", {
+				"sender": sender
+				if sender != ""
+				else LocalizationManager.text("common.unknown"),
+				"username": (
+					LocalizationManager.text("ui.mail.contact.username", {
+						"username": sender_username,
+					})
+					if sender_username != ""
+					else ""
+				),
+			})
 		)
 		var attachment_text := ""
 		if attachment_count > 0:
-			attachment_text = "  ·  %s attachment%s" % [attachment_count, "" if attachment_count == 1 else "s"]
+			attachment_text = LocalizationManager.plural(
+				"ui.mail.attachment_count.one",
+				"ui.mail.attachment_count.many",
+				attachment_count
+			)
 		button.text = "%s%s\n%s%s" % [
 			"●  " if is_unread else "",
-			subject if subject != "" else "Mail",
+			subject if subject != "" else LocalizationManager.text("ui.mail.fallback"),
 			contact_text,
 			attachment_text,
 		]
@@ -29516,7 +29795,9 @@ func _refresh_mail_list() -> void:
 		button.custom_minimum_size = Vector2(0, 66)
 		button.focus_mode = Control.FOCUS_NONE
 		button.disabled = mail_id <= 0
-		button.tooltip_text = subject if subject != "" else "Mail"
+		button.tooltip_text = (
+			subject if subject != "" else LocalizationManager.text("ui.mail.fallback")
+		)
 		_apply_mail_card_style(button, mail_id == selected_mail_id, attachment_count > 0, is_unread)
 		button.pressed.connect(_on_mail_selected.bind(mail_id))
 		mail_list.add_child(button)
@@ -29570,10 +29851,10 @@ func _refresh_mail_detail() -> void:
 	var mail: Dictionary = _get_mail_by_id(selected_mail_id)
 	var attachment_title: Label = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/AttachmentTitle
 	if mail.is_empty():
-		mail_subject_label.text = "Choose a message"
-		mail_sender_label.text = "Select an item from your mailbox to read it."
-		mail_body_label.text = "Your message will appear here."
-		attachment_title.text = "ATTACHMENTS"
+		mail_subject_label.text = LocalizationManager.text("ui.mail.detail.choose")
+		mail_sender_label.text = LocalizationManager.text("ui.mail.detail.select")
+		mail_body_label.text = LocalizationManager.text("ui.mail.detail.placeholder")
+		attachment_title.text = LocalizationManager.text("ui.mail.attachments")
 		_render_mail_attachments([])
 		mail_claim_button.visible = false
 		mail_reply_button.visible = false
@@ -29581,27 +29862,38 @@ func _refresh_mail_detail() -> void:
 		mail_delete_button.disabled = true
 		return
 
-	var subject: String = str(mail.get("subject", "Mail")).strip_edges()
-	mail_subject_label.text = subject if subject != "" else "Mail"
+	var subject: String = str(mail.get("subject", LocalizationManager.text("ui.mail.fallback"))).strip_edges()
+	mail_subject_label.text = (
+		subject if subject != "" else LocalizationManager.text("ui.mail.fallback")
+	)
 	if active_mail_box == "sent":
-		mail_sender_label.text = "TO  ·  @%s" % str(mail.get("recipientUsername", "-"))
+		mail_sender_label.text = LocalizationManager.text("ui.mail.detail.to", {
+			"username": str(mail.get("recipientUsername", "-")),
+		})
 	else:
-		mail_sender_label.text = "FROM  ·  %s  ·  @%s" % [
-			str(mail.get("senderDisplayName", "Unknown")),
-			str(mail.get("senderUsername", "-")),
-		]
+		mail_sender_label.text = LocalizationManager.text("ui.mail.detail.from", {
+			"sender": str(mail.get(
+				"senderDisplayName",
+				LocalizationManager.text("common.unknown")
+			)),
+			"username": str(mail.get("senderUsername", "-")),
+		})
 	mail_body_label.text = str(mail.get("body", ""))
 	if mail_body_label.text.strip_edges() == "":
-		mail_body_label.text = "(No message)"
+		mail_body_label.text = LocalizationManager.text("ui.mail.detail.no_message")
 
 	var attachments: Array = _array_from_variant(mail.get("attachments", []))
-	attachment_title.text = "ATTACHMENTS  ·  %s" % attachments.size()
+	attachment_title.text = LocalizationManager.text("ui.mail.attachments_count", {
+		"count": attachments.size(),
+	})
 	_render_mail_attachments(attachments)
 	var has_unclaimed_attachments: bool = _mail_has_unclaimed_attachments(attachments)
 	mail_claim_button.visible = active_mail_box == "inbox" and not attachments.is_empty()
 	mail_reply_button.visible = _mail_can_reply(mail)
 	mail_delete_button.visible = true
-	mail_claim_button.text = "Claim All" if has_unclaimed_attachments else "All Claimed"
+	mail_claim_button.text = LocalizationManager.text(
+		"ui.mail.claim_all" if has_unclaimed_attachments else "ui.mail.all_claimed"
+	)
 	mail_claim_button.disabled = not has_unclaimed_attachments
 	mail_delete_button.disabled = active_mail_box == "inbox" and has_unclaimed_attachments
 
@@ -29654,7 +29946,7 @@ func _render_mail_attachments(attachments: Array) -> void:
 
 	if attachments.is_empty():
 		var empty_label := Label.new()
-		empty_label.text = "No attachments included"
+		empty_label.text = LocalizationManager.text("ui.mail.attachments_empty")
 		empty_label.custom_minimum_size = Vector2(0, 48)
 		empty_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		empty_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -29671,7 +29963,11 @@ func _render_mail_attachments(attachments: Array) -> void:
 			payload = attachment.get("payload", {}) as Dictionary
 		var claimed: bool = _mail_attachment_is_claimed(attachment)
 		var voided: bool = _mail_attachment_is_voided(attachment)
-		var suffix := " (unavailable)" if voided else (" (claimed)" if claimed else "")
+		var suffix := (
+			LocalizationManager.text("ui.mail.attachment.unavailable")
+			if voided
+			else LocalizationManager.text("ui.mail.attachment.claimed") if claimed else ""
+		)
 		var attachment_id: int = int(attachment.get("id", -1))
 		var can_claim: bool = (
 			active_mail_box == "inbox"
@@ -29681,11 +29977,19 @@ func _render_mail_attachments(attachments: Array) -> void:
 		)
 		match str(attachment.get("type", "")):
 			"item":
+				var item_id := str(payload.get("itemId", ""))
+				var item_name := ItemLocalization.display_name(
+					item_id,
+					str(payload.get(
+						"name",
+						item_id if not item_id.is_empty() else LocalizationManager.text("ui.market.item_fallback")
+					))
+				)
 				mail_attachment_list.add_child(_create_mail_attachment_row(
-					_load_item_icon(str(payload.get("itemId", ""))),
+					_load_item_icon(item_id),
 					"%sx %s%s" % [
 					int(payload.get("quantity", 1)),
-					str(payload.get("name", payload.get("itemId", "Item"))),
+					item_name,
 					suffix,
 					],
 					{},
@@ -29696,7 +30000,10 @@ func _render_mail_attachments(attachments: Array) -> void:
 				var pokemon_payload: Dictionary = {}
 				if payload.get("pokemon", {}) is Dictionary:
 					pokemon_payload = payload.get("pokemon", {}) as Dictionary
-				var species: String = str(pokemon_payload.get("species", "Pokemon"))
+				var species: String = str(pokemon_payload.get(
+					"species",
+					LocalizationManager.text("ui.mail.pokemon_fallback")
+				))
 				var shiny: bool = bool(pokemon_payload.get("shiny", false))
 				mail_attachment_list.add_child(_create_mail_attachment_row(
 					PokemonAssets.load_party_icon(species, shiny),
@@ -29712,7 +30019,7 @@ func _render_mail_attachments(attachments: Array) -> void:
 			_:
 				mail_attachment_list.add_child(_create_mail_attachment_row(
 					null,
-					"Attachment%s" % suffix,
+					"%s%s" % [LocalizationManager.text("ui.mail.attachment"), suffix],
 					{},
 					attachment_id,
 					can_claim
@@ -29760,18 +30067,18 @@ func _create_mail_attachment_row(
 
 	if not pokemon_payload.is_empty():
 		var summary_button := Button.new()
-		summary_button.text = "Summary"
+		summary_button.text = LocalizationManager.text("ui.mail.summary")
 		summary_button.custom_minimum_size = Vector2(74, 26)
 		summary_button.focus_mode = Control.FOCUS_NONE
 		summary_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-		summary_button.tooltip_text = "View Pokémon summary"
+		summary_button.tooltip_text = LocalizationManager.text("ui.mail.summary_tooltip")
 		summary_button.pressed.connect(_on_mail_pokemon_attachment_pressed.bind(pokemon_payload))
 		_apply_button_style(summary_button)
 		row.add_child(summary_button)
 
 	if can_claim:
 		var claim_button := Button.new()
-		claim_button.text = "Claim"
+		claim_button.text = LocalizationManager.text("ui.mail.claim")
 		claim_button.custom_minimum_size = Vector2(58, 26)
 		claim_button.focus_mode = Control.FOCUS_NONE
 		claim_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -29788,7 +30095,9 @@ func _on_mail_pokemon_attachment_pressed(pokemon_payload: Dictionary) -> void:
 func _open_readonly_pokemon_summary(pokemon_payload: Dictionary) -> void:
 	var pokemon: Pokemon = PokemonFactory.create_pokemon_from_backend_payload(pokemon_payload)
 	if pokemon == null:
-		_add_chat_message("Could not open Pokemon summary: %s" % PokemonFactory.last_error_message)
+		_add_chat_message(LocalizationManager.text("ui.mail.error.open_summary", {
+			"error": PokemonFactory.last_error_message,
+		}))
 		return
 
 	var card_key: String = _get_pokemon_summary_card_key(pokemon, -1, "readonly")
