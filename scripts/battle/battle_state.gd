@@ -16,6 +16,7 @@ var hp_event_helper := BattleHpEventHelper.new()
 var transformed_species_by_ident: Dictionary = {}
 var mega_species_by_ident: Dictionary = {}
 var hp_snapshot_by_ident: Dictionary = {}
+var skip_previous_hp_memory_once := false
 var timer_state: Dictionary = {}
 var operational_state: Dictionary = {}
 var decisions: Dictionary = {}
@@ -30,7 +31,8 @@ func load_from_api_response(
 	since_event_seq := -1
 ) -> void:
 	var next_battle_id := str(response.get("battleId", ""))
-	if battle_id != "" and next_battle_id != battle_id:
+	var battle_changed := battle_id != "" and next_battle_id != battle_id
+	if battle_changed:
 		transformed_species_by_ident.clear()
 		mega_species_by_ident.clear()
 		hp_snapshot_by_ident.clear()
@@ -39,7 +41,10 @@ func load_from_api_response(
 	battle_id = next_battle_id
 	format_id = str(response.get("formatId", ""))
 	players = response.get("players", {})
-	_remember_hp_fields_from_requests(requests)
+	if battle_changed or skip_previous_hp_memory_once:
+		skip_previous_hp_memory_once = false
+	else:
+		_remember_hp_fields_from_requests(requests)
 	var next_requests_value: Variant = response.get("requests", null)
 	if next_requests_value is Dictionary:
 		# Presentation rewinds temporarily mutate request HP. Keep that state local to
@@ -131,6 +136,15 @@ func apply_event_conditions(events: Array) -> void:
 	# During ordered presentation, a valid switch may precede a faint that is
 	# already reflected in the newer canonical request snapshot.
 	_apply_event_conditions_to_requests(events, true)
+
+func reset_side_relative_presentation_memory() -> void:
+	# Spectator perspective switching remaps canonical p1/p2 into the opposite
+	# display sides. Cached HP and form identities are keyed by those display
+	# sides, so retaining them would apply one player's state to the other.
+	hp_snapshot_by_ident.clear()
+	transformed_species_by_ident.clear()
+	mega_species_by_ident.clear()
+	skip_previous_hp_memory_once = true
 
 func _preserve_missing_hp_fields_in_requests(next_requests: Dictionary) -> void:
 	if requests.is_empty() or next_requests.is_empty():

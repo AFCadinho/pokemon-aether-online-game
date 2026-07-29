@@ -241,6 +241,8 @@ func _init() -> void:
 			and battle_source.contains('action_flow.set_local_player_id("p2" if spectator_sides_swapped else "p1")') \
 			and battle_source.contains("spectator_latest_raw_response") \
 			and battle_source.contains('mapped_snapshot["events"] = []') \
+			and battle_source.contains("battle_state.reset_side_relative_presentation_memory()") \
+			and battle_source.contains("var canonical_response := action_flow.map_response_for_local_player(response)") \
 			and battle_source.contains("func _swap_spectator_public_knowledge_sides() -> void:"),
 		true,
 		"spectator side switching remaps an authoritative snapshot without replaying events"

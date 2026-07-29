@@ -11,6 +11,7 @@ func _init() -> void:
 	_check_public_lead_switches_activate_team_preview_rosters()
 	_check_public_base_ident_resolves_unique_preview_form()
 	_check_public_hp_memory_is_scoped_per_player()
+	_check_spectator_side_swap_resets_side_relative_hp_memory()
 	quit(1 if failed else 0)
 
 
@@ -159,6 +160,50 @@ func _check_public_hp_memory_is_scoped_per_player() -> void:
 	_check_equal(bool(cinderace.get("fainted", false)), false, "p1 Cinderace does not inherit p2 Landorus's faint")
 	_check_equal(str(cinderace.get("condition", "")), "100/100", "p1 Cinderace retains its own public HP")
 	_check_equal(bool(landorus.get("fainted", false)), true, "p2 Landorus remains fainted")
+
+
+func _check_spectator_side_swap_resets_side_relative_hp_memory() -> void:
+	var state = BattleStateScript.new()
+	var original_view := {
+		"success": true,
+		"battleId": "spectator-side-swap-hp-test",
+		"requests": {
+			"p1": {"side": {"pokemon": [{
+				"ident": "p1: Cinderace", "species": "Cinderace",
+				"condition": "100/100", "hp": 100, "maxHp": 100, "fainted": false,
+			}]}},
+			"p2": {"side": {"pokemon": [{
+				"ident": "p2: Landorus-Therian", "species": "Landorus-Therian",
+				"condition": "0 fnt", "hp": 0, "maxHp": 100, "fainted": true,
+			}]}},
+		},
+		"events": [],
+	}
+	state.load_from_api_response(original_view, false)
+
+	var switched_view := {
+		"success": true,
+		"battleId": "spectator-side-swap-hp-test",
+		"requests": {
+			"p1": {"side": {"pokemon": [{
+				"ident": "p1: Landorus-Therian", "species": "Landorus-Therian",
+				"condition": "0 fnt", "hp": 0, "maxHp": 100, "fainted": true,
+			}]}},
+			"p2": {"side": {"pokemon": [{
+				"ident": "p2: Cinderace", "species": "Cinderace",
+				"condition": "100/100", "hp": 100, "maxHp": 100, "fainted": false,
+			}]}},
+		},
+		"events": [],
+	}
+	state.reset_side_relative_presentation_memory()
+	state.load_from_api_response(switched_view, false)
+
+	var landorus: Dictionary = state.get_player_team("p1")[0]
+	var cinderace: Dictionary = state.get_player_team("p2")[0]
+	_check_equal(bool(landorus.get("fainted", false)), true, "switched p1 Landorus remains fainted")
+	_check_equal(bool(cinderace.get("fainted", false)), false, "switched p2 Cinderace remains healthy")
+	_check_equal(str(cinderace.get("condition", "")), "100/100", "switched Cinderace keeps its own HP")
 
 
 func _check_public_lead_switches_activate_team_preview_rosters() -> void:

@@ -5657,6 +5657,7 @@ func _on_spectator_switch_sides_pressed() -> void:
 	)
 	mapped_snapshot["events"] = []
 	mapped_snapshot["eventBatches"] = []
+	battle_state.reset_side_relative_presentation_memory()
 	battle_state.load_from_api_response(mapped_snapshot, false)
 	_swap_spectator_public_knowledge_sides()
 	_sync_presentation_field_from_battle_state()
@@ -6586,6 +6587,10 @@ func _remember_spectator_canonical_response(response: Dictionary) -> void:
 		return
 
 	var canonical := spectator_latest_raw_response.duplicate(true)
+	# Render responses and BattleState requests use the current display
+	# perspective. Mapping them once more while p2 is on the left reverses that
+	# display mapping, keeping this stored response canonical for either view.
+	var canonical_response := action_flow.map_response_for_local_player(response)
 	for key in [
 		"success",
 		"viewerRole",
@@ -6603,9 +6608,15 @@ func _remember_spectator_canonical_response(response: Dictionary) -> void:
 		"timerState",
 		"pvpServerSeq",
 	]:
-		if response.has(key):
-			canonical[key] = response.get(key)
-	canonical["requests"] = battle_state.requests.duplicate(true)
+		if canonical_response.has(key):
+			canonical[key] = canonical_response.get(key)
+	var display_requests_response := {
+		"requests": battle_state.requests.duplicate(true),
+	}
+	var canonical_requests_response := action_flow.map_response_for_local_player(
+		display_requests_response
+	)
+	canonical["requests"] = canonical_requests_response.get("requests", {})
 	spectator_latest_raw_response = canonical
 
 
