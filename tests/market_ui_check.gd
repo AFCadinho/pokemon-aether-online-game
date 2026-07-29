@@ -22,14 +22,17 @@ func _check_market_popup_contract() -> void:
 	_check_true(text.contains("func _market_item_subtitle"), "UIOverlay shows market item subtitles")
 	_check_true(text.contains("func _refresh_market_detail"), "UIOverlay refreshes selected item details")
 	_check_true(text.contains("func _on_market_search_changed"), "UIOverlay supports catalog search")
-	_check_true(text.contains("Money: %s"), "UIOverlay labels market money")
+	_check_true(text.contains('"ui.market.money"'), "UIOverlay localizes the market money label")
 	_check_true(text.contains("MarketService.purchase_standard_item(item_id, quantity)"), "UIOverlay purchases through MarketService")
 	_check_true(text.contains("MarketService.sell_standard_item(item_id, quantity)"), "UIOverlay sells through MarketService")
 	_check_true(text.contains('market_mode == "player_sells"'), "UIOverlay supports the player-sells mode")
 	_check_true(text.contains("PlayerWalletService.apply_wallet_result(result)"), "UIOverlay applies wallet updates")
 	_check_true(text.contains("bag_inventory_items = _normalize_bag_inventory_items(inventory_value)"), "UIOverlay refreshes bag inventory")
-	_check_true(text.contains("Not enough money."), "UIOverlay explains insufficient money")
-	_check_true(text.contains('"Sold" if player_is_selling else "Bought"'), "UIOverlay posts role-aware transaction feedback")
+	_check_true(text.contains('"ui.market.status.not_enough_money"'), "UIOverlay localizes insufficient-money feedback")
+	_check_true(
+		text.contains('"ui.market.message.sold" if player_is_selling else "ui.market.message.bought"'),
+		"UIOverlay posts localized role-aware transaction feedback"
+	)
 
 
 func _check_market_attendant_uses_ui() -> void:

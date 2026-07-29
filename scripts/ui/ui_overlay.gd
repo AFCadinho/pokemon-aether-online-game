@@ -917,6 +917,7 @@ var market_items: Array[Dictionary] = []
 var market_selected_item: Dictionary = {}
 var market_purchase_in_progress := false
 var market_mode := "player_buys"
+var market_context: Dictionary = {}
 var mailbox_messages: Array[Dictionary] = []
 var selected_mail_id := -1
 var active_mail_box := "inbox"
@@ -1379,7 +1380,7 @@ func _on_locale_changed(_locale: String) -> void:
 	_refresh_location_weather(WorldPresenceService.current_weather_state)
 	_refresh_party()
 	_refresh_bag_localized_ui()
-	_refresh_market_localized_item_data()
+	_refresh_market_localized_ui()
 
 
 func _play_mail_notification_sound() -> void:
@@ -13742,7 +13743,7 @@ func _setup_market_popup() -> void:
 
 	market_title_label = Label.new()
 	market_title_label.name = "MarketTitle"
-	market_title_label.text = "Poké Mart"
+	_set_localized_control_property(market_title_label, "text", "ui.market.title.default")
 	market_title_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	market_title_label.add_theme_font_size_override("font_size", 20)
 	market_title_label.add_theme_color_override("font_color", UI_TEXT)
@@ -13750,7 +13751,7 @@ func _setup_market_popup() -> void:
 
 	market_subtitle_label = Label.new()
 	market_subtitle_label.name = "MarketSubtitle"
-	market_subtitle_label.text = "Trainer supplies and everyday essentials"
+	_set_localized_control_property(market_subtitle_label, "text", "ui.market.subtitle.buy")
 	market_subtitle_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	market_subtitle_label.add_theme_font_size_override("font_size", 11)
 	market_subtitle_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -13784,7 +13785,9 @@ func _setup_market_popup() -> void:
 	wallet_row.add_child(wallet_coin)
 
 	market_money_label = Label.new()
-	market_money_label.text = "Money: %s" % _format_money(PlayerSave.money)
+	market_money_label.text = LocalizationManager.text("ui.market.money", {
+		"amount": _format_money(PlayerSave.money),
+	})
 	market_money_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	market_money_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	market_money_label.add_theme_font_size_override("font_size", 13)
@@ -13793,7 +13796,7 @@ func _setup_market_popup() -> void:
 
 	var close_button := Button.new()
 	close_button.text = "×"
-	close_button.tooltip_text = "Close"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.custom_minimum_size = Vector2(32, 32)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_market_popup)
@@ -13833,7 +13836,7 @@ func _setup_market_popup() -> void:
 	catalog_layout.add_child(catalog_header)
 
 	market_catalog_caption_label = Label.new()
-	market_catalog_caption_label.text = "SHOP CATALOG"
+	_set_localized_control_property(market_catalog_caption_label, "text", "ui.market.catalog.buy")
 	market_catalog_caption_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	market_catalog_caption_label.add_theme_font_size_override("font_size", 10)
 	market_catalog_caption_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -13841,7 +13844,7 @@ func _setup_market_popup() -> void:
 
 	market_catalog_summary_label = Label.new()
 	market_catalog_summary_label.name = "CatalogSummary"
-	market_catalog_summary_label.text = "0 items available"
+	market_catalog_summary_label.text = LocalizationManager.text("ui.market.summary.available", {"count": 0})
 	market_catalog_summary_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	market_catalog_summary_label.add_theme_font_size_override("font_size", 10)
 	market_catalog_summary_label.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.78))
@@ -13849,7 +13852,7 @@ func _setup_market_popup() -> void:
 
 	market_search_input = LineEdit.new()
 	market_search_input.name = "MarketSearch"
-	market_search_input.placeholder_text = "Search the catalog..."
+	_set_localized_control_property(market_search_input, "placeholder_text", "ui.market.search.buy")
 	market_search_input.clear_button_enabled = true
 	market_search_input.custom_minimum_size = Vector2(0, 36)
 	market_search_input.focus_mode = Control.FOCUS_ALL
@@ -13898,7 +13901,7 @@ func _setup_market_popup() -> void:
 
 	market_status_label = Label.new()
 	market_status_label.name = "MarketStatus"
-	market_status_label.text = "Select an item to view its details."
+	market_status_label.text = LocalizationManager.text("ui.market.status.select")
 	market_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	market_status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	market_status_label.add_theme_font_size_override("font_size", 12)
@@ -13920,7 +13923,7 @@ func _setup_market_detail_panel(panel: PanelContainer) -> void:
 	margin.add_child(layout)
 
 	market_action_caption_label = Label.new()
-	market_action_caption_label.text = "PURCHASE"
+	_set_localized_control_property(market_action_caption_label, "text", "ui.market.action.purchase")
 	market_action_caption_label.add_theme_font_size_override("font_size", 10)
 	market_action_caption_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	layout.add_child(market_action_caption_label)
@@ -13947,7 +13950,7 @@ func _setup_market_detail_panel(panel: PanelContainer) -> void:
 	icon_center.add_child(market_detail_icon)
 
 	market_detail_name_label = Label.new()
-	market_detail_name_label.text = "Select an item"
+	market_detail_name_label.text = LocalizationManager.text("ui.market.detail.select")
 	market_detail_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	market_detail_name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	market_detail_name_label.add_theme_font_size_override("font_size", 18)
@@ -13955,14 +13958,14 @@ func _setup_market_detail_panel(panel: PanelContainer) -> void:
 	layout.add_child(market_detail_name_label)
 
 	market_detail_category_label = Label.new()
-	market_detail_category_label.text = "CATALOG ITEM"
+	market_detail_category_label.text = LocalizationManager.text("ui.market.detail.catalog_item")
 	market_detail_category_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	market_detail_category_label.add_theme_font_size_override("font_size", 10)
 	market_detail_category_label.add_theme_color_override("font_color", Color("#75d7f2"))
 	layout.add_child(market_detail_category_label)
 
 	market_detail_description_label = Label.new()
-	market_detail_description_label.text = "Choose an item from the catalog to see its description and price."
+	market_detail_description_label.text = LocalizationManager.text("ui.market.detail.placeholder")
 	market_detail_description_label.custom_minimum_size = Vector2(0, 48)
 	market_detail_description_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	market_detail_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -13993,7 +13996,7 @@ func _setup_market_detail_panel(panel: PanelContainer) -> void:
 	price_rows.add_child(unit_row)
 
 	var unit_caption := Label.new()
-	unit_caption.text = "Unit price"
+	_set_localized_control_property(unit_caption, "text", "ui.market.unit_price")
 	unit_caption.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	unit_caption.add_theme_font_size_override("font_size", 11)
 	unit_caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -14010,7 +14013,7 @@ func _setup_market_detail_panel(panel: PanelContainer) -> void:
 	price_rows.add_child(total_row)
 
 	var total_caption := Label.new()
-	total_caption.text = "Total"
+	_set_localized_control_property(total_caption, "text", "ui.market.total")
 	total_caption.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	total_caption.add_theme_font_size_override("font_size", 12)
 	total_caption.add_theme_color_override("font_color", UI_TEXT)
@@ -14029,7 +14032,7 @@ func _setup_market_detail_panel(panel: PanelContainer) -> void:
 	layout.add_child(quantity_row)
 
 	var quantity_label := Label.new()
-	quantity_label.text = "Quantity"
+	_set_localized_control_property(quantity_label, "text", "ui.market.quantity")
 	quantity_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	quantity_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	quantity_label.add_theme_font_size_override("font_size", 12)
@@ -14048,7 +14051,7 @@ func _setup_market_detail_panel(panel: PanelContainer) -> void:
 
 	market_buy_button = Button.new()
 	market_buy_button.name = "BuyButton"
-	market_buy_button.text = "Select an Item"
+	market_buy_button.text = LocalizationManager.text("ui.market.select_action")
 	market_buy_button.custom_minimum_size = Vector2(0, 42)
 	market_buy_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	market_buy_button.focus_mode = Control.FOCUS_NONE
@@ -14058,7 +14061,7 @@ func _setup_market_detail_panel(panel: PanelContainer) -> void:
 	layout.add_child(market_buy_button)
 
 	market_delivery_hint_label = Label.new()
-	market_delivery_hint_label.text = "Purchases are delivered directly to your Bag."
+	market_delivery_hint_label.text = LocalizationManager.text("ui.market.delivery.buy")
 	market_delivery_hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	market_delivery_hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	market_delivery_hint_label.add_theme_font_size_override("font_size", 10)
@@ -14070,43 +14073,29 @@ func open_market(market: Dictionary, requested_mode: String = "player_buys", inv
 		return
 	market_mode = requested_mode if requested_mode in ["player_buys", "player_sells"] else "player_buys"
 	var player_is_selling := market_mode == "player_sells"
-	var market_name := str(market.get("name", "")).strip_edges()
-	market_title_label.text = ("%s Buyer" % market_name) if player_is_selling and market_name != "" else (
-		"Market Buyer" if player_is_selling else (market_name if market_name != "" else "Poké Mart")
-	)
-	var location_name := str(market.get("locationName", "")).strip_edges()
-	var region_name := str(market.get("region", "")).strip_edges()
-	var activity_description := "Sell items from your Bag" if player_is_selling else "Trainer supplies and everyday essentials"
-	if location_name != "":
-		market_subtitle_label.text = "%s · %s" % [location_name, activity_description]
-	elif region_name != "":
-		market_subtitle_label.text = "%s · %s" % [region_name, activity_description]
-	else:
-		market_subtitle_label.text = activity_description
-	market_catalog_caption_label.text = "YOUR SELLABLE ITEMS" if player_is_selling else "SHOP CATALOG"
-	market_action_caption_label.text = "SALE" if player_is_selling else "PURCHASE"
-	market_delivery_hint_label.text = (
-		"Sold items are removed from your Bag immediately."
-		if player_is_selling
-		else "Purchases are delivered directly to your Bag."
-	)
-	market_search_input.placeholder_text = "Search your sellable items..." if player_is_selling else "Search the catalog..."
+	market_context = {
+		"name": str(market.get("name", "")).strip_edges(),
+		"location": str(market.get("locationName", "")).strip_edges(),
+		"region": str(market.get("region", "")).strip_edges(),
+	}
+	_apply_market_context_copy()
 	var catalog_items := _normalize_market_items(market.get("items", []))
 	market_items = _market_sell_items(catalog_items, inventory_items) if player_is_selling else catalog_items
 	market_selected_item = market_items[0].duplicate(true) if not market_items.is_empty() else {}
 	market_quantity_spinbox.max_value = max(int(market_selected_item.get("quantity", 1)), 1) if player_is_selling else 99
 	market_quantity_spinbox.value = 1
 	market_search_input.text = ""
-	market_search_input.release_focus()
+	if market_search_input.is_inside_tree():
+		market_search_input.release_focus()
 	market_popup.visible = true
 	_activate_ui_panel(market_popup)
 	_refresh_market_money()
 	_refresh_market_items()
 	if market_items.is_empty():
 		_set_market_status(
-			"You do not have any items this buyer accepts."
+			LocalizationManager.text("ui.market.status.no_accepted_items")
 			if player_is_selling
-			else "This shop does not have any items available right now.",
+			else LocalizationManager.text("ui.market.status.no_available_items"),
 			false
 		)
 
@@ -14229,6 +14218,69 @@ func _refresh_market_localized_item_data() -> void:
 		_refresh_market_items()
 
 
+func _refresh_market_localized_ui() -> void:
+	_refresh_market_localized_item_data()
+	if market_popup == null:
+		return
+	LocalizationManager.localize_tree(market_popup)
+	_apply_market_context_copy()
+	if not market_popup.visible:
+		return
+	if market_items.is_empty():
+		_set_market_status(
+			LocalizationManager.text("ui.market.status.no_accepted_items")
+			if market_mode == "player_sells"
+			else LocalizationManager.text("ui.market.status.no_available_items"),
+			false
+		)
+	else:
+		_refresh_market_items()
+
+
+func _apply_market_context_copy() -> void:
+	if market_title_label == null:
+		return
+	var player_is_selling := market_mode == "player_sells"
+	var market_name := str(market_context.get("name", "")).strip_edges()
+	if player_is_selling:
+		market_title_label.text = (
+			LocalizationManager.text("ui.market.title.named_buyer", {"market": market_name})
+			if not market_name.is_empty()
+			else LocalizationManager.text("ui.market.title.buyer")
+		)
+	else:
+		market_title_label.text = (
+			market_name if not market_name.is_empty()
+			else LocalizationManager.text("ui.market.title.default")
+		)
+	var activity := LocalizationManager.text(
+		"ui.market.subtitle.sell" if player_is_selling else "ui.market.subtitle.buy"
+	)
+	var place := str(market_context.get("location", "")).strip_edges()
+	if place.is_empty():
+		place = str(market_context.get("region", "")).strip_edges()
+	market_subtitle_label.text = (
+		LocalizationManager.text("ui.market.subtitle.at_place", {
+			"place": place,
+			"activity": activity,
+		})
+		if not place.is_empty()
+		else activity
+	)
+	market_catalog_caption_label.text = LocalizationManager.text(
+		"ui.market.catalog.sell" if player_is_selling else "ui.market.catalog.buy"
+	)
+	market_action_caption_label.text = LocalizationManager.text(
+		"ui.market.action.sale" if player_is_selling else "ui.market.action.purchase"
+	)
+	market_delivery_hint_label.text = LocalizationManager.text(
+		"ui.market.delivery.sell" if player_is_selling else "ui.market.delivery.buy"
+	)
+	market_search_input.placeholder_text = LocalizationManager.text(
+		"ui.market.search.sell" if player_is_selling else "ui.market.search.buy"
+	)
+
+
 func _market_sell_items(catalog_items: Array[Dictionary], inventory_items: Array) -> Array[Dictionary]:
 	var inventory_by_id := {}
 	for inventory_value: Variant in inventory_items:
@@ -14274,17 +14326,22 @@ func _refresh_market_items() -> void:
 	var filtered_items := _filtered_market_items()
 	if market_catalog_summary_label != null:
 		if market_search_input != null and market_search_input.text.strip_edges() != "":
-			market_catalog_summary_label.text = "%d of %d items" % [filtered_items.size(), market_items.size()]
+			market_catalog_summary_label.text = LocalizationManager.text("ui.market.summary.filtered", {
+				"shown": filtered_items.size(),
+				"total": market_items.size(),
+			})
 		else:
-			market_catalog_summary_label.text = "%d item%s %s" % [
-				filtered_items.size(),
-				"" if filtered_items.size() == 1 else "s",
-				"accepted" if market_mode == "player_sells" else "available",
-			]
+			market_catalog_summary_label.text = LocalizationManager.plural(
+				"ui.market.summary.accepted.one" if market_mode == "player_sells" else "ui.market.summary.available.one",
+				"ui.market.summary.accepted.many" if market_mode == "player_sells" else "ui.market.summary.available.many",
+				filtered_items.size()
+			)
 
 	if filtered_items.is_empty():
-		var empty_message := "No items match your search." if not market_items.is_empty() else (
-			"No accepted items in your Bag." if market_mode == "player_sells" else "No market items available."
+		var empty_message := LocalizationManager.text("ui.market.empty.search") if not market_items.is_empty() else (
+			LocalizationManager.text("ui.market.empty.sell")
+			if market_mode == "player_sells"
+			else LocalizationManager.text("ui.market.empty.buy")
 		)
 		market_item_list.add_child(_create_bag_empty_state(empty_message))
 		if market_buy_button != null:
@@ -14411,7 +14468,7 @@ func _create_market_item_button(item: Dictionary) -> Control:
 	price_stack.add_child(price_label)
 
 	var each_label := Label.new()
-	each_label.text = "each"
+	each_label.text = LocalizationManager.text("ui.market.each")
 	each_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	each_label.add_theme_font_size_override("font_size", 9)
 	each_label.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.68))
@@ -14448,10 +14505,10 @@ func _apply_market_item_row_style(row: PanelContainer, selected: bool, hovered: 
 
 func _market_item_subtitle(item: Dictionary) -> String:
 	if market_mode == "player_sells":
-		return "%s · %d in Bag" % [
-			_market_category_label(str(item.get("category", ""))),
-			int(item.get("quantity", 0)),
-		]
+		return LocalizationManager.text("ui.market.in_bag", {
+			"category": _market_category_label(str(item.get("category", ""))),
+			"quantity": int(item.get("quantity", 0)),
+		})
 	var description := str(item.get("shortDesc", "")).strip_edges()
 	if description != "":
 		return _ellipsize_text(description, 58)
@@ -14461,8 +14518,36 @@ func _market_item_subtitle(item: Dictionary) -> String:
 	return str(item.get("id", ""))
 
 func _market_category_label(category: String) -> String:
-	var normalized := category.strip_edges().replace("-", " ").replace("_", " ")
-	return normalized.capitalize() if normalized != "" else "General goods"
+	var normalized := category.strip_edges().to_lower().replace("-", "_").replace(" ", "_")
+	var bag_category: String = str({
+		"pokeball": "pokeball",
+		"pokeballs": "pokeball",
+		"key_item": "key_items",
+		"key_items": "key_items",
+		"tm": "machines",
+		"hm": "machines",
+		"machine": "machines",
+		"machines": "machines",
+		"charm": "charms",
+		"charms": "charms",
+		"held_item": "held_items",
+		"held_items": "held_items",
+		"power_stone": "power_stones",
+		"power_stones": "power_stones",
+		"cosmetic": "cosmetics",
+		"cosmetics": "cosmetics",
+		"voucher": "vouchers",
+		"vouchers": "vouchers",
+	}.get(normalized, normalized))
+	for category_value: Variant in BAG_CATEGORIES:
+		var category_spec := category_value as Dictionary
+		if str(category_spec.get("id", "")) == bag_category:
+			return LocalizationManager.text(str(category_spec.get("labelKey", "")))
+	return (
+		normalized.replace("_", " ").capitalize()
+		if not normalized.is_empty()
+		else LocalizationManager.text("ui.market.category.general")
+	)
 
 func _on_market_item_selected(item: Dictionary) -> void:
 	if market_purchase_in_progress:
@@ -14482,7 +14567,7 @@ func _refresh_market_purchase_state() -> void:
 	_refresh_market_detail()
 	if market_selected_item.is_empty():
 		market_buy_button.disabled = true
-		market_buy_button.text = "Select an Item"
+		market_buy_button.text = LocalizationManager.text("ui.market.select_action")
 		return
 
 	var quantity: int = max(int(market_quantity_spinbox.value), 1)
@@ -14492,13 +14577,29 @@ func _refresh_market_purchase_state() -> void:
 	var allowed := quantity <= int(market_selected_item.get("quantity", 0)) if player_is_selling else total <= PlayerSave.money
 	market_buy_button.disabled = market_purchase_in_progress or not allowed
 	if market_purchase_in_progress:
-		market_buy_button.text = "Selling..." if player_is_selling else "Purchasing..."
+		market_buy_button.text = LocalizationManager.text(
+			"ui.market.action.selling" if player_is_selling else "ui.market.action.purchasing"
+		)
 	else:
-		market_buy_button.text = "%s · %s" % ["Sell" if player_is_selling else "Buy", _format_money(total)]
-	var item_name := str(market_selected_item.get("name", "Item"))
-	var status_text := "%sx %s · Total %s" % [quantity, item_name, _format_money(total)]
+		market_buy_button.text = LocalizationManager.text(
+			"ui.market.action.sell_total" if player_is_selling else "ui.market.action.buy_total",
+			{"total": _format_money(total)}
+		)
+	var item_name := str(market_selected_item.get(
+		"name",
+		LocalizationManager.text("ui.market.item_fallback")
+	))
+	var status_text := LocalizationManager.text("ui.market.status.total", {
+		"quantity": quantity,
+		"item": item_name,
+		"total": _format_money(total),
+	})
 	if not allowed:
-		status_text += " · Not enough items." if player_is_selling else " · Not enough money."
+		status_text += LocalizationManager.text(
+			"ui.market.status.not_enough_items"
+			if player_is_selling
+			else "ui.market.status.not_enough_money"
+		)
 	_set_market_status(status_text, not allowed)
 
 func _refresh_market_detail() -> void:
@@ -14507,9 +14608,9 @@ func _refresh_market_detail() -> void:
 	if market_selected_item.is_empty():
 		market_detail_icon.texture = MARKET_INTERFACE_ICON
 		market_detail_icon.modulate = Color(1, 1, 1, 0.32)
-		market_detail_name_label.text = "Select an item"
-		market_detail_category_label.text = "CATALOG ITEM"
-		market_detail_description_label.text = "Choose an item from the catalog to see its description and price."
+		market_detail_name_label.text = LocalizationManager.text("ui.market.detail.select")
+		market_detail_category_label.text = LocalizationManager.text("ui.market.detail.catalog_item")
+		market_detail_description_label.text = LocalizationManager.text("ui.market.detail.placeholder")
 		market_unit_price_label.text = "—"
 		market_total_price_label.text = "—"
 		market_quantity_spinbox.editable = false
@@ -14526,7 +14627,9 @@ func _refresh_market_detail() -> void:
 	market_detail_name_label.text = item_name
 	market_detail_category_label.text = _market_category_label(category).to_upper()
 	market_detail_description_label.text = description if description != "" else (
-		"An item this buyer accepts." if market_mode == "player_sells" else "A useful item available from this shop."
+		LocalizationManager.text("ui.market.detail.sell_fallback")
+		if market_mode == "player_sells"
+		else LocalizationManager.text("ui.market.detail.buy_fallback")
 	)
 	market_unit_price_label.text = _format_money(unit_price)
 	market_total_price_label.text = _format_money(unit_price * quantity)
@@ -14535,7 +14638,9 @@ func _refresh_market_detail() -> void:
 
 func _refresh_market_money() -> void:
 	if market_money_label != null:
-		market_money_label.text = "Money: %s" % _format_money(PlayerSave.money)
+		market_money_label.text = LocalizationManager.text("ui.market.money", {
+			"amount": _format_money(PlayerSave.money),
+		})
 
 func _on_market_buy_pressed() -> void:
 	if market_purchase_in_progress or market_selected_item.is_empty():
@@ -14547,7 +14652,9 @@ func _on_market_buy_pressed() -> void:
 	market_purchase_in_progress = true
 	_refresh_market_purchase_state()
 	var player_is_selling := market_mode == "player_sells"
-	_set_market_status("Selling item..." if player_is_selling else "Buying item...", false)
+	_set_market_status(LocalizationManager.text(
+		"ui.market.status.selling" if player_is_selling else "ui.market.status.buying"
+	), false)
 
 	var quantity: int = max(int(market_quantity_spinbox.value), 1)
 	var result: Dictionary
@@ -14558,10 +14665,10 @@ func _on_market_buy_pressed() -> void:
 	market_purchase_in_progress = false
 	if not bool(result.get("success", false)):
 		_set_market_status(
-			"Could not %s item: %s" % [
-				"sell" if player_is_selling else "buy",
-				str(result.get("error", "Unknown error")),
-			],
+			LocalizationManager.text(
+				"ui.market.status.sell_failed" if player_is_selling else "ui.market.status.buy_failed",
+				{"error": str(result.get("error", LocalizationManager.text("common.unknown_error")))},
+			),
 			true
 		)
 		_refresh_market_purchase_state()
@@ -14579,7 +14686,10 @@ func _on_market_buy_pressed() -> void:
 	var transaction: Dictionary = _staff_dictionary_from_variant(result.get(transaction_key, {}))
 	var transacted_quantity: int = max(int(transaction.get("quantity", quantity)), 1)
 	var item_name := str(market_selected_item.get("name", _item_name_from_id(item_id)))
-	_add_chat_message("%s %sx %s." % ["Sold" if player_is_selling else "Bought", transacted_quantity, item_name])
+	_add_chat_message(LocalizationManager.text(
+		"ui.market.message.sold" if player_is_selling else "ui.market.message.bought",
+		{"quantity": transacted_quantity, "item": item_name},
+	))
 	if player_is_selling:
 		_update_market_sell_items_from_inventory(inventory_value)
 	_refresh_market_purchase_state()
