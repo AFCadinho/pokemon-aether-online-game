@@ -1,6 +1,7 @@
 class_name FishingActionController
 extends Node
 
+const FISHING_ACTION_ICON := preload("res://assets/ui/fishing_rod.svg")
 const ROD_ICONS := {
 	"old-rod": preload("res://assets/items/icons/OLDROD.png"),
 	"good-rod": preload("res://assets/items/icons/GOODROD.png"),
@@ -91,7 +92,7 @@ func _build_interface() -> void:
 	content.add_child(header)
 	var header_icon := TextureRect.new()
 	header_icon.custom_minimum_size = Vector2(34, 34)
-	header_icon.texture = ROD_ICONS["old-rod"]
+	header_icon.texture = FISHING_ACTION_ICON
 	header_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	header_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	header.add_child(header_icon)
@@ -170,11 +171,10 @@ func refresh_from_game_state() -> void:
 	if action_button == null:
 		return
 	var selected_id := GameState.selected_fishing_rod_item_id
-	var icon: Texture2D = ROD_ICONS.get(selected_id, ROD_ICONS["old-rod"])
-	action_button.texture_normal = icon
-	action_button.texture_hover = icon
-	action_button.texture_pressed = icon
-	action_button.texture_disabled = icon
+	action_button.texture_normal = FISHING_ACTION_ICON
+	action_button.texture_hover = FISHING_ACTION_ICON
+	action_button.texture_pressed = FISHING_ACTION_ICON
+	action_button.texture_disabled = FISHING_ACTION_ICON
 	action_button.disabled = selection_pending
 	_apply_action_slot_style()
 	if selected_id == "":

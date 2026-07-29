@@ -23,6 +23,12 @@ func _init() -> void:
 		"action bar exposes a clickable rod selector"
 	)
 	_check(
+		controller_source.contains('const FISHING_ACTION_ICON := preload("res://assets/ui/fishing_rod.svg")')
+		and controller_source.contains("action_button.texture_normal = FISHING_ACTION_ICON")
+		and controller_source.contains("header_icon.texture = FISHING_ACTION_ICON"),
+		"toolbar and header use the dedicated vector fishing icon"
+	)
+	_check(
 		controller_source.contains("not bool(rod.get(\"owned\", false))")
 		and controller_source.contains("not bool(rod.get(\"usable\", false))")
 		and controller_source.contains("InventoryService.select_fishing_rod"),
