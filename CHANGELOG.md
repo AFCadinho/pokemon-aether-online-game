@@ -4,6 +4,7 @@
 
 **Added**
 
+- Added three male and two female tradeable Chroma hairstyles to the Aether Gift Store.
 - Added spectator mode for private PvP battle rooms. Hosts can choose whether viewers are allowed, and spectators can join with the room code without affecting the battle.
 - Spectators can switch between both Trainers' perspectives, inspect information that has been revealed during the battle, and leave at any time.
 - Joining a battle already in progress now immediately shows the complete Battle Log and current battlefield, including form changes, HP, status conditions, and fainted Pokémon, without replaying earlier animations.

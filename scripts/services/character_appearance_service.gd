@@ -244,6 +244,26 @@ static func get_cosmetic_item_icon(item_id: String, gender: String = "male") -> 
 			layers = [
 				{"category": SHOES_CATEGORY, "id": "Aether_Blossom_Shoes_Chroma", "tint": Color("#d6a629"), "preserve": true},
 			]
+		"aether-male-chroma-hair-1":
+			layers = [
+				{"category": HAIR_CATEGORY, "id": "Aether_Male_Hair_01", "tint": Color(DEFAULT_MALE_HAIR_COLOR), "preserve": true},
+			]
+		"aether-male-chroma-hair-2":
+			layers = [
+				{"category": HAIR_CATEGORY, "id": "Aether_Male_Hair_02", "tint": Color(DEFAULT_MALE_HAIR_COLOR), "preserve": true},
+			]
+		"aether-male-chroma-hair-3":
+			layers = [
+				{"category": HAIR_CATEGORY, "id": "Aether_Male_Hair_03", "tint": Color(DEFAULT_MALE_HAIR_COLOR), "preserve": true},
+			]
+		"aether-female-chroma-hair-1":
+			layers = [
+				{"category": HAIR_CATEGORY, "id": "Aether_Female_Hair_01", "tint": Color(DEFAULT_FEMALE_HAIR_COLOR), "preserve": true},
+			]
+		"aether-female-chroma-hair-2":
+			layers = [
+				{"category": HAIR_CATEGORY, "id": "Aether_Female_Hair_02", "tint": Color(DEFAULT_FEMALE_HAIR_COLOR), "preserve": true},
+			]
 		"adinho-classic-outfit":
 			layers = [
 				{"kind": "body"},

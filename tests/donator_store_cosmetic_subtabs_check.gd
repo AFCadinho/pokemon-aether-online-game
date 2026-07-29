@@ -104,6 +104,12 @@ func _run() -> void:
 	store.call("_on_cosmetic_item_category_selected", hair_category_index)
 	_check(store.active_cosmetic_subcategory == "hair", "dropdown applies the selected loose-item category")
 	_check(store.product_buttons.has("adinho-chroma-hair"), "Hair dropdown category lists hair products")
+	for item_id: String in [
+		"aether-male-chroma-hair-1",
+		"aether-male-chroma-hair-2",
+		"aether-male-chroma-hair-3",
+	]:
+		_check(store.product_buttons.has(item_id), "%s is listed for male models" % item_id)
 	store.call("_select_cosmetic_filter_group", "all")
 	_check(store.product_buttons.has("adinho-classic-outfit"), "All includes complete outfit boxes")
 	_check(store.catalog_search_input != null, "Gift Store includes a catalog search bar")
@@ -190,6 +196,17 @@ func _run() -> void:
 	_check(
 		blossom_chroma_custom_preview.get("hair_color", "") == "#7a46c5",
 		"Store Chroma preview accepts a custom hex colour"
+	)
+	for item_id: String in [
+		"aether-female-chroma-hair-1",
+		"aether-female-chroma-hair-2",
+	]:
+		_check(store.product_buttons.has(item_id), "%s is listed for female models" % item_id)
+	store.call("_select_product", "aether-female-chroma-hair-1")
+	var female_hair_preview: Dictionary = store.call("_current_character_preview_appearance")
+	_check(
+		female_hair_preview.get("hair", "") == "Aether_Female_Hair_01",
+		"new female Chroma hairstyle renders in the Store preview"
 	)
 	store.call("_select_cosmetic_subcategory", "facegear")
 	_check(store.product_buttons.has("aether-blossom-chroma-earrings"), "Aether Blossom Chroma Earrings are sold separately")
@@ -291,6 +308,11 @@ func _run() -> void:
 		"aether-blossom-chroma-hair": 100,
 		"aether-blossom-chroma-earrings": 100,
 		"aether-blossom-chroma-shoes": 75,
+		"aether-male-chroma-hair-1": 100,
+		"aether-male-chroma-hair-2": 100,
+		"aether-male-chroma-hair-3": 100,
+		"aether-female-chroma-hair-1": 100,
+		"aether-female-chroma-hair-2": 100,
 		"adinho-chroma-hair": 100,
 		"adinho-chroma-beard": 75,
 		"adinho-chroma-glasses": 100,

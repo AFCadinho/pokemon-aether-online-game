@@ -17,6 +17,23 @@ func _init() -> void:
 func _run() -> void:
 	_check(APPEARANCE.HAIR_COLOR_SWATCHES.size() >= 14, "hair palette offers natural and expressive choices")
 	_check(APPEARANCE.CHROMA_COLOR_SWATCHES.size() >= 20, "Chroma palette covers a broad colour range")
+	for hairstyle: Dictionary in [
+		{"gender": "male", "id": "Aether_Male_Hair_01"},
+		{"gender": "male", "id": "Aether_Male_Hair_02"},
+		{"gender": "male", "id": "Aether_Male_Hair_03"},
+		{"gender": "female", "id": "Aether_Female_Hair_01"},
+		{"gender": "female", "id": "Aether_Female_Hair_02"},
+	]:
+		var hairstyle_id := str(hairstyle.get("id", ""))
+		var hairstyle_gender := str(hairstyle.get("gender", ""))
+		_check(
+			APPEARANCE.get_available_part_ids("hair", hairstyle_gender).has(hairstyle_id),
+			"%s is available for %s models" % [hairstyle_id, hairstyle_gender]
+		)
+		_check(
+			APPEARANCE.is_tintable_part("hair", hairstyle_id),
+			"%s supports Chroma colours" % hairstyle_id
+		)
 	_check(APPEARANCE.SKIN_TONE_SWATCHES.size() >= 13, "skin palette includes Default plus twelve curated tones")
 	_check(
 		str(APPEARANCE.SKIN_TONE_SWATCHES[0].get("label", "")) == "Default"
@@ -155,6 +172,11 @@ func _run() -> void:
 		"aether-blossom-chroma-hair",
 		"aether-blossom-chroma-earrings",
 		"aether-blossom-chroma-shoes",
+		"aether-male-chroma-hair-1",
+		"aether-male-chroma-hair-2",
+		"aether-male-chroma-hair-3",
+		"aether-female-chroma-hair-1",
+		"aether-female-chroma-hair-2",
 		"adinho-classic-outfit",
 		"adinho-classic-sunglasses",
 		"adinho-classic-shirt",
@@ -167,7 +189,12 @@ func _run() -> void:
 		"adinho-chroma-trousers",
 		"adinho-chroma-shoes",
 	]:
-		var icon_gender := "female" if cosmetic_item_id.begins_with("aether-blossom") else "male"
+		var icon_gender := (
+			"female"
+			if cosmetic_item_id.begins_with("aether-blossom")
+				or cosmetic_item_id.begins_with("aether-female")
+			else "male"
+		)
 		var cosmetic_icon := APPEARANCE.get_cosmetic_item_icon(cosmetic_item_id, icon_gender)
 		_check(cosmetic_icon != null, "%s has a spritesheet-frame icon" % cosmetic_item_id)
 		if cosmetic_icon != null:
