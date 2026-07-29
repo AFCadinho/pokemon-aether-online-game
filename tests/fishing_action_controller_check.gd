@@ -69,10 +69,9 @@ func _init() -> void:
 	_check(
 		appearance_source.contains('const BODY_MOVEMENT_SURF_FISH := "surf_fish"')
 		and appearance_source.contains("func resolve_layer_movement_style(")
-		and appearance_source.contains("normalized_category == BOTTOM_CATEGORY")
-		and appearance_source.contains("return BODY_MOVEMENT_RIDE")
-		and appearance_source.contains("return BODY_MOVEMENT_FISH"),
-		"Surf fishing combines fishing upper layers with riding lower layers"
+		and not appearance_source.contains("SURF_FISH_BODY_CUTOFFS")
+		and not appearance_source.contains("func _build_surf_fishing_body_frames("),
+		"Surf fishing avoids fragile per-pixel body composition"
 	)
 	_check(
 		CharacterAppearanceServiceScript.resolve_layer_movement_style("surf_fish", "body")
@@ -80,10 +79,10 @@ func _init() -> void:
 		and CharacterAppearanceServiceScript.resolve_layer_movement_style("surf_fish", "top")
 			== CharacterAppearanceServiceScript.BODY_MOVEMENT_FISH
 		and CharacterAppearanceServiceScript.resolve_layer_movement_style("surf_fish", "bottom")
-			== CharacterAppearanceServiceScript.BODY_MOVEMENT_RIDE
+			== CharacterAppearanceServiceScript.BODY_MOVEMENT_FISH
 		and CharacterAppearanceServiceScript.resolve_layer_movement_style("surf_fish", "shoes")
-			== CharacterAppearanceServiceScript.BODY_MOVEMENT_RIDE,
-		"combined Surf fishing resolves each appearance layer to an existing sheet"
+			== CharacterAppearanceServiceScript.BODY_MOVEMENT_FISH,
+		"Surf fishing resolves every appearance layer to one consistent fishing pose"
 	)
 	var combined_body_frames := CharacterAppearanceServiceScript.get_body_frames(
 		CharacterAppearanceServiceScript.DEFAULT_MALE_BODY_ID,
@@ -115,21 +114,15 @@ func _init() -> void:
 		CharacterAppearanceServiceScript.BODY_MOVEMENT_SURF_FISH
 	)
 	_check(
-		combined_body_frames != null
-		and appearance_source.contains("func _build_surf_fishing_body_frames(")
-		and appearance_source.contains("func _build_surf_fishing_layer_frames(")
-		and appearance_source.contains("func _build_surf_fishing_upper_layer_frames(")
-		and appearance_source.contains("func _build_surf_fishing_lower_layer_frames(")
-		and appearance_source.contains("SURF_FISH_SIDE_LOWER_SHIFT := 12")
-		and combined_top_frames != null
-		and combined_bottom_frames != null,
-		"combined Surf fishing removes riding arms below the fishing upper body"
+		_frame_atlas_path(combined_body_frames).contains("/body/fish/")
+		and _frame_atlas_path(combined_top_frames).contains("/top/fish/")
+		and _frame_atlas_path(combined_bottom_frames).contains("/bottom/fish/"),
+		"Surf fishing loads matching authored fishing textures"
 	)
 	_check(
-		custom_bottom_frames != null
-		and custom_shoes_frames != null
-		and appearance_source.contains("func _get_shifted_surf_riding_pixel("),
-		"cosmetics without activity sheets fall back to aligned riding lower layers"
+		_frame_atlas_path(custom_bottom_frames).contains("/bottom/fish/Trousers_fish.png")
+		and _frame_atlas_path(custom_shoes_frames).contains("/shoes/fish/Shoes_fish.png"),
+		"cosmetics without fishing sheets fall back to aligned fishing layers"
 	)
 	_check(
 		remote_player_source.contains(
@@ -138,7 +131,7 @@ func _init() -> void:
 		and player_source.contains(
 			'get_tree().call_group("world", "_publish_world_presence", true)'
 		),
-		"combined Surf pose is published and rendered for remote avatars"
+		"Surf fishing pose is published and rendered for remote avatars"
 	)
 	_check(
 		controller_source.contains('button.add_theme_constant_override("icon_max_width", 32)')
