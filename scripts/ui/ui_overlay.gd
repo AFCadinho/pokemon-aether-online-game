@@ -1092,6 +1092,7 @@ var evolution_sparkle_nodes: Array[Control] = []
 var evolution_tween: Tween
 var evolution_silhouette_material: ShaderMaterial
 var evolution_is_playing := false
+var evolution_overlay_active_evolution: Dictionary = {}
 var content_creator_menu_popup: PanelContainer
 var content_creator_create_pokemon_button: Button
 var content_creator_clear_party_button: Button
@@ -1415,6 +1416,7 @@ func _on_locale_changed(_locale: String) -> void:
 	_refresh_trainer_card_localized_ui()
 	_refresh_chat_localized_ui()
 	_refresh_buffs_localized_ui()
+	_refresh_progression_prompts_localized_ui()
 	_refresh_dev_tools_localized_ui()
 	_refresh_dev_world_time_selector()
 	_refresh_dev_world_weather_selector()
@@ -2997,7 +2999,7 @@ func _setup_ui_confirm_popup() -> void:
 	stack.add_child(header)
 
 	ui_confirm_title_label = Label.new()
-	ui_confirm_title_label.text = "Confirm"
+	_set_localized_control_property(ui_confirm_title_label, "text", "common.confirm")
 	ui_confirm_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	ui_confirm_title_label.add_theme_font_size_override("font_size", 17)
 	ui_confirm_title_label.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
@@ -3005,6 +3007,7 @@ func _setup_ui_confirm_popup() -> void:
 
 	var close_button := Button.new()
 	close_button.text = "X"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.custom_minimum_size = Vector2(32, 28)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_on_ui_confirm_cancel_pressed)
@@ -3025,7 +3028,7 @@ func _setup_ui_confirm_popup() -> void:
 	stack.add_child(button_row)
 
 	ui_confirm_cancel_button = Button.new()
-	ui_confirm_cancel_button.text = "Cancel"
+	_set_localized_control_property(ui_confirm_cancel_button, "text", "common.cancel")
 	ui_confirm_cancel_button.custom_minimum_size = Vector2(112, 32)
 	ui_confirm_cancel_button.focus_mode = Control.FOCUS_NONE
 	ui_confirm_cancel_button.pressed.connect(_on_ui_confirm_cancel_pressed)
@@ -3033,7 +3036,7 @@ func _setup_ui_confirm_popup() -> void:
 	button_row.add_child(ui_confirm_cancel_button)
 
 	ui_confirm_confirm_button = Button.new()
-	ui_confirm_confirm_button.text = "Confirm"
+	_set_localized_control_property(ui_confirm_confirm_button, "text", "common.confirm")
 	ui_confirm_confirm_button.custom_minimum_size = Vector2(128, 32)
 	ui_confirm_confirm_button.focus_mode = Control.FOCUS_NONE
 	ui_confirm_confirm_button.pressed.connect(_on_ui_confirm_confirm_pressed)
@@ -3047,7 +3050,7 @@ func _show_ui_confirm_popup(
 	callback: Callable,
 	size: Vector2i = Vector2i(460, 190),
 	danger_confirm: bool = false,
-	cancel_text: String = "Cancel",
+	cancel_text: String = "",
 	cancel_callback: Callable = Callable()
 ) -> void:
 	if ui_confirm_popup == null:
@@ -3060,7 +3063,11 @@ func _show_ui_confirm_popup(
 	ui_confirm_message_label.text = message
 	ui_confirm_confirm_button.text = confirm_text
 	_apply_button_style(ui_confirm_confirm_button, "danger" if danger_confirm else "primary")
-	ui_confirm_cancel_button.text = cancel_text
+	ui_confirm_cancel_button.text = (
+		LocalizationManager.text("common.cancel")
+		if cancel_text == ""
+		else cancel_text
+	)
 
 	var popup_size := Vector2(size)
 	if popup_size.y <= 0.0:
@@ -3125,7 +3132,7 @@ func _setup_move_learn_popup() -> void:
 	margin.add_child(stack)
 
 	move_learn_title_label = Label.new()
-	move_learn_title_label.text = "Learn Move"
+	_set_localized_control_property(move_learn_title_label, "text", "ui.move_learning.title")
 	move_learn_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	move_learn_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	move_learn_title_label.add_theme_font_size_override("font_size", 17)
@@ -3158,7 +3165,7 @@ func _setup_move_learn_popup() -> void:
 	stack.add_child(button_row)
 
 	move_learn_confirm_button = Button.new()
-	move_learn_confirm_button.text = "Learn"
+	_set_localized_control_property(move_learn_confirm_button, "text", "ui.move_learning.learn")
 	move_learn_confirm_button.custom_minimum_size = Vector2(132, 42)
 	move_learn_confirm_button.focus_mode = Control.FOCUS_NONE
 	move_learn_confirm_button.disabled = true
@@ -3167,7 +3174,7 @@ func _setup_move_learn_popup() -> void:
 	button_row.add_child(move_learn_confirm_button)
 
 	move_learn_skip_button = Button.new()
-	move_learn_skip_button.text = "Cancel"
+	_set_localized_control_property(move_learn_skip_button, "text", "ui.move_learning.do_not_learn")
 	move_learn_skip_button.custom_minimum_size = Vector2(132, 42)
 	move_learn_skip_button.focus_mode = Control.FOCUS_NONE
 	move_learn_skip_button.pressed.connect(_on_move_learn_skip_pressed)
@@ -3216,7 +3223,7 @@ func _setup_evolution_prompt_popup() -> void:
 	stack.add_child(header)
 
 	evolution_prompt_title_label = Label.new()
-	evolution_prompt_title_label.text = "Evolution"
+	_set_localized_control_property(evolution_prompt_title_label, "text", "ui.evolution.title")
 	evolution_prompt_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	evolution_prompt_title_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	evolution_prompt_title_label.add_theme_font_size_override("font_size", 19)
@@ -3277,7 +3284,11 @@ func _setup_evolution_prompt_popup() -> void:
 	stack.add_child(button_row)
 
 	evolution_prompt_skip_button = Button.new()
-	evolution_prompt_skip_button.text = "Do not evolve"
+	_set_localized_control_property(
+		evolution_prompt_skip_button,
+		"text",
+		"ui.evolution.do_not_evolve"
+	)
 	evolution_prompt_skip_button.custom_minimum_size = Vector2(132, 36)
 	evolution_prompt_skip_button.focus_mode = Control.FOCUS_NONE
 	evolution_prompt_skip_button.pressed.connect(_on_evolution_skipped)
@@ -3285,7 +3296,7 @@ func _setup_evolution_prompt_popup() -> void:
 	button_row.add_child(evolution_prompt_skip_button)
 
 	evolution_prompt_confirm_button = Button.new()
-	evolution_prompt_confirm_button.text = "Evolve"
+	_set_localized_control_property(evolution_prompt_confirm_button, "text", "ui.evolution.evolve")
 	evolution_prompt_confirm_button.custom_minimum_size = Vector2(132, 36)
 	evolution_prompt_confirm_button.focus_mode = Control.FOCUS_NONE
 	evolution_prompt_confirm_button.pressed.connect(_on_evolution_confirmed)
@@ -3394,7 +3405,7 @@ func _setup_evolution_overlay() -> void:
 
 	evolution_continue_button = Button.new()
 	evolution_continue_button.name = "ContinueButton"
-	evolution_continue_button.text = "Continue"
+	_set_localized_control_property(evolution_continue_button, "text", "common.continue")
 	evolution_continue_button.custom_minimum_size = Vector2(140, 40)
 	evolution_continue_button.focus_mode = Control.FOCUS_NONE
 	evolution_continue_button.pressed.connect(_hide_evolution_overlay)
@@ -3555,19 +3566,26 @@ func play_evolution_overlay(evolution: Dictionary) -> void:
 		evolution_tween.kill()
 
 	var shiny := bool(evolution.get("shiny", false))
+	evolution_overlay_active_evolution = evolution.duplicate(true)
 	var old_texture := PokemonAssets.load_home_sprite(old_species, shiny)
 	var new_texture := PokemonAssets.load_home_sprite(new_species, shiny)
 	var old_species_name := _localized_species_name(old_species, old_species)
 	var new_species_name := _localized_species_name(new_species, new_species)
 	if old_texture == null or new_texture == null:
-		add_system_message("%s evolved into %s!" % [old_species_name, new_species_name])
+		add_system_message(LocalizationManager.text(
+			"ui.evolution.result.evolved",
+			{"from": old_species_name, "to": new_species_name}
+		))
 		return
 
 	evolution_is_playing = true
 	evolution_old_sprite.texture = old_texture
 	evolution_silhouette_sprite.texture = old_texture
 	evolution_new_sprite.texture = new_texture
-	evolution_title_label.text = "What? %s is evolving!" % old_species_name
+	evolution_title_label.text = LocalizationManager.text(
+		"ui.evolution.overlay.start",
+		{"pokemon": old_species_name}
+	)
 	evolution_message_label.text = ""
 	evolution_overlay.visible = true
 	evolution_overlay.move_to_front()
@@ -3592,7 +3610,10 @@ func play_evolution_overlay(evolution: Dictionary) -> void:
 	evolution_tween.tween_interval(0.22)
 	await evolution_tween.finished
 
-	evolution_message_label.text = "Congratulations! %s evolved into %s!" % [old_species_name, new_species_name]
+	evolution_message_label.text = LocalizationManager.text(
+		"ui.evolution.overlay.complete",
+		{"from": old_species_name, "to": new_species_name}
+	)
 	evolution_continue_button.visible = true
 	evolution_is_playing = false
 	await evolution_continue_button.pressed
@@ -3651,6 +3672,7 @@ func _hide_evolution_overlay() -> void:
 		evolution_tween.kill()
 	evolution_tween = null
 	evolution_is_playing = false
+	evolution_overlay_active_evolution.clear()
 	if evolution_overlay != null:
 		evolution_overlay.visible = false
 	_reset_evolution_visuals()
@@ -3804,7 +3826,11 @@ func _show_next_evolution_prompt() -> void:
 		var prompt: Dictionary = evolution_prompt_queue.pop_front()
 		var pokemon := _find_party_pokemon_by_owned_id(int(prompt.get("pokemonId", 0)))
 		if pokemon == null:
-			add_system_message("Could not open evolution prompt for %s." % _evolution_prompt_from_species(prompt))
+			var source_species := _evolution_prompt_from_species(prompt)
+			add_system_message(LocalizationManager.text(
+				"ui.evolution.error.open_prompt",
+				{"pokemon": _localized_species_name(source_species, source_species)}
+			))
 			continue
 
 		evolution_prompt_review_index += 1
@@ -3827,10 +3853,17 @@ func _render_evolution_prompt(prompt: Dictionary) -> void:
 	)
 	var progress_label := _evolution_queue_progress_label()
 	var level := int(prompt.get("level", 0))
-	evolution_prompt_title_label.text = "Evolution"
+	evolution_prompt_title_label.text = LocalizationManager.text("ui.evolution.title")
 	evolution_prompt_progress_label.text = progress_label
-	evolution_prompt_message_label.text = "%s can evolve into %s." % [from_species_name, to_species_name]
-	evolution_prompt_level_label.text = "Available at Lv. %s" % level if level > 0 else ""
+	evolution_prompt_message_label.text = LocalizationManager.text(
+		"ui.evolution.available",
+		{"from": from_species_name, "to": to_species_name}
+	)
+	evolution_prompt_level_label.text = (
+		LocalizationManager.text("ui.evolution.available_level", {"level": level})
+		if level > 0
+		else ""
+	)
 	evolution_prompt_status_label.text = ""
 	evolution_prompt_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	_set_evolution_prompt_controls_disabled(false)
@@ -3872,13 +3905,14 @@ func _submit_evolution_choice(confirm: bool) -> void:
 	var pokemon_id := int(prompt.get("pokemonId", 0))
 	var target_species_id := _evolution_prompt_target_species_id(prompt)
 	var from_species := _evolution_prompt_from_species(prompt)
-	evolution_prompt_status_label.text = "Saving..."
+	evolution_prompt_status_label.text = LocalizationManager.text("common.saving")
 	evolution_prompt_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	var result: Dictionary = await PlayerPartyStateService.evolve_pokemon(pokemon_id, target_species_id, confirm)
 	evolution_prompt_processing = false
 
 	if not bool(result.get("success", false)):
-		evolution_prompt_status_label.text = str(result.get("error", "Could not save evolution choice."))
+		push_warning("UIOverlay: evolution choice failed: %s" % str(result.get("error", "Unknown error")))
+		evolution_prompt_status_label.text = LocalizationManager.text("ui.evolution.error.save")
 		evolution_prompt_status_label.add_theme_color_override("font_color", UI_DANGER)
 		_set_evolution_prompt_controls_disabled(false)
 		return
@@ -3895,14 +3929,20 @@ func _submit_evolution_choice(confirm: bool) -> void:
 			evolution_prompt_popup.visible = false
 		await play_evolution_overlay(evolution)
 		var to_species := _evolution_prompt_to_species(evolution)
-		add_system_message("%s evolved into %s!" % [
-			_localized_species_name(from_species, from_species),
-			_localized_species_name(target_species_id, to_species),
-		])
+		add_system_message(LocalizationManager.text(
+			"ui.evolution.result.evolved",
+			{
+				"from": _localized_species_name(from_species, from_species),
+				"to": _localized_species_name(target_species_id, to_species),
+			}
+		))
 	else:
 		if evolution_prompt_popup != null:
 			evolution_prompt_popup.visible = false
-		add_system_message("%s did not evolve." % _localized_species_name(from_species, from_species))
+		add_system_message(LocalizationManager.text(
+			"ui.evolution.result.skipped",
+			{"pokemon": _localized_species_name(from_species, from_species)}
+		))
 
 	evolution_active_prompt.clear()
 	_refresh_party()
@@ -3978,7 +4018,7 @@ func _discard_move_learn_review_prompt() -> void:
 
 func _finish_move_learn_review_queue() -> void:
 	if move_learn_pending_review_total > 1 and move_learn_pending_review_index >= move_learn_pending_review_total:
-		add_system_message("Move learning review complete.")
+		add_system_message(LocalizationManager.text("ui.move_learning.review_complete"))
 	move_learn_pending_review_total = 0
 	move_learn_pending_review_index = 0
 
@@ -3994,7 +4034,16 @@ func _show_next_move_learn_prompt() -> void:
 		var prompt: Dictionary = move_learn_queue.pop_front()
 		var pokemon := _find_party_pokemon_by_owned_id(int(prompt.get("pokemonId", 0)))
 		if pokemon == null:
-			add_system_message("Could not open move learning prompt for %s." % str(prompt.get("species", "Pokemon")))
+			var source_species := str(prompt.get("species", "")).strip_edges()
+			add_system_message(LocalizationManager.text(
+				"ui.move_learning.error.open_prompt",
+				{
+					"pokemon": _localized_species_name(
+						source_species,
+						source_species if source_species != "" else LocalizationManager.text("pokemon.generic")
+					),
+				}
+			))
 			_discard_move_learn_review_prompt()
 			continue
 
@@ -4011,8 +4060,16 @@ func _render_move_learn_prompt(pokemon: Pokemon, prompt: Dictionary) -> void:
 	var species := _pokemon_display_name(pokemon)
 	var new_move_value: Variant = _move_learn_prompt_move_value(prompt)
 	var progress_label := _move_learn_queue_progress_label()
-	move_learn_title_label.text = "Learn %s%s" % [move_name, " (%s)" % progress_label if progress_label != "" else ""]
-	move_learn_message_label.text = "%s wants to learn %s. Select a move to replace or choose not to learn." % [species, move_name]
+	move_learn_title_label.text = LocalizationManager.text(
+		"ui.move_learning.learn_named_progress"
+		if progress_label != ""
+		else "ui.move_learning.learn_named",
+		{"move": move_name, "progress": progress_label}
+	)
+	move_learn_message_label.text = LocalizationManager.text(
+		"ui.move_learning.prompt",
+		{"pokemon": species, "move": move_name}
+	)
 	move_learn_status_label.text = ""
 	move_learn_selected_replace_slot = -2
 	_hide_move_learn_hover_panel()
@@ -4078,7 +4135,7 @@ func _create_move_learn_new_move_tile(move_name: String, move_value: Variant) ->
 	button.add_child(stack)
 
 	var eyebrow := Label.new()
-	eyebrow.text = "New move"
+	eyebrow.text = LocalizationManager.text("ui.move_learning.new_move")
 	eyebrow.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	eyebrow.add_theme_font_size_override("font_size", 10)
 	eyebrow.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
@@ -4118,7 +4175,12 @@ func _create_move_learn_empty_slot_button(move_index: int) -> Button:
 	button.focus_mode = Control.FOCUS_NONE
 	button.pressed.connect(_on_move_learn_slot_pressed.bind(move_index))
 	_apply_move_learn_move_tile_style(button, false)
-	_fill_move_learn_choice_button(button, "Empty slot", {}, "Learn here")
+	_fill_move_learn_choice_button(
+		button,
+		LocalizationManager.text("ui.move_learning.empty_slot"),
+		{},
+		LocalizationManager.text("ui.move_learning.learn_here")
+	)
 	return button
 
 func _apply_move_learn_new_move_tile_style(button: Button) -> void:
@@ -4228,7 +4290,9 @@ func _refresh_move_learn_selection_buttons() -> void:
 
 func _on_move_learn_confirm_pressed() -> void:
 	if move_learn_selected_replace_slot < 0:
-		move_learn_status_label.text = "Select a move to replace first."
+		move_learn_status_label.text = LocalizationManager.text(
+			"ui.move_learning.select_replacement"
+		)
 		move_learn_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		return
 	var replace_slot := move_learn_selected_replace_slot
@@ -4274,8 +4338,8 @@ func _show_move_learn_hover_panel(anchor: Control, move_value: Variant) -> void:
 	var meta_row := HBoxContainer.new()
 	meta_row.add_theme_constant_override("separation", 6)
 	stack.add_child(meta_row)
-	meta_row.add_child(_create_move_learn_hover_stat("Power", _get_summary_move_power_text(move_value), Color("#f2cf78")))
-	meta_row.add_child(_create_move_learn_hover_stat("Acc", _get_summary_move_accuracy_text(move_value), Color("#d9ecff")))
+	meta_row.add_child(_create_move_learn_hover_stat(LocalizationManager.text("ui.move_learning.power"), _get_summary_move_power_text(move_value), Color("#f2cf78")))
+	meta_row.add_child(_create_move_learn_hover_stat(LocalizationManager.text("ui.move_learning.accuracy"), _get_summary_move_accuracy_text(move_value), Color("#d9ecff")))
 	meta_row.add_child(_create_move_learn_hover_stat("PP", _get_summary_move_pp_text(move_value).split("/", false, 1)[0], Color("#7df2e8")))
 
 	var description := _get_summary_move_description_text(move_value)
@@ -4397,7 +4461,14 @@ func _create_move_learn_category_label(category: String) -> Control:
 func _get_summary_move_category_text(move_value: Variant) -> String:
 	var category_value: Variant = _get_summary_move_data_value(move_value, ["category", "damageClass", "damage_class"], "")
 	var category := str(category_value).strip_edges()
-	return _format_identifier_display_name(category) if category != "" else ""
+	if category == "":
+		return ""
+	var key := "ui.move.category.%s" % category.to_lower().replace("-", "_").replace(" ", "_")
+	return (
+		LocalizationManager.text(key)
+		if LocalizationManager.has_key(key)
+		else _format_identifier_display_name(category)
+	)
 
 func _on_move_learn_skip_pressed() -> void:
 	await _submit_move_learn_choice(-1, true)
@@ -4412,13 +4483,14 @@ func _submit_move_learn_choice(replace_slot: int, skip: bool) -> void:
 	var move_id := _move_learn_prompt_move_id(move_learn_active_prompt)
 	var move_name := _move_learn_prompt_move_name(move_learn_active_prompt)
 	var pokemon_id := int(move_learn_active_prompt.get("pokemonId", 0))
-	move_learn_status_label.text = "Saving..."
+	move_learn_status_label.text = LocalizationManager.text("common.saving")
 	var source_item_id := str(move_learn_active_prompt.get("sourceItemId", "")).strip_edges()
 	var result: Dictionary = await PlayerPartyStateService.learn_pokemon_move(pokemon_id, move_id, replace_slot, skip, source_item_id)
 	move_learn_processing = false
 
 	if not bool(result.get("success", false)):
-		move_learn_status_label.text = str(result.get("error", "Could not save move choice."))
+		push_warning("UIOverlay: move learning choice failed: %s" % str(result.get("error", "Unknown error")))
+		move_learn_status_label.text = LocalizationManager.text("ui.move_learning.error.save")
 		_set_move_learn_controls_disabled(false)
 		return
 
@@ -4444,7 +4516,10 @@ func _emit_move_learn_result_message(result: Dictionary, fallback_species: Strin
 	var learned_name := _move_learn_result_move_name(learned_move, fallback_move_name)
 	var skipped := bool(result.get("skipped", fallback_skipped))
 	if skipped:
-		add_system_message("%s did not learn %s." % [species, learned_name])
+		add_system_message(LocalizationManager.text(
+			"ui.move_learning.result.skipped",
+			{"pokemon": species, "move": learned_name}
+		))
 		return
 
 	var replaced_move: Dictionary = {}
@@ -4453,9 +4528,15 @@ func _emit_move_learn_result_message(result: Dictionary, fallback_species: Strin
 		replaced_move = replaced_move_value as Dictionary
 	var replaced_name := _move_learn_result_move_name(replaced_move, "")
 	if replaced_name != "":
-		add_system_message("%s forgot %s and learned %s!" % [species, replaced_name, learned_name])
+		add_system_message(LocalizationManager.text(
+			"ui.move_learning.result.replaced",
+			{"pokemon": species, "forgotten": replaced_name, "learned": learned_name}
+		))
 	else:
-		add_system_message("%s learned %s!" % [species, learned_name])
+		add_system_message(LocalizationManager.text(
+			"ui.move_learning.result.learned",
+			{"pokemon": species, "move": learned_name}
+		))
 
 func _move_learn_result_move_name(move_value: Variant, fallback_name: String) -> String:
 	if move_value is Dictionary:
@@ -4466,8 +4547,9 @@ func _move_learn_result_move_name(move_value: Variant, fallback_name: String) ->
 				return move_name
 			var move_id := str(move_data.get("moveId", move_data.get("move_id", ""))).strip_edges()
 			if move_id != "":
-				return _format_move_name(move_id)
-	return fallback_name
+				return _localized_content_name("moves", move_id, _format_move_name(move_id))
+	var fallback_id := fallback_name.to_lower().replace(" ", "-").replace("_", "-")
+	return _localized_content_name("moves", fallback_id, fallback_name)
 
 func _set_move_learn_controls_disabled(disabled: bool) -> void:
 	for button: Button in move_learn_move_buttons:
@@ -4497,13 +4579,14 @@ func _move_learn_prompt_move_id(prompt: Dictionary) -> String:
 	return ""
 
 func _move_learn_prompt_move_name(prompt: Dictionary) -> String:
+	var move_id := _move_learn_prompt_move_id(prompt)
 	var move_name := str(prompt.get("name", "")).strip_edges()
 	if move_name != "":
-		return move_name
+		return _localized_content_name("moves", move_id, move_name)
 	var move_value: Variant = prompt.get("move", {})
 	if move_value is Dictionary:
 		return _get_summary_move_name(move_value)
-	return _format_move_name(_move_learn_prompt_move_id(prompt))
+	return _localized_content_name("moves", move_id, _format_move_name(move_id))
 
 func _move_learn_prompt_move_value(prompt: Dictionary) -> Variant:
 	var move_value: Variant = prompt.get("move", {})
@@ -8570,6 +8653,58 @@ func _refresh_dev_tools_localized_ui() -> void:
 			_refresh_dev_item_results()
 	if dev_add_money_popup != null:
 		LocalizationManager.localize_tree(dev_add_money_popup)
+
+func _refresh_progression_prompts_localized_ui() -> void:
+	for panel: Control in [
+		ui_confirm_popup,
+		move_learn_popup,
+		move_learn_hover_panel,
+		evolution_prompt_popup,
+		evolution_overlay,
+	]:
+		if panel != null:
+			LocalizationManager.localize_tree(panel)
+	if (
+		evolution_prompt_popup != null
+		and evolution_prompt_popup.visible
+		and not evolution_active_prompt.is_empty()
+	):
+		_render_evolution_prompt(evolution_active_prompt)
+		_set_evolution_prompt_controls_disabled(evolution_prompt_processing)
+	if move_learn_popup != null and move_learn_popup.visible and not move_learn_active_prompt.is_empty():
+		var pokemon := _find_party_pokemon_by_owned_id(
+			int(move_learn_active_prompt.get("pokemonId", 0))
+		)
+		if pokemon != null:
+			var selected_slot := move_learn_selected_replace_slot
+			_render_move_learn_prompt(pokemon, move_learn_active_prompt)
+			move_learn_selected_replace_slot = selected_slot
+			_refresh_move_learn_selection_buttons()
+			_set_move_learn_controls_disabled(move_learn_processing)
+	if (
+		evolution_overlay != null
+		and evolution_overlay.visible
+		and not evolution_overlay_active_evolution.is_empty()
+	):
+		var from_id := str(evolution_overlay_active_evolution.get(
+			"oldSpecies",
+			evolution_overlay_active_evolution.get("fromSpecies", "")
+		)).strip_edges()
+		var to_id := str(evolution_overlay_active_evolution.get(
+			"newSpecies",
+			evolution_overlay_active_evolution.get("toSpecies", "")
+		)).strip_edges()
+		var from_name := _localized_species_name(from_id, from_id)
+		var to_name := _localized_species_name(to_id, to_id)
+		evolution_title_label.text = LocalizationManager.text(
+			"ui.evolution.overlay.start",
+			{"pokemon": from_name}
+		)
+		if not evolution_is_playing:
+			evolution_message_label.text = LocalizationManager.text(
+				"ui.evolution.overlay.complete",
+				{"from": from_name, "to": to_name}
+			)
 
 func _refresh_pokedex_localized_ui() -> void:
 	if pokedex_popup == null:

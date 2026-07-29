@@ -13,7 +13,7 @@ approval.
 
 The following gates pass:
 
-- the English, Dutch, and Brazilian Portuguese client catalogs contain 2,580 matching
+- the English, Dutch, and Brazilian Portuguese client catalogs contain 2,676 matching
   keys;
 - the three launcher catalogs contain 133 matching keys;
 - catalog JSON, non-empty values, key parity, and named placeholders have no errors;
@@ -21,7 +21,7 @@ The following gates pass:
 - local signs, NPC metadata/dialogue contracts, canonical content overlays, item
   overlays, backend error contracts, login, migrated gameplay domains, battles, and
   the launcher pass their domain checks;
-- all 139 project checks pass;
+- all 140 project checks pass;
 - the standalone launcher localization runtime check passes.
 
 Run the repeatable catalog and completeness audit with:
@@ -40,25 +40,21 @@ The strict command currently exits with status 1, as intended.
 
 ## Open technical gates
 
-The static completeness scan started at 400 candidates and currently reports 92
+The static completeness scan started at 400 candidates and currently reports 32
 candidates at player-facing text sinks:
 
 | Source | Candidates |
 | --- | ---: |
-| `scripts/ui/ui_overlay.gd` | 31 |
 | `scenes/interface/ui_overlay.tscn` | 27 |
-| `scripts/ui/fishing_action_controller.gd` | 11 |
-| `scripts/world/world.gd` | 11 |
-| `scripts/world/player.gd` | 5 |
-| Other scene/script sources | 7 |
+| `scenes/interface/player_status_card.tscn` | 2 |
+| `scripts/ui/ui_overlay.gd` | 1 |
+| Other scene sources | 2 |
 
 Candidates require classification and are not all automatically translation debt.
 Preview values, abbreviations, player data, and decorative text can be intentional.
-However, direct inspection confirms real remaining English in at least these surfaces:
-
-- Fishing loadout, rod requirements, prompts, and failures;
-- several blackout, capture, reward, field-move, and progression system messages;
-- move-learning and evolution prompts that still build formatted English directly.
+The remaining list is now limited to scene preview/default values and one Pokémon
+Summary title. Phase 10G will migrate or explicitly classify each one before running
+the strict completeness gate.
 
 Phase 10A migrated the Pokémon Storage controls, search, filters, box selector,
 release flow, move feedback, error feedback, and live locale switching. Its focused
@@ -87,6 +83,12 @@ Developer Tools defaults and search feedback; staff teleport copy; and Store
 purchase announcements. Its focused runtime, Wild Pokémon, developer-tool, Store,
 and layout checks pass, and it reduced the open list by another 36 candidates.
 
+Phase 10F migrated Fishing loadout, rods and progression; Surf and other field-move
+feedback; blackout, capture, Gym Badge, money, EXP, EV and level rewards; evolution
+prompts and animation copy; and move-learning choices and results. Its focused
+runtime and existing Fishing, field-move, blackout, boss, reward, and summary checks
+pass, and it reduced the open list by another 60 candidates.
+
 The raw candidate list can be printed with `--limit 0`. Every remaining candidate must be
 migrated to a semantic key or documented as an intentional exclusion before the
 strict gate can become green.
@@ -113,7 +115,7 @@ but cannot replace them.
 
 ## Required remediation order
 
-1. Migrate or classify the remaining 92 static-scan candidates, one functional domain at a
+1. Migrate or classify the remaining 32 static-scan candidates, one functional domain at a
    time, with runtime locale-switch tests.
 2. Add full-flow layout checks for all supported locales and resolutions, including
    long-text and empty/error states.

@@ -1536,7 +1536,9 @@ func _render_offer_slot(slot: Control, pokemon: Dictionary, is_local: bool, posi
 	icon_button.pressed.connect(_open_offer_summary.bind(pokemon, is_local))
 	content.add_child(icon_button)
 	var level_label := Label.new()
-	level_label.text = "Lv. %d" % maxi(int(pokemon.get("level", 1)), 1)
+	level_label.text = _t("ui.trade.pokemon.level", {
+		"level": maxi(int(pokemon.get("level", 1)), 1),
+	})
 	level_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	level_label.add_theme_color_override("font_color", TRADE_MUTED)
 	level_label.add_theme_font_size_override("font_size", 11)

@@ -539,6 +539,8 @@ func face_world_position(world_position: Vector2) -> void:
 
 func _ready() -> void:
 	add_to_group("player")
+	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
+		LocalizationManager.locale_changed.connect(_on_locale_changed)
 	z_as_relative = false
 	base_look_position = look_node.position
 	PlayerSave.ensure_body_matches_gender(false)
@@ -853,7 +855,7 @@ func _setup_fishing_prompt() -> void:
 	fishing_prompt_button.size = FISHING_PROMPT_SIZE
 	fishing_prompt_button.position = FISHING_PROMPT_POSITION
 	fishing_prompt_button.z_index = 560
-	fishing_prompt_button.tooltip_text = "Fish"
+	fishing_prompt_button.tooltip_text = LocalizationManager.text("ui.fishing.prompt.fish")
 	_apply_fishing_prompt_style(fishing_prompt_button)
 	fishing_prompt_button.pressed.connect(Callable(self, "_on_fishing_prompt_pressed"))
 	add_child(fishing_prompt_button)
@@ -874,7 +876,7 @@ func _setup_fishing_bite_prompt() -> void:
 	fishing_bite_prompt_button.size = FISHING_BITE_PROMPT_SIZE
 	fishing_bite_prompt_button.position = FISHING_BITE_PROMPT_POSITION
 	fishing_bite_prompt_button.z_index = 570
-	fishing_bite_prompt_button.tooltip_text = "Reel"
+	fishing_bite_prompt_button.tooltip_text = LocalizationManager.text("ui.fishing.prompt.reel")
 	_apply_fishing_bite_prompt_style(fishing_bite_prompt_button)
 	fishing_bite_prompt_button.button_down.connect(Callable(self, "_on_fishing_bite_prompt_button_down"))
 	fishing_bite_prompt_button.gui_input.connect(Callable(self, "_on_fishing_bite_prompt_gui_input"))
@@ -898,7 +900,7 @@ func _setup_surf_prompt() -> void:
 	surf_prompt_button.size = SURF_PROMPT_SIZE
 	surf_prompt_button.position = SURF_PROMPT_POSITION
 	surf_prompt_button.z_index = 560
-	surf_prompt_button.tooltip_text = "Surf"
+	surf_prompt_button.tooltip_text = LocalizationManager.text("ui.field_move.surf")
 	_apply_surf_prompt_style(surf_prompt_button)
 	surf_prompt_button.pressed.connect(Callable(self, "_on_surf_prompt_pressed"))
 	add_child(surf_prompt_button)
@@ -1241,12 +1243,40 @@ func _show_field_move_system_message(move_id: String) -> void:
 		return
 	var charm_name := str(field_move_result.get("itemName", "")).strip_edges()
 	if charm_name != "":
-		get_tree().call_group("ui_overlay", "add_system_message", "%s was used!" % charm_name)
+		get_tree().call_group(
+			"ui_overlay",
+			"add_system_message",
+			LocalizationManager.text("ui.field_move.item_used", {"item": charm_name})
+		)
 		return
 	var pokemon: Pokemon = field_move_result.get("pokemon") as Pokemon
-	var pokemon_name := pokemon.species if pokemon != null else "Pokemon"
-	var move_name := move_id.replace("_", "-").replace("-", " ").capitalize()
-	get_tree().call_group("ui_overlay", "add_system_message", "%s used %s!" % [pokemon_name, move_name])
+	var pokemon_name := (
+		ContentLocalization.display_name("species", pokemon.species, pokemon.species)
+		if pokemon != null
+		else LocalizationManager.text("pokemon.generic")
+	)
+	var move_name := ContentLocalization.display_name(
+		"moves",
+		move_id,
+		move_id.replace("_", "-").replace("-", " ").capitalize()
+	)
+	get_tree().call_group(
+		"ui_overlay",
+		"add_system_message",
+		LocalizationManager.text(
+			"ui.field_move.pokemon_used",
+			{"pokemon": pokemon_name, "move": move_name}
+		)
+	)
+
+
+func _on_locale_changed(_locale: String) -> void:
+	if fishing_prompt_button != null:
+		fishing_prompt_button.tooltip_text = LocalizationManager.text("ui.fishing.prompt.fish")
+	if fishing_bite_prompt_button != null:
+		fishing_bite_prompt_button.tooltip_text = LocalizationManager.text("ui.fishing.prompt.reel")
+	if surf_prompt_button != null:
+		surf_prompt_button.tooltip_text = LocalizationManager.text("ui.field_move.surf")
 
 func _start_surf_activity(clear_input := true) -> void:
 	surf_activity_active = true

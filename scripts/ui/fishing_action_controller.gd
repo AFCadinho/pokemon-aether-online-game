@@ -41,6 +41,8 @@ var action_hovered := false
 
 func _ready() -> void:
 	add_to_group("fishing_action_controller")
+	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
+		LocalizationManager.locale_changed.connect(_on_locale_changed)
 	call_deferred("_build_interface")
 
 
@@ -105,18 +107,18 @@ func _build_interface() -> void:
 	heading.add_theme_constant_override("separation", 0)
 	header.add_child(heading)
 	var title := Label.new()
-	title.text = "Fishing"
+	_set_localized_control_property(title, "text", "ui.fishing.title")
 	title.add_theme_color_override("font_color", TEXT_PRIMARY)
 	title.add_theme_font_size_override("font_size", 19)
 	heading.add_child(title)
 	var subtitle := Label.new()
-	subtitle.text = "ROD LOADOUT"
+	_set_localized_control_property(subtitle, "text", "ui.fishing.loadout")
 	subtitle.add_theme_color_override("font_color", ACCENT_CYAN)
 	subtitle.add_theme_font_size_override("font_size", 10)
 	heading.add_child(subtitle)
 	var close_button := Button.new()
 	close_button.text = "×"
-	close_button.tooltip_text = "Close"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.custom_minimum_size = Vector2(32, 32)
 	_apply_close_button_style(close_button)
@@ -160,7 +162,7 @@ func _build_interface() -> void:
 	experience_row.add_child(experience_bar)
 
 	var loadout_label := Label.new()
-	loadout_label.text = "AVAILABLE RODS"
+	_set_localized_control_property(loadout_label, "text", "ui.fishing.available_rods")
 	loadout_label.add_theme_color_override("font_color", Color(TEXT_MUTED.r, TEXT_MUTED.g, TEXT_MUTED.b, 0.82))
 	loadout_label.add_theme_font_size_override("font_size", 10)
 	content.add_child(loadout_label)
@@ -168,6 +170,7 @@ func _build_interface() -> void:
 	rods_container.add_theme_constant_override("separation", 7)
 	content.add_child(rods_container)
 
+	LocalizationManager.localize_tree(popup)
 	refresh_from_game_state()
 
 
@@ -182,26 +185,33 @@ func refresh_from_game_state() -> void:
 	action_button.disabled = selection_pending
 	_apply_action_slot_style()
 	if selected_id == "":
-		action_button.tooltip_text = "Fishing rods (no rod selected)"
+		action_button.tooltip_text = LocalizationManager.text("ui.fishing.tooltip.no_rod")
 	else:
-		var usability := "ready" if GameState.fishing_unlocked else "locked in this region"
-		action_button.tooltip_text = "%s — %s" % [ROD_NAMES.get(selected_id, selected_id), usability]
+		var usability := LocalizationManager.text(
+			"ui.fishing.ready"
+			if GameState.fishing_unlocked
+			else "ui.fishing.locked_region"
+		)
+		action_button.tooltip_text = LocalizationManager.text(
+			"ui.fishing.tooltip.rod",
+			{"rod": _localized_rod_name(selected_id), "status": usability}
+		)
 	if status_label == null:
 		return
-	status_label.text = "Level %d  •  %s badges: %d" % [
-		GameState.fishing_level,
-		GameState.fishing_region.capitalize(),
-		GameState.fishing_region_badge_count,
-	]
+	status_label.text = LocalizationManager.text("ui.fishing.progress", {
+		"level": GameState.fishing_level,
+		"region": _localized_fishing_region(),
+		"badges": GameState.fishing_region_badge_count,
+	})
 	if GameState.fishing_experience_for_next_level > 0:
-		experience_label.text = "%d / %d XP" % [
-			GameState.fishing_experience_into_level,
-			GameState.fishing_experience_for_next_level,
-		]
+		experience_label.text = LocalizationManager.text("ui.fishing.experience", {
+			"current": GameState.fishing_experience_into_level,
+			"required": GameState.fishing_experience_for_next_level,
+		})
 		experience_bar.max_value = maxi(GameState.fishing_experience_for_next_level, 1)
 		experience_bar.value = GameState.fishing_experience_into_level
 	else:
-		experience_label.text = "MAX LEVEL"
+		experience_label.text = LocalizationManager.text("ui.fishing.max_level")
 		experience_bar.max_value = 1
 		experience_bar.value = 1
 	_rebuild_rod_buttons()
@@ -219,9 +229,11 @@ func _rebuild_rod_buttons() -> void:
 	no_rod_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	no_rod_button.focus_mode = Control.FOCUS_NONE
 	no_rod_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	no_rod_button.text = "✓ No rod — Fishing inactive" if no_rod_selected else "No rod — Put rod away"
+	no_rod_button.text = LocalizationManager.text(
+		"ui.fishing.no_rod.selected" if no_rod_selected else "ui.fishing.no_rod.stow"
+	)
 	no_rod_button.disabled = selection_pending
-	no_rod_button.tooltip_text = "Hide the fishing prompt until you select a rod."
+	no_rod_button.tooltip_text = LocalizationManager.text("ui.fishing.no_rod.tooltip")
 	_apply_no_rod_button_style(no_rod_button, no_rod_selected)
 	no_rod_button.pressed.connect(_select_rod.bind(""))
 	rods_container.add_child(no_rod_button)
@@ -249,26 +261,28 @@ func _rebuild_rod_buttons() -> void:
 func _rod_button_text(rod: Dictionary) -> String:
 	var item_id := str(rod.get("itemId", "")).strip_edges().to_lower()
 	var prefix := "✓ " if item_id == GameState.selected_fishing_rod_item_id else ""
-	var name := str(rod.get("name", ROD_NAMES.get(item_id, item_id)))
+	var name := _localized_rod_name(item_id, str(rod.get("name", "")))
 	if not bool(rod.get("owned", false)):
-		return "%s%s — Not owned" % [prefix, name]
+		return prefix + LocalizationManager.text("ui.fishing.rod.not_owned", {"rod": name})
 	if not bool(rod.get("levelRequirementMet", false)):
-		return "%s%s — Level %d required" % [prefix, name, int(rod.get("requiredLevel", 1))]
+		return prefix + LocalizationManager.text("ui.fishing.rod.level_required", {
+			"rod": name,
+			"level": int(rod.get("requiredLevel", 1)),
+		})
 	if not bool(rod.get("badgeRequirementMet", false)):
-		return "%s%s — %d %s badges required" % [
-			prefix,
-			name,
-			int(rod.get("requiredBadges", 0)),
-			GameState.fishing_region.capitalize(),
-		]
-	return "%s%s — Ready" % [prefix, name]
+		return prefix + LocalizationManager.text("ui.fishing.rod.badges_required", {
+			"rod": name,
+			"badges": int(rod.get("requiredBadges", 0)),
+			"region": _localized_fishing_region(),
+		})
+	return prefix + LocalizationManager.text("ui.fishing.rod.ready", {"rod": name})
 
 
 func _rod_tooltip(rod: Dictionary) -> String:
-	return "Fishing Level %d • %d regional badges" % [
-		int(rod.get("requiredLevel", 1)),
-		int(rod.get("requiredBadges", 0)),
-	]
+	return LocalizationManager.text("ui.fishing.rod.requirements", {
+		"level": int(rod.get("requiredLevel", 1)),
+		"badges": int(rod.get("requiredBadges", 0)),
+	})
 
 
 func _toggle_popup() -> void:
@@ -292,7 +306,11 @@ func _close_popup() -> void:
 func _refresh_progression() -> void:
 	var result: Dictionary = await InventoryService.load_fishing_progression(_current_area_id())
 	if not bool(result.get("success", false)):
-		get_tree().call_group("ui_overlay", "add_system_message", "Fishing progress could not be refreshed.")
+		get_tree().call_group(
+			"ui_overlay",
+			"add_system_message",
+			LocalizationManager.text("ui.fishing.error.refresh")
+		)
 
 
 func _select_rod(item_id: String) -> void:
@@ -304,11 +322,38 @@ func _select_rod(item_id: String) -> void:
 	selection_pending = false
 	refresh_from_game_state()
 	if not bool(result.get("success", false)):
+		push_warning("FishingActionController: rod selection failed: %s" % str(result.get("error", "Unknown error")))
 		get_tree().call_group(
 			"ui_overlay",
 			"add_system_message",
-			str(result.get("error", "That fishing rod could not be selected."))
+			LocalizationManager.text("ui.fishing.error.select")
 		)
+
+
+func _localized_rod_name(item_id: String, fallback_name: String = "") -> String:
+	var fallback := fallback_name.strip_edges()
+	if fallback == "":
+		fallback = str(ROD_NAMES.get(item_id, item_id))
+	return ItemLocalization.display_name(item_id, fallback)
+
+
+func _localized_fishing_region() -> String:
+	var region_id := str(GameState.fishing_region).strip_edges().to_lower()
+	var key := "ui.fishing.region.%s" % region_id
+	if region_id != "" and LocalizationManager.has_key(key):
+		return LocalizationManager.text(key)
+	return region_id.capitalize()
+
+
+func _set_localized_control_property(control: Control, property_name: String, key: String) -> void:
+	control.set_meta("i18n_source_%s" % property_name, key)
+	control.set(property_name, LocalizationManager.text(key))
+
+
+func _on_locale_changed(_locale: String) -> void:
+	if popup != null:
+		LocalizationManager.localize_tree(popup)
+	refresh_from_game_state()
 
 
 func _current_area_id() -> String:
