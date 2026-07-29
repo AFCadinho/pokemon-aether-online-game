@@ -985,6 +985,8 @@ var pc_selected_release_name := ""
 var pc_party_slot_by_owned_id: Dictionary = {}
 var pc_move_in_progress := false
 var pc_release_in_progress := false
+var pc_status_translation_key := "ui.storage.status.idle"
+var pc_status_translation_values: Dictionary = {}
 var pc_release_mode_active := false
 var pc_popup_dragging := false
 var pc_popup_drag_offset := Vector2.ZERO
@@ -1389,6 +1391,7 @@ func _on_locale_changed(_locale: String) -> void:
 	_refresh_market_localized_ui()
 	_refresh_pokedex_localized_ui()
 	_refresh_mail_localized_ui()
+	_refresh_pc_localized_ui()
 	_refresh_dev_world_time_selector()
 	_refresh_dev_world_weather_selector()
 	if staff_impersonate_token_input != null and not staff_impersonate_in_flight:
@@ -1398,6 +1401,46 @@ func _on_locale_changed(_locale: String) -> void:
 		_rebuild_staff_teleport_map_options()
 		_rebuild_staff_teleport_player_options()
 		_rebuild_staff_teleport_send_map_options()
+
+
+func _refresh_pc_localized_ui() -> void:
+	if pc_popup == null:
+		return
+
+	LocalizationManager.localize_tree(pc_popup)
+	if pc_box_selector_panel != null:
+		LocalizationManager.localize_tree(pc_box_selector_panel)
+
+	var filters: Array = [
+		[pc_filter_species_input, "ui.storage.filter.species"],
+		[pc_filter_type_input, "ui.storage.filter.type"],
+		[pc_filter_nature_input, "ui.storage.filter.nature"],
+		[pc_filter_ability_input, "ui.storage.filter.ability"],
+		[pc_filter_move_input, "ui.storage.filter.move"],
+		[pc_filter_item_input, "ui.storage.filter.held_item"],
+	]
+	for filter_value: Variant in filters:
+		var filter_data: Array = filter_value as Array
+		var filter_input: LineEdit = filter_data[0] as LineEdit
+		if filter_input == null:
+			continue
+		var placeholder_key: String = str(filter_data[1])
+		_set_localized_control_property(filter_input, "placeholder_text", placeholder_key)
+		filter_input.tooltip_text = LocalizationManager.text(
+			"ui.storage.filter_by",
+			{"field": LocalizationManager.text(placeholder_key).to_lower()}
+		)
+
+	_refresh_pc_release_controls()
+	_refresh_pc_box_tabs()
+	_update_pc_box_header()
+	if pc_box_selector_panel != null and pc_box_selector_panel.visible:
+		_refresh_pc_box_selector()
+	if pc_party_list != null:
+		_render_pc_party()
+	if pc_box_grid != null:
+		_render_pc_box()
+	_set_pc_status(pc_status_translation_key, pc_status_translation_values)
 
 
 func _play_mail_notification_sound() -> void:
@@ -2029,7 +2072,7 @@ func _setup_pc_ui() -> void:
 	header.add_child(title_stack)
 
 	var title := Label.new()
-	title.text = "Pokémon Storage"
+	_set_localized_control_property(title, "text", "ui.storage.title")
 	title.mouse_filter = Control.MOUSE_FILTER_STOP
 	title.gui_input.connect(_on_pc_header_gui_input)
 	title.mouse_default_cursor_shape = Control.CURSOR_MOVE
@@ -2039,7 +2082,7 @@ func _setup_pc_ui() -> void:
 	title_stack.add_child(title)
 
 	var subtitle := Label.new()
-	subtitle.text = "Organize your party and stored Pokémon"
+	_set_localized_control_property(subtitle, "text", "ui.storage.subtitle")
 	subtitle.mouse_filter = Control.MOUSE_FILTER_STOP
 	subtitle.gui_input.connect(_on_pc_header_gui_input)
 	subtitle.mouse_default_cursor_shape = Control.CURSOR_MOVE
@@ -2049,10 +2092,10 @@ func _setup_pc_ui() -> void:
 	title_stack.add_child(subtitle)
 
 	pc_release_mode_button = Button.new()
-	pc_release_mode_button.text = "Release"
+	_set_localized_control_property(pc_release_mode_button, "text", "ui.storage.release")
 	pc_release_mode_button.custom_minimum_size = Vector2(90, 34)
 	pc_release_mode_button.focus_mode = Control.FOCUS_NONE
-	pc_release_mode_button.tooltip_text = "Choose Pokémon to release"
+	_set_localized_control_property(pc_release_mode_button, "tooltip_text", "ui.storage.release.choose")
 	pc_release_mode_button.pressed.connect(_on_pc_release_mode_button_pressed)
 	_apply_button_style(pc_release_mode_button, "secondary")
 	header.add_child(pc_release_mode_button)
@@ -2061,7 +2104,7 @@ func _setup_pc_ui() -> void:
 	pc_close_button.text = "×"
 	pc_close_button.custom_minimum_size = Vector2(36, 34)
 	pc_close_button.focus_mode = Control.FOCUS_NONE
-	pc_close_button.tooltip_text = "Close Pokémon Storage"
+	_set_localized_control_property(pc_close_button, "tooltip_text", "ui.storage.close")
 	pc_close_button.pressed.connect(_on_pc_close_button_pressed)
 	_apply_button_style(pc_close_button)
 	header.add_child(pc_close_button)
@@ -2090,7 +2133,7 @@ func _setup_pc_ui() -> void:
 	party_stack.add_theme_constant_override("separation", 8)
 	party_margin.add_child(party_stack)
 
-	var party_section_label := _create_pc_section_caption("YOUR PARTY")
+	var party_section_label := _create_pc_section_caption("ui.storage.section.party")
 	party_stack.add_child(party_section_label)
 
 	var party_heading_row := HBoxContainer.new()
@@ -2098,7 +2141,7 @@ func _setup_pc_ui() -> void:
 	party_stack.add_child(party_heading_row)
 
 	var party_title := Label.new()
-	party_title.text = "Current Team"
+	_set_localized_control_property(party_title, "text", "ui.storage.current_team")
 	party_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	party_title.add_theme_font_size_override("font_size", 16)
 	party_title.add_theme_color_override("font_color", UI_TEXT)
@@ -2145,7 +2188,7 @@ func _setup_pc_ui() -> void:
 	box_header.add_child(box_heading_stack)
 
 	pc_box_title_label = Label.new()
-	pc_box_title_label.text = "Box 1"
+	pc_box_title_label.text = LocalizationManager.text("ui.storage.box.default", {"number": 1})
 	pc_box_title_label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	pc_box_title_label.mouse_filter = Control.MOUSE_FILTER_STOP
 	pc_box_title_label.gui_input.connect(_on_pc_box_title_gui_input)
@@ -2171,13 +2214,16 @@ func _setup_pc_ui() -> void:
 	pc_box_rename_button.text = "✎"
 	pc_box_rename_button.custom_minimum_size = Vector2(30, 30)
 	pc_box_rename_button.focus_mode = Control.FOCUS_NONE
-	pc_box_rename_button.tooltip_text = "Rename this box"
+	_set_localized_control_property(pc_box_rename_button, "tooltip_text", "ui.storage.box.rename")
 	pc_box_rename_button.pressed.connect(_begin_pc_box_inline_rename)
 	_apply_button_style(pc_box_rename_button)
 	box_title_row.add_child(pc_box_rename_button)
 
 	pc_box_capacity_label = Label.new()
-	pc_box_capacity_label.text = "0 / 30 Pokémon"
+	pc_box_capacity_label.text = LocalizationManager.text(
+		"ui.storage.capacity",
+		{"occupied": 0, "capacity": 30}
+	)
 	pc_box_capacity_label.add_theme_font_size_override("font_size", 10)
 	pc_box_capacity_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	box_heading_stack.add_child(pc_box_capacity_label)
@@ -2186,7 +2232,7 @@ func _setup_pc_ui() -> void:
 	pc_box_tab_prev_button.text = "‹"
 	pc_box_tab_prev_button.custom_minimum_size = Vector2(34, 32)
 	pc_box_tab_prev_button.focus_mode = Control.FOCUS_NONE
-	pc_box_tab_prev_button.tooltip_text = "Previous box"
+	_set_localized_control_property(pc_box_tab_prev_button, "tooltip_text", "ui.storage.box.previous")
 	pc_box_tab_prev_button.pressed.connect(_on_pc_box_step_pressed.bind(-1))
 	_apply_button_style(pc_box_tab_prev_button)
 	box_header.add_child(pc_box_tab_prev_button)
@@ -2195,7 +2241,7 @@ func _setup_pc_ui() -> void:
 	pc_box_tab_next_button.text = "›"
 	pc_box_tab_next_button.custom_minimum_size = Vector2(34, 32)
 	pc_box_tab_next_button.focus_mode = Control.FOCUS_NONE
-	pc_box_tab_next_button.tooltip_text = "Next box"
+	_set_localized_control_property(pc_box_tab_next_button, "tooltip_text", "ui.storage.box.next")
 	pc_box_tab_next_button.pressed.connect(_on_pc_box_step_pressed.bind(1))
 	_apply_button_style(pc_box_tab_next_button)
 	box_header.add_child(pc_box_tab_next_button)
@@ -2204,7 +2250,7 @@ func _setup_pc_ui() -> void:
 	pc_box_selector_button.text = "☷"
 	pc_box_selector_button.custom_minimum_size = Vector2(34, 32)
 	pc_box_selector_button.focus_mode = Control.FOCUS_NONE
-	pc_box_selector_button.tooltip_text = "Show all boxes"
+	_set_localized_control_property(pc_box_selector_button, "tooltip_text", "ui.storage.box.show_all")
 	pc_box_selector_button.pressed.connect(_toggle_pc_box_selector)
 	_apply_button_style(pc_box_selector_button)
 	box_header.add_child(pc_box_selector_button)
@@ -2214,7 +2260,7 @@ func _setup_pc_ui() -> void:
 	box_tabs_row.add_theme_constant_override("separation", 8)
 	box_stack.add_child(box_tabs_row)
 
-	var boxes_caption := _create_pc_section_caption("BOXES")
+	var boxes_caption := _create_pc_section_caption("ui.storage.section.boxes")
 	boxes_caption.custom_minimum_size = Vector2(42, 0)
 	boxes_caption.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	box_tabs_row.add_child(boxes_caption)
@@ -2230,27 +2276,27 @@ func _setup_pc_ui() -> void:
 	box_stack.add_child(search_row)
 
 	pc_search_input = LineEdit.new()
-	pc_search_input.placeholder_text = "Search Pokémon across all boxes…"
+	_set_localized_control_property(pc_search_input, "placeholder_text", "ui.storage.search")
 	pc_search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pc_search_input.custom_minimum_size = Vector2(0, 38)
 	pc_search_input.clear_button_enabled = true
-	pc_search_input.tooltip_text = "Search all storage boxes"
+	_set_localized_control_property(pc_search_input, "tooltip_text", "ui.storage.search_tooltip")
 	pc_search_input.text_changed.connect(_on_pc_search_text_changed)
 	_apply_line_edit_style(pc_search_input)
 	search_row.add_child(pc_search_input)
 
 	pc_filter_button = Button.new()
-	pc_filter_button.text = "Filter"
+	_set_localized_control_property(pc_filter_button, "text", "ui.storage.filter")
 	pc_filter_button.custom_minimum_size = Vector2(72, 38)
 	pc_filter_button.focus_mode = Control.FOCUS_NONE
 	pc_filter_button.toggle_mode = true
-	pc_filter_button.tooltip_text = "Filter by multiple criteria"
+	_set_localized_control_property(pc_filter_button, "tooltip_text", "ui.storage.filter_tooltip")
 	pc_filter_button.toggled.connect(_on_pc_filter_toggled)
 	_apply_button_style(pc_filter_button)
 	search_row.add_child(pc_filter_button)
 
 	pc_search_results_label = Label.new()
-	pc_search_results_label.text = "ALL BOXES"
+	_set_localized_control_property(pc_search_results_label, "text", "ui.storage.all_boxes")
 	pc_search_results_label.custom_minimum_size = Vector2(78, 0)
 	pc_search_results_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	pc_search_results_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -2274,12 +2320,12 @@ func _setup_pc_ui() -> void:
 	filter_grid.add_theme_constant_override("h_separation", 8)
 	filter_grid.add_theme_constant_override("v_separation", 6)
 	filter_margin.add_child(filter_grid)
-	pc_filter_species_input = _create_pc_filter_input("Species")
-	pc_filter_type_input = _create_pc_filter_input("Type")
-	pc_filter_nature_input = _create_pc_filter_input("Nature")
-	pc_filter_ability_input = _create_pc_filter_input("Ability")
-	pc_filter_move_input = _create_pc_filter_input("Move")
-	pc_filter_item_input = _create_pc_filter_input("Held item")
+	pc_filter_species_input = _create_pc_filter_input("ui.storage.filter.species")
+	pc_filter_type_input = _create_pc_filter_input("ui.storage.filter.type")
+	pc_filter_nature_input = _create_pc_filter_input("ui.storage.filter.nature")
+	pc_filter_ability_input = _create_pc_filter_input("ui.storage.filter.ability")
+	pc_filter_move_input = _create_pc_filter_input("ui.storage.filter.move")
+	pc_filter_item_input = _create_pc_filter_input("ui.storage.filter.held_item")
 	for filter_input: LineEdit in [pc_filter_species_input, pc_filter_type_input, pc_filter_nature_input, pc_filter_ability_input, pc_filter_move_input, pc_filter_item_input]:
 		filter_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		filter_input.custom_minimum_size = Vector2(0, 32)
@@ -2318,7 +2364,11 @@ func _setup_pc_ui() -> void:
 	pc_release_drop_panel.name = "ReleaseDropZone"
 	pc_release_drop_panel.visible = false
 	pc_release_drop_panel.custom_minimum_size = Vector2(0, 58)
-	pc_release_drop_panel.tooltip_text = "Drag a Pokémon here to release it permanently"
+	_set_localized_control_property(
+		pc_release_drop_panel,
+		"tooltip_text",
+		"ui.storage.release.drop_tooltip"
+	)
 	pc_release_drop_panel.mouse_default_cursor_shape = Control.CURSOR_ARROW
 	pc_release_drop_panel.add_theme_stylebox_override("panel", _make_pc_release_zone_style())
 	box_stack.add_child(pc_release_drop_panel)
@@ -2335,7 +2385,7 @@ func _setup_pc_ui() -> void:
 	release_margin.add_child(release_stack)
 
 	pc_release_hint_label = Label.new()
-	pc_release_hint_label.text = "Drop a Pokémon here to release it"
+	_set_localized_control_property(pc_release_hint_label, "text", "ui.storage.release.drop_hint")
 	pc_release_hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	pc_release_hint_label.add_theme_font_size_override("font_size", 13)
 	pc_release_hint_label.add_theme_color_override("font_color", Color("#ffd0d4"))
@@ -2344,7 +2394,7 @@ func _setup_pc_ui() -> void:
 	release_stack.add_child(pc_release_hint_label)
 
 	var release_warning_label := Label.new()
-	release_warning_label.text = "PERMANENT · THIS CANNOT BE UNDONE"
+	_set_localized_control_property(release_warning_label, "text", "ui.storage.release.warning")
 	release_warning_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	release_warning_label.add_theme_font_size_override("font_size", 9)
 	release_warning_label.add_theme_color_override("font_color", UI_DANGER)
@@ -2374,7 +2424,7 @@ func _setup_pc_ui() -> void:
 	status_row.add_child(status_dot)
 
 	pc_status_label = Label.new()
-	pc_status_label.text = "Drag to move  ·  Click to inspect"
+	_set_localized_control_property(pc_status_label, "text", "ui.storage.status.idle")
 	pc_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pc_status_label.add_theme_font_size_override("font_size", 11)
 	pc_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -2385,9 +2435,9 @@ func _setup_pc_ui() -> void:
 	pc_popup.gui_input.connect(_on_focusable_overlay_panel_gui_input.bind(pc_popup))
 
 
-func _create_pc_section_caption(text: String) -> Label:
+func _create_pc_section_caption(key: String) -> Label:
 	var label := Label.new()
-	label.text = text
+	_set_localized_control_property(label, "text", key)
 	label.add_theme_font_size_override("font_size", 9)
 	label.add_theme_color_override("font_color", PC_ACCENT)
 	return label
@@ -27615,7 +27665,7 @@ func _show_pc_popup() -> void:
 		return
 	pc_popup.visible = true
 	_activate_ui_panel(pc_popup)
-	pc_status_label.text = "Loading..."
+	_set_pc_status("ui.storage.status.loading")
 	pc_selected_source = {}
 	_set_pc_release_mode_active(false)
 	if pc_search_input != null:
@@ -27668,8 +27718,9 @@ func _refresh_pc_state(load_all_boxes: bool = false) -> void:
 			_refresh_pc_box_tabs()
 			pc_current_box = _box_state_from_boxes(boxes, pc_selected_box_index)
 		else:
-			pc_status_label.text = "Could not load boxes."
-			_add_chat_message("Could not load PC boxes: %s" % str(box_result.get("error", "Unknown error")))
+			_set_pc_status("ui.storage.error.load_boxes")
+			_add_chat_message(LocalizationManager.text("ui.storage.error.load_boxes"))
+			push_warning("UIOverlay: PC box list load failed: %s" % str(box_result.get("error", "Unknown error")))
 			_render_pc_party()
 			_render_pc_box()
 			return
@@ -27682,14 +27733,15 @@ func _refresh_pc_state(load_all_boxes: bool = false) -> void:
 			_update_pc_all_boxes_cache(pc_current_box)
 			_refresh_pc_box_tabs()
 		else:
-			pc_status_label.text = "Could not load box."
-			_add_chat_message("Could not load PC box: %s" % str(box_result.get("error", "Unknown error")))
+			_set_pc_status("ui.storage.error.load_box")
+			_add_chat_message(LocalizationManager.text("ui.storage.error.load_box"))
+			push_warning("UIOverlay: PC box load failed: %s" % str(box_result.get("error", "Unknown error")))
 			return
 
 	_render_pc_party()
 	_render_pc_box()
 	if _pc_search_query() == "":
-		pc_status_label.text = "Drag to move  ·  Click to inspect"
+		_set_pc_status("ui.storage.status.idle")
 
 
 func _update_pc_all_boxes_cache(box_state: Dictionary) -> void:
@@ -27724,7 +27776,10 @@ func _refresh_pc_box_tabs() -> void:
 		button.custom_minimum_size = Vector2(76, 30)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.focus_mode = Control.FOCUS_NONE
-		button.tooltip_text = "Box %d: %s" % [index + 1, _pc_box_display_name(index)]
+		button.tooltip_text = LocalizationManager.text("ui.storage.box.tab_tooltip", {
+			"number": index + 1,
+			"box": _pc_box_display_name(index),
+		})
 		button.pressed.connect(_on_pc_box_selected.bind(index))
 		_apply_pc_box_tab_style(button, index == pc_selected_box_index)
 		pc_box_tab_bar.add_child(button)
@@ -27763,12 +27818,12 @@ func _build_pc_box_selector_panel() -> void:
 	title_stack.add_theme_constant_override("separation", 1)
 	header.add_child(title_stack)
 	var title := Label.new()
-	title.text = "BOX SELECTOR"
+	_set_localized_control_property(title, "text", "ui.storage.selector.title")
 	title.add_theme_font_size_override("font_size", 15)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	title_stack.add_child(title)
 	var subtitle := Label.new()
-	subtitle.text = "Choose a storage box"
+	_set_localized_control_property(subtitle, "text", "ui.storage.selector.subtitle")
 	subtitle.add_theme_font_size_override("font_size", 10)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	title_stack.add_child(subtitle)
@@ -27783,7 +27838,11 @@ func _build_pc_box_selector_panel() -> void:
 
 	pc_box_selector_count_label = Label.new()
 	pc_box_selector_count_label.name = "BoxSelectorCount"
-	pc_box_selector_count_label.text = "%d BOXES" % max(pc_box_count, 1)
+	pc_box_selector_count_label.text = LocalizationManager.plural(
+		"ui.storage.selector.box.one",
+		"ui.storage.selector.box.many",
+		max(pc_box_count, 1)
+	)
 	pc_box_selector_count_label.add_theme_font_size_override("font_size", 9)
 	pc_box_selector_count_label.add_theme_color_override("font_color", PC_ACCENT)
 	stack.add_child(pc_box_selector_count_label)
@@ -27832,7 +27891,11 @@ func _refresh_pc_box_selector() -> void:
 	if pc_box_selector_list == null:
 		return
 	if pc_box_selector_count_label != null:
-		pc_box_selector_count_label.text = "%d BOXES" % max(pc_box_count, 1)
+		pc_box_selector_count_label.text = LocalizationManager.plural(
+			"ui.storage.selector.box.one",
+			"ui.storage.selector.box.many",
+			max(pc_box_count, 1)
+		)
 	_clear_children(pc_box_selector_list)
 	for index in range(max(pc_box_count, 1)):
 		var button := Button.new()
@@ -27843,7 +27906,10 @@ func _refresh_pc_box_selector() -> void:
 		button.mouse_filter = Control.MOUSE_FILTER_STOP
 		button.add_theme_font_size_override("font_size", 12)
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		button.tooltip_text = "Open %s" % _pc_box_display_name(index)
+		button.tooltip_text = LocalizationManager.text(
+			"ui.storage.selector.open",
+			{"box": _pc_box_display_name(index)}
+		)
 		button.pressed.connect(_on_pc_selector_box_selected.bind(index))
 		_apply_pc_box_tab_style(button, index == pc_selected_box_index)
 		pc_box_selector_list.add_child(button)
@@ -27874,7 +27940,10 @@ func _on_pc_selector_box_selected(index: int) -> void:
 func _pc_box_display_name(box_index: int) -> String:
 	var box := _box_state_from_boxes(pc_all_boxes, box_index)
 	var name := str(box.get("name", "")).strip_edges()
-	return name if name != "" else "Box %d" % (box_index + 1)
+	return name if name != "" else LocalizationManager.text(
+		"ui.storage.box.default",
+		{"number": box_index + 1}
+	)
 
 
 func _update_pc_box_header() -> void:
@@ -27882,7 +27951,10 @@ func _update_pc_box_header() -> void:
 		return
 	pc_box_title_label.text = _pc_box_display_name(pc_selected_box_index)
 	if pc_box_rename_button != null:
-		pc_box_rename_button.tooltip_text = "Rename %s" % pc_box_title_label.text
+		pc_box_rename_button.tooltip_text = LocalizationManager.text(
+			"ui.storage.box.rename_named",
+			{"box": pc_box_title_label.text}
+		)
 
 
 func _begin_pc_box_inline_rename() -> void:
@@ -27921,7 +27993,9 @@ func _finish_pc_box_inline_rename() -> void:
 	pc_box_rename_button.disabled = false
 	var result: Dictionary = await PokemonStorageService.rename_box(pc_selected_box_index, new_name)
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not rename box: %s" % str(result.get("error", "Unknown error")))
+		_set_pc_status("ui.storage.error.rename_box")
+		_add_chat_message(LocalizationManager.text("ui.storage.error.rename_box"))
+		push_warning("UIOverlay: PC box rename failed: %s" % str(result.get("error", "Unknown error")))
 		_update_pc_box_header()
 		return
 	var renamed_box := _dictionary_from_value(result.get("box", {}))
@@ -27929,7 +28003,7 @@ func _finish_pc_box_inline_rename() -> void:
 	pc_current_box = renamed_box
 	_refresh_pc_box_tabs()
 	_update_pc_box_header()
-	pc_status_label.text = "Box renamed."
+	_set_pc_status("ui.storage.box.renamed")
 
 
 func _apply_pc_box_tab_style(button: Button, selected: bool) -> void:
@@ -28030,22 +28104,33 @@ func _render_pc_box_search_results(search_query: String) -> void:
 		pc_box_grid.columns = 1
 		pc_box_grid.add_child(_create_pc_search_empty_state(search_query))
 	if pc_box_title_label != null:
-		pc_box_title_label.text = "Search Results"
+		pc_box_title_label.text = LocalizationManager.text("ui.storage.search_results")
 	if pc_box_capacity_label != null:
-		pc_box_capacity_label.text = "Across %d box%s" % [pc_box_count, "" if pc_box_count == 1 else "es"]
+		pc_box_capacity_label.text = LocalizationManager.plural(
+			"ui.storage.search_across.one",
+			"ui.storage.search_across.many",
+			pc_box_count
+		)
 	if pc_search_results_label != null:
-		pc_search_results_label.text = "%d FOUND" % result_count
+		pc_search_results_label.text = LocalizationManager.plural(
+			"ui.storage.search_found.one",
+			"ui.storage.search_found.many",
+			result_count
+		)
 		pc_search_results_label.add_theme_color_override("font_color", PC_ACCENT if result_count > 0 else UI_MUTED_TEXT)
-	pc_status_label.text = "Showing matches from every box · Clear search to return to Box %d" % (pc_selected_box_index + 1)
+	_set_pc_status("ui.storage.search_scope", {"number": pc_selected_box_index + 1})
 
 
 func _refresh_pc_box_overview(occupied_count: int) -> void:
 	if pc_box_title_label != null:
 		_update_pc_box_header()
 	if pc_box_capacity_label != null:
-		pc_box_capacity_label.text = "%d / %d Pokémon stored" % [occupied_count, pc_slots_per_box]
+		pc_box_capacity_label.text = LocalizationManager.text("ui.storage.capacity", {
+			"occupied": occupied_count,
+			"capacity": pc_slots_per_box,
+		})
 	if pc_search_results_label != null:
-		pc_search_results_label.text = "ALL BOXES"
+		pc_search_results_label.text = LocalizationManager.text("ui.storage.all_boxes")
 		pc_search_results_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 
 
@@ -28069,14 +28154,14 @@ func _create_pc_search_empty_state(search_query: String) -> PanelContainer:
 	margin.add_child(stack)
 
 	var title := Label.new()
-	title.text = "No Pokémon found"
+	_set_localized_control_property(title, "text", "ui.storage.empty.title")
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 16)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	stack.add_child(title)
 
 	var hint := Label.new()
-	hint.text = "Nothing matched “%s”. Try a species, type, ability or held item." % search_query
+	hint.text = LocalizationManager.text("ui.storage.empty.query", {"query": search_query})
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	hint.add_theme_font_size_override("font_size", 11)
@@ -28087,8 +28172,16 @@ func _create_pc_search_empty_state(search_query: String) -> PanelContainer:
 
 func _create_pc_party_slot_button(slot_index: int, storage_slot_index: int, pokemon: Pokemon, selected: bool) -> Button:
 	var occupied := pokemon != null
-	var title := _pokemon_display_name(pokemon) if occupied else "Empty"
-	var subtitle := "Lv. %s" % pokemon.level if occupied else "Party slot %d" % (slot_index + 1)
+	var title := (
+		_pokemon_display_name(pokemon)
+		if occupied
+		else LocalizationManager.text("ui.storage.slot.empty")
+	)
+	var subtitle := (
+		LocalizationManager.text("ui.storage.level", {"level": pokemon.level})
+		if occupied
+		else LocalizationManager.text("ui.storage.slot.party_label", {"number": slot_index + 1})
+	)
 	var texture: Texture2D = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny) if occupied else null
 	var held_item_id := _get_pokemon_held_item_id(pokemon) if occupied else ""
 	var button := _create_pc_pokemon_slot_button(
@@ -28103,7 +28196,10 @@ func _create_pc_party_slot_button(slot_index: int, storage_slot_index: int, poke
 		"%d" % (slot_index + 1),
 		PC_PARTY_SLOT_SIZE
 	)
-	button.tooltip_text = "%s party slot %d" % [title, slot_index + 1]
+	button.tooltip_text = LocalizationManager.text("ui.storage.slot.party", {
+		"pokemon": title,
+		"number": slot_index + 1,
+	})
 	if occupied and pokemon.owned_pokemon_id > 0:
 		button.drag_source = {
 			"type": "party",
@@ -28133,7 +28229,11 @@ func _create_pc_box_slot_button_for_location(box_index: int, slot_index: int, po
 	var types: Array = _pc_payload_types(payload)
 	var texture: Texture2D = PokemonAssets.load_party_icon(species, shiny) if occupied else null
 	var button := _create_pc_box_pokemon_slot_button(
-		_pc_payload_species_display_name(payload) if occupied else "Empty",
+		(
+			_pc_payload_species_display_name(payload)
+			if occupied
+			else LocalizationManager.text("ui.storage.slot.empty")
+		),
 		level,
 		shiny,
 		held_item_id,
@@ -28145,11 +28245,15 @@ func _create_pc_box_slot_button_for_location(box_index: int, slot_index: int, po
 		PC_BOX_SLOT_SIZE
 	)
 	button.use_native_drag = false
-	button.tooltip_text = "%s Box %d slot %02d" % [
-		_pc_payload_species_display_name(payload) if occupied else "Empty",
-		box_index + 1,
-		slot_index + 1,
-	]
+	button.tooltip_text = LocalizationManager.text("ui.storage.slot.box", {
+		"pokemon": (
+			_pc_payload_species_display_name(payload)
+			if occupied
+			else LocalizationManager.text("ui.storage.slot.empty")
+		),
+		"box": box_index + 1,
+		"slot": "%02d" % (slot_index + 1),
+	})
 	if occupied:
 		var pokemon_id := _pc_owned_pokemon_id_from_response(pokemon_response)
 		if pokemon_id > 0:
@@ -28174,7 +28278,11 @@ func _create_pc_box_pokemon_slot_button(title_text: String, level: int, shiny: b
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.focus_mode = Control.FOCUS_NONE
 	button.drag_title = title_text
-	button.drag_subtitle = "Lv. %s" % level if occupied else "Box slot %s" % slot_badge
+	button.drag_subtitle = (
+		LocalizationManager.text("ui.storage.level", {"level": level})
+		if occupied
+		else LocalizationManager.text("ui.storage.slot.box_label", {"slot": slot_badge})
+	)
 	button.drag_texture = texture if texture != null else PokemonAssets.load_unknown_icon()
 	button.mouse_default_cursor_shape = Control.CURSOR_DRAG if occupied else Control.CURSOR_ARROW
 	_apply_pc_pokemon_slot_style(button, occupied, selected, types)
@@ -28251,7 +28359,7 @@ func _create_pc_box_pokemon_slot_button(title_text: String, level: int, shiny: b
 
 	var level_label := Label.new()
 	level_label.name = "Level"
-	level_label.text = "Lv.%s" % level if occupied else ""
+	level_label.text = LocalizationManager.text("ui.storage.level", {"level": level}) if occupied else ""
 	level_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	level_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	level_label.add_theme_font_size_override("font_size", 9)
@@ -28352,7 +28460,11 @@ func _create_pc_pokemon_slot_button(title_text: String, subtitle_text: String, s
 	title_row.add_child(title)
 
 	var subtitle := Label.new()
-	subtitle.text = subtitle_text if occupied else "Open party slot"
+	subtitle.text = (
+		subtitle_text
+		if occupied
+		else LocalizationManager.text("ui.storage.slot.open_party")
+	)
 	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	subtitle.add_theme_font_size_override("font_size", 10)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -28502,7 +28614,10 @@ func _add_pc_held_item_marker(icon: Control, held_item_id: String) -> void:
 	var marker: Control = Control.new()
 	marker.name = "HeldItemMarker"
 	marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	marker.tooltip_text = "Holding %s" % _item_name_from_id(held_item_id)
+	marker.tooltip_text = LocalizationManager.text(
+		"ui.storage.holding",
+		{"item": _item_name_from_id(held_item_id)}
+	)
 	marker.custom_minimum_size = Vector2(10, 14)
 	marker.anchor_left = 1.0
 	marker.anchor_right = 1.0
@@ -28558,13 +28673,23 @@ func _pc_search_query() -> String:
 	return pc_search_input.text.strip_edges().to_lower()
 
 
-func _create_pc_filter_input(placeholder: String) -> LineEdit:
+func _create_pc_filter_input(placeholder_key: String) -> LineEdit:
 	var input := LineEdit.new()
-	input.placeholder_text = placeholder
-	input.tooltip_text = "Filter by %s" % placeholder.to_lower()
+	_set_localized_control_property(input, "placeholder_text", placeholder_key)
+	input.tooltip_text = LocalizationManager.text(
+		"ui.storage.filter_by",
+		{"field": LocalizationManager.text(placeholder_key).to_lower()}
+	)
 	input.clear_button_enabled = true
 	_apply_line_edit_style(input)
 	return input
+
+
+func _set_pc_status(key: String, values: Dictionary = {}) -> void:
+	pc_status_translation_key = key
+	pc_status_translation_values = values.duplicate(true)
+	if pc_status_label != null:
+		pc_status_label.text = LocalizationManager.text(key, values)
 
 
 func _on_pc_filter_toggled(active: bool) -> void:
@@ -28646,7 +28771,7 @@ func _on_pc_search_text_changed(_text: String) -> void:
 	_render_pc_box()
 	var query := _pc_search_query()
 	if query == "" and not _pc_has_active_filter():
-		pc_status_label.text = "Drag to move  ·  Click to inspect"
+		_set_pc_status("ui.storage.status.idle")
 
 
 func _pc_pokemon_matches_search(pokemon_response: Dictionary, query: String) -> bool:
@@ -28989,7 +29114,7 @@ func _set_pc_release_selection(source: Dictionary, pokemon_name: String) -> void
 	pc_selected_release_source = source.duplicate(true)
 	pc_selected_release_name = pokemon_name.strip_edges()
 	if pc_selected_release_name == "":
-		pc_selected_release_name = "Pokemon"
+		pc_selected_release_name = LocalizationManager.text("ui.storage.fallback_pokemon")
 	_refresh_pc_release_controls()
 
 
@@ -29019,19 +29144,27 @@ func _refresh_pc_release_controls() -> void:
 	if pc_release_drop_panel != null:
 		pc_release_drop_panel.visible = pc_release_mode_active
 	if pc_release_mode_button != null:
-		pc_release_mode_button.text = "Cancel" if pc_release_mode_active else "Release"
+		pc_release_mode_button.text = LocalizationManager.text(
+			"ui.storage.release.cancel" if pc_release_mode_active else "ui.storage.release"
+		)
 		pc_release_mode_button.disabled = pc_release_in_progress
-		pc_release_mode_button.tooltip_text = "Stop choosing Pokémon to release" if pc_release_mode_active else "Choose Pokémon to release"
+		pc_release_mode_button.tooltip_text = LocalizationManager.text(
+			"ui.storage.release.stop" if pc_release_mode_active else "ui.storage.release.choose"
+		)
 		_apply_button_style(pc_release_mode_button, "danger" if pc_release_mode_active else "secondary")
 		pc_release_mode_button.mouse_default_cursor_shape = Control.CURSOR_ARROW if pc_release_in_progress else Control.CURSOR_POINTING_HAND
-	pc_release_hint_label.text = "Releasing..." if pc_release_in_progress else "Drop a Pokémon here to release it"
+	pc_release_hint_label.text = LocalizationManager.text(
+		"ui.storage.release.releasing"
+		if pc_release_in_progress
+		else "ui.storage.release.drop_hint"
+	)
 
 
 func _confirm_pc_release_from_source(source: Dictionary) -> void:
 	if not pc_release_mode_active or pc_release_in_progress or source.is_empty():
 		return
 	if str(source.get("type", "")) == "party" and PlayerSave.party.size() <= 1:
-		pc_status_label.text = "You must keep at least one Pokemon in your party."
+		_set_pc_status("ui.storage.release.keep_one")
 		return
 	var pokemon_id: int = int(source.get("pokemonId", 0))
 	if pokemon_id <= 0:
@@ -29039,13 +29172,16 @@ func _confirm_pc_release_from_source(source: Dictionary) -> void:
 	var pokemon_name: String = _pc_release_name_for_source(source)
 	_set_pc_release_selection(source, pokemon_name)
 	_show_ui_confirm_popup(
-		"Release Pokemon",
-		"Release %s permanently?\n\nThis cannot be undone." % pc_selected_release_name,
-		"Release",
+		LocalizationManager.text("ui.storage.release.title"),
+		LocalizationManager.text(
+			"ui.storage.release.confirm",
+			{"pokemon": pc_selected_release_name}
+		),
+		LocalizationManager.text("ui.storage.release"),
 		Callable(self, "_release_selected_pc_pokemon_confirmed"),
 		Vector2i(460, 190),
 		true,
-		"Cancel",
+		LocalizationManager.text("ui.storage.release.cancel"),
 		Callable(self, "_on_pc_release_confirm_cancelled")
 	)
 
@@ -29067,7 +29203,7 @@ func _pc_release_name_for_source(source: Dictionary) -> String:
 			if not pokemon_response.is_empty():
 				var payload: Dictionary = _dictionary_from_value(pokemon_response.get("pokemon", {}))
 				return _pc_payload_species_display_name(payload)
-	return "Pokemon"
+	return LocalizationManager.text("ui.storage.fallback_pokemon")
 
 
 func _release_selected_pc_pokemon_confirmed() -> void:
@@ -29084,17 +29220,17 @@ func _release_selected_pc_pokemon() -> void:
 
 	pc_release_in_progress = true
 	_refresh_pc_release_controls()
-	pc_status_label.text = "Releasing..."
+	_set_pc_status("ui.storage.release.releasing")
 	var result: Dictionary = await PokemonStorageService.release_pokemon(pokemon_id)
 	pc_release_in_progress = false
 	if not bool(result.get("success", false)):
-		pc_status_label.text = "Release failed."
-		_add_chat_message("Could not release Pokemon: %s" % str(result.get("error", "Unknown error")))
+		_set_pc_status("ui.storage.release.failed")
+		_add_chat_message(LocalizationManager.text("ui.storage.release.failed"))
 		_refresh_pc_release_controls()
 		return
 
 	_set_pc_release_mode_active(false)
-	_add_chat_message("Pokemon released.")
+	_add_chat_message(LocalizationManager.text("ui.storage.release.success"))
 	_refresh_party()
 	await _refresh_pc_state(_pc_search_query() != "")
 
@@ -29124,7 +29260,7 @@ func _on_pc_slot_dropped(source: Dictionary, target: Dictionary) -> void:
 		return
 
 	if str(source.get("type", "")) == "party" and str(target.get("type", "")) == "box" and PlayerSave.party.size() <= 1 and not _pc_target_has_pokemon(target):
-		pc_status_label.text = "You must keep at least one Pokemon in your party."
+		_set_pc_status("ui.storage.release.keep_one")
 		return
 
 	pc_selected_source = source.duplicate(true)
@@ -29163,14 +29299,14 @@ func _move_pc_selection_to(target: Dictionary) -> void:
 	pc_move_in_progress = true
 	var source := pc_selected_source.duplicate(true)
 	_preview_pc_slot_move(source, target)
-	pc_status_label.text = "Saving move..."
+	_set_pc_status("ui.storage.move.saving")
 	var target_party_pokemon_before := _pc_party_pokemon_at_storage_slot(int(target.get("partySlot", -1))) if str(target.get("type", "")) == "party" else null
 	var target_box_pokemon_id_before := _pc_box_pokemon_id_at_target(target) if str(target.get("type", "")) == "box" else 0
 	var result: Dictionary = await PokemonStorageService.move_pokemon(pokemon_id, source, target)
 	pc_move_in_progress = false
 	if not bool(result.get("success", false)):
-		pc_status_label.text = "Move failed."
-		_add_chat_message("Could not move Pokemon: %s" % str(result.get("error", "Unknown error")))
+		_set_pc_status("ui.storage.move.failed")
+		_add_chat_message(LocalizationManager.text("ui.storage.move.failed"))
 		_render_pc_party()
 		_render_pc_box()
 		return
@@ -29181,9 +29317,39 @@ func _move_pc_selection_to(target: Dictionary) -> void:
 	if not compacted:
 		_apply_pc_party_slot_move(source, target, target_party_pokemon_before, target_box_pokemon_id_before)
 	var location: Dictionary = _dictionary_from_value(result.get("location", {}))
-	_add_chat_message("Pokemon moved to %s." % PokemonStorageService.storage_location_label(location))
+	_add_chat_message(LocalizationManager.text(
+		"ui.storage.move.success",
+		{"location": _pc_storage_location_label(location)}
+	))
 	_refresh_party()
 	await _refresh_pc_state(_pc_search_query() != "")
+
+
+func _pc_storage_location_label(value: Variant) -> String:
+	var location: Dictionary = PokemonStorageService.normalize_storage_location(value)
+	match str(location.get("type", "")):
+		"party":
+			var party_slot := int(location.get("partySlot", -1))
+			if party_slot >= 0:
+				return LocalizationManager.text(
+					"ui.storage.location.party_slot",
+					{"number": party_slot + 1}
+				)
+			return LocalizationManager.text("ui.storage.location.party")
+		"box":
+			var box_index := int(location.get("boxIndex", -1))
+			var slot_index := int(location.get("slotIndex", -1))
+			if box_index >= 0 and slot_index >= 0:
+				return LocalizationManager.text("ui.storage.location.box_slot", {
+					"box": box_index + 1,
+					"slot": slot_index + 1,
+				})
+			if box_index >= 0:
+				return LocalizationManager.text(
+					"ui.storage.location.box",
+					{"number": box_index + 1}
+				)
+	return LocalizationManager.text("ui.storage.location.generic")
 
 
 func _preview_pc_slot_move(source: Dictionary, target: Dictionary) -> void:

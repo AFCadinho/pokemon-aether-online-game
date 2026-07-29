@@ -13,7 +13,7 @@ approval.
 
 The following gates pass:
 
-- the English, Dutch, and Brazilian Portuguese client catalogs contain 1,849 matching
+- the English, Dutch, and Brazilian Portuguese client catalogs contain 1,924 matching
   keys;
 - the three launcher catalogs contain 133 matching keys;
 - catalog JSON, non-empty values, key parity, and named placeholders have no errors;
@@ -21,7 +21,7 @@ The following gates pass:
 - local signs, NPC metadata/dialogue contracts, canonical content overlays, item
   overlays, backend error contracts, login, migrated gameplay domains, battles, and
   the launcher pass their domain checks;
-- all 134 project checks pass;
+- all 135 project checks pass;
 - the standalone launcher localization runtime check passes.
 
 Run the repeatable catalog and completeness audit with:
@@ -40,12 +40,12 @@ The strict command currently exits with status 1, as intended.
 
 ## Open technical gates
 
-The static completeness scan currently reports 400 candidates at player-facing text
-sinks:
+The static completeness scan started at 400 candidates and currently reports 344
+candidates at player-facing text sinks:
 
 | Source | Candidates |
 | --- | ---: |
-| `scripts/ui/ui_overlay.gd` | 300 |
+| `scripts/ui/ui_overlay.gd` | 244 |
 | `scenes/interface/ui_overlay.tscn` | 66 |
 | `scripts/ui/fishing_action_controller.gd` | 11 |
 | `scripts/world/world.gd` | 11 |
@@ -56,7 +56,6 @@ Candidates require classification and are not all automatically translation debt
 Preview values, abbreviations, player data, and decorative text can be intentional.
 However, direct inspection confirms real remaining English in at least these surfaces:
 
-- Pokémon Storage controls, search, filters, release flow, and box navigation;
 - ranked/private PvP lobby, validation, queue, leaderboard, history, and spectator
   controls;
 - Trainer Card, wallet, profile, appearance, and badge presentation;
@@ -67,7 +66,12 @@ However, direct inspection confirms real remaining English in at least these sur
 - several blackout, capture, reward, field-move, and progression system messages;
 - move-learning and evolution prompts that still build formatted English directly.
 
-The raw candidate list can be printed with `--limit 0`. Every candidate must be
+Phase 10A migrated the Pokémon Storage controls, search, filters, box selector,
+release flow, move feedback, error feedback, and live locale switching. Its focused
+runtime and storage contract checks pass, and it reduced the open list by 56
+candidates.
+
+The raw candidate list can be printed with `--limit 0`. Every remaining candidate must be
 migrated to a semantic key or documented as an intentional exclusion before the
 strict gate can become green.
 
@@ -93,7 +97,7 @@ but cannot replace them.
 
 ## Required remediation order
 
-1. Migrate or classify the 400 static-scan candidates, one functional domain at a
+1. Migrate or classify the remaining 344 static-scan candidates, one functional domain at a
    time, with runtime locale-switch tests.
 2. Add full-flow layout checks for all supported locales and resolutions, including
    long-text and empty/error states.
