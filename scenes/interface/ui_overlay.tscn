@@ -787,19 +787,19 @@ theme_override_constants/separation = 10
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8980392, 0.90588236, 0.92156863, 1)
 theme_override_font_sizes/font_size = 20
-text = "Add Pokemon"
+text = "ui.staff.dev.pokemon.add_title"
 
 [node name="Subtitle" type="Label" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer" unique_id=121503219]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.55, 0.61, 0.69, 1)
 theme_override_font_sizes/font_size = 11
-text = "Paste a Pokémon or an entire Showdown team"
+text = "ui.staff.dev.pokemon.add_subtitle"
 
 [node name="PokemonText" type="TextEdit" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer" unique_id=488137648]
 custom_minimum_size = Vector2(0, 338)
 layout_mode = 2
 size_flags_vertical = 3
-placeholder_text = "Paste Showdown/Pokepaste text here"
+placeholder_text = "ui.staff.dev.pokemon.add_placeholder"
 
 [node name="ButtonRow" type="HBoxContainer" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer" unique_id=1480530736]
 layout_mode = 2
@@ -809,12 +809,12 @@ alignment = 2
 [node name="CloseButton" type="Button" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow" unique_id=1066928572]
 layout_mode = 2
 custom_minimum_size = Vector2(72, 36)
-text = "Close"
+text = "common.close"
 
 [node name="AddButton" type="Button" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow" unique_id=1635496109]
 layout_mode = 2
 custom_minimum_size = Vector2(108, 36)
-text = "Add"
+text = "ui.staff.dev.add"
 
 [node name="LocationPanel" type="PanelContainer" parent="Control" unique_id=907156867]
 custom_minimum_size = Vector2(332, 66)
@@ -1306,7 +1306,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="PvpButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/PvpSlot" unique_id=342526372]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Battle other trainers"
+tooltip_text = "ui.navigation.pvp"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("18_pvp")
 texture_pressed = ExtResource("18_pvp")
@@ -1424,7 +1424,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="EscapeRopeButton" type="TextureButton" parent="Control/ToggleActionsPanel/MarginContainer/HBoxContainer/EscapeRopeSlot"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Return to your last healing point"
+tooltip_text = "ui.navigation.escape_rope"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("20_escape_rope")
 texture_pressed = ExtResource("20_escape_rope")
@@ -1700,32 +1700,32 @@ theme_override_constants/separation = 8
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-text = "Create Pokemon"
+text = "ui.staff.dev.create_pokemon"
 
 [node name="AddTeamButton" type="Button" parent="Control/DevActionsPopup/MarginContainer/VBoxContainer" unique_id=367149496]
 visible = false
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-text = "Create Team"
+text = "ui.staff.dev.create_team"
 
 [node name="SpawnPokemonButton" type="Button" parent="Control/DevActionsPopup/MarginContainer/VBoxContainer" unique_id=1162333859]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-text = "Spawn Pokemon"
+text = "ui.staff.dev.start_encounter"
 
 [node name="ClearPartyButton" type="Button" parent="Control/DevActionsPopup/MarginContainer/VBoxContainer" unique_id=758281915]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-text = "Clear Party"
+text = "ui.staff.dev.clear_data"
 
 [node name="WorldTimeLabel" type="Label" parent="Control/DevActionsPopup/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
 theme_override_font_sizes/font_size = 12
-text = "World Time"
+text = "ui.staff.dev.time"
 
 [node name="WorldTimeSelect" type="OptionButton" parent="Control/DevActionsPopup/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 36)
@@ -1747,7 +1747,7 @@ popup/item_4/id = 4
 layout_mode = 2
 theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
 theme_override_font_sizes/font_size = 12
-text = "World Weather"
+text = "ui.staff.dev.weather"
 
 [node name="WorldWeatherSelect" type="OptionButton" parent="Control/DevActionsPopup/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 36)
@@ -1767,7 +1767,7 @@ popup/item_3/id = 3
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-text = "Close"
+text = "common.close"
 
 [node name="SettingsMenu" parent="Control" unique_id=1857705427 instance=ExtResource("6_settings")]
 visible = false

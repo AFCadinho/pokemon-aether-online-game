@@ -291,8 +291,9 @@ func _init() -> void:
 		"Donator Store purchases use the authoritative Aether Gem checkout"
 	)
 	_check(
-		script_source.contains('add_system_message("Aether Gift Store: Purchased %s. It was added to your Bag." % purchased_item_name)'),
-		"successful Aether Gift Store purchases announce themselves in System chat"
+		script_source.contains('"ui.store.purchase.system_success"')
+		and script_source.contains('{"item": purchased_item_name}'),
+		"successful Aether Gift Store purchases use a localized System message"
 	)
 	_check(
 		donator_store_script_source.contains("Tradeable voucher. Use it from the Bag")

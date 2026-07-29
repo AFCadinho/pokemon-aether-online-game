@@ -1134,6 +1134,7 @@ var item_dex_capture_label: Label
 var item_dex_sources_label: Label
 var item_dex_search_request_id := 0
 var item_dex_selected_item_id := ""
+var item_dex_selected_item: Dictionary = {}
 var item_dex_dragging := false
 var item_dex_drag_offset := Vector2.ZERO
 var pokedex_popup: PanelContainer
@@ -1175,6 +1176,9 @@ var wild_pokemon_popup: PanelContainer
 var wild_pokemon_title_label: Label
 var wild_pokemon_content: VBoxContainer
 var wild_pokemon_request_id := 0
+var wild_pokemon_last_metadata: Dictionary = {}
+var wild_pokemon_message_key := ""
+var wild_pokemon_message_color := UI_MUTED_TEXT
 var wild_pokemon_button_hovered := false
 var wild_pokemon_button_tween: Tween
 var displayed_money: int = -1
@@ -1403,12 +1407,15 @@ func _on_locale_changed(_locale: String) -> void:
 	_refresh_bag_localized_ui()
 	_refresh_market_localized_ui()
 	_refresh_pokedex_localized_ui()
+	_refresh_item_dex_localized_ui()
+	_refresh_wild_pokemon_localized_ui()
 	_refresh_mail_localized_ui()
 	_refresh_pc_localized_ui()
 	_refresh_pvp_localized_ui()
 	_refresh_trainer_card_localized_ui()
 	_refresh_chat_localized_ui()
 	_refresh_buffs_localized_ui()
+	_refresh_dev_tools_localized_ui()
 	_refresh_dev_world_time_selector()
 	_refresh_dev_world_weather_selector()
 	if staff_impersonate_token_input != null and not staff_impersonate_in_flight:
@@ -7792,7 +7799,7 @@ func _setup_item_dex_popup() -> void:
 	header.add_child(heading)
 
 	var title_label := Label.new()
-	title_label.text = "Item Dex"
+	_set_localized_control_property(title_label, "text", "ui.item_dex.title")
 	title_label.mouse_default_cursor_shape = Control.CURSOR_MOVE
 	title_label.gui_input.connect(_on_item_dex_header_gui_input)
 	title_label.add_theme_font_size_override("font_size", 20)
@@ -7800,20 +7807,20 @@ func _setup_item_dex_popup() -> void:
 	heading.add_child(title_label)
 
 	var subtitle_label := Label.new()
-	subtitle_label.text = "Item catalogue and field notes"
+	_set_localized_control_property(subtitle_label, "text", "ui.item_dex.subtitle")
 	subtitle_label.add_theme_font_size_override("font_size", 11)
 	subtitle_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	heading.add_child(subtitle_label)
 
 	var header_hint := Label.new()
-	header_hint.text = "Search · inspect · collect"
+	_set_localized_control_property(header_hint, "text", "ui.item_dex.hint")
 	header_hint.add_theme_font_size_override("font_size", 10)
 	header_hint.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.72))
 	header.add_child(header_hint)
 
 	var close_button := Button.new()
 	close_button.text = "×"
-	close_button.tooltip_text = "Close"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.custom_minimum_size = Vector2(34, 34)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_item_dex_popup)
@@ -7845,21 +7852,21 @@ func _setup_item_dex_popup() -> void:
 	browser_stack.add_child(browser_header)
 
 	var browser_label := Label.new()
-	browser_label.text = "ITEM INDEX"
+	_set_localized_control_property(browser_label, "text", "ui.item_dex.index")
 	browser_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	browser_label.add_theme_font_size_override("font_size", 10)
 	browser_label.add_theme_color_override("font_color", ITEM_DEX_ACCENT)
 	browser_header.add_child(browser_label)
 
 	item_dex_results_count_label = Label.new()
-	item_dex_results_count_label.text = "Loading..."
+	_set_localized_control_property(item_dex_results_count_label, "text", "common.loading")
 	item_dex_results_count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	item_dex_results_count_label.add_theme_font_size_override("font_size", 10)
 	item_dex_results_count_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	browser_header.add_child(item_dex_results_count_label)
 
 	item_dex_search_input = LineEdit.new()
-	item_dex_search_input.placeholder_text = "Search item..."
+	_set_localized_control_property(item_dex_search_input, "placeholder_text", "ui.item_dex.search")
 	item_dex_search_input.clear_button_enabled = true
 	item_dex_search_input.custom_minimum_size = Vector2(0, 36)
 	item_dex_search_input.text_changed.connect(_on_item_dex_search_changed)
@@ -7930,28 +7937,32 @@ func _setup_item_dex_popup() -> void:
 	hero_row.add_child(hero_stack)
 
 	item_dex_name_label = Label.new()
-	item_dex_name_label.text = "Select an item"
+	_set_localized_control_property(item_dex_name_label, "text", "ui.item_dex.select")
 	item_dex_name_label.add_theme_font_size_override("font_size", 24)
 	item_dex_name_label.add_theme_color_override("font_color", UI_TEXT)
 	hero_stack.add_child(item_dex_name_label)
 
 	item_dex_meta_label = Label.new()
-	item_dex_meta_label.text = "Category: -    Base price: Unknown"
+	_set_localized_control_property(item_dex_meta_label, "text", "ui.item_dex.meta_empty")
 	item_dex_meta_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	item_dex_meta_label.add_theme_font_size_override("font_size", 12)
 	item_dex_meta_label.add_theme_color_override("font_color", ITEM_DEX_ACCENT)
 	hero_stack.add_child(item_dex_meta_label)
 
-	summary_layout.add_child(_create_item_dex_section_title("Description"))
+	summary_layout.add_child(_create_item_dex_section_title("ui.item_dex.description"))
 
 	item_dex_description_label = Label.new()
-	item_dex_description_label.text = "Search and select an item to view its summary."
+	_set_localized_control_property(
+		item_dex_description_label,
+		"text",
+		"ui.item_dex.description_empty"
+	)
 	item_dex_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	item_dex_description_label.add_theme_font_size_override("font_size", 13)
 	item_dex_description_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	summary_layout.add_child(item_dex_description_label)
 
-	item_dex_effect_section_label = _create_item_dex_section_title("Effect")
+	item_dex_effect_section_label = _create_item_dex_section_title("ui.item_dex.effect")
 	item_dex_effect_section_label.visible = false
 	summary_layout.add_child(item_dex_effect_section_label)
 
@@ -7962,7 +7973,7 @@ func _setup_item_dex_popup() -> void:
 	item_dex_effect_label.add_theme_color_override("font_color", Color("#f2cf78"))
 	summary_layout.add_child(item_dex_effect_label)
 
-	item_dex_capture_section_label = _create_item_dex_section_title("Capture")
+	item_dex_capture_section_label = _create_item_dex_section_title("ui.item_dex.capture")
 	item_dex_capture_section_label.visible = false
 	summary_layout.add_child(item_dex_capture_section_label)
 
@@ -7973,7 +7984,7 @@ func _setup_item_dex_popup() -> void:
 	item_dex_capture_label.add_theme_color_override("font_color", Color("#f2cf78"))
 	summary_layout.add_child(item_dex_capture_label)
 
-	summary_layout.add_child(_create_item_dex_section_title("Where to get"))
+	summary_layout.add_child(_create_item_dex_section_title("ui.item_dex.sources"))
 
 	var sources_scroll := ScrollContainer.new()
 	sources_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -7981,7 +7992,7 @@ func _setup_item_dex_popup() -> void:
 	summary_layout.add_child(sources_scroll)
 
 	item_dex_sources_label = Label.new()
-	item_dex_sources_label.text = "Where to get\nNo item selected."
+	_set_localized_control_property(item_dex_sources_label, "text", "ui.item_dex.sources_empty")
 	item_dex_sources_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	item_dex_sources_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	item_dex_sources_label.add_theme_font_size_override("font_size", 12)
@@ -8524,6 +8535,42 @@ func _refresh_pokedex_results_count_copy() -> void:
 		_:
 			pokedex_results_count_label.text = LocalizationManager.text("common.loading")
 
+func _refresh_item_dex_localized_ui() -> void:
+	if item_dex_popup == null:
+		return
+	LocalizationManager.localize_tree(item_dex_popup)
+	if not item_dex_selected_item.is_empty():
+		_on_item_dex_result_selected(ItemLocalization.localize_item(item_dex_selected_item))
+	if item_dex_popup.visible:
+		_refresh_item_dex_results()
+
+func _refresh_wild_pokemon_localized_ui() -> void:
+	if wild_pokemon_popup == null:
+		return
+	LocalizationManager.localize_tree(wild_pokemon_popup)
+	if wild_pokemon_popup.visible:
+		wild_pokemon_title_label.text = LocalizationManager.text(
+			"ui.wild.title_map",
+			{"map": _get_current_map_display_name()}
+		)
+	if not wild_pokemon_last_metadata.is_empty():
+		_render_wild_pokemon_metadata(wild_pokemon_last_metadata)
+	elif wild_pokemon_message_key != "":
+		_set_wild_pokemon_message_key(wild_pokemon_message_key, wild_pokemon_message_color)
+
+func _refresh_dev_tools_localized_ui() -> void:
+	if dev_actions_popup != null:
+		LocalizationManager.localize_tree(dev_actions_popup)
+	if dev_pokemon_popup != null:
+		LocalizationManager.localize_tree(dev_pokemon_popup)
+		_refresh_dev_pokemon_popup_copy()
+	if dev_add_item_popup != null:
+		LocalizationManager.localize_tree(dev_add_item_popup)
+		if dev_add_item_popup.visible:
+			_refresh_dev_item_results()
+	if dev_add_money_popup != null:
+		LocalizationManager.localize_tree(dev_add_money_popup)
+
 func _refresh_pokedex_localized_ui() -> void:
 	if pokedex_popup == null:
 		return
@@ -8682,7 +8729,7 @@ func _setup_wild_pokemon_popup() -> void:
 	layout.add_child(header)
 
 	wild_pokemon_title_label = Label.new()
-	wild_pokemon_title_label.text = "Wild Pokémon"
+	_set_localized_control_property(wild_pokemon_title_label, "text", "ui.wild.title")
 	wild_pokemon_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	wild_pokemon_title_label.add_theme_font_size_override("font_size", 20)
 	wild_pokemon_title_label.add_theme_color_override("font_color", UI_TEXT)
@@ -8690,6 +8737,7 @@ func _setup_wild_pokemon_popup() -> void:
 
 	var close_button := Button.new()
 	close_button.text = "X"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.custom_minimum_size = Vector2(34, 30)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_wild_pokemon_popup)
@@ -8721,9 +8769,13 @@ func _on_wild_pokemon_button_pressed() -> void:
 
 	wild_pokemon_popup.visible = true
 	_animate_wild_pokemon_button()
-	wild_pokemon_title_label.text = "Wild Pokémon · %s" % _get_current_map_display_name()
+	wild_pokemon_title_label.text = LocalizationManager.text(
+		"ui.wild.title_map",
+		{"map": _get_current_map_display_name()}
+	)
 	_activate_ui_panel(wild_pokemon_popup)
-	_set_wild_pokemon_message("Loading encounters…", UI_MUTED_TEXT)
+	wild_pokemon_last_metadata.clear()
+	_set_wild_pokemon_message_key("ui.wild.loading", UI_MUTED_TEXT)
 	wild_pokemon_request_id += 1
 	var request_id := wild_pokemon_request_id
 	var response: Dictionary = await EncounterMetadataService.get_encounter_area_metadata(area_id)
@@ -8733,13 +8785,14 @@ func _on_wild_pokemon_button_pressed() -> void:
 		_hide_wild_pokemon_popup()
 		return
 	if not bool(response.get("success", false)):
-		_set_wild_pokemon_message("Could not load wild Pokémon.", UI_DANGER)
+		_set_wild_pokemon_message_key("ui.wild.load_failed", UI_DANGER)
 		return
 
 	await PokedexService.get_owned_species_ids(false)
 	if request_id != wild_pokemon_request_id or not wild_pokemon_popup.visible:
 		return
-	_render_wild_pokemon_metadata(response.get("metadata", {}) as Dictionary)
+	wild_pokemon_last_metadata = (response.get("metadata", {}) as Dictionary).duplicate(true)
+	_render_wild_pokemon_metadata(wild_pokemon_last_metadata)
 
 func _hide_wild_pokemon_popup() -> void:
 	wild_pokemon_request_id += 1
@@ -8779,7 +8832,13 @@ func _set_wild_pokemon_message(message: String, color: Color) -> void:
 	label.add_theme_color_override("font_color", color)
 	wild_pokemon_content.add_child(label)
 
+func _set_wild_pokemon_message_key(key: String, color: Color) -> void:
+	wild_pokemon_message_key = key
+	wild_pokemon_message_color = color
+	_set_wild_pokemon_message(LocalizationManager.text(key), color)
+
 func _render_wild_pokemon_metadata(metadata: Dictionary) -> void:
+	wild_pokemon_message_key = ""
 	_clear_wild_pokemon_content()
 	var encounter_types: Dictionary = metadata.get("encounterTypes", {}) as Dictionary
 	var encounter_type_ids: Array = encounter_types.keys()
@@ -8805,7 +8864,7 @@ func _render_wild_pokemon_metadata(metadata: Dictionary) -> void:
 			rendered_count += 1
 
 	if rendered_count == 0:
-		_set_wild_pokemon_message("No wild Pokémon are known for this map.", UI_MUTED_TEXT)
+		_set_wild_pokemon_message_key("ui.wild.empty", UI_MUTED_TEXT)
 
 func _create_wild_pokemon_row(entry: Dictionary) -> Control:
 	var species := str(entry.get("species", "Unknown")).strip_edges()
@@ -8852,7 +8911,14 @@ func _create_wild_pokemon_row(entry: Dictionary) -> Control:
 	row.add_child(_create_wild_pokemon_rarity_badge(rarity))
 
 	var level_label := Label.new()
-	level_label.text = "Lv. %d" % min_level if min_level == max_level else "Lv. %d–%d" % [min_level, max_level]
+	level_label.text = (
+		LocalizationManager.text("ui.wild.level", {"level": min_level})
+		if min_level == max_level
+		else LocalizationManager.text(
+			"ui.wild.level_range",
+			{"min": min_level, "max": max_level}
+		)
+	)
 	level_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	level_label.add_theme_font_size_override("font_size", 12)
 	level_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -8867,13 +8933,19 @@ func _create_wild_pokemon_rarity_badge(rarity: String) -> Control:
 	badge.add_theme_stylebox_override("panel", _make_panel_style(Color(color.r, color.g, color.b, 0.16), Color(color.r, color.g, color.b, 0.72), 7, 1))
 
 	var label := Label.new()
-	label.text = _format_identifier_display_name(normalized_rarity)
+	label.text = _wild_pokemon_rarity_label(normalized_rarity)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 9)
 	label.add_theme_color_override("font_color", color)
 	badge.add_child(label)
 	return badge
+
+func _wild_pokemon_rarity_label(rarity: String) -> String:
+	var key := "ui.wild.rarity.%s" % rarity
+	if LocalizationManager.has_key(key):
+		return LocalizationManager.text(key)
+	return _format_identifier_display_name(rarity)
 
 func _wild_pokemon_rarity_color(rarity: String) -> Color:
 	match rarity:
@@ -8893,13 +8965,13 @@ func _wild_pokemon_rarity_color(rarity: String) -> Color:
 func _wild_encounter_method_label(encounter_type: String) -> String:
 	match encounter_type.strip_edges().to_lower():
 		"grass":
-			return "Tall grass"
+			return LocalizationManager.text("ui.wild.method.grass")
 		"cave":
-			return "Cave"
+			return LocalizationManager.text("ui.wild.method.cave")
 		"surf":
-			return "Surfing"
+			return LocalizationManager.text("ui.wild.method.surf")
 		"fish", "fishing":
-			return "Fishing"
+			return LocalizationManager.text("ui.wild.method.fishing")
 		_:
 			return _format_identifier_display_name(encounter_type)
 
@@ -9814,7 +9886,10 @@ func _on_donator_store_purchase_requested(item_id: String, chroma_colors: Dictio
 	var purchased_item_id := str(purchase.get("itemId", item_id))
 	var purchased_item_name := _item_name_from_id(purchased_item_id)
 	donator_store_popup.show_purchase_success(purchased_item_name)
-	add_system_message("Aether Gift Store: Purchased %s. It was added to your Bag." % purchased_item_name)
+	add_system_message(LocalizationManager.text(
+		"ui.store.purchase.system_success",
+		{"item": purchased_item_name}
+	))
 
 func _hide_donator_store_popup() -> void:
 	if donator_store_popup == null:
@@ -23885,7 +23960,9 @@ func _refresh_staff_teleport_tab_visibility() -> void:
 		staff_teleport_player_divider.visible = false
 	if staff_teleport_self_reason_input != null:
 		staff_teleport_self_reason_input.visible = show_self
-		staff_teleport_self_reason_input.placeholder_text = "Self teleport reason (optional)"
+		staff_teleport_self_reason_input.placeholder_text = LocalizationManager.text(
+			"ui.staff.teleport.self_reason"
+		)
 	if staff_teleport_player_reason_input != null:
 		staff_teleport_player_reason_input.visible = show_to_player or show_send_safe
 		var player_reason_required := (_current_user_requires_teleport_to_player_reason() and show_to_player) or (_current_user_requires_teleport_other_reason() and show_send_safe)
@@ -26344,9 +26421,10 @@ func _create_pokedex_section_title(title_text: String) -> Control:
 	label.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
 	return label
 
-func _create_item_dex_section_title(title_text: String) -> Control:
+func _create_item_dex_section_title(title_key: String) -> Control:
 	var label := Label.new()
-	label.text = title_text.to_upper()
+	_set_localized_control_property(label, "text", title_key)
+	label.text = label.text.to_upper()
 	label.add_theme_font_size_override("font_size", 10)
 	label.add_theme_color_override("font_color", ITEM_DEX_ACCENT)
 	return label
@@ -26778,7 +26856,7 @@ func _refresh_item_dex_results() -> void:
 	loading_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	item_dex_results_list.add_child(loading_label)
 	if item_dex_results_count_label != null:
-		item_dex_results_count_label.text = "Searching..."
+		item_dex_results_count_label.text = LocalizationManager.text("common.searching")
 
 	item_dex_search_request_id += 1
 	var request_id := item_dex_search_request_id
@@ -26791,7 +26869,7 @@ func _refresh_item_dex_results() -> void:
 
 	if not bool(search_result.get("success", false)):
 		if item_dex_results_count_label != null:
-			item_dex_results_count_label.text = "Unavailable"
+			item_dex_results_count_label.text = LocalizationManager.text("common.unavailable")
 		var error_label := Label.new()
 		error_label.text = LocalizationManager.text("ui.staff.dev.items_load_failed")
 		error_label.add_theme_color_override("font_color", UI_DANGER)
@@ -26808,7 +26886,11 @@ func _refresh_item_dex_results() -> void:
 		if count >= 40:
 			break
 	if item_dex_results_count_label != null:
-		item_dex_results_count_label.text = "%d result%s" % [count, "" if count == 1 else "s"]
+		item_dex_results_count_label.text = LocalizationManager.plural(
+			"ui.item_dex.result.one",
+			"ui.item_dex.result.many",
+			count
+		)
 
 	if count == 0:
 		var empty_label := Label.new()
@@ -26832,13 +26914,14 @@ func _filter_player_facing_item_variants(items: Array[Dictionary]) -> Array[Dict
 
 func _create_item_dex_result_button(item: Dictionary) -> Control:
 	var item_id := str(item.get("id", ""))
-	var item_name := str(item.get("name", item_id))
+	var localized_item := ItemLocalization.localize_item(item)
+	var item_name := str(localized_item.get("name", item_id))
 	var button := Button.new()
 	button.custom_minimum_size = Vector2(0, 58)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.focus_mode = Control.FOCUS_NONE
-	button.tooltip_text = str(item.get("shortDesc", item.get("desc", "")))
-	button.pressed.connect(_on_item_dex_result_selected.bind(item))
+	button.tooltip_text = str(localized_item.get("shortDesc", localized_item.get("desc", "")))
+	button.pressed.connect(_on_item_dex_result_selected.bind(localized_item))
 	button.set_meta("item_id", item_id)
 
 	var row := HBoxContainer.new()
@@ -26878,7 +26961,7 @@ func _create_item_dex_result_button(item: Dictionary) -> Control:
 	label_stack.add_child(label)
 
 	var meta_label := Label.new()
-	meta_label.text = _format_item_dex_category_label(item)
+	meta_label.text = _format_item_dex_category_label(localized_item)
 	meta_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	meta_label.add_theme_font_size_override("font_size", 10)
 	meta_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -26909,63 +26992,86 @@ func _refresh_item_dex_selection_state() -> void:
 		_style_item_dex_result_button(button, str(button.get_meta("item_id", "")) == item_dex_selected_item_id)
 
 func _on_item_dex_result_selected(item: Dictionary) -> void:
-	var item_id := str(item.get("id", ""))
+	var localized_item := ItemLocalization.localize_item(item)
+	var item_id := str(localized_item.get("id", ""))
 	item_dex_selected_item_id = item_id
+	item_dex_selected_item = localized_item.duplicate(true)
 	_refresh_item_dex_selection_state()
 	item_dex_icon.texture = _load_item_icon(
 		item_id,
-		str(item.get("machineKind", "")),
-		str(item.get("machineMoveType", "")),
+		str(localized_item.get("machineKind", "")),
+		str(localized_item.get("machineMoveType", "")),
 	)
-	item_dex_name_label.text = str(item.get("name", item_id))
-	item_dex_meta_label.text = _format_item_dex_meta(item)
-	var description := str(item.get("shortDesc", ""))
+	item_dex_name_label.text = str(localized_item.get("name", item_id))
+	item_dex_meta_label.text = _format_item_dex_meta(localized_item)
+	var description := str(localized_item.get("shortDesc", ""))
 	if description == "":
-		description = str(item.get("desc", ""))
+		description = str(localized_item.get("desc", ""))
 	if description == "":
-		description = "No item summary available yet."
+		description = LocalizationManager.text("ui.item_dex.no_summary")
 	item_dex_description_label.text = description
-	var effect_text := _format_item_dex_effect_info(item)
+	var effect_text := _format_item_dex_effect_info(localized_item)
 	if item_dex_effect_section_label != null:
 		item_dex_effect_section_label.visible = effect_text != ""
 	if item_dex_effect_label != null:
 		item_dex_effect_label.text = effect_text
 		item_dex_effect_label.visible = effect_text != ""
-	var capture_text := _format_item_dex_capture_info(item)
+	var capture_text := _format_item_dex_capture_info(localized_item)
 	if item_dex_capture_section_label != null:
 		item_dex_capture_section_label.visible = capture_text != ""
 	if item_dex_capture_label != null:
 		item_dex_capture_label.text = capture_text
 		item_dex_capture_label.visible = capture_text != ""
-	item_dex_sources_label.text = _format_item_dex_sources(item)
+	item_dex_sources_label.text = _format_item_dex_sources(localized_item)
 
 func _format_item_dex_meta(item: Dictionary) -> String:
 	var category_text := _format_item_dex_category_label(item)
 	var cost_value: Variant = item.get("cost", null)
-	var cost_text := "Unknown"
+	var cost_text := LocalizationManager.text("common.unknown")
 	if cost_value != null:
 		cost_text = "$%s" % _format_money(int(cost_value))
-	var meta_parts: Array[String] = ["Category: %s" % category_text]
+	var meta_parts: Array[String] = [
+		LocalizationManager.text("ui.item_dex.meta.category", {"category": category_text})
+	]
 	var potency_text := _format_item_dex_potency(item)
 	if potency_text != "":
-		meta_parts.append("Potency: %s" % potency_text)
-	meta_parts.append("Base price: %s" % cost_text)
+		meta_parts.append(LocalizationManager.text(
+			"ui.item_dex.meta.potency",
+			{"potency": potency_text}
+		))
+	meta_parts.append(LocalizationManager.text(
+		"ui.item_dex.meta.base_price",
+		{"price": cost_text}
+	))
 	return "    ".join(meta_parts)
 
 func _format_item_dex_category_label(item: Dictionary) -> String:
-	var category := _format_identifier_display_name(str(item.get("category", "-")))
+	var category := _localized_item_dex_term("category", str(item.get("category", "-")))
 	var sub_category_value: Variant = item.get("subCategory", "")
-	var sub_category := "" if sub_category_value == null else _format_identifier_display_name(str(sub_category_value))
+	var sub_category := (
+		""
+		if sub_category_value == null
+		else _localized_item_dex_term("subcategory", str(sub_category_value))
+	)
 	var machine_kind := str(item.get("machineKind", "")).strip_edges()
 	var machine_move_type := str(item.get("machineMoveType", "")).strip_edges()
 	if machine_kind != "":
-		var machine_label := _format_identifier_display_name(machine_kind)
+		var machine_label := _localized_item_dex_term("machine", machine_kind)
 		if machine_move_type != "":
-			machine_label += " • " + _format_identifier_display_name(machine_move_type)
+			machine_label += " • " + _localized_type_name(machine_move_type)
 		return "%s / %s" % [category, machine_label]
 	if sub_category == "":
 		return category
 	return "%s / %s" % [category, sub_category]
+
+func _localized_item_dex_term(group: String, raw_value: String) -> String:
+	var normalized := raw_value.strip_edges().to_lower().replace("-", "_").replace(" ", "_")
+	if normalized == "":
+		return "-"
+	var key := "ui.item_dex.%s.%s" % [group, normalized]
+	if LocalizationManager.has_key(key):
+		return LocalizationManager.text(key)
+	return _format_identifier_display_name(raw_value)
 
 func _format_item_dex_potency(item: Dictionary) -> String:
 	var potency_value: Variant = item.get("potency", null)
@@ -26976,37 +27082,37 @@ func _format_item_dex_potency(item: Dictionary) -> String:
 	var potency_text := str(int(potency_number)) if is_equal_approx(potency_number, float(int(potency_number))) else str(potency_number)
 	match potency_unit:
 		"experience":
-			return "%s EXP" % potency_text
+			return LocalizationManager.text("ui.item_dex.potency.exp", {"value": potency_text})
 		"hp":
-			return "%s HP" % potency_text
+			return LocalizationManager.text("ui.item_dex.potency.hp", {"value": potency_text})
 		"percent_hp":
-			return "%s%% HP" % potency_text
+			return LocalizationManager.text("ui.item_dex.potency.hp_percent", {"value": potency_text})
 		"pp":
-			return "%s PP" % potency_text
+			return LocalizationManager.text("ui.item_dex.potency.pp", {"value": potency_text})
 		"pp_all":
-			return "%s PP per move" % potency_text
+			return LocalizationManager.text("ui.item_dex.potency.pp_each", {"value": potency_text})
 		"percent_max_pp":
-			return "%s%% max PP" % potency_text
+			return LocalizationManager.text("ui.item_dex.potency.pp_max_percent", {"value": potency_text})
 		"full_hp":
-			return "Full HP"
+			return LocalizationManager.text("ui.item_dex.potency.full_hp")
 		"full_hp_status":
-			return "Full HP + status cure"
+			return LocalizationManager.text("ui.item_dex.potency.full_hp_status")
 		"full_pp":
-			return "Full PP"
+			return LocalizationManager.text("ui.item_dex.potency.full_pp")
 		"full_pp_all":
-			return "Full PP per move"
+			return LocalizationManager.text("ui.item_dex.potency.full_pp_each")
 		"level":
-			return "+%s level" % potency_text
+			return LocalizationManager.text("ui.item_dex.potency.level", {"value": potency_text})
 		"ability_change":
-			return "1 ability change"
+			return LocalizationManager.text("ui.item_dex.potency.ability_change")
 		"status":
-			return "1 status cure"
+			return LocalizationManager.text("ui.item_dex.potency.status")
 		"ev":
-			return "+%s EV" % potency_text
+			return LocalizationManager.text("ui.item_dex.potency.ev", {"value": potency_text})
 		"nature":
-			return "1 nature change"
+			return LocalizationManager.text("ui.item_dex.potency.nature")
 		"stat":
-			return "+%s stat" % potency_text
+			return LocalizationManager.text("ui.item_dex.potency.stat", {"value": potency_text})
 		_:
 			return potency_text
 
@@ -27019,39 +27125,45 @@ func _format_item_dex_effect_info(item: Dictionary) -> String:
 
 	var lines: Array[String] = []
 	if sub_category != "":
-		lines.append("Type: %s" % _format_identifier_display_name(sub_category))
+		lines.append(LocalizationManager.text(
+			"ui.item_dex.effect.type",
+			{"type": _localized_item_dex_term("subcategory", sub_category)}
+		))
 	if sub_category == "ev":
 		var stat_text := _summary_stat_label(str(item.get("stat", "")).strip_edges())
 		if stat_text != "":
-			lines.append("Stat: %s" % stat_text)
+			lines.append(LocalizationManager.text("ui.item_dex.effect.stat", {"stat": stat_text}))
 	if potency_text != "":
-		lines.append("Potency: %s" % potency_text)
+		lines.append(LocalizationManager.text(
+			"ui.item_dex.meta.potency",
+			{"potency": potency_text}
+		))
 
 	var item_id := _normalize_item_id(str(item.get("id", "")))
 	match sub_category:
 		"exp":
-			lines.append("Grants experience to the selected Pokemon.")
+			lines.append(LocalizationManager.text("ui.item_dex.effect.exp"))
 		"level":
-			lines.append("Raises the selected Pokemon by the listed number of levels.")
+			lines.append(LocalizationManager.text("ui.item_dex.effect.level"))
 		"heal":
-			lines.append("Restores HP to the selected Pokemon.")
+			lines.append(LocalizationManager.text("ui.item_dex.effect.heal"))
 		"revive":
-			lines.append("Revives a fainted Pokemon with the listed HP amount.")
+			lines.append(LocalizationManager.text("ui.item_dex.effect.revive"))
 		"pp":
-			lines.append("Restores or increases move PP.")
+			lines.append(LocalizationManager.text("ui.item_dex.effect.pp"))
 		"status":
-			lines.append("Cures a status condition.")
+			lines.append(LocalizationManager.text("ui.item_dex.effect.status"))
 		"ability":
-			lines.append("Changes an eligible Pokemon's ability.")
+			lines.append(LocalizationManager.text("ui.item_dex.effect.ability"))
 		"ev":
-			lines.append("Changes effort values for one stat.")
+			lines.append(LocalizationManager.text("ui.item_dex.effect.ev"))
 		"nature":
-			lines.append("Changes how stat growth is treated for the Pokemon.")
+			lines.append(LocalizationManager.text("ui.item_dex.effect.nature"))
 		"stat":
-			lines.append("Raises a stat-related value.")
+			lines.append(LocalizationManager.text("ui.item_dex.effect.stat_value"))
 		_:
 			if item_id != "":
-				lines.append("Structured effect metadata is available for this item.")
+				lines.append(LocalizationManager.text("ui.item_dex.effect.metadata"))
 	return "\n".join(lines)
 
 func _format_item_dex_capture_info(item: Dictionary) -> String:
@@ -27060,16 +27172,19 @@ func _format_item_dex_capture_info(item: Dictionary) -> String:
 
 	var item_id := _normalize_item_id(str(item.get("id", "")))
 	if item_id == "master-ball":
-		return "Guaranteed catch.\nMaster Ball always catches wild Pokemon in the current capture rules."
+		return LocalizationManager.text("ui.item_dex.capture.guaranteed")
 
 	var multiplier := float(ITEM_DEX_CAPTURE_BALL_MULTIPLIERS.get(item_id, 1.0))
 	var lines: Array[String] = [
-		"Current capture modifier: x%s" % _format_item_dex_multiplier(multiplier),
+		LocalizationManager.text(
+			"ui.item_dex.capture.modifier",
+			{"multiplier": _format_item_dex_multiplier(multiplier)}
+		),
 	]
 	var reference_note := _extract_item_dex_capture_effect_note(item)
 	if reference_note != "":
 		lines.append(reference_note)
-	lines.append("Actual catch chance also depends on target HP, species catch rate, and status.")
+	lines.append(LocalizationManager.text("ui.item_dex.capture.factors"))
 	return "\n".join(lines)
 
 func _is_item_dex_pokeball(item: Dictionary) -> bool:
@@ -27080,15 +27195,19 @@ func _is_item_dex_pokeball(item: Dictionary) -> bool:
 	return item_id.ends_with("ball") or item_id.contains("-ball")
 
 func _extract_item_dex_capture_effect_note(item: Dictionary) -> String:
-	var text := str(item.get("shortDesc", ""))
-	if text == "":
-		text = str(item.get("desc", ""))
-	text = text.strip_edges()
-	if text == "":
+	var display_text := str(item.get("shortDesc", item.get("desc", ""))).strip_edges()
+	var source_text := str(item.get(
+		"_i18n_source_short_desc",
+		item.get("shortDesc", item.get("desc", ""))
+	)).strip_edges()
+	if display_text == "" or source_text == "":
 		return ""
-	var lower_text := text.to_lower()
+	var lower_text := source_text.to_lower()
 	if lower_text.contains("success rate") or lower_text.contains("catch rate") or lower_text.contains("catches"):
-		return "Reference effect: %s" % text
+		return LocalizationManager.text(
+			"ui.item_dex.capture.reference",
+			{"effect": display_text}
+		)
 	return ""
 
 func _format_item_dex_multiplier(value: float) -> String:
@@ -27100,20 +27219,28 @@ func _format_item_dex_multiplier(value: float) -> String:
 func _format_item_dex_sources(item: Dictionary) -> String:
 	var summary_value: Variant = item.get("sourceSummary", [])
 	if typeof(summary_value) != TYPE_ARRAY:
-		return "No known repeatable ways yet."
+		return LocalizationManager.text("ui.item_dex.sources.none")
 
 	var summaries: Array = summary_value
 	if summaries.is_empty():
-		return "No known repeatable ways yet."
+		return LocalizationManager.text("ui.item_dex.sources.none")
 
 	var lines: Array[String] = []
 	for summary_value_item: Variant in summaries:
 		if typeof(summary_value_item) != TYPE_DICTIONARY:
 			continue
 		var summary: Dictionary = summary_value_item
-		var label := str(summary.get("label", summary.get("type", "Source")))
+		var raw_label := str(summary.get("label", summary.get("type", ""))).strip_edges()
+		var label := (
+			LocalizationManager.text("ui.item_dex.sources.source")
+			if raw_label == ""
+			else _localized_item_dex_term("source", raw_label)
+		)
 		var count: int = int(summary.get("count", 0))
-		lines.append("%s (%s)" % [label, count])
+		lines.append(LocalizationManager.text(
+			"ui.item_dex.sources.count",
+			{"source": label, "count": count}
+		))
 
 		var preview_value: Variant = summary.get("preview", [])
 		if typeof(preview_value) != TYPE_ARRAY:
@@ -27125,7 +27252,10 @@ func _format_item_dex_sources(item: Dictionary) -> String:
 
 		var hidden_count: int = count - previews.size()
 		if hidden_count > 0:
-			lines.append("+%s more" % hidden_count)
+			lines.append(LocalizationManager.text(
+				"ui.item_dex.sources.more",
+				{"count": hidden_count}
+			))
 	return "\n".join(lines)
 
 func _on_dev_add_pokemon_button_pressed() -> void:
@@ -27405,7 +27535,7 @@ func _refresh_dev_item_results() -> void:
 		query = dev_item_search_input.text.strip_edges().to_lower()
 
 	var loading_label := Label.new()
-	loading_label.text = "Searching..."
+	loading_label.text = LocalizationManager.text("common.searching")
 	loading_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	dev_item_results_list.add_child(loading_label)
 
@@ -27420,7 +27550,7 @@ func _refresh_dev_item_results() -> void:
 
 	if not bool(search_result.get("success", false)):
 		var error_label := Label.new()
-		error_label.text = "Could not load items."
+		error_label.text = LocalizationManager.text("ui.staff.dev.items_load_failed")
 		error_label.add_theme_color_override("font_color", UI_DANGER)
 		dev_item_results_list.add_child(error_label)
 		return
@@ -27438,7 +27568,7 @@ func _refresh_dev_item_results() -> void:
 
 	if count == 0:
 		var empty_label := Label.new()
-		empty_label.text = "No item results."
+		empty_label.text = LocalizationManager.text("ui.staff.dev.no_item_results")
 		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		dev_item_results_list.add_child(empty_label)
 
@@ -27455,7 +27585,7 @@ func _normalize_dev_item_results(items_value: Variant) -> Array[Dictionary]:
 		var item_id := str(item.get("id", "")).strip_edges()
 		if item_id == "":
 			continue
-		normalized_items.append({
+		normalized_items.append(ItemLocalization.localize_item({
 			"id": item_id,
 			"name": str(item.get("name", _item_name_from_id(item_id))),
 			"category": str(item.get("category", "")),
@@ -27465,11 +27595,12 @@ func _normalize_dev_item_results(items_value: Variant) -> Array[Dictionary]:
 			"cost": item.get("cost", null),
 			"potency": item.get("potency", null),
 			"potencyUnit": item.get("potencyUnit", null),
+			"stat": str(item.get("stat", "")),
 			"machineKind": str(item.get("machineKind", "")).strip_edges().to_lower(),
 			"machineMoveType": str(item.get("machineMoveType", "")).strip_edges().to_lower(),
 			"sources": item.get("sources", []),
 			"sourceSummary": item.get("sourceSummary", []),
-		})
+		}))
 	return normalized_items
 
 func _create_dev_item_result_button(item: Dictionary) -> Control:
