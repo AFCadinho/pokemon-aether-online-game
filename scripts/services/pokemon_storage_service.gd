@@ -48,6 +48,22 @@ func load_box(box_index: int) -> Dictionary:
 	return parse_box_response(response)
 
 
+func rename_box(box_index: int, name: String) -> Dictionary:
+	if not _is_authenticated():
+		return {"success": false, "error": "Not authenticated."}
+	if box_index < 0:
+		return {"success": false, "error": "Invalid box."}
+
+	var base_url: String = await _get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + BOX_ENDPOINT % str(box_index).uri_encode(),
+		HTTPClient.METHOD_PATCH,
+		_get_json_headers(),
+		JSON.stringify({"name": name.strip_edges()})
+	)
+	return parse_box_response(response)
+
+
 func move_pokemon(pokemon_id: int, source: Dictionary, target: Dictionary) -> Dictionary:
 	if not _is_authenticated():
 		return {
@@ -302,6 +318,7 @@ static func _normalize_box_state(value: Variant) -> Dictionary:
 	var box: Dictionary = _dictionary_from_value(value)
 	return {
 		"boxIndex": int(box.get("boxIndex", box.get("box_index", 0))),
+		"name": str(box.get("name", "")).strip_edges(),
 		"slots": _normalize_box_slots_array(box.get("slots", [])),
 	}
 

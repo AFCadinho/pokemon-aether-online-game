@@ -6,6 +6,7 @@ const TYPE_ICON_PATH := "res://assets/sprites/types/%s.png"
 const CARD_WIDTH := 300.0
 const STAT_BOOST_COLOR := Color(0.3882353, 0.83137256, 0.44313726, 1.0)
 const STAT_DROP_COLOR := Color(0.9372549, 0.26666668, 0.26666668, 1.0)
+const NATURE_DROP_COLOR := Color(0.9372549, 0.26666668, 0.26666668, 1.0)
 
 @onready var name_label: Label = $MarginContainer/VBoxContainer/NameLabel
 @onready var type_icon_1: TextureRect = $MarginContainer/VBoxContainer/TypeBoxContainer/TypeIcon
@@ -26,18 +27,61 @@ const STAT_DROP_COLOR := Color(0.9372549, 0.26666668, 0.26666668, 1.0)
 	$MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer3,
 	$MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer4,
 ]
+var iv_value_label: Label
+var ev_value_label: Label
+var show_ivs := false
+var show_evs := false
 
 
 func _ready() -> void:
+	set_anchors_preset(Control.PRESET_TOP_LEFT)
+	offset_left = 0.0
+	offset_top = 0.0
+	offset_right = CARD_WIDTH
+	offset_bottom = 0.0
 	custom_minimum_size.x = CARD_WIDTH
+	custom_minimum_size.y = 0.0
+	size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	size.x = CARD_WIDTH
+	size.y = 0.0
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	iv_value_label = Label.new()
+	iv_value_label.name = "IVValueLabel"
+	iv_value_label.add_theme_font_size_override("font_size", 11)
+	iv_value_label.add_theme_color_override("font_color", Color(0.55, 0.75, 0.89, 1.0))
+	iv_value_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	ev_value_label = Label.new()
+	ev_value_label.name = "EVValueLabel"
+	ev_value_label.add_theme_font_size_override("font_size", 11)
+	ev_value_label.add_theme_color_override("font_color", Color(0.96, 0.70, 0.40, 1.0))
+	ev_value_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	var content := $MarginContainer/VBoxContainer as VBoxContainer
+	content.add_child(ev_value_label)
+	content.add_child(iv_value_label)
+	var details_index := $MarginContainer/VBoxContainer/SeperationLabel2.get_index() + 1
+	content.move_child(ev_value_label, details_index)
+	content.move_child(iv_value_label, details_index + 1)
 	hide_card()
 
 
 func show_for_pokemon(pokemon_data: Dictionary) -> void:
 	_set_pokemon_data(pokemon_data)
 	visible = true
+
+
+func set_show_ivs(enabled: bool) -> void:
+	show_ivs = enabled
+	if iv_value_label != null:
+		iv_value_label.visible = enabled
+
+
+func set_show_storage_details(enabled: bool) -> void:
+	show_ivs = enabled
+	show_evs = enabled
+	if iv_value_label != null:
+		iv_value_label.visible = enabled
+	if ev_value_label != null:
+		ev_value_label.visible = enabled
 
 
 func hide_card() -> void:
@@ -47,6 +91,8 @@ func hide_card() -> void:
 func position_near_mouse(mouse_position: Vector2, viewport_size: Vector2) -> void:
 	var padding := 12.0
 	custom_minimum_size.x = CARD_WIDTH
+	custom_minimum_size.y = 0.0
+	size.y = 0.0
 	reset_size()
 	var card_size: Vector2 = size
 	var target_position := mouse_position + Vector2(padding, padding)
@@ -62,6 +108,8 @@ func position_near_mouse(mouse_position: Vector2, viewport_size: Vector2) -> voi
 func position_near_rect(anchor_rect: Rect2, viewport_size: Vector2) -> void:
 	var padding := 10.0
 	custom_minimum_size.x = CARD_WIDTH
+	custom_minimum_size.y = 0.0
+	size.y = 0.0
 	reset_size()
 	var card_size: Vector2 = size
 	var target_position: Vector2
@@ -93,8 +141,11 @@ func _set_pokemon_data(pokemon_data: Dictionary) -> void:
 	nature_value_label.text = _format_value(str(pokemon_data.get("nature", "")), "Unknown")
 	_set_stats(
 		pokemon_data.get("stats", pokemon_data.get("evs", {})),
-		pokemon_data.get("statStages", pokemon_data.get("stat_stages", {}))
+		pokemon_data.get("statStages", pokemon_data.get("stat_stages", {})),
+		str(pokemon_data.get("nature", ""))
 	)
+	_set_ivs(pokemon_data.get("ivs", {}))
+	_set_evs(pokemon_data.get("evs", {}))
 	_set_moves(pokemon_data.get("moves", []))
 
 
@@ -151,7 +202,7 @@ func _set_hp(pokemon_data: Dictionary) -> void:
 	hp_value_label.text = "(%s/%s)" % [clamped_hp, max_hp]
 
 
-func _set_stats(stats_value: Variant, stat_stages_value: Variant = {}) -> void:
+func _set_stats(stats_value: Variant, stat_stages_value: Variant = {}, nature_value: String = "") -> void:
 	var stats: Dictionary = {}
 	if stats_value is Dictionary:
 		stats = stats_value as Dictionary
@@ -160,20 +211,85 @@ func _set_stats(stats_value: Variant, stat_stages_value: Variant = {}) -> void:
 	if stat_stages_value is Dictionary:
 		stat_stages = stat_stages_value as Dictionary
 
-	_set_stat_label(atk_value_label, stats, stat_stages, "atk")
-	_set_stat_label(def_value_label, stats, stat_stages, "def")
-	_set_stat_label(spa_value_label, stats, stat_stages, "spa")
-	_set_stat_label(spd_value_label, stats, stat_stages, "spd")
-	_set_stat_label(spe_value_label, stats, stat_stages, "spe")
+	var nature_modifiers := _nature_modifiers(nature_value)
+	_set_stat_label(atk_value_label, stats, stat_stages, "atk", nature_modifiers)
+	_set_stat_label(def_value_label, stats, stat_stages, "def", nature_modifiers)
+	_set_stat_label(spa_value_label, stats, stat_stages, "spa", nature_modifiers)
+	_set_stat_label(spd_value_label, stats, stat_stages, "spd", nature_modifiers)
+	_set_stat_label(spe_value_label, stats, stat_stages, "spe", nature_modifiers)
 
 
-func _set_stat_label(label: Label, stats: Dictionary, stat_stages: Dictionary, stat_key: String) -> void:
+func _nature_modifiers(nature_value: String) -> Dictionary:
+	var nature := nature_value.strip_edges().to_lower().replace("-", "_")
+	var modifiers := {
+		"adamant": ["atk", "spa"], "bashful": ["", ""], "bold": ["def", "atk"],
+		"brave": ["atk", "spe"], "calm": ["spd", "atk"], "careful": ["spd", "spa"],
+		"docile": ["", ""], "gentle": ["spd", "def"], "hardy": ["", ""],
+		"hasty": ["spe", "def"], "impish": ["def", "spa"], "jolly": ["spe", "spa"],
+		"lax": ["def", "spd"], "lonely": ["atk", "def"], "mild": ["spa", "def"],
+		"modest": ["spa", "atk"], "naive": ["spe", "spd"], "naughty": ["atk", "spd"],
+		"quirky": ["", ""], "relaxed": ["def", "spe"], "sassy": ["spd", "spe"],
+		"serious": ["", ""], "timid": ["spe", "atk"],
+	}
+	var pair: Array = modifiers.get(nature, ["", ""])
+	return {"up": str(pair[0]), "down": str(pair[1])}
+
+
+func _set_ivs(ivs_value: Variant) -> void:
+	if iv_value_label == null:
+		return
+	if not show_ivs or not (ivs_value is Dictionary):
+		iv_value_label.visible = false
+		return
+	var ivs: Dictionary = ivs_value as Dictionary
+	var parts: Array[String] = []
+	for entry: Array in [
+		["HP", "hp"],
+		["Atk", "atk"],
+		["Def", "def"],
+		["SpA", "spa"],
+		["SpD", "spd"],
+		["Spe", "spe"],
+	]:
+		if ivs.has(entry[1]):
+			parts.append("%s %d" % [entry[0], int(ivs.get(entry[1]))])
+	iv_value_label.text = "IVs: " + " · ".join(parts)
+	iv_value_label.visible = not parts.is_empty()
+
+
+func _set_evs(evs_value: Variant) -> void:
+	if ev_value_label == null:
+		return
+	if not show_evs or not (evs_value is Dictionary):
+		ev_value_label.visible = false
+		return
+	var evs: Dictionary = evs_value as Dictionary
+	var parts: Array[String] = []
+	for entry: Array in [
+		["HP", "hp"],
+		["Atk", "atk"],
+		["Def", "def"],
+		["SpA", "spa"],
+		["SpD", "spd"],
+		["Spe", "spe"],
+	]:
+		if evs.has(entry[1]) and int(evs.get(entry[1])) > 0:
+			parts.append("%s %d" % [entry[0], int(evs.get(entry[1]))])
+	ev_value_label.text = "EVs: " + " · ".join(parts)
+	ev_value_label.visible = not parts.is_empty()
+
+
+func _set_stat_label(label: Label, stats: Dictionary, stat_stages: Dictionary, stat_key: String, nature_modifiers: Dictionary = {}) -> void:
 	var stage_value: int = int(stat_stages.get(stat_key, 0))
 	label.text = _format_stat_value(stats, stat_stages, stat_key)
 	if stage_value > 0:
 		label.add_theme_color_override("font_color", STAT_BOOST_COLOR)
 	elif stage_value < 0:
 		label.add_theme_color_override("font_color", STAT_DROP_COLOR)
+	elif str(nature_modifiers.get("up", "")) == stat_key:
+		label.add_theme_color_override("font_color", STAT_BOOST_COLOR)
+	elif str(nature_modifiers.get("down", "")) == stat_key:
+		label.add_theme_color_override("font_color", NATURE_DROP_COLOR)
 	else:
 		label.remove_theme_color_override("font_color")
 

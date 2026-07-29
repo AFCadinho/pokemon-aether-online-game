@@ -121,7 +121,9 @@ func _check_ui_overlay_wrapper_exists() -> void:
 	_check_equal(source.contains("func _release_selected_pc_pokemon"), true, "UIOverlay releases selected PC Pokemon")
 	_check_equal(source.contains("func _add_pc_held_item_marker"), true, "UIOverlay marks PC Pokemon with held items")
 	_check_equal(source.contains("HeldItemMarker"), true, "UIOverlay creates held item marker control")
-	_check_equal(source.contains("pc_box_selector"), false, "UIOverlay no longer uses PC box dropdown")
+	_check_equal(source.contains("pc_box_selector"), true, "UIOverlay provides a scrollable box selector")
+	_check_equal(source.contains("func _toggle_pc_box_selector"), true, "UIOverlay toggles the box selector")
+	_check_equal(source.contains("func _on_pc_selector_box_selected"), true, "UIOverlay opens a box from the selector")
 	_check_equal(source.contains("socials_pc_button"), false, "Socials menu no longer owns PC button")
 	_check_equal(source.contains("_on_socials_pc_button_pressed"), false, "Socials PC handler removed")
 
