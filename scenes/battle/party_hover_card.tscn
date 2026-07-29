@@ -40,7 +40,7 @@ layout_mode = 2
 custom_minimum_size = Vector2(100, 24)
 layout_mode = 2
 theme_override_font_sizes/font_size = 21
-text = "Garchomp"
+text = ""
 
 [node name="TypeBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=455388023]
 layout_mode = 2
@@ -80,13 +80,13 @@ text = "battle.hover.hp"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8745098, 0.92156863, 0.9843137, 1)
 theme_override_font_sizes/font_size = 14
-text = "100%"
+text = ""
 
 [node name="HpValueLabel" type="Label" parent="MarginContainer/VBoxContainer/HPBoxContainer/HpContainer" unique_id=2006246769]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8745098, 0.92156863, 0.9843137, 1)
 theme_override_font_sizes/font_size = 14
-text = "(12/12)"
+text = ""
 
 [node name="SeperationLabel" type="Label" parent="MarginContainer/VBoxContainer/HPBoxContainer" unique_id=286594064]
 layout_mode = 2
@@ -104,7 +104,7 @@ text = "@"
 [node name="ItemValueLabel" type="Label" parent="MarginContainer/VBoxContainer/HPBoxContainer/ItemContainer" unique_id=1418138783]
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
-text = "Choice Scarf"
+text = ""
 
 [node name="AbilityBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1385344729]
 layout_mode = 2
@@ -122,7 +122,7 @@ text = "battle.hover.ability"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8745098, 0.92156863, 0.9843137, 1)
 theme_override_font_sizes/font_size = 14
-text = "Rough Skin"
+text = ""
 
 [node name="SeperationLabel" type="Label" parent="MarginContainer/VBoxContainer/AbilityBoxContainer" unique_id=286594063]
 layout_mode = 2
@@ -140,7 +140,7 @@ text = "battle.hover.nature"
 [node name="NatureValueLabel" type="Label" parent="MarginContainer/VBoxContainer/AbilityBoxContainer/NatureContainer" unique_id=1418138784]
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
-text = "Adamant"
+text = ""
 
 [node name="StatsBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=871422526]
 layout_mode = 2
@@ -155,7 +155,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 theme_override_font_sizes/font_size = 14
-text = "Atk "
+text = "battle.stat.short.attack"
 
 [node name="ValueLabel" type="Label" parent="MarginContainer/VBoxContainer/StatsBoxContainer/AttackContainer" unique_id=1437858402]
 custom_minimum_size = Vector2(0, 18)
@@ -163,7 +163,7 @@ layout_mode = 2
 size_flags_vertical = 0
 theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
 theme_override_font_sizes/font_size = 14
-text = "6"
+text = ""
 
 [node name="Speedseperator3" type="Label" parent="MarginContainer/VBoxContainer/StatsBoxContainer" unique_id=583256896]
 layout_mode = 2
@@ -179,7 +179,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 theme_override_font_sizes/font_size = 14
-text = "Def "
+text = "battle.stat.short.defense"
 
 [node name="ValueLabel" type="Label" parent="MarginContainer/VBoxContainer/StatsBoxContainer/DefContainer" unique_id=1925922144]
 custom_minimum_size = Vector2(0, 18)
@@ -187,7 +187,7 @@ layout_mode = 2
 size_flags_vertical = 0
 theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
 theme_override_font_sizes/font_size = 14
-text = "6"
+text = ""
 
 [node name="Speedseperator5" type="Label" parent="MarginContainer/VBoxContainer/StatsBoxContainer" unique_id=1651644091]
 layout_mode = 2
@@ -203,7 +203,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 theme_override_font_sizes/font_size = 14
-text = "SpA"
+text = "battle.stat.short.special_attack"
 
 [node name="ValueLabel" type="Label" parent="MarginContainer/VBoxContainer/StatsBoxContainer/SpAContainer" unique_id=735811040]
 custom_minimum_size = Vector2(0, 18)
@@ -211,7 +211,7 @@ layout_mode = 2
 size_flags_vertical = 0
 theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
 theme_override_font_sizes/font_size = 14
-text = "6"
+text = ""
 
 [node name="Speedseperator4" type="Label" parent="MarginContainer/VBoxContainer/StatsBoxContainer" unique_id=58398009]
 layout_mode = 2
@@ -227,7 +227,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 theme_override_font_sizes/font_size = 14
-text = "SpD"
+text = "battle.stat.short.special_defense"
 
 [node name="ValueLabel" type="Label" parent="MarginContainer/VBoxContainer/StatsBoxContainer/SpDContainer" unique_id=1369626662]
 custom_minimum_size = Vector2(0, 18)
@@ -235,7 +235,7 @@ layout_mode = 2
 size_flags_vertical = 0
 theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
 theme_override_font_sizes/font_size = 14
-text = "6"
+text = ""
 
 [node name="Speedseperator6" type="Label" parent="MarginContainer/VBoxContainer/StatsBoxContainer" unique_id=1469106446]
 layout_mode = 2
@@ -251,7 +251,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 theme_override_font_sizes/font_size = 14
-text = "Spe "
+text = "battle.stat.short.speed"
 
 [node name="ValueLabel" type="Label" parent="MarginContainer/VBoxContainer/StatsBoxContainer/SpeContainer" unique_id=2020724211]
 custom_minimum_size = Vector2(0, 18)
@@ -259,7 +259,7 @@ layout_mode = 2
 size_flags_vertical = 0
 theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
 theme_override_font_sizes/font_size = 14
-text = "6"
+text = ""
 
 [node name="SeperationLabel2" type="ColorRect" parent="MarginContainer/VBoxContainer" unique_id=415937999]
 custom_minimum_size = Vector2(0, 1)
@@ -277,13 +277,13 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
 theme_override_font_sizes/font_size = 14
-text = "• Swords Dance"
+text = ""
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=367502554]
 custom_minimum_size = Vector2(42, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
-text = "13/15"
+text = ""
 horizontal_alignment = 2
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1931422379]
@@ -295,13 +295,13 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
 theme_override_font_sizes/font_size = 14
-text = "• Swords Dance"
+text = ""
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=1670997195]
 custom_minimum_size = Vector2(42, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
-text = "13/15"
+text = ""
 horizontal_alignment = 2
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1703012252]
@@ -313,13 +313,13 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
 theme_override_font_sizes/font_size = 14
-text = "• Swords Dance"
+text = ""
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer3" unique_id=857354779]
 custom_minimum_size = Vector2(42, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
-text = "13/15"
+text = ""
 horizontal_alignment = 2
 
 [node name="HBoxContainer4" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=159137242]
@@ -331,11 +331,11 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
 theme_override_font_sizes/font_size = 14
-text = "• Swords Dance"
+text = ""
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer4" unique_id=991153146]
 custom_minimum_size = Vector2(42, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
-text = "13/15"
+text = ""
 horizontal_alignment = 2

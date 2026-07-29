@@ -15,8 +15,9 @@ Initial locales: English (`en`), Dutch (`nl`), Brazilian Portuguese (`pt-BR`)
 | Phase 2: login and settings pilot | Complete in commit `96be89e3a` |
 | Phase 3: automated guardrails | In progress; catalog, placeholder, fallback, persistence, and pilot layout checks are active |
 | Phase 4: shared game interface | Complete; all 11 functional domains are migrated |
+| Phase 5: battle localization | Complete; battle UI, dynamic events, timers, field state, results, and calculator are migrated |
 | Phase 7: Pokémon and item content | In progress; shared item resolver and 69 current item overlays are active |
-| Phases 5-6 and 8-10 | Planned; battle localization is the next implementation phase |
+| Phases 6 and 8-10 | Planned; world signs and NPC dialogue are the next implementation phase |
 
 ## Goal
 
@@ -229,6 +230,32 @@ large change.
 - A locale change cannot interrupt or invalidate an active battle.
 - Existing battle logs either re-render in the new language or follow an explicitly
   documented temporary behavior until re-rendering is implemented.
+
+### Completion note
+
+Phase 5 is complete on `feature/localization-foundation`.
+
+- Battle controls, confirmations, spectator controls, result screens, reconnect
+  messages, errors, field timers, side conditions, stat badges, hover cards, and the
+  damage calculator resolve through the client catalogs.
+- `BattleEventTextFormatter` renders move, switch, item, ability, status, damage,
+  healing, weather, field-effect, transformation, and terminal sentences from named
+  placeholders. Canonical protocol values are never translated.
+- Runtime checks exercise the same components and representative event data in
+  English, Dutch, and Brazilian Portuguese. Catalog parity and placeholder parity are
+  enforced across all 1,802 keys.
+- Live battle controls and current dynamic panels re-render immediately after a locale
+  change without changing battle state, legal actions, or timers.
+
+Temporary battle-log behavior: entries already appended to the log remain in the
+language in which they were received because the current log stores rendered strings.
+New entries and all live battle controls use the newly selected locale immediately.
+Re-rendering historical entries requires retaining their structured event payloads and
+can be added later without changing the authoritative battle protocol.
+
+Canonical species, move, ability, item, nature, and type display data remains English
+until the remaining Phase 7 overlays. Raw backend-provided error strings remain Phase
+8 work; localized client fallbacks are already present.
 
 ### Sequencing note
 

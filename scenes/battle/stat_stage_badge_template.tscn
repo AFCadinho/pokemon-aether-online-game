@@ -28,8 +28,8 @@ theme_override_constants/separation = 3
 
 [node name="StatLabel" type="Label" parent="MarginContainer/HBoxContainer" unique_id=691890593]
 layout_mode = 2
-text = "Atk"
+text = ""
 
 [node name="ValueLabel" type="Label" parent="MarginContainer/HBoxContainer" unique_id=1379597986]
 layout_mode = 2
-text = "+2"
+text = ""

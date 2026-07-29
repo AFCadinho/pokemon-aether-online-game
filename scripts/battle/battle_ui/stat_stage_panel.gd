@@ -12,14 +12,20 @@ const BADGE_LINE_MODIFIER := "modifier"
 @onready var ability_modifier_row: HBoxContainer = $MarginContainer/VBoxContainer/AbilityModifierRow
 @onready var badge_template: PanelContainer = $MarginContainer/VBoxContainer/StatStageRow/StatStageBadgeTemplate
 
+var current_stages: Dictionary = {}
+var localization_manager: Node
 
 func _ready() -> void:
+	localization_manager = get_tree().root.get_node_or_null("LocalizationManager")
+	if localization_manager != null and not localization_manager.locale_changed.is_connected(_on_locale_changed):
+		localization_manager.locale_changed.connect(_on_locale_changed)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	badge_template.visible = false
 	clear()
 
 
 func set_stat_stages(stages: Dictionary) -> void:
+	current_stages = stages.duplicate(true)
 	var badges: Array[Dictionary] = []
 	var visible_stages: Dictionary = _get_visible_stat_stages(stages)
 	for stat_key in STAT_ORDER:
@@ -54,6 +60,7 @@ func set_badges(badges: Array) -> void:
 
 
 func clear() -> void:
+	current_stages.clear()
 	_clear_generated_badges()
 	visible = false
 
@@ -128,19 +135,19 @@ func _get_visible_stat_stages(stages: Dictionary) -> Dictionary:
 func _format_stat_stage_name(stat_key: String) -> String:
 	match stat_key:
 		"atk":
-			return "Atk"
+			return _t("battle.stat.short.attack")
 		"def":
-			return "Def"
+			return _t("battle.stat.short.defense")
 		"spa":
-			return "SpA"
+			return _t("battle.stat.short.special_attack")
 		"spd":
-			return "SpD"
+			return _t("battle.stat.short.special_defense")
 		"spe":
-			return "Spe"
+			return _t("battle.stat.short.speed")
 		"accuracy":
-			return "Acc"
+			return _t("battle.stat.short.accuracy")
 		"evasion":
-			return "Eva"
+			return _t("battle.stat.short.evasion")
 
 	return stat_key.capitalize()
 
@@ -150,3 +157,14 @@ func _format_stat_stage_value(stage_value: int) -> String:
 		return "+%s" % stage_value
 
 	return str(stage_value)
+
+
+func _on_locale_changed(_locale: String) -> void:
+	if not current_stages.is_empty():
+		set_stat_stages(current_stages)
+
+
+func _t(key: String, replacements: Dictionary = {}) -> String:
+	if localization_manager != null:
+		return str(localization_manager.call("text", key, replacements))
+	return key

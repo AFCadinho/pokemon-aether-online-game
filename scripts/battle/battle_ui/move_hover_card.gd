@@ -20,8 +20,15 @@ const CATEGORY_ICON_PATHS := {
 @onready var z_effect_value_label: Label = $MarginContainer/VBoxContainer/ZEffectRow/ZEffectValueLabel
 @onready var description_label: Label = $MarginContainer/VBoxContainer/DescriptionLabel
 
+var current_move_data: Dictionary = {}
+var localization_manager: Node
 
 func _ready() -> void:
+	localization_manager = get_tree().root.get_node_or_null("LocalizationManager")
+	if localization_manager != null:
+		localization_manager.call("localize_tree", self)
+		if not localization_manager.locale_changed.is_connected(_on_locale_changed):
+			localization_manager.locale_changed.connect(_on_locale_changed)
 	custom_minimum_size.x = CARD_WIDTH
 	size.x = CARD_WIDTH
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -70,7 +77,11 @@ func position_near_rect(anchor_rect: Rect2, viewport_size: Vector2) -> void:
 
 
 func _set_move_data(move_data: Dictionary) -> void:
-	name_label.text = str(move_data.get("name", move_data.get("move", move_data.get("id", "Unknown Move"))))
+	current_move_data = move_data.duplicate(true)
+	name_label.text = str(move_data.get(
+		"name",
+		move_data.get("move", move_data.get("id", _t("battle.move.unknown"))),
+	))
 	_set_icon_or_text(type_node, str(move_data.get("type", "")), TYPE_ICON_PATH)
 	var category := str(move_data.get("category", ""))
 	_set_category_icon_or_text(category)
@@ -139,7 +150,7 @@ func _format_power(power_value: Variant) -> String:
 
 func _format_accuracy(accuracy_value: Variant) -> String:
 	if accuracy_value is bool:
-		return "Always hits" if bool(accuracy_value) else "--"
+		return _t("battle.move.always_hits") if bool(accuracy_value) else "--"
 	if accuracy_value == null or str(accuracy_value) == "":
 		return "--"
 
@@ -153,3 +164,16 @@ func _set_description(move_data: Dictionary) -> void:
 
 	description_label.visible = description != ""
 	description_label.text = description
+
+
+func _on_locale_changed(_locale: String) -> void:
+	if localization_manager != null:
+		localization_manager.call("localize_tree", self)
+	if not current_move_data.is_empty():
+		_set_move_data(current_move_data)
+
+
+func _t(key: String, replacements: Dictionary = {}) -> String:
+	if localization_manager != null:
+		return str(localization_manager.call("text", key, replacements))
+	return key

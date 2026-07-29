@@ -2215,10 +2215,10 @@ func _refresh_damage_calc_results() -> void:
 	_sync_damage_calc_matchup_assumptions()
 	_apply_known_damage_calc_defender_info()
 	if battle_finished:
-		calc_panel.show_error("Battle has ended.")
+		calc_panel.show_error(_t("battle.error.ended"))
 		return
 	if battle_state.battle_id.strip_edges() == "":
-		calc_panel.show_error("Battle is not ready yet.")
+		calc_panel.show_error(_t("battle.error.not_ready"))
 		return
 
 	if damage_calc_request_in_flight:
@@ -2256,7 +2256,7 @@ func _refresh_damage_calc_results() -> void:
 	if bool(response.get("success", false)):
 		calc_panel.show_response(response)
 	else:
-		calc_panel.show_error(str(response.get("error", "Damage calculation failed.")))
+		calc_panel.show_error(str(response.get("error", _t("battle.calc.error.failed"))))
 
 func _on_calc_panel_defender_assumptions_changed(assumptions: Dictionary, edited_fields: Dictionary) -> void:
 	_sync_damage_calc_matchup_assumptions()
@@ -2957,7 +2957,7 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 	SfxManager.play("battle_item_use")
 	var capture_result: Dictionary = await InventoryService.catch_wild_pokemon(current_battle_id, item_id)
 	if not bool(capture_result.get("success", false)):
-		current_action_panel.set_message(str(capture_result.get("error", "Could not catch Pokemon.")))
+		current_action_panel.set_message(str(capture_result.get("error", _t("battle.error.capture_failed"))))
 		_refresh_bag_inventory()
 		_set_battle_input_locked(false)
 		return
@@ -3003,7 +3003,7 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 		await _hold_opponent_response_message()
 		var pass_turn_response: Dictionary = await action_flow.submit_pass_turn("p1", "p2", last_rendered_event_seq)
 		if not bool(pass_turn_response.get("success", false)):
-			current_action_panel.set_message(str(pass_turn_response.get("error", "Could not resolve the wild Pokemon's turn.")))
+			current_action_panel.set_message(str(pass_turn_response.get("error", _t("battle.error.wild_turn_failed"))))
 			_set_battle_input_locked(false)
 			return
 
@@ -3031,18 +3031,21 @@ func _capture_result_message_with_storage(capture_result: Dictionary, fallback_m
 	if pokemon_payload_value is Dictionary:
 		pokemon_payload = pokemon_payload_value as Dictionary
 
-	var species := str(pokemon_payload.get("displaySpecies", pokemon_payload.get("species", "Pokemon"))).strip_edges()
+	var species := str(pokemon_payload.get(
+		"displaySpecies",
+		pokemon_payload.get("species", _t("battle.fallback.pokemon")),
+	)).strip_edges()
 	if species == "":
-		species = "Pokemon"
+		species = _t("battle.fallback.pokemon")
 
 	match str(location.get("type", "")):
 		"party":
-			return "Gotcha! %s was caught and added to party." % species
+			return _t("battle.capture.added_to_party", {"species": species})
 		"box":
-			return "Gotcha! %s was caught and sent to %s." % [
-				species,
-				PokemonStorageService.storage_location_label(location),
-			]
+			return _t("battle.capture.sent_to_storage", {
+				"species": species,
+				"location": PokemonStorageService.storage_location_label(location),
+			})
 	return fallback_message
 
 func _on_capture_ball_thrown() -> void:
@@ -3121,7 +3124,7 @@ func _try_run() -> void:
 	var response: Dictionary = await action_flow.submit_player_choice("run", 1, false, last_rendered_event_seq)
 	_set_battle_input_locked(false)
 	if not bool(response.get("success", false)):
-		var error_message := str(response.get("error", "Could not run from the battle."))
+		var error_message := str(response.get("error", _t("battle.error.run_failed")))
 		current_action_panel.set_message(error_message)
 		_add_battle_log_message(error_message)
 		return
@@ -3145,7 +3148,7 @@ func _on_forfeit_confirmed() -> void:
 		var response: Dictionary = await action_flow.submit_player_choice("forfeit", 1, false, last_rendered_event_seq)
 		_set_battle_input_locked(false)
 		if not bool(response.get("success", false)):
-			var error_message := str(response.get("error", "Could not forfeit the battle."))
+			var error_message := str(response.get("error", _t("battle.error.forfeit_failed")))
 			current_action_panel.set_message(error_message)
 			_add_battle_log_message(error_message)
 			return
@@ -3162,7 +3165,7 @@ func _on_forfeit_confirmed() -> void:
 		return
 	_set_battle_input_locked(false)
 	if not bool(response.get("success", false)):
-		var error_message := str(response.get("error", "Could not forfeit the battle."))
+		var error_message := str(response.get("error", _t("battle.error.forfeit_failed")))
 		current_action_panel.set_message(error_message)
 		_add_battle_log_message(error_message)
 		return
@@ -3207,7 +3210,7 @@ func _get_display_moves_for_selected_mechanic() -> Array:
 		if z_move.is_empty():
 			base_move["disabled"] = true
 			base_move["zMoveUnavailable"] = true
-			base_move["disabledReason"] = "This move cannot be used as a Z-Move."
+			base_move["disabledReason"] = _t("battle.error.move_no_z")
 			display_moves.append(base_move)
 			continue
 
@@ -3465,7 +3468,7 @@ func _add_pvp_victory_message_if_needed(result: Dictionary) -> void:
 	if winner_name == "":
 		return
 
-	var message := "🏆 %s won the battle!" % winner_name
+	var message := _t("battle.result.log_winner", {"winner": winner_name})
 	_add_battle_log_message(message)
 	current_action_panel.set_message(message)
 	if not _is_spectator_battle():
@@ -3483,8 +3486,11 @@ func _add_pvp_victory_system_chat_message(message: String) -> void:
 func _format_pvp_victory_system_chat_message(result: Dictionary, winner_name: String) -> String:
 	var loser_name := _resolve_pvp_loser_name(result, winner_name)
 	if loser_name == "":
-		return "🏆 %s won the battle!" % winner_name
-	return "%s has defeated %s in battle." % [winner_name, loser_name]
+		return _t("battle.result.log_winner", {"winner": winner_name})
+	return _t("battle.result.system_defeated", {
+		"winner": winner_name,
+		"loser": loser_name,
+	})
 
 func _resolve_pvp_winner_name(result: Dictionary) -> String:
 	var winner_name := PvpBattleRealtimeService.normalize_terminal_winner(result.get("winner", ""))
@@ -5020,15 +5026,15 @@ func _get_stat_stage_badges_for_ident(ident_key: String) -> Array:
 func _format_volatile_condition_badge_name(condition_key: String) -> String:
 	match condition_key:
 		"air_balloon":
-			return "Air Balloon"
+			return _t("battle.effect.air_balloon")
 		"confused":
-			return "Confused"
+			return _t("battle.effect.confused")
 		"taunt":
-			return "Taunt:"
+			return _t("battle.effect.taunt")
 		"encore":
-			return "Encore:"
+			return _t("battle.effect.encore")
 		"substitute":
-			return "Substitute"
+			return _t("battle.effect.substitute")
 
 	return condition_key.capitalize()
 
@@ -5063,19 +5069,19 @@ func _get_volatile_condition_display_turns(condition_key: String, condition_data
 func _format_stat_badge_name(stat_key: String) -> String:
 	match stat_key:
 		"atk":
-			return "Atk"
+			return _t("battle.stat.short.attack")
 		"def":
-			return "Def"
+			return _t("battle.stat.short.defense")
 		"spa":
-			return "SpA"
+			return _t("battle.stat.short.special_attack")
 		"spd":
-			return "SpD"
+			return _t("battle.stat.short.special_defense")
 		"spe":
-			return "Spe"
+			return _t("battle.stat.short.speed")
 		"accuracy":
-			return "Acc"
+			return _t("battle.stat.short.accuracy")
 		"evasion":
-			return "Eva"
+			return _t("battle.stat.short.evasion")
 
 	return stat_key.capitalize()
 
@@ -5149,7 +5155,10 @@ func _get_fallback_knock_off_item_message(event: Dictionary) -> String:
 	if not pending_knock_off_targets_by_ident.has(ident_key) and not current_item.to_lower().contains("knocked off"):
 		return ""
 
-	return "%s's %s got knocked off!" % [_get_public_item_display_name(item_ident), item_name]
+	return _t("battle.item.knocked_off", {
+		"pokemon": _get_public_item_display_name(item_ident),
+		"item": item_name,
+	})
 
 func _get_public_confirmed_item_from_event(event: Dictionary) -> String:
 	match str(event.get("type", "")):
@@ -5687,8 +5696,8 @@ func _enter_spectator_controls() -> void:
 
 func _get_spectator_status_message() -> String:
 	if team_preview_lead_selection_active:
-		return "Waiting for both players..."
-	return "Waiting for players..."
+		return _t("battle.prompt.waiting_both_players")
+	return _t("battle.spectator.waiting_players")
 
 
 func _on_spectator_switch_sides_pressed() -> void:
@@ -6360,7 +6369,7 @@ func _run_default_trainer_lead_selection() -> Dictionary:
 	_set_battle_input_locked(true)
 	var player_lead_response := await _submit_lead("p1", 1)
 	if not bool(player_lead_response.get("success", false)):
-		var error_message := str(player_lead_response.get("error", "Cannot choose player lead!"))
+		var error_message := str(player_lead_response.get("error", _t("battle.error.choose_player_lead")))
 		current_action_panel.set_message(error_message)
 		_add_battle_log_message(error_message)
 		_set_battle_input_locked(false)
@@ -6368,7 +6377,7 @@ func _run_default_trainer_lead_selection() -> Dictionary:
 
 	var npc_lead_response := await _submit_npc_lead()
 	if not bool(npc_lead_response.get("success", false)):
-		var error_message := str(npc_lead_response.get("error", "The trainer could not choose a lead!"))
+		var error_message := str(npc_lead_response.get("error", _t("battle.error.choose_trainer_lead")))
 		current_action_panel.set_message(error_message)
 		_add_battle_log_message(error_message)
 		_set_battle_input_locked(false)
@@ -6401,7 +6410,7 @@ func _run_trainer_team_preview_lead_selection() -> Dictionary:
 		_set_battle_input_locked(true)
 		var lead_response := await _submit_lead("p1", selected_slot)
 		if not bool(lead_response.get("success", false)):
-			var error_message := str(lead_response.get("error", "Cannot choose that lead!"))
+			var error_message := str(lead_response.get("error", _t("battle.error.choose_lead")))
 			current_action_panel.set_message(error_message)
 			_add_battle_log_message(error_message)
 			_set_battle_input_locked(false)
@@ -6409,7 +6418,7 @@ func _run_trainer_team_preview_lead_selection() -> Dictionary:
 
 		var npc_lead_response := await _submit_npc_lead()
 		if not bool(npc_lead_response.get("success", false)):
-			var error_message := str(npc_lead_response.get("error", "The trainer could not choose a lead!"))
+			var error_message := str(npc_lead_response.get("error", _t("battle.error.choose_trainer_lead")))
 			current_action_panel.set_message(error_message)
 			_add_battle_log_message(error_message)
 			_set_battle_input_locked(false)
@@ -6517,7 +6526,7 @@ func _run_pvp_team_preview_lead_selection(local_player_id: String) -> Dictionary
 		if not pending_completion.is_empty():
 			return _finish_pvp_team_preview_selection(pending_completion)
 		if not bool(lead_response.get("success", false)):
-			var error_message := str(lead_response.get("error", "Cannot choose that lead!"))
+			var error_message := str(lead_response.get("error", _t("battle.error.choose_lead")))
 			current_action_panel.set_message(error_message)
 			_add_battle_log_message(error_message)
 			_set_battle_input_locked(false)
@@ -8790,7 +8799,7 @@ func _format_battle_actor(actor: String, include_side_prefix := true) -> String:
 		actor_name = actor_name.split(": ")[1]
 
 	if include_side_prefix and player_id == "p2" and actor_name != "":
-		return "The opposing %s" % actor_name
+		return _t("battle.event.actor.opposing", {"actor": actor_name})
 
 	return actor_name
 
@@ -8806,19 +8815,19 @@ func _normalize_battle_ident(ident: String) -> String:
 func _format_stat_name(stat: String) -> String:
 	match stat.to_lower().replace(" ", ""):
 		"atk", "attack":
-			return "Attack"
+			return _t("battle.event.stat.name.attack")
 		"def", "defense", "defence":
-			return "Defense"
+			return _t("battle.event.stat.name.defense")
 		"spa", "spatk", "specialattack":
-			return "Sp. Atk"
+			return _t("battle.event.stat.name.special_attack")
 		"spd", "spdef", "specialdefense", "specialdefence":
-			return "Sp. Def"
+			return _t("battle.event.stat.name.special_defense")
 		"spe", "speed":
-			return "Speed"
+			return _t("battle.event.stat.name.speed")
 		"accuracy":
-			return "accuracy"
+			return _t("battle.event.stat.name.accuracy")
 		"evasion":
-			return "evasion"
+			return _t("battle.event.stat.name.evasion")
 
 	return _format_compact_effect_name(stat)
 
@@ -8921,7 +8930,7 @@ func _on_party_grid_party_selected(slot: int) -> void:
 		player_response = await _submit_player_choice_and_resolve("switch", submit_slot)
 
 	if not player_response.get("success", false):
-		var error_message := str(player_response.get("error", "Cannot switch right now!"))
+		var error_message := str(player_response.get("error", _t("battle.error.cannot_switch")))
 		current_action_panel.set_message(error_message)
 		_add_battle_log_message(error_message)
 		if was_force_switch:
@@ -9693,7 +9702,7 @@ func _apply_pvp_connection_log_event(message_type: String, message: Dictionary) 
 	var player_name := _get_pvp_connection_event_display_name(message)
 	match message_type:
 		"pvp.opponent_disconnected":
-			log_message = "%s disconnected." % player_name
+			log_message = _t("battle.connection.disconnected", {"player": player_name})
 		"pvp.reconnect_grace_started":
 			var grace_seconds := _get_int_from_variant(message.get("disconnectGraceSeconds", 0), 0)
 			vs_panel_container.show_reconnect_timer(
@@ -9704,13 +9713,16 @@ func _apply_pvp_connection_log_event(message_type: String, message: Dictionary) 
 			)
 			_sync_pvp_reconnect_timer_pause()
 			if grace_seconds > 0:
-				log_message = "%s has %s seconds to reconnect." % [player_name, grace_seconds]
+				log_message = _t("battle.connection.reconnect_seconds", {
+					"player": player_name,
+					"seconds": grace_seconds,
+				})
 			else:
-				log_message = "Waiting for %s to reconnect." % player_name
+				log_message = _t("battle.connection.waiting_reconnect", {"player": player_name})
 		"pvp.opponent_reconnected":
 			vs_panel_container.clear_reconnect_timer(_get_pvp_connection_event_display_side(message))
 			_sync_pvp_reconnect_timer_pause()
-			log_message = "%s reconnected." % player_name
+			log_message = _t("battle.connection.reconnected", {"player": player_name})
 		_:
 			return false
 
@@ -9753,7 +9765,7 @@ func _get_pvp_connection_event_display_name(message: Dictionary) -> String:
 	if display_side == "p1" or display_side == "p2":
 		return _get_player_display_name(display_side)
 
-	return "Player"
+	return _t("battle.player.generic")
 
 func _get_pvp_connection_event_display_side(message: Dictionary) -> String:
 	var server_side := str(message.get("side", "")).strip_edges()
@@ -11315,7 +11327,7 @@ func _finish_spectator_terminal_message(message: Dictionary) -> void:
 func _finish_pvp_infrastructure_no_contest(message: Dictionary) -> void:
 	if battle_finished or not PvpBattleRealtimeService.is_infrastructure_no_contest_message(message):
 		return
-	_add_battle_log_message("The battle ended as a no contest because battle authority was lost.")
+	_add_battle_log_message(_t("battle.result.no_contest_authority_lost"))
 	current_action_panel.set_message(_t("battle.result.no_contest_message"))
 	_finish_battle({
 		"reason": "infrastructure_no_contest",
@@ -12956,14 +12968,14 @@ func _update_vs_panel_names() -> void:
 func _get_vs_player_name(player_id: String) -> String:
 	if player_id == "p1":
 		var player_name: String = _get_player_display_name("p1")
-		if player_name == "" or player_name == "Player":
+		if player_name == "" or player_name == _t("battle.player.generic"):
 			player_name = PlayerSave.player_name
 		return player_name
 
 	if battle_type == BattleType.WILD:
 		var wild_species: String = _get_active_display_species("p2")
 		if wild_species != "":
-			return "Wild %s" % wild_species
+			return _t("battle.player.wild", {"species": wild_species})
 
 	return _get_player_display_name(player_id)
 
@@ -13089,9 +13101,9 @@ func _get_player_display_name(player_id: String) -> String:
 	if player_name != "":
 		return player_name
 	if player_id == "p1":
-		return "Player"
+		return _t("battle.player.generic")
 
-	return "Opponent"
+	return _t("battle.player.opponent")
 
 func _try_select_move(slot: int) -> void:
 	_focus_battle_ui_layer()

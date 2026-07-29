@@ -140,7 +140,7 @@ custom_minimum_size = Vector2(72, 24)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 14
-text = "Charmander"
+text = ""
 text_overrun_behavior = 3
 vertical_alignment = 1
 

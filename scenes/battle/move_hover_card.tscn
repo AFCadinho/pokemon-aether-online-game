@@ -37,7 +37,7 @@ layout_mode = 2
 
 [node name="NameLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1523645198]
 layout_mode = 2
-text = "Thunderbolt"
+text = ""
 
 [node name="MetaRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1708902655]
 layout_mode = 2
@@ -71,7 +71,7 @@ text = "battle.move.base_power"
 [node name="PowerValueLabel" type="Label" parent="MarginContainer/VBoxContainer/BasePowerRow" unique_id=1180221303]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8745098, 0.92156863, 0.9843137, 1)
-text = "90"
+text = ""
 
 [node name="BasePowerRow2" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=945434555]
 layout_mode = 2
@@ -82,7 +82,7 @@ text = "battle.move.accuracy"
 
 [node name="AccuracyLabel2" type="Label" parent="MarginContainer/VBoxContainer/BasePowerRow2" unique_id=574118617]
 layout_mode = 2
-text = "100%"
+text = ""
 
 [node name="ZEffectRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 visible = false
@@ -99,7 +99,7 @@ custom_minimum_size = Vector2(218, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.941176, 0.886275, 0.682353, 1)
-text = "Attack +1"
+text = ""
 autowrap_mode = 3
 
 [node name="ColorRect2" type="ColorRect" parent="MarginContainer/VBoxContainer" unique_id=457702315]
@@ -111,5 +111,5 @@ custom_minimum_size = Vector2(290, 10)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.6509804, 0.78431374, 1)
 theme_override_font_sizes/font_size = 12
-text = "10% Chance to paralyze the target"
+text = ""
 autowrap_mode = 3

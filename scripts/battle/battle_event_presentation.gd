@@ -148,7 +148,7 @@ func build(event_data: Dictionary) -> Dictionary:
 			if to_name == "":
 				to_name = _format_actor(str(event_data.get("pokemon", "")), false)
 			if to_name == "":
-				to_name = "Pokemon"
+				to_name = ""
 			if player_id == "p1":
 				if forced_switch:
 					presentation["log_message"] = event_text_formatter.format_player_forced_switch_log_message(from_name, to_name)
@@ -234,21 +234,12 @@ func build(event_data: Dictionary) -> Dictionary:
 			recent_move_event = false
 			var actor := _format_actor(str(event_data.get("target", "")))
 			var item_name := str(event_data.get("item", "")).strip_edges()
-			var item_state := str(event_data.get("state", ""))
 			if actor != "" and item_name != "":
-				if item_state == "end":
-					if _is_knock_off_item_end_event(event_data):
-						presentation["log_message"] = "%s's %s got knocked off!" % [actor, item_name]
-					elif _normalize_item_key(item_name) == "boosterenergy":
-						presentation["log_message"] = "%s's %s activated!" % [actor, item_name]
-					elif _normalize_item_key(item_name) == "airballoon":
-						presentation["log_message"] = "%s's Air Balloon popped!" % actor
-					else:
-						presentation["log_message"] = "%s used its %s!" % [actor, item_name]
-				elif _normalize_item_key(item_name) == "airballoon":
-					presentation["log_message"] = "%s floats in the air with its Air Balloon!" % actor
-				else:
-					presentation["log_message"] = "%s's %s was revealed!" % [actor, item_name]
+				presentation["log_message"] = event_text_formatter.format_item_event(
+					event_data,
+					actor,
+					_is_knock_off_item_end_event(event_data),
+				)
 				presentation["battle_message"] = str(presentation["log_message"])
 				presentation["add_blank_after"] = true
 

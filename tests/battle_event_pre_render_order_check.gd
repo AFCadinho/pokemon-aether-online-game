@@ -578,7 +578,7 @@ func _check_pvp_state_and_field_wait_for_render_cursor() -> void:
 		"move controls cannot reopen inside the force-switch render barrier"
 	)
 	_check_equal(
-		show_moves_source.contains('current_action_panel.set_message("Waiting for switch prompt...")'),
+		show_moves_source.contains('current_action_panel.set_message(_t("battle.prompt.waiting_switch"))'),
 		true,
 		"critical-hit text is replaced while waiting for the force-switch phase"
 	)

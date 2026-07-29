@@ -189,17 +189,23 @@ dialog, tooltip, chat system message, or notification.
 9. Localize the launcher and add locale-aware news.
 10. Run the complete release gate in all locales and supported resolutions.
 
+## Completed battle slice
+
+Phase 5 now covers battle menus, action labels, timers, result screens, status and
+field presentation, the damage calculator, and structured battle-event templates.
+Runtime checks cover English, Dutch, and Brazilian Portuguese. Historical battle-log
+lines retain their original render language temporarily; new lines and live controls
+switch immediately.
+
 ## Next implementation slice
 
-The next recommended slice is Phase 5, battle localization:
+The next recommended slice is Phase 6:
 
-- battle menus, action labels, timers, result screens, statuses, weather, terrain, and
-  stat-stage presentation;
-- structured battle-event sentences with named placeholders instead of concatenated
-  English fragments;
-- runtime switching, English fallback, and layout coverage for Dutch and Brazilian
-  Portuguese.
+- locale-aware world sign files with stable sign IDs and English fallback;
+- locale-aware NPC dialogue and display metadata requests;
+- cache isolation by locale and runtime refresh behavior;
+- validation that missing localized content never blocks interaction or gameplay.
 
 Canonical move, ability, species, nature, and type display data remain English until
-their Phase 7 overlays. Raw backend errors remain outside the battle slice and are
-handled through stable error-code mappings in Phase 8.
+their remaining Phase 7 overlays. Raw backend errors remain outside the battle slice
+and are handled through stable error-code mappings in Phase 8.

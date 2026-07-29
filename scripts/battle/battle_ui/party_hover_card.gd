@@ -40,6 +40,8 @@ func _ready() -> void:
 	localization_manager = get_tree().root.get_node_or_null("LocalizationManager")
 	if localization_manager != null and not localization_manager.locale_changed.is_connected(_on_locale_changed):
 		localization_manager.locale_changed.connect(_on_locale_changed)
+	if localization_manager != null:
+		localization_manager.call("localize_tree", self)
 	set_anchors_preset(Control.PRESET_TOP_LEFT)
 	offset_left = 0.0
 	offset_top = 0.0
