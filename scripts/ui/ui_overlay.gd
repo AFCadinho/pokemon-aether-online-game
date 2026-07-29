@@ -5511,14 +5511,20 @@ func _configure_launcher_card_button(
 
 	var title := Label.new()
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	title.text = title_text
+	if LocalizationManager.has_key(title_text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(title, "text", title_text)
+	else:
+		title.text = title_text
 	title.add_theme_font_size_override("font_size", 15)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	labels.add_child(title)
 
 	var subtitle := Label.new()
 	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	subtitle.text = subtitle_text
+	if LocalizationManager.has_key(subtitle_text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(subtitle, "text", subtitle_text)
+	else:
+		subtitle.text = subtitle_text
 	subtitle.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	subtitle.add_theme_font_size_override("font_size", 12)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -20142,31 +20148,34 @@ func _apply_socials_menu_style() -> void:
 
 	var title_label: Label = socials_menu.get_node_or_null("MarginContainer/VBoxContainer/Header/Heading/Title") as Label
 	if title_label != null:
+		_set_localized_control_property(title_label, "text", "ui.social.title")
 		title_label.add_theme_color_override("font_color", UI_TEXT)
 		title_label.add_theme_font_size_override("font_size", 18)
 
 	var subtitle_label: Label = socials_menu.get_node_or_null("MarginContainer/VBoxContainer/Header/Heading/Subtitle") as Label
 	if subtitle_label != null:
+		_set_localized_control_property(subtitle_label, "text", "ui.social.subtitle")
 		subtitle_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	_set_localized_control_property(socials_close_button, "tooltip_text", "common.close")
 
 	_configure_launcher_card_button(
 		socials_friend_list_button,
-		"Friends",
-		"Manage friends and requests",
+		"ui.social.friends",
+		"ui.social.friends_description",
 		SOCIALS_FRIENDS_ICON,
 		Color("#7aa7f4")
 	)
 	_configure_launcher_card_button(
 		socials_players_on_map_button,
-		"Nearby Trainers",
-		"See who is on this map",
+		"ui.social.nearby",
+		"ui.social.nearby_description",
 		SOCIALS_NEARBY_ICON,
 		Color("#60d3ff")
 	)
 	_configure_launcher_card_button(
 		socials_mail_button,
-		"Mail",
-		"Read and send messages",
+		"ui.social.mail",
+		"ui.social.mail_description",
 		SOCIALS_MAIL_ICON,
 		Color("#f0cc70")
 	)
