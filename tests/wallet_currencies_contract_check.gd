@@ -48,8 +48,8 @@ func _init() -> void:
 		"new wallet currencies use dedicated icons"
 	)
 	_check(
-		overlay.contains('dev_aetherite_confirm_button.text = "Add Aetherite"')
-		and overlay.contains('dev_battle_points_confirm_button.text = "Add Battle Points"')
+		overlay.contains('"ui.staff.dev.add_aetherite"')
+		and overlay.contains('"ui.staff.dev.add_battle_points"')
 		and overlay.contains("PlayerWalletService.dev_add_aetherite(amount)")
 		and overlay.contains("PlayerWalletService.dev_add_battle_points(amount)")
 		and overlay.contains("currency_buttons.columns = 2"),

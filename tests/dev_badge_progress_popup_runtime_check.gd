@@ -8,6 +8,10 @@ func _init() -> void:
 
 
 func _run() -> void:
+	var localization_manager := root.get_node_or_null("LocalizationManager")
+	if localization_manager != null:
+		localization_manager.set_locale("en")
+		await process_frame
 	_check(root.get_node_or_null("BadgeProgressionService") != null, "badge progression service autoload is available")
 	var player_save := root.get_node_or_null("PlayerSave")
 	_check(player_save != null, "PlayerSave autoload is available")
@@ -58,6 +62,16 @@ func _run() -> void:
 	_check(popup.find_child("GrantFirstThreeButton", true, false) != null, "first-three bulk developer action exists")
 	_check(popup.find_child("GrantAllButton", true, false) != null, "grant-all developer action exists")
 	_check(popup.find_child("ClearAllButton", true, false) != null, "clear-all developer action exists")
+	if localization_manager != null:
+		localization_manager.set_locale("nl")
+		await process_frame
+		var grant_all_button := popup.find_child("GrantAllButton", true, false) as Button
+		_check(
+			grant_all_button != null and grant_all_button.text == "Alles toekennen",
+			"developer badge actions refresh live in Dutch"
+		)
+		localization_manager.set_locale("en")
+		await process_frame
 
 	popup.visible = true
 	popup.close()

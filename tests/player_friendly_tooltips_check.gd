@@ -42,7 +42,7 @@ func _init() -> void:
 	for phrase: String in TECHNICAL_TOOLTIP_PHRASES:
 		_check(not combined_source.contains(phrase), "tooltips avoid technical phrase: %s" % phrase)
 
-	_check(combined_source.contains('"Create Pokémon for the Alpha"'), "Alpha Tools explains its player-facing purpose")
+	_check(combined_source.contains('"ui.staff.alpha.subtitle"'), "Alpha Tools explains its player-facing purpose")
 	_check(combined_source.contains('tooltip_text = "Search all storage boxes"'), "storage search uses everyday language")
 	_check(combined_source.contains('tooltip_text = "Checking whether your team can enter ranked battles..."'), "ranked team checks use player-facing language")
 	_check(combined_source.contains('"ui.store.safety"'), "Store safety avoids backend terminology")

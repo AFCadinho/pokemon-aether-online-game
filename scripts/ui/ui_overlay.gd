@@ -1370,6 +1370,8 @@ func _ready() -> void:
 	dev_actions_close_button.pressed.connect(_on_dev_actions_close_button_pressed)
 	_refresh_dev_world_time_selector()
 	_refresh_dev_world_weather_selector()
+	if dev_pokemon_popup != null and dev_pokemon_popup.visible:
+		_refresh_dev_pokemon_popup_copy()
 	dev_actions_popup.visible = false
 	_refresh_dev_tools_visibility()
 	if settings_menu.has_signal("closed"):
@@ -1387,6 +1389,15 @@ func _on_locale_changed(_locale: String) -> void:
 	_refresh_market_localized_ui()
 	_refresh_pokedex_localized_ui()
 	_refresh_mail_localized_ui()
+	_refresh_dev_world_time_selector()
+	_refresh_dev_world_weather_selector()
+	if staff_impersonate_token_input != null and not staff_impersonate_in_flight:
+		_on_staff_impersonate_token_changed(staff_impersonate_token_input.text)
+	if staff_teleport_popup != null:
+		_refresh_staff_teleport_tab_visibility()
+		_rebuild_staff_teleport_map_options()
+		_rebuild_staff_teleport_player_options()
+		_rebuild_staff_teleport_send_map_options()
 
 
 func _play_mail_notification_sound() -> void:
@@ -5561,7 +5572,7 @@ func _create_tool_launcher_header(
 	accent_color: Color
 ) -> HBoxContainer:
 	var header := HBoxContainer.new()
-	header.name = "%sHeader" % title_text.replace(" ", "")
+	header.name = "ToolLauncherHeader"
 	header.add_theme_constant_override("separation", 10)
 
 	var accent := Panel.new()
@@ -5581,14 +5592,20 @@ func _create_tool_launcher_header(
 
 	var title := Label.new()
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	title.text = title_text
+	if LocalizationManager.has_key(title_text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(title, "text", title_text)
+	else:
+		title.text = title_text
 	title.add_theme_font_size_override("font_size", 18)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	heading.add_child(title)
 
 	var subtitle := Label.new()
 	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	subtitle.text = subtitle_text
+	if LocalizationManager.has_key(subtitle_text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(subtitle, "text", subtitle_text)
+	else:
+		subtitle.text = subtitle_text
 	subtitle.add_theme_font_size_override("font_size", 12)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	heading.add_child(subtitle)
@@ -5598,7 +5615,7 @@ func _create_tool_launcher_header(
 		if current_parent != null:
 			current_parent.remove_child(close_button)
 		close_button.text = "×"
-		close_button.tooltip_text = "Close"
+		_set_localized_control_property(close_button, "tooltip_text", "common.close")
 		close_button.custom_minimum_size = Vector2(32, 32)
 		close_button.focus_mode = Control.FOCUS_NONE
 		_apply_button_style(close_button)
@@ -5609,7 +5626,10 @@ func _create_tool_launcher_header(
 func _create_tool_section_label(label_text: String, accent_color: Color) -> Label:
 	var label := Label.new()
 	label.name = "Label"
-	label.text = label_text.to_upper()
+	if LocalizationManager.has_key(label_text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(label, "text", label_text)
+	else:
+		label.text = label_text.to_upper()
 	label.add_theme_font_size_override("font_size", 10)
 	label.add_theme_color_override("font_color", accent_color)
 	return label
@@ -5685,7 +5705,10 @@ func _configure_tool_tile_button(
 
 	var title := Label.new()
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	title.text = title_text
+	if LocalizationManager.has_key(title_text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(title, "text", title_text)
+	else:
+		title.text = title_text
 	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	title.add_theme_font_size_override("font_size", 13)
 	title.add_theme_color_override("font_color", UI_TEXT)
@@ -5693,7 +5716,10 @@ func _configure_tool_tile_button(
 
 	var subtitle := Label.new()
 	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	subtitle.text = subtitle_text
+	if LocalizationManager.has_key(subtitle_text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(subtitle, "text", subtitle_text)
+	else:
+		subtitle.text = subtitle_text
 	subtitle.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	subtitle.add_theme_font_size_override("font_size", 10)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -5928,8 +5954,8 @@ func _setup_content_creator_menu_popup() -> void:
 	content_creator_close_button.pressed.connect(_hide_content_creator_menu_popup)
 	layout.add_child(
 		_create_tool_launcher_header(
-			"Alpha Tools",
-			"Create Pokémon for the Alpha",
+			"ui.staff.alpha.title",
+			"ui.staff.alpha.subtitle",
 			content_creator_close_button,
 			Color("#b28ae8")
 		)
@@ -5940,8 +5966,8 @@ func _setup_content_creator_menu_popup() -> void:
 	layout.add_child(content_creator_create_pokemon_button)
 	_configure_launcher_card_button(
 		content_creator_create_pokemon_button,
-		"Create Pokémon",
-		"Build a team for your Alpha adventure",
+		"ui.staff.alpha.create",
+		"ui.staff.alpha.create_description",
 		CONTENT_CREATOR_MENU_ICON,
 		Color("#b28ae8")
 	)
@@ -5951,8 +5977,8 @@ func _setup_content_creator_menu_popup() -> void:
 	layout.add_child(content_creator_clear_party_button)
 	_configure_launcher_card_button(
 		content_creator_clear_party_button,
-		"Clear Alpha Pokémon",
-		"Remove only Pokémon made with Alpha Tools",
+		"ui.staff.alpha.clear",
+		"ui.staff.alpha.clear_description",
 		TOOL_CLEAR_DATA_ICON,
 		Color("#ef7085")
 	)
@@ -5961,7 +5987,7 @@ func _setup_dev_add_item_tools() -> void:
 	var dev_actions_container := dev_clear_party_button.get_parent()
 
 	dev_add_button = Button.new()
-	dev_add_button.text = "Add"
+	_set_localized_control_property(dev_add_button, "text", "ui.staff.dev.add")
 	dev_add_button.custom_minimum_size = Vector2(190, 34)
 	dev_add_button.focus_mode = Control.FOCUS_NONE
 	if dev_actions_container != null:
@@ -5969,7 +5995,7 @@ func _setup_dev_add_item_tools() -> void:
 		dev_actions_container.move_child(dev_add_button, dev_clear_party_button.get_index())
 
 	dev_heal_party_button = Button.new()
-	dev_heal_party_button.text = "Heal"
+	_set_localized_control_property(dev_heal_party_button, "text", "ui.staff.dev.heal")
 	dev_heal_party_button.custom_minimum_size = Vector2(190, 34)
 	dev_heal_party_button.focus_mode = Control.FOCUS_NONE
 	if dev_actions_container != null:
@@ -5977,7 +6003,7 @@ func _setup_dev_add_item_tools() -> void:
 		dev_actions_container.move_child(dev_heal_party_button, dev_clear_party_button.get_index())
 
 	dev_preview_evolution_button = Button.new()
-	dev_preview_evolution_button.text = "Preview Evolution"
+	_set_localized_control_property(dev_preview_evolution_button, "text", "ui.staff.dev.preview_evolution")
 	dev_preview_evolution_button.custom_minimum_size = Vector2(190, 34)
 	dev_preview_evolution_button.focus_mode = Control.FOCUS_NONE
 	if dev_actions_container != null:
@@ -5985,7 +6011,7 @@ func _setup_dev_add_item_tools() -> void:
 		dev_actions_container.move_child(dev_preview_evolution_button, dev_clear_party_button.get_index())
 
 	dev_badge_progress_button = Button.new()
-	dev_badge_progress_button.text = "Trainer Progress"
+	_set_localized_control_property(dev_badge_progress_button, "text", "ui.staff.dev.trainer_progress")
 	dev_badge_progress_button.custom_minimum_size = Vector2(190, 34)
 	dev_badge_progress_button.focus_mode = Control.FOCUS_NONE
 	if dev_actions_container != null:
@@ -6026,8 +6052,8 @@ func _setup_dev_add_item_tools() -> void:
 	dev_add_menu_close_button.pressed.connect(_hide_dev_add_menu_popup)
 	add_layout.add_child(
 		_create_tool_launcher_header(
-			"Add Resources",
-			"Prepare a test account quickly",
+			"ui.staff.dev.resources",
+			"ui.staff.dev.resources_description",
 			dev_add_menu_close_button,
 			Color("#f0cc70")
 		)
@@ -6037,8 +6063,8 @@ func _setup_dev_add_item_tools() -> void:
 	add_layout.add_child(dev_add_item_button)
 	_configure_tool_tile_button(
 		dev_add_item_button,
-		"Add Items",
-		"Search the item catalogue",
+		"ui.staff.dev.add_items",
+		"ui.staff.dev.add_items_description",
 		DEV_ADD_RESOURCES_ICON,
 		Color("#f0cc70")
 	)
@@ -6047,8 +6073,8 @@ func _setup_dev_add_item_tools() -> void:
 	add_layout.add_child(dev_add_money_button)
 	_configure_tool_tile_button(
 		dev_add_money_button,
-		"Add Currency",
-		"Add any wallet currency",
+		"ui.staff.dev.add_currency",
+		"ui.staff.dev.add_currency_description",
 		DEV_ADD_CURRENCY_ICON,
 		Color("#f0cc70")
 	)
@@ -6104,27 +6130,27 @@ func _setup_dev_add_item_tools() -> void:
 	header.add_child(heading)
 
 	var title_label := Label.new()
-	title_label.text = "Add Item"
+	_set_localized_control_property(title_label, "text", "ui.staff.dev.add_item_title")
 	title_label.add_theme_font_size_override("font_size", 19)
 	title_label.add_theme_color_override("font_color", UI_TEXT)
 	heading.add_child(title_label)
 
 	var subtitle_label := Label.new()
-	subtitle_label.text = "Choose an item and set the amount"
+	_set_localized_control_property(subtitle_label, "text", "ui.staff.dev.add_item_subtitle")
 	subtitle_label.add_theme_font_size_override("font_size", 11)
 	subtitle_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	heading.add_child(subtitle_label)
 
 	var close_button := Button.new()
 	close_button.text = "×"
-	close_button.tooltip_text = "Close"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.custom_minimum_size = Vector2(34, 34)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_dev_add_item_popup)
 	header.add_child(close_button)
 
 	dev_item_search_input = LineEdit.new()
-	dev_item_search_input.placeholder_text = "Search item..."
+	_set_localized_control_property(dev_item_search_input, "placeholder_text", "ui.staff.dev.search_item")
 	dev_item_search_input.clear_button_enabled = true
 	dev_item_search_input.custom_minimum_size = Vector2(0, 36)
 	dev_item_search_input.text_changed.connect(_on_dev_item_search_changed)
@@ -6158,7 +6184,7 @@ func _setup_dev_add_item_tools() -> void:
 	layout.add_child(quantity_row)
 
 	var quantity_label := Label.new()
-	quantity_label.text = "AMOUNT"
+	_set_localized_control_property(quantity_label, "text", "ui.staff.dev.amount")
 	quantity_label.custom_minimum_size = Vector2(96, 0)
 	quantity_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	quantity_label.add_theme_color_override("font_color", UI_TEXT)
@@ -6175,7 +6201,7 @@ func _setup_dev_add_item_tools() -> void:
 	quantity_row.add_child(dev_item_quantity_spinbox)
 
 	dev_item_confirm_button = Button.new()
-	dev_item_confirm_button.text = "Add selected item"
+	_set_localized_control_property(dev_item_confirm_button, "text", "ui.staff.dev.add_selected_item")
 	dev_item_confirm_button.custom_minimum_size = Vector2(0, 36)
 	dev_item_confirm_button.disabled = true
 	dev_item_confirm_button.focus_mode = Control.FOCUS_NONE
@@ -6234,20 +6260,20 @@ func _setup_dev_add_item_tools() -> void:
 	money_header.add_child(money_heading)
 
 	var money_title := Label.new()
-	money_title.text = "Add Currency"
+	_set_localized_control_property(money_title, "text", "ui.staff.dev.add_currency")
 	money_title.add_theme_font_size_override("font_size", 19)
 	money_title.add_theme_color_override("font_color", UI_TEXT)
 	money_heading.add_child(money_title)
 
 	var money_subtitle := Label.new()
-	money_subtitle.text = "Set an amount, then choose the balance to update"
+	_set_localized_control_property(money_subtitle, "text", "ui.staff.dev.add_currency_subtitle")
 	money_subtitle.add_theme_font_size_override("font_size", 11)
 	money_subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	money_heading.add_child(money_subtitle)
 
 	var money_close_button := Button.new()
 	money_close_button.text = "×"
-	money_close_button.tooltip_text = "Close"
+	_set_localized_control_property(money_close_button, "tooltip_text", "common.close")
 	money_close_button.custom_minimum_size = Vector2(34, 34)
 	money_close_button.focus_mode = Control.FOCUS_NONE
 	money_close_button.pressed.connect(_hide_dev_add_money_popup)
@@ -6269,7 +6295,7 @@ func _setup_dev_add_item_tools() -> void:
 	amount_margin.add_child(money_row)
 
 	var money_label := Label.new()
-	money_label.text = "AMOUNT"
+	_set_localized_control_property(money_label, "text", "ui.staff.dev.amount")
 	money_label.custom_minimum_size = Vector2(96, 0)
 	money_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	money_label.add_theme_color_override("font_color", UI_TEXT)
@@ -6292,7 +6318,7 @@ func _setup_dev_add_item_tools() -> void:
 	money_layout.add_child(currency_buttons)
 
 	dev_money_confirm_button = Button.new()
-	dev_money_confirm_button.text = "Add Pokédollars"
+	_set_localized_control_property(dev_money_confirm_button, "text", "ui.staff.dev.add_pokedollars")
 	dev_money_confirm_button.custom_minimum_size = Vector2(0, 36)
 	dev_money_confirm_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	dev_money_confirm_button.focus_mode = Control.FOCUS_NONE
@@ -6300,7 +6326,7 @@ func _setup_dev_add_item_tools() -> void:
 	currency_buttons.add_child(dev_money_confirm_button)
 
 	dev_gems_confirm_button = Button.new()
-	dev_gems_confirm_button.text = "Add Aether Gems"
+	_set_localized_control_property(dev_gems_confirm_button, "text", "ui.staff.dev.add_gems")
 	dev_gems_confirm_button.custom_minimum_size = Vector2(0, 36)
 	dev_gems_confirm_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	dev_gems_confirm_button.focus_mode = Control.FOCUS_NONE
@@ -6308,7 +6334,7 @@ func _setup_dev_add_item_tools() -> void:
 	currency_buttons.add_child(dev_gems_confirm_button)
 
 	dev_aetherite_confirm_button = Button.new()
-	dev_aetherite_confirm_button.text = "Add Aetherite"
+	_set_localized_control_property(dev_aetherite_confirm_button, "text", "ui.staff.dev.add_aetherite")
 	dev_aetherite_confirm_button.custom_minimum_size = Vector2(0, 36)
 	dev_aetherite_confirm_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	dev_aetherite_confirm_button.focus_mode = Control.FOCUS_NONE
@@ -6316,7 +6342,7 @@ func _setup_dev_add_item_tools() -> void:
 	currency_buttons.add_child(dev_aetherite_confirm_button)
 
 	dev_battle_points_confirm_button = Button.new()
-	dev_battle_points_confirm_button.text = "Add Battle Points"
+	_set_localized_control_property(dev_battle_points_confirm_button, "text", "ui.staff.dev.add_battle_points")
 	dev_battle_points_confirm_button.custom_minimum_size = Vector2(0, 36)
 	dev_battle_points_confirm_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	dev_battle_points_confirm_button.focus_mode = Control.FOCUS_NONE
@@ -6342,15 +6368,15 @@ func _setup_dev_tools_menu_surface() -> void:
 		_make_panel_style(UI_SURFACE_BASE, Color("#7f6ab5aa"), 12, 1)
 	)
 	var header := _create_tool_launcher_header(
-		"Developer Tools",
-		"Test gameplay and world states",
+		"ui.staff.dev.title",
+		"ui.staff.dev.subtitle",
 		dev_actions_close_button,
 		Color("#b28ae8")
 	)
 	layout.add_child(header)
 	layout.move_child(header, 0)
 
-	var quick_actions_label := _create_tool_section_label("Quick actions", Color("#bda4e8"))
+	var quick_actions_label := _create_tool_section_label("ui.staff.dev.quick_actions", Color("#bda4e8"))
 	layout.add_child(quick_actions_label)
 	layout.move_child(quick_actions_label, 1)
 
@@ -6377,55 +6403,55 @@ func _setup_dev_tools_menu_surface() -> void:
 
 	_configure_tool_tile_button(
 		dev_add_pokemon_button,
-		"Create Pokémon",
-		"Build a party member",
+		"ui.staff.dev.create_pokemon",
+		"ui.staff.dev.create_pokemon_description",
 		DEV_CREATE_POKEMON_ICON,
 		Color("#7aa7f4")
 	)
 	_configure_tool_tile_button(
 		dev_spawn_pokemon_button,
-		"Start Encounter",
-		"Spawn a wild battle",
+		"ui.staff.dev.start_encounter",
+		"ui.staff.dev.start_encounter_description",
 		DEV_SPAWN_ENCOUNTER_ICON,
 		Color("#60d3ff")
 	)
 	_configure_tool_tile_button(
 		dev_add_button,
-		"Add Resources",
-		"Items or wallet currencies",
+		"ui.staff.dev.resources",
+		"ui.staff.dev.resources_short_description",
 		DEV_ADD_RESOURCES_ICON,
 		Color("#f0cc70")
 	)
 	_configure_tool_tile_button(
 		dev_heal_party_button,
-		"Heal Party",
-		"Restore the active team",
+		"ui.staff.dev.heal_party",
+		"ui.staff.dev.heal_party_description",
 		DEV_HEAL_PARTY_ICON,
 		Color("#6ee7a2")
 	)
 	_configure_tool_tile_button(
 		dev_preview_evolution_button,
-		"Preview Evolution",
-		"Play the evolution flow",
+		"ui.staff.dev.preview_evolution",
+		"ui.staff.dev.preview_evolution_description",
 		DEV_PREVIEW_EVOLUTION_ICON,
 		Color("#b28ae8")
 	)
 	_configure_tool_tile_button(
 		dev_badge_progress_button,
-		"Trainer Progress",
-		"Manage server Gym Badges",
+		"ui.staff.dev.trainer_progress",
+		"ui.staff.dev.trainer_progress_description",
 		DEV_TRAINER_PROGRESS_ICON,
 		Color("#e3bd68")
 	)
 	_configure_tool_tile_button(
 		dev_clear_party_button,
-		"Clear Data",
-		"Party or inventory",
+		"ui.staff.dev.clear_data",
+		"ui.staff.dev.clear_data_description",
 		TOOL_CLEAR_DATA_ICON,
 		Color("#ef7085")
 	)
 
-	var world_label := _create_tool_section_label("World preview", Color("#75d9ed"))
+	var world_label := _create_tool_section_label("ui.staff.dev.world_preview", Color("#75d9ed"))
 	layout.add_child(world_label)
 
 	var world_panel := PanelContainer.new()
@@ -6454,7 +6480,7 @@ func _setup_dev_tools_menu_surface() -> void:
 	_move_tool_menu_control(world_time_label, time_group)
 	_move_tool_menu_control(dev_world_time_select, time_group)
 	if world_time_label != null:
-		world_time_label.text = "Time"
+		_set_localized_control_property(world_time_label, "text", "ui.staff.dev.time")
 		world_time_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		world_time_label.add_theme_font_size_override("font_size", 11)
 
@@ -6465,7 +6491,7 @@ func _setup_dev_tools_menu_surface() -> void:
 	_move_tool_menu_control(world_weather_label, weather_group)
 	_move_tool_menu_control(dev_world_weather_select, weather_group)
 	if world_weather_label != null:
-		world_weather_label.text = "Weather"
+		_set_localized_control_property(world_weather_label, "text", "ui.staff.dev.weather")
 		world_weather_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		world_weather_label.add_theme_font_size_override("font_size", 11)
 
@@ -6511,8 +6537,8 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_tools_close_button.pressed.connect(_hide_staff_tools_popup)
 	tools_layout.add_child(
 		_create_tool_launcher_header(
-			"Staff Tools",
-			"Moderation and player assistance",
+			"ui.staff.tools.title",
+			"ui.staff.tools.subtitle",
 			staff_tools_close_button,
 			Color("#60d3ff")
 		)
@@ -6523,8 +6549,8 @@ func _setup_staff_impersonation_tools() -> void:
 	tools_layout.add_child(staff_teleport_button)
 	_configure_launcher_card_button(
 		staff_teleport_button,
-		"Teleport",
-		"Move yourself or assist another trainer",
+		"ui.staff.teleport.action",
+		"ui.staff.teleport.action_description",
 		STAFF_TELEPORT_ICON,
 		Color("#60d3ff")
 	)
@@ -6534,8 +6560,8 @@ func _setup_staff_impersonation_tools() -> void:
 	tools_layout.add_child(staff_impersonate_button)
 	_configure_launcher_card_button(
 		staff_impersonate_button,
-		"Impersonate",
-		"Enter a secure staff session",
+		"ui.staff.impersonate.action",
+		"ui.staff.impersonate.action_description",
 		STAFF_IMPERSONATE_ICON,
 		Color("#b28ae8")
 	)
@@ -6608,20 +6634,20 @@ func _setup_staff_impersonation_tools() -> void:
 	header.add_child(impersonate_heading)
 
 	var title_label := Label.new()
-	title_label.text = "Staff Impersonation"
+	_set_localized_control_property(title_label, "text", "ui.staff.impersonate.title")
 	title_label.add_theme_font_size_override("font_size", 20)
 	title_label.add_theme_color_override("font_color", UI_TEXT)
 	impersonate_heading.add_child(title_label)
 
 	var impersonate_subtitle := Label.new()
-	impersonate_subtitle.text = "Start a temporary secure account session"
+	_set_localized_control_property(impersonate_subtitle, "text", "ui.staff.impersonate.subtitle")
 	impersonate_subtitle.add_theme_font_size_override("font_size", 11)
 	impersonate_subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	impersonate_heading.add_child(impersonate_subtitle)
 
 	var close_button := Button.new()
 	close_button.text = "×"
-	close_button.tooltip_text = "Close"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.custom_minimum_size = Vector2(34, 34)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_staff_impersonate_popup)
@@ -6655,25 +6681,33 @@ func _setup_staff_impersonation_tools() -> void:
 	security_copy.add_theme_constant_override("separation", 2)
 	security_row.add_child(security_copy)
 	var security_title := Label.new()
-	security_title.text = "SECURE STAFF ACTION"
+	_set_localized_control_property(security_title, "text", "ui.staff.impersonate.security_title")
 	security_title.add_theme_font_size_override("font_size", 10)
 	security_title.add_theme_color_override("font_color", Color("#d9b5ff"))
 	security_copy.add_child(security_title)
 	var security_description := Label.new()
-	security_description.text = "Use a single-use token from the admin portal. This replaces the active account for this client and clears the saved session."
+	_set_localized_control_property(
+		security_description,
+		"text",
+		"ui.staff.impersonate.security_description"
+	)
 	security_description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	security_description.add_theme_font_size_override("font_size", 11)
 	security_description.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	security_copy.add_child(security_description)
 
 	var token_caption := Label.new()
-	token_caption.text = "IMPERSONATION TOKEN"
+	_set_localized_control_property(token_caption, "text", "ui.staff.impersonate.token")
 	token_caption.add_theme_font_size_override("font_size", 10)
 	token_caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	layout.add_child(token_caption)
 
 	staff_impersonate_token_input = LineEdit.new()
-	staff_impersonate_token_input.placeholder_text = "Paste single-use token"
+	_set_localized_control_property(
+		staff_impersonate_token_input,
+		"placeholder_text",
+		"ui.staff.impersonate.token_placeholder"
+	)
 	staff_impersonate_token_input.custom_minimum_size = Vector2(0, 42)
 	staff_impersonate_token_input.secret = true
 	staff_impersonate_token_input.secret_character = "•"
@@ -6683,7 +6717,11 @@ func _setup_staff_impersonation_tools() -> void:
 	layout.add_child(staff_impersonate_token_input)
 
 	staff_impersonate_status_label = Label.new()
-	staff_impersonate_status_label.text = "The token is never displayed or stored by the client."
+	_set_localized_control_property(
+		staff_impersonate_status_label,
+		"text",
+		"ui.staff.impersonate.token_safety"
+	)
 	staff_impersonate_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	staff_impersonate_status_label.add_theme_font_size_override("font_size", 11)
 	staff_impersonate_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -6694,14 +6732,18 @@ func _setup_staff_impersonation_tools() -> void:
 	impersonate_actions.add_theme_constant_override("separation", 8)
 	layout.add_child(impersonate_actions)
 	var impersonate_cancel_button := Button.new()
-	impersonate_cancel_button.text = "Cancel"
+	_set_localized_control_property(impersonate_cancel_button, "text", "common.cancel")
 	impersonate_cancel_button.custom_minimum_size = Vector2(112, 40)
 	impersonate_cancel_button.focus_mode = Control.FOCUS_NONE
 	impersonate_cancel_button.pressed.connect(_hide_staff_impersonate_popup)
 	impersonate_actions.add_child(impersonate_cancel_button)
 
 	staff_impersonate_confirm_button = Button.new()
-	staff_impersonate_confirm_button.text = "Start Secure Session"
+	_set_localized_control_property(
+		staff_impersonate_confirm_button,
+		"text",
+		"ui.staff.impersonate.confirm"
+	)
 	staff_impersonate_confirm_button.custom_minimum_size = Vector2(210, 40)
 	staff_impersonate_confirm_button.focus_mode = Control.FOCUS_NONE
 	staff_impersonate_confirm_button.disabled = true
@@ -6745,7 +6787,7 @@ func _setup_staff_impersonation_tools() -> void:
 	teleport_layout.add_child(teleport_header)
 
 	var teleport_title := Label.new()
-	teleport_title.text = "Staff Teleporter"
+	_set_localized_control_property(teleport_title, "text", "ui.staff.teleport.title")
 	teleport_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	teleport_title.add_theme_font_size_override("font_size", 18)
 	teleport_title.add_theme_color_override("font_color", UI_TEXT)
@@ -6755,7 +6797,7 @@ func _setup_staff_impersonation_tools() -> void:
 
 	var teleport_close_button := Button.new()
 	teleport_close_button.text = "×"
-	teleport_close_button.tooltip_text = "Close"
+	_set_localized_control_property(teleport_close_button, "tooltip_text", "common.close")
 	teleport_close_button.custom_minimum_size = Vector2(34, 34)
 	teleport_close_button.focus_mode = Control.FOCUS_NONE
 	teleport_close_button.pressed.connect(_hide_staff_teleport_popup)
@@ -6766,7 +6808,11 @@ func _setup_staff_impersonation_tools() -> void:
 	teleport_layout.add_child(teleport_tab_bar)
 
 	staff_teleport_self_tab_button = Button.new()
-	staff_teleport_self_tab_button.text = "Teleport Self"
+	_set_localized_control_property(
+		staff_teleport_self_tab_button,
+		"text",
+		"ui.staff.teleport.self"
+	)
 	staff_teleport_self_tab_button.custom_minimum_size = Vector2(0, 40)
 	staff_teleport_self_tab_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_self_tab_button.focus_mode = Control.FOCUS_NONE
@@ -6774,7 +6820,11 @@ func _setup_staff_impersonation_tools() -> void:
 	teleport_tab_bar.add_child(staff_teleport_self_tab_button)
 
 	staff_teleport_player_tab_button = Button.new()
-	staff_teleport_player_tab_button.text = "Player Actions"
+	_set_localized_control_property(
+		staff_teleport_player_tab_button,
+		"text",
+		"ui.staff.teleport.player_actions"
+	)
 	staff_teleport_player_tab_button.custom_minimum_size = Vector2(0, 40)
 	staff_teleport_player_tab_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_player_tab_button.focus_mode = Control.FOCUS_NONE
@@ -6801,7 +6851,11 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_self_section.add_child(_create_staff_teleport_section_title("Map"))
 
 	staff_teleport_destination_search = LineEdit.new()
-	staff_teleport_destination_search.placeholder_text = "Search map…"
+	_set_localized_control_property(
+		staff_teleport_destination_search,
+		"placeholder_text",
+		"ui.staff.teleport.search_map"
+	)
 	staff_teleport_destination_search.custom_minimum_size = Vector2(0, 38)
 	staff_teleport_destination_search.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_destination_search.text_changed.connect(_on_staff_teleport_destination_search_changed)
@@ -6810,7 +6864,11 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_self_section.add_child(_create_staff_teleport_section_title("Spawn point"))
 
 	staff_teleport_spawn_search = LineEdit.new()
-	staff_teleport_spawn_search.placeholder_text = "Search spawn point…"
+	_set_localized_control_property(
+		staff_teleport_spawn_search,
+		"placeholder_text",
+		"ui.staff.teleport.search_spawn"
+	)
 	staff_teleport_spawn_search.custom_minimum_size = Vector2(0, 38)
 	staff_teleport_spawn_search.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_spawn_search.text_changed.connect(_on_staff_teleport_spawn_search_changed)
@@ -6824,20 +6882,32 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_self_section.add_child(staff_teleport_destination_results)
 
 	staff_teleport_selected_destination_label = Label.new()
-	staff_teleport_selected_destination_label.text = "No destination selected"
+	_set_localized_control_property(
+		staff_teleport_selected_destination_label,
+		"text",
+		"ui.staff.teleport.no_destination"
+	)
 	staff_teleport_selected_destination_label.add_theme_font_size_override("font_size", 12)
 	staff_teleport_selected_destination_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	staff_teleport_selected_destination_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	staff_teleport_self_section.add_child(staff_teleport_selected_destination_label)
 
 	staff_teleport_self_reason_input = LineEdit.new()
-	staff_teleport_self_reason_input.placeholder_text = "Self teleport reason (optional)"
+	_set_localized_control_property(
+		staff_teleport_self_reason_input,
+		"placeholder_text",
+		"ui.staff.teleport.self_reason"
+	)
 	staff_teleport_self_reason_input.custom_minimum_size = Vector2(0, 38)
 	staff_teleport_self_reason_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_self_section.add_child(staff_teleport_self_reason_input)
 
 	staff_teleport_confirm_button = Button.new()
-	staff_teleport_confirm_button.text = "Teleport Self"
+	_set_localized_control_property(
+		staff_teleport_confirm_button,
+		"text",
+		"ui.staff.teleport.self"
+	)
 	staff_teleport_confirm_button.custom_minimum_size = Vector2(0, 36)
 	staff_teleport_confirm_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_confirm_button.focus_mode = Control.FOCUS_NONE
@@ -6849,11 +6919,17 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_player_section.add_theme_constant_override("separation", 7)
 	teleport_body.add_child(staff_teleport_player_section)
 
-	staff_teleport_player_title = _create_staff_teleport_section_title("Player") as Label
+	staff_teleport_player_title = _create_staff_teleport_section_title(
+		"ui.staff.teleport.player"
+	) as Label
 	staff_teleport_player_section.add_child(staff_teleport_player_title)
 
 	staff_teleport_player_search_input = LineEdit.new()
-	staff_teleport_player_search_input.placeholder_text = "Search online player…"
+	_set_localized_control_property(
+		staff_teleport_player_search_input,
+		"placeholder_text",
+		"ui.staff.teleport.search_online_player"
+	)
 	staff_teleport_player_search_input.custom_minimum_size = Vector2(0, 36)
 	staff_teleport_player_search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_player_search_input.text_changed.connect(_on_staff_teleport_player_search_changed)
@@ -6867,7 +6943,11 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_player_section.add_child(staff_teleport_player_results)
 
 	staff_teleport_selected_player_label = Label.new()
-	staff_teleport_selected_player_label.text = "Selected player: none"
+	_set_localized_control_property(
+		staff_teleport_selected_player_label,
+		"text",
+		"ui.staff.teleport.no_player"
+	)
 	staff_teleport_selected_player_label.add_theme_font_size_override("font_size", 12)
 	staff_teleport_selected_player_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	staff_teleport_selected_player_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -6878,7 +6958,11 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_player_section.add_child(player_action_mode_bar)
 
 	staff_teleport_to_player_mode_button = Button.new()
-	staff_teleport_to_player_mode_button.text = "To Player"
+	_set_localized_control_property(
+		staff_teleport_to_player_mode_button,
+		"text",
+		"ui.staff.teleport.to_player_short"
+	)
 	staff_teleport_to_player_mode_button.custom_minimum_size = Vector2(0, 34)
 	staff_teleport_to_player_mode_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_to_player_mode_button.focus_mode = Control.FOCUS_NONE
@@ -6886,7 +6970,11 @@ func _setup_staff_impersonation_tools() -> void:
 	player_action_mode_bar.add_child(staff_teleport_to_player_mode_button)
 
 	staff_teleport_send_player_mode_button = Button.new()
-	staff_teleport_send_player_mode_button.text = "Send Safe"
+	_set_localized_control_property(
+		staff_teleport_send_player_mode_button,
+		"text",
+		"ui.staff.teleport.send_safe"
+	)
 	staff_teleport_send_player_mode_button.custom_minimum_size = Vector2(0, 34)
 	staff_teleport_send_player_mode_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_send_player_mode_button.focus_mode = Control.FOCUS_NONE
@@ -6902,7 +6990,11 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_send_section.add_child(_create_staff_teleport_section_title("Map"))
 
 	staff_teleport_send_map_search = LineEdit.new()
-	staff_teleport_send_map_search.placeholder_text = "Search map…"
+	_set_localized_control_property(
+		staff_teleport_send_map_search,
+		"placeholder_text",
+		"ui.staff.teleport.search_map"
+	)
 	staff_teleport_send_map_search.custom_minimum_size = Vector2(0, 38)
 	staff_teleport_send_map_search.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_send_map_search.text_changed.connect(_on_staff_teleport_send_destination_search_changed)
@@ -6911,7 +7003,11 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_send_section.add_child(_create_staff_teleport_section_title("Spawn point"))
 
 	staff_teleport_send_spawn_search = LineEdit.new()
-	staff_teleport_send_spawn_search.placeholder_text = "Search spawn point…"
+	_set_localized_control_property(
+		staff_teleport_send_spawn_search,
+		"placeholder_text",
+		"ui.staff.teleport.search_spawn"
+	)
 	staff_teleport_send_spawn_search.custom_minimum_size = Vector2(0, 38)
 	staff_teleport_send_spawn_search.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_send_spawn_search.text_changed.connect(_on_staff_teleport_send_destination_search_changed)
@@ -6925,13 +7021,21 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_send_section.add_child(staff_teleport_send_destination_results)
 
 	staff_teleport_player_reason_input = LineEdit.new()
-	staff_teleport_player_reason_input.placeholder_text = "Player action reason (optional)"
+	_set_localized_control_property(
+		staff_teleport_player_reason_input,
+		"placeholder_text",
+		"ui.staff.teleport.player_reason"
+	)
 	staff_teleport_player_reason_input.custom_minimum_size = Vector2(0, 38)
 	staff_teleport_player_reason_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_player_section.add_child(staff_teleport_player_reason_input)
 
 	staff_teleport_to_player_button = Button.new()
-	staff_teleport_to_player_button.text = "Teleport To Player"
+	_set_localized_control_property(
+		staff_teleport_to_player_button,
+		"text",
+		"ui.staff.teleport.to_player"
+	)
 	staff_teleport_to_player_button.custom_minimum_size = Vector2(0, 36)
 	staff_teleport_to_player_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_to_player_button.focus_mode = Control.FOCUS_NONE
@@ -6939,7 +7043,11 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_player_section.add_child(staff_teleport_to_player_button)
 
 	staff_teleport_send_player_button = Button.new()
-	staff_teleport_send_player_button.text = "Send To Safe Location"
+	_set_localized_control_property(
+		staff_teleport_send_player_button,
+		"text",
+		"ui.staff.teleport.move_safe"
+	)
 	staff_teleport_send_player_button.custom_minimum_size = Vector2(0, 36)
 	staff_teleport_send_player_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_send_player_button.focus_mode = Control.FOCUS_NONE
@@ -6975,7 +7083,10 @@ func _setup_staff_impersonation_tools() -> void:
 
 func _create_staff_teleport_section_title(title_text: String) -> Label:
 	var label := Label.new()
-	label.text = title_text
+	if LocalizationManager.has_key(title_text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(label, "text", title_text)
+	else:
+		label.text = title_text
 	label.add_theme_font_size_override("font_size", 14)
 	label.add_theme_color_override("font_color", UI_TEXT)
 	label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.35))
@@ -7030,19 +7141,23 @@ func _apply_staff_teleport_revamp(
 	header.add_child(heading)
 	header.move_child(heading, 2)
 	title.reparent(heading)
-	title.text = "Staff Teleporter"
+	_set_localized_control_property(title, "text", "ui.staff.teleport.title")
 	title.add_theme_font_size_override("font_size", 20)
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	var subtitle := Label.new()
-	subtitle.text = "Move yourself or assist an online player"
+	_set_localized_control_property(subtitle, "text", "ui.staff.teleport.subtitle")
 	subtitle.add_theme_font_size_override("font_size", 11)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	heading.add_child(subtitle)
 
 	close_button.text = "×"
-	close_button.tooltip_text = "Close teleporter"
+	_set_localized_control_property(
+		close_button,
+		"tooltip_text",
+		"ui.staff.teleport.close"
+	)
 	tab_bar.add_theme_constant_override("separation", 8)
 	body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -7075,8 +7190,10 @@ func _build_staff_teleport_self_workspace() -> void:
 	var browser_header := HBoxContainer.new()
 	browser_header.add_theme_constant_override("separation", 8)
 	browser_layout.add_child(browser_header)
-	browser_header.add_child(_create_staff_teleport_caption("DESTINATIONS"))
-	staff_teleport_destination_status_label = _create_staff_teleport_status_label("Waiting for destinations")
+	browser_header.add_child(_create_staff_teleport_caption("ui.staff.teleport.destinations"))
+	staff_teleport_destination_status_label = _create_staff_teleport_status_label(
+		"ui.staff.teleport.waiting_destinations"
+	)
 	staff_teleport_destination_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_destination_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	browser_header.add_child(staff_teleport_destination_status_label)
@@ -7084,9 +7201,17 @@ func _build_staff_teleport_self_workspace() -> void:
 	var self_search_row := HBoxContainer.new()
 	self_search_row.add_theme_constant_override("separation", 8)
 	browser_layout.add_child(self_search_row)
-	staff_teleport_destination_search.placeholder_text = "Search map..."
+	_set_localized_control_property(
+		staff_teleport_destination_search,
+		"placeholder_text",
+		"ui.staff.teleport.search_map"
+	)
 	staff_teleport_destination_search.reparent(self_search_row)
-	staff_teleport_spawn_search.placeholder_text = "Search spawn point..."
+	_set_localized_control_property(
+		staff_teleport_spawn_search,
+		"placeholder_text",
+		"ui.staff.teleport.search_spawn"
+	)
 	staff_teleport_spawn_search.reparent(self_search_row)
 	staff_teleport_destination_results.custom_minimum_size = Vector2(0, 350)
 	staff_teleport_destination_results.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -7094,7 +7219,7 @@ func _build_staff_teleport_self_workspace() -> void:
 
 	var action_surface := _create_staff_teleport_surface(columns, Vector2(356, 0), Color("#4e8bb899"))
 	var action_layout := action_surface.get("layout") as VBoxContainer
-	action_layout.add_child(_create_staff_teleport_caption("SELECTED DESTINATION"))
+	action_layout.add_child(_create_staff_teleport_caption("ui.staff.teleport.selected_destination"))
 	var destination_card := _create_staff_teleport_selection_card(STAFF_TELEPORT_ICON)
 	action_layout.add_child(destination_card.get("panel") as PanelContainer)
 	var destination_card_row := destination_card.get("row") as HBoxContainer
@@ -7107,7 +7232,7 @@ func _build_staff_teleport_self_workspace() -> void:
 	staff_teleport_selected_destination_label.add_theme_font_size_override("font_size", 14)
 
 	var self_hint := Label.new()
-	self_hint.text = "Choose a map and spawn point. Your current session will move through the authorized teleport flow."
+	_set_localized_control_property(self_hint, "text", "ui.staff.teleport.self_hint")
 	self_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	self_hint.add_theme_font_size_override("font_size", 11)
 	self_hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -7116,10 +7241,18 @@ func _build_staff_teleport_self_workspace() -> void:
 	var self_spacer := Control.new()
 	self_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	action_layout.add_child(self_spacer)
-	action_layout.add_child(_create_staff_teleport_caption("STAFF NOTE"))
-	staff_teleport_self_reason_input.placeholder_text = "Reason (optional)"
+	action_layout.add_child(_create_staff_teleport_caption("ui.staff.teleport.staff_note"))
+	_set_localized_control_property(
+		staff_teleport_self_reason_input,
+		"placeholder_text",
+		"ui.staff.teleport.reason"
+	)
 	staff_teleport_self_reason_input.reparent(action_layout)
-	staff_teleport_confirm_button.text = "Teleport Self"
+	_set_localized_control_property(
+		staff_teleport_confirm_button,
+		"text",
+		"ui.staff.teleport.self"
+	)
 	staff_teleport_confirm_button.custom_minimum_size = Vector2(0, 44)
 	staff_teleport_confirm_button.reparent(action_layout)
 
@@ -7144,12 +7277,18 @@ func _build_staff_teleport_player_workspace() -> void:
 	var player_header := HBoxContainer.new()
 	player_header.add_theme_constant_override("separation", 8)
 	player_layout.add_child(player_header)
-	player_header.add_child(_create_staff_teleport_caption("ONLINE PLAYERS"))
-	staff_teleport_player_results_status_label = _create_staff_teleport_status_label("Waiting for players")
+	player_header.add_child(_create_staff_teleport_caption("ui.staff.teleport.online_players"))
+	staff_teleport_player_results_status_label = _create_staff_teleport_status_label(
+		"ui.staff.teleport.waiting_players"
+	)
 	staff_teleport_player_results_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_player_results_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	player_header.add_child(staff_teleport_player_results_status_label)
-	staff_teleport_player_search_input.placeholder_text = "Search name or username..."
+	_set_localized_control_property(
+		staff_teleport_player_search_input,
+		"placeholder_text",
+		"ui.staff.teleport.search_player"
+	)
 	staff_teleport_player_search_input.reparent(player_layout)
 	staff_teleport_player_results.custom_minimum_size = Vector2(0, 350)
 	staff_teleport_player_results.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -7157,7 +7296,7 @@ func _build_staff_teleport_player_workspace() -> void:
 
 	var action_surface := _create_staff_teleport_surface(columns, Vector2(488, 0), Color("#4e8bb899"))
 	var action_layout := action_surface.get("layout") as VBoxContainer
-	action_layout.add_child(_create_staff_teleport_caption("SELECTED PLAYER"))
+	action_layout.add_child(_create_staff_teleport_caption("ui.staff.teleport.selected_player"))
 	var player_card := _create_staff_teleport_selection_card(SOCIALS_NEARBY_ICON)
 	action_layout.add_child(player_card.get("panel") as PanelContainer)
 	var player_card_row := player_card.get("row") as HBoxContainer
@@ -7170,18 +7309,30 @@ func _build_staff_teleport_player_workspace() -> void:
 	staff_teleport_selected_player_label.add_theme_font_size_override("font_size", 14)
 
 	staff_teleport_player_action_hint = Label.new()
-	staff_teleport_player_action_hint.text = "Select a player to unlock staff actions."
+	_set_localized_control_property(
+		staff_teleport_player_action_hint,
+		"text",
+		"ui.staff.teleport.select_player_hint"
+	)
 	staff_teleport_player_action_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	staff_teleport_player_action_hint.add_theme_font_size_override("font_size", 11)
 	staff_teleport_player_action_hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	action_layout.add_child(staff_teleport_player_action_hint)
 
-	action_layout.add_child(_create_staff_teleport_caption("ACTION"))
+	action_layout.add_child(_create_staff_teleport_caption("ui.staff.teleport.action_caption"))
 	var mode_bar := staff_teleport_to_player_mode_button.get_parent() as HBoxContainer
 	if mode_bar != null:
 		mode_bar.reparent(action_layout)
-	staff_teleport_to_player_mode_button.text = "Go to Player"
-	staff_teleport_send_player_mode_button.text = "Move Player Safely"
+	_set_localized_control_property(
+		staff_teleport_to_player_mode_button,
+		"text",
+		"ui.staff.teleport.go_to_player"
+	)
+	_set_localized_control_property(
+		staff_teleport_send_player_mode_button,
+		"text",
+		"ui.staff.teleport.move_player_safely"
+	)
 
 	var send_content := staff_teleport_send_section as VBoxContainer
 	if send_content != null:
@@ -7192,8 +7343,10 @@ func _build_staff_teleport_player_workspace() -> void:
 		safe_header.add_theme_constant_override("separation", 8)
 		send_content.add_child(safe_header)
 		send_content.move_child(safe_header, 0)
-		safe_header.add_child(_create_staff_teleport_caption("SAFE DESTINATION"))
-		staff_teleport_safe_destination_status_label = _create_staff_teleport_status_label("Waiting for destinations")
+		safe_header.add_child(_create_staff_teleport_caption("ui.staff.teleport.safe_destination"))
+		staff_teleport_safe_destination_status_label = _create_staff_teleport_status_label(
+			"ui.staff.teleport.waiting_destinations"
+		)
 		staff_teleport_safe_destination_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		staff_teleport_safe_destination_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 		safe_header.add_child(staff_teleport_safe_destination_status_label)
@@ -7202,9 +7355,17 @@ func _build_staff_teleport_player_workspace() -> void:
 		safe_search_row.add_theme_constant_override("separation", 8)
 		send_content.add_child(safe_search_row)
 		send_content.move_child(safe_search_row, 1)
-		staff_teleport_send_map_search.placeholder_text = "Search map..."
+		_set_localized_control_property(
+			staff_teleport_send_map_search,
+			"placeholder_text",
+			"ui.staff.teleport.search_map"
+		)
 		staff_teleport_send_map_search.reparent(safe_search_row)
-		staff_teleport_send_spawn_search.placeholder_text = "Search spawn..."
+		_set_localized_control_property(
+			staff_teleport_send_spawn_search,
+			"placeholder_text",
+			"ui.staff.teleport.search_spawn_short"
+		)
 		staff_teleport_send_spawn_search.reparent(safe_search_row)
 		staff_teleport_send_destination_results.custom_minimum_size = Vector2(0, 100)
 		staff_teleport_send_destination_results.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -7228,13 +7389,25 @@ func _build_staff_teleport_player_workspace() -> void:
 	var player_spacer := Control.new()
 	player_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	action_layout.add_child(player_spacer)
-	action_layout.add_child(_create_staff_teleport_caption("STAFF NOTE"))
-	staff_teleport_player_reason_input.placeholder_text = "Player action reason (optional)"
+	action_layout.add_child(_create_staff_teleport_caption("ui.staff.teleport.staff_note"))
+	_set_localized_control_property(
+		staff_teleport_player_reason_input,
+		"placeholder_text",
+		"ui.staff.teleport.player_reason"
+	)
 	staff_teleport_player_reason_input.reparent(action_layout)
-	staff_teleport_to_player_button.text = "Teleport to Player"
+	_set_localized_control_property(
+		staff_teleport_to_player_button,
+		"text",
+		"ui.staff.teleport.to_player"
+	)
 	staff_teleport_to_player_button.custom_minimum_size = Vector2(0, 44)
 	staff_teleport_to_player_button.reparent(action_layout)
-	staff_teleport_send_player_button.text = "Move Player to Safe Location"
+	_set_localized_control_property(
+		staff_teleport_send_player_button,
+		"text",
+		"ui.staff.teleport.move_safe"
+	)
 	staff_teleport_send_player_button.custom_minimum_size = Vector2(0, 44)
 	staff_teleport_send_player_button.reparent(action_layout)
 
@@ -7269,14 +7442,20 @@ func _create_staff_teleport_surface(
 
 func _create_staff_teleport_caption(text: String) -> Label:
 	var label := Label.new()
-	label.text = text
+	if LocalizationManager.has_key(text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(label, "text", text)
+	else:
+		label.text = text
 	label.add_theme_font_size_override("font_size", 10)
 	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	return label
 
 func _create_staff_teleport_status_label(text: String) -> Label:
 	var label := Label.new()
-	label.text = text
+	if LocalizationManager.has_key(text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(label, "text", text)
+	else:
+		label.text = text
 	label.add_theme_font_size_override("font_size", 10)
 	label.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.76))
 	return label
@@ -23137,14 +23316,14 @@ func _hide_staff_tools_popup() -> void:
 
 func _on_staff_impersonate_button_pressed() -> void:
 	if not _can_impersonate_accounts():
-		_add_chat_message("You do not have permission to impersonate accounts.")
+		_add_chat_message(LocalizationManager.text("ui.staff.error.no_impersonate_permission"))
 		return
 	if staff_impersonate_popup == null:
 		return
 	staff_impersonate_popup.visible = not staff_impersonate_popup.visible
 	if staff_impersonate_popup.visible and staff_impersonate_token_input != null:
 		_activate_ui_panel(staff_impersonate_popup)
-		_set_staff_impersonate_status("The token is never displayed or stored by the client.")
+		_set_staff_impersonate_status("ui.staff.impersonate.token_safety")
 		staff_impersonate_confirm_button.disabled = staff_impersonate_token_input.text.strip_edges() == ""
 		staff_impersonate_token_input.grab_focus()
 	elif not staff_impersonate_popup.visible:
@@ -23159,13 +23338,17 @@ func _hide_staff_impersonate_popup() -> void:
 	if staff_impersonate_token_input != null:
 		staff_impersonate_token_input.clear()
 		staff_impersonate_token_input.editable = true
-	_set_staff_impersonate_status("The token is never displayed or stored by the client.")
+	_set_staff_impersonate_status("ui.staff.impersonate.token_safety")
 
 func _on_staff_impersonate_token_changed(token: String) -> void:
 	if staff_impersonate_confirm_button != null:
 		staff_impersonate_confirm_button.disabled = staff_impersonate_in_flight or token.strip_edges() == ""
 	if not staff_impersonate_in_flight:
-		_set_staff_impersonate_status("Ready to verify this single-use token." if token.strip_edges() != "" else "The token is never displayed or stored by the client.")
+		_set_staff_impersonate_status(
+			"ui.staff.impersonate.ready"
+			if token.strip_edges() != ""
+			else "ui.staff.impersonate.token_safety"
+		)
 
 func _on_staff_impersonate_token_submitted(_token: String) -> void:
 	if staff_impersonate_confirm_button == null or staff_impersonate_confirm_button.disabled:
@@ -23175,7 +23358,11 @@ func _on_staff_impersonate_token_submitted(_token: String) -> void:
 func _set_staff_impersonate_status(message: String, is_error: bool = false) -> void:
 	if staff_impersonate_status_label == null:
 		return
-	staff_impersonate_status_label.text = message
+	staff_impersonate_status_label.text = (
+		LocalizationManager.text(message)
+		if LocalizationManager.has_key(message, LocalizationManager.DEFAULT_LOCALE)
+		else message
+	)
 	staff_impersonate_status_label.add_theme_color_override(
 		"font_color",
 		UI_DANGER if is_error else UI_MUTED_TEXT
@@ -23244,13 +23431,19 @@ func _refresh_staff_teleport_tab_visibility() -> void:
 		_apply_button_style(staff_teleport_send_player_mode_button, "primary" if show_send_safe else "default")
 	if staff_teleport_player_action_hint != null:
 		if not player_is_selected:
-			staff_teleport_player_action_hint.text = "Select a player from the list to unlock staff actions."
+			staff_teleport_player_action_hint.text = LocalizationManager.text(
+				"ui.staff.teleport.select_player_from_list"
+			)
 			staff_teleport_player_action_hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		elif show_send_safe:
-			staff_teleport_player_action_hint.text = "This action moves another player. Confirm the safe destination and staff note carefully."
+			staff_teleport_player_action_hint.text = LocalizationManager.text(
+				"ui.staff.teleport.move_player_warning"
+			)
 			staff_teleport_player_action_hint.add_theme_color_override("font_color", UI_DANGER)
 		else:
-			staff_teleport_player_action_hint.text = "You will be teleported to the selected player's current location."
+			staff_teleport_player_action_hint.text = LocalizationManager.text(
+				"ui.staff.teleport.go_to_player_hint"
+			)
 			staff_teleport_player_action_hint.add_theme_color_override("font_color", Color("#79d9f2"))
 	if staff_teleport_send_section != null:
 		staff_teleport_send_section.visible = show_send_safe
@@ -23262,8 +23455,20 @@ func _refresh_staff_teleport_tab_visibility() -> void:
 	if staff_teleport_player_reason_input != null:
 		staff_teleport_player_reason_input.visible = show_to_player or show_send_safe
 		var player_reason_required := (_current_user_requires_teleport_to_player_reason() and show_to_player) or (_current_user_requires_teleport_other_reason() and show_send_safe)
-		var player_reason_label := "Reason for teleport to player" if show_to_player else "Reason for safe-location send"
-		staff_teleport_player_reason_input.placeholder_text = "%s (required)" % player_reason_label if player_reason_required else "%s (optional)" % player_reason_label
+		var reason_key := (
+			"ui.staff.teleport.reason_to_player"
+			if show_to_player
+			else "ui.staff.teleport.reason_safe_send"
+		)
+		var requirement_key := (
+			"ui.staff.teleport.reason_required"
+			if player_reason_required
+			else "ui.staff.teleport.reason_optional"
+		)
+		staff_teleport_player_reason_input.placeholder_text = LocalizationManager.text(
+			requirement_key,
+			{"reason": LocalizationManager.text(reason_key)}
+		)
 	if staff_teleport_to_player_button != null:
 		staff_teleport_to_player_button.visible = show_to_player
 	if staff_teleport_send_player_button != null:
@@ -23272,7 +23477,7 @@ func _refresh_staff_teleport_tab_visibility() -> void:
 
 func _on_staff_teleport_button_pressed() -> void:
 	if not (_can_teleport_self() or _can_teleport_to_player() or _can_teleport_other_player()):
-		_add_chat_message("You do not have permission to teleport.")
+		_add_chat_message(LocalizationManager.text("ui.staff.error.no_teleport_permission"))
 		return
 	if staff_teleport_popup == null:
 		return
@@ -23313,16 +23518,18 @@ func _load_staff_teleport_points_if_needed(force := false) -> void:
 	if staff_teleport_confirm_button != null:
 		staff_teleport_confirm_button.disabled = true
 	if staff_teleport_destination_status_label != null:
-		staff_teleport_destination_status_label.text = "Loading..."
+		staff_teleport_destination_status_label.text = LocalizationManager.text("common.loading")
 
 	var result: Dictionary = await ModeratorTeleportService.load_teleport_points()
 	staff_teleport_points_loading = false
 	if not bool(result.get("success", false)):
 		if staff_teleport_destination_status_label != null:
-			staff_teleport_destination_status_label.text = "Unavailable"
+			staff_teleport_destination_status_label.text = LocalizationManager.text("common.unavailable")
 		if staff_teleport_confirm_button != null:
 			staff_teleport_confirm_button.disabled = false
-		_add_chat_message("Could not load teleport points: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.staff.error.load_destinations", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
 
 	var maps_value: Variant = result.get("maps", [])
@@ -23341,16 +23548,18 @@ func _load_staff_teleport_online_players_if_needed(force := false) -> void:
 	if staff_teleport_to_player_button != null:
 		staff_teleport_to_player_button.disabled = true
 	if staff_teleport_player_results_status_label != null:
-		staff_teleport_player_results_status_label.text = "Loading..."
+		staff_teleport_player_results_status_label.text = LocalizationManager.text("common.loading")
 
 	var result: Dictionary = await ModeratorTeleportService.load_online_teleport_players()
 	staff_teleport_players_loading = false
 	if not bool(result.get("success", false)):
 		if staff_teleport_player_results_status_label != null:
-			staff_teleport_player_results_status_label.text = "Unavailable"
+			staff_teleport_player_results_status_label.text = LocalizationManager.text("common.unavailable")
 		if staff_teleport_to_player_button != null:
 			staff_teleport_to_player_button.disabled = false
-		_add_chat_message("Could not load online players: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.staff.error.load_players", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
 
 	var players_value: Variant = result.get("players", [])
@@ -23371,16 +23580,18 @@ func _load_staff_teleport_safe_points_if_needed(force := false) -> void:
 	if staff_teleport_send_player_button != null:
 		staff_teleport_send_player_button.disabled = true
 	if staff_teleport_safe_destination_status_label != null:
-		staff_teleport_safe_destination_status_label.text = "Loading..."
+		staff_teleport_safe_destination_status_label.text = LocalizationManager.text("common.loading")
 
 	var result: Dictionary = await ModeratorTeleportService.load_safe_teleport_points()
 	staff_teleport_safe_points_loading = false
 	if not bool(result.get("success", false)):
 		if staff_teleport_safe_destination_status_label != null:
-			staff_teleport_safe_destination_status_label.text = "Unavailable"
+			staff_teleport_safe_destination_status_label.text = LocalizationManager.text("common.unavailable")
 		if staff_teleport_send_player_button != null:
 			staff_teleport_send_player_button.disabled = false
-		_add_chat_message("Could not load safe teleport points: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.staff.error.load_safe_destinations", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
 
 	var maps_value: Variant = result.get("maps", [])
@@ -23437,10 +23648,11 @@ func _rebuild_staff_teleport_map_options() -> void:
 			selected_index = 0
 		staff_teleport_destination_results.select(selected_index)
 	if staff_teleport_destination_status_label != null:
-		staff_teleport_destination_status_label.text = (
-			"%d found" % staff_teleport_filtered_destinations.size()
-			if not staff_teleport_filtered_destinations.is_empty()
-			else "No matches"
+		staff_teleport_destination_status_label.text = LocalizationManager.text(
+			"ui.staff.teleport.found",
+			{"count": staff_teleport_filtered_destinations.size()}
+		) if not staff_teleport_filtered_destinations.is_empty() else LocalizationManager.text(
+			"ui.staff.teleport.no_matches"
 		)
 	_update_staff_teleport_selected_destination_label()
 	if staff_teleport_confirm_button != null:
@@ -23472,7 +23684,9 @@ func _update_staff_teleport_selected_destination_label() -> void:
 	var map_label := str(map_entry.get("label", "")).strip_edges()
 	var point_label := str(point_entry.get("label", "")).strip_edges()
 	if map_label == "" or point_label == "":
-		staff_teleport_selected_destination_label.text = "Select a destination"
+		staff_teleport_selected_destination_label.text = LocalizationManager.text(
+			"ui.staff.teleport.select_destination"
+		)
 		staff_teleport_selected_destination_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		return
 	staff_teleport_selected_destination_label.text = "%s\n%s" % [map_label, point_label]
@@ -23536,10 +23750,11 @@ func _rebuild_staff_teleport_send_map_options() -> void:
 	if not staff_teleport_filtered_safe_destinations.is_empty():
 		staff_teleport_send_destination_results.select(0 if selected_index < 0 else selected_index)
 	if staff_teleport_safe_destination_status_label != null:
-		staff_teleport_safe_destination_status_label.text = (
-			"%d found" % staff_teleport_filtered_safe_destinations.size()
-			if not staff_teleport_filtered_safe_destinations.is_empty()
-			else "No matches"
+		staff_teleport_safe_destination_status_label.text = LocalizationManager.text(
+			"ui.staff.teleport.found",
+			{"count": staff_teleport_filtered_safe_destinations.size()}
+		) if not staff_teleport_filtered_safe_destinations.is_empty() else LocalizationManager.text(
+			"ui.staff.teleport.no_matches"
 		)
 	if staff_teleport_send_player_button != null:
 		staff_teleport_send_player_button.disabled = staff_teleport_filtered_players.is_empty() or staff_teleport_filtered_safe_destinations.is_empty() or staff_teleport_in_flight
@@ -23615,10 +23830,11 @@ func _rebuild_staff_teleport_player_options() -> void:
 		staff_teleport_player_results.select(selected_index)
 	staff_teleport_player_results.visible = true
 	if staff_teleport_player_results_status_label != null:
-		staff_teleport_player_results_status_label.text = (
-			"%d online" % staff_teleport_filtered_players.size()
-			if not staff_teleport_filtered_players.is_empty()
-			else "No matches"
+		staff_teleport_player_results_status_label.text = LocalizationManager.text(
+			"ui.staff.teleport.online_count",
+			{"count": staff_teleport_filtered_players.size()}
+		) if not staff_teleport_filtered_players.is_empty() else LocalizationManager.text(
+			"ui.staff.teleport.no_matches"
 		)
 	_update_staff_teleport_selected_player_label()
 	if staff_teleport_to_player_button != null:
@@ -23631,14 +23847,18 @@ func _update_staff_teleport_selected_player_label() -> void:
 	if staff_teleport_selected_player_label == null:
 		return
 	if not staff_teleport_player_selection_confirmed:
-		staff_teleport_selected_player_label.text = "Select a player"
+		staff_teleport_selected_player_label.text = LocalizationManager.text(
+			"ui.staff.teleport.select_player"
+		)
 		staff_teleport_selected_player_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		return
 	var selected_player := _get_selected_staff_teleport_player()
 	var username := str(selected_player.get("username", "")).strip_edges()
 	var display_name := str(selected_player.get("displayName", username)).strip_edges()
 	if username == "" and display_name == "":
-		staff_teleport_selected_player_label.text = "Select a player"
+		staff_teleport_selected_player_label.text = LocalizationManager.text(
+			"ui.staff.teleport.select_player"
+		)
 		staff_teleport_selected_player_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		return
 	staff_teleport_selected_player_label.text = "%s\n@%s" % [display_name, username]
@@ -23928,7 +24148,7 @@ func _get_staff_teleport_local_block_reason(world: Node) -> String:
 
 func _on_staff_impersonate_confirm_pressed() -> void:
 	if not _can_impersonate_accounts():
-		_add_chat_message("You do not have permission to impersonate accounts.")
+		_add_chat_message(LocalizationManager.text("ui.staff.error.no_impersonate_permission"))
 		return
 	if staff_impersonate_token_input == null:
 		return
@@ -23937,8 +24157,8 @@ func _on_staff_impersonate_confirm_pressed() -> void:
 
 	var token := staff_impersonate_token_input.text.strip_edges()
 	if token == "":
-		_set_staff_impersonate_status("Paste a valid single-use token first.", true)
-		_add_chat_message("Enter an impersonation token first.")
+		_set_staff_impersonate_status("ui.staff.impersonate.invalid_empty", true)
+		_add_chat_message(LocalizationManager.text("ui.staff.impersonate.enter_token"))
 		staff_impersonate_token_input.grab_focus()
 		return
 
@@ -23946,8 +24166,10 @@ func _on_staff_impersonate_confirm_pressed() -> void:
 	staff_impersonate_token_input.editable = false
 	if staff_impersonate_confirm_button != null:
 		staff_impersonate_confirm_button.disabled = true
-		staff_impersonate_confirm_button.text = "Verifying..."
-	_set_staff_impersonate_status("Verifying the token with the authentication service...")
+		staff_impersonate_confirm_button.text = LocalizationManager.text(
+			"ui.staff.impersonate.verifying"
+		)
+	_set_staff_impersonate_status("ui.staff.impersonate.verifying_status")
 
 	var auth_result: Dictionary = await AuthService.impersonate_with_token(token)
 	if not auth_result.get("success", false):
@@ -23955,26 +24177,40 @@ func _on_staff_impersonate_confirm_pressed() -> void:
 		staff_impersonate_token_input.editable = true
 		if staff_impersonate_confirm_button != null:
 			staff_impersonate_confirm_button.disabled = false
-			staff_impersonate_confirm_button.text = "Start Secure Session"
-		_set_staff_impersonate_status(str(auth_result.get("error", "The token is invalid or expired.")), true)
+			staff_impersonate_confirm_button.text = LocalizationManager.text(
+				"ui.staff.impersonate.confirm"
+			)
+		_set_staff_impersonate_status(str(auth_result.get(
+			"error",
+			LocalizationManager.text("ui.staff.impersonate.invalid")
+		)), true)
 		staff_impersonate_token_input.select_all()
 		staff_impersonate_token_input.grab_focus()
-		_add_chat_message("Impersonation failed: %s" % str(auth_result.get("error", "Invalid token")))
+		_add_chat_message(LocalizationManager.text("ui.staff.impersonate.failed", {
+			"error": str(auth_result.get(
+				"error",
+				LocalizationManager.text("ui.staff.impersonate.invalid_short")
+			)),
+		}))
 		return
 
 	if staff_impersonate_confirm_button != null:
-		staff_impersonate_confirm_button.text = "Loading Profile..."
-	_set_staff_impersonate_status("Token accepted. Loading the impersonated profile...")
+		staff_impersonate_confirm_button.text = LocalizationManager.text(
+			"ui.staff.impersonate.loading_profile"
+		)
+	_set_staff_impersonate_status("ui.staff.impersonate.loading_profile_status")
 	var profile_result: Dictionary = await PlayerGameStateService.load_player_profile()
 	staff_impersonate_in_flight = false
 	staff_impersonate_token_input.editable = true
 	if staff_impersonate_confirm_button != null:
 		staff_impersonate_confirm_button.disabled = false
-		staff_impersonate_confirm_button.text = "Start Secure Session"
+		staff_impersonate_confirm_button.text = LocalizationManager.text(
+			"ui.staff.impersonate.confirm"
+		)
 	if not profile_result.get("success", false):
 		staff_impersonate_token_input.clear()
-		_set_staff_impersonate_status("The secure session started, but its profile could not be loaded. Reconnect before continuing.", true)
-		_add_chat_message("Impersonated login succeeded, but profile loading failed.")
+		_set_staff_impersonate_status("ui.staff.impersonate.profile_failed", true)
+		_add_chat_message(LocalizationManager.text("ui.staff.impersonate.profile_failed_short"))
 		return
 
 	_apply_impersonated_profile(profile_result)
@@ -23983,7 +24219,9 @@ func _on_staff_impersonate_confirm_pressed() -> void:
 	_hide_staff_impersonate_popup()
 	_refresh_dev_tools_visibility()
 	_refresh_party()
-	_add_chat_message("Now impersonating %s." % AuthService.get_display_name())
+	_add_chat_message(LocalizationManager.text("ui.staff.impersonate.success", {
+		"name": AuthService.get_display_name(),
+	}))
 
 func _apply_impersonated_profile(profile_response: Dictionary) -> void:
 	var user: Dictionary = _staff_dictionary_from_variant(profile_response.get("user", {}))
@@ -26012,7 +26250,7 @@ func _refresh_item_dex_results() -> void:
 		query = item_dex_search_input.text.strip_edges().to_lower()
 
 	var loading_label := Label.new()
-	loading_label.text = "Searching..."
+	loading_label.text = LocalizationManager.text("common.searching")
 	loading_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	loading_label.custom_minimum_size = Vector2(0, 44)
 	loading_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -26033,7 +26271,7 @@ func _refresh_item_dex_results() -> void:
 		if item_dex_results_count_label != null:
 			item_dex_results_count_label.text = "Unavailable"
 		var error_label := Label.new()
-		error_label.text = "Could not load items."
+		error_label.text = LocalizationManager.text("ui.staff.dev.items_load_failed")
 		error_label.add_theme_color_override("font_color", UI_DANGER)
 		item_dex_results_list.add_child(error_label)
 		return
@@ -26052,7 +26290,7 @@ func _refresh_item_dex_results() -> void:
 
 	if count == 0:
 		var empty_label := Label.new()
-		empty_label.text = "No item results."
+		empty_label.text = LocalizationManager.text("ui.staff.dev.no_item_results")
 		empty_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		empty_label.custom_minimum_size = Vector2(0, 44)
 		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -27044,32 +27282,36 @@ func _show_dev_pokemon_popup(mode: int) -> void:
 		return
 
 	dev_pokemon_popup_mode = mode
-	match dev_pokemon_popup_mode:
-		DevPokemonPopupMode.CONTENT_CREATOR:
-			dev_pokemon_title.text = "Alpha Pokemon"
-			dev_pokemon_subtitle.text = "Paste a Pokémon or Showdown team here"
-			dev_pokemon_add_button.text = "Create"
-			dev_pokemon_text.placeholder_text = "Paste one Pokemon or a full Showdown/Pokepaste team. Shiny, invalid EVs, and non-held items are rejected."
-		DevPokemonPopupMode.TEAM:
-			dev_pokemon_title.text = "Create Pokemon"
-			dev_pokemon_subtitle.text = "Paste one Pokémon or a complete Showdown / Pokepaste team"
-			dev_pokemon_add_button.text = "Create"
-			dev_pokemon_text.placeholder_text = "Paste one Pokemon or a full Showdown/Pokepaste team here"
-		DevPokemonPopupMode.SPAWN:
-			dev_pokemon_title.text = "Spawn Pokemon"
-			dev_pokemon_subtitle.text = "Start a wild encounter from a name, set, or Pokepaste"
-			dev_pokemon_add_button.text = "Spawn"
-			dev_pokemon_text.placeholder_text = "Enter a Pokemon name, Showdown set, or Pokepaste"
-		_:
-			dev_pokemon_title.text = "Add Pokemon"
-			dev_pokemon_subtitle.text = "Paste Showdown or Pokepaste text to add a Pokémon"
-			dev_pokemon_add_button.text = "Add"
-			dev_pokemon_text.placeholder_text = "Paste Showdown/Pokepaste text here"
+	_refresh_dev_pokemon_popup_copy()
 
 	dev_pokemon_add_button.disabled = dev_pokemon_popup_mode == DevPokemonPopupMode.CONTENT_CREATOR and not _can_use_content_creator_generation()
 	dev_pokemon_popup.visible = true
 	_activate_ui_panel(dev_pokemon_popup)
 	dev_pokemon_text.grab_focus()
+
+
+func _refresh_dev_pokemon_popup_copy() -> void:
+	match dev_pokemon_popup_mode:
+		DevPokemonPopupMode.CONTENT_CREATOR:
+			dev_pokemon_title.text = LocalizationManager.text("ui.staff.dev.pokemon.alpha_title")
+			dev_pokemon_subtitle.text = LocalizationManager.text("ui.staff.dev.pokemon.alpha_subtitle")
+			dev_pokemon_add_button.text = LocalizationManager.text("ui.staff.dev.pokemon.create")
+			dev_pokemon_text.placeholder_text = LocalizationManager.text("ui.staff.dev.pokemon.alpha_placeholder")
+		DevPokemonPopupMode.TEAM:
+			dev_pokemon_title.text = LocalizationManager.text("ui.staff.dev.pokemon.create_title")
+			dev_pokemon_subtitle.text = LocalizationManager.text("ui.staff.dev.pokemon.create_subtitle")
+			dev_pokemon_add_button.text = LocalizationManager.text("ui.staff.dev.pokemon.create")
+			dev_pokemon_text.placeholder_text = LocalizationManager.text("ui.staff.dev.pokemon.create_placeholder")
+		DevPokemonPopupMode.SPAWN:
+			dev_pokemon_title.text = LocalizationManager.text("ui.staff.dev.pokemon.spawn_title")
+			dev_pokemon_subtitle.text = LocalizationManager.text("ui.staff.dev.pokemon.spawn_subtitle")
+			dev_pokemon_add_button.text = LocalizationManager.text("ui.staff.dev.pokemon.spawn")
+			dev_pokemon_text.placeholder_text = LocalizationManager.text("ui.staff.dev.pokemon.spawn_placeholder")
+		_:
+			dev_pokemon_title.text = LocalizationManager.text("ui.staff.dev.pokemon.add_title")
+			dev_pokemon_subtitle.text = LocalizationManager.text("ui.staff.dev.pokemon.add_subtitle")
+			dev_pokemon_add_button.text = LocalizationManager.text("ui.staff.dev.add")
+			dev_pokemon_text.placeholder_text = LocalizationManager.text("ui.staff.dev.pokemon.add_placeholder")
 
 func _on_dev_pokemon_add_button_pressed() -> void:
 	if dev_pokemon_popup_mode == DevPokemonPopupMode.CONTENT_CREATOR:

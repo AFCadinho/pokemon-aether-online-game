@@ -43,24 +43,29 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	add_theme_stylebox_override("panel", _panel_style(UI_BG, Color("#8d7440"), 14, 1))
 	_build_ui()
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	if localization_manager != null:
+		var locale_callable := Callable(self, "_on_locale_changed")
+		if not localization_manager.is_connected("locale_changed", locale_callable):
+			localization_manager.connect("locale_changed", locale_callable)
 
 
 func open() -> void:
 	visible = true
 	_center_in_viewport()
-	_set_status("Loading server badge progress…", false)
+	_set_status(_t("ui.staff.badges.loading"), false)
 	_set_busy(true)
 	var service := get_node_or_null("/root/BadgeProgressionService")
 	if service == null or not service.has_method("load_gym_badges"):
 		_set_busy(false)
-		_set_status("Badge progression service is unavailable.", true)
+		_set_status(_t("ui.staff.badges.unavailable"), true)
 		return
 	var result: Dictionary = await service.call("load_gym_badges")
 	_set_busy(false)
 	if not visible:
 		return
 	if not bool(result.get("success", false)):
-		_set_status(str(result.get("error", "Could not load Gym Badges.")), true)
+		_set_status(str(result.get("error", _t("ui.staff.badges.load_failed"))), true)
 		return
 	set_badge_state(result)
 
@@ -107,13 +112,13 @@ func _build_ui() -> void:
 	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	heading.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	header.add_child(heading)
-	heading.add_child(_label("Trainer Progress", 20, UI_TEXT))
-	heading.add_child(_label("Developer tool · server-side Kanto Gym Badges", 11, UI_MUTED))
+	heading.add_child(_localized_label("ui.staff.dev.trainer_progress", 20, UI_TEXT))
+	heading.add_child(_localized_label("ui.staff.badges.subtitle", 11, UI_MUTED))
 
 	var close_button := Button.new()
 	close_button.name = "CloseButton"
 	close_button.text = "×"
-	close_button.tooltip_text = "Close"
+	_set_localized_property(close_button, "tooltip_text", "common.close")
 	close_button.custom_minimum_size = Vector2(38, 38)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(close)
@@ -126,8 +131,8 @@ func _build_ui() -> void:
 	var notice_margin := MarginContainer.new()
 	_set_margins(notice_margin, 12, 9, 12, 9)
 	notice.add_child(notice_margin)
-	var notice_label := _label(
-		"These controls update your real server progression. Use them while Gym maps are still being built.",
+	var notice_label := _localized_label(
+		"ui.staff.badges.notice",
 		11,
 		UI_MUTED
 	)
@@ -177,7 +182,7 @@ func _build_ui() -> void:
 		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		tile_layout.add_child(name_label)
-		var state_label := _label("LOCKED", 9, UI_MUTED)
+		var state_label := _localized_label("ui.staff.badges.locked", 9, UI_MUTED)
 		state_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		state_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		tile_layout.add_child(state_label)
@@ -194,21 +199,21 @@ func _build_ui() -> void:
 
 	var first_three_button := Button.new()
 	first_three_button.name = "GrantFirstThreeButton"
-	first_three_button.text = "Grant first 3"
+	_set_localized_property(first_three_button, "text", "ui.staff.badges.grant_first_three")
 	first_three_button.pressed.connect(_set_first_three)
 	_apply_button_style(first_three_button, true)
 	footer.add_child(first_three_button)
 
 	var all_button := Button.new()
 	all_button.name = "GrantAllButton"
-	all_button.text = "Grant all"
+	_set_localized_property(all_button, "text", "ui.staff.badges.grant_all")
 	all_button.pressed.connect(_set_all.bind(true))
 	_apply_button_style(all_button, true)
 	footer.add_child(all_button)
 
 	var clear_button := Button.new()
 	clear_button.name = "ClearAllButton"
-	clear_button.text = "Clear all"
+	_set_localized_property(clear_button, "text", "ui.staff.badges.clear_all")
 	clear_button.pressed.connect(_set_all.bind(false))
 	_apply_button_style(clear_button, false)
 	footer.add_child(clear_button)
@@ -245,16 +250,16 @@ func _set_all(earned: bool) -> void:
 
 func _submit_badges(badge_ids: Array[String], earned: bool) -> void:
 	_set_busy(true)
-	_set_status("Saving server progression…", false)
+	_set_status(_t("ui.staff.badges.saving"), false)
 	var service := get_node_or_null("/root/BadgeProgressionService")
 	if service == null or not service.has_method("dev_set_gym_badges"):
 		_set_busy(false)
-		_set_status("Badge progression service is unavailable.", true)
+		_set_status(_t("ui.staff.badges.unavailable"), true)
 		return
 	var result: Dictionary = await service.call("dev_set_gym_badges", REGION, badge_ids, earned)
 	_set_busy(false)
 	if not bool(result.get("success", false)):
-		_set_status(str(result.get("error", "Could not update Gym Badges.")), true)
+		_set_status(str(result.get("error", _t("ui.staff.badges.update_failed"))), true)
 		return
 	set_badge_state(result)
 
@@ -271,14 +276,22 @@ func _render_badges() -> void:
 			continue
 		button.tooltip_text = "%s · %s" % [
 			str(definition.get("name", "Badge")),
-			"Earned" if earned else "Locked",
+			(
+				_t("ui.staff.badges.earned")
+				if earned
+				else _t("ui.staff.badges.locked")
+			).capitalize(),
 		]
 		var icon_rect := badge_icon_rects.get(badge_id) as TextureRect
 		if icon_rect != null:
 			icon_rect.modulate = Color.WHITE if earned else Color("#6370809a")
 		var state_label := badge_status_labels.get(badge_id) as Label
 		if state_label != null:
-			state_label.text = "EARNED" if earned else "LOCKED"
+			state_label.text = (
+				_t("ui.staff.badges.earned")
+				if earned
+				else _t("ui.staff.badges.locked")
+			)
 			state_label.add_theme_color_override("font_color", UI_SUCCESS if earned else UI_MUTED)
 		var style := _panel_style(
 			Color("#112b27f2") if earned else UI_SURFACE,
@@ -288,7 +301,10 @@ func _render_badges() -> void:
 		)
 		button.add_theme_stylebox_override("normal", style)
 	if not busy:
-		_set_status("%d of %d Kanto badges earned" % [earned_count, BADGES.size()], false)
+		_set_status(_t("ui.staff.badges.progress", {
+			"earned": earned_count,
+			"total": BADGES.size(),
+		}), false)
 
 
 func _set_busy(value: bool) -> void:
@@ -309,6 +325,31 @@ func _set_status(message: String, is_error: bool) -> void:
 		return
 	status_label.text = message
 	status_label.add_theme_color_override("font_color", UI_ERROR if is_error else UI_MUTED)
+
+
+func _t(key: String, replacements: Dictionary = {}) -> String:
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	if localization_manager == null:
+		return key
+	return str(localization_manager.call("text", key, replacements))
+
+
+func _set_localized_property(control: Control, property_name: String, key: String) -> void:
+	control.set_meta("i18n_source_%s" % property_name, key)
+	control.set(property_name, _t(key))
+
+
+func _localized_label(key: String, font_size: int, color: Color) -> Label:
+	var label := _label("", font_size, color)
+	_set_localized_property(label, "text", key)
+	return label
+
+
+func _on_locale_changed(_locale: String) -> void:
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	if localization_manager != null:
+		localization_manager.call("localize_tree", self)
+	_render_badges()
 
 
 func _on_header_gui_input(event: InputEvent) -> void:
