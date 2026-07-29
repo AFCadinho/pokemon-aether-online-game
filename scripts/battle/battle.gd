@@ -5637,7 +5637,7 @@ func _enter_spectator_controls() -> void:
 func _get_spectator_status_message() -> String:
 	if team_preview_lead_selection_active:
 		return "Waiting for both players..."
-	return "Watching the battle live"
+	return "Waiting for players..."
 
 
 func _on_spectator_switch_sides_pressed() -> void:

@@ -218,7 +218,7 @@ func _init() -> void:
 	_check_equal(
 		battle_source.contains("func _is_spectator_battle() -> bool:") \
 			and battle_source.contains('return "Waiting for both players..."') \
-			and battle_source.contains('return "Watching the battle live"') \
+			and battle_source.contains('return "Waiting for players..."') \
 			and battle_source.contains("action_buttons.visible = false") \
 			and battle_source.contains('action_buttons.set_action_visible("run", false)') \
 			and battle_source.contains("spectator_action_panel.visible = true") \
