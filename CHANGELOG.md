@@ -32,7 +32,6 @@
 
 **Fixed**
 
-- Fixed the new Chroma hairstyles exposing brown base-head pixels through transparent scalp gaps.
 - Fixed the first Pokémon Storage hover card after starting the game sometimes stretching to nearly the full window height.
 - Fixed valid fishing attempts falling through to the generic “report this to staff” message even when the player owned an Old Rod.
 - Fixed local and remote fishing poses, including duplicated Surf limbs and misaligned hair, headgear, eyes, facial hair, and accessories while facing down.
