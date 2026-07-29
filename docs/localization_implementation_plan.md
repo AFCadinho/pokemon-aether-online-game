@@ -15,7 +15,8 @@ Initial locales: English (`en`), Dutch (`nl`), Brazilian Portuguese (`pt-BR`)
 | Phase 2: login and settings pilot | Complete in commit `96be89e3a` |
 | Phase 3: automated guardrails | In progress; catalog, placeholder, fallback, persistence, and pilot layout checks are active |
 | Phase 4: shared game interface | In progress; domains 1-3 are complete |
-| Phases 5-10 | Planned |
+| Phase 7: Pokémon and item content | In progress; shared item resolver and 69 current item overlays are active |
+| Phases 5-6 and 8-10 | Planned |
 
 ## Goal
 
@@ -308,6 +309,13 @@ Add overlays for:
 - natures;
 - statuses and effects;
 - shops and cosmetic content.
+
+The client-side item pilot stores presentation-only `name` and `shortDesc` fields in
+`localization/items/<locale>.json`. `ItemLocalization` resolves those fields by
+canonical item ID, preserves the original English response as fallback, and never
+copies quantity, price, ownership, effects, or other mechanics into an overlay. Bag,
+hotbar, Market, Pokémon Summary item labels, and later item consumers share this
+resolver.
 
 ### Acceptance criteria
 

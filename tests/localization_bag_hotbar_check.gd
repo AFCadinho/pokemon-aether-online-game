@@ -5,6 +5,7 @@ const PREVIEW := preload("res://scripts/ui/bag_item_effect_preview.gd")
 
 var failed := false
 var localization_manager: Node
+var item_localization: Node
 
 
 func _init() -> void:
@@ -13,8 +14,10 @@ func _init() -> void:
 
 func _run() -> void:
 	localization_manager = root.get_node_or_null("LocalizationManager")
+	item_localization = root.get_node_or_null("ItemLocalization")
 	_check(localization_manager != null, "Bag and hotbar check can access LocalizationManager")
-	if localization_manager == null:
+	_check(item_localization != null, "Bag and hotbar check can access ItemLocalization")
+	if localization_manager == null or item_localization == null:
 		quit(1)
 		return
 
@@ -68,27 +71,34 @@ func _check_bag_and_hotbar_runtime_translation() -> void:
 		"quantity": 2,
 		"shortDesc": "Restores 20 HP.",
 	}
-	overlay.set("bag_selected_item", external_item)
-	overlay.call("_refresh_bag_detail")
+	overlay.set(
+		"bag_inventory_items",
+		overlay.call("_normalize_bag_inventory_items", [external_item])
+	)
+	overlay.set("bag_inventory_loaded", true)
+	overlay.call("_refresh_bag_items")
 	var detail_name := overlay.get("bag_detail_name_label") as Label
 	var detail_meta := overlay.get("bag_detail_meta_label") as Label
 	var detail_description := overlay.get("bag_detail_description_label") as Label
-	_check(detail_name != null and detail_name.text == "Potion", "Bag keeps the external item name unchanged")
+	_check(detail_name != null and detail_name.text == "Potion", "Bag resolves the approved Dutch item name")
 	_check(detail_meta != null and detail_meta.text.contains("Medicijnen"), "Bag detail grammar renders in Dutch")
 	_check(
-		detail_description != null and detail_description.text == "Restores 20 HP.",
-		"Bag keeps the external item description unchanged"
+		detail_description != null and detail_description.text == "Herstelt 20 HP.",
+		"Bag resolves the Dutch item description by canonical ID"
 	)
 
 	localization_manager.call("set_locale", "pt_BR")
 	localization_manager.call("localize_tree", overlay)
 	overlay.call("_refresh_bag_category_buttons")
-	overlay.call("_refresh_bag_detail")
-	overlay.call("_refresh_hotbar_ui")
+	overlay.call("_refresh_bag_localized_ui")
 	_check(search != null and search.placeholder_text == "Buscar itens...", "Bag search updates to Portuguese")
 	_check(all_label != null and all_label.text == "Todos os itens", "Bag category updates to Portuguese")
-	_check(detail_name != null and detail_name.text == "Potion", "locale switching preserves the external item name")
+	_check(detail_name != null and detail_name.text == "Poção", "locale switching updates the item name")
 	_check(detail_meta != null and detail_meta.text.contains("Medicamentos"), "Bag detail grammar updates to Portuguese")
+	_check(
+		detail_description != null and detail_description.text == "Restaura 20 PS.",
+		"locale switching updates the item description"
+	)
 	_check(
 		first_hotbar_button != null and first_hotbar_button.tooltip_text.begins_with("Atalho vazio 1"),
 		"hotbar instructions update to Portuguese"

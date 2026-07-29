@@ -33,11 +33,16 @@ Completed client domains:
   move-order, Poké Ball, and held-item messages;
 - Bag and hotbar interface chrome, including categories, search and empty states,
   item-action flows, local medicine previews, Escape Rope interactions, and runtime
-  refresh.
+  refresh;
+- canonical-ID item display overlays for 69 currently player-facing items, covering
+  the standard PokéMart, virtual and legacy Escape Rope, fishing rods, field Charms,
+  Aether Blessing vouchers, Trainer-service tickets, Guild emblems, and current
+  Store cosmetics.
 
-Pokémon, move, ability, nature, type, and item display data remain in their canonical
-English data sources until the Pokémon Data overlay phase. The translated Summary
-and Bag changes only the surrounding interface and grammar.
+Pokémon, move, ability, nature, and type display data remain in their canonical English
+data sources until their Pokémon Data overlay slices. Items outside the current
+69-entry player-facing catalog safely retain the English name and description supplied
+by their authoritative source.
 
 The remaining client surface is substantial:
 
@@ -187,5 +192,6 @@ The next recommended slice is Market and standard shop interface chrome:
   feedback;
 - runtime refresh and layout checks in Dutch and Brazilian Portuguese.
 
-Item and shop display data, battle text, Pokémon data, and server-owned messages remain
-outside that slice.
+The shared item resolver supplies localized names and descriptions to Market without
+changing item IDs, prices, quantities, or effects. Battle text, other Pokémon data, and
+server-owned messages remain outside that slice.

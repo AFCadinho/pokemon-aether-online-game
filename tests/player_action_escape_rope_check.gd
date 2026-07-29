@@ -19,7 +19,16 @@ func _init() -> void:
 	_check(ui_source.contains("escape_rope_button.disabled"), "disabled state")
 	_check(ui_source.contains('LocalizationManager.text("ui.hotbar.escape_rope.tooltip.ready"'), "localized cooldown state")
 	_check(ui_source.contains('LocalizationManager.text("ui.hotbar.escape_rope.message.cooldown"'), "localized cooldown click feedback")
-	_check(ui_source.contains("func _refresh_bag_localized_ui() -> void:\n\tif escape_rope_button != null:\n\t\t_update_escape_rope_action_ui()"), "Escape Rope tooltip refreshes after a live locale change")
+	var localized_refresh_start := ui_source.find("func _refresh_bag_localized_ui()")
+	var localized_refresh_end := ui_source.find("func ", localized_refresh_start + 5)
+	var localized_refresh_source := ui_source.substr(
+		localized_refresh_start,
+		localized_refresh_end - localized_refresh_start
+	)
+	_check(
+		localized_refresh_source.contains("_update_escape_rope_action_ui()"),
+		"Escape Rope tooltip refreshes after a live locale change"
+	)
 	_check(ui_source.contains("escape_rope_in_flight"), "duplicate activation guard")
 	_check(ui_source.contains("begin_authorized_teleport"), "local authorized teleport preparation")
 	_check(ui_source.contains("apply_authorized_teleport_state"), "authorized teleport handoff")

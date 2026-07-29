@@ -64,6 +64,22 @@ all generated labels, option items, statuses, and cached presentation text.
 Never translate internal IDs before logic, persistence, search indexing, or network
 calls. Resolve the display string only at the presentation boundary.
 
+Item presentation data uses a separate canonical-ID overlay:
+
+```json
+{
+  "potion": {
+    "name": "Potion",
+    "shortDesc": "Herstelt 20 HP."
+  }
+}
+```
+
+These overlays live under `localization/items/`. Every released locale contains the
+same item IDs and the same `name` and `shortDesc` fields. `ItemLocalization` retains
+the authoritative source values for English fallback and must not add mechanical
+fields such as quantity, price, category, ownership, or effects.
+
 ## Placeholders and sentences
 
 - Use named placeholders: `{trainer}`, `{count}`, `{item}`.

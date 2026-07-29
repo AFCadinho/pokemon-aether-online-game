@@ -1379,6 +1379,7 @@ func _on_locale_changed(_locale: String) -> void:
 	_refresh_location_weather(WorldPresenceService.current_weather_state)
 	_refresh_party()
 	_refresh_bag_localized_ui()
+	_refresh_market_localized_item_data()
 
 
 func _play_mail_notification_sound() -> void:
@@ -14208,15 +14209,24 @@ func _normalize_market_items(items_value: Variant) -> Array[Dictionary]:
 		var item_id := str(item.get("itemId", "")).strip_edges()
 		if item_id == "":
 			continue
-		normalized_items.append({
+		normalized_items.append(ItemLocalization.localize_item({
 			"id": item_id,
-			"name": str(item.get("name", _item_name_from_id(item_id))),
+			"name": str(item.get("name", _format_item_name_from_id(item_id))),
 			"category": str(item.get("category", "")),
 			"shortDesc": str(item.get("shortDesc", "")),
 			"price": _market_item_money_price(item),
 			"sellPrice": max(int(item.get("sellPrice", 0)), 0),
-		})
+		}))
 	return normalized_items
+
+
+func _refresh_market_localized_item_data() -> void:
+	for item_index in range(market_items.size()):
+		market_items[item_index] = ItemLocalization.localize_item(market_items[item_index])
+	if not market_selected_item.is_empty():
+		market_selected_item = ItemLocalization.localize_item(market_selected_item)
+	if market_popup != null and market_popup.visible:
+		_refresh_market_items()
 
 
 func _market_sell_items(catalog_items: Array[Dictionary], inventory_items: Array) -> Array[Dictionary]:
@@ -16150,9 +16160,9 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 		var backend_category := str(item.get("category", "")).strip_edges()
 		var gameplay: Dictionary = _staff_dictionary_from_variant(item.get("gameplay", {})).duplicate(true)
 		var use_notice: Dictionary = _staff_dictionary_from_variant(item.get("useNotice", {})).duplicate(true)
-		normalized_items.append({
+		normalized_items.append(ItemLocalization.localize_item({
 			"id": item_id,
-			"name": str(item.get("name", _item_name_from_id(item_id))),
+			"name": str(item.get("name", _format_item_name_from_id(item_id))),
 			"category": _normalize_backend_bag_category(backend_category, item_id),
 			"shortDesc": str(item.get("shortDesc", item.get("description", ""))).strip_edges(),
 			"isHoldable": bool(item.get("isHoldable", false)),
@@ -16166,17 +16176,14 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 			"useNotice": use_notice,
 			"useAction": str(item.get("useAction", "")).strip_edges(),
 			"appearanceUnlocks": item.get("appearanceUnlocks", []),
-		})
-	normalized_items.append({
+		}))
+	normalized_items.append(ItemLocalization.localize_item({
 		"id": "escape-rope-action",
-		"name": "Escape Rope · Key Item",
 		"category": "key_items",
 		"quantity": 1,
 		"permanent": true,
-		"shortDesc": "Return to the last safe indoor location you visited.",
 		"gameplay": {},
-		"useNotice": {"message": "Use Escape Rope from your hotbar."},
-	})
+	}))
 	return normalized_items
 
 func _normalize_backend_bag_category(category: String, item_id: String) -> String:
@@ -16194,6 +16201,14 @@ func _normalize_backend_bag_category(category: String, item_id: String) -> Strin
 	return _guess_bag_category(item_id)
 
 func _item_name_from_id(item_id: String) -> String:
+	var normalized_item_id := _normalize_item_id(item_id)
+	return ItemLocalization.display_name(
+		normalized_item_id,
+		_format_item_name_from_id(normalized_item_id)
+	)
+
+
+func _format_item_name_from_id(item_id: String) -> String:
 	var words := item_id.replace("_", "-").split("-")
 	var formatted_words: Array[String] = []
 	for word: String in words:
@@ -16270,6 +16285,14 @@ func _refresh_bag_category_buttons() -> void:
 			label.add_theme_color_override("font_color", UI_TEXT if selected else UI_MUTED_TEXT)
 
 func _refresh_bag_localized_ui() -> void:
+	for item_index in range(bag_inventory_items.size()):
+		bag_inventory_items[item_index] = ItemLocalization.localize_item(bag_inventory_items[item_index])
+	for item_index in range(mail_compose_inventory_items.size()):
+		mail_compose_inventory_items[item_index] = ItemLocalization.localize_item(
+			mail_compose_inventory_items[item_index]
+		)
+	if not bag_item_use_pending_item.is_empty():
+		bag_item_use_pending_item = ItemLocalization.localize_item(bag_item_use_pending_item)
 	if escape_rope_button != null:
 		_update_escape_rope_action_ui()
 	_refresh_bag_items()

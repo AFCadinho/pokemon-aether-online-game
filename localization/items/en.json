@@ -1,0 +1,278 @@
+{
+  "escape-rope-action": {
+    "name": "Escape Rope · Key Item",
+    "shortDesc": "Return to the last safe indoor location you visited."
+  },
+  "escape-rope": {
+    "name": "Escape Rope",
+    "shortDesc": "Escape instantly from caves and dungeons."
+  },
+  "poke-ball": {
+    "name": "Poke Ball",
+    "shortDesc": "A basic ball used to catch wild Pokémon."
+  },
+  "great-ball": {
+    "name": "Great Ball",
+    "shortDesc": "A better ball with a higher catch rate than a Poke Ball."
+  },
+  "ultra-ball": {
+    "name": "Ultra Ball",
+    "shortDesc": "A high-performance ball with a higher catch rate than a Great Ball."
+  },
+  "potion": {
+    "name": "Potion",
+    "shortDesc": "Restores 20 HP."
+  },
+  "super-potion": {
+    "name": "Super Potion",
+    "shortDesc": "Restores 50 HP."
+  },
+  "hyper-potion": {
+    "name": "Hyper Potion",
+    "shortDesc": "Restores 200 HP."
+  },
+  "max-potion": {
+    "name": "Max Potion",
+    "shortDesc": "Fully restores a Pokémon's HP."
+  },
+  "full-restore": {
+    "name": "Full Restore",
+    "shortDesc": "Fully restores HP and cures any status condition."
+  },
+  "antidote": {
+    "name": "Antidote",
+    "shortDesc": "Cures poisoning."
+  },
+  "paralyze-heal": {
+    "name": "Paralyze Heal",
+    "shortDesc": "Cures paralysis."
+  },
+  "awakening": {
+    "name": "Awakening",
+    "shortDesc": "Wakes a sleeping Pokémon."
+  },
+  "burn-heal": {
+    "name": "Burn Heal",
+    "shortDesc": "Cures a burn."
+  },
+  "ice-heal": {
+    "name": "Ice Heal",
+    "shortDesc": "Thaws a frozen Pokémon."
+  },
+  "full-heal": {
+    "name": "Full Heal",
+    "shortDesc": "Cures any status condition."
+  },
+  "revive": {
+    "name": "Revive",
+    "shortDesc": "Revives a fainted Pokémon with half of its maximum HP."
+  },
+  "old-rod": {
+    "name": "Old Rod",
+    "shortDesc": "Use it to fish for Pokémon."
+  },
+  "good-rod": {
+    "name": "Good Rod",
+    "shortDesc": "Use it to catch Pokémon in bodies of water."
+  },
+  "super-rod": {
+    "name": "Super Rod",
+    "shortDesc": "Use it to catch powerful Pokémon in bodies of water."
+  },
+  "cut-charm": {
+    "name": "Cut Charm",
+    "shortDesc": "Lets you use Cut without a Pokémon knowing it."
+  },
+  "defog-charm": {
+    "name": "Defog Charm",
+    "shortDesc": "Lets you use Defog without a Pokémon knowing it."
+  },
+  "dive-charm": {
+    "name": "Dive Charm",
+    "shortDesc": "Lets you use Dive without a Pokémon knowing it."
+  },
+  "flash-charm": {
+    "name": "Flash Charm",
+    "shortDesc": "Lets you use Flash without a Pokémon knowing it."
+  },
+  "rain-dance-charm": {
+    "name": "Rain Dance Charm",
+    "shortDesc": "Lets you use Rain Dance without a Pokémon knowing it."
+  },
+  "rock-climb-charm": {
+    "name": "Rock Climb Charm",
+    "shortDesc": "Lets you use Rock Climb without a Pokémon knowing it."
+  },
+  "rock-smash-charm": {
+    "name": "Rock Smash Charm",
+    "shortDesc": "Lets you use Rock Smash without a Pokémon knowing it."
+  },
+  "snowscape-charm": {
+    "name": "Snowscape Charm",
+    "shortDesc": "Lets you use Snowscape without a Pokémon knowing it."
+  },
+  "strength-charm": {
+    "name": "Strength Charm",
+    "shortDesc": "Lets you use Strength without a Pokémon knowing it."
+  },
+  "sunny-day-charm": {
+    "name": "Sunny Day Charm",
+    "shortDesc": "Lets you use Sunny Day without a Pokémon knowing it."
+  },
+  "surf-charm": {
+    "name": "Surf Charm",
+    "shortDesc": "Lets you use Surf without a Pokémon knowing it."
+  },
+  "waterfall-charm": {
+    "name": "Waterfall Charm",
+    "shortDesc": "Lets you use Waterfall without a Pokémon knowing it."
+  },
+  "whirlpool-charm": {
+    "name": "Whirlpool Charm",
+    "shortDesc": "Lets you use Whirlpool without a Pokémon knowing it."
+  },
+  "aether-blessing-voucher-3-days": {
+    "name": "Aether Blessing Voucher · 3 Days",
+    "shortDesc": "A tradeable voucher that adds three days to the recipient's Aether Blessing."
+  },
+  "aether-blessing-voucher-7-days": {
+    "name": "Aether Blessing Voucher · 7 Days",
+    "shortDesc": "A tradeable voucher that adds seven days to the recipient's Aether Blessing."
+  },
+  "aether-blessing-voucher-14-days": {
+    "name": "Aether Blessing Voucher · 14 Days",
+    "shortDesc": "A tradeable voucher that adds fourteen days to the recipient's Aether Blessing."
+  },
+  "aether-blessing-voucher-30-days": {
+    "name": "Aether Blessing Voucher · 30 Days",
+    "shortDesc": "A tradeable voucher that adds thirty days to the recipient's Aether Blessing."
+  },
+  "name-change-ticket": {
+    "name": "Name Change Ticket",
+    "shortDesc": "Change your username and public Trainer name."
+  },
+  "gender-chance-ticket": {
+    "name": "Gender Change Ticket",
+    "shortDesc": "Change gender and return wardrobe cosmetics to your Bag."
+  },
+  "squirtle-guild-emblem-template": {
+    "name": "Squirtle Guild Emblem",
+    "shortDesc": "Consume this template to permanently unlock it for your current Guild."
+  },
+  "charmander-guild-emblem-template": {
+    "name": "Charmander Guild Emblem",
+    "shortDesc": "Consume this template to permanently unlock it for your current Guild."
+  },
+  "bulbasaur-guild-emblem-template": {
+    "name": "Bulbasaur Guild Emblem",
+    "shortDesc": "Consume this template to permanently unlock it for your current Guild."
+  },
+  "venusaur-guild-emblem-template": {
+    "name": "Venusaur Guild Emblem",
+    "shortDesc": "Consume this template to permanently unlock it for your current Guild."
+  },
+  "charizard-guild-emblem-template": {
+    "name": "Charizard Guild Emblem",
+    "shortDesc": "Consume this template to permanently unlock it for your current Guild."
+  },
+  "blastoise-guild-emblem-template": {
+    "name": "Blastoise Guild Emblem",
+    "shortDesc": "Consume this template to permanently unlock it for your current Guild."
+  },
+  "aether-blossom-outfit": {
+    "name": "Aether Blossom Box",
+    "shortDesc": "Open this female-only outfit box to receive four separate Aether Blossom cosmetics."
+  },
+  "aether-blossom-hair": {
+    "name": "Aether Blossom Hair",
+    "shortDesc": "Move the Aether Blossom hairstyle into Character Customization."
+  },
+  "aether-blossom-earrings": {
+    "name": "Aether Blossom Earrings",
+    "shortDesc": "Move the Aether Blossom earrings into Character Customization."
+  },
+  "aether-blossom-dress": {
+    "name": "Aether Blossom Dress",
+    "shortDesc": "Move the Aether Blossom dress into Character Customization."
+  },
+  "aether-blossom-shoes": {
+    "name": "Aether Blossom Shoes",
+    "shortDesc": "Move the Aether Blossom shoes into Character Customization."
+  },
+  "aether-blossom-chroma-hair": {
+    "name": "Aether Blossom Chroma Hair",
+    "shortDesc": "Unlock the female-only, colour-customizable Aether Blossom hairstyle."
+  },
+  "aether-blossom-chroma-earrings": {
+    "name": "Aether Blossom Chroma Earrings",
+    "shortDesc": "Unlock the female-only, colour-customizable Aether Blossom earrings."
+  },
+  "aether-blossom-chroma-shoes": {
+    "name": "Aether Blossom Chroma Shoes",
+    "shortDesc": "Unlock the female-only, colour-customizable Aether Blossom shoes."
+  },
+  "aether-male-chroma-hair-1": {
+    "name": "Aether Chroma Hair I",
+    "shortDesc": "Unlock a male-only, colour-customizable Aether hairstyle."
+  },
+  "aether-male-chroma-hair-2": {
+    "name": "Aether Chroma Hair II",
+    "shortDesc": "Unlock a male-only, colour-customizable Aether hairstyle."
+  },
+  "aether-male-chroma-hair-3": {
+    "name": "Aether Chroma Hair III",
+    "shortDesc": "Unlock a male-only, colour-customizable Aether hairstyle."
+  },
+  "aether-female-chroma-hair-1": {
+    "name": "Aether Chroma Hair I",
+    "shortDesc": "Unlock a female-only, colour-customizable Aether hairstyle."
+  },
+  "aether-female-chroma-hair-2": {
+    "name": "Aether Chroma Hair II",
+    "shortDesc": "Unlock a female-only, colour-customizable Aether hairstyle."
+  },
+  "adinho-classic-outfit": {
+    "name": "Adinho Classic Box",
+    "shortDesc": "Open this male-only outfit box to receive six separate Adinho cosmetics."
+  },
+  "adinho-classic-sunglasses": {
+    "name": "Adinho Classic Sunglasses",
+    "shortDesc": "Move the original Adinho sunglasses into Character Customization."
+  },
+  "adinho-classic-shirt": {
+    "name": "Adinho Classic Shirt",
+    "shortDesc": "Move the original male-only Adinho shirt into Character Customization."
+  },
+  "adinho-classic-trousers": {
+    "name": "Adinho Classic Trousers",
+    "shortDesc": "Move the original male-only Adinho trousers into Character Customization."
+  },
+  "adinho-classic-shoes": {
+    "name": "Adinho Classic Shoes",
+    "shortDesc": "Move the original male-only Adinho shoes into Character Customization."
+  },
+  "adinho-chroma-hair": {
+    "name": "Adinho Chroma Hair",
+    "shortDesc": "Unlock the male-only Adinho Chroma hairstyle."
+  },
+  "adinho-chroma-beard": {
+    "name": "Adinho Chroma Beard",
+    "shortDesc": "Unlock the male-only, colour-customizable Adinho beard."
+  },
+  "adinho-chroma-glasses": {
+    "name": "Adinho Chroma Glasses",
+    "shortDesc": "Unlock the male-only, colour-customizable Adinho glasses."
+  },
+  "adinho-chroma-shirt": {
+    "name": "Adinho Chroma Shirt",
+    "shortDesc": "Unlock the male-only, colour-customizable Adinho shirt."
+  },
+  "adinho-chroma-trousers": {
+    "name": "Adinho Chroma Trousers",
+    "shortDesc": "Unlock the male-only, colour-customizable Adinho trousers."
+  },
+  "adinho-chroma-shoes": {
+    "name": "Adinho Chroma Shoes",
+    "shortDesc": "Unlock the male-only, colour-customizable Adinho shoes."
+  }
+}
