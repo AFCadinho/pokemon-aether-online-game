@@ -1,10 +1,20 @@
 # PokeAether localization implementation plan
 
-Status: planned
+Status: in progress
 
 Created: 2026-07-29
 
 Initial locales: English (`en`), Dutch (`nl`), Brazilian Portuguese (`pt-BR`)
+
+## Progress
+
+| Phase | Status |
+| --- | --- |
+| Phase 0: inventory and conventions | Complete; see `localization_inventory.md` and `localization_conventions.md` |
+| Phase 1: Godot localization foundation | Complete in commit `96be89e3a` |
+| Phase 2: login and settings pilot | Complete in commit `96be89e3a` |
+| Phase 3: automated guardrails | In progress; catalog, placeholder, fallback, persistence, and pilot layout checks are active |
+| Phases 4-10 | Planned |
 
 ## Goal
 
