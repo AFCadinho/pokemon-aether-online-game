@@ -265,7 +265,7 @@ func _run() -> void:
 	_check(
 		ui_source.contains("const DEFAULT_APPEARANCE_SLOT_LIMIT := 8")
 			and ui_source.contains("func _refresh_trainer_card_appearance_capacity_label()")
-			and ui_source.contains('"%s wardrobe · %d/%d unlocked"'),
+			and ui_source.contains('"ui.appearance.wardrobe_capacity"'),
 		"Character Customization shows the eight-item limit for each cosmetic slot"
 	)
 	_check(

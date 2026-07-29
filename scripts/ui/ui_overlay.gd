@@ -143,14 +143,14 @@ const STATUS_ICON_SHEET: Texture2D = preload("res://assets/battles/status/icon_s
 const PLAYER_PREVIEW_SCENE: PackedScene = preload("res://scenes/player.tscn")
 const DEFAULT_APPEARANCE_SLOT_LIMIT := 8
 const APPEARANCE_CATEGORIES := [
-	{"id": "body", "label": "Body"},
-	{"id": "hair", "label": "Hair"},
-	{"id": "headgear", "label": "Headgear"},
-	{"id": "facial_hair", "label": "Facial Hair"},
-	{"id": "facegear", "label": "Facegear"},
-	{"id": "top", "label": "Top"},
-	{"id": "bottom", "label": "Bottom"},
-	{"id": "shoes", "label": "Shoes"},
+	{"id": "body", "label_key": "ui.appearance.category.body"},
+	{"id": "hair", "label_key": "ui.appearance.category.hair"},
+	{"id": "headgear", "label_key": "ui.appearance.category.headgear"},
+	{"id": "facial_hair", "label_key": "ui.appearance.category.facial_hair"},
+	{"id": "facegear", "label_key": "ui.appearance.category.facegear"},
+	{"id": "top", "label_key": "ui.appearance.category.top"},
+	{"id": "bottom", "label_key": "ui.appearance.category.bottom"},
+	{"id": "shoes", "label_key": "ui.appearance.category.shoes"},
 ]
 const HAIR_COLOR_SWATCHES := CharacterAppearanceService.HAIR_COLOR_SWATCHES
 const CHROMA_COLOR_SWATCHES := CharacterAppearanceService.CHROMA_COLOR_SWATCHES
@@ -832,6 +832,9 @@ var hotkey_sidebar_dragging := false
 var hotkey_sidebar_drag_offset := Vector2.ZERO
 var trainer_card_popup: PanelContainer
 var public_trainer_card_popup: PanelContainer
+var public_trainer_card_data: Dictionary = {}
+var trainer_card_tabs: TabContainer
+var trainer_card_subtitle_label: Label
 var trainer_card_avatar_viewports: Array[SubViewport] = []
 var trainer_card_money_label: Label
 var trainer_card_aether_gems_label: Label
@@ -862,6 +865,8 @@ var trainer_card_badge_options: Array[Dictionary] = []
 var trainer_card_gym_badge_slots: Dictionary = {}
 var trainer_card_has_unsaved_appearance_changes := false
 var trainer_card_is_saving_appearance := false
+var trainer_card_appearance_message_key := ""
+var trainer_card_appearance_message_values: Dictionary = {}
 var trainer_card_dragging: bool = false
 var trainer_card_drag_offset := Vector2.ZERO
 var bag_popup: PanelContainer
@@ -1401,6 +1406,7 @@ func _on_locale_changed(_locale: String) -> void:
 	_refresh_mail_localized_ui()
 	_refresh_pc_localized_ui()
 	_refresh_pvp_localized_ui()
+	_refresh_trainer_card_localized_ui()
 	_refresh_dev_world_time_selector()
 	_refresh_dev_world_weather_selector()
 	if staff_impersonate_token_input != null and not staff_impersonate_in_flight:
@@ -10299,6 +10305,45 @@ func _apply_trainer_card_tabs_style(tabs: TabContainer) -> void:
 	)
 	tabs.add_theme_stylebox_override("panel", _make_trainer_card_inset_style())
 
+func _refresh_trainer_card_tab_titles() -> void:
+	if trainer_card_tabs == null:
+		return
+	for index in range(trainer_card_tabs.get_tab_count()):
+		var page := trainer_card_tabs.get_child(index)
+		if page == null:
+			continue
+		var key := str(page.get_meta("i18n_tab_key", ""))
+		if key != "":
+			trainer_card_tabs.set_tab_title(index, LocalizationManager.text(key))
+
+func _refresh_trainer_card_localized_ui() -> void:
+	if trainer_card_popup != null:
+		LocalizationManager.localize_tree(trainer_card_popup)
+	if trainer_card_natural_colors_popup != null:
+		LocalizationManager.localize_tree(trainer_card_natural_colors_popup)
+	if trainer_card_subtitle_label != null:
+		trainer_card_subtitle_label.text = LocalizationManager.text(
+			"ui.trainer_card.passport",
+			{"id": _get_trainer_id_text()}
+		)
+	_refresh_trainer_card_tab_titles()
+	_populate_trainer_card_badge_option()
+	_refresh_trainer_card_gym_badges()
+	_refresh_trainer_card_body_buttons()
+	_refresh_trainer_card_part_buttons()
+	_refresh_trainer_card_color_buttons()
+	_refresh_trainer_card_appearance_capacity_label()
+	_update_trainer_card_appearance_save_state(
+		trainer_card_appearance_message_key,
+		trainer_card_appearance_message_values
+	)
+	if (
+		public_trainer_card_popup != null
+		and public_trainer_card_popup.visible
+		and not public_trainer_card_data.is_empty()
+	):
+		_show_public_trainer_card(public_trainer_card_data)
+
 func _setup_trainer_card_popup() -> void:
 	trainer_card_popup = PanelContainer.new()
 	trainer_card_popup.name = "TrainerCardPopup"
@@ -10351,10 +10396,14 @@ func _setup_trainer_card_popup() -> void:
 	title_stack.add_child(title)
 
 	var subtitle := Label.new()
-	subtitle.text = "TRAINER PASSPORT  ·  ID %s" % _get_trainer_id_text()
+	subtitle.text = LocalizationManager.text(
+		"ui.trainer_card.passport",
+		{"id": _get_trainer_id_text()}
+	)
 	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	subtitle.add_theme_font_size_override("font_size", 10)
 	subtitle.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
+	trainer_card_subtitle_label = subtitle
 	title_stack.add_child(subtitle)
 
 	header.add_child(_create_trainer_card_redeem_button())
@@ -10368,18 +10417,20 @@ func _setup_trainer_card_popup() -> void:
 	_apply_button_style(close_button)
 	header.add_child(close_button)
 
-	var tabs := TabContainer.new()
-	tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	tabs.add_theme_font_size_override("font_size", 13)
-	tabs.add_child(_create_trainer_card_stats_tab())
-	tabs.add_child(_create_trainer_card_wallet_tab())
-	tabs.add_child(_create_trainer_card_appearance_tab())
-	tabs.add_child(_create_trainer_card_badges_tab())
-	_apply_trainer_card_tabs_style(tabs)
-	layout.add_child(tabs)
+	trainer_card_tabs = TabContainer.new()
+	trainer_card_tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	trainer_card_tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	trainer_card_tabs.add_theme_font_size_override("font_size", 13)
+	trainer_card_tabs.add_child(_create_trainer_card_stats_tab())
+	trainer_card_tabs.add_child(_create_trainer_card_wallet_tab())
+	trainer_card_tabs.add_child(_create_trainer_card_appearance_tab())
+	trainer_card_tabs.add_child(_create_trainer_card_badges_tab())
+	_apply_trainer_card_tabs_style(trainer_card_tabs)
+	_refresh_trainer_card_tab_titles()
+	layout.add_child(trainer_card_tabs)
 
 func _show_public_trainer_card(card: Dictionary) -> void:
+	public_trainer_card_data = card.duplicate(true)
 	_hide_trainer_card()
 	_hide_public_trainer_card()
 	public_trainer_card_popup = PanelContainer.new()
@@ -10415,7 +10466,7 @@ func _show_public_trainer_card(card: Dictionary) -> void:
 	header_spacer.custom_minimum_size = Vector2(34, 0)
 	header.add_child(header_spacer)
 	var title := Label.new()
-	title.text = "Trainer Card"
+	_set_localized_control_property(title, "text", "ui.trainer_card.title")
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 22)
@@ -10442,12 +10493,12 @@ func _show_public_trainer_card(card: Dictionary) -> void:
 	body.add_child(details)
 
 	var identity_rows: Array[Dictionary] = [
-		{"label": "Name", "value": str(card.get("displayName", card.get("username", "Trainer")))},
-		{"label": "ID", "value": str(card.get("userId", "-"))},
-		{"label": "Joined", "value": _format_join_date_text(str(card.get("createdAt", "")), "-")},
-		{"label": "Badge", "value": _get_public_trainer_badge_text(card)},
+		{"label_key": "ui.trainer_card.field.name", "value": str(card.get("displayName", card.get("username", LocalizationManager.text("ui.trainer_card.trainer"))))},
+		{"label_key": "ui.trainer_card.field.id", "value": str(card.get("userId", "-"))},
+		{"label_key": "ui.trainer_card.field.joined", "value": _format_join_date_text(str(card.get("createdAt", "")), "-")},
+		{"label_key": "ui.trainer_card.field.badge", "value": _get_public_trainer_badge_text(card)},
 	]
-	details.add_child(_create_public_trainer_info_panel("TRAINER PROFILE", identity_rows))
+	details.add_child(_create_public_trainer_info_panel("ui.trainer_card.profile_section", identity_rows))
 	details.add_child(_create_public_trainer_gym_badges_panel(card))
 
 	var summary_row := HBoxContainer.new()
@@ -10455,18 +10506,18 @@ func _show_public_trainer_card(card: Dictionary) -> void:
 	summary_row.add_theme_constant_override("separation", 10)
 	details.add_child(summary_row)
 	var adventure_rows: Array[Dictionary] = [
-		{"label": "Playtime", "value": _format_playtime(int(card.get("playtimeSeconds", 0)))},
-		{"label": "Status", "value": "Online"},
+		{"label_key": "ui.trainer_card.field.playtime", "value": _format_playtime(int(card.get("playtimeSeconds", 0)))},
+		{"label_key": "ui.trainer_card.field.status", "value": LocalizationManager.text("ui.trainer_card.status.online")},
 	]
-	var location_text := str(card.get("mapId", "Nearby")).strip_edges()
+	var location_text := str(card.get("mapId", LocalizationManager.text("ui.trainer_card.status.nearby"))).strip_edges()
 	if location_text == "":
-		location_text = "Nearby"
+		location_text = LocalizationManager.text("ui.trainer_card.status.nearby")
 	var presence_rows: Array[Dictionary] = [
-		{"label": "Location", "value": location_text},
-		{"label": "Profile", "value": "Public"},
+		{"label_key": "ui.trainer_card.field.location", "value": location_text},
+		{"label_key": "ui.trainer_card.field.profile", "value": LocalizationManager.text("ui.trainer_card.status.public")},
 	]
-	summary_row.add_child(_create_public_trainer_info_panel("ADVENTURE", adventure_rows))
-	summary_row.add_child(_create_public_trainer_info_panel("PRESENCE", presence_rows))
+	summary_row.add_child(_create_public_trainer_info_panel("ui.trainer_card.adventure", adventure_rows))
+	summary_row.add_child(_create_public_trainer_info_panel("ui.trainer_card.presence", presence_rows))
 
 	_activate_ui_panel(public_trainer_card_popup)
 
@@ -10500,7 +10551,10 @@ func _create_public_trainer_gym_badges_panel(card: Dictionary) -> Control:
 			earned_count += 1
 
 	var heading := Label.new()
-	heading.text = "GYM BADGES  ·  %d/%d" % [earned_count, KANTO_BADGES.size()]
+	heading.text = LocalizationManager.text(
+		"ui.trainer_card.gym_badges",
+		{"earned": earned_count, "total": KANTO_BADGES.size()}
+	)
 	heading.add_theme_font_size_override("font_size", 11)
 	heading.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
 	stack.add_child(heading)
@@ -10525,10 +10579,15 @@ func _create_public_trainer_gym_badges_panel(card: Dictionary) -> Control:
 func _create_public_trainer_gym_badge_icon(badge: Dictionary, earned: bool) -> Control:
 	var icon_center := CenterContainer.new()
 	icon_center.custom_minimum_size = Vector2(43, 43)
-	icon_center.tooltip_text = "%s · %s" % [
-		str(badge.get("name", "Badge")),
-		"Earned" if earned else "Locked",
-	]
+	icon_center.tooltip_text = LocalizationManager.text(
+		"ui.trainer_card.badge.tooltip",
+		{
+			"name": str(badge.get("name", LocalizationManager.text("ui.trainer_card.field.badge"))),
+			"state": LocalizationManager.text(
+				"ui.trainer_card.badge.earned" if earned else "ui.trainer_card.badge.locked"
+			),
+		}
+	)
 
 	var texture_rect := TextureRect.new()
 	texture_rect.custom_minimum_size = Vector2(39, 39)
@@ -10557,7 +10616,7 @@ func _create_public_trainer_avatar_panel(card: Dictionary) -> Control:
 	stack.add_theme_constant_override("separation", 8)
 	margin.add_child(stack)
 	var preview_label := Label.new()
-	preview_label.text = "TRAINER"
+	_set_localized_control_property(preview_label, "text", "ui.trainer_card.trainer")
 	preview_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	preview_label.add_theme_font_size_override("font_size", 10)
 	preview_label.add_theme_color_override("font_color", TRAINER_CARD_CYAN)
@@ -10595,7 +10654,7 @@ func _create_public_trainer_avatar_panel(card: Dictionary) -> Control:
 	stack.add_child(name_label)
 	return panel
 
-func _create_public_trainer_info_panel(title_text: String, rows: Array[Dictionary]) -> Control:
+func _create_public_trainer_info_panel(title_key: String, rows: Array[Dictionary]) -> Control:
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -10610,14 +10669,14 @@ func _create_public_trainer_info_panel(title_text: String, rows: Array[Dictionar
 	stack.add_theme_constant_override("separation", 5)
 	margin.add_child(stack)
 	var title := Label.new()
-	title.text = title_text
+	_set_localized_control_property(title, "text", title_key)
 	title.add_theme_font_size_override("font_size", 11)
 	title.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
 	stack.add_child(title)
 	for row: Dictionary in rows:
 		var line := HBoxContainer.new()
 		var label := Label.new()
-		label.text = "%s:" % str(row.get("label", ""))
+		_set_localized_control_property(label, "text", str(row.get("label_key", "")))
 		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		label.add_theme_font_size_override("font_size", 14)
 		label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -10683,7 +10742,7 @@ func _create_trainer_card_avatar_panel(
 
 	if show_name:
 		var preview_label := Label.new()
-		preview_label.text = "TRAINER"
+		_set_localized_control_property(preview_label, "text", "ui.trainer_card.trainer")
 		preview_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		preview_label.add_theme_font_size_override("font_size", 10)
 		preview_label.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
@@ -10714,6 +10773,7 @@ func _create_trainer_card_avatar_panel(
 func _create_trainer_card_stats_tab() -> Control:
 	var tab := MarginContainer.new()
 	tab.name = "Trainer"
+	tab.set_meta("i18n_tab_key", "ui.trainer_card.tab.trainer")
 	tab.add_theme_constant_override("margin_left", 8)
 	tab.add_theme_constant_override("margin_top", 8)
 	tab.add_theme_constant_override("margin_right", 8)
@@ -10740,17 +10800,17 @@ func _create_trainer_card_stats_tab() -> Control:
 	layout.add_child(stats_row)
 
 	var adventure_rows: Array[Dictionary] = [
-		{"label": "Join Date", "value": _get_formatted_trainer_stat_text("join_date", "-")},
-		{"label": "Playtime", "value": _format_playtime(PlayerSave.playtime_seconds)},
-		{"label": "Pokemon Caught", "value": _get_trainer_stat_text("pokemon_caught", "0")},
-		{"label": "Pokemon Seen", "value": _get_trainer_stat_text("pokemon_seen", "0")},
+		{"id": "join_date", "label_key": "ui.trainer_card.field.join_date", "value": _get_formatted_trainer_stat_text("join_date", "-")},
+		{"id": "playtime", "label_key": "ui.trainer_card.field.playtime", "value": _format_playtime(PlayerSave.playtime_seconds)},
+		{"id": "pokemon_caught", "label_key": "ui.trainer_card.field.pokemon_caught", "value": _get_trainer_stat_text("pokemon_caught", "0")},
+		{"id": "pokemon_seen", "label_key": "ui.trainer_card.field.pokemon_seen", "value": _get_trainer_stat_text("pokemon_seen", "0")},
 	]
 	var battle_rows: Array[Dictionary] = [
-		{"label": "Victories", "value": _get_trainer_stat_text("victories", "0")},
-		{"label": "Defeats", "value": _get_trainer_stat_text("defeats", "0")},
+		{"id": "victories", "label_key": "ui.trainer_card.field.victories", "value": _get_trainer_stat_text("victories", "0")},
+		{"id": "defeats", "label_key": "ui.trainer_card.field.defeats", "value": _get_trainer_stat_text("defeats", "0")},
 	]
-	stats_row.add_child(_create_trainer_card_stat_panel("Adventure Stats", adventure_rows))
-	stats_row.add_child(_create_trainer_card_stat_panel("Battle Stats", battle_rows))
+	stats_row.add_child(_create_trainer_card_stat_panel("ui.trainer_card.stats.adventure", adventure_rows))
+	stats_row.add_child(_create_trainer_card_stat_panel("ui.trainer_card.stats.battle", battle_rows))
 
 	var spacer := Control.new()
 	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -10762,6 +10822,7 @@ func _create_trainer_card_stats_tab() -> Control:
 func _create_trainer_card_wallet_tab() -> Control:
 	var tab := MarginContainer.new()
 	tab.name = "Wallet"
+	tab.set_meta("i18n_tab_key", "ui.trainer_card.tab.wallet")
 	tab.add_theme_constant_override("margin_left", 12)
 	tab.add_theme_constant_override("margin_top", 12)
 	tab.add_theme_constant_override("margin_right", 12)
@@ -10774,13 +10835,13 @@ func _create_trainer_card_wallet_tab() -> Control:
 	tab.add_child(layout)
 
 	var heading := Label.new()
-	heading.text = "CURRENCY WALLET"
+	_set_localized_control_property(heading, "text", "ui.trainer_card.wallet.title")
 	heading.add_theme_font_size_override("font_size", 12)
 	heading.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
 	layout.add_child(heading)
 
 	var introduction := Label.new()
-	introduction.text = "Your account balances. Future voucher items remain in the Bag until they are used."
+	_set_localized_control_property(introduction, "text", "ui.trainer_card.wallet.intro")
 	introduction.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	introduction.add_theme_font_size_override("font_size", 13)
 	introduction.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -10795,8 +10856,8 @@ func _create_trainer_card_wallet_tab() -> Control:
 	layout.add_child(cards)
 	cards.add_child(
 		_create_trainer_card_currency_card(
-			"Pokédollars",
-			"Earned through normal gameplay and used by regular shops and services.",
+			"ui.trainer_card.wallet.money",
+			"ui.trainer_card.wallet.money_description",
 			TRAINER_WALLET_MONEY_ICON,
 			TRAINER_CARD_GREEN,
 			"money"
@@ -10804,8 +10865,8 @@ func _create_trainer_card_wallet_tab() -> Control:
 	)
 	cards.add_child(
 		_create_trainer_card_currency_card(
-			"Aether Gems",
-			"Supporter currency used for available products in the Aether Gift Store.",
+			"ui.trainer_card.wallet.gems",
+			"ui.trainer_card.wallet.gems_description",
 			TRAINER_WALLET_AETHER_GEM_ICON,
 			UI_PURPLE_HOVER,
 			"gems"
@@ -10813,8 +10874,8 @@ func _create_trainer_card_wallet_tab() -> Control:
 	)
 	cards.add_child(
 		_create_trainer_card_currency_card(
-			"Aetherite",
-			"Future gameplay currency. Earning and spending options are coming later.",
+			"ui.trainer_card.wallet.aetherite",
+			"ui.trainer_card.wallet.aetherite_description",
 			TRAINER_WALLET_AETHERITE_ICON,
 			TRAINER_CARD_CYAN,
 			"aetherite"
@@ -10822,8 +10883,8 @@ func _create_trainer_card_wallet_tab() -> Control:
 	)
 	cards.add_child(
 		_create_trainer_card_currency_card(
-			"Battle Points",
-			"Future battle currency. Earning and spending options are coming later.",
+			"ui.trainer_card.wallet.battle_points",
+			"ui.trainer_card.wallet.battle_points_description",
 			TRAINER_WALLET_BATTLE_POINTS_ICON,
 			TRAINER_CARD_ACCENT,
 			"battle_points"
@@ -10833,8 +10894,8 @@ func _create_trainer_card_wallet_tab() -> Control:
 
 
 func _create_trainer_card_currency_card(
-	title_text: String,
-	description_text: String,
+	title_key: String,
+	description_key: String,
 	icon_texture: Texture2D,
 	accent: Color,
 	currency_key: String
@@ -10879,7 +10940,7 @@ func _create_trainer_card_currency_card(
 	details.add_child(title_row)
 
 	var title := Label.new()
-	title.text = title_text
+	_set_localized_control_property(title, "text", title_key)
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.add_theme_font_size_override("font_size", 14)
 	title.add_theme_color_override("font_color", UI_TEXT)
@@ -10902,7 +10963,7 @@ func _create_trainer_card_currency_card(
 			trainer_card_battle_points_label = balance
 
 	var description := Label.new()
-	description.text = description_text
+	_set_localized_control_property(description, "text", description_key)
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	description.add_theme_font_size_override("font_size", 11)
 	description.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -10925,7 +10986,7 @@ func _get_trainer_card_currency_balance(currency_key: String) -> int:
 func _create_trainer_card_redeem_button() -> Button:
 	var redeem_button := Button.new()
 	redeem_button.name = "RedeemCodeButton"
-	redeem_button.text = "Redeem Code"
+	_set_localized_control_property(redeem_button, "text", "ui.trainer_card.redeem")
 	redeem_button.icon = REDEEM_CODE_ICON
 	redeem_button.add_theme_constant_override("icon_max_width", 18)
 	redeem_button.expand_icon = true
@@ -10933,7 +10994,7 @@ func _create_trainer_card_redeem_button() -> Button:
 	redeem_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	redeem_button.focus_mode = Control.FOCUS_NONE
 	redeem_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	redeem_button.tooltip_text = "Enter a promotional gift code"
+	_set_localized_control_property(redeem_button, "tooltip_text", "ui.trainer_card.redeem_tooltip")
 	_apply_button_style(redeem_button)
 	return redeem_button
 
@@ -10956,13 +11017,13 @@ func _create_trainer_card_identity_panel() -> Control:
 	margin_container.add_child(rows)
 
 	var heading := Label.new()
-	heading.text = "PROFILE"
+	_set_localized_control_property(heading, "text", "ui.trainer_card.profile")
 	heading.add_theme_font_size_override("font_size", 11)
 	heading.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
 	rows.add_child(heading)
 
-	rows.add_child(_create_trainer_card_stat_row("Trainer ID", _get_trainer_id_text(), 104, 15, TRAINER_CARD_CYAN))
-	rows.add_child(_create_trainer_card_stat_row("Guild", _get_trainer_stat_text("guild", "-"), 104, 15, UI_TEXT))
+	rows.add_child(_create_trainer_card_stat_row("ui.trainer_card.field.trainer_id", _get_trainer_id_text(), 104, 15, TRAINER_CARD_CYAN))
+	rows.add_child(_create_trainer_card_stat_row("ui.trainer_card.field.guild", _get_trainer_stat_text("guild", "-"), 104, 15, UI_TEXT))
 	rows.add_child(_create_trainer_card_badge_row())
 	return panel
 
@@ -10972,7 +11033,7 @@ func _create_trainer_card_badge_row() -> Control:
 	row.add_theme_constant_override("separation", 10)
 
 	var label := Label.new()
-	label.text = "Badge:"
+	_set_localized_control_property(label, "text", "ui.trainer_card.field.badge")
 	label.custom_minimum_size = Vector2(104, 0)
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 16)
@@ -11035,7 +11096,13 @@ func _populate_trainer_card_badge_option() -> void:
 	trainer_card_badge_options = _get_selectable_chat_badge_roles(AuthService.current_user)
 	trainer_card_badge_option.clear()
 	for option: Dictionary in trainer_card_badge_options:
-		trainer_card_badge_option.add_item(str(option.get("label", "None")))
+		var option_id := str(option.get("id", ""))
+		var option_label := (
+			LocalizationManager.text("ui.trainer_card.badge.none")
+			if option_id == "" or option_id == "none"
+			else str(option.get("label", LocalizationManager.text("ui.trainer_card.badge.none")))
+		)
+		trainer_card_badge_option.add_item(option_label)
 		trainer_card_badge_option.set_item_metadata(trainer_card_badge_option.item_count - 1, str(option.get("id", "")))
 
 	var selected_badge: String = _get_selected_role_badge_preference()
@@ -11052,13 +11119,13 @@ func _on_trainer_card_badge_selected(index: int) -> void:
 		return
 	var selected_badge: String = str(trainer_card_badge_option.get_item_metadata(index)).strip_edges().to_lower()
 	_apply_selected_role_badge_preference(selected_badge)
-	trainer_card_badge_status_label.text = "Saving"
+	_set_localized_control_property(trainer_card_badge_status_label, "text", "ui.trainer_card.badge.saving")
 	var result: Dictionary = await _save_toggle_preferences()
 	if bool(result.get("success", false)):
-		trainer_card_badge_status_label.text = "Saved"
+		_set_localized_control_property(trainer_card_badge_status_label, "text", "ui.trainer_card.badge.saved")
 		_refresh_world_role_badge_state()
 	else:
-		trainer_card_badge_status_label.text = "Error"
+		_set_localized_control_property(trainer_card_badge_status_label, "text", "ui.trainer_card.badge.error")
 
 func _get_selected_role_badge_preference() -> String:
 	var selected_badge: String = GameState.selected_role_badge.strip_edges().to_lower()
@@ -11084,7 +11151,7 @@ func _get_current_user_with_selected_badge() -> Dictionary:
 	user["selectedRoleBadge"] = GameState.selected_role_badge
 	return user
 
-func _create_trainer_card_stat_panel(title_text: String, rows: Array[Dictionary]) -> Control:
+func _create_trainer_card_stat_panel(title_key: String, rows: Array[Dictionary]) -> Control:
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -11102,7 +11169,7 @@ func _create_trainer_card_stat_panel(title_text: String, rows: Array[Dictionary]
 	margin_container.add_child(layout)
 
 	var title := Label.new()
-	title.text = title_text.to_upper()
+	_set_localized_control_property(title, "text", title_key)
 	title.add_theme_font_size_override("font_size", 11)
 	title.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
 	layout.add_child(title)
@@ -11114,25 +11181,33 @@ func _create_trainer_card_stat_panel(title_text: String, rows: Array[Dictionary]
 	layout.add_child(row_stack)
 
 	for row_value: Dictionary in rows:
-		var label_text: String = str(row_value.get("label", ""))
+		var label_key: String = str(row_value.get("label_key", ""))
 		var value_text: String = str(row_value.get("value", ""))
 		var value_color: Color = TRAINER_CARD_GREEN if bool(row_value.get("money", false)) else UI_TEXT
-		row_stack.add_child(_create_trainer_card_stat_row(label_text, value_text, 130, 15, value_color))
+		row_stack.add_child(_create_trainer_card_stat_row(
+			label_key,
+			value_text,
+			130,
+			15,
+			value_color,
+			str(row_value.get("id", ""))
+		))
 
 	return panel
 
 func _create_trainer_card_stat_row(
-	label_text: String,
+	label_key: String,
 	value_text: String,
 	label_width: float = 82.0,
 	font_size: int = 16,
-	value_color: Color = TRAINER_CARD_CYAN
+	value_color: Color = TRAINER_CARD_CYAN,
+	field_id: String = ""
 ) -> Control:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 10)
 
 	var label := Label.new()
-	label.text = "%s:" % label_text
+	_set_localized_control_property(label, "text", label_key)
 	label.custom_minimum_size = Vector2(label_width, 0)
 	label.add_theme_font_size_override("font_size", font_size)
 	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -11146,9 +11221,9 @@ func _create_trainer_card_stat_row(
 	value.add_theme_color_override("font_color", value_color)
 	value.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	row.add_child(value)
-	if label_text == "Money":
+	if field_id == "money":
 		trainer_card_money_label = value
-	elif label_text == "Playtime":
+	elif field_id == "playtime":
 		trainer_card_playtime_label = value
 
 	return row
@@ -11158,6 +11233,7 @@ func _create_trainer_card_appearance_tab() -> Control:
 	trainer_card_appearance_capacity_label = null
 	var tab := MarginContainer.new()
 	tab.name = "Appearance"
+	tab.set_meta("i18n_tab_key", "ui.trainer_card.tab.appearance")
 	tab.add_theme_constant_override("margin_left", 10)
 	tab.add_theme_constant_override("margin_top", 10)
 	tab.add_theme_constant_override("margin_right", 10)
@@ -11175,7 +11251,7 @@ func _create_trainer_card_appearance_tab() -> Control:
 	layout.add_child(preview_column)
 
 	var preview_label := Label.new()
-	preview_label.text = "LIVE PREVIEW"
+	_set_localized_control_property(preview_label, "text", "ui.appearance.live_preview")
 	preview_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	preview_label.add_theme_font_size_override("font_size", 10)
 	preview_label.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
@@ -11206,7 +11282,7 @@ func _create_trainer_card_appearance_tab() -> Control:
 	sidebar_margin.add_child(sidebar)
 
 	var sidebar_label := Label.new()
-	sidebar_label.text = "CUSTOMIZE"
+	_set_localized_control_property(sidebar_label, "text", "ui.appearance.customize")
 	sidebar_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	sidebar_label.add_theme_font_size_override("font_size", 10)
 	sidebar_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -11250,9 +11326,9 @@ func _create_trainer_card_appearance_tab() -> Control:
 
 		var category: Dictionary = category_value as Dictionary
 		var category_id: String = str(category.get("id", ""))
-		var category_label: String = str(category.get("label", category_id.capitalize()))
+		var category_key: String = str(category.get("label_key", "ui.appearance.category.%s" % category_id))
 		var side_button := Button.new()
-		side_button.text = category_label
+		_set_localized_control_property(side_button, "text", category_key)
 		side_button.focus_mode = Control.FOCUS_NONE
 		side_button.custom_minimum_size = Vector2(0, 34)
 		side_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -11292,7 +11368,7 @@ func _create_trainer_card_appearance_save_row() -> Control:
 	row.add_child(trainer_card_appearance_status_label)
 
 	trainer_card_appearance_save_button = Button.new()
-	trainer_card_appearance_save_button.text = "Save"
+	_set_localized_control_property(trainer_card_appearance_save_button, "text", "common.save")
 	trainer_card_appearance_save_button.custom_minimum_size = Vector2(96, 32)
 	trainer_card_appearance_save_button.focus_mode = Control.FOCUS_NONE
 	trainer_card_appearance_save_button.pressed.connect(_on_trainer_card_appearance_save_pressed)
@@ -11303,6 +11379,7 @@ func _create_trainer_card_appearance_save_row() -> Control:
 func _create_trainer_card_badges_tab() -> Control:
 	var tab := MarginContainer.new()
 	tab.name = "Badges"
+	tab.set_meta("i18n_tab_key", "ui.trainer_card.tab.badges")
 	tab.add_theme_constant_override("margin_left", 12)
 	tab.add_theme_constant_override("margin_top", 10)
 	tab.add_theme_constant_override("margin_right", 12)
@@ -11447,7 +11524,15 @@ func _apply_trainer_card_gym_badge_slot_state(
 	earned: bool
 ) -> void:
 	texture_rect.modulate = Color.WHITE if earned else Color("#6873839a")
-	slot.tooltip_text = "%s · %s" % [badge_name, "Earned" if earned else "Locked"]
+	slot.tooltip_text = LocalizationManager.text(
+		"ui.trainer_card.badge.tooltip",
+		{
+			"name": badge_name,
+			"state": LocalizationManager.text(
+				"ui.trainer_card.badge.earned" if earned else "ui.trainer_card.badge.locked"
+			),
+		}
+	)
 
 func _gym_badge_state_has(state: Dictionary, region: String, badge_id: String) -> bool:
 	var wanted_key := _gym_badge_key(region, badge_id)
@@ -11664,11 +11749,11 @@ func _create_trainer_card_body_appearance_content(content_stack: VBoxContainer) 
 	trainer_card_appearance_capacity_label = null
 	_create_trainer_card_appearance_section_header(
 		content_stack,
-		"Body",
-		"Choose the body model for your trainer."
+		"ui.appearance.category.body",
+		"ui.appearance.body_description"
 	)
 
-	var search_input := _create_trainer_card_appearance_search_input("Search bodies")
+	var search_input := _create_trainer_card_appearance_search_input("ui.appearance.search_bodies")
 	search_input.text_changed.connect(_filter_trainer_card_body_buttons)
 	content_stack.add_child(search_input)
 
@@ -11716,26 +11801,30 @@ func _create_trainer_card_natural_colors_summary(content_stack: VBoxContainer) -
 	row.add_child(copy)
 
 	var title := Label.new()
-	title.text = "Natural Colors"
+	_set_localized_control_property(title, "text", "ui.appearance.natural.title")
 	title.add_theme_font_size_override("font_size", 13)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	copy.add_child(title)
 
 	var hint := Label.new()
-	hint.text = "Skin · eyes · starter hair"
+	_set_localized_control_property(hint, "text", "ui.appearance.natural.hint")
 	hint.add_theme_font_size_override("font_size", 10)
 	hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	copy.add_child(hint)
 
 	for color_entry: Dictionary in [
-		{"key": "skin_tone", "label": "Skin tone"},
-		{"key": "eye_color", "label": "Eye color"},
-		{"key": "hair_color", "label": "Starter hair color"},
+		{"key": "skin_tone", "label_key": "ui.appearance.color.skin"},
+		{"key": "eye_color", "label_key": "ui.appearance.color.eye"},
+		{"key": "hair_color", "label_key": "ui.appearance.color.starter_hair"},
 	]:
 		var color_key := str(color_entry.get("key", ""))
 		var swatch := Button.new()
 		swatch.text = ""
-		swatch.tooltip_text = str(color_entry.get("label", "Color"))
+		_set_localized_control_property(
+			swatch,
+			"tooltip_text",
+			str(color_entry.get("label_key", "ui.appearance.color.generic"))
+		)
 		swatch.custom_minimum_size = Vector2(27, 27)
 		swatch.focus_mode = Control.FOCUS_NONE
 		swatch.pressed.connect(_open_trainer_card_natural_colors_popup)
@@ -11743,8 +11832,8 @@ func _create_trainer_card_natural_colors_summary(content_stack: VBoxContainer) -
 		trainer_card_natural_color_summary_buttons[color_key] = swatch
 
 	var edit_button := Button.new()
-	edit_button.text = "Edit"
-	edit_button.tooltip_text = "Edit natural trainer colors"
+	_set_localized_control_property(edit_button, "text", "common.edit")
+	_set_localized_control_property(edit_button, "tooltip_text", "ui.appearance.natural.edit_tooltip")
 	edit_button.custom_minimum_size = Vector2(58, 30)
 	edit_button.focus_mode = Control.FOCUS_NONE
 	edit_button.pressed.connect(_open_trainer_card_natural_colors_popup)
@@ -11785,13 +11874,13 @@ func _open_trainer_card_natural_colors_popup() -> void:
 	header.add_child(heading)
 
 	var title := Label.new()
-	title.text = "Natural Colors"
+	_set_localized_control_property(title, "text", "ui.appearance.natural.title")
 	title.add_theme_font_size_override("font_size", 18)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	heading.add_child(title)
 
 	var description := Label.new()
-	description.text = "Free trainer colors. Chroma items are dyed at Aether Atelier."
+	_set_localized_control_property(description, "text", "ui.appearance.natural.description")
 	description.add_theme_font_size_override("font_size", 10)
 	description.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	heading.add_child(description)
@@ -11815,11 +11904,11 @@ func _open_trainer_card_natural_colors_popup() -> void:
 	palettes.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	palettes.add_theme_constant_override("separation", 8)
 	scroll.add_child(palettes)
-	_create_trainer_card_color_palette(palettes, "Skin Tone", "skin_tone", SKIN_TONE_SWATCHES)
-	_create_trainer_card_color_palette(palettes, "Eye Color", "eye_color", EYE_COLOR_SWATCHES)
+	_create_trainer_card_color_palette(palettes, "ui.appearance.color.skin", "skin_tone", SKIN_TONE_SWATCHES)
+	_create_trainer_card_color_palette(palettes, "ui.appearance.color.eye", "eye_color", EYE_COLOR_SWATCHES)
 	_create_trainer_card_color_palette(
 		palettes,
-		"Starter Hair Color · Free",
+		"ui.appearance.color.starter_hair_free",
 		"hair_color",
 		HAIR_COLOR_SWATCHES
 	)
@@ -11842,11 +11931,10 @@ func _refresh_trainer_card_natural_color_summary() -> void:
 
 func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, category_id: String) -> void:
 	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category_id)
-	var category_name := _format_appearance_category_name(normalized_category)
 	_create_trainer_card_appearance_section_header(
 		content_stack,
-		category_name,
-		"Select the %s that fits your trainer." % category_name.to_lower()
+		"ui.appearance.category.%s" % normalized_category,
+		"ui.appearance.part_description"
 	)
 
 	trainer_card_appearance_capacity_label = Label.new()
@@ -11854,7 +11942,7 @@ func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, 
 	content_stack.add_child(trainer_card_appearance_capacity_label)
 	_refresh_trainer_card_appearance_capacity_label()
 
-	var search_input := _create_trainer_card_appearance_search_input("Search %s" % category_name.to_lower())
+	var search_input := _create_trainer_card_appearance_search_input("ui.appearance.search_cosmetics")
 	search_input.text_changed.connect(_filter_trainer_card_part_buttons)
 	content_stack.add_child(search_input)
 
@@ -11869,7 +11957,7 @@ func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, 
 	none_row.add_theme_constant_override("separation", 6)
 	grid.add_child(none_row)
 	var none_button := Button.new()
-	none_button.text = "None"
+	_set_localized_control_property(none_button, "text", "common.none")
 	none_button.focus_mode = Control.FOCUS_NONE
 	none_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	none_button.pressed.connect(_on_trainer_card_part_selected.bind(normalized_category, ""))
@@ -11894,7 +11982,11 @@ func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, 
 
 		var return_button := Button.new()
 		return_button.text = "×"
-		return_button.tooltip_text = "Return this cosmetic to the Bag; applied Chroma dye is removed"
+		_set_localized_control_property(
+			return_button,
+			"tooltip_text",
+			"ui.appearance.return_cosmetic_tooltip"
+		)
 		return_button.custom_minimum_size = Vector2(30, 30)
 		return_button.focus_mode = Control.FOCUS_NONE
 		return_button.visible = false
@@ -11909,34 +12001,34 @@ func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, 
 
 func _create_trainer_card_appearance_section_header(
 	content_stack: VBoxContainer,
-	title_text: String,
-	description_text: String
+	title_key: String,
+	description_key: String
 ) -> void:
 	var header := VBoxContainer.new()
 	header.add_theme_constant_override("separation", 1)
 	content_stack.add_child(header)
 
 	var title := Label.new()
-	title.text = title_text
+	_set_localized_control_property(title, "text", title_key)
 	title.add_theme_font_size_override("font_size", 20)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	header.add_child(title)
 
 	var description := Label.new()
-	description.text = description_text
+	_set_localized_control_property(description, "text", description_key)
 	description.add_theme_font_size_override("font_size", 11)
 	description.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	header.add_child(description)
 
 func _create_trainer_card_color_palette(
 	content_stack: VBoxContainer,
-	title_text: String,
+	title_key: String,
 	color_key: String,
 	swatches: Array,
 	allow_custom: bool = true
 ) -> void:
 	var title := Label.new()
-	title.text = title_text
+	_set_localized_control_property(title, "text", title_key)
 	title.add_theme_font_size_override("font_size", 14)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	content_stack.add_child(title)
@@ -11956,7 +12048,7 @@ func _create_trainer_card_color_palette(
 		var swatch_color: Color = swatch.get("color", Color.WHITE) as Color
 		var button := Button.new()
 		button.text = ""
-		button.tooltip_text = str(swatch.get("label", color_id))
+		button.tooltip_text = _format_appearance_swatch_name(str(swatch.get("label", color_id)))
 		button.custom_minimum_size = Vector2(30, 24)
 		button.focus_mode = Control.FOCUS_NONE
 		button.pressed.connect(_on_trainer_card_color_selected.bind(color_key, color_id))
@@ -11964,6 +12056,7 @@ func _create_trainer_card_color_palette(
 		trainer_card_color_buttons["%s:%s" % [color_key, color_id]] = {
 			"button": button,
 			"color": swatch_color,
+			"label": str(swatch.get("label", color_id)),
 		}
 		_apply_color_swatch_button_style(button, swatch_color, _get_player_save_color_value(color_key) == color_id)
 
@@ -11973,13 +12066,13 @@ func _create_trainer_card_color_palette(
 		content_stack.add_child(custom_row)
 
 		var custom_label := Label.new()
-		custom_label.text = "Custom"
+		_set_localized_control_property(custom_label, "text", "ui.appearance.color.custom")
 		custom_label.add_theme_font_size_override("font_size", 12)
 		custom_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		custom_row.add_child(custom_label)
 
 		var custom_picker := ColorPickerButton.new()
-		custom_picker.tooltip_text = "Choose any custom color"
+		_set_localized_control_property(custom_picker, "tooltip_text", "ui.appearance.color.custom_tooltip")
 		custom_picker.custom_minimum_size = Vector2(54, 26)
 		custom_picker.focus_mode = Control.FOCUS_NONE
 		custom_picker.color = Color.from_string(
@@ -11995,7 +12088,7 @@ func _create_trainer_card_color_palette(
 		hex_input.max_length = 7
 		hex_input.custom_minimum_size = Vector2(100, 26)
 		hex_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		hex_input.tooltip_text = "Enter a hex colour code, for example #7a46c5"
+		_set_localized_control_property(hex_input, "tooltip_text", "ui.appearance.color.hex_tooltip")
 		hex_input.text = _get_player_save_color_value(color_key)
 		hex_input.text_changed.connect(
 			_on_trainer_card_hex_color_changed.bind(color_key, hex_input)
@@ -12010,9 +12103,9 @@ func _create_trainer_card_color_palette(
 		custom_row.add_child(hex_input)
 		trainer_card_hex_inputs[color_key] = hex_input
 
-func _create_trainer_card_appearance_search_input(placeholder: String) -> LineEdit:
+func _create_trainer_card_appearance_search_input(placeholder_key: String) -> LineEdit:
 	var search_input := LineEdit.new()
-	search_input.placeholder_text = placeholder
+	_set_localized_control_property(search_input, "placeholder_text", placeholder_key)
 	search_input.clear_button_enabled = true
 	search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_apply_line_edit_style(search_input)
@@ -12080,25 +12173,11 @@ func _format_join_date_text(raw_text: String, fallback: String) -> String:
 	return date_part if date_part != "" else fallback
 
 func _format_appearance_category_name(category_id: String) -> String:
-	match CharacterAppearanceService.normalize_part_category(category_id):
-		"body":
-			return "Body"
-		"hair":
-			return "Hair"
-		"headgear":
-			return "Headgear"
-		"facial_hair":
-			return "Facial Hair"
-		"facegear":
-			return "Facegear"
-		"top":
-			return "Top"
-		"bottom":
-			return "Bottom"
-		"shoes":
-			return "Shoes"
-		_:
-			return _humanize_appearance_id(category_id)
+	var normalized_category := CharacterAppearanceService.normalize_part_category(category_id)
+	var key := "ui.appearance.category.%s" % normalized_category
+	if LocalizationManager.has_key(key, LocalizationManager.DEFAULT_LOCALE):
+		return LocalizationManager.text(key)
+	return _humanize_appearance_id(category_id)
 
 func _format_appearance_option_name(category_id: String, part_id: String) -> String:
 	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category_id)
@@ -12106,62 +12185,70 @@ func _format_appearance_option_name(category_id: String, part_id: String) -> Str
 	if normalized_category == "body":
 		match normalized_part_id:
 			"Gen4_Base_v1", "Gen4_Base_F_v1":
-				return "Default"
+				return LocalizationManager.text("ui.appearance.option.default")
 			"Gen4_Base_M_Tan", "Gen4_Base_F_Tan":
-				return "Tan"
+				return LocalizationManager.text("ui.appearance.option.tan")
 			"Gen4_Base_M_Dark", "Gen4_Base_F_Dark":
-				return "Dark"
+				return LocalizationManager.text("ui.appearance.option.dark")
 	if normalized_category != "body":
 		match normalized_part_id:
 			"Hair":
-				return "Starter Hair"
+				return LocalizationManager.text("ui.appearance.option.starter_hair")
 			"Cap":
-				return "Starter Cap"
+				return LocalizationManager.text("ui.appearance.option.starter_cap")
 			"Shirt":
-				return "Starter Shirt"
+				return LocalizationManager.text("ui.appearance.option.starter_shirt")
 			"Trousers":
-				return "Starter Trousers"
+				return LocalizationManager.text("ui.appearance.option.starter_trousers")
 			"Shoes":
-				return "Starter Shoes"
+				return LocalizationManager.text("ui.appearance.option.starter_shoes")
 			"Eyes":
-				return "Starter Eyes"
+				return LocalizationManager.text("ui.appearance.option.starter_eyes")
 			"Eyebrows":
-				return "Starter Eyebrows"
+				return LocalizationManager.text("ui.appearance.option.starter_eyebrows")
 			"Adinho_Hair":
-				return "Adinho Hair"
+				return LocalizationManager.text("ui.appearance.option.adinho_hair")
 			"Adinho_Beard":
-				return "Adinho Beard"
+				return LocalizationManager.text("ui.appearance.option.adinho_beard")
 			"Adinho_Glasses":
-				return "Adinho Glasses"
+				return LocalizationManager.text("ui.appearance.option.adinho_glasses")
 			"Adinho_Glasses_Chroma":
-				return "Adinho Chroma Glasses"
+				return LocalizationManager.text("ui.appearance.option.adinho_chroma_glasses")
 			"Adinho_Shirt":
-				return "Adinho Shirt"
+				return LocalizationManager.text("ui.appearance.option.adinho_shirt")
 			"Adinho_Shirt_Chroma":
-				return "Adinho Chroma Shirt"
+				return LocalizationManager.text("ui.appearance.option.adinho_chroma_shirt")
 			"Adinho_Trousers":
-				return "Adinho Trousers"
+				return LocalizationManager.text("ui.appearance.option.adinho_trousers")
 			"Adinho_Trousers_Chroma":
-				return "Adinho Chroma Trousers"
+				return LocalizationManager.text("ui.appearance.option.adinho_chroma_trousers")
 			"Adinho_Shoes":
-				return "Adinho Shoes"
+				return LocalizationManager.text("ui.appearance.option.adinho_shoes")
 			"Adinho_Shoes_Chroma":
-				return "Adinho Chroma Shoes"
+				return LocalizationManager.text("ui.appearance.option.adinho_chroma_shoes")
 			"Aether_Blossom_Hair":
-				return "Aether Blossom Hair"
+				return LocalizationManager.text("ui.appearance.option.blossom_hair")
 			"Aether_Blossom_Earrings":
-				return "Aether Blossom Earrings"
+				return LocalizationManager.text("ui.appearance.option.blossom_earrings")
 			"Aether_Blossom_Dress":
-				return "Aether Blossom Dress"
+				return LocalizationManager.text("ui.appearance.option.blossom_dress")
 			"Aether_Blossom_Shoes":
-				return "Aether Blossom Shoes"
+				return LocalizationManager.text("ui.appearance.option.blossom_shoes")
 			"Aether_Blossom_Hair_Chroma":
-				return "Aether Blossom Chroma Hair"
+				return LocalizationManager.text("ui.appearance.option.blossom_chroma_hair")
 			"Aether_Blossom_Earrings_Chroma":
-				return "Aether Blossom Chroma Earrings"
+				return LocalizationManager.text("ui.appearance.option.blossom_chroma_earrings")
 			"Aether_Blossom_Shoes_Chroma":
-				return "Aether Blossom Chroma Shoes"
+				return LocalizationManager.text("ui.appearance.option.blossom_chroma_shoes")
 	return _humanize_appearance_id(normalized_part_id)
+
+func _format_appearance_swatch_name(raw_label: String) -> String:
+	var key_suffix := raw_label.to_lower()
+	key_suffix = key_suffix.replace(" · ", "_").replace(" ", "_").replace("-", "_")
+	var key := "ui.appearance.swatch.%s" % key_suffix
+	if LocalizationManager.has_key(key, LocalizationManager.DEFAULT_LOCALE):
+		return LocalizationManager.text(key)
+	return raw_label
 
 func _humanize_appearance_id(raw_id: String) -> String:
 	var text := raw_id.replace("/", " ").replace("_", " ").replace("-", " ").strip_edges()
@@ -12194,7 +12281,7 @@ func _filter_trainer_card_part_buttons(search_text: String) -> void:
 			continue
 		var category_id: String = key.substr(0, separator_index)
 		var part_id: String = key.substr(separator_index + 1)
-		var label_text: String = "None" if part_id == "" else _format_appearance_option_name(category_id, part_id)
+		var label_text: String = LocalizationManager.text("common.none") if part_id == "" else _format_appearance_option_name(category_id, part_id)
 		var row := trainer_card_part_rows.get(key) as Control
 		var should_show := _is_appearance_part_owned(category_id, part_id) \
 			and _matches_appearance_search(label_text, part_id, search_text)
@@ -12241,7 +12328,7 @@ func _refresh_trainer_card_part_buttons() -> void:
 		var category_id: String = key.substr(0, separator_index)
 		var part_id: String = key.substr(separator_index + 1)
 		var selected_part_id: String = _get_preview_part_id(category_id)
-		var display_name: String = "None" if part_id == "" else _format_appearance_option_name(category_id, part_id)
+		var display_name: String = LocalizationManager.text("common.none") if part_id == "" else _format_appearance_option_name(category_id, part_id)
 		var is_owned := _is_appearance_part_owned(category_id, part_id)
 		var row := trainer_card_part_rows.get(key) as Control
 		if row != null:
@@ -12254,9 +12341,9 @@ func _refresh_trainer_card_part_buttons() -> void:
 			return_button.visible = is_owned and source_item_id != ""
 			return_button.disabled = appearance_inventory_returning
 			if source_item_id != "":
-				return_button.tooltip_text = (
-					"Return %s to the Bag; applied Chroma dye is removed"
-					% _item_name_from_id(source_item_id)
+				return_button.tooltip_text = LocalizationManager.text(
+					"ui.appearance.return_item_tooltip",
+					{"item": _item_name_from_id(source_item_id)}
 				)
 		if part_id == selected_part_id:
 			button.text = "%s  *" % display_name
@@ -12316,6 +12403,7 @@ func _refresh_trainer_card_color_buttons() -> void:
 		var color_key: String = key.substr(0, separator_index)
 		var color_value: String = key.substr(separator_index + 1)
 		var swatch_color: Color = entry.get("color", Color.WHITE) as Color
+		button.tooltip_text = _format_appearance_swatch_name(str(entry.get("label", color_value)))
 		_apply_color_swatch_button_style(button, swatch_color, _get_player_save_color_value(color_key) == color_value)
 	for color_key_value: Variant in trainer_card_hex_inputs.keys():
 		var color_key := str(color_key_value)
@@ -12486,11 +12574,14 @@ func _refresh_trainer_card_appearance_capacity_label() -> void:
 	var count := int(appearance_inventory_slot_counts.get(category, 0))
 	var category_name := _format_appearance_category_name(category)
 	trainer_card_appearance_capacity_label.visible = true
-	trainer_card_appearance_capacity_label.text = "%s wardrobe · %d/%d unlocked" % [
-		category_name,
-		count,
-		appearance_inventory_slot_limit,
-	]
+	trainer_card_appearance_capacity_label.text = LocalizationManager.text(
+		"ui.appearance.wardrobe_capacity",
+		{
+			"category": category_name,
+			"count": count,
+			"limit": appearance_inventory_slot_limit,
+		}
+	)
 	trainer_card_appearance_capacity_label.add_theme_color_override(
 		"font_color",
 		UI_DANGER if count >= appearance_inventory_slot_limit else TRAINER_CARD_ACCENT
@@ -12550,27 +12641,32 @@ func _mark_trainer_card_appearance_dirty() -> void:
 	if world != null and world.has_method("_publish_world_presence"):
 		world.call("_publish_world_presence", true)
 
-func _update_trainer_card_appearance_save_state(message: String = "") -> void:
+func _update_trainer_card_appearance_save_state(
+	message_key: String = "",
+	message_values: Dictionary = {}
+) -> void:
+	trainer_card_appearance_message_key = message_key
+	trainer_card_appearance_message_values = message_values.duplicate()
 	if trainer_card_appearance_save_button != null:
 		trainer_card_appearance_save_button.disabled = trainer_card_is_saving_appearance or not trainer_card_has_unsaved_appearance_changes
 		if trainer_card_is_saving_appearance:
-			trainer_card_appearance_save_button.text = "Saving..."
+			trainer_card_appearance_save_button.text = LocalizationManager.text("common.saving")
 		elif trainer_card_has_unsaved_appearance_changes:
-			trainer_card_appearance_save_button.text = "Save"
+			trainer_card_appearance_save_button.text = LocalizationManager.text("common.save")
 		else:
-			trainer_card_appearance_save_button.text = "Saved"
+			trainer_card_appearance_save_button.text = LocalizationManager.text("common.saved")
 		_apply_button_style(trainer_card_appearance_save_button, "primary" if trainer_card_has_unsaved_appearance_changes else "default")
 
 	if trainer_card_appearance_status_label == null:
 		return
-	if message != "":
-		trainer_card_appearance_status_label.text = message
+	if message_key != "":
+		trainer_card_appearance_status_label.text = LocalizationManager.text(message_key, message_values)
 	elif trainer_card_is_saving_appearance:
-		trainer_card_appearance_status_label.text = "Saving appearance..."
+		trainer_card_appearance_status_label.text = LocalizationManager.text("ui.appearance.status.saving")
 	elif trainer_card_has_unsaved_appearance_changes:
-		trainer_card_appearance_status_label.text = "Unsaved appearance changes"
+		trainer_card_appearance_status_label.text = LocalizationManager.text("ui.appearance.status.unsaved")
 	else:
-		trainer_card_appearance_status_label.text = "Appearance saved"
+		trainer_card_appearance_status_label.text = LocalizationManager.text("ui.appearance.status.saved")
 
 	var status_color := UI_MUTED_TEXT
 	if trainer_card_is_saving_appearance:
@@ -12590,16 +12686,18 @@ func _on_trainer_card_appearance_save_pressed() -> void:
 
 	if not bool(result.get("success", false)):
 		trainer_card_has_unsaved_appearance_changes = true
-		_update_trainer_card_appearance_save_state("Save failed: %s" % str(result.get("error", "Unknown error")))
+		push_warning("Appearance save failed: %s" % str(result.get("error", "Unknown error")))
+		_update_trainer_card_appearance_save_state("ui.appearance.status.save_failed")
 		return
 
 	if not _save_response_matches_current_appearance(result):
 		trainer_card_has_unsaved_appearance_changes = true
-		_update_trainer_card_appearance_save_state("Save failed: server did not persist all appearance parts")
+		push_warning("Appearance save failed: server did not persist all appearance parts")
+		_update_trainer_card_appearance_save_state("ui.appearance.status.save_failed")
 		return
 
 	trainer_card_has_unsaved_appearance_changes = false
-	_update_trainer_card_appearance_save_state("Appearance saved")
+	_update_trainer_card_appearance_save_state("ui.appearance.status.saved")
 
 func _save_trainer_card_appearance_to_backend() -> Dictionary:
 	var world := GameState.get_world()
@@ -12670,7 +12768,7 @@ func _on_trainer_card_body_selected(body_id: String) -> void:
 func _on_trainer_card_part_selected(category_id: String, part_id: String) -> void:
 	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category_id)
 	if not _is_appearance_part_owned(normalized_category, part_id):
-		_update_trainer_card_appearance_save_state("Unlock this cosmetic from your Bag first")
+		_update_trainer_card_appearance_save_state("ui.appearance.status.unlock_first")
 		return
 	_ensure_layered_body_for_part_selection()
 	_apply_saved_chroma_color_for_part(normalized_category, part_id)
@@ -12690,19 +12788,21 @@ func _on_trainer_card_return_appearance_pressed(category_id: String, part_id: St
 		return
 	var source_item_id := _appearance_source_item_for_part(category_id, part_id)
 	if source_item_id == "":
-		_update_trainer_card_appearance_save_state("This starter item cannot be returned")
+		_update_trainer_card_appearance_save_state("ui.appearance.status.starter_not_returnable")
 		return
 
 	appearance_inventory_returning = true
 	_refresh_trainer_card_part_buttons()
-	_update_trainer_card_appearance_save_state("Returning %s to the Bag..." % _item_name_from_id(source_item_id))
+	_update_trainer_card_appearance_save_state(
+		"ui.appearance.status.returning",
+		{"item": _item_name_from_id(source_item_id)}
+	)
 	var result: Dictionary = await InventoryService.return_appearance_item(source_item_id)
 	appearance_inventory_returning = false
 	if not bool(result.get("success", false)):
 		_refresh_trainer_card_part_buttons()
-		_update_trainer_card_appearance_save_state(
-			"Return failed: %s" % str(result.get("error", "Unknown error"))
-		)
+		push_warning("Appearance return failed: %s" % str(result.get("error", "Unknown error")))
+		_update_trainer_card_appearance_save_state("ui.appearance.status.return_failed")
 		return
 
 	_apply_returned_appearance_defaults(result.get("returnedUnlocks", []))
@@ -12731,10 +12831,8 @@ func _on_trainer_card_return_appearance_pressed(category_id: String, part_id: St
 		and _save_response_matches_current_appearance(save_result)
 	trainer_card_has_unsaved_appearance_changes = not saved
 	_update_trainer_card_appearance_save_state(
-		"%s returned to the Bag%s" % [
-			_item_name_from_id(source_item_id),
-			"" if saved else " · appearance save pending",
-		]
+		"ui.appearance.status.returned" if saved else "ui.appearance.status.returned_pending",
+		{"item": _item_name_from_id(source_item_id)}
 	)
 	var world := GameState.get_world()
 	if world != null and world.has_method("_publish_world_presence"):
@@ -12780,7 +12878,7 @@ func _on_trainer_card_color_selected(color_key: String, color_value: String) -> 
 		and not CharacterAppearanceService.is_free_part_id("hair", PlayerSave.appearance_hair_id)
 	):
 		_update_trainer_card_appearance_save_state(
-			"Chroma item colours are changed at the Aether Atelier"
+			"ui.appearance.status.chroma_atelier"
 		)
 		return
 	_ensure_layered_body_for_part_selection()

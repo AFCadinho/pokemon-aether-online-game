@@ -21,7 +21,7 @@ The following gates pass:
 - local signs, NPC metadata/dialogue contracts, canonical content overlays, item
   overlays, backend error contracts, login, migrated gameplay domains, battles, and
   the launcher pass their domain checks;
-- all 136 project checks pass;
+- all 137 project checks pass;
 - the standalone launcher localization runtime check passes.
 
 Run the repeatable catalog and completeness audit with:
@@ -40,12 +40,12 @@ The strict command currently exits with status 1, as intended.
 
 ## Open technical gates
 
-The static completeness scan started at 400 candidates and currently reports 236
+The static completeness scan started at 400 candidates and currently reports 202
 candidates at player-facing text sinks:
 
 | Source | Candidates |
 | --- | ---: |
-| `scripts/ui/ui_overlay.gd` | 136 |
+| `scripts/ui/ui_overlay.gd` | 102 |
 | `scenes/interface/ui_overlay.tscn` | 66 |
 | `scripts/ui/fishing_action_controller.gd` | 11 |
 | `scripts/world/world.gd` | 11 |
@@ -56,7 +56,6 @@ Candidates require classification and are not all automatically translation debt
 Preview values, abbreviations, player data, and decorative text can be intentional.
 However, direct inspection confirms real remaining English in at least these surfaces:
 
-- Trainer Card, wallet, profile, appearance, and badge presentation;
 - Item Dex and Wild Pokémon presentation;
 - personal/global buff presentation;
 - chat tabs, context controls, tooltips, and empty states;
@@ -73,6 +72,11 @@ Phase 10B migrated the ranked/private PvP launcher, team validation, queue state
 private rooms, rules and banlists, leaderboard, match history, spectator controls,
 countdown and compact queue panel. Its runtime locale-switch and existing PvP
 contract checks pass, and it reduced the open list by another 108 candidates.
+
+Phase 10C migrated the private and public Trainer Card, currency wallet, role and
+Gym Badge states, appearance editor, wardrobe feedback, cosmetic names, natural
+color palettes, and live locale switching. Its focused runtime, layout, appearance,
+and badge checks pass, and it reduced the open list by another 34 candidates.
 
 The raw candidate list can be printed with `--limit 0`. Every remaining candidate must be
 migrated to a semantic key or documented as an intentional exclusion before the
@@ -100,7 +104,7 @@ but cannot replace them.
 
 ## Required remediation order
 
-1. Migrate or classify the remaining 236 static-scan candidates, one functional domain at a
+1. Migrate or classify the remaining 202 static-scan candidates, one functional domain at a
    time, with runtime locale-switch tests.
 2. Add full-flow layout checks for all supported locales and resolutions, including
    long-text and empty/error states.

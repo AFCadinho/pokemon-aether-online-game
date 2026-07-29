@@ -304,10 +304,10 @@ func _init() -> void:
 	_check(
 		script_source.contains("func _create_trainer_card_wallet_tab()")
 		and script_source.contains('tab.name = "Wallet"')
-		and script_source.contains('"Pokédollars"')
-		and script_source.contains('"Aether Gems"')
-		and script_source.contains('"Aetherite"')
-		and script_source.contains('"Battle Points"')
+		and script_source.contains('"ui.trainer_card.wallet.money"')
+		and script_source.contains('"ui.trainer_card.wallet.gems"')
+		and script_source.contains('"ui.trainer_card.wallet.aetherite"')
+		and script_source.contains('"ui.trainer_card.wallet.battle_points"')
 		and script_source.contains('cards.columns = 2'),
 		"Trainer Card has a 2x2 Wallet grid for all currencies"
 	)
@@ -328,8 +328,8 @@ func _init() -> void:
 	_check(script_source.contains("const TRAINER_CARD_SIZE := Vector2(720, 500)"), "Trainer Card has enough room for a breathable passport layout")
 	_check(script_source.contains("func _make_trainer_card_outer_style()") and script_source.contains("func _make_trainer_card_section_style"), "Trainer Card uses dedicated semantic surfaces")
 	_check(script_source.contains("func _apply_trainer_card_tabs_style") and script_source.contains("TRAINER_CARD_ACCENT, true"), "Trainer Card tabs use a restrained selected accent")
-	_check(script_source.contains('subtitle.text = "TRAINER PASSPORT  ·  ID %s"'), "Trainer Card header prioritizes passport identity")
-	_check(script_source.contains('title.text = title_text.to_upper()') and script_source.contains('title.add_theme_font_size_override("font_size", 11)'), "Trainer Card section headings use compact hierarchy")
+	_check(script_source.contains('"ui.trainer_card.passport"'), "Trainer Card header prioritizes localized passport identity")
+	_check(script_source.contains('_set_localized_control_property(title, "text", title_key)') and script_source.contains('title.add_theme_font_size_override("font_size", 11)'), "Trainer Card section headings use compact localized hierarchy")
 	_check(script_source.contains('redeem_button.custom_minimum_size = Vector2(142, 30)') and script_source.contains("_apply_button_style(redeem_button)"), "Redeem Code remains a compact secondary header action")
 	_check(not script_source.contains('trainer_card_popup.add_theme_stylebox_override("panel", _make_gold_panel_style'), "Trainer Card no longer uses the legacy heavy gold frame")
 	_check(script_source.contains('button.texture_normal = _load_item_icon(entry_id)') and script_source.contains('button.texture_normal = _load_item_icon("%s-charm" % move_id)'), "hotbar keeps authentic item and field-move charm icons")
