@@ -6,6 +6,7 @@ const CharacterAppearanceService := preload("res://scripts/services/character_ap
 const CATALOG_ENDPOINT := "/game/aether-atelier"
 const CREATE_ENDPOINT := "/game/aether-atelier/outfits/%s/create"
 const DYE_ENDPOINT := "/game/aether-atelier/chroma/%s/dye"
+const DYE_OUTFIT_ENDPOINT := "/game/aether-atelier/chroma-outfit/dye"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 
@@ -65,6 +66,33 @@ func dye_chroma_item(item_id: String, color: String) -> Dictionary:
 	return parse_dye_response(response)
 
 
+func dye_chroma_outfit(changes: Array[Dictionary]) -> Dictionary:
+	if changes.is_empty():
+		return {"success": false, "error": "Choose at least one new colour."}
+	if not _is_authenticated():
+		return {"success": false, "error": "Not authenticated."}
+	var normalized_changes: Array[Dictionary] = []
+	for change: Dictionary in changes:
+		var item_id := str(change.get("itemId", "")).strip_edges()
+		var color := CharacterAppearanceService.normalize_hex_color_code(
+			str(change.get("color", ""))
+		)
+		if item_id == "" or color == "":
+			return {"success": false, "error": "Invalid Chroma outfit change."}
+		normalized_changes.append({"itemId": item_id, "color": color})
+	var gateway := get_node_or_null("/root/GatewayApiConfig")
+	if gateway == null:
+		return {"success": false, "error": "Gateway API config is unavailable."}
+	var base_url: String = await gateway.call("get_base_url")
+	var response := await _request_json(
+		base_url + DYE_OUTFIT_ENDPOINT,
+		HTTPClient.METHOD_POST,
+		gateway.call("get_json_headers"),
+		JSON.stringify({"changes": normalized_changes})
+	)
+	return parse_dye_outfit_response(response)
+
+
 func parse_catalog_response(response: Dictionary) -> Dictionary:
 	if not bool(response.get("success", false)):
 		return response
@@ -107,6 +135,22 @@ func parse_dye_response(response: Dictionary) -> Dictionary:
 		"appearanceSlotCounts": _dictionary_from_value(
 			appearance_inventory.get("slotCounts", {})
 		),
+	}
+
+
+func parse_dye_outfit_response(response: Dictionary) -> Dictionary:
+	if not bool(response.get("success", false)):
+		return response
+	var body := _dictionary_from_value(response.get("body", {}))
+	var appearance_inventory := _dictionary_from_value(body.get("appearanceInventory", {}))
+	return {
+		"success": true,
+		"items": normalize_chroma_items(body.get("items", [])),
+		"fee": maxi(int(body.get("fee", 0)), 0),
+		"wallet": _dictionary_from_value(body.get("wallet", {})),
+		"appearanceUnlocks": _array_from_value(appearance_inventory.get("unlocks", [])),
+		"appearanceSlotLimit": int(appearance_inventory.get("slotLimit", 8)),
+		"appearanceSlotCounts": _dictionary_from_value(appearance_inventory.get("slotCounts", {})),
 	}
 
 
@@ -171,6 +215,7 @@ func normalize_chroma_items(value: Variant) -> Array[Dictionary]:
 			"genders": genders,
 			"color": color if color != "" else "#ffffff",
 			"fee": maxi(int(item.get("fee", 0)), 0),
+			"equipped": bool(item.get("equipped", false)),
 		})
 	return items
 

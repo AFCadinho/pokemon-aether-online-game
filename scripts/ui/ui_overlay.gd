@@ -14130,11 +14130,16 @@ func _on_aether_atelier_chroma_dyed(result: Dictionary) -> void:
 		result.get("appearanceSlotLimit", DEFAULT_APPEARANCE_SLOT_LIMIT),
 		result.get("appearanceSlotCounts", {})
 	)
-	var item := result.get("item", {}) as Dictionary
-	var slot := CharacterAppearanceService.normalize_part_category(str(item.get("slot", "")))
-	var appearance_id := str(item.get("appearanceId", ""))
-	var color := CharacterAppearanceService.normalize_hex_color_code(str(item.get("color", "")))
-	if color != "" and _get_preview_part_id(slot) == appearance_id:
+	var dyed_items: Array = result.get("items", [])
+	if dyed_items.is_empty() and result.get("item", {}) is Dictionary:
+		dyed_items = [result.get("item", {})]
+	for item_value: Variant in dyed_items:
+		var item := item_value as Dictionary
+		var slot := CharacterAppearanceService.normalize_part_category(str(item.get("slot", "")))
+		var appearance_id := str(item.get("appearanceId", ""))
+		var color := CharacterAppearanceService.normalize_hex_color_code(str(item.get("color", "")))
+		if color == "" or _get_preview_part_id(slot) != appearance_id:
+			continue
 		match slot:
 			"hair":
 				PlayerSave.appearance_hair_color = color
@@ -14148,6 +14153,7 @@ func _on_aether_atelier_chroma_dyed(result: Dictionary) -> void:
 				PlayerSave.appearance_bottom_color = color
 			"shoes":
 				PlayerSave.appearance_shoes_color = color
+	if not dyed_items.is_empty():
 		var player := get_tree().get_first_node_in_group("player")
 		if player != null and player.has_method("refresh_appearance"):
 			player.call("refresh_appearance")
@@ -14155,9 +14161,9 @@ func _on_aether_atelier_chroma_dyed(result: Dictionary) -> void:
 		var world := GameState.get_world()
 		if world != null and world.has_method("_publish_world_presence"):
 			world.call("_publish_world_presence", true)
-	_add_chat_message("%s was dyed %s." % [
-		str(item.get("name", _item_name_from_id(str(item.get("itemId", ""))))),
-		color.to_upper(),
+	_add_chat_message("%d Chroma item%s recoloured at the Aether Atelier." % [
+		dyed_items.size(),
+		"" if dyed_items.size() == 1 else "s",
 	])
 
 func _normalize_market_items(items_value: Variant) -> Array[Dictionary]:

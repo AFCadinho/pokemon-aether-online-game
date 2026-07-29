@@ -16,6 +16,7 @@
 
 **Changed**
 
+- Upgraded the Aether Atelier with character customization for all currently worn Chroma items, a combined live preview, and one total fee based on the number of changed items.
 - Removed the obsolete Adinho eyebrow overlay and the temporary scalp-fill layer that caused dark pixels across Chroma hairstyles.
 - Gift Store Chroma purchases now include the selected preview colour as the item's permanent base colour, including Chroma components inside outfit boxes.
 - Redesigned Pokémon Storage with a clearer Party and Box workspace, larger Pokémon artwork, quieter empty slots, restrained type accents, and clearer mouse feedback for buttons, dragging, and valid drop targets.

@@ -22,6 +22,7 @@ func _init() -> void:
 				"genders": ["male"],
 				"color": "#7a46c5",
 				"fee": 2500,
+				"equipped": true,
 			}],
 			"outfits": [{
 				"boxItemId": "aether-blossom-outfit",
@@ -57,6 +58,10 @@ func _init() -> void:
 		parsed_chroma_items.size() == 1
 			and str((parsed_chroma_items[0] as Dictionary).get("color", "")) == "#7a46c5",
 		"Atelier service retains per-item Chroma dye state"
+	)
+	_check(
+		bool((parsed_chroma_items[0] as Dictionary).get("equipped", false)),
+		"Atelier service retains worn Chroma state"
 	)
 	service.free()
 
