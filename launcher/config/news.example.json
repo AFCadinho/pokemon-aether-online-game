@@ -3,7 +3,17 @@
 	{
 	  "title": "Patch 0.1.8 is live",
 	  "description": "New fixes, balance changes, and quality-of-life updates.",
-	  "url": "https://pokeaether.com/news/patch-0-1-8"
+	  "url": "https://pokeaether.com/news/patch-0-1-8",
+	  "localizations": {
+		"nl": {
+		  "title": "Patch 0.1.8 is live",
+		  "description": "Nieuwe oplossingen, balanswijzigingen en gebruiksverbeteringen."
+		},
+		"pt-BR": {
+		  "title": "A atualização 0.1.8 chegou",
+		  "description": "Novas correções, ajustes de balanceamento e melhorias de qualidade."
+		}
+	  }
 	},
 	{
 	  "title": "Server maintenance",

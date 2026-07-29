@@ -1,6 +1,7 @@
 extends Control
 
 const LauncherServerHealthService := preload("res://scripts/server_health_service.gd")
+const LauncherNewsLocalizationService := preload("res://scripts/news_localization_service.gd")
 
 const DEFAULT_MANIFEST_URL := "https://example.com/pokeaether/manifest.json"
 const DEFAULT_NEWS_URL := "https://updates.pokeaether.com/data/news.json"
@@ -76,6 +77,7 @@ const SERVER_CHECKING_COLOR := Color(1.0, 0.72, 0.34, 1.0)
 @onready var patch_notes_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/PatchNotesButton
 @onready var credits_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/CreditsButton
 @onready var uninstall_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/UninstallButton
+@onready var language_options_button: OptionButton = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/LanguageSection/LanguageOptionsButton
 @onready var discord_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton
 @onready var install_folder_dialog: FileDialog = $InstallFolderDialog
 @onready var uninstall_confirm_dialog: ConfirmationDialog = $UninstallConfirmDialog
@@ -102,12 +104,14 @@ var discord_url := DEFAULT_DISCORD_URL
 var patch_notes_url := DEFAULT_PATCH_NOTES_URL
 var credits_url := DEFAULT_CREDITS_URL
 var install_dir := DEFAULT_INSTALL_DIR
+var locale := "en"
 var launcher_update_info: Dictionary = {}
 var launcher_update_busy := false
 var launcher_update_in_progress := false
 var launcher_update_pending := false
 var launcher_update_shown := false
 var news_items: Array[Dictionary] = []
+var raw_news_data: Dictionary = {}
 var progress_is_indeterminate := false
 var asset_pack_download_total := 0
 var current_asset_pack_download_index := 0
@@ -178,9 +182,12 @@ func _draw() -> void:
 
 
 func _ready() -> void:
-	_apply_visual_style()
 	_load_launcher_config()
 	_load_launcher_settings()
+	LauncherLocalization.set_locale(locale)
+	_apply_visual_style()
+	_apply_locale()
+	_populate_language_options()
 	check_button.pressed.connect(check_for_updates)
 	update_button.pressed.connect(start_update)
 	gen5_sprites_button.pressed.connect(download_gen5_animated_sprites)
@@ -189,6 +196,7 @@ func _ready() -> void:
 	patch_notes_button.pressed.connect(open_patch_notes)
 	credits_button.pressed.connect(open_credits)
 	uninstall_button.pressed.connect(_on_uninstall_button_pressed)
+	language_options_button.item_selected.connect(_on_language_selected)
 	launcher_update_later_button.pressed.connect(_hide_launcher_update_prompt)
 	launcher_update_now_button.pressed.connect(_on_launcher_update_now_pressed)
 	launcher_update_http_request.request_completed.connect(_on_launcher_update_request_completed)
@@ -208,6 +216,50 @@ func _ready() -> void:
 	check_for_updates.call_deferred()
 	fetch_news.call_deferred()
 	queue_redraw()
+
+
+func _apply_locale() -> void:
+	LauncherLocalization.localize_tree(self)
+	install_folder_dialog.title = _t("Open a Directory")
+	uninstall_confirm_dialog.title = _t("Uninstall Game")
+	uninstall_confirm_dialog.ok_button_text = _t("Uninstall")
+	uninstall_confirm_dialog.dialog_text = _t(
+		"This will permanently remove the selected game folder and all downloaded files.\n\nContinue?"
+	)
+
+
+func _populate_language_options() -> void:
+	language_options_button.clear()
+	var selected_index := 0
+	var supported_locales: Array[String] = LauncherLocalization.get_supported_locales()
+	for index: int in range(supported_locales.size()):
+		var supported_locale := supported_locales[index]
+		language_options_button.add_item(LauncherLocalization.get_language_name(supported_locale))
+		language_options_button.set_item_metadata(index, supported_locale)
+		if supported_locale == locale:
+			selected_index = index
+	language_options_button.select(selected_index)
+
+
+func _on_language_selected(index: int) -> void:
+	var selected_locale := str(language_options_button.get_item_metadata(index))
+	if selected_locale.is_empty() or selected_locale == locale:
+		return
+	locale = LauncherLocalization.set_locale(selected_locale)
+	_save_launcher_settings()
+	_apply_locale()
+	_populate_language_options()
+	_refresh_status()
+	_set_server_health_checking()
+	_refresh_server_health.call_deferred()
+	if raw_news_data.is_empty():
+		fetch_news()
+	else:
+		_render_localized_news()
+
+
+func _t(key: String, values: Dictionary = {}) -> String:
+	return LauncherLocalization.text(key, values)
 
 
 func _apply_visual_style() -> void:
@@ -355,10 +407,11 @@ func _process(_delta: float) -> void:
 				progress_bar.value = fmod(float(Time.get_ticks_msec()) / 18.0, 100.0)
 				if not current_download.is_empty():
 					_set_status(
-						"Downloading %s... Large download in progress (%s)" % [
-							_get_current_download_display_label(),
-							_format_bytes(total_bytes),
-						]
+						_t("Downloading {label}... Large download in progress ({total})", {
+							"label": _get_current_download_display_label(),
+							"total": _format_bytes(total_bytes),
+						}),
+						"updating"
 					)
 				return
 
@@ -367,31 +420,34 @@ func _process(_delta: float) -> void:
 			progress_bar.value = percent
 			if not current_download.is_empty():
 				_set_status(
-					"Downloading %s... %s / %s (%d%%)" % [
-						_get_current_download_display_label(),
-						_format_bytes(downloaded_bytes),
-						_format_bytes(total_bytes),
-						int(percent),
-					]
+					_t("Downloading {label}... {downloaded} / {total} ({percent}%)", {
+						"label": _get_current_download_display_label(),
+						"downloaded": _format_bytes(downloaded_bytes),
+						"total": _format_bytes(total_bytes),
+						"percent": int(percent),
+					}),
+					"updating"
 				)
 		elif not current_download.is_empty():
 			if downloaded_bytes < 0:
 				progress_is_indeterminate = true
 				progress_bar.value = fmod(float(Time.get_ticks_msec()) / 18.0, 100.0)
 				_set_status(
-					"Downloading %s... Large download in progress" % [
-						_get_current_download_display_label(),
-					]
+					_t("Downloading {label}... Large download in progress", {
+						"label": _get_current_download_display_label(),
+					}),
+					"updating"
 				)
 				return
 
 			progress_is_indeterminate = false
 			progress_bar.value = 0.0
 			_set_status(
-				"Downloading %s... %s" % [
-					_get_current_download_display_label(),
-					_format_bytes(maxi(downloaded_bytes, 0)),
-				]
+				_t("Downloading {label}... {downloaded}", {
+					"label": _get_current_download_display_label(),
+					"downloaded": _format_bytes(maxi(downloaded_bytes, 0)),
+				}),
+				"updating"
 			)
 
 
@@ -584,7 +640,10 @@ func _on_uninstall_button_pressed() -> void:
 		_refresh_uninstall_button()
 		return
 
-	uninstall_confirm_dialog.dialog_text = "This will permanently remove the game folder:\n%s\n\nContinue?" % absolute_game_install_dir
+	uninstall_confirm_dialog.dialog_text = _t(
+		"This will permanently remove the game folder:\n{path}\n\nContinue?",
+		{"path": absolute_game_install_dir}
+	)
 	uninstall_confirm_dialog.popup_centered()
 
 
@@ -656,17 +715,21 @@ func _create_game_process(absolute_executable_path: String) -> int:
 	var executable_name: String = absolute_executable_path.get_file()
 	var os_name: String = OS.get_name()
 	if os_name == "Windows":
-		var command: String = "cd /D %s && %s" % [
+		var command: String = "cd /D %s && %s -- --locale=%s" % [
 			_quote_windows_shell(game_dir),
 			_quote_windows_shell(executable_name),
+			locale,
 		]
 		return OS.create_process("cmd.exe", PackedStringArray(["/C", command]))
 
 	if os_name == "Linux" or os_name == "macOS" or os_name == "FreeBSD" or os_name == "NetBSD" or os_name == "OpenBSD" or os_name == "BSD":
-		var command: String = "cd \"$1\" && exec \"./$2\""
-		return OS.create_process("/bin/sh", PackedStringArray(["-c", command, "pokeaether-launcher", game_dir, executable_name]))
+		var command: String = "cd \"$1\" && exec \"./$2\" -- \"--locale=$3\""
+		return OS.create_process(
+			"/bin/sh",
+			PackedStringArray(["-c", command, "pokeaether-launcher", game_dir, executable_name, locale])
+		)
 
-	return OS.create_process(absolute_executable_path, PackedStringArray())
+	return OS.create_process(absolute_executable_path, PackedStringArray(["--", "--locale=%s" % locale]))
 
 
 func _on_request_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
@@ -675,7 +738,7 @@ func _on_request_completed(result: int, response_code: int, _headers: PackedStri
 	if result != HTTPRequest.RESULT_SUCCESS or response_code < 200 or response_code >= 300:
 		_set_busy(false)
 		var request_failure_message: String = _format_request_failure(result, response_code)
-		_set_status(request_failure_message)
+		_set_status(request_failure_message, "error")
 		_log_error("%s url=%s" % [request_failure_message, _get_active_request_url()])
 		return
 
@@ -698,33 +761,22 @@ func _on_news_request_completed(result: int, response_code: int, _headers: Packe
 		_log_error("News JSON must be an object.")
 		return
 
-	var news_data: Dictionary = parsed_json
-	var parsed_items: Array[Dictionary] = []
-	var item_variants: Variant = news_data.get("items") if news_data.has("items") else news_data.get("articles", [])
-	if typeof(item_variants) == TYPE_ARRAY:
-		for item_variant: Variant in item_variants:
-			if typeof(item_variant) != TYPE_DICTIONARY:
-				continue
+	raw_news_data = parsed_json as Dictionary
+	_render_localized_news()
 
-			var item: Dictionary = item_variant
-			var title := str(item.get("title", "")).strip_edges()
-			if title.is_empty():
-				continue
 
-			parsed_items.append({
-				"title": title,
-				"description": str(item.get("description", item.get("summary", ""))).strip_edges(),
-				"url": str(item.get("url", item.get("externalLink", ""))).strip_edges(),
-			})
-
-	_render_news_items(parsed_items)
+func _render_localized_news() -> void:
+	_render_news_items(LauncherNewsLocalizationService.resolve_items(
+		raw_news_data,
+		LauncherLocalization.get_http_locale()
+	))
 
 
 func _render_news_items(items: Array[Dictionary]) -> void:
 	news_items = items
 	log_label.clear()
 	if news_items.is_empty():
-		log_label.text = "No news available."
+		log_label.text = _t("No news available.")
 		return
 
 	for index in range(mini(news_items.size(), 5)):
@@ -1069,7 +1121,10 @@ func _get_local_launcher_version() -> String:
 func launch_restart_check_failed(reason: String) -> void:
 	launcher_update_busy = false
 	launcher_update_in_progress = false
-	_set_status("%s You can retry from launcher update prompt." % reason)
+	_set_status(_t(
+		"{reason} You can retry from launcher update prompt.",
+		{"reason": _t(reason)}
+	), "error")
 	_cleanup_launcher_update_files()
 	_set_busy(false)
 
@@ -1391,7 +1446,7 @@ func _handle_download_response() -> void:
 		return
 
 	var download_label: String = _get_current_download_display_label()
-	_set_status("Extracting %s..." % download_label)
+	_set_status(_t("Extracting {label}...", {"label": download_label}), "updating")
 	_log("Extracting %s." % download_label)
 	await get_tree().process_frame
 
@@ -1443,7 +1498,7 @@ func _start_next_download() -> void:
 
 	DirAccess.make_dir_recursive_absolute(_globalize_storage_path(TEMP_DIR))
 	var download_label: String = _get_current_download_display_label()
-	_set_status("Downloading %s..." % download_label)
+	_set_status(_t("Downloading {label}...", {"label": download_label}), "updating")
 	_log("Downloading %s." % download_label)
 	http_request.download_file = target_path
 	var error_code: Error = http_request.request(url, _request_headers())
@@ -1455,7 +1510,10 @@ func _start_next_download() -> void:
 
 
 func _request_headers() -> PackedStringArray:
-	return PackedStringArray([USER_AGENT_HEADER])
+	return PackedStringArray([
+		USER_AGENT_HEADER,
+		"Accept-Language: %s, en;q=0.8" % LauncherLocalization.get_http_locale(),
+	])
 
 
 func _build_download_queue() -> void:
@@ -1668,12 +1726,13 @@ func _extract_zip(zip_path: String, target_dir: String, label: String) -> Error:
 				percent = minf((float(extracted_file_count) / float(file_count)) * 100.0, 99.0)
 			progress_bar.value = percent
 			_set_status(
-				"Extracting %s... %d / %d files (%d%%)" % [
-					label,
-					extracted_file_count,
-					file_count,
-					int(percent),
-				]
+				_t("Extracting {label}... {current} / {total} files ({percent}%)", {
+					"label": label,
+					"current": extracted_file_count,
+					"total": file_count,
+					"percent": int(percent),
+				}),
+				"updating"
 			)
 			await get_tree().process_frame
 
@@ -1859,6 +1918,7 @@ func _load_launcher_config() -> void:
 
 func _load_launcher_settings() -> void:
 	if not FileAccess.file_exists(LAUNCHER_SETTINGS_FILE):
+		locale = LauncherLocalization.get_preferred_system_locale()
 		return
 
 	var file := FileAccess.open(LAUNCHER_SETTINGS_FILE, FileAccess.READ)
@@ -1873,6 +1933,9 @@ func _load_launcher_settings() -> void:
 	var configured_install_dir := str(settings.get("installDir", ""))
 	if not configured_install_dir.is_empty():
 		install_dir = configured_install_dir.strip_edges()
+	locale = LauncherLocalization.normalize_locale(
+		str(settings.get("locale", LauncherLocalization.get_preferred_system_locale()))
+	)
 
 
 func _save_launcher_settings() -> void:
@@ -1883,6 +1946,7 @@ func _save_launcher_settings() -> void:
 
 	file.store_string(JSON.stringify({
 		"installDir": install_dir,
+		"locale": locale,
 	}, "\t"))
 
 
@@ -1962,7 +2026,10 @@ func _format_request_failure(result: int, response_code: int) -> String:
 		task_label = str(current_download.get("label", current_download.get("file_name", "download")))
 
 	var reason: String = _get_request_failure_reason(result, response_code)
-	return "Download failed: %s (%s). See launcher_error.log." % [task_label, reason]
+	return _t("Download failed: {task} ({reason}). See launcher_error.log.", {
+		"task": task_label,
+		"reason": reason,
+	})
 
 
 func _get_request_failure_reason(result: int, response_code: int) -> String:
@@ -1971,27 +2038,27 @@ func _get_request_failure_reason(result: int, response_code: int) -> String:
 
 	match result:
 		HTTPRequest.RESULT_CHUNKED_BODY_SIZE_MISMATCH:
-			return "size mismatch"
+			return _t("size mismatch")
 		HTTPRequest.RESULT_CANT_CONNECT:
-			return "cannot connect"
+			return _t("cannot connect")
 		HTTPRequest.RESULT_CANT_RESOLVE:
-			return "cannot resolve host"
+			return _t("cannot resolve host")
 		HTTPRequest.RESULT_CONNECTION_ERROR:
-			return "connection error"
+			return _t("connection error")
 		HTTPRequest.RESULT_TLS_HANDSHAKE_ERROR:
-			return "TLS error"
+			return _t("TLS error")
 		HTTPRequest.RESULT_BODY_SIZE_LIMIT_EXCEEDED:
-			return "size limit exceeded"
+			return _t("size limit exceeded")
 		HTTPRequest.RESULT_BODY_DECOMPRESS_FAILED:
-			return "decompress failed"
+			return _t("decompress failed")
 		HTTPRequest.RESULT_DOWNLOAD_FILE_CANT_OPEN:
-			return "cannot open download file"
+			return _t("cannot open download file")
 		HTTPRequest.RESULT_DOWNLOAD_FILE_WRITE_ERROR:
-			return "download write error"
+			return _t("download write error")
 		HTTPRequest.RESULT_REDIRECT_LIMIT_REACHED:
-			return "redirect limit reached"
+			return _t("redirect limit reached")
 		HTTPRequest.RESULT_TIMEOUT:
-			return "timeout"
+			return _t("timeout")
 		_:
 			return "result %d" % result
 
@@ -2024,7 +2091,7 @@ func _refresh_status() -> void:
 	var local_game_version := str(local_versions.get("gameVersion", ""))
 	if local_game_version.is_empty():
 		local_game_version = "not installed"
-	version_label.text = local_game_version
+	version_label.text = _t(local_game_version)
 	play_button.disabled = update_required or not _has_installed_game()
 	update_button.disabled = not update_required
 	check_button.disabled = false
@@ -2050,32 +2117,35 @@ func _refresh_launcher_version() -> void:
 func _refresh_server_health() -> void:
 	var result: Dictionary = await LauncherServerHealthService.check_async(self, health_url)
 	if bool(result.get("online", false)):
-		server_online_label.text = "Online"
+		server_online_label.text = _t("Online")
 		server_online_label.add_theme_color_override("font_color", SERVER_ONLINE_COLOR)
 		await _refresh_online_players()
 	else:
-		server_online_label.text = "Offline"
+		server_online_label.text = _t("Offline")
 		server_online_label.add_theme_color_override("font_color", SERVER_OFFLINE_COLOR)
-		online_players_label.text = "Players online unavailable"
+		online_players_label.text = _t("Players online unavailable")
 		online_players_label.add_theme_color_override("font_color", SERVER_CHECKING_COLOR)
 
 
 func _set_server_health_checking() -> void:
-	server_online_label.text = "Checking..."
+	server_online_label.text = _t("Checking...")
 	server_online_label.add_theme_color_override("font_color", SERVER_CHECKING_COLOR)
-	online_players_label.text = "Checking players online..."
+	online_players_label.text = _t("Checking players online...")
 	online_players_label.add_theme_color_override("font_color", SERVER_CHECKING_COLOR)
 
 
 func _refresh_online_players() -> void:
 	var result: Dictionary = await LauncherServerHealthService.request_presence_async(self, presence_url)
 	if not bool(result.get("success", false)):
-		online_players_label.text = "Players online unavailable"
+		online_players_label.text = _t("Players online unavailable")
 		online_players_label.add_theme_color_override("font_color", SERVER_CHECKING_COLOR)
 		return
 
 	var online_players: int = int(result.get("onlineUsers", 0))
-	online_players_label.text = "%s %s online" % [online_players, "player" if online_players == 1 else "players"]
+	online_players_label.text = _t(
+		"{count} player online" if online_players == 1 else "{count} players online",
+		{"count": online_players}
+	)
 	online_players_label.add_theme_color_override("font_color", SERVER_ONLINE_COLOR)
 
 
@@ -2094,34 +2164,34 @@ func _sync_button_cursors() -> void:
 		button.mouse_default_cursor_shape = Control.CURSOR_ARROW if button.disabled else Control.CURSOR_POINTING_HAND
 	game_folder_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	discord_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	patch_notes_button.tooltip_text = "Open patch notes"
-	credits_button.tooltip_text = "View credits"
-	uninstall_button.tooltip_text = "Remove installed game folder"
+	patch_notes_button.tooltip_text = _t("Open patch notes")
+	credits_button.tooltip_text = _t("View credits")
+	uninstall_button.tooltip_text = _t("Remove installed game folder")
 
 
 func _refresh_gen5_sprites_button() -> void:
 	if _has_gen5_sprites_folder():
 		gen5_sprites_button.visible = false
 		gen5_sprites_button.disabled = true
-		gen5_sprites_button.tooltip_text = "Gen 5 Animated Sprites are already installed."
+		gen5_sprites_button.tooltip_text = _t("Gen 5 Animated Sprites are already installed.")
 		return
 
 	gen5_sprites_button.visible = true
 	if manifest.is_empty():
-		gen5_sprites_button.text = "Gen 5 Sprites"
+		gen5_sprites_button.text = _t("Gen 5 Sprites")
 		gen5_sprites_button.disabled = true
-		gen5_sprites_button.tooltip_text = "Download Gen 5 Animated sprites after launcher manifest is available."
+		gen5_sprites_button.tooltip_text = _t("Download Gen 5 Animated sprites after launcher manifest is available.")
 		return
 
 	if _are_gen5_sprites_installed():
-		gen5_sprites_button.text = "Gen 5 Installed"
+		gen5_sprites_button.text = _t("Gen 5 Installed")
 		gen5_sprites_button.disabled = true
-		gen5_sprites_button.tooltip_text = "Gen 5 Animated Sprites are already installed."
+		gen5_sprites_button.tooltip_text = _t("Gen 5 Animated Sprites are already installed.")
 		return
 
-	gen5_sprites_button.text = "Download Gen 5"
+	gen5_sprites_button.text = _t("Download Gen 5")
 	gen5_sprites_button.disabled = not _can_download_gen5_sprites()
-	gen5_sprites_button.tooltip_text = "Download Gen 5 Animated Sprites."
+	gen5_sprites_button.tooltip_text = _t("Download Gen 5 Animated Sprites.")
 
 
 func _has_gen5_sprites_folder() -> bool:
@@ -2168,9 +2238,9 @@ func _refresh_uninstall_button() -> void:
 	uninstall_button.visible = has_game_install_folder
 	uninstall_button.disabled = not has_game_install_folder
 	if has_game_install_folder:
-		uninstall_button.tooltip_text = "Remove installed game folder"
+		uninstall_button.tooltip_text = _t("Remove installed game folder")
 	else:
-		uninstall_button.tooltip_text = "No game folder to remove"
+		uninstall_button.tooltip_text = _t("No game folder to remove")
 
 
 func _are_gen5_sprites_installed() -> bool:
@@ -2228,23 +2298,23 @@ func _get_game_install_dir() -> String:
 	return install_dir.path_join(GAME_INSTALL_SUBDIR)
 
 
-func _set_status(message: String) -> void:
-	status_label.text = message
+func _set_status(message: String, state: String = "") -> void:
+	status_label.text = _t(message)
 	var lowered_message := message.to_lower()
-	if lowered_message.contains("failed") or lowered_message.contains("could not") or lowered_message.contains("missing") or lowered_message.contains("invalid"):
-		status_value_label.text = "Error"
+	if state == "error" or lowered_message.contains("failed") or lowered_message.contains("could not") or lowered_message.contains("missing") or lowered_message.contains("invalid"):
+		status_value_label.text = _t("Error")
 		status_value_label.add_theme_color_override("font_color", Color(1.0, 0.38, 0.45))
-	elif lowered_message.contains("not installed"):
-		status_value_label.text = "Not installed"
+	elif state == "not_installed" or lowered_message.contains("not installed"):
+		status_value_label.text = _t("Not installed")
 		status_value_label.add_theme_color_override("font_color", Color(1.0, 0.72, 0.34))
-	elif lowered_message.contains("update available"):
-		status_value_label.text = "Update needed"
+	elif state == "update_needed" or lowered_message.contains("update available"):
+		status_value_label.text = _t("Update needed")
 		status_value_label.add_theme_color_override("font_color", Color(1.0, 0.72, 0.34))
-	elif lowered_message.contains("download") or lowered_message.contains("extract") or lowered_message.contains("checking"):
-		status_value_label.text = "Updating"
+	elif state == "updating" or lowered_message.contains("download") or lowered_message.contains("extract") or lowered_message.contains("checking"):
+		status_value_label.text = _t("Updating")
 		status_value_label.add_theme_color_override("font_color", Color(0.70, 0.45, 1.0))
 	else:
-		status_value_label.text = "Ready."
+		status_value_label.text = _t("Ready.")
 		status_value_label.add_theme_color_override("font_color", Color(0.16, 0.94, 0.66))
 
 

@@ -1,5 +1,7 @@
 extends Control
 
+const NewsLocalizationService := preload("res://scripts/services/news_localization_service.gd")
+
 signal login_submitted(username: String, password: String)
 
 const ExternalLinks = preload("res://scripts/core/external_links.gd")
@@ -47,6 +49,7 @@ var server_online := false
 var is_loading := false
 var player_preview_instance: Node2D
 var news_items: Array[Dictionary] = []
+var raw_news_data: Dictionary = {}
 var status_translation_key := ""
 var status_translation_values: Dictionary = {}
 var status_is_error := false
@@ -206,8 +209,10 @@ func _on_locale_changed(_locale: String) -> void:
 		online_players_translation_key,
 		online_players_translation_values
 	)
-	if news_items.is_empty():
+	if raw_news_data.is_empty():
 		_render_news_items([])
+	else:
+		_render_localized_news()
 
 
 func _on_language_selected(index: int) -> void:
@@ -339,7 +344,13 @@ func _fetch_news() -> void:
 		_render_news_items([])
 		return
 
-	var error_code: Error = news_request.request(NEWS_URL, [USER_AGENT_HEADER])
+	var error_code: Error = news_request.request(
+		NEWS_URL,
+		[
+			USER_AGENT_HEADER,
+			"Accept-Language: %s, en;q=0.8" % LocalizationManager.get_http_locale(),
+		]
+	)
 	if error_code != OK:
 		_render_news_items([])
 
@@ -355,26 +366,15 @@ func _on_news_request_completed(result: int, response_code: int, _headers: Packe
 		_render_news_items([])
 		return
 
-	var news_data: Dictionary = parsed_json
-	var parsed_items: Array[Dictionary] = []
-	var item_variants: Variant = news_data.get("items") if news_data.has("items") else news_data.get("articles", [])
-	if typeof(item_variants) == TYPE_ARRAY:
-		for item_variant: Variant in item_variants:
-			if typeof(item_variant) != TYPE_DICTIONARY:
-				continue
+	raw_news_data = parsed_json as Dictionary
+	_render_localized_news()
 
-			var item: Dictionary = item_variant
-			var title: String = str(item.get("title", "")).strip_edges()
-			if title.is_empty():
-				continue
 
-			parsed_items.append({
-				"title": title,
-				"description": str(item.get("description", item.get("summary", ""))).strip_edges(),
-				"url": str(item.get("url", item.get("externalLink", ""))).strip_edges(),
-			})
-
-	_render_news_items(parsed_items)
+func _render_localized_news() -> void:
+	_render_news_items(NewsLocalizationService.resolve_items(
+		raw_news_data,
+		LocalizationManager.get_http_locale()
+	))
 
 
 func _render_news_items(items: Array[Dictionary]) -> void:

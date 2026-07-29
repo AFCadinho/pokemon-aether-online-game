@@ -33,7 +33,11 @@ func _init() -> void:
 	_check_not_contains(launcher_scene, 'text = "Credits & Legal"', "launcher avoids unclear legal wording")
 	_check_contains(launcher_script, "func open_credits", "launcher credits action is connected")
 	_check_contains(launcher_script, "patch_notes_button, credits_button, uninstall_button", "launcher credits uses the pointing-hand cursor")
-	_check_contains(launcher_script, 'credits_button.tooltip_text = "View credits"', "launcher credits has a clear tooltip")
+	_check_contains(
+		launcher_script,
+		'credits_button.tooltip_text = _t("View credits")',
+		"launcher credits has a clear localized tooltip"
+	)
 	_check_contains(launcher_config, '"creditsUrl": "%s"' % CREDITS_URL, "launcher config uses the canonical credits URL")
 
 	quit(1 if failed else 0)

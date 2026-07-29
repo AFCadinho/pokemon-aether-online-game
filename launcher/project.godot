@@ -16,6 +16,10 @@ run/main_scene="res://scenes/launcher.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://assets/ui/logo.png"
 
+[autoload]
+
+LauncherLocalization="*res://scripts/localization_manager.gd"
+
 [display]
 
 window/size/viewport_width=1120

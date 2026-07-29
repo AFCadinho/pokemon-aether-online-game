@@ -72,12 +72,14 @@ func _ready() -> void:
 func load_settings() -> void:
 	if not FileAccess.file_exists(SETTINGS_PATH):
 		locale = LocalizationManager.get_preferred_system_locale()
+		_apply_launcher_locale_argument()
 		save_settings()
 		return
 
 	var settings_text: String = FileAccess.get_file_as_string(SETTINGS_PATH)
 	var parsed_data: Variant = JSON.parse_string(settings_text)
 	if not parsed_data is Dictionary:
+		_apply_launcher_locale_argument()
 		save_settings()
 		return
 
@@ -103,7 +105,19 @@ func load_settings() -> void:
 	)
 	chat_tab_visibility = _validated_chat_tab_visibility(data.get("chat_tab_visibility", chat_tab_visibility))
 	chat_tab_order = _validated_chat_tab_order(data.get("chat_tab_order", chat_tab_order))
+	if _apply_launcher_locale_argument():
+		save_settings()
 	_apply_runtime_settings()
+
+
+func _apply_launcher_locale_argument() -> bool:
+	for argument: String in OS.get_cmdline_user_args():
+		if argument.begins_with("--locale="):
+			var launcher_locale := LocalizationManager.normalize_locale(argument.trim_prefix("--locale="))
+			var changed := locale != launcher_locale
+			locale = launcher_locale
+			return changed
+	return false
 
 
 func save_settings() -> void:

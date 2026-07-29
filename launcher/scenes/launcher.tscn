@@ -145,6 +145,20 @@ layout_mode = 2
 text = "Uninstall"
 alignment = 0
 
+[node name="LanguageSection" type="VBoxContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="LanguageTitle" type="Label" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/LanguageSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.53, 0.56, 0.69, 1)
+theme_override_font_sizes/font_size = 11
+text = "LANGUAGE"
+
+[node name="LanguageOptionsButton" type="OptionButton" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/LanguageSection"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+
 [node name="SidebarSpacer" type="Control" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout" unique_id=550067109]
 layout_mode = 2
 size_flags_vertical = 3

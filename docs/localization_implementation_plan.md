@@ -458,6 +458,34 @@ Example:
 - News content can be selected by locale without breaking older English-only entries.
 - Missing localized launcher or news content falls back to English.
 
+### Completed implementation
+
+- The standalone launcher now uses the same `en`, `nl`, and `pt_BR` locale model,
+  system-locale detection, normalization, and English catalog fallback as the game.
+- Its language selector updates the interface immediately and persists the selection
+  beside the existing install-directory preference.
+- Static controls, actions, server presence, progress, download/extraction states,
+  launcher self-update states, uninstall flows, tooltips, and player-facing failures
+  are covered by complete launcher catalogs.
+- Starting the game passes the validated launcher locale as a user argument. The game
+  imports and persists this value through `SettingsManager`, keeping both projects in
+  sync without sharing their separate Godot user-data files.
+- Login and launcher news requests send `Accept-Language` with English as the requested
+  fallback. Both consumers select translated news again immediately after a runtime
+  language change.
+- News remains compatible with the original English-only `items`/`articles` arrays.
+  New feeds may add per-item `localizations` (or `translations`) keyed by `nl`,
+  `pt-BR`, and `en`, or use top-level `locales` buckets. Missing translated fields
+  inherit the English/base item.
+- `launcher/config/news.example.json` documents the preferred per-item format.
+- Dedicated launcher runtime checks and game-project integration checks validate
+  locale behavior, catalog parity, placeholders, preference synchronization, request
+  headers, translated news selection, and English fallback.
+
+Phase 9 is technically complete. External websites, registration, credits, and legal
+documents remain deliberately outside the game/launcher catalogs and require their own
+content and legal review before release.
+
 ## Phase 10: completeness and release gate
 
 PokeAether is considered fully localized for the initial language set when:
