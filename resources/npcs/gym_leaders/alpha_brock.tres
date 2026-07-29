@@ -1,8 +1,8 @@
-[gd_resource type="Resource" script_class="GymLeaderDefinition" load_steps=4 format=3]
+[gd_resource type="Resource" script_class="GymLeaderDefinition" format=3 uid="uid://bnjoxn7rvxpam"]
 
-[ext_resource type="Script" path="res://scripts/world/npcs/gym_leader_definition.gd" id="1_definition"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/gym_leaders/alpha_brock_frames.tres" id="2_frames"]
-[ext_resource type="Texture2D" path="res://assets/gym_badges/kanto_badges/Boulder_Badge.png" id="3_badge"]
+[ext_resource type="Script" uid="uid://clv8fhrgcx3ak" path="res://scripts/world/npcs/gym_leader_definition.gd" id="1_definition"]
+[ext_resource type="SpriteFrames" uid="uid://dlh8wgpn7hn78" path="res://assets/npcs/gym_leaders/alpha_brock_frames.tres" id="2_frames"]
+[ext_resource type="Texture2D" uid="uid://cvspx3t78ayb7" path="res://assets/gym_badges/kanto_badges/Boulder_Badge.png" id="3_badge"]
 
 [resource]
 script = ExtResource("1_definition")
@@ -10,7 +10,6 @@ npc_id = "kanto_alpha_gym_brock"
 trainer_id = "kanto_alpha_gym_brock"
 display_name = "Alpha Trial · Brock"
 sprite_frames = ExtResource("2_frames")
-badge_region = "kanto"
 badge_id = "boulder"
 badge_display_name = "Boulder Badge"
 badge_icon_texture = ExtResource("3_badge")

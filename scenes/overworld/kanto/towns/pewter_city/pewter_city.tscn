@@ -15,9 +15,9 @@
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="12_vw642"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/building_window_light.tscn" id="13_4hm78"]
 [ext_resource type="PackedScene" uid="uid://ds0lg7oj5khbm" path="res://scenes/npcs/gym_leader_npc.tscn" id="14_gym_leader"]
-[ext_resource type="Resource" path="res://resources/npcs/gym_leaders/alpha_brock.tres" id="15_brock"]
-[ext_resource type="Resource" path="res://resources/npcs/gym_leaders/alpha_misty.tres" id="16_misty"]
-[ext_resource type="Resource" path="res://resources/npcs/gym_leaders/alpha_lt_surge.tres" id="17_surge"]
+[ext_resource type="Resource" uid="uid://bnjoxn7rvxpam" path="res://resources/npcs/gym_leaders/alpha_brock.tres" id="15_brock"]
+[ext_resource type="Resource" uid="uid://c3alv8nu8paur" path="res://resources/npcs/gym_leaders/alpha_misty.tres" id="16_misty"]
+[ext_resource type="Resource" uid="uid://dmm23s1e2m34y" path="res://resources/npcs/gym_leaders/alpha_lt_surge.tres" id="17_surge"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2mtwu"]
 size = Vector2(32, 32)
