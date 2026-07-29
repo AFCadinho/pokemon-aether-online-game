@@ -1941,6 +1941,14 @@ static func _static_item_display_name(item: Dictionary) -> String:
 	return str(item_localization.call("display_name", item_id, fallback))
 
 
+static func _static_species_display_name(species_id: String, fallback: String) -> String:
+	var tree := Engine.get_main_loop() as SceneTree
+	var content_localization := tree.root.get_node_or_null("ContentLocalization") if tree != null else null
+	if content_localization == null:
+		return fallback
+	return str(content_localization.call("display_name", "species", species_id, fallback))
+
+
 static func _static_join_parts(parts: Array[String]) -> String:
 	if parts.size() < 2:
 		return parts[0] if not parts.is_empty() else ""
@@ -1959,8 +1967,9 @@ static func _completion_pokemon_name(value: Dictionary) -> String:
 	if nickname != "" and nickname != "<null>":
 		return nickname
 	if species_name != "" and species_name != "<null>":
-		return species_name
-	return species_id if species_id != "" else "Pokemon"
+		return _static_species_display_name(species_id, species_name)
+	var fallback := species_id if species_id != "" else "Pokemon"
+	return _static_species_display_name(species_id, fallback)
 
 
 func _leave_trade() -> void:
@@ -2242,6 +2251,15 @@ func _item_display_name(item: Dictionary) -> String:
 	return str(item_localization.call("display_name", item_id, fallback))
 
 
+func _species_display_name(species_id: String, fallback: String) -> String:
+	if not is_inside_tree():
+		return fallback
+	var content_localization := get_node_or_null("/root/ContentLocalization")
+	if content_localization == null:
+		return fallback
+	return str(content_localization.call("display_name", "species", species_id, fallback))
+
+
 func _set_localized_property(control: Control, property_name: String, key: String) -> void:
 	control.set_meta("i18n_source_%s" % property_name, key)
 	control.set(property_name, _t(key))
@@ -2278,6 +2296,8 @@ func _pokemon_label(value: Variant) -> String:
 	var name := nickname if nickname != "" and nickname != "<null>" else species_name
 	if name == "" or name == "<null>":
 		name = species_id if species_id != "" else "Pokemon"
+	elif nickname == "" or nickname == "<null>":
+		name = _species_display_name(species_id, name)
 	return "%s  Lv. %d" % [name, maxi(int(pokemon.get("level", 1)), 1)]
 
 
@@ -2288,8 +2308,9 @@ func _pokemon_name(value: Dictionary) -> String:
 	if nickname != "" and nickname != "<null>":
 		return nickname
 	if species_name != "" and species_name != "<null>":
-		return species_name
-	return species_id if species_id != "" else "Pokemon"
+		return _species_display_name(species_id, species_name)
+	var fallback := species_id if species_id != "" else "Pokemon"
+	return _species_display_name(species_id, fallback)
 
 
 func _pokemon_species(value: Dictionary) -> String:

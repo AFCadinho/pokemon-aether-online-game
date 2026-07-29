@@ -24,6 +24,13 @@ func _run() -> void:
 			"Zoek ruilbare items op naam of categorie"
 		)
 		_check(search != null, "item search refreshes in Dutch")
+		_check(
+			workspace.call("_pokemon_name", {
+				"speciesId": "mr-mime",
+				"speciesName": "Mr Mime",
+			}) == "Mr. Mime",
+			"trade Pokemon names resolve through the species catalog"
+		)
 		localization_manager.set_locale("pt_BR")
 		await process_frame
 		_check(workspace.title == "Troca entre jogadores", "trade title refreshes in Brazilian Portuguese")

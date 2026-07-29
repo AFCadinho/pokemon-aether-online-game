@@ -2,9 +2,18 @@ extends Node
 
 const DEFAULT_LOCALE := "en"
 const CATALOG_PATHS: Dictionary = {
-	"en": "res://localization/items/en.json",
-	"nl": "res://localization/items/nl.json",
-	"pt_BR": "res://localization/items/pt_BR.json",
+	"en": [
+		"res://localization/items/generated/en.json",
+		"res://localization/items/en.json",
+	],
+	"nl": [
+		"res://localization/items/generated/nl.json",
+		"res://localization/items/nl.json",
+	],
+	"pt_BR": [
+		"res://localization/items/generated/pt_BR.json",
+		"res://localization/items/pt_BR.json",
+	],
 }
 const SOURCE_NAME_FIELD := "_i18n_source_name"
 const SOURCE_DESCRIPTION_FIELD := "_i18n_source_short_desc"
@@ -130,7 +139,12 @@ func _load_catalogs() -> void:
 	catalogs.clear()
 	for locale_value: Variant in CATALOG_PATHS.keys():
 		var locale := str(locale_value)
-		catalogs[locale] = _load_catalog(locale, str(CATALOG_PATHS.get(locale, "")))
+		var merged_catalog: Dictionary = {}
+		var paths_value: Variant = CATALOG_PATHS.get(locale, [])
+		var paths: Array = paths_value if paths_value is Array else [paths_value]
+		for path_value: Variant in paths:
+			merged_catalog.merge(_load_catalog(locale, str(path_value)), true)
+		catalogs[locale] = merged_catalog
 
 
 func _load_catalog(locale: String, path: String) -> Dictionary:

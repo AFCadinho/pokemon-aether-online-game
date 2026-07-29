@@ -3433,15 +3433,17 @@ func play_evolution_overlay(evolution: Dictionary) -> void:
 	var shiny := bool(evolution.get("shiny", false))
 	var old_texture := PokemonAssets.load_home_sprite(old_species, shiny)
 	var new_texture := PokemonAssets.load_home_sprite(new_species, shiny)
+	var old_species_name := _localized_species_name(old_species, old_species)
+	var new_species_name := _localized_species_name(new_species, new_species)
 	if old_texture == null or new_texture == null:
-		add_system_message("%s evolved into %s!" % [old_species, new_species])
+		add_system_message("%s evolved into %s!" % [old_species_name, new_species_name])
 		return
 
 	evolution_is_playing = true
 	evolution_old_sprite.texture = old_texture
 	evolution_silhouette_sprite.texture = old_texture
 	evolution_new_sprite.texture = new_texture
-	evolution_title_label.text = "What? %s is evolving!" % old_species
+	evolution_title_label.text = "What? %s is evolving!" % old_species_name
 	evolution_message_label.text = ""
 	evolution_overlay.visible = true
 	evolution_overlay.move_to_front()
@@ -3466,7 +3468,7 @@ func play_evolution_overlay(evolution: Dictionary) -> void:
 	evolution_tween.tween_interval(0.22)
 	await evolution_tween.finished
 
-	evolution_message_label.text = "Congratulations! %s evolved into %s!" % [old_species, new_species]
+	evolution_message_label.text = "Congratulations! %s evolved into %s!" % [old_species_name, new_species_name]
 	evolution_continue_button.visible = true
 	evolution_is_playing = false
 	await evolution_continue_button.pressed
@@ -3694,11 +3696,16 @@ func _render_evolution_prompt(prompt: Dictionary) -> void:
 
 	var from_species := _evolution_prompt_from_species(prompt)
 	var to_species := _evolution_prompt_to_species(prompt)
+	var from_species_name := _localized_species_name(from_species, from_species)
+	var to_species_name := _localized_species_name(
+		_evolution_prompt_target_species_id(prompt),
+		to_species
+	)
 	var progress_label := _evolution_queue_progress_label()
 	var level := int(prompt.get("level", 0))
 	evolution_prompt_title_label.text = "Evolution"
 	evolution_prompt_progress_label.text = progress_label
-	evolution_prompt_message_label.text = "%s can evolve into %s." % [from_species, to_species]
+	evolution_prompt_message_label.text = "%s can evolve into %s." % [from_species_name, to_species_name]
 	evolution_prompt_level_label.text = "Available at Lv. %s" % level if level > 0 else ""
 	evolution_prompt_status_label.text = ""
 	evolution_prompt_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -3763,11 +3770,15 @@ func _submit_evolution_choice(confirm: bool) -> void:
 		if evolution_prompt_popup != null:
 			evolution_prompt_popup.visible = false
 		await play_evolution_overlay(evolution)
-		add_system_message("%s evolved into %s!" % [from_species, _evolution_prompt_to_species(evolution)])
+		var to_species := _evolution_prompt_to_species(evolution)
+		add_system_message("%s evolved into %s!" % [
+			_localized_species_name(from_species, from_species),
+			_localized_species_name(target_species_id, to_species),
+		])
 	else:
 		if evolution_prompt_popup != null:
 			evolution_prompt_popup.visible = false
-		add_system_message("%s did not evolve." % from_species)
+		add_system_message("%s did not evolve." % _localized_species_name(from_species, from_species))
 
 	evolution_active_prompt.clear()
 	_refresh_party()
@@ -3873,9 +3884,7 @@ func _show_next_move_learn_prompt() -> void:
 
 func _render_move_learn_prompt(pokemon: Pokemon, prompt: Dictionary) -> void:
 	var move_name := _move_learn_prompt_move_name(prompt)
-	var species := str(prompt.get("species", pokemon.species)).strip_edges()
-	if species == "":
-		species = pokemon.species
+	var species := _pokemon_display_name(pokemon)
 	var new_move_value: Variant = _move_learn_prompt_move_value(prompt)
 	var progress_label := _move_learn_queue_progress_label()
 	move_learn_title_label.text = "Learn %s%s" % [move_name, " (%s)" % progress_label if progress_label != "" else ""]
@@ -4299,9 +4308,10 @@ func _submit_move_learn_choice(replace_slot: int, skip: bool) -> void:
 	_show_next_move_learn_prompt()
 
 func _emit_move_learn_result_message(result: Dictionary, fallback_species: String, fallback_move_name: String, fallback_skipped: bool) -> void:
-	var species := fallback_species.strip_edges()
-	if species == "":
-		species = "Pokemon"
+	var source_species := fallback_species.strip_edges()
+	if source_species == "":
+		source_species = "Pokemon"
+	var species := _localized_species_name(source_species, source_species)
 
 	var learned_move: Dictionary = {}
 	var learned_move_value: Variant = result.get("learnedMove", {})
@@ -5881,7 +5891,7 @@ func _create_pvp_team_preview_slot(pokemon: Pokemon, slot_index: int) -> Control
 
 	icon.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
 	icon.modulate = Color(1, 1, 1, 1) if icon.texture != null else Color(1, 1, 1, 0.18)
-	panel.tooltip_text = _format_identifier_display_name(pokemon.species)
+	panel.tooltip_text = _pokemon_display_name(pokemon)
 	return panel
 
 func _create_pvp_tournaments_placeholder() -> Control:
@@ -8602,6 +8612,7 @@ func _render_wild_pokemon_metadata(metadata: Dictionary) -> void:
 
 func _create_wild_pokemon_row(entry: Dictionary) -> Control:
 	var species := str(entry.get("species", "Unknown")).strip_edges()
+	var species_name := _localized_species_name(species, _format_identifier_display_name(species))
 	var min_level: int = max(int(entry.get("minLevel", 1)), 1)
 	var max_level: int = max(int(entry.get("maxLevel", min_level)), min_level)
 	var rarity := str(entry.get("rarity", "common")).strip_edges().to_lower()
@@ -8634,7 +8645,7 @@ func _create_wild_pokemon_row(entry: Dictionary) -> Control:
 		row.add_child(_create_owned_pokeball_icon(Vector2(18, 18)))
 
 	var name_label := Label.new()
-	name_label.text = _format_identifier_display_name(species)
+	name_label.text = species_name
 	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	name_label.add_theme_font_size_override("font_size", 15)
@@ -15920,7 +15931,7 @@ func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> C
 
 	var name_label := Label.new()
 	name_label.text = LocalizationManager.text("ui.bag.use.pokemon_level", {
-		"pokemon": pokemon.species,
+		"pokemon": _pokemon_display_name(pokemon),
 		"level": max(pokemon.level, 1),
 	})
 	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -15937,7 +15948,7 @@ func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> C
 	button.tooltip_text = str(preview.get("tooltip", button.text))
 	button.disabled = bag_item_use_in_progress or pokemon.owned_pokemon_id <= 0 or not _bag_item_can_affect_pokemon(pokemon, item_id)
 	if pokemon.owned_pokemon_id <= 0:
-		button.tooltip_text = LocalizationManager.text("ui.bag.use.pokemon_unavailable", {"pokemon": pokemon.species})
+		button.tooltip_text = LocalizationManager.text("ui.bag.use.pokemon_unavailable", {"pokemon": _pokemon_display_name(pokemon)})
 	elif button.disabled and not bag_item_use_in_progress:
 		var disabled_preview := _bag_item_use_preview_for_pokemon(pokemon, item_id, requested_quantity)
 		button.tooltip_text = str(disabled_preview.get("tooltip", button.tooltip_text))
@@ -15954,7 +15965,7 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 			return {
 				"label": LocalizationManager.text("ui.bag.use.already_knows", {"move": _format_move_name(machine_move_id)}),
 				"tooltip": LocalizationManager.text("ui.bag.use.already_knows_tooltip", {
-					"pokemon": pokemon.species,
+					"pokemon": _pokemon_display_name(pokemon),
 					"move": _format_move_name(machine_move_id),
 				}),
 				"canApply": false,
@@ -15963,7 +15974,7 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 			"label": LocalizationManager.text("ui.bag.use.teach_move", {"move": _format_move_name(machine_move_id)}),
 			"tooltip": LocalizationManager.text("ui.bag.use.teach_move_tooltip", {
 				"move": _format_move_name(machine_move_id),
-				"pokemon": pokemon.species,
+				"pokemon": _pokemon_display_name(pokemon),
 			}),
 			"canApply": true,
 		}
@@ -15979,7 +15990,7 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 	if current_level >= POKEMON_MAX_LEVEL:
 		return {
 			"label": LocalizationManager.text("ui.bag.use.max_level"),
-			"tooltip": LocalizationManager.text("ui.bag.use.already_level_100", {"pokemon": pokemon.species}),
+			"tooltip": LocalizationManager.text("ui.bag.use.already_level_100", {"pokemon": _pokemon_display_name(pokemon)}),
 			"canApply": false,
 		}
 
@@ -15990,7 +16001,7 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 	if remaining_exp <= 0:
 		return {
 			"label": LocalizationManager.text("ui.bag.use.max_level"),
-			"tooltip": LocalizationManager.text("ui.bag.use.already_level_cap", {"pokemon": pokemon.species}),
+			"tooltip": LocalizationManager.text("ui.bag.use.already_level_cap", {"pokemon": _pokemon_display_name(pokemon)}),
 			"canApply": false,
 		}
 
@@ -16021,7 +16032,7 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 		"canApply": true,
 		"label": label,
 		"tooltip": LocalizationManager.text("ui.bag.use.exp_tooltip", {
-			"pokemon": pokemon.species,
+			"pokemon": _pokemon_display_name(pokemon),
 			"used": used_quantity,
 			"exp": gained_exp,
 			"current_level": current_level,
@@ -16050,7 +16061,7 @@ func _bag_ev_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, req
 		return {
 			"label": LocalizationManager.text("ui.bag.use.storage_full"),
 			"tooltip": LocalizationManager.text("ui.bag.use.storage_full_tooltip", {
-				"pokemon": pokemon.species,
+				"pokemon": _pokemon_display_name(pokemon),
 				"stat": stat_label,
 				"stat_current": current_value,
 				"stat_max": POKEMON_EV_STAT_LIMIT,
@@ -16078,7 +16089,7 @@ func _bag_ev_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, req
 		"canApply": true,
 		"label": label,
 		"tooltip": LocalizationManager.text("ui.bag.use.ev_tooltip", {
-			"pokemon": pokemon.species,
+			"pokemon": _pokemon_display_name(pokemon),
 			"used": used_quantity,
 			"stat": stat_label,
 			"current": current_value,
@@ -16198,7 +16209,7 @@ func _refresh_bag_item_use_selected_preview() -> void:
 	if preview_text == "":
 		preview_text = LocalizationManager.text("ui.bag.use.no_item_change")
 	_set_bag_item_use_status(LocalizationManager.text("ui.bag.use.selected_preview", {
-		"pokemon": pokemon.species,
+		"pokemon": _pokemon_display_name(pokemon),
 		"preview": preview_text,
 	}), false)
 
@@ -16289,10 +16300,14 @@ func _add_bag_item_use_success_message(item_id: String, reward: Dictionary) -> v
 			var ev_changes: Dictionary = _staff_dictionary_from_variant(effort_entry.get("storedEvChanges", effort_entry.get("evChanges", {})))
 			var gained_evs: int = max(int(ev_changes.get(stat_id, 0)), 0)
 			if gained_evs > 0:
+				var effort_species := str(effort_entry.get(
+					"species",
+					LocalizationManager.text("ui.bag.pokemon_fallback")
+				))
 				_add_chat_message(LocalizationManager.text("ui.bag.use.success_evs", {
 					"quantity": quantity,
 					"item": item_name,
-					"pokemon": str(effort_entry.get("species", LocalizationManager.text("ui.bag.pokemon_fallback"))),
+					"pokemon": _localized_species_name(effort_species, effort_species),
 					"amount": gained_evs,
 					"stat": _summary_stat_label(stat_id),
 				}))
@@ -18211,7 +18226,7 @@ func _on_summary_ev_allocate_confirm_pressed() -> void:
 	var allocation: Dictionary = _staff_dictionary_from_variant(result.get("allocation", {}))
 	var added_value: int = max(int(allocation.get("addedValue", 0)), 0)
 	_add_chat_message(LocalizationManager.text("ui.pokemon_summary.evs.allocated_message", {
-		"pokemon": str(allocation.get("species", pokemon.species)),
+		"pokemon": _pokemon_display_name(pokemon),
 		"amount": added_value,
 		"stat": _summary_stat_label(stat_id),
 	}))
@@ -19094,7 +19109,7 @@ func _get_pokemon_ball_item_id(pokemon: Pokemon) -> String:
 	return ball_item_id if ball_item_id != "" else "poke-ball"
 
 func _format_move_name(move_id: String) -> String:
-	return _item_name_from_id(move_id)
+	return _localized_content_name("moves", move_id, _item_name_from_id(move_id))
 
 func _format_identifier_display_name(raw_value: String) -> String:
 	var cleaned: String = raw_value.strip_edges()
@@ -21148,11 +21163,12 @@ func _refresh_pending_chat_pokemon_attachment_preview() -> void:
 
 func _create_pending_chat_pokemon_button(pokemon_payload: Dictionary, index: int) -> Button:
 	var species: String = str(pokemon_payload.get("species", "Pokemon"))
+	var species_name := _localized_species_name(species, species)
 	var shiny: bool = bool(pokemon_payload.get("shiny", false))
 	var button := Button.new()
 	button.custom_minimum_size = Vector2(44, 34)
 	button.focus_mode = Control.FOCUS_NONE
-	button.tooltip_text = "Gift: %s. Click to remove." % species
+	button.tooltip_text = "Gift: %s. Click to remove." % species_name
 	button.pressed.connect(_remove_pending_chat_pokemon_attachment.bind(index))
 	_apply_button_style(button)
 
@@ -23059,7 +23075,7 @@ func _parse_hotbar_field_move_binding(entry_id: String) -> Dictionary:
 
 func _hotbar_field_move_pokemon_name(pokemon_id: int) -> String:
 	var pokemon := _get_party_pokemon_by_owned_id(pokemon_id)
-	return pokemon.species if pokemon != null else LocalizationManager.text("ui.hotbar.pokemon_not_in_party")
+	return _pokemon_display_name(pokemon) if pokemon != null else LocalizationManager.text("ui.hotbar.pokemon_not_in_party")
 
 
 func _activate_hotbar_field_move(entry_id: String) -> void:
@@ -26274,6 +26290,12 @@ func _localized_species_name(species_id: String, fallback_name: String = "") -> 
 	return _localized_content_name("species", species_id, fallback)
 
 
+func _pokemon_display_name(pokemon: Pokemon) -> String:
+	if pokemon == null:
+		return ""
+	return _localized_species_name(pokemon.species, pokemon.species)
+
+
 func _content_search_terms(kind: String, content_id: String, fallback_name: String) -> Array[String]:
 	var content_localization := _get_content_localization()
 	if content_localization != null and content_localization.has_method("search_terms"):
@@ -28065,7 +28087,7 @@ func _create_pc_search_empty_state(search_query: String) -> PanelContainer:
 
 func _create_pc_party_slot_button(slot_index: int, storage_slot_index: int, pokemon: Pokemon, selected: bool) -> Button:
 	var occupied := pokemon != null
-	var title := pokemon.species if occupied else "Empty"
+	var title := _pokemon_display_name(pokemon) if occupied else "Empty"
 	var subtitle := "Lv. %s" % pokemon.level if occupied else "Party slot %d" % (slot_index + 1)
 	var texture: Texture2D = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny) if occupied else null
 	var held_item_id := _get_pokemon_held_item_id(pokemon) if occupied else ""
@@ -28123,7 +28145,11 @@ func _create_pc_box_slot_button_for_location(box_index: int, slot_index: int, po
 		PC_BOX_SLOT_SIZE
 	)
 	button.use_native_drag = false
-	button.tooltip_text = "%s Box %d slot %02d" % [species if occupied else "Empty", box_index + 1, slot_index + 1]
+	button.tooltip_text = "%s Box %d slot %02d" % [
+		_pc_payload_species_display_name(payload) if occupied else "Empty",
+		box_index + 1,
+		slot_index + 1,
+	]
 	if occupied:
 		var pokemon_id := _pc_owned_pokemon_id_from_response(pokemon_response)
 		if pokemon_id > 0:
@@ -29627,6 +29653,7 @@ func _emit_mail_claim_messages(previous_attachments: Array, claimed_mail: Dictio
 					"species",
 					LocalizationManager.text("ui.mail.pokemon_fallback")
 				))
+				var species_name := _localized_species_name(species, species)
 				var level: int = int(pokemon_payload.get("level", 1))
 				var location: Dictionary = {}
 				if pokemon_claim_index >= 0 and pokemon_claim_index < storage_locations.size():
@@ -29634,14 +29661,14 @@ func _emit_mail_claim_messages(previous_attachments: Array, claimed_mail: Dictio
 				pokemon_claim_index += 1
 				if location.is_empty():
 					_add_chat_message(LocalizationManager.text("ui.mail.message.received_pokemon", {
-						"pokemon": species,
+						"pokemon": species_name,
 						"level": level,
 					}))
 				else:
 					_add_chat_message(LocalizationManager.text(
 						"ui.mail.message.received_pokemon_storage",
 						{
-							"pokemon": species,
+							"pokemon": species_name,
 							"level": level,
 							"location": PokemonStorageService.storage_location_label(location),
 						}
@@ -29775,7 +29802,7 @@ func _refresh_mail_pokemon_attachment_options() -> void:
 		if mail_selected_pokemon_ids.has(pokemon.owned_pokemon_id):
 			continue
 		mail_compose_party_pokemon.append(pokemon)
-		mail_pokemon_option.add_item("%s Lv. %s" % [pokemon.species, pokemon.level], mail_compose_party_pokemon.size() - 1)
+		mail_pokemon_option.add_item("%s Lv. %s" % [_pokemon_display_name(pokemon), pokemon.level], mail_compose_party_pokemon.size() - 1)
 
 	if mail_compose_party_pokemon.is_empty():
 		mail_pokemon_option.add_item(LocalizationManager.text("ui.mail.compose.no_eligible_pokemon"), -1)
@@ -29873,7 +29900,7 @@ func _refresh_mail_attachment_summary() -> void:
 		if pokemon != null:
 			mail_selected_attachments_list.add_child(_create_mail_compose_attachment_row(
 				PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny),
-				pokemon.species,
+				_pokemon_display_name(pokemon),
 				LocalizationManager.text("ui.mail.compose.pokemon_level", {"level": pokemon.level}),
 				_on_mail_remove_pokemon_attachment_pressed.bind(pokemon_id)
 			))
@@ -30386,11 +30413,12 @@ func _render_mail_attachments(attachments: Array) -> void:
 					"species",
 					LocalizationManager.text("ui.mail.pokemon_fallback")
 				))
+				var species_name := _localized_species_name(species, species)
 				var shiny: bool = bool(pokemon_payload.get("shiny", false))
 				mail_attachment_list.add_child(_create_mail_attachment_row(
 					PokemonAssets.load_party_icon(species, shiny),
 					"%s Lv. %s%s" % [
-					species,
+					species_name,
 					int(pokemon_payload.get("level", 1)),
 					suffix,
 					],
@@ -30929,7 +30957,10 @@ func _refresh_pvp_team_validator() -> void:
 	for species_key: String in species_counts.keys():
 		var count: int = int(species_counts[species_key])
 		if count > 1:
-			issues.append("Species Clause: %s appears %d times." % [_format_identifier_display_name(species_key), count])
+			issues.append("Species Clause: %s appears %d times." % [
+				_format_pvp_species_display_name(species_key),
+				count,
+			])
 
 	if pvp_team_source_select != null and pvp_team_source_select.selected > 0:
 		issues.append("PvP team slots are not available yet. Select Current Party.")
@@ -31044,14 +31075,28 @@ func _pvp_ranked_validation_issue_message(issue: Dictionary) -> String:
 		"banned_pokemon":
 			return "%s is banned." % (pokemon_name if pokemon_name != "" else value)
 		"banned_item":
-			return "%s holds banned item: %s." % [_pvp_issue_subject(pokemon_name, slot), value]
+			var item_id := str(issue.get("value", issue.get("normalizedValue", "")))
+			return "%s holds banned item: %s." % [
+				_pvp_issue_subject(pokemon_name, slot),
+				ItemLocalization.display_name(item_id, value),
+			]
 		"banned_move":
-			return "%s has banned move: %s." % [_pvp_issue_subject(pokemon_name, slot), value]
+			var move_id := str(issue.get("value", issue.get("normalizedValue", "")))
+			return "%s has banned move: %s." % [
+				_pvp_issue_subject(pokemon_name, slot),
+				_localized_content_name("moves", move_id, value),
+			]
 		"banned_ability":
-			return "%s has banned ability: %s." % [_pvp_issue_subject(pokemon_name, slot), value]
+			var ability_id := str(issue.get("value", issue.get("normalizedValue", "")))
+			return "%s has banned ability: %s." % [
+				_pvp_issue_subject(pokemon_name, slot),
+				_localized_content_name("abilities", ability_id, value),
+			]
 		"species_clause_duplicate":
 			var slots_text := _pvp_validation_slots_text(issue.get("slots", []))
-			var species := _format_identifier_display_name(str(issue.get("species", value))).strip_edges()
+			var species := _format_pvp_species_display_name(
+				str(issue.get("species", value))
+			).strip_edges()
 			return "Species Clause: %s appears more than once%s." % [species, " in %s" % slots_text if slots_text != "" else ""]
 	var message := str(issue.get("message", "")).strip_edges()
 	return message if message != "" else code.replace("_", " ").capitalize()
@@ -32469,7 +32514,11 @@ func _create_pvp_history_team_icon(pokemon_data: Dictionary) -> TextureRect:
 	icon.texture = PokemonAssets.load_party_icon(species, shiny)
 	if icon.texture == null:
 		icon.texture = PokemonAssets.load_unknown_icon()
-	icon.tooltip_text = species if species != "" else "Pokémon"
+	icon.tooltip_text = (
+		_localized_species_name(species, species)
+		if species != ""
+		else "Pokémon"
+	)
 	if _pvp_history_pokemon_fainted(pokemon_data):
 		icon.modulate = Color(0.65, 0.65, 0.65, 0.65)
 	return icon
@@ -34053,13 +34102,14 @@ func _create_chat_role_badge(role_name: String, role_color: String) -> PanelCont
 func _create_chat_pokemon_attachment_button(pokemon_payload: Dictionary) -> Control:
 	var button := Button.new()
 	var species: String = str(pokemon_payload.get("species", "Pokemon"))
+	var species_name := _localized_species_name(species, species)
 	var shiny: bool = bool(pokemon_payload.get("shiny", false))
 	button.custom_minimum_size = Vector2(36, 36)
 	button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	button.focus_mode = Control.FOCUS_NONE
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	button.tooltip_text = "View %s summary" % species
+	button.tooltip_text = "View %s summary" % species_name
 	button.pressed.connect(_open_readonly_pokemon_summary.bind(pokemon_payload))
 	var transparent_style := _make_button_style(Color("#00000000"), Color("#00000000"), 0, 0)
 	button.add_theme_stylebox_override("normal", transparent_style)

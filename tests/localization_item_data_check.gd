@@ -6,6 +6,15 @@ const CATALOG_PATHS: Dictionary = {
 	"nl": "res://localization/items/nl.json",
 	"pt_BR": "res://localization/items/pt_BR.json",
 }
+const GENERATED_CATALOG_PATHS: Dictionary = {
+	"en": "res://localization/items/generated/en.json",
+	"nl": "res://localization/items/generated/nl.json",
+	"pt_BR": "res://localization/items/generated/pt_BR.json",
+}
+const SHOP_CONSUMER_PATHS: Dictionary = {
+	"Aether Atelier": "res://scripts/ui/aether_atelier_popup.gd",
+	"Donator Store": "res://scripts/ui/donator_store_popup.gd",
+}
 
 var failed := false
 var localization_manager: Node
@@ -29,6 +38,7 @@ func _run() -> void:
 	_check_catalogs()
 	_check_resolver_fallback_and_mechanics()
 	_check_overlay_integration()
+	_check_shop_and_cosmetic_integration()
 	localization_manager.call("set_locale", original_locale)
 	await process_frame
 	quit(1 if failed else 0)
@@ -52,10 +62,6 @@ func _check_catalogs() -> void:
 		var localized_item_ids: Array = catalog.keys()
 		localized_item_ids.sort()
 		_check(localized_item_ids == english_item_ids, "%s item IDs match English" % locale)
-		_check(
-			(item_localization.call("get_catalog", locale) as Dictionary).size() == english.size(),
-			"%s item catalog loads into the runtime resolver" % locale
-		)
 		for item_id_value: Variant in english.keys():
 			var item_id := str(item_id_value)
 			var entry: Dictionary = catalog.get(item_id, {})
@@ -64,6 +70,42 @@ func _check_catalogs() -> void:
 				not str(entry.get("shortDesc", "")).strip_edges().is_empty(),
 				"%s %s has a short description" % [locale, item_id]
 			)
+
+	var generated_catalogs: Dictionary = {}
+	for locale: String in GENERATED_CATALOG_PATHS:
+		var parsed: Variant = JSON.parse_string(
+			FileAccess.get_file_as_string(str(GENERATED_CATALOG_PATHS.get(locale, "")))
+		)
+		_check(parsed is Dictionary, "generated %s item catalog is valid JSON" % locale)
+		var catalog: Dictionary = parsed as Dictionary if parsed is Dictionary else {}
+		generated_catalogs[locale] = catalog
+		_check(catalog.size() == 1395, "generated %s item catalog covers the complete source index" % locale)
+		for item_id_value: Variant in catalog.keys():
+			var item_id := str(item_id_value)
+			var entry: Dictionary = catalog.get(item_id, {})
+			_check(not str(entry.get("name", "")).strip_edges().is_empty(), "generated %s %s has a name" % [locale, item_id])
+			_check(
+				not str(entry.get("shortDesc", "")).strip_edges().is_empty(),
+				"generated %s %s has a short description" % [locale, item_id]
+			)
+			for entry_key_value: Variant in entry.keys():
+				_check(
+					str(entry_key_value) in ["name", "shortDesc"],
+					"generated %s %s contains presentation fields only" % [locale, item_id]
+				)
+
+	var generated_english: Dictionary = generated_catalogs.get("en", {})
+	var expected_generated_ids: Array = generated_english.keys()
+	expected_generated_ids.sort()
+	for locale: String in GENERATED_CATALOG_PATHS:
+		var catalog: Dictionary = generated_catalogs.get(locale, {})
+		var localized_ids: Array = catalog.keys()
+		localized_ids.sort()
+		_check(localized_ids == expected_generated_ids, "generated %s item IDs match English" % locale)
+		_check(
+			(item_localization.call("get_catalog", locale) as Dictionary).size() == 1396,
+			"%s complete item catalog plus virtual Escape Rope action loads into the runtime resolver" % locale
+		)
 
 
 func _check_resolver_fallback_and_mechanics() -> void:
@@ -81,6 +123,16 @@ func _check_resolver_fallback_and_mechanics() -> void:
 	_check(dutch.get("shortDesc") == "Herstelt 20 HP.", "Dutch resolves the Potion description by item ID")
 	_check(dutch.get("quantity") == 4, "item localization preserves quantity")
 	_check(dutch.get("gameplay") == {"target": "pokemon"}, "item localization preserves mechanics")
+	var generated_dutch: Dictionary = item_localization.call("localize_item", {
+		"itemId": "armorite-ore",
+		"name": "Armorite Ore",
+		"shortDesc": "Server-provided English description.",
+		"quantity": 7,
+		"sellPrice": 5,
+	})
+	_check(generated_dutch.get("name") == "Armorieterts", "Dutch generated catalog covers an item outside the reviewed pilot")
+	_check(generated_dutch.get("quantity") == 7, "generated item localization preserves quantity")
+	_check(generated_dutch.get("sellPrice") == 5, "generated item localization preserves price mechanics")
 
 	localization_manager.call("set_locale", "pt_BR")
 	var portuguese: Dictionary = item_localization.call("localize_item", dutch)
@@ -150,6 +202,23 @@ func _check_overlay_integration() -> void:
 		if loader != null:
 			loader.free()
 	overlay.free()
+
+
+func _check_shop_and_cosmetic_integration() -> void:
+	for consumer_name: String in SHOP_CONSUMER_PATHS:
+		var source := FileAccess.get_file_as_string(str(SHOP_CONSUMER_PATHS[consumer_name]))
+		_check(
+			source.contains("/root/ItemLocalization"),
+			"%s resolves item presentation through ItemLocalization" % consumer_name
+		)
+		_check(
+			source.contains("display_name"),
+			"%s uses the shared localized item name" % consumer_name
+		)
+		_check(
+			source.contains("short_description"),
+			"%s uses the shared localized item description" % consumer_name
+		)
 
 
 func _check(condition: bool, label: String) -> void:

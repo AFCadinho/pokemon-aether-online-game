@@ -209,11 +209,9 @@ Phase 6 now includes:
 
 ## Next implementation slice
 
-Continue Phase 7 by reviewing generated Dutch and Brazilian Portuguese content
-translations and migrating the remaining species presentation consumers. The shared
-resolver now covers all 1,439 species/forms, 919 moves, and 376 abilities; all 18
-types, 25 natures, and the 65 moves and 20 abilities explicitly used by the current
-Route 1 and Alpha Gym trainer rosters have reviewed overlays. Summary, Pokédex, PC,
-and battle consumers use the shared resolver without changing canonical mechanics.
-Raw backend errors remain Phase 8 work and are handled through stable error-code
-mappings.
+Start Phase 8 by replacing raw player-facing backend failures with stable error-code
+mappings. Phase 7 is technically complete: the shared resolvers cover all 1,439
+species/forms, 919 moves, 376 abilities, and 1,395 canonical items without duplicating
+mechanics. The current Dutch and Brazilian Portuguese generated entries remain review
+drafts for the Phase 10 language-quality gate; reviewed overlays always take
+precedence. Raw backend errors remain Phase 8 work.

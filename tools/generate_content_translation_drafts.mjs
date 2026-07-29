@@ -6,9 +6,12 @@ import process from "node:process";
 import {fileURLToPath} from "node:url";
 
 const ACCEPT_FLAG = "--accept-machine-translation";
+const ITEMS_ONLY_FLAG = "--items-only";
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const generatedDir = path.join(projectRoot, "localization/content/generated");
 const englishSourcePath = path.join(generatedDir, "en.json");
+const generatedItemDir = path.join(projectRoot, "localization/items/generated");
+const englishItemSourcePath = path.join(generatedItemDir, "en.json");
 const targets = [
 	{locale: "nl", translationLanguage: "nl"},
 	{locale: "pt_BR", translationLanguage: "pt"},
@@ -185,7 +188,67 @@ async function generateLocale(englishSource, target) {
 	);
 }
 
+async function generateItemLocale(englishItems, target) {
+	const reviewedItems = readJson(
+		path.join(projectRoot, `localization/items/${target.locale}.json`),
+	);
+	const reviewedNames = new Map();
+	const reviewedDescriptions = new Map();
+	for (const [itemId, reviewedEntry] of Object.entries(reviewedItems)) {
+		const sourceEntry = englishItems[itemId];
+		if (!sourceEntry) {
+			continue;
+		}
+		if (sourceEntry.name && reviewedEntry.name) {
+			reviewedNames.set(sourceEntry.name, reviewedEntry.name);
+		}
+		if (sourceEntry.shortDesc && reviewedEntry.shortDesc) {
+			reviewedDescriptions.set(sourceEntry.shortDesc, reviewedEntry.shortDesc);
+		}
+	}
+
+	const names = [];
+	const descriptions = [];
+	for (const entry of Object.values(englishItems)) {
+		if (!reviewedNames.has(entry.name)) {
+			names.push(entry.name);
+		}
+		if (!reviewedDescriptions.has(entry.shortDesc)) {
+			descriptions.push(entry.shortDesc);
+		}
+	}
+	const [translatedNames, translatedDescriptions] = await Promise.all([
+		translateUniqueStrings(names, target.translationLanguage),
+		translateUniqueStrings(descriptions, target.translationLanguage),
+	]);
+	const generatedItems = {};
+	for (const [itemId, sourceEntry] of Object.entries(englishItems)) {
+		generatedItems[itemId] = {
+			name: reviewedNames.get(sourceEntry.name)
+				?? translatedNames.get(sourceEntry.name)
+				?? sourceEntry.name,
+			shortDesc: reviewedDescriptions.get(sourceEntry.shortDesc)
+				?? translatedDescriptions.get(sourceEntry.shortDesc)
+				?? sourceEntry.shortDesc,
+		};
+	}
+	fs.mkdirSync(generatedItemDir, {recursive: true});
+	fs.writeFileSync(
+		path.join(generatedItemDir, `${target.locale}.json`),
+		`${JSON.stringify(generatedItems, null, 2)}\n`,
+		"utf8",
+	);
+	console.log(
+		`Generated ${target.locale} item review draft: ` +
+		`${Object.keys(generatedItems).length} items`,
+	);
+}
+
 const englishSource = readJson(englishSourcePath);
+const englishItems = readJson(englishItemSourcePath);
 for (const target of targets) {
-	await generateLocale(englishSource, target);
+	if (!process.argv.includes(ITEMS_ONLY_FLAG)) {
+		await generateLocale(englishSource, target);
+	}
+	await generateItemLocale(englishItems, target);
 }

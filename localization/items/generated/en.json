@@ -1,0 +1,5582 @@
+{
+  "ability-capsule": {
+    "name": "Ability Capsule",
+    "shortDesc": "Switches a Pokemon between its two possible (non-Hidden) Abilities."
+  },
+  "ability-patch": {
+    "name": "Ability Patch",
+    "shortDesc": "A patch that allows a Pokemon with a regular Ability to have a rare Ability."
+  },
+  "ability-shield": {
+    "name": "Ability Shield",
+    "shortDesc": "Holder's Ability cannot be changed, suppressed, or ignored by any effect."
+  },
+  "abomasite": {
+    "name": "Abomasite",
+    "shortDesc": "Held: Allows Abomasnow to Mega Evolve into Mega Abomasnow."
+  },
+  "absolite": {
+    "name": "Absolite",
+    "shortDesc": "Held: Allows Absol to Mega Evolve into Mega Absol."
+  },
+  "absorb-bulb": {
+    "name": "Absorb Bulb",
+    "shortDesc": "Held: Raises the holders Special Attack by one stage when it takes Water-type damage."
+  },
+  "acro-bike": {
+    "name": "Acro Bike",
+    "shortDesc": "More maneuverable than the Mach Bike, and allows hopping along rails."
+  },
+  "adamant-crystal": {
+    "name": "Adamant Crystal",
+    "shortDesc": "If held by a Dialga, its Steel- and Dragon-type attacks have 1.2x power."
+  },
+  "adamant-mint": {
+    "name": "Adamant Mint",
+    "shortDesc": "When a Pokemon smells this mint, its Attack will grow more easily, but its Sp. Atk will grow more slowly."
+  },
+  "adamant-orb": {
+    "name": "Adamant Orb",
+    "shortDesc": "Boosts the damage from Dialgas Dragon-type and Steel-type moves by 20%."
+  },
+  "adinho-chroma-beard": {
+    "name": "Adinho Chroma Beard",
+    "shortDesc": "Unlock the male-only, colour-customizable Adinho beard."
+  },
+  "adinho-chroma-glasses": {
+    "name": "Adinho Chroma Glasses",
+    "shortDesc": "Unlock the male-only, colour-customizable Adinho glasses."
+  },
+  "adinho-chroma-hair": {
+    "name": "Adinho Chroma Hair",
+    "shortDesc": "Unlock the male-only Adinho Chroma hairstyle."
+  },
+  "adinho-chroma-shirt": {
+    "name": "Adinho Chroma Shirt",
+    "shortDesc": "Unlock the male-only, colour-customizable Adinho shirt."
+  },
+  "adinho-chroma-shoes": {
+    "name": "Adinho Chroma Shoes",
+    "shortDesc": "Unlock the male-only, colour-customizable Adinho shoes."
+  },
+  "adinho-chroma-trousers": {
+    "name": "Adinho Chroma Trousers",
+    "shortDesc": "Unlock the male-only, colour-customizable Adinho trousers."
+  },
+  "adinho-classic-outfit": {
+    "name": "Adinho Classic Box",
+    "shortDesc": "Open this male-only outfit box to receive six separate Adinho cosmetic items."
+  },
+  "adinho-classic-shirt": {
+    "name": "Adinho Classic Shirt",
+    "shortDesc": "Move the original male-only Adinho shirt into Character Customization."
+  },
+  "adinho-classic-shoes": {
+    "name": "Adinho Classic Shoes",
+    "shortDesc": "Move the original male-only Adinho shoes into Character Customization."
+  },
+  "adinho-classic-sunglasses": {
+    "name": "Adinho Classic Sunglasses",
+    "shortDesc": "Move the original Adinho sunglasses into Character Customization."
+  },
+  "adinho-classic-trousers": {
+    "name": "Adinho Classic Trousers",
+    "shortDesc": "Move the original male-only Adinho trousers into Character Customization."
+  },
+  "adrenaline-orb": {
+    "name": "Adrenaline Orb",
+    "shortDesc": "Makes wild Pokemon more likely to summon allies. Held: increases the holders Speed by one stage when affected by Intimidate."
+  },
+  "adventure-rules": {
+    "name": "Adventure Guide",
+    "shortDesc": "Contains basic gameplay information."
+  },
+  "aerodactylite": {
+    "name": "Aerodactylite",
+    "shortDesc": "Held: Allows Aerodactyl to Mega Evolve into Mega Aerodactyl."
+  },
+  "aether-blessing-voucher-14-days": {
+    "name": "Aether Blessing Voucher · 14 Days",
+    "shortDesc": "A tradeable voucher that adds fourteen days to the recipient's Aether Blessing when used."
+  },
+  "aether-blessing-voucher-3-days": {
+    "name": "Aether Blessing Voucher · 3 Days",
+    "shortDesc": "A tradeable voucher that adds three days to the recipient's Aether Blessing when used."
+  },
+  "aether-blessing-voucher-30-days": {
+    "name": "Aether Blessing Voucher · 30 Days",
+    "shortDesc": "A tradeable voucher that adds thirty days to the recipient's Aether Blessing when used."
+  },
+  "aether-blessing-voucher-7-days": {
+    "name": "Aether Blessing Voucher · 7 Days",
+    "shortDesc": "A tradeable voucher that adds seven days to the recipient's Aether Blessing when used."
+  },
+  "aether-blossom-chroma-earrings": {
+    "name": "Aether Blossom Chroma Earrings",
+    "shortDesc": "Unlock the female-only, colour-customizable Aether Blossom earrings."
+  },
+  "aether-blossom-chroma-hair": {
+    "name": "Aether Blossom Chroma Hair",
+    "shortDesc": "Unlock the female-only, colour-customizable Aether Blossom hairstyle."
+  },
+  "aether-blossom-chroma-shoes": {
+    "name": "Aether Blossom Chroma Shoes",
+    "shortDesc": "Unlock the female-only, colour-customizable Aether Blossom shoes."
+  },
+  "aether-blossom-dress": {
+    "name": "Aether Blossom Dress",
+    "shortDesc": "Move the Aether Blossom dress into Character Customization."
+  },
+  "aether-blossom-earrings": {
+    "name": "Aether Blossom Earrings",
+    "shortDesc": "Move the Aether Blossom earrings into Character Customization."
+  },
+  "aether-blossom-hair": {
+    "name": "Aether Blossom Hair",
+    "shortDesc": "Move the Aether Blossom hairstyle into Character Customization."
+  },
+  "aether-blossom-outfit": {
+    "name": "Aether Blossom Box",
+    "shortDesc": "Open this female-only outfit box to receive four separate Aether Blossom cosmetic items."
+  },
+  "aether-blossom-shoes": {
+    "name": "Aether Blossom Shoes",
+    "shortDesc": "Move the Aether Blossom shoes into Character Customization."
+  },
+  "aether-female-chroma-hair-1": {
+    "name": "Aether Chroma Hair I",
+    "shortDesc": "Unlock a female-only, colour-customizable Aether hairstyle."
+  },
+  "aether-female-chroma-hair-2": {
+    "name": "Aether Chroma Hair II",
+    "shortDesc": "Unlock a female-only, colour-customizable Aether hairstyle."
+  },
+  "aether-male-chroma-hair-1": {
+    "name": "Aether Chroma Hair I",
+    "shortDesc": "Unlock a male-only, colour-customizable Aether hairstyle."
+  },
+  "aether-male-chroma-hair-2": {
+    "name": "Aether Chroma Hair II",
+    "shortDesc": "Unlock a male-only, colour-customizable Aether hairstyle."
+  },
+  "aether-male-chroma-hair-3": {
+    "name": "Aether Chroma Hair III",
+    "shortDesc": "Unlock a male-only, colour-customizable Aether hairstyle."
+  },
+  "aggronite": {
+    "name": "Aggronite",
+    "shortDesc": "Held: Allows Aggron to Mega Evolve into Mega Aggron."
+  },
+  "aguav-berry": {
+    "name": "Aguav Berry",
+    "shortDesc": "Held: Consumed at 1/2 max HP to restore 1/8 max HP. Confuses Pokemon that dislike bitter flavor."
+  },
+  "air-balloon": {
+    "name": "Air Balloon",
+    "shortDesc": "Held: Grants immunity to Ground-type moves, Spikes, and Toxic Spikes. Consumed when the holder takes damage from a move."
+  },
+  "alakazite": {
+    "name": "Alakazite",
+    "shortDesc": "Held: Allows Alakazam to Mega Evolve into Mega Alakazam."
+  },
+  "aloraichium-z--bag": {
+    "name": "Aloraichium Z",
+    "shortDesc": "XXX new effect for aloraichium-z--bag"
+  },
+  "aloraichium-z--held": {
+    "name": "Aloraichium Z",
+    "shortDesc": "Held: Allows Alola Raichu to upgrade Thunderbolt into Stoked Sparksurfer."
+  },
+  "altarianite": {
+    "name": "Altarianite",
+    "shortDesc": "Held: Allows Altaria to Mega Evolve into Mega Altaria."
+  },
+  "amaze-mulch": {
+    "name": "Amaze Mulch",
+    "shortDesc": "Increases the total number of Berries by 2, increases the chance of Berry mutation, and causes soil to dry out in 4 hours."
+  },
+  "ampharosite": {
+    "name": "Ampharosite",
+    "shortDesc": "Held: Allows Ampharos to Mega Evolve into Mega Ampharos."
+  },
+  "amulet-coin": {
+    "name": "Amulet Coin",
+    "shortDesc": "Held: Doubles the money earned from a battle. Does not stack with Luck Incense."
+  },
+  "antidote": {
+    "name": "Antidote",
+    "shortDesc": "Cures poison."
+  },
+  "apicot-berry": {
+    "name": "Apicot Berry",
+    "shortDesc": "Held: Consumed at 1/4 max HP to boost Special Defense."
+  },
+  "apricorn-box": {
+    "name": "Apricorn Box",
+    "shortDesc": "Holds Apricorns."
+  },
+  "aqua-suit": {
+    "name": "Aqua Suit",
+    "shortDesc": "Allows the player to ride Kyogre in the Cave of Origin."
+  },
+  "armor-fossil": {
+    "name": "Armor Fossil",
+    "shortDesc": "Can be revived into a Shieldon."
+  },
+  "armor-pass": {
+    "name": "Armor Pass",
+    "shortDesc": "A pass to go to the Isle of Armor. Show it to the rail staff at Wedgehurst Station."
+  },
+  "armorite-ore": {
+    "name": "Armorite Ore",
+    "shortDesc": "Rare ore that can be obtained on the Isle of Armor. Something good will happen if you give it to a collector on the Isle of Armor."
+  },
+  "aspear-berry": {
+    "name": "Aspear Berry",
+    "shortDesc": "Held: Consumed when frozen to cure frozen."
+  },
+  "assault-vest": {
+    "name": "Assault Vest",
+    "shortDesc": "Raises the holders Special Defense to 1.5. Prevents the holder from selecting a status move."
+  },
+  "audinite": {
+    "name": "Audinite",
+    "shortDesc": "Held: Allows Audino to Mega Evolve into Mega Audino."
+  },
+  "auroraticket": {
+    "name": "AuroraTicket",
+    "shortDesc": "Allows access to Birth Island and Deoxys."
+  },
+  "auspicious-armor": {
+    "name": "Auspicious Armor",
+    "shortDesc": "Evolves Charcadet into Armarouge when used."
+  },
+  "autograph": {
+    "name": "Autograph",
+    "shortDesc": "The autograph you got from the Vermilion City Gym Leader, Lt. Surge. He wrote, Good luck!"
+  },
+  "awakening": {
+    "name": "Awakening",
+    "shortDesc": "Cures sleep."
+  },
+  "azure-flute": {
+    "name": "Azure Flute",
+    "shortDesc": "Allows entry into the Hall of Origin. Unreleased."
+  },
+  "babiri-berry": {
+    "name": "Babiri Berry",
+    "shortDesc": "Held: Consumed when struck by a super-effective Steel-type attack to halve the damage."
+  },
+  "bachs-food-tin": {
+    "name": "Bachs Food Tin",
+    "shortDesc": "One of the many ingredients that can be used for cooking at your camp. The tinned food that Bach sells is curiously popular in Galar."
+  },
+  "balm-mushroom": {
+    "name": "Balm Mushroom",
+    "shortDesc": "Sell to Hungry Maid for 25000 Pokedollars."
+  },
+  "band-autograph": {
+    "name": "Band Autograph",
+    "shortDesc": "Its signed by all members of the Galar regions most charismatic band, the Maximizers."
+  },
+  "banettite": {
+    "name": "Banettite",
+    "shortDesc": "Held: Allows Banette to Mega Evolve into Mega Banette."
+  },
+  "basement-key": {
+    "name": "Basement Key",
+    "shortDesc": "HS: Key to the tunnel under Goldenrod City. Gen III: Key to New Mauville."
+  },
+  "basement-key--goldenrod": {
+    "name": "Basement Key",
+    "shortDesc": "XXX new effect for basement-key--goldenrod"
+  },
+  "basement-key--new-mauville": {
+    "name": "Basement Key",
+    "shortDesc": "XXX new effect for basement-key--new-mauville"
+  },
+  "battle-pocket": {
+    "name": "Battle Pocket",
+    "shortDesc": "- - -"
+  },
+  "beach-glass": {
+    "name": "Beach Glass",
+    "shortDesc": "A piece of colored glass. Waves have rounded its edges. Its slightly rough to the touch."
+  },
+  "beast-ball": {
+    "name": "Beast Ball",
+    "shortDesc": "Tries to catch a wild Pokemon. Success rate is 5 for Ultra Beasts and 0.1 for all other Pokemon."
+  },
+  "beedrillite": {
+    "name": "Beedrillite",
+    "shortDesc": "Held: Allows Beedrill to Mega Evolve into Mega Beedrill."
+  },
+  "belue-berry": {
+    "name": "Belue Berry",
+    "shortDesc": "Used for creating PokeBlocks and Poffins."
+  },
+  "berry-juice": {
+    "name": "Berry Juice",
+    "shortDesc": "Restores 20 HP."
+  },
+  "berry-pots": {
+    "name": "Berry Pots",
+    "shortDesc": "Allows portable berry growing."
+  },
+  "berry-pouch": {
+    "name": "Berry Pouch",
+    "shortDesc": "Holds berries."
+  },
+  "berry-sweet": {
+    "name": "Berry Sweet",
+    "shortDesc": "A berry-shaped sweet. When a Milcery holds this, it spins around happily."
+  },
+  "bicycle": {
+    "name": "Bicycle",
+    "shortDesc": "Use for fast transit."
+  },
+  "big-malasada": {
+    "name": "Big Malasada",
+    "shortDesc": "Cures major status ailments and confusion."
+  },
+  "big-mushroom": {
+    "name": "Big Mushroom",
+    "shortDesc": "Fire Red and Leaf Green: Trade for prior Level-up moves. Sell for 2500 Pokedollars, or to Hungry Maid for 5000 Pokedollars."
+  },
+  "big-nugget": {
+    "name": "Big Nugget",
+    "shortDesc": "Sell to Ore Collector for 30000 Pokedollars."
+  },
+  "big-pearl": {
+    "name": "Big Pearl",
+    "shortDesc": "Sell for 3750 Pokedollars, or to Ore Collector for 7500 Pokedollars."
+  },
+  "big-root": {
+    "name": "Big Root",
+    "shortDesc": "Held: Increases HP recovered from draining moves, Ingrain, and Aqua Ring by 3/10 (30%)."
+  },
+  "bike": {
+    "name": "Bike",
+    "shortDesc": "Lets the player travel faster."
+  },
+  "bike--green": {
+    "name": "Bike",
+    "shortDesc": "XXX new effect for bike--green"
+  },
+  "bike--yellow": {
+    "name": "Bike",
+    "shortDesc": "XXX new effect for bike--yellow"
+  },
+  "bike-voucher": {
+    "name": "Bike Voucher",
+    "shortDesc": "Trade in Cerulean bike shop for a Bicycle."
+  },
+  "binding-band": {
+    "name": "Binding Band",
+    "shortDesc": "Held: Doubles the per-turn damage of multi-turn trapping moves."
+  },
+  "black-apricorn": {
+    "name": "Black Apricorn",
+    "shortDesc": "Used to make a Heavy Ball."
+  },
+  "black-belt": {
+    "name": "Black Belt",
+    "shortDesc": "Held: Fighting-Type moves from holder do 20% more damage."
+  },
+  "black-flute": {
+    "name": "Black Flute",
+    "shortDesc": "Halves the wild Pokemon encounter rate."
+  },
+  "black-glasses": {
+    "name": "Black Glasses",
+    "shortDesc": "Held: Dark-Type moves from holder do 20% more damage."
+  },
+  "black-mane-hair": {
+    "name": "Black Mane Hair",
+    "shortDesc": "Mane hair that belonged to the King of Bountiful Harvests beloved steed, Spectrier. The hair is very smooth to the touch."
+  },
+  "black-sludge": {
+    "name": "Black Sludge",
+    "shortDesc": "Held: Poison-type holder recovers 1/16 (6.25%) max HP each turn. Non-Poison-Types take 1/8 (12.5%) max HP damage."
+  },
+  "blastoise-guild-emblem-template": {
+    "name": "Blastoise Guild Emblem",
+    "shortDesc": "Consume this template to permanently unlock it for your current Guild."
+  },
+  "blastoisinite": {
+    "name": "Blastoisinite",
+    "shortDesc": "Held: Allows Blastoise to Mega Evolve into Mega Blastoise."
+  },
+  "blazikenite": {
+    "name": "Blazikenite",
+    "shortDesc": "Held: Allows Blaziken to Mega Evolve into Mega Blaziken."
+  },
+  "blue-apricorn": {
+    "name": "Blue Apricorn",
+    "shortDesc": "Used to make a Lure Ball."
+  },
+  "blue-card": {
+    "name": "Blue Card",
+    "shortDesc": "Keeps track of points from Buenas show."
+  },
+  "blue-flute": {
+    "name": "Blue Flute",
+    "shortDesc": "Cures sleep."
+  },
+  "blue-orb": {
+    "name": "Blue Orb",
+    "shortDesc": "Summons Kyogre to the Embedded Tower."
+  },
+  "blue-petal": {
+    "name": "Blue Petal",
+    "shortDesc": "XXX new effect for blue-petal"
+  },
+  "blue-scarf": {
+    "name": "Blue Scarf",
+    "shortDesc": "Raises the holders Beauty while in a contest."
+  },
+  "blue-shard": {
+    "name": "Blue Shard",
+    "shortDesc": "No effect. Can be traded for items or moves."
+  },
+  "bluk-berry": {
+    "name": "Bluk Berry",
+    "shortDesc": "Used for creating PokeBlocks and Poffins."
+  },
+  "blunder-policy": {
+    "name": "Blunder Policy",
+    "shortDesc": "Raises Speed sharply when a Pokemon misses with a move because of accuracy."
+  },
+  "bobs-food-tin": {
+    "name": "Bobs Food Tin",
+    "shortDesc": "One of the many ingredients that can be used for cooking at your camp. The tinned food that Bob sells is curiously popular in Galar."
+  },
+  "boiled-egg": {
+    "name": "Boiled Egg",
+    "shortDesc": "One of the many ingredients that can be used for cooking at your camp. Even just one boiled egg can really enhance a dish."
+  },
+  "bold-mint": {
+    "name": "Bold Mint",
+    "shortDesc": "When a Pokemon smells this mint, its Defense will grow more easily, but its Attack will grow more slowly."
+  },
+  "boost-mulch": {
+    "name": "Boost Mulch",
+    "shortDesc": "Causes soil to dry out in 4 hours."
+  },
+  "booster-energy": {
+    "name": "Booster Energy",
+    "shortDesc": "Activates the Protosynthesis or Quark Drive Abilities. Single use."
+  },
+  "bottle-cap": {
+    "name": "Bottle Cap",
+    "shortDesc": "Trade to Mr. Hyper to maximize one of a Pokemons genes."
+  },
+  "brave-mint": {
+    "name": "Brave Mint",
+    "shortDesc": "When a Pokemon smells this mint, its Attack will grow more easily, but its Speed will grow more slowly."
+  },
+  "bread": {
+    "name": "Bread",
+    "shortDesc": "One of the many ingredients that can be used for cooking at your camp. An indispensable tool for mopping up that extra curry left on your plate."
+  },
+  "bridge-mail-d": {
+    "name": "Bridge Mail D",
+    "shortDesc": "Lets a Trainer write a message and send it via Pokemon trade."
+  },
+  "bridge-mail-m": {
+    "name": "Bridge Mail M",
+    "shortDesc": "Lets a Trainer write a message and send it via Pokemon trade."
+  },
+  "bridge-mail-s": {
+    "name": "Bridge Mail S",
+    "shortDesc": "Lets a Trainer write a message and send it via Pokemon trade."
+  },
+  "bridge-mail-t": {
+    "name": "Bridge Mail T",
+    "shortDesc": "Lets a Trainer write a message and send it via Pokemon trade."
+  },
+  "bridge-mail-v": {
+    "name": "Bridge Mail V",
+    "shortDesc": "Lets a Trainer write a message and send it via Pokemon trade."
+  },
+  "bright-powder": {
+    "name": "Bright Powder",
+    "shortDesc": "Held: Increases the holders evasion by 1/9 (11 1/9%)."
+  },
+  "brittle-bones": {
+    "name": "Brittle Bones",
+    "shortDesc": "One of the many ingredients that can be used for cooking at your camp. The taste boiled off from the bones is sure to give a dish a light umami taste."
+  },
+  "bug-gem": {
+    "name": "Bug Gem",
+    "shortDesc": "Held: When the holder uses a damaging Bug-type move, the move has 1.5 power and this item is consumed."
+  },
+  "bug-memory": {
+    "name": "Bug Memory",
+    "shortDesc": "Held: Changes Silvally to its Bug form. Changes Multi-Attacks type to Bug."
+  },
+  "buginium-z--bag": {
+    "name": "Buginium Z",
+    "shortDesc": "XXX new effect for buginium-z--bag"
+  },
+  "buginium-z--held": {
+    "name": "Buginium Z",
+    "shortDesc": "Held: Allows a Pokemon to use the Z-move equivalents of its Bug moves."
+  },
+  "bulbasaur-guild-emblem-template": {
+    "name": "Bulbasaur Guild Emblem",
+    "shortDesc": "Consume this template to permanently unlock it for your current Guild."
+  },
+  "burn-drive": {
+    "name": "Burn Drive",
+    "shortDesc": "Grants Genesect a red, Fire-type Techno Blast."
+  },
+  "burn-heal": {
+    "name": "Burn Heal",
+    "shortDesc": "Cures a burn."
+  },
+  "calcium": {
+    "name": "Calcium",
+    "shortDesc": "Raises Special Attack effort and happiness."
+  },
+  "calm-mint": {
+    "name": "Calm Mint",
+    "shortDesc": "When a Pokemon smells this mint, its Sp. Def will grow more easily, but its Attack will grow more slowly."
+  },
+  "cameruptite": {
+    "name": "Cameruptite",
+    "shortDesc": "Held: Allows Camerupt to Mega Evolve into Mega Camerupt."
+  },
+  "camping-gear": {
+    "name": "Camping Gear",
+    "shortDesc": "Everything you need to set up a tent and get cooking in a Wild Area or at a camping spot."
+  },
+  "candy-jar": {
+    "name": "Candy Jar",
+    "shortDesc": "- - -"
+  },
+  "carbos": {
+    "name": "Carbos",
+    "shortDesc": "Raises Speed effort and happiness."
+  },
+  "card-key": {
+    "name": "Card Key",
+    "shortDesc": "HS: Opens doors in the Radio Tower. Gen III: Unlocks Silph Co Doors."
+  },
+  "card-key--letsgo": {
+    "name": "Card Key",
+    "shortDesc": "A card key that unlocks doors in Silph Co.s head office in Saffron City."
+  },
+  "careful-mint": {
+    "name": "Careful Mint",
+    "shortDesc": "When a Pokemon smells this mint, its Sp. Def will grow more easily, but its Sp. Atk will grow more slowly."
+  },
+  "carrot-seeds": {
+    "name": "Carrot Seeds",
+    "shortDesc": "Seeds to plant in a field. The kind of carrot youll get is determined by which field you plant the seeds in."
+  },
+  "casteliacone": {
+    "name": "Casteliacone",
+    "shortDesc": "Cures any status ailment and confusion."
+  },
+  "catching-charm": {
+    "name": "Catching Charm",
+    "shortDesc": "Holding it is said to increase the chance of getting a critical catch. Curiously, the charm doesnt shake much."
+  },
+  "catching-pocket": {
+    "name": "Catching Pocket",
+    "shortDesc": "- - -"
+  },
+  "cell-battery": {
+    "name": "Cell Battery",
+    "shortDesc": "Held: Raises the holders Attack by one stage when it takes Electric-type damage."
+  },
+  "chalky-stone": {
+    "name": "Chalky Stone",
+    "shortDesc": "A small whitish stone picked up at the edge of the road."
+  },
+  "charcoal": {
+    "name": "Charcoal",
+    "shortDesc": "Held: Fire-Type moves from holder do 20% more damage."
+  },
+  "charizard-guild-emblem-template": {
+    "name": "Charizard Guild Emblem",
+    "shortDesc": "Consume this template to permanently unlock it for your current Guild."
+  },
+  "charizardite-x": {
+    "name": "Charizardite X",
+    "shortDesc": "Held: Allows Charizard to Mega Evolve into Mega Charizard X."
+  },
+  "charizardite-y": {
+    "name": "Charizardite Y",
+    "shortDesc": "Held: Allows Charizard to Mega Evolve into Mega Charizard Y."
+  },
+  "charmander-guild-emblem-template": {
+    "name": "Charmander Guild Emblem",
+    "shortDesc": "Consume this template to permanently unlock it for your current Guild."
+  },
+  "charti-berry": {
+    "name": "Charti Berry",
+    "shortDesc": "Held: Consumed when struck by a super-effective Rock-type attack to halve the damage."
+  },
+  "cheri-berry": {
+    "name": "Cheri Berry",
+    "shortDesc": "Held: Consumed when paralyzed to cure paralysis."
+  },
+  "cherish-ball": {
+    "name": "Cherish Ball",
+    "shortDesc": "Tries to catch a wild Pokemon."
+  },
+  "chesto-berry": {
+    "name": "Chesto Berry",
+    "shortDesc": "Held: Consumed when asleep to cure sleep."
+  },
+  "chilan-berry": {
+    "name": "Chilan Berry",
+    "shortDesc": "Held: Consumed when struck by a Normal-type attack to halve the damage."
+  },
+  "chill-drive": {
+    "name": "Chill Drive",
+    "shortDesc": "Grants Genesect a white, Ice-type Techno Blast."
+  },
+  "chipped-pot": {
+    "name": "Chipped Pot",
+    "shortDesc": "A peculiar teapot that can make a certain species of Pokemon evolve. It may be chipped, but tea poured from it is delicious."
+  },
+  "choice-band": {
+    "name": "Choice Band",
+    "shortDesc": "Boosts Attack but locks the holder into one move."
+  },
+  "choice-scarf": {
+    "name": "Choice Scarf",
+    "shortDesc": "Held: Increases Speed by 50%, but restricts the holder to only one move."
+  },
+  "choice-specs": {
+    "name": "Choice Specs",
+    "shortDesc": "Held: Increases Special Attack by 50%, but restricts the holder to only one move."
+  },
+  "chople-berry": {
+    "name": "Chople Berry",
+    "shortDesc": "Held: Consumed when struck by a super-effective Fighting-type attack to halve the damage."
+  },
+  "claw-fossil": {
+    "name": "Claw Fossil",
+    "shortDesc": "Can be revived into an Anorith."
+  },
+  "cleanse-tag": {
+    "name": "Cleanse Tag",
+    "shortDesc": "Prevents wild encounters of level lower than your partys lead Pokemon."
+  },
+  "clear-amulet": {
+    "name": "Clear Amulet",
+    "shortDesc": "Prevents other Pokemon from lowering the holder's stat stages."
+  },
+  "clear-bell": {
+    "name": "Clear Bell",
+    "shortDesc": "HS: Allows Kimono-girls to summon Ho-oh. C: Summons Suicune to the Tin Tower."
+  },
+  "clever-wing": {
+    "name": "Clever Feather",
+    "shortDesc": "Increases Special Defense effort by 1."
+  },
+  "clothing-trunk": {
+    "name": "Clothing Trunk",
+    "shortDesc": "A very light trunk that can carry clothing for you and your Pokemon."
+  },
+  "clover-sweet": {
+    "name": "Clover Sweet",
+    "shortDesc": "A clover-shaped sweet. When a Milcery holds this, it spins around happily."
+  },
+  "coba-berry": {
+    "name": "Coba Berry",
+    "shortDesc": "Held: Consumed when struck by a super-effective Flying-type attack to halve the damage."
+  },
+  "coconut-milk": {
+    "name": "Coconut Milk",
+    "shortDesc": "One of the many ingredients that can be used for cooking at your camp. The refined sweetness of this coconut milk makes it quite popular."
+  },
+  "coin-case": {
+    "name": "Coin Case",
+    "shortDesc": "Holds coins for the Game Corner."
+  },
+  "colbur-berry": {
+    "name": "Colbur Berry",
+    "shortDesc": "Held: Consumed when struck by a super-effective Dark-type attack to halve the damage."
+  },
+  "colress-machine": {
+    "name": "Colress Machine",
+    "shortDesc": "Wakes up the Crustle blocking the way in Seaside Cave."
+  },
+  "comet-shard": {
+    "name": "Comet Shard",
+    "shortDesc": "Sell to Ore Collector for 60000 Pokedollars."
+  },
+  "common-stone": {
+    "name": "Common Stone",
+    "shortDesc": "Unknown."
+  },
+  "contest-costume--dress": {
+    "name": "Contest Costume",
+    "shortDesc": "XXX new effect for contest-costume--dress"
+  },
+  "contest-costume--jacket": {
+    "name": "Contest Costume",
+    "shortDesc": "Worn during Pokemon Contests."
+  },
+  "contest-pass": {
+    "name": "Contest Pass",
+    "shortDesc": "Allows participation in Pokemon Contests."
+  },
+  "cornerstone-mask": {
+    "name": "Cornerstone Mask",
+    "shortDesc": "Ogerpon-Cornerstone: 1.2x power attacks; Terastallize to gain Embody Aspect."
+  },
+  "cornn-berry": {
+    "name": "Cornn Berry",
+    "shortDesc": "Used for creating PokeBlocks and Poffins."
+  },
+  "coupon-1": {
+    "name": "Coupon 1",
+    "shortDesc": "The first of three tickets used to obtain a Poketch."
+  },
+  "coupon-2": {
+    "name": "Coupon 2",
+    "shortDesc": "The second of three tickets used to obtain a Poketch."
+  },
+  "coupon-3": {
+    "name": "Coupon 3",
+    "shortDesc": "The last of three tickets used to obtain a Poketch."
+  },
+  "courage-candy": {
+    "name": "Courage Candy",
+    "shortDesc": "A candy that is packed with energy. When given to a Pokemon, it will increase that Pokemons Sp. Def stat."
+  },
+  "courage-candy-l": {
+    "name": "Courage Candy L",
+    "shortDesc": "A big candy that is packed with energy. When given to a Pokemon at Lv. 30 or higher, it will increase that Pokemons Sp. Def stat."
+  },
+  "courage-candy-xl": {
+    "name": "Courage Candy XL",
+    "shortDesc": "A huge candy that is packed with energy. When given to a Pokemon at Lv. 60 or higher, it will increase that Pokemons Sp. Def stat."
+  },
+  "cover-fossil": {
+    "name": "Cover Fossil",
+    "shortDesc": "Can be revived into a Tirtouga."
+  },
+  "covert-cloak": {
+    "name": "Covert Cloak",
+    "shortDesc": "The holder is not affected by the secondary effect of another Pokemon's attack. Attacks with secondary effects that are prevented include those with a chance (even 100%) to paralyze, sleep, freeze, burn, poison, confuse, cause the holder to flinch, cause the holder's stat stages to be lowered, as well as Anchor Shot, Eerie Spell, Fling, Psychic Noise, Salt Cure, Spirit Shackle, Syrup Bomb, and Throat Chop. The effect of Sparkling Aria is prevented if the holder is the only target. Secondary effects added by King's Rock, Razor Fang, and the Poison Touch, Stench, and Toxic Chain Abilities are also prevented against the holder."
+  },
+  "cracked-pot": {
+    "name": "Cracked Pot",
+    "shortDesc": "A peculiar teapot that can make a certain species of Pokemon evolve. It may be cracked, but tea poured from it is delicious."
+  },
+  "crown-pass": {
+    "name": "Crown Pass",
+    "shortDesc": "A pass to go to the Crown Tundra. Show it to the rail staff at Wedgehurst Station."
+  },
+  "custap-berry": {
+    "name": "Custap Berry",
+    "shortDesc": "Held: Consumed at 1/4 max HP when using a move to go first."
+  },
+  "cut-charm": {
+    "name": "Cut Charm",
+    "shortDesc": "Lets you use Cut without a Pokemon knowing it."
+  },
+  "damp-mulch": {
+    "name": "Damp Mulch",
+    "shortDesc": "Growing time of berries is increased, but the soil dries out slower."
+  },
+  "damp-rock": {
+    "name": "Damp Rock",
+    "shortDesc": "Held: Rain Dance by the holder lasts 8 rounds instead of 5."
+  },
+  "dark-gem": {
+    "name": "Dark Gem",
+    "shortDesc": "Held: When the holder uses a damaging Dark-type move, the move has 1.5 power and this item is consumed."
+  },
+  "dark-memory": {
+    "name": "Dark Memory",
+    "shortDesc": "Held: Changes Silvally to its Dark form. Changes Multi-Attacks type to Dark."
+  },
+  "dark-stone": {
+    "name": "Dark Stone",
+    "shortDesc": "Summons Zekrom for the final battle against N."
+  },
+  "darkinium-z--bag": {
+    "name": "Darkinium Z",
+    "shortDesc": "XXX new effect for darkinium-z--bag"
+  },
+  "darkinium-z--held": {
+    "name": "Darkinium Z",
+    "shortDesc": "Held: Allows a Pokemon to use the Z-move equivalents of its Dark moves."
+  },
+  "dawn-stone": {
+    "name": "Dawn Stone",
+    "shortDesc": "Evolves a male Kirlia into Gallade or a female Snorunt into Froslass."
+  },
+  "decidium-z--bag": {
+    "name": "Decidium Z",
+    "shortDesc": "XXX new effect for decidium-z--bag"
+  },
+  "decidium-z--held": {
+    "name": "Decidium Z",
+    "shortDesc": "Held: Allows Decidueye to upgrade Spirit Shackle into Sinister Arrow Raid."
+  },
+  "deep-sea-scale": {
+    "name": "Deep Sea Scale",
+    "shortDesc": "Doubles Clamperls Special Defense. Traded on a Clamperl: Holder evolves into Gorebyss."
+  },
+  "deep-sea-tooth": {
+    "name": "Deep Sea Tooth",
+    "shortDesc": "Doubles Clamperls Special Attack. Traded on a Clamperl: Holder evolves into Huntail."
+  },
+  "defog-charm": {
+    "name": "Defog Charm",
+    "shortDesc": "Lets you use Defog without a Pokemon knowing it."
+  },
+  "destiny-knot": {
+    "name": "Destiny Knot",
+    "shortDesc": "Held: Infatuates opposing Pokemon when holder is inflicted with infatuation."
+  },
+  "devon-goods": {
+    "name": "Devon Goods",
+    "shortDesc": "Contains mechanical parts to be delivered to Captain Stern."
+  },
+  "devon-parts": {
+    "name": "Devon Parts",
+    "shortDesc": "Allows Captain Stern to set out on his expedition."
+  },
+  "devon-scope": {
+    "name": "Devon Scope",
+    "shortDesc": "Allows spotting of invisible Kecleon."
+  },
+  "devon-scuba-gear": {
+    "name": "Devon Scuba Gear",
+    "shortDesc": "Worn by the player while underwater."
+  },
+  "diancite": {
+    "name": "Diancite",
+    "shortDesc": "Held: Allows Diancie to Mega Evolve into Mega Diancie."
+  },
+  "dire-hit": {
+    "name": "Dire Hit",
+    "shortDesc": "Increases the chance of a critical hit in battle. Raises happiness."
+  },
+  "discount-coupon": {
+    "name": "Discount Coupon",
+    "shortDesc": "Can be used at a boutique for a 50% discount. Consumed once used."
+  },
+  "dive-ball": {
+    "name": "Dive Ball",
+    "shortDesc": "Tries to catch a wild Pokemon. Success rate is 3.5 when underwater, fishing, or surfing."
+  },
+  "dive-charm": {
+    "name": "Dive Charm",
+    "shortDesc": "Lets you use Dive without a Pokemon knowing it."
+  },
+  "dna-splicers": {
+    "name": "DNA Splicers",
+    "shortDesc": "Fuses Kyurem with Reshiram or Zekrom, or splits them apart again."
+  },
+  "dna-splicers--merge": {
+    "name": "DNA Splicers",
+    "shortDesc": "XXX new effect for dna-splicers--merge"
+  },
+  "dna-splicers--split": {
+    "name": "DNA Splicers",
+    "shortDesc": "XXX new effect for dna-splicers--split"
+  },
+  "dome-fossil": {
+    "name": "Dome Fossil",
+    "shortDesc": "Can be revived into a Kabuto."
+  },
+  "douse-drive": {
+    "name": "Douse Drive",
+    "shortDesc": "Grants Genesect a blue, Water-type Techno Blast."
+  },
+  "dowsing-machine": {
+    "name": "Dowsing Machine",
+    "shortDesc": "Use to find hidden items on the field. AKA Itemfinder."
+  },
+  "draco-plate": {
+    "name": "Draco Plate",
+    "shortDesc": "Held: Dragon-Type moves from holder do 20% more damage. Changes Arceuss and Judgments type to Dragon."
+  },
+  "dragon-fang": {
+    "name": "Dragon Fang",
+    "shortDesc": "Held: Dragon-Type moves from holder do 20% more damage."
+  },
+  "dragon-gem": {
+    "name": "Dragon Gem",
+    "shortDesc": "Held: When the holder uses a damaging Dragon-type move, the move has 1.5 power and this item is consumed."
+  },
+  "dragon-memory": {
+    "name": "Dragon Memory",
+    "shortDesc": "Held: Changes Silvally to its Dragon form. Changes Multi-Attacks type to Dragon."
+  },
+  "dragon-scale": {
+    "name": "Dragon Scale",
+    "shortDesc": "Traded on a Seadra: Holder evolves into Kingdra."
+  },
+  "dragon-skull": {
+    "name": "Dragon Skull",
+    "shortDesc": "Return to the museum in Nacrene City."
+  },
+  "dragonium-z--bag": {
+    "name": "Dragonium Z",
+    "shortDesc": "XXX new effect for dragonium-z--bag"
+  },
+  "dragonium-z--held": {
+    "name": "Dragonium Z",
+    "shortDesc": "Held: Allows a Pokemon to use the Z-move equivalents of its Dragon moves."
+  },
+  "dread-plate": {
+    "name": "Dread Plate",
+    "shortDesc": "Held: Dark-Type moves from holder do 20% more damage. Changes Arceuss and Judgments type to Dark."
+  },
+  "dream-ball": {
+    "name": "Dream Ball",
+    "shortDesc": "Catches Pokemon found in the Dream World."
+  },
+  "dropped-item": {
+    "name": "Dropped Item",
+    "shortDesc": "Returned to Curtis or Yancy as part of a sidequest."
+  },
+  "dropped-item--red": {
+    "name": "Dropped Item",
+    "shortDesc": "XXX new effect for dropped-item--red"
+  },
+  "dropped-item--yellow": {
+    "name": "Dropped Item",
+    "shortDesc": "XXX new effect for dropped-item--yellow"
+  },
+  "dubious-disc": {
+    "name": "Dubious Disc",
+    "shortDesc": "Traded on a Porygon2: Holder evolves into Porygon-Z."
+  },
+  "durin-berry": {
+    "name": "Durin Berry",
+    "shortDesc": "Used for creating PokeBlocks and Poffins."
+  },
+  "dusk-ball": {
+    "name": "Dusk Ball",
+    "shortDesc": "Tries to catch a wild Pokemon. Success rate is 3.5 at night and in caves."
+  },
+  "dusk-stone": {
+    "name": "Dusk Stone",
+    "shortDesc": "Evolves a Lampent into Chandelure, a Misdreavus into Mismagius, or a Murkrow into Honchkrow."
+  },
+  "dynamax-band": {
+    "name": "Dynamax Band",
+    "shortDesc": "A Wishing Star has been affixed to it. It lets out a light that allows Pokemon to Dynamax when at a Power Spot."
+  },
+  "dynamax-candy": {
+    "name": "Dynamax Candy",
+    "shortDesc": "A candy that is packed with energy. When consumed, it will raise the Dynamax Level of a single Pokemon by one. A higher level means higher HP when Dynamaxed."
+  },
+  "dynite-ore": {
+    "name": "Dynite Ore",
+    "shortDesc": "Mysterious ore that can be obtained in the Max Lair. Something good will happen if you give it to a collector in the Crown Tundra."
+  },
+  "earth-plate": {
+    "name": "Earth Plate",
+    "shortDesc": "Held: Ground-Type moves from holder do 20% more damage. Changes Arceuss and Judgments type to Ground."
+  },
+  "eevium-z--bag": {
+    "name": "Eevium Z",
+    "shortDesc": "XXX new effect for eevium-z--bag"
+  },
+  "eevium-z--held": {
+    "name": "Eevium Z",
+    "shortDesc": "Held: Allows Eevee to upgrade Last Resort into Extreme Evoboost."
+  },
+  "eject-button": {
+    "name": "Eject Button",
+    "shortDesc": "Held: When the holder takes damage from a move, it switches out for a party Pokemon of the Trainers choice."
+  },
+  "eject-pack": {
+    "name": "Eject Pack",
+    "shortDesc": "An item to be held by a Pokemon. When the holders stats are lowered, it will be switched out of battle."
+  },
+  "electirizer": {
+    "name": "Electirizer",
+    "shortDesc": "Traded on an Electabuzz: Holder evolves into Electivire."
+  },
+  "electric-gem": {
+    "name": "Electric Gem",
+    "shortDesc": "Held: When the holder uses a damaging Electric-type move, the move has 1.5 power and this item is consumed."
+  },
+  "electric-memory": {
+    "name": "Electric Memory",
+    "shortDesc": "Held: Changes Silvally to its Electric form. Changes Multi-Attacks type to Electric."
+  },
+  "electric-seed": {
+    "name": "Electric Seed",
+    "shortDesc": "Held: Consumed on Electric Terrain and raises the holders Defense by one stage."
+  },
+  "electrium-z--bag": {
+    "name": "Electrium Z",
+    "shortDesc": "XXX new effect for electrium-z--bag"
+  },
+  "electrium-z--held": {
+    "name": "Electrium Z",
+    "shortDesc": "Held: Allows a Pokemon to use the Z-move equivalents of its Electric moves."
+  },
+  "elevator-key": {
+    "name": "Elevator Key",
+    "shortDesc": "Unlocks the elevator in Lysandre Labs."
+  },
+  "elixir": {
+    "name": "Elixir",
+    "shortDesc": "Restores 10 PP for each move."
+  },
+  "endorsement": {
+    "name": "Endorsement",
+    "shortDesc": "A letter of recommendation that youll need in order to participate in the Gym Challenge."
+  },
+  "energy-powder": {
+    "name": "Energy Powder",
+    "shortDesc": "Restores 50 HP, but lowers happiness."
+  },
+  "energy-root": {
+    "name": "Energy Root",
+    "shortDesc": "Restores 200 HP, but lowers happiness."
+  },
+  "enigma-berry": {
+    "name": "Enigma Berry",
+    "shortDesc": "Held: Consumed when struck by a super-effective attack to restore 1/4 max HP."
+  },
+  "enigma-stone": {
+    "name": "Enigma Stone",
+    "shortDesc": "S: Summons Latias H: Summons Latios."
+  },
+  "enigmatic-card": {
+    "name": "Enigmatic Card",
+    "shortDesc": "Unlocks Lookers motel room on Route 8."
+  },
+  "eon-flute": {
+    "name": "Eon Flute",
+    "shortDesc": "Summons Latias or Latios for a ride."
+  },
+  "eon-ticket": {
+    "name": "Eon Ticket",
+    "shortDesc": "Provides access to Southern Island and Latias or Latios."
+  },
+  "escape-rope": {
+    "name": "Escape Rope",
+    "shortDesc": "Escapes from caves and dungeons."
+  },
+  "ether": {
+    "name": "Ether",
+    "shortDesc": "Restores 10 PP for one move."
+  },
+  "everstone": {
+    "name": "Everstone",
+    "shortDesc": "Held: Prevents level-based evolution from occuring."
+  },
+  "eviolite": {
+    "name": "Eviolite",
+    "shortDesc": "Held: Holder has 1.5 Defense and Special Defense, as long as its not fully evolved."
+  },
+  "exp-candy-l": {
+    "name": "Exp. Candy L",
+    "shortDesc": "A candy that is packed with energy. When consumed, it will grant a single Pokemon a large amount of Exp. Points."
+  },
+  "exp-candy-m": {
+    "name": "Exp. Candy M",
+    "shortDesc": "A candy that is packed with energy. When consumed, it will grant a single Pokemon a moderate amount of Exp. Points."
+  },
+  "exp-candy-s": {
+    "name": "Exp. Candy S",
+    "shortDesc": "A candy that is packed with energy. When consumed, it will grant a single Pokemon a small amount of Exp. Points."
+  },
+  "exp-candy-xl": {
+    "name": "Exp. Candy XL",
+    "shortDesc": "A candy that is packed with energy. When consumed, it will grant a single Pokemon a very large amount of Exp. Points."
+  },
+  "exp-candy-xs": {
+    "name": "Exp. Candy XS",
+    "shortDesc": "A candy that is packed with energy. When consumed, it will grant a single Pokemon a very small amount of Exp. Points."
+  },
+  "exp-charm": {
+    "name": "Exp. Charm",
+    "shortDesc": "A charm that increases the Exp. Points that Pokemon can get. A machine-like object is inside the charm."
+  },
+  "exp-share": {
+    "name": "Exp. Share",
+    "shortDesc": "Held: Half the experience from a battle is split between Pokemon holding this item."
+  },
+  "expert-belt": {
+    "name": "Expert Belt",
+    "shortDesc": "Held: Holders Super Effective moves do 20% extra damage."
+  },
+  "explorer-kit": {
+    "name": "Explorer Kit",
+    "shortDesc": "Allows visiting the Underground."
+  },
+  "fairium-z--bag": {
+    "name": "Fairium Z",
+    "shortDesc": "XXX new effect for fairium-z--bag"
+  },
+  "fairium-z--held": {
+    "name": "Fairium Z",
+    "shortDesc": "Held: Allows a Pokemon to use the Z-move equivalents of its Fairy moves."
+  },
+  "fairy-feather": {
+    "name": "Fairy Feather",
+    "shortDesc": "Holder's Fairy-type attacks have 1.2x power."
+  },
+  "fairy-gem": {
+    "name": "Fairy Gem",
+    "shortDesc": "Held: When the holder uses a damaging Fairy move, the move has 1.5 power and this item is consumed."
+  },
+  "fairy-memory": {
+    "name": "Fairy Memory",
+    "shortDesc": "Held: Changes Silvally to its Fairy form. Changes Multi-Attacks type to Fairy."
+  },
+  "fame-checker": {
+    "name": "Fame Checker",
+    "shortDesc": "Records information about NPCs."
+  },
+  "fancy-apple": {
+    "name": "Fancy Apple",
+    "shortDesc": "One of the many ingredients that can be used for cooking at your camp. An apple chosen above others. It has spectacular form and a brilliant sheen."
+  },
+  "fashion-case": {
+    "name": "Fashion Case",
+    "shortDesc": "Holds Pokemon Accessories for use in Contests."
+  },
+  "fast-ball": {
+    "name": "Fast Ball",
+    "shortDesc": "4 effectiveness on Pokemon with 100 or greater base speed. (Gen II: Roaming or Fleeing Pokemon). Made from Wht Apricorn."
+  },
+  "festival-ticket": {
+    "name": "Festival Ticket",
+    "shortDesc": "Hosts a mission in Festival Plaza."
+  },
+  "fighting-gem": {
+    "name": "Fighting Gem",
+    "shortDesc": "Held: When the holder uses a damaging Fighting-type move, the move has 1.5 power and this item is consumed."
+  },
+  "fighting-memory": {
+    "name": "Fighting Memory",
+    "shortDesc": "Held: Changes Silvally to its Fighting form. Changes Multi-Attacks type to Fighting."
+  },
+  "fightinium-z--bag": {
+    "name": "Fightinium Z",
+    "shortDesc": "XXX new effect for fightinium-z--bag"
+  },
+  "fightinium-z--held": {
+    "name": "Fightinium Z",
+    "shortDesc": "Held: Allows a Pokemon to use the Z-move equivalents of its Fighting moves."
+  },
+  "figy-berry": {
+    "name": "Figy Berry",
+    "shortDesc": "Held: Consumed at 1/2 max HP to restore 1/8 max HP. Confuses Pokemon that dislike spicy flavor."
+  },
+  "fire-gem": {
+    "name": "Fire Gem",
+    "shortDesc": "Held: When the holder uses a damaging Fire-type move, the move has 1.5 power and this item is consumed."
+  },
+  "fire-memory": {
+    "name": "Fire Memory",
+    "shortDesc": "Held: Changes Silvally to its Fire form. Changes Multi-Attacks type to Fire."
+  },
+  "fire-stone": {
+    "name": "Fire Stone",
+    "shortDesc": "Evolves certain Pokemon."
+  },
+  "firium-z--bag": {
+    "name": "Firium Z",
+    "shortDesc": "XXX new effect for firium-z--bag"
+  },
+  "firium-z--held": {
+    "name": "Firium Z",
+    "shortDesc": "Held: Allows a Pokemon to use the Z-move equivalents of its Fire moves."
+  },
+  "fishing-rod": {
+    "name": "Fishing Rod",
+    "shortDesc": "Allows the player to fish for Pokemon."
+  },
+  "fishing-rod--galar": {
+    "name": "Fishing Rod",
+    "shortDesc": "Use it by the water to fish up various kinds of Pokemon."
+  },
+  "fist-plate": {
+    "name": "Fist Plate",
+    "shortDesc": "Held: Fighting-Type moves from holder do 20% more damage. Changes Arceuss and Judgments type to Fighting."
+  },
+  "flame-orb": {
+    "name": "Flame Orb",
+    "shortDesc": "Held: Inflicts Burn on the holder at the end of the turn. Activates after Burn damage would occur."
+  },
+  "flame-plate": {
+    "name": "Flame Plate",
+    "shortDesc": "Held: Fire-Type moves from holder do 20% more damage. Changes Arceuss and Judgments type to Fire."
+  },
+  "flash-charm": {
+    "name": "Flash Charm",
+    "shortDesc": "Lets you use Flash without a Pokemon knowing it."
+  },
+  "float-stone": {
+    "name": "Float Stone",
+    "shortDesc": "Held: Holder has 0.5 weight."
+  },
+  "flower-sweet": {
+    "name": "Flower Sweet",
+    "shortDesc": "A flower-shaped sweet. When a Milcery holds this, it spins around happily."
+  },
+  "fluffy-tail": {
+    "name": "Fluffy Tail",
+    "shortDesc": "Ends a wild battle."
+  },
+  "flying-gem": {
+    "name": "Flying Gem",
+    "shortDesc": "Held: When the holder uses a damaging Flying-type move, the move has 1.5 power and this item is consumed."
+  },
+  "flying-memory": {
+    "name": "Flying Memory",
+    "shortDesc": "Held: Changes Silvally to its Flying form. Changes Multi-Attacks type to Flying."
+  },
+  "flyinium-z--bag": {
+    "name": "Flyinium Z",
+    "shortDesc": "XXX new effect for flyinium-z--bag"
+  },
+  "flyinium-z--held": {
+    "name": "Flyinium Z",
+    "shortDesc": "Held: Allows a Pokemon to use the Z-move equivalents of its Flying moves."
+  },
+  "focus-band": {
+    "name": "Focus Band",
+    "shortDesc": "Held: Holder has 10% chance to survive attacks or self-inflicted damage at 1 HP."
+  },
+  "focus-sash": {
+    "name": "Focus Sash",
+    "shortDesc": "Held: Holder survives any single-hit attack at 1 HP if at max HP, then the item is consumed."
+  },
+  "forage-bag": {
+    "name": "Forage Bag",
+    "shortDesc": "Holds ingredients during Mallows trial."
+  },
+  "fossilized-bird": {
+    "name": "Fossilized Bird",
+    "shortDesc": "The fossil of an ancient Pokemon that once soared through the sky. What it looked like is a mystery."
+  },
+  "fossilized-dino": {
+    "name": "Fossilized Dino",
+    "shortDesc": "The fossil of an ancient Pokemon that once lived in the sea. What it looked like is a mystery."
+  },
+  "fossilized-drake": {
+    "name": "Fossilized Drake",
+    "shortDesc": "The fossil of an ancient Pokemon that once roamed the land. What it looked like is a mystery."
+  },
+  "fossilized-fish": {
+    "name": "Fossilized Fish",
+    "shortDesc": "The fossil of an ancient Pokemon that once lived in the sea. What it looked like is a mystery."
+  },
+  "fresh-cream": {
+    "name": "Fresh Cream",
+    "shortDesc": "One of the many ingredients that can be used for cooking at your camp. Add some whipped cream to a spicy curry to give it some sweetness."
+  },
+  "fresh-water": {
+    "name": "Fresh Water",
+    "shortDesc": "Restores 50 HP."
+  },
+  "fried-food": {
+    "name": "Fried Food",
+    "shortDesc": "One of the many ingredients that can be used for cooking at your camp. Its been a while since it was fried, so its gotten greasy."
+  },
+  "friend-ball": {
+    "name": "Friend Ball",
+    "shortDesc": "Caught Pokemon start with 200 happiness. Made from Grn Apricorn."
+  },
+  "fruit-bunch": {
+    "name": "Fruit Bunch",
+    "shortDesc": "One of the many ingredients that can be used for cooking at your camp. The syrupy fruits give off a strong tropical feel."
+  },
+  "full-heal": {
+    "name": "Full Heal",
+    "shortDesc": "Cures any status ailment and confusion."
+  },
+  "full-incense": {
+    "name": "Full Incense",
+    "shortDesc": "Held: Holder moves last in its priority bracket. Breeding: Snorlax begets a Munchlax Egg."
+  },
+  "full-restore": {
+    "name": "Full Restore",
+    "shortDesc": "Restores HP to full and cures any status ailment and confusion."
+  },
+  "galactic-key": {
+    "name": "Galactic Key",
+    "shortDesc": "Grants access to Galactic HQ in Veilstone City."
+  },
+  "galarica-cuff": {
+    "name": "Galarica Cuff",
+    "shortDesc": "A cuff made from woven-together Galarica Twigs. Giving it to Galarian Slowpoke makes the Pokemon very happy."
+  },
+  "galarica-twig": {
+    "name": "Galarica Twig",
+    "shortDesc": "A twig from a species of tree called Galarica that grows in certain areas around the Galar region. Its a material for an accessory for a certain Pokemon."
+  },
+  "galarica-wreath": {
+    "name": "Galarica Wreath",
+    "shortDesc": "A wreath made from woven-together Galarica Twigs. Placing it on the head of a Galarian Slowpoke makes the Pokemon very happy."
+  },
+  "galladite": {
+    "name": "Galladite",
+    "shortDesc": "Held: Allows Gallade to Mega Evolve into Mega Gallade."
+  },
+  "ganlon-berry": {
+    "name": "Ganlon Berry",
+    "shortDesc": "Held: Consumed at 1/4 max HP to boost Defense."
+  },
+  "garchompite": {
+    "name": "Garchompite",
+    "shortDesc": "Held: Allows Garchomp to Mega Evolve into Mega Garchomp."
+  },
+  "gardevoirite": {
+    "name": "Gardevoirite",
+    "shortDesc": "Held: Allows Gardevoir to Mega Evolve into Mega Gardevoir."
+  },
+  "gb-sounds": {
+    "name": "GB Sounds",
+    "shortDesc": "Use to listen to GameBoy era audio."
+  },
+  "gender-chance-ticket": {
+    "name": "Gender Chance Ticket",
+    "shortDesc": "Change gender and return wardrobe cosmetics to your Bag."
+  },
+  "gengarite": {
+    "name": "Gengarite",
+    "shortDesc": "Held: Allows Gengar to Mega Evolve into Mega Gengar."
+  },
+  "genius-wing": {
+    "name": "Genius Feather",
+    "shortDesc": "Increases Special Attack effort by 1."
+  },
+  "gentle-mint": {
+    "name": "Gentle Mint",
+    "shortDesc": "When a Pokemon smells this mint, its Sp. Def will grow more easily, but its Defense will grow more slowly."
+  },
+  "ghost-gem": {
+    "name": "Ghost Gem",
+    "shortDesc": "Held: When the holder uses a damaging Ghost-type move, the move has 1.5 power and this item is consumed."
+  },
+  "ghost-memory": {
+    "name": "Ghost Memory",
+    "shortDesc": "Held: Changes Silvally to its Ghost form. Changes Multi-Attacks type to Ghost."
+  },
+  "ghostium-z--bag": {
+    "name": "Ghostium Z",
+    "shortDesc": "XXX new effect for ghostium-z--bag"
+  },
+  "ghostium-z--held": {
+    "name": "Ghostium Z",
+    "shortDesc": "Held: Allows a Pokemon to use the Z-move equivalents of its Ghost moves."
+  },
+  "gigantamix": {
+    "name": "Gigantamix",
+    "shortDesc": "One of the many ingredients that can be used for cooking at your camp. A mysterious spice. Even a tiny sprinkle is sure to make a curry gigantic."
+  },
+  "glalitite": {
+    "name": "Glalitite",
+    "shortDesc": "Held: Allows Glalie to Mega Evolve into Mega Glalie."
+  },
+  "go-goggles": {
+    "name": "Go-Goggles",
+    "shortDesc": "Allows passage through windy deserts."
+  },
+  "god-stone": {
+    "name": "god stone",
+    "shortDesc": "Unknown. Currently unused."
+  },
+  "gold-bottle-cap": {
+    "name": "Gold Bottle Cap",
+    "shortDesc": "Trade to Mr. Hyper to maximize all of a Pokemons genes."
+  },
+  "gold-leaf": {
+    "name": "Gold Leaf",
+    "shortDesc": "A mysterious gold leaf. No trees with this leaf have been found yet."
+  },
+  "gold-teeth": {
+    "name": "Gold Teeth",
+    "shortDesc": "The Safari Zone Wardens dentures. Trade for HM04 (Strength)."
+  },
+  "good-rod": {
+    "name": "Good Rod",
+    "shortDesc": "Used to catch Pokemon in bodies of water."
+  },
+  "gooey-mulch": {
+    "name": "Gooey Mulch",
+    "shortDesc": "Berries regrow from dead plants an increased number of times."
+  },
+  "gracidea": {
+    "name": "Gracidea",
+    "shortDesc": "Changes an unfrozen Shaymin to Sky Forme in the day."
+  },
+  "gram-1": {
+    "name": "Gram 1",
+    "shortDesc": "Part of a sidequest to obtain TM89."
+  },
+  "gram-2": {
+    "name": "Gram 2",
+    "shortDesc": "Part of a sidequest to obtain TM89."
+  },
+  "gram-3": {
+    "name": "Gram 3",
+    "shortDesc": "Part of a sidequest to obtain TM89."
+  },
+  "grass-gem": {
+    "name": "Grass Gem",
+    "shortDesc": "Held: When the holder uses a damaging Grass-type move, the move has 1.5 power and this item is consumed."
+  },
+  "grass-memory": {
+    "name": "Grass Memory",
+    "shortDesc": "Held: Changes Silvally to its Grass form. Changes Multi-Attacks type to Grass."
+  },
+  "grassium-z--bag": {
+    "name": "Grassium Z",
+    "shortDesc": "XXX new effect for grassium-z--bag"
+  },
+  "grassium-z--held": {
+    "name": "Grassium Z",
+    "shortDesc": "Held: Allows a Pokemon to use the Z-move equivalents of its Grass moves."
+  },
+  "grassy-seed": {
+    "name": "Grassy Seed",
+    "shortDesc": "Held: Consumed on Grassy Terrain and raises the holders Defense by one stage."
+  },
+  "great-ball": {
+    "name": "Great Ball",
+    "shortDesc": "A better ball with a higher catch rate than a Poke Ball."
+  },
+  "green-apricorn": {
+    "name": "Green Apricorn",
+    "shortDesc": "Used to make a Friend Ball."
+  },
+  "green-petal": {
+    "name": "Green Petal",
+    "shortDesc": "XXX new effect for green-petal"
+  },
+  "green-scarf": {
+    "name": "Green Scarf",
+    "shortDesc": "Raises the holders Smartness while in a contest."
+  },
+  "green-shard": {
+    "name": "Green Shard",
+    "shortDesc": "No effect. Can be traded for items or moves."
+  },
+  "grepa-berry": {
+    "name": "Grepa Berry",
+    "shortDesc": "Drops Special Defense Effort Values by 10 and raises happiness."
+  },
+  "grip-claw": {
+    "name": "Grip Claw",
+    "shortDesc": "Held: Holders multi-turn trapping moves last 5 turns."
+  },
+  "griseous-core": {
+    "name": "Griseous Core",
+    "shortDesc": "If held by a Giratina, its Ghost- and Dragon-type attacks have 1.2x power."
+  },
+  "griseous-orb": {
+    "name": "Griseous Orb",
+    "shortDesc": "Boosts the damage from Giratinas Dragon-type and Ghost-type moves by 20%, and transforms it into Origin Forme."
+  },
+  "ground-gem": {
+    "name": "Ground Gem",
+    "shortDesc": "Held: When the holder uses a damaging Ground-type move, the move has 1.5 power and this item is consumed."
+  },
+  "ground-memory": {
+    "name": "Ground Memory",
+    "shortDesc": "Held: Changes Silvally to its Ground form. Changes Multi-Attacks type to Ground."
+  },
+  "groundium-z--bag": {
+    "name": "Groundium Z",
+    "shortDesc": "XXX new effect for groundium-z--bag"
+  },
+  "groundium-z--held": {
+    "name": "Groundium Z",
+    "shortDesc": "Held: Allows a Pokemon to use the Z-move equivalents of its Ground moves."
+  },
+  "growth-mulch": {
+    "name": "Growth Mulch",
+    "shortDesc": "Growing time of berries is reduced, but the soil dries out faster."
+  },
+  "grubby-hanky": {
+    "name": "Grubby Hanky",
+    "shortDesc": "Appears in the Cafe Warehouse on Sunday; return to the customer with a Patrat on Thursday."
+  },
+  "guard-spec": {
+    "name": "Guard Spec.",
+    "shortDesc": "Prevents stat reduction during battle."
+  },
+  "gyaradosite": {
+    "name": "Gyaradosite",
+    "shortDesc": "Held: Allows Gyarados to Mega Evolve into Mega Gyarados."
+  },
+  "haban-berry": {
+    "name": "Haban Berry",
+    "shortDesc": "Held: Consumed when struck by a super-effective Dragon-type attack to halve the damage."
+  },
+  "hard-stone": {
+    "name": "Hard Stone",
+    "shortDesc": "Held: Rock-Type moves from holder do 20% more damage."
+  },
+  "hasty-mint": {
+    "name": "Hasty Mint",
+    "shortDesc": "When a Pokemon smells this mint, its Speed will grow more easily, but its Defense will grow more slowly."
+  },
+  "heal-ball": {
+    "name": "Heal Ball",
+    "shortDesc": "Tries to catch a wild Pokemon. Caught Pokemon are immediately healed."
+  },
+  "heal-powder": {
+    "name": "Heal Powder",
+    "shortDesc": "Cures any status ailment, but lowers happiness."
+  },
+  "health-candy": {
+    "name": "Health Candy",
+    "shortDesc": "A candy that is packed with energy. When given to a Pokemon, it will increase that Pokemons HP."
+  },
+  "health-candy-l": {
+    "name": "Health Candy L",
+    "shortDesc": "A big candy that is packed with energy. When given to a Pokemon at Lv. 30 or higher, it will increase that Pokemons HP."
+  },
+  "health-candy-xl": {
+    "name": "Health Candy XL",
+    "shortDesc": "A huge candy that is packed with energy. When given to a Pokemon at Lv. 60 or higher, it will increase that Pokemons HP."
+  },
+  "health-wing": {
+    "name": "Health Feather",
+    "shortDesc": "Increases HP effort by 1."
+  },
+  "heart-scale": {
+    "name": "Heart Scale",
+    "shortDesc": "No effect. Can be traded for prior Level-up moves."
+  },
+  "hearthflame-mask": {
+    "name": "Hearthflame Mask",
+    "shortDesc": "Ogerpon-Hearthflame: 1.2x power attacks; Terastallize to gain Embody Aspect."
+  },
+  "heat-rock": {
+    "name": "Heat Rock",
+    "shortDesc": "Held: Sunny Day by the holder lasts 8 rounds instead of 5."
+  },
+  "heavy-ball": {
+    "name": "Heavy Ball",
+    "shortDesc": "Has flat bonus or penalty to catch rate depending on weight class of target. Made from Blk Apricorn."
+  },
+  "heavy-duty-boots": {
+    "name": "Heavy-Duty Boots",
+    "shortDesc": "These boots prevent the effects of traps set on the battlefield."
+  },
+  "helix-fossil": {
+    "name": "Helix Fossil",
+    "shortDesc": "Can be revived into an Omanyte."
+  },
+  "heracronite": {
+    "name": "Heracronite",
+    "shortDesc": "Held: Allows Heracross to Mega Evolve into Mega Heracross."
+  },
+  "hi-tech-earbuds": {
+    "name": "Hi-tech Earbuds",
+    "shortDesc": "Strange earbuds that allow you to freely control the volume of various sounds."
+  },
+  "hm-cut": {
+    "name": "HM Cut",
+    "shortDesc": "Teaches Cut to a compatible Pokemon."
+  },
+  "hm-defog": {
+    "name": "HM Defog",
+    "shortDesc": "Teaches Defog to a compatible Pokemon."
+  },
+  "hm-dive": {
+    "name": "HM Dive",
+    "shortDesc": "Teaches Dive to a compatible Pokemon."
+  },
+  "hm-flash": {
+    "name": "HM Flash",
+    "shortDesc": "Teaches Flash to a compatible Pokemon."
+  },
+  "hm-fly": {
+    "name": "HM Fly",
+    "shortDesc": "Teaches Fly to a compatible Pokemon."
+  },
+  "hm-rock-climb": {
+    "name": "HM Rock Climb",
+    "shortDesc": "Teaches Rock Climb to a compatible Pokemon."
+  },
+  "hm-rock-smash": {
+    "name": "HM Rock Smash",
+    "shortDesc": "Teaches Rock Smash to a compatible Pokemon."
+  },
+  "hm-strength": {
+    "name": "HM Strength",
+    "shortDesc": "Teaches Strength to a compatible Pokemon."
+  },
+  "hm-surf": {
+    "name": "HM Surf",
+    "shortDesc": "Teaches Surf to a compatible Pokemon."
+  },
+  "hm-waterfall": {
+    "name": "HM Waterfall",
+    "shortDesc": "Teaches Waterfall to a compatible Pokemon."
+  },
+  "hm-whirlpool": {
+    "name": "HM Whirlpool",
+    "shortDesc": "Teaches Whirlpool to a compatible Pokemon."
+  },
+  "holo-caster": {
+    "name": "Holo Caster",
+    "shortDesc": "Displays cutscene conversations as the plot advances."
+  },
+  "holo-caster--green": {
+    "name": "Holo Caster",
+    "shortDesc": "XXX new effect for holo-caster--green"
+  },
+  "holo-caster--red": {
+    "name": "Holo Caster",
+    "shortDesc": "XXX new effect for holo-caster--red"
+  },
+  "hondew-berry": {
+    "name": "Hondew Berry",
+    "shortDesc": "Drops Special Attack Effort Values by 10 and raises happiness."
+  },
+  "honey": {
+    "name": "Honey",
+    "shortDesc": "Used outside of battle : Immediately triggers a wild Pokemon battle, as long as the trainer is somewhere with wild Pokemoni.e., in tall grass, in a cave, or surfing. Can be smeared on sweet-smelling trees to attract tree-dwelling Pokemon after six hours."
+  },
+  "honor-of-kalos": {
+    "name": "Honor of Kalos",
+    "shortDesc": "Does nothing, but signifies becoming Champion."
+  },
+  "houndoominite": {
+    "name": "Houndoominite",
+    "shortDesc": "Held: Allows Houndoom to Mega Evolve into Mega Houndoom."
+  },
+  "hp-up": {
+    "name": "HP Up",
+    "shortDesc": "Raises HP effort and happiness."
+  },
+  "hyper-potion": {
+    "name": "Hyper Potion",
+    "shortDesc": "Restores 200 HP."
+  },
+  "iapapa-berry": {
+    "name": "Iapapa Berry",
+    "shortDesc": "Held: Consumed at 1/2 max HP to restore 1/8 max HP. Confuses Pokemon that dislike sour flavor."
+  },
+  "ice-gem": {
+    "name": "Ice Gem",
+    "shortDesc": "Held: When the holder uses a damaging Ice-type move, the move has 1.5 power and this item is consumed."
+  },
+  "ice-heal": {
+    "name": "Ice Heal",
+    "shortDesc": "Cures freezing."
+  },
+  "ice-memory": {
+    "name": "Ice Memory",
+    "shortDesc": "Held: Changes Silvally to its Ice form. Changes Multi-Attacks type to Ice."
+  },
+  "ice-stone": {
+    "name": "Ice Stone",
+    "shortDesc": "Evolves an Alola Sandshrew into Alola Sandslash or an Alola Vulpix into Alola Ninetales."
+  },
+  "iceroot-carrot": {
+    "name": "Iceroot Carrot",
+    "shortDesc": "Produce that the King of Bountiful Harvests beloved steed likes to eat. It grew in a field covered in snow."
+  },
+  "icicle-plate": {
+    "name": "Icicle Plate",
+    "shortDesc": "Held: Ice-Type moves from holder do 20% more damage. Changes Arceuss and Judgments type to Ice."
+  },
+  "icium-z--bag": {
+    "name": "Icium Z",
+    "shortDesc": "XXX new effect for icium-z--bag"
+  },
+  "icium-z--held": {
+    "name": "Icium Z",
+    "shortDesc": "Held: Allows a Pokemon to use the Z-move equivalents of its Ice moves."
+  },
+  "icy-rock": {
+    "name": "Icy Rock",
+    "shortDesc": "Held: Hail by the holder lasts 8 rounds instead of 5."
+  },
+  "ilimas-normalium-z": {
+    "name": "Ilima Normalium Z",
+    "shortDesc": "XXX new effect for ilimas-normalium-z"
+  },
+  "impish-mint": {
+    "name": "Impish Mint",
+    "shortDesc": "When a Pokemon smells this mint, its Defense will grow more easily, but its Sp. Atk will grow more slowly."
+  },
+  "incinium-z--bag": {
+    "name": "Incinium Z",
+    "shortDesc": "XXX new effect for incinium-z--bag"
+  },
+  "incinium-z--held": {
+    "name": "Incinium Z",
+    "shortDesc": "Held: Allows Incineroar to upgrade Darkest Lariat into Malicious Moonsault."
+  },
+  "insect-plate": {
+    "name": "Insect Plate",
+    "shortDesc": "Held: Bug-Type moves from holder do 20% more damage. Changes Arceuss and Judgments type to Bug."
+  },
+  "instant-noodles": {
+    "name": "Instant Noodles",
+    "shortDesc": "One of the many ingredients that can be used for cooking at your camp. It has a junk-food sort of taste, but it goes well with curry."
+  },
+  "intriguing-stone": {
+    "name": "Intriguing Stone",
+    "shortDesc": "Trade for a Sun Stone in X and Y, or Pidgeotite in Omega Ruby and Alpha Sapphire."
+  },
+  "iron": {
+    "name": "Iron",
+    "shortDesc": "Raises Defense effort and happiness."
+  },
+  "iron-ball": {
+    "name": "Iron Ball",
+    "shortDesc": "Held: Holders Speed is halved. Negates all Ground-type immunities, and makes Flying-types take neutral damage from Ground-type moves. Arena Trap. Spikes, and Toxic Spikes affect the holder."
+  },
+  "iron-plate": {
+    "name": "Iron Plate",
+    "shortDesc": "Held: Steel-Type moves from holder do 20% more damage. Changes Arceuss and Judgments type to Steel."
+  },
+  "jaboca-berry": {
+    "name": "Jaboca Berry",
+    "shortDesc": "Held: Consumed to deal 1/8 attackers max HP when holder is struck by a physical attack."
+  },
+  "jade-orb": {
+    "name": "Jade Orb",
+    "shortDesc": "Summons Rayquaza to the Embedded Tower."
+  },
+  "jaw-fossil": {
+    "name": "Jaw Fossil",
+    "shortDesc": "Can be revived into a Tyrunt."
+  },
+  "jolly-mint": {
+    "name": "Jolly Mint",
+    "shortDesc": "When a Pokemon smells this mint, its Speed will grow more easily, but its Sp. Atk will grow more slowly."
+  },
+  "journal": {
+    "name": "Journal",
+    "shortDesc": "Records prior significant activities the player took."
+  },
+  "kangaskhanite": {
+    "name": "Kangaskhanite",
+    "shortDesc": "Held: Allows Kangaskhan to Mega Evolve into Mega Kangaskhan."
+  },
+  "kasib-berry": {
+    "name": "Kasib Berry",
+    "shortDesc": "Held: Consumed when struck by a super-effective Ghost-type attack to halve the damage."
+  },
+  "kebia-berry": {
+    "name": "Kebia Berry",
+    "shortDesc": "Held: Consumed when struck by a super-effective Poison-type attack to halve the damage."
+  },
+  "kee-berry": {
+    "name": "Kee Berry",
+    "shortDesc": "Held: When the holder is hit by a physical move, increases its Defense by one stage."
+  },
+  "kelpsy-berry": {
+    "name": "Kelpsy Berry",
+    "shortDesc": "Drops Attack Effort Values by 10 and raises happiness."
+  },
+  "key-stone": {
+    "name": "Key Stone",
+    "shortDesc": "Allows the players Pokemon to Mega Evolve."
+  },
+  "key-to-room-1": {
+    "name": "Key to Room 1",
+    "shortDesc": "Unlocks the door to Room 1 in Sea Mauville."
+  },
+  "key-to-room-2": {
+    "name": "Key to Room 2",
+    "shortDesc": "Unlocks the door to Room 2 in Sea Mauville."
+  },
+  "key-to-room-4": {
+    "name": "Key to Room 4",
+    "shortDesc": "Unlocks the door to Room 4 in Sea Mauville."
+  },
+  "key-to-room-6": {
+    "name": "Key to Room 6",
+    "shortDesc": "Unlocks the door to Room 6 in Sea Mauville."
+  },
+  "kings-rock": {
+    "name": "Kings Rock",
+    "shortDesc": "Held: Damaging moves gain a 10% chance to make their target flinch. Traded on a Poliwhirl: Holder evolves into Politoed. Traded on a Slowpoke: Holder evolves into Slowking."
+  },
+  "kommonium-z--bag": {
+    "name": "Kommonium Z",
+    "shortDesc": "XXX new effect for kommonium-z--bag"
+  },
+  "kommonium-z--held": {
+    "name": "Kommonium Z",
+    "shortDesc": "Held: Allows Kommo-o to use Clangorous Soulblaze."
+  },
+  "lagging-tail": {
+    "name": "Lagging Tail",
+    "shortDesc": "Held: Holder moves last in its priority bracket."
+  },
+  "lansat-berry": {
+    "name": "Lansat Berry",
+    "shortDesc": "Held: Consumed at 1/4 max HP to boost critical hit ratio by two stages."
+  },
+  "large-leek": {
+    "name": "Large Leek",
+    "shortDesc": "One of the many ingredients that can be used for cooking at your camp. Whether this is the kind of vegetable stalk that Farfetchd like is unknown."
+  },
+  "latiasite": {
+    "name": "Latiasite",
+    "shortDesc": "Held: Allows Latias to Mega Evolve into Mega Latias."
+  },
+  "latiosite": {
+    "name": "Latiosite",
+    "shortDesc": "Held: Allows Latios to Mega Evolve into Mega Latios."
+  },
+  "lava-cookie": {
+    "name": "Lava Cookie",
+    "shortDesc": "Cures any status ailment and confusion."
+  },
+  "lax-incense": {
+    "name": "Lax Incense",
+    "shortDesc": "Held: Holders evasion is increased by 5%. Breeding: Wobbuffet begets a Wynaut Egg."
+  },
+  "lax-mint": {
+    "name": "Lax Mint",
+    "shortDesc": "When a Pokemon smells this mint, its Defense will grow more easily, but its Sp. Def will grow more slowly."
+  },
+  "leaf-letter--eevee": {
+    "name": "Leaf Letter",
+    "shortDesc": "A letter written on a leaf. Something is written using Eevees footprints."
+  },
+  "leaf-letter--pikachu": {
+    "name": "Leaf Letter",
+    "shortDesc": "A letter written on a leaf. Something is written using Pikachus footprints."
+  },
+  "leaf-stone": {
+    "name": "Leaf Stone",
+    "shortDesc": "Evolves an Exeggcute into Exeggutor, a Gloom into Vileplume, a Nuzleaf into Shiftry, a Pansage into Simisage, or a Weepinbell into Victreebel."
+  },
+  "left-poke-ball": {
+    "name": "Left Poke Ball",
+    "shortDesc": "XXX new effect for left-poke-ball"
+  },
+  "leftovers": {
+    "name": "Leftovers",
+    "shortDesc": "Restores a little HP every turn."
+  },
+  "legendary-clue-1": {
+    "name": "Legendary Clue 1",
+    "shortDesc": "A clue about the King of Bountiful Harvests. Its written by Peony, and an old photo is attached to it."
+  },
+  "legendary-clue-2": {
+    "name": "Legendary Clue 2",
+    "shortDesc": "A clue about the legend of giants. Its written by Peony and has unique drawings."
+  },
+  "legendary-clue-3": {
+    "name": "Legendary Clue 3",
+    "shortDesc": "A clue about the legend of bird Pokemon. Its written by Peony and has a unique drawing."
+  },
+  "legendary-clue-question": {
+    "name": "Legendary Clue?",
+    "shortDesc": "A mysterious clue that Peony seems to have dropped. Theres a photo attached to it showing a shining hole opening above the Max Lair."
+  },
+  "lemonade": {
+    "name": "Lemonade",
+    "shortDesc": "Restores 80 HP."
+  },
+  "lens-case": {
+    "name": "Lens Case",
+    "shortDesc": "Allows the player to change their eye color."
+  },
+  "leppa-berry": {
+    "name": "Leppa Berry",
+    "shortDesc": "Held: Consumed when a move runs out of PP to restore its PP by 10."
+  },
+  "letter": {
+    "name": "Letter",
+    "shortDesc": "A letter to Steven from the Devon Corp president."
+  },
+  "level-ball": {
+    "name": "Level Ball",
+    "shortDesc": "Success rate based off of fraction target Pokemon is of users Pokemon. Made from Red Apricorn."
+  },
+  "liberty-pass": {
+    "name": "Liberty Pass",
+    "shortDesc": "Allows access to Liberty Garden and Victini."
+  },
+  "liechi-berry": {
+    "name": "Liechi Berry",
+    "shortDesc": "Held: Consumed at 1/4 max HP to boost Attack."
+  },
+  "life-orb": {
+    "name": "Life Orb",
+    "shortDesc": "Held: Holders moves inflict 30% extra damage, but cost 10% max HP."
+  },
+  "lift-key": {
+    "name": "Lift Key",
+    "shortDesc": "Operates the elevator in Team Rockets Celadon Hideout."
+  },
+  "light-ball": {
+    "name": "Light Ball",
+    "shortDesc": "Doubles Pikachus Attack and Special Attack. Breed on Pikachu or Raichu: Pichu Egg will have Volt Tackle."
+  },
+  "light-clay": {
+    "name": "Light Clay",
+    "shortDesc": "Held: Light Screen and Reflect used by the holder last 8 rounds instead of 5."
+  },
+  "light-stone": {
+    "name": "Light Stone",
+    "shortDesc": "Summons Reshiram for the final battle against N."
+  },
+  "linking-cord": {
+    "name": "Linking Cord",
+    "shortDesc": "Allows a Pokemon whose evolution is usually triggered by trading to evolve"
+  },
+  "loaded-dice": {
+    "name": "Loaded Dice",
+    "shortDesc": "The holder's moves that normally hit 2 to 5 times instead hit 4 or 5 times. If the first hit is successful, the holder's use of Triple Kick or Triple Axel hits 3 times, and Population Bomb hits 4 to 10 times, at random."
+  },
+  "lock-capsule": {
+    "name": "Lock Capsule",
+    "shortDesc": "Contains TM95 (Snarl)."
+  },
+  "lone-earring": {
+    "name": "Lone Earring",
+    "shortDesc": "A single earring that somebody dropped."
+  },
+  "lonely-mint": {
+    "name": "Lonely Mint",
+    "shortDesc": "When a Pokemon smells this mint, its Attack will grow more easily, but its Defense will grow more slowly."
+  },
+  "looker-ticket": {
+    "name": "Looker Ticket",
+    "shortDesc": "Advances the Looker postgame plot."
+  },
+  "loot-sack": {
+    "name": "Loot Sack",
+    "shortDesc": "Carries coal mine loot."
+  },
+  "lopunnite": {
+    "name": "Lopunnite",
+    "shortDesc": "Held: Allows Lopunny to Mega Evolve into Mega Lopunny."
+  },
+  "lost-item": {
+    "name": "Lost Item",
+    "shortDesc": "A Poke Doll lost by the Copycat who lives in Saffron City. Trade for a Pass."
+  },
+  "love-ball": {
+    "name": "Love Ball",
+    "shortDesc": "8 effectiveness on opposite sex, same species targets of the Active Pokemon. Made from Pnk Apricorn."
+  },
+  "love-sweet": {
+    "name": "Love Sweet",
+    "shortDesc": "A heart-shaped sweet. When a Milcery holds this, it spins around happily."
+  },
+  "lucarionite": {
+    "name": "Lucarionite",
+    "shortDesc": "Held: Allows Lucario to Mega Evolve into Mega Lucario."
+  },
+  "luck-incense": {
+    "name": "Luck Incense",
+    "shortDesc": "Held: Doubles the money earned from a battle. Does not stack with Amulet Coin. Breeding: Chansey and Blissey beget a Happiny Egg."
+  },
+  "lucky-egg": {
+    "name": "Lucky Egg",
+    "shortDesc": "Held: Increases EXP earned in battle by 50%."
+  },
+  "lucky-punch": {
+    "name": "Lucky Punch",
+    "shortDesc": "Raises Chanseys critical hit ratio by two stages."
+  },
+  "lum-berry": {
+    "name": "Lum Berry",
+    "shortDesc": "Cures any status condition when held."
+  },
+  "luminous-moss": {
+    "name": "Luminous Moss",
+    "shortDesc": "Held: If the holder is hit by a damaging Water move, raises its Special Defense by one stage."
+  },
+  "lumiose-galette": {
+    "name": "Lumiose Galette",
+    "shortDesc": "Cures all major status ailments and confusion."
+  },
+  "lunalium-z--bag": {
+    "name": "Lunalium Z",
+    "shortDesc": "XXX new effect for lunalium-z--bag"
+  },
+  "lunalium-z--held": {
+    "name": "Lunalium Z",
+    "shortDesc": "Held: Allows Lunala to use Menacing Moonraze Maelstrom."
+  },
+  "lunar-wing": {
+    "name": "Lunar Wing",
+    "shortDesc": "Cures sailors son of nightmares in Canalave City."
+  },
+  "lure": {
+    "name": "Lure",
+    "shortDesc": "A glass bottle of perfume that makes rare Pokemon more likely to appear."
+  },
+  "lure-ball": {
+    "name": "Lure Ball",
+    "shortDesc": "3 effectiveness while fishing. Made from Blu Apricorn."
+  },
+  "lustrous-globe": {
+    "name": "Lustrous Globe",
+    "shortDesc": "If held by a Palkia, its Water- and Dragon-type attacks have 1.2x power."
+  },
+  "lustrous-orb": {
+    "name": "Lustrous Orb",
+    "shortDesc": "Boosts the damage from Palkias Dragon-type and Water-type moves by 20%."
+  },
+  "luxury-ball": {
+    "name": "Luxury Ball",
+    "shortDesc": "Tries to catch a wild Pokemon. Caught Pokemon start with 200 happiness."
+  },
+  "lycanium-z--bag": {
+    "name": "Lycanium Z",
+    "shortDesc": "XXX new effect for lycanium-z--bag"
+  },
+  "lycanium-z--held": {
+    "name": "Lycanium Z",
+    "shortDesc": "Held: Allows Lycanroc to use Splintered Stormshards."
+  },
+  "mach-bike": {
+    "name": "Mach Bike",
+    "shortDesc": "Faster than the Acro Bike, and can ride up sandy slopes and across cracked floors."
+  },
+  "machine-part": {
+    "name": "Machine Part",
+    "shortDesc": "Must be replaced in the Power Plant to power the Magnet Train."
+  },
+  "macho-brace": {
+    "name": "Macho Brace",
+    "shortDesc": "Held: Holder gains double effort values from battles, but has halved Speed in battle."
+  },
+  "magma-emblem": {
+    "name": "Magma Emblem",
+    "shortDesc": "Provides access to the Team Magma Hideout in the Jagged Pass."
+  },
+  "magma-stone": {
+    "name": "Magma Stone",
+    "shortDesc": "Magma is sealed inside."
+  },
+  "magma-suit": {
+    "name": "Magma Suit",
+    "shortDesc": "Allows the player to ride Groudon in the Cave of Origin."
+  },
+  "magmarizer": {
+    "name": "Magmarizer",
+    "shortDesc": "Traded on a Magmar: Holder evolves into Magmortar."
+  },
+  "magnet": {
+    "name": "Magnet",
+    "shortDesc": "Held: Electric-Type moves from holder do 20% more damage."
+  },
+  "mago-berry": {
+    "name": "Mago Berry",
+    "shortDesc": "Held: Consumed at 1/2 max HP to restore 1/8 max HP. Confuses Pokemon that dislike sweet flavor."
+  },
+  "magost-berry": {
+    "name": "Magost Berry",
+    "shortDesc": "Used for creating PokeBlocks and Poffins."
+  },
+  "makeup-bag": {
+    "name": "Makeup Bag",
+    "shortDesc": "Allows the player to change their lipstick color."
+  },
+  "malicious-armor": {
+    "name": "Malicious Armor",
+    "shortDesc": "Evolves Charcadet into Ceruledge when used."
+  },
+  "manectite": {
+    "name": "Manectite",
+    "shortDesc": "Held: Allows Manectric to Mega Evolve into Mega Manectric."
+  },
+  "maranga-berry": {
+    "name": "Maranga Berry",
+    "shortDesc": "Held: When the holder is hit by a special move, increases its Special Defense by one stage."
+  },
+  "marble": {
+    "name": "Marble",
+    "shortDesc": "A round glass marble. You can see colored glass inside the transparent marble."
+  },
+  "mark-charm": {
+    "name": "Mark Charm",
+    "shortDesc": "A mysterious and unique charm that increases the chance of finding a Pokemon with a mark."
+  },
+  "marshadium-z--bag": {
+    "name": "Marshadium Z",
+    "shortDesc": "XXX new effect for marshadium-z--bag"
+  },
+  "marshadium-z--held": {
+    "name": "Marshadium Z",
+    "shortDesc": "Held: Allows Marshadow to upgrade Spectral Thief into Soul-Stealing 7 Star Strike."
+  },
+  "master-ball": {
+    "name": "Master Ball",
+    "shortDesc": "Catches a wild Pokemon every time."
+  },
+  "masterpiece-teacup": {
+    "name": "Masterpiece Teacup",
+    "shortDesc": "Evolves Poltchageist-Artisan into Sinistcha-Masterpiece when used."
+  },
+  "mawilite": {
+    "name": "Mawilite",
+    "shortDesc": "Held: Allows Mawile to Mega Evolve into Mega Mawile."
+  },
+  "max-elixir": {
+    "name": "Max Elixir",
+    "shortDesc": "Restores PP to full for each move."
+  },
+  "max-ether": {
+    "name": "Max Ether",
+    "shortDesc": "Restores PP to full for one move."
+  },
+  "max-honey": {
+    "name": "Max Honey",
+    "shortDesc": "Honey that Dynamax Vespiquen produces. Adding this honey to Max Soup makes the taste very smooth. It also has the same effect as a Max Revive."
+  },
+  "max-lure": {
+    "name": "Max Lure",
+    "shortDesc": "A glass bottle of perfume that makes rare Pokemon more likely to appear. It lasts longer than a Super Lure."
+  },
+  "max-mushrooms": {
+    "name": "Max Mushrooms",
+    "shortDesc": "Mushrooms that have the power of changing Dynamax forms. They boost all stats of a Pokemon during battle."
+  },
+  "max-potion": {
+    "name": "Max Potion",
+    "shortDesc": "Restores HP to full."
+  },
+  "max-repel": {
+    "name": "Max Repel",
+    "shortDesc": "For 250 steps, prevents wild encounters of level lower than your partys lead Pokemon."
+  },
+  "max-revive": {
+    "name": "Max Revive",
+    "shortDesc": "Revives with full HP."
+  },
+  "meadow-plate": {
+    "name": "Meadow Plate",
+    "shortDesc": "Held: Grass-Type moves from holder do 20% more damage. Changes Arceuss and Judgments type to Grass."
+  },
+  "medal-box": {
+    "name": "Medal Box",
+    "shortDesc": "Holds medals recieved in the medal rally."
+  },
+  "medichamite": {
+    "name": "Medichamite",
+    "shortDesc": "Held: Allows Medicham to Mega Evolve into Mega Medicham."
+  },
+  "medicine-pocket": {
+    "name": "Medicine Pocket",
+    "shortDesc": "- - -"
+  },
+  "mega-anchor": {
+    "name": "Mega Anchor",
+    "shortDesc": "Unused NPC Key Stone."
+  },
+  "mega-anklet": {
+    "name": "Mega Anklet",
+    "shortDesc": "Unused NPC Key Stone."
+  },
+  "mega-bracelet": {
+    "name": "Mega Bracelet",
+    "shortDesc": "Allows the players Pokemon to Mega Evolve."
+  },
+  "mega-charm": {
+    "name": "Mega Charm",
+    "shortDesc": "Unused Key Stone."
+  },
+  "mega-cuff": {
+    "name": "Mega Cuff",
+    "shortDesc": "Unused Key Stone."
+  },
+  "mega-glasses": {
+    "name": "Mega Glasses",
+    "shortDesc": "Unused NPC Key Stone."
+  },
+  "mega-glove": {
+    "name": "Mega Glove",
+    "shortDesc": "Unused NPC Key Stone."
+  },
+  "mega-pendant": {
+    "name": "Mega Pendant",
+    "shortDesc": "Unused NPC Key Stone."
+  },
+  "mega-ring": {
+    "name": "Mega Ring",
+    "shortDesc": "Allows the players Pokemon to Mega Evolve."
+  },
+  "mega-stickpin": {
+    "name": "Mega Stickpin",
+    "shortDesc": "Unused NPC Key Stone."
+  },
+  "mega-tiara": {
+    "name": "Mega Tiara",
+    "shortDesc": "Unused NPC Key Stone."
+  },
+  "member-card": {
+    "name": "Member Card",
+    "shortDesc": "Allows access to Newmoon Island and Darkrai."
+  },
+  "mental-herb": {
+    "name": "Mental Herb",
+    "shortDesc": "Held: Consumed to cure infatuation. Gen V: Also removes Taunt, Encore, Torment, Disable, and Cursed Body."
+  },
+  "metagrossite": {
+    "name": "Metagrossite",
+    "shortDesc": "Held: Allows Metagross to Mega Evolve into Mega Metagross."
+  },
+  "metal-alloy": {
+    "name": "Metal Alloy",
+    "shortDesc": "Evolves Duraludon into Archaludon when used."
+  },
+  "metal-coat": {
+    "name": "Metal Coat",
+    "shortDesc": "Boosts Steel moves and evolves certain Pokemon when traded."
+  },
+  "metal-powder": {
+    "name": "Metal Powder",
+    "shortDesc": "Raises Dittos Defense and Special Defense by 50%. The boost is lost after transforming."
+  },
+  "meteorite": {
+    "name": "Meteorite",
+    "shortDesc": "FL: Deliver to Lostelles father. RSE: Trade to Professor Cozmo for TM27 (Return)."
+  },
+  "meteorite--2": {
+    "name": "Meteorite",
+    "shortDesc": "XXX new effect for meteorite--2"
+  },
+  "meteorite--3": {
+    "name": "Meteorite",
+    "shortDesc": "XXX new effect for meteorite--3"
+  },
+  "meteorite--4": {
+    "name": "Meteorite",
+    "shortDesc": "XXX new effect for meteorite--4"
+  },
+  "meteorite-shard": {
+    "name": "Meteorite Shard",
+    "shortDesc": "Causes the Meteorite to transform to its final form, allowing Rayquaza to Mega Evolve."
+  },
+  "metronome": {
+    "name": "Metronome",
+    "shortDesc": "Held: Consectutive uses of the same attack have a cumulative damage boost of 10%. Maximum 100% boost."
+  },
+  "mewnium-z--bag": {
+    "name": "Mewnium Z",
+    "shortDesc": "XXX new effect for mewnium-z--bag"
+  },
+  "mewnium-z--held": {
+    "name": "Mewnium Z",
+    "shortDesc": "Held: Allows Mew to upgrade Psychic into Genesis Supernova."
+  },
+  "mewtwonite-x": {
+    "name": "Mewtwonite X",
+    "shortDesc": "Held: Allows Mewtwo to Mega Evolve into Mega Mewtwo X."
+  },
+  "mewtwonite-y": {
+    "name": "Mewtwonite Y",
+    "shortDesc": "Held: Allows Mewtwo to Mega Evolve into Mega Mewtwo Y."
+  },
+  "micle-berry": {
+    "name": "Micle Berry",
+    "shortDesc": "Held: Consumed at 1/4 max HP to boost accuracy of next move by 20%. (Gen IV: Perfect accuracy)"
+  },
+  "mighty-candy": {
+    "name": "Mighty Candy",
+    "shortDesc": "A candy that is packed with energy. When given to a Pokemon, it will increase that Pokemons Attack stat."
+  },
+  "mighty-candy-l": {
+    "name": "Mighty Candy L",
+    "shortDesc": "A big candy that is packed with energy. When given to a Pokemon at Lv. 30 or higher, it will increase that Pokemons Attack stat."
+  },
+  "mighty-candy-xl": {
+    "name": "Mighty Candy XL",
+    "shortDesc": "A huge candy that is packed with energy. When given to a Pokemon at Lv. 60 or higher, it will increase that Pokemons Attack stat."
+  },
+  "mild-mint": {
+    "name": "Mild Mint",
+    "shortDesc": "When a Pokemon smells this mint, its Sp. Atk will grow more easily, but its Defense will grow more slowly."
+  },
+  "mimikium-z--bag": {
+    "name": "Mimikium Z",
+    "shortDesc": "XXX new effect for mimikium-z--bag"
+  },
+  "mimikium-z--held": {
+    "name": "Mimikium Z",
+    "shortDesc": "Held: Allows Mimikyu to use Let's Snuggle Forever."
+  },
+  "mind-plate": {
+    "name": "Mind Plate",
+    "shortDesc": "Held: Psychic-Type moves from holder do 20% more damage. Changes Arceuss and Judgments type to Psychic."
+  },
+  "miracle-seed": {
+    "name": "Miracle Seed",
+    "shortDesc": "Held: Grass-Type moves from holder do 20% more damage."
+  },
+  "mirror-herb": {
+    "name": "Mirror Herb",
+    "shortDesc": "When an opposing Pokemon raises a stat stage, the holder copies it. Single use."
+  },
+  "misty-seed": {
+    "name": "Misty Seed",
+    "shortDesc": "Held: Consumed on Misty Terrain and raises the holders Special Defense by one stage."
+  },
+  "mixed-mushrooms": {
+    "name": "Mixed Mushrooms",
+    "shortDesc": "One of the many ingredients that can be used for cooking at your camp. The chewy texture of the mushrooms transforms any dish theyre added to."
+  },
+  "modest-mint": {
+    "name": "Modest Mint",
+    "shortDesc": "When a Pokemon smells this mint, its Sp. Atk will grow more easily, but its Attack will grow more slowly."
+  },
+  "moomoo-cheese": {
+    "name": "Moomoo Cheese",
+    "shortDesc": "One of the many ingredients that can be used for cooking at your camp. Melted cheese can really give a curry some richness."
+  },
+  "moomoo-milk": {
+    "name": "Moomoo Milk",
+    "shortDesc": "Restores 100 HP."
+  },
+  "moon-ball": {
+    "name": "Moon Ball",
+    "shortDesc": "4 effectiveness on familes of Pokemon with a Moon Stone evolution. Made from Ylw Apricorn."
+  },
+  "moon-flute": {
+    "name": "Moon Flute",
+    "shortDesc": "Evolves Nebby into Lunala when used at the Altar of the Moone."
+  },
+  "moon-stone": {
+    "name": "Moon Stone",
+    "shortDesc": "Evolves a Clefairy into Clefable, a Jigglypuff into Wigglytuff, a Munna into Musharna, a Nidorina into Nidoqueen, a Nidorino into Nidoking, or a Skitty into Delcatty."
+  },
+  "muscle-band": {
+    "name": "Muscle Band",
+    "shortDesc": "Held: Boosts the damage of physical moves used by the holder by 10%."
+  },
+  "muscle-wing": {
+    "name": "Muscle Feather",
+    "shortDesc": "Increases Attack effort by 1."
+  },
+  "mystery-egg": {
+    "name": "Mystery Egg",
+    "shortDesc": "Deliver to Professor Elm."
+  },
+  "mystic-water": {
+    "name": "Mystic Water",
+    "shortDesc": "Held: Water-Type moves from holder do 20% more damage."
+  },
+  "mysticticket": {
+    "name": "MysticTicket",
+    "shortDesc": "Allows access to Navel Rock and Lugia or Ho-oh."
+  },
+  "n-lunarizer--merge": {
+    "name": "N-Lunarizer",
+    "shortDesc": "XXX new effect for n-lunarizer--merge"
+  },
+  "n-lunarizer--split": {
+    "name": "N-Lunarizer",
+    "shortDesc": "XXX new effect for n-lunarizer--split"
+  },
+  "n-solarizer--merge": {
+    "name": "N-Solarizer",
+    "shortDesc": "XXX new effect for n-solarizer--merge"
+  },
+  "n-solarizer--split": {
+    "name": "N-Solarizer",
+    "shortDesc": "XXX new effect for n-solarizer--split"
+  },
+  "naive-mint": {
+    "name": "Naive Mint",
+    "shortDesc": "When a Pokemon smells this mint, its Speed will grow more easily, but its Sp. Def will grow more slowly."
+  },
+  "name-change-ticket": {
+    "name": "Name Change Ticket",
+    "shortDesc": "Change your username and trainer display name."
+  },
+  "nanab-berry": {
+    "name": "Nanab Berry",
+    "shortDesc": "Used for creating PokeBlocks and Poffins."
+  },
+  "naughty-mint": {
+    "name": "Naughty Mint",
+    "shortDesc": "When a Pokemon smells this mint, its Attack will grow more easily, but its Sp. Def will grow more slowly."
+  },
+  "nest-ball": {
+    "name": "Nest Ball",
+    "shortDesc": "Tries to catch a wild Pokemon. Success rate is 3.9 for level 1 Pokemon, and drops steadily to 1 at level 30."
+  },
+  "net-ball": {
+    "name": "Net Ball",
+    "shortDesc": "Tries to catch a wild Pokemon. Success rate is 3 for water and bug Pokemon."
+  },
+  "never-melt-ice": {
+    "name": "Never-Melt Ice",
+    "shortDesc": "Held: Ice-Type moves from holder do 20% more damage."
+  },
+  "nomel-berry": {
+    "name": "Nomel Berry",
+    "shortDesc": "Used for creating PokeBlocks and Poffins."
+  },
+  "normal-gem": {
+    "name": "Normal Gem",
+    "shortDesc": "Held: When the holder uses a damaging Normal-type move, the move has 1.5 power and this item is consumed."
+  },
+  "normalium-z--bag": {
+    "name": "Normalium Z",
+    "shortDesc": "XXX new effect for normalium-z--bag"
+  },
+  "normalium-z--held": {
+    "name": "Normalium Z",
+    "shortDesc": "Held: Allows a Pokemon to use the Z-move equivalents of its Normal moves."
+  },
+  "nugget": {
+    "name": "Nugget",
+    "shortDesc": "Can be sold for money."
+  },
+  "oaks-letter": {
+    "name": "Oaks Letter",
+    "shortDesc": "Allows access to Seabreak path, Flower Paradise, and Shaymin."
+  },
+  "oaks-parcel": {
+    "name": "Oaks Parcel",
+    "shortDesc": "Trade to Prof. Oak for a Pokedex."
+  },
+  "occa-berry": {
+    "name": "Occa Berry",
+    "shortDesc": "Held: Consumed when struck by a super-effective Fire-type attack to halve the damage."
+  },
+  "odd-incense": {
+    "name": "Odd Incense",
+    "shortDesc": "Held: Psychic-Type moves from holder do 20% more damage. Breeding: Mr. Mime begets a Mime Jr. Egg."
+  },
+  "odd-keystone": {
+    "name": "Odd Keystone",
+    "shortDesc": "Use on the tower on Route 209 to encounter Spiritomb if you have at least 32 Underground greetings."
+  },
+  "old-amber": {
+    "name": "Old Amber",
+    "shortDesc": "Can be revived into an Aerodactyl."
+  },
+  "old-charm": {
+    "name": "Old Charm",
+    "shortDesc": "Trade to Cynthias grandmother in Celestic Town for HM04 (Surf)."
+  },
+  "old-gateau": {
+    "name": "Old Gateau",
+    "shortDesc": "Cures any status ailment and confusion."
+  },
+  "old-letter": {
+    "name": "Old Letter",
+    "shortDesc": "A letter entrusted to you by a girl, to be delivered to a boy. Strangely, it looks old to you."
+  },
+  "old-rod": {
+    "name": "Old Rod",
+    "shortDesc": "Used to fish for Pokemon."
+  },
+  "old-sea-map": {
+    "name": "Old Sea Map",
+    "shortDesc": "Allows access to Faraway Island and Mew. Unreleased outside of Japan."
+  },
+  "oran-berry": {
+    "name": "Oran Berry",
+    "shortDesc": "Restores 10 HP when held."
+  },
+  "orange-petal": {
+    "name": "Orange Petal",
+    "shortDesc": "XXX new effect for orange-petal"
+  },
+  "oval-charm": {
+    "name": "Oval Charm",
+    "shortDesc": "Doubles the chance of two Pokemon producing an egg at the daycare every 255 steps."
+  },
+  "oval-stone": {
+    "name": "Oval Stone",
+    "shortDesc": "Level-up during Day on a Happiny: Holder evolves into Chansey."
+  },
+  "pack-of-potatoes": {
+    "name": "Pack of Potatoes",
+    "shortDesc": "One of the many ingredients that can be used for cooking at your camp. Potatoes help mellow out a spicy taste, to make a dish more mild."
+  },
+  "packaged-curry": {
+    "name": "Packaged Curry",
+    "shortDesc": "One of the many ingredients that can be used for cooking at your camp. Using packaged curry helps make sure there are no slipups when cooking."
+  },
+  "pair-of-tickets": {
+    "name": "Pair of Tickets",
+    "shortDesc": "Allows the player and their mother to see the star show in the Mossdeep Space Center."
+  },
+  "pal-pad": {
+    "name": "Pal Pad",
+    "shortDesc": "Use to record Friend Codes and check your own."
+  },
+  "pamtre-berry": {
+    "name": "Pamtre Berry",
+    "shortDesc": "Used for creating PokeBlocks and Poffins."
+  },
+  "paralyze-heal": {
+    "name": "Paralyze Heal",
+    "shortDesc": "Cures paralysis."
+  },
+  "parcel": {
+    "name": "Parcel",
+    "shortDesc": "Given to the trainers rival in Jubilife City. Contains Town Maps."
+  },
+  "parcel--letsgo": {
+    "name": "Parcel",
+    "shortDesc": "A parcel to be delivered to Professor Oak from Viridian Citys Poke Mart."
+  },
+  "park-ball": {
+    "name": "Park Ball",
+    "shortDesc": "Catches Pokemon in the Pal Park every time."
+  },
+  "pass": {
+    "name": "Pass",
+    "shortDesc": "Grants access to ride the Magnet Train between Goldenrod City and Saffron City."
+  },
+  "pass-orb": {
+    "name": "Pass Orb",
+    "shortDesc": "Activates Pass Powers."
+  },
+  "passho-berry": {
+    "name": "Passho Berry",
+    "shortDesc": "Held: Consumed when struck by a super-effective Water-type attack to halve the damage."
+  },
+  "pasta": {
+    "name": "Pasta",
+    "shortDesc": "One of the many ingredients that can be used for cooking at your camp. These flour noodles make for a surprisingly good match with curry."
+  },
+  "payapa-berry": {
+    "name": "Payapa Berry",
+    "shortDesc": "Held: Consumed when struck by a super-effective Psychic-type attack to halve the damage."
+  },
+  "pearl": {
+    "name": "Pearl",
+    "shortDesc": "Sell for 700 Pokedollars, or to Ore Collector for 1400 Pokedollars."
+  },
+  "pearl-string": {
+    "name": "Pearl String",
+    "shortDesc": "Sell to Ore Collector for 25000 Pokedollars."
+  },
+  "pecha-berry": {
+    "name": "Pecha Berry",
+    "shortDesc": "Held: Consumed when poisoned to cure poison."
+  },
+  "permit": {
+    "name": "Permit",
+    "shortDesc": "Grants access to the Nature Preserve."
+  },
+  "persim-berry": {
+    "name": "Persim Berry",
+    "shortDesc": "Held: Consumed when confused to cure confusion."
+  },
+  "petaya-berry": {
+    "name": "Petaya Berry",
+    "shortDesc": "Held: Consumed at 1/4 max HP to boost Special Attack."
+  },
+  "pewter-crunchies": {
+    "name": "Pewter Crunchies",
+    "shortDesc": "Pewter Citys famous crunchy snack. They can be used to heal all status conditions of a single Pokemon."
+  },
+  "photo-album": {
+    "name": "Photo Album",
+    "shortDesc": "Stores photos from your adventure."
+  },
+  "pidgeotite": {
+    "name": "Pidgeotite",
+    "shortDesc": "Held: Allows Pidgeot to Mega Evolve into Mega Pidgeot."
+  },
+  "pikanium-z--bag": {
+    "name": "Pikanium Z",
+    "shortDesc": "XXX new effect for pikanium-z--bag"
+  },
+  "pikanium-z--held": {
+    "name": "Pikanium Z",
+    "shortDesc": "Held: Allows Pikachu to upgrade Volt Tackle into Catastropika."
+  },
+  "pikashunium-z--bag": {
+    "name": "Pikashunium Z",
+    "shortDesc": "XXX new effect for pikashunium-z--bag"
+  },
+  "pikashunium-z--held": {
+    "name": "Pikashunium Z",
+    "shortDesc": "Held: Allows cap-wearing Pikachu to upgrade Thunderbolt into 10,000,000 Volt Thunderbolt."
+  },
+  "pinap-berry": {
+    "name": "Pinap Berry",
+    "shortDesc": "Used for creating PokeBlocks and Poffins."
+  },
+  "pink-apricorn": {
+    "name": "Pink Apricorn",
+    "shortDesc": "Used to make a Love Ball."
+  },
+  "pink-nectar": {
+    "name": "Pink Nectar",
+    "shortDesc": "Changes Oricorio to Pau Style."
+  },
+  "pink-petal": {
+    "name": "Pink Petal",
+    "shortDesc": "XXX new effect for pink-petal"
+  },
+  "pink-scarf": {
+    "name": "Pink Scarf",
+    "shortDesc": "Raises the holders Cuteness while in a contest."
+  },
+  "pinsirite": {
+    "name": "Pinsirite",
+    "shortDesc": "Held: Allows Pinsir to Mega Evolve into Mega Pinsir."
+  },
+  "pixie-plate": {
+    "name": "Pixie Plate",
+    "shortDesc": "Held: Fairy-Type moves from holder do 20% more damage. Changes Arceuss and Judgments type to Fairy."
+  },
+  "plasma-card": {
+    "name": "Plasma Card",
+    "shortDesc": "Required to progress in the Plasma Frigate."
+  },
+  "plume-fossil": {
+    "name": "Plume Fossil",
+    "shortDesc": "Can be revived into an Archen."
+  },
+  "poffin-case": {
+    "name": "Poffin Case",
+    "shortDesc": "Holds Poffins."
+  },
+  "point-card": {
+    "name": "Point Card",
+    "shortDesc": "Keeps count of Battle Points earned."
+  },
+  "poison-barb": {
+    "name": "Poison Barb",
+    "shortDesc": "Held: Poison-Type moves from holder do 20% more damage."
+  },
+  "poison-gem": {
+    "name": "Poison Gem",
+    "shortDesc": "Held: When the holder uses a damaging Poison-type move, the move has 1.5 power and this item is consumed."
+  },
+  "poison-memory": {
+    "name": "Poison Memory",
+    "shortDesc": "Held: Changes Silvally to its Poison form. Changes Multi-Attacks type to Poison."
+  },
+  "poisonium-z--bag": {
+    "name": "Poisonium Z",
+    "shortDesc": "XXX new effect for poisonium-z--bag"
+  },
+  "poisonium-z--held": {
+    "name": "Poisonium Z",
+    "shortDesc": "Held: Allows a Pokemon to use the Z-move equivalents of its Poison moves."
+  },
+  "poke-ball": {
+    "name": "Poke Ball",
+    "shortDesc": "A basic ball used to catch wild Pokemon."
+  },
+  "poke-doll": {
+    "name": "Poke Doll",
+    "shortDesc": "Ends a wild battle."
+  },
+  "poke-flute": {
+    "name": "Poke Flute",
+    "shortDesc": "Use to awaken sleeping Pokemon, including Snorlax on roads."
+  },
+  "poke-radar": {
+    "name": "Poke Radar",
+    "shortDesc": "Use to track down rare or shiny Pokemon. 50 steps to recharge."
+  },
+  "poke-toy": {
+    "name": "Poke Toy",
+    "shortDesc": "Ends a wild battle."
+  },
+  "pokeblock-case": {
+    "name": "Pokeblock Case",
+    "shortDesc": "Holds Pokeblocks."
+  },
+  "pokeblock-kit": {
+    "name": "Pokeblock Kit",
+    "shortDesc": "Creates and stores Pokeblocks."
+  },
+  "pokemon-box": {
+    "name": "Pokemon Box Link",
+    "shortDesc": "- - -"
+  },
+  "pokemon-box-link": {
+    "name": "Pokemon Box Link",
+    "shortDesc": "A device that allows you to access the Pokemon storage system. There are some places where it wont work."
+  },
+  "polished-mud-ball": {
+    "name": "Polished Mud Ball",
+    "shortDesc": "A ball made of mud. It had been polished for such a long time that the surface is very shiny."
+  },
+  "pomeg-berry": {
+    "name": "Pomeg Berry",
+    "shortDesc": "Drops HP Effort Values by 10 and raises happiness."
+  },
+  "potion": {
+    "name": "Potion",
+    "shortDesc": "Restores 20 HP."
+  },
+  "powder-jar": {
+    "name": "Powder Jar",
+    "shortDesc": "Stores Berry Powder made using a Berry Crusher."
+  },
+  "power-anklet": {
+    "name": "Power Anklet",
+    "shortDesc": "Held: Holder gains 4 Speed effort values, but has halved Speed in battle."
+  },
+  "power-band": {
+    "name": "Power Band",
+    "shortDesc": "Held: Holder gains 4 Special Defense effort values, but has halved Speed in battle."
+  },
+  "power-belt": {
+    "name": "Power Belt",
+    "shortDesc": "Held: Holder gains 4 Defense effort values, but has halved Speed in battle."
+  },
+  "power-bracer": {
+    "name": "Power Bracer",
+    "shortDesc": "Held: Holder gains 4 Attack effort values, but has halved Speed in battle."
+  },
+  "power-herb": {
+    "name": "Power Herb",
+    "shortDesc": "Held: Both turns of a two-turn charge move happen at once. Consumed upon use."
+  },
+  "power-lens": {
+    "name": "Power Lens",
+    "shortDesc": "Held: Holder gains 4 Special Attack effort values, but has halved Speed in battle."
+  },
+  "power-plant-pass": {
+    "name": "Power Plant Pass",
+    "shortDesc": "Permits entry to the Kalos Power Plant."
+  },
+  "power-up-pocket": {
+    "name": "Power-Up Pocket",
+    "shortDesc": "- - -"
+  },
+  "power-weight": {
+    "name": "Power Weight",
+    "shortDesc": "Held: Holder gains 4 HP effort values, but has halved Speed in battle."
+  },
+  "pp-max": {
+    "name": "PP Max",
+    "shortDesc": "Raises a moves max PP by 60%."
+  },
+  "pp-up": {
+    "name": "PP Up",
+    "shortDesc": "Raises a moves max PP by 20%."
+  },
+  "precooked-burger": {
+    "name": "Precooked Burger",
+    "shortDesc": "One of the many ingredients that can be used for cooking at your camp. If youre unsure about what to cook, you cant go wrong with some burger."
+  },
+  "premier-ball": {
+    "name": "Premier Ball",
+    "shortDesc": "Tries to catch a wild Pokemon."
+  },
+  "pretty-wing": {
+    "name": "Pretty Feather",
+    "shortDesc": "Sell for 100 Pokedollars."
+  },
+  "primarium-z--bag": {
+    "name": "Primarium Z",
+    "shortDesc": "XXX new effect for primarium-z--bag"
+  },
+  "primarium-z--held": {
+    "name": "Primarium Z",
+    "shortDesc": "Held: Allows Primarina to upgrade Sparkling Aria into Oceanic Operetta."
+  },
+  "prism-scale": {
+    "name": "Prism Scale",
+    "shortDesc": "Traded on a Feebas: Holder evolves into Milotic."
+  },
+  "prison-bottle": {
+    "name": "Prison Bottle",
+    "shortDesc": "Transforms Hoopa into its Unbound form for up to three days."
+  },
+  "professors-mask": {
+    "name": "Professors Mask",
+    "shortDesc": "Lost by Professor Kukui."
+  },
+  "profs-letter": {
+    "name": "Profs Letter",
+    "shortDesc": "Traded to the players mom for the Town Map and a Potion."
+  },
+  "prop-case": {
+    "name": "Prop Case",
+    "shortDesc": "Stores props for the Pokemon Musical."
+  },
+  "protective-pads": {
+    "name": "Protective Pads",
+    "shortDesc": "Held: Prevents side effects of contact moves used on the holder."
+  },
+  "protector": {
+    "name": "Protector",
+    "shortDesc": "Traded on a Rhydon: Holder evolves into Rhyperior."
+  },
+  "protein": {
+    "name": "Protein",
+    "shortDesc": "Raises Attack effort and happiness."
+  },
+  "psychic-gem": {
+    "name": "Psychic Gem",
+    "shortDesc": "Held: When the holder uses a damaging Psychic-type move, the move has 1.5 power and this item is consumed."
+  },
+  "psychic-memory": {
+    "name": "Psychic Memory",
+    "shortDesc": "Held: Changes Silvally to its Psychic form. Changes Multi-Attacks type to Psychic."
+  },
+  "psychic-seed": {
+    "name": "Psychic Seed",
+    "shortDesc": "Held: Consumed on Psychic Terrain and raises the holders Special Defense by one stage."
+  },
+  "psychium-z--bag": {
+    "name": "Psychium Z",
+    "shortDesc": "XXX new effect for psychium-z--bag"
+  },
+  "psychium-z--held": {
+    "name": "Psychium Z",
+    "shortDesc": "Held: Allows a Pokemon to use the Z-move equivalents of its Psychic moves."
+  },
+  "punching-glove": {
+    "name": "Punching Glove",
+    "shortDesc": "Holder's punch-based attacks have 1.1x power and do not make contact."
+  },
+  "pungent-root": {
+    "name": "Pungent Root",
+    "shortDesc": "One of the many ingredients that can be used for cooking at your camp. Though carelessly picked, these herbs can add a fragrant accent to a dish."
+  },
+  "pure-incense": {
+    "name": "Pure Incense",
+    "shortDesc": "Prevents wild encounters of level lower than your partys lead Pokemon. Breeding: Chimecho begets a Chingling Egg."
+  },
+  "purple-nectar": {
+    "name": "Purple Nectar",
+    "shortDesc": "Changes Oricorio to Sensu Style."
+  },
+  "purple-petal": {
+    "name": "Purple Petal",
+    "shortDesc": "XXX new effect for purple-petal"
+  },
+  "qualot-berry": {
+    "name": "Qualot Berry",
+    "shortDesc": "Drops Defense Effort Values by 10 and raises happiness."
+  },
+  "quick-ball": {
+    "name": "Quick Ball",
+    "shortDesc": "Tries to catch a wild Pokemon. Success rate is 4 (Gen V: 5), but only on the first turn."
+  },
+  "quick-candy": {
+    "name": "Quick Candy",
+    "shortDesc": "A candy that is packed with energy. When given to a Pokemon, it will increase that Pokemons Speed stat."
+  },
+  "quick-candy-l": {
+    "name": "Quick Candy L",
+    "shortDesc": "A big candy that is packed with energy. When given to a Pokemon at Lv. 30 or higher, it will increase that Pokemons Speed stat."
+  },
+  "quick-candy-xl": {
+    "name": "Quick Candy XL",
+    "shortDesc": "A huge candy that is packed with energy. When given to a Pokemon at Lv. 60 or higher, it will increase that Pokemons Speed stat."
+  },
+  "quick-claw": {
+    "name": "Quick Claw",
+    "shortDesc": "Held: Holder has a 3/16 (18.75%) chance to move first."
+  },
+  "quick-powder": {
+    "name": "Quick Powder",
+    "shortDesc": "Doubles Dittos Speed when held. The boost is lost after transforming."
+  },
+  "quiet-mint": {
+    "name": "Quiet Mint",
+    "shortDesc": "When a Pokemon smells this mint, its Sp. Atk will grow more easily, but its Speed will grow more slowly."
+  },
+  "rabuta-berry": {
+    "name": "Rabuta Berry",
+    "shortDesc": "Used for creating PokeBlocks and Poffins."
+  },
+  "radiant-petal": {
+    "name": "Radiant Petal",
+    "shortDesc": "A single petal that the King of Bountiful Harvests gave you. It radiates faint light."
+  },
+  "rage-candy-bar": {
+    "name": "Rage Candy Bar",
+    "shortDesc": "HS: Traded for TM64. Gen II & Gen V: Acts as a Potion."
+  },
+  "rain-dance-charm": {
+    "name": "Rain Dance Charm",
+    "shortDesc": "Lets you use Rain Dance without a Pokemon knowing it."
+  },
+  "rainbow-flower": {
+    "name": "Rainbow Flower",
+    "shortDesc": "XXX new effect for rainbow-flower"
+  },
+  "rainbow-pass": {
+    "name": "Rainbow Pass",
+    "shortDesc": "Grants access to all of the Sevii Islands."
+  },
+  "rainbow-wing": {
+    "name": "Rainbow Wing",
+    "shortDesc": "Summons Ho-Oh at the top of the Bell Tower."
+  },
+  "rare-bone": {
+    "name": "Rare Bone",
+    "shortDesc": "Sell for 5000 Pokedollars, or to Bone Man for 10000 Pokedollars."
+  },
+  "rare-candy": {
+    "name": "Rare Candy",
+    "shortDesc": "Causes a level-up and raises happiness."
+  },
+  "rash-mint": {
+    "name": "Rash Mint",
+    "shortDesc": "When a Pokemon smells this mint, its Sp. Atk will grow more easily, but its Sp. Def will grow more slowly."
+  },
+  "rawst-berry": {
+    "name": "Rawst Berry",
+    "shortDesc": "Held: Consumed when burned to cure a burn."
+  },
+  "razor-claw": {
+    "name": "Razor Claw",
+    "shortDesc": "Held: Raises the holders critical hit ratio by one stage. Held by a Sneasel while levelling up at night: Holder evolves into Weavile."
+  },
+  "razor-fang": {
+    "name": "Razor Fang",
+    "shortDesc": "Held: Damaging moves gain a 10% chance to make their target flinch. Held by a Gligar while levelling up: Holder evolves into Gliscor."
+  },
+  "razz-berry": {
+    "name": "Razz Berry",
+    "shortDesc": "Used for creating PokeBlocks and Poffins."
+  },
+  "reaper-cloth": {
+    "name": "Reaper Cloth",
+    "shortDesc": "Traded on a Dusclops: Holder evolves into Dusknoir."
+  },
+  "red-apricorn": {
+    "name": "Red Apricorn",
+    "shortDesc": "Used to make a Level Ball."
+  },
+  "red-card": {
+    "name": "Red Card",
+    "shortDesc": "Held: When the holder takes damage from a move, the opponent switches out for another random party Pokemon. Consumed after use."
+  },
+  "red-chain": {
+    "name": "Red Chain",
+    "shortDesc": "Used to bind Palkia and Dialga."
+  },
+  "red-flute": {
+    "name": "Red Flute",
+    "shortDesc": "Cures attraction."
+  },
+  "red-nectar": {
+    "name": "Red Nectar",
+    "shortDesc": "Changes Oricorio to Baile Style."
+  },
+  "red-orb": {
+    "name": "Red Orb",
+    "shortDesc": "Summons Groudon to the Embedded Tower."
+  },
+  "red-petal": {
+    "name": "Red Petal",
+    "shortDesc": "XXX new effect for red-petal"
+  },
+  "red-scale": {
+    "name": "Red Scale",
+    "shortDesc": "Trade to Mr. Pokemon for an Exp. Share."
+  },
+  "red-scarf": {
+    "name": "Red Scarf",
+    "shortDesc": "Raises the holders Coolness while in a contest."
+  },
+  "red-shard": {
+    "name": "Red Shard",
+    "shortDesc": "No effect. Can be traded for items or moves."
+  },
+  "reins-of-unity": {
+    "name": "Reins of Unity",
+    "shortDesc": "Cords that shine when you hold them up to the light. The people of old times presented these to the King of Bountiful Harvests to express their gratitude."
+  },
+  "reins-of-unity--merge": {
+    "name": "Reins of Unity",
+    "shortDesc": "Reins that people presented to the king. They enhance Calyrexs power over bountiful harvests and unite Calyrex with its beloved steed."
+  },
+  "reins-of-unity--split": {
+    "name": "Reins of Unity",
+    "shortDesc": "Reins that people presented to the king. They enable those who are connected to communicate with each other. The reins separate Calyrex and its beloved steed."
+  },
+  "relaxed-mint": {
+    "name": "Relaxed Mint",
+    "shortDesc": "When a Pokemon smells this mint, its Defense will grow more easily, but its Speed will grow more slowly."
+  },
+  "relic-band": {
+    "name": "Relic Band",
+    "shortDesc": "Sell to Villa Owner for 100000 Pokedollars."
+  },
+  "relic-copper": {
+    "name": "Relic Copper",
+    "shortDesc": "Sell to Villa Owner for 1000 Pokedollars."
+  },
+  "relic-crown": {
+    "name": "Relic Crown",
+    "shortDesc": "Sell to Villa Owner for 300000 Pokedollars."
+  },
+  "relic-gold": {
+    "name": "Relic Gold",
+    "shortDesc": "Sell to Villa Owner 10000 Pokedollars."
+  },
+  "relic-silver": {
+    "name": "Relic Silver",
+    "shortDesc": "Sell to Villa Owner 5000 Pokedollars."
+  },
+  "relic-statue": {
+    "name": "Relic Statue",
+    "shortDesc": "Sell to Villa Owner 200000 Pokedollars."
+  },
+  "relic-vase": {
+    "name": "Relic Vase",
+    "shortDesc": "Sell to Villa Owner 50000 Pokedollars."
+  },
+  "repeat-ball": {
+    "name": "Repeat Ball",
+    "shortDesc": "Tries to catch a wild Pokemon. Success rate is 3 for previously-caught Pokemon."
+  },
+  "repel": {
+    "name": "Repel",
+    "shortDesc": "Prevents weak wild Pokemon from appearing for a short time."
+  },
+  "resist-wing": {
+    "name": "Resist Feather",
+    "shortDesc": "Increases Defense effort by 1."
+  },
+  "reveal-glass": {
+    "name": "Reveal Glass",
+    "shortDesc": "Switches Tornadus, Thundurus, and Landorus between Incarnate and Therian Forme."
+  },
+  "revival-herb": {
+    "name": "Revival Herb",
+    "shortDesc": "Revives with full HP, but lowers happiness."
+  },
+  "revive": {
+    "name": "Revive",
+    "shortDesc": "Revives with half HP."
+  },
+  "ribbon-sweet": {
+    "name": "Ribbon Sweet",
+    "shortDesc": "A ribbon-shaped sweet. When a Milcery holds this, it spins around happily."
+  },
+  "rich-mulch": {
+    "name": "Rich Mulch",
+    "shortDesc": "Increases the total number of Berries by 2."
+  },
+  "ride-pager": {
+    "name": "Ride Pager",
+    "shortDesc": "Allows the player to summon a Ride Pokemon."
+  },
+  "rindo-berry": {
+    "name": "Rindo Berry",
+    "shortDesc": "Held: Consumed when struck by a super-effective Grass-type attack to halve the damage."
+  },
+  "ring-target": {
+    "name": "Ring Target",
+    "shortDesc": "Held: Negates the holders type immunities. Ability immunities are not removed."
+  },
+  "rm-1-key": {
+    "name": "Rm. 1 Key",
+    "shortDesc": "Unlocks room 1 on the Abandoned Ship."
+  },
+  "rm-2-key": {
+    "name": "Rm. 2 Key",
+    "shortDesc": "Unlocks room 2 on the Abandoned Ship."
+  },
+  "rm-4-key": {
+    "name": "Rm. 4 Key",
+    "shortDesc": "Unlocks room 4 on the Abandoned Ship."
+  },
+  "rm-6-key": {
+    "name": "Rm. 6 Key",
+    "shortDesc": "Unlocks room 6 on the Abandoned Ship."
+  },
+  "rock-climb-charm": {
+    "name": "Rock Climb Charm",
+    "shortDesc": "Lets you use Rock Climb without a Pokemon knowing it."
+  },
+  "rock-gem": {
+    "name": "Rock Gem",
+    "shortDesc": "Held: When the holder uses a damaging Rock-type move, the move has 1.5 power and this item is consumed."
+  },
+  "rock-incense": {
+    "name": "Rock Incense",
+    "shortDesc": "Held: Rock-Type moves from holder do 20% more damage. Breeding: Sudowoodo begets a Bonsly Egg."
+  },
+  "rock-memory": {
+    "name": "Rock Memory",
+    "shortDesc": "Held: Changes Silvally to its Rock form. Changes Multi-Attacks type to Rock."
+  },
+  "rock-smash-charm": {
+    "name": "Rock Smash Charm",
+    "shortDesc": "Lets you use Rock Smash without a Pokemon knowing it."
+  },
+  "rockium-z--bag": {
+    "name": "Rockium Z",
+    "shortDesc": "XXX new effect for rockium-z--bag"
+  },
+  "rockium-z--held": {
+    "name": "Rockium Z",
+    "shortDesc": "Held: Allows a Pokemon to use the Z-move equivalents of its Rock moves."
+  },
+  "rocky-helmet": {
+    "name": "Rocky Helmet",
+    "shortDesc": "Held: When the holder is hit by a contact move, the attacking Pokemon takes 1/6 its max HP in damage."
+  },
+  "roller-skates": {
+    "name": "Roller Skates",
+    "shortDesc": "Allows the player to move quickly and off the grid."
+  },
+  "room-service": {
+    "name": "Room Service",
+    "shortDesc": "An item to be held by a Pokemon. Lowers Speed when Trick Room takes effect."
+  },
+  "root-fossil": {
+    "name": "Root Fossil",
+    "shortDesc": "Can be revived into a Lileep."
+  },
+  "rose-incense": {
+    "name": "Rose Incense",
+    "shortDesc": "Held: Grass-Type moves from holder do 20% more damage. Breeding: Roselia or Roserade beget a Budew Egg."
+  },
+  "roseli-berry": {
+    "name": "Roseli Berry",
+    "shortDesc": "Held: Consumed when struck by a super-effective Fairy-type attack to halve the damage."
+  },
+  "roto-bargain": {
+    "name": "Roto Bargain",
+    "shortDesc": "XXX new effect for roto-bargain"
+  },
+  "roto-boost": {
+    "name": "Roto Boost",
+    "shortDesc": "XXX new effect for roto-boost"
+  },
+  "roto-catch": {
+    "name": "Roto Catch",
+    "shortDesc": "XXX new effect for roto-catch"
+  },
+  "roto-encounter": {
+    "name": "Roto Encounter",
+    "shortDesc": "XXX new effect for roto-encounter"
+  },
+  "roto-exp-points": {
+    "name": "Roto Exp. Points",
+    "shortDesc": "XXX new effect for roto-exp-points"
+  },
+  "roto-friendship": {
+    "name": "Roto Friendship",
+    "shortDesc": "XXX new effect for roto-friendship"
+  },
+  "roto-hatch": {
+    "name": "Roto Hatch",
+    "shortDesc": "XXX new effect for roto-hatch"
+  },
+  "roto-hp-restore": {
+    "name": "Roto HP Restore",
+    "shortDesc": "XXX new effect for roto-hp-restore"
+  },
+  "roto-pp-restore": {
+    "name": "Roto PP Restore",
+    "shortDesc": "XXX new effect for roto-pp-restore"
+  },
+  "roto-prize-money": {
+    "name": "Roto Prize Money",
+    "shortDesc": "XXX new effect for roto-prize-money"
+  },
+  "roto-stealth": {
+    "name": "Roto Stealth",
+    "shortDesc": "XXX new effect for roto-stealth"
+  },
+  "rotom-bike": {
+    "name": "Rotom Bike",
+    "shortDesc": "This bike can be combined with the Pokemon Rotom to use a turbo boost."
+  },
+  "rotom-bike--glistening-black": {
+    "name": "Rotom Bike",
+    "shortDesc": "This bike can do a turbo boost and run on the water using Rotoms power. Its a glistening black that shines reddish-black."
+  },
+  "rotom-bike--sparkling-white": {
+    "name": "Rotom Bike",
+    "shortDesc": "This bike can do a turbo boost and run on the water using Rotoms power. Its a sparkling white that shines brilliantly."
+  },
+  "rotom-bike--water-mode": {
+    "name": "Rotom Bike",
+    "shortDesc": "This bike can be combined with the Pokemon Rotom to not only do a turbo boost but also run on the water."
+  },
+  "rotom-catalog": {
+    "name": "Rotom Catalog",
+    "shortDesc": "A catalog of devices that Rotom like. Use the catalog to have Rotom hop in and out of the various devices listed within."
+  },
+  "rowap-berry": {
+    "name": "Rowap Berry",
+    "shortDesc": "Held: Consumed to deal 1/8 attackers max HP when holder is struck by a special attack."
+  },
+  "ruby": {
+    "name": "Ruby",
+    "shortDesc": "Give to Celio with Sapphire to activate Network Machine and get Rainbow Pass."
+  },
+  "rule-book": {
+    "name": "Rule Book",
+    "shortDesc": "List of battle types and their rules."
+  },
+  "rusted-shield": {
+    "name": "Rusted Shield",
+    "shortDesc": "It is said that a hero used this shield to halt a terrible disaster in ancient times. But its grown rusty and worn."
+  },
+  "rusted-sword": {
+    "name": "Rusted Sword",
+    "shortDesc": "It is said that a hero used this sword to halt a terrible disaster in ancient times. But its grown rusty and worn."
+  },
+  "sablenite": {
+    "name": "Sablenite",
+    "shortDesc": "Held: Allows Sableye to Mega Evolve into Mega Sableye."
+  },
+  "sachet": {
+    "name": "Sachet",
+    "shortDesc": "Traded on a Spritzee: Holder evolves into Aromatisse."
+  },
+  "sacred-ash": {
+    "name": "Sacred Ash",
+    "shortDesc": "Revives all fainted Pokemon with full HP."
+  },
+  "safari-ball": {
+    "name": "Safari Ball",
+    "shortDesc": "Tries to catch a wild Pokemon in the Great Marsh or Safari Zone. Success rate is 1.5."
+  },
+  "safety-goggles": {
+    "name": "Safety Goggles",
+    "shortDesc": "Held: Prevents damage from powder moves and the damage from Hail and Sandstorm."
+  },
+  "sail-fossil": {
+    "name": "Sail Fossil",
+    "shortDesc": "Can be revived into an Amaura."
+  },
+  "salac-berry": {
+    "name": "Salac Berry",
+    "shortDesc": "Held: Consumed at 1/4 max HP to boost Speed."
+  },
+  "salad-mix": {
+    "name": "Salad Mix",
+    "shortDesc": "One of the many ingredients that can be used for cooking at your camp. The assortment of vegetables looks quite appealing and healthy."
+  },
+  "salamencite": {
+    "name": "Salamencite",
+    "shortDesc": "Held: Allows Salamence to Mega Evolve into Mega Salamence."
+  },
+  "sapphire": {
+    "name": "Sapphire",
+    "shortDesc": "Give to Celio with Ruby to activate Network Machine and get Rainbow Pass."
+  },
+  "sassy-mint": {
+    "name": "Sassy Mint",
+    "shortDesc": "When a Pokemon smells this mint, its Sp. Def will grow more easily, but its Speed will grow more slowly."
+  },
+  "sausages": {
+    "name": "Sausages",
+    "shortDesc": "One of the many ingredients that can be used for cooking at your camp. These sausages should be boiled before eating."
+  },
+  "scanner": {
+    "name": "Scanner",
+    "shortDesc": "Trade to Captain Stern for a DeepSeaTooth or DeepSeaScale."
+  },
+  "sceptilite": {
+    "name": "Sceptilite",
+    "shortDesc": "Held: Allows Sceptile to Mega Evolve into Mega Sceptile."
+  },
+  "scizorite": {
+    "name": "Scizorite",
+    "shortDesc": "Held: Allows Scizor to Mega Evolve into Mega Scizor."
+  },
+  "scope-lens": {
+    "name": "Scope Lens",
+    "shortDesc": "Held: Raises the holders critical hit ratio by one stage."
+  },
+  "sea-incense": {
+    "name": "Sea Incense",
+    "shortDesc": "Held: Water-Type moves from holder do 20% more damage. Breeding: Marill or Azumarill beget an Azurill Egg."
+  },
+  "seal-bag": {
+    "name": "Seal Bag",
+    "shortDesc": "Holds ten Seals for Poke Balls."
+  },
+  "seal-case": {
+    "name": "Seal Case",
+    "shortDesc": "Stores Seals that can be applied to Poke Ball capsules."
+  },
+  "secret-key": {
+    "name": "Secret Key",
+    "shortDesc": "Gen IV: The key to Rotoms appliance room. Gen III: The key to Cinnabar Gym."
+  },
+  "secret-key--letsgo": {
+    "name": "Secret Key",
+    "shortDesc": "The key that unlocks the front door of the Pokemon Gym on Cinnabar Island. It has a red decoration."
+  },
+  "secret-potion": {
+    "name": "Secret Potion",
+    "shortDesc": "Used to heal the Ampharos at the top of Olivine Lighthouse."
+  },
+  "serious-mint": {
+    "name": "Serious Mint",
+    "shortDesc": "When a Pokemon smells this mint, all of its stats will grow at an equal rate."
+  },
+  "shaderoot-carrot": {
+    "name": "Shaderoot Carrot",
+    "shortDesc": "Produce that the King of Bountiful Harvests beloved steed likes to eat. It grew in a gloomy field."
+  },
+  "shalour-sable": {
+    "name": "Shalour Sable",
+    "shortDesc": "Cures any major status ailment and confusion."
+  },
+  "sharp-beak": {
+    "name": "Sharp Beak",
+    "shortDesc": "Held: Flying-Type moves from holder do 20% more damage."
+  },
+  "sharpedonite": {
+    "name": "Sharpedonite",
+    "shortDesc": "Held: Allows Sharpedo to Mega Evolve into Mega Sharpedo."
+  },
+  "shed-shell": {
+    "name": "Shed Shell",
+    "shortDesc": "Held: Holder can bypass all trapping effects and switch out. Multi-turn moves still cannot be switched out of."
+  },
+  "shell-bell": {
+    "name": "Shell Bell",
+    "shortDesc": "Held: Holder receives 1/8 of the damage it deals when attacking."
+  },
+  "shiny-charm": {
+    "name": "Shiny Charm",
+    "shortDesc": "Raises the chance of finding a shiny Pokemon."
+  },
+  "shiny-stone": {
+    "name": "Shiny Stone",
+    "shortDesc": "Evolves a Minccino into Cinccino, a Roselia into Roserade, or a Togetic into Togekiss."
+  },
+  "shoal-salt": {
+    "name": "Shoal Salt",
+    "shortDesc": "No effect. Gen III: Trade four and four Shoal Shells for a Shell Bell."
+  },
+  "shoal-shell": {
+    "name": "Shoal Shell",
+    "shortDesc": "No effect. Gen III: Trade four and four Shoal Salts for a Shell Bell."
+  },
+  "shock-drive": {
+    "name": "Shock Drive",
+    "shortDesc": "Grants Genesect a yellow, Electric-type Techno Blast."
+  },
+  "shuca-berry": {
+    "name": "Shuca Berry",
+    "shortDesc": "Held: Consumed when struck by a super-effective Ground-type attack to halve the damage."
+  },
+  "silk-scarf": {
+    "name": "Silk Scarf",
+    "shortDesc": "Held: Normal-Type moves from holder do 20% more damage."
+  },
+  "silph-scope": {
+    "name": "Silph Scope",
+    "shortDesc": "Used to identify the true forms of ghosts in Pokemon Tower."
+  },
+  "silver-leaf": {
+    "name": "Silver Leaf",
+    "shortDesc": "A mysterious silver leaf. No trees with this leaf have been found yet."
+  },
+  "silver-powder": {
+    "name": "Silver Powder",
+    "shortDesc": "Held: Bug-Type moves from holder do 20% more damage."
+  },
+  "silver-wing": {
+    "name": "Silver Wing",
+    "shortDesc": "Summons Lugia to the Whirl Islands."
+  },
+  "sitrus-berry": {
+    "name": "Sitrus Berry",
+    "shortDesc": "Held: Consumed at 1/2 max HP to recover 1/4 max HP."
+  },
+  "skull-fossil": {
+    "name": "Skull Fossil",
+    "shortDesc": "Can be revived into a Cranidos."
+  },
+  "sky-plate": {
+    "name": "Sky Plate",
+    "shortDesc": "Held: Flying-Type moves from holder do 20% more damage. Changes Arceuss and Judgments type to Flying."
+  },
+  "slowbronite": {
+    "name": "Slowbronite",
+    "shortDesc": "Held: Allows Slowbro to Mega Evolve into Mega Slowbro."
+  },
+  "slowpoke-tail": {
+    "name": "Slowpoke Tail",
+    "shortDesc": "A tasty tail that sells for a high price."
+  },
+  "small-bouquet": {
+    "name": "Small Bouquet",
+    "shortDesc": "A small bouquet that was made with heart and soul for a single Trainer."
+  },
+  "smart-candy": {
+    "name": "Smart Candy",
+    "shortDesc": "A candy that is packed with energy. When given to a Pokemon, it will increase that Pokemons Sp. Atk stat."
+  },
+  "smart-candy-l": {
+    "name": "Smart Candy L",
+    "shortDesc": "A big candy that is packed with energy. When given to a Pokemon at Lv. 30 or higher, it will increase that Pokemons Sp. Atk stat."
+  },
+  "smart-candy-xl": {
+    "name": "Smart Candy XL",
+    "shortDesc": "A huge candy that is packed with energy. When given to a Pokemon at Lv. 60 or higher, it will increase that Pokemons Sp. Atk stat."
+  },
+  "smoke-ball": {
+    "name": "Smoke Ball",
+    "shortDesc": "Held: Allows the Holder to escape from any wild battle."
+  },
+  "smoke-poke-tail": {
+    "name": "Smoke-Poke Tail",
+    "shortDesc": "One of the many ingredients that can be used for cooking at your camp. When a Slowpokes tail falls off, it grows back quickly."
+  },
+  "smooth-rock": {
+    "name": "Smooth Rock",
+    "shortDesc": "Held: Sandstorm by the holder lasts 8 rounds instead of 5."
+  },
+  "snorlium-z--bag": {
+    "name": "Snorlium Z",
+    "shortDesc": "XXX new effect for snorlium-z--bag"
+  },
+  "snorlium-z--held": {
+    "name": "Snorlium Z",
+    "shortDesc": "Held: Allows Snorlax to upgrade Giga Impact into Pulverizing Pancake."
+  },
+  "snowball": {
+    "name": "Snowball",
+    "shortDesc": "Held: If the holder is hit by a damaging Ice move, raises its Attack by one stage."
+  },
+  "snowscape-charm": {
+    "name": "Snowscape Charm",
+    "shortDesc": "Lets you use Snowscape without a Pokemon knowing it."
+  },
+  "soda-pop": {
+    "name": "Soda Pop",
+    "shortDesc": "Restores 60 HP."
+  },
+  "soft-sand": {
+    "name": "Soft Sand",
+    "shortDesc": "Held: Ground-Type moves from holder do 20% more damage."
+  },
+  "solganium-z--bag": {
+    "name": "Solganium Z",
+    "shortDesc": "XXX new effect for solganium-z--bag"
+  },
+  "solganium-z--held": {
+    "name": "Solganium Z",
+    "shortDesc": "Held: Allows Solgaleo to use Searing Sunraze Smash."
+  },
+  "sonias-book": {
+    "name": "Sonias Book",
+    "shortDesc": "Professor Sonias published writings. Her new discoveries about the Galar regions legends are recorded in this enjoyable read."
+  },
+  "soot-sack": {
+    "name": "Soot Sack",
+    "shortDesc": "Stores volcanic ash from Route 113."
+  },
+  "soothe-bell": {
+    "name": "Soothe Bell",
+    "shortDesc": "Held: Doubles the happiness earned by the holder."
+  },
+  "soul-dew": {
+    "name": "Soul Dew",
+    "shortDesc": "Raises Latias and Latioss Special Attack and Special Defense by 50%."
+  },
+  "sparkling-stone": {
+    "name": "Sparkling Stone",
+    "shortDesc": "Required to obtain a Z-Ring."
+  },
+  "spell-tag": {
+    "name": "Spell Tag",
+    "shortDesc": "Held: Ghost-Type moves from holder do 20% more damage."
+  },
+  "spelon-berry": {
+    "name": "Spelon Berry",
+    "shortDesc": "Used for creating PokeBlocks and Poffins."
+  },
+  "spice-mix": {
+    "name": "Spice Mix",
+    "shortDesc": "One of the many ingredients that can be used for cooking at your camp. There are over fifty spices contained within this ingredients hot flavor."
+  },
+  "splash-plate": {
+    "name": "Splash Plate",
+    "shortDesc": "Held: Water-Type moves from holder do 20% more damage. Changes Arceuss and Judgments type to Water."
+  },
+  "spooky-plate": {
+    "name": "Spooky Plate",
+    "shortDesc": "Held: Ghost-Type moves from holder do 20% more damage. Changes Arceuss and Judgments type to Ghost."
+  },
+  "sport-ball": {
+    "name": "Sport Ball",
+    "shortDesc": "Tries to catch a Pokemon in the Bug-Catching contest in National Park. (Gen II: Park Ball)"
+  },
+  "sprayduck": {
+    "name": "Sprayduck",
+    "shortDesc": "Used to water berries."
+  },
+  "sprinklotad": {
+    "name": "Sprinklotad",
+    "shortDesc": "Waters Berry plants."
+  },
+  "squirt-bottle": {
+    "name": "Squirt Bottle",
+    "shortDesc": "Use on Sudowoodo blocking the path on Route 36. Also waters berries."
+  },
+  "squirtle-guild-emblem-template": {
+    "name": "Squirtle Guild Emblem",
+    "shortDesc": "Consume this template to permanently unlock it for your current Guild."
+  },
+  "ss-ticket": {
+    "name": "S.S. Ticket",
+    "shortDesc": "Ticket for a ship. (RSE: S.S. Tidal LF: S.S. Anne HG: S.S. Aqua)"
+  },
+  "ss-ticket--hoenn": {
+    "name": "S.S. Ticket",
+    "shortDesc": "XXX new effect for ss-ticket--hoenn"
+  },
+  "ss-ticket--letsgo": {
+    "name": "S.S. Ticket",
+    "shortDesc": "The ticket required to board the S.S. Anne. It has a drawing of a ship on it."
+  },
+  "stable-mulch": {
+    "name": "Stable Mulch",
+    "shortDesc": "Berries stay on the plant for longer than their usual time."
+  },
+  "star-piece": {
+    "name": "Star Piece",
+    "shortDesc": "Platinum: Trade for one of each color Shard. Black and White: Trade for PP Up. Sell for 4900 Pokedollars, or to Ore Collector for 9800 Pokedollars."
+  },
+  "star-sweet": {
+    "name": "Star Sweet",
+    "shortDesc": "A star-shaped sweet. When a Milcery holds this, it spins around happily."
+  },
+  "stardust": {
+    "name": "Stardust",
+    "shortDesc": "Can be sold for money."
+  },
+  "starf-berry": {
+    "name": "Starf Berry",
+    "shortDesc": "Held: Consumed at 1/4 max HP to boost a random stat by two stages."
+  },
+  "steel-gem": {
+    "name": "Steel Gem",
+    "shortDesc": "Held: When the holder uses a damaging Steel-type move, the move has 1.5 power and this item is consumed."
+  },
+  "steel-memory": {
+    "name": "Steel Memory",
+    "shortDesc": "Held: Changes Silvally to its Steel form. Changes Multi-Attacks type to Steel."
+  },
+  "steelium-z--bag": {
+    "name": "Steelium Z",
+    "shortDesc": "XXX new effect for steelium-z--bag"
+  },
+  "steelium-z--held": {
+    "name": "Steelium Z",
+    "shortDesc": "Held: Allows a Pokemon to use the Z-move equivalents of its Steel moves."
+  },
+  "steelixite": {
+    "name": "Steelixite",
+    "shortDesc": "Held: Allows Steelix to Mega Evolve into Mega Steelix."
+  },
+  "stick": {
+    "name": "Leek",
+    "shortDesc": "Raises Farfetchds critical hit ratio by two stages."
+  },
+  "sticky-barb": {
+    "name": "Sticky Barb",
+    "shortDesc": "Held: Holder takes 1/8 (12.5%) its max HP at the end of each turn. When the holder is hit by a contact move, the attacking Pokemon takes 1/8 its max HP in damage and receive the item if not holding one."
+  },
+  "stone-plate": {
+    "name": "Stone Plate",
+    "shortDesc": "Held: Rock-Type moves from holder do 20% more damage. Changes Arceuss and Judgments type to Rock."
+  },
+  "storage-key": {
+    "name": "Storage Key",
+    "shortDesc": "Grants access to the Team Galactic warehouse in Veilstone City."
+  },
+  "storage-key--galactic-warehouse": {
+    "name": "Storage Key",
+    "shortDesc": "XXX new effect for storage-key--galactic-warehouse"
+  },
+  "storage-key--sea-mauville": {
+    "name": "Storage Key",
+    "shortDesc": "XXX new effect for storage-key--sea-mauville"
+  },
+  "strange-ball": {
+    "name": "Strange Ball",
+    "shortDesc": "Placeholder if caught in Poke Ball not in current game."
+  },
+  "strange-souvenir": {
+    "name": "Strange Souvenir",
+    "shortDesc": "Vendor trash."
+  },
+  "strawberry-sweet": {
+    "name": "Strawberry Sweet",
+    "shortDesc": "A strawberry-shaped sweet. When a Milcery holds this, it will spin around happily."
+  },
+  "strength-charm": {
+    "name": "Strength Charm",
+    "shortDesc": "Lets you use Strength without a Pokemon knowing it."
+  },
+  "stretchy-spring": {
+    "name": "Stretchy Spring",
+    "shortDesc": "A thin small spring. Its totally stretched out, and what its used for is unknown."
+  },
+  "style-card": {
+    "name": "Style Card",
+    "shortDesc": "A card that increases the selection in boutiques and hair salons."
+  },
+  "suite-key": {
+    "name": "Suite Key",
+    "shortDesc": "Opens a locked building in the Lakeside Resort."
+  },
+  "sun-flute": {
+    "name": "Sun Flute",
+    "shortDesc": "Evolves Nebby into Solgaleo when used at the Altar of the Sunne."
+  },
+  "sun-stone": {
+    "name": "Sun Stone",
+    "shortDesc": "Evolves a Cottonee into Whimsicott, a Gloom into Bellossom, a Petilil into Lilligant, or a Sunkern into Sunflora."
+  },
+  "sunny-day-charm": {
+    "name": "Sunny Day Charm",
+    "shortDesc": "Lets you use Sunny Day without a Pokemon knowing it."
+  },
+  "super-lure": {
+    "name": "Super Lure",
+    "shortDesc": "A glass bottle of perfume that makes rare Pokemon more likely to appear. It lasts longer than a Lure."
+  },
+  "super-potion": {
+    "name": "Super Potion",
+    "shortDesc": "Restores 50 HP."
+  },
+  "super-repel": {
+    "name": "Super Repel",
+    "shortDesc": "For 200 steps, prevents wild encounters of level lower than your partys lead Pokemon."
+  },
+  "super-rod": {
+    "name": "Super Rod",
+    "shortDesc": "Used to catch Pokemon in bodies of water."
+  },
+  "surf-charm": {
+    "name": "Surf Charm",
+    "shortDesc": "Lets you use Surf without a Pokemon knowing it."
+  },
+  "surge-badge": {
+    "name": "Surge Badge",
+    "shortDesc": "XXX new effect for surge-badge"
+  },
+  "surprise-mulch": {
+    "name": "Surprise Mulch",
+    "shortDesc": "Increases the chance of Berry mutation."
+  },
+  "swampertite": {
+    "name": "Swampertite",
+    "shortDesc": "Held: Allows Swampert to Mega Evolve into Mega Swampert."
+  },
+  "sweet-apple": {
+    "name": "Sweet Apple",
+    "shortDesc": "A peculiar apple that can make a certain species of Pokemon evolve. Its exceptionally sweet."
+  },
+  "sweet-heart": {
+    "name": "Sweet Heart",
+    "shortDesc": "Restores 20 HP."
+  },
+  "swift-wing": {
+    "name": "Swift Feather",
+    "shortDesc": "Increases Speed effort by 1."
+  },
+  "syrupy-apple": {
+    "name": "Syrupy Apple",
+    "shortDesc": "Evolves Applin into Dipplin when used."
+  },
+  "tamato-berry": {
+    "name": "Tamato Berry",
+    "shortDesc": "Drops Speed Effort Values by 10 and raises happiness."
+  },
+  "tanga-berry": {
+    "name": "Tanga Berry",
+    "shortDesc": "Held: Consumed when struck by a super-effective Bug-type attack to halve the damage."
+  },
+  "tapunium-z--bag": {
+    "name": "Tapunium Z",
+    "shortDesc": "XXX new effect for tapunium-z--bag"
+  },
+  "tapunium-z--held": {
+    "name": "Tapunium Z",
+    "shortDesc": "Held: Allows the Tapus to upgrade Natures Madness into Guardian of Alola."
+  },
+  "tart-apple": {
+    "name": "Tart Apple",
+    "shortDesc": "A peculiar apple that can make a certain species of Pokemon evolve. Its exceptionally tart."
+  },
+  "tea": {
+    "name": "Tea",
+    "shortDesc": "Grants access to Saffron City."
+  },
+  "teachy-tv": {
+    "name": "Teachy TV",
+    "shortDesc": "Teachers basic trainer advice."
+  },
+  "terrain-extender": {
+    "name": "Terrain Extender",
+    "shortDesc": "Held: Extends the holders Terrain effects to 8 turns."
+  },
+  "thick-club": {
+    "name": "Thick Club",
+    "shortDesc": "Doubles Cubone or Marowaks Attack."
+  },
+  "throat-spray": {
+    "name": "Throat Spray",
+    "shortDesc": "Raises Sp. Atk when a Pokemon uses a sound-based move."
+  },
+  "thunder-stone": {
+    "name": "Thunder Stone",
+    "shortDesc": "Evolves an Eelektrik into Eelektross, an Eevee into Jolteon, or a Pikachu into Raichu."
+  },
+  "tidal-bell": {
+    "name": "Tidal Bell",
+    "shortDesc": "Allows Kimono-girls to summon Lugia."
+  },
+  "timer-ball": {
+    "name": "Timer Ball",
+    "shortDesc": "Tries to catch a wild Pokemon. Success rate increases by 0.1 (Gen V: 0.3) every turn, to a max of 4."
+  },
+  "timid-mint": {
+    "name": "Timid Mint",
+    "shortDesc": "When a Pokemon smells this mint, its Speed will grow more easily, but its Attack will grow more slowly."
+  },
+  "tin-of-beans": {
+    "name": "Tin of Beans",
+    "shortDesc": "One of the many ingredients that can be used for cooking at your camp. When simmered, the beans suffuse a dish with their mild flavor."
+  },
+  "tiny-mushroom": {
+    "name": "Tiny Mushroom",
+    "shortDesc": "Fire Red and Leaf Green: Trade two for prior Level-up moves. Sell for 250 Pokedollars, or to Hungry Maid for 500 Pokedollars."
+  },
+  "tm-acid-spray": {
+    "name": "TM Acid Spray",
+    "shortDesc": "Teaches Acid Spray to a compatible Pokemon."
+  },
+  "tm-acrobatics": {
+    "name": "TM Acrobatics",
+    "shortDesc": "Teaches Acrobatics to a compatible Pokemon."
+  },
+  "tm-aerial-ace": {
+    "name": "TM Aerial Ace",
+    "shortDesc": "Teaches Aerial Ace to a compatible Pokemon."
+  },
+  "tm-agility": {
+    "name": "TM Agility",
+    "shortDesc": "Teaches Agility to a compatible Pokemon."
+  },
+  "tm-air-cutter": {
+    "name": "TM Air Cutter",
+    "shortDesc": "Teaches Air Cutter to a compatible Pokemon."
+  },
+  "tm-air-slash": {
+    "name": "TM Air Slash",
+    "shortDesc": "Teaches Air Slash to a compatible Pokemon."
+  },
+  "tm-alluring-voice": {
+    "name": "TM Alluring Voice",
+    "shortDesc": "Teaches Alluring Voice to a compatible Pokemon."
+  },
+  "tm-ally-switch": {
+    "name": "TM Ally Switch",
+    "shortDesc": "Teaches Ally Switch to a compatible Pokemon."
+  },
+  "tm-amnesia": {
+    "name": "TM Amnesia",
+    "shortDesc": "Teaches Amnesia to a compatible Pokemon."
+  },
+  "tm-assurance": {
+    "name": "TM Assurance",
+    "shortDesc": "Teaches Assurance to a compatible Pokemon."
+  },
+  "tm-attract": {
+    "name": "TM Attract",
+    "shortDesc": "Teaches Attract to a compatible Pokemon."
+  },
+  "tm-aura-sphere": {
+    "name": "TM Aura Sphere",
+    "shortDesc": "Teaches Aura Sphere to a compatible Pokemon."
+  },
+  "tm-avalanche": {
+    "name": "TM Avalanche",
+    "shortDesc": "Teaches Avalanche to a compatible Pokemon."
+  },
+  "tm-baton-pass": {
+    "name": "TM Baton Pass",
+    "shortDesc": "Teaches Baton Pass to a compatible Pokemon."
+  },
+  "tm-beat-up": {
+    "name": "TM Beat Up",
+    "shortDesc": "Teaches Beat Up to a compatible Pokemon."
+  },
+  "tm-blast-burn": {
+    "name": "TM Blast Burn",
+    "shortDesc": "Teaches Blast Burn to a compatible Pokemon."
+  },
+  "tm-blaze-kick": {
+    "name": "TM Blaze Kick",
+    "shortDesc": "Teaches Blaze Kick to a compatible Pokemon."
+  },
+  "tm-blizzard": {
+    "name": "TM Blizzard",
+    "shortDesc": "Teaches Blizzard to a compatible Pokemon."
+  },
+  "tm-body-press": {
+    "name": "TM Body Press",
+    "shortDesc": "Teaches Body Press to a compatible Pokemon."
+  },
+  "tm-body-slam": {
+    "name": "TM Body Slam",
+    "shortDesc": "Teaches Body Slam to a compatible Pokemon."
+  },
+  "tm-bounce": {
+    "name": "TM Bounce",
+    "shortDesc": "Teaches Bounce to a compatible Pokemon."
+  },
+  "tm-brave-bird": {
+    "name": "TM Brave Bird",
+    "shortDesc": "Teaches Brave Bird to a compatible Pokemon."
+  },
+  "tm-breaking-swipe": {
+    "name": "TM Breaking Swipe",
+    "shortDesc": "Teaches Breaking Swipe to a compatible Pokemon."
+  },
+  "tm-brick-break": {
+    "name": "TM Brick Break",
+    "shortDesc": "Teaches Brick Break to a compatible Pokemon."
+  },
+  "tm-brine": {
+    "name": "TM Brine",
+    "shortDesc": "Teaches Brine to a compatible Pokemon."
+  },
+  "tm-brutal-swing": {
+    "name": "TM Brutal Swing",
+    "shortDesc": "Teaches Brutal Swing to a compatible Pokemon."
+  },
+  "tm-bug-bite": {
+    "name": "TM Bug Bite",
+    "shortDesc": "Teaches Bug Bite to a compatible Pokemon."
+  },
+  "tm-bug-buzz": {
+    "name": "TM Bug Buzz",
+    "shortDesc": "Teaches Bug Buzz to a compatible Pokemon."
+  },
+  "tm-bulk-up": {
+    "name": "TM Bulk Up",
+    "shortDesc": "Teaches Bulk Up to a compatible Pokemon."
+  },
+  "tm-bulldoze": {
+    "name": "TM Bulldoze",
+    "shortDesc": "Teaches Bulldoze to a compatible Pokemon."
+  },
+  "tm-bullet-seed": {
+    "name": "TM Bullet Seed",
+    "shortDesc": "Teaches Bullet Seed to a compatible Pokemon."
+  },
+  "tm-burning-jealousy": {
+    "name": "TM Burning Jealousy",
+    "shortDesc": "Teaches Burning Jealousy to a compatible Pokemon."
+  },
+  "tm-calm-mind": {
+    "name": "TM Calm Mind",
+    "shortDesc": "Teaches Calm Mind to a compatible Pokemon."
+  },
+  "tm-case": {
+    "name": "TM Case",
+    "shortDesc": "Holds TMs."
+  },
+  "tm-charge": {
+    "name": "TM Charge",
+    "shortDesc": "Teaches Charge to a compatible Pokemon."
+  },
+  "tm-charge-beam": {
+    "name": "TM Charge Beam",
+    "shortDesc": "Teaches Charge Beam to a compatible Pokemon."
+  },
+  "tm-charm": {
+    "name": "TM Charm",
+    "shortDesc": "Teaches Charm to a compatible Pokemon."
+  },
+  "tm-chilling-water": {
+    "name": "TM Chilling Water",
+    "shortDesc": "Teaches Chilling Water to a compatible Pokemon."
+  },
+  "tm-close-combat": {
+    "name": "TM Close Combat",
+    "shortDesc": "Teaches Close Combat to a compatible Pokemon."
+  },
+  "tm-coaching": {
+    "name": "TM Coaching",
+    "shortDesc": "Teaches Coaching to a compatible Pokemon."
+  },
+  "tm-confide": {
+    "name": "TM Confide",
+    "shortDesc": "Teaches Confide to a compatible Pokemon."
+  },
+  "tm-confuse-ray": {
+    "name": "TM Confuse Ray",
+    "shortDesc": "Teaches Confuse Ray to a compatible Pokemon."
+  },
+  "tm-cosmic-power": {
+    "name": "TM Cosmic Power",
+    "shortDesc": "Teaches Cosmic Power to a compatible Pokemon."
+  },
+  "tm-cross-poison": {
+    "name": "TM Cross Poison",
+    "shortDesc": "Teaches Cross Poison to a compatible Pokemon."
+  },
+  "tm-crunch": {
+    "name": "TM Crunch",
+    "shortDesc": "Teaches Crunch to a compatible Pokemon."
+  },
+  "tm-curse": {
+    "name": "TM Curse",
+    "shortDesc": "Teaches Curse to a compatible Pokemon."
+  },
+  "tm-dark-pulse": {
+    "name": "TM Dark Pulse",
+    "shortDesc": "Teaches Dark Pulse to a compatible Pokemon."
+  },
+  "tm-darkest-lariat": {
+    "name": "TM Darkest Lariat",
+    "shortDesc": "Teaches Darkest Lariat to a compatible Pokemon."
+  },
+  "tm-dazzling-gleam": {
+    "name": "TM Dazzling Gleam",
+    "shortDesc": "Teaches Dazzling Gleam to a compatible Pokemon."
+  },
+  "tm-dig": {
+    "name": "TM Dig",
+    "shortDesc": "Teaches Dig to a compatible Pokemon."
+  },
+  "tm-disarming-voice": {
+    "name": "TM Disarming Voice",
+    "shortDesc": "Teaches Disarming Voice to a compatible Pokemon."
+  },
+  "tm-double-edge": {
+    "name": "TM Double-Edge",
+    "shortDesc": "Teaches Double-Edge to a compatible Pokemon."
+  },
+  "tm-double-team": {
+    "name": "TM Double Team",
+    "shortDesc": "Teaches Double Team to a compatible Pokemon."
+  },
+  "tm-draco-meteor": {
+    "name": "TM Draco Meteor",
+    "shortDesc": "Teaches Draco Meteor to a compatible Pokemon."
+  },
+  "tm-dragon-cheer": {
+    "name": "TM Dragon Cheer",
+    "shortDesc": "Teaches Dragon Cheer to a compatible Pokemon."
+  },
+  "tm-dragon-claw": {
+    "name": "TM Dragon Claw",
+    "shortDesc": "Teaches Dragon Claw to a compatible Pokemon."
+  },
+  "tm-dragon-dance": {
+    "name": "TM Dragon Dance",
+    "shortDesc": "Teaches Dragon Dance to a compatible Pokemon."
+  },
+  "tm-dragon-pulse": {
+    "name": "TM Dragon Pulse",
+    "shortDesc": "Teaches Dragon Pulse to a compatible Pokemon."
+  },
+  "tm-dragon-tail": {
+    "name": "TM Dragon Tail",
+    "shortDesc": "Teaches Dragon Tail to a compatible Pokemon."
+  },
+  "tm-drain-punch": {
+    "name": "TM Drain Punch",
+    "shortDesc": "Teaches Drain Punch to a compatible Pokemon."
+  },
+  "tm-draining-kiss": {
+    "name": "TM Draining Kiss",
+    "shortDesc": "Teaches Draining Kiss to a compatible Pokemon."
+  },
+  "tm-dream-eater": {
+    "name": "TM Dream Eater",
+    "shortDesc": "Teaches Dream Eater to a compatible Pokemon."
+  },
+  "tm-drill-run": {
+    "name": "TM Drill Run",
+    "shortDesc": "Teaches Drill Run to a compatible Pokemon."
+  },
+  "tm-dual-wingbeat": {
+    "name": "TM Dual Wingbeat",
+    "shortDesc": "Teaches Dual Wingbeat to a compatible Pokemon."
+  },
+  "tm-earth-power": {
+    "name": "TM Earth Power",
+    "shortDesc": "Teaches Earth Power to a compatible Pokemon."
+  },
+  "tm-earthquake": {
+    "name": "TM Earthquake",
+    "shortDesc": "Teaches Earthquake to a compatible Pokemon."
+  },
+  "tm-echoed-voice": {
+    "name": "TM Echoed Voice",
+    "shortDesc": "Teaches Echoed Voice to a compatible Pokemon."
+  },
+  "tm-eerie-impulse": {
+    "name": "TM Eerie Impulse",
+    "shortDesc": "Teaches Eerie Impulse to a compatible Pokemon."
+  },
+  "tm-electric-terrain": {
+    "name": "TM Electric Terrain",
+    "shortDesc": "Teaches Electric Terrain to a compatible Pokemon."
+  },
+  "tm-electro-ball": {
+    "name": "TM Electro Ball",
+    "shortDesc": "Teaches Electro Ball to a compatible Pokemon."
+  },
+  "tm-electroweb": {
+    "name": "TM Electroweb",
+    "shortDesc": "Teaches Electroweb to a compatible Pokemon."
+  },
+  "tm-embargo": {
+    "name": "TM Embargo",
+    "shortDesc": "Teaches Embargo to a compatible Pokemon."
+  },
+  "tm-encore": {
+    "name": "TM Encore",
+    "shortDesc": "Teaches Encore to a compatible Pokemon."
+  },
+  "tm-endeavor": {
+    "name": "TM Endeavor",
+    "shortDesc": "Teaches Endeavor to a compatible Pokemon."
+  },
+  "tm-endure": {
+    "name": "TM Endure",
+    "shortDesc": "Teaches Endure to a compatible Pokemon."
+  },
+  "tm-energy-ball": {
+    "name": "TM Energy Ball",
+    "shortDesc": "Teaches Energy Ball to a compatible Pokemon."
+  },
+  "tm-expanding-force": {
+    "name": "TM Expanding Force",
+    "shortDesc": "Teaches Expanding Force to a compatible Pokemon."
+  },
+  "tm-facade": {
+    "name": "TM Facade",
+    "shortDesc": "Teaches Facade to a compatible Pokemon."
+  },
+  "tm-fake-tears": {
+    "name": "TM Fake Tears",
+    "shortDesc": "Teaches Fake Tears to a compatible Pokemon."
+  },
+  "tm-false-swipe": {
+    "name": "TM False Swipe",
+    "shortDesc": "Teaches False Swipe to a compatible Pokemon."
+  },
+  "tm-feather-dance": {
+    "name": "TM Feather Dance",
+    "shortDesc": "Teaches Feather Dance to a compatible Pokemon."
+  },
+  "tm-fire-blast": {
+    "name": "TM Fire Blast",
+    "shortDesc": "Teaches Fire Blast to a compatible Pokemon."
+  },
+  "tm-fire-fang": {
+    "name": "TM Fire Fang",
+    "shortDesc": "Teaches Fire Fang to a compatible Pokemon."
+  },
+  "tm-fire-pledge": {
+    "name": "TM Fire Pledge",
+    "shortDesc": "Teaches Fire Pledge to a compatible Pokemon."
+  },
+  "tm-fire-punch": {
+    "name": "TM Fire Punch",
+    "shortDesc": "Teaches Fire Punch to a compatible Pokemon."
+  },
+  "tm-fire-spin": {
+    "name": "TM Fire Spin",
+    "shortDesc": "Teaches Fire Spin to a compatible Pokemon."
+  },
+  "tm-flame-charge": {
+    "name": "TM Flame Charge",
+    "shortDesc": "Teaches Flame Charge to a compatible Pokemon."
+  },
+  "tm-flamethrower": {
+    "name": "TM Flamethrower",
+    "shortDesc": "Teaches Flamethrower to a compatible Pokemon."
+  },
+  "tm-flare-blitz": {
+    "name": "TM Flare Blitz",
+    "shortDesc": "Teaches Flare Blitz to a compatible Pokemon."
+  },
+  "tm-flash-cannon": {
+    "name": "TM Flash Cannon",
+    "shortDesc": "Teaches Flash Cannon to a compatible Pokemon."
+  },
+  "tm-fling": {
+    "name": "TM Fling",
+    "shortDesc": "Teaches Fling to a compatible Pokemon."
+  },
+  "tm-flip-turn": {
+    "name": "TM Flip Turn",
+    "shortDesc": "Teaches Flip Turn to a compatible Pokemon."
+  },
+  "tm-focus-blast": {
+    "name": "TM Focus Blast",
+    "shortDesc": "Teaches Focus Blast to a compatible Pokemon."
+  },
+  "tm-focus-energy": {
+    "name": "TM Focus Energy",
+    "shortDesc": "Teaches Focus Energy to a compatible Pokemon."
+  },
+  "tm-focus-punch": {
+    "name": "TM Focus Punch",
+    "shortDesc": "Teaches Focus Punch to a compatible Pokemon."
+  },
+  "tm-foul-play": {
+    "name": "TM Foul Play",
+    "shortDesc": "Teaches Foul Play to a compatible Pokemon."
+  },
+  "tm-frenzy-plant": {
+    "name": "TM Frenzy Plant",
+    "shortDesc": "Teaches Frenzy Plant to a compatible Pokemon."
+  },
+  "tm-frustration": {
+    "name": "TM Frustration",
+    "shortDesc": "Teaches Frustration to a compatible Pokemon."
+  },
+  "tm-future-sight": {
+    "name": "TM Future Sight",
+    "shortDesc": "Teaches Future Sight to a compatible Pokemon."
+  },
+  "tm-giga-drain": {
+    "name": "TM Giga Drain",
+    "shortDesc": "Teaches Giga Drain to a compatible Pokemon."
+  },
+  "tm-giga-impact": {
+    "name": "TM Giga Impact",
+    "shortDesc": "Teaches Giga Impact to a compatible Pokemon."
+  },
+  "tm-grass-knot": {
+    "name": "TM Grass Knot",
+    "shortDesc": "Teaches Grass Knot to a compatible Pokemon."
+  },
+  "tm-grass-pledge": {
+    "name": "TM Grass Pledge",
+    "shortDesc": "Teaches Grass Pledge to a compatible Pokemon."
+  },
+  "tm-grassy-glide": {
+    "name": "TM Grassy Glide",
+    "shortDesc": "Teaches Grassy Glide to a compatible Pokemon."
+  },
+  "tm-grassy-terrain": {
+    "name": "TM Grassy Terrain",
+    "shortDesc": "Teaches Grassy Terrain to a compatible Pokemon."
+  },
+  "tm-gravity": {
+    "name": "TM Gravity",
+    "shortDesc": "Teaches Gravity to a compatible Pokemon."
+  },
+  "tm-guard-swap": {
+    "name": "TM Guard Swap",
+    "shortDesc": "Teaches Guard Swap to a compatible Pokemon."
+  },
+  "tm-gunk-shot": {
+    "name": "TM Gunk Shot",
+    "shortDesc": "Teaches Gunk Shot to a compatible Pokemon."
+  },
+  "tm-gyro-ball": {
+    "name": "TM Gyro Ball",
+    "shortDesc": "Teaches Gyro Ball to a compatible Pokemon."
+  },
+  "tm-hail": {
+    "name": "TM Hail",
+    "shortDesc": "Teaches Hail to a compatible Pokemon."
+  },
+  "tm-hard-press": {
+    "name": "TM Hard Press",
+    "shortDesc": "Teaches Hard Press to a compatible Pokemon."
+  },
+  "tm-haze": {
+    "name": "TM Haze",
+    "shortDesc": "Teaches Haze to a compatible Pokemon."
+  },
+  "tm-heat-crash": {
+    "name": "TM Heat Crash",
+    "shortDesc": "Teaches Heat Crash to a compatible Pokemon."
+  },
+  "tm-heat-wave": {
+    "name": "TM Heat Wave",
+    "shortDesc": "Teaches Heat Wave to a compatible Pokemon."
+  },
+  "tm-heavy-slam": {
+    "name": "TM Heavy Slam",
+    "shortDesc": "Teaches Heavy Slam to a compatible Pokemon."
+  },
+  "tm-helping-hand": {
+    "name": "TM Helping Hand",
+    "shortDesc": "Teaches Helping Hand to a compatible Pokemon."
+  },
+  "tm-hex": {
+    "name": "TM Hex",
+    "shortDesc": "Teaches Hex to a compatible Pokemon."
+  },
+  "tm-hidden-power": {
+    "name": "TM Hidden Power",
+    "shortDesc": "Teaches Hidden Power to a compatible Pokemon."
+  },
+  "tm-high-horsepower": {
+    "name": "TM High Horsepower",
+    "shortDesc": "Teaches High Horsepower to a compatible Pokemon."
+  },
+  "tm-hurricane": {
+    "name": "TM Hurricane",
+    "shortDesc": "Teaches Hurricane to a compatible Pokemon."
+  },
+  "tm-hydro-cannon": {
+    "name": "TM Hydro Cannon",
+    "shortDesc": "Teaches Hydro Cannon to a compatible Pokemon."
+  },
+  "tm-hydro-pump": {
+    "name": "TM Hydro Pump",
+    "shortDesc": "Teaches Hydro Pump to a compatible Pokemon."
+  },
+  "tm-hyper-beam": {
+    "name": "TM Hyper Beam",
+    "shortDesc": "Teaches Hyper Beam to a compatible Pokemon."
+  },
+  "tm-hyper-voice": {
+    "name": "TM Hyper Voice",
+    "shortDesc": "Teaches Hyper Voice to a compatible Pokemon."
+  },
+  "tm-ice-beam": {
+    "name": "TM Ice Beam",
+    "shortDesc": "Teaches Ice Beam to a compatible Pokemon."
+  },
+  "tm-ice-fang": {
+    "name": "TM Ice Fang",
+    "shortDesc": "Teaches Ice Fang to a compatible Pokemon."
+  },
+  "tm-ice-punch": {
+    "name": "TM Ice Punch",
+    "shortDesc": "Teaches Ice Punch to a compatible Pokemon."
+  },
+  "tm-ice-spinner": {
+    "name": "TM Ice Spinner",
+    "shortDesc": "Teaches Ice Spinner to a compatible Pokemon."
+  },
+  "tm-icicle-spear": {
+    "name": "TM Icicle Spear",
+    "shortDesc": "Teaches Icicle Spear to a compatible Pokemon."
+  },
+  "tm-icy-wind": {
+    "name": "TM Icy Wind",
+    "shortDesc": "Teaches Icy Wind to a compatible Pokemon."
+  },
+  "tm-imprison": {
+    "name": "TM Imprison",
+    "shortDesc": "Teaches Imprison to a compatible Pokemon."
+  },
+  "tm-infestation": {
+    "name": "TM Infestation",
+    "shortDesc": "Teaches Infestation to a compatible Pokemon."
+  },
+  "tm-iron-defense": {
+    "name": "TM Iron Defense",
+    "shortDesc": "Teaches Iron Defense to a compatible Pokemon."
+  },
+  "tm-iron-head": {
+    "name": "TM Iron Head",
+    "shortDesc": "Teaches Iron Head to a compatible Pokemon."
+  },
+  "tm-iron-tail": {
+    "name": "TM Iron Tail",
+    "shortDesc": "Teaches Iron Tail to a compatible Pokemon."
+  },
+  "tm-knock-off": {
+    "name": "TM Knock Off",
+    "shortDesc": "Teaches Knock Off to a compatible Pokemon."
+  },
+  "tm-lash-out": {
+    "name": "TM Lash Out",
+    "shortDesc": "Teaches Lash Out to a compatible Pokemon."
+  },
+  "tm-leaf-blade": {
+    "name": "TM Leaf Blade",
+    "shortDesc": "Teaches Leaf Blade to a compatible Pokemon."
+  },
+  "tm-leaf-storm": {
+    "name": "TM Leaf Storm",
+    "shortDesc": "Teaches Leaf Storm to a compatible Pokemon."
+  },
+  "tm-leech-life": {
+    "name": "TM Leech Life",
+    "shortDesc": "Teaches Leech Life to a compatible Pokemon."
+  },
+  "tm-light-screen": {
+    "name": "TM Light Screen",
+    "shortDesc": "Teaches Light Screen to a compatible Pokemon."
+  },
+  "tm-liquidation": {
+    "name": "TM Liquidation",
+    "shortDesc": "Teaches Liquidation to a compatible Pokemon."
+  },
+  "tm-low-kick": {
+    "name": "TM Low Kick",
+    "shortDesc": "Teaches Low Kick to a compatible Pokemon."
+  },
+  "tm-low-sweep": {
+    "name": "TM Low Sweep",
+    "shortDesc": "Teaches Low Sweep to a compatible Pokemon."
+  },
+  "tm-lunge": {
+    "name": "TM Lunge",
+    "shortDesc": "Teaches Lunge to a compatible Pokemon."
+  },
+  "tm-magic-room": {
+    "name": "TM Magic Room",
+    "shortDesc": "Teaches Magic Room to a compatible Pokemon."
+  },
+  "tm-magical-leaf": {
+    "name": "TM Magical Leaf",
+    "shortDesc": "Teaches Magical Leaf to a compatible Pokemon."
+  },
+  "tm-mega-kick": {
+    "name": "TM Mega Kick",
+    "shortDesc": "Teaches Mega Kick to a compatible Pokemon."
+  },
+  "tm-mega-punch": {
+    "name": "TM Mega Punch",
+    "shortDesc": "Teaches Mega Punch to a compatible Pokemon."
+  },
+  "tm-megahorn": {
+    "name": "TM Megahorn",
+    "shortDesc": "Teaches Megahorn to a compatible Pokemon."
+  },
+  "tm-metal-claw": {
+    "name": "TM Metal Claw",
+    "shortDesc": "Teaches Metal Claw to a compatible Pokemon."
+  },
+  "tm-metal-sound": {
+    "name": "TM Metal Sound",
+    "shortDesc": "Teaches Metal Sound to a compatible Pokemon."
+  },
+  "tm-meteor-beam": {
+    "name": "TM Meteor Beam",
+    "shortDesc": "Teaches Meteor Beam to a compatible Pokemon."
+  },
+  "tm-metronome": {
+    "name": "TM Metronome",
+    "shortDesc": "Teaches Metronome to a compatible Pokemon."
+  },
+  "tm-misty-explosion": {
+    "name": "TM Misty Explosion",
+    "shortDesc": "Teaches Misty Explosion to a compatible Pokemon."
+  },
+  "tm-misty-terrain": {
+    "name": "TM Misty Terrain",
+    "shortDesc": "Teaches Misty Terrain to a compatible Pokemon."
+  },
+  "tm-mud-shot": {
+    "name": "TM Mud Shot",
+    "shortDesc": "Teaches Mud Shot to a compatible Pokemon."
+  },
+  "tm-mud-slap": {
+    "name": "TM Mud-Slap",
+    "shortDesc": "Teaches Mud-Slap to a compatible Pokemon."
+  },
+  "tm-muddy-water": {
+    "name": "TM Muddy Water",
+    "shortDesc": "Teaches Muddy Water to a compatible Pokemon."
+  },
+  "tm-mystical-fire": {
+    "name": "TM Mystical Fire",
+    "shortDesc": "Teaches Mystical Fire to a compatible Pokemon."
+  },
+  "tm-nasty-plot": {
+    "name": "TM Nasty Plot",
+    "shortDesc": "Teaches Nasty Plot to a compatible Pokemon."
+  },
+  "tm-nature-power": {
+    "name": "TM Nature Power",
+    "shortDesc": "Teaches Nature Power to a compatible Pokemon."
+  },
+  "tm-night-shade": {
+    "name": "TM Night Shade",
+    "shortDesc": "Teaches Night Shade to a compatible Pokemon."
+  },
+  "tm-outrage": {
+    "name": "TM Outrage",
+    "shortDesc": "Teaches Outrage to a compatible Pokemon."
+  },
+  "tm-overheat": {
+    "name": "TM Overheat",
+    "shortDesc": "Teaches Overheat to a compatible Pokemon."
+  },
+  "tm-pain-split": {
+    "name": "TM Pain Split",
+    "shortDesc": "Teaches Pain Split to a compatible Pokemon."
+  },
+  "tm-pay-day": {
+    "name": "TM Pay Day",
+    "shortDesc": "Teaches Pay Day to a compatible Pokemon."
+  },
+  "tm-payback": {
+    "name": "TM Payback",
+    "shortDesc": "Teaches Payback to a compatible Pokemon."
+  },
+  "tm-petal-blizzard": {
+    "name": "TM Petal Blizzard",
+    "shortDesc": "Teaches Petal Blizzard to a compatible Pokemon."
+  },
+  "tm-phantom-force": {
+    "name": "TM Phantom Force",
+    "shortDesc": "Teaches Phantom Force to a compatible Pokemon."
+  },
+  "tm-pin-missile": {
+    "name": "TM Pin Missile",
+    "shortDesc": "Teaches Pin Missile to a compatible Pokemon."
+  },
+  "tm-play-rough": {
+    "name": "TM Play Rough",
+    "shortDesc": "Teaches Play Rough to a compatible Pokemon."
+  },
+  "tm-poison-jab": {
+    "name": "TM Poison Jab",
+    "shortDesc": "Teaches Poison Jab to a compatible Pokemon."
+  },
+  "tm-poison-tail": {
+    "name": "TM Poison Tail",
+    "shortDesc": "Teaches Poison Tail to a compatible Pokemon."
+  },
+  "tm-pollen-puff": {
+    "name": "TM Pollen Puff",
+    "shortDesc": "Teaches Pollen Puff to a compatible Pokemon."
+  },
+  "tm-poltergeist": {
+    "name": "TM Poltergeist",
+    "shortDesc": "Teaches Poltergeist to a compatible Pokemon."
+  },
+  "tm-pounce": {
+    "name": "TM Pounce",
+    "shortDesc": "Teaches Pounce to a compatible Pokemon."
+  },
+  "tm-power-gem": {
+    "name": "TM Power Gem",
+    "shortDesc": "Teaches Power Gem to a compatible Pokemon."
+  },
+  "tm-power-swap": {
+    "name": "TM Power Swap",
+    "shortDesc": "Teaches Power Swap to a compatible Pokemon."
+  },
+  "tm-power-whip": {
+    "name": "TM Power Whip",
+    "shortDesc": "Teaches Power Whip to a compatible Pokemon."
+  },
+  "tm-protect": {
+    "name": "TM Protect",
+    "shortDesc": "Teaches Protect to a compatible Pokemon."
+  },
+  "tm-psybeam": {
+    "name": "TM Psybeam",
+    "shortDesc": "Teaches Psybeam to a compatible Pokemon."
+  },
+  "tm-psych-up": {
+    "name": "TM Psych Up",
+    "shortDesc": "Teaches Psych Up to a compatible Pokemon."
+  },
+  "tm-psychic": {
+    "name": "TM Psychic",
+    "shortDesc": "Teaches Psychic to a compatible Pokemon."
+  },
+  "tm-psychic-fangs": {
+    "name": "TM Psychic Fangs",
+    "shortDesc": "Teaches Psychic Fangs to a compatible Pokemon."
+  },
+  "tm-psychic-noise": {
+    "name": "TM Psychic Noise",
+    "shortDesc": "Teaches Psychic Noise to a compatible Pokemon."
+  },
+  "tm-psychic-terrain": {
+    "name": "TM Psychic Terrain",
+    "shortDesc": "Teaches Psychic Terrain to a compatible Pokemon."
+  },
+  "tm-psycho-cut": {
+    "name": "TM Psycho Cut",
+    "shortDesc": "Teaches Psycho Cut to a compatible Pokemon."
+  },
+  "tm-psyshock": {
+    "name": "TM Psyshock",
+    "shortDesc": "Teaches Psyshock to a compatible Pokemon."
+  },
+  "tm-quash": {
+    "name": "TM Quash",
+    "shortDesc": "Teaches Quash to a compatible Pokemon."
+  },
+  "tm-rain-dance": {
+    "name": "TM Rain Dance",
+    "shortDesc": "Teaches Rain Dance to a compatible Pokemon."
+  },
+  "tm-razor-shell": {
+    "name": "TM Razor Shell",
+    "shortDesc": "Teaches Razor Shell to a compatible Pokemon."
+  },
+  "tm-reflect": {
+    "name": "TM Reflect",
+    "shortDesc": "Teaches Reflect to a compatible Pokemon."
+  },
+  "tm-rest": {
+    "name": "TM Rest",
+    "shortDesc": "Teaches Rest to a compatible Pokemon."
+  },
+  "tm-retaliate": {
+    "name": "TM Retaliate",
+    "shortDesc": "Teaches Retaliate to a compatible Pokemon."
+  },
+  "tm-return": {
+    "name": "TM Return",
+    "shortDesc": "Teaches Return to a compatible Pokemon."
+  },
+  "tm-revenge": {
+    "name": "TM Revenge",
+    "shortDesc": "Teaches Revenge to a compatible Pokemon."
+  },
+  "tm-reversal": {
+    "name": "TM Reversal",
+    "shortDesc": "Teaches Reversal to a compatible Pokemon."
+  },
+  "tm-roar": {
+    "name": "TM Roar",
+    "shortDesc": "Teaches Roar to a compatible Pokemon."
+  },
+  "tm-rock-blast": {
+    "name": "TM Rock Blast",
+    "shortDesc": "Teaches Rock Blast to a compatible Pokemon."
+  },
+  "tm-rock-slide": {
+    "name": "TM Rock Slide",
+    "shortDesc": "Teaches Rock Slide to a compatible Pokemon."
+  },
+  "tm-rock-tomb": {
+    "name": "TM Rock Tomb",
+    "shortDesc": "Teaches Rock Tomb to a compatible Pokemon."
+  },
+  "tm-roost": {
+    "name": "TM Roost",
+    "shortDesc": "Teaches Roost to a compatible Pokemon."
+  },
+  "tm-round": {
+    "name": "TM Round",
+    "shortDesc": "Teaches Round to a compatible Pokemon."
+  },
+  "tm-safeguard": {
+    "name": "TM Safeguard",
+    "shortDesc": "Teaches Safeguard to a compatible Pokemon."
+  },
+  "tm-sand-tomb": {
+    "name": "TM Sand Tomb",
+    "shortDesc": "Teaches Sand Tomb to a compatible Pokemon."
+  },
+  "tm-sandstorm": {
+    "name": "TM Sandstorm",
+    "shortDesc": "Teaches Sandstorm to a compatible Pokemon."
+  },
+  "tm-scald": {
+    "name": "TM Scald",
+    "shortDesc": "Teaches Scald to a compatible Pokemon."
+  },
+  "tm-scale-shot": {
+    "name": "TM Scale Shot",
+    "shortDesc": "Teaches Scale Shot to a compatible Pokemon."
+  },
+  "tm-scary-face": {
+    "name": "TM Scary Face",
+    "shortDesc": "Teaches Scary Face to a compatible Pokemon."
+  },
+  "tm-scorching-sands": {
+    "name": "TM Scorching Sands",
+    "shortDesc": "Teaches Scorching Sands to a compatible Pokemon."
+  },
+  "tm-screech": {
+    "name": "TM Screech",
+    "shortDesc": "Teaches Screech to a compatible Pokemon."
+  },
+  "tm-seed-bomb": {
+    "name": "TM Seed Bomb",
+    "shortDesc": "Teaches Seed Bomb to a compatible Pokemon."
+  },
+  "tm-self-destruct": {
+    "name": "TM Self-Destruct",
+    "shortDesc": "Teaches Self-Destruct to a compatible Pokemon."
+  },
+  "tm-shadow-ball": {
+    "name": "TM Shadow Ball",
+    "shortDesc": "Teaches Shadow Ball to a compatible Pokemon."
+  },
+  "tm-shadow-claw": {
+    "name": "TM Shadow Claw",
+    "shortDesc": "Teaches Shadow Claw to a compatible Pokemon."
+  },
+  "tm-skill-swap": {
+    "name": "TM Skill Swap",
+    "shortDesc": "Teaches Skill Swap to a compatible Pokemon."
+  },
+  "tm-skitter-smack": {
+    "name": "TM Skitter Smack",
+    "shortDesc": "Teaches Skitter Smack to a compatible Pokemon."
+  },
+  "tm-sleep-talk": {
+    "name": "TM Sleep Talk",
+    "shortDesc": "Teaches Sleep Talk to a compatible Pokemon."
+  },
+  "tm-sludge-bomb": {
+    "name": "TM Sludge Bomb",
+    "shortDesc": "Teaches Sludge Bomb to a compatible Pokemon."
+  },
+  "tm-sludge-wave": {
+    "name": "TM Sludge Wave",
+    "shortDesc": "Teaches Sludge Wave to a compatible Pokemon."
+  },
+  "tm-smack-down": {
+    "name": "TM Smack Down",
+    "shortDesc": "Teaches Smack Down to a compatible Pokemon."
+  },
+  "tm-smart-strike": {
+    "name": "TM Smart Strike",
+    "shortDesc": "Teaches Smart Strike to a compatible Pokemon."
+  },
+  "tm-snarl": {
+    "name": "TM Snarl",
+    "shortDesc": "Teaches Snarl to a compatible Pokemon."
+  },
+  "tm-snore": {
+    "name": "TM Snore",
+    "shortDesc": "Teaches Snore to a compatible Pokemon."
+  },
+  "tm-snowscape": {
+    "name": "TM Snowscape",
+    "shortDesc": "Teaches Snowscape to a compatible Pokemon."
+  },
+  "tm-solar-beam": {
+    "name": "TM Solar Beam",
+    "shortDesc": "Teaches Solar Beam to a compatible Pokemon."
+  },
+  "tm-solar-blade": {
+    "name": "TM Solar Blade",
+    "shortDesc": "Teaches Solar Blade to a compatible Pokemon."
+  },
+  "tm-speed-swap": {
+    "name": "TM Speed Swap",
+    "shortDesc": "Teaches Speed Swap to a compatible Pokemon."
+  },
+  "tm-spikes": {
+    "name": "TM Spikes",
+    "shortDesc": "Teaches Spikes to a compatible Pokemon."
+  },
+  "tm-spite": {
+    "name": "TM Spite",
+    "shortDesc": "Teaches Spite to a compatible Pokemon."
+  },
+  "tm-stealth-rock": {
+    "name": "TM Stealth Rock",
+    "shortDesc": "Teaches Stealth Rock to a compatible Pokemon."
+  },
+  "tm-steel-beam": {
+    "name": "TM Steel Beam",
+    "shortDesc": "Teaches Steel Beam to a compatible Pokemon."
+  },
+  "tm-steel-wing": {
+    "name": "TM Steel Wing",
+    "shortDesc": "Teaches Steel Wing to a compatible Pokemon."
+  },
+  "tm-stomping-tantrum": {
+    "name": "TM Stomping Tantrum",
+    "shortDesc": "Teaches Stomping Tantrum to a compatible Pokemon."
+  },
+  "tm-stone-edge": {
+    "name": "TM Stone Edge",
+    "shortDesc": "Teaches Stone Edge to a compatible Pokemon."
+  },
+  "tm-stored-power": {
+    "name": "TM Stored Power",
+    "shortDesc": "Teaches Stored Power to a compatible Pokemon."
+  },
+  "tm-struggle-bug": {
+    "name": "TM Struggle Bug",
+    "shortDesc": "Teaches Struggle Bug to a compatible Pokemon."
+  },
+  "tm-substitute": {
+    "name": "TM Substitute",
+    "shortDesc": "Teaches Substitute to a compatible Pokemon."
+  },
+  "tm-sunny-day": {
+    "name": "TM Sunny Day",
+    "shortDesc": "Teaches Sunny Day to a compatible Pokemon."
+  },
+  "tm-super-fang": {
+    "name": "TM Super Fang",
+    "shortDesc": "Teaches Super Fang to a compatible Pokemon."
+  },
+  "tm-supercell-slam": {
+    "name": "TM Supercell Slam",
+    "shortDesc": "Teaches Supercell Slam to a compatible Pokemon."
+  },
+  "tm-superpower": {
+    "name": "TM Superpower",
+    "shortDesc": "Teaches Superpower to a compatible Pokemon."
+  },
+  "tm-swagger": {
+    "name": "TM Swagger",
+    "shortDesc": "Teaches Swagger to a compatible Pokemon."
+  },
+  "tm-swift": {
+    "name": "TM Swift",
+    "shortDesc": "Teaches Swift to a compatible Pokemon."
+  },
+  "tm-swords-dance": {
+    "name": "TM Swords Dance",
+    "shortDesc": "Teaches Swords Dance to a compatible Pokemon."
+  },
+  "tm-tail-slap": {
+    "name": "TM Tail Slap",
+    "shortDesc": "Teaches Tail Slap to a compatible Pokemon."
+  },
+  "tm-tailwind": {
+    "name": "TM Tailwind",
+    "shortDesc": "Teaches Tailwind to a compatible Pokemon."
+  },
+  "tm-take-down": {
+    "name": "TM Take Down",
+    "shortDesc": "Teaches Take Down to a compatible Pokemon."
+  },
+  "tm-taunt": {
+    "name": "TM Taunt",
+    "shortDesc": "Teaches Taunt to a compatible Pokemon."
+  },
+  "tm-temper-flare": {
+    "name": "TM Temper Flare",
+    "shortDesc": "Teaches Temper Flare to a compatible Pokemon."
+  },
+  "tm-tera-blast": {
+    "name": "TM Tera Blast",
+    "shortDesc": "Teaches Tera Blast to a compatible Pokemon."
+  },
+  "tm-thief": {
+    "name": "TM Thief",
+    "shortDesc": "Teaches Thief to a compatible Pokemon."
+  },
+  "tm-throat-chop": {
+    "name": "TM Throat Chop",
+    "shortDesc": "Teaches Throat Chop to a compatible Pokemon."
+  },
+  "tm-thunder": {
+    "name": "TM Thunder",
+    "shortDesc": "Teaches Thunder to a compatible Pokemon."
+  },
+  "tm-thunder-fang": {
+    "name": "TM Thunder Fang",
+    "shortDesc": "Teaches Thunder Fang to a compatible Pokemon."
+  },
+  "tm-thunder-punch": {
+    "name": "TM Thunder Punch",
+    "shortDesc": "Teaches Thunder Punch to a compatible Pokemon."
+  },
+  "tm-thunder-wave": {
+    "name": "TM Thunder Wave",
+    "shortDesc": "Teaches Thunder Wave to a compatible Pokemon."
+  },
+  "tm-thunderbolt": {
+    "name": "TM Thunderbolt",
+    "shortDesc": "Teaches Thunderbolt to a compatible Pokemon."
+  },
+  "tm-torment": {
+    "name": "TM Torment",
+    "shortDesc": "Teaches Torment to a compatible Pokemon."
+  },
+  "tm-toxic": {
+    "name": "TM Toxic",
+    "shortDesc": "Teaches Toxic to a compatible Pokemon."
+  },
+  "tm-toxic-spikes": {
+    "name": "TM Toxic Spikes",
+    "shortDesc": "Teaches Toxic Spikes to a compatible Pokemon."
+  },
+  "tm-trailblaze": {
+    "name": "TM Trailblaze",
+    "shortDesc": "Teaches Trailblaze to a compatible Pokemon."
+  },
+  "tm-tri-attack": {
+    "name": "TM Tri Attack",
+    "shortDesc": "Teaches Tri Attack to a compatible Pokemon."
+  },
+  "tm-trick": {
+    "name": "TM Trick",
+    "shortDesc": "Teaches Trick to a compatible Pokemon."
+  },
+  "tm-trick-room": {
+    "name": "TM Trick Room",
+    "shortDesc": "Teaches Trick Room to a compatible Pokemon."
+  },
+  "tm-triple-axel": {
+    "name": "TM Triple Axel",
+    "shortDesc": "Teaches Triple Axel to a compatible Pokemon."
+  },
+  "tm-u-turn": {
+    "name": "TM U-turn",
+    "shortDesc": "Teaches U-turn to a compatible Pokemon."
+  },
+  "tm-upper-hand": {
+    "name": "TM Upper Hand",
+    "shortDesc": "Teaches Upper Hand to a compatible Pokemon."
+  },
+  "tm-uproar": {
+    "name": "TM Uproar",
+    "shortDesc": "Teaches Uproar to a compatible Pokemon."
+  },
+  "tm-vacuum-wave": {
+    "name": "TM Vacuum Wave",
+    "shortDesc": "Teaches Vacuum Wave to a compatible Pokemon."
+  },
+  "tm-venom-drench": {
+    "name": "TM Venom Drench",
+    "shortDesc": "Teaches Venom Drench to a compatible Pokemon."
+  },
+  "tm-venoshock": {
+    "name": "TM Venoshock",
+    "shortDesc": "Teaches Venoshock to a compatible Pokemon."
+  },
+  "tm-volt-switch": {
+    "name": "TM Volt Switch",
+    "shortDesc": "Teaches Volt Switch to a compatible Pokemon."
+  },
+  "tm-water-pledge": {
+    "name": "TM Water Pledge",
+    "shortDesc": "Teaches Water Pledge to a compatible Pokemon."
+  },
+  "tm-water-pulse": {
+    "name": "TM Water Pulse",
+    "shortDesc": "Teaches Water Pulse to a compatible Pokemon."
+  },
+  "tm-weather-ball": {
+    "name": "TM Weather Ball",
+    "shortDesc": "Teaches Weather Ball to a compatible Pokemon."
+  },
+  "tm-wild-charge": {
+    "name": "TM Wild Charge",
+    "shortDesc": "Teaches Wild Charge to a compatible Pokemon."
+  },
+  "tm-will-o-wisp": {
+    "name": "TM Will-O-Wisp",
+    "shortDesc": "Teaches Will-O-Wisp to a compatible Pokemon."
+  },
+  "tm-wonder-room": {
+    "name": "TM Wonder Room",
+    "shortDesc": "Teaches Wonder Room to a compatible Pokemon."
+  },
+  "tm-work-up": {
+    "name": "TM Work Up",
+    "shortDesc": "Teaches Work Up to a compatible Pokemon."
+  },
+  "tm-x-scissor": {
+    "name": "TM X-Scissor",
+    "shortDesc": "Teaches X-Scissor to a compatible Pokemon."
+  },
+  "tm-zen-headbutt": {
+    "name": "TM Zen Headbutt",
+    "shortDesc": "Teaches Zen Headbutt to a compatible Pokemon."
+  },
+  "tmv-pass": {
+    "name": "TMV Pass",
+    "shortDesc": "Permits access to Kiloude City."
+  },
+  "tough-candy": {
+    "name": "Tough Candy",
+    "shortDesc": "A candy that is packed with energy. When given to a Pokemon, it will increase that Pokemons Defense stat."
+  },
+  "tough-candy-l": {
+    "name": "Tough Candy L",
+    "shortDesc": "A big candy that is packed with energy. When given to a Pokemon at Lv. 30 or higher, it will increase that Pokemons Defense stat."
+  },
+  "tough-candy-xl": {
+    "name": "Tough Candy XL",
+    "shortDesc": "A huge candy that is packed with energy. When given to a Pokemon at Lv. 60 or higher, it will increase that Pokemons Defense stat."
+  },
+  "town-map": {
+    "name": "Town Map",
+    "shortDesc": "Use to see the overworld map."
+  },
+  "toxic-orb": {
+    "name": "Toxic Orb",
+    "shortDesc": "Held: Inflicts Toxic on the holder at the end of the turn. Activates after Poison damage would occur."
+  },
+  "toxic-plate": {
+    "name": "Toxic Plate",
+    "shortDesc": "Held: Poison-Type moves from holder do 20% more damage. Changes Arceuss and Judgments type to Poison."
+  },
+  "tr00": {
+    "name": "TR00",
+    "shortDesc": "A frenetic dance to uplift the fighting spirit. This sharply raises the users Attack stat."
+  },
+  "tr01": {
+    "name": "TR01",
+    "shortDesc": "The user drops onto the target with its full body weight. This may also leave the target with paralysis."
+  },
+  "tr02": {
+    "name": "TR02",
+    "shortDesc": "The target is scorched with an intense blast of fire. This may also leave the target with a burn."
+  },
+  "tr03": {
+    "name": "TR03",
+    "shortDesc": "The target is blasted by a huge volume of water launched under great pressure."
+  },
+  "tr04": {
+    "name": "TR04",
+    "shortDesc": "The user attacks everything around it by swamping its surroundings with a giant wave."
+  },
+  "tr05": {
+    "name": "TR05",
+    "shortDesc": "The target is struck with an icy-cold beam of energy. This may also leave the target frozen."
+  },
+  "tr06": {
+    "name": "TR06",
+    "shortDesc": "A howling blizzard is summoned to strike opposing Pokemon. This may also leave the opposing Pokemon frozen."
+  },
+  "tr07": {
+    "name": "TR07",
+    "shortDesc": "A powerful low kick that makes the target fall over. The heavier the target, the greater the moves power."
+  },
+  "tr08": {
+    "name": "TR08",
+    "shortDesc": "A strong electric blast crashes down on the target. This may also leave the target with paralysis."
+  },
+  "tr09": {
+    "name": "TR09",
+    "shortDesc": "A wicked thunderbolt is dropped on the target to inflict damage. This may also leave the target with paralysis."
+  },
+  "tr10": {
+    "name": "TR10",
+    "shortDesc": "The user sets off an earthquake that strikes every Pokemon around it."
+  },
+  "tr11": {
+    "name": "TR11",
+    "shortDesc": "The target is hit by a strong telekinetic force. This may also lower the targets Sp. Def stat."
+  },
+  "tr12": {
+    "name": "TR12",
+    "shortDesc": "The user relaxes and lightens its body to move faster. This sharply raises the Speed stat."
+  },
+  "tr13": {
+    "name": "TR13",
+    "shortDesc": "The user takes a deep breath and focuses so that critical hits land more easily."
+  },
+  "tr14": {
+    "name": "TR14",
+    "shortDesc": "The user waggles a finger and stimulates its brain into randomly using nearly any move."
+  },
+  "tr15": {
+    "name": "TR15",
+    "shortDesc": "The target is attacked with an intense blast of all-consuming fire. This may also leave the target with a burn."
+  },
+  "tr16": {
+    "name": "TR16",
+    "shortDesc": "The user charges at the target and may make it flinch."
+  },
+  "tr17": {
+    "name": "TR17",
+    "shortDesc": "The user temporarily empties its mind to forget its concerns. This sharply raises the users Sp. Def stat."
+  },
+  "tr18": {
+    "name": "TR18",
+    "shortDesc": "The user drains the targets blood. The users HP is restored by half the damage taken by the target."
+  },
+  "tr19": {
+    "name": "TR19",
+    "shortDesc": "The user strikes with a simultaneous three-beam attack. This may also burn, freeze, or paralyze the target."
+  },
+  "tr20": {
+    "name": "TR20",
+    "shortDesc": "The user creates a substitute for itself using some of its HP. The substitute serves as the users decoy."
+  },
+  "tr21": {
+    "name": "TR21",
+    "shortDesc": "An all-out attack that becomes more powerful the less HP the user has."
+  },
+  "tr22": {
+    "name": "TR22",
+    "shortDesc": "Unsanitary sludge is hurled at the target. This may also poison the target."
+  },
+  "tr23": {
+    "name": "TR23",
+    "shortDesc": "The user lays a trap of spikes at the opposing teams feet. The trap hurts Pokemon that switch into battle."
+  },
+  "tr24": {
+    "name": "TR24",
+    "shortDesc": "The user rampages and attacks for two to three turns. The user then becomes confused."
+  },
+  "tr25": {
+    "name": "TR25",
+    "shortDesc": "The user materializes an odd psychic wave to attack the target. This attack does physical damage."
+  },
+  "tr26": {
+    "name": "TR26",
+    "shortDesc": "The user endures any attack with at least 1 HP. Its chance of failing rises if it is used in succession."
+  },
+  "tr27": {
+    "name": "TR27",
+    "shortDesc": "While it is asleep, the user randomly uses one of the moves it knows."
+  },
+  "tr28": {
+    "name": "TR28",
+    "shortDesc": "Using its tough and impressive horn, the user rams into the target with no letup."
+  },
+  "tr29": {
+    "name": "TR29",
+    "shortDesc": "The user switches places with a party Pokemon in waiting and passes along any stat changes."
+  },
+  "tr30": {
+    "name": "TR30",
+    "shortDesc": "The user compels the target to keep using the move it encored for three turns."
+  },
+  "tr31": {
+    "name": "TR31",
+    "shortDesc": "The target is slammed with a steel-hard tail. This may also lower the targets Defense stat."
+  },
+  "tr32": {
+    "name": "TR32",
+    "shortDesc": "The user crunches up the target with sharp fangs. This may also lower the targets Defense stat."
+  },
+  "tr33": {
+    "name": "TR33",
+    "shortDesc": "The user hurls a shadowy blob at the target. This may also lower the targets Sp. Def stat."
+  },
+  "tr34": {
+    "name": "TR34",
+    "shortDesc": "Two turns after this move is used, a hunk of psychic energy attacks the target."
+  },
+  "tr35": {
+    "name": "TR35",
+    "shortDesc": "The user attacks in an uproar for three turns. During that time, no Pokemon can fall asleep."
+  },
+  "tr36": {
+    "name": "TR36",
+    "shortDesc": "The user attacks by exhaling hot breath on opposing Pokemon. This may also leave those Pokemon with a burn."
+  },
+  "tr37": {
+    "name": "TR37",
+    "shortDesc": "The target is taunted into a rage that allows it to use only attack moves for three turns."
+  },
+  "tr38": {
+    "name": "TR38",
+    "shortDesc": "The user catches the target off guard and swaps its held item with its own."
+  },
+  "tr39": {
+    "name": "TR39",
+    "shortDesc": "The user attacks the target with great power. However, this also lowers the users Attack and Defense stats."
+  },
+  "tr40": {
+    "name": "TR40",
+    "shortDesc": "The user employs its psychic power to exchange Abilities with the target."
+  },
+  "tr41": {
+    "name": "TR41",
+    "shortDesc": "The user launches a kick that lands a critical hit more easily. This may also leave the target with a burn."
+  },
+  "tr42": {
+    "name": "TR42",
+    "shortDesc": "The user lets loose a horribly echoing shout with the power to inflict damage."
+  },
+  "tr43": {
+    "name": "TR43",
+    "shortDesc": "The user attacks the target at full power. The attacks recoil harshly lowers the users Sp. Atk stat."
+  },
+  "tr44": {
+    "name": "TR44",
+    "shortDesc": "The user absorbs a mystical power from space to raise its Defense and Sp. Def stats."
+  },
+  "tr45": {
+    "name": "TR45",
+    "shortDesc": "The user attacks by shooting muddy water at opposing Pokemon. This may also lower their accuracy."
+  },
+  "tr46": {
+    "name": "TR46",
+    "shortDesc": "The user hardens its bodys surface like iron, sharply raising its Defense stat."
+  },
+  "tr47": {
+    "name": "TR47",
+    "shortDesc": "The user slashes the target with huge sharp claws."
+  },
+  "tr48": {
+    "name": "TR48",
+    "shortDesc": "The user tenses its muscles to bulk up its body, raising both its Attack and Defense stats."
+  },
+  "tr49": {
+    "name": "TR49",
+    "shortDesc": "The user quietly focuses its mind and calms its spirit to raise its Sp. Atk and Sp. Def stats."
+  },
+  "tr50": {
+    "name": "TR50",
+    "shortDesc": "The user handles a sharp leaf like a sword and attacks by cutting its target. Critical hits land more easily."
+  },
+  "tr51": {
+    "name": "TR51",
+    "shortDesc": "The user vigorously performs a mystic, powerful dance that raises its Attack and Speed stats."
+  },
+  "tr52": {
+    "name": "TR52",
+    "shortDesc": "The user tackles the target with a high-speed spin. The slower the user compared to the target, the greater the moves power."
+  },
+  "tr53": {
+    "name": "TR53",
+    "shortDesc": "The user fights the target up close without guarding itself. This also lowers the users Defense and Sp. Def stats."
+  },
+  "tr54": {
+    "name": "TR54",
+    "shortDesc": "The user lays a trap of poison spikes at the feet of the opposing team. The spikes will poison opposing Pokemon that switch into battle."
+  },
+  "tr55": {
+    "name": "TR55",
+    "shortDesc": "The user cloaks itself in fire and charges the target. This also damages the user quite a lot. This attack may leave the target with a burn."
+  },
+  "tr56": {
+    "name": "TR56",
+    "shortDesc": "The user lets loose a blast of aura power from deep within its body at the target. This attack never misses."
+  },
+  "tr57": {
+    "name": "TR57",
+    "shortDesc": "The target is stabbed with a tentacle, arm, or the like steeped in poison. This may also poison the target."
+  },
+  "tr58": {
+    "name": "TR58",
+    "shortDesc": "The user releases a horrible aura imbued with dark thoughts. This may also make the target flinch."
+  },
+  "tr59": {
+    "name": "TR59",
+    "shortDesc": "The user slams a barrage of hard-shelled seeds down on the target from above."
+  },
+  "tr60": {
+    "name": "TR60",
+    "shortDesc": "The user slashes at the target by crossing its scythes or claws as if they were a pair of scissors."
+  },
+  "tr61": {
+    "name": "TR61",
+    "shortDesc": "The user generates a damaging sound wave by vibration. This may also lower the targets Sp. Def stat."
+  },
+  "tr62": {
+    "name": "TR62",
+    "shortDesc": "The target is attacked with a shock wave generated by the users gaping mouth."
+  },
+  "tr63": {
+    "name": "TR63",
+    "shortDesc": "The user attacks with a ray of light that sparkles as if it were made of gemstones."
+  },
+  "tr64": {
+    "name": "TR64",
+    "shortDesc": "The user heightens its mental focus and unleashes its power. This may also lower the targets Sp. Def stat."
+  },
+  "tr65": {
+    "name": "TR65",
+    "shortDesc": "The user draws power from nature and fires it at the target. This may also lower the targets Sp. Def stat."
+  },
+  "tr66": {
+    "name": "TR66",
+    "shortDesc": "The user tucks in its wings and charges from a low altitude. This also damages the user quite a lot."
+  },
+  "tr67": {
+    "name": "TR67",
+    "shortDesc": "The user makes the ground under the target erupt with power. This may also lower the targets Sp. Def stat."
+  },
+  "tr68": {
+    "name": "TR68",
+    "shortDesc": "The user stimulates its brain by thinking bad thoughts. This sharply raises the users Sp. Atk stat."
+  },
+  "tr69": {
+    "name": "TR69",
+    "shortDesc": "The user focuses its willpower to its head and attacks the target. This may also make the target flinch."
+  },
+  "tr70": {
+    "name": "TR70",
+    "shortDesc": "The user gathers all its light energy and releases it all at once. This may also lower the targets Sp. Def stat."
+  },
+  "tr71": {
+    "name": "TR71",
+    "shortDesc": "The user whips up a storm of leaves around the target. The attacks recoil harshly lowers the users Sp. Atk stat."
+  },
+  "tr72": {
+    "name": "TR72",
+    "shortDesc": "The user violently whirls its vines, tentacles, or the like to harshly lash the target."
+  },
+  "tr73": {
+    "name": "TR73",
+    "shortDesc": "The user shoots filthy garbage at the target to attack. This may also poison the target."
+  },
+  "tr74": {
+    "name": "TR74",
+    "shortDesc": "The user slams the target with its steel-hard head. This may also make the target flinch."
+  },
+  "tr75": {
+    "name": "TR75",
+    "shortDesc": "The user stabs the target from below with sharpened stones. Critical hits land more easily."
+  },
+  "tr76": {
+    "name": "TR76",
+    "shortDesc": "The user lays a trap of levitating stones around the opposing team. The trap hurts opposing Pokemon that switch into battle."
+  },
+  "tr77": {
+    "name": "TR77",
+    "shortDesc": "The user snares the target with grass and trips it. The heavier the target, the greater the moves power."
+  },
+  "tr78": {
+    "name": "TR78",
+    "shortDesc": "The user strikes everything around it by swamping the area with a giant sludge wave. This may also poison those hit."
+  },
+  "tr79": {
+    "name": "TR79",
+    "shortDesc": "The user slams into the target with its heavy body. The more the user outweighs the target, the greater the moves power."
+  },
+  "tr80": {
+    "name": "TR80",
+    "shortDesc": "The user hurls an electric orb at the target. The faster the user is than the target, the greater the moves power."
+  },
+  "tr81": {
+    "name": "TR81",
+    "shortDesc": "The user turns the targets power against it. The higher the targets Attack stat, the greater the damage it deals."
+  },
+  "tr82": {
+    "name": "TR82",
+    "shortDesc": "The user attacks the target with stored power. The more the users stats are raised, the greater the moves power."
+  },
+  "tr83": {
+    "name": "TR83",
+    "shortDesc": "The user teleports using a strange power and switches places with one of its allies."
+  },
+  "tr84": {
+    "name": "TR84",
+    "shortDesc": "The user shoots boiling hot water at its target. This may also leave the target with a burn."
+  },
+  "tr85": {
+    "name": "TR85",
+    "shortDesc": "The user is roused, and its Attack and Sp. Atk stats increase."
+  },
+  "tr86": {
+    "name": "TR86",
+    "shortDesc": "The user shrouds itself in electricity and smashes into its target. This also damages the user a little."
+  },
+  "tr87": {
+    "name": "TR87",
+    "shortDesc": "The user crashes into its target while rotating its body like a drill. Critical hits land more easily."
+  },
+  "tr88": {
+    "name": "TR88",
+    "shortDesc": "The user slams its target with its flame-covered body. The more the user outweighs the target, the greater the moves power."
+  },
+  "tr89": {
+    "name": "TR89",
+    "shortDesc": "The user attacks by wrapping its opponent in a fierce wind that flies up into the sky. This may also confuse the target."
+  },
+  "tr90": {
+    "name": "TR90",
+    "shortDesc": "The user plays rough with the target and attacks it. This may also lower the targets Attack stat."
+  },
+  "tr91": {
+    "name": "TR91",
+    "shortDesc": "Opposing Pokemon are drenched in an odd poisonous liquid. This lowers the Attack, Sp. Atk, and Speed stats of a poisoned target."
+  },
+  "tr92": {
+    "name": "TR92",
+    "shortDesc": "The user damages opposing Pokemon by emitting a powerful flash."
+  },
+  "tr93": {
+    "name": "TR93",
+    "shortDesc": "The user swings both arms and hits the target. The targets stat changes dont affect this attacks damage."
+  },
+  "tr94": {
+    "name": "TR94",
+    "shortDesc": "The user fiercely attacks the target using its entire body."
+  },
+  "tr95": {
+    "name": "TR95",
+    "shortDesc": "The user attacks the targets throat, and the resultant suffering prevents the target from using moves that emit sound for two turns."
+  },
+  "tr96": {
+    "name": "TR96",
+    "shortDesc": "The user attacks the enemy with a pollen puff that explodes. If the target is an ally, it gives the ally a pollen puff that restores its HP instead."
+  },
+  "tr97": {
+    "name": "TR97",
+    "shortDesc": "The user bites the target with its psychic capabilities. This can also destroy Light Screen and Reflect."
+  },
+  "tr98": {
+    "name": "TR98",
+    "shortDesc": "The user slams into the target using a full-force blast of water. This may also lower the targets Defense stat."
+  },
+  "tr99": {
+    "name": "TR99",
+    "shortDesc": "The user attacks by slamming its body into the target. The higher the users Defense, the more damage it can inflict on the target."
+  },
+  "travel-trunk": {
+    "name": "Travel Trunk",
+    "shortDesc": "Unobtainable, but allows the player to change clothes anywhere."
+  },
+  "tri-pass": {
+    "name": "Tri-Pass",
+    "shortDesc": "Grants access to the first three Sevii Islands."
+  },
+  "tropical-shell": {
+    "name": "Tropical Shell",
+    "shortDesc": "A beautiful white shell that may have drifted from a sea in a warm region."
+  },
+  "twisted-spoon": {
+    "name": "Twisted Spoon",
+    "shortDesc": "Held: Psychic-Type moves from holder do 20% more damage."
+  },
+  "tyranitarite": {
+    "name": "Tyranitarite",
+    "shortDesc": "Held: Allows Tyranitar to Mega Evolve into Mega Tyranitar."
+  },
+  "ultra-ball": {
+    "name": "Ultra Ball",
+    "shortDesc": "Tries to catch a wild Pokemon. Success rate is 2."
+  },
+  "ultranecrozium-z--bag": {
+    "name": "Ultranecrozium Z",
+    "shortDesc": "XXX new effect for ultranecrozium-z--bag"
+  },
+  "ultranecrozium-z--held": {
+    "name": "Ultranecrozium Z",
+    "shortDesc": "Held: Allows Necrozma to use Light That Burns the Sky."
+  },
+  "unown-report": {
+    "name": "Unown Report",
+    "shortDesc": "Keeps track of Unown types caught."
+  },
+  "unremarkable-teacup": {
+    "name": "Unremarkable Teacup",
+    "shortDesc": "Evolves Poltchageist into Sinistcha when used."
+  },
+  "up-grade": {
+    "name": "Upgrade",
+    "shortDesc": "Traded on a Porygon: Holder evolves into Porygon2."
+  },
+  "utility-umbrella": {
+    "name": "Utility Umbrella",
+    "shortDesc": "An item to be held by a Pokemon. This sturdy umbrella protects the holder from the effects of rain and harsh sunlight."
+  },
+  "venusaur-guild-emblem-template": {
+    "name": "Venusaur Guild Emblem",
+    "shortDesc": "Consume this template to permanently unlock it for your current Guild."
+  },
+  "venusaurite": {
+    "name": "Venusaurite",
+    "shortDesc": "Held: Allows Venusaur to Mega Evolve into Mega Venusaur."
+  },
+  "vs-recorder": {
+    "name": "Vs. Recorder",
+    "shortDesc": "Records wireless, Wi-Fi, or Battle Frontier battles, and stores points."
+  },
+  "vs-seeker": {
+    "name": "Vs. Seeker",
+    "shortDesc": "Allows rebattling of on-screen trainers. 100 steps to recharge."
+  },
+  "wacan-berry": {
+    "name": "Wacan Berry",
+    "shortDesc": "Held: Consumed when struck by a super-effective Electric-type attack to halve the damage."
+  },
+  "wailmer-pail": {
+    "name": "Wailmer Pail",
+    "shortDesc": "Used to water berries."
+  },
+  "water-gem": {
+    "name": "Water Gem",
+    "shortDesc": "Held: When the holder uses a damaging Water-type move, the move has 1.5 power and this item is consumed."
+  },
+  "water-memory": {
+    "name": "Water Memory",
+    "shortDesc": "Held: Changes Silvally to its Water form. Changes Multi-Attacks type to Water."
+  },
+  "water-stone": {
+    "name": "Water Stone",
+    "shortDesc": "Evolves an Eevee into Vaporeon, a Lombre into Ludicolo, a Panpour into Simipour, a Poliwhirl into Poliwrath, a Shellder into Cloyster, or a Staryu into Starmie."
+  },
+  "waterfall-charm": {
+    "name": "Waterfall Charm",
+    "shortDesc": "Lets you use Waterfall without a Pokemon knowing it."
+  },
+  "waterium-z--bag": {
+    "name": "Waterium Z",
+    "shortDesc": "XXX new effect for waterium-z--bag"
+  },
+  "waterium-z--held": {
+    "name": "Waterium Z",
+    "shortDesc": "Held: Allows a Pokemon to use the Z-move equivalents of its Water moves."
+  },
+  "watmel-berry": {
+    "name": "Watmel Berry",
+    "shortDesc": "Used for creating PokeBlocks and Poffins."
+  },
+  "wave-incense": {
+    "name": "Wave Incense",
+    "shortDesc": "Held: Water-Type moves from holder do 20% more damage. Breeding: Mantine begets a Mantyke Egg."
+  },
+  "weakness-policy": {
+    "name": "Weakness Policy",
+    "shortDesc": "Held: When the holder is hit by a super effective move, its Attack and Special Attack raise by two stages."
+  },
+  "wellspring-mask": {
+    "name": "Wellspring Mask",
+    "shortDesc": "Ogerpon-Wellspring: 1.2x power attacks; Terastallize to gain Embody Aspect."
+  },
+  "wepear-berry": {
+    "name": "Wepear Berry",
+    "shortDesc": "Used for creating PokeBlocks and Poffins."
+  },
+  "whipped-dream": {
+    "name": "Whipped Dream",
+    "shortDesc": "Traded on a Swirlix: Holder evolves into Slurpuff."
+  },
+  "whirlpool-charm": {
+    "name": "Whirlpool Charm",
+    "shortDesc": "Lets you use Whirlpool without a Pokemon knowing it."
+  },
+  "white-apricorn": {
+    "name": "White Apricorn",
+    "shortDesc": "Used to make a Fast Ball."
+  },
+  "white-flute": {
+    "name": "White Flute",
+    "shortDesc": "Doubles the wild Pokemon encounter rate."
+  },
+  "white-herb": {
+    "name": "White Herb",
+    "shortDesc": "Held: Resets all lowered stats to normal at end of turn. Consumed after use."
+  },
+  "white-mane-hair": {
+    "name": "White Mane Hair",
+    "shortDesc": "Mane hair that belonged to the King of Bountiful Harvests beloved steed, Glastrier. The hair is strong and very flexible."
+  },
+  "wide-lens": {
+    "name": "Wide Lens",
+    "shortDesc": "Held: Provides a 1/10 (10%) boost in accuracy to the holder."
+  },
+  "wiki-berry": {
+    "name": "Wiki Berry",
+    "shortDesc": "Held: Consumed at 1/2 max HP to restore 1/8 max HP. Confuses Pokemon that dislike dry flavor."
+  },
+  "wise-glasses": {
+    "name": "Wise Glasses",
+    "shortDesc": "Held: Boosts the damage of special moves used by the holder by 1/10 (10%)."
+  },
+  "wishing-chip": {
+    "name": "Wishing Chip",
+    "shortDesc": "Toss a number of them into a Pokemon Den for the chance to attract a wild Dynamax Pokemon."
+  },
+  "wishing-piece": {
+    "name": "Wishing Piece",
+    "shortDesc": "Throw one into a Pokemon Den to attract a wild Dynamax Pokemon."
+  },
+  "wishing-star": {
+    "name": "Wishing Star",
+    "shortDesc": "A stone found in the Galar region with a mysterious power. Its said that your dreams come true if you find one."
+  },
+  "wooden-crown": {
+    "name": "Wooden Crown",
+    "shortDesc": "A mysterious object made of wood. Part of it seems to be chipped. Maybe its meant to be part of something."
+  },
+  "works-key": {
+    "name": "Works Key",
+    "shortDesc": "Grants access to Valley Windworks."
+  },
+  "x-accuracy": {
+    "name": "X Accuracy",
+    "shortDesc": "Raises accuracy by one stage in battle. Raises happiness."
+  },
+  "x-attack": {
+    "name": "X Attack",
+    "shortDesc": "Raises Attack during battle."
+  },
+  "x-defense": {
+    "name": "X Defense",
+    "shortDesc": "Raises Defense by one stage in battle. Raises happiness."
+  },
+  "x-sp-atk": {
+    "name": "X Sp. Atk",
+    "shortDesc": "Raises Special Attack by one stage in battle. Raises happiness."
+  },
+  "x-sp-def": {
+    "name": "X Sp. Def",
+    "shortDesc": "Raises Special Defense by one stage in battle. Raises happiness."
+  },
+  "x-speed": {
+    "name": "X Speed",
+    "shortDesc": "Raises Speed by one stage in battle. Raises happiness."
+  },
+  "xtransceiver": {
+    "name": "Xtransceiver",
+    "shortDesc": "Makes four-way video calls."
+  },
+  "xtransceiver--red": {
+    "name": "Xtransceiver",
+    "shortDesc": "XXX new effect for xtranceiver--red"
+  },
+  "xtransceiver--yellow": {
+    "name": "Xtransceiver",
+    "shortDesc": "XXX new effect for xtranceiver--yellow"
+  },
+  "yache-berry": {
+    "name": "Yache Berry",
+    "shortDesc": "Held: Consumed when struck by a super-effective Ice-type attack to halve the damage."
+  },
+  "yellow-apricorn": {
+    "name": "Yellow Apricorn",
+    "shortDesc": "Used to make a Moon Ball."
+  },
+  "yellow-flute": {
+    "name": "Yellow Flute",
+    "shortDesc": "Cures confusion."
+  },
+  "yellow-nectar": {
+    "name": "Yellow Nectar",
+    "shortDesc": "Changes Oricorio to Pom-Pom Style."
+  },
+  "yellow-petal": {
+    "name": "Yellow Petal",
+    "shortDesc": "XXX new effect for yellow-petal"
+  },
+  "yellow-scarf": {
+    "name": "Yellow Scarf",
+    "shortDesc": "Raises the holders Toughness while in a contest."
+  },
+  "yellow-shard": {
+    "name": "Yellow Shard",
+    "shortDesc": "No effect. Can be traded for items or moves."
+  },
+  "z-power-ring": {
+    "name": "Z-Power Ring",
+    "shortDesc": "XXX new effect for z-power-ring"
+  },
+  "z-ring": {
+    "name": "Z-Ring",
+    "shortDesc": "Allows the players Pokemon to use Z-moves."
+  },
+  "zap-plate": {
+    "name": "Zap Plate",
+    "shortDesc": "Held: Electric-Type moves from holder do 20% more damage. Changes Arceuss and Judgments type to Electric."
+  },
+  "zinc": {
+    "name": "Zinc",
+    "shortDesc": "Raises Special Defense and happiness."
+  },
+  "zoom-lens": {
+    "name": "Zoom Lens",
+    "shortDesc": "Held: Provides a 1/5 (20%) boost in accuracy if the holder moves after the target."
+  },
+  "zygarde-cube": {
+    "name": "Zygarde Cube",
+    "shortDesc": "Contains collected Zygarde cells/cores. Can teach Zygarde moves."
+  }
+}

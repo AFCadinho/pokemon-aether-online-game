@@ -17,7 +17,7 @@ Initial locales: English (`en`), Dutch (`nl`), Brazilian Portuguese (`pt-BR`)
 | Phase 4: shared game interface | Complete; all 11 functional domains are migrated |
 | Phase 5: battle localization | Complete; battle UI, dynamic events, timers, field state, results, and calculator are migrated |
 | Phase 6: world signs and NPC dialogue | Complete; signs, Game Content dialogue, NPC display overlays, locale caches, and fallback are active |
-| Phase 7: Pokémon and item content | In progress; complete species/move/ability draft coverage is active, with reviewed trainer/gym overrides |
+| Phase 7: Pokémon and item content | Complete; full species, move, ability, and item presentation coverage is active |
 | Phases 8-10 | Planned |
 
 ## Goal
@@ -353,12 +353,13 @@ Add overlays for:
 - statuses and effects;
 - shops and cosmetic content.
 
-The client-side item pilot stores presentation-only `name` and `shortDesc` fields in
-`localization/items/<locale>.json`. `ItemLocalization` resolves those fields by
-canonical item ID, preserves the original English response as fallback, and never
-copies quantity, price, ownership, effects, or other mechanics into an overlay. Bag,
-hotbar, Market, Pokémon Summary item labels, and later item consumers share this
-resolver.
+The client-side item catalogs store presentation-only `name` and `shortDesc` fields.
+Generated catalogs cover all 1,395 canonical items, while the 69-item reviewed pilot
+loads afterward and overrides its draft entries. `ItemLocalization` resolves those
+fields by canonical item ID, preserves the original English response as fallback, and
+never copies quantity, price, ownership, effects, or other mechanics into an overlay.
+Bag, hotbar, Market, Pokémon Summary, trade, mail, Aether Atelier, and Donator Store
+item presentation share this resolver.
 
 The shared `ContentLocalization` resolver now provides the same ID-first contract for
 types, natures, species, moves, abilities, and statuses. The initial complete catalogs
@@ -376,6 +377,17 @@ accuracy, PP, type, category, or ability mechanics. Full local indexes (919 move
 Dutch and Brazilian Portuguese generated entries are review drafts; manually approved
 overlays always take precedence. See `localization_content_review.md` for the guarded
 generation and review workflow.
+
+Statuses and effects use the structured `pokemon.status.*`, `battle.status.*`, and
+`battle.event.status.*` keys completed in Phase 5. Shop and cosmetic titles/actions
+use normal UI keys, while their item names and descriptions use `ItemLocalization`.
+Remaining Pokémon presentation in bag actions, the hotbar, PC party slots, mail,
+PvP preview, and trade uses the species resolver. Nicknames and player-generated
+content remain unchanged.
+
+Phase 7 is technically complete. Dutch and Brazilian Portuguese generated entries
+remain review drafts; linguistic approval and final terminology choices are part of
+the Phase 10 release gate rather than an architecture or consumer-coverage gap.
 
 ### Acceptance criteria
 
