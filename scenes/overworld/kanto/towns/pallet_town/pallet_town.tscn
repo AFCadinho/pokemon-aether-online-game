@@ -27,6 +27,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="23_route_hint"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="24_door_hint"]
 [ext_resource type="PackedScene" uid="uid://b8s7eihsl5ikf" path="res://scenes/world/interactables/sign_interactable.tscn" id="25_sign"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/item_gift_npc.tscn" id="26_item_gift"]
 [ext_resource type="Texture2D" uid="uid://e2ksljyggppg" path="res://assets/tilesets/fiver/tiles_env2_floors32.png" id="27_q27eu"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6lp0i"]
@@ -2263,6 +2264,11 @@ mugshot = ExtResource("7_66okb")
 position = Vector2(368, 240)
 npc_id = "kanto_pallet_town_nurse"
 mugshot = ExtResource("8_j16lr")
+
+[node name="FishingGuru" parent="Entities/NPCs" instance=ExtResource("26_item_gift")]
+position = Vector2(496, 944)
+npc_id = "kanto_pallet_town_fishing_guru"
+reward_id = "kanto_pallet_town_old_rod"
 
 [node name="BossBattle" type="Node2D" parent="Entities/NPCs" unique_id=1297212386]
 

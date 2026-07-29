@@ -3,6 +3,7 @@ extends Node
 class_name InventoryServiceNode
 
 const INVENTORY_ENDPOINT := "/game/inventory"
+const NPC_ITEM_REWARD_ENDPOINT := "/game/npc-rewards/%s/claim"
 const APPEARANCE_INVENTORY_ENDPOINT := "/game/appearance/inventory"
 const INVENTORY_ITEM_USE_ENDPOINT := "/game/inventory/items/%s/use"
 const APPEARANCE_ITEM_RETURN_ENDPOINT := "/game/appearance/inventory/items/%s/return"
@@ -42,6 +43,36 @@ func load_inventory() -> Dictionary:
 	return {
 		"success": true,
 		"items": items,
+	}
+
+
+func claim_npc_item_reward(reward_id: String) -> Dictionary:
+	var normalized_reward_id := reward_id.strip_edges().to_lower()
+	if not AuthService.is_authenticated():
+		return {"success": false, "error": "Not authenticated."}
+	if normalized_reward_id == "":
+		return {"success": false, "error": "Missing NPC reward id."}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + NPC_ITEM_REWARD_ENDPOINT % normalized_reward_id.uri_encode(),
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	var inventory_result: Dictionary = await load_inventory()
+	return {
+		"success": true,
+		"rewardId": str(body.get("rewardId", normalized_reward_id)),
+		"itemId": str(body.get("itemId", "")),
+		"quantity": maxi(int(body.get("quantity", 1)), 1),
+		"claimed": bool(body.get("claimed", false)),
+		"alreadyOwned": bool(body.get("alreadyOwned", false)),
+		"inventoryRefreshSuccess": bool(inventory_result.get("success", false)),
 	}
 
 

@@ -104,6 +104,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/dialogue_metadata_service_check.gd",
 	"res://tests/trainer_dialogue_cleanup_check.gd",
 	"res://tests/npc_content_validation_check.gd",
+	"res://tests/item_gift_npc_check.gd",
 	"res://tests/overworld_pokemon_check.gd",
 	"res://tests/overworld_medicine_check.gd",
 	"res://tests/player_action_escape_rope_check.gd",
