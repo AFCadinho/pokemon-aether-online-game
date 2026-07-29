@@ -4221,13 +4221,16 @@ func _create_move_learn_detail_chip(text: String, background_color: Color, text_
 
 func _create_move_learn_type_label(type_name: String) -> Control:
 	var normalized_type := type_name.strip_edges().to_lower().replace(" ", "-").replace("_", "-")
+	var localized_type := _localized_type_name(type_name)
+	if _uses_localized_type_text():
+		return _create_move_learn_detail_chip(localized_type, Color("#34312a"), Color("#f4f0de"))
 	var texture_path := "%s%s.png" % [MOVE_LEARN_TYPE_LABEL_ROOT, normalized_type]
 	if normalized_type == "" or not ResourceLoader.exists(texture_path):
-		return _create_move_learn_detail_chip(type_name, Color("#34312a"), Color("#f4f0de"))
+		return _create_move_learn_detail_chip(localized_type, Color("#34312a"), Color("#f4f0de"))
 
 	var texture := load(texture_path) as Texture2D
 	if texture == null:
-		return _create_move_learn_detail_chip(type_name, Color("#34312a"), Color("#f4f0de"))
+		return _create_move_learn_detail_chip(localized_type, Color("#34312a"), Color("#f4f0de"))
 
 	var icon := TextureRect.new()
 	icon.name = "Icon"
@@ -4236,7 +4239,7 @@ func _create_move_learn_type_label(type_name: String) -> Control:
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	icon.tooltip_text = type_name.capitalize()
+	icon.tooltip_text = localized_type
 	return icon
 
 func _create_move_learn_category_label(category: String) -> Control:
@@ -17146,6 +17149,12 @@ func _refresh_pokemon_summary_type_icons(pokemon: Pokemon) -> void:
 
 	var added_count: int = 0
 	for type_value: String in _string_array_from_value(pokemon.types):
+		if _uses_localized_type_text():
+			pokemon_summary_type_icon_row.add_child(_create_summary_move_type_label(type_value))
+			added_count += 1
+			if added_count >= 2:
+				break
+			continue
 		var type_label: Texture2D = _load_pokemon_type_text_label(type_value)
 		if type_label == null:
 			continue
@@ -17155,7 +17164,7 @@ func _refresh_pokemon_summary_type_icons(pokemon: Pokemon) -> void:
 		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		icon.texture = type_label
-		icon.tooltip_text = type_value.capitalize()
+		icon.tooltip_text = _localized_type_name(type_value)
 		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		pokemon_summary_type_icon_row.add_child(icon)
 		added_count += 1
@@ -17367,7 +17376,13 @@ func _render_pokemon_summary_general(pokemon: Pokemon) -> void:
 		Color(0, 0, 0, 0),
 		_get_summary_ability_description_text(pokemon.ability)
 	))
-	info_grid.add_child(_create_summary_field_card(LocalizationManager.text("ui.pokemon_summary.nature"), _default_text(pokemon.nature), Color("#f2cf78"), false, 148.0))
+	info_grid.add_child(_create_summary_field_card(
+		LocalizationManager.text("ui.pokemon_summary.nature"),
+		_localized_nature_name(pokemon.nature),
+		Color("#f2cf78"),
+		false,
+		148.0
+	))
 	info_grid.add_child(_create_summary_field_card(LocalizationManager.text("ui.pokemon_summary.location"), _get_pokemon_summary_location_text(pokemon), Color("#62d7ff"), false, 148.0))
 	info_grid.add_child(_create_summary_field_card(LocalizationManager.text("ui.pokemon_summary.caught_date"), _get_pokemon_summary_caught_date_text(pokemon), Color("#d9ecff"), false, 148.0))
 	info_grid.add_child(_create_summary_field_card(LocalizationManager.text("ui.pokemon_summary.caught_level"), _get_pokemon_summary_caught_level_text(pokemon), Color("#d9ecff"), false, 148.0))
@@ -18345,7 +18360,7 @@ func _create_summary_move_card(
 		type_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		type_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		type_icon.texture = type_icon_texture
-		type_icon.tooltip_text = description_text if description_text != "" else move_type.capitalize()
+		type_icon.tooltip_text = description_text if description_text != "" else _localized_type_name(move_type)
 		type_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		top_row.add_child(type_icon)
 	elif move_type.strip_edges() != "":
@@ -18548,8 +18563,9 @@ func _create_summary_move_type_label(move_type: String) -> Control:
 	panel.add_child(margin)
 
 	var label := Label.new()
-	label.text = move_type.to_upper()
-	label.tooltip_text = move_type.capitalize()
+	var localized_type := _localized_type_name(move_type)
+	label.text = localized_type.to_upper()
+	label.tooltip_text = localized_type
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_make_label_clip_width(label)
@@ -26156,6 +26172,10 @@ func _create_pokedex_move_value_label(text_value: String, width: float, color: C
 func _create_pokedex_move_type_cell(type_name: String, width: float) -> Control:
 	var center := CenterContainer.new()
 	center.custom_minimum_size = Vector2(width, 0)
+	var localized_type := _localized_type_name(type_name)
+	if _uses_localized_type_text():
+		center.add_child(_create_pokedex_move_value_label(localized_type, width, Color("#f5df9a"), true))
+		return center
 	var texture := _load_pokemon_type_text_label(type_name)
 	if texture != null:
 		var icon := TextureRect.new()
@@ -26163,10 +26183,10 @@ func _create_pokedex_move_type_cell(type_name: String, width: float) -> Control:
 		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		icon.texture = texture
-		icon.tooltip_text = type_name.capitalize()
+		icon.tooltip_text = localized_type
 		center.add_child(icon)
 		return center
-	center.add_child(_create_pokedex_move_value_label(_compact_pokedex_text(type_name), width, Color("#f5df9a"), true))
+	center.add_child(_create_pokedex_move_value_label(_compact_pokedex_text(localized_type), width, Color("#f5df9a"), true))
 	return center
 
 func _create_pokedex_move_category_cell(category: String, width: float) -> Control:
@@ -26189,6 +26209,8 @@ func _create_pokedex_move_category_cell(category: String, width: float) -> Contr
 	return center
 
 func _create_pokedex_type_badge(type_name: String) -> Control:
+	if _uses_localized_type_text():
+		return _create_summary_move_type_label(type_name)
 	var type_label: Texture2D = _load_pokemon_type_text_label(type_name)
 	if type_label != null:
 		var icon := TextureRect.new()
@@ -26196,7 +26218,7 @@ func _create_pokedex_type_badge(type_name: String) -> Control:
 		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		icon.texture = type_label
-		icon.tooltip_text = type_name.capitalize()
+		icon.tooltip_text = _localized_type_name(type_name)
 		return icon
 	return _create_summary_move_type_label(type_name)
 
@@ -26205,8 +26227,42 @@ func _format_pokedex_type_list(types: Array) -> String:
 	for type_value: Variant in types:
 		var type_name := str(type_value).strip_edges()
 		if type_name != "":
-			names.append(type_name)
+			names.append(_localized_type_name(type_name))
 	return " / ".join(names)
+
+
+func _localized_type_name(type_name: String) -> String:
+	var fallback_name := _format_identifier_display_name(type_name)
+	var content_localization := _get_content_localization()
+	if content_localization != null and content_localization.has_method("type_name"):
+		return str(content_localization.call("type_name", type_name, fallback_name))
+	return fallback_name
+
+
+func _localized_nature_name(nature: String) -> String:
+	var fallback_name := _default_text(nature)
+	var content_localization := _get_content_localization()
+	if content_localization != null and content_localization.has_method("nature_name"):
+		return str(content_localization.call("nature_name", nature, fallback_name))
+	return fallback_name
+
+
+func _content_search_terms(kind: String, content_id: String, fallback_name: String) -> Array[String]:
+	var content_localization := _get_content_localization()
+	if content_localization != null and content_localization.has_method("search_terms"):
+		return content_localization.call("search_terms", kind, content_id, fallback_name)
+	return [content_id, fallback_name]
+
+
+func _get_content_localization() -> Node:
+	if is_inside_tree():
+		return get_node_or_null("/root/ContentLocalization")
+	var scene_tree := Engine.get_main_loop() as SceneTree
+	return scene_tree.root.get_node_or_null("ContentLocalization") if scene_tree != null else null
+
+
+func _uses_localized_type_text() -> bool:
+	return LocalizationManager.current_locale != "en"
 
 func _format_pokedex_value_list(values: Array) -> String:
 	var names: Array[String] = []
@@ -28459,9 +28515,10 @@ func _pc_pokemon_matches_filters(pokemon_response: Dictionary) -> bool:
 		str(payload.get("heldItemId", "")),
 		str(payload.get("held_item_id", "")),
 	])
+	var nature_search_terms: Array = _content_search_terms("natures", nature, nature)
 	return _pc_filter_matches_value(pc_filter_species_input, [species]) \
 		and _pc_filter_matches_value(pc_filter_type_input, types) \
-		and _pc_filter_matches_value(pc_filter_nature_input, [nature]) \
+		and _pc_filter_matches_value(pc_filter_nature_input, nature_search_terms) \
 		and _pc_filter_matches_value(pc_filter_ability_input, [ability]) \
 		and _pc_filter_matches_value(pc_filter_move_input, moves) \
 		and _pc_filter_matches_value(pc_filter_item_input, [held_item])
@@ -28532,7 +28589,12 @@ func _pc_payload_type_search_fields(payload: Dictionary) -> Array[String]:
 		var value: String = str(payload.get(key, "")).strip_edges()
 		if value != "":
 			fields.append(value)
-	return fields
+	var search_fields := fields.duplicate()
+	for type_value: Variant in fields:
+		for term: String in _content_search_terms("types", str(type_value), str(type_value)):
+			if not search_fields.has(term):
+				search_fields.append(term)
+	return search_fields
 
 
 func _pc_owned_pokemon_id_from_response(pokemon_response: Dictionary) -> int:

@@ -209,6 +209,7 @@ Phase 6 now includes:
 
 ## Next implementation slice
 
-Continue Phase 7 with locale overlays and localized search for canonical move, ability,
-species, nature, and type display data. Raw backend errors remain Phase 8 work and are
-handled through stable error-code mappings.
+Continue Phase 7 with locale overlays and localized search for canonical moves,
+abilities, and species. The shared resolver, all 18 types, all 25 natures, and their
+current display/search consumers are complete. Raw backend errors remain Phase 8 work
+and are handled through stable error-code mappings.

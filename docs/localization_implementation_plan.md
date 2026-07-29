@@ -17,7 +17,7 @@ Initial locales: English (`en`), Dutch (`nl`), Brazilian Portuguese (`pt-BR`)
 | Phase 4: shared game interface | Complete; all 11 functional domains are migrated |
 | Phase 5: battle localization | Complete; battle UI, dynamic events, timers, field state, results, and calculator are migrated |
 | Phase 6: world signs and NPC dialogue | Complete; signs, Game Content dialogue, NPC display overlays, locale caches, and fallback are active |
-| Phase 7: Pokémon and item content | In progress; shared item resolver and 69 current item overlays are active |
+| Phase 7: Pokémon and item content | In progress; item, type, and nature overlays plus localized type/nature search are active |
 | Phases 8-10 | Planned |
 
 ## Goal
@@ -359,6 +359,12 @@ canonical item ID, preserves the original English response as fallback, and neve
 copies quantity, price, ownership, effects, or other mechanics into an overlay. Bag,
 hotbar, Market, Pokémon Summary item labels, and later item consumers share this
 resolver.
+
+The shared `ContentLocalization` resolver now provides the same ID-first contract for
+types, natures, species, moves, abilities, and statuses. The initial complete catalogs
+cover all 18 types and 25 natures. Pokémon Summary, Pokédex, move learning, PC filters,
+battle party hover, and the damage calculator resolve type and nature presentation
+through this service while retaining canonical type and nature values internally.
 
 ### Acceptance criteria
 

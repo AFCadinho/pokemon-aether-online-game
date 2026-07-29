@@ -614,7 +614,7 @@ func _get_assumption_fallback_label(editor_kind: String) -> String:
 		SELECTOR_ABILITY:
 			return _t("battle.calc.ability_unknown")
 		SELECTOR_NATURE:
-			return "Hardy"
+			return _localized_nature_name("Hardy")
 		SELECTOR_EVS:
 			return _t("battle.calc.evs_total", {"total": 0, "limit": EV_TOTAL_LIMIT})
 		_:
@@ -716,7 +716,11 @@ func _render_nature_assumption_editor(assumptions: Dictionary) -> void:
 	catalog_suggestions_box.add_child(grid)
 	for nature_value: Variant in _get_nature_option_names():
 		var nature: String = str(nature_value)
-		var button := _make_compact_option_button(nature, nature == selected_nature, _on_nature_option_pressed.bind(nature))
+		var button := _make_compact_option_button(
+			_localized_nature_name(nature),
+			nature == selected_nature,
+			_on_nature_option_pressed.bind(nature)
+		)
 		grid.add_child(button)
 
 
@@ -1333,8 +1337,23 @@ func _get_display_assumptions(defender: Dictionary) -> Dictionary:
 
 
 func _get_nature_chip_label(assumptions: Dictionary) -> String:
-	var label := _fallback_text(str(assumptions.get("nature", "")).strip_edges(), "Hardy")
+	var canonical_nature := _fallback_text(str(assumptions.get("nature", "")).strip_edges(), "Hardy")
+	var label := _localized_nature_name(canonical_nature)
 	return "%s*" % label if bool(edited_assumption_fields.get("nature", false)) else label
+
+
+func _localized_nature_name(nature: String) -> String:
+	var content_localization := _get_content_localization()
+	if content_localization != null and content_localization.has_method("nature_name"):
+		return str(content_localization.call("nature_name", nature, nature))
+	return nature
+
+
+func _get_content_localization() -> Node:
+	if is_inside_tree():
+		return get_node_or_null("/root/ContentLocalization")
+	var scene_tree := Engine.get_main_loop() as SceneTree
+	return scene_tree.root.get_node_or_null("ContentLocalization") if scene_tree != null else null
 
 
 func _get_evs_chip_label(evs: Dictionary) -> String:

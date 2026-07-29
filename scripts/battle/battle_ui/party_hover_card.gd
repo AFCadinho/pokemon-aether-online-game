@@ -184,8 +184,9 @@ func _set_pokemon_data(pokemon_data: Dictionary) -> void:
 		str(pokemon_data.get("item", "")),
 		_t("battle.hover.no_item")
 	)
+	var canonical_nature := str(pokemon_data.get("nature", ""))
 	nature_value_label.text = _format_value(
-		str(pokemon_data.get("nature", "")),
+		_localized_nature_name(canonical_nature),
 		_t("common.unknown")
 	)
 	_set_stats(
@@ -208,6 +209,20 @@ func _get_display_species(pokemon_data: Dictionary) -> String:
 		return str(ident.split(": ")[1]).strip_edges()
 
 	return _t("common.unknown")
+
+
+func _localized_nature_name(nature: String) -> String:
+	var content_localization := _get_content_localization()
+	if content_localization != null and content_localization.has_method("nature_name"):
+		return str(content_localization.call("nature_name", nature, nature))
+	return nature
+
+
+func _get_content_localization() -> Node:
+	if is_inside_tree():
+		return get_node_or_null("/root/ContentLocalization")
+	var scene_tree := Engine.get_main_loop() as SceneTree
+	return scene_tree.root.get_node_or_null("ContentLocalization") if scene_tree != null else null
 
 
 func _set_type_icons(pokemon_data: Dictionary) -> void:
