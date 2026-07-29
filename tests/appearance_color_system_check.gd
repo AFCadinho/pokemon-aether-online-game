@@ -226,10 +226,10 @@ func _run() -> void:
 		"Bag slots render cosmetic icons with the item's compatible gender"
 	)
 	_check(
-		ui_source.contains(
-			'use_action == "unlock_appearance" and not _bag_item_matches_player_gender(item)'
-		)
-			and ui_source.contains('return "%s Model Only"'),
+			ui_source.contains(
+				'use_action == "unlock_appearance" and not _bag_item_matches_player_gender(item)'
+			)
+				and ui_source.contains('LocalizationManager.text("ui.bag.action.model_only"'),
 		"Bag disables moving incompatible cosmetics to Character Customization"
 	)
 	_check(
@@ -252,9 +252,9 @@ func _run() -> void:
 		"inventory service preserves authoritative per-slot wardrobe capacity"
 	)
 	_check(
-		inventory_service_source.contains('"grantedItems"')
-			and ui_source.contains('use_action == "open_item_bundle"')
-			and ui_source.contains('return "Open Box"'),
+			inventory_service_source.contains('"grantedItems"')
+				and ui_source.contains('use_action == "open_item_bundle"')
+				and ui_source.contains('LocalizationManager.text("ui.bag.action.open_box")'),
 		"Bag can open the Classic box and refresh its granted component items"
 	)
 	_check(

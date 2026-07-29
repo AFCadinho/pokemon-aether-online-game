@@ -414,7 +414,7 @@ func _run() -> void:
 	)
 	_check(
 		overlay_source.contains('"apply_guild_emblem_template"')
-		and overlay_source.contains('return "Unlock for Guild"'),
+		and overlay_source.contains('LocalizationManager.text("ui.bag.action.unlock_for_guild")'),
 		"Bag exposes the consumable Guild emblem unlock action"
 	)
 	for starter_id: String in [

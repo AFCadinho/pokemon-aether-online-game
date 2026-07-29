@@ -345,18 +345,18 @@ const MARKET_INTERFACE_ICON: Texture2D = preload("res://assets/ui/market_shop.sv
 const AETHER_ATELIER_POPUP_SCENE := preload("res://scenes/interface/aether_atelier_popup.tscn")
 const ITEM_DEX_ICON := preload("res://assets/ui/item_dex.svg")
 const BAG_CATEGORIES := [
-	{"id": "all", "label": "All Items", "iconItemId": ""},
-	{"id": "medicine", "label": "Medicine", "iconItemId": "potion"},
-	{"id": "pokeball", "label": "Poke Balls", "iconItemId": "poke-ball"},
-	{"id": "key_items", "label": "Key Items", "iconItemId": "bicycle"},
-	{"id": "machines", "label": "TMs & HMs", "iconItemId": "tm-material"},
-	{"id": "charms", "label": "Charms", "iconItemId": "surf-charm"},
-	{"id": "held_items", "label": "Held Items", "iconItemId": "leftovers"},
-	{"id": "power_stones", "label": "Mega & Z", "iconItemId": "charizardite-x"},
-	{"id": "cosmetics", "label": "Cosmetics", "iconItemId": "blue-canari-plush-lv-1"},
-	{"id": "vouchers", "label": "Vouchers", "iconItemId": "aether-blessing-voucher-3-days"},
-	{"id": "currency", "label": "Currency", "iconItemId": "coin-case"},
-	{"id": "general", "label": "Other", "iconItemId": "ability-capsule"},
+	{"id": "all", "labelKey": "ui.bag.category.all", "iconItemId": ""},
+	{"id": "medicine", "labelKey": "ui.bag.category.medicine", "iconItemId": "potion"},
+	{"id": "pokeball", "labelKey": "ui.bag.category.pokeballs", "iconItemId": "poke-ball"},
+	{"id": "key_items", "labelKey": "ui.bag.category.key_items", "iconItemId": "bicycle"},
+	{"id": "machines", "labelKey": "ui.bag.category.machines", "iconItemId": "tm-material"},
+	{"id": "charms", "labelKey": "ui.bag.category.charms", "iconItemId": "surf-charm"},
+	{"id": "held_items", "labelKey": "ui.bag.category.held_items", "iconItemId": "leftovers"},
+	{"id": "power_stones", "labelKey": "ui.bag.category.power_stones", "iconItemId": "charizardite-x"},
+	{"id": "cosmetics", "labelKey": "ui.bag.category.cosmetics", "iconItemId": "blue-canari-plush-lv-1"},
+	{"id": "vouchers", "labelKey": "ui.bag.category.vouchers", "iconItemId": "aether-blessing-voucher-3-days"},
+	{"id": "currency", "labelKey": "ui.bag.category.currency", "iconItemId": "coin-case"},
+	{"id": "general", "labelKey": "ui.bag.category.other", "iconItemId": "ability-capsule"},
 ]
 const TRAINER_CARD_CYAN := Color("#8bd8f4")
 const TRAINER_CARD_GREEN := Color("#73d98b")
@@ -1223,6 +1223,7 @@ func _ready() -> void:
 	_refresh_utc_time_label(UTC_TIME_REFRESH_INTERVAL_SECONDS, true)
 	_refresh_location_weather(WorldPresenceService.current_weather_state)
 	_refresh_party()
+	_refresh_bag_localized_ui()
 	_load_mailbox.call_deferred()
 	_poll_pvp_ranked_queue_availability.call_deferred()
 
@@ -1377,6 +1378,7 @@ func _on_locale_changed(_locale: String) -> void:
 	_refresh_utc_time_label(UTC_TIME_REFRESH_INTERVAL_SECONDS, true)
 	_refresh_location_weather(WorldPresenceService.current_weather_state)
 	_refresh_party()
+	_refresh_bag_localized_ui()
 
 
 func _play_mail_notification_sound() -> void:
@@ -13376,19 +13378,19 @@ func _setup_bag_popup() -> void:
 	header.add_child(heading)
 
 	var title_label := Label.new()
-	title_label.text = "Bag"
+	_set_localized_control_property(title_label, "text", "ui.bag.title")
 	title_label.add_theme_font_size_override("font_size", 20)
 	title_label.add_theme_color_override("font_color", UI_TEXT)
 	heading.add_child(title_label)
 
 	bag_summary_label = Label.new()
-	bag_summary_label.text = "Inventory"
+	bag_summary_label.text = LocalizationManager.text("ui.bag.inventory")
 	bag_summary_label.add_theme_font_size_override("font_size", 11)
 	bag_summary_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	heading.add_child(bag_summary_label)
 
 	bag_search_input = LineEdit.new()
-	bag_search_input.placeholder_text = "Search items..."
+	_set_localized_control_property(bag_search_input, "placeholder_text", "ui.bag.search")
 	bag_search_input.clear_button_enabled = true
 	bag_search_input.custom_minimum_size = Vector2(300, 36)
 	bag_search_input.focus_mode = Control.FOCUS_ALL
@@ -13398,7 +13400,7 @@ func _setup_bag_popup() -> void:
 
 	var close_button := Button.new()
 	close_button.text = "×"
-	close_button.tooltip_text = "Close"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.custom_minimum_size = Vector2(32, 32)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_bag_popup)
@@ -13432,7 +13434,7 @@ func _setup_bag_popup() -> void:
 	category_margin.add_child(category_layout)
 
 	var category_caption := Label.new()
-	category_caption.text = "CATEGORIES"
+	_set_localized_control_property(category_caption, "text", "ui.bag.categories")
 	category_caption.add_theme_font_size_override("font_size", 10)
 	category_caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	category_layout.add_child(category_caption)
@@ -13480,14 +13482,14 @@ func _setup_bag_popup() -> void:
 	inventory_layout.add_child(inventory_header)
 
 	var inventory_caption := Label.new()
-	inventory_caption.text = "ITEMS"
+	_set_localized_control_property(inventory_caption, "text", "ui.bag.items")
 	inventory_caption.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	inventory_caption.add_theme_font_size_override("font_size", 10)
 	inventory_caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	inventory_header.add_child(inventory_caption)
 
 	var inventory_hint := Label.new()
-	inventory_hint.text = "Click to inspect · drag or right-click for actions"
+	_set_localized_control_property(inventory_hint, "text", "ui.bag.inventory_hint")
 	inventory_hint.add_theme_font_size_override("font_size", 10)
 	inventory_hint.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.72))
 	inventory_header.add_child(inventory_hint)
@@ -13551,7 +13553,8 @@ func _create_bag_category_button(category: Dictionary) -> Button:
 	content.add_child(icon)
 
 	var label := Label.new()
-	label.text = str(category.get("label", category_id))
+	label.name = "Label"
+	label.text = _bag_category_label(category_id)
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 12)
@@ -13587,7 +13590,7 @@ func _setup_bag_detail_panel(panel: PanelContainer) -> void:
 	margin.add_child(layout)
 
 	var caption := Label.new()
-	caption.text = "SELECTED ITEM"
+	_set_localized_control_property(caption, "text", "ui.bag.selected_item")
 	caption.add_theme_font_size_override("font_size", 10)
 	caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	layout.add_child(caption)
@@ -13613,7 +13616,7 @@ func _setup_bag_detail_panel(panel: PanelContainer) -> void:
 	icon_center.add_child(bag_detail_icon)
 
 	bag_detail_name_label = Label.new()
-	bag_detail_name_label.text = "Select an item"
+	bag_detail_name_label.text = LocalizationManager.text("ui.bag.select_item")
 	bag_detail_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	bag_detail_name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	bag_detail_name_label.add_theme_font_size_override("font_size", 18)
@@ -13621,14 +13624,14 @@ func _setup_bag_detail_panel(panel: PanelContainer) -> void:
 	layout.add_child(bag_detail_name_label)
 
 	bag_detail_meta_label = Label.new()
-	bag_detail_meta_label.text = "Choose an item from your Bag"
+	bag_detail_meta_label.text = LocalizationManager.text("ui.bag.choose_item")
 	bag_detail_meta_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	bag_detail_meta_label.add_theme_font_size_override("font_size", 11)
 	bag_detail_meta_label.add_theme_color_override("font_color", UI_MONEY)
 	layout.add_child(bag_detail_meta_label)
 
 	bag_detail_description_label = Label.new()
-	bag_detail_description_label.text = "Item details and actions will appear here."
+	bag_detail_description_label.text = LocalizationManager.text("ui.bag.details_placeholder")
 	bag_detail_description_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	bag_detail_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	bag_detail_description_label.add_theme_font_size_override("font_size", 12)
@@ -13636,14 +13639,14 @@ func _setup_bag_detail_panel(panel: PanelContainer) -> void:
 	layout.add_child(bag_detail_description_label)
 
 	var hotbar_hint := Label.new()
-	hotbar_hint.text = "Tip: drag an item onto a specific hotbar slot."
+	_set_localized_control_property(hotbar_hint, "text", "ui.bag.hotbar_tip")
 	hotbar_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	hotbar_hint.add_theme_font_size_override("font_size", 10)
 	hotbar_hint.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.72))
 	layout.add_child(hotbar_hint)
 
 	bag_detail_use_button = Button.new()
-	bag_detail_use_button.text = "Select an Item"
+	bag_detail_use_button.text = LocalizationManager.text("ui.bag.select_item_action")
 	bag_detail_use_button.custom_minimum_size = Vector2(0, 40)
 	bag_detail_use_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	bag_detail_use_button.focus_mode = Control.FOCUS_NONE
@@ -13653,7 +13656,7 @@ func _setup_bag_detail_panel(panel: PanelContainer) -> void:
 	layout.add_child(bag_detail_use_button)
 
 	bag_detail_hotbar_button = Button.new()
-	bag_detail_hotbar_button.text = "Assign to Hotbar"
+	bag_detail_hotbar_button.text = LocalizationManager.text("ui.bag.assign_hotbar")
 	bag_detail_hotbar_button.custom_minimum_size = Vector2(0, 38)
 	bag_detail_hotbar_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	bag_detail_hotbar_button.focus_mode = Control.FOCUS_NONE
@@ -14636,7 +14639,7 @@ func _setup_bag_item_use_popup() -> void:
 	layout.add_child(header)
 
 	bag_item_use_title_label = Label.new()
-	bag_item_use_title_label.text = "Use Item"
+	bag_item_use_title_label.text = LocalizationManager.text("ui.bag.use.title")
 	bag_item_use_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	bag_item_use_title_label.add_theme_font_size_override("font_size", 18)
 	bag_item_use_title_label.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
@@ -14644,6 +14647,7 @@ func _setup_bag_item_use_popup() -> void:
 
 	var close_button := Button.new()
 	close_button.text = "X"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.custom_minimum_size = Vector2(34, 30)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_bag_item_use_popup)
@@ -14651,14 +14655,14 @@ func _setup_bag_item_use_popup() -> void:
 	header.add_child(close_button)
 
 	bag_item_use_item_label = Label.new()
-	bag_item_use_item_label.text = "Select an item."
+	bag_item_use_item_label.text = LocalizationManager.text("ui.bag.use.select_item")
 	bag_item_use_item_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	bag_item_use_item_label.add_theme_font_size_override("font_size", 13)
 	bag_item_use_item_label.add_theme_color_override("font_color", UI_TEXT)
 	layout.add_child(bag_item_use_item_label)
 
 	var party_label := Label.new()
-	party_label.text = "Choose Pokemon"
+	_set_localized_control_property(party_label, "text", "ui.bag.use.choose_pokemon")
 	party_label.add_theme_font_size_override("font_size", 11)
 	party_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	layout.add_child(party_label)
@@ -14679,7 +14683,7 @@ func _setup_bag_item_use_popup() -> void:
 	layout.add_child(quantity_row)
 
 	var quantity_label := Label.new()
-	quantity_label.text = "Amount"
+	_set_localized_control_property(quantity_label, "text", "ui.bag.use.amount")
 	quantity_label.custom_minimum_size = Vector2(84, 0)
 	quantity_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	quantity_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -14696,7 +14700,7 @@ func _setup_bag_item_use_popup() -> void:
 	quantity_row.add_child(bag_item_use_quantity_spinbox)
 
 	bag_item_use_status_label = Label.new()
-	bag_item_use_status_label.text = "Select a Pokemon first."
+	bag_item_use_status_label.text = LocalizationManager.text("ui.bag.use.select_pokemon_first")
 	bag_item_use_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	bag_item_use_status_label.add_theme_font_size_override("font_size", 12)
 	bag_item_use_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -14708,7 +14712,7 @@ func _setup_bag_item_use_popup() -> void:
 	layout.add_child(action_row)
 
 	var cancel_button := Button.new()
-	cancel_button.text = "Cancel"
+	_set_localized_control_property(cancel_button, "text", "common.cancel")
 	cancel_button.custom_minimum_size = Vector2(112, 32)
 	cancel_button.focus_mode = Control.FOCUS_NONE
 	cancel_button.pressed.connect(_hide_bag_item_use_popup)
@@ -14716,7 +14720,7 @@ func _setup_bag_item_use_popup() -> void:
 	action_row.add_child(cancel_button)
 
 	bag_item_use_confirm_button = Button.new()
-	bag_item_use_confirm_button.text = "Use"
+	_set_localized_control_property(bag_item_use_confirm_button, "text", "ui.bag.action.use")
 	bag_item_use_confirm_button.custom_minimum_size = Vector2(128, 32)
 	bag_item_use_confirm_button.focus_mode = Control.FOCUS_NONE
 	bag_item_use_confirm_button.disabled = true
@@ -14739,15 +14743,15 @@ func _refresh_bag_items() -> void:
 	if bag_inventory_loading:
 		bag_selected_item = {}
 		_refresh_bag_detail()
-		_set_bag_summary("Loading inventory...")
-		bag_item_grid.add_child(_create_bag_empty_state("Loading bag..."))
+		_set_bag_summary(LocalizationManager.text("ui.bag.loading_inventory"))
+		bag_item_grid.add_child(_create_bag_empty_state(LocalizationManager.text("ui.bag.loading")))
 		return
 
 	if not bag_inventory_loaded:
 		bag_selected_item = {}
 		_refresh_bag_detail()
-		_set_bag_summary("Inventory not loaded")
-		bag_item_grid.add_child(_create_bag_empty_state("Open your bag to load items."))
+		_set_bag_summary(LocalizationManager.text("ui.bag.inventory_not_loaded"))
+		bag_item_grid.add_child(_create_bag_empty_state(LocalizationManager.text("ui.bag.open_to_load")))
 		return
 
 	var visible_items: Array[Dictionary] = []
@@ -14766,9 +14770,11 @@ func _refresh_bag_items() -> void:
 	if visible_items.is_empty():
 		bag_selected_item = {}
 		_refresh_bag_detail()
-		_set_bag_summary("No results · %s" % category_label)
+		_set_bag_summary(LocalizationManager.text("ui.bag.no_results", {"category": category_label}))
 		bag_item_grid.add_child(_create_bag_empty_state(
-			"No items match your search." if search_text != "" else "No items in %s." % category_label
+			LocalizationManager.text("ui.bag.no_search_matches")
+			if search_text != ""
+			else LocalizationManager.text("ui.bag.no_items_in_category", {"category": category_label})
 		))
 		_refresh_hotbar_ui()
 		return
@@ -14786,10 +14792,11 @@ func _refresh_bag_items() -> void:
 	for item: Dictionary in visible_items:
 		bag_item_grid.add_child(_create_bag_item_slot(item))
 
-	var noun := "item" if visible_items.size() == 1 else "items"
-	var summary_prefix := "%d result" % visible_items.size() if search_text != "" else "%d %s" % [visible_items.size(), noun]
-	if search_text != "" and visible_items.size() != 1:
-		summary_prefix += "s"
+	var summary_prefix := (
+		LocalizationManager.plural("ui.bag.result_one", "ui.bag.result_many", visible_items.size())
+		if search_text != ""
+		else LocalizationManager.plural("ui.bag.item_count_one", "ui.bag.item_count_many", visible_items.size())
+	)
 	_set_bag_summary("%s · %s" % [summary_prefix, category_label])
 	_refresh_bag_detail()
 	_refresh_hotbar_ui()
@@ -14821,7 +14828,8 @@ func _create_bag_item_slot(item: Dictionary) -> Control:
 	slot.hotbar_item = item.duplicate(true)
 	slot.custom_minimum_size = Vector2(106, 118)
 	slot.mouse_filter = Control.MOUSE_FILTER_STOP
-	slot.tooltip_text = "%s\nClick for details. Drag or right-click for more options." % str(item.get("name", "Item"))
+	var item_name := str(item.get("name", LocalizationManager.text("ui.bag.item_fallback")))
+	slot.tooltip_text = LocalizationManager.text("ui.bag.item_tooltip", {"item": item_name})
 	slot.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	slot.gui_input.connect(_on_bag_item_slot_gui_input.bind(item.duplicate(true), slot))
 	slot.mouse_entered.connect(_on_bag_item_slot_hover_changed.bind(slot, true))
@@ -14879,7 +14887,7 @@ func _create_bag_item_slot(item: Dictionary) -> Control:
 
 	var quantity_label := Label.new()
 	quantity_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	quantity_label.text = "KEY" if bool(item.get("permanent", false)) else "x%s" % max(int(item.get("quantity", 1)), 1)
+	quantity_label.text = LocalizationManager.text("ui.bag.key_marker") if bool(item.get("permanent", false)) else "x%s" % max(int(item.get("quantity", 1)), 1)
 	quantity_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	quantity_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	quantity_label.add_theme_font_size_override("font_size", 9)
@@ -14888,7 +14896,7 @@ func _create_bag_item_slot(item: Dictionary) -> Control:
 
 	var name_label := Label.new()
 	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	name_label.text = str(item.get("name", "Item"))
+	name_label.text = str(item.get("name", LocalizationManager.text("ui.bag.item_fallback")))
 	name_label.custom_minimum_size = Vector2(0, 29)
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -14958,12 +14966,12 @@ func _refresh_bag_detail() -> void:
 	if bag_selected_item.is_empty():
 		bag_detail_icon.texture = BAG_INTERFACE_ICON
 		bag_detail_icon.modulate = Color(1, 1, 1, 0.35)
-		bag_detail_name_label.text = "Select an item"
-		bag_detail_meta_label.text = "Choose an item from your Bag"
-		bag_detail_description_label.text = "Item details and actions will appear here."
-		bag_detail_use_button.text = "Select an Item"
+		bag_detail_name_label.text = LocalizationManager.text("ui.bag.select_item")
+		bag_detail_meta_label.text = LocalizationManager.text("ui.bag.choose_item")
+		bag_detail_description_label.text = LocalizationManager.text("ui.bag.details_placeholder")
+		bag_detail_use_button.text = LocalizationManager.text("ui.bag.select_item_action")
 		bag_detail_use_button.disabled = true
-		bag_detail_hotbar_button.text = "Assign to Hotbar"
+		bag_detail_hotbar_button.text = LocalizationManager.text("ui.bag.assign_hotbar")
 		bag_detail_hotbar_button.disabled = true
 		return
 
@@ -14980,7 +14988,9 @@ func _refresh_bag_detail() -> void:
 	bag_detail_name_label.text = item_name
 	bag_detail_meta_label.text = "%s · %s" % [
 		_bag_category_label(category),
-		"KEY ITEM" if bool(bag_selected_item.get("permanent", false)) else "x%d owned" % quantity,
+		LocalizationManager.text("ui.bag.key_item")
+		if bool(bag_selected_item.get("permanent", false))
+		else LocalizationManager.text("ui.bag.quantity_owned", {"quantity": quantity}),
 	]
 	bag_detail_description_label.text = _bag_item_detail_description(bag_selected_item)
 
@@ -14988,7 +14998,11 @@ func _refresh_bag_detail() -> void:
 	bag_detail_use_button.text = _bag_item_use_action_label(bag_selected_item)
 	bag_detail_use_button.disabled = not can_use
 	var can_assign := _bag_item_can_assign_to_hotbar(bag_selected_item)
-	bag_detail_hotbar_button.text = "Assign to Hotbar" if can_assign else "Not Hotbar Compatible"
+	bag_detail_hotbar_button.text = (
+		LocalizationManager.text("ui.bag.assign_hotbar")
+		if can_assign
+		else LocalizationManager.text("ui.bag.not_hotbar_compatible")
+	)
 	bag_detail_hotbar_button.disabled = not can_assign
 
 func _bag_item_detail_description(item: Dictionary) -> String:
@@ -14996,7 +15010,7 @@ func _bag_item_detail_description(item: Dictionary) -> String:
 	if use_action == "unlock_appearance" and not _bag_item_matches_player_gender(item):
 		var allowed_models := _bag_item_allowed_genders(item)
 		var model_label := " or ".join(allowed_models).capitalize()
-		return "%s character models only. Keep this item in your Bag or trade it; it cannot be moved to Character Customization." % model_label
+		return LocalizationManager.text("ui.bag.description.wrong_model", {"models": model_label})
 	var description := str(item.get("shortDesc", item.get("description", ""))).strip_edges()
 	if description != "":
 		return description
@@ -15008,29 +15022,29 @@ func _bag_item_detail_description(item: Dictionary) -> String:
 	var item_id := _normalize_item_id(str(item.get("id", "")))
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	if FieldMoveService.is_direct_field_move(field_move_id):
-		return "A permanent field Charm. Use it here or assign it to your hotbar for quick access."
+		return LocalizationManager.text("ui.bag.description.field_charm")
 	if _bag_machine_move_id(item_id) != "":
-		return "Teach this move to a compatible Pokemon in your party."
+		return LocalizationManager.text("ui.bag.description.machine")
 	if _is_pokemon_usable_item_id(item_id):
-		return "Use this item on a compatible Pokemon in your party."
+		return LocalizationManager.text("ui.bag.description.pokemon_item")
 
 	match str(item.get("category", "general")):
 		"pokeball":
-			return "Use this item from the Bag during a wild battle."
+			return LocalizationManager.text("ui.bag.description.pokeball")
 		"held_items":
-			return "Give this item to a Pokemon from its Summary."
+			return LocalizationManager.text("ui.bag.description.held_item")
 		"power_stones":
-			return "A special battle item. Manage compatible items from a Pokemon Summary."
+			return LocalizationManager.text("ui.bag.description.power_stone")
 		"key_items":
-			return "An important item used during your adventure."
+			return LocalizationManager.text("ui.bag.description.key_item")
 		"charms":
-			return "A permanent tradeable field Charm. It can also be assigned to your hotbar."
+			return LocalizationManager.text("ui.bag.description.charm")
 		"cosmetics":
-			return "A cosmetic unlock connected to your account."
+			return LocalizationManager.text("ui.bag.description.cosmetic")
 		"currency":
-			return "A special currency or collectible."
+			return LocalizationManager.text("ui.bag.description.currency")
 		_:
-			return "This item is stored safely in your Bag."
+			return LocalizationManager.text("ui.bag.description.default")
 
 func _bag_item_can_use_from_bag(item: Dictionary) -> bool:
 	var item_id := _normalize_item_id(str(item.get("id", "")))
@@ -15054,37 +15068,37 @@ func _bag_item_can_assign_to_hotbar(item: Dictionary) -> bool:
 func _bag_item_use_action_label(item: Dictionary) -> String:
 	var item_id := _normalize_item_id(str(item.get("id", "")))
 	if item_id == "escape-rope-action":
-		return "Use Escape Rope"
+		return LocalizationManager.text("ui.bag.action.use_escape_rope")
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	if FieldMoveService.is_direct_field_move(field_move_id):
-		return "Use Charm"
+		return LocalizationManager.text("ui.bag.action.use_charm")
 	var use_action := str(item.get("useAction", "")).strip_edges()
 	if use_action == "trainer_name_change":
-		return "Change Name"
+		return LocalizationManager.text("ui.bag.action.change_name")
 	if use_action == "trainer_gender_change":
-		return "Change Gender"
+		return LocalizationManager.text("ui.bag.action.change_gender")
 	if use_action == "open_item_bundle":
-		return "Open Box"
+		return LocalizationManager.text("ui.bag.action.open_box")
 	if use_action == "unlock_appearance":
 		if not _bag_item_matches_player_gender(item):
 			var allowed_models := _bag_item_allowed_genders(item)
-			return "%s Model Only" % " or ".join(allowed_models).capitalize()
-		return "Move to Customization"
+			return LocalizationManager.text("ui.bag.action.model_only", {"models": " or ".join(allowed_models).capitalize()})
+		return LocalizationManager.text("ui.bag.action.move_to_customization")
 	if use_action == "redeem_aether_blessing":
-		return "Redeem Voucher"
+		return LocalizationManager.text("ui.bag.action.redeem_voucher")
 	if use_action == "apply_guild_emblem_template":
-		return "Unlock for Guild"
+		return LocalizationManager.text("ui.bag.action.unlock_for_guild")
 	if _bag_machine_move_id(item_id) != "":
-		return "Teach Move"
+		return LocalizationManager.text("ui.bag.action.teach_move")
 	if _is_pokemon_usable_item_id(item_id):
-		return "Use Item"
+		return LocalizationManager.text("ui.bag.action.use_item")
 	match str(item.get("category", "general")):
 		"pokeball":
-			return "Battle Item"
+			return LocalizationManager.text("ui.bag.action.battle_item")
 		"held_items", "power_stones":
-			return "Use Pokemon Summary"
+			return LocalizationManager.text("ui.bag.action.use_summary")
 		_:
-			return "Not Usable Here"
+			return LocalizationManager.text("ui.bag.action.not_usable")
 
 func _on_bag_detail_use_pressed() -> void:
 	if bag_selected_item.is_empty() or not _bag_item_can_use_from_bag(bag_selected_item):
@@ -15112,11 +15126,11 @@ func _show_bag_item_context_menu(item: Dictionary) -> void:
 		_setup_bag_item_context_menu()
 	bag_item_context_item = item.duplicate(true)
 	bag_item_context_menu.clear()
-	bag_item_context_menu.add_item("Inspect", 0)
+	bag_item_context_menu.add_item(LocalizationManager.text("ui.bag.action.inspect"), 0)
 	if _bag_item_can_use_from_bag(item):
 		bag_item_context_menu.add_item(_bag_item_use_action_label(item), 1)
 	if _bag_item_can_assign_to_hotbar(item):
-		bag_item_context_menu.add_item("Assign to Hotbar", 2)
+		bag_item_context_menu.add_item(LocalizationManager.text("ui.bag.assign_hotbar"), 2)
 	var viewport_size := get_viewport().get_visible_rect().size
 	var menu_position := get_viewport().get_mouse_position()
 	menu_position.x = minf(menu_position.x, viewport_size.x - 200.0)
@@ -15143,7 +15157,7 @@ func _bag_category_label(category_id: String) -> String:
 	for category_value: Variant in BAG_CATEGORIES:
 		var category := category_value as Dictionary
 		if str(category.get("id", "")) == category_id:
-			return str(category.get("label", category_id))
+			return LocalizationManager.text(str(category.get("labelKey", category_id)))
 	return category_id.replace("_", " ").capitalize()
 
 func _on_bag_item_selected(item: Dictionary) -> void:
@@ -15159,7 +15173,15 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 		return
 	if use_action == "trainer_gender_change":
 		var target_gender := "female" if PlayerSave.gender == "male" else "male"
-		_show_ui_confirm_popup("Change gender?", "Change to %s?\n\nAll cosmetics in Character Customization will be returned to your Bag. Your equipped appearance and colours will reset." % target_gender.capitalize(), "Change to %s" % target_gender.capitalize(), Callable(self, "_execute_trainer_gender_change").bind(target_gender), Vector2i(480, 220), true)
+		var target_gender_label := LocalizationManager.text("ui.bag.gender.%s" % target_gender)
+		_show_ui_confirm_popup(
+			LocalizationManager.text("ui.bag.gender.confirm_title"),
+			LocalizationManager.text("ui.bag.gender.confirm_message", {"gender": target_gender_label}),
+			LocalizationManager.text("ui.bag.gender.confirm_action", {"gender": target_gender_label}),
+			Callable(self, "_execute_trainer_gender_change").bind(target_gender),
+			Vector2i(480, 220),
+			true
+		)
 		return
 	if use_action == "unlock_appearance" and not _bag_item_matches_player_gender(item):
 		_add_chat_message(_bag_item_detail_description(item))
@@ -15167,7 +15189,7 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 	if use_action == "open_item_bundle":
 		var open_result: Dictionary = await InventoryService.use_inventory_item(item_id)
 		if not bool(open_result.get("success", false)):
-			_add_chat_message(str(open_result.get("error", "That box could not be opened.")))
+			_add_chat_message(str(open_result.get("error", LocalizationManager.text("ui.bag.message.open_box_failed"))))
 			return
 		bag_inventory_items = _normalize_bag_inventory_items(open_result.get("inventory", []))
 		_apply_owned_appearance_unlocks(
@@ -15182,15 +15204,15 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 		bag_selected_item = {}
 		_refresh_bag_items()
 		_refresh_bag_detail()
-		_add_chat_message("%s was opened. %d cosmetic items were added to your Bag." % [
-			str(item.get("name", _item_name_from_id(item_id))),
-			granted_count,
-		])
+		_add_chat_message(LocalizationManager.text("ui.bag.message.box_opened", {
+			"item": str(item.get("name", _item_name_from_id(item_id))),
+			"count": granted_count,
+		}))
 		return
 	if use_action == "unlock_appearance":
 		var unlock_result: Dictionary = await InventoryService.use_inventory_item(item_id)
 		if not bool(unlock_result.get("success", false)):
-			_add_chat_message(str(unlock_result.get("error", "That cosmetic could not be moved to Character Customization.")))
+			_add_chat_message(str(unlock_result.get("error", LocalizationManager.text("ui.bag.message.cosmetic_failed"))))
 			return
 		bag_inventory_items = _normalize_bag_inventory_items(unlock_result.get("inventory", []))
 		_apply_owned_appearance_unlocks(
@@ -15201,12 +15223,14 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 		bag_selected_item = {}
 		_refresh_bag_items()
 		_refresh_bag_detail()
-		_add_chat_message("%s was added to Character Customization." % str(item.get("name", _item_name_from_id(item_id))))
+		_add_chat_message(LocalizationManager.text("ui.bag.message.cosmetic_added", {
+			"item": str(item.get("name", _item_name_from_id(item_id))),
+		}))
 		return
 	if use_action == "redeem_aether_blessing":
 		var redeem_result: Dictionary = await InventoryService.use_inventory_item(item_id)
 		if not bool(redeem_result.get("success", false)):
-			_add_chat_message(str(redeem_result.get("error", "That voucher could not be redeemed.")))
+			_add_chat_message(str(redeem_result.get("error", LocalizationManager.text("ui.bag.message.voucher_failed"))))
 			return
 		bag_inventory_items = _normalize_bag_inventory_items(redeem_result.get("inventory", []))
 		var updated_user := redeem_result.get("user", {}) as Dictionary
@@ -15220,15 +15244,14 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 		bag_selected_item = {}
 		_refresh_bag_items()
 		_refresh_bag_detail()
-		_add_chat_message(
-			"Aether Blessing extended by %d days."
-			% int(redeem_result.get("durationDays", 0))
-		)
+		_add_chat_message(LocalizationManager.text("ui.bag.message.blessing_extended", {
+			"days": int(redeem_result.get("durationDays", 0)),
+		}))
 		return
 	if use_action == "apply_guild_emblem_template":
 		var emblem_result: Dictionary = await InventoryService.use_inventory_item(item_id)
 		if not bool(emblem_result.get("success", false)):
-			_add_chat_message(str(emblem_result.get("error", "That Guild emblem could not be applied.")))
+			_add_chat_message(str(emblem_result.get("error", LocalizationManager.text("ui.bag.message.guild_emblem_failed"))))
 			return
 		bag_inventory_items = _normalize_bag_inventory_items(emblem_result.get("inventory", []))
 		bag_selected_item = {}
@@ -15237,18 +15260,20 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 		if guild_popup != null and guild_popup.visible:
 			await guild_popup._refresh_from_server()
 		var applied_guild := emblem_result.get("guild", {}) as Dictionary
-		_add_chat_message("%s was consumed, unlocked and applied to %s." % [
-			str(item.get("name", _item_name_from_id(item_id))),
-			str(applied_guild.get("name", "your Guild")),
-		])
+		_add_chat_message(LocalizationManager.text("ui.bag.message.guild_emblem_applied", {
+			"item": str(item.get("name", _item_name_from_id(item_id))),
+			"guild": str(applied_guild.get("name", LocalizationManager.text("ui.bag.your_guild"))),
+		}))
 		return
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	if FieldMoveService.is_direct_field_move(field_move_id):
 		var field_move_result: Dictionary = await FieldMoveService.use_direct_field_move(field_move_id)
 		if not bool(field_move_result.get("success", false)):
-			_add_chat_message(str(field_move_result.get("error", "That Charm cannot be used right now.")))
+			_add_chat_message(str(field_move_result.get("error", LocalizationManager.text("ui.bag.message.charm_unavailable"))))
 		else:
-			_add_chat_message(str(field_move_result.get("message", "%s was used." % str(item.get("name", "Field Move Charm")))))
+			_add_chat_message(str(field_move_result.get("message", LocalizationManager.text("ui.bag.message.item_used", {
+				"item": str(item.get("name", LocalizationManager.text("ui.bag.field_move_charm"))),
+			}))))
 		return
 	if _bag_machine_move_id(item_id) != "":
 		await _refresh_bag_inventory_for_machine_selection()
@@ -15263,7 +15288,9 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 	if notice_message != "":
 		_add_chat_message(notice_message)
 		return
-	_add_chat_message("%s is informational and cannot be used from the Bag." % str(item.get("name", _item_name_from_id(item_id))))
+	_add_chat_message(LocalizationManager.text("ui.bag.message.informational", {
+		"item": str(item.get("name", _item_name_from_id(item_id))),
+	}))
 
 
 func _show_trainer_name_change_popup() -> void:
@@ -15271,7 +15298,7 @@ func _show_trainer_name_change_popup() -> void:
 		_setup_trainer_name_change_popup()
 	trainer_name_change_username_input.text = str(AuthService.current_user.get("username", "")).strip_edges()
 	trainer_name_change_display_name_input.text = str(AuthService.current_user.get("displayName", PlayerSave.player_name)).strip_edges()
-	trainer_name_change_status_label.text = "Your previous username will remain reserved permanently."
+	trainer_name_change_status_label.text = LocalizationManager.text("ui.bag.name_change.reserved")
 	trainer_name_change_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	trainer_name_change_popup.visible = true
 	_activate_ui_panel(trainer_name_change_popup)
@@ -15298,22 +15325,22 @@ func _setup_trainer_name_change_popup() -> void:
 	layout.add_theme_constant_override("separation", 8)
 	margin.add_child(layout)
 	var title := Label.new()
-	title.text = "Name Change Ticket"
+	_set_localized_control_property(title, "text", "ui.bag.name_change.title")
 	title.add_theme_font_size_override("font_size", 18)
 	title.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
 	layout.add_child(title)
 	var hint := Label.new()
-	hint.text = "Change both your account username and public Trainer name."
+	_set_localized_control_property(hint, "text", "ui.bag.name_change.hint")
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	hint.add_theme_font_size_override("font_size", 12)
 	hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	layout.add_child(hint)
 	trainer_name_change_username_input = LineEdit.new()
-	trainer_name_change_username_input.placeholder_text = "Username (letters, numbers, underscores)"
+	_set_localized_control_property(trainer_name_change_username_input, "placeholder_text", "ui.bag.name_change.username")
 	trainer_name_change_username_input.max_length = 32
 	layout.add_child(trainer_name_change_username_input)
 	trainer_name_change_display_name_input = LineEdit.new()
-	trainer_name_change_display_name_input.placeholder_text = "Display name"
+	_set_localized_control_property(trainer_name_change_display_name_input, "placeholder_text", "ui.settings.account.display_name")
 	trainer_name_change_display_name_input.max_length = 32
 	layout.add_child(trainer_name_change_display_name_input)
 	trainer_name_change_status_label = Label.new()
@@ -15325,12 +15352,12 @@ func _setup_trainer_name_change_popup() -> void:
 	actions.add_theme_constant_override("separation", 8)
 	layout.add_child(actions)
 	var cancel := Button.new()
-	cancel.text = "Cancel"
+	_set_localized_control_property(cancel, "text", "common.cancel")
 	cancel.pressed.connect(func(): trainer_name_change_popup.visible = false)
 	_apply_button_style(cancel)
 	actions.add_child(cancel)
 	trainer_name_change_confirm_button = Button.new()
-	trainer_name_change_confirm_button.text = "Change Name"
+	_set_localized_control_property(trainer_name_change_confirm_button, "text", "ui.bag.action.change_name")
 	trainer_name_change_confirm_button.pressed.connect(_execute_trainer_name_change)
 	_apply_button_style(trainer_name_change_confirm_button, "primary")
 	actions.add_child(trainer_name_change_confirm_button)
@@ -15342,31 +15369,35 @@ func _execute_trainer_name_change() -> void:
 	var username := trainer_name_change_username_input.text.strip_edges()
 	var display_name := trainer_name_change_display_name_input.text.strip_edges()
 	if username.length() < 3 or display_name.is_empty():
-		trainer_name_change_status_label.text = "Enter a username of at least 3 characters and a display name."
+		trainer_name_change_status_label.text = LocalizationManager.text("ui.bag.name_change.validation")
 		trainer_name_change_status_label.add_theme_color_override("font_color", UI_DANGER)
 		return
 	trainer_name_change_in_progress = true
 	trainer_name_change_confirm_button.disabled = true
-	trainer_name_change_status_label.text = "Changing name securely..."
+	trainer_name_change_status_label.text = LocalizationManager.text("ui.bag.name_change.changing")
 	var result: Dictionary = await InventoryService.change_trainer_name(username, display_name)
 	trainer_name_change_in_progress = false
 	trainer_name_change_confirm_button.disabled = false
 	if not bool(result.get("success", false)):
-		trainer_name_change_status_label.text = str(result.get("error", "Name change failed."))
+		trainer_name_change_status_label.text = str(result.get("error", LocalizationManager.text("ui.bag.name_change.failed")))
 		trainer_name_change_status_label.add_theme_color_override("font_color", UI_DANGER)
 		return
 	_apply_trainer_service_result(result, false)
 	trainer_name_change_popup.visible = false
-	add_system_message("Your Trainer name is now %s." % PlayerSave.player_name)
+	add_system_message(LocalizationManager.text("ui.bag.name_change.success", {"name": PlayerSave.player_name}))
 
 
 func _execute_trainer_gender_change(target_gender: String) -> void:
 	var result: Dictionary = await InventoryService.change_trainer_gender(target_gender)
 	if not bool(result.get("success", false)):
-		add_system_message("Gender change failed: %s" % str(result.get("error", "Unknown error")))
+		add_system_message(LocalizationManager.text("ui.bag.gender.failed", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
 	_apply_trainer_service_result(result, true)
-	add_system_message("Gender updated. %d cosmetics were returned to your Bag." % int(result.get("returnedCosmeticItemCount", 0)))
+	add_system_message(LocalizationManager.text("ui.bag.gender.success", {
+		"count": int(result.get("returnedCosmeticItemCount", 0)),
+	}))
 
 
 func _apply_trainer_service_result(result: Dictionary, gender_changed: bool) -> void:
@@ -15402,7 +15433,7 @@ func _show_bag_item_use_popup(item: Dictionary) -> void:
 	var item_id := _normalize_item_id(str(item.get("id", "")))
 	var item_name := str(item.get("name", _item_name_from_id(item_id)))
 	var quantity: int = max(int(item.get("quantity", 1)), 1)
-	bag_item_use_title_label.text = "Use %s" % item_name
+	bag_item_use_title_label.text = LocalizationManager.text("ui.bag.use.named_title", {"item": item_name})
 	bag_item_use_item_label.text = "%s x%s" % [item_name, quantity]
 	var gameplay: Dictionary = _staff_dictionary_from_variant(item.get("gameplay", {}))
 	bag_item_use_quantity_spinbox.max_value = 1 if str(gameplay.get("quantityPolicy", "")) == "single" else min(quantity, 99)
@@ -15410,7 +15441,7 @@ func _show_bag_item_use_popup(item: Dictionary) -> void:
 	bag_item_use_quantity_spinbox.editable = false
 	if bag_item_use_confirm_button != null:
 		bag_item_use_confirm_button.disabled = true
-	bag_item_use_status_label.text = "Select a Pokemon first."
+	bag_item_use_status_label.text = LocalizationManager.text("ui.bag.use.select_pokemon_first")
 	bag_item_use_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	_refresh_bag_item_use_party_list()
 	bag_item_use_popup.visible = true
@@ -15432,7 +15463,7 @@ func _refresh_bag_item_use_party_list() -> void:
 		child.queue_free()
 
 	if PlayerSave.party.is_empty():
-		bag_item_use_party_list.add_child(_create_bag_empty_state("Your party is empty."))
+		bag_item_use_party_list.add_child(_create_bag_empty_state(LocalizationManager.text("ui.bag.use.party_empty")))
 		return
 
 	var shown_pokemon_count := 0
@@ -15448,7 +15479,7 @@ func _refresh_bag_item_use_party_list() -> void:
 		shown_pokemon_count += 1
 
 	if shown_pokemon_count == 0:
-		bag_item_use_party_list.add_child(_create_bag_empty_state("No compatible Pokemon in your party."))
+		bag_item_use_party_list.add_child(_create_bag_empty_state(LocalizationManager.text("ui.bag.use.no_compatible_pokemon")))
 
 func _on_bag_item_use_quantity_changed(_value: float) -> void:
 	if bag_item_use_popup == null or not bag_item_use_popup.visible:
@@ -15494,7 +15525,10 @@ func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> C
 	row.add_child(details)
 
 	var name_label := Label.new()
-	name_label.text = "%s  Lv. %s" % [pokemon.species, max(pokemon.level, 1)]
+	name_label.text = LocalizationManager.text("ui.bag.use.pokemon_level", {
+		"pokemon": pokemon.species,
+		"level": max(pokemon.level, 1),
+	})
 	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	name_label.add_theme_font_size_override("font_size", 15)
 	name_label.add_theme_color_override("font_color", UI_TEXT)
@@ -15509,7 +15543,7 @@ func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> C
 	button.tooltip_text = str(preview.get("tooltip", button.text))
 	button.disabled = bag_item_use_in_progress or pokemon.owned_pokemon_id <= 0 or not _bag_item_can_affect_pokemon(pokemon, item_id)
 	if pokemon.owned_pokemon_id <= 0:
-		button.tooltip_text = "%s cannot use this item right now." % pokemon.species
+		button.tooltip_text = LocalizationManager.text("ui.bag.use.pokemon_unavailable", {"pokemon": pokemon.species})
 	elif button.disabled and not bag_item_use_in_progress:
 		var disabled_preview := _bag_item_use_preview_for_pokemon(pokemon, item_id, requested_quantity)
 		button.tooltip_text = str(disabled_preview.get("tooltip", button.tooltip_text))
@@ -15524,13 +15558,19 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 	if machine_move_id != "":
 		if _pokemon_knows_move_id(pokemon, machine_move_id):
 			return {
-				"label": "Already knows %s" % _format_move_name(machine_move_id),
-				"tooltip": "%s already knows %s." % [pokemon.species, _format_move_name(machine_move_id)],
+				"label": LocalizationManager.text("ui.bag.use.already_knows", {"move": _format_move_name(machine_move_id)}),
+				"tooltip": LocalizationManager.text("ui.bag.use.already_knows_tooltip", {
+					"pokemon": pokemon.species,
+					"move": _format_move_name(machine_move_id),
+				}),
 				"canApply": false,
 			}
 		return {
-			"label": "Teach %s" % _format_move_name(machine_move_id),
-			"tooltip": "Teach %s to %s. If a Pokémon can learn this move, the machine can be used again." % [_format_move_name(machine_move_id), pokemon.species],
+			"label": LocalizationManager.text("ui.bag.use.teach_move", {"move": _format_move_name(machine_move_id)}),
+			"tooltip": LocalizationManager.text("ui.bag.use.teach_move_tooltip", {
+				"move": _format_move_name(machine_move_id),
+				"pokemon": pokemon.species,
+			}),
 			"canApply": true,
 		}
 	var gameplay := _bag_gameplay_definition_for_item_id(item_id)
@@ -15544,8 +15584,9 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 	var current_level: int = clampi(max(pokemon.level, 1), 1, POKEMON_MAX_LEVEL)
 	if current_level >= POKEMON_MAX_LEVEL:
 		return {
-			"label": "Max level",
-			"tooltip": "%s is already Lv. 100." % pokemon.species,
+			"label": LocalizationManager.text("ui.bag.use.max_level"),
+			"tooltip": LocalizationManager.text("ui.bag.use.already_level_100", {"pokemon": pokemon.species}),
+			"canApply": false,
 		}
 
 	var growth_rate := _normalize_exp_growth_rate(pokemon.growth_rate)
@@ -15554,8 +15595,9 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 	var remaining_exp: int = max(max_exp - current_exp, 0)
 	if remaining_exp <= 0:
 		return {
-			"label": "Max level",
-			"tooltip": "%s is already at the level cap." % pokemon.species,
+			"label": LocalizationManager.text("ui.bag.use.max_level"),
+			"tooltip": LocalizationManager.text("ui.bag.use.already_level_cap", {"pokemon": pokemon.species}),
+			"canApply": false,
 		}
 
 	var quantity: int = max(requested_quantity, 1)
@@ -15577,19 +15619,20 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 
 	var label := "+%s EXP" % gained_exp
 	if target_level > current_level:
-		label = "Lv. %s  +%s EXP" % [target_level, gained_exp]
+		label = LocalizationManager.text("ui.bag.use.level_exp", {"level": target_level, "exp": gained_exp})
 	if used_quantity < quantity:
-		label += "  uses %s/%s" % [used_quantity, quantity]
+		label += LocalizationManager.text("ui.bag.use.uses_suffix", {"used": used_quantity, "requested": quantity})
 
 	return {
+		"canApply": true,
 		"label": label,
-		"tooltip": "%s\nItems used: %s\nExperience gained: %s\nLevel: %s → %s" % [
-			pokemon.species,
-			used_quantity,
-			gained_exp,
-			current_level,
-			target_level,
-		],
+		"tooltip": LocalizationManager.text("ui.bag.use.exp_tooltip", {
+			"pokemon": pokemon.species,
+			"used": used_quantity,
+			"exp": gained_exp,
+			"current_level": current_level,
+			"target_level": target_level,
+		}),
 	}
 
 func _bag_ev_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, requested_quantity: int) -> Dictionary:
@@ -15611,16 +15654,17 @@ func _bag_ev_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, req
 	var stat_label := _summary_stat_label(stat_id)
 	if max_gain <= 0:
 		return {
-			"label": "Storage full",
-			"tooltip": "%s cannot gain more training points right now.\n%s training points waiting: %s/%s\nAlready assigned: %s/%s\nTotal waiting: %s" % [
-				pokemon.species,
-				stat_label,
-				current_value,
-				POKEMON_EV_STAT_LIMIT,
-				allocated_total,
-				POKEMON_EV_TOTAL_LIMIT,
-				stored_total,
-			],
+			"label": LocalizationManager.text("ui.bag.use.storage_full"),
+			"tooltip": LocalizationManager.text("ui.bag.use.storage_full_tooltip", {
+				"pokemon": pokemon.species,
+				"stat": stat_label,
+				"stat_current": current_value,
+				"stat_max": POKEMON_EV_STAT_LIMIT,
+				"allocated": allocated_total,
+				"total_max": POKEMON_EV_TOTAL_LIMIT,
+				"stored": stored_total,
+			}),
+			"canApply": false,
 		}
 
 	var quantity: int = max(requested_quantity, 1)
@@ -15628,23 +15672,28 @@ func _bag_ev_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, req
 	var gained_evs: int = min(used_quantity * potency, max_gain)
 	var new_value: int = current_value + gained_evs
 	var new_stored_total: int = stored_total + gained_evs
-	var label := "Stored %s %s -> %s" % [stat_label, current_value, new_value]
+	var label := LocalizationManager.text("ui.bag.use.stored_evs", {
+		"stat": stat_label,
+		"current": current_value,
+		"new": new_value,
+	})
 	if used_quantity < quantity:
-		label += "  uses %s/%s" % [used_quantity, quantity]
+		label += LocalizationManager.text("ui.bag.use.uses_suffix", {"used": used_quantity, "requested": quantity})
 
 	return {
+		"canApply": true,
 		"label": label,
-		"tooltip": "%s\nItems used: %s\n%s training points waiting: %s → %s\nTotal waiting: %s → %s\nAlready assigned: %s/%s" % [
-			pokemon.species,
-			used_quantity,
-			stat_label,
-			current_value,
-			new_value,
-			stored_total,
-			new_stored_total,
-			allocated_total,
-			POKEMON_EV_TOTAL_LIMIT,
-		],
+		"tooltip": LocalizationManager.text("ui.bag.use.ev_tooltip", {
+			"pokemon": pokemon.species,
+			"used": used_quantity,
+			"stat": stat_label,
+			"current": current_value,
+			"new": new_value,
+			"stored_total": stored_total,
+			"new_stored_total": new_stored_total,
+			"allocated": allocated_total,
+			"total_max": POKEMON_EV_TOTAL_LIMIT,
+		}),
 	}
 
 func _bag_item_can_affect_pokemon(pokemon: Pokemon, item_id: String) -> bool:
@@ -15655,8 +15704,7 @@ func _bag_item_can_affect_pokemon(pokemon: Pokemon, item_id: String) -> bool:
 		return false
 	if preview.has("canApply"):
 		return bool(preview.get("canApply", false))
-	var label := str(preview.get("label", ""))
-	return not label.contains("Max level") and not label.contains("EV cap") and not label.contains("Storage full")
+	return not preview.is_empty()
 
 func _pokemon_preview_current_experience(pokemon: Pokemon, growth_rate: String) -> int:
 	var level_floor_exp: int = _pokemon_exp_for_level(growth_rate, max(pokemon.level, 1))
@@ -15720,16 +15768,16 @@ func _on_bag_item_use_pokemon_selected(slot_index: int) -> void:
 
 	var pokemon: Pokemon = PlayerSave.party[slot_index]
 	if pokemon == null or pokemon.owned_pokemon_id <= 0:
-		_set_bag_item_use_status("This Pokémon can’t be changed right now.", true)
+		_set_bag_item_use_status(LocalizationManager.text("ui.pokemon_summary.readonly_error"), true)
 		return
 
 	var item_id := _normalize_item_id(str(bag_item_use_pending_item.get("id", "")))
 	if not _is_pokemon_usable_item_id(item_id):
-		_set_bag_item_use_status("This item cannot be used on Pokemon yet.", true)
+		_set_bag_item_use_status(LocalizationManager.text("ui.bag.use.unsupported_item"), true)
 		return
 	if not _bag_item_can_affect_pokemon(pokemon, item_id):
 		var preview := _bag_item_use_preview_for_pokemon(pokemon, item_id, 1)
-		_set_bag_item_use_status(str(preview.get("label", "This item would have no effect.")), true)
+		_set_bag_item_use_status(str(preview.get("label", LocalizationManager.text("ui.bag.use.no_effect"))), true)
 		return
 
 	bag_item_use_selected_slot = slot_index
@@ -15741,12 +15789,12 @@ func _on_bag_item_use_pokemon_selected(slot_index: int) -> void:
 
 func _refresh_bag_item_use_selected_preview() -> void:
 	if bag_item_use_selected_slot < 0 or bag_item_use_selected_slot >= PlayerSave.party.size():
-		_set_bag_item_use_status("Select a Pokemon first.", false)
+		_set_bag_item_use_status(LocalizationManager.text("ui.bag.use.select_pokemon_first"), false)
 		return
 
 	var pokemon: Pokemon = PlayerSave.party[bag_item_use_selected_slot]
 	if pokemon == null:
-		_set_bag_item_use_status("Select a Pokemon first.", false)
+		_set_bag_item_use_status(LocalizationManager.text("ui.bag.use.select_pokemon_first"), false)
 		return
 
 	var item_id := _normalize_item_id(str(bag_item_use_pending_item.get("id", "")))
@@ -15754,29 +15802,32 @@ func _refresh_bag_item_use_selected_preview() -> void:
 	var preview := _bag_item_use_preview_for_pokemon(pokemon, item_id, quantity)
 	var preview_text := str(preview.get("label", ""))
 	if preview_text == "":
-		preview_text = "No item change"
-	_set_bag_item_use_status("%s selected. %s" % [pokemon.species, preview_text], false)
+		preview_text = LocalizationManager.text("ui.bag.use.no_item_change")
+	_set_bag_item_use_status(LocalizationManager.text("ui.bag.use.selected_preview", {
+		"pokemon": pokemon.species,
+		"preview": preview_text,
+	}), false)
 
 func _on_bag_item_use_confirm_pressed() -> void:
 	if bag_item_use_in_progress:
 		return
 	if bag_item_use_selected_slot < 0 or bag_item_use_selected_slot >= PlayerSave.party.size():
-		_set_bag_item_use_status("Select a Pokemon first.", true)
+		_set_bag_item_use_status(LocalizationManager.text("ui.bag.use.select_pokemon_first"), true)
 		return
 
 	var pokemon: Pokemon = PlayerSave.party[bag_item_use_selected_slot]
 	if pokemon == null or pokemon.owned_pokemon_id <= 0:
-		_set_bag_item_use_status("This Pokémon can’t be changed right now.", true)
+		_set_bag_item_use_status(LocalizationManager.text("ui.pokemon_summary.readonly_error"), true)
 		return
 
 	var item_id := _normalize_item_id(str(bag_item_use_pending_item.get("id", "")))
 	var quantity: int = clampi(int(bag_item_use_quantity_spinbox.value), 1, int(bag_item_use_quantity_spinbox.max_value))
 	if not _is_pokemon_usable_item_id(item_id):
-		_set_bag_item_use_status("This item cannot be used on Pokemon yet.", true)
+		_set_bag_item_use_status(LocalizationManager.text("ui.bag.use.unsupported_item"), true)
 		return
 	if not _bag_item_can_affect_pokemon(pokemon, item_id):
 		var preview := _bag_item_use_preview_for_pokemon(pokemon, item_id, quantity)
-		_set_bag_item_use_status(str(preview.get("label", "This item would have no effect.")), true)
+		_set_bag_item_use_status(str(preview.get("label", LocalizationManager.text("ui.bag.use.no_effect"))), true)
 		return
 	var machine_move_id := _bag_machine_move_id(item_id)
 	if machine_move_id != "":
@@ -15789,7 +15840,7 @@ func _on_bag_item_use_confirm_pressed() -> void:
 	bag_item_use_quantity_spinbox.editable = false
 	if bag_item_use_confirm_button != null:
 		bag_item_use_confirm_button.disabled = true
-	_set_bag_item_use_status("Using item...", false)
+	_set_bag_item_use_status(LocalizationManager.text("ui.bag.use.using"), false)
 	_refresh_bag_item_use_party_list()
 
 	var result: Dictionary = await InventoryService.use_pokemon_item(pokemon.owned_pokemon_id, item_id, quantity)
@@ -15798,7 +15849,9 @@ func _on_bag_item_use_confirm_pressed() -> void:
 	if bag_item_use_confirm_button != null:
 		bag_item_use_confirm_button.disabled = false
 	if not bool(result.get("success", false)):
-		_set_bag_item_use_status("Could not use item: %s" % str(result.get("error", "Unknown error")), true)
+		_set_bag_item_use_status(LocalizationManager.text("ui.bag.use.failed", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}), true)
 		_refresh_bag_item_use_party_list()
 		return
 
@@ -15841,12 +15894,16 @@ func _add_bag_item_use_success_message(item_id: String, reward: Dictionary) -> v
 			var stat_id := str(effort_entry.get("stat", "")).strip_edges()
 			var ev_changes: Dictionary = _staff_dictionary_from_variant(effort_entry.get("storedEvChanges", effort_entry.get("evChanges", {})))
 			var gained_evs: int = max(int(ev_changes.get(stat_id, 0)), 0)
-			var suffix: String = " %s stored +%s %s EVs." % [
-				str(effort_entry.get("species", "Pokemon")),
-				gained_evs,
-				_summary_stat_label(stat_id),
-			] if gained_evs > 0 else ""
-			_add_chat_message("Used %sx %s.%s" % [quantity, item_name, suffix])
+			if gained_evs > 0:
+				_add_chat_message(LocalizationManager.text("ui.bag.use.success_evs", {
+					"quantity": quantity,
+					"item": item_name,
+					"pokemon": str(effort_entry.get("species", LocalizationManager.text("ui.bag.pokemon_fallback"))),
+					"amount": gained_evs,
+					"stat": _summary_stat_label(stat_id),
+				}))
+			else:
+				_add_chat_message(LocalizationManager.text("ui.bag.use.success", {"quantity": quantity, "item": item_name}))
 			return
 
 	var experience_gained: int = 0
@@ -15854,13 +15911,19 @@ func _add_bag_item_use_success_message(item_id: String, reward: Dictionary) -> v
 	if experience_value is Array:
 		var experience_array: Array = experience_value as Array
 		if experience_array.is_empty() or not (experience_array[0] is Dictionary):
-			_add_chat_message("Used %sx %s." % [quantity, item_name])
+			_add_chat_message(LocalizationManager.text("ui.bag.use.success", {"quantity": quantity, "item": item_name}))
 			return
 		var experience_entry: Dictionary = experience_array[0]
 		quantity = max(int(experience_entry.get("quantity", quantity)), 1)
 		experience_gained = max(int(experience_entry.get("experience", 0)), 0)
-	var suffix: String = " Gained %s EXP." % experience_gained if experience_gained > 0 else ""
-	_add_chat_message("Used %sx %s.%s" % [quantity, item_name, suffix])
+	if experience_gained > 0:
+		_add_chat_message(LocalizationManager.text("ui.bag.use.success_exp", {
+			"quantity": quantity,
+			"item": item_name,
+			"exp": experience_gained,
+		}))
+	else:
+		_add_chat_message(LocalizationManager.text("ui.bag.use.success", {"quantity": quantity, "item": item_name}))
 
 func _notify_progression_reward(reward: Dictionary) -> void:
 	if reward.is_empty():
@@ -16203,7 +16266,29 @@ func _refresh_bag_category_buttons() -> void:
 			count_label.add_theme_color_override("font_color", UI_MONEY if selected else UI_MUTED_TEXT)
 		var label := category_button.find_child("Label", true, false) as Label
 		if label != null:
+			label.text = _bag_category_label(category_id)
 			label.add_theme_color_override("font_color", UI_TEXT if selected else UI_MUTED_TEXT)
+
+func _refresh_bag_localized_ui() -> void:
+	if escape_rope_button != null:
+		_update_escape_rope_action_ui()
+	_refresh_bag_items()
+	_refresh_hotbar_ui()
+	if bag_item_context_menu != null and bag_item_context_menu.visible:
+		bag_item_context_menu.hide()
+	if bag_item_use_popup != null and bag_item_use_popup.visible and not bag_item_use_pending_item.is_empty():
+		var item_id := _normalize_item_id(str(bag_item_use_pending_item.get("id", "")))
+		var item_name := str(bag_item_use_pending_item.get("name", _item_name_from_id(item_id)))
+		var quantity: int = max(int(bag_item_use_pending_item.get("quantity", 1)), 1)
+		bag_item_use_title_label.text = LocalizationManager.text("ui.bag.use.named_title", {"item": item_name})
+		bag_item_use_item_label.text = "%s x%s" % [item_name, quantity]
+		_refresh_bag_item_use_party_list()
+		if bag_item_use_in_progress:
+			_set_bag_item_use_status(LocalizationManager.text("ui.bag.use.using"), false)
+		else:
+			_refresh_bag_item_use_selected_preview()
+	if trainer_name_change_popup != null and trainer_name_change_popup.visible and not trainer_name_change_in_progress:
+		trainer_name_change_status_label.text = LocalizationManager.text("ui.bag.name_change.reserved")
 
 func _apply_bag_category_button_style(button: Button, selected: bool) -> void:
 	var normal_background := UI_SURFACE_INTERACTIVE if selected else Color("#07111ed8")
@@ -22242,7 +22327,7 @@ func _setup_player_hotbar() -> void:
 		button.ignore_texture_size = true
 		button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
 		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-		button.tooltip_text = "Empty shortcut %s" % (slot_index + 1)
+		button.tooltip_text = LocalizationManager.text("ui.hotbar.empty_shortcut", {"slot": slot_index + 1})
 		button.pressed.connect(_on_hotbar_slot_pressed.bind(slot_index))
 		button.gui_input.connect(_on_hotbar_slot_gui_input.bind(slot_index))
 		button.bag_item_dropped.connect(_on_hotbar_bag_item_dropped)
@@ -22288,7 +22373,8 @@ func _refresh_hotbar_ui() -> void:
 		button.preview_texture = null
 		button.modulate = Color(1.0, 1.0, 1.0, 0.35)
 		quantity_label.text = ""
-		button.tooltip_text = "Empty shortcut %s\nRight-click a usable item in your Bag to place it here." % (slot_index + 1)
+		button.tooltip_text = LocalizationManager.text("ui.hotbar.empty_tooltip", {"slot": slot_index + 1})
+		(hotbar_slot_panels[slot_index] as PanelContainer).tooltip_text = button.tooltip_text
 		_apply_hotbar_slot_style(slot_index)
 		if entry.is_empty():
 			continue
@@ -22298,8 +22384,10 @@ func _refresh_hotbar_ui() -> void:
 			button.texture_normal = _load_item_icon("escape-rope")
 			button.preview_texture = button.texture_normal
 			button.modulate = Color.WHITE if bool(escape_rope_status.get("available", false)) else Color(1.0, 1.0, 1.0, 0.55)
-			quantity_label.text = "KEY"
-			button.tooltip_text = "%s\nThis key item is never used up.\nRight-click to remove this shortcut." % escape_rope_button.tooltip_text
+			quantity_label.text = LocalizationManager.text("ui.bag.key_marker")
+			button.tooltip_text = LocalizationManager.text("ui.hotbar.key_item_tooltip", {
+				"item": escape_rope_button.tooltip_text,
+			})
 		elif entry_type == "field_move":
 			var binding: Dictionary = _parse_hotbar_field_move_binding(entry_id)
 			var move_id := str(binding.get("moveId", ""))
@@ -22309,23 +22397,40 @@ func _refresh_hotbar_ui() -> void:
 			button.preview_texture = button.texture_normal
 			var availability: Dictionary = FieldMoveService.can_use_direct_field_move(move_id, pokemon_id)
 			button.modulate = Color.WHITE if bool(availability.get("success", false)) else Color(1.0, 1.0, 1.0, 0.35)
-			quantity_label.text = "KEY" if is_charm else "MOVE"
-			var source_name := "%s Charm" % _format_move_name(move_id) if is_charm else _hotbar_field_move_pokemon_name(pokemon_id)
-			button.tooltip_text = "%s · %s\n%s\nRight-click to remove this shortcut." % [
-				_format_move_name(move_id),
-				source_name,
-				"Use while exploring." if bool(availability.get("success", false)) else str(availability.get("error", "Unavailable.")),
-			]
+			quantity_label.text = (
+				LocalizationManager.text("ui.bag.key_marker")
+				if is_charm
+				else LocalizationManager.text("ui.hotbar.move_marker")
+			)
+			var source_name := (
+				LocalizationManager.text("ui.hotbar.charm_name", {"move": _format_move_name(move_id)})
+				if is_charm
+				else _hotbar_field_move_pokemon_name(pokemon_id)
+			)
+			button.tooltip_text = LocalizationManager.text("ui.hotbar.field_move_tooltip", {
+				"move": _format_move_name(move_id),
+				"source": source_name,
+				"availability": (
+					LocalizationManager.text("ui.hotbar.use_while_exploring")
+					if bool(availability.get("success", false))
+					else str(availability.get("error", LocalizationManager.text("ui.hotbar.unavailable")))
+				),
+			})
 		elif entry_type == "item":
 			button.texture_normal = _load_item_icon(entry_id)
 			button.preview_texture = button.texture_normal
 			var quantity := _hotbar_inventory_quantity(entry_id)
 			quantity_label.text = "x%s" % quantity
 			button.modulate = Color.WHITE if quantity > 0 else Color(1.0, 1.0, 1.0, 0.28)
-			button.tooltip_text = "%s\n%s\nRight-click to remove this shortcut." % [
-				_item_name_from_id(entry_id),
-				"Use on a party Pokémon. You have %s left." % quantity if quantity > 0 else "None left in your Bag.",
-			]
+			button.tooltip_text = LocalizationManager.text("ui.hotbar.item_tooltip", {
+				"item": _item_name_from_id(entry_id),
+				"availability": (
+					LocalizationManager.text("ui.hotbar.item_remaining", {"quantity": quantity})
+					if quantity > 0
+					else LocalizationManager.text("ui.hotbar.item_none")
+				),
+			})
+		(hotbar_slot_panels[slot_index] as PanelContainer).tooltip_text = button.tooltip_text
 
 
 func _hotbar_inventory_quantity(item_id: String) -> int:
@@ -22358,7 +22463,7 @@ func _hotbar_index_from_keycode(keycode: Key) -> int:
 func _on_hotbar_slot_pressed(slot_index: int) -> void:
 	var entry := _hotbar_entry_for_slot(slot_index)
 	if entry.is_empty():
-		_add_chat_message("Hotbar slot %s is empty. Right-click a usable item in your Bag to assign it." % (slot_index + 1))
+		_add_chat_message(LocalizationManager.text("ui.hotbar.message.empty", {"slot": slot_index + 1}))
 		return
 	var entry_type := str(entry.get("entryType", ""))
 	var entry_id := str(entry.get("entryId", ""))
@@ -22373,7 +22478,7 @@ func _on_hotbar_slot_pressed(slot_index: int) -> void:
 			if _normalize_item_id(str(item.get("id", ""))) == _normalize_item_id(entry_id):
 				_show_bag_item_use_popup(item)
 				return
-		_add_chat_message("That hotbar item is no longer in your Bag.")
+		_add_chat_message(LocalizationManager.text("ui.hotbar.message.item_missing"))
 		_load_bag_inventory.call_deferred()
 
 
@@ -22388,9 +22493,11 @@ func _on_hotbar_slot_gui_input(event: InputEvent, slot_index: int) -> void:
 		return
 	var result: Dictionary = await PlayerHotbarService.clear_slot(slot_index)
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not clear hotbar slot: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.hotbar.message.clear_failed", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
-	_add_chat_message("Hotbar slot %s cleared." % (slot_index + 1))
+	_add_chat_message(LocalizationManager.text("ui.hotbar.message.cleared", {"slot": slot_index + 1}))
 
 
 func _assign_bag_item_to_hotbar(item: Dictionary) -> void:
@@ -22411,22 +22518,29 @@ func _on_hotbar_bag_item_dropped(slot_index: int, item: Dictionary) -> void:
 func _on_hotbar_field_move_dropped(slot_index: int, pokemon_id: int, move_id: String, move_name: String) -> void:
 	var normalized_move_id := move_id.strip_edges().to_lower().replace("_", "-").replace(" ", "-")
 	if not FieldMoveService.is_direct_field_move(normalized_move_id):
-		_add_chat_message("%s cannot be assigned as a direct overworld action." % move_name)
+		_add_chat_message(LocalizationManager.text("ui.hotbar.message.move_not_assignable", {"move": move_name}))
 		return
 	var source_id := "charm" if pokemon_id <= 0 else str(pokemon_id)
 	var result: Dictionary = await PlayerHotbarService.assign(slot_index, "field_move", "%s:%s" % [source_id, normalized_move_id])
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not update hotbar: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.hotbar.message.update_failed", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
-	_add_chat_message("%s assigned to hotbar slot %s." % [move_name, slot_index + 1])
+	_add_chat_message(LocalizationManager.text("ui.hotbar.message.assigned", {"item": move_name, "slot": slot_index + 1}))
 
 
 func _on_hotbar_entry_dropped(source_slot: int, target_slot: int) -> void:
 	var result: Dictionary = await PlayerHotbarService.move_slot(source_slot, target_slot)
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not move hotbar item: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.hotbar.message.move_failed", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
-	_add_chat_message("Moved hotbar slot %s to slot %s." % [source_slot + 1, target_slot + 1])
+	_add_chat_message(LocalizationManager.text("ui.hotbar.message.moved", {
+		"source": source_slot + 1,
+		"target": target_slot + 1,
+	}))
 
 
 func _on_hotbar_drop_highlight_changed(slot_index: int, highlighted: bool) -> void:
@@ -22486,13 +22600,18 @@ func _assign_bag_item_to_hotbar_slot(item: Dictionary, target_slot: int) -> void
 		entry_type = "player_action"
 		entry_id = "escape-rope"
 	elif not _is_pokemon_usable_item_id(item_id):
-		_add_chat_message("This item cannot be assigned to the overworld hotbar.")
+		_add_chat_message(LocalizationManager.text("ui.hotbar.message.item_not_assignable"))
 		return
 	var result: Dictionary = await PlayerHotbarService.assign(target_slot, entry_type, entry_id)
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not update hotbar: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.hotbar.message.update_failed", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
-	_add_chat_message("%s assigned to hotbar slot %s." % [str(item.get("name", _item_name_from_id(item_id))), target_slot + 1])
+	_add_chat_message(LocalizationManager.text("ui.hotbar.message.assigned", {
+		"item": str(item.get("name", _item_name_from_id(item_id))),
+		"slot": target_slot + 1,
+	}))
 
 
 func _parse_hotbar_field_move_binding(entry_id: String) -> Dictionary:
@@ -22513,22 +22632,22 @@ func _parse_hotbar_field_move_binding(entry_id: String) -> Dictionary:
 
 func _hotbar_field_move_pokemon_name(pokemon_id: int) -> String:
 	var pokemon := _get_party_pokemon_by_owned_id(pokemon_id)
-	return pokemon.species if pokemon != null else "Pokemon not in party"
+	return pokemon.species if pokemon != null else LocalizationManager.text("ui.hotbar.pokemon_not_in_party")
 
 
 func _activate_hotbar_field_move(entry_id: String) -> void:
 	var binding := _parse_hotbar_field_move_binding(entry_id)
 	if binding.is_empty():
-		_add_chat_message("This field move hotbar binding is invalid.")
+		_add_chat_message(LocalizationManager.text("ui.hotbar.message.invalid_field_move"))
 		return
 	var result: Dictionary = await FieldMoveService.use_direct_field_move(
 		str(binding.get("moveId", "")),
 		int(binding.get("pokemonId", 0))
 	)
 	if not bool(result.get("success", false)):
-		_add_chat_message(str(result.get("error", "That overworld move cannot be used right now.")))
+		_add_chat_message(str(result.get("error", LocalizationManager.text("ui.pokemon_summary.moves.field_move_unavailable"))))
 		return
-	_add_chat_message(str(result.get("message", "Field move used.")))
+	_add_chat_message(str(result.get("message", LocalizationManager.text("ui.hotbar.message.field_move_used"))))
 
 
 func _refresh_player_actions() -> void:
@@ -22559,6 +22678,7 @@ func _refresh_player_action_cooldown(delta: float) -> void:
 
 func _update_escape_rope_action_ui() -> void:
 	var visible_unlocked := bool(escape_rope_status.get("visible", false)) and bool(escape_rope_status.get("unlocked", false))
+	var item_name := _item_name_from_id("escape-rope")
 	# Escape Rope is represented by the configurable hotbar. Keep the legacy
 	# action-bar slot hidden while retaining its button as an internal status and
 	# tooltip presenter for the hotbar entry.
@@ -22574,30 +22694,43 @@ func _update_escape_rope_action_ui() -> void:
 	escape_rope_button.disabled = escape_rope_in_flight
 	escape_rope_button.modulate = Color.WHITE if action_available and not cooldown_active else Color(1.0, 1.0, 1.0, 0.55)
 	if cooldown_active:
-		escape_rope_button.tooltip_text = "Escape Rope\nReady in %s" % PlayerActionService.format_remaining(int(ceil(escape_rope_remaining_seconds)))
+		escape_rope_button.tooltip_text = LocalizationManager.text("ui.hotbar.escape_rope.tooltip.ready", {
+			"item": item_name,
+			"time": PlayerActionService.format_remaining(int(ceil(escape_rope_remaining_seconds))),
+		})
 	elif not block.is_empty():
-		escape_rope_button.tooltip_text = "Escape Rope\n%s" % str(block.get("message", "Unavailable."))
+		escape_rope_button.tooltip_text = "%s\n%s" % [
+			item_name,
+			str(block.get("message", LocalizationManager.text("ui.hotbar.escape_rope.message.unavailable", {"item": item_name}))),
+		]
 	else:
-		escape_rope_button.tooltip_text = "Escape Rope\nReturn to your last healing point."
+		escape_rope_button.tooltip_text = LocalizationManager.text("ui.hotbar.escape_rope.tooltip.return", {"item": item_name})
 	_refresh_action_bar_layouts()
 
 
 func _on_escape_rope_pressed() -> void:
+	var item_name := _item_name_from_id("escape-rope")
 	if escape_rope_in_flight:
-		_add_chat_message("Escape Rope is already being used.")
+		_add_chat_message(LocalizationManager.text("ui.hotbar.escape_rope.message.in_progress", {"item": item_name}))
 		return
 	if escape_rope_remaining_seconds > 0.0:
-		_add_chat_message("Escape Rope is on cooldown. Ready in %s." % PlayerActionService.format_remaining(int(ceil(escape_rope_remaining_seconds))))
+		_add_chat_message(LocalizationManager.text("ui.hotbar.escape_rope.message.cooldown", {
+			"item": item_name,
+			"time": PlayerActionService.format_remaining(int(ceil(escape_rope_remaining_seconds))),
+		}))
 		return
 	if not bool(escape_rope_status.get("available", false)):
 		var block: Dictionary = _staff_dictionary_from_variant(escape_rope_status.get("blockReason", {}))
-		_add_chat_message(str(block.get("message", "Escape Rope is currently unavailable.")))
+		_add_chat_message(str(block.get(
+			"message",
+			LocalizationManager.text("ui.hotbar.escape_rope.message.unavailable", {"item": item_name})
+		)))
 		_refresh_player_actions.call_deferred()
 		return
 	_show_ui_confirm_popup(
-		"Use Escape Rope?",
-		"Return to your last healing point?\n\nYour party will not be healed.",
-		"Use Escape Rope",
+		LocalizationManager.text("ui.hotbar.escape_rope.confirm.title", {"item": item_name}),
+		LocalizationManager.text("ui.hotbar.escape_rope.confirm.message"),
+		LocalizationManager.text("ui.bag.action.use_escape_rope"),
 		Callable(self, "_execute_escape_rope"),
 		Vector2i(460, 190)
 	)
@@ -22606,9 +22739,10 @@ func _on_escape_rope_pressed() -> void:
 func _execute_escape_rope() -> void:
 	if escape_rope_in_flight:
 		return
+	var item_name := _item_name_from_id("escape-rope")
 	var world := get_tree().current_scene
 	if world == null or not world.has_method("begin_authorized_teleport") or not world.has_method("apply_authorized_teleport_state"):
-		_add_chat_message("Escape Rope is unavailable because the world is not ready.")
+		_add_chat_message(LocalizationManager.text("ui.hotbar.escape_rope.message.world_not_ready", {"item": item_name}))
 		return
 	escape_rope_in_flight = true
 	_update_escape_rope_action_ui()
@@ -22616,14 +22750,20 @@ func _execute_escape_rope() -> void:
 	if not bool(begin_result.get("success", false)):
 		escape_rope_in_flight = false
 		_update_escape_rope_action_ui()
-		_add_chat_message(str(begin_result.get("error", "Escape Rope is unavailable.")))
+		_add_chat_message(str(begin_result.get(
+			"error",
+			LocalizationManager.text("ui.hotbar.escape_rope.message.unavailable", {"item": item_name})
+		)))
 		return
 	var response: Dictionary = await PlayerActionService.execute("escape-rope")
 	if not bool(response.get("success", false)):
 		world.call("cancel_authorized_teleport")
 		escape_rope_in_flight = false
 		_update_escape_rope_action_ui()
-		_add_chat_message(str(response.get("error", "Escape Rope failed.")))
+		_add_chat_message(str(response.get(
+			"error",
+			LocalizationManager.text("ui.hotbar.escape_rope.message.failed", {"item": item_name})
+		)))
 		return
 	var result: Dictionary = _staff_dictionary_from_variant(response.get("result", {}))
 	if not bool(result.get("accepted", false)):
@@ -22631,16 +22771,22 @@ func _execute_escape_rope() -> void:
 		escape_rope_in_flight = false
 		_update_escape_rope_action_ui()
 		var block := _staff_dictionary_from_variant(result.get("blockReason", {}))
-		_add_chat_message(str(block.get("message", "Escape Rope is unavailable.")))
+		_add_chat_message(str(block.get(
+			"message",
+			LocalizationManager.text("ui.hotbar.escape_rope.message.unavailable", {"item": item_name})
+		)))
 		return
 	var teleport_state := _staff_dictionary_from_variant(result.get("teleportState", {}))
 	var apply_result: Dictionary = await world.call("apply_authorized_teleport_state", teleport_state)
 	escape_rope_in_flight = false
 	_update_escape_rope_action_ui()
 	if not bool(apply_result.get("success", false)):
-		_add_chat_message("Escape Rope was authorized, but applying the teleport failed: %s" % str(apply_result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.hotbar.escape_rope.message.apply_failed", {
+			"item": item_name,
+			"error": str(apply_result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
-	_add_chat_message("Escape Rope returned you to your healing point.")
+	_add_chat_message(LocalizationManager.text("ui.hotbar.escape_rope.message.success", {"item": item_name}))
 	_refresh_player_actions.call_deferred()
 
 func _load_toggle_preferences() -> void:

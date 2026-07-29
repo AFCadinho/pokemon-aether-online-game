@@ -20,8 +20,8 @@ keys and placeholders.
 
 ## Current baseline
 
-The login/settings pilot and the first two shared-interface slices are complete. The
-three client catalogs currently contain 253 matching keys. Language selection is
+The login/settings pilot and the first three shared-interface slices are complete. The
+three client catalogs currently contain 433 matching keys. Language selection is
 available before login and in the shared settings menu, is stored locally, updates at
 runtime, and falls back to English.
 
@@ -30,11 +30,14 @@ Completed client domains:
 - login and settings;
 - loading, main navigation, location, time, and weather;
 - Party slots and Pokémon Summary interface chrome, including runtime status, EV,
-  move-order, Poké Ball, and held-item messages.
+  move-order, Poké Ball, and held-item messages;
+- Bag and hotbar interface chrome, including categories, search and empty states,
+  item-action flows, local medicine previews, Escape Rope interactions, and runtime
+  refresh.
 
 Pokémon, move, ability, nature, type, and item display data remain in their canonical
 English data sources until the Pokémon Data overlay phase. The translated Summary
-changes only the surrounding interface and grammar.
+and Bag changes only the surrounding interface and grammar.
 
 The remaining client surface is substantial:
 
@@ -176,12 +179,13 @@ dialog, tooltip, chat system message, or notification.
 
 ## Next implementation slice
 
-The next recommended slice is Bag and hotbar interface chrome:
+The next recommended slice is Market and standard shop interface chrome:
 
-- Bag headings, categories, search, empty states, item-action controls, and local
+- market and shop headings, tabs, search, quantity controls, empty states, and local
   validation messages;
-- hotbar assignment and interaction hints owned by the client;
+- buy/sell controls, price and ownership grammar, confirmations, and local transaction
+  feedback;
 - runtime refresh and layout checks in Dutch and Brazilian Portuguese.
 
-Item names and descriptions, market/shop data, battle text, Pokémon data, and
-server-owned messages remain outside that slice.
+Item and shop display data, battle text, Pokémon data, and server-owned messages remain
+outside that slice.

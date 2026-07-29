@@ -13,7 +13,7 @@ func _init() -> void:
 	var normalize_source := ui.substr(normalize_start, normalize_end - normalize_start)
 
 	_check(ui.contains('item.get("useNotice", {})'), "Bag reads generic use notice")
-	_check(ui.contains("is informational and cannot be used from the Bag"), "generic informational message")
+	_check(ui.contains('LocalizationManager.text("ui.bag.message.informational"'), "localized generic informational message")
 	_check(normalize_source.contains('"useNotice": use_notice'), "legacy notice survives inventory normalization")
 	_check(not selected_source.contains("PlayerActionService"), "inventory does not execute Player Actions")
 	_check(not selected_source.contains("repel_enabled"), "inventory Repels do not toggle free Repel")

@@ -9,12 +9,12 @@ const SUPPORTED_EFFECT_TYPES := {
 }
 
 const STATUS_LABELS := {
-	"psn": "Poisoned",
-	"tox": "Badly Poisoned",
-	"brn": "Burned",
-	"par": "Paralyzed",
-	"slp": "Asleep",
-	"frz": "Frozen",
+	"psn": "pokemon.status.poisoned",
+	"tox": "pokemon.status.badly_poisoned",
+	"brn": "pokemon.status.burned",
+	"par": "pokemon.status.paralyzed",
+	"slp": "pokemon.status.asleep",
+	"frz": "pokemon.status.frozen",
 }
 
 
@@ -97,18 +97,25 @@ static func preview(pokemon: Pokemon, gameplay: Dictionary, requested_quantity: 
 
 	var label: String = "%s/%s -> %s/%s" % [pokemon.current_hp, max_hp, current_hp, max_hp]
 	if revived:
-		label = "Fainted -> %s/%s" % [current_hp, max_hp]
+		label = _text("ui.bag.preview.fainted_to", {"current": current_hp, "max": max_hp})
 	elif cured_status != "" and pokemon.current_hp == current_hp:
-		label = "%s -> Healthy" % _status_label(cured_status)
+		label = _text("ui.bag.preview.status_to_healthy", {"status": _status_label(cured_status)})
 	elif cured_status != "":
-		label += " · %s -> Healthy" % _status_label(cured_status)
+		label += _text("ui.bag.preview.status_suffix", {"status": _status_label(cured_status)})
 	if str(gameplay.get("quantityPolicy", "single")) != "single" and consumed_quantity < requested_quantity:
-		label += " · uses %s/%s" % [consumed_quantity, requested_quantity]
+		label += _text("ui.bag.preview.uses_suffix", {
+			"used": consumed_quantity,
+			"requested": requested_quantity,
+		})
 
 	return {
 		"canApply": true,
 		"label": label,
-		"tooltip": "%s\nItems used: %s\n%s" % [pokemon.species, consumed_quantity, label],
+		"tooltip": _text("ui.bag.preview.tooltip", {
+			"pokemon": pokemon.species,
+			"used": consumed_quantity,
+			"result": label,
+		}),
 		"usedQuantity": consumed_quantity,
 		"previousHp": pokemon.current_hp,
 		"currentHp": current_hp,
@@ -121,24 +128,37 @@ static func preview(pokemon: Pokemon, gameplay: Dictionary, requested_quantity: 
 
 static func _no_effect_label(fainted: bool, current_hp: int, max_hp: int, status: String) -> String:
 	if fainted:
-		return "Fainted"
+		return _text("ui.bag.preview.fainted")
 	if current_hp >= max_hp and status == "":
-		return "Full HP"
-	return "No effect"
+		return _text("ui.bag.preview.full_hp")
+	return _text("ui.bag.preview.no_effect")
 
 
 static func _no_effect_tooltip(pokemon: Pokemon, fainted: bool, current_hp: int, max_hp: int, status: String) -> String:
 	if fainted:
-		return "%s is fainted; this item cannot affect it." % pokemon.species
+		return _text("ui.bag.preview.fainted_tooltip", {"pokemon": pokemon.species})
 	if current_hp >= max_hp and status == "":
-		return "%s is already at full HP." % pokemon.species
+		return _text("ui.bag.preview.full_hp_tooltip", {"pokemon": pokemon.species})
 	if status != "":
-		return "%s cannot cure %s." % [pokemon.species, _status_label(status).to_lower()]
-	return "This item would have no effect on %s." % pokemon.species
+		return _text("ui.bag.preview.cannot_cure", {
+			"pokemon": pokemon.species,
+			"status": _status_label(status).to_lower(),
+		})
+	return _text("ui.bag.preview.no_effect_tooltip", {"pokemon": pokemon.species})
 
 
 static func _status_label(status: String) -> String:
-	return str(STATUS_LABELS.get(_normalize_status(status), "Status"))
+	var key := str(STATUS_LABELS.get(_normalize_status(status), "ui.bag.preview.status"))
+	return _text(key)
+
+
+static func _text(key: String, values: Dictionary = {}) -> String:
+	var main_loop := Engine.get_main_loop()
+	if main_loop is SceneTree:
+		var manager := (main_loop as SceneTree).root.get_node_or_null("LocalizationManager")
+		if manager != null:
+			return str(manager.call("text", key, values))
+	return key
 
 
 static func _normalize_status(value: String) -> String:

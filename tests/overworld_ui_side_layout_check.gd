@@ -253,7 +253,7 @@ func _init() -> void:
 	_check(donator_store_script_source.contains('"name": "Rain Dance Charm"') and donator_store_script_source.contains('"name": "Snowscape Charm"'), "Store includes overworld weather Charms")
 	_check(donator_store_script_source.contains('"charms": "FIELD CONVENIENCE"') and donator_store_script_source.contains("Progression and area rules still apply."), "Charm category covers field convenience without promising progression bypasses")
 	_check(
-		script_source.contains('{"id": "charms", "label": "Charms", "iconItemId": "surf-charm"}')
+		script_source.contains('{"id": "charms", "labelKey": "ui.bag.category.charms", "iconItemId": "surf-charm"}')
 			and script_source.contains('"medicine", "machines", "charms",'),
 		"tradeable field Charms use their own Bag category instead of Key Items"
 	)
@@ -283,9 +283,9 @@ func _init() -> void:
 	)
 	_check(
 		donator_store_script_source.contains("Tradeable voucher. Use it from the Bag")
-		and script_source.contains('"id": "vouchers", "label": "Vouchers"')
+		and script_source.contains('"id": "vouchers", "labelKey": "ui.bag.category.vouchers"')
 		and script_source.contains('use_action == "redeem_aether_blessing"')
-		and script_source.contains("Aether Blessing extended by %d days."),
+		and script_source.contains('LocalizationManager.text("ui.bag.message.blessing_extended"'),
 		"Blessing purchases remain tradeable vouchers until redeemed from the Bag"
 	)
 	_check(
