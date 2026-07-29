@@ -33,6 +33,13 @@ func _check_world_initial_map() -> void:
 		world_script_source.contains("if not saved_state.is_empty():"),
 		"Saved player positions still take precedence over the initial spawn"
 	)
+	var initial_state_setup_position := world_script_source.find("await _setup_initial_world_state()")
+	var fishing_progression_load_position := world_script_source.find("await _refresh_fishing_progression()")
+	_check(
+		initial_state_setup_position >= 0
+		and fishing_progression_load_position > initial_state_setup_position,
+		"World applies the prepared player location before loading fishing progression"
+	)
 
 
 func _check_players_house_initial_spawn() -> void:
