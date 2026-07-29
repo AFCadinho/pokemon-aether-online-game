@@ -223,7 +223,8 @@ func _check_login_scene_translation() -> void:
 		_check(language_options.text == "NL", "login language selector uses the compact locale code")
 		_check(
 			language_options.custom_minimum_size == Vector2(104, 38)
-			and language_options.size_flags_horizontal == Control.SIZE_SHRINK_END,
+			and language_options.size_flags_horizontal == Control.SIZE_SHRINK_END
+			and language_options.alignment == HORIZONTAL_ALIGNMENT_CENTER,
 			"login language selector stays visually secondary"
 		)
 		_check(

@@ -53,6 +53,7 @@ static func configure_login_compact(button: OptionButton) -> void:
 		return
 	button.custom_minimum_size = Vector2(104, 38)
 	button.size_flags_horizontal = Control.SIZE_SHRINK_END
+	button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	button.add_theme_constant_override("icon_max_width", 22)
 	button.add_theme_constant_override("h_separation", 7)
 	button.add_theme_constant_override("arrow_margin", 9)
