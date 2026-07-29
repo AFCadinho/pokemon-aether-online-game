@@ -107,8 +107,13 @@ func _run() -> void:
 	localization_manager.call("set_locale", "nl")
 	_check_equal(
 		formatter.format_move_event("Pikachu", "Thunderbolt"),
-		"Pikachu gebruikte Thunderbolt!",
-		"Dutch move event localizes the sentence while preserving canonical names"
+		"Pikachu gebruikte Bliksemschicht!",
+		"Dutch move event localizes the sentence and move presentation"
+	)
+	_check_equal(
+		formatter.format_ability_event({"target": "Pikachu", "ability": "Static"}),
+		"Statische Lading van Pikachu werd geactiveerd!",
+		"Dutch ability event localizes ability presentation"
 	)
 	_check_equal(
 		formatter.format_status_event({"target": "Pikachu", "status": "brn"}),

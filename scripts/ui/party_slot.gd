@@ -59,6 +59,8 @@ var current_is_shiny: bool = false
 var current_level: int = 0
 var current_held_item_id: String = ""
 var current_status_key: String = ""
+var current_species_id: String = ""
+var current_species_source_name: String = ""
 var held_item_marker: Control
 var status_icon_texture_cache: Dictionary = {}
 
@@ -85,8 +87,9 @@ func set_pokemon(pokemon: Pokemon) -> void:
 	_refresh_lead_accent()
 	current_is_shiny = pokemon.shiny
 	current_level = pokemon.level
-	name_label.text = pokemon.species
-	name_label.tooltip_text = pokemon.species
+	current_species_id = pokemon.species
+	current_species_source_name = pokemon.species
+	_refresh_species_name()
 	shiny_badge.visible = pokemon.shiny
 	_refresh_level_label()
 	hp_bar.max_value = max(pokemon.max_hp, 1)
@@ -104,14 +107,18 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	visible = true
 	_refresh_lead_accent()
 	var species := str(pokemon_data.get("displaySpecies", pokemon_data.get("species", ""))).strip_edges()
+	current_species_id = str(pokemon_data.get(
+		"speciesId",
+		pokemon_data.get("species_id", pokemon_data.get("species", species))
+	))
+	current_species_source_name = species
 	var is_shiny := bool(pokemon_data.get("shiny", false))
 	var level := int(pokemon_data.get("level", 0))
 	var max_hp: int = maxi(int(pokemon_data.get("maxHp", pokemon_data.get("max_hp", 1))), 1)
 	var current_hp: int = int(pokemon_data.get("hp", pokemon_data.get("currentHp", pokemon_data.get("current_hp", max_hp))))
 	current_is_shiny = is_shiny
 	current_level = level
-	name_label.text = species
-	name_label.tooltip_text = species
+	_refresh_species_name()
 	shiny_badge.visible = is_shiny
 	_refresh_level_label()
 	hp_bar.max_value = max_hp
@@ -129,6 +136,8 @@ func set_empty() -> void:
 	visible = false
 	current_is_shiny = false
 	current_level = 0
+	current_species_id = ""
+	current_species_source_name = ""
 	is_hovered = false
 	is_pressed = false
 	is_dragging = false
@@ -302,6 +311,23 @@ func _refresh_localized_text() -> void:
 		_set_held_item_marker(current_held_item_id)
 	if status_icon != null:
 		status_icon.tooltip_text = _get_status_tooltip(current_status_key) if status_icon.visible else ""
+	_refresh_species_name()
+
+
+func _refresh_species_name() -> void:
+	if name_label == null or current_species_id.strip_edges().is_empty():
+		return
+	var display_name := current_species_source_name
+	var content_localization := get_node_or_null("/root/ContentLocalization")
+	if content_localization != null and content_localization.has_method("display_name"):
+		display_name = str(content_localization.call(
+			"display_name",
+			"species",
+			current_species_id,
+			current_species_source_name
+		))
+	name_label.text = display_name
+	name_label.tooltip_text = display_name
 
 func _refresh_level_label() -> void:
 	if level_label == null:

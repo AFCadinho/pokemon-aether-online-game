@@ -36,7 +36,10 @@ func format_move_event(actor: String, move_name: String) -> String:
 	if actor == "" or move_name == "":
 		return ""
 
-	return _t("battle.event.move.used", {"actor": actor, "move": move_name})
+	return _t("battle.event.move.used", {
+		"actor": actor,
+		"move": _localized_content_name("moves", move_name, move_name),
+	})
 
 func format_move_source_message(event: Dictionary, actor: String) -> String:
 	var raw_source := str(event.get("source", ""))
@@ -651,7 +654,23 @@ func _format_ability_name(ability: String) -> String:
 	if cleaned == "":
 		return ""
 
-	return _format_compact_effect_name(cleaned)
+	return _localized_content_name(
+		"abilities",
+		cleaned,
+		_format_compact_effect_name(cleaned)
+	)
+
+
+func _localized_content_name(kind: String, content_id: String, fallback_name: String) -> String:
+	var scene_tree := Engine.get_main_loop() as SceneTree
+	var content_localization := (
+		scene_tree.root.get_node_or_null("ContentLocalization")
+		if scene_tree != null
+		else null
+	)
+	if content_localization != null and content_localization.has_method("display_name"):
+		return str(content_localization.call("display_name", kind, content_id, fallback_name))
+	return fallback_name
 
 func _is_reflection_effect(raw_effect: String, effect: String) -> bool:
 	var source_kind := ""

@@ -206,11 +206,16 @@ func _set_pokemon_data(pokemon_data: Dictionary) -> void:
 func _get_display_species(pokemon_data: Dictionary) -> String:
 	var species := str(pokemon_data.get("displaySpecies", pokemon_data.get("species", "")))
 	if species != "":
-		return species
+		var species_id := str(pokemon_data.get(
+			"speciesId",
+			pokemon_data.get("species_id", pokemon_data.get("species", species))
+		))
+		return _localized_content_name("species", species_id, species)
 
 	var ident := str(pokemon_data.get("ident", ""))
 	if ident.contains(": "):
-		return str(ident.split(": ")[1]).strip_edges()
+		var ident_species := str(ident.split(": ")[1]).strip_edges()
+		return _localized_content_name("species", ident_species, ident_species)
 
 	return _t("common.unknown")
 

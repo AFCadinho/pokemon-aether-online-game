@@ -382,8 +382,12 @@ func _set_color(background: Color, border: Color, is_active: bool) -> void:
 	add_theme_stylebox_override("disabled", normal)
 
 func _set_species_name(species: String, is_shiny: bool) -> void:
-	name_label.text = species
-	name_label.add_theme_font_size_override("font_size", _get_name_font_size(species))
+	var display_name := species
+	var content_localization := get_node_or_null("/root/ContentLocalization")
+	if content_localization != null and content_localization.has_method("display_name"):
+		display_name = str(content_localization.call("display_name", "species", species, species))
+	name_label.text = display_name
+	name_label.add_theme_font_size_override("font_size", _get_name_font_size(display_name))
 	shiny_badge.text = "S" if is_shiny else ""
 	shiny_badge.tooltip_text = _t("ui.party.shiny") if is_shiny else ""
 

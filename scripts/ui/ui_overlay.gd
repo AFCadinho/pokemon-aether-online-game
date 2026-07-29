@@ -17020,8 +17020,9 @@ func _refresh_pokemon_summary() -> void:
 		return
 
 	_set_pokemon_summary_popup_size()
-	pokemon_summary_title_label.text = pokemon.species
-	pokemon_summary_title_label.tooltip_text = pokemon.species
+	var localized_species_name := _localized_species_name(pokemon.species, pokemon.species)
+	pokemon_summary_title_label.text = localized_species_name
+	pokemon_summary_title_label.tooltip_text = localized_species_name
 	var summary_id: String = str(pokemon.owned_pokemon_id) if pokemon.owned_pokemon_id > 0 else ""
 	if summary_id == "":
 		summary_id = pokemon.instance_id.strip_edges()
@@ -24665,7 +24666,8 @@ func _refresh_pokedex_results() -> void:
 
 func _create_pokedex_species_button(species: Dictionary) -> Control:
 	var species_id := str(species.get("id", "")).strip_edges()
-	var species_name := str(species.get("name", species_id))
+	var source_species_name := str(species.get("name", species_id))
+	var species_name := _localized_species_name(species_id, source_species_name)
 	var national_number := int(species.get("nationalDexNumber", 0))
 	var type_text := _format_pokedex_type_list(_array_from_variant(species.get("types", [])))
 	var button := Button.new()
@@ -24922,10 +24924,12 @@ func _set_pokedex_header_from_species(species: Dictionary) -> void:
 		_refresh_pokedex_header_stats({})
 		return
 
-	var species_name := str(species.get(
+	var source_species_name := str(species.get(
 		"name",
 		species.get("id", LocalizationManager.text("common.unknown"))
 	))
+	var species_id := str(species.get("id", source_species_name))
+	var species_name := _localized_species_name(species_id, source_species_name)
 	var national_number := int(species.get("nationalDexNumber", 0))
 	var rarity := str(species.get("rarity", "")).strip_edges()
 	var meta_parts: Array[String] = []
@@ -24939,7 +24943,7 @@ func _set_pokedex_header_from_species(species: Dictionary) -> void:
 	pokedex_name_label.text = species_name
 	if pokedex_owned_icon != null:
 		pokedex_owned_icon.visible = PokedexService.is_species_owned(
-			str(species.get("id", species_name)),
+			species_id,
 			pokedex_shiny_mode
 		)
 	pokedex_meta_label.text = (
@@ -26168,7 +26172,7 @@ func _create_pokedex_move_row(move: Dictionary, source_label: String = "") -> Co
 	if first_column_text == "":
 		first_column_text = str(int(move.get("level", 1)))
 	row.add_child(_create_pokedex_move_value_label(first_column_text, 54, POKEDEX_ACCENT, true))
-	row.add_child(_create_pokedex_move_value_label(str(move.get("name", move.get("id", ""))), 172, UI_TEXT, true))
+	row.add_child(_create_pokedex_move_value_label(_get_summary_move_name(move), 172, UI_TEXT, true))
 	row.add_child(_create_pokedex_move_type_cell(str(move.get("type", "")), 92))
 	row.add_child(_create_pokedex_move_category_cell(str(move.get("category", "")), 92))
 	row.add_child(_create_pokedex_move_value_label(_format_pokedex_move_number(move.get("power", null)), 52, UI_TEXT))
@@ -26263,6 +26267,11 @@ func _localized_nature_name(nature: String) -> String:
 	if content_localization != null and content_localization.has_method("nature_name"):
 		return str(content_localization.call("nature_name", nature, fallback_name))
 	return fallback_name
+
+
+func _localized_species_name(species_id: String, fallback_name: String = "") -> String:
+	var fallback := fallback_name if not fallback_name.strip_edges().is_empty() else _format_identifier_display_name(species_id)
+	return _localized_content_name("species", species_id, fallback)
 
 
 func _content_search_terms(kind: String, content_id: String, fallback_name: String) -> Array[String]:
@@ -28102,7 +28111,7 @@ func _create_pc_box_slot_button_for_location(box_index: int, slot_index: int, po
 	var types: Array = _pc_payload_types(payload)
 	var texture: Texture2D = PokemonAssets.load_party_icon(species, shiny) if occupied else null
 	var button := _create_pc_box_pokemon_slot_button(
-		species if occupied else "Empty",
+		_pc_payload_species_display_name(payload) if occupied else "Empty",
 		level,
 		shiny,
 		held_item_id,
@@ -28335,6 +28344,15 @@ func _pc_payload_species(payload: Dictionary) -> String:
 	return species if species != "" else "Pokemon"
 
 
+func _pc_payload_species_display_name(payload: Dictionary) -> String:
+	var source_name := _pc_payload_species(payload)
+	var species_id := str(payload.get(
+		"speciesId",
+		payload.get("species_id", payload.get("species", source_name))
+	))
+	return _localized_species_name(species_id, source_name)
+
+
 func _pc_payload_level(payload: Dictionary) -> int:
 	return max(int(payload.get("level", 1)), 1)
 
@@ -28554,7 +28572,8 @@ func _pc_pokemon_matches_filters(pokemon_response: Dictionary) -> bool:
 	])
 	var nature_search_terms: Array = _content_search_terms("natures", nature, nature)
 	var ability_search_terms: Array = _content_search_terms("abilities", ability, ability)
-	return _pc_filter_matches_value(pc_filter_species_input, [species]) \
+	var species_search_terms: Array = _content_search_terms("species", species, species)
+	return _pc_filter_matches_value(pc_filter_species_input, species_search_terms) \
 		and _pc_filter_matches_value(pc_filter_type_input, types) \
 		and _pc_filter_matches_value(pc_filter_nature_input, nature_search_terms) \
 		and _pc_filter_matches_value(pc_filter_ability_input, ability_search_terms) \
@@ -28608,6 +28627,7 @@ func _pc_pokemon_matches_search(pokemon_response: Dictionary, query: String) -> 
 	var payload: Dictionary = _dictionary_from_value(pokemon_response.get("pokemon", {}))
 	var fields: Array[String] = [
 		_pc_payload_species(payload),
+		_pc_payload_species_display_name(payload),
 		str(payload.get("ability", "")),
 		str(payload.get("item", "")),
 		str(payload.get("heldItemId", "")),
@@ -29015,12 +29035,12 @@ func _pc_release_name_for_source(source: Dictionary) -> String:
 			if party_index >= 0:
 				var pokemon: Pokemon = PlayerSave.party[party_index]
 				if pokemon != null and pokemon.species.strip_edges() != "":
-					return pokemon.species.strip_edges()
+					return _localized_species_name(pokemon.species, pokemon.species)
 		"box":
 			var pokemon_response: Dictionary = _pc_box_pokemon_response_at_location(int(source.get("boxIndex", -1)), int(source.get("slotIndex", -1)))
 			if not pokemon_response.is_empty():
 				var payload: Dictionary = _dictionary_from_value(pokemon_response.get("pokemon", {}))
-				return _pc_payload_species(payload)
+				return _pc_payload_species_display_name(payload)
 	return "Pokemon"
 
 
@@ -31061,28 +31081,33 @@ func _format_pvp_species_display_name(species: String) -> String:
 	var value := species.strip_edges()
 	if value == "":
 		return ""
+	var fallback_name := ""
 	if value.contains("-") or value.contains("_") or value.contains(" "):
-		return _format_identifier_display_name(value)
-	var suffix_labels := {
-		"mega": "Mega",
-		"megax": "Mega X",
-		"megay": "Mega Y",
-		"primal": "Primal",
-		"origin": "Origin",
-		"crowned": "Crowned",
-		"ice": "Ice",
-		"shadow": "Shadow",
-		"black": "Black",
-		"white": "White",
-		"sky": "Sky",
-		"bloodmoon": "Bloodmoon",
-		"hearthflame": "Hearthflame",
-	}
-	for suffix: String in suffix_labels.keys():
-		if value.ends_with(suffix) and value.length() > suffix.length():
-			var base := value.substr(0, value.length() - suffix.length())
-			return "%s %s" % [base.capitalize(), suffix_labels[suffix]]
-	return value.capitalize()
+		fallback_name = _format_identifier_display_name(value)
+	else:
+		var suffix_labels := {
+			"mega": "Mega",
+			"megax": "Mega X",
+			"megay": "Mega Y",
+			"primal": "Primal",
+			"origin": "Origin",
+			"crowned": "Crowned",
+			"ice": "Ice",
+			"shadow": "Shadow",
+			"black": "Black",
+			"white": "White",
+			"sky": "Sky",
+			"bloodmoon": "Bloodmoon",
+			"hearthflame": "Hearthflame",
+		}
+		for suffix: String in suffix_labels.keys():
+			if value.ends_with(suffix) and value.length() > suffix.length():
+				var base := value.substr(0, value.length() - suffix.length())
+				fallback_name = "%s %s" % [base.capitalize(), suffix_labels[suffix]]
+				break
+		if fallback_name == "":
+			fallback_name = value.capitalize()
+	return _localized_species_name(species, fallback_name)
 
 func _pvp_validation_slots_text(slots_value: Variant) -> String:
 	if not (slots_value is Array):

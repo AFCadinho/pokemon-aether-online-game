@@ -111,15 +111,20 @@ func position_near_mouse(mouse_position: Vector2, viewport_size: Vector2) -> voi
 func _get_species_name(pokemon_data: Dictionary) -> String:
 	var display_species: String = str(pokemon_data.get("displaySpecies", ""))
 	if display_species != "":
-		return display_species
+		var species_id := str(pokemon_data.get(
+			"speciesId",
+			pokemon_data.get("species_id", pokemon_data.get("species", display_species))
+		))
+		return _localized_content_name("species", species_id, display_species)
 
 	var species: String = str(pokemon_data.get("species", ""))
 	if species != "":
-		return species
+		return _localized_content_name("species", species, species)
 
 	var ident: String = str(pokemon_data.get("ident", ""))
 	if ident.contains(":"):
-		return ident.split(":", false, 1)[1].strip_edges()
+		var ident_species := str(ident.split(":", false, 1)[1]).strip_edges()
+		return _localized_content_name("species", ident_species, ident_species)
 
 	return ident.strip_edges()
 
