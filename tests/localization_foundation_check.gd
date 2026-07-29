@@ -7,6 +7,7 @@ const CATALOG_PATHS: Dictionary = {
 }
 const SETTINGS_SCENE_PATH := "res://scenes/interface/settings/settings_menu.tscn"
 const LOGIN_SCENE_PATH := "res://scenes/interface/login_screen.tscn"
+const LOGIN_SCRIPT_PATH := "res://scripts/ui/login_screen.gd"
 const SETTINGS_MANAGER_PATH := "res://scripts/services/settings_manager.gd"
 const PROJECT_PATH := "res://project.godot"
 const LanguageSelectorStyle := preload("res://scripts/ui/language_selector_style.gd")
@@ -149,6 +150,8 @@ func _check_settings_scene_translation() -> void:
 	var title := menu.get_node_or_null("MarginContainer/VBoxContainer/Header/Heading/TitleLabel") as Label
 	var language_options := menu.find_child("LanguageOptionsButton", true, false) as OptionButton
 	var tabs := menu.find_child("SettingsTabs", true, false) as TabContainer
+	var workspace := menu.find_child("SettingsWorkspace", true, false) as HBoxContainer
+	var navigation := menu.find_child("SettingsNavigation", true, false) as VBoxContainer
 	_check(
 		title != null and title.text == "Instellingen",
 		"static settings text renders in Dutch (received %s)" % str(title.text if title != null else "<missing>")
@@ -159,6 +162,25 @@ func _check_settings_scene_translation() -> void:
 		"settings language selector displays flags"
 	)
 	_check(tabs != null and tabs.get_tab_title(0) == "Algemeen", "dynamic tab title renders in Dutch")
+	_check(
+		tabs != null and not tabs.tabs_visible and workspace != null and navigation != null,
+		"settings use the two-column navigation layout"
+	)
+	_check(
+		navigation != null and navigation.get_child_count() == tabs.get_tab_count(),
+		"settings navigation exposes every functional domain"
+	)
+	if menu.has_method("open"):
+		menu.call("open", "login")
+		_check(
+			not menu.find_child("AccountNavigationButton", true, false).visible,
+			"login settings hide account navigation"
+		)
+		var escape_event := InputEventAction.new()
+		escape_event.action = "ui_cancel"
+		escape_event.pressed = true
+		menu.call("_input", escape_event)
+		_check(not menu.visible, "Escape closes an open settings menu")
 	var dutch_minimum_size := (menu as Control).get_combined_minimum_size()
 	_check(
 		dutch_minimum_size.x <= 720.0 and dutch_minimum_size.y <= 720.0,
@@ -183,6 +205,13 @@ func _check_settings_scene_translation() -> void:
 
 
 func _check_login_scene_translation() -> void:
+	var login_source := FileAccess.get_file_as_string(LOGIN_SCRIPT_PATH)
+	_check(
+		login_source.contains("func _unhandled_input(event: InputEvent)")
+		and login_source.contains("_on_options_button_pressed()")
+		and login_source.contains("event.is_action_pressed(\"ui_cancel\")"),
+		"login Escape input opens settings through the regular options flow"
+	)
 	var packed := load(LOGIN_SCENE_PATH) as PackedScene
 	_check(packed != null, "login scene loads with localization enabled")
 	if packed == null:

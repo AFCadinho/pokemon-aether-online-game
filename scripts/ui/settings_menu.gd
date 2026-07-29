@@ -16,7 +16,8 @@ const OPTION_ID_BY_SPRITE_STYLE: Dictionary = {
 }
 const GEN5_SPRITE_MISSING_KEY := "ui.settings.sprite.not_installed"
 const LOGIN_SCENE_PATH := "res://scenes/interface/login_screen.tscn"
-const MINIMUM_MENU_SIZE := Vector2(500, 520)
+const MINIMUM_MENU_SIZE := Vector2(700, 600)
+const NAVIGATION_WIDTH := 168.0
 const UI_BG := Color("#070b14f2")
 const UI_SLOT_BG := Color("#0d1625e6")
 const UI_INPUT_BG := Color("#050912e8")
@@ -63,6 +64,10 @@ var loading_controls := false
 var logging_out := false
 var logout_confirmation_requested := false
 var tab_container: TabContainer
+var settings_workspace: HBoxContainer
+var settings_navigation: VBoxContainer
+var settings_navigation_panel: PanelContainer
+var settings_navigation_buttons: Array[Button] = []
 var account_tab_root: Control
 var account_user_label: Label
 var account_status_label: Label
@@ -130,7 +135,7 @@ func open(context: String = "game") -> void:
 	_apply_settings_to_controls()
 	_apply_context(context)
 	visible = true
-	close_button.grab_focus()
+	_focus_active_navigation_button()
 
 
 func close() -> void:
@@ -141,6 +146,19 @@ func close() -> void:
 		_hide_logout_confirm_dialog()
 	visible = false
 	closed.emit()
+
+
+func _input(event: InputEvent) -> void:
+	if not visible or not event.is_action_pressed("ui_cancel"):
+		return
+
+	if account_details_dialog != null and account_details_dialog.visible:
+		_hide_account_details_dialog()
+	elif logout_confirm_dialog != null and logout_confirm_dialog.visible:
+		_hide_logout_confirm_dialog()
+	else:
+		close()
+	get_viewport().set_input_as_handled()
 
 
 func _apply_settings_to_controls() -> void:
@@ -179,10 +197,47 @@ func _setup_tabs() -> void:
 
 	tab_container = TabContainer.new()
 	tab_container.name = "SettingsTabs"
+	tab_container.tabs_visible = false
 	tab_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	tab_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	settings_layout.add_child(tab_container)
-	settings_layout.move_child(tab_container, 1)
+	tab_container.tab_changed.connect(_on_settings_tab_changed)
+
+	settings_workspace = HBoxContainer.new()
+	settings_workspace.name = "SettingsWorkspace"
+	settings_workspace.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	settings_workspace.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	settings_workspace.add_theme_constant_override("separation", 14)
+	settings_layout.add_child(settings_workspace)
+	settings_layout.move_child(settings_workspace, 1)
+
+	settings_navigation_panel = PanelContainer.new()
+	settings_navigation_panel.name = "SettingsNavigationPanel"
+	settings_navigation_panel.custom_minimum_size.x = NAVIGATION_WIDTH
+	settings_navigation_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	settings_workspace.add_child(settings_navigation_panel)
+
+	var navigation_margin := MarginContainer.new()
+	navigation_margin.add_theme_constant_override("margin_left", 10)
+	navigation_margin.add_theme_constant_override("margin_top", 12)
+	navigation_margin.add_theme_constant_override("margin_right", 10)
+	navigation_margin.add_theme_constant_override("margin_bottom", 12)
+	settings_navigation_panel.add_child(navigation_margin)
+
+	settings_navigation = VBoxContainer.new()
+	settings_navigation.name = "SettingsNavigation"
+	settings_navigation.add_theme_constant_override("separation", 7)
+	navigation_margin.add_child(settings_navigation)
+
+	var content_panel := PanelContainer.new()
+	content_panel.name = "SettingsContentPanel"
+	content_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	content_panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#08111ee8"), UI_BORDER_SOFT, 12, 1)
+	)
+	settings_workspace.add_child(content_panel)
+	content_panel.add_child(tab_container)
 
 	var general_tab: VBoxContainer = _create_tab_content("General", "ui.settings.tab.general")
 	var graphics_tab: VBoxContainer = _create_tab_content("Graphics", "ui.settings.tab.graphics")
@@ -190,6 +245,7 @@ func _setup_tabs() -> void:
 	var account_tab: VBoxContainer = _create_tab_content("Account", "ui.settings.tab.account")
 	var about_tab: VBoxContainer = _create_tab_content("About", "ui.settings.tab.about")
 	account_tab_root = account_tab.get_parent().get_parent() as Control
+	_build_navigation()
 
 	language_label = Label.new()
 	_set_localized_text(language_label, "ui.settings.language")
@@ -258,13 +314,69 @@ func _apply_context(context: String) -> void:
 		var account_tab_index: int = account_tab_root.get_index()
 		if tab_container != null and tab_container.has_method("set_tab_hidden"):
 			tab_container.call("set_tab_hidden", account_tab_index, not show_account_tab)
+		if account_tab_index >= 0 and account_tab_index < settings_navigation_buttons.size():
+			settings_navigation_buttons[account_tab_index].visible = show_account_tab
 
 	if show_account_tab:
 		_refresh_account_tab()
+		_refresh_navigation_state()
 		return
 
 	if tab_container != null:
 		tab_container.current_tab = 0
+	_refresh_navigation_state()
+
+
+func _build_navigation() -> void:
+	if settings_navigation == null or tab_container == null:
+		return
+
+	for index: int in range(tab_container.get_tab_count()):
+		var tab_root := tab_container.get_child(index)
+		var button := Button.new()
+		button.name = "%sNavigationButton" % str(tab_root.name)
+		button.custom_minimum_size = Vector2(NAVIGATION_WIDTH - 20.0, 42.0)
+		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		button.focus_mode = Control.FOCUS_ALL
+		button.set_meta("settings_tab_index", index)
+		if tab_root.has_meta("i18n_tab_key"):
+			_set_localized_text(button, str(tab_root.get_meta("i18n_tab_key")))
+		button.pressed.connect(_on_navigation_button_pressed.bind(index))
+		settings_navigation.add_child(button)
+		settings_navigation_buttons.append(button)
+	_refresh_navigation_state()
+
+
+func _on_navigation_button_pressed(tab_index: int) -> void:
+	if tab_container == null:
+		return
+	tab_container.current_tab = tab_index
+	_refresh_navigation_state()
+
+
+func _on_settings_tab_changed(_tab_index: int) -> void:
+	_refresh_navigation_state()
+
+
+func _refresh_navigation_state() -> void:
+	if tab_container == null:
+		return
+	for index: int in range(settings_navigation_buttons.size()):
+		var button := settings_navigation_buttons[index]
+		_apply_navigation_button_style(button, index == tab_container.current_tab)
+
+
+func _focus_active_navigation_button() -> void:
+	if tab_container == null:
+		close_button.grab_focus()
+		return
+	var active_index := tab_container.current_tab
+	if active_index >= 0 and active_index < settings_navigation_buttons.size():
+		var button := settings_navigation_buttons[active_index]
+		if button.visible:
+			button.grab_focus()
+			return
+	close_button.grab_focus()
 
 
 func _create_tab_content(tab_name: String, translation_key: String) -> VBoxContainer:
@@ -642,6 +754,7 @@ func _refresh_localized_content() -> void:
 	LocalizationManager.localize_tree(self)
 	_refresh_localized_controls(self)
 	_refresh_tab_titles()
+	_refresh_navigation_state()
 	_update_about_version_label()
 	_apply_sprite_style_option_labels()
 	_apply_language_options_to_control()
@@ -675,6 +788,11 @@ func _on_locale_changed(_locale: String) -> void:
 
 func _apply_premium_styles() -> void:
 	add_theme_stylebox_override("panel", _make_glass_panel_style(14, 1))
+	if settings_navigation_panel != null:
+		settings_navigation_panel.add_theme_stylebox_override(
+			"panel",
+			_make_panel_style(Color("#0b1728e8"), Color("#274563"), 12, 1)
+		)
 	if tab_container != null:
 		tab_container.add_theme_constant_override("tab_separation", 4)
 		tab_container.add_theme_constant_override("side_margin", 4)
@@ -703,6 +821,7 @@ func _apply_premium_styles() -> void:
 	_apply_button_style(close_button)
 	_apply_account_dialog_style()
 	_apply_logout_confirm_dialog_style()
+	_refresh_navigation_state()
 
 
 func _apply_styles_recursive(node: Node) -> void:
@@ -807,6 +926,22 @@ func _apply_button_style(button: Button, variant: String = "default") -> void:
 	button.add_theme_stylebox_override("hover", _make_button_style(hover_bg, hover_border))
 	button.add_theme_stylebox_override("pressed", _make_button_style(pressed_bg, hover_border))
 	button.add_theme_stylebox_override("focus", _make_button_style(UI_INPUT_BG, UI_BORDER_FOCUS, 8, 1))
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+
+
+func _apply_navigation_button_style(button: Button, selected: bool) -> void:
+	if button == null:
+		return
+	var normal_bg := Color("#172b48f2") if selected else Color(0, 0, 0, 0)
+	var normal_border := UI_BORDER_FOCUS if selected else Color(0, 0, 0, 0)
+	button.add_theme_color_override("font_color", UI_TEXT if selected else UI_MUTED_TEXT)
+	button.add_theme_color_override("font_hover_color", UI_TEXT)
+	button.add_theme_color_override("font_pressed_color", UI_TEXT)
+	button.add_theme_font_size_override("font_size", 14)
+	button.add_theme_stylebox_override("normal", _make_button_style(normal_bg, normal_border, 8, 1 if selected else 0))
+	button.add_theme_stylebox_override("hover", _make_button_style(Color("#132641e8"), UI_BORDER_SOFT, 8, 1))
+	button.add_theme_stylebox_override("pressed", _make_button_style(Color("#0b1729f2"), UI_BORDER_FOCUS, 8, 1))
+	button.add_theme_stylebox_override("focus", _make_button_style(normal_bg, UI_BORDER_FOCUS, 8, 1))
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 

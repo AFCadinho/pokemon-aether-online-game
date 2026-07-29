@@ -298,6 +298,19 @@ func _on_options_button_pressed() -> void:
 		settings_menu.visible = true
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if (
+		not event.is_action_pressed("ui_cancel")
+		or is_loading
+		or settings_menu == null
+		or settings_menu.visible
+	):
+		return
+
+	_on_options_button_pressed()
+	get_viewport().set_input_as_handled()
+
+
 func _on_quit_button_pressed() -> void:
 	get_tree().quit()
 
