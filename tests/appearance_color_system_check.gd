@@ -133,7 +133,7 @@ func _run() -> void:
 	_check(store_source.contains("CharacterAppearanceService.CHROMA_COLOR_SWATCHES"), "Store preview uses the shared Chroma palette")
 	_check(store_source.contains("ColorPickerButton.new()"), "Store preview includes a custom colour picker")
 	_check(
-		store_source.contains('placeholder_text = "Search Store..."')
+		store_source.contains('"ui.store.search"')
 			and store_source.contains("func _item_matches_catalog_search"),
 		"Gift Store exposes catalog search"
 	)

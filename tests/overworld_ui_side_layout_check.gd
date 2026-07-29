@@ -83,7 +83,12 @@ func _init() -> void:
 	_check(script_source.contains('pvp_mode_close_button.text = "×"') and not script_source.contains('_create_pvp_mode_menu_button("Close")'), "PvP launcher uses a compact header close action")
 	_check(socials_menu_block.contains("custom_minimum_size = Vector2(390, 0)"), "Social opens as a readable launcher instead of a narrow button list")
 	_check(scene_source.contains('text = "Stay connected with other trainers"'), "Social launcher explains its purpose")
-	_check(script_source.contains('"Friends"') and script_source.contains('"Nearby Trainers"') and script_source.contains('"Mail"'), "Social launcher keeps all existing destinations")
+	_check(
+		script_source.contains('"ui.social.friends"')
+		and script_source.contains('"ui.social.nearby"')
+		and script_source.contains('"ui.social.mail"'),
+		"Social launcher keeps all existing destinations"
+	)
 	_check(script_source.contains('const SOCIALS_NEARBY_ICON: Texture2D = preload("res://assets/ui/socials_nearby.svg")'), "Nearby Trainers uses a dedicated location icon")
 	_check(script_source.contains('const SOCIALS_MAIL_ICON: Texture2D = preload("res://assets/ui/socials_mail.svg")'), "Mail uses a dedicated envelope icon")
 	_check(script_source.contains('$Control/SocialsMenu/MarginContainer/VBoxContainer/Header/CloseButton'), "Social launcher uses a compact header close action")
@@ -268,9 +273,17 @@ func _init() -> void:
 		and donator_store_script_source.contains("GENDERCHANCETICKET.png"),
 		"Trainer Service tickets use dedicated pixel-art item icons"
 	)
-	_check(donator_store_script_source.contains('title.text = "Aether Gift Store"') and donator_store_script_source.contains("Server-verified catalog"), "Gift Store presents itself as a clearly labeled authoritative catalog")
+	_check(
+		donator_store_script_source.contains('"ui.store.title"')
+		and donator_store_script_source.contains('"ui.store.subtitle"'),
+		"Gift Store presents itself as a clearly labeled authoritative catalog"
+	)
 	_check(not donator_store_script_source.contains('"personal_buffs"') and not donator_store_script_source.contains('"personal_buff"'), "paid personal buffs stay outside the Store catalog")
-	_check(donator_store_script_source.contains("func set_gem_balance(amount: int)") and donator_store_script_source.contains('balance_label.text = "%s Aether Gems"'), "Donator Store labels its authoritative Aether Gem balance")
+	_check(
+		donator_store_script_source.contains("func set_gem_balance(amount: int)")
+		and donator_store_script_source.contains('"ui.store.balance"'),
+		"Donator Store labels its authoritative Aether Gem balance"
+	)
 	_check(
 		donator_store_script_source.contains("authoritative_gem_prices")
 		and donator_store_script_source.contains("purchase_requested.emit(selected_item_id, _selected_purchase_chroma_colors())")

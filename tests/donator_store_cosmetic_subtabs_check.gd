@@ -13,6 +13,10 @@ func _init() -> void:
 
 
 func _run() -> void:
+	var localization_manager := root.get_node_or_null("LocalizationManager")
+	if localization_manager != null:
+		localization_manager.set_locale("en")
+		await process_frame
 	var store := STORE_SCENE.instantiate() as DonatorStorePopup
 	root.add_child(store)
 	await process_frame
@@ -520,6 +524,21 @@ func _run() -> void:
 		and gender_ticket_icon.get_height() == 48,
 		"Gender Chance Ticket has a 48x48 pixel-art item icon"
 	)
+
+	if localization_manager != null:
+		localization_manager.set_locale("nl")
+		await process_frame
+		var featured_button := store.category_buttons.get("featured") as Button
+		_check(
+			featured_button != null and featured_button.text == "Uitgelicht",
+			"Store categories refresh live in Dutch"
+		)
+		_check(
+			store.catalog_search_input.placeholder_text == "Zoek in Store...",
+			"Store search refreshes live in Dutch"
+		)
+		localization_manager.set_locale("en")
+		await process_frame
 
 	store.queue_free()
 	quit(1 if failed else 0)

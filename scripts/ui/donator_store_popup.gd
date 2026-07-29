@@ -617,19 +617,24 @@ func _ready() -> void:
 	_sync_character_preview_colors()
 	set_gem_balance(gem_balance)
 	_select_category("featured")
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	if localization_manager != null:
+		var locale_callable := Callable(self, "_on_locale_changed")
+		if not localization_manager.is_connected("locale_changed", locale_callable):
+			localization_manager.connect("locale_changed", locale_callable)
 
 
 func set_gem_balance(amount: int) -> void:
 	gem_balance = maxi(amount, 0)
 	if balance_label != null:
-		balance_label.text = "%s Aether Gems" % _format_number(gem_balance)
+		balance_label.text = _t("ui.store.balance", {"amount": _format_number(gem_balance)})
 	_refresh_purchase_state()
 
 
 func set_store_loading(loading: bool) -> void:
 	store_catalog_loading = loading
 	if loading and status_label != null:
-		status_label.text = "Loading Aether Gem balance and available items..."
+		status_label.text = _t("ui.store.status.loading")
 	_refresh_purchase_state()
 
 
@@ -684,14 +689,14 @@ func show_store_error(message: String) -> void:
 func set_purchase_in_progress(active: bool) -> void:
 	purchase_in_progress = active
 	if active and status_label != null:
-		status_label.text = "Completing secure Aether Gem purchase..."
+		status_label.text = _t("ui.store.status.purchasing")
 	_refresh_purchase_state()
 
 
 func show_purchase_success(item_name: String) -> void:
 	purchase_in_progress = false
 	if status_label != null:
-		status_label.text = "%s was added to your Bag" % item_name
+		status_label.text = _t("ui.store.status.added", {"item": item_name})
 	_refresh_purchase_state(false)
 
 
@@ -724,7 +729,7 @@ func open_store() -> void:
 	_refresh_character_preview()
 	visible = true
 	if status_label != null:
-		status_label.text = "Loading Aether Gem balance and available items..."
+		status_label.text = _t("ui.store.status.loading")
 
 
 func close_store() -> void:
@@ -793,13 +798,13 @@ func _create_header() -> Control:
 	row.add_child(heading)
 
 	var title := Label.new()
-	title.text = "Aether Gift Store"
+	_set_localized_property(title, "text", "ui.store.title")
 	title.add_theme_font_size_override("font_size", 20)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	heading.add_child(title)
 
 	var subtitle := Label.new()
-	subtitle.text = "Blessings, style, convenience and trainer services"
+	_set_localized_property(subtitle, "text", "ui.store.subtitle")
 	subtitle.add_theme_font_size_override("font_size", 12)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	heading.add_child(subtitle)
@@ -808,8 +813,8 @@ func _create_header() -> Control:
 
 	var add_gems_button := Button.new()
 	add_gems_button.name = "AddGemsButton"
-	add_gems_button.text = "+ Add Gems"
-	add_gems_button.tooltip_text = "Aether Gem top-ups are coming later"
+	_set_localized_property(add_gems_button, "text", "ui.store.add_gems")
+	_set_localized_property(add_gems_button, "tooltip_text", "ui.store.add_gems_tooltip")
 	add_gems_button.custom_minimum_size = Vector2(96, 36)
 	add_gems_button.focus_mode = Control.FOCUS_NONE
 	add_gems_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -819,7 +824,7 @@ func _create_header() -> Control:
 
 	var close_button := Button.new()
 	close_button.text = "×"
-	close_button.tooltip_text = "Close"
+	_set_localized_property(close_button, "tooltip_text", "common.close")
 	close_button.custom_minimum_size = Vector2(36, 36)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -830,7 +835,7 @@ func _create_header() -> Control:
 
 
 func _on_add_gems_pressed() -> void:
-	var message := "Adding Aether Gems is not implemented yet."
+	var message := _t("ui.store.add_gems_unavailable")
 	if status_label != null:
 		status_label.text = message
 	if selection_description_label != null:
@@ -885,14 +890,14 @@ func _create_category_rail() -> Control:
 	margin.add_child(layout)
 
 	var browse_label := Label.new()
-	browse_label.text = "BROWSE"
+	_set_localized_property(browse_label, "text", "ui.store.browse")
 	browse_label.add_theme_font_size_override("font_size", 10)
 	browse_label.add_theme_color_override("font_color", UI_PURPLE)
 	layout.add_child(browse_label)
 
 	for category_id: String in CATEGORY_ORDER:
 		var button := Button.new()
-		button.text = str(CATEGORY_LABELS.get(category_id, category_id.capitalize()))
+		button.text = _category_text(category_id, "label")
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		button.custom_minimum_size = Vector2(0, 38)
 		button.focus_mode = Control.FOCUS_NONE
@@ -906,7 +911,7 @@ func _create_category_rail() -> Control:
 	layout.add_child(spacer)
 
 	var note := Label.new()
-	note.text = "Server-verified catalog\nUnavailable items are clearly marked"
+	_set_localized_property(note, "text", "ui.store.catalog_note")
 	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	note.add_theme_font_size_override("font_size", 10)
 	note.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -927,7 +932,7 @@ func _create_catalog_area() -> Control:
 	layout.add_child(catalog_header)
 
 	var products_label := Label.new()
-	products_label.text = "STORE CATALOG"
+	_set_localized_property(products_label, "text", "ui.store.catalog")
 	products_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	products_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	products_label.add_theme_font_size_override("font_size", 10)
@@ -936,10 +941,10 @@ func _create_catalog_area() -> Control:
 
 	catalog_search_input = LineEdit.new()
 	catalog_search_input.name = "CatalogSearchInput"
-	catalog_search_input.placeholder_text = "Search Store..."
+	_set_localized_property(catalog_search_input, "placeholder_text", "ui.store.search")
 	catalog_search_input.clear_button_enabled = true
 	catalog_search_input.custom_minimum_size = Vector2(210, 34)
-	catalog_search_input.tooltip_text = "Search the active Store category"
+	_set_localized_property(catalog_search_input, "tooltip_text", "ui.store.search_tooltip")
 	catalog_search_input.text_changed.connect(_on_catalog_search_changed)
 	_apply_line_edit_style(catalog_search_input)
 	catalog_header.add_child(catalog_search_input)
@@ -984,7 +989,7 @@ func _create_cosmetic_subcategory_bar() -> PanelContainer:
 	for group_id: String in COSMETIC_FILTER_GROUP_ORDER:
 		var button := Button.new()
 		button.name = "CosmeticFilter_%s" % group_id
-		button.text = str(COSMETIC_FILTER_GROUP_LABELS.get(group_id, group_id.capitalize()))
+		button.text = _t("ui.store.cosmetic.group.%s" % group_id)
 		button.custom_minimum_size = Vector2(70, 30)
 		button.focus_mode = Control.FOCUS_NONE
 		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -1002,7 +1007,7 @@ func _create_cosmetic_subcategory_bar() -> PanelContainer:
 	row.add_child(cosmetic_item_category_control)
 
 	var category_label := Label.new()
-	category_label.text = "ITEM CATEGORY"
+	_set_localized_property(category_label, "text", "ui.store.cosmetic.item_category")
 	category_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	category_label.add_theme_font_size_override("font_size", 9)
 	category_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -1011,12 +1016,10 @@ func _create_cosmetic_subcategory_bar() -> PanelContainer:
 	cosmetic_item_category_select = OptionButton.new()
 	cosmetic_item_category_select.name = "CosmeticItemCategorySelect"
 	cosmetic_item_category_select.custom_minimum_size = Vector2(150, 30)
-	cosmetic_item_category_select.add_item(str(COSMETIC_SUBCATEGORY_LABELS.get("all", "All item types")))
+	cosmetic_item_category_select.add_item(_subcategory_text("all"))
 	cosmetic_item_category_select.set_item_metadata(0, "all")
 	for subcategory_id: String in COSMETIC_ITEM_CATEGORY_ORDER:
-		cosmetic_item_category_select.add_item(
-			str(COSMETIC_SUBCATEGORY_LABELS.get(subcategory_id, subcategory_id.capitalize()))
-		)
+		cosmetic_item_category_select.add_item(_subcategory_text(subcategory_id))
 		cosmetic_item_category_select.set_item_metadata(
 			cosmetic_item_category_select.item_count - 1,
 			subcategory_id
@@ -1095,14 +1098,14 @@ func _create_character_preview_panel() -> Control:
 	margin.add_child(layout)
 
 	character_preview_eyebrow_label = Label.new()
-	character_preview_eyebrow_label.text = "ON YOUR TRAINER"
+	character_preview_eyebrow_label.text = _t("ui.store.preview.on_trainer")
 	character_preview_eyebrow_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	character_preview_eyebrow_label.add_theme_font_size_override("font_size", 10)
 	character_preview_eyebrow_label.add_theme_color_override("font_color", UI_CYAN)
 	layout.add_child(character_preview_eyebrow_label)
 
 	character_preview_title_label = Label.new()
-	character_preview_title_label.text = "Select a cosmetic"
+	character_preview_title_label.text = _t("ui.store.preview.select_cosmetic")
 	character_preview_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	character_preview_title_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	character_preview_title_label.add_theme_font_size_override("font_size", 14)
@@ -1138,7 +1141,7 @@ func _create_character_preview_panel() -> Control:
 	for direction: Dictionary in PREVIEW_DIRECTIONS:
 		var direction_id := str(direction.get("id", "down"))
 		var direction_button := Button.new()
-		direction_button.text = str(direction.get("label", direction_id.capitalize()))
+		direction_button.text = _t("ui.store.preview.direction.%s" % direction_id)
 		direction_button.custom_minimum_size = Vector2(51, 27)
 		direction_button.focus_mode = Control.FOCUS_NONE
 		direction_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -1152,7 +1155,7 @@ func _create_character_preview_panel() -> Control:
 	layout.add_child(character_preview_palette)
 
 	character_preview_color_label = Label.new()
-	character_preview_color_label.text = "PREVIEW COLOR"
+	_set_localized_property(character_preview_color_label, "text", "ui.store.preview.color")
 	character_preview_color_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	character_preview_color_label.add_theme_font_size_override("font_size", 9)
 	character_preview_color_label.add_theme_color_override("font_color", UI_PURPLE)
@@ -1170,13 +1173,17 @@ func _create_character_preview_panel() -> Control:
 	character_preview_palette.add_child(custom_color_row)
 
 	var custom_color_label := Label.new()
-	custom_color_label.text = "Custom"
+	_set_localized_property(custom_color_label, "text", "ui.store.preview.custom")
 	custom_color_label.add_theme_font_size_override("font_size", 10)
 	custom_color_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	custom_color_row.add_child(custom_color_label)
 
 	character_preview_color_picker = ColorPickerButton.new()
-	character_preview_color_picker.tooltip_text = "Choose a custom color"
+	_set_localized_property(
+		character_preview_color_picker,
+		"tooltip_text",
+		"ui.store.preview.choose_color"
+	)
 	character_preview_color_picker.custom_minimum_size = Vector2(54, 24)
 	character_preview_color_picker.focus_mode = Control.FOCUS_NONE
 	character_preview_color_picker.color_changed.connect(_select_character_preview_custom_color)
@@ -1187,7 +1194,11 @@ func _create_character_preview_panel() -> Control:
 	character_preview_hex_input.placeholder_text = "#RRGGBB"
 	character_preview_hex_input.max_length = 7
 	character_preview_hex_input.custom_minimum_size = Vector2(88, 24)
-	character_preview_hex_input.tooltip_text = "Enter a hex colour code, for example #7a46c5"
+	_set_localized_property(
+		character_preview_hex_input,
+		"tooltip_text",
+		"ui.store.preview.hex_tooltip"
+	)
 	character_preview_hex_input.text_changed.connect(_on_character_preview_hex_text_changed)
 	character_preview_hex_input.text_submitted.connect(_commit_character_preview_hex_color)
 	character_preview_hex_input.focus_exited.connect(_commit_character_preview_hex_color)
@@ -1195,7 +1206,11 @@ func _create_character_preview_panel() -> Control:
 	custom_color_row.add_child(character_preview_hex_input)
 
 	character_preview_note_label = Label.new()
-	character_preview_note_label.text = "Selected Chroma colours are included with your purchase"
+	_set_localized_property(
+		character_preview_note_label,
+		"text",
+		"ui.store.preview.chroma_included"
+	)
 	character_preview_note_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	character_preview_note_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	character_preview_note_label.add_theme_font_size_override("font_size", 10)
@@ -1230,13 +1245,13 @@ func _create_selection_footer() -> Control:
 	row.add_child(selection)
 
 	selection_title_label = Label.new()
-	selection_title_label.text = "Select an item to preview"
+	selection_title_label.text = _t("ui.store.selection.title")
 	selection_title_label.add_theme_font_size_override("font_size", 13)
 	selection_title_label.add_theme_color_override("font_color", UI_TEXT)
 	selection.add_child(selection_title_label)
 
 	selection_description_label = Label.new()
-	selection_description_label.text = "Select an available item to purchase it safely with Aether Gems."
+	selection_description_label.text = _t("ui.store.selection.description")
 	selection_description_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	selection_description_label.add_theme_font_size_override("font_size", 10)
 	selection_description_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -1252,8 +1267,8 @@ func _create_selection_footer() -> Control:
 	row.add_child(selection_price_label)
 
 	purchase_button = Button.new()
-	purchase_button.text = "Purchase"
-	purchase_button.tooltip_text = "Select an available Store item"
+	_set_localized_property(purchase_button, "text", "ui.store.purchase")
+	_set_localized_property(purchase_button, "tooltip_text", "ui.store.purchase_select")
 	purchase_button.custom_minimum_size = Vector2(112, 36)
 	purchase_button.focus_mode = Control.FOCUS_NONE
 	purchase_button.disabled = true
@@ -1262,11 +1277,11 @@ func _create_selection_footer() -> Control:
 	row.add_child(purchase_button)
 
 	status_label = Label.new()
-	status_label.text = "Loading Aether Gem balance and available items..."
+	status_label.text = _t("ui.store.status.loading")
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	status_label.add_theme_font_size_override("font_size", 10)
 	status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	status_label.tooltip_text = "Your Aether Gem balance and purchases are kept safe."
+	_set_localized_property(status_label, "tooltip_text", "ui.store.safety")
 	row.add_child(status_label)
 	return panel
 
@@ -1281,11 +1296,11 @@ func _select_category(category_id: String) -> void:
 		if button != null:
 			_apply_category_button_style(button, category_key == active_category)
 	if hero_title_label != null:
-		hero_title_label.text = str(CATEGORY_LABELS.get(active_category, "Store"))
+		hero_title_label.text = _category_text(active_category, "label")
 	if hero_description_label != null:
-		hero_description_label.text = str(CATEGORY_DESCRIPTIONS.get(active_category, ""))
+		hero_description_label.text = _category_text(active_category, "description")
 	if hero_promise_label != null:
-		hero_promise_label.text = str(CATEGORY_PROMISES.get(active_category, "FAIR SUPPORT"))
+		hero_promise_label.text = _category_text(active_category, "promise")
 	_refresh_cosmetic_subcategory_bar()
 	_reset_selection_footer()
 	_render_products()
@@ -1394,8 +1409,8 @@ func _item_matches_catalog_search(item: Dictionary) -> bool:
 		return true
 	var searchable_parts := PackedStringArray([
 		str(item.get("id", "")),
-		str(item.get("name", "")),
-		str(item.get("description", "")),
+		_item_name(item),
+		_item_description(item),
 		str(item.get("badge", "")),
 		str(item.get("cosmetic_subcategory", "")),
 	])
@@ -1451,7 +1466,7 @@ func _create_product_card(item: Dictionary) -> Button:
 
 	var badge := Label.new()
 	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var badge_text := str(item.get("badge", "CONCEPT"))
+	var badge_text := _badge_text(str(item.get("badge", "CONCEPT")))
 	var compatibility_badge := _item_gender_badge(item)
 	badge.text = (
 		"%s · %s" % [compatibility_badge, badge_text]
@@ -1490,7 +1505,7 @@ func _create_product_card(item: Dictionary) -> Button:
 
 	var title := Label.new()
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	title.text = str(item.get("name", "Store Item"))
+	title.text = _item_name(item)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	title.add_theme_font_size_override("font_size", 13)
@@ -1499,7 +1514,7 @@ func _create_product_card(item: Dictionary) -> Button:
 
 	var description := Label.new()
 	description.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	description.text = str(item.get("description", ""))
+	description.text = _item_description(item)
 	description.custom_minimum_size = Vector2(0, 34)
 	description.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -1511,7 +1526,7 @@ func _create_product_card(item: Dictionary) -> Button:
 	price.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var authoritative_price := _gem_price(item_id)
 	price.text = (
-		"COMING LATER"
+		_t("ui.store.coming_later")
 		if store_catalog_loaded and authoritative_price < 0
 		else "◆  %s" % _format_number(authoritative_price if authoritative_price >= 0 else int(item.get("price", 0)))
 	)
@@ -1533,8 +1548,8 @@ func _select_product(item_id: String) -> void:
 		if button != null:
 			_apply_product_card_style(button, product_id == selected_item_id)
 
-	selection_title_label.text = str(item.get("name", "Store Item"))
-	var description := str(item.get("description", ""))
+	selection_title_label.text = _item_name(item)
+	var description := _item_description(item)
 	var compatibility_note := _item_gender_compatibility_note(item)
 	selection_description_label.text = (
 		"%s · %s" % [description, compatibility_note]
@@ -1543,7 +1558,7 @@ func _select_product(item_id: String) -> void:
 	)
 	var authoritative_price := _gem_price(item_id)
 	selection_price_label.text = (
-		"COMING LATER"
+		_t("ui.store.coming_later")
 		if store_catalog_loaded and authoritative_price < 0
 		else "◆ %s" % _format_number(authoritative_price if authoritative_price >= 0 else int(item.get("price", 0)))
 	)
@@ -1553,13 +1568,13 @@ func _select_product(item_id: String) -> void:
 
 func _reset_selection_footer() -> void:
 	if selection_title_label != null:
-		selection_title_label.text = "Select an item to preview"
+		selection_title_label.text = _t("ui.store.selection.title")
 	if selection_description_label != null:
-		selection_description_label.text = "Select an available item to purchase it safely with Aether Gems."
+		selection_description_label.text = _t("ui.store.selection.description")
 	if selection_price_label != null:
 		selection_price_label.text = "—"
 	if status_label != null:
-		status_label.text = "Select an item to preview"
+		status_label.text = _t("ui.store.selection.title")
 	_refresh_purchase_state()
 	_refresh_character_preview()
 
@@ -1637,14 +1652,14 @@ func _refresh_character_preview() -> void:
 		emblem_sprite.scale = Vector2(6.0, 6.0)
 		emblem_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 		character_preview_viewport.add_child(emblem_sprite)
-		character_preview_eyebrow_label.text = "FOR YOUR GUILD"
-		character_preview_title_label.text = str(item.get("name", "Guild Emblem"))
-		character_preview_note_label.text = "Permanent template · apply it from your Bag"
+		character_preview_eyebrow_label.text = _t("ui.store.preview.for_guild")
+		character_preview_title_label.text = _item_name(item)
+		character_preview_note_label.text = _t("ui.store.preview.guild_template")
 		character_preview_direction_row.visible = false
 		character_preview_palette.visible = false
 		return
 
-	character_preview_eyebrow_label.text = "ON YOUR TRAINER"
+	character_preview_eyebrow_label.text = _t("ui.store.preview.on_trainer")
 	character_preview_direction_row.visible = true
 	var appearance := _current_character_preview_appearance()
 	var preview_visual := _create_character_preview_visual(appearance)
@@ -1663,23 +1678,23 @@ func _refresh_character_preview() -> void:
 			break
 	if character_preview_title_label != null:
 		character_preview_title_label.text = (
-			str(item.get("name", "Select a cosmetic"))
+			_item_name(item)
 			if not preview_parts.is_empty()
-			else "Select a cosmetic"
+			else _t("ui.store.preview.select_cosmetic")
 		)
 	if character_preview_note_label != null:
 		character_preview_note_label.text = (
-			"Selected Chroma colours are included with your purchase"
+			_t("ui.store.preview.chroma_included")
 			if not preview_parts.is_empty()
-			else "Choose a cosmetic to try it on"
+			else _t("ui.store.preview.choose_cosmetic")
 		)
 	if character_preview_palette != null:
 		character_preview_palette.visible = tint_key != ""
 	if character_preview_color_label != null and tint_key != "":
 		character_preview_color_label.text = (
-			"HAIR & EYEBROW COLOR"
+			_t("ui.store.preview.hair_color")
 			if tint_key == "hair_color"
-			else "PREVIEW COLOR"
+			else _t("ui.store.preview.color")
 		)
 	_rebuild_character_preview_color_buttons(tint_key)
 	_refresh_character_preview_color_buttons(tint_key)
@@ -2079,18 +2094,18 @@ func _item_matches_trainer_gender(item: Dictionary) -> bool:
 func _item_gender_badge(item: Dictionary) -> String:
 	var genders := _item_genders(item)
 	if genders == ["male"]:
-		return "MALE ONLY"
+		return _t("ui.store.gender.male_only")
 	if genders == ["female"]:
-		return "FEMALE ONLY"
+		return _t("ui.store.gender.female_only")
 	return ""
 
 
 func _item_gender_compatibility_note(item: Dictionary) -> String:
 	var badge := _item_gender_badge(item)
-	if badge == "MALE ONLY":
-		return "Male character models only."
-	if badge == "FEMALE ONLY":
-		return "Female character models only."
+	if badge == _t("ui.store.gender.male_only"):
+		return _t("ui.store.gender.male_note")
+	if badge == _t("ui.store.gender.female_only"):
+		return _t("ui.store.gender.female_note")
 	return ""
 
 
@@ -2105,43 +2120,49 @@ func _refresh_purchase_state(update_status: bool = true) -> void:
 		return
 	if purchase_in_progress:
 		purchase_button.disabled = true
-		purchase_button.text = "Purchasing..."
-		purchase_button.tooltip_text = "Completing your purchase..."
+		purchase_button.text = _t("ui.store.status.purchasing_short")
+		purchase_button.tooltip_text = _t("ui.store.status.purchasing_tooltip")
 		return
-	purchase_button.text = "Purchase"
+	purchase_button.text = _t("ui.store.purchase")
 	if selected_item_id == "":
 		purchase_button.disabled = true
-		purchase_button.tooltip_text = "Select an available Store item"
+		purchase_button.tooltip_text = _t("ui.store.purchase_select")
 		return
 	if not _item_matches_trainer_gender(_catalog_item(selected_item_id)):
 		purchase_button.disabled = true
-		purchase_button.tooltip_text = "This item does not fit your character"
+		purchase_button.tooltip_text = _t("ui.store.error.incompatible_tooltip")
 		if update_status:
-			status_label.text = "This cosmetic is not compatible with your character model"
+			status_label.text = _t("ui.store.error.incompatible")
 		return
 	if store_catalog_loading or not store_catalog_loaded:
 		purchase_button.disabled = true
-		purchase_button.tooltip_text = "Loading Store items..."
+		purchase_button.tooltip_text = _t("ui.store.status.loading_short")
 		if update_status:
-			status_label.text = "Loading Aether Gem balance and available items..."
+			status_label.text = _t("ui.store.status.loading")
 		return
 	var price := _gem_price(selected_item_id)
 	if price < 0:
 		purchase_button.disabled = true
-		purchase_button.tooltip_text = "This preview item is not available yet"
+		purchase_button.tooltip_text = _t("ui.store.error.preview_unavailable")
 		if update_status:
-			status_label.text = "Preview only · this item is coming later"
+			status_label.text = _t("ui.store.status.preview_only")
 		return
 	if gem_balance < price:
 		purchase_button.disabled = true
-		purchase_button.tooltip_text = "You need %s more Aether Gems" % _format_number(price - gem_balance)
+		purchase_button.tooltip_text = _t("ui.store.error.gems_needed", {
+			"amount": _format_number(price - gem_balance),
+		})
 		if update_status:
-			status_label.text = "Not enough Aether Gems · need %s more" % _format_number(price - gem_balance)
+			status_label.text = _t("ui.store.error.not_enough_gems", {
+				"amount": _format_number(price - gem_balance),
+			})
 		return
 	purchase_button.disabled = false
-	purchase_button.tooltip_text = "Purchase for %s Aether Gems and add it to your Bag" % _format_number(price)
+	purchase_button.tooltip_text = _t("ui.store.purchase_tooltip", {
+		"amount": _format_number(price),
+	})
 	if update_status:
-		status_label.text = "Ready to purchase · item goes to your Bag"
+		status_label.text = _t("ui.store.status.ready")
 
 
 func _on_purchase_pressed() -> void:
@@ -2328,3 +2349,88 @@ func _format_number(value: int) -> String:
 		grouped = ",%s%s" % [raw.right(3), grouped]
 		raw = raw.left(raw.length() - 3)
 	return "%s%s" % [raw, grouped]
+
+
+func _item_name(item: Dictionary) -> String:
+	var item_id := str(item.get("id", item.get("itemId", "")))
+	var fallback := str(item.get("name", _t("ui.store.item")))
+	var item_localization := get_node_or_null("/root/ItemLocalization")
+	if item_localization == null:
+		return fallback
+	return str(item_localization.call("display_name", item_id, fallback))
+
+
+func _item_description(item: Dictionary) -> String:
+	var item_id := str(item.get("id", item.get("itemId", "")))
+	var fallback := str(item.get("description", ""))
+	var item_localization := get_node_or_null("/root/ItemLocalization")
+	if item_localization == null:
+		return fallback
+	return str(item_localization.call("short_description", item_id, fallback))
+
+
+func _category_text(category_id: String, field: String) -> String:
+	var key := "ui.store.category.%s.%s" % [category_id, field]
+	var translated := _t(key)
+	if translated != key:
+		return translated
+	match field:
+		"label": return str(CATEGORY_LABELS.get(category_id, category_id.capitalize()))
+		"description": return str(CATEGORY_DESCRIPTIONS.get(category_id, ""))
+		"promise": return str(CATEGORY_PROMISES.get(category_id, ""))
+	return ""
+
+
+func _subcategory_text(subcategory_id: String) -> String:
+	var key := "ui.store.cosmetic.subcategory.%s" % subcategory_id
+	var translated := _t(key)
+	return (
+		translated
+		if translated != key
+		else str(COSMETIC_SUBCATEGORY_LABELS.get(subcategory_id, subcategory_id.capitalize()))
+	)
+
+
+func _badge_text(value: String) -> String:
+	var key := "ui.store.badge.%s" % value.to_lower().replace("-", "_").replace(" ", "_")
+	var translated := _t(key)
+	return translated if translated != key else value
+
+
+func _set_localized_property(control: Control, property_name: String, key: String) -> void:
+	control.set_meta("i18n_source_%s" % property_name, key)
+	control.set(property_name, _t(key))
+
+
+func _t(key: String, values: Dictionary = {}) -> String:
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	if localization_manager == null:
+		return key.format(values)
+	return str(localization_manager.call("text", key, values))
+
+
+func _on_locale_changed(_locale: String) -> void:
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	if localization_manager != null:
+		localization_manager.call("localize_tree", self)
+	for category_id: String in CATEGORY_ORDER:
+		var button := category_buttons.get(category_id) as Button
+		if button != null:
+			button.text = _category_text(category_id, "label")
+	for group_id: String in COSMETIC_FILTER_GROUP_ORDER:
+		var group_button := cosmetic_filter_group_buttons.get(group_id) as Button
+		if group_button != null:
+			group_button.text = _t("ui.store.cosmetic.group.%s" % group_id)
+	if cosmetic_item_category_select != null:
+		for index: int in range(cosmetic_item_category_select.item_count):
+			cosmetic_item_category_select.set_item_text(
+				index,
+				_subcategory_text(str(cosmetic_item_category_select.get_item_metadata(index)))
+			)
+	set_gem_balance(gem_balance)
+	var previous_selection := selected_item_id
+	_select_category(active_category)
+	if not previous_selection.is_empty():
+		_select_product(previous_selection)
+	else:
+		_reset_selection_footer()
