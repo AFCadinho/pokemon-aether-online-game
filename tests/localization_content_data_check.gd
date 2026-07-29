@@ -5,6 +5,11 @@ const CATALOG_PATHS: Dictionary = {
 	"nl": "res://localization/content/nl.json",
 	"pt_BR": "res://localization/content/pt_BR.json",
 }
+const GENERATED_CATALOG_PATHS: Dictionary = {
+	"en": "res://localization/content/generated/en.json",
+	"nl": "res://localization/content/generated/nl.json",
+	"pt_BR": "res://localization/content/generated/pt_BR.json",
+}
 const OVERLAY_SCENE_PATH := "res://scenes/interface/ui_overlay.tscn"
 const CALC_PANEL_SCRIPT := preload("res://scripts/battle/battle_ui/battle_damage_calc_panel.gd")
 const PARTY_HOVER_CARD_SCRIPT := "res://scripts/battle/battle_ui/party_hover_card.gd"
@@ -75,6 +80,76 @@ func _check_catalogs() -> void:
 						"%s %s %s has a short description" % [locale, kind, content_id]
 					)
 
+	var generated_catalogs: Dictionary = {}
+	for locale: String in GENERATED_CATALOG_PATHS:
+		var generated_value: Variant = JSON.parse_string(
+			FileAccess.get_file_as_string(str(GENERATED_CATALOG_PATHS.get(locale, "")))
+		)
+		_check(generated_value is Dictionary, "generated %s content catalog is valid JSON" % locale)
+		generated_catalogs[locale] = generated_value as Dictionary if generated_value is Dictionary else {}
+
+	var generated_english: Dictionary = generated_catalogs.get("en", {})
+	for generated_kind: String in ["species", "moves", "abilities"]:
+		var expected_size: int = int({
+			"species": 1439,
+			"moves": 919,
+			"abilities": 376,
+		}.get(generated_kind, 0))
+		var english_generated_entries: Dictionary = generated_english.get(generated_kind, {})
+		var expected_ids: Array = english_generated_entries.keys()
+		expected_ids.sort()
+		for locale: String in GENERATED_CATALOG_PATHS:
+			var generated: Dictionary = generated_catalogs.get(locale, {})
+			var generated_entries: Dictionary = generated.get(generated_kind, {})
+			var localized_ids: Array = generated_entries.keys()
+			localized_ids.sort()
+			_check(
+				generated_entries.size() == expected_size,
+				"generated %s %s catalog covers the complete local index" % [locale, generated_kind]
+			)
+			_check(
+				localized_ids == expected_ids,
+				"generated %s %s IDs match English" % [locale, generated_kind]
+			)
+			for content_id_value: Variant in localized_ids:
+				var content_id := str(content_id_value)
+				var entry: Dictionary = generated_entries.get(content_id, {})
+				_check(
+					not str(entry.get("name", "")).strip_edges().is_empty(),
+					"generated %s %s %s has a name" % [locale, generated_kind, content_id]
+				)
+				for entry_key_value: Variant in entry.keys():
+					_check(
+						str(entry_key_value) in ["name", "shortDesc"],
+						"generated %s %s %s contains presentation fields only" % [
+							locale,
+							generated_kind,
+							content_id,
+						]
+					)
+				if generated_kind == "moves":
+					_check(
+						not str(entry.get("shortDesc", "")).strip_edges().is_empty(),
+						"generated %s move %s has a short description" % [locale, content_id]
+					)
+			if generated_kind == "abilities":
+				var described_ability_count := 0
+				for ability_value: Variant in generated_entries.values():
+					if ability_value is Dictionary and not str(
+						(ability_value as Dictionary).get("shortDesc", "")
+					).strip_edges().is_empty():
+						described_ability_count += 1
+				_check(
+					described_ability_count == 316,
+					"generated %s abilities preserve every available source description" % locale
+				)
+
+	for locale: String in GENERATED_CATALOG_PATHS:
+		var merged_catalog: Dictionary = content_localization.call("get_catalog", locale)
+		_check((merged_catalog.get("species", {}) as Dictionary).size() == 1439, "%s resolver merges all species" % locale)
+		_check((merged_catalog.get("moves", {}) as Dictionary).size() == 919, "%s resolver merges all moves" % locale)
+		_check((merged_catalog.get("abilities", {}) as Dictionary).size() == 376, "%s resolver merges all abilities" % locale)
+
 
 func _check_runtime_resolution() -> void:
 	localization_manager.call("set_locale", "nl")
@@ -104,6 +179,18 @@ func _check_runtime_resolution() -> void:
 	_check(
 		content_localization.call("display_name", "moves", "future-move", "Future Move") == "Future Move",
 		"missing content overlay keeps its English source fallback"
+	)
+	_check(
+		content_localization.call("display_name", "moves", "absorb", "Absorb") == "Absorver",
+		"generated Portuguese move presentation covers the complete source catalog"
+	)
+	_check(
+		content_localization.call("short_description", "abilities", "adaptability", "") != "",
+		"generated Portuguese ability presentation retains the available source description"
+	)
+	_check(
+		content_localization.call("display_name", "species", "mr-mime", "Mr Mime") == "Mr. Mime",
+		"species presentation resolves from the complete canonical source catalog"
 	)
 
 
@@ -205,6 +292,10 @@ func _check_runtime_consumers() -> void:
 	_check(
 		overlay.call("_get_summary_ability_display_name", "water-absorb") == "Waterabsorptie",
 		"Pokémon Summary displays a localized ability name"
+	)
+	_check(
+		overlay.call("_localized_species_name", "mr-mime", "Mr Mime") == "Mr. Mime",
+		"Pokémon Summary and Pokédex share canonical species presentation"
 	)
 	var pokedex_move := {"id": "water-pulse", "name": "Water Pulse", "type": "water"}
 	_check(

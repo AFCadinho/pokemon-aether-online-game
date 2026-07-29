@@ -4,9 +4,18 @@ class_name ContentLocalizationServiceNode
 
 const DEFAULT_LOCALE := "en"
 const CATALOG_PATHS: Dictionary = {
-	"en": "res://localization/content/en.json",
-	"nl": "res://localization/content/nl.json",
-	"pt_BR": "res://localization/content/pt_BR.json",
+	"en": [
+		"res://localization/content/generated/en.json",
+		"res://localization/content/en.json",
+	],
+	"nl": [
+		"res://localization/content/generated/nl.json",
+		"res://localization/content/nl.json",
+	],
+	"pt_BR": [
+		"res://localization/content/generated/pt_BR.json",
+		"res://localization/content/pt_BR.json",
+	],
 }
 const SUPPORTED_KINDS: Array[String] = [
 	"types",
@@ -160,7 +169,27 @@ func _load_catalogs() -> void:
 	catalogs.clear()
 	for locale_value: Variant in CATALOG_PATHS.keys():
 		var locale := str(locale_value)
-		catalogs[locale] = _load_catalog(locale, str(CATALOG_PATHS.get(locale, "")))
+		var merged_catalog: Dictionary = {}
+		var paths_value: Variant = CATALOG_PATHS.get(locale, [])
+		var paths: Array = paths_value if paths_value is Array else [paths_value]
+		for path_value: Variant in paths:
+			_merge_catalog(merged_catalog, _load_catalog(locale, str(path_value)))
+		catalogs[locale] = merged_catalog
+
+
+func _merge_catalog(target: Dictionary, source: Dictionary) -> void:
+	for kind_value: Variant in source.keys():
+		var kind := str(kind_value)
+		if not target.has(kind):
+			target[kind] = {}
+		var target_entries: Dictionary = target.get(kind, {})
+		var source_entries_value: Variant = source.get(kind, {})
+		if not source_entries_value is Dictionary:
+			continue
+		for content_id_value: Variant in (source_entries_value as Dictionary).keys():
+			target_entries[content_id_value] = (
+				source_entries_value as Dictionary
+			).get(content_id_value)
 
 
 func _load_catalog(locale: String, path: String) -> Dictionary:
