@@ -11,6 +11,19 @@ static func message_lines(response: Dictionary) -> Array[String]:
 				"That fishing rod is no longer available in your Bag.",
 				"Your fishing access has been refreshed.",
 			]
+		"fishing_level_required":
+			var detail := _detail(response)
+			return ["Fishing Level %d is required for this rod. Your Fishing Level is %d." % [
+				int(detail.get("requiredFishingLevel", 1)),
+				int(detail.get("currentFishingLevel", 1)),
+			]]
+		"fishing_badges_required":
+			var detail := _detail(response)
+			return ["You need %d %s badges for this rod. You currently have %d." % [
+				int(detail.get("requiredBadges", 0)),
+				str(detail.get("region", "regional")).capitalize(),
+				int(detail.get("currentBadges", 0)),
+			]]
 		"encounter_type_not_found":
 			return ["Nothing seems to be biting with this rod here."]
 		"fishing_authentication_required":
@@ -33,8 +46,7 @@ static func message_lines(response: Dictionary) -> Array[String]:
 
 
 static func error_code(response: Dictionary) -> String:
-	var detail_value: Variant = response.get("detail", {})
-	var detail: Dictionary = detail_value if detail_value is Dictionary else {}
+	var detail := _detail(response)
 	var code := str(detail.get(
 		"code",
 		response.get("errorCode", response.get("code", ""))
@@ -49,3 +61,15 @@ static func error_code(response: Dictionary) -> String:
 		return "no_usable_pokemon"
 
 	return ""
+
+
+static func _detail(response: Dictionary) -> Dictionary:
+	var detail_value: Variant = response.get("detail", {})
+	if detail_value is Dictionary and not (detail_value as Dictionary).is_empty():
+		return detail_value as Dictionary
+	var body_value: Variant = response.get("body", {})
+	if body_value is Dictionary:
+		var nested_value: Variant = (body_value as Dictionary).get("detail", {})
+		if nested_value is Dictionary:
+			return nested_value as Dictionary
+	return {}

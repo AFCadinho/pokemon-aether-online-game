@@ -32,6 +32,7 @@
 [ext_resource type="Texture2D" path="res://assets/ui/pvp_queue_ball_red.svg" id="28_pvp_red_ball"]
 [ext_resource type="Texture2D" path="res://assets/ui/pvp_queue_ball_blue.svg" id="29_pvp_blue_ball"]
 [ext_resource type="Texture2D" path="res://assets/ui/pvp_queue_ranked_emblem.svg" id="30_pvp_ranked_emblem"]
+[ext_resource type="Script" path="res://scripts/ui/fishing_action_controller.gd" id="31_fishing_action"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grslb"]
 bg_color = Color(0.019607844, 0.043137256, 0.078431375, 0.92941177)
@@ -2175,3 +2176,6 @@ grow_vertical = 0
 stream = ExtResource("17_notification")
 
 [node name="ParsePokemonRequest" type="HTTPRequest" parent="." unique_id=1824609221]
+
+[node name="FishingActionController" type="Node" parent="."]
+script = ExtResource("31_fishing_action")

@@ -17,6 +17,15 @@ var running_shoes_enabled := false
 var selected_role_badge := ""
 var fishing_unlocked := false
 var fishing_tier := 0
+var fishing_level := 1
+var fishing_total_experience := 0
+var fishing_experience_into_level := 0
+var fishing_experience_for_next_level := 25
+var selected_fishing_rod_item_id := ""
+var fishing_region := "kanto"
+var fishing_region_badge_count := 0
+var fishing_rods: Array = []
+var fishing_owned_rod_item_ids: Array[String] = []
 var surf_unlocked := true
 var gameplay_reset_in_progress := false
 
@@ -40,6 +49,15 @@ func reset_gameplay_runtime_state() -> void:
 	selected_role_badge = ""
 	fishing_unlocked = false
 	fishing_tier = 0
+	fishing_level = 1
+	fishing_total_experience = 0
+	fishing_experience_into_level = 0
+	fishing_experience_for_next_level = 25
+	selected_fishing_rod_item_id = ""
+	fishing_region = "kanto"
+	fishing_region_badge_count = 0
+	fishing_rods = []
+	fishing_owned_rod_item_ids = []
 	surf_unlocked = true
 
 func finish_gameplay_reset() -> void:

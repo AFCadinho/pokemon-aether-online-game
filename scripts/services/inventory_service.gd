@@ -3,6 +3,8 @@ extends Node
 class_name InventoryServiceNode
 
 const INVENTORY_ENDPOINT := "/game/inventory"
+const FISHING_PROGRESSION_ENDPOINT := "/game/fishing/progression"
+const FISHING_SELECTION_ENDPOINT := "/game/fishing/selection"
 const NPC_ITEM_REWARD_ENDPOINT := "/game/npc-rewards/%s/claim"
 const APPEARANCE_INVENTORY_ENDPOINT := "/game/appearance/inventory"
 const INVENTORY_ITEM_USE_ENDPOINT := "/game/inventory/items/%s/use"
@@ -46,6 +48,68 @@ func load_inventory() -> Dictionary:
 	}
 
 
+func load_fishing_progression(area_id := "") -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {"success": false, "error": "Not authenticated."}
+
+	var endpoint := FISHING_PROGRESSION_ENDPOINT
+	var normalized_area_id := str(area_id).strip_edges()
+	if normalized_area_id != "":
+		endpoint += "?areaId=%s" % normalized_area_id.uri_encode()
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + endpoint,
+		HTTPClient.METHOD_GET,
+		GatewayApiConfig.get_accept_headers(),
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var progression := _dictionary_from_value(response.get("body", {}))
+	apply_fishing_progression(progression)
+	return {"success": true, "progression": progression}
+
+
+func select_fishing_rod(item_id: String, area_id := "") -> Dictionary:
+	var normalized_item_id := item_id.strip_edges().to_lower()
+	if not AuthService.is_authenticated():
+		return {"success": false, "error": "Not authenticated."}
+	if normalized_item_id == "":
+		return {"success": false, "error": "Missing fishing rod item id."}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + FISHING_SELECTION_ENDPOINT,
+		HTTPClient.METHOD_PUT,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({
+			"itemId": normalized_item_id,
+			"areaId": str(area_id).strip_edges(),
+		})
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var progression := _dictionary_from_value(response.get("body", {}))
+	apply_fishing_progression(progression)
+	return {"success": true, "progression": progression}
+
+
+func apply_fishing_progression(progression: Dictionary) -> void:
+	GameState.fishing_level = maxi(int(progression.get("level", 1)), 1)
+	GameState.fishing_total_experience = maxi(int(progression.get("totalExperience", 0)), 0)
+	GameState.fishing_experience_into_level = maxi(int(progression.get("experienceIntoLevel", 0)), 0)
+	GameState.fishing_experience_for_next_level = maxi(int(progression.get("experienceForNextLevel", 0)), 0)
+	GameState.selected_fishing_rod_item_id = str(progression.get("selectedRodItemId", "")).strip_edges().to_lower()
+	GameState.fishing_region = str(progression.get("region", "kanto")).strip_edges().to_lower()
+	GameState.fishing_region_badge_count = maxi(int(progression.get("badgeCount", 0)), 0)
+	GameState.fishing_rods = _array_from_value(progression.get("rods", [])).duplicate(true)
+	GameState.fishing_tier = maxi(int(progression.get("activeTier", 0)), 0)
+	GameState.fishing_unlocked = bool(progression.get("selectedRodUsable", false)) and GameState.fishing_tier > 0
+	get_tree().call_group("fishing_action_controller", "refresh_from_game_state")
+
+
 func claim_npc_item_reward(reward_id: String) -> Dictionary:
 	var normalized_reward_id := reward_id.strip_edges().to_lower()
 	if not AuthService.is_authenticated():
@@ -65,6 +129,7 @@ func claim_npc_item_reward(reward_id: String) -> Dictionary:
 
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
 	var inventory_result: Dictionary = await load_inventory()
+	var progression_result: Dictionary = await load_fishing_progression("")
 	return {
 		"success": true,
 		"rewardId": str(body.get("rewardId", normalized_reward_id)),
@@ -73,6 +138,7 @@ func claim_npc_item_reward(reward_id: String) -> Dictionary:
 		"claimed": bool(body.get("claimed", false)),
 		"alreadyOwned": bool(body.get("alreadyOwned", false)),
 		"inventoryRefreshSuccess": bool(inventory_result.get("success", false)),
+		"fishingProgressionRefreshSuccess": bool(progression_result.get("success", false)),
 	}
 
 
@@ -375,9 +441,21 @@ func dev_clear_inventory() -> Dictionary:
 
 
 func _set_fishing_access_from_items(items: Array) -> void:
-	var tier := FishingRodRulesScript.resolve_tier(items)
-	GameState.fishing_tier = tier
-	GameState.fishing_unlocked = tier > 0
+	var owned: Array[String] = []
+	for item_value: Variant in items:
+		if not (item_value is Dictionary):
+			continue
+		var item: Dictionary = item_value
+		if int(item.get("quantity", 0)) <= 0:
+			continue
+		var item_id := str(item.get("itemId", item.get("id", ""))).strip_edges().to_lower()
+		if int(FishingRodRulesScript.ROD_TIERS.get(item_id, 0)) > 0:
+			owned.append(item_id)
+	GameState.fishing_owned_rod_item_ids = owned
+	if GameState.selected_fishing_rod_item_id not in owned:
+		GameState.fishing_unlocked = false
+		GameState.fishing_tier = 0
+	get_tree().call_group("fishing_action_controller", "refresh_from_game_state")
 
 
 func _request_json(url: String, method: HTTPClient.Method, headers: PackedStringArray, body: String) -> Dictionary:

@@ -43,6 +43,31 @@ func _init() -> void:
 		[],
 		"unknown errors remain eligible for staff reporting"
 	)
+	_check_equal(
+		ErrorRules.message_lines({
+			"body": {
+				"detail": {
+					"code": "fishing_level_required",
+					"requiredFishingLevel": 10,
+					"currentFishingLevel": 4,
+				},
+			},
+		}),
+		["Fishing Level 10 is required for this rod. Your Fishing Level is 4."],
+		"Fishing Level gate explains current and required levels"
+	)
+	_check_equal(
+		ErrorRules.message_lines({
+			"detail": {
+				"code": "fishing_badges_required",
+				"region": "johto",
+				"requiredBadges": 3,
+				"currentBadges": 1,
+			},
+		}),
+		["You need 3 Johto badges for this rod. You currently have 1."],
+		"regional badge gate explains current and required badges"
+	)
 	quit(1 if failed else 0)
 
 

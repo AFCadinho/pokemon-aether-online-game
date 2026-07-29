@@ -98,6 +98,7 @@ func _ready() -> void:
 	_connect_world_presence_signals()
 	await _load_fishing_access()
 	await _setup_initial_world_state()
+	await _refresh_fishing_progression()
 	_normalize_map_depth_layer_z_indices(GameState.current_map)
 	if GameState.gameplay_reset_in_progress:
 		GameState.finish_gameplay_reset()
@@ -109,6 +110,20 @@ func _load_fishing_access() -> void:
 		push_warning("World: fishing inventory load failed: %s" % str(
 			inventory_result.get("error", "Unknown error")
 		))
+
+
+func _refresh_fishing_progression() -> void:
+	var progression_result: Dictionary = await InventoryService.load_fishing_progression(_current_fishing_area_id())
+	if not bool(progression_result.get("success", false)):
+		push_warning("World: fishing progression load failed: %s" % str(
+			progression_result.get("error", "Unknown error")
+		))
+
+
+func _current_fishing_area_id() -> String:
+	if GameState.current_map != null and is_instance_valid(GameState.current_map) and GameState.current_map.has_method("get_wild_encounter_area_id"):
+		return str(GameState.current_map.call("get_wild_encounter_area_id")).strip_edges()
+	return ""
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -301,6 +316,7 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 		_mark_authorized_teleport_apply_failed()
 		return position_result
 	_apply_camera_limits_for_map(target_map)
+	await _refresh_fishing_progression()
 	if changes_map:
 		await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
 	last_presence_position_signature = ""
@@ -473,6 +489,7 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 	move_player_to_map(new_map)
 	_position_player_at_spawn(new_map, target_spawn_name, Vector2.ZERO)
 	_apply_camera_limits_for_map(new_map)
+	await _refresh_fishing_progression()
 
 	await get_tree().physics_frame
 	await _save_current_player_position_if_changed(true, target_spawn_name)
@@ -2347,10 +2364,12 @@ func _award_wild_battle_money(battle_id: String, pokemon_species: String) -> voi
 	var wallet_result: Dictionary = await PlayerWalletService.award_wild_battle_money(battle_id)
 	if bool(wallet_result.get("success", false)):
 		PlayerWalletService.apply_wallet_result(wallet_result)
+		var reward: Dictionary = wallet_result.get("reward", {}) as Dictionary
 		_notify_wild_battle_money_awarded(pokemon_species, max(int(PlayerSave.money), 0) - previous_money)
-		_notify_reward_experience_gains(wallet_result.get("reward", {}))
-		_notify_reward_effort_gains(wallet_result.get("reward", {}))
-		_notify_reward_level_ups(wallet_result.get("reward", {}))
+		_notify_reward_experience_gains(reward)
+		_notify_reward_effort_gains(reward)
+		_notify_reward_level_ups(reward)
+		await _notify_fishing_experience_award(reward.get("fishingProgression", {}))
 	else:
 		push_warning("World: wild battle money reward failed: %s" % str(wallet_result.get("error", "Unknown error")))
 
@@ -2366,6 +2385,9 @@ func _award_trainer_battle_rewards(battle_id: String, trainer_name: String) -> v
 		_notify_reward_effort_gains(reward)
 		_notify_reward_level_ups(reward)
 		_notify_gym_badge_award(reward_result.get("gymBadgeAward", {}))
+		var gym_badge_award := _dictionary_from_value(reward_result.get("gymBadgeAward", {}))
+		if bool(gym_badge_award.get("awarded", false)):
+			await _refresh_fishing_progression()
 	else:
 		push_warning("World: trainer battle reward failed: %s" % str(reward_result.get("error", "Unknown error")))
 
@@ -2396,6 +2418,27 @@ func _notify_gym_badge_award(value: Variant) -> void:
 		"add_system_message",
 		"No Gym Badge was awarded. First earn %s." % requirement_text
 	)
+
+
+func _notify_fishing_experience_award(value: Variant) -> void:
+	if not (value is Dictionary):
+		return
+	var progression_award: Dictionary = value as Dictionary
+	var experience_awarded := maxi(int(progression_award.get("experienceAwarded", 0)), 0)
+	if experience_awarded <= 0:
+		return
+	await _refresh_fishing_progression()
+	get_tree().call_group(
+		"ui_overlay",
+		"add_system_message",
+		"Fishing +%d XP." % experience_awarded
+	)
+	if bool(progression_award.get("leveledUp", false)):
+		get_tree().call_group(
+			"ui_overlay",
+			"add_system_message",
+			"Fishing Level increased to %d!" % int(progression_award.get("level", GameState.fishing_level))
+		)
 
 func _notify_wild_battle_money_awarded(pokemon_species: String, money_awarded: int) -> void:
 	if money_awarded <= 0:
