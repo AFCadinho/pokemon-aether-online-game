@@ -125,21 +125,22 @@ occurrences and include some intentional non-language values.
 be bulk-rewritten as one localization change. Each contained domain receives its own
 catalog prefix, tests, review, and commit.
 
-## Server-owned content findings
+## Server-owned content status
 
-- `GatewayApiConfig` currently sends JSON accept/content headers but no
-  `Accept-Language`.
-- `DialogueMetadataService` caches only by dialogue ID.
-- NPC and dialogue normalization accepts English display strings and dialogue arrays
-  directly from the server.
+- `GatewayApiConfig` sends the current locale as `Accept-Language`.
+- `DialogueMetadataService` and `NpcMetadataService` cache by locale and content ID.
+- Game Content resolves `en`, `nl`, and `pt-BR`, with English fallback.
+- NPC locale overlays are restricted to display fields; authoritative mechanics remain
+  in the canonical NPC definitions.
 - Multiple UI flows display raw `error`, `detail`, or `message` fields.
-- Local sign content currently exists only under `signs/en`.
+- Local sign content exists in all three supported locale directories with ID parity
+  validation and English fallback.
 - Login news is English-only remote content and correctly remains English during the
   client pilot.
 
-These are cross-repository contracts. Client header support can be prepared locally,
-but locale-aware server responses and stable error codes require corresponding backend
-and Game Content work before they can be considered complete.
+Locale-aware narrative content is now implemented across the client, gateway contract,
+and Game Content service. Stable error codes and raw service-message replacement remain
+Phase 8 work.
 
 ## Pokémon data findings
 
@@ -197,15 +198,17 @@ Runtime checks cover English, Dutch, and Brazilian Portuguese. Historical battle
 lines retain their original render language temporarily; new lines and live controls
 switch immediately.
 
-## Next implementation slice
+## Completed world-content slice
 
-The next recommended slice is Phase 6:
+Phase 6 now includes:
 
 - locale-aware world sign files with stable sign IDs and English fallback;
 - locale-aware NPC dialogue and display metadata requests;
 - cache isolation by locale and runtime refresh behavior;
 - validation that missing localized content never blocks interaction or gameplay.
 
-Canonical move, ability, species, nature, and type display data remain English until
-their remaining Phase 7 overlays. Raw backend errors remain outside the battle slice
-and are handled through stable error-code mappings in Phase 8.
+## Next implementation slice
+
+Continue Phase 7 with locale overlays and localized search for canonical move, ability,
+species, nature, and type display data. Raw backend errors remain Phase 8 work and are
+handled through stable error-code mappings.

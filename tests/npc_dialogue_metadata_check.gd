@@ -19,6 +19,7 @@ func _init() -> void:
 	_check_metadata_preserves_scene_dialogue_id_without_override()
 	_check_scene_display_name_overrides_metadata_name()
 	_check_npc_metadata_service_normalizes_dialogue_id()
+	_check_npc_metadata_locale_contract()
 	_check_base_npc_movement_behavior()
 	_check_existing_npc_behavior_entrypoints()
 
@@ -74,7 +75,7 @@ func _check_metadata_preserves_scene_dialogue_id_without_override() -> void:
 func _check_scene_display_name_overrides_metadata_name() -> void:
 	var text := _read_text(BASE_NPC_SCRIPT)
 	_check_true(
-		text.contains("if display_name.strip_edges().is_empty() and not metadata_name.is_empty():"),
+		text.contains("display_name.strip_edges().is_empty() or display_name == metadata_display_name"),
 		"scene display_name overrides backend metadata name"
 	)
 
@@ -95,6 +96,16 @@ func _check_npc_metadata_service_normalizes_dialogue_id() -> void:
 		and text.contains("npc_metadata[\"marketMode\"]"),
 		"NPC metadata normalizes market attendant fields"
 	)
+
+
+func _check_npc_metadata_locale_contract() -> void:
+	var service_text := _read_text(NPC_METADATA_SERVICE_SCRIPT)
+	_check_true(service_text.contains("var cache_key := _get_cache_key(locale, normalized_npc_id)"), "NPC metadata cache is isolated by locale")
+	_check_true(service_text.contains("GatewayApiConfig.get_accept_headers(locale)"), "NPC metadata request sends its resolved locale")
+
+	var base_npc_text := _read_text(BASE_NPC_SCRIPT)
+	_check_true(base_npc_text.contains("LocalizationManager.locale_changed.connect(_on_locale_changed)"), "NPCs observe runtime locale changes")
+	_check_true(base_npc_text.contains("func _on_locale_changed(_locale: String) -> void:"), "NPCs reset metadata state after a locale change")
 
 
 func _check_base_npc_movement_behavior() -> void:

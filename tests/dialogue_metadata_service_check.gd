@@ -13,6 +13,7 @@ func _init() -> void:
 	_check_service_api()
 	_check_service_normalization()
 	_check_service_safe_missing_id()
+	_check_service_locale_contract()
 	_check_dialogue_npc_uses_dialogue_id_lookup()
 	_check_dialogue_npc_fallback_behavior()
 	_check_trainer_npc_uses_intro_dialogue_lookup()
@@ -51,6 +52,13 @@ func _check_service_safe_missing_id() -> void:
 	_check_true(text.contains("if normalized_dialogue_id.is_empty():"), "missing dialogue_id is handled")
 	_check_true(text.contains("\"success\": false"), "missing/unknown dialogue returns failure payload")
 	_check_true(text.contains("return []"), "get_lines fails safely to empty lines")
+
+
+func _check_service_locale_contract() -> void:
+	var text := _read_text(DIALOGUE_METADATA_SERVICE_SCRIPT)
+	_check_true(text.contains("var cache_key := _get_cache_key(locale, normalized_dialogue_id)"), "dialogue cache is isolated by locale")
+	_check_true(text.contains("GatewayApiConfig.get_accept_headers(locale)"), "dialogue request sends its resolved locale")
+	_check_true(text.contains("func _get_http_locale() -> String:"), "dialogue service resolves the current HTTP locale")
 
 
 func _check_dialogue_npc_uses_dialogue_id_lookup() -> void:

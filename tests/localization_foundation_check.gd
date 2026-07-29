@@ -28,6 +28,7 @@ func _run() -> void:
 	var catalogs := _load_catalogs()
 	_check_catalogs(catalogs)
 	_check_locale_normalization()
+	_check_locale_request_headers()
 	_check_runtime_translation(catalogs)
 	_check_login_scene_translation()
 	await _check_settings_scene_translation()
@@ -70,6 +71,16 @@ func _check_locale_normalization() -> void:
 	_check(localization_manager.call("normalize_locale", "pt-PT") == "pt_BR", "Portuguese currently falls back to pt_BR")
 	_check(localization_manager.call("normalize_locale", "de-DE") == "en", "unsupported locales fall back to English")
 	_check(localization_manager.call("get_http_locale", "pt_BR") == "pt-BR", "Godot pt_BR maps to HTTP pt-BR")
+
+
+func _check_locale_request_headers() -> void:
+	var gateway_config := root.get_node_or_null("GatewayApiConfig")
+	_check(gateway_config != null, "GatewayApiConfig autoload is available")
+	if gateway_config == null:
+		return
+
+	var headers: PackedStringArray = gateway_config.call("get_accept_headers", "pt_BR")
+	_check(headers.has("Accept-Language: pt-BR"), "gateway requests send the selected HTTP locale")
 
 
 func _check_runtime_translation(catalogs: Dictionary) -> void:

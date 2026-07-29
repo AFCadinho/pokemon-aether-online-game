@@ -16,8 +16,9 @@ Initial locales: English (`en`), Dutch (`nl`), Brazilian Portuguese (`pt-BR`)
 | Phase 3: automated guardrails | In progress; catalog, placeholder, fallback, persistence, and pilot layout checks are active |
 | Phase 4: shared game interface | Complete; all 11 functional domains are migrated |
 | Phase 5: battle localization | Complete; battle UI, dynamic events, timers, field state, results, and calculator are migrated |
+| Phase 6: world signs and NPC dialogue | Complete; signs, Game Content dialogue, NPC display overlays, locale caches, and fallback are active |
 | Phase 7: Pokémon and item content | In progress; shared item resolver and 69 current item overlays are active |
-| Phases 6 and 8-10 | Planned; world signs and NPC dialogue are the next implementation phase |
+| Phases 8-10 | Planned |
 
 ## Goal
 
@@ -300,6 +301,21 @@ game-content/data/dialogues/pt-BR/...
 - The next interaction after a locale change uses the new locale.
 - Missing translations fall back to English.
 - Missing localized content can never block an interaction or progression check.
+
+### Completed implementation
+
+- The current Pallet Town sign catalog is available in all three locales and validated
+  for identical IDs. Sign lookup follows the global locale and falls back per sign to
+  English.
+- The Game Content service stores the current dialogue catalog under `en`, `nl`, and
+  `pt-BR`, resolves `Accept-Language`, and falls back to English.
+- NPC mechanics remain canonical and language-neutral. Locale overlays may replace
+  only display names, inline dialogue, and display messages.
+- Client dialogue and NPC caches are isolated by HTTP locale. NPC metadata is marked
+  for safe reload after a runtime locale change, so the next interaction uses the new
+  language.
+- The gateway already forwards `Accept-Language`; its local end-to-end routes were
+  verified for Dutch dialogue and Brazilian Portuguese NPC metadata.
 
 ## Phase 7: Pokémon and item content
 

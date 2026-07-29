@@ -27,14 +27,22 @@ func get_base_url() -> String:
 	return cached_url
 
 
-func get_accept_headers() -> PackedStringArray:
-	var headers := PackedStringArray([ACCEPT_JSON_HEADER])
+func get_accept_headers(locale: String = "") -> PackedStringArray:
+	var headers := PackedStringArray([ACCEPT_JSON_HEADER, _get_accept_language_header(locale)])
 	return _append_authorization_header(headers)
 
 
-func get_json_headers() -> PackedStringArray:
-	var headers := PackedStringArray([CONTENT_TYPE_JSON_HEADER, ACCEPT_JSON_HEADER])
+func get_json_headers(locale: String = "") -> PackedStringArray:
+	var headers := PackedStringArray([CONTENT_TYPE_JSON_HEADER, ACCEPT_JSON_HEADER, _get_accept_language_header(locale)])
 	return _append_authorization_header(headers)
+
+
+func _get_accept_language_header(locale: String = "") -> String:
+	var http_locale := "en"
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	if localization_manager != null and localization_manager.has_method("get_http_locale"):
+		http_locale = str(localization_manager.call("get_http_locale", locale))
+	return "Accept-Language: %s" % http_locale
 
 
 func _append_authorization_header(headers: PackedStringArray) -> PackedStringArray:
