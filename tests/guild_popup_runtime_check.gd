@@ -177,6 +177,22 @@ func _run() -> void:
 	_check(popup.active_page == "member", "returning guild members land on My Guild")
 	popup._on_primary_navigation_pressed("browse")
 	_check(popup.active_page == "browse", "guild members can still browse guilds explicitly")
+	var localization_manager := root.get_node_or_null("LocalizationManager")
+	if localization_manager != null:
+		localization_manager.set_locale("nl")
+		await process_frame
+		var browse_button := popup.find_child("BrowseGuildsButton", true, false) as Button
+		_check(
+			browse_button != null and browse_button.text.contains("Guilds bekijken"),
+			"Guild navigation refreshes live in Dutch"
+		)
+		var search := popup.find_child("GuildSearchInput", true, false) as LineEdit
+		_check(
+			search != null and search.placeholder_text == "Zoek op naam, taal of focus",
+			"Guild search refreshes live in Dutch"
+		)
+		localization_manager.set_locale("en")
+		await process_frame
 	popup.close()
 	quit(1 if failed else 0)
 

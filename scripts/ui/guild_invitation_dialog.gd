@@ -28,7 +28,7 @@ var decline_button: Button
 
 func setup() -> void:
 	hide()
-	title = "Guild Invitation"
+	title = _t("ui.guild.invitation.title")
 	min_size = DIALOG_SIZE
 	max_size = DIALOG_SIZE
 	unresizable = true
@@ -78,13 +78,13 @@ func setup() -> void:
 	header.add_child(title_stack)
 
 	var window_title := Label.new()
-	window_title.text = "Guild Invitation"
+	_set_localized_property(window_title, "text", "ui.guild.invitation.title")
 	window_title.add_theme_color_override("font_color", UI_TEXT)
 	window_title.add_theme_font_size_override("font_size", 19)
 	title_stack.add_child(window_title)
 
 	var window_subtitle := Label.new()
-	window_subtitle.text = "A guild would like you to join"
+	_set_localized_property(window_subtitle, "text", "ui.guild.invitation.subtitle")
 	window_subtitle.add_theme_color_override("font_color", UI_MUTED)
 	window_subtitle.add_theme_font_size_override("font_size", 11)
 	title_stack.add_child(window_subtitle)
@@ -92,7 +92,7 @@ func setup() -> void:
 	var close_button := Button.new()
 	close_button.name = "DeclineGuildInvitationCloseButton"
 	close_button.text = "×"
-	close_button.tooltip_text = "Decline invitation"
+	_set_localized_property(close_button, "tooltip_text", "ui.guild.invitation.decline_tooltip")
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	close_button.custom_minimum_size = Vector2(36, 34)
@@ -157,7 +157,7 @@ func setup() -> void:
 
 	decline_button = Button.new()
 	decline_button.name = "DeclineGuildInvitationDialogButton"
-	decline_button.text = "Decline"
+	_set_localized_property(decline_button, "text", "common.decline")
 	decline_button.custom_minimum_size = Vector2(112, 38)
 	decline_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	decline_button.pressed.connect(_decline)
@@ -166,7 +166,7 @@ func setup() -> void:
 
 	accept_button = Button.new()
 	accept_button.name = "AcceptGuildInvitationDialogButton"
-	accept_button.text = "Accept"
+	_set_localized_property(accept_button, "text", "common.accept")
 	accept_button.custom_minimum_size = Vector2(132, 38)
 	accept_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	accept_button.pressed.connect(_accept)
@@ -174,6 +174,11 @@ func setup() -> void:
 	actions.add_child(accept_button)
 
 	close_requested.connect(_decline)
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	if localization_manager != null:
+		var locale_callable := Callable(self, "_on_locale_changed")
+		if not localization_manager.is_connected("locale_changed", locale_callable):
+			localization_manager.connect("locale_changed", locale_callable)
 
 
 func show_invitations(values: Array) -> void:
@@ -198,15 +203,15 @@ func _render_invitation() -> void:
 	if invitation.is_empty():
 		hide()
 		return
-	var guild_name := str(invitation.get("guildName", "A guild")).strip_edges()
-	var inviter_name := str(invitation.get("invitedBy", "A guild member")).strip_edges()
+	var guild_name := str(invitation.get("guildName", _t("ui.guild.fallback.guild"))).strip_edges()
+	var inviter_name := str(invitation.get("invitedBy", _t("ui.guild.fallback.member"))).strip_edges()
 	position_label.text = (
-		"INCOMING INVITATION"
+		_t("ui.guild.invitation.incoming")
 		if invitations.size() == 1
-		else "INCOMING INVITATION · 1 OF %d" % invitations.size()
+		else _t("ui.guild.invitation.position", {"current": 1, "total": invitations.size()})
 	)
-	heading_label.text = "Join %s?" % guild_name
-	status_label.text = "%s invited you to join their guild." % inviter_name
+	heading_label.text = _t("ui.guild.invitation.join", {"guild": guild_name})
+	status_label.text = _t("ui.guild.invitation.invited_by", {"inviter": inviter_name})
 	status_label.add_theme_color_override("font_color", UI_MUTED)
 	_set_action_in_flight(false)
 	_notify_once(invitation)
@@ -219,20 +224,22 @@ func _accept() -> void:
 		return
 	var service := get_node_or_null("/root/GuildService")
 	if service == null:
-		_show_error("Guild service is unavailable.")
+		_show_error(_t("ui.guild.error.service_unavailable"))
 		return
 	_set_action_in_flight(true)
 	var resolved_invitation := invitation.duplicate(true)
 	var result: Dictionary = await service.accept_invitation(int(invitation.get("id", 0)))
 	if not bool(result.get("success", false)):
 		_set_action_in_flight(false)
-		_show_error(str(result.get("error", "Could not accept the guild invitation.")))
+		_show_error(str(result.get("error", _t("ui.guild.error.accept_invitation"))))
 		return
 	_set_action_in_flight(false)
 	invitations.clear()
 	invitation.clear()
 	hide()
-	_add_system_message("You joined %s." % str(resolved_invitation.get("guildName", "the guild")))
+	_add_system_message(_t("ui.guild.invitation.joined", {
+		"guild": str(resolved_invitation.get("guildName", _t("ui.guild.fallback.the_guild"))),
+	}))
 	invitation_resolved.emit("accepted", resolved_invitation)
 
 
@@ -241,7 +248,7 @@ func _decline() -> void:
 		return
 	var service := get_node_or_null("/root/GuildService")
 	if service == null:
-		_show_error("Guild service is unavailable.")
+		_show_error(_t("ui.guild.error.service_unavailable"))
 		return
 	_set_action_in_flight(true)
 	var resolved_invitation := invitation.duplicate(true)
@@ -249,7 +256,7 @@ func _decline() -> void:
 	var result: Dictionary = await service.decline_invitation(invitation_id)
 	if not bool(result.get("success", false)):
 		_set_action_in_flight(false)
-		_show_error(str(result.get("error", "Could not decline the guild invitation.")))
+		_show_error(str(result.get("error", _t("ui.guild.error.decline_invitation"))))
 		return
 	var remaining: Array[Dictionary] = []
 	for value: Dictionary in invitations:
@@ -271,7 +278,7 @@ func _set_action_in_flight(value: bool) -> void:
 	accept_button.disabled = value
 	decline_button.disabled = value
 	if value:
-		status_label.text = "Updating your guild invitation..."
+		status_label.text = _t("ui.guild.invitation.updating")
 		status_label.add_theme_color_override("font_color", UI_MUTED)
 
 
@@ -286,12 +293,32 @@ func _notify_once(value: Dictionary) -> void:
 		return
 	notified_invitation_ids[invitation_id] = true
 	_add_system_message(
-		"Guild invitation received from %s for %s."
-		% [
-			str(value.get("invitedBy", "a guild member")),
-			str(value.get("guildName", "a guild")),
-		]
+		_t("ui.guild.invitation.received", {
+			"inviter": str(value.get("invitedBy", _t("ui.guild.fallback.member_lower"))),
+			"guild": str(value.get("guildName", _t("ui.guild.fallback.guild_lower"))),
+		})
 	)
+
+
+func _on_locale_changed(_locale: String) -> void:
+	title = _t("ui.guild.invitation.title")
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	if localization_manager != null:
+		localization_manager.call("localize_tree", self)
+	if not invitation.is_empty() and not action_in_flight:
+		_render_invitation()
+
+
+func _set_localized_property(control: Control, property_name: String, key: String) -> void:
+	control.set_meta("i18n_source_%s" % property_name, key)
+	control.set(property_name, _t(key))
+
+
+func _t(key: String, values: Dictionary = {}) -> String:
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	if localization_manager == null:
+		return key.format(values)
+	return str(localization_manager.call("text", key, values))
 
 
 func _add_system_message(message: String) -> void:
