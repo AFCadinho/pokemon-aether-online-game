@@ -40,6 +40,7 @@ func _check_scene_text(scene_path: String) -> void:
 	for node: Dictionary in nodes:
 		if not _is_placed_npc_node(node):
 			continue
+		_merge_profile_identity(node, ext_resources)
 		_check_placed_npc(scene_path, node)
 
 
@@ -125,6 +126,33 @@ func _check_placed_npc(scene_path: String, node: Dictionary) -> void:
 		if trainer_id.is_empty():
 			trainer_id = _get_default_trainer_id()
 		_check_true(trainer_id != "", "%s trainer NPC has trainer_id" % context)
+
+
+func _merge_profile_identity(node: Dictionary, ext_resources: Dictionary) -> void:
+	var properties: Dictionary = node.get("properties", {})
+	var profile_path := _resolve_ext_resource_value(
+		str(properties.get("npc_profile", "")),
+		ext_resources
+	)
+	if profile_path.is_empty():
+		return
+
+	var profile := load(profile_path)
+	_check_true(profile != null, "%s NPC profile loads" % profile_path)
+	if profile == null:
+		return
+
+	for property_name: String in ["npc_id", "npc_definition_id", "display_name"]:
+		if str(properties.get(property_name, "")).strip_edges().is_empty():
+			properties[property_name] = str(profile.get(property_name))
+
+
+func _resolve_ext_resource_value(raw_value: String, ext_resources: Dictionary) -> String:
+	const PREFIX := 'ExtResource("'
+	if not raw_value.begins_with(PREFIX) or not raw_value.ends_with('")'):
+		return ""
+	var resource_id := raw_value.substr(PREFIX.length(), raw_value.length() - PREFIX.length() - 2)
+	return str(ext_resources.get(resource_id, ""))
 
 
 func _extract_quoted_attribute(line: String, attribute_name: String) -> String:

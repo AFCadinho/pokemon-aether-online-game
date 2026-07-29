@@ -59,7 +59,7 @@ sources/1 = SubResource("TileSetAtlasSource_y5qkb")
 atlas = ExtResource("10_k6grd")
 region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_nmui6"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_k6grd"]
 resource_local_to_scene = true
 animations = [{
 "frames": [{
@@ -131,7 +131,7 @@ position = Vector2(592, 976)
 [node name="AetherAtelier" parent="Entities/NPCs" unique_id=1024286238 instance=ExtResource("7_atelier")]
 position = Vector2(304, 880)
 facing_direction = Vector2(1, 0)
-npc_sprite_frames = SubResource("SpriteFrames_nmui6")
+npc_sprite_frames = SubResource("SpriteFrames_k6grd")
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1615845431]
 

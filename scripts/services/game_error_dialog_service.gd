@@ -9,6 +9,10 @@ const REPORT_TO_STAFF_LINES: Array[String] = [
 const DEFAULT_SPEAKER := "System"
 
 func show_report_to_staff_message(dialogue_box: Node = null) -> void:
+	await show_message(REPORT_TO_STAFF_LINES, DEFAULT_SPEAKER, dialogue_box)
+
+
+func show_message(lines: Array[String], speaker: String = DEFAULT_SPEAKER, dialogue_box: Node = null) -> void:
 	var target_dialogue_box := dialogue_box
 	if target_dialogue_box == null:
 		target_dialogue_box = _get_dialogue_box()
@@ -17,7 +21,7 @@ func show_report_to_staff_message(dialogue_box: Node = null) -> void:
 		GameState.unlock_input()
 		return
 
-	target_dialogue_box.start_dialogue(REPORT_TO_STAFF_LINES, DEFAULT_SPEAKER)
+	target_dialogue_box.start_dialogue(lines, speaker)
 	await target_dialogue_box.dialogue_finished
 
 func _get_dialogue_box() -> Node:

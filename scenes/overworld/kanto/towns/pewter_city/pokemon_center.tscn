@@ -1,6 +1,23 @@
-[gd_scene load_steps=2 format=3 uid="uid://dgo4lvw2as13c"]
+[gd_scene format=3 uid="uid://dgo4lvw2as13c"]
 
 [ext_resource type="PackedScene" uid="uid://bfy37wf81vi6g" path="res://scenes/overworld/kanto/reusable_interiors/pokemon_center_template.tscn" id="1_template"]
+[ext_resource type="Texture2D" uid="uid://bb62an6t47c7m" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_044_Beauty.png" id="2_6j24v"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tailor"]
+atlas = ExtResource("2_6j24v")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jxxh7"]
+resource_local_to_scene = true
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tailor")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="PokemonCenter" unique_id=514331162 instance=ExtResource("1_template")]
 map_id = "kanto_pewter_city_pokemon_center"
@@ -9,14 +26,17 @@ location_id = "kanto.pewter_city.pokemon_center"
 location_name = "Pewter City Pokémon Center"
 
 [node name="NurseJoy" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="0" unique_id=1839105410]
-npc_id = "kanto_pewter_city_pokemon_center_nurse_joy"
 respawn_point_id = "kanto_pewter_city_pokemon_center"
+npc_id = "kanto_pewter_city_pokemon_center_nurse_joy"
 
-[node name="Clerk" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="1" unique_id=554856490]
+[node name="Clerk" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="2" unique_id=554856490]
 npc_id = "kanto_pewter_city_pokemon_center_clerk"
 
-[node name="Clerk2" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="2" unique_id=854794050]
+[node name="Clerk2" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="3" unique_id=854794050]
 npc_id = "kanto_pewter_city_pokemon_center_clerk_2"
+
+[node name="AetherAtelier" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="4" unique_id=1024286238]
+npc_sprite_frames = SubResource("SpriteFrames_jxxh7")
 
 [node name="ToOutside" parent="Exits" parent_id_path=PackedInt32Array(1112148501) index="0" unique_id=1126740257]
 target_scene_path = "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn"

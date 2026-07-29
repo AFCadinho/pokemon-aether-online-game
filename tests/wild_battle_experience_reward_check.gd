@@ -6,7 +6,7 @@ var failures := 0
 func _init() -> void:
 	var world := FileAccess.get_file_as_string("res://scripts/world/world.gd")
 	var wallet := FileAccess.get_file_as_string("res://scripts/services/player_wallet_service.gd")
-	_check(world.contains('_notify_reward_experience_gains(wallet_result.get("reward", {}))'), "wild reward announces applied experience")
+	_check(world.contains("_notify_reward_experience_gains(reward)"), "wild reward announces applied experience")
 	_check(world.contains('"%s gained %s EXP."'), "system message includes Pokemon and EXP amount")
 	_check(world.contains('entry.get("pokemonId", 0)'), "experience message resolves the rewarded Pokemon")
 	_check(world.contains('entry.get("progression", {})'), "experience message prefers authoritative progression species")

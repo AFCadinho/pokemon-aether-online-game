@@ -55,7 +55,7 @@ func _run() -> void:
 			continue
 		leaders[node_name] = leader
 		var values: Array = expected[node_name]
-		_check(leader.get("definition") != null, "%s uses a bundled definition" % node_name)
+		_check(leader.get("npc_profile") != null, "%s uses a bundled NPC profile" % node_name)
 		_check(str(leader.get("trainer_id")) == str(values[0]), "%s uses its server trainer id" % node_name)
 		_check(str(leader.get("badge_id")) == str(values[1]), "%s advertises its canonical badge" % node_name)
 		_check(int(leader.get("sight_range_tiles")) == 0, "%s starts only through deliberate interaction" % node_name)

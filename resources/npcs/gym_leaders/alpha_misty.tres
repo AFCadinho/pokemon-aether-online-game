@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="GymLeaderDefinition" format=3 uid="uid://c3alv8nu8paur"]
 
 [ext_resource type="Script" uid="uid://clv8fhrgcx3ak" path="res://scripts/world/npcs/gym_leader_definition.gd" id="1_definition"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/gym_leaders/alpha_misty_frames.tres" id="2_frames"]
+[ext_resource type="SpriteFrames" uid="uid://wgkh3id1848j" path="res://assets/npcs/gym_leaders/alpha_misty_frames.tres" id="2_frames"]
 [ext_resource type="Texture2D" uid="uid://bxy6it77q0kuh" path="res://assets/gym_badges/kanto_badges/Cascade_Badge.png" id="3_badge"]
 
 [resource]

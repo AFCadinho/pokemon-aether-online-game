@@ -5,30 +5,27 @@
 [ext_resource type="Texture2D" uid="uid://c5801ltimr4ed" path="res://assets/npcs/gen4-ow-sprites/trchar101.png" id="4_3oirl"]
 [ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="5_n6c5k"]
 [ext_resource type="Texture2D" uid="uid://ba8f0l65uv4cv" path="res://assets/tilesets/overworld/JohtoFX.png" id="5_uujun"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/heal_npc.tscn" id="6_jhh0g"]
+[ext_resource type="PackedScene" uid="uid://br7n6hywfrl2a" path="res://scenes/npcs/heal_npc.tscn" id="6_jhh0g"]
 [ext_resource type="Texture2D" uid="uid://dgvhjpghervgq" path="res://assets/sprites/mugshots/ace_trainer.png" id="7_66okb"]
 [ext_resource type="Texture2D" uid="uid://b6drbo1a67h55" path="res://assets/tilesets/overworld/nature/ledges/ledges.png" id="7_fiq1l"]
-[ext_resource type="Texture2D" uid="uid://c3eq5myl821f3" path="res://assets/npcs/gen4-ow-sprites/NPC 16.png" id="7_j16lr"]
-[ext_resource type="Texture2D" uid="uid://dvw4u17xvuce4" path="res://assets/sprites/mugshots/nurse_joy_mugshot.png" id="8_j16lr"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/boss_battle_npc.tscn" id="9_s3ag2"]
-[ext_resource type="Texture2D" uid="uid://30fkhs34v51d" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/DP Beta Overworlds/DP_Beta027.png" id="10_s3ag2"]
-[ext_resource type="Texture2D" uid="uid://ckc4i8557tm1l" path="res://assets/sprites/mugshots/trainer_red_mugshot.png" id="11_fec28"]
+[ext_resource type="Texture2D" uid="uid://cnixsmivuhykq" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_068_Fisherman.png" id="9_q27eu"]
+[ext_resource type="PackedScene" uid="uid://bql6a1hbx7o2m" path="res://scenes/npcs/boss_battle_npc.tscn" id="9_s3ag2"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/market_seller_npc.tscn" id="12_4x353"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="12_h1bkg"]
-[ext_resource type="Texture2D" uid="uid://d3tf216kfmai2" path="res://assets/npcs/gen4-ow-sprites/trchar118.png" id="13_4x353"]
 [ext_resource type="Texture2D" uid="uid://bsxw7vgtdrlpk" path="res://assets/followers/HORSEA.png" id="13_j8pek"]
 [ext_resource type="Texture2D" uid="uid://3tny2dss8f2p" path="res://assets/tilesets/fiver/tiles_env2_32.png" id="14_2e47g"]
 [ext_resource type="Texture2D" uid="uid://by43kvi6o5e0g" path="res://assets/followers/PIKACHU.png" id="14_2p5pd"]
 [ext_resource type="Texture2D" uid="uid://wf0tl5jvqhhw" path="res://assets/sprites/mugshots/market_attendance.png" id="14_m86ow"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="14_voysl"]
 [ext_resource type="PackedScene" uid="uid://b6sun8ubp3uia" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="19_3oirl"]
-[ext_resource type="PackedScene" path="res://generated/tiled_visuals/pallet_town/pallet_town.visual.tscn" id="21_visual"]
-[ext_resource type="Script" path="res://scripts/world/map_door_animator.gd" id="22_door_animator"]
+[ext_resource type="PackedScene" uid="uid://mkdk7jtd37sw" path="res://generated/tiled_visuals/pallet_town/pallet_town.visual.tscn" id="21_visual"]
+[ext_resource type="Script" uid="uid://babnhtwtaiewv" path="res://scripts/world/map_door_animator.gd" id="22_door_animator"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="23_route_hint"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="24_door_hint"]
 [ext_resource type="PackedScene" uid="uid://b8s7eihsl5ikf" path="res://scenes/world/interactables/sign_interactable.tscn" id="25_sign"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/item_gift_npc.tscn" id="26_item_gift"]
 [ext_resource type="Texture2D" uid="uid://e2ksljyggppg" path="res://assets/tilesets/fiver/tiles_env2_floors32.png" id="27_q27eu"]
+[ext_resource type="Resource" path="res://resources/npcs/trainers/trainer_red_boss.tres" id="28_trainer_red_profile"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6lp0i"]
 atlas = ExtResource("4_3oirl")
@@ -45,27 +42,91 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ckaf6"]
-atlas = ExtResource("7_j16lr")
-region = Rect2(64, 0, 64, 64)
+[sub_resource type="AtlasTexture" id="AtlasTexture_ih4yo"]
+atlas = ExtResource("9_q27eu")
+region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_jhh0g"]
-atlas = ExtResource("7_j16lr")
+[sub_resource type="AtlasTexture" id="AtlasTexture_uh5vu"]
+atlas = ExtResource("9_q27eu")
 region = Rect2(0, 64, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_j16lr"]
-atlas = ExtResource("7_j16lr")
+[sub_resource type="AtlasTexture" id="AtlasTexture_k81it"]
+atlas = ExtResource("9_q27eu")
 region = Rect2(0, 128, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ltoox"]
-atlas = ExtResource("7_j16lr")
+[sub_resource type="AtlasTexture" id="AtlasTexture_kntt5"]
+atlas = ExtResource("9_q27eu")
 region = Rect2(0, 192, 64, 64)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_ltoox"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_httxw"]
+atlas = ExtResource("9_q27eu")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dgsb8"]
+atlas = ExtResource("9_q27eu")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6xqow"]
+atlas = ExtResource("9_q27eu")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jdcey"]
+atlas = ExtResource("9_q27eu")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wtyve"]
+atlas = ExtResource("9_q27eu")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hp3ta"]
+atlas = ExtResource("9_q27eu")
+region = Rect2(64, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_thnuy"]
+atlas = ExtResource("9_q27eu")
+region = Rect2(128, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kfdk0"]
+atlas = ExtResource("9_q27eu")
+region = Rect2(192, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m7moy"]
+atlas = ExtResource("9_q27eu")
+region = Rect2(0, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_avdvm"]
+atlas = ExtResource("9_q27eu")
+region = Rect2(64, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_85pli"]
+atlas = ExtResource("9_q27eu")
+region = Rect2(128, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7mw4s"]
+atlas = ExtResource("9_q27eu")
+region = Rect2(192, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jtr0h"]
+atlas = ExtResource("9_q27eu")
+region = Rect2(0, 192, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vait5"]
+atlas = ExtResource("9_q27eu")
+region = Rect2(64, 192, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cmwdm"]
+atlas = ExtResource("9_q27eu")
+region = Rect2(128, 192, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cewwl"]
+atlas = ExtResource("9_q27eu")
+region = Rect2(192, 192, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_27c3h"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ckaf6")
+"texture": SubResource("AtlasTexture_ih4yo")
 }],
 "loop": true,
 "name": &"idle_down",
@@ -73,7 +134,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_jhh0g")
+"texture": SubResource("AtlasTexture_uh5vu")
 }],
 "loop": true,
 "name": &"idle_left",
@@ -81,7 +142,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_j16lr")
+"texture": SubResource("AtlasTexture_k81it")
 }],
 "loop": true,
 "name": &"idle_right",
@@ -89,84 +150,78 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ltoox")
+"texture": SubResource("AtlasTexture_kntt5")
 }],
 "loop": true,
 "name": &"idle_up",
 "speed": 5.0
 }, {
-"frames": [],
-"loop": true,
-"name": &"new_animation_3",
-"speed": 5.0
-}, {
-"frames": [],
-"loop": true,
-"name": &"new_animation_4",
-"speed": 5.0
-}]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_fec28"]
-atlas = ExtResource("10_s3ag2")
-region = Rect2(0, 128, 64, 64)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_s3ag2"]
-animations = [{
 "frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_fec28")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ih4yo"]
-atlas = ExtResource("13_4x353")
-region = Rect2(0, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_uh5vu"]
-atlas = ExtResource("13_4x353")
-region = Rect2(0, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_k81it"]
-atlas = ExtResource("13_4x353")
-region = Rect2(64, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_kntt5"]
-atlas = ExtResource("13_4x353")
-region = Rect2(128, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_httxw"]
-atlas = ExtResource("13_4x353")
-region = Rect2(192, 0, 64, 64)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_3oirl"]
-resource_local_to_scene = true
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ih4yo")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_uh5vu")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_k81it")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_kntt5")
-}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_httxw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dgsb8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6xqow")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jdcey")
 }],
 "loop": true,
-"name": &"idle_down",
+"name": &"walk_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wtyve")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hp3ta")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_thnuy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kfdk0")
+}],
+"loop": true,
+"name": &"walk_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m7moy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_avdvm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_85pli")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7mw4s")
+}],
+"loop": true,
+"name": &"walk_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jtr0h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vait5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cmwdm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cewwl")
+}],
+"loop": true,
+"name": &"walk_up",
 "speed": 5.0
 }]
 
@@ -2234,11 +2289,10 @@ script = ExtResource("1_f4ndu")
 
 [node name="Visuals" parent="." unique_id=1489195967 instance=ExtResource("21_visual")]
 
-[node name="DoorAnimator" type="Node" parent="."]
+[node name="DoorAnimator" type="Node" parent="." unique_id=1334535847]
 script = ExtResource("22_door_animator")
 visual_root_path = NodePath("../Visuals")
 door_layer_name = "Door Layer"
-door_cover_layer_names = PackedStringArray("Structures Bottom", "Objects Layer", "Structures Top")
 cell_opening_regions = {
 Vector2i(20, 16): Rect2(0, 0, 32, 24),
 Vector2i(35, 12): Rect2(0, 0, 32, 24),
@@ -2263,12 +2317,13 @@ mugshot = ExtResource("7_66okb")
 [node name="HealNPC" parent="Entities/NPCs" unique_id=437133988 instance=ExtResource("6_jhh0g")]
 position = Vector2(368, 240)
 npc_id = "kanto_pallet_town_nurse"
-mugshot = ExtResource("8_j16lr")
 
-[node name="FishingGuru" parent="Entities/NPCs" instance=ExtResource("26_item_gift")]
-position = Vector2(496, 944)
-npc_id = "kanto_pallet_town_fishing_guru"
+[node name="FishingGuru" parent="Entities/NPCs" unique_id=1517982080 instance=ExtResource("26_item_gift")]
+position = Vector2(368, 816)
 reward_id = "kanto_pallet_town_old_rod"
+npc_id = "kanto_pallet_town_fishing_guru"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = SubResource("SpriteFrames_27c3h")
 
 [node name="BossBattle" type="Node2D" parent="Entities/NPCs" unique_id=1297212386]
 
@@ -2278,12 +2333,9 @@ easy_trainer_id = "kanto_route_1_trainer_red_easy"
 normal_trainer_id = "kanto_route_1_trainer_red_normal"
 hard_trainer_id = "kanto_route_1_trainer_red_hard"
 normal_label = "Medium"
-npc_id = "kanto_route_1_trainer_red_boss"
+npc_profile = ExtResource("28_trainer_red_profile")
 dialogue_id = "kanto_pallet_town_trainer_red_default"
-display_name = "Trainer Red"
 facing_direction = Vector2(1, 0)
-npc_sprite_frames = SubResource("SpriteFrames_s3ag2")
-mugshot = ExtResource("11_fec28")
 
 [node name="MarketSellerNPC" parent="Entities/NPCs" unique_id=634307267 instance=ExtResource("12_4x353")]
 position = Vector2(272, 240)
@@ -2346,10 +2398,10 @@ position = Vector2(1008, 112)
 [node name="FromOaksLab" type="Marker2D" parent="Spawns" unique_id=682812935]
 position = Vector2(1296, 848)
 
-[node name="FromPlayersHouse" type="Marker2D" parent="Spawns"]
+[node name="FromPlayersHouse" type="Marker2D" parent="Spawns" unique_id=1666692287]
 position = Vector2(656, 560)
 
-[node name="FromRivalsHouse" type="Marker2D" parent="Spawns"]
+[node name="FromRivalsHouse" type="Marker2D" parent="Spawns" unique_id=737384273]
 position = Vector2(1136, 432)
 
 [node name="Exits" type="Node2D" parent="." unique_id=1482608450]
@@ -2382,28 +2434,28 @@ shape = SubResource("RectangleShape2D_3e7rq")
 [node name="DoorTransitionHint" parent="Exits/ToOaksLab" unique_id=1983010285 instance=ExtResource("24_door_hint")]
 position = Vector2(800, 672)
 
-[node name="ToPlayersHouse" type="Area2D" parent="Exits"]
+[node name="ToPlayersHouse" type="Area2D" parent="Exits" unique_id=2054942535]
 position = Vector2(656, 496)
 script = ExtResource("14_voysl")
 target_scene_path = "res://scenes/overworld/kanto/towns/pallet_town/players_house.tscn"
 target_spawn_name = "FromPalletTown"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPlayersHouse"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPlayersHouse" unique_id=1283236050]
 shape = SubResource("RectangleShape2D_3e7rq")
 
-[node name="DoorTransitionHint" parent="Exits/ToPlayersHouse" instance=ExtResource("24_door_hint")]
+[node name="DoorTransitionHint" parent="Exits/ToPlayersHouse" unique_id=228985460 instance=ExtResource("24_door_hint")]
 position = Vector2(0, 32)
 
-[node name="ToRivalsHouse" type="Area2D" parent="Exits"]
+[node name="ToRivalsHouse" type="Area2D" parent="Exits" unique_id=858244795]
 position = Vector2(1136, 368)
 script = ExtResource("14_voysl")
 target_scene_path = "res://scenes/overworld/kanto/towns/pallet_town/rivals_house.tscn"
 target_spawn_name = "FromPalletTown"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRivalsHouse"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRivalsHouse" unique_id=1938726291]
 shape = SubResource("RectangleShape2D_3e7rq")
 
-[node name="DoorTransitionHint" parent="Exits/ToRivalsHouse" instance=ExtResource("24_door_hint")]
+[node name="DoorTransitionHint" parent="Exits/ToRivalsHouse" unique_id=1928985348 instance=ExtResource("24_door_hint")]
 position = Vector2(0, 32)
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=136807931]

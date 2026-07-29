@@ -11,13 +11,12 @@
 [ext_resource type="Texture2D" uid="uid://2qey36patp5j" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_080_Worker.png" id="6_rwph1"]
 [ext_resource type="Script" uid="uid://babnhtwtaiewv" path="res://scripts/world/map_door_animator.gd" id="7_door_animator"]
 [ext_resource type="Texture2D" uid="uid://dr2fy1qoutvvi" path="res://assets/tilesets/dirt path.png" id="9_iv6v0"]
-[ext_resource type="Texture2D" uid="uid://cf588mgea7cyu" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_023_Youngster.png" id="10_lpr83"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="12_vw642"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/building_window_light.tscn" id="13_4hm78"]
 [ext_resource type="PackedScene" uid="uid://ds0lg7oj5khbm" path="res://scenes/npcs/gym_leader_npc.tscn" id="14_gym_leader"]
-[ext_resource type="Resource" path="res://resources/npcs/gym_leaders/alpha_brock.tres" id="15_brock"]
-[ext_resource type="Resource" path="res://resources/npcs/gym_leaders/alpha_misty.tres" id="16_misty"]
-[ext_resource type="Resource" path="res://resources/npcs/gym_leaders/alpha_lt_surge.tres" id="17_surge"]
+[ext_resource type="Resource" uid="uid://bnjoxn7rvxpam" path="res://resources/npcs/gym_leaders/alpha_brock.tres" id="15_brock"]
+[ext_resource type="Resource" uid="uid://c3alv8nu8paur" path="res://resources/npcs/gym_leaders/alpha_misty.tres" id="16_misty"]
+[ext_resource type="Resource" uid="uid://dmm23s1e2m34y" path="res://resources/npcs/gym_leaders/alpha_lt_surge.tres" id="17_surge"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2mtwu"]
 size = Vector2(32, 32)
@@ -31,46 +30,6 @@ animations = [{
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_frcun")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_fallback"]
-atlas = ExtResource("10_lpr83")
-region = Rect2(0, 0, 64, 64)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_vdhxh"]
-resource_local_to_scene = true
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_fallback")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_5e8h1"]
-resource_local_to_scene = true
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_fallback")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_yr2ka"]
-resource_local_to_scene = true
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_fallback")
 }],
 "loop": true,
 "name": &"default",
@@ -335,18 +294,15 @@ npc_sprite_frames = SubResource("SpriteFrames_2pdw6")
 
 [node name="AlphaGymBrock" parent="Entities/NPCs" unique_id=101151216 instance=ExtResource("14_gym_leader")]
 position = Vector2(464, 624)
-definition = ExtResource("15_brock")
-npc_sprite_frames = SubResource("SpriteFrames_vdhxh")
+npc_profile = ExtResource("15_brock")
 
 [node name="AlphaGymMisty" parent="Entities/NPCs" unique_id=142669909 instance=ExtResource("14_gym_leader")]
 position = Vector2(656, 624)
-definition = ExtResource("16_misty")
-npc_sprite_frames = SubResource("SpriteFrames_5e8h1")
+npc_profile = ExtResource("16_misty")
 
 [node name="AlphaGymLtSurge" parent="Entities/NPCs" unique_id=451315257 instance=ExtResource("14_gym_leader")]
 position = Vector2(816, 624)
-definition = ExtResource("17_surge")
-npc_sprite_frames = SubResource("SpriteFrames_yr2ka")
+npc_profile = ExtResource("17_surge")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=913732015]
 

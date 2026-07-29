@@ -75,6 +75,7 @@ func _load_placed_npcs() -> Array[Dictionary]:
 		for node: Dictionary in nodes:
 			if not _is_placed_npc_node(node):
 				continue
+			_merge_profile_identity(node, ext_resources)
 			node["scene_path"] = scene_path
 			npcs.append(node)
 
@@ -95,6 +96,25 @@ func _check_placed_npc_identity() -> void:
 				trainer_id = _get_default_trainer_id()
 			_check_true(trainer_id != "", "%s has trainer_id" % context)
 			_check_true(_is_snake_case_id(trainer_id), "%s trainer_id is valid snake_case: %s" % [context, trainer_id])
+
+
+func _merge_profile_identity(node: Dictionary, ext_resources: Dictionary) -> void:
+	var properties: Dictionary = node.get("properties", {})
+	var profile_path := _resolve_ext_resource_value(
+		str(properties.get("npc_profile", "")),
+		ext_resources
+	)
+	if profile_path.is_empty():
+		return
+
+	var profile := load(profile_path)
+	_check_true(profile != null, "%s NPC profile loads" % profile_path)
+	if profile == null:
+		return
+
+	for property_name: String in ["npc_id", "npc_definition_id", "display_name"]:
+		if str(properties.get(property_name, "")).strip_edges().is_empty():
+			properties[property_name] = str(profile.get(property_name))
 
 
 func _check_placed_dialogue_references(dialogue_catalog: Dictionary) -> void:
@@ -342,6 +362,14 @@ func _strip_string_value(raw_value: String) -> String:
 	if raw_value.length() >= 2 and raw_value.begins_with("\"") and raw_value.ends_with("\""):
 		return raw_value.substr(1, raw_value.length() - 2)
 	return raw_value
+
+
+func _resolve_ext_resource_value(raw_value: String, ext_resources: Dictionary) -> String:
+	const PREFIX := 'ExtResource("'
+	if not raw_value.begins_with(PREFIX) or not raw_value.ends_with('")'):
+		return ""
+	var resource_id := raw_value.substr(PREFIX.length(), raw_value.length() - PREFIX.length() - 2)
+	return str(ext_resources.get(resource_id, ""))
 
 
 func _is_snake_case_id(value: String) -> bool:

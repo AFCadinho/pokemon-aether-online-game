@@ -14,7 +14,10 @@
 
 **Changed**
 
-- Refreshed Pokémon Storage with quieter surfaces, clearer box and party hierarchy, larger Pokémon artwork, compact filters, restrained type accents, and a matching storage hover card.
+- Redesigned Pokémon Storage with a clearer Party and Box workspace, larger Pokémon artwork, quieter empty slots, restrained type accents, and clearer mouse feedback for buttons, dragging, and valid drop targets.
+- Storage boxes can now be renamed and navigated through compact tabs or a complete box selector.
+- Storage search now works across every box, with additional filters for species, type, nature, Ability, move, and held item.
+- Storage hover cards now show held items, moves, stats with nature adjustments, EVs, and IVs in a compact matching design.
 - Fishing rods now carry across regions, while usage depends on Fishing Level and badges earned in the current region. Old Rod requires Level 1 and no badges, Good Rod Level 10 and three badges, and Super Rod Level 25 and six badges.
 - Fishing rod ownership, selection, and regional eligibility are now validated by the server.
 - Moved Guild emblems into Trainer name cards, where they render as compact icons to the left of the name without increasing the card height.
@@ -24,6 +27,7 @@
 
 **Fixed**
 
+- Fixed the first Pokémon Storage hover card after starting the game sometimes stretching to nearly the full window height.
 - Fixed valid fishing attempts falling through to the generic “report this to staff” message even when the player owned an Old Rod.
 - Fixed defeated players sometimes respawning on invalid map tiles instead of beside their last healing NPC. A late position autosave could overwrite the server's blackout destination before the client finished teleporting.
 - Fixed Guild invitations being visible only after opening the Guild window. Incoming invitations now open a dialog with Accept and Decline actions while playing.

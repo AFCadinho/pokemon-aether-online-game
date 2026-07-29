@@ -986,6 +986,7 @@ var pc_release_in_progress := false
 var pc_release_mode_active := false
 var pc_popup_dragging := false
 var pc_popup_drag_offset := Vector2.ZERO
+var pc_header_drag_controls: Array[Control] = []
 var pc_dragging := false
 var pc_drag_source: Dictionary = {}
 var pc_drag_visual: Control
@@ -1921,6 +1922,8 @@ func _setup_pc_ui() -> void:
 	header.add_theme_constant_override("separation", 10)
 	header.mouse_filter = Control.MOUSE_FILTER_STOP
 	header.gui_input.connect(_on_pc_header_gui_input)
+	header.mouse_default_cursor_shape = Control.CURSOR_MOVE
+	pc_header_drag_controls.append(header)
 	stack.add_child(header)
 
 	var icon_frame := PanelContainer.new()
@@ -1950,12 +1953,18 @@ func _setup_pc_ui() -> void:
 	title_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title_stack.alignment = BoxContainer.ALIGNMENT_CENTER
 	title_stack.add_theme_constant_override("separation", 1)
+	title_stack.mouse_filter = Control.MOUSE_FILTER_STOP
+	title_stack.mouse_default_cursor_shape = Control.CURSOR_MOVE
+	title_stack.gui_input.connect(_on_pc_header_gui_input)
+	pc_header_drag_controls.append(title_stack)
 	header.add_child(title_stack)
 
 	var title := Label.new()
 	title.text = "Pokémon Storage"
 	title.mouse_filter = Control.MOUSE_FILTER_STOP
 	title.gui_input.connect(_on_pc_header_gui_input)
+	title.mouse_default_cursor_shape = Control.CURSOR_MOVE
+	pc_header_drag_controls.append(title)
 	title.add_theme_font_size_override("font_size", 20)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	title_stack.add_child(title)
@@ -1964,6 +1973,8 @@ func _setup_pc_ui() -> void:
 	subtitle.text = "Organize your party and stored Pokémon"
 	subtitle.mouse_filter = Control.MOUSE_FILTER_STOP
 	subtitle.gui_input.connect(_on_pc_header_gui_input)
+	subtitle.mouse_default_cursor_shape = Control.CURSOR_MOVE
+	pc_header_drag_controls.append(subtitle)
 	subtitle.add_theme_font_size_override("font_size", 11)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	title_stack.add_child(subtitle)
@@ -2069,6 +2080,7 @@ func _setup_pc_ui() -> void:
 	pc_box_title_label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	pc_box_title_label.mouse_filter = Control.MOUSE_FILTER_STOP
 	pc_box_title_label.gui_input.connect(_on_pc_box_title_gui_input)
+	pc_box_title_label.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	pc_box_title_label.add_theme_font_size_override("font_size", 17)
 	pc_box_title_label.add_theme_color_override("font_color", UI_TEXT)
 	var box_title_row := HBoxContainer.new()
@@ -2238,6 +2250,7 @@ func _setup_pc_ui() -> void:
 	pc_release_drop_panel.visible = false
 	pc_release_drop_panel.custom_minimum_size = Vector2(0, 58)
 	pc_release_drop_panel.tooltip_text = "Drag a Pokémon here to release it permanently"
+	pc_release_drop_panel.mouse_default_cursor_shape = Control.CURSOR_ARROW
 	pc_release_drop_panel.add_theme_stylebox_override("panel", _make_pc_release_zone_style())
 	box_stack.add_child(pc_release_drop_panel)
 
@@ -19146,9 +19159,11 @@ func _on_pc_header_gui_input(event: InputEvent) -> void:
 	if mouse_event.pressed:
 		pc_popup_dragging = true
 		pc_popup_drag_offset = mouse_event.global_position - pc_popup.global_position
+		_set_pc_header_cursor(Control.CURSOR_DRAG)
 		_activate_ui_panel(pc_popup)
 	else:
 		pc_popup_dragging = false
+		_set_pc_header_cursor(Control.CURSOR_MOVE)
 	get_viewport().set_input_as_handled()
 
 
@@ -19157,8 +19172,9 @@ func _handle_pc_popup_drag_input(event: InputEvent) -> void:
 		var mouse_event: InputEventMouseButton = event as InputEventMouseButton
 		if mouse_event.button_index == MOUSE_BUTTON_LEFT and not mouse_event.pressed:
 			pc_popup_dragging = false
+			_set_pc_header_cursor(Control.CURSOR_MOVE)
 			get_viewport().set_input_as_handled()
-		return
+			return
 
 	if not (event is InputEventMouseMotion):
 		return
@@ -19168,6 +19184,12 @@ func _handle_pc_popup_drag_input(event: InputEvent) -> void:
 	if pc_box_selector_panel != null and pc_box_selector_panel.visible:
 		_position_pc_box_selector()
 	get_viewport().set_input_as_handled()
+
+
+func _set_pc_header_cursor(cursor_shape: Control.CursorShape) -> void:
+	for control: Control in pc_header_drag_controls:
+		if is_instance_valid(control):
+			control.mouse_default_cursor_shape = cursor_shape
 
 
 func _on_staff_teleport_header_gui_input(event: InputEvent) -> void:
@@ -26662,6 +26684,7 @@ func _on_pc_close_button_pressed() -> void:
 	_hide_pc_pokemon_hover()
 	pc_popup.visible = false
 	pc_popup_dragging = false
+	_set_pc_header_cursor(Control.CURSOR_MOVE)
 	_close_pc_box_selector()
 	pc_selected_source = {}
 	_set_pc_release_mode_active(false)
@@ -26762,10 +26785,13 @@ func _refresh_pc_box_tabs() -> void:
 
 	if pc_box_tab_prev_button != null:
 		pc_box_tab_prev_button.disabled = pc_selected_box_index <= 0
+		pc_box_tab_prev_button.mouse_default_cursor_shape = Control.CURSOR_ARROW if pc_box_tab_prev_button.disabled else Control.CURSOR_POINTING_HAND
 	if pc_box_tab_next_button != null:
 		pc_box_tab_next_button.disabled = pc_selected_box_index >= count - 1
+		pc_box_tab_next_button.mouse_default_cursor_shape = Control.CURSOR_ARROW if pc_box_tab_next_button.disabled else Control.CURSOR_POINTING_HAND
 	if pc_box_rename_button != null:
 		pc_box_rename_button.disabled = count <= 0
+		pc_box_rename_button.mouse_default_cursor_shape = Control.CURSOR_ARROW if pc_box_rename_button.disabled else Control.CURSOR_POINTING_HAND
 	if pc_box_selector_panel != null and pc_box_selector_panel.visible:
 		_refresh_pc_box_selector()
 
@@ -27200,6 +27226,7 @@ func _create_pc_box_pokemon_slot_button(title_text: String, level: int, shiny: b
 	button.drag_title = title_text
 	button.drag_subtitle = "Lv. %s" % level if occupied else "Box slot %s" % slot_badge
 	button.drag_texture = texture if texture != null else PokemonAssets.load_unknown_icon()
+	button.mouse_default_cursor_shape = Control.CURSOR_DRAG if occupied else Control.CURSOR_ARROW
 	_apply_pc_pokemon_slot_style(button, occupied, selected, types)
 	if not occupied:
 		button.modulate = Color(1.0, 1.0, 1.0, 0.76)
@@ -27295,6 +27322,7 @@ func _create_pc_pokemon_slot_button(title_text: String, subtitle_text: String, s
 	button.drag_title = title_text
 	button.drag_subtitle = subtitle_text
 	button.drag_texture = texture if texture != null else PokemonAssets.load_unknown_icon()
+	button.mouse_default_cursor_shape = Control.CURSOR_DRAG if occupied else Control.CURSOR_ARROW
 	_apply_pc_pokemon_slot_style(button, occupied, selected, types)
 	if not occupied:
 		button.modulate = Color(1.0, 1.0, 1.0, 0.76)
@@ -27645,7 +27673,7 @@ func _on_pc_search_text_changed(_text: String) -> void:
 	_render_pc_box()
 	var query := _pc_search_query()
 	if query == "" and not _pc_has_active_filter():
-		pc_status_label.text = "Drag Pokémon to move them · Click a Pokémon to inspect it"
+		pc_status_label.text = "Drag to move  ·  Click to inspect"
 
 
 func _pc_pokemon_matches_search(pokemon_response: Dictionary, query: String) -> bool:
@@ -27830,6 +27858,7 @@ func _start_pc_drag(button: PcPokemonSlotButton, global_position: Vector2) -> vo
 	pc_drag_start_mouse_position = global_position
 	pc_dragging = true
 	button.modulate = Color(1.0, 1.0, 1.0, 0.35)
+	_set_pc_storage_drag_cursor_state(true)
 
 	pc_drag_visual = _create_pc_drag_icon_visual(button.drag_texture)
 	if pc_drag_visual == null:
@@ -27908,6 +27937,35 @@ func _clear_pc_drag_visual() -> void:
 	if pc_drag_visual != null:
 		pc_drag_visual.queue_free()
 	pc_drag_visual = null
+	_set_pc_storage_drag_cursor_state(false)
+
+
+func _set_pc_storage_drag_cursor_state(active: bool) -> void:
+	for container: Control in [pc_party_list, pc_box_grid]:
+		if container == null:
+			continue
+		for child: Node in container.get_children():
+			var button := child as PcPokemonSlotButton
+			if button == null:
+				continue
+			if not active:
+				button.mouse_default_cursor_shape = Control.CURSOR_DRAG if not button.drag_source.is_empty() else Control.CURSOR_ARROW
+			elif button.drop_target.is_empty():
+				button.mouse_default_cursor_shape = Control.CURSOR_ARROW
+			elif _pc_locations_match(pc_drag_source, button.drop_target):
+				button.mouse_default_cursor_shape = Control.CURSOR_DRAG
+			else:
+				button.mouse_default_cursor_shape = Control.CURSOR_CAN_DROP
+	if pc_release_drop_panel != null:
+		var release_cursor := Control.CURSOR_CAN_DROP if active and pc_release_mode_active else Control.CURSOR_ARROW
+		_set_pc_control_tree_cursor(pc_release_drop_panel, release_cursor)
+
+
+func _set_pc_control_tree_cursor(control: Control, cursor_shape: Control.CursorShape) -> void:
+	control.mouse_default_cursor_shape = cursor_shape
+	for child: Node in control.get_children():
+		if child is Control:
+			_set_pc_control_tree_cursor(child as Control, cursor_shape)
 
 
 func _pc_drop_target_at_global_position(global_position: Vector2) -> Dictionary:
@@ -27986,6 +28044,7 @@ func _refresh_pc_release_controls() -> void:
 		pc_release_mode_button.disabled = pc_release_in_progress
 		pc_release_mode_button.tooltip_text = "Stop choosing Pokémon to release" if pc_release_mode_active else "Choose Pokémon to release"
 		_apply_button_style(pc_release_mode_button, "danger" if pc_release_mode_active else "secondary")
+		pc_release_mode_button.mouse_default_cursor_shape = Control.CURSOR_ARROW if pc_release_in_progress else Control.CURSOR_POINTING_HAND
 	pc_release_hint_label.text = "Releasing..." if pc_release_in_progress else "Drop a Pokémon here to release it"
 
 

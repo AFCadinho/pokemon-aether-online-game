@@ -1,11 +1,35 @@
+@tool
 extends Node2D
 
 class_name BaseNPC
+
+const NpcDefinitionResource := preload("res://scripts/world/npcs/npc_definition.gd")
 
 const MISSING_DIALOGUE_LINES: Array[String] = [
 	"This NPC has no dialogue.",
 	"Please contact staff.",
 ]
+
+## A profile is authoritative for every non-empty field it provides.
+## Placement-specific values such as position, facing, and movement stay on this node.
+@export var npc_profile: NpcDefinitionResource:
+	set(value):
+		var profile_changed := Callable(self, "_on_npc_profile_changed")
+		if (
+			Engine.is_editor_hint()
+			and npc_profile != null
+			and npc_profile.changed.is_connected(profile_changed)
+		):
+			npc_profile.changed.disconnect(profile_changed)
+		npc_profile = value
+		if (
+			Engine.is_editor_hint()
+			and npc_profile != null
+			and not npc_profile.changed.is_connected(profile_changed)
+		):
+			npc_profile.changed.connect(profile_changed)
+		if Engine.is_editor_hint() and is_inside_tree():
+			call_deferred("_refresh_npc_profile_preview")
 
 @export var npc_id := ""
 @export var npc_definition_id := ""
@@ -55,6 +79,11 @@ var is_npc_moving := false
 
 
 func _ready_base_npc() -> void:
+	_apply_npc_profile()
+	if Engine.is_editor_hint():
+		_refresh_npc_profile_preview()
+		return
+
 	z_as_relative = false
 	if npc_sprite_frames != null:
 		sprite.sprite_frames = _get_directional_sprite_frames(npc_sprite_frames)
@@ -71,6 +100,43 @@ func _ready_base_npc() -> void:
 	_schedule_next_npc_movement_step()
 	_update_sort_z()
 	_setup_nameplate()
+
+
+func _apply_npc_profile() -> void:
+	if npc_profile == null:
+		return
+
+	if not npc_profile.npc_id.strip_edges().is_empty():
+		npc_id = npc_profile.npc_id
+	if not npc_profile.npc_definition_id.strip_edges().is_empty():
+		npc_definition_id = npc_profile.npc_definition_id
+	if not npc_profile.display_name.strip_edges().is_empty():
+		display_name = npc_profile.display_name
+	if npc_profile.sprite_frames != null:
+		npc_sprite_frames = npc_profile.sprite_frames
+	if npc_profile.mugshot != null:
+		mugshot = npc_profile.mugshot
+
+
+func _on_npc_profile_changed() -> void:
+	if Engine.is_editor_hint():
+		call_deferred("_refresh_npc_profile_preview")
+
+
+func _refresh_npc_profile_preview() -> void:
+	if not Engine.is_editor_hint() or not is_inside_tree():
+		return
+
+	_apply_npc_profile()
+	var preview_sprite := get_node_or_null("Look/AnimatedSprite2D") as AnimatedSprite2D
+	if preview_sprite == null:
+		return
+
+	if npc_sprite_frames != null:
+		preview_sprite.sprite_frames = _get_directional_sprite_frames(npc_sprite_frames)
+	preview_sprite.position = sprite_offset
+	sprite = preview_sprite
+	_set_idle_frame(_get_cardinal_direction(facing_direction))
 
 
 func blocks_world_position(world_position: Vector2) -> bool:
@@ -381,6 +447,9 @@ func _create_atlas_frame(atlas: Texture2D, frame_size: Vector2, column: int, row
 
 
 func _process_base_npc() -> void:
+	if Engine.is_editor_hint():
+		return
+
 	_update_sort_z()
 	await _process_npc_movement()
 	if _can_start_manual_interaction():

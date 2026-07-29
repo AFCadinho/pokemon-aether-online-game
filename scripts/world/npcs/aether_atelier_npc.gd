@@ -1,3 +1,4 @@
+@tool
 extends DialogueNPC
 
 class_name AetherAtelierNPC

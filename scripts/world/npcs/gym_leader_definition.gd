@@ -1,15 +1,10 @@
-extends Resource
+@tool
+extends "res://scripts/world/npcs/trainer_definition.gd"
 
 class_name GymLeaderDefinition
 
-## Alle vaste gegevens die samen één Gym Leader beschrijven.
-## Plaatsing in de wereld, zoals positie en kijkrichting, blijft op de scene-instantie.
-@export var npc_id := ""
-@export var trainer_id := ""
-@export var display_name := ""
-@export var dialogue_id := ""
-@export var sprite_frames: SpriteFrames
-@export var mugshot: Texture2D
+## Client-owned Gym Leader progression and presentation.
+## Placement, dialogue, and battle content deliberately live elsewhere.
 @export var badge_region := "kanto"
 @export var badge_id := ""
 @export var badge_display_name := "Gym Badge"

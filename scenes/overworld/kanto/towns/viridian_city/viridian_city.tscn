@@ -5,31 +5,15 @@
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_route1"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_340ux"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/boss_battle_npc.tscn" id="10_8shi4"]
-[ext_resource type="Texture2D" uid="uid://30fkhs34v51d" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/DP Beta Overworlds/DP_Beta027.png" id="11_d6e6d"]
-[ext_resource type="Texture2D" uid="uid://ckc4i8557tm1l" path="res://assets/sprites/mugshots/trainer_red_mugshot.png" id="12_flvrk"]
 [ext_resource type="Texture2D" uid="uid://3tny2dss8f2p" path="res://assets/tilesets/fiver/tiles_env2_32.png" id="12_n7exw"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="16_bddn7"]
 [ext_resource type="Texture2D" uid="uid://bsxw7vgtdrlpk" path="res://assets/followers/HORSEA.png" id="17_v4pkh"]
 [ext_resource type="Texture2D" uid="uid://by43kvi6o5e0g" path="res://assets/followers/PIKACHU.png" id="18_s7hp4"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="21_night_light"]
+[ext_resource type="Resource" path="res://resources/npcs/trainers/trainer_red_boss.tres" id="22_trainer_red_profile"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route1"]
 size = Vector2(224, 36)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_fec28"]
-atlas = ExtResource("11_d6e6d")
-region = Rect2(0, 128, 64, 64)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_ytt3b"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_fec28")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2p5pd"]
 atlas = ExtResource("17_v4pkh")
@@ -560,12 +544,9 @@ easy_trainer_id = "kanto_route_1_trainer_red_easy"
 normal_trainer_id = "kanto_route_1_trainer_red_normal"
 hard_trainer_id = "kanto_route_1_trainer_red_hard"
 normal_label = "Medium"
-npc_id = "kanto_route_1_trainer_red_boss"
+npc_profile = ExtResource("22_trainer_red_profile")
 dialogue_id = "kanto_pallet_town_trainer_red_default"
-display_name = "Trainer Red"
 facing_direction = Vector2(1, 0)
-npc_sprite_frames = SubResource("SpriteFrames_ytt3b")
-mugshot = ExtResource("12_flvrk")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=784148565]
 

@@ -1,3 +1,4 @@
+@tool
 extends DialogueNPC
 
 class_name GateNPC
@@ -22,6 +23,8 @@ const LEGACY_STAFF_ROLE_IDS := ["staff", "owner", "senior_staff", "developer", "
 
 func _ready() -> void:
 	_ready_base_npc()
+	if Engine.is_editor_hint():
+		return
 	Callable(self, "_load_gate_metadata").call_deferred()
 
 

@@ -1,6 +1,9 @@
+@tool
 extends BaseNPC
 
 class_name TrainerNPC
+
+const TrainerDefinitionResource := preload("res://scripts/world/npcs/trainer_definition.gd")
 
 @export var trainer_id := "kanto_route_1_bug_catcher_1"
 @export var sight_range_tiles := 5
@@ -13,7 +16,18 @@ var auto_trigger_failed := false
 
 func _ready() -> void:
 	_ready_base_npc()
+	if Engine.is_editor_hint():
+		return
 	_configure_vision_area()
+
+
+func _apply_npc_profile() -> void:
+	super._apply_npc_profile()
+	var trainer_profile := npc_profile as TrainerDefinitionResource
+	if trainer_profile == null:
+		return
+	if not trainer_profile.trainer_id.strip_edges().is_empty():
+		trainer_id = trainer_profile.trainer_id
 	
 
 func walk_to_player(body: Node2D) -> void:
@@ -189,7 +203,9 @@ func _on_vision_area_body_exited(body: Node2D) -> void:
 
 func _process(_delta: float) -> void:
 	await _process_base_npc()
-	
+	if Engine.is_editor_hint():
+		return
+
 	if vision_candidate != null:
 		_try_trigger_vision(vision_candidate)
 

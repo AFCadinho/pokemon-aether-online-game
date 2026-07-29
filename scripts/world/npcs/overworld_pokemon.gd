@@ -1,3 +1,4 @@
+@tool
 extends BaseNPC
 
 class_name OverworldPokemon
@@ -13,6 +14,9 @@ const HOME_ICON_DIR := "res://assets/sprites/pokemon/pokemon_home"
 
 
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		_ready_base_npc()
+		return
 	if display_name.strip_edges().is_empty():
 		display_name = _format_species_display_name(species_id)
 	if mugshot == null and auto_resolve_home_icon:

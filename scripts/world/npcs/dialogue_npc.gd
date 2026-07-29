@@ -1,3 +1,4 @@
+@tool
 extends BaseNPC
 
 class_name DialogueNPC
