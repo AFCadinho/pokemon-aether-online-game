@@ -112,6 +112,7 @@ const FRAME_ROWS := 4
 const SURF_FISH_BODY_CUTOFFS: Array[int] = [43, 49, 49, 45]
 const SURF_FISH_DOWN_ROD_X_MIN := 28
 const SURF_FISH_DOWN_ROD_X_MAX := 35
+const SURF_FISH_SIDE_LOWER_SHIFT := 12
 const IDLE_ANIMATION_SPEED := 5.0
 const WALK_ANIMATION_SPEED := 7.5
 const NON_SELECTABLE_BODY_DIRECTORIES: Array[String] = ["run", "running", "fish", "ride", "surf", "mount"]
@@ -668,6 +669,24 @@ static func get_part_frames(category: String, part_id: String, gender: String = 
 			_part_frames_cache[cache_key] = combined_frames
 			return combined_frames
 		texture = fishing_texture
+	elif (
+		normalized_movement_style == BODY_MOVEMENT_SURF_FISH
+		and (
+			normalized_category == BOTTOM_CATEGORY
+			or normalized_category == SHOES_CATEGORY
+		)
+	):
+		var riding_texture := _load_part_texture_for_movement(
+			normalized_category,
+			normalized_part_id,
+			normalized_gender,
+			BODY_MOVEMENT_RIDE
+		)
+		if riding_texture != null:
+			var shifted_frames := _build_surf_fishing_lower_layer_frames(riding_texture)
+			_part_frames_cache[cache_key] = shifted_frames
+			return shifted_frames
+		texture = riding_texture
 	else:
 		texture = _load_part_texture_for_movement(
 			normalized_category,
@@ -1226,10 +1245,74 @@ static func _build_surf_fishing_layer_frames(
 			combined_image.set_pixel(
 				x,
 				y,
-				fishing_pixel if use_fishing_pixel else riding_image.get_pixel(x, y)
+				fishing_pixel
+				if use_fishing_pixel
+				else _get_shifted_surf_riding_pixel(
+					riding_image,
+					x,
+					y,
+					row,
+					frame_width
+				)
 			)
 
 	return _build_sprite_frames(ImageTexture.create_from_image(combined_image))
+
+
+static func _build_surf_fishing_lower_layer_frames(
+	riding_texture: Texture2D
+) -> SpriteFrames:
+	var riding_image := _get_texture_image(riding_texture)
+	if riding_image == null:
+		return _build_sprite_frames(riding_texture)
+
+	var texture_size := riding_image.get_size()
+	var frame_width := maxi(floori(float(texture_size.x) / float(FRAME_COLUMNS)), 1)
+	var frame_height := maxi(floori(float(texture_size.y) / float(FRAME_ROWS)), 1)
+	var shifted_image := Image.create(
+		texture_size.x,
+		texture_size.y,
+		false,
+		Image.FORMAT_RGBA8
+	)
+	for y: int in range(texture_size.y):
+		var row := mini(floori(float(y) / float(frame_height)), FRAME_ROWS - 1)
+		for x: int in range(texture_size.x):
+			shifted_image.set_pixel(
+				x,
+				y,
+				_get_shifted_surf_riding_pixel(
+					riding_image,
+					x,
+					y,
+					row,
+					frame_width
+				)
+			)
+
+	return _build_sprite_frames(ImageTexture.create_from_image(shifted_image))
+
+
+static func _get_shifted_surf_riding_pixel(
+	riding_image: Image,
+	x: int,
+	y: int,
+	row: int,
+	frame_width: int
+) -> Color:
+	var shift := 0
+	if row == 1:
+		shift = SURF_FISH_SIDE_LOWER_SHIFT
+	elif row == 2:
+		shift = -SURF_FISH_SIDE_LOWER_SHIFT
+	if shift == 0:
+		return riding_image.get_pixel(x, y)
+
+	var frame_start_x := floori(float(x) / float(frame_width)) * frame_width
+	var source_x := x - shift
+	if source_x < frame_start_x or source_x >= frame_start_x + frame_width:
+		return Color.TRANSPARENT
+	return riding_image.get_pixel(source_x, y)
 
 
 static func _build_tinted_sprite_frames(base_frames: SpriteFrames, tint_color: Color, preserve_luminance: bool) -> SpriteFrames:

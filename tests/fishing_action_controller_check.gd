@@ -118,13 +118,16 @@ func _init() -> void:
 		combined_body_frames != null
 		and appearance_source.contains("func _build_surf_fishing_body_frames(")
 		and appearance_source.contains("func _build_surf_fishing_layer_frames(")
+		and appearance_source.contains("func _build_surf_fishing_lower_layer_frames(")
+		and appearance_source.contains("SURF_FISH_SIDE_LOWER_SHIFT := 12")
 		and combined_top_frames != null
-		and _frame_atlas_path(combined_bottom_frames).contains("/ride/"),
+		and combined_bottom_frames != null,
 		"combined Surf fishing builds its body and top from fishing and riding textures"
 	)
 	_check(
-		_frame_atlas_path(custom_bottom_frames).contains("/bottom/ride/Trousers_ride.png")
-		and _frame_atlas_path(custom_shoes_frames).contains("/shoes/ride/Shoes_ride.png"),
+		custom_bottom_frames != null
+		and custom_shoes_frames != null
+		and appearance_source.contains("func _get_shifted_surf_riding_pixel("),
 		"cosmetics without activity sheets fall back to aligned riding lower layers"
 	)
 	_check(
