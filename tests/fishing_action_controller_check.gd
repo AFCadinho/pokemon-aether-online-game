@@ -102,6 +102,18 @@ func _init() -> void:
 		"male",
 		CharacterAppearanceServiceScript.BODY_MOVEMENT_SURF_FISH
 	)
+	var custom_bottom_frames := CharacterAppearanceServiceScript.get_part_frames(
+		"bottom",
+		"Adinho_Trousers",
+		"male",
+		CharacterAppearanceServiceScript.BODY_MOVEMENT_SURF_FISH
+	)
+	var custom_shoes_frames := CharacterAppearanceServiceScript.get_part_frames(
+		"shoes",
+		"Adinho_Shoes",
+		"male",
+		CharacterAppearanceServiceScript.BODY_MOVEMENT_SURF_FISH
+	)
 	_check(
 		combined_body_frames != null
 		and appearance_source.contains("func _build_surf_fishing_body_frames(")
@@ -109,6 +121,11 @@ func _init() -> void:
 		and combined_top_frames != null
 		and _frame_atlas_path(combined_bottom_frames).contains("/ride/"),
 		"combined Surf fishing builds its body and top from fishing and riding textures"
+	)
+	_check(
+		_frame_atlas_path(custom_bottom_frames).contains("/bottom/ride/Trousers_ride.png")
+		and _frame_atlas_path(custom_shoes_frames).contains("/shoes/ride/Shoes_ride.png"),
+		"cosmetics without activity sheets fall back to aligned riding lower layers"
 	)
 	_check(
 		remote_player_source.contains(

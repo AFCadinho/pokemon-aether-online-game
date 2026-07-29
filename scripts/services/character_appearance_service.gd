@@ -133,6 +133,11 @@ const LAYERED_PART_CATEGORIES: Array[String] = [
 	EYES_CATEGORY,
 	EYEBROWS_CATEGORY,
 ]
+const MOVEMENT_POSE_PART_CATEGORIES: Array[String] = [
+	TOP_CATEGORY,
+	BOTTOM_CATEGORY,
+	SHOES_CATEGORY,
+]
 const DEFAULT_LAYERED_MALE_BODY_IDS: Array[String] = [
 	"Gen4_Base_v1",
 	"Gen4_Base_M_Dark",
@@ -1056,12 +1061,26 @@ static func _is_selectable_body_id(body_id: String) -> bool:
 
 
 static func _load_part_texture_for_movement(category: String, part_id: String, gender: String, movement_style: String) -> Texture2D:
+	var normalized_category := normalize_part_category(category)
 	var normalized_movement_style := resolve_layer_movement_style(movement_style, category)
 	if normalized_movement_style != BODY_MOVEMENT_DEFAULT:
 		var movement_part_id: String = _get_movement_body_id(part_id, normalized_movement_style)
 		var movement_texture: Texture2D = _load_part_texture(category, movement_part_id, gender)
 		if movement_texture != null:
 			return movement_texture
+		if MOVEMENT_POSE_PART_CATEGORIES.has(normalized_category):
+			var default_part_id := get_default_part_id(normalized_category, gender)
+			var default_movement_part_id := _get_movement_body_id(
+				default_part_id,
+				normalized_movement_style
+			)
+			var default_movement_texture := _load_part_texture(
+				normalized_category,
+				default_movement_part_id,
+				gender
+			)
+			if default_movement_texture != null:
+				return default_movement_texture
 	return _load_part_texture(category, part_id, gender)
 
 
