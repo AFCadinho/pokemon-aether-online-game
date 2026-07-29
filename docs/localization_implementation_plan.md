@@ -18,7 +18,8 @@ Initial locales: English (`en`), Dutch (`nl`), Brazilian Portuguese (`pt-BR`)
 | Phase 5: battle localization | Complete; battle UI, dynamic events, timers, field state, results, and calculator are migrated |
 | Phase 6: world signs and NPC dialogue | Complete; signs, Game Content dialogue, NPC display overlays, locale caches, and fallback are active |
 | Phase 7: Pokémon and item content | Complete; full species, move, ability, and item presentation coverage is active |
-| Phases 8-10 | Planned |
+| Phase 8: backend error contracts | Complete; stable codes, safe localization, diagnostics, and transport fallbacks are active |
+| Phases 9-10 | Planned |
 
 ## Goal
 
@@ -422,6 +423,23 @@ Example:
 - Known service errors display correctly in all supported locales.
 - Unknown errors still produce a useful localized message.
 - Localization changes do not alter HTTP status handling or service behavior.
+
+### Completed implementation
+
+- `BackendErrorLocalization` extracts stable codes from top-level and nested gateway
+  response shapes.
+- Known player-facing account, Guild, trade, inventory, shop, appearance, mail,
+  fishing, field-move, and reward codes map to localized messages in all three
+  catalogs.
+- All player-facing Godot HTTP services and both battle API clients use the shared
+  resolver; background metadata-loader failures remain diagnostic-only.
+- Unknown codes show a safe localized generic error and never expose raw backend text.
+- English server messages remain available separately for logs and diagnostics.
+- Connection, TLS, and timeout failures are localized through the same service.
+- The account service preserves existing domain codes and normalizes legacy
+  `HTTPException` strings to stable category codes without changing HTTP statuses.
+- The complete contract and extension workflow are documented in
+  `localization_error_contract.md`.
 
 ## Phase 9: launcher and news
 

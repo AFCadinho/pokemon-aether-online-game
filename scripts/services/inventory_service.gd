@@ -484,15 +484,7 @@ func _request_json(url: String, method: HTTPClient.Method, headers: PackedString
 
 
 func _extract_error(body: Dictionary, response_code: int) -> String:
-	if body.has("detail"):
-		var detail: Variant = body.get("detail")
-		if detail is Dictionary:
-			var detail_dictionary: Dictionary = detail as Dictionary
-			return str(detail_dictionary.get("message", detail_dictionary.get("code", "Request failed.")))
-		return str(detail)
-	if body.has("error"):
-		return str(body.get("error"))
-	return "Request failed with HTTP %s." % response_code
+	return BackendErrorLocalizationService.message({"body": body, "status": response_code})
 
 
 func _dictionary_from_value(value: Variant) -> Dictionary:
@@ -510,16 +502,4 @@ func _array_from_value(value: Variant) -> Array:
 
 
 func _request_result_message(result: int) -> String:
-	match result:
-		HTTPRequest.RESULT_CANT_CONNECT:
-			return "Cannot connect to server."
-		HTTPRequest.RESULT_CANT_RESOLVE:
-			return "Cannot resolve server address."
-		HTTPRequest.RESULT_CONNECTION_ERROR:
-			return "Connection error."
-		HTTPRequest.RESULT_TLS_HANDSHAKE_ERROR:
-			return "TLS handshake failed."
-		HTTPRequest.RESULT_TIMEOUT:
-			return "Request timed out."
-		_:
-			return "Request failed."
+	return BackendErrorLocalizationService.transport_message(result)

@@ -258,12 +258,7 @@ func _request_json(
 
 
 func _extract_error(body: Dictionary, response_code: int) -> String:
-	var detail: Variant = body.get("detail")
-	if detail is Dictionary:
-		return str((detail as Dictionary).get("message", "Request failed."))
-	if detail != null:
-		return str(detail)
-	return "Request failed with HTTP %s." % response_code
+	return BackendErrorLocalizationService.message({"body": body, "status": response_code})
 
 
 func _is_authenticated() -> bool:

@@ -54,13 +54,18 @@ func _check_action_response_overview_unwrap() -> void:
 func _check_error_detail_extraction() -> void:
 	_check_equal(
 		service._extract_error({"detail": "friend request already pending"}, 409),
-		"friend request already pending",
-		"string detail"
+		"Something went wrong. Please try again.",
+		"legacy string detail is hidden behind the safe fallback"
 	)
 	_check_equal(
-		service._extract_error({"detail": {"message": "user not found"}}, 404),
-		"user not found",
-		"dictionary detail message"
+		service._extract_error({
+			"detail": {
+				"code": "guild_invite_target_not_found",
+				"message": "internal user lookup detail",
+			},
+		}, 404),
+		"That Trainer could not be found.",
+		"structured detail code is localized"
 	)
 
 

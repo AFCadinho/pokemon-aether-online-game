@@ -213,21 +213,30 @@ func _request_json(url: String, body: String) -> Dictionary:
 	var error: Error = request.request(url, GatewayApiConfig.get_json_headers(), HTTPClient.METHOD_POST, body)
 	if error != OK:
 		request.queue_free()
-		return {"success": false, "error": "Could not start weather request: %s" % error_string(error)}
+		return {
+			"success": false,
+			"error": BackendErrorLocalizationService.message({"code": "service_unavailable"}),
+			"diagnosticError": error_string(error),
+		}
 	var result: Array = await request.request_completed
 	request.queue_free()
 	var request_result := int(result[0])
 	var response_code := int(result[1])
 	var response_text := (result[3] as PackedByteArray).get_string_from_utf8()
 	if request_result != HTTPRequest.RESULT_SUCCESS:
-		return {"success": false, "status": response_code, "error": "Could not reach the weather server."}
+		return {
+			"success": false,
+			"status": response_code,
+			"error": BackendErrorLocalizationService.transport_message(request_result),
+		}
 	var parsed_body: Variant = JSON.parse_string(response_text)
 	var parsed_dictionary: Dictionary = parsed_body as Dictionary if parsed_body is Dictionary else {}
 	if response_code < 200 or response_code >= 300:
-		var detail: Variant = parsed_dictionary.get("detail", parsed_dictionary.get("error", "Weather action failed."))
-		if detail is Dictionary:
-			detail = (detail as Dictionary).get("message", (detail as Dictionary).get("error", "Weather action failed."))
-		return {"success": false, "status": response_code, "error": str(detail), "body": parsed_dictionary}
+		return BackendErrorLocalizationService.decorate({
+			"success": false,
+			"status": response_code,
+			"body": parsed_dictionary,
+		})
 	return {"success": true, "status": response_code, "body": parsed_dictionary}
 
 

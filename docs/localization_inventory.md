@@ -209,9 +209,11 @@ Phase 6 now includes:
 
 ## Next implementation slice
 
-Start Phase 8 by replacing raw player-facing backend failures with stable error-code
-mappings. Phase 7 is technically complete: the shared resolvers cover all 1,439
-species/forms, 919 moves, 376 abilities, and 1,395 canonical items without duplicating
-mechanics. The current Dutch and Brazilian Portuguese generated entries remain review
-drafts for the Phase 10 language-quality gate; reviewed overlays always take
-precedence. Raw backend errors remain Phase 8 work.
+Start Phase 9 by applying the shared locale model to the launcher and locale-aware
+news. Phase 8 is complete: account-service errors have stable domain or category
+codes, all player-facing game HTTP clients use the shared safe resolver, known codes
+are translated in all three locales, and unknown server details remain
+diagnostic-only.
+See `localization_error_contract.md` for the extension rules. The current Dutch and
+Brazilian Portuguese generated content entries remain review drafts for the Phase 10
+language-quality gate.

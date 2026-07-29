@@ -35,6 +35,7 @@ PokemonDataApiClient="*res://scripts/battle/battle_api/pokemon_data_api_client.g
 LocalizationManager="*res://scripts/services/localization_manager.gd"
 ItemLocalization="*res://scripts/services/item_localization_service.gd"
 ContentLocalization="*res://scripts/services/content_localization_service.gd"
+BackendErrorLocalization="*res://scripts/services/backend_error_localization_service.gd"
 SettingsManager="*res://scripts/services/settings_manager.gd"
 MusicManager="*res://scripts/services/music_manager.gd"
 SfxManager="*res://scripts/services/sfx_manager.gd"

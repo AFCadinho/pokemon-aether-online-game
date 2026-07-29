@@ -84,9 +84,5 @@ func _new_request_id() -> String:
 	]
 
 
-func _error_message(body: Dictionary, fallback: String) -> String:
-	var detail: Variant = body.get("detail", body.get("error", fallback))
-	if detail is Dictionary:
-		return str((detail as Dictionary).get("message", fallback))
-	var message := str(detail).strip_edges()
-	return message if message != "" else fallback
+func _error_message(body: Dictionary, _fallback: String) -> String:
+	return BackendErrorLocalizationService.message({"body": body})

@@ -2200,35 +2200,17 @@ func _local_offer_nonempty() -> bool:
 
 
 func _friendly_error(result: Dictionary) -> String:
-	var body: Dictionary = result.get("body", {}) if result.get("body", {}) is Dictionary else {}
-	var detail: Variant = body.get("detail", {})
-	var code := str(detail.get("code", "")) if detail is Dictionary else ""
-	match code:
-		"pokemon_reserved_for_trade": return _t("ui.trade.error.pokemon_reserved")
-		"pokemon_holding_item": return _t("ui.trade.error.pokemon_holding_item")
-		"trade_offer_requires_party_pokemon": return _t("ui.trade.error.party_last")
-		"pokemon_not_tradable": return _t("ui.trade.error.pokemon_not_tradable")
-		"pokemon_not_owned_or_held": return _t("ui.trade.error.pokemon_not_owned")
-		"pokemon_location_stale": return _t("ui.trade.error.pokemon_moved")
-		"item_not_tradable": return _t("ui.trade.error.item_not_tradable")
-		"item_reserved_for_trade": return _t("ui.trade.error.item_reserved")
-		"trade_item_quantity_unavailable", "trade_item_quantity_changed":
-			return _t("ui.trade.error.item_quantity")
-		"trade_item_snapshot_changed": return _t("ui.trade.error.item_changed")
-		"trade_money_unavailable", "trade_money_balance_changed":
-			return _t("ui.trade.error.money_changed")
-		"money_reserved_for_trade": return _t("ui.trade.error.money_reserved")
-		"trade_offer_party_only": return _t("ui.trade.error.party_only")
-		"trade_party_capacity_exceeded": return _t("ui.trade.error.opponent_party_full")
-		"trade_party_space_required": return _t("ui.trade.error.party_space")
-		"trade_offer_required": return _t("ui.trade.error.offer_required")
-		"trade_review_mismatch": return _t("ui.trade.error.review_changed")
-		"trade_review_not_locked": return _t("ui.trade.error.review_not_locked")
-		"trade_settlement_invalidated": return _t("ui.trade.error.settlement_invalidated")
-		"trade_settlement_retryable": return _t("ui.trade.error.settlement_retry")
 	if _is_stale_revision_error(result):
 		return _t("ui.trade.error.stale")
-	return str(result.get("error", _t("ui.trade.error.update_offer")))
+	if is_inside_tree():
+		var error_localization := get_node_or_null("/root/BackendErrorLocalization")
+		if error_localization != null:
+			return str(error_localization.call(
+				"message",
+				result,
+				"ui.trade.error.update_offer"
+			))
+	return _t("ui.trade.error.update_offer")
 
 
 func _show_error(message: String) -> void:
