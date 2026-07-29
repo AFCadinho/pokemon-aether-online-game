@@ -13,13 +13,14 @@ Initial locales: English (`en`), Dutch (`nl`), Brazilian Portuguese (`pt-BR`)
 | Phase 0: inventory and conventions | Complete; see `localization_inventory.md` and `localization_conventions.md` |
 | Phase 1: Godot localization foundation | Complete in commit `96be89e3a` |
 | Phase 2: login and settings pilot | Complete in commit `96be89e3a` |
-| Phase 3: automated guardrails | In progress; catalog, placeholder, fallback, persistence, and pilot layout checks are active |
+| Phase 3: automated guardrails | Active; strict hardcoded-text release audit added, with existing debt still open |
 | Phase 4: shared game interface | Complete; all 11 functional domains are migrated |
 | Phase 5: battle localization | Complete; battle UI, dynamic events, timers, field state, results, and calculator are migrated |
 | Phase 6: world signs and NPC dialogue | Complete; signs, Game Content dialogue, NPC display overlays, locale caches, and fallback are active |
 | Phase 7: Pokémon and item content | Complete; full species, move, ability, and item presentation coverage is active |
 | Phase 8: backend error contracts | Complete; stable codes, safe localization, diagnostics, and transport fallbacks are active |
-| Phases 9-10 | Planned |
+| Phase 9: launcher and news | Complete in commit `f8ecd6b07` |
+| Phase 10: completeness and release gate | Executed; release blocked by remaining text/layout debt and human language review |
 
 ## Goal
 
@@ -487,6 +488,11 @@ documents remain deliberately outside the game/launcher catalogs and require the
 content and legal review before release.
 
 ## Phase 10: completeness and release gate
+
+The release gate was executed on 2026-07-29. Catalog integrity and all existing
+automated project checks pass, but the strict completeness gate remains red. The
+reproducible evidence, confirmed remaining UI domains, layout coverage gap, and human
+review requirements are recorded in `localization_phase10_release_audit.md`.
 
 PokeAether is considered fully localized for the initial language set when:
 

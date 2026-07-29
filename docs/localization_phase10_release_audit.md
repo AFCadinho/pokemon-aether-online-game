@@ -1,0 +1,105 @@
+# Phase 10 localization release audit
+
+Date: 2026-07-29
+
+Decision: **not ready for localization release**
+
+This document records the result of executing the Phase 10 completeness gate. It is
+not a migration estimate and does not downgrade the completed architecture in phases
+1–9. It distinguishes automated technical evidence from product and native-speaker
+approval.
+
+## Automated evidence
+
+The following gates pass:
+
+- the English, Dutch, and Brazilian Portuguese client catalogs contain 1,849 matching
+  keys;
+- the three launcher catalogs contain 133 matching keys;
+- catalog JSON, non-empty values, key parity, and named placeholders have no errors;
+- locale normalization, persistence, request headers, and English fallback pass;
+- local signs, NPC metadata/dialogue contracts, canonical content overlays, item
+  overlays, backend error contracts, login, migrated gameplay domains, battles, and
+  the launcher pass their domain checks;
+- all 134 project checks pass;
+- the standalone launcher localization runtime check passes.
+
+Run the repeatable catalog and completeness audit with:
+
+```bash
+python3 tools/audit_localization_release.py
+```
+
+The strict release decision is:
+
+```bash
+python3 tools/audit_localization_release.py --strict --limit 0
+```
+
+The strict command currently exits with status 1, as intended.
+
+## Open technical gates
+
+The static completeness scan currently reports 400 candidates at player-facing text
+sinks:
+
+| Source | Candidates |
+| --- | ---: |
+| `scripts/ui/ui_overlay.gd` | 300 |
+| `scenes/interface/ui_overlay.tscn` | 66 |
+| `scripts/ui/fishing_action_controller.gd` | 11 |
+| `scripts/world/world.gd` | 11 |
+| `scripts/world/player.gd` | 5 |
+| Other scene/script sources | 7 |
+
+Candidates require classification and are not all automatically translation debt.
+Preview values, abbreviations, player data, and decorative text can be intentional.
+However, direct inspection confirms real remaining English in at least these surfaces:
+
+- Pokémon Storage controls, search, filters, release flow, and box navigation;
+- ranked/private PvP lobby, validation, queue, leaderboard, history, and spectator
+  controls;
+- Trainer Card, wallet, profile, appearance, and badge presentation;
+- Item Dex and Wild Pokémon presentation;
+- personal/global buff presentation;
+- chat tabs, context controls, tooltips, and empty states;
+- Fishing loadout, rod requirements, prompts, and failures;
+- several blackout, capture, reward, field-move, and progression system messages;
+- move-learning and evolution prompts that still build formatted English directly.
+
+The raw candidate list can be printed with `--limit 0`. Every candidate must be
+migrated to a semantic key or documented as an intentional exclusion before the
+strict gate can become green.
+
+The supported-resolution gate is also incomplete. Existing tests cover focused
+layouts and the 1280×720 login/settings pilot, but do not instantiate every supported
+flow in all three locales at 1280×720, 1600×900, and 1920×1080. Therefore the plan's
+full layout criterion cannot yet be certified.
+
+## Open language-quality gates
+
+The complete generated Dutch and Brazilian Portuguese species, move, ability, and
+item catalogs are still explicitly marked as machine-generated review drafts in
+`localization_content_review.md`.
+
+- Dutch has received hands-on review for several flows, but there is no recorded
+  product review of every catalog and remaining interface.
+- Brazilian Portuguese has no recorded native-speaker approval.
+- External registration, website, credits, and legal content require separate content
+  and legal review.
+
+These are human release approvals. Automated tests can verify coverage and mechanics,
+but cannot replace them.
+
+## Required remediation order
+
+1. Migrate or classify the 400 static-scan candidates, one functional domain at a
+   time, with runtime locale-switch tests.
+2. Add full-flow layout checks for all supported locales and resolutions, including
+   long-text and empty/error states.
+3. Review generated Dutch content and move approved entries into manual overlays.
+4. Complete Brazilian Portuguese native-speaker review and record approval.
+5. Re-run all project checks, the launcher runtime check, and the strict release audit.
+
+Phase 10 may be marked complete only when the strict audit is green and both human
+language approvals are recorded.
