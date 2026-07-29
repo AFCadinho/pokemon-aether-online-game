@@ -20,8 +20,8 @@ keys and placeholders.
 
 ## Current baseline
 
-The login/settings pilot and the first three shared-interface slices are complete. The
-three client catalogs currently contain 433 matching keys. Language selection is
+The login/settings pilot and all eleven shared-interface slices are complete. The
+three client catalogs currently contain 1,402 matching keys. Language selection is
 available before login and in the shared settings menu, is stored locally, updates at
 runtime, and falls back to English.
 
@@ -34,6 +34,13 @@ Completed client domains:
 - Bag and hotbar interface chrome, including categories, search and empty states,
   item-action flows, local medicine previews, Escape Rope interactions, and runtime
   refresh;
+- Market and standard shop buy/sell flows;
+- Pokédex interface chrome and mail composition, attachments, rules, and statuses;
+- Friends, nearby-player, Guild, and player-trading interfaces;
+- Aether Store and Aether Atelier, including item-overlay presentation and localized
+  search;
+- Alpha, developer, and relevant staff interfaces, including account impersonation,
+  staff teleport, item/currency tools, and Trainer Progress;
 - canonical-ID item display overlays for 69 currently player-facing items, covering
   the standard PokéMart, virtual and legacy Escape Rope, fishing rods, field Charms,
   Aether Blessing vouchers, Trainer-service tickets, Guild emblems, and current
@@ -44,7 +51,7 @@ data sources until their Pokémon Data overlay slices. Items outside the current
 69-entry player-facing catalog safely retain the English name and description supplied
 by their authoritative source.
 
-The remaining client surface is substantial:
+The remaining localization surface is concentrated in later phases:
 
 | Source | Baseline | Meaning |
 | --- | ---: | --- |
@@ -184,14 +191,15 @@ dialog, tooltip, chat system message, or notification.
 
 ## Next implementation slice
 
-The next recommended slice is Market and standard shop interface chrome:
+The next recommended slice is Phase 5, battle localization:
 
-- market and shop headings, tabs, search, quantity controls, empty states, and local
-  validation messages;
-- buy/sell controls, price and ownership grammar, confirmations, and local transaction
-  feedback;
-- runtime refresh and layout checks in Dutch and Brazilian Portuguese.
+- battle menus, action labels, timers, result screens, statuses, weather, terrain, and
+  stat-stage presentation;
+- structured battle-event sentences with named placeholders instead of concatenated
+  English fragments;
+- runtime switching, English fallback, and layout coverage for Dutch and Brazilian
+  Portuguese.
 
-The shared item resolver supplies localized names and descriptions to Market without
-changing item IDs, prices, quantities, or effects. Battle text, other Pokémon data, and
-server-owned messages remain outside that slice.
+Canonical move, ability, species, nature, and type display data remain English until
+their Phase 7 overlays. Raw backend errors remain outside the battle slice and are
+handled through stable error-code mappings in Phase 8.

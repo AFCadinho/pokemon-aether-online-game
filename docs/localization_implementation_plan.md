@@ -14,9 +14,9 @@ Initial locales: English (`en`), Dutch (`nl`), Brazilian Portuguese (`pt-BR`)
 | Phase 1: Godot localization foundation | Complete in commit `96be89e3a` |
 | Phase 2: login and settings pilot | Complete in commit `96be89e3a` |
 | Phase 3: automated guardrails | In progress; catalog, placeholder, fallback, persistence, and pilot layout checks are active |
-| Phase 4: shared game interface | In progress; domains 1-3 are complete |
+| Phase 4: shared game interface | Complete; all 11 functional domains are migrated |
 | Phase 7: Pokémon and item content | In progress; shared item resolver and 69 current item overlays are active |
-| Phases 5-6 and 8-10 | Planned |
+| Phases 5-6 and 8-10 | Planned; battle localization is the next implementation phase |
 
 ## Goal
 
