@@ -96,20 +96,11 @@ func _ready() -> void:
 	_ensure_map_transition_overlay()
 	_ensure_remote_players_container()
 	_connect_world_presence_signals()
-	await _load_fishing_access()
 	await _setup_initial_world_state()
 	await _refresh_fishing_progression()
 	_normalize_map_depth_layer_z_indices(GameState.current_map)
 	if GameState.gameplay_reset_in_progress:
 		GameState.finish_gameplay_reset()
-
-
-func _load_fishing_access() -> void:
-	var inventory_result: Dictionary = await InventoryService.load_inventory()
-	if not bool(inventory_result.get("success", false)):
-		push_warning("World: fishing inventory load failed: %s" % str(
-			inventory_result.get("error", "Unknown error")
-		))
 
 
 func _refresh_fishing_progression() -> void:
@@ -2017,7 +2008,7 @@ func _show_wild_encounter_start_error(response: Dictionary) -> void:
 	match error_code:
 		"fishing_rod_not_owned":
 			await GameErrorDialogService.show_message(message_lines)
-			await _load_fishing_access()
+			await _refresh_fishing_progression()
 		_:
 			if not message_lines.is_empty():
 				await GameErrorDialogService.show_message(message_lines)

@@ -18,7 +18,6 @@ const DEV_CLEAR_ITEMS_ENDPOINT := "/game/dev/inventory/items"
 const ITEM_SEARCH_ENDPOINT := "/game/items/search?q=%s"
 const DEV_ITEM_SEARCH_ENDPOINT := "/game/dev/items/search?q=%s"
 const REQUEST_TIMEOUT_SECONDS := 8.0
-const FishingRodRulesScript := preload("res://scripts/services/fishing_rod_rules.gd")
 
 
 func load_inventory() -> Dictionary:
@@ -36,12 +35,10 @@ func load_inventory() -> Dictionary:
 		""
 	)
 	if not bool(response.get("success", false)):
-		_set_fishing_access_from_items([])
 		return response
 
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
 	var items := _array_from_value(body.get("items", []))
-	_set_fishing_access_from_items(items)
 	return {
 		"success": true,
 		"items": items,
@@ -376,7 +373,6 @@ func dev_add_item(item_id: String, quantity: int) -> Dictionary:
 
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
 	var items := _array_from_value(body.get("items", []))
-	_set_fishing_access_from_items(items)
 	return {
 		"success": true,
 		"items": items,
@@ -433,30 +429,10 @@ func dev_clear_inventory() -> Dictionary:
 
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
 	var items := _array_from_value(body.get("items", []))
-	_set_fishing_access_from_items(items)
 	return {
 		"success": true,
 		"items": items,
 	}
-
-
-func _set_fishing_access_from_items(items: Array) -> void:
-	var owned: Array[String] = []
-	for item_value: Variant in items:
-		if not (item_value is Dictionary):
-			continue
-		var item: Dictionary = item_value
-		if int(item.get("quantity", 0)) <= 0:
-			continue
-		var item_id := str(item.get("itemId", item.get("id", ""))).strip_edges().to_lower()
-		if int(FishingRodRulesScript.ROD_TIERS.get(item_id, 0)) > 0:
-			owned.append(item_id)
-	GameState.fishing_owned_rod_item_ids = owned
-	if GameState.selected_fishing_rod_item_id not in owned:
-		GameState.fishing_unlocked = false
-		GameState.fishing_tier = 0
-	get_tree().call_group("fishing_action_controller", "refresh_from_game_state")
-
 
 func _request_json(url: String, method: HTTPClient.Method, headers: PackedStringArray, body: String) -> Dictionary:
 	var request := HTTPRequest.new()
