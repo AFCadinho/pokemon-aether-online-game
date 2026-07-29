@@ -20,7 +20,7 @@ Initial locales: English (`en`), Dutch (`nl`), Brazilian Portuguese (`pt-BR`)
 | Phase 7: Pokémon and item content | Complete; full species, move, ability, and item presentation coverage is active |
 | Phase 8: backend error contracts | Complete; stable codes, safe localization, diagnostics, and transport fallbacks are active |
 | Phase 9: launcher and news | Complete in commit `f8ecd6b07` |
-| Phase 10: completeness and release gate | Executed; release blocked by remaining text/layout debt and human language review |
+| Phase 10: completeness and release gate | Technical text completeness passes; release remains blocked by full-flow layout coverage and human language review |
 
 ## Goal
 
@@ -489,10 +489,10 @@ content and legal review before release.
 
 ## Phase 10: completeness and release gate
 
-The release gate was executed on 2026-07-29. Catalog integrity and all existing
-automated project checks pass, but the strict completeness gate remains red. The
-reproducible evidence, confirmed remaining UI domains, layout coverage gap, and human
-review requirements are recorded in `localization_phase10_release_audit.md`.
+The release gate was executed on 2026-07-29. Catalog integrity, all project checks,
+and the strict hardcoded-text completeness gate pass. The reproducible evidence,
+remaining full-flow layout coverage gap, and human review requirements are recorded
+in `localization_phase10_release_audit.md`.
 
 PokeAether is considered fully localized for the initial language set when:
 

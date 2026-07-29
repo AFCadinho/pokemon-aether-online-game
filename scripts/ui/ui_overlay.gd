@@ -31332,7 +31332,7 @@ func _promote_trade_summary_to_window(card_key: String) -> void:
 		return
 	var host := DRAGGABLE_SUBWINDOW.new() as DraggableSubwindow
 	host.name = "TradePokemonSummary"
-	host.title = "Pokemon Summary"
+	host.title = LocalizationManager.text("ui.pokemon_summary.title")
 	host.borderless = true
 	host.unresizable = true
 	host.always_on_top = false

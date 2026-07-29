@@ -848,7 +848,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.8980392, 0.90588236, 0.92156863, 1)
 theme_override_font_sizes/font_size = 17
-text = "Pallet Town"
+text = "ui.world.location.unknown"
 text_overrun_behavior = 3
 vertical_alignment = 1
 
@@ -874,7 +874,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_location_region")
 layout_mode = 2
 theme_override_colors/font_color = Color(0.84705883, 0.7176471, 0.40392157, 1)
 theme_override_font_sizes/font_size = 10
-text = "KANTO"
+text = "ui.world.location.unknown_region"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -882,7 +882,7 @@ vertical_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.6901961, 0.72156864, 0.7764706, 1)
 theme_override_font_sizes/font_size = 13
-text = "08:54 AM"
+text = "--:--"
 
 [node name="StatusSpacer" type="Control" parent="Control/LocationPanel/MarginContainer/VBoxContainer/StatusRow"]
 layout_mode = 2
@@ -1888,19 +1888,19 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 24
-text = "Mail"
+text = "ui.mail.title"
 
 [node name="ComposeButton" type="Button" parent="Control/MailPopup/MarginContainer/VBoxContainer/HeaderRow" unique_id=1372160869]
 custom_minimum_size = Vector2(120, 34)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-text = "New Mail"
+text = "ui.mail.new"
 
 [node name="CloseButton" type="Button" parent="Control/MailPopup/MarginContainer/VBoxContainer/HeaderRow" unique_id=512305409]
 custom_minimum_size = Vector2(80, 34)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-text = "Close"
+text = "common.close"
 
 [node name="MailTabRow" type="HBoxContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer" unique_id=726266398]
 layout_mode = 2
@@ -1910,13 +1910,13 @@ theme_override_constants/separation = 8
 custom_minimum_size = Vector2(110, 30)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-text = "Inbox"
+text = "ui.mail.inbox"
 
 [node name="SentButton" type="Button" parent="Control/MailPopup/MarginContainer/VBoxContainer/MailTabRow" unique_id=1829045477]
 custom_minimum_size = Vector2(110, 30)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-text = "Sent"
+text = "ui.mail.sent"
 
 [node name="BodyRow" type="HBoxContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer" unique_id=371925585]
 layout_mode = 2
@@ -1948,11 +1948,11 @@ theme_override_constants/separation = 8
 [node name="InboxLabel" type="Label" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailListPanel/MarginContainer/MailListScroll/MailList" unique_id=61995334]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Inbox"
+text = "ui.mail.inbox"
 
 [node name="EmptyInboxLabel" type="Label" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailListPanel/MarginContainer/MailListScroll/MailList" unique_id=989309632]
 layout_mode = 2
-text = "No mail yet."
+text = "ui.mail.empty.inbox"
 
 [node name="MailDetailPanel" type="PanelContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow" unique_id=857998755]
 layout_mode = 2
@@ -1974,11 +1974,11 @@ theme_override_constants/separation = 8
 [node name="SubjectLabel" type="Label" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack" unique_id=1667600774]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Select a mail"
+text = "ui.mail.detail.choose"
 
 [node name="SenderLabel" type="Label" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack" unique_id=1062141544]
 layout_mode = 2
-text = "Sender: -"
+text = "ui.mail.detail.select"
 
 [node name="BodyScroll" type="ScrollContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack" unique_id=2040912713]
 custom_minimum_size = Vector2(0, 105)
@@ -1988,12 +1988,12 @@ size_flags_vertical = 3
 [node name="BodyLabel" type="Label" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/BodyScroll" unique_id=1339070480]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Mail messages and reward attachments will appear here."
+text = "ui.mail.detail.placeholder"
 autowrap_mode = 3
 
 [node name="AttachmentTitle" type="Label" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack" unique_id=1112882056]
 layout_mode = 2
-text = "Attachments"
+text = "ui.mail.attachments"
 
 [node name="AttachmentScroll" type="ScrollContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack" unique_id=1793159218]
 custom_minimum_size = Vector2(0, 96)
@@ -2010,20 +2010,20 @@ custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 disabled = true
-text = "Claim Attachments"
+text = "ui.mail.claim_attachments"
 
 [node name="ReplyButton" type="Button" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack" unique_id=1379299307]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-text = "Reply"
+text = "ui.mail.reply"
 
 [node name="DeleteButton" type="Button" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack" unique_id=530702169]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 disabled = true
-text = "Delete Mail"
+text = "ui.mail.delete"
 
 [node name="MailComposePopup" type="PanelContainer" parent="Control" unique_id=1922992608]
 visible = false
@@ -2057,29 +2057,29 @@ theme_override_constants/separation = 10
 [node name="Title" type="Label" parent="Control/MailComposePopup/MarginContainer/VBoxContainer" unique_id=145136877]
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
-text = "New Mail"
+text = "ui.mail.compose.title"
 
 [node name="RecipientInput" type="LineEdit" parent="Control/MailComposePopup/MarginContainer/VBoxContainer" unique_id=1434314538]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
-placeholder_text = "Recipient username"
+placeholder_text = "ui.mail.compose.recipient_placeholder"
 
 [node name="SubjectInput" type="LineEdit" parent="Control/MailComposePopup/MarginContainer/VBoxContainer" unique_id=1837748876]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
-placeholder_text = "Subject"
+placeholder_text = "ui.mail.compose.subject_placeholder"
 
 [node name="BodyInput" type="TextEdit" parent="Control/MailComposePopup/MarginContainer/VBoxContainer" unique_id=137926333]
 custom_minimum_size = Vector2(0, 110)
 layout_mode = 2
 size_flags_vertical = 3
-placeholder_text = "Message"
+placeholder_text = "ui.mail.compose.message_placeholder"
 wrap_mode = 1
 
 [node name="AttachmentsTitle" type="Label" parent="Control/MailComposePopup/MarginContainer/VBoxContainer" unique_id=204848758]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Attachments"
+text = "ui.mail.attachments"
 
 [node name="ItemAttachmentRow" type="HBoxContainer" parent="Control/MailComposePopup/MarginContainer/VBoxContainer" unique_id=1302572077]
 layout_mode = 2
@@ -2089,7 +2089,7 @@ theme_override_constants/separation = 8
 custom_minimum_size = Vector2(240, 34)
 layout_mode = 2
 size_flags_horizontal = 3
-placeholder_text = "Search items in your bag"
+placeholder_text = "ui.mail.compose.item_search"
 
 [node name="ItemQuantity" type="SpinBox" parent="Control/MailComposePopup/MarginContainer/VBoxContainer/ItemAttachmentRow" unique_id=1743334111]
 custom_minimum_size = Vector2(86, 34)
@@ -2102,7 +2102,7 @@ value = 1.0
 custom_minimum_size = Vector2(110, 34)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-text = "Add Item"
+text = "ui.mail.compose.add_item"
 
 [node name="ItemSuggestions" type="VBoxContainer" parent="Control/MailComposePopup/MarginContainer/VBoxContainer" unique_id=523515061]
 layout_mode = 2
@@ -2121,7 +2121,7 @@ size_flags_horizontal = 3
 custom_minimum_size = Vector2(130, 34)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-text = "Add Pokemon"
+text = "ui.mail.compose.add_pokemon"
 
 [node name="SelectedAttachmentsScroll" type="ScrollContainer" parent="Control/MailComposePopup/MarginContainer/VBoxContainer" unique_id=627427116]
 custom_minimum_size = Vector2(0, 104)
@@ -2144,13 +2144,13 @@ size_flags_horizontal = 3
 custom_minimum_size = Vector2(100, 34)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-text = "Send"
+text = "ui.mail.compose.send"
 
 [node name="CloseButton" type="Button" parent="Control/MailComposePopup/MarginContainer/VBoxContainer/ButtonRow" unique_id=1602980904]
 custom_minimum_size = Vector2(100, 34)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-text = "Close"
+text = "common.close"
 
 [node name="OptionsPanel2" type="Panel" parent="Control" unique_id=1164557573]
 visible = false

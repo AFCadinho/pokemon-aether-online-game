@@ -138,7 +138,7 @@ custom_minimum_size = Vector2(28, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 theme_override_font_sizes/font_size = 18
-text = "vs"
+text = "VS"
 horizontal_alignment = 1
 vertical_alignment = 1
 

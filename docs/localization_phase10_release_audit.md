@@ -21,8 +21,11 @@ The following gates pass:
 - local signs, NPC metadata/dialogue contracts, canonical content overlays, item
   overlays, backend error contracts, login, migrated gameplay domains, battles, and
   the launcher pass their domain checks;
-- all 140 project checks pass;
+- all 141 project checks pass;
 - the standalone launcher localization runtime check passes.
+- the static completeness scan contains zero hardcoded player-facing candidates;
+- the final scene-default surfaces pass a locale and layout matrix for English,
+  Dutch, and Brazilian Portuguese at 1280×720, 1600×900, and 1920×1080.
 
 Run the repeatable catalog and completeness audit with:
 
@@ -36,25 +39,17 @@ The strict release decision is:
 python3 tools/audit_localization_release.py --strict --limit 0
 ```
 
-The strict command currently exits with status 1, as intended.
+The strict command exits with status 0.
 
-## Open technical gates
+## Completed technical text gate
 
-The static completeness scan started at 400 candidates and currently reports 32
+The static completeness scan started at 400 candidates and now reports zero
 candidates at player-facing text sinks:
 
-| Source | Candidates |
-| --- | ---: |
-| `scenes/interface/ui_overlay.tscn` | 27 |
-| `scenes/interface/player_status_card.tscn` | 2 |
-| `scripts/ui/ui_overlay.gd` | 1 |
-| Other scene sources | 2 |
-
-Candidates require classification and are not all automatically translation debt.
-Preview values, abbreviations, player data, and decorative text can be intentional.
-The remaining list is now limited to scene preview/default values and one Pokémon
-Summary title. Phase 10G will migrate or explicitly classify each one before running
-the strict completeness gate.
+```text
+Hardcoded player-facing candidates: 0
+RESULT: PASS
+```
 
 Phase 10A migrated the Pokémon Storage controls, search, filters, box selector,
 release flow, move feedback, error feedback, and live locale switching. Its focused
@@ -89,14 +84,21 @@ prompts and animation copy; and move-learning choices and results. Its focused
 runtime and existing Fishing, field-move, blackout, boss, reward, and summary checks
 pass, and it reduced the open list by another 60 candidates.
 
-The raw candidate list can be printed with `--limit 0`. Every remaining candidate must be
-migrated to a semantic key or documented as an intentional exclusion before the
-strict gate can become green.
+Phase 10G migrated the final Mail and location scene defaults, Trainer status
+defaults, and detached Pokémon Summary title. Dynamic username and time previews now
+start empty or neutral until authoritative runtime data is available, while `VS` is
+classified as a non-linguistic battle marker. Its runtime check covers every
+supported locale and resolution for these final surfaces, reducing the last 32
+candidates to zero.
 
-The supported-resolution gate is also incomplete. Existing tests cover focused
-layouts and the 1280×720 login/settings pilot, but do not instantiate every supported
-flow in all three locales at 1280×720, 1600×900, and 1920×1080. Therefore the plan's
-full layout criterion cannot yet be certified.
+## Open technical release gate
+
+The complete supported-resolution gate is still incomplete. Existing tests now cover
+focused layouts, the 1280×720 login/settings pilot, and the final Phase 10G surfaces
+in all three locales at 1280×720, 1600×900, and 1920×1080. They still do not
+instantiate every supported flow and every long-text, empty, and error state across
+that full matrix. Therefore the plan's full-flow layout criterion cannot yet be
+certified.
 
 ## Open language-quality gates
 
@@ -115,13 +117,12 @@ but cannot replace them.
 
 ## Required remediation order
 
-1. Migrate or classify the remaining 32 static-scan candidates, one functional domain at a
-   time, with runtime locale-switch tests.
-2. Add full-flow layout checks for all supported locales and resolutions, including
+1. Add full-flow layout checks for all supported locales and resolutions, including
    long-text and empty/error states.
-3. Review generated Dutch content and move approved entries into manual overlays.
-4. Complete Brazilian Portuguese native-speaker review and record approval.
-5. Re-run all project checks, the launcher runtime check, and the strict release audit.
+2. Review generated Dutch content and move approved entries into manual overlays.
+3. Complete Brazilian Portuguese native-speaker review and record approval.
+4. Re-run all project checks, the launcher runtime check, and the strict release audit.
 
-Phase 10 may be marked complete only when the strict audit is green and both human
-language approvals are recorded.
+Phase 10 may be marked complete only when full-flow layout coverage passes and both
+human language approvals are recorded. The strict text-completeness audit is already
+green.
