@@ -353,10 +353,10 @@ bg_color = Color(0.19607843, 0.047058824, 0.03137255, 1)
 bg_color = Color(0.13725491, 0.047058824, 0.039215688, 0.98)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_spectator_card"]
-content_margin_left = 18.0
-content_margin_top = 8.0
-content_margin_right = 10.0
-content_margin_bottom = 8.0
+content_margin_left = 20.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
 bg_color = Color(0.011764706, 0.03529412, 0.07450981, 0.96)
 border_width_left = 2
 border_width_top = 1
@@ -2009,46 +2009,46 @@ compact_mode = true
 [node name="SpectatorActionPanel" type="PanelContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack"]
 unique_name_in_owner = true
 visible = false
-custom_minimum_size = Vector2(0, 58)
+custom_minimum_size = Vector2(0, 72)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_spectator_card")
 
 [node name="SpectatorContent" type="HBoxContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/SpectatorActionPanel"]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 14
 alignment = 1
 
 [node name="SpectatorLiveIndicator" type="Label" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/SpectatorActionPanel/SpectatorContent"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 20
 text = "●"
 vertical_alignment = 1
 
 [node name="SpectatorViewDetails" type="VBoxContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/SpectatorActionPanel/SpectatorContent"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 0
+theme_override_constants/separation = 2
 alignment = 1
 
 [node name="SpectatorModeLabel" type="Label" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/SpectatorActionPanel/SpectatorContent/SpectatorViewDetails"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 12
 text = "SPECTATOR MODE"
 
 [node name="SpectatorPerspectiveLabel" type="Label" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/SpectatorActionPanel/SpectatorContent/SpectatorViewDetails"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.86, 0.92, 1, 1)
-theme_override_font_sizes/font_size = 15
-text = "Admin is shown on the left"
+theme_override_font_sizes/font_size = 17
+text = "Viewing from Admin's perspective"
 vertical_alignment = 1
 
 [node name="SpectatorSwitchSidesButton" type="Button" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/SpectatorActionPanel/SpectatorContent"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(142, 38)
+custom_minimum_size = Vector2(152, 42)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 15
@@ -2060,7 +2060,7 @@ text = "Switch View"
 
 [node name="SpectatorLeaveButton" type="Button" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/SpectatorActionPanel/SpectatorContent"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(128, 38)
+custom_minimum_size = Vector2(136, 42)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 15

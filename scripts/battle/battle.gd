@@ -5678,7 +5678,7 @@ func _remember_spectator_raw_response(response: Dictionary) -> void:
 func _update_spectator_perspective_label() -> void:
 	if not _is_spectator_battle():
 		return
-	spectator_perspective_label.text = "%s is shown on the left" % _get_player_display_name("p1")
+	spectator_perspective_label.text = "Viewing from %s's perspective" % _get_player_display_name("p1")
 
 
 func _swap_spectator_public_knowledge_sides() -> void:

@@ -88,6 +88,8 @@ func _check_scene_structure() -> void:
 	_check_contains(scene_source, "[node name=\"SpectatorActionPanel\" type=\"PanelContainer\" parent=\"HBoxContainer/CenterColumn/ActionsDock", "spectator controls replace the interactive party row with a styled dashboard")
 	_check_contains(scene_source, "[node name=\"SpectatorModeLabel\" type=\"Label\"", "spectator dashboard identifies the read-only viewing mode")
 	_check_contains(scene_source, "theme_override_styles/panel = SubResource(\"StyleBoxFlat_spectator_card\")", "spectator dashboard has a distinct card surface")
+	_check_contains(scene_source, "custom_minimum_size = Vector2(0, 72)", "spectator dashboard has comfortable vertical spacing")
+	_check_contains(scene_source, "text = \"Viewing from Admin's perspective\"", "spectator dashboard describes the selected player perspective")
 	_check_contains(scene_source, "[node name=\"SpectatorSwitchSidesButton\" type=\"Button\"", "spectator controls expose side switching")
 	_check_contains(scene_source, "[node name=\"SpectatorLeaveButton\" type=\"Button\"", "spectator controls expose a safe leave action")
 	var actions_dock_start := scene_source.find("[node name=\"ActionsDock\"")
