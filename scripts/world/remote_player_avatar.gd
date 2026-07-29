@@ -69,12 +69,36 @@ const ACTIVITY_LAYER_OFFSETS := {
 	},
 	"ride": {
 		"default": {
-			"hair": Vector2(0.0, 2.0),
-			"headgear": Vector2(0.0, 2.0),
-			"facial_hair": Vector2(0.0, 2.0),
-			"facegear": Vector2(0.0, 2.0),
-			"eyes": Vector2(0.0, 2.0),
-			"eyebrows": Vector2(0.0, 2.0),
+			"hair": Vector2(0.0, 4.0),
+			"headgear": Vector2(0.0, 4.0),
+			"facial_hair": Vector2(0.0, 4.0),
+			"facegear": Vector2(0.0, 4.0),
+			"eyes": Vector2(0.0, 4.0),
+			"eyebrows": Vector2(0.0, 4.0),
+		},
+		"down": {
+			"hair": Vector2(0.0, 4.0),
+			"headgear": Vector2(0.0, 4.0),
+			"facial_hair": Vector2(0.0, 4.0),
+			"facegear": Vector2(0.0, 4.0),
+			"eyes": Vector2(0.0, 6.0),
+			"eyebrows": Vector2(0.0, 5.0),
+		},
+		"left": {
+			"hair": Vector2(-4.0, 4.0),
+			"headgear": Vector2(-4.0, 4.0),
+			"facial_hair": Vector2(-4.0, 4.0),
+			"facegear": Vector2(-4.0, 4.0),
+			"eyes": Vector2(-4.0, 4.0),
+			"eyebrows": Vector2(-4.0, 4.0),
+		},
+		"right": {
+			"hair": Vector2(4.0, 4.0),
+			"headgear": Vector2(4.0, 4.0),
+			"facial_hair": Vector2(4.0, 4.0),
+			"facegear": Vector2(4.0, 4.0),
+			"eyes": Vector2(4.0, 4.0),
+			"eyebrows": Vector2(4.0, 4.0),
 		},
 	},
 }
@@ -97,6 +121,7 @@ const APPEARANCE_PART_SPRITES := {
 	"eyes": "EyesSprite",
 	"eyebrows": "EyebrowsSprite",
 }
+const RIDE_STATIC_PART_CATEGORIES := ["hair", "headgear", "facial_hair", "facegear", "eyes", "eyebrows"]
 
 var user_id := 0
 var username := ""
@@ -1121,6 +1146,9 @@ func _sync_sprite_to_body(sprite: AnimatedSprite2D) -> void:
 		return
 	if sprite.sprite_frames == null:
 		return
+	if _should_keep_activity_layer_idle(sprite):
+		_sync_activity_idle_layer(sprite, last_direction)
+		return
 
 	var animation_name: StringName = body_sprite.animation
 	if not sprite.sprite_frames.has_animation(animation_name):
@@ -1375,21 +1403,84 @@ func _get_appearance_signature(appearance_state: Dictionary) -> String:
 
 func _update_animation(is_moving: bool) -> void:
 	_apply_directional_appearance_layer_order()
-	var animation_name := _get_walk_animation_name(last_direction) if is_moving else _get_idle_animation_name(last_direction)
+	_sync_activity_layer_offsets()
+	var uses_static_pose := _uses_static_activity_movement_pose()
+	var should_animate_movement := is_moving and not uses_static_pose
+	var animation_name := _get_walk_animation_name(last_direction) \
+		if should_animate_movement \
+		else _get_idle_animation_name(last_direction)
 	for sprite in appearance_sprites:
 		if _is_unequipped_appearance_part_sprite(sprite):
 			sprite.visible = false
 			sprite.stop()
 			continue
+		if _should_keep_activity_layer_idle(sprite):
+			_sync_activity_idle_layer(sprite, last_direction)
+			continue
 		if sprite.sprite_frames == null or not sprite.sprite_frames.has_animation(animation_name):
 			continue
-		if sprite.animation != animation_name:
+		sprite.animation = animation_name
+		if should_animate_movement:
 			sprite.play(animation_name)
-		elif not is_moving:
+		else:
 			sprite.frame = 0
+			sprite.frame_progress = 0.0
 			sprite.stop()
 	_sync_all_part_sprites_to_body()
 	_apply_activity_visual_offset()
+
+
+func _uses_static_activity_movement_pose() -> bool:
+	return CharacterAppearanceService.normalize_movement_style(current_activity_style) \
+		== CharacterAppearanceService.BODY_MOVEMENT_RIDE
+
+
+func _sync_activity_idle_layer(sprite: AnimatedSprite2D, direction: Vector2) -> void:
+	if sprite == null:
+		return
+
+	var animation_name := _get_idle_animation_name(direction)
+	if sprite.sprite_frames == null or not sprite.sprite_frames.has_animation(animation_name):
+		animation_name = _get_walk_animation_name(direction)
+	if sprite.sprite_frames == null or not sprite.sprite_frames.has_animation(animation_name):
+		sprite.visible = false
+		sprite.stop()
+		return
+
+	sprite.visible = true
+	sprite.animation = animation_name
+	sprite.frame = 0
+	sprite.frame_progress = 0.0
+	sprite.stop()
+
+
+func _should_keep_activity_layer_idle(sprite: AnimatedSprite2D) -> bool:
+	if sprite == null or sprite == _get_body_sprite():
+		return false
+	if not _uses_static_activity_movement_pose():
+		return false
+
+	var category := _get_appearance_category_for_sprite(sprite)
+	return RIDE_STATIC_PART_CATEGORIES.has(category)
+
+
+func _get_appearance_category_for_sprite(sprite: AnimatedSprite2D) -> String:
+	if sprite == null:
+		return ""
+
+	var sprite_name := str(sprite.name)
+	for category_value: Variant in APPEARANCE_PART_SPRITES.keys():
+		var category := str(category_value)
+		if str(APPEARANCE_PART_SPRITES[category]) == sprite_name:
+			return category
+	return ""
+
+
+func _sync_activity_layer_offsets() -> void:
+	for category_value: Variant in APPEARANCE_PART_SPRITES.keys():
+		var category := str(category_value)
+		var sprite := _get_appearance_sprite(str(APPEARANCE_PART_SPRITES[category]))
+		_apply_activity_layer_offset(sprite, category)
 
 
 func _is_unequipped_appearance_part_sprite(sprite: AnimatedSprite2D) -> bool:

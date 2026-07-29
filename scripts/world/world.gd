@@ -1659,13 +1659,17 @@ func _get_current_player_position_signature(use_confirmed_appearance: bool = fal
 	var position: Vector2 = _get_current_player_persistent_position()
 	var follower_state := _get_current_follower_presence_state()
 	var appearance_state := _get_confirmed_appearance_state() if use_confirmed_appearance else _get_current_appearance_presence_state()
-	return "%s|%s|%0.1f|%0.1f|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s" % [
+	var activity_style := str(player.call("get_activity_style")) \
+		if player.has_method("get_activity_style") \
+		else CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
+	return "%s|%s|%0.1f|%0.1f|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s" % [
 		_get_map_id(current_map),
 		_get_map_scene_path(current_map),
 		roundf(position.x / POSITION_SAVE_EPSILON) * POSITION_SAVE_EPSILON,
 		roundf(position.y / POSITION_SAVE_EPSILON) * POSITION_SAVE_EPSILON,
 		PlayerSave.gender,
 		_direction_to_name(player.last_direction),
+		activity_style,
 		GameState.selected_role_badge,
 		str(follower_state.get("visible", false)),
 		str(follower_state.get("species", "")),
