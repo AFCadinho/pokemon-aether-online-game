@@ -366,7 +366,7 @@ const CATALOG: Array[Dictionary] = [
 	{
 		"id": "adinho-chroma-hair",
 		"name": "Adinho Chroma Hair",
-		"description": "Tradeable hair box with matching eyebrows, both using your selected hair colour.",
+		"description": "Tradeable hair box using your selected permanent hair colour.",
 		"price": 100,
 		"icon": STYLE_ICON,
 		"categories": ["cosmetics"],
@@ -374,7 +374,7 @@ const CATALOG: Array[Dictionary] = [
 		"appearance_slots": ["hair"],
 		"preview_part": {"slot": "hair", "appearance_id": "Adinho_Hair", "tint": "hair_color"},
 		"genders": ["male"],
-		"badge": "HAIR + BROWS",
+		"badge": "CHROMA",
 	},
 	{
 		"id": "adinho-chroma-beard",

@@ -241,7 +241,7 @@ func _run() -> void:
 	_check(store.product_buttons.has("adinho-chroma-hair"), "grayscale hair is sold separately")
 	store.call("_select_product", "adinho-chroma-hair")
 	var hair_preview: Dictionary = store.call("_current_character_preview_appearance")
-	_check(hair_preview.get("hair", "") == "Adinho_Hair", "separate hair product previews the hair with linked eyebrows")
+	_check(hair_preview.get("hair", "") == "Adinho_Hair", "separate hair product previews the selected hairstyle")
 	_check(
 		hair_preview.get("top", "") == "Shirt"
 			and hair_preview.get("bottom", "") == "Trousers"

@@ -41,16 +41,7 @@ const DEFAULT_FEMALE_EYEBROWS_ID := "Eyebrows"
 const EYEBROWS_BY_HAIR_ID := {
 	"male:Hair": DEFAULT_MALE_EYEBROWS_ID,
 	"female:Hair": DEFAULT_FEMALE_EYEBROWS_ID,
-	"male:Adinho_Hair": "Adinho_Eyebrows",
 }
-const SCALP_OCCLUSION_HAIR_IDS: Array[String] = [
-	"Aether_Male_Hair_01",
-	"Aether_Male_Hair_02",
-	"Aether_Male_Hair_03",
-	"Aether_Female_Hair_01",
-	"Aether_Female_Hair_02",
-]
-const SCALP_OCCLUSION_RECT := Rect2i(20, 8, 24, 20)
 const LEGACY_DEFAULT_HAIR_COLOR := "#ffffff"
 const LEGACY_DEFAULT_EYE_COLOR := "#0fff00"
 const DEFAULT_MALE_HAIR_COLOR := "#5a3728"
@@ -302,7 +293,6 @@ static func get_cosmetic_item_icon(item_id: String, gender: String = "male") -> 
 			]
 		"adinho-chroma-hair":
 			layers = [
-				{"category": EYEBROWS_CATEGORY, "id": "Adinho_Eyebrows", "tint": Color(DEFAULT_HAIR_COLOR), "preserve": true},
 				{"category": HAIR_CATEGORY, "id": "Adinho_Hair", "tint": Color(DEFAULT_HAIR_COLOR), "preserve": true},
 			]
 		"adinho-chroma-beard":
@@ -725,19 +715,6 @@ static func get_tinted_part_frames(
 		return null
 
 	var tinted_frames: SpriteFrames = _build_tinted_sprite_frames(base_frames, tint_color, preserve_luminance)
-	if (
-		normalized_category == HAIR_CATEGORY
-		and SCALP_OCCLUSION_HAIR_IDS.has(normalized_part_id)
-	):
-		var scalp_frames := get_tinted_part_frames(
-			HAIR_CATEGORY,
-			get_default_part_id(HAIR_CATEGORY, normalized_gender),
-			normalized_gender,
-			normalized_movement_style,
-			tint_color,
-			true
-		)
-		tinted_frames = _build_scalp_occluded_sprite_frames(scalp_frames, tinted_frames)
 	_tinted_part_frames_cache[cache_key] = tinted_frames
 	return tinted_frames
 
@@ -1182,65 +1159,6 @@ static func _build_tinted_sprite_frames(base_frames: SpriteFrames, tint_color: C
 			var tinted_texture: Texture2D = _make_tinted_texture(frame_texture, tint_color, preserve_luminance)
 			sprite_frames.add_frame(animation_name, tinted_texture, frame_duration)
 
-	return sprite_frames
-
-
-static func _build_scalp_occluded_sprite_frames(
-	scalp_frames: SpriteFrames,
-	hairstyle_frames: SpriteFrames
-) -> SpriteFrames:
-	if scalp_frames == null or hairstyle_frames == null:
-		return hairstyle_frames
-	var sprite_frames := SpriteFrames.new()
-	if sprite_frames.has_animation(&"default"):
-		sprite_frames.remove_animation(&"default")
-
-	for animation_name_text: String in hairstyle_frames.get_animation_names():
-		var animation_name := StringName(animation_name_text)
-		sprite_frames.add_animation(animation_name)
-		sprite_frames.set_animation_speed(
-			animation_name,
-			hairstyle_frames.get_animation_speed(animation_name)
-		)
-		sprite_frames.set_animation_loop(
-			animation_name,
-			hairstyle_frames.get_animation_loop(animation_name)
-		)
-		var frame_count := hairstyle_frames.get_frame_count(animation_name)
-		for frame_index: int in range(frame_count):
-			var hairstyle_texture := hairstyle_frames.get_frame_texture(
-				animation_name,
-				frame_index
-			)
-			var hairstyle_image := _get_texture_image(hairstyle_texture)
-			var scalp_texture := scalp_frames.get_frame_texture(
-				animation_name,
-				mini(frame_index, scalp_frames.get_frame_count(animation_name) - 1)
-			)
-			var scalp_image := _get_texture_image(scalp_texture)
-			if hairstyle_image == null or scalp_image == null:
-				sprite_frames.add_frame(
-					animation_name,
-					hairstyle_texture,
-					hairstyle_frames.get_frame_duration(animation_name, frame_index)
-				)
-				continue
-			var composited_image := hairstyle_image.duplicate()
-			var cover_rect := SCALP_OCCLUSION_RECT.intersection(
-				Rect2i(Vector2i.ZERO, composited_image.get_size())
-			)
-			for y: int in range(cover_rect.position.y, cover_rect.end.y):
-				for x: int in range(cover_rect.position.x, cover_rect.end.x):
-					if composited_image.get_pixel(x, y).a > 0.001:
-						continue
-					var scalp_pixel := scalp_image.get_pixel(x, y)
-					if scalp_pixel.a > 0.001:
-						composited_image.set_pixel(x, y, scalp_pixel)
-			sprite_frames.add_frame(
-				animation_name,
-				ImageTexture.create_from_image(composited_image),
-				hairstyle_frames.get_frame_duration(animation_name, frame_index)
-			)
 	return sprite_frames
 
 

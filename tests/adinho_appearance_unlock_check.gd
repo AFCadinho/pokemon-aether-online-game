@@ -25,7 +25,7 @@ func _run() -> void:
 	_check(APPEARANCE.is_tintable_part("bottom", "Adinho_Trousers_Chroma"), "Chroma trousers support colour")
 	_check(APPEARANCE.get_available_part_ids("shoes", "male").has("Adinho_Shoes_Chroma"), "separate Chroma shoes asset is imported")
 	_check(APPEARANCE.is_tintable_part("shoes", "Adinho_Shoes_Chroma"), "Chroma shoes support colour")
-	_check(APPEARANCE.get_eyebrows_for_hair("Adinho_Hair", "male") == "Adinho_Eyebrows", "Adinho hair selects matching eyebrows")
+	_check(APPEARANCE.get_eyebrows_for_hair("Adinho_Hair", "male") == "", "Adinho hair does not add the obsolete brow overlay")
 	_check(APPEARANCE.get_eyebrows_for_hair("Hair", "male") == "Eyebrows", "starter hair selects matching starter eyebrows")
 	_check(APPEARANCE.get_eyebrows_for_hair("Unknown_Hair", "male") == "", "unmapped hair does not receive starter eyebrows")
 	quit(1 if failed else 0)
