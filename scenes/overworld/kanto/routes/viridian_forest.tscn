@@ -476,6 +476,7 @@ tile_map_data = PackedByteArray("AAA4ACQAAAADAAIAAAA4ACUAAAADAAIAAAA4ACYAAAADAAI
 tile_set = SubResource("TileSet_2hhau")
 
 [node name="SandTiles" type="Node2D" parent="." unique_id=1647808265]
+visible = false
 
 [node name="Sand" type="TileMapLayer" parent="SandTiles" unique_id=759397556]
 z_index = 100
