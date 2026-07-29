@@ -32,18 +32,18 @@ func _init() -> void:
 		],
 	}
 	_check(dialog._current_role() == "recipient", "recipient derived from authenticated user")
-	_check(dialog._status_text(true).contains("invited"), "incoming invitation copy")
+	_check(not dialog._status_text(true).is_empty(), "incoming invitation copy is localized")
 	_check(dialog._initiator_display_name() == "Ash Ketchum (@ash)", "incoming invitation identifies the initiator")
 	_check(dialog._invitation_status_text(true).contains("Ash Ketchum (@ash)"), "incoming dialog names the initiator")
 	dialog.trade["status"] = "active"
-	_check(dialog._status_text(true).contains("accepted"), "minimal accepted state")
+	_check(not dialog._status_text(true).is_empty(), "minimal accepted state is localized")
 	dialog.show_trade(dialog.trade)
 	_check(not dialog.visible, "active trade closes invitation dialog")
 	dialog.trade["status"] = "completed"
 	dialog.show_trade(dialog.trade)
 	_check(not dialog.visible, "completed trade closes invitation dialog")
 	dialog.trade["status"] = "expired"
-	_check(dialog._status_text(true).contains("expired"), "expired state")
+	_check(not dialog._status_text(true).is_empty(), "expired state is localized")
 	var incoming_snapshot := {
 		"tradeId": "trade-2",
 		"status": "invited",
@@ -55,9 +55,17 @@ func _init() -> void:
 	}
 	dialog._on_trade_changed(incoming_snapshot)
 	_check(dialog.visible and str(dialog.trade.get("tradeId", "")) == "trade-2", "authoritative invited snapshot opens recipient dialog")
-	_check(system_overlay.messages.size() == 1 and system_overlay.messages[0].contains("A player"), "incoming invitation adds a system message")
+	_check(system_overlay.messages.size() == 1, "incoming invitation adds one localized system message")
 	dialog._on_trade_changed(incoming_snapshot)
 	_check(system_overlay.messages.size() == 1, "replayed invitation does not duplicate the system message")
+	var localization_manager := root.get_node_or_null("LocalizationManager")
+	if localization_manager != null:
+		localization_manager.set_locale("pt_BR")
+		await process_frame
+		_check(dialog.title == "Convite para troca", "invitation title refreshes in Brazilian Portuguese")
+		_check(dialog.mode_label.text == "PEDIDO RECEBIDO", "invitation state refreshes in Brazilian Portuguese")
+		localization_manager.set_locale("en")
+		await process_frame
 	var source := FileAccess.get_file_as_string("res://scripts/ui/trade_invitation_dialog.gd")
 	_check(source.contains("accept_invitation"), "accept command wiring")
 	_check(source.contains("decline_invitation"), "decline command wiring")

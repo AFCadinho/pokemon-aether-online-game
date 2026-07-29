@@ -70,13 +70,18 @@ const VIEWPORT_MARGIN := Vector2i(20, 20)
 
 func _ready() -> void:
 	hide()
-	title = "Player Trade"
+	title = _t("ui.trade.title")
 	min_size = MINIMUM_WINDOW_SIZE
 	size = trade_window_size_for_viewport(get_tree().root.size)
 	unresizable = true
 	borderless = true
 	_build_ui()
 	close_requested.connect(_on_close_requested)
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	if localization_manager != null:
+		var locale_callable := Callable(self, "_on_locale_changed")
+		if not localization_manager.is_connected("locale_changed", locale_callable):
+			localization_manager.connect("locale_changed", locale_callable)
 	var realtime := get_node_or_null("/root/TradeRealtimeService")
 	if realtime != null:
 		realtime.active_trade_changed.connect(_on_trade_changed)
@@ -137,7 +142,7 @@ func _build_ui() -> void:
 	header.add_child(title_stack)
 
 	var heading := Label.new()
-	heading.text = "Player Trade"
+	_set_localized_property(heading, "text", "ui.trade.title")
 	heading.mouse_filter = Control.MOUSE_FILTER_STOP
 	heading.gui_input.connect(_on_window_header_gui_input)
 	heading.add_theme_color_override("font_color", TRADE_TEXT)
@@ -145,7 +150,7 @@ func _build_ui() -> void:
 	title_stack.add_child(heading)
 
 	var subtitle := Label.new()
-	subtitle.text = "Build both offers, lock them, then confirm the exact exchange"
+	_set_localized_property(subtitle, "text", "ui.trade.subtitle")
 	subtitle.mouse_filter = Control.MOUSE_FILTER_STOP
 	subtitle.gui_input.connect(_on_window_header_gui_input)
 	subtitle.add_theme_color_override("font_color", TRADE_MUTED)
@@ -159,7 +164,7 @@ func _build_ui() -> void:
 	header.add_child(phase_chip)
 
 	phase_label = Label.new()
-	phase_label.text = "OFFER SETUP"
+	phase_label.text = _t("ui.trade.phase.setup")
 	phase_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	phase_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	phase_label.add_theme_color_override("font_color", TRADE_ACCENT)
@@ -168,7 +173,7 @@ func _build_ui() -> void:
 
 	var close_button := Button.new()
 	close_button.text = "×"
-	close_button.tooltip_text = "Close trade"
+	_set_localized_property(close_button, "tooltip_text", "ui.trade.close")
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	close_button.custom_minimum_size = Vector2(38, 34)
@@ -241,14 +246,14 @@ func _build_ui() -> void:
 	action_margin.add_child(actions)
 
 	add_items_button = Button.new()
-	add_items_button.text = "+  Add Items"
+	_set_localized_property(add_items_button, "text", "ui.trade.add_items")
 	add_items_button.focus_mode = Control.FOCUS_NONE
 	add_items_button.pressed.connect(_open_item_selector)
 	_apply_button_style(add_items_button, "secondary")
 	actions.add_child(add_items_button)
 
 	var action_hint := Label.new()
-	action_hint.text = "Drag Pokémon from your party into an open slot"
+	_set_localized_property(action_hint, "text", "ui.trade.drag_hint")
 	action_hint.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	action_hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	action_hint.add_theme_color_override("font_color", TRADE_MUTED)
@@ -260,7 +265,7 @@ func _build_ui() -> void:
 	actions.add_child(action_spacer)
 
 	ready_button = Button.new()
-	ready_button.text = "Ready Offer"
+	_set_localized_property(ready_button, "text", "ui.trade.ready")
 	ready_button.custom_minimum_size = Vector2(128, 34)
 	ready_button.focus_mode = Control.FOCUS_NONE
 	ready_button.pressed.connect(_set_ready.bind(true))
@@ -268,7 +273,7 @@ func _build_ui() -> void:
 	actions.add_child(ready_button)
 
 	edit_button = Button.new()
-	edit_button.text = "Edit Offer"
+	_set_localized_property(edit_button, "text", "ui.trade.edit")
 	edit_button.custom_minimum_size = Vector2(118, 34)
 	edit_button.focus_mode = Control.FOCUS_NONE
 	edit_button.pressed.connect(_set_ready.bind(false))
@@ -304,7 +309,7 @@ func _build_ui() -> void:
 	review_banner_row.add_child(locked_mark)
 
 	review_trust_label = Label.new()
-	review_trust_label.text = "Offers locked · Review both sides before confirming"
+	review_trust_label.text = _t("ui.trade.review.locked")
 	review_trust_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	review_trust_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	review_trust_label.add_theme_color_override("font_color", TRADE_READY)
@@ -315,8 +320,8 @@ func _build_ui() -> void:
 	review_columns.add_theme_constant_override("separation", 14)
 	review_columns.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	review_root.add_child(review_columns)
-	review_give_list = _section(review_columns, "YOU GIVE")
-	review_receive_list = _section(review_columns, "YOU RECEIVE")
+	review_give_list = _section(review_columns, _t("ui.trade.review.give"))
+	review_receive_list = _section(review_columns, _t("ui.trade.review.receive"))
 
 	var confirmation_panel := PanelContainer.new()
 	confirmation_panel.name = "ConfirmationBar"
@@ -342,7 +347,7 @@ func _build_ui() -> void:
 	confirmation_row.add_child(confirmation_label)
 
 	confirm_button = Button.new()
-	confirm_button.text = "Confirm Trade"
+	_set_localized_property(confirm_button, "text", "ui.trade.confirm")
 	confirm_button.custom_minimum_size = Vector2(148, 36)
 	confirm_button.focus_mode = Control.FOCUS_NONE
 	confirm_button.pressed.connect(_confirm_trade)
@@ -455,13 +460,19 @@ func _offer_section(parent: Control, label_text: String, slots: Array[Control]) 
 	header.add_child(identity_stack)
 
 	var side_caption := Label.new()
-	side_caption.text = "YOUR OFFER" if label_text == "Your Offer" else "THEIR OFFER"
+	side_caption.text = _t(
+		"ui.trade.offer.yours" if label_text == "Your Offer" else "ui.trade.offer.theirs"
+	)
 	side_caption.add_theme_font_size_override("font_size", 9)
 	side_caption.add_theme_color_override("font_color", TRADE_ACCENT if label_text == "Your Offer" else TRADE_MUTED)
 	identity_stack.add_child(side_caption)
 
 	var participant_label := Label.new()
-	participant_label.text = "You" if label_text == "Your Offer" else "Other Trainer"
+	participant_label.text = _t(
+		"ui.trade.participant.you"
+		if label_text == "Your Offer"
+		else "ui.trade.participant.other_trainer"
+	)
 	participant_label.add_theme_font_size_override("font_size", 16)
 	participant_label.add_theme_color_override("font_color", TRADE_TEXT)
 	identity_stack.add_child(participant_label)
@@ -471,7 +482,7 @@ func _offer_section(parent: Control, label_text: String, slots: Array[Control]) 
 		opponent_offer_title_label = participant_label
 
 	var ready_indicator := Label.new()
-	ready_indicator.text = "●  READY"
+	_set_localized_property(ready_indicator, "text", "ui.trade.ready_indicator")
 	ready_indicator.visible = false
 	ready_indicator.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	ready_indicator.add_theme_color_override("font_color", TRADE_READY)
@@ -500,7 +511,11 @@ func _offer_section(parent: Control, label_text: String, slots: Array[Control]) 
 	margin.add_child(content)
 
 	var pokemon_caption := Label.new()
-	pokemon_caption.text = "POKÉMON  ·  DRAG FROM YOUR PARTY" if label_text == "Your Offer" else "POKÉMON"
+	pokemon_caption.text = _t(
+		"ui.trade.offer.pokemon_drag"
+		if label_text == "Your Offer"
+		else "ui.trade.offer.pokemon"
+	)
 	pokemon_caption.add_theme_font_size_override("font_size", 9)
 	pokemon_caption.add_theme_color_override("font_color", TRADE_MUTED)
 	content.add_child(pokemon_caption)
@@ -519,14 +534,18 @@ func _offer_section(parent: Control, label_text: String, slots: Array[Control]) 
 	content.add_child(item_heading)
 
 	var item_caption := Label.new()
-	item_caption.text = "ITEMS"
+	_set_localized_property(item_caption, "text", "ui.trade.offer.items")
 	item_caption.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	item_caption.add_theme_font_size_override("font_size", 9)
 	item_caption.add_theme_color_override("font_color", TRADE_MUTED)
 	item_heading.add_child(item_caption)
 
 	var item_hint := Label.new()
-	item_hint.text = "Added from inventory" if label_text == "Your Offer" else "Offered by trainer"
+	item_hint.text = _t(
+		"ui.trade.offer.items_yours"
+		if label_text == "Your Offer"
+		else "ui.trade.offer.items_theirs"
+	)
 	item_hint.add_theme_font_size_override("font_size", 9)
 	item_hint.add_theme_color_override("font_color", Color(TRADE_MUTED.r, TRADE_MUTED.g, TRADE_MUTED.b, 0.62))
 	item_heading.add_child(item_hint)
@@ -567,7 +586,7 @@ func _offer_section(parent: Control, label_text: String, slots: Array[Control]) 
 	money_content.add_child(money_header)
 
 	var money_title := Label.new()
-	money_title.text = "MONEY OFFER"
+	_set_localized_property(money_title, "text", "ui.trade.offer.money")
 	money_title.add_theme_color_override("font_color", TRADE_MUTED)
 	money_title.add_theme_font_size_override("font_size", 9)
 	money_header.add_child(money_title)
@@ -582,8 +601,12 @@ func _offer_section(parent: Control, label_text: String, slots: Array[Control]) 
 	if label_text == "Your Offer":
 		local_money_offer_label = money_offer_label
 		money_balance_label = Label.new()
-		money_balance_label.text = "Available $0"
-		money_balance_label.tooltip_text = "Current wallet balance"
+		money_balance_label.text = _t("ui.trade.money.available", {"amount": "0"})
+		_set_localized_property(
+			money_balance_label,
+			"tooltip_text",
+			"ui.trade.money.balance_tooltip"
+		)
 		money_balance_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 		money_balance_label.add_theme_color_override("font_color", TRADE_MUTED)
 		money_balance_label.add_theme_font_size_override("font_size", 9)
@@ -612,16 +635,20 @@ func _offer_section(parent: Control, label_text: String, slots: Array[Control]) 
 		money_controls.add_child(money_amount_spinbox)
 
 		update_money_button = Button.new()
-		update_money_button.text = "Update"
+		_set_localized_property(update_money_button, "text", "ui.trade.money.update")
 		update_money_button.focus_mode = Control.FOCUS_NONE
-		update_money_button.tooltip_text = "Update money offer"
+		_set_localized_property(
+			update_money_button,
+			"tooltip_text",
+			"ui.trade.money.update_tooltip"
+		)
 		update_money_button.pressed.connect(_update_money_offer)
 		_apply_button_style(update_money_button, "secondary")
 		money_controls.add_child(update_money_button)
 	else:
 		opponent_money_offer_label = money_offer_label
 		var opponent_hint := Label.new()
-		opponent_hint.text = "Offered by this player"
+		_set_localized_property(opponent_hint, "text", "ui.trade.money.opponent")
 		opponent_hint.add_theme_color_override("font_color", TRADE_MUTED)
 		opponent_hint.add_theme_font_size_override("font_size", 10)
 		money_content.add_child(opponent_hint)
@@ -675,13 +702,13 @@ func _build_item_selector() -> void:
 	header.add_child(title_stack)
 
 	var heading := Label.new()
-	heading.text = "Add Items to Offer"
+	_set_localized_property(heading, "text", "ui.trade.items.title")
 	heading.add_theme_font_size_override("font_size", 19)
 	heading.add_theme_color_override("font_color", TRADE_TEXT)
 	title_stack.add_child(heading)
 
 	var help := Label.new()
-	help.text = "Select tradable stacks and choose how many to offer"
+	_set_localized_property(help, "text", "ui.trade.items.subtitle")
 	help.add_theme_font_size_override("font_size", 10)
 	help.add_theme_color_override("font_color", TRADE_MUTED)
 	title_stack.add_child(help)
@@ -690,13 +717,17 @@ func _build_item_selector() -> void:
 	close_button.text = "×"
 	close_button.custom_minimum_size = Vector2(36, 34)
 	close_button.focus_mode = Control.FOCUS_NONE
-	close_button.tooltip_text = "Close item selection"
+	_set_localized_property(close_button, "tooltip_text", "ui.trade.items.close")
 	close_button.pressed.connect(item_selector_popup.hide)
 	_apply_button_style(close_button, "secondary")
 	header.add_child(close_button)
 
 	item_selector_search = LineEdit.new()
-	item_selector_search.placeholder_text = "Search tradable items by name or category"
+	_set_localized_property(
+		item_selector_search,
+		"placeholder_text",
+		"ui.trade.items.search"
+	)
 	item_selector_search.custom_minimum_size = Vector2(0, 38)
 	item_selector_search.clear_button_enabled = true
 	item_selector_search.add_theme_color_override("font_color", TRADE_TEXT)
@@ -729,7 +760,7 @@ func _build_item_selector() -> void:
 	scroll.add_child(item_selector_list)
 
 	item_selector_empty_label = Label.new()
-	item_selector_empty_label.text = "No matching tradable items"
+	item_selector_empty_label.text = _t("ui.trade.items.no_matches")
 	item_selector_empty_label.custom_minimum_size = Vector2(0, 70)
 	item_selector_empty_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	item_selector_empty_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -754,7 +785,7 @@ func _build_item_selector() -> void:
 	action_margin.add_child(actions)
 
 	var selection_hint := Label.new()
-	selection_hint.text = "Your offer updates after you apply this selection"
+	_set_localized_property(selection_hint, "text", "ui.trade.items.apply_hint")
 	selection_hint.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	selection_hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	selection_hint.add_theme_color_override("font_color", TRADE_MUTED)
@@ -762,14 +793,14 @@ func _build_item_selector() -> void:
 	actions.add_child(selection_hint)
 
 	var cancel := Button.new()
-	cancel.text = "Cancel"
+	_set_localized_property(cancel, "text", "common.cancel")
 	cancel.focus_mode = Control.FOCUS_NONE
 	cancel.pressed.connect(item_selector_popup.hide)
 	_apply_button_style(cancel, "secondary")
 	actions.add_child(cancel)
 
 	var apply := Button.new()
-	apply.text = "Update Offer"
+	_set_localized_property(apply, "text", "ui.trade.items.update_offer")
 	apply.custom_minimum_size = Vector2(130, 34)
 	apply.focus_mode = Control.FOCUS_NONE
 	apply.pressed.connect(_apply_item_selection)
@@ -818,7 +849,7 @@ func _render_empty_offer_slot(slot: Control, slot_index: int, accepts_drop: bool
 	stack.add_child(plus)
 
 	var hint := Label.new()
-	hint.text = "DROP" if accepts_drop else "EMPTY"
+	hint.text = _t("ui.trade.slot.drop" if accepts_drop else "ui.trade.slot.empty")
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint.add_theme_font_size_override("font_size", 8)
 	hint.add_theme_color_override("font_color", Color(TRADE_MUTED.r, TRADE_MUTED.g, TRADE_MUTED.b, 0.48))
@@ -931,11 +962,11 @@ func _on_trade_changed(value: Dictionary) -> void:
 	)
 	if status == "cancelled":
 		trade = value.duplicate(true)
-		phase_label.text = "CANCELLED"
+		phase_label.text = _t("ui.trade.phase.cancelled")
 		editable_root.visible = false
 		review_root.visible = false
 		if str(trade.get("cancellationReason", "")) == "reconnect_timeout":
-			_set_status("Trade cancelled because reconnect time expired.")
+			_set_status(_t("ui.trade.status.reconnect_expired"))
 			popup_centered()
 		else:
 			hide()
@@ -965,20 +996,20 @@ func _on_trade_changed(value: Dictionary) -> void:
 func refresh_available_pokemon() -> void:
 	var party_service := get_node_or_null("/root/PlayerPartyStateService")
 	if party_service == null:
-		_show_error("Your party is unavailable.")
+		_show_error(_t("ui.trade.error.party_unavailable"))
 		return
 	var party_result: Dictionary = await party_service.load_party()
 	if not bool(party_result.get("success", false)):
-		_show_error("Could not refresh your party.")
+		_show_error(_t("ui.trade.error.party_refresh"))
 		return
 	candidates = collect_candidates(party_result.get("party", []))
 	var inventory_service := get_node_or_null("/root/InventoryService")
 	if inventory_service == null:
-		_show_error("Your inventory is unavailable.")
+		_show_error(_t("ui.trade.error.inventory_unavailable"))
 		return
 	var inventory_result: Dictionary = await inventory_service.load_inventory()
 	if not bool(inventory_result.get("success", false)):
-		_show_error("Could not refresh your inventory.")
+		_show_error(_t("ui.trade.error.inventory_refresh"))
 		return
 	inventory_items = normalize_inventory_candidates(inventory_result.get("items", []))
 
@@ -1041,7 +1072,7 @@ func _replace_offer(pokemon_ids: Array[int], item_offers: Array[Dictionary] = []
 	var result: Dictionary
 	var trade_id := str(trade.get("tradeId", ""))
 	if service == null:
-		result = {"success":false, "error":"Trade service unavailable."}
+		result = {"success":false, "error":_t("ui.trade.error.service_unavailable")}
 	else:
 		result = await service.replace_offer(trade_id, int(trade.get("revision", 0)), pokemon_ids, "", item_offers, resolved_money)
 		if _is_stale_revision_error(result):
@@ -1064,13 +1095,13 @@ func _retry_offer_after_stale_revision(service: Node, trade_id: String, pokemon_
 		return refresh
 	var latest: Dictionary = refresh.get("trade", {}).duplicate(true)
 	if str(latest.get("tradeId", "")) != trade_id or str(latest.get("status", "")) != "active":
-		return {"success":false, "error":"The trade is no longer editable."}
+		return {"success":false, "error":_t("ui.trade.error.not_editable")}
 	trade = latest
 	var realtime := get_node_or_null("/root/TradeRealtimeService")
 	if realtime != null:
 		realtime.apply_snapshot(latest)
 	if _local_participant_ready() or _connection_state_unresolved():
-		return {"success":false, "error":"The trade changed and is not ready for offer updates."}
+		return {"success":false, "error":_t("ui.trade.error.not_ready_for_update")}
 	return await service.replace_offer(trade_id, int(latest.get("revision", 0)), pokemon_ids, "", item_offers, money_offer)
 
 
@@ -1091,7 +1122,7 @@ func _set_ready(ready: bool) -> void:
 	var service := get_node_or_null("/root/TradeService")
 	var result: Dictionary
 	if service == null:
-		result = {"success":false, "error":"Trade service unavailable."}
+		result = {"success":false, "error":_t("ui.trade.error.service_unavailable")}
 	else:
 		result = await service.set_readiness(str(trade.get("tradeId", "")), int(trade.get("revision", 0)), ready)
 	mutation_in_flight = false
@@ -1151,9 +1182,9 @@ func _render_offers() -> void:
 		var money_label := local_money_offer_label if is_local else opponent_money_offer_label
 		money_label.text = "$%s" % format_money(money)
 	if local_item_offer_list.get_child_count() == 0:
-		_render_empty_item_offer(local_item_offer_list, "No items added")
+		_render_empty_item_offer(local_item_offer_list, _t("ui.trade.offer.no_items_added"))
 	if opponent_item_offer_list.get_child_count() == 0:
-		_render_empty_item_offer(opponent_item_offer_list, "No items offered")
+		_render_empty_item_offer(opponent_item_offer_list, _t("ui.trade.offer.no_items_offered"))
 
 
 func _render_item_offer(target: VBoxContainer, item: Dictionary, is_local: bool, position: int) -> void:
@@ -1181,7 +1212,10 @@ func _render_item_offer(target: VBoxContainer, item: Dictionary, is_local: bool,
 	row.add_child(item_mark)
 
 	var name_label := Label.new()
-	name_label.text = "%dx %s" % [int(item.get("quantity", 0)), str(item.get("name", item.get("itemId", "Item")))]
+	name_label.text = _t("ui.trade.item.quantity_name", {
+		"quantity": int(item.get("quantity", 0)),
+		"name": _item_display_name(item),
+	})
 	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	name_label.add_theme_color_override("font_color", TRADE_TEXT)
@@ -1197,7 +1231,7 @@ func _render_item_offer(target: VBoxContainer, item: Dictionary, is_local: bool,
 	if is_local and _local_offer_asset_count() > 1 and not _local_participant_ready() and not mutation_in_flight:
 		var remove := Button.new()
 		remove.text = "×"
-		remove.tooltip_text = "Remove this item from your offer"
+		_set_localized_property(remove, "tooltip_text", "ui.trade.item.remove")
 		remove.focus_mode = Control.FOCUS_NONE
 		remove.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		remove.custom_minimum_size = Vector2(24, 24)
@@ -1224,11 +1258,11 @@ func _open_item_selector() -> void:
 		return
 	var inventory_service := get_node_or_null("/root/InventoryService")
 	if inventory_service == null:
-		_show_error("Your inventory is unavailable.")
+		_show_error(_t("ui.trade.error.inventory_unavailable"))
 		return
 	var result: Dictionary = await inventory_service.load_inventory()
 	if not bool(result.get("success", false)):
-		_show_error("Could not refresh your inventory.")
+		_show_error(_t("ui.trade.error.inventory_refresh"))
 		return
 	inventory_items = normalize_inventory_candidates(result.get("items", []))
 	item_selector_search.text = ""
@@ -1252,7 +1286,9 @@ func refresh_available_money() -> void:
 		if not money_draft_dirty:
 			_set_money_input_value(mini(selected_money, int(money_amount_spinbox.max_value)))
 	if money_balance_label != null:
-		money_balance_label.text = "Available $%s" % format_money(balance)
+		money_balance_label.text = _t("ui.trade.money.available", {
+			"amount": format_money(balance),
+		})
 
 
 func _update_money_offer() -> void:
@@ -1260,7 +1296,7 @@ func _update_money_offer() -> void:
 		return
 	var amount := maxi(int(money_amount_spinbox.value), 0)
 	if amount == 0 and selected_ids.is_empty() and selected_item_offers.is_empty():
-		_show_error("Offer at least one Pokemon, item, or money.")
+		_show_error(_t("ui.trade.error.offer_assets"))
 		return
 	_replace_offer(selected_ids.duplicate(), selected_item_offers.duplicate(true), amount)
 
@@ -1280,7 +1316,7 @@ func _rebuild_item_selector_rows() -> void:
 	_clear(item_selector_list)
 	item_selector_rows.clear()
 	item_selector_empty_label = Label.new()
-	item_selector_empty_label.text = "No matching tradable items"
+	item_selector_empty_label.text = _t("ui.trade.items.no_matches")
 	item_selector_empty_label.custom_minimum_size = Vector2(0, 70)
 	item_selector_empty_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	item_selector_empty_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -1292,7 +1328,7 @@ func _rebuild_item_selector_rows() -> void:
 		selected_by_id[str(selected.get("itemId", ""))] = int(selected.get("quantity", 1))
 	if inventory_items.is_empty():
 		var empty := Label.new()
-		empty.text = "No tradable inventory items are available"
+		empty.text = _t("ui.trade.items.none_available")
 		empty.custom_minimum_size = Vector2(0, 70)
 		empty.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		empty.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -1328,22 +1364,22 @@ func _rebuild_item_selector_rows() -> void:
 		row.add_child(identity)
 
 		var label := Label.new()
-		label.text = str(item.get("name", item_id))
+		label.text = _item_display_name(item)
 		label.add_theme_color_override("font_color", TRADE_TEXT)
 		label.add_theme_font_size_override("font_size", 12)
 		identity.add_child(label)
 
 		var item_meta := Label.new()
-		item_meta.text = "%s  ·  %d owned" % [
-			str(item.get("category", "item")).replace("-", " ").capitalize(),
-			int(item.get("quantity", 0)),
-		]
+		item_meta.text = _t("ui.trade.items.owned", {
+			"category": str(item.get("category", "item")).replace("-", " ").capitalize(),
+			"count": int(item.get("quantity", 0)),
+		})
 		item_meta.add_theme_color_override("font_color", TRADE_MUTED)
 		item_meta.add_theme_font_size_override("font_size", 9)
 		identity.add_child(item_meta)
 
 		var quantity_caption := Label.new()
-		quantity_caption.text = "QTY"
+		_set_localized_property(quantity_caption, "text", "ui.trade.items.quantity")
 		quantity_caption.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		quantity_caption.add_theme_color_override("font_color", TRADE_MUTED)
 		quantity_caption.add_theme_font_size_override("font_size", 9)
@@ -1356,7 +1392,16 @@ func _rebuild_item_selector_rows() -> void:
 		quantity.value = clampi(int(selected_by_id.get(item_id, 1)), 1, int(quantity.max_value))
 		quantity.custom_minimum_size.x = 90
 		row.add_child(quantity)
-		item_selector_rows[item_id] = {"enabled":enabled, "quantity":quantity, "row":row_panel, "searchText":("%s %s %s" % [item.get("name", ""), item_id, item.get("category", "")]).to_lower()}
+		item_selector_rows[item_id] = {
+			"enabled": enabled,
+			"quantity": quantity,
+			"row": row_panel,
+			"searchText": ("%s %s %s" % [
+				_item_display_name(item),
+				item_id,
+				item.get("category", ""),
+			]).to_lower(),
+		}
 	_filter_item_selector_rows(item_selector_search.text)
 
 
@@ -1418,7 +1463,7 @@ func _apply_item_selection() -> void:
 		if enabled != null and enabled.button_pressed and quantity != null:
 			replacement.append({"itemId":item_id, "quantity":int(quantity.value)})
 	if replacement.is_empty() and selected_ids.is_empty():
-		_show_error("Offer at least one Pokemon or item.")
+		_show_error(_t("ui.trade.error.offer_required"))
 		return
 	item_selector_popup.hide()
 	_replace_offer(selected_ids.duplicate(), replacement)
@@ -1485,7 +1530,9 @@ func _render_offer_slot(slot: Control, pokemon: Dictionary, is_local: bool, posi
 	icon_button.add_theme_stylebox_override("normal", _panel_style(Color("#00000000"), Color("#00000000"), 4, 0))
 	icon_button.add_theme_stylebox_override("hover", _panel_style(Color("#62d7ff12"), TRADE_ACCENT, 4, 1))
 	icon_button.add_theme_stylebox_override("pressed", _panel_style(Color("#62d7ff20"), TRADE_ACCENT, 4, 1))
-	icon_button.tooltip_text = "%s\nOpen Pokémon summary" % _pokemon_label(pokemon)
+	icon_button.tooltip_text = _t("ui.trade.pokemon.open_summary", {
+		"pokemon": _pokemon_label(pokemon),
+	})
 	icon_button.pressed.connect(_open_offer_summary.bind(pokemon, is_local))
 	content.add_child(icon_button)
 	var level_label := Label.new()
@@ -1497,7 +1544,7 @@ func _render_offer_slot(slot: Control, pokemon: Dictionary, is_local: bool, posi
 	if is_local and _local_offer_asset_count() > 1 and not _local_participant_ready() and not mutation_in_flight:
 		var remove_button := Button.new()
 		remove_button.text = "×"
-		remove_button.tooltip_text = "Remove from offer"
+		_set_localized_property(remove_button, "tooltip_text", "ui.trade.pokemon.remove")
 		remove_button.focus_mode = Control.FOCUS_NONE
 		remove_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		remove_button.custom_minimum_size = Vector2(22, 22)
@@ -1542,18 +1589,18 @@ func try_offer_party_drop(global_position: Vector2, party_slot: int) -> bool:
 	if party_slot < 0 or party_slot >= 6 or mutation_in_flight or _local_participant_ready() or _connection_state_unresolved() or str(trade.get("status", "")) != "active":
 		return true
 	if candidates.size() <= 1:
-		_show_error("At least one Pokemon must remain in your party.")
+		_show_error(_t("ui.trade.error.party_last"))
 		return true
 	var candidate := _candidate_by_party_slot(party_slot)
 	if candidate.is_empty():
-		_show_error("That party Pokemon is unavailable. Refresh your party.")
+		_show_error(_t("ui.trade.error.pokemon_unavailable"))
 		return true
 	var pokemon_id := int(candidate.get("pokemonId", 0))
 	var target_position := _offer_slot_at_position(workspace_position)
 	var replacement := build_drop_replacement(selected_ids, pokemon_id, target_position, _offer_limit())
 	if replacement == selected_ids:
 		if pokemon_id not in selected_ids and selected_ids.size() >= _offer_limit():
-			_show_error("The other player does not have enough free party slots.")
+			_show_error(_t("ui.trade.error.opponent_party_full"))
 		return true
 	_replace_offer(replacement, selected_item_offers)
 	return true
@@ -1638,7 +1685,7 @@ static func normalize_summary_payload(value: Dictionary) -> Dictionary:
 
 func _render_mode() -> void:
 	var locked := str(trade.get("status", "")) == "locked"
-	phase_label.text = "FINAL REVIEW" if locked else "OFFER SETUP"
+	phase_label.text = _t("ui.trade.phase.review" if locked else "ui.trade.phase.setup")
 	editable_root.visible = not locked
 	review_root.visible = locked
 	if locked:
@@ -1656,24 +1703,28 @@ func _render_mode() -> void:
 	edit_button.visible = local_ready
 	edit_button.disabled = mutation_in_flight or blocked
 	if local_ready:
-		_set_status("Your offer is ready and cannot be edited.")
+		_set_status(_t("ui.trade.status.ready_locked"))
 	elif _opponent_receive_capacity() <= 0 and selected_item_offers.is_empty() and selected_money == 0:
-		_set_status("The other player needs a free party slot before you can offer a Pokemon.")
+		_set_status(_t("ui.trade.status.opponent_slot"))
 	elif not _local_offer_nonempty():
-		_set_status("Offer at least one Pokemon, item, or money before becoming Ready.")
+		_set_status(_t("ui.trade.status.offer_required"))
 	else:
 		_set_status("")
 
 
 func _render_participant_names() -> void:
 	var user_id := _current_user_id()
-	var local_name := "You"
-	var opponent_name := "Other Player"
+	var local_name := _t("ui.trade.participant.you")
+	var opponent_name := _t("ui.trade.participant.other_player")
 	for participant_value: Variant in trade.get("participants", []):
 		if not participant_value is Dictionary:
 			continue
 		var participant := participant_value as Dictionary
-		var fallback := "You" if int(participant.get("userId", 0)) == user_id else "Other Player"
+		var fallback := (
+			_t("ui.trade.participant.you")
+			if int(participant.get("userId", 0)) == user_id
+			else _t("ui.trade.participant.other_player")
+		)
 		var display_name := participant_display_name(participant, fallback)
 		if int(participant.get("userId", 0)) == user_id:
 			local_name = display_name
@@ -1706,18 +1757,18 @@ func _render_locked_review() -> void:
 			_add_review_money(review_give_list, int(participant_value.get("givesMoney", 0)))
 			_add_review_money(review_receive_list, int(participant_value.get("receivesMoney", 0)))
 	if review_give_list.get_child_count() == 0:
-		_render_review_empty_state(review_give_list, "You are not giving any assets")
+		_render_review_empty_state(review_give_list, _t("ui.trade.review.give_empty"))
 	if review_receive_list.get_child_count() == 0:
-		_render_review_empty_state(review_receive_list, "You are not receiving any assets")
-	review_trust_label.text = "Offers locked · Any change requires both trainers to review again"
-	review_trust_label.tooltip_text = "The offers are locked. If either trainer changes anything, both trainers must check the trade again."
+		_render_review_empty_state(review_receive_list, _t("ui.trade.review.receive_empty"))
+	review_trust_label.text = _t("ui.trade.review.changed")
+	review_trust_label.tooltip_text = _t("ui.trade.review.tooltip")
 	var local_confirmed := _local_participant_confirmed()
 	confirm_button.visible = not local_confirmed
 	confirm_button.disabled = mutation_in_flight or _connection_state_unresolved()
 	confirmation_label.text = (
-		"Confirmed · Waiting for the other trainer"
+		_t("ui.trade.review.confirmed_waiting")
 		if local_confirmed
-		else "Confirm only when both columns match what you agreed to exchange."
+		else _t("ui.trade.review.confirm_hint")
 	)
 
 
@@ -1730,7 +1781,7 @@ func _confirm_trade() -> void:
 	var service := get_node_or_null("/root/TradeService")
 	var result: Dictionary
 	if service == null:
-		result = {"success":false,"error":"Trade service unavailable."}
+		result = {"success":false,"error":_t("ui.trade.error.service_unavailable")}
 	else:
 		result = await service.confirm_trade(str(trade.get("tradeId", "")),int(trade.get("revision",0)),int(review.get("lockedRevision",0)),str(review.get("snapshotHash","")))
 	mutation_in_flight = false
@@ -1753,12 +1804,12 @@ func refresh_after_completion() -> void:
 		if not bool(result.get("success", false)):
 			var overlay := get_tree().get_first_node_in_group("ui_overlay")
 			if overlay != null and overlay.has_method("add_system_message"):
-				overlay.call("add_system_message", "Trade completed, but your party could not be refreshed. Please reconnect.")
+				overlay.call("add_system_message", _t("ui.trade.completion.party_refresh_failed"))
 	var result: Dictionary = trade.get("completionResult", {}) if trade.get("completionResult", {}) is Dictionary else {}
 	var refresh: Dictionary = result.get("refresh", {}) if result.get("refresh", {}) is Dictionary else {}
 	if bool(refresh.get("inventory", false)):
 		var inventory_service := get_node_or_null("/root/InventoryService")
-		var inventory_result: Dictionary = await inventory_service.load_inventory() if inventory_service != null else {"success":false,"error":"Inventory service unavailable."}
+		var inventory_result: Dictionary = await inventory_service.load_inventory() if inventory_service != null else {"success":false,"error":_t("ui.trade.error.inventory_unavailable")}
 		var overlay := get_tree().get_first_node_in_group("ui_overlay")
 		if bool(inventory_result.get("success", false)):
 			if overlay != null:
@@ -1766,16 +1817,16 @@ func refresh_after_completion() -> void:
 				overlay.set("bag_inventory_loaded", true)
 		else:
 			if overlay != null and overlay.has_method("add_system_message"):
-				overlay.call("add_system_message", "Trade completed, but your inventory could not be refreshed. Please reconnect.")
+				overlay.call("add_system_message", _t("ui.trade.completion.inventory_refresh_failed"))
 	if bool(refresh.get("wallet", false)):
 		var wallet_service := get_node_or_null("/root/PlayerWalletService")
-		var wallet_result: Dictionary = await wallet_service.load_wallet() if wallet_service != null else {"success":false,"error":"Wallet service unavailable."}
+		var wallet_result: Dictionary = await wallet_service.load_wallet() if wallet_service != null else {"success":false,"error":_t("ui.trade.error.wallet_unavailable")}
 		var overlay := get_tree().get_first_node_in_group("ui_overlay")
 		if bool(wallet_result.get("success", false)):
 			wallet_service.apply_wallet_result(wallet_result)
 			get_tree().call_group("ui_overlay", "refresh_money_display")
 		elif overlay != null and overlay.has_method("add_system_message"):
-			overlay.call("add_system_message", "Trade completed, but your wallet could not be refreshed. Please reconnect.")
+			overlay.call("add_system_message", _t("ui.trade.completion.wallet_refresh_failed"))
 
 
 func _notify_trade_completion(snapshot: Dictionary) -> void:
@@ -1817,7 +1868,10 @@ static func completion_transfer_messages(snapshot: Dictionary, user_id: int) -> 
 		for transfer_value: Variant in item_transfers:
 			if not transfer_value is Dictionary:
 				continue
-			var item_label := "%dx %s" % [int(transfer_value.get("quantity", 0)), str(transfer_value.get("name", transfer_value.get("itemId", "Item")))]
+			var item_label := _static_t("ui.trade.item.quantity_name", {
+				"quantity": int(transfer_value.get("quantity", 0)),
+				"name": _static_item_display_name(transfer_value),
+			})
 			if int(transfer_value.get("fromUserId", 0)) == user_id:
 				removed_items.append(item_label)
 			if int(transfer_value.get("toUserId", 0)) == user_id:
@@ -1835,16 +1889,67 @@ static func completion_transfer_messages(snapshot: Dictionary, user_id: int) -> 
 		return {}
 	var removed_parts: Array[String] = []
 	var received_parts: Array[String] = []
-	if not removed.is_empty(): removed_parts.append("%s from your party" % ", ".join(removed))
-	if not removed_items.is_empty(): removed_parts.append("%s from your inventory" % ", ".join(removed_items))
-	if removed_money > 0: removed_parts.append("$%s from your wallet" % format_money(removed_money))
-	if not received.is_empty(): received_parts.append("%s in your party" % ", ".join(received))
-	if not received_items.is_empty(): received_parts.append("%s in your inventory" % ", ".join(received_items))
-	if received_money > 0: received_parts.append("$%s in your wallet" % format_money(received_money))
+	if not removed.is_empty():
+		removed_parts.append(_static_t("ui.trade.completion.from_party", {
+			"assets": ", ".join(removed),
+		}))
+	if not removed_items.is_empty():
+		removed_parts.append(_static_t("ui.trade.completion.from_inventory", {
+			"assets": ", ".join(removed_items),
+		}))
+	if removed_money > 0:
+		removed_parts.append(_static_t("ui.trade.completion.from_wallet", {
+			"amount": format_money(removed_money),
+		}))
+	if not received.is_empty():
+		received_parts.append(_static_t("ui.trade.completion.in_party", {
+			"assets": ", ".join(received),
+		}))
+	if not received_items.is_empty():
+		received_parts.append(_static_t("ui.trade.completion.in_inventory", {
+			"assets": ", ".join(received_items),
+		}))
+	if received_money > 0:
+		received_parts.append(_static_t("ui.trade.completion.in_wallet", {
+			"amount": format_money(received_money),
+		}))
 	return {
-		"removed": "Removed %s." % " and ".join(removed_parts),
-		"received": "Received %s." % " and ".join(received_parts),
+		"removed": _static_t("ui.trade.completion.removed", {
+			"assets": _static_join_parts(removed_parts),
+		}),
+		"received": _static_t("ui.trade.completion.received", {
+			"assets": _static_join_parts(received_parts),
+		}),
 	}
+
+
+static func _static_t(key: String, values: Dictionary = {}) -> String:
+	var tree := Engine.get_main_loop() as SceneTree
+	var localization_manager := tree.root.get_node_or_null("LocalizationManager") if tree != null else null
+	if localization_manager == null:
+		return key.format(values)
+	return str(localization_manager.call("text", key, values))
+
+
+static func _static_item_display_name(item: Dictionary) -> String:
+	var item_id := str(item.get("itemId", item.get("id", "")))
+	var fallback := str(item.get("name", item_id))
+	var tree := Engine.get_main_loop() as SceneTree
+	var item_localization := tree.root.get_node_or_null("ItemLocalization") if tree != null else null
+	if item_localization == null:
+		return fallback
+	return str(item_localization.call("display_name", item_id, fallback))
+
+
+static func _static_join_parts(parts: Array[String]) -> String:
+	if parts.size() < 2:
+		return parts[0] if not parts.is_empty() else ""
+	var final_part := parts[-1]
+	var leading := parts.slice(0, parts.size() - 1)
+	return _static_t("ui.trade.completion.join", {
+		"leading": ", ".join(leading),
+		"final": final_part,
+	})
 
 
 static func _completion_pokemon_name(value: Dictionary) -> String:
@@ -1865,7 +1970,7 @@ func _leave_trade() -> void:
 	var service := get_node_or_null("/root/TradeService")
 	var result: Dictionary
 	if service == null:
-		result = {"success":false,"error":"Trade service unavailable."}
+		result = {"success":false,"error":_t("ui.trade.error.service_unavailable")}
 	else:
 		result = await service.leave_trade(str(trade.get("tradeId", "")), int(trade.get("revision", 0)))
 	mutation_in_flight = false
@@ -1893,7 +1998,7 @@ func _render_connection_status() -> void:
 		return
 	var deadline := str(disconnected.get("reconnectDeadlineAt", ""))
 	var remaining := reconnect_seconds_remaining(deadline, Time.get_unix_time_from_system())
-	_set_status("Other player disconnected. Waiting %d seconds for reconnect." % remaining)
+	_set_status(_t("ui.trade.status.disconnected", {"seconds": remaining}))
 
 
 static func reconnect_seconds_remaining(deadline: String, now_unix: float) -> int:
@@ -1955,7 +2060,9 @@ func _add_review_pokemon(target: VBoxContainer, values: Variant) -> void:
 		identity.add_child(label)
 
 		var level_label := Label.new()
-		level_label.text = "Level %d" % maxi(int(pokemon.get("level", 1)), 1)
+		level_label.text = _t("ui.trade.pokemon.level", {
+			"level": maxi(int(pokemon.get("level", 1)), 1),
+		})
 		level_label.add_theme_color_override("font_color", TRADE_MUTED)
 		level_label.add_theme_font_size_override("font_size", 10)
 		identity.add_child(level_label)
@@ -1991,7 +2098,10 @@ func _add_review_items(target: VBoxContainer, values: Variant) -> void:
 		row.add_child(mark)
 
 		var label := Label.new()
-		label.text = "%dx %s" % [int(value.get("quantity", 0)), str(value.get("name", value.get("itemId", "Item")))]
+		label.text = _t("ui.trade.item.quantity_name", {
+			"quantity": int(value.get("quantity", 0)),
+			"name": _item_display_name(value),
+		})
 		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		label.add_theme_color_override("font_color", TRADE_TEXT)
@@ -2015,7 +2125,7 @@ func _add_review_money(target: VBoxContainer, amount: int) -> void:
 	panel.add_child(margin)
 
 	var label := Label.new()
-	label.text = "$%s Pokédollars" % format_money(amount)
+	label.text = _t("ui.trade.money.pokedollars", {"amount": format_money(amount)})
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.add_theme_color_override("font_color", TRADE_GOLD)
 	label.add_theme_font_size_override("font_size", 12)
@@ -2085,29 +2195,31 @@ func _friendly_error(result: Dictionary) -> String:
 	var detail: Variant = body.get("detail", {})
 	var code := str(detail.get("code", "")) if detail is Dictionary else ""
 	match code:
-		"pokemon_reserved_for_trade": return "That Pokemon is already reserved for a trade."
-		"pokemon_holding_item": return "Remove the held item before offering that Pokemon."
-		"trade_offer_requires_party_pokemon": return "At least one Pokemon must remain in your party."
-		"pokemon_not_tradable": return "That Pokemon cannot be traded."
-		"pokemon_not_owned_or_held": return "That Pokemon is no longer held by your account."
-		"pokemon_location_stale": return "That Pokemon moved. Refresh your party."
-		"item_not_tradable": return "That item cannot be traded."
-		"item_reserved_for_trade": return "That item stack is already reserved for a trade."
-		"trade_item_quantity_unavailable", "trade_item_quantity_changed": return "That item quantity is no longer available. Refresh your inventory."
-		"trade_item_snapshot_changed": return "That item changed. Refresh your inventory before trying again."
-		"trade_money_unavailable", "trade_money_balance_changed": return "That money is no longer available. Refresh your wallet."
-		"money_reserved_for_trade": return "That money is already reserved for an active trade."
-		"trade_offer_party_only": return "Only Pokemon currently in your party can be offered."
-		"trade_party_capacity_exceeded": return "The other player does not have enough free party slots."
-		"trade_party_space_required": return "A free party slot is required to receive a Pokemon."
-		"trade_offer_required": return "Offer at least one Pokemon or item before becoming Ready."
-		"trade_review_mismatch": return "The locked review changed. Refresh before confirming."
-		"trade_review_not_locked": return "This trade is no longer locked for review."
-		"trade_settlement_invalidated": return "The trade changed and could not be completed. Refresh the authoritative trade state."
-		"trade_settlement_retryable": return "The trade was not committed. Refresh and try again."
+		"pokemon_reserved_for_trade": return _t("ui.trade.error.pokemon_reserved")
+		"pokemon_holding_item": return _t("ui.trade.error.pokemon_holding_item")
+		"trade_offer_requires_party_pokemon": return _t("ui.trade.error.party_last")
+		"pokemon_not_tradable": return _t("ui.trade.error.pokemon_not_tradable")
+		"pokemon_not_owned_or_held": return _t("ui.trade.error.pokemon_not_owned")
+		"pokemon_location_stale": return _t("ui.trade.error.pokemon_moved")
+		"item_not_tradable": return _t("ui.trade.error.item_not_tradable")
+		"item_reserved_for_trade": return _t("ui.trade.error.item_reserved")
+		"trade_item_quantity_unavailable", "trade_item_quantity_changed":
+			return _t("ui.trade.error.item_quantity")
+		"trade_item_snapshot_changed": return _t("ui.trade.error.item_changed")
+		"trade_money_unavailable", "trade_money_balance_changed":
+			return _t("ui.trade.error.money_changed")
+		"money_reserved_for_trade": return _t("ui.trade.error.money_reserved")
+		"trade_offer_party_only": return _t("ui.trade.error.party_only")
+		"trade_party_capacity_exceeded": return _t("ui.trade.error.opponent_party_full")
+		"trade_party_space_required": return _t("ui.trade.error.party_space")
+		"trade_offer_required": return _t("ui.trade.error.offer_required")
+		"trade_review_mismatch": return _t("ui.trade.error.review_changed")
+		"trade_review_not_locked": return _t("ui.trade.error.review_not_locked")
+		"trade_settlement_invalidated": return _t("ui.trade.error.settlement_invalidated")
+		"trade_settlement_retryable": return _t("ui.trade.error.settlement_retry")
 	if _is_stale_revision_error(result):
-		return "The trade changed again. Please retry your offer."
-	return str(result.get("error", "The offer could not be updated. Refresh and try again."))
+		return _t("ui.trade.error.stale")
+	return str(result.get("error", _t("ui.trade.error.update_offer")))
 
 
 func _show_error(message: String) -> void:
@@ -2117,6 +2229,45 @@ func _show_error(message: String) -> void:
 func _set_status(message: String) -> void:
 	status_label.text = message
 	status_panel.visible = message.strip_edges() != ""
+
+
+func _item_display_name(item: Dictionary) -> String:
+	var item_id := str(item.get("itemId", item.get("id", "")))
+	var fallback := str(item.get("name", item_id))
+	if not is_inside_tree():
+		return fallback
+	var item_localization := get_node_or_null("/root/ItemLocalization")
+	if item_localization == null:
+		return fallback
+	return str(item_localization.call("display_name", item_id, fallback))
+
+
+func _set_localized_property(control: Control, property_name: String, key: String) -> void:
+	control.set_meta("i18n_source_%s" % property_name, key)
+	control.set(property_name, _t(key))
+
+
+func _t(key: String, values: Dictionary = {}) -> String:
+	if not is_inside_tree():
+		return key.format(values)
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	if localization_manager == null:
+		return key.format(values)
+	return str(localization_manager.call("text", key, values))
+
+
+func _on_locale_changed(_locale: String) -> void:
+	title = _t("ui.trade.title")
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	if localization_manager != null:
+		localization_manager.call("localize_tree", self)
+	if item_selector_list != null and is_instance_valid(item_selector_list):
+		_rebuild_item_selector_rows()
+	if not trade.is_empty():
+		_render_participant_names()
+		_sync_selected_from_offer()
+		_render_offers()
+		_render_mode()
 
 
 func _pokemon_label(value: Variant) -> String:

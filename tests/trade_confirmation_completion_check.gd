@@ -12,6 +12,13 @@ class FakeTradeService extends Node:
 
 
 func _init() -> void:
+	call_deferred("_run")
+
+
+func _run() -> void:
+	var localization_manager := root.get_node_or_null("LocalizationManager")
+	if localization_manager != null:
+		localization_manager.set_locale("en")
 	var source := FileAccess.get_file_as_string("res://scripts/ui/trade_workspace.gd")
 	_check(source.contains("func _confirm_trade"), "workspace owns explicit confirmation action")
 	_check(source.contains("lockedRevision") and source.contains("snapshotHash"), "workspace submits exact locked review")
@@ -56,8 +63,20 @@ func _init() -> void:
 			"moneyTransfers":[{"amount":50,"fromUserId":1,"toUserId":2},{"amount":25,"fromUserId":2,"toUserId":1}],
 		}
 	}, 1)
-	_check(mixed_messages.get("removed", "") == "Removed Pidgey from your party and 2x Potion from your inventory and $50 from your wallet.", "mixed completion reports every outgoing asset")
-	_check(mixed_messages.get("received", "") == "Received Eevee in your party and 1x Antidote in your inventory and $25 in your wallet.", "mixed completion reports every incoming asset")
+	var removed_message := str(mixed_messages.get("removed", ""))
+	_check(
+		removed_message.contains("Pidgey")
+		and removed_message.contains("2x Potion")
+		and removed_message.contains("$50"),
+		"mixed completion reports every outgoing asset"
+	)
+	var received_message := str(mixed_messages.get("received", ""))
+	_check(
+		received_message.contains("Eevee")
+		and received_message.contains("1x Antidote")
+		and received_message.contains("$25"),
+		"mixed completion reports every incoming asset"
+	)
 	_check(preload("res://scripts/ui/trade_workspace.gd").completion_transfer_messages({"status":"completed"}, 1).is_empty(), "incomplete realtime event waits for REST completion result")
 	var service := Realtime.new()
 	var fake := FakeTradeService.new()

@@ -105,6 +105,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/trade_realtime_service_check.gd",
 	"res://tests/trade_invitation_dialog_check.gd",
 	"res://tests/trade_workspace_check.gd",
+	"res://tests/localization_trade_ui_check.gd",
 	"res://tests/trade_two_client_offer_check.gd",
 	"res://tests/trade_disconnect_lifecycle_check.gd",
 	"res://tests/trade_confirmation_completion_check.gd",
