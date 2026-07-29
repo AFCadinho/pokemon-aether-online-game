@@ -21,6 +21,7 @@ const CHAT_TAB_SYSTEM := "system"
 const CHAT_TAB_PM := "pm"
 const CHAT_TAB_GUILD := "guild"
 const LEGACY_CHAT_TAB_CLAN := "clan"
+const DEFAULT_LOCALE := "en"
 const DEFAULT_CHAT_TAB_ORDER: Array[String] = [
 	CHAT_TAB_ALL,
 	CHAT_TAB_GENERAL,
@@ -50,6 +51,7 @@ var pokemon_cry_volume := 75.0
 var ui_volume := 75.0
 var notification_volume := 75.0
 var battle_music_track := BATTLE_MUSIC_DEFAULT
+var locale := DEFAULT_LOCALE
 var chat_tab_visibility: Dictionary = {
 	CHAT_TAB_ALL: true,
 	CHAT_TAB_GENERAL: true,
@@ -69,6 +71,7 @@ func _ready() -> void:
 
 func load_settings() -> void:
 	if not FileAccess.file_exists(SETTINGS_PATH):
+		locale = LocalizationManager.get_preferred_system_locale()
 		save_settings()
 		return
 
@@ -95,6 +98,9 @@ func load_settings() -> void:
 	battle_music_track = str(data.get("battle_music_track", battle_music_track)).strip_edges()
 	if battle_music_track == "":
 		battle_music_track = BATTLE_MUSIC_DEFAULT
+	locale = LocalizationManager.normalize_locale(
+		str(data.get("locale", LocalizationManager.get_preferred_system_locale()))
+	)
 	chat_tab_visibility = _validated_chat_tab_visibility(data.get("chat_tab_visibility", chat_tab_visibility))
 	chat_tab_order = _validated_chat_tab_order(data.get("chat_tab_order", chat_tab_order))
 	_apply_runtime_settings()
@@ -119,6 +125,7 @@ func save_settings() -> void:
 		"ui_volume": ui_volume,
 		"notification_volume": notification_volume,
 		"battle_music_track": battle_music_track,
+		"locale": locale,
 		"chat_tab_visibility": chat_tab_visibility,
 		"chat_tab_order": chat_tab_order,
 	}
@@ -195,6 +202,17 @@ func set_window_resolution(resolution: Vector2i) -> void:
 
 	window_resolution = validated_resolution
 	_apply_display_settings()
+	_save_and_emit()
+
+
+func set_locale(value: String) -> void:
+	var validated_locale: String = LocalizationManager.normalize_locale(value)
+	if locale == validated_locale:
+		LocalizationManager.set_locale(locale)
+		return
+
+	locale = validated_locale
+	LocalizationManager.set_locale(locale)
 	_save_and_emit()
 
 
@@ -398,6 +416,7 @@ func _ensure_audio_bus(bus_name: String) -> void:
 
 
 func _apply_runtime_settings() -> void:
+	LocalizationManager.set_locale(locale)
 	_apply_audio_settings()
 	_apply_display_settings()
 

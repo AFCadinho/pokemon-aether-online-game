@@ -34,6 +34,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/pokemon_home_icon_resolution_check.gd",
 	"res://tests/pokemon_cry_resolver_check.gd",
 	"res://tests/pokemon_cry_audio_settings_check.gd",
+	"res://tests/localization_foundation_check.gd",
 	"res://tests/pokemon_experience_payload_check.gd",
 	"res://tests/pokemon_factory_hp_snapshot_check.gd",
 	"res://tests/pokemon_pc_interactable_check.gd",

@@ -4,6 +4,7 @@
 
 **Added**
 
+- Added language selection for English, Dutch, and Brazilian Portuguese to the login screen and in-game settings. This first localization milestone translates both interfaces.
 - Added five tradeable Chroma hairstyles to the Aether Gift Store: three for male Trainers and two for female Trainers.
 - You can now watch private PvP battles when the room host allows spectators. Join with the room code without affecting the battle.
 - Spectators can view the battle from either Trainer's side, check everything revealed during the fight, and leave whenever they want.
@@ -16,6 +17,7 @@
 
 **Changed**
 
+- Settings tabs now scroll when needed so longer translations remain usable at smaller resolutions.
 - The Aether Atelier now includes the full Appearance Wear collection. You can switch outfits, preview all changes together, and pay once for the Chroma colours you changed.
 - Appearance Wear is now grouped more clearly by equipment slot in the Aether Atelier.
 - Chroma hairstyles now look cleaner, without the dark pixels and unwanted eyebrow layer some styles showed.
