@@ -50,7 +50,13 @@ func _init() -> void:
 	_check_equal(pokemon_icon.custom_minimum_size, Vector2(46.0, 46.0), "preview icon fills more of its slot")
 	_check_equal(margin_container.get_theme_constant("margin_left"), 2, "preview icon uses compact left padding")
 	_check_equal(margin_container.get_theme_constant("margin_right"), 2, "preview icon uses matching right padding")
-	_check_equal(faint_badge.text, "FNT", "fainted icon-only slot shows FNT text")
+	var localization_manager := root.get_node_or_null("LocalizationManager")
+	var expected_fainted_text := (
+		str(localization_manager.call("text", "battle.status.compact.fainted"))
+		if localization_manager != null
+		else "battle.status.compact.fainted"
+	)
+	_check_equal(faint_badge.text, expected_fainted_text, "fainted icon-only slot shows localized fainted text")
 	_check_equal(faint_badge.visible, true, "fainted icon-only slot shows its badge")
 	_check_equal(pokemon_icon.modulate, Color.WHITE, "FNT badge parent no longer passes a dark modulate to its children")
 	_check_equal(faint_badge.self_modulate, Color.WHITE, "FNT badge keeps its full text and pill brightness")

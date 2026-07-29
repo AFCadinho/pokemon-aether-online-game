@@ -47,7 +47,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
 theme_override_font_sizes/font_size = 16
-text = "Turn: 1"
+text = "battle.status.turn_preview"
 
 [node name="SeperationLabel" type="Label" parent="MarginContainer/HBoxContainer" unique_id=969292844]
 layout_mode = 2

@@ -66,7 +66,7 @@ layout_mode = 2
 [node name="PowerLabel" type="Label" parent="MarginContainer/VBoxContainer/BasePowerRow" unique_id=1735035573]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
-text = "Base Power:"
+text = "battle.move.base_power"
 
 [node name="PowerValueLabel" type="Label" parent="MarginContainer/VBoxContainer/BasePowerRow" unique_id=1180221303]
 layout_mode = 2
@@ -78,7 +78,7 @@ layout_mode = 2
 
 [node name="AccuracyLabel" type="Label" parent="MarginContainer/VBoxContainer/BasePowerRow2" unique_id=1997790715]
 layout_mode = 2
-text = "Accuracy:"
+text = "battle.move.accuracy"
 
 [node name="AccuracyLabel2" type="Label" parent="MarginContainer/VBoxContainer/BasePowerRow2" unique_id=574118617]
 layout_mode = 2
@@ -92,7 +92,7 @@ theme_override_constants/separation = 4
 [node name="ZEffectLabel" type="Label" parent="MarginContainer/VBoxContainer/ZEffectRow"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.827451, 0.352941, 1)
-text = "Z-Effect:"
+text = "battle.move.z_effect"
 
 [node name="ZEffectValueLabel" type="Label" parent="MarginContainer/VBoxContainer/ZEffectRow"]
 custom_minimum_size = Vector2(218, 0)

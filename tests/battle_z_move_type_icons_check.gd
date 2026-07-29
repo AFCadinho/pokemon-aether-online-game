@@ -18,7 +18,7 @@ func _init() -> void:
 	_check_true(battle_script.contains("Z_MOVE_TYPE_ICON_PATH"), "battle maps generic Z-Moves to type icons")
 	_check_true(battle_script.contains("Z_CRYSTAL_NAMES"), "generic Z-Move tooltips name the equipped crystal")
 	_check_true(battle_script.contains("SIGNATURE_Z_MOVE_NAMES"), "signature Z-Moves retain the neutral fallback")
-	_check_true(battle_script.contains("Z-Move ready. Choose a Z-Move!"), "Z-Move activation has a clear fallback message")
+	_check_true(battle_script.contains('_t("battle.mechanic.z_move_ready")'), "Z-Move activation has a clear localized fallback message")
 	_check_true(battle_script.contains("_update_z_move_button_icon"), "Z-Move button refreshes its icon from battle state")
 	_check_true(hover_script.contains('category.to_lower() != "status"'), "status moves omit the irrelevant Base Power row")
 	_check_true(hover_script.contains('move_data.get("zEffect"'), "status Z-Moves render their presented Z-Effect")

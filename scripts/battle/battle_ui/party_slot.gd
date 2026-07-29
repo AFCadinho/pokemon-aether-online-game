@@ -37,8 +37,12 @@ const VERY_LONG_NAME_FONT_SIZE := 11
 @onready var status_icon: TextureRect = $MarginContainer/HBoxContainer/VBoxContainer/BottomRowContainer/StatusIcon
 
 var current_pokemon_data: Dictionary = {}
+var localization_manager: Node
 
 func _ready() -> void:
+	localization_manager = get_tree().root.get_node_or_null("LocalizationManager")
+	if localization_manager != null and not localization_manager.locale_changed.is_connected(_on_locale_changed):
+		localization_manager.locale_changed.connect(_on_locale_changed)
 	_apply_slot_layout()
 	_ignore_child_mouse_input(self)
 	if not pressed.is_connected(_on_pressed):
@@ -102,7 +106,7 @@ func set_pokemon(pokemon: Pokemon) -> void:
 	visible = true
 	disabled = is_active or is_fainted
 	modulate = FAINTED_MODULATE if is_fainted and not icon_only_mode else NORMAL_MODULATE
-	tooltip_text = "Active Pokémon" if is_active else ""
+	tooltip_text = _t("battle.party.active") if is_active else ""
 
 	_set_species_name(pokemon.species, pokemon.shiny)
 	hp_bar.max_value = max(pokemon.max_hp, 1)
@@ -125,7 +129,7 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	visible = true
 	disabled = is_active or is_fainted
 	modulate = FAINTED_MODULATE if is_fainted and not icon_only_mode else NORMAL_MODULATE
-	tooltip_text = "Active Pokémon" if is_active else ""
+	tooltip_text = _t("battle.party.active") if is_active else ""
 
 	var is_shiny := _get_shiny_from_data(pokemon_data)
 	_set_species_name(species, is_shiny)
@@ -234,7 +238,11 @@ func _apply_icon_only_condition_badge(status: String, is_fainted: bool) -> void:
 		return
 
 	var normalized_status := status.strip_edges().to_lower()
-	icon_status_badge.text = "FNT" if is_fainted else _get_compact_status_text(normalized_status)
+	icon_status_badge.text = (
+		_t("battle.status.compact.fainted")
+		if is_fainted
+		else _get_compact_status_text(normalized_status)
+	)
 	icon_status_badge.visible = is_fainted or icon_status_badge.text != ""
 	icon_status_badge.self_modulate = NORMAL_MODULATE
 	if not icon_status_badge.visible:
@@ -255,12 +263,12 @@ func _apply_icon_only_condition_badge(status: String, is_fainted: bool) -> void:
 
 func _get_compact_status_text(status: String) -> String:
 	match status:
-		"brn": return "BRN"
-		"par": return "PAR"
-		"slp": return "SLP"
-		"frz": return "FRZ"
-		"psn": return "PSN"
-		"tox": return "TOX"
+		"brn": return _t("battle.status.compact.burn")
+		"par": return _t("battle.status.compact.paralysis")
+		"slp": return _t("battle.status.compact.sleep")
+		"frz": return _t("battle.status.compact.freeze")
+		"psn": return _t("battle.status.compact.poison")
+		"tox": return _t("battle.status.compact.toxic")
 	return ""
 
 func _get_condition_badge_color(status: String) -> Color:
@@ -283,17 +291,17 @@ func _get_status_texture(status: String) -> Texture2D:
 func _get_status_tooltip(status: String) -> String:
 	match status.strip_edges().to_lower():
 		"psn":
-			return "Poisoned"
+			return _t("pokemon.status.poisoned")
 		"tox":
-			return "Badly poisoned"
+			return _t("pokemon.status.badly_poisoned")
 		"brn":
-			return "Burned"
+			return _t("pokemon.status.burned")
 		"par":
-			return "Paralyzed"
+			return _t("pokemon.status.paralyzed")
 		"slp":
-			return "Asleep"
+			return _t("pokemon.status.asleep")
 		"frz":
-			return "Frozen"
+			return _t("pokemon.status.frozen")
 
 	return ""
 
@@ -377,7 +385,7 @@ func _set_species_name(species: String, is_shiny: bool) -> void:
 	name_label.text = species
 	name_label.add_theme_font_size_override("font_size", _get_name_font_size(species))
 	shiny_badge.text = "S" if is_shiny else ""
-	shiny_badge.tooltip_text = "Shiny Pokémon" if is_shiny else ""
+	shiny_badge.tooltip_text = _t("ui.party.shiny") if is_shiny else ""
 
 func _get_name_font_size(species: String) -> int:
 	var compact_name := species.replace(" ", "")
@@ -407,3 +415,14 @@ func _on_mouse_entered() -> void:
 
 func _on_mouse_exited() -> void:
 	pokemon_unhovered.emit()
+
+
+func _on_locale_changed(_locale: String) -> void:
+	if not current_pokemon_data.is_empty():
+		set_pokemon_data(current_pokemon_data)
+
+
+func _t(key: String, replacements: Dictionary = {}) -> String:
+	if localization_manager != null:
+		return str(localization_manager.call("text", key, replacements))
+	return key

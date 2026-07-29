@@ -57,7 +57,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.8627451, 0.14901961, 0.14901961, 1)
 theme_override_font_sizes/font_size = 18
-text = "Forfeit Battle"
+text = "battle.forfeit.title"
 horizontal_alignment = 1
 
 [node name="ColorRect" type="ColorRect" parent="MarginContainer/VBoxContainer" unique_id=1032926976]
@@ -69,7 +69,7 @@ color = Color(0.1764706, 0.5686275, 0.92941177, 0.48)
 custom_minimum_size = Vector2(0, 1)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8745098, 0.92156863, 0.9843137, 1)
-text = "Do you want to forfeit the battle?"
+text = "battle.forfeit.message"
 horizontal_alignment = 1
 autowrap_mode = 2
 
@@ -84,7 +84,7 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.95686275, 0.96862745, 1, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_upqqu")
 theme_override_styles/hover = SubResource("StyleBoxFlat_h44c2")
-text = "Yes"
+text = "common.yes"
 
 [node name="NoButton" type="Button" parent="MarginContainer/VBoxContainer/ButtonRow" unique_id=1535460959]
 custom_minimum_size = Vector2(70, 36)
@@ -92,4 +92,4 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.8745098, 0.92156863, 0.9843137, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_vg5e3")
 theme_override_styles/hover = SubResource("StyleBoxFlat_0k32i")
-text = "No"
+text = "common.no"

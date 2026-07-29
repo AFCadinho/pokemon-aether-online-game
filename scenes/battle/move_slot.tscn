@@ -102,7 +102,7 @@ size_flags_vertical = 10
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.6509804, 0.78431374, 1)
 theme_override_font_sizes/font_size = 11
-text = "super effective"
+text = "battle.move.effect.super"
 
 [node name="PPLabel" type="Label" parent="MarginContainer/VBoxContainer/BottomRow" unique_id=1696639893]
 custom_minimum_size = Vector2(42, 0)

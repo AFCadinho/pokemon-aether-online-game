@@ -70,7 +70,7 @@ custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
-text = "Boosts: "
+text = "battle.hover.boosts"
 
 [node name="BoostsLabel2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer4" unique_id=1993788108]
 custom_minimum_size = Vector2(0, 18)
@@ -87,7 +87,7 @@ custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
-text = "Drops: "
+text = "battle.hover.drops"
 
 [node name="DropsLabel2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer5" unique_id=838798042]
 custom_minimum_size = Vector2(0, 18)
@@ -106,7 +106,7 @@ layout_mode = 2
 [node name="AbilityLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1950549048]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
-text = "Possible abilities: "
+text = "battle.hover.possible_abilities"
 
 [node name="AbilityLabel2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=41440541]
 layout_mode = 2
@@ -115,14 +115,14 @@ text = "Sand Veil / Rough Skin"
 
 [node name="ItemLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=915833458]
 layout_mode = 2
-text = "Item: None (Loaded dice was knocked off)"
+text = "battle.hover.no_item"
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1698634679]
 layout_mode = 2
 
 [node name="SpeedLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3" unique_id=895068706]
 layout_mode = 2
-text = "Speed: "
+text = "battle.hover.speed"
 
 [node name="LowestSpeedLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3" unique_id=2116590592]
 layout_mode = 2
