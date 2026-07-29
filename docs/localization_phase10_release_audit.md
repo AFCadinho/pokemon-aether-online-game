@@ -13,7 +13,7 @@ approval.
 
 The following gates pass:
 
-- the English, Dutch, and Brazilian Portuguese client catalogs contain 2,674 matching
+- the English, Dutch, and Brazilian Portuguese client catalogs contain 2,675 matching
   keys;
 - the three launcher catalogs contain 133 matching keys;
 - catalog JSON, non-empty values, key parity, and named placeholders have no errors;

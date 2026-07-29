@@ -124,6 +124,7 @@
   "ui.login.session_ready": "●  SESSÃO PRONTA  ·  REDE AETHER",
   "ui.login.options": "Opções",
   "ui.login.quit": "Fechar",
+  "ui.login.legal_notice": "O PokeAether é um projeto de fãs não oficial e não é afiliado nem endossado por qualquer detentor de direitos. Todas as marcas, nomes e materiais relacionados pertencem aos seus respectivos proprietários.",
   "ui.login.error.enter_username": "Digite seu nome de usuário.",
   "ui.login.error.enter_password": "Digite sua senha.",
   "ui.login.error.offline": "O PokeAether está offline no momento. Tente novamente mais tarde.",

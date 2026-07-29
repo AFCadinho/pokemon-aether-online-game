@@ -124,6 +124,7 @@
   "ui.login.session_ready": "●  SESSIE GEREED  ·  AETHER-NETWERK",
   "ui.login.options": "Opties",
   "ui.login.quit": "Afsluiten",
+  "ui.login.legal_notice": "PokeAether is een onofficieel fanproject en is niet verbonden aan of goedgekeurd door enige rechthebbende. Alle handelsmerken, namen en gerelateerde materialen behoren toe aan hun respectieve eigenaren.",
   "ui.login.error.enter_username": "Voer je gebruikersnaam in.",
   "ui.login.error.enter_password": "Voer je wachtwoord in.",
   "ui.login.error.offline": "PokeAether is momenteel offline. Probeer het later opnieuw.",

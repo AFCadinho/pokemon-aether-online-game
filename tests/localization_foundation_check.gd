@@ -198,11 +198,18 @@ func _check_login_scene_translation() -> void:
 	var language_options := login.get_node_or_null(
 		"Background/ScreenActions/LanguageOptionsButton"
 	) as OptionButton
+	var legal_notice := login.get_node_or_null(
+		"Background/Shell/MainSplit/LoginColumn/LegalNotice"
+	) as Label
 
 	localization_manager.call("set_locale", "nl")
 	localization_manager.call("localize_tree", login)
 	_check(headline != null and headline.text == "Welkom, Trainer", "login headline renders in Dutch")
 	_check(sign_in != null and sign_in.text == "Inloggen", "login action renders in Dutch")
+	_check(
+		legal_notice != null and legal_notice.text.begins_with("PokeAether is een onofficieel fanproject"),
+		"login legal notice renders in Dutch"
+	)
 	_check(language_options != null, "login screen exposes the language selector before sign-in")
 	var settings_manager := root.get_node_or_null("SettingsManager")
 	if language_options != null and settings_manager != null:
@@ -232,6 +239,10 @@ func _check_login_scene_translation() -> void:
 		"login headline updates to Brazilian Portuguese"
 	)
 	_check(sign_in != null and sign_in.text == "Entrar", "login action updates to Brazilian Portuguese")
+	_check(
+		legal_notice != null and legal_notice.text.begins_with("O PokeAether é um projeto de fãs"),
+		"login legal notice updates to Brazilian Portuguese"
+	)
 	login.free()
 
 
