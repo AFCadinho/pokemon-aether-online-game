@@ -1,6 +1,7 @@
 extends Control
 
 const NewsLocalizationService := preload("res://scripts/services/news_localization_service.gd")
+const LanguageSelectorStyle := preload("res://scripts/ui/language_selector_style.gd")
 
 signal login_submitted(username: String, password: String)
 
@@ -64,6 +65,7 @@ var loading_language_options := false
 func _ready() -> void:
 	MusicManager.play_login_music()
 	_apply_remember_me_style()
+	LanguageSelectorStyle.configure(language_options_button)
 	language_options_button.item_selected.connect(_on_language_selected)
 	login_button.pressed.connect(_on_login_button_pressed)
 	register_link_button.pressed.connect(_on_register_link_pressed)
@@ -231,8 +233,12 @@ func _apply_language_options_to_control() -> void:
 	var supported_locales: Array[String] = LocalizationManager.get_supported_locales()
 	for index: int in range(supported_locales.size()):
 		var supported_locale := supported_locales[index]
-		language_options_button.add_item(LocalizationManager.get_language_name(supported_locale), index)
-		language_options_button.set_item_metadata(index, supported_locale)
+		LanguageSelectorStyle.add_locale_item(
+			language_options_button,
+			supported_locale,
+			LocalizationManager.get_language_name(supported_locale),
+			index
+		)
 		if supported_locale == SettingsManager.locale:
 			selected_index = index
 	if language_options_button.item_count > 0:

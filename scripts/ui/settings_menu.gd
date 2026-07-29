@@ -3,6 +3,7 @@ extends PanelContainer
 signal closed
 
 const ExternalLinks = preload("res://scripts/core/external_links.gd")
+const LanguageSelectorStyle := preload("res://scripts/ui/language_selector_style.gd")
 const SPRITE_STYLE_BY_OPTION_ID: Dictionary = {
 	0: "animated",
 	1: "static",
@@ -97,6 +98,7 @@ func _ready() -> void:
 	_setup_tabs()
 	_setup_logout_confirm_dialog()
 	_apply_premium_styles()
+	LanguageSelectorStyle.configure(language_options_button)
 	battle_animations_check_box.toggled.connect(_on_battle_animations_toggled)
 	weather_effects_check_box.toggled.connect(_on_weather_effects_toggled)
 	terrain_effects_check_box.toggled.connect(_on_terrain_effects_toggled)
@@ -1377,8 +1379,12 @@ func _apply_language_options_to_control() -> void:
 	var supported_locales: Array[String] = LocalizationManager.get_supported_locales()
 	for index: int in range(supported_locales.size()):
 		var supported_locale := supported_locales[index]
-		language_options_button.add_item(LocalizationManager.get_language_name(supported_locale), index)
-		language_options_button.set_item_metadata(index, supported_locale)
+		LanguageSelectorStyle.add_locale_item(
+			language_options_button,
+			supported_locale,
+			LocalizationManager.get_language_name(supported_locale),
+			index
+		)
 		if supported_locale == SettingsManager.locale:
 			selected_index = index
 	if language_options_button.item_count > 0:

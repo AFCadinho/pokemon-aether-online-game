@@ -9,6 +9,7 @@ const SETTINGS_SCENE_PATH := "res://scenes/interface/settings/settings_menu.tscn
 const LOGIN_SCENE_PATH := "res://scenes/interface/login_screen.tscn"
 const SETTINGS_MANAGER_PATH := "res://scripts/services/settings_manager.gd"
 const PROJECT_PATH := "res://project.godot"
+const LanguageSelectorStyle := preload("res://scripts/ui/language_selector_style.gd")
 
 var failed := false
 var localization_manager: Node
@@ -30,6 +31,7 @@ func _run() -> void:
 	_check_locale_normalization()
 	_check_locale_request_headers()
 	_check_runtime_translation(catalogs)
+	_check_language_selector_presentation()
 	_check_login_scene_translation()
 	await _check_settings_scene_translation()
 	_check_settings_persistence_contract()
@@ -108,6 +110,31 @@ func _check_runtime_translation(catalogs: Dictionary) -> void:
 	)
 
 
+func _check_language_selector_presentation() -> void:
+	var selector := OptionButton.new()
+	LanguageSelectorStyle.configure(selector)
+	for index: int in range(LocalizationManager.SUPPORTED_LOCALES.size()):
+		var locale: String = LocalizationManager.SUPPORTED_LOCALES[index]
+		LanguageSelectorStyle.add_locale_item(
+			selector,
+			locale,
+			localization_manager.call("get_language_name", locale),
+			index
+		)
+	_check(selector.item_count == 3, "styled language selector lists every locale")
+	for index: int in range(selector.item_count):
+		_check(selector.get_item_icon(index) != null, "language option %d has a flag" % index)
+	_check(selector.has_theme_icon_override("arrow"), "language selector uses the custom chevron")
+	_check(selector.has_theme_stylebox_override("normal"), "language selector uses a custom surface")
+	_check(selector.has_theme_stylebox_override("focus"), "language selector has keyboard focus styling")
+	_check(
+		selector.get_popup().has_theme_stylebox_override("panel")
+		and selector.get_popup().has_theme_stylebox_override("hover"),
+		"language selector popup uses the matching PokeAether style"
+	)
+	selector.free()
+
+
 func _check_settings_scene_translation() -> void:
 	localization_manager.call("set_locale", "nl")
 	var packed := load(SETTINGS_SCENE_PATH) as PackedScene
@@ -127,6 +154,10 @@ func _check_settings_scene_translation() -> void:
 		"static settings text renders in Dutch (received %s)" % str(title.text if title != null else "<missing>")
 	)
 	_check(language_options != null and language_options.item_count == 3, "language selector lists three locales")
+	_check(
+		language_options != null and language_options.get_item_icon(0) != null,
+		"settings language selector displays flags"
+	)
 	_check(tabs != null and tabs.get_tab_title(0) == "Algemeen", "dynamic tab title renders in Dutch")
 	var dutch_minimum_size := (menu as Control).get_combined_minimum_size()
 	_check(
@@ -180,6 +211,7 @@ func _check_login_scene_translation() -> void:
 		login.set("language_options_button", language_options)
 		login.call("_apply_language_options_to_control")
 		_check(language_options.item_count == 3, "login language selector lists three locales")
+		_check(language_options.get_item_icon(0) != null, "login language selector displays flags")
 		_check(
 			str(language_options.get_item_metadata(language_options.selected)) == "nl",
 			"login language selector reflects the saved locale"

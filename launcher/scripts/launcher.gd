@@ -2,6 +2,7 @@ extends Control
 
 const LauncherServerHealthService := preload("res://scripts/server_health_service.gd")
 const LauncherNewsLocalizationService := preload("res://scripts/news_localization_service.gd")
+const LauncherLanguageSelectorStyle := preload("res://scripts/language_selector_style.gd")
 
 const DEFAULT_MANIFEST_URL := "https://example.com/pokeaether/manifest.json"
 const DEFAULT_NEWS_URL := "https://updates.pokeaether.com/data/news.json"
@@ -234,8 +235,12 @@ func _populate_language_options() -> void:
 	var supported_locales: Array[String] = LauncherLocalization.get_supported_locales()
 	for index: int in range(supported_locales.size()):
 		var supported_locale := supported_locales[index]
-		language_options_button.add_item(LauncherLocalization.get_language_name(supported_locale))
-		language_options_button.set_item_metadata(index, supported_locale)
+		LauncherLanguageSelectorStyle.add_locale_item(
+			language_options_button,
+			supported_locale,
+			LauncherLocalization.get_language_name(supported_locale),
+			index
+		)
 		if supported_locale == locale:
 			selected_index = index
 	language_options_button.select(selected_index)
@@ -328,6 +333,7 @@ func _apply_visual_style() -> void:
 	_apply_button_style(launcher_update_now_button, true)
 	launcher_update_later_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	launcher_update_now_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	LauncherLanguageSelectorStyle.configure(language_options_button)
 
 
 func _panel_style(background_color: Color, border_color: Color, radius: int, border_width: int) -> StyleBoxFlat:
