@@ -5,7 +5,6 @@ const LanguageSelectorStyle := preload("res://scripts/ui/language_selector_style
 
 signal login_submitted(username: String, password: String)
 
-const ExternalLinks = preload("res://scripts/core/external_links.gd")
 const REGISTER_URL := "https://pokeaether.com/register"
 const NEWS_URL := "https://updates.pokeaether.com/data/news.json"
 const LOADING_SCENE_PATH := "res://scenes/interface/loading_screen.tscn"
@@ -42,7 +41,6 @@ const PLAYER_PREVIEW_SCALE := Vector2(2.0, 2.0)
 @onready var news_request: HTTPRequest = $NewsRequest
 @onready var language_options_button: OptionButton = $Background/ScreenActions/LanguageOptionsButton
 @onready var options_button: Button = $Background/ScreenActions/OptionsButton
-@onready var credits_button: Button = $Background/ScreenActions/CreditsButton
 @onready var quit_button: Button = $Background/ScreenActions/QuitButton
 @onready var settings_menu: PanelContainer = $Background/LoginSettingsMenu
 
@@ -72,7 +70,6 @@ func _ready() -> void:
 	continue_button.pressed.connect(_on_continue_button_pressed)
 	logout_button.pressed.connect(_on_logout_button_pressed)
 	options_button.pressed.connect(_on_options_button_pressed)
-	credits_button.pressed.connect(_on_credits_button_pressed)
 	quit_button.pressed.connect(_on_quit_button_pressed)
 	news_request.request_completed.connect(_on_news_request_completed)
 	login_news_label.meta_clicked.connect(_on_news_meta_clicked)
@@ -295,12 +292,6 @@ func _on_options_button_pressed() -> void:
 		settings_menu.call("open", "login")
 	else:
 		settings_menu.visible = true
-
-
-func _on_credits_button_pressed() -> void:
-	var open_error := OS.shell_open(ExternalLinks.CREDITS_URL)
-	if open_error != OK:
-		show_status_key("ui.login.error.credits", {}, true)
 
 
 func _on_quit_button_pressed() -> void:
