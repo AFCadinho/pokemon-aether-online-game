@@ -118,11 +118,12 @@ func _init() -> void:
 		combined_body_frames != null
 		and appearance_source.contains("func _build_surf_fishing_body_frames(")
 		and appearance_source.contains("func _build_surf_fishing_layer_frames(")
+		and appearance_source.contains("func _build_surf_fishing_upper_layer_frames(")
 		and appearance_source.contains("func _build_surf_fishing_lower_layer_frames(")
 		and appearance_source.contains("SURF_FISH_SIDE_LOWER_SHIFT := 12")
 		and combined_top_frames != null
 		and combined_bottom_frames != null,
-		"combined Surf fishing builds its body and top from fishing and riding textures"
+		"combined Surf fishing removes riding arms below the fishing upper body"
 	)
 	_check(
 		custom_bottom_frames != null
