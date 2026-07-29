@@ -72,8 +72,6 @@ func select_fishing_rod(item_id: String, area_id := "") -> Dictionary:
 	var normalized_item_id := item_id.strip_edges().to_lower()
 	if not AuthService.is_authenticated():
 		return {"success": false, "error": "Not authenticated."}
-	if normalized_item_id == "":
-		return {"success": false, "error": "Missing fishing rod item id."}
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
@@ -105,6 +103,7 @@ func apply_fishing_progression(progression: Dictionary) -> void:
 	GameState.fishing_tier = maxi(int(progression.get("activeTier", 0)), 0)
 	GameState.fishing_unlocked = bool(progression.get("selectedRodUsable", false)) and GameState.fishing_tier > 0
 	get_tree().call_group("fishing_action_controller", "refresh_from_game_state")
+	get_tree().call_group("player", "refresh_fishing_prompt")
 
 
 func claim_npc_item_reward(reward_id: String) -> Dictionary:

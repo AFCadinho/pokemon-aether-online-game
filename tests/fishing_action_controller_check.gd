@@ -3,6 +3,7 @@ extends SceneTree
 const CONTROLLER_PATH := "res://scripts/ui/fishing_action_controller.gd"
 const OVERLAY_PATH := "res://scenes/interface/ui_overlay.tscn"
 const WORLD_PATH := "res://scripts/world/world.gd"
+const PLAYER_PATH := "res://scripts/world/player.gd"
 
 var failed := false
 
@@ -11,6 +12,7 @@ func _init() -> void:
 	var controller_source := FileAccess.get_file_as_string(CONTROLLER_PATH)
 	var overlay_source := FileAccess.get_file_as_string(OVERLAY_PATH)
 	var world_source := FileAccess.get_file_as_string(WORLD_PATH)
+	var player_source := FileAccess.get_file_as_string(PLAYER_PATH)
 
 	_check(
 		overlay_source.contains('path="res://scripts/ui/fishing_action_controller.gd"')
@@ -37,6 +39,17 @@ func _init() -> void:
 	_check(
 		controller_source.contains("action_button.disabled = selection_pending"),
 		"players without a rod can still inspect the fishing progression panel"
+	)
+	_check(
+		controller_source.contains('no_rod_button.pressed.connect(_select_rod.bind(""))')
+		and controller_source.contains("No rod — Put rod away")
+		and controller_source.contains("ACTIVE_GREEN_BG"),
+		"players can deactivate fishing and active rods use the green toolbar state"
+	)
+	_check(
+		player_source.contains("GameState.selected_fishing_rod_item_id.is_empty()")
+		and player_source.contains("func refresh_fishing_prompt()"),
+		"the nearby-water prompt requires and reacts to an active rod selection"
 	)
 	_check(
 		controller_source.contains('button.add_theme_constant_override("icon_max_width", 32)')

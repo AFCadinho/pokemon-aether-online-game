@@ -17,8 +17,14 @@ func _init() -> void:
 	_check(
 		inventory_source.contains("GameState.fishing_unlocked = bool(progression.get(\"selectedRodUsable\", false))")
 		and inventory_source.contains('GameState.fishing_rods = _array_from_value(progression.get("rods", []))')
+		and inventory_source.contains('get_tree().call_group("player", "refresh_fishing_prompt")')
 		and not inventory_source.contains("_set_fishing_access_from_items"),
 		"server progression, not highest inventory tier, controls fishing access"
+	)
+	_check(
+		not inventory_source.contains('return {"success": false, "error": "Missing fishing rod item id."}')
+		and inventory_source.contains('"itemId": normalized_item_id'),
+		"an empty fishing rod selection can be persisted as fishing inactive"
 	)
 	_check(
 		not inventory_source.contains('preload("res://scripts/services/fishing_rod_rules.gd")'),

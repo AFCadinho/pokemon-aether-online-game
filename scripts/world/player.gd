@@ -283,7 +283,10 @@ func sync_activity_state_for_current_tile() -> void:
 	refresh_map_layers()
 
 	if _is_water_tile_at(global_position):
-		if bool(GameState.surf_unlocked) and _has_party_field_move("surf") and not surf_activity_active:
+		# Reaching water is gated when the tile is entered. Once a persisted or
+		# battle-return position is already on water, restore Surf unconditionally
+		# so asynchronous party/charm loading cannot strand the player.
+		if not surf_activity_active:
 			_start_surf_activity(false)
 		return
 
@@ -291,6 +294,8 @@ func sync_activity_state_for_current_tile() -> void:
 		_finish_surf_activity("left_water")
 
 func can_fish_here() -> bool:
+	if GameState.selected_fishing_rod_item_id.is_empty():
+		return false
 	if not bool(GameState.fishing_unlocked):
 		return false
 	if int(GameState.fishing_tier) <= 0:
@@ -934,6 +939,9 @@ func _sync_fishing_prompt_visibility() -> void:
 	if fishing_prompt_button == null:
 		return
 	fishing_prompt_button.visible = can_fish_here()
+
+func refresh_fishing_prompt() -> void:
+	_sync_fishing_prompt_visibility()
 
 func _sync_surf_prompt_visibility() -> void:
 	if surf_prompt_button == null:

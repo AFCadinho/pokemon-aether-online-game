@@ -20,6 +20,10 @@ const BORDER_SUBTLE := Color("#2d4b66d9")
 const BORDER_SOFT := Color("#3f6685e6")
 const ACCENT_GOLD := Color("#d8b767")
 const ACCENT_CYAN := Color("#69cbe8")
+const ACTIVE_GREEN_BG := Color("#155f2be8")
+const ACTIVE_GREEN_HOVER := Color("#1b6f34e8")
+const ACTIVE_GREEN_BORDER := Color("#58d96f")
+const ACTIVE_GREEN_BORDER_HOVER := Color("#72f28a")
 const TEXT_PRIMARY := Color("#f4f0de")
 const TEXT_MUTED := Color("#aeb8c5")
 const POPUP_Z_INDEX := 1050
@@ -207,6 +211,20 @@ func _rebuild_rod_buttons() -> void:
 	for child in rods_container.get_children():
 		rods_container.remove_child(child)
 		child.queue_free()
+	var no_rod_button := Button.new()
+	var no_rod_selected := GameState.selected_fishing_rod_item_id == ""
+	no_rod_button.icon = FISHING_ACTION_ICON
+	no_rod_button.expand_icon = true
+	no_rod_button.custom_minimum_size = Vector2(0, 48)
+	no_rod_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	no_rod_button.focus_mode = Control.FOCUS_NONE
+	no_rod_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	no_rod_button.text = "✓ No rod — Fishing inactive" if no_rod_selected else "No rod — Put rod away"
+	no_rod_button.disabled = selection_pending
+	no_rod_button.tooltip_text = "Hide the fishing prompt until you select a rod."
+	_apply_no_rod_button_style(no_rod_button, no_rod_selected)
+	no_rod_button.pressed.connect(_select_rod.bind(""))
+	rods_container.add_child(no_rod_button)
 	for rod_value: Variant in GameState.fishing_rods:
 		if not (rod_value is Dictionary):
 			continue
@@ -309,8 +327,22 @@ func _apply_action_slot_style() -> void:
 	if action_slot == null or action_button == null:
 		return
 	var selected := popup != null and popup.visible
-	var background := SURFACE_HOVER if action_hovered or selected else SURFACE_INTERACTIVE
-	var border := ACCENT_GOLD if selected else ACCENT_CYAN if GameState.fishing_unlocked else BORDER_SOFT
+	var rod_active := (
+		not GameState.selected_fishing_rod_item_id.is_empty()
+		and GameState.fishing_unlocked
+		and GameState.fishing_tier > 0
+	)
+	var background := SURFACE_INTERACTIVE
+	var border := BORDER_SOFT
+	if rod_active:
+		background = ACTIVE_GREEN_HOVER if action_hovered else ACTIVE_GREEN_BG
+		border = ACTIVE_GREEN_BORDER_HOVER if action_hovered else ACTIVE_GREEN_BORDER
+	elif action_hovered:
+		background = SURFACE_HOVER
+		border = ACCENT_CYAN
+	if selected:
+		background = ACTIVE_GREEN_HOVER if rod_active else SURFACE_HOVER
+		border = ACCENT_GOLD
 	var width := 2 if selected else 1
 	var style := _make_style(background, border, 9, width)
 	style.content_margin_left = 8
@@ -318,7 +350,24 @@ func _apply_action_slot_style() -> void:
 	style.content_margin_right = 8
 	style.content_margin_bottom = 8
 	action_slot.add_theme_stylebox_override("panel", style)
-	action_button.modulate = Color.WHITE if GameState.selected_fishing_rod_item_id != "" else Color(0.66, 0.72, 0.8, 0.9)
+	action_button.modulate = Color.WHITE if rod_active else Color(0.66, 0.72, 0.8, 0.9)
+
+
+func _apply_no_rod_button_style(button: Button, selected: bool) -> void:
+	var background := Color("#252114f2") if selected else SURFACE_INTERACTIVE
+	var border := ACCENT_GOLD if selected else BORDER_SUBTLE
+	button.add_theme_color_override("font_color", TEXT_PRIMARY)
+	button.add_theme_color_override("font_hover_color", TEXT_PRIMARY)
+	button.add_theme_color_override("font_pressed_color", TEXT_PRIMARY)
+	button.add_theme_color_override("font_disabled_color", TEXT_MUTED)
+	button.add_theme_font_size_override("font_size", 13)
+	button.add_theme_constant_override("icon_max_width", 30)
+	button.add_theme_stylebox_override("normal", _make_button_style(background, border))
+	button.add_theme_stylebox_override("hover", _make_button_style(SURFACE_HOVER, ACCENT_CYAN))
+	button.add_theme_stylebox_override("pressed", _make_button_style(SURFACE_PRESSED, ACCENT_CYAN))
+	button.add_theme_stylebox_override("focus", _make_button_style(SURFACE_HOVER, ACCENT_CYAN))
+	button.add_theme_stylebox_override("disabled", _make_button_style(background, border))
+	button.modulate = Color.WHITE if selected else Color(0.78, 0.82, 0.88, 0.92)
 
 
 func _apply_rod_button_style(button: Button, rod: Dictionary, selected: bool) -> void:
