@@ -216,6 +216,7 @@ func normalize_chroma_items(value: Variant) -> Array[Dictionary]:
 			"color": color if color != "" else "#ffffff",
 			"fee": maxi(int(item.get("fee", 0)), 0),
 			"equipped": bool(item.get("equipped", false)),
+			"tintable": bool(item.get("tintable", false)),
 		})
 	return items
 

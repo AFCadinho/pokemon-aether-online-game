@@ -32,6 +32,8 @@ var selected_box_item_id := ""
 var selected_chroma_item_id := ""
 var selected_chroma_color := "#ffffff"
 var pending_chroma_colors: Dictionary = {}
+var selected_wear_item_ids: Dictionary = {}
+var initial_wear_item_ids: Dictionary = {}
 var preview_direction := "down"
 var money := 0
 var create_in_progress := false
@@ -150,7 +152,7 @@ func _build_service_tabs() -> Control:
 	dye_tab_button.pressed.connect(_select_mode.bind("dye"))
 	tabs.add_child(dye_tab_button)
 	var explanation := Label.new()
-	explanation.text = "Recolour the Chroma items your character is wearing."
+	explanation.text = "Switch Appearance Wear items and recolour Chroma pieces."
 	explanation.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	explanation.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	explanation.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -413,9 +415,16 @@ func _apply_catalog(result: Dictionary) -> void:
 	money_label.text = "Money: ₽%s" % _format_number(money)
 	if selected_box_item_id == "" or _selected_outfit().is_empty():
 		selected_box_item_id = str(outfits[0].get("boxItemId", "")) if not outfits.is_empty() else ""
-	var equipped_items := _equipped_chroma_items()
-	if selected_chroma_item_id == "" or _selected_chroma_item().is_empty() or not bool(_selected_chroma_item().get("equipped", false)):
-		selected_chroma_item_id = str(equipped_items[0].get("itemId", "")) if not equipped_items.is_empty() else ""
+	selected_wear_item_ids.clear()
+	initial_wear_item_ids.clear()
+	for item: Dictionary in chroma_items:
+		if bool(item.get("equipped", false)):
+			var slot := str(item.get("slot", ""))
+			var item_id := str(item.get("itemId", ""))
+			selected_wear_item_ids[slot] = item_id
+			initial_wear_item_ids[slot] = item_id
+	if selected_chroma_item_id == "" or _selected_chroma_item().is_empty():
+		selected_chroma_item_id = str(chroma_items[0].get("itemId", "")) if not chroma_items.is_empty() else ""
 	pending_chroma_colors.clear()
 	selected_chroma_color = str(_selected_chroma_item().get("color", "#ffffff"))
 	_render_outfit_list()
@@ -429,22 +438,20 @@ func _render_outfit_list() -> void:
 	var visible_count := 0
 	if active_mode == "dye":
 		for item: Dictionary in chroma_items:
-			if not bool(item.get("equipped", false)):
-				continue
 			if not _chroma_item_matches_search(item, search_text):
 				continue
 			visible_count += 1
 			outfit_list.add_child(_create_chroma_item_card(item))
-		catalog_summary_label.text = "%d of %d Chroma items" % [
+		catalog_summary_label.text = "%d of %d wear items" % [
 			visible_count,
-			_equipped_chroma_items().size(),
+			chroma_items.size(),
 		]
 		if visible_count == 0:
 			var empty_dye_label := Label.new()
 			empty_dye_label.text = (
-				"No Chroma items are currently worn by your character."
+				"No items are available in Appearance Wear."
 				if search_text == ""
-				else "No Chroma items match your search."
+				else "No Appearance Wear items match your search."
 			)
 			empty_dye_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			empty_dye_label.add_theme_color_override("font_color", UI_MUTED)
@@ -529,13 +536,14 @@ func _select_outfit(box_item_id: String) -> void:
 
 func _create_chroma_item_card(item: Dictionary) -> Button:
 	var item_id := str(item.get("itemId", ""))
-	var selected := item_id == selected_chroma_item_id
+	var selected := str(selected_wear_item_ids.get(str(item.get("slot", "")), "")) == item_id
 	var button := Button.new()
 	button.name = "Chroma_%s" % item_id
-	button.text = "%s\n%s · %s" % [
+	button.text = "%s\n%s%s" % [
 		str(item.get("name", item_id)),
 		str(item.get("slot", "")).replace("_", " ").capitalize(),
-		str(pending_chroma_colors.get(item_id, item.get("color", "#ffffff"))).to_upper(),
+		(" · %s" % str(pending_chroma_colors.get(item_id, item.get("color", "#ffffff"))).to_upper())
+		if bool(item.get("tintable", false)) else "",
 	]
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.custom_minimum_size = Vector2(0, 62)
@@ -548,6 +556,7 @@ func _create_chroma_item_card(item: Dictionary) -> Button:
 func _select_chroma_item(item_id: String) -> void:
 	selected_chroma_item_id = item_id
 	var item := _selected_chroma_item()
+	selected_wear_item_ids[str(item.get("slot", ""))] = item_id
 	selected_chroma_color = str(pending_chroma_colors.get(item_id, item.get("color", "#ffffff")))
 	_render_outfit_list()
 	_refresh_detail()
@@ -559,7 +568,7 @@ func _select_mode(mode: String) -> void:
 	active_mode = mode
 	search_input.text = ""
 	search_input.placeholder_text = (
-		"Search worn Chroma items..."
+		"Search Appearance Wear..."
 		if active_mode == "dye"
 		else "Search outfits or components..."
 	)
@@ -634,7 +643,7 @@ func _refresh_dye_detail() -> void:
 	dye_palette.visible = has_item
 	component_scroll.visible = false
 	components_caption_label.visible = false
-	detail_name_label.text = "Character Customization" if has_item else "No worn Chroma items"
+	detail_name_label.text = "Appearance Wear" if has_item else "No Appearance Wear items"
 	detail_gender_label.text = (
 		"%s · %s" % [
 			str(item.get("slot", "")).replace("_", " ").capitalize(),
@@ -642,14 +651,15 @@ func _refresh_dye_detail() -> void:
 		]
 	).to_upper() if has_item else ""
 	detail_description_label.text = (
-		"Select a worn Chroma item, preview its colour, and pay once for all changed items."
+		"Switch worn items here. Only Chroma colour changes add to the total fee."
 		if has_item
-		else "Equip a Chroma item in Character Customization to dye it here."
+		else "Move appearance items from your Bag into Appearance Wear first."
 	)
 	detail_progress_label.text = (
-		"Editing %s · current colour %s" % [
+		"Editing %s%s" % [
 			str(item.get("name", "")),
-			str(item.get("color", "#ffffff")).to_upper(),
+			(" · current colour %s" % str(item.get("color", "#ffffff")).to_upper())
+			if bool(item.get("tintable", false)) else "",
 		]
 		if has_item
 		else ""
@@ -659,26 +669,27 @@ func _refresh_dye_detail() -> void:
 		fee_label.text = ""
 		create_button.text = "Select a Chroma Item"
 		create_button.disabled = true
-		status_label.text = "Only Chroma items worn by your character can be dyed."
+		status_label.text = "Appearance Wear is empty."
 		status_label.add_theme_color_override("font_color", UI_MUTED)
 		_clear_preview()
 		return
 	if selected_chroma_color == "":
 		selected_chroma_color = str(item.get("color", "#ffffff"))
-	var changed_count := _pending_chroma_changes().size()
+	var changed_count := _pending_color_change_count()
 	var fee := _pending_chroma_fee()
+	var outfit_changed := _has_wear_selection_changes()
 	fee_label.text = "%d changed item%s · ₽%s total" % [
 		changed_count,
 		"" if changed_count == 1 else "s",
 		_format_number(fee),
 	]
 	create_button.text = "Applying..." if create_in_progress else "Apply Changes · ₽%s" % _format_number(fee)
-	create_button.disabled = create_in_progress or changed_count == 0 or money < fee
+	create_button.disabled = create_in_progress or (changed_count == 0 and not outfit_changed) or money < fee
 	if create_in_progress:
 		status_label.text = "Applying the new colour..."
 		status_label.add_theme_color_override("font_color", UI_MUTED)
-	elif changed_count == 0:
-		status_label.text = "Choose a new colour for one or more worn Chroma items."
+	elif changed_count == 0 and not outfit_changed:
+		status_label.text = "Choose another wear item or a new Chroma colour."
 		status_label.add_theme_color_override("font_color", UI_MUTED)
 	elif money < fee:
 		status_label.text = "You need ₽%s more." % _format_number(fee - money)
@@ -687,6 +698,8 @@ func _refresh_dye_detail() -> void:
 		status_label.text = "Preview ready · your item changes only after payment."
 		status_label.add_theme_color_override("font_color", UI_GREEN)
 	_sync_dye_controls()
+	dye_swatch_grid.visible = bool(item.get("tintable", false))
+	dye_hex_input.get_parent().visible = bool(item.get("tintable", false))
 	_refresh_preview()
 
 
@@ -720,6 +733,8 @@ func _select_dye_color(color: String) -> void:
 		return
 	selected_chroma_color = normalized
 	var item := _selected_chroma_item()
+	if not bool(item.get("tintable", false)):
+		return
 	if normalized.to_lower() == str(item.get("color", "#ffffff")).to_lower():
 		pending_chroma_colors.erase(selected_chroma_item_id)
 	else:
@@ -762,13 +777,14 @@ func _refresh_dye_action_state() -> void:
 	var item := _selected_chroma_item()
 	if item.is_empty():
 		return
-	var changed_count := _pending_chroma_changes().size()
+	var changed_count := _pending_color_change_count()
 	var fee := _pending_chroma_fee()
+	var outfit_changed := _has_wear_selection_changes()
 	fee_label.text = "%d changed item%s · ₽%s total" % [changed_count, "" if changed_count == 1 else "s", _format_number(fee)]
 	create_button.text = "Applying..." if create_in_progress else "Apply Changes · ₽%s" % _format_number(fee)
-	create_button.disabled = create_in_progress or changed_count == 0 or money < fee
-	if changed_count == 0:
-		status_label.text = "Choose a new colour for one or more worn Chroma items."
+	create_button.disabled = create_in_progress or (changed_count == 0 and not outfit_changed) or money < fee
+	if changed_count == 0 and not outfit_changed:
+		status_label.text = "Choose another wear item or a new Chroma colour."
 		status_label.add_theme_color_override("font_color", UI_MUTED)
 	elif money < fee:
 		status_label.text = "You need ₽%s more." % _format_number(fee - money)
@@ -803,7 +819,7 @@ func _refresh_preview() -> void:
 		if player_save != null and player_save.has_method("to_appearance_state")
 		else CharacterAppearanceService.get_default_appearance(_trainer_gender())
 	) as Dictionary
-	for worn_item: Dictionary in _equipped_chroma_items():
+	for worn_item: Dictionary in _selected_wear_items():
 		var slot := str(worn_item.get("slot", ""))
 		var item_id := str(worn_item.get("itemId", ""))
 		appearance[slot] = str(worn_item.get("appearanceId", ""))
@@ -1012,15 +1028,21 @@ func _dye_customized_outfit() -> void:
 			if str(chroma_items[index].get("itemId", "")) == str(dyed_item.get("itemId", "")):
 				chroma_items[index] = dyed_item.duplicate(true)
 				break
+	for index: int in chroma_items.size():
+		var local_item := chroma_items[index]
+		local_item["equipped"] = (
+			str(selected_wear_item_ids.get(str(local_item.get("slot", "")), ""))
+			== str(local_item.get("itemId", ""))
+		)
+		chroma_items[index] = local_item
+	initial_wear_item_ids = selected_wear_item_ids.duplicate(true)
 	pending_chroma_colors.clear()
 	selected_chroma_color = str(_selected_chroma_item().get("color", selected_chroma_color))
 	_render_outfit_list()
 	_refresh_dye_detail()
-	status_label.text = "%d Chroma item%s updated for ₽%s." % [
-		dyed_items.size(),
-		"" if dyed_items.size() == 1 else "s",
-		_format_number(int(result.get("fee", fee))),
-	]
+	status_label.text = "Appearance Wear updated · ₽%s paid for Chroma colour changes." % _format_number(
+		int(result.get("fee", fee))
+	)
 	status_label.add_theme_color_override("font_color", UI_GREEN)
 	chroma_dyed.emit(result)
 
@@ -1043,22 +1065,42 @@ func _selected_chroma_item() -> Dictionary:
 	return {}
 
 
-func _equipped_chroma_items() -> Array[Dictionary]:
-	var equipped: Array[Dictionary] = []
+func _selected_wear_items() -> Array[Dictionary]:
+	var selected_items: Array[Dictionary] = []
 	for item: Dictionary in chroma_items:
-		if bool(item.get("equipped", false)):
-			equipped.append(item)
-	return equipped
+		var slot := str(item.get("slot", ""))
+		if str(selected_wear_item_ids.get(slot, "")) == str(item.get("itemId", "")):
+			selected_items.append(item)
+	return selected_items
 
 
 func _pending_chroma_changes() -> Array[Dictionary]:
 	var changes: Array[Dictionary] = []
-	for item: Dictionary in _equipped_chroma_items():
+	for item: Dictionary in _selected_wear_items():
 		var item_id := str(item.get("itemId", ""))
-		if not pending_chroma_colors.has(item_id):
-			continue
-		changes.append({"itemId": item_id, "color": str(pending_chroma_colors[item_id])})
+		changes.append({
+			"itemId": item_id,
+			"color": str(pending_chroma_colors.get(item_id, item.get("color", "#ffffff"))),
+		})
 	return changes
+
+
+func _pending_color_change_count() -> int:
+	var count := 0
+	for item: Dictionary in _selected_wear_items():
+		var item_id := str(item.get("itemId", ""))
+		if (
+			bool(item.get("tintable", false))
+			and pending_chroma_colors.has(item_id)
+			and str(pending_chroma_colors[item_id]).to_lower()
+				!= str(item.get("color", "#ffffff")).to_lower()
+		):
+			count += 1
+	return count
+
+
+func _has_wear_selection_changes() -> bool:
+	return selected_wear_item_ids != initial_wear_item_ids
 
 
 func _pending_chroma_fee() -> int:
@@ -1066,7 +1108,12 @@ func _pending_chroma_fee() -> int:
 	for change: Dictionary in _pending_chroma_changes():
 		var item_id := str(change.get("itemId", ""))
 		for item: Dictionary in chroma_items:
-			if str(item.get("itemId", "")) == item_id:
+			if (
+				str(item.get("itemId", "")) == item_id
+				and bool(item.get("tintable", false))
+				and str(change.get("color", "")).to_lower()
+					!= str(item.get("color", "#ffffff")).to_lower()
+			):
 				total += int(item.get("fee", 0))
 				break
 	return total

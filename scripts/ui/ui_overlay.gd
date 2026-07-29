@@ -14138,6 +14138,8 @@ func _on_aether_atelier_chroma_dyed(result: Dictionary) -> void:
 		var slot := CharacterAppearanceService.normalize_part_category(str(item.get("slot", "")))
 		var appearance_id := str(item.get("appearanceId", ""))
 		var color := CharacterAppearanceService.normalize_hex_color_code(str(item.get("color", "")))
+		if appearance_id != "":
+			_apply_player_save_appearance_part(slot, appearance_id)
 		if color == "" or _get_preview_part_id(slot) != appearance_id:
 			continue
 		match slot:

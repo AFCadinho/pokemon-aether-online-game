@@ -25,6 +25,7 @@ func _run() -> void:
 			"color": "#ffffff",
 			"fee": 2500,
 			"equipped": true,
+			"tintable": true,
 		}, {
 			"itemId": "adinho-chroma-trousers",
 			"name": "Adinho Chroma Trousers",
@@ -34,6 +35,17 @@ func _run() -> void:
 			"color": "#ffffff",
 			"fee": 2500,
 			"equipped": true,
+			"tintable": true,
+		}, {
+			"itemId": "adinho-classic-sunglasses",
+			"name": "Adinho Classic Sunglasses",
+			"slot": "facegear",
+			"appearanceId": "Adinho_Glasses",
+			"genders": ["male", "female"],
+			"color": "#ffffff",
+			"fee": 0,
+			"equipped": false,
+			"tintable": false,
 		}],
 	})
 	popup.call("_select_mode", "dye")
@@ -57,6 +69,7 @@ func _run() -> void:
 	var create_button := popup.get("create_button") as Button
 	popup.call("_select_chroma_item", "adinho-chroma-trousers")
 	popup.call("_select_dye_color", "#285f9e")
+	popup.call("_select_chroma_item", "adinho-classic-sunglasses")
 	_check(
 		create_button != null and not create_button.disabled,
 		"Character Customization enables one combined payment"
@@ -64,6 +77,11 @@ func _run() -> void:
 	_check(
 		str(create_button.text).contains("5,000"),
 		"Character Customization adds the fees of both changed items"
+	)
+	_check(
+		str((popup.get("selected_wear_item_ids") as Dictionary).get("facegear", ""))
+			== "adinho-classic-sunglasses",
+		"Character Customization can switch to a non-Chroma Appearance Wear item for free"
 	)
 
 	popup.queue_free()

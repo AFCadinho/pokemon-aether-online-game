@@ -23,6 +23,7 @@ func _init() -> void:
 				"color": "#7a46c5",
 				"fee": 2500,
 				"equipped": true,
+				"tintable": true,
 			}],
 			"outfits": [{
 				"boxItemId": "aether-blossom-outfit",
@@ -62,6 +63,10 @@ func _init() -> void:
 	_check(
 		bool((parsed_chroma_items[0] as Dictionary).get("equipped", false)),
 		"Atelier service retains worn Chroma state"
+	)
+	_check(
+		bool((parsed_chroma_items[0] as Dictionary).get("tintable", false)),
+		"Atelier service identifies Chroma-capable wear items"
 	)
 	service.free()
 
