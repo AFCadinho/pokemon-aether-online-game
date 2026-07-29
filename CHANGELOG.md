@@ -32,6 +32,7 @@
 - Fixed the first Pokémon Storage hover card after starting the game sometimes stretching to nearly the full window height.
 - Fixed valid fishing attempts falling through to the generic “report this to staff” message even when the player owned an Old Rod.
 - Fixed local and remote fishing poses, including duplicated Surf limbs and misaligned hair, headgear, eyes, facial hair, and accessories while facing down.
+- Fixed the Adinho outfit reverting to the standard clothes while fishing, Surfing, or using a mount.
 - Fixed defeated players sometimes respawning on invalid map tiles instead of beside their last healing NPC. A late position autosave could overwrite the server's blackout destination before the client finished teleporting.
 - Fixed Guild invitations being visible only after opening the Guild window. Incoming invitations now open a dialog with Accept and Decline actions while playing.
 - Fixed several PvP synchronization issues that could leave both players waiting, apply an outdated snapshot, briefly restore old HP, or stop the battle controls from responding after reconnecting.

@@ -21,6 +21,25 @@ func _init() -> void:
 	var appearance_source := FileAccess.get_file_as_string(APPEARANCE_SERVICE_PATH)
 	var remote_player_source := FileAccess.get_file_as_string(REMOTE_PLAYER_PATH)
 
+	for activity_asset_path: String in [
+		"res://assets/player/male/top/fish/Adinho_Shirt_fish.png",
+		"res://assets/player/male/top/fish/Adinho_Shirt_Chroma_fish.png",
+		"res://assets/player/male/bottom/fish/Adinho_Trousers_fish.png",
+		"res://assets/player/male/bottom/fish/Adinho_Trousers_Chroma_fish.png",
+		"res://assets/player/male/shoes/fish/Adinho_Shoes_fish.png",
+		"res://assets/player/male/shoes/fish/Adinho_Shoes_Chroma_fish.png",
+		"res://assets/player/male/top/ride/Adinho_Shirt_ride.png",
+		"res://assets/player/male/top/ride/Adinho_Shirt_Chroma_ride.png",
+		"res://assets/player/male/bottom/ride/Adinho_Trousers_ride.png",
+		"res://assets/player/male/bottom/ride/Adinho_Trousers_Chroma_ride.png",
+		"res://assets/player/male/shoes/ride/Adinho_Shoes_ride.png",
+		"res://assets/player/male/shoes/ride/Adinho_Shoes_Chroma_ride.png",
+	]:
+		_check(
+			ResourceLoader.exists(activity_asset_path),
+			"Adinho activity asset exists: %s" % activity_asset_path.get_file()
+		)
+
 	_check(
 		overlay_source.contains('path="res://scripts/ui/fishing_action_controller.gd"')
 		and overlay_source.contains('[node name="FishingActionController" type="Node" parent="."]'),
@@ -101,6 +120,18 @@ func _init() -> void:
 		"male",
 		CharacterAppearanceServiceScript.BODY_MOVEMENT_SURF_FISH
 	)
+	var custom_top_frames := CharacterAppearanceServiceScript.get_part_frames(
+		"top",
+		"Adinho_Shirt",
+		"male",
+		CharacterAppearanceServiceScript.BODY_MOVEMENT_SURF_FISH
+	)
+	var custom_chroma_top_frames := CharacterAppearanceServiceScript.get_part_frames(
+		"top",
+		"Adinho_Shirt_Chroma",
+		"male",
+		CharacterAppearanceServiceScript.BODY_MOVEMENT_SURF_FISH
+	)
 	var custom_bottom_frames := CharacterAppearanceServiceScript.get_part_frames(
 		"bottom",
 		"Adinho_Trousers",
@@ -113,6 +144,24 @@ func _init() -> void:
 		"male",
 		CharacterAppearanceServiceScript.BODY_MOVEMENT_SURF_FISH
 	)
+	var custom_surf_top_frames := CharacterAppearanceServiceScript.get_part_frames(
+		"top",
+		"Adinho_Shirt",
+		"male",
+		CharacterAppearanceServiceScript.BODY_MOVEMENT_SURF
+	)
+	var custom_mount_bottom_frames := CharacterAppearanceServiceScript.get_part_frames(
+		"bottom",
+		"Adinho_Trousers",
+		"male",
+		CharacterAppearanceServiceScript.BODY_MOVEMENT_MOUNT
+	)
+	var custom_ride_shoes_frames := CharacterAppearanceServiceScript.get_part_frames(
+		"shoes",
+		"Adinho_Shoes",
+		"male",
+		CharacterAppearanceServiceScript.BODY_MOVEMENT_RIDE
+	)
 	_check(
 		_frame_atlas_path(combined_body_frames).contains("/body/fish/")
 		and _frame_atlas_path(combined_top_frames).contains("/top/fish/")
@@ -120,9 +169,29 @@ func _init() -> void:
 		"Surf fishing loads matching authored fishing textures"
 	)
 	_check(
-		_frame_atlas_path(custom_bottom_frames).contains("/bottom/fish/Trousers_fish.png")
-		and _frame_atlas_path(custom_shoes_frames).contains("/shoes/fish/Shoes_fish.png"),
-		"cosmetics without fishing sheets fall back to aligned fishing layers"
+		_frame_atlas_path(custom_top_frames).contains("/top/fish/Adinho_Shirt_fish.png")
+		and _frame_atlas_path(custom_chroma_top_frames).contains(
+			"/top/fish/Adinho_Shirt_Chroma_fish.png"
+		)
+		and _frame_atlas_path(custom_bottom_frames).contains(
+			"/bottom/fish/Adinho_Trousers_fish.png"
+		)
+		and _frame_atlas_path(custom_shoes_frames).contains(
+			"/shoes/fish/Adinho_Shoes_fish.png"
+		),
+		"Adinho cosmetics keep their authored outfit while fishing"
+	)
+	_check(
+		_frame_atlas_path(custom_surf_top_frames).contains(
+			"/top/ride/Adinho_Shirt_ride.png"
+		)
+		and _frame_atlas_path(custom_mount_bottom_frames).contains(
+			"/bottom/ride/Adinho_Trousers_ride.png"
+		)
+		and _frame_atlas_path(custom_ride_shoes_frames).contains(
+			"/shoes/ride/Adinho_Shoes_ride.png"
+		),
+		"Adinho cosmetics keep their authored outfit while Surfing or mounted"
 	)
 	_check(
 		remote_player_source.contains(
