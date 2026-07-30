@@ -107,6 +107,7 @@ func _ready() -> void:
 	_setup_logout_confirm_dialog()
 	_apply_premium_styles()
 	LanguageSelectorStyle.configure(language_options_button)
+	LanguageSelectorStyle.configure(terminology_options_button)
 	battle_animations_check_box.toggled.connect(_on_battle_animations_toggled)
 	weather_effects_check_box.toggled.connect(_on_weather_effects_toggled)
 	terrain_effects_check_box.toggled.connect(_on_terrain_effects_toggled)

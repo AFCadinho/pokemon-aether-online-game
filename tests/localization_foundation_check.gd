@@ -166,6 +166,13 @@ func _check_settings_scene_translation() -> void:
 		"settings expose an independent localized terminology preference"
 	)
 	_check(
+		terminology_options != null
+		and terminology_options.has_theme_icon_override("arrow")
+		and terminology_options.has_theme_stylebox_override("normal")
+		and terminology_options.get_popup().has_theme_stylebox_override("panel"),
+		"terminology selector uses the complete PokeAether dropdown style"
+	)
+	_check(
 		language_options != null and language_options.get_item_icon(0) != null,
 		"settings language selector displays flags"
 	)
