@@ -329,7 +329,7 @@ func _init() -> void:
 	_check(script_source.contains("func _create_trainer_card_redeem_button()") and script_source.contains('header.add_child(_create_trainer_card_redeem_button())'), "Trainer Card places the future Redeem Code action beside Close")
 	_check(not script_source.contains('hint_label.text = "Have a gift code?"') and not script_source.contains("RedeemCodePanel"), "Trainer Card omits the redundant redeem footer copy")
 	_check(script_source.contains('redeem_button.add_theme_constant_override("icon_max_width", 18)') and not script_source.contains("redeem_button.icon_max_width"), "runtime Redeem Code button sizes its icon through a valid theme override")
-	_check(not script_source.contains("redeem_button.pressed.connect"), "Redeem Code remains intentionally non-functional")
+	_check(script_source.contains("redeem_button.pressed.connect(_open_trainer_card_redeem_popup)"), "Redeem Code opens the live gift-code flow")
 	_check(script_source.contains("const TRAINER_CARD_SIZE := Vector2(720, 500)"), "Trainer Card has enough room for a breathable passport layout")
 	_check(script_source.contains("func _make_trainer_card_outer_style()") and script_source.contains("func _make_trainer_card_section_style"), "Trainer Card uses dedicated semantic surfaces")
 	_check(script_source.contains("func _apply_trainer_card_tabs_style") and script_source.contains("TRAINER_CARD_ACCENT, true"), "Trainer Card tabs use a restrained selected accent")

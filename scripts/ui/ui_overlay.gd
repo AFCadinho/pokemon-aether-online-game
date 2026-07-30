@@ -853,6 +853,11 @@ var trainer_card_color_buttons: Dictionary = {}
 var trainer_card_hex_inputs: Dictionary = {}
 var trainer_card_natural_color_summary_buttons: Dictionary = {}
 var trainer_card_natural_colors_popup: PopupPanel
+var trainer_card_redeem_popup: PanelContainer
+var trainer_card_redeem_input: LineEdit
+var trainer_card_redeem_status: Label
+var trainer_card_redeem_submit: Button
+var trainer_card_redeem_in_flight := false
 var owned_appearance_parts: Dictionary = {}
 var appearance_inventory_slot_limit := DEFAULT_APPEARANCE_SLOT_LIMIT
 var appearance_inventory_slot_counts: Dictionary = {}
@@ -11335,8 +11340,165 @@ func _create_trainer_card_redeem_button() -> Button:
 	redeem_button.focus_mode = Control.FOCUS_NONE
 	redeem_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	_set_localized_control_property(redeem_button, "tooltip_text", "ui.trainer_card.redeem_tooltip")
+	redeem_button.pressed.connect(_open_trainer_card_redeem_popup)
 	_apply_button_style(redeem_button)
 	return redeem_button
+
+func _open_trainer_card_redeem_popup() -> void:
+	if is_instance_valid(trainer_card_redeem_popup):
+		trainer_card_redeem_popup.visible = true
+		_activate_ui_panel(trainer_card_redeem_popup)
+		trainer_card_redeem_input.grab_focus()
+		return
+
+	trainer_card_redeem_popup = PanelContainer.new()
+	trainer_card_redeem_popup.name = "GiftCodeRedeemPopup"
+	trainer_card_redeem_popup.custom_minimum_size = Vector2(460, 260)
+	trainer_card_redeem_popup.anchor_left = 0.5
+	trainer_card_redeem_popup.anchor_top = 0.5
+	trainer_card_redeem_popup.anchor_right = 0.5
+	trainer_card_redeem_popup.anchor_bottom = 0.5
+	trainer_card_redeem_popup.offset_left = -230
+	trainer_card_redeem_popup.offset_top = -130
+	trainer_card_redeem_popup.offset_right = 230
+	trainer_card_redeem_popup.offset_bottom = 130
+	trainer_card_redeem_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	trainer_card_redeem_popup.add_theme_stylebox_override("panel", _make_trainer_card_outer_style())
+	root_control.add_child(trainer_card_redeem_popup)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 22)
+	margin.add_theme_constant_override("margin_top", 20)
+	margin.add_theme_constant_override("margin_right", 22)
+	margin.add_theme_constant_override("margin_bottom", 20)
+	trainer_card_redeem_popup.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 12)
+	margin.add_child(layout)
+
+	var title := Label.new()
+	_set_localized_control_property(title, "text", "ui.gift_code.title")
+	title.add_theme_font_size_override("font_size", 22)
+	title.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
+	layout.add_child(title)
+
+	var description := Label.new()
+	_set_localized_control_property(description, "text", "ui.gift_code.description")
+	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	description.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(description)
+
+	trainer_card_redeem_input = LineEdit.new()
+	trainer_card_redeem_input.name = "GiftCodeInput"
+	trainer_card_redeem_input.max_length = 64
+	trainer_card_redeem_input.placeholder_text = LocalizationManager.text("ui.gift_code.placeholder")
+	trainer_card_redeem_input.text_submitted.connect(func(_value: String) -> void: _submit_trainer_card_gift_code())
+	_apply_line_edit_style(trainer_card_redeem_input)
+	layout.add_child(trainer_card_redeem_input)
+
+	trainer_card_redeem_status = Label.new()
+	trainer_card_redeem_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	trainer_card_redeem_status.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(trainer_card_redeem_status)
+
+	var actions := HBoxContainer.new()
+	actions.alignment = BoxContainer.ALIGNMENT_END
+	actions.add_theme_constant_override("separation", 8)
+	layout.add_child(actions)
+
+	var cancel := Button.new()
+	cancel.text = LocalizationManager.text("ui.gift_code.cancel")
+	cancel.pressed.connect(_hide_trainer_card_redeem_popup)
+	_apply_button_style(cancel)
+	actions.add_child(cancel)
+
+	trainer_card_redeem_submit = Button.new()
+	trainer_card_redeem_submit.text = LocalizationManager.text("ui.gift_code.submit")
+	trainer_card_redeem_submit.pressed.connect(_submit_trainer_card_gift_code)
+	_apply_button_style(trainer_card_redeem_submit, "primary")
+	actions.add_child(trainer_card_redeem_submit)
+
+	_activate_ui_panel(trainer_card_redeem_popup)
+	trainer_card_redeem_input.grab_focus()
+
+func _hide_trainer_card_redeem_popup() -> void:
+	if not is_instance_valid(trainer_card_redeem_popup):
+		return
+	_deactivate_ui_panel(trainer_card_redeem_popup)
+	trainer_card_redeem_popup.queue_free()
+	trainer_card_redeem_popup = null
+	trainer_card_redeem_input = null
+	trainer_card_redeem_status = null
+	trainer_card_redeem_submit = null
+	trainer_card_redeem_in_flight = false
+
+func _submit_trainer_card_gift_code() -> void:
+	if trainer_card_redeem_in_flight or not is_instance_valid(trainer_card_redeem_input):
+		return
+	var code := trainer_card_redeem_input.text.strip_edges()
+	if code == "":
+		trainer_card_redeem_status.text = LocalizationManager.text("ui.gift_code.error.empty")
+		trainer_card_redeem_status.add_theme_color_override("font_color", UI_DANGER)
+		return
+	trainer_card_redeem_in_flight = true
+	trainer_card_redeem_submit.disabled = true
+	trainer_card_redeem_input.editable = false
+	trainer_card_redeem_status.text = LocalizationManager.text("ui.gift_code.redeeming")
+	trainer_card_redeem_status.add_theme_color_override("font_color", UI_MUTED_TEXT)
+
+	var result: Dictionary = await GiftCodeService.redeem(code)
+	if not is_instance_valid(trainer_card_redeem_popup):
+		return
+	trainer_card_redeem_in_flight = false
+	trainer_card_redeem_submit.disabled = false
+	trainer_card_redeem_input.editable = true
+	if not bool(result.get("success", false)):
+		trainer_card_redeem_status.text = str(result.get("error", LocalizationManager.text("backend.error.generic")))
+		trainer_card_redeem_status.add_theme_color_override("font_color", UI_DANGER)
+		return
+
+	bag_inventory_items = _normalize_bag_inventory_items(result.get("inventory", []))
+	bag_inventory_loaded = true
+	_refresh_bag_items()
+	_refresh_party()
+	_refresh_player_status_card()
+	var summary := _gift_code_reward_summary(result.get("rewards", []))
+	add_system_message(LocalizationManager.text("ui.gift_code.success", {"rewards": summary}))
+	var public_message := str(result.get("publicMessage", "")).strip_edges()
+	if public_message != "":
+		add_system_message(public_message)
+	_hide_trainer_card_redeem_popup()
+
+func _gift_code_reward_summary(rewards_value: Variant) -> String:
+	var labels: Array[String] = []
+	if rewards_value is not Array:
+		return LocalizationManager.text("ui.gift_code.reward.generic")
+	for reward_value: Variant in rewards_value as Array:
+		if reward_value is not Dictionary:
+			continue
+		var reward: Dictionary = reward_value
+		var payload: Dictionary = reward.get("payload", {}) as Dictionary
+		match str(reward.get("type", "")):
+			"currency":
+				var currency_id := str(payload.get("currency", ""))
+				labels.append(LocalizationManager.text("ui.gift_code.reward.currency", {
+					"amount": int(payload.get("amount", 0)),
+					"currency": LocalizationManager.text("ui.trainer_card.wallet.%s" % currency_id),
+				}))
+			"item":
+				labels.append(LocalizationManager.text("ui.gift_code.reward.item", {
+					"quantity": int(payload.get("quantity", 0)),
+					"item": ItemLocalization.display_name(
+						str(payload.get("itemId", "")),
+						str(payload.get("name", payload.get("itemId", "")))
+					),
+				}))
+			"pokemon":
+				labels.append(LocalizationManager.text("ui.gift_code.reward.pokemon", {
+					"pokemon": str(payload.get("species", "Pokémon")),
+				}))
+	return ", ".join(labels) if not labels.is_empty() else LocalizationManager.text("ui.gift_code.reward.generic")
 
 func _create_trainer_card_identity_panel() -> Control:
 	var panel := PanelContainer.new()
