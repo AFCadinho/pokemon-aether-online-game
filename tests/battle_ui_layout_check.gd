@@ -171,6 +171,15 @@ func _check_scene_structure() -> void:
 	var bag_close_block := battle_script_source.substr(bag_close_start, bag_close_end - bag_close_start)
 	_check_contains(bag_close_block, "current_action_view = ActionView.MOVES", "Bag close leaves BAG state unconditionally")
 	_check_contains(bag_close_block, "_sync_action_panel_mode_visibility()", "Bag close hides the drawer before contextual flow resumes")
+	var capture_start := battle_script_source.find("func _on_bag_grid_item_selected")
+	var capture_end := battle_script_source.find("\nfunc ", capture_start + 1)
+	var capture_block := battle_script_source.substr(capture_start, capture_end - capture_start)
+	_check_contains(capture_block, "_close_bag_for_capture_attempt()", "Selecting a capture item closes the Bag before awaiting the throw request")
+	_check_true(
+		capture_block.find("_close_bag_for_capture_attempt()") < capture_block.find("await InventoryService.catch_wild_pokemon"),
+		"Bag closes before the capture request can delay the throw presentation"
+	)
+	_check_contains(capture_block, "_restore_bag_after_capture_error()", "Rejected capture attempts restore the Bag for another choice")
 	_check_contains(scene_source, "[node name=\"MechanicsPanel\" type=\"PanelContainer\" parent=\"HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage\"", "mechanics live beside the battlefield moves")
 	_check_contains(scene_source, "[node name=\"CalcLogButton\" type=\"Button\" parent=\"HBoxContainer/BattleLogRail/ActionChoices", "Damage Calc lives below the battle log")
 	_check_contains(scene_source, "[node name=\"UtilityActions\" type=\"PanelContainer\" parent=\"HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage\"", "battlefield has a shared segmented utility bar")

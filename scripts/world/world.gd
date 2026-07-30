@@ -95,6 +95,9 @@ func _ready() -> void:
 		FieldMoveService.owned_charms_changed.connect(_validate_active_flash_source)
 	_ensure_map_transition_overlay()
 	_ensure_remote_players_container()
+	if not SettingsManager.settings_changed.is_connected(_on_settings_changed):
+		SettingsManager.settings_changed.connect(_on_settings_changed)
+	_sync_remote_players_visibility()
 	_connect_world_presence_signals()
 	await _setup_initial_world_state()
 	await _refresh_fishing_progression()
@@ -1260,12 +1263,34 @@ func _get_tile_group_bottom_z_index(layer: TileMapLayer, group: Array[Vector2i],
 func _ensure_remote_players_container() -> void:
 	if remote_players_container != null and is_instance_valid(remote_players_container):
 		_order_remote_players_container()
+		_sync_remote_players_visibility()
 		return
 
 	remote_players_container = Node2D.new()
 	remote_players_container.name = "RemotePlayers"
 	add_child(remote_players_container)
 	_order_remote_players_container()
+	_sync_remote_players_visibility()
+
+
+func _on_settings_changed() -> void:
+	_sync_remote_players_visibility()
+	_sync_local_player_nameplate_visibility()
+
+
+func _sync_local_player_nameplate_visibility() -> void:
+	if player != null and is_instance_valid(player) and player.has_method("set_display_name"):
+		player.call("set_display_name", PlayerSave.player_name, SettingsManager.display_own_name)
+
+
+func _sync_remote_players_visibility() -> void:
+	if remote_players_container == null or not is_instance_valid(remote_players_container):
+		return
+	var players_visible := not SettingsManager.hide_other_players
+	remote_players_container.visible = players_visible
+	for avatar: Node in remote_players_container.get_children():
+		if avatar.has_method("set_interaction_enabled"):
+			avatar.call("set_interaction_enabled", players_visible)
 
 
 func _order_remote_players_container() -> void:
@@ -1377,6 +1402,8 @@ func _apply_remote_player_states(player_states: Array, prune_missing := true) ->
 			avatar = new_avatar as Node2D
 			remote_player_avatars[user_key] = avatar
 			remote_players_container.add_child(avatar)
+			if avatar.has_method("set_interaction_enabled"):
+				avatar.call("set_interaction_enabled", not SettingsManager.hide_other_players)
 			var interaction_callable := Callable(self, "_on_remote_player_interaction_requested")
 			if avatar.has_signal("interaction_requested") and not avatar.is_connected("interaction_requested", interaction_callable):
 				avatar.connect("interaction_requested", interaction_callable)

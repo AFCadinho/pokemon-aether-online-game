@@ -156,6 +156,7 @@ var guild_emblem: TextureRect
 var role_badge_panel: Panel
 var role_badge_label: Label
 var map_chat_bubble: PanelContainer
+var interaction_hit_area: Area2D
 var pokemon_follower: PokemonFollower
 var current_follower_species := ""
 var current_follower_shiny := false
@@ -637,6 +638,12 @@ func _create_interaction_hit_area() -> void:
 	hit_area.add_child(shape)
 	hit_area.input_event.connect(_on_interaction_hit_area_input_event)
 	add_child(hit_area)
+	interaction_hit_area = hit_area
+
+
+func set_interaction_enabled(enabled: bool) -> void:
+	if interaction_hit_area != null:
+		interaction_hit_area.input_pickable = enabled
 
 func _on_interaction_hit_area_input_event(_viewport: Node, event: InputEvent, _shape_index: int) -> void:
 	if not event is InputEventMouseButton:

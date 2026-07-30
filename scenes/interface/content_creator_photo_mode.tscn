@@ -1,0 +1,322 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/content_creator_photo_mode.gd" id="1_photo"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_photo_panel"]
+bg_color = Color(0.015686275, 0.03529412, 0.0627451, 0.975)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.41960785, 0.7137255, 0.85882354, 0.8)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.52)
+shadow_size = 14
+shadow_offset = Vector2(0, 5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_section"]
+bg_color = Color(0.03529412, 0.078431375, 0.1254902, 0.88)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.1764706, 0.29411766, 0.4, 0.72)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_primary"]
+bg_color = Color(0.14117648, 0.5058824, 0.6901961, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.46666667, 0.8156863, 0.9490196, 0.9)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_primary_hover"]
+bg_color = Color(0.19607843, 0.61960787, 0.8117647, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.6509804, 0.9019608, 1, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_secondary"]
+bg_color = Color(0.05490196, 0.11764706, 0.18039216, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.22352941, 0.38039216, 0.5019608, 0.85)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_hint"]
+bg_color = Color(0.019607844, 0.043137256, 0.078431375, 0.86)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.41960785, 0.7137255, 0.85882354, 0.7)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="ContentCreatorPhotoMode" type="CanvasLayer"]
+layer = 900
+script = ExtResource("1_photo")
+
+[node name="ControlsPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+offset_left = 22.0
+offset_top = 12.0
+offset_right = 454.0
+offset_bottom = 708.0
+theme_override_styles/panel = SubResource("StyleBox_photo_panel")
+
+[node name="MarginContainer" type="MarginContainer" parent="ControlsPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 16
+
+[node name="Layout" type="VBoxContainer" parent="ControlsPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HeaderRow" type="HBoxContainer" parent="ControlsPanel/MarginContainer/Layout"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="ControlsPanel/MarginContainer/Layout/HeaderRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.7529412, 0.88235295, 0.9607843, 1)
+theme_override_font_sizes/font_size = 22
+text = "Photo Mode"
+
+[node name="CloseButton" type="Button" parent="ControlsPanel/MarginContainer/Layout/HeaderRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBox_secondary")
+theme_override_styles/hover = SubResource("StyleBox_primary_hover")
+text = "×"
+
+[node name="HelpLabel" type="Label" parent="ControlsPanel/MarginContainer/Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.59607846, 0.69411767, 0.78431374, 1)
+theme_override_font_sizes/font_size = 12
+text = "Move with WASD or arrows. Hold Shift for speed."
+autowrap_mode = 2
+
+[node name="CameraSectionLabel" type="Label" parent="ControlsPanel/MarginContainer/Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.41960785, 0.7137255, 0.85882354, 1)
+theme_override_font_sizes/font_size = 11
+text = "CAMERA"
+
+[node name="CameraSection" type="PanelContainer" parent="ControlsPanel/MarginContainer/Layout"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBox_section")
+
+[node name="Margin" type="MarginContainer" parent="ControlsPanel/MarginContainer/Layout/CameraSection"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 9
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 9
+
+[node name="Content" type="VBoxContainer" parent="ControlsPanel/MarginContainer/Layout/CameraSection/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ZoomRow" type="HBoxContainer" parent="ControlsPanel/MarginContainer/Layout/CameraSection/Margin/Content"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ZoomLabel" type="Label" parent="ControlsPanel/MarginContainer/Layout/CameraSection/Margin/Content/ZoomRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+text = "Zoom"
+
+[node name="ZoomSlider" type="HSlider" parent="ControlsPanel/MarginContainer/Layout/CameraSection/Margin/Content/ZoomRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ZoomValueLabel" type="Label" parent="ControlsPanel/MarginContainer/Layout/CameraSection/Margin/Content/ZoomRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+text = "1.50x"
+horizontal_alignment = 2
+
+[node name="ResetButton" type="Button" parent="ControlsPanel/MarginContainer/Layout/CameraSection/Margin/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBox_secondary")
+theme_override_styles/hover = SubResource("StyleBox_primary_hover")
+text = "Reset camera"
+
+[node name="SceneSectionLabel" type="Label" parent="ControlsPanel/MarginContainer/Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.41960785, 0.7137255, 0.85882354, 1)
+theme_override_font_sizes/font_size = 11
+text = "SCENE LIGHTING"
+
+[node name="SceneSection" type="PanelContainer" parent="ControlsPanel/MarginContainer/Layout"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBox_section")
+
+[node name="Margin" type="MarginContainer" parent="ControlsPanel/MarginContainer/Layout/SceneSection"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 9
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 9
+
+[node name="Content" type="VBoxContainer" parent="ControlsPanel/MarginContainer/Layout/SceneSection/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PresetRow" type="HBoxContainer" parent="ControlsPanel/MarginContainer/Layout/SceneSection/Margin/Content"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="LightingPresetLabel" type="Label" parent="ControlsPanel/MarginContainer/Layout/SceneSection/Margin/Content/PresetRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(92, 0)
+layout_mode = 2
+text = "Time"
+
+[node name="LightingPresetSelect" type="OptionButton" parent="ControlsPanel/MarginContainer/Layout/SceneSection/Margin/Content/PresetRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ExposureRow" type="HBoxContainer" parent="ControlsPanel/MarginContainer/Layout/SceneSection/Margin/Content"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ExposureLabel" type="Label" parent="ControlsPanel/MarginContainer/Layout/SceneSection/Margin/Content/ExposureRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(92, 0)
+layout_mode = 2
+text = "Brightness"
+
+[node name="ExposureSlider" type="HSlider" parent="ControlsPanel/MarginContainer/Layout/SceneSection/Margin/Content/ExposureRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ExposureValueLabel" type="Label" parent="ControlsPanel/MarginContainer/Layout/SceneSection/Margin/Content/ExposureRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+text = "100%"
+horizontal_alignment = 2
+
+[node name="WeatherEffectsToggle" type="CheckButton" parent="ControlsPanel/MarginContainer/Layout/SceneSection/Margin/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Show weather effects"
+
+[node name="CaptureSectionLabel" type="Label" parent="ControlsPanel/MarginContainer/Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.41960785, 0.7137255, 0.85882354, 1)
+theme_override_font_sizes/font_size = 11
+text = "CAPTURE"
+
+[node name="CaptureSection" type="PanelContainer" parent="ControlsPanel/MarginContainer/Layout"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBox_section")
+
+[node name="Margin" type="MarginContainer" parent="ControlsPanel/MarginContainer/Layout/CaptureSection"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 9
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 9
+
+[node name="Content" type="VBoxContainer" parent="ControlsPanel/MarginContainer/Layout/CaptureSection/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 7
+
+[node name="ToggleRow" type="HBoxContainer" parent="ControlsPanel/MarginContainer/Layout/CaptureSection/Margin/Content"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HudToggle" type="CheckButton" parent="ControlsPanel/MarginContainer/Layout/CaptureSection/Margin/Content/ToggleRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+button_pressed = true
+text = "Hide HUD"
+
+[node name="ControlsToggle" type="CheckButton" parent="ControlsPanel/MarginContainer/Layout/CaptureSection/Margin/Content/ToggleRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Hide controls"
+
+[node name="CaptureButton" type="Button" parent="ControlsPanel/MarginContainer/Layout/CaptureSection/Margin/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBox_primary")
+theme_override_styles/hover = SubResource("StyleBox_primary_hover")
+theme_override_styles/pressed = SubResource("StyleBox_primary")
+text = "Capture (F12)"
+
+[node name="OpenFolderButton" type="Button" parent="ControlsPanel/MarginContainer/Layout/CaptureSection/Margin/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBox_secondary")
+theme_override_styles/hover = SubResource("StyleBox_primary_hover")
+text = "Open screenshot folder"
+
+[node name="StatusLabel" type="Label" parent="ControlsPanel/MarginContainer/Layout"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.44313726, 0.7607843, 0.90588236, 1)
+theme_override_font_sizes/font_size = 11
+autowrap_mode = 2
+
+[node name="HiddenControlsHint" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = 22.0
+offset_top = 22.0
+offset_right = 350.0
+offset_bottom = 56.0
+theme_override_colors/font_color = Color(0.7529412, 0.88235295, 0.9607843, 1)
+theme_override_styles/normal = SubResource("StyleBox_hint")
+text = "H: show controls · F12: capture · Esc: close"
+horizontal_alignment = 1
+vertical_alignment = 1

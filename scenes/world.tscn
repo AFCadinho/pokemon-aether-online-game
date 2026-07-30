@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/field_move_flash_light.tscn" id="7_flash_light"]
 [ext_resource type="PackedScene" path="res://scenes/world/weather/overworld_weather_controller.tscn" id="8_weather"]
 [ext_resource type="Script" path="res://scripts/ui/wild_encounter_transition.gd" id="9_wild_encounter_transition"]
+[ext_resource type="PackedScene" path="res://scenes/interface/content_creator_photo_mode.tscn" id="10_creator_photo"]
 
 [node name="World" type="Node2D" unique_id=618561729]
 script = ExtResource("1_4wyf3")
@@ -63,3 +64,5 @@ grow_vertical = 2
 script = ExtResource("9_wild_encounter_transition")
 
 [node name="UIOverlay" parent="." unique_id=2126675853 instance=ExtResource("5_71j4m")]
+
+[node name="ContentCreatorPhotoMode" parent="." instance=ExtResource("10_creator_photo")]

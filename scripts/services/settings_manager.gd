@@ -43,6 +43,7 @@ var battle_animations := true
 var weather_effects := true
 var terrain_effects := true
 var display_own_name := true
+var hide_other_players := false
 var sprite_style := SPRITE_STYLE_ANIMATED
 var fullscreen := false
 var window_resolution := DEFAULT_WINDOW_RESOLUTION
@@ -92,6 +93,7 @@ func load_settings() -> void:
 	weather_effects = bool(data.get("weather_effects", weather_effects))
 	terrain_effects = bool(data.get("terrain_effects", terrain_effects))
 	display_own_name = bool(data.get("display_own_name", display_own_name))
+	hide_other_players = bool(data.get("hide_other_players", hide_other_players))
 	sprite_style = _validated_sprite_style(str(data.get("sprite_style", sprite_style)))
 	fullscreen = bool(data.get("fullscreen", fullscreen))
 	window_resolution = _validated_window_resolution(data.get("window_resolution", window_resolution))
@@ -137,6 +139,7 @@ func save_settings() -> void:
 		"weather_effects": weather_effects,
 		"terrain_effects": terrain_effects,
 		"display_own_name": display_own_name,
+		"hide_other_players": hide_other_players,
 		"sprite_style": sprite_style,
 		"fullscreen": fullscreen,
 		"window_resolution": {
@@ -193,6 +196,14 @@ func set_display_own_name(enabled: bool) -> void:
 		return
 
 	display_own_name = enabled
+	_save_and_emit()
+
+
+func set_hide_other_players(enabled: bool) -> void:
+	if hide_other_players == enabled:
+		return
+
+	hide_other_players = enabled
 	_save_and_emit()
 
 

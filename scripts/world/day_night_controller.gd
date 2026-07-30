@@ -19,6 +19,9 @@ var current_lighting_profile := LIGHTING_PROFILE_OUTDOOR
 var current_night_intensity := 0.0
 var _refresh_elapsed := REFRESH_INTERVAL_SECONDS
 var _world_time_service: Node
+var _creator_lighting_override_active := false
+var _creator_hour := -1.0
+var _creator_exposure := 1.0
 
 @onready var world_canvas_modulate: CanvasModulate = get_node_or_null(canvas_modulate_path) as CanvasModulate
 
@@ -54,6 +57,22 @@ func set_lighting_profile(profile: String) -> void:
 	_refresh_lighting()
 
 
+func set_creator_lighting_override(hour: float = -1.0, exposure: float = 1.0) -> void:
+	_creator_lighting_override_active = true
+	_creator_hour = hour
+	_creator_exposure = clampf(exposure, 0.65, 1.4)
+	_refresh_lighting()
+
+
+func clear_creator_lighting_override() -> void:
+	if not _creator_lighting_override_active:
+		return
+	_creator_lighting_override_active = false
+	_creator_hour = -1.0
+	_creator_exposure = 1.0
+	_refresh_lighting()
+
+
 func _refresh_lighting() -> void:
 	_refresh_elapsed = 0.0
 	var color := DAY_COLOR
@@ -65,6 +84,18 @@ func _refresh_lighting() -> void:
 		var seconds_since_midnight: float = _get_seconds_since_midnight()
 		color = color_for_seconds(seconds_since_midnight)
 		night_intensity = night_intensity_for_seconds(seconds_since_midnight)
+
+	if _creator_lighting_override_active:
+		if _creator_hour >= 0.0:
+			var creator_seconds := wrapf(_creator_hour, 0.0, 24.0) * 3600.0
+			color = color_for_seconds(creator_seconds)
+			night_intensity = night_intensity_for_seconds(creator_seconds)
+		color = Color(
+			color.r * _creator_exposure,
+			color.g * _creator_exposure,
+			color.b * _creator_exposure,
+			color.a
+		)
 
 	current_night_intensity = night_intensity
 	if world_canvas_modulate != null:

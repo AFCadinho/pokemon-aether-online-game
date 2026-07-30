@@ -177,6 +177,14 @@ func _check_settings_scene_translation() -> void:
 		"settings language selector displays flags"
 	)
 	_check(tabs != null and tabs.get_tab_title(0) == "Algemeen", "dynamic tab title renders in Dutch")
+	_check(tabs != null and tabs.get_tab_title(1) == "Taal", "language settings use a dedicated localized tab")
+	_check(
+		language_options != null
+		and language_options.find_parent("LanguageContent") != null
+		and terminology_options != null
+		and terminology_options.find_parent("LanguageContent") != null,
+		"interface language and Pokémon terminology share the dedicated Language tab"
+	)
 	_check(
 		tabs != null and not tabs.tabs_visible and workspace != null and navigation != null,
 		"settings use the two-column navigation layout"

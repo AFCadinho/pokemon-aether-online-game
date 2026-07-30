@@ -145,17 +145,17 @@ layout_mode = 2
 text = "Uninstall"
 alignment = 0
 
-[node name="LanguageSection" type="VBoxContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout"]
+[node name="LanguageSection" type="VBoxContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout" unique_id=1376333695]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="LanguageTitle" type="Label" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/LanguageSection"]
+[node name="LanguageTitle" type="Label" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/LanguageSection" unique_id=546910555]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.53, 0.56, 0.69, 1)
 theme_override_font_sizes/font_size = 11
 text = "LANGUAGE"
 
-[node name="LanguageOptionsButton" type="OptionButton" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/LanguageSection"]
+[node name="LanguageOptionsButton" type="OptionButton" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/LanguageSection" unique_id=1404343520]
 custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
 
@@ -487,9 +487,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 0
 
-[node name="Backdrop" type="ColorRect" parent="LauncherUpdateOverlay"]
+[node name="Backdrop" type="ColorRect" parent="LauncherUpdateOverlay" unique_id=828578800]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -499,7 +498,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.008, 0.012, 0.035, 0.82)
 
-[node name="UpdateCard" type="PanelContainer" parent="LauncherUpdateOverlay"]
+[node name="UpdateCard" type="PanelContainer" parent="LauncherUpdateOverlay" unique_id=1609446020]
 custom_minimum_size = Vector2(560, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -514,65 +513,65 @@ offset_bottom = 166.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Margin" type="MarginContainer" parent="LauncherUpdateOverlay/UpdateCard"]
+[node name="Margin" type="MarginContainer" parent="LauncherUpdateOverlay/UpdateCard" unique_id=1923417311]
 layout_mode = 2
 theme_override_constants/margin_left = 30
 theme_override_constants/margin_top = 28
 theme_override_constants/margin_right = 30
 theme_override_constants/margin_bottom = 26
 
-[node name="Layout" type="VBoxContainer" parent="LauncherUpdateOverlay/UpdateCard/Margin"]
+[node name="Layout" type="VBoxContainer" parent="LauncherUpdateOverlay/UpdateCard/Margin" unique_id=349321295]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="EyebrowRow" type="HBoxContainer" parent="LauncherUpdateOverlay/UpdateCard/Margin/Layout"]
+[node name="EyebrowRow" type="HBoxContainer" parent="LauncherUpdateOverlay/UpdateCard/Margin/Layout" unique_id=914842708]
 layout_mode = 2
 
-[node name="Eyebrow" type="Label" parent="LauncherUpdateOverlay/UpdateCard/Margin/Layout/EyebrowRow"]
+[node name="Eyebrow" type="Label" parent="LauncherUpdateOverlay/UpdateCard/Margin/Layout/EyebrowRow" unique_id=976912138]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 13
 text = "LAUNCHER UPDATE"
 
-[node name="VersionBadge" type="PanelContainer" parent="LauncherUpdateOverlay/UpdateCard/Margin/Layout/EyebrowRow"]
+[node name="VersionBadge" type="PanelContainer" parent="LauncherUpdateOverlay/UpdateCard/Margin/Layout/EyebrowRow" unique_id=1129640893]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="LauncherUpdateOverlay/UpdateCard/Margin/Layout/EyebrowRow/VersionBadge"]
+[node name="Label" type="Label" parent="LauncherUpdateOverlay/UpdateCard/Margin/Layout/EyebrowRow/VersionBadge" unique_id=1203231791]
 custom_minimum_size = Vector2(78, 28)
 layout_mode = 2
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Title" type="Label" parent="LauncherUpdateOverlay/UpdateCard/Margin/Layout"]
+[node name="Title" type="Label" parent="LauncherUpdateOverlay/UpdateCard/Margin/Layout" unique_id=39140026]
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = "A new launcher is ready"
 
-[node name="Description" type="Label" parent="LauncherUpdateOverlay/UpdateCard/Margin/Layout"]
+[node name="Description" type="Label" parent="LauncherUpdateOverlay/UpdateCard/Margin/Layout" unique_id=1972892147]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-autowrap_mode = 2
 text = "Install the latest version to keep your launcher reliable and up to date. The launcher will restart automatically."
+autowrap_mode = 2
 
-[node name="Divider" type="HSeparator" parent="LauncherUpdateOverlay/UpdateCard/Margin/Layout"]
+[node name="Divider" type="HSeparator" parent="LauncherUpdateOverlay/UpdateCard/Margin/Layout" unique_id=122653839]
 layout_mode = 2
 
-[node name="RestartNote" type="Label" parent="LauncherUpdateOverlay/UpdateCard/Margin/Layout"]
+[node name="RestartNote" type="Label" parent="LauncherUpdateOverlay/UpdateCard/Margin/Layout" unique_id=868774898]
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "Takes only a moment · Your game files stay untouched"
 
-[node name="ButtonRow" type="HBoxContainer" parent="LauncherUpdateOverlay/UpdateCard/Margin/Layout"]
+[node name="ButtonRow" type="HBoxContainer" parent="LauncherUpdateOverlay/UpdateCard/Margin/Layout" unique_id=1866895157]
 layout_mode = 2
 theme_override_constants/separation = 12
 alignment = 2
 
-[node name="LaterButton" type="Button" parent="LauncherUpdateOverlay/UpdateCard/Margin/Layout/ButtonRow"]
+[node name="LaterButton" type="Button" parent="LauncherUpdateOverlay/UpdateCard/Margin/Layout/ButtonRow" unique_id=1369381535]
 custom_minimum_size = Vector2(126, 46)
 layout_mode = 2
 text = "Later"
 
-[node name="UpdateNowButton" type="Button" parent="LauncherUpdateOverlay/UpdateCard/Margin/Layout/ButtonRow"]
+[node name="UpdateNowButton" type="Button" parent="LauncherUpdateOverlay/UpdateCard/Margin/Layout/ButtonRow" unique_id=1710932900]
 custom_minimum_size = Vector2(192, 46)
 layout_mode = 2
 text = "Update & restart"

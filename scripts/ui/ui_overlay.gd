@@ -120,7 +120,8 @@ const DEV_TRAINER_PROGRESS_ICON: Texture2D = preload("res://assets/gym_badges/ka
 const TOOL_CLEAR_DATA_ICON: Texture2D = preload("res://assets/ui/tool_clear_data.svg")
 const STAFF_TELEPORT_ICON: Texture2D = preload("res://assets/ui/location_waypoint.svg")
 const STAFF_IMPERSONATE_ICON: Texture2D = preload("res://assets/ui/staff_impersonate.svg")
-const CONTENT_CREATOR_MENU_ICON: Texture2D = preload("res://assets/ui/alpha_tools.svg")
+const ALPHA_TOOLS_MENU_ICON: Texture2D = preload("res://assets/ui/alpha_tools.svg")
+const CONTENT_CREATOR_MENU_ICON: Texture2D = preload("res://assets/ui/content_creator.svg")
 const BATTLE_SPRITE_LOADER := preload("res://scripts/battle/battle_ui/sprite_box.gd")
 const DRAGGABLE_SUBWINDOW := preload("res://scripts/ui/draggable_subwindow.gd")
 const PVP_RANKED_DEFAULT_FORMAT_KEY := "aether-ou"
@@ -529,6 +530,8 @@ var player_interaction_coordinator: PlayerInteractionCoordinator
 @onready var staff_tools_button: TextureButton = $Control/StaffActionsPanel/MarginContainer/HBoxContainer/StaffToolsSlot/StaffToolsButton
 @onready var content_creator_tools_slot: PanelContainer = $Control/StaffActionsPanel/MarginContainer/HBoxContainer/ContentCreatorToolsSlot
 @onready var content_creator_tools_button: TextureButton = $Control/StaffActionsPanel/MarginContainer/HBoxContainer/ContentCreatorToolsSlot/ContentCreatorToolsButton
+@onready var alpha_tools_slot: PanelContainer = $Control/StaffActionsPanel/MarginContainer/HBoxContainer/AlphaToolsSlot
+@onready var alpha_tools_button: TextureButton = $Control/StaffActionsPanel/MarginContainer/HBoxContainer/AlphaToolsSlot/AlphaToolsButton
 @onready var dev_actions_slot: PanelContainer = $Control/StaffActionsPanel/MarginContainer/HBoxContainer/DevActionsSlot
 @onready var dev_actions_button: TextureButton = $Control/StaffActionsPanel/MarginContainer/HBoxContainer/DevActionsSlot/DevActionsButton
 @onready var mail_notification_sound: AudioStreamPlayer = $Control/MailNotificationSound
@@ -1093,10 +1096,12 @@ var evolution_tween: Tween
 var evolution_silhouette_material: ShaderMaterial
 var evolution_is_playing := false
 var evolution_overlay_active_evolution: Dictionary = {}
-var content_creator_menu_popup: PanelContainer
-var content_creator_create_pokemon_button: Button
-var content_creator_clear_party_button: Button
-var content_creator_close_button: Button
+var alpha_tools_popup: PanelContainer
+var content_creator_tools_popup: PanelContainer
+var content_creator_photo_mode_button: Button
+var alpha_create_pokemon_button: Button
+var alpha_clear_party_button: Button
+var alpha_tools_close_button: Button
 var dev_add_button: Button
 var dev_preview_evolution_button: Button
 var dev_add_menu_popup: PanelContainer
@@ -1223,7 +1228,8 @@ func _ready() -> void:
 	_setup_evolution_prompt_popup()
 	_setup_evolution_overlay()
 	_setup_dev_clear_menu_popup()
-	_setup_content_creator_menu_popup()
+	_setup_alpha_tools_popup()
+	_setup_content_creator_tools_popup()
 	_setup_pvp_room_popup()
 	_setup_pvp_queue_compact_panel()
 	_setup_pvp_match_countdown_overlay()
@@ -1319,6 +1325,7 @@ func _ready() -> void:
 	_setup_icon_slot_hover(pokedex_slot, pokedex_button)
 	_setup_icon_slot_hover(dev_actions_slot, dev_actions_button)
 	_setup_icon_slot_hover(staff_tools_slot, staff_tools_button)
+	_setup_icon_slot_hover(alpha_tools_slot, alpha_tools_button)
 	_setup_icon_slot_hover(content_creator_tools_slot, content_creator_tools_button)
 	_disable_icon_button_focus()
 	map_button.pressed.connect(_on_map_button_pressed)
@@ -1372,6 +1379,7 @@ func _ready() -> void:
 	wild_pokemon_button.mouse_entered.connect(_on_wild_pokemon_button_mouse_entered)
 	wild_pokemon_button.mouse_exited.connect(_on_wild_pokemon_button_mouse_exited)
 	wild_pokemon_button.pivot_offset = wild_pokemon_button.custom_minimum_size * 0.5
+	alpha_tools_button.pressed.connect(_on_alpha_tools_button_pressed)
 	content_creator_tools_button.pressed.connect(_on_content_creator_tools_button_pressed)
 	hotkey_sidebar_panel.gui_input.connect(_on_hotkey_sidebar_gui_input)
 	dev_add_pokemon_button.pressed.connect(_on_dev_add_pokemon_button_pressed)
@@ -1615,21 +1623,25 @@ func _refresh_dev_tools_visibility() -> void:
 	var can_teleport_other: bool = _can_teleport_other_player()
 	var can_use_content_creator_tools: bool = _can_use_content_creator_tools()
 	var can_use_content_creator_generation: bool = _can_use_content_creator_generation()
-	var can_open_content_creator_menu: bool = can_use_content_creator_tools or can_use_content_creator_generation
 	var has_staff_tool: bool = can_impersonate or can_teleport or can_teleport_to_player or can_teleport_other
-	var has_visible_staff_action: bool = has_staff_tool or can_use_dev_tools or can_open_content_creator_menu
+	var has_visible_staff_action: bool = has_staff_tool or can_use_dev_tools or can_use_content_creator_tools or can_use_content_creator_generation
 	PlayerSave.is_staff = _current_player_has_staff_role()
 	if content_creator_tools_slot != null:
-		content_creator_tools_slot.visible = can_show_staff_action_bar and can_open_content_creator_menu
+		content_creator_tools_slot.visible = can_show_staff_action_bar and can_use_content_creator_tools
 	if content_creator_tools_button != null:
-		content_creator_tools_button.visible = can_show_staff_action_bar and can_open_content_creator_menu
-		content_creator_tools_button.disabled = not can_open_content_creator_menu
-	if content_creator_create_pokemon_button != null:
-		content_creator_create_pokemon_button.visible = can_use_content_creator_generation
-		content_creator_create_pokemon_button.disabled = not can_use_content_creator_generation
-	if content_creator_clear_party_button != null:
-		content_creator_clear_party_button.visible = can_use_content_creator_generation
-		content_creator_clear_party_button.disabled = not can_use_content_creator_generation
+		content_creator_tools_button.visible = can_show_staff_action_bar and can_use_content_creator_tools
+		content_creator_tools_button.disabled = not can_use_content_creator_tools
+	if alpha_tools_slot != null:
+		alpha_tools_slot.visible = can_show_staff_action_bar and can_use_content_creator_generation
+	if alpha_tools_button != null:
+		alpha_tools_button.visible = can_show_staff_action_bar and can_use_content_creator_generation
+		alpha_tools_button.disabled = not can_use_content_creator_generation
+	if alpha_create_pokemon_button != null:
+		alpha_create_pokemon_button.visible = can_use_content_creator_generation
+		alpha_create_pokemon_button.disabled = not can_use_content_creator_generation
+	if alpha_clear_party_button != null:
+		alpha_clear_party_button.visible = can_use_content_creator_generation
+		alpha_clear_party_button.disabled = not can_use_content_creator_generation
 	dev_actions_slot.visible = can_show_staff_action_bar and can_use_dev_tools
 	dev_actions_button.visible = can_show_staff_action_bar and can_use_dev_tools
 	dev_actions_button.disabled = not can_use_dev_tools
@@ -1692,8 +1704,10 @@ func _refresh_dev_tools_visibility() -> void:
 			dev_clear_menu_popup.visible = false
 		if dev_badge_progress_popup != null:
 			dev_badge_progress_popup.close()
-	if not can_open_content_creator_menu and content_creator_menu_popup != null:
-		content_creator_menu_popup.visible = false
+	if not can_use_content_creator_generation and alpha_tools_popup != null:
+		alpha_tools_popup.visible = false
+	if not can_use_content_creator_tools and content_creator_tools_popup != null:
+		content_creator_tools_popup.visible = false
 	if not can_use_content_creator_generation and dev_pokemon_popup_mode == DevPokemonPopupMode.CONTENT_CREATOR:
 		dev_pokemon_popup.visible = false
 	if not can_impersonate and staff_impersonate_popup != null:
@@ -2740,7 +2754,8 @@ func _apply_ui_z_index_policy() -> void:
 		dev_add_item_popup,
 		dev_add_money_popup,
 		dev_add_menu_popup,
-		content_creator_menu_popup,
+		alpha_tools_popup,
+		content_creator_tools_popup,
 		staff_tools_popup,
 		staff_impersonate_popup,
 		staff_teleport_popup,
@@ -2801,7 +2816,8 @@ func _has_visible_priority_overlay_panel() -> bool:
 		dev_add_item_popup,
 		dev_add_money_popup,
 		dev_add_menu_popup,
-		content_creator_menu_popup,
+		alpha_tools_popup,
+		content_creator_tools_popup,
 		staff_tools_popup,
 		staff_impersonate_popup,
 		staff_teleport_popup,
@@ -6226,61 +6242,107 @@ func _create_pvp_validator_row(status_text: String, message: String, color: Colo
 	row.add_child(label)
 	return row
 
-func _setup_content_creator_menu_popup() -> void:
-	content_creator_menu_popup = PanelContainer.new()
-	content_creator_menu_popup.name = "ContentCreatorMenuPopup"
-	content_creator_menu_popup.visible = false
-	content_creator_menu_popup.custom_minimum_size = Vector2(390, 0)
-	content_creator_menu_popup.mouse_filter = Control.MOUSE_FILTER_STOP
-	content_creator_menu_popup.z_index = UI_BASE_Z_INDEX
-	content_creator_menu_popup.add_theme_stylebox_override(
+func _setup_alpha_tools_popup() -> void:
+	alpha_tools_popup = PanelContainer.new()
+	alpha_tools_popup.name = "AlphaToolsPopup"
+	alpha_tools_popup.visible = false
+	alpha_tools_popup.custom_minimum_size = Vector2(390, 0)
+	alpha_tools_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	alpha_tools_popup.z_index = UI_BASE_Z_INDEX
+	alpha_tools_popup.add_theme_stylebox_override(
 		"panel",
 		_make_panel_style(UI_SURFACE_BASE, Color("#8065b0aa"), 12, 1)
 	)
-	root_control.add_child(content_creator_menu_popup)
+	root_control.add_child(alpha_tools_popup)
 
 	var margin_container := MarginContainer.new()
 	margin_container.add_theme_constant_override("margin_left", 14)
 	margin_container.add_theme_constant_override("margin_top", 12)
 	margin_container.add_theme_constant_override("margin_right", 14)
 	margin_container.add_theme_constant_override("margin_bottom", 14)
-	content_creator_menu_popup.add_child(margin_container)
+	alpha_tools_popup.add_child(margin_container)
 
 	var layout := VBoxContainer.new()
 	layout.add_theme_constant_override("separation", 10)
 	margin_container.add_child(layout)
 
-	content_creator_close_button = Button.new()
-	content_creator_close_button.pressed.connect(_hide_content_creator_menu_popup)
+	alpha_tools_close_button = Button.new()
+	alpha_tools_close_button.pressed.connect(_hide_alpha_tools_popup)
 	layout.add_child(
 		_create_tool_launcher_header(
 			"ui.staff.alpha.title",
 			"ui.staff.alpha.subtitle",
-			content_creator_close_button,
+			alpha_tools_close_button,
 			Color("#b28ae8")
 		)
 	)
 
-	content_creator_create_pokemon_button = Button.new()
-	content_creator_create_pokemon_button.pressed.connect(_on_content_creator_create_pokemon_button_pressed)
-	layout.add_child(content_creator_create_pokemon_button)
+	alpha_create_pokemon_button = Button.new()
+	alpha_create_pokemon_button.pressed.connect(_on_alpha_create_pokemon_button_pressed)
+	layout.add_child(alpha_create_pokemon_button)
 	_configure_launcher_card_button(
-		content_creator_create_pokemon_button,
+		alpha_create_pokemon_button,
 		"ui.staff.alpha.create",
 		"ui.staff.alpha.create_description",
-		CONTENT_CREATOR_MENU_ICON,
+		ALPHA_TOOLS_MENU_ICON,
 		Color("#b28ae8")
 	)
 
-	content_creator_clear_party_button = Button.new()
-	content_creator_clear_party_button.pressed.connect(_on_content_creator_clear_party_button_pressed)
-	layout.add_child(content_creator_clear_party_button)
+	alpha_clear_party_button = Button.new()
+	alpha_clear_party_button.pressed.connect(_on_alpha_clear_party_button_pressed)
+	layout.add_child(alpha_clear_party_button)
 	_configure_launcher_card_button(
-		content_creator_clear_party_button,
+		alpha_clear_party_button,
 		"ui.staff.alpha.clear",
 		"ui.staff.alpha.clear_description",
 		TOOL_CLEAR_DATA_ICON,
 		Color("#ef7085")
+	)
+
+func _setup_content_creator_tools_popup() -> void:
+	content_creator_tools_popup = PanelContainer.new()
+	content_creator_tools_popup.name = "ContentCreatorToolsPopup"
+	content_creator_tools_popup.visible = false
+	content_creator_tools_popup.custom_minimum_size = Vector2(390, 0)
+	content_creator_tools_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	content_creator_tools_popup.z_index = UI_BASE_Z_INDEX
+	content_creator_tools_popup.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_BASE, Color("#4baed0aa"), 12, 1)
+	)
+	root_control.add_child(content_creator_tools_popup)
+
+	var margin_container := MarginContainer.new()
+	margin_container.add_theme_constant_override("margin_left", 14)
+	margin_container.add_theme_constant_override("margin_top", 12)
+	margin_container.add_theme_constant_override("margin_right", 14)
+	margin_container.add_theme_constant_override("margin_bottom", 14)
+	content_creator_tools_popup.add_child(margin_container)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 10)
+	margin_container.add_child(layout)
+
+	var close_button := Button.new()
+	close_button.pressed.connect(_hide_content_creator_tools_popup)
+	layout.add_child(
+		_create_tool_launcher_header(
+			"ui.staff.creator.title",
+			"ui.staff.creator.subtitle",
+			close_button,
+			Color("#67c7ea")
+		)
+	)
+
+	content_creator_photo_mode_button = Button.new()
+	content_creator_photo_mode_button.pressed.connect(_on_content_creator_photo_mode_button_pressed)
+	layout.add_child(content_creator_photo_mode_button)
+	_configure_launcher_card_button(
+		content_creator_photo_mode_button,
+		"ui.staff.creator.photo_mode",
+		"ui.staff.creator.photo_mode_description",
+		CONTENT_CREATOR_MENU_ICON,
+		Color("#67c7ea")
 	)
 
 func _setup_dev_add_item_tools() -> void:
@@ -9331,7 +9393,8 @@ func is_point_over_visible_ui(global_position: Vector2) -> bool:
 		dev_add_item_popup,
 		dev_add_money_popup,
 		dev_add_menu_popup,
-		content_creator_menu_popup,
+		alpha_tools_popup,
+		content_creator_tools_popup,
 		staff_tools_popup,
 		staff_impersonate_popup,
 		staff_teleport_popup,
@@ -21145,8 +21208,10 @@ func _apply_collapsible_panel_state(panel_id: String) -> void:
 	_apply_collapsible_button_style(button, str(state.get("side", "right")), collapsed)
 	if collapsed and panel_id == "staff_actions":
 		dev_actions_popup.visible = false
-		if content_creator_menu_popup != null:
-			content_creator_menu_popup.visible = false
+		if alpha_tools_popup != null:
+			alpha_tools_popup.visible = false
+		if content_creator_tools_popup != null:
+			content_creator_tools_popup.visible = false
 		if staff_tools_popup != null:
 			staff_tools_popup.visible = false
 		if staff_impersonate_popup != null:
@@ -21391,7 +21456,8 @@ func _get_escape_close_candidates() -> Array[Dictionary]:
 		{"panel": mail_popup, "close": Callable(self, "_on_mail_close_button_pressed")},
 		{"panel": friendlist_popup, "close": Callable(self, "_hide_friendlist_popup")},
 		{"panel": socials_menu, "close": Callable(self, "_hide_socials_menu")},
-		{"panel": content_creator_menu_popup, "close": Callable(self, "_hide_content_creator_menu_popup")},
+		{"panel": alpha_tools_popup, "close": Callable(self, "_hide_alpha_tools_popup")},
+		{"panel": content_creator_tools_popup, "close": Callable(self, "_hide_content_creator_tools_popup")},
 		{"panel": staff_tools_popup, "close": Callable(self, "_hide_staff_tools_popup")},
 		{"panel": dev_pokemon_popup, "close": Callable(self, "_hide_dev_pokemon_popup_for_escape")},
 		{"panel": dev_badge_progress_popup, "close": Callable(self, "_hide_dev_badge_progress_popup_for_escape")},
@@ -24951,11 +25017,12 @@ func _apply_impersonated_profile(profile_response: Dictionary) -> void:
 		_rebuild_trainer_card_popup(true)
 
 func _refresh_world_player_display_name() -> void:
-	var player_node := get_tree().get_first_node_in_group("player")
+	var player_node: Node
+	var world := GameState.get_world()
+	if world != null:
+		player_node = world.get_node_or_null("Player")
 	if player_node == null:
-		var world := GameState.get_world()
-		if world != null:
-			player_node = world.get_node_or_null("Player")
+		player_node = get_tree().get_first_node_in_group("player")
 	if player_node != null and player_node.has_method("set_display_name"):
 		player_node.call("set_display_name", PlayerSave.player_name, SettingsManager.display_own_name)
 	if player_node != null and player_node.has_method("refresh_appearance"):
@@ -25105,38 +25172,58 @@ func _on_item_dex_button_pressed() -> void:
 func _on_pokedex_button_pressed() -> void:
 	await _show_pokedex_popup()
 
-func _on_content_creator_tools_button_pressed() -> void:
-	if not _can_use_content_creator_tools() and not _can_use_content_creator_generation():
-		return
-	if content_creator_menu_popup == null:
-		return
-	content_creator_menu_popup.visible = not content_creator_menu_popup.visible
-	if content_creator_menu_popup.visible:
-		_position_content_creator_menu_popup()
-		_activate_ui_panel(content_creator_menu_popup)
-	else:
-		_deactivate_ui_panel(content_creator_menu_popup)
-
-func _on_content_creator_create_pokemon_button_pressed() -> void:
+func _on_alpha_tools_button_pressed() -> void:
 	if not _can_use_content_creator_generation():
 		return
-	_hide_content_creator_menu_popup()
+	if alpha_tools_popup == null:
+		return
+	alpha_tools_popup.visible = not alpha_tools_popup.visible
+	if alpha_tools_popup.visible:
+		_position_alpha_tools_popup()
+		_activate_ui_panel(alpha_tools_popup)
+	else:
+		_deactivate_ui_panel(alpha_tools_popup)
+
+func _on_content_creator_tools_button_pressed() -> void:
+	if not _can_use_content_creator_tools() or content_creator_tools_popup == null:
+		return
+	content_creator_tools_popup.visible = not content_creator_tools_popup.visible
+	if content_creator_tools_popup.visible:
+		_position_action_slot_popup(content_creator_tools_popup, content_creator_tools_slot)
+		_activate_ui_panel(content_creator_tools_popup)
+	else:
+		_deactivate_ui_panel(content_creator_tools_popup)
+
+func _on_content_creator_photo_mode_button_pressed() -> void:
+	if not _can_use_content_creator_tools():
+		return
+	_hide_content_creator_tools_popup()
+	get_tree().call_group("content_creator_photo_mode", "open_photo_mode")
+
+func set_content_creator_capture_hidden(hidden: bool) -> void:
+	if root_control != null:
+		root_control.visible = not hidden
+
+func _on_alpha_create_pokemon_button_pressed() -> void:
+	if not _can_use_content_creator_generation():
+		return
+	_hide_alpha_tools_popup()
 	_show_dev_pokemon_popup(DevPokemonPopupMode.CONTENT_CREATOR)
 
-func _on_content_creator_clear_party_button_pressed() -> void:
+func _on_alpha_clear_party_button_pressed() -> void:
 	if not _can_use_content_creator_generation():
 		return
-	_hide_content_creator_menu_popup()
+	_hide_alpha_tools_popup()
 	_show_ui_confirm_popup(
 		"Clear Alpha Pokemon",
 		"This will remove generated Alpha Pokemon from your party. Other party Pokemon stay untouched.",
 		"Clear Pokemon",
-		Callable(self, "_on_content_creator_clear_party_confirmed"),
+		Callable(self, "_on_alpha_clear_party_confirmed"),
 		Vector2i(500, 0),
 		true
 	)
 
-func _on_content_creator_clear_party_confirmed() -> void:
+func _on_alpha_clear_party_confirmed() -> void:
 	if not _can_use_content_creator_generation():
 		return
 
@@ -25153,14 +25240,20 @@ func _on_content_creator_clear_party_confirmed() -> void:
 	else:
 		_add_chat_message("No Alpha Pokemon found in party.")
 
-func _position_content_creator_menu_popup() -> void:
-	_position_action_slot_popup(content_creator_menu_popup, content_creator_tools_slot)
+func _position_alpha_tools_popup() -> void:
+	_position_action_slot_popup(alpha_tools_popup, alpha_tools_slot)
 
-func _hide_content_creator_menu_popup() -> void:
-	if content_creator_menu_popup == null:
+func _hide_alpha_tools_popup() -> void:
+	if alpha_tools_popup == null:
 		return
-	content_creator_menu_popup.visible = false
-	_deactivate_ui_panel(content_creator_menu_popup)
+	alpha_tools_popup.visible = false
+	_deactivate_ui_panel(alpha_tools_popup)
+
+func _hide_content_creator_tools_popup() -> void:
+	if content_creator_tools_popup == null:
+		return
+	content_creator_tools_popup.visible = false
+	_deactivate_ui_panel(content_creator_tools_popup)
 
 func _show_item_dex_popup() -> void:
 	_position_item_dex_popup()
@@ -34446,6 +34539,7 @@ func _disable_icon_button_focus() -> void:
 		wild_pokemon_button,
 		item_dex_button,
 		pokedex_button,
+		alpha_tools_button,
 		content_creator_tools_button,
 		staff_tools_button,
 		dev_actions_button,

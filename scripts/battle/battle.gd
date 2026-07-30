@@ -2022,6 +2022,18 @@ func _on_bag_drawer_close_pressed() -> void:
 	_sync_action_panel_mode_visibility()
 	_show_moves()
 
+func _close_bag_for_capture_attempt() -> void:
+	# Keep the battle message intact while immediately clearing the drawer so
+	# the server-backed throw animation remains visible.
+	bag_inventory_request_token += 1
+	current_action_view = ActionView.MOVES
+	_sync_action_panel_mode_visibility()
+
+func _restore_bag_after_capture_error() -> void:
+	current_action_view = ActionView.BAG
+	_sync_action_panel_mode_visibility()
+	_refresh_bag_inventory()
+
 func _on_calc_drawer_close_pressed() -> void:
 	_focus_battle_ui_layer()
 	_set_action_panel_mode(BattleActionsPanelMode.BATTLE)
@@ -2955,10 +2967,11 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 	current_action_panel.set_message(use_item_message)
 	_add_battle_log_message(use_item_message)
 	SfxManager.play("battle_item_use")
+	_close_bag_for_capture_attempt()
 	var capture_result: Dictionary = await InventoryService.catch_wild_pokemon(current_battle_id, item_id)
 	if not bool(capture_result.get("success", false)):
 		current_action_panel.set_message(str(capture_result.get("error", _t("battle.error.capture_failed"))))
-		_refresh_bag_inventory()
+		_restore_bag_after_capture_error()
 		_set_battle_input_locked(false)
 		return
 

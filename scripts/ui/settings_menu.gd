@@ -39,6 +39,7 @@ const LOGOUT_CONFIRM_Z_INDEX := 2200
 @onready var weather_effects_check_box: CheckBox = $MarginContainer/VBoxContainer/WeatherEffectsCheckBox
 @onready var terrain_effects_check_box: CheckBox = $MarginContainer/VBoxContainer/TerrainEffectsCheckBox
 var display_own_name_check_box: CheckBox
+var hide_other_players_check_box: CheckBox
 var language_label: Label
 var language_options_button: OptionButton
 var terminology_label: Label
@@ -112,6 +113,7 @@ func _ready() -> void:
 	weather_effects_check_box.toggled.connect(_on_weather_effects_toggled)
 	terrain_effects_check_box.toggled.connect(_on_terrain_effects_toggled)
 	display_own_name_check_box.toggled.connect(_on_display_own_name_toggled)
+	hide_other_players_check_box.toggled.connect(_on_hide_other_players_toggled)
 	sprite_style_options_button.item_selected.connect(_on_sprite_style_selected)
 	fullscreen_check_box.toggled.connect(_on_fullscreen_toggled)
 	resolution_options_button.item_selected.connect(_on_resolution_selected)
@@ -172,6 +174,7 @@ func _apply_settings_to_controls() -> void:
 	weather_effects_check_box.button_pressed = SettingsManager.weather_effects
 	terrain_effects_check_box.button_pressed = SettingsManager.terrain_effects
 	display_own_name_check_box.button_pressed = SettingsManager.display_own_name
+	hide_other_players_check_box.button_pressed = SettingsManager.hide_other_players
 	_apply_language_options_to_control()
 	_apply_terminology_options_to_control()
 
@@ -246,6 +249,7 @@ func _setup_tabs() -> void:
 	content_panel.add_child(tab_container)
 
 	var general_tab: VBoxContainer = _create_tab_content("General", "ui.settings.tab.general")
+	var language_tab: VBoxContainer = _create_tab_content("Language", "ui.settings.tab.language")
 	var graphics_tab: VBoxContainer = _create_tab_content("Graphics", "ui.settings.tab.graphics")
 	var sound_tab: VBoxContainer = _create_tab_content("Sound", "ui.settings.tab.sound")
 	var account_tab: VBoxContainer = _create_tab_content("Account", "ui.settings.tab.account")
@@ -268,21 +272,30 @@ func _setup_tabs() -> void:
 	terminology_hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_set_localized_text(terminology_hint_label, "ui.settings.terminology_hint")
 	_move_nodes_to_container(general_tab, [
-		language_label,
-		language_options_button,
-		terminology_label,
-		terminology_options_button,
-		terminology_hint_label,
 		battle_animations_check_box,
 		weather_effects_check_box,
 		terrain_effects_check_box,
 		_create_display_own_name_check_box(),
+		_create_hide_other_players_check_box(),
 	])
 	_wrap_settings_section(
 		general_tab,
 		"ui.settings.section.gameplay",
 		"ui.settings.section.gameplay_subtitle",
 		general_tab.get_children()
+	)
+	_move_nodes_to_container(language_tab, [
+		language_label,
+		language_options_button,
+		terminology_label,
+		terminology_options_button,
+		terminology_hint_label,
+	])
+	_wrap_settings_section(
+		language_tab,
+		"ui.settings.section.language",
+		"ui.settings.section.language_subtitle",
+		language_tab.get_children()
 	)
 	_move_nodes_to_container(graphics_tab, [
 		sprite_style_options_button.get_node("../SpriteStyleLabel"),
@@ -565,6 +578,13 @@ func _create_display_own_name_check_box() -> CheckBox:
 	_set_localized_text(display_own_name_check_box, "ui.settings.display_own_name")
 	display_own_name_check_box.focus_mode = Control.FOCUS_NONE
 	return display_own_name_check_box
+
+
+func _create_hide_other_players_check_box() -> CheckBox:
+	hide_other_players_check_box = CheckBox.new()
+	_set_localized_text(hide_other_players_check_box, "ui.settings.hide_other_players")
+	hide_other_players_check_box.focus_mode = Control.FOCUS_NONE
+	return hide_other_players_check_box
 
 
 func _setup_logout_confirm_dialog() -> void:
@@ -1121,6 +1141,13 @@ func _on_display_own_name_toggled(enabled: bool) -> void:
 	_refresh_local_player_nameplate()
 
 
+func _on_hide_other_players_toggled(enabled: bool) -> void:
+	if loading_controls:
+		return
+
+	SettingsManager.set_hide_other_players(enabled)
+
+
 func _on_sprite_style_selected(index: int) -> void:
 	if loading_controls:
 		return
@@ -1391,7 +1418,12 @@ func _account_details_confirmed() -> void:
 
 
 func _refresh_local_player_nameplate() -> void:
-	var player_node: Node = get_tree().get_first_node_in_group("player")
+	var player_node: Node
+	var world := GameState.get_world()
+	if world != null:
+		player_node = world.get_node_or_null("Player")
+	if player_node == null:
+		player_node = get_tree().get_first_node_in_group("player")
 	if player_node != null and player_node.has_method("set_display_name"):
 		player_node.call("set_display_name", PlayerSave.player_name, SettingsManager.display_own_name)
 

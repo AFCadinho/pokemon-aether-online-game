@@ -53,6 +53,12 @@ func _init() -> void:
 	var unknown_map := Node2D.new()
 	controller.call("apply_map", unknown_map)
 	_check_color(canvas_modulate.color, Color("65718f"), "maps without metadata safely default to outdoor")
+	controller.call("set_creator_lighting_override", 12.0, 1.0)
+	_check_color(canvas_modulate.color, Color.WHITE, "creator daylight preset locally overrides midnight")
+	controller.call("set_creator_lighting_override", 0.0, 0.8)
+	_check_approx(canvas_modulate.color.r, Color("65718f").r * 0.8, "creator brightness adjusts the selected lighting preset")
+	controller.call("clear_creator_lighting_override")
+	_check_color(canvas_modulate.color, Color("65718f"), "closing creator lighting restores live world time")
 
 	_check_scene_contracts()
 	world_time_service.call("clear_debug_time")
@@ -67,9 +73,15 @@ func _init() -> void:
 func _check_scene_contracts() -> void:
 	var world_scene_source := FileAccess.get_file_as_string(WORLD_SCENE_PATH)
 	var world_script_source := FileAccess.get_file_as_string(WORLD_SCRIPT_PATH)
+	var day_night_source := FileAccess.get_file_as_string("res://scripts/world/day_night_controller.gd")
 	var ui_source := FileAccess.get_file_as_string(UI_OVERLAY_SCRIPT_PATH)
 	var oaks_lab_source := FileAccess.get_file_as_string(OAKS_LAB_SCENE_PATH)
 	_check_true(world_scene_source.contains('[node name="WorldCanvasModulate" type="CanvasModulate"'), "world owns one canvas modulator")
+	_check_true(
+		day_night_source.contains("func set_creator_lighting_override(")
+		and day_night_source.contains("func clear_creator_lighting_override()"),
+		"day/night controller exposes a reversible local creator override"
+	)
 	_check_true(world_scene_source.contains('[node name="DayNightController" type="Node"'), "world owns the day/night controller")
 	_check_true(world_script_source.count("_apply_day_night_for_map(") >= 4, "initial load and both map-switch paths apply lighting")
 	_check_true(ui_source.contains("WorldTimeService.get_utc_datetime()"), "location clock uses the shared time source")

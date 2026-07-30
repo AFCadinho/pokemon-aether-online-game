@@ -41,7 +41,15 @@ const DEFAULT_FEMALE_EYES_ID := "Eyes"
 const DEFAULT_FEMALE_EYEBROWS_ID := "Eyebrows"
 const EYEBROWS_BY_HAIR_ID := {
 	"male:Hair": DEFAULT_MALE_EYEBROWS_ID,
+	"male:Adinho_Hair": "Adinho_Eyebrows",
+	"male:Aether_Male_Hair_01": DEFAULT_MALE_EYEBROWS_ID,
+	"male:Aether_Male_Hair_02": DEFAULT_MALE_EYEBROWS_ID,
+	"male:Aether_Male_Hair_03": DEFAULT_MALE_EYEBROWS_ID,
 	"female:Hair": DEFAULT_FEMALE_EYEBROWS_ID,
+	"female:Aether_Blossom_Hair": DEFAULT_FEMALE_EYEBROWS_ID,
+	"female:Aether_Blossom_Hair_Chroma": DEFAULT_FEMALE_EYEBROWS_ID,
+	"female:Aether_Female_Hair_01": DEFAULT_FEMALE_EYEBROWS_ID,
+	"female:Aether_Female_Hair_02": DEFAULT_FEMALE_EYEBROWS_ID,
 }
 const LEGACY_DEFAULT_HAIR_COLOR := "#ffffff"
 const LEGACY_DEFAULT_EYE_COLOR := "#0fff00"
