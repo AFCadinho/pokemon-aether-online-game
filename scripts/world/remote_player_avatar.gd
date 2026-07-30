@@ -169,6 +169,8 @@ var current_appearance_state: Dictionary = {}
 var current_appearance_signature := ""
 var has_position := false
 var presence_state: Dictionary = {}
+var creator_nameplate_visibility_override_active := false
+var creator_nameplate_visible := true
 
 
 func _ready() -> void:
@@ -709,11 +711,25 @@ func _update_nameplate() -> void:
 	if name_text == "":
 		name_text = username.strip_edges()
 	nameplate_label.text = name_text
-	nameplate_label.visible = name_text != ""
+	var should_show_nameplate := name_text != ""
+	if creator_nameplate_visibility_override_active:
+		should_show_nameplate = creator_nameplate_visible and name_text != ""
+	nameplate_label.visible = should_show_nameplate
 	_update_role_badge()
 	_sync_nameplate_layout()
 	if nameplate != null:
-		nameplate.visible = name_text != ""
+		nameplate.visible = should_show_nameplate
+
+
+func set_creator_nameplate_visible(visible: bool) -> void:
+	creator_nameplate_visibility_override_active = true
+	creator_nameplate_visible = visible
+	_update_nameplate()
+
+
+func clear_creator_nameplate_visibility_override() -> void:
+	creator_nameplate_visibility_override_active = false
+	_update_nameplate()
 
 
 func _apply_guild_emblem(emblem: Dictionary) -> void:

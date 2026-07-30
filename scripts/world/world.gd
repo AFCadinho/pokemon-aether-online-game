@@ -69,6 +69,10 @@ var last_presence_position_signature := ""
 var confirmed_appearance_state: Dictionary = {}
 var remote_players_container: Node2D
 var remote_player_avatars: Dictionary = {}
+var creator_remote_players_visibility_override_active := false
+var creator_remote_players_visible := true
+var creator_nameplate_visibility_override_active := false
+var creator_nameplates_visible := true
 var pending_map_chat_messages: Dictionary = {}
 var pending_remote_player_interaction: Dictionary = {}
 var remote_player_interaction_pending := false
@@ -1287,10 +1291,56 @@ func _sync_remote_players_visibility() -> void:
 	if remote_players_container == null or not is_instance_valid(remote_players_container):
 		return
 	var players_visible := not SettingsManager.hide_other_players
+	if creator_remote_players_visibility_override_active:
+		players_visible = creator_remote_players_visible
 	remote_players_container.visible = players_visible
 	for avatar: Node in remote_players_container.get_children():
 		if avatar.has_method("set_interaction_enabled"):
 			avatar.call("set_interaction_enabled", players_visible)
+
+
+func set_creator_remote_players_visible(visible: bool) -> void:
+	creator_remote_players_visibility_override_active = true
+	creator_remote_players_visible = visible
+	_sync_remote_players_visibility()
+
+
+func clear_creator_remote_players_visibility_override() -> void:
+	creator_remote_players_visibility_override_active = false
+	_sync_remote_players_visibility()
+
+
+func set_creator_nameplates_visible(visible: bool) -> void:
+	creator_nameplate_visibility_override_active = true
+	creator_nameplates_visible = visible
+	_sync_creator_nameplate_visibility()
+
+
+func clear_creator_nameplates_visibility_override() -> void:
+	creator_nameplate_visibility_override_active = false
+	_sync_creator_nameplate_visibility()
+
+
+func _sync_creator_nameplate_visibility() -> void:
+	var method_name := (
+		"set_creator_nameplate_visible"
+		if creator_nameplate_visibility_override_active
+		else "clear_creator_nameplate_visibility_override"
+	)
+	if player != null and is_instance_valid(player) and player.has_method(method_name):
+		if creator_nameplate_visibility_override_active:
+			player.call(method_name, creator_nameplates_visible)
+		else:
+			player.call(method_name)
+	if remote_players_container == null or not is_instance_valid(remote_players_container):
+		return
+	for avatar: Node in remote_players_container.get_children():
+		if not avatar.has_method(method_name):
+			continue
+		if creator_nameplate_visibility_override_active:
+			avatar.call(method_name, creator_nameplates_visible)
+		else:
+			avatar.call(method_name)
 
 
 func _order_remote_players_container() -> void:
@@ -1402,8 +1452,15 @@ func _apply_remote_player_states(player_states: Array, prune_missing := true) ->
 			avatar = new_avatar as Node2D
 			remote_player_avatars[user_key] = avatar
 			remote_players_container.add_child(avatar)
+			if creator_nameplate_visibility_override_active and avatar.has_method("set_creator_nameplate_visible"):
+				avatar.call("set_creator_nameplate_visible", creator_nameplates_visible)
 			if avatar.has_method("set_interaction_enabled"):
-				avatar.call("set_interaction_enabled", not SettingsManager.hide_other_players)
+				avatar.call(
+					"set_interaction_enabled",
+					creator_remote_players_visible
+					if creator_remote_players_visibility_override_active
+					else not SettingsManager.hide_other_players
+				)
 			var interaction_callable := Callable(self, "_on_remote_player_interaction_requested")
 			if avatar.has_signal("interaction_requested") and not avatar.is_connected("interaction_requested", interaction_callable):
 				avatar.connect("interaction_requested", interaction_callable)

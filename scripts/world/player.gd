@@ -220,6 +220,9 @@ var move_duration := TILE_MOVE_DURATION
 
 # Onthoudt de laatste kijkrichting, zodat de idle frame goed blijft staan.
 var last_direction := Vector2.DOWN
+var creator_nameplate_visibility_override_active := false
+var creator_nameplate_visible := true
+var nameplate_visibility_requested := true
 var input_action_priority := ["move_right", "move_left", "move_down", "move_up"]
 var buffered_direction := Vector2.ZERO
 var input_buffer_time_left := 0.0
@@ -455,7 +458,18 @@ func set_display_name(display_name: String, visible: bool = true) -> void:
 		return
 
 	nameplate_label.text = display_name.strip_edges()
-	_sync_nameplate_visibility(visible and SettingsManager.display_own_name)
+	_sync_nameplate_visibility(visible)
+
+
+func set_creator_nameplate_visible(visible: bool) -> void:
+	creator_nameplate_visibility_override_active = true
+	creator_nameplate_visible = visible
+	_sync_nameplate_visibility(nameplate_visibility_requested)
+
+
+func clear_creator_nameplate_visibility_override() -> void:
+	creator_nameplate_visibility_override_active = false
+	_sync_nameplate_visibility(nameplate_visibility_requested)
 
 func set_guild_emblem(emblem: Dictionary) -> void:
 	if guild_emblem == null:
@@ -606,8 +620,11 @@ func _sync_nameplate_visibility(visible: bool) -> void:
 	if nameplate == null or nameplate_label == null:
 		return
 
+	nameplate_visibility_requested = visible
 	_sync_nameplate_layout()
 	var should_show_nameplate: bool = visible and SettingsManager.display_own_name and nameplate_label.text != ""
+	if creator_nameplate_visibility_override_active:
+		should_show_nameplate = creator_nameplate_visible and nameplate_label.text != ""
 	nameplate_label.visible = should_show_nameplate
 	nameplate.visible = should_show_nameplate
 
