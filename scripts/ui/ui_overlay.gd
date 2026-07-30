@@ -30611,6 +30611,10 @@ func _on_mail_claim_button_pressed() -> void:
 		bag_inventory_items = _normalize_bag_inventory_items(inventory_value)
 		bag_inventory_loaded = true
 		_refresh_bag_items()
+	var wallet_value: Variant = result.get("wallet", {})
+	if wallet_value is Dictionary:
+		PlayerWalletService.apply_wallet_result({"success": true, "wallet": wallet_value})
+		refresh_money_display()
 
 	var claimed_mail: Dictionary = _mail_dictionary_from_variant(result.get("mail", {}))
 	_emit_mail_claim_messages(previous_attachments, claimed_mail, _array_from_variant(result.get("storageLocations", [])))
@@ -30641,6 +30645,10 @@ func _on_mail_attachment_claim_pressed(attachment_id: int) -> void:
 		bag_inventory_items = _normalize_bag_inventory_items(inventory_value)
 		bag_inventory_loaded = true
 		_refresh_bag_items()
+	var wallet_value: Variant = result.get("wallet", {})
+	if wallet_value is Dictionary:
+		PlayerWalletService.apply_wallet_result({"success": true, "wallet": wallet_value})
+		refresh_money_display()
 
 	var claimed_mail: Dictionary = _mail_dictionary_from_variant(result.get("mail", {}))
 	_emit_mail_claim_messages(previous_attachments, claimed_mail, _array_from_variant(result.get("storageLocations", [])))
@@ -30683,6 +30691,13 @@ func _emit_mail_claim_messages(previous_attachments: Array, claimed_mail: Dictio
 			payload = payload_value as Dictionary
 
 		match attachment_type:
+			"currency":
+				var currency_id := str(payload.get("currency", "money"))
+				var amount: int = int(payload.get("amount", 0))
+				_add_chat_message("%s %s" % [
+					amount,
+					LocalizationManager.text("ui.trainer_card.wallet.%s" % currency_id),
+				])
 			"item":
 				var item_id := str(payload.get("itemId", ""))
 				var item_name: String = ItemLocalization.display_name(
@@ -31388,6 +31403,8 @@ func _format_reply_subject(subject: String) -> String:
 func _mail_can_reply(mail: Dictionary) -> bool:
 	if mail.is_empty():
 		return false
+	if str(mail.get("senderType", "player")).strip_edges().to_lower() in ["system", "admin"]:
+		return false
 
 	var can_reply_as_sender: bool = str(mail.get("senderUsername", "")).strip_edges() != ""
 	var can_reply_as_recipient: bool = str(mail.get("recipientUsername", "")).strip_edges() != ""
@@ -31435,6 +31452,20 @@ func _render_mail_attachments(attachments: Array) -> void:
 			and not voided
 		)
 		match str(attachment.get("type", "")):
+			"currency":
+				var currency_id := str(payload.get("currency", "money"))
+				var amount: int = int(payload.get("amount", 0))
+				mail_attachment_list.add_child(_create_mail_attachment_row(
+					null,
+					"%s %s%s" % [
+						amount,
+						LocalizationManager.text("ui.trainer_card.wallet.%s" % currency_id),
+						suffix,
+					],
+					{},
+					attachment_id,
+					can_claim
+				))
 			"item":
 				var item_id := str(payload.get("itemId", ""))
 				var item_name := ItemLocalization.display_name(

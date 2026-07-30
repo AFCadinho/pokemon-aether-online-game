@@ -114,6 +114,7 @@ func claim_mail(mail_id: int) -> Dictionary:
 		"mail": _dictionary_from_value(body.get("mail", {})),
 		"inventory": _array_from_value(_dictionary_from_value(body.get("inventory", {})).get("items", [])),
 		"party": _array_from_value(_dictionary_from_value(body.get("party", {})).get("party", [])),
+		"wallet": _dictionary_from_value(_dictionary_from_value(body.get("wallet", {})).get("wallet", {})),
 		"storageLocations": _normalize_storage_locations(body.get("storageLocations", [])),
 	}
 
@@ -180,6 +181,7 @@ func claim_mail_attachment(mail_id: int, attachment_id: int) -> Dictionary:
 		"mail": _dictionary_from_value(body.get("mail", {})),
 		"inventory": _array_from_value(_dictionary_from_value(body.get("inventory", {})).get("items", [])),
 		"party": _array_from_value(_dictionary_from_value(body.get("party", {})).get("party", [])),
+		"wallet": _dictionary_from_value(_dictionary_from_value(body.get("wallet", {})).get("wallet", {})),
 		"storageLocations": _normalize_storage_locations(body.get("storageLocations", [])),
 	}
 
