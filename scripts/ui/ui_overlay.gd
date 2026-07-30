@@ -19924,11 +19924,22 @@ func _normalize_summary_move_lookup_key(value: String) -> String:
 func _get_summary_move_id(move_value: Variant) -> String:
 	if move_value is Dictionary:
 		var move_data: Dictionary = move_value as Dictionary
-		return _normalize_summary_move_lookup_key(str(_get_first_dictionary_value(
-			move_data,
-			["id", "move", "name"],
-			""
-		)))
+		for key_value: Variant in ["id", "move", "moveId", "move_id", "name"]:
+			var move_key := str(move_data.get(str(key_value), "")).strip_edges()
+			if move_key == "":
+				continue
+			var metadata := _lookup_summary_move_metadata(move_key)
+			var canonical_id := _normalize_summary_move_lookup_key(str(metadata.get("id", "")))
+			if canonical_id != "":
+				return canonical_id
+
+		for key_value: Variant in ["moveId", "move_id", "move", "id", "name"]:
+			var fallback_id := _normalize_summary_move_lookup_key(
+				str(move_data.get(str(key_value), ""))
+			)
+			if fallback_id != "":
+				return fallback_id
+		return ""
 	return _normalize_summary_move_lookup_key(str(move_value))
 
 func _get_summary_move_pp_text(move_value: Variant) -> String:

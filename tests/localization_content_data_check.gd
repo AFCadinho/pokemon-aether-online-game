@@ -336,6 +336,46 @@ func _check_runtime_consumers() -> void:
 		overlay.call("_get_summary_move_name", {"id": "water-pulse", "name": "Water Pulse"}) == "Waterpuls",
 		"Pokémon Summary displays a localized move name"
 	)
+	var legacy_summary_moves: Array[Dictionary] = [
+		{
+			"id": "scaryface",
+			"name": "Scary Face",
+			"shortDesc": "Lowers the target’s Speed by two stages.",
+			"canonicalId": "scary-face",
+			"localizedDesc": "Verlaagt de Snelheid van het doel met twee niveaus.",
+		},
+		{
+			"id": "firespin",
+			"name": "Fire Spin",
+			"shortDesc": "Prevents the target from fleeing and inflicts damage for 2-5 turns.",
+			"canonicalId": "fire-spin",
+			"localizedDesc": "Sluit het doel op en brengt 2–5 beurten schade toe.",
+		},
+		{
+			"id": "inferno",
+			"name": "Inferno",
+			"shortDesc": "Has a chance to burn the target.",
+			"canonicalId": "inferno",
+			"localizedDesc": "Kan het doel verbranden.",
+		},
+		{
+			"id": "flareblitz",
+			"name": "Flare Blitz",
+			"shortDesc": "Damages the user by 1/3 the damage inflicted. Has a chance to burn the target.",
+			"canonicalId": "flare-blitz",
+			"localizedDesc": "De gebruiker krijgt 1/3 van de schade die wordt toegebracht tijdens de terugslag. Heeft een kans om het doelwit te verbranden.",
+		},
+	]
+	for move_data: Dictionary in legacy_summary_moves:
+		_check(
+			overlay.call("_get_summary_move_id", move_data) == str(move_data.get("canonicalId", "")),
+			"Pokémon Summary resolves legacy move ID %s to its canonical catalog ID" % move_data.get("id", "")
+		)
+		_check(
+			overlay.call("_get_summary_move_description_text", move_data)
+			== str(move_data.get("localizedDesc", "")),
+			"Pokémon Summary localizes the legacy %s move description" % move_data.get("name", "")
+		)
 	_check(
 		overlay.call("_get_summary_ability_display_name", "water-absorb") == "Waterabsorptie",
 		"Pokémon Summary displays a localized ability name"
