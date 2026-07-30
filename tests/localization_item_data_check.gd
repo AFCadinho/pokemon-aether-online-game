@@ -19,6 +19,7 @@ const SHOP_CONSUMER_PATHS: Dictionary = {
 var failed := false
 var localization_manager: Node
 var item_localization: Node
+var settings_manager: Node
 
 
 func _init() -> void:
@@ -28,17 +29,25 @@ func _init() -> void:
 func _run() -> void:
 	localization_manager = root.get_node_or_null("LocalizationManager")
 	item_localization = root.get_node_or_null("ItemLocalization")
+	settings_manager = root.get_node_or_null("SettingsManager")
 	_check(localization_manager != null, "item-data check can access LocalizationManager")
 	_check(item_localization != null, "item-data check can access ItemLocalization")
-	if localization_manager == null or item_localization == null:
+	_check(settings_manager != null, "item-data check can access SettingsManager")
+	if localization_manager == null or item_localization == null or settings_manager == null:
 		quit(1)
 		return
 
 	var original_locale := str(localization_manager.get("current_locale"))
+	var original_settings_locale := str(settings_manager.get("locale"))
+	var original_content_name_language := str(settings_manager.get("content_name_language"))
+	settings_manager.set("content_name_language", "localized")
 	_check_catalogs()
 	_check_resolver_fallback_and_mechanics()
+	_check_independent_name_language()
 	_check_overlay_integration()
 	_check_shop_and_cosmetic_integration()
+	settings_manager.set("locale", original_settings_locale)
+	settings_manager.set("content_name_language", original_content_name_language)
 	localization_manager.call("set_locale", original_locale)
 	await process_frame
 	quit(1 if failed else 0)
@@ -155,6 +164,26 @@ func _check_resolver_fallback_and_mechanics() -> void:
 		unknown.get("shortDesc") == "Server fallback remains visible.",
 		"unknown item keeps its server description"
 	)
+
+
+func _check_independent_name_language() -> void:
+	localization_manager.call("set_locale", "nl")
+	settings_manager.set("locale", "nl")
+	settings_manager.set("content_name_language", "english")
+	var english_names: Dictionary = item_localization.call("localize_item", {
+		"itemId": "armorite-ore",
+		"name": "Armorite Ore",
+		"shortDesc": "Server-provided English description.",
+	})
+	_check(
+		english_names.get("name") == "Armorite Ore",
+		"Dutch interface can keep English item names"
+	)
+	_check(
+		english_names.get("shortDesc") != "Server-provided English description.",
+		"item descriptions remain Dutch with English item names"
+	)
+	settings_manager.set("content_name_language", "localized")
 
 
 func _check_overlay_integration() -> void:

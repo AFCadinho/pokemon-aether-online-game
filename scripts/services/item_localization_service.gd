@@ -26,7 +26,7 @@ func _ready() -> void:
 
 
 func display_name(item_id: String, fallback_name: String = "", locale: String = "") -> String:
-	return _localized_field(item_id, "name", fallback_name, locale)
+	return _localized_field(item_id, "name", fallback_name, _normalized_name_locale(locale))
 
 
 func short_description(
@@ -34,7 +34,7 @@ func short_description(
 	fallback_description: String = "",
 	locale: String = ""
 ) -> String:
-	return _localized_field(item_id, "shortDesc", fallback_description, locale)
+	return _localized_field(item_id, "shortDesc", fallback_description, _normalized_locale(locale))
 
 
 func localize_item(item: Dictionary, locale: String = "") -> Dictionary:
@@ -95,7 +95,7 @@ func _localized_field(
 	if normalized_id.is_empty():
 		return fallback_value
 
-	var localized_entry := _catalog_entry(_normalized_locale(locale), normalized_id)
+	var localized_entry := _catalog_entry(locale, normalized_id)
 	var english_entry := _catalog_entry(DEFAULT_LOCALE, normalized_id)
 	var localized_value := str(localized_entry.get(field_name, "")).strip_edges()
 	if not localized_value.is_empty():
@@ -116,6 +116,14 @@ func _normalized_locale(locale: String) -> String:
 	if locale.strip_edges().is_empty():
 		return str(LocalizationManager.current_locale)
 	return LocalizationManager.normalize_locale(locale)
+
+
+func _normalized_name_locale(locale: String) -> String:
+	if not locale.strip_edges().is_empty():
+		return LocalizationManager.normalize_locale(locale)
+	if SettingsManager != null and SettingsManager.has_method("get_content_name_locale"):
+		return str(SettingsManager.get_content_name_locale())
+	return _normalized_locale(locale)
 
 
 func _item_id(item: Dictionary) -> String:

@@ -44,7 +44,7 @@ func display_name(
 	if normalized_kind.is_empty() or normalized_id.is_empty():
 		return fallback_name
 
-	var normalized_locale := _normalized_locale(locale)
+	var normalized_locale := _normalized_name_locale(locale)
 	var localized_entry := _catalog_entry(normalized_locale, normalized_kind, normalized_id)
 	var english_entry := _catalog_entry(DEFAULT_LOCALE, normalized_kind, normalized_id)
 	var localized_name := str(localized_entry.get("name", "")).strip_edges()
@@ -123,6 +123,7 @@ func search_terms(
 		content_id,
 		fallback_name,
 		display_name(kind, content_id, fallback_name, locale),
+		display_name(kind, content_id, fallback_name, str(LocalizationManager.current_locale)),
 		display_name(kind, content_id, fallback_name, DEFAULT_LOCALE),
 	]:
 		var term := value.strip_edges()
@@ -155,6 +156,14 @@ func _normalized_locale(locale: String) -> String:
 	if locale.strip_edges().is_empty():
 		return str(LocalizationManager.current_locale)
 	return LocalizationManager.normalize_locale(locale)
+
+
+func _normalized_name_locale(locale: String) -> String:
+	if not locale.strip_edges().is_empty():
+		return LocalizationManager.normalize_locale(locale)
+	if SettingsManager != null and SettingsManager.has_method("get_content_name_locale"):
+		return str(SettingsManager.get_content_name_locale())
+	return _normalized_locale(locale)
 
 
 func _normalize_kind(kind: String) -> String:

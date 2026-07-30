@@ -6,6 +6,7 @@ const PREVIEW := preload("res://scripts/ui/bag_item_effect_preview.gd")
 var failed := false
 var localization_manager: Node
 var item_localization: Node
+var settings_manager: Node
 
 
 func _init() -> void:
@@ -15,15 +16,20 @@ func _init() -> void:
 func _run() -> void:
 	localization_manager = root.get_node_or_null("LocalizationManager")
 	item_localization = root.get_node_or_null("ItemLocalization")
+	settings_manager = root.get_node_or_null("SettingsManager")
 	_check(localization_manager != null, "Bag and hotbar check can access LocalizationManager")
 	_check(item_localization != null, "Bag and hotbar check can access ItemLocalization")
-	if localization_manager == null or item_localization == null:
+	_check(settings_manager != null, "Bag and hotbar check can access SettingsManager")
+	if localization_manager == null or item_localization == null or settings_manager == null:
 		quit(1)
 		return
 
 	var original_locale := str(localization_manager.get("current_locale"))
+	var original_content_name_language := str(settings_manager.get("content_name_language"))
+	settings_manager.set("content_name_language", "localized")
 	_check_bag_and_hotbar_runtime_translation()
 	_check_item_effect_preview_translation()
+	settings_manager.set("content_name_language", original_content_name_language)
 	localization_manager.call("set_locale", original_locale)
 	await process_frame
 	quit(1 if failed else 0)

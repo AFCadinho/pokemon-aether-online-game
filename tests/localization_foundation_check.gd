@@ -149,6 +149,7 @@ func _check_settings_scene_translation() -> void:
 
 	var title := menu.get_node_or_null("MarginContainer/VBoxContainer/Header/Heading/TitleLabel") as Label
 	var language_options := menu.find_child("LanguageOptionsButton", true, false) as OptionButton
+	var terminology_options := menu.find_child("TerminologyOptionsButton", true, false) as OptionButton
 	var tabs := menu.find_child("SettingsTabs", true, false) as TabContainer
 	var workspace := menu.find_child("SettingsWorkspace", true, false) as HBoxContainer
 	var navigation := menu.find_child("SettingsNavigation", true, false) as VBoxContainer
@@ -157,6 +158,13 @@ func _check_settings_scene_translation() -> void:
 		"static settings text renders in Dutch (received %s)" % str(title.text if title != null else "<missing>")
 	)
 	_check(language_options != null and language_options.item_count == 3, "language selector lists three locales")
+	_check(
+		terminology_options != null
+		and terminology_options.item_count == 2
+		and terminology_options.get_item_text(0) == "Engelse namen"
+		and terminology_options.get_item_text(1) == "Vertaalde namen",
+		"settings expose an independent localized terminology preference"
+	)
 	_check(
 		language_options != null and language_options.get_item_icon(0) != null,
 		"settings language selector displays flags"
@@ -281,6 +289,15 @@ func _check_settings_persistence_contract() -> void:
 	var project_source := FileAccess.get_file_as_string(PROJECT_PATH)
 	_check(settings_source.contains('"locale": locale'), "locale is persisted in local settings")
 	_check(settings_source.contains("func set_locale"), "settings expose a locale setter")
+	_check(
+		settings_source.contains('"content_name_language": content_name_language'),
+		"Pokémon terminology preference is persisted in local settings"
+	)
+	_check(
+		settings_source.contains("func set_content_name_language")
+		and settings_source.contains("func get_content_name_locale"),
+		"settings expose the independent Pokémon terminology language"
+	)
 	_check(
 		settings_source.contains("LocalizationManager.get_preferred_system_locale()"),
 		"first-run settings use the supported system locale"

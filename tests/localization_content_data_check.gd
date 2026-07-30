@@ -17,6 +17,7 @@ const PARTY_HOVER_CARD_SCRIPT := "res://scripts/battle/battle_ui/party_hover_car
 var failed := false
 var localization_manager: Node
 var content_localization: Node
+var settings_manager: Node
 
 
 func _init() -> void:
@@ -26,17 +27,25 @@ func _init() -> void:
 func _run() -> void:
 	localization_manager = root.get_node_or_null("LocalizationManager")
 	content_localization = root.get_node_or_null("ContentLocalization")
+	settings_manager = root.get_node_or_null("SettingsManager")
 	_check(localization_manager != null, "content-data check can access LocalizationManager")
 	_check(content_localization != null, "content-data check can access ContentLocalization")
-	if localization_manager == null or content_localization == null:
+	_check(settings_manager != null, "content-data check can access SettingsManager")
+	if localization_manager == null or content_localization == null or settings_manager == null:
 		quit(1)
 		return
 
 	var original_locale := str(localization_manager.get("current_locale"))
+	var original_settings_locale := str(settings_manager.get("locale"))
+	var original_content_name_language := str(settings_manager.get("content_name_language"))
+	settings_manager.set("content_name_language", "localized")
 	_check_catalogs()
 	_check_runtime_resolution()
+	_check_independent_name_language()
 	_check_search_terms_preserve_canonical_values()
 	_check_runtime_consumers()
+	settings_manager.set("locale", original_settings_locale)
+	settings_manager.set("content_name_language", original_content_name_language)
 	localization_manager.call("set_locale", original_locale)
 	quit(1 if failed else 0)
 
@@ -191,6 +200,44 @@ func _check_runtime_resolution() -> void:
 	_check(
 		content_localization.call("display_name", "species", "mr-mime", "Mr Mime") == "Mr. Mime",
 		"species presentation resolves from the complete canonical source catalog"
+	)
+
+
+func _check_independent_name_language() -> void:
+	localization_manager.call("set_locale", "nl")
+	settings_manager.set("locale", "nl")
+	settings_manager.set("content_name_language", "english")
+	_check(
+		content_localization.call("display_name", "moves", "water-pulse", "Water Pulse") == "Water Pulse",
+		"Dutch interface can keep English Move names"
+	)
+	_check(
+		content_localization.call("nature_name", "Adamant", "Adamant") == "Adamant",
+		"Dutch interface can keep English Nature names"
+	)
+	_check(
+		content_localization.call("short_description", "moves", "thunder-wave", "")
+		== "Verlamt het doel.",
+		"Dutch descriptions remain localized with English terminology"
+	)
+	var search_terms: Array[String] = content_localization.call(
+		"search_terms",
+		"moves",
+		"water-pulse",
+		"Water Pulse"
+	)
+	_check(
+		search_terms.has("Water Pulse") and search_terms.has("Waterpuls"),
+		"search accepts both English and interface-language terminology"
+	)
+
+	settings_manager.set("content_name_language", "localized")
+	localization_manager.call("set_locale", "pt_BR")
+	settings_manager.set("locale", "pt_BR")
+	_check(
+		content_localization.call("display_name", "abilities", "water-absorb", "Water Absorb")
+		== "Absorção de Água",
+		"Portuguese interface can use translated Ability names"
 	)
 
 

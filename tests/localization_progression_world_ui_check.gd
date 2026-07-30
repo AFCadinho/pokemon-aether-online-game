@@ -7,6 +7,7 @@ const WORLD_SCRIPT_PATH := "res://scripts/world/world.gd"
 var failed := false
 var localization_manager: Node
 var game_state: Node
+var settings_manager: Node
 
 
 func _init() -> void:
@@ -16,19 +17,24 @@ func _init() -> void:
 func _run() -> void:
 	localization_manager = root.get_node_or_null("LocalizationManager")
 	game_state = root.get_node_or_null("GameState")
+	settings_manager = root.get_node_or_null("SettingsManager")
 	_check(localization_manager != null, "Progression localization check can access LocalizationManager")
 	_check(game_state != null, "Progression localization check can access GameState")
-	if localization_manager == null or game_state == null:
+	_check(settings_manager != null, "Progression localization check can access SettingsManager")
+	if localization_manager == null or game_state == null or settings_manager == null:
 		quit(1)
 		return
 
 	var original_locale := str(localization_manager.get("current_locale"))
+	var original_content_name_language := str(settings_manager.get("content_name_language"))
+	settings_manager.set("content_name_language", "localized")
 	var original_rod := str(game_state.get("selected_fishing_rod_item_id"))
 	var original_region := str(game_state.get("fishing_region"))
 	_check_runtime_copy()
 	_check_source_contracts()
 	game_state.set("selected_fishing_rod_item_id", original_rod)
 	game_state.set("fishing_region", original_region)
+	settings_manager.set("content_name_language", original_content_name_language)
 	localization_manager.call("set_locale", original_locale)
 	await process_frame
 	quit(1 if failed else 0)

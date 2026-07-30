@@ -35,6 +35,10 @@ func set_locale(locale: String) -> String:
 	return current_locale
 
 
+func refresh_current_locale() -> void:
+	locale_changed.emit(current_locale)
+
+
 func normalize_locale(locale: String) -> String:
 	var normalized := locale.strip_edges().replace("-", "_")
 	if normalized.is_empty():

@@ -11,6 +11,7 @@
 **Changed**
 
 - Redesigned Settings with a clearer two-column layout, compact category navigation, and styling that matches the login screen and in-game interface.
+- You can now keep Pokémon terminology such as Move, Ability, item, Nature, type, and status names in English while using another language for the interface and descriptions.
 - Pressing Escape on the login screen now opens Settings. Pressing Escape inside Settings closes the active dialog or Settings itself.
 - Simplified the login screen actions and added a localized notice explaining that PokeAether is an unofficial fan project.
 - Improved localization handling for server messages and errors while keeping externally supplied news in its original language.

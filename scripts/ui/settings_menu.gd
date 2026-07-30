@@ -41,6 +41,9 @@ const LOGOUT_CONFIRM_Z_INDEX := 2200
 var display_own_name_check_box: CheckBox
 var language_label: Label
 var language_options_button: OptionButton
+var terminology_label: Label
+var terminology_options_button: OptionButton
+var terminology_hint_label: Label
 @onready var sprite_style_options_button: OptionButton = $MarginContainer/VBoxContainer/SpriteStyleOptionsButton
 @onready var sprite_style_status_label: Label = $MarginContainer/VBoxContainer/SpriteStyleStatusLabel
 @onready var fullscreen_check_box: CheckBox = $MarginContainer/VBoxContainer/FullscreenCheckBox
@@ -119,6 +122,7 @@ func _ready() -> void:
 	ui_volume_slider.value_changed.connect(_on_ui_volume_changed)
 	notification_volume_slider.value_changed.connect(_on_notification_volume_changed)
 	language_options_button.item_selected.connect(_on_language_selected)
+	terminology_options_button.item_selected.connect(_on_terminology_selected)
 	edit_account_button.pressed.connect(_on_edit_account_button_pressed)
 	logout_button.pressed.connect(_on_logout_button_pressed)
 	exit_game_button.pressed.connect(_on_exit_game_button_pressed)
@@ -168,6 +172,7 @@ func _apply_settings_to_controls() -> void:
 	terrain_effects_check_box.button_pressed = SettingsManager.terrain_effects
 	display_own_name_check_box.button_pressed = SettingsManager.display_own_name
 	_apply_language_options_to_control()
+	_apply_terminology_options_to_control()
 
 	var option_id: int = int(OPTION_ID_BY_SPRITE_STYLE.get(SettingsManager.sprite_style, 0))
 	_apply_sprite_style_option_labels()
@@ -252,9 +257,21 @@ func _setup_tabs() -> void:
 	language_options_button = OptionButton.new()
 	language_options_button.name = "LanguageOptionsButton"
 	language_options_button.focus_mode = Control.FOCUS_NONE
+	terminology_label = Label.new()
+	_set_localized_text(terminology_label, "ui.settings.terminology")
+	terminology_options_button = OptionButton.new()
+	terminology_options_button.name = "TerminologyOptionsButton"
+	terminology_options_button.focus_mode = Control.FOCUS_NONE
+	terminology_hint_label = Label.new()
+	terminology_hint_label.name = "TerminologyHintLabel"
+	terminology_hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_set_localized_text(terminology_hint_label, "ui.settings.terminology_hint")
 	_move_nodes_to_container(general_tab, [
 		language_label,
 		language_options_button,
+		terminology_label,
+		terminology_options_button,
+		terminology_hint_label,
 		battle_animations_check_box,
 		weather_effects_check_box,
 		terrain_effects_check_box,
@@ -758,6 +775,7 @@ func _refresh_localized_content() -> void:
 	_update_about_version_label()
 	_apply_sprite_style_option_labels()
 	_apply_language_options_to_control()
+	_apply_terminology_options_to_control()
 	_update_sprite_style_status_label("")
 	if account_user_label != null and account_tab_root != null and account_tab_root.visible:
 		_refresh_account_tab()
@@ -853,7 +871,11 @@ func _apply_label_style(label: Label) -> void:
 		"ResolutionLabel",
 		"AudioLabel",
 		"BattleMusicLabel",
-	] or localization_key in ["ui.settings.language", "ui.settings.tab.account"]:
+	] or localization_key in [
+		"ui.settings.language",
+		"ui.settings.terminology",
+		"ui.settings.tab.account",
+	]:
 		label.add_theme_color_override("font_color", UI_SECTION_TEXT)
 		label.add_theme_font_size_override("font_size", 14)
 
@@ -1196,6 +1218,15 @@ func _on_language_selected(index: int) -> void:
 	SettingsManager.set_locale(selected_locale)
 
 
+func _on_terminology_selected(index: int) -> void:
+	if loading_controls:
+		return
+	var selected_language := str(terminology_options_button.get_item_metadata(index))
+	if selected_language.is_empty():
+		return
+	SettingsManager.set_content_name_language(selected_language)
+
+
 func _on_logout_button_pressed() -> void:
 	if logging_out or not visible or not _is_account_tab_active():
 		return
@@ -1524,6 +1555,35 @@ func _apply_language_options_to_control() -> void:
 			selected_index = index
 	if language_options_button.item_count > 0:
 		language_options_button.select(selected_index)
+	loading_controls = was_loading_controls
+
+
+func _apply_terminology_options_to_control() -> void:
+	if terminology_options_button == null:
+		return
+	var was_loading_controls := loading_controls
+	loading_controls = true
+	terminology_options_button.clear()
+	var options: Array[String] = [
+		SettingsManager.CONTENT_NAME_LANGUAGE_ENGLISH,
+		SettingsManager.CONTENT_NAME_LANGUAGE_LOCALIZED,
+	]
+	var translation_keys := {
+		SettingsManager.CONTENT_NAME_LANGUAGE_ENGLISH: "ui.settings.terminology.english",
+		SettingsManager.CONTENT_NAME_LANGUAGE_LOCALIZED: "ui.settings.terminology.localized",
+	}
+	var selected_index := 0
+	for index: int in range(options.size()):
+		var option := options[index]
+		terminology_options_button.add_item(
+			LocalizationManager.text(str(translation_keys.get(option, ""))),
+			index
+		)
+		terminology_options_button.set_item_metadata(index, option)
+		if option == SettingsManager.content_name_language:
+			selected_index = index
+	if terminology_options_button.item_count > 0:
+		terminology_options_button.select(selected_index)
 	loading_controls = was_loading_controls
 
 
