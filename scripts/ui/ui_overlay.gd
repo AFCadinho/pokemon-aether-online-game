@@ -15763,7 +15763,6 @@ func _on_market_buy_pressed() -> void:
 		bag_inventory_items = _normalize_bag_inventory_items(inventory_value)
 		bag_inventory_loaded = true
 		_refresh_bag_items()
-
 	var transaction_key := "sale" if player_is_selling else "purchase"
 	var transaction: Dictionary = _staff_dictionary_from_variant(result.get(transaction_key, {}))
 	var transacted_quantity: int = max(int(transaction.get("quantity", quantity)), 1)
