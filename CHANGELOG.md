@@ -2,9 +2,23 @@
 
 ## Unreleased
 
+**Added**
+
+- Completed English, Dutch, and Brazilian Portuguese language support across the game, including battles, Pokémon and item information, NPC dialogue, signs, shops, social features, PvP, trading, storage, progression, and developer tools.
+- Added localized names and descriptions for Pokémon content such as moves, Abilities, types, Natures, items, status effects, and encounter information.
+- Added styled language selectors with country flags to the login screen, launcher, and settings. Your selected language is remembered between sessions.
+
+**Changed**
+
+- Redesigned Settings with a clearer two-column layout, compact category navigation, and styling that matches the login screen and in-game interface.
+- Pressing Escape on the login screen now opens Settings. Pressing Escape inside Settings closes the active dialog or Settings itself.
+- Simplified the login screen actions and added a localized notice explaining that PokeAether is an unofficial fan project.
+- Improved localization handling for server messages and errors while keeping externally supplied news in its original language.
+
 **Fixed**
 
 - Fixed chat tooltips showing the resize handle's description after resizing the chat.
+- Removed an incorrect sand overlay from Viridian Forest.
 
 ## 0.3.37 - 2026-07-29
 
