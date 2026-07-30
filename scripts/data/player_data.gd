@@ -209,7 +209,9 @@ func apply_appearance_state(appearance_state: Dictionary) -> void:
 		appearance_state = merged_appearance_state
 
 	var previous_body_id := appearance_body_id
-	var body_id := str(appearance_state.get("body", "")).strip_edges()
+	var body_id := CharacterAppearanceService.normalize_legacy_optional_text(
+		appearance_state.get("body", "")
+	)
 	var source_body_id := previous_body_id
 	if body_id != "":
 		source_body_id = CharacterAppearanceService.get_presence_body_base_id(body_id)
@@ -261,9 +263,7 @@ func apply_appearance_state(appearance_state: Dictionary) -> void:
 
 
 func _resolve_optional_chroma_color(value: Variant) -> String:
-	if value == null:
-		return "#ffffff"
-	var normalized_color := str(value).strip_edges()
+	var normalized_color := CharacterAppearanceService.normalize_legacy_optional_text(value)
 	return "#ffffff" if normalized_color == "" else normalized_color
 
 

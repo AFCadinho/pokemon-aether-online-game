@@ -57,6 +57,17 @@ func _run() -> void:
 		APPEARANCE.resolve_skin_tone("Gen4_Base_M_Dark", "", "male") == APPEARANCE.LEGACY_DARK_SKIN_TONE,
 		"legacy dark body retains its visual skin tone"
 	)
+	for legacy_null_value: String in ["<null>", " NULL ", "none"]:
+		_check(
+			APPEARANCE.resolve_hair_color(legacy_null_value, "male") == APPEARANCE.DEFAULT_MALE_HAIR_COLOR
+				and APPEARANCE.resolve_skin_tone(APPEARANCE.DEFAULT_MALE_BODY_ID, legacy_null_value, "male") == APPEARANCE.DEFAULT_SKIN_TONE
+				and APPEARANCE.resolve_eye_color(legacy_null_value, "male") == APPEARANCE.DEFAULT_MALE_EYE_COLOR,
+			"legacy null appearance colours normalize consistently: %s" % legacy_null_value
+		)
+		_check(
+			APPEARANCE.deserialize_part_id(legacy_null_value) == "",
+			"legacy null appearance part normalizes consistently: %s" % legacy_null_value
+		)
 
 	var player_data := PLAYER_DATA.new() as PlayerData
 	player_data.gender = "male"
@@ -67,18 +78,42 @@ func _run() -> void:
 	_check(player_data.appearance_body_id == APPEARANCE.DEFAULT_MALE_BODY_ID, "loaded legacy body migrates to the base model")
 	_check(player_data.appearance_skin_tone == APPEARANCE.LEGACY_DARK_SKIN_TONE, "loaded legacy body migrates its skin tone")
 	player_data.apply_appearance_state({
+		"body": "<null>",
+		"hair": "null",
+		"headgear": "none",
+		"facial_hair": "<NULL>",
+		"facegear": " NULL ",
+		"top": "NONE",
+		"bottom": "<null>",
+		"shoes": "null",
+		"hair_color": "<null>",
+		"skin_tone": "null",
+		"eye_color": "none",
 		"facegear_color": null,
-		"top_color": null,
-		"bottom_color": null,
-		"shoes_color": null,
+		"facial_hair_color": "<null>",
+		"top_color": "null",
+		"bottom_color": "none",
+		"shoes_color": "<NULL>",
 	})
 	var normalized_legacy_appearance := player_data.to_appearance_state()
 	_check(
-		normalized_legacy_appearance.get("facegear_color") == "#ffffff"
+		normalized_legacy_appearance.get("body") == APPEARANCE.DEFAULT_MALE_BODY_ID
+			and normalized_legacy_appearance.get("hair") == APPEARANCE.UNEQUIPPED_PART_ID
+			and normalized_legacy_appearance.get("headgear") == APPEARANCE.UNEQUIPPED_PART_ID
+			and normalized_legacy_appearance.get("facial_hair") == APPEARANCE.UNEQUIPPED_PART_ID
+			and normalized_legacy_appearance.get("facegear") == APPEARANCE.UNEQUIPPED_PART_ID
+			and normalized_legacy_appearance.get("top") == APPEARANCE.UNEQUIPPED_PART_ID
+			and normalized_legacy_appearance.get("bottom") == APPEARANCE.UNEQUIPPED_PART_ID
+			and normalized_legacy_appearance.get("shoes") == APPEARANCE.UNEQUIPPED_PART_ID
+			and normalized_legacy_appearance.get("hair_color") == APPEARANCE.DEFAULT_MALE_HAIR_COLOR
+			and normalized_legacy_appearance.get("skin_tone") == APPEARANCE.DEFAULT_SKIN_TONE
+			and normalized_legacy_appearance.get("eye_color") == APPEARANCE.DEFAULT_MALE_EYE_COLOR
+			and normalized_legacy_appearance.get("facegear_color") == "#ffffff"
+			and normalized_legacy_appearance.get("facial_hair_color") == "#ffffff"
 			and normalized_legacy_appearance.get("top_color") == "#ffffff"
 			and normalized_legacy_appearance.get("bottom_color") == "#ffffff"
 			and normalized_legacy_appearance.get("shoes_color") == "#ffffff",
-		"legacy null Chroma colours normalize to save-safe defaults"
+		"all legacy null appearance values normalize to save-safe defaults"
 	)
 	player_data.free()
 

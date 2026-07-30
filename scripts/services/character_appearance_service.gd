@@ -16,6 +16,7 @@ const SHOES_CATEGORY := "shoes"
 const EYES_CATEGORY := "eyes"
 const EYEBROWS_CATEGORY := "eyebrows"
 const UNEQUIPPED_PART_ID := "__none__"
+const LEGACY_NULL_TEXT_VALUES: Array[String] = ["<null>", "null", "none"]
 const PRESENCE_BODY_APPEARANCE_SEPARATOR := "#appearance="
 const DEFAULT_BODY_ID := "Gen4_Base_v1"
 const DEFAULT_MALE_BODY_ID := "Gen4_Base_v1"
@@ -388,14 +389,14 @@ static func get_default_eye_color(gender: String = "") -> String:
 
 
 static func resolve_hair_color(color_text: String, gender: String = "") -> String:
-	var normalized_color: String = color_text.strip_edges()
-	if normalized_color == "" or normalized_color.to_lower() in [LEGACY_DEFAULT_HAIR_COLOR, "<null>"]:
+	var normalized_color := normalize_legacy_optional_text(color_text)
+	if normalized_color == "" or normalized_color.to_lower() == LEGACY_DEFAULT_HAIR_COLOR:
 		return get_default_hair_color(gender)
 	return normalized_color
 
 
 static func resolve_eye_color(color_text: String, gender: String = "") -> String:
-	var normalized_color: String = color_text.strip_edges()
+	var normalized_color := normalize_legacy_optional_text(color_text)
 	if normalized_color == "" or normalized_color.to_lower() == LEGACY_DEFAULT_EYE_COLOR:
 		return get_default_eye_color(gender)
 	return normalized_color
@@ -415,7 +416,7 @@ static func resolve_body_model_id(body_id: String, gender: String = "") -> Strin
 
 
 static func resolve_skin_tone(body_id: String, color_text: String, gender: String = "") -> String:
-	var normalized_color := color_text.strip_edges().to_lower()
+	var normalized_color := normalize_legacy_optional_text(color_text).to_lower()
 	var normalized_body_id := _normalize_body_id(body_id)
 	if normalized_color == "" or normalized_color in ["#ffffff", "#ffffffff"]:
 		if normalized_body_id in ["Gen4_Base_M_Tan", "Gen4_Base_F_Tan"]:
@@ -561,12 +562,12 @@ static func get_eyebrows_for_hair(hair_id: String, gender: String = "") -> Strin
 
 
 static func serialize_part_id(part_id: String) -> String:
-	var normalized_part_id: String = part_id.strip_edges()
+	var normalized_part_id := normalize_legacy_optional_text(part_id)
 	return UNEQUIPPED_PART_ID if _is_empty_presence_part_id(normalized_part_id) else normalized_part_id
 
 
 static func deserialize_part_id(part_id: String) -> String:
-	var normalized_part_id: String = part_id.strip_edges()
+	var normalized_part_id := normalize_legacy_optional_text(part_id)
 	if _is_empty_presence_part_id(normalized_part_id):
 		return ""
 	return normalized_part_id
@@ -574,7 +575,14 @@ static func deserialize_part_id(part_id: String) -> String:
 
 static func _is_empty_presence_part_id(part_id: String) -> bool:
 	var normalized_part_id: String = part_id.strip_edges().to_lower()
-	return ["", UNEQUIPPED_PART_ID, "<null>", "null", "none"].has(normalized_part_id)
+	return normalized_part_id == "" or normalized_part_id == UNEQUIPPED_PART_ID
+
+
+static func normalize_legacy_optional_text(value: Variant) -> String:
+	if value == null:
+		return ""
+	var normalized := str(value).strip_edges()
+	return "" if normalized.to_lower() in LEGACY_NULL_TEXT_VALUES else normalized
 
 
 static func encode_presence_body_with_appearance(body_id: String, appearance: Dictionary) -> String:
@@ -1367,7 +1375,8 @@ static func _make_frame_texture(texture: Texture2D, frame_size: Vector2, column:
 
 
 static func _normalize_body_id(body_id: String) -> String:
-	var normalized: String = get_presence_body_base_id(body_id).strip_edges().replace("\\", "/")
+	var normalized_body_id := normalize_legacy_optional_text(body_id)
+	var normalized: String = get_presence_body_base_id(normalized_body_id).strip_edges().replace("\\", "/")
 	var normalized_parts: Array[String] = []
 	for part: String in normalized.split("/", false):
 		var normalized_part: String = part.strip_edges()
