@@ -42,6 +42,13 @@ func _init() -> void:
 		),
 		"Authorized teleports reapply their destination after the first map physics frame"
 	)
+	_expect(
+		world_source.contains('saved_state.get("teleportAcknowledgementRequired", false)')
+		and world_source.contains(
+			"var ack_result: Dictionary = await _ack_authorized_teleport_state(saved_state)"
+		),
+		"Login recovers a teleport acknowledgement interrupted by a client shutdown"
+	)
 	var ack_position := world_source.find(
 		"var ack_result: Dictionary = await _ack_authorized_teleport_state(state)"
 	)

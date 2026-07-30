@@ -778,6 +778,14 @@ func _setup_initial_world_state() -> void:
 		_position_player_at_saved_state(initial_map, saved_state)
 		current_teleport_revision = int(saved_state.get("teleportRevision", current_teleport_revision))
 		last_saved_position_signature = _get_current_player_position_signature(true)
+		if bool(saved_state.get("teleportAcknowledgementRequired", false)):
+			var ack_result: Dictionary = await _ack_authorized_teleport_state(saved_state)
+			if not bool(ack_result.get("success", false)):
+				_mark_authorized_teleport_apply_failed()
+				push_warning(
+					"World: pending teleport acknowledgement recovery failed: %s"
+					% str(ack_result.get("error", "Unknown error"))
+				)
 	elif not GameState.has_player_position:
 		_position_player_at_spawn(initial_map, initial_spawn_name, player.global_position)
 		_save_current_player_position_if_changed.call_deferred(true, initial_spawn_name)
