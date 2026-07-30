@@ -208,6 +208,7 @@ func _init() -> void:
 	_check(script_source.contains('CHAT_RESIZE_ICON: Texture2D = preload("res://assets/ui/chat_resize.svg")'), "chat resize control uses a dedicated diagonal icon")
 	_check(not script_source.contains('chat_resize_button.text = "[]"'), "chat resize control no longer exposes placeholder text")
 	_check(script_source.contains("Control.CURSOR_FDIAGSIZE"), "chat resize control uses a diagonal resize cursor")
+	_check(script_source.contains("# Let the button receive mouse-up so Godot clears its pressed and hover"), "chat resize forwards mouse release to clear the handle tooltip state")
 	_check(script_source.contains("func _on_party_slot_clicked(slot_index: int)"), "normal party slots remain clickable")
 	_check(script_source.contains("_show_pokemon_summary(slot_index)"), "normal party slots still open summaries")
 	_check(script_source.contains("func set_global_buffs(buffs: Array)"), "global buff tray accepts future live data")

@@ -9294,7 +9294,9 @@ func _handle_chat_resize_drag(event: InputEvent) -> void:
 		var mouse_event: InputEventMouseButton = event as InputEventMouseButton
 		if mouse_event.button_index == MOUSE_BUTTON_LEFT and not mouse_event.pressed:
 			chat_resize_dragging = false
-			get_viewport().set_input_as_handled()
+			# Let the button receive mouse-up so Godot clears its pressed and hover
+			# state instead of retaining this control's tooltip until another click.
+			return
 
 func _is_point_inside_control(control: Control, point: Vector2) -> bool:
 	return control.get_global_rect().has_point(point)

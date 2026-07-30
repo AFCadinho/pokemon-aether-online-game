@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+**Fixed**
+
+- Fixed chat tooltips showing the resize handle's description after resizing the chat.
+
 ## 0.3.37 - 2026-07-29
 
 **Added**
