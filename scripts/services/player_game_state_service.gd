@@ -3,6 +3,7 @@ extends Node
 class_name PlayerGameStateServiceNode
 
 const PLAYER_POSITION_ENDPOINT := "/game/player-position"
+const PLAYER_TELEPORT_ACK_ENDPOINT := "/game/player-position/teleport-ack"
 const PLAYER_RESPAWN_ENDPOINT := "/game/respawn"
 const PLAYER_RESPAWN_POINT_ENDPOINT := "/game/respawn-point"
 const PLAYER_ACTIVITY_ENDPOINT := "/game/player-activity"
@@ -116,6 +117,31 @@ func save_player_position(state: Dictionary) -> Dictionary:
 		HTTPClient.METHOD_PUT,
 		GatewayApiConfig.get_json_headers(),
 		JSON.stringify(state)
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	return {
+		"success": true,
+		"hasState": bool(body.get("hasState", false)),
+		"state": _dictionary_from_value(body.get("state", {})),
+	}
+
+
+func acknowledge_player_teleport(teleport_revision: int) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + PLAYER_TELEPORT_ACK_ENDPOINT,
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({"teleportRevision": teleport_revision})
 	)
 	if not bool(response.get("success", false)):
 		return response

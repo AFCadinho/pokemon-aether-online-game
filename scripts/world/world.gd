@@ -63,6 +63,7 @@ var has_pending_player_position_save := false
 var authorized_teleport_in_progress := false
 var authorized_teleport_locked_overworld := false
 var authorized_teleport_apply_failed_autosave_blocked := false
+var account_switch_in_progress := false
 var current_teleport_revision := 0
 var last_saved_position_signature := ""
 var last_presence_position_signature := ""
@@ -178,6 +179,35 @@ func prepare_for_gameplay_reset() -> Dictionary:
 		await get_tree().process_frame
 
 	return {"success": true}
+
+
+func prepare_for_account_switch() -> Dictionary:
+	if is_in_battle:
+		return {"success": false, "error": "Finish the active battle before switching accounts."}
+	if is_loading_map or authorized_teleport_in_progress:
+		return {"success": false, "error": "Wait for the map transition to finish before switching accounts."}
+
+	account_switch_in_progress = true
+	WorldPresenceService.disconnect_presence()
+	has_pending_player_position_save = false
+
+	var deadline_msec := Time.get_ticks_msec() + 12000
+	while is_saving_player_position or is_flushing_playtime:
+		if Time.get_ticks_msec() >= deadline_msec:
+			cancel_account_switch()
+			return {
+				"success": false,
+				"error": "A save is still finishing. Wait a moment and try again.",
+			}
+		await get_tree().process_frame
+
+	return {"success": true}
+
+
+func cancel_account_switch() -> void:
+	account_switch_in_progress = false
+	WorldPresenceService.connect_presence.call_deferred()
+
 
 func save_current_player_state_now() -> Dictionary:
 	if _is_player_position_save_blocked_by_teleport():
@@ -391,6 +421,7 @@ func _mark_authorized_teleport_apply_failed() -> void:
 func _is_player_position_save_blocked_by_teleport() -> bool:
 	return (
 		GameState.gameplay_reset_in_progress
+		or account_switch_in_progress
 		or authorized_teleport_in_progress
 		or authorized_teleport_apply_failed_autosave_blocked
 	)
@@ -399,6 +430,8 @@ func _is_player_position_save_blocked_by_teleport() -> bool:
 func _get_player_position_save_block_reason() -> String:
 	if GameState.gameplay_reset_in_progress:
 		return "Gameplay reset is in progress."
+	if account_switch_in_progress:
+		return "Account switch is in progress."
 	if authorized_teleport_apply_failed_autosave_blocked:
 		return "A server-authorized teleport did not finish locally; position autosave is blocked to protect the new server position."
 	return "Authorized teleport is in progress."
@@ -406,25 +439,9 @@ func _get_player_position_save_block_reason() -> String:
 
 func _ack_authorized_teleport_state(state: Dictionary) -> Dictionary:
 	var teleport_revision := int(state.get("teleportRevision", current_teleport_revision))
-	var position_data: Dictionary = _dictionary_from_value(state.get("position", {}))
-	var ack_state: Dictionary = {
-		"mapId": str(state.get("mapId", _get_map_id(GameState.current_map))).strip_edges(),
-		"mapScenePath": str(state.get("mapScenePath", _get_map_scene_path(GameState.current_map))).strip_edges(),
-		"position": {
-			"x": float(position_data.get("x", player.global_position.x)),
-			"y": float(position_data.get("y", player.global_position.y)),
-		},
-		"gender": PlayerSave.gender,
-		"facingDirection": str(state.get("facingDirection", _direction_to_name(player.last_direction))).strip_edges(),
-		"spawnMarker": str(state.get("spawnMarker", "")).strip_edges(),
-		"appearance": _get_confirmed_appearance_state(),
-		"roles": _get_current_role_presence_state(),
-		"selectedRoleBadge": GameState.selected_role_badge,
-		"activityState": "battle" if is_in_battle else "idle",
-		"activityContext": _get_current_activity_context(),
-		"teleportRevision": teleport_revision,
-	}
-	var result: Dictionary = await PlayerGameStateService.save_player_position(ack_state)
+	var result: Dictionary = await PlayerGameStateService.acknowledge_player_teleport(
+		teleport_revision
+	)
 	if bool(result.get("success", false)):
 		var response_state: Dictionary = _dictionary_from_value(result.get("state", {}))
 		current_teleport_revision = int(response_state.get("teleportRevision", teleport_revision))

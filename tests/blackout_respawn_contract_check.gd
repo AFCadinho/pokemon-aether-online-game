@@ -49,6 +49,10 @@ func _init() -> void:
 		),
 		"Login recovers a teleport acknowledgement interrupted by a client shutdown"
 	)
+	_expect(
+		world_source.contains("PlayerGameStateService.acknowledge_player_teleport("),
+		"Teleport acknowledgements send only the server-issued revision"
+	)
 	var ack_position := world_source.find(
 		"var ack_result: Dictionary = await _ack_authorized_teleport_state(state)"
 	)

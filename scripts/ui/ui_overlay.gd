@@ -25064,8 +25064,39 @@ func _on_staff_impersonate_confirm_pressed() -> void:
 		)
 	_set_staff_impersonate_status("ui.staff.impersonate.verifying_status")
 
+	var world := GameState.get_world()
+	if world == null or not world.has_method("prepare_for_account_switch"):
+		staff_impersonate_in_flight = false
+		staff_impersonate_token_input.editable = true
+		if staff_impersonate_confirm_button != null:
+			staff_impersonate_confirm_button.disabled = false
+			staff_impersonate_confirm_button.text = LocalizationManager.text(
+				"ui.staff.impersonate.confirm"
+			)
+		_set_staff_impersonate_status("World is not ready for an account switch.", true)
+		return
+	var prepare_value: Variant = await world.call("prepare_for_account_switch")
+	var prepare_result: Dictionary = (
+		prepare_value as Dictionary if prepare_value is Dictionary else {}
+	)
+	if not bool(prepare_result.get("success", false)):
+		staff_impersonate_in_flight = false
+		staff_impersonate_token_input.editable = true
+		if staff_impersonate_confirm_button != null:
+			staff_impersonate_confirm_button.disabled = false
+			staff_impersonate_confirm_button.text = LocalizationManager.text(
+				"ui.staff.impersonate.confirm"
+			)
+		_set_staff_impersonate_status(
+			str(prepare_result.get("error", "Could not prepare the account switch.")),
+			true
+		)
+		return
+
 	var auth_result: Dictionary = await AuthService.impersonate_with_token(token)
 	if not auth_result.get("success", false):
+		if world.has_method("cancel_account_switch"):
+			world.call("cancel_account_switch")
 		staff_impersonate_in_flight = false
 		staff_impersonate_token_input.editable = true
 		if staff_impersonate_confirm_button != null:
@@ -25087,34 +25118,18 @@ func _on_staff_impersonate_confirm_pressed() -> void:
 		}))
 		return
 
-	if staff_impersonate_confirm_button != null:
-		staff_impersonate_confirm_button.text = LocalizationManager.text(
-			"ui.staff.impersonate.loading_profile"
-		)
-	_set_staff_impersonate_status("ui.staff.impersonate.loading_profile_status")
-	var profile_result: Dictionary = await PlayerGameStateService.load_player_profile()
-	staff_impersonate_in_flight = false
-	staff_impersonate_token_input.editable = true
-	if staff_impersonate_confirm_button != null:
-		staff_impersonate_confirm_button.disabled = false
-		staff_impersonate_confirm_button.text = LocalizationManager.text(
-			"ui.staff.impersonate.confirm"
-		)
-	if not profile_result.get("success", false):
-		staff_impersonate_token_input.clear()
-		_set_staff_impersonate_status("ui.staff.impersonate.profile_failed", true)
-		_add_chat_message(LocalizationManager.text("ui.staff.impersonate.profile_failed_short"))
-		return
-
-	_apply_impersonated_profile(profile_result)
 	if staff_impersonate_token_input != null:
 		staff_impersonate_token_input.text = ""
-	_hide_staff_impersonate_popup()
-	_refresh_dev_tools_visibility()
-	_refresh_party()
-	_add_chat_message(LocalizationManager.text("ui.staff.impersonate.success", {
-		"name": AuthService.get_display_name(),
-	}))
+	GameState.set_prepared_world_state({})
+	var reload_error: Error = get_tree().change_scene_to_file(LOADING_SCENE_PATH)
+	if reload_error != OK:
+		AuthService.clear_session()
+		var login_error: Error = get_tree().change_scene_to_file(LOGIN_SCENE_PATH)
+		if login_error != OK:
+			push_error(
+				"UIOverlay: failed to leave the old account runtime after impersonation: %s"
+				% error_string(reload_error)
+			)
 
 func _apply_impersonated_profile(profile_response: Dictionary) -> void:
 	var user: Dictionary = _staff_dictionary_from_variant(profile_response.get("user", {}))

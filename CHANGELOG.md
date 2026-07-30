@@ -18,7 +18,7 @@
 
 **Fixed**
 
-- Fixed interrupted respawn and authorized-teleport acknowledgements remaining stuck across logins, which forced affected Trainers back to their last healing point and blocked later position saves.
+- Fixed interrupted respawn and authorized-teleport acknowledgements remaining stuck across logins. Acknowledgements now send only the server-issued revision, preventing serialized position fields from forcing affected Trainers back to their last healing point.
 - Fixed chat tooltips showing the resize handle's description after resizing the chat.
 - Removed an incorrect sand overlay from Viridian Forest.
 
