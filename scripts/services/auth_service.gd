@@ -12,6 +12,7 @@ const ACCEPT_HEADER := "Accept: application/json"
 var session_token := ""
 var expires_at := ""
 var current_user: Dictionary = {}
+var pending_login_notice := ""
 
 
 func is_authenticated() -> bool:
@@ -22,6 +23,16 @@ func get_authorization_header() -> String:
 	if session_token == "":
 		return ""
 	return "Authorization: Bearer %s" % session_token
+
+
+func set_pending_login_notice(message: String) -> void:
+	pending_login_notice = message.strip_edges()
+
+
+func take_pending_login_notice() -> String:
+	var message := pending_login_notice
+	pending_login_notice = ""
+	return message
 
 
 func login(username: String, password: String, remember_me: bool) -> Dictionary:

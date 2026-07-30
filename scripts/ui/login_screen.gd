@@ -86,6 +86,9 @@ func _ready() -> void:
 	_setup_background_video()
 	_render_news_items([])
 	_show_login_form()
+	var pending_notice := AuthService.take_pending_login_notice()
+	if pending_notice != "":
+		show_status(pending_notice, true)
 	_setup_player_preview()
 	username_input.grab_focus()
 	_center_settings_menu.call_deferred()
@@ -528,6 +531,8 @@ func _refresh_online_players() -> void:
 func _restore_saved_session() -> void:
 	var result: Dictionary = await AuthService.restore_saved_session()
 	if not bool(result.get("success", false)):
+		if int(result.get("status", 0)) == 503:
+			show_status(_get_login_error_message(result), true)
 		return
 
 	var username: String = str(AuthService.current_user.get("username", ""))
@@ -892,6 +897,13 @@ func _dictionary_from_value(value: Variant) -> Dictionary:
 
 func _get_login_error_message(result: Dictionary) -> String:
 	var status: int = int(result.get("status", 0))
+	var body: Dictionary = _dictionary_from_value(result.get("body", {}))
+	var detail: Dictionary = _dictionary_from_value(body.get("detail", {}))
+	var code := str(detail.get("code", "")).strip_edges().to_lower()
+	if code in ["account_login_blocked", "server_maintenance"]:
+		var public_message := str(detail.get("message", "")).strip_edges()
+		if public_message != "":
+			return public_message
 	if status == 401:
 		return LocalizationManager.text("ui.login.error.invalid_credentials")
 	if status >= 500:

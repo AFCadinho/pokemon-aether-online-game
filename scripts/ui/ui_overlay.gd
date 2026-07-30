@@ -704,6 +704,10 @@ var pvp_match_countdown_active := false
 var pvp_match_countdown_finishing := false
 var pvp_match_countdown_match_id := ""
 var pvp_match_countdown_remaining := 0.0
+var session_logout_operation_id := ""
+var session_logout_execute_at_unix := 0.0
+var session_logout_message := ""
+var session_logout_last_announced_second := -1
 var pvp_banlists_in_flight := false
 var pvp_banlists_loaded := false
 var pvp_banlists_result: Dictionary = PvpRankedBanlists.not_loaded()
@@ -8807,6 +8811,7 @@ func _process(delta: float) -> void:
 	_refresh_pvp_queue_button_animation(delta)
 	_refresh_pvp_ranked_queue_availability(delta)
 	_refresh_pvp_match_countdown(delta)
+	_refresh_session_logout_countdown()
 	_refresh_player_status_card_if_needed()
 	_refresh_trainer_card_playtime_if_needed()
 	_refresh_location_label_if_needed()
@@ -34849,7 +34854,17 @@ func _scroll_chat_to_bottom() -> void:
 	message_scroll.scroll_vertical = int(vertical_scroll_bar.max_value)
 
 func _on_chat_realtime_message_received(message: Dictionary) -> void:
-	if str(message.get("type", "")) == "chat_error":
+	var message_type := str(message.get("type", "")).strip_edges().to_lower()
+	if message_type == "system.logout_scheduled":
+		_start_session_logout_countdown(message)
+		return
+	if message_type == "system.logout_cancelled":
+		_cancel_session_logout_countdown(message)
+		return
+	if message_type == "system.force_logout":
+		_force_session_logout(str(message.get("message", "")))
+		return
+	if message_type == "chat_error":
 		var error_text: String = str(message.get("message", "Chat message could not be sent."))
 		var error_channel := str(message.get("channel", "")).strip_edges().to_lower()
 		var error_category := (
@@ -34860,7 +34875,7 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 		_add_chat_message(error_text, false, error_category)
 		return
 
-	if str(message.get("type", "")) != "chat":
+	if message_type != "chat":
 		return
 
 	var user: Dictionary = {}
@@ -35586,7 +35601,66 @@ func _escape_bbcode(text: String) -> String:
 
 
 func _on_chat_session_invalid(_reason: String) -> void:
-	_add_chat_message("Your session is no longer valid. Please sign in again.")
+	_force_session_logout(LocalizationManager.text("ui.session.signed_out"))
+
+
+func _start_session_logout_countdown(message: Dictionary) -> void:
+	var operation_id := str(message.get("operationId", "")).strip_edges()
+	var execute_at := str(message.get("executeAt", "")).strip_edges()
+	var execute_at_unix := _pvp_iso_timestamp_to_unix_time(execute_at.replace("+00:00", "Z"))
+	if operation_id == "" or execute_at_unix <= 0.0:
+		return
+	session_logout_operation_id = operation_id
+	session_logout_execute_at_unix = execute_at_unix
+	session_logout_message = str(message.get("message", "")).strip_edges()
+	var remaining := maxi(0, int(ceil(execute_at_unix - Time.get_unix_time_from_system())))
+	session_logout_last_announced_second = remaining
+	add_system_message(LocalizationManager.text(
+		"ui.session.logout_countdown",
+		{"message": session_logout_message, "seconds": remaining}
+	))
+
+
+func _refresh_session_logout_countdown() -> void:
+	if session_logout_operation_id == "" or session_logout_execute_at_unix <= 0.0:
+		return
+	var remaining := maxi(
+		0,
+		int(ceil(session_logout_execute_at_unix - Time.get_unix_time_from_system()))
+	)
+	if remaining == session_logout_last_announced_second:
+		return
+	session_logout_last_announced_second = remaining
+	if remaining in [300, 120, 60, 30, 10, 5, 4, 3, 2, 1]:
+		add_system_message(LocalizationManager.text(
+			"ui.session.logout_countdown",
+			{"message": session_logout_message, "seconds": remaining}
+		))
+	elif remaining == 0:
+		add_system_message(LocalizationManager.text("ui.session.logout_now"))
+
+
+func _cancel_session_logout_countdown(event: Dictionary) -> void:
+	var operation_id := str(event.get("operationId", "")).strip_edges()
+	if session_logout_operation_id != "" and operation_id != session_logout_operation_id:
+		return
+	var message := str(event.get("message", ""))
+	session_logout_operation_id = ""
+	session_logout_execute_at_unix = 0.0
+	session_logout_message = ""
+	session_logout_last_announced_second = -1
+	add_system_message(
+		message
+		if message.strip_edges() != ""
+		else LocalizationManager.text("ui.session.logout_cancelled")
+	)
+
+
+func _force_session_logout(message: String) -> void:
+	var notice := message.strip_edges()
+	if notice == "":
+		notice = LocalizationManager.text("ui.session.signed_out")
+	AuthService.set_pending_login_notice(notice)
 	AuthService.clear_session()
 	var tree := get_tree()
 	if tree == null:
