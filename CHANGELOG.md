@@ -34,6 +34,7 @@
 
 **Fixed**
 
+- Fixed legacy empty values in any saved appearance part or colour preventing the Trainer's current map and tile from being saved. This was likely the cause of affected Trainers returning to their last healing spawn point after logging in again: appearance validation rejected the save before the new location could be stored.
 - Fixed the first Pokémon Storage info card after logging in sometimes becoming almost as tall as the whole window.
 - Fixed fishing sometimes showing an incorrect error message even when you owned an Old Rod.
 - Fixed fishing poses while Surfing, including duplicate limbs and misplaced hair, headgear, eyes, facial hair, and accessories.
