@@ -972,6 +972,10 @@ func _preview_frames(category: String, appearance: Dictionary) -> SpriteFrames:
 			str(appearance.get("hair", "")),
 			trainer_gender
 		)
+	elif category == "hair":
+		part_id = CharacterAppearanceService.resolve_hair_render_id(
+			str(appearance.get("hair", ""))
+		)
 	else:
 		part_id = CharacterAppearanceService.deserialize_part_id(
 			str(appearance.get(category, ""))

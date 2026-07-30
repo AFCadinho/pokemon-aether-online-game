@@ -1090,7 +1090,7 @@ func _get_appearance_part_id(category: String) -> String:
 func _get_appearance_hair_id() -> String:
 	var hair_id: String = CharacterAppearanceService.deserialize_part_id(str(current_appearance_state.get("hair", "")))
 	if current_appearance_state.has("hair"):
-		return hair_id
+		return CharacterAppearanceService.resolve_hair_render_id(hair_id)
 
 	var hair_ids: Array[String] = CharacterAppearanceService.get_available_part_ids("hair", current_body_gender)
 	if hair_ids.is_empty():

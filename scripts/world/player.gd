@@ -2147,7 +2147,9 @@ func _apply_directional_appearance_layer_order(direction: Vector2) -> void:
 func _get_player_appearance_part_id(category: String) -> String:
 	match CharacterAppearanceService.normalize_part_category(category):
 		"hair":
-			return PlayerSave.appearance_hair_id
+			return CharacterAppearanceService.resolve_hair_render_id(
+				PlayerSave.appearance_hair_id
+			)
 		"headgear":
 			return PlayerSave.appearance_headgear_id
 		"facial_hair":
