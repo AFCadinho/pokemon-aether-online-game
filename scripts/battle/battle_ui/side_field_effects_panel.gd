@@ -14,37 +14,46 @@ const EFFECT_ICONS := {
 }
 
 const EFFECT_NAME_ALIASES := {
-	"lightscreen": "Light Screen",
-	"reflect": "Reflect",
-	"auroraveil": "Aurora Veil",
-	"tailwind": "Tailwind",
-	"safeguard": "Safeguard",
-	"mist": "Mist",
-	"stealthrock": "Stealth Rock",
-	"spikes": "Spikes",
-	"toxicspikes": "Toxic Spikes",
-	"stickyweb": "Sticky Web",
-	"stickywebs": "Sticky Web",
+	"lightscreen": "battle.field.effect.light_screen",
+	"reflect": "battle.field.effect.reflect",
+	"auroraveil": "battle.field.effect.aurora_veil",
+	"tailwind": "battle.field.effect.tailwind",
+	"safeguard": "battle.field.effect.safeguard",
+	"mist": "battle.field.effect.mist",
+	"stealthrock": "battle.field.effect.stealth_rock",
+	"spikes": "battle.field.effect.spikes",
+	"toxicspikes": "battle.field.effect.toxic_spikes",
+	"stickyweb": "battle.field.effect.sticky_web",
+	"stickywebs": "battle.field.effect.sticky_web",
 }
 
 const EFFECT_SHORT_NAMES := {
-	"lightscreen": "LS",
-	"reflect": "Ref",
-	"auroraveil": "AV",
-	"tailwind": "TW",
-	"safeguard": "Safe",
-	"mist": "Mist",
-	"stealthrock": "SR",
-	"spikes": "Spk",
-	"toxicspikes": "TSpk",
-	"stickyweb": "Web",
-	"stickywebs": "Web",
+	"lightscreen": "battle.field.short.light_screen",
+	"reflect": "battle.field.short.reflect",
+	"auroraveil": "battle.field.short.aurora_veil",
+	"tailwind": "battle.field.short.tailwind",
+	"safeguard": "battle.field.short.safeguard",
+	"mist": "battle.field.short.mist",
+	"stealthrock": "battle.field.short.stealth_rock",
+	"spikes": "battle.field.short.spikes",
+	"toxicspikes": "battle.field.short.toxic_spikes",
+	"stickyweb": "battle.field.short.sticky_web",
+	"stickywebs": "battle.field.short.sticky_web",
 }
+var current_side_effects: Array = []
+var current_turn := 0
+var localization_manager: Node
 
 func _ready() -> void:
+	localization_manager = get_tree().root.get_node_or_null("LocalizationManager")
+	if localization_manager != null and not localization_manager.locale_changed.is_connected(_on_locale_changed):
+		localization_manager.locale_changed.connect(_on_locale_changed)
 	clear_effects()
 
-func clear_effects() -> void:
+func clear_effects(clear_data := true) -> void:
+	if clear_data:
+		current_side_effects = []
+		current_turn = 0
 	for row in effects_container.get_children():
 		if row == row_template:
 			continue
@@ -56,7 +65,9 @@ func clear_effects() -> void:
 	visible = false
 
 func set_side_effects(side_effects: Array, current_turn: int = 0) -> void:
-	clear_effects()
+	current_side_effects = side_effects.duplicate(true)
+	self.current_turn = current_turn
+	clear_effects(false)
 
 	var has_effects: bool = false
 	for effect_value in side_effects:
@@ -91,7 +102,8 @@ func _add_effect_row(effect_key: String, raw_effect: String, effect_data: Dictio
 	# Hazard artwork already identifies the condition. Text-only effects use a
 	# compact abbreviation so indicator chips remain recognizable without
 	# covering battle sprites.
-	label_node.text = str(EFFECT_SHORT_NAMES.get(effect_key, full_effect_name))
+	var short_name_key := str(EFFECT_SHORT_NAMES.get(effect_key, ""))
+	label_node.text = _t(short_name_key) if short_name_key != "" else full_effect_name
 	label_node.visible = label_node.text != ""
 	row.tooltip_text = full_effect_name
 	icon_node.tooltip_text = full_effect_name
@@ -105,7 +117,7 @@ func _add_effect_row(effect_key: String, raw_effect: String, effect_data: Dictio
 
 func _format_effect_name(effect_key: String, raw_effect: String) -> String:
 	if EFFECT_NAME_ALIASES.has(effect_key):
-		return str(EFFECT_NAME_ALIASES[effect_key])
+		return _t(str(EFFECT_NAME_ALIASES[effect_key]))
 
 	var cleaned_effect: String = raw_effect.strip_edges()
 	if cleaned_effect.contains(": "):
@@ -188,3 +200,14 @@ func _split_effect_name(effect_name: String) -> String:
 			result += character
 
 	return result.strip_edges()
+
+
+func _on_locale_changed(_locale: String) -> void:
+	if not current_side_effects.is_empty():
+		set_side_effects(current_side_effects, current_turn)
+
+
+func _t(key: String, replacements: Dictionary = {}) -> String:
+	if localization_manager != null:
+		return str(localization_manager.call("text", key, replacements))
+	return key

@@ -2,6 +2,7 @@ extends Node
 
 class_name AuthServiceNode
 
+const ClientBuild := preload("res://scripts/services/client_build.gd")
 const SESSION_FILE_PATH := "user://auth_session.json"
 const REQUEST_TIMEOUT_SECONDS := 12.0
 const USER_AGENT_HEADER := "User-Agent: PokeAether/1.0"
@@ -11,6 +12,7 @@ const ACCEPT_HEADER := "Accept: application/json"
 var session_token := ""
 var expires_at := ""
 var current_user: Dictionary = {}
+var pending_login_notice := ""
 
 
 func is_authenticated() -> bool:
@@ -21,6 +23,16 @@ func get_authorization_header() -> String:
 	if session_token == "":
 		return ""
 	return "Authorization: Bearer %s" % session_token
+
+
+func set_pending_login_notice(message: String) -> void:
+	pending_login_notice = message.strip_edges()
+
+
+func take_pending_login_notice() -> String:
+	var message := pending_login_notice
+	pending_login_notice = ""
+	return message
 
 
 func login(username: String, password: String, remember_me: bool) -> Dictionary:
@@ -34,7 +46,7 @@ func login(username: String, password: String, remember_me: bool) -> Dictionary:
 	var response: Dictionary = await _request_json(
 		base_url + "/auth/login",
 		HTTPClient.METHOD_POST,
-		PackedStringArray([USER_AGENT_HEADER, CONTENT_TYPE_HEADER, ACCEPT_HEADER]),
+		_client_headers(PackedStringArray([USER_AGENT_HEADER, CONTENT_TYPE_HEADER, ACCEPT_HEADER])),
 		JSON.stringify(payload)
 	)
 
@@ -69,7 +81,7 @@ func impersonate_with_token(token: String) -> Dictionary:
 	var response: Dictionary = await _request_json(
 		base_url + "/auth/impersonate/consume",
 		HTTPClient.METHOD_POST,
-		PackedStringArray([USER_AGENT_HEADER, CONTENT_TYPE_HEADER, ACCEPT_HEADER]),
+		_client_headers(PackedStringArray([USER_AGENT_HEADER, CONTENT_TYPE_HEADER, ACCEPT_HEADER])),
 		JSON.stringify({"token": normalized_token})
 	)
 	if not bool(response.get("success", false)):
@@ -121,7 +133,7 @@ func me() -> Dictionary:
 	var response: Dictionary = await _request_json(
 		base_url + "/auth/me",
 		HTTPClient.METHOD_GET,
-		PackedStringArray([USER_AGENT_HEADER, ACCEPT_HEADER, get_authorization_header()]),
+		_client_headers(PackedStringArray([USER_AGENT_HEADER, ACCEPT_HEADER, get_authorization_header()])),
 		""
 	)
 
@@ -155,7 +167,7 @@ func logout() -> Dictionary:
 	var response: Dictionary = await _request_json(
 		base_url + "/auth/logout",
 		HTTPClient.METHOD_POST,
-		PackedStringArray([USER_AGENT_HEADER, ACCEPT_HEADER, get_authorization_header()]),
+		_client_headers(PackedStringArray([USER_AGENT_HEADER, ACCEPT_HEADER, get_authorization_header()])),
 		""
 	)
 	clear_session()
@@ -180,7 +192,7 @@ func update_account_details(display_name: String, current_password: String, new_
 	var response: Dictionary = await _request_json(
 		base_url + "/auth/account",
 		HTTPClient.METHOD_PUT,
-		PackedStringArray([USER_AGENT_HEADER, CONTENT_TYPE_HEADER, ACCEPT_HEADER, get_authorization_header()]),
+		_client_headers(PackedStringArray([USER_AGENT_HEADER, CONTENT_TYPE_HEADER, ACCEPT_HEADER, get_authorization_header()])),
 		JSON.stringify(payload)
 	)
 
@@ -319,12 +331,12 @@ func _request_json(url: String, method: HTTPClient.Method, headers: PackedString
 	}
 
 
+func _client_headers(headers: PackedStringArray) -> PackedStringArray:
+	return ClientBuild.append_http_header(headers)
+
+
 func _extract_error(body: Dictionary, response_code: int) -> String:
-	if body.has("detail"):
-		return str(body.get("detail"))
-	if body.has("error"):
-		return str(body.get("error"))
-	return "Request failed with HTTP %s." % response_code
+	return BackendErrorLocalizationService.message({"body": body, "status": response_code})
 
 
 func _save_session() -> void:
@@ -371,16 +383,4 @@ func _clear_session_file() -> void:
 
 
 func _request_result_message(result: int) -> String:
-	match result:
-		HTTPRequest.RESULT_CANT_CONNECT:
-			return "Cannot connect to server."
-		HTTPRequest.RESULT_CANT_RESOLVE:
-			return "Cannot resolve server address."
-		HTTPRequest.RESULT_CONNECTION_ERROR:
-			return "Server connection error."
-		HTTPRequest.RESULT_TLS_HANDSHAKE_ERROR:
-			return "Server TLS error."
-		HTTPRequest.RESULT_TIMEOUT:
-			return "Request timed out."
-		_:
-			return "Request failed: %s." % result
+	return BackendErrorLocalizationService.transport_message(result)

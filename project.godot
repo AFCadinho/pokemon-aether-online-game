@@ -11,6 +11,8 @@ config_version=5
 [application]
 
 config/name="PokeAether"
+config/version="dev"
+config/build_id="dev"
 run/main_scene="uid://duw5e076ulb3"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://assets/ui/logo.png"
@@ -32,6 +34,10 @@ OverworldPokemonMetadataService="*res://scripts/services/overworld_pokemon_metad
 EncounterMetadataService="*res://scripts/services/encounter_metadata_service.gd"
 GameErrorDialogService="*res://scripts/services/game_error_dialog_service.gd"
 PokemonDataApiClient="*res://scripts/battle/battle_api/pokemon_data_api_client.gd"
+LocalizationManager="*res://scripts/services/localization_manager.gd"
+ItemLocalization="*res://scripts/services/item_localization_service.gd"
+ContentLocalization="*res://scripts/services/content_localization_service.gd"
+BackendErrorLocalization="*res://scripts/services/backend_error_localization_service.gd"
 SettingsManager="*res://scripts/services/settings_manager.gd"
 MusicManager="*res://scripts/services/music_manager.gd"
 SfxManager="*res://scripts/services/sfx_manager.gd"
@@ -49,6 +55,7 @@ PlayerActionService="*res://scripts/services/player_action_service.gd"
 PlayerHotbarService="*res://scripts/services/player_hotbar_service.gd"
 MarketService="*res://scripts/services/market_service.gd"
 DonatorStoreService="*res://scripts/services/donator_store_service.gd"
+GiftCodeService="*res://scripts/services/gift_code_service.gd"
 PlayerStatsService="*res://scripts/services/player_stats_service.gd"
 PokedexService="*res://scripts/services/pokedex_service.gd"
 ChatRealtimeService="*res://scripts/services/chat_realtime_service.gd"
@@ -61,6 +68,10 @@ PartyHealService="*res://scripts/services/party_heal_service.gd"
 TradeService="*res://scripts/services/trade_service.gd"
 TradeRealtimeService="*res://scripts/services/trade_realtime_service.gd"
 TradeWorkspace="*res://scripts/ui/trade_workspace.gd"
+
+[internationalization]
+
+locale/fallback="en"
 
 [display]
 

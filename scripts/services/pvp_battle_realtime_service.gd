@@ -2,6 +2,7 @@ extends Node
 
 class_name PvpBattleRealtimeServiceNode
 
+const ClientBuild := preload("res://scripts/services/client_build.gd")
 const BattleTimerProjectionClass = preload("res://scripts/battle/battle_timer_projection.gd")
 
 signal connection_changed(connected: bool)
@@ -178,7 +179,9 @@ func _connect_room_async(attempt_generation: int) -> void:
 	websocket.inbound_buffer_size = WEBSOCKET_BUFFER_BYTES
 	websocket.outbound_buffer_size = WEBSOCKET_BUFFER_BYTES
 	websocket.max_queued_packets = WEBSOCKET_MAX_QUEUED_PACKETS
-	var websocket_url := _to_websocket_url(base_url) + "/ws/pvp-battle?token=%s" % _session_token().uri_encode()
+	var websocket_url := ClientBuild.append_websocket_query(
+		_to_websocket_url(base_url) + "/ws/pvp-battle?token=%s" % _session_token().uri_encode()
+	)
 	if DEBUG_PVP_REALTIME:
 		_log_realtime("Connecting websocket", "url=%s" % websocket_url)
 	var error := websocket.connect_to_url(websocket_url)

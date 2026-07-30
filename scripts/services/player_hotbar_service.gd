@@ -84,14 +84,27 @@ func _request_json(method: HTTPClient.Method, body: String) -> Dictionary:
 	var error := request.request(base_url + HOTBAR_ENDPOINT, headers, method, body)
 	if error != OK:
 		request.queue_free()
-		return {"success": false, "error": "Could not start hotbar request."}
+		return {
+			"success": false,
+			"error": BackendErrorLocalizationService.message({"code": "service_unavailable"}),
+			"diagnosticError": error_string(error),
+		}
 	var completed: Array = await request.request_completed
 	request.queue_free()
 	var parsed: Variant = JSON.parse_string((completed[3] as PackedByteArray).get_string_from_utf8())
 	var parsed_body: Dictionary = parsed as Dictionary if parsed is Dictionary else {}
 	var status := int(completed[1])
-	if int(completed[0]) != HTTPRequest.RESULT_SUCCESS or status < 200 or status >= 300:
-		var detail: Variant = parsed_body.get("detail", {})
-		var message := str((detail as Dictionary).get("message", "Hotbar request failed.")) if detail is Dictionary else str(detail)
-		return {"success": false, "status": status, "error": message}
+	var request_result := int(completed[0])
+	if request_result != HTTPRequest.RESULT_SUCCESS:
+		return {
+			"success": false,
+			"status": status,
+			"error": BackendErrorLocalizationService.transport_message(request_result),
+		}
+	if status < 200 or status >= 300:
+		return BackendErrorLocalizationService.decorate({
+			"success": false,
+			"status": status,
+			"body": parsed_body,
+		})
 	return {"success": true, "body": parsed_body}

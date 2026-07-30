@@ -39,12 +39,23 @@ func _init() -> void:
 	_check(dialog.invitations.size() == 2, "multiple invitations are queued")
 	_check(dialog.heading_label.text.contains("Aether Vanguard"), "dialog identifies the guild")
 	_check(dialog.status_label.text.contains("Nova"), "dialog identifies the inviter")
-	_check(dialog.position_label.text.contains("1 OF 2"), "dialog shows the invitation queue position")
+	_check(
+		dialog.position_label.text.contains("1") and dialog.position_label.text.contains("2"),
+		"dialog shows the localized invitation queue position"
+	)
 	_check(dialog.find_child("AcceptGuildInvitationDialogButton", true, false) != null, "dialog has an accept action")
 	_check(dialog.find_child("DeclineGuildInvitationDialogButton", true, false) != null, "dialog has a decline action")
 	_check(system_overlay.messages.size() == 1, "incoming invitation emits one system message")
 	dialog.show_invitations([first_invitation, second_invitation])
 	_check(system_overlay.messages.size() == 1, "replayed invitation does not duplicate its system message")
+	var localization_manager := root.get_node_or_null("LocalizationManager")
+	if localization_manager != null:
+		localization_manager.set_locale("pt_BR")
+		await process_frame
+		_check(dialog.title == "Convite para Guilda", "dialog title refreshes in Brazilian Portuguese")
+		_check(dialog.heading_label.text.contains("Entrar em"), "dialog copy refreshes without losing its invitation")
+		localization_manager.set_locale("en")
+		await process_frame
 	dialog.show_invitations([])
 	_check(not dialog.visible, "dialog closes when no invitations remain")
 

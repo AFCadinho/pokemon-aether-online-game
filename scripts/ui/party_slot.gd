@@ -56,6 +56,11 @@ var is_dragging: bool = false
 var is_drop_target: bool = false
 var is_lead: bool = false
 var current_is_shiny: bool = false
+var current_level: int = 0
+var current_held_item_id: String = ""
+var current_status_key: String = ""
+var current_species_id: String = ""
+var current_species_source_name: String = ""
 var held_item_marker: Control
 var status_icon_texture_cache: Dictionary = {}
 
@@ -70,7 +75,10 @@ func _ready() -> void:
 		click_button.mouse_entered.connect(_on_click_button_mouse_entered)
 	if not click_button.mouse_exited.is_connected(_on_click_button_mouse_exited):
 		click_button.mouse_exited.connect(_on_click_button_mouse_exited)
+	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
+		LocalizationManager.locale_changed.connect(_on_locale_changed)
 	_setup_held_item_marker()
+	_refresh_localized_text()
 	_refresh_lead_accent()
 	_apply_slot_style()
 	
@@ -78,10 +86,12 @@ func set_pokemon(pokemon: Pokemon) -> void:
 	visible = true
 	_refresh_lead_accent()
 	current_is_shiny = pokemon.shiny
-	name_label.text = pokemon.species
-	name_label.tooltip_text = pokemon.species
+	current_level = pokemon.level
+	current_species_id = pokemon.species
+	current_species_source_name = pokemon.species
+	_refresh_species_name()
 	shiny_badge.visible = pokemon.shiny
-	level_label.text = "Lv. " + str(pokemon.level)
+	_refresh_level_label()
 	hp_bar.max_value = max(pokemon.max_hp, 1)
 	hp_bar.value = clamp(pokemon.current_hp, 0, pokemon.max_hp)
 	_update_health_bar_style()
@@ -97,15 +107,20 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	visible = true
 	_refresh_lead_accent()
 	var species := str(pokemon_data.get("displaySpecies", pokemon_data.get("species", ""))).strip_edges()
+	current_species_id = str(pokemon_data.get(
+		"speciesId",
+		pokemon_data.get("species_id", pokemon_data.get("species", species))
+	))
+	current_species_source_name = species
 	var is_shiny := bool(pokemon_data.get("shiny", false))
 	var level := int(pokemon_data.get("level", 0))
 	var max_hp: int = maxi(int(pokemon_data.get("maxHp", pokemon_data.get("max_hp", 1))), 1)
 	var current_hp: int = int(pokemon_data.get("hp", pokemon_data.get("currentHp", pokemon_data.get("current_hp", max_hp))))
 	current_is_shiny = is_shiny
-	name_label.text = species
-	name_label.tooltip_text = species
+	current_level = level
+	_refresh_species_name()
 	shiny_badge.visible = is_shiny
-	level_label.text = "Lv. " + str(level) if level > 0 else ""
+	_refresh_level_label()
 	hp_bar.max_value = max_hp
 	hp_bar.value = clampi(current_hp, 0, max_hp)
 	_update_health_bar_style()
@@ -120,6 +135,9 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 func set_empty() -> void:
 	visible = false
 	current_is_shiny = false
+	current_level = 0
+	current_species_id = ""
+	current_species_source_name = ""
 	is_hovered = false
 	is_pressed = false
 	is_dragging = false
@@ -216,9 +234,12 @@ func _set_held_item_marker(item_id: String) -> void:
 	if held_item_marker == null:
 		return
 	var normalized_item_id: String = item_id.strip_edges()
+	current_held_item_id = normalized_item_id
 	held_item_marker.visible = normalized_item_id != ""
 	held_item_marker.tooltip_text = (
-		"Holding %s" % normalized_item_id.replace("-", " ").capitalize()
+		LocalizationManager.text("ui.party.holding_item", {
+			"item": normalized_item_id.replace("-", " ").capitalize(),
+		})
 		if normalized_item_id != ""
 		else ""
 	)
@@ -228,6 +249,7 @@ func _set_status_icon(status: String) -> void:
 		return
 
 	var status_key := _normalize_status_key(status)
+	current_status_key = status_key
 	var status_texture := _get_status_icon_texture(status_key)
 	status_icon.texture = status_texture
 	status_icon.visible = status_texture != null
@@ -268,21 +290,49 @@ func _get_status_icon_texture(status_key: String) -> Texture2D:
 	return atlas_texture
 
 func _get_status_tooltip(status_key: String) -> String:
-	match status_key:
-		"psn":
-			return "Poisoned"
-		"tox":
-			return "Badly poisoned"
-		"brn":
-			return "Burned"
-		"par":
-			return "Paralyzed"
-		"slp":
-			return "Asleep"
-		"frz":
-			return "Frozen"
+	var key := str({
+		"psn": "pokemon.status.poisoned",
+		"tox": "pokemon.status.badly_poisoned",
+		"brn": "pokemon.status.burned",
+		"par": "pokemon.status.paralyzed",
+		"slp": "pokemon.status.asleep",
+		"frz": "pokemon.status.frozen",
+	}.get(status_key, ""))
+	return LocalizationManager.text(key) if key != "" else ""
 
-	return ""
+func _on_locale_changed(_locale: String) -> void:
+	_refresh_localized_text()
+
+func _refresh_localized_text() -> void:
+	if shiny_badge != null:
+		shiny_badge.tooltip_text = LocalizationManager.text("ui.party.shiny")
+	_refresh_level_label()
+	if held_item_marker != null:
+		_set_held_item_marker(current_held_item_id)
+	if status_icon != null:
+		status_icon.tooltip_text = _get_status_tooltip(current_status_key) if status_icon.visible else ""
+	_refresh_species_name()
+
+
+func _refresh_species_name() -> void:
+	if name_label == null or current_species_id.strip_edges().is_empty():
+		return
+	var display_name := current_species_source_name
+	var content_localization := get_node_or_null("/root/ContentLocalization")
+	if content_localization != null and content_localization.has_method("display_name"):
+		display_name = str(content_localization.call(
+			"display_name",
+			"species",
+			current_species_id,
+			current_species_source_name
+		))
+	name_label.text = display_name
+	name_label.tooltip_text = display_name
+
+func _refresh_level_label() -> void:
+	if level_label == null:
+		return
+	level_label.text = LocalizationManager.text("ui.party.level", {"level": current_level}) if current_level > 0 else ""
 
 func _on_click_button_gui_input(event: InputEvent) -> void:
 	if not (event is InputEventMouseButton):

@@ -1,0 +1,278 @@
+{
+  "escape-rope-action": {
+    "name": "Escape Rope · Belangrijk item",
+    "shortDesc": "Keer terug naar de laatste veilige binnenlocatie die je hebt bezocht."
+  },
+  "escape-rope": {
+    "name": "Escape Rope",
+    "shortDesc": "Ontsnap direct uit grotten en kerkers."
+  },
+  "poke-ball": {
+    "name": "Poke Ball",
+    "shortDesc": "Een standaardbal om wilde Pokémon te vangen."
+  },
+  "great-ball": {
+    "name": "Great Ball",
+    "shortDesc": "Een betere bal met een hogere vangkans dan een Poke Ball."
+  },
+  "ultra-ball": {
+    "name": "Ultra Ball",
+    "shortDesc": "Een hoogwaardige bal met een hogere vangkans dan een Great Ball."
+  },
+  "potion": {
+    "name": "Potion",
+    "shortDesc": "Herstelt 20 HP."
+  },
+  "super-potion": {
+    "name": "Super Potion",
+    "shortDesc": "Herstelt 50 HP."
+  },
+  "hyper-potion": {
+    "name": "Hyper Potion",
+    "shortDesc": "Herstelt 200 HP."
+  },
+  "max-potion": {
+    "name": "Max Potion",
+    "shortDesc": "Herstelt de HP van een Pokémon volledig."
+  },
+  "full-restore": {
+    "name": "Full Restore",
+    "shortDesc": "Herstelt alle HP en geneest elke statusconditie."
+  },
+  "antidote": {
+    "name": "Antidote",
+    "shortDesc": "Geneest vergiftiging."
+  },
+  "paralyze-heal": {
+    "name": "Paralyze Heal",
+    "shortDesc": "Geneest verlamming."
+  },
+  "awakening": {
+    "name": "Awakening",
+    "shortDesc": "Maakt een slapende Pokémon wakker."
+  },
+  "burn-heal": {
+    "name": "Burn Heal",
+    "shortDesc": "Geneest een brandwond."
+  },
+  "ice-heal": {
+    "name": "Ice Heal",
+    "shortDesc": "Ontdooit een bevroren Pokémon."
+  },
+  "full-heal": {
+    "name": "Full Heal",
+    "shortDesc": "Geneest elke statusconditie."
+  },
+  "revive": {
+    "name": "Revive",
+    "shortDesc": "Wekt een uitgeschakelde Pokémon met de helft van zijn maximale HP."
+  },
+  "old-rod": {
+    "name": "Old Rod",
+    "shortDesc": "Gebruik deze hengel om Pokémon te vissen."
+  },
+  "good-rod": {
+    "name": "Good Rod",
+    "shortDesc": "Gebruik deze hengel om Pokémon in water te vangen."
+  },
+  "super-rod": {
+    "name": "Super Rod",
+    "shortDesc": "Gebruik deze hengel om sterke Pokémon in water te vangen."
+  },
+  "cut-charm": {
+    "name": "Cut Charm",
+    "shortDesc": "Hiermee kun je Cut gebruiken zonder dat een Pokémon de aanval kent."
+  },
+  "defog-charm": {
+    "name": "Defog Charm",
+    "shortDesc": "Hiermee kun je Defog gebruiken zonder dat een Pokémon de aanval kent."
+  },
+  "dive-charm": {
+    "name": "Dive Charm",
+    "shortDesc": "Hiermee kun je Dive gebruiken zonder dat een Pokémon de aanval kent."
+  },
+  "flash-charm": {
+    "name": "Flash Charm",
+    "shortDesc": "Hiermee kun je Flash gebruiken zonder dat een Pokémon de aanval kent."
+  },
+  "rain-dance-charm": {
+    "name": "Rain Dance Charm",
+    "shortDesc": "Hiermee kun je Rain Dance gebruiken zonder dat een Pokémon de aanval kent."
+  },
+  "rock-climb-charm": {
+    "name": "Rock Climb Charm",
+    "shortDesc": "Hiermee kun je Rock Climb gebruiken zonder dat een Pokémon de aanval kent."
+  },
+  "rock-smash-charm": {
+    "name": "Rock Smash Charm",
+    "shortDesc": "Hiermee kun je Rock Smash gebruiken zonder dat een Pokémon de aanval kent."
+  },
+  "snowscape-charm": {
+    "name": "Snowscape Charm",
+    "shortDesc": "Hiermee kun je Snowscape gebruiken zonder dat een Pokémon de aanval kent."
+  },
+  "strength-charm": {
+    "name": "Strength Charm",
+    "shortDesc": "Hiermee kun je Strength gebruiken zonder dat een Pokémon de aanval kent."
+  },
+  "sunny-day-charm": {
+    "name": "Sunny Day Charm",
+    "shortDesc": "Hiermee kun je Sunny Day gebruiken zonder dat een Pokémon de aanval kent."
+  },
+  "surf-charm": {
+    "name": "Surf Charm",
+    "shortDesc": "Hiermee kun je Surf gebruiken zonder dat een Pokémon de aanval kent."
+  },
+  "waterfall-charm": {
+    "name": "Waterfall Charm",
+    "shortDesc": "Hiermee kun je Waterfall gebruiken zonder dat een Pokémon de aanval kent."
+  },
+  "whirlpool-charm": {
+    "name": "Whirlpool Charm",
+    "shortDesc": "Hiermee kun je Whirlpool gebruiken zonder dat een Pokémon de aanval kent."
+  },
+  "aether-blessing-voucher-3-days": {
+    "name": "Aether Blessing-voucher · 3 dagen",
+    "shortDesc": "Een verhandelbare voucher die drie dagen toevoegt aan de Aether Blessing van de ontvanger."
+  },
+  "aether-blessing-voucher-7-days": {
+    "name": "Aether Blessing-voucher · 7 dagen",
+    "shortDesc": "Een verhandelbare voucher die zeven dagen toevoegt aan de Aether Blessing van de ontvanger."
+  },
+  "aether-blessing-voucher-14-days": {
+    "name": "Aether Blessing-voucher · 14 dagen",
+    "shortDesc": "Een verhandelbare voucher die veertien dagen toevoegt aan de Aether Blessing van de ontvanger."
+  },
+  "aether-blessing-voucher-30-days": {
+    "name": "Aether Blessing-voucher · 30 dagen",
+    "shortDesc": "Een verhandelbare voucher die dertig dagen toevoegt aan de Aether Blessing van de ontvanger."
+  },
+  "name-change-ticket": {
+    "name": "Ticket voor naamswijziging",
+    "shortDesc": "Wijzig je gebruikersnaam en openbare Trainernaam."
+  },
+  "gender-chance-ticket": {
+    "name": "Ticket voor geslachtswijziging",
+    "shortDesc": "Wijzig je geslacht en plaats cosmetica uit je garderobe terug in je Bag."
+  },
+  "squirtle-guild-emblem-template": {
+    "name": "Squirtle Guild-embleem",
+    "shortDesc": "Gebruik dit sjabloon om het permanent voor je huidige Guild te ontgrendelen."
+  },
+  "charmander-guild-emblem-template": {
+    "name": "Charmander Guild-embleem",
+    "shortDesc": "Gebruik dit sjabloon om het permanent voor je huidige Guild te ontgrendelen."
+  },
+  "bulbasaur-guild-emblem-template": {
+    "name": "Bulbasaur Guild-embleem",
+    "shortDesc": "Gebruik dit sjabloon om het permanent voor je huidige Guild te ontgrendelen."
+  },
+  "venusaur-guild-emblem-template": {
+    "name": "Venusaur Guild-embleem",
+    "shortDesc": "Gebruik dit sjabloon om het permanent voor je huidige Guild te ontgrendelen."
+  },
+  "charizard-guild-emblem-template": {
+    "name": "Charizard Guild-embleem",
+    "shortDesc": "Gebruik dit sjabloon om het permanent voor je huidige Guild te ontgrendelen."
+  },
+  "blastoise-guild-emblem-template": {
+    "name": "Blastoise Guild-embleem",
+    "shortDesc": "Gebruik dit sjabloon om het permanent voor je huidige Guild te ontgrendelen."
+  },
+  "aether-blossom-outfit": {
+    "name": "Aether Blossom Box",
+    "shortDesc": "Open deze outfitbox voor vrouwelijke modellen om vier losse Aether Blossom-cosmetica te ontvangen."
+  },
+  "aether-blossom-hair": {
+    "name": "Aether Blossom Hair",
+    "shortDesc": "Verplaats het Aether Blossom-kapsel naar Personage aanpassen."
+  },
+  "aether-blossom-earrings": {
+    "name": "Aether Blossom Earrings",
+    "shortDesc": "Verplaats de Aether Blossom-oorbellen naar Personage aanpassen."
+  },
+  "aether-blossom-dress": {
+    "name": "Aether Blossom Dress",
+    "shortDesc": "Verplaats de Aether Blossom-jurk naar Personage aanpassen."
+  },
+  "aether-blossom-shoes": {
+    "name": "Aether Blossom Shoes",
+    "shortDesc": "Verplaats de Aether Blossom-schoenen naar Personage aanpassen."
+  },
+  "aether-blossom-chroma-hair": {
+    "name": "Aether Blossom Chroma Hair",
+    "shortDesc": "Ontgrendel het aanpasbare Aether Blossom-kapsel voor vrouwelijke modellen."
+  },
+  "aether-blossom-chroma-earrings": {
+    "name": "Aether Blossom Chroma Earrings",
+    "shortDesc": "Ontgrendel de aanpasbare Aether Blossom-oorbellen voor vrouwelijke modellen."
+  },
+  "aether-blossom-chroma-shoes": {
+    "name": "Aether Blossom Chroma Shoes",
+    "shortDesc": "Ontgrendel de aanpasbare Aether Blossom-schoenen voor vrouwelijke modellen."
+  },
+  "aether-male-chroma-hair-1": {
+    "name": "Aether Chroma Hair I",
+    "shortDesc": "Ontgrendel een aanpasbaar Aether-kapsel voor mannelijke modellen."
+  },
+  "aether-male-chroma-hair-2": {
+    "name": "Aether Chroma Hair II",
+    "shortDesc": "Ontgrendel een aanpasbaar Aether-kapsel voor mannelijke modellen."
+  },
+  "aether-male-chroma-hair-3": {
+    "name": "Aether Chroma Hair III",
+    "shortDesc": "Ontgrendel een aanpasbaar Aether-kapsel voor mannelijke modellen."
+  },
+  "aether-female-chroma-hair-1": {
+    "name": "Aether Chroma Hair I",
+    "shortDesc": "Ontgrendel een aanpasbaar Aether-kapsel voor vrouwelijke modellen."
+  },
+  "aether-female-chroma-hair-2": {
+    "name": "Aether Chroma Hair II",
+    "shortDesc": "Ontgrendel een aanpasbaar Aether-kapsel voor vrouwelijke modellen."
+  },
+  "adinho-classic-outfit": {
+    "name": "Adinho Classic Box",
+    "shortDesc": "Open deze outfitbox voor mannelijke modellen om zes losse Adinho-cosmetica te ontvangen."
+  },
+  "adinho-classic-sunglasses": {
+    "name": "Adinho Classic Sunglasses",
+    "shortDesc": "Verplaats de originele Adinho-zonnebril naar Personage aanpassen."
+  },
+  "adinho-classic-shirt": {
+    "name": "Adinho Classic Shirt",
+    "shortDesc": "Verplaats het originele Adinho-shirt voor mannelijke modellen naar Personage aanpassen."
+  },
+  "adinho-classic-trousers": {
+    "name": "Adinho Classic Trousers",
+    "shortDesc": "Verplaats de originele Adinho-broek voor mannelijke modellen naar Personage aanpassen."
+  },
+  "adinho-classic-shoes": {
+    "name": "Adinho Classic Shoes",
+    "shortDesc": "Verplaats de originele Adinho-schoenen voor mannelijke modellen naar Personage aanpassen."
+  },
+  "adinho-chroma-hair": {
+    "name": "Adinho Chroma Hair",
+    "shortDesc": "Ontgrendel het Adinho Chroma-kapsel voor mannelijke modellen."
+  },
+  "adinho-chroma-beard": {
+    "name": "Adinho Chroma Beard",
+    "shortDesc": "Ontgrendel de aanpasbare Adinho-baard voor mannelijke modellen."
+  },
+  "adinho-chroma-glasses": {
+    "name": "Adinho Chroma Glasses",
+    "shortDesc": "Ontgrendel de aanpasbare Adinho-bril voor mannelijke modellen."
+  },
+  "adinho-chroma-shirt": {
+    "name": "Adinho Chroma Shirt",
+    "shortDesc": "Ontgrendel het aanpasbare Adinho-shirt voor mannelijke modellen."
+  },
+  "adinho-chroma-trousers": {
+    "name": "Adinho Chroma Trousers",
+    "shortDesc": "Ontgrendel de aanpasbare Adinho-broek voor mannelijke modellen."
+  },
+  "adinho-chroma-shoes": {
+    "name": "Adinho Chroma Shoes",
+    "shortDesc": "Ontgrendel de aanpasbare Adinho-schoenen voor mannelijke modellen."
+  }
+}

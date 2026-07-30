@@ -148,7 +148,7 @@ func _make_difficulty_button(label: String, difficulty: String, accent_color: Co
 
 func _make_cancel_button() -> Button:
 	var button := Button.new()
-	button.text = "Cancel"
+	button.text = LocalizationManager.text("common.cancel")
 	button.focus_mode = Control.FOCUS_NONE
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	button.custom_minimum_size = Vector2(0, 34)

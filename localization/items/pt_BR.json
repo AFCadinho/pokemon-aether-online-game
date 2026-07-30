@@ -1,0 +1,278 @@
+{
+  "escape-rope-action": {
+    "name": "Escape Rope · Item-chave",
+    "shortDesc": "Volte ao último local interno seguro que você visitou."
+  },
+  "escape-rope": {
+    "name": "Escape Rope",
+    "shortDesc": "Escape instantaneamente de cavernas e masmorras."
+  },
+  "poke-ball": {
+    "name": "Poké Bola",
+    "shortDesc": "Uma bola básica usada para capturar Pokémon selvagens."
+  },
+  "great-ball": {
+    "name": "Grande Bola",
+    "shortDesc": "Uma bola melhor, com uma chance de captura maior que a de uma Poké Bola."
+  },
+  "ultra-ball": {
+    "name": "Ultra Bola",
+    "shortDesc": "Uma bola de alto desempenho, com uma chance de captura maior que a de uma Grande Bola."
+  },
+  "potion": {
+    "name": "Poção",
+    "shortDesc": "Restaura 20 PS."
+  },
+  "super-potion": {
+    "name": "Superpoção",
+    "shortDesc": "Restaura 50 PS."
+  },
+  "hyper-potion": {
+    "name": "Hiperpoção",
+    "shortDesc": "Restaura 200 PS."
+  },
+  "max-potion": {
+    "name": "Poção Máxima",
+    "shortDesc": "Restaura completamente os PS de um Pokémon."
+  },
+  "full-restore": {
+    "name": "Restauração Total",
+    "shortDesc": "Restaura todos os PS e cura qualquer condição de status."
+  },
+  "antidote": {
+    "name": "Antídoto",
+    "shortDesc": "Cura envenenamento."
+  },
+  "paralyze-heal": {
+    "name": "Antiparalisante",
+    "shortDesc": "Cura paralisia."
+  },
+  "awakening": {
+    "name": "Despertador",
+    "shortDesc": "Acorda um Pokémon adormecido."
+  },
+  "burn-heal": {
+    "name": "Cura de Queimadura",
+    "shortDesc": "Cura uma queimadura."
+  },
+  "ice-heal": {
+    "name": "Cura de Gelo",
+    "shortDesc": "Descongela um Pokémon congelado."
+  },
+  "full-heal": {
+    "name": "Cura Total",
+    "shortDesc": "Cura qualquer condição de status."
+  },
+  "revive": {
+    "name": "Reviver",
+    "shortDesc": "Reanima um Pokémon desmaiado com metade dos PS máximos."
+  },
+  "old-rod": {
+    "name": "Vara Velha",
+    "shortDesc": "Use-a para pescar Pokémon."
+  },
+  "good-rod": {
+    "name": "Vara Boa",
+    "shortDesc": "Use-a para capturar Pokémon em corpos d'água."
+  },
+  "super-rod": {
+    "name": "Supervara",
+    "shortDesc": "Use-a para capturar Pokémon poderosos em corpos d'água."
+  },
+  "cut-charm": {
+    "name": "Amuleto de Cut",
+    "shortDesc": "Permite usar Cut sem que um Pokémon conheça o movimento."
+  },
+  "defog-charm": {
+    "name": "Amuleto de Defog",
+    "shortDesc": "Permite usar Defog sem que um Pokémon conheça o movimento."
+  },
+  "dive-charm": {
+    "name": "Amuleto de Dive",
+    "shortDesc": "Permite usar Dive sem que um Pokémon conheça o movimento."
+  },
+  "flash-charm": {
+    "name": "Amuleto de Flash",
+    "shortDesc": "Permite usar Flash sem que um Pokémon conheça o movimento."
+  },
+  "rain-dance-charm": {
+    "name": "Amuleto de Rain Dance",
+    "shortDesc": "Permite usar Rain Dance sem que um Pokémon conheça o movimento."
+  },
+  "rock-climb-charm": {
+    "name": "Amuleto de Rock Climb",
+    "shortDesc": "Permite usar Rock Climb sem que um Pokémon conheça o movimento."
+  },
+  "rock-smash-charm": {
+    "name": "Amuleto de Rock Smash",
+    "shortDesc": "Permite usar Rock Smash sem que um Pokémon conheça o movimento."
+  },
+  "snowscape-charm": {
+    "name": "Amuleto de Snowscape",
+    "shortDesc": "Permite usar Snowscape sem que um Pokémon conheça o movimento."
+  },
+  "strength-charm": {
+    "name": "Amuleto de Strength",
+    "shortDesc": "Permite usar Strength sem que um Pokémon conheça o movimento."
+  },
+  "sunny-day-charm": {
+    "name": "Amuleto de Sunny Day",
+    "shortDesc": "Permite usar Sunny Day sem que um Pokémon conheça o movimento."
+  },
+  "surf-charm": {
+    "name": "Amuleto de Surf",
+    "shortDesc": "Permite usar Surf sem que um Pokémon conheça o movimento."
+  },
+  "waterfall-charm": {
+    "name": "Amuleto de Waterfall",
+    "shortDesc": "Permite usar Waterfall sem que um Pokémon conheça o movimento."
+  },
+  "whirlpool-charm": {
+    "name": "Amuleto de Whirlpool",
+    "shortDesc": "Permite usar Whirlpool sem que um Pokémon conheça o movimento."
+  },
+  "aether-blessing-voucher-3-days": {
+    "name": "Vale da Bênção do Aether · 3 dias",
+    "shortDesc": "Um vale negociável que adiciona três dias à Bênção do Aether de quem o recebe."
+  },
+  "aether-blessing-voucher-7-days": {
+    "name": "Vale da Bênção do Aether · 7 dias",
+    "shortDesc": "Um vale negociável que adiciona sete dias à Bênção do Aether de quem o recebe."
+  },
+  "aether-blessing-voucher-14-days": {
+    "name": "Vale da Bênção do Aether · 14 dias",
+    "shortDesc": "Um vale negociável que adiciona quatorze dias à Bênção do Aether de quem o recebe."
+  },
+  "aether-blessing-voucher-30-days": {
+    "name": "Vale da Bênção do Aether · 30 dias",
+    "shortDesc": "Um vale negociável que adiciona trinta dias à Bênção do Aether de quem o recebe."
+  },
+  "name-change-ticket": {
+    "name": "Bilhete de Alteração de Nome",
+    "shortDesc": "Altere seu nome de usuário e seu nome público de Treinador."
+  },
+  "gender-chance-ticket": {
+    "name": "Bilhete de Alteração de Gênero",
+    "shortDesc": "Altere seu gênero e devolva os cosméticos do guarda-roupa para sua Bolsa."
+  },
+  "squirtle-guild-emblem-template": {
+    "name": "Emblema de Guilda do Squirtle",
+    "shortDesc": "Consuma este modelo para desbloqueá-lo permanentemente para sua Guilda atual."
+  },
+  "charmander-guild-emblem-template": {
+    "name": "Emblema de Guilda do Charmander",
+    "shortDesc": "Consuma este modelo para desbloqueá-lo permanentemente para sua Guilda atual."
+  },
+  "bulbasaur-guild-emblem-template": {
+    "name": "Emblema de Guilda do Bulbasaur",
+    "shortDesc": "Consuma este modelo para desbloqueá-lo permanentemente para sua Guilda atual."
+  },
+  "venusaur-guild-emblem-template": {
+    "name": "Emblema de Guilda do Venusaur",
+    "shortDesc": "Consuma este modelo para desbloqueá-lo permanentemente para sua Guilda atual."
+  },
+  "charizard-guild-emblem-template": {
+    "name": "Emblema de Guilda do Charizard",
+    "shortDesc": "Consuma este modelo para desbloqueá-lo permanentemente para sua Guilda atual."
+  },
+  "blastoise-guild-emblem-template": {
+    "name": "Emblema de Guilda do Blastoise",
+    "shortDesc": "Consuma este modelo para desbloqueá-lo permanentemente para sua Guilda atual."
+  },
+  "aether-blossom-outfit": {
+    "name": "Caixa Aether Blossom",
+    "shortDesc": "Abra esta caixa de traje para modelos femininos e receba quatro cosméticos Aether Blossom separados."
+  },
+  "aether-blossom-hair": {
+    "name": "Cabelo Aether Blossom",
+    "shortDesc": "Mova o penteado Aether Blossom para a Personalização de Personagem."
+  },
+  "aether-blossom-earrings": {
+    "name": "Brincos Aether Blossom",
+    "shortDesc": "Mova os brincos Aether Blossom para a Personalização de Personagem."
+  },
+  "aether-blossom-dress": {
+    "name": "Vestido Aether Blossom",
+    "shortDesc": "Mova o vestido Aether Blossom para a Personalização de Personagem."
+  },
+  "aether-blossom-shoes": {
+    "name": "Sapatos Aether Blossom",
+    "shortDesc": "Mova os sapatos Aether Blossom para a Personalização de Personagem."
+  },
+  "aether-blossom-chroma-hair": {
+    "name": "Cabelo Chroma Aether Blossom",
+    "shortDesc": "Desbloqueie o penteado Aether Blossom personalizável para modelos femininos."
+  },
+  "aether-blossom-chroma-earrings": {
+    "name": "Brincos Chroma Aether Blossom",
+    "shortDesc": "Desbloqueie os brincos Aether Blossom personalizáveis para modelos femininos."
+  },
+  "aether-blossom-chroma-shoes": {
+    "name": "Sapatos Chroma Aether Blossom",
+    "shortDesc": "Desbloqueie os sapatos Aether Blossom personalizáveis para modelos femininos."
+  },
+  "aether-male-chroma-hair-1": {
+    "name": "Cabelo Chroma Aether I",
+    "shortDesc": "Desbloqueie um penteado Aether personalizável para modelos masculinos."
+  },
+  "aether-male-chroma-hair-2": {
+    "name": "Cabelo Chroma Aether II",
+    "shortDesc": "Desbloqueie um penteado Aether personalizável para modelos masculinos."
+  },
+  "aether-male-chroma-hair-3": {
+    "name": "Cabelo Chroma Aether III",
+    "shortDesc": "Desbloqueie um penteado Aether personalizável para modelos masculinos."
+  },
+  "aether-female-chroma-hair-1": {
+    "name": "Cabelo Chroma Aether I",
+    "shortDesc": "Desbloqueie um penteado Aether personalizável para modelos femininos."
+  },
+  "aether-female-chroma-hair-2": {
+    "name": "Cabelo Chroma Aether II",
+    "shortDesc": "Desbloqueie um penteado Aether personalizável para modelos femininos."
+  },
+  "adinho-classic-outfit": {
+    "name": "Caixa Adinho Classic",
+    "shortDesc": "Abra esta caixa de traje para modelos masculinos e receba seis cosméticos Adinho separados."
+  },
+  "adinho-classic-sunglasses": {
+    "name": "Óculos de Sol Adinho Classic",
+    "shortDesc": "Mova os óculos de sol originais do Adinho para a Personalização de Personagem."
+  },
+  "adinho-classic-shirt": {
+    "name": "Camisa Adinho Classic",
+    "shortDesc": "Mova a camisa original do Adinho para modelos masculinos para a Personalização de Personagem."
+  },
+  "adinho-classic-trousers": {
+    "name": "Calças Adinho Classic",
+    "shortDesc": "Mova as calças originais do Adinho para modelos masculinos para a Personalização de Personagem."
+  },
+  "adinho-classic-shoes": {
+    "name": "Sapatos Adinho Classic",
+    "shortDesc": "Mova os sapatos originais do Adinho para modelos masculinos para a Personalização de Personagem."
+  },
+  "adinho-chroma-hair": {
+    "name": "Cabelo Chroma do Adinho",
+    "shortDesc": "Desbloqueie o penteado Chroma do Adinho para modelos masculinos."
+  },
+  "adinho-chroma-beard": {
+    "name": "Barba Chroma do Adinho",
+    "shortDesc": "Desbloqueie a barba personalizável do Adinho para modelos masculinos."
+  },
+  "adinho-chroma-glasses": {
+    "name": "Óculos Chroma do Adinho",
+    "shortDesc": "Desbloqueie os óculos personalizáveis do Adinho para modelos masculinos."
+  },
+  "adinho-chroma-shirt": {
+    "name": "Camisa Chroma do Adinho",
+    "shortDesc": "Desbloqueie a camisa personalizável do Adinho para modelos masculinos."
+  },
+  "adinho-chroma-trousers": {
+    "name": "Calças Chroma do Adinho",
+    "shortDesc": "Desbloqueie as calças personalizáveis do Adinho para modelos masculinos."
+  },
+  "adinho-chroma-shoes": {
+    "name": "Sapatos Chroma do Adinho",
+    "shortDesc": "Desbloqueie os sapatos personalizáveis do Adinho para modelos masculinos."
+  }
+}

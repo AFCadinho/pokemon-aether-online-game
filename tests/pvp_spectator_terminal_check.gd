@@ -33,7 +33,7 @@ func _init() -> void:
 	_check(
 		battle_source.contains("if allows_gameplay_persistence or _is_spectator_battle():") \
 			and battle_source.contains('current_action_panel.set_message(message)') \
-			and battle_source.contains('battle_result_title.text = "%s Wins" % winner_name if winner_name != "" else "Battle Over"'),
+			and battle_source.contains('_t("battle.result.winner_title", {"winner": winner_name})'),
 		"spectator winner appears in the battle log, battle text, and result screen"
 	)
 	_check(

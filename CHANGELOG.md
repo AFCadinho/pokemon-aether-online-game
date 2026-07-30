@@ -1,9 +1,31 @@
 # Changelog
 
+## Unreleased
+
+**Added**
+
+- Completed English, Dutch, and Brazilian Portuguese language support across the game, including battles, Pokémon and item information, NPC dialogue, signs, shops, social features, PvP, trading, storage, progression, and developer tools.
+- Added localized names and descriptions for Pokémon content such as moves, Abilities, types, Natures, items, status effects, and encounter information.
+- Added styled language selectors with country flags to the login screen, launcher, and settings. Your selected language is remembered between sessions.
+- Added a separate Pokémon terminology setting so names such as Moves, Abilities, items, Natures, types, and statuses can remain in English while descriptions use the selected interface language.
+
+**Changed**
+
+- Redesigned Settings with a clearer two-column layout, compact category navigation, and styling that matches the login screen and in-game interface.
+- Pressing Escape on the login screen now opens Settings. Pressing Escape inside Settings closes the active dialog or Settings itself.
+- Simplified the login screen actions and added a localized notice explaining that PokeAether is an unofficial fan project.
+- Improved localization handling for server messages and errors while keeping externally supplied news in its original language.
+
+**Fixed**
+
+- Fixed chat tooltips showing the resize handle's description after resizing the chat.
+- Removed an incorrect sand overlay from Viridian Forest.
+
 ## 0.3.37 - 2026-07-29
 
 **Added**
 
+- Added language selection for English, Dutch, and Brazilian Portuguese. Localization currently covers login, settings, loading, main overworld navigation tooltips, and local time and weather status.
 - Added five tradeable Chroma hairstyles to the Aether Gift Store: three for male Trainers and two for female Trainers.
 - You can now watch private PvP battles when the room host allows spectators. Join with the room code without affecting the battle.
 - Spectators can view the battle from either Trainer's side, check everything revealed during the fight, and leave whenever they want.
@@ -16,6 +38,7 @@
 
 **Changed**
 
+- Settings tabs now scroll when needed so longer translations remain usable at smaller resolutions.
 - The Aether Atelier now includes the full Appearance Wear collection. You can switch outfits, preview all changes together, and pay once for the Chroma colours you changed.
 - Appearance Wear is now grouped more clearly by equipment slot in the Aether Atelier.
 - Chroma hairstyles now look cleaner, without the dark pixels and unwanted eyebrow layer some styles showed.

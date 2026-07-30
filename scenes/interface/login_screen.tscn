@@ -352,13 +352,13 @@ layout_mode = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9607843, 0.9607843, 1, 1)
 theme_override_font_sizes/font_size = 34
-text = "Welcome, Trainer"
+text = "ui.login.brand_headline"
 
 [node name="Body" type="Label" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout" unique_id=604320417]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.76, 0.78, 0.88, 1)
 theme_override_font_sizes/font_size = 14
-text = "Your journey through the Aether is waiting. Sign in and return to the world where you left off."
+text = "ui.login.brand_body"
 autowrap_mode = 3
 
 [node name="AccentLine" type="ColorRect" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout" unique_id=1239468972]
@@ -389,7 +389,7 @@ theme_override_constants/separation = 8
 layout_mode = 2
 theme_override_colors/font_color = Color(0.47843137, 0.654902, 0.95686275, 1)
 theme_override_font_sizes/font_size = 13
-text = "LATEST FROM AETHER"
+text = "ui.login.latest_from_aether"
 
 [node name="LoginNewsLabel" type="RichTextLabel" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout/NewsCard/NewsMargin/NewsLayout" unique_id=404349432]
 custom_minimum_size = Vector2(0, 214)
@@ -423,19 +423,19 @@ theme_override_constants/separation = 6
 layout_mode = 2
 theme_override_colors/font_color = Color(0.64, 0.66, 0.77, 1)
 theme_override_font_sizes/font_size = 13
-text = "WORLD STATUS"
+text = "ui.login.world_status"
 
 [node name="StatusValue" type="Label" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout/StatusCard/StatusMargin/StatusLayout" unique_id=1123683599]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.16, 0.94, 0.66, 1)
 theme_override_font_sizes/font_size = 16
-text = "Server Online"
+text = "ui.login.server_online"
 
 [node name="OnlinePlayersValue" type="Label" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout/StatusCard/StatusMargin/StatusLayout" unique_id=1167328517]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.47843137, 0.654902, 0.95686275, 1)
 theme_override_font_sizes/font_size = 13
-text = "Checking players online..."
+text = "ui.login.checking_players"
 
 [node name="FormSpacerLeft" type="Control" parent="Background/Shell/MainSplit" unique_id=1533438422]
 custom_minimum_size = Vector2(56, 0)
@@ -476,7 +476,7 @@ theme_override_constants/separation = 16
 layout_mode = 2
 theme_override_colors/font_color = Color(0.47843137, 0.654902, 0.95686275, 1)
 theme_override_font_sizes/font_size = 12
-text = "✦  TRAINER ACCESS"
+text = "ui.login.trainer_access"
 
 [node name="HeaderAccent" type="ColorRect" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout"]
 custom_minimum_size = Vector2(52, 2)
@@ -489,13 +489,13 @@ color = Color(0.47843137, 0.654902, 0.95686275, 0.85)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9607843, 0.9607843, 1, 1)
 theme_override_font_sizes/font_size = 32
-text = "Step into the Aether"
+text = "ui.login.title"
 
 [node name="LoginSubtitle" type="Label" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout" unique_id=1418968257]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.64, 0.66, 0.77, 1)
 theme_override_font_sizes/font_size = 15
-text = "Sign in with your trainer account to continue."
+text = "ui.login.subtitle"
 
 [node name="FormFields" type="VBoxContainer" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout" unique_id=1618537617]
 layout_mode = 2
@@ -505,7 +505,7 @@ theme_override_constants/separation = 12
 layout_mode = 2
 theme_override_colors/font_color = Color(0.76, 0.78, 0.88, 1)
 theme_override_font_sizes/font_size = 13
-text = "USERNAME"
+text = "ui.login.username"
 
 [node name="UsernameInput" type="LineEdit" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout/FormFields" unique_id=1075642155]
 custom_minimum_size = Vector2(0, 46)
@@ -514,14 +514,14 @@ theme_override_colors/font_color = Color(0.9607843, 0.9607843, 1, 1)
 theme_override_colors/font_placeholder_color = Color(0.45, 0.47, 0.58, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_input")
 theme_override_styles/focus = SubResource("StyleBoxFlat_input_focus")
-placeholder_text = "username"
+placeholder_text = "ui.login.username_placeholder"
 clear_button_enabled = true
 
 [node name="PasswordLabel" type="Label" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout/FormFields" unique_id=1092767495]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.76, 0.78, 0.88, 1)
 theme_override_font_sizes/font_size = 13
-text = "PASSWORD"
+text = "ui.login.password"
 
 [node name="PasswordInput" type="LineEdit" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout/FormFields" unique_id=454606900]
 custom_minimum_size = Vector2(0, 46)
@@ -530,7 +530,7 @@ theme_override_colors/font_color = Color(0.9607843, 0.9607843, 1, 1)
 theme_override_colors/font_placeholder_color = Color(0.45, 0.47, 0.58, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_input")
 theme_override_styles/focus = SubResource("StyleBoxFlat_input_focus")
-placeholder_text = "password"
+placeholder_text = "ui.login.password_placeholder"
 secret = true
 
 [node name="RememberMeCheckbox" type="CheckBox" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout/FormFields" unique_id=216259224]
@@ -538,14 +538,14 @@ layout_mode = 2
 mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.76, 0.78, 0.88, 1)
 theme_override_font_sizes/font_size = 13
-text = "Remember me"
+text = "ui.login.remember_me"
 
 [node name="StatusLabel" type="Label" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout" unique_id=1342839935]
 visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.42, 0.42, 1)
 theme_override_font_sizes/font_size = 13
-text = "Status"
+text = "ui.login.status"
 autowrap_mode = 3
 
 [node name="LoginButton" type="Button" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout" unique_id=317175019]
@@ -557,20 +557,20 @@ theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
 theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
-text = "Sign In"
+text = "ui.login.sign_in"
 
 [node name="RegisterLinkButton" type="LinkButton" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout" unique_id=2059007361]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.74, 0.55, 1, 1)
 theme_override_colors/font_hover_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
 theme_override_font_sizes/font_size = 12
-text = "New trainer? Create your account  →"
+text = "ui.login.register"
 
 [node name="ConnectionStatus" type="Label" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.47, 0.59, 0.72, 0.9)
 theme_override_font_sizes/font_size = 11
-text = "●  SECURE CONNECTION  ·  AETHER NETWORK"
+text = "ui.login.secure_connection"
 horizontal_alignment = 1
 
 [node name="SavedSessionCard" type="PanelContainer" parent="Background/Shell/MainSplit/LoginColumn" unique_id=1267162580]
@@ -595,7 +595,7 @@ theme_override_constants/separation = 16
 layout_mode = 2
 theme_override_colors/font_color = Color(0.47843137, 0.654902, 0.95686275, 1)
 theme_override_font_sizes/font_size = 12
-text = "✦  SAVED TRAINER"
+text = "ui.login.saved_trainer"
 
 [node name="SavedHeaderAccent" type="ColorRect" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout"]
 custom_minimum_size = Vector2(52, 2)
@@ -608,13 +608,13 @@ color = Color(0.47843137, 0.654902, 0.95686275, 0.85)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9607843, 0.9607843, 1, 1)
 theme_override_font_sizes/font_size = 34
-text = "Welcome Back"
+text = "ui.login.welcome_back"
 
 [node name="SavedSubtitle" type="Label" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout" unique_id=718989212]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.64, 0.66, 0.77, 1)
 theme_override_font_sizes/font_size = 15
-text = "Continue with your saved trainer session."
+text = "ui.login.saved_subtitle"
 
 [node name="TrainerCard" type="PanelContainer" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout" unique_id=773413421]
 custom_minimum_size = Vector2(0, 186)
@@ -642,19 +642,19 @@ theme_override_constants/separation = 8
 layout_mode = 2
 theme_override_colors/font_color = Color(0.47843137, 0.654902, 0.95686275, 1)
 theme_override_font_sizes/font_size = 13
-text = "LOGGED IN AS"
+text = "ui.login.logged_in_as"
 
 [node name="SavedDisplayNameLabel" type="Label" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout/TrainerCard/TrainerMargin/TrainerLayout/TrainerInfoLayout" unique_id=236107840]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9607843, 0.9607843, 1, 1)
 theme_override_font_sizes/font_size = 30
-text = "Trainer"
+text = "ui.login.trainer"
 
 [node name="SavedUsernameLabel" type="Label" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout/TrainerCard/TrainerMargin/TrainerLayout/TrainerInfoLayout" unique_id=832646234]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.72, 0.56, 1, 1)
 theme_override_font_sizes/font_size = 14
-text = "@trainer"
+text = ""
 
 [node name="PlayerPreviewViewportContainer" type="SubViewportContainer" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout/TrainerCard/TrainerMargin/TrainerLayout" unique_id=1587898040]
 custom_minimum_size = Vector2(190, 154)
@@ -674,7 +674,7 @@ visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.42, 0.42, 1)
 theme_override_font_sizes/font_size = 13
-text = "Status"
+text = "ui.login.status"
 autowrap_mode = 3
 
 [node name="ContinueButton" type="Button" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout" unique_id=793231538]
@@ -686,7 +686,7 @@ theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
 theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
-text = "Continue"
+text = "ui.login.continue"
 
 [node name="LogoutButton" type="Button" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout" unique_id=688356913]
 custom_minimum_size = Vector2(0, 42)
@@ -697,14 +697,25 @@ theme_override_colors/font_hover_color = Color(1, 0.76, 0.78, 1)
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource("StyleBoxFlat_logout_button")
 theme_override_styles/hover = SubResource("StyleBoxFlat_logout_button_hover")
-text = "Logout"
+text = "ui.login.logout"
 
 [node name="SavedConnectionStatus" type="Label" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.47, 0.59, 0.72, 0.9)
 theme_override_font_sizes/font_size = 11
-text = "●  SESSION READY  ·  AETHER NETWORK"
+text = "ui.login.session_ready"
 horizontal_alignment = 1
+
+[node name="LegalNotice" type="Label" parent="Background/Shell/MainSplit/LoginColumn"]
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.62, 0.65, 0.72, 0.66)
+theme_override_font_sizes/font_size = 10
+text = "ui.login.legal_notice"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
 
 [node name="FormSpacerRight" type="Control" parent="Background/Shell/MainSplit" unique_id=1699297983]
 layout_mode = 2
@@ -718,12 +729,23 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -222.0
-offset_top = -212.0
+offset_top = -264.0
 offset_right = -64.0
 offset_bottom = -52.0
 grow_horizontal = 0
 grow_vertical = 0
 theme_override_constants/separation = 10
+
+[node name="LanguageOptionsButton" type="OptionButton" parent="Background/ScreenActions"]
+custom_minimum_size = Vector2(158, 42)
+layout_mode = 2
+tooltip_text = "ui.settings.language"
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.82, 0.78, 0.96, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_screen_action")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_logout_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_screen_action_hover")
 
 [node name="OptionsButton" type="Button" parent="Background/ScreenActions" unique_id=235236376]
 custom_minimum_size = Vector2(158, 46)
@@ -734,18 +756,7 @@ theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxFlat_screen_action")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_logout_button")
 theme_override_styles/hover = SubResource("StyleBoxFlat_screen_action_hover")
-text = "Options"
-
-[node name="CreditsButton" type="Button" parent="Background/ScreenActions"]
-custom_minimum_size = Vector2(158, 42)
-layout_mode = 2
-mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(0.82, 0.78, 0.96, 1)
-theme_override_font_sizes/font_size = 14
-theme_override_styles/normal = SubResource("StyleBoxFlat_screen_action")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_logout_button")
-theme_override_styles/hover = SubResource("StyleBoxFlat_screen_action_hover")
-text = "Credits & Legal"
+text = "ui.login.options"
 
 [node name="QuitButton" type="Button" parent="Background/ScreenActions" unique_id=1161813470]
 custom_minimum_size = Vector2(158, 42)
@@ -755,7 +766,7 @@ theme_override_colors/font_color = Color(1, 0.64, 0.66, 1)
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource("StyleBoxFlat_logout_button")
 theme_override_styles/hover = SubResource("StyleBoxFlat_logout_button_hover")
-text = "Quit"
+text = "ui.login.quit"
 
 [node name="LoginSettingsMenu" parent="Background" unique_id=472746973 instance=ExtResource("5_settings")]
 visible = false

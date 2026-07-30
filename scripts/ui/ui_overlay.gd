@@ -59,12 +59,12 @@ const CHAT_TAB_DEFAULT_ORDER: Array[String] = [
 	CHAT_TAB_GUILD,
 ]
 const CHAT_TAB_LABELS := {
-	CHAT_TAB_ALL: "All",
-	CHAT_TAB_GENERAL: "General",
-	CHAT_TAB_MAP: "Map",
-	CHAT_TAB_SYSTEM: "System",
-	CHAT_TAB_PM: "PM",
-	CHAT_TAB_GUILD: "Guild",
+	CHAT_TAB_ALL: "ui.chat.tab.all",
+	CHAT_TAB_GENERAL: "ui.chat.tab.general",
+	CHAT_TAB_MAP: "ui.chat.tab.map",
+	CHAT_TAB_SYSTEM: "ui.chat.tab.system",
+	CHAT_TAB_PM: "ui.chat.tab.pm",
+	CHAT_TAB_GUILD: "ui.chat.tab.guild",
 }
 const CHAT_CATEGORY_USER := "user"
 const CHAT_CATEGORY_SYSTEM := "system"
@@ -120,17 +120,18 @@ const DEV_TRAINER_PROGRESS_ICON: Texture2D = preload("res://assets/gym_badges/ka
 const TOOL_CLEAR_DATA_ICON: Texture2D = preload("res://assets/ui/tool_clear_data.svg")
 const STAFF_TELEPORT_ICON: Texture2D = preload("res://assets/ui/location_waypoint.svg")
 const STAFF_IMPERSONATE_ICON: Texture2D = preload("res://assets/ui/staff_impersonate.svg")
-const CONTENT_CREATOR_MENU_ICON: Texture2D = preload("res://assets/ui/alpha_tools.svg")
+const ALPHA_TOOLS_MENU_ICON: Texture2D = preload("res://assets/ui/alpha_tools.svg")
+const CONTENT_CREATOR_MENU_ICON: Texture2D = preload("res://assets/ui/content_creator.svg")
 const BATTLE_SPRITE_LOADER := preload("res://scripts/battle/battle_ui/sprite_box.gd")
 const DRAGGABLE_SUBWINDOW := preload("res://scripts/ui/draggable_subwindow.gd")
 const PVP_RANKED_DEFAULT_FORMAT_KEY := "aether-ou"
 const PVP_RANKED_DEFAULT_FORMAT_NAME := "Aether OU"
 const PVP_MATCH_COUNTDOWN_SECONDS := 10.0
 const PVP_LEADERBOARD_SCOPES: Array[Dictionary] = [
-	{"id": "daily", "label": "Daily"},
-	{"id": "weekly", "label": "Weekly"},
-	{"id": "monthly", "label": "Monthly"},
-	{"id": "all_time", "label": "All Time"},
+	{"id": "daily", "label_key": "ui.pvp.leaderboard.scope.daily"},
+	{"id": "weekly", "label_key": "ui.pvp.leaderboard.scope.weekly"},
+	{"id": "monthly", "label_key": "ui.pvp.leaderboard.scope.monthly"},
+	{"id": "all_time", "label_key": "ui.pvp.leaderboard.scope.all_time"},
 ]
 const FRIENDLIST_POPUP_SCENE: PackedScene = preload("res://scenes/interface/friendlist_popup.tscn")
 const GUILD_POPUP_SCENE: PackedScene = preload("res://scenes/interface/guild_popup.tscn")
@@ -143,14 +144,14 @@ const STATUS_ICON_SHEET: Texture2D = preload("res://assets/battles/status/icon_s
 const PLAYER_PREVIEW_SCENE: PackedScene = preload("res://scenes/player.tscn")
 const DEFAULT_APPEARANCE_SLOT_LIMIT := 8
 const APPEARANCE_CATEGORIES := [
-	{"id": "body", "label": "Body"},
-	{"id": "hair", "label": "Hair"},
-	{"id": "headgear", "label": "Headgear"},
-	{"id": "facial_hair", "label": "Facial Hair"},
-	{"id": "facegear", "label": "Facegear"},
-	{"id": "top", "label": "Top"},
-	{"id": "bottom", "label": "Bottom"},
-	{"id": "shoes", "label": "Shoes"},
+	{"id": "body", "label_key": "ui.appearance.category.body"},
+	{"id": "hair", "label_key": "ui.appearance.category.hair"},
+	{"id": "headgear", "label_key": "ui.appearance.category.headgear"},
+	{"id": "facial_hair", "label_key": "ui.appearance.category.facial_hair"},
+	{"id": "facegear", "label_key": "ui.appearance.category.facegear"},
+	{"id": "top", "label_key": "ui.appearance.category.top"},
+	{"id": "bottom", "label_key": "ui.appearance.category.bottom"},
+	{"id": "shoes", "label_key": "ui.appearance.category.shoes"},
 ]
 const HAIR_COLOR_SWATCHES := CharacterAppearanceService.HAIR_COLOR_SWATCHES
 const CHROMA_COLOR_SWATCHES := CharacterAppearanceService.CHROMA_COLOR_SWATCHES
@@ -345,18 +346,18 @@ const MARKET_INTERFACE_ICON: Texture2D = preload("res://assets/ui/market_shop.sv
 const AETHER_ATELIER_POPUP_SCENE := preload("res://scenes/interface/aether_atelier_popup.tscn")
 const ITEM_DEX_ICON := preload("res://assets/ui/item_dex.svg")
 const BAG_CATEGORIES := [
-	{"id": "all", "label": "All Items", "iconItemId": ""},
-	{"id": "medicine", "label": "Medicine", "iconItemId": "potion"},
-	{"id": "pokeball", "label": "Poke Balls", "iconItemId": "poke-ball"},
-	{"id": "key_items", "label": "Key Items", "iconItemId": "bicycle"},
-	{"id": "machines", "label": "TMs & HMs", "iconItemId": "tm-material"},
-	{"id": "charms", "label": "Charms", "iconItemId": "surf-charm"},
-	{"id": "held_items", "label": "Held Items", "iconItemId": "leftovers"},
-	{"id": "power_stones", "label": "Mega & Z", "iconItemId": "charizardite-x"},
-	{"id": "cosmetics", "label": "Cosmetics", "iconItemId": "blue-canari-plush-lv-1"},
-	{"id": "vouchers", "label": "Vouchers", "iconItemId": "aether-blessing-voucher-3-days"},
-	{"id": "currency", "label": "Currency", "iconItemId": "coin-case"},
-	{"id": "general", "label": "Other", "iconItemId": "ability-capsule"},
+	{"id": "all", "labelKey": "ui.bag.category.all", "iconItemId": ""},
+	{"id": "medicine", "labelKey": "ui.bag.category.medicine", "iconItemId": "potion"},
+	{"id": "pokeball", "labelKey": "ui.bag.category.pokeballs", "iconItemId": "poke-ball"},
+	{"id": "key_items", "labelKey": "ui.bag.category.key_items", "iconItemId": "bicycle"},
+	{"id": "machines", "labelKey": "ui.bag.category.machines", "iconItemId": "tm-material"},
+	{"id": "charms", "labelKey": "ui.bag.category.charms", "iconItemId": "surf-charm"},
+	{"id": "held_items", "labelKey": "ui.bag.category.held_items", "iconItemId": "leftovers"},
+	{"id": "power_stones", "labelKey": "ui.bag.category.power_stones", "iconItemId": "charizardite-x"},
+	{"id": "cosmetics", "labelKey": "ui.bag.category.cosmetics", "iconItemId": "blue-canari-plush-lv-1"},
+	{"id": "vouchers", "labelKey": "ui.bag.category.vouchers", "iconItemId": "aether-blessing-voucher-3-days"},
+	{"id": "currency", "labelKey": "ui.bag.category.currency", "iconItemId": "coin-case"},
+	{"id": "general", "labelKey": "ui.bag.category.other", "iconItemId": "ability-capsule"},
 ]
 const TRAINER_CARD_CYAN := Color("#8bd8f4")
 const TRAINER_CARD_GREEN := Color("#73d98b")
@@ -529,6 +530,8 @@ var player_interaction_coordinator: PlayerInteractionCoordinator
 @onready var staff_tools_button: TextureButton = $Control/StaffActionsPanel/MarginContainer/HBoxContainer/StaffToolsSlot/StaffToolsButton
 @onready var content_creator_tools_slot: PanelContainer = $Control/StaffActionsPanel/MarginContainer/HBoxContainer/ContentCreatorToolsSlot
 @onready var content_creator_tools_button: TextureButton = $Control/StaffActionsPanel/MarginContainer/HBoxContainer/ContentCreatorToolsSlot/ContentCreatorToolsButton
+@onready var alpha_tools_slot: PanelContainer = $Control/StaffActionsPanel/MarginContainer/HBoxContainer/AlphaToolsSlot
+@onready var alpha_tools_button: TextureButton = $Control/StaffActionsPanel/MarginContainer/HBoxContainer/AlphaToolsSlot/AlphaToolsButton
 @onready var dev_actions_slot: PanelContainer = $Control/StaffActionsPanel/MarginContainer/HBoxContainer/DevActionsSlot
 @onready var dev_actions_button: TextureButton = $Control/StaffActionsPanel/MarginContainer/HBoxContainer/DevActionsSlot/DevActionsButton
 @onready var mail_notification_sound: AudioStreamPlayer = $Control/MailNotificationSound
@@ -701,15 +704,23 @@ var pvp_match_countdown_active := false
 var pvp_match_countdown_finishing := false
 var pvp_match_countdown_match_id := ""
 var pvp_match_countdown_remaining := 0.0
+var session_logout_operation_id := ""
+var session_logout_execute_at_unix := 0.0
+var session_logout_message := ""
+var session_logout_last_announced_second := -1
 var pvp_banlists_in_flight := false
 var pvp_banlists_loaded := false
 var pvp_banlists_result: Dictionary = PvpRankedBanlists.not_loaded()
 var pvp_banlist_category_open: Dictionary = {}
 var pvp_banlist_category_search: Dictionary = {}
 var pvp_leaderboard_in_flight := false
+var pvp_leaderboard_entries: Array = []
 var pvp_leaderboard_scope_select: OptionButton
 var pvp_active_leaderboard_scope := "all_time"
 var pvp_history_in_flight := false
+var pvp_history_matches: Array = []
+var pvp_history_user_id := 0
+var pvp_live_entries: Array = []
 var pvp_ranked_team_validation_in_flight := false
 var pvp_ranked_queue_join_preparing := false
 var pvp_ranked_team_validation_request_seq := 0
@@ -720,6 +731,10 @@ var pvp_poll_in_flight := false
 var pvp_polling_active := false
 var pvp_poll_elapsed := 0.0
 var pvp_battle_starting := false
+var pvp_room_status_translation_key := "ui.pvp.room.ready"
+var pvp_room_status_translation_values: Dictionary = {}
+var pvp_queue_status_translation_key := "ui.pvp.queue.ready"
+var pvp_queue_status_translation_values: Dictionary = {}
 var pvp_room_dragging := false
 var pvp_room_drag_offset := Vector2.ZERO
 var staff_tools_popup: PanelContainer
@@ -824,6 +839,9 @@ var hotkey_sidebar_dragging := false
 var hotkey_sidebar_drag_offset := Vector2.ZERO
 var trainer_card_popup: PanelContainer
 var public_trainer_card_popup: PanelContainer
+var public_trainer_card_data: Dictionary = {}
+var trainer_card_tabs: TabContainer
+var trainer_card_subtitle_label: Label
 var trainer_card_avatar_viewports: Array[SubViewport] = []
 var trainer_card_money_label: Label
 var trainer_card_aether_gems_label: Label
@@ -839,6 +857,11 @@ var trainer_card_color_buttons: Dictionary = {}
 var trainer_card_hex_inputs: Dictionary = {}
 var trainer_card_natural_color_summary_buttons: Dictionary = {}
 var trainer_card_natural_colors_popup: PopupPanel
+var trainer_card_redeem_popup: PanelContainer
+var trainer_card_redeem_input: LineEdit
+var trainer_card_redeem_status: Label
+var trainer_card_redeem_submit: Button
+var trainer_card_redeem_in_flight := false
 var owned_appearance_parts: Dictionary = {}
 var appearance_inventory_slot_limit := DEFAULT_APPEARANCE_SLOT_LIMIT
 var appearance_inventory_slot_counts: Dictionary = {}
@@ -854,6 +877,8 @@ var trainer_card_badge_options: Array[Dictionary] = []
 var trainer_card_gym_badge_slots: Dictionary = {}
 var trainer_card_has_unsaved_appearance_changes := false
 var trainer_card_is_saving_appearance := false
+var trainer_card_appearance_message_key := ""
+var trainer_card_appearance_message_values: Dictionary = {}
 var trainer_card_dragging: bool = false
 var trainer_card_drag_offset := Vector2.ZERO
 var bag_popup: PanelContainer
@@ -917,6 +942,7 @@ var market_items: Array[Dictionary] = []
 var market_selected_item: Dictionary = {}
 var market_purchase_in_progress := false
 var market_mode := "player_buys"
+var market_context: Dictionary = {}
 var mailbox_messages: Array[Dictionary] = []
 var selected_mail_id := -1
 var active_mail_box := "inbox"
@@ -927,6 +953,7 @@ var mail_compose_party_pokemon: Array[Pokemon] = []
 var mail_selected_item_attachments: Array[Dictionary] = []
 var mail_selected_pokemon_ids: Array[int] = []
 var mail_selected_item_for_attachment: Dictionary = {}
+var mail_inventory_load_state := "idle"
 var socials_attention_sources: Dictionary = {}
 var socials_friend_list_attention_badge: Panel
 var socials_mail_attention_badge: Panel
@@ -983,6 +1010,8 @@ var pc_selected_release_name := ""
 var pc_party_slot_by_owned_id: Dictionary = {}
 var pc_move_in_progress := false
 var pc_release_in_progress := false
+var pc_status_translation_key := "ui.storage.status.idle"
+var pc_status_translation_values: Dictionary = {}
 var pc_release_mode_active := false
 var pc_popup_dragging := false
 var pc_popup_drag_offset := Vector2.ZERO
@@ -1075,10 +1104,13 @@ var evolution_sparkle_nodes: Array[Control] = []
 var evolution_tween: Tween
 var evolution_silhouette_material: ShaderMaterial
 var evolution_is_playing := false
-var content_creator_menu_popup: PanelContainer
-var content_creator_create_pokemon_button: Button
-var content_creator_clear_party_button: Button
-var content_creator_close_button: Button
+var evolution_overlay_active_evolution: Dictionary = {}
+var alpha_tools_popup: PanelContainer
+var content_creator_tools_popup: PanelContainer
+var content_creator_photo_mode_button: Button
+var alpha_create_pokemon_button: Button
+var alpha_clear_party_button: Button
+var alpha_tools_close_button: Button
 var dev_add_button: Button
 var dev_preview_evolution_button: Button
 var dev_add_menu_popup: PanelContainer
@@ -1117,6 +1149,7 @@ var item_dex_capture_label: Label
 var item_dex_sources_label: Label
 var item_dex_search_request_id := 0
 var item_dex_selected_item_id := ""
+var item_dex_selected_item: Dictionary = {}
 var item_dex_dragging := false
 var item_dex_drag_offset := Vector2.ZERO
 var pokedex_popup: PanelContainer
@@ -1149,12 +1182,18 @@ var pokedex_search_request_id := 0
 var pokedex_detail_request_id := 0
 var pokedex_search_debounce_timer: Timer
 var pokedex_species_list_icon_cache: Dictionary = {}
+var pokedex_results_state := "idle"
+var pokedex_results_owned_total := 0
+var pokedex_results_dex_total := 0
 var pokedex_dragging := false
 var pokedex_drag_offset := Vector2.ZERO
 var wild_pokemon_popup: PanelContainer
 var wild_pokemon_title_label: Label
 var wild_pokemon_content: VBoxContainer
 var wild_pokemon_request_id := 0
+var wild_pokemon_last_metadata: Dictionary = {}
+var wild_pokemon_message_key := ""
+var wild_pokemon_message_color := UI_MUTED_TEXT
 var wild_pokemon_button_hovered := false
 var wild_pokemon_button_tween: Tween
 var displayed_money: int = -1
@@ -1174,6 +1213,9 @@ func _ready() -> void:
 	add_to_group("ui_overlay")
 	layer = UI_OVERLAY_BASE_LAYER
 	root_control.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
+		LocalizationManager.locale_changed.connect(_on_locale_changed)
+	LocalizationManager.localize_tree(self)
 	_setup_player_status_card()
 	_setup_status_docks()
 	_setup_trainer_card_popup()
@@ -1195,7 +1237,8 @@ func _ready() -> void:
 	_setup_evolution_prompt_popup()
 	_setup_evolution_overlay()
 	_setup_dev_clear_menu_popup()
-	_setup_content_creator_menu_popup()
+	_setup_alpha_tools_popup()
+	_setup_content_creator_tools_popup()
 	_setup_pvp_room_popup()
 	_setup_pvp_queue_compact_panel()
 	_setup_pvp_match_countdown_overlay()
@@ -1220,6 +1263,7 @@ func _ready() -> void:
 	_refresh_utc_time_label(UTC_TIME_REFRESH_INTERVAL_SECONDS, true)
 	_refresh_location_weather(WorldPresenceService.current_weather_state)
 	_refresh_party()
+	_refresh_bag_localized_ui()
 	_load_mailbox.call_deferred()
 	_poll_pvp_ranked_queue_availability.call_deferred()
 
@@ -1290,6 +1334,7 @@ func _ready() -> void:
 	_setup_icon_slot_hover(pokedex_slot, pokedex_button)
 	_setup_icon_slot_hover(dev_actions_slot, dev_actions_button)
 	_setup_icon_slot_hover(staff_tools_slot, staff_tools_button)
+	_setup_icon_slot_hover(alpha_tools_slot, alpha_tools_button)
 	_setup_icon_slot_hover(content_creator_tools_slot, content_creator_tools_button)
 	_disable_icon_button_focus()
 	map_button.pressed.connect(_on_map_button_pressed)
@@ -1343,6 +1388,7 @@ func _ready() -> void:
 	wild_pokemon_button.mouse_entered.connect(_on_wild_pokemon_button_mouse_entered)
 	wild_pokemon_button.mouse_exited.connect(_on_wild_pokemon_button_mouse_exited)
 	wild_pokemon_button.pivot_offset = wild_pokemon_button.custom_minimum_size * 0.5
+	alpha_tools_button.pressed.connect(_on_alpha_tools_button_pressed)
 	content_creator_tools_button.pressed.connect(_on_content_creator_tools_button_pressed)
 	hotkey_sidebar_panel.gui_input.connect(_on_hotkey_sidebar_gui_input)
 	dev_add_pokemon_button.pressed.connect(_on_dev_add_pokemon_button_pressed)
@@ -1361,11 +1407,134 @@ func _ready() -> void:
 	dev_actions_close_button.pressed.connect(_on_dev_actions_close_button_pressed)
 	_refresh_dev_world_time_selector()
 	_refresh_dev_world_weather_selector()
+	if dev_pokemon_popup != null and dev_pokemon_popup.visible:
+		_refresh_dev_pokemon_popup_copy()
 	dev_actions_popup.visible = false
 	_refresh_dev_tools_visibility()
 	if settings_menu.has_signal("closed"):
 		settings_menu.closed.connect(_on_settings_menu_closed)
 	settings_menu.gui_input.connect(_on_focusable_overlay_panel_gui_input.bind(settings_menu))
+
+
+func _on_locale_changed(_locale: String) -> void:
+	LocalizationManager.localize_tree(self)
+	_refresh_location_label()
+	_refresh_utc_time_label(UTC_TIME_REFRESH_INTERVAL_SECONDS, true)
+	_refresh_location_weather(WorldPresenceService.current_weather_state)
+	_refresh_party()
+	_refresh_bag_localized_ui()
+	_refresh_market_localized_ui()
+	_refresh_pokedex_localized_ui()
+	_refresh_item_dex_localized_ui()
+	_refresh_wild_pokemon_localized_ui()
+	_refresh_mail_localized_ui()
+	_refresh_pc_localized_ui()
+	_refresh_pvp_localized_ui()
+	_refresh_trainer_card_localized_ui()
+	_refresh_chat_localized_ui()
+	_refresh_buffs_localized_ui()
+	_refresh_progression_prompts_localized_ui()
+	_refresh_dev_tools_localized_ui()
+	_refresh_dev_world_time_selector()
+	_refresh_dev_world_weather_selector()
+	if staff_impersonate_token_input != null and not staff_impersonate_in_flight:
+		_on_staff_impersonate_token_changed(staff_impersonate_token_input.text)
+	if staff_teleport_popup != null:
+		_refresh_staff_teleport_tab_visibility()
+		_rebuild_staff_teleport_map_options()
+		_rebuild_staff_teleport_player_options()
+		_rebuild_staff_teleport_send_map_options()
+
+
+func _refresh_pc_localized_ui() -> void:
+	if pc_popup == null:
+		return
+
+	LocalizationManager.localize_tree(pc_popup)
+	if pc_box_selector_panel != null:
+		LocalizationManager.localize_tree(pc_box_selector_panel)
+
+	var filters: Array = [
+		[pc_filter_species_input, "ui.storage.filter.species"],
+		[pc_filter_type_input, "ui.storage.filter.type"],
+		[pc_filter_nature_input, "ui.storage.filter.nature"],
+		[pc_filter_ability_input, "ui.storage.filter.ability"],
+		[pc_filter_move_input, "ui.storage.filter.move"],
+		[pc_filter_item_input, "ui.storage.filter.held_item"],
+	]
+	for filter_value: Variant in filters:
+		var filter_data: Array = filter_value as Array
+		var filter_input: LineEdit = filter_data[0] as LineEdit
+		if filter_input == null:
+			continue
+		var placeholder_key: String = str(filter_data[1])
+		_set_localized_control_property(filter_input, "placeholder_text", placeholder_key)
+		filter_input.tooltip_text = LocalizationManager.text(
+			"ui.storage.filter_by",
+			{"field": LocalizationManager.text(placeholder_key).to_lower()}
+		)
+
+	_refresh_pc_release_controls()
+	_refresh_pc_box_tabs()
+	_update_pc_box_header()
+	if pc_box_selector_panel != null and pc_box_selector_panel.visible:
+		_refresh_pc_box_selector()
+	if pc_party_list != null:
+		_render_pc_party()
+	if pc_box_grid != null:
+		_render_pc_box()
+	_set_pc_status(pc_status_translation_key, pc_status_translation_values)
+
+
+func _refresh_pvp_localized_ui() -> void:
+	if pvp_room_popup == null:
+		return
+	LocalizationManager.localize_tree(pvp_room_popup)
+	if pvp_mode_menu != null:
+		LocalizationManager.localize_tree(pvp_mode_menu)
+	if pvp_queue_compact_panel != null:
+		LocalizationManager.localize_tree(pvp_queue_compact_panel)
+	if pvp_match_countdown_overlay != null:
+		LocalizationManager.localize_tree(pvp_match_countdown_overlay)
+
+	for tab_container: TabContainer in [pvp_ranked_tabs, pvp_ranked_rules_tabs, pvp_ranked_battles_tabs]:
+		_refresh_pvp_tab_titles(tab_container)
+	_refresh_pvp_leaderboard_scope_options()
+	_render_pvp_team_preview()
+	_refresh_pvp_team_validator()
+	_render_pvp_banlists()
+	_render_pvp_live_battles(pvp_live_entries)
+	if not pvp_leaderboard_entries.is_empty():
+		_render_pvp_leaderboard(pvp_leaderboard_entries)
+	_render_pvp_history_matches(pvp_history_matches, pvp_history_user_id)
+	_refresh_pvp_room_form_title()
+	if pvp_room_code_label != null:
+		var room_code := pvp_active_room_code if pvp_active_room_code != "" else "-"
+		pvp_room_code_label.text = LocalizationManager.text(
+			"ui.pvp.room.spectating"
+			if pvp_room_selected_mode == "spectate" and pvp_active_room_code != ""
+			else "ui.pvp.room.code",
+			{"code": room_code}
+		)
+	if pvp_match_countdown_active:
+		_update_pvp_match_countdown_text()
+	elif pvp_match_countdown_status_label != null:
+		pvp_match_countdown_status_label.text = LocalizationManager.text("ui.pvp.countdown.soon")
+	_refresh_pvp_allow_spectators_checkbox(
+		pvp_allow_spectators_check != null and pvp_allow_spectators_check.button_pressed
+	)
+	_refresh_pvp_queue_buttons(_current_pvp_queue_status_for_buttons())
+	_refresh_pvp_queue_compact_panel(0.0)
+	_refresh_pvp_button_tooltip()
+	if pvp_room_status_translation_key != "":
+		_set_pvp_status_key(pvp_room_status_translation_key, pvp_room_status_translation_values)
+	if pvp_queue_status_translation_key != "":
+		_set_pvp_queue_status_key(pvp_queue_status_translation_key, pvp_queue_status_translation_values)
+	if pvp_popup_title_label != null:
+		pvp_popup_title_label.text = _pvp_popup_title_for_section(_current_pvp_section_name())
+	if pvp_popup_subtitle_label != null:
+		pvp_popup_subtitle_label.text = _pvp_popup_subtitle_for_section(_current_pvp_section_name())
+
 
 func _play_mail_notification_sound() -> void:
 	if mail_notification_sound == null:
@@ -1463,21 +1632,25 @@ func _refresh_dev_tools_visibility() -> void:
 	var can_teleport_other: bool = _can_teleport_other_player()
 	var can_use_content_creator_tools: bool = _can_use_content_creator_tools()
 	var can_use_content_creator_generation: bool = _can_use_content_creator_generation()
-	var can_open_content_creator_menu: bool = can_use_content_creator_tools or can_use_content_creator_generation
 	var has_staff_tool: bool = can_impersonate or can_teleport or can_teleport_to_player or can_teleport_other
-	var has_visible_staff_action: bool = has_staff_tool or can_use_dev_tools or can_open_content_creator_menu
+	var has_visible_staff_action: bool = has_staff_tool or can_use_dev_tools or can_use_content_creator_tools or can_use_content_creator_generation
 	PlayerSave.is_staff = _current_player_has_staff_role()
 	if content_creator_tools_slot != null:
-		content_creator_tools_slot.visible = can_show_staff_action_bar and can_open_content_creator_menu
+		content_creator_tools_slot.visible = can_show_staff_action_bar and can_use_content_creator_tools
 	if content_creator_tools_button != null:
-		content_creator_tools_button.visible = can_show_staff_action_bar and can_open_content_creator_menu
-		content_creator_tools_button.disabled = not can_open_content_creator_menu
-	if content_creator_create_pokemon_button != null:
-		content_creator_create_pokemon_button.visible = can_use_content_creator_generation
-		content_creator_create_pokemon_button.disabled = not can_use_content_creator_generation
-	if content_creator_clear_party_button != null:
-		content_creator_clear_party_button.visible = can_use_content_creator_generation
-		content_creator_clear_party_button.disabled = not can_use_content_creator_generation
+		content_creator_tools_button.visible = can_show_staff_action_bar and can_use_content_creator_tools
+		content_creator_tools_button.disabled = not can_use_content_creator_tools
+	if alpha_tools_slot != null:
+		alpha_tools_slot.visible = can_show_staff_action_bar and can_use_content_creator_generation
+	if alpha_tools_button != null:
+		alpha_tools_button.visible = can_show_staff_action_bar and can_use_content_creator_generation
+		alpha_tools_button.disabled = not can_use_content_creator_generation
+	if alpha_create_pokemon_button != null:
+		alpha_create_pokemon_button.visible = can_use_content_creator_generation
+		alpha_create_pokemon_button.disabled = not can_use_content_creator_generation
+	if alpha_clear_party_button != null:
+		alpha_clear_party_button.visible = can_use_content_creator_generation
+		alpha_clear_party_button.disabled = not can_use_content_creator_generation
 	dev_actions_slot.visible = can_show_staff_action_bar and can_use_dev_tools
 	dev_actions_button.visible = can_show_staff_action_bar and can_use_dev_tools
 	dev_actions_button.disabled = not can_use_dev_tools
@@ -1540,8 +1713,10 @@ func _refresh_dev_tools_visibility() -> void:
 			dev_clear_menu_popup.visible = false
 		if dev_badge_progress_popup != null:
 			dev_badge_progress_popup.close()
-	if not can_open_content_creator_menu and content_creator_menu_popup != null:
-		content_creator_menu_popup.visible = false
+	if not can_use_content_creator_generation and alpha_tools_popup != null:
+		alpha_tools_popup.visible = false
+	if not can_use_content_creator_tools and content_creator_tools_popup != null:
+		content_creator_tools_popup.visible = false
 	if not can_use_content_creator_generation and dev_pokemon_popup_mode == DevPokemonPopupMode.CONTENT_CREATOR:
 		dev_pokemon_popup.visible = false
 	if not can_impersonate and staff_impersonate_popup != null:
@@ -1653,7 +1828,7 @@ func _setup_mail_workspace_structure() -> void:
 	header.add_child(heading)
 	header.move_child(heading, 1)
 	title_label.reparent(heading)
-	title_label.text = "Mailbox"
+	_set_localized_control_property(title_label, "text", "ui.mail.title")
 	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title_label.add_theme_font_size_override("font_size", 21)
@@ -1661,16 +1836,16 @@ func _setup_mail_workspace_structure() -> void:
 
 	var subtitle := Label.new()
 	subtitle.name = "Subtitle"
-	subtitle.text = "Messages, deliveries and trainer gifts"
+	_set_localized_control_property(subtitle, "text", "ui.mail.subtitle")
 	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	subtitle.add_theme_font_size_override("font_size", 11)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	heading.add_child(subtitle)
 
-	mail_compose_button.text = "+  New Mail"
+	_set_localized_control_property(mail_compose_button, "text", "ui.mail.new")
 	mail_compose_button.custom_minimum_size = Vector2(132, 38)
 	mail_close_button.text = "×"
-	mail_close_button.tooltip_text = "Close mailbox"
+	_set_localized_control_property(mail_close_button, "tooltip_text", "ui.mail.close")
 	mail_close_button.custom_minimum_size = Vector2(38, 38)
 	mail_close_button.add_theme_font_size_override("font_size", 18)
 
@@ -1679,6 +1854,8 @@ func _setup_mail_workspace_structure() -> void:
 	tab_row.add_theme_constant_override("separation", 6)
 	mail_inbox_button.custom_minimum_size = Vector2(124, 36)
 	mail_sent_button.custom_minimum_size = Vector2(124, 36)
+	_set_localized_control_property(mail_inbox_button, "text", "ui.mail.inbox")
+	_set_localized_control_property(mail_sent_button, "text", "ui.mail.sent")
 	for button: Button in [
 		mail_compose_button,
 		mail_close_button,
@@ -1695,7 +1872,7 @@ func _setup_mail_workspace_structure() -> void:
 	tab_row.add_child(tab_spacer)
 
 	var mailbox_hint := Label.new()
-	mailbox_hint.text = "Select a message to read it"
+	_set_localized_control_property(mailbox_hint, "text", "ui.mail.select_hint")
 	mailbox_hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	mailbox_hint.add_theme_font_size_override("font_size", 11)
 	mailbox_hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -1713,11 +1890,12 @@ func _setup_mail_workspace_structure() -> void:
 	mail_list.add_theme_constant_override("separation", 7)
 
 	var inbox_label: Label = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailListPanel/MarginContainer/MailListScroll/MailList/InboxLabel
-	inbox_label.text = "INBOX"
+	inbox_label.text = LocalizationManager.text("ui.mail.inbox").to_upper()
 	inbox_label.add_theme_font_size_override("font_size", 10)
 	inbox_label.add_theme_color_override("font_color", Color("#60d3ff"))
 
 	mail_empty_inbox_label.custom_minimum_size = Vector2(0, 84)
+	mail_empty_inbox_label.text = LocalizationManager.text("ui.mail.empty.inbox")
 	mail_empty_inbox_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	mail_empty_inbox_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	mail_empty_inbox_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -1734,7 +1912,7 @@ func _setup_mail_workspace_structure() -> void:
 
 	var message_caption := Label.new()
 	message_caption.name = "MessageCaption"
-	message_caption.text = "MESSAGE"
+	_set_localized_control_property(message_caption, "text", "ui.mail.message")
 	message_caption.add_theme_font_size_override("font_size", 10)
 	message_caption.add_theme_color_override("font_color", Color("#60d3ff"))
 	detail_stack.add_child(message_caption)
@@ -1755,7 +1933,7 @@ func _setup_mail_workspace_structure() -> void:
 	mail_body_label.custom_minimum_size = Vector2(0, body_label_margin)
 
 	var attachment_title: Label = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/AttachmentTitle
-	attachment_title.text = "ATTACHMENTS"
+	attachment_title.text = LocalizationManager.text("ui.mail.attachments")
 	attachment_title.add_theme_font_size_override("font_size", 10)
 	attachment_title.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	var attachment_scroll: ScrollContainer = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/AttachmentScroll
@@ -1775,6 +1953,9 @@ func _setup_mail_workspace_structure() -> void:
 	mail_reply_button.custom_minimum_size = Vector2(92, 38)
 	mail_delete_button.reparent(action_row)
 	mail_delete_button.custom_minimum_size = Vector2(104, 38)
+	_set_localized_control_property(mail_claim_button, "text", "ui.mail.claim_attachments")
+	_set_localized_control_property(mail_reply_button, "text", "ui.mail.reply")
+	_set_localized_control_property(mail_delete_button, "text", "ui.mail.delete")
 
 func _setup_mail_compose_workspace_structure() -> void:
 	if bool(mail_compose_popup.get_meta("workspace_structure_ready", false)):
@@ -1801,41 +1982,71 @@ func _setup_mail_compose_workspace_structure() -> void:
 	var header: HBoxContainer = title_label.get_parent() as HBoxContainer
 	header.custom_minimum_size = Vector2(0, 42)
 	header.add_theme_constant_override("separation", 8)
-	title_label.text = "Compose Mail"
+	_set_localized_control_property(title_label, "text", "ui.mail.compose.title")
 	title_label.add_theme_font_size_override("font_size", 21)
 	title_label.add_theme_color_override("font_color", UI_TEXT)
-	mail_compose_help_button.tooltip_text = "View mail rules and delivery fees"
+	_set_localized_control_property(
+		mail_compose_help_button,
+		"tooltip_text",
+		"ui.mail.compose.rules_tooltip"
+	)
 	_apply_button_style(mail_compose_help_button)
 
 	mail_compose_close_button.reparent(header)
 	mail_compose_close_button.text = "×"
-	mail_compose_close_button.tooltip_text = "Close composer"
+	_set_localized_control_property(
+		mail_compose_close_button,
+		"tooltip_text",
+		"ui.mail.compose.close"
+	)
 	mail_compose_close_button.custom_minimum_size = Vector2(36, 34)
 	mail_compose_close_button.add_theme_font_size_override("font_size", 18)
 
 	var subtitle := Label.new()
 	subtitle.name = "Subtitle"
-	subtitle.text = "Send a message or safely deliver items and Pokémon."
+	_set_localized_control_property(subtitle, "text", "ui.mail.compose.subtitle")
 	subtitle.add_theme_font_size_override("font_size", 11)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	layout.add_child(subtitle)
 	layout.move_child(subtitle, header.get_index() + 1)
 
-	_add_mail_compose_field_caption(layout, mail_compose_recipient_input, "TO")
-	_add_mail_compose_field_caption(layout, mail_compose_subject_input, "SUBJECT")
-	_add_mail_compose_field_caption(layout, mail_compose_body_input, "MESSAGE")
+	_add_mail_compose_field_caption(layout, mail_compose_recipient_input, "ui.mail.compose.to")
+	_add_mail_compose_field_caption(layout, mail_compose_subject_input, "ui.mail.compose.subject")
+	_add_mail_compose_field_caption(layout, mail_compose_body_input, "ui.mail.message")
+	_set_localized_control_property(
+		mail_compose_recipient_input,
+		"placeholder_text",
+		"ui.mail.compose.recipient_placeholder"
+	)
+	_set_localized_control_property(
+		mail_compose_subject_input,
+		"placeholder_text",
+		"ui.mail.compose.subject_placeholder"
+	)
+	_set_localized_control_property(
+		mail_compose_body_input,
+		"placeholder_text",
+		"ui.mail.compose.message_placeholder"
+	)
 	mail_compose_recipient_input.custom_minimum_size = Vector2(0, 38)
 	mail_compose_subject_input.custom_minimum_size = Vector2(0, 38)
 	mail_compose_body_input.custom_minimum_size = Vector2(0, 112)
 
 	var attachments_title: Label = $Control/MailComposePopup/MarginContainer/VBoxContainer/AttachmentsTitle
-	attachments_title.text = "ATTACHMENTS"
+	_set_localized_control_property(attachments_title, "text", "ui.mail.attachments")
 	attachments_title.add_theme_font_size_override("font_size", 10)
 	attachments_title.add_theme_color_override("font_color", Color("#60d3ff"))
 	var item_row: HBoxContainer = $Control/MailComposePopup/MarginContainer/VBoxContainer/ItemAttachmentRow
 	var pokemon_row: HBoxContainer = $Control/MailComposePopup/MarginContainer/VBoxContainer/PokemonAttachmentRow
-	_add_mail_compose_field_caption(layout, item_row, "FROM YOUR BAG")
-	_add_mail_compose_field_caption(layout, pokemon_row, "FROM YOUR PARTY")
+	_add_mail_compose_field_caption(layout, item_row, "ui.mail.compose.from_bag")
+	_add_mail_compose_field_caption(layout, pokemon_row, "ui.mail.compose.from_party")
+	_set_localized_control_property(
+		mail_item_search_input,
+		"placeholder_text",
+		"ui.mail.compose.item_search"
+	)
+	_set_localized_control_property(mail_add_item_button, "text", "ui.mail.compose.add_item")
+	_set_localized_control_property(mail_add_pokemon_button, "text", "ui.mail.compose.add_pokemon")
 	mail_item_search_input.custom_minimum_size = Vector2(300, 36)
 	mail_item_quantity.custom_minimum_size = Vector2(88, 36)
 	mail_add_item_button.custom_minimum_size = Vector2(112, 36)
@@ -1858,13 +2069,13 @@ func _setup_mail_compose_workspace_structure() -> void:
 
 	var button_row: HBoxContainer = $Control/MailComposePopup/MarginContainer/VBoxContainer/ButtonRow
 	button_row.add_theme_constant_override("separation", 8)
-	mail_compose_send_button.text = "Send Mail"
+	_set_localized_control_property(mail_compose_send_button, "text", "ui.mail.compose.send")
 	mail_compose_send_button.custom_minimum_size = Vector2(136, 40)
 
-func _add_mail_compose_field_caption(layout: VBoxContainer, target: Control, caption_text: String) -> void:
+func _add_mail_compose_field_caption(layout: VBoxContainer, target: Control, caption_key: String) -> void:
 	var caption := Label.new()
-	caption.name = "%sCaption" % caption_text.to_pascal_case().replace(" ", "")
-	caption.text = caption_text
+	caption.name = "%sCaption" % target.name
+	_set_localized_control_property(caption, "text", caption_key)
 	caption.add_theme_font_size_override("font_size", 9)
 	caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	var target_index: int = target.get_index()
@@ -1960,7 +2171,7 @@ func _setup_pc_ui() -> void:
 	header.add_child(title_stack)
 
 	var title := Label.new()
-	title.text = "Pokémon Storage"
+	_set_localized_control_property(title, "text", "ui.storage.title")
 	title.mouse_filter = Control.MOUSE_FILTER_STOP
 	title.gui_input.connect(_on_pc_header_gui_input)
 	title.mouse_default_cursor_shape = Control.CURSOR_MOVE
@@ -1970,7 +2181,7 @@ func _setup_pc_ui() -> void:
 	title_stack.add_child(title)
 
 	var subtitle := Label.new()
-	subtitle.text = "Organize your party and stored Pokémon"
+	_set_localized_control_property(subtitle, "text", "ui.storage.subtitle")
 	subtitle.mouse_filter = Control.MOUSE_FILTER_STOP
 	subtitle.gui_input.connect(_on_pc_header_gui_input)
 	subtitle.mouse_default_cursor_shape = Control.CURSOR_MOVE
@@ -1980,10 +2191,10 @@ func _setup_pc_ui() -> void:
 	title_stack.add_child(subtitle)
 
 	pc_release_mode_button = Button.new()
-	pc_release_mode_button.text = "Release"
+	_set_localized_control_property(pc_release_mode_button, "text", "ui.storage.release")
 	pc_release_mode_button.custom_minimum_size = Vector2(90, 34)
 	pc_release_mode_button.focus_mode = Control.FOCUS_NONE
-	pc_release_mode_button.tooltip_text = "Choose Pokémon to release"
+	_set_localized_control_property(pc_release_mode_button, "tooltip_text", "ui.storage.release.choose")
 	pc_release_mode_button.pressed.connect(_on_pc_release_mode_button_pressed)
 	_apply_button_style(pc_release_mode_button, "secondary")
 	header.add_child(pc_release_mode_button)
@@ -1992,7 +2203,7 @@ func _setup_pc_ui() -> void:
 	pc_close_button.text = "×"
 	pc_close_button.custom_minimum_size = Vector2(36, 34)
 	pc_close_button.focus_mode = Control.FOCUS_NONE
-	pc_close_button.tooltip_text = "Close Pokémon Storage"
+	_set_localized_control_property(pc_close_button, "tooltip_text", "ui.storage.close")
 	pc_close_button.pressed.connect(_on_pc_close_button_pressed)
 	_apply_button_style(pc_close_button)
 	header.add_child(pc_close_button)
@@ -2021,7 +2232,7 @@ func _setup_pc_ui() -> void:
 	party_stack.add_theme_constant_override("separation", 8)
 	party_margin.add_child(party_stack)
 
-	var party_section_label := _create_pc_section_caption("YOUR PARTY")
+	var party_section_label := _create_pc_section_caption("ui.storage.section.party")
 	party_stack.add_child(party_section_label)
 
 	var party_heading_row := HBoxContainer.new()
@@ -2029,7 +2240,7 @@ func _setup_pc_ui() -> void:
 	party_stack.add_child(party_heading_row)
 
 	var party_title := Label.new()
-	party_title.text = "Current Team"
+	_set_localized_control_property(party_title, "text", "ui.storage.current_team")
 	party_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	party_title.add_theme_font_size_override("font_size", 16)
 	party_title.add_theme_color_override("font_color", UI_TEXT)
@@ -2076,7 +2287,7 @@ func _setup_pc_ui() -> void:
 	box_header.add_child(box_heading_stack)
 
 	pc_box_title_label = Label.new()
-	pc_box_title_label.text = "Box 1"
+	pc_box_title_label.text = LocalizationManager.text("ui.storage.box.default", {"number": 1})
 	pc_box_title_label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	pc_box_title_label.mouse_filter = Control.MOUSE_FILTER_STOP
 	pc_box_title_label.gui_input.connect(_on_pc_box_title_gui_input)
@@ -2102,13 +2313,16 @@ func _setup_pc_ui() -> void:
 	pc_box_rename_button.text = "✎"
 	pc_box_rename_button.custom_minimum_size = Vector2(30, 30)
 	pc_box_rename_button.focus_mode = Control.FOCUS_NONE
-	pc_box_rename_button.tooltip_text = "Rename this box"
+	_set_localized_control_property(pc_box_rename_button, "tooltip_text", "ui.storage.box.rename")
 	pc_box_rename_button.pressed.connect(_begin_pc_box_inline_rename)
 	_apply_button_style(pc_box_rename_button)
 	box_title_row.add_child(pc_box_rename_button)
 
 	pc_box_capacity_label = Label.new()
-	pc_box_capacity_label.text = "0 / 30 Pokémon"
+	pc_box_capacity_label.text = LocalizationManager.text(
+		"ui.storage.capacity",
+		{"occupied": 0, "capacity": 30}
+	)
 	pc_box_capacity_label.add_theme_font_size_override("font_size", 10)
 	pc_box_capacity_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	box_heading_stack.add_child(pc_box_capacity_label)
@@ -2117,7 +2331,7 @@ func _setup_pc_ui() -> void:
 	pc_box_tab_prev_button.text = "‹"
 	pc_box_tab_prev_button.custom_minimum_size = Vector2(34, 32)
 	pc_box_tab_prev_button.focus_mode = Control.FOCUS_NONE
-	pc_box_tab_prev_button.tooltip_text = "Previous box"
+	_set_localized_control_property(pc_box_tab_prev_button, "tooltip_text", "ui.storage.box.previous")
 	pc_box_tab_prev_button.pressed.connect(_on_pc_box_step_pressed.bind(-1))
 	_apply_button_style(pc_box_tab_prev_button)
 	box_header.add_child(pc_box_tab_prev_button)
@@ -2126,7 +2340,7 @@ func _setup_pc_ui() -> void:
 	pc_box_tab_next_button.text = "›"
 	pc_box_tab_next_button.custom_minimum_size = Vector2(34, 32)
 	pc_box_tab_next_button.focus_mode = Control.FOCUS_NONE
-	pc_box_tab_next_button.tooltip_text = "Next box"
+	_set_localized_control_property(pc_box_tab_next_button, "tooltip_text", "ui.storage.box.next")
 	pc_box_tab_next_button.pressed.connect(_on_pc_box_step_pressed.bind(1))
 	_apply_button_style(pc_box_tab_next_button)
 	box_header.add_child(pc_box_tab_next_button)
@@ -2135,7 +2349,7 @@ func _setup_pc_ui() -> void:
 	pc_box_selector_button.text = "☷"
 	pc_box_selector_button.custom_minimum_size = Vector2(34, 32)
 	pc_box_selector_button.focus_mode = Control.FOCUS_NONE
-	pc_box_selector_button.tooltip_text = "Show all boxes"
+	_set_localized_control_property(pc_box_selector_button, "tooltip_text", "ui.storage.box.show_all")
 	pc_box_selector_button.pressed.connect(_toggle_pc_box_selector)
 	_apply_button_style(pc_box_selector_button)
 	box_header.add_child(pc_box_selector_button)
@@ -2145,7 +2359,7 @@ func _setup_pc_ui() -> void:
 	box_tabs_row.add_theme_constant_override("separation", 8)
 	box_stack.add_child(box_tabs_row)
 
-	var boxes_caption := _create_pc_section_caption("BOXES")
+	var boxes_caption := _create_pc_section_caption("ui.storage.section.boxes")
 	boxes_caption.custom_minimum_size = Vector2(42, 0)
 	boxes_caption.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	box_tabs_row.add_child(boxes_caption)
@@ -2161,27 +2375,27 @@ func _setup_pc_ui() -> void:
 	box_stack.add_child(search_row)
 
 	pc_search_input = LineEdit.new()
-	pc_search_input.placeholder_text = "Search Pokémon across all boxes…"
+	_set_localized_control_property(pc_search_input, "placeholder_text", "ui.storage.search")
 	pc_search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pc_search_input.custom_minimum_size = Vector2(0, 38)
 	pc_search_input.clear_button_enabled = true
-	pc_search_input.tooltip_text = "Search all storage boxes"
+	_set_localized_control_property(pc_search_input, "tooltip_text", "ui.storage.search_tooltip")
 	pc_search_input.text_changed.connect(_on_pc_search_text_changed)
 	_apply_line_edit_style(pc_search_input)
 	search_row.add_child(pc_search_input)
 
 	pc_filter_button = Button.new()
-	pc_filter_button.text = "Filter"
+	_set_localized_control_property(pc_filter_button, "text", "ui.storage.filter")
 	pc_filter_button.custom_minimum_size = Vector2(72, 38)
 	pc_filter_button.focus_mode = Control.FOCUS_NONE
 	pc_filter_button.toggle_mode = true
-	pc_filter_button.tooltip_text = "Filter by multiple criteria"
+	_set_localized_control_property(pc_filter_button, "tooltip_text", "ui.storage.filter_tooltip")
 	pc_filter_button.toggled.connect(_on_pc_filter_toggled)
 	_apply_button_style(pc_filter_button)
 	search_row.add_child(pc_filter_button)
 
 	pc_search_results_label = Label.new()
-	pc_search_results_label.text = "ALL BOXES"
+	_set_localized_control_property(pc_search_results_label, "text", "ui.storage.all_boxes")
 	pc_search_results_label.custom_minimum_size = Vector2(78, 0)
 	pc_search_results_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	pc_search_results_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -2205,12 +2419,12 @@ func _setup_pc_ui() -> void:
 	filter_grid.add_theme_constant_override("h_separation", 8)
 	filter_grid.add_theme_constant_override("v_separation", 6)
 	filter_margin.add_child(filter_grid)
-	pc_filter_species_input = _create_pc_filter_input("Species")
-	pc_filter_type_input = _create_pc_filter_input("Type")
-	pc_filter_nature_input = _create_pc_filter_input("Nature")
-	pc_filter_ability_input = _create_pc_filter_input("Ability")
-	pc_filter_move_input = _create_pc_filter_input("Move")
-	pc_filter_item_input = _create_pc_filter_input("Held item")
+	pc_filter_species_input = _create_pc_filter_input("ui.storage.filter.species")
+	pc_filter_type_input = _create_pc_filter_input("ui.storage.filter.type")
+	pc_filter_nature_input = _create_pc_filter_input("ui.storage.filter.nature")
+	pc_filter_ability_input = _create_pc_filter_input("ui.storage.filter.ability")
+	pc_filter_move_input = _create_pc_filter_input("ui.storage.filter.move")
+	pc_filter_item_input = _create_pc_filter_input("ui.storage.filter.held_item")
 	for filter_input: LineEdit in [pc_filter_species_input, pc_filter_type_input, pc_filter_nature_input, pc_filter_ability_input, pc_filter_move_input, pc_filter_item_input]:
 		filter_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		filter_input.custom_minimum_size = Vector2(0, 32)
@@ -2249,7 +2463,11 @@ func _setup_pc_ui() -> void:
 	pc_release_drop_panel.name = "ReleaseDropZone"
 	pc_release_drop_panel.visible = false
 	pc_release_drop_panel.custom_minimum_size = Vector2(0, 58)
-	pc_release_drop_panel.tooltip_text = "Drag a Pokémon here to release it permanently"
+	_set_localized_control_property(
+		pc_release_drop_panel,
+		"tooltip_text",
+		"ui.storage.release.drop_tooltip"
+	)
 	pc_release_drop_panel.mouse_default_cursor_shape = Control.CURSOR_ARROW
 	pc_release_drop_panel.add_theme_stylebox_override("panel", _make_pc_release_zone_style())
 	box_stack.add_child(pc_release_drop_panel)
@@ -2266,7 +2484,7 @@ func _setup_pc_ui() -> void:
 	release_margin.add_child(release_stack)
 
 	pc_release_hint_label = Label.new()
-	pc_release_hint_label.text = "Drop a Pokémon here to release it"
+	_set_localized_control_property(pc_release_hint_label, "text", "ui.storage.release.drop_hint")
 	pc_release_hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	pc_release_hint_label.add_theme_font_size_override("font_size", 13)
 	pc_release_hint_label.add_theme_color_override("font_color", Color("#ffd0d4"))
@@ -2275,7 +2493,7 @@ func _setup_pc_ui() -> void:
 	release_stack.add_child(pc_release_hint_label)
 
 	var release_warning_label := Label.new()
-	release_warning_label.text = "PERMANENT · THIS CANNOT BE UNDONE"
+	_set_localized_control_property(release_warning_label, "text", "ui.storage.release.warning")
 	release_warning_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	release_warning_label.add_theme_font_size_override("font_size", 9)
 	release_warning_label.add_theme_color_override("font_color", UI_DANGER)
@@ -2305,7 +2523,7 @@ func _setup_pc_ui() -> void:
 	status_row.add_child(status_dot)
 
 	pc_status_label = Label.new()
-	pc_status_label.text = "Drag to move  ·  Click to inspect"
+	_set_localized_control_property(pc_status_label, "text", "ui.storage.status.idle")
 	pc_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pc_status_label.add_theme_font_size_override("font_size", 11)
 	pc_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -2316,9 +2534,9 @@ func _setup_pc_ui() -> void:
 	pc_popup.gui_input.connect(_on_focusable_overlay_panel_gui_input.bind(pc_popup))
 
 
-func _create_pc_section_caption(text: String) -> Label:
+func _create_pc_section_caption(key: String) -> Label:
 	var label := Label.new()
-	label.text = text
+	_set_localized_control_property(label, "text", key)
 	label.add_theme_font_size_override("font_size", 9)
 	label.add_theme_color_override("font_color", PC_ACCENT)
 	return label
@@ -2390,7 +2608,11 @@ func _setup_mail_compose_help_button() -> void:
 	mail_compose_help_button.text = "?"
 	mail_compose_help_button.custom_minimum_size = Vector2(32, 30)
 	mail_compose_help_button.focus_mode = Control.FOCUS_NONE
-	mail_compose_help_button.tooltip_text = "Mail rules\nMessage only: 50\nWith gifts: 400\nWait 2 minutes between mails\nUp to 5 kinds of items and 5 Pokémon\nPokémon must not be holding an item"
+	_set_localized_control_property(
+		mail_compose_help_button,
+		"tooltip_text",
+		"ui.mail.rules.summary"
+	)
 	mail_compose_help_button.pressed.connect(_toggle_mail_compose_help_popup)
 	header.add_child(mail_compose_help_button)
 	_apply_button_style(mail_compose_help_button, "primary")
@@ -2421,28 +2643,28 @@ func _setup_mail_compose_help_popup() -> void:
 	margin.add_child(layout)
 
 	var title := Label.new()
-	title.text = "Mail Rules"
+	_set_localized_control_property(title, "text", "ui.mail.rules.title")
 	title.add_theme_font_size_override("font_size", 18)
 	title.add_theme_color_override("font_color", Color("#f5df9a"))
 	layout.add_child(title)
 
-	for line in [
-		"Base fee: 50",
-		"With attachments: 400",
-		"Cooldown: 2 minutes",
-		"Max item stacks: 5",
-		"Max Pokemon: 5",
-		"Pokemon cannot hold items.",
+	for line_key in [
+		"ui.mail.rules.base_fee",
+		"ui.mail.rules.attachments_fee",
+		"ui.mail.rules.cooldown",
+		"ui.mail.rules.max_item_stacks",
+		"ui.mail.rules.max_pokemon",
+		"ui.mail.rules.no_held_items",
 	]:
 		var label := Label.new()
-		label.text = line
+		_set_localized_control_property(label, "text", line_key)
 		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		label.add_theme_font_size_override("font_size", 13)
 		label.add_theme_color_override("font_color", UI_TEXT)
 		layout.add_child(label)
 
 	var close_button := Button.new()
-	close_button.text = "Close"
+	_set_localized_control_property(close_button, "text", "common.close")
 	close_button.custom_minimum_size = Vector2(0, 32)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_mail_compose_help_popup)
@@ -2541,7 +2763,8 @@ func _apply_ui_z_index_policy() -> void:
 		dev_add_item_popup,
 		dev_add_money_popup,
 		dev_add_menu_popup,
-		content_creator_menu_popup,
+		alpha_tools_popup,
+		content_creator_tools_popup,
 		staff_tools_popup,
 		staff_impersonate_popup,
 		staff_teleport_popup,
@@ -2602,7 +2825,8 @@ func _has_visible_priority_overlay_panel() -> bool:
 		dev_add_item_popup,
 		dev_add_money_popup,
 		dev_add_menu_popup,
-		content_creator_menu_popup,
+		alpha_tools_popup,
+		content_creator_tools_popup,
 		staff_tools_popup,
 		staff_impersonate_popup,
 		staff_teleport_popup,
@@ -2800,7 +3024,7 @@ func _setup_ui_confirm_popup() -> void:
 	stack.add_child(header)
 
 	ui_confirm_title_label = Label.new()
-	ui_confirm_title_label.text = "Confirm"
+	_set_localized_control_property(ui_confirm_title_label, "text", "common.confirm")
 	ui_confirm_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	ui_confirm_title_label.add_theme_font_size_override("font_size", 17)
 	ui_confirm_title_label.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
@@ -2808,6 +3032,7 @@ func _setup_ui_confirm_popup() -> void:
 
 	var close_button := Button.new()
 	close_button.text = "X"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.custom_minimum_size = Vector2(32, 28)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_on_ui_confirm_cancel_pressed)
@@ -2828,7 +3053,7 @@ func _setup_ui_confirm_popup() -> void:
 	stack.add_child(button_row)
 
 	ui_confirm_cancel_button = Button.new()
-	ui_confirm_cancel_button.text = "Cancel"
+	_set_localized_control_property(ui_confirm_cancel_button, "text", "common.cancel")
 	ui_confirm_cancel_button.custom_minimum_size = Vector2(112, 32)
 	ui_confirm_cancel_button.focus_mode = Control.FOCUS_NONE
 	ui_confirm_cancel_button.pressed.connect(_on_ui_confirm_cancel_pressed)
@@ -2836,7 +3061,7 @@ func _setup_ui_confirm_popup() -> void:
 	button_row.add_child(ui_confirm_cancel_button)
 
 	ui_confirm_confirm_button = Button.new()
-	ui_confirm_confirm_button.text = "Confirm"
+	_set_localized_control_property(ui_confirm_confirm_button, "text", "common.confirm")
 	ui_confirm_confirm_button.custom_minimum_size = Vector2(128, 32)
 	ui_confirm_confirm_button.focus_mode = Control.FOCUS_NONE
 	ui_confirm_confirm_button.pressed.connect(_on_ui_confirm_confirm_pressed)
@@ -2850,7 +3075,7 @@ func _show_ui_confirm_popup(
 	callback: Callable,
 	size: Vector2i = Vector2i(460, 190),
 	danger_confirm: bool = false,
-	cancel_text: String = "Cancel",
+	cancel_text: String = "",
 	cancel_callback: Callable = Callable()
 ) -> void:
 	if ui_confirm_popup == null:
@@ -2863,7 +3088,11 @@ func _show_ui_confirm_popup(
 	ui_confirm_message_label.text = message
 	ui_confirm_confirm_button.text = confirm_text
 	_apply_button_style(ui_confirm_confirm_button, "danger" if danger_confirm else "primary")
-	ui_confirm_cancel_button.text = cancel_text
+	ui_confirm_cancel_button.text = (
+		LocalizationManager.text("common.cancel")
+		if cancel_text == ""
+		else cancel_text
+	)
 
 	var popup_size := Vector2(size)
 	if popup_size.y <= 0.0:
@@ -2928,7 +3157,7 @@ func _setup_move_learn_popup() -> void:
 	margin.add_child(stack)
 
 	move_learn_title_label = Label.new()
-	move_learn_title_label.text = "Learn Move"
+	_set_localized_control_property(move_learn_title_label, "text", "ui.move_learning.title")
 	move_learn_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	move_learn_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	move_learn_title_label.add_theme_font_size_override("font_size", 17)
@@ -2961,7 +3190,7 @@ func _setup_move_learn_popup() -> void:
 	stack.add_child(button_row)
 
 	move_learn_confirm_button = Button.new()
-	move_learn_confirm_button.text = "Learn"
+	_set_localized_control_property(move_learn_confirm_button, "text", "ui.move_learning.learn")
 	move_learn_confirm_button.custom_minimum_size = Vector2(132, 42)
 	move_learn_confirm_button.focus_mode = Control.FOCUS_NONE
 	move_learn_confirm_button.disabled = true
@@ -2970,7 +3199,7 @@ func _setup_move_learn_popup() -> void:
 	button_row.add_child(move_learn_confirm_button)
 
 	move_learn_skip_button = Button.new()
-	move_learn_skip_button.text = "Cancel"
+	_set_localized_control_property(move_learn_skip_button, "text", "ui.move_learning.do_not_learn")
 	move_learn_skip_button.custom_minimum_size = Vector2(132, 42)
 	move_learn_skip_button.focus_mode = Control.FOCUS_NONE
 	move_learn_skip_button.pressed.connect(_on_move_learn_skip_pressed)
@@ -3019,7 +3248,7 @@ func _setup_evolution_prompt_popup() -> void:
 	stack.add_child(header)
 
 	evolution_prompt_title_label = Label.new()
-	evolution_prompt_title_label.text = "Evolution"
+	_set_localized_control_property(evolution_prompt_title_label, "text", "ui.evolution.title")
 	evolution_prompt_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	evolution_prompt_title_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	evolution_prompt_title_label.add_theme_font_size_override("font_size", 19)
@@ -3080,7 +3309,11 @@ func _setup_evolution_prompt_popup() -> void:
 	stack.add_child(button_row)
 
 	evolution_prompt_skip_button = Button.new()
-	evolution_prompt_skip_button.text = "Do not evolve"
+	_set_localized_control_property(
+		evolution_prompt_skip_button,
+		"text",
+		"ui.evolution.do_not_evolve"
+	)
 	evolution_prompt_skip_button.custom_minimum_size = Vector2(132, 36)
 	evolution_prompt_skip_button.focus_mode = Control.FOCUS_NONE
 	evolution_prompt_skip_button.pressed.connect(_on_evolution_skipped)
@@ -3088,7 +3321,7 @@ func _setup_evolution_prompt_popup() -> void:
 	button_row.add_child(evolution_prompt_skip_button)
 
 	evolution_prompt_confirm_button = Button.new()
-	evolution_prompt_confirm_button.text = "Evolve"
+	_set_localized_control_property(evolution_prompt_confirm_button, "text", "ui.evolution.evolve")
 	evolution_prompt_confirm_button.custom_minimum_size = Vector2(132, 36)
 	evolution_prompt_confirm_button.focus_mode = Control.FOCUS_NONE
 	evolution_prompt_confirm_button.pressed.connect(_on_evolution_confirmed)
@@ -3197,7 +3430,7 @@ func _setup_evolution_overlay() -> void:
 
 	evolution_continue_button = Button.new()
 	evolution_continue_button.name = "ContinueButton"
-	evolution_continue_button.text = "Continue"
+	_set_localized_control_property(evolution_continue_button, "text", "common.continue")
 	evolution_continue_button.custom_minimum_size = Vector2(140, 40)
 	evolution_continue_button.focus_mode = Control.FOCUS_NONE
 	evolution_continue_button.pressed.connect(_hide_evolution_overlay)
@@ -3358,17 +3591,26 @@ func play_evolution_overlay(evolution: Dictionary) -> void:
 		evolution_tween.kill()
 
 	var shiny := bool(evolution.get("shiny", false))
+	evolution_overlay_active_evolution = evolution.duplicate(true)
 	var old_texture := PokemonAssets.load_home_sprite(old_species, shiny)
 	var new_texture := PokemonAssets.load_home_sprite(new_species, shiny)
+	var old_species_name := _localized_species_name(old_species, old_species)
+	var new_species_name := _localized_species_name(new_species, new_species)
 	if old_texture == null or new_texture == null:
-		add_system_message("%s evolved into %s!" % [old_species, new_species])
+		add_system_message(LocalizationManager.text(
+			"ui.evolution.result.evolved",
+			{"from": old_species_name, "to": new_species_name}
+		))
 		return
 
 	evolution_is_playing = true
 	evolution_old_sprite.texture = old_texture
 	evolution_silhouette_sprite.texture = old_texture
 	evolution_new_sprite.texture = new_texture
-	evolution_title_label.text = "What? %s is evolving!" % old_species
+	evolution_title_label.text = LocalizationManager.text(
+		"ui.evolution.overlay.start",
+		{"pokemon": old_species_name}
+	)
 	evolution_message_label.text = ""
 	evolution_overlay.visible = true
 	evolution_overlay.move_to_front()
@@ -3393,7 +3635,10 @@ func play_evolution_overlay(evolution: Dictionary) -> void:
 	evolution_tween.tween_interval(0.22)
 	await evolution_tween.finished
 
-	evolution_message_label.text = "Congratulations! %s evolved into %s!" % [old_species, new_species]
+	evolution_message_label.text = LocalizationManager.text(
+		"ui.evolution.overlay.complete",
+		{"from": old_species_name, "to": new_species_name}
+	)
 	evolution_continue_button.visible = true
 	evolution_is_playing = false
 	await evolution_continue_button.pressed
@@ -3452,6 +3697,7 @@ func _hide_evolution_overlay() -> void:
 		evolution_tween.kill()
 	evolution_tween = null
 	evolution_is_playing = false
+	evolution_overlay_active_evolution.clear()
 	if evolution_overlay != null:
 		evolution_overlay.visible = false
 	_reset_evolution_visuals()
@@ -3605,7 +3851,11 @@ func _show_next_evolution_prompt() -> void:
 		var prompt: Dictionary = evolution_prompt_queue.pop_front()
 		var pokemon := _find_party_pokemon_by_owned_id(int(prompt.get("pokemonId", 0)))
 		if pokemon == null:
-			add_system_message("Could not open evolution prompt for %s." % _evolution_prompt_from_species(prompt))
+			var source_species := _evolution_prompt_from_species(prompt)
+			add_system_message(LocalizationManager.text(
+				"ui.evolution.error.open_prompt",
+				{"pokemon": _localized_species_name(source_species, source_species)}
+			))
 			continue
 
 		evolution_prompt_review_index += 1
@@ -3621,12 +3871,24 @@ func _render_evolution_prompt(prompt: Dictionary) -> void:
 
 	var from_species := _evolution_prompt_from_species(prompt)
 	var to_species := _evolution_prompt_to_species(prompt)
+	var from_species_name := _localized_species_name(from_species, from_species)
+	var to_species_name := _localized_species_name(
+		_evolution_prompt_target_species_id(prompt),
+		to_species
+	)
 	var progress_label := _evolution_queue_progress_label()
 	var level := int(prompt.get("level", 0))
-	evolution_prompt_title_label.text = "Evolution"
+	evolution_prompt_title_label.text = LocalizationManager.text("ui.evolution.title")
 	evolution_prompt_progress_label.text = progress_label
-	evolution_prompt_message_label.text = "%s can evolve into %s." % [from_species, to_species]
-	evolution_prompt_level_label.text = "Available at Lv. %s" % level if level > 0 else ""
+	evolution_prompt_message_label.text = LocalizationManager.text(
+		"ui.evolution.available",
+		{"from": from_species_name, "to": to_species_name}
+	)
+	evolution_prompt_level_label.text = (
+		LocalizationManager.text("ui.evolution.available_level", {"level": level})
+		if level > 0
+		else ""
+	)
 	evolution_prompt_status_label.text = ""
 	evolution_prompt_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	_set_evolution_prompt_controls_disabled(false)
@@ -3668,13 +3930,14 @@ func _submit_evolution_choice(confirm: bool) -> void:
 	var pokemon_id := int(prompt.get("pokemonId", 0))
 	var target_species_id := _evolution_prompt_target_species_id(prompt)
 	var from_species := _evolution_prompt_from_species(prompt)
-	evolution_prompt_status_label.text = "Saving..."
+	evolution_prompt_status_label.text = LocalizationManager.text("common.saving")
 	evolution_prompt_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	var result: Dictionary = await PlayerPartyStateService.evolve_pokemon(pokemon_id, target_species_id, confirm)
 	evolution_prompt_processing = false
 
 	if not bool(result.get("success", false)):
-		evolution_prompt_status_label.text = str(result.get("error", "Could not save evolution choice."))
+		push_warning("UIOverlay: evolution choice failed: %s" % str(result.get("error", "Unknown error")))
+		evolution_prompt_status_label.text = LocalizationManager.text("ui.evolution.error.save")
 		evolution_prompt_status_label.add_theme_color_override("font_color", UI_DANGER)
 		_set_evolution_prompt_controls_disabled(false)
 		return
@@ -3690,11 +3953,21 @@ func _submit_evolution_choice(confirm: bool) -> void:
 		if evolution_prompt_popup != null:
 			evolution_prompt_popup.visible = false
 		await play_evolution_overlay(evolution)
-		add_system_message("%s evolved into %s!" % [from_species, _evolution_prompt_to_species(evolution)])
+		var to_species := _evolution_prompt_to_species(evolution)
+		add_system_message(LocalizationManager.text(
+			"ui.evolution.result.evolved",
+			{
+				"from": _localized_species_name(from_species, from_species),
+				"to": _localized_species_name(target_species_id, to_species),
+			}
+		))
 	else:
 		if evolution_prompt_popup != null:
 			evolution_prompt_popup.visible = false
-		add_system_message("%s did not evolve." % from_species)
+		add_system_message(LocalizationManager.text(
+			"ui.evolution.result.skipped",
+			{"pokemon": _localized_species_name(from_species, from_species)}
+		))
 
 	evolution_active_prompt.clear()
 	_refresh_party()
@@ -3770,7 +4043,7 @@ func _discard_move_learn_review_prompt() -> void:
 
 func _finish_move_learn_review_queue() -> void:
 	if move_learn_pending_review_total > 1 and move_learn_pending_review_index >= move_learn_pending_review_total:
-		add_system_message("Move learning review complete.")
+		add_system_message(LocalizationManager.text("ui.move_learning.review_complete"))
 	move_learn_pending_review_total = 0
 	move_learn_pending_review_index = 0
 
@@ -3786,7 +4059,16 @@ func _show_next_move_learn_prompt() -> void:
 		var prompt: Dictionary = move_learn_queue.pop_front()
 		var pokemon := _find_party_pokemon_by_owned_id(int(prompt.get("pokemonId", 0)))
 		if pokemon == null:
-			add_system_message("Could not open move learning prompt for %s." % str(prompt.get("species", "Pokemon")))
+			var source_species := str(prompt.get("species", "")).strip_edges()
+			add_system_message(LocalizationManager.text(
+				"ui.move_learning.error.open_prompt",
+				{
+					"pokemon": _localized_species_name(
+						source_species,
+						source_species if source_species != "" else LocalizationManager.text("pokemon.generic")
+					),
+				}
+			))
 			_discard_move_learn_review_prompt()
 			continue
 
@@ -3800,13 +4082,19 @@ func _show_next_move_learn_prompt() -> void:
 
 func _render_move_learn_prompt(pokemon: Pokemon, prompt: Dictionary) -> void:
 	var move_name := _move_learn_prompt_move_name(prompt)
-	var species := str(prompt.get("species", pokemon.species)).strip_edges()
-	if species == "":
-		species = pokemon.species
+	var species := _pokemon_display_name(pokemon)
 	var new_move_value: Variant = _move_learn_prompt_move_value(prompt)
 	var progress_label := _move_learn_queue_progress_label()
-	move_learn_title_label.text = "Learn %s%s" % [move_name, " (%s)" % progress_label if progress_label != "" else ""]
-	move_learn_message_label.text = "%s wants to learn %s. Select a move to replace or choose not to learn." % [species, move_name]
+	move_learn_title_label.text = LocalizationManager.text(
+		"ui.move_learning.learn_named_progress"
+		if progress_label != ""
+		else "ui.move_learning.learn_named",
+		{"move": move_name, "progress": progress_label}
+	)
+	move_learn_message_label.text = LocalizationManager.text(
+		"ui.move_learning.prompt",
+		{"pokemon": species, "move": move_name}
+	)
 	move_learn_status_label.text = ""
 	move_learn_selected_replace_slot = -2
 	_hide_move_learn_hover_panel()
@@ -3872,7 +4160,7 @@ func _create_move_learn_new_move_tile(move_name: String, move_value: Variant) ->
 	button.add_child(stack)
 
 	var eyebrow := Label.new()
-	eyebrow.text = "New move"
+	eyebrow.text = LocalizationManager.text("ui.move_learning.new_move")
 	eyebrow.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	eyebrow.add_theme_font_size_override("font_size", 10)
 	eyebrow.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
@@ -3912,7 +4200,12 @@ func _create_move_learn_empty_slot_button(move_index: int) -> Button:
 	button.focus_mode = Control.FOCUS_NONE
 	button.pressed.connect(_on_move_learn_slot_pressed.bind(move_index))
 	_apply_move_learn_move_tile_style(button, false)
-	_fill_move_learn_choice_button(button, "Empty slot", {}, "Learn here")
+	_fill_move_learn_choice_button(
+		button,
+		LocalizationManager.text("ui.move_learning.empty_slot"),
+		{},
+		LocalizationManager.text("ui.move_learning.learn_here")
+	)
 	return button
 
 func _apply_move_learn_new_move_tile_style(button: Button) -> void:
@@ -4022,7 +4315,9 @@ func _refresh_move_learn_selection_buttons() -> void:
 
 func _on_move_learn_confirm_pressed() -> void:
 	if move_learn_selected_replace_slot < 0:
-		move_learn_status_label.text = "Select a move to replace first."
+		move_learn_status_label.text = LocalizationManager.text(
+			"ui.move_learning.select_replacement"
+		)
 		move_learn_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		return
 	var replace_slot := move_learn_selected_replace_slot
@@ -4068,8 +4363,8 @@ func _show_move_learn_hover_panel(anchor: Control, move_value: Variant) -> void:
 	var meta_row := HBoxContainer.new()
 	meta_row.add_theme_constant_override("separation", 6)
 	stack.add_child(meta_row)
-	meta_row.add_child(_create_move_learn_hover_stat("Power", _get_summary_move_power_text(move_value), Color("#f2cf78")))
-	meta_row.add_child(_create_move_learn_hover_stat("Acc", _get_summary_move_accuracy_text(move_value), Color("#d9ecff")))
+	meta_row.add_child(_create_move_learn_hover_stat(LocalizationManager.text("ui.move_learning.power"), _get_summary_move_power_text(move_value), Color("#f2cf78")))
+	meta_row.add_child(_create_move_learn_hover_stat(LocalizationManager.text("ui.move_learning.accuracy"), _get_summary_move_accuracy_text(move_value), Color("#d9ecff")))
 	meta_row.add_child(_create_move_learn_hover_stat("PP", _get_summary_move_pp_text(move_value).split("/", false, 1)[0], Color("#7df2e8")))
 
 	var description := _get_summary_move_description_text(move_value)
@@ -4148,13 +4443,16 @@ func _create_move_learn_detail_chip(text: String, background_color: Color, text_
 
 func _create_move_learn_type_label(type_name: String) -> Control:
 	var normalized_type := type_name.strip_edges().to_lower().replace(" ", "-").replace("_", "-")
+	var localized_type := _localized_type_name(type_name)
+	if _uses_localized_type_text():
+		return _create_move_learn_detail_chip(localized_type, Color("#34312a"), Color("#f4f0de"))
 	var texture_path := "%s%s.png" % [MOVE_LEARN_TYPE_LABEL_ROOT, normalized_type]
 	if normalized_type == "" or not ResourceLoader.exists(texture_path):
-		return _create_move_learn_detail_chip(type_name, Color("#34312a"), Color("#f4f0de"))
+		return _create_move_learn_detail_chip(localized_type, Color("#34312a"), Color("#f4f0de"))
 
 	var texture := load(texture_path) as Texture2D
 	if texture == null:
-		return _create_move_learn_detail_chip(type_name, Color("#34312a"), Color("#f4f0de"))
+		return _create_move_learn_detail_chip(localized_type, Color("#34312a"), Color("#f4f0de"))
 
 	var icon := TextureRect.new()
 	icon.name = "Icon"
@@ -4163,7 +4461,7 @@ func _create_move_learn_type_label(type_name: String) -> Control:
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	icon.tooltip_text = type_name.capitalize()
+	icon.tooltip_text = localized_type
 	return icon
 
 func _create_move_learn_category_label(category: String) -> Control:
@@ -4188,7 +4486,14 @@ func _create_move_learn_category_label(category: String) -> Control:
 func _get_summary_move_category_text(move_value: Variant) -> String:
 	var category_value: Variant = _get_summary_move_data_value(move_value, ["category", "damageClass", "damage_class"], "")
 	var category := str(category_value).strip_edges()
-	return _format_identifier_display_name(category) if category != "" else ""
+	if category == "":
+		return ""
+	var key := "ui.move.category.%s" % category.to_lower().replace("-", "_").replace(" ", "_")
+	return (
+		LocalizationManager.text(key)
+		if LocalizationManager.has_key(key)
+		else _format_identifier_display_name(category)
+	)
 
 func _on_move_learn_skip_pressed() -> void:
 	await _submit_move_learn_choice(-1, true)
@@ -4203,13 +4508,14 @@ func _submit_move_learn_choice(replace_slot: int, skip: bool) -> void:
 	var move_id := _move_learn_prompt_move_id(move_learn_active_prompt)
 	var move_name := _move_learn_prompt_move_name(move_learn_active_prompt)
 	var pokemon_id := int(move_learn_active_prompt.get("pokemonId", 0))
-	move_learn_status_label.text = "Saving..."
+	move_learn_status_label.text = LocalizationManager.text("common.saving")
 	var source_item_id := str(move_learn_active_prompt.get("sourceItemId", "")).strip_edges()
 	var result: Dictionary = await PlayerPartyStateService.learn_pokemon_move(pokemon_id, move_id, replace_slot, skip, source_item_id)
 	move_learn_processing = false
 
 	if not bool(result.get("success", false)):
-		move_learn_status_label.text = str(result.get("error", "Could not save move choice."))
+		push_warning("UIOverlay: move learning choice failed: %s" % str(result.get("error", "Unknown error")))
+		move_learn_status_label.text = LocalizationManager.text("ui.move_learning.error.save")
 		_set_move_learn_controls_disabled(false)
 		return
 
@@ -4223,9 +4529,10 @@ func _submit_move_learn_choice(replace_slot: int, skip: bool) -> void:
 	_show_next_move_learn_prompt()
 
 func _emit_move_learn_result_message(result: Dictionary, fallback_species: String, fallback_move_name: String, fallback_skipped: bool) -> void:
-	var species := fallback_species.strip_edges()
-	if species == "":
-		species = "Pokemon"
+	var source_species := fallback_species.strip_edges()
+	if source_species == "":
+		source_species = "Pokemon"
+	var species := _localized_species_name(source_species, source_species)
 
 	var learned_move: Dictionary = {}
 	var learned_move_value: Variant = result.get("learnedMove", {})
@@ -4234,7 +4541,10 @@ func _emit_move_learn_result_message(result: Dictionary, fallback_species: Strin
 	var learned_name := _move_learn_result_move_name(learned_move, fallback_move_name)
 	var skipped := bool(result.get("skipped", fallback_skipped))
 	if skipped:
-		add_system_message("%s did not learn %s." % [species, learned_name])
+		add_system_message(LocalizationManager.text(
+			"ui.move_learning.result.skipped",
+			{"pokemon": species, "move": learned_name}
+		))
 		return
 
 	var replaced_move: Dictionary = {}
@@ -4243,9 +4553,15 @@ func _emit_move_learn_result_message(result: Dictionary, fallback_species: Strin
 		replaced_move = replaced_move_value as Dictionary
 	var replaced_name := _move_learn_result_move_name(replaced_move, "")
 	if replaced_name != "":
-		add_system_message("%s forgot %s and learned %s!" % [species, replaced_name, learned_name])
+		add_system_message(LocalizationManager.text(
+			"ui.move_learning.result.replaced",
+			{"pokemon": species, "forgotten": replaced_name, "learned": learned_name}
+		))
 	else:
-		add_system_message("%s learned %s!" % [species, learned_name])
+		add_system_message(LocalizationManager.text(
+			"ui.move_learning.result.learned",
+			{"pokemon": species, "move": learned_name}
+		))
 
 func _move_learn_result_move_name(move_value: Variant, fallback_name: String) -> String:
 	if move_value is Dictionary:
@@ -4256,8 +4572,9 @@ func _move_learn_result_move_name(move_value: Variant, fallback_name: String) ->
 				return move_name
 			var move_id := str(move_data.get("moveId", move_data.get("move_id", ""))).strip_edges()
 			if move_id != "":
-				return _format_move_name(move_id)
-	return fallback_name
+				return _localized_content_name("moves", move_id, _format_move_name(move_id))
+	var fallback_id := fallback_name.to_lower().replace(" ", "-").replace("_", "-")
+	return _localized_content_name("moves", fallback_id, fallback_name)
 
 func _set_move_learn_controls_disabled(disabled: bool) -> void:
 	for button: Button in move_learn_move_buttons:
@@ -4287,13 +4604,14 @@ func _move_learn_prompt_move_id(prompt: Dictionary) -> String:
 	return ""
 
 func _move_learn_prompt_move_name(prompt: Dictionary) -> String:
+	var move_id := _move_learn_prompt_move_id(prompt)
 	var move_name := str(prompt.get("name", "")).strip_edges()
 	if move_name != "":
-		return move_name
+		return _localized_content_name("moves", move_id, move_name)
 	var move_value: Variant = prompt.get("move", {})
 	if move_value is Dictionary:
 		return _get_summary_move_name(move_value)
-	return _format_move_name(_move_learn_prompt_move_id(prompt))
+	return _localized_content_name("moves", move_id, _format_move_name(move_id))
 
 func _move_learn_prompt_move_value(prompt: Dictionary) -> Variant:
 	var move_value: Variant = prompt.get("move", {})
@@ -4466,7 +4784,7 @@ func _setup_pvp_room_popup() -> void:
 	header.add_child(header_heading)
 
 	var title := Label.new()
-	title.text = "Ranked"
+	_set_localized_control_property(title, "text", "ui.pvp.mode.ranked")
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title.add_theme_font_size_override("font_size", 20)
 	title.add_theme_color_override("font_color", UI_TEXT)
@@ -4474,7 +4792,10 @@ func _setup_pvp_room_popup() -> void:
 	pvp_popup_title_label = title
 
 	var subtitle := Label.new()
-	subtitle.text = "Competitive matchmaking · Aether OU"
+	subtitle.text = LocalizationManager.text(
+		"ui.pvp.popup.ranked_subtitle",
+		{"format": pvp_active_format_name}
+	)
 	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	subtitle.add_theme_font_size_override("font_size", 11)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -4487,7 +4808,7 @@ func _setup_pvp_room_popup() -> void:
 
 	var minimize_button := Button.new()
 	minimize_button.text = "-"
-	minimize_button.tooltip_text = "Minimize"
+	_set_localized_control_property(minimize_button, "tooltip_text", "ui.pvp.minimize")
 	minimize_button.custom_minimum_size = Vector2(30, 30)
 	minimize_button.focus_mode = Control.FOCUS_NONE
 	minimize_button.pressed.connect(_minimize_pvp_room_popup)
@@ -4496,7 +4817,7 @@ func _setup_pvp_room_popup() -> void:
 
 	var close_button := Button.new()
 	close_button.text = "×"
-	close_button.tooltip_text = "Close"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.custom_minimum_size = Vector2(30, 30)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_pvp_room_popup)
@@ -4572,7 +4893,7 @@ func _setup_pvp_room_popup() -> void:
 	var team_header := HBoxContainer.new()
 	team_header.add_theme_constant_override("separation", 8)
 	team_layout.add_child(team_header)
-	team_header.add_child(_create_pvp_section_title("Selected Team"))
+	team_header.add_child(_create_pvp_section_title("ui.pvp.team.selected"))
 
 	var team_header_spacer := Control.new()
 	team_header_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -4590,14 +4911,14 @@ func _setup_pvp_room_popup() -> void:
 	team_source_badge.add_child(team_source_badge_margin)
 
 	var team_source_badge_label := Label.new()
-	team_source_badge_label.text = "CURRENT PARTY"
+	_set_localized_control_property(team_source_badge_label, "text", "ui.pvp.team.current")
 	team_source_badge_label.add_theme_font_size_override("font_size", 10)
 	team_source_badge_label.add_theme_color_override("font_color", Color("#60d3ff"))
 	team_source_badge_margin.add_child(team_source_badge_label)
 
 	pvp_team_source_select = OptionButton.new()
 	pvp_team_source_select.visible = false
-	pvp_team_source_select.add_item("Current Party")
+	pvp_team_source_select.add_item(LocalizationManager.text("ui.pvp.team.current_option"))
 	pvp_team_source_select.set_item_metadata(0, "party")
 	pvp_team_source_select.item_selected.connect(_on_pvp_team_source_selected)
 	team_layout.add_child(pvp_team_source_select)
@@ -4626,13 +4947,13 @@ func _setup_pvp_room_popup() -> void:
 	validator_margin.add_child(validator_layout)
 
 	var validator_heading := Label.new()
-	validator_heading.text = "TEAM VALIDATION"
+	_set_localized_control_property(validator_heading, "text", "ui.pvp.team.validation")
 	validator_heading.add_theme_font_size_override("font_size", 10)
 	validator_heading.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	validator_layout.add_child(validator_heading)
 
 	pvp_team_validator_status_label = Label.new()
-	pvp_team_validator_status_label.text = "Checking current party..."
+	pvp_team_validator_status_label.text = LocalizationManager.text("ui.pvp.team.checking_current")
 	pvp_team_validator_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pvp_team_validator_status_label.add_theme_font_size_override("font_size", 15)
 	pvp_team_validator_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -4665,10 +4986,10 @@ func _setup_pvp_room_popup() -> void:
 	var matchmaking_layout := VBoxContainer.new()
 	matchmaking_layout.add_theme_constant_override("separation", 12)
 	matchmaking_margin.add_child(matchmaking_layout)
-	matchmaking_layout.add_child(_create_pvp_section_title("Ranked Matchmaking"))
+	matchmaking_layout.add_child(_create_pvp_section_title("ui.pvp.matchmaking.title"))
 
 	var format_caption := Label.new()
-	format_caption.text = "FORMAT"
+	_set_localized_control_property(format_caption, "text", "ui.pvp.matchmaking.format")
 	format_caption.add_theme_font_size_override("font_size", 10)
 	format_caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	matchmaking_layout.add_child(format_caption)
@@ -4682,7 +5003,7 @@ func _setup_pvp_room_popup() -> void:
 
 	pvp_mode_select = OptionButton.new()
 	pvp_mode_select.visible = false
-	pvp_mode_select.add_item("Ranked")
+	pvp_mode_select.add_item(LocalizationManager.text("ui.pvp.mode.ranked"))
 	pvp_mode_select.set_item_metadata(0, "ranked")
 	pvp_mode_select.item_selected.connect(_on_pvp_mode_selected)
 	matchmaking_layout.add_child(pvp_mode_select)
@@ -4692,7 +5013,7 @@ func _setup_pvp_room_popup() -> void:
 	])
 
 	var queue_note := Label.new()
-	queue_note.text = "Your selected team is checked by the server before matchmaking begins."
+	_set_localized_control_property(queue_note, "text", "ui.pvp.matchmaking.note")
 	queue_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	queue_note.add_theme_font_size_override("font_size", 11)
 	queue_note.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -4723,7 +5044,7 @@ func _setup_pvp_room_popup() -> void:
 	queue_status_row.add_child(pvp_queue_status_spinner_label)
 
 	pvp_queue_status_label = Label.new()
-	pvp_queue_status_label.text = "Ready to search."
+	pvp_queue_status_label.text = LocalizationManager.text("ui.pvp.queue.ready")
 	pvp_queue_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_queue_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pvp_queue_status_label.add_theme_color_override("font_color", UI_TEXT)
@@ -4738,7 +5059,7 @@ func _setup_pvp_room_popup() -> void:
 	matchmaking_layout.add_child(queue_actions)
 
 	pvp_join_queue_button = Button.new()
-	pvp_join_queue_button.text = "Find Match"
+	pvp_join_queue_button.text = LocalizationManager.text("ui.pvp.queue.find")
 	pvp_join_queue_button.custom_minimum_size = Vector2(0, 46)
 	pvp_join_queue_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_join_queue_button.focus_mode = Control.FOCUS_NONE
@@ -4746,28 +5067,28 @@ func _setup_pvp_room_popup() -> void:
 	queue_actions.add_child(pvp_join_queue_button)
 
 	pvp_leave_queue_button = Button.new()
-	pvp_leave_queue_button.text = "Leave Queue"
+	_set_localized_control_property(pvp_leave_queue_button, "text", "ui.pvp.queue.leave")
 	pvp_leave_queue_button.custom_minimum_size = Vector2(0, 46)
 	pvp_leave_queue_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_leave_queue_button.focus_mode = Control.FOCUS_NONE
 	pvp_leave_queue_button.visible = false
 	pvp_leave_queue_button.disabled = true
-	pvp_leave_queue_button.tooltip_text = "Stop searching for an opponent"
+	_set_localized_control_property(pvp_leave_queue_button, "tooltip_text", "ui.pvp.queue.leave_tooltip")
 	pvp_leave_queue_button.pressed.connect(_on_pvp_leave_queue_pressed)
 	queue_actions.add_child(pvp_leave_queue_button)
 
 	pvp_reconnect_battle_button = Button.new()
-	pvp_reconnect_battle_button.text = "Reconnect Battle"
+	_set_localized_control_property(pvp_reconnect_battle_button, "text", "ui.pvp.queue.reconnect")
 	pvp_reconnect_battle_button.custom_minimum_size = Vector2(0, 46)
 	pvp_reconnect_battle_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_reconnect_battle_button.focus_mode = Control.FOCUS_NONE
 	pvp_reconnect_battle_button.visible = false
-	pvp_reconnect_battle_button.tooltip_text = "Return to your current ranked battle"
+	_set_localized_control_property(pvp_reconnect_battle_button, "tooltip_text", "ui.pvp.queue.reconnect_tooltip")
 	pvp_reconnect_battle_button.pressed.connect(_on_pvp_reconnect_battle_pressed)
 	queue_actions.add_child(pvp_reconnect_battle_button)
 
 	var integrity_note := Label.new()
-	integrity_note.text = "Fair play is enforced. Wintrading and ladder manipulation can result in a ranked ban."
+	_set_localized_control_property(integrity_note, "text", "ui.pvp.queue.integrity")
 	integrity_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	integrity_note.add_theme_font_size_override("font_size", 10)
 	integrity_note.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -4796,13 +5117,13 @@ func _setup_pvp_room_popup() -> void:
 	room_margin.add_child(room_layout)
 
 	var room_heading := Label.new()
-	room_heading.text = "Private battle room"
+	_set_localized_control_property(room_heading, "text", "ui.pvp.room.title")
 	room_heading.add_theme_font_size_override("font_size", 19)
 	room_heading.add_theme_color_override("font_color", Color("#f3e1a5"))
 	room_layout.add_child(room_heading)
 
 	var room_intro := Label.new()
-	room_intro.text = "Create a room to battle a friend directly, or enter a code to join one."
+	_set_localized_control_property(room_intro, "text", "ui.pvp.room.intro")
 	room_intro.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	room_intro.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	room_layout.add_child(room_intro)
@@ -4827,7 +5148,7 @@ func _setup_pvp_room_popup() -> void:
 	room_status_margin.add_child(room_status_layout)
 
 	pvp_room_code_label = Label.new()
-	pvp_room_code_label.text = "ROOM CODE  ·  -"
+	pvp_room_code_label.text = LocalizationManager.text("ui.pvp.room.code", {"code": "-"})
 	pvp_room_code_label.add_theme_font_size_override("font_size", 15)
 	pvp_room_code_label.add_theme_color_override("font_color", Color("#f5df9a"))
 	room_status_layout.add_child(pvp_room_code_label)
@@ -4837,7 +5158,7 @@ func _setup_pvp_room_popup() -> void:
 	room_status_layout.add_child(room_status_row)
 
 	pvp_room_status_label = Label.new()
-	pvp_room_status_label.text = "Ready."
+	pvp_room_status_label.text = LocalizationManager.text("ui.pvp.room.ready")
 	pvp_room_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pvp_room_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	pvp_room_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -4850,7 +5171,7 @@ func _setup_pvp_room_popup() -> void:
 	room_status_row.add_child(pvp_room_wait_spinner_label)
 
 	var room_choice_label := Label.new()
-	room_choice_label.text = "WHAT WOULD YOU LIKE TO DO?"
+	_set_localized_control_property(room_choice_label, "text", "ui.pvp.room.choice")
 	room_choice_label.add_theme_font_size_override("font_size", 11)
 	room_choice_label.add_theme_color_override("font_color", Color("#87bce8"))
 	room_layout.add_child(room_choice_label)
@@ -4860,21 +5181,21 @@ func _setup_pvp_room_popup() -> void:
 	room_layout.add_child(pvp_room_mode_selector)
 
 	pvp_room_create_mode_button = Button.new()
-	pvp_room_create_mode_button.text = "Create Room"
+	_set_localized_control_property(pvp_room_create_mode_button, "text", "ui.pvp.room.create")
 	pvp_room_create_mode_button.custom_minimum_size = Vector2(130, 38)
 	pvp_room_create_mode_button.focus_mode = Control.FOCUS_NONE
 	pvp_room_create_mode_button.pressed.connect(_on_pvp_room_mode_selected.bind("create"))
 	pvp_room_mode_selector.add_child(pvp_room_create_mode_button)
 
 	pvp_room_join_mode_button = Button.new()
-	pvp_room_join_mode_button.text = "Join Room"
+	_set_localized_control_property(pvp_room_join_mode_button, "text", "ui.pvp.room.join")
 	pvp_room_join_mode_button.custom_minimum_size = Vector2(118, 38)
 	pvp_room_join_mode_button.focus_mode = Control.FOCUS_NONE
 	pvp_room_join_mode_button.pressed.connect(_on_pvp_room_mode_selected.bind("join"))
 	pvp_room_mode_selector.add_child(pvp_room_join_mode_button)
 
 	pvp_room_spectate_mode_button = Button.new()
-	pvp_room_spectate_mode_button.text = "Spectate"
+	_set_localized_control_property(pvp_room_spectate_mode_button, "text", "ui.pvp.room.spectate")
 	pvp_room_spectate_mode_button.custom_minimum_size = Vector2(104, 38)
 	pvp_room_spectate_mode_button.focus_mode = Control.FOCUS_NONE
 	pvp_room_spectate_mode_button.pressed.connect(_on_pvp_room_mode_selected.bind("spectate"))
@@ -4891,7 +5212,7 @@ func _setup_pvp_room_popup() -> void:
 	pvp_room_form.add_child(pvp_room_form_title)
 
 	pvp_room_code_input = LineEdit.new()
-	pvp_room_code_input.placeholder_text = "Enter a room code"
+	_set_localized_control_property(pvp_room_code_input, "placeholder_text", "ui.pvp.room.enter_code")
 	pvp_room_code_input.max_length = 12
 	pvp_room_code_input.custom_minimum_size = Vector2(0, 34)
 	pvp_room_form.add_child(pvp_room_code_input)
@@ -4899,7 +5220,7 @@ func _setup_pvp_room_popup() -> void:
 
 	pvp_allow_spectators_check = CheckBox.new()
 	pvp_allow_spectators_check.button_pressed = false
-	pvp_allow_spectators_check.tooltip_text = "Anyone with this room code may watch after the battle starts."
+	_set_localized_control_property(pvp_allow_spectators_check, "tooltip_text", "ui.pvp.room.spectators_tooltip")
 	pvp_allow_spectators_check.add_theme_constant_override("h_separation", 8)
 	pvp_allow_spectators_check.add_theme_icon_override("unchecked", _pvp_spectators_checkbox_icon(false, false))
 	pvp_allow_spectators_check.add_theme_icon_override("unchecked_hover", _pvp_spectators_checkbox_icon(false, true))
@@ -4916,40 +5237,40 @@ func _setup_pvp_room_popup() -> void:
 	pvp_room_form.add_child(actions)
 
 	pvp_create_room_button = Button.new()
-	pvp_create_room_button.text = "Create Room"
+	_set_localized_control_property(pvp_create_room_button, "text", "ui.pvp.room.create")
 	pvp_create_room_button.custom_minimum_size = Vector2(112, 34)
-	pvp_create_room_button.tooltip_text = "Create a private room and share its code"
+	_set_localized_control_property(pvp_create_room_button, "tooltip_text", "ui.pvp.room.create_tooltip")
 	pvp_create_room_button.focus_mode = Control.FOCUS_NONE
 	pvp_create_room_button.pressed.connect(_on_pvp_create_room_pressed)
 	actions.add_child(pvp_create_room_button)
 
 	pvp_cancel_room_button = Button.new()
-	pvp_cancel_room_button.text = "Cancel Room"
+	_set_localized_control_property(pvp_cancel_room_button, "text", "ui.pvp.room.cancel")
 	pvp_cancel_room_button.custom_minimum_size = Vector2(112, 34)
 	pvp_cancel_room_button.focus_mode = Control.FOCUS_NONE
-	pvp_cancel_room_button.tooltip_text = "Close your room and stop waiting for an opponent"
+	_set_localized_control_property(pvp_cancel_room_button, "tooltip_text", "ui.pvp.room.cancel_tooltip")
 	pvp_cancel_room_button.visible = false
 	pvp_cancel_room_button.pressed.connect(_on_pvp_cancel_room_pressed)
 	actions.add_child(pvp_cancel_room_button)
 
 	pvp_join_room_button = Button.new()
-	pvp_join_room_button.text = "Join Room"
+	_set_localized_control_property(pvp_join_room_button, "text", "ui.pvp.room.join")
 	pvp_join_room_button.custom_minimum_size = Vector2(100, 34)
-	pvp_join_room_button.tooltip_text = "Join the room code above"
+	_set_localized_control_property(pvp_join_room_button, "tooltip_text", "ui.pvp.room.join_tooltip")
 	pvp_join_room_button.focus_mode = Control.FOCUS_NONE
 	pvp_join_room_button.pressed.connect(_on_pvp_join_room_pressed)
 	actions.add_child(pvp_join_room_button)
 
 	pvp_spectate_room_button = Button.new()
-	pvp_spectate_room_button.text = "Spectate"
+	_set_localized_control_property(pvp_spectate_room_button, "text", "ui.pvp.room.spectate")
 	pvp_spectate_room_button.custom_minimum_size = Vector2(92, 34)
-	pvp_spectate_room_button.tooltip_text = "Watch a room that allows spectators"
+	_set_localized_control_property(pvp_spectate_room_button, "tooltip_text", "ui.pvp.room.spectate_tooltip")
 	pvp_spectate_room_button.focus_mode = Control.FOCUS_NONE
 	pvp_spectate_room_button.pressed.connect(_on_pvp_spectate_room_pressed)
 	actions.add_child(pvp_spectate_room_button)
 
 	pvp_copy_code_button = Button.new()
-	pvp_copy_code_button.text = "Copy"
+	_set_localized_control_property(pvp_copy_code_button, "text", "ui.pvp.room.copy")
 	pvp_copy_code_button.custom_minimum_size = Vector2(72, 34)
 	pvp_copy_code_button.focus_mode = Control.FOCUS_NONE
 	pvp_copy_code_button.disabled = true
@@ -4995,13 +5316,13 @@ func _setup_pvp_room_popup() -> void:
 	bans_tab.add_child(bans_header)
 
 	pvp_bans_status_label = Label.new()
-	pvp_bans_status_label.text = "Loading..."
+	pvp_bans_status_label.text = LocalizationManager.text("ui.pvp.bans.loading")
 	pvp_bans_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_bans_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	bans_header.add_child(pvp_bans_status_label)
 
 	pvp_bans_refresh_button = Button.new()
-	pvp_bans_refresh_button.text = "Refresh"
+	_set_localized_control_property(pvp_bans_refresh_button, "text", "ui.pvp.bans.refresh")
 	pvp_bans_refresh_button.custom_minimum_size = Vector2(92, 32)
 	pvp_bans_refresh_button.focus_mode = Control.FOCUS_NONE
 	pvp_bans_refresh_button.pressed.connect(_on_pvp_bans_refresh_pressed)
@@ -5054,7 +5375,7 @@ func _setup_pvp_room_popup() -> void:
 	live_tab.add_child(live_header)
 
 	pvp_live_status_label = Label.new()
-	pvp_live_status_label.text = "Live ranked battles"
+	_set_localized_control_property(pvp_live_status_label, "text", "ui.pvp.live.title")
 	pvp_live_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_live_status_label.add_theme_color_override("font_color", UI_TEXT)
 	live_header.add_child(pvp_live_status_label)
@@ -5062,10 +5383,10 @@ func _setup_pvp_room_popup() -> void:
 	var live_columns := HBoxContainer.new()
 	live_columns.add_theme_constant_override("separation", 10)
 	live_tab.add_child(live_columns)
-	live_columns.add_child(_create_pvp_leaderboard_header_label("Battle", 0, HORIZONTAL_ALIGNMENT_LEFT, true))
-	live_columns.add_child(_create_pvp_leaderboard_header_label("Players", 180, HORIZONTAL_ALIGNMENT_LEFT))
-	live_columns.add_child(_create_pvp_leaderboard_header_label("Status", 100, HORIZONTAL_ALIGNMENT_RIGHT))
-	live_columns.add_child(_create_pvp_leaderboard_header_label("Started", 110, HORIZONTAL_ALIGNMENT_RIGHT))
+	live_columns.add_child(_create_pvp_leaderboard_header_label("ui.pvp.live.column.battle", 0, HORIZONTAL_ALIGNMENT_LEFT, true))
+	live_columns.add_child(_create_pvp_leaderboard_header_label("ui.pvp.live.column.players", 180, HORIZONTAL_ALIGNMENT_LEFT))
+	live_columns.add_child(_create_pvp_leaderboard_header_label("ui.pvp.live.column.status", 100, HORIZONTAL_ALIGNMENT_RIGHT))
+	live_columns.add_child(_create_pvp_leaderboard_header_label("ui.pvp.live.column.started", 110, HORIZONTAL_ALIGNMENT_RIGHT))
 
 	var live_scroll := ScrollContainer.new()
 	live_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -5113,13 +5434,16 @@ func _setup_pvp_room_popup() -> void:
 	leaderboard_header.add_child(leaderboard_heading)
 
 	var leaderboard_title := Label.new()
-	leaderboard_title.text = "Aether OU Ladder"
+	_set_localized_control_property(leaderboard_title, "text", "ui.pvp.leaderboard.title")
 	leaderboard_title.add_theme_font_size_override("font_size", 18)
 	leaderboard_title.add_theme_color_override("font_color", UI_TEXT)
 	leaderboard_heading.add_child(leaderboard_title)
 
 	pvp_leaderboard_status_label = Label.new()
-	pvp_leaderboard_status_label.text = "All Time standings · Win +10 · Loss -10"
+	pvp_leaderboard_status_label.text = LocalizationManager.text(
+		"ui.pvp.leaderboard.status",
+		{"period": _pvp_leaderboard_scope_label("all_time"), "win": "+10", "loss": "-10"}
+	)
 	pvp_leaderboard_status_label.add_theme_font_size_override("font_size", 11)
 	pvp_leaderboard_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	leaderboard_heading.add_child(pvp_leaderboard_status_label)
@@ -5130,7 +5454,7 @@ func _setup_pvp_room_popup() -> void:
 	leaderboard_header.add_child(leaderboard_scope_stack)
 
 	var leaderboard_scope_caption := Label.new()
-	leaderboard_scope_caption.text = "PERIOD"
+	_set_localized_control_property(leaderboard_scope_caption, "text", "ui.pvp.leaderboard.period")
 	leaderboard_scope_caption.add_theme_font_size_override("font_size", 9)
 	leaderboard_scope_caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	leaderboard_scope_stack.add_child(leaderboard_scope_caption)
@@ -5140,7 +5464,7 @@ func _setup_pvp_room_popup() -> void:
 	pvp_leaderboard_scope_select.focus_mode = Control.FOCUS_NONE
 	for scope_index in range(PVP_LEADERBOARD_SCOPES.size()):
 		var scope: Dictionary = PVP_LEADERBOARD_SCOPES[scope_index]
-		pvp_leaderboard_scope_select.add_item(str(scope.get("label", "")))
+		pvp_leaderboard_scope_select.add_item(LocalizationManager.text(str(scope.get("label_key", ""))))
 		pvp_leaderboard_scope_select.set_item_metadata(scope_index, str(scope.get("id", "")))
 	pvp_leaderboard_scope_select.select(_pvp_leaderboard_scope_index(pvp_active_leaderboard_scope))
 	pvp_leaderboard_scope_select.item_selected.connect(_on_pvp_leaderboard_scope_selected)
@@ -5148,10 +5472,10 @@ func _setup_pvp_room_popup() -> void:
 	leaderboard_scope_stack.add_child(pvp_leaderboard_scope_select)
 
 	pvp_leaderboard_refresh_button = Button.new()
-	pvp_leaderboard_refresh_button.text = "Refresh"
+	_set_localized_control_property(pvp_leaderboard_refresh_button, "text", "ui.pvp.leaderboard.refresh")
 	pvp_leaderboard_refresh_button.custom_minimum_size = Vector2(88, 36)
 	pvp_leaderboard_refresh_button.focus_mode = Control.FOCUS_NONE
-	pvp_leaderboard_refresh_button.tooltip_text = "Update leaderboard"
+	_set_localized_control_property(pvp_leaderboard_refresh_button, "tooltip_text", "ui.pvp.leaderboard.refresh_tooltip")
 	pvp_leaderboard_refresh_button.pressed.connect(_on_pvp_leaderboard_refresh_pressed)
 	leaderboard_header.add_child(pvp_leaderboard_refresh_button)
 
@@ -5178,11 +5502,11 @@ func _setup_pvp_room_popup() -> void:
 	var leaderboard_columns := HBoxContainer.new()
 	leaderboard_columns.add_theme_constant_override("separation", 10)
 	leaderboard_table_layout.add_child(leaderboard_columns)
-	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("RANK", 54, HORIZONTAL_ALIGNMENT_CENTER))
-	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("Player", 0, HORIZONTAL_ALIGNMENT_LEFT, true))
-	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("Points", 96, HORIZONTAL_ALIGNMENT_RIGHT))
-	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("Record", 104, HORIZONTAL_ALIGNMENT_RIGHT))
-	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("Win Rate", 86, HORIZONTAL_ALIGNMENT_RIGHT))
+	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("ui.pvp.leaderboard.column.rank", 54, HORIZONTAL_ALIGNMENT_CENTER))
+	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("ui.pvp.leaderboard.column.player", 0, HORIZONTAL_ALIGNMENT_LEFT, true))
+	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("ui.pvp.leaderboard.column.points", 96, HORIZONTAL_ALIGNMENT_RIGHT))
+	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("ui.pvp.leaderboard.column.record", 104, HORIZONTAL_ALIGNMENT_RIGHT))
+	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("ui.pvp.leaderboard.column.win_rate", 86, HORIZONTAL_ALIGNMENT_RIGHT))
 
 	var leaderboard_scroll := ScrollContainer.new()
 	leaderboard_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -5195,8 +5519,8 @@ func _setup_pvp_room_popup() -> void:
 	pvp_leaderboard_list.add_theme_constant_override("separation", 6)
 	leaderboard_scroll.add_child(pvp_leaderboard_list)
 	_render_pvp_leaderboard_state(
-		"Leaderboard not loaded",
-		"Open Ranked to fetch the latest standings."
+		LocalizationManager.text("ui.pvp.leaderboard.not_loaded"),
+		LocalizationManager.text("ui.pvp.leaderboard.not_loaded_detail")
 	)
 
 	var history_tab_page := _create_pvp_ranked_tab_page("My History", 8)
@@ -5213,13 +5537,13 @@ func _setup_pvp_room_popup() -> void:
 	history_tab.add_child(history_header)
 
 	pvp_history_status_label = Label.new()
-	pvp_history_status_label.text = "Recent matches"
+	pvp_history_status_label.text = LocalizationManager.text("ui.pvp.history.recent")
 	pvp_history_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_history_status_label.add_theme_color_override("font_color", UI_TEXT)
 	history_header.add_child(pvp_history_status_label)
 
 	pvp_history_refresh_button = Button.new()
-	pvp_history_refresh_button.text = "Refresh"
+	_set_localized_control_property(pvp_history_refresh_button, "text", "ui.pvp.bans.refresh")
 	pvp_history_refresh_button.custom_minimum_size = Vector2(92, 32)
 	pvp_history_refresh_button.focus_mode = Control.FOCUS_NONE
 	pvp_history_refresh_button.pressed.connect(_on_pvp_history_refresh_pressed)
@@ -5259,6 +5583,8 @@ func _setup_pvp_room_popup() -> void:
 	_apply_button_style(pvp_bans_refresh_button)
 	_apply_button_style(pvp_leaderboard_refresh_button)
 	_apply_button_style(pvp_history_refresh_button)
+	for tab_container: TabContainer in [pvp_ranked_tabs, pvp_ranked_rules_tabs, pvp_ranked_battles_tabs]:
+		_refresh_pvp_tab_titles(tab_container)
 	_render_pvp_banlists()
 	_render_pvp_banlists.call_deferred()
 	_refresh_pvp_queue_buttons(_current_pvp_queue_status_for_buttons())
@@ -5308,20 +5634,20 @@ func _setup_pvp_mode_menu() -> void:
 	header.add_child(heading_stack)
 
 	var title := Label.new()
-	title.text = "PvP Battles"
+	_set_localized_control_property(title, "text", "ui.pvp.title")
 	title.add_theme_font_size_override("font_size", 18)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	heading_stack.add_child(title)
 
 	var subtitle := Label.new()
-	subtitle.text = "Choose how you want to battle"
+	_set_localized_control_property(subtitle, "text", "ui.pvp.choose_mode")
 	subtitle.add_theme_font_size_override("font_size", 12)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	heading_stack.add_child(subtitle)
 
 	pvp_mode_close_button = Button.new()
 	pvp_mode_close_button.text = "×"
-	pvp_mode_close_button.tooltip_text = "Close"
+	_set_localized_control_property(pvp_mode_close_button, "tooltip_text", "common.close")
 	pvp_mode_close_button.custom_minimum_size = Vector2(32, 32)
 	pvp_mode_close_button.focus_mode = Control.FOCUS_NONE
 	pvp_mode_close_button.pressed.connect(_hide_pvp_mode_menu)
@@ -5329,8 +5655,8 @@ func _setup_pvp_mode_menu() -> void:
 	header.add_child(pvp_mode_close_button)
 
 	pvp_mode_ranked_button = _create_pvp_mode_menu_button(
-		"Ranked",
-		"Competitive matchmaking",
+		"ui.pvp.mode.ranked",
+		"ui.pvp.mode.competitive",
 		PVP_MODE_RANKED_ICON,
 		Color("#f0cc70")
 	)
@@ -5338,8 +5664,8 @@ func _setup_pvp_mode_menu() -> void:
 	layout.add_child(pvp_mode_ranked_button)
 
 	pvp_mode_casual_button = _create_pvp_mode_menu_button(
-		"Custom / Casual",
-		"Create or join a private battle",
+		"ui.pvp.mode.custom",
+		"ui.pvp.mode.private",
 		PVP_MODE_CUSTOM_ICON,
 		Color("#60d3ff")
 	)
@@ -5347,16 +5673,16 @@ func _setup_pvp_mode_menu() -> void:
 	layout.add_child(pvp_mode_casual_button)
 
 	pvp_mode_tournaments_button = _create_pvp_mode_menu_button(
-		"Tournaments",
-		"Scheduled competitive events",
+		"ui.pvp.mode.tournaments",
+		"ui.pvp.mode.scheduled",
 		PVP_MODE_TOURNAMENT_ICON,
 		Color("#b28ae8"),
-		"COMING SOON"
+		"ui.pvp.mode.coming_soon"
 	)
 	pvp_mode_tournaments_button.disabled = true
 	pvp_mode_tournaments_button.modulate = Color(1, 1, 1, 0.58)
 	pvp_mode_tournaments_button.mouse_default_cursor_shape = Control.CURSOR_ARROW
-	pvp_mode_tournaments_button.tooltip_text = "Tournaments are coming soon."
+	_set_localized_control_property(pvp_mode_tournaments_button, "tooltip_text", "ui.pvp.mode.tournaments_soon")
 	pvp_mode_tournaments_button.pressed.connect(_on_pvp_mode_tournaments_pressed)
 	layout.add_child(pvp_mode_tournaments_button)
 
@@ -5449,14 +5775,20 @@ func _configure_launcher_card_button(
 
 	var title := Label.new()
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	title.text = title_text
+	if LocalizationManager.has_key(title_text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(title, "text", title_text)
+	else:
+		title.text = title_text
 	title.add_theme_font_size_override("font_size", 15)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	labels.add_child(title)
 
 	var subtitle := Label.new()
 	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	subtitle.text = subtitle_text
+	if LocalizationManager.has_key(subtitle_text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(subtitle, "text", subtitle_text)
+	else:
+		subtitle.text = subtitle_text
 	subtitle.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	subtitle.add_theme_font_size_override("font_size", 12)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -5481,7 +5813,10 @@ func _configure_launcher_card_button(
 
 		var badge_label := Label.new()
 		badge_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		badge_label.text = badge_text
+		if LocalizationManager.has_key(badge_text, LocalizationManager.DEFAULT_LOCALE):
+			_set_localized_control_property(badge_label, "text", badge_text)
+		else:
+			badge_label.text = badge_text
 		badge_label.add_theme_font_size_override("font_size", 10)
 		badge_label.add_theme_color_override("font_color", Color("#c9afd9"))
 		badge_margin.add_child(badge_label)
@@ -5493,7 +5828,7 @@ func _create_tool_launcher_header(
 	accent_color: Color
 ) -> HBoxContainer:
 	var header := HBoxContainer.new()
-	header.name = "%sHeader" % title_text.replace(" ", "")
+	header.name = "ToolLauncherHeader"
 	header.add_theme_constant_override("separation", 10)
 
 	var accent := Panel.new()
@@ -5513,14 +5848,20 @@ func _create_tool_launcher_header(
 
 	var title := Label.new()
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	title.text = title_text
+	if LocalizationManager.has_key(title_text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(title, "text", title_text)
+	else:
+		title.text = title_text
 	title.add_theme_font_size_override("font_size", 18)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	heading.add_child(title)
 
 	var subtitle := Label.new()
 	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	subtitle.text = subtitle_text
+	if LocalizationManager.has_key(subtitle_text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(subtitle, "text", subtitle_text)
+	else:
+		subtitle.text = subtitle_text
 	subtitle.add_theme_font_size_override("font_size", 12)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	heading.add_child(subtitle)
@@ -5530,7 +5871,7 @@ func _create_tool_launcher_header(
 		if current_parent != null:
 			current_parent.remove_child(close_button)
 		close_button.text = "×"
-		close_button.tooltip_text = "Close"
+		_set_localized_control_property(close_button, "tooltip_text", "common.close")
 		close_button.custom_minimum_size = Vector2(32, 32)
 		close_button.focus_mode = Control.FOCUS_NONE
 		_apply_button_style(close_button)
@@ -5541,7 +5882,10 @@ func _create_tool_launcher_header(
 func _create_tool_section_label(label_text: String, accent_color: Color) -> Label:
 	var label := Label.new()
 	label.name = "Label"
-	label.text = label_text.to_upper()
+	if LocalizationManager.has_key(label_text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(label, "text", label_text)
+	else:
+		label.text = label_text.to_upper()
 	label.add_theme_font_size_override("font_size", 10)
 	label.add_theme_color_override("font_color", accent_color)
 	return label
@@ -5617,7 +5961,10 @@ func _configure_tool_tile_button(
 
 	var title := Label.new()
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	title.text = title_text
+	if LocalizationManager.has_key(title_text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(title, "text", title_text)
+	else:
+		title.text = title_text
 	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	title.add_theme_font_size_override("font_size", 13)
 	title.add_theme_color_override("font_color", UI_TEXT)
@@ -5625,7 +5972,10 @@ func _configure_tool_tile_button(
 
 	var subtitle := Label.new()
 	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	subtitle.text = subtitle_text
+	if LocalizationManager.has_key(subtitle_text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(subtitle, "text", subtitle_text)
+	else:
+		subtitle.text = subtitle_text
 	subtitle.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	subtitle.add_theme_font_size_override("font_size", 10)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -5634,10 +5984,61 @@ func _configure_tool_tile_button(
 func _create_pvp_ranked_tab_page(tab_name: String, top_margin: int = 12) -> MarginContainer:
 	var page := MarginContainer.new()
 	page.name = tab_name
+	var tab_key := _pvp_tab_key(tab_name)
+	if tab_key != "":
+		page.set_meta("i18n_tab_key", tab_key)
 	page.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	page.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	page.add_theme_constant_override("margin_top", top_margin)
 	return page
+
+
+func _pvp_tab_key(tab_name: String) -> String:
+	match tab_name:
+		"Play":
+			return "ui.pvp.tab.play"
+		"Rules":
+			return "ui.pvp.tab.rules"
+		"Battles":
+			return "ui.pvp.tab.battles"
+		"Leaderboard":
+			return "ui.pvp.tab.leaderboard"
+		"Format":
+			return "ui.pvp.tab.format"
+		"Banlist":
+			return "ui.pvp.tab.banlist"
+		"Live":
+			return "ui.pvp.tab.live"
+		"My History":
+			return "ui.pvp.tab.history"
+	return ""
+
+
+func _refresh_pvp_tab_titles(tab_container: TabContainer) -> void:
+	if tab_container == null:
+		return
+	for index in range(tab_container.get_tab_count()):
+		var page := tab_container.get_child(index)
+		if page == null:
+			continue
+		var key := str(page.get_meta("i18n_tab_key", ""))
+		if key != "":
+			tab_container.set_tab_title(index, LocalizationManager.text(key))
+
+
+func _refresh_pvp_leaderboard_scope_options() -> void:
+	if pvp_leaderboard_scope_select == null:
+		return
+	var selected_scope := pvp_active_leaderboard_scope
+	pvp_leaderboard_scope_select.clear()
+	for index in range(PVP_LEADERBOARD_SCOPES.size()):
+		var scope: Dictionary = PVP_LEADERBOARD_SCOPES[index]
+		pvp_leaderboard_scope_select.add_item(
+			LocalizationManager.text(str(scope.get("label_key", "")))
+		)
+		pvp_leaderboard_scope_select.set_item_metadata(index, str(scope.get("id", "")))
+	pvp_leaderboard_scope_select.select(_pvp_leaderboard_scope_index(selected_scope))
+
 
 func _create_pvp_ruleset_panel() -> Control:
 	var panel := PanelContainer.new()
@@ -5657,19 +6058,19 @@ func _create_pvp_ruleset_panel() -> Control:
 	margin.add_child(layout)
 
 	var title := Label.new()
-	title.text = "Ruleset"
+	_set_localized_control_property(title, "text", "ui.pvp.rules.title")
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 20)
 	title.add_theme_color_override("font_color", Color("#f5df9a"))
 	layout.add_child(title)
 
 	var rules: Array[Dictionary] = [
-		{"title": "Format", "body": "Aether OU. Queue selection decides casual or ranked processing."},
-		{"title": "Species", "body": "Prevents having 2 or more of the same Pokemon on a team."},
-		{"title": "OHKO", "body": "Prevents one-hit KO moves from being used."},
-		{"title": "Evasion", "body": "Prevents moves that boost evasion from being used."},
-		{"title": "Timers", "body": "Server-authoritative timers are enforced by the PvP foundation."},
-		{"title": "Disconnects", "body": "Reconnect grace is tracked server-side; expired grace can end the match."},
+		{"title": "ui.pvp.rules.format.title", "body": "ui.pvp.rules.format.body"},
+		{"title": "ui.pvp.rules.species.title", "body": "ui.pvp.rules.species.body"},
+		{"title": "ui.pvp.rules.ohko.title", "body": "ui.pvp.rules.ohko.body"},
+		{"title": "ui.pvp.rules.evasion.title", "body": "ui.pvp.rules.evasion.body"},
+		{"title": "ui.pvp.rules.timers.title", "body": "ui.pvp.rules.timers.body"},
+		{"title": "ui.pvp.rules.disconnects.title", "body": "ui.pvp.rules.disconnects.body"},
 	]
 	for rule: Dictionary in rules:
 		layout.add_child(_create_pvp_ruleset_row(str(rule["title"]), str(rule["body"])))
@@ -5697,13 +6098,19 @@ func _create_pvp_ruleset_row(title_text: String, body_text: String) -> Control:
 	margin.add_child(layout)
 
 	var title := Label.new()
-	title.text = title_text
+	if LocalizationManager.has_key(title_text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(title, "text", title_text)
+	else:
+		title.text = title_text
 	title.add_theme_font_size_override("font_size", 16)
 	title.add_theme_color_override("font_color", Color("#cfe8ff"))
 	layout.add_child(title)
 
 	var body := Label.new()
-	body.text = body_text
+	if LocalizationManager.has_key(body_text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(body, "text", body_text)
+	else:
+		body.text = body_text
 	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	body.add_theme_color_override("font_color", UI_TEXT)
 	layout.add_child(body)
@@ -5712,7 +6119,10 @@ func _create_pvp_ruleset_row(title_text: String, body_text: String) -> Control:
 
 func _create_pvp_section_title(title_text: String) -> Label:
 	var label := Label.new()
-	label.text = title_text
+	if LocalizationManager.has_key(title_text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(label, "text", title_text)
+	else:
+		label.text = title_text
 	label.add_theme_font_size_override("font_size", 16)
 	label.add_theme_color_override("font_color", Color("#f5df9a"))
 	return label
@@ -5742,12 +6152,18 @@ func _create_pvp_info_row(title_text: String, body_text: String) -> Control:
 	margin.add_child(layout)
 
 	var title := Label.new()
-	title.text = title_text
+	if LocalizationManager.has_key(title_text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(title, "text", title_text)
+	else:
+		title.text = title_text
 	title.add_theme_color_override("font_color", Color("#cfe8ff"))
 	layout.add_child(title)
 
 	var body := Label.new()
-	body.text = body_text
+	if LocalizationManager.has_key(body_text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(body, "text", body_text)
+	else:
+		body.text = body_text
 	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	body.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	layout.add_child(body)
@@ -5779,12 +6195,15 @@ func _create_pvp_team_preview_slot(pokemon: Pokemon, slot_index: int) -> Control
 
 	if pokemon == null:
 		icon.modulate = Color(1, 1, 1, 0.18)
-		panel.tooltip_text = "Empty slot %d" % [slot_index + 1]
+		panel.tooltip_text = LocalizationManager.text(
+			"ui.pvp.team.empty_slot",
+			{"number": slot_index + 1}
+		)
 		return panel
 
 	icon.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
 	icon.modulate = Color(1, 1, 1, 1) if icon.texture != null else Color(1, 1, 1, 0.18)
-	panel.tooltip_text = _format_identifier_display_name(pokemon.species)
+	panel.tooltip_text = _pokemon_display_name(pokemon)
 	return panel
 
 func _create_pvp_tournaments_placeholder() -> Control:
@@ -5804,10 +6223,10 @@ func _create_pvp_tournaments_placeholder() -> Control:
 	layout.add_theme_constant_override("separation", 10)
 	margin.add_child(layout)
 
-	layout.add_child(_create_pvp_section_title("Tournaments"))
-	layout.add_child(_create_pvp_info_row("Status", "Tournament support is not live yet. This section is reserved for brackets, best-of series and scheduled events."))
-	layout.add_child(_create_pvp_info_row("Foundation", "Future tournament battles will use the same PvP match, ownership, reconnect, settlement and history systems as ranked."))
-	layout.add_child(_create_pvp_info_row("Next Work", "The next backend step is a tournament domain with brackets, check-in, series rules and spectator support."))
+	layout.add_child(_create_pvp_section_title("ui.pvp.mode.tournaments"))
+	layout.add_child(_create_pvp_info_row("ui.pvp.tournaments.status", "ui.pvp.tournaments.status_body"))
+	layout.add_child(_create_pvp_info_row("ui.pvp.tournaments.foundation", "ui.pvp.tournaments.foundation_body"))
+	layout.add_child(_create_pvp_info_row("ui.pvp.tournaments.next", "ui.pvp.tournaments.next_body"))
 
 	var spacer := Control.new()
 	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -5832,68 +6251,114 @@ func _create_pvp_validator_row(status_text: String, message: String, color: Colo
 	row.add_child(label)
 	return row
 
-func _setup_content_creator_menu_popup() -> void:
-	content_creator_menu_popup = PanelContainer.new()
-	content_creator_menu_popup.name = "ContentCreatorMenuPopup"
-	content_creator_menu_popup.visible = false
-	content_creator_menu_popup.custom_minimum_size = Vector2(390, 0)
-	content_creator_menu_popup.mouse_filter = Control.MOUSE_FILTER_STOP
-	content_creator_menu_popup.z_index = UI_BASE_Z_INDEX
-	content_creator_menu_popup.add_theme_stylebox_override(
+func _setup_alpha_tools_popup() -> void:
+	alpha_tools_popup = PanelContainer.new()
+	alpha_tools_popup.name = "AlphaToolsPopup"
+	alpha_tools_popup.visible = false
+	alpha_tools_popup.custom_minimum_size = Vector2(390, 0)
+	alpha_tools_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	alpha_tools_popup.z_index = UI_BASE_Z_INDEX
+	alpha_tools_popup.add_theme_stylebox_override(
 		"panel",
 		_make_panel_style(UI_SURFACE_BASE, Color("#8065b0aa"), 12, 1)
 	)
-	root_control.add_child(content_creator_menu_popup)
+	root_control.add_child(alpha_tools_popup)
 
 	var margin_container := MarginContainer.new()
 	margin_container.add_theme_constant_override("margin_left", 14)
 	margin_container.add_theme_constant_override("margin_top", 12)
 	margin_container.add_theme_constant_override("margin_right", 14)
 	margin_container.add_theme_constant_override("margin_bottom", 14)
-	content_creator_menu_popup.add_child(margin_container)
+	alpha_tools_popup.add_child(margin_container)
 
 	var layout := VBoxContainer.new()
 	layout.add_theme_constant_override("separation", 10)
 	margin_container.add_child(layout)
 
-	content_creator_close_button = Button.new()
-	content_creator_close_button.pressed.connect(_hide_content_creator_menu_popup)
+	alpha_tools_close_button = Button.new()
+	alpha_tools_close_button.pressed.connect(_hide_alpha_tools_popup)
 	layout.add_child(
 		_create_tool_launcher_header(
-			"Alpha Tools",
-			"Create Pokémon for the Alpha",
-			content_creator_close_button,
+			"ui.staff.alpha.title",
+			"ui.staff.alpha.subtitle",
+			alpha_tools_close_button,
 			Color("#b28ae8")
 		)
 	)
 
-	content_creator_create_pokemon_button = Button.new()
-	content_creator_create_pokemon_button.pressed.connect(_on_content_creator_create_pokemon_button_pressed)
-	layout.add_child(content_creator_create_pokemon_button)
+	alpha_create_pokemon_button = Button.new()
+	alpha_create_pokemon_button.pressed.connect(_on_alpha_create_pokemon_button_pressed)
+	layout.add_child(alpha_create_pokemon_button)
 	_configure_launcher_card_button(
-		content_creator_create_pokemon_button,
-		"Create Pokémon",
-		"Build a team for your Alpha adventure",
-		CONTENT_CREATOR_MENU_ICON,
+		alpha_create_pokemon_button,
+		"ui.staff.alpha.create",
+		"ui.staff.alpha.create_description",
+		ALPHA_TOOLS_MENU_ICON,
 		Color("#b28ae8")
 	)
 
-	content_creator_clear_party_button = Button.new()
-	content_creator_clear_party_button.pressed.connect(_on_content_creator_clear_party_button_pressed)
-	layout.add_child(content_creator_clear_party_button)
+	alpha_clear_party_button = Button.new()
+	alpha_clear_party_button.pressed.connect(_on_alpha_clear_party_button_pressed)
+	layout.add_child(alpha_clear_party_button)
 	_configure_launcher_card_button(
-		content_creator_clear_party_button,
-		"Clear Alpha Pokémon",
-		"Remove only Pokémon made with Alpha Tools",
+		alpha_clear_party_button,
+		"ui.staff.alpha.clear",
+		"ui.staff.alpha.clear_description",
 		TOOL_CLEAR_DATA_ICON,
 		Color("#ef7085")
+	)
+
+func _setup_content_creator_tools_popup() -> void:
+	content_creator_tools_popup = PanelContainer.new()
+	content_creator_tools_popup.name = "ContentCreatorToolsPopup"
+	content_creator_tools_popup.visible = false
+	content_creator_tools_popup.custom_minimum_size = Vector2(390, 0)
+	content_creator_tools_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	content_creator_tools_popup.z_index = UI_BASE_Z_INDEX
+	content_creator_tools_popup.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_BASE, Color("#4baed0aa"), 12, 1)
+	)
+	root_control.add_child(content_creator_tools_popup)
+
+	var margin_container := MarginContainer.new()
+	margin_container.add_theme_constant_override("margin_left", 14)
+	margin_container.add_theme_constant_override("margin_top", 12)
+	margin_container.add_theme_constant_override("margin_right", 14)
+	margin_container.add_theme_constant_override("margin_bottom", 14)
+	content_creator_tools_popup.add_child(margin_container)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 10)
+	margin_container.add_child(layout)
+
+	var close_button := Button.new()
+	close_button.pressed.connect(_hide_content_creator_tools_popup)
+	layout.add_child(
+		_create_tool_launcher_header(
+			"ui.staff.creator.title",
+			"ui.staff.creator.subtitle",
+			close_button,
+			Color("#67c7ea")
+		)
+	)
+
+	content_creator_photo_mode_button = Button.new()
+	content_creator_photo_mode_button.pressed.connect(_on_content_creator_photo_mode_button_pressed)
+	layout.add_child(content_creator_photo_mode_button)
+	_configure_launcher_card_button(
+		content_creator_photo_mode_button,
+		"ui.staff.creator.photo_mode",
+		"ui.staff.creator.photo_mode_description",
+		CONTENT_CREATOR_MENU_ICON,
+		Color("#67c7ea")
 	)
 
 func _setup_dev_add_item_tools() -> void:
 	var dev_actions_container := dev_clear_party_button.get_parent()
 
 	dev_add_button = Button.new()
-	dev_add_button.text = "Add"
+	_set_localized_control_property(dev_add_button, "text", "ui.staff.dev.add")
 	dev_add_button.custom_minimum_size = Vector2(190, 34)
 	dev_add_button.focus_mode = Control.FOCUS_NONE
 	if dev_actions_container != null:
@@ -5901,7 +6366,7 @@ func _setup_dev_add_item_tools() -> void:
 		dev_actions_container.move_child(dev_add_button, dev_clear_party_button.get_index())
 
 	dev_heal_party_button = Button.new()
-	dev_heal_party_button.text = "Heal"
+	_set_localized_control_property(dev_heal_party_button, "text", "ui.staff.dev.heal")
 	dev_heal_party_button.custom_minimum_size = Vector2(190, 34)
 	dev_heal_party_button.focus_mode = Control.FOCUS_NONE
 	if dev_actions_container != null:
@@ -5909,7 +6374,7 @@ func _setup_dev_add_item_tools() -> void:
 		dev_actions_container.move_child(dev_heal_party_button, dev_clear_party_button.get_index())
 
 	dev_preview_evolution_button = Button.new()
-	dev_preview_evolution_button.text = "Preview Evolution"
+	_set_localized_control_property(dev_preview_evolution_button, "text", "ui.staff.dev.preview_evolution")
 	dev_preview_evolution_button.custom_minimum_size = Vector2(190, 34)
 	dev_preview_evolution_button.focus_mode = Control.FOCUS_NONE
 	if dev_actions_container != null:
@@ -5917,7 +6382,7 @@ func _setup_dev_add_item_tools() -> void:
 		dev_actions_container.move_child(dev_preview_evolution_button, dev_clear_party_button.get_index())
 
 	dev_badge_progress_button = Button.new()
-	dev_badge_progress_button.text = "Trainer Progress"
+	_set_localized_control_property(dev_badge_progress_button, "text", "ui.staff.dev.trainer_progress")
 	dev_badge_progress_button.custom_minimum_size = Vector2(190, 34)
 	dev_badge_progress_button.focus_mode = Control.FOCUS_NONE
 	if dev_actions_container != null:
@@ -5958,8 +6423,8 @@ func _setup_dev_add_item_tools() -> void:
 	dev_add_menu_close_button.pressed.connect(_hide_dev_add_menu_popup)
 	add_layout.add_child(
 		_create_tool_launcher_header(
-			"Add Resources",
-			"Prepare a test account quickly",
+			"ui.staff.dev.resources",
+			"ui.staff.dev.resources_description",
 			dev_add_menu_close_button,
 			Color("#f0cc70")
 		)
@@ -5969,8 +6434,8 @@ func _setup_dev_add_item_tools() -> void:
 	add_layout.add_child(dev_add_item_button)
 	_configure_tool_tile_button(
 		dev_add_item_button,
-		"Add Items",
-		"Search the item catalogue",
+		"ui.staff.dev.add_items",
+		"ui.staff.dev.add_items_description",
 		DEV_ADD_RESOURCES_ICON,
 		Color("#f0cc70")
 	)
@@ -5979,8 +6444,8 @@ func _setup_dev_add_item_tools() -> void:
 	add_layout.add_child(dev_add_money_button)
 	_configure_tool_tile_button(
 		dev_add_money_button,
-		"Add Currency",
-		"Add any wallet currency",
+		"ui.staff.dev.add_currency",
+		"ui.staff.dev.add_currency_description",
 		DEV_ADD_CURRENCY_ICON,
 		Color("#f0cc70")
 	)
@@ -6036,27 +6501,27 @@ func _setup_dev_add_item_tools() -> void:
 	header.add_child(heading)
 
 	var title_label := Label.new()
-	title_label.text = "Add Item"
+	_set_localized_control_property(title_label, "text", "ui.staff.dev.add_item_title")
 	title_label.add_theme_font_size_override("font_size", 19)
 	title_label.add_theme_color_override("font_color", UI_TEXT)
 	heading.add_child(title_label)
 
 	var subtitle_label := Label.new()
-	subtitle_label.text = "Choose an item and set the amount"
+	_set_localized_control_property(subtitle_label, "text", "ui.staff.dev.add_item_subtitle")
 	subtitle_label.add_theme_font_size_override("font_size", 11)
 	subtitle_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	heading.add_child(subtitle_label)
 
 	var close_button := Button.new()
 	close_button.text = "×"
-	close_button.tooltip_text = "Close"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.custom_minimum_size = Vector2(34, 34)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_dev_add_item_popup)
 	header.add_child(close_button)
 
 	dev_item_search_input = LineEdit.new()
-	dev_item_search_input.placeholder_text = "Search item..."
+	_set_localized_control_property(dev_item_search_input, "placeholder_text", "ui.staff.dev.search_item")
 	dev_item_search_input.clear_button_enabled = true
 	dev_item_search_input.custom_minimum_size = Vector2(0, 36)
 	dev_item_search_input.text_changed.connect(_on_dev_item_search_changed)
@@ -6090,7 +6555,7 @@ func _setup_dev_add_item_tools() -> void:
 	layout.add_child(quantity_row)
 
 	var quantity_label := Label.new()
-	quantity_label.text = "AMOUNT"
+	_set_localized_control_property(quantity_label, "text", "ui.staff.dev.amount")
 	quantity_label.custom_minimum_size = Vector2(96, 0)
 	quantity_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	quantity_label.add_theme_color_override("font_color", UI_TEXT)
@@ -6107,7 +6572,7 @@ func _setup_dev_add_item_tools() -> void:
 	quantity_row.add_child(dev_item_quantity_spinbox)
 
 	dev_item_confirm_button = Button.new()
-	dev_item_confirm_button.text = "Add selected item"
+	_set_localized_control_property(dev_item_confirm_button, "text", "ui.staff.dev.add_selected_item")
 	dev_item_confirm_button.custom_minimum_size = Vector2(0, 36)
 	dev_item_confirm_button.disabled = true
 	dev_item_confirm_button.focus_mode = Control.FOCUS_NONE
@@ -6166,20 +6631,20 @@ func _setup_dev_add_item_tools() -> void:
 	money_header.add_child(money_heading)
 
 	var money_title := Label.new()
-	money_title.text = "Add Currency"
+	_set_localized_control_property(money_title, "text", "ui.staff.dev.add_currency")
 	money_title.add_theme_font_size_override("font_size", 19)
 	money_title.add_theme_color_override("font_color", UI_TEXT)
 	money_heading.add_child(money_title)
 
 	var money_subtitle := Label.new()
-	money_subtitle.text = "Set an amount, then choose the balance to update"
+	_set_localized_control_property(money_subtitle, "text", "ui.staff.dev.add_currency_subtitle")
 	money_subtitle.add_theme_font_size_override("font_size", 11)
 	money_subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	money_heading.add_child(money_subtitle)
 
 	var money_close_button := Button.new()
 	money_close_button.text = "×"
-	money_close_button.tooltip_text = "Close"
+	_set_localized_control_property(money_close_button, "tooltip_text", "common.close")
 	money_close_button.custom_minimum_size = Vector2(34, 34)
 	money_close_button.focus_mode = Control.FOCUS_NONE
 	money_close_button.pressed.connect(_hide_dev_add_money_popup)
@@ -6201,7 +6666,7 @@ func _setup_dev_add_item_tools() -> void:
 	amount_margin.add_child(money_row)
 
 	var money_label := Label.new()
-	money_label.text = "AMOUNT"
+	_set_localized_control_property(money_label, "text", "ui.staff.dev.amount")
 	money_label.custom_minimum_size = Vector2(96, 0)
 	money_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	money_label.add_theme_color_override("font_color", UI_TEXT)
@@ -6224,7 +6689,7 @@ func _setup_dev_add_item_tools() -> void:
 	money_layout.add_child(currency_buttons)
 
 	dev_money_confirm_button = Button.new()
-	dev_money_confirm_button.text = "Add Pokédollars"
+	_set_localized_control_property(dev_money_confirm_button, "text", "ui.staff.dev.add_pokedollars")
 	dev_money_confirm_button.custom_minimum_size = Vector2(0, 36)
 	dev_money_confirm_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	dev_money_confirm_button.focus_mode = Control.FOCUS_NONE
@@ -6232,7 +6697,7 @@ func _setup_dev_add_item_tools() -> void:
 	currency_buttons.add_child(dev_money_confirm_button)
 
 	dev_gems_confirm_button = Button.new()
-	dev_gems_confirm_button.text = "Add Aether Gems"
+	_set_localized_control_property(dev_gems_confirm_button, "text", "ui.staff.dev.add_gems")
 	dev_gems_confirm_button.custom_minimum_size = Vector2(0, 36)
 	dev_gems_confirm_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	dev_gems_confirm_button.focus_mode = Control.FOCUS_NONE
@@ -6240,7 +6705,7 @@ func _setup_dev_add_item_tools() -> void:
 	currency_buttons.add_child(dev_gems_confirm_button)
 
 	dev_aetherite_confirm_button = Button.new()
-	dev_aetherite_confirm_button.text = "Add Aetherite"
+	_set_localized_control_property(dev_aetherite_confirm_button, "text", "ui.staff.dev.add_aetherite")
 	dev_aetherite_confirm_button.custom_minimum_size = Vector2(0, 36)
 	dev_aetherite_confirm_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	dev_aetherite_confirm_button.focus_mode = Control.FOCUS_NONE
@@ -6248,7 +6713,7 @@ func _setup_dev_add_item_tools() -> void:
 	currency_buttons.add_child(dev_aetherite_confirm_button)
 
 	dev_battle_points_confirm_button = Button.new()
-	dev_battle_points_confirm_button.text = "Add Battle Points"
+	_set_localized_control_property(dev_battle_points_confirm_button, "text", "ui.staff.dev.add_battle_points")
 	dev_battle_points_confirm_button.custom_minimum_size = Vector2(0, 36)
 	dev_battle_points_confirm_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	dev_battle_points_confirm_button.focus_mode = Control.FOCUS_NONE
@@ -6274,15 +6739,15 @@ func _setup_dev_tools_menu_surface() -> void:
 		_make_panel_style(UI_SURFACE_BASE, Color("#7f6ab5aa"), 12, 1)
 	)
 	var header := _create_tool_launcher_header(
-		"Developer Tools",
-		"Test gameplay and world states",
+		"ui.staff.dev.title",
+		"ui.staff.dev.subtitle",
 		dev_actions_close_button,
 		Color("#b28ae8")
 	)
 	layout.add_child(header)
 	layout.move_child(header, 0)
 
-	var quick_actions_label := _create_tool_section_label("Quick actions", Color("#bda4e8"))
+	var quick_actions_label := _create_tool_section_label("ui.staff.dev.quick_actions", Color("#bda4e8"))
 	layout.add_child(quick_actions_label)
 	layout.move_child(quick_actions_label, 1)
 
@@ -6309,55 +6774,55 @@ func _setup_dev_tools_menu_surface() -> void:
 
 	_configure_tool_tile_button(
 		dev_add_pokemon_button,
-		"Create Pokémon",
-		"Build a party member",
+		"ui.staff.dev.create_pokemon",
+		"ui.staff.dev.create_pokemon_description",
 		DEV_CREATE_POKEMON_ICON,
 		Color("#7aa7f4")
 	)
 	_configure_tool_tile_button(
 		dev_spawn_pokemon_button,
-		"Start Encounter",
-		"Spawn a wild battle",
+		"ui.staff.dev.start_encounter",
+		"ui.staff.dev.start_encounter_description",
 		DEV_SPAWN_ENCOUNTER_ICON,
 		Color("#60d3ff")
 	)
 	_configure_tool_tile_button(
 		dev_add_button,
-		"Add Resources",
-		"Items or wallet currencies",
+		"ui.staff.dev.resources",
+		"ui.staff.dev.resources_short_description",
 		DEV_ADD_RESOURCES_ICON,
 		Color("#f0cc70")
 	)
 	_configure_tool_tile_button(
 		dev_heal_party_button,
-		"Heal Party",
-		"Restore the active team",
+		"ui.staff.dev.heal_party",
+		"ui.staff.dev.heal_party_description",
 		DEV_HEAL_PARTY_ICON,
 		Color("#6ee7a2")
 	)
 	_configure_tool_tile_button(
 		dev_preview_evolution_button,
-		"Preview Evolution",
-		"Play the evolution flow",
+		"ui.staff.dev.preview_evolution",
+		"ui.staff.dev.preview_evolution_description",
 		DEV_PREVIEW_EVOLUTION_ICON,
 		Color("#b28ae8")
 	)
 	_configure_tool_tile_button(
 		dev_badge_progress_button,
-		"Trainer Progress",
-		"Manage server Gym Badges",
+		"ui.staff.dev.trainer_progress",
+		"ui.staff.dev.trainer_progress_description",
 		DEV_TRAINER_PROGRESS_ICON,
 		Color("#e3bd68")
 	)
 	_configure_tool_tile_button(
 		dev_clear_party_button,
-		"Clear Data",
-		"Party or inventory",
+		"ui.staff.dev.clear_data",
+		"ui.staff.dev.clear_data_description",
 		TOOL_CLEAR_DATA_ICON,
 		Color("#ef7085")
 	)
 
-	var world_label := _create_tool_section_label("World preview", Color("#75d9ed"))
+	var world_label := _create_tool_section_label("ui.staff.dev.world_preview", Color("#75d9ed"))
 	layout.add_child(world_label)
 
 	var world_panel := PanelContainer.new()
@@ -6386,7 +6851,7 @@ func _setup_dev_tools_menu_surface() -> void:
 	_move_tool_menu_control(world_time_label, time_group)
 	_move_tool_menu_control(dev_world_time_select, time_group)
 	if world_time_label != null:
-		world_time_label.text = "Time"
+		_set_localized_control_property(world_time_label, "text", "ui.staff.dev.time")
 		world_time_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		world_time_label.add_theme_font_size_override("font_size", 11)
 
@@ -6397,7 +6862,7 @@ func _setup_dev_tools_menu_surface() -> void:
 	_move_tool_menu_control(world_weather_label, weather_group)
 	_move_tool_menu_control(dev_world_weather_select, weather_group)
 	if world_weather_label != null:
-		world_weather_label.text = "Weather"
+		_set_localized_control_property(world_weather_label, "text", "ui.staff.dev.weather")
 		world_weather_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		world_weather_label.add_theme_font_size_override("font_size", 11)
 
@@ -6443,8 +6908,8 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_tools_close_button.pressed.connect(_hide_staff_tools_popup)
 	tools_layout.add_child(
 		_create_tool_launcher_header(
-			"Staff Tools",
-			"Moderation and player assistance",
+			"ui.staff.tools.title",
+			"ui.staff.tools.subtitle",
 			staff_tools_close_button,
 			Color("#60d3ff")
 		)
@@ -6455,8 +6920,8 @@ func _setup_staff_impersonation_tools() -> void:
 	tools_layout.add_child(staff_teleport_button)
 	_configure_launcher_card_button(
 		staff_teleport_button,
-		"Teleport",
-		"Move yourself or assist another trainer",
+		"ui.staff.teleport.action",
+		"ui.staff.teleport.action_description",
 		STAFF_TELEPORT_ICON,
 		Color("#60d3ff")
 	)
@@ -6466,8 +6931,8 @@ func _setup_staff_impersonation_tools() -> void:
 	tools_layout.add_child(staff_impersonate_button)
 	_configure_launcher_card_button(
 		staff_impersonate_button,
-		"Impersonate",
-		"Enter a secure staff session",
+		"ui.staff.impersonate.action",
+		"ui.staff.impersonate.action_description",
 		STAFF_IMPERSONATE_ICON,
 		Color("#b28ae8")
 	)
@@ -6540,20 +7005,20 @@ func _setup_staff_impersonation_tools() -> void:
 	header.add_child(impersonate_heading)
 
 	var title_label := Label.new()
-	title_label.text = "Staff Impersonation"
+	_set_localized_control_property(title_label, "text", "ui.staff.impersonate.title")
 	title_label.add_theme_font_size_override("font_size", 20)
 	title_label.add_theme_color_override("font_color", UI_TEXT)
 	impersonate_heading.add_child(title_label)
 
 	var impersonate_subtitle := Label.new()
-	impersonate_subtitle.text = "Start a temporary secure account session"
+	_set_localized_control_property(impersonate_subtitle, "text", "ui.staff.impersonate.subtitle")
 	impersonate_subtitle.add_theme_font_size_override("font_size", 11)
 	impersonate_subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	impersonate_heading.add_child(impersonate_subtitle)
 
 	var close_button := Button.new()
 	close_button.text = "×"
-	close_button.tooltip_text = "Close"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.custom_minimum_size = Vector2(34, 34)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_staff_impersonate_popup)
@@ -6587,25 +7052,33 @@ func _setup_staff_impersonation_tools() -> void:
 	security_copy.add_theme_constant_override("separation", 2)
 	security_row.add_child(security_copy)
 	var security_title := Label.new()
-	security_title.text = "SECURE STAFF ACTION"
+	_set_localized_control_property(security_title, "text", "ui.staff.impersonate.security_title")
 	security_title.add_theme_font_size_override("font_size", 10)
 	security_title.add_theme_color_override("font_color", Color("#d9b5ff"))
 	security_copy.add_child(security_title)
 	var security_description := Label.new()
-	security_description.text = "Use a single-use token from the admin portal. This replaces the active account for this client and clears the saved session."
+	_set_localized_control_property(
+		security_description,
+		"text",
+		"ui.staff.impersonate.security_description"
+	)
 	security_description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	security_description.add_theme_font_size_override("font_size", 11)
 	security_description.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	security_copy.add_child(security_description)
 
 	var token_caption := Label.new()
-	token_caption.text = "IMPERSONATION TOKEN"
+	_set_localized_control_property(token_caption, "text", "ui.staff.impersonate.token")
 	token_caption.add_theme_font_size_override("font_size", 10)
 	token_caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	layout.add_child(token_caption)
 
 	staff_impersonate_token_input = LineEdit.new()
-	staff_impersonate_token_input.placeholder_text = "Paste single-use token"
+	_set_localized_control_property(
+		staff_impersonate_token_input,
+		"placeholder_text",
+		"ui.staff.impersonate.token_placeholder"
+	)
 	staff_impersonate_token_input.custom_minimum_size = Vector2(0, 42)
 	staff_impersonate_token_input.secret = true
 	staff_impersonate_token_input.secret_character = "•"
@@ -6615,7 +7088,11 @@ func _setup_staff_impersonation_tools() -> void:
 	layout.add_child(staff_impersonate_token_input)
 
 	staff_impersonate_status_label = Label.new()
-	staff_impersonate_status_label.text = "The token is never displayed or stored by the client."
+	_set_localized_control_property(
+		staff_impersonate_status_label,
+		"text",
+		"ui.staff.impersonate.token_safety"
+	)
 	staff_impersonate_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	staff_impersonate_status_label.add_theme_font_size_override("font_size", 11)
 	staff_impersonate_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -6626,14 +7103,18 @@ func _setup_staff_impersonation_tools() -> void:
 	impersonate_actions.add_theme_constant_override("separation", 8)
 	layout.add_child(impersonate_actions)
 	var impersonate_cancel_button := Button.new()
-	impersonate_cancel_button.text = "Cancel"
+	_set_localized_control_property(impersonate_cancel_button, "text", "common.cancel")
 	impersonate_cancel_button.custom_minimum_size = Vector2(112, 40)
 	impersonate_cancel_button.focus_mode = Control.FOCUS_NONE
 	impersonate_cancel_button.pressed.connect(_hide_staff_impersonate_popup)
 	impersonate_actions.add_child(impersonate_cancel_button)
 
 	staff_impersonate_confirm_button = Button.new()
-	staff_impersonate_confirm_button.text = "Start Secure Session"
+	_set_localized_control_property(
+		staff_impersonate_confirm_button,
+		"text",
+		"ui.staff.impersonate.confirm"
+	)
 	staff_impersonate_confirm_button.custom_minimum_size = Vector2(210, 40)
 	staff_impersonate_confirm_button.focus_mode = Control.FOCUS_NONE
 	staff_impersonate_confirm_button.disabled = true
@@ -6677,7 +7158,7 @@ func _setup_staff_impersonation_tools() -> void:
 	teleport_layout.add_child(teleport_header)
 
 	var teleport_title := Label.new()
-	teleport_title.text = "Staff Teleporter"
+	_set_localized_control_property(teleport_title, "text", "ui.staff.teleport.title")
 	teleport_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	teleport_title.add_theme_font_size_override("font_size", 18)
 	teleport_title.add_theme_color_override("font_color", UI_TEXT)
@@ -6687,7 +7168,7 @@ func _setup_staff_impersonation_tools() -> void:
 
 	var teleport_close_button := Button.new()
 	teleport_close_button.text = "×"
-	teleport_close_button.tooltip_text = "Close"
+	_set_localized_control_property(teleport_close_button, "tooltip_text", "common.close")
 	teleport_close_button.custom_minimum_size = Vector2(34, 34)
 	teleport_close_button.focus_mode = Control.FOCUS_NONE
 	teleport_close_button.pressed.connect(_hide_staff_teleport_popup)
@@ -6698,7 +7179,11 @@ func _setup_staff_impersonation_tools() -> void:
 	teleport_layout.add_child(teleport_tab_bar)
 
 	staff_teleport_self_tab_button = Button.new()
-	staff_teleport_self_tab_button.text = "Teleport Self"
+	_set_localized_control_property(
+		staff_teleport_self_tab_button,
+		"text",
+		"ui.staff.teleport.self"
+	)
 	staff_teleport_self_tab_button.custom_minimum_size = Vector2(0, 40)
 	staff_teleport_self_tab_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_self_tab_button.focus_mode = Control.FOCUS_NONE
@@ -6706,7 +7191,11 @@ func _setup_staff_impersonation_tools() -> void:
 	teleport_tab_bar.add_child(staff_teleport_self_tab_button)
 
 	staff_teleport_player_tab_button = Button.new()
-	staff_teleport_player_tab_button.text = "Player Actions"
+	_set_localized_control_property(
+		staff_teleport_player_tab_button,
+		"text",
+		"ui.staff.teleport.player_actions"
+	)
 	staff_teleport_player_tab_button.custom_minimum_size = Vector2(0, 40)
 	staff_teleport_player_tab_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_player_tab_button.focus_mode = Control.FOCUS_NONE
@@ -6733,7 +7222,11 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_self_section.add_child(_create_staff_teleport_section_title("Map"))
 
 	staff_teleport_destination_search = LineEdit.new()
-	staff_teleport_destination_search.placeholder_text = "Search map…"
+	_set_localized_control_property(
+		staff_teleport_destination_search,
+		"placeholder_text",
+		"ui.staff.teleport.search_map"
+	)
 	staff_teleport_destination_search.custom_minimum_size = Vector2(0, 38)
 	staff_teleport_destination_search.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_destination_search.text_changed.connect(_on_staff_teleport_destination_search_changed)
@@ -6742,7 +7235,11 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_self_section.add_child(_create_staff_teleport_section_title("Spawn point"))
 
 	staff_teleport_spawn_search = LineEdit.new()
-	staff_teleport_spawn_search.placeholder_text = "Search spawn point…"
+	_set_localized_control_property(
+		staff_teleport_spawn_search,
+		"placeholder_text",
+		"ui.staff.teleport.search_spawn"
+	)
 	staff_teleport_spawn_search.custom_minimum_size = Vector2(0, 38)
 	staff_teleport_spawn_search.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_spawn_search.text_changed.connect(_on_staff_teleport_spawn_search_changed)
@@ -6756,20 +7253,32 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_self_section.add_child(staff_teleport_destination_results)
 
 	staff_teleport_selected_destination_label = Label.new()
-	staff_teleport_selected_destination_label.text = "No destination selected"
+	_set_localized_control_property(
+		staff_teleport_selected_destination_label,
+		"text",
+		"ui.staff.teleport.no_destination"
+	)
 	staff_teleport_selected_destination_label.add_theme_font_size_override("font_size", 12)
 	staff_teleport_selected_destination_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	staff_teleport_selected_destination_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	staff_teleport_self_section.add_child(staff_teleport_selected_destination_label)
 
 	staff_teleport_self_reason_input = LineEdit.new()
-	staff_teleport_self_reason_input.placeholder_text = "Self teleport reason (optional)"
+	_set_localized_control_property(
+		staff_teleport_self_reason_input,
+		"placeholder_text",
+		"ui.staff.teleport.self_reason"
+	)
 	staff_teleport_self_reason_input.custom_minimum_size = Vector2(0, 38)
 	staff_teleport_self_reason_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_self_section.add_child(staff_teleport_self_reason_input)
 
 	staff_teleport_confirm_button = Button.new()
-	staff_teleport_confirm_button.text = "Teleport Self"
+	_set_localized_control_property(
+		staff_teleport_confirm_button,
+		"text",
+		"ui.staff.teleport.self"
+	)
 	staff_teleport_confirm_button.custom_minimum_size = Vector2(0, 36)
 	staff_teleport_confirm_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_confirm_button.focus_mode = Control.FOCUS_NONE
@@ -6781,11 +7290,17 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_player_section.add_theme_constant_override("separation", 7)
 	teleport_body.add_child(staff_teleport_player_section)
 
-	staff_teleport_player_title = _create_staff_teleport_section_title("Player") as Label
+	staff_teleport_player_title = _create_staff_teleport_section_title(
+		"ui.staff.teleport.player"
+	) as Label
 	staff_teleport_player_section.add_child(staff_teleport_player_title)
 
 	staff_teleport_player_search_input = LineEdit.new()
-	staff_teleport_player_search_input.placeholder_text = "Search online player…"
+	_set_localized_control_property(
+		staff_teleport_player_search_input,
+		"placeholder_text",
+		"ui.staff.teleport.search_online_player"
+	)
 	staff_teleport_player_search_input.custom_minimum_size = Vector2(0, 36)
 	staff_teleport_player_search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_player_search_input.text_changed.connect(_on_staff_teleport_player_search_changed)
@@ -6799,7 +7314,11 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_player_section.add_child(staff_teleport_player_results)
 
 	staff_teleport_selected_player_label = Label.new()
-	staff_teleport_selected_player_label.text = "Selected player: none"
+	_set_localized_control_property(
+		staff_teleport_selected_player_label,
+		"text",
+		"ui.staff.teleport.no_player"
+	)
 	staff_teleport_selected_player_label.add_theme_font_size_override("font_size", 12)
 	staff_teleport_selected_player_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	staff_teleport_selected_player_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -6810,7 +7329,11 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_player_section.add_child(player_action_mode_bar)
 
 	staff_teleport_to_player_mode_button = Button.new()
-	staff_teleport_to_player_mode_button.text = "To Player"
+	_set_localized_control_property(
+		staff_teleport_to_player_mode_button,
+		"text",
+		"ui.staff.teleport.to_player_short"
+	)
 	staff_teleport_to_player_mode_button.custom_minimum_size = Vector2(0, 34)
 	staff_teleport_to_player_mode_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_to_player_mode_button.focus_mode = Control.FOCUS_NONE
@@ -6818,7 +7341,11 @@ func _setup_staff_impersonation_tools() -> void:
 	player_action_mode_bar.add_child(staff_teleport_to_player_mode_button)
 
 	staff_teleport_send_player_mode_button = Button.new()
-	staff_teleport_send_player_mode_button.text = "Send Safe"
+	_set_localized_control_property(
+		staff_teleport_send_player_mode_button,
+		"text",
+		"ui.staff.teleport.send_safe"
+	)
 	staff_teleport_send_player_mode_button.custom_minimum_size = Vector2(0, 34)
 	staff_teleport_send_player_mode_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_send_player_mode_button.focus_mode = Control.FOCUS_NONE
@@ -6834,7 +7361,11 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_send_section.add_child(_create_staff_teleport_section_title("Map"))
 
 	staff_teleport_send_map_search = LineEdit.new()
-	staff_teleport_send_map_search.placeholder_text = "Search map…"
+	_set_localized_control_property(
+		staff_teleport_send_map_search,
+		"placeholder_text",
+		"ui.staff.teleport.search_map"
+	)
 	staff_teleport_send_map_search.custom_minimum_size = Vector2(0, 38)
 	staff_teleport_send_map_search.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_send_map_search.text_changed.connect(_on_staff_teleport_send_destination_search_changed)
@@ -6843,7 +7374,11 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_send_section.add_child(_create_staff_teleport_section_title("Spawn point"))
 
 	staff_teleport_send_spawn_search = LineEdit.new()
-	staff_teleport_send_spawn_search.placeholder_text = "Search spawn point…"
+	_set_localized_control_property(
+		staff_teleport_send_spawn_search,
+		"placeholder_text",
+		"ui.staff.teleport.search_spawn"
+	)
 	staff_teleport_send_spawn_search.custom_minimum_size = Vector2(0, 38)
 	staff_teleport_send_spawn_search.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_send_spawn_search.text_changed.connect(_on_staff_teleport_send_destination_search_changed)
@@ -6857,13 +7392,21 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_send_section.add_child(staff_teleport_send_destination_results)
 
 	staff_teleport_player_reason_input = LineEdit.new()
-	staff_teleport_player_reason_input.placeholder_text = "Player action reason (optional)"
+	_set_localized_control_property(
+		staff_teleport_player_reason_input,
+		"placeholder_text",
+		"ui.staff.teleport.player_reason"
+	)
 	staff_teleport_player_reason_input.custom_minimum_size = Vector2(0, 38)
 	staff_teleport_player_reason_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_player_section.add_child(staff_teleport_player_reason_input)
 
 	staff_teleport_to_player_button = Button.new()
-	staff_teleport_to_player_button.text = "Teleport To Player"
+	_set_localized_control_property(
+		staff_teleport_to_player_button,
+		"text",
+		"ui.staff.teleport.to_player"
+	)
 	staff_teleport_to_player_button.custom_minimum_size = Vector2(0, 36)
 	staff_teleport_to_player_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_to_player_button.focus_mode = Control.FOCUS_NONE
@@ -6871,7 +7414,11 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_player_section.add_child(staff_teleport_to_player_button)
 
 	staff_teleport_send_player_button = Button.new()
-	staff_teleport_send_player_button.text = "Send To Safe Location"
+	_set_localized_control_property(
+		staff_teleport_send_player_button,
+		"text",
+		"ui.staff.teleport.move_safe"
+	)
 	staff_teleport_send_player_button.custom_minimum_size = Vector2(0, 36)
 	staff_teleport_send_player_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_send_player_button.focus_mode = Control.FOCUS_NONE
@@ -6907,7 +7454,10 @@ func _setup_staff_impersonation_tools() -> void:
 
 func _create_staff_teleport_section_title(title_text: String) -> Label:
 	var label := Label.new()
-	label.text = title_text
+	if LocalizationManager.has_key(title_text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(label, "text", title_text)
+	else:
+		label.text = title_text
 	label.add_theme_font_size_override("font_size", 14)
 	label.add_theme_color_override("font_color", UI_TEXT)
 	label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.35))
@@ -6962,19 +7512,23 @@ func _apply_staff_teleport_revamp(
 	header.add_child(heading)
 	header.move_child(heading, 2)
 	title.reparent(heading)
-	title.text = "Staff Teleporter"
+	_set_localized_control_property(title, "text", "ui.staff.teleport.title")
 	title.add_theme_font_size_override("font_size", 20)
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	var subtitle := Label.new()
-	subtitle.text = "Move yourself or assist an online player"
+	_set_localized_control_property(subtitle, "text", "ui.staff.teleport.subtitle")
 	subtitle.add_theme_font_size_override("font_size", 11)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	heading.add_child(subtitle)
 
 	close_button.text = "×"
-	close_button.tooltip_text = "Close teleporter"
+	_set_localized_control_property(
+		close_button,
+		"tooltip_text",
+		"ui.staff.teleport.close"
+	)
 	tab_bar.add_theme_constant_override("separation", 8)
 	body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -7007,8 +7561,10 @@ func _build_staff_teleport_self_workspace() -> void:
 	var browser_header := HBoxContainer.new()
 	browser_header.add_theme_constant_override("separation", 8)
 	browser_layout.add_child(browser_header)
-	browser_header.add_child(_create_staff_teleport_caption("DESTINATIONS"))
-	staff_teleport_destination_status_label = _create_staff_teleport_status_label("Waiting for destinations")
+	browser_header.add_child(_create_staff_teleport_caption("ui.staff.teleport.destinations"))
+	staff_teleport_destination_status_label = _create_staff_teleport_status_label(
+		"ui.staff.teleport.waiting_destinations"
+	)
 	staff_teleport_destination_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_destination_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	browser_header.add_child(staff_teleport_destination_status_label)
@@ -7016,9 +7572,17 @@ func _build_staff_teleport_self_workspace() -> void:
 	var self_search_row := HBoxContainer.new()
 	self_search_row.add_theme_constant_override("separation", 8)
 	browser_layout.add_child(self_search_row)
-	staff_teleport_destination_search.placeholder_text = "Search map..."
+	_set_localized_control_property(
+		staff_teleport_destination_search,
+		"placeholder_text",
+		"ui.staff.teleport.search_map"
+	)
 	staff_teleport_destination_search.reparent(self_search_row)
-	staff_teleport_spawn_search.placeholder_text = "Search spawn point..."
+	_set_localized_control_property(
+		staff_teleport_spawn_search,
+		"placeholder_text",
+		"ui.staff.teleport.search_spawn"
+	)
 	staff_teleport_spawn_search.reparent(self_search_row)
 	staff_teleport_destination_results.custom_minimum_size = Vector2(0, 350)
 	staff_teleport_destination_results.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -7026,7 +7590,7 @@ func _build_staff_teleport_self_workspace() -> void:
 
 	var action_surface := _create_staff_teleport_surface(columns, Vector2(356, 0), Color("#4e8bb899"))
 	var action_layout := action_surface.get("layout") as VBoxContainer
-	action_layout.add_child(_create_staff_teleport_caption("SELECTED DESTINATION"))
+	action_layout.add_child(_create_staff_teleport_caption("ui.staff.teleport.selected_destination"))
 	var destination_card := _create_staff_teleport_selection_card(STAFF_TELEPORT_ICON)
 	action_layout.add_child(destination_card.get("panel") as PanelContainer)
 	var destination_card_row := destination_card.get("row") as HBoxContainer
@@ -7039,7 +7603,7 @@ func _build_staff_teleport_self_workspace() -> void:
 	staff_teleport_selected_destination_label.add_theme_font_size_override("font_size", 14)
 
 	var self_hint := Label.new()
-	self_hint.text = "Choose a map and spawn point. Your current session will move through the authorized teleport flow."
+	_set_localized_control_property(self_hint, "text", "ui.staff.teleport.self_hint")
 	self_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	self_hint.add_theme_font_size_override("font_size", 11)
 	self_hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -7048,10 +7612,18 @@ func _build_staff_teleport_self_workspace() -> void:
 	var self_spacer := Control.new()
 	self_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	action_layout.add_child(self_spacer)
-	action_layout.add_child(_create_staff_teleport_caption("STAFF NOTE"))
-	staff_teleport_self_reason_input.placeholder_text = "Reason (optional)"
+	action_layout.add_child(_create_staff_teleport_caption("ui.staff.teleport.staff_note"))
+	_set_localized_control_property(
+		staff_teleport_self_reason_input,
+		"placeholder_text",
+		"ui.staff.teleport.reason"
+	)
 	staff_teleport_self_reason_input.reparent(action_layout)
-	staff_teleport_confirm_button.text = "Teleport Self"
+	_set_localized_control_property(
+		staff_teleport_confirm_button,
+		"text",
+		"ui.staff.teleport.self"
+	)
 	staff_teleport_confirm_button.custom_minimum_size = Vector2(0, 44)
 	staff_teleport_confirm_button.reparent(action_layout)
 
@@ -7076,12 +7648,18 @@ func _build_staff_teleport_player_workspace() -> void:
 	var player_header := HBoxContainer.new()
 	player_header.add_theme_constant_override("separation", 8)
 	player_layout.add_child(player_header)
-	player_header.add_child(_create_staff_teleport_caption("ONLINE PLAYERS"))
-	staff_teleport_player_results_status_label = _create_staff_teleport_status_label("Waiting for players")
+	player_header.add_child(_create_staff_teleport_caption("ui.staff.teleport.online_players"))
+	staff_teleport_player_results_status_label = _create_staff_teleport_status_label(
+		"ui.staff.teleport.waiting_players"
+	)
 	staff_teleport_player_results_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_player_results_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	player_header.add_child(staff_teleport_player_results_status_label)
-	staff_teleport_player_search_input.placeholder_text = "Search name or username..."
+	_set_localized_control_property(
+		staff_teleport_player_search_input,
+		"placeholder_text",
+		"ui.staff.teleport.search_player"
+	)
 	staff_teleport_player_search_input.reparent(player_layout)
 	staff_teleport_player_results.custom_minimum_size = Vector2(0, 350)
 	staff_teleport_player_results.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -7089,7 +7667,7 @@ func _build_staff_teleport_player_workspace() -> void:
 
 	var action_surface := _create_staff_teleport_surface(columns, Vector2(488, 0), Color("#4e8bb899"))
 	var action_layout := action_surface.get("layout") as VBoxContainer
-	action_layout.add_child(_create_staff_teleport_caption("SELECTED PLAYER"))
+	action_layout.add_child(_create_staff_teleport_caption("ui.staff.teleport.selected_player"))
 	var player_card := _create_staff_teleport_selection_card(SOCIALS_NEARBY_ICON)
 	action_layout.add_child(player_card.get("panel") as PanelContainer)
 	var player_card_row := player_card.get("row") as HBoxContainer
@@ -7102,18 +7680,30 @@ func _build_staff_teleport_player_workspace() -> void:
 	staff_teleport_selected_player_label.add_theme_font_size_override("font_size", 14)
 
 	staff_teleport_player_action_hint = Label.new()
-	staff_teleport_player_action_hint.text = "Select a player to unlock staff actions."
+	_set_localized_control_property(
+		staff_teleport_player_action_hint,
+		"text",
+		"ui.staff.teleport.select_player_hint"
+	)
 	staff_teleport_player_action_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	staff_teleport_player_action_hint.add_theme_font_size_override("font_size", 11)
 	staff_teleport_player_action_hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	action_layout.add_child(staff_teleport_player_action_hint)
 
-	action_layout.add_child(_create_staff_teleport_caption("ACTION"))
+	action_layout.add_child(_create_staff_teleport_caption("ui.staff.teleport.action_caption"))
 	var mode_bar := staff_teleport_to_player_mode_button.get_parent() as HBoxContainer
 	if mode_bar != null:
 		mode_bar.reparent(action_layout)
-	staff_teleport_to_player_mode_button.text = "Go to Player"
-	staff_teleport_send_player_mode_button.text = "Move Player Safely"
+	_set_localized_control_property(
+		staff_teleport_to_player_mode_button,
+		"text",
+		"ui.staff.teleport.go_to_player"
+	)
+	_set_localized_control_property(
+		staff_teleport_send_player_mode_button,
+		"text",
+		"ui.staff.teleport.move_player_safely"
+	)
 
 	var send_content := staff_teleport_send_section as VBoxContainer
 	if send_content != null:
@@ -7124,8 +7714,10 @@ func _build_staff_teleport_player_workspace() -> void:
 		safe_header.add_theme_constant_override("separation", 8)
 		send_content.add_child(safe_header)
 		send_content.move_child(safe_header, 0)
-		safe_header.add_child(_create_staff_teleport_caption("SAFE DESTINATION"))
-		staff_teleport_safe_destination_status_label = _create_staff_teleport_status_label("Waiting for destinations")
+		safe_header.add_child(_create_staff_teleport_caption("ui.staff.teleport.safe_destination"))
+		staff_teleport_safe_destination_status_label = _create_staff_teleport_status_label(
+			"ui.staff.teleport.waiting_destinations"
+		)
 		staff_teleport_safe_destination_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		staff_teleport_safe_destination_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 		safe_header.add_child(staff_teleport_safe_destination_status_label)
@@ -7134,9 +7726,17 @@ func _build_staff_teleport_player_workspace() -> void:
 		safe_search_row.add_theme_constant_override("separation", 8)
 		send_content.add_child(safe_search_row)
 		send_content.move_child(safe_search_row, 1)
-		staff_teleport_send_map_search.placeholder_text = "Search map..."
+		_set_localized_control_property(
+			staff_teleport_send_map_search,
+			"placeholder_text",
+			"ui.staff.teleport.search_map"
+		)
 		staff_teleport_send_map_search.reparent(safe_search_row)
-		staff_teleport_send_spawn_search.placeholder_text = "Search spawn..."
+		_set_localized_control_property(
+			staff_teleport_send_spawn_search,
+			"placeholder_text",
+			"ui.staff.teleport.search_spawn_short"
+		)
 		staff_teleport_send_spawn_search.reparent(safe_search_row)
 		staff_teleport_send_destination_results.custom_minimum_size = Vector2(0, 100)
 		staff_teleport_send_destination_results.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -7160,13 +7760,25 @@ func _build_staff_teleport_player_workspace() -> void:
 	var player_spacer := Control.new()
 	player_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	action_layout.add_child(player_spacer)
-	action_layout.add_child(_create_staff_teleport_caption("STAFF NOTE"))
-	staff_teleport_player_reason_input.placeholder_text = "Player action reason (optional)"
+	action_layout.add_child(_create_staff_teleport_caption("ui.staff.teleport.staff_note"))
+	_set_localized_control_property(
+		staff_teleport_player_reason_input,
+		"placeholder_text",
+		"ui.staff.teleport.player_reason"
+	)
 	staff_teleport_player_reason_input.reparent(action_layout)
-	staff_teleport_to_player_button.text = "Teleport to Player"
+	_set_localized_control_property(
+		staff_teleport_to_player_button,
+		"text",
+		"ui.staff.teleport.to_player"
+	)
 	staff_teleport_to_player_button.custom_minimum_size = Vector2(0, 44)
 	staff_teleport_to_player_button.reparent(action_layout)
-	staff_teleport_send_player_button.text = "Move Player to Safe Location"
+	_set_localized_control_property(
+		staff_teleport_send_player_button,
+		"text",
+		"ui.staff.teleport.move_safe"
+	)
 	staff_teleport_send_player_button.custom_minimum_size = Vector2(0, 44)
 	staff_teleport_send_player_button.reparent(action_layout)
 
@@ -7201,14 +7813,20 @@ func _create_staff_teleport_surface(
 
 func _create_staff_teleport_caption(text: String) -> Label:
 	var label := Label.new()
-	label.text = text
+	if LocalizationManager.has_key(text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(label, "text", text)
+	else:
+		label.text = text
 	label.add_theme_font_size_override("font_size", 10)
 	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	return label
 
 func _create_staff_teleport_status_label(text: String) -> Label:
 	var label := Label.new()
-	label.text = text
+	if LocalizationManager.has_key(text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(label, "text", text)
+	else:
+		label.text = text
 	label.add_theme_font_size_override("font_size", 10)
 	label.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.76))
 	return label
@@ -7335,7 +7953,7 @@ func _setup_item_dex_popup() -> void:
 	header.add_child(heading)
 
 	var title_label := Label.new()
-	title_label.text = "Item Dex"
+	_set_localized_control_property(title_label, "text", "ui.item_dex.title")
 	title_label.mouse_default_cursor_shape = Control.CURSOR_MOVE
 	title_label.gui_input.connect(_on_item_dex_header_gui_input)
 	title_label.add_theme_font_size_override("font_size", 20)
@@ -7343,20 +7961,20 @@ func _setup_item_dex_popup() -> void:
 	heading.add_child(title_label)
 
 	var subtitle_label := Label.new()
-	subtitle_label.text = "Item catalogue and field notes"
+	_set_localized_control_property(subtitle_label, "text", "ui.item_dex.subtitle")
 	subtitle_label.add_theme_font_size_override("font_size", 11)
 	subtitle_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	heading.add_child(subtitle_label)
 
 	var header_hint := Label.new()
-	header_hint.text = "Search · inspect · collect"
+	_set_localized_control_property(header_hint, "text", "ui.item_dex.hint")
 	header_hint.add_theme_font_size_override("font_size", 10)
 	header_hint.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.72))
 	header.add_child(header_hint)
 
 	var close_button := Button.new()
 	close_button.text = "×"
-	close_button.tooltip_text = "Close"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.custom_minimum_size = Vector2(34, 34)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_item_dex_popup)
@@ -7388,21 +8006,21 @@ func _setup_item_dex_popup() -> void:
 	browser_stack.add_child(browser_header)
 
 	var browser_label := Label.new()
-	browser_label.text = "ITEM INDEX"
+	_set_localized_control_property(browser_label, "text", "ui.item_dex.index")
 	browser_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	browser_label.add_theme_font_size_override("font_size", 10)
 	browser_label.add_theme_color_override("font_color", ITEM_DEX_ACCENT)
 	browser_header.add_child(browser_label)
 
 	item_dex_results_count_label = Label.new()
-	item_dex_results_count_label.text = "Loading..."
+	_set_localized_control_property(item_dex_results_count_label, "text", "common.loading")
 	item_dex_results_count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	item_dex_results_count_label.add_theme_font_size_override("font_size", 10)
 	item_dex_results_count_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	browser_header.add_child(item_dex_results_count_label)
 
 	item_dex_search_input = LineEdit.new()
-	item_dex_search_input.placeholder_text = "Search item..."
+	_set_localized_control_property(item_dex_search_input, "placeholder_text", "ui.item_dex.search")
 	item_dex_search_input.clear_button_enabled = true
 	item_dex_search_input.custom_minimum_size = Vector2(0, 36)
 	item_dex_search_input.text_changed.connect(_on_item_dex_search_changed)
@@ -7473,28 +8091,32 @@ func _setup_item_dex_popup() -> void:
 	hero_row.add_child(hero_stack)
 
 	item_dex_name_label = Label.new()
-	item_dex_name_label.text = "Select an item"
+	_set_localized_control_property(item_dex_name_label, "text", "ui.item_dex.select")
 	item_dex_name_label.add_theme_font_size_override("font_size", 24)
 	item_dex_name_label.add_theme_color_override("font_color", UI_TEXT)
 	hero_stack.add_child(item_dex_name_label)
 
 	item_dex_meta_label = Label.new()
-	item_dex_meta_label.text = "Category: -    Base price: Unknown"
+	_set_localized_control_property(item_dex_meta_label, "text", "ui.item_dex.meta_empty")
 	item_dex_meta_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	item_dex_meta_label.add_theme_font_size_override("font_size", 12)
 	item_dex_meta_label.add_theme_color_override("font_color", ITEM_DEX_ACCENT)
 	hero_stack.add_child(item_dex_meta_label)
 
-	summary_layout.add_child(_create_item_dex_section_title("Description"))
+	summary_layout.add_child(_create_item_dex_section_title("ui.item_dex.description"))
 
 	item_dex_description_label = Label.new()
-	item_dex_description_label.text = "Search and select an item to view its summary."
+	_set_localized_control_property(
+		item_dex_description_label,
+		"text",
+		"ui.item_dex.description_empty"
+	)
 	item_dex_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	item_dex_description_label.add_theme_font_size_override("font_size", 13)
 	item_dex_description_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	summary_layout.add_child(item_dex_description_label)
 
-	item_dex_effect_section_label = _create_item_dex_section_title("Effect")
+	item_dex_effect_section_label = _create_item_dex_section_title("ui.item_dex.effect")
 	item_dex_effect_section_label.visible = false
 	summary_layout.add_child(item_dex_effect_section_label)
 
@@ -7505,7 +8127,7 @@ func _setup_item_dex_popup() -> void:
 	item_dex_effect_label.add_theme_color_override("font_color", Color("#f2cf78"))
 	summary_layout.add_child(item_dex_effect_label)
 
-	item_dex_capture_section_label = _create_item_dex_section_title("Capture")
+	item_dex_capture_section_label = _create_item_dex_section_title("ui.item_dex.capture")
 	item_dex_capture_section_label.visible = false
 	summary_layout.add_child(item_dex_capture_section_label)
 
@@ -7516,7 +8138,7 @@ func _setup_item_dex_popup() -> void:
 	item_dex_capture_label.add_theme_color_override("font_color", Color("#f2cf78"))
 	summary_layout.add_child(item_dex_capture_label)
 
-	summary_layout.add_child(_create_item_dex_section_title("Where to get"))
+	summary_layout.add_child(_create_item_dex_section_title("ui.item_dex.sources"))
 
 	var sources_scroll := ScrollContainer.new()
 	sources_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -7524,7 +8146,7 @@ func _setup_item_dex_popup() -> void:
 	summary_layout.add_child(sources_scroll)
 
 	item_dex_sources_label = Label.new()
-	item_dex_sources_label.text = "Where to get\nNo item selected."
+	_set_localized_control_property(item_dex_sources_label, "text", "ui.item_dex.sources_empty")
 	item_dex_sources_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	item_dex_sources_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	item_dex_sources_label.add_theme_font_size_override("font_size", 12)
@@ -7621,7 +8243,7 @@ func _setup_pokedex_popup() -> void:
 	header.add_child(heading)
 
 	var title_label := Label.new()
-	title_label.text = "Pokédex"
+	_set_localized_control_property(title_label, "text", "ui.pokedex.title")
 	title_label.mouse_default_cursor_shape = Control.CURSOR_MOVE
 	title_label.gui_input.connect(_on_pokedex_header_gui_input)
 	title_label.add_theme_font_size_override("font_size", 20)
@@ -7629,14 +8251,14 @@ func _setup_pokedex_popup() -> void:
 	heading.add_child(title_label)
 
 	var subtitle_label := Label.new()
-	subtitle_label.text = "Species research and habitat data"
+	_set_localized_control_property(subtitle_label, "text", "ui.pokedex.subtitle")
 	subtitle_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	subtitle_label.add_theme_font_size_override("font_size", 11)
 	subtitle_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	heading.add_child(subtitle_label)
 
 	var header_hint := Label.new()
-	header_hint.text = "Search · inspect · compare"
+	_set_localized_control_property(header_hint, "text", "ui.pokedex.header_hint")
 	header_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	header_hint.add_theme_font_size_override("font_size", 10)
 	header_hint.add_theme_color_override(
@@ -7647,7 +8269,7 @@ func _setup_pokedex_popup() -> void:
 
 	var close_button := Button.new()
 	close_button.text = "×"
-	close_button.tooltip_text = "Close"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.custom_minimum_size = Vector2(34, 34)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_pokedex_popup)
@@ -7682,18 +8304,22 @@ func _setup_pokedex_popup() -> void:
 	browser_stack.add_child(browser_header)
 
 	var browser_label := Label.new()
-	browser_label.text = "SPECIES INDEX"
+	_set_localized_control_property(browser_label, "text", "ui.pokedex.species_index")
 	browser_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	browser_label.add_theme_font_size_override("font_size", 10)
 	browser_label.add_theme_color_override("font_color", POKEDEX_ACCENT)
 	browser_header.add_child(browser_label)
 
 	pokedex_results_count_label = Label.new()
-	pokedex_results_count_label.text = "Loading..."
+	pokedex_results_count_label.text = LocalizationManager.text("common.loading")
 	pokedex_results_count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	pokedex_results_count_label.add_theme_font_size_override("font_size", 10)
 	pokedex_results_count_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	pokedex_results_count_label.tooltip_text = "Unique species registered to your Trainer ID"
+	_set_localized_control_property(
+		pokedex_results_count_label,
+		"tooltip_text",
+		"ui.pokedex.registered_tooltip"
+	)
 	browser_header.add_child(pokedex_results_count_label)
 
 	var dex_selector_row := HBoxContainer.new()
@@ -7701,7 +8327,7 @@ func _setup_pokedex_popup() -> void:
 	browser_stack.add_child(dex_selector_row)
 
 	var dex_selector_label := Label.new()
-	dex_selector_label.text = "DEX"
+	_set_localized_control_property(dex_selector_label, "text", "ui.pokedex.dex")
 	dex_selector_label.custom_minimum_size = Vector2(38, 0)
 	dex_selector_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	dex_selector_label.add_theme_font_size_override("font_size", 10)
@@ -7713,9 +8339,9 @@ func _setup_pokedex_popup() -> void:
 	pokedex_dex_selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pokedex_dex_selector.custom_minimum_size = Vector2(0, 36)
 	pokedex_dex_selector.focus_mode = Control.FOCUS_NONE
-	pokedex_dex_selector.add_item("National Dex")
+	pokedex_dex_selector.add_item(LocalizationManager.text("ui.pokedex.dex.national"))
 	pokedex_dex_selector.set_item_metadata(0, "national")
-	pokedex_dex_selector.add_item("Kanto Dex")
+	pokedex_dex_selector.add_item(LocalizationManager.text("ui.pokedex.dex.kanto"))
 	pokedex_dex_selector.set_item_metadata(1, "kanto")
 	pokedex_dex_selector.item_selected.connect(_on_pokedex_dex_selected)
 	_apply_pokedex_dex_selector_style(pokedex_dex_selector)
@@ -7726,7 +8352,7 @@ func _setup_pokedex_popup() -> void:
 	browser_stack.add_child(variant_selector_row)
 
 	var variant_selector_label := Label.new()
-	variant_selector_label.text = "VIEW"
+	_set_localized_control_property(variant_selector_label, "text", "ui.pokedex.view")
 	variant_selector_label.custom_minimum_size = Vector2(38, 0)
 	variant_selector_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	variant_selector_label.add_theme_font_size_override("font_size", 10)
@@ -7737,12 +8363,16 @@ func _setup_pokedex_popup() -> void:
 	variant_button_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	variant_button_row.add_theme_constant_override("separation", 5)
 	variant_selector_row.add_child(variant_button_row)
-	variant_button_row.add_child(_create_pokedex_variant_button("normal", "Normal"))
-	variant_button_row.add_child(_create_pokedex_variant_button("shiny", "✦ Shiny"))
+	variant_button_row.add_child(_create_pokedex_variant_button("normal", "ui.pokedex.variant.normal"))
+	variant_button_row.add_child(_create_pokedex_variant_button("shiny", "ui.pokedex.variant.shiny"))
 	_refresh_pokedex_variant_buttons()
 
 	pokedex_search_input = LineEdit.new()
-	pokedex_search_input.placeholder_text = "Search by name or number..."
+	_set_localized_control_property(
+		pokedex_search_input,
+		"placeholder_text",
+		"ui.pokedex.search"
+	)
 	pokedex_search_input.clear_button_enabled = true
 	pokedex_search_input.custom_minimum_size = Vector2(0, 36)
 	pokedex_search_input.text_changed.connect(_on_pokedex_search_changed)
@@ -7811,7 +8441,7 @@ func _setup_pokedex_popup() -> void:
 	detail_header.add_child(title_stack)
 
 	var record_label := Label.new()
-	record_label.text = "SPECIES RECORD"
+	_set_localized_control_property(record_label, "text", "ui.pokedex.species_record")
 	record_label.add_theme_font_size_override("font_size", 10)
 	record_label.add_theme_color_override("font_color", POKEDEX_ACCENT)
 	title_stack.add_child(record_label)
@@ -7825,7 +8455,7 @@ func _setup_pokedex_popup() -> void:
 	pokedex_name_row.add_child(pokedex_owned_icon)
 
 	pokedex_name_label = Label.new()
-	pokedex_name_label.text = "Select a species"
+	pokedex_name_label.text = LocalizationManager.text("ui.pokedex.select_species")
 	pokedex_name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pokedex_name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	pokedex_name_label.add_theme_font_size_override("font_size", 25)
@@ -7833,7 +8463,7 @@ func _setup_pokedex_popup() -> void:
 	pokedex_name_row.add_child(pokedex_name_label)
 
 	pokedex_meta_label = Label.new()
-	pokedex_meta_label.text = "No species selected."
+	pokedex_meta_label.text = LocalizationManager.text("ui.pokedex.no_species_selected")
 	pokedex_meta_label.add_theme_font_size_override("font_size", 11)
 	pokedex_meta_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	title_stack.add_child(pokedex_meta_label)
@@ -7851,7 +8481,9 @@ func _setup_pokedex_popup() -> void:
 	pokedex_sprite_panel.custom_minimum_size = Vector2(190, 138)
 	pokedex_sprite_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	pokedex_sprite_panel.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	pokedex_sprite_panel.tooltip_text = "Show the back view"
+	pokedex_sprite_panel.tooltip_text = LocalizationManager.text("ui.pokedex.sprite.show_view", {
+		"side": LocalizationManager.text("ui.pokedex.side.back"),
+	})
 	var sprite_stage_style := _make_panel_style(UI_SURFACE_INSET, Color("#653642aa"), 11, 1)
 	sprite_stage_style.shadow_color = Color(POKEDEX_ACCENT.r, POKEDEX_ACCENT.g, POKEDEX_ACCENT.b, 0.12)
 	sprite_stage_style.shadow_size = 8
@@ -7925,15 +8557,15 @@ func _setup_pokedex_popup() -> void:
 	tab_row.add_theme_constant_override("separation", 4)
 	tab_margin.add_child(tab_row)
 
-	var general_tab := _create_pokedex_tab_button("general", "General")
+	var general_tab := _create_pokedex_tab_button("general", "ui.pokedex.tab.general")
 	tab_row.add_child(general_tab)
-	var moves_tab := _create_pokedex_tab_button("moves", "Moves")
+	var moves_tab := _create_pokedex_tab_button("moves", "ui.pokedex.tab.moves")
 	tab_row.add_child(moves_tab)
-	var locations_tab := _create_pokedex_tab_button("locations", "Locations")
+	var locations_tab := _create_pokedex_tab_button("locations", "ui.pokedex.tab.locations")
 	tab_row.add_child(locations_tab)
-	var evolutions_tab := _create_pokedex_tab_button("evolutions", "Evolutions")
+	var evolutions_tab := _create_pokedex_tab_button("evolutions", "ui.pokedex.tab.evolutions")
 	tab_row.add_child(evolutions_tab)
-	var drops_tab := _create_pokedex_tab_button("drops", "Drops")
+	var drops_tab := _create_pokedex_tab_button("drops", "ui.pokedex.tab.drops")
 	tab_row.add_child(drops_tab)
 	_refresh_pokedex_tab_buttons()
 
@@ -8008,10 +8640,10 @@ func _make_pokedex_dex_popup_panel_style() -> StyleBoxFlat:
 	style.shadow_offset = Vector2(0, 5)
 	return style
 
-func _create_pokedex_variant_button(variant_id: String, label_text: String) -> Button:
+func _create_pokedex_variant_button(variant_id: String, label_key: String) -> Button:
 	var button := Button.new()
 	button.name = "PokedexVariant_%s" % variant_id
-	button.text = label_text
+	_set_localized_control_property(button, "text", label_key)
 	button.custom_minimum_size = Vector2(0, 32)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.focus_mode = Control.FOCUS_NONE
@@ -8041,10 +8673,128 @@ func _refresh_pokedex_variant_buttons() -> void:
 		button.add_theme_color_override("font_pressed_color", UI_TEXT)
 		button.add_theme_font_size_override("font_size", 11)
 
+func _refresh_pokedex_results_count_copy() -> void:
+	if pokedex_results_count_label == null:
+		return
+	match pokedex_results_state:
+		"loading":
+			pokedex_results_count_label.text = LocalizationManager.text("ui.pokedex.searching")
+		"unavailable":
+			pokedex_results_count_label.text = LocalizationManager.text("common.unavailable")
+		"loaded":
+			pokedex_results_count_label.text = LocalizationManager.text("ui.pokedex.owned_count", {
+				"owned": pokedex_results_owned_total,
+				"total": pokedex_results_dex_total,
+			})
+		_:
+			pokedex_results_count_label.text = LocalizationManager.text("common.loading")
+
+func _refresh_item_dex_localized_ui() -> void:
+	if item_dex_popup == null:
+		return
+	LocalizationManager.localize_tree(item_dex_popup)
+	if not item_dex_selected_item.is_empty():
+		_on_item_dex_result_selected(ItemLocalization.localize_item(item_dex_selected_item))
+	if item_dex_popup.visible:
+		_refresh_item_dex_results()
+
+func _refresh_wild_pokemon_localized_ui() -> void:
+	if wild_pokemon_popup == null:
+		return
+	LocalizationManager.localize_tree(wild_pokemon_popup)
+	if wild_pokemon_popup.visible:
+		wild_pokemon_title_label.text = LocalizationManager.text(
+			"ui.wild.title_map",
+			{"map": _get_current_map_display_name()}
+		)
+	if not wild_pokemon_last_metadata.is_empty():
+		_render_wild_pokemon_metadata(wild_pokemon_last_metadata)
+	elif wild_pokemon_message_key != "":
+		_set_wild_pokemon_message_key(wild_pokemon_message_key, wild_pokemon_message_color)
+
+func _refresh_dev_tools_localized_ui() -> void:
+	if dev_actions_popup != null:
+		LocalizationManager.localize_tree(dev_actions_popup)
+	if dev_pokemon_popup != null:
+		LocalizationManager.localize_tree(dev_pokemon_popup)
+		_refresh_dev_pokemon_popup_copy()
+	if dev_add_item_popup != null:
+		LocalizationManager.localize_tree(dev_add_item_popup)
+		if dev_add_item_popup.visible:
+			_refresh_dev_item_results()
+	if dev_add_money_popup != null:
+		LocalizationManager.localize_tree(dev_add_money_popup)
+
+func _refresh_progression_prompts_localized_ui() -> void:
+	for panel: Control in [
+		ui_confirm_popup,
+		move_learn_popup,
+		move_learn_hover_panel,
+		evolution_prompt_popup,
+		evolution_overlay,
+	]:
+		if panel != null:
+			LocalizationManager.localize_tree(panel)
+	if (
+		evolution_prompt_popup != null
+		and evolution_prompt_popup.visible
+		and not evolution_active_prompt.is_empty()
+	):
+		_render_evolution_prompt(evolution_active_prompt)
+		_set_evolution_prompt_controls_disabled(evolution_prompt_processing)
+	if move_learn_popup != null and move_learn_popup.visible and not move_learn_active_prompt.is_empty():
+		var pokemon := _find_party_pokemon_by_owned_id(
+			int(move_learn_active_prompt.get("pokemonId", 0))
+		)
+		if pokemon != null:
+			var selected_slot := move_learn_selected_replace_slot
+			_render_move_learn_prompt(pokemon, move_learn_active_prompt)
+			move_learn_selected_replace_slot = selected_slot
+			_refresh_move_learn_selection_buttons()
+			_set_move_learn_controls_disabled(move_learn_processing)
+	if (
+		evolution_overlay != null
+		and evolution_overlay.visible
+		and not evolution_overlay_active_evolution.is_empty()
+	):
+		var from_id := str(evolution_overlay_active_evolution.get(
+			"oldSpecies",
+			evolution_overlay_active_evolution.get("fromSpecies", "")
+		)).strip_edges()
+		var to_id := str(evolution_overlay_active_evolution.get(
+			"newSpecies",
+			evolution_overlay_active_evolution.get("toSpecies", "")
+		)).strip_edges()
+		var from_name := _localized_species_name(from_id, from_id)
+		var to_name := _localized_species_name(to_id, to_id)
+		evolution_title_label.text = LocalizationManager.text(
+			"ui.evolution.overlay.start",
+			{"pokemon": from_name}
+		)
+		if not evolution_is_playing:
+			evolution_message_label.text = LocalizationManager.text(
+				"ui.evolution.overlay.complete",
+				{"from": from_name, "to": to_name}
+			)
+
+func _refresh_pokedex_localized_ui() -> void:
+	if pokedex_popup == null:
+		return
+	LocalizationManager.localize_tree(pokedex_popup)
+	if pokedex_dex_selector != null and pokedex_dex_selector.item_count >= 2:
+		pokedex_dex_selector.set_item_text(0, LocalizationManager.text("ui.pokedex.dex.national"))
+		pokedex_dex_selector.set_item_text(1, LocalizationManager.text("ui.pokedex.dex.kanto"))
+	_refresh_pokedex_results_count_copy()
+	_set_pokedex_header_from_species(pokedex_selected_species)
+	_refresh_pokedex_detail()
+
 func _position_pokedex_popup() -> void:
 	if pokedex_popup == null:
 		return
-	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
+	var viewport := get_viewport()
+	if viewport == null:
+		return
+	var viewport_size: Vector2 = viewport.get_visible_rect().size
 	var popup_size := Vector2(
 		min(POKEDEX_SIZE.x, max(viewport_size.x - 32.0, 360.0)),
 		min(POKEDEX_SIZE.y, max(viewport_size.y - 32.0, 360.0))
@@ -8061,6 +8811,7 @@ func _process(delta: float) -> void:
 	_refresh_pvp_queue_button_animation(delta)
 	_refresh_pvp_ranked_queue_availability(delta)
 	_refresh_pvp_match_countdown(delta)
+	_refresh_session_logout_countdown()
 	_refresh_player_status_card_if_needed()
 	_refresh_trainer_card_playtime_if_needed()
 	_refresh_location_label_if_needed()
@@ -8138,13 +8889,13 @@ func _refresh_location_weather(weather_state: Dictionary) -> void:
 	var weather: String = str(weather_state.get("weather", "clear")).strip_edges().to_lower()
 	match weather:
 		"rain":
-			weather_label.text = "Rain"
+			weather_label.text = LocalizationManager.text("ui.world.weather.rain")
 			weather_label.add_theme_color_override("font_color", Color("#62d7ff"))
 		"snow":
-			weather_label.text = "Snow"
+			weather_label.text = LocalizationManager.text("ui.world.weather.snow")
 			weather_label.add_theme_color_override("font_color", Color("#d9f3ff"))
 		_:
-			weather_label.text = "Clear"
+			weather_label.text = LocalizationManager.text("ui.world.weather.clear")
 			weather_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 
 func _get_current_encounter_area_id() -> String:
@@ -8185,7 +8936,7 @@ func _setup_wild_pokemon_popup() -> void:
 	layout.add_child(header)
 
 	wild_pokemon_title_label = Label.new()
-	wild_pokemon_title_label.text = "Wild Pokémon"
+	_set_localized_control_property(wild_pokemon_title_label, "text", "ui.wild.title")
 	wild_pokemon_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	wild_pokemon_title_label.add_theme_font_size_override("font_size", 20)
 	wild_pokemon_title_label.add_theme_color_override("font_color", UI_TEXT)
@@ -8193,6 +8944,7 @@ func _setup_wild_pokemon_popup() -> void:
 
 	var close_button := Button.new()
 	close_button.text = "X"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.custom_minimum_size = Vector2(34, 30)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_wild_pokemon_popup)
@@ -8224,9 +8976,13 @@ func _on_wild_pokemon_button_pressed() -> void:
 
 	wild_pokemon_popup.visible = true
 	_animate_wild_pokemon_button()
-	wild_pokemon_title_label.text = "Wild Pokémon · %s" % _get_current_map_display_name()
+	wild_pokemon_title_label.text = LocalizationManager.text(
+		"ui.wild.title_map",
+		{"map": _get_current_map_display_name()}
+	)
 	_activate_ui_panel(wild_pokemon_popup)
-	_set_wild_pokemon_message("Loading encounters…", UI_MUTED_TEXT)
+	wild_pokemon_last_metadata.clear()
+	_set_wild_pokemon_message_key("ui.wild.loading", UI_MUTED_TEXT)
 	wild_pokemon_request_id += 1
 	var request_id := wild_pokemon_request_id
 	var response: Dictionary = await EncounterMetadataService.get_encounter_area_metadata(area_id)
@@ -8236,13 +8992,14 @@ func _on_wild_pokemon_button_pressed() -> void:
 		_hide_wild_pokemon_popup()
 		return
 	if not bool(response.get("success", false)):
-		_set_wild_pokemon_message("Could not load wild Pokémon.", UI_DANGER)
+		_set_wild_pokemon_message_key("ui.wild.load_failed", UI_DANGER)
 		return
 
 	await PokedexService.get_owned_species_ids(false)
 	if request_id != wild_pokemon_request_id or not wild_pokemon_popup.visible:
 		return
-	_render_wild_pokemon_metadata(response.get("metadata", {}) as Dictionary)
+	wild_pokemon_last_metadata = (response.get("metadata", {}) as Dictionary).duplicate(true)
+	_render_wild_pokemon_metadata(wild_pokemon_last_metadata)
 
 func _hide_wild_pokemon_popup() -> void:
 	wild_pokemon_request_id += 1
@@ -8282,7 +9039,13 @@ func _set_wild_pokemon_message(message: String, color: Color) -> void:
 	label.add_theme_color_override("font_color", color)
 	wild_pokemon_content.add_child(label)
 
+func _set_wild_pokemon_message_key(key: String, color: Color) -> void:
+	wild_pokemon_message_key = key
+	wild_pokemon_message_color = color
+	_set_wild_pokemon_message(LocalizationManager.text(key), color)
+
 func _render_wild_pokemon_metadata(metadata: Dictionary) -> void:
+	wild_pokemon_message_key = ""
 	_clear_wild_pokemon_content()
 	var encounter_types: Dictionary = metadata.get("encounterTypes", {}) as Dictionary
 	var encounter_type_ids: Array = encounter_types.keys()
@@ -8308,10 +9071,11 @@ func _render_wild_pokemon_metadata(metadata: Dictionary) -> void:
 			rendered_count += 1
 
 	if rendered_count == 0:
-		_set_wild_pokemon_message("No wild Pokémon are known for this map.", UI_MUTED_TEXT)
+		_set_wild_pokemon_message_key("ui.wild.empty", UI_MUTED_TEXT)
 
 func _create_wild_pokemon_row(entry: Dictionary) -> Control:
 	var species := str(entry.get("species", "Unknown")).strip_edges()
+	var species_name := _localized_species_name(species, _format_identifier_display_name(species))
 	var min_level: int = max(int(entry.get("minLevel", 1)), 1)
 	var max_level: int = max(int(entry.get("maxLevel", min_level)), min_level)
 	var rarity := str(entry.get("rarity", "common")).strip_edges().to_lower()
@@ -8344,7 +9108,7 @@ func _create_wild_pokemon_row(entry: Dictionary) -> Control:
 		row.add_child(_create_owned_pokeball_icon(Vector2(18, 18)))
 
 	var name_label := Label.new()
-	name_label.text = _format_identifier_display_name(species)
+	name_label.text = species_name
 	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	name_label.add_theme_font_size_override("font_size", 15)
@@ -8354,7 +9118,14 @@ func _create_wild_pokemon_row(entry: Dictionary) -> Control:
 	row.add_child(_create_wild_pokemon_rarity_badge(rarity))
 
 	var level_label := Label.new()
-	level_label.text = "Lv. %d" % min_level if min_level == max_level else "Lv. %d–%d" % [min_level, max_level]
+	level_label.text = (
+		LocalizationManager.text("ui.wild.level", {"level": min_level})
+		if min_level == max_level
+		else LocalizationManager.text(
+			"ui.wild.level_range",
+			{"min": min_level, "max": max_level}
+		)
+	)
 	level_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	level_label.add_theme_font_size_override("font_size", 12)
 	level_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -8369,13 +9140,19 @@ func _create_wild_pokemon_rarity_badge(rarity: String) -> Control:
 	badge.add_theme_stylebox_override("panel", _make_panel_style(Color(color.r, color.g, color.b, 0.16), Color(color.r, color.g, color.b, 0.72), 7, 1))
 
 	var label := Label.new()
-	label.text = _format_identifier_display_name(normalized_rarity)
+	label.text = _wild_pokemon_rarity_label(normalized_rarity)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 9)
 	label.add_theme_color_override("font_color", color)
 	badge.add_child(label)
 	return badge
+
+func _wild_pokemon_rarity_label(rarity: String) -> String:
+	var key := "ui.wild.rarity.%s" % rarity
+	if LocalizationManager.has_key(key):
+		return LocalizationManager.text(key)
+	return _format_identifier_display_name(rarity)
 
 func _wild_pokemon_rarity_color(rarity: String) -> Color:
 	match rarity:
@@ -8395,13 +9172,13 @@ func _wild_pokemon_rarity_color(rarity: String) -> Color:
 func _wild_encounter_method_label(encounter_type: String) -> String:
 	match encounter_type.strip_edges().to_lower():
 		"grass":
-			return "Tall grass"
+			return LocalizationManager.text("ui.wild.method.grass")
 		"cave":
-			return "Cave"
+			return LocalizationManager.text("ui.wild.method.cave")
 		"surf":
-			return "Surfing"
+			return LocalizationManager.text("ui.wild.method.surf")
 		"fish", "fishing":
-			return "Fishing"
+			return LocalizationManager.text("ui.wild.method.fishing")
 		_:
 			return _format_identifier_display_name(encounter_type)
 
@@ -8414,17 +9191,17 @@ func _clear_wild_pokemon_content() -> void:
 func _get_current_map_region_name() -> String:
 	var current_map: Node = GameState.current_map as Node
 	if current_map == null:
-		return "Unknown"
+		return LocalizationManager.text("ui.world.location.unknown_region")
 	if current_map.has_method("get_map_region_name"):
 		var region_name: String = str(current_map.call("get_map_region_name")).strip_edges()
 		if region_name != "":
 			return region_name
-	return "Unknown"
+	return LocalizationManager.text("ui.world.location.unknown_region")
 
 func _get_current_map_display_name() -> String:
 	var current_map: Node = GameState.current_map as Node
 	if current_map == null:
-		return "Unknown Location"
+		return LocalizationManager.text("ui.world.location.unknown")
 	if current_map.has_method("get_map_display_name"):
 		var display_name: String = str(current_map.call("get_map_display_name")).strip_edges()
 		if display_name != "":
@@ -8434,7 +9211,7 @@ func _get_current_map_display_name() -> String:
 func _format_map_name(raw_name: String) -> String:
 	var readable: String = raw_name.replace("_", " ").strip_edges()
 	if readable == "":
-		return "Unknown Location"
+		return LocalizationManager.text("ui.world.location.unknown")
 	return readable
 
 func _refresh_utc_time_label(delta: float, force := false) -> void:
@@ -8448,6 +9225,10 @@ func _refresh_utc_time_label(delta: float, force := false) -> void:
 	var date_time: Dictionary = WorldTimeService.get_utc_datetime()
 	var hour: int = int(date_time.get("hour", 0))
 	var minute: int = int(date_time.get("minute", 0))
+	if LocalizationManager.current_locale != "en":
+		time_label.text = "%02d:%02d" % [hour, minute]
+		_refresh_time_of_day_label(hour)
+		return
 	var period: String = "AM" if hour < 12 else "PM"
 	var display_hour: int = hour % 12
 	if display_hour == 0:
@@ -8459,16 +9240,16 @@ func _refresh_time_of_day_label(hour: int) -> void:
 	if time_of_day_label == null:
 		return
 	if hour >= 5 and hour < 11:
-		time_of_day_label.text = "Morning"
+		time_of_day_label.text = LocalizationManager.text("ui.world.time.morning")
 		time_of_day_label.add_theme_color_override("font_color", Color("#ffd45a"))
 	elif hour >= 11 and hour < 17:
-		time_of_day_label.text = "Afternoon"
+		time_of_day_label.text = LocalizationManager.text("ui.world.time.afternoon")
 		time_of_day_label.add_theme_color_override("font_color", Color("#f3c969"))
 	elif hour >= 17 and hour < 21:
-		time_of_day_label.text = "Evening"
+		time_of_day_label.text = LocalizationManager.text("ui.world.time.evening")
 		time_of_day_label.add_theme_color_override("font_color", Color("#ff9f68"))
 	else:
-		time_of_day_label.text = "Night"
+		time_of_day_label.text = LocalizationManager.text("ui.world.time.night")
 		time_of_day_label.add_theme_color_override("font_color", Color("#7aa7f4"))
 
 func _input(event: InputEvent) -> void:
@@ -8585,7 +9366,9 @@ func _handle_chat_resize_drag(event: InputEvent) -> void:
 		var mouse_event: InputEventMouseButton = event as InputEventMouseButton
 		if mouse_event.button_index == MOUSE_BUTTON_LEFT and not mouse_event.pressed:
 			chat_resize_dragging = false
-			get_viewport().set_input_as_handled()
+			# Let the button receive mouse-up so Godot clears its pressed and hover
+			# state instead of retaining this control's tooltip until another click.
+			return
 
 func _is_point_inside_control(control: Control, point: Vector2) -> bool:
 	return control.get_global_rect().has_point(point)
@@ -8620,7 +9403,8 @@ func is_point_over_visible_ui(global_position: Vector2) -> bool:
 		dev_add_item_popup,
 		dev_add_money_popup,
 		dev_add_menu_popup,
-		content_creator_menu_popup,
+		alpha_tools_popup,
+		content_creator_tools_popup,
 		staff_tools_popup,
 		staff_impersonate_popup,
 		staff_teleport_popup,
@@ -8710,6 +9494,12 @@ func _setup_status_docks() -> void:
 	global_buff_amount_10000_button.pressed.connect(_select_global_buff_contribution.bind(10000))
 	global_buff_amount_25000_button.pressed.connect(_select_global_buff_contribution.bind(25000))
 	global_buff_contribute_button.pressed.connect(_on_global_buff_contribute_pressed)
+	_set_localized_control_property(personal_buffs_empty_label, "text", "ui.buff.none")
+	_set_localized_control_property(global_buff_details_close_button, "tooltip_text", "common.close")
+	var contribution_hint := global_buff_donation_section.get_node_or_null("HintLabel") as Label
+	if contribution_hint != null:
+		_set_localized_control_property(contribution_hint, "text", "ui.buff.contribution_hint")
+	_set_localized_control_property(global_buff_contribute_button, "text", "ui.buff.contribute")
 	for child: Node in global_buff_slots.get_children():
 		var button := child as Button
 		if button == null:
@@ -8730,8 +9520,8 @@ func _setup_status_docks() -> void:
 		{
 			"id": "global_exp",
 			"icon": GLOBAL_EXP_BUFF_ICON,
-			"name": "Global EXP Boost",
-			"description": "When funded, the entire server earns double Pokémon experience.",
+			"name_key": "ui.buff.global_exp.name",
+			"description_key": "ui.buff.global_exp.description",
 			"state": "funding",
 			"current": 0,
 			"goal": 100000,
@@ -8740,8 +9530,8 @@ func _setup_status_docks() -> void:
 		{
 			"id": "global_ev",
 			"icon": GLOBAL_EV_BUFF_ICON,
-			"name": "Global EV Boost",
-			"description": "The entire server earns double Effort Values while this buff is active.",
+			"name_key": "ui.buff.global_ev.name",
+			"description_key": "ui.buff.global_ev.description",
 			"state": "funding",
 			"current": 0,
 			"goal": 100000,
@@ -8750,8 +9540,8 @@ func _setup_status_docks() -> void:
 		{
 			"id": "global_shiny",
 			"icon": GLOBAL_SHINY_BUFF_ICON,
-			"name": "Global Shiny Boost",
-			"description": "When funded, the entire server receives increased Shiny encounter odds.",
+			"name_key": "ui.buff.global_shiny.name",
+			"description_key": "ui.buff.global_shiny.description",
 			"state": "funding",
 			"current": 0,
 			"goal": 100000,
@@ -8760,8 +9550,8 @@ func _setup_status_docks() -> void:
 		{
 			"id": "global_rare_encounter",
 			"icon": GLOBAL_RARE_ENCOUNTER_BUFF_ICON,
-			"name": "Rare Encounter Boost",
-			"description": "When funded, rarer Pokémon become more likely to appear for the entire server.",
+			"name_key": "ui.buff.global_rare.name",
+			"description_key": "ui.buff.global_rare.description",
 			"state": "funding",
 			"current": 0,
 			"goal": 100000,
@@ -8850,8 +9640,8 @@ func _current_aether_blessing_buff() -> Dictionary:
 		return {
 			"id": "aether_blessing",
 			"label": "AE",
-			"name": "Aether Blessing",
-			"description": "Supporter recognition without battle advantages.",
+			"name_key": "ui.buff.aether_blessing.name",
+			"description_key": "ui.buff.aether_blessing.description",
 			"remaining": _format_aether_blessing_remaining(remaining_seconds),
 			"compactRemaining": _format_aether_blessing_remaining(remaining_seconds, true),
 			"expiresAt": expires_at,
@@ -8909,9 +9699,12 @@ func _render_personal_buffs(buffs: Array) -> void:
 			if badge_label != null:
 				badge_label.text = "+"
 			if name_label != null:
-				name_label.text = "%d more buffs" % (buffs.size() - slot_count + 1)
+				name_label.text = LocalizationManager.text(
+					"ui.buff.more",
+					{"count": buffs.size() - slot_count + 1}
+				)
 			if description_label != null:
-				description_label.text = "Hover for the complete list."
+				description_label.text = LocalizationManager.text("ui.buff.hover_complete")
 			if time_label != null:
 				time_label.text = ""
 			_apply_personal_buff_row_visual(button, {})
@@ -8922,9 +9715,9 @@ func _render_personal_buffs(buffs: Array) -> void:
 		if badge_label != null:
 			badge_label.text = str(buff.get("label", "?")).strip_edges().left(3)
 		if name_label != null:
-			name_label.text = str(buff.get("name", "Buff"))
+			name_label.text = _localized_buff_name(buff)
 		if description_label != null:
-			description_label.text = str(buff.get("description", "")).strip_edges()
+			description_label.text = _localized_buff_description(buff)
 		if time_label != null:
 			time_label.text = str(
 				buff.get("compactRemaining", buff.get("remaining", ""))
@@ -8970,9 +9763,13 @@ func _refresh_personal_buffs_compact_state() -> void:
 	personal_buffs_summary_button.visible = has_active_buffs
 	personal_buff_slots.visible = has_active_buffs and personal_buffs_expanded
 	if has_active_buffs:
-		var noun := "buff" if active_count == 1 else "buffs"
 		var toggle_marker := "▴" if personal_buffs_expanded else "▾"
-		personal_buffs_summary_button.text = "%d %s active  %s" % [active_count, noun, toggle_marker]
+		personal_buffs_summary_button.text = LocalizationManager.plural(
+			"ui.buff.active.one",
+			"ui.buff.active.many",
+			active_count,
+			{"marker": toggle_marker}
+		)
 		personal_buffs_summary_button.tooltip_text = _personal_buffs_summary_tooltip()
 	else:
 		personal_buffs_summary_button.tooltip_text = ""
@@ -8988,31 +9785,43 @@ func _refresh_personal_buffs_compact_state() -> void:
 	personal_buffs_panel.custom_minimum_size.y = panel_height
 	personal_buffs_panel.offset_top = personal_buffs_panel.offset_bottom - panel_height
 func _personal_buffs_summary_tooltip() -> String:
-	var lines: Array[String] = ["%d personal %s active" % [active_personal_buffs.size(), "boost" if active_personal_buffs.size() == 1 else "boosts"]]
+	var lines: Array[String] = [LocalizationManager.plural(
+		"ui.buff.personal_active.one",
+		"ui.buff.personal_active.many",
+		active_personal_buffs.size()
+	)]
 	for buff_value: Variant in active_personal_buffs:
 		var buff := buff_value as Dictionary
-		var description := str(buff.get("description", "")).strip_edges()
+		var description := _localized_buff_description(buff)
 		var remaining := str(buff.get("remaining", "")).strip_edges()
 		lines.append("")
-		lines.append(str(buff.get("name", "Boost")))
+		lines.append(_localized_buff_name(buff))
 		if description != "":
 			lines.append(description)
 		if remaining != "":
-			lines.append("Remaining: %s" % remaining)
-	lines.append("Click to hide details" if personal_buffs_expanded else "Click to show details")
+			lines.append(LocalizationManager.text("ui.buff.remaining", {"remaining": remaining}))
+	lines.append(LocalizationManager.text(
+		"ui.buff.hide_details" if personal_buffs_expanded else "ui.buff.show_details"
+	))
 	return "\n".join(lines)
 
 func _global_buff_tooltip(buff: Dictionary) -> String:
-	var lines: Array[String] = [str(buff.get("name", "Community Boost"))]
+	var lines: Array[String] = [_localized_buff_name(buff)]
 	if str(buff.get("state", "funding")) == "active":
-		lines.append("ACTIVE · %s remaining" % str(buff.get("remaining", "")))
+		lines.append(LocalizationManager.text(
+			"ui.buff.active_remaining",
+			{"remaining": str(buff.get("remaining", ""))}
+		))
 	else:
 		var current := maxi(int(buff.get("current", 0)), 0)
 		var goal := maxi(int(buff.get("goal", 100000)), 1)
 		if current == 0:
-			lines.append("Waiting for community contributions")
-		lines.append("$%s of $%s contributed" % [_format_money(current), _format_money(goal)])
-	lines.append("Click for details")
+			lines.append(LocalizationManager.text("ui.buff.waiting_contributions"))
+		lines.append(LocalizationManager.text(
+			"ui.buff.contributed",
+			{"current": _format_money(current), "goal": _format_money(goal)}
+		))
+	lines.append(LocalizationManager.text("ui.buff.click_details"))
 	return "\n".join(lines)
 
 func _on_global_buff_hover_changed(button: Button, hovered: bool) -> void:
@@ -9095,21 +9904,50 @@ func _apply_buff_tray_group_visibility(panel: PanelContainer, tray_available: bo
 	)
 
 func _buff_tooltip(buff: Dictionary) -> String:
-	var lines: Array[String] = [str(buff.get("name", "Boost"))]
-	var description := str(buff.get("description", "")).strip_edges()
+	var lines: Array[String] = [_localized_buff_name(buff)]
+	var description := _localized_buff_description(buff)
 	if description != "":
 		lines.append(description)
 	var remaining := str(buff.get("remaining", "")).strip_edges()
 	if remaining != "":
-		lines.append("Remaining: %s" % remaining)
+		lines.append(LocalizationManager.text("ui.buff.remaining", {"remaining": remaining}))
 	return "\n".join(lines)
 
 func _buff_overflow_tooltip(buffs: Array, start_index: int) -> String:
 	var names: Array[String] = []
 	for buff_index in range(start_index, buffs.size()):
 		var buff: Dictionary = buffs[buff_index] as Dictionary
-		names.append(str(buff.get("name", "Boost")))
-	return "More active boosts:\n%s" % "\n".join(names)
+		names.append(_localized_buff_name(buff))
+	return LocalizationManager.text("ui.buff.more_active", {"names": "\n".join(names)})
+
+func _localized_buff_name(buff: Dictionary) -> String:
+	var key := str(buff.get("name_key", "")).strip_edges()
+	if key != "":
+		return LocalizationManager.text(key)
+	return str(buff.get("name", LocalizationManager.text("ui.buff.generic")))
+
+func _localized_buff_description(buff: Dictionary) -> String:
+	var key := str(buff.get("description_key", "")).strip_edges()
+	if key != "":
+		return LocalizationManager.text(key)
+	return str(buff.get("description", "")).strip_edges()
+
+func _refresh_buffs_localized_ui() -> void:
+	if personal_buffs_panel != null:
+		LocalizationManager.localize_tree(personal_buffs_panel)
+	_refresh_personal_buffs_from_entitlements()
+	if global_buff_slots != null:
+		for child: Node in global_buff_slots.get_children():
+			var button := child as Button
+			if button == null:
+				continue
+			var buff := button.get_meta("buff_data", {}) as Dictionary
+			if not buff.is_empty():
+				button.tooltip_text = _global_buff_tooltip(buff)
+	if global_buff_details_panel != null:
+		LocalizationManager.localize_tree(global_buff_details_panel)
+	if not selected_global_buff.is_empty():
+		_render_global_buff_details()
 
 func _on_global_buff_button_pressed(button: Button) -> void:
 	var buff: Dictionary = button.get_meta("buff_data", {}) as Dictionary
@@ -9131,12 +9969,14 @@ func _render_global_buff_details() -> void:
 	var goal := maxi(int(selected_global_buff.get("goal", 100000)), 1)
 	var progress := clampf(float(current) / float(goal) * 100.0, 0.0, 100.0)
 	global_buff_details_icon.texture = _global_buff_icon_for(selected_global_buff)
-	global_buff_details_title.text = str(selected_global_buff.get("name", "Global Buff"))
-	global_buff_details_description.text = str(selected_global_buff.get("description", ""))
+	global_buff_details_title.text = _localized_buff_name(selected_global_buff)
+	global_buff_details_description.text = _localized_buff_description(selected_global_buff)
 	global_buff_details_progress.value = 100.0 if active else progress
 	global_buff_details_progress_label.text = "$%s / $%s" % [_format_money(current), _format_money(goal)]
 	global_buff_details_percent_label.text = "%d%%" % roundi(100.0 if active else progress)
-	global_buff_details_status.text = "ACTIVE SERVER BUFF" if active else "COMMUNITY GOAL"
+	global_buff_details_status.text = LocalizationManager.text(
+		"ui.buff.active_server" if active else "ui.buff.community_goal"
+	)
 	global_buff_details_status.add_theme_color_override(
 		"font_color",
 		Color("#85f29c") if active else Color("#60d3ff")
@@ -9151,7 +9991,10 @@ func _render_global_buff_details() -> void:
 		)
 	)
 	global_buff_details_active_label.visible = active
-	global_buff_details_active_label.text = "Active server-wide · %s remaining" % str(selected_global_buff.get("remaining", ""))
+	global_buff_details_active_label.text = LocalizationManager.text(
+		"ui.buff.server_remaining",
+		{"remaining": str(selected_global_buff.get("remaining", ""))}
+	)
 	global_buff_donation_section.visible = not active
 	_refresh_global_buff_contribution_buttons()
 	if global_buff_details_panel != null:
@@ -9176,8 +10019,10 @@ func _on_global_buff_contribute_pressed() -> void:
 	if selected_global_buff.is_empty() or str(selected_global_buff.get("state", "funding")) == "active":
 		return
 	_add_chat_message(
-		"Community contributions are not connected yet. Selected contribution: $%s."
-		% _format_money(selected_global_buff_contribution)
+		LocalizationManager.text(
+			"ui.buff.contribution_unavailable",
+			{"amount": _format_money(selected_global_buff_contribution)}
+		)
 	)
 
 func _hide_global_buff_details() -> void:
@@ -9251,7 +10096,10 @@ func _on_donator_store_purchase_requested(item_id: String, chroma_colors: Dictio
 	var purchased_item_id := str(purchase.get("itemId", item_id))
 	var purchased_item_name := _item_name_from_id(purchased_item_id)
 	donator_store_popup.show_purchase_success(purchased_item_name)
-	add_system_message("Aether Gift Store: Purchased %s. It was added to your Bag." % purchased_item_name)
+	add_system_message(LocalizationManager.text(
+		"ui.store.purchase.system_success",
+		{"item": purchased_item_name}
+	))
 
 func _hide_donator_store_popup() -> void:
 	if donator_store_popup == null:
@@ -9302,7 +10150,7 @@ func _setup_pvp_queue_compact_panel() -> void:
 	row.add_child(text_stack)
 
 	pvp_queue_compact_status_label = Label.new()
-	pvp_queue_compact_status_label.text = "Ranked Queue"
+	pvp_queue_compact_status_label.text = LocalizationManager.text("ui.pvp.queue.compact_title")
 	pvp_queue_compact_status_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	pvp_queue_compact_status_label.add_theme_font_size_override("font_size", 13)
 	pvp_queue_compact_status_label.add_theme_color_override("font_color", UI_TEXT)
@@ -9315,7 +10163,7 @@ func _setup_pvp_queue_compact_panel() -> void:
 	text_stack.add_child(pvp_queue_compact_time_label)
 
 	pvp_queue_compact_open_button = Button.new()
-	pvp_queue_compact_open_button.text = "Open"
+	_set_localized_control_property(pvp_queue_compact_open_button, "text", "ui.pvp.queue.open")
 	pvp_queue_compact_open_button.custom_minimum_size = Vector2(58, 30)
 	pvp_queue_compact_open_button.focus_mode = Control.FOCUS_NONE
 	pvp_queue_compact_open_button.pressed.connect(_on_pvp_queue_compact_open_pressed)
@@ -9323,7 +10171,7 @@ func _setup_pvp_queue_compact_panel() -> void:
 	row.add_child(pvp_queue_compact_open_button)
 
 	pvp_queue_compact_leave_button = Button.new()
-	pvp_queue_compact_leave_button.text = "Leave"
+	_set_localized_control_property(pvp_queue_compact_leave_button, "text", "ui.pvp.queue.leave_short")
 	pvp_queue_compact_leave_button.custom_minimum_size = Vector2(62, 30)
 	pvp_queue_compact_leave_button.focus_mode = Control.FOCUS_NONE
 	pvp_queue_compact_leave_button.pressed.connect(_on_pvp_queue_compact_leave_pressed)
@@ -9406,7 +10254,7 @@ func _setup_pvp_match_countdown_overlay() -> void:
 
 	var title := Label.new()
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	title.text = "RANKED MATCH FOUND"
+	_set_localized_control_property(title, "text", "ui.pvp.countdown.title")
 	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	title.add_theme_font_size_override("font_size", 20)
 	title.add_theme_color_override("font_color", UI_MONEY)
@@ -9414,7 +10262,7 @@ func _setup_pvp_match_countdown_overlay() -> void:
 
 	pvp_match_countdown_status_label = Label.new()
 	pvp_match_countdown_status_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	pvp_match_countdown_status_label.text = "Finish your action now. PvP starts soon."
+	pvp_match_countdown_status_label.text = LocalizationManager.text("ui.pvp.countdown.soon")
 	pvp_match_countdown_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pvp_match_countdown_status_label.add_theme_font_size_override("font_size", 16)
 	pvp_match_countdown_status_label.add_theme_color_override("font_color", UI_TEXT)
@@ -9422,7 +10270,10 @@ func _setup_pvp_match_countdown_overlay() -> void:
 
 	pvp_match_countdown_timer_label = Label.new()
 	pvp_match_countdown_timer_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	pvp_match_countdown_timer_label.text = "10s"
+	pvp_match_countdown_timer_label.text = LocalizationManager.text(
+		"ui.pvp.countdown.timer",
+		{"seconds": 10}
+	)
 	pvp_match_countdown_timer_label.custom_minimum_size = Vector2(86, 0)
 	pvp_match_countdown_timer_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	pvp_match_countdown_timer_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -9582,7 +10433,9 @@ func _get_appearance_category_for_sprite(sprite_name: String) -> String:
 func _get_preview_part_id(category_id: String) -> String:
 	match CharacterAppearanceService.normalize_part_category(category_id):
 		"hair":
-			return PlayerSave.appearance_hair_id
+			return CharacterAppearanceService.resolve_hair_render_id(
+				PlayerSave.appearance_hair_id
+			)
 		"headgear":
 			return PlayerSave.appearance_headgear_id
 		"facial_hair":
@@ -9802,6 +10655,45 @@ func _apply_trainer_card_tabs_style(tabs: TabContainer) -> void:
 	)
 	tabs.add_theme_stylebox_override("panel", _make_trainer_card_inset_style())
 
+func _refresh_trainer_card_tab_titles() -> void:
+	if trainer_card_tabs == null:
+		return
+	for index in range(trainer_card_tabs.get_tab_count()):
+		var page := trainer_card_tabs.get_child(index)
+		if page == null:
+			continue
+		var key := str(page.get_meta("i18n_tab_key", ""))
+		if key != "":
+			trainer_card_tabs.set_tab_title(index, LocalizationManager.text(key))
+
+func _refresh_trainer_card_localized_ui() -> void:
+	if trainer_card_popup != null:
+		LocalizationManager.localize_tree(trainer_card_popup)
+	if trainer_card_natural_colors_popup != null:
+		LocalizationManager.localize_tree(trainer_card_natural_colors_popup)
+	if trainer_card_subtitle_label != null:
+		trainer_card_subtitle_label.text = LocalizationManager.text(
+			"ui.trainer_card.passport",
+			{"id": _get_trainer_id_text()}
+		)
+	_refresh_trainer_card_tab_titles()
+	_populate_trainer_card_badge_option()
+	_refresh_trainer_card_gym_badges()
+	_refresh_trainer_card_body_buttons()
+	_refresh_trainer_card_part_buttons()
+	_refresh_trainer_card_color_buttons()
+	_refresh_trainer_card_appearance_capacity_label()
+	_update_trainer_card_appearance_save_state(
+		trainer_card_appearance_message_key,
+		trainer_card_appearance_message_values
+	)
+	if (
+		public_trainer_card_popup != null
+		and public_trainer_card_popup.visible
+		and not public_trainer_card_data.is_empty()
+	):
+		_show_public_trainer_card(public_trainer_card_data)
+
 func _setup_trainer_card_popup() -> void:
 	trainer_card_popup = PanelContainer.new()
 	trainer_card_popup.name = "TrainerCardPopup"
@@ -9854,10 +10746,14 @@ func _setup_trainer_card_popup() -> void:
 	title_stack.add_child(title)
 
 	var subtitle := Label.new()
-	subtitle.text = "TRAINER PASSPORT  ·  ID %s" % _get_trainer_id_text()
+	subtitle.text = LocalizationManager.text(
+		"ui.trainer_card.passport",
+		{"id": _get_trainer_id_text()}
+	)
 	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	subtitle.add_theme_font_size_override("font_size", 10)
 	subtitle.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
+	trainer_card_subtitle_label = subtitle
 	title_stack.add_child(subtitle)
 
 	header.add_child(_create_trainer_card_redeem_button())
@@ -9871,18 +10767,20 @@ func _setup_trainer_card_popup() -> void:
 	_apply_button_style(close_button)
 	header.add_child(close_button)
 
-	var tabs := TabContainer.new()
-	tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	tabs.add_theme_font_size_override("font_size", 13)
-	tabs.add_child(_create_trainer_card_stats_tab())
-	tabs.add_child(_create_trainer_card_wallet_tab())
-	tabs.add_child(_create_trainer_card_appearance_tab())
-	tabs.add_child(_create_trainer_card_badges_tab())
-	_apply_trainer_card_tabs_style(tabs)
-	layout.add_child(tabs)
+	trainer_card_tabs = TabContainer.new()
+	trainer_card_tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	trainer_card_tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	trainer_card_tabs.add_theme_font_size_override("font_size", 13)
+	trainer_card_tabs.add_child(_create_trainer_card_stats_tab())
+	trainer_card_tabs.add_child(_create_trainer_card_wallet_tab())
+	trainer_card_tabs.add_child(_create_trainer_card_appearance_tab())
+	trainer_card_tabs.add_child(_create_trainer_card_badges_tab())
+	_apply_trainer_card_tabs_style(trainer_card_tabs)
+	_refresh_trainer_card_tab_titles()
+	layout.add_child(trainer_card_tabs)
 
 func _show_public_trainer_card(card: Dictionary) -> void:
+	public_trainer_card_data = card.duplicate(true)
 	_hide_trainer_card()
 	_hide_public_trainer_card()
 	public_trainer_card_popup = PanelContainer.new()
@@ -9918,7 +10816,7 @@ func _show_public_trainer_card(card: Dictionary) -> void:
 	header_spacer.custom_minimum_size = Vector2(34, 0)
 	header.add_child(header_spacer)
 	var title := Label.new()
-	title.text = "Trainer Card"
+	_set_localized_control_property(title, "text", "ui.trainer_card.title")
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 22)
@@ -9945,12 +10843,12 @@ func _show_public_trainer_card(card: Dictionary) -> void:
 	body.add_child(details)
 
 	var identity_rows: Array[Dictionary] = [
-		{"label": "Name", "value": str(card.get("displayName", card.get("username", "Trainer")))},
-		{"label": "ID", "value": str(card.get("userId", "-"))},
-		{"label": "Joined", "value": _format_join_date_text(str(card.get("createdAt", "")), "-")},
-		{"label": "Badge", "value": _get_public_trainer_badge_text(card)},
+		{"label_key": "ui.trainer_card.field.name", "value": str(card.get("displayName", card.get("username", LocalizationManager.text("ui.trainer_card.trainer"))))},
+		{"label_key": "ui.trainer_card.field.id", "value": str(card.get("userId", "-"))},
+		{"label_key": "ui.trainer_card.field.joined", "value": _format_join_date_text(str(card.get("createdAt", "")), "-")},
+		{"label_key": "ui.trainer_card.field.badge", "value": _get_public_trainer_badge_text(card)},
 	]
-	details.add_child(_create_public_trainer_info_panel("TRAINER PROFILE", identity_rows))
+	details.add_child(_create_public_trainer_info_panel("ui.trainer_card.profile_section", identity_rows))
 	details.add_child(_create_public_trainer_gym_badges_panel(card))
 
 	var summary_row := HBoxContainer.new()
@@ -9958,18 +10856,18 @@ func _show_public_trainer_card(card: Dictionary) -> void:
 	summary_row.add_theme_constant_override("separation", 10)
 	details.add_child(summary_row)
 	var adventure_rows: Array[Dictionary] = [
-		{"label": "Playtime", "value": _format_playtime(int(card.get("playtimeSeconds", 0)))},
-		{"label": "Status", "value": "Online"},
+		{"label_key": "ui.trainer_card.field.playtime", "value": _format_playtime(int(card.get("playtimeSeconds", 0)))},
+		{"label_key": "ui.trainer_card.field.status", "value": LocalizationManager.text("ui.trainer_card.status.online")},
 	]
-	var location_text := str(card.get("mapId", "Nearby")).strip_edges()
+	var location_text := str(card.get("mapId", LocalizationManager.text("ui.trainer_card.status.nearby"))).strip_edges()
 	if location_text == "":
-		location_text = "Nearby"
+		location_text = LocalizationManager.text("ui.trainer_card.status.nearby")
 	var presence_rows: Array[Dictionary] = [
-		{"label": "Location", "value": location_text},
-		{"label": "Profile", "value": "Public"},
+		{"label_key": "ui.trainer_card.field.location", "value": location_text},
+		{"label_key": "ui.trainer_card.field.profile", "value": LocalizationManager.text("ui.trainer_card.status.public")},
 	]
-	summary_row.add_child(_create_public_trainer_info_panel("ADVENTURE", adventure_rows))
-	summary_row.add_child(_create_public_trainer_info_panel("PRESENCE", presence_rows))
+	summary_row.add_child(_create_public_trainer_info_panel("ui.trainer_card.adventure", adventure_rows))
+	summary_row.add_child(_create_public_trainer_info_panel("ui.trainer_card.presence", presence_rows))
 
 	_activate_ui_panel(public_trainer_card_popup)
 
@@ -10003,7 +10901,10 @@ func _create_public_trainer_gym_badges_panel(card: Dictionary) -> Control:
 			earned_count += 1
 
 	var heading := Label.new()
-	heading.text = "GYM BADGES  ·  %d/%d" % [earned_count, KANTO_BADGES.size()]
+	heading.text = LocalizationManager.text(
+		"ui.trainer_card.gym_badges",
+		{"earned": earned_count, "total": KANTO_BADGES.size()}
+	)
 	heading.add_theme_font_size_override("font_size", 11)
 	heading.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
 	stack.add_child(heading)
@@ -10028,10 +10929,15 @@ func _create_public_trainer_gym_badges_panel(card: Dictionary) -> Control:
 func _create_public_trainer_gym_badge_icon(badge: Dictionary, earned: bool) -> Control:
 	var icon_center := CenterContainer.new()
 	icon_center.custom_minimum_size = Vector2(43, 43)
-	icon_center.tooltip_text = "%s · %s" % [
-		str(badge.get("name", "Badge")),
-		"Earned" if earned else "Locked",
-	]
+	icon_center.tooltip_text = LocalizationManager.text(
+		"ui.trainer_card.badge.tooltip",
+		{
+			"name": str(badge.get("name", LocalizationManager.text("ui.trainer_card.field.badge"))),
+			"state": LocalizationManager.text(
+				"ui.trainer_card.badge.earned" if earned else "ui.trainer_card.badge.locked"
+			),
+		}
+	)
 
 	var texture_rect := TextureRect.new()
 	texture_rect.custom_minimum_size = Vector2(39, 39)
@@ -10060,7 +10966,7 @@ func _create_public_trainer_avatar_panel(card: Dictionary) -> Control:
 	stack.add_theme_constant_override("separation", 8)
 	margin.add_child(stack)
 	var preview_label := Label.new()
-	preview_label.text = "TRAINER"
+	_set_localized_control_property(preview_label, "text", "ui.trainer_card.trainer")
 	preview_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	preview_label.add_theme_font_size_override("font_size", 10)
 	preview_label.add_theme_color_override("font_color", TRAINER_CARD_CYAN)
@@ -10098,7 +11004,7 @@ func _create_public_trainer_avatar_panel(card: Dictionary) -> Control:
 	stack.add_child(name_label)
 	return panel
 
-func _create_public_trainer_info_panel(title_text: String, rows: Array[Dictionary]) -> Control:
+func _create_public_trainer_info_panel(title_key: String, rows: Array[Dictionary]) -> Control:
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -10113,14 +11019,14 @@ func _create_public_trainer_info_panel(title_text: String, rows: Array[Dictionar
 	stack.add_theme_constant_override("separation", 5)
 	margin.add_child(stack)
 	var title := Label.new()
-	title.text = title_text
+	_set_localized_control_property(title, "text", title_key)
 	title.add_theme_font_size_override("font_size", 11)
 	title.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
 	stack.add_child(title)
 	for row: Dictionary in rows:
 		var line := HBoxContainer.new()
 		var label := Label.new()
-		label.text = "%s:" % str(row.get("label", ""))
+		_set_localized_control_property(label, "text", str(row.get("label_key", "")))
 		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		label.add_theme_font_size_override("font_size", 14)
 		label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -10186,7 +11092,7 @@ func _create_trainer_card_avatar_panel(
 
 	if show_name:
 		var preview_label := Label.new()
-		preview_label.text = "TRAINER"
+		_set_localized_control_property(preview_label, "text", "ui.trainer_card.trainer")
 		preview_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		preview_label.add_theme_font_size_override("font_size", 10)
 		preview_label.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
@@ -10217,6 +11123,7 @@ func _create_trainer_card_avatar_panel(
 func _create_trainer_card_stats_tab() -> Control:
 	var tab := MarginContainer.new()
 	tab.name = "Trainer"
+	tab.set_meta("i18n_tab_key", "ui.trainer_card.tab.trainer")
 	tab.add_theme_constant_override("margin_left", 8)
 	tab.add_theme_constant_override("margin_top", 8)
 	tab.add_theme_constant_override("margin_right", 8)
@@ -10243,17 +11150,17 @@ func _create_trainer_card_stats_tab() -> Control:
 	layout.add_child(stats_row)
 
 	var adventure_rows: Array[Dictionary] = [
-		{"label": "Join Date", "value": _get_formatted_trainer_stat_text("join_date", "-")},
-		{"label": "Playtime", "value": _format_playtime(PlayerSave.playtime_seconds)},
-		{"label": "Pokemon Caught", "value": _get_trainer_stat_text("pokemon_caught", "0")},
-		{"label": "Pokemon Seen", "value": _get_trainer_stat_text("pokemon_seen", "0")},
+		{"id": "join_date", "label_key": "ui.trainer_card.field.join_date", "value": _get_formatted_trainer_stat_text("join_date", "-")},
+		{"id": "playtime", "label_key": "ui.trainer_card.field.playtime", "value": _format_playtime(PlayerSave.playtime_seconds)},
+		{"id": "pokemon_caught", "label_key": "ui.trainer_card.field.pokemon_caught", "value": _get_trainer_stat_text("pokemon_caught", "0")},
+		{"id": "pokemon_seen", "label_key": "ui.trainer_card.field.pokemon_seen", "value": _get_trainer_stat_text("pokemon_seen", "0")},
 	]
 	var battle_rows: Array[Dictionary] = [
-		{"label": "Victories", "value": _get_trainer_stat_text("victories", "0")},
-		{"label": "Defeats", "value": _get_trainer_stat_text("defeats", "0")},
+		{"id": "victories", "label_key": "ui.trainer_card.field.victories", "value": _get_trainer_stat_text("victories", "0")},
+		{"id": "defeats", "label_key": "ui.trainer_card.field.defeats", "value": _get_trainer_stat_text("defeats", "0")},
 	]
-	stats_row.add_child(_create_trainer_card_stat_panel("Adventure Stats", adventure_rows))
-	stats_row.add_child(_create_trainer_card_stat_panel("Battle Stats", battle_rows))
+	stats_row.add_child(_create_trainer_card_stat_panel("ui.trainer_card.stats.adventure", adventure_rows))
+	stats_row.add_child(_create_trainer_card_stat_panel("ui.trainer_card.stats.battle", battle_rows))
 
 	var spacer := Control.new()
 	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -10265,6 +11172,7 @@ func _create_trainer_card_stats_tab() -> Control:
 func _create_trainer_card_wallet_tab() -> Control:
 	var tab := MarginContainer.new()
 	tab.name = "Wallet"
+	tab.set_meta("i18n_tab_key", "ui.trainer_card.tab.wallet")
 	tab.add_theme_constant_override("margin_left", 12)
 	tab.add_theme_constant_override("margin_top", 12)
 	tab.add_theme_constant_override("margin_right", 12)
@@ -10277,13 +11185,13 @@ func _create_trainer_card_wallet_tab() -> Control:
 	tab.add_child(layout)
 
 	var heading := Label.new()
-	heading.text = "CURRENCY WALLET"
+	_set_localized_control_property(heading, "text", "ui.trainer_card.wallet.title")
 	heading.add_theme_font_size_override("font_size", 12)
 	heading.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
 	layout.add_child(heading)
 
 	var introduction := Label.new()
-	introduction.text = "Your account balances. Future voucher items remain in the Bag until they are used."
+	_set_localized_control_property(introduction, "text", "ui.trainer_card.wallet.intro")
 	introduction.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	introduction.add_theme_font_size_override("font_size", 13)
 	introduction.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -10298,8 +11206,8 @@ func _create_trainer_card_wallet_tab() -> Control:
 	layout.add_child(cards)
 	cards.add_child(
 		_create_trainer_card_currency_card(
-			"Pokédollars",
-			"Earned through normal gameplay and used by regular shops and services.",
+			"ui.trainer_card.wallet.money",
+			"ui.trainer_card.wallet.money_description",
 			TRAINER_WALLET_MONEY_ICON,
 			TRAINER_CARD_GREEN,
 			"money"
@@ -10307,8 +11215,8 @@ func _create_trainer_card_wallet_tab() -> Control:
 	)
 	cards.add_child(
 		_create_trainer_card_currency_card(
-			"Aether Gems",
-			"Supporter currency used for available products in the Aether Gift Store.",
+			"ui.trainer_card.wallet.gems",
+			"ui.trainer_card.wallet.gems_description",
 			TRAINER_WALLET_AETHER_GEM_ICON,
 			UI_PURPLE_HOVER,
 			"gems"
@@ -10316,8 +11224,8 @@ func _create_trainer_card_wallet_tab() -> Control:
 	)
 	cards.add_child(
 		_create_trainer_card_currency_card(
-			"Aetherite",
-			"Future gameplay currency. Earning and spending options are coming later.",
+			"ui.trainer_card.wallet.aetherite",
+			"ui.trainer_card.wallet.aetherite_description",
 			TRAINER_WALLET_AETHERITE_ICON,
 			TRAINER_CARD_CYAN,
 			"aetherite"
@@ -10325,8 +11233,8 @@ func _create_trainer_card_wallet_tab() -> Control:
 	)
 	cards.add_child(
 		_create_trainer_card_currency_card(
-			"Battle Points",
-			"Future battle currency. Earning and spending options are coming later.",
+			"ui.trainer_card.wallet.battle_points",
+			"ui.trainer_card.wallet.battle_points_description",
 			TRAINER_WALLET_BATTLE_POINTS_ICON,
 			TRAINER_CARD_ACCENT,
 			"battle_points"
@@ -10336,8 +11244,8 @@ func _create_trainer_card_wallet_tab() -> Control:
 
 
 func _create_trainer_card_currency_card(
-	title_text: String,
-	description_text: String,
+	title_key: String,
+	description_key: String,
 	icon_texture: Texture2D,
 	accent: Color,
 	currency_key: String
@@ -10382,7 +11290,7 @@ func _create_trainer_card_currency_card(
 	details.add_child(title_row)
 
 	var title := Label.new()
-	title.text = title_text
+	_set_localized_control_property(title, "text", title_key)
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.add_theme_font_size_override("font_size", 14)
 	title.add_theme_color_override("font_color", UI_TEXT)
@@ -10405,7 +11313,7 @@ func _create_trainer_card_currency_card(
 			trainer_card_battle_points_label = balance
 
 	var description := Label.new()
-	description.text = description_text
+	_set_localized_control_property(description, "text", description_key)
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	description.add_theme_font_size_override("font_size", 11)
 	description.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -10428,7 +11336,7 @@ func _get_trainer_card_currency_balance(currency_key: String) -> int:
 func _create_trainer_card_redeem_button() -> Button:
 	var redeem_button := Button.new()
 	redeem_button.name = "RedeemCodeButton"
-	redeem_button.text = "Redeem Code"
+	_set_localized_control_property(redeem_button, "text", "ui.trainer_card.redeem")
 	redeem_button.icon = REDEEM_CODE_ICON
 	redeem_button.add_theme_constant_override("icon_max_width", 18)
 	redeem_button.expand_icon = true
@@ -10436,9 +11344,166 @@ func _create_trainer_card_redeem_button() -> Button:
 	redeem_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	redeem_button.focus_mode = Control.FOCUS_NONE
 	redeem_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	redeem_button.tooltip_text = "Enter a promotional gift code"
+	_set_localized_control_property(redeem_button, "tooltip_text", "ui.trainer_card.redeem_tooltip")
+	redeem_button.pressed.connect(_open_trainer_card_redeem_popup)
 	_apply_button_style(redeem_button)
 	return redeem_button
+
+func _open_trainer_card_redeem_popup() -> void:
+	if is_instance_valid(trainer_card_redeem_popup):
+		trainer_card_redeem_popup.visible = true
+		_activate_ui_panel(trainer_card_redeem_popup)
+		trainer_card_redeem_input.grab_focus()
+		return
+
+	trainer_card_redeem_popup = PanelContainer.new()
+	trainer_card_redeem_popup.name = "GiftCodeRedeemPopup"
+	trainer_card_redeem_popup.custom_minimum_size = Vector2(460, 260)
+	trainer_card_redeem_popup.anchor_left = 0.5
+	trainer_card_redeem_popup.anchor_top = 0.5
+	trainer_card_redeem_popup.anchor_right = 0.5
+	trainer_card_redeem_popup.anchor_bottom = 0.5
+	trainer_card_redeem_popup.offset_left = -230
+	trainer_card_redeem_popup.offset_top = -130
+	trainer_card_redeem_popup.offset_right = 230
+	trainer_card_redeem_popup.offset_bottom = 130
+	trainer_card_redeem_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	trainer_card_redeem_popup.add_theme_stylebox_override("panel", _make_trainer_card_outer_style())
+	root_control.add_child(trainer_card_redeem_popup)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 22)
+	margin.add_theme_constant_override("margin_top", 20)
+	margin.add_theme_constant_override("margin_right", 22)
+	margin.add_theme_constant_override("margin_bottom", 20)
+	trainer_card_redeem_popup.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 12)
+	margin.add_child(layout)
+
+	var title := Label.new()
+	_set_localized_control_property(title, "text", "ui.gift_code.title")
+	title.add_theme_font_size_override("font_size", 22)
+	title.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
+	layout.add_child(title)
+
+	var description := Label.new()
+	_set_localized_control_property(description, "text", "ui.gift_code.description")
+	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	description.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(description)
+
+	trainer_card_redeem_input = LineEdit.new()
+	trainer_card_redeem_input.name = "GiftCodeInput"
+	trainer_card_redeem_input.max_length = 64
+	trainer_card_redeem_input.placeholder_text = LocalizationManager.text("ui.gift_code.placeholder")
+	trainer_card_redeem_input.text_submitted.connect(func(_value: String) -> void: _submit_trainer_card_gift_code())
+	_apply_line_edit_style(trainer_card_redeem_input)
+	layout.add_child(trainer_card_redeem_input)
+
+	trainer_card_redeem_status = Label.new()
+	trainer_card_redeem_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	trainer_card_redeem_status.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(trainer_card_redeem_status)
+
+	var actions := HBoxContainer.new()
+	actions.alignment = BoxContainer.ALIGNMENT_END
+	actions.add_theme_constant_override("separation", 8)
+	layout.add_child(actions)
+
+	var cancel := Button.new()
+	cancel.text = LocalizationManager.text("ui.gift_code.cancel")
+	cancel.pressed.connect(_hide_trainer_card_redeem_popup)
+	_apply_button_style(cancel)
+	actions.add_child(cancel)
+
+	trainer_card_redeem_submit = Button.new()
+	trainer_card_redeem_submit.text = LocalizationManager.text("ui.gift_code.submit")
+	trainer_card_redeem_submit.pressed.connect(_submit_trainer_card_gift_code)
+	_apply_button_style(trainer_card_redeem_submit, "primary")
+	actions.add_child(trainer_card_redeem_submit)
+
+	_activate_ui_panel(trainer_card_redeem_popup)
+	trainer_card_redeem_input.grab_focus()
+
+func _hide_trainer_card_redeem_popup() -> void:
+	if not is_instance_valid(trainer_card_redeem_popup):
+		return
+	_deactivate_ui_panel(trainer_card_redeem_popup)
+	trainer_card_redeem_popup.queue_free()
+	trainer_card_redeem_popup = null
+	trainer_card_redeem_input = null
+	trainer_card_redeem_status = null
+	trainer_card_redeem_submit = null
+	trainer_card_redeem_in_flight = false
+
+func _submit_trainer_card_gift_code() -> void:
+	if trainer_card_redeem_in_flight or not is_instance_valid(trainer_card_redeem_input):
+		return
+	var code := trainer_card_redeem_input.text.strip_edges()
+	if code == "":
+		trainer_card_redeem_status.text = LocalizationManager.text("ui.gift_code.error.empty")
+		trainer_card_redeem_status.add_theme_color_override("font_color", UI_DANGER)
+		return
+	trainer_card_redeem_in_flight = true
+	trainer_card_redeem_submit.disabled = true
+	trainer_card_redeem_input.editable = false
+	trainer_card_redeem_status.text = LocalizationManager.text("ui.gift_code.redeeming")
+	trainer_card_redeem_status.add_theme_color_override("font_color", UI_MUTED_TEXT)
+
+	var result: Dictionary = await GiftCodeService.redeem(code)
+	if not is_instance_valid(trainer_card_redeem_popup):
+		return
+	trainer_card_redeem_in_flight = false
+	trainer_card_redeem_submit.disabled = false
+	trainer_card_redeem_input.editable = true
+	if not bool(result.get("success", false)):
+		trainer_card_redeem_status.text = str(result.get("error", LocalizationManager.text("backend.error.generic")))
+		trainer_card_redeem_status.add_theme_color_override("font_color", UI_DANGER)
+		return
+
+	bag_inventory_items = _normalize_bag_inventory_items(result.get("inventory", []))
+	bag_inventory_loaded = true
+	_refresh_bag_items()
+	_refresh_party()
+	_refresh_player_status_card()
+	var summary := _gift_code_reward_summary(result.get("rewards", []))
+	add_system_message(LocalizationManager.text("ui.gift_code.success", {"rewards": summary}))
+	var public_message := str(result.get("publicMessage", "")).strip_edges()
+	if public_message != "":
+		add_system_message(public_message)
+	_hide_trainer_card_redeem_popup()
+
+func _gift_code_reward_summary(rewards_value: Variant) -> String:
+	var labels: Array[String] = []
+	if rewards_value is not Array:
+		return LocalizationManager.text("ui.gift_code.reward.generic")
+	for reward_value: Variant in rewards_value as Array:
+		if reward_value is not Dictionary:
+			continue
+		var reward: Dictionary = reward_value
+		var payload: Dictionary = reward.get("payload", {}) as Dictionary
+		match str(reward.get("type", "")):
+			"currency":
+				var currency_id := str(payload.get("currency", ""))
+				labels.append(LocalizationManager.text("ui.gift_code.reward.currency", {
+					"amount": int(payload.get("amount", 0)),
+					"currency": LocalizationManager.text("ui.trainer_card.wallet.%s" % currency_id),
+				}))
+			"item":
+				labels.append(LocalizationManager.text("ui.gift_code.reward.item", {
+					"quantity": int(payload.get("quantity", 0)),
+					"item": ItemLocalization.display_name(
+						str(payload.get("itemId", "")),
+						str(payload.get("name", payload.get("itemId", "")))
+					),
+				}))
+			"pokemon":
+				labels.append(LocalizationManager.text("ui.gift_code.reward.pokemon", {
+					"pokemon": str(payload.get("species", "Pokémon")),
+				}))
+	return ", ".join(labels) if not labels.is_empty() else LocalizationManager.text("ui.gift_code.reward.generic")
 
 func _create_trainer_card_identity_panel() -> Control:
 	var panel := PanelContainer.new()
@@ -10459,13 +11524,13 @@ func _create_trainer_card_identity_panel() -> Control:
 	margin_container.add_child(rows)
 
 	var heading := Label.new()
-	heading.text = "PROFILE"
+	_set_localized_control_property(heading, "text", "ui.trainer_card.profile")
 	heading.add_theme_font_size_override("font_size", 11)
 	heading.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
 	rows.add_child(heading)
 
-	rows.add_child(_create_trainer_card_stat_row("Trainer ID", _get_trainer_id_text(), 104, 15, TRAINER_CARD_CYAN))
-	rows.add_child(_create_trainer_card_stat_row("Guild", _get_trainer_stat_text("guild", "-"), 104, 15, UI_TEXT))
+	rows.add_child(_create_trainer_card_stat_row("ui.trainer_card.field.trainer_id", _get_trainer_id_text(), 104, 15, TRAINER_CARD_CYAN))
+	rows.add_child(_create_trainer_card_stat_row("ui.trainer_card.field.guild", _get_trainer_stat_text("guild", "-"), 104, 15, UI_TEXT))
 	rows.add_child(_create_trainer_card_badge_row())
 	return panel
 
@@ -10475,7 +11540,7 @@ func _create_trainer_card_badge_row() -> Control:
 	row.add_theme_constant_override("separation", 10)
 
 	var label := Label.new()
-	label.text = "Badge:"
+	_set_localized_control_property(label, "text", "ui.trainer_card.field.badge")
 	label.custom_minimum_size = Vector2(104, 0)
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 16)
@@ -10538,7 +11603,13 @@ func _populate_trainer_card_badge_option() -> void:
 	trainer_card_badge_options = _get_selectable_chat_badge_roles(AuthService.current_user)
 	trainer_card_badge_option.clear()
 	for option: Dictionary in trainer_card_badge_options:
-		trainer_card_badge_option.add_item(str(option.get("label", "None")))
+		var option_id := str(option.get("id", ""))
+		var option_label := (
+			LocalizationManager.text("ui.trainer_card.badge.none")
+			if option_id == "" or option_id == "none"
+			else str(option.get("label", LocalizationManager.text("ui.trainer_card.badge.none")))
+		)
+		trainer_card_badge_option.add_item(option_label)
 		trainer_card_badge_option.set_item_metadata(trainer_card_badge_option.item_count - 1, str(option.get("id", "")))
 
 	var selected_badge: String = _get_selected_role_badge_preference()
@@ -10555,13 +11626,13 @@ func _on_trainer_card_badge_selected(index: int) -> void:
 		return
 	var selected_badge: String = str(trainer_card_badge_option.get_item_metadata(index)).strip_edges().to_lower()
 	_apply_selected_role_badge_preference(selected_badge)
-	trainer_card_badge_status_label.text = "Saving"
+	_set_localized_control_property(trainer_card_badge_status_label, "text", "ui.trainer_card.badge.saving")
 	var result: Dictionary = await _save_toggle_preferences()
 	if bool(result.get("success", false)):
-		trainer_card_badge_status_label.text = "Saved"
+		_set_localized_control_property(trainer_card_badge_status_label, "text", "ui.trainer_card.badge.saved")
 		_refresh_world_role_badge_state()
 	else:
-		trainer_card_badge_status_label.text = "Error"
+		_set_localized_control_property(trainer_card_badge_status_label, "text", "ui.trainer_card.badge.error")
 
 func _get_selected_role_badge_preference() -> String:
 	var selected_badge: String = GameState.selected_role_badge.strip_edges().to_lower()
@@ -10587,7 +11658,7 @@ func _get_current_user_with_selected_badge() -> Dictionary:
 	user["selectedRoleBadge"] = GameState.selected_role_badge
 	return user
 
-func _create_trainer_card_stat_panel(title_text: String, rows: Array[Dictionary]) -> Control:
+func _create_trainer_card_stat_panel(title_key: String, rows: Array[Dictionary]) -> Control:
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -10605,7 +11676,7 @@ func _create_trainer_card_stat_panel(title_text: String, rows: Array[Dictionary]
 	margin_container.add_child(layout)
 
 	var title := Label.new()
-	title.text = title_text.to_upper()
+	_set_localized_control_property(title, "text", title_key)
 	title.add_theme_font_size_override("font_size", 11)
 	title.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
 	layout.add_child(title)
@@ -10617,25 +11688,33 @@ func _create_trainer_card_stat_panel(title_text: String, rows: Array[Dictionary]
 	layout.add_child(row_stack)
 
 	for row_value: Dictionary in rows:
-		var label_text: String = str(row_value.get("label", ""))
+		var label_key: String = str(row_value.get("label_key", ""))
 		var value_text: String = str(row_value.get("value", ""))
 		var value_color: Color = TRAINER_CARD_GREEN if bool(row_value.get("money", false)) else UI_TEXT
-		row_stack.add_child(_create_trainer_card_stat_row(label_text, value_text, 130, 15, value_color))
+		row_stack.add_child(_create_trainer_card_stat_row(
+			label_key,
+			value_text,
+			130,
+			15,
+			value_color,
+			str(row_value.get("id", ""))
+		))
 
 	return panel
 
 func _create_trainer_card_stat_row(
-	label_text: String,
+	label_key: String,
 	value_text: String,
 	label_width: float = 82.0,
 	font_size: int = 16,
-	value_color: Color = TRAINER_CARD_CYAN
+	value_color: Color = TRAINER_CARD_CYAN,
+	field_id: String = ""
 ) -> Control:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 10)
 
 	var label := Label.new()
-	label.text = "%s:" % label_text
+	_set_localized_control_property(label, "text", label_key)
 	label.custom_minimum_size = Vector2(label_width, 0)
 	label.add_theme_font_size_override("font_size", font_size)
 	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -10649,9 +11728,9 @@ func _create_trainer_card_stat_row(
 	value.add_theme_color_override("font_color", value_color)
 	value.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	row.add_child(value)
-	if label_text == "Money":
+	if field_id == "money":
 		trainer_card_money_label = value
-	elif label_text == "Playtime":
+	elif field_id == "playtime":
 		trainer_card_playtime_label = value
 
 	return row
@@ -10661,6 +11740,7 @@ func _create_trainer_card_appearance_tab() -> Control:
 	trainer_card_appearance_capacity_label = null
 	var tab := MarginContainer.new()
 	tab.name = "Appearance"
+	tab.set_meta("i18n_tab_key", "ui.trainer_card.tab.appearance")
 	tab.add_theme_constant_override("margin_left", 10)
 	tab.add_theme_constant_override("margin_top", 10)
 	tab.add_theme_constant_override("margin_right", 10)
@@ -10678,7 +11758,7 @@ func _create_trainer_card_appearance_tab() -> Control:
 	layout.add_child(preview_column)
 
 	var preview_label := Label.new()
-	preview_label.text = "LIVE PREVIEW"
+	_set_localized_control_property(preview_label, "text", "ui.appearance.live_preview")
 	preview_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	preview_label.add_theme_font_size_override("font_size", 10)
 	preview_label.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
@@ -10709,7 +11789,7 @@ func _create_trainer_card_appearance_tab() -> Control:
 	sidebar_margin.add_child(sidebar)
 
 	var sidebar_label := Label.new()
-	sidebar_label.text = "CUSTOMIZE"
+	_set_localized_control_property(sidebar_label, "text", "ui.appearance.customize")
 	sidebar_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	sidebar_label.add_theme_font_size_override("font_size", 10)
 	sidebar_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -10753,9 +11833,9 @@ func _create_trainer_card_appearance_tab() -> Control:
 
 		var category: Dictionary = category_value as Dictionary
 		var category_id: String = str(category.get("id", ""))
-		var category_label: String = str(category.get("label", category_id.capitalize()))
+		var category_key: String = str(category.get("label_key", "ui.appearance.category.%s" % category_id))
 		var side_button := Button.new()
-		side_button.text = category_label
+		_set_localized_control_property(side_button, "text", category_key)
 		side_button.focus_mode = Control.FOCUS_NONE
 		side_button.custom_minimum_size = Vector2(0, 34)
 		side_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -10795,7 +11875,7 @@ func _create_trainer_card_appearance_save_row() -> Control:
 	row.add_child(trainer_card_appearance_status_label)
 
 	trainer_card_appearance_save_button = Button.new()
-	trainer_card_appearance_save_button.text = "Save"
+	_set_localized_control_property(trainer_card_appearance_save_button, "text", "common.save")
 	trainer_card_appearance_save_button.custom_minimum_size = Vector2(96, 32)
 	trainer_card_appearance_save_button.focus_mode = Control.FOCUS_NONE
 	trainer_card_appearance_save_button.pressed.connect(_on_trainer_card_appearance_save_pressed)
@@ -10806,6 +11886,7 @@ func _create_trainer_card_appearance_save_row() -> Control:
 func _create_trainer_card_badges_tab() -> Control:
 	var tab := MarginContainer.new()
 	tab.name = "Badges"
+	tab.set_meta("i18n_tab_key", "ui.trainer_card.tab.badges")
 	tab.add_theme_constant_override("margin_left", 12)
 	tab.add_theme_constant_override("margin_top", 10)
 	tab.add_theme_constant_override("margin_right", 12)
@@ -10950,7 +12031,15 @@ func _apply_trainer_card_gym_badge_slot_state(
 	earned: bool
 ) -> void:
 	texture_rect.modulate = Color.WHITE if earned else Color("#6873839a")
-	slot.tooltip_text = "%s · %s" % [badge_name, "Earned" if earned else "Locked"]
+	slot.tooltip_text = LocalizationManager.text(
+		"ui.trainer_card.badge.tooltip",
+		{
+			"name": badge_name,
+			"state": LocalizationManager.text(
+				"ui.trainer_card.badge.earned" if earned else "ui.trainer_card.badge.locked"
+			),
+		}
+	)
 
 func _gym_badge_state_has(state: Dictionary, region: String, badge_id: String) -> bool:
 	var wanted_key := _gym_badge_key(region, badge_id)
@@ -11167,11 +12256,11 @@ func _create_trainer_card_body_appearance_content(content_stack: VBoxContainer) 
 	trainer_card_appearance_capacity_label = null
 	_create_trainer_card_appearance_section_header(
 		content_stack,
-		"Body",
-		"Choose the body model for your trainer."
+		"ui.appearance.category.body",
+		"ui.appearance.body_description"
 	)
 
-	var search_input := _create_trainer_card_appearance_search_input("Search bodies")
+	var search_input := _create_trainer_card_appearance_search_input("ui.appearance.search_bodies")
 	search_input.text_changed.connect(_filter_trainer_card_body_buttons)
 	content_stack.add_child(search_input)
 
@@ -11219,26 +12308,30 @@ func _create_trainer_card_natural_colors_summary(content_stack: VBoxContainer) -
 	row.add_child(copy)
 
 	var title := Label.new()
-	title.text = "Natural Colors"
+	_set_localized_control_property(title, "text", "ui.appearance.natural.title")
 	title.add_theme_font_size_override("font_size", 13)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	copy.add_child(title)
 
 	var hint := Label.new()
-	hint.text = "Skin · eyes · starter hair"
+	_set_localized_control_property(hint, "text", "ui.appearance.natural.hint")
 	hint.add_theme_font_size_override("font_size", 10)
 	hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	copy.add_child(hint)
 
 	for color_entry: Dictionary in [
-		{"key": "skin_tone", "label": "Skin tone"},
-		{"key": "eye_color", "label": "Eye color"},
-		{"key": "hair_color", "label": "Starter hair color"},
+		{"key": "skin_tone", "label_key": "ui.appearance.color.skin"},
+		{"key": "eye_color", "label_key": "ui.appearance.color.eye"},
+		{"key": "hair_color", "label_key": "ui.appearance.color.starter_hair"},
 	]:
 		var color_key := str(color_entry.get("key", ""))
 		var swatch := Button.new()
 		swatch.text = ""
-		swatch.tooltip_text = str(color_entry.get("label", "Color"))
+		_set_localized_control_property(
+			swatch,
+			"tooltip_text",
+			str(color_entry.get("label_key", "ui.appearance.color.generic"))
+		)
 		swatch.custom_minimum_size = Vector2(27, 27)
 		swatch.focus_mode = Control.FOCUS_NONE
 		swatch.pressed.connect(_open_trainer_card_natural_colors_popup)
@@ -11246,8 +12339,8 @@ func _create_trainer_card_natural_colors_summary(content_stack: VBoxContainer) -
 		trainer_card_natural_color_summary_buttons[color_key] = swatch
 
 	var edit_button := Button.new()
-	edit_button.text = "Edit"
-	edit_button.tooltip_text = "Edit natural trainer colors"
+	_set_localized_control_property(edit_button, "text", "common.edit")
+	_set_localized_control_property(edit_button, "tooltip_text", "ui.appearance.natural.edit_tooltip")
 	edit_button.custom_minimum_size = Vector2(58, 30)
 	edit_button.focus_mode = Control.FOCUS_NONE
 	edit_button.pressed.connect(_open_trainer_card_natural_colors_popup)
@@ -11288,13 +12381,13 @@ func _open_trainer_card_natural_colors_popup() -> void:
 	header.add_child(heading)
 
 	var title := Label.new()
-	title.text = "Natural Colors"
+	_set_localized_control_property(title, "text", "ui.appearance.natural.title")
 	title.add_theme_font_size_override("font_size", 18)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	heading.add_child(title)
 
 	var description := Label.new()
-	description.text = "Free trainer colors. Chroma items are dyed at Aether Atelier."
+	_set_localized_control_property(description, "text", "ui.appearance.natural.description")
 	description.add_theme_font_size_override("font_size", 10)
 	description.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	heading.add_child(description)
@@ -11318,11 +12411,11 @@ func _open_trainer_card_natural_colors_popup() -> void:
 	palettes.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	palettes.add_theme_constant_override("separation", 8)
 	scroll.add_child(palettes)
-	_create_trainer_card_color_palette(palettes, "Skin Tone", "skin_tone", SKIN_TONE_SWATCHES)
-	_create_trainer_card_color_palette(palettes, "Eye Color", "eye_color", EYE_COLOR_SWATCHES)
+	_create_trainer_card_color_palette(palettes, "ui.appearance.color.skin", "skin_tone", SKIN_TONE_SWATCHES)
+	_create_trainer_card_color_palette(palettes, "ui.appearance.color.eye", "eye_color", EYE_COLOR_SWATCHES)
 	_create_trainer_card_color_palette(
 		palettes,
-		"Starter Hair Color · Free",
+		"ui.appearance.color.starter_hair_free",
 		"hair_color",
 		HAIR_COLOR_SWATCHES
 	)
@@ -11345,11 +12438,10 @@ func _refresh_trainer_card_natural_color_summary() -> void:
 
 func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, category_id: String) -> void:
 	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category_id)
-	var category_name := _format_appearance_category_name(normalized_category)
 	_create_trainer_card_appearance_section_header(
 		content_stack,
-		category_name,
-		"Select the %s that fits your trainer." % category_name.to_lower()
+		"ui.appearance.category.%s" % normalized_category,
+		"ui.appearance.part_description"
 	)
 
 	trainer_card_appearance_capacity_label = Label.new()
@@ -11357,7 +12449,7 @@ func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, 
 	content_stack.add_child(trainer_card_appearance_capacity_label)
 	_refresh_trainer_card_appearance_capacity_label()
 
-	var search_input := _create_trainer_card_appearance_search_input("Search %s" % category_name.to_lower())
+	var search_input := _create_trainer_card_appearance_search_input("ui.appearance.search_cosmetics")
 	search_input.text_changed.connect(_filter_trainer_card_part_buttons)
 	content_stack.add_child(search_input)
 
@@ -11372,7 +12464,7 @@ func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, 
 	none_row.add_theme_constant_override("separation", 6)
 	grid.add_child(none_row)
 	var none_button := Button.new()
-	none_button.text = "None"
+	_set_localized_control_property(none_button, "text", "common.none")
 	none_button.focus_mode = Control.FOCUS_NONE
 	none_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	none_button.pressed.connect(_on_trainer_card_part_selected.bind(normalized_category, ""))
@@ -11397,7 +12489,11 @@ func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, 
 
 		var return_button := Button.new()
 		return_button.text = "×"
-		return_button.tooltip_text = "Return this cosmetic to the Bag; applied Chroma dye is removed"
+		_set_localized_control_property(
+			return_button,
+			"tooltip_text",
+			"ui.appearance.return_cosmetic_tooltip"
+		)
 		return_button.custom_minimum_size = Vector2(30, 30)
 		return_button.focus_mode = Control.FOCUS_NONE
 		return_button.visible = false
@@ -11412,34 +12508,34 @@ func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, 
 
 func _create_trainer_card_appearance_section_header(
 	content_stack: VBoxContainer,
-	title_text: String,
-	description_text: String
+	title_key: String,
+	description_key: String
 ) -> void:
 	var header := VBoxContainer.new()
 	header.add_theme_constant_override("separation", 1)
 	content_stack.add_child(header)
 
 	var title := Label.new()
-	title.text = title_text
+	_set_localized_control_property(title, "text", title_key)
 	title.add_theme_font_size_override("font_size", 20)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	header.add_child(title)
 
 	var description := Label.new()
-	description.text = description_text
+	_set_localized_control_property(description, "text", description_key)
 	description.add_theme_font_size_override("font_size", 11)
 	description.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	header.add_child(description)
 
 func _create_trainer_card_color_palette(
 	content_stack: VBoxContainer,
-	title_text: String,
+	title_key: String,
 	color_key: String,
 	swatches: Array,
 	allow_custom: bool = true
 ) -> void:
 	var title := Label.new()
-	title.text = title_text
+	_set_localized_control_property(title, "text", title_key)
 	title.add_theme_font_size_override("font_size", 14)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	content_stack.add_child(title)
@@ -11459,7 +12555,7 @@ func _create_trainer_card_color_palette(
 		var swatch_color: Color = swatch.get("color", Color.WHITE) as Color
 		var button := Button.new()
 		button.text = ""
-		button.tooltip_text = str(swatch.get("label", color_id))
+		button.tooltip_text = _format_appearance_swatch_name(str(swatch.get("label", color_id)))
 		button.custom_minimum_size = Vector2(30, 24)
 		button.focus_mode = Control.FOCUS_NONE
 		button.pressed.connect(_on_trainer_card_color_selected.bind(color_key, color_id))
@@ -11467,6 +12563,7 @@ func _create_trainer_card_color_palette(
 		trainer_card_color_buttons["%s:%s" % [color_key, color_id]] = {
 			"button": button,
 			"color": swatch_color,
+			"label": str(swatch.get("label", color_id)),
 		}
 		_apply_color_swatch_button_style(button, swatch_color, _get_player_save_color_value(color_key) == color_id)
 
@@ -11476,13 +12573,13 @@ func _create_trainer_card_color_palette(
 		content_stack.add_child(custom_row)
 
 		var custom_label := Label.new()
-		custom_label.text = "Custom"
+		_set_localized_control_property(custom_label, "text", "ui.appearance.color.custom")
 		custom_label.add_theme_font_size_override("font_size", 12)
 		custom_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		custom_row.add_child(custom_label)
 
 		var custom_picker := ColorPickerButton.new()
-		custom_picker.tooltip_text = "Choose any custom color"
+		_set_localized_control_property(custom_picker, "tooltip_text", "ui.appearance.color.custom_tooltip")
 		custom_picker.custom_minimum_size = Vector2(54, 26)
 		custom_picker.focus_mode = Control.FOCUS_NONE
 		custom_picker.color = Color.from_string(
@@ -11498,7 +12595,7 @@ func _create_trainer_card_color_palette(
 		hex_input.max_length = 7
 		hex_input.custom_minimum_size = Vector2(100, 26)
 		hex_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		hex_input.tooltip_text = "Enter a hex colour code, for example #7a46c5"
+		_set_localized_control_property(hex_input, "tooltip_text", "ui.appearance.color.hex_tooltip")
 		hex_input.text = _get_player_save_color_value(color_key)
 		hex_input.text_changed.connect(
 			_on_trainer_card_hex_color_changed.bind(color_key, hex_input)
@@ -11513,9 +12610,9 @@ func _create_trainer_card_color_palette(
 		custom_row.add_child(hex_input)
 		trainer_card_hex_inputs[color_key] = hex_input
 
-func _create_trainer_card_appearance_search_input(placeholder: String) -> LineEdit:
+func _create_trainer_card_appearance_search_input(placeholder_key: String) -> LineEdit:
 	var search_input := LineEdit.new()
-	search_input.placeholder_text = placeholder
+	_set_localized_control_property(search_input, "placeholder_text", placeholder_key)
 	search_input.clear_button_enabled = true
 	search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_apply_line_edit_style(search_input)
@@ -11583,25 +12680,11 @@ func _format_join_date_text(raw_text: String, fallback: String) -> String:
 	return date_part if date_part != "" else fallback
 
 func _format_appearance_category_name(category_id: String) -> String:
-	match CharacterAppearanceService.normalize_part_category(category_id):
-		"body":
-			return "Body"
-		"hair":
-			return "Hair"
-		"headgear":
-			return "Headgear"
-		"facial_hair":
-			return "Facial Hair"
-		"facegear":
-			return "Facegear"
-		"top":
-			return "Top"
-		"bottom":
-			return "Bottom"
-		"shoes":
-			return "Shoes"
-		_:
-			return _humanize_appearance_id(category_id)
+	var normalized_category := CharacterAppearanceService.normalize_part_category(category_id)
+	var key := "ui.appearance.category.%s" % normalized_category
+	if LocalizationManager.has_key(key, LocalizationManager.DEFAULT_LOCALE):
+		return LocalizationManager.text(key)
+	return _humanize_appearance_id(category_id)
 
 func _format_appearance_option_name(category_id: String, part_id: String) -> String:
 	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category_id)
@@ -11609,62 +12692,70 @@ func _format_appearance_option_name(category_id: String, part_id: String) -> Str
 	if normalized_category == "body":
 		match normalized_part_id:
 			"Gen4_Base_v1", "Gen4_Base_F_v1":
-				return "Default"
+				return LocalizationManager.text("ui.appearance.option.default")
 			"Gen4_Base_M_Tan", "Gen4_Base_F_Tan":
-				return "Tan"
+				return LocalizationManager.text("ui.appearance.option.tan")
 			"Gen4_Base_M_Dark", "Gen4_Base_F_Dark":
-				return "Dark"
+				return LocalizationManager.text("ui.appearance.option.dark")
 	if normalized_category != "body":
 		match normalized_part_id:
 			"Hair":
-				return "Starter Hair"
+				return LocalizationManager.text("ui.appearance.option.starter_hair")
 			"Cap":
-				return "Starter Cap"
+				return LocalizationManager.text("ui.appearance.option.starter_cap")
 			"Shirt":
-				return "Starter Shirt"
+				return LocalizationManager.text("ui.appearance.option.starter_shirt")
 			"Trousers":
-				return "Starter Trousers"
+				return LocalizationManager.text("ui.appearance.option.starter_trousers")
 			"Shoes":
-				return "Starter Shoes"
+				return LocalizationManager.text("ui.appearance.option.starter_shoes")
 			"Eyes":
-				return "Starter Eyes"
+				return LocalizationManager.text("ui.appearance.option.starter_eyes")
 			"Eyebrows":
-				return "Starter Eyebrows"
+				return LocalizationManager.text("ui.appearance.option.starter_eyebrows")
 			"Adinho_Hair":
-				return "Adinho Hair"
+				return LocalizationManager.text("ui.appearance.option.adinho_hair")
 			"Adinho_Beard":
-				return "Adinho Beard"
+				return LocalizationManager.text("ui.appearance.option.adinho_beard")
 			"Adinho_Glasses":
-				return "Adinho Glasses"
+				return LocalizationManager.text("ui.appearance.option.adinho_glasses")
 			"Adinho_Glasses_Chroma":
-				return "Adinho Chroma Glasses"
+				return LocalizationManager.text("ui.appearance.option.adinho_chroma_glasses")
 			"Adinho_Shirt":
-				return "Adinho Shirt"
+				return LocalizationManager.text("ui.appearance.option.adinho_shirt")
 			"Adinho_Shirt_Chroma":
-				return "Adinho Chroma Shirt"
+				return LocalizationManager.text("ui.appearance.option.adinho_chroma_shirt")
 			"Adinho_Trousers":
-				return "Adinho Trousers"
+				return LocalizationManager.text("ui.appearance.option.adinho_trousers")
 			"Adinho_Trousers_Chroma":
-				return "Adinho Chroma Trousers"
+				return LocalizationManager.text("ui.appearance.option.adinho_chroma_trousers")
 			"Adinho_Shoes":
-				return "Adinho Shoes"
+				return LocalizationManager.text("ui.appearance.option.adinho_shoes")
 			"Adinho_Shoes_Chroma":
-				return "Adinho Chroma Shoes"
+				return LocalizationManager.text("ui.appearance.option.adinho_chroma_shoes")
 			"Aether_Blossom_Hair":
-				return "Aether Blossom Hair"
+				return LocalizationManager.text("ui.appearance.option.blossom_hair")
 			"Aether_Blossom_Earrings":
-				return "Aether Blossom Earrings"
+				return LocalizationManager.text("ui.appearance.option.blossom_earrings")
 			"Aether_Blossom_Dress":
-				return "Aether Blossom Dress"
+				return LocalizationManager.text("ui.appearance.option.blossom_dress")
 			"Aether_Blossom_Shoes":
-				return "Aether Blossom Shoes"
+				return LocalizationManager.text("ui.appearance.option.blossom_shoes")
 			"Aether_Blossom_Hair_Chroma":
-				return "Aether Blossom Chroma Hair"
+				return LocalizationManager.text("ui.appearance.option.blossom_chroma_hair")
 			"Aether_Blossom_Earrings_Chroma":
-				return "Aether Blossom Chroma Earrings"
+				return LocalizationManager.text("ui.appearance.option.blossom_chroma_earrings")
 			"Aether_Blossom_Shoes_Chroma":
-				return "Aether Blossom Chroma Shoes"
+				return LocalizationManager.text("ui.appearance.option.blossom_chroma_shoes")
 	return _humanize_appearance_id(normalized_part_id)
+
+func _format_appearance_swatch_name(raw_label: String) -> String:
+	var key_suffix := raw_label.to_lower()
+	key_suffix = key_suffix.replace(" · ", "_").replace(" ", "_").replace("-", "_")
+	var key := "ui.appearance.swatch.%s" % key_suffix
+	if LocalizationManager.has_key(key, LocalizationManager.DEFAULT_LOCALE):
+		return LocalizationManager.text(key)
+	return raw_label
 
 func _humanize_appearance_id(raw_id: String) -> String:
 	var text := raw_id.replace("/", " ").replace("_", " ").replace("-", " ").strip_edges()
@@ -11697,7 +12788,7 @@ func _filter_trainer_card_part_buttons(search_text: String) -> void:
 			continue
 		var category_id: String = key.substr(0, separator_index)
 		var part_id: String = key.substr(separator_index + 1)
-		var label_text: String = "None" if part_id == "" else _format_appearance_option_name(category_id, part_id)
+		var label_text: String = LocalizationManager.text("common.none") if part_id == "" else _format_appearance_option_name(category_id, part_id)
 		var row := trainer_card_part_rows.get(key) as Control
 		var should_show := _is_appearance_part_owned(category_id, part_id) \
 			and _matches_appearance_search(label_text, part_id, search_text)
@@ -11744,7 +12835,7 @@ func _refresh_trainer_card_part_buttons() -> void:
 		var category_id: String = key.substr(0, separator_index)
 		var part_id: String = key.substr(separator_index + 1)
 		var selected_part_id: String = _get_preview_part_id(category_id)
-		var display_name: String = "None" if part_id == "" else _format_appearance_option_name(category_id, part_id)
+		var display_name: String = LocalizationManager.text("common.none") if part_id == "" else _format_appearance_option_name(category_id, part_id)
 		var is_owned := _is_appearance_part_owned(category_id, part_id)
 		var row := trainer_card_part_rows.get(key) as Control
 		if row != null:
@@ -11757,9 +12848,9 @@ func _refresh_trainer_card_part_buttons() -> void:
 			return_button.visible = is_owned and source_item_id != ""
 			return_button.disabled = appearance_inventory_returning
 			if source_item_id != "":
-				return_button.tooltip_text = (
-					"Return %s to the Bag; applied Chroma dye is removed"
-					% _item_name_from_id(source_item_id)
+				return_button.tooltip_text = LocalizationManager.text(
+					"ui.appearance.return_item_tooltip",
+					{"item": _item_name_from_id(source_item_id)}
 				)
 		if part_id == selected_part_id:
 			button.text = "%s  *" % display_name
@@ -11819,6 +12910,7 @@ func _refresh_trainer_card_color_buttons() -> void:
 		var color_key: String = key.substr(0, separator_index)
 		var color_value: String = key.substr(separator_index + 1)
 		var swatch_color: Color = entry.get("color", Color.WHITE) as Color
+		button.tooltip_text = _format_appearance_swatch_name(str(entry.get("label", color_value)))
 		_apply_color_swatch_button_style(button, swatch_color, _get_player_save_color_value(color_key) == color_value)
 	for color_key_value: Variant in trainer_card_hex_inputs.keys():
 		var color_key := str(color_key_value)
@@ -11989,11 +13081,14 @@ func _refresh_trainer_card_appearance_capacity_label() -> void:
 	var count := int(appearance_inventory_slot_counts.get(category, 0))
 	var category_name := _format_appearance_category_name(category)
 	trainer_card_appearance_capacity_label.visible = true
-	trainer_card_appearance_capacity_label.text = "%s wardrobe · %d/%d unlocked" % [
-		category_name,
-		count,
-		appearance_inventory_slot_limit,
-	]
+	trainer_card_appearance_capacity_label.text = LocalizationManager.text(
+		"ui.appearance.wardrobe_capacity",
+		{
+			"category": category_name,
+			"count": count,
+			"limit": appearance_inventory_slot_limit,
+		}
+	)
 	trainer_card_appearance_capacity_label.add_theme_color_override(
 		"font_color",
 		UI_DANGER if count >= appearance_inventory_slot_limit else TRAINER_CARD_ACCENT
@@ -12053,27 +13148,32 @@ func _mark_trainer_card_appearance_dirty() -> void:
 	if world != null and world.has_method("_publish_world_presence"):
 		world.call("_publish_world_presence", true)
 
-func _update_trainer_card_appearance_save_state(message: String = "") -> void:
+func _update_trainer_card_appearance_save_state(
+	message_key: String = "",
+	message_values: Dictionary = {}
+) -> void:
+	trainer_card_appearance_message_key = message_key
+	trainer_card_appearance_message_values = message_values.duplicate()
 	if trainer_card_appearance_save_button != null:
 		trainer_card_appearance_save_button.disabled = trainer_card_is_saving_appearance or not trainer_card_has_unsaved_appearance_changes
 		if trainer_card_is_saving_appearance:
-			trainer_card_appearance_save_button.text = "Saving..."
+			trainer_card_appearance_save_button.text = LocalizationManager.text("common.saving")
 		elif trainer_card_has_unsaved_appearance_changes:
-			trainer_card_appearance_save_button.text = "Save"
+			trainer_card_appearance_save_button.text = LocalizationManager.text("common.save")
 		else:
-			trainer_card_appearance_save_button.text = "Saved"
+			trainer_card_appearance_save_button.text = LocalizationManager.text("common.saved")
 		_apply_button_style(trainer_card_appearance_save_button, "primary" if trainer_card_has_unsaved_appearance_changes else "default")
 
 	if trainer_card_appearance_status_label == null:
 		return
-	if message != "":
-		trainer_card_appearance_status_label.text = message
+	if message_key != "":
+		trainer_card_appearance_status_label.text = LocalizationManager.text(message_key, message_values)
 	elif trainer_card_is_saving_appearance:
-		trainer_card_appearance_status_label.text = "Saving appearance..."
+		trainer_card_appearance_status_label.text = LocalizationManager.text("ui.appearance.status.saving")
 	elif trainer_card_has_unsaved_appearance_changes:
-		trainer_card_appearance_status_label.text = "Unsaved appearance changes"
+		trainer_card_appearance_status_label.text = LocalizationManager.text("ui.appearance.status.unsaved")
 	else:
-		trainer_card_appearance_status_label.text = "Appearance saved"
+		trainer_card_appearance_status_label.text = LocalizationManager.text("ui.appearance.status.saved")
 
 	var status_color := UI_MUTED_TEXT
 	if trainer_card_is_saving_appearance:
@@ -12093,16 +13193,18 @@ func _on_trainer_card_appearance_save_pressed() -> void:
 
 	if not bool(result.get("success", false)):
 		trainer_card_has_unsaved_appearance_changes = true
-		_update_trainer_card_appearance_save_state("Save failed: %s" % str(result.get("error", "Unknown error")))
+		push_warning("Appearance save failed: %s" % str(result.get("error", "Unknown error")))
+		_update_trainer_card_appearance_save_state("ui.appearance.status.save_failed")
 		return
 
 	if not _save_response_matches_current_appearance(result):
 		trainer_card_has_unsaved_appearance_changes = true
-		_update_trainer_card_appearance_save_state("Save failed: server did not persist all appearance parts")
+		push_warning("Appearance save failed: server did not persist all appearance parts")
+		_update_trainer_card_appearance_save_state("ui.appearance.status.save_failed")
 		return
 
 	trainer_card_has_unsaved_appearance_changes = false
-	_update_trainer_card_appearance_save_state("Appearance saved")
+	_update_trainer_card_appearance_save_state("ui.appearance.status.saved")
 
 func _save_trainer_card_appearance_to_backend() -> Dictionary:
 	var world := GameState.get_world()
@@ -12173,7 +13275,7 @@ func _on_trainer_card_body_selected(body_id: String) -> void:
 func _on_trainer_card_part_selected(category_id: String, part_id: String) -> void:
 	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category_id)
 	if not _is_appearance_part_owned(normalized_category, part_id):
-		_update_trainer_card_appearance_save_state("Unlock this cosmetic from your Bag first")
+		_update_trainer_card_appearance_save_state("ui.appearance.status.unlock_first")
 		return
 	_ensure_layered_body_for_part_selection()
 	_apply_saved_chroma_color_for_part(normalized_category, part_id)
@@ -12193,19 +13295,21 @@ func _on_trainer_card_return_appearance_pressed(category_id: String, part_id: St
 		return
 	var source_item_id := _appearance_source_item_for_part(category_id, part_id)
 	if source_item_id == "":
-		_update_trainer_card_appearance_save_state("This starter item cannot be returned")
+		_update_trainer_card_appearance_save_state("ui.appearance.status.starter_not_returnable")
 		return
 
 	appearance_inventory_returning = true
 	_refresh_trainer_card_part_buttons()
-	_update_trainer_card_appearance_save_state("Returning %s to the Bag..." % _item_name_from_id(source_item_id))
+	_update_trainer_card_appearance_save_state(
+		"ui.appearance.status.returning",
+		{"item": _item_name_from_id(source_item_id)}
+	)
 	var result: Dictionary = await InventoryService.return_appearance_item(source_item_id)
 	appearance_inventory_returning = false
 	if not bool(result.get("success", false)):
 		_refresh_trainer_card_part_buttons()
-		_update_trainer_card_appearance_save_state(
-			"Return failed: %s" % str(result.get("error", "Unknown error"))
-		)
+		push_warning("Appearance return failed: %s" % str(result.get("error", "Unknown error")))
+		_update_trainer_card_appearance_save_state("ui.appearance.status.return_failed")
 		return
 
 	_apply_returned_appearance_defaults(result.get("returnedUnlocks", []))
@@ -12234,10 +13338,8 @@ func _on_trainer_card_return_appearance_pressed(category_id: String, part_id: St
 		and _save_response_matches_current_appearance(save_result)
 	trainer_card_has_unsaved_appearance_changes = not saved
 	_update_trainer_card_appearance_save_state(
-		"%s returned to the Bag%s" % [
-			_item_name_from_id(source_item_id),
-			"" if saved else " · appearance save pending",
-		]
+		"ui.appearance.status.returned" if saved else "ui.appearance.status.returned_pending",
+		{"item": _item_name_from_id(source_item_id)}
 	)
 	var world := GameState.get_world()
 	if world != null and world.has_method("_publish_world_presence"):
@@ -12283,7 +13385,7 @@ func _on_trainer_card_color_selected(color_key: String, color_value: String) -> 
 		and not CharacterAppearanceService.is_free_part_id("hair", PlayerSave.appearance_hair_id)
 	):
 		_update_trainer_card_appearance_save_state(
-			"Chroma item colours are changed at the Aether Atelier"
+			"ui.appearance.status.chroma_atelier"
 		)
 		return
 	_ensure_layered_body_for_part_selection()
@@ -12455,7 +13557,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	)
 	sprite_frame.mouse_filter = Control.MOUSE_FILTER_STOP
 	sprite_frame.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	sprite_frame.tooltip_text = "Switch between the front and back view"
+	_set_localized_control_property(sprite_frame, "tooltip_text", "ui.pokemon_summary.switch_sprite_view")
 	sprite_frame.gui_input.connect(_on_pokemon_summary_sprite_frame_gui_input.bind(card_key))
 	left_stack.add_child(sprite_frame)
 
@@ -12529,7 +13631,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_ball_button = Button.new()
 	pokemon_summary_ball_button.text = ""
 	pokemon_summary_ball_button.pressed.connect(_on_pokemon_summary_ball_button_pressed.bind(card_key))
-	pokemon_summary_ball_button.tooltip_text = "Change this Pokémon's Poké Ball"
+	_set_localized_control_property(pokemon_summary_ball_button, "tooltip_text", "ui.pokemon_summary.ball.change_tooltip")
 	pokemon_summary_ball_button.focus_mode = Control.FOCUS_NONE
 	pokemon_summary_ball_button.flat = true
 	pokemon_summary_ball_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -12577,7 +13679,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_level_badge_panel.add_child(level_badge_margin)
 
 	pokemon_summary_level_badge_label = Label.new()
-	pokemon_summary_level_badge_label.text = "Lv -"
+	pokemon_summary_level_badge_label.text = LocalizationManager.text("ui.pokemon_summary.level_empty")
 	pokemon_summary_level_badge_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	pokemon_summary_level_badge_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	pokemon_summary_level_badge_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -12615,7 +13717,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	title_row.add_child(pokemon_summary_shiny_badge)
 
 	pokemon_summary_title_label = Label.new()
-	pokemon_summary_title_label.text = "Pokemon"
+	pokemon_summary_title_label.text = LocalizationManager.text("ui.pokemon_summary.title")
 	pokemon_summary_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_make_label_clip_width(pokemon_summary_title_label)
 	pokemon_summary_title_label.add_theme_font_size_override("font_size", 14)
@@ -12626,7 +13728,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	title_row.add_child(pokemon_summary_title_label)
 
 	pokemon_summary_meta_label = Label.new()
-	pokemon_summary_meta_label.text = "Lv -"
+	pokemon_summary_meta_label.text = LocalizationManager.text("ui.pokemon_summary.level_empty")
 	pokemon_summary_meta_label.custom_minimum_size = Vector2(38, 0)
 	pokemon_summary_meta_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_make_label_clip_width(pokemon_summary_meta_label)
@@ -12639,7 +13741,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	identity_stack.add_child(identity_meta_row)
 
 	pokemon_summary_id_label = Label.new()
-	pokemon_summary_id_label.text = "ID: -"
+	pokemon_summary_id_label.text = LocalizationManager.text("ui.pokemon_summary.id_empty")
 	pokemon_summary_id_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_make_label_clip_width(pokemon_summary_id_label)
 	pokemon_summary_id_label.add_theme_font_size_override("font_size", 9)
@@ -12651,7 +13753,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	left_stack.add_child(hp_row)
 
 	pokemon_summary_hp_label = Label.new()
-	pokemon_summary_hp_label.text = "HP -"
+	pokemon_summary_hp_label.text = LocalizationManager.text("ui.pokemon_summary.hp_empty")
 	pokemon_summary_hp_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pokemon_summary_hp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	pokemon_summary_hp_label.add_theme_font_size_override("font_size", 11)
@@ -12683,7 +13785,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	ball_picker_margin.add_child(ball_picker_stack)
 
 	pokemon_summary_ball_search_input = LineEdit.new()
-	pokemon_summary_ball_search_input.placeholder_text = "Search Poké Ball..."
+	_set_localized_control_property(pokemon_summary_ball_search_input, "placeholder_text", "ui.pokemon_summary.ball.search")
 	pokemon_summary_ball_search_input.clear_button_enabled = true
 	pokemon_summary_ball_search_input.custom_minimum_size = Vector2(0, 28)
 	pokemon_summary_ball_search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -12769,7 +13871,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_held_item_slot_button = Button.new()
 	pokemon_summary_held_item_slot_button.text = ""
 	pokemon_summary_held_item_slot_button.pressed.connect(_on_pokemon_summary_held_item_slot_pressed.bind(card_key))
-	pokemon_summary_held_item_slot_button.tooltip_text = "Give or take a held item"
+	_set_localized_control_property(pokemon_summary_held_item_slot_button, "tooltip_text", "ui.pokemon_summary.held_item.manage_tooltip")
 	pokemon_summary_held_item_slot_button.focus_mode = Control.FOCUS_NONE
 	pokemon_summary_held_item_slot_button.flat = true
 	pokemon_summary_held_item_slot_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -12800,7 +13902,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	picker_margin.add_child(item_picker_stack)
 
 	pokemon_summary_item_search_input = LineEdit.new()
-	pokemon_summary_item_search_input.placeholder_text = "Search held item..."
+	_set_localized_control_property(pokemon_summary_item_search_input, "placeholder_text", "ui.pokemon_summary.held_item.search")
 	pokemon_summary_item_search_input.clear_button_enabled = true
 	pokemon_summary_item_search_input.custom_minimum_size = Vector2(0, 28)
 	pokemon_summary_item_search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -12896,7 +13998,9 @@ func _add_pokemon_summary_owner_bar(layout: VBoxContainer, card_key: String) -> 
 	header_margin.add_child(header_row)
 
 	pokemon_summary_trainer_label = Label.new()
-	pokemon_summary_trainer_label.text = "Trainer's Pokemon"
+	pokemon_summary_trainer_label.text = LocalizationManager.text("ui.pokemon_summary.trainer_pokemon", {
+		"trainer": LocalizationManager.text("ui.pokemon_summary.trainer_fallback"),
+	})
 	pokemon_summary_trainer_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pokemon_summary_trainer_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	pokemon_summary_trainer_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -12915,7 +14019,7 @@ func _add_pokemon_summary_owner_bar(layout: VBoxContainer, card_key: String) -> 
 	close_button.size_flags_horizontal = Control.SIZE_SHRINK_END
 	close_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	close_button.focus_mode = Control.FOCUS_NONE
-	close_button.tooltip_text = "Close"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	close_button.pressed.connect(_hide_pokemon_summary_popup.bind(card_key))
 	close_button.add_theme_stylebox_override("normal", _make_pokemon_summary_button_style(Color("#0e2138f0"), Color("#5a82ad"), true))
@@ -12981,7 +14085,7 @@ func _add_pokemon_summary_header(layout: VBoxContainer, card_key: String) -> voi
 	header_margin.add_child(header)
 
 	pokemon_summary_title_label = Label.new()
-	pokemon_summary_title_label.text = "Pokemon Summary"
+	pokemon_summary_title_label.text = LocalizationManager.text("ui.pokemon_summary.title")
 	pokemon_summary_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pokemon_summary_title_label.size_flags_stretch_ratio = 1.0
 	_make_label_clip_width(pokemon_summary_title_label)
@@ -13008,7 +14112,7 @@ func _add_pokemon_summary_header(layout: VBoxContainer, card_key: String) -> voi
 	header.add_child(title_row)
 
 	pokemon_summary_id_label = Label.new()
-	pokemon_summary_id_label.text = "ID: -"
+	pokemon_summary_id_label.text = LocalizationManager.text("ui.pokemon_summary.id_empty")
 	pokemon_summary_id_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	pokemon_summary_id_label.size_flags_horizontal = Control.SIZE_SHRINK_END
 	pokemon_summary_id_label.custom_minimum_size = Vector2(50, 0)
@@ -13045,7 +14149,7 @@ func _add_pokemon_summary_header(layout: VBoxContainer, card_key: String) -> voi
 	meta_block.add_child(pokemon_summary_meta_label)
 
 	pokemon_summary_trainer_label = Label.new()
-	pokemon_summary_trainer_label.text = "Original Trainer: -"
+	pokemon_summary_trainer_label.text = LocalizationManager.text("ui.pokemon_summary.original_trainer_value", {"trainer": "-"})
 	pokemon_summary_trainer_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_make_label_clip_width(pokemon_summary_trainer_label)
 	pokemon_summary_trainer_label.add_theme_font_size_override("font_size", 9)
@@ -13055,6 +14159,7 @@ func _add_pokemon_summary_header(layout: VBoxContainer, card_key: String) -> voi
 
 	var close_button := Button.new()
 	close_button.text = "X"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.custom_minimum_size = Vector2(26, 24)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_pokemon_summary_popup.bind(card_key))
@@ -13071,7 +14176,7 @@ func _create_pokemon_summary_shiny_badge() -> PanelContainer:
 	var badge := PanelContainer.new()
 	badge.visible = false
 	badge.custom_minimum_size = Vector2(16, 16)
-	badge.tooltip_text = "Shiny Pokémon"
+	_set_localized_control_property(badge, "tooltip_text", "ui.party.shiny")
 	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var badge_style := StyleBoxFlat.new()
 	badge_style.bg_color = Color("#15191fee")
@@ -13109,10 +14214,10 @@ func _create_pokemon_summary_shiny_badge() -> PanelContainer:
 	return badge
 
 func _add_pokemon_summary_tab_buttons(tab_column: HBoxContainer, card_key: String) -> void:
-	var general_tab := _create_pokemon_summary_tab_button("general", "Info", POKEMON_SUMMARY_ACCENT, card_key)
-	var iv_tab := _create_pokemon_summary_tab_button("ivs", "IVs", Color("#1fb6ff"), card_key)
-	var ev_tab := _create_pokemon_summary_tab_button("evs", "EVs", Color("#ffb347"), card_key)
-	var moves_tab := _create_pokemon_summary_tab_button("moves", "Moves", Color("#ff7b54"), card_key)
+	var general_tab := _create_pokemon_summary_tab_button("general", "ui.pokemon_summary.tab.info", POKEMON_SUMMARY_ACCENT, card_key)
+	var iv_tab := _create_pokemon_summary_tab_button("ivs", "ui.pokemon_summary.tab.ivs", Color("#1fb6ff"), card_key)
+	var ev_tab := _create_pokemon_summary_tab_button("evs", "ui.pokemon_summary.tab.evs", Color("#ffb347"), card_key)
+	var moves_tab := _create_pokemon_summary_tab_button("moves", "ui.pokemon_summary.tab.moves", Color("#ff7b54"), card_key)
 	tab_column.add_child(general_tab)
 	tab_column.add_child(iv_tab)
 	tab_column.add_child(ev_tab)
@@ -13152,7 +14257,7 @@ func _setup_pokemon_summary_ev_allocate_popup() -> void:
 	layout.add_child(header)
 
 	pokemon_summary_ev_allocate_stat_label = Label.new()
-	pokemon_summary_ev_allocate_stat_label.text = "Allocate EVs"
+	pokemon_summary_ev_allocate_stat_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocate")
 	pokemon_summary_ev_allocate_stat_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pokemon_summary_ev_allocate_stat_label.add_theme_font_size_override("font_size", 16)
 	pokemon_summary_ev_allocate_stat_label.add_theme_color_override("font_color", Color("#f5df9a"))
@@ -13160,6 +14265,7 @@ func _setup_pokemon_summary_ev_allocate_popup() -> void:
 
 	var close_button := Button.new()
 	close_button.text = "X"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.custom_minimum_size = Vector2(34, 30)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_pokemon_summary_ev_allocate_popup)
@@ -13185,25 +14291,29 @@ func _setup_pokemon_summary_ev_allocate_popup() -> void:
 	layout.add_child(pokemon_summary_ev_allocate_status_label)
 
 	pokemon_summary_ev_allocate_confirm_button = Button.new()
-	pokemon_summary_ev_allocate_confirm_button.text = "Confirm"
+	_set_localized_control_property(pokemon_summary_ev_allocate_confirm_button, "text", "common.confirm")
 	pokemon_summary_ev_allocate_confirm_button.custom_minimum_size = Vector2(0, 34)
 	pokemon_summary_ev_allocate_confirm_button.focus_mode = Control.FOCUS_NONE
 	pokemon_summary_ev_allocate_confirm_button.pressed.connect(_on_summary_ev_allocate_confirm_pressed)
 	layout.add_child(pokemon_summary_ev_allocate_confirm_button)
 	_apply_button_style(pokemon_summary_ev_allocate_confirm_button, "primary")
 
-func _create_pokemon_summary_tab_button(tab_id: String, label_text: String, accent_color: Color, card_key: String = "") -> Button:
+func _create_pokemon_summary_tab_button(tab_id: String, label_key: String, accent_color: Color, card_key: String = "") -> Button:
 	var button := Button.new()
-	button.text = label_text
+	_set_localized_control_property(button, "text", label_key)
 	button.custom_minimum_size = Vector2(POKEMON_SUMMARY_TAB_COLUMN_WIDTH, 28)
 	button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	button.focus_mode = Control.FOCUS_NONE
-	button.tooltip_text = label_text
+	_set_localized_control_property(button, "tooltip_text", label_key)
 	button.pressed.connect(_on_pokemon_summary_tab_selected.bind(tab_id, card_key))
 	pokemon_summary_tab_buttons[tab_id] = button
 	_apply_summary_tab_style(button, false, accent_color)
 	return button
+
+func _set_localized_control_property(control: Control, property_name: String, key: String) -> void:
+	control.set_meta("i18n_source_%s" % property_name, key)
+	control.set(property_name, LocalizationManager.text(key))
 
 func _on_pokemon_summary_tab_selected(tab_id: String, card_key: String = "") -> void:
 	_apply_pokemon_summary_card_context(card_key)
@@ -13352,19 +14462,19 @@ func _setup_bag_popup() -> void:
 	header.add_child(heading)
 
 	var title_label := Label.new()
-	title_label.text = "Bag"
+	_set_localized_control_property(title_label, "text", "ui.bag.title")
 	title_label.add_theme_font_size_override("font_size", 20)
 	title_label.add_theme_color_override("font_color", UI_TEXT)
 	heading.add_child(title_label)
 
 	bag_summary_label = Label.new()
-	bag_summary_label.text = "Inventory"
+	bag_summary_label.text = LocalizationManager.text("ui.bag.inventory")
 	bag_summary_label.add_theme_font_size_override("font_size", 11)
 	bag_summary_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	heading.add_child(bag_summary_label)
 
 	bag_search_input = LineEdit.new()
-	bag_search_input.placeholder_text = "Search items..."
+	_set_localized_control_property(bag_search_input, "placeholder_text", "ui.bag.search")
 	bag_search_input.clear_button_enabled = true
 	bag_search_input.custom_minimum_size = Vector2(300, 36)
 	bag_search_input.focus_mode = Control.FOCUS_ALL
@@ -13374,7 +14484,7 @@ func _setup_bag_popup() -> void:
 
 	var close_button := Button.new()
 	close_button.text = "×"
-	close_button.tooltip_text = "Close"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.custom_minimum_size = Vector2(32, 32)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_bag_popup)
@@ -13408,7 +14518,7 @@ func _setup_bag_popup() -> void:
 	category_margin.add_child(category_layout)
 
 	var category_caption := Label.new()
-	category_caption.text = "CATEGORIES"
+	_set_localized_control_property(category_caption, "text", "ui.bag.categories")
 	category_caption.add_theme_font_size_override("font_size", 10)
 	category_caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	category_layout.add_child(category_caption)
@@ -13456,14 +14566,14 @@ func _setup_bag_popup() -> void:
 	inventory_layout.add_child(inventory_header)
 
 	var inventory_caption := Label.new()
-	inventory_caption.text = "ITEMS"
+	_set_localized_control_property(inventory_caption, "text", "ui.bag.items")
 	inventory_caption.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	inventory_caption.add_theme_font_size_override("font_size", 10)
 	inventory_caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	inventory_header.add_child(inventory_caption)
 
 	var inventory_hint := Label.new()
-	inventory_hint.text = "Click to inspect · drag or right-click for actions"
+	_set_localized_control_property(inventory_hint, "text", "ui.bag.inventory_hint")
 	inventory_hint.add_theme_font_size_override("font_size", 10)
 	inventory_hint.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.72))
 	inventory_header.add_child(inventory_hint)
@@ -13527,7 +14637,8 @@ func _create_bag_category_button(category: Dictionary) -> Button:
 	content.add_child(icon)
 
 	var label := Label.new()
-	label.text = str(category.get("label", category_id))
+	label.name = "Label"
+	label.text = _bag_category_label(category_id)
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 12)
@@ -13563,7 +14674,7 @@ func _setup_bag_detail_panel(panel: PanelContainer) -> void:
 	margin.add_child(layout)
 
 	var caption := Label.new()
-	caption.text = "SELECTED ITEM"
+	_set_localized_control_property(caption, "text", "ui.bag.selected_item")
 	caption.add_theme_font_size_override("font_size", 10)
 	caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	layout.add_child(caption)
@@ -13589,7 +14700,7 @@ func _setup_bag_detail_panel(panel: PanelContainer) -> void:
 	icon_center.add_child(bag_detail_icon)
 
 	bag_detail_name_label = Label.new()
-	bag_detail_name_label.text = "Select an item"
+	bag_detail_name_label.text = LocalizationManager.text("ui.bag.select_item")
 	bag_detail_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	bag_detail_name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	bag_detail_name_label.add_theme_font_size_override("font_size", 18)
@@ -13597,14 +14708,14 @@ func _setup_bag_detail_panel(panel: PanelContainer) -> void:
 	layout.add_child(bag_detail_name_label)
 
 	bag_detail_meta_label = Label.new()
-	bag_detail_meta_label.text = "Choose an item from your Bag"
+	bag_detail_meta_label.text = LocalizationManager.text("ui.bag.choose_item")
 	bag_detail_meta_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	bag_detail_meta_label.add_theme_font_size_override("font_size", 11)
 	bag_detail_meta_label.add_theme_color_override("font_color", UI_MONEY)
 	layout.add_child(bag_detail_meta_label)
 
 	bag_detail_description_label = Label.new()
-	bag_detail_description_label.text = "Item details and actions will appear here."
+	bag_detail_description_label.text = LocalizationManager.text("ui.bag.details_placeholder")
 	bag_detail_description_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	bag_detail_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	bag_detail_description_label.add_theme_font_size_override("font_size", 12)
@@ -13612,14 +14723,14 @@ func _setup_bag_detail_panel(panel: PanelContainer) -> void:
 	layout.add_child(bag_detail_description_label)
 
 	var hotbar_hint := Label.new()
-	hotbar_hint.text = "Tip: drag an item onto a specific hotbar slot."
+	_set_localized_control_property(hotbar_hint, "text", "ui.bag.hotbar_tip")
 	hotbar_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	hotbar_hint.add_theme_font_size_override("font_size", 10)
 	hotbar_hint.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.72))
 	layout.add_child(hotbar_hint)
 
 	bag_detail_use_button = Button.new()
-	bag_detail_use_button.text = "Select an Item"
+	bag_detail_use_button.text = LocalizationManager.text("ui.bag.select_item_action")
 	bag_detail_use_button.custom_minimum_size = Vector2(0, 40)
 	bag_detail_use_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	bag_detail_use_button.focus_mode = Control.FOCUS_NONE
@@ -13629,7 +14740,7 @@ func _setup_bag_detail_panel(panel: PanelContainer) -> void:
 	layout.add_child(bag_detail_use_button)
 
 	bag_detail_hotbar_button = Button.new()
-	bag_detail_hotbar_button.text = "Assign to Hotbar"
+	bag_detail_hotbar_button.text = LocalizationManager.text("ui.bag.assign_hotbar")
 	bag_detail_hotbar_button.custom_minimum_size = Vector2(0, 38)
 	bag_detail_hotbar_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	bag_detail_hotbar_button.focus_mode = Control.FOCUS_NONE
@@ -13714,7 +14825,7 @@ func _setup_market_popup() -> void:
 
 	market_title_label = Label.new()
 	market_title_label.name = "MarketTitle"
-	market_title_label.text = "Poké Mart"
+	_set_localized_control_property(market_title_label, "text", "ui.market.title.default")
 	market_title_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	market_title_label.add_theme_font_size_override("font_size", 20)
 	market_title_label.add_theme_color_override("font_color", UI_TEXT)
@@ -13722,7 +14833,7 @@ func _setup_market_popup() -> void:
 
 	market_subtitle_label = Label.new()
 	market_subtitle_label.name = "MarketSubtitle"
-	market_subtitle_label.text = "Trainer supplies and everyday essentials"
+	_set_localized_control_property(market_subtitle_label, "text", "ui.market.subtitle.buy")
 	market_subtitle_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	market_subtitle_label.add_theme_font_size_override("font_size", 11)
 	market_subtitle_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -13756,7 +14867,9 @@ func _setup_market_popup() -> void:
 	wallet_row.add_child(wallet_coin)
 
 	market_money_label = Label.new()
-	market_money_label.text = "Money: %s" % _format_money(PlayerSave.money)
+	market_money_label.text = LocalizationManager.text("ui.market.money", {
+		"amount": _format_money(PlayerSave.money),
+	})
 	market_money_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	market_money_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	market_money_label.add_theme_font_size_override("font_size", 13)
@@ -13765,7 +14878,7 @@ func _setup_market_popup() -> void:
 
 	var close_button := Button.new()
 	close_button.text = "×"
-	close_button.tooltip_text = "Close"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.custom_minimum_size = Vector2(32, 32)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_market_popup)
@@ -13805,7 +14918,7 @@ func _setup_market_popup() -> void:
 	catalog_layout.add_child(catalog_header)
 
 	market_catalog_caption_label = Label.new()
-	market_catalog_caption_label.text = "SHOP CATALOG"
+	_set_localized_control_property(market_catalog_caption_label, "text", "ui.market.catalog.buy")
 	market_catalog_caption_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	market_catalog_caption_label.add_theme_font_size_override("font_size", 10)
 	market_catalog_caption_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -13813,7 +14926,7 @@ func _setup_market_popup() -> void:
 
 	market_catalog_summary_label = Label.new()
 	market_catalog_summary_label.name = "CatalogSummary"
-	market_catalog_summary_label.text = "0 items available"
+	market_catalog_summary_label.text = LocalizationManager.text("ui.market.summary.available", {"count": 0})
 	market_catalog_summary_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	market_catalog_summary_label.add_theme_font_size_override("font_size", 10)
 	market_catalog_summary_label.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.78))
@@ -13821,7 +14934,7 @@ func _setup_market_popup() -> void:
 
 	market_search_input = LineEdit.new()
 	market_search_input.name = "MarketSearch"
-	market_search_input.placeholder_text = "Search the catalog..."
+	_set_localized_control_property(market_search_input, "placeholder_text", "ui.market.search.buy")
 	market_search_input.clear_button_enabled = true
 	market_search_input.custom_minimum_size = Vector2(0, 36)
 	market_search_input.focus_mode = Control.FOCUS_ALL
@@ -13870,7 +14983,7 @@ func _setup_market_popup() -> void:
 
 	market_status_label = Label.new()
 	market_status_label.name = "MarketStatus"
-	market_status_label.text = "Select an item to view its details."
+	market_status_label.text = LocalizationManager.text("ui.market.status.select")
 	market_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	market_status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	market_status_label.add_theme_font_size_override("font_size", 12)
@@ -13892,7 +15005,7 @@ func _setup_market_detail_panel(panel: PanelContainer) -> void:
 	margin.add_child(layout)
 
 	market_action_caption_label = Label.new()
-	market_action_caption_label.text = "PURCHASE"
+	_set_localized_control_property(market_action_caption_label, "text", "ui.market.action.purchase")
 	market_action_caption_label.add_theme_font_size_override("font_size", 10)
 	market_action_caption_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	layout.add_child(market_action_caption_label)
@@ -13919,7 +15032,7 @@ func _setup_market_detail_panel(panel: PanelContainer) -> void:
 	icon_center.add_child(market_detail_icon)
 
 	market_detail_name_label = Label.new()
-	market_detail_name_label.text = "Select an item"
+	market_detail_name_label.text = LocalizationManager.text("ui.market.detail.select")
 	market_detail_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	market_detail_name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	market_detail_name_label.add_theme_font_size_override("font_size", 18)
@@ -13927,14 +15040,14 @@ func _setup_market_detail_panel(panel: PanelContainer) -> void:
 	layout.add_child(market_detail_name_label)
 
 	market_detail_category_label = Label.new()
-	market_detail_category_label.text = "CATALOG ITEM"
+	market_detail_category_label.text = LocalizationManager.text("ui.market.detail.catalog_item")
 	market_detail_category_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	market_detail_category_label.add_theme_font_size_override("font_size", 10)
 	market_detail_category_label.add_theme_color_override("font_color", Color("#75d7f2"))
 	layout.add_child(market_detail_category_label)
 
 	market_detail_description_label = Label.new()
-	market_detail_description_label.text = "Choose an item from the catalog to see its description and price."
+	market_detail_description_label.text = LocalizationManager.text("ui.market.detail.placeholder")
 	market_detail_description_label.custom_minimum_size = Vector2(0, 48)
 	market_detail_description_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	market_detail_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -13965,7 +15078,7 @@ func _setup_market_detail_panel(panel: PanelContainer) -> void:
 	price_rows.add_child(unit_row)
 
 	var unit_caption := Label.new()
-	unit_caption.text = "Unit price"
+	_set_localized_control_property(unit_caption, "text", "ui.market.unit_price")
 	unit_caption.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	unit_caption.add_theme_font_size_override("font_size", 11)
 	unit_caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -13982,7 +15095,7 @@ func _setup_market_detail_panel(panel: PanelContainer) -> void:
 	price_rows.add_child(total_row)
 
 	var total_caption := Label.new()
-	total_caption.text = "Total"
+	_set_localized_control_property(total_caption, "text", "ui.market.total")
 	total_caption.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	total_caption.add_theme_font_size_override("font_size", 12)
 	total_caption.add_theme_color_override("font_color", UI_TEXT)
@@ -14001,7 +15114,7 @@ func _setup_market_detail_panel(panel: PanelContainer) -> void:
 	layout.add_child(quantity_row)
 
 	var quantity_label := Label.new()
-	quantity_label.text = "Quantity"
+	_set_localized_control_property(quantity_label, "text", "ui.market.quantity")
 	quantity_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	quantity_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	quantity_label.add_theme_font_size_override("font_size", 12)
@@ -14020,7 +15133,7 @@ func _setup_market_detail_panel(panel: PanelContainer) -> void:
 
 	market_buy_button = Button.new()
 	market_buy_button.name = "BuyButton"
-	market_buy_button.text = "Select an Item"
+	market_buy_button.text = LocalizationManager.text("ui.market.select_action")
 	market_buy_button.custom_minimum_size = Vector2(0, 42)
 	market_buy_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	market_buy_button.focus_mode = Control.FOCUS_NONE
@@ -14030,7 +15143,7 @@ func _setup_market_detail_panel(panel: PanelContainer) -> void:
 	layout.add_child(market_buy_button)
 
 	market_delivery_hint_label = Label.new()
-	market_delivery_hint_label.text = "Purchases are delivered directly to your Bag."
+	market_delivery_hint_label.text = LocalizationManager.text("ui.market.delivery.buy")
 	market_delivery_hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	market_delivery_hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	market_delivery_hint_label.add_theme_font_size_override("font_size", 10)
@@ -14042,43 +15155,29 @@ func open_market(market: Dictionary, requested_mode: String = "player_buys", inv
 		return
 	market_mode = requested_mode if requested_mode in ["player_buys", "player_sells"] else "player_buys"
 	var player_is_selling := market_mode == "player_sells"
-	var market_name := str(market.get("name", "")).strip_edges()
-	market_title_label.text = ("%s Buyer" % market_name) if player_is_selling and market_name != "" else (
-		"Market Buyer" if player_is_selling else (market_name if market_name != "" else "Poké Mart")
-	)
-	var location_name := str(market.get("locationName", "")).strip_edges()
-	var region_name := str(market.get("region", "")).strip_edges()
-	var activity_description := "Sell items from your Bag" if player_is_selling else "Trainer supplies and everyday essentials"
-	if location_name != "":
-		market_subtitle_label.text = "%s · %s" % [location_name, activity_description]
-	elif region_name != "":
-		market_subtitle_label.text = "%s · %s" % [region_name, activity_description]
-	else:
-		market_subtitle_label.text = activity_description
-	market_catalog_caption_label.text = "YOUR SELLABLE ITEMS" if player_is_selling else "SHOP CATALOG"
-	market_action_caption_label.text = "SALE" if player_is_selling else "PURCHASE"
-	market_delivery_hint_label.text = (
-		"Sold items are removed from your Bag immediately."
-		if player_is_selling
-		else "Purchases are delivered directly to your Bag."
-	)
-	market_search_input.placeholder_text = "Search your sellable items..." if player_is_selling else "Search the catalog..."
+	market_context = {
+		"name": str(market.get("name", "")).strip_edges(),
+		"location": str(market.get("locationName", "")).strip_edges(),
+		"region": str(market.get("region", "")).strip_edges(),
+	}
+	_apply_market_context_copy()
 	var catalog_items := _normalize_market_items(market.get("items", []))
 	market_items = _market_sell_items(catalog_items, inventory_items) if player_is_selling else catalog_items
 	market_selected_item = market_items[0].duplicate(true) if not market_items.is_empty() else {}
 	market_quantity_spinbox.max_value = max(int(market_selected_item.get("quantity", 1)), 1) if player_is_selling else 99
 	market_quantity_spinbox.value = 1
 	market_search_input.text = ""
-	market_search_input.release_focus()
+	if market_search_input.is_inside_tree():
+		market_search_input.release_focus()
 	market_popup.visible = true
 	_activate_ui_panel(market_popup)
 	_refresh_market_money()
 	_refresh_market_items()
 	if market_items.is_empty():
 		_set_market_status(
-			"You do not have any items this buyer accepts."
+			LocalizationManager.text("ui.market.status.no_accepted_items")
 			if player_is_selling
-			else "This shop does not have any items available right now.",
+			else LocalizationManager.text("ui.market.status.no_available_items"),
 			false
 		)
 
@@ -14181,15 +15280,87 @@ func _normalize_market_items(items_value: Variant) -> Array[Dictionary]:
 		var item_id := str(item.get("itemId", "")).strip_edges()
 		if item_id == "":
 			continue
-		normalized_items.append({
+		normalized_items.append(ItemLocalization.localize_item({
 			"id": item_id,
-			"name": str(item.get("name", _item_name_from_id(item_id))),
+			"name": str(item.get("name", _format_item_name_from_id(item_id))),
 			"category": str(item.get("category", "")),
 			"shortDesc": str(item.get("shortDesc", "")),
 			"price": _market_item_money_price(item),
 			"sellPrice": max(int(item.get("sellPrice", 0)), 0),
-		})
+		}))
 	return normalized_items
+
+
+func _refresh_market_localized_item_data() -> void:
+	for item_index in range(market_items.size()):
+		market_items[item_index] = ItemLocalization.localize_item(market_items[item_index])
+	if not market_selected_item.is_empty():
+		market_selected_item = ItemLocalization.localize_item(market_selected_item)
+	if market_popup != null and market_popup.visible:
+		_refresh_market_items()
+
+
+func _refresh_market_localized_ui() -> void:
+	_refresh_market_localized_item_data()
+	if market_popup == null:
+		return
+	LocalizationManager.localize_tree(market_popup)
+	_apply_market_context_copy()
+	if not market_popup.visible:
+		return
+	if market_items.is_empty():
+		_set_market_status(
+			LocalizationManager.text("ui.market.status.no_accepted_items")
+			if market_mode == "player_sells"
+			else LocalizationManager.text("ui.market.status.no_available_items"),
+			false
+		)
+	else:
+		_refresh_market_items()
+
+
+func _apply_market_context_copy() -> void:
+	if market_title_label == null:
+		return
+	var player_is_selling := market_mode == "player_sells"
+	var market_name := str(market_context.get("name", "")).strip_edges()
+	if player_is_selling:
+		market_title_label.text = (
+			LocalizationManager.text("ui.market.title.named_buyer", {"market": market_name})
+			if not market_name.is_empty()
+			else LocalizationManager.text("ui.market.title.buyer")
+		)
+	else:
+		market_title_label.text = (
+			market_name if not market_name.is_empty()
+			else LocalizationManager.text("ui.market.title.default")
+		)
+	var activity := LocalizationManager.text(
+		"ui.market.subtitle.sell" if player_is_selling else "ui.market.subtitle.buy"
+	)
+	var place := str(market_context.get("location", "")).strip_edges()
+	if place.is_empty():
+		place = str(market_context.get("region", "")).strip_edges()
+	market_subtitle_label.text = (
+		LocalizationManager.text("ui.market.subtitle.at_place", {
+			"place": place,
+			"activity": activity,
+		})
+		if not place.is_empty()
+		else activity
+	)
+	market_catalog_caption_label.text = LocalizationManager.text(
+		"ui.market.catalog.sell" if player_is_selling else "ui.market.catalog.buy"
+	)
+	market_action_caption_label.text = LocalizationManager.text(
+		"ui.market.action.sale" if player_is_selling else "ui.market.action.purchase"
+	)
+	market_delivery_hint_label.text = LocalizationManager.text(
+		"ui.market.delivery.sell" if player_is_selling else "ui.market.delivery.buy"
+	)
+	market_search_input.placeholder_text = LocalizationManager.text(
+		"ui.market.search.sell" if player_is_selling else "ui.market.search.buy"
+	)
 
 
 func _market_sell_items(catalog_items: Array[Dictionary], inventory_items: Array) -> Array[Dictionary]:
@@ -14237,17 +15408,22 @@ func _refresh_market_items() -> void:
 	var filtered_items := _filtered_market_items()
 	if market_catalog_summary_label != null:
 		if market_search_input != null and market_search_input.text.strip_edges() != "":
-			market_catalog_summary_label.text = "%d of %d items" % [filtered_items.size(), market_items.size()]
+			market_catalog_summary_label.text = LocalizationManager.text("ui.market.summary.filtered", {
+				"shown": filtered_items.size(),
+				"total": market_items.size(),
+			})
 		else:
-			market_catalog_summary_label.text = "%d item%s %s" % [
-				filtered_items.size(),
-				"" if filtered_items.size() == 1 else "s",
-				"accepted" if market_mode == "player_sells" else "available",
-			]
+			market_catalog_summary_label.text = LocalizationManager.plural(
+				"ui.market.summary.accepted.one" if market_mode == "player_sells" else "ui.market.summary.available.one",
+				"ui.market.summary.accepted.many" if market_mode == "player_sells" else "ui.market.summary.available.many",
+				filtered_items.size()
+			)
 
 	if filtered_items.is_empty():
-		var empty_message := "No items match your search." if not market_items.is_empty() else (
-			"No accepted items in your Bag." if market_mode == "player_sells" else "No market items available."
+		var empty_message := LocalizationManager.text("ui.market.empty.search") if not market_items.is_empty() else (
+			LocalizationManager.text("ui.market.empty.sell")
+			if market_mode == "player_sells"
+			else LocalizationManager.text("ui.market.empty.buy")
 		)
 		market_item_list.add_child(_create_bag_empty_state(empty_message))
 		if market_buy_button != null:
@@ -14374,7 +15550,7 @@ func _create_market_item_button(item: Dictionary) -> Control:
 	price_stack.add_child(price_label)
 
 	var each_label := Label.new()
-	each_label.text = "each"
+	each_label.text = LocalizationManager.text("ui.market.each")
 	each_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	each_label.add_theme_font_size_override("font_size", 9)
 	each_label.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.68))
@@ -14411,10 +15587,10 @@ func _apply_market_item_row_style(row: PanelContainer, selected: bool, hovered: 
 
 func _market_item_subtitle(item: Dictionary) -> String:
 	if market_mode == "player_sells":
-		return "%s · %d in Bag" % [
-			_market_category_label(str(item.get("category", ""))),
-			int(item.get("quantity", 0)),
-		]
+		return LocalizationManager.text("ui.market.in_bag", {
+			"category": _market_category_label(str(item.get("category", ""))),
+			"quantity": int(item.get("quantity", 0)),
+		})
 	var description := str(item.get("shortDesc", "")).strip_edges()
 	if description != "":
 		return _ellipsize_text(description, 58)
@@ -14424,8 +15600,36 @@ func _market_item_subtitle(item: Dictionary) -> String:
 	return str(item.get("id", ""))
 
 func _market_category_label(category: String) -> String:
-	var normalized := category.strip_edges().replace("-", " ").replace("_", " ")
-	return normalized.capitalize() if normalized != "" else "General goods"
+	var normalized := category.strip_edges().to_lower().replace("-", "_").replace(" ", "_")
+	var bag_category: String = str({
+		"pokeball": "pokeball",
+		"pokeballs": "pokeball",
+		"key_item": "key_items",
+		"key_items": "key_items",
+		"tm": "machines",
+		"hm": "machines",
+		"machine": "machines",
+		"machines": "machines",
+		"charm": "charms",
+		"charms": "charms",
+		"held_item": "held_items",
+		"held_items": "held_items",
+		"power_stone": "power_stones",
+		"power_stones": "power_stones",
+		"cosmetic": "cosmetics",
+		"cosmetics": "cosmetics",
+		"voucher": "vouchers",
+		"vouchers": "vouchers",
+	}.get(normalized, normalized))
+	for category_value: Variant in BAG_CATEGORIES:
+		var category_spec := category_value as Dictionary
+		if str(category_spec.get("id", "")) == bag_category:
+			return LocalizationManager.text(str(category_spec.get("labelKey", "")))
+	return (
+		normalized.replace("_", " ").capitalize()
+		if not normalized.is_empty()
+		else LocalizationManager.text("ui.market.category.general")
+	)
 
 func _on_market_item_selected(item: Dictionary) -> void:
 	if market_purchase_in_progress:
@@ -14445,7 +15649,7 @@ func _refresh_market_purchase_state() -> void:
 	_refresh_market_detail()
 	if market_selected_item.is_empty():
 		market_buy_button.disabled = true
-		market_buy_button.text = "Select an Item"
+		market_buy_button.text = LocalizationManager.text("ui.market.select_action")
 		return
 
 	var quantity: int = max(int(market_quantity_spinbox.value), 1)
@@ -14455,13 +15659,29 @@ func _refresh_market_purchase_state() -> void:
 	var allowed := quantity <= int(market_selected_item.get("quantity", 0)) if player_is_selling else total <= PlayerSave.money
 	market_buy_button.disabled = market_purchase_in_progress or not allowed
 	if market_purchase_in_progress:
-		market_buy_button.text = "Selling..." if player_is_selling else "Purchasing..."
+		market_buy_button.text = LocalizationManager.text(
+			"ui.market.action.selling" if player_is_selling else "ui.market.action.purchasing"
+		)
 	else:
-		market_buy_button.text = "%s · %s" % ["Sell" if player_is_selling else "Buy", _format_money(total)]
-	var item_name := str(market_selected_item.get("name", "Item"))
-	var status_text := "%sx %s · Total %s" % [quantity, item_name, _format_money(total)]
+		market_buy_button.text = LocalizationManager.text(
+			"ui.market.action.sell_total" if player_is_selling else "ui.market.action.buy_total",
+			{"total": _format_money(total)}
+		)
+	var item_name := str(market_selected_item.get(
+		"name",
+		LocalizationManager.text("ui.market.item_fallback")
+	))
+	var status_text := LocalizationManager.text("ui.market.status.total", {
+		"quantity": quantity,
+		"item": item_name,
+		"total": _format_money(total),
+	})
 	if not allowed:
-		status_text += " · Not enough items." if player_is_selling else " · Not enough money."
+		status_text += LocalizationManager.text(
+			"ui.market.status.not_enough_items"
+			if player_is_selling
+			else "ui.market.status.not_enough_money"
+		)
 	_set_market_status(status_text, not allowed)
 
 func _refresh_market_detail() -> void:
@@ -14470,9 +15690,9 @@ func _refresh_market_detail() -> void:
 	if market_selected_item.is_empty():
 		market_detail_icon.texture = MARKET_INTERFACE_ICON
 		market_detail_icon.modulate = Color(1, 1, 1, 0.32)
-		market_detail_name_label.text = "Select an item"
-		market_detail_category_label.text = "CATALOG ITEM"
-		market_detail_description_label.text = "Choose an item from the catalog to see its description and price."
+		market_detail_name_label.text = LocalizationManager.text("ui.market.detail.select")
+		market_detail_category_label.text = LocalizationManager.text("ui.market.detail.catalog_item")
+		market_detail_description_label.text = LocalizationManager.text("ui.market.detail.placeholder")
 		market_unit_price_label.text = "—"
 		market_total_price_label.text = "—"
 		market_quantity_spinbox.editable = false
@@ -14489,7 +15709,9 @@ func _refresh_market_detail() -> void:
 	market_detail_name_label.text = item_name
 	market_detail_category_label.text = _market_category_label(category).to_upper()
 	market_detail_description_label.text = description if description != "" else (
-		"An item this buyer accepts." if market_mode == "player_sells" else "A useful item available from this shop."
+		LocalizationManager.text("ui.market.detail.sell_fallback")
+		if market_mode == "player_sells"
+		else LocalizationManager.text("ui.market.detail.buy_fallback")
 	)
 	market_unit_price_label.text = _format_money(unit_price)
 	market_total_price_label.text = _format_money(unit_price * quantity)
@@ -14498,7 +15720,9 @@ func _refresh_market_detail() -> void:
 
 func _refresh_market_money() -> void:
 	if market_money_label != null:
-		market_money_label.text = "Money: %s" % _format_money(PlayerSave.money)
+		market_money_label.text = LocalizationManager.text("ui.market.money", {
+			"amount": _format_money(PlayerSave.money),
+		})
 
 func _on_market_buy_pressed() -> void:
 	if market_purchase_in_progress or market_selected_item.is_empty():
@@ -14510,7 +15734,9 @@ func _on_market_buy_pressed() -> void:
 	market_purchase_in_progress = true
 	_refresh_market_purchase_state()
 	var player_is_selling := market_mode == "player_sells"
-	_set_market_status("Selling item..." if player_is_selling else "Buying item...", false)
+	_set_market_status(LocalizationManager.text(
+		"ui.market.status.selling" if player_is_selling else "ui.market.status.buying"
+	), false)
 
 	var quantity: int = max(int(market_quantity_spinbox.value), 1)
 	var result: Dictionary
@@ -14521,10 +15747,10 @@ func _on_market_buy_pressed() -> void:
 	market_purchase_in_progress = false
 	if not bool(result.get("success", false)):
 		_set_market_status(
-			"Could not %s item: %s" % [
-				"sell" if player_is_selling else "buy",
-				str(result.get("error", "Unknown error")),
-			],
+			LocalizationManager.text(
+				"ui.market.status.sell_failed" if player_is_selling else "ui.market.status.buy_failed",
+				{"error": str(result.get("error", LocalizationManager.text("common.unknown_error")))},
+			),
 			true
 		)
 		_refresh_market_purchase_state()
@@ -14537,12 +15763,14 @@ func _on_market_buy_pressed() -> void:
 		bag_inventory_items = _normalize_bag_inventory_items(inventory_value)
 		bag_inventory_loaded = true
 		_refresh_bag_items()
-
 	var transaction_key := "sale" if player_is_selling else "purchase"
 	var transaction: Dictionary = _staff_dictionary_from_variant(result.get(transaction_key, {}))
 	var transacted_quantity: int = max(int(transaction.get("quantity", quantity)), 1)
 	var item_name := str(market_selected_item.get("name", _item_name_from_id(item_id)))
-	_add_chat_message("%s %sx %s." % ["Sold" if player_is_selling else "Bought", transacted_quantity, item_name])
+	_add_chat_message(LocalizationManager.text(
+		"ui.market.message.sold" if player_is_selling else "ui.market.message.bought",
+		{"quantity": transacted_quantity, "item": item_name},
+	))
 	if player_is_selling:
 		_update_market_sell_items_from_inventory(inventory_value)
 	_refresh_market_purchase_state()
@@ -14612,7 +15840,7 @@ func _setup_bag_item_use_popup() -> void:
 	layout.add_child(header)
 
 	bag_item_use_title_label = Label.new()
-	bag_item_use_title_label.text = "Use Item"
+	bag_item_use_title_label.text = LocalizationManager.text("ui.bag.use.title")
 	bag_item_use_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	bag_item_use_title_label.add_theme_font_size_override("font_size", 18)
 	bag_item_use_title_label.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
@@ -14620,6 +15848,7 @@ func _setup_bag_item_use_popup() -> void:
 
 	var close_button := Button.new()
 	close_button.text = "X"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.custom_minimum_size = Vector2(34, 30)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_bag_item_use_popup)
@@ -14627,14 +15856,14 @@ func _setup_bag_item_use_popup() -> void:
 	header.add_child(close_button)
 
 	bag_item_use_item_label = Label.new()
-	bag_item_use_item_label.text = "Select an item."
+	bag_item_use_item_label.text = LocalizationManager.text("ui.bag.use.select_item")
 	bag_item_use_item_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	bag_item_use_item_label.add_theme_font_size_override("font_size", 13)
 	bag_item_use_item_label.add_theme_color_override("font_color", UI_TEXT)
 	layout.add_child(bag_item_use_item_label)
 
 	var party_label := Label.new()
-	party_label.text = "Choose Pokemon"
+	_set_localized_control_property(party_label, "text", "ui.bag.use.choose_pokemon")
 	party_label.add_theme_font_size_override("font_size", 11)
 	party_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	layout.add_child(party_label)
@@ -14655,7 +15884,7 @@ func _setup_bag_item_use_popup() -> void:
 	layout.add_child(quantity_row)
 
 	var quantity_label := Label.new()
-	quantity_label.text = "Amount"
+	_set_localized_control_property(quantity_label, "text", "ui.bag.use.amount")
 	quantity_label.custom_minimum_size = Vector2(84, 0)
 	quantity_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	quantity_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -14672,7 +15901,7 @@ func _setup_bag_item_use_popup() -> void:
 	quantity_row.add_child(bag_item_use_quantity_spinbox)
 
 	bag_item_use_status_label = Label.new()
-	bag_item_use_status_label.text = "Select a Pokemon first."
+	bag_item_use_status_label.text = LocalizationManager.text("ui.bag.use.select_pokemon_first")
 	bag_item_use_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	bag_item_use_status_label.add_theme_font_size_override("font_size", 12)
 	bag_item_use_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -14684,7 +15913,7 @@ func _setup_bag_item_use_popup() -> void:
 	layout.add_child(action_row)
 
 	var cancel_button := Button.new()
-	cancel_button.text = "Cancel"
+	_set_localized_control_property(cancel_button, "text", "common.cancel")
 	cancel_button.custom_minimum_size = Vector2(112, 32)
 	cancel_button.focus_mode = Control.FOCUS_NONE
 	cancel_button.pressed.connect(_hide_bag_item_use_popup)
@@ -14692,7 +15921,7 @@ func _setup_bag_item_use_popup() -> void:
 	action_row.add_child(cancel_button)
 
 	bag_item_use_confirm_button = Button.new()
-	bag_item_use_confirm_button.text = "Use"
+	_set_localized_control_property(bag_item_use_confirm_button, "text", "ui.bag.action.use")
 	bag_item_use_confirm_button.custom_minimum_size = Vector2(128, 32)
 	bag_item_use_confirm_button.focus_mode = Control.FOCUS_NONE
 	bag_item_use_confirm_button.disabled = true
@@ -14715,15 +15944,15 @@ func _refresh_bag_items() -> void:
 	if bag_inventory_loading:
 		bag_selected_item = {}
 		_refresh_bag_detail()
-		_set_bag_summary("Loading inventory...")
-		bag_item_grid.add_child(_create_bag_empty_state("Loading bag..."))
+		_set_bag_summary(LocalizationManager.text("ui.bag.loading_inventory"))
+		bag_item_grid.add_child(_create_bag_empty_state(LocalizationManager.text("ui.bag.loading")))
 		return
 
 	if not bag_inventory_loaded:
 		bag_selected_item = {}
 		_refresh_bag_detail()
-		_set_bag_summary("Inventory not loaded")
-		bag_item_grid.add_child(_create_bag_empty_state("Open your bag to load items."))
+		_set_bag_summary(LocalizationManager.text("ui.bag.inventory_not_loaded"))
+		bag_item_grid.add_child(_create_bag_empty_state(LocalizationManager.text("ui.bag.open_to_load")))
 		return
 
 	var visible_items: Array[Dictionary] = []
@@ -14742,9 +15971,11 @@ func _refresh_bag_items() -> void:
 	if visible_items.is_empty():
 		bag_selected_item = {}
 		_refresh_bag_detail()
-		_set_bag_summary("No results · %s" % category_label)
+		_set_bag_summary(LocalizationManager.text("ui.bag.no_results", {"category": category_label}))
 		bag_item_grid.add_child(_create_bag_empty_state(
-			"No items match your search." if search_text != "" else "No items in %s." % category_label
+			LocalizationManager.text("ui.bag.no_search_matches")
+			if search_text != ""
+			else LocalizationManager.text("ui.bag.no_items_in_category", {"category": category_label})
 		))
 		_refresh_hotbar_ui()
 		return
@@ -14762,10 +15993,11 @@ func _refresh_bag_items() -> void:
 	for item: Dictionary in visible_items:
 		bag_item_grid.add_child(_create_bag_item_slot(item))
 
-	var noun := "item" if visible_items.size() == 1 else "items"
-	var summary_prefix := "%d result" % visible_items.size() if search_text != "" else "%d %s" % [visible_items.size(), noun]
-	if search_text != "" and visible_items.size() != 1:
-		summary_prefix += "s"
+	var summary_prefix := (
+		LocalizationManager.plural("ui.bag.result_one", "ui.bag.result_many", visible_items.size())
+		if search_text != ""
+		else LocalizationManager.plural("ui.bag.item_count_one", "ui.bag.item_count_many", visible_items.size())
+	)
 	_set_bag_summary("%s · %s" % [summary_prefix, category_label])
 	_refresh_bag_detail()
 	_refresh_hotbar_ui()
@@ -14797,7 +16029,8 @@ func _create_bag_item_slot(item: Dictionary) -> Control:
 	slot.hotbar_item = item.duplicate(true)
 	slot.custom_minimum_size = Vector2(106, 118)
 	slot.mouse_filter = Control.MOUSE_FILTER_STOP
-	slot.tooltip_text = "%s\nClick for details. Drag or right-click for more options." % str(item.get("name", "Item"))
+	var item_name := str(item.get("name", LocalizationManager.text("ui.bag.item_fallback")))
+	slot.tooltip_text = LocalizationManager.text("ui.bag.item_tooltip", {"item": item_name})
 	slot.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	slot.gui_input.connect(_on_bag_item_slot_gui_input.bind(item.duplicate(true), slot))
 	slot.mouse_entered.connect(_on_bag_item_slot_hover_changed.bind(slot, true))
@@ -14855,7 +16088,7 @@ func _create_bag_item_slot(item: Dictionary) -> Control:
 
 	var quantity_label := Label.new()
 	quantity_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	quantity_label.text = "KEY" if bool(item.get("permanent", false)) else "x%s" % max(int(item.get("quantity", 1)), 1)
+	quantity_label.text = LocalizationManager.text("ui.bag.key_marker") if bool(item.get("permanent", false)) else "x%s" % max(int(item.get("quantity", 1)), 1)
 	quantity_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	quantity_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	quantity_label.add_theme_font_size_override("font_size", 9)
@@ -14864,7 +16097,7 @@ func _create_bag_item_slot(item: Dictionary) -> Control:
 
 	var name_label := Label.new()
 	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	name_label.text = str(item.get("name", "Item"))
+	name_label.text = str(item.get("name", LocalizationManager.text("ui.bag.item_fallback")))
 	name_label.custom_minimum_size = Vector2(0, 29)
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -14934,12 +16167,12 @@ func _refresh_bag_detail() -> void:
 	if bag_selected_item.is_empty():
 		bag_detail_icon.texture = BAG_INTERFACE_ICON
 		bag_detail_icon.modulate = Color(1, 1, 1, 0.35)
-		bag_detail_name_label.text = "Select an item"
-		bag_detail_meta_label.text = "Choose an item from your Bag"
-		bag_detail_description_label.text = "Item details and actions will appear here."
-		bag_detail_use_button.text = "Select an Item"
+		bag_detail_name_label.text = LocalizationManager.text("ui.bag.select_item")
+		bag_detail_meta_label.text = LocalizationManager.text("ui.bag.choose_item")
+		bag_detail_description_label.text = LocalizationManager.text("ui.bag.details_placeholder")
+		bag_detail_use_button.text = LocalizationManager.text("ui.bag.select_item_action")
 		bag_detail_use_button.disabled = true
-		bag_detail_hotbar_button.text = "Assign to Hotbar"
+		bag_detail_hotbar_button.text = LocalizationManager.text("ui.bag.assign_hotbar")
 		bag_detail_hotbar_button.disabled = true
 		return
 
@@ -14956,7 +16189,9 @@ func _refresh_bag_detail() -> void:
 	bag_detail_name_label.text = item_name
 	bag_detail_meta_label.text = "%s · %s" % [
 		_bag_category_label(category),
-		"KEY ITEM" if bool(bag_selected_item.get("permanent", false)) else "x%d owned" % quantity,
+		LocalizationManager.text("ui.bag.key_item")
+		if bool(bag_selected_item.get("permanent", false))
+		else LocalizationManager.text("ui.bag.quantity_owned", {"quantity": quantity}),
 	]
 	bag_detail_description_label.text = _bag_item_detail_description(bag_selected_item)
 
@@ -14964,7 +16199,11 @@ func _refresh_bag_detail() -> void:
 	bag_detail_use_button.text = _bag_item_use_action_label(bag_selected_item)
 	bag_detail_use_button.disabled = not can_use
 	var can_assign := _bag_item_can_assign_to_hotbar(bag_selected_item)
-	bag_detail_hotbar_button.text = "Assign to Hotbar" if can_assign else "Not Hotbar Compatible"
+	bag_detail_hotbar_button.text = (
+		LocalizationManager.text("ui.bag.assign_hotbar")
+		if can_assign
+		else LocalizationManager.text("ui.bag.not_hotbar_compatible")
+	)
 	bag_detail_hotbar_button.disabled = not can_assign
 
 func _bag_item_detail_description(item: Dictionary) -> String:
@@ -14972,7 +16211,7 @@ func _bag_item_detail_description(item: Dictionary) -> String:
 	if use_action == "unlock_appearance" and not _bag_item_matches_player_gender(item):
 		var allowed_models := _bag_item_allowed_genders(item)
 		var model_label := " or ".join(allowed_models).capitalize()
-		return "%s character models only. Keep this item in your Bag or trade it; it cannot be moved to Character Customization." % model_label
+		return LocalizationManager.text("ui.bag.description.wrong_model", {"models": model_label})
 	var description := str(item.get("shortDesc", item.get("description", ""))).strip_edges()
 	if description != "":
 		return description
@@ -14984,29 +16223,29 @@ func _bag_item_detail_description(item: Dictionary) -> String:
 	var item_id := _normalize_item_id(str(item.get("id", "")))
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	if FieldMoveService.is_direct_field_move(field_move_id):
-		return "A permanent field Charm. Use it here or assign it to your hotbar for quick access."
+		return LocalizationManager.text("ui.bag.description.field_charm")
 	if _bag_machine_move_id(item_id) != "":
-		return "Teach this move to a compatible Pokemon in your party."
+		return LocalizationManager.text("ui.bag.description.machine")
 	if _is_pokemon_usable_item_id(item_id):
-		return "Use this item on a compatible Pokemon in your party."
+		return LocalizationManager.text("ui.bag.description.pokemon_item")
 
 	match str(item.get("category", "general")):
 		"pokeball":
-			return "Use this item from the Bag during a wild battle."
+			return LocalizationManager.text("ui.bag.description.pokeball")
 		"held_items":
-			return "Give this item to a Pokemon from its Summary."
+			return LocalizationManager.text("ui.bag.description.held_item")
 		"power_stones":
-			return "A special battle item. Manage compatible items from a Pokemon Summary."
+			return LocalizationManager.text("ui.bag.description.power_stone")
 		"key_items":
-			return "An important item used during your adventure."
+			return LocalizationManager.text("ui.bag.description.key_item")
 		"charms":
-			return "A permanent tradeable field Charm. It can also be assigned to your hotbar."
+			return LocalizationManager.text("ui.bag.description.charm")
 		"cosmetics":
-			return "A cosmetic unlock connected to your account."
+			return LocalizationManager.text("ui.bag.description.cosmetic")
 		"currency":
-			return "A special currency or collectible."
+			return LocalizationManager.text("ui.bag.description.currency")
 		_:
-			return "This item is stored safely in your Bag."
+			return LocalizationManager.text("ui.bag.description.default")
 
 func _bag_item_can_use_from_bag(item: Dictionary) -> bool:
 	var item_id := _normalize_item_id(str(item.get("id", "")))
@@ -15030,37 +16269,37 @@ func _bag_item_can_assign_to_hotbar(item: Dictionary) -> bool:
 func _bag_item_use_action_label(item: Dictionary) -> String:
 	var item_id := _normalize_item_id(str(item.get("id", "")))
 	if item_id == "escape-rope-action":
-		return "Use Escape Rope"
+		return LocalizationManager.text("ui.bag.action.use_escape_rope")
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	if FieldMoveService.is_direct_field_move(field_move_id):
-		return "Use Charm"
+		return LocalizationManager.text("ui.bag.action.use_charm")
 	var use_action := str(item.get("useAction", "")).strip_edges()
 	if use_action == "trainer_name_change":
-		return "Change Name"
+		return LocalizationManager.text("ui.bag.action.change_name")
 	if use_action == "trainer_gender_change":
-		return "Change Gender"
+		return LocalizationManager.text("ui.bag.action.change_gender")
 	if use_action == "open_item_bundle":
-		return "Open Box"
+		return LocalizationManager.text("ui.bag.action.open_box")
 	if use_action == "unlock_appearance":
 		if not _bag_item_matches_player_gender(item):
 			var allowed_models := _bag_item_allowed_genders(item)
-			return "%s Model Only" % " or ".join(allowed_models).capitalize()
-		return "Move to Customization"
+			return LocalizationManager.text("ui.bag.action.model_only", {"models": " or ".join(allowed_models).capitalize()})
+		return LocalizationManager.text("ui.bag.action.move_to_customization")
 	if use_action == "redeem_aether_blessing":
-		return "Redeem Voucher"
+		return LocalizationManager.text("ui.bag.action.redeem_voucher")
 	if use_action == "apply_guild_emblem_template":
-		return "Unlock for Guild"
+		return LocalizationManager.text("ui.bag.action.unlock_for_guild")
 	if _bag_machine_move_id(item_id) != "":
-		return "Teach Move"
+		return LocalizationManager.text("ui.bag.action.teach_move")
 	if _is_pokemon_usable_item_id(item_id):
-		return "Use Item"
+		return LocalizationManager.text("ui.bag.action.use_item")
 	match str(item.get("category", "general")):
 		"pokeball":
-			return "Battle Item"
+			return LocalizationManager.text("ui.bag.action.battle_item")
 		"held_items", "power_stones":
-			return "Use Pokemon Summary"
+			return LocalizationManager.text("ui.bag.action.use_summary")
 		_:
-			return "Not Usable Here"
+			return LocalizationManager.text("ui.bag.action.not_usable")
 
 func _on_bag_detail_use_pressed() -> void:
 	if bag_selected_item.is_empty() or not _bag_item_can_use_from_bag(bag_selected_item):
@@ -15088,11 +16327,11 @@ func _show_bag_item_context_menu(item: Dictionary) -> void:
 		_setup_bag_item_context_menu()
 	bag_item_context_item = item.duplicate(true)
 	bag_item_context_menu.clear()
-	bag_item_context_menu.add_item("Inspect", 0)
+	bag_item_context_menu.add_item(LocalizationManager.text("ui.bag.action.inspect"), 0)
 	if _bag_item_can_use_from_bag(item):
 		bag_item_context_menu.add_item(_bag_item_use_action_label(item), 1)
 	if _bag_item_can_assign_to_hotbar(item):
-		bag_item_context_menu.add_item("Assign to Hotbar", 2)
+		bag_item_context_menu.add_item(LocalizationManager.text("ui.bag.assign_hotbar"), 2)
 	var viewport_size := get_viewport().get_visible_rect().size
 	var menu_position := get_viewport().get_mouse_position()
 	menu_position.x = minf(menu_position.x, viewport_size.x - 200.0)
@@ -15119,7 +16358,7 @@ func _bag_category_label(category_id: String) -> String:
 	for category_value: Variant in BAG_CATEGORIES:
 		var category := category_value as Dictionary
 		if str(category.get("id", "")) == category_id:
-			return str(category.get("label", category_id))
+			return LocalizationManager.text(str(category.get("labelKey", category_id)))
 	return category_id.replace("_", " ").capitalize()
 
 func _on_bag_item_selected(item: Dictionary) -> void:
@@ -15135,7 +16374,15 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 		return
 	if use_action == "trainer_gender_change":
 		var target_gender := "female" if PlayerSave.gender == "male" else "male"
-		_show_ui_confirm_popup("Change gender?", "Change to %s?\n\nAll cosmetics in Character Customization will be returned to your Bag. Your equipped appearance and colours will reset." % target_gender.capitalize(), "Change to %s" % target_gender.capitalize(), Callable(self, "_execute_trainer_gender_change").bind(target_gender), Vector2i(480, 220), true)
+		var target_gender_label := LocalizationManager.text("ui.bag.gender.%s" % target_gender)
+		_show_ui_confirm_popup(
+			LocalizationManager.text("ui.bag.gender.confirm_title"),
+			LocalizationManager.text("ui.bag.gender.confirm_message", {"gender": target_gender_label}),
+			LocalizationManager.text("ui.bag.gender.confirm_action", {"gender": target_gender_label}),
+			Callable(self, "_execute_trainer_gender_change").bind(target_gender),
+			Vector2i(480, 220),
+			true
+		)
 		return
 	if use_action == "unlock_appearance" and not _bag_item_matches_player_gender(item):
 		_add_chat_message(_bag_item_detail_description(item))
@@ -15143,7 +16390,7 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 	if use_action == "open_item_bundle":
 		var open_result: Dictionary = await InventoryService.use_inventory_item(item_id)
 		if not bool(open_result.get("success", false)):
-			_add_chat_message(str(open_result.get("error", "That box could not be opened.")))
+			_add_chat_message(str(open_result.get("error", LocalizationManager.text("ui.bag.message.open_box_failed"))))
 			return
 		bag_inventory_items = _normalize_bag_inventory_items(open_result.get("inventory", []))
 		_apply_owned_appearance_unlocks(
@@ -15158,15 +16405,15 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 		bag_selected_item = {}
 		_refresh_bag_items()
 		_refresh_bag_detail()
-		_add_chat_message("%s was opened. %d cosmetic items were added to your Bag." % [
-			str(item.get("name", _item_name_from_id(item_id))),
-			granted_count,
-		])
+		_add_chat_message(LocalizationManager.text("ui.bag.message.box_opened", {
+			"item": str(item.get("name", _item_name_from_id(item_id))),
+			"count": granted_count,
+		}))
 		return
 	if use_action == "unlock_appearance":
 		var unlock_result: Dictionary = await InventoryService.use_inventory_item(item_id)
 		if not bool(unlock_result.get("success", false)):
-			_add_chat_message(str(unlock_result.get("error", "That cosmetic could not be moved to Character Customization.")))
+			_add_chat_message(str(unlock_result.get("error", LocalizationManager.text("ui.bag.message.cosmetic_failed"))))
 			return
 		bag_inventory_items = _normalize_bag_inventory_items(unlock_result.get("inventory", []))
 		_apply_owned_appearance_unlocks(
@@ -15177,12 +16424,14 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 		bag_selected_item = {}
 		_refresh_bag_items()
 		_refresh_bag_detail()
-		_add_chat_message("%s was added to Character Customization." % str(item.get("name", _item_name_from_id(item_id))))
+		_add_chat_message(LocalizationManager.text("ui.bag.message.cosmetic_added", {
+			"item": str(item.get("name", _item_name_from_id(item_id))),
+		}))
 		return
 	if use_action == "redeem_aether_blessing":
 		var redeem_result: Dictionary = await InventoryService.use_inventory_item(item_id)
 		if not bool(redeem_result.get("success", false)):
-			_add_chat_message(str(redeem_result.get("error", "That voucher could not be redeemed.")))
+			_add_chat_message(str(redeem_result.get("error", LocalizationManager.text("ui.bag.message.voucher_failed"))))
 			return
 		bag_inventory_items = _normalize_bag_inventory_items(redeem_result.get("inventory", []))
 		var updated_user := redeem_result.get("user", {}) as Dictionary
@@ -15196,15 +16445,14 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 		bag_selected_item = {}
 		_refresh_bag_items()
 		_refresh_bag_detail()
-		_add_chat_message(
-			"Aether Blessing extended by %d days."
-			% int(redeem_result.get("durationDays", 0))
-		)
+		_add_chat_message(LocalizationManager.text("ui.bag.message.blessing_extended", {
+			"days": int(redeem_result.get("durationDays", 0)),
+		}))
 		return
 	if use_action == "apply_guild_emblem_template":
 		var emblem_result: Dictionary = await InventoryService.use_inventory_item(item_id)
 		if not bool(emblem_result.get("success", false)):
-			_add_chat_message(str(emblem_result.get("error", "That Guild emblem could not be applied.")))
+			_add_chat_message(str(emblem_result.get("error", LocalizationManager.text("ui.bag.message.guild_emblem_failed"))))
 			return
 		bag_inventory_items = _normalize_bag_inventory_items(emblem_result.get("inventory", []))
 		bag_selected_item = {}
@@ -15213,18 +16461,20 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 		if guild_popup != null and guild_popup.visible:
 			await guild_popup._refresh_from_server()
 		var applied_guild := emblem_result.get("guild", {}) as Dictionary
-		_add_chat_message("%s was consumed, unlocked and applied to %s." % [
-			str(item.get("name", _item_name_from_id(item_id))),
-			str(applied_guild.get("name", "your Guild")),
-		])
+		_add_chat_message(LocalizationManager.text("ui.bag.message.guild_emblem_applied", {
+			"item": str(item.get("name", _item_name_from_id(item_id))),
+			"guild": str(applied_guild.get("name", LocalizationManager.text("ui.bag.your_guild"))),
+		}))
 		return
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	if FieldMoveService.is_direct_field_move(field_move_id):
 		var field_move_result: Dictionary = await FieldMoveService.use_direct_field_move(field_move_id)
 		if not bool(field_move_result.get("success", false)):
-			_add_chat_message(str(field_move_result.get("error", "That Charm cannot be used right now.")))
+			_add_chat_message(str(field_move_result.get("error", LocalizationManager.text("ui.bag.message.charm_unavailable"))))
 		else:
-			_add_chat_message(str(field_move_result.get("message", "%s was used." % str(item.get("name", "Field Move Charm")))))
+			_add_chat_message(str(field_move_result.get("message", LocalizationManager.text("ui.bag.message.item_used", {
+				"item": str(item.get("name", LocalizationManager.text("ui.bag.field_move_charm"))),
+			}))))
 		return
 	if _bag_machine_move_id(item_id) != "":
 		await _refresh_bag_inventory_for_machine_selection()
@@ -15239,7 +16489,9 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 	if notice_message != "":
 		_add_chat_message(notice_message)
 		return
-	_add_chat_message("%s is informational and cannot be used from the Bag." % str(item.get("name", _item_name_from_id(item_id))))
+	_add_chat_message(LocalizationManager.text("ui.bag.message.informational", {
+		"item": str(item.get("name", _item_name_from_id(item_id))),
+	}))
 
 
 func _show_trainer_name_change_popup() -> void:
@@ -15247,7 +16499,7 @@ func _show_trainer_name_change_popup() -> void:
 		_setup_trainer_name_change_popup()
 	trainer_name_change_username_input.text = str(AuthService.current_user.get("username", "")).strip_edges()
 	trainer_name_change_display_name_input.text = str(AuthService.current_user.get("displayName", PlayerSave.player_name)).strip_edges()
-	trainer_name_change_status_label.text = "Your previous username will remain reserved permanently."
+	trainer_name_change_status_label.text = LocalizationManager.text("ui.bag.name_change.reserved")
 	trainer_name_change_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	trainer_name_change_popup.visible = true
 	_activate_ui_panel(trainer_name_change_popup)
@@ -15274,22 +16526,22 @@ func _setup_trainer_name_change_popup() -> void:
 	layout.add_theme_constant_override("separation", 8)
 	margin.add_child(layout)
 	var title := Label.new()
-	title.text = "Name Change Ticket"
+	_set_localized_control_property(title, "text", "ui.bag.name_change.title")
 	title.add_theme_font_size_override("font_size", 18)
 	title.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
 	layout.add_child(title)
 	var hint := Label.new()
-	hint.text = "Change both your account username and public Trainer name."
+	_set_localized_control_property(hint, "text", "ui.bag.name_change.hint")
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	hint.add_theme_font_size_override("font_size", 12)
 	hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	layout.add_child(hint)
 	trainer_name_change_username_input = LineEdit.new()
-	trainer_name_change_username_input.placeholder_text = "Username (letters, numbers, underscores)"
+	_set_localized_control_property(trainer_name_change_username_input, "placeholder_text", "ui.bag.name_change.username")
 	trainer_name_change_username_input.max_length = 32
 	layout.add_child(trainer_name_change_username_input)
 	trainer_name_change_display_name_input = LineEdit.new()
-	trainer_name_change_display_name_input.placeholder_text = "Display name"
+	_set_localized_control_property(trainer_name_change_display_name_input, "placeholder_text", "ui.settings.account.display_name")
 	trainer_name_change_display_name_input.max_length = 32
 	layout.add_child(trainer_name_change_display_name_input)
 	trainer_name_change_status_label = Label.new()
@@ -15301,12 +16553,12 @@ func _setup_trainer_name_change_popup() -> void:
 	actions.add_theme_constant_override("separation", 8)
 	layout.add_child(actions)
 	var cancel := Button.new()
-	cancel.text = "Cancel"
+	_set_localized_control_property(cancel, "text", "common.cancel")
 	cancel.pressed.connect(func(): trainer_name_change_popup.visible = false)
 	_apply_button_style(cancel)
 	actions.add_child(cancel)
 	trainer_name_change_confirm_button = Button.new()
-	trainer_name_change_confirm_button.text = "Change Name"
+	_set_localized_control_property(trainer_name_change_confirm_button, "text", "ui.bag.action.change_name")
 	trainer_name_change_confirm_button.pressed.connect(_execute_trainer_name_change)
 	_apply_button_style(trainer_name_change_confirm_button, "primary")
 	actions.add_child(trainer_name_change_confirm_button)
@@ -15318,31 +16570,35 @@ func _execute_trainer_name_change() -> void:
 	var username := trainer_name_change_username_input.text.strip_edges()
 	var display_name := trainer_name_change_display_name_input.text.strip_edges()
 	if username.length() < 3 or display_name.is_empty():
-		trainer_name_change_status_label.text = "Enter a username of at least 3 characters and a display name."
+		trainer_name_change_status_label.text = LocalizationManager.text("ui.bag.name_change.validation")
 		trainer_name_change_status_label.add_theme_color_override("font_color", UI_DANGER)
 		return
 	trainer_name_change_in_progress = true
 	trainer_name_change_confirm_button.disabled = true
-	trainer_name_change_status_label.text = "Changing name securely..."
+	trainer_name_change_status_label.text = LocalizationManager.text("ui.bag.name_change.changing")
 	var result: Dictionary = await InventoryService.change_trainer_name(username, display_name)
 	trainer_name_change_in_progress = false
 	trainer_name_change_confirm_button.disabled = false
 	if not bool(result.get("success", false)):
-		trainer_name_change_status_label.text = str(result.get("error", "Name change failed."))
+		trainer_name_change_status_label.text = str(result.get("error", LocalizationManager.text("ui.bag.name_change.failed")))
 		trainer_name_change_status_label.add_theme_color_override("font_color", UI_DANGER)
 		return
 	_apply_trainer_service_result(result, false)
 	trainer_name_change_popup.visible = false
-	add_system_message("Your Trainer name is now %s." % PlayerSave.player_name)
+	add_system_message(LocalizationManager.text("ui.bag.name_change.success", {"name": PlayerSave.player_name}))
 
 
 func _execute_trainer_gender_change(target_gender: String) -> void:
 	var result: Dictionary = await InventoryService.change_trainer_gender(target_gender)
 	if not bool(result.get("success", false)):
-		add_system_message("Gender change failed: %s" % str(result.get("error", "Unknown error")))
+		add_system_message(LocalizationManager.text("ui.bag.gender.failed", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
 	_apply_trainer_service_result(result, true)
-	add_system_message("Gender updated. %d cosmetics were returned to your Bag." % int(result.get("returnedCosmeticItemCount", 0)))
+	add_system_message(LocalizationManager.text("ui.bag.gender.success", {
+		"count": int(result.get("returnedCosmeticItemCount", 0)),
+	}))
 
 
 func _apply_trainer_service_result(result: Dictionary, gender_changed: bool) -> void:
@@ -15378,7 +16634,7 @@ func _show_bag_item_use_popup(item: Dictionary) -> void:
 	var item_id := _normalize_item_id(str(item.get("id", "")))
 	var item_name := str(item.get("name", _item_name_from_id(item_id)))
 	var quantity: int = max(int(item.get("quantity", 1)), 1)
-	bag_item_use_title_label.text = "Use %s" % item_name
+	bag_item_use_title_label.text = LocalizationManager.text("ui.bag.use.named_title", {"item": item_name})
 	bag_item_use_item_label.text = "%s x%s" % [item_name, quantity]
 	var gameplay: Dictionary = _staff_dictionary_from_variant(item.get("gameplay", {}))
 	bag_item_use_quantity_spinbox.max_value = 1 if str(gameplay.get("quantityPolicy", "")) == "single" else min(quantity, 99)
@@ -15386,7 +16642,7 @@ func _show_bag_item_use_popup(item: Dictionary) -> void:
 	bag_item_use_quantity_spinbox.editable = false
 	if bag_item_use_confirm_button != null:
 		bag_item_use_confirm_button.disabled = true
-	bag_item_use_status_label.text = "Select a Pokemon first."
+	bag_item_use_status_label.text = LocalizationManager.text("ui.bag.use.select_pokemon_first")
 	bag_item_use_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	_refresh_bag_item_use_party_list()
 	bag_item_use_popup.visible = true
@@ -15408,7 +16664,7 @@ func _refresh_bag_item_use_party_list() -> void:
 		child.queue_free()
 
 	if PlayerSave.party.is_empty():
-		bag_item_use_party_list.add_child(_create_bag_empty_state("Your party is empty."))
+		bag_item_use_party_list.add_child(_create_bag_empty_state(LocalizationManager.text("ui.bag.use.party_empty")))
 		return
 
 	var shown_pokemon_count := 0
@@ -15424,7 +16680,7 @@ func _refresh_bag_item_use_party_list() -> void:
 		shown_pokemon_count += 1
 
 	if shown_pokemon_count == 0:
-		bag_item_use_party_list.add_child(_create_bag_empty_state("No compatible Pokemon in your party."))
+		bag_item_use_party_list.add_child(_create_bag_empty_state(LocalizationManager.text("ui.bag.use.no_compatible_pokemon")))
 
 func _on_bag_item_use_quantity_changed(_value: float) -> void:
 	if bag_item_use_popup == null or not bag_item_use_popup.visible:
@@ -15470,7 +16726,10 @@ func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> C
 	row.add_child(details)
 
 	var name_label := Label.new()
-	name_label.text = "%s  Lv. %s" % [pokemon.species, max(pokemon.level, 1)]
+	name_label.text = LocalizationManager.text("ui.bag.use.pokemon_level", {
+		"pokemon": _pokemon_display_name(pokemon),
+		"level": max(pokemon.level, 1),
+	})
 	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	name_label.add_theme_font_size_override("font_size", 15)
 	name_label.add_theme_color_override("font_color", UI_TEXT)
@@ -15485,7 +16744,7 @@ func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> C
 	button.tooltip_text = str(preview.get("tooltip", button.text))
 	button.disabled = bag_item_use_in_progress or pokemon.owned_pokemon_id <= 0 or not _bag_item_can_affect_pokemon(pokemon, item_id)
 	if pokemon.owned_pokemon_id <= 0:
-		button.tooltip_text = "%s cannot use this item right now." % pokemon.species
+		button.tooltip_text = LocalizationManager.text("ui.bag.use.pokemon_unavailable", {"pokemon": _pokemon_display_name(pokemon)})
 	elif button.disabled and not bag_item_use_in_progress:
 		var disabled_preview := _bag_item_use_preview_for_pokemon(pokemon, item_id, requested_quantity)
 		button.tooltip_text = str(disabled_preview.get("tooltip", button.tooltip_text))
@@ -15500,13 +16759,19 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 	if machine_move_id != "":
 		if _pokemon_knows_move_id(pokemon, machine_move_id):
 			return {
-				"label": "Already knows %s" % _format_move_name(machine_move_id),
-				"tooltip": "%s already knows %s." % [pokemon.species, _format_move_name(machine_move_id)],
+				"label": LocalizationManager.text("ui.bag.use.already_knows", {"move": _format_move_name(machine_move_id)}),
+				"tooltip": LocalizationManager.text("ui.bag.use.already_knows_tooltip", {
+					"pokemon": _pokemon_display_name(pokemon),
+					"move": _format_move_name(machine_move_id),
+				}),
 				"canApply": false,
 			}
 		return {
-			"label": "Teach %s" % _format_move_name(machine_move_id),
-			"tooltip": "Teach %s to %s. If a Pokémon can learn this move, the machine can be used again." % [_format_move_name(machine_move_id), pokemon.species],
+			"label": LocalizationManager.text("ui.bag.use.teach_move", {"move": _format_move_name(machine_move_id)}),
+			"tooltip": LocalizationManager.text("ui.bag.use.teach_move_tooltip", {
+				"move": _format_move_name(machine_move_id),
+				"pokemon": _pokemon_display_name(pokemon),
+			}),
 			"canApply": true,
 		}
 	var gameplay := _bag_gameplay_definition_for_item_id(item_id)
@@ -15520,8 +16785,9 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 	var current_level: int = clampi(max(pokemon.level, 1), 1, POKEMON_MAX_LEVEL)
 	if current_level >= POKEMON_MAX_LEVEL:
 		return {
-			"label": "Max level",
-			"tooltip": "%s is already Lv. 100." % pokemon.species,
+			"label": LocalizationManager.text("ui.bag.use.max_level"),
+			"tooltip": LocalizationManager.text("ui.bag.use.already_level_100", {"pokemon": _pokemon_display_name(pokemon)}),
+			"canApply": false,
 		}
 
 	var growth_rate := _normalize_exp_growth_rate(pokemon.growth_rate)
@@ -15530,8 +16796,9 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 	var remaining_exp: int = max(max_exp - current_exp, 0)
 	if remaining_exp <= 0:
 		return {
-			"label": "Max level",
-			"tooltip": "%s is already at the level cap." % pokemon.species,
+			"label": LocalizationManager.text("ui.bag.use.max_level"),
+			"tooltip": LocalizationManager.text("ui.bag.use.already_level_cap", {"pokemon": _pokemon_display_name(pokemon)}),
+			"canApply": false,
 		}
 
 	var quantity: int = max(requested_quantity, 1)
@@ -15553,19 +16820,20 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 
 	var label := "+%s EXP" % gained_exp
 	if target_level > current_level:
-		label = "Lv. %s  +%s EXP" % [target_level, gained_exp]
+		label = LocalizationManager.text("ui.bag.use.level_exp", {"level": target_level, "exp": gained_exp})
 	if used_quantity < quantity:
-		label += "  uses %s/%s" % [used_quantity, quantity]
+		label += LocalizationManager.text("ui.bag.use.uses_suffix", {"used": used_quantity, "requested": quantity})
 
 	return {
+		"canApply": true,
 		"label": label,
-		"tooltip": "%s\nItems used: %s\nExperience gained: %s\nLevel: %s → %s" % [
-			pokemon.species,
-			used_quantity,
-			gained_exp,
-			current_level,
-			target_level,
-		],
+		"tooltip": LocalizationManager.text("ui.bag.use.exp_tooltip", {
+			"pokemon": _pokemon_display_name(pokemon),
+			"used": used_quantity,
+			"exp": gained_exp,
+			"current_level": current_level,
+			"target_level": target_level,
+		}),
 	}
 
 func _bag_ev_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, requested_quantity: int) -> Dictionary:
@@ -15587,16 +16855,17 @@ func _bag_ev_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, req
 	var stat_label := _summary_stat_label(stat_id)
 	if max_gain <= 0:
 		return {
-			"label": "Storage full",
-			"tooltip": "%s cannot gain more training points right now.\n%s training points waiting: %s/%s\nAlready assigned: %s/%s\nTotal waiting: %s" % [
-				pokemon.species,
-				stat_label,
-				current_value,
-				POKEMON_EV_STAT_LIMIT,
-				allocated_total,
-				POKEMON_EV_TOTAL_LIMIT,
-				stored_total,
-			],
+			"label": LocalizationManager.text("ui.bag.use.storage_full"),
+			"tooltip": LocalizationManager.text("ui.bag.use.storage_full_tooltip", {
+				"pokemon": _pokemon_display_name(pokemon),
+				"stat": stat_label,
+				"stat_current": current_value,
+				"stat_max": POKEMON_EV_STAT_LIMIT,
+				"allocated": allocated_total,
+				"total_max": POKEMON_EV_TOTAL_LIMIT,
+				"stored": stored_total,
+			}),
+			"canApply": false,
 		}
 
 	var quantity: int = max(requested_quantity, 1)
@@ -15604,23 +16873,28 @@ func _bag_ev_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, req
 	var gained_evs: int = min(used_quantity * potency, max_gain)
 	var new_value: int = current_value + gained_evs
 	var new_stored_total: int = stored_total + gained_evs
-	var label := "Stored %s %s -> %s" % [stat_label, current_value, new_value]
+	var label := LocalizationManager.text("ui.bag.use.stored_evs", {
+		"stat": stat_label,
+		"current": current_value,
+		"new": new_value,
+	})
 	if used_quantity < quantity:
-		label += "  uses %s/%s" % [used_quantity, quantity]
+		label += LocalizationManager.text("ui.bag.use.uses_suffix", {"used": used_quantity, "requested": quantity})
 
 	return {
+		"canApply": true,
 		"label": label,
-		"tooltip": "%s\nItems used: %s\n%s training points waiting: %s → %s\nTotal waiting: %s → %s\nAlready assigned: %s/%s" % [
-			pokemon.species,
-			used_quantity,
-			stat_label,
-			current_value,
-			new_value,
-			stored_total,
-			new_stored_total,
-			allocated_total,
-			POKEMON_EV_TOTAL_LIMIT,
-		],
+		"tooltip": LocalizationManager.text("ui.bag.use.ev_tooltip", {
+			"pokemon": _pokemon_display_name(pokemon),
+			"used": used_quantity,
+			"stat": stat_label,
+			"current": current_value,
+			"new": new_value,
+			"stored_total": stored_total,
+			"new_stored_total": new_stored_total,
+			"allocated": allocated_total,
+			"total_max": POKEMON_EV_TOTAL_LIMIT,
+		}),
 	}
 
 func _bag_item_can_affect_pokemon(pokemon: Pokemon, item_id: String) -> bool:
@@ -15631,8 +16905,7 @@ func _bag_item_can_affect_pokemon(pokemon: Pokemon, item_id: String) -> bool:
 		return false
 	if preview.has("canApply"):
 		return bool(preview.get("canApply", false))
-	var label := str(preview.get("label", ""))
-	return not label.contains("Max level") and not label.contains("EV cap") and not label.contains("Storage full")
+	return not preview.is_empty()
 
 func _pokemon_preview_current_experience(pokemon: Pokemon, growth_rate: String) -> int:
 	var level_floor_exp: int = _pokemon_exp_for_level(growth_rate, max(pokemon.level, 1))
@@ -15696,16 +16969,16 @@ func _on_bag_item_use_pokemon_selected(slot_index: int) -> void:
 
 	var pokemon: Pokemon = PlayerSave.party[slot_index]
 	if pokemon == null or pokemon.owned_pokemon_id <= 0:
-		_set_bag_item_use_status("This Pokémon can’t be changed right now.", true)
+		_set_bag_item_use_status(LocalizationManager.text("ui.pokemon_summary.readonly_error"), true)
 		return
 
 	var item_id := _normalize_item_id(str(bag_item_use_pending_item.get("id", "")))
 	if not _is_pokemon_usable_item_id(item_id):
-		_set_bag_item_use_status("This item cannot be used on Pokemon yet.", true)
+		_set_bag_item_use_status(LocalizationManager.text("ui.bag.use.unsupported_item"), true)
 		return
 	if not _bag_item_can_affect_pokemon(pokemon, item_id):
 		var preview := _bag_item_use_preview_for_pokemon(pokemon, item_id, 1)
-		_set_bag_item_use_status(str(preview.get("label", "This item would have no effect.")), true)
+		_set_bag_item_use_status(str(preview.get("label", LocalizationManager.text("ui.bag.use.no_effect"))), true)
 		return
 
 	bag_item_use_selected_slot = slot_index
@@ -15717,12 +16990,12 @@ func _on_bag_item_use_pokemon_selected(slot_index: int) -> void:
 
 func _refresh_bag_item_use_selected_preview() -> void:
 	if bag_item_use_selected_slot < 0 or bag_item_use_selected_slot >= PlayerSave.party.size():
-		_set_bag_item_use_status("Select a Pokemon first.", false)
+		_set_bag_item_use_status(LocalizationManager.text("ui.bag.use.select_pokemon_first"), false)
 		return
 
 	var pokemon: Pokemon = PlayerSave.party[bag_item_use_selected_slot]
 	if pokemon == null:
-		_set_bag_item_use_status("Select a Pokemon first.", false)
+		_set_bag_item_use_status(LocalizationManager.text("ui.bag.use.select_pokemon_first"), false)
 		return
 
 	var item_id := _normalize_item_id(str(bag_item_use_pending_item.get("id", "")))
@@ -15730,29 +17003,32 @@ func _refresh_bag_item_use_selected_preview() -> void:
 	var preview := _bag_item_use_preview_for_pokemon(pokemon, item_id, quantity)
 	var preview_text := str(preview.get("label", ""))
 	if preview_text == "":
-		preview_text = "No item change"
-	_set_bag_item_use_status("%s selected. %s" % [pokemon.species, preview_text], false)
+		preview_text = LocalizationManager.text("ui.bag.use.no_item_change")
+	_set_bag_item_use_status(LocalizationManager.text("ui.bag.use.selected_preview", {
+		"pokemon": _pokemon_display_name(pokemon),
+		"preview": preview_text,
+	}), false)
 
 func _on_bag_item_use_confirm_pressed() -> void:
 	if bag_item_use_in_progress:
 		return
 	if bag_item_use_selected_slot < 0 or bag_item_use_selected_slot >= PlayerSave.party.size():
-		_set_bag_item_use_status("Select a Pokemon first.", true)
+		_set_bag_item_use_status(LocalizationManager.text("ui.bag.use.select_pokemon_first"), true)
 		return
 
 	var pokemon: Pokemon = PlayerSave.party[bag_item_use_selected_slot]
 	if pokemon == null or pokemon.owned_pokemon_id <= 0:
-		_set_bag_item_use_status("This Pokémon can’t be changed right now.", true)
+		_set_bag_item_use_status(LocalizationManager.text("ui.pokemon_summary.readonly_error"), true)
 		return
 
 	var item_id := _normalize_item_id(str(bag_item_use_pending_item.get("id", "")))
 	var quantity: int = clampi(int(bag_item_use_quantity_spinbox.value), 1, int(bag_item_use_quantity_spinbox.max_value))
 	if not _is_pokemon_usable_item_id(item_id):
-		_set_bag_item_use_status("This item cannot be used on Pokemon yet.", true)
+		_set_bag_item_use_status(LocalizationManager.text("ui.bag.use.unsupported_item"), true)
 		return
 	if not _bag_item_can_affect_pokemon(pokemon, item_id):
 		var preview := _bag_item_use_preview_for_pokemon(pokemon, item_id, quantity)
-		_set_bag_item_use_status(str(preview.get("label", "This item would have no effect.")), true)
+		_set_bag_item_use_status(str(preview.get("label", LocalizationManager.text("ui.bag.use.no_effect"))), true)
 		return
 	var machine_move_id := _bag_machine_move_id(item_id)
 	if machine_move_id != "":
@@ -15765,7 +17041,7 @@ func _on_bag_item_use_confirm_pressed() -> void:
 	bag_item_use_quantity_spinbox.editable = false
 	if bag_item_use_confirm_button != null:
 		bag_item_use_confirm_button.disabled = true
-	_set_bag_item_use_status("Using item...", false)
+	_set_bag_item_use_status(LocalizationManager.text("ui.bag.use.using"), false)
 	_refresh_bag_item_use_party_list()
 
 	var result: Dictionary = await InventoryService.use_pokemon_item(pokemon.owned_pokemon_id, item_id, quantity)
@@ -15774,7 +17050,9 @@ func _on_bag_item_use_confirm_pressed() -> void:
 	if bag_item_use_confirm_button != null:
 		bag_item_use_confirm_button.disabled = false
 	if not bool(result.get("success", false)):
-		_set_bag_item_use_status("Could not use item: %s" % str(result.get("error", "Unknown error")), true)
+		_set_bag_item_use_status(LocalizationManager.text("ui.bag.use.failed", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}), true)
 		_refresh_bag_item_use_party_list()
 		return
 
@@ -15817,12 +17095,20 @@ func _add_bag_item_use_success_message(item_id: String, reward: Dictionary) -> v
 			var stat_id := str(effort_entry.get("stat", "")).strip_edges()
 			var ev_changes: Dictionary = _staff_dictionary_from_variant(effort_entry.get("storedEvChanges", effort_entry.get("evChanges", {})))
 			var gained_evs: int = max(int(ev_changes.get(stat_id, 0)), 0)
-			var suffix: String = " %s stored +%s %s EVs." % [
-				str(effort_entry.get("species", "Pokemon")),
-				gained_evs,
-				_summary_stat_label(stat_id),
-			] if gained_evs > 0 else ""
-			_add_chat_message("Used %sx %s.%s" % [quantity, item_name, suffix])
+			if gained_evs > 0:
+				var effort_species := str(effort_entry.get(
+					"species",
+					LocalizationManager.text("ui.bag.pokemon_fallback")
+				))
+				_add_chat_message(LocalizationManager.text("ui.bag.use.success_evs", {
+					"quantity": quantity,
+					"item": item_name,
+					"pokemon": _localized_species_name(effort_species, effort_species),
+					"amount": gained_evs,
+					"stat": _summary_stat_label(stat_id),
+				}))
+			else:
+				_add_chat_message(LocalizationManager.text("ui.bag.use.success", {"quantity": quantity, "item": item_name}))
 			return
 
 	var experience_gained: int = 0
@@ -15830,13 +17116,19 @@ func _add_bag_item_use_success_message(item_id: String, reward: Dictionary) -> v
 	if experience_value is Array:
 		var experience_array: Array = experience_value as Array
 		if experience_array.is_empty() or not (experience_array[0] is Dictionary):
-			_add_chat_message("Used %sx %s." % [quantity, item_name])
+			_add_chat_message(LocalizationManager.text("ui.bag.use.success", {"quantity": quantity, "item": item_name}))
 			return
 		var experience_entry: Dictionary = experience_array[0]
 		quantity = max(int(experience_entry.get("quantity", quantity)), 1)
 		experience_gained = max(int(experience_entry.get("experience", 0)), 0)
-	var suffix: String = " Gained %s EXP." % experience_gained if experience_gained > 0 else ""
-	_add_chat_message("Used %sx %s.%s" % [quantity, item_name, suffix])
+	if experience_gained > 0:
+		_add_chat_message(LocalizationManager.text("ui.bag.use.success_exp", {
+			"quantity": quantity,
+			"item": item_name,
+			"exp": experience_gained,
+		}))
+	else:
+		_add_chat_message(LocalizationManager.text("ui.bag.use.success", {"quantity": quantity, "item": item_name}))
 
 func _notify_progression_reward(reward: Dictionary) -> void:
 	if reward.is_empty():
@@ -16063,9 +17355,9 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 		var backend_category := str(item.get("category", "")).strip_edges()
 		var gameplay: Dictionary = _staff_dictionary_from_variant(item.get("gameplay", {})).duplicate(true)
 		var use_notice: Dictionary = _staff_dictionary_from_variant(item.get("useNotice", {})).duplicate(true)
-		normalized_items.append({
+		normalized_items.append(ItemLocalization.localize_item({
 			"id": item_id,
-			"name": str(item.get("name", _item_name_from_id(item_id))),
+			"name": str(item.get("name", _format_item_name_from_id(item_id))),
 			"category": _normalize_backend_bag_category(backend_category, item_id),
 			"shortDesc": str(item.get("shortDesc", item.get("description", ""))).strip_edges(),
 			"isHoldable": bool(item.get("isHoldable", false)),
@@ -16079,17 +17371,14 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 			"useNotice": use_notice,
 			"useAction": str(item.get("useAction", "")).strip_edges(),
 			"appearanceUnlocks": item.get("appearanceUnlocks", []),
-		})
-	normalized_items.append({
+		}))
+	normalized_items.append(ItemLocalization.localize_item({
 		"id": "escape-rope-action",
-		"name": "Escape Rope · Key Item",
 		"category": "key_items",
 		"quantity": 1,
 		"permanent": true,
-		"shortDesc": "Return to the last safe indoor location you visited.",
 		"gameplay": {},
-		"useNotice": {"message": "Use Escape Rope from your hotbar."},
-	})
+	}))
 	return normalized_items
 
 func _normalize_backend_bag_category(category: String, item_id: String) -> String:
@@ -16107,6 +17396,14 @@ func _normalize_backend_bag_category(category: String, item_id: String) -> Strin
 	return _guess_bag_category(item_id)
 
 func _item_name_from_id(item_id: String) -> String:
+	var normalized_item_id := _normalize_item_id(item_id)
+	return ItemLocalization.display_name(
+		normalized_item_id,
+		_format_item_name_from_id(normalized_item_id)
+	)
+
+
+func _format_item_name_from_id(item_id: String) -> String:
 	var words := item_id.replace("_", "-").split("-")
 	var formatted_words: Array[String] = []
 	for word: String in words:
@@ -16179,7 +17476,37 @@ func _refresh_bag_category_buttons() -> void:
 			count_label.add_theme_color_override("font_color", UI_MONEY if selected else UI_MUTED_TEXT)
 		var label := category_button.find_child("Label", true, false) as Label
 		if label != null:
+			label.text = _bag_category_label(category_id)
 			label.add_theme_color_override("font_color", UI_TEXT if selected else UI_MUTED_TEXT)
+
+func _refresh_bag_localized_ui() -> void:
+	for item_index in range(bag_inventory_items.size()):
+		bag_inventory_items[item_index] = ItemLocalization.localize_item(bag_inventory_items[item_index])
+	for item_index in range(mail_compose_inventory_items.size()):
+		mail_compose_inventory_items[item_index] = ItemLocalization.localize_item(
+			mail_compose_inventory_items[item_index]
+		)
+	if not bag_item_use_pending_item.is_empty():
+		bag_item_use_pending_item = ItemLocalization.localize_item(bag_item_use_pending_item)
+	if escape_rope_button != null:
+		_update_escape_rope_action_ui()
+	_refresh_bag_items()
+	_refresh_hotbar_ui()
+	if bag_item_context_menu != null and bag_item_context_menu.visible:
+		bag_item_context_menu.hide()
+	if bag_item_use_popup != null and bag_item_use_popup.visible and not bag_item_use_pending_item.is_empty():
+		var item_id := _normalize_item_id(str(bag_item_use_pending_item.get("id", "")))
+		var item_name := str(bag_item_use_pending_item.get("name", _item_name_from_id(item_id)))
+		var quantity: int = max(int(bag_item_use_pending_item.get("quantity", 1)), 1)
+		bag_item_use_title_label.text = LocalizationManager.text("ui.bag.use.named_title", {"item": item_name})
+		bag_item_use_item_label.text = "%s x%s" % [item_name, quantity]
+		_refresh_bag_item_use_party_list()
+		if bag_item_use_in_progress:
+			_set_bag_item_use_status(LocalizationManager.text("ui.bag.use.using"), false)
+		else:
+			_refresh_bag_item_use_selected_preview()
+	if trainer_name_change_popup != null and trainer_name_change_popup.visible and not trainer_name_change_in_progress:
+		trainer_name_change_status_label.text = LocalizationManager.text("ui.bag.name_change.reserved")
 
 func _apply_bag_category_button_style(button: Button, selected: bool) -> void:
 	var normal_background := UI_SURFACE_INTERACTIVE if selected else Color("#07111ed8")
@@ -16430,6 +17757,7 @@ func _refresh_open_pokemon_summary_cards() -> void:
 		if pokemon_summary_popup == null or not pokemon_summary_popup.visible:
 			continue
 		_refresh_pokemon_summary()
+		_refresh_pokemon_summary_ev_allocate_translation()
 	_store_active_pokemon_summary_card_context()
 
 func _show_pokemon_summary(slot_index: int) -> void:
@@ -16503,18 +17831,23 @@ func _refresh_pokemon_summary() -> void:
 		return
 
 	_set_pokemon_summary_popup_size()
-	pokemon_summary_title_label.text = pokemon.species
-	pokemon_summary_title_label.tooltip_text = pokemon.species
+	var localized_species_name := _localized_species_name(pokemon.species, pokemon.species)
+	pokemon_summary_title_label.text = localized_species_name
+	pokemon_summary_title_label.tooltip_text = localized_species_name
 	var summary_id: String = str(pokemon.owned_pokemon_id) if pokemon.owned_pokemon_id > 0 else ""
 	if summary_id == "":
 		summary_id = pokemon.instance_id.strip_edges()
-	pokemon_summary_id_label.text = "ID: %s" % summary_id if summary_id != "" else "ID: -"
+	pokemon_summary_id_label.text = (
+		LocalizationManager.text("ui.pokemon_summary.id", {"id": summary_id})
+		if summary_id != ""
+		else LocalizationManager.text("ui.pokemon_summary.id_empty")
+	)
 	pokemon_summary_id_label.tooltip_text = pokemon_summary_id_label.text
 	pokemon_summary_shiny_badge.visible = pokemon.shiny
 	if pokemon_summary_shiny_badge_label != null:
 		pokemon_summary_shiny_badge_label.text = "*"
 	pokemon_summary_trainer_label.text = _get_pokemon_summary_current_trainer_title_text(pokemon)
-	var level_text := "Lv %s" % str(max(pokemon.level, 1))
+	var level_text := LocalizationManager.text("ui.pokemon_summary.level", {"level": max(pokemon.level, 1)})
 	pokemon_summary_meta_label.text = level_text
 	if pokemon_summary_level_badge_label != null:
 		pokemon_summary_level_badge_label.text = level_text
@@ -16528,13 +17861,20 @@ func _refresh_pokemon_summary() -> void:
 	_set_pokemon_summary_ball_button(pokemon)
 
 	_set_pokemon_summary_held_item_slot(pokemon)
+	if pokemon_summary_ball_picker != null and pokemon_summary_ball_picker.visible:
+		_refresh_pokemon_summary_ball_picker(pokemon)
+	if pokemon_summary_item_picker != null and pokemon_summary_item_picker.visible:
+		_refresh_pokemon_summary_item_picker()
 	if _is_pokemon_summary_readonly():
 		_hide_pokemon_summary_ev_allocate_popup()
 		pokemon_summary_item_picker.visible = false
 		pokemon_summary_ball_picker.visible = false
 	pokemon_summary_hp_bar.max_value = max(pokemon.max_hp, 1)
 	pokemon_summary_hp_bar.value = clamp(pokemon.current_hp, 0, pokemon.max_hp)
-	pokemon_summary_hp_label.text = "HP %s / %s" % [max(pokemon.current_hp, 0), max(pokemon.max_hp, 1)]
+	pokemon_summary_hp_label.text = LocalizationManager.text("ui.pokemon_summary.hp", {
+		"current": max(pokemon.current_hp, 0),
+		"max": max(pokemon.max_hp, 1),
+	})
 	_set_pokemon_summary_status_icon(pokemon.status)
 	_refresh_pokemon_summary_tab_buttons()
 	_render_pokemon_summary_content(pokemon)
@@ -16621,6 +17961,12 @@ func _refresh_pokemon_summary_type_icons(pokemon: Pokemon) -> void:
 
 	var added_count: int = 0
 	for type_value: String in _string_array_from_value(pokemon.types):
+		if _uses_localized_type_text():
+			pokemon_summary_type_icon_row.add_child(_create_summary_move_type_label(type_value))
+			added_count += 1
+			if added_count >= 2:
+				break
+			continue
 		var type_label: Texture2D = _load_pokemon_type_text_label(type_value)
 		if type_label == null:
 			continue
@@ -16630,7 +17976,7 @@ func _refresh_pokemon_summary_type_icons(pokemon: Pokemon) -> void:
 		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		icon.texture = type_label
-		icon.tooltip_text = type_value.capitalize()
+		icon.tooltip_text = _localized_type_name(type_value)
 		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		pokemon_summary_type_icon_row.add_child(icon)
 		added_count += 1
@@ -16682,21 +18028,15 @@ func _get_pokemon_summary_status_icon_texture(status_key: String) -> Texture2D:
 	return atlas_texture
 
 func _get_pokemon_summary_status_tooltip(status_key: String) -> String:
-	match status_key:
-		"psn":
-			return "Poisoned"
-		"tox":
-			return "Badly poisoned"
-		"brn":
-			return "Burned"
-		"par":
-			return "Paralyzed"
-		"slp":
-			return "Asleep"
-		"frz":
-			return "Frozen"
-
-	return ""
+	var key := str({
+		"psn": "pokemon.status.poisoned",
+		"tox": "pokemon.status.badly_poisoned",
+		"brn": "pokemon.status.burned",
+		"par": "pokemon.status.paralyzed",
+		"slp": "pokemon.status.asleep",
+		"frz": "pokemon.status.frozen",
+	}.get(status_key, ""))
+	return LocalizationManager.text(key) if key != "" else ""
 
 func _load_pokemon_type_icon(type_name: String) -> Texture2D:
 	var normalized_type: String = type_name.strip_edges().to_lower().replace(" ", "-").replace("_", "-")
@@ -16822,7 +18162,14 @@ func _render_pokemon_summary_general(pokemon: Pokemon) -> void:
 	top_metrics.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pokemon_summary_content_stack.add_child(top_metrics)
 	top_metrics.add_child(_create_summary_experience_metric_card(pokemon, Color("#62d7ff"), 148.0))
-	top_metrics.add_child(_create_summary_metric_card("Happiness", "Happiness progress is not tracked yet.", 0, 255, Color("#f2cf78"), 148.0))
+	top_metrics.add_child(_create_summary_metric_card(
+		LocalizationManager.text("ui.pokemon_summary.happiness"),
+		LocalizationManager.text("ui.pokemon_summary.happiness_untracked"),
+		0,
+		255,
+		Color("#f2cf78"),
+		148.0
+	))
 
 	var info_grid := GridContainer.new()
 	info_grid.columns = 2
@@ -16830,9 +18177,9 @@ func _render_pokemon_summary_general(pokemon: Pokemon) -> void:
 	info_grid.add_theme_constant_override("v_separation", 7)
 	info_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pokemon_summary_content_stack.add_child(info_grid)
-	info_grid.add_child(_create_summary_field_card("Original Trainer", _get_pokemon_summary_original_trainer_text(pokemon), Color("#9eb7d8"), false, 148.0))
+	info_grid.add_child(_create_summary_field_card(LocalizationManager.text("ui.pokemon_summary.original_trainer"), _get_pokemon_summary_original_trainer_text(pokemon), Color("#9eb7d8"), false, 148.0))
 	info_grid.add_child(_create_summary_field_card(
-		"Ability",
+		LocalizationManager.text("ui.pokemon_summary.ability"),
 		_get_summary_ability_display_name(pokemon.ability),
 		Color("#ffb15f"),
 		false,
@@ -16841,10 +18188,16 @@ func _render_pokemon_summary_general(pokemon: Pokemon) -> void:
 		Color(0, 0, 0, 0),
 		_get_summary_ability_description_text(pokemon.ability)
 	))
-	info_grid.add_child(_create_summary_field_card("Nature", _default_text(pokemon.nature), Color("#f2cf78"), false, 148.0))
-	info_grid.add_child(_create_summary_field_card("Location", _get_pokemon_summary_location_text(pokemon), Color("#62d7ff"), false, 148.0))
-	info_grid.add_child(_create_summary_field_card("Caught Date", _get_pokemon_summary_caught_date_text(pokemon), Color("#d9ecff"), false, 148.0))
-	info_grid.add_child(_create_summary_field_card("Caught Level", _get_pokemon_summary_caught_level_text(pokemon), Color("#d9ecff"), false, 148.0))
+	info_grid.add_child(_create_summary_field_card(
+		LocalizationManager.text("ui.pokemon_summary.nature"),
+		_localized_nature_name(pokemon.nature),
+		Color("#f2cf78"),
+		false,
+		148.0
+	))
+	info_grid.add_child(_create_summary_field_card(LocalizationManager.text("ui.pokemon_summary.location"), _get_pokemon_summary_location_text(pokemon), Color("#62d7ff"), false, 148.0))
+	info_grid.add_child(_create_summary_field_card(LocalizationManager.text("ui.pokemon_summary.caught_date"), _get_pokemon_summary_caught_date_text(pokemon), Color("#d9ecff"), false, 148.0))
+	info_grid.add_child(_create_summary_field_card(LocalizationManager.text("ui.pokemon_summary.caught_level"), _get_pokemon_summary_caught_level_text(pokemon), Color("#d9ecff"), false, 148.0))
 
 	var stat_grid := GridContainer.new()
 	stat_grid.columns = 3
@@ -16931,8 +18284,18 @@ func _create_summary_experience_metric_card(pokemon: Pokemon, accent_color: Colo
 	var next_level_remaining: int = max(next_level_exp - current_exp, 0) if has_next_level_range else 0
 	var target_level: int = min(pokemon.level + 1, 100)
 	var value_text := str(current_exp) if current_exp > 0 or has_next_level_range else "-"
-	var detail_text := "%s EXP to Lv. %s" % [next_level_remaining, target_level] if has_next_level_range else "Max level"
-	var tooltip_text := "Current experience: %s\n%s" % [value_text, detail_text]
+	var detail_text := (
+		LocalizationManager.text("ui.pokemon_summary.exp_to_level", {
+			"exp": next_level_remaining,
+			"level": target_level,
+		})
+		if has_next_level_range
+		else LocalizationManager.text("ui.pokemon_summary.max_level")
+	)
+	var tooltip_text := LocalizationManager.text("ui.pokemon_summary.current_experience", {
+		"experience": value_text,
+		"detail": detail_text,
+	})
 
 	var stack := VBoxContainer.new()
 	stack.custom_minimum_size = Vector2(min_width, 30)
@@ -17022,13 +18385,13 @@ func _get_pokemon_origin_summary_text(pokemon: Pokemon) -> String:
 	if location_name == "":
 		location_name = pokemon.location.strip_edges()
 	if location_name == "":
-		location_name = "Unknown Location"
+		location_name = LocalizationManager.text("ui.pokemon_summary.unknown_location")
 
 	var parts: Array[String] = [location_name]
 	if method != "":
 		parts.append(_format_pokemon_origin_method(method))
 	if met_level > 0:
-		parts.append("Lv %s" % met_level)
+		parts.append(LocalizationManager.text("ui.pokemon_summary.level", {"level": met_level}))
 	return " - ".join(parts)
 
 func _get_pokemon_summary_location_text(pokemon: Pokemon) -> String:
@@ -17038,7 +18401,7 @@ func _get_pokemon_summary_location_text(pokemon: Pokemon) -> String:
 	if location_name == "":
 		location_name = pokemon.location.strip_edges()
 	if location_name == "":
-		location_name = "Unknown Location"
+		location_name = LocalizationManager.text("ui.pokemon_summary.unknown_location")
 	if region_name != "" and region_name.to_lower() != "unknown" and region_name != location_name:
 		return "%s - %s" % [region_name, location_name]
 	return location_name
@@ -17066,8 +18429,8 @@ func _get_pokemon_summary_current_trainer_title_text(_pokemon: Pokemon) -> Strin
 		PlayerSave.player_name
 	)).strip_edges()
 	if trainer_name == "":
-		trainer_name = "Trainer"
-	return "%s's Pokemon" % trainer_name
+		trainer_name = LocalizationManager.text("ui.pokemon_summary.trainer_fallback")
+	return LocalizationManager.text("ui.pokemon_summary.trainer_pokemon", {"trainer": trainer_name})
 
 func _get_pokemon_summary_original_trainer_text(pokemon: Pokemon) -> String:
 	var origin: Dictionary = pokemon.origin
@@ -17089,7 +18452,7 @@ func _get_pokemon_summary_original_trainer_text(pokemon: Pokemon) -> String:
 		if current_player_id != "" and original_trainer_user_id == current_player_id:
 			return PlayerSave.player_name
 
-		return "Trainer #%s" % original_trainer_user_id
+		return LocalizationManager.text("ui.pokemon_summary.trainer_number", {"id": original_trainer_user_id})
 
 	return "-"
 
@@ -17115,20 +18478,20 @@ func _get_pokemon_summary_caught_date_text(pokemon: Pokemon) -> String:
 func _format_pokemon_origin_method(method: String) -> String:
 	match method.strip_edges().to_lower():
 		"gift":
-			return "Gift"
+			return LocalizationManager.text("ui.pokemon_summary.origin.gift")
 		"caught":
-			return "Caught"
+			return LocalizationManager.text("ui.pokemon_summary.origin.caught")
 		"generated":
-			return "Generated"
+			return LocalizationManager.text("ui.pokemon_summary.origin.generated")
 		"npc_trade":
-			return "NPC Trade"
+			return LocalizationManager.text("ui.pokemon_summary.origin.npc_trade")
 		"chest":
-			return "Chest"
+			return LocalizationManager.text("ui.pokemon_summary.origin.chest")
 		_:
 			return method.capitalize()
 
 func _render_pokemon_summary_ivs(pokemon: Pokemon) -> void:
-	_add_summary_section_title("Individual Values", Color("#62d7ff"))
+	_add_summary_section_title(LocalizationManager.text("ui.pokemon_summary.ivs.title"), Color("#62d7ff"))
 	var grid := GridContainer.new()
 	grid.columns = 2
 	grid.add_theme_constant_override("h_separation", 6)
@@ -17143,7 +18506,7 @@ func _render_pokemon_summary_ivs(pokemon: Pokemon) -> void:
 
 func _render_pokemon_summary_evs(pokemon: Pokemon) -> void:
 	var allocated_total: int = _get_summary_ev_total(pokemon.evs)
-	_add_summary_section_title("Allocated EVs (%s/510)" % allocated_total, POKEMON_SUMMARY_ACCENT)
+	_add_summary_section_title(LocalizationManager.text("ui.pokemon_summary.evs.allocated", {"total": allocated_total}), POKEMON_SUMMARY_ACCENT)
 	var grid := GridContainer.new()
 	grid.columns = 3
 	grid.add_theme_constant_override("h_separation", 6)
@@ -17160,11 +18523,11 @@ func _render_pokemon_summary_evs(pokemon: Pokemon) -> void:
 			value,
 			stat.get("color", UI_BORDER_FOCUS) as Color
 		))
-	_add_summary_section_title("Stored EVs", POKEMON_SUMMARY_ACCENT)
+	_add_summary_section_title(LocalizationManager.text("ui.pokemon_summary.evs.stored"), POKEMON_SUMMARY_ACCENT)
 	pokemon_summary_content_stack.add_child(_create_summary_stored_evs_panel(pokemon.evs, pokemon.stored_evs))
 
 func _render_pokemon_summary_moves_tab(pokemon: Pokemon) -> void:
-	_add_summary_section_title("Moves", POKEMON_SUMMARY_ACCENT)
+	_add_summary_section_title(LocalizationManager.text("ui.pokemon_summary.tab.moves"), POKEMON_SUMMARY_ACCENT)
 	for move_index in range(4):
 		var move_value: Variant = {}
 		var move_name: String = "-"
@@ -17301,7 +18664,7 @@ func _create_summary_ev_box(stat_id: String, label_text: String, value: int, col
 	if panel is Button:
 		var button: Button = panel as Button
 		button.focus_mode = Control.FOCUS_NONE
-		button.tooltip_text = "Assign training points to %s" % label_text
+		button.tooltip_text = LocalizationManager.text("ui.pokemon_summary.evs.assign_to_stat", {"stat": label_text})
 		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		button.pressed.connect(_on_summary_allocated_ev_pressed.bind(stat_id, label_text, pokemon_summary_active_card_key))
 		button.add_theme_stylebox_override("normal", _make_panel_style(Color("#081321ef"), Color(color.r, color.g, color.b, 0.42), 7, 1))
@@ -17390,7 +18753,7 @@ func _create_summary_ev_total_panel(total_evs: int) -> Control:
 	stack.add_child(row)
 
 	var title := Label.new()
-	title.text = "TOTAL"
+	title.text = LocalizationManager.text("ui.pokemon_summary.evs.total").to_upper()
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.add_theme_font_size_override("font_size", 10)
 	title.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
@@ -17412,7 +18775,10 @@ func _create_summary_ev_total_panel(total_evs: int) -> Control:
 	bar.show_percentage = false
 	bar.custom_minimum_size = Vector2(0, 8)
 	bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	bar.tooltip_text = "Training points assigned: %s/%s" % [clamped_total, POKEMON_EV_TOTAL_LIMIT]
+	bar.tooltip_text = LocalizationManager.text("ui.pokemon_summary.evs.training_assigned", {
+		"current": clamped_total,
+		"max": POKEMON_EV_TOTAL_LIMIT,
+	})
 	bar.add_theme_stylebox_override("background", _make_panel_style(Color("#050912e8"), Color("#263b58"), 3, 1))
 	bar.add_theme_stylebox_override("fill", _make_panel_style(Color("#62d7ff"), Color("#62d7ff"), 3, 0))
 	stack.add_child(bar)
@@ -17425,7 +18791,11 @@ func _create_summary_ev_training_row(stat_id: String, label_text: String, value:
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(0, 31)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	panel.tooltip_text = "%s training points: %s/%s" % [label_text, clamped_value, POKEMON_EV_STAT_LIMIT]
+	panel.tooltip_text = LocalizationManager.text("ui.pokemon_summary.evs.stat_training_points", {
+		"stat": label_text,
+		"current": clamped_value,
+		"max": POKEMON_EV_STAT_LIMIT,
+	})
 	panel.add_theme_stylebox_override(
 		"panel",
 		_make_panel_style(
@@ -17503,7 +18873,11 @@ func _create_summary_stored_evs_panel(allocated_evs: Dictionary, stored_evs: Dic
 		stored_total += int(stored_evs.get(stat_id, 0))
 
 	var total_label := Label.new()
-	total_label.text = "AVAILABLE: %s    TOTAL CAPACITY: %s / %s" % [stored_total, allocated_total + stored_total, POKEMON_EV_TOTAL_LIMIT]
+	total_label.text = LocalizationManager.text("ui.pokemon_summary.evs.available_capacity", {
+		"available": stored_total,
+		"current": allocated_total + stored_total,
+		"max": POKEMON_EV_TOTAL_LIMIT,
+	})
 	total_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	total_label.add_theme_font_size_override("font_size", 10)
 	total_label.add_theme_color_override("font_color", Color("#f5df9a"))
@@ -17568,8 +18942,12 @@ func _on_summary_allocated_ev_pressed(stat_id: String, label_text: String, card_
 	var max_value: int = min(252, current_value + stored_for_stat, current_value + total_room)
 
 	pokemon_summary_ev_allocate_stat_id = stat_id
-	pokemon_summary_ev_allocate_stat_label.text = "Allocate %s EVs" % label_text
-	pokemon_summary_ev_allocate_current_label.text = "Current: %s    Allocated: %s / 510    Stored for stat: %s" % [current_value, allocated_total, stored_for_stat]
+	pokemon_summary_ev_allocate_stat_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocate_stat", {"stat": label_text})
+	pokemon_summary_ev_allocate_current_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocate_current", {
+		"current": current_value,
+		"allocated": allocated_total,
+		"stored": stored_for_stat,
+	})
 	pokemon_summary_ev_allocate_input.min_value = current_value
 	pokemon_summary_ev_allocate_input.max_value = max(current_value, max_value)
 	pokemon_summary_ev_allocate_input.value = current_value
@@ -17584,6 +18962,32 @@ func _hide_pokemon_summary_ev_allocate_popup() -> void:
 		_deactivate_ui_panel(pokemon_summary_ev_allocate_popup)
 	pokemon_summary_ev_allocate_stat_id = ""
 
+func _refresh_pokemon_summary_ev_allocate_translation() -> void:
+	if pokemon_summary_ev_allocate_popup == null:
+		return
+	if not pokemon_summary_ev_allocate_popup.visible:
+		pokemon_summary_ev_allocate_stat_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocate")
+		return
+	if pokemon_summary_selected_slot < 0 or pokemon_summary_selected_slot >= PlayerSave.party.size():
+		return
+	var pokemon: Pokemon = PlayerSave.party[pokemon_summary_selected_slot]
+	var stat_id := pokemon_summary_ev_allocate_stat_id
+	if pokemon == null or stat_id == "":
+		return
+	var current_value: int = int(pokemon.evs.get(stat_id, 0))
+	var allocated_total: int = _get_summary_ev_total(pokemon.evs)
+	var stored_for_stat: int = clampi(int(pokemon.stored_evs.get(stat_id, 0)), 0, POKEMON_EV_STAT_LIMIT)
+	pokemon_summary_ev_allocate_stat_label.text = LocalizationManager.text(
+		"ui.pokemon_summary.evs.allocate_stat",
+		{"stat": _summary_stat_label(stat_id)}
+	)
+	pokemon_summary_ev_allocate_current_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocate_current", {
+		"current": current_value,
+		"allocated": allocated_total,
+		"stored": stored_for_stat,
+	})
+	_refresh_summary_ev_allocate_status()
+
 func _on_summary_ev_allocate_value_changed(_value: float) -> void:
 	_refresh_summary_ev_allocate_status()
 
@@ -17596,7 +19000,7 @@ func _on_summary_ev_allocate_confirm_pressed() -> void:
 
 	var pokemon: Pokemon = PlayerSave.party[pokemon_summary_selected_slot]
 	if pokemon == null or pokemon.owned_pokemon_id <= 0:
-		pokemon_summary_ev_allocate_status_label.text = "This Pokémon can’t be changed right now."
+		pokemon_summary_ev_allocate_status_label.text = LocalizationManager.text("ui.pokemon_summary.readonly_error")
 		pokemon_summary_ev_allocate_status_label.add_theme_color_override("font_color", UI_DANGER)
 		return
 
@@ -17604,24 +19008,24 @@ func _on_summary_ev_allocate_confirm_pressed() -> void:
 	var requested_value: int = int(pokemon_summary_ev_allocate_input.value)
 	pokemon_summary_ev_allocate_confirm_button.disabled = true
 	pokemon_summary_ev_allocate_input.editable = false
-	pokemon_summary_ev_allocate_status_label.text = "Allocating EVs..."
+	pokemon_summary_ev_allocate_status_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocating")
 	pokemon_summary_ev_allocate_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 
 	var result: Dictionary = await PlayerPartyStateService.allocate_pokemon_evs(pokemon.owned_pokemon_id, stat_id, requested_value)
 	pokemon_summary_ev_allocate_input.editable = true
 	if not bool(result.get("success", false)):
-		pokemon_summary_ev_allocate_status_label.text = str(result.get("error", "Could not allocate EVs."))
+		pokemon_summary_ev_allocate_status_label.text = str(result.get("error", LocalizationManager.text("ui.pokemon_summary.evs.allocate_failed")))
 		pokemon_summary_ev_allocate_status_label.add_theme_color_override("font_color", UI_DANGER)
 		_refresh_summary_ev_allocate_status()
 		return
 
 	var allocation: Dictionary = _staff_dictionary_from_variant(result.get("allocation", {}))
 	var added_value: int = max(int(allocation.get("addedValue", 0)), 0)
-	_add_chat_message("%s allocated +%s %s EVs." % [
-		str(allocation.get("species", pokemon.species)),
-		added_value,
-		_summary_stat_label(stat_id),
-	])
+	_add_chat_message(LocalizationManager.text("ui.pokemon_summary.evs.allocated_message", {
+		"pokemon": _pokemon_display_name(pokemon),
+		"amount": added_value,
+		"stat": _summary_stat_label(stat_id),
+	}))
 	_hide_pokemon_summary_ev_allocate_popup()
 	_refresh_open_pokemon_summary_cards()
 
@@ -17643,13 +19047,13 @@ func _refresh_summary_ev_allocate_status() -> void:
 	var error_text := ""
 
 	if requested_value < current_value:
-		error_text = "Value cannot be lower than the current allocated EVs."
+		error_text = LocalizationManager.text("ui.pokemon_summary.evs.error.below_current")
 	elif requested_value > 252:
-		error_text = "A stat cannot exceed 252 EVs."
+		error_text = LocalizationManager.text("ui.pokemon_summary.evs.error.stat_limit")
 	elif requested_allocated_total > 510:
-		error_text = "Allocated EVs cannot exceed 510 total."
+		error_text = LocalizationManager.text("ui.pokemon_summary.evs.error.total_limit")
 	elif added_value > stored_for_stat:
-		error_text = "Not enough stored %s EVs available." % _summary_stat_label(stat_id)
+		error_text = LocalizationManager.text("ui.pokemon_summary.evs.error.not_enough_stored", {"stat": _summary_stat_label(stat_id)})
 
 	if error_text != "":
 		pokemon_summary_ev_allocate_status_label.text = error_text
@@ -17657,7 +19061,10 @@ func _refresh_summary_ev_allocate_status() -> void:
 		pokemon_summary_ev_allocate_confirm_button.disabled = true
 		return
 
-	pokemon_summary_ev_allocate_status_label.text = "Will allocate +%s EVs. New allocated total: %s / 510." % [max(added_value, 0), requested_allocated_total]
+	pokemon_summary_ev_allocate_status_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocation_preview", {
+		"amount": max(added_value, 0),
+		"total": requested_allocated_total,
+	})
 	pokemon_summary_ev_allocate_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	pokemon_summary_ev_allocate_confirm_button.disabled = added_value <= 0
 
@@ -17709,9 +19116,11 @@ func _create_summary_move_card(
 	panel.connect("direct_action_requested", Callable(self, "_on_pokemon_summary_direct_move_requested"))
 	panel.custom_minimum_size = Vector2(0, 50)
 	if can_reorder:
-		panel.tooltip_text = "%s\nDrag to reorder moves." % description_text if description_text != "" else "Drag to reorder moves."
+		var reorder_hint := LocalizationManager.text("ui.pokemon_summary.moves.drag_to_reorder")
+		panel.tooltip_text = "%s\n%s" % [description_text, reorder_hint] if description_text != "" else reorder_hint
 	elif _is_world_battle_active() and move_id != "":
-		panel.tooltip_text = "%s\nMove order cannot be changed during a battle." % description_text if description_text != "" else "Move order cannot be changed during a battle."
+		var battle_hint := LocalizationManager.text("ui.pokemon_summary.moves.reorder_during_battle")
+		panel.tooltip_text = "%s\n%s" % [description_text, battle_hint] if description_text != "" else battle_hint
 	else:
 		panel.tooltip_text = description_text
 	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#081321ef"), POKEMON_SUMMARY_ACCENT_FAINT, 8, 1))
@@ -17763,7 +19172,7 @@ func _create_summary_move_card(
 		type_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		type_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		type_icon.texture = type_icon_texture
-		type_icon.tooltip_text = description_text if description_text != "" else move_type.capitalize()
+		type_icon.tooltip_text = description_text if description_text != "" else _localized_type_name(move_type)
 		type_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		top_row.add_child(type_icon)
 	elif move_type.strip_edges() != "":
@@ -17780,7 +19189,7 @@ func _create_summary_move_card(
 		direct_action_button.disabled = not can_reorder
 		direct_action_button.modulate = Color.WHITE if can_reorder else Color(1, 1, 1, 0.38)
 		direct_action_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-		direct_action_button.tooltip_text = "Use %s while exploring." % move_name
+		direct_action_button.tooltip_text = LocalizationManager.text("ui.pokemon_summary.moves.use_while_exploring", {"move": move_name})
 		direct_action_button.pressed.connect(Callable(panel, "request_direct_action"))
 		top_row.add_child(direct_action_button)
 
@@ -17789,7 +19198,7 @@ func _create_summary_move_card(
 	meta_row.add_theme_constant_override("separation", 8)
 	stack.add_child(meta_row)
 	meta_row.add_child(_create_summary_move_meta_label("PP", pp_text, Color("#ff5da8"), description_text))
-	meta_row.add_child(_create_summary_move_meta_label("Power", power_text, Color("#f2cf78"), description_text))
+	meta_row.add_child(_create_summary_move_meta_label(LocalizationManager.text("ui.pokemon_summary.moves.power"), power_text, Color("#f2cf78"), description_text))
 	meta_row.add_child(_create_summary_move_meta_label("ACC", accuracy_text, Color("#d9ecff"), description_text))
 	_set_control_tree_mouse_filter(margin, Control.MOUSE_FILTER_IGNORE)
 	if direct_action_button != null:
@@ -17803,9 +19212,9 @@ func _on_pokemon_summary_direct_move_requested(card_key: String, pokemon_id: int
 		return
 	var result: Dictionary = await FieldMoveService.use_direct_field_move(move_id, pokemon_id)
 	if not bool(result.get("success", false)):
-		_add_chat_message(str(result.get("error", "That overworld move cannot be used right now.")))
+		_add_chat_message(str(result.get("error", LocalizationManager.text("ui.pokemon_summary.moves.field_move_unavailable"))))
 		return
-	_add_chat_message(str(result.get("message", "%s was used." % _format_move_name(move_id))))
+	_add_chat_message(str(result.get("message", LocalizationManager.text("ui.pokemon_summary.moves.used", {"move": _format_move_name(move_id)}))))
 
 func _on_pokemon_summary_move_reorder_drag_started(card_key: String, pokemon_id: int, source_move_id: String) -> void:
 	if not _apply_pokemon_summary_card_context(card_key):
@@ -17870,7 +19279,7 @@ func _on_pokemon_summary_move_reorder_requested(card_key: String, pokemon_id: in
 	var move_ids: Array[String] = _get_summary_move_ids(reordered_moves)
 	if move_ids.is_empty() or move_ids.size() != reordered_moves.size():
 		_render_pokemon_summary_content(pokemon)
-		_add_chat_message("Could not reorder moves because the move data is invalid.")
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.moves.invalid_reorder_data"))
 		return
 	if move_ids == original_move_ids:
 		_render_pokemon_summary_content(pokemon)
@@ -17889,7 +19298,7 @@ func _on_pokemon_summary_move_reorder_requested(card_key: String, pokemon_id: in
 	if rollback_pokemon != null:
 		rollback_pokemon.moves = original_moves
 	_refresh_open_pokemon_summary_cards()
-	_add_chat_message("Could not save the new move order. The previous order was restored.")
+	_add_chat_message(LocalizationManager.text("ui.pokemon_summary.moves.reorder_failed"))
 	push_warning("UIOverlay: move reorder failed: %s" % str(result.get("error", "Unknown error")))
 
 func _on_pokemon_summary_move_reorder_drag_finished(
@@ -17966,8 +19375,9 @@ func _create_summary_move_type_label(move_type: String) -> Control:
 	panel.add_child(margin)
 
 	var label := Label.new()
-	label.text = move_type.to_upper()
-	label.tooltip_text = move_type.capitalize()
+	var localized_type := _localized_type_name(move_type)
+	label.text = localized_type.to_upper()
+	label.tooltip_text = localized_type
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_make_label_clip_width(label)
@@ -18006,12 +19416,12 @@ func _render_stat_bar_list(values: Dictionary, max_value: int, use_actual_max: b
 
 func _summary_stat_order() -> Array[Dictionary]:
 	return [
-		{"id": "hp", "label": "HP", "color": Color("#ff5d69")},
-		{"id": "atk", "label": "ATK", "color": Color("#ffb347")},
-		{"id": "def", "label": "DEF", "color": Color("#ffd95d")},
-		{"id": "spa", "label": "SP.ATK", "color": Color("#38bdf8")},
-		{"id": "spd", "label": "SP.DEF", "color": Color("#73e26d")},
-		{"id": "spe", "label": "SPEED", "color": Color("#e879f9")},
+		{"id": "hp", "label": LocalizationManager.text("pokemon.stat.hp"), "color": Color("#ff5d69")},
+		{"id": "atk", "label": LocalizationManager.text("pokemon.stat.attack"), "color": Color("#ffb347")},
+		{"id": "def", "label": LocalizationManager.text("pokemon.stat.defense"), "color": Color("#ffd95d")},
+		{"id": "spa", "label": LocalizationManager.text("pokemon.stat.special_attack"), "color": Color("#38bdf8")},
+		{"id": "spd", "label": LocalizationManager.text("pokemon.stat.special_defense"), "color": Color("#73e26d")},
+		{"id": "spe", "label": LocalizationManager.text("pokemon.stat.speed"), "color": Color("#e879f9")},
 	]
 
 func _summary_stat_label(stat_id: String) -> String:
@@ -18041,14 +19451,7 @@ func _refresh_pokemon_summary_stats(pokemon: Pokemon) -> void:
 	for child: Node in pokemon_summary_stats_list.get_children():
 		child.queue_free()
 
-	var stat_order: Array[Dictionary] = [
-		{"id": "hp", "label": "HP", "color": Color("#ff5d69")},
-		{"id": "atk", "label": "ATK", "color": Color("#ffb347")},
-		{"id": "def", "label": "DEF", "color": Color("#ffd95d")},
-		{"id": "spa", "label": "SP.ATK", "color": Color("#38bdf8")},
-		{"id": "spd", "label": "SP.DEF", "color": Color("#73e26d")},
-		{"id": "spe", "label": "SPEED", "color": Color("#e879f9")},
-	]
+	var stat_order: Array[Dictionary] = _summary_stat_order()
 	var max_stat: int = 1
 	for stat_value: Variant in stat_order:
 		var stat: Dictionary = stat_value
@@ -18101,7 +19504,7 @@ func _refresh_pokemon_summary_moves(pokemon: Pokemon) -> void:
 		child.queue_free()
 
 	var title := Label.new()
-	title.text = "Moves"
+	title.text = LocalizationManager.text("ui.pokemon_summary.tab.moves")
 	title.add_theme_font_size_override("font_size", 14)
 	title.add_theme_color_override("font_color", UI_MONEY)
 	pokemon_summary_moves_list.add_child(title)
@@ -18141,7 +19544,11 @@ func _set_pokemon_summary_ball_button(pokemon: Pokemon) -> void:
 	pokemon_summary_ball_icon.modulate = Color(1, 1, 1, 0.45) if ball_texture == null else Color(1, 1, 1, 1)
 	pokemon_summary_ball_button.disabled = _is_pokemon_summary_readonly()
 	pokemon_summary_ball_button.mouse_default_cursor_shape = Control.CURSOR_ARROW if _is_pokemon_summary_readonly() else Control.CURSOR_POINTING_HAND
-	pokemon_summary_ball_button.tooltip_text = "You can view this Pokémon, but not change it here." if _is_pokemon_summary_readonly() else "Current Poké Ball: %s. Click to change it." % _item_name_from_id(ball_item_id)
+	pokemon_summary_ball_button.tooltip_text = (
+		LocalizationManager.text("ui.pokemon_summary.readonly_tooltip")
+		if _is_pokemon_summary_readonly()
+		else LocalizationManager.text("ui.pokemon_summary.ball.current_tooltip", {"ball": _item_name_from_id(ball_item_id)})
+	)
 
 func _on_pokemon_summary_ball_button_pressed(card_key: String = "") -> void:
 	_apply_pokemon_summary_card_context(card_key)
@@ -18149,11 +19556,11 @@ func _on_pokemon_summary_ball_button_pressed(card_key: String = "") -> void:
 		return
 	var pokemon_value: Variant = _get_selected_summary_pokemon()
 	if not (pokemon_value is Pokemon):
-		_add_chat_message("This Pokémon can’t be changed right now.")
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.readonly_error"))
 		return
 	var pokemon: Pokemon = pokemon_value as Pokemon
 	if pokemon.owned_pokemon_id <= 0:
-		_add_chat_message("This Pokémon can’t be changed right now.")
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.readonly_error"))
 		return
 
 	await _ensure_bag_inventory_loaded()
@@ -18194,12 +19601,16 @@ func _refresh_pokemon_summary_ball_picker(pokemon: Pokemon) -> void:
 
 	if added_count <= 0:
 		var empty_label := Label.new()
-		empty_label.text = "No matching Poké Balls." if query != "" else "No Poké Balls in your bag."
+		empty_label.text = (
+			LocalizationManager.text("ui.pokemon_summary.ball.no_matches")
+			if query != ""
+			else LocalizationManager.text("ui.pokemon_summary.ball.none_in_bag")
+		)
 		empty_label.add_theme_font_size_override("font_size", 12)
 		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		pokemon_summary_ball_list.add_child(empty_label)
 	elif query == "" and has_more_matches:
-		pokemon_summary_ball_list.add_child(_create_summary_picker_hint("Search to narrow Poké Balls."))
+		pokemon_summary_ball_list.add_child(_create_summary_picker_hint(LocalizationManager.text("ui.pokemon_summary.ball.search_hint")))
 
 func _on_pokemon_summary_ball_search_changed(_text: String) -> void:
 	var pokemon_value: Variant = _get_selected_summary_pokemon()
@@ -18244,11 +19655,11 @@ func _on_pokemon_summary_ball_selected(item_id: String, card_key: String = "") -
 		return
 	var pokemon_value: Variant = _get_selected_summary_pokemon()
 	if not (pokemon_value is Pokemon):
-		_add_chat_message("This Pokémon can’t be changed right now.")
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.readonly_error"))
 		return
 	var pokemon: Pokemon = pokemon_value as Pokemon
 	if pokemon.owned_pokemon_id <= 0:
-		_add_chat_message("This Pokémon can’t be changed right now.")
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.readonly_error"))
 		return
 
 	var current_ball_item_id := _get_pokemon_ball_item_id(pokemon)
@@ -18258,15 +19669,12 @@ func _on_pokemon_summary_ball_selected(item_id: String, card_key: String = "") -
 	pokemon_summary_pending_ball_item_id = item_id
 	pokemon_summary_pending_ball_card_key = card_key
 	_show_ui_confirm_popup(
-		"Change Poké Ball",
-		"Change this Pokemon's Poké Ball from %s to %s?\n\n%s will not be returned to your Bag, and %s will be consumed."
-			% [
-				_item_name_from_id(current_ball_item_id),
-				_item_name_from_id(item_id),
-				_item_name_from_id(current_ball_item_id),
-				_item_name_from_id(item_id),
-			],
-		"Change Ball",
+		LocalizationManager.text("ui.pokemon_summary.ball.confirm_title"),
+		LocalizationManager.text("ui.pokemon_summary.ball.confirm_message", {
+			"current_ball": _item_name_from_id(current_ball_item_id),
+			"new_ball": _item_name_from_id(item_id),
+		}),
+		LocalizationManager.text("ui.pokemon_summary.ball.confirm_action"),
 		Callable(self, "_on_pokemon_summary_ball_change_confirmed"),
 		Vector2i(480, 0)
 	)
@@ -18286,16 +19694,18 @@ func _apply_pokemon_summary_ball_change(item_id: String, card_key: String = "") 
 		return
 	var pokemon_value: Variant = _get_selected_summary_pokemon()
 	if not (pokemon_value is Pokemon):
-		_add_chat_message("This Pokémon can’t be changed right now.")
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.readonly_error"))
 		return
 	var pokemon: Pokemon = pokemon_value as Pokemon
 	if pokemon.owned_pokemon_id <= 0:
-		_add_chat_message("This Pokémon can’t be changed right now.")
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.readonly_error"))
 		return
 
 	var result: Dictionary = await PlayerPartyStateService.set_pokemon_ball(pokemon.owned_pokemon_id, item_id)
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not change Poké Ball: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.ball.change_failed", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
 
 	bag_inventory_items = _normalize_bag_inventory_items(result.get("inventory", []))
@@ -18312,18 +19722,20 @@ func _on_pokemon_summary_held_item_slot_pressed(card_key: String = "") -> void:
 		return
 	var pokemon_value: Variant = _get_selected_summary_pokemon()
 	if not (pokemon_value is Pokemon):
-		_add_chat_message("This Pokémon can’t be changed right now.")
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.readonly_error"))
 		return
 	var pokemon: Pokemon = pokemon_value as Pokemon
 	if pokemon.owned_pokemon_id <= 0:
-		_add_chat_message("This Pokémon can’t be changed right now.")
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.readonly_error"))
 		return
 
 	var held_item_id: String = _get_pokemon_held_item_id(pokemon)
 	if held_item_id != "":
 		var result: Dictionary = await PlayerPartyStateService.take_pokemon_held_item(pokemon.owned_pokemon_id)
 		if not bool(result.get("success", false)):
-			_add_chat_message("Could not take item: %s" % str(result.get("error", "Unknown error")))
+			_add_chat_message(LocalizationManager.text("ui.pokemon_summary.held_item.take_failed", {
+				"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+			}))
 			return
 		bag_inventory_items = _normalize_bag_inventory_items(result.get("inventory", []))
 		bag_inventory_loaded = true
@@ -18356,12 +19768,20 @@ func _set_pokemon_summary_held_item_slot(pokemon: Pokemon) -> void:
 		pokemon_summary_held_item_slot_name_label.text = _item_name_from_id(held_item_id)
 		pokemon_summary_held_item_slot_name_label.tooltip_text = pokemon_summary_held_item_slot_name_label.text
 		if pokemon_summary_held_item_slot_button != null:
-			pokemon_summary_held_item_slot_button.tooltip_text = "You can view this Pokémon, but not change it here." if _is_pokemon_summary_readonly() else "Take this held item"
+			pokemon_summary_held_item_slot_button.tooltip_text = (
+				LocalizationManager.text("ui.pokemon_summary.readonly_tooltip")
+				if _is_pokemon_summary_readonly()
+				else LocalizationManager.text("ui.pokemon_summary.held_item.take_tooltip")
+			)
 	else:
-		pokemon_summary_held_item_slot_name_label.text = "No held item"
+		pokemon_summary_held_item_slot_name_label.text = LocalizationManager.text("ui.pokemon_summary.held_item.none")
 		pokemon_summary_held_item_slot_name_label.tooltip_text = pokemon_summary_held_item_slot_name_label.text
 		if pokemon_summary_held_item_slot_button != null:
-			pokemon_summary_held_item_slot_button.tooltip_text = "You can view this Pokémon, but not change it here." if _is_pokemon_summary_readonly() else "Give this Pokémon an item"
+			pokemon_summary_held_item_slot_button.tooltip_text = (
+				LocalizationManager.text("ui.pokemon_summary.readonly_tooltip")
+				if _is_pokemon_summary_readonly()
+				else LocalizationManager.text("ui.pokemon_summary.held_item.give_tooltip")
+			)
 	if pokemon_summary_held_item_slot_button != null:
 		pokemon_summary_held_item_slot_button.disabled = _is_pokemon_summary_readonly()
 		pokemon_summary_held_item_slot_button.mouse_default_cursor_shape = Control.CURSOR_ARROW if _is_pokemon_summary_readonly() else Control.CURSOR_POINTING_HAND
@@ -18395,12 +19815,16 @@ func _refresh_pokemon_summary_item_picker() -> void:
 
 	if added_count <= 0:
 		var empty_label := Label.new()
-		empty_label.text = "No matching held items." if query != "" else "No held items in your bag."
+		empty_label.text = (
+			LocalizationManager.text("ui.pokemon_summary.held_item.no_matches")
+			if query != ""
+			else LocalizationManager.text("ui.pokemon_summary.held_item.none_in_bag")
+		)
 		empty_label.add_theme_font_size_override("font_size", 12)
 		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		pokemon_summary_item_list.add_child(empty_label)
 	elif query == "" and has_more_matches:
-		pokemon_summary_item_list.add_child(_create_summary_picker_hint("Search to narrow held items."))
+		pokemon_summary_item_list.add_child(_create_summary_picker_hint(LocalizationManager.text("ui.pokemon_summary.held_item.search_hint")))
 
 func _on_pokemon_summary_item_search_changed(_text: String) -> void:
 	_refresh_pokemon_summary_item_picker()
@@ -18423,16 +19847,18 @@ func _on_pokemon_summary_item_selected(item_id: String, card_key: String = "") -
 		return
 	var pokemon_value: Variant = _get_selected_summary_pokemon()
 	if not (pokemon_value is Pokemon):
-		_add_chat_message("This Pokémon can’t be changed right now.")
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.readonly_error"))
 		return
 	var pokemon: Pokemon = pokemon_value as Pokemon
 	if pokemon.owned_pokemon_id <= 0:
-		_add_chat_message("This Pokémon can’t be changed right now.")
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.readonly_error"))
 		return
 
 	var result: Dictionary = await PlayerPartyStateService.give_pokemon_held_item(pokemon.owned_pokemon_id, item_id)
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not give item: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.held_item.give_failed", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
 
 	bag_inventory_items = _normalize_bag_inventory_items(result.get("inventory", []))
@@ -18479,7 +19905,7 @@ func _get_pokemon_ball_item_id(pokemon: Pokemon) -> String:
 	return ball_item_id if ball_item_id != "" else "poke-ball"
 
 func _format_move_name(move_id: String) -> String:
-	return _item_name_from_id(move_id)
+	return _localized_content_name("moves", move_id, _item_name_from_id(move_id))
 
 func _format_identifier_display_name(raw_value: String) -> String:
 	var cleaned: String = raw_value.strip_edges()
@@ -18492,7 +19918,7 @@ func _format_identifier_display_name(raw_value: String) -> String:
 
 	return " ".join(words)
 
-func _get_summary_move_name(move_value: Variant) -> String:
+func _get_summary_move_source_name(move_value: Variant) -> String:
 	if move_value is Dictionary:
 		var move_data: Dictionary = move_value as Dictionary
 		var move_name: String = str(move_data.get("name", "")).strip_edges()
@@ -18501,6 +19927,11 @@ func _get_summary_move_name(move_value: Variant) -> String:
 		return _format_move_name(str(move_data.get("id", move_data.get("move", ""))))
 
 	return _format_move_name(str(move_value))
+
+
+func _get_summary_move_name(move_value: Variant) -> String:
+	var source_name := _get_summary_move_source_name(move_value)
+	return _localized_content_name("moves", _get_summary_move_id(move_value), source_name)
 
 func _get_summary_move_type(move_value: Variant) -> String:
 	if not (move_value is Dictionary):
@@ -18544,9 +19975,9 @@ func _get_summary_move_type(move_value: Variant) -> String:
 			if indexed_type != "":
 				return indexed_type
 
-	var fallback_metadata: Dictionary = _lookup_summary_move_metadata(_get_summary_move_name(move_value))
+	var fallback_metadata: Dictionary = _lookup_summary_move_metadata(_get_summary_move_source_name(move_value))
 	var fallback_metadata_type: String = str(fallback_metadata.get("type", "")).strip_edges()
-	return fallback_metadata_type if fallback_metadata_type != "" else _lookup_summary_move_type(_get_summary_move_name(move_value))
+	return fallback_metadata_type if fallback_metadata_type != "" else _lookup_summary_move_type(_get_summary_move_source_name(move_value))
 
 func _lookup_summary_move_type(move_key: String) -> String:
 	var normalized_key: String = _normalize_summary_move_lookup_key(move_key)
@@ -18697,7 +20128,7 @@ func _get_summary_ability_description_text(ability_value: String) -> String:
 	)).strip_edges()
 	if description == "":
 		description = str(_get_first_dictionary_value(metadata, ["desc", "description"], "")).strip_edges()
-	return description
+	return _localized_content_description("abilities", ability_value, description)
 
 func _get_summary_ability_display_name(ability_value: String) -> String:
 	var cleaned: String = ability_value.strip_edges()
@@ -18706,10 +20137,8 @@ func _get_summary_ability_display_name(ability_value: String) -> String:
 
 	var metadata: Dictionary = _lookup_summary_ability_metadata(cleaned)
 	var metadata_name: String = str(_get_first_dictionary_value(metadata, ["name", "displayName", "display_name"], "")).strip_edges()
-	if metadata_name != "":
-		return metadata_name
-
-	return _format_identifier_display_name(cleaned)
+	var fallback_name := metadata_name if metadata_name != "" else _format_identifier_display_name(cleaned)
+	return _localized_content_name("abilities", cleaned, fallback_name)
 
 func _normalize_summary_move_lookup_key(value: String) -> String:
 	var normalized_key: String = value.strip_edges().to_lower()
@@ -18724,11 +20153,22 @@ func _normalize_summary_move_lookup_key(value: String) -> String:
 func _get_summary_move_id(move_value: Variant) -> String:
 	if move_value is Dictionary:
 		var move_data: Dictionary = move_value as Dictionary
-		return _normalize_summary_move_lookup_key(str(_get_first_dictionary_value(
-			move_data,
-			["id", "move", "name"],
-			""
-		)))
+		for key_value: Variant in ["id", "move", "moveId", "move_id", "name"]:
+			var move_key := str(move_data.get(str(key_value), "")).strip_edges()
+			if move_key == "":
+				continue
+			var metadata := _lookup_summary_move_metadata(move_key)
+			var canonical_id := _normalize_summary_move_lookup_key(str(metadata.get("id", "")))
+			if canonical_id != "":
+				return canonical_id
+
+		for key_value: Variant in ["moveId", "move_id", "move", "id", "name"]:
+			var fallback_id := _normalize_summary_move_lookup_key(
+				str(move_data.get(str(key_value), ""))
+			)
+			if fallback_id != "":
+				return fallback_id
+		return ""
 	return _normalize_summary_move_lookup_key(str(move_value))
 
 func _get_summary_move_pp_text(move_value: Variant) -> String:
@@ -18767,7 +20207,7 @@ func _get_summary_move_power_text(move_value: Variant) -> String:
 func _get_summary_move_accuracy_text(move_value: Variant) -> String:
 	var accuracy_value: Variant = _get_summary_move_data_value(move_value, ["accuracy", "acc"], null)
 	if accuracy_value is bool:
-		return "Always" if bool(accuracy_value) else "-"
+		return LocalizationManager.text("ui.pokemon_summary.moves.always") if bool(accuracy_value) else "-"
 	if accuracy_value == null or str(accuracy_value).strip_edges() == "":
 		return "-"
 
@@ -18784,7 +20224,7 @@ func _get_summary_move_description_text(move_value: Variant) -> String:
 	)).strip_edges()
 	if description == "":
 		description = str(_get_summary_move_data_value(move_value, ["desc", "description"], "")).strip_edges()
-	return description
+	return _localized_content_description("moves", _get_summary_move_id(move_value), description)
 
 func _get_summary_move_data_value(move_value: Variant, keys: Array[String], fallback: Variant) -> Variant:
 	if not (move_value is Dictionary):
@@ -19729,31 +21169,34 @@ func _apply_socials_menu_style() -> void:
 
 	var title_label: Label = socials_menu.get_node_or_null("MarginContainer/VBoxContainer/Header/Heading/Title") as Label
 	if title_label != null:
+		_set_localized_control_property(title_label, "text", "ui.social.title")
 		title_label.add_theme_color_override("font_color", UI_TEXT)
 		title_label.add_theme_font_size_override("font_size", 18)
 
 	var subtitle_label: Label = socials_menu.get_node_or_null("MarginContainer/VBoxContainer/Header/Heading/Subtitle") as Label
 	if subtitle_label != null:
+		_set_localized_control_property(subtitle_label, "text", "ui.social.subtitle")
 		subtitle_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	_set_localized_control_property(socials_close_button, "tooltip_text", "common.close")
 
 	_configure_launcher_card_button(
 		socials_friend_list_button,
-		"Friends",
-		"Manage friends and requests",
+		"ui.social.friends",
+		"ui.social.friends_description",
 		SOCIALS_FRIENDS_ICON,
 		Color("#7aa7f4")
 	)
 	_configure_launcher_card_button(
 		socials_players_on_map_button,
-		"Nearby Trainers",
-		"See who is on this map",
+		"ui.social.nearby",
+		"ui.social.nearby_description",
 		SOCIALS_NEARBY_ICON,
 		Color("#60d3ff")
 	)
 	_configure_launcher_card_button(
 		socials_mail_button,
-		"Mail",
-		"Read and send messages",
+		"ui.social.mail",
+		"ui.social.mail_description",
 		SOCIALS_MAIL_ICON,
 		Color("#f0cc70")
 	)
@@ -19785,7 +21228,7 @@ func _setup_chat_resize_button() -> void:
 	chat_resize_button.icon = CHAT_RESIZE_ICON
 	chat_resize_button.expand_icon = true
 	chat_resize_button.add_theme_constant_override("icon_max_width", 16)
-	chat_resize_button.tooltip_text = "Drag to resize chat"
+	_set_localized_control_property(chat_resize_button, "tooltip_text", "ui.chat.resize")
 	chat_resize_button.mouse_default_cursor_shape = Control.CURSOR_FDIAGSIZE
 	chat_resize_button.focus_mode = Control.FOCUS_NONE
 	chat_resize_button.z_index = UI_BASE_Z_INDEX
@@ -19829,6 +21272,10 @@ func _setup_chat_surface_ui() -> void:
 	)
 	chat_tabs_panel.add_child(chat_tabs_background)
 	chat_tabs_panel.move_child(chat_tabs_background, 0)
+	_set_localized_control_property(general_chat_tab_button, "text", "ui.chat.tab.general")
+	_set_localized_control_property(trade_chat_tab_button, "text", "ui.chat.tab.trade")
+	_set_localized_control_property(system_chat_tab_button, "text", "ui.chat.tab.system")
+	_set_localized_control_property(send_button, "text", "ui.chat.send")
 
 
 func _on_chat_resize_button_gui_input(event: InputEvent) -> void:
@@ -19862,7 +21309,7 @@ func _register_collapsible_panel(
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	button.z_index = UI_BASE_Z_INDEX
 	button.text = _collapsible_button_glyph(side, false)
-	button.tooltip_text = "Collapse"
+	_set_localized_control_property(button, "tooltip_text", "ui.chat.collapse")
 	button.focus_mode = Control.FOCUS_NONE
 	_apply_collapsible_button_style(button, side, false)
 	button.pressed.connect(_on_collapsible_panel_button_pressed.bind(panel_id))
@@ -19919,12 +21366,18 @@ func _apply_collapsible_panel_state(panel_id: String) -> void:
 			companion.visible = group_visible and bool(companion.get_meta("group_available", true))
 	button.visible = available
 	button.text = _collapsible_button_glyph(str(state.get("side", "right")), collapsed)
-	button.tooltip_text = "Expand" if collapsed else "Collapse"
+	_set_localized_control_property(
+		button,
+		"tooltip_text",
+		"ui.chat.expand" if collapsed else "ui.chat.collapse"
+	)
 	_apply_collapsible_button_style(button, str(state.get("side", "right")), collapsed)
 	if collapsed and panel_id == "staff_actions":
 		dev_actions_popup.visible = false
-		if content_creator_menu_popup != null:
-			content_creator_menu_popup.visible = false
+		if alpha_tools_popup != null:
+			alpha_tools_popup.visible = false
+		if content_creator_tools_popup != null:
+			content_creator_tools_popup.visible = false
 		if staff_tools_popup != null:
 			staff_tools_popup.visible = false
 		if staff_impersonate_popup != null:
@@ -20169,7 +21622,8 @@ func _get_escape_close_candidates() -> Array[Dictionary]:
 		{"panel": mail_popup, "close": Callable(self, "_on_mail_close_button_pressed")},
 		{"panel": friendlist_popup, "close": Callable(self, "_hide_friendlist_popup")},
 		{"panel": socials_menu, "close": Callable(self, "_hide_socials_menu")},
-		{"panel": content_creator_menu_popup, "close": Callable(self, "_hide_content_creator_menu_popup")},
+		{"panel": alpha_tools_popup, "close": Callable(self, "_hide_alpha_tools_popup")},
+		{"panel": content_creator_tools_popup, "close": Callable(self, "_hide_content_creator_tools_popup")},
 		{"panel": staff_tools_popup, "close": Callable(self, "_hide_staff_tools_popup")},
 		{"panel": dev_pokemon_popup, "close": Callable(self, "_hide_dev_pokemon_popup_for_escape")},
 		{"panel": dev_badge_progress_popup, "close": Callable(self, "_hide_dev_badge_progress_popup_for_escape")},
@@ -20465,7 +21919,7 @@ func _finish_party_drag(global_position: Vector2) -> void:
 		PlayerSave.party[target_index] = PlayerSave.party[source_index]
 		PlayerSave.party[source_index] = dragged_pokemon
 		PlayerSave.party_changed.emit()
-		_add_chat_message("Could not save party order. Please report this to staff.")
+		_add_chat_message(LocalizationManager.text("ui.chat.error.party_order"))
 		push_warning("UIOverlay: party swap failed: %s" % str(result.get("error", "Unknown error")))
 
 func _try_offer_party_drag_to_trade(global_position: Vector2) -> bool:
@@ -20527,11 +21981,15 @@ func _refresh_pending_chat_pokemon_attachment_preview() -> void:
 
 func _create_pending_chat_pokemon_button(pokemon_payload: Dictionary, index: int) -> Button:
 	var species: String = str(pokemon_payload.get("species", "Pokemon"))
+	var species_name := _localized_species_name(species, species)
 	var shiny: bool = bool(pokemon_payload.get("shiny", false))
 	var button := Button.new()
 	button.custom_minimum_size = Vector2(44, 34)
 	button.focus_mode = Control.FOCUS_NONE
-	button.tooltip_text = "Gift: %s. Click to remove." % species
+	button.tooltip_text = LocalizationManager.text(
+		"ui.chat.attachment.remove",
+		{"pokemon": species_name}
+	)
 	button.pressed.connect(_remove_pending_chat_pokemon_attachment.bind(index))
 	_apply_button_style(button)
 
@@ -20608,7 +22066,7 @@ func _setup_pm_chat_ui() -> void:
 
 	pm_tab_button = Button.new()
 	pm_tab_button.custom_minimum_size = Vector2(70, 28)
-	pm_tab_button.text = "PM"
+	_set_localized_control_property(pm_tab_button, "text", "ui.chat.tab.pm")
 	pm_tab_button.focus_mode = Control.FOCUS_NONE
 	pm_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_PM))
 	$Control/ChatTabsPanel/TabRow.add_child(pm_tab_button)
@@ -20623,8 +22081,8 @@ func _setup_pm_chat_ui() -> void:
 	pm_chat_container.add_theme_constant_override("separation", 8)
 
 	var global_empty_state := _create_chat_empty_state(
-		"No private messages yet",
-		"Open a trainer card or use /pm username in chat to start a conversation."
+		LocalizationManager.text("ui.chat.pm.empty_title"),
+		LocalizationManager.text("ui.chat.pm.empty_hint")
 	)
 	pm_empty_state = global_empty_state.get("container") as CenterContainer
 	pm_empty_title_label = global_empty_state.get("title") as Label
@@ -20698,9 +22156,9 @@ func _setup_guild_chat_ui() -> void:
 	guild_chat_tab_button = Button.new()
 	guild_chat_tab_button.name = "GuildButton"
 	guild_chat_tab_button.custom_minimum_size = Vector2(70, 28)
-	guild_chat_tab_button.text = "Guild"
+	_set_localized_control_property(guild_chat_tab_button, "text", "ui.chat.tab.guild")
 	guild_chat_tab_button.focus_mode = Control.FOCUS_NONE
-	guild_chat_tab_button.tooltip_text = "Chat with members of your guild"
+	_set_localized_control_property(guild_chat_tab_button, "tooltip_text", "ui.chat.guild.tooltip")
 	guild_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_GUILD))
 	$Control/ChatTabsPanel/TabRow.add_child(guild_chat_tab_button)
 	_apply_button_style(guild_chat_tab_button, "primary")
@@ -20808,9 +22266,9 @@ func _rebuild_chat_context_options() -> void:
 
 	var primary_tab := _active_primary_chat_tab_id()
 	if primary_tab == CHAT_TAB_GENERAL:
-		_add_chat_context_option("Global", CHAT_TAB_GENERAL, active_chat_tab == CHAT_TAB_GENERAL)
-		_add_chat_context_option("Trade", CHAT_TAB_TRADE, active_chat_tab == CHAT_TAB_TRADE)
-		_add_chat_context_option("Help", CHAT_TAB_HELP, active_chat_tab == CHAT_TAB_HELP)
+		_add_chat_context_option(LocalizationManager.text("ui.chat.channel.global"), CHAT_TAB_GENERAL, active_chat_tab == CHAT_TAB_GENERAL)
+		_add_chat_context_option(LocalizationManager.text("ui.chat.tab.trade"), CHAT_TAB_TRADE, active_chat_tab == CHAT_TAB_TRADE)
+		_add_chat_context_option(LocalizationManager.text("ui.chat.tab.help"), CHAT_TAB_HELP, active_chat_tab == CHAT_TAB_HELP)
 		_refresh_chat_context_scroll_size()
 		return
 	if primary_tab != CHAT_TAB_PM:
@@ -20901,41 +22359,44 @@ func _refresh_chat_context_selector() -> void:
 	chat_context_selector_button.disabled = false
 	match primary_tab:
 		CHAT_TAB_ALL:
-			chat_context_selector_button.text = "To: Global"
+			chat_context_selector_button.text = LocalizationManager.text("ui.chat.context.to_global")
 			chat_context_selector_button.disabled = true
-			chat_context_selector_button.tooltip_text = "You are viewing all chats. New messages are sent to Global."
+			chat_context_selector_button.tooltip_text = LocalizationManager.text("ui.chat.context.all_tooltip")
 		CHAT_TAB_GENERAL:
-			var channel_label := "Global"
+			var channel_label := LocalizationManager.text("ui.chat.channel.global")
 			if active_chat_tab == CHAT_TAB_TRADE:
-				channel_label = "Trade"
+				channel_label = LocalizationManager.text("ui.chat.tab.trade")
 			elif active_chat_tab == CHAT_TAB_HELP:
-				channel_label = "Help"
-			chat_context_selector_button.text = "%s  ▴" % channel_label
-			chat_context_selector_button.tooltip_text = "Choose Global, Trade, or Help chat"
+				channel_label = LocalizationManager.text("ui.chat.tab.help")
+			chat_context_selector_button.text = LocalizationManager.text(
+				"ui.chat.context.selector",
+				{"channel": channel_label}
+			)
+			chat_context_selector_button.tooltip_text = LocalizationManager.text("ui.chat.context.choose_channel")
 		CHAT_TAB_MAP:
-			chat_context_selector_button.text = "Map"
+			chat_context_selector_button.text = LocalizationManager.text("ui.chat.tab.map")
 			chat_context_selector_button.disabled = true
-			chat_context_selector_button.tooltip_text = "Only nearby trainers on this map can see these messages"
+			chat_context_selector_button.tooltip_text = LocalizationManager.text("ui.chat.map.visibility")
 		CHAT_TAB_PM:
 			if active_pm_user_id != 0 and pm_conversations_by_user_id.has(active_pm_user_id):
 				var conversation := _dictionary_from_value(pm_conversations_by_user_id.get(active_pm_user_id, {}))
 				var user := _dictionary_from_value(conversation.get("user", {}))
 				chat_context_selector_button.text = "%s  ▴" % _pm_conversation_title(user, 0)
 			else:
-				chat_context_selector_button.text = "Select PM  ▴"
+				chat_context_selector_button.text = LocalizationManager.text("ui.chat.context.select_pm")
 			chat_context_selector_button.disabled = pm_conversations_by_user_id.is_empty()
 			chat_context_selector_button.tooltip_text = (
-				"No PM conversations yet"
+				LocalizationManager.text("ui.chat.pm.no_conversations")
 				if pm_conversations_by_user_id.is_empty()
-				else "Choose private conversation"
+				else LocalizationManager.text("ui.chat.pm.choose_conversation")
 			)
 		CHAT_TAB_GUILD:
-			chat_context_selector_button.text = "Guild"
+			chat_context_selector_button.text = LocalizationManager.text("ui.chat.tab.guild")
 			chat_context_selector_button.disabled = guild_chat_membership.is_empty()
 			chat_context_selector_button.tooltip_text = (
-				"Chat with members of your guild"
+				LocalizationManager.text("ui.chat.guild.tooltip")
 				if not guild_chat_membership.is_empty()
-				else "Join a guild to use Guild chat"
+				else LocalizationManager.text("ui.chat.guild.join_required")
 			)
 
 
@@ -20946,9 +22407,9 @@ func _setup_all_chat_tab() -> void:
 	all_chat_tab_button = Button.new()
 	all_chat_tab_button.name = "AllButton"
 	all_chat_tab_button.custom_minimum_size = Vector2(70, 28)
-	all_chat_tab_button.text = "All"
+	_set_localized_control_property(all_chat_tab_button, "text", "ui.chat.tab.all")
 	all_chat_tab_button.focus_mode = Control.FOCUS_NONE
-	all_chat_tab_button.tooltip_text = "Show messages from every chat"
+	_set_localized_control_property(all_chat_tab_button, "tooltip_text", "ui.chat.all.tooltip")
 	all_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_ALL))
 	$Control/ChatTabsPanel/TabRow.add_child(all_chat_tab_button)
 	_apply_button_style(all_chat_tab_button, "primary")
@@ -20962,9 +22423,9 @@ func _setup_map_chat_tab() -> void:
 	map_chat_tab_button = Button.new()
 	map_chat_tab_button.name = "MapButton"
 	map_chat_tab_button.custom_minimum_size = Vector2(70, 28)
-	map_chat_tab_button.text = "Map"
+	_set_localized_control_property(map_chat_tab_button, "text", "ui.chat.tab.map")
 	map_chat_tab_button.focus_mode = Control.FOCUS_NONE
-	map_chat_tab_button.tooltip_text = "Chat with trainers on your current map"
+	_set_localized_control_property(map_chat_tab_button, "tooltip_text", "ui.chat.map.tooltip")
 	map_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_MAP))
 	$Control/ChatTabsPanel/TabRow.add_child(map_chat_tab_button)
 	_apply_button_style(map_chat_tab_button, "primary")
@@ -20977,7 +22438,7 @@ func _setup_help_chat_tab() -> void:
 
 	help_chat_tab_button = Button.new()
 	help_chat_tab_button.custom_minimum_size = Vector2(70, 28)
-	help_chat_tab_button.text = "Help"
+	_set_localized_control_property(help_chat_tab_button, "text", "ui.chat.tab.help")
 	help_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	help_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_HELP))
 	$Control/ChatTabsPanel/TabRow.add_child(help_chat_tab_button)
@@ -21007,7 +22468,7 @@ func _setup_chat_tab_settings_ui() -> void:
 	chat_settings_button.text = "⋯"
 	chat_settings_button.custom_minimum_size = Vector2(32, 28)
 	chat_settings_button.focus_mode = Control.FOCUS_NONE
-	chat_settings_button.tooltip_text = "Chat settings"
+	_set_localized_control_property(chat_settings_button, "tooltip_text", "ui.chat.settings.tooltip")
 	chat_settings_button.pressed.connect(_on_chat_settings_button_pressed)
 	tab_row.add_child(chat_settings_button)
 	_apply_button_style(chat_settings_button)
@@ -21039,7 +22500,7 @@ func _setup_chat_tab_settings_ui() -> void:
 	content.add_child(header)
 
 	var title := Label.new()
-	title.text = "Chat tabs"
+	_set_localized_control_property(title, "text", "ui.chat.settings.title")
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.add_theme_font_size_override("font_size", 15)
 	title.add_theme_color_override("font_color", UI_TEXT)
@@ -21050,14 +22511,14 @@ func _setup_chat_tab_settings_ui() -> void:
 	close_button.text = "×"
 	close_button.custom_minimum_size = Vector2(28, 26)
 	close_button.focus_mode = Control.FOCUS_NONE
-	close_button.tooltip_text = "Close"
+	_set_localized_control_property(close_button, "tooltip_text", "common.close")
 	close_button.pressed.connect(_hide_chat_settings_popup)
 	_apply_button_style(close_button)
 	_apply_compact_chat_settings_button_style(close_button)
 	header.add_child(close_button)
 
 	var description := Label.new()
-	description.text = "Choose visible main tabs and their order."
+	_set_localized_control_property(description, "text", "ui.chat.settings.description")
 	description.add_theme_font_size_override("font_size", 11)
 	description.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	content.add_child(description)
@@ -21076,7 +22537,7 @@ func _setup_chat_tab_settings_ui() -> void:
 	content.add_child(footer)
 
 	var saved_label := Label.new()
-	saved_label.text = "Saved automatically"
+	_set_localized_control_property(saved_label, "text", "ui.chat.settings.saved_automatically")
 	saved_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	saved_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	saved_label.add_theme_font_size_override("font_size", 10)
@@ -21085,10 +22546,10 @@ func _setup_chat_tab_settings_ui() -> void:
 
 	var reset_button := Button.new()
 	reset_button.name = "ResetButton"
-	reset_button.text = "Reset"
+	_set_localized_control_property(reset_button, "text", "ui.chat.settings.reset")
 	reset_button.custom_minimum_size = Vector2(62, 28)
 	reset_button.focus_mode = Control.FOCUS_NONE
-	reset_button.tooltip_text = "Restore the default chat tabs"
+	_set_localized_control_property(reset_button, "tooltip_text", "ui.chat.settings.reset_tooltip")
 	reset_button.pressed.connect(_on_chat_tab_settings_reset_pressed)
 	_apply_button_style(reset_button)
 	_apply_compact_chat_settings_button_style(reset_button)
@@ -21113,6 +22574,34 @@ func _apply_compact_chat_settings_button_style(button: Button) -> void:
 		compact_style.content_margin_bottom = 3
 		button.add_theme_stylebox_override(style_name, compact_style)
 
+func _chat_tab_label(tab_id: String) -> String:
+	var key := str(CHAT_TAB_LABELS.get(tab_id, ""))
+	return LocalizationManager.text(key) if key != "" else tab_id.capitalize()
+
+func _refresh_chat_localized_ui() -> void:
+	if chat_panel != null:
+		LocalizationManager.localize_tree(chat_panel)
+	if chat_tabs_panel != null:
+		LocalizationManager.localize_tree(chat_tabs_panel)
+	if chat_settings_popup != null:
+		LocalizationManager.localize_tree(chat_settings_popup)
+		_render_chat_tab_settings_rows()
+	if socials_menu != null:
+		LocalizationManager.localize_tree(socials_menu)
+	for state_value: Variant in collapsible_panels.values():
+		var state := state_value as Dictionary
+		var button := state.get("button") as Button
+		if button != null:
+			_set_localized_control_property(
+				button,
+				"tooltip_text",
+				"ui.chat.expand" if bool(state.get("collapsed", false)) else "ui.chat.collapse"
+			)
+	_refresh_pending_chat_pokemon_attachment_preview()
+	_apply_chat_tab_state()
+	if chat_context_popup != null and chat_context_popup.visible:
+		_rebuild_chat_context_options()
+
 
 func _render_chat_tab_settings_rows() -> void:
 	if chat_settings_rows == null:
@@ -21123,23 +22612,24 @@ func _render_chat_tab_settings_rows() -> void:
 
 	for order_index: int in range(chat_tab_order.size()):
 		var tab_id := chat_tab_order[order_index]
+		var tab_label := _chat_tab_label(tab_id)
 		var row := HBoxContainer.new()
-		row.name = "%sRow" % str(CHAT_TAB_LABELS.get(tab_id, tab_id))
+		row.name = "%sRow" % tab_id.capitalize()
 		row.custom_minimum_size = Vector2(0, 30)
 		row.add_theme_constant_override("separation", 5)
 		chat_settings_rows.add_child(row)
 
 		var visibility_toggle := CheckButton.new()
 		visibility_toggle.name = "VisibilityToggle"
-		visibility_toggle.text = str(CHAT_TAB_LABELS.get(tab_id, tab_id))
+		visibility_toggle.text = tab_label
 		visibility_toggle.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		visibility_toggle.focus_mode = Control.FOCUS_NONE
 		visibility_toggle.set_pressed_no_signal(bool(chat_tab_visibility.get(tab_id, true)))
 		visibility_toggle.disabled = tab_id in [CHAT_TAB_ALL, CHAT_TAB_GENERAL]
 		visibility_toggle.tooltip_text = (
-			"%s always stays visible." % str(CHAT_TAB_LABELS.get(tab_id, tab_id))
+			LocalizationManager.text("ui.chat.settings.always_visible", {"tab": tab_label})
 			if visibility_toggle.disabled
-			else "Show or hide this chat tab."
+			else LocalizationManager.text("ui.chat.settings.toggle_tab")
 		)
 		visibility_toggle.add_theme_font_size_override("font_size", 13)
 		visibility_toggle.add_theme_color_override("font_color", UI_TEXT)
@@ -21153,7 +22643,7 @@ func _render_chat_tab_settings_rows() -> void:
 		move_up_button.custom_minimum_size = Vector2(28, 26)
 		move_up_button.focus_mode = Control.FOCUS_NONE
 		move_up_button.disabled = order_index == 0
-		move_up_button.tooltip_text = "Move tab left"
+		_set_localized_control_property(move_up_button, "tooltip_text", "ui.chat.settings.move_left")
 		move_up_button.pressed.connect(_on_chat_tab_move_pressed.bind(tab_id, -1))
 		_apply_button_style(move_up_button)
 		_apply_compact_chat_settings_button_style(move_up_button)
@@ -21165,7 +22655,7 @@ func _render_chat_tab_settings_rows() -> void:
 		move_down_button.custom_minimum_size = Vector2(28, 26)
 		move_down_button.focus_mode = Control.FOCUS_NONE
 		move_down_button.disabled = order_index == chat_tab_order.size() - 1
-		move_down_button.tooltip_text = "Move tab right"
+		_set_localized_control_property(move_down_button, "tooltip_text", "ui.chat.settings.move_right")
 		move_down_button.pressed.connect(_on_chat_tab_move_pressed.bind(tab_id, 1))
 		_apply_button_style(move_down_button)
 		_apply_compact_chat_settings_button_style(move_down_button)
@@ -21291,7 +22781,7 @@ func _reorder_chat_tab_buttons() -> void:
 func open_private_message_conversation(user: Dictionary) -> void:
 	var conversation_key: int = _pm_conversation_key_from_user(user)
 	if conversation_key == 0:
-		_add_chat_message("Could not open PM conversation: missing username.")
+		_add_chat_message(LocalizationManager.text("ui.chat.pm.missing_username"))
 		return
 
 	_ensure_pm_conversation(user)
@@ -21351,17 +22841,17 @@ func _render_active_pm_conversation() -> void:
 		pm_message_area.visible = has_conversations
 	if not has_conversations:
 		if pm_empty_title_label != null:
-			pm_empty_title_label.text = "No private messages yet"
+			pm_empty_title_label.text = LocalizationManager.text("ui.chat.pm.empty_title")
 		if pm_empty_hint_label != null:
-			pm_empty_hint_label.text = "Open a trainer card or use /pm username in chat to start a conversation."
+			pm_empty_hint_label.text = LocalizationManager.text("ui.chat.pm.empty_hint")
 		return
 
 	if active_pm_user_id == 0 or not pm_conversations_by_user_id.has(active_pm_user_id):
 		if pm_active_conversation_label != null:
 			pm_active_conversation_label.visible = false
 		_show_pm_message_empty_state(
-			"Select a conversation",
-			"Choose a trainer from the PM menu below."
+			LocalizationManager.text("ui.chat.pm.select_title"),
+			LocalizationManager.text("ui.chat.pm.select_hint")
 		)
 		return
 
@@ -21373,8 +22863,8 @@ func _render_active_pm_conversation() -> void:
 	var messages: Array = _array_from_variant(conversation.get("messages", []))
 	if messages.is_empty():
 		_show_pm_message_empty_state(
-			"No messages yet",
-			"Send the first message below."
+			LocalizationManager.text("ui.chat.pm.no_messages_title"),
+			LocalizationManager.text("ui.chat.pm.no_messages_hint")
 		)
 		return
 
@@ -21406,7 +22896,7 @@ func _create_pm_message_row(message: Dictionary) -> Control:
 	row.add_theme_constant_override("separation", 4)
 
 	var outgoing: bool = bool(message.get("outgoing", false))
-	var label: String = "You" if outgoing else str(message.get("displayName", message.get("username", "Trainer")))
+	var label: String = LocalizationManager.text("ui.chat.you") if outgoing else str(message.get("displayName", message.get("username", LocalizationManager.text("ui.trainer_card.trainer"))))
 	var name_color: String = "#7fd6ff" if outgoing else CHAT_DEFAULT_NAME_COLOR
 
 	var name_label := RichTextLabel.new()
@@ -21444,9 +22934,9 @@ func _create_pm_message_row(message: Dictionary) -> Control:
 	return row
 
 func _pm_conversation_title(user: Dictionary, unread: int) -> String:
-	var title := str(user.get("displayName", user.get("username", "Trainer"))).strip_edges()
+	var title := str(user.get("displayName", user.get("username", LocalizationManager.text("ui.trainer_card.trainer")))).strip_edges()
 	if title == "":
-		title = str(user.get("username", "Trainer"))
+		title = str(user.get("username", LocalizationManager.text("ui.trainer_card.trainer")))
 	if unread > 0:
 		return "%s (%s)" % [title, unread]
 	return title
@@ -21471,7 +22961,7 @@ func _recalculate_pm_total_unread() -> void:
 func _refresh_pm_tab_label() -> void:
 	if pm_tab_button == null:
 		return
-	pm_tab_button.text = "PM"
+	pm_tab_button.text = LocalizationManager.text("ui.chat.tab.pm")
 	if pm_tab_attention_badge != null:
 		pm_tab_attention_badge.visible = pm_total_unread_count > 0 and pm_tab_button.visible
 	if pm_context_selector_attention_badge != null:
@@ -21585,27 +23075,27 @@ func _apply_chat_tab_state() -> void:
 			attachment_button.visible = input_active
 	chat_input.editable = input_active
 	if active_chat_tab == CHAT_TAB_PM:
-		chat_input.placeholder_text = "Private message"
+		chat_input.placeholder_text = LocalizationManager.text("ui.chat.input.private")
 	elif active_chat_tab == CHAT_TAB_ALL:
-		chat_input.placeholder_text = "All messages · reply sends to Global"
+		chat_input.placeholder_text = LocalizationManager.text("ui.chat.input.all")
 	elif active_chat_tab == CHAT_TAB_MAP:
-		chat_input.placeholder_text = "Only trainers on this map can see this"
+		chat_input.placeholder_text = LocalizationManager.text("ui.chat.input.map")
 	elif active_chat_tab == CHAT_TAB_TRADE:
-		chat_input.placeholder_text = "Trade chat has a 2 minute cooldown"
+		chat_input.placeholder_text = LocalizationManager.text("ui.chat.input.trade")
 	elif active_chat_tab == CHAT_TAB_HELP:
-		chat_input.placeholder_text = "Help chat has a 5 minute cooldown"
+		chat_input.placeholder_text = LocalizationManager.text("ui.chat.input.help")
 	elif active_chat_tab == CHAT_TAB_GUILD:
 		chat_input.placeholder_text = (
-			"Checking guild membership..."
+			LocalizationManager.text("ui.chat.input.guild_checking")
 			if guild_chat_membership_loading
 			else (
-				"Message your guild"
+				LocalizationManager.text("ui.chat.input.guild")
 				if not guild_chat_membership.is_empty()
-				else "Join a guild to use Guild chat"
+				else LocalizationManager.text("ui.chat.guild.join_required")
 			)
 		)
 	else:
-		chat_input.placeholder_text = "" if input_active else "System messages only"
+		chat_input.placeholder_text = "" if input_active else LocalizationManager.text("ui.chat.input.system")
 	send_button.disabled = not input_active
 	if not input_active:
 		chat_input.release_focus()
@@ -21689,13 +23179,13 @@ func _submit_chat_input_async() -> void:
 
 	chat_input.clear()
 	if text.begins_with("/"):
-		_add_chat_message("Command not recognized.")
+		_add_chat_message(LocalizationManager.text("ui.chat.error.command_unknown"))
 		chat_submit_in_progress = false
 		_keep_chat_input_focused()
 		return
 
 	if not ChatRealtimeService.send_chat_message(text, _get_active_chat_channel(), pokemon_attachments):
-		_add_chat_message("Chat is reconnecting. Please try again in a moment.")
+		_add_chat_message(LocalizationManager.text("ui.chat.error.reconnecting"))
 	else:
 		_clear_pending_chat_pokemon_attachments()
 	chat_submit_in_progress = false
@@ -21709,22 +23199,23 @@ func _open_pm_from_chat_command(text: String) -> void:
 	var command_text := text.strip_edges()
 	var username := command_text.substr(3).strip_edges()
 	if username == "":
-		_add_chat_message("Usage: /pm username")
+		_add_chat_message(LocalizationManager.text("ui.chat.pm.usage"))
 		return
 	if username.contains(" "):
 		username = username.split(" ", false, 1)[0].strip_edges()
 	if username == "":
-		_add_chat_message("Usage: /pm username")
+		_add_chat_message(LocalizationManager.text("ui.chat.pm.usage"))
 		return
 
 	var result: Dictionary = await SocialService.validate_private_message_target(username)
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not open PM: %s" % str(result.get("error", "Player is not available.")))
+		push_warning("Could not open PM: %s" % str(result.get("error", "Player is not available.")))
+		_add_chat_message(LocalizationManager.text("ui.chat.pm.open_failed"))
 		return
 
 	var user: Dictionary = _dictionary_from_value(result.get("user", {}))
 	if user.is_empty():
-		_add_chat_message("Could not open PM: player not found.")
+		_add_chat_message(LocalizationManager.text("ui.chat.pm.player_not_found"))
 		return
 
 	chat_input.clear()
@@ -21732,7 +23223,7 @@ func _open_pm_from_chat_command(text: String) -> void:
 
 func _share_party_to_chat() -> void:
 	if PlayerSave.party.is_empty():
-		_add_chat_message("You need a Pokemon in your party first.")
+		_add_chat_message(LocalizationManager.text("ui.chat.error.party_required"))
 		return
 
 	var attachments: Array[Dictionary] = []
@@ -21746,11 +23237,11 @@ func _share_party_to_chat() -> void:
 
 	chat_input.clear()
 	if not ChatRealtimeService.send_chat_message("", _get_active_chat_channel(), attachments):
-		_add_chat_message("Chat is reconnecting. Please try again in a moment.")
+		_add_chat_message(LocalizationManager.text("ui.chat.error.reconnecting"))
 
 func _share_party_to_pm() -> void:
 	if PlayerSave.party.is_empty():
-		_add_pm_notice(active_pm_user_id, "You need a Pokemon in your party first.")
+		_add_pm_notice(active_pm_user_id, LocalizationManager.text("ui.chat.error.party_required"))
 		return
 
 	var attachments: Array[Dictionary] = []
@@ -21790,7 +23281,7 @@ func _submit_pm_input_async(text: String) -> void:
 
 func _submit_pm_message_with_attachments(text: String, pokemon_attachments: Array[Dictionary]) -> void:
 	if active_pm_user_id == 0 or not pm_conversations_by_user_id.has(active_pm_user_id):
-		_show_pm_empty_state("Select a PM conversation first.")
+		_show_pm_empty_state(LocalizationManager.text("ui.chat.pm.select_first"))
 		return
 	if text.length() > 300:
 		text = text.substr(0, 300)
@@ -21801,7 +23292,7 @@ func _submit_pm_message_with_attachments(text: String, pokemon_attachments: Arra
 	var user: Dictionary = _dictionary_from_value(conversation.get("user", {}))
 	var target_username: String = str(user.get("username", "")).strip_edges()
 	if target_username == "":
-		_add_pm_notice(target_pm_user_id, "Could not send PM: missing username.")
+		_add_pm_notice(target_pm_user_id, LocalizationManager.text("ui.chat.pm.missing_username"))
 		return
 	var sender_username: String = str(AuthService.current_user.get("username", "you"))
 	var sender_display_name: String = AuthService.get_display_name()
@@ -21809,7 +23300,8 @@ func _submit_pm_message_with_attachments(text: String, pokemon_attachments: Arra
 	chat_input.clear()
 	var result: Dictionary = await SocialService.send_private_message(target_username, target_body, pokemon_attachments)
 	if not bool(result.get("success", false)):
-		_add_pm_notice(target_pm_user_id, str(result.get("error", "Private message could not be sent.")))
+		push_warning("Could not send PM: %s" % str(result.get("error", "Private message could not be sent.")))
+		_add_pm_notice(target_pm_user_id, LocalizationManager.text("ui.chat.pm.send_failed"))
 		return
 
 	var message: Dictionary = _dictionary_from_value(result.get("message", {}))
@@ -21859,13 +23351,13 @@ func _show_pm_empty_state(text: String) -> void:
 	_clear_children(pm_message_list)
 	if pm_conversations_by_user_id.is_empty():
 		if pm_empty_title_label != null:
-			pm_empty_title_label.text = "Private messages"
+			pm_empty_title_label.text = LocalizationManager.text("ui.chat.pm.title")
 		if pm_empty_hint_label != null:
 			pm_empty_hint_label.text = text
 		return
 	if pm_active_conversation_label != null and active_pm_user_id == 0:
 		pm_active_conversation_label.visible = false
-	_show_pm_message_empty_state("Private messages", text)
+	_show_pm_message_empty_state(LocalizationManager.text("ui.chat.pm.title"), text)
 
 func _keep_chat_input_focused() -> void:
 	_restore_chat_input_focus.call_deferred()
@@ -22133,7 +23625,7 @@ func _setup_player_hotbar() -> void:
 		button.ignore_texture_size = true
 		button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
 		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-		button.tooltip_text = "Empty shortcut %s" % (slot_index + 1)
+		button.tooltip_text = LocalizationManager.text("ui.hotbar.empty_shortcut", {"slot": slot_index + 1})
 		button.pressed.connect(_on_hotbar_slot_pressed.bind(slot_index))
 		button.gui_input.connect(_on_hotbar_slot_gui_input.bind(slot_index))
 		button.bag_item_dropped.connect(_on_hotbar_bag_item_dropped)
@@ -22179,7 +23671,8 @@ func _refresh_hotbar_ui() -> void:
 		button.preview_texture = null
 		button.modulate = Color(1.0, 1.0, 1.0, 0.35)
 		quantity_label.text = ""
-		button.tooltip_text = "Empty shortcut %s\nRight-click a usable item in your Bag to place it here." % (slot_index + 1)
+		button.tooltip_text = LocalizationManager.text("ui.hotbar.empty_tooltip", {"slot": slot_index + 1})
+		(hotbar_slot_panels[slot_index] as PanelContainer).tooltip_text = button.tooltip_text
 		_apply_hotbar_slot_style(slot_index)
 		if entry.is_empty():
 			continue
@@ -22189,8 +23682,10 @@ func _refresh_hotbar_ui() -> void:
 			button.texture_normal = _load_item_icon("escape-rope")
 			button.preview_texture = button.texture_normal
 			button.modulate = Color.WHITE if bool(escape_rope_status.get("available", false)) else Color(1.0, 1.0, 1.0, 0.55)
-			quantity_label.text = "KEY"
-			button.tooltip_text = "%s\nThis key item is never used up.\nRight-click to remove this shortcut." % escape_rope_button.tooltip_text
+			quantity_label.text = LocalizationManager.text("ui.bag.key_marker")
+			button.tooltip_text = LocalizationManager.text("ui.hotbar.key_item_tooltip", {
+				"item": escape_rope_button.tooltip_text,
+			})
 		elif entry_type == "field_move":
 			var binding: Dictionary = _parse_hotbar_field_move_binding(entry_id)
 			var move_id := str(binding.get("moveId", ""))
@@ -22200,23 +23695,40 @@ func _refresh_hotbar_ui() -> void:
 			button.preview_texture = button.texture_normal
 			var availability: Dictionary = FieldMoveService.can_use_direct_field_move(move_id, pokemon_id)
 			button.modulate = Color.WHITE if bool(availability.get("success", false)) else Color(1.0, 1.0, 1.0, 0.35)
-			quantity_label.text = "KEY" if is_charm else "MOVE"
-			var source_name := "%s Charm" % _format_move_name(move_id) if is_charm else _hotbar_field_move_pokemon_name(pokemon_id)
-			button.tooltip_text = "%s · %s\n%s\nRight-click to remove this shortcut." % [
-				_format_move_name(move_id),
-				source_name,
-				"Use while exploring." if bool(availability.get("success", false)) else str(availability.get("error", "Unavailable.")),
-			]
+			quantity_label.text = (
+				LocalizationManager.text("ui.bag.key_marker")
+				if is_charm
+				else LocalizationManager.text("ui.hotbar.move_marker")
+			)
+			var source_name := (
+				LocalizationManager.text("ui.hotbar.charm_name", {"move": _format_move_name(move_id)})
+				if is_charm
+				else _hotbar_field_move_pokemon_name(pokemon_id)
+			)
+			button.tooltip_text = LocalizationManager.text("ui.hotbar.field_move_tooltip", {
+				"move": _format_move_name(move_id),
+				"source": source_name,
+				"availability": (
+					LocalizationManager.text("ui.hotbar.use_while_exploring")
+					if bool(availability.get("success", false))
+					else str(availability.get("error", LocalizationManager.text("ui.hotbar.unavailable")))
+				),
+			})
 		elif entry_type == "item":
 			button.texture_normal = _load_item_icon(entry_id)
 			button.preview_texture = button.texture_normal
 			var quantity := _hotbar_inventory_quantity(entry_id)
 			quantity_label.text = "x%s" % quantity
 			button.modulate = Color.WHITE if quantity > 0 else Color(1.0, 1.0, 1.0, 0.28)
-			button.tooltip_text = "%s\n%s\nRight-click to remove this shortcut." % [
-				_item_name_from_id(entry_id),
-				"Use on a party Pokémon. You have %s left." % quantity if quantity > 0 else "None left in your Bag.",
-			]
+			button.tooltip_text = LocalizationManager.text("ui.hotbar.item_tooltip", {
+				"item": _item_name_from_id(entry_id),
+				"availability": (
+					LocalizationManager.text("ui.hotbar.item_remaining", {"quantity": quantity})
+					if quantity > 0
+					else LocalizationManager.text("ui.hotbar.item_none")
+				),
+			})
+		(hotbar_slot_panels[slot_index] as PanelContainer).tooltip_text = button.tooltip_text
 
 
 func _hotbar_inventory_quantity(item_id: String) -> int:
@@ -22249,7 +23761,7 @@ func _hotbar_index_from_keycode(keycode: Key) -> int:
 func _on_hotbar_slot_pressed(slot_index: int) -> void:
 	var entry := _hotbar_entry_for_slot(slot_index)
 	if entry.is_empty():
-		_add_chat_message("Hotbar slot %s is empty. Right-click a usable item in your Bag to assign it." % (slot_index + 1))
+		_add_chat_message(LocalizationManager.text("ui.hotbar.message.empty", {"slot": slot_index + 1}))
 		return
 	var entry_type := str(entry.get("entryType", ""))
 	var entry_id := str(entry.get("entryId", ""))
@@ -22264,7 +23776,7 @@ func _on_hotbar_slot_pressed(slot_index: int) -> void:
 			if _normalize_item_id(str(item.get("id", ""))) == _normalize_item_id(entry_id):
 				_show_bag_item_use_popup(item)
 				return
-		_add_chat_message("That hotbar item is no longer in your Bag.")
+		_add_chat_message(LocalizationManager.text("ui.hotbar.message.item_missing"))
 		_load_bag_inventory.call_deferred()
 
 
@@ -22279,9 +23791,11 @@ func _on_hotbar_slot_gui_input(event: InputEvent, slot_index: int) -> void:
 		return
 	var result: Dictionary = await PlayerHotbarService.clear_slot(slot_index)
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not clear hotbar slot: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.hotbar.message.clear_failed", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
-	_add_chat_message("Hotbar slot %s cleared." % (slot_index + 1))
+	_add_chat_message(LocalizationManager.text("ui.hotbar.message.cleared", {"slot": slot_index + 1}))
 
 
 func _assign_bag_item_to_hotbar(item: Dictionary) -> void:
@@ -22302,22 +23816,29 @@ func _on_hotbar_bag_item_dropped(slot_index: int, item: Dictionary) -> void:
 func _on_hotbar_field_move_dropped(slot_index: int, pokemon_id: int, move_id: String, move_name: String) -> void:
 	var normalized_move_id := move_id.strip_edges().to_lower().replace("_", "-").replace(" ", "-")
 	if not FieldMoveService.is_direct_field_move(normalized_move_id):
-		_add_chat_message("%s cannot be assigned as a direct overworld action." % move_name)
+		_add_chat_message(LocalizationManager.text("ui.hotbar.message.move_not_assignable", {"move": move_name}))
 		return
 	var source_id := "charm" if pokemon_id <= 0 else str(pokemon_id)
 	var result: Dictionary = await PlayerHotbarService.assign(slot_index, "field_move", "%s:%s" % [source_id, normalized_move_id])
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not update hotbar: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.hotbar.message.update_failed", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
-	_add_chat_message("%s assigned to hotbar slot %s." % [move_name, slot_index + 1])
+	_add_chat_message(LocalizationManager.text("ui.hotbar.message.assigned", {"item": move_name, "slot": slot_index + 1}))
 
 
 func _on_hotbar_entry_dropped(source_slot: int, target_slot: int) -> void:
 	var result: Dictionary = await PlayerHotbarService.move_slot(source_slot, target_slot)
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not move hotbar item: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.hotbar.message.move_failed", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
-	_add_chat_message("Moved hotbar slot %s to slot %s." % [source_slot + 1, target_slot + 1])
+	_add_chat_message(LocalizationManager.text("ui.hotbar.message.moved", {
+		"source": source_slot + 1,
+		"target": target_slot + 1,
+	}))
 
 
 func _on_hotbar_drop_highlight_changed(slot_index: int, highlighted: bool) -> void:
@@ -22377,13 +23898,18 @@ func _assign_bag_item_to_hotbar_slot(item: Dictionary, target_slot: int) -> void
 		entry_type = "player_action"
 		entry_id = "escape-rope"
 	elif not _is_pokemon_usable_item_id(item_id):
-		_add_chat_message("This item cannot be assigned to the overworld hotbar.")
+		_add_chat_message(LocalizationManager.text("ui.hotbar.message.item_not_assignable"))
 		return
 	var result: Dictionary = await PlayerHotbarService.assign(target_slot, entry_type, entry_id)
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not update hotbar: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.hotbar.message.update_failed", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
-	_add_chat_message("%s assigned to hotbar slot %s." % [str(item.get("name", _item_name_from_id(item_id))), target_slot + 1])
+	_add_chat_message(LocalizationManager.text("ui.hotbar.message.assigned", {
+		"item": str(item.get("name", _item_name_from_id(item_id))),
+		"slot": target_slot + 1,
+	}))
 
 
 func _parse_hotbar_field_move_binding(entry_id: String) -> Dictionary:
@@ -22404,22 +23930,22 @@ func _parse_hotbar_field_move_binding(entry_id: String) -> Dictionary:
 
 func _hotbar_field_move_pokemon_name(pokemon_id: int) -> String:
 	var pokemon := _get_party_pokemon_by_owned_id(pokemon_id)
-	return pokemon.species if pokemon != null else "Pokemon not in party"
+	return _pokemon_display_name(pokemon) if pokemon != null else LocalizationManager.text("ui.hotbar.pokemon_not_in_party")
 
 
 func _activate_hotbar_field_move(entry_id: String) -> void:
 	var binding := _parse_hotbar_field_move_binding(entry_id)
 	if binding.is_empty():
-		_add_chat_message("This field move hotbar binding is invalid.")
+		_add_chat_message(LocalizationManager.text("ui.hotbar.message.invalid_field_move"))
 		return
 	var result: Dictionary = await FieldMoveService.use_direct_field_move(
 		str(binding.get("moveId", "")),
 		int(binding.get("pokemonId", 0))
 	)
 	if not bool(result.get("success", false)):
-		_add_chat_message(str(result.get("error", "That overworld move cannot be used right now.")))
+		_add_chat_message(str(result.get("error", LocalizationManager.text("ui.pokemon_summary.moves.field_move_unavailable"))))
 		return
-	_add_chat_message(str(result.get("message", "Field move used.")))
+	_add_chat_message(str(result.get("message", LocalizationManager.text("ui.hotbar.message.field_move_used"))))
 
 
 func _refresh_player_actions() -> void:
@@ -22450,6 +23976,7 @@ func _refresh_player_action_cooldown(delta: float) -> void:
 
 func _update_escape_rope_action_ui() -> void:
 	var visible_unlocked := bool(escape_rope_status.get("visible", false)) and bool(escape_rope_status.get("unlocked", false))
+	var item_name := _item_name_from_id("escape-rope")
 	# Escape Rope is represented by the configurable hotbar. Keep the legacy
 	# action-bar slot hidden while retaining its button as an internal status and
 	# tooltip presenter for the hotbar entry.
@@ -22465,30 +23992,43 @@ func _update_escape_rope_action_ui() -> void:
 	escape_rope_button.disabled = escape_rope_in_flight
 	escape_rope_button.modulate = Color.WHITE if action_available and not cooldown_active else Color(1.0, 1.0, 1.0, 0.55)
 	if cooldown_active:
-		escape_rope_button.tooltip_text = "Escape Rope\nReady in %s" % PlayerActionService.format_remaining(int(ceil(escape_rope_remaining_seconds)))
+		escape_rope_button.tooltip_text = LocalizationManager.text("ui.hotbar.escape_rope.tooltip.ready", {
+			"item": item_name,
+			"time": PlayerActionService.format_remaining(int(ceil(escape_rope_remaining_seconds))),
+		})
 	elif not block.is_empty():
-		escape_rope_button.tooltip_text = "Escape Rope\n%s" % str(block.get("message", "Unavailable."))
+		escape_rope_button.tooltip_text = "%s\n%s" % [
+			item_name,
+			str(block.get("message", LocalizationManager.text("ui.hotbar.escape_rope.message.unavailable", {"item": item_name}))),
+		]
 	else:
-		escape_rope_button.tooltip_text = "Escape Rope\nReturn to your last healing point."
+		escape_rope_button.tooltip_text = LocalizationManager.text("ui.hotbar.escape_rope.tooltip.return", {"item": item_name})
 	_refresh_action_bar_layouts()
 
 
 func _on_escape_rope_pressed() -> void:
+	var item_name := _item_name_from_id("escape-rope")
 	if escape_rope_in_flight:
-		_add_chat_message("Escape Rope is already being used.")
+		_add_chat_message(LocalizationManager.text("ui.hotbar.escape_rope.message.in_progress", {"item": item_name}))
 		return
 	if escape_rope_remaining_seconds > 0.0:
-		_add_chat_message("Escape Rope is on cooldown. Ready in %s." % PlayerActionService.format_remaining(int(ceil(escape_rope_remaining_seconds))))
+		_add_chat_message(LocalizationManager.text("ui.hotbar.escape_rope.message.cooldown", {
+			"item": item_name,
+			"time": PlayerActionService.format_remaining(int(ceil(escape_rope_remaining_seconds))),
+		}))
 		return
 	if not bool(escape_rope_status.get("available", false)):
 		var block: Dictionary = _staff_dictionary_from_variant(escape_rope_status.get("blockReason", {}))
-		_add_chat_message(str(block.get("message", "Escape Rope is currently unavailable.")))
+		_add_chat_message(str(block.get(
+			"message",
+			LocalizationManager.text("ui.hotbar.escape_rope.message.unavailable", {"item": item_name})
+		)))
 		_refresh_player_actions.call_deferred()
 		return
 	_show_ui_confirm_popup(
-		"Use Escape Rope?",
-		"Return to your last healing point?\n\nYour party will not be healed.",
-		"Use Escape Rope",
+		LocalizationManager.text("ui.hotbar.escape_rope.confirm.title", {"item": item_name}),
+		LocalizationManager.text("ui.hotbar.escape_rope.confirm.message"),
+		LocalizationManager.text("ui.bag.action.use_escape_rope"),
 		Callable(self, "_execute_escape_rope"),
 		Vector2i(460, 190)
 	)
@@ -22497,9 +24037,10 @@ func _on_escape_rope_pressed() -> void:
 func _execute_escape_rope() -> void:
 	if escape_rope_in_flight:
 		return
+	var item_name := _item_name_from_id("escape-rope")
 	var world := get_tree().current_scene
 	if world == null or not world.has_method("begin_authorized_teleport") or not world.has_method("apply_authorized_teleport_state"):
-		_add_chat_message("Escape Rope is unavailable because the world is not ready.")
+		_add_chat_message(LocalizationManager.text("ui.hotbar.escape_rope.message.world_not_ready", {"item": item_name}))
 		return
 	escape_rope_in_flight = true
 	_update_escape_rope_action_ui()
@@ -22507,14 +24048,20 @@ func _execute_escape_rope() -> void:
 	if not bool(begin_result.get("success", false)):
 		escape_rope_in_flight = false
 		_update_escape_rope_action_ui()
-		_add_chat_message(str(begin_result.get("error", "Escape Rope is unavailable.")))
+		_add_chat_message(str(begin_result.get(
+			"error",
+			LocalizationManager.text("ui.hotbar.escape_rope.message.unavailable", {"item": item_name})
+		)))
 		return
 	var response: Dictionary = await PlayerActionService.execute("escape-rope")
 	if not bool(response.get("success", false)):
 		world.call("cancel_authorized_teleport")
 		escape_rope_in_flight = false
 		_update_escape_rope_action_ui()
-		_add_chat_message(str(response.get("error", "Escape Rope failed.")))
+		_add_chat_message(str(response.get(
+			"error",
+			LocalizationManager.text("ui.hotbar.escape_rope.message.failed", {"item": item_name})
+		)))
 		return
 	var result: Dictionary = _staff_dictionary_from_variant(response.get("result", {}))
 	if not bool(result.get("accepted", false)):
@@ -22522,16 +24069,22 @@ func _execute_escape_rope() -> void:
 		escape_rope_in_flight = false
 		_update_escape_rope_action_ui()
 		var block := _staff_dictionary_from_variant(result.get("blockReason", {}))
-		_add_chat_message(str(block.get("message", "Escape Rope is unavailable.")))
+		_add_chat_message(str(block.get(
+			"message",
+			LocalizationManager.text("ui.hotbar.escape_rope.message.unavailable", {"item": item_name})
+		)))
 		return
 	var teleport_state := _staff_dictionary_from_variant(result.get("teleportState", {}))
 	var apply_result: Dictionary = await world.call("apply_authorized_teleport_state", teleport_state)
 	escape_rope_in_flight = false
 	_update_escape_rope_action_ui()
 	if not bool(apply_result.get("success", false)):
-		_add_chat_message("Escape Rope was authorized, but applying the teleport failed: %s" % str(apply_result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.hotbar.escape_rope.message.apply_failed", {
+			"item": item_name,
+			"error": str(apply_result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
-	_add_chat_message("Escape Rope returned you to your healing point.")
+	_add_chat_message(LocalizationManager.text("ui.hotbar.escape_rope.message.success", {"item": item_name}))
 	_refresh_player_actions.call_deferred()
 
 func _load_toggle_preferences() -> void:
@@ -22654,14 +24207,14 @@ func _hide_staff_tools_popup() -> void:
 
 func _on_staff_impersonate_button_pressed() -> void:
 	if not _can_impersonate_accounts():
-		_add_chat_message("You do not have permission to impersonate accounts.")
+		_add_chat_message(LocalizationManager.text("ui.staff.error.no_impersonate_permission"))
 		return
 	if staff_impersonate_popup == null:
 		return
 	staff_impersonate_popup.visible = not staff_impersonate_popup.visible
 	if staff_impersonate_popup.visible and staff_impersonate_token_input != null:
 		_activate_ui_panel(staff_impersonate_popup)
-		_set_staff_impersonate_status("The token is never displayed or stored by the client.")
+		_set_staff_impersonate_status("ui.staff.impersonate.token_safety")
 		staff_impersonate_confirm_button.disabled = staff_impersonate_token_input.text.strip_edges() == ""
 		staff_impersonate_token_input.grab_focus()
 	elif not staff_impersonate_popup.visible:
@@ -22676,13 +24229,17 @@ func _hide_staff_impersonate_popup() -> void:
 	if staff_impersonate_token_input != null:
 		staff_impersonate_token_input.clear()
 		staff_impersonate_token_input.editable = true
-	_set_staff_impersonate_status("The token is never displayed or stored by the client.")
+	_set_staff_impersonate_status("ui.staff.impersonate.token_safety")
 
 func _on_staff_impersonate_token_changed(token: String) -> void:
 	if staff_impersonate_confirm_button != null:
 		staff_impersonate_confirm_button.disabled = staff_impersonate_in_flight or token.strip_edges() == ""
 	if not staff_impersonate_in_flight:
-		_set_staff_impersonate_status("Ready to verify this single-use token." if token.strip_edges() != "" else "The token is never displayed or stored by the client.")
+		_set_staff_impersonate_status(
+			"ui.staff.impersonate.ready"
+			if token.strip_edges() != ""
+			else "ui.staff.impersonate.token_safety"
+		)
 
 func _on_staff_impersonate_token_submitted(_token: String) -> void:
 	if staff_impersonate_confirm_button == null or staff_impersonate_confirm_button.disabled:
@@ -22692,7 +24249,11 @@ func _on_staff_impersonate_token_submitted(_token: String) -> void:
 func _set_staff_impersonate_status(message: String, is_error: bool = false) -> void:
 	if staff_impersonate_status_label == null:
 		return
-	staff_impersonate_status_label.text = message
+	staff_impersonate_status_label.text = (
+		LocalizationManager.text(message)
+		if LocalizationManager.has_key(message, LocalizationManager.DEFAULT_LOCALE)
+		else message
+	)
 	staff_impersonate_status_label.add_theme_color_override(
 		"font_color",
 		UI_DANGER if is_error else UI_MUTED_TEXT
@@ -22761,13 +24322,19 @@ func _refresh_staff_teleport_tab_visibility() -> void:
 		_apply_button_style(staff_teleport_send_player_mode_button, "primary" if show_send_safe else "default")
 	if staff_teleport_player_action_hint != null:
 		if not player_is_selected:
-			staff_teleport_player_action_hint.text = "Select a player from the list to unlock staff actions."
+			staff_teleport_player_action_hint.text = LocalizationManager.text(
+				"ui.staff.teleport.select_player_from_list"
+			)
 			staff_teleport_player_action_hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		elif show_send_safe:
-			staff_teleport_player_action_hint.text = "This action moves another player. Confirm the safe destination and staff note carefully."
+			staff_teleport_player_action_hint.text = LocalizationManager.text(
+				"ui.staff.teleport.move_player_warning"
+			)
 			staff_teleport_player_action_hint.add_theme_color_override("font_color", UI_DANGER)
 		else:
-			staff_teleport_player_action_hint.text = "You will be teleported to the selected player's current location."
+			staff_teleport_player_action_hint.text = LocalizationManager.text(
+				"ui.staff.teleport.go_to_player_hint"
+			)
 			staff_teleport_player_action_hint.add_theme_color_override("font_color", Color("#79d9f2"))
 	if staff_teleport_send_section != null:
 		staff_teleport_send_section.visible = show_send_safe
@@ -22775,12 +24342,26 @@ func _refresh_staff_teleport_tab_visibility() -> void:
 		staff_teleport_player_divider.visible = false
 	if staff_teleport_self_reason_input != null:
 		staff_teleport_self_reason_input.visible = show_self
-		staff_teleport_self_reason_input.placeholder_text = "Self teleport reason (optional)"
+		staff_teleport_self_reason_input.placeholder_text = LocalizationManager.text(
+			"ui.staff.teleport.self_reason"
+		)
 	if staff_teleport_player_reason_input != null:
 		staff_teleport_player_reason_input.visible = show_to_player or show_send_safe
 		var player_reason_required := (_current_user_requires_teleport_to_player_reason() and show_to_player) or (_current_user_requires_teleport_other_reason() and show_send_safe)
-		var player_reason_label := "Reason for teleport to player" if show_to_player else "Reason for safe-location send"
-		staff_teleport_player_reason_input.placeholder_text = "%s (required)" % player_reason_label if player_reason_required else "%s (optional)" % player_reason_label
+		var reason_key := (
+			"ui.staff.teleport.reason_to_player"
+			if show_to_player
+			else "ui.staff.teleport.reason_safe_send"
+		)
+		var requirement_key := (
+			"ui.staff.teleport.reason_required"
+			if player_reason_required
+			else "ui.staff.teleport.reason_optional"
+		)
+		staff_teleport_player_reason_input.placeholder_text = LocalizationManager.text(
+			requirement_key,
+			{"reason": LocalizationManager.text(reason_key)}
+		)
 	if staff_teleport_to_player_button != null:
 		staff_teleport_to_player_button.visible = show_to_player
 	if staff_teleport_send_player_button != null:
@@ -22789,7 +24370,7 @@ func _refresh_staff_teleport_tab_visibility() -> void:
 
 func _on_staff_teleport_button_pressed() -> void:
 	if not (_can_teleport_self() or _can_teleport_to_player() or _can_teleport_other_player()):
-		_add_chat_message("You do not have permission to teleport.")
+		_add_chat_message(LocalizationManager.text("ui.staff.error.no_teleport_permission"))
 		return
 	if staff_teleport_popup == null:
 		return
@@ -22830,16 +24411,18 @@ func _load_staff_teleport_points_if_needed(force := false) -> void:
 	if staff_teleport_confirm_button != null:
 		staff_teleport_confirm_button.disabled = true
 	if staff_teleport_destination_status_label != null:
-		staff_teleport_destination_status_label.text = "Loading..."
+		staff_teleport_destination_status_label.text = LocalizationManager.text("common.loading")
 
 	var result: Dictionary = await ModeratorTeleportService.load_teleport_points()
 	staff_teleport_points_loading = false
 	if not bool(result.get("success", false)):
 		if staff_teleport_destination_status_label != null:
-			staff_teleport_destination_status_label.text = "Unavailable"
+			staff_teleport_destination_status_label.text = LocalizationManager.text("common.unavailable")
 		if staff_teleport_confirm_button != null:
 			staff_teleport_confirm_button.disabled = false
-		_add_chat_message("Could not load teleport points: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.staff.error.load_destinations", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
 
 	var maps_value: Variant = result.get("maps", [])
@@ -22858,16 +24441,18 @@ func _load_staff_teleport_online_players_if_needed(force := false) -> void:
 	if staff_teleport_to_player_button != null:
 		staff_teleport_to_player_button.disabled = true
 	if staff_teleport_player_results_status_label != null:
-		staff_teleport_player_results_status_label.text = "Loading..."
+		staff_teleport_player_results_status_label.text = LocalizationManager.text("common.loading")
 
 	var result: Dictionary = await ModeratorTeleportService.load_online_teleport_players()
 	staff_teleport_players_loading = false
 	if not bool(result.get("success", false)):
 		if staff_teleport_player_results_status_label != null:
-			staff_teleport_player_results_status_label.text = "Unavailable"
+			staff_teleport_player_results_status_label.text = LocalizationManager.text("common.unavailable")
 		if staff_teleport_to_player_button != null:
 			staff_teleport_to_player_button.disabled = false
-		_add_chat_message("Could not load online players: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.staff.error.load_players", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
 
 	var players_value: Variant = result.get("players", [])
@@ -22888,16 +24473,18 @@ func _load_staff_teleport_safe_points_if_needed(force := false) -> void:
 	if staff_teleport_send_player_button != null:
 		staff_teleport_send_player_button.disabled = true
 	if staff_teleport_safe_destination_status_label != null:
-		staff_teleport_safe_destination_status_label.text = "Loading..."
+		staff_teleport_safe_destination_status_label.text = LocalizationManager.text("common.loading")
 
 	var result: Dictionary = await ModeratorTeleportService.load_safe_teleport_points()
 	staff_teleport_safe_points_loading = false
 	if not bool(result.get("success", false)):
 		if staff_teleport_safe_destination_status_label != null:
-			staff_teleport_safe_destination_status_label.text = "Unavailable"
+			staff_teleport_safe_destination_status_label.text = LocalizationManager.text("common.unavailable")
 		if staff_teleport_send_player_button != null:
 			staff_teleport_send_player_button.disabled = false
-		_add_chat_message("Could not load safe teleport points: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.staff.error.load_safe_destinations", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
 
 	var maps_value: Variant = result.get("maps", [])
@@ -22954,10 +24541,11 @@ func _rebuild_staff_teleport_map_options() -> void:
 			selected_index = 0
 		staff_teleport_destination_results.select(selected_index)
 	if staff_teleport_destination_status_label != null:
-		staff_teleport_destination_status_label.text = (
-			"%d found" % staff_teleport_filtered_destinations.size()
-			if not staff_teleport_filtered_destinations.is_empty()
-			else "No matches"
+		staff_teleport_destination_status_label.text = LocalizationManager.text(
+			"ui.staff.teleport.found",
+			{"count": staff_teleport_filtered_destinations.size()}
+		) if not staff_teleport_filtered_destinations.is_empty() else LocalizationManager.text(
+			"ui.staff.teleport.no_matches"
 		)
 	_update_staff_teleport_selected_destination_label()
 	if staff_teleport_confirm_button != null:
@@ -22989,7 +24577,9 @@ func _update_staff_teleport_selected_destination_label() -> void:
 	var map_label := str(map_entry.get("label", "")).strip_edges()
 	var point_label := str(point_entry.get("label", "")).strip_edges()
 	if map_label == "" or point_label == "":
-		staff_teleport_selected_destination_label.text = "Select a destination"
+		staff_teleport_selected_destination_label.text = LocalizationManager.text(
+			"ui.staff.teleport.select_destination"
+		)
 		staff_teleport_selected_destination_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		return
 	staff_teleport_selected_destination_label.text = "%s\n%s" % [map_label, point_label]
@@ -23053,10 +24643,11 @@ func _rebuild_staff_teleport_send_map_options() -> void:
 	if not staff_teleport_filtered_safe_destinations.is_empty():
 		staff_teleport_send_destination_results.select(0 if selected_index < 0 else selected_index)
 	if staff_teleport_safe_destination_status_label != null:
-		staff_teleport_safe_destination_status_label.text = (
-			"%d found" % staff_teleport_filtered_safe_destinations.size()
-			if not staff_teleport_filtered_safe_destinations.is_empty()
-			else "No matches"
+		staff_teleport_safe_destination_status_label.text = LocalizationManager.text(
+			"ui.staff.teleport.found",
+			{"count": staff_teleport_filtered_safe_destinations.size()}
+		) if not staff_teleport_filtered_safe_destinations.is_empty() else LocalizationManager.text(
+			"ui.staff.teleport.no_matches"
 		)
 	if staff_teleport_send_player_button != null:
 		staff_teleport_send_player_button.disabled = staff_teleport_filtered_players.is_empty() or staff_teleport_filtered_safe_destinations.is_empty() or staff_teleport_in_flight
@@ -23132,10 +24723,11 @@ func _rebuild_staff_teleport_player_options() -> void:
 		staff_teleport_player_results.select(selected_index)
 	staff_teleport_player_results.visible = true
 	if staff_teleport_player_results_status_label != null:
-		staff_teleport_player_results_status_label.text = (
-			"%d online" % staff_teleport_filtered_players.size()
-			if not staff_teleport_filtered_players.is_empty()
-			else "No matches"
+		staff_teleport_player_results_status_label.text = LocalizationManager.text(
+			"ui.staff.teleport.online_count",
+			{"count": staff_teleport_filtered_players.size()}
+		) if not staff_teleport_filtered_players.is_empty() else LocalizationManager.text(
+			"ui.staff.teleport.no_matches"
 		)
 	_update_staff_teleport_selected_player_label()
 	if staff_teleport_to_player_button != null:
@@ -23148,14 +24740,18 @@ func _update_staff_teleport_selected_player_label() -> void:
 	if staff_teleport_selected_player_label == null:
 		return
 	if not staff_teleport_player_selection_confirmed:
-		staff_teleport_selected_player_label.text = "Select a player"
+		staff_teleport_selected_player_label.text = LocalizationManager.text(
+			"ui.staff.teleport.select_player"
+		)
 		staff_teleport_selected_player_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		return
 	var selected_player := _get_selected_staff_teleport_player()
 	var username := str(selected_player.get("username", "")).strip_edges()
 	var display_name := str(selected_player.get("displayName", username)).strip_edges()
 	if username == "" and display_name == "":
-		staff_teleport_selected_player_label.text = "Select a player"
+		staff_teleport_selected_player_label.text = LocalizationManager.text(
+			"ui.staff.teleport.select_player"
+		)
 		staff_teleport_selected_player_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		return
 	staff_teleport_selected_player_label.text = "%s\n@%s" % [display_name, username]
@@ -23445,7 +25041,7 @@ func _get_staff_teleport_local_block_reason(world: Node) -> String:
 
 func _on_staff_impersonate_confirm_pressed() -> void:
 	if not _can_impersonate_accounts():
-		_add_chat_message("You do not have permission to impersonate accounts.")
+		_add_chat_message(LocalizationManager.text("ui.staff.error.no_impersonate_permission"))
 		return
 	if staff_impersonate_token_input == null:
 		return
@@ -23454,8 +25050,8 @@ func _on_staff_impersonate_confirm_pressed() -> void:
 
 	var token := staff_impersonate_token_input.text.strip_edges()
 	if token == "":
-		_set_staff_impersonate_status("Paste a valid single-use token first.", true)
-		_add_chat_message("Enter an impersonation token first.")
+		_set_staff_impersonate_status("ui.staff.impersonate.invalid_empty", true)
+		_add_chat_message(LocalizationManager.text("ui.staff.impersonate.enter_token"))
 		staff_impersonate_token_input.grab_focus()
 		return
 
@@ -23463,8 +25059,10 @@ func _on_staff_impersonate_confirm_pressed() -> void:
 	staff_impersonate_token_input.editable = false
 	if staff_impersonate_confirm_button != null:
 		staff_impersonate_confirm_button.disabled = true
-		staff_impersonate_confirm_button.text = "Verifying..."
-	_set_staff_impersonate_status("Verifying the token with the authentication service...")
+		staff_impersonate_confirm_button.text = LocalizationManager.text(
+			"ui.staff.impersonate.verifying"
+		)
+	_set_staff_impersonate_status("ui.staff.impersonate.verifying_status")
 
 	var auth_result: Dictionary = await AuthService.impersonate_with_token(token)
 	if not auth_result.get("success", false):
@@ -23472,26 +25070,40 @@ func _on_staff_impersonate_confirm_pressed() -> void:
 		staff_impersonate_token_input.editable = true
 		if staff_impersonate_confirm_button != null:
 			staff_impersonate_confirm_button.disabled = false
-			staff_impersonate_confirm_button.text = "Start Secure Session"
-		_set_staff_impersonate_status(str(auth_result.get("error", "The token is invalid or expired.")), true)
+			staff_impersonate_confirm_button.text = LocalizationManager.text(
+				"ui.staff.impersonate.confirm"
+			)
+		_set_staff_impersonate_status(str(auth_result.get(
+			"error",
+			LocalizationManager.text("ui.staff.impersonate.invalid")
+		)), true)
 		staff_impersonate_token_input.select_all()
 		staff_impersonate_token_input.grab_focus()
-		_add_chat_message("Impersonation failed: %s" % str(auth_result.get("error", "Invalid token")))
+		_add_chat_message(LocalizationManager.text("ui.staff.impersonate.failed", {
+			"error": str(auth_result.get(
+				"error",
+				LocalizationManager.text("ui.staff.impersonate.invalid_short")
+			)),
+		}))
 		return
 
 	if staff_impersonate_confirm_button != null:
-		staff_impersonate_confirm_button.text = "Loading Profile..."
-	_set_staff_impersonate_status("Token accepted. Loading the impersonated profile...")
+		staff_impersonate_confirm_button.text = LocalizationManager.text(
+			"ui.staff.impersonate.loading_profile"
+		)
+	_set_staff_impersonate_status("ui.staff.impersonate.loading_profile_status")
 	var profile_result: Dictionary = await PlayerGameStateService.load_player_profile()
 	staff_impersonate_in_flight = false
 	staff_impersonate_token_input.editable = true
 	if staff_impersonate_confirm_button != null:
 		staff_impersonate_confirm_button.disabled = false
-		staff_impersonate_confirm_button.text = "Start Secure Session"
+		staff_impersonate_confirm_button.text = LocalizationManager.text(
+			"ui.staff.impersonate.confirm"
+		)
 	if not profile_result.get("success", false):
 		staff_impersonate_token_input.clear()
-		_set_staff_impersonate_status("The secure session started, but its profile could not be loaded. Reconnect before continuing.", true)
-		_add_chat_message("Impersonated login succeeded, but profile loading failed.")
+		_set_staff_impersonate_status("ui.staff.impersonate.profile_failed", true)
+		_add_chat_message(LocalizationManager.text("ui.staff.impersonate.profile_failed_short"))
 		return
 
 	_apply_impersonated_profile(profile_result)
@@ -23500,7 +25112,9 @@ func _on_staff_impersonate_confirm_pressed() -> void:
 	_hide_staff_impersonate_popup()
 	_refresh_dev_tools_visibility()
 	_refresh_party()
-	_add_chat_message("Now impersonating %s." % AuthService.get_display_name())
+	_add_chat_message(LocalizationManager.text("ui.staff.impersonate.success", {
+		"name": AuthService.get_display_name(),
+	}))
 
 func _apply_impersonated_profile(profile_response: Dictionary) -> void:
 	var user: Dictionary = _staff_dictionary_from_variant(profile_response.get("user", {}))
@@ -23569,11 +25183,12 @@ func _apply_impersonated_profile(profile_response: Dictionary) -> void:
 		_rebuild_trainer_card_popup(true)
 
 func _refresh_world_player_display_name() -> void:
-	var player_node := get_tree().get_first_node_in_group("player")
+	var player_node: Node
+	var world := GameState.get_world()
+	if world != null:
+		player_node = world.get_node_or_null("Player")
 	if player_node == null:
-		var world := GameState.get_world()
-		if world != null:
-			player_node = world.get_node_or_null("Player")
+		player_node = get_tree().get_first_node_in_group("player")
 	if player_node != null and player_node.has_method("set_display_name"):
 		player_node.call("set_display_name", PlayerSave.player_name, SettingsManager.display_own_name)
 	if player_node != null and player_node.has_method("refresh_appearance"):
@@ -23723,38 +25338,58 @@ func _on_item_dex_button_pressed() -> void:
 func _on_pokedex_button_pressed() -> void:
 	await _show_pokedex_popup()
 
-func _on_content_creator_tools_button_pressed() -> void:
-	if not _can_use_content_creator_tools() and not _can_use_content_creator_generation():
-		return
-	if content_creator_menu_popup == null:
-		return
-	content_creator_menu_popup.visible = not content_creator_menu_popup.visible
-	if content_creator_menu_popup.visible:
-		_position_content_creator_menu_popup()
-		_activate_ui_panel(content_creator_menu_popup)
-	else:
-		_deactivate_ui_panel(content_creator_menu_popup)
-
-func _on_content_creator_create_pokemon_button_pressed() -> void:
+func _on_alpha_tools_button_pressed() -> void:
 	if not _can_use_content_creator_generation():
 		return
-	_hide_content_creator_menu_popup()
+	if alpha_tools_popup == null:
+		return
+	alpha_tools_popup.visible = not alpha_tools_popup.visible
+	if alpha_tools_popup.visible:
+		_position_alpha_tools_popup()
+		_activate_ui_panel(alpha_tools_popup)
+	else:
+		_deactivate_ui_panel(alpha_tools_popup)
+
+func _on_content_creator_tools_button_pressed() -> void:
+	if not _can_use_content_creator_tools() or content_creator_tools_popup == null:
+		return
+	content_creator_tools_popup.visible = not content_creator_tools_popup.visible
+	if content_creator_tools_popup.visible:
+		_position_action_slot_popup(content_creator_tools_popup, content_creator_tools_slot)
+		_activate_ui_panel(content_creator_tools_popup)
+	else:
+		_deactivate_ui_panel(content_creator_tools_popup)
+
+func _on_content_creator_photo_mode_button_pressed() -> void:
+	if not _can_use_content_creator_tools():
+		return
+	_hide_content_creator_tools_popup()
+	get_tree().call_group("content_creator_photo_mode", "open_photo_mode")
+
+func set_content_creator_capture_hidden(hidden: bool) -> void:
+	if root_control != null:
+		root_control.visible = not hidden
+
+func _on_alpha_create_pokemon_button_pressed() -> void:
+	if not _can_use_content_creator_generation():
+		return
+	_hide_alpha_tools_popup()
 	_show_dev_pokemon_popup(DevPokemonPopupMode.CONTENT_CREATOR)
 
-func _on_content_creator_clear_party_button_pressed() -> void:
+func _on_alpha_clear_party_button_pressed() -> void:
 	if not _can_use_content_creator_generation():
 		return
-	_hide_content_creator_menu_popup()
+	_hide_alpha_tools_popup()
 	_show_ui_confirm_popup(
 		"Clear Alpha Pokemon",
 		"This will remove generated Alpha Pokemon from your party. Other party Pokemon stay untouched.",
 		"Clear Pokemon",
-		Callable(self, "_on_content_creator_clear_party_confirmed"),
+		Callable(self, "_on_alpha_clear_party_confirmed"),
 		Vector2i(500, 0),
 		true
 	)
 
-func _on_content_creator_clear_party_confirmed() -> void:
+func _on_alpha_clear_party_confirmed() -> void:
 	if not _can_use_content_creator_generation():
 		return
 
@@ -23771,14 +25406,20 @@ func _on_content_creator_clear_party_confirmed() -> void:
 	else:
 		_add_chat_message("No Alpha Pokemon found in party.")
 
-func _position_content_creator_menu_popup() -> void:
-	_position_action_slot_popup(content_creator_menu_popup, content_creator_tools_slot)
+func _position_alpha_tools_popup() -> void:
+	_position_action_slot_popup(alpha_tools_popup, alpha_tools_slot)
 
-func _hide_content_creator_menu_popup() -> void:
-	if content_creator_menu_popup == null:
+func _hide_alpha_tools_popup() -> void:
+	if alpha_tools_popup == null:
 		return
-	content_creator_menu_popup.visible = false
-	_deactivate_ui_panel(content_creator_menu_popup)
+	alpha_tools_popup.visible = false
+	_deactivate_ui_panel(alpha_tools_popup)
+
+func _hide_content_creator_tools_popup() -> void:
+	if content_creator_tools_popup == null:
+		return
+	content_creator_tools_popup.visible = false
+	_deactivate_ui_panel(content_creator_tools_popup)
 
 func _show_item_dex_popup() -> void:
 	_position_item_dex_popup()
@@ -23853,14 +25494,15 @@ func _refresh_pokedex_results() -> void:
 		query = pokedex_search_input.text.strip_edges()
 
 	var loading_label := Label.new()
-	loading_label.text = "Searching species..."
+	_set_localized_control_property(loading_label, "text", "ui.pokedex.searching_species")
 	loading_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	loading_label.custom_minimum_size = Vector2(0, 44)
 	loading_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	loading_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	pokedex_results_list.add_child(loading_label)
+	pokedex_results_state = "loading"
 	if pokedex_results_count_label != null:
-		pokedex_results_count_label.text = "Searching..."
+		_refresh_pokedex_results_count_copy()
 
 	pokedex_search_request_id += 1
 	var request_id := pokedex_search_request_id
@@ -23879,14 +25521,14 @@ func _refresh_pokedex_results() -> void:
 
 	if not bool(search_result.get("success", false)):
 		var error_label := Label.new()
-		error_label.text = "Could not load species."
+		_set_localized_control_property(error_label, "text", "ui.pokedex.load_failed")
 		error_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		error_label.custom_minimum_size = Vector2(0, 44)
 		error_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		error_label.add_theme_color_override("font_color", UI_DANGER)
 		pokedex_results_list.add_child(error_label)
-		if pokedex_results_count_label != null:
-			pokedex_results_count_label.text = "Unavailable"
+		pokedex_results_state = "unavailable"
+		_refresh_pokedex_results_count_copy()
 		return
 
 	var species_results: Array = _array_from_variant(search_result.get("species", []))
@@ -23904,7 +25546,7 @@ func _refresh_pokedex_results() -> void:
 
 	if count == 0:
 		var empty_label := Label.new()
-		empty_label.text = "No species match this search."
+		_set_localized_control_property(empty_label, "text", "ui.pokedex.empty_search")
 		empty_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		empty_label.custom_minimum_size = Vector2(0, 44)
 		empty_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -23913,9 +25555,10 @@ func _refresh_pokedex_results() -> void:
 	elif pokedex_selected_species_id == "" and pokedex_selected_species.is_empty() and first_species_id != "":
 		await _on_pokedex_species_selected(first_species_id)
 	if pokedex_results_count_label != null:
-		var owned_total := int(search_result.get("ownedTotal", 0))
-		var dex_total := int(search_result.get("dexTotal", count))
-		pokedex_results_count_label.text = "OWNED %d / %d" % [owned_total, dex_total]
+		pokedex_results_owned_total = int(search_result.get("ownedTotal", 0))
+		pokedex_results_dex_total = int(search_result.get("dexTotal", count))
+		pokedex_results_state = "loaded"
+		_refresh_pokedex_results_count_copy()
 		pokedex_results_count_label.add_theme_color_override(
 			"font_color",
 			POKEDEX_SHINY_ACCENT if pokedex_shiny_mode else POKEDEX_ACCENT
@@ -23923,7 +25566,8 @@ func _refresh_pokedex_results() -> void:
 
 func _create_pokedex_species_button(species: Dictionary) -> Control:
 	var species_id := str(species.get("id", "")).strip_edges()
-	var species_name := str(species.get("name", species_id))
+	var source_species_name := str(species.get("name", species_id))
+	var species_name := _localized_species_name(species_id, source_species_name)
 	var national_number := int(species.get("nationalDexNumber", 0))
 	var type_text := _format_pokedex_type_list(_array_from_variant(species.get("types", [])))
 	var button := Button.new()
@@ -24000,7 +25644,10 @@ func _create_pokedex_species_button(species: Dictionary) -> Control:
 
 	var meta_label := Label.new()
 	meta_label.name = "Meta"
-	meta_label.text = type_text if type_text != "" else "Unknown type"
+	if type_text != "":
+		meta_label.text = type_text
+	else:
+		_set_localized_control_property(meta_label, "text", "ui.pokedex.unknown_type")
 	meta_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	meta_label.add_theme_font_size_override("font_size", 10)
 	meta_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -24017,7 +25664,11 @@ func _create_owned_pokeball_icon(icon_size: Vector2) -> TextureRect:
 	owned_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	owned_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	owned_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	owned_icon.tooltip_text = "Registered to your Trainer ID"
+	_set_localized_control_property(
+		owned_icon,
+		"tooltip_text",
+		"ui.pokedex.registered_tooltip"
+	)
 	return owned_icon
 
 func _style_pokedex_species_button(button: Button, selected: bool) -> void:
@@ -24098,21 +25749,21 @@ func _on_pokedex_species_selected(species_id: String) -> void:
 
 	pokedex_detail_request_id += 1
 	var detail_request_id := pokedex_detail_request_id
-	_set_pokedex_detail_message("Loading species...")
+	_set_pokedex_detail_message(LocalizationManager.text("ui.pokedex.loading_species"))
 	var detail_result: Dictionary = await PokedexService.get_species_detail(normalized_species_id)
 	if detail_request_id != pokedex_detail_request_id:
 		return
 	if not bool(detail_result.get("success", false)):
 		pokedex_selected_species = {}
 		_set_pokedex_header_from_species({})
-		_set_pokedex_detail_message("Could not load species.")
+		_set_pokedex_detail_message(LocalizationManager.text("ui.pokedex.load_failed"))
 		return
 
 	var species_value: Variant = detail_result.get("species", {})
 	if typeof(species_value) != TYPE_DICTIONARY:
 		pokedex_selected_species = {}
 		_set_pokedex_header_from_species({})
-		_set_pokedex_detail_message("Species detail is empty.")
+		_set_pokedex_detail_message(LocalizationManager.text("ui.pokedex.detail_empty"))
 		return
 
 	pokedex_selected_species = species_value
@@ -24123,10 +25774,10 @@ func _on_pokedex_species_selected(species_id: String) -> void:
 	_set_pokedex_header_from_species(pokedex_selected_species)
 	_refresh_pokedex_detail()
 
-func _create_pokedex_tab_button(tab_id: String, label_text: String) -> Button:
+func _create_pokedex_tab_button(tab_id: String, label_key: String) -> Button:
 	var button := Button.new()
 	button.name = "PokedexTab_%s" % tab_id
-	button.text = label_text
+	_set_localized_control_property(button, "text", label_key)
 	button.custom_minimum_size = Vector2(0, 34)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.focus_mode = Control.FOCUS_NONE
@@ -24164,16 +25815,21 @@ func _set_pokedex_header_from_species(species: Dictionary) -> void:
 		return
 
 	if species.is_empty():
-		pokedex_name_label.text = "Select a species"
+		pokedex_name_label.text = LocalizationManager.text("ui.pokedex.select_species")
 		if pokedex_owned_icon != null:
 			pokedex_owned_icon.visible = false
-		pokedex_meta_label.text = "No species selected."
+		pokedex_meta_label.text = LocalizationManager.text("ui.pokedex.no_species_selected")
 		_clear_pokedex_species_sprite()
 		_refresh_pokedex_type_row([])
 		_refresh_pokedex_header_stats({})
 		return
 
-	var species_name := str(species.get("name", species.get("id", "Unknown")))
+	var source_species_name := str(species.get(
+		"name",
+		species.get("id", LocalizationManager.text("common.unknown"))
+	))
+	var species_id := str(species.get("id", source_species_name))
+	var species_name := _localized_species_name(species_id, source_species_name)
 	var national_number := int(species.get("nationalDexNumber", 0))
 	var rarity := str(species.get("rarity", "")).strip_edges()
 	var meta_parts: Array[String] = []
@@ -24187,10 +25843,14 @@ func _set_pokedex_header_from_species(species: Dictionary) -> void:
 	pokedex_name_label.text = species_name
 	if pokedex_owned_icon != null:
 		pokedex_owned_icon.visible = PokedexService.is_species_owned(
-			str(species.get("id", species_name)),
+			species_id,
 			pokedex_shiny_mode
 		)
-	pokedex_meta_label.text = " / ".join(meta_parts) if not meta_parts.is_empty() else "Species data"
+	pokedex_meta_label.text = (
+		" / ".join(meta_parts)
+		if not meta_parts.is_empty()
+		else LocalizationManager.text("ui.pokedex.species_data")
+	)
 	_set_pokedex_species_sprite(species)
 	_refresh_pokedex_type_row(_array_from_variant(species.get("types", [])))
 	var stats_value: Variant = species.get("baseStats", {})
@@ -24217,7 +25877,7 @@ func _clear_pokedex_species_sprite() -> void:
 		pokedex_sprite.texture = null
 		pokedex_sprite.visible = true
 	if pokedex_sprite_panel != null:
-		pokedex_sprite_panel.tooltip_text = "Select a Pokémon"
+		pokedex_sprite_panel.tooltip_text = LocalizationManager.text("ui.pokedex.sprite.select")
 
 func _set_pokedex_species_sprite(species: Dictionary) -> void:
 	if pokedex_animated_sprite == null or pokedex_sprite == null:
@@ -24256,7 +25916,10 @@ func _set_pokedex_species_sprite(species: Dictionary) -> void:
 		pokedex_sprite.texture = _load_pokedex_species_texture(species)
 
 	if pokedex_sprite_panel != null:
-		pokedex_sprite_panel.tooltip_text = "Show the %s view" % ("front" if _get_pokedex_sprite_side() == "back" else "back")
+		var target_side := "front" if _get_pokedex_sprite_side() == "back" else "back"
+		pokedex_sprite_panel.tooltip_text = LocalizationManager.text("ui.pokedex.sprite.show_view", {
+			"side": LocalizationManager.text("ui.pokedex.side.%s" % target_side),
+		})
 
 func _pokedex_species_sprite_candidates(species: Dictionary) -> Array[String]:
 	var candidates: Array[String] = []
@@ -24438,14 +26101,14 @@ func _refresh_pokedex_header_stats(stats: Dictionary) -> void:
 		child.queue_free()
 
 	var caption := Label.new()
-	caption.text = "BASE STATS"
+	_set_localized_control_property(caption, "text", "ui.pokedex.base_stats")
 	caption.add_theme_font_size_override("font_size", 9)
 	caption.add_theme_color_override("font_color", POKEDEX_ACCENT)
 	pokedex_header_stats_stack.add_child(caption)
 
 	if stats.is_empty():
 		var empty_label := Label.new()
-		empty_label.text = "Select a species to compare stats."
+		_set_localized_control_property(empty_label, "text", "ui.pokedex.stats.select")
 		empty_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		empty_label.add_theme_font_size_override("font_size", 11)
 		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -24502,7 +26165,7 @@ func _create_pokedex_header_stat_total_row(total: int) -> Control:
 	row.add_theme_constant_override("separation", 6)
 
 	var label := Label.new()
-	label.text = "TOTAL"
+	_set_localized_control_property(label, "text", "common.total")
 	label.custom_minimum_size = Vector2(48, 0)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -24531,7 +26194,7 @@ func _refresh_pokedex_detail() -> void:
 		child.queue_free()
 
 	if pokedex_selected_species.is_empty():
-		_set_pokedex_detail_message("Search and select a Pokemon to view its data.")
+		_set_pokedex_detail_message(LocalizationManager.text("ui.pokedex.detail.select"))
 		return
 
 	match pokedex_active_tab:
@@ -24542,7 +26205,7 @@ func _refresh_pokedex_detail() -> void:
 		"evolutions":
 			_build_pokedex_evolutions_tab()
 		"drops":
-			_build_pokedex_placeholder_tab("Drops", [])
+			_build_pokedex_placeholder_tab(LocalizationManager.text("ui.pokedex.tab.drops"), [])
 		_:
 			_build_pokedex_moves_tab()
 
@@ -24569,7 +26232,7 @@ func _set_pokedex_detail_message(message: String) -> void:
 	center.add_child(stack)
 
 	var caption := Label.new()
-	caption.text = "POKÉDEX STATUS"
+	_set_localized_control_property(caption, "text", "ui.pokedex.status")
 	caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	caption.add_theme_font_size_override("font_size", 10)
 	caption.add_theme_color_override("font_color", POKEDEX_ACCENT)
@@ -24583,7 +26246,10 @@ func _set_pokedex_detail_message(message: String) -> void:
 	stack.add_child(label)
 
 func _build_pokedex_general_tab() -> void:
-	var profile_card := _create_pokedex_dossier_card("Species Profile", "Biology and training overview")
+	var profile_card := _create_pokedex_dossier_card(
+		LocalizationManager.text("ui.pokedex.profile.title"),
+		LocalizationManager.text("ui.pokedex.profile.subtitle")
+	)
 	pokedex_detail_stack.add_child(profile_card.get("panel") as Control)
 	var profile_content: VBoxContainer = profile_card.get("content") as VBoxContainer
 	var profile_facts := GridContainer.new()
@@ -24592,27 +26258,37 @@ func _build_pokedex_general_tab() -> void:
 	profile_facts.add_theme_constant_override("v_separation", 6)
 	profile_content.add_child(profile_facts)
 	profile_facts.add_child(_create_pokedex_profile_fact(
-		"EGG GROUPS",
+		LocalizationManager.text("ui.pokedex.profile.egg_groups"),
 		_format_pokedex_value_list(_array_from_variant(pokedex_selected_species.get("eggGroups", pokedex_selected_species.get("egg_groups", []))))
 	))
 	profile_facts.add_child(_create_pokedex_profile_fact(
-		"GROWTH RATE",
-		_format_identifier_display_name(str(pokedex_selected_species.get("growthRate", ""))) if str(pokedex_selected_species.get("growthRate", "")).strip_edges() != "" else "Unknown"
+		LocalizationManager.text("ui.pokedex.profile.growth_rate"),
+		_format_identifier_display_name(str(pokedex_selected_species.get("growthRate", "")))
+		if str(pokedex_selected_species.get("growthRate", "")).strip_edges() != ""
+		else LocalizationManager.text("common.unknown")
 	))
 	profile_facts.add_child(_create_pokedex_profile_fact(
-		"BASE EXP",
+		LocalizationManager.text("ui.pokedex.profile.base_exp"),
 		str(int(pokedex_selected_species.get("baseExperience", 0)))
 	))
 
-	var abilities_card := _create_pokedex_dossier_card("Abilities", "Hover an ability for its effect")
+	var abilities_card := _create_pokedex_dossier_card(
+		LocalizationManager.text("ui.pokedex.abilities.title"),
+		LocalizationManager.text("ui.pokedex.abilities.subtitle")
+	)
 	pokedex_detail_stack.add_child(abilities_card.get("panel") as Control)
 	var abilities_content: VBoxContainer = abilities_card.get("content") as VBoxContainer
 	var abilities := _array_from_variant(pokedex_selected_species.get("abilities", []))
 	var added_abilities := _add_pokedex_ability_rows(abilities, abilities_content)
 	if added_abilities <= 0:
-		abilities_content.add_child(_create_pokedex_muted_message("No abilities available."))
+		abilities_content.add_child(_create_pokedex_muted_message(
+			LocalizationManager.text("ui.pokedex.abilities.empty")
+		))
 
-	var training_card := _create_pokedex_dossier_card("Effort Values", "Stats gained after defeating this species")
+	var training_card := _create_pokedex_dossier_card(
+		LocalizationManager.text("ui.pokedex.evs.title"),
+		LocalizationManager.text("ui.pokedex.evs.subtitle")
+	)
 	pokedex_detail_stack.add_child(training_card.get("panel") as Control)
 	var training_content: VBoxContainer = training_card.get("content") as VBoxContainer
 	training_content.add_child(_create_pokedex_ev_yield_panel(_get_pokedex_ev_yield()))
@@ -24627,10 +26303,18 @@ func _add_pokedex_ability_rows(abilities: Array, target: VBoxContainer = null) -
 		var ability_name := str(ability.get("name", ability.get("id", ""))).strip_edges()
 		if ability_name == "":
 			continue
+		var ability_id := str(ability.get("id", ability_name))
 		var slot := str(ability.get("slot", "")).strip_edges()
 		var label := _format_pokedex_ability_slot_label(slot)
-		var ability_row := _create_pokedex_info_line(label, ability_name)
-		var ability_description := _get_summary_ability_description_text(ability_name)
+		var ability_row := _create_pokedex_info_line(
+			label,
+			_localized_content_name("abilities", ability_id, ability_name)
+		)
+		var ability_description := _localized_content_description(
+			"abilities",
+			ability_id,
+			_get_summary_ability_description_text(ability_name)
+		)
 		if ability_description != "":
 			ability_row.tooltip_text = ability_description
 		target_stack.add_child(ability_row)
@@ -24640,13 +26324,13 @@ func _add_pokedex_ability_rows(abilities: Array, target: VBoxContainer = null) -
 func _format_pokedex_ability_slot_label(slot: String) -> String:
 	match slot.strip_edges().to_lower():
 		"primary":
-			return "Ability 1"
+			return LocalizationManager.text("ui.pokedex.ability.primary")
 		"secondary":
-			return "Ability 2"
+			return LocalizationManager.text("ui.pokedex.ability.secondary")
 		"hidden":
-			return "Hidden Ability"
+			return LocalizationManager.text("ui.pokedex.ability.hidden")
 		_:
-			return "Ability"
+			return LocalizationManager.text("ui.pokedex.ability.default")
 
 func _get_pokedex_ev_yield() -> Dictionary:
 	var yield_value: Variant = pokedex_selected_species.get("evYield", pokedex_selected_species.get("ev_yield", {}))
@@ -24683,20 +26367,26 @@ func _create_pokedex_ev_yield_panel(ev_yield: Dictionary) -> Control:
 	stack.add_child(header)
 
 	var title := Label.new()
-	title.text = "EV YIELD"
+	title.text = LocalizationManager.text("ui.pokedex.evs.yield")
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.add_theme_font_size_override("font_size", 10)
 	title.add_theme_color_override("font_color", POKEDEX_ACCENT)
 	header.add_child(title)
 
 	var total_label := Label.new()
-	total_label.text = "%d total" % total if total > 0 else "Unknown"
+	total_label.text = (
+		LocalizationManager.text("ui.pokedex.evs.total", {"total": total})
+		if total > 0
+		else LocalizationManager.text("common.unknown")
+	)
 	total_label.add_theme_font_size_override("font_size", 11)
 	total_label.add_theme_color_override("font_color", Color("#f2ead2") if total > 0 else UI_MUTED_TEXT)
 	header.add_child(total_label)
 
 	if total <= 0:
-		stack.add_child(_create_pokedex_muted_message("No EV yield data available."))
+		stack.add_child(_create_pokedex_muted_message(
+			LocalizationManager.text("ui.pokedex.evs.empty")
+		))
 		return panel
 
 	var chip_row := HBoxContainer.new()
@@ -24742,17 +26432,23 @@ func _create_pokedex_ev_yield_chip(label_text: String, value: int, color: Color)
 func _build_pokedex_placeholder_tab(title_text: String, entries: Array) -> void:
 	pokedex_detail_stack.add_child(_create_pokedex_detail_section_title(title_text))
 	if entries.is_empty():
-		pokedex_detail_stack.add_child(_create_pokedex_muted_message("%s data is not available yet." % title_text))
+		pokedex_detail_stack.add_child(_create_pokedex_muted_message(
+			LocalizationManager.text("ui.pokedex.data_unavailable", {"section": title_text})
+		))
 		return
 	for entry_value: Variant in entries:
 		pokedex_detail_stack.add_child(_create_pokedex_muted_message(str(entry_value)))
 
 func _build_pokedex_locations_tab() -> void:
-	pokedex_detail_stack.add_child(_create_pokedex_detail_section_title("Wild Locations"))
+	pokedex_detail_stack.add_child(_create_pokedex_detail_section_title(
+		LocalizationManager.text("ui.pokedex.locations.title")
+	))
 
 	var locations := _array_from_variant(pokedex_selected_species.get("locations", []))
 	if locations.is_empty():
-		pokedex_detail_stack.add_child(_create_pokedex_muted_message("No known wild locations."))
+		pokedex_detail_stack.add_child(_create_pokedex_muted_message(
+			LocalizationManager.text("ui.pokedex.locations.empty")
+		))
 		return
 
 	for location_value: Variant in locations:
@@ -24776,9 +26472,16 @@ func _create_pokedex_location_row(location: Dictionary) -> Control:
 	row.add_theme_constant_override("separation", 12)
 	margin.add_child(row)
 
-	var area_name := str(location.get("areaName", location.get("areaId", "Unknown Area"))).strip_edges()
+	var area_name := str(location.get(
+		"areaName",
+		location.get("areaId", LocalizationManager.text("ui.pokedex.locations.unknown_area"))
+	)).strip_edges()
 	var area_label := Label.new()
-	area_label.text = area_name if area_name != "" else "Unknown Area"
+	area_label.text = (
+		area_name
+		if area_name != ""
+		else LocalizationManager.text("ui.pokedex.locations.unknown_area")
+	)
 	area_label.custom_minimum_size = Vector2(210, 0)
 	area_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	area_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -24791,17 +26494,27 @@ func _create_pokedex_location_row(location: Dictionary) -> Control:
 	encounter_stack.add_theme_constant_override("separation", 1)
 	row.add_child(encounter_stack)
 
-	var encounter_type := str(location.get("encounterType", "Wild")).strip_edges()
+	var encounter_type := str(location.get(
+		"encounterType",
+		LocalizationManager.text("ui.pokedex.locations.wild")
+	)).strip_edges()
 	var level_text := _format_pokedex_location_level_range(location)
 	var method_label := Label.new()
-	method_label.text = "%s - %s" % [encounter_type if encounter_type != "" else "Wild", level_text]
+	method_label.text = "%s - %s" % [
+		encounter_type
+		if encounter_type != ""
+		else LocalizationManager.text("ui.pokedex.locations.wild"),
+		level_text,
+	]
 	method_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	method_label.add_theme_font_size_override("font_size", 12)
 	method_label.add_theme_color_override("font_color", UI_TEXT)
 	encounter_stack.add_child(method_label)
 
 	var rarity_label := Label.new()
-	rarity_label.text = "Rarity: %s" % _get_pokedex_selected_rarity_label()
+	rarity_label.text = LocalizationManager.text("ui.pokedex.locations.rarity", {
+		"rarity": _get_pokedex_selected_rarity_label(),
+	})
 	rarity_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	rarity_label.add_theme_font_size_override("font_size", 10)
 	rarity_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -24814,19 +26527,30 @@ func _format_pokedex_location_level_range(location: Dictionary) -> String:
 	var min_level: int = max(1, int(location.get("minLevel", location.get("min_level", 1))))
 	var max_level: int = max(min_level, int(location.get("maxLevel", location.get("max_level", min_level))))
 	if min_level == max_level:
-		return "Lv. %d" % min_level
-	return "Lv. %d-%d" % [min_level, max_level]
+		return LocalizationManager.text("ui.pokedex.level", {"level": min_level})
+	return LocalizationManager.text("ui.pokedex.level_range", {
+		"minimum": min_level,
+		"maximum": max_level,
+	})
 
 func _get_pokedex_selected_rarity_label() -> String:
 	var rarity := str(pokedex_selected_species.get("rarity", "")).strip_edges()
-	return _format_identifier_display_name(rarity) if rarity != "" else "Unknown"
+	return (
+		_format_identifier_display_name(rarity)
+		if rarity != ""
+		else LocalizationManager.text("common.unknown")
+	)
 
 func _build_pokedex_evolutions_tab() -> void:
-	pokedex_detail_stack.add_child(_create_pokedex_detail_section_title("Evolves Into"))
+	pokedex_detail_stack.add_child(_create_pokedex_detail_section_title(
+		LocalizationManager.text("ui.pokedex.evolutions.title")
+	))
 
 	var evolutions := _array_from_variant(pokedex_selected_species.get("evolutions", []))
 	if evolutions.is_empty():
-		pokedex_detail_stack.add_child(_create_pokedex_muted_message("No known evolutions."))
+		pokedex_detail_stack.add_child(_create_pokedex_muted_message(
+			LocalizationManager.text("ui.pokedex.evolutions.empty")
+		))
 		return
 
 	for evolution_value: Variant in evolutions:
@@ -24851,7 +26575,10 @@ func _create_pokedex_evolution_row(evolution: Dictionary) -> Control:
 	margin.add_child(row)
 
 	var name_label := Label.new()
-	name_label.text = str(evolution.get("speciesName", evolution.get("speciesId", "Unknown")))
+	name_label.text = str(evolution.get(
+		"speciesName",
+		evolution.get("speciesId", LocalizationManager.text("common.unknown"))
+	))
 	name_label.custom_minimum_size = Vector2(180, 0)
 	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -24866,17 +26593,24 @@ func _create_pokedex_evolution_row(evolution: Dictionary) -> Control:
 
 	var trigger_text := _format_pokedex_evolution_trigger(evolution)
 	var trigger_label := Label.new()
-	trigger_label.text = "Trigger: %s" % trigger_text
+	trigger_label.text = LocalizationManager.text("ui.pokedex.evolutions.trigger", {
+		"trigger": trigger_text,
+	})
 	trigger_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	trigger_label.add_theme_font_size_override("font_size", 12)
 	trigger_label.add_theme_color_override("font_color", UI_TEXT)
 	detail_stack.add_child(trigger_label)
 
-	var condition_text := str(evolution.get("condition", "Unknown condition")).strip_edges()
+	var condition_text := str(evolution.get(
+		"condition",
+		LocalizationManager.text("ui.pokedex.evolutions.unknown_condition")
+	)).strip_edges()
 	if condition_text == "":
-		condition_text = "Unknown condition"
+		condition_text = LocalizationManager.text("ui.pokedex.evolutions.unknown_condition")
 	var condition_label := Label.new()
-	condition_label.text = "Condition: %s" % condition_text
+	condition_label.text = LocalizationManager.text("ui.pokedex.evolutions.condition", {
+		"condition": condition_text,
+	})
 	condition_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	condition_label.add_theme_font_size_override("font_size", 10)
 	condition_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -24891,16 +26625,16 @@ func _format_pokedex_evolution_trigger(evolution: Dictionary) -> String:
 	var normalized_method := method.strip_edges().to_lower().replace("_", "-")
 	var normalized_trigger := trigger.strip_edges().to_lower().replace("_", "-")
 	if normalized_method == "item" or normalized_trigger == "use-item" or normalized_trigger == "item":
-		return "Item"
+		return LocalizationManager.text("ui.pokedex.evolutions.item")
 	if trigger != "":
 		return _format_pokedex_evolution_label(trigger)
 	if method != "":
 		return _format_pokedex_evolution_label(method)
-	return "Unknown"
+	return LocalizationManager.text("common.unknown")
 
 func _format_pokedex_evolution_label(value: String) -> String:
 	var text := value.strip_edges().replace("_", " ").replace("-", " ")
-	return text.capitalize() if text != "" else "Unknown"
+	return text.capitalize() if text != "" else LocalizationManager.text("common.unknown")
 
 func _build_pokedex_moves_tab() -> void:
 	var moves_value: Variant = pokedex_selected_species.get("moves", {})
@@ -24908,15 +26642,15 @@ func _build_pokedex_moves_tab() -> void:
 	pokedex_detail_stack.add_child(_create_pokedex_move_search_input())
 
 	var sections := [
-		{"key": "levelUp", "title": "Level-Up Moves", "empty": "No level-up moves available.", "column": "Lv", "source": ""},
-		{"key": "egg", "title": "Egg Moves", "empty": "No egg moves available.", "column": "Learn", "source": "Egg"},
-		{"key": "tm", "title": "TM Moves", "empty": "No TM moves available.", "column": "Learn", "source": "TM"},
-		{"key": "tutor", "title": "Tutor Moves", "empty": "No tutor moves available.", "column": "Learn", "source": "Tutor"},
-		{"key": "special", "title": "Special Moves", "empty": "No special moves available.", "column": "Learn", "source": "Special"},
-		{"key": "event", "title": "Event Moves", "empty": "No event moves available.", "column": "Learn", "source": "Event"},
-		{"key": "legacy", "title": "Legacy Moves", "empty": "No legacy moves available.", "column": "Learn", "source": "Legacy"},
-		{"key": "legacyEvent", "title": "Legacy Event Moves", "empty": "No legacy event moves available.", "column": "Learn", "source": "Legacy Event"},
-		{"key": "preEvolution", "title": "Pre-Evolution Moves", "empty": "No pre-evolution moves available.", "column": "Learn", "source": "Pre-Evo"},
+		{"key": "levelUp", "i18n": "level_up", "column": "ui.pokedex.moves.level", "source": ""},
+		{"key": "egg", "i18n": "egg", "column": "ui.pokedex.moves.learn", "source": "ui.pokedex.moves.source.egg"},
+		{"key": "tm", "i18n": "tm", "column": "ui.pokedex.moves.learn", "source": "ui.pokedex.moves.source.tm"},
+		{"key": "tutor", "i18n": "tutor", "column": "ui.pokedex.moves.learn", "source": "ui.pokedex.moves.source.tutor"},
+		{"key": "special", "i18n": "special", "column": "ui.pokedex.moves.learn", "source": "ui.pokedex.moves.source.special"},
+		{"key": "event", "i18n": "event", "column": "ui.pokedex.moves.learn", "source": "ui.pokedex.moves.source.event"},
+		{"key": "legacy", "i18n": "legacy", "column": "ui.pokedex.moves.learn", "source": "ui.pokedex.moves.source.legacy"},
+		{"key": "legacyEvent", "i18n": "legacy_event", "column": "ui.pokedex.moves.learn", "source": "ui.pokedex.moves.source.legacy_event"},
+		{"key": "preEvolution", "i18n": "pre_evolution", "column": "ui.pokedex.moves.learn", "source": "ui.pokedex.moves.source.pre_evolution"},
 	]
 	var added_any_section := false
 	var available_move_count := 0
@@ -24927,34 +26661,41 @@ func _build_pokedex_moves_tab() -> void:
 		var section: Dictionary = section_value
 		var raw_bucket_moves := _array_from_variant(moves.get(str(section.get("key", "")), []))
 		available_move_count += raw_bucket_moves.size()
+		var source_label := LocalizationManager.text(str(section.get("source", ""))) \
+			if not str(section.get("source", "")).is_empty() else ""
 		var bucket_moves := _filter_pokedex_move_bucket(
 			raw_bucket_moves,
 			normalized_query,
-			str(section.get("source", ""))
+			source_label
 		)
 		if bucket_moves.is_empty() and (normalized_query != "" or str(section.get("key", "")) != "levelUp"):
 			continue
 		if added_any_section:
 			pokedex_detail_stack.add_child(_create_pokedex_section_spacer())
 		added_any_section = true
+		var section_i18n := str(section.get("i18n", ""))
 		_add_pokedex_move_section(
-			str(section.get("title", "")),
+			LocalizationManager.text("ui.pokedex.moves.section.%s" % section_i18n),
 			bucket_moves,
-			str(section.get("column", "")),
-			str(section.get("source", "")),
-			str(section.get("empty", "No moves available."))
+			LocalizationManager.text(str(section.get("column", ""))),
+			source_label,
+			LocalizationManager.text("ui.pokedex.moves.empty.%s" % section_i18n)
 		)
 
 	if not added_any_section:
 		if available_move_count <= 0:
-			pokedex_detail_stack.add_child(_create_pokedex_muted_message("No moves available."))
+			pokedex_detail_stack.add_child(_create_pokedex_muted_message(
+				LocalizationManager.text("ui.pokedex.moves.empty.all")
+			))
 		else:
-			pokedex_detail_stack.add_child(_create_pokedex_muted_message("No moves match your search."))
+			pokedex_detail_stack.add_child(_create_pokedex_muted_message(
+				LocalizationManager.text("ui.pokedex.moves.empty.search")
+			))
 
 func _create_pokedex_move_search_input() -> Control:
 	var search_input := LineEdit.new()
 	pokedex_move_search_input = search_input
-	search_input.placeholder_text = "Search moves..."
+	search_input.placeholder_text = LocalizationManager.text("ui.pokedex.moves.search")
 	search_input.text = pokedex_move_search_text
 	search_input.custom_minimum_size = Vector2(0, 32)
 	search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -24996,6 +26737,13 @@ func _pokedex_move_matches_query(move: Dictionary, normalized_query: String, sou
 		str(move.get("category", "")),
 		source_label,
 	]
+	var move_id := str(move.get("id", move.get("move", move.get("name", ""))))
+	for localized_term: String in _content_search_terms(
+		"moves",
+		move_id,
+		str(move.get("name", move_id))
+	):
+		values.append(localized_term)
 	if move.has("level"):
 		values.append("level")
 		values.append(str(int(move.get("level", 1))))
@@ -25029,12 +26777,12 @@ func _create_pokedex_move_header_row(first_column_label: String) -> Control:
 	var header := HBoxContainer.new()
 	header.add_theme_constant_override("separation", 7)
 	header.add_child(_create_pokedex_move_header_label(first_column_label, 54))
-	header.add_child(_create_pokedex_move_header_label("Move", 172))
-	header.add_child(_create_pokedex_move_header_label("Type", 92))
-	header.add_child(_create_pokedex_move_header_label("Category", 92))
-	header.add_child(_create_pokedex_move_header_label("Power", 52))
-	header.add_child(_create_pokedex_move_header_label("Acc", 52))
-	header.add_child(_create_pokedex_move_header_label("PP", 42))
+	header.add_child(_create_pokedex_move_header_label(LocalizationManager.text("ui.pokedex.moves.move"), 172))
+	header.add_child(_create_pokedex_move_header_label(LocalizationManager.text("ui.pokedex.moves.type"), 92))
+	header.add_child(_create_pokedex_move_header_label(LocalizationManager.text("ui.pokedex.moves.category"), 92))
+	header.add_child(_create_pokedex_move_header_label(LocalizationManager.text("ui.pokedex.moves.power"), 52))
+	header.add_child(_create_pokedex_move_header_label(LocalizationManager.text("ui.pokedex.moves.accuracy"), 52))
+	header.add_child(_create_pokedex_move_header_label(LocalizationManager.text("ui.pokedex.moves.pp"), 42))
 	return header
 
 func _create_pokedex_move_section_title(title_text: String, move_count: int) -> Control:
@@ -25082,9 +26830,10 @@ func _create_pokedex_section_title(title_text: String) -> Control:
 	label.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
 	return label
 
-func _create_item_dex_section_title(title_text: String) -> Control:
+func _create_item_dex_section_title(title_key: String) -> Control:
 	var label := Label.new()
-	label.text = title_text.to_upper()
+	_set_localized_control_property(label, "text", title_key)
+	label.text = label.text.to_upper()
 	label.add_theme_font_size_override("font_size", 10)
 	label.add_theme_color_override("font_color", ITEM_DEX_ACCENT)
 	return label
@@ -25324,7 +27073,7 @@ func _create_pokedex_move_row(move: Dictionary, source_label: String = "") -> Co
 	if first_column_text == "":
 		first_column_text = str(int(move.get("level", 1)))
 	row.add_child(_create_pokedex_move_value_label(first_column_text, 54, POKEDEX_ACCENT, true))
-	row.add_child(_create_pokedex_move_value_label(str(move.get("name", move.get("id", ""))), 172, UI_TEXT, true))
+	row.add_child(_create_pokedex_move_value_label(_get_summary_move_name(move), 172, UI_TEXT, true))
 	row.add_child(_create_pokedex_move_type_cell(str(move.get("type", "")), 92))
 	row.add_child(_create_pokedex_move_category_cell(str(move.get("category", "")), 92))
 	row.add_child(_create_pokedex_move_value_label(_format_pokedex_move_number(move.get("power", null)), 52, UI_TEXT))
@@ -25346,6 +27095,10 @@ func _create_pokedex_move_value_label(text_value: String, width: float, color: C
 func _create_pokedex_move_type_cell(type_name: String, width: float) -> Control:
 	var center := CenterContainer.new()
 	center.custom_minimum_size = Vector2(width, 0)
+	var localized_type := _localized_type_name(type_name)
+	if _uses_localized_type_text():
+		center.add_child(_create_pokedex_move_value_label(localized_type, width, Color("#f5df9a"), true))
+		return center
 	var texture := _load_pokemon_type_text_label(type_name)
 	if texture != null:
 		var icon := TextureRect.new()
@@ -25353,10 +27106,10 @@ func _create_pokedex_move_type_cell(type_name: String, width: float) -> Control:
 		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		icon.texture = texture
-		icon.tooltip_text = type_name.capitalize()
+		icon.tooltip_text = localized_type
 		center.add_child(icon)
 		return center
-	center.add_child(_create_pokedex_move_value_label(_compact_pokedex_text(type_name), width, Color("#f5df9a"), true))
+	center.add_child(_create_pokedex_move_value_label(_compact_pokedex_text(localized_type), width, Color("#f5df9a"), true))
 	return center
 
 func _create_pokedex_move_category_cell(category: String, width: float) -> Control:
@@ -25379,6 +27132,8 @@ func _create_pokedex_move_category_cell(category: String, width: float) -> Contr
 	return center
 
 func _create_pokedex_type_badge(type_name: String) -> Control:
+	if _uses_localized_type_text():
+		return _create_summary_move_type_label(type_name)
 	var type_label: Texture2D = _load_pokemon_type_text_label(type_name)
 	if type_label != null:
 		var icon := TextureRect.new()
@@ -25386,7 +27141,7 @@ func _create_pokedex_type_badge(type_name: String) -> Control:
 		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		icon.texture = type_label
-		icon.tooltip_text = type_name.capitalize()
+		icon.tooltip_text = _localized_type_name(type_name)
 		return icon
 	return _create_summary_move_type_label(type_name)
 
@@ -25395,8 +27150,72 @@ func _format_pokedex_type_list(types: Array) -> String:
 	for type_value: Variant in types:
 		var type_name := str(type_value).strip_edges()
 		if type_name != "":
-			names.append(type_name)
+			names.append(_localized_type_name(type_name))
 	return " / ".join(names)
+
+
+func _localized_type_name(type_name: String) -> String:
+	var fallback_name := _format_identifier_display_name(type_name)
+	var content_localization := _get_content_localization()
+	if content_localization != null and content_localization.has_method("type_name"):
+		return str(content_localization.call("type_name", type_name, fallback_name))
+	return fallback_name
+
+
+func _localized_nature_name(nature: String) -> String:
+	var fallback_name := _default_text(nature)
+	var content_localization := _get_content_localization()
+	if content_localization != null and content_localization.has_method("nature_name"):
+		return str(content_localization.call("nature_name", nature, fallback_name))
+	return fallback_name
+
+
+func _localized_species_name(species_id: String, fallback_name: String = "") -> String:
+	var fallback := fallback_name if not fallback_name.strip_edges().is_empty() else _format_identifier_display_name(species_id)
+	return _localized_content_name("species", species_id, fallback)
+
+
+func _pokemon_display_name(pokemon: Pokemon) -> String:
+	if pokemon == null:
+		return ""
+	return _localized_species_name(pokemon.species, pokemon.species)
+
+
+func _content_search_terms(kind: String, content_id: String, fallback_name: String) -> Array[String]:
+	var content_localization := _get_content_localization()
+	if content_localization != null and content_localization.has_method("search_terms"):
+		return content_localization.call("search_terms", kind, content_id, fallback_name)
+	return [content_id, fallback_name]
+
+
+func _localized_content_name(kind: String, content_id: String, fallback_name: String) -> String:
+	var content_localization := _get_content_localization()
+	if content_localization != null and content_localization.has_method("display_name"):
+		return str(content_localization.call("display_name", kind, content_id, fallback_name))
+	return fallback_name
+
+
+func _localized_content_description(kind: String, content_id: String, fallback_description: String) -> String:
+	var content_localization := _get_content_localization()
+	if content_localization != null and content_localization.has_method("short_description"):
+		return str(content_localization.call(
+			"short_description",
+			kind,
+			content_id,
+			fallback_description
+		))
+	return fallback_description
+
+
+func _get_content_localization() -> Node:
+	if is_inside_tree():
+		return get_node_or_null("/root/ContentLocalization")
+	var scene_tree := Engine.get_main_loop() as SceneTree
+	return scene_tree.root.get_node_or_null("ContentLocalization") if scene_tree != null else null
+
+
+func _uses_localized_type_text() -> bool:
+	return LocalizationManager.current_locale != "en"
 
 func _format_pokedex_value_list(values: Array) -> String:
 	var names: Array[String] = []
@@ -25440,13 +27259,13 @@ func _refresh_item_dex_results() -> void:
 		query = item_dex_search_input.text.strip_edges().to_lower()
 
 	var loading_label := Label.new()
-	loading_label.text = "Searching..."
+	loading_label.text = LocalizationManager.text("common.searching")
 	loading_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	loading_label.custom_minimum_size = Vector2(0, 44)
 	loading_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	item_dex_results_list.add_child(loading_label)
 	if item_dex_results_count_label != null:
-		item_dex_results_count_label.text = "Searching..."
+		item_dex_results_count_label.text = LocalizationManager.text("common.searching")
 
 	item_dex_search_request_id += 1
 	var request_id := item_dex_search_request_id
@@ -25459,9 +27278,9 @@ func _refresh_item_dex_results() -> void:
 
 	if not bool(search_result.get("success", false)):
 		if item_dex_results_count_label != null:
-			item_dex_results_count_label.text = "Unavailable"
+			item_dex_results_count_label.text = LocalizationManager.text("common.unavailable")
 		var error_label := Label.new()
-		error_label.text = "Could not load items."
+		error_label.text = LocalizationManager.text("ui.staff.dev.items_load_failed")
 		error_label.add_theme_color_override("font_color", UI_DANGER)
 		item_dex_results_list.add_child(error_label)
 		return
@@ -25476,11 +27295,15 @@ func _refresh_item_dex_results() -> void:
 		if count >= 40:
 			break
 	if item_dex_results_count_label != null:
-		item_dex_results_count_label.text = "%d result%s" % [count, "" if count == 1 else "s"]
+		item_dex_results_count_label.text = LocalizationManager.plural(
+			"ui.item_dex.result.one",
+			"ui.item_dex.result.many",
+			count
+		)
 
 	if count == 0:
 		var empty_label := Label.new()
-		empty_label.text = "No item results."
+		empty_label.text = LocalizationManager.text("ui.staff.dev.no_item_results")
 		empty_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		empty_label.custom_minimum_size = Vector2(0, 44)
 		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -25500,13 +27323,14 @@ func _filter_player_facing_item_variants(items: Array[Dictionary]) -> Array[Dict
 
 func _create_item_dex_result_button(item: Dictionary) -> Control:
 	var item_id := str(item.get("id", ""))
-	var item_name := str(item.get("name", item_id))
+	var localized_item := ItemLocalization.localize_item(item)
+	var item_name := str(localized_item.get("name", item_id))
 	var button := Button.new()
 	button.custom_minimum_size = Vector2(0, 58)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.focus_mode = Control.FOCUS_NONE
-	button.tooltip_text = str(item.get("shortDesc", item.get("desc", "")))
-	button.pressed.connect(_on_item_dex_result_selected.bind(item))
+	button.tooltip_text = str(localized_item.get("shortDesc", localized_item.get("desc", "")))
+	button.pressed.connect(_on_item_dex_result_selected.bind(localized_item))
 	button.set_meta("item_id", item_id)
 
 	var row := HBoxContainer.new()
@@ -25546,7 +27370,7 @@ func _create_item_dex_result_button(item: Dictionary) -> Control:
 	label_stack.add_child(label)
 
 	var meta_label := Label.new()
-	meta_label.text = _format_item_dex_category_label(item)
+	meta_label.text = _format_item_dex_category_label(localized_item)
 	meta_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	meta_label.add_theme_font_size_override("font_size", 10)
 	meta_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -25577,63 +27401,86 @@ func _refresh_item_dex_selection_state() -> void:
 		_style_item_dex_result_button(button, str(button.get_meta("item_id", "")) == item_dex_selected_item_id)
 
 func _on_item_dex_result_selected(item: Dictionary) -> void:
-	var item_id := str(item.get("id", ""))
+	var localized_item := ItemLocalization.localize_item(item)
+	var item_id := str(localized_item.get("id", ""))
 	item_dex_selected_item_id = item_id
+	item_dex_selected_item = localized_item.duplicate(true)
 	_refresh_item_dex_selection_state()
 	item_dex_icon.texture = _load_item_icon(
 		item_id,
-		str(item.get("machineKind", "")),
-		str(item.get("machineMoveType", "")),
+		str(localized_item.get("machineKind", "")),
+		str(localized_item.get("machineMoveType", "")),
 	)
-	item_dex_name_label.text = str(item.get("name", item_id))
-	item_dex_meta_label.text = _format_item_dex_meta(item)
-	var description := str(item.get("shortDesc", ""))
+	item_dex_name_label.text = str(localized_item.get("name", item_id))
+	item_dex_meta_label.text = _format_item_dex_meta(localized_item)
+	var description := str(localized_item.get("shortDesc", ""))
 	if description == "":
-		description = str(item.get("desc", ""))
+		description = str(localized_item.get("desc", ""))
 	if description == "":
-		description = "No item summary available yet."
+		description = LocalizationManager.text("ui.item_dex.no_summary")
 	item_dex_description_label.text = description
-	var effect_text := _format_item_dex_effect_info(item)
+	var effect_text := _format_item_dex_effect_info(localized_item)
 	if item_dex_effect_section_label != null:
 		item_dex_effect_section_label.visible = effect_text != ""
 	if item_dex_effect_label != null:
 		item_dex_effect_label.text = effect_text
 		item_dex_effect_label.visible = effect_text != ""
-	var capture_text := _format_item_dex_capture_info(item)
+	var capture_text := _format_item_dex_capture_info(localized_item)
 	if item_dex_capture_section_label != null:
 		item_dex_capture_section_label.visible = capture_text != ""
 	if item_dex_capture_label != null:
 		item_dex_capture_label.text = capture_text
 		item_dex_capture_label.visible = capture_text != ""
-	item_dex_sources_label.text = _format_item_dex_sources(item)
+	item_dex_sources_label.text = _format_item_dex_sources(localized_item)
 
 func _format_item_dex_meta(item: Dictionary) -> String:
 	var category_text := _format_item_dex_category_label(item)
 	var cost_value: Variant = item.get("cost", null)
-	var cost_text := "Unknown"
+	var cost_text := LocalizationManager.text("common.unknown")
 	if cost_value != null:
 		cost_text = "$%s" % _format_money(int(cost_value))
-	var meta_parts: Array[String] = ["Category: %s" % category_text]
+	var meta_parts: Array[String] = [
+		LocalizationManager.text("ui.item_dex.meta.category", {"category": category_text})
+	]
 	var potency_text := _format_item_dex_potency(item)
 	if potency_text != "":
-		meta_parts.append("Potency: %s" % potency_text)
-	meta_parts.append("Base price: %s" % cost_text)
+		meta_parts.append(LocalizationManager.text(
+			"ui.item_dex.meta.potency",
+			{"potency": potency_text}
+		))
+	meta_parts.append(LocalizationManager.text(
+		"ui.item_dex.meta.base_price",
+		{"price": cost_text}
+	))
 	return "    ".join(meta_parts)
 
 func _format_item_dex_category_label(item: Dictionary) -> String:
-	var category := _format_identifier_display_name(str(item.get("category", "-")))
+	var category := _localized_item_dex_term("category", str(item.get("category", "-")))
 	var sub_category_value: Variant = item.get("subCategory", "")
-	var sub_category := "" if sub_category_value == null else _format_identifier_display_name(str(sub_category_value))
+	var sub_category := (
+		""
+		if sub_category_value == null
+		else _localized_item_dex_term("subcategory", str(sub_category_value))
+	)
 	var machine_kind := str(item.get("machineKind", "")).strip_edges()
 	var machine_move_type := str(item.get("machineMoveType", "")).strip_edges()
 	if machine_kind != "":
-		var machine_label := _format_identifier_display_name(machine_kind)
+		var machine_label := _localized_item_dex_term("machine", machine_kind)
 		if machine_move_type != "":
-			machine_label += " • " + _format_identifier_display_name(machine_move_type)
+			machine_label += " • " + _localized_type_name(machine_move_type)
 		return "%s / %s" % [category, machine_label]
 	if sub_category == "":
 		return category
 	return "%s / %s" % [category, sub_category]
+
+func _localized_item_dex_term(group: String, raw_value: String) -> String:
+	var normalized := raw_value.strip_edges().to_lower().replace("-", "_").replace(" ", "_")
+	if normalized == "":
+		return "-"
+	var key := "ui.item_dex.%s.%s" % [group, normalized]
+	if LocalizationManager.has_key(key):
+		return LocalizationManager.text(key)
+	return _format_identifier_display_name(raw_value)
 
 func _format_item_dex_potency(item: Dictionary) -> String:
 	var potency_value: Variant = item.get("potency", null)
@@ -25644,37 +27491,37 @@ func _format_item_dex_potency(item: Dictionary) -> String:
 	var potency_text := str(int(potency_number)) if is_equal_approx(potency_number, float(int(potency_number))) else str(potency_number)
 	match potency_unit:
 		"experience":
-			return "%s EXP" % potency_text
+			return LocalizationManager.text("ui.item_dex.potency.exp", {"value": potency_text})
 		"hp":
-			return "%s HP" % potency_text
+			return LocalizationManager.text("ui.item_dex.potency.hp", {"value": potency_text})
 		"percent_hp":
-			return "%s%% HP" % potency_text
+			return LocalizationManager.text("ui.item_dex.potency.hp_percent", {"value": potency_text})
 		"pp":
-			return "%s PP" % potency_text
+			return LocalizationManager.text("ui.item_dex.potency.pp", {"value": potency_text})
 		"pp_all":
-			return "%s PP per move" % potency_text
+			return LocalizationManager.text("ui.item_dex.potency.pp_each", {"value": potency_text})
 		"percent_max_pp":
-			return "%s%% max PP" % potency_text
+			return LocalizationManager.text("ui.item_dex.potency.pp_max_percent", {"value": potency_text})
 		"full_hp":
-			return "Full HP"
+			return LocalizationManager.text("ui.item_dex.potency.full_hp")
 		"full_hp_status":
-			return "Full HP + status cure"
+			return LocalizationManager.text("ui.item_dex.potency.full_hp_status")
 		"full_pp":
-			return "Full PP"
+			return LocalizationManager.text("ui.item_dex.potency.full_pp")
 		"full_pp_all":
-			return "Full PP per move"
+			return LocalizationManager.text("ui.item_dex.potency.full_pp_each")
 		"level":
-			return "+%s level" % potency_text
+			return LocalizationManager.text("ui.item_dex.potency.level", {"value": potency_text})
 		"ability_change":
-			return "1 ability change"
+			return LocalizationManager.text("ui.item_dex.potency.ability_change")
 		"status":
-			return "1 status cure"
+			return LocalizationManager.text("ui.item_dex.potency.status")
 		"ev":
-			return "+%s EV" % potency_text
+			return LocalizationManager.text("ui.item_dex.potency.ev", {"value": potency_text})
 		"nature":
-			return "1 nature change"
+			return LocalizationManager.text("ui.item_dex.potency.nature")
 		"stat":
-			return "+%s stat" % potency_text
+			return LocalizationManager.text("ui.item_dex.potency.stat", {"value": potency_text})
 		_:
 			return potency_text
 
@@ -25687,39 +27534,45 @@ func _format_item_dex_effect_info(item: Dictionary) -> String:
 
 	var lines: Array[String] = []
 	if sub_category != "":
-		lines.append("Type: %s" % _format_identifier_display_name(sub_category))
+		lines.append(LocalizationManager.text(
+			"ui.item_dex.effect.type",
+			{"type": _localized_item_dex_term("subcategory", sub_category)}
+		))
 	if sub_category == "ev":
 		var stat_text := _summary_stat_label(str(item.get("stat", "")).strip_edges())
 		if stat_text != "":
-			lines.append("Stat: %s" % stat_text)
+			lines.append(LocalizationManager.text("ui.item_dex.effect.stat", {"stat": stat_text}))
 	if potency_text != "":
-		lines.append("Potency: %s" % potency_text)
+		lines.append(LocalizationManager.text(
+			"ui.item_dex.meta.potency",
+			{"potency": potency_text}
+		))
 
 	var item_id := _normalize_item_id(str(item.get("id", "")))
 	match sub_category:
 		"exp":
-			lines.append("Grants experience to the selected Pokemon.")
+			lines.append(LocalizationManager.text("ui.item_dex.effect.exp"))
 		"level":
-			lines.append("Raises the selected Pokemon by the listed number of levels.")
+			lines.append(LocalizationManager.text("ui.item_dex.effect.level"))
 		"heal":
-			lines.append("Restores HP to the selected Pokemon.")
+			lines.append(LocalizationManager.text("ui.item_dex.effect.heal"))
 		"revive":
-			lines.append("Revives a fainted Pokemon with the listed HP amount.")
+			lines.append(LocalizationManager.text("ui.item_dex.effect.revive"))
 		"pp":
-			lines.append("Restores or increases move PP.")
+			lines.append(LocalizationManager.text("ui.item_dex.effect.pp"))
 		"status":
-			lines.append("Cures a status condition.")
+			lines.append(LocalizationManager.text("ui.item_dex.effect.status"))
 		"ability":
-			lines.append("Changes an eligible Pokemon's ability.")
+			lines.append(LocalizationManager.text("ui.item_dex.effect.ability"))
 		"ev":
-			lines.append("Changes effort values for one stat.")
+			lines.append(LocalizationManager.text("ui.item_dex.effect.ev"))
 		"nature":
-			lines.append("Changes how stat growth is treated for the Pokemon.")
+			lines.append(LocalizationManager.text("ui.item_dex.effect.nature"))
 		"stat":
-			lines.append("Raises a stat-related value.")
+			lines.append(LocalizationManager.text("ui.item_dex.effect.stat_value"))
 		_:
 			if item_id != "":
-				lines.append("Structured effect metadata is available for this item.")
+				lines.append(LocalizationManager.text("ui.item_dex.effect.metadata"))
 	return "\n".join(lines)
 
 func _format_item_dex_capture_info(item: Dictionary) -> String:
@@ -25728,16 +27581,19 @@ func _format_item_dex_capture_info(item: Dictionary) -> String:
 
 	var item_id := _normalize_item_id(str(item.get("id", "")))
 	if item_id == "master-ball":
-		return "Guaranteed catch.\nMaster Ball always catches wild Pokemon in the current capture rules."
+		return LocalizationManager.text("ui.item_dex.capture.guaranteed")
 
 	var multiplier := float(ITEM_DEX_CAPTURE_BALL_MULTIPLIERS.get(item_id, 1.0))
 	var lines: Array[String] = [
-		"Current capture modifier: x%s" % _format_item_dex_multiplier(multiplier),
+		LocalizationManager.text(
+			"ui.item_dex.capture.modifier",
+			{"multiplier": _format_item_dex_multiplier(multiplier)}
+		),
 	]
 	var reference_note := _extract_item_dex_capture_effect_note(item)
 	if reference_note != "":
 		lines.append(reference_note)
-	lines.append("Actual catch chance also depends on target HP, species catch rate, and status.")
+	lines.append(LocalizationManager.text("ui.item_dex.capture.factors"))
 	return "\n".join(lines)
 
 func _is_item_dex_pokeball(item: Dictionary) -> bool:
@@ -25748,15 +27604,19 @@ func _is_item_dex_pokeball(item: Dictionary) -> bool:
 	return item_id.ends_with("ball") or item_id.contains("-ball")
 
 func _extract_item_dex_capture_effect_note(item: Dictionary) -> String:
-	var text := str(item.get("shortDesc", ""))
-	if text == "":
-		text = str(item.get("desc", ""))
-	text = text.strip_edges()
-	if text == "":
+	var display_text := str(item.get("shortDesc", item.get("desc", ""))).strip_edges()
+	var source_text := str(item.get(
+		"_i18n_source_short_desc",
+		item.get("shortDesc", item.get("desc", ""))
+	)).strip_edges()
+	if display_text == "" or source_text == "":
 		return ""
-	var lower_text := text.to_lower()
+	var lower_text := source_text.to_lower()
 	if lower_text.contains("success rate") or lower_text.contains("catch rate") or lower_text.contains("catches"):
-		return "Reference effect: %s" % text
+		return LocalizationManager.text(
+			"ui.item_dex.capture.reference",
+			{"effect": display_text}
+		)
 	return ""
 
 func _format_item_dex_multiplier(value: float) -> String:
@@ -25768,20 +27628,28 @@ func _format_item_dex_multiplier(value: float) -> String:
 func _format_item_dex_sources(item: Dictionary) -> String:
 	var summary_value: Variant = item.get("sourceSummary", [])
 	if typeof(summary_value) != TYPE_ARRAY:
-		return "No known repeatable ways yet."
+		return LocalizationManager.text("ui.item_dex.sources.none")
 
 	var summaries: Array = summary_value
 	if summaries.is_empty():
-		return "No known repeatable ways yet."
+		return LocalizationManager.text("ui.item_dex.sources.none")
 
 	var lines: Array[String] = []
 	for summary_value_item: Variant in summaries:
 		if typeof(summary_value_item) != TYPE_DICTIONARY:
 			continue
 		var summary: Dictionary = summary_value_item
-		var label := str(summary.get("label", summary.get("type", "Source")))
+		var raw_label := str(summary.get("label", summary.get("type", ""))).strip_edges()
+		var label := (
+			LocalizationManager.text("ui.item_dex.sources.source")
+			if raw_label == ""
+			else _localized_item_dex_term("source", raw_label)
+		)
 		var count: int = int(summary.get("count", 0))
-		lines.append("%s (%s)" % [label, count])
+		lines.append(LocalizationManager.text(
+			"ui.item_dex.sources.count",
+			{"source": label, "count": count}
+		))
 
 		var preview_value: Variant = summary.get("preview", [])
 		if typeof(preview_value) != TYPE_ARRAY:
@@ -25793,7 +27661,10 @@ func _format_item_dex_sources(item: Dictionary) -> String:
 
 		var hidden_count: int = count - previews.size()
 		if hidden_count > 0:
-			lines.append("+%s more" % hidden_count)
+			lines.append(LocalizationManager.text(
+				"ui.item_dex.sources.more",
+				{"count": hidden_count}
+			))
 	return "\n".join(lines)
 
 func _on_dev_add_pokemon_button_pressed() -> void:
@@ -26073,7 +27944,7 @@ func _refresh_dev_item_results() -> void:
 		query = dev_item_search_input.text.strip_edges().to_lower()
 
 	var loading_label := Label.new()
-	loading_label.text = "Searching..."
+	loading_label.text = LocalizationManager.text("common.searching")
 	loading_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	dev_item_results_list.add_child(loading_label)
 
@@ -26088,7 +27959,7 @@ func _refresh_dev_item_results() -> void:
 
 	if not bool(search_result.get("success", false)):
 		var error_label := Label.new()
-		error_label.text = "Could not load items."
+		error_label.text = LocalizationManager.text("ui.staff.dev.items_load_failed")
 		error_label.add_theme_color_override("font_color", UI_DANGER)
 		dev_item_results_list.add_child(error_label)
 		return
@@ -26106,7 +27977,7 @@ func _refresh_dev_item_results() -> void:
 
 	if count == 0:
 		var empty_label := Label.new()
-		empty_label.text = "No item results."
+		empty_label.text = LocalizationManager.text("ui.staff.dev.no_item_results")
 		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		dev_item_results_list.add_child(empty_label)
 
@@ -26123,7 +27994,7 @@ func _normalize_dev_item_results(items_value: Variant) -> Array[Dictionary]:
 		var item_id := str(item.get("id", "")).strip_edges()
 		if item_id == "":
 			continue
-		normalized_items.append({
+		normalized_items.append(ItemLocalization.localize_item({
 			"id": item_id,
 			"name": str(item.get("name", _item_name_from_id(item_id))),
 			"category": str(item.get("category", "")),
@@ -26133,11 +28004,12 @@ func _normalize_dev_item_results(items_value: Variant) -> Array[Dictionary]:
 			"cost": item.get("cost", null),
 			"potency": item.get("potency", null),
 			"potencyUnit": item.get("potencyUnit", null),
+			"stat": str(item.get("stat", "")),
 			"machineKind": str(item.get("machineKind", "")).strip_edges().to_lower(),
 			"machineMoveType": str(item.get("machineMoveType", "")).strip_edges().to_lower(),
 			"sources": item.get("sources", []),
 			"sourceSummary": item.get("sourceSummary", []),
-		})
+		}))
 	return normalized_items
 
 func _create_dev_item_result_button(item: Dictionary) -> Control:
@@ -26472,32 +28344,36 @@ func _show_dev_pokemon_popup(mode: int) -> void:
 		return
 
 	dev_pokemon_popup_mode = mode
-	match dev_pokemon_popup_mode:
-		DevPokemonPopupMode.CONTENT_CREATOR:
-			dev_pokemon_title.text = "Alpha Pokemon"
-			dev_pokemon_subtitle.text = "Paste a Pokémon or Showdown team here"
-			dev_pokemon_add_button.text = "Create"
-			dev_pokemon_text.placeholder_text = "Paste one Pokemon or a full Showdown/Pokepaste team. Shiny, invalid EVs, and non-held items are rejected."
-		DevPokemonPopupMode.TEAM:
-			dev_pokemon_title.text = "Create Pokemon"
-			dev_pokemon_subtitle.text = "Paste one Pokémon or a complete Showdown / Pokepaste team"
-			dev_pokemon_add_button.text = "Create"
-			dev_pokemon_text.placeholder_text = "Paste one Pokemon or a full Showdown/Pokepaste team here"
-		DevPokemonPopupMode.SPAWN:
-			dev_pokemon_title.text = "Spawn Pokemon"
-			dev_pokemon_subtitle.text = "Start a wild encounter from a name, set, or Pokepaste"
-			dev_pokemon_add_button.text = "Spawn"
-			dev_pokemon_text.placeholder_text = "Enter a Pokemon name, Showdown set, or Pokepaste"
-		_:
-			dev_pokemon_title.text = "Add Pokemon"
-			dev_pokemon_subtitle.text = "Paste Showdown or Pokepaste text to add a Pokémon"
-			dev_pokemon_add_button.text = "Add"
-			dev_pokemon_text.placeholder_text = "Paste Showdown/Pokepaste text here"
+	_refresh_dev_pokemon_popup_copy()
 
 	dev_pokemon_add_button.disabled = dev_pokemon_popup_mode == DevPokemonPopupMode.CONTENT_CREATOR and not _can_use_content_creator_generation()
 	dev_pokemon_popup.visible = true
 	_activate_ui_panel(dev_pokemon_popup)
 	dev_pokemon_text.grab_focus()
+
+
+func _refresh_dev_pokemon_popup_copy() -> void:
+	match dev_pokemon_popup_mode:
+		DevPokemonPopupMode.CONTENT_CREATOR:
+			dev_pokemon_title.text = LocalizationManager.text("ui.staff.dev.pokemon.alpha_title")
+			dev_pokemon_subtitle.text = LocalizationManager.text("ui.staff.dev.pokemon.alpha_subtitle")
+			dev_pokemon_add_button.text = LocalizationManager.text("ui.staff.dev.pokemon.create")
+			dev_pokemon_text.placeholder_text = LocalizationManager.text("ui.staff.dev.pokemon.alpha_placeholder")
+		DevPokemonPopupMode.TEAM:
+			dev_pokemon_title.text = LocalizationManager.text("ui.staff.dev.pokemon.create_title")
+			dev_pokemon_subtitle.text = LocalizationManager.text("ui.staff.dev.pokemon.create_subtitle")
+			dev_pokemon_add_button.text = LocalizationManager.text("ui.staff.dev.pokemon.create")
+			dev_pokemon_text.placeholder_text = LocalizationManager.text("ui.staff.dev.pokemon.create_placeholder")
+		DevPokemonPopupMode.SPAWN:
+			dev_pokemon_title.text = LocalizationManager.text("ui.staff.dev.pokemon.spawn_title")
+			dev_pokemon_subtitle.text = LocalizationManager.text("ui.staff.dev.pokemon.spawn_subtitle")
+			dev_pokemon_add_button.text = LocalizationManager.text("ui.staff.dev.pokemon.spawn")
+			dev_pokemon_text.placeholder_text = LocalizationManager.text("ui.staff.dev.pokemon.spawn_placeholder")
+		_:
+			dev_pokemon_title.text = LocalizationManager.text("ui.staff.dev.pokemon.add_title")
+			dev_pokemon_subtitle.text = LocalizationManager.text("ui.staff.dev.pokemon.add_subtitle")
+			dev_pokemon_add_button.text = LocalizationManager.text("ui.staff.dev.add")
+			dev_pokemon_text.placeholder_text = LocalizationManager.text("ui.staff.dev.pokemon.add_placeholder")
 
 func _on_dev_pokemon_add_button_pressed() -> void:
 	if dev_pokemon_popup_mode == DevPokemonPopupMode.CONTENT_CREATOR:
@@ -26677,7 +28553,7 @@ func _show_pc_popup() -> void:
 		return
 	pc_popup.visible = true
 	_activate_ui_panel(pc_popup)
-	pc_status_label.text = "Loading..."
+	_set_pc_status("ui.storage.status.loading")
 	pc_selected_source = {}
 	_set_pc_release_mode_active(false)
 	if pc_search_input != null:
@@ -26730,8 +28606,9 @@ func _refresh_pc_state(load_all_boxes: bool = false) -> void:
 			_refresh_pc_box_tabs()
 			pc_current_box = _box_state_from_boxes(boxes, pc_selected_box_index)
 		else:
-			pc_status_label.text = "Could not load boxes."
-			_add_chat_message("Could not load PC boxes: %s" % str(box_result.get("error", "Unknown error")))
+			_set_pc_status("ui.storage.error.load_boxes")
+			_add_chat_message(LocalizationManager.text("ui.storage.error.load_boxes"))
+			push_warning("UIOverlay: PC box list load failed: %s" % str(box_result.get("error", "Unknown error")))
 			_render_pc_party()
 			_render_pc_box()
 			return
@@ -26744,14 +28621,15 @@ func _refresh_pc_state(load_all_boxes: bool = false) -> void:
 			_update_pc_all_boxes_cache(pc_current_box)
 			_refresh_pc_box_tabs()
 		else:
-			pc_status_label.text = "Could not load box."
-			_add_chat_message("Could not load PC box: %s" % str(box_result.get("error", "Unknown error")))
+			_set_pc_status("ui.storage.error.load_box")
+			_add_chat_message(LocalizationManager.text("ui.storage.error.load_box"))
+			push_warning("UIOverlay: PC box load failed: %s" % str(box_result.get("error", "Unknown error")))
 			return
 
 	_render_pc_party()
 	_render_pc_box()
 	if _pc_search_query() == "":
-		pc_status_label.text = "Drag to move  ·  Click to inspect"
+		_set_pc_status("ui.storage.status.idle")
 
 
 func _update_pc_all_boxes_cache(box_state: Dictionary) -> void:
@@ -26786,7 +28664,10 @@ func _refresh_pc_box_tabs() -> void:
 		button.custom_minimum_size = Vector2(76, 30)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.focus_mode = Control.FOCUS_NONE
-		button.tooltip_text = "Box %d: %s" % [index + 1, _pc_box_display_name(index)]
+		button.tooltip_text = LocalizationManager.text("ui.storage.box.tab_tooltip", {
+			"number": index + 1,
+			"box": _pc_box_display_name(index),
+		})
 		button.pressed.connect(_on_pc_box_selected.bind(index))
 		_apply_pc_box_tab_style(button, index == pc_selected_box_index)
 		pc_box_tab_bar.add_child(button)
@@ -26825,12 +28706,12 @@ func _build_pc_box_selector_panel() -> void:
 	title_stack.add_theme_constant_override("separation", 1)
 	header.add_child(title_stack)
 	var title := Label.new()
-	title.text = "BOX SELECTOR"
+	_set_localized_control_property(title, "text", "ui.storage.selector.title")
 	title.add_theme_font_size_override("font_size", 15)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	title_stack.add_child(title)
 	var subtitle := Label.new()
-	subtitle.text = "Choose a storage box"
+	_set_localized_control_property(subtitle, "text", "ui.storage.selector.subtitle")
 	subtitle.add_theme_font_size_override("font_size", 10)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	title_stack.add_child(subtitle)
@@ -26845,7 +28726,11 @@ func _build_pc_box_selector_panel() -> void:
 
 	pc_box_selector_count_label = Label.new()
 	pc_box_selector_count_label.name = "BoxSelectorCount"
-	pc_box_selector_count_label.text = "%d BOXES" % max(pc_box_count, 1)
+	pc_box_selector_count_label.text = LocalizationManager.plural(
+		"ui.storage.selector.box.one",
+		"ui.storage.selector.box.many",
+		max(pc_box_count, 1)
+	)
 	pc_box_selector_count_label.add_theme_font_size_override("font_size", 9)
 	pc_box_selector_count_label.add_theme_color_override("font_color", PC_ACCENT)
 	stack.add_child(pc_box_selector_count_label)
@@ -26894,7 +28779,11 @@ func _refresh_pc_box_selector() -> void:
 	if pc_box_selector_list == null:
 		return
 	if pc_box_selector_count_label != null:
-		pc_box_selector_count_label.text = "%d BOXES" % max(pc_box_count, 1)
+		pc_box_selector_count_label.text = LocalizationManager.plural(
+			"ui.storage.selector.box.one",
+			"ui.storage.selector.box.many",
+			max(pc_box_count, 1)
+		)
 	_clear_children(pc_box_selector_list)
 	for index in range(max(pc_box_count, 1)):
 		var button := Button.new()
@@ -26905,7 +28794,10 @@ func _refresh_pc_box_selector() -> void:
 		button.mouse_filter = Control.MOUSE_FILTER_STOP
 		button.add_theme_font_size_override("font_size", 12)
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		button.tooltip_text = "Open %s" % _pc_box_display_name(index)
+		button.tooltip_text = LocalizationManager.text(
+			"ui.storage.selector.open",
+			{"box": _pc_box_display_name(index)}
+		)
 		button.pressed.connect(_on_pc_selector_box_selected.bind(index))
 		_apply_pc_box_tab_style(button, index == pc_selected_box_index)
 		pc_box_selector_list.add_child(button)
@@ -26936,7 +28828,10 @@ func _on_pc_selector_box_selected(index: int) -> void:
 func _pc_box_display_name(box_index: int) -> String:
 	var box := _box_state_from_boxes(pc_all_boxes, box_index)
 	var name := str(box.get("name", "")).strip_edges()
-	return name if name != "" else "Box %d" % (box_index + 1)
+	return name if name != "" else LocalizationManager.text(
+		"ui.storage.box.default",
+		{"number": box_index + 1}
+	)
 
 
 func _update_pc_box_header() -> void:
@@ -26944,7 +28839,10 @@ func _update_pc_box_header() -> void:
 		return
 	pc_box_title_label.text = _pc_box_display_name(pc_selected_box_index)
 	if pc_box_rename_button != null:
-		pc_box_rename_button.tooltip_text = "Rename %s" % pc_box_title_label.text
+		pc_box_rename_button.tooltip_text = LocalizationManager.text(
+			"ui.storage.box.rename_named",
+			{"box": pc_box_title_label.text}
+		)
 
 
 func _begin_pc_box_inline_rename() -> void:
@@ -26983,7 +28881,9 @@ func _finish_pc_box_inline_rename() -> void:
 	pc_box_rename_button.disabled = false
 	var result: Dictionary = await PokemonStorageService.rename_box(pc_selected_box_index, new_name)
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not rename box: %s" % str(result.get("error", "Unknown error")))
+		_set_pc_status("ui.storage.error.rename_box")
+		_add_chat_message(LocalizationManager.text("ui.storage.error.rename_box"))
+		push_warning("UIOverlay: PC box rename failed: %s" % str(result.get("error", "Unknown error")))
 		_update_pc_box_header()
 		return
 	var renamed_box := _dictionary_from_value(result.get("box", {}))
@@ -26991,7 +28891,7 @@ func _finish_pc_box_inline_rename() -> void:
 	pc_current_box = renamed_box
 	_refresh_pc_box_tabs()
 	_update_pc_box_header()
-	pc_status_label.text = "Box renamed."
+	_set_pc_status("ui.storage.box.renamed")
 
 
 func _apply_pc_box_tab_style(button: Button, selected: bool) -> void:
@@ -27092,22 +28992,33 @@ func _render_pc_box_search_results(search_query: String) -> void:
 		pc_box_grid.columns = 1
 		pc_box_grid.add_child(_create_pc_search_empty_state(search_query))
 	if pc_box_title_label != null:
-		pc_box_title_label.text = "Search Results"
+		pc_box_title_label.text = LocalizationManager.text("ui.storage.search_results")
 	if pc_box_capacity_label != null:
-		pc_box_capacity_label.text = "Across %d box%s" % [pc_box_count, "" if pc_box_count == 1 else "es"]
+		pc_box_capacity_label.text = LocalizationManager.plural(
+			"ui.storage.search_across.one",
+			"ui.storage.search_across.many",
+			pc_box_count
+		)
 	if pc_search_results_label != null:
-		pc_search_results_label.text = "%d FOUND" % result_count
+		pc_search_results_label.text = LocalizationManager.plural(
+			"ui.storage.search_found.one",
+			"ui.storage.search_found.many",
+			result_count
+		)
 		pc_search_results_label.add_theme_color_override("font_color", PC_ACCENT if result_count > 0 else UI_MUTED_TEXT)
-	pc_status_label.text = "Showing matches from every box · Clear search to return to Box %d" % (pc_selected_box_index + 1)
+	_set_pc_status("ui.storage.search_scope", {"number": pc_selected_box_index + 1})
 
 
 func _refresh_pc_box_overview(occupied_count: int) -> void:
 	if pc_box_title_label != null:
 		_update_pc_box_header()
 	if pc_box_capacity_label != null:
-		pc_box_capacity_label.text = "%d / %d Pokémon stored" % [occupied_count, pc_slots_per_box]
+		pc_box_capacity_label.text = LocalizationManager.text("ui.storage.capacity", {
+			"occupied": occupied_count,
+			"capacity": pc_slots_per_box,
+		})
 	if pc_search_results_label != null:
-		pc_search_results_label.text = "ALL BOXES"
+		pc_search_results_label.text = LocalizationManager.text("ui.storage.all_boxes")
 		pc_search_results_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 
 
@@ -27131,14 +29042,14 @@ func _create_pc_search_empty_state(search_query: String) -> PanelContainer:
 	margin.add_child(stack)
 
 	var title := Label.new()
-	title.text = "No Pokémon found"
+	_set_localized_control_property(title, "text", "ui.storage.empty.title")
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 16)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	stack.add_child(title)
 
 	var hint := Label.new()
-	hint.text = "Nothing matched “%s”. Try a species, type, ability or held item." % search_query
+	hint.text = LocalizationManager.text("ui.storage.empty.query", {"query": search_query})
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	hint.add_theme_font_size_override("font_size", 11)
@@ -27149,8 +29060,16 @@ func _create_pc_search_empty_state(search_query: String) -> PanelContainer:
 
 func _create_pc_party_slot_button(slot_index: int, storage_slot_index: int, pokemon: Pokemon, selected: bool) -> Button:
 	var occupied := pokemon != null
-	var title := pokemon.species if occupied else "Empty"
-	var subtitle := "Lv. %s" % pokemon.level if occupied else "Party slot %d" % (slot_index + 1)
+	var title := (
+		_pokemon_display_name(pokemon)
+		if occupied
+		else LocalizationManager.text("ui.storage.slot.empty")
+	)
+	var subtitle := (
+		LocalizationManager.text("ui.storage.level", {"level": pokemon.level})
+		if occupied
+		else LocalizationManager.text("ui.storage.slot.party_label", {"number": slot_index + 1})
+	)
 	var texture: Texture2D = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny) if occupied else null
 	var held_item_id := _get_pokemon_held_item_id(pokemon) if occupied else ""
 	var button := _create_pc_pokemon_slot_button(
@@ -27165,7 +29084,10 @@ func _create_pc_party_slot_button(slot_index: int, storage_slot_index: int, poke
 		"%d" % (slot_index + 1),
 		PC_PARTY_SLOT_SIZE
 	)
-	button.tooltip_text = "%s party slot %d" % [title, slot_index + 1]
+	button.tooltip_text = LocalizationManager.text("ui.storage.slot.party", {
+		"pokemon": title,
+		"number": slot_index + 1,
+	})
 	if occupied and pokemon.owned_pokemon_id > 0:
 		button.drag_source = {
 			"type": "party",
@@ -27195,7 +29117,11 @@ func _create_pc_box_slot_button_for_location(box_index: int, slot_index: int, po
 	var types: Array = _pc_payload_types(payload)
 	var texture: Texture2D = PokemonAssets.load_party_icon(species, shiny) if occupied else null
 	var button := _create_pc_box_pokemon_slot_button(
-		species if occupied else "Empty",
+		(
+			_pc_payload_species_display_name(payload)
+			if occupied
+			else LocalizationManager.text("ui.storage.slot.empty")
+		),
 		level,
 		shiny,
 		held_item_id,
@@ -27207,7 +29133,15 @@ func _create_pc_box_slot_button_for_location(box_index: int, slot_index: int, po
 		PC_BOX_SLOT_SIZE
 	)
 	button.use_native_drag = false
-	button.tooltip_text = "%s Box %d slot %02d" % [species if occupied else "Empty", box_index + 1, slot_index + 1]
+	button.tooltip_text = LocalizationManager.text("ui.storage.slot.box", {
+		"pokemon": (
+			_pc_payload_species_display_name(payload)
+			if occupied
+			else LocalizationManager.text("ui.storage.slot.empty")
+		),
+		"box": box_index + 1,
+		"slot": "%02d" % (slot_index + 1),
+	})
 	if occupied:
 		var pokemon_id := _pc_owned_pokemon_id_from_response(pokemon_response)
 		if pokemon_id > 0:
@@ -27232,7 +29166,11 @@ func _create_pc_box_pokemon_slot_button(title_text: String, level: int, shiny: b
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.focus_mode = Control.FOCUS_NONE
 	button.drag_title = title_text
-	button.drag_subtitle = "Lv. %s" % level if occupied else "Box slot %s" % slot_badge
+	button.drag_subtitle = (
+		LocalizationManager.text("ui.storage.level", {"level": level})
+		if occupied
+		else LocalizationManager.text("ui.storage.slot.box_label", {"slot": slot_badge})
+	)
 	button.drag_texture = texture if texture != null else PokemonAssets.load_unknown_icon()
 	button.mouse_default_cursor_shape = Control.CURSOR_DRAG if occupied else Control.CURSOR_ARROW
 	_apply_pc_pokemon_slot_style(button, occupied, selected, types)
@@ -27309,7 +29247,7 @@ func _create_pc_box_pokemon_slot_button(title_text: String, level: int, shiny: b
 
 	var level_label := Label.new()
 	level_label.name = "Level"
-	level_label.text = "Lv.%s" % level if occupied else ""
+	level_label.text = LocalizationManager.text("ui.storage.level", {"level": level}) if occupied else ""
 	level_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	level_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	level_label.add_theme_font_size_override("font_size", 9)
@@ -27410,7 +29348,11 @@ func _create_pc_pokemon_slot_button(title_text: String, subtitle_text: String, s
 	title_row.add_child(title)
 
 	var subtitle := Label.new()
-	subtitle.text = subtitle_text if occupied else "Open party slot"
+	subtitle.text = (
+		subtitle_text
+		if occupied
+		else LocalizationManager.text("ui.storage.slot.open_party")
+	)
 	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	subtitle.add_theme_font_size_override("font_size", 10)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -27426,6 +29368,15 @@ func _create_pc_pokemon_slot_button(title_text: String, subtitle_text: String, s
 func _pc_payload_species(payload: Dictionary) -> String:
 	var species := str(payload.get("displaySpecies", payload.get("species", "Pokemon"))).strip_edges()
 	return species if species != "" else "Pokemon"
+
+
+func _pc_payload_species_display_name(payload: Dictionary) -> String:
+	var source_name := _pc_payload_species(payload)
+	var species_id := str(payload.get(
+		"speciesId",
+		payload.get("species_id", payload.get("species", source_name))
+	))
+	return _localized_species_name(species_id, source_name)
 
 
 func _pc_payload_level(payload: Dictionary) -> int:
@@ -27551,7 +29502,10 @@ func _add_pc_held_item_marker(icon: Control, held_item_id: String) -> void:
 	var marker: Control = Control.new()
 	marker.name = "HeldItemMarker"
 	marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	marker.tooltip_text = "Holding %s" % _item_name_from_id(held_item_id)
+	marker.tooltip_text = LocalizationManager.text(
+		"ui.storage.holding",
+		{"item": _item_name_from_id(held_item_id)}
+	)
 	marker.custom_minimum_size = Vector2(10, 14)
 	marker.anchor_left = 1.0
 	marker.anchor_right = 1.0
@@ -27607,13 +29561,23 @@ func _pc_search_query() -> String:
 	return pc_search_input.text.strip_edges().to_lower()
 
 
-func _create_pc_filter_input(placeholder: String) -> LineEdit:
+func _create_pc_filter_input(placeholder_key: String) -> LineEdit:
 	var input := LineEdit.new()
-	input.placeholder_text = placeholder
-	input.tooltip_text = "Filter by %s" % placeholder.to_lower()
+	_set_localized_control_property(input, "placeholder_text", placeholder_key)
+	input.tooltip_text = LocalizationManager.text(
+		"ui.storage.filter_by",
+		{"field": LocalizationManager.text(placeholder_key).to_lower()}
+	)
 	input.clear_button_enabled = true
 	_apply_line_edit_style(input)
 	return input
+
+
+func _set_pc_status(key: String, values: Dictionary = {}) -> void:
+	pc_status_translation_key = key
+	pc_status_translation_values = values.duplicate(true)
+	if pc_status_label != null:
+		pc_status_label.text = LocalizationManager.text(key, values)
 
 
 func _on_pc_filter_toggled(active: bool) -> void:
@@ -27645,10 +29609,13 @@ func _pc_pokemon_matches_filters(pokemon_response: Dictionary) -> bool:
 		str(payload.get("heldItemId", "")),
 		str(payload.get("held_item_id", "")),
 	])
-	return _pc_filter_matches_value(pc_filter_species_input, [species]) \
+	var nature_search_terms: Array = _content_search_terms("natures", nature, nature)
+	var ability_search_terms: Array = _content_search_terms("abilities", ability, ability)
+	var species_search_terms: Array = _content_search_terms("species", species, species)
+	return _pc_filter_matches_value(pc_filter_species_input, species_search_terms) \
 		and _pc_filter_matches_value(pc_filter_type_input, types) \
-		and _pc_filter_matches_value(pc_filter_nature_input, [nature]) \
-		and _pc_filter_matches_value(pc_filter_ability_input, [ability]) \
+		and _pc_filter_matches_value(pc_filter_nature_input, nature_search_terms) \
+		and _pc_filter_matches_value(pc_filter_ability_input, ability_search_terms) \
 		and _pc_filter_matches_value(pc_filter_move_input, moves) \
 		and _pc_filter_matches_value(pc_filter_item_input, [held_item])
 
@@ -27658,12 +29625,23 @@ func _pc_payload_move_search_fields(payload: Dictionary) -> Array[String]:
 	for move_value: Variant in _array_from_variant(payload.get("moves", payload.get("moveSlots", []))):
 		if move_value is Dictionary:
 			var move_entry: Dictionary = move_value as Dictionary
+			var move_id := str(move_entry.get(
+				"id",
+				move_entry.get("move", move_entry.get("moveId", move_entry.get("move_id", move_entry.get("name", ""))))
+			))
+			var fallback_name := str(move_entry.get("name", move_id))
+			for localized_term: String in _content_search_terms("moves", move_id, fallback_name):
+				if not fields.has(localized_term):
+					fields.append(localized_term)
 			for key: String in ["name", "move", "id", "moveId", "move_id"]:
 				var move_name := str(move_entry.get(key, "")).strip_edges()
-				if move_name != "":
+				if move_name != "" and not fields.has(move_name):
 					fields.append(move_name)
 		else:
-			fields.append(str(move_value).strip_edges())
+			var move_id := str(move_value).strip_edges()
+			for localized_term: String in _content_search_terms("moves", move_id, move_id):
+				if not fields.has(localized_term):
+					fields.append(localized_term)
 	return fields
 
 
@@ -27681,13 +29659,14 @@ func _on_pc_search_text_changed(_text: String) -> void:
 	_render_pc_box()
 	var query := _pc_search_query()
 	if query == "" and not _pc_has_active_filter():
-		pc_status_label.text = "Drag to move  ·  Click to inspect"
+		_set_pc_status("ui.storage.status.idle")
 
 
 func _pc_pokemon_matches_search(pokemon_response: Dictionary, query: String) -> bool:
 	var payload: Dictionary = _dictionary_from_value(pokemon_response.get("pokemon", {}))
 	var fields: Array[String] = [
 		_pc_payload_species(payload),
+		_pc_payload_species_display_name(payload),
 		str(payload.get("ability", "")),
 		str(payload.get("item", "")),
 		str(payload.get("heldItemId", "")),
@@ -27718,7 +29697,12 @@ func _pc_payload_type_search_fields(payload: Dictionary) -> Array[String]:
 		var value: String = str(payload.get(key, "")).strip_edges()
 		if value != "":
 			fields.append(value)
-	return fields
+	var search_fields := fields.duplicate()
+	for type_value: Variant in fields:
+		for term: String in _content_search_terms("types", str(type_value), str(type_value)):
+			if not search_fields.has(term):
+				search_fields.append(term)
+	return search_fields
 
 
 func _pc_owned_pokemon_id_from_response(pokemon_response: Dictionary) -> int:
@@ -28018,7 +30002,7 @@ func _set_pc_release_selection(source: Dictionary, pokemon_name: String) -> void
 	pc_selected_release_source = source.duplicate(true)
 	pc_selected_release_name = pokemon_name.strip_edges()
 	if pc_selected_release_name == "":
-		pc_selected_release_name = "Pokemon"
+		pc_selected_release_name = LocalizationManager.text("ui.storage.fallback_pokemon")
 	_refresh_pc_release_controls()
 
 
@@ -28048,19 +30032,27 @@ func _refresh_pc_release_controls() -> void:
 	if pc_release_drop_panel != null:
 		pc_release_drop_panel.visible = pc_release_mode_active
 	if pc_release_mode_button != null:
-		pc_release_mode_button.text = "Cancel" if pc_release_mode_active else "Release"
+		pc_release_mode_button.text = LocalizationManager.text(
+			"ui.storage.release.cancel" if pc_release_mode_active else "ui.storage.release"
+		)
 		pc_release_mode_button.disabled = pc_release_in_progress
-		pc_release_mode_button.tooltip_text = "Stop choosing Pokémon to release" if pc_release_mode_active else "Choose Pokémon to release"
+		pc_release_mode_button.tooltip_text = LocalizationManager.text(
+			"ui.storage.release.stop" if pc_release_mode_active else "ui.storage.release.choose"
+		)
 		_apply_button_style(pc_release_mode_button, "danger" if pc_release_mode_active else "secondary")
 		pc_release_mode_button.mouse_default_cursor_shape = Control.CURSOR_ARROW if pc_release_in_progress else Control.CURSOR_POINTING_HAND
-	pc_release_hint_label.text = "Releasing..." if pc_release_in_progress else "Drop a Pokémon here to release it"
+	pc_release_hint_label.text = LocalizationManager.text(
+		"ui.storage.release.releasing"
+		if pc_release_in_progress
+		else "ui.storage.release.drop_hint"
+	)
 
 
 func _confirm_pc_release_from_source(source: Dictionary) -> void:
 	if not pc_release_mode_active or pc_release_in_progress or source.is_empty():
 		return
 	if str(source.get("type", "")) == "party" and PlayerSave.party.size() <= 1:
-		pc_status_label.text = "You must keep at least one Pokemon in your party."
+		_set_pc_status("ui.storage.release.keep_one")
 		return
 	var pokemon_id: int = int(source.get("pokemonId", 0))
 	if pokemon_id <= 0:
@@ -28068,13 +30060,16 @@ func _confirm_pc_release_from_source(source: Dictionary) -> void:
 	var pokemon_name: String = _pc_release_name_for_source(source)
 	_set_pc_release_selection(source, pokemon_name)
 	_show_ui_confirm_popup(
-		"Release Pokemon",
-		"Release %s permanently?\n\nThis cannot be undone." % pc_selected_release_name,
-		"Release",
+		LocalizationManager.text("ui.storage.release.title"),
+		LocalizationManager.text(
+			"ui.storage.release.confirm",
+			{"pokemon": pc_selected_release_name}
+		),
+		LocalizationManager.text("ui.storage.release"),
 		Callable(self, "_release_selected_pc_pokemon_confirmed"),
 		Vector2i(460, 190),
 		true,
-		"Cancel",
+		LocalizationManager.text("ui.storage.release.cancel"),
 		Callable(self, "_on_pc_release_confirm_cancelled")
 	)
 
@@ -28090,13 +30085,13 @@ func _pc_release_name_for_source(source: Dictionary) -> String:
 			if party_index >= 0:
 				var pokemon: Pokemon = PlayerSave.party[party_index]
 				if pokemon != null and pokemon.species.strip_edges() != "":
-					return pokemon.species.strip_edges()
+					return _localized_species_name(pokemon.species, pokemon.species)
 		"box":
 			var pokemon_response: Dictionary = _pc_box_pokemon_response_at_location(int(source.get("boxIndex", -1)), int(source.get("slotIndex", -1)))
 			if not pokemon_response.is_empty():
 				var payload: Dictionary = _dictionary_from_value(pokemon_response.get("pokemon", {}))
-				return _pc_payload_species(payload)
-	return "Pokemon"
+				return _pc_payload_species_display_name(payload)
+	return LocalizationManager.text("ui.storage.fallback_pokemon")
 
 
 func _release_selected_pc_pokemon_confirmed() -> void:
@@ -28113,17 +30108,17 @@ func _release_selected_pc_pokemon() -> void:
 
 	pc_release_in_progress = true
 	_refresh_pc_release_controls()
-	pc_status_label.text = "Releasing..."
+	_set_pc_status("ui.storage.release.releasing")
 	var result: Dictionary = await PokemonStorageService.release_pokemon(pokemon_id)
 	pc_release_in_progress = false
 	if not bool(result.get("success", false)):
-		pc_status_label.text = "Release failed."
-		_add_chat_message("Could not release Pokemon: %s" % str(result.get("error", "Unknown error")))
+		_set_pc_status("ui.storage.release.failed")
+		_add_chat_message(LocalizationManager.text("ui.storage.release.failed"))
 		_refresh_pc_release_controls()
 		return
 
 	_set_pc_release_mode_active(false)
-	_add_chat_message("Pokemon released.")
+	_add_chat_message(LocalizationManager.text("ui.storage.release.success"))
 	_refresh_party()
 	await _refresh_pc_state(_pc_search_query() != "")
 
@@ -28153,7 +30148,7 @@ func _on_pc_slot_dropped(source: Dictionary, target: Dictionary) -> void:
 		return
 
 	if str(source.get("type", "")) == "party" and str(target.get("type", "")) == "box" and PlayerSave.party.size() <= 1 and not _pc_target_has_pokemon(target):
-		pc_status_label.text = "You must keep at least one Pokemon in your party."
+		_set_pc_status("ui.storage.release.keep_one")
 		return
 
 	pc_selected_source = source.duplicate(true)
@@ -28192,14 +30187,14 @@ func _move_pc_selection_to(target: Dictionary) -> void:
 	pc_move_in_progress = true
 	var source := pc_selected_source.duplicate(true)
 	_preview_pc_slot_move(source, target)
-	pc_status_label.text = "Saving move..."
+	_set_pc_status("ui.storage.move.saving")
 	var target_party_pokemon_before := _pc_party_pokemon_at_storage_slot(int(target.get("partySlot", -1))) if str(target.get("type", "")) == "party" else null
 	var target_box_pokemon_id_before := _pc_box_pokemon_id_at_target(target) if str(target.get("type", "")) == "box" else 0
 	var result: Dictionary = await PokemonStorageService.move_pokemon(pokemon_id, source, target)
 	pc_move_in_progress = false
 	if not bool(result.get("success", false)):
-		pc_status_label.text = "Move failed."
-		_add_chat_message("Could not move Pokemon: %s" % str(result.get("error", "Unknown error")))
+		_set_pc_status("ui.storage.move.failed")
+		_add_chat_message(LocalizationManager.text("ui.storage.move.failed"))
 		_render_pc_party()
 		_render_pc_box()
 		return
@@ -28210,9 +30205,39 @@ func _move_pc_selection_to(target: Dictionary) -> void:
 	if not compacted:
 		_apply_pc_party_slot_move(source, target, target_party_pokemon_before, target_box_pokemon_id_before)
 	var location: Dictionary = _dictionary_from_value(result.get("location", {}))
-	_add_chat_message("Pokemon moved to %s." % PokemonStorageService.storage_location_label(location))
+	_add_chat_message(LocalizationManager.text(
+		"ui.storage.move.success",
+		{"location": _pc_storage_location_label(location)}
+	))
 	_refresh_party()
 	await _refresh_pc_state(_pc_search_query() != "")
+
+
+func _pc_storage_location_label(value: Variant) -> String:
+	var location: Dictionary = PokemonStorageService.normalize_storage_location(value)
+	match str(location.get("type", "")):
+		"party":
+			var party_slot := int(location.get("partySlot", -1))
+			if party_slot >= 0:
+				return LocalizationManager.text(
+					"ui.storage.location.party_slot",
+					{"number": party_slot + 1}
+				)
+			return LocalizationManager.text("ui.storage.location.party")
+		"box":
+			var box_index := int(location.get("boxIndex", -1))
+			var slot_index := int(location.get("slotIndex", -1))
+			if box_index >= 0 and slot_index >= 0:
+				return LocalizationManager.text("ui.storage.location.box_slot", {
+					"box": box_index + 1,
+					"slot": slot_index + 1,
+				})
+			if box_index >= 0:
+				return LocalizationManager.text(
+					"ui.storage.location.box",
+					{"number": box_index + 1}
+				)
+	return LocalizationManager.text("ui.storage.location.generic")
 
 
 func _preview_pc_slot_move(source: Dictionary, target: Dictionary) -> void:
@@ -28577,7 +30602,9 @@ func _on_mail_claim_button_pressed() -> void:
 
 	var result: Dictionary = await MailService.claim_mail(selected_mail_id)
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not claim mail: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.mail.error.claim", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
 
 	var party_value: Variant = result.get("party", [])
@@ -28588,6 +30615,10 @@ func _on_mail_claim_button_pressed() -> void:
 		bag_inventory_items = _normalize_bag_inventory_items(inventory_value)
 		bag_inventory_loaded = true
 		_refresh_bag_items()
+	var wallet_value: Variant = result.get("wallet", {})
+	if wallet_value is Dictionary:
+		PlayerWalletService.apply_wallet_result({"success": true, "wallet": wallet_value})
+		refresh_money_display()
 
 	var claimed_mail: Dictionary = _mail_dictionary_from_variant(result.get("mail", {}))
 	_emit_mail_claim_messages(previous_attachments, claimed_mail, _array_from_variant(result.get("storageLocations", [])))
@@ -28605,7 +30636,9 @@ func _on_mail_attachment_claim_pressed(attachment_id: int) -> void:
 
 	var result: Dictionary = await MailService.claim_mail_attachment(selected_mail_id, attachment_id)
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not claim attachment: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.mail.error.claim_attachment", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
 
 	var party_value: Variant = result.get("party", [])
@@ -28616,6 +30649,10 @@ func _on_mail_attachment_claim_pressed(attachment_id: int) -> void:
 		bag_inventory_items = _normalize_bag_inventory_items(inventory_value)
 		bag_inventory_loaded = true
 		_refresh_bag_items()
+	var wallet_value: Variant = result.get("wallet", {})
+	if wallet_value is Dictionary:
+		PlayerWalletService.apply_wallet_result({"success": true, "wallet": wallet_value})
+		refresh_money_display()
 
 	var claimed_mail: Dictionary = _mail_dictionary_from_variant(result.get("mail", {}))
 	_emit_mail_claim_messages(previous_attachments, claimed_mail, _array_from_variant(result.get("storageLocations", [])))
@@ -28658,31 +30695,55 @@ func _emit_mail_claim_messages(previous_attachments: Array, claimed_mail: Dictio
 			payload = payload_value as Dictionary
 
 		match attachment_type:
+			"currency":
+				var currency_id := str(payload.get("currency", "money"))
+				var amount: int = int(payload.get("amount", 0))
+				_add_chat_message("%s %s" % [
+					amount,
+					LocalizationManager.text("ui.trainer_card.wallet.%s" % currency_id),
+				])
 			"item":
-				var item_name: String = str(payload.get("name", payload.get("itemId", "Item")))
+				var item_id := str(payload.get("itemId", ""))
+				var item_name: String = ItemLocalization.display_name(
+					item_id,
+					str(payload.get("name", item_id if not item_id.is_empty() else LocalizationManager.text("ui.market.item_fallback")))
+				)
 				var quantity: int = int(payload.get("quantity", 1))
-				_add_chat_message("Received %sx %s." % [quantity, item_name])
+				_add_chat_message(LocalizationManager.text("ui.mail.message.received_item", {
+					"quantity": quantity,
+					"item": item_name,
+				}))
 			"pokemon":
 				var pokemon_payload: Dictionary = {}
 				var pokemon_value: Variant = payload.get("pokemon", {})
 				if pokemon_value is Dictionary:
 					pokemon_payload = pokemon_value as Dictionary
-				var species: String = str(pokemon_payload.get("species", "Pokemon"))
+				var species: String = str(pokemon_payload.get(
+					"species",
+					LocalizationManager.text("ui.mail.pokemon_fallback")
+				))
+				var species_name := _localized_species_name(species, species)
 				var level: int = int(pokemon_payload.get("level", 1))
 				var location: Dictionary = {}
 				if pokemon_claim_index >= 0 and pokemon_claim_index < storage_locations.size():
 					location = PokemonStorageService.normalize_storage_location(storage_locations[pokemon_claim_index])
 				pokemon_claim_index += 1
 				if location.is_empty():
-					_add_chat_message("Received Pokemon: %s (Lv. %s)." % [species, level])
+					_add_chat_message(LocalizationManager.text("ui.mail.message.received_pokemon", {
+						"pokemon": species_name,
+						"level": level,
+					}))
 				else:
-					_add_chat_message("Received Pokemon: %s (Lv. %s), sent to %s." % [
-						species,
-						level,
-						PokemonStorageService.storage_location_label(location),
-					])
+					_add_chat_message(LocalizationManager.text(
+						"ui.mail.message.received_pokemon_storage",
+						{
+							"pokemon": species_name,
+							"level": level,
+							"location": PokemonStorageService.storage_location_label(location),
+						}
+					))
 			_:
-				_add_chat_message("Mail attachment claimed.")
+				_add_chat_message(LocalizationManager.text("ui.mail.message.attachment_claimed"))
 
 func _on_mail_delete_button_pressed() -> void:
 	if selected_mail_id <= 0:
@@ -28690,7 +30751,9 @@ func _on_mail_delete_button_pressed() -> void:
 
 	var result: Dictionary = await MailService.delete_mail(selected_mail_id, active_mail_box)
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not delete mail: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.mail.error.delete", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
 
 	selected_mail_id = -1
@@ -28699,7 +30762,7 @@ func _on_mail_delete_button_pressed() -> void:
 		selected_mail_id = int(mailbox_messages[0].get("id", -1))
 	_refresh_mailbox()
 	_refresh_mail_attention_from_messages(mailbox_messages)
-	_add_chat_message("Mail deleted.")
+	_add_chat_message(LocalizationManager.text("ui.mail.message.deleted"))
 
 func _prepare_mail_attachment_options() -> void:
 	mail_compose_inventory_items.clear()
@@ -28709,21 +30772,28 @@ func _prepare_mail_attachment_options() -> void:
 	_load_mail_item_attachment_options()
 
 func _load_mail_item_attachment_options() -> void:
-	mail_item_search_input.text = "Loading bag..."
+	mail_inventory_load_state = "loading"
+	mail_item_search_input.text = LocalizationManager.text("ui.mail.compose.loading_bag")
 	mail_item_search_input.editable = false
 	mail_add_item_button.disabled = true
 	_clear_mail_item_suggestions()
 
 	var result: Dictionary = await InventoryService.load_inventory()
 	if not bool(result.get("success", false)):
+		mail_inventory_load_state = "error"
 		mail_item_search_input.text = ""
-		mail_item_search_input.placeholder_text = "Could not load bag"
+		mail_item_search_input.placeholder_text = LocalizationManager.text("ui.mail.compose.bag_load_failed")
 		return
 
+	mail_inventory_load_state = "loaded"
 	mail_compose_inventory_items = _normalize_bag_inventory_items(result.get("items", []))
 	mail_item_search_input.text = ""
 	mail_item_search_input.editable = true
-	mail_item_search_input.placeholder_text = "Search items in your bag" if not mail_compose_inventory_items.is_empty() else "No items in bag"
+	mail_item_search_input.placeholder_text = LocalizationManager.text(
+		"ui.mail.compose.item_search"
+		if not mail_compose_inventory_items.is_empty()
+		else "ui.mail.compose.no_items"
+	)
 	mail_add_item_button.disabled = true
 
 func _on_mail_item_search_changed(_text: String) -> void:
@@ -28801,10 +30871,10 @@ func _refresh_mail_pokemon_attachment_options() -> void:
 		if mail_selected_pokemon_ids.has(pokemon.owned_pokemon_id):
 			continue
 		mail_compose_party_pokemon.append(pokemon)
-		mail_pokemon_option.add_item("%s Lv. %s" % [pokemon.species, pokemon.level], mail_compose_party_pokemon.size() - 1)
+		mail_pokemon_option.add_item("%s Lv. %s" % [_pokemon_display_name(pokemon), pokemon.level], mail_compose_party_pokemon.size() - 1)
 
 	if mail_compose_party_pokemon.is_empty():
-		mail_pokemon_option.add_item("No eligible Pokemon", -1)
+		mail_pokemon_option.add_item(LocalizationManager.text("ui.mail.compose.no_eligible_pokemon"), -1)
 		mail_pokemon_option.disabled = true
 		mail_add_pokemon_button.disabled = true
 	else:
@@ -28815,7 +30885,7 @@ func _on_mail_add_item_attachment_pressed() -> void:
 	if mail_selected_item_for_attachment.is_empty():
 		return
 	if mail_selected_item_attachments.size() >= 5:
-		_add_chat_message("You can attach up to 5 item stacks.")
+		_add_chat_message(LocalizationManager.text("ui.mail.error.item_limit"))
 		return
 
 	var item: Dictionary = mail_selected_item_for_attachment
@@ -28843,10 +30913,10 @@ func _on_mail_add_item_attachment_pressed() -> void:
 
 func _on_mail_add_pokemon_attachment_pressed() -> void:
 	if mail_selected_pokemon_ids.size() >= 5:
-		_add_chat_message("You can attach up to 5 Pokemon.")
+		_add_chat_message(LocalizationManager.text("ui.mail.error.pokemon_limit"))
 		return
 	if mail_selected_pokemon_ids.size() >= max(PlayerSave.party.size() - 1, 0):
-		_add_chat_message("You must keep at least one Pokemon in your party.")
+		_add_chat_message(LocalizationManager.text("ui.mail.error.keep_pokemon"))
 		return
 
 	var selected_index: int = mail_pokemon_option.selected
@@ -28868,7 +30938,7 @@ func _refresh_mail_attachment_summary() -> void:
 	var has_attachments: bool = not mail_selected_item_attachments.is_empty() or not mail_selected_pokemon_ids.is_empty()
 	if not has_attachments:
 		var empty_label := Label.new()
-		empty_label.text = "No attachments selected\nYou can also send mail without an attachment."
+		empty_label.text = LocalizationManager.text("ui.mail.compose.no_attachments")
 		empty_label.custom_minimum_size = Vector2(0, 56)
 		empty_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		empty_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -28879,12 +30949,18 @@ func _refresh_mail_attachment_summary() -> void:
 
 	for attachment: Dictionary in mail_selected_item_attachments:
 		var item_id: String = str(attachment.get("itemId", "")).strip_edges()
-		var item_name: String = str(attachment.get("name", item_id if item_id != "" else "Item"))
+		var item_name: String = ItemLocalization.display_name(
+			item_id,
+			str(attachment.get(
+				"name",
+				item_id if item_id != "" else LocalizationManager.text("ui.market.item_fallback")
+			))
+		)
 		var quantity: int = max(int(attachment.get("quantity", 1)), 1)
 		mail_selected_attachments_list.add_child(_create_mail_compose_attachment_row(
 			_load_item_icon(item_id),
 			item_name,
-			"Item stack  ·  x%s" % quantity,
+			LocalizationManager.text("ui.mail.compose.item_stack", {"quantity": quantity}),
 			_on_mail_remove_item_attachment_pressed.bind(item_id)
 		))
 
@@ -28893,17 +30969,17 @@ func _refresh_mail_attachment_summary() -> void:
 		if pokemon != null:
 			mail_selected_attachments_list.add_child(_create_mail_compose_attachment_row(
 				PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny),
-				pokemon.species,
-				"Pokémon  ·  Lv. %s" % pokemon.level,
+				_pokemon_display_name(pokemon),
+				LocalizationManager.text("ui.mail.compose.pokemon_level", {"level": pokemon.level}),
 				_on_mail_remove_pokemon_attachment_pressed.bind(pokemon_id)
 			))
 
 	var limit_label := Label.new()
-	limit_label.text = "ITEM STACKS  %s/5     ·     POKÉMON  %s/5     ·     PARTY KEPT  %s" % [
-		mail_selected_item_attachments.size(),
-		mail_selected_pokemon_ids.size(),
-		max(PlayerSave.party.size() - mail_selected_pokemon_ids.size(), 0),
-	]
+	limit_label.text = LocalizationManager.text("ui.mail.compose.limits", {
+		"items": mail_selected_item_attachments.size(),
+		"pokemon": mail_selected_pokemon_ids.size(),
+		"remaining": max(PlayerSave.party.size() - mail_selected_pokemon_ids.size(), 0),
+	})
 	limit_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	limit_label.add_theme_font_size_override("font_size", 9)
 	limit_label.add_theme_color_override("font_color", Color("#79d9ff"))
@@ -28958,10 +31034,10 @@ func _create_mail_compose_attachment_row(
 	heading.add_child(detail)
 
 	var remove_button := Button.new()
-	remove_button.text = "Remove"
+	remove_button.text = LocalizationManager.text("common.remove")
 	remove_button.custom_minimum_size = Vector2(74, 30)
 	remove_button.focus_mode = Control.FOCUS_NONE
-	remove_button.tooltip_text = "Remove this gift"
+	remove_button.tooltip_text = LocalizationManager.text("ui.mail.compose.remove_gift")
 	remove_button.pressed.connect(remove_callback)
 	_apply_button_style(remove_button)
 	remove_button.add_theme_font_size_override("font_size", 11)
@@ -28992,7 +31068,7 @@ func _get_party_pokemon_by_owned_id(owned_pokemon_id: int) -> Pokemon:
 
 func _on_mail_compose_send_button_pressed() -> void:
 	if not mail_selected_pokemon_ids.is_empty() and mail_selected_pokemon_ids.size() >= PlayerSave.party.size():
-		_add_chat_message("You must keep at least one Pokemon in your party.")
+		_add_chat_message(LocalizationManager.text("ui.mail.error.keep_pokemon"))
 		return
 
 	var result: Dictionary = await MailService.send_mail(
@@ -29003,7 +31079,9 @@ func _on_mail_compose_send_button_pressed() -> void:
 		mail_selected_pokemon_ids
 	)
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not send mail: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.mail.error.send", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
 
 	var party_value: Variant = result.get("party", [])
@@ -29026,9 +31104,11 @@ func _on_mail_compose_send_button_pressed() -> void:
 	var sent_mail: Dictionary = result.get("sent", {}) as Dictionary
 	var fee_paid: int = int(sent_mail.get("feePaid", sent_mail.get("fee_paid", 0)))
 	if fee_paid > 0:
-		_add_chat_message("Mail sent. Paid %s." % _format_money(fee_paid))
+		_add_chat_message(LocalizationManager.text("ui.mail.message.sent_paid", {
+			"amount": _format_money(fee_paid),
+		}))
 	else:
-		_add_chat_message("Mail sent.")
+		_add_chat_message(LocalizationManager.text("ui.mail.message.sent"))
 	_load_mailbox()
 
 func _on_mail_compose_close_button_pressed() -> void:
@@ -29039,7 +31119,9 @@ func _on_mail_compose_close_button_pressed() -> void:
 func _load_mailbox() -> void:
 	var result: Dictionary = await MailService.load_mail(active_mail_box)
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not load mail: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message(LocalizationManager.text("ui.mail.error.load", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
 		return
 
 	mailbox_messages = _normalize_mailbox_messages(result.get("mail", []))
@@ -29080,6 +31162,44 @@ func _refresh_mailbox() -> void:
 	_refresh_mail_detail()
 	_set_mail_popup_size.call_deferred()
 
+func _refresh_mail_localized_ui() -> void:
+	if mail_popup != null:
+		LocalizationManager.localize_tree(mail_popup)
+	if mail_compose_popup != null:
+		LocalizationManager.localize_tree(mail_compose_popup)
+	if mail_compose_help_popup != null:
+		LocalizationManager.localize_tree(mail_compose_help_popup)
+	if mail_compose_body_input != null:
+		mail_compose_body_input.placeholder_text = LocalizationManager.text(
+			"ui.mail.compose.message_placeholder"
+		)
+	if mail_item_search_input != null:
+		match mail_inventory_load_state:
+			"loading":
+				mail_item_search_input.text = LocalizationManager.text("ui.mail.compose.loading_bag")
+			"error":
+				mail_item_search_input.placeholder_text = LocalizationManager.text(
+					"ui.mail.compose.bag_load_failed"
+				)
+			"loaded":
+				mail_item_search_input.placeholder_text = LocalizationManager.text(
+					"ui.mail.compose.item_search"
+					if not mail_compose_inventory_items.is_empty()
+					else "ui.mail.compose.no_items"
+				)
+			_:
+				mail_item_search_input.placeholder_text = LocalizationManager.text(
+					"ui.mail.compose.item_search"
+				)
+	if mail_list != null:
+		_refresh_mail_list()
+	if mail_subject_label != null:
+		_refresh_mail_detail()
+	if mail_selected_attachments_list != null:
+		_refresh_mail_attachment_summary()
+	if mail_pokemon_option != null and mail_compose_popup != null and mail_compose_popup.visible:
+		_refresh_mail_pokemon_attachment_options()
+
 func _refresh_mail_list() -> void:
 	if mail_list == null:
 		return
@@ -29090,36 +31210,61 @@ func _refresh_mail_list() -> void:
 		child.queue_free()
 
 	var list_title: Label = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailListPanel/MarginContainer/MailListScroll/MailList/InboxLabel
-	list_title.text = "%s  ·  %s" % ["SENT" if active_mail_box == "sent" else "INBOX", mailbox_messages.size()]
+	list_title.text = LocalizationManager.text(
+		"ui.mail.list.sent" if active_mail_box == "sent" else "ui.mail.list.inbox",
+		{"count": mailbox_messages.size()}
+	)
 	mail_empty_inbox_label.visible = mailbox_messages.is_empty()
 	mail_empty_inbox_label.text = (
-		"No sent messages yet.\nMessages you send will appear here."
+		LocalizationManager.text("ui.mail.empty.sent")
 		if active_mail_box == "sent"
-		else "Your inbox is empty.\nNew deliveries will appear here."
+		else LocalizationManager.text("ui.mail.empty.inbox")
 	)
 	for mail: Dictionary in mailbox_messages:
 		var button := Button.new()
 		var mail_id: int = int(mail.get("id", -1))
-		var subject: String = str(mail.get("subject", "Mail")).strip_edges()
-		var sender: String = str(mail.get("senderDisplayName", mail.get("senderUsername", "Unknown"))).strip_edges()
+		var subject: String = str(mail.get("subject", LocalizationManager.text("ui.mail.fallback"))).strip_edges()
+		var sender: String = str(mail.get(
+			"senderDisplayName",
+			mail.get("senderUsername", LocalizationManager.text("common.unknown"))
+		)).strip_edges()
 		var sender_username: String = str(mail.get("senderUsername", "")).strip_edges()
-		var recipient: String = str(mail.get("recipientUsername", "Unknown")).strip_edges()
+		var recipient: String = str(mail.get(
+			"recipientUsername",
+			LocalizationManager.text("common.unknown")
+		)).strip_edges()
 		var attachment_count: int = _array_from_variant(mail.get("attachments", [])).size()
 		var is_unread: bool = active_mail_box == "inbox" and not _mail_message_is_read(mail)
 		var contact_text: String = (
-			"To  @%s" % (recipient if recipient != "" else "unknown")
+			LocalizationManager.text("ui.mail.contact.to", {
+				"username": recipient
+				if recipient != ""
+				else LocalizationManager.text("common.unknown").to_lower(),
+			})
 			if active_mail_box == "sent"
-			else "From  %s%s" % [
-				sender if sender != "" else "Unknown",
-				"  ·  @%s" % sender_username if sender_username != "" else "",
-			]
+			else LocalizationManager.text("ui.mail.contact.from", {
+				"sender": sender
+				if sender != ""
+				else LocalizationManager.text("common.unknown"),
+				"username": (
+					LocalizationManager.text("ui.mail.contact.username", {
+						"username": sender_username,
+					})
+					if sender_username != ""
+					else ""
+				),
+			})
 		)
 		var attachment_text := ""
 		if attachment_count > 0:
-			attachment_text = "  ·  %s attachment%s" % [attachment_count, "" if attachment_count == 1 else "s"]
+			attachment_text = LocalizationManager.plural(
+				"ui.mail.attachment_count.one",
+				"ui.mail.attachment_count.many",
+				attachment_count
+			)
 		button.text = "%s%s\n%s%s" % [
 			"●  " if is_unread else "",
-			subject if subject != "" else "Mail",
+			subject if subject != "" else LocalizationManager.text("ui.mail.fallback"),
 			contact_text,
 			attachment_text,
 		]
@@ -29128,7 +31273,9 @@ func _refresh_mail_list() -> void:
 		button.custom_minimum_size = Vector2(0, 66)
 		button.focus_mode = Control.FOCUS_NONE
 		button.disabled = mail_id <= 0
-		button.tooltip_text = subject if subject != "" else "Mail"
+		button.tooltip_text = (
+			subject if subject != "" else LocalizationManager.text("ui.mail.fallback")
+		)
 		_apply_mail_card_style(button, mail_id == selected_mail_id, attachment_count > 0, is_unread)
 		button.pressed.connect(_on_mail_selected.bind(mail_id))
 		mail_list.add_child(button)
@@ -29182,10 +31329,10 @@ func _refresh_mail_detail() -> void:
 	var mail: Dictionary = _get_mail_by_id(selected_mail_id)
 	var attachment_title: Label = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/AttachmentTitle
 	if mail.is_empty():
-		mail_subject_label.text = "Choose a message"
-		mail_sender_label.text = "Select an item from your mailbox to read it."
-		mail_body_label.text = "Your message will appear here."
-		attachment_title.text = "ATTACHMENTS"
+		mail_subject_label.text = LocalizationManager.text("ui.mail.detail.choose")
+		mail_sender_label.text = LocalizationManager.text("ui.mail.detail.select")
+		mail_body_label.text = LocalizationManager.text("ui.mail.detail.placeholder")
+		attachment_title.text = LocalizationManager.text("ui.mail.attachments")
 		_render_mail_attachments([])
 		mail_claim_button.visible = false
 		mail_reply_button.visible = false
@@ -29193,27 +31340,38 @@ func _refresh_mail_detail() -> void:
 		mail_delete_button.disabled = true
 		return
 
-	var subject: String = str(mail.get("subject", "Mail")).strip_edges()
-	mail_subject_label.text = subject if subject != "" else "Mail"
+	var subject: String = str(mail.get("subject", LocalizationManager.text("ui.mail.fallback"))).strip_edges()
+	mail_subject_label.text = (
+		subject if subject != "" else LocalizationManager.text("ui.mail.fallback")
+	)
 	if active_mail_box == "sent":
-		mail_sender_label.text = "TO  ·  @%s" % str(mail.get("recipientUsername", "-"))
+		mail_sender_label.text = LocalizationManager.text("ui.mail.detail.to", {
+			"username": str(mail.get("recipientUsername", "-")),
+		})
 	else:
-		mail_sender_label.text = "FROM  ·  %s  ·  @%s" % [
-			str(mail.get("senderDisplayName", "Unknown")),
-			str(mail.get("senderUsername", "-")),
-		]
+		mail_sender_label.text = LocalizationManager.text("ui.mail.detail.from", {
+			"sender": str(mail.get(
+				"senderDisplayName",
+				LocalizationManager.text("common.unknown")
+			)),
+			"username": str(mail.get("senderUsername", "-")),
+		})
 	mail_body_label.text = str(mail.get("body", ""))
 	if mail_body_label.text.strip_edges() == "":
-		mail_body_label.text = "(No message)"
+		mail_body_label.text = LocalizationManager.text("ui.mail.detail.no_message")
 
 	var attachments: Array = _array_from_variant(mail.get("attachments", []))
-	attachment_title.text = "ATTACHMENTS  ·  %s" % attachments.size()
+	attachment_title.text = LocalizationManager.text("ui.mail.attachments_count", {
+		"count": attachments.size(),
+	})
 	_render_mail_attachments(attachments)
 	var has_unclaimed_attachments: bool = _mail_has_unclaimed_attachments(attachments)
 	mail_claim_button.visible = active_mail_box == "inbox" and not attachments.is_empty()
 	mail_reply_button.visible = _mail_can_reply(mail)
 	mail_delete_button.visible = true
-	mail_claim_button.text = "Claim All" if has_unclaimed_attachments else "All Claimed"
+	mail_claim_button.text = LocalizationManager.text(
+		"ui.mail.claim_all" if has_unclaimed_attachments else "ui.mail.all_claimed"
+	)
 	mail_claim_button.disabled = not has_unclaimed_attachments
 	mail_delete_button.disabled = active_mail_box == "inbox" and has_unclaimed_attachments
 
@@ -29249,6 +31407,8 @@ func _format_reply_subject(subject: String) -> String:
 func _mail_can_reply(mail: Dictionary) -> bool:
 	if mail.is_empty():
 		return false
+	if str(mail.get("senderType", "player")).strip_edges().to_lower() in ["system", "admin"]:
+		return false
 
 	var can_reply_as_sender: bool = str(mail.get("senderUsername", "")).strip_edges() != ""
 	var can_reply_as_recipient: bool = str(mail.get("recipientUsername", "")).strip_edges() != ""
@@ -29266,7 +31426,7 @@ func _render_mail_attachments(attachments: Array) -> void:
 
 	if attachments.is_empty():
 		var empty_label := Label.new()
-		empty_label.text = "No attachments included"
+		empty_label.text = LocalizationManager.text("ui.mail.attachments_empty")
 		empty_label.custom_minimum_size = Vector2(0, 48)
 		empty_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		empty_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -29283,7 +31443,11 @@ func _render_mail_attachments(attachments: Array) -> void:
 			payload = attachment.get("payload", {}) as Dictionary
 		var claimed: bool = _mail_attachment_is_claimed(attachment)
 		var voided: bool = _mail_attachment_is_voided(attachment)
-		var suffix := " (unavailable)" if voided else (" (claimed)" if claimed else "")
+		var suffix := (
+			LocalizationManager.text("ui.mail.attachment.unavailable")
+			if voided
+			else LocalizationManager.text("ui.mail.attachment.claimed") if claimed else ""
+		)
 		var attachment_id: int = int(attachment.get("id", -1))
 		var can_claim: bool = (
 			active_mail_box == "inbox"
@@ -29292,12 +31456,34 @@ func _render_mail_attachments(attachments: Array) -> void:
 			and not voided
 		)
 		match str(attachment.get("type", "")):
-			"item":
+			"currency":
+				var currency_id := str(payload.get("currency", "money"))
+				var amount: int = int(payload.get("amount", 0))
 				mail_attachment_list.add_child(_create_mail_attachment_row(
-					_load_item_icon(str(payload.get("itemId", ""))),
+					null,
+					"%s %s%s" % [
+						amount,
+						LocalizationManager.text("ui.trainer_card.wallet.%s" % currency_id),
+						suffix,
+					],
+					{},
+					attachment_id,
+					can_claim
+				))
+			"item":
+				var item_id := str(payload.get("itemId", ""))
+				var item_name := ItemLocalization.display_name(
+					item_id,
+					str(payload.get(
+						"name",
+						item_id if not item_id.is_empty() else LocalizationManager.text("ui.market.item_fallback")
+					))
+				)
+				mail_attachment_list.add_child(_create_mail_attachment_row(
+					_load_item_icon(item_id),
 					"%sx %s%s" % [
 					int(payload.get("quantity", 1)),
-					str(payload.get("name", payload.get("itemId", "Item"))),
+					item_name,
 					suffix,
 					],
 					{},
@@ -29308,12 +31494,16 @@ func _render_mail_attachments(attachments: Array) -> void:
 				var pokemon_payload: Dictionary = {}
 				if payload.get("pokemon", {}) is Dictionary:
 					pokemon_payload = payload.get("pokemon", {}) as Dictionary
-				var species: String = str(pokemon_payload.get("species", "Pokemon"))
+				var species: String = str(pokemon_payload.get(
+					"species",
+					LocalizationManager.text("ui.mail.pokemon_fallback")
+				))
+				var species_name := _localized_species_name(species, species)
 				var shiny: bool = bool(pokemon_payload.get("shiny", false))
 				mail_attachment_list.add_child(_create_mail_attachment_row(
 					PokemonAssets.load_party_icon(species, shiny),
 					"%s Lv. %s%s" % [
-					species,
+					species_name,
 					int(pokemon_payload.get("level", 1)),
 					suffix,
 					],
@@ -29324,7 +31514,7 @@ func _render_mail_attachments(attachments: Array) -> void:
 			_:
 				mail_attachment_list.add_child(_create_mail_attachment_row(
 					null,
-					"Attachment%s" % suffix,
+					"%s%s" % [LocalizationManager.text("ui.mail.attachment"), suffix],
 					{},
 					attachment_id,
 					can_claim
@@ -29372,18 +31562,18 @@ func _create_mail_attachment_row(
 
 	if not pokemon_payload.is_empty():
 		var summary_button := Button.new()
-		summary_button.text = "Summary"
+		summary_button.text = LocalizationManager.text("ui.mail.summary")
 		summary_button.custom_minimum_size = Vector2(74, 26)
 		summary_button.focus_mode = Control.FOCUS_NONE
 		summary_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-		summary_button.tooltip_text = "View Pokémon summary"
+		summary_button.tooltip_text = LocalizationManager.text("ui.mail.summary_tooltip")
 		summary_button.pressed.connect(_on_mail_pokemon_attachment_pressed.bind(pokemon_payload))
 		_apply_button_style(summary_button)
 		row.add_child(summary_button)
 
 	if can_claim:
 		var claim_button := Button.new()
-		claim_button.text = "Claim"
+		claim_button.text = LocalizationManager.text("ui.mail.claim")
 		claim_button.custom_minimum_size = Vector2(58, 26)
 		claim_button.focus_mode = Control.FOCUS_NONE
 		claim_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -29400,7 +31590,9 @@ func _on_mail_pokemon_attachment_pressed(pokemon_payload: Dictionary) -> void:
 func _open_readonly_pokemon_summary(pokemon_payload: Dictionary) -> void:
 	var pokemon: Pokemon = PokemonFactory.create_pokemon_from_backend_payload(pokemon_payload)
 	if pokemon == null:
-		_add_chat_message("Could not open Pokemon summary: %s" % PokemonFactory.last_error_message)
+		_add_chat_message(LocalizationManager.text("ui.mail.error.open_summary", {
+			"error": PokemonFactory.last_error_message,
+		}))
 		return
 
 	var card_key: String = _get_pokemon_summary_card_key(pokemon, -1, "readonly")
@@ -29445,7 +31637,7 @@ func _promote_trade_summary_to_window(card_key: String) -> void:
 		return
 	var host := DRAGGABLE_SUBWINDOW.new() as DraggableSubwindow
 	host.name = "TradePokemonSummary"
-	host.title = "Pokemon Summary"
+	host.title = LocalizationManager.text("ui.pokemon_summary.title")
 	host.borderless = true
 	host.unresizable = true
 	host.always_on_top = false
@@ -29672,24 +31864,27 @@ func _open_pvp_popup_section(section_name: String) -> void:
 func _pvp_popup_title_for_section(section_name: String) -> String:
 	match section_name:
 		"Ranked":
-			return "Ranked"
+			return LocalizationManager.text("ui.pvp.mode.ranked")
 		"Tournaments":
-			return "Tournaments"
+			return LocalizationManager.text("ui.pvp.mode.tournaments")
 		"Custom / Casual":
-			return "Custom / Casual"
+			return LocalizationManager.text("ui.pvp.mode.custom")
 		_:
-			return "PvP"
+			return LocalizationManager.text("ui.pvp.title")
 
 func _pvp_popup_subtitle_for_section(section_name: String) -> String:
 	match section_name:
 		"Ranked":
-			return "Competitive matchmaking · %s" % pvp_active_format_name
+			return LocalizationManager.text(
+				"ui.pvp.popup.ranked_subtitle",
+				{"format": pvp_active_format_name}
+			)
 		"Tournaments":
-			return "Scheduled competitive events"
+			return LocalizationManager.text("ui.pvp.mode.scheduled")
 		"Custom / Casual":
-			return "Create or join a private battle"
+			return LocalizationManager.text("ui.pvp.mode.private")
 		_:
-			return "Choose how you want to battle"
+			return LocalizationManager.text("ui.pvp.choose_mode")
 
 func _pvp_popup_icon_for_section(section_name: String) -> Texture2D:
 	match section_name:
@@ -29708,6 +31903,19 @@ func _select_pvp_root_tab(section_name: String) -> void:
 		if child != null and _pvp_root_tab_matches_section(child.name, section_name):
 			pvp_root_tabs.current_tab = index
 			return
+
+
+func _current_pvp_section_name() -> String:
+	if pvp_root_tabs == null or pvp_root_tabs.get_child_count() == 0:
+		return "Ranked"
+	var page := pvp_root_tabs.get_child(pvp_root_tabs.current_tab)
+	if page == null:
+		return "Ranked"
+	var tab_name := str(page.name)
+	if tab_name == "Custom _ Casual" or tab_name == "Custom Casual":
+		return "Custom / Casual"
+	return tab_name
+
 
 func _pvp_root_tab_matches_section(tab_name: String, section_name: String) -> bool:
 	if tab_name == section_name:
@@ -29799,7 +32007,7 @@ func _select_first_pvp_queue_for_mode(mode: String) -> bool:
 		if pvp_active_queue_entry_id != "" or pvp_active_queue_match_id != "":
 			_refresh_pvp_queue_buttons(pvp_active_queue_status)
 		else:
-			_set_pvp_queue_status("Queue Status: idle")
+			_set_pvp_queue_status_key("ui.pvp.queue.ready")
 			_refresh_pvp_queue_buttons("idle")
 		return true
 	return false
@@ -29836,9 +32044,12 @@ func _refresh_pvp_team_validator() -> void:
 	var warnings: Array[String] = []
 	var party_size: int = PlayerSave.party.size()
 	if party_size <= 0:
-		issues.append("Your current party is empty.")
+		issues.append(LocalizationManager.text("ui.pvp.validation.empty_party"))
 	elif party_size > MAX_PARTY_SIZE:
-		issues.append("Your party has more than %d Pokemon." % MAX_PARTY_SIZE)
+		issues.append(LocalizationManager.text(
+			"ui.pvp.validation.too_many",
+			{"count": MAX_PARTY_SIZE}
+		))
 
 	var species_counts: Dictionary = {}
 	for pokemon: Pokemon in PlayerSave.party:
@@ -29850,25 +32061,29 @@ func _refresh_pvp_team_validator() -> void:
 	for species_key: String in species_counts.keys():
 		var count: int = int(species_counts[species_key])
 		if count > 1:
-			issues.append("Species Clause: %s appears %d times." % [_format_identifier_display_name(species_key), count])
+			issues.append(LocalizationManager.text(
+				"ui.pvp.validation.species_clause",
+				{"pokemon": _format_pvp_species_display_name(species_key), "count": count}
+			))
 
 	if pvp_team_source_select != null and pvp_team_source_select.selected > 0:
-		issues.append("PvP team slots are not available yet. Select Current Party.")
+		issues.append(LocalizationManager.text("ui.pvp.validation.party_only"))
 
 	if pvp_active_queue_id == "":
-		warnings.append("No queue is selected.")
+		warnings.append(LocalizationManager.text("ui.pvp.validation.no_queue"))
 
 	if issues.is_empty() and not _is_selected_pvp_queue_ranked():
 		if pvp_team_validator_status_label != null:
-			pvp_team_validator_status_label.text = "Eligible for the selected queue."
+			pvp_team_validator_status_label.text = LocalizationManager.text("ui.pvp.validation.eligible")
 			pvp_team_validator_status_label.add_theme_color_override("font_color", Color("#62e36e"))
 		_set_pvp_validator_visual_state("valid")
 	elif not issues.is_empty():
 		if pvp_team_validator_status_label != null:
-			pvp_team_validator_status_label.text = "Team not allowed · %d %s" % [
-				issues.size(),
-				"issue" if issues.size() == 1 else "issues",
-			]
+			pvp_team_validator_status_label.text = LocalizationManager.plural(
+				"ui.pvp.validation.issue.one",
+				"ui.pvp.validation.issue.many",
+				issues.size()
+			)
 			pvp_team_validator_status_label.add_theme_color_override("font_color", Color("#ff7979"))
 		_set_pvp_validator_visual_state("invalid")
 
@@ -29881,47 +32096,52 @@ func _refresh_pvp_team_validator() -> void:
 		]
 		if not server_is_authoritative:
 			for issue: String in issues:
-				pvp_team_validator_list.add_child(_create_pvp_validator_row("Issue", issue, Color("#ff7979")))
+				pvp_team_validator_list.add_child(_create_pvp_validator_row(LocalizationManager.text("ui.pvp.validation.label.issue"), issue, Color("#ff7979")))
 			for warning: String in warnings:
-				pvp_team_validator_list.add_child(_create_pvp_validator_row("Note", warning, Color("#f5df9a")))
+				pvp_team_validator_list.add_child(_create_pvp_validator_row(LocalizationManager.text("ui.pvp.validation.label.note"), warning, Color("#f5df9a")))
 		if issues.is_empty():
 			_render_pvp_ranked_server_validation()
 		elif pvp_team_validator_status_label != null:
-			pvp_team_validator_status_label.text = "Team not allowed · %d %s" % [
-				issues.size(),
-				"issue" if issues.size() == 1 else "issues",
-			]
+			pvp_team_validator_status_label.text = LocalizationManager.plural(
+				"ui.pvp.validation.issue.one",
+				"ui.pvp.validation.issue.many",
+				issues.size()
+			)
 	else:
 		for issue: String in issues:
-			pvp_team_validator_list.add_child(_create_pvp_validator_row("Local", issue, Color("#f5df9a")))
+			pvp_team_validator_list.add_child(_create_pvp_validator_row(LocalizationManager.text("ui.pvp.validation.label.local"), issue, Color("#f5df9a")))
 		for warning: String in warnings:
-			pvp_team_validator_list.add_child(_create_pvp_validator_row("Note", warning, Color("#f5df9a")))
+			pvp_team_validator_list.add_child(_create_pvp_validator_row(LocalizationManager.text("ui.pvp.validation.label.note"), warning, Color("#f5df9a")))
 		if issues.is_empty() and warnings.is_empty():
-			pvp_team_validator_list.add_child(_create_pvp_validator_row("Allowed", "No validation issues found.", Color("#62e36e")))
+			pvp_team_validator_list.add_child(_create_pvp_validator_row(
+				LocalizationManager.text("ui.pvp.validation.label.allowed"),
+				LocalizationManager.text("ui.pvp.validation.none"),
+				Color("#62e36e")
+			))
 	_refresh_pvp_queue_buttons(_current_pvp_queue_status_for_buttons())
 
 func _render_pvp_ranked_server_validation() -> void:
 	var server_state := str(pvp_ranked_team_validation_result.get("state", "")).strip_edges()
-	var server_message := PvpRankedTeamValidation.display_message(pvp_ranked_team_validation_result)
 	match server_state:
 		PvpRankedTeamValidation.STATE_VALID:
 			_set_pvp_validator_visual_state("valid")
 			if pvp_team_validator_status_label != null:
-				pvp_team_validator_status_label.text = "Ranked Ready"
+				pvp_team_validator_status_label.text = LocalizationManager.text("ui.pvp.validation.ranked_ready")
 				pvp_team_validator_status_label.add_theme_color_override("font_color", Color("#62e36e"))
 			pvp_team_validator_list.add_child(_create_pvp_validator_row(
-				"Allowed",
-				"Team is allowed in %s." % pvp_active_format_name,
+				LocalizationManager.text("ui.pvp.validation.label.allowed"),
+				LocalizationManager.text("ui.pvp.validation.allowed_format", {"format": pvp_active_format_name}),
 				Color("#62e36e")
 			))
 		PvpRankedTeamValidation.STATE_INVALID:
 			_set_pvp_validator_visual_state("invalid")
 			var server_issues := PvpRankedTeamValidation.display_issues(pvp_ranked_team_validation_result)
 			if pvp_team_validator_status_label != null:
-				pvp_team_validator_status_label.text = "Team not allowed · %d %s" % [
-					server_issues.size(),
-					"issue" if server_issues.size() == 1 else "issues",
-				]
+				pvp_team_validator_status_label.text = LocalizationManager.plural(
+					"ui.pvp.validation.issue.one",
+					"ui.pvp.validation.issue.many",
+					server_issues.size()
+				)
 				pvp_team_validator_status_label.add_theme_color_override("font_color", Color("#ff7979"))
 			for issue: Dictionary in server_issues:
 				pvp_team_validator_list.add_child(_create_pvp_validator_row(
@@ -29932,29 +32152,37 @@ func _render_pvp_ranked_server_validation() -> void:
 		PvpRankedTeamValidation.STATE_CHECKING:
 			_set_pvp_validator_visual_state("checking")
 			if pvp_team_validator_status_label != null:
-				pvp_team_validator_status_label.text = "Checking ranked team..."
+				pvp_team_validator_status_label.text = LocalizationManager.text("ui.pvp.validation.checking")
 				pvp_team_validator_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-			pvp_team_validator_list.add_child(_create_pvp_validator_row("Checking", server_message, UI_MUTED_TEXT))
+			pvp_team_validator_list.add_child(_create_pvp_validator_row(
+				LocalizationManager.text("ui.pvp.validation.label.checking"),
+				LocalizationManager.text("ui.pvp.validation.checking"),
+				UI_MUTED_TEXT
+			))
 		PvpRankedTeamValidation.STATE_ERROR:
 			_set_pvp_validator_visual_state("invalid")
 			if pvp_team_validator_status_label != null:
-				pvp_team_validator_status_label.text = "Server validation unavailable."
+				pvp_team_validator_status_label.text = LocalizationManager.text("ui.pvp.validation.unavailable")
 				pvp_team_validator_status_label.add_theme_color_override("font_color", Color("#ff7979"))
 			var errors := PvpRankedTeamValidation.display_errors(pvp_ranked_team_validation_result)
 			for error: String in errors:
-				pvp_team_validator_list.add_child(_create_pvp_validator_row("Error", error, Color("#ff7979")))
+				pvp_team_validator_list.add_child(_create_pvp_validator_row(LocalizationManager.text("ui.pvp.validation.label.error"), error, Color("#ff7979")))
 		_:
 			_set_pvp_validator_visual_state("checking")
 			if pvp_team_validator_status_label != null:
-				pvp_team_validator_status_label.text = "Checking current party..."
+				pvp_team_validator_status_label.text = LocalizationManager.text("ui.pvp.team.checking_current")
 				pvp_team_validator_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-			pvp_team_validator_list.add_child(_create_pvp_validator_row("Checking", "Server validation pending.", UI_MUTED_TEXT))
+			pvp_team_validator_list.add_child(_create_pvp_validator_row(
+				LocalizationManager.text("ui.pvp.validation.label.checking"),
+				LocalizationManager.text("ui.pvp.validation.pending"),
+				UI_MUTED_TEXT
+			))
 
 func _pvp_ranked_validation_issue_label(issue: Dictionary) -> String:
 	var slot := int(issue.get("slot", 0))
 	if slot > 0:
-		return "Slot %d" % slot
-	return "Rule"
+		return LocalizationManager.text("ui.pvp.validation.slot", {"number": slot})
+	return LocalizationManager.text("ui.pvp.validation.label.rule")
 
 func _pvp_ranked_validation_issue_message(issue: Dictionary) -> String:
 	var code := str(issue.get("code", "")).strip_edges()
@@ -29963,17 +32191,40 @@ func _pvp_ranked_validation_issue_message(issue: Dictionary) -> String:
 	var value := _pvp_validation_issue_value(issue)
 	match code:
 		"banned_pokemon":
-			return "%s is banned." % (pokemon_name if pokemon_name != "" else value)
+			return LocalizationManager.text(
+				"ui.pvp.validation.banned_pokemon",
+				{"pokemon": pokemon_name if pokemon_name != "" else value}
+			)
 		"banned_item":
-			return "%s holds banned item: %s." % [_pvp_issue_subject(pokemon_name, slot), value]
+			var item_id := str(issue.get("value", issue.get("normalizedValue", "")))
+			return LocalizationManager.text("ui.pvp.validation.banned_item", {
+				"pokemon": _pvp_issue_subject(pokemon_name, slot),
+				"item": ItemLocalization.display_name(item_id, value),
+			})
 		"banned_move":
-			return "%s has banned move: %s." % [_pvp_issue_subject(pokemon_name, slot), value]
+			var move_id := str(issue.get("value", issue.get("normalizedValue", "")))
+			return LocalizationManager.text("ui.pvp.validation.banned_move", {
+				"pokemon": _pvp_issue_subject(pokemon_name, slot),
+				"move": _localized_content_name("moves", move_id, value),
+			})
 		"banned_ability":
-			return "%s has banned ability: %s." % [_pvp_issue_subject(pokemon_name, slot), value]
+			var ability_id := str(issue.get("value", issue.get("normalizedValue", "")))
+			return LocalizationManager.text("ui.pvp.validation.banned_ability", {
+				"pokemon": _pvp_issue_subject(pokemon_name, slot),
+				"ability": _localized_content_name("abilities", ability_id, value),
+			})
 		"species_clause_duplicate":
 			var slots_text := _pvp_validation_slots_text(issue.get("slots", []))
-			var species := _format_identifier_display_name(str(issue.get("species", value))).strip_edges()
-			return "Species Clause: %s appears more than once%s." % [species, " in %s" % slots_text if slots_text != "" else ""]
+			var species := _format_pvp_species_display_name(
+				str(issue.get("species", value))
+			).strip_edges()
+			return LocalizationManager.text("ui.pvp.validation.species_duplicate", {
+				"pokemon": species,
+				"slots": LocalizationManager.text(
+					"ui.pvp.validation.in_slots",
+					{"slots": slots_text}
+				) if slots_text != "" else "",
+			})
 	var message := str(issue.get("message", "")).strip_edges()
 	return message if message != "" else code.replace("_", " ").capitalize()
 
@@ -29981,14 +32232,14 @@ func _pvp_validation_issue_value(issue: Dictionary) -> String:
 	var value := str(issue.get("value", "")).strip_edges()
 	if value == "":
 		value = str(issue.get("normalizedValue", "")).strip_edges()
-	return _format_identifier_display_name(value) if value != "" else "Unknown"
+	return _format_identifier_display_name(value) if value != "" else LocalizationManager.text("ui.pvp.validation.unknown")
 
 func _pvp_issue_subject(pokemon_name: String, slot: int) -> String:
 	if pokemon_name != "":
 		return pokemon_name
 	if slot > 0:
-		return "Slot %d" % slot
-	return "Pokemon"
+		return LocalizationManager.text("ui.pvp.validation.slot", {"number": slot})
+	return LocalizationManager.text("ui.storage.fallback_pokemon")
 
 func _pvp_party_slot_display_name(slot: int) -> String:
 	if slot <= 0 or slot > PlayerSave.party.size():
@@ -30002,28 +32253,33 @@ func _format_pvp_species_display_name(species: String) -> String:
 	var value := species.strip_edges()
 	if value == "":
 		return ""
+	var fallback_name := ""
 	if value.contains("-") or value.contains("_") or value.contains(" "):
-		return _format_identifier_display_name(value)
-	var suffix_labels := {
-		"mega": "Mega",
-		"megax": "Mega X",
-		"megay": "Mega Y",
-		"primal": "Primal",
-		"origin": "Origin",
-		"crowned": "Crowned",
-		"ice": "Ice",
-		"shadow": "Shadow",
-		"black": "Black",
-		"white": "White",
-		"sky": "Sky",
-		"bloodmoon": "Bloodmoon",
-		"hearthflame": "Hearthflame",
-	}
-	for suffix: String in suffix_labels.keys():
-		if value.ends_with(suffix) and value.length() > suffix.length():
-			var base := value.substr(0, value.length() - suffix.length())
-			return "%s %s" % [base.capitalize(), suffix_labels[suffix]]
-	return value.capitalize()
+		fallback_name = _format_identifier_display_name(value)
+	else:
+		var suffix_labels := {
+			"mega": "Mega",
+			"megax": "Mega X",
+			"megay": "Mega Y",
+			"primal": "Primal",
+			"origin": "Origin",
+			"crowned": "Crowned",
+			"ice": "Ice",
+			"shadow": "Shadow",
+			"black": "Black",
+			"white": "White",
+			"sky": "Sky",
+			"bloodmoon": "Bloodmoon",
+			"hearthflame": "Hearthflame",
+		}
+		for suffix: String in suffix_labels.keys():
+			if value.ends_with(suffix) and value.length() > suffix.length():
+				var base := value.substr(0, value.length() - suffix.length())
+				fallback_name = "%s %s" % [base.capitalize(), suffix_labels[suffix]]
+				break
+		if fallback_name == "":
+			fallback_name = value.capitalize()
+	return _localized_species_name(species, fallback_name)
 
 func _pvp_validation_slots_text(slots_value: Variant) -> String:
 	if not (slots_value is Array):
@@ -30032,7 +32288,7 @@ func _pvp_validation_slots_text(slots_value: Variant) -> String:
 	for slot_value: Variant in slots_value as Array:
 		var slot := int(slot_value)
 		if slot > 0:
-			labels.append("Slot %d" % slot)
+			labels.append(LocalizationManager.text("ui.pvp.validation.slot", {"number": slot}))
 	return ", ".join(labels)
 
 func _refresh_pvp_ranked_team_validation(force: bool = false) -> void:
@@ -30153,13 +32409,13 @@ func _should_confirm_pvp_queue_leave_on_popup_close() -> bool:
 
 func _show_pvp_queue_close_confirm() -> void:
 	_show_ui_confirm_popup(
-		"Leave ranked queue?",
-		"You are currently in the ranked queue. Closing this window will leave the queue.",
-		"Leave Queue",
+		LocalizationManager.text("ui.pvp.queue.leave_confirm_title"),
+		LocalizationManager.text("ui.pvp.queue.leave_confirm_body"),
+		LocalizationManager.text("ui.pvp.queue.leave"),
 		Callable(self, "_confirm_close_pvp_room_and_leave_queue"),
 		Vector2i(480, 178),
 		true,
-		"Stay in Queue"
+		LocalizationManager.text("ui.pvp.queue.stay")
 	)
 
 func _confirm_close_pvp_room_and_leave_queue() -> void:
@@ -30169,15 +32425,15 @@ func _confirm_close_pvp_room_and_leave_queue() -> void:
 
 func _heal_party_before_pvp(action_label: String = "PvP") -> bool:
 	if PlayerSave.party.is_empty():
-		_set_pvp_queue_status("Queue Status: add at least one Pokemon before joining PvP.")
-		_set_pvp_status("Add at least one Pokemon before starting PvP.")
+		_set_pvp_queue_status_key("ui.pvp.queue.add_pokemon")
+		_set_pvp_status_key("ui.pvp.queue.add_pokemon")
 		return false
 	var result: Dictionary = await PartyHealService.heal_current_party_and_save()
 	if bool(result.get("success", false)):
 		return true
 	var error := str(result.get("error", "Unknown error"))
-	_set_pvp_queue_status("Queue Status: could not prepare team: %s" % error)
-	_set_pvp_status("Could not prepare team for %s: %s" % [action_label, error])
+	_set_pvp_queue_status_key("ui.pvp.queue.prepare_failed")
+	_set_pvp_status_key("ui.pvp.queue.prepare_failed")
 	push_warning("UIOverlay: could not heal party before %s: %s" % [action_label, error])
 	return false
 
@@ -30191,21 +32447,33 @@ func _on_pvp_room_mode_selected(mode: String) -> void:
 	pvp_spectate_room_button.visible = mode == "spectate"
 	pvp_cancel_room_button.visible = false
 	pvp_copy_code_button.visible = false
-	match mode:
+	_refresh_pvp_room_form_title()
+	_set_pvp_status_key("ui.pvp.room.ready")
+
+
+func _refresh_pvp_room_form_title() -> void:
+	if pvp_room_form_title == null:
+		return
+	if pvp_room_selected_mode == "create" and pvp_active_room_code != "":
+		pvp_room_form_title.text = LocalizationManager.text("ui.pvp.room.form_share")
+		return
+	match pvp_room_selected_mode:
 		"create":
-			pvp_room_form_title.text = "CREATE A PRIVATE ROOM"
+			pvp_room_form_title.text = LocalizationManager.text("ui.pvp.room.form_create")
 		"join":
-			pvp_room_form_title.text = "ENTER A ROOM CODE TO JOIN"
+			pvp_room_form_title.text = LocalizationManager.text("ui.pvp.room.form_join")
 		"spectate":
-			pvp_room_form_title.text = "ENTER A ROOM CODE TO SPECTATE"
-	_set_pvp_status("Ready.")
+			pvp_room_form_title.text = LocalizationManager.text("ui.pvp.room.form_spectate")
+		_:
+			pvp_room_form_title.text = ""
 
 func _on_pvp_create_room_pressed() -> void:
 	if pvp_battle_starting:
 		return
 	if not await _heal_party_before_pvp("PvP room"):
 		return
-	_set_pvp_room_busy(true, "Creating room...")
+	_set_pvp_room_busy(true)
+	_set_pvp_status_key("ui.pvp.room.creating")
 	var request := _create_pvp_request_node()
 	var response: Dictionary = await BattleApiClient.create_pvp_room(
 		request,
@@ -30216,15 +32484,16 @@ func _on_pvp_create_room_pressed() -> void:
 	_set_pvp_room_busy(false)
 
 	if not bool(response.get("success", false)):
-		_set_pvp_status("Could not create room: %s" % str(response.get("error", "Unknown error")))
+		_set_pvp_status_key("ui.pvp.room.create_failed")
+		push_warning("UIOverlay: PVP room creation failed: %s" % str(response.get("error", "Unknown error")))
 		return
 
 	pvp_active_room_code = str(response.get("roomCode", "")).strip_edges()
-	pvp_room_code_label.text = "ROOM CODE  ·  %s" % pvp_active_room_code
+	pvp_room_code_label.text = LocalizationManager.text("ui.pvp.room.code", {"code": pvp_active_room_code})
 	pvp_copy_code_button.disabled = pvp_active_room_code == ""
 	pvp_room_mode_selector.visible = false
 	pvp_room_form.visible = true
-	pvp_room_form_title.text = "YOUR ROOM IS READY TO SHARE"
+	pvp_room_form_title.text = LocalizationManager.text("ui.pvp.room.form_share")
 	pvp_room_code_input.visible = false
 	pvp_allow_spectators_check.visible = false
 	pvp_create_room_button.visible = false
@@ -30232,7 +32501,7 @@ func _on_pvp_create_room_pressed() -> void:
 	pvp_spectate_room_button.visible = false
 	pvp_cancel_room_button.visible = pvp_active_room_code != ""
 	pvp_copy_code_button.visible = pvp_active_room_code != ""
-	_set_pvp_status("Waiting for another player...")
+	_set_pvp_status_key("ui.pvp.room.waiting")
 	if pvp_active_room_code != "":
 		_start_pvp_room_polling()
 
@@ -30242,7 +32511,10 @@ func _on_pvp_allow_spectators_toggled(allowed: bool) -> void:
 func _refresh_pvp_allow_spectators_checkbox(allowed: bool) -> void:
 	if pvp_allow_spectators_check == null:
 		return
-	pvp_allow_spectators_check.text = "Allow private spectators  ·  %s" % ("ON" if allowed else "OFF")
+	pvp_allow_spectators_check.text = LocalizationManager.text(
+		"ui.pvp.room.allow_spectators",
+		{"state": LocalizationManager.text("ui.pvp.state.on" if allowed else "ui.pvp.state.off")}
+	)
 	pvp_allow_spectators_check.add_theme_color_override(
 		"font_color",
 		Color("#9be7b1") if allowed else Color("#f1c3a1")
@@ -30270,36 +32542,39 @@ func _pvp_spectators_checkbox_icon(checked: bool, hovered: bool) -> ImageTexture
 func _on_pvp_cancel_room_pressed() -> void:
 	if pvp_battle_starting or pvp_active_room_code == "":
 		return
-	_set_pvp_room_busy(true, "Cancelling room...")
+	_set_pvp_room_busy(true)
+	_set_pvp_status_key("ui.pvp.room.cancelling")
 	var request := _create_pvp_request_node()
 	var response: Dictionary = await BattleApiClient.cancel_pvp_room(request, pvp_active_room_code)
 	request.queue_free()
 	_set_pvp_room_busy(false)
 	if not bool(response.get("success", false)):
-		_set_pvp_status("Could not cancel room: %s" % str(response.get("error", "Unknown error")))
+		_set_pvp_status_key("ui.pvp.room.cancel_failed")
+		push_warning("UIOverlay: PVP room cancellation failed: %s" % str(response.get("error", "Unknown error")))
 		return
 	pvp_polling_active = false
 	pvp_poll_in_flight = false
 	pvp_poll_elapsed = 0.0
 	pvp_active_room_code = ""
-	pvp_room_code_label.text = "ROOM CODE  ·  -"
+	pvp_room_code_label.text = LocalizationManager.text("ui.pvp.room.code", {"code": "-"})
 	pvp_copy_code_button.disabled = true
 	pvp_room_mode_selector.visible = true
 	pvp_room_form.visible = false
 	pvp_room_selected_mode = ""
-	_set_pvp_status("Room cancelled.")
+	_set_pvp_status_key("ui.pvp.room.cancelled")
 
 func _on_pvp_join_room_pressed() -> void:
 	if pvp_battle_starting:
 		return
 	var room_code := pvp_room_code_input.text.strip_edges().to_upper()
 	if room_code == "":
-		_set_pvp_status("Enter a room code first.")
+		_set_pvp_status_key("ui.pvp.room.enter_code_first")
 		return
 	if not await _heal_party_before_pvp("PvP room"):
 		return
 
-	_set_pvp_room_busy(true, "Joining room...")
+	_set_pvp_room_busy(true)
+	_set_pvp_status_key("ui.pvp.room.joining")
 	var request := _create_pvp_request_node()
 	var response: Dictionary = await BattleApiClient.join_pvp_room(
 		request,
@@ -30312,16 +32587,17 @@ func _on_pvp_join_room_pressed() -> void:
 	if not bool(response.get("success", false)):
 		if _can_reconnect_to_started_pvp_room(response):
 			pvp_active_room_code = str(response.get("roomCode", room_code)).strip_edges()
-			pvp_room_code_label.text = "ROOM CODE  ·  %s" % pvp_active_room_code
+			pvp_room_code_label.text = LocalizationManager.text("ui.pvp.room.code", {"code": pvp_active_room_code})
 			pvp_copy_code_button.disabled = pvp_active_room_code == ""
-			_set_pvp_status("Room already started. Reconnecting...")
+			_set_pvp_status_key("ui.pvp.room.reconnecting")
 			await _start_pvp_battle_from_response(_normalize_started_pvp_reconnect_response(response))
 			return
-		_set_pvp_status("Could not join room: %s" % str(response.get("error", "Unknown error")))
+		_set_pvp_status_key("ui.pvp.room.join_failed")
+		push_warning("UIOverlay: PVP room join failed: %s" % str(response.get("error", "Unknown error")))
 		return
 
 	pvp_active_room_code = str(response.get("roomCode", room_code)).strip_edges()
-	pvp_room_code_label.text = "ROOM CODE  ·  %s" % pvp_active_room_code
+	pvp_room_code_label.text = LocalizationManager.text("ui.pvp.room.code", {"code": pvp_active_room_code})
 	pvp_copy_code_button.disabled = pvp_active_room_code == ""
 	await _start_pvp_battle_from_response(response)
 
@@ -30330,21 +32606,23 @@ func _on_pvp_spectate_room_pressed() -> void:
 		return
 	var room_code := pvp_room_code_input.text.strip_edges().to_upper()
 	if room_code == "":
-		_set_pvp_status("Enter a room code first.")
+		_set_pvp_status_key("ui.pvp.room.enter_code_first")
 		return
-	_set_pvp_room_busy(true, "Opening spectator view...")
+	_set_pvp_room_busy(true)
+	_set_pvp_status_key("ui.pvp.room.spectator_opening")
 	var request := _create_pvp_request_node()
 	var response: Dictionary = await BattleApiClient.spectate_pvp_room(request, room_code)
 	request.queue_free()
 	_set_pvp_room_busy(false)
 	if not bool(response.get("success", false)):
-		_set_pvp_status("Could not spectate room: %s" % str(response.get("error", "Spectating is unavailable.")))
+		_set_pvp_status_key("ui.pvp.room.spectator_failed")
+		push_warning("UIOverlay: PVP spectate failed: %s" % str(response.get("error", "Spectating is unavailable.")))
 		return
 	if not _spectator_response_has_public_teams(response):
-		_set_pvp_status("The public team preview is not available yet. Try again shortly.")
+		_set_pvp_status_key("ui.pvp.room.preview_unavailable")
 		return
 	pvp_active_room_code = room_code
-	pvp_room_code_label.text = "SPECTATING  ·  %s" % room_code
+	pvp_room_code_label.text = LocalizationManager.text("ui.pvp.room.spectating", {"code": room_code})
 	pvp_copy_code_button.disabled = false
 	await _start_pvp_battle_from_response(response)
 
@@ -30375,12 +32653,12 @@ func _on_pvp_join_queue_pressed() -> void:
 		await _refresh_pvp_ranked_team_validation(true)
 		if not PvpRankedTeamValidation.allows_ranked_join(pvp_ranked_team_validation_result):
 			pvp_ranked_queue_join_preparing = false
-			_set_pvp_queue_status("Queue Status: team validation failed.")
+			_set_pvp_queue_status_key("ui.pvp.queue.validation_failed")
 			_refresh_pvp_team_validator()
 			return
 	pvp_ranked_queue_join_preparing = false
-	_set_pvp_room_busy(true, "Joining queue...")
-	_set_pvp_queue_status("Queue Status: joining...")
+	_set_pvp_room_busy(true)
+	_set_pvp_queue_status_key("ui.pvp.queue.joining")
 	var request := _create_pvp_request_node()
 	var response: Dictionary = await BattleApiClient.join_pvp_queue(
 		request,
@@ -30391,7 +32669,8 @@ func _on_pvp_join_queue_pressed() -> void:
 	_set_pvp_room_busy(false)
 
 	if not bool(response.get("success", false)):
-		_set_pvp_queue_status("Queue Status: join failed: %s" % str(response.get("error", "Unknown error")))
+		_set_pvp_queue_status_key("ui.pvp.queue.join_failed")
+		push_warning("UIOverlay: PVP queue join failed: %s" % str(response.get("error", "Unknown error")))
 		var validation_value: Variant = response.get("validation", {})
 		if validation_value is Dictionary:
 			pvp_ranked_team_validation_result = PvpRankedTeamValidation.normalize_response(validation_value as Dictionary)
@@ -30400,7 +32679,7 @@ func _on_pvp_join_queue_pressed() -> void:
 
 	var entry: Dictionary = _pvp_queue_entry_from_response(response)
 	if entry.is_empty():
-		_set_pvp_queue_status("Queue Status: joined, but server returned no entry.")
+		_set_pvp_queue_status_key("ui.pvp.queue.no_entry")
 		return
 
 	_update_pvp_queue_state_from_entry(entry)
@@ -30512,7 +32791,7 @@ func _on_pvp_queue_selected(index: int) -> void:
 		pvp_banlists_loaded = false
 		pvp_banlists_result = PvpRankedBanlists.not_loaded()
 	_select_pvp_mode_by_queue_id(pvp_active_queue_id)
-	_set_pvp_queue_status("Queue Status: idle")
+	_set_pvp_queue_status_key("ui.pvp.queue.ready")
 	_refresh_pvp_queue_buttons("idle")
 	_refresh_pvp_team_validator()
 	_refresh_pvp_ranked_team_validation.call_deferred(true)
@@ -30584,8 +32863,16 @@ func _refresh_pvp_banlists(force: bool = false) -> void:
 
 func _render_pvp_banlists() -> void:
 	if pvp_bans_status_label != null:
-		pvp_bans_status_label.text = PvpRankedBanlists.display_message(pvp_banlists_result)
 		var state := str(pvp_banlists_result.get("state", "")).strip_edges()
+		match state:
+			PvpRankedBanlists.STATE_READY:
+				pvp_bans_status_label.text = LocalizationManager.text("ui.pvp.bans.loaded")
+			PvpRankedBanlists.STATE_ERROR:
+				pvp_bans_status_label.text = LocalizationManager.text("ui.pvp.bans.failed")
+			PvpRankedBanlists.STATE_LOADING:
+				pvp_bans_status_label.text = LocalizationManager.text("ui.pvp.bans.loading")
+			_:
+				pvp_bans_status_label.text = LocalizationManager.text("ui.pvp.bans.not_loaded")
 		var color := UI_MUTED_TEXT
 		if state == PvpRankedBanlists.STATE_READY:
 			color = UI_TEXT
@@ -30625,8 +32912,8 @@ func _create_pvp_banlist_metadata_panel(metadata: Dictionary) -> Control:
 	grid.add_theme_constant_override("v_separation", 8)
 	margin.add_child(grid)
 
-	grid.add_child(_create_pvp_banlist_metadata_field("Format", _pvp_banlist_metadata_value(metadata, "formatName", _pvp_banlist_metadata_value(metadata, "formatId", "Unknown"))))
-	grid.add_child(_create_pvp_banlist_metadata_field("Last Updated", _pvp_banlist_updated_label(_pvp_banlist_metadata_value(metadata, "updatedAt", ""))))
+	grid.add_child(_create_pvp_banlist_metadata_field(LocalizationManager.text("ui.pvp.bans.format"), _pvp_banlist_metadata_value(metadata, "formatName", _pvp_banlist_metadata_value(metadata, "formatId", LocalizationManager.text("ui.pvp.validation.unknown")))))
+	grid.add_child(_create_pvp_banlist_metadata_field(LocalizationManager.text("ui.pvp.bans.updated"), _pvp_banlist_updated_label(_pvp_banlist_metadata_value(metadata, "updatedAt", ""))))
 	return panel
 
 func _create_pvp_banlist_metadata_field(title_text: String, body_text: String) -> Control:
@@ -30653,10 +32940,10 @@ func _render_pvp_banlist_categories() -> void:
 		child.queue_free()
 	var state := str(pvp_banlists_result.get("state", "")).strip_edges()
 	if state == PvpRankedBanlists.STATE_LOADING:
-		pvp_bans_list.add_child(_create_pvp_banlist_state_label("Loading..."))
+		pvp_bans_list.add_child(_create_pvp_banlist_state_label(LocalizationManager.text("ui.pvp.bans.loading")))
 		return
 	if state == PvpRankedBanlists.STATE_ERROR:
-		pvp_bans_list.add_child(_create_pvp_banlist_state_label("Failed to load banlists."))
+		pvp_bans_list.add_child(_create_pvp_banlist_state_label(LocalizationManager.text("ui.pvp.bans.failed")))
 		return
 	for category_value: String in PvpRankedBanlists.CATEGORIES:
 		pvp_bans_list.add_child(_create_pvp_banlist_category_panel(category_value))
@@ -30683,7 +32970,7 @@ func _create_pvp_banlist_category_panel(category: String) -> Control:
 	var is_open := bool(pvp_banlist_category_open.get(category, true))
 
 	var header_button := Button.new()
-	header_button.text = "%s %s (%d)" % ["v" if is_open else ">", PvpRankedBanlists.category_label(category), bans.size()]
+	header_button.text = "%s %s (%d)" % ["v" if is_open else ">", _pvp_ban_category_label(category), bans.size()]
 	header_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	header_button.focus_mode = Control.FOCUS_NONE
 	header_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -30695,7 +32982,10 @@ func _create_pvp_banlist_category_panel(category: String) -> Control:
 		return panel
 
 	var search_input := LineEdit.new()
-	search_input.placeholder_text = "Search %s bans" % PvpRankedBanlists.category_label(category)
+	search_input.placeholder_text = LocalizationManager.text(
+		"ui.pvp.bans.search",
+		{"category": _pvp_ban_category_label(category)}
+	)
 	search_input.text = str(pvp_banlist_category_search.get(category, ""))
 	search_input.clear_button_enabled = true
 	search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -30715,7 +33005,9 @@ func _populate_pvp_banlist_category_items(category: String, items_list: VBoxCont
 		child.queue_free()
 	var bans := PvpRankedBanlists.category_bans(pvp_banlists_result, category)
 	if bans.is_empty():
-		items_list.add_child(_create_pvp_banlist_state_label(PvpRankedBanlists.empty_message(category)))
+		items_list.add_child(_create_pvp_banlist_state_label(
+			LocalizationManager.text("ui.pvp.bans.empty.%s" % category)
+		))
 		return
 	var query := str(pvp_banlist_category_search.get(category, "")).strip_edges().to_lower()
 	var matches := 0
@@ -30728,7 +33020,7 @@ func _populate_pvp_banlist_category_items(category: String, items_list: VBoxCont
 		label.add_theme_color_override("font_color", UI_TEXT)
 		items_list.add_child(label)
 	if matches == 0:
-		items_list.add_child(_create_pvp_banlist_state_label("No matching bans."))
+		items_list.add_child(_create_pvp_banlist_state_label(LocalizationManager.text("ui.pvp.bans.no_matches")))
 
 func _pvp_ban_matches_search(ban: Dictionary, query: String) -> bool:
 	if query == "":
@@ -30736,6 +33028,14 @@ func _pvp_ban_matches_search(ban: Dictionary, query: String) -> bool:
 	var label := str(ban.get("label", "")).strip_edges().to_lower()
 	var id := str(ban.get("id", "")).strip_edges().to_lower()
 	return label.find(query) >= 0 or id.find(query) >= 0
+
+
+func _pvp_ban_category_label(category: String) -> String:
+	var key := "ui.pvp.bans.category.%s" % category
+	return LocalizationManager.text(key) if LocalizationManager.has_key(
+		key,
+		LocalizationManager.DEFAULT_LOCALE
+	) else category.capitalize()
 
 func _on_pvp_banlist_category_toggled(category: String) -> void:
 	pvp_banlist_category_open[category] = not bool(pvp_banlist_category_open.get(category, true))
@@ -30759,7 +33059,7 @@ func _pvp_banlist_metadata_value(metadata: Dictionary, key: String, fallback: St
 func _pvp_banlist_updated_label(value: String) -> String:
 	var cleaned := value.strip_edges()
 	if cleaned == "":
-		return "Not updated"
+		return LocalizationManager.text("ui.pvp.bans.not_updated")
 	var without_zone := cleaned.trim_suffix("Z")
 	var dot_index := without_zone.find(".")
 	if dot_index >= 0:
@@ -30787,15 +33087,16 @@ func _on_pvp_leaderboard_refresh_pressed() -> void:
 	await _refresh_pvp_leaderboard()
 
 func _render_pvp_live_battles(entries: Array) -> void:
+	pvp_live_entries = entries.duplicate(true)
 	if pvp_live_list == null:
 		return
 	for child in pvp_live_list.get_children():
 		child.queue_free()
 	if pvp_live_status_label != null:
-		pvp_live_status_label.text = "Live ranked battles"
+		pvp_live_status_label.text = LocalizationManager.text("ui.pvp.live.title")
 	if entries.is_empty():
 		var empty_label := Label.new()
-		empty_label.text = "No live ranked battles."
+		empty_label.text = LocalizationManager.text("ui.pvp.live.empty")
 		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		pvp_live_list.add_child(empty_label)
 		return
@@ -30819,10 +33120,13 @@ func _refresh_pvp_leaderboard() -> void:
 		pvp_leaderboard_refresh_button.disabled = true
 	var scope_label := _pvp_leaderboard_scope_label(pvp_active_leaderboard_scope)
 	if pvp_leaderboard_status_label != null:
-		pvp_leaderboard_status_label.text = "Updating %s standings..." % scope_label.to_lower()
+		pvp_leaderboard_status_label.text = LocalizationManager.text(
+			"ui.pvp.leaderboard.updating",
+			{"period": scope_label.to_lower()}
+		)
 	_render_pvp_leaderboard_state(
-		"Updating leaderboard",
-		"Fetching the latest %s standings." % scope_label.to_lower()
+		LocalizationManager.text("ui.pvp.leaderboard.updating_title"),
+		LocalizationManager.text("ui.pvp.leaderboard.updating_detail", {"period": scope_label.to_lower()})
 	)
 	var request := _create_pvp_request_node()
 	var response: Dictionary = await BattleApiClient.get_pvp_leaderboard(request, 50, 0, pvp_active_format_key, pvp_active_leaderboard_scope)
@@ -30833,10 +33137,10 @@ func _refresh_pvp_leaderboard() -> void:
 
 	if not bool(response.get("success", false)):
 		if pvp_leaderboard_status_label != null:
-			pvp_leaderboard_status_label.text = "Could not load leaderboard."
+			pvp_leaderboard_status_label.text = LocalizationManager.text("ui.pvp.leaderboard.failed")
 		_render_pvp_leaderboard_state(
-			"Leaderboard unavailable",
-			"The standings could not be loaded. Try Refresh again.",
+			LocalizationManager.text("ui.pvp.leaderboard.unavailable"),
+			LocalizationManager.text("ui.pvp.leaderboard.unavailable_detail"),
 			UI_DANGER
 		)
 		return
@@ -30849,11 +33153,14 @@ func _refresh_pvp_leaderboard() -> void:
 		var points_policy: Dictionary = policy_value as Dictionary if policy_value is Dictionary else {}
 		var win_points := _pvp_history_variant_to_int(points_policy.get("win", 10))
 		var loss_points := _pvp_history_variant_to_int(points_policy.get("loss", -10))
-		pvp_leaderboard_status_label.text = "%s standings · Win %s · Loss %s" % [
-			scope_label,
-			_pvp_leaderboard_point_delta(win_points),
-			_pvp_leaderboard_point_delta(loss_points),
-		]
+		pvp_leaderboard_status_label.text = LocalizationManager.text(
+			"ui.pvp.leaderboard.status",
+			{
+				"period": scope_label,
+				"win": _pvp_leaderboard_point_delta(win_points),
+				"loss": _pvp_leaderboard_point_delta(loss_points),
+			}
+		)
 	_render_pvp_leaderboard(entries)
 
 func _pvp_leaderboard_scope_index(scope: String) -> int:
@@ -30867,8 +33174,11 @@ func _pvp_leaderboard_scope_label(scope: String) -> String:
 	var normalized_scope := scope.strip_edges()
 	for entry: Dictionary in PVP_LEADERBOARD_SCOPES:
 		if str(entry.get("id", "")).strip_edges() == normalized_scope:
-			return str(entry.get("label", "All Time"))
-	return "All Time"
+			return LocalizationManager.text(str(entry.get(
+				"label_key",
+				"ui.pvp.leaderboard.scope.all_time"
+			)))
+	return LocalizationManager.text("ui.pvp.leaderboard.scope.all_time")
 
 func _apply_pvp_leaderboard_scope_style(option: OptionButton) -> void:
 	var normal := _make_button_style(UI_SURFACE_INTERACTIVE, UI_BORDER_SUBTLE, 7, 1)
@@ -30890,12 +33200,16 @@ func _apply_pvp_leaderboard_scope_style(option: OptionButton) -> void:
 	option.add_theme_font_size_override("font_size", 13)
 
 func _render_pvp_leaderboard(entries: Array) -> void:
+	pvp_leaderboard_entries = entries.duplicate(true)
 	if pvp_leaderboard_list == null:
 		return
 	if entries.is_empty():
 		_render_pvp_leaderboard_state(
-			"No ranked results yet",
-			"Complete a ranked battle to appear in the %s standings." % _pvp_leaderboard_scope_label(pvp_active_leaderboard_scope)
+			LocalizationManager.text("ui.pvp.leaderboard.empty"),
+			LocalizationManager.text(
+				"ui.pvp.leaderboard.empty_detail",
+				{"period": _pvp_leaderboard_scope_label(pvp_active_leaderboard_scope)}
+			)
 		)
 		return
 	for child in pvp_leaderboard_list.get_children():
@@ -30931,7 +33245,7 @@ func _render_pvp_leaderboard_state(title_text: String, detail_text: String, acce
 	center.add_child(content)
 
 	var marker := Label.new()
-	marker.text = "LADDER"
+	marker.text = LocalizationManager.text("ui.pvp.leaderboard.marker")
 	marker.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	marker.add_theme_font_size_override("font_size", 9)
 	marker.add_theme_color_override("font_color", accent)
@@ -30964,14 +33278,17 @@ func _create_pvp_leaderboard_row(entry: Dictionary) -> Control:
 	panel.custom_minimum_size = Vector2(0, 56 if rank > 0 and rank <= 3 else 50)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.add_theme_stylebox_override("panel", _make_pvp_leaderboard_row_style(rank, is_current_player))
-	panel.tooltip_text = "%s\nRank #%d · %d points\n%d wins · %d losses · %d battles" % [
-		_pvp_leaderboard_display_name(entry),
-		rank,
-		points,
-		wins,
-		losses,
-		games_played,
-	]
+	panel.tooltip_text = LocalizationManager.text(
+		"ui.pvp.leaderboard.tooltip",
+		{
+			"player": _pvp_leaderboard_display_name(entry),
+			"rank": rank,
+			"points": points,
+			"wins": wins,
+			"losses": losses,
+			"battles": games_played,
+		}
+	)
 
 	var margin := MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 8)
@@ -30994,7 +33311,10 @@ func _create_pvp_leaderboard_row(entry: Dictionary) -> Control:
 		_pvp_leaderboard_points_color(points)
 	))
 	row.add_child(_create_pvp_leaderboard_value_label(
-		"%dW · %dL" % [wins, losses],
+		LocalizationManager.text(
+			"ui.pvp.leaderboard.record",
+			{"wins": wins, "losses": losses}
+		),
 		104,
 		HORIZONTAL_ALIGNMENT_RIGHT
 	))
@@ -31085,7 +33405,7 @@ func _create_pvp_leaderboard_player_cell(entry: Dictionary, games_played: int, i
 		you_badge.add_child(you_margin)
 
 		var you_label := Label.new()
-		you_label.text = "YOU"
+		you_label.text = LocalizationManager.text("ui.pvp.leaderboard.you")
 		you_label.add_theme_font_size_override("font_size", 9)
 		you_label.add_theme_color_override("font_color", Color("#8fe7ff"))
 		you_margin.add_child(you_label)
@@ -31095,7 +33415,11 @@ func _create_pvp_leaderboard_player_cell(entry: Dictionary, games_played: int, i
 	name_row.add_child(name_spacer)
 
 	var games_label := Label.new()
-	games_label.text = "%d %s" % [games_played, "battle" if games_played == 1 else "battles"]
+	games_label.text = LocalizationManager.plural(
+		"ui.pvp.leaderboard.battle.one",
+		"ui.pvp.leaderboard.battle.many",
+		games_played
+	)
 	games_label.add_theme_font_size_override("font_size", 10)
 	games_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	cell.add_child(games_label)
@@ -31124,6 +33448,8 @@ func _pvp_leaderboard_point_delta(points: int) -> String:
 
 func _create_pvp_leaderboard_header_label(text: String, width: float, alignment: HorizontalAlignment, expand: bool = false) -> Label:
 	var label := _create_pvp_leaderboard_value_label(text, width, alignment, UI_MUTED_TEXT, expand)
+	if LocalizationManager.has_key(text, LocalizationManager.DEFAULT_LOCALE):
+		_set_localized_control_property(label, "text", text)
 	label.add_theme_font_size_override("font_size", 10)
 	return label
 
@@ -31150,7 +33476,7 @@ func _pvp_leaderboard_display_name(entry: Dictionary) -> String:
 	if display_name != "":
 		return display_name
 	var username := str(entry.get("username", "")).strip_edges()
-	return username if username != "" else "Player"
+	return username if username != "" else LocalizationManager.text("ui.pvp.player")
 
 func _pvp_leaderboard_win_rate(value: Variant) -> String:
 	if typeof(value) == TYPE_INT or typeof(value) == TYPE_FLOAT:
@@ -31167,7 +33493,7 @@ func _refresh_pvp_match_history() -> void:
 	if pvp_history_refresh_button != null:
 		pvp_history_refresh_button.disabled = true
 	if pvp_history_status_label != null:
-		pvp_history_status_label.text = "Loading recent matches..."
+		pvp_history_status_label.text = LocalizationManager.text("ui.pvp.history.loading")
 	var request := _create_pvp_request_node()
 	var response: Dictionary = await BattleApiClient.get_pvp_match_history(request, 20, 0, pvp_active_format_key)
 	request.queue_free()
@@ -31177,7 +33503,7 @@ func _refresh_pvp_match_history() -> void:
 
 	if not bool(response.get("success", false)):
 		if pvp_history_status_label != null:
-			pvp_history_status_label.text = "Could not load match history."
+			pvp_history_status_label.text = LocalizationManager.text("ui.pvp.history.failed")
 		_render_pvp_history_matches([], 0)
 		return
 
@@ -31185,10 +33511,12 @@ func _refresh_pvp_match_history() -> void:
 	var matches: Array = matches_value as Array if matches_value is Array else []
 	var user_id := _pvp_history_variant_to_user_id(response.get("userId", 0))
 	if pvp_history_status_label != null:
-		pvp_history_status_label.text = "Recent matches"
+		pvp_history_status_label.text = LocalizationManager.text("ui.pvp.history.recent")
 	_render_pvp_history_matches(matches, user_id)
 
 func _render_pvp_history_matches(matches: Array, user_id: int) -> void:
+	pvp_history_matches = matches.duplicate(true)
+	pvp_history_user_id = user_id
 	if pvp_history_list == null:
 		return
 	for child in pvp_history_list.get_children():
@@ -31196,7 +33524,7 @@ func _render_pvp_history_matches(matches: Array, user_id: int) -> void:
 
 	if matches.is_empty():
 		var empty_label := Label.new()
-		empty_label.text = "No PvP matches yet."
+		empty_label.text = LocalizationManager.text("ui.pvp.history.empty")
 		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		pvp_history_list.add_child(empty_label)
 		return
@@ -31241,14 +33569,14 @@ func _create_pvp_history_card(match: Dictionary, user_id: int) -> Control:
 	var opponent_label := Label.new()
 	opponent_label.text = _pvp_history_opponent_name(match, user_id)
 	if opponent_label.text == "":
-		opponent_label.text = "Opponent"
+		opponent_label.text = LocalizationManager.text("ui.pvp.history.opponent")
 	opponent_label.add_theme_color_override("font_color", UI_TEXT)
 	result_block.add_child(opponent_label)
 
 	var meta_label := Label.new()
 	meta_label.text = _pvp_history_mode_label(match)
 	if meta_label.text == "":
-		meta_label.text = "PvP"
+		meta_label.text = LocalizationManager.text("ui.pvp.title")
 	meta_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	result_block.add_child(meta_label)
 
@@ -31317,15 +33645,21 @@ func _create_pvp_history_card(match: Dictionary, user_id: int) -> Control:
 		time_block.add_child(battle_id_row)
 
 		var battle_id_label := Label.new()
-		battle_id_label.text = "ID: %s" % _pvp_history_short_battle_id(battle_id)
-		battle_id_label.tooltip_text = "Battle code: %s" % battle_id
+		battle_id_label.text = LocalizationManager.text(
+			"ui.pvp.history.battle_id",
+			{"id": _pvp_history_short_battle_id(battle_id)}
+		)
+		battle_id_label.tooltip_text = LocalizationManager.text(
+			"ui.pvp.history.battle_code",
+			{"code": battle_id}
+		)
 		battle_id_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		battle_id_label.add_theme_font_size_override("font_size", 11)
 		battle_id_row.add_child(battle_id_label)
 
 		var copy_battle_id_button := Button.new()
-		copy_battle_id_button.text = "Copy"
-		copy_battle_id_button.tooltip_text = "Copy the full battle code"
+		copy_battle_id_button.text = LocalizationManager.text("ui.pvp.room.copy")
+		copy_battle_id_button.tooltip_text = LocalizationManager.text("ui.pvp.history.copy_code")
 		copy_battle_id_button.custom_minimum_size = Vector2(62, 24)
 		copy_battle_id_button.focus_mode = Control.FOCUS_NONE
 		copy_battle_id_button.pressed.connect(
@@ -31354,7 +33688,7 @@ func _pvp_history_short_battle_id(battle_id: String) -> String:
 func _on_pvp_history_copy_battle_id_pressed(battle_id: String, button: Button) -> void:
 	DisplayServer.clipboard_set(battle_id)
 	if is_instance_valid(button):
-		button.text = "Copied"
+		button.text = LocalizationManager.text("ui.pvp.room.copied")
 
 func _create_pvp_history_team_strip(team: Array) -> Control:
 	var strip := HBoxContainer.new()
@@ -31363,7 +33697,7 @@ func _create_pvp_history_team_strip(team: Array) -> Control:
 	strip.alignment = BoxContainer.ALIGNMENT_CENTER
 	if team.is_empty():
 		var empty_label := Label.new()
-		empty_label.text = "Team unavailable"
+		empty_label.text = LocalizationManager.text("ui.pvp.history.team_unavailable")
 		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		strip.add_child(empty_label)
 		return strip
@@ -31385,7 +33719,11 @@ func _create_pvp_history_team_icon(pokemon_data: Dictionary) -> TextureRect:
 	icon.texture = PokemonAssets.load_party_icon(species, shiny)
 	if icon.texture == null:
 		icon.texture = PokemonAssets.load_unknown_icon()
-	icon.tooltip_text = species if species != "" else "Pokémon"
+	icon.tooltip_text = (
+		_localized_species_name(species, species)
+		if species != ""
+		else "Pokémon"
+	)
 	if _pvp_history_pokemon_fainted(pokemon_data):
 		icon.modulate = Color(0.65, 0.65, 0.65, 0.65)
 	return icon
@@ -31428,7 +33766,7 @@ func _pvp_history_outcome_summary(match: Dictionary, user_id: int) -> String:
 	var parts: Array[String] = []
 	if reason != "":
 		parts.append(reason)
-	return " · ".join(parts) if not parts.is_empty() else str(match.get("status", "PvP match")).capitalize()
+	return " · ".join(parts) if not parts.is_empty() else LocalizationManager.text("ui.pvp.history.fallback_match")
 
 func _pvp_history_title(match: Dictionary, user_id: int) -> String:
 	var opponent_name := _pvp_history_opponent_name(match, user_id)
@@ -31457,15 +33795,21 @@ func _pvp_history_detail(match: Dictionary, user_id: int) -> String:
 	var reason := _pvp_history_reason_label(match)
 	var settled_at := _pvp_history_time_label(str(match.get("settledAt", match.get("endedAt", ""))).strip_edges())
 	var final_seq := _pvp_history_seq_label(match.get("finalEventSeq", null))
-	var result_text := "Result pending"
+	var result_text := LocalizationManager.text("ui.pvp.history.pending")
 	if user_id > 0 and winner_user_id == user_id and opponent_name != "":
-		result_text = "You defeated %s" % opponent_name
+		result_text = LocalizationManager.text("ui.pvp.history.you_defeated", {"opponent": opponent_name})
 	elif user_id > 0 and loser_user_id == user_id and opponent_name != "":
-		result_text = "You lost to %s" % opponent_name
+		result_text = LocalizationManager.text("ui.pvp.history.you_lost", {"opponent": opponent_name})
 	elif winner_name != "":
-		result_text = "%s defeated %s" % [winner_name, loser_name if loser_name != "" else "opponent"]
+		result_text = LocalizationManager.text("ui.pvp.history.player_defeated", {
+			"winner": winner_name,
+			"loser": loser_name if loser_name != "" else LocalizationManager.text("ui.pvp.history.opponent_lower"),
+		})
 	if reason != "":
-		result_text = "%s by %s" % [result_text, reason]
+		result_text = LocalizationManager.text(
+			"ui.pvp.history.by_reason",
+			{"result": result_text, "reason": reason}
+		)
 	if final_seq != "":
 		result_text = "%s · %s" % [result_text, final_seq]
 	if settled_at != "":
@@ -31476,17 +33820,17 @@ func _pvp_history_result_label(match: Dictionary, user_id: int) -> String:
 	var winner_user_id := _pvp_history_variant_to_user_id(match.get("winnerUserId", 0))
 	var loser_user_id := _pvp_history_variant_to_user_id(match.get("loserUserId", 0))
 	if user_id > 0 and winner_user_id == user_id:
-		return "Victory"
+		return LocalizationManager.text("ui.pvp.history.victory")
 	if user_id > 0 and loser_user_id == user_id:
-		return "Defeat"
+		return LocalizationManager.text("ui.pvp.history.defeat")
 	var status := str(match.get("status", "")).strip_edges()
-	return status.capitalize() if status != "" else "Pending"
+	return status.capitalize() if status != "" else LocalizationManager.text("ui.pvp.history.pending")
 
 func _pvp_history_result_color(result_label: String) -> Color:
 	var normalized := result_label.strip_edges().to_lower()
-	if normalized == "win" or normalized == "victory":
+	if normalized == "win" or normalized == "victory" or normalized == LocalizationManager.text("ui.pvp.history.victory").to_lower():
 		return Color("#65e38b")
-	if normalized == "loss" or normalized == "defeat":
+	if normalized == "loss" or normalized == "defeat" or normalized == LocalizationManager.text("ui.pvp.history.defeat").to_lower():
 		return Color("#ff7a7a")
 	return Color("#f5df9a")
 
@@ -31506,19 +33850,23 @@ func _pvp_history_mode_label(match: Dictionary) -> String:
 	var mode := str(match.get("mode", "")).strip_edges().to_lower()
 	if mode == "":
 		return ""
+	if mode == "ranked":
+		return LocalizationManager.text("ui.pvp.mode.ranked")
+	if mode == "casual" or mode == "custom":
+		return LocalizationManager.text("ui.pvp.mode.custom")
 	return mode.capitalize()
 
 func _pvp_history_reason_label(match: Dictionary) -> String:
 	var reason := str(match.get("reason", "")).strip_edges().to_lower()
 	match reason:
 		"battle_end":
-			return "Battle End"
+			return LocalizationManager.text("ui.pvp.history.battle_end")
 		"forfeit":
-			return "Forfeit"
+			return LocalizationManager.text("ui.pvp.history.forfeit")
 		"timeout":
-			return "Timeout"
+			return LocalizationManager.text("ui.pvp.history.timeout")
 		"disconnect":
-			return "Disconnect"
+			return LocalizationManager.text("ui.pvp.history.disconnect")
 		_:
 			return reason.replace("_", " ").capitalize() if reason != "" else ""
 
@@ -31526,7 +33874,7 @@ func _pvp_history_seq_label(value: Variant) -> String:
 	var text := str(value).strip_edges()
 	if text == "" or text.to_lower() == "<null>" or text.to_lower() == "null":
 		return ""
-	return "Event #%s" % text
+	return LocalizationManager.text("ui.pvp.history.event", {"number": text})
 
 func _pvp_history_time_label(value: String) -> String:
 	if value == "":
@@ -31560,9 +33908,9 @@ func _pvp_history_duration_label(value: Variant) -> String:
 	if seconds <= 0:
 		return ""
 	if seconds < 60:
-		return "%d sec" % seconds
+		return LocalizationManager.text("ui.pvp.history.seconds", {"count": seconds})
 	var minutes := int(ceil(float(seconds) / 60.0))
-	return "%d min" % minutes
+	return LocalizationManager.text("ui.pvp.history.minutes", {"count": minutes})
 
 func _pvp_history_participant_name(match: Dictionary, user_id: int) -> String:
 	if user_id <= 0:
@@ -31600,7 +33948,8 @@ func _leave_pvp_queue(queue_id: String, show_status: bool = true) -> bool:
 		return false
 	pvp_queue_leave_in_flight = true
 	if show_status:
-		_set_pvp_room_busy(true, "Leaving queue...")
+		_set_pvp_room_busy(true)
+		_set_pvp_queue_status_key("ui.pvp.queue.leaving")
 	var request := _create_pvp_request_node()
 	var response: Dictionary = await BattleApiClient.leave_pvp_queue(request, normalized_queue_id)
 	request.queue_free()
@@ -31610,7 +33959,8 @@ func _leave_pvp_queue(queue_id: String, show_status: bool = true) -> bool:
 
 	if not bool(response.get("success", false)):
 		if show_status:
-			_set_pvp_queue_status("Queue Status: leave failed: %s" % str(response.get("error", "Unknown error")))
+			_set_pvp_queue_status_key("ui.pvp.queue.leave_failed")
+			push_warning("UIOverlay: PVP queue leave failed: %s" % str(response.get("error", "Unknown error")))
 		return false
 
 	if pvp_active_queue_id == normalized_queue_id:
@@ -31624,7 +33974,7 @@ func _leave_pvp_queue(queue_id: String, show_status: bool = true) -> bool:
 		if pvp_poll_timer != null:
 			pvp_poll_timer.stop()
 		if show_status:
-			_set_pvp_queue_status("Queue Status: left queue.")
+			_set_pvp_queue_status_key("ui.pvp.queue.left")
 		_refresh_pvp_queue_buttons("idle")
 		_refresh_pvp_queue_compact_panel(0.0)
 	return true
@@ -31642,13 +33992,12 @@ func _open_pvp_queue_match(auto_open: bool) -> void:
 	if auto_open and pvp_queue_auto_open_in_flight:
 		return
 	if pvp_active_queue_match_id == "":
-		_set_pvp_queue_status("Queue Status: no matched battle yet.")
+		_set_pvp_queue_status_key("ui.pvp.queue.no_match")
 		return
 
 	pvp_queue_auto_open_in_flight = auto_open
-	var busy_message := "Starting matched battle..." if auto_open else "Opening queue battle..."
-	_set_pvp_room_busy(true, busy_message)
-	_set_pvp_queue_status("Queue Status: starting matched battle..." if auto_open else "Queue Status: opening battle...")
+	_set_pvp_room_busy(true)
+	_set_pvp_queue_status_key("ui.pvp.queue.starting" if auto_open else "ui.pvp.queue.opening")
 	var request := _create_pvp_request_node()
 	var response: Dictionary = await BattleApiClient.start_pvp_match_battle(request, pvp_active_queue_match_id)
 	request.queue_free()
@@ -31660,7 +34009,8 @@ func _open_pvp_queue_match(auto_open: bool) -> void:
 			return
 		await _cancel_ranked_battle_entry_transition()
 		_clear_pvp_match_countdown(true)
-		_set_pvp_queue_status("Queue Status: could not start battle: %s" % str(response.get("error", "Unknown error")))
+		_set_pvp_queue_status_key("ui.pvp.queue.start_failed")
+		push_warning("UIOverlay: PVP matched battle start failed: %s" % str(response.get("error", "Unknown error")))
 		_refresh_pvp_queue_buttons("matched")
 		return
 
@@ -31694,7 +34044,10 @@ func _begin_pvp_match_countdown(match_id: String, starts_at: String = "") -> voi
 	_position_pvp_match_countdown_overlay()
 	_play_pvp_match_countdown_flash()
 	_update_pvp_match_countdown_text()
-	_set_pvp_queue_status("Queue Status: match found. Starting in %ds..." % int(ceil(pvp_match_countdown_remaining)))
+	_set_pvp_queue_status_key(
+		"ui.pvp.queue.match_countdown",
+		{"seconds": int(ceil(pvp_match_countdown_remaining))}
+	)
 	_refresh_pvp_queue_buttons("matched")
 	_refresh_pvp_queue_compact_panel(0.0)
 
@@ -31733,10 +34086,16 @@ func _refresh_pvp_match_countdown(delta: float) -> void:
 func _update_pvp_match_countdown_text() -> void:
 	var remaining_seconds: int = maxi(0, int(ceil(pvp_match_countdown_remaining)))
 	if pvp_match_countdown_timer_label != null:
-		pvp_match_countdown_timer_label.text = "%ds" % remaining_seconds
+		pvp_match_countdown_timer_label.text = LocalizationManager.text(
+			"ui.pvp.countdown.timer",
+			{"seconds": remaining_seconds}
+		)
 	if pvp_match_countdown_status_label != null:
-		pvp_match_countdown_status_label.text = "Finish your action now. PvP starts in %d seconds." % remaining_seconds
-	_set_pvp_queue_status("Queue Status: match found. Starting in %ds..." % remaining_seconds)
+		pvp_match_countdown_status_label.text = LocalizationManager.text(
+			"ui.pvp.countdown.seconds",
+			{"seconds": remaining_seconds}
+		)
+	_set_pvp_queue_status_key("ui.pvp.queue.match_countdown", {"seconds": remaining_seconds})
 
 func _finish_pvp_match_countdown() -> void:
 	if not pvp_match_countdown_active:
@@ -31784,25 +34143,25 @@ func _on_pvp_reconnect_battle_pressed() -> void:
 	if pvp_battle_starting:
 		return
 
-	_set_pvp_room_busy(true, "Checking active battle...")
-	_set_pvp_queue_status("Queue Status: checking active battle...")
+	_set_pvp_room_busy(true)
+	_set_pvp_queue_status_key("ui.pvp.queue.checking_active")
 	var active_request := _create_pvp_request_node()
 	var active_response: Dictionary = await BattleApiClient.get_active_pvp_match(active_request)
 	active_request.queue_free()
 
 	if not bool(active_response.get("success", false)):
 		_set_pvp_room_busy(false)
-		_set_pvp_queue_status("Queue Status: no active battle found.")
+		_set_pvp_queue_status_key("ui.pvp.queue.no_active")
 		return
 
 	var match_id := str(active_response.get("matchId", "")).strip_edges()
 	if match_id == "":
 		_set_pvp_room_busy(false)
-		_set_pvp_queue_status("Queue Status: active battle has no match id.")
+		_set_pvp_queue_status_key("ui.pvp.queue.no_match_id")
 		return
 
 	pvp_active_queue_match_id = match_id
-	_set_pvp_queue_status("Queue Status: reconnecting...")
+	_set_pvp_queue_status_key("ui.pvp.queue.reconnecting")
 	var start_request := _create_pvp_request_node()
 	var start_response: Dictionary = await BattleApiClient.start_pvp_match_battle(start_request, match_id)
 	start_request.queue_free()
@@ -31811,7 +34170,8 @@ func _on_pvp_reconnect_battle_pressed() -> void:
 	if not bool(start_response.get("success", false)):
 		if await _recover_already_bound_pvp_queue_match(start_response):
 			return
-		_set_pvp_queue_status("Queue Status: reconnect failed: %s" % str(start_response.get("error", "Unknown error")))
+		_set_pvp_queue_status_key("ui.pvp.queue.reconnect_failed")
+		push_warning("UIOverlay: PVP reconnect failed: %s" % str(start_response.get("error", "Unknown error")))
 		return
 
 	if str(start_response.get("roomCode", "")).strip_edges() == "":
@@ -31822,7 +34182,7 @@ func _recover_already_bound_pvp_queue_match(error_response: Dictionary) -> bool:
 	var error_text := str(error_response.get("error", error_response.get("detail", ""))).strip_edges().to_lower()
 	if not error_text.contains("already bound"):
 		return false
-	_set_pvp_queue_status("Queue Status: matched battle already exists. Reconnecting...")
+	_set_pvp_queue_status_key("ui.pvp.queue.already_exists")
 	var active_request := _create_pvp_request_node()
 	var active_response: Dictionary = await BattleApiClient.get_active_pvp_match(active_request)
 	active_request.queue_free()
@@ -31872,7 +34232,7 @@ func _on_pvp_copy_code_pressed() -> void:
 	if pvp_active_room_code == "":
 		return
 	DisplayServer.clipboard_set(pvp_active_room_code)
-	_set_pvp_status("Room code copied.")
+	_set_pvp_status_key("ui.pvp.room.code_copied")
 
 func _on_pvp_poll_timeout() -> void:
 	if pvp_queue_polling_active:
@@ -31912,10 +34272,12 @@ func _refresh_pvp_queue_compact_panel(delta: float = 0.0) -> void:
 	_position_pvp_queue_compact_panel()
 	var has_match := pvp_active_queue_match_id.strip_edges() != ""
 	if pvp_queue_compact_status_label != null:
-		pvp_queue_compact_status_label.text = "Match found" if has_match else "Ranked Queue"
+		pvp_queue_compact_status_label.text = LocalizationManager.text(
+			"ui.pvp.queue.match_found" if has_match else "ui.pvp.queue.compact_title"
+		)
 	if pvp_queue_compact_time_label != null:
 		var elapsed_seconds := _pvp_queue_elapsed_seconds()
-		pvp_queue_compact_time_label.text = "Ready" if has_match else _format_pvp_queue_elapsed(elapsed_seconds)
+		pvp_queue_compact_time_label.text = LocalizationManager.text("ui.pvp.queue.ready_short") if has_match else _format_pvp_queue_elapsed(elapsed_seconds)
 	if pvp_queue_compact_spinner_label != null:
 		pvp_queue_compact_spinner_label.text = spinner_text
 	if pvp_queue_compact_open_button != null:
@@ -31952,9 +34314,12 @@ func _refresh_pvp_button_tooltip() -> void:
 		return
 	var queue_label := PVP_RANKED_DEFAULT_FORMAT_NAME
 	if pvp_ranked_queue_has_waiting_player:
-		pvp_button.tooltip_text = "PvP Battles (%s) · Player waiting" % queue_label
+		pvp_button.tooltip_text = LocalizationManager.text(
+			"ui.pvp.queue.player_waiting",
+			{"format": queue_label}
+		)
 		return
-	pvp_button.tooltip_text = "PvP Battles"
+	pvp_button.tooltip_text = LocalizationManager.text("ui.pvp.title")
 
 
 func _refresh_pvp_queue_button_animation(delta: float) -> void:
@@ -32036,7 +34401,8 @@ func _poll_pvp_queue_status() -> void:
 	pvp_queue_poll_in_flight = false
 
 	if not bool(response.get("success", false)):
-		_set_pvp_queue_status("Queue Status: check failed: %s" % str(response.get("error", "Unknown error")))
+		_set_pvp_queue_status_key("ui.pvp.queue.check_failed")
+		push_warning("UIOverlay: PVP queue status check failed: %s" % str(response.get("error", "Unknown error")))
 		return
 
 	var entry: Dictionary = _latest_relevant_pvp_queue_entry(response)
@@ -32050,7 +34416,7 @@ func _poll_pvp_queue_status() -> void:
 		pvp_active_queue_starts_at = ""
 		pvp_queue_compact_minimized = false
 		pvp_queue_wait_started_msec = 0
-		_set_pvp_queue_status("Queue Status: idle")
+		_set_pvp_queue_status_key("ui.pvp.queue.ready")
 		_refresh_pvp_queue_buttons("idle")
 		_refresh_pvp_queue_compact_panel(0.0)
 		return
@@ -32108,11 +34474,14 @@ func _update_pvp_queue_state_from_entry(entry: Dictionary) -> void:
 		pvp_queue_polling_active = false
 		if pvp_poll_timer != null:
 			pvp_poll_timer.stop()
-		_set_pvp_queue_status("Queue Status: match found.")
+		_set_pvp_queue_status_key("ui.pvp.queue.match_found")
 	elif status == "waiting":
-		_set_pvp_queue_status("Queue Status: searching for opponent...")
+		_set_pvp_queue_status_key("ui.pvp.queue.searching")
 	else:
-		_set_pvp_queue_status("Queue Status: %s" % (status if status != "" else "unknown"))
+		_set_pvp_queue_status_key(
+			"ui.pvp.queue.status_unknown",
+			{"status": status if status != "" else LocalizationManager.text("ui.pvp.validation.unknown")}
+		)
 	_refresh_pvp_queue_buttons(status)
 	_refresh_pvp_queue_compact_panel(0.0)
 
@@ -32129,25 +34498,25 @@ func _refresh_pvp_queue_buttons(status: String) -> void:
 		PvpRankedTeamValidation.STATE_CHECKING,
 	]
 	var has_visible_validation_issues := (
-		pvp_team_validator_status_label != null
-		and pvp_team_validator_status_label.text.begins_with("Team not allowed")
+		str(pvp_ranked_team_validation_result.get("state", "")).strip_edges()
+		== PvpRankedTeamValidation.STATE_INVALID
 	)
 	pvp_join_queue_button.visible = not is_waiting and not has_match
 	pvp_leave_queue_button.visible = is_waiting and not has_match
 	pvp_join_queue_button.disabled = pvp_battle_starting or is_waiting or has_match or ranked_blocked
 	pvp_leave_queue_button.disabled = pvp_battle_starting or not is_waiting
 	if ranked_blocked and has_visible_validation_issues:
-		pvp_join_queue_button.text = "Team Not Ready"
-		pvp_join_queue_button.tooltip_text = "Fix the team issues shown above before finding a match"
+		pvp_join_queue_button.text = LocalizationManager.text("ui.pvp.queue.team_not_ready")
+		pvp_join_queue_button.tooltip_text = LocalizationManager.text("ui.pvp.queue.fix_team")
 	elif validation_pending:
-		pvp_join_queue_button.text = "Checking Team..."
-		pvp_join_queue_button.tooltip_text = "Checking whether your team can enter ranked battles..."
+		pvp_join_queue_button.text = LocalizationManager.text("ui.pvp.queue.checking_team")
+		pvp_join_queue_button.tooltip_text = LocalizationManager.text("ui.pvp.queue.checking_team_tooltip")
 	elif ranked_blocked:
-		pvp_join_queue_button.text = "Team Not Ready"
-		pvp_join_queue_button.tooltip_text = "Your team is not ready for ranked battles yet"
+		pvp_join_queue_button.text = LocalizationManager.text("ui.pvp.queue.team_not_ready")
+		pvp_join_queue_button.tooltip_text = LocalizationManager.text("ui.pvp.queue.team_not_ready_tooltip")
 	else:
-		pvp_join_queue_button.text = "Find Match"
-		pvp_join_queue_button.tooltip_text = "Search for a ranked opponent"
+		pvp_join_queue_button.text = LocalizationManager.text("ui.pvp.queue.find")
+		pvp_join_queue_button.tooltip_text = LocalizationManager.text("ui.pvp.queue.find_tooltip")
 	if pvp_queue_select != null:
 		pvp_queue_select.disabled = pvp_battle_starting or is_waiting or has_match
 	if pvp_mode_select != null:
@@ -32166,12 +34535,13 @@ func _poll_pvp_room() -> void:
 	pvp_poll_in_flight = false
 
 	if not bool(response.get("success", false)):
-		_set_pvp_status("Room check failed: %s" % str(response.get("error", "Unknown error")))
+		_set_pvp_status_key("ui.pvp.room.check_failed")
+		push_warning("UIOverlay: PVP room check failed: %s" % str(response.get("error", "Unknown error")))
 		return
 
 	var status := str(response.get("status", "waiting"))
 	if status != "started":
-		_set_pvp_status("Waiting for another player...")
+		_set_pvp_status_key("ui.pvp.room.waiting")
 		return
 
 	await _start_pvp_battle_from_response(response)
@@ -32193,7 +34563,8 @@ func _request_pvp_room_poll() -> void:
 	)
 	if error != OK:
 		pvp_poll_in_flight = false
-		_set_pvp_status("Room check failed to start: %s" % error_string(error))
+		_set_pvp_status_key("ui.pvp.room.check_failed")
+		push_warning("UIOverlay: PVP room check request failed to start: %s" % error_string(error))
 
 func _on_pvp_room_poll_completed(
 	result: int,
@@ -32206,25 +34577,28 @@ func _on_pvp_room_poll_completed(
 		return
 
 	if result != HTTPRequest.RESULT_SUCCESS:
-		_set_pvp_status("Room check failed: %s" % result)
+		_set_pvp_status_key("ui.pvp.room.check_failed")
+		push_warning("UIOverlay: PVP room poll transport failed: %s" % result)
 		return
 
 	var parsed: Variant = JSON.parse_string(body.get_string_from_utf8())
 	if not (parsed is Dictionary):
-		_set_pvp_status("Room check failed: invalid response (%s)." % response_code)
+		_set_pvp_status_key("ui.pvp.room.check_failed")
+		push_warning("UIOverlay: PVP room poll returned invalid response (%s)." % response_code)
 		return
 
 	var response: Dictionary = parsed as Dictionary
 	if not bool(response.get("success", false)):
-		_set_pvp_status("Room check failed: %s" % str(response.get("error", response.get("detail", "Unknown error"))))
+		_set_pvp_status_key("ui.pvp.room.check_failed")
+		push_warning("UIOverlay: PVP room poll failed: %s" % str(response.get("error", response.get("detail", "Unknown error"))))
 		return
 
 	var status := str(response.get("status", "waiting"))
 	if status != "started":
-		_set_pvp_status("Waiting for another player...")
+		_set_pvp_status_key("ui.pvp.room.waiting")
 		return
 
-	_set_pvp_status("Opponent joined. Starting battle...")
+	_set_pvp_status_key("ui.pvp.room.opponent_joined")
 	await _start_pvp_battle_from_response(response)
 
 func _start_pvp_battle_from_response(response: Dictionary) -> void:
@@ -32233,12 +34607,12 @@ func _start_pvp_battle_from_response(response: Dictionary) -> void:
 	pvp_battle_starting = true
 	if pvp_poll_timer != null:
 		pvp_poll_timer.stop()
-	_set_pvp_status("Starting battle...")
+	_set_pvp_status_key("ui.pvp.battle.starting")
 
 	var world := get_tree().get_first_node_in_group("world")
 	if world == null or not world.has_method("start_pvp_battle_from_response"):
 		await _cancel_ranked_battle_entry_transition()
-		_set_pvp_status("Could not start PvP battle from this scene.")
+		_set_pvp_status_key("ui.pvp.battle.scene_unavailable")
 		pvp_battle_starting = false
 		return
 
@@ -32252,7 +34626,7 @@ func _start_pvp_battle_from_response(response: Dictionary) -> void:
 		if popup_was_visible and pvp_room_popup != null:
 			pvp_room_popup.visible = true
 			_activate_ui_panel(pvp_room_popup)
-		_set_pvp_status("Could not start PvP battle.")
+		_set_pvp_status_key("ui.pvp.battle.start_failed")
 		_clear_pvp_match_countdown(true)
 		pvp_battle_starting = false
 		return
@@ -32269,14 +34643,14 @@ func _start_pvp_battle_from_response(response: Dictionary) -> void:
 	pvp_queue_auto_open_in_flight = false
 	pvp_polling_active = false
 	pvp_poll_elapsed = 0.0
-	pvp_room_code_label.text = "ROOM CODE  ·  -"
+	pvp_room_code_label.text = LocalizationManager.text("ui.pvp.room.code", {"code": "-"})
 	pvp_copy_code_button.disabled = true
 	if pvp_room_mode_selector != null:
 		pvp_room_mode_selector.visible = true
 	if pvp_room_form != null:
 		pvp_room_form.visible = false
 	pvp_room_selected_mode = ""
-	_set_pvp_queue_status("Queue Status: idle")
+	_set_pvp_queue_status_key("ui.pvp.queue.ready")
 	_refresh_pvp_queue_buttons("idle")
 	_refresh_pvp_queue_compact_panel(0.0)
 	pvp_battle_starting = false
@@ -32286,7 +34660,7 @@ func _create_pvp_request_node() -> HTTPRequest:
 	add_child(request)
 	return request
 
-func _set_pvp_room_busy(is_busy: bool, message: String = "") -> void:
+func _set_pvp_room_busy(is_busy: bool) -> void:
 	pvp_create_room_button.disabled = is_busy
 	if pvp_room_create_mode_button != null:
 		pvp_room_create_mode_button.disabled = is_busy
@@ -32314,26 +34688,20 @@ func _set_pvp_room_busy(is_busy: bool, message: String = "") -> void:
 		pvp_team_source_select.disabled = is_busy
 	if pvp_reconnect_battle_button != null:
 		pvp_reconnect_battle_button.disabled = is_busy
-	if message != "":
-		_set_pvp_status(message)
 
-func _set_pvp_status(message: String) -> void:
+
+func _set_pvp_status_key(key: String, values: Dictionary = {}) -> void:
+	pvp_room_status_translation_key = key
+	pvp_room_status_translation_values = values.duplicate(true)
 	if pvp_room_status_label != null:
-		pvp_room_status_label.text = message
+		pvp_room_status_label.text = LocalizationManager.text(key, values)
 
-func _set_pvp_queue_status(message: String) -> void:
+func _set_pvp_queue_status_key(key: String, values: Dictionary = {}) -> void:
+	pvp_queue_status_translation_key = key
+	pvp_queue_status_translation_values = values.duplicate(true)
 	if pvp_queue_status_label != null:
-		var display_message := message.strip_edges()
-		if display_message.begins_with("Queue Status:"):
-			display_message = display_message.trim_prefix("Queue Status:").strip_edges()
-		match display_message.to_lower():
-			"idle":
-				display_message = "Ready to search."
-			"searching for opponent...":
-				display_message = "Searching for an opponent..."
-			"match found.":
-				display_message = "Match found."
-		pvp_queue_status_label.text = display_message
+		pvp_queue_status_label.text = LocalizationManager.text(key, values)
+
 
 func _on_map_button_pressed() -> void:
 	_add_chat_message("Town Map is not implemented yet.")
@@ -32368,6 +34736,7 @@ func _disable_icon_button_focus() -> void:
 		wild_pokemon_button,
 		item_dex_button,
 		pokedex_button,
+		alpha_tools_button,
 		content_creator_tools_button,
 		staff_tools_button,
 		dev_actions_button,
@@ -32484,7 +34853,17 @@ func _scroll_chat_to_bottom() -> void:
 	message_scroll.scroll_vertical = int(vertical_scroll_bar.max_value)
 
 func _on_chat_realtime_message_received(message: Dictionary) -> void:
-	if str(message.get("type", "")) == "chat_error":
+	var message_type := str(message.get("type", "")).strip_edges().to_lower()
+	if message_type == "system.logout_scheduled":
+		_start_session_logout_countdown(message)
+		return
+	if message_type == "system.logout_cancelled":
+		_cancel_session_logout_countdown(message)
+		return
+	if message_type == "system.force_logout":
+		_force_session_logout(str(message.get("message", "")))
+		return
+	if message_type == "chat_error":
 		var error_text: String = str(message.get("message", "Chat message could not be sent."))
 		var error_channel := str(message.get("channel", "")).strip_edges().to_lower()
 		var error_category := (
@@ -32495,7 +34874,7 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 		_add_chat_message(error_text, false, error_category)
 		return
 
-	if str(message.get("type", "")) != "chat":
+	if message_type != "chat":
 		return
 
 	var user: Dictionary = {}
@@ -32805,20 +35184,27 @@ func _create_chat_channel_prefix(channel: String, target_user_id: int = 0) -> Bu
 	prefix.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	prefix.add_theme_font_size_override("font_size", 11)
 	var prefix_color := Color("#70859b")
+	var prefix_key := "ui.chat.prefix.global"
+	var tooltip_key := "ui.chat.open.global"
 	match channel:
 		CHAT_CHANNEL_MAP:
-			prefix.text = "[Map]"
+			prefix_key = "ui.chat.prefix.map"
+			tooltip_key = "ui.chat.open.map"
 		CHAT_CHANNEL_TRADE:
-			prefix.text = "[Trade]"
+			prefix_key = "ui.chat.prefix.trade"
+			tooltip_key = "ui.chat.open.trade"
 		CHAT_CHANNEL_HELP:
-			prefix.text = "[Help]"
+			prefix_key = "ui.chat.prefix.help"
+			tooltip_key = "ui.chat.open.help"
 		CHAT_TAB_PM:
-			prefix.text = "[PM]"
+			prefix_key = "ui.chat.prefix.pm"
+			tooltip_key = "ui.chat.open.pm"
 		CHAT_TAB_GUILD:
-			prefix.text = "[Guild]"
+			prefix_key = "ui.chat.prefix.guild"
+			tooltip_key = "ui.chat.open.guild"
 		_:
-			prefix.text = "[Global]"
 			prefix_color = Color("#d8b767")
+	_set_localized_control_property(prefix, "text", prefix_key)
 	var empty_style := StyleBoxEmpty.new()
 	for state: String in ["normal", "hover", "pressed", "focus"]:
 		prefix.add_theme_stylebox_override(state, empty_style)
@@ -32827,10 +35213,10 @@ func _create_chat_channel_prefix(channel: String, target_user_id: int = 0) -> Bu
 	prefix.add_theme_color_override("font_pressed_color", prefix_color.lightened(0.4))
 	prefix.visible = active_chat_tab == CHAT_TAB_ALL
 	if channel == CHAT_TAB_PM and target_user_id != 0:
-		prefix.tooltip_text = "Open this private conversation"
+		_set_localized_control_property(prefix, "tooltip_text", "ui.chat.open.private")
 		prefix.pressed.connect(_on_all_pm_channel_pressed.bind(target_user_id))
 	else:
-		prefix.tooltip_text = "Open %s chat" % prefix.text.trim_prefix("[").trim_suffix("]")
+		_set_localized_control_property(prefix, "tooltip_text", tooltip_key)
 		prefix.pressed.connect(_on_all_channel_badge_pressed.bind(channel))
 	return prefix
 
@@ -32969,13 +35355,17 @@ func _create_chat_role_badge(role_name: String, role_color: String) -> PanelCont
 func _create_chat_pokemon_attachment_button(pokemon_payload: Dictionary) -> Control:
 	var button := Button.new()
 	var species: String = str(pokemon_payload.get("species", "Pokemon"))
+	var species_name := _localized_species_name(species, species)
 	var shiny: bool = bool(pokemon_payload.get("shiny", false))
 	button.custom_minimum_size = Vector2(36, 36)
 	button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	button.focus_mode = Control.FOCUS_NONE
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	button.tooltip_text = "View %s summary" % species
+	button.tooltip_text = LocalizationManager.text(
+		"ui.chat.attachment.view",
+		{"pokemon": species_name}
+	)
 	button.pressed.connect(_open_readonly_pokemon_summary.bind(pokemon_payload))
 	var transparent_style := _make_button_style(Color("#00000000"), Color("#00000000"), 0, 0)
 	button.add_theme_stylebox_override("normal", transparent_style)
@@ -33210,7 +35600,66 @@ func _escape_bbcode(text: String) -> String:
 
 
 func _on_chat_session_invalid(_reason: String) -> void:
-	_add_chat_message("Your session is no longer valid. Please sign in again.")
+	_force_session_logout(LocalizationManager.text("ui.session.signed_out"))
+
+
+func _start_session_logout_countdown(message: Dictionary) -> void:
+	var operation_id := str(message.get("operationId", "")).strip_edges()
+	var execute_at := str(message.get("executeAt", "")).strip_edges()
+	var execute_at_unix := _pvp_iso_timestamp_to_unix_time(execute_at.replace("+00:00", "Z"))
+	if operation_id == "" or execute_at_unix <= 0.0:
+		return
+	session_logout_operation_id = operation_id
+	session_logout_execute_at_unix = execute_at_unix
+	session_logout_message = str(message.get("message", "")).strip_edges()
+	var remaining := maxi(0, int(ceil(execute_at_unix - Time.get_unix_time_from_system())))
+	session_logout_last_announced_second = remaining
+	add_system_message(LocalizationManager.text(
+		"ui.session.logout_countdown",
+		{"message": session_logout_message, "seconds": remaining}
+	))
+
+
+func _refresh_session_logout_countdown() -> void:
+	if session_logout_operation_id == "" or session_logout_execute_at_unix <= 0.0:
+		return
+	var remaining := maxi(
+		0,
+		int(ceil(session_logout_execute_at_unix - Time.get_unix_time_from_system()))
+	)
+	if remaining == session_logout_last_announced_second:
+		return
+	session_logout_last_announced_second = remaining
+	if remaining in [300, 120, 60, 30, 10, 5, 4, 3, 2, 1]:
+		add_system_message(LocalizationManager.text(
+			"ui.session.logout_countdown",
+			{"message": session_logout_message, "seconds": remaining}
+		))
+	elif remaining == 0:
+		add_system_message(LocalizationManager.text("ui.session.logout_now"))
+
+
+func _cancel_session_logout_countdown(event: Dictionary) -> void:
+	var operation_id := str(event.get("operationId", "")).strip_edges()
+	if session_logout_operation_id != "" and operation_id != session_logout_operation_id:
+		return
+	var message := str(event.get("message", ""))
+	session_logout_operation_id = ""
+	session_logout_execute_at_unix = 0.0
+	session_logout_message = ""
+	session_logout_last_announced_second = -1
+	add_system_message(
+		message
+		if message.strip_edges() != ""
+		else LocalizationManager.text("ui.session.logout_cancelled")
+	)
+
+
+func _force_session_logout(message: String) -> void:
+	var notice := message.strip_edges()
+	if notice == "":
+		notice = LocalizationManager.text("ui.session.signed_out")
+	AuthService.set_pending_login_notice(notice)
 	AuthService.clear_session()
 	var tree := get_tree()
 	if tree == null:

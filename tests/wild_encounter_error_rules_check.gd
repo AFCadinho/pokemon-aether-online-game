@@ -32,10 +32,7 @@ func _init() -> void:
 	)
 	_check_equal(
 		ErrorRules.message_lines({"errorCode": "no_usable_pokemon"}),
-		[
-			"None of your Pokemon are able to battle.",
-			"Heal your party at a Pokemon Center before trying again.",
-		],
+		["None of your Pokémon can battle. Heal your party at a Pokémon Center first."],
 		"no-usable-Pokemon guidance"
 	)
 	_check_equal(
@@ -65,9 +62,17 @@ func _init() -> void:
 				"currentBadges": 1,
 			},
 		}),
-		["You need 3 Johto badges for this rod. You currently have 1."],
+		["You need 3 johto badges for this rod. You currently have 1."],
 		"regional badge gate explains current and required badges"
 	)
+	var localization := root.get_node_or_null("LocalizationManager")
+	if localization != null:
+		localization.call("set_locale", "nl")
+		_check_equal(
+			ErrorRules.message_lines({"errorCode": "no_usable_pokemon"}),
+			["Geen van je Pokémon kan vechten. Heel eerst je team in een Pokémon Center."],
+			"structured encounter error follows the active locale"
+		)
 	quit(1 if failed else 0)
 
 

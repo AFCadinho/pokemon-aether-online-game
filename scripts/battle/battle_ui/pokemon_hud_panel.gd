@@ -25,8 +25,12 @@ const GENDER_COLORS := {
 }
 
 var status_icon_texture_cache: Dictionary = {}
+var localization_manager: Node
 
 func _ready() -> void:
+	localization_manager = get_tree().root.get_node_or_null("LocalizationManager")
+	if localization_manager != null and not localization_manager.locale_changed.is_connected(_on_locale_changed):
+		localization_manager.locale_changed.connect(_on_locale_changed)
 	for row_index in range(active_info_rows.size()):
 		_clear_active_info_row_data(row_index)
 		_set_active_info_row_visible(row_index, false)
@@ -66,6 +70,7 @@ func _clear_active_info_row_data(row_index: int) -> void:
 		return
 
 	var row: Node = active_info_rows[row_index]
+	row.remove_meta("battle_hud_data")
 	var name_label: Label = row.get_node_or_null("MarginContainer/VBoxContainer/TopRow/NameContainer/NameLabel") as Label
 	if name_label != null:
 		name_label.text = ""
@@ -82,7 +87,7 @@ func _clear_active_info_row_data(row_index: int) -> void:
 
 	var level_label: Label = row.get_node_or_null("MarginContainer/VBoxContainer/TopRow/HBoxContainer/LevelLabel") as Label
 	if level_label != null:
-		level_label.text = "Lv. --"
+		level_label.text = _t("battle.hud.level_unknown")
 
 	var hp_bar: ProgressBar = row.get_node_or_null("MarginContainer/VBoxContainer/HPRow/HpBar") as ProgressBar
 	if hp_bar != null:
@@ -105,6 +110,16 @@ func _set_active_info_row_data(
 		return
 
 	var row: Node = active_info_rows[row_index]
+	row.set_meta("battle_hud_data", {
+		"species": species,
+		"level": level,
+		"current_hp": current_hp,
+		"max_hp": max_hp,
+		"status": status,
+		"gender": gender,
+		"is_shiny": is_shiny,
+		"experience_data": experience_data.duplicate(true),
+	})
 	_set_active_info_row_visible(row_index, true)
 
 	var name_label: Label = row.get_node_or_null("MarginContainer/VBoxContainer/TopRow/NameContainer/NameLabel") as Label
@@ -114,7 +129,7 @@ func _set_active_info_row_data(
 	_set_shiny_badge(row, is_shiny)
 	var level_label: Label = row.get_node_or_null("MarginContainer/VBoxContainer/TopRow/HBoxContainer/LevelLabel") as Label
 	if level_label != null:
-		level_label.text = "Lv. " + str(level)
+		level_label.text = _t("battle.hud.level", {"level": level})
 
 	var hp_bar: ProgressBar = row.get_node_or_null("MarginContainer/VBoxContainer/HPRow/HpBar") as ProgressBar
 	var visible_hp_percent := _to_visible_hp_percent(current_hp, max_hp)
@@ -178,7 +193,9 @@ func _set_gender(row: Node, gender: String) -> void:
 
 	var gender_color: Color = GENDER_COLORS.get(gender_text, Color.WHITE)
 	gender_icon.modulate = gender_color
-	gender_icon.tooltip_text = "Male" if gender_text == "M" else "Female"
+	gender_icon.tooltip_text = _t(
+		"battle.gender.male" if gender_text == "M" else "battle.gender.female"
+	)
 
 func _set_status(row: Node, status: String) -> void:
 	var status_icon: TextureRect = row.get_node_or_null("MarginContainer/VBoxContainer/TopRow/HBoxContainer/StatusIcon") as TextureRect
@@ -232,19 +249,39 @@ func _get_status_icon_texture(status_key: String) -> Texture2D:
 func _get_status_tooltip(status_key: String) -> String:
 	match status_key:
 		"psn":
-			return "Poisoned"
+			return _t("pokemon.status.poisoned")
 		"tox":
-			return "Badly poisoned"
+			return _t("pokemon.status.badly_poisoned")
 		"brn":
-			return "Burned"
+			return _t("pokemon.status.burned")
 		"par":
-			return "Paralyzed"
+			return _t("pokemon.status.paralyzed")
 		"slp":
-			return "Asleep"
+			return _t("pokemon.status.asleep")
 		"frz":
-			return "Frozen"
+			return _t("pokemon.status.frozen")
 
 	return ""
+
+
+func _on_locale_changed(_locale: String) -> void:
+	for row_index in range(active_info_rows.size()):
+		var row := active_info_rows[row_index]
+		var data_value: Variant = row.get_meta("battle_hud_data", {})
+		if not data_value is Dictionary or (data_value as Dictionary).is_empty():
+			continue
+		var data := data_value as Dictionary
+		_set_active_info_row_data(
+			row_index,
+			str(data.get("species", "")),
+			int(data.get("level", 0)),
+			int(data.get("current_hp", 0)),
+			int(data.get("max_hp", 0)),
+			str(data.get("status", "")),
+			str(data.get("gender", "")),
+			bool(data.get("is_shiny", false)),
+			data.get("experience_data", {}) as Dictionary
+		)
 
 func _to_visible_hp_percent(current_hp: int, max_hp: int) -> int:
 	if max_hp <= 0:
@@ -254,3 +291,9 @@ func _to_visible_hp_percent(current_hp: int, max_hp: int) -> int:
 		return 0
 		
 	return ceili((float(current_hp) / float(max_hp)) * 100.0)
+
+
+func _t(key: String, replacements: Dictionary = {}) -> String:
+	if localization_manager != null:
+		return str(localization_manager.call("text", key, replacements))
+	return key

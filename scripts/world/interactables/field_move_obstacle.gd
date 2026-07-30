@@ -68,10 +68,26 @@ func _play_clear_animation() -> void:
 
 func _show_field_move_used_message(pokemon: Pokemon, charm_name := "") -> void:
 	if charm_name != "":
-		get_tree().call_group("ui_overlay", "add_system_message", "%s was used!" % charm_name)
+		get_tree().call_group(
+			"ui_overlay",
+			"add_system_message",
+			LocalizationManager.text("ui.field_move.item_used", {"item": charm_name})
+		)
 		return
-	var pokemon_name := pokemon.species if pokemon != null else "Pokemon"
-	var message := "%s used %s!" % [pokemon_name, _format_field_move_name(required_field_move)]
+	var pokemon_name := (
+		ContentLocalization.display_name("species", pokemon.species, pokemon.species)
+		if pokemon != null
+		else LocalizationManager.text("pokemon.generic")
+	)
+	var move_name := ContentLocalization.display_name(
+		"moves",
+		required_field_move,
+		_format_field_move_name(required_field_move)
+	)
+	var message := LocalizationManager.text(
+		"ui.field_move.pokemon_used",
+		{"pokemon": pokemon_name, "move": move_name}
+	)
 	get_tree().call_group("ui_overlay", "add_system_message", message)
 
 

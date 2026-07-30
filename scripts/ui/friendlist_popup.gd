@@ -56,9 +56,14 @@ var add_friend_dialog: PanelContainer
 var add_friend_input: LineEdit
 var add_friend_confirm_button: Button
 var add_friend_cancel_button: Button
+var localization_manager: Variant
 
 
 func _ready() -> void:
+	localization_manager = get_node_or_null("/root/LocalizationManager")
+	if localization_manager == null:
+		push_error("FriendlistPopup: LocalizationManager is unavailable")
+		return
 	visible = false
 	custom_minimum_size = POPUP_SIZE
 	size = POPUP_SIZE
@@ -67,6 +72,8 @@ func _ready() -> void:
 	_build_ui()
 	_setup_add_friend_dialog()
 	_setup_remove_friend_confirm_dialog()
+	if not localization_manager.locale_changed.is_connected(_on_locale_changed):
+		localization_manager.locale_changed.connect(_on_locale_changed)
 
 
 func open() -> void:
@@ -154,21 +161,21 @@ func _build_ui() -> void:
 	header.add_child(heading)
 
 	var title := Label.new()
-	title.text = "Friends"
+	_set_localized_property(title, "text", "ui.friends.title")
 	title.add_theme_color_override("font_color", UI_TEXT)
 	title.add_theme_font_size_override("font_size", 21)
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	heading.add_child(title)
 
 	var subtitle := Label.new()
-	subtitle.text = "Your trainer network and social activity"
+	_set_localized_property(subtitle, "text", "ui.friends.subtitle")
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	subtitle.add_theme_font_size_override("font_size", 11)
 	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	heading.add_child(subtitle)
 
 	var add_friend_button := Button.new()
-	add_friend_button.text = "+  Add Friend"
+	_set_localized_property(add_friend_button, "text", "ui.friends.add")
 	add_friend_button.custom_minimum_size = Vector2(126, 38)
 	add_friend_button.pressed.connect(_show_add_friend_dialog)
 	_apply_button_style(add_friend_button, "primary")
@@ -176,7 +183,7 @@ func _build_ui() -> void:
 
 	var refresh_button := Button.new()
 	refresh_button.text = "↻"
-	refresh_button.tooltip_text = "Refresh friends"
+	_set_localized_property(refresh_button, "tooltip_text", "ui.friends.refresh")
 	refresh_button.custom_minimum_size = Vector2(38, 38)
 	refresh_button.pressed.connect(_on_refresh_pressed)
 	_apply_button_style(refresh_button)
@@ -185,7 +192,7 @@ func _build_ui() -> void:
 
 	var close_button := Button.new()
 	close_button.text = "×"
-	close_button.tooltip_text = "Close friends"
+	_set_localized_property(close_button, "tooltip_text", "ui.friends.close")
 	close_button.custom_minimum_size = Vector2(38, 38)
 	close_button.pressed.connect(close)
 	_apply_button_style(close_button)
@@ -234,7 +241,10 @@ func _build_friends_tab() -> Control:
 	tab.add_child(tools_row)
 
 	friends_summary_label = Label.new()
-	friends_summary_label.text = "0 friends"
+	friends_summary_label.text = localization_manager.text("ui.friends.summary", {
+		"friends": 0,
+		"online": 0,
+	})
 	friends_summary_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	friends_summary_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	friends_summary_label.add_theme_font_size_override("font_size", 12)
@@ -242,7 +252,7 @@ func _build_friends_tab() -> Control:
 	tools_row.add_child(friends_summary_label)
 
 	friend_search_input = LineEdit.new()
-	friend_search_input.placeholder_text = "Search by name or username"
+	_set_localized_property(friend_search_input, "placeholder_text", "ui.friends.search")
 	friend_search_input.custom_minimum_size = Vector2(300, 38)
 	friend_search_input.clear_button_enabled = true
 	friend_search_input.text_changed.connect(_on_friend_search_changed)
@@ -270,7 +280,7 @@ func _build_blocked_tab() -> Control:
 	tab.add_child(block_row)
 
 	block_user_input = LineEdit.new()
-	block_user_input.placeholder_text = "Enter a username to block"
+	_set_localized_property(block_user_input, "placeholder_text", "ui.friends.block.placeholder")
 	block_user_input.custom_minimum_size = Vector2(0, 38)
 	block_user_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	block_user_input.text_submitted.connect(_on_block_user_submitted)
@@ -278,7 +288,7 @@ func _build_blocked_tab() -> Control:
 	block_row.add_child(block_user_input)
 
 	var block_button := Button.new()
-	block_button.text = "Block"
+	_set_localized_property(block_button, "text", "ui.friends.block.action")
 	block_button.custom_minimum_size = Vector2(96, 38)
 	block_button.pressed.connect(_on_block_user_pressed)
 	_apply_button_style(block_button, "danger")
@@ -295,20 +305,24 @@ func _build_status_tab() -> Control:
 	tab.add_theme_constant_override("separation", 9)
 
 	var hint := Label.new()
-	hint.text = "YOUR STATUS"
+	_set_localized_property(hint, "text", "ui.friends.status.title")
 	hint.add_theme_color_override("font_color", UI_SECTION_TEXT)
 	hint.add_theme_font_size_override("font_size", 10)
 	tab.add_child(hint)
 
 	var description := Label.new()
-	description.text = "Let friends know what you are currently doing."
+	_set_localized_property(description, "text", "ui.friends.status.description")
 	description.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	description.add_theme_font_size_override("font_size", 12)
 	tab.add_child(description)
 
 	status_message_input = LineEdit.new()
 	status_message_input.max_length = 100
-	status_message_input.placeholder_text = "Training, trading, exploring..."
+	_set_localized_property(
+		status_message_input,
+		"placeholder_text",
+		"ui.friends.status.placeholder"
+	)
 	status_message_input.custom_minimum_size = Vector2(0, 40)
 	status_message_input.text_changed.connect(_on_status_message_changed)
 	_apply_line_edit_style(status_message_input)
@@ -322,7 +336,7 @@ func _build_status_tab() -> Control:
 	tab.add_child(status_character_label)
 
 	save_status_button = Button.new()
-	save_status_button.text = "Save Status"
+	_set_localized_property(save_status_button, "text", "ui.friends.status.save")
 	save_status_button.custom_minimum_size = Vector2(132, 38)
 	save_status_button.size_flags_horizontal = Control.SIZE_SHRINK_END
 	save_status_button.pressed.connect(_on_save_status_pressed)
@@ -361,11 +375,14 @@ func _load_socials_async() -> void:
 	if is_busy:
 		return
 	is_busy = true
-	_set_status("Loading socials...")
+	_set_status(localization_manager.text("ui.friends.loading"))
 	var result: Dictionary = await SocialService.load_socials()
 	is_busy = false
 	if not bool(result.get("success", false)):
-		_set_status(str(result.get("error", "Could not load socials.")))
+		_set_status(str(result.get(
+			"error",
+			localization_manager.text("ui.friends.error.load")
+		)))
 		return
 
 	overview = _dictionary_from_value(result.get("overview", {}))
@@ -403,13 +420,14 @@ func _render_friends(friends: Array) -> void:
 		if bool(friend_user.get("online", false)):
 			online_count += 1
 	if friends_summary_label != null:
-		friends_summary_label.text = "%s friend%s  ·  %s online" % [
-			friends.size(),
-			"" if friends.size() == 1 else "s",
-			online_count,
-		]
+		friends_summary_label.text = localization_manager.text("ui.friends.summary", {
+			"friends": friends.size(),
+			"online": online_count,
+		})
 	if friends.is_empty():
-		friends_list.add_child(_empty_label("No friends yet.\nAdd a trainer to start building your network."))
+		friends_list.add_child(_empty_label(
+			localization_manager.text("ui.friends.empty")
+		))
 		return
 
 	var rendered_count := 0
@@ -422,7 +440,9 @@ func _render_friends(friends: Array) -> void:
 		rendered_count += 1
 
 	if rendered_count == 0:
-		friends_list.add_child(_empty_label("No friends match this search."))
+		friends_list.add_child(_empty_label(
+			localization_manager.text("ui.friends.empty_search")
+		))
 
 
 func _friend_row(user: Dictionary) -> Control:
@@ -465,7 +485,11 @@ func _friend_row(user: Dictionary) -> Control:
 
 	var status_message: String = str(user.get("statusMessage", "")).strip_edges()
 	var status_message_label := Label.new()
-	status_message_label.text = status_message if status_message != "" else "No status message"
+	status_message_label.text = (
+		status_message
+		if status_message != ""
+		else localization_manager.text("ui.friends.status.none")
+	)
 	status_message_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	status_message_label.max_lines_visible = FRIEND_STATUS_PREVIEW_LINES
 	status_message_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -480,8 +504,10 @@ func _friend_row(user: Dictionary) -> Control:
 	row.add_child(actions)
 
 	var message_button := Button.new()
-	message_button.text = "Message"
-	message_button.tooltip_text = "Open a private conversation." if online else "This friend is offline."
+	message_button.text = localization_manager.text("ui.friends.message")
+	message_button.tooltip_text = localization_manager.text(
+		"ui.friends.message_tooltip" if online else "ui.friends.offline_tooltip"
+	)
 	message_button.custom_minimum_size = Vector2(96, 34)
 	message_button.disabled = not online
 	message_button.pressed.connect(_on_private_message_pressed.bind(user.duplicate(true)))
@@ -489,16 +515,16 @@ func _friend_row(user: Dictionary) -> Control:
 	actions.add_child(message_button)
 
 	var mail_button := Button.new()
-	mail_button.text = "Mail"
-	mail_button.tooltip_text = "Send mail to this trainer."
+	mail_button.text = localization_manager.text("ui.friends.mail")
+	mail_button.tooltip_text = localization_manager.text("ui.friends.mail_tooltip")
 	mail_button.custom_minimum_size = Vector2(72, 34)
 	mail_button.pressed.connect(_on_mail_pressed.bind(user.duplicate(true)))
 	_apply_button_style(mail_button)
 	actions.add_child(mail_button)
 
 	var remove_button := Button.new()
-	remove_button.text = "Remove"
-	remove_button.tooltip_text = "Remove this trainer from your friends."
+	remove_button.text = localization_manager.text("common.remove")
+	remove_button.tooltip_text = localization_manager.text("ui.friends.remove_tooltip")
 	remove_button.custom_minimum_size = Vector2(82, 34)
 	remove_button.pressed.connect(_on_remove_friend_pressed.bind(
 		str(user.get("username", "")),
@@ -524,21 +550,29 @@ func _render_requests(incoming: Array, outgoing: Array) -> void:
 	_clear_children(requests_list)
 
 	var incoming_title := Label.new()
-	incoming_title.text = "INCOMING  ·  %s" % incoming.size()
+	incoming_title.text = localization_manager.text("ui.friends.requests.incoming", {
+		"count": incoming.size(),
+	})
 	_apply_section_label_style(incoming_title)
 	requests_list.add_child(incoming_title)
 	if incoming.is_empty():
-		requests_list.add_child(_empty_label("No incoming friend requests."))
+		requests_list.add_child(_empty_label(
+			localization_manager.text("ui.friends.requests.incoming_empty")
+		))
 	else:
 		for request_value: Variant in incoming:
 			requests_list.add_child(_incoming_request_row(_dictionary_from_value(request_value)))
 
 	var outgoing_title := Label.new()
-	outgoing_title.text = "SENT  ·  %s" % outgoing.size()
+	outgoing_title.text = localization_manager.text("ui.friends.requests.sent", {
+		"count": outgoing.size(),
+	})
 	_apply_section_label_style(outgoing_title)
 	requests_list.add_child(outgoing_title)
 	if outgoing.is_empty():
-		requests_list.add_child(_empty_label("No pending requests sent."))
+		requests_list.add_child(_empty_label(
+			localization_manager.text("ui.friends.requests.sent_empty")
+		))
 	else:
 		for request_value: Variant in outgoing:
 			requests_list.add_child(_outgoing_request_row(_dictionary_from_value(request_value)))
@@ -549,15 +583,16 @@ func _setup_friendlist_tab_buttons() -> void:
 		return
 	tab_buttons.clear()
 	var tab_specs: Array[Dictionary] = [
-		{"index": 0, "label": "Friends", "id": "friends"},
-		{"index": 1, "label": "Requests", "id": "requests"},
-		{"index": 2, "label": "Blocked", "id": "blocked"},
-		{"index": 3, "label": "Status", "id": "status"},
+		{"index": 0, "key": "ui.friends.tab.friends", "id": "friends"},
+		{"index": 1, "key": "ui.friends.tab.requests", "id": "requests"},
+		{"index": 2, "key": "ui.friends.tab.blocked", "id": "blocked"},
+		{"index": 3, "key": "ui.friends.tab.status", "id": "status"},
 	]
 	for spec: Dictionary in tab_specs:
 		var button := Button.new()
-		button.text = str(spec.get("label", ""))
-		button.set_meta("base_label", str(spec.get("label", "")))
+		var label_key := str(spec.get("key", ""))
+		button.text = localization_manager.text(label_key)
+		button.set_meta("base_label_key", label_key)
 		button.focus_mode = Control.FOCUS_NONE
 		button.custom_minimum_size = Vector2(0, 36)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -579,7 +614,10 @@ func _refresh_tab_counts(friend_count: int, request_count: int, blocked_count: i
 		var button: Button = tab_buttons.get(tab_id) as Button
 		if button == null:
 			continue
-		var base_label: String = str(button.get_meta("base_label", button.text))
+		var base_label: String = str(localization_manager.text(str(button.get_meta(
+			"base_label_key",
+			"ui.friends.tab.%s" % tab_id
+		))))
 		button.text = (
 			"%s  %s" % [base_label, int(counts.get(tab_id, 0))]
 			if counts.has(tab_id)
@@ -648,19 +686,23 @@ func _setup_add_friend_dialog() -> void:
 	margin.add_child(layout)
 
 	var title := Label.new()
-	title.text = "Add Friend"
+	_set_localized_property(title, "text", "ui.friends.add_dialog.title")
 	title.add_theme_color_override("font_color", UI_TEXT)
 	title.add_theme_font_size_override("font_size", 18)
 	layout.add_child(title)
 
 	var hint := Label.new()
-	hint.text = "Send a friend request using a trainer's username."
+	_set_localized_property(hint, "text", "ui.friends.add_dialog.hint")
 	hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	hint.add_theme_font_size_override("font_size", 11)
 	layout.add_child(hint)
 
 	add_friend_input = LineEdit.new()
-	add_friend_input.placeholder_text = "Trainer username"
+	_set_localized_property(
+		add_friend_input,
+		"placeholder_text",
+		"ui.friends.add_dialog.placeholder"
+	)
 	add_friend_input.custom_minimum_size = Vector2(0, 38)
 	add_friend_input.text_submitted.connect(_on_add_friend_submitted)
 	_apply_line_edit_style(add_friend_input)
@@ -672,14 +714,18 @@ func _setup_add_friend_dialog() -> void:
 	layout.add_child(button_row)
 
 	add_friend_cancel_button = Button.new()
-	add_friend_cancel_button.text = "Cancel"
+	_set_localized_property(add_friend_cancel_button, "text", "common.cancel")
 	add_friend_cancel_button.custom_minimum_size = Vector2(92, 32)
 	add_friend_cancel_button.pressed.connect(_hide_add_friend_dialog)
 	_apply_button_style(add_friend_cancel_button)
 	button_row.add_child(add_friend_cancel_button)
 
 	add_friend_confirm_button = Button.new()
-	add_friend_confirm_button.text = "Send Request"
+	_set_localized_property(
+		add_friend_confirm_button,
+		"text",
+		"ui.friends.add_dialog.send"
+	)
 	add_friend_confirm_button.custom_minimum_size = Vector2(126, 34)
 	add_friend_confirm_button.pressed.connect(_confirm_add_friend)
 	_apply_button_style(add_friend_confirm_button, "success")
@@ -736,7 +782,7 @@ func _setup_remove_friend_confirm_dialog() -> void:
 	margin.add_child(layout)
 
 	var title := Label.new()
-	title.text = "Remove Friend"
+	_set_localized_property(title, "text", "ui.friends.remove_dialog.title")
 	title.add_theme_color_override("font_color", UI_TEXT)
 	title.add_theme_font_size_override("font_size", 18)
 	layout.add_child(title)
@@ -753,14 +799,14 @@ func _setup_remove_friend_confirm_dialog() -> void:
 	layout.add_child(button_row)
 
 	remove_friend_cancel_button = Button.new()
-	remove_friend_cancel_button.text = "Cancel"
+	_set_localized_property(remove_friend_cancel_button, "text", "common.cancel")
 	remove_friend_cancel_button.custom_minimum_size = Vector2(92, 32)
 	remove_friend_cancel_button.pressed.connect(_hide_remove_friend_confirm_dialog)
 	_apply_button_style(remove_friend_cancel_button)
 	button_row.add_child(remove_friend_cancel_button)
 
 	remove_friend_confirm_button = Button.new()
-	remove_friend_confirm_button.text = "Remove"
+	_set_localized_property(remove_friend_confirm_button, "text", "common.remove")
 	remove_friend_confirm_button.custom_minimum_size = Vector2(104, 32)
 	remove_friend_confirm_button.pressed.connect(_confirm_remove_friend)
 	_apply_button_style(remove_friend_confirm_button, "danger")
@@ -775,7 +821,10 @@ func _show_remove_friend_confirm_dialog(username: String, display_name: String) 
 	var name_text: String = display_name.strip_edges()
 	if name_text == "":
 		name_text = pending_remove_friend_username
-	remove_friend_confirm_label.text = "Remove %s from your friends?" % name_text
+	remove_friend_confirm_label.text = localization_manager.text(
+		"ui.friends.remove_dialog.message",
+		{"trainer": name_text}
+	)
 	remove_friend_confirm_dialog.size = Vector2(380, 170)
 	remove_friend_confirm_dialog.position = (size - remove_friend_confirm_dialog.size) * 0.5
 	remove_friend_confirm_dialog.visible = true
@@ -814,17 +863,20 @@ func _incoming_request_row(request: Dictionary) -> Control:
 	var friendship_id := int(request.get("id", 0))
 
 	row.add_child(_create_user_avatar(requester, true))
-	row.add_child(_create_request_identity(requester, "Wants to add you as a friend"))
+	row.add_child(_create_request_identity(
+		requester,
+		localization_manager.text("ui.friends.requests.wants_friend")
+	))
 
 	var accept_button := Button.new()
-	accept_button.text = "Accept"
+	accept_button.text = localization_manager.text("common.accept")
 	accept_button.custom_minimum_size = Vector2(92, 34)
 	accept_button.pressed.connect(_on_accept_request_pressed.bind(friendship_id))
 	_apply_button_style(accept_button, "primary")
 	row.add_child(accept_button)
 
 	var decline_button := Button.new()
-	decline_button.text = "Decline"
+	decline_button.text = localization_manager.text("common.decline")
 	decline_button.custom_minimum_size = Vector2(92, 34)
 	decline_button.pressed.connect(_on_decline_request_pressed.bind(friendship_id))
 	_apply_button_style(decline_button, "danger")
@@ -841,10 +893,13 @@ func _outgoing_request_row(request: Dictionary) -> Control:
 	var friendship_id := int(request.get("id", 0))
 
 	row.add_child(_create_user_avatar(addressee, false))
-	row.add_child(_create_request_identity(addressee, "Waiting for a response"))
+	row.add_child(_create_request_identity(
+		addressee,
+		localization_manager.text("ui.friends.requests.waiting")
+	))
 
 	var cancel_button := Button.new()
-	cancel_button.text = "Cancel"
+	cancel_button.text = localization_manager.text("common.cancel")
 	cancel_button.custom_minimum_size = Vector2(92, 34)
 	cancel_button.pressed.connect(_on_cancel_request_pressed.bind(friendship_id))
 	_apply_button_style(cancel_button)
@@ -856,7 +911,9 @@ func _outgoing_request_row(request: Dictionary) -> Control:
 func _render_blocked(blocked_users: Array) -> void:
 	_clear_children(blocked_list)
 	if blocked_users.is_empty():
-		blocked_list.add_child(_empty_label("No blocked trainers.\nBlocked trainers will be listed here."))
+		blocked_list.add_child(_empty_label(
+			localization_manager.text("ui.friends.blocked.empty")
+		))
 		return
 
 	for block_value: Variant in blocked_users:
@@ -871,10 +928,13 @@ func _blocked_row(user: Dictionary) -> Control:
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
 	row.add_child(_create_user_avatar(user, false, true))
-	row.add_child(_create_request_identity(user, "Messages and social invites are hidden"))
+	row.add_child(_create_request_identity(
+		user,
+		localization_manager.text("ui.friends.blocked.detail")
+	))
 
 	var unblock_button := Button.new()
-	unblock_button.text = "Unblock"
+	unblock_button.text = localization_manager.text("ui.friends.unblock")
 	unblock_button.custom_minimum_size = Vector2(104, 34)
 	unblock_button.pressed.connect(_on_unblock_user_pressed.bind(str(user.get("username", ""))))
 	_apply_button_style(unblock_button)
@@ -944,7 +1004,9 @@ func _on_refresh_pressed() -> void:
 
 func _on_private_message_pressed(user: Dictionary) -> void:
 	if not bool(user.get("online", false)):
-		_set_status("%s is offline." % _display_user_name(user))
+		_set_status(localization_manager.text("ui.friends.message_offline", {
+			"trainer": _display_user_name(user),
+		}))
 		return
 	private_message_requested.emit(user)
 
@@ -993,7 +1055,7 @@ func _on_block_user_submitted(username: String) -> void:
 
 func _block_user_async(username: String) -> void:
 	var result: Dictionary = await SocialService.block_user(username)
-	_apply_action_result(result, "User blocked.")
+	_apply_action_result(result, "ui.friends.success.blocked")
 	if bool(result.get("success", false)):
 		block_user_input.text = ""
 
@@ -1008,45 +1070,48 @@ func _on_save_status_pressed() -> void:
 
 func _add_friend_async(username: String) -> void:
 	var result: Dictionary = await SocialService.send_friend_request(username)
-	_apply_action_result(result, "Friend request sent.")
+	_apply_action_result(result, "ui.friends.success.request_sent")
 
 
 func _accept_request_async(friendship_id: int) -> void:
 	var result: Dictionary = await SocialService.accept_friend_request(friendship_id)
-	_apply_action_result(result, "Friend request accepted.")
+	_apply_action_result(result, "ui.friends.success.request_accepted")
 
 
 func _decline_request_async(friendship_id: int) -> void:
 	var result: Dictionary = await SocialService.decline_friend_request(friendship_id)
-	_apply_action_result(result, "Friend request declined.")
+	_apply_action_result(result, "ui.friends.success.request_declined")
 
 
 func _cancel_request_async(friendship_id: int) -> void:
 	var result: Dictionary = await SocialService.cancel_friend_request(friendship_id)
-	_apply_action_result(result, "Friend request cancelled.")
+	_apply_action_result(result, "ui.friends.success.request_cancelled")
 
 
 func _remove_friend_async(username: String) -> void:
 	var result: Dictionary = await SocialService.remove_friend(username)
-	_apply_action_result(result, "Friend removed.")
+	_apply_action_result(result, "ui.friends.success.removed")
 
 
 func _unblock_user_async(username: String) -> void:
 	var result: Dictionary = await SocialService.unblock_user(username)
-	_apply_action_result(result, "User unblocked.")
+	_apply_action_result(result, "ui.friends.success.unblocked")
 
 
 func _save_status_async() -> void:
 	var result: Dictionary = await SocialService.update_status_message(status_message_input.text)
-	_apply_action_result(result, "Status saved.")
+	_apply_action_result(result, "ui.friends.success.status_saved")
 
 
-func _apply_action_result(result: Dictionary, success_message: String) -> void:
+func _apply_action_result(result: Dictionary, success_key: String) -> void:
 	if not bool(result.get("success", false)):
-		_set_status(str(result.get("error", "Action failed.")))
+		_set_status(str(result.get(
+			"error",
+			localization_manager.text("ui.friends.error.action")
+		)))
 		return
 
-	_set_status(success_message)
+	_set_status(localization_manager.text(success_key))
 	if result.has("overview"):
 		overview = _dictionary_from_value(result.get("overview", {}))
 		_render_overview()
@@ -1073,42 +1138,56 @@ func _user_display_name(user: Dictionary) -> String:
 
 func _user_handle(user: Dictionary) -> String:
 	var username := str(user.get("username", "")).strip_edges()
-	return username if username != "" else "unknown"
+	return (
+		username
+		if username != ""
+		else localization_manager.text("common.unknown").to_lower()
+	)
 
 
 func _presence_label_text(user: Dictionary) -> String:
 	if bool(user.get("online", false)):
-		return "Online"
+		return localization_manager.text("ui.friends.presence.online")
 	var last_seen_at: String = str(user.get("lastSeenAt", "")).strip_edges()
 	if last_seen_at == "":
-		return "Offline"
-	return "Last seen %s" % _relative_last_seen_text(last_seen_at)
+		return localization_manager.text("ui.friends.presence.offline")
+	return localization_manager.text("ui.friends.presence.last_seen", {
+		"time": _relative_last_seen_text(last_seen_at),
+	})
 
 
 func _relative_last_seen_text(last_seen_at: String) -> String:
 	var last_seen_unix: float = _unix_from_iso_datetime(last_seen_at)
 	if last_seen_unix <= 0.0:
-		return "offline"
+		return localization_manager.text("ui.friends.presence.offline").to_lower()
 	var now_unix: float = Time.get_unix_time_from_system()
 	var elapsed_seconds: int = maxi(0, int(now_unix - last_seen_unix))
 	if elapsed_seconds < 60:
-		return "just now"
+		return localization_manager.text("ui.friends.time.just_now")
 	if elapsed_seconds < 3600:
-		return "%sm ago" % int(elapsed_seconds / 60)
+		return localization_manager.text("ui.friends.time.minutes_ago", {
+			"count": int(elapsed_seconds / 60),
+		})
 	if elapsed_seconds < 86400:
-		return "%sh ago" % int(elapsed_seconds / 3600)
+		return localization_manager.text("ui.friends.time.hours_ago", {
+			"count": int(elapsed_seconds / 3600),
+		})
 	if elapsed_seconds < 172800:
-		return "yesterday"
+		return localization_manager.text("ui.friends.time.yesterday")
 	if elapsed_seconds < 604800:
-		return "%sd ago" % int(elapsed_seconds / 86400)
+		return localization_manager.text("ui.friends.time.days_ago", {
+			"count": int(elapsed_seconds / 86400),
+		})
 
 	var datetime: Dictionary = Time.get_datetime_dict_from_unix_time(int(last_seen_unix))
 	var month: int = int(datetime.get("month", 0))
 	var day: int = int(datetime.get("day", 0))
 	var year: int = int(datetime.get("year", 0))
-	var months: Array[String] = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+	var months: Array[String] = []
+	for month_index in range(1, 13):
+		months.append(localization_manager.text("ui.friends.month.%02d" % month_index))
 	if month < 1 or month > months.size() or day < 1:
-		return "offline"
+		return localization_manager.text("ui.friends.presence.offline").to_lower()
 	if year == int(Time.get_datetime_dict_from_system().get("year", 0)):
 		return "%s %s" % [months[month - 1], day]
 	return "%s %s, %s" % [months[month - 1], day, year]
@@ -1150,6 +1229,19 @@ func _set_status(message: String) -> void:
 		status_label.text = message
 		status_label.visible = message != ""
 		status_label.add_theme_color_override("font_color", UI_MUTED_TEXT if message == "" else UI_SECTION_TEXT)
+
+func _on_locale_changed(_locale: String) -> void:
+	localization_manager.localize_tree(self)
+	_render_overview()
+	if remove_friend_confirm_dialog != null and remove_friend_confirm_dialog.visible:
+		remove_friend_confirm_label.text = localization_manager.text(
+			"ui.friends.remove_dialog.message",
+			{"trainer": pending_remove_friend_username}
+		)
+
+func _set_localized_property(control: Control, property_name: String, key: String) -> void:
+	control.set_meta("i18n_source_%s" % property_name, key)
+	control.set(property_name, localization_manager.text(key))
 
 
 func _center_in_viewport() -> void:

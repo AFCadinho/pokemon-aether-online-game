@@ -85,8 +85,41 @@ func _check_trade_context_action() -> void:
 	_check_equal(trade_button != null and trade_button.disabled, true, "authoritatively disabled trading remains visible but cannot start")
 
 	await _check_guild_invite_context_action()
+	await _check_live_localization()
 	coordinator.close_context_menu()
 	host.queue_free()
+
+func _check_live_localization() -> void:
+	var manager := root.get_node_or_null("LocalizationManager")
+	if manager == null:
+		_check_equal(false, true, "localization manager is available")
+		return
+	manager.set_locale("nl")
+	await process_frame
+	var nearby_title := _find_label_with_text(coordinator.players_panel, "Trainers in de buurt")
+	_check_equal(nearby_title != null, true, "Nearby title refreshes in Dutch")
+	coordinator.trade_capabilities = {"enabled": true}
+	coordinator.trade_capabilities_loaded = true
+	coordinator.current_target = {"userId": 7, "username": "misty", "displayName": "Misty"}
+	coordinator.context_more_actions_expanded = false
+	coordinator._render_context_menu()
+	var trade_button := _find_player_action("Trade")
+	_check_equal(
+		trade_button != null and _find_label_with_text(trade_button, "Ruilen") != null,
+		true,
+		"Nearby actions display Dutch without changing their canonical action id"
+	)
+	manager.set_locale("en")
+	await process_frame
+
+func _find_label_with_text(node: Node, expected: String) -> Label:
+	if node is Label and (node as Label).text == expected:
+		return node as Label
+	for child: Node in node.get_children():
+		var match := _find_label_with_text(child, expected)
+		if match != null:
+			return match
+	return null
 
 func _find_player_action(action_name: String) -> Button:
 	for child: Node in coordinator.context_actions.get_children():

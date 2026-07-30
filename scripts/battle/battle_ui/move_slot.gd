@@ -19,10 +19,14 @@ signal unhovered
 @onready var effectiveness_label: Label = $MarginContainer/VBoxContainer/BottomRow/EffectivenessLabel
 
 var current_move_data: Dictionary = {}
+var localization_manager: Node
 static var move_type_index: Dictionary = {}
 static var move_type_index_loaded := false
 
 func _ready() -> void:
+	localization_manager = get_tree().root.get_node_or_null("LocalizationManager")
+	if localization_manager != null and not localization_manager.locale_changed.is_connected(_on_locale_changed):
+		localization_manager.locale_changed.connect(_on_locale_changed)
 	if not pressed.is_connected(_on_pressed):
 		pressed.connect(_on_pressed)
 	if not mouse_entered.is_connected(_on_mouse_entered):
@@ -37,7 +41,7 @@ func set_move_data(move_data: Dictionary) -> void:
 	modulate = DISABLED_MODULATE if disabled else Color.WHITE
 	tooltip_text = str(move_data.get("disabledReason", "")) if disabled else ""
 	
-	move_name_label.text = str(move_data.get("name", ""))
+	move_name_label.text = _localized_move_name(move_data)
 	
 	var current_pp_value = move_data.get("pp", 0)
 	var current_pp := 0
@@ -63,12 +67,12 @@ func set_move_data(move_data: Dictionary) -> void:
 	_apply_type_style(move_type, disabled, is_z_move)
 	
 	if bool(move_data.get("zMoveUnavailable", false)):
-		effectiveness_label.text = "no Z-Move"
+		effectiveness_label.text = _t("battle.move.no_z_move")
 		effectiveness_label.add_theme_color_override("font_color", Color("#9ba5b8"))
 	elif is_z_move:
-		effectiveness_label.text = "Z-POWER"
+		effectiveness_label.text = _t("battle.move.z_power")
 		effectiveness_label.add_theme_color_override("font_color", Z_MOVE_BORDER)
-		tooltip_text = "Z-Power move"
+		tooltip_text = _t("battle.move.z_power_tooltip")
 	else:
 		_set_effectiveness(move_data)
 	
@@ -224,6 +228,21 @@ func _normalize_move_lookup_key(value: String) -> String:
 		normalized_key = normalized_key.replace("--", "-")
 
 	return normalized_key
+
+
+func _localized_move_name(move_data: Dictionary) -> String:
+	var fallback_name := str(move_data.get(
+		"name",
+		move_data.get("move", move_data.get("id", ""))
+	)).strip_edges()
+	var move_id := str(move_data.get(
+		"id",
+		move_data.get("move", move_data.get("moveId", move_data.get("move_id", fallback_name)))
+	))
+	var content_localization := get_node_or_null("/root/ContentLocalization")
+	if content_localization != null and content_localization.has_method("display_name"):
+		return str(content_localization.call("display_name", "moves", move_id, fallback_name))
+	return fallback_name
 	
 func set_empty() -> void:
 	visible = true
@@ -231,7 +250,7 @@ func set_empty() -> void:
 	disabled = true
 	modulate = DISABLED_MODULATE
 	tooltip_text = ""
-	move_name_label.text = "Empty"
+	move_name_label.text = _t("battle.move.empty")
 	pp_label.text = "--/--"
 	effectiveness_label.text = ""
 	type_banner.texture = null
@@ -244,7 +263,7 @@ func _set_effectiveness(move_data: Dictionary) -> void:
 	var category := str(move_data.get("category", ""))
 	
 	if category == "Status":
-		effectiveness_label.text = "status"
+		effectiveness_label.text = _t("battle.move.effect.status")
 		effectiveness_label.add_theme_color_override("font_color", Color("#9aa7ff"))
 		return
 	
@@ -256,16 +275,16 @@ func _set_effectiveness(move_data: Dictionary) -> void:
 	var immune := bool(effectiveness.get("immune", false))
 	
 	if immune or multiplier == 0.0:
-		effectiveness_label.text = "no effect"
+		effectiveness_label.text = _t("battle.move.effect.none")
 		effectiveness_label.add_theme_color_override("font_color", Color("#d66a6a"))
 	elif multiplier <1.0:
-		effectiveness_label.text = "not effective"
+		effectiveness_label.text = _t("battle.move.effect.resisted")
 		effectiveness_label.add_theme_color_override("font_color", Color("#d9a441"))
 	elif multiplier > 1.0:
-		effectiveness_label.text = "super effective"
+		effectiveness_label.text = _t("battle.move.effect.super")
 		effectiveness_label.add_theme_color_override("font_color", Color("#65d46e"))
 	else:
-		effectiveness_label.text = "effective"
+		effectiveness_label.text = _t("battle.move.effect.normal")
 		effectiveness_label.add_theme_color_override("font_color", Color("#b8b8b8"))
 
 
@@ -293,4 +312,16 @@ func _on_mouse_entered() -> void:
 
 func _on_mouse_exited() -> void:
 	unhovered.emit()
-	
+
+
+func _on_locale_changed(_locale: String) -> void:
+	if current_move_data.is_empty():
+		set_empty()
+	else:
+		set_move_data(current_move_data)
+
+
+func _t(key: String, replacements: Dictionary = {}) -> String:
+	if localization_manager != null:
+		return str(localization_manager.call("text", key, replacements))
+	return key

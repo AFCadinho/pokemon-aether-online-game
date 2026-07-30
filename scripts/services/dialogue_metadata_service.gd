@@ -16,10 +16,12 @@ func get_dialogue(dialogue_id: String) -> Dictionary:
 			"metadata": {},
 		}
 
-	if dialogue_metadata_cache.has(normalized_dialogue_id):
-		return dialogue_metadata_cache[normalized_dialogue_id]
+	var locale := _get_http_locale()
+	var cache_key := _get_cache_key(locale, normalized_dialogue_id)
+	if dialogue_metadata_cache.has(cache_key):
+		return dialogue_metadata_cache[cache_key]
 
-	var response := await _fetch_dialogue_metadata(normalized_dialogue_id)
+	var response := await _fetch_dialogue_metadata(normalized_dialogue_id, locale)
 	if not response.get("success", false):
 		return response
 
@@ -31,7 +33,7 @@ func get_dialogue(dialogue_id: String) -> Dictionary:
 		"success": true,
 		"metadata": normalized_metadata,
 	}
-	dialogue_metadata_cache[normalized_dialogue_id] = result
+	dialogue_metadata_cache[cache_key] = result
 	return result
 
 
@@ -53,14 +55,14 @@ func clear_cache() -> void:
 	dialogue_metadata_cache.clear()
 
 
-func _fetch_dialogue_metadata(dialogue_id: String) -> Dictionary:
+func _fetch_dialogue_metadata(dialogue_id: String, locale: String) -> Dictionary:
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var url := base_url + DIALOGUE_METADATA_ENDPOINT % dialogue_id.uri_encode()
 	var request := HTTPRequest.new()
 	add_child(request)
 	request.timeout = 3.0
 
-	var error := request.request(url, GatewayApiConfig.get_accept_headers())
+	var error := request.request(url, GatewayApiConfig.get_accept_headers(locale))
 	if error != OK:
 		request.queue_free()
 		return {
@@ -128,6 +130,17 @@ func _normalize_dialogue_metadata(dialogue_id: String, metadata: Dictionary) -> 
 		)
 	)
 	return dialogue_metadata
+
+
+func _get_http_locale() -> String:
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	if localization_manager != null and localization_manager.has_method("get_http_locale"):
+		return str(localization_manager.call("get_http_locale"))
+	return "en"
+
+
+func _get_cache_key(locale: String, dialogue_id: String) -> String:
+	return "%s:%s" % [locale, dialogue_id]
 
 
 func _get_string_array(value: Variant) -> Array[String]:

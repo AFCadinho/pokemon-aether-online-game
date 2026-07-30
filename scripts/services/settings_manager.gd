@@ -21,6 +21,9 @@ const CHAT_TAB_SYSTEM := "system"
 const CHAT_TAB_PM := "pm"
 const CHAT_TAB_GUILD := "guild"
 const LEGACY_CHAT_TAB_CLAN := "clan"
+const DEFAULT_LOCALE := "en"
+const CONTENT_NAME_LANGUAGE_ENGLISH := "english"
+const CONTENT_NAME_LANGUAGE_LOCALIZED := "localized"
 const DEFAULT_CHAT_TAB_ORDER: Array[String] = [
 	CHAT_TAB_ALL,
 	CHAT_TAB_GENERAL,
@@ -40,6 +43,7 @@ var battle_animations := true
 var weather_effects := true
 var terrain_effects := true
 var display_own_name := true
+var hide_other_players := false
 var sprite_style := SPRITE_STYLE_ANIMATED
 var fullscreen := false
 var window_resolution := DEFAULT_WINDOW_RESOLUTION
@@ -50,6 +54,8 @@ var pokemon_cry_volume := 75.0
 var ui_volume := 75.0
 var notification_volume := 75.0
 var battle_music_track := BATTLE_MUSIC_DEFAULT
+var locale := DEFAULT_LOCALE
+var content_name_language := CONTENT_NAME_LANGUAGE_ENGLISH
 var chat_tab_visibility: Dictionary = {
 	CHAT_TAB_ALL: true,
 	CHAT_TAB_GENERAL: true,
@@ -69,12 +75,16 @@ func _ready() -> void:
 
 func load_settings() -> void:
 	if not FileAccess.file_exists(SETTINGS_PATH):
+		locale = LocalizationManager.get_preferred_system_locale()
+		_apply_launcher_locale_argument()
+		content_name_language = _default_content_name_language(locale)
 		save_settings()
 		return
 
 	var settings_text: String = FileAccess.get_file_as_string(SETTINGS_PATH)
 	var parsed_data: Variant = JSON.parse_string(settings_text)
 	if not parsed_data is Dictionary:
+		_apply_launcher_locale_argument()
 		save_settings()
 		return
 
@@ -83,6 +93,7 @@ func load_settings() -> void:
 	weather_effects = bool(data.get("weather_effects", weather_effects))
 	terrain_effects = bool(data.get("terrain_effects", terrain_effects))
 	display_own_name = bool(data.get("display_own_name", display_own_name))
+	hide_other_players = bool(data.get("hide_other_players", hide_other_players))
 	sprite_style = _validated_sprite_style(str(data.get("sprite_style", sprite_style)))
 	fullscreen = bool(data.get("fullscreen", fullscreen))
 	window_resolution = _validated_window_resolution(data.get("window_resolution", window_resolution))
@@ -95,9 +106,31 @@ func load_settings() -> void:
 	battle_music_track = str(data.get("battle_music_track", battle_music_track)).strip_edges()
 	if battle_music_track == "":
 		battle_music_track = BATTLE_MUSIC_DEFAULT
+	locale = LocalizationManager.normalize_locale(
+		str(data.get("locale", LocalizationManager.get_preferred_system_locale()))
+	)
+	var has_content_name_language := data.has("content_name_language")
+	content_name_language = _validated_content_name_language(
+		str(data.get("content_name_language", _default_content_name_language(locale)))
+	)
 	chat_tab_visibility = _validated_chat_tab_visibility(data.get("chat_tab_visibility", chat_tab_visibility))
 	chat_tab_order = _validated_chat_tab_order(data.get("chat_tab_order", chat_tab_order))
+	var launcher_changed := _apply_launcher_locale_argument()
+	if not has_content_name_language:
+		content_name_language = _default_content_name_language(locale)
+	if launcher_changed or not has_content_name_language:
+		save_settings()
 	_apply_runtime_settings()
+
+
+func _apply_launcher_locale_argument() -> bool:
+	for argument: String in OS.get_cmdline_user_args():
+		if argument.begins_with("--locale="):
+			var launcher_locale := LocalizationManager.normalize_locale(argument.trim_prefix("--locale="))
+			var changed := locale != launcher_locale
+			locale = launcher_locale
+			return changed
+	return false
 
 
 func save_settings() -> void:
@@ -106,6 +139,7 @@ func save_settings() -> void:
 		"weather_effects": weather_effects,
 		"terrain_effects": terrain_effects,
 		"display_own_name": display_own_name,
+		"hide_other_players": hide_other_players,
 		"sprite_style": sprite_style,
 		"fullscreen": fullscreen,
 		"window_resolution": {
@@ -119,6 +153,8 @@ func save_settings() -> void:
 		"ui_volume": ui_volume,
 		"notification_volume": notification_volume,
 		"battle_music_track": battle_music_track,
+		"locale": locale,
+		"content_name_language": content_name_language,
 		"chat_tab_visibility": chat_tab_visibility,
 		"chat_tab_order": chat_tab_order,
 	}
@@ -163,6 +199,14 @@ func set_display_own_name(enabled: bool) -> void:
 	_save_and_emit()
 
 
+func set_hide_other_players(enabled: bool) -> void:
+	if hide_other_players == enabled:
+		return
+
+	hide_other_players = enabled
+	_save_and_emit()
+
+
 func set_sprite_style(style: String) -> bool:
 	var validated_style: String = _validated_sprite_style(style)
 	if style == SPRITE_STYLE_GEN5_ANIMATED and validated_style != SPRITE_STYLE_GEN5_ANIMATED:
@@ -196,6 +240,35 @@ func set_window_resolution(resolution: Vector2i) -> void:
 	window_resolution = validated_resolution
 	_apply_display_settings()
 	_save_and_emit()
+
+
+func set_locale(value: String) -> void:
+	var validated_locale: String = LocalizationManager.normalize_locale(value)
+	if locale == validated_locale:
+		LocalizationManager.set_locale(locale)
+		return
+
+	locale = validated_locale
+	LocalizationManager.set_locale(locale)
+	_save_and_emit()
+
+
+func set_content_name_language(value: String) -> void:
+	var validated_value := _validated_content_name_language(value)
+	if content_name_language == validated_value:
+		return
+
+	content_name_language = validated_value
+	_save_and_emit()
+	LocalizationManager.refresh_current_locale()
+
+
+func get_content_name_locale() -> String:
+	return (
+		LocalizationManager.DEFAULT_LOCALE
+		if content_name_language == CONTENT_NAME_LANGUAGE_ENGLISH
+		else LocalizationManager.current_locale
+	)
 
 
 func set_master_volume(volume: float) -> void:
@@ -308,6 +381,22 @@ func _validated_sprite_style(style: String) -> String:
 			return SPRITE_STYLE_ANIMATED
 
 
+func _validated_content_name_language(value: String) -> String:
+	return (
+		CONTENT_NAME_LANGUAGE_LOCALIZED
+		if value == CONTENT_NAME_LANGUAGE_LOCALIZED
+		else CONTENT_NAME_LANGUAGE_ENGLISH
+	)
+
+
+func _default_content_name_language(interface_locale: String) -> String:
+	return (
+		CONTENT_NAME_LANGUAGE_LOCALIZED
+		if LocalizationManager.normalize_locale(interface_locale) == "pt_BR"
+		else CONTENT_NAME_LANGUAGE_ENGLISH
+	)
+
+
 func _validated_volume(volume: Variant) -> float:
 	return clampf(float(volume), 0.0, 100.0)
 
@@ -398,6 +487,7 @@ func _ensure_audio_bus(bus_name: String) -> void:
 
 
 func _apply_runtime_settings() -> void:
+	LocalizationManager.set_locale(locale)
 	_apply_audio_settings()
 	_apply_display_settings()
 

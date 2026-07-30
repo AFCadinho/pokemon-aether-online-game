@@ -236,24 +236,8 @@ func _array_from_value(value: Variant) -> Array:
 
 
 func _extract_error(body: Dictionary, response_code: int) -> String:
-	if body.has("detail"):
-		return str(body.get("detail"))
-	if body.has("error"):
-		return str(body.get("error"))
-	return "Request failed with HTTP %s." % response_code
+	return BackendErrorLocalizationService.message({"body": body, "status": response_code})
 
 
 func _request_result_message(request_result: int) -> String:
-	match request_result:
-		HTTPRequest.RESULT_CANT_RESOLVE:
-			return "Could not resolve server."
-		HTTPRequest.RESULT_CANT_CONNECT:
-			return "Could not connect to server."
-		HTTPRequest.RESULT_CONNECTION_ERROR:
-			return "Connection error."
-		HTTPRequest.RESULT_TLS_HANDSHAKE_ERROR:
-			return "TLS handshake failed."
-		HTTPRequest.RESULT_TIMEOUT:
-			return "Request timed out."
-		_:
-			return "Request failed."
+	return BackendErrorLocalizationService.transport_message(request_result)

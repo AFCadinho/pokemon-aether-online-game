@@ -26,7 +26,7 @@ var notified_incoming_trade_ids: Dictionary = {}
 func setup() -> void:
 	hide()
 	trade.clear()
-	title = "Trade Invitation"
+	title = _t("ui.trade.invitation.window_title")
 	min_size = DIALOG_SIZE
 	max_size = DIALOG_SIZE
 	unresizable = true
@@ -78,20 +78,20 @@ func setup() -> void:
 	header.add_child(title_stack)
 
 	var window_title := Label.new()
-	window_title.text = "Trade Request"
+	_set_localized_property(window_title, "text", "ui.trade.invitation.title")
 	window_title.add_theme_color_override("font_color", TRADE_TEXT)
 	window_title.add_theme_font_size_override("font_size", 19)
 	title_stack.add_child(window_title)
 
 	var window_subtitle := Label.new()
-	window_subtitle.text = "Secure player-to-player exchange"
+	_set_localized_property(window_subtitle, "text", "ui.trade.invitation.subtitle")
 	window_subtitle.add_theme_color_override("font_color", TRADE_MUTED)
 	window_subtitle.add_theme_font_size_override("font_size", 11)
 	title_stack.add_child(window_subtitle)
 
 	var close_button := Button.new()
 	close_button.text = "×"
-	close_button.tooltip_text = "Close invitation"
+	_set_localized_property(close_button, "tooltip_text", "ui.trade.invitation.close")
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	close_button.custom_minimum_size = Vector2(36, 34)
@@ -120,13 +120,13 @@ func setup() -> void:
 	content_margin.add_child(stack)
 
 	mode_label = Label.new()
-	mode_label.text = "INCOMING REQUEST"
+	mode_label.text = _t("ui.trade.invitation.incoming")
 	mode_label.add_theme_color_override("font_color", TRADE_ACCENT)
 	mode_label.add_theme_font_size_override("font_size", 10)
 	stack.add_child(mode_label)
 
 	heading_label = Label.new()
-	heading_label.text = "A trainer wants to trade"
+	heading_label.text = _t("ui.trade.invitation.heading")
 	heading_label.add_theme_color_override("font_color", TRADE_TEXT)
 	heading_label.add_theme_font_size_override("font_size", 18)
 	stack.add_child(heading_label)
@@ -138,7 +138,7 @@ func setup() -> void:
 	stack.add_child(status_label)
 
 	var safety_label := Label.new()
-	safety_label.text = "Nothing is exchanged until both trainers confirm the final review."
+	_set_localized_property(safety_label, "text", "ui.trade.invitation.safety")
 	safety_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	safety_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	safety_label.add_theme_color_override("font_color", Color("#75d99a"))
@@ -155,20 +155,25 @@ func setup() -> void:
 	actions.add_child(action_spacer)
 
 	decline_button = Button.new()
-	decline_button.text = "Decline"
+	_set_localized_property(decline_button, "text", "common.decline")
 	decline_button.custom_minimum_size = Vector2(112, 38)
 	decline_button.pressed.connect(_decline_or_close)
 	_style_button(decline_button, "secondary")
 	actions.add_child(decline_button)
 
 	accept_button = Button.new()
-	accept_button.text = "Accept Trade"
+	_set_localized_property(accept_button, "text", "ui.trade.invitation.accept")
 	accept_button.custom_minimum_size = Vector2(132, 38)
 	accept_button.pressed.connect(_accept)
 	_style_button(accept_button, "primary")
 	actions.add_child(accept_button)
 
 	close_requested.connect(_decline_or_close)
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	if localization_manager != null:
+		var locale_callable := Callable(self, "_on_locale_changed")
+		if not localization_manager.is_connected("locale_changed", locale_callable):
+			localization_manager.connect("locale_changed", locale_callable)
 	var realtime := get_node_or_null("/root/TradeRealtimeService")
 	if realtime != null:
 		realtime.invitation_received.connect(show_trade)
@@ -181,7 +186,7 @@ func setup() -> void:
 func send_invitation(username: String) -> Dictionary:
 	var service := get_node_or_null("/root/TradeService")
 	if service == null:
-		return {"success": false, "error": "Trade service unavailable."}
+		return {"success": false, "error": _t("ui.trade.error.service_unavailable")}
 	action_in_flight = true
 	var result: Dictionary = await service.create_invitation(username)
 	action_in_flight = false
@@ -192,7 +197,7 @@ func send_invitation(username: String) -> Dictionary:
 			realtime.apply_snapshot(trade)
 			realtime.restore_active_trade_and_connect.call_deferred()
 	else:
-		show_error(str(result.get("error", "Could not send trade invitation.")))
+		show_error(str(result.get("error", _t("ui.trade.error.send_invitation"))))
 	return result
 
 
@@ -203,9 +208,13 @@ func show_trade(value: Dictionary) -> void:
 		return
 	var incoming := _current_role() == "recipient"
 	accept_button.visible = incoming and str(trade.get("status", "")) == "invited"
-	decline_button.text = "Decline" if incoming else "Cancel Invitation"
-	mode_label.text = "INCOMING REQUEST" if incoming else "REQUEST SENT"
-	heading_label.text = "%s wants to trade" % _initiator_display_name() if incoming else "Invitation sent"
+	decline_button.text = _t("common.decline") if incoming else _t("ui.trade.invitation.cancel")
+	mode_label.text = _t("ui.trade.invitation.incoming") if incoming else _t("ui.trade.invitation.sent_mode")
+	heading_label.text = (
+		_t("ui.trade.invitation.wants_to_trade", {"trainer": _initiator_display_name()})
+		if incoming
+		else _t("ui.trade.invitation.sent")
+	)
 	_style_button(decline_button, "secondary")
 	status_label.text = _invitation_status_text(incoming)
 	if incoming:
@@ -217,9 +226,9 @@ func show_trade(value: Dictionary) -> void:
 func show_error(message: String) -> void:
 	trade.clear()
 	accept_button.visible = false
-	decline_button.text = "Close"
-	mode_label.text = "REQUEST ERROR"
-	heading_label.text = "Unable to start trade"
+	decline_button.text = _t("common.close")
+	mode_label.text = _t("ui.trade.invitation.error_mode")
+	heading_label.text = _t("ui.trade.invitation.error_heading")
 	_style_button(decline_button, "secondary")
 	status_label.text = message
 	size = DIALOG_SIZE
@@ -263,7 +272,7 @@ func _apply_result(result: Dictionary) -> void:
 		if realtime != null:
 			realtime.apply_snapshot(result_trade)
 	else:
-		show_error(str(result.get("error", "Trade invitation action failed.")))
+		show_error(str(result.get("error", _t("ui.trade.error.invitation_action"))))
 
 
 func _on_trade_changed(value: Dictionary) -> void:
@@ -293,17 +302,18 @@ func _role_for_trade(value: Dictionary) -> String:
 
 func _status_text(incoming: bool) -> String:
 	match str(trade.get("status", "")):
-		"invited": return "A player invited you to trade." if incoming else "Waiting for the other player to respond."
-		"active": return "Trade accepted. Setup will continue in the next step."
-		"declined": return "The trade invitation was declined."
-		"cancelled": return "The trade invitation was cancelled."
-		"expired": return "The trade invitation expired."
-		_: return "Trade invitation state unavailable."
+		"invited":
+			return _t("ui.trade.invitation.status.incoming") if incoming else _t("ui.trade.invitation.status.waiting")
+		"active": return _t("ui.trade.invitation.status.accepted")
+		"declined": return _t("ui.trade.invitation.status.declined")
+		"cancelled": return _t("ui.trade.invitation.status.cancelled")
+		"expired": return _t("ui.trade.invitation.status.expired")
+		_: return _t("ui.trade.invitation.status.unavailable")
 
 
 func _invitation_status_text(incoming: bool) -> String:
 	if incoming and str(trade.get("status", "")) == "invited":
-		return "%s invited you to trade." % _initiator_display_name()
+		return _t("ui.trade.invitation.invited_by", {"trainer": _initiator_display_name()})
 	return _status_text(incoming)
 
 
@@ -319,7 +329,7 @@ func _initiator_display_name() -> String:
 			return display_name
 		if username != "":
 			return "@%s" % username
-	return "A player"
+	return _t("ui.trade.fallback.player")
 
 
 func _notify_incoming_invitation_once() -> void:
@@ -329,7 +339,30 @@ func _notify_incoming_invitation_once() -> void:
 	notified_incoming_trade_ids[trade_id] = true
 	var overlay := get_tree().get_first_node_in_group("ui_overlay")
 	if overlay != null and overlay.has_method("add_system_message"):
-		overlay.call("add_system_message", "Trade request received from %s." % _initiator_display_name())
+		overlay.call("add_system_message", _t("ui.trade.invitation.received", {
+			"trainer": _initiator_display_name(),
+		}))
+
+
+func _on_locale_changed(_locale: String) -> void:
+	title = _t("ui.trade.invitation.window_title")
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	if localization_manager != null:
+		localization_manager.call("localize_tree", self)
+	if not trade.is_empty() and str(trade.get("status", "")) == "invited":
+		show_trade(trade)
+
+
+func _set_localized_property(control: Control, property_name: String, key: String) -> void:
+	control.set_meta("i18n_source_%s" % property_name, key)
+	control.set(property_name, _t(key))
+
+
+func _t(key: String, values: Dictionary = {}) -> String:
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	if localization_manager == null:
+		return key.format(values)
+	return str(localization_manager.call("text", key, values))
 
 
 func _panel_style(background: Color, border: Color, radius: int, width: int) -> StyleBoxFlat:

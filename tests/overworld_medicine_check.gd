@@ -7,6 +7,13 @@ var failed := false
 
 
 func _init() -> void:
+	call_deferred("_run")
+
+
+func _run() -> void:
+	var localization_manager := root.get_node_or_null("LocalizationManager")
+	if localization_manager != null:
+		localization_manager.call("set_locale", "en")
 	_check_preview_and_eligibility()
 	_check_status_and_revive_previews()
 	_check_overlay_contract()

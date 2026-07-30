@@ -32,9 +32,16 @@ var ev_value_label: Label
 var show_ivs := false
 var show_evs := false
 var storage_visuals := false
+var current_pokemon_data: Dictionary = {}
+var localization_manager: Node
 
 
 func _ready() -> void:
+	localization_manager = get_tree().root.get_node_or_null("LocalizationManager")
+	if localization_manager != null and not localization_manager.locale_changed.is_connected(_on_locale_changed):
+		localization_manager.locale_changed.connect(_on_locale_changed)
+	if localization_manager != null:
+		localization_manager.call("localize_tree", self)
 	set_anchors_preset(Control.PRESET_TOP_LEFT)
 	offset_left = 0.0
 	offset_top = 0.0
@@ -165,12 +172,27 @@ func position_near_rect(anchor_rect: Rect2, viewport_size: Vector2) -> void:
 
 
 func _set_pokemon_data(pokemon_data: Dictionary) -> void:
+	current_pokemon_data = pokemon_data.duplicate(true)
 	name_label.text = _get_display_species(pokemon_data)
 	_set_type_icons(pokemon_data)
 	_set_hp(pokemon_data)
-	ability_value_label.text = _format_value(str(pokemon_data.get("ability", "")), "Unknown")
-	item_value_label.text = _format_value(str(pokemon_data.get("item", "")), "No item")
-	nature_value_label.text = _format_value(str(pokemon_data.get("nature", "")), "Unknown")
+	ability_value_label.text = _format_value(
+		_localized_content_name(
+			"abilities",
+			str(pokemon_data.get("ability", "")),
+			str(pokemon_data.get("ability", ""))
+		),
+		_t("common.unknown")
+	)
+	item_value_label.text = _format_value(
+		str(pokemon_data.get("item", "")),
+		_t("battle.hover.no_item")
+	)
+	var canonical_nature := str(pokemon_data.get("nature", ""))
+	nature_value_label.text = _format_value(
+		_localized_nature_name(canonical_nature),
+		_t("common.unknown")
+	)
 	_set_stats(
 		pokemon_data.get("stats", pokemon_data.get("evs", {})),
 		pokemon_data.get("statStages", pokemon_data.get("stat_stages", {})),
@@ -184,13 +206,39 @@ func _set_pokemon_data(pokemon_data: Dictionary) -> void:
 func _get_display_species(pokemon_data: Dictionary) -> String:
 	var species := str(pokemon_data.get("displaySpecies", pokemon_data.get("species", "")))
 	if species != "":
-		return species
+		var species_id := str(pokemon_data.get(
+			"speciesId",
+			pokemon_data.get("species_id", pokemon_data.get("species", species))
+		))
+		return _localized_content_name("species", species_id, species)
 
 	var ident := str(pokemon_data.get("ident", ""))
 	if ident.contains(": "):
-		return str(ident.split(": ")[1]).strip_edges()
+		var ident_species := str(ident.split(": ")[1]).strip_edges()
+		return _localized_content_name("species", ident_species, ident_species)
 
-	return "Unknown"
+	return _t("common.unknown")
+
+
+func _localized_nature_name(nature: String) -> String:
+	var content_localization := _get_content_localization()
+	if content_localization != null and content_localization.has_method("nature_name"):
+		return str(content_localization.call("nature_name", nature, nature))
+	return nature
+
+
+func _localized_content_name(kind: String, content_id: String, fallback_name: String) -> String:
+	var content_localization := _get_content_localization()
+	if content_localization != null and content_localization.has_method("display_name"):
+		return str(content_localization.call("display_name", kind, content_id, fallback_name))
+	return fallback_name
+
+
+func _get_content_localization() -> Node:
+	if is_inside_tree():
+		return get_node_or_null("/root/ContentLocalization")
+	var scene_tree := Engine.get_main_loop() as SceneTree
+	return scene_tree.root.get_node_or_null("ContentLocalization") if scene_tree != null else null
 
 
 func _set_type_icons(pokemon_data: Dictionary) -> void:
@@ -225,7 +273,7 @@ func _set_hp(pokemon_data: Dictionary) -> void:
 	var max_hp: int = raw_max_hp if raw_max_hp > 0 else 1
 	var clamped_hp: int = mini(maxi(hp, 0), max_hp)
 	if bool(pokemon_data.get("fainted", false)) or str(pokemon_data.get("condition", "")).contains("fnt"):
-		hp_percent_label.text = "fnt"
+		hp_percent_label.text = _t("battle.status.compact.fainted").to_lower()
 	else:
 		var hp_percent: int = int(round((float(clamped_hp) / float(max_hp)) * 100.0))
 		var clamped_hp_percent: int = mini(maxi(hp_percent, 0), 100)
@@ -285,7 +333,9 @@ func _set_ivs(ivs_value: Variant) -> void:
 	]:
 		if ivs.has(entry[1]):
 			parts.append("%s %d" % [entry[0], int(ivs.get(entry[1]))])
-	iv_value_label.text = "IVs: " + " · ".join(parts)
+	iv_value_label.text = _t("battle.hover.ivs", {
+		"values": " · ".join(parts),
+	})
 	iv_value_label.visible = not parts.is_empty()
 
 
@@ -307,7 +357,9 @@ func _set_evs(evs_value: Variant) -> void:
 	]:
 		if evs.has(entry[1]) and int(evs.get(entry[1])) > 0:
 			parts.append("%s %d" % [entry[0], int(evs.get(entry[1]))])
-	ev_value_label.text = "EVs: " + " · ".join(parts)
+	ev_value_label.text = _t("battle.hover.evs", {
+		"values": " · ".join(parts),
+	})
 	ev_value_label.visible = not parts.is_empty()
 
 
@@ -365,9 +417,21 @@ func _set_moves(moves_value: Variant) -> void:
 func _get_move_display_name(move_data: Variant) -> String:
 	if move_data is Dictionary:
 		var move_dictionary := move_data as Dictionary
-		return str(move_dictionary.get("name", move_dictionary.get("move", "")))
+		var fallback_name := str(move_dictionary.get(
+			"name",
+			move_dictionary.get("move", move_dictionary.get("id", ""))
+		))
+		var move_id := str(move_dictionary.get(
+			"id",
+			move_dictionary.get(
+				"move",
+				move_dictionary.get("moveId", move_dictionary.get("move_id", fallback_name))
+			)
+		))
+		return _localized_content_name("moves", move_id, fallback_name)
 
-	return str(move_data)
+	var move_name := str(move_data)
+	return _localized_content_name("moves", move_name, move_name)
 
 
 func _get_move_pp_text(move_data: Variant) -> String:
@@ -401,6 +465,13 @@ func _get_first_dictionary_value(dictionary: Dictionary, keys: Array[String], fa
 	return fallback
 
 
+func _on_locale_changed(_locale: String) -> void:
+	if localization_manager != null:
+		localization_manager.call("localize_tree", self)
+	if not current_pokemon_data.is_empty():
+		_set_pokemon_data(current_pokemon_data)
+
+
 func _format_value(value: String, fallback: String) -> String:
 	var cleaned := value.strip_edges()
 	if cleaned == "":
@@ -411,3 +482,9 @@ func _format_value(value: String, fallback: String) -> String:
 		words[index] = words[index].capitalize()
 
 	return " ".join(words)
+
+
+func _t(key: String, replacements: Dictionary = {}) -> String:
+	if localization_manager != null:
+		return str(localization_manager.call("text", key, replacements))
+	return key

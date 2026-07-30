@@ -570,7 +570,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 theme_override_font_sizes/font_size = 18
-text = "BAG"
+text = "battle.ui.bag"
 vertical_alignment = 1
 
 [node name="BagDrawerCloseButton" type="Button" parent="BattleDrawerLayer/BagDrawer/BagDrawerContent/BagDrawerHeader/HeaderRow" unique_id=136768042]
@@ -624,7 +624,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 theme_override_font_sizes/font_size = 18
-text = "DAMAGE CALCULATOR"
+text = "battle.ui.damage_calculator"
 vertical_alignment = 1
 
 [node name="CalcDrawerCloseButton" type="Button" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcDrawerHeader/HeaderRow" unique_id=2014048764]
@@ -708,7 +708,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_8h6bs")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_dsauo")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ilhaa")
 toggle_mode = true
-text = "Damage Calc"
+text = "battle.ui.damage_calc"
 
 [node name="BattleLogPanel" parent="HBoxContainer/BattleLogRail" unique_id=2138858408 instance=ExtResource("17_6ofp8")]
 unique_name_in_owner = true
@@ -1733,7 +1733,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_utility_segment_normal"
 theme_override_styles/pressed = SubResource("StyleBoxFlat_utility_bag_pressed")
 theme_override_styles/hover = SubResource("StyleBoxFlat_utility_bag_hover")
 theme_override_styles/focus = SubResource("StyleBoxFlat_utility_bag_hover")
-text = "Bag"
+text = "battle.ui.bag"
 
 [node name="UtilityActionDivider" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/UtilityActions/ActionSegments" unique_id=1094135919]
 unique_name_in_owner = true
@@ -1754,7 +1754,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_utility_segment_normal"
 theme_override_styles/pressed = SubResource("StyleBoxFlat_utility_exit_pressed")
 theme_override_styles/hover = SubResource("StyleBoxFlat_utility_exit_hover")
 theme_override_styles/focus = SubResource("StyleBoxFlat_utility_exit_hover")
-text = "Run"
+text = "battle.ui.run"
 
 [node name="MechanicsPanel" type="PanelContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=57273673]
 unique_name_in_owner = true
@@ -1865,7 +1865,7 @@ alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
-text = "Victory"
+text = "battle.result.victory"
 horizontal_alignment = 1
 
 [node name="BattleResultSummary" type="Label" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay/CenterContainer/ResultPanel/MarginContainer/VBoxContainer" unique_id=255086977]
@@ -1873,7 +1873,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8980392, 0.9254902, 0.972549, 1)
 theme_override_font_sizes/font_size = 20
-text = "Player defeated Opponent."
+text = "battle.result.ended"
 horizontal_alignment = 1
 autowrap_mode = 2
 
@@ -1893,7 +1893,7 @@ theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("StyleBoxFlat_8h6bs")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_dsauo")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ilhaa")
-text = "Continue"
+text = "common.continue"
 
 [node name="ActionsDock" type="Panel" parent="HBoxContainer/CenterColumn" unique_id=910737858]
 unique_name_in_owner = true
@@ -1957,7 +1957,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_colors/font_color = Color(0.5686275, 0.6509804, 0.78431374, 1)
 theme_override_font_sizes/font_size = 18
-text = "Choose an action"
+text = "battle.ui.choose_action"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -1969,7 +1969,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.82, 0.9, 1, 1)
 theme_override_font_sizes/font_size = 18
-text = "Pokemon will switch in, replacing Pokemon."
+text = "battle.ui.switch_confirmation_preview"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
@@ -2036,14 +2036,14 @@ alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 theme_override_font_sizes/font_size = 12
-text = "SPECTATOR MODE"
+text = "battle.spectator.mode"
 
 [node name="SpectatorPerspectiveLabel" type="Label" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/SpectatorActionPanel/SpectatorContent/SpectatorViewDetails"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.86, 0.92, 1, 1)
 theme_override_font_sizes/font_size = 17
-text = "Viewing from Admin's perspective"
+text = "battle.spectator.perspective_preview"
 vertical_alignment = 1
 
 [node name="SpectatorSwitchSidesButton" type="Button" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/SpectatorActionPanel/SpectatorContent"]
@@ -2056,7 +2056,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_spectator_switch_normal
 theme_override_styles/pressed = SubResource("StyleBoxFlat_utility_bag_pressed")
 theme_override_styles/hover = SubResource("StyleBoxFlat_spectator_switch_hover")
 theme_override_styles/focus = SubResource("StyleBoxFlat_spectator_switch_hover")
-text = "Switch View"
+text = "battle.spectator.switch_view"
 
 [node name="SpectatorLeaveButton" type="Button" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/SpectatorActionPanel/SpectatorContent"]
 unique_name_in_owner = true
@@ -2068,7 +2068,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_spectator_leave_normal"
 theme_override_styles/pressed = SubResource("StyleBoxFlat_utility_exit_pressed")
 theme_override_styles/hover = SubResource("StyleBoxFlat_utility_exit_hover")
 theme_override_styles/focus = SubResource("StyleBoxFlat_utility_exit_hover")
-text = "Leave Battle"
+text = "battle.spectator.leave"
 
 [node name="UtilitySection" type="VBoxContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent" unique_id=1895783644]
 unique_name_in_owner = true
@@ -2090,7 +2090,7 @@ size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 theme_override_font_sizes/font_size = 18
 theme_override_styles/focus = SubResource("StyleBoxFlat_t1kk3")
-text = "BATTLE ACTIONS"
+text = "battle.ui.actions"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -2118,7 +2118,7 @@ theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_battle_tab_press
 theme_override_styles/focus = SubResource("StyleBoxFlat_battle_tab_hover")
 toggle_mode = true
 button_pressed = true
-text = "Battle"
+text = "battle.ui.battle"
 
 [node name="CalcModeButton" type="Button" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/UtilitySection/HeaderRow/ModeTabs" unique_id=2031729883]
 unique_name_in_owner = true
@@ -2137,7 +2137,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_battle_tab_hover")
 theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_battle_tab_pressed")
 theme_override_styles/focus = SubResource("StyleBoxFlat_battle_tab_hover")
 toggle_mode = true
-text = "Calc"
+text = "battle.ui.calc"
 
 [node name="BattlePartyRail" type="PanelContainer" parent="HBoxContainer" unique_id=1870675427]
 unique_name_in_owner = true
@@ -2166,7 +2166,7 @@ theme_override_constants/separation = 4
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.36078432, 0.6117647, 1)
 theme_override_font_sizes/font_size = 13
-text = "OPPONENT PARTY"
+text = "battle.party.opponent"
 horizontal_alignment = 1
 
 [node name="PartyRailDivider" type="ColorRect" parent="HBoxContainer/BattlePartyRail/PartyRailMargin/PartyRailContent" unique_id=507523120]
@@ -2182,7 +2182,7 @@ theme_override_constants/separation = 4
 layout_mode = 2
 theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 theme_override_font_sizes/font_size = 13
-text = "YOUR PARTY"
+text = "battle.party.yours"
 horizontal_alignment = 1
 
 [node name="PartyRailStateLabel" type="Label" parent="HBoxContainer/BattlePartyRail/PartyRailMargin/PartyRailContent/PlayerPartySection" unique_id=1950049224]
@@ -2191,7 +2191,7 @@ custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.6509804, 0.78431374, 1)
 theme_override_font_sizes/font_size = 11
-text = "Party status"
+text = "battle.party.status"
 horizontal_alignment = 1
 
 [node name="BattleLogButton" type="Button" parent="." unique_id=900280603]

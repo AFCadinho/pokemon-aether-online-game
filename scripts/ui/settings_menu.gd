@@ -3,6 +3,7 @@ extends PanelContainer
 signal closed
 
 const ExternalLinks = preload("res://scripts/core/external_links.gd")
+const LanguageSelectorStyle := preload("res://scripts/ui/language_selector_style.gd")
 const SPRITE_STYLE_BY_OPTION_ID: Dictionary = {
 	0: "animated",
 	1: "static",
@@ -13,18 +14,19 @@ const OPTION_ID_BY_SPRITE_STYLE: Dictionary = {
 	"static": 1,
 	"pixel": 2,
 }
-const GEN5_SPRITE_MISSING_MESSAGE := "Gen 5 Animated sprites are not installed. Download them from the launcher."
+const GEN5_SPRITE_MISSING_KEY := "ui.settings.sprite.not_installed"
 const LOGIN_SCENE_PATH := "res://scenes/interface/login_screen.tscn"
-const MINIMUM_MENU_SIZE := Vector2(500, 520)
-const UI_BG := Color("#070b14f2")
-const UI_SLOT_BG := Color("#0d1625e6")
-const UI_INPUT_BG := Color("#050912e8")
-const UI_BORDER := Color("#d8b767")
+const MINIMUM_MENU_SIZE := Vector2(700, 540)
+const NAVIGATION_WIDTH := 168.0
+const UI_BG := Color("#07111ff7")
+const UI_SLOT_BG := Color("#0d1c30eb")
+const UI_INPUT_BG := Color("#050d1aed")
+const UI_BORDER := Color("#7aa7f4")
 const UI_BORDER_SOFT := Color("#315070")
 const UI_BORDER_FOCUS := Color("#7aa7f4")
-const UI_TEXT := Color("#f4f0de")
-const UI_MUTED_TEXT := Color("#aeb8c5")
-const UI_SECTION_TEXT := Color("#d8b767")
+const UI_TEXT := Color("#f1f5fb")
+const UI_MUTED_TEXT := Color("#aebbc9")
+const UI_SECTION_TEXT := Color("#b980ff")
 const UI_PURPLE_HOVER := Color("#b980ff")
 const UI_DANGER := Color("#ff6b74")
 const UI_DANGER_BG := Color("#2a1015e8")
@@ -37,6 +39,12 @@ const LOGOUT_CONFIRM_Z_INDEX := 2200
 @onready var weather_effects_check_box: CheckBox = $MarginContainer/VBoxContainer/WeatherEffectsCheckBox
 @onready var terrain_effects_check_box: CheckBox = $MarginContainer/VBoxContainer/TerrainEffectsCheckBox
 var display_own_name_check_box: CheckBox
+var hide_other_players_check_box: CheckBox
+var language_label: Label
+var language_options_button: OptionButton
+var terminology_label: Label
+var terminology_options_button: OptionButton
+var terminology_hint_label: Label
 @onready var sprite_style_options_button: OptionButton = $MarginContainer/VBoxContainer/SpriteStyleOptionsButton
 @onready var sprite_style_status_label: Label = $MarginContainer/VBoxContainer/SpriteStyleStatusLabel
 @onready var fullscreen_check_box: CheckBox = $MarginContainer/VBoxContainer/FullscreenCheckBox
@@ -60,6 +68,10 @@ var loading_controls := false
 var logging_out := false
 var logout_confirmation_requested := false
 var tab_container: TabContainer
+var settings_workspace: HBoxContainer
+var settings_navigation: VBoxContainer
+var settings_navigation_panel: PanelContainer
+var settings_navigation_buttons: Array[Button] = []
 var account_tab_root: Control
 var account_user_label: Label
 var account_status_label: Label
@@ -68,6 +80,7 @@ var logout_button: Button
 var exit_game_button: Button
 var credits_button: Button
 var credits_status_label: Label
+var about_version_label: Label
 var logout_confirm_dialog: PanelContainer
 var logout_confirm_return_button: Button
 var logout_confirm_cancel_button: Button
@@ -80,6 +93,12 @@ var account_display_name_input: LineEdit
 var account_current_password_input: LineEdit
 var account_new_password_input: LineEdit
 var account_confirm_password_input: LineEdit
+var account_status_key := ""
+var account_status_values: Dictionary = {}
+var account_status_is_error := false
+var account_dialog_status_key := ""
+var account_dialog_status_values: Dictionary = {}
+var account_dialog_status_is_error := false
 
 
 func _ready() -> void:
@@ -88,10 +107,13 @@ func _ready() -> void:
 	_setup_tabs()
 	_setup_logout_confirm_dialog()
 	_apply_premium_styles()
+	LanguageSelectorStyle.configure(language_options_button)
+	LanguageSelectorStyle.configure(terminology_options_button)
 	battle_animations_check_box.toggled.connect(_on_battle_animations_toggled)
 	weather_effects_check_box.toggled.connect(_on_weather_effects_toggled)
 	terrain_effects_check_box.toggled.connect(_on_terrain_effects_toggled)
 	display_own_name_check_box.toggled.connect(_on_display_own_name_toggled)
+	hide_other_players_check_box.toggled.connect(_on_hide_other_players_toggled)
 	sprite_style_options_button.item_selected.connect(_on_sprite_style_selected)
 	fullscreen_check_box.toggled.connect(_on_fullscreen_toggled)
 	resolution_options_button.item_selected.connect(_on_resolution_selected)
@@ -102,12 +124,17 @@ func _ready() -> void:
 	pokemon_cry_volume_slider.value_changed.connect(_on_pokemon_cry_volume_changed)
 	ui_volume_slider.value_changed.connect(_on_ui_volume_changed)
 	notification_volume_slider.value_changed.connect(_on_notification_volume_changed)
+	language_options_button.item_selected.connect(_on_language_selected)
+	terminology_options_button.item_selected.connect(_on_terminology_selected)
 	edit_account_button.pressed.connect(_on_edit_account_button_pressed)
 	logout_button.pressed.connect(_on_logout_button_pressed)
 	exit_game_button.pressed.connect(_on_exit_game_button_pressed)
 	credits_button.pressed.connect(_on_credits_button_pressed)
 	close_button.pressed.connect(close)
+	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
+		LocalizationManager.locale_changed.connect(_on_locale_changed)
 	_apply_settings_to_controls()
+	_refresh_localized_content()
 	visible = false
 
 
@@ -115,7 +142,7 @@ func open(context: String = "game") -> void:
 	_apply_settings_to_controls()
 	_apply_context(context)
 	visible = true
-	close_button.grab_focus()
+	_focus_active_navigation_button()
 
 
 func close() -> void:
@@ -128,14 +155,31 @@ func close() -> void:
 	closed.emit()
 
 
+func _input(event: InputEvent) -> void:
+	if not visible or not event.is_action_pressed("ui_cancel"):
+		return
+
+	if account_details_dialog != null and account_details_dialog.visible:
+		_hide_account_details_dialog()
+	elif logout_confirm_dialog != null and logout_confirm_dialog.visible:
+		_hide_logout_confirm_dialog()
+	else:
+		close()
+	get_viewport().set_input_as_handled()
+
+
 func _apply_settings_to_controls() -> void:
 	loading_controls = true
 	battle_animations_check_box.button_pressed = SettingsManager.battle_animations
 	weather_effects_check_box.button_pressed = SettingsManager.weather_effects
 	terrain_effects_check_box.button_pressed = SettingsManager.terrain_effects
 	display_own_name_check_box.button_pressed = SettingsManager.display_own_name
+	hide_other_players_check_box.button_pressed = SettingsManager.hide_other_players
+	_apply_language_options_to_control()
+	_apply_terminology_options_to_control()
 
 	var option_id: int = int(OPTION_ID_BY_SPRITE_STYLE.get(SettingsManager.sprite_style, 0))
+	_apply_sprite_style_option_labels()
 	var option_index: int = sprite_style_options_button.get_item_index(option_id)
 	if option_index >= 0:
 		sprite_style_options_button.select(option_index)
@@ -162,25 +206,97 @@ func _setup_tabs() -> void:
 
 	tab_container = TabContainer.new()
 	tab_container.name = "SettingsTabs"
+	tab_container.tabs_visible = false
 	tab_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	tab_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	settings_layout.add_child(tab_container)
-	settings_layout.move_child(tab_container, 1)
+	tab_container.tab_changed.connect(_on_settings_tab_changed)
 
-	var general_tab: VBoxContainer = _create_tab_content("General")
-	var graphics_tab: VBoxContainer = _create_tab_content("Graphics")
-	var sound_tab: VBoxContainer = _create_tab_content("Sound")
-	var account_tab: VBoxContainer = _create_tab_content("Account")
-	var about_tab: VBoxContainer = _create_tab_content("About")
-	account_tab_root = account_tab.get_parent() as Control
+	settings_workspace = HBoxContainer.new()
+	settings_workspace.name = "SettingsWorkspace"
+	settings_workspace.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	settings_workspace.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	settings_workspace.add_theme_constant_override("separation", 14)
+	settings_layout.add_child(settings_workspace)
+	settings_layout.move_child(settings_workspace, 1)
 
+	settings_navigation_panel = PanelContainer.new()
+	settings_navigation_panel.name = "SettingsNavigationPanel"
+	settings_navigation_panel.custom_minimum_size.x = NAVIGATION_WIDTH
+	settings_navigation_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	settings_workspace.add_child(settings_navigation_panel)
+
+	var navigation_margin := MarginContainer.new()
+	navigation_margin.add_theme_constant_override("margin_left", 10)
+	navigation_margin.add_theme_constant_override("margin_top", 12)
+	navigation_margin.add_theme_constant_override("margin_right", 10)
+	navigation_margin.add_theme_constant_override("margin_bottom", 12)
+	settings_navigation_panel.add_child(navigation_margin)
+
+	settings_navigation = VBoxContainer.new()
+	settings_navigation.name = "SettingsNavigation"
+	settings_navigation.add_theme_constant_override("separation", 7)
+	navigation_margin.add_child(settings_navigation)
+
+	var content_panel := PanelContainer.new()
+	content_panel.name = "SettingsContentPanel"
+	content_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	content_panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#081522e8"), Color("#315070cc"), 12, 1)
+	)
+	settings_workspace.add_child(content_panel)
+	content_panel.add_child(tab_container)
+
+	var general_tab: VBoxContainer = _create_tab_content("General", "ui.settings.tab.general")
+	var language_tab: VBoxContainer = _create_tab_content("Language", "ui.settings.tab.language")
+	var graphics_tab: VBoxContainer = _create_tab_content("Graphics", "ui.settings.tab.graphics")
+	var sound_tab: VBoxContainer = _create_tab_content("Sound", "ui.settings.tab.sound")
+	var account_tab: VBoxContainer = _create_tab_content("Account", "ui.settings.tab.account")
+	var about_tab: VBoxContainer = _create_tab_content("About", "ui.settings.tab.about")
+	account_tab_root = account_tab.get_parent().get_parent() as Control
+	_build_navigation()
+
+	language_label = Label.new()
+	_set_localized_text(language_label, "ui.settings.language")
+	language_options_button = OptionButton.new()
+	language_options_button.name = "LanguageOptionsButton"
+	language_options_button.focus_mode = Control.FOCUS_NONE
+	terminology_label = Label.new()
+	_set_localized_text(terminology_label, "ui.settings.terminology")
+	terminology_options_button = OptionButton.new()
+	terminology_options_button.name = "TerminologyOptionsButton"
+	terminology_options_button.focus_mode = Control.FOCUS_NONE
+	terminology_hint_label = Label.new()
+	terminology_hint_label.name = "TerminologyHintLabel"
+	terminology_hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_set_localized_text(terminology_hint_label, "ui.settings.terminology_hint")
 	_move_nodes_to_container(general_tab, [
 		battle_animations_check_box,
 		weather_effects_check_box,
 		terrain_effects_check_box,
 		_create_display_own_name_check_box(),
+		_create_hide_other_players_check_box(),
 	])
-	_wrap_settings_section(general_tab, "Gameplay", "Choose which in-world feedback is shown", general_tab.get_children())
+	_wrap_settings_section(
+		general_tab,
+		"ui.settings.section.gameplay",
+		"ui.settings.section.gameplay_subtitle",
+		general_tab.get_children()
+	)
+	_move_nodes_to_container(language_tab, [
+		language_label,
+		language_options_button,
+		terminology_label,
+		terminology_options_button,
+		terminology_hint_label,
+	])
+	_wrap_settings_section(
+		language_tab,
+		"ui.settings.section.language",
+		"ui.settings.section.language_subtitle",
+		language_tab.get_children()
+	)
 	_move_nodes_to_container(graphics_tab, [
 		sprite_style_options_button.get_node("../SpriteStyleLabel"),
 		sprite_style_options_button,
@@ -190,12 +306,12 @@ func _setup_tabs() -> void:
 		resolution_options_button.get_node("../ResolutionLabel"),
 		resolution_options_button,
 	])
-	_wrap_settings_section(graphics_tab, "Sprites", "Select how Pokémon are displayed", [
+	_wrap_settings_section(graphics_tab, "ui.settings.section.sprites", "ui.settings.section.sprites_subtitle", [
 		sprite_style_options_button.get_node("../SpriteStyleLabel"),
 		sprite_style_options_button,
 		sprite_style_status_label,
 	])
-	_wrap_settings_section(graphics_tab, "Display", "Adjust the game window", [
+	_wrap_settings_section(graphics_tab, "ui.settings.section.display", "ui.settings.section.display_subtitle", [
 		fullscreen_check_box.get_node("../DisplayLabel"),
 		fullscreen_check_box,
 		resolution_options_button.get_node("../ResolutionLabel"),
@@ -212,7 +328,12 @@ func _setup_tabs() -> void:
 		ui_volume_slider.get_node(".."),
 		notification_volume_slider.get_node(".."),
 	])
-	_wrap_settings_section(sound_tab, "Audio mix", "Set separate levels for every part of the game", sound_tab.get_children())
+	_wrap_settings_section(
+		sound_tab,
+		"ui.settings.section.audio_mix",
+		"ui.settings.section.audio_mix_subtitle",
+		sound_tab.get_children()
+	)
 	_build_account_tab(account_tab)
 	_build_about_tab(about_tab)
 
@@ -224,25 +345,93 @@ func _apply_context(context: String) -> void:
 		var account_tab_index: int = account_tab_root.get_index()
 		if tab_container != null and tab_container.has_method("set_tab_hidden"):
 			tab_container.call("set_tab_hidden", account_tab_index, not show_account_tab)
+		if account_tab_index >= 0 and account_tab_index < settings_navigation_buttons.size():
+			settings_navigation_buttons[account_tab_index].visible = show_account_tab
 
 	if show_account_tab:
 		_refresh_account_tab()
+		_refresh_navigation_state()
 		return
 
 	if tab_container != null:
 		tab_container.current_tab = 0
+	_refresh_navigation_state()
 
 
-func _create_tab_content(tab_name: String) -> VBoxContainer:
+func _build_navigation() -> void:
+	if settings_navigation == null or tab_container == null:
+		return
+
+	for index: int in range(tab_container.get_tab_count()):
+		var tab_root := tab_container.get_child(index)
+		var button := Button.new()
+		button.name = "%sNavigationButton" % str(tab_root.name)
+		button.custom_minimum_size = Vector2(NAVIGATION_WIDTH - 20.0, 42.0)
+		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		button.focus_mode = Control.FOCUS_ALL
+		button.set_meta("settings_tab_index", index)
+		if tab_root.has_meta("i18n_tab_key"):
+			_set_localized_text(button, str(tab_root.get_meta("i18n_tab_key")))
+		button.pressed.connect(_on_navigation_button_pressed.bind(index))
+		settings_navigation.add_child(button)
+		settings_navigation_buttons.append(button)
+	_refresh_navigation_state()
+
+
+func _on_navigation_button_pressed(tab_index: int) -> void:
+	if tab_container == null:
+		return
+	tab_container.current_tab = tab_index
+	_refresh_navigation_state()
+
+
+func _on_settings_tab_changed(_tab_index: int) -> void:
+	_refresh_navigation_state()
+
+
+func _refresh_navigation_state() -> void:
+	if tab_container == null:
+		return
+	for index: int in range(settings_navigation_buttons.size()):
+		var button := settings_navigation_buttons[index]
+		_apply_navigation_button_style(button, index == tab_container.current_tab)
+
+
+func _focus_active_navigation_button() -> void:
+	if tab_container == null:
+		close_button.grab_focus()
+		return
+	var active_index := tab_container.current_tab
+	if active_index >= 0 and active_index < settings_navigation_buttons.size():
+		var button := settings_navigation_buttons[active_index]
+		if button.visible:
+			button.grab_focus()
+			return
+	close_button.grab_focus()
+
+
+func _create_tab_content(tab_name: String, translation_key: String) -> VBoxContainer:
+	var scroll := ScrollContainer.new()
+	scroll.name = tab_name
+	scroll.set_meta("i18n_tab_key", translation_key)
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	scroll.scroll_vertical_custom_step = 32.0
+	scroll.follow_focus = true
+	tab_container.add_child(scroll)
+	tab_container.set_tab_title(scroll.get_index(), LocalizationManager.text(translation_key))
+
 	var margin := MarginContainer.new()
-	margin.name = tab_name
+	margin.name = "%sMargin" % tab_name
 	margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	margin.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	margin.add_theme_constant_override("margin_left", 4)
 	margin.add_theme_constant_override("margin_top", 14)
 	margin.add_theme_constant_override("margin_right", 4)
 	margin.add_theme_constant_override("margin_bottom", 8)
-	tab_container.add_child(margin)
+	scroll.add_child(margin)
 
 	var content := VBoxContainer.new()
 	content.name = "%sContent" % tab_name
@@ -264,7 +453,7 @@ func _move_nodes_to_container(container: VBoxContainer, nodes: Array) -> void:
 		container.add_child(node)
 
 
-func _wrap_settings_section(container: VBoxContainer, title_text: String, subtitle_text: String, nodes: Array) -> void:
+func _wrap_settings_section(container: VBoxContainer, title_key: String, subtitle_key: String, nodes: Array) -> void:
 	var card := PanelContainer.new()
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	card.add_theme_stylebox_override("panel", _make_panel_style(UI_SLOT_BG, UI_BORDER_SOFT, 10, 1))
@@ -282,13 +471,13 @@ func _wrap_settings_section(container: VBoxContainer, title_text: String, subtit
 	margin.add_child(stack)
 
 	var title := Label.new()
-	title.text = title_text.to_upper()
+	_set_localized_text(title, title_key, true)
 	title.add_theme_font_size_override("font_size", 10)
 	title.add_theme_color_override("font_color", UI_SECTION_TEXT)
 	stack.add_child(title)
 
 	var subtitle := Label.new()
-	subtitle.text = subtitle_text
+	_set_localized_text(subtitle, subtitle_key)
 	subtitle.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	subtitle.add_theme_font_size_override("font_size", 11)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -306,7 +495,7 @@ func _wrap_settings_section(container: VBoxContainer, title_text: String, subtit
 
 func _build_account_tab(account_tab: VBoxContainer) -> void:
 	var account_label := Label.new()
-	account_label.text = "Account"
+	_set_localized_text(account_label, "ui.settings.tab.account")
 	account_tab.add_child(account_label)
 
 	account_user_label = Label.new()
@@ -314,7 +503,7 @@ func _build_account_tab(account_tab: VBoxContainer) -> void:
 	account_tab.add_child(account_user_label)
 
 	edit_account_button = Button.new()
-	edit_account_button.text = "Edit Account Details"
+	_set_localized_text(edit_account_button, "ui.settings.account.edit")
 	edit_account_button.focus_mode = Control.FOCUS_NONE
 	account_tab.add_child(edit_account_button)
 
@@ -328,18 +517,18 @@ func _build_account_tab(account_tab: VBoxContainer) -> void:
 	account_tab.add_child(account_status_label)
 
 	var account_note := Label.new()
-	account_note.text = "Return to the login screen without ending your saved session."
+	_set_localized_text(account_note, "ui.settings.account.return_note")
 	account_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	account_note.add_theme_font_size_override("font_size", 12)
 	account_tab.add_child(account_note)
 
 	logout_button = Button.new()
-	logout_button.text = "Return to Login"
+	_set_localized_text(logout_button, "ui.settings.account.return_login")
 	logout_button.focus_mode = Control.FOCUS_NONE
 	account_tab.add_child(logout_button)
 
 	exit_game_button = Button.new()
-	exit_game_button.text = "Exit Game"
+	_set_localized_text(exit_game_button, "ui.settings.account.exit_game")
 	exit_game_button.focus_mode = Control.FOCUS_NONE
 	account_tab.add_child(exit_game_button)
 
@@ -350,13 +539,14 @@ func _build_about_tab(about_tab: VBoxContainer) -> void:
 	about_label.add_theme_font_size_override("font_size", 20)
 	about_tab.add_child(about_label)
 
-	var version_label := Label.new()
+	about_version_label = Label.new()
 	var version: String = str(ProjectSettings.get_setting("application/config/version", "")).strip_edges()
-	version_label.text = "Version %s" % version if version != "" and version != "dev" else "Alpha development build"
-	about_tab.add_child(version_label)
+	about_version_label.set_meta("version", version)
+	_update_about_version_label()
+	about_tab.add_child(about_version_label)
 
 	var description_label := Label.new()
-	description_label.text = "Created with the help of developers, artists, musicians, toolmakers, and community contributors."
+	_set_localized_text(description_label, "ui.settings.about.description")
 	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	description_label.add_theme_font_size_override("font_size", 13)
 	about_tab.add_child(description_label)
@@ -366,7 +556,7 @@ func _build_about_tab(about_tab: VBoxContainer) -> void:
 	about_tab.add_child(spacer)
 
 	credits_button = Button.new()
-	credits_button.text = "View Credits & Licences"
+	_set_localized_text(credits_button, "ui.settings.about.credits")
 	credits_button.focus_mode = Control.FOCUS_ALL
 	about_tab.add_child(credits_button)
 
@@ -377,7 +567,7 @@ func _build_about_tab(about_tab: VBoxContainer) -> void:
 	about_tab.add_child(credits_status_label)
 
 	var legal_note := Label.new()
-	legal_note.text = "Unofficial community project. Not affiliated with, endorsed by, or associated with any rights holder."
+	_set_localized_text(legal_note, "ui.settings.about.legal")
 	legal_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	legal_note.add_theme_font_size_override("font_size", 12)
 	about_tab.add_child(legal_note)
@@ -385,9 +575,16 @@ func _build_about_tab(about_tab: VBoxContainer) -> void:
 
 func _create_display_own_name_check_box() -> CheckBox:
 	display_own_name_check_box = CheckBox.new()
-	display_own_name_check_box.text = "Display own name"
+	_set_localized_text(display_own_name_check_box, "ui.settings.display_own_name")
 	display_own_name_check_box.focus_mode = Control.FOCUS_NONE
 	return display_own_name_check_box
+
+
+func _create_hide_other_players_check_box() -> CheckBox:
+	hide_other_players_check_box = CheckBox.new()
+	_set_localized_text(hide_other_players_check_box, "ui.settings.hide_other_players")
+	hide_other_players_check_box.focus_mode = Control.FOCUS_NONE
+	return hide_other_players_check_box
 
 
 func _setup_logout_confirm_dialog() -> void:
@@ -417,7 +614,7 @@ func _setup_logout_confirm_dialog() -> void:
 	stack.add_child(header)
 
 	var title_label := Label.new()
-	title_label.text = "Return to Login"
+	_set_localized_text(title_label, "ui.settings.account.return_login")
 	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title_label.add_theme_font_size_override("font_size", 17)
 	title_label.add_theme_color_override("font_color", UI_SECTION_TEXT)
@@ -431,7 +628,7 @@ func _setup_logout_confirm_dialog() -> void:
 	header.add_child(close_dialog_button)
 
 	var message_label := Label.new()
-	message_label.text = "Return to the login screen? Your saved session stays active."
+	_set_localized_text(message_label, "ui.settings.logout.message")
 	message_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	message_label.add_theme_font_size_override("font_size", 14)
 	message_label.add_theme_color_override("font_color", UI_TEXT)
@@ -443,14 +640,14 @@ func _setup_logout_confirm_dialog() -> void:
 	stack.add_child(button_row)
 
 	logout_confirm_cancel_button = Button.new()
-	logout_confirm_cancel_button.text = "Cancel"
+	_set_localized_text(logout_confirm_cancel_button, "common.cancel")
 	logout_confirm_cancel_button.custom_minimum_size = Vector2(104, 32)
 	logout_confirm_cancel_button.focus_mode = Control.FOCUS_NONE
 	logout_confirm_cancel_button.pressed.connect(_hide_logout_confirm_dialog)
 	button_row.add_child(logout_confirm_cancel_button)
 
 	logout_confirm_return_button = Button.new()
-	logout_confirm_return_button.text = "Return"
+	_set_localized_text(logout_confirm_return_button, "common.return")
 	logout_confirm_return_button.custom_minimum_size = Vector2(112, 32)
 	logout_confirm_return_button.focus_mode = Control.FOCUS_NONE
 	logout_confirm_return_button.pressed.connect(_logout_confirmed)
@@ -481,7 +678,7 @@ func _setup_account_details_dialog() -> void:
 	layout.add_child(title_row)
 
 	var title_label := Label.new()
-	title_label.text = "Edit Account Details"
+	_set_localized_text(title_label, "ui.settings.account.edit")
 	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title_label.add_theme_font_size_override("font_size", 16)
 	title_row.add_child(title_label)
@@ -493,27 +690,27 @@ func _setup_account_details_dialog() -> void:
 	title_row.add_child(close_dialog_button)
 
 	var display_hint := Label.new()
-	display_hint.text = "Display name must match your username. Only casing can change."
+	_set_localized_text(display_hint, "ui.settings.account.display_hint")
 	display_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	display_hint.add_theme_font_size_override("font_size", 11)
 	layout.add_child(display_hint)
 
-	account_display_name_input = _create_account_line_edit("Display name", false)
+	account_display_name_input = _create_account_line_edit("ui.settings.account.display_name", false)
 	layout.add_child(account_display_name_input)
 
 	var password_hint := Label.new()
-	password_hint.text = "Leave password fields empty if you only want to update your display name."
+	_set_localized_text(password_hint, "ui.settings.account.password_hint")
 	password_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	password_hint.add_theme_font_size_override("font_size", 11)
 	layout.add_child(password_hint)
 
-	account_current_password_input = _create_account_line_edit("Current password", true)
+	account_current_password_input = _create_account_line_edit("ui.settings.account.current_password", true)
 	layout.add_child(account_current_password_input)
 
-	account_new_password_input = _create_account_line_edit("New password", true)
+	account_new_password_input = _create_account_line_edit("ui.settings.account.new_password", true)
 	layout.add_child(account_new_password_input)
 
-	account_confirm_password_input = _create_account_line_edit("Confirm new password", true)
+	account_confirm_password_input = _create_account_line_edit("ui.settings.account.confirm_password", true)
 	layout.add_child(account_confirm_password_input)
 
 	account_dialog_status_label = Label.new()
@@ -531,29 +728,110 @@ func _setup_account_details_dialog() -> void:
 	button_row.add_child(button_spacer)
 
 	account_cancel_button = Button.new()
-	account_cancel_button.text = "Cancel"
+	_set_localized_text(account_cancel_button, "common.cancel")
 	account_cancel_button.custom_minimum_size = Vector2(92, 32)
 	account_cancel_button.pressed.connect(_hide_account_details_dialog)
 	button_row.add_child(account_cancel_button)
 
 	account_confirm_button = Button.new()
-	account_confirm_button.text = "Confirm"
+	_set_localized_text(account_confirm_button, "common.confirm")
 	account_confirm_button.custom_minimum_size = Vector2(104, 32)
 	account_confirm_button.pressed.connect(_account_details_confirmed)
 	button_row.add_child(account_confirm_button)
 
 
-func _create_account_line_edit(placeholder: String, secret: bool) -> LineEdit:
+func _create_account_line_edit(placeholder_key: String, secret: bool) -> LineEdit:
 	var input := LineEdit.new()
-	input.placeholder_text = placeholder
+	_set_localized_placeholder(input, placeholder_key)
 	input.custom_minimum_size = Vector2(300, 32)
 	input.secret = secret
 	input.clear_button_enabled = true
 	return input
 
 
+func _set_localized_text(control: Control, key: String, uppercase: bool = false) -> void:
+	control.set_meta("i18n_text_key", key)
+	control.set_meta("i18n_text_uppercase", uppercase)
+	var translated := LocalizationManager.text(key)
+	control.set("text", translated.to_upper() if uppercase else translated)
+
+
+func _set_localized_placeholder(input: LineEdit, key: String) -> void:
+	input.set_meta("i18n_placeholder_key", key)
+	input.placeholder_text = LocalizationManager.text(key)
+
+
+func _refresh_localized_controls(node: Node) -> void:
+	if node is Control and node.has_meta("i18n_text_key"):
+		var key := str(node.get_meta("i18n_text_key"))
+		var translated := LocalizationManager.text(key)
+		if bool(node.get_meta("i18n_text_uppercase", false)):
+			translated = translated.to_upper()
+		node.set("text", translated)
+	if node is LineEdit and node.has_meta("i18n_placeholder_key"):
+		(node as LineEdit).placeholder_text = LocalizationManager.text(
+			str(node.get_meta("i18n_placeholder_key"))
+		)
+	for child: Node in node.get_children():
+		_refresh_localized_controls(child)
+
+
+func _refresh_tab_titles() -> void:
+	if tab_container == null:
+		return
+	for index: int in range(tab_container.get_tab_count()):
+		var tab_root := tab_container.get_child(index)
+		if tab_root != null and tab_root.has_meta("i18n_tab_key"):
+			tab_container.set_tab_title(
+				index,
+				LocalizationManager.text(str(tab_root.get_meta("i18n_tab_key")))
+			)
+
+
+func _refresh_localized_content() -> void:
+	LocalizationManager.localize_tree(self)
+	_refresh_localized_controls(self)
+	_refresh_tab_titles()
+	_refresh_navigation_state()
+	_update_about_version_label()
+	_apply_sprite_style_option_labels()
+	_apply_language_options_to_control()
+	_apply_terminology_options_to_control()
+	_update_sprite_style_status_label("")
+	if account_user_label != null and account_tab_root != null and account_tab_root.visible:
+		_refresh_account_tab()
+	if not account_status_key.is_empty():
+		_set_account_status_key(account_status_key, account_status_values, account_status_is_error)
+	if not account_dialog_status_key.is_empty():
+		_set_account_dialog_status_key(
+			account_dialog_status_key,
+			account_dialog_status_values,
+			account_dialog_status_is_error
+		)
+
+
+func _update_about_version_label() -> void:
+	if about_version_label == null:
+		return
+	var version := str(about_version_label.get_meta("version", "")).strip_edges()
+	about_version_label.text = (
+		LocalizationManager.text("ui.settings.about.version", {"version": version})
+		if version != "" and version != "dev"
+		else LocalizationManager.text("ui.settings.about.alpha_build")
+	)
+
+
+func _on_locale_changed(_locale: String) -> void:
+	_refresh_localized_content()
+
+
 func _apply_premium_styles() -> void:
 	add_theme_stylebox_override("panel", _make_glass_panel_style(14, 1))
+	if settings_navigation_panel != null:
+		settings_navigation_panel.add_theme_stylebox_override(
+			"panel",
+			_make_panel_style(Color("#091727e8"), Color("#315070cc"), 12, 1)
+		)
 	if tab_container != null:
 		tab_container.add_theme_constant_override("tab_separation", 4)
 		tab_container.add_theme_constant_override("side_margin", 4)
@@ -582,6 +860,7 @@ func _apply_premium_styles() -> void:
 	_apply_button_style(close_button)
 	_apply_account_dialog_style()
 	_apply_logout_confirm_dialog_style()
+	_refresh_navigation_state()
 
 
 func _apply_styles_recursive(node: Node) -> void:
@@ -602,12 +881,22 @@ func _apply_styles_recursive(node: Node) -> void:
 
 func _apply_label_style(label: Label) -> void:
 	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	var text_value := label.text.strip_edges()
 	if label.name == "TitleLabel":
-		label.add_theme_color_override("font_color", UI_SECTION_TEXT)
+		label.add_theme_color_override("font_color", UI_TEXT)
 		label.add_theme_font_size_override("font_size", 21)
 		return
-	if text_value in ["Sprite Style", "Display", "Window Resolution", "Audio", "Battle Music", "Account"]:
+	var localization_key := str(label.get_meta("i18n_text_key", ""))
+	if label.name in [
+		"SpriteStyleLabel",
+		"DisplayLabel",
+		"ResolutionLabel",
+		"AudioLabel",
+		"BattleMusicLabel",
+	] or localization_key in [
+		"ui.settings.language",
+		"ui.settings.terminology",
+		"ui.settings.tab.account",
+	]:
 		label.add_theme_color_override("font_color", UI_SECTION_TEXT)
 		label.add_theme_font_size_override("font_size", 14)
 
@@ -683,6 +972,22 @@ func _apply_button_style(button: Button, variant: String = "default") -> void:
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 
+func _apply_navigation_button_style(button: Button, selected: bool) -> void:
+	if button == null:
+		return
+	var normal_bg := Color("#201b3fed") if selected else Color(0, 0, 0, 0)
+	var normal_border := UI_PURPLE_HOVER if selected else Color(0, 0, 0, 0)
+	button.add_theme_color_override("font_color", UI_TEXT if selected else UI_MUTED_TEXT)
+	button.add_theme_color_override("font_hover_color", UI_TEXT)
+	button.add_theme_color_override("font_pressed_color", UI_TEXT)
+	button.add_theme_font_size_override("font_size", 14)
+	button.add_theme_stylebox_override("normal", _make_button_style(normal_bg, normal_border, 8, 1 if selected else 0))
+	button.add_theme_stylebox_override("hover", _make_button_style(Color("#171b35e8"), UI_PURPLE_HOVER, 8, 1))
+	button.add_theme_stylebox_override("pressed", _make_button_style(Color("#12152bf2"), UI_PURPLE_HOVER, 8, 1))
+	button.add_theme_stylebox_override("focus", _make_button_style(normal_bg, UI_PURPLE_HOVER, 8, 1))
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+
+
 func _apply_line_edit_style(input: LineEdit) -> void:
 	input.add_theme_color_override("font_color", UI_TEXT)
 	input.add_theme_color_override("font_placeholder_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.7))
@@ -745,18 +1050,18 @@ func _make_panel_style(background_color: Color, border_color: Color, corner_radi
 
 
 func _make_gold_panel_style(corner_radius: int, border_width: int) -> StyleBoxFlat:
-	var style := _make_panel_style(UI_BG, UI_BORDER, corner_radius, border_width)
-	style.shadow_color = Color(0, 0, 0, 0.38)
-	style.shadow_size = 10
+	var style := _make_panel_style(UI_BG, UI_BORDER_SOFT, corner_radius, border_width)
+	style.shadow_color = Color("#3f2b8a55")
+	style.shadow_size = 16
 	style.shadow_offset = Vector2(0, 4)
 	return style
 
 
 func _make_glass_panel_style(corner_radius: int, border_width: int) -> StyleBoxFlat:
-	var style := _make_panel_style(UI_BG, Color("#75613bcc"), corner_radius, border_width)
-	style.shadow_color = Color(0, 0, 0, 0.38)
-	style.shadow_size = 10
-	style.shadow_offset = Vector2(0, 4)
+	var style := _make_panel_style(UI_BG, Color("#506f9acc"), corner_radius, border_width)
+	style.shadow_color = Color("#4b2ca866")
+	style.shadow_size = 24
+	style.shadow_offset = Vector2(0, 8)
 	return style
 
 
@@ -787,7 +1092,7 @@ func _refresh_account_tab() -> void:
 	var username: String = str(AuthService.current_user.get("username", ""))
 	print("[settings] refresh account tab. display=%s username=%s" % [display_name, username])
 	if display_name == "" and username == "":
-		account_user_label.text = "No active account."
+		account_user_label.text = LocalizationManager.text("ui.settings.account.no_active")
 		if edit_account_button != null:
 			edit_account_button.disabled = true
 			print("[settings] edit account disabled: no active account")
@@ -796,9 +1101,15 @@ func _refresh_account_tab() -> void:
 		edit_account_button.disabled = false
 		print("[settings] edit account enabled")
 	if username != "" and username != display_name:
-		account_user_label.text = "Logged in as %s (@%s)" % [display_name, username]
+		account_user_label.text = LocalizationManager.text(
+			"ui.settings.account.logged_in_with_username",
+			{"display_name": display_name, "username": username}
+		)
 		return
-	account_user_label.text = "Logged in as %s" % display_name
+	account_user_label.text = LocalizationManager.text(
+		"ui.settings.account.logged_in",
+		{"display_name": display_name}
+	)
 
 
 func _on_battle_animations_toggled(enabled: bool) -> void:
@@ -830,6 +1141,13 @@ func _on_display_own_name_toggled(enabled: bool) -> void:
 	_refresh_local_player_nameplate()
 
 
+func _on_hide_other_players_toggled(enabled: bool) -> void:
+	if loading_controls:
+		return
+
+	SettingsManager.set_hide_other_players(enabled)
+
+
 func _on_sprite_style_selected(index: int) -> void:
 	if loading_controls:
 		return
@@ -838,7 +1156,7 @@ func _on_sprite_style_selected(index: int) -> void:
 	var sprite_style: String = str(SPRITE_STYLE_BY_OPTION_ID.get(option_id, "animated"))
 	if not SettingsManager.set_sprite_style(sprite_style):
 		_select_current_sprite_style()
-		_update_sprite_style_status_label(GEN5_SPRITE_MISSING_MESSAGE)
+		_update_sprite_style_status_label(GEN5_SPRITE_MISSING_KEY)
 		return
 
 	_update_sprite_style_status_label("")
@@ -919,6 +1237,24 @@ func _on_notification_volume_changed(value: float) -> void:
 	SettingsManager.set_notification_volume(value)
 
 
+func _on_language_selected(index: int) -> void:
+	if loading_controls:
+		return
+	var selected_locale := str(language_options_button.get_item_metadata(index))
+	if selected_locale.is_empty():
+		return
+	SettingsManager.set_locale(selected_locale)
+
+
+func _on_terminology_selected(index: int) -> void:
+	if loading_controls:
+		return
+	var selected_language := str(terminology_options_button.get_item_metadata(index))
+	if selected_language.is_empty():
+		return
+	SettingsManager.set_content_name_language(selected_language)
+
+
 func _on_logout_button_pressed() -> void:
 	if logging_out or not visible or not _is_account_tab_active():
 		return
@@ -949,7 +1285,7 @@ func _on_credits_button_pressed() -> void:
 		credits_status_label.visible = false
 	var open_error := OS.shell_open(ExternalLinks.CREDITS_URL)
 	if open_error != OK and credits_status_label != null:
-		credits_status_label.text = "Could not open the credits page. Visit pokeaether.com/credits in your browser."
+		credits_status_label.text = LocalizationManager.text("ui.settings.account.error.credits")
 		credits_status_label.add_theme_color_override("font_color", UI_DANGER)
 		credits_status_label.visible = true
 
@@ -1039,32 +1375,36 @@ func _account_details_confirmed() -> void:
 	var confirm_password: String = account_confirm_password_input.text
 
 	if username == "":
-		_set_account_dialog_status("No active account.", true)
+		_set_account_dialog_status_key("ui.settings.account.no_active", {}, true)
 		return
 	if display_name == "":
-		_set_account_dialog_status("Display name is required.", true)
+		_set_account_dialog_status_key("ui.settings.account.error.display_required", {}, true)
 		return
 	if display_name.to_lower() != username.to_lower():
-		_set_account_dialog_status("Display name must match your username. Only casing can change.", true)
+		_set_account_dialog_status_key("ui.settings.account.error.display_mismatch", {}, true)
 		return
 	if new_password != "" or confirm_password != "" or current_password != "":
 		if current_password == "":
-			_set_account_dialog_status("Enter your current password to change your password.", true)
+			_set_account_dialog_status_key("ui.settings.account.error.current_password", {}, true)
 			return
 		if new_password.length() < 8:
-			_set_account_dialog_status("New password must be at least 8 characters.", true)
+			_set_account_dialog_status_key("ui.settings.account.error.password_length", {}, true)
 			return
 		if new_password != confirm_password:
-			_set_account_dialog_status("New passwords do not match.", true)
+			_set_account_dialog_status_key("ui.settings.account.error.password_mismatch", {}, true)
 			return
 
 	_set_account_controls_disabled(true)
-	_set_account_dialog_status("Saving account details...")
+	_set_account_dialog_status_key("ui.settings.account.saving")
 	var result: Dictionary = await AuthService.update_account_details(display_name, current_password, new_password)
 	_set_account_controls_disabled(false)
 
 	if not bool(result.get("success", false)):
-		_set_account_dialog_status(str(result.get("error", "Could not update account details.")), true)
+		var error_message := str(result.get("error", "")).strip_edges()
+		if error_message.is_empty():
+			_set_account_dialog_status_key("ui.settings.account.error.update", {}, true)
+		else:
+			_set_account_dialog_status(error_message, true)
 		return
 
 	PlayerSave.player_name = AuthService.get_display_name()
@@ -1074,11 +1414,16 @@ func _account_details_confirmed() -> void:
 
 	_refresh_account_tab()
 	_hide_account_details_dialog()
-	_set_account_status("Account details updated.")
+	_set_account_status_key("ui.settings.account.updated")
 
 
 func _refresh_local_player_nameplate() -> void:
-	var player_node: Node = get_tree().get_first_node_in_group("player")
+	var player_node: Node
+	var world := GameState.get_world()
+	if world != null:
+		player_node = world.get_node_or_null("Player")
+	if player_node == null:
+		player_node = get_tree().get_first_node_in_group("player")
 	if player_node != null and player_node.has_method("set_display_name"):
 		player_node.call("set_display_name", PlayerSave.player_name, SettingsManager.display_own_name)
 
@@ -1087,8 +1432,18 @@ func _set_account_dialog_status(message: String, is_error: bool = false) -> void
 	if account_dialog_status_label == null:
 		return
 
+	account_dialog_status_key = ""
+	account_dialog_status_values = {}
+	account_dialog_status_is_error = is_error
 	account_dialog_status_label.text = message
 	account_dialog_status_label.add_theme_color_override("font_color", UI_DANGER if is_error else UI_MUTED_TEXT)
+
+
+func _set_account_dialog_status_key(key: String, values: Dictionary = {}, is_error: bool = false) -> void:
+	_set_account_dialog_status(LocalizationManager.text(key, values), is_error)
+	account_dialog_status_key = key
+	account_dialog_status_values = values.duplicate()
+	account_dialog_status_is_error = is_error
 
 
 func _set_account_controls_disabled(disabled: bool) -> void:
@@ -1118,12 +1473,22 @@ func _set_account_controls_disabled(disabled: bool) -> void:
 func _set_account_status(message: String, is_error: bool = false) -> void:
 	if account_status_label == null:
 		return
+	account_status_key = ""
+	account_status_values = {}
+	account_status_is_error = is_error
 	account_status_label.text = message
 	account_status_label.visible = message != ""
 	if is_error:
 		account_status_label.add_theme_color_override("font_color", UI_DANGER)
 	else:
 		account_status_label.add_theme_color_override("font_color", UI_SECTION_TEXT)
+
+
+func _set_account_status_key(key: String, values: Dictionary = {}, is_error: bool = false) -> void:
+	_set_account_status(LocalizationManager.text(key, values), is_error)
+	account_status_key = key
+	account_status_values = values.duplicate()
+	account_status_is_error = is_error
 
 
 func _logout_confirmed() -> void:
@@ -1177,15 +1542,82 @@ func _select_current_sprite_style() -> void:
 		sprite_style_options_button.select(option_index)
 
 
-func _update_sprite_style_status_label(message: String) -> void:
+func _update_sprite_style_status_label(message_key: String) -> void:
 	if sprite_style_status_label == null:
 		return
 
-	if message.is_empty() and not SettingsManager.is_gen5_animated_sprites_installed():
-		message = "Gen 5 Animated sprites can be downloaded from the launcher."
+	if message_key.is_empty() and not SettingsManager.is_gen5_animated_sprites_installed():
+		message_key = "ui.settings.sprite.download_available"
 
-	sprite_style_status_label.text = message
-	sprite_style_status_label.visible = not message.is_empty()
+	sprite_style_status_label.text = LocalizationManager.text(message_key) if not message_key.is_empty() else ""
+	sprite_style_status_label.visible = not message_key.is_empty()
+
+
+func _apply_sprite_style_option_labels() -> void:
+	if sprite_style_options_button == null:
+		return
+	var translation_key_by_id: Dictionary = {
+		0: "ui.settings.sprite.animated",
+		1: "ui.settings.sprite.static",
+		2: "ui.settings.sprite.gen5",
+	}
+	for index: int in range(sprite_style_options_button.item_count):
+		var option_id := sprite_style_options_button.get_item_id(index)
+		var key := str(translation_key_by_id.get(option_id, ""))
+		if not key.is_empty():
+			sprite_style_options_button.set_item_text(index, LocalizationManager.text(key))
+
+
+func _apply_language_options_to_control() -> void:
+	if language_options_button == null:
+		return
+	var was_loading_controls := loading_controls
+	loading_controls = true
+	language_options_button.clear()
+	var selected_index := 0
+	var supported_locales: Array[String] = LocalizationManager.get_supported_locales()
+	for index: int in range(supported_locales.size()):
+		var supported_locale := supported_locales[index]
+		LanguageSelectorStyle.add_locale_item(
+			language_options_button,
+			supported_locale,
+			LocalizationManager.get_language_name(supported_locale),
+			index
+		)
+		if supported_locale == SettingsManager.locale:
+			selected_index = index
+	if language_options_button.item_count > 0:
+		language_options_button.select(selected_index)
+	loading_controls = was_loading_controls
+
+
+func _apply_terminology_options_to_control() -> void:
+	if terminology_options_button == null:
+		return
+	var was_loading_controls := loading_controls
+	loading_controls = true
+	terminology_options_button.clear()
+	var options: Array[String] = [
+		SettingsManager.CONTENT_NAME_LANGUAGE_ENGLISH,
+		SettingsManager.CONTENT_NAME_LANGUAGE_LOCALIZED,
+	]
+	var translation_keys := {
+		SettingsManager.CONTENT_NAME_LANGUAGE_ENGLISH: "ui.settings.terminology.english",
+		SettingsManager.CONTENT_NAME_LANGUAGE_LOCALIZED: "ui.settings.terminology.localized",
+	}
+	var selected_index := 0
+	for index: int in range(options.size()):
+		var option := options[index]
+		terminology_options_button.add_item(
+			LocalizationManager.text(str(translation_keys.get(option, ""))),
+			index
+		)
+		terminology_options_button.set_item_metadata(index, option)
+		if option == SettingsManager.content_name_language:
+			selected_index = index
+	if terminology_options_button.item_count > 0:
+		terminology_options_button.select(selected_index)
+	loading_controls = was_loading_controls
 
 
 func _apply_battle_music_options_to_control() -> void:

@@ -69,6 +69,10 @@ var last_presence_position_signature := ""
 var confirmed_appearance_state: Dictionary = {}
 var remote_players_container: Node2D
 var remote_player_avatars: Dictionary = {}
+var creator_remote_players_visibility_override_active := false
+var creator_remote_players_visible := true
+var creator_nameplate_visibility_override_active := false
+var creator_nameplates_visible := true
 var pending_map_chat_messages: Dictionary = {}
 var pending_remote_player_interaction: Dictionary = {}
 var remote_player_interaction_pending := false
@@ -95,6 +99,9 @@ func _ready() -> void:
 		FieldMoveService.owned_charms_changed.connect(_validate_active_flash_source)
 	_ensure_map_transition_overlay()
 	_ensure_remote_players_container()
+	if not SettingsManager.settings_changed.is_connected(_on_settings_changed):
+		SettingsManager.settings_changed.connect(_on_settings_changed)
+	_sync_remote_players_visibility()
 	_connect_world_presence_signals()
 	await _setup_initial_world_state()
 	await _refresh_fishing_progression()
@@ -565,7 +572,7 @@ func _ensure_map_transition_overlay() -> void:
 	layout.add_child(indicator)
 
 	var label := Label.new()
-	label.text = "Loading..."
+	label.text = LocalizationManager.text("common.loading")
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 15)
 	label.add_theme_color_override("font_color", Color(0.78, 0.86, 1.0, 0.94))
@@ -804,27 +811,52 @@ func _on_world_presence_weather_changed(weather_state: Dictionary) -> void:
 
 func use_direct_field_move(move_id: String, source: Dictionary) -> Dictionary:
 	if is_in_battle:
-		return {"success": false, "error": "Field moves cannot be used during a battle."}
+		return {
+			"success": false,
+			"error": LocalizationManager.text("ui.field_move.error.in_battle"),
+		}
 	if is_loading_map:
-		return {"success": false, "error": "Wait until the map has finished loading."}
+		return {
+			"success": false,
+			"error": LocalizationManager.text("ui.field_move.error.map_loading"),
+		}
 	var normalized_move_id := move_id.strip_edges().to_lower().replace("_", "-").replace(" ", "-")
 	if normalized_move_id != "flash":
-		return {"success": false, "error": "That direct field move is not implemented."}
+		return {
+			"success": false,
+			"error": LocalizationManager.text("ui.field_move.error.not_implemented"),
+		}
 	if field_move_flash_light == null:
-		return {"success": false, "error": "The Flash light is not ready."}
+		return {
+			"success": false,
+			"error": LocalizationManager.text("ui.field_move.error.flash_not_ready"),
+		}
 	var result: Dictionary = field_move_flash_light.activate()
 	if not bool(result.get("success", false)):
 		return result
 	if bool(result.get("deactivated", false)):
-		result["message"] = "Flash was turned off."
+		result["message"] = LocalizationManager.text("ui.field_move.flash_off")
 		return result
 	var charm_name := str(source.get("itemName", "")).strip_edges()
 	if charm_name != "":
-		result["message"] = "%s lit the area around you." % charm_name
+		result["message"] = LocalizationManager.text(
+			"ui.field_move.item_lit_area",
+			{"item": charm_name}
+		)
 		return result
 	var pokemon: Pokemon = source.get("pokemon") as Pokemon
-	var pokemon_name := pokemon.species if pokemon != null else "Your Pokemon"
-	result["message"] = "%s used Flash!" % pokemon_name
+	var pokemon_name := (
+		_localized_world_species_name(pokemon.species, pokemon.species)
+		if pokemon != null
+		else LocalizationManager.text("pokemon.yours")
+	)
+	result["message"] = LocalizationManager.text(
+		"ui.field_move.pokemon_used",
+		{
+			"pokemon": pokemon_name,
+			"move": _localized_world_move_name("flash", "Flash"),
+		}
+	)
 	return result
 
 
@@ -835,7 +867,11 @@ func _validate_active_flash_source() -> void:
 	if bool(availability.get("success", false)):
 		return
 	field_move_flash_light.deactivate()
-	get_tree().call_group("ui_overlay", "add_system_message", "Flash turned off because no party Pokemon or Charm can use it anymore.")
+	get_tree().call_group(
+		"ui_overlay",
+		"add_system_message",
+		LocalizationManager.text("ui.field_move.flash_source_lost")
+	)
 
 
 func _instantiate_map(scene_path: String) -> Node:
@@ -1231,12 +1267,80 @@ func _get_tile_group_bottom_z_index(layer: TileMapLayer, group: Array[Vector2i],
 func _ensure_remote_players_container() -> void:
 	if remote_players_container != null and is_instance_valid(remote_players_container):
 		_order_remote_players_container()
+		_sync_remote_players_visibility()
 		return
 
 	remote_players_container = Node2D.new()
 	remote_players_container.name = "RemotePlayers"
 	add_child(remote_players_container)
 	_order_remote_players_container()
+	_sync_remote_players_visibility()
+
+
+func _on_settings_changed() -> void:
+	_sync_remote_players_visibility()
+	_sync_local_player_nameplate_visibility()
+
+
+func _sync_local_player_nameplate_visibility() -> void:
+	if player != null and is_instance_valid(player) and player.has_method("set_display_name"):
+		player.call("set_display_name", PlayerSave.player_name, SettingsManager.display_own_name)
+
+
+func _sync_remote_players_visibility() -> void:
+	if remote_players_container == null or not is_instance_valid(remote_players_container):
+		return
+	var players_visible := not SettingsManager.hide_other_players
+	if creator_remote_players_visibility_override_active:
+		players_visible = creator_remote_players_visible
+	remote_players_container.visible = players_visible
+	for avatar: Node in remote_players_container.get_children():
+		if avatar.has_method("set_interaction_enabled"):
+			avatar.call("set_interaction_enabled", players_visible)
+
+
+func set_creator_remote_players_visible(visible: bool) -> void:
+	creator_remote_players_visibility_override_active = true
+	creator_remote_players_visible = visible
+	_sync_remote_players_visibility()
+
+
+func clear_creator_remote_players_visibility_override() -> void:
+	creator_remote_players_visibility_override_active = false
+	_sync_remote_players_visibility()
+
+
+func set_creator_nameplates_visible(visible: bool) -> void:
+	creator_nameplate_visibility_override_active = true
+	creator_nameplates_visible = visible
+	_sync_creator_nameplate_visibility()
+
+
+func clear_creator_nameplates_visibility_override() -> void:
+	creator_nameplate_visibility_override_active = false
+	_sync_creator_nameplate_visibility()
+
+
+func _sync_creator_nameplate_visibility() -> void:
+	var method_name := (
+		"set_creator_nameplate_visible"
+		if creator_nameplate_visibility_override_active
+		else "clear_creator_nameplate_visibility_override"
+	)
+	if player != null and is_instance_valid(player) and player.has_method(method_name):
+		if creator_nameplate_visibility_override_active:
+			player.call(method_name, creator_nameplates_visible)
+		else:
+			player.call(method_name)
+	if remote_players_container == null or not is_instance_valid(remote_players_container):
+		return
+	for avatar: Node in remote_players_container.get_children():
+		if not avatar.has_method(method_name):
+			continue
+		if creator_nameplate_visibility_override_active:
+			avatar.call(method_name, creator_nameplates_visible)
+		else:
+			avatar.call(method_name)
 
 
 func _order_remote_players_container() -> void:
@@ -1348,6 +1452,15 @@ func _apply_remote_player_states(player_states: Array, prune_missing := true) ->
 			avatar = new_avatar as Node2D
 			remote_player_avatars[user_key] = avatar
 			remote_players_container.add_child(avatar)
+			if creator_nameplate_visibility_override_active and avatar.has_method("set_creator_nameplate_visible"):
+				avatar.call("set_creator_nameplate_visible", creator_nameplates_visible)
+			if avatar.has_method("set_interaction_enabled"):
+				avatar.call(
+					"set_interaction_enabled",
+					creator_remote_players_visible
+					if creator_remote_players_visibility_override_active
+					else not SettingsManager.hide_other_players
+				)
 			var interaction_callable := Callable(self, "_on_remote_player_interaction_requested")
 			if avatar.has_signal("interaction_requested") and not avatar.is_connected("interaction_requested", interaction_callable):
 				avatar.connect("interaction_requested", interaction_callable)
@@ -2221,7 +2334,11 @@ func _respawn_after_battle_loss() -> void:
 	if not bool(apply_result.get("success", false)):
 		push_warning("World: respawn position apply failed: %s" % str(apply_result.get("error", "Unknown error")))
 		return
-	get_tree().call_group("ui_overlay", "add_system_message", "You blacked out, returned to your last heal point, and your party was healed.")
+	get_tree().call_group(
+		"ui_overlay",
+		"add_system_message",
+		LocalizationManager.text("ui.world.blackout.respawned")
+	)
 
 
 func _fallback_respawn_after_battle_loss() -> void:
@@ -2233,10 +2350,18 @@ func _fallback_respawn_after_battle_loss() -> void:
 	var apply_result: Dictionary = await apply_authorized_teleport_state(default_respawn_state)
 	if not bool(apply_result.get("success", false)):
 		push_warning("World: fallback respawn position apply failed: %s" % str(apply_result.get("error", "Unknown error")))
-		get_tree().call_group("ui_overlay", "add_system_message", "You blacked out, but the default heal point could not be loaded.")
+		get_tree().call_group(
+			"ui_overlay",
+			"add_system_message",
+			LocalizationManager.text("ui.world.blackout.default_failed")
+		)
 		return
 
-	get_tree().call_group("ui_overlay", "add_system_message", "You blacked out and returned to Nurse Joy.")
+	get_tree().call_group(
+		"ui_overlay",
+		"add_system_message",
+		LocalizationManager.text("ui.world.blackout.nurse_joy")
+	)
 
 
 func _get_default_healer_respawn_state() -> Dictionary:
@@ -2306,13 +2431,17 @@ func _notify_caught_pokemon_if_needed(result: Dictionary) -> void:
 	if pokemon_payload.is_empty():
 		return
 
-	var species := str(pokemon_payload.get("species", "Pokemon")).strip_edges()
+	var species_id := str(pokemon_payload.get("species", "")).strip_edges()
+	var species := _localized_world_species_name(species_id, species_id)
 	if species == "":
-		species = "Pokemon"
+		species = LocalizationManager.text("pokemon.generic")
 
-	var message := "You caught %s!" % species
+	var message := LocalizationManager.text("ui.world.capture.caught", {"pokemon": species})
 	if result.has("addedToParty") and bool(result.get("addedToParty", false)):
-		message = "You caught %s! Added to your party." % species
+		message = LocalizationManager.text(
+			"ui.world.capture.caught_party",
+			{"pokemon": species}
+		)
 
 	get_tree().call_group("ui_overlay", "add_system_pokemon_message", message, [pokemon_payload])
 
@@ -2391,11 +2520,17 @@ func _notify_gym_badge_award(value: Variant) -> void:
 		return
 	var award: Dictionary = value as Dictionary
 	if bool(award.get("awarded", false)):
-		var badge_name := str(award.get("name", "Gym Badge")).strip_edges()
+		var badge_name := _localized_gym_badge_name(
+			str(award.get("id", award.get("badgeId", ""))),
+			str(award.get("name", "")).strip_edges()
+		)
 		get_tree().call_group(
 			"ui_overlay",
 			"add_system_message",
-			"You earned the %s!" % badge_name
+			LocalizationManager.text(
+				"ui.world.reward.badge_earned",
+				{"badge": badge_name}
+			)
 		)
 		return
 	if bool(award.get("eligible", true)):
@@ -2404,14 +2539,17 @@ func _notify_gym_badge_award(value: Variant) -> void:
 	var missing_value: Variant = award.get("missingBadgeIds", [])
 	if missing_value is Array:
 		for missing_id: Variant in missing_value:
-			missing_names.append("%s Badge" % str(missing_id).capitalize())
+			missing_names.append(_localized_gym_badge_name(str(missing_id)))
 	var requirement_text := ", ".join(missing_names)
 	if requirement_text == "":
-		requirement_text = "the preceding Gym Badge"
+		requirement_text = LocalizationManager.text("ui.world.reward.preceding_badge")
 	get_tree().call_group(
 		"ui_overlay",
 		"add_system_message",
-		"No Gym Badge was awarded. First earn %s." % requirement_text
+		LocalizationManager.text(
+			"ui.world.reward.badge_required",
+			{"badge": requirement_text}
+		)
 	)
 
 
@@ -2426,13 +2564,19 @@ func _notify_fishing_experience_award(value: Variant) -> void:
 	get_tree().call_group(
 		"ui_overlay",
 		"add_system_message",
-		"Fishing +%d XP." % experience_awarded
+		LocalizationManager.text(
+			"ui.world.reward.fishing_exp",
+			{"experience": experience_awarded}
+		)
 	)
 	if bool(progression_award.get("leveledUp", false)):
 		get_tree().call_group(
 			"ui_overlay",
 			"add_system_message",
-			"Fishing Level increased to %d!" % int(progression_award.get("level", GameState.fishing_level))
+			LocalizationManager.text(
+				"ui.world.reward.fishing_level",
+				{"level": int(progression_award.get("level", GameState.fishing_level))}
+			)
 		)
 
 func _notify_wild_battle_money_awarded(pokemon_species: String, money_awarded: int) -> void:
@@ -2441,9 +2585,14 @@ func _notify_wild_battle_money_awarded(pokemon_species: String, money_awarded: i
 
 	var species_text := pokemon_species.strip_edges()
 	if species_text == "":
-		species_text = "wild Pokemon"
+		species_text = LocalizationManager.text("pokemon.wild")
+	else:
+		species_text = _localized_world_species_name(species_text, species_text)
 
-	var message := "You fainted %s and earned $%s." % [species_text, _format_money_amount(money_awarded)]
+	var message := LocalizationManager.text("ui.world.reward.wild_money", {
+		"pokemon": species_text,
+		"money": _format_money_amount(money_awarded),
+	})
 	get_tree().call_group("ui_overlay", "refresh_money_display")
 	get_tree().call_group("ui_overlay", "add_system_message", message)
 
@@ -2453,9 +2602,12 @@ func _notify_trainer_battle_rewards_awarded(trainer_name: String, money_awarded:
 
 	var trainer_text := trainer_name.strip_edges()
 	if trainer_text == "":
-		trainer_text = "the Trainer"
+		trainer_text = LocalizationManager.text("trainer.generic_with_article")
 
-	var message := "You defeated %s and earned $%s." % [trainer_text, _format_money_amount(money_awarded)]
+	var message := LocalizationManager.text("ui.world.reward.trainer_money", {
+		"trainer": trainer_text,
+		"money": _format_money_amount(money_awarded),
+	})
 	get_tree().call_group("ui_overlay", "refresh_money_display")
 	get_tree().call_group("ui_overlay", "add_system_message", message)
 
@@ -2480,8 +2632,17 @@ func _notify_reward_experience_gains(reward_value: Variant) -> void:
 		if pokemon_name == "":
 			pokemon_name = _reward_pokemon_name(int(entry.get("pokemonId", 0)))
 		if pokemon_name == "":
-			pokemon_name = "Your Pokemon"
-		get_tree().call_group("ui_overlay", "add_system_message", "%s gained %s EXP." % [pokemon_name, amount])
+			pokemon_name = LocalizationManager.text("pokemon.yours")
+		else:
+			pokemon_name = _localized_world_species_name(pokemon_name, pokemon_name)
+		get_tree().call_group(
+			"ui_overlay",
+			"add_system_message",
+			LocalizationManager.text(
+				"ui.world.reward.exp",
+				{"pokemon": pokemon_name, "experience": amount}
+			)
+		)
 
 func _reward_pokemon_name(pokemon_id: int) -> String:
 	if pokemon_id <= 0:
@@ -2513,25 +2674,34 @@ func _notify_reward_effort_gains(reward_value: Variant) -> void:
 		if parts.is_empty():
 			continue
 
-		var species := str(effort_entry.get("species", "Pokemon")).strip_edges()
+		var species := str(effort_entry.get("species", "")).strip_edges()
 		if species == "":
-			species = "Pokemon"
-		get_tree().call_group("ui_overlay", "add_system_message", "%s stored %s EVs." % [species, ", ".join(parts)])
+			species = LocalizationManager.text("pokemon.generic")
+		else:
+			species = _localized_world_species_name(species, species)
+		get_tree().call_group(
+			"ui_overlay",
+			"add_system_message",
+			LocalizationManager.text(
+				"ui.world.reward.evs",
+				{"pokemon": species, "evs": ", ".join(parts)}
+			)
+		)
 
 func _format_effort_stat_label(stat_key: String) -> String:
 	match stat_key.strip_edges().to_lower():
 		"hp":
-			return "HP"
+			return LocalizationManager.text("pokemon.stat.hp")
 		"atk":
-			return "ATK"
+			return LocalizationManager.text("pokemon.stat.attack")
 		"def":
-			return "DEF"
+			return LocalizationManager.text("pokemon.stat.defense")
 		"spa":
-			return "SP. ATK"
+			return LocalizationManager.text("pokemon.stat.special_attack")
 		"spd":
-			return "SP. DEF"
+			return LocalizationManager.text("pokemon.stat.special_defense")
 		"spe":
-			return "SPEED"
+			return LocalizationManager.text("pokemon.stat.speed")
 		_:
 			return stat_key.to_upper()
 
@@ -2549,18 +2719,27 @@ func _notify_reward_level_ups(reward_value: Variant) -> void:
 			continue
 
 		var level_up: Dictionary = level_up_value as Dictionary
-		var species := str(level_up.get("species", "Pokemon")).strip_edges()
+		var species := str(level_up.get("species", "")).strip_edges()
 		if species == "":
-			species = "Pokemon"
+			species = LocalizationManager.text("pokemon.generic")
+		else:
+			species = _localized_world_species_name(species, species)
 
 		var previous_level := int(level_up.get("previousLevel", 0))
 		var level := int(level_up.get("level", 0))
 		if level <= 0:
 			continue
 
-		var message := "%s grew to Lv. %s!" % [species, level]
+		var message := LocalizationManager.text(
+			"ui.world.reward.level_up",
+			{"pokemon": species, "level": level}
+		)
 		if previous_level > 0 and level - previous_level > 1:
-			message = "%s grew from Lv. %s to Lv. %s!" % [species, previous_level, level]
+			message = LocalizationManager.text("ui.world.reward.level_jump", {
+				"pokemon": species,
+				"previous": previous_level,
+				"level": level,
+			})
 		get_tree().call_group("ui_overlay", "add_system_message", message)
 		_notify_reward_level_up_moves(species, level_up)
 
@@ -2570,15 +2749,15 @@ func _notify_reward_level_up_moves(species: String, level_up: Dictionary) -> voi
 	_notify_reward_move_messages(
 		species,
 		level_up.get("learnedMoves", []),
-		"%s learned %s!"
+		"ui.world.reward.move_learned"
 	)
 	_notify_reward_move_messages(
 		species,
 		level_up.get("moveLearnCandidates", []),
-		"%s can learn %s."
+		"ui.world.reward.move_available"
 	)
 
-func _notify_reward_move_messages(species: String, moves_value: Variant, message_template: String) -> void:
+func _notify_reward_move_messages(species: String, moves_value: Variant, message_key: String) -> void:
 	if not (moves_value is Array):
 		return
 
@@ -2587,25 +2766,52 @@ func _notify_reward_move_messages(species: String, moves_value: Variant, message
 		if move_name == "":
 			continue
 
-		get_tree().call_group("ui_overlay", "add_system_message", message_template % [species, move_name])
+		get_tree().call_group(
+			"ui_overlay",
+			"add_system_message",
+			LocalizationManager.text(
+				message_key,
+				{"pokemon": species, "move": move_name}
+			)
+		)
 
 func _reward_move_name(move_value: Variant) -> String:
 	if not (move_value is Dictionary):
 		return ""
 
 	var move_event: Dictionary = move_value as Dictionary
+	var move_id := str(move_event.get("moveId", move_event.get("move_id", ""))).strip_edges()
 	var move_name := str(move_event.get("name", "")).strip_edges()
 	if move_name != "":
-		return move_name
+		return _localized_world_move_name(move_id, move_name)
 
 	var move_payload_value: Variant = move_event.get("move", {})
 	if move_payload_value is Dictionary:
 		var move_payload: Dictionary = move_payload_value as Dictionary
-		move_name = str(move_payload.get("name", move_payload.get("id", ""))).strip_edges()
+		move_id = str(move_payload.get("id", move_payload.get("move", move_id))).strip_edges()
+		move_name = str(move_payload.get("name", move_id)).strip_edges()
 		if move_name != "":
-			return move_name
+			return _localized_world_move_name(move_id, move_name)
 
-	return str(move_event.get("moveId", "")).strip_edges()
+	return _localized_world_move_name(move_id, move_id)
+
+func _localized_world_species_name(species_id: String, fallback_name: String = "") -> String:
+	var fallback := fallback_name if fallback_name.strip_edges() != "" else species_id
+	return ContentLocalization.display_name("species", species_id, fallback)
+
+func _localized_world_move_name(move_id: String, fallback_name: String = "") -> String:
+	var fallback := fallback_name if fallback_name.strip_edges() != "" else move_id
+	return ContentLocalization.display_name("moves", move_id, fallback)
+
+func _localized_gym_badge_name(badge_id: String, fallback_name: String = "") -> String:
+	var normalized_id := badge_id.strip_edges().to_lower().replace("-", "_").replace(" ", "_")
+	normalized_id = normalized_id.trim_suffix("_badge")
+	var key := "ui.gym_badge.%s" % normalized_id
+	if normalized_id != "" and LocalizationManager.has_key(key):
+		return LocalizationManager.text(key)
+	if fallback_name.strip_edges() != "":
+		return fallback_name.strip_edges()
+	return LocalizationManager.text("ui.gym_badge.generic")
 
 func _format_money_amount(value: int) -> String:
 	var value_text := str(max(value, 0))

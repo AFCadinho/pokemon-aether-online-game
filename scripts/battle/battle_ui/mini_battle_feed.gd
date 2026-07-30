@@ -10,14 +10,14 @@ const COLOR_FIELD := Color("#9fd0ee")
 const COLOR_WARNING := Color("#e6b779")
 const COLOR_DAMAGE := Color("#e78b8b")
 const COLOR_HEAL := Color("#93d99b")
-const FILTERED_PREFIXES: Array[String] = [
-	"waiting for opponent",
-	"waiting for the other player",
-	"choose your lead",
-	"choose another pokemon",
-	"choose a pokemon",
-	"cannot switch right now",
-	"bag cannot be used",
+const FILTERED_MESSAGE_KEYS: Array[String] = [
+	"battle.prompt.waiting_opponent",
+	"battle.prompt.waiting_other_player",
+	"battle.prompt.choose_lead",
+	"battle.prompt.choose_another_pokemon",
+	"battle.prompt.choose_pokemon",
+	"battle.error.cannot_switch",
+	"battle.error.bag_unavailable",
 ]
 
 @onready var scroll_container: ScrollContainer = $MarginContainer/ScrollContainer
@@ -42,7 +42,7 @@ func add_turn_header(turn: int) -> void:
 	if turn <= 0:
 		return
 
-	_add_line("Turn %s" % turn, "turn")
+	_add_line(_t("battle.status.turn", {"turn": turn}), "turn")
 
 func add_message(message: String, kind := "") -> void:
 	for raw_line: String in message.split("\n"):
@@ -123,7 +123,8 @@ func _should_show_message(line: String) -> bool:
 		return false
 
 	var lower: String = line.to_lower()
-	for prefix: String in FILTERED_PREFIXES:
+	for key: String in FILTERED_MESSAGE_KEYS:
+		var prefix := _t(key).to_lower()
 		if lower.begins_with(prefix):
 			return false
 
@@ -165,3 +166,10 @@ func _contains_word(value: String, word: String) -> bool:
 		normalized = normalized.replace(character, " ")
 
 	return (" " + normalized + " ").contains(" " + word + " ")
+
+
+func _t(key: String, replacements: Dictionary = {}) -> String:
+	var localization_manager := get_tree().root.get_node_or_null("LocalizationManager")
+	if localization_manager != null:
+		return str(localization_manager.call("text", key, replacements))
+	return key

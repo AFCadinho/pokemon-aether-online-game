@@ -1,0 +1,32 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_pallet_town",
+  "signs": [
+    {
+      "id": "kanto_pallet_town_town_sign",
+      "type": "town",
+      "title": "Cidade de Pallet",
+      "lines": [
+        "Cidade de Pallet",
+        "Uma cidade tranquila onde novas jornadas começam."
+      ]
+    },
+    {
+      "id": "kanto_pallet_town_trainer_tips_1",
+      "type": "trainer_tips",
+      "speakerName": "Dicas para Treinadores",
+      "lines": [
+        "Pressione o botão de interação enquanto estiver de frente para pessoas ou placas."
+      ]
+    },
+    {
+      "id": "kanto_pallet_town_oaks_lab",
+      "type": "building",
+      "title": "Laboratório do Oak",
+      "lines": [
+        "Laboratório de Pesquisa Pokémon do Oak",
+        "Onde os mistérios dos Pokémon são estudados."
+      ]
+    }
+  ]
+}

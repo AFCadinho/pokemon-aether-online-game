@@ -1,8 +1,10 @@
 extends Control
 
+const NewsLocalizationService := preload("res://scripts/services/news_localization_service.gd")
+const LanguageSelectorStyle := preload("res://scripts/ui/language_selector_style.gd")
+
 signal login_submitted(username: String, password: String)
 
-const ExternalLinks = preload("res://scripts/core/external_links.gd")
 const REGISTER_URL := "https://pokeaether.com/register"
 const NEWS_URL := "https://updates.pokeaether.com/data/news.json"
 const LOADING_SCENE_PATH := "res://scenes/interface/loading_screen.tscn"
@@ -37,8 +39,8 @@ const PLAYER_PREVIEW_SCALE := Vector2(2.0, 2.0)
 @onready var hero_background: TextureRect = $Background/HeroBackground
 @onready var background_video_player: VideoStreamPlayer = $Background/VideoBackground
 @onready var news_request: HTTPRequest = $NewsRequest
+@onready var language_options_button: OptionButton = $Background/ScreenActions/LanguageOptionsButton
 @onready var options_button: Button = $Background/ScreenActions/OptionsButton
-@onready var credits_button: Button = $Background/ScreenActions/CreditsButton
 @onready var quit_button: Button = $Background/ScreenActions/QuitButton
 @onready var settings_menu: PanelContainer = $Background/LoginSettingsMenu
 
@@ -46,16 +48,28 @@ var server_online := false
 var is_loading := false
 var player_preview_instance: Node2D
 var news_items: Array[Dictionary] = []
+var raw_news_data: Dictionary = {}
+var status_translation_key := ""
+var status_translation_values: Dictionary = {}
+var status_is_error := false
+var saved_status_translation_key := ""
+var saved_status_translation_values: Dictionary = {}
+var saved_status_is_error := false
+var server_status_translation_key := "ui.login.checking_server"
+var online_players_translation_key := "ui.login.checking_players"
+var online_players_translation_values: Dictionary = {}
+var loading_language_options := false
 
 func _ready() -> void:
 	MusicManager.play_login_music()
 	_apply_remember_me_style()
+	LanguageSelectorStyle.configure_login_compact(language_options_button)
+	language_options_button.item_selected.connect(_on_language_selected)
 	login_button.pressed.connect(_on_login_button_pressed)
 	register_link_button.pressed.connect(_on_register_link_pressed)
 	continue_button.pressed.connect(_on_continue_button_pressed)
 	logout_button.pressed.connect(_on_logout_button_pressed)
 	options_button.pressed.connect(_on_options_button_pressed)
-	credits_button.pressed.connect(_on_credits_button_pressed)
 	quit_button.pressed.connect(_on_quit_button_pressed)
 	news_request.request_completed.connect(_on_news_request_completed)
 	login_news_label.meta_clicked.connect(_on_news_meta_clicked)
@@ -64,10 +78,17 @@ func _ready() -> void:
 	background_video_player.finished.connect(_on_background_video_finished)
 	username_input.text_submitted.connect(_on_username_submitted)
 	password_input.text_submitted.connect(_on_password_submitted)
+	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
+		LocalizationManager.locale_changed.connect(_on_locale_changed)
+	LocalizationManager.localize_tree(self)
+	_apply_language_options_to_control()
 	_set_server_status_checking()
 	_setup_background_video()
 	_render_news_items([])
 	_show_login_form()
+	var pending_notice := AuthService.take_pending_login_notice()
+	if pending_notice != "":
+		show_status(pending_notice, true)
 	_setup_player_preview()
 	username_input.grab_focus()
 	_center_settings_menu.call_deferred()
@@ -114,14 +135,24 @@ func set_loading(is_loading: bool) -> void:
 	login_button.disabled = is_loading
 	continue_button.disabled = is_loading
 	logout_button.disabled = is_loading
-	login_button.text = "Signing In..." if is_loading else _get_idle_login_button_text()
-	continue_button.text = "Entering..." if is_loading else "Continue"
+	language_options_button.disabled = is_loading
+	login_button.text = (
+		LocalizationManager.text("ui.login.signing_in")
+		if is_loading
+		else _get_idle_login_button_text()
+	)
+	continue_button.text = LocalizationManager.text(
+		"ui.login.entering" if is_loading else "ui.login.continue"
+	)
 
 	if is_loading:
-		show_status("Connecting to Aether...", false)
+		show_status_key("ui.login.connecting")
 
 
 func show_status(message: String, is_error: bool = false) -> void:
+	status_translation_key = ""
+	status_translation_values = {}
+	status_is_error = is_error
 	status_label.text = message
 	status_label.visible = not message.strip_edges().is_empty()
 	if is_error:
@@ -130,13 +161,93 @@ func show_status(message: String, is_error: bool = false) -> void:
 		status_label.add_theme_color_override("font_color", ONLINE_COLOR)
 
 
+func show_status_key(key: String, values: Dictionary = {}, is_error: bool = false) -> void:
+	show_status(LocalizationManager.text(key, values), is_error)
+	status_translation_key = key
+	status_translation_values = values.duplicate()
+	status_is_error = is_error
+
+
 func show_saved_status(message: String, is_error: bool = false) -> void:
+	saved_status_translation_key = ""
+	saved_status_translation_values = {}
+	saved_status_is_error = is_error
 	saved_status_label.text = message
 	saved_status_label.visible = not message.strip_edges().is_empty()
 	if is_error:
 		saved_status_label.add_theme_color_override("font_color", OFFLINE_COLOR)
 	else:
 		saved_status_label.add_theme_color_override("font_color", ONLINE_COLOR)
+
+
+func show_saved_status_key(key: String, values: Dictionary = {}, is_error: bool = false) -> void:
+	show_saved_status(LocalizationManager.text(key, values), is_error)
+	saved_status_translation_key = key
+	saved_status_translation_values = values.duplicate()
+	saved_status_is_error = is_error
+
+
+func _on_locale_changed(_locale: String) -> void:
+	LocalizationManager.localize_tree(self)
+	_apply_language_options_to_control()
+	login_button.text = (
+		LocalizationManager.text("ui.login.signing_in")
+		if is_loading
+		else _get_idle_login_button_text()
+	)
+	continue_button.text = LocalizationManager.text(
+		"ui.login.entering" if is_loading else "ui.login.continue"
+	)
+	if not status_translation_key.is_empty():
+		show_status_key(status_translation_key, status_translation_values, status_is_error)
+	if not saved_status_translation_key.is_empty():
+		show_saved_status_key(
+			saved_status_translation_key,
+			saved_status_translation_values,
+			saved_status_is_error
+		)
+	server_status_value.text = LocalizationManager.text(server_status_translation_key)
+	online_players_value.text = LocalizationManager.text(
+		online_players_translation_key,
+		online_players_translation_values
+	)
+	if raw_news_data.is_empty():
+		_render_news_items([])
+	else:
+		_render_localized_news()
+
+
+func _on_language_selected(index: int) -> void:
+	if loading_language_options or index < 0 or index >= language_options_button.item_count:
+		return
+	SettingsManager.set_locale(str(language_options_button.get_item_metadata(index)))
+
+
+func _apply_language_options_to_control() -> void:
+	if language_options_button == null:
+		return
+	var was_loading_options := loading_language_options
+	loading_language_options = true
+	language_options_button.clear()
+	var selected_index := 0
+	var supported_locales: Array[String] = LocalizationManager.get_supported_locales()
+	for index: int in range(supported_locales.size()):
+		var supported_locale := supported_locales[index]
+		LanguageSelectorStyle.add_locale_item(
+			language_options_button,
+			supported_locale,
+			LocalizationManager.get_language_name(supported_locale),
+			index
+		)
+		if supported_locale == SettingsManager.locale:
+			selected_index = index
+	if language_options_button.item_count > 0:
+		language_options_button.select(selected_index)
+		LanguageSelectorStyle.apply_compact_label(
+			language_options_button,
+			str(language_options_button.get_item_metadata(selected_index))
+		)
+	loading_language_options = was_loading_options
 
 
 func clear_form() -> void:
@@ -170,7 +281,7 @@ func _on_logout_button_pressed() -> void:
 		return
 
 	set_loading(true)
-	show_saved_status("Signing out...", false)
+	show_saved_status_key("ui.login.signing_out")
 	await AuthService.logout()
 	set_loading(false)
 
@@ -190,10 +301,17 @@ func _on_options_button_pressed() -> void:
 		settings_menu.visible = true
 
 
-func _on_credits_button_pressed() -> void:
-	var open_error := OS.shell_open(ExternalLinks.CREDITS_URL)
-	if open_error != OK:
-		show_status("Could not open the credits page.", true)
+func _unhandled_input(event: InputEvent) -> void:
+	if (
+		not event.is_action_pressed("ui_cancel")
+		or is_loading
+		or settings_menu == null
+		or settings_menu.visible
+	):
+		return
+
+	_on_options_button_pressed()
+	get_viewport().set_input_as_handled()
 
 
 func _on_quit_button_pressed() -> void:
@@ -243,7 +361,13 @@ func _fetch_news() -> void:
 		_render_news_items([])
 		return
 
-	var error_code: Error = news_request.request(NEWS_URL, [USER_AGENT_HEADER])
+	var error_code: Error = news_request.request(
+		NEWS_URL,
+		[
+			USER_AGENT_HEADER,
+			"Accept-Language: %s, en;q=0.8" % LocalizationManager.get_http_locale(),
+		]
+	)
 	if error_code != OK:
 		_render_news_items([])
 
@@ -259,33 +383,24 @@ func _on_news_request_completed(result: int, response_code: int, _headers: Packe
 		_render_news_items([])
 		return
 
-	var news_data: Dictionary = parsed_json
-	var parsed_items: Array[Dictionary] = []
-	var item_variants: Variant = news_data.get("items") if news_data.has("items") else news_data.get("articles", [])
-	if typeof(item_variants) == TYPE_ARRAY:
-		for item_variant: Variant in item_variants:
-			if typeof(item_variant) != TYPE_DICTIONARY:
-				continue
+	raw_news_data = parsed_json as Dictionary
+	_render_localized_news()
 
-			var item: Dictionary = item_variant
-			var title: String = str(item.get("title", "")).strip_edges()
-			if title.is_empty():
-				continue
 
-			parsed_items.append({
-				"title": title,
-				"description": str(item.get("description", item.get("summary", ""))).strip_edges(),
-				"url": str(item.get("url", item.get("externalLink", ""))).strip_edges(),
-			})
-
-	_render_news_items(parsed_items)
+func _render_localized_news() -> void:
+	_render_news_items(NewsLocalizationService.resolve_items(
+		raw_news_data,
+		LocalizationManager.get_http_locale()
+	))
 
 
 func _render_news_items(items: Array[Dictionary]) -> void:
 	news_items = items
 	login_news_label.clear()
 	if news_items.is_empty():
-		login_news_label.append_text("[color=#cfd2df]Latest updates will appear here.[/color]")
+		login_news_label.append_text(
+			"[color=#cfd2df]%s[/color]" % LocalizationManager.text("ui.login.latest_empty")
+		)
 		return
 
 	for index: int in range(mini(news_items.size(), 3)):
@@ -329,7 +444,7 @@ func _submit_login() -> void:
 	var password := password_input.text
 
 	if username.is_empty():
-		show_status("Enter your username.", true)
+		show_status_key("ui.login.error.enter_username", {}, true)
 		username_input.grab_focus()
 		return
 
@@ -340,12 +455,12 @@ func _submit_login() -> void:
 			return
 
 	if password.is_empty():
-		show_status("Enter your password.", true)
+		show_status_key("ui.login.error.enter_password", {}, true)
 		password_input.grab_focus()
 		return
 
 	if not server_online:
-		show_status("PokeAether is currently offline. Please try again later.", true)
+		show_status_key("ui.login.error.offline", {}, true)
 		_refresh_server_health.call_deferred()
 		return
 
@@ -370,39 +485,54 @@ func _refresh_server_health() -> void:
 	var result: Dictionary = await ServerHealthService.check_async(self)
 	server_online = bool(result.get("online", false))
 	if server_online:
-		server_status_value.text = "Server Online"
-		server_status_value.add_theme_color_override("font_color", ONLINE_COLOR)
+		_set_server_status("ui.login.server_online", ONLINE_COLOR)
 		await _refresh_online_players()
 	else:
-		server_status_value.text = "Server Offline"
-		server_status_value.add_theme_color_override("font_color", OFFLINE_COLOR)
-		online_players_value.text = "Players online unavailable"
-		online_players_value.add_theme_color_override("font_color", CHECKING_COLOR)
+		_set_server_status("ui.login.server_offline", OFFLINE_COLOR)
+		_set_online_players_status("ui.login.players_unavailable", {}, CHECKING_COLOR)
+
+
+func _set_server_status(key: String, color: Color) -> void:
+	server_status_translation_key = key
+	server_status_value.text = LocalizationManager.text(key)
+	server_status_value.add_theme_color_override("font_color", color)
+
+
+func _set_online_players_status(key: String, values: Dictionary, color: Color) -> void:
+	online_players_translation_key = key
+	online_players_translation_values = values.duplicate()
+	online_players_value.text = LocalizationManager.text(key, values)
+	online_players_value.add_theme_color_override("font_color", color)
 
 
 func _set_server_status_checking() -> void:
 	server_online = false
-	server_status_value.text = "Checking server..."
-	server_status_value.add_theme_color_override("font_color", CHECKING_COLOR)
-	online_players_value.text = "Checking players online..."
-	online_players_value.add_theme_color_override("font_color", CHECKING_COLOR)
+	_set_server_status("ui.login.checking_server", CHECKING_COLOR)
+	_set_online_players_status("ui.login.checking_players", {}, CHECKING_COLOR)
 
 
 func _refresh_online_players() -> void:
 	var result: Dictionary = await ServerHealthService.check_presence_async(self)
 	if not bool(result.get("success", false)):
-		online_players_value.text = "Players online unavailable"
-		online_players_value.add_theme_color_override("font_color", CHECKING_COLOR)
+		_set_online_players_status("ui.login.players_unavailable", {}, CHECKING_COLOR)
 		return
 
 	var online_players: int = int(result.get("onlineUsers", 0))
-	online_players_value.text = "%s %s online" % [online_players, "player" if online_players == 1 else "players"]
-	online_players_value.add_theme_color_override("font_color", ONLINE_COLOR)
+	online_players_translation_key = (
+		"ui.login.player_online" if online_players == 1 else "ui.login.players_online"
+	)
+	_set_online_players_status(
+		online_players_translation_key,
+		{"count": online_players},
+		ONLINE_COLOR
+	)
 
 
 func _restore_saved_session() -> void:
 	var result: Dictionary = await AuthService.restore_saved_session()
 	if not bool(result.get("success", false)):
+		if int(result.get("status", 0)) == 503:
+			show_status(_get_login_error_message(result), true)
 		return
 
 	var username: String = str(AuthService.current_user.get("username", ""))
@@ -440,7 +570,7 @@ func _enter_world() -> void:
 
 	var error: Error = get_tree().change_scene_to_file(LOADING_SCENE_PATH)
 	if error != OK:
-		show_status("Could not enter the world. Please contact staff.", true)
+		show_status_key("ui.login.error.enter_world", {}, true)
 		push_error("LoginScreen: failed to load loading scene: %s" % error_string(error))
 
 
@@ -459,7 +589,9 @@ func _apply_authenticated_player_profile() -> void:
 
 
 func _get_idle_login_button_text() -> String:
-	return "Continue" if AuthService.is_authenticated() else "Sign In"
+	return LocalizationManager.text(
+		"ui.login.continue" if AuthService.is_authenticated() else "ui.login.sign_in"
+	)
 
 
 func _show_login_form() -> void:
@@ -646,7 +778,9 @@ func _get_player_preview_category_for_sprite(sprite_name: String) -> String:
 func _get_player_preview_part_id(category_id: String) -> String:
 	match CharacterAppearanceService.normalize_part_category(category_id):
 		"hair":
-			return PlayerSave.appearance_hair_id
+			return CharacterAppearanceService.resolve_hair_render_id(
+				PlayerSave.appearance_hair_id
+			)
 		"headgear":
 			return PlayerSave.appearance_headgear_id
 		"facial_hair":
@@ -763,8 +897,15 @@ func _dictionary_from_value(value: Variant) -> Dictionary:
 
 func _get_login_error_message(result: Dictionary) -> String:
 	var status: int = int(result.get("status", 0))
+	var body: Dictionary = _dictionary_from_value(result.get("body", {}))
+	var detail: Dictionary = _dictionary_from_value(body.get("detail", {}))
+	var code := str(detail.get("code", "")).strip_edges().to_lower()
+	if code in ["account_login_blocked", "server_maintenance"]:
+		var public_message := str(detail.get("message", "")).strip_edges()
+		if public_message != "":
+			return public_message
 	if status == 401:
-		return "Invalid username or password."
+		return LocalizationManager.text("ui.login.error.invalid_credentials")
 	if status >= 500:
-		return "PokeAether is currently unavailable. Please try again later."
-	return str(result.get("error", "Could not sign in. Please try again."))
+		return LocalizationManager.text("ui.login.error.unavailable")
+	return LocalizationManager.text("ui.login.error.sign_in")

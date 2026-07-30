@@ -145,32 +145,15 @@ func _read_json_response(request_node: HTTPRequest) -> Dictionary:
 	response["status"] = response_code
 	if not response.has("error") and response.has("detail"):
 		response["error"] = str(response["detail"])
+	if response_code < 200 or response_code >= 300 or not bool(response.get("success", true)):
+		return BackendErrorLocalizationService.decorate(response)
 	return response
 
 func _get_invalid_json_error_message(response_code: int, response_text: String) -> String:
-	var message := "Invalid JSON response"
-	if response_code > 0:
-		message += " (status %s)" % response_code
-
-	var response_excerpt := response_text.strip_edges().replace("\n", " ")
-	if response_excerpt.length() > 160:
-		response_excerpt = response_excerpt.substr(0, 160) + "..."
-	if response_excerpt != "":
-		message += ": %s" % response_excerpt
-
-	return message
+	return BackendErrorLocalizationService.message({
+		"status": response_code,
+		"diagnosticError": response_text,
+	})
 
 func _get_request_error_message(request_result: int) -> String:
-	match request_result:
-		HTTPRequest.RESULT_CANT_CONNECT:
-			return "Cannot connect to API gateway."
-		HTTPRequest.RESULT_CANT_RESOLVE:
-			return "Cannot resolve API gateway."
-		HTTPRequest.RESULT_CONNECTION_ERROR:
-			return "API gateway connection error."
-		HTTPRequest.RESULT_TLS_HANDSHAKE_ERROR:
-			return "API gateway TLS error."
-		HTTPRequest.RESULT_TIMEOUT:
-			return "API gateway request timed out."
-		_:
-			return "API gateway request failed."
+	return BackendErrorLocalizationService.transport_message(request_result)

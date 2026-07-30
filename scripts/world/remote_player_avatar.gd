@@ -156,6 +156,7 @@ var guild_emblem: TextureRect
 var role_badge_panel: Panel
 var role_badge_label: Label
 var map_chat_bubble: PanelContainer
+var interaction_hit_area: Area2D
 var pokemon_follower: PokemonFollower
 var current_follower_species := ""
 var current_follower_shiny := false
@@ -168,6 +169,8 @@ var current_appearance_state: Dictionary = {}
 var current_appearance_signature := ""
 var has_position := false
 var presence_state: Dictionary = {}
+var creator_nameplate_visibility_override_active := false
+var creator_nameplate_visible := true
 
 
 func _ready() -> void:
@@ -637,6 +640,12 @@ func _create_interaction_hit_area() -> void:
 	hit_area.add_child(shape)
 	hit_area.input_event.connect(_on_interaction_hit_area_input_event)
 	add_child(hit_area)
+	interaction_hit_area = hit_area
+
+
+func set_interaction_enabled(enabled: bool) -> void:
+	if interaction_hit_area != null:
+		interaction_hit_area.input_pickable = enabled
 
 func _on_interaction_hit_area_input_event(_viewport: Node, event: InputEvent, _shape_index: int) -> void:
 	if not event is InputEventMouseButton:
@@ -702,11 +711,25 @@ func _update_nameplate() -> void:
 	if name_text == "":
 		name_text = username.strip_edges()
 	nameplate_label.text = name_text
-	nameplate_label.visible = name_text != ""
+	var should_show_nameplate := name_text != ""
+	if creator_nameplate_visibility_override_active:
+		should_show_nameplate = creator_nameplate_visible and name_text != ""
+	nameplate_label.visible = should_show_nameplate
 	_update_role_badge()
 	_sync_nameplate_layout()
 	if nameplate != null:
-		nameplate.visible = name_text != ""
+		nameplate.visible = should_show_nameplate
+
+
+func set_creator_nameplate_visible(visible: bool) -> void:
+	creator_nameplate_visibility_override_active = true
+	creator_nameplate_visible = visible
+	_update_nameplate()
+
+
+func clear_creator_nameplate_visibility_override() -> void:
+	creator_nameplate_visibility_override_active = false
+	_update_nameplate()
 
 
 func _apply_guild_emblem(emblem: Dictionary) -> void:
@@ -1090,7 +1113,7 @@ func _get_appearance_part_id(category: String) -> String:
 func _get_appearance_hair_id() -> String:
 	var hair_id: String = CharacterAppearanceService.deserialize_part_id(str(current_appearance_state.get("hair", "")))
 	if current_appearance_state.has("hair"):
-		return hair_id
+		return CharacterAppearanceService.resolve_hair_render_id(hair_id)
 
 	var hair_ids: Array[String] = CharacterAppearanceService.get_available_part_ids("hair", current_body_gender)
 	if hair_ids.is_empty():

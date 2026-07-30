@@ -18,9 +18,9 @@ func _init() -> void:
 	_check(finish_source.contains("_show_pvp_battle_result(result)"), "PvP completion presents the result before exiting")
 	_check(not finish_source.contains("battle_ended.emit(result)"), "PvP completion no longer destroys the battle scene immediately")
 	_check(source.contains("func _on_battle_result_continue_pressed() -> void:"), "Continue closes the result screen")
-	_check(source.contains("battle_result_title.text = \"Victory\""), "result screen supports a local victory")
-	_check(source.contains("battle_result_title.text = \"Defeat\""), "result screen supports a local defeat")
-	_check(source.contains('battle_result_title.text = "%s Wins" % winner_name if winner_name != "" else "Battle Over"'), "spectator result title names the public winner")
+	_check(source.contains('_t("battle.result.victory")'), "result screen supports a localized victory")
+	_check(source.contains('_t("battle.result.defeat")'), "result screen supports a localized defeat")
+	_check(source.contains('_t("battle.result.winner_title"'), "spectator result title names the public winner through a localized template")
 	_check(source.contains("PvpBattleRealtimeService.is_local_terminal_winner("), "result screen resolves both winner sides and Showdown display names")
 	quit(1 if failed else 0)
 

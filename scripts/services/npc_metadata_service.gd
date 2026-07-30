@@ -8,19 +8,29 @@ var npc_metadata_cache: Dictionary = {}
 
 
 func get_npc_metadata(npc_id: String) -> Dictionary:
-	if npc_metadata_cache.has(npc_id):
-		return npc_metadata_cache[npc_id]
+	var normalized_npc_id := npc_id.strip_edges()
+	if normalized_npc_id.is_empty():
+		return {
+			"success": false,
+			"error": "Missing npc_id",
+			"metadata": {},
+		}
 
-	var response := await _fetch_npc_metadata(npc_id)
+	var locale := _get_http_locale()
+	var cache_key := _get_cache_key(locale, normalized_npc_id)
+	if npc_metadata_cache.has(cache_key):
+		return npc_metadata_cache[cache_key]
+
+	var response := await _fetch_npc_metadata(normalized_npc_id, locale)
 	if not response.get("success", false):
 		return response
 
-	var normalized_metadata := _normalize_npc_metadata(npc_id, response.get("metadata", {}))
+	var normalized_metadata := _normalize_npc_metadata(normalized_npc_id, response.get("metadata", {}))
 	var result := {
 		"success": true,
 		"metadata": normalized_metadata,
 	}
-	npc_metadata_cache[npc_id] = result
+	npc_metadata_cache[cache_key] = result
 	return result
 
 
@@ -28,14 +38,14 @@ func clear_cache() -> void:
 	npc_metadata_cache.clear()
 
 
-func _fetch_npc_metadata(npc_id: String) -> Dictionary:
+func _fetch_npc_metadata(npc_id: String, locale: String) -> Dictionary:
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var url := base_url + NPC_METADATA_ENDPOINT % npc_id.uri_encode()
 	var request := HTTPRequest.new()
 	add_child(request)
 	request.timeout = 3.0
 
-	var error := request.request(url, GatewayApiConfig.get_accept_headers())
+	var error := request.request(url, GatewayApiConfig.get_accept_headers(locale))
 	if error != OK:
 		request.queue_free()
 		return {
@@ -111,6 +121,17 @@ func _normalize_npc_metadata(npc_id: String, metadata: Dictionary) -> Dictionary
 	npc_metadata["marketMode"] = str(npc_metadata.get("marketMode", npc_metadata.get("market_mode", "")))
 	npc_metadata["requiresPartyPokemon"] = bool(npc_metadata.get("requiresPartyPokemon", false))
 	return npc_metadata
+
+
+func _get_http_locale() -> String:
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	if localization_manager != null and localization_manager.has_method("get_http_locale"):
+		return str(localization_manager.call("get_http_locale"))
+	return "en"
+
+
+func _get_cache_key(locale: String, npc_id: String) -> String:
+	return "%s:%s" % [locale, npc_id]
 
 
 func _get_string_array(value: Variant) -> Array[String]:

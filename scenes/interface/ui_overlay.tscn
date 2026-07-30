@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" path="res://assets/ui/staff_tools.svg" id="13_staff_tools"]
 [ext_resource type="Texture2D" uid="uid://w30miu0aiebu" path="res://assets/ui/pokedex.svg" id="14_pokedex"]
 [ext_resource type="Texture2D" path="res://assets/ui/alpha_tools.svg" id="15_content_creator"]
+[ext_resource type="Texture2D" path="res://assets/ui/content_creator.svg" id="15_creator_tools"]
 [ext_resource type="Texture2D" path="res://assets/ui/clan.svg" id="16_guild"]
 [ext_resource type="AudioStream" uid="uid://d0sitgcr6kq4u" path="res://assets/audio/notification/notification.mp3" id="17_notification"]
 [ext_resource type="Texture2D" path="res://assets/ui/pvp_battles.svg" id="18_pvp"]
@@ -391,7 +392,7 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.59607846, 0.627451, 0.69803923, 1)
 theme_override_font_sizes/font_size = 11
-text = "No buffs active"
+text = "ui.buff.none"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -403,7 +404,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.8980392, 0.8392157, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 11
-text = "3 buffs active"
+text = "ui.buff.preview_active"
 theme_override_styles/normal = SubResource("StyleBoxFlat_personal_buff_slot")
 theme_override_styles/hover = SubResource("StyleBoxFlat_personal_buff_slot_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_personal_buff_slot_hover")
@@ -450,14 +451,14 @@ size_flags_horizontal = 3
 layout_mode = 2
 theme_override_colors/font_color = Color(0.92156863, 0.9019608, 0.96862745, 1)
 theme_override_font_sizes/font_size = 11
-text = "EXP Boost"
+text = "ui.buff.preview_exp.name"
 text_overrun_behavior = 3
 
 [node name="DescriptionLabel" type="Label" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot1/Content/Details"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.6156863, 0.6784314, 0.7607843, 1)
 theme_override_font_sizes/font_size = 9
-text = "Double experience from battles."
+text = "ui.buff.preview_exp.description"
 text_overrun_behavior = 3
 
 [node name="TimeLabel" type="Label" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot1/Content"]
@@ -495,7 +496,7 @@ custom_minimum_size = Vector2(28, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7607843, 0.627451, 1, 1)
 theme_override_font_sizes/font_size = 10
-text = "EG"
+text = ""
 vertical_alignment = 1
 
 [node name="Details" type="VBoxContainer" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot2/Content"]
@@ -506,14 +507,14 @@ size_flags_horizontal = 3
 layout_mode = 2
 theme_override_colors/font_color = Color(0.92156863, 0.9019608, 0.96862745, 1)
 theme_override_font_sizes/font_size = 11
-text = "Egg Power"
+text = "ui.buff.preview_egg.name"
 text_overrun_behavior = 3
 
 [node name="DescriptionLabel" type="Label" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot2/Content/Details"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.6156863, 0.6784314, 0.7607843, 1)
 theme_override_font_sizes/font_size = 9
-text = "Faster Egg progress while active."
+text = "ui.buff.preview_egg.description"
 text_overrun_behavior = 3
 
 [node name="TimeLabel" type="Label" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot2/Content"]
@@ -551,7 +552,7 @@ custom_minimum_size = Vector2(28, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7607843, 0.627451, 1, 1)
 theme_override_font_sizes/font_size = 10
-text = "RN"
+text = ""
 vertical_alignment = 1
 
 [node name="Details" type="VBoxContainer" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot3/Content"]
@@ -562,14 +563,14 @@ size_flags_horizontal = 3
 layout_mode = 2
 theme_override_colors/font_color = Color(0.92156863, 0.9019608, 0.96862745, 1)
 theme_override_font_sizes/font_size = 11
-text = "Run Power"
+text = "ui.buff.preview_run.name"
 text_overrun_behavior = 3
 
 [node name="DescriptionLabel" type="Label" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot3/Content/Details"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.6156863, 0.6784314, 0.7607843, 1)
 theme_override_font_sizes/font_size = 9
-text = "Move faster outside battle."
+text = "ui.buff.preview_run.description"
 text_overrun_behavior = 3
 
 [node name="TimeLabel" type="Label" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot3/Content"]
@@ -596,7 +597,7 @@ offset_bottom = -104.0
 grow_horizontal = 0
 grow_vertical = 0
 mouse_default_cursor_shape = 2
-tooltip_text = "Buy cosmetics and gifts"
+tooltip_text = "ui.navigation.open_store"
 icon = ExtResource("22_donator_gem")
 icon_max_width = 26
 expand_icon = true
@@ -620,7 +621,7 @@ offset_bottom = -152.0
 grow_horizontal = 0
 grow_vertical = 0
 mouse_default_cursor_shape = 2
-tooltip_text = "Change game settings"
+tooltip_text = "ui.navigation.open_settings"
 icon = ExtResource("7_settings_icon")
 icon_max_width = 26
 expand_icon = true
@@ -680,21 +681,21 @@ custom_minimum_size = Vector2(70, 28)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8980392, 0.90588236, 0.92156863, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_riyyd")
-text = "General"
+text = "ui.chat.tab.general"
 
 [node name="TradeButton" type="Button" parent="Control/ChatTabsPanel/TabRow" unique_id=609304235]
 custom_minimum_size = Vector2(70, 28)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8980392, 0.90588236, 0.92156863, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_riyyd")
-text = "Trade"
+text = "ui.chat.tab.trade"
 
 [node name="SystemButton" type="Button" parent="Control/ChatTabsPanel/TabRow" unique_id=1479272996]
 custom_minimum_size = Vector2(70, 28)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8980392, 0.90588236, 0.92156863, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_riyyd")
-text = "System"
+text = "ui.chat.tab.system"
 
 [node name="ChatPanel" type="PanelContainer" parent="Control" unique_id=228485371]
 custom_minimum_size = Vector2(360, 190)
@@ -735,7 +736,7 @@ theme_override_constants/separation = 4
 visible = false
 custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
-text = "Hello"
+text = ""
 fit_content = true
 scroll_active = false
 
@@ -749,11 +750,11 @@ size_flags_horizontal = 3
 
 [node name="DevPokemonButton" type="Button" parent="Control/ChatPanel/MarginContainer/VBoxContainer/InputRow" unique_id=2075498917]
 layout_mode = 2
-text = "Pokemon"
+text = "ui.chat.pokemon"
 
 [node name="SendButton" type="Button" parent="Control/ChatPanel/MarginContainer/VBoxContainer/InputRow" unique_id=676409170]
 layout_mode = 2
-text = "Send"
+text = "ui.chat.send"
 
 [node name="DevPokemonPopup" type="PanelContainer" parent="Control" unique_id=1288104280]
 visible = false
@@ -787,19 +788,19 @@ theme_override_constants/separation = 10
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8980392, 0.90588236, 0.92156863, 1)
 theme_override_font_sizes/font_size = 20
-text = "Add Pokemon"
+text = "ui.staff.dev.pokemon.add_title"
 
 [node name="Subtitle" type="Label" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer" unique_id=121503219]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.55, 0.61, 0.69, 1)
 theme_override_font_sizes/font_size = 11
-text = "Paste a Pokémon or an entire Showdown team"
+text = "ui.staff.dev.pokemon.add_subtitle"
 
 [node name="PokemonText" type="TextEdit" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer" unique_id=488137648]
 custom_minimum_size = Vector2(0, 338)
 layout_mode = 2
 size_flags_vertical = 3
-placeholder_text = "Paste Showdown/Pokepaste text here"
+placeholder_text = "ui.staff.dev.pokemon.add_placeholder"
 
 [node name="ButtonRow" type="HBoxContainer" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer" unique_id=1480530736]
 layout_mode = 2
@@ -809,12 +810,12 @@ alignment = 2
 [node name="CloseButton" type="Button" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow" unique_id=1066928572]
 layout_mode = 2
 custom_minimum_size = Vector2(72, 36)
-text = "Close"
+text = "common.close"
 
 [node name="AddButton" type="Button" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow" unique_id=1635496109]
 layout_mode = 2
 custom_minimum_size = Vector2(108, 36)
-text = "Add"
+text = "ui.staff.dev.add"
 
 [node name="LocationPanel" type="PanelContainer" parent="Control" unique_id=907156867]
 custom_minimum_size = Vector2(332, 66)
@@ -848,14 +849,14 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.8980392, 0.90588236, 0.92156863, 1)
 theme_override_font_sizes/font_size = 17
-text = "Pallet Town"
+text = "ui.world.location.unknown"
 text_overrun_behavior = 3
 vertical_alignment = 1
 
 [node name="WildPokemonButton" type="TextureButton" parent="Control/LocationPanel/MarginContainer/VBoxContainer/HeaderRow"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Wild Pokémon on this map"
+tooltip_text = "ui.navigation.wild_pokemon"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("21_wild_radar")
 ignore_texture_size = true
@@ -874,7 +875,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_location_region")
 layout_mode = 2
 theme_override_colors/font_color = Color(0.84705883, 0.7176471, 0.40392157, 1)
 theme_override_font_sizes/font_size = 10
-text = "KANTO"
+text = "ui.world.location.unknown_region"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -882,7 +883,7 @@ vertical_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.6901961, 0.72156864, 0.7764706, 1)
 theme_override_font_sizes/font_size = 13
-text = "08:54 AM"
+text = "--:--"
 
 [node name="StatusSpacer" type="Control" parent="Control/LocationPanel/MarginContainer/VBoxContainer/StatusRow"]
 layout_mode = 2
@@ -892,7 +893,7 @@ size_flags_horizontal = 3
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.83137256, 0.3529412, 1)
 theme_override_font_sizes/font_size = 13
-text = "Morning"
+text = "ui.world.time.morning"
 
 [node name="StatusSeparator" type="Label" parent="Control/LocationPanel/MarginContainer/VBoxContainer/StatusRow"]
 layout_mode = 2
@@ -904,7 +905,7 @@ text = "•"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.6901961, 0.72156864, 0.7764706, 1)
 theme_override_font_sizes/font_size = 13
-text = "Clear"
+text = "ui.world.weather.clear"
 
 [node name="GlobalBuffsPanel" type="PanelContainer" parent="Control"]
 custom_minimum_size = Vector2(197, 50)
@@ -1093,14 +1094,14 @@ alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.91764706, 0.96862745, 1, 1)
 theme_override_font_sizes/font_size = 17
-text = "Global EXP Boost"
+text = "ui.buff.global_exp.name"
 text_overrun_behavior = 3
 
 [node name="StatusLabel" type="Label" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/Header/Heading"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3764706, 0.827451, 1, 1)
 theme_override_font_sizes/font_size = 11
-text = "COMMUNITY GOAL"
+text = "ui.buff.community_goal"
 
 [node name="CloseButton" type="Button" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/Header"]
 custom_minimum_size = Vector2(30, 30)
@@ -1112,7 +1113,7 @@ text = "×"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.78431374, 0.8235294, 0.8862745, 1)
 theme_override_font_sizes/font_size = 12
-text = "When funded, the entire server earns double Pokémon experience."
+text = "ui.buff.global_exp.description"
 autowrap_mode = 2
 
 [node name="GoalPanel" type="PanelContainer" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content"]
@@ -1160,7 +1161,7 @@ visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(0.52156866, 0.9490196, 0.6117647, 1)
 theme_override_font_sizes/font_size = 13
-text = "Active server-wide · 18m remaining"
+text = "ui.buff.preview_server_remaining"
 horizontal_alignment = 1
 
 [node name="DonationSection" type="VBoxContainer" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content"]
@@ -1171,7 +1172,7 @@ theme_override_constants/separation = 6
 layout_mode = 2
 theme_override_colors/font_color = Color(0.59607846, 0.6509804, 0.7294118, 1)
 theme_override_font_sizes/font_size = 11
-text = "Choose how many Pokédollars you want to contribute."
+text = "ui.buff.contribution_hint"
 
 [node name="DonationRow" type="HBoxContainer" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection"]
 layout_mode = 2
@@ -1200,7 +1201,7 @@ custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_default_cursor_shape = 2
-text = "Contribute"
+text = "ui.buff.contribute"
 
 [node name="OptionsPanel" type="PanelContainer" parent="Control" unique_id=1882847732]
 custom_minimum_size = Vector2(368, 0)
@@ -1245,7 +1246,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="SocialsButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/SocialsSlot" unique_id=442590352]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Friends, mail, and nearby trainers"
+tooltip_text = "ui.navigation.social"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("13_friendlist")
 texture_pressed = ExtResource("13_friendlist")
@@ -1270,7 +1271,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="AetherExchangeButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/AetherExchangeSlot" unique_id=1721297434]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Aether Exchange (coming soon)"
+tooltip_text = "ui.navigation.exchange"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("19_exchange")
 texture_pressed = ExtResource("19_exchange")
@@ -1288,7 +1289,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="GuildButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/GuildSlot" unique_id=2000857235]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Open Guilds"
+tooltip_text = "ui.navigation.guilds"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("16_guild")
 texture_pressed = ExtResource("16_guild")
@@ -1306,7 +1307,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="PvpButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/PvpSlot" unique_id=342526372]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Battle other trainers"
+tooltip_text = "ui.navigation.pvp"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("18_pvp")
 texture_pressed = ExtResource("18_pvp")
@@ -1363,7 +1364,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="QuestButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/QuestSlot" unique_id=302294960]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "View your quests"
+tooltip_text = "ui.navigation.quests"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("27_quest_log")
 texture_pressed = ExtResource("27_quest_log")
@@ -1404,7 +1405,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="RepelToggle" type="TextureButton" parent="Control/ToggleActionsPanel/MarginContainer/HBoxContainer/RepelSlot" unique_id=2085702693]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Turn wild encounter protection on or off"
+tooltip_text = "ui.navigation.repel"
 mouse_default_cursor_shape = 2
 toggle_mode = true
 texture_normal = ExtResource("8_iv6uh")
@@ -1424,7 +1425,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="EscapeRopeButton" type="TextureButton" parent="Control/ToggleActionsPanel/MarginContainer/HBoxContainer/EscapeRopeSlot"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Return to your last healing point"
+tooltip_text = "ui.navigation.escape_rope"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("20_escape_rope")
 texture_pressed = ExtResource("20_escape_rope")
@@ -1442,7 +1443,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="RunningShoesButton" type="TextureButton" parent="Control/ToggleActionsPanel/MarginContainer/HBoxContainer/RunningShoesSlot" unique_id=9405703]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Turn running on or off"
+tooltip_text = "ui.navigation.running"
 mouse_default_cursor_shape = 2
 toggle_mode = true
 texture_normal = ExtResource("11_running_shoe")
@@ -1461,7 +1462,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="FollowerToggle" type="TextureButton" parent="Control/ToggleActionsPanel/MarginContainer/HBoxContainer/FollowerSlot" unique_id=1273127839]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Show or hide your following Pokémon"
+tooltip_text = "ui.navigation.follower"
 mouse_default_cursor_shape = 2
 toggle_mode = true
 texture_normal = ExtResource("10_follower")
@@ -1517,7 +1518,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="MapButton" type="TextureButton" parent="Control/DexActionsPanel/MarginContainer/HBoxContainer/MapSlot" unique_id=1031341535]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "View the Town Map"
+tooltip_text = "ui.navigation.town_map"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("3_riyyd")
 texture_pressed = ExtResource("3_riyyd")
@@ -1535,7 +1536,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="PokedexButton" type="TextureButton" parent="Control/DexActionsPanel/MarginContainer/HBoxContainer/PokedexSlot" unique_id=1188406318]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Browse Pokémon you have seen"
+tooltip_text = "ui.navigation.pokedex"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("14_pokedex")
 texture_pressed = ExtResource("14_pokedex")
@@ -1553,7 +1554,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="ItemDexButton" type="TextureButton" parent="Control/DexActionsPanel/MarginContainer/HBoxContainer/ItemDexSlot" unique_id=496092701]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Browse items and where to find them"
+tooltip_text = "ui.navigation.item_dex"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("12_item_dex")
 texture_pressed = ExtResource("12_item_dex")
@@ -1609,7 +1610,25 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="ContentCreatorToolsButton" type="TextureButton" parent="Control/StaffActionsPanel/MarginContainer/HBoxContainer/ContentCreatorToolsSlot" unique_id=1492568340]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Create Pokémon for the Alpha"
+tooltip_text = "ui.navigation.content_creator"
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("15_creator_tools")
+texture_pressed = ExtResource("15_creator_tools")
+texture_hover = ExtResource("15_creator_tools")
+texture_disabled = ExtResource("15_creator_tools")
+texture_focused = ExtResource("15_creator_tools")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="AlphaToolsSlot" type="PanelContainer" parent="Control/StaffActionsPanel/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
+
+[node name="AlphaToolsButton" type="TextureButton" parent="Control/StaffActionsPanel/MarginContainer/HBoxContainer/AlphaToolsSlot"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+tooltip_text = "ui.navigation.alpha_tools"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("15_content_creator")
 texture_pressed = ExtResource("15_content_creator")
@@ -1628,7 +1647,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="StaffToolsButton" type="TextureButton" parent="Control/StaffActionsPanel/MarginContainer/HBoxContainer/StaffToolsSlot" unique_id=309118989]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Help and manage players"
+tooltip_text = "ui.navigation.staff_tools"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("13_staff_tools")
 texture_pressed = ExtResource("13_staff_tools")
@@ -1647,7 +1666,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="DevActionsButton" type="TextureButton" parent="Control/StaffActionsPanel/MarginContainer/HBoxContainer/DevActionsSlot" unique_id=1939088199]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Open developer tools"
+tooltip_text = "ui.navigation.developer_tools"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("9_s0khl")
 texture_pressed = ExtResource("9_s0khl")
@@ -1700,32 +1719,32 @@ theme_override_constants/separation = 8
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-text = "Create Pokemon"
+text = "ui.staff.dev.create_pokemon"
 
 [node name="AddTeamButton" type="Button" parent="Control/DevActionsPopup/MarginContainer/VBoxContainer" unique_id=367149496]
 visible = false
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-text = "Create Team"
+text = "ui.staff.dev.create_team"
 
 [node name="SpawnPokemonButton" type="Button" parent="Control/DevActionsPopup/MarginContainer/VBoxContainer" unique_id=1162333859]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-text = "Spawn Pokemon"
+text = "ui.staff.dev.start_encounter"
 
 [node name="ClearPartyButton" type="Button" parent="Control/DevActionsPopup/MarginContainer/VBoxContainer" unique_id=758281915]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-text = "Clear Party"
+text = "ui.staff.dev.clear_data"
 
 [node name="WorldTimeLabel" type="Label" parent="Control/DevActionsPopup/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
 theme_override_font_sizes/font_size = 12
-text = "World Time"
+text = "ui.staff.dev.time"
 
 [node name="WorldTimeSelect" type="OptionButton" parent="Control/DevActionsPopup/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 36)
@@ -1747,7 +1766,7 @@ popup/item_4/id = 4
 layout_mode = 2
 theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
 theme_override_font_sizes/font_size = 12
-text = "World Weather"
+text = "ui.staff.dev.weather"
 
 [node name="WorldWeatherSelect" type="OptionButton" parent="Control/DevActionsPopup/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 36)
@@ -1767,7 +1786,7 @@ popup/item_3/id = 3
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-text = "Close"
+text = "common.close"
 
 [node name="SettingsMenu" parent="Control" unique_id=1857705427 instance=ExtResource("6_settings")]
 visible = false
@@ -1823,18 +1842,18 @@ theme_override_constants/separation = 1
 [node name="Title" type="Label" parent="Control/SocialsMenu/MarginContainer/VBoxContainer/Header/Heading" unique_id=1908866577]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
-text = "Social"
+text = "ui.social.title"
 
 [node name="Subtitle" type="Label" parent="Control/SocialsMenu/MarginContainer/VBoxContainer/Header/Heading"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "Stay connected with other trainers"
+text = "ui.social.subtitle"
 
 [node name="CloseButton" type="Button" parent="Control/SocialsMenu/MarginContainer/VBoxContainer/Header" unique_id=686062249]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-tooltip_text = "Close"
+tooltip_text = "common.close"
 text = "×"
 
 [node name="FriendListButton" type="Button" parent="Control/SocialsMenu/MarginContainer/VBoxContainer" unique_id=206924973]
@@ -1888,19 +1907,19 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 24
-text = "Mail"
+text = "ui.mail.title"
 
 [node name="ComposeButton" type="Button" parent="Control/MailPopup/MarginContainer/VBoxContainer/HeaderRow" unique_id=1372160869]
 custom_minimum_size = Vector2(120, 34)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-text = "New Mail"
+text = "ui.mail.new"
 
 [node name="CloseButton" type="Button" parent="Control/MailPopup/MarginContainer/VBoxContainer/HeaderRow" unique_id=512305409]
 custom_minimum_size = Vector2(80, 34)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-text = "Close"
+text = "common.close"
 
 [node name="MailTabRow" type="HBoxContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer" unique_id=726266398]
 layout_mode = 2
@@ -1910,13 +1929,13 @@ theme_override_constants/separation = 8
 custom_minimum_size = Vector2(110, 30)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-text = "Inbox"
+text = "ui.mail.inbox"
 
 [node name="SentButton" type="Button" parent="Control/MailPopup/MarginContainer/VBoxContainer/MailTabRow" unique_id=1829045477]
 custom_minimum_size = Vector2(110, 30)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-text = "Sent"
+text = "ui.mail.sent"
 
 [node name="BodyRow" type="HBoxContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer" unique_id=371925585]
 layout_mode = 2
@@ -1948,11 +1967,11 @@ theme_override_constants/separation = 8
 [node name="InboxLabel" type="Label" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailListPanel/MarginContainer/MailListScroll/MailList" unique_id=61995334]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Inbox"
+text = "ui.mail.inbox"
 
 [node name="EmptyInboxLabel" type="Label" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailListPanel/MarginContainer/MailListScroll/MailList" unique_id=989309632]
 layout_mode = 2
-text = "No mail yet."
+text = "ui.mail.empty.inbox"
 
 [node name="MailDetailPanel" type="PanelContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow" unique_id=857998755]
 layout_mode = 2
@@ -1974,11 +1993,11 @@ theme_override_constants/separation = 8
 [node name="SubjectLabel" type="Label" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack" unique_id=1667600774]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Select a mail"
+text = "ui.mail.detail.choose"
 
 [node name="SenderLabel" type="Label" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack" unique_id=1062141544]
 layout_mode = 2
-text = "Sender: -"
+text = "ui.mail.detail.select"
 
 [node name="BodyScroll" type="ScrollContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack" unique_id=2040912713]
 custom_minimum_size = Vector2(0, 105)
@@ -1988,12 +2007,12 @@ size_flags_vertical = 3
 [node name="BodyLabel" type="Label" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/BodyScroll" unique_id=1339070480]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Mail messages and reward attachments will appear here."
+text = "ui.mail.detail.placeholder"
 autowrap_mode = 3
 
 [node name="AttachmentTitle" type="Label" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack" unique_id=1112882056]
 layout_mode = 2
-text = "Attachments"
+text = "ui.mail.attachments"
 
 [node name="AttachmentScroll" type="ScrollContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack" unique_id=1793159218]
 custom_minimum_size = Vector2(0, 96)
@@ -2010,20 +2029,20 @@ custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 disabled = true
-text = "Claim Attachments"
+text = "ui.mail.claim_attachments"
 
 [node name="ReplyButton" type="Button" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack" unique_id=1379299307]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-text = "Reply"
+text = "ui.mail.reply"
 
 [node name="DeleteButton" type="Button" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack" unique_id=530702169]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 disabled = true
-text = "Delete Mail"
+text = "ui.mail.delete"
 
 [node name="MailComposePopup" type="PanelContainer" parent="Control" unique_id=1922992608]
 visible = false
@@ -2057,29 +2076,29 @@ theme_override_constants/separation = 10
 [node name="Title" type="Label" parent="Control/MailComposePopup/MarginContainer/VBoxContainer" unique_id=145136877]
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
-text = "New Mail"
+text = "ui.mail.compose.title"
 
 [node name="RecipientInput" type="LineEdit" parent="Control/MailComposePopup/MarginContainer/VBoxContainer" unique_id=1434314538]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
-placeholder_text = "Recipient username"
+placeholder_text = "ui.mail.compose.recipient_placeholder"
 
 [node name="SubjectInput" type="LineEdit" parent="Control/MailComposePopup/MarginContainer/VBoxContainer" unique_id=1837748876]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
-placeholder_text = "Subject"
+placeholder_text = "ui.mail.compose.subject_placeholder"
 
 [node name="BodyInput" type="TextEdit" parent="Control/MailComposePopup/MarginContainer/VBoxContainer" unique_id=137926333]
 custom_minimum_size = Vector2(0, 110)
 layout_mode = 2
 size_flags_vertical = 3
-placeholder_text = "Message"
+placeholder_text = "ui.mail.compose.message_placeholder"
 wrap_mode = 1
 
 [node name="AttachmentsTitle" type="Label" parent="Control/MailComposePopup/MarginContainer/VBoxContainer" unique_id=204848758]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Attachments"
+text = "ui.mail.attachments"
 
 [node name="ItemAttachmentRow" type="HBoxContainer" parent="Control/MailComposePopup/MarginContainer/VBoxContainer" unique_id=1302572077]
 layout_mode = 2
@@ -2089,7 +2108,7 @@ theme_override_constants/separation = 8
 custom_minimum_size = Vector2(240, 34)
 layout_mode = 2
 size_flags_horizontal = 3
-placeholder_text = "Search items in your bag"
+placeholder_text = "ui.mail.compose.item_search"
 
 [node name="ItemQuantity" type="SpinBox" parent="Control/MailComposePopup/MarginContainer/VBoxContainer/ItemAttachmentRow" unique_id=1743334111]
 custom_minimum_size = Vector2(86, 34)
@@ -2102,7 +2121,7 @@ value = 1.0
 custom_minimum_size = Vector2(110, 34)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-text = "Add Item"
+text = "ui.mail.compose.add_item"
 
 [node name="ItemSuggestions" type="VBoxContainer" parent="Control/MailComposePopup/MarginContainer/VBoxContainer" unique_id=523515061]
 layout_mode = 2
@@ -2121,7 +2140,7 @@ size_flags_horizontal = 3
 custom_minimum_size = Vector2(130, 34)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-text = "Add Pokemon"
+text = "ui.mail.compose.add_pokemon"
 
 [node name="SelectedAttachmentsScroll" type="ScrollContainer" parent="Control/MailComposePopup/MarginContainer/VBoxContainer" unique_id=627427116]
 custom_minimum_size = Vector2(0, 104)
@@ -2144,13 +2163,13 @@ size_flags_horizontal = 3
 custom_minimum_size = Vector2(100, 34)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-text = "Send"
+text = "ui.mail.compose.send"
 
 [node name="CloseButton" type="Button" parent="Control/MailComposePopup/MarginContainer/VBoxContainer/ButtonRow" unique_id=1602980904]
 custom_minimum_size = Vector2(100, 34)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-text = "Close"
+text = "common.close"
 
 [node name="OptionsPanel2" type="Panel" parent="Control" unique_id=1164557573]
 visible = false

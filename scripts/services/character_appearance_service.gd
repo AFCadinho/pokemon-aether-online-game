@@ -21,6 +21,7 @@ const PRESENCE_BODY_APPEARANCE_SEPARATOR := "#appearance="
 const DEFAULT_BODY_ID := "Gen4_Base_v1"
 const DEFAULT_MALE_BODY_ID := "Gen4_Base_v1"
 const DEFAULT_FEMALE_BODY_ID := "Gen4_Base_F_v1"
+const BASE_HAIR_ID := "Bald_Hair"
 const DEFAULT_MALE_HAIR_ID := "Hair"
 const DEFAULT_MALE_HEADGEAR_ID := "Cap"
 const DEFAULT_MALE_FACIAL_HAIR_ID := ""
@@ -41,7 +42,15 @@ const DEFAULT_FEMALE_EYES_ID := "Eyes"
 const DEFAULT_FEMALE_EYEBROWS_ID := "Eyebrows"
 const EYEBROWS_BY_HAIR_ID := {
 	"male:Hair": DEFAULT_MALE_EYEBROWS_ID,
+	"male:Adinho_Hair": "Adinho_Eyebrows",
+	"male:Aether_Male_Hair_01": DEFAULT_MALE_EYEBROWS_ID,
+	"male:Aether_Male_Hair_02": DEFAULT_MALE_EYEBROWS_ID,
+	"male:Aether_Male_Hair_03": DEFAULT_MALE_EYEBROWS_ID,
 	"female:Hair": DEFAULT_FEMALE_EYEBROWS_ID,
+	"female:Aether_Blossom_Hair": DEFAULT_FEMALE_EYEBROWS_ID,
+	"female:Aether_Blossom_Hair_Chroma": DEFAULT_FEMALE_EYEBROWS_ID,
+	"female:Aether_Female_Hair_01": DEFAULT_FEMALE_EYEBROWS_ID,
+	"female:Aether_Female_Hair_02": DEFAULT_FEMALE_EYEBROWS_ID,
 }
 const LEGACY_DEFAULT_HAIR_COLOR := "#ffffff"
 const LEGACY_DEFAULT_EYE_COLOR := "#0fff00"
@@ -573,6 +582,11 @@ static func deserialize_part_id(part_id: String) -> String:
 	return normalized_part_id
 
 
+static func resolve_hair_render_id(hair_id: String) -> String:
+	var normalized_hair_id := deserialize_part_id(hair_id)
+	return BASE_HAIR_ID if normalized_hair_id == "" else normalized_hair_id
+
+
 static func _is_empty_presence_part_id(part_id: String) -> bool:
 	var normalized_part_id: String = part_id.strip_edges().to_lower()
 	return normalized_part_id == "" or normalized_part_id == UNEQUIPPED_PART_ID
@@ -722,7 +736,18 @@ static func get_tinted_part_frames(
 		_tinted_part_frames_cache[cache_key] = null
 		return null
 
-	var tinted_frames: SpriteFrames = _build_tinted_sprite_frames(base_frames, tint_color, preserve_luminance)
+	var tinted_frames: SpriteFrames = _build_tinted_sprite_frames(
+		base_frames,
+		tint_color,
+		preserve_luminance and normalized_part_id != BASE_HAIR_ID
+	)
+	if normalized_category == HAIR_CATEGORY and normalized_part_id != BASE_HAIR_ID:
+		tinted_frames = _add_base_hair_underlay(
+			tinted_frames,
+			normalized_gender,
+			normalized_movement_style,
+			tint_color
+		)
 	_tinted_part_frames_cache[cache_key] = tinted_frames
 	return tinted_frames
 
@@ -1168,6 +1193,106 @@ static func _build_tinted_sprite_frames(base_frames: SpriteFrames, tint_color: C
 			sprite_frames.add_frame(animation_name, tinted_texture, frame_duration)
 
 	return sprite_frames
+
+
+static func _add_base_hair_underlay(
+	hairstyle_frames: SpriteFrames,
+	gender: String,
+	movement_style: String,
+	hair_color: Color
+) -> SpriteFrames:
+	if hairstyle_frames == null:
+		return null
+
+	var base_hair_frames := get_part_frames(
+		HAIR_CATEGORY,
+		BASE_HAIR_ID,
+		gender,
+		movement_style
+	)
+	if base_hair_frames == null:
+		return hairstyle_frames
+
+	var tinted_base_hair_frames := _build_tinted_sprite_frames(
+		base_hair_frames,
+		hair_color,
+		false
+	)
+	return _build_layered_sprite_frames(tinted_base_hair_frames, hairstyle_frames)
+
+
+static func _build_layered_sprite_frames(
+	underlay_frames: SpriteFrames,
+	overlay_frames: SpriteFrames
+) -> SpriteFrames:
+	if underlay_frames == null:
+		return overlay_frames
+	if overlay_frames == null:
+		return underlay_frames
+
+	var sprite_frames := SpriteFrames.new()
+	if sprite_frames.has_animation(&"default"):
+		sprite_frames.remove_animation(&"default")
+
+	for animation_name_text: String in overlay_frames.get_animation_names():
+		var animation_name := StringName(animation_name_text)
+		sprite_frames.add_animation(animation_name)
+		sprite_frames.set_animation_speed(
+			animation_name,
+			overlay_frames.get_animation_speed(animation_name)
+		)
+		sprite_frames.set_animation_loop(
+			animation_name,
+			overlay_frames.get_animation_loop(animation_name)
+		)
+
+		var overlay_frame_count := overlay_frames.get_frame_count(animation_name)
+		var underlay_frame_count := (
+			underlay_frames.get_frame_count(animation_name)
+			if underlay_frames.has_animation(animation_name)
+			else 0
+		)
+		for frame_index: int in range(overlay_frame_count):
+			var overlay_texture := overlay_frames.get_frame_texture(animation_name, frame_index)
+			var layered_texture := overlay_texture
+			if frame_index < underlay_frame_count:
+				layered_texture = _make_layered_texture(
+					underlay_frames.get_frame_texture(animation_name, frame_index),
+					overlay_texture
+				)
+			sprite_frames.add_frame(
+				animation_name,
+				layered_texture,
+				overlay_frames.get_frame_duration(animation_name, frame_index)
+			)
+
+	return sprite_frames
+
+
+static func _make_layered_texture(
+	underlay_texture: Texture2D,
+	overlay_texture: Texture2D
+) -> Texture2D:
+	var underlay_image := _get_texture_image(underlay_texture)
+	var overlay_image := _get_texture_image(overlay_texture)
+	if underlay_image == null or overlay_image == null:
+		return overlay_texture
+	if underlay_image.get_size() != overlay_image.get_size():
+		return overlay_texture
+
+	var layered_image := underlay_image.duplicate()
+	if layered_image.get_format() != Image.FORMAT_RGBA8:
+		layered_image.convert(Image.FORMAT_RGBA8)
+	var source_image := overlay_image
+	if source_image.get_format() != Image.FORMAT_RGBA8:
+		source_image = overlay_image.duplicate()
+		source_image.convert(Image.FORMAT_RGBA8)
+	layered_image.blend_rect(
+		source_image,
+		Rect2i(Vector2i.ZERO, source_image.get_size()),
+		Vector2i.ZERO
+	)
+	return ImageTexture.create_from_image(layered_image)
 
 
 static func _build_skin_tinted_sprite_frames(base_frames: SpriteFrames, skin_tone: Color) -> SpriteFrames:

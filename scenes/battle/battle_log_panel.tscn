@@ -44,7 +44,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 theme_override_font_sizes/font_size = 18
-text = "BATTLE LOG"
+text = "battle.log.title"
 horizontal_alignment = 1
 
 [node name="Divider" type="ColorRect" parent="MarginContainer/VBoxContainer" unique_id=691402501]
@@ -59,6 +59,4 @@ size_flags_vertical = 3
 size_flags_horizontal = 3
 theme_override_colors/default_color = Color(0.8745098, 0.92156863, 0.9843137, 1)
 theme_override_font_sizes/normal_font_size = 15
-text = "Wild Absol appeared!
-Aegislash used Iron Head!
-It was super effective!"
+text = ""

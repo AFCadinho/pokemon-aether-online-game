@@ -76,6 +76,11 @@ func setup(host_control: Control) -> void:
 	_build_ui()
 	_setup_trade_invitation_dialog()
 	_setup_guild_invitation_dialog()
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	if localization_manager != null:
+		var locale_callable := Callable(self, "_on_locale_changed")
+		if not localization_manager.is_connected("locale_changed", locale_callable):
+			localization_manager.connect("locale_changed", locale_callable)
 	var presence := get_node_or_null("/root/WorldPresenceService")
 	if presence != null and presence.has_signal("roster_changed"):
 		var roster_callable := Callable(self, "_on_roster_changed")
@@ -194,12 +199,12 @@ func _build_ui() -> void:
 	heading.add_theme_constant_override("separation", 1)
 	header.add_child(heading)
 	var title := Label.new()
-	title.text = "Nearby Trainers"
+	_set_localized_property(title, "text", "ui.nearby.title")
 	title.add_theme_color_override("font_color", UI_TEXT)
 	title.add_theme_font_size_override("font_size", 19)
 	heading.add_child(title)
 	var subtitle := Label.new()
-	subtitle.text = "Trainers currently exploring this map"
+	_set_localized_property(subtitle, "text", "ui.nearby.subtitle")
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	subtitle.add_theme_font_size_override("font_size", 10)
 	heading.add_child(subtitle)
@@ -212,7 +217,7 @@ func _build_ui() -> void:
 	roster_header.add_theme_constant_override("separation", 8)
 	players_root.add_child(roster_header)
 	var roster_caption := Label.new()
-	roster_caption.text = "LIVE ROSTER"
+	_set_localized_property(roster_caption, "text", "ui.nearby.roster")
 	roster_caption.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	roster_caption.add_theme_font_size_override("font_size", 10)
 	roster_caption.add_theme_color_override("font_color", UI_ACCENT)
@@ -233,7 +238,7 @@ func _build_ui() -> void:
 	scroll.add_child(players_list)
 
 	var roster_hint := Label.new()
-	roster_hint.text = "Select a trainer to open social actions"
+	_set_localized_property(roster_hint, "text", "ui.nearby.hint")
 	roster_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	roster_hint.add_theme_font_size_override("font_size", 10)
 	roster_hint.add_theme_color_override(
@@ -328,7 +333,7 @@ func _render_players() -> void:
 		return
 	_clear_children(players_list)
 	var players := _current_map_players()
-	players_status_label.text = "%d trainer%s nearby" % [players.size(), "" if players.size() == 1 else "s"]
+	players_status_label.text = _t("ui.nearby.count", {"count": players.size()})
 	if players.is_empty():
 		players_list.add_child(_create_empty_roster_state())
 		return
@@ -342,7 +347,9 @@ func _create_player_row(player: Dictionary) -> Button:
 	row.custom_minimum_size = Vector2(0, 66)
 	row.focus_mode = Control.FOCUS_ALL
 	row.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	row.tooltip_text = "Open actions for %s" % _player_primary_name(player)
+	row.tooltip_text = _t("ui.nearby.open_actions", {
+		"trainer": _player_primary_name(player),
+	})
 	row.pressed.connect(_on_player_row_pressed.bind(player))
 	_apply_player_row_style(row)
 
@@ -399,7 +406,7 @@ func _create_player_row(player: Dictionary) -> Button:
 	identity.add_child(username_label)
 
 	var nearby_label := Label.new()
-	nearby_label.text = "NEARBY"
+	nearby_label.text = _t("ui.nearby.badge")
 	nearby_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	nearby_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	nearby_label.add_theme_font_size_override("font_size", 9)
@@ -436,13 +443,13 @@ func _create_empty_roster_state() -> Control:
 	icon.modulate = Color(1, 1, 1, 0.55)
 	stack.add_child(icon)
 	var title := Label.new()
-	title.text = "No trainers nearby"
+	title.text = _t("ui.nearby.empty.title")
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 14)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	stack.add_child(title)
 	var description := Label.new()
-	description.text = "Other trainers on this map will appear here automatically."
+	description.text = _t("ui.nearby.empty.description")
 	description.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	description.custom_minimum_size = Vector2(270, 0)
@@ -470,7 +477,7 @@ func _render_context_menu() -> void:
 	_clear_children(context_actions)
 	# Keep the default right-click card focused on the two actions trainers use
 	# most. Everything else stays one deliberate click away.
-	_add_context_action("Message", "Start a private conversation", _on_message_pressed)
+	_add_context_action("Message", _t("ui.nearby.action.message.description"), _on_message_pressed)
 	var trade_enabled := bool(trade_capabilities.get("enabled", false))
 	_add_context_action(
 		"Trade",
@@ -481,25 +488,37 @@ func _render_context_menu() -> void:
 	)
 	_add_context_more_actions_toggle()
 	if context_more_actions_expanded:
-		context_actions.add_child(_context_section_label("MORE ACTIONS"))
-		_add_context_action("View Trainer Card", "Inspect profile, badges and stats", _on_trainer_card_pressed)
-		_add_context_action("Send Mail", "Send a message or attachment", _on_mail_pressed)
+		context_actions.add_child(_context_section_label(_t("ui.nearby.more_actions")))
+		_add_context_action(
+			"View Trainer Card",
+			_t("ui.nearby.action.trainer_card.description"),
+			_on_trainer_card_pressed
+		)
+		_add_context_action(
+			"Send Mail",
+			_t("ui.nearby.action.mail.description"),
+			_on_mail_pressed
+		)
 		if _can_invite_to_guild():
 			_add_context_action(
 				"Invite to Guild",
-				"Invite this trainer to join your guild",
+				_t("ui.nearby.action.guild.description"),
 				_on_guild_invite_pressed,
 				"default",
 				guild_action_in_flight
 			)
 		_add_context_action(
 			"Remove Friend" if _is_friend(current_target) else "Add Friend",
-			"Update your friends list",
+			_t("ui.nearby.action.friend.description"),
 			_on_friend_pressed
 		)
 		_add_context_action(
 			"Unblock" if _is_blocked(current_target) else "Block",
-			"Restore contact" if _is_blocked(current_target) else "Prevent future contact",
+			_t(
+				"ui.nearby.action.unblock.description"
+				if _is_blocked(current_target)
+				else "ui.nearby.action.block.description"
+			),
 			_on_block_pressed,
 			"default" if _is_blocked(current_target) else "danger"
 		)
@@ -509,8 +528,10 @@ func _render_context_menu() -> void:
 func _add_context_more_actions_toggle() -> void:
 	var button := Button.new()
 	button.set_meta("player_action", "More actions")
-	button.text = "More actions  %s" % ["▴" if context_more_actions_expanded else "▾"]
-	button.tooltip_text = "Show additional trainer actions"
+	button.text = _t("ui.nearby.more_actions_toggle", {
+		"indicator": "▴" if context_more_actions_expanded else "▾",
+	})
+	button.tooltip_text = _t("ui.nearby.more_actions_tooltip")
 	button.custom_minimum_size = Vector2(0, 34)
 	button.focus_mode = Control.FOCUS_ALL
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -549,15 +570,15 @@ func _refresh_context_status() -> void:
 	if context_status_label == null:
 		return
 	if social_state_loading:
-		context_status_label.text = "Checking friendship and block status..."
+		context_status_label.text = _t("ui.nearby.status.checking_social")
 		context_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		return
 	if social_action_in_flight:
-		context_status_label.text = "Updating social state..."
+		context_status_label.text = _t("ui.nearby.status.updating_social")
 		context_status_label.add_theme_color_override("font_color", UI_ACCENT)
 		return
 	if guild_action_in_flight:
-		context_status_label.text = "Sending guild invitation..."
+		context_status_label.text = _t("ui.nearby.status.sending_guild")
 		context_status_label.add_theme_color_override("font_color", UI_ACCENT)
 		return
 	if guild_status_message != "":
@@ -575,13 +596,13 @@ func _refresh_context_status() -> void:
 		)
 		return
 	if _is_blocked(current_target):
-		context_status_label.text = "Blocked trainer · direct contact is restricted"
+		context_status_label.text = _t("ui.nearby.status.blocked")
 		context_status_label.add_theme_color_override("font_color", UI_DANGER)
 	elif _is_friend(current_target):
-		context_status_label.text = "Friend · currently on this map"
+		context_status_label.text = _t("ui.nearby.status.friend")
 		context_status_label.add_theme_color_override("font_color", Color("#6fe49a"))
 	else:
-		context_status_label.text = "Trainer currently active on this map"
+		context_status_label.text = _t("ui.nearby.status.active")
 		context_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 
 
@@ -605,14 +626,14 @@ func _add_context_action(
 
 func _trade_action_description(trade_enabled: bool) -> String:
 	if trade_enabled:
-		return "Invite this trainer to trade"
+		return _t("ui.nearby.action.trade.description")
 	if trade_capabilities_loading:
-		return "Checking trade availability..."
+		return _t("ui.nearby.action.trade.checking")
 	if trade_capabilities_error != "":
-		return "Could not check trade availability · select to retry"
+		return _t("ui.nearby.action.trade.retry")
 	if trade_capabilities_loaded:
-		return "Trading is currently unavailable"
-	return "Check whether trading is available"
+		return _t("ui.nearby.action.trade.unavailable")
+	return _t("ui.nearby.action.trade.check")
 
 
 func _on_message_pressed() -> void:
@@ -777,9 +798,9 @@ func _on_guild_invite_pressed() -> void:
 	guild_action_in_flight = false
 	guild_status_is_error = not bool(result.get("success", false))
 	guild_status_message = (
-		"Guild invitation sent to %s." % username
+		_t("ui.nearby.status.guild_sent", {"username": username})
 		if not guild_status_is_error
-		else str(result.get("error", "Could not send the guild invitation."))
+		else str(result.get("error", _t("ui.nearby.error.guild_invite")))
 	)
 	if context_menu != null and context_menu.visible:
 		_render_context_menu()
@@ -827,7 +848,7 @@ func _apply_social_result(result: Dictionary) -> void:
 		social_overview_updated.emit(social_overview.duplicate(true))
 	else:
 		social_state_loading = false
-		social_status_message = str(result.get("error", "Action failed."))
+		social_status_message = str(result.get("error", _t("ui.friends.error.action")))
 		social_status_is_error = true
 	_render_context_menu()
 	if bool(result.get("success", false)):
@@ -853,7 +874,7 @@ func _refresh_social_overview_for_target(target: Dictionary) -> void:
 		social_overview_updated.emit(social_overview.duplicate(true))
 	else:
 		social_state_loading = false
-		social_status_message = str(result.get("error", "Could not refresh social state."))
+		social_status_message = str(result.get("error", _t("ui.nearby.error.refresh_social")))
 		social_status_is_error = true
 	_render_context_menu()
 
@@ -1004,7 +1025,7 @@ func _margin_container(amount: int) -> MarginContainer:
 func _compact_close_button() -> Button:
 	var button := Button.new()
 	button.text = "×"
-	button.tooltip_text = "Close"
+	button.tooltip_text = _t("common.close")
 	button.custom_minimum_size = Vector2(32, 32)
 	button.focus_mode = Control.FOCUS_NONE
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -1067,7 +1088,7 @@ func _context_action_button(label_text: String, description_text: String, varian
 	copy.add_theme_constant_override("separation", 0)
 	row.add_child(copy)
 	var title := Label.new()
-	title.text = label_text
+	title.text = _t(_context_action_label_key(label_text))
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title.add_theme_font_size_override("font_size", 12)
 	title.add_theme_color_override("font_color", title_color)
@@ -1087,6 +1108,42 @@ func _context_action_button(label_text: String, description_text: String, varian
 	chevron.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	row.add_child(chevron)
 	return button
+
+func _context_action_label_key(label_text: String) -> String:
+	return str({
+		"Message": "ui.nearby.action.message",
+		"Trade": "ui.nearby.action.trade",
+		"View Trainer Card": "ui.nearby.action.trainer_card",
+		"Send Mail": "ui.nearby.action.mail",
+		"Invite to Guild": "ui.nearby.action.guild",
+		"Remove Friend": "ui.nearby.action.remove_friend",
+		"Add Friend": "ui.nearby.action.add_friend",
+		"Unblock": "ui.nearby.action.unblock",
+		"Block": "ui.nearby.action.block",
+	}.get(label_text, label_text))
+
+func _on_locale_changed(_locale: String) -> void:
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	if localization_manager != null:
+		if players_panel != null:
+			localization_manager.call("localize_tree", players_panel)
+		if context_menu != null:
+			localization_manager.call("localize_tree", context_menu)
+	social_status_message = ""
+	guild_status_message = ""
+	_render_players()
+	if not current_target.is_empty():
+		_render_context_menu()
+
+func _set_localized_property(control: Control, property_name: String, key: String) -> void:
+	control.set_meta("i18n_source_%s" % property_name, key)
+	control.set(property_name, _t(key))
+
+func _t(key: String, values: Dictionary = {}) -> String:
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	if localization_manager == null:
+		return key
+	return str(localization_manager.call("text", key, values))
 
 
 func _apply_player_row_style(button: Button) -> void:
@@ -1148,6 +1205,6 @@ func _dictionary_from_value(value: Variant) -> Dictionary:
 func _social_action(method_name: String, username: String = "") -> Dictionary:
 	var social_service := get_node_or_null("/root/SocialService")
 	if social_service == null or not social_service.has_method(method_name):
-		return {"success": false, "error": "Social service is unavailable."}
+		return {"success": false, "error": _t("ui.nearby.error.social_unavailable")}
 	var result: Variant = await social_service.call(method_name, username) if username != "" else await social_service.call(method_name)
 	return _dictionary_from_value(result)

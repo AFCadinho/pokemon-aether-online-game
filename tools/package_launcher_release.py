@@ -70,6 +70,10 @@ def main() -> None:
     )
     parser.add_argument("--version", required=True, help="Release version, for example 0.1.0.")
     parser.add_argument(
+        "--build-id",
+        help="Immutable game build identifier. Defaults to --version for local packages.",
+    )
+    parser.add_argument(
         "--base-url",
         required=True,
         help="Public URL folder where the generated zip files will be hosted.",
@@ -125,6 +129,9 @@ def main() -> None:
         help="Public URL path prefix for launcher zip URLs.",
     )
     args = parser.parse_args()
+    build_id = (args.build_id or args.version).strip()
+    if not build_id:
+        raise SystemExit("--build-id cannot be empty")
 
     output_dir = Path(args.output_dir).resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -164,8 +171,10 @@ def main() -> None:
 
         manifest = {
             "gameVersion": args.version,
+            "gameBuildId": build_id,
             "game": {
                 "version": args.version,
+                "buildId": build_id,
                 "url": _build_url(base_url, game_prefix, zip_name),
                 "sha256": _sha256(zip_path),
                 "sizeBytes": zip_path.stat().st_size,

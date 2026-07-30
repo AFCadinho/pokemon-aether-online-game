@@ -13,7 +13,7 @@ func _init() -> void:
 	_check(source.contains("leave_trade"), "workspace has authoritative Leave Trade command")
 	_check(source.contains("reconnectDeadlineAt"), "workspace uses server reconnect deadline")
 	_check(source.contains("reconnect_timeout"), "workspace explains timeout cancellation")
-	_check(source.contains("Confirm Trade"), "confirmation remains confined to locked workspace")
+	_check(source.contains('"ui.trade.confirm"'), "localized confirmation remains confined to locked workspace")
 	var realtime_source := FileAccess.get_file_as_string("res://scripts/services/trade_realtime_service.gd")
 	_check(realtime_source.contains("func leave_active_trade_for_exit()"), "trade service owns logout and shutdown cleanup")
 	_check(realtime_source.contains("NOTIFICATION_WM_CLOSE_REQUEST"), "application close waits for trade cleanup")

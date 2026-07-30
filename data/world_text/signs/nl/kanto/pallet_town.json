@@ -1,0 +1,32 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_pallet_town",
+  "signs": [
+    {
+      "id": "kanto_pallet_town_town_sign",
+      "type": "town",
+      "title": "Pallet Town",
+      "lines": [
+        "Pallet Town",
+        "Een rustig dorp waar nieuwe reizen beginnen."
+      ]
+    },
+    {
+      "id": "kanto_pallet_town_trainer_tips_1",
+      "type": "trainer_tips",
+      "speakerName": "Trainertips",
+      "lines": [
+        "Druk op de interactieknop terwijl je naar mensen of bordjes kijkt."
+      ]
+    },
+    {
+      "id": "kanto_pallet_town_oaks_lab",
+      "type": "building",
+      "title": "Oaks laboratorium",
+      "lines": [
+        "Oaks Pokémon-onderzoekslaboratorium",
+        "Waar de mysteries van Pokémon worden onderzocht."
+      ]
+    }
+  ]
+}

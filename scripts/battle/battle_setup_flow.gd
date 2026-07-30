@@ -29,6 +29,6 @@ func get_trainer_battle_start_messages(
 func get_trainer_name(trainer_data: Dictionary, fallback_trainer_name: String) -> String:
 	var trainer_name := str(trainer_data.get("name", fallback_trainer_name))
 	if trainer_name == "":
-		return "Trainer"
+		return ""
 
 	return trainer_name

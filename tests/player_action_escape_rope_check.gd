@@ -17,8 +17,18 @@ func _init() -> void:
 	_check(service_source.contains('return "%02d:%02d"'), "countdown formatting")
 	_check(ui_source.contains("_show_ui_confirm_popup("), "styled confirmation flow")
 	_check(ui_source.contains("escape_rope_button.disabled"), "disabled state")
-	_check(ui_source.contains("Ready in %s"), "cooldown state")
-	_check(ui_source.contains("Escape Rope is on cooldown."), "cooldown click feedback")
+	_check(ui_source.contains('LocalizationManager.text("ui.hotbar.escape_rope.tooltip.ready"'), "localized cooldown state")
+	_check(ui_source.contains('LocalizationManager.text("ui.hotbar.escape_rope.message.cooldown"'), "localized cooldown click feedback")
+	var localized_refresh_start := ui_source.find("func _refresh_bag_localized_ui()")
+	var localized_refresh_end := ui_source.find("func ", localized_refresh_start + 5)
+	var localized_refresh_source := ui_source.substr(
+		localized_refresh_start,
+		localized_refresh_end - localized_refresh_start
+	)
+	_check(
+		localized_refresh_source.contains("_update_escape_rope_action_ui()"),
+		"Escape Rope tooltip refreshes after a live locale change"
+	)
 	_check(ui_source.contains("escape_rope_in_flight"), "duplicate activation guard")
 	_check(ui_source.contains("begin_authorized_teleport"), "local authorized teleport preparation")
 	_check(ui_source.contains("apply_authorized_teleport_state"), "authorized teleport handoff")

@@ -11,10 +11,14 @@ func _init() -> void:
 
 func _run() -> void:
 	var player_save := root.get_node_or_null("PlayerSave")
+	var localization_manager := root.get_node_or_null("LocalizationManager")
 	_check(player_save != null, "PlayerSave autoload is available")
-	if player_save == null:
+	_check(localization_manager != null, "LocalizationManager autoload is available")
+	if player_save == null or localization_manager == null:
 		quit(1)
 		return
+	var original_locale := str(localization_manager.get("current_locale"))
+	localization_manager.call("set_locale", "en")
 
 	var overlay_script := load(OVERLAY_SCRIPT_PATH) as GDScript
 	_check(overlay_script != null, "Trainer Card overlay script loads")
@@ -45,7 +49,7 @@ func _run() -> void:
 			],
 		},
 	}) as Control
-	_check(_find_label(public_panel, "GYM BADGES  ·  1/8") != null, "public Trainer Card reports the correct earned badge count")
+	_check(_find_label(public_panel, "GYM BADGES · 1/8") != null, "public Trainer Card reports the correct earned badge count")
 	_check(_find_tooltip(public_panel, "Boulder Badge · Earned") != null, "public Trainer Card shows another trainer's earned badge")
 	_check(_find_tooltip(public_panel, "Cascade Badge · Locked") != null, "public Trainer Card keeps another trainer's unearned badge locked")
 
@@ -55,6 +59,7 @@ func _run() -> void:
 		public_panel.free()
 	overlay.free()
 	player_save.call("apply_gym_badge_state", {"badges": []})
+	localization_manager.call("set_locale", original_locale)
 	quit(1 if failed else 0)
 
 

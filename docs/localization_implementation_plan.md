@@ -1,10 +1,26 @@
 # PokeAether localization implementation plan
 
-Status: planned
+Status: in progress
 
 Created: 2026-07-29
 
 Initial locales: English (`en`), Dutch (`nl`), Brazilian Portuguese (`pt-BR`)
+
+## Progress
+
+| Phase | Status |
+| --- | --- |
+| Phase 0: inventory and conventions | Complete; see `localization_inventory.md` and `localization_conventions.md` |
+| Phase 1: Godot localization foundation | Complete in commit `96be89e3a` |
+| Phase 2: login and settings pilot | Complete in commit `96be89e3a` |
+| Phase 3: automated guardrails | Active; strict hardcoded-text release audit added, with existing debt still open |
+| Phase 4: shared game interface | Complete; all 11 functional domains are migrated |
+| Phase 5: battle localization | Complete; battle UI, dynamic events, timers, field state, results, and calculator are migrated |
+| Phase 6: world signs and NPC dialogue | Complete; signs, Game Content dialogue, NPC display overlays, locale caches, and fallback are active |
+| Phase 7: Pokémon and item content | Complete; full species, move, ability, and item presentation coverage is active |
+| Phase 8: backend error contracts | Complete; stable codes, safe localization, diagnostics, and transport fallbacks are active |
+| Phase 9: launcher and news | Complete in commit `f8ecd6b07` |
+| Phase 10: completeness and release gate | Technical text completeness passes; release remains blocked by full-flow layout coverage and human language review |
 
 ## Goal
 
@@ -218,6 +234,32 @@ large change.
 - Existing battle logs either re-render in the new language or follow an explicitly
   documented temporary behavior until re-rendering is implemented.
 
+### Completion note
+
+Phase 5 is complete on `feature/localization-foundation`.
+
+- Battle controls, confirmations, spectator controls, result screens, reconnect
+  messages, errors, field timers, side conditions, stat badges, hover cards, and the
+  damage calculator resolve through the client catalogs.
+- `BattleEventTextFormatter` renders move, switch, item, ability, status, damage,
+  healing, weather, field-effect, transformation, and terminal sentences from named
+  placeholders. Canonical protocol values are never translated.
+- Runtime checks exercise the same components and representative event data in
+  English, Dutch, and Brazilian Portuguese. Catalog parity and placeholder parity are
+  enforced across all 1,802 keys.
+- Live battle controls and current dynamic panels re-render immediately after a locale
+  change without changing battle state, legal actions, or timers.
+
+Temporary battle-log behavior: entries already appended to the log remain in the
+language in which they were received because the current log stores rendered strings.
+New entries and all live battle controls use the newly selected locale immediately.
+Re-rendering historical entries requires retaining their structured event payloads and
+can be added later without changing the authoritative battle protocol.
+
+Canonical species, move, ability, item, nature, and type display data remains English
+until the remaining Phase 7 overlays. Raw backend-provided error strings remain Phase
+8 work; localized client fallbacks are already present.
+
 ### Sequencing note
 
 There are active local changes in battle-related files at the time this plan was
@@ -262,6 +304,21 @@ game-content/data/dialogues/pt-BR/...
 - Missing translations fall back to English.
 - Missing localized content can never block an interaction or progression check.
 
+### Completed implementation
+
+- The current Pallet Town sign catalog is available in all three locales and validated
+  for identical IDs. Sign lookup follows the global locale and falls back per sign to
+  English.
+- The Game Content service stores the current dialogue catalog under `en`, `nl`, and
+  `pt-BR`, resolves `Accept-Language`, and falls back to English.
+- NPC mechanics remain canonical and language-neutral. Locale overlays may replace
+  only display names, inline dialogue, and display messages.
+- Client dialogue and NPC caches are isolated by HTTP locale. NPC metadata is marked
+  for safe reload after a runtime locale change, so the next interaction uses the new
+  language.
+- The gateway already forwards `Accept-Language`; its local end-to-end routes were
+  verified for Dutch dialogue and Brazilian Portuguese NPC metadata.
+
 ## Phase 7: Pokémon and item content
 
 Keep authoritative mechanical data language-neutral and add translation overlays keyed
@@ -298,6 +355,42 @@ Add overlays for:
 - statuses and effects;
 - shops and cosmetic content.
 
+The client-side item catalogs store presentation-only `name` and `shortDesc` fields.
+Generated catalogs cover all 1,395 canonical items, while the 69-item reviewed pilot
+loads afterward and overrides its draft entries. `ItemLocalization` resolves those
+fields by canonical item ID, preserves the original English response as fallback, and
+never copies quantity, price, ownership, effects, or other mechanics into an overlay.
+Bag, hotbar, Market, Pokémon Summary, trade, mail, Aether Atelier, and Donator Store
+item presentation share this resolver.
+
+The shared `ContentLocalization` resolver now provides the same ID-first contract for
+types, natures, species, moves, abilities, and statuses. The initial complete catalogs
+cover all 18 types and 25 natures. Pokémon Summary, Pokédex, move learning, PC filters,
+battle party hover, and the damage calculator resolve type and nature presentation
+through this service while retaining canonical type and nature values internally.
+
+The reviewed content slice covers all 65 moves and 20 abilities explicitly used by the
+current Route 1 and Alpha Gym trainer rosters. English, Dutch, and Brazilian Portuguese
+overlays provide names and short descriptions. Pokémon Summary, Pokédex move search,
+PC filters, battle move slots, move hover cards, and Pokémon hover cards resolve these
+presentation fields through the shared service. The catalogs contain no power,
+accuracy, PP, type, category, or ability mechanics. Full local indexes (919 moves and
+376 abilities) and all 1,439 species/forms now have generated presentation coverage.
+Dutch and Brazilian Portuguese generated entries are review drafts; manually approved
+overlays always take precedence. See `localization_content_review.md` for the guarded
+generation and review workflow.
+
+Statuses and effects use the structured `pokemon.status.*`, `battle.status.*`, and
+`battle.event.status.*` keys completed in Phase 5. Shop and cosmetic titles/actions
+use normal UI keys, while their item names and descriptions use `ItemLocalization`.
+Remaining Pokémon presentation in bag actions, the hotbar, PC party slots, mail,
+PvP preview, and trade uses the species resolver. Nicknames and player-generated
+content remain unchanged.
+
+Phase 7 is technically complete. Dutch and Brazilian Portuguese generated entries
+remain review drafts; linguistic approval and final terminology choices are part of
+the Phase 10 release gate rather than an architecture or consumer-coverage gap.
+
 ### Acceptance criteria
 
 - APIs and saved objects always retain canonical IDs.
@@ -332,6 +425,23 @@ Example:
 - Unknown errors still produce a useful localized message.
 - Localization changes do not alter HTTP status handling or service behavior.
 
+### Completed implementation
+
+- `BackendErrorLocalization` extracts stable codes from top-level and nested gateway
+  response shapes.
+- Known player-facing account, Guild, trade, inventory, shop, appearance, mail,
+  fishing, field-move, and reward codes map to localized messages in all three
+  catalogs.
+- All player-facing Godot HTTP services and both battle API clients use the shared
+  resolver; background metadata-loader failures remain diagnostic-only.
+- Unknown codes show a safe localized generic error and never expose raw backend text.
+- English server messages remain available separately for logs and diagnostics.
+- Connection, TLS, and timeout failures are localized through the same service.
+- The account service preserves existing domain codes and normalizes legacy
+  `HTTPException` strings to stable category codes without changing HTTP statuses.
+- The complete contract and extension workflow are documented in
+  `localization_error_contract.md`.
+
 ## Phase 9: launcher and news
 
 ### Work
@@ -349,7 +459,40 @@ Example:
 - News content can be selected by locale without breaking older English-only entries.
 - Missing localized launcher or news content falls back to English.
 
+### Completed implementation
+
+- The standalone launcher now uses the same `en`, `nl`, and `pt_BR` locale model,
+  system-locale detection, normalization, and English catalog fallback as the game.
+- Its language selector updates the interface immediately and persists the selection
+  beside the existing install-directory preference.
+- Static controls, actions, server presence, progress, download/extraction states,
+  launcher self-update states, uninstall flows, tooltips, and player-facing failures
+  are covered by complete launcher catalogs.
+- Starting the game passes the validated launcher locale as a user argument. The game
+  imports and persists this value through `SettingsManager`, keeping both projects in
+  sync without sharing their separate Godot user-data files.
+- Login and launcher news requests send `Accept-Language` with English as the requested
+  fallback. Both consumers select translated news again immediately after a runtime
+  language change.
+- News remains compatible with the original English-only `items`/`articles` arrays.
+  New feeds may add per-item `localizations` (or `translations`) keyed by `nl`,
+  `pt-BR`, and `en`, or use top-level `locales` buckets. Missing translated fields
+  inherit the English/base item.
+- `launcher/config/news.example.json` documents the preferred per-item format.
+- Dedicated launcher runtime checks and game-project integration checks validate
+  locale behavior, catalog parity, placeholders, preference synchronization, request
+  headers, translated news selection, and English fallback.
+
+Phase 9 is technically complete. External websites, registration, credits, and legal
+documents remain deliberately outside the game/launcher catalogs and require their own
+content and legal review before release.
+
 ## Phase 10: completeness and release gate
+
+The release gate was executed on 2026-07-29. Catalog integrity, all project checks,
+and the strict hardcoded-text completeness gate pass. The reproducible evidence,
+remaining full-flow layout coverage gap, and human review requirements are recorded
+in `localization_phase10_release_audit.md`.
 
 PokeAether is considered fully localized for the initial language set when:
 

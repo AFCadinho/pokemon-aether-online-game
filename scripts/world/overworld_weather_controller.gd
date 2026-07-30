@@ -21,6 +21,7 @@ var debug_weather_override := ""
 var active_weather := WEATHER_CLEAR
 var current_weather_profile := WEATHER_PROFILE_OUTDOOR
 var _transition_tween: Tween
+var _creator_weather_visibility_override := -1
 
 
 func _ready() -> void:
@@ -57,12 +58,26 @@ func clear_debug_weather() -> void:
 	_transition_to_weather(get_effective_weather())
 
 
+func set_creator_weather_effects_visible(visible: bool) -> void:
+	_creator_weather_visibility_override = 1 if visible else 0
+	_transition_to_weather(get_effective_weather())
+
+
+func clear_creator_weather_effects_override() -> void:
+	if _creator_weather_visibility_override < 0:
+		return
+	_creator_weather_visibility_override = -1
+	_transition_to_weather(get_effective_weather())
+
+
 func is_debug_weather_active() -> bool:
 	return debug_weather_override != ""
 
 
 func get_effective_weather() -> String:
 	if not is_weather_enabled_for_current_map():
+		return WEATHER_CLEAR
+	if _creator_weather_visibility_override == 0:
 		return WEATHER_CLEAR
 	return debug_weather_override if is_debug_weather_active() else server_weather
 

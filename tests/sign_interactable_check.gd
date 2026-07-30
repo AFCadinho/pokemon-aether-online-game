@@ -15,8 +15,14 @@ var failed := false
 
 
 func _init() -> void:
+	call_deferred("_run")
+
+
+func _run() -> void:
 	_check_service_is_autoloaded()
 	_check_service_loads_local_sign_catalog()
+	_check_service_uses_global_locale()
+	_check_service_falls_back_to_english()
 	_check_sign_interactable_contract()
 	_check_sign_scene_contract()
 	_check_pallet_town_sign_markers()
@@ -43,6 +49,53 @@ func _check_service_loads_local_sign_catalog() -> void:
 
 	var lines: Array[String] = service.call("get_lines", "kanto_pallet_town_trainer_tips_1", "kanto_pallet_town")
 	_check_true(not lines.is_empty(), "SignTextService returns trainer tips lines")
+	service.free()
+
+
+func _check_service_uses_global_locale() -> void:
+	var localization_manager := get_root().get_node_or_null("LocalizationManager")
+	_check_true(localization_manager != null, "LocalizationManager is available for sign locale resolution")
+	if localization_manager == null:
+		return
+
+	var original_locale := str(localization_manager.get("current_locale"))
+	var service: Node = SignTextServiceScript.new()
+	get_root().add_child(service)
+
+	localization_manager.call("set_locale", "nl")
+	var dutch_lines: Array[String] = service.call(
+		"get_lines",
+		"kanto_pallet_town_town_sign",
+		"kanto_pallet_town"
+	)
+	_check_true(dutch_lines.has("Een rustig dorp waar nieuwe reizen beginnen."), "SignTextService uses the global Dutch locale")
+
+	localization_manager.call("set_locale", "pt_BR")
+	var portuguese_lines: Array[String] = service.call(
+		"get_lines",
+		"kanto_pallet_town_town_sign",
+		"kanto_pallet_town"
+	)
+	_check_true(portuguese_lines.has("Uma cidade tranquila onde novas jornadas começam."), "SignTextService maps pt_BR to the pt-BR sign directory")
+
+	localization_manager.call("set_locale", original_locale)
+	service.free()
+
+
+func _check_service_falls_back_to_english() -> void:
+	var service: Node = SignTextServiceScript.new()
+	var localized_catalog: Dictionary = service.call("_load_sign_catalog", "nl")
+	(localized_catalog.get("entries", {}) as Dictionary).erase("kanto_pallet_town_oaks_lab")
+
+	var response: Dictionary = service.call(
+		"get_sign",
+		"kanto_pallet_town_oaks_lab",
+		"kanto_pallet_town",
+		"nl"
+	)
+	_check_true(bool(response.get("success", false)), "Missing localized sign content falls back without blocking")
+	var metadata: Dictionary = response.get("metadata", {})
+	_check_equal(str(metadata.get("title", "")), "Oaks Lab", "Missing localized sign falls back to English")
 	service.free()
 
 

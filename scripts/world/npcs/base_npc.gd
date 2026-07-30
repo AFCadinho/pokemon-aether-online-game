@@ -67,6 +67,7 @@ var nearby_player: Node2D
 var is_interacting := false
 var npc_metadata_loaded := false
 var npc_metadata_load_failed := false
+var metadata_display_name := ""
 var nameplate: Control
 var nameplate_background: Panel
 var nameplate_label: Label
@@ -100,6 +101,8 @@ func _ready_base_npc() -> void:
 	_schedule_next_npc_movement_step()
 	_update_sort_z()
 	_setup_nameplate()
+	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
+		LocalizationManager.locale_changed.connect(_on_locale_changed)
 
 
 func _apply_npc_profile() -> void:
@@ -692,13 +695,22 @@ func _apply_npc_metadata(metadata: Dictionary) -> void:
 		dialogue_id = metadata_dialogue_id
 
 	var metadata_name := str(metadata.get("name", ""))
-	if display_name.strip_edges().is_empty() and not metadata_name.is_empty():
+	if (
+		(display_name.strip_edges().is_empty() or display_name == metadata_display_name)
+		and not metadata_name.is_empty()
+	):
 		display_name = metadata_name
+		metadata_display_name = metadata_name
 		_sync_nameplate()
 
 	var metadata_dialogue: Array[String] = _get_string_array(metadata.get("dialogue", []))
 	if not metadata_dialogue.is_empty():
 		dialogue_lines = metadata_dialogue
+
+
+func _on_locale_changed(_locale: String) -> void:
+	npc_metadata_loaded = false
+	npc_metadata_load_failed = false
 
 
 func _get_string_array(value: Variant) -> Array[String]:

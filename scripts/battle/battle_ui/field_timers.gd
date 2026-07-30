@@ -23,8 +23,14 @@ const EFFECT_ICON_ALIASES := {
 
 var effect_timer_cache: Dictionary = {}
 var animated_icon_rows: Array[Dictionary] = []
+var current_effects: Array = []
+var current_turn := 0
+var localization_manager: Node
 
 func _ready() -> void:
+	localization_manager = get_tree().root.get_node_or_null("LocalizationManager")
+	if localization_manager != null and not localization_manager.locale_changed.is_connected(_on_locale_changed):
+		localization_manager.locale_changed.connect(_on_locale_changed)
 	set_process(false)
 
 func _process(delta: float) -> void:
@@ -64,6 +70,8 @@ func _process(delta: float) -> void:
 		set_process(false)
 
 func reset_timers() -> void:
+	current_effects = []
+	current_turn = 0
 	visible = false
 	effect_timer_cache.clear()
 	_clear_effect_rows()
@@ -78,9 +86,13 @@ func set_condition(text: String, icon: Texture2D = null) -> void:
 	_fit_to_content.call_deferred()
 
 func set_effects(effects: Array, current_turn := 0) -> void:
+	current_effects = effects.duplicate(true)
+	self.current_turn = current_turn
 	_clear_effect_rows()
 	if effects.is_empty():
-		reset_timers()
+		visible = false
+		effect_timer_cache.clear()
+		_fit_to_content.call_deferred()
 		return
 
 	var has_effects := false
@@ -179,8 +191,12 @@ func _format_effect_label(effect_data: Dictionary, current_turn: int) -> String:
 	var max_remaining := _get_remaining_turns(effect_data, current_turn, "maxRemainingTurns", "maxDuration")
 	if min_remaining > 0 and max_remaining > 0:
 		if min_remaining == max_remaining:
-			return "%s: %s" % [effect, min_remaining]
-		return "%s: %s-%s" % [effect, min_remaining, max_remaining]
+			return _t("battle.field.timer.single", {"effect": effect, "turns": min_remaining})
+		return _t("battle.field.timer.range", {
+			"effect": effect,
+			"min": min_remaining,
+			"max": max_remaining,
+		})
 
 	return effect
 
@@ -241,29 +257,37 @@ func _format_effect_name(effect: String) -> String:
 
 	match effect_key:
 		"raindance", "rain":
-			return "Rain"
+			return _t("battle.field.effect.rain")
 		"primordialsea":
-			return "Primordial Sea"
+			return _t("battle.field.effect.primordial_sea")
 		"sunnyday", "sun":
-			return "Sun"
+			return _t("battle.field.effect.sun")
 		"desolateland":
-			return "Desolate Land"
+			return _t("battle.field.effect.desolate_land")
 		"deltastream":
-			return "Delta Stream"
+			return _t("battle.field.effect.delta_stream")
 		"sandstorm":
-			return "Sandstorm"
+			return _t("battle.field.effect.sandstorm")
 		"hail":
-			return "Hail"
+			return _t("battle.field.effect.hail")
 		"snow":
-			return "Snow"
+			return _t("battle.field.effect.snow")
 		"snowscape":
-			return "Snowscape"
+			return _t("battle.field.effect.snowscape")
 		"trickroom":
-			return "Trick Room"
+			return _t("battle.field.effect.trick_room")
 		"magicroom":
-			return "Magic Room"
+			return _t("battle.field.effect.magic_room")
 		"wonderroom":
-			return "Wonder Room"
+			return _t("battle.field.effect.wonder_room")
+		"grassyterrain":
+			return _t("battle.field.effect.grassy_terrain")
+		"mistyterrain":
+			return _t("battle.field.effect.misty_terrain")
+		"psychicterrain":
+			return _t("battle.field.effect.psychic_terrain")
+		"electricterrain":
+			return _t("battle.field.effect.electric_terrain")
 
 	cleaned = cleaned.replace("Dance", " Dance")
 	cleaned = cleaned.replace("Room", " Room")
@@ -415,3 +439,14 @@ func _to_kebab_case(value: String) -> String:
 		result = result.substr(0, result.length() - 1)
 
 	return result.strip_edges()
+
+
+func _on_locale_changed(_locale: String) -> void:
+	if not current_effects.is_empty():
+		set_effects(current_effects, current_turn)
+
+
+func _t(key: String, replacements: Dictionary = {}) -> String:
+	if localization_manager != null:
+		return str(localization_manager.call("text", key, replacements))
+	return key

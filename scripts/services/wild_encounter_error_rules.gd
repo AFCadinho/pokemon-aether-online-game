@@ -3,46 +3,19 @@ extends RefCounted
 
 
 static func message_lines(response: Dictionary) -> Array[String]:
-	match error_code(response):
-		"fishing_rod_required":
-			return ["You need a fishing rod before you can fish here."]
-		"fishing_rod_not_owned":
-			return [
-				"That fishing rod is no longer available in your Bag.",
-				"Your fishing access has been refreshed.",
-			]
-		"fishing_level_required":
-			var detail := _detail(response)
-			return ["Fishing Level %d is required for this rod. Your Fishing Level is %d." % [
-				int(detail.get("requiredFishingLevel", 1)),
-				int(detail.get("currentFishingLevel", 1)),
-			]]
-		"fishing_badges_required":
-			var detail := _detail(response)
-			return ["You need %d %s badges for this rod. You currently have %d." % [
-				int(detail.get("requiredBadges", 0)),
-				str(detail.get("region", "regional")).capitalize(),
-				int(detail.get("currentBadges", 0)),
-			]]
-		"encounter_type_not_found":
-			return ["Nothing seems to be biting with this rod here."]
-		"fishing_authentication_required":
-			return [
-				"Your fishing access could not be verified.",
-				"Please log in again.",
-			]
-		"fishing_rod_validation_unavailable":
-			return [
-				"Fishing is temporarily unavailable.",
-				"Please try again in a moment.",
-			]
-		"no_usable_pokemon":
-			return [
-				"None of your Pokemon are able to battle.",
-				"Heal your party at a Pokemon Center before trying again.",
-			]
-		_:
-			return []
+	var code := error_code(response)
+	if code in [
+		"fishing_rod_required",
+		"fishing_rod_not_owned",
+		"fishing_level_required",
+		"fishing_badges_required",
+		"encounter_type_not_found",
+		"fishing_authentication_required",
+		"fishing_rod_validation_unavailable",
+		"no_usable_pokemon",
+	]:
+		return [BackendErrorLocalizationService.message(response)]
+	return []
 
 
 static func error_code(response: Dictionary) -> String:

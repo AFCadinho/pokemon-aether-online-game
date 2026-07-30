@@ -89,9 +89,9 @@ func _init() -> void:
 		"All is a main tab and General defaults to Global"
 	)
 	_check(
-		overlay_source.contains('chat_input.placeholder_text = "All messages · reply sends to Global"')
+		overlay_source.contains('chat_input.placeholder_text = LocalizationManager.text("ui.chat.input.all")')
 		and overlay_source.contains("if active_chat_tab == CHAT_TAB_ALL:\n\t\treturn CHAT_CHANNEL_GLOBAL"),
-		"All is an aggregate view that sends through Global"
+		"All is a localized aggregate view that sends through Global"
 	)
 	_check(
 		overlay_source.contains("CHAT_CHANNEL_MAP,\n\t\t\tCHAT_CHANNEL_TRADE,")
@@ -100,7 +100,8 @@ func _init() -> void:
 	)
 	_check(
 		overlay_source.contains("func _create_chat_channel_prefix")
-		and overlay_source.contains('prefix.text = "[Global]"')
+		and overlay_source.contains('_set_localized_control_property(prefix, "text", prefix_key)')
+		and overlay_source.contains('var prefix_key := "ui.chat.prefix.global"')
 		and overlay_source.contains('prefix_color = Color("#d8b767")')
 		and overlay_source.contains("prefix.flat = true")
 		and overlay_source.contains("StyleBoxEmpty.new()")

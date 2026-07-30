@@ -46,10 +46,10 @@ stretch_mode = 6
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8745098, 0.92156863, 0.9843137, 1)
 theme_override_font_sizes/font_size = 12
-text = "Spikes"
+text = ""
 
 [node name="EffectAmount" type="Label" parent="MarginContainer/VBoxContainer/FieldEffectRow" unique_id=53707715]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 theme_override_font_sizes/font_size = 12
-text = "2x"
+text = ""

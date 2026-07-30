@@ -168,7 +168,7 @@ func _run() -> void:
 	_check(store_source.contains("CharacterAppearanceService.CHROMA_COLOR_SWATCHES"), "Store preview uses the shared Chroma palette")
 	_check(store_source.contains("ColorPickerButton.new()"), "Store preview includes a custom colour picker")
 	_check(
-		store_source.contains('placeholder_text = "Search Store..."')
+		store_source.contains('"ui.store.search"')
 			and store_source.contains("func _item_matches_catalog_search"),
 		"Gift Store exposes catalog search"
 	)
@@ -261,10 +261,10 @@ func _run() -> void:
 		"Bag slots render cosmetic icons with the item's compatible gender"
 	)
 	_check(
-		ui_source.contains(
-			'use_action == "unlock_appearance" and not _bag_item_matches_player_gender(item)'
-		)
-			and ui_source.contains('return "%s Model Only"'),
+			ui_source.contains(
+				'use_action == "unlock_appearance" and not _bag_item_matches_player_gender(item)'
+			)
+				and ui_source.contains('LocalizationManager.text("ui.bag.action.model_only"'),
 		"Bag disables moving incompatible cosmetics to Character Customization"
 	)
 	_check(
@@ -287,9 +287,9 @@ func _run() -> void:
 		"inventory service preserves authoritative per-slot wardrobe capacity"
 	)
 	_check(
-		inventory_service_source.contains('"grantedItems"')
-			and ui_source.contains('use_action == "open_item_bundle"')
-			and ui_source.contains('return "Open Box"'),
+			inventory_service_source.contains('"grantedItems"')
+				and ui_source.contains('use_action == "open_item_bundle"')
+				and ui_source.contains('LocalizationManager.text("ui.bag.action.open_box")'),
 		"Bag can open the Classic box and refresh its granted component items"
 	)
 	_check(
@@ -300,7 +300,7 @@ func _run() -> void:
 	_check(
 		ui_source.contains("const DEFAULT_APPEARANCE_SLOT_LIMIT := 8")
 			and ui_source.contains("func _refresh_trainer_card_appearance_capacity_label()")
-			and ui_source.contains('"%s wardrobe · %d/%d unlocked"'),
+			and ui_source.contains('"ui.appearance.wardrobe_capacity"'),
 		"Character Customization shows the eight-item limit for each cosmetic slot"
 	)
 	_check(

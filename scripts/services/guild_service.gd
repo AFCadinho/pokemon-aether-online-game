@@ -268,28 +268,11 @@ func _request_json(path: String, method: HTTPClient.Method, body: String) -> Dic
 
 
 func _error_message(body: Dictionary, response_code: int) -> String:
-	var detail: Variant = body.get("detail", {})
-	if detail is Dictionary:
-		return str((detail as Dictionary).get("message", "Request failed."))
-	if str(detail).strip_edges() != "":
-		return str(detail)
-	return "Request failed with HTTP %d." % response_code
+	return BackendErrorLocalizationService.message({"body": body, "status": response_code})
 
 
 func _request_result_message(result: int) -> String:
-	match result:
-		HTTPRequest.RESULT_CANT_CONNECT:
-			return "Cannot connect to server."
-		HTTPRequest.RESULT_CANT_RESOLVE:
-			return "Cannot resolve server address."
-		HTTPRequest.RESULT_CONNECTION_ERROR:
-			return "Server connection error."
-		HTTPRequest.RESULT_TLS_HANDSHAKE_ERROR:
-			return "Server TLS error."
-		HTTPRequest.RESULT_TIMEOUT:
-			return "Request timed out."
-		_:
-			return "Request failed: %s." % result
+	return BackendErrorLocalizationService.transport_message(result)
 
 
 func _new_request_id() -> String:

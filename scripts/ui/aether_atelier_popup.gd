@@ -79,20 +79,25 @@ func _ready() -> void:
 	add_child(atelier_service)
 	add_theme_stylebox_override("panel", _panel_style(UI_BG, Color("#795aa5dd"), 14, 2))
 	_build_interface()
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	if localization_manager != null:
+		var locale_callable := Callable(self, "_on_locale_changed")
+		if not localization_manager.is_connected("locale_changed", locale_callable):
+			localization_manager.connect("locale_changed", locale_callable)
 
 
 func open_atelier() -> void:
 	visible = true
-	status_label.text = "Loading every available outfit..."
+	status_label.text = _t("ui.atelier.status.loading")
 	status_label.add_theme_color_override("font_color", UI_MUTED)
 	create_button.disabled = true
 	var result: Dictionary = await atelier_service.load_catalog()
 	if not bool(result.get("success", false)):
-		status_label.text = str(result.get("error", "The Atelier could not be loaded."))
+		status_label.text = str(result.get("error", _t("ui.atelier.error.load")))
 		status_label.add_theme_color_override("font_color", UI_DANGER)
 		return
 	_apply_catalog(result)
-	status_label.text = "Choose an outfit to inspect its components."
+	status_label.text = _t("ui.atelier.status.choose_outfit")
 	status_label.add_theme_color_override("font_color", UI_MUTED)
 
 
@@ -122,7 +127,7 @@ func _build_interface() -> void:
 	layout.add_child(search_row)
 	search_input = LineEdit.new()
 	search_input.name = "AtelierSearchInput"
-	search_input.placeholder_text = "Search outfits or components..."
+	_set_localized_property(search_input, "placeholder_text", "ui.atelier.search")
 	search_input.clear_button_enabled = true
 	search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	search_input.custom_minimum_size = Vector2(0, 38)
@@ -150,19 +155,19 @@ func _build_service_tabs() -> Control:
 	var tabs := HBoxContainer.new()
 	tabs.add_theme_constant_override("separation", 7)
 	outfits_tab_button = Button.new()
-	outfits_tab_button.text = "Outfit Boxes"
+	_set_localized_property(outfits_tab_button, "text", "ui.atelier.tab.outfits")
 	outfits_tab_button.custom_minimum_size = Vector2(150, 32)
 	outfits_tab_button.focus_mode = Control.FOCUS_NONE
 	outfits_tab_button.pressed.connect(_select_mode.bind("outfits"))
 	tabs.add_child(outfits_tab_button)
 	dye_tab_button = Button.new()
-	dye_tab_button.text = "Character Customization"
+	_set_localized_property(dye_tab_button, "text", "ui.atelier.tab.customize")
 	dye_tab_button.custom_minimum_size = Vector2(150, 32)
 	dye_tab_button.focus_mode = Control.FOCUS_NONE
 	dye_tab_button.pressed.connect(_select_mode.bind("dye"))
 	tabs.add_child(dye_tab_button)
 	var explanation := Label.new()
-	explanation.text = "Switch Appearance Wear items and recolour Chroma pieces."
+	_set_localized_property(explanation, "text", "ui.atelier.tab.explanation")
 	explanation.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	explanation.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	explanation.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -189,12 +194,12 @@ func _build_header() -> Control:
 	heading.add_theme_constant_override("separation", 1)
 	header.add_child(heading)
 	var title := Label.new()
-	title.text = "Aether Atelier"
+	_set_localized_property(title, "text", "ui.atelier.title")
 	title.add_theme_font_size_override("font_size", 21)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	heading.add_child(title)
 	var subtitle := Label.new()
-	subtitle.text = "Turn complete loose outfit sets back into tradeable boxes."
+	_set_localized_property(subtitle, "text", "ui.atelier.subtitle")
 	subtitle.add_theme_font_size_override("font_size", 11)
 	subtitle.add_theme_color_override("font_color", UI_MUTED)
 	heading.add_child(subtitle)
@@ -212,7 +217,7 @@ func _build_header() -> Control:
 
 	var close_button := Button.new()
 	close_button.text = "×"
-	close_button.tooltip_text = "Close"
+	_set_localized_property(close_button, "tooltip_text", "common.close")
 	close_button.custom_minimum_size = Vector2(34, 34)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(close_atelier)
@@ -237,7 +242,7 @@ func _build_catalog_panel() -> Control:
 	stack.add_theme_constant_override("separation", 8)
 	margin.add_child(stack)
 	catalog_caption_label = Label.new()
-	catalog_caption_label.text = "OUTFIT BOXES"
+	catalog_caption_label.text = _t("ui.atelier.catalog.outfits")
 	catalog_caption_label.add_theme_font_size_override("font_size", 10)
 	catalog_caption_label.add_theme_color_override("font_color", UI_PURPLE)
 	stack.add_child(catalog_caption_label)
@@ -315,7 +320,7 @@ func _build_detail_panel() -> Control:
 	detail_progress_label.add_theme_font_size_override("font_size", 13)
 	stack.add_child(detail_progress_label)
 	components_caption_label = Label.new()
-	components_caption_label.text = "REQUIRED BAG ITEMS"
+	components_caption_label.text = _t("ui.atelier.components.required")
 	components_caption_label.add_theme_font_size_override("font_size", 10)
 	components_caption_label.add_theme_color_override("font_color", UI_PURPLE)
 	stack.add_child(components_caption_label)
@@ -349,7 +354,7 @@ func _build_detail_panel() -> Control:
 	status_label.add_theme_color_override("font_color", UI_MUTED)
 	footer_copy.add_child(status_label)
 	create_button = Button.new()
-	create_button.text = "Create Box"
+	_set_localized_property(create_button, "text", "ui.atelier.create")
 	create_button.custom_minimum_size = Vector2(160, 42)
 	create_button.focus_mode = Control.FOCUS_NONE
 	create_button.pressed.connect(_on_create_pressed)
@@ -393,7 +398,7 @@ func _build_dye_palette() -> void:
 	custom_row.add_theme_constant_override("separation", 7)
 	dye_palette.add_child(custom_row)
 	var custom_label := Label.new()
-	custom_label.text = "Custom"
+	_set_localized_property(custom_label, "text", "ui.atelier.custom")
 	custom_label.add_theme_color_override("font_color", UI_MUTED)
 	custom_row.add_child(custom_label)
 	dye_color_picker = ColorPickerButton.new()
@@ -422,7 +427,7 @@ func _apply_catalog(result: Dictionary) -> void:
 	for item_value: Variant in result.get("chromaItems", []):
 		if item_value is Dictionary:
 			chroma_items.append((item_value as Dictionary).duplicate(true))
-	money_label.text = "Money: ₽%s" % _format_number(money)
+	money_label.text = _t("ui.atelier.money", {"amount": _format_number(money)})
 	if selected_box_item_id == "" or _selected_outfit().is_empty():
 		selected_box_item_id = str(outfits[0].get("boxItemId", "")) if not outfits.is_empty() else ""
 	selected_wear_item_ids.clear()
@@ -445,9 +450,9 @@ func _render_outfit_list() -> void:
 	for child: Node in outfit_list.get_children():
 		child.queue_free()
 	catalog_caption_label.text = (
-		"APPEARANCE WEAR"
+		_t("ui.atelier.catalog.wear")
 		if active_mode == "dye"
-		else "OUTFIT BOXES"
+		else _t("ui.atelier.catalog.outfits")
 	)
 	var search_text := search_input.text.strip_edges().to_lower()
 	var visible_count := 0
@@ -466,16 +471,16 @@ func _render_outfit_list() -> void:
 			for item: Dictionary in slot_items:
 				visible_count += 1
 				outfit_list.add_child(_create_chroma_item_card(item))
-		catalog_summary_label.text = "%d of %d wear items" % [
-			visible_count,
-			chroma_items.size(),
-		]
+		catalog_summary_label.text = _t("ui.atelier.count.wear", {
+			"visible": visible_count,
+			"total": chroma_items.size(),
+		})
 		if visible_count == 0:
 			var empty_dye_label := Label.new()
 			empty_dye_label.text = (
-				"No items are available in Appearance Wear."
+				_t("ui.atelier.empty.wear")
 				if search_text == ""
-				else "No Appearance Wear items match your search."
+				else _t("ui.atelier.empty.wear_search")
 			)
 			empty_dye_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			empty_dye_label.add_theme_color_override("font_color", UI_MUTED)
@@ -486,10 +491,13 @@ func _render_outfit_list() -> void:
 			continue
 		visible_count += 1
 		outfit_list.add_child(_create_outfit_card(outfit))
-	catalog_summary_label.text = "%d of %d outfits" % [visible_count, outfits.size()]
+	catalog_summary_label.text = _t("ui.atelier.count.outfits", {
+		"visible": visible_count,
+		"total": outfits.size(),
+	})
 	if visible_count == 0:
 		var empty_label := Label.new()
-		empty_label.text = "No outfits match your search."
+		empty_label.text = _t("ui.atelier.empty.search")
 		empty_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		empty_label.add_theme_color_override("font_color", UI_MUTED)
 		outfit_list.add_child(empty_label)
@@ -497,7 +505,7 @@ func _render_outfit_list() -> void:
 
 func _create_wear_slot_heading(slot: String) -> Label:
 	var heading := Label.new()
-	heading.text = str(slot).replace("_", " ").to_upper()
+	heading.text = _slot_label(slot).to_upper()
 	heading.add_theme_font_size_override("font_size", 10)
 	heading.add_theme_color_override("font_color", UI_PURPLE)
 	heading.add_theme_constant_override("outline_size", 2)
@@ -548,7 +556,7 @@ func _create_outfit_card(outfit: Dictionary) -> Button:
 	copy.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(copy)
 	var name_label := Label.new()
-	name_label.text = str(outfit.get("name", box_item_id))
+	name_label.text = _item_name(box_item_id, str(outfit.get("name", box_item_id)))
 	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	name_label.add_theme_font_size_override("font_size", 13)
 	name_label.add_theme_color_override("font_color", UI_TEXT)
@@ -557,7 +565,11 @@ func _create_outfit_card(outfit: Dictionary) -> Button:
 	var owned_count := int(outfit.get("ownedComponentCount", 0))
 	var total_count := int(outfit.get("totalComponentCount", 1))
 	var meta_label := Label.new()
-	meta_label.text = "%d/%d parts · %s" % [owned_count, total_count, _outfit_gender_label(outfit)]
+	meta_label.text = _t("ui.atelier.outfit.meta", {
+		"owned": owned_count,
+		"total": total_count,
+		"gender": _outfit_gender_label(outfit),
+	})
 	meta_label.add_theme_font_size_override("font_size", 10)
 	meta_label.add_theme_color_override("font_color", UI_GREEN if ready else UI_MUTED)
 	meta_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -576,8 +588,8 @@ func _create_chroma_item_card(item: Dictionary) -> Button:
 	var button := Button.new()
 	button.name = "Chroma_%s" % item_id
 	button.text = "%s\n%s%s" % [
-		str(item.get("name", item_id)),
-		str(item.get("slot", "")).replace("_", " ").capitalize(),
+		_item_name(item_id, str(item.get("name", item_id))),
+		_slot_label(str(item.get("slot", ""))),
 		(" · %s" % str(pending_chroma_colors.get(item_id, item.get("color", "#ffffff"))).to_upper())
 		if bool(item.get("tintable", false)) else "",
 	]
@@ -604,9 +616,9 @@ func _select_mode(mode: String) -> void:
 	active_mode = mode
 	search_input.text = ""
 	search_input.placeholder_text = (
-		"Search Appearance Wear..."
+		_t("ui.atelier.search_wear")
 		if active_mode == "dye"
-		else "Search outfits or components..."
+		else _t("ui.atelier.search")
 	)
 	_refresh_mode_tabs()
 	_render_outfit_list()
@@ -631,9 +643,20 @@ func _refresh_detail() -> void:
 	dye_palette.visible = false
 	component_scroll.visible = true
 	components_caption_label.visible = true
-	detail_name_label.text = str(outfit.get("name", "Select an outfit"))
+	detail_name_label.text = (
+		_item_name(str(outfit.get("boxItemId", "")), str(outfit.get("name", "")))
+		if has_outfit
+		else _t("ui.atelier.detail.select")
+	)
 	detail_gender_label.text = _outfit_gender_label(outfit).to_upper() if has_outfit else ""
-	detail_description_label.text = str(outfit.get("shortDesc", "Search the full outfit catalog and select a box."))
+	detail_description_label.text = (
+		_item_description(
+			str(outfit.get("boxItemId", "")),
+			str(outfit.get("shortDesc", ""))
+		)
+		if has_outfit
+		else _t("ui.atelier.detail.search_hint")
+	)
 	for child: Node in component_list.get_children():
 		child.queue_free()
 	if not has_outfit:
@@ -649,26 +672,36 @@ func _refresh_detail() -> void:
 	var owned_count := int(outfit.get("ownedComponentCount", 0))
 	var total_count := int(outfit.get("totalComponentCount", 1))
 	var complete := owned_count >= total_count
-	detail_progress_label.text = "Complete set" if complete else "%d of %d components in your Bag" % [owned_count, total_count]
+	detail_progress_label.text = (
+		_t("ui.atelier.detail.complete")
+		if complete
+		else _t("ui.atelier.detail.progress", {"owned": owned_count, "total": total_count})
+	)
 	detail_progress_label.add_theme_color_override("font_color", UI_GREEN if complete else UI_GOLD)
 	for component_value: Variant in outfit.get("components", []):
 		if component_value is Dictionary:
 			component_list.add_child(_create_component_row(component_value as Dictionary))
 	var fee := int(outfit.get("fee", 0))
-	fee_label.text = "Atelier fee: ₽%s" % _format_number(fee)
-	create_button.text = "Creating..." if create_in_progress else "Create Box · ₽%s" % _format_number(fee)
+	fee_label.text = _t("ui.atelier.fee", {"amount": _format_number(fee)})
+	create_button.text = (
+		_t("ui.atelier.status.creating")
+		if create_in_progress
+		else _t("ui.atelier.create_price", {"amount": _format_number(fee)})
+	)
 	create_button.disabled = create_in_progress or not bool(outfit.get("canCreate", false))
 	if create_in_progress:
-		status_label.text = "Carefully packing your outfit..."
+		status_label.text = _t("ui.atelier.status.packing")
 		status_label.add_theme_color_override("font_color", UI_MUTED)
 	elif not complete:
-		status_label.text = "Every component must be in your Bag."
+		status_label.text = _t("ui.atelier.error.components")
 		status_label.add_theme_color_override("font_color", UI_MUTED)
 	elif money < fee:
-		status_label.text = "You need ₽%s more." % _format_number(fee - money)
+		status_label.text = _t("ui.atelier.error.money", {
+			"amount": _format_number(fee - money),
+		})
 		status_label.add_theme_color_override("font_color", UI_DANGER)
 	else:
-		status_label.text = "Ready to create a tradeable outfit box."
+		status_label.text = _t("ui.atelier.status.ready_box")
 		status_label.add_theme_color_override("font_color", UI_GREEN)
 
 func _refresh_dye_detail() -> void:
@@ -679,33 +712,46 @@ func _refresh_dye_detail() -> void:
 	dye_palette.visible = has_item
 	component_scroll.visible = false
 	components_caption_label.visible = false
-	detail_name_label.text = "Appearance Wear" if has_item else "No Appearance Wear items"
+	detail_name_label.text = (
+		_t("ui.atelier.wear.title")
+		if has_item
+		else _t("ui.atelier.wear.empty")
+	)
 	detail_gender_label.text = (
 		"%s · %s" % [
-			str(item.get("slot", "")).replace("_", " ").capitalize(),
+			_slot_label(str(item.get("slot", ""))),
 			_outfit_gender_label(item),
 		]
 	).to_upper() if has_item else ""
 	detail_description_label.text = (
-		"Switch worn items here. Only Chroma colour changes add to the total fee."
+		_t("ui.atelier.wear.description")
 		if has_item
-		else "Move appearance items from your Bag into Appearance Wear first."
+		else _t("ui.atelier.wear.move_hint")
 	)
 	detail_progress_label.text = (
-		"Editing %s%s" % [
-			str(item.get("name", "")),
-			(" · current colour %s" % str(item.get("color", "#ffffff")).to_upper())
-			if bool(item.get("tintable", false)) else "",
-		]
+		_t("ui.atelier.wear.editing", {
+			"item": _item_name(
+				str(item.get("itemId", "")),
+				str(item.get("name", ""))
+			),
+			"color": str(item.get("color", "#ffffff")).to_upper(),
+		})
+		if bool(item.get("tintable", false))
+		else _t("ui.atelier.wear.editing_plain", {
+			"item": _item_name(
+				str(item.get("itemId", "")),
+				str(item.get("name", ""))
+			),
+		})
 		if has_item
 		else ""
 	)
 	detail_progress_label.add_theme_color_override("font_color", UI_PURPLE)
 	if not has_item:
 		fee_label.text = ""
-		create_button.text = "Select a Chroma Item"
+		create_button.text = _t("ui.atelier.wear.select_chroma")
 		create_button.disabled = true
-		status_label.text = "Appearance Wear is empty."
+		status_label.text = _t("ui.atelier.wear.empty_status")
 		status_label.add_theme_color_override("font_color", UI_MUTED)
 		_clear_preview()
 		return
@@ -714,24 +760,27 @@ func _refresh_dye_detail() -> void:
 	var changed_count := _pending_color_change_count()
 	var fee := _pending_chroma_fee()
 	var outfit_changed := _has_wear_selection_changes()
-	fee_label.text = "%d changed item%s · ₽%s total" % [
-		changed_count,
-		"" if changed_count == 1 else "s",
-		_format_number(fee),
-	]
-	create_button.text = "Applying..." if create_in_progress else "Apply Changes · ₽%s" % _format_number(fee)
+	fee_label.text = _t("ui.atelier.wear.changed", {
+		"count": changed_count,
+		"amount": _format_number(fee),
+	})
+	create_button.text = (
+		_t("ui.atelier.status.applying")
+		if create_in_progress
+		else _t("ui.atelier.wear.apply", {"amount": _format_number(fee)})
+	)
 	create_button.disabled = create_in_progress or (changed_count == 0 and not outfit_changed) or money < fee
 	if create_in_progress:
-		status_label.text = "Applying the new colour..."
+		status_label.text = _t("ui.atelier.status.applying_color")
 		status_label.add_theme_color_override("font_color", UI_MUTED)
 	elif changed_count == 0 and not outfit_changed:
-		status_label.text = "Choose another wear item or a new Chroma colour."
+		status_label.text = _t("ui.atelier.wear.choose_change")
 		status_label.add_theme_color_override("font_color", UI_MUTED)
 	elif money < fee:
-		status_label.text = "You need ₽%s more." % _format_number(fee - money)
+		status_label.text = _t("ui.atelier.error.money", {"amount": _format_number(fee - money)})
 		status_label.add_theme_color_override("font_color", UI_DANGER)
 	else:
-		status_label.text = "Preview ready · your item changes only after payment."
+		status_label.text = _t("ui.atelier.wear.preview_ready")
 		status_label.add_theme_color_override("font_color", UI_GREEN)
 	_sync_dye_controls()
 	dye_swatch_grid.visible = bool(item.get("tintable", false))
@@ -816,17 +865,24 @@ func _refresh_dye_action_state() -> void:
 	var changed_count := _pending_color_change_count()
 	var fee := _pending_chroma_fee()
 	var outfit_changed := _has_wear_selection_changes()
-	fee_label.text = "%d changed item%s · ₽%s total" % [changed_count, "" if changed_count == 1 else "s", _format_number(fee)]
-	create_button.text = "Applying..." if create_in_progress else "Apply Changes · ₽%s" % _format_number(fee)
+	fee_label.text = _t("ui.atelier.wear.changed", {
+		"count": changed_count,
+		"amount": _format_number(fee),
+	})
+	create_button.text = (
+		_t("ui.atelier.status.applying")
+		if create_in_progress
+		else _t("ui.atelier.wear.apply", {"amount": _format_number(fee)})
+	)
 	create_button.disabled = create_in_progress or (changed_count == 0 and not outfit_changed) or money < fee
 	if changed_count == 0 and not outfit_changed:
-		status_label.text = "Choose another wear item or a new Chroma colour."
+		status_label.text = _t("ui.atelier.wear.choose_change")
 		status_label.add_theme_color_override("font_color", UI_MUTED)
 	elif money < fee:
-		status_label.text = "You need ₽%s more." % _format_number(fee - money)
+		status_label.text = _t("ui.atelier.error.money", {"amount": _format_number(fee - money)})
 		status_label.add_theme_color_override("font_color", UI_DANGER)
 	else:
-		status_label.text = "Preview ready · your item changes only after payment."
+		status_label.text = _t("ui.atelier.wear.preview_ready")
 		status_label.add_theme_color_override("font_color", UI_GREEN)
 
 
@@ -916,6 +972,10 @@ func _preview_frames(category: String, appearance: Dictionary) -> SpriteFrames:
 			str(appearance.get("hair", "")),
 			trainer_gender
 		)
+	elif category == "hair":
+		part_id = CharacterAppearanceService.resolve_hair_render_id(
+			str(appearance.get("hair", ""))
+		)
 	else:
 		part_id = CharacterAppearanceService.deserialize_part_id(
 			str(appearance.get(category, ""))
@@ -1002,7 +1062,10 @@ func _create_component_row(component: Dictionary) -> Control:
 	state.add_theme_color_override("font_color", UI_GREEN if has_enough else UI_DANGER)
 	row.add_child(state)
 	var name_label := Label.new()
-	name_label.text = str(component.get("name", component.get("itemId", "Component")))
+	name_label.text = _item_name(
+		str(component.get("itemId", "")),
+		str(component.get("name", component.get("itemId", _t("ui.atelier.component"))))
+	)
 	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	name_label.add_theme_color_override("font_color", UI_TEXT)
 	row.add_child(name_label)
@@ -1028,14 +1091,15 @@ func _on_create_pressed() -> void:
 	var result: Dictionary = await atelier_service.create_bundle(selected_box_item_id)
 	create_in_progress = false
 	if not bool(result.get("success", false)):
-		status_label.text = str(result.get("error", "The outfit box could not be created."))
+		status_label.text = str(result.get("error", _t("ui.atelier.error.create")))
 		status_label.add_theme_color_override("font_color", UI_DANGER)
 		_refresh_detail()
 		return
 	_apply_catalog(result)
-	status_label.text = "%s was created and added to your Bag." % _format_item_name(
-		str(result.get("createdBoxItemId", "outfit-box"))
-	)
+	var created_item_id := str(result.get("createdBoxItemId", "outfit-box"))
+	status_label.text = _t("ui.atelier.status.created", {
+		"item": _item_name(created_item_id, _format_item_name(created_item_id)),
+	})
 	status_label.add_theme_color_override("font_color", UI_GREEN)
 	bundle_created.emit(result)
 
@@ -1051,12 +1115,12 @@ func _dye_customized_outfit() -> void:
 	var result: Dictionary = await atelier_service.dye_chroma_outfit(changes)
 	create_in_progress = false
 	if not bool(result.get("success", false)):
-		status_label.text = str(result.get("error", "The Chroma item could not be dyed."))
+		status_label.text = str(result.get("error", _t("ui.atelier.error.dye")))
 		status_label.add_theme_color_override("font_color", UI_DANGER)
 		_refresh_dye_action_state()
 		return
 	money = maxi(int((result.get("wallet", {}) as Dictionary).get("money", money)), 0)
-	money_label.text = "Money: ₽%s" % _format_number(money)
+	money_label.text = _t("ui.atelier.money", {"amount": _format_number(money)})
 	var dyed_items: Array = result.get("items", [])
 	for dyed_value: Variant in dyed_items:
 		var dyed_item := dyed_value as Dictionary
@@ -1076,9 +1140,9 @@ func _dye_customized_outfit() -> void:
 	selected_chroma_color = str(_selected_chroma_item().get("color", selected_chroma_color))
 	_render_outfit_list()
 	_refresh_dye_detail()
-	status_label.text = "Appearance Wear updated · ₽%s paid for Chroma colour changes." % _format_number(
-		int(result.get("fee", fee))
-	)
+	status_label.text = _t("ui.atelier.status.wear_updated", {
+		"amount": _format_number(int(result.get("fee", fee))),
+	})
 	status_label.add_theme_color_override("font_color", UI_GREEN)
 	chroma_dyed.emit(result)
 
@@ -1160,14 +1224,17 @@ func _outfit_matches_search(outfit: Dictionary, search_text: String) -> bool:
 		return true
 	var searchable := "%s %s %s" % [
 		str(outfit.get("boxItemId", "")),
-		str(outfit.get("name", "")),
+		_item_name(str(outfit.get("boxItemId", "")), str(outfit.get("name", ""))),
 		_outfit_gender_label(outfit),
 	]
 	for component_value: Variant in outfit.get("components", []):
 		if component_value is Dictionary:
 			searchable += " %s %s" % [
 				str((component_value as Dictionary).get("itemId", "")),
-				str((component_value as Dictionary).get("name", "")),
+				_item_name(
+					str((component_value as Dictionary).get("itemId", "")),
+					str((component_value as Dictionary).get("name", ""))
+				),
 			]
 	return searchable.to_lower().contains(search_text)
 
@@ -1177,8 +1244,8 @@ func _chroma_item_matches_search(item: Dictionary, search_text: String) -> bool:
 		return true
 	return ("%s %s %s %s" % [
 		str(item.get("itemId", "")),
-		str(item.get("name", "")),
-		str(item.get("slot", "")),
+		_item_name(str(item.get("itemId", "")), str(item.get("name", ""))),
+		_slot_label(str(item.get("slot", ""))),
 		_outfit_gender_label(item),
 	]).to_lower().contains(search_text)
 
@@ -1193,8 +1260,10 @@ func _outfit_icon_gender(outfit: Dictionary) -> String:
 func _outfit_gender_label(outfit: Dictionary) -> String:
 	var genders: Array = outfit.get("genders", [])
 	if genders.size() == 1:
-		return "%s only" % str(genders[0]).capitalize()
-	return "All models"
+		return _t("ui.atelier.gender.only", {
+			"gender": _t("ui.atelier.gender.%s" % str(genders[0]).to_lower()),
+		})
+	return _t("ui.atelier.gender.all")
 
 
 func _apply_outfit_card_style(button: Button, selected: bool, ready: bool) -> void:
@@ -1250,6 +1319,50 @@ func _format_number(value: int) -> String:
 			result += ","
 		result += digits.substr(index, 1)
 	return result
+
+
+func _item_name(item_id: String, fallback: String) -> String:
+	var item_localization := get_node_or_null("/root/ItemLocalization")
+	if item_localization == null:
+		return fallback
+	return str(item_localization.call("display_name", item_id, fallback))
+
+
+func _item_description(item_id: String, fallback: String) -> String:
+	var item_localization := get_node_or_null("/root/ItemLocalization")
+	if item_localization == null:
+		return fallback
+	return str(item_localization.call("short_description", item_id, fallback))
+
+
+func _slot_label(slot: String) -> String:
+	var key := "ui.atelier.slot.%s" % slot.strip_edges().to_lower()
+	var translated := _t(key)
+	return translated if translated != key else slot.replace("_", " ").capitalize()
+
+
+func _set_localized_property(control: Control, property_name: String, key: String) -> void:
+	control.set_meta("i18n_source_%s" % property_name, key)
+	control.set(property_name, _t(key))
+
+
+func _t(key: String, values: Dictionary = {}) -> String:
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	if localization_manager == null:
+		return key.format(values)
+	return str(localization_manager.call("text", key, values))
+
+
+func _on_locale_changed(_locale: String) -> void:
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	if localization_manager != null:
+		localization_manager.call("localize_tree", self)
+	search_input.placeholder_text = _t(
+		"ui.atelier.search_wear" if active_mode == "dye" else "ui.atelier.search"
+	)
+	money_label.text = _t("ui.atelier.money", {"amount": _format_number(money)})
+	_render_outfit_list()
+	_refresh_detail()
 
 
 func _format_item_name(item_id: String) -> String:

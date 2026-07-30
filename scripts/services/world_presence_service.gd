@@ -3,6 +3,7 @@ extends Node
 class_name WorldPresenceServiceNode
 
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
+const ClientBuild := preload("res://scripts/services/client_build.gd")
 
 signal snapshot_received(players: Array)
 signal player_update_received(player_state: Dictionary)
@@ -97,7 +98,9 @@ func _connect_presence_async() -> void:
 		connecting = false
 		return
 
-	var websocket_url := _to_websocket_url(base_url) + "/ws/world-presence?token=%s" % _session_token().uri_encode()
+	var websocket_url := ClientBuild.append_websocket_query(
+		_to_websocket_url(base_url) + "/ws/world-presence?token=%s" % _session_token().uri_encode()
+	)
 	var error := websocket.connect_to_url(websocket_url)
 	if error != OK:
 		connecting = false

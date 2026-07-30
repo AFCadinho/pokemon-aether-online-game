@@ -22,18 +22,23 @@ func _init() -> void:
 	var launcher_config := FileAccess.get_file_as_string(LAUNCHER_CONFIG_PATH)
 
 	_check_contains(external_links, CREDITS_URL, "game client defines the canonical credits URL")
-	_check_contains(login_scene, '[node name="CreditsButton"', "login screen exposes credits")
-	_check_contains(login_script, "ExternalLinks.CREDITS_URL", "login screen uses the shared credits URL")
-	_check_contains(login_script, "func _on_credits_button_pressed", "login credits action is connected")
-	_check_contains(settings_script, '_create_tab_content("About")', "settings expose an About tab")
+	_check_not_contains(login_scene, '[node name="CreditsButton"', "login screen avoids a redundant credits action")
+	_check_not_contains(login_script, "func _on_credits_button_pressed", "login credits wiring is removed")
+	_check_contains(login_scene, 'text = "ui.login.legal_notice"', "login keeps a concise non-interactive legal notice")
+	_check_contains(settings_script, '_create_tab_content("About", "ui.settings.tab.about")', "settings expose an About tab")
 	_check_contains(settings_script, "ExternalLinks.CREDITS_URL", "settings use the shared credits URL")
-	_check_contains(settings_script, 'credits_button.text = "View Credits & Licences"', "About tab exposes full credits")
+	_check_contains(settings_script, '_set_localized_text(credits_button, "ui.settings.about.credits")', "About tab exposes localized credits")
+	_check_contains(settings_script, '_set_localized_text(legal_note, "ui.settings.about.legal")', "About tab retains the legal notice")
 	_check_contains(launcher_scene, '[node name="CreditsButton"', "launcher exposes credits")
 	_check_contains(launcher_scene, 'text = "Credits"', "launcher uses a clear Credits label")
 	_check_not_contains(launcher_scene, 'text = "Credits & Legal"', "launcher avoids unclear legal wording")
 	_check_contains(launcher_script, "func open_credits", "launcher credits action is connected")
 	_check_contains(launcher_script, "patch_notes_button, credits_button, uninstall_button", "launcher credits uses the pointing-hand cursor")
-	_check_contains(launcher_script, 'credits_button.tooltip_text = "View credits"', "launcher credits has a clear tooltip")
+	_check_contains(
+		launcher_script,
+		'credits_button.tooltip_text = _t("View credits")',
+		"launcher credits has a clear localized tooltip"
+	)
 	_check_contains(launcher_config, '"creditsUrl": "%s"' % CREDITS_URL, "launcher config uses the canonical credits URL")
 
 	quit(1 if failed else 0)

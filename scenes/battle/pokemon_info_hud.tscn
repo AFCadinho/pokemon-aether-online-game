@@ -62,7 +62,7 @@ theme_override_constants/separation = 4
 [node name="ShinyBadge" type="Label" parent="MarginContainer/VBoxContainer/TopRow/NameContainer" unique_id=843612097]
 visible = false
 layout_mode = 2
-tooltip_text = "Shiny Pokémon"
+tooltip_text = "ui.party.shiny"
 theme_override_colors/font_color = Color(1, 0.84313726, 0.3529412, 1)
 theme_override_colors/font_outline_color = Color(0.2784314, 0.14901961, 0.019607844, 1)
 theme_override_constants/outline_size = 3
@@ -80,7 +80,7 @@ theme_override_font_sizes/font_size = 16
 visible = false
 custom_minimum_size = Vector2(18, 18)
 layout_mode = 2
-tooltip_text = "Registered to your Trainer ID"
+tooltip_text = "battle.hud.owned"
 texture = ExtResource("2_owned")
 expand_mode = 1
 stretch_mode = 5
@@ -110,7 +110,7 @@ layout_mode = 2
 size_flags_horizontal = 8
 theme_override_colors/font_color = Color(0.6509804, 0.7490196, 0.8862745, 1)
 theme_override_font_sizes/font_size = 13
-text = "Lv. --"
+text = "battle.hud.level_unknown"
 
 [node name="HPRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1866931360]
 custom_minimum_size = Vector2(0, 18)
@@ -121,7 +121,7 @@ theme_override_constants/separation = 5
 layout_mode = 2
 theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 theme_override_font_sizes/font_size = 11
-text = "HP"
+text = "battle.hover.hp"
 
 [node name="HpBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/HPRow" unique_id=769804269]
 custom_minimum_size = Vector2(0, 18)

@@ -10,6 +10,9 @@ func _init() -> void:
 
 
 func _run() -> void:
+	var localization_manager := root.get_node_or_null("LocalizationManager")
+	if localization_manager != null:
+		localization_manager.set_locale("en")
 	var popup := POPUP_SCENE.instantiate() as AetherAtelierPopup
 	root.add_child(popup)
 	await process_frame
@@ -63,7 +66,7 @@ func _run() -> void:
 		if child is Label:
 			section_labels.append((child as Label).text)
 	_check(
-		section_labels == ["FACEGEAR", "TOP", "BOTTOM"],
+		section_labels == ["FACEGEAR", "TOPS", "BOTTOMS"],
 		"Appearance Wear parts use a stable slot order with section headings"
 	)
 	_check(
@@ -97,6 +100,21 @@ func _run() -> void:
 			== "adinho-classic-sunglasses",
 		"Character Customization can switch to a non-Chroma Appearance Wear item for free"
 	)
+	if localization_manager != null:
+		localization_manager.set_locale("nl")
+		await process_frame
+		var search := popup.get("search_input") as LineEdit
+		_check(
+			search != null and search.placeholder_text == "Zoek in Appearance Wear...",
+			"Atelier search refreshes live in Dutch"
+		)
+		var money_label := popup.get("money_label") as Label
+		_check(
+			money_label != null and money_label.text.begins_with("Geld:"),
+			"Atelier wallet label refreshes live in Dutch"
+		)
+		localization_manager.set_locale("en")
+		await process_frame
 
 	popup.queue_free()
 	await process_frame

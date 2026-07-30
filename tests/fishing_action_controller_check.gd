@@ -68,9 +68,9 @@ func _init() -> void:
 	)
 	_check(
 		controller_source.contains('no_rod_button.pressed.connect(_select_rod.bind(""))')
-		and controller_source.contains("No rod — Put rod away")
+		and controller_source.contains('"ui.fishing.no_rod.stow"')
 		and controller_source.contains("ACTIVE_GREEN_BG"),
-		"players can deactivate fishing and active rods use the green toolbar state"
+		"players can deactivate fishing with localized copy and active rods use the green toolbar state"
 	)
 	_check(
 		player_source.contains("GameState.selected_fishing_rod_item_id.is_empty()")
@@ -232,8 +232,8 @@ func _init() -> void:
 	_check(
 		world_source.contains("await _refresh_fishing_progression()")
 		and world_source.contains('reward.get("fishingProgression", {})')
-		and world_source.contains('"Fishing Level increased to %d!"'),
-		"world refreshes regional progression and reports Fishing XP levels"
+		and world_source.contains('"ui.world.reward.fishing_level"'),
+		"world refreshes regional progression and reports localized Fishing XP levels"
 	)
 	quit(1 if failed else 0)
 

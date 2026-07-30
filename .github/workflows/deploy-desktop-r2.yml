@@ -4,9 +4,10 @@ on:
   workflow_dispatch:
     inputs:
       release_version:
-        description: Game/launcher release version, for example 0.2.0.
-        required: true
+        description: Optional display version. Defaults automatically to 0.0.<workflow run number>.
+        required: false
         type: string
+        default: ""
       build_launcher:
         description: Rebuild and publish the launcher only when the launcher itself changed.
         required: false
@@ -86,19 +87,20 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set launcher release version
+      - name: Set automatic release identity
         env:
           INPUT_RELEASE_VERSION: ${{ inputs.release_version }}
         run: |
-          if [ -z "${INPUT_RELEASE_VERSION}" ]; then
-            echo "::error::release_version is required. Use a version like 0.2.0."
-            exit 1
-          fi
-          if ! printf '%s' "${INPUT_RELEASE_VERSION}" | grep -Eq '^[0-9]+(\.[0-9]+){1,2}([-+][A-Za-z0-9._-]+)?$'; then
+          release_version="${INPUT_RELEASE_VERSION:-0.0.${GITHUB_RUN_NUMBER}}"
+          if ! printf '%s' "${release_version}" | grep -Eq '^[0-9]+(\.[0-9]+){1,2}([-+][A-Za-z0-9._-]+)?$'; then
             echo "::error::release_version must look like 0.2.0 or 0.2.0-beta.1."
             exit 1
           fi
-          echo "LAUNCHER_RELEASE_VERSION=${INPUT_RELEASE_VERSION}" >> "${GITHUB_ENV}"
+          echo "LAUNCHER_RELEASE_VERSION=${release_version}" >> "${GITHUB_ENV}"
+          client_build_id="${GITHUB_SHA}-${GITHUB_RUN_ID}"
+          echo "CLIENT_BUILD_ID=${client_build_id}" >> "${GITHUB_ENV}"
+          echo "Release version: ${release_version}"
+          echo "Client build: ${client_build_id}"
 
       - name: Detect launcher changes
         env:
@@ -138,6 +140,14 @@ jobs:
             --project launcher/project.godot \
             --export-presets launcher/export_presets.cfg \
             --version "${LAUNCHER_RELEASE_VERSION}"
+
+      - name: Stamp game release and build identity
+        run: |
+          python3 tools/stamp_godot_version.py \
+            --project project.godot \
+            --export-presets export_presets.cfg \
+            --version "${LAUNCHER_RELEASE_VERSION}" \
+            --build-id "${CLIENT_BUILD_ID}"
 
       - name: Install system packages
         run: sudo apt-get update && sudo apt-get install -y unzip
@@ -334,6 +344,7 @@ jobs:
 
           python3 tools/package_launcher_release.py \
             --version "${LAUNCHER_RELEASE_VERSION}" \
+            --build-id "${CLIENT_BUILD_ID}" \
             --base-url "${UPDATE_BASE_URL}" \
             --game-prefix game \
             --asset-prefix assets \
@@ -368,6 +379,7 @@ jobs:
 
           python3 - <<'PY'
           import json
+          import os
           from pathlib import Path
 
           output_dir = Path("builds/launcher")
@@ -399,6 +411,7 @@ jobs:
         run: |
           python3 - <<'PY'
           import json
+          import os
           from pathlib import Path
 
           required_ids = {
@@ -419,6 +432,9 @@ jobs:
 
           for manifest_path in sorted(Path("builds/launcher").glob("manifest*.json")):
               manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+              game = manifest.get("game")
+              if not isinstance(game, dict) or game.get("buildId") != os.environ["CLIENT_BUILD_ID"]:
+                  raise SystemExit(f"{manifest_path} missing the current immutable client build ID")
               launcher = manifest.get("launcher")
               if not isinstance(launcher, dict) or not required_launcher_fields.issubset(launcher):
                   raise SystemExit(f"{manifest_path} missing launcher self-update metadata")
@@ -510,7 +526,6 @@ jobs:
         if: steps.upload_r2.outputs.published == 'true' && inputs.announce_discord
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          RELEASE_VERSION: ${{ inputs.release_version }}
           RELEASE_NOTES: ${{ inputs.release_notes }}
         run: |
           if [ -z "${DISCORD_WEBHOOK_URL}" ]; then
@@ -519,7 +534,7 @@ jobs:
           fi
 
           python3 tools/build_discord_release_payload.py \
-            --version "${RELEASE_VERSION}" \
+            --version "${LAUNCHER_RELEASE_VERSION}" \
             --release-notes "${RELEASE_NOTES}" \
             > discord_payload.json
 

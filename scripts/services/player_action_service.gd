@@ -73,16 +73,29 @@ func _request_json(endpoint: String, method: HTTPClient.Method, body: String) ->
 	var error: Error = request.request(base_url + endpoint, headers, method, body)
 	if error != OK:
 		request.queue_free()
-		return {"success": false, "error": "Could not start request: %s" % error_string(error)}
+		return {
+			"success": false,
+			"error": BackendErrorLocalizationService.message({"code": "service_unavailable"}),
+			"diagnosticError": error_string(error),
+		}
 	var completed: Array = await request.request_completed
 	request.queue_free()
 	var response_code: int = int(completed[1])
 	var parsed: Variant = JSON.parse_string((completed[3] as PackedByteArray).get_string_from_utf8())
 	var parsed_body: Dictionary = _dictionary(parsed)
-	if int(completed[0]) != HTTPRequest.RESULT_SUCCESS or response_code < 200 or response_code >= 300:
-		var detail: Variant = parsed_body.get("detail", {})
-		var message: String = str((detail as Dictionary).get("message", "Request failed.")) if detail is Dictionary else str(detail)
-		return {"success": false, "status": response_code, "error": message}
+	var request_result := int(completed[0])
+	if request_result != HTTPRequest.RESULT_SUCCESS:
+		return {
+			"success": false,
+			"status": response_code,
+			"error": BackendErrorLocalizationService.transport_message(request_result),
+		}
+	if response_code < 200 or response_code >= 300:
+		return BackendErrorLocalizationService.decorate({
+			"success": false,
+			"status": response_code,
+			"body": parsed_body,
+		})
 	return {"success": true, "body": parsed_body}
 
 

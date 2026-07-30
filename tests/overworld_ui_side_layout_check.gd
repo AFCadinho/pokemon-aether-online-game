@@ -77,32 +77,40 @@ func _init() -> void:
 	_check(settings_block.contains('icon = ExtResource("7_settings_icon")'), "relocated Settings keeps its familiar gear icon")
 	_check(quest_slot_block.contains("custom_minimum_size = Vector2(52, 52)") and quest_button_block.contains('texture_normal = ExtResource("27_quest_log")'), "Quest Log replaces Settings in the primary navigation bar")
 	_check(scene_source.contains('path="res://assets/ui/pvp_battles.svg" id="18_pvp"'), "PvP uses a dedicated versus icon instead of a generic Poke Ball")
-	_check(script_source.contains('pvp_mode_menu.custom_minimum_size = Vector2(390, 0)') and script_source.contains('title.text = "PvP Battles"'), "PvP opens a deliberate battle-mode launcher")
-	_check(script_source.contains('"Competitive matchmaking"') and script_source.contains('"Create or join a private battle"'), "PvP mode cards explain Ranked and Custom battles")
-	_check(script_source.contains('pvp_mode_tournaments_button.disabled = true') and script_source.contains('"COMING SOON"'), "unavailable Tournaments are clearly disabled")
+	_check(script_source.contains('pvp_mode_menu.custom_minimum_size = Vector2(390, 0)') and script_source.contains('"ui.pvp.title"'), "PvP opens a deliberate battle-mode launcher")
+	_check(script_source.contains('"ui.pvp.mode.competitive"') and script_source.contains('"ui.pvp.mode.private"'), "PvP mode cards explain Ranked and Custom battles")
+	_check(script_source.contains('pvp_mode_tournaments_button.disabled = true') and script_source.contains('"ui.pvp.mode.coming_soon"'), "unavailable Tournaments are clearly disabled")
 	_check(script_source.contains('pvp_mode_close_button.text = "×"') and not script_source.contains('_create_pvp_mode_menu_button("Close")'), "PvP launcher uses a compact header close action")
 	_check(socials_menu_block.contains("custom_minimum_size = Vector2(390, 0)"), "Social opens as a readable launcher instead of a narrow button list")
-	_check(scene_source.contains('text = "Stay connected with other trainers"'), "Social launcher explains its purpose")
-	_check(script_source.contains('"Friends"') and script_source.contains('"Nearby Trainers"') and script_source.contains('"Mail"'), "Social launcher keeps all existing destinations")
+	_check(scene_source.contains('text = "ui.social.subtitle"'), "Social launcher explains its purpose with a localization key")
+	_check(
+		script_source.contains('"ui.social.friends"')
+		and script_source.contains('"ui.social.nearby"')
+		and script_source.contains('"ui.social.mail"'),
+		"Social launcher keeps all existing destinations"
+	)
 	_check(script_source.contains('const SOCIALS_NEARBY_ICON: Texture2D = preload("res://assets/ui/socials_nearby.svg")'), "Nearby Trainers uses a dedicated location icon")
 	_check(script_source.contains('const SOCIALS_MAIL_ICON: Texture2D = preload("res://assets/ui/socials_mail.svg")'), "Mail uses a dedicated envelope icon")
 	_check(script_source.contains('$Control/SocialsMenu/MarginContainer/VBoxContainer/Header/CloseButton'), "Social launcher uses a compact header close action")
 	_check(script_source.contains('content.name = "LauncherCardContent"') and script_source.contains("func _configure_launcher_card_button("), "PvP and Social launchers share one card language")
 	_check(script_source.contains("socials_friend_list_attention_badge = _create_socials_menu_attention_badge(socials_friend_list_button)"), "friend requests remain visible on the refreshed launcher")
 	_check(script_source.contains("socials_mail_attention_badge = _create_socials_menu_attention_badge(socials_mail_button)"), "unread mail remains visible on the refreshed launcher")
-	_check(script_source.contains('dev_actions_popup.custom_minimum_size = Vector2(420, 0)') and script_source.contains('"Developer Tools"'), "Developer Tools uses a structured launcher surface")
-	_check(script_source.contains('"DeveloperQuickActions"') and script_source.contains('"World preview"'), "Developer actions and world preview have separate visual groups")
-	_check(script_source.contains('"Create Pokémon"') and script_source.contains('"Start Encounter"') and script_source.contains('"Add Resources"'), "Developer quick actions use clear task-oriented labels")
-	_check(script_source.contains('"Heal Party"') and script_source.contains('"Preview Evolution"') and script_source.contains('"Clear Data"'), "Developer utility and destructive actions remain available")
-	_check(script_source.contains('staff_tools_popup.custom_minimum_size = Vector2(390, 0)') and script_source.contains('"Moderation and player assistance"'), "Staff Tools uses the shared compact launcher")
-	_check(script_source.contains('"Move yourself or assist another trainer"') and script_source.contains('"Enter a secure staff session"'), "Staff actions explain Teleport and Impersonate")
-	_check(script_source.contains('content_creator_menu_popup.custom_minimum_size = Vector2(390, 0)') and script_source.contains('"Create Pokémon for the Alpha"'), "Alpha Tools uses the shared compact launcher")
-	_check(script_source.contains('"Build a team for your Alpha adventure"') and script_source.contains('"Remove only Pokémon made with Alpha Tools"'), "Alpha Tools actions explain their scope")
+	_check(script_source.contains('dev_actions_popup.custom_minimum_size = Vector2(420, 0)') and script_source.contains('"ui.staff.dev.title"'), "Developer Tools uses a structured launcher surface")
+	_check(script_source.contains('"DeveloperQuickActions"') and script_source.contains('"ui.staff.dev.world_preview"'), "Developer actions and world preview have separate visual groups")
+	_check(script_source.contains('"ui.staff.dev.create_pokemon"') and script_source.contains('"ui.staff.dev.start_encounter"') and script_source.contains('"ui.staff.dev.resources"'), "Developer quick actions use clear task-oriented labels")
+	_check(script_source.contains('"ui.staff.dev.heal_party"') and script_source.contains('"ui.staff.dev.preview_evolution"') and script_source.contains('"ui.staff.dev.clear_data"'), "Developer utility and destructive actions remain available")
+	_check(script_source.contains('staff_tools_popup.custom_minimum_size = Vector2(390, 0)') and script_source.contains('"ui.staff.tools.subtitle"'), "Staff Tools uses the shared compact launcher")
+	_check(script_source.contains('"ui.staff.teleport.action_description"') and script_source.contains('"ui.staff.impersonate.action_description"'), "Staff actions explain Teleport and Impersonate")
+	_check(script_source.contains('alpha_tools_popup.custom_minimum_size = Vector2(390, 0)') and script_source.contains('"ui.staff.alpha.subtitle"'), "Alpha Tools uses the shared compact launcher")
+	_check(script_source.contains('"ui.staff.alpha.create_description"') and script_source.contains('"ui.staff.alpha.clear_description"'), "Alpha Tools actions explain their scope")
 	_check(scene_source.contains('path="res://assets/ui/alpha_tools.svg" id="15_content_creator"') and script_source.contains('preload("res://assets/ui/alpha_tools.svg")'), "Alpha Tools uses its dedicated validated Alpha icon")
+	_check(script_source.contains('content_creator_tools_popup.custom_minimum_size = Vector2(390, 0)') and script_source.contains('"ui.staff.creator.subtitle"'), "Content Creator Tools uses a separate compact launcher")
+	_check(scene_source.contains('path="res://assets/ui/content_creator.svg"') and script_source.contains('preload("res://assets/ui/content_creator.svg")'), "Content Creator Tools uses its dedicated creator icon")
 	_check(script_source.contains('const TOOL_CLEAR_DATA_ICON: Texture2D = preload("res://assets/ui/tool_clear_data.svg")') and script_source.contains('const STAFF_IMPERSONATE_ICON: Texture2D = preload("res://assets/ui/staff_impersonate.svg")'), "internal tool launchers use dedicated action icons")
 	_check(script_source.contains('_position_action_slot_popup(dev_actions_popup, dev_actions_slot)') and script_source.contains('_position_action_slot_popup(staff_tools_popup, staff_tools_slot)'), "internal tool menus open beside their toolbar actions")
-	_check(script_source.contains('{"panel": content_creator_menu_popup, "close": Callable(self, "_hide_content_creator_menu_popup")}'), "Escape closes the Alpha Tools launcher")
-	_check(script_source.contains("content_creator_create_pokemon_button.visible = can_use_content_creator_generation") and script_source.contains("staff_impersonate_button.visible = can_impersonate"), "launcher polish preserves permission-based action visibility")
+	_check(script_source.contains('{"panel": alpha_tools_popup, "close": Callable(self, "_hide_alpha_tools_popup")}'), "Escape closes the Alpha Tools launcher")
+	_check(script_source.contains('{"panel": content_creator_tools_popup, "close": Callable(self, "_hide_content_creator_tools_popup")}'), "Escape closes the Content Creator Tools launcher")
+	_check(script_source.contains("alpha_create_pokemon_button.visible = can_use_content_creator_generation") and script_source.contains("staff_impersonate_button.visible = can_impersonate"), "launcher polish preserves permission-based action visibility")
 	_check(
 		disable_icon_focus_block.contains("socials_button")
 		and disable_icon_focus_block.contains("pvp_button")
@@ -114,7 +122,7 @@ func _init() -> void:
 		and disable_icon_focus_block.contains("button.focus_mode = Control.FOCUS_NONE"),
 		"toolbar menu buttons cannot retain Space-triggerable keyboard focus"
 	)
-	_check(scene_source.contains('path="res://assets/ui/clan.svg" id="16_guild"') and scene_source.contains('tooltip_text = "Open Guilds"'), "Guilds use a three-member group crest instead of a guild building")
+	_check(scene_source.contains('path="res://assets/ui/clan.svg" id="16_guild"') and scene_source.contains('tooltip_text = "ui.navigation.guilds"'), "Guilds use a three-member group crest with a localized tooltip")
 	_check(scene_source.contains('path="res://assets/ui/follower_toggle.svg" id="10_follower"'), "Follower toggle shows a trainer and companion")
 	_check(scene_source.contains('path="res://assets/ui/running_shoes_toggle.svg" id="11_running_shoe"'), "Running Shoes use a dedicated speed-toggle icon")
 	_check(scene_source.contains('path="res://assets/ui/town_map_navigation.svg" id="3_riyyd"'), "Town Map uses a navigation-focused map icon")
@@ -142,7 +150,7 @@ func _init() -> void:
 	_check(scene_source.count('[node name="DescriptionLabel" type="Label" parent="Control/PersonalBuffsPanel') == 3, "personal buffs render readable effect descriptions")
 	_check(scene_source.count('[node name="TimeLabel" type="Label" parent="Control/PersonalBuffsPanel') == 3, "personal buffs render remaining durations")
 	_check(scene_source.contains('[node name="EmptyLabel" type="Label" parent="Control/PersonalBuffsPanel'), "personal buffs provide an empty-state label")
-	_check(scene_source.contains('text = "No buffs active"'), "personal empty state clearly reports that no buffs are active")
+	_check(scene_source.contains('text = "ui.buff.none"'), "personal empty state uses its localization key")
 	_check(scene_source.contains('[node name="ActiveSummaryButton" type="Button" parent="Control/PersonalBuffsPanel'), "active personal buffs use a compact count button")
 
 	_check(script_source.contains('_register_collapsible_panel("hotkey_sidebar", hotkey_sidebar_panel, "left_center")'), "hotbar collapse control sits on its inner edge")
@@ -167,7 +175,7 @@ func _init() -> void:
 	_check(settings_source.contains('"chat_tab_visibility": chat_tab_visibility'), "chat tab visibility is persisted with local settings")
 	_check(settings_source.contains('"chat_tab_order": chat_tab_order'), "chat tab order is persisted with local settings")
 	_check(settings_source.contains("func reset_chat_tab_preferences()"), "chat tab settings provide a default reset")
-	_check(script_source.contains('"No private messages yet"'), "PM uses one clear full-width empty state")
+	_check(script_source.contains('"ui.chat.pm.empty_title"'), "PM uses one localized full-width empty state")
 	_check(not script_source.contains('"No PMs yet."') and not script_source.contains('"No PM selected"'), "PM removes duplicated empty-state copy")
 	_check(not script_source.contains("pm_conversation_sidebar"), "PM conversation navigation moves out of the permanent sidebar")
 	_check(script_source.contains("pm_message_area.visible = has_conversations"), "PM gives its empty state the full chat width")
@@ -178,10 +186,10 @@ func _init() -> void:
 	_check(script_source.contains("channel == CHAT_TAB_GUILD and active_chat_tab != CHAT_TAB_GUILD"), "incoming Guild messages mark the Guild tab unread")
 	_check(script_source.contains("active_chat_tab == CHAT_TAB_GUILD and guild_chat_has_unread"), "opening Guild chat clears its unread badge")
 	_check(script_source.contains("trade_chat_tab_button.visible = false") and script_source.contains("help_chat_tab_button.visible = false"), "Trade and Help no longer consume top-tab space")
-	_check(script_source.contains('chat_context_selector_button.text = "%s  ▴" % channel_label'), "bottom-left selector shows the active General channel")
-	_check(script_source.contains('_add_chat_context_option("Global", CHAT_TAB_GENERAL'), "General selector exposes Global")
-	_check(script_source.contains('_add_chat_context_option("Trade", CHAT_TAB_TRADE'), "General selector exposes Trade")
-	_check(script_source.contains('_add_chat_context_option("Help", CHAT_TAB_HELP'), "General selector exposes Help")
+	_check(script_source.contains('"ui.chat.context.selector"'), "bottom-left selector localizes the active General channel")
+	_check(script_source.contains('_add_chat_context_option(LocalizationManager.text("ui.chat.channel.global"), CHAT_TAB_GENERAL'), "General selector exposes localized Global")
+	_check(script_source.contains('_add_chat_context_option(LocalizationManager.text("ui.chat.tab.trade"), CHAT_TAB_TRADE'), "General selector exposes localized Trade")
+	_check(script_source.contains('_add_chat_context_option(LocalizationManager.text("ui.chat.tab.help"), CHAT_TAB_HELP'), "General selector exposes localized Help")
 	_check(script_source.contains("pm_context_selector_attention_badge = _create_attention_badge_for_button"), "PM selector button has a red unread indicator")
 	_check(script_source.contains("pm_context_selector_attention_badge.visible = (") and script_source.contains("_active_primary_chat_tab_id() == CHAT_TAB_PM"), "PM selector badge appears only when unread PMs are actionable")
 	_check(script_source.contains("_add_pm_context_option(label, user_id, user_id == active_pm_user_id, unread)"), "PM selector exposes conversation names with their unread state")
@@ -203,18 +211,19 @@ func _init() -> void:
 	_check(script_source.contains('CHAT_RESIZE_ICON: Texture2D = preload("res://assets/ui/chat_resize.svg")'), "chat resize control uses a dedicated diagonal icon")
 	_check(not script_source.contains('chat_resize_button.text = "[]"'), "chat resize control no longer exposes placeholder text")
 	_check(script_source.contains("Control.CURSOR_FDIAGSIZE"), "chat resize control uses a diagonal resize cursor")
+	_check(script_source.contains("# Let the button receive mouse-up so Godot clears its pressed and hover"), "chat resize forwards mouse release to clear the handle tooltip state")
 	_check(script_source.contains("func _on_party_slot_clicked(slot_index: int)"), "normal party slots remain clickable")
 	_check(script_source.contains("_show_pokemon_summary(slot_index)"), "normal party slots still open summaries")
 	_check(script_source.contains("func set_global_buffs(buffs: Array)"), "global buff tray accepts future live data")
 	_check(script_source.count('"current": 0') == 4, "global buffs start with no community funding")
 	_check(script_source.count('"state": "funding"') == 4 and not script_source.contains('"state": "active"'), "global buffs start inactive")
-	_check(script_source.contains("func _apply_global_buff_slot_visual") and script_source.contains("Waiting for community contributions"), "unfunded global buffs use a clear inactive visual state")
+	_check(script_source.contains("func _apply_global_buff_slot_visual") and script_source.contains('"ui.buff.waiting_contributions"'), "unfunded global buffs use a localized inactive visual state")
 	_check(scene_source.count("value = 0.0") >= 4, "global buff scene defaults avoid flashing funded progress")
 	_check(script_source.contains("func set_personal_buffs(buffs: Array)"), "personal buff tray accepts future live data")
 	_check(script_source.contains("set_personal_buffs([])"), "personal buffs default to the empty state")
 	_check(
 		script_source.contains("func _current_aether_blessing_buff()")
-		and script_source.contains('"name": "Aether Blessing"')
+		and script_source.contains('"name_key": "ui.buff.aether_blessing.name"')
 		and script_source.contains('"expiresAt": expires_at'),
 		"active Aether Blessings appear in the personal buff tray with their expiry"
 	)
@@ -228,13 +237,13 @@ func _init() -> void:
 	_check(script_source.contains("const PERSONAL_BUFF_PANEL_COMPACT_HEIGHT := 42.0"), "personal buff and Store controls share a status-rail height")
 	_check(script_source.contains("func _on_personal_buffs_summary_pressed()"), "personal buff count can expand and collapse its details")
 	_check(script_source.contains("func _personal_buffs_summary_tooltip()"), "personal buff count exposes hover details")
-	_check(script_source.contains('personal_buffs_summary_button.text = "%d %s active  %s"'), "personal buff summary reports the active count")
+	_check(script_source.contains('LocalizationManager.plural(') and script_source.contains('"ui.buff.active.one"') and script_source.contains('"ui.buff.active.many"'), "personal buff summary localizes the active count")
 	_check(script_source.contains("func _on_global_buff_button_pressed(button: Button)"), "global buff icons open their detail panel")
 	_check(script_source.contains('str(buff.get("state", "funding")) == "active"'), "global buff icons distinguish active and funding states")
 	_check(script_source.contains('"id": "global_shiny"'), "global buff data includes Shiny encounters")
 	_check(script_source.contains('"id": "global_rare_encounter"'), "global buff data includes rarer Pokémon encounters")
-	_check(script_source.contains("Community contributions are not connected yet."), "community contribution placeholder cannot silently spend currency")
-	_check(script_source.contains('name_label.text = str(buff.get("name", "Buff"))'), "personal buff rows receive readable names")
+	_check(script_source.contains('"ui.buff.contribution_unavailable"'), "localized community contribution placeholder cannot silently spend currency")
+	_check(script_source.contains("name_label.text = _localized_buff_name(buff)"), "personal buff rows receive localized readable names")
 	_check(donator_store_scene_source.contains("custom_minimum_size = Vector2(1120, 680)"), "Donator Store opens as a full catalog and character-preview interface")
 	_check(donator_store_script_source.contains('"membership",') and donator_store_script_source.contains('"cosmetics",') and donator_store_script_source.contains('"mounts",') and donator_store_script_source.contains('"charms",') and donator_store_script_source.contains('"services",'), "Aether Store separates its six scalable catalog categories")
 	_check(donator_store_script_source.contains('"membership": "Blessings"') and donator_store_script_source.contains('"membership": "NO BATTLE POWER"') and donator_store_script_source.contains("No battle advantages"), "Blessings establish a fair supporter direction")
@@ -253,7 +262,7 @@ func _init() -> void:
 	_check(donator_store_script_source.contains('"name": "Rain Dance Charm"') and donator_store_script_source.contains('"name": "Snowscape Charm"'), "Store includes overworld weather Charms")
 	_check(donator_store_script_source.contains('"charms": "FIELD CONVENIENCE"') and donator_store_script_source.contains("Progression and area rules still apply."), "Charm category covers field convenience without promising progression bypasses")
 	_check(
-		script_source.contains('{"id": "charms", "label": "Charms", "iconItemId": "surf-charm"}')
+		script_source.contains('{"id": "charms", "labelKey": "ui.bag.category.charms", "iconItemId": "surf-charm"}')
 			and script_source.contains('"medicine", "machines", "charms",'),
 		"tradeable field Charms use their own Bag category instead of Key Items"
 	)
@@ -268,9 +277,17 @@ func _init() -> void:
 		and donator_store_script_source.contains("GENDERCHANCETICKET.png"),
 		"Trainer Service tickets use dedicated pixel-art item icons"
 	)
-	_check(donator_store_script_source.contains('title.text = "Aether Gift Store"') and donator_store_script_source.contains("Server-verified catalog"), "Gift Store presents itself as a clearly labeled authoritative catalog")
+	_check(
+		donator_store_script_source.contains('"ui.store.title"')
+		and donator_store_script_source.contains('"ui.store.subtitle"'),
+		"Gift Store presents itself as a clearly labeled authoritative catalog"
+	)
 	_check(not donator_store_script_source.contains('"personal_buffs"') and not donator_store_script_source.contains('"personal_buff"'), "paid personal buffs stay outside the Store catalog")
-	_check(donator_store_script_source.contains("func set_gem_balance(amount: int)") and donator_store_script_source.contains('balance_label.text = "%s Aether Gems"'), "Donator Store labels its authoritative Aether Gem balance")
+	_check(
+		donator_store_script_source.contains("func set_gem_balance(amount: int)")
+		and donator_store_script_source.contains('"ui.store.balance"'),
+		"Donator Store labels its authoritative Aether Gem balance"
+	)
 	_check(
 		donator_store_script_source.contains("authoritative_gem_prices")
 		and donator_store_script_source.contains("purchase_requested.emit(selected_item_id, _selected_purchase_chroma_colors())")
@@ -278,23 +295,24 @@ func _init() -> void:
 		"Donator Store purchases use the authoritative Aether Gem checkout"
 	)
 	_check(
-		script_source.contains('add_system_message("Aether Gift Store: Purchased %s. It was added to your Bag." % purchased_item_name)'),
-		"successful Aether Gift Store purchases announce themselves in System chat"
+		script_source.contains('"ui.store.purchase.system_success"')
+		and script_source.contains('{"item": purchased_item_name}'),
+		"successful Aether Gift Store purchases use a localized System message"
 	)
 	_check(
 		donator_store_script_source.contains("Tradeable voucher. Use it from the Bag")
-		and script_source.contains('"id": "vouchers", "label": "Vouchers"')
+		and script_source.contains('"id": "vouchers", "labelKey": "ui.bag.category.vouchers"')
 		and script_source.contains('use_action == "redeem_aether_blessing"')
-		and script_source.contains("Aether Blessing extended by %d days."),
+		and script_source.contains('LocalizationManager.text("ui.bag.message.blessing_extended"'),
 		"Blessing purchases remain tradeable vouchers until redeemed from the Bag"
 	)
 	_check(
 		script_source.contains("func _create_trainer_card_wallet_tab()")
 		and script_source.contains('tab.name = "Wallet"')
-		and script_source.contains('"Pokédollars"')
-		and script_source.contains('"Aether Gems"')
-		and script_source.contains('"Aetherite"')
-		and script_source.contains('"Battle Points"')
+		and script_source.contains('"ui.trainer_card.wallet.money"')
+		and script_source.contains('"ui.trainer_card.wallet.gems"')
+		and script_source.contains('"ui.trainer_card.wallet.aetherite"')
+		and script_source.contains('"ui.trainer_card.wallet.battle_points"')
 		and script_source.contains('cards.columns = 2'),
 		"Trainer Card has a 2x2 Wallet grid for all currencies"
 	)
@@ -311,12 +329,12 @@ func _init() -> void:
 	_check(script_source.contains("func _create_trainer_card_redeem_button()") and script_source.contains('header.add_child(_create_trainer_card_redeem_button())'), "Trainer Card places the future Redeem Code action beside Close")
 	_check(not script_source.contains('hint_label.text = "Have a gift code?"') and not script_source.contains("RedeemCodePanel"), "Trainer Card omits the redundant redeem footer copy")
 	_check(script_source.contains('redeem_button.add_theme_constant_override("icon_max_width", 18)') and not script_source.contains("redeem_button.icon_max_width"), "runtime Redeem Code button sizes its icon through a valid theme override")
-	_check(not script_source.contains("redeem_button.pressed.connect"), "Redeem Code remains intentionally non-functional")
+	_check(script_source.contains("redeem_button.pressed.connect(_open_trainer_card_redeem_popup)"), "Redeem Code opens the live gift-code flow")
 	_check(script_source.contains("const TRAINER_CARD_SIZE := Vector2(720, 500)"), "Trainer Card has enough room for a breathable passport layout")
 	_check(script_source.contains("func _make_trainer_card_outer_style()") and script_source.contains("func _make_trainer_card_section_style"), "Trainer Card uses dedicated semantic surfaces")
 	_check(script_source.contains("func _apply_trainer_card_tabs_style") and script_source.contains("TRAINER_CARD_ACCENT, true"), "Trainer Card tabs use a restrained selected accent")
-	_check(script_source.contains('subtitle.text = "TRAINER PASSPORT  ·  ID %s"'), "Trainer Card header prioritizes passport identity")
-	_check(script_source.contains('title.text = title_text.to_upper()') and script_source.contains('title.add_theme_font_size_override("font_size", 11)'), "Trainer Card section headings use compact hierarchy")
+	_check(script_source.contains('"ui.trainer_card.passport"'), "Trainer Card header prioritizes localized passport identity")
+	_check(script_source.contains('_set_localized_control_property(title, "text", title_key)') and script_source.contains('title.add_theme_font_size_override("font_size", 11)'), "Trainer Card section headings use compact localized hierarchy")
 	_check(script_source.contains('redeem_button.custom_minimum_size = Vector2(142, 30)') and script_source.contains("_apply_button_style(redeem_button)"), "Redeem Code remains a compact secondary header action")
 	_check(not script_source.contains('trainer_card_popup.add_theme_stylebox_override("panel", _make_gold_panel_style'), "Trainer Card no longer uses the legacy heavy gold frame")
 	_check(script_source.contains('button.texture_normal = _load_item_icon(entry_id)') and script_source.contains('button.texture_normal = _load_item_icon("%s-charm" % move_id)'), "hotbar keeps authentic item and field-move charm icons")

@@ -4,9 +4,26 @@ const BattleEventTextFormatterScript := preload("res://scripts/battle/battle_eve
 
 var formatter := BattleEventTextFormatterScript.new()
 var failed := false
+var localization_manager: Node
+var settings_manager: Node
 
 
 func _init() -> void:
+	call_deferred("_run")
+
+
+func _run() -> void:
+	localization_manager = root.get_node_or_null("LocalizationManager")
+	settings_manager = root.get_node_or_null("SettingsManager")
+	_check_equal(localization_manager != null, true, "formatter check can access LocalizationManager")
+	_check_equal(settings_manager != null, true, "formatter check can access SettingsManager")
+	if localization_manager == null or settings_manager == null:
+		quit(1)
+		return
+	var original_locale := str(localization_manager.get("current_locale"))
+	var original_content_name_language := str(settings_manager.get("content_name_language"))
+	settings_manager.set("content_name_language", "localized")
+	localization_manager.call("set_locale", "en")
 	_check_equal(
 		formatter.format_wild_battle_start_messages("Pikachu", "Pidgey"),
 		["A wild Pidgey has appeared!", "Go! Pikachu!"],
@@ -92,6 +109,40 @@ func _init() -> void:
 		"The weather returned to normal.",
 		"legacy weather end message never displays None ended"
 	)
+	localization_manager.call("set_locale", "nl")
+	_check_equal(
+		formatter.format_move_event("Pikachu", "Thunderbolt"),
+		"Pikachu gebruikte Bliksemschicht!",
+		"Dutch move event localizes the sentence and move presentation"
+	)
+	_check_equal(
+		formatter.format_ability_event({"target": "Pikachu", "ability": "Static"}),
+		"Statische Lading van Pikachu werd geactiveerd!",
+		"Dutch ability event localizes ability presentation"
+	)
+	_check_equal(
+		formatter.format_status_event({"target": "Pikachu", "status": "brn"}),
+		"Pikachu liep een brandwond op!",
+		"Dutch status event localizes battle grammar"
+	)
+	_check_equal(
+		formatter.format_field_effect_event({"state": "end", "effectType": "weather", "effect": "Snow"}),
+		"De sneeuw stopte.",
+		"Dutch weather end uses canonical event identity after localization"
+	)
+	localization_manager.call("set_locale", "pt_BR")
+	_check_equal(
+		formatter.format_action_prompt("Pikachu"),
+		"O que Pikachu fará?",
+		"Portuguese action prompt localizes at runtime"
+	)
+	_check_equal(
+		formatter.format_stat_change_event({"target": "Pikachu", "stat": "atk", "amount": 2}),
+		"Ataque de Pikachu subiu muito!",
+		"Portuguese stat event localizes stat and action"
+	)
+	localization_manager.call("set_locale", original_locale)
+	settings_manager.set("content_name_language", original_content_name_language)
 
 	quit(1 if failed else 0)
 

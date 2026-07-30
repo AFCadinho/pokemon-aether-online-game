@@ -73,9 +73,13 @@ var selector_loading: bool = false
 var selector_error: String = ""
 var nature_catalog_options: Array = []
 var is_syncing_assumption_controls := false
+var localization_manager: Node
 
 
 func _ready() -> void:
+	localization_manager = get_tree().root.get_node_or_null("LocalizationManager")
+	if localization_manager != null and not localization_manager.locale_changed.is_connected(_on_locale_changed):
+		localization_manager.locale_changed.connect(_on_locale_changed)
 	clip_contents = true
 	content.clip_contents = true
 	content.add_theme_constant_override("separation", 5)
@@ -118,7 +122,7 @@ func show_error(message: String) -> void:
 	loading_attacker_name = ""
 	loading_defender_name = ""
 	last_response = {}
-	last_error = _fallback_text(message, "Damage calculation failed.")
+	last_error = _fallback_text(message, _t("battle.calc.error.failed"))
 	_render_current_state()
 
 
@@ -130,7 +134,7 @@ func show_response(response: Dictionary) -> void:
 
 	if not bool(response.get("success", false)):
 		last_response = {}
-		last_error = str(response.get("error", "Damage calculation failed."))
+		last_error = str(response.get("error", _t("battle.calc.error.failed")))
 	else:
 		last_response = response
 
@@ -184,8 +188,8 @@ func _render_current_state() -> void:
 	_add_subtabs()
 
 	if active_subtab == SUBTAB_THEIR_DAMAGE:
-		_add_profile_summary("Opponent", "Your Pokemon", "HP ?", "Lv ?")
-		_add_status("Coming soon", TEXT_SECONDARY)
+		_add_profile_summary(_t("battle.calc.opponent"), _t("battle.calc.your_pokemon"), _t("battle.calc.hp_unknown"), _t("battle.calc.level_unknown"))
+		_add_status(_t("battle.calc.coming_soon"), TEXT_SECONDARY)
 		return
 
 	if not last_response.is_empty():
@@ -194,22 +198,22 @@ func _render_current_state() -> void:
 
 	if is_loading:
 		_add_profile_summary(
-			_fallback_text(loading_attacker_name, "Your Pokemon"),
-			_fallback_text(loading_defender_name, "Opponent"),
-			"HP ?",
-			"Lv ?"
+			_fallback_text(loading_attacker_name, _t("battle.calc.your_pokemon")),
+			_fallback_text(loading_defender_name, _t("battle.calc.opponent")),
+			_t("battle.calc.hp_unknown"),
+			_t("battle.calc.level_unknown")
 		)
-		_add_status("Calculating damage...", TEXT_SECONDARY)
+		_add_status(_t("battle.calc.calculating"), TEXT_SECONDARY)
 		return
 
 	if last_error != "":
-		_add_profile_summary("Your Pokemon", "Opponent", "HP ?", "Lv ?")
+		_add_profile_summary(_t("battle.calc.your_pokemon"), _t("battle.calc.opponent"), _t("battle.calc.hp_unknown"), _t("battle.calc.level_unknown"))
 		_add_status(last_error, TEXT_ERROR)
 		return
 
 	if last_response.is_empty():
-		_add_profile_summary("Your Pokemon", "Opponent", "HP ?", "Lv ?")
-		_add_status("Open Calc to load current damage ranges.", TEXT_SECONDARY)
+		_add_profile_summary(_t("battle.calc.your_pokemon"), _t("battle.calc.opponent"), _t("battle.calc.hp_unknown"), _t("battle.calc.level_unknown"))
+		_add_status(_t("battle.calc.open_to_load"), TEXT_SECONDARY)
 		return
 
 	_render_your_damage_response(last_response)
@@ -226,8 +230,8 @@ func _render_your_damage_response(response: Dictionary) -> void:
 	var attacker: Dictionary = _as_dictionary(response.get("attacker", {}))
 	var defender: Dictionary = _as_dictionary(response.get("defender", {}))
 	_add_profile_summary(
-		_get_pokemon_label(attacker, "Your Pokemon"),
-		_get_pokemon_label(defender, "Opponent"),
+		_get_pokemon_label(attacker, _t("battle.calc.your_pokemon")),
+		_get_pokemon_label(defender, _t("battle.calc.opponent")),
 		_get_hp_label(defender),
 		_get_level_label(defender),
 		_get_boosts_label(attacker)
@@ -236,7 +240,7 @@ func _render_your_damage_response(response: Dictionary) -> void:
 
 	var results: Array = _as_array(response.get("results", []))
 	if results.is_empty():
-		_add_status(_fallback_text(str(response.get("emptyReason", "")), "No damage results available."), TEXT_SECONDARY)
+		_add_status(_fallback_text(str(response.get("emptyReason", "")), _t("battle.calc.no_results")), TEXT_SECONDARY)
 		return
 
 	for result_value: Variant in results:
@@ -257,8 +261,8 @@ func _add_subtabs() -> void:
 	row.add_theme_constant_override("separation", 4)
 	content.add_child(row)
 
-	row.add_child(_make_subtab_button("Your Dmg", SUBTAB_YOUR_DAMAGE))
-	row.add_child(_make_subtab_button("Their Dmg", SUBTAB_THEIR_DAMAGE))
+	row.add_child(_make_subtab_button(_t("battle.calc.your_damage"), SUBTAB_YOUR_DAMAGE))
+	row.add_child(_make_subtab_button(_t("battle.calc.their_damage"), SUBTAB_THEIR_DAMAGE))
 
 
 func _make_subtab_button(text: String, tab_id: String) -> Button:
@@ -319,10 +323,10 @@ func _add_profile_summary(attacker_name: String, defender_name: String, hp_label
 	panel.add_child(box)
 
 	var matchup := _make_label(
-		"%s -> %s" % [
-			_fallback_text(attacker_name, "Your Pokemon"),
-			_fallback_text(defender_name, "Opponent"),
-		],
+		_t("battle.calc.matchup", {
+			"attacker": _fallback_text(attacker_name, _t("battle.calc.your_pokemon")),
+			"defender": _fallback_text(defender_name, _t("battle.calc.opponent")),
+		}),
 		13,
 		TEXT_PRIMARY
 	)
@@ -336,8 +340,8 @@ func _add_profile_summary(attacker_name: String, defender_name: String, hp_label
 	info.add_theme_constant_override("separation", 10)
 	box.add_child(info)
 
-	info.add_child(_make_info_label(_fallback_text(hp_label, "HP ?")))
-	info.add_child(_make_info_label(_fallback_text(level_label, "Lv ?")))
+	info.add_child(_make_info_label(_fallback_text(hp_label, _t("battle.calc.hp_unknown"))))
+	info.add_child(_make_info_label(_fallback_text(level_label, _t("battle.calc.level_unknown"))))
 
 	if boosts_label.strip_edges() != "":
 		var boosts := _make_label(boosts_label, 10, TEXT_ACCENT)
@@ -375,7 +379,7 @@ func _add_move_result_row(result: Dictionary, defender: Dictionary) -> void:
 	box.add_child(top)
 
 	var move_name := _get_move_name(result)
-	var move_label := _make_label(_fallback_text(move_name, "Unknown move"), 13, TEXT_PRIMARY)
+	var move_label := _make_label(_fallback_text(move_name, _t("battle.move.unknown")), 13, TEXT_PRIMARY)
 	move_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	move_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	top.add_child(move_label)
@@ -474,8 +478,8 @@ func _add_live_assumption_controls(assumptions: Dictionary) -> void:
 	primary_row.add_theme_constant_override("separation", 5)
 	box.add_child(primary_row)
 
-	primary_row.add_child(_make_assumption_summary_button(_get_assumption_chip_label(assumptions, "item", "Item ?"), SELECTOR_ITEM))
-	primary_row.add_child(_make_assumption_summary_button(_get_assumption_chip_label(assumptions, "ability", "Ability ?"), SELECTOR_ABILITY))
+	primary_row.add_child(_make_assumption_summary_button(_get_assumption_chip_label(assumptions, "item", _t("battle.calc.item_unknown")), SELECTOR_ITEM))
+	primary_row.add_child(_make_assumption_summary_button(_get_assumption_chip_label(assumptions, "ability", _t("battle.calc.ability_unknown")), SELECTOR_ABILITY))
 
 	var secondary_row := HBoxContainer.new()
 	secondary_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -486,7 +490,7 @@ func _add_live_assumption_controls(assumptions: Dictionary) -> void:
 	secondary_row.add_child(_make_assumption_summary_button(_get_nature_chip_label(assumptions), SELECTOR_NATURE))
 	secondary_row.add_child(_make_assumption_summary_button(_get_evs_summary_chip_label(_as_dictionary(assumptions.get("evs", {}))), SELECTOR_EVS))
 
-	var reset_button := _make_small_button("Reset", _reset_live_assumptions)
+	var reset_button := _make_small_button(_t("common.reset"), _reset_live_assumptions)
 	reset_button.custom_minimum_size = Vector2(48, 24)
 	secondary_row.add_child(reset_button)
 
@@ -606,13 +610,13 @@ func _make_assumption_summary_button(text: String, editor_kind: String) -> Butto
 func _get_assumption_fallback_label(editor_kind: String) -> String:
 	match editor_kind:
 		SELECTOR_ITEM:
-			return "Item ?"
+			return _t("battle.calc.item_unknown")
 		SELECTOR_ABILITY:
-			return "Ability ?"
+			return _t("battle.calc.ability_unknown")
 		SELECTOR_NATURE:
-			return "Hardy"
+			return _localized_nature_name("Hardy")
 		SELECTOR_EVS:
-			return "EVs 0/508"
+			return _t("battle.calc.evs_total", {"total": 0, "limit": EV_TOTAL_LIMIT})
 		_:
 			return ""
 
@@ -667,7 +671,7 @@ func _render_catalog_assumption_editor(kind: String, assumptions: Dictionary) ->
 
 	var input := LineEdit.new()
 	input.text = _get_catalog_assumption_value(assumptions, kind)
-	input.placeholder_text = "Search item..." if kind == SELECTOR_ITEM else "Search ability..."
+	input.placeholder_text = _t("battle.calc.search_item") if kind == SELECTOR_ITEM else _t("battle.calc.search_ability")
 	input.custom_minimum_size = Vector2(0, 24)
 	input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	input.add_theme_font_size_override("font_size", 11)
@@ -676,7 +680,7 @@ func _render_catalog_assumption_editor(kind: String, assumptions: Dictionary) ->
 	input.text_changed.connect(_on_catalog_assumption_text_changed.bind(kind))
 	row.add_child(input)
 
-	var clear_button := _make_small_button("None", _on_catalog_assumption_clear_pressed.bind(kind))
+	var clear_button := _make_small_button(_t("common.none"), _on_catalog_assumption_clear_pressed.bind(kind))
 	clear_button.custom_minimum_size = Vector2(46, 22)
 	row.add_child(clear_button)
 
@@ -697,7 +701,7 @@ func _render_catalog_assumption_editor(kind: String, assumptions: Dictionary) ->
 
 func _render_nature_assumption_editor(assumptions: Dictionary) -> void:
 	if selector_loading and selector_results.is_empty() and nature_catalog_options.is_empty():
-		_add_selector_status(catalog_suggestions_box, "Loading natures...", TEXT_SECONDARY)
+		_add_selector_status(catalog_suggestions_box, _t("battle.calc.loading_natures"), TEXT_SECONDARY)
 		return
 	if selector_error != "" and nature_catalog_options.is_empty():
 		_add_selector_status(catalog_suggestions_box, selector_error, TEXT_MUTED)
@@ -712,7 +716,11 @@ func _render_nature_assumption_editor(assumptions: Dictionary) -> void:
 	catalog_suggestions_box.add_child(grid)
 	for nature_value: Variant in _get_nature_option_names():
 		var nature: String = str(nature_value)
-		var button := _make_compact_option_button(nature, nature == selected_nature, _on_nature_option_pressed.bind(nature))
+		var button := _make_compact_option_button(
+			_localized_nature_name(nature),
+			nature == selected_nature,
+			_on_nature_option_pressed.bind(nature)
+		)
 		grid.add_child(button)
 
 
@@ -878,7 +886,7 @@ func show_assumption_catalog_response(kind: String, response: Dictionary) -> voi
 		return
 	selector_loading = false
 	if not bool(response.get("success", false)):
-		selector_error = str(response.get("error", "Could not load assumptions."))
+		selector_error = str(response.get("error", _t("battle.calc.error.assumptions")))
 		selector_results = []
 		_refresh_catalog_results()
 		return
@@ -901,7 +909,7 @@ func show_assumption_catalog_error(kind: String, message: String) -> void:
 	if kind != active_selector:
 		return
 	selector_loading = false
-	selector_error = _fallback_text(message, "Could not load assumptions.")
+	selector_error = _fallback_text(message, _t("battle.calc.error.assumptions"))
 	selector_results = []
 	if kind == SELECTOR_ITEM or kind == SELECTOR_ABILITY:
 		_refresh_catalog_results()
@@ -1032,18 +1040,18 @@ func _refresh_catalog_results() -> void:
 	if not catalog_results_box.visible:
 		return
 
-	var clear_button := _make_selector_result_button("Unknown / None", "Clear", Callable(self, "_on_catalog_assumption_clear_pressed").bind(active_selector))
+	var clear_button := _make_selector_result_button(_t("battle.calc.unknown_none"), _t("common.clear"), Callable(self, "_on_catalog_assumption_clear_pressed").bind(active_selector))
 	catalog_results_box.add_child(clear_button)
 
 	if selector_loading:
-		_add_selector_status(catalog_results_box, "Loading...", TEXT_SECONDARY)
+		_add_selector_status(catalog_results_box, _t("common.loading"), TEXT_SECONDARY)
 		return
 
 	if selector_error != "":
 		_add_selector_status(catalog_results_box, selector_error, TEXT_MUTED)
 
 	if selector_results.is_empty():
-		_add_selector_status(catalog_results_box, "No results.", TEXT_SECONDARY)
+		_add_selector_status(catalog_results_box, _t("battle.calc.no_results_short"), TEXT_SECONDARY)
 		return
 
 	var result_count: int = mini(selector_results.size(), 4)
@@ -1051,7 +1059,7 @@ func _refresh_catalog_results() -> void:
 		var result: Dictionary = _as_dictionary(selector_results[index])
 		var name: String = str(result.get("name", result.get("calcName", ""))).strip_edges()
 		catalog_results_box.add_child(_make_selector_result_button(
-			_fallback_text(name, "Unknown"),
+			_fallback_text(name, _t("common.unknown")),
 			"",
 			Callable(self, "_on_selector_result_pressed").bind(result)
 		))
@@ -1105,17 +1113,17 @@ func _emit_defender_assumptions_changed() -> void:
 func _get_ev_display_name(stat_key: String) -> String:
 	match stat_key:
 		"hp":
-			return "HP"
+			return _t("battle.calc.hp_short")
 		"atk":
-			return "Atk"
+			return _t("battle.stat.short.attack")
 		"def":
-			return "Def"
+			return _t("battle.stat.short.defense")
 		"spa":
-			return "SpA"
+			return _t("battle.stat.short.special_attack")
 		"spd":
-			return "SpD"
+			return _t("battle.stat.short.special_defense")
 		"spe":
-			return "Spe"
+			return _t("battle.stat.short.speed")
 		_:
 			return stat_key.to_upper()
 
@@ -1161,17 +1169,17 @@ func _get_hp_label(pokemon: Dictionary) -> String:
 	var hp := _as_dictionary(pokemon.get("hp", {}))
 	var display := str(hp.get("display", "")).strip_edges()
 	if display != "":
-		return "HP %s" % display
+		return _t("battle.calc.hp_value", {"value": display})
 
 	var percent_value: Variant = _get_percent_number(hp.get("percent"))
 	if percent_value != null:
-		return "HP %s%%" % _format_percent_value(percent_value)
-	return "HP ?"
+		return _t("battle.calc.hp_percent", {"percent": _format_percent_value(percent_value)})
+	return _t("battle.calc.hp_unknown")
 
 
 func _get_level_label(pokemon: Dictionary) -> String:
 	var level := str(pokemon.get("level", "")).strip_edges()
-	return "Lv %s" % level if level != "" else "Lv ?"
+	return _t("battle.calc.level", {"level": level}) if level != "" else _t("battle.calc.level_unknown")
 
 
 func _get_move_name(result: Dictionary) -> String:
@@ -1215,12 +1223,12 @@ func _get_percent_label(result: Dictionary) -> String:
 		if _has_suspicious_percent_values(result):
 			push_warning(
 				"Damage Calc received suspicious percent range for %s: min=%s max=%s" % [
-					_fallback_text(_get_move_name(result), "unknown move"),
+					_fallback_text(_get_move_name(result), _t("battle.move.unknown").to_lower()),
 					str(result.get("minPercent")),
 					str(result.get("maxPercent")),
 				]
 			)
-			return "Calc issue"
+			return _t("battle.calc.issue")
 		return "%s-%s%%" % [
 			_format_percent_value(result.get("minPercent")),
 			_format_percent_value(result.get("maxPercent")),
@@ -1230,7 +1238,7 @@ func _get_percent_label(result: Dictionary) -> String:
 
 func _get_primary_result_label(result: Dictionary, defender: Dictionary) -> String:
 	if _is_status_result(result):
-		return "Status"
+		return _t("battle.calc.status")
 
 	var ko_summary_label := str(result.get("koSummaryLabel", "")).strip_edges()
 	if ko_summary_label != "":
@@ -1247,14 +1255,14 @@ func _get_primary_result_label(result: Dictionary, defender: Dictionary) -> Stri
 			if min_percent >= hp_percent:
 				return "OHKO"
 			if max_percent >= hp_percent:
-				return "Possible OHKO"
+				return _t("battle.calc.possible_ohko")
 			if max_percent > 0.0:
 				var best_hits := int(ceil(hp_percent / max_percent))
 				var worst_hits := best_hits
 				if min_percent > 0.0:
 					worst_hits = int(ceil(hp_percent / min_percent))
 				if best_hits >= 5:
-					return "No KO"
+					return _t("battle.calc.no_ko")
 				if best_hits == worst_hits:
 					return "%dHKO" % best_hits
 				return "%d-%dHKO" % [best_hits, worst_hits]
@@ -1271,11 +1279,11 @@ func _get_compact_result_label(text: String) -> String:
 		"Guaranteed OHKO":
 			return "OHKO"
 		"Possible OHKO":
-			return "Chance"
+			return _t("battle.calc.chance")
 		"Already KO":
-			return "KO'd"
+			return _t("battle.calc.ko")
 		"No KO":
-			return "No KO"
+			return _t("battle.calc.no_ko")
 	if label.begins_with("100% "):
 		return label.substr(5)
 	if label.contains(" chance to "):
@@ -1329,8 +1337,23 @@ func _get_display_assumptions(defender: Dictionary) -> Dictionary:
 
 
 func _get_nature_chip_label(assumptions: Dictionary) -> String:
-	var label := _fallback_text(str(assumptions.get("nature", "")).strip_edges(), "Hardy")
+	var canonical_nature := _fallback_text(str(assumptions.get("nature", "")).strip_edges(), "Hardy")
+	var label := _localized_nature_name(canonical_nature)
 	return "%s*" % label if bool(edited_assumption_fields.get("nature", false)) else label
+
+
+func _localized_nature_name(nature: String) -> String:
+	var content_localization := _get_content_localization()
+	if content_localization != null and content_localization.has_method("nature_name"):
+		return str(content_localization.call("nature_name", nature, nature))
+	return nature
+
+
+func _get_content_localization() -> Node:
+	if is_inside_tree():
+		return get_node_or_null("/root/ContentLocalization")
+	var scene_tree := Engine.get_main_loop() as SceneTree
+	return scene_tree.root.get_node_or_null("ContentLocalization") if scene_tree != null else null
 
 
 func _get_evs_chip_label(evs: Dictionary) -> String:
@@ -1339,7 +1362,10 @@ func _get_evs_chip_label(evs: Dictionary) -> String:
 
 
 func _get_evs_summary_chip_label(evs: Dictionary) -> String:
-	var label: String = "EVs %d/%d" % [_get_evs_total(evs), EV_TOTAL_LIMIT]
+	var label := _t("battle.calc.evs_total", {
+		"total": _get_evs_total(evs),
+		"limit": EV_TOTAL_LIMIT,
+	})
 	return "%s*" % label if bool(edited_assumption_fields.get("evs", false)) else label
 
 
@@ -1363,31 +1389,31 @@ func _get_nature_option_names() -> Array[String]:
 
 func _get_assumptions_summary_label(assumptions: Dictionary) -> String:
 	var parts: Array[String] = [
-		_get_assumption_chip_label(assumptions, "item", "Item ?"),
-		_get_assumption_chip_label(assumptions, "ability", "Ability ?"),
+		_get_assumption_chip_label(assumptions, "item", _t("battle.calc.item_unknown")),
+		_get_assumption_chip_label(assumptions, "ability", _t("battle.calc.ability_unknown")),
 		_get_nature_chip_label(assumptions),
 		_get_evs_chip_label(_as_dictionary(assumptions.get("evs", {}))),
 		_get_ivs_label(_as_dictionary(assumptions.get("ivs", {}))),
 	]
-	return "Assumptions: %s" % ", ".join(parts)
+	return _t("battle.calc.assumptions", {"values": ", ".join(parts)})
 
 
 func _get_evs_label(evs: Dictionary) -> String:
 	if evs.is_empty():
-		return "EVs 0"
+		return _t("battle.calc.evs_value", {"value": 0})
 
 	for preset_value: Variant in EV_PRESETS:
 		var preset := preset_value as Dictionary
 		var preset_evs := _as_dictionary(preset.get("evs", {}))
 		if _evs_equal(evs, preset_evs):
-			return str(preset.get("chip", "EVs custom"))
+			return str(preset.get("chip", _t("battle.calc.evs_custom")))
 
 	var total := 0
 	for value: Variant in evs.values():
 		var number_value: Variant = _get_percent_number(value)
 		if number_value != null:
 			total += int(number_value)
-	return "EVs %d" % total if total > 0 else "EVs 0"
+	return _t("battle.calc.evs_value", {"value": total if total > 0 else 0})
 
 
 func _get_evs_total(evs: Dictionary) -> int:
@@ -1407,20 +1433,20 @@ func _is_custom_evs(evs: Dictionary) -> bool:
 
 func _get_ivs_label(ivs: Dictionary) -> String:
 	if ivs.is_empty():
-		return "IVs 31"
+		return _t("battle.calc.ivs_value", {"value": 31})
 
 	var values := []
 	for key: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
 		if ivs.has(key):
 			values.append(int(ivs.get(key)))
 	if values.is_empty():
-		return "IVs 31"
+		return _t("battle.calc.ivs_value", {"value": 31})
 
 	var first_value := int(values[0])
 	for value: Variant in values:
 		if int(value) != first_value:
-			return "IVs custom"
-	return "IVs %d" % first_value
+			return _t("battle.calc.ivs_custom")
+	return _t("battle.calc.ivs_value", {"value": first_value})
 
 
 func _evs_equal(left: Dictionary, right: Dictionary) -> bool:
@@ -1450,25 +1476,25 @@ func _get_boosts_label(pokemon: Dictionary) -> String:
 		parts.append("%s %s%d" % [_format_boost_stat_name(stat_key), "+" if amount > 0 else "", amount])
 	if parts.is_empty():
 		return ""
-	return "Boosts: %s" % " / ".join(parts)
+	return _t("battle.calc.boosts", {"values": " / ".join(parts)})
 
 
 func _format_boost_stat_name(stat_key: String) -> String:
 	match stat_key:
 		"atk":
-			return "Atk"
+			return _t("battle.stat.short.attack")
 		"def":
-			return "Def"
+			return _t("battle.stat.short.defense")
 		"spa":
-			return "SpA"
+			return _t("battle.stat.short.special_attack")
 		"spd":
-			return "SpD"
+			return _t("battle.stat.short.special_defense")
 		"spe":
-			return "Spe"
+			return _t("battle.stat.short.speed")
 		"accuracy":
-			return "Acc"
+			return _t("battle.stat.short.accuracy")
 		"evasion":
-			return "Eva"
+			return _t("battle.stat.short.evasion")
 		_:
 			return stat_key.capitalize()
 
@@ -1549,3 +1575,13 @@ func _join_string_array(values: Array, separator: String) -> String:
 func _fallback_text(value: String, fallback: String) -> String:
 	var text := value.strip_edges()
 	return fallback if text == "" else text
+
+
+func _on_locale_changed(_locale: String) -> void:
+	_render_current_state()
+
+
+func _t(key: String, replacements: Dictionary = {}) -> String:
+	if localization_manager != null:
+		return str(localization_manager.call("text", key, replacements))
+	return key
