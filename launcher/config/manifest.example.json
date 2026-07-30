@@ -1,7 +1,9 @@
 {
   "gameVersion": "0.1.0",
+  "gameBuildId": "0123456789abcdef0123456789abcdef01234567",
   "game": {
     "version": "0.1.0",
+    "buildId": "0123456789abcdef0123456789abcdef01234567",
     "url": "https://example.com/pokeaether/builds/windows/game-v0.1.0.zip",
     "sha256": "",
     "executable": "PokeAether.exe"

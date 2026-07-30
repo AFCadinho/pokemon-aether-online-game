@@ -15,6 +15,7 @@ const CODE_TO_KEY: Dictionary = {
 	"authentication_required": "backend.error.auth_required",
 	"missing_bearer_token": "backend.error.auth_required",
 	"invalid_bearer_token": "backend.error.auth_required",
+	"client_update_required": "backend.error.client_update_required",
 	"action_forbidden": "backend.error.action_blocked",
 	"resource_not_found": "backend.error.unavailable",
 	"request_failed": "backend.error.generic",

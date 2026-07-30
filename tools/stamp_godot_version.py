@@ -9,6 +9,10 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Stamp a Godot project/export preset with a release version.")
     parser.add_argument("--project", required=True, type=Path, help="Path to project.godot.")
     parser.add_argument("--version", required=True, help="Version value to write.")
+    parser.add_argument(
+        "--build-id",
+        help="Optional immutable client build identifier to write to application/config/build_id.",
+    )
     parser.add_argument("--export-presets", type=Path, help="Optional path to export_presets.cfg.")
     args = parser.parse_args()
 
@@ -22,6 +26,13 @@ def main() -> None:
         "config/version",
         _quote(args.version),
     )
+    if args.build_id is not None:
+        _replace_or_insert_project_setting(
+            project_path,
+            "application",
+            "config/build_id",
+            _quote(args.build_id),
+        )
 
     if args.export_presets is not None:
         export_presets_path = args.export_presets

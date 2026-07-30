@@ -7,6 +7,7 @@
   "common.return": "Return",
   "backend.error.generic": "Something went wrong. Please try again.",
   "backend.error.auth_required": "Your session could not be verified. Please sign in again.",
+  "backend.error.client_update_required": "A newer PokeAether version is required. Close the game and start it again through the launcher.",
   "backend.error.not_enough_money": "You do not have enough money.",
   "backend.error.not_enough_gems": "You do not have enough Aether Gems.",
   "backend.error.item_not_found": "That item could not be found.",

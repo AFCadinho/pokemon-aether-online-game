@@ -2,6 +2,7 @@ extends Node
 
 class_name TradeRealtimeServiceNode
 
+const ClientBuild := preload("res://scripts/services/client_build.gd")
 signal snapshot_received(trade: Dictionary)
 signal event_received(event: Dictionary)
 signal recovery_required(trade_id: String, after_seq: int)
@@ -315,7 +316,9 @@ func _authenticated_websocket_url() -> String:
 	var base_url: String = await gateway.call("get_base_url")
 	var scheme := "wss://" if base_url.begins_with("https://") else "ws://"
 	var host := base_url.trim_prefix("https://").trim_prefix("http://").trim_suffix("/")
-	return scheme + host + "/ws/trade?token=" + str(auth.get("session_token")).uri_encode()
+	return ClientBuild.append_websocket_query(
+		scheme + host + "/ws/trade?token=" + str(auth.get("session_token")).uri_encode()
+	)
 
 
 func _is_authenticated() -> bool:

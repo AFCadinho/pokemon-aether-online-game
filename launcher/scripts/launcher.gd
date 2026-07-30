@@ -1529,12 +1529,21 @@ func _build_download_queue() -> void:
 
 	var game_data: Dictionary = _get_dictionary(manifest, "game")
 	var remote_game_version := str(game_data.get("version", manifest.get("gameVersion", "")))
+	var remote_game_build_id := str(game_data.get(
+		"buildId",
+		manifest.get("gameBuildId", remote_game_version)
+	))
+	var local_game_build_id := str(local_versions.get(
+		"gameBuildId",
+		local_versions.get("gameVersion", "")
+	))
 	var local_game_missing := not _has_installed_game_for_manifest(game_data)
-	if remote_game_version != "" and (str(local_versions.get("gameVersion", "")) != remote_game_version or local_game_missing):
+	if remote_game_build_id != "" and (local_game_build_id != remote_game_build_id or local_game_missing):
 		pending_downloads.append({
 			"type": "game",
 			"id": "game",
 			"version": remote_game_version,
+			"build_id": remote_game_build_id,
 			"url": str(game_data.get("url", "")),
 			"sha256": str(game_data.get("sha256", "")),
 			"size_bytes": int(game_data.get("sizeBytes", 0)),
@@ -1701,6 +1710,7 @@ func _mark_download_installed(download: Dictionary) -> void:
 	var download_type := str(download.get("type", ""))
 	if download_type == "game":
 		local_versions["gameVersion"] = str(download.get("version", ""))
+		local_versions["gameBuildId"] = str(download.get("build_id", download.get("version", "")))
 		var game_data: Dictionary = _get_dictionary(manifest, "game")
 		local_versions["gameExecutable"] = str(game_data.get("executable", ""))
 	elif download_type == "asset_pack":
@@ -1840,6 +1850,7 @@ func _load_local_versions() -> void:
 	if not FileAccess.file_exists(VERSION_FILE):
 		local_versions = {
 			"gameVersion": "",
+			"gameBuildId": "",
 			"assetPacks": {},
 		}
 		return
@@ -1979,6 +1990,7 @@ func _ensure_install_dir_is_writable(target_dir: String) -> Error:
 func _reset_local_versions() -> void:
 	local_versions = {
 		"gameVersion": "",
+		"gameBuildId": "",
 		"gameExecutable": "",
 		"assetPacks": {},
 	}

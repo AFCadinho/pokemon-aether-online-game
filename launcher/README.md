@@ -12,6 +12,13 @@ Small Godot launcher project for PokeAether.
 6. Replaces `user://game/game` on each game update while keeping unchanged asset packs.
 7. Starts the configured game executable.
 
+Every published game also has an immutable `game.buildId`. CI derives it from
+the Git commit and workflow run, stamps it into the exported game, and writes
+the same value to the launcher manifest. The launcher compares this build ID,
+so a new build is downloaded even when the human-readable release version was
+left unchanged. The gateway consumes the same manifest to reject obsolete
+clients during authentication and new realtime handshakes.
+
 Asset packs marked with `"optional": true` are skipped by the normal update flow. For Gen 5 animated Pokemon sprites, set `"autoUpdateIfInstalled": true` in the manifest when a user already has the Gen 5 folder installed; then the launcher will auto-update those packs on startup while still keeping the manual install button hidden when the folder is already present.
 
 The default install folder is `user://game`. Players can choose a custom install folder from the launcher Game Folder button; that choice is saved in `user://launcher_settings.json`.
@@ -62,6 +69,7 @@ First export the game with the existing Godot export presets. Then package the e
 ```bash
 python3 tools/package_launcher_release.py \
   --version 0.1.0 \
+  --build-id "$(git rev-parse HEAD)" \
   --base-url http://127.0.0.1:8000 \
   --output-dir launcher/test_server \
   --default-platform linux
@@ -81,6 +89,7 @@ For a public release, use the real hosted URL as `--base-url` and the production
 ```bash
 python3 tools/package_launcher_release.py \
   --version 0.1.0 \
+  --build-id "$(git rev-parse HEAD)" \
   --base-url https://updates.pokeaether.com \
   --game-prefix game \
   --asset-prefix assets \

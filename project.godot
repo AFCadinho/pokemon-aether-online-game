@@ -11,6 +11,8 @@ config_version=5
 [application]
 
 config/name="PokeAether"
+config/version="dev"
+config/build_id="dev"
 run/main_scene="uid://duw5e076ulb3"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://assets/ui/logo.png"

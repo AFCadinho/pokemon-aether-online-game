@@ -7,6 +7,7 @@
   "common.return": "Terug",
   "backend.error.generic": "Er ging iets mis. Probeer het opnieuw.",
   "backend.error.auth_required": "Je sessie kon niet worden gecontroleerd. Log opnieuw in.",
+  "backend.error.client_update_required": "Een nieuwere PokeAether-versie is vereist. Sluit de game en start hem opnieuw via de launcher.",
   "backend.error.not_enough_money": "Je hebt niet genoeg geld.",
   "backend.error.not_enough_gems": "Je hebt niet genoeg Aether Gems.",
   "backend.error.item_not_found": "Dat item kon niet worden gevonden.",

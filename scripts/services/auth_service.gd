@@ -2,6 +2,7 @@ extends Node
 
 class_name AuthServiceNode
 
+const ClientBuild := preload("res://scripts/services/client_build.gd")
 const SESSION_FILE_PATH := "user://auth_session.json"
 const REQUEST_TIMEOUT_SECONDS := 12.0
 const USER_AGENT_HEADER := "User-Agent: PokeAether/1.0"
@@ -34,7 +35,7 @@ func login(username: String, password: String, remember_me: bool) -> Dictionary:
 	var response: Dictionary = await _request_json(
 		base_url + "/auth/login",
 		HTTPClient.METHOD_POST,
-		PackedStringArray([USER_AGENT_HEADER, CONTENT_TYPE_HEADER, ACCEPT_HEADER]),
+		_client_headers(PackedStringArray([USER_AGENT_HEADER, CONTENT_TYPE_HEADER, ACCEPT_HEADER])),
 		JSON.stringify(payload)
 	)
 
@@ -69,7 +70,7 @@ func impersonate_with_token(token: String) -> Dictionary:
 	var response: Dictionary = await _request_json(
 		base_url + "/auth/impersonate/consume",
 		HTTPClient.METHOD_POST,
-		PackedStringArray([USER_AGENT_HEADER, CONTENT_TYPE_HEADER, ACCEPT_HEADER]),
+		_client_headers(PackedStringArray([USER_AGENT_HEADER, CONTENT_TYPE_HEADER, ACCEPT_HEADER])),
 		JSON.stringify({"token": normalized_token})
 	)
 	if not bool(response.get("success", false)):
@@ -121,7 +122,7 @@ func me() -> Dictionary:
 	var response: Dictionary = await _request_json(
 		base_url + "/auth/me",
 		HTTPClient.METHOD_GET,
-		PackedStringArray([USER_AGENT_HEADER, ACCEPT_HEADER, get_authorization_header()]),
+		_client_headers(PackedStringArray([USER_AGENT_HEADER, ACCEPT_HEADER, get_authorization_header()])),
 		""
 	)
 
@@ -155,7 +156,7 @@ func logout() -> Dictionary:
 	var response: Dictionary = await _request_json(
 		base_url + "/auth/logout",
 		HTTPClient.METHOD_POST,
-		PackedStringArray([USER_AGENT_HEADER, ACCEPT_HEADER, get_authorization_header()]),
+		_client_headers(PackedStringArray([USER_AGENT_HEADER, ACCEPT_HEADER, get_authorization_header()])),
 		""
 	)
 	clear_session()
@@ -180,7 +181,7 @@ func update_account_details(display_name: String, current_password: String, new_
 	var response: Dictionary = await _request_json(
 		base_url + "/auth/account",
 		HTTPClient.METHOD_PUT,
-		PackedStringArray([USER_AGENT_HEADER, CONTENT_TYPE_HEADER, ACCEPT_HEADER, get_authorization_header()]),
+		_client_headers(PackedStringArray([USER_AGENT_HEADER, CONTENT_TYPE_HEADER, ACCEPT_HEADER, get_authorization_header()])),
 		JSON.stringify(payload)
 	)
 
@@ -317,6 +318,10 @@ func _request_json(url: String, method: HTTPClient.Method, headers: PackedString
 		"status": response_code,
 		"body": body_dictionary,
 	}
+
+
+func _client_headers(headers: PackedStringArray) -> PackedStringArray:
+	return ClientBuild.append_http_header(headers)
 
 
 func _extract_error(body: Dictionary, response_code: int) -> String:

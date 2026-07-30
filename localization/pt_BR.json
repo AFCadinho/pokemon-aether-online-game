@@ -7,6 +7,7 @@
   "common.return": "Voltar",
   "backend.error.generic": "Algo deu errado. Tente novamente.",
   "backend.error.auth_required": "Não foi possível verificar sua sessão. Entre novamente.",
+  "backend.error.client_update_required": "Uma versão mais recente do PokeAether é necessária. Feche o jogo e inicie-o novamente pelo launcher.",
   "backend.error.not_enough_money": "Você não tem dinheiro suficiente.",
   "backend.error.not_enough_gems": "Você não tem Gemas Aether suficientes.",
   "backend.error.item_not_found": "Esse item não foi encontrado.",

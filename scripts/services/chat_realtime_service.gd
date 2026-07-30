@@ -2,6 +2,7 @@ extends Node
 
 class_name ChatRealtimeServiceNode
 
+const ClientBuild := preload("res://scripts/services/client_build.gd")
 signal message_received(message: Dictionary)
 signal private_message_received(message: Dictionary)
 signal mail_received(mail_id: int)
@@ -79,7 +80,9 @@ func _connect_chat_async() -> void:
 		connecting = false
 		return
 
-	var websocket_url: String = _to_websocket_url(base_url) + "/ws/chat?token=%s" % AuthService.session_token.uri_encode()
+	var websocket_url: String = ClientBuild.append_websocket_query(
+		_to_websocket_url(base_url) + "/ws/chat?token=%s" % AuthService.session_token.uri_encode()
+	)
 	var error: Error = websocket.connect_to_url(websocket_url)
 	if error != OK:
 		connecting = false

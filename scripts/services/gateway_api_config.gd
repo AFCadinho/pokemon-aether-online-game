@@ -2,6 +2,7 @@ extends Node
 
 class_name GatewayApiConfigNode
 
+const ClientBuild := preload("res://scripts/services/client_build.gd")
 const LOCAL_GATEWAY_URL := "http://localhost:8000"
 const PRODUCTION_GATEWAY_URL := "https://api.pokeaether.com"
 const ACCEPT_JSON_HEADER := "Accept: application/json"
@@ -46,7 +47,7 @@ func _get_accept_language_header(locale: String = "") -> String:
 
 
 func _append_authorization_header(headers: PackedStringArray) -> PackedStringArray:
-	var result: PackedStringArray = headers.duplicate()
+	var result: PackedStringArray = ClientBuild.append_http_header(headers)
 	var auth_service: Object = get_node_or_null("/root/AuthService")
 	if auth_service == null or not auth_service.has_method("get_authorization_header"):
 		return result
