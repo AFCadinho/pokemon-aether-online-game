@@ -1,0 +1,621 @@
+{
+	"areas": {
+		"kanto_oaks_lab": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Oak's Lab",
+			"locationGroupId": "kanto_pallet_town",
+			"locationGroupLabel": "Pallet Town",
+			"regionName": "Kanto",
+			"sceneAliases": [
+				"uid://brjbfuu4rye1o"
+			],
+			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn"
+		},
+		"kanto_pallet_town": {
+			"areaType": "exterior",
+			"defaultMode": "open",
+			"label": "Pallet Town",
+			"locationGroupId": "kanto_pallet_town",
+			"locationGroupLabel": "Pallet Town",
+			"regionName": "Kanto",
+			"sceneAliases": [
+				"uid://cbb7318supm5h"
+			],
+			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn"
+		},
+		"kanto_pewter_city": {
+			"areaType": "exterior",
+			"defaultMode": "open",
+			"label": "Pewter City",
+			"locationGroupId": "kanto_pewter_city",
+			"locationGroupLabel": "Pewter City",
+			"regionName": "Kanto",
+			"sceneAliases": [
+				"uid://b63qp0afy4rpd"
+			],
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn"
+		},
+		"kanto_pewter_city_pokemon_center": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Pewter City Pokémon Center",
+			"locationGroupId": "kanto_pewter_city",
+			"locationGroupLabel": "Pewter City",
+			"regionName": "Kanto",
+			"sceneAliases": [
+				"uid://dgo4lvw2as13c"
+			],
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/pokemon_center.tscn"
+		},
+		"kanto_players_house": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Player's House",
+			"locationGroupId": "kanto_pallet_town",
+			"locationGroupLabel": "Pallet Town",
+			"regionName": "Kanto",
+			"sceneAliases": [
+				"uid://dxi5ghtfb65wq"
+			],
+			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/players_house.tscn"
+		},
+		"kanto_rivals_house": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Rival's House",
+			"locationGroupId": "kanto_pallet_town",
+			"locationGroupLabel": "Pallet Town",
+			"regionName": "Kanto",
+			"sceneAliases": [
+				"uid://c5ohbprcq5fyb"
+			],
+			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/rivals_house.tscn"
+		},
+		"kanto_route_1": {
+			"areaType": "route",
+			"defaultMode": "open",
+			"label": "Route 1",
+			"locationGroupId": "kanto_route_1",
+			"locationGroupLabel": "Route 1",
+			"regionName": "Kanto",
+			"sceneAliases": [
+				"uid://b65lnk8twsct"
+			],
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_1.tscn"
+		},
+		"kanto_route_2": {
+			"areaType": "route",
+			"defaultMode": "open",
+			"label": "Route 2",
+			"locationGroupId": "kanto_route_2",
+			"locationGroupLabel": "Route 2",
+			"regionName": "Kanto",
+			"sceneAliases": [
+				"uid://cnbfksossjfg7"
+			],
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_2.tscn"
+		},
+		"kanto_route_2_gate": {
+			"areaType": "transition",
+			"defaultMode": "open",
+			"label": "Route 2 Gate",
+			"locationGroupId": "kanto_route_2",
+			"locationGroupLabel": "Route 2",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/transition_buildings/route_2_gate.tscn"
+		},
+		"kanto_route_2_viridian_forest_north_gate": {
+			"areaType": "transition",
+			"defaultMode": "open",
+			"label": "Viridian Forest Gate",
+			"locationGroupId": "kanto_viridian_forest",
+			"locationGroupLabel": "Viridian Forest",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/transition_buildings/route_2_viridian_forest_north_gate.tscn"
+		},
+		"kanto_route_2_viridian_forest_south_gate": {
+			"areaType": "transition",
+			"defaultMode": "open",
+			"label": "Viridian Forest Gate",
+			"locationGroupId": "kanto_viridian_forest",
+			"locationGroupLabel": "Viridian Forest",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/transition_buildings/route_2_viridian_forest_south_gate.tscn"
+		},
+		"kanto_viridian_city": {
+			"areaType": "exterior",
+			"defaultMode": "open",
+			"label": "Viridian City",
+			"locationGroupId": "kanto_viridian_city",
+			"locationGroupLabel": "Viridian City",
+			"regionName": "Kanto",
+			"sceneAliases": [
+				"uid://b8tl17hk3yovn"
+			],
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn"
+		},
+		"kanto_viridian_forest": {
+			"areaType": "wilderness",
+			"defaultMode": "open",
+			"label": "Viridian Forest",
+			"locationGroupId": "kanto_viridian_forest",
+			"locationGroupLabel": "Viridian Forest",
+			"regionName": "Kanto",
+			"sceneAliases": [
+				"uid://dxrgvafxdtmod"
+			],
+			"scenePath": "res://scenes/overworld/kanto/routes/viridian_forest.tscn"
+		}
+	},
+	"schemaVersion": 2,
+	"transitions": {
+		"kanto_oaks_lab__to_pallet_town": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_pallet_town",
+				"mapSceneAliases": [
+					"uid://cbb7318supm5h"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn",
+				"position": {
+					"x": 1296.0,
+					"y": 848.0
+				},
+				"spawnMarker": "FromOaksLab"
+			},
+			"destinationAreaId": "kanto_pallet_town",
+			"sourceMapId": "kanto_oaks_lab"
+		},
+		"kanto_pallet_town__to_oaks_lab": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_oaks_lab",
+				"mapSceneAliases": [
+					"uid://brjbfuu4rye1o"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn",
+				"position": {
+					"x": 400.0,
+					"y": 944.0
+				},
+				"spawnMarker": "FromPalletTown"
+			},
+			"destinationAreaId": "kanto_oaks_lab",
+			"sourceMapId": "kanto_pallet_town"
+		},
+		"kanto_pallet_town__to_players_house": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_players_house",
+				"mapSceneAliases": [
+					"uid://dxi5ghtfb65wq"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/pallet_town/players_house.tscn",
+				"position": {
+					"x": 432.0,
+					"y": 976.0
+				},
+				"spawnMarker": "FromPalletTown"
+			},
+			"destinationAreaId": "kanto_players_house",
+			"sourceMapId": "kanto_pallet_town"
+		},
+		"kanto_pallet_town__to_rivals_house": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_rivals_house",
+				"mapSceneAliases": [
+					"uid://c5ohbprcq5fyb"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/pallet_town/rivals_house.tscn",
+				"position": {
+					"x": 176.0,
+					"y": 944.0
+				},
+				"spawnMarker": "FromPalletTown"
+			},
+			"destinationAreaId": "kanto_rivals_house",
+			"sourceMapId": "kanto_pallet_town"
+		},
+		"kanto_pallet_town__to_route_1": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_1",
+				"mapSceneAliases": [
+					"uid://b65lnk8twsct"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_1.tscn",
+				"position": {
+					"x": 960.0,
+					"y": 2336.0
+				},
+				"spawnMarker": "FromPalletTown"
+			},
+			"destinationAreaId": "kanto_route_1",
+			"sourceMapId": "kanto_pallet_town"
+		},
+		"kanto_pewter_city__to_pokecenter": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_pewter_city_pokemon_center",
+				"mapSceneAliases": [
+					"uid://dgo4lvw2as13c"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/pewter_city/pokemon_center.tscn",
+				"position": {
+					"x": 464.0,
+					"y": 1008.0
+				},
+				"spawnMarker": "FromOutside"
+			},
+			"destinationAreaId": "kanto_pewter_city_pokemon_center",
+			"sourceMapId": "kanto_pewter_city"
+		},
+		"kanto_pewter_city__to_route_2": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_2",
+				"mapSceneAliases": [
+					"uid://cnbfksossjfg7"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_2.tscn",
+				"position": {
+					"x": 1488.0,
+					"y": 48.0
+				},
+				"spawnMarker": "FromPewterCity"
+			},
+			"destinationAreaId": "kanto_route_2",
+			"sourceMapId": "kanto_pewter_city"
+		},
+		"kanto_pewter_city_pokemon_center__to_outside": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_pewter_city",
+				"mapSceneAliases": [
+					"uid://b63qp0afy4rpd"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn",
+				"position": {
+					"x": 1424.0,
+					"y": 1584.0
+				},
+				"spawnMarker": "FromPokecenter"
+			},
+			"destinationAreaId": "kanto_pewter_city",
+			"sourceMapId": "kanto_pewter_city_pokemon_center"
+		},
+		"kanto_players_house__to_pallet_town": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_pallet_town",
+				"mapSceneAliases": [
+					"uid://cbb7318supm5h"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn",
+				"position": {
+					"x": 656.0,
+					"y": 560.0
+				},
+				"spawnMarker": "FromPlayersHouse"
+			},
+			"destinationAreaId": "kanto_pallet_town",
+			"sourceMapId": "kanto_players_house"
+		},
+		"kanto_rivals_house__to_pallet_town": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_pallet_town",
+				"mapSceneAliases": [
+					"uid://cbb7318supm5h"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn",
+				"position": {
+					"x": 1136.0,
+					"y": 432.0
+				},
+				"spawnMarker": "FromRivalsHouse"
+			},
+			"destinationAreaId": "kanto_pallet_town",
+			"sourceMapId": "kanto_rivals_house"
+		},
+		"kanto_route_1__to_pallet_town": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_pallet_town",
+				"mapSceneAliases": [
+					"uid://cbb7318supm5h"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn",
+				"position": {
+					"x": 1008.0,
+					"y": 112.0
+				},
+				"spawnMarker": "FromRoute1"
+			},
+			"destinationAreaId": "kanto_pallet_town",
+			"sourceMapId": "kanto_route_1"
+		},
+		"kanto_route_2__to_pewter_city": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_pewter_city",
+				"mapSceneAliases": [
+					"uid://b63qp0afy4rpd"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn",
+				"position": {
+					"x": 848.0,
+					"y": 1872.0
+				},
+				"spawnMarker": "FromRoute2"
+			},
+			"destinationAreaId": "kanto_pewter_city",
+			"sourceMapId": "kanto_route_2"
+		},
+		"kanto_route_2__to_route_2_gate_north": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_2_gate",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/transition_buildings/route_2_gate.tscn",
+				"position": {
+					"x": 336.0,
+					"y": 272.0
+				},
+				"spawnMarker": "FromNorth"
+			},
+			"destinationAreaId": "kanto_route_2_gate",
+			"sourceMapId": "kanto_route_2"
+		},
+		"kanto_route_2__to_route_2_gate_south": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_2_gate",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/transition_buildings/route_2_gate.tscn",
+				"position": {
+					"x": 336.0,
+					"y": 592.0
+				},
+				"spawnMarker": "FromSouth"
+			},
+			"destinationAreaId": "kanto_route_2_gate",
+			"sourceMapId": "kanto_route_2"
+		},
+		"kanto_route_2__to_viridian_city": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_viridian_city",
+				"mapSceneAliases": [
+					"uid://b8tl17hk3yovn"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
+				"position": {
+					"x": 784.0,
+					"y": 48.0
+				},
+				"spawnMarker": "FromRoute2"
+			},
+			"destinationAreaId": "kanto_viridian_city",
+			"sourceMapId": "kanto_route_2"
+		},
+		"kanto_route_2__to_viridian_forest_north": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_2_viridian_forest_north_gate",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/transition_buildings/route_2_viridian_forest_north_gate.tscn",
+				"position": {
+					"x": 336.0,
+					"y": 272.0
+				},
+				"spawnMarker": "FromNorth"
+			},
+			"destinationAreaId": "kanto_route_2_viridian_forest_north_gate",
+			"sourceMapId": "kanto_route_2"
+		},
+		"kanto_route_2__to_viridian_forest_south": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_2_viridian_forest_south_gate",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/transition_buildings/route_2_viridian_forest_south_gate.tscn",
+				"position": {
+					"x": 336.0,
+					"y": 592.0
+				},
+				"spawnMarker": "FromSouth"
+			},
+			"destinationAreaId": "kanto_route_2_viridian_forest_south_gate",
+			"sourceMapId": "kanto_route_2"
+		},
+		"kanto_route_2_gate__to_north": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_2",
+				"mapSceneAliases": [
+					"uid://cnbfksossjfg7"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_2.tscn",
+				"position": {
+					"x": 1376.0,
+					"y": 784.0
+				},
+				"spawnMarker": "FromRoute2GateNorth"
+			},
+			"destinationAreaId": "kanto_route_2",
+			"sourceMapId": "kanto_route_2_gate"
+		},
+		"kanto_route_2_gate__to_south": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_2",
+				"mapSceneAliases": [
+					"uid://cnbfksossjfg7"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_2.tscn",
+				"position": {
+					"x": 1376.0,
+					"y": 1136.0
+				},
+				"spawnMarker": "FromRoute2GateSouth"
+			},
+			"destinationAreaId": "kanto_route_2",
+			"sourceMapId": "kanto_route_2_gate"
+		},
+		"kanto_route_2_viridian_forest_north_gate__to_north": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_2",
+				"mapSceneAliases": [
+					"uid://cnbfksossjfg7"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_2.tscn",
+				"position": {
+					"x": 368.0,
+					"y": 528.0
+				},
+				"spawnMarker": "FromViridianForestNorth"
+			},
+			"destinationAreaId": "kanto_route_2",
+			"sourceMapId": "kanto_route_2_viridian_forest_north_gate"
+		},
+		"kanto_route_2_viridian_forest_north_gate__to_south": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_viridian_forest",
+				"mapSceneAliases": [
+					"uid://dxrgvafxdtmod"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/viridian_forest.tscn",
+				"position": {
+					"x": 368.0,
+					"y": 272.0
+				},
+				"spawnMarker": "FromRoute2North"
+			},
+			"destinationAreaId": "kanto_viridian_forest",
+			"sourceMapId": "kanto_route_2_viridian_forest_north_gate"
+		},
+		"kanto_route_2_viridian_forest_south_gate__to_north": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_viridian_forest",
+				"mapSceneAliases": [
+					"uid://dxrgvafxdtmod"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/viridian_forest.tscn",
+				"position": {
+					"x": 1264.0,
+					"y": 2192.0
+				},
+				"spawnMarker": "FromRoute2South"
+			},
+			"destinationAreaId": "kanto_viridian_forest",
+			"sourceMapId": "kanto_route_2_viridian_forest_south_gate"
+		},
+		"kanto_route_2_viridian_forest_south_gate__to_south": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_2",
+				"mapSceneAliases": [
+					"uid://cnbfksossjfg7"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_2.tscn",
+				"position": {
+					"x": 336.0,
+					"y": 1296.0
+				},
+				"spawnMarker": "FromViridianForestSouth"
+			},
+			"destinationAreaId": "kanto_route_2",
+			"sourceMapId": "kanto_route_2_viridian_forest_south_gate"
+		},
+		"kanto_viridian_city__to_route_1": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_1",
+				"mapSceneAliases": [
+					"uid://b65lnk8twsct"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_1.tscn",
+				"position": {
+					"x": 1136.0,
+					"y": 48.0
+				},
+				"spawnMarker": "FromViridianCity"
+			},
+			"destinationAreaId": "kanto_route_1",
+			"sourceMapId": "kanto_viridian_city"
+		},
+		"kanto_viridian_city__to_route_2": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_2",
+				"mapSceneAliases": [
+					"uid://cnbfksossjfg7"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_2.tscn",
+				"position": {
+					"x": 592.0,
+					"y": 2352.0
+				},
+				"spawnMarker": "FromViridianCity"
+			},
+			"destinationAreaId": "kanto_route_2",
+			"sourceMapId": "kanto_viridian_city"
+		},
+		"kanto_viridian_forest__to_route_2_north": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_2_viridian_forest_north_gate",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/transition_buildings/route_2_viridian_forest_north_gate.tscn",
+				"position": {
+					"x": 336.0,
+					"y": 592.0
+				},
+				"spawnMarker": "FromSouth"
+			},
+			"destinationAreaId": "kanto_route_2_viridian_forest_north_gate",
+			"sourceMapId": "kanto_viridian_forest"
+		},
+		"kanto_viridian_forest__to_route_2_south": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_2_viridian_forest_south_gate",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/transition_buildings/route_2_viridian_forest_south_gate.tscn",
+				"position": {
+					"x": 336.0,
+					"y": 272.0
+				},
+				"spawnMarker": "FromNorth"
+			},
+			"destinationAreaId": "kanto_route_2_viridian_forest_south_gate",
+			"sourceMapId": "kanto_viridian_forest"
+		},
+		"route_1_to_viridian_city": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_viridian_city",
+				"mapSceneAliases": [
+					"uid://b8tl17hk3yovn"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
+				"position": {
+					"x": 784.0,
+					"y": 1200.0
+				},
+				"spawnMarker": "FromRoute1"
+			},
+			"destinationAreaId": "kanto_viridian_city",
+			"sourceMapId": "kanto_route_1"
+		}
+	}
+}

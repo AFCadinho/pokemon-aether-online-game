@@ -359,6 +359,7 @@ func _reset_account_runtime_state() -> void:
 	GameState.reset_gameplay_runtime_state()
 	PlayerHotbarService.clear_cached_state()
 	PlayerActionService.clear_cached_state()
+	WorldTransitionService.clear_cache()
 	FieldMoveService.update_owned_charms_from_inventory([])
 	PokedexService.invalidate_owned_species_cache()
 	var trade_workspace: Object = get_node_or_null("/root/TradeWorkspace")

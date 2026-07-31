@@ -210,6 +210,9 @@ jobs:
       - name: Import Godot assets
         run: ./godot --headless --import --quit
 
+      - name: Verify generated world access catalog
+        run: ./godot --no-header --headless --path . res://tools/generate_world_access_catalog.tscn -- --check
+
       - name: Import launcher assets
         if: env.BUILD_LAUNCHER == 'true'
         run: |

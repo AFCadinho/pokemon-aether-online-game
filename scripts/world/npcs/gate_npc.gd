@@ -3,10 +3,10 @@ extends DialogueNPC
 
 class_name GateNPC
 
-const STAFF_ROLE_CATEGORY := "staff"
-const LEGACY_STAFF_ROLE_IDS := ["staff", "owner", "senior_staff", "developer", "moderator", "gamemaster"]
+const LEGACY_IN_PROGRESS_ACCESS_PERMISSION := "world:areas:access-in-progress"
 
 @export var gate_id := "route_1"
+@export var guarded_transition_id := ""
 @export var requires_party_pokemon := true
 @export var requires_staff_role := false
 @export var blocked_dialogue_lines: Array[String] = [
@@ -20,11 +20,16 @@ const LEGACY_STAFF_ROLE_IDS := ["staff", "owner", "senior_staff", "developer", "
 @export var staff_blocked_dialogue_id := ""
 @export var allowed_dialogue_id := ""
 
+var transition_access: Dictionary = {}
+
 
 func _ready() -> void:
 	_ready_base_npc()
 	if Engine.is_editor_hint():
 		return
+	if not guarded_transition_id.strip_edges().is_empty():
+		add_to_group("world_transition_denial_presenters")
+		Callable(self, "_refresh_transition_access").call_deferred()
 	Callable(self, "_load_gate_metadata").call_deferred()
 
 
@@ -32,7 +37,10 @@ func is_gate_open() -> bool:
 	if requires_party_pokemon and PlayerSave.party.is_empty():
 		return false
 
-	if requires_staff_role and not _current_player_has_staff_role():
+	if not guarded_transition_id.strip_edges().is_empty():
+		return bool(transition_access.get("allowed", false))
+
+	if requires_staff_role and not _current_player_has_legacy_gate_permission():
 		return false
 
 	return true
@@ -59,11 +67,42 @@ func show_gate_dialogue() -> void:
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
 
+	if (
+		not guarded_transition_id.strip_edges().is_empty()
+		and not (requires_party_pokemon and PlayerSave.party.is_empty())
+	):
+		var access_response := await _refresh_transition_access(true)
+		if not bool(access_response.get("success", false)):
+			await GameErrorDialogService.show_report_to_staff_message()
+			return
+		if not bool(transition_access.get("allowed", false)):
+			await _show_transition_denied_dialogue(transition_access)
+			return
+
 	var lines: Array[String] = await _get_blocked_dialogue_lines()
 	if is_gate_open():
 		lines = await _resolve_dialogue_lines(allowed_dialogue_id, allowed_dialogue_lines)
 
-	await show_dialogue(lines)
+	if not lines.is_empty():
+		await show_dialogue(lines)
+
+
+func handles_world_transition(candidate_transition_id: String) -> bool:
+	return (
+		not guarded_transition_id.strip_edges().is_empty()
+		and guarded_transition_id.strip_edges() == candidate_transition_id.strip_edges()
+	)
+
+
+func present_world_transition_denied(access: Dictionary, player: Node2D) -> void:
+	transition_access = access.duplicate(true)
+	GameState.lock_overworld_input()
+	_face_body(player)
+	if player.has_method("face_world_position"):
+		player.face_world_position(get_feet_position())
+	await _show_transition_denied_dialogue(transition_access)
+	_set_idle_frame(_get_cardinal_direction(facing_direction))
+	GameState.unlock_overworld_input()
 
 
 func _load_gate_metadata() -> Dictionary:
@@ -104,7 +143,7 @@ func _get_blocked_dialogue_lines() -> Array[String]:
 	if requires_party_pokemon and PlayerSave.party.is_empty():
 		return await _resolve_dialogue_lines(blocked_dialogue_id, blocked_dialogue_lines)
 
-	if requires_staff_role and not _current_player_has_staff_role():
+	if requires_staff_role and not _current_player_has_legacy_gate_permission():
 		return await _resolve_dialogue_lines(staff_blocked_dialogue_id, staff_blocked_dialogue_lines)
 
 	return await _resolve_dialogue_lines(blocked_dialogue_id, blocked_dialogue_lines)
@@ -130,23 +169,32 @@ func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Arra
 	return lines
 
 
-func _current_player_has_staff_role() -> bool:
-	var roles_value: Variant = AuthService.current_user.get("roles", [])
-	if not roles_value is Array:
+func _refresh_transition_access(force_refresh := false) -> Dictionary:
+	var response: Dictionary = await WorldTransitionService.get_transition_access(
+		guarded_transition_id,
+		force_refresh
+	)
+	if bool(response.get("success", false)):
+		var access_value: Variant = response.get("access", {})
+		transition_access = access_value as Dictionary if access_value is Dictionary else {}
+	return response
+
+
+func _show_transition_denied_dialogue(access: Dictionary) -> void:
+	var dialogue_reference_id := str(access.get("dialogueId", "")).strip_edges()
+	var lines := await _resolve_dialogue_lines(
+		dialogue_reference_id,
+		staff_blocked_dialogue_lines
+	)
+	if not lines.is_empty():
+		await show_dialogue(lines)
+
+
+func _current_player_has_legacy_gate_permission() -> bool:
+	var permissions_value: Variant = AuthService.current_user.get("permissions", [])
+	if not permissions_value is Array:
 		return false
-
-	var roles: Array = roles_value as Array
-	for role_value: Variant in roles:
-		var role_id := ""
-		var role_category := ""
-		if role_value is Dictionary:
-			var role := role_value as Dictionary
-			role_id = str(role.get("id", "")).strip_edges().to_lower()
-			role_category = str(role.get("category", "")).strip_edges().to_lower()
-		else:
-			role_id = str(role_value).strip_edges().to_lower()
-
-		if role_category == STAFF_ROLE_CATEGORY or LEGACY_STAFF_ROLE_IDS.has(role_id):
+	for permission_value: Variant in permissions_value as Array:
+		if str(permission_value).strip_edges().to_lower() == LEGACY_IN_PROGRESS_ACCESS_PERMISSION:
 			return true
-
 	return false

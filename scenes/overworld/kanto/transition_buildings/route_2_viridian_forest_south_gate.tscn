@@ -5,6 +5,9 @@
 [node name="Route2ViridianForestSouthGate" instance=ExtResource("1_template")]
 map_id = "kanto_route_2_viridian_forest_south_gate"
 map_display_name = "Viridian Forest Gate"
+world_access_group_id = "kanto_viridian_forest"
+world_access_group_label = "Viridian Forest"
+world_access_area_type = "transition"
 location_id = "kanto.route_2.viridian_forest.south_gate"
 location_name = "Viridian Forest Gate"
 music_track_path = "res://assets/music/overworld/kanto/routes/route1.ogg"

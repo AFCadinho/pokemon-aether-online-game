@@ -1060,6 +1060,7 @@ sprite_offset = null
 
 [node name="GateNPC" parent="Entities/NPCs/Dialogue" unique_id=586724815 instance=ExtResource("13_8kkc8")]
 position = Vector2(1072, 272)
+guarded_transition_id = "route_1_to_viridian_city"
 npc_id = "kanto_route_1_north_guard"
 npc_sprite_frames = SubResource("SpriteFrames_qefnj")
 mugshot = ExtResource("15_4m8jl")
@@ -1100,6 +1101,7 @@ position = Vector2(1136, -16)
 script = ExtResource("20_viridian")
 target_scene_path = "uid://b8tl17hk3yovn"
 target_spawn_name = "FromRoute1"
+transition_id = "route_1_to_viridian_city"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToViridianCity" unique_id=297572459]
 position = Vector2(0, 16)

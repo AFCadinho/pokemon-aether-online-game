@@ -276,8 +276,8 @@ func save_current_player_state_now() -> Dictionary:
 	return result
 
 
-func begin_authorized_teleport() -> Dictionary:
-	var block_reason := get_authorized_teleport_block_reason()
+func begin_authorized_teleport(ignore_player_movement := false) -> Dictionary:
+	var block_reason := _get_authorized_teleport_block_reason(false, false, ignore_player_movement)
 	if block_reason != "":
 		return {
 			"success": false,
@@ -289,7 +289,7 @@ func begin_authorized_teleport() -> Dictionary:
 	authorized_teleport_locked_overworld = true
 	while is_saving_player_position:
 		await get_tree().process_frame
-	block_reason = _get_authorized_teleport_block_reason(true)
+	block_reason = _get_authorized_teleport_block_reason(true, false, ignore_player_movement)
 	if block_reason != "":
 		cancel_authorized_teleport()
 		return {
@@ -415,7 +415,11 @@ func get_authorized_teleport_block_reason() -> String:
 	return _get_authorized_teleport_block_reason(false)
 
 
-func _get_authorized_teleport_block_reason(ignore_teleport_in_progress := false, ignore_failed_autosave_block := false) -> String:
+func _get_authorized_teleport_block_reason(
+	ignore_teleport_in_progress := false,
+	ignore_failed_autosave_block := false,
+	ignore_player_movement := false
+) -> String:
 	if authorized_teleport_in_progress and not ignore_teleport_in_progress:
 		return "Another teleport is already in progress."
 	if authorized_teleport_apply_failed_autosave_blocked and not ignore_failed_autosave_block:
@@ -432,7 +436,11 @@ func _get_authorized_teleport_block_reason(ignore_teleport_in_progress := false,
 		return "Cannot teleport while overworld movement is locked."
 	if GameState.ui_input_locked:
 		return "Cannot teleport while a menu lock is active."
-	if player.has_method("is_tile_moving") and bool(player.call("is_tile_moving")):
+	if (
+		not ignore_player_movement
+		and player.has_method("is_tile_moving")
+		and bool(player.call("is_tile_moving"))
+	):
 		return "Cannot teleport while moving."
 	if bool(player.get("route_gate_interaction_in_progress")):
 		return "Cannot teleport during a route transition."

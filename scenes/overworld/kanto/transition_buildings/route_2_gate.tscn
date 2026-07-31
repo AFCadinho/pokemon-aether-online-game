@@ -5,6 +5,9 @@
 [node name="Route2Gate" instance=ExtResource("1_template")]
 map_id = "kanto_route_2_gate"
 map_display_name = "Route 2 Gate"
+world_access_group_id = "kanto_route_2"
+world_access_group_label = "Route 2"
+world_access_area_type = "transition"
 location_id = "kanto.route_2.gate"
 location_name = "Route 2 Gate"
 music_track_path = "res://assets/music/overworld/kanto/routes/route1.ogg"
