@@ -103,6 +103,12 @@ func give_starter_pokemon(pokemon_name: String) -> Pokemon:
 		push_warning("Oak.give_starter_pokemon failed: Pokemon could not be saved: %s" % str(create_result.get("error", "Unknown error")))
 		return null
 	last_starter_claim_already_completed = bool(create_result.get("alreadyClaimed", false))
+	var story_result: Dictionary = await PlayerGameStateService.refresh_story()
+	if not bool(story_result.get("success", false)):
+		push_warning(
+			"Oak.give_starter_pokemon could not refresh story progress: %s"
+			% str(story_result.get("error", "Unknown error"))
+		)
 
 	var owned_pokemon_response: Dictionary = {}
 	var owned_pokemon_response_value: Variant = create_result.get("pokemon", {})

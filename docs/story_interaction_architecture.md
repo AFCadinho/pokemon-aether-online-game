@@ -29,9 +29,10 @@ collision shape. `story_host_path` identifies the node used as `self` for
 dialogue, facing, and movement; an empty path uses the trigger itself. Catalog
 `mapId`, `entityId`, and `trigger` must exactly match the runtime context.
 
-No production scene is wired in the foundation layer and the production
-catalog is empty. The first real hook belongs in the Pallet Town vertical
-slice, together with its catalog definition and reload/reconnect tests.
+The first production hook is `players_house_father_intro` in Player's House.
+The loading flow bootstraps the server-selected `kanto_main` storyline before
+entering the world, and the existing authoritative starter claim completes the
+quest's terminal `choose_starter` step.
 
 ## Authoring rule for movement
 

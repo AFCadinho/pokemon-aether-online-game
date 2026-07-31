@@ -133,6 +133,14 @@ func _prepare_world() -> void:
 
 	StoryService.reset_story()
 	_set_loading_status("ui.loading.loading_profile", 0)
+	var story_bootstrap_response: Dictionary = await PlayerGameStateService.bootstrap_story()
+	if not bool(story_bootstrap_response.get("success", false)):
+		push_warning(
+			"LoadingScreen: story bootstrap failed: %s"
+			% str(story_bootstrap_response.get("error", "Unknown error"))
+		)
+		_return_to_login("Could not prepare your story progress. Please try again.")
+		return
 	var profile_response: Dictionary = await PlayerGameStateService.load_player_profile()
 	var saved_state: Dictionary = {}
 	if bool(profile_response.get("success", false)):

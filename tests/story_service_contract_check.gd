@@ -109,18 +109,28 @@ func _verify_integration_contract() -> void:
 	var loading := _source("res://scripts/ui/loading_screen.gd")
 	var auth := _source("res://scripts/services/auth_service.gd")
 	var overlay := _source("res://scripts/ui/ui_overlay.gd")
+	var oak := _source("res://scripts/world/kanto/towns/pallet_town/oak.gd")
 	_expect(
 		project.contains('StoryService="*res://scripts/services/story_service.gd"'),
 		"project registers the story projection"
 	)
 	_expect(
 		game_state_service.contains('const PLAYER_STORY_ENDPOINT := "/game/story"')
+		and game_state_service.contains('const STORY_BOOTSTRAP_ENDPOINT := "/game/story/bootstrap"')
+		and game_state_service.contains("func bootstrap_story() -> Dictionary:")
 		and game_state_service.contains('"story": story'),
-		"game state service exposes profile and refresh story payloads"
+		"game state service exposes bootstrap, profile, and refresh story payloads"
 	)
 	_expect(
-		loading.contains('StoryService.apply_story(_dictionary_from_value(profile_response.get("story", {})))'),
-		"loading hydrates the story projection from the aggregate profile"
+		loading.contains("await PlayerGameStateService.bootstrap_story()")
+		and loading.find("await PlayerGameStateService.bootstrap_story()")
+		< loading.find("await PlayerGameStateService.load_player_profile()")
+		and loading.contains('StoryService.apply_story(_dictionary_from_value(profile_response.get("story", {})))'),
+		"loading bootstraps before hydrating the aggregate story projection"
+	)
+	_expect(
+		oak.contains("await PlayerGameStateService.refresh_story()"),
+		"the authoritative starter claim refreshes completed quest progress"
 	)
 	_expect(
 		auth.contains("StoryService.reset_story()")

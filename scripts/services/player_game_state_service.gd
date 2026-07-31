@@ -11,6 +11,7 @@ const MAP_PLAYERS_ENDPOINT := "/game/map-players"
 const PLAYER_PREFERENCES_ENDPOINT := "/game/preferences"
 const PLAYER_PROFILE_ENDPOINT := "/game/profile"
 const PLAYER_STORY_ENDPOINT := "/game/story"
+const STORY_BOOTSTRAP_ENDPOINT := "/game/story/bootstrap"
 const STORY_INTERACTION_ENDPOINT := "/game/story/interactions/%s"
 const PUBLIC_TRAINER_CARD_ENDPOINT := "/game/trainers/%s/card"
 const REQUEST_TIMEOUT_SECONDS := 8.0
@@ -81,6 +82,38 @@ func refresh_story() -> Dictionary:
 
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
 	var story: Dictionary = _dictionary_from_value(body.get("story", body))
+	StoryService.apply_story(story)
+	return {
+		"success": true,
+		"story": StoryService.get_story(),
+	}
+
+
+func bootstrap_story() -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + STORY_BOOTSTRAP_ENDPOINT,
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_accept_headers(),
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var story: Dictionary = _dictionary_from_value(response.get("body", {}))
+	if not _is_valid_story_projection_body(story):
+		return {
+			"success": false,
+			"status": int(response.get("status", 0)),
+			"error": "Story bootstrap response was invalid.",
+		}
+
 	StoryService.apply_story(story)
 	return {
 		"success": true,
@@ -199,13 +232,7 @@ func _is_valid_story_complete_body(
 	):
 		return false
 	var story: Dictionary = _dictionary_from_value(body.get("story", {}))
-	if (
-		story.is_empty()
-		or not story.has("revision")
-		or not _is_nonnegative_integer(story.get("revision"))
-		or not story.has("quests")
-		or not (story.get("quests") is Array)
-	):
+	if not _is_valid_story_projection_body(story):
 		return false
 	if int(story.get("revision", -1)) != expected_revision + 1:
 		return false
@@ -213,6 +240,16 @@ func _is_valid_story_complete_body(
 		body.has("effects")
 		and body.get("effects") is Array
 		and (body.get("effects") as Array).is_empty()
+	)
+
+
+func _is_valid_story_projection_body(story: Dictionary) -> bool:
+	return (
+		not story.is_empty()
+		and story.has("revision")
+		and _is_nonnegative_integer(story.get("revision"))
+		and story.has("quests")
+		and story.get("quests") is Array
 	)
 
 

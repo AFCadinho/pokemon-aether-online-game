@@ -6,12 +6,34 @@
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="4_floor_mask"]
 [ext_resource type="Script" uid="uid://dcir531aqivcy" path="res://scripts/world/internal_floor_transition.gd" id="5_floor_transition"]
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="6_ikli7"]
+[ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="7_father_npc"]
+[ext_resource type="Texture2D" uid="uid://2qey36patp5j" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_080_Worker.png" id="8_father_sprite"]
+[ext_resource type="Script" uid="uid://c0rvsvb5ckinb" path="res://scripts/world/story/story_trigger.gd" id="9_story_trigger"]
+[ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="10_story_hook"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_house_exit"]
 size = Vector2(32, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_stairs"]
 size = Vector2(16, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_father"]
+atlas = ExtResource("8_father_sprite")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_father"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_father")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_father_intro"]
+size = Vector2(160, 32)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_r1um2"]
 texture = ExtResource("6_ikli7")
@@ -73,7 +95,31 @@ music_profile_id = "kanto.pallet_town"
 z_index = 10
 y_sort_enabled = true
 
+[node name="NPCs" type="Node2D" parent="Entities"]
+
+[node name="Father" parent="Entities/NPCs" instance=ExtResource("7_father_npc")]
+position = Vector2(432, 944)
+npc_id = "kanto_players_house_father"
+display_name = "Dad"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = SubResource("SpriteFrames_father")
+
 [node name="Players" type="Node2D" parent="Entities" unique_id=1334826896]
+
+[node name="StoryTriggers" type="Node2D" parent="."]
+
+[node name="FatherIntro" type="Area2D" parent="StoryTriggers"]
+position = Vector2(432, 896)
+script = ExtResource("9_story_trigger")
+story_host_path = NodePath("../../Entities/NPCs/Father")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StoryTriggers/FatherIntro"]
+shape = SubResource("RectangleShape2D_father_intro")
+
+[node name="StoryHook" type="Node" parent="StoryTriggers/FatherIntro"]
+script = ExtResource("10_story_hook")
+interaction_id = "players_house_father_intro"
+entity_id = "kanto_players_house_father"
 
 [node name="Spawns" type="Node2D" parent="." unique_id=1574395695]
 
