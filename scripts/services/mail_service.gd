@@ -36,7 +36,8 @@ func send_mail(
 	subject: String,
 	body: String,
 	item_attachments: Array = [],
-	pokemon_attachment_ids: Array = []
+	pokemon_attachment_ids: Array = [],
+	money_attachment: int = 0
 ) -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {
@@ -61,6 +62,7 @@ func send_mail(
 		"recipientUsername": recipient,
 		"subject": mail_subject,
 		"body": body.strip_edges(),
+		"moneyAttachment": maxi(money_attachment, 0),
 		"itemAttachments": _normalize_item_attachments(item_attachments),
 		"pokemonAttachmentIds": _normalize_pokemon_attachment_ids(pokemon_attachment_ids),
 	}

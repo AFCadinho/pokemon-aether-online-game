@@ -507,6 +507,7 @@ var player_interaction_coordinator: PlayerInteractionCoordinator
 @onready var mail_item_quantity: SpinBox = $Control/MailComposePopup/MarginContainer/VBoxContainer/ItemAttachmentRow/ItemQuantity
 @onready var mail_add_item_button: Button = $Control/MailComposePopup/MarginContainer/VBoxContainer/ItemAttachmentRow/AddItemButton
 @onready var mail_item_suggestions: VBoxContainer = $Control/MailComposePopup/MarginContainer/VBoxContainer/ItemSuggestions
+@onready var mail_money_amount: SpinBox = $Control/MailComposePopup/MarginContainer/VBoxContainer/MoneyAttachmentRow/MoneyAmount
 @onready var mail_pokemon_option: OptionButton = $Control/MailComposePopup/MarginContainer/VBoxContainer/PokemonAttachmentRow/PokemonOption
 @onready var mail_add_pokemon_button: Button = $Control/MailComposePopup/MarginContainer/VBoxContainer/PokemonAttachmentRow/AddPokemonButton
 @onready var mail_selected_attachments_list: VBoxContainer = $Control/MailComposePopup/MarginContainer/VBoxContainer/SelectedAttachmentsScroll/SelectedAttachmentsList
@@ -1354,6 +1355,7 @@ func _ready() -> void:
 	mail_delete_button.pressed.connect(_on_mail_delete_button_pressed)
 	mail_item_search_input.text_changed.connect(_on_mail_item_search_changed)
 	mail_add_item_button.pressed.connect(_on_mail_add_item_attachment_pressed)
+	mail_money_amount.value_changed.connect(_on_mail_money_amount_changed)
 	mail_add_pokemon_button.pressed.connect(_on_mail_add_pokemon_attachment_pressed)
 	mail_compose_send_button.pressed.connect(_on_mail_compose_send_button_pressed)
 	mail_compose_close_button.pressed.connect(_on_mail_compose_close_button_pressed)
@@ -1770,6 +1772,7 @@ func _apply_mail_ui_styles() -> void:
 	_apply_line_edit_style(mail_compose_subject_input)
 	_apply_line_edit_style(mail_item_search_input)
 	_apply_line_edit_style(mail_item_quantity.get_line_edit())
+	_apply_line_edit_style(mail_money_amount.get_line_edit())
 	_apply_button_style(mail_pokemon_option)
 	_apply_text_edit_style(mail_compose_body_input)
 	var selected_attachments_scroll: ScrollContainer = $Control/MailComposePopup/MarginContainer/VBoxContainer/SelectedAttachmentsScroll
@@ -2037,9 +2040,13 @@ func _setup_mail_compose_workspace_structure() -> void:
 	attachments_title.add_theme_font_size_override("font_size", 10)
 	attachments_title.add_theme_color_override("font_color", Color("#60d3ff"))
 	var item_row: HBoxContainer = $Control/MailComposePopup/MarginContainer/VBoxContainer/ItemAttachmentRow
+	var money_row: HBoxContainer = $Control/MailComposePopup/MarginContainer/VBoxContainer/MoneyAttachmentRow
 	var pokemon_row: HBoxContainer = $Control/MailComposePopup/MarginContainer/VBoxContainer/PokemonAttachmentRow
 	_add_mail_compose_field_caption(layout, item_row, "ui.mail.compose.from_bag")
+	_add_mail_compose_field_caption(layout, money_row, "ui.mail.compose.from_wallet")
 	_add_mail_compose_field_caption(layout, pokemon_row, "ui.mail.compose.from_party")
+	var money_label: Label = money_row.get_node("MoneyLabel") as Label
+	_set_localized_control_property(money_label, "text", "ui.mail.compose.money_amount")
 	_set_localized_control_property(
 		mail_item_search_input,
 		"placeholder_text",
@@ -2049,6 +2056,7 @@ func _setup_mail_compose_workspace_structure() -> void:
 	_set_localized_control_property(mail_add_pokemon_button, "text", "ui.mail.compose.add_pokemon")
 	mail_item_search_input.custom_minimum_size = Vector2(300, 36)
 	mail_item_quantity.custom_minimum_size = Vector2(88, 36)
+	mail_money_amount.custom_minimum_size = Vector2(220, 36)
 	mail_add_item_button.custom_minimum_size = Vector2(112, 36)
 	mail_pokemon_option.custom_minimum_size = Vector2(390, 36)
 	mail_add_pokemon_button.custom_minimum_size = Vector2(138, 36)
@@ -2652,6 +2660,7 @@ func _setup_mail_compose_help_popup() -> void:
 		"ui.mail.rules.base_fee",
 		"ui.mail.rules.attachments_fee",
 		"ui.mail.rules.cooldown",
+		"ui.mail.rules.money",
 		"ui.mail.rules.max_item_stacks",
 		"ui.mail.rules.max_pokemon",
 		"ui.mail.rules.no_held_items",
@@ -30470,6 +30479,7 @@ func _open_mail_compose_popup(recipient: String = "", subject: String = "") -> v
 	mail_selected_item_attachments.clear()
 	mail_selected_pokemon_ids.clear()
 	mail_selected_item_for_attachment = {}
+	mail_money_amount.value = 0
 	_prepare_mail_attachment_options()
 	mail_compose_popup.visible = true
 	_activate_ui_panel(mail_compose_popup)
@@ -30824,11 +30834,19 @@ func _on_mail_add_pokemon_attachment_pressed() -> void:
 	_refresh_mail_pokemon_attachment_options()
 	_refresh_mail_attachment_summary()
 
+func _on_mail_money_amount_changed(_value: float) -> void:
+	_refresh_mail_attachment_summary()
+
 func _refresh_mail_attachment_summary() -> void:
 	for child: Node in mail_selected_attachments_list.get_children():
 		child.queue_free()
 
-	var has_attachments: bool = not mail_selected_item_attachments.is_empty() or not mail_selected_pokemon_ids.is_empty()
+	var money_amount := maxi(int(mail_money_amount.value), 0)
+	var has_attachments: bool = (
+		money_amount > 0
+		or not mail_selected_item_attachments.is_empty()
+		or not mail_selected_pokemon_ids.is_empty()
+	)
 	if not has_attachments:
 		var empty_label := Label.new()
 		empty_label.text = LocalizationManager.text("ui.mail.compose.no_attachments")
@@ -30855,6 +30873,16 @@ func _refresh_mail_attachment_summary() -> void:
 			item_name,
 			LocalizationManager.text("ui.mail.compose.item_stack", {"quantity": quantity}),
 			_on_mail_remove_item_attachment_pressed.bind(item_id)
+		))
+
+	if money_amount > 0:
+		mail_selected_attachments_list.add_child(_create_mail_compose_attachment_row(
+			_load_item_icon("coin-case"),
+			LocalizationManager.text("ui.trainer_card.wallet.money"),
+			LocalizationManager.text("ui.mail.compose.money_attachment", {
+				"amount": _format_money(money_amount),
+			}),
+			_on_mail_remove_money_attachment_pressed
 		))
 
 	for pokemon_id: int in mail_selected_pokemon_ids:
@@ -30948,6 +30976,9 @@ func _on_mail_remove_item_attachment_pressed(item_id: String) -> void:
 	mail_add_item_button.disabled = true
 	_refresh_mail_attachment_summary()
 
+func _on_mail_remove_money_attachment_pressed() -> void:
+	mail_money_amount.value = 0
+
 func _on_mail_remove_pokemon_attachment_pressed(pokemon_id: int) -> void:
 	mail_selected_pokemon_ids.erase(pokemon_id)
 	_refresh_mail_pokemon_attachment_options()
@@ -30969,7 +31000,8 @@ func _on_mail_compose_send_button_pressed() -> void:
 		mail_compose_subject_input.text,
 		mail_compose_body_input.text,
 		mail_selected_item_attachments,
-		mail_selected_pokemon_ids
+		mail_selected_pokemon_ids,
+		maxi(int(mail_money_amount.value), 0)
 	)
 	if not bool(result.get("success", false)):
 		_add_chat_message(LocalizationManager.text("ui.mail.error.send", {
@@ -30992,6 +31024,7 @@ func _on_mail_compose_send_button_pressed() -> void:
 
 	mail_selected_item_attachments.clear()
 	mail_selected_pokemon_ids.clear()
+	mail_money_amount.value = 0
 	mail_compose_popup.visible = false
 	_deactivate_ui_panel(mail_compose_popup)
 	var sent_mail: Dictionary = result.get("sent", {}) as Dictionary

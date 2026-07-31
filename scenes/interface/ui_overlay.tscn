@@ -2127,6 +2127,23 @@ text = "ui.mail.compose.add_item"
 layout_mode = 2
 theme_override_constants/separation = 4
 
+[node name="MoneyAttachmentRow" type="HBoxContainer" parent="Control/MailComposePopup/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="MoneyLabel" type="Label" parent="Control/MailComposePopup/MarginContainer/VBoxContainer/MoneyAttachmentRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "ui.mail.compose.money_amount"
+vertical_alignment = 1
+
+[node name="MoneyAmount" type="SpinBox" parent="Control/MailComposePopup/MarginContainer/VBoxContainer/MoneyAttachmentRow"]
+custom_minimum_size = Vector2(220, 34)
+layout_mode = 2
+max_value = 999999999.0
+allow_greater = false
+prefix = "₽ "
+
 [node name="PokemonAttachmentRow" type="HBoxContainer" parent="Control/MailComposePopup/MarginContainer/VBoxContainer" unique_id=1417563497]
 layout_mode = 2
 theme_override_constants/separation = 8
