@@ -34835,7 +34835,7 @@ func _poll_pvp_room() -> void:
 		return
 	pvp_poll_in_flight = true
 	var request := _create_pvp_request_node()
-	var response: Dictionary = await BattleApiClient.get_pvp_room(request, pvp_active_room_code, "p1")
+	var response: Dictionary = await BattleApiClient.get_pvp_room(request, pvp_active_room_code)
 	request.queue_free()
 	pvp_poll_in_flight = false
 

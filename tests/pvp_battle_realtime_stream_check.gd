@@ -65,10 +65,18 @@ func _init() -> void:
 	_check_equal(
 		preview_drain_position > initial_render_position \
 			and preview_drain_position < initial_controls_position \
-			and battle_source.contains('message_action != "choose_lead"') \
+			and battle_source.contains("PvpBattleRealtimeService.is_team_preview_completion_update(") \
 			and battle_source.contains('"post_team_preview_unapplied_lead"'),
 		true,
-		"late public Team Preview batches render before participant controls open"
+		"late privacy-projected Team Preview batches render before participant controls open"
+	)
+	_check_equal(
+		battle_source.contains("func _capture_pvp_team_preview_completion_while_picker_open(message: Dictionary) -> bool:") \
+			and battle_source.contains('if str(message.get("requestId", "")).strip_edges() != "":') \
+			and battle_source.contains("pvp_pending_team_preview_completion = response.duplicate(true)") \
+			and battle_source.contains("player_party_grid.party_selected.emit(0)"),
+		true,
+		"an actionless final Team Preview batch wakes a timer-blocked party selector"
 	)
 	_check_equal(
 		battle_source.contains('bool(response.get("requiresBattleResync", false)) or str(response.get("code", "")) == "BATTLE_COMMAND_STALE"'),
@@ -640,6 +648,83 @@ func _init() -> void:
 		),
 		true,
 		"server-selected timeout lead without request id uses timeout recovery"
+	)
+	var actionless_team_preview_completion := {
+		"type": "pvp.render_batch",
+		"playerId": "p2",
+		"response": {
+			"success": true,
+			"visibilityContractVersion": 2,
+			"viewer": {"role": "participant", "side": "p1"},
+			"phase": "rendering_events",
+			"viewerControl": {"phase": "rendering_events"},
+			"battleOptions": {"teamPreview": true},
+			"requests": {"p1": {"active": []}, "p2": {"wait": true}},
+		},
+	}
+	_check_equal(
+		PvpBattleRealtimeServiceNode.is_team_preview_completion_update(
+			actionless_team_preview_completion,
+			"p1"
+		),
+		true,
+		"the first lead chooser accepts the safe actionless final render batch"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.is_team_preview_response(
+			actionless_team_preview_completion["response"]
+		),
+		false,
+		"authoritative post-preview phase overrides the persistent format option"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.is_team_preview_completion_update(
+			actionless_team_preview_completion,
+			"p2"
+		),
+		false,
+		"a participant projection for the wrong viewer cannot complete Team Preview"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.is_team_preview_completion_update(
+			{
+				"type": "pvp.battle_update",
+				"response": {
+					"success": true,
+					"visibilityContractVersion": 2,
+					"viewer": {"role": "participant", "side": "p1"},
+					"phase": "team_preview",
+					"requests": {"p1": {"teamPreview": true}},
+				},
+			},
+			"p1"
+		),
+		false,
+		"a pending participant response cannot end Team Preview"
+	)
+	var accepted_first_lead_response := {
+		"success": true,
+		"visibilityContractVersion": 2,
+		"viewer": {"role": "participant", "side": "p1"},
+		"phase": "waiting_for_opponent",
+		"viewerControl": {"phase": "waiting_for_opponent"},
+		"requests": {
+			"p1": {"teamPreview": true, "wait": true},
+			"p2": {"teamPreview": true},
+		},
+	}
+	_check_equal(
+		PvpBattleRealtimeServiceNode.is_team_preview_response(accepted_first_lead_response),
+		true,
+		"waiting_for_opponent remains Team Preview while its requests say teamPreview"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.is_team_preview_completion_update(
+			{"type": "pvp.battle_update", "response": accepted_first_lead_response},
+			"p1"
+		),
+		false,
+		"the first accepted lead cannot prematurely complete Team Preview"
 	)
 	_check_equal(
 		PvpBattleRealtimeServiceNode.is_unrequested_local_forced_switch(

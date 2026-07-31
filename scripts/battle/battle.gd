@@ -2259,7 +2259,6 @@ func _refresh_damage_calc_results() -> void:
 	var response: Dictionary = await BattleApiClient.calculate_battle_damage(
 		damage_calc_request,
 		battle_state.battle_id,
-		action_flow.local_player_id,
 		"own-to-opponent",
 		_get_damage_calc_defender_assumptions_payload()
 	)
@@ -6415,26 +6414,7 @@ func _run_trainer_lead_selection(api_response: Dictionary) -> Dictionary:
 	return await _run_default_trainer_lead_selection()
 
 func _should_show_team_preview(api_response: Dictionary) -> bool:
-	var battle_options_value: Variant = api_response.get("battleOptions", {})
-	if battle_options_value is Dictionary:
-		var battle_options: Dictionary = battle_options_value as Dictionary
-		if bool(battle_options.get("teamPreview", false)):
-			return true
-
-	var requests_value: Variant = api_response.get("requests", {})
-	if not (requests_value is Dictionary):
-		return false
-
-	var requests: Dictionary = requests_value as Dictionary
-	for request_value: Variant in requests.values():
-		if not (request_value is Dictionary):
-			continue
-
-		var request: Dictionary = request_value as Dictionary
-		if bool(request.get("teamPreview", false)):
-			return true
-
-	return false
+	return PvpBattleRealtimeService.is_team_preview_response(api_response)
 
 func _run_default_trainer_lead_selection() -> Dictionary:
 	_set_battle_input_locked(true)
@@ -6775,9 +6755,10 @@ func _drain_pvp_team_preview_completion_updates() -> void:
 		var message := _pop_next_pvp_realtime_update(true, "after team preview intro")
 		if message.is_empty():
 			return
-		var message_type := str(message.get("type", "")).strip_edges()
-		var message_action := str(message.get("action", "")).strip_edges()
-		if message_type not in ["pvp.battle_update", "pvp.render_batch"] or message_action != "choose_lead":
+		if not PvpBattleRealtimeService.is_team_preview_completion_update(
+			message,
+			action_flow.local_player_id
+		):
 			_defer_pvp_realtime_update(message, "post_team_preview_non_lead")
 			return
 		if not await _apply_pvp_realtime_battle_update(message):
@@ -6802,9 +6783,7 @@ func _wait_for_pvp_team_preview_complete(local_player_id: String) -> Dictionary:
 			if not polled_response.is_empty():
 				return polled_response
 			continue
-		if str(message.get("action", "")) != "choose_lead":
-			continue
-		if str(message.get("playerId", "")) == local_player_id:
+		if not PvpBattleRealtimeService.is_team_preview_completion_update(message, local_player_id):
 			continue
 
 		var response: Dictionary = _response_from_pvp_realtime_message(message)
@@ -9752,6 +9731,8 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 			_finish_pvp_realtime_battle_from_message.call_deferred(message.duplicate(true))
 		return
 
+	if _capture_pvp_team_preview_completion_while_picker_open(message):
+		return
 	if _capture_local_pvp_team_preview_timeout(message):
 		return
 	if _capture_local_pvp_forced_switch_timeout(message):
@@ -9931,8 +9912,40 @@ func _apply_pvp_phase_update(message: Dictionary) -> void:
 		return
 	_open_pvp_released_phase(phase)
 
+func _capture_pvp_team_preview_completion_while_picker_open(message: Dictionary) -> bool:
+	if not team_preview_lead_selection_active or current_action_view != ActionView.PARTY:
+		return false
+	# A correlated response belongs to the in-flight local action waiter. This
+	# recovery path is for the privacy-projected final batch (or snapshot) that
+	# has no opponent action category and therefore cannot wake that waiter.
+	if str(message.get("requestId", "")).strip_edges() != "":
+		return false
+	if not PvpBattleRealtimeService.is_team_preview_completion_update(
+		message,
+		action_flow.local_player_id
+	):
+		return false
+	# Preserve the first wake-up boundary. A retransmit or a newer render batch
+	# must continue through the normal queue so event dedupe and render ACKs still
+	# run; it must not overwrite pending state or emit a second picker signal.
+	if not pvp_pending_team_preview_completion.is_empty():
+		return false
+
+	var response := _response_from_pvp_realtime_message(message)
+	if response.is_empty():
+		return false
+	pvp_pending_team_preview_completion = response.duplicate(true)
+	pvp_realtime_activity_seq += 1
+	# The selector coroutine may still be blocked because the server timer chose
+	# our lead. Wake it so it can consume this authoritative completion instead
+	# of depending on a later HTTP recovery poll.
+	player_party_grid.party_selected.emit(0)
+	return true
+
 func _capture_local_pvp_team_preview_timeout(message: Dictionary) -> bool:
 	if not team_preview_lead_selection_active or current_action_view != ActionView.PARTY:
+		return false
+	if not pvp_pending_team_preview_completion.is_empty():
 		return false
 	if not PvpBattleRealtimeService.is_unrequested_local_team_preview_lead(message, action_flow.local_player_id):
 		return false
@@ -10058,8 +10071,7 @@ func _fetch_pvp_room_serialized(player_id: String) -> Dictionary:
 	pvp_room_recovery_request_active = true
 	var response: Dictionary = await BattleApiClient.get_pvp_room(
 		battle_request,
-		requested_room_code,
-		player_id
+		requested_room_code
 	)
 	pvp_room_recovery_request_active = false
 	if requested_room_code != pvp_room_code:

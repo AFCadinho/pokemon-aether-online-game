@@ -84,11 +84,10 @@ func _fetch_hover_pokemon_info(
 	if viewer_id == "":
 		return {}
 
-	_debug_battle_move("pokemon-info request viewerId=%s ident=%s battleId=%s" % [viewer_id, ident, battle_id])
+	_debug_battle_move("pokemon-info request viewerSideHint=%s ident=%s battleId=%s" % [viewer_id, ident, battle_id])
 	var response: Dictionary = await BattleApiClient.get_pokemon_info(
 		request_node,
 		battle_id,
-		viewer_id,
 		ident
 	)
 	_debug_battle_move("pokemon-info response=%s" % JSON.stringify(response))

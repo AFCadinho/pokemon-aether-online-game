@@ -484,6 +484,12 @@ func _process_packets() -> void:
 			if request_id != "":
 				action_response_received.emit(request_id, message)
 			continue
+		if message_type == "pvp.choice_confirmed":
+			# Confirmation itself is public so the opponent clock can change to
+			# Waiting. The envelope intentionally contains no action category or
+			# request correlation belonging to the other player.
+			_apply_timer_projection_from_battle_response(message)
+			continue
 		if message_type == "pvp.render_batch":
 			var request_id := str(message.get("requestId", ""))
 			_apply_timer_projection_from_battle_response(message)
@@ -688,6 +694,62 @@ static func is_unrequested_local_team_preview_lead(message: Dictionary, local_pl
 		and str(message.get("playerId", "")).strip_edges() == local_player_id.strip_edges()
 		and message.get("response", {}) is Dictionary
 	)
+
+
+static func is_team_preview_response(response: Dictionary) -> bool:
+	# `battleOptions.teamPreview` describes the format capability and remains true
+	# after both leads have been selected. A first accepted lead can meanwhile
+	# expose the public phase `waiting_for_opponent` while its request is still a
+	# Team Preview request, so that explicit request marker remains authoritative.
+	var requests_value: Variant = response.get("requests", {})
+	if requests_value is Dictionary:
+		for request_value: Variant in (requests_value as Dictionary).values():
+			if request_value is Dictionary and bool((request_value as Dictionary).get("teamPreview", false)):
+				return true
+
+	var phase := str(response.get("phase", "")).strip_edges().to_lower()
+	var viewer_control_value: Variant = response.get("viewerControl", {})
+	if phase == "" and viewer_control_value is Dictionary:
+		phase = str((viewer_control_value as Dictionary).get("phase", "")).strip_edges().to_lower()
+	if phase != "":
+		return phase == "team_preview"
+
+	var battle_options_value: Variant = response.get("battleOptions", {})
+	return (
+		battle_options_value is Dictionary
+		and bool((battle_options_value as Dictionary).get("teamPreview", false))
+	)
+
+
+static func is_team_preview_completion_update(message: Dictionary, local_player_id: String) -> bool:
+	# Privacy-v2 deliberately removes the opponent's choose_lead action and
+	# requestId. Completion must be inferred from the recipient-specific battle
+	# response, never from the other player's private action envelope.
+	var message_type := str(message.get("type", "")).strip_edges().to_lower()
+	if message_type not in ["pvp.battle_update", "pvp.render_batch", "pvp.snapshot"]:
+		return false
+	var response_value: Variant = message.get("response", {})
+	if not (response_value is Dictionary):
+		return false
+	var response := response_value as Dictionary
+	if not bool(response.get("success", false)):
+		return false
+
+	if int(response.get("visibilityContractVersion", 0)) >= 2:
+		var viewer_value: Variant = response.get("viewer", {})
+		if not (viewer_value is Dictionary):
+			return false
+		var viewer := viewer_value as Dictionary
+		var normalized_local_side := local_player_id.strip_edges().to_lower()
+		if normalized_local_side not in ["p1", "p2"]:
+			return false
+		if (
+			str(viewer.get("role", "")).strip_edges().to_lower() != "participant"
+			or str(viewer.get("side", "")).strip_edges().to_lower() != normalized_local_side
+		):
+			return false
+
+	return not is_team_preview_response(response)
 
 
 static func is_unrequested_local_forced_switch(message: Dictionary, local_player_id: String) -> bool:

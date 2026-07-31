@@ -70,13 +70,10 @@ func create_pvp_room(
 		}
 	)
 
-func get_pvp_room(request_node: HTTPRequest, room_code: String, player_id: String = "p1") -> Dictionary:
+func get_pvp_room(request_node: HTTPRequest, room_code: String) -> Dictionary:
 	return await send_get_request(
 		request_node,
-		"/battle/pvp/rooms/%s?playerId=%s" % [
-			room_code.strip_edges().uri_encode(),
-			player_id.strip_edges().uri_encode()
-		]
+		"/battle/pvp/rooms/%s" % room_code.strip_edges().uri_encode()
 	)
 
 func join_pvp_room(request_node: HTTPRequest, room_code: String, player: Dictionary) -> Dictionary:
@@ -325,11 +322,8 @@ func _append_since_event_seq_query(path: String, since_event_seq: int) -> String
 	var separator := "&" if path.contains("?") else "?"
 	return "%s%ssinceEventSeq=%d" % [path, separator, since_event_seq]
 
-func get_pokemon_info(request_node: HTTPRequest, battle_id: String, viewer_id: String, ident: String) -> Dictionary:
-	var query: String = "?viewerId=%s&ident=%s" % [
-		viewer_id.uri_encode(),
-		ident.uri_encode(),
-	]
+func get_pokemon_info(request_node: HTTPRequest, battle_id: String, ident: String) -> Dictionary:
+	var query: String = "?ident=%s" % ident.uri_encode()
 	return await send_get_request(
 		request_node,
 		"/battle/%s/pokemon-info%s" % [battle_id, query]
@@ -340,7 +334,6 @@ func get_pokemon_info(request_node: HTTPRequest, battle_id: String, viewer_id: S
 func calculate_battle_damage(
 	request_node: HTTPRequest,
 	battle_id: String,
-	viewer_id: String = "p1",
 	direction: String = "own-to-opponent",
 	defender_assumptions: Dictionary = {}
 ) -> Dictionary:
@@ -352,7 +345,7 @@ func calculate_battle_damage(
 			"code": "invalid_battle_id",
 		}
 
-	var payload := _build_damage_calc_payload(viewer_id, direction, defender_assumptions)
+	var payload := _build_damage_calc_payload(direction, defender_assumptions)
 	var response: Dictionary = await send_post_request(
 		request_node,
 		"/battle/%s/damage-calc" % normalized_battle_id.uri_encode(),
@@ -439,9 +432,8 @@ func _get_invalid_json_error_message(response_code: int, response_text: String) 
 func _get_request_error_message(request_result: int) -> String:
 	return BackendErrorLocalizationService.transport_message(request_result)
 
-func _build_damage_calc_payload(viewer_id: String, direction: String, defender_assumptions: Dictionary) -> Dictionary:
+func _build_damage_calc_payload(direction: String, defender_assumptions: Dictionary) -> Dictionary:
 	var payload := {
-		"viewerId": viewer_id.strip_edges(),
 		"direction": direction.strip_edges(),
 		"defender": {
 			"side": "opponent",
