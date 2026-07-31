@@ -268,6 +268,54 @@ func update_account_details(display_name: String, current_password: String, new_
 	}
 
 
+func export_personal_data(current_password: String, locale: String) -> Dictionary:
+	if session_token == "":
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + "/privacy/export",
+		HTTPClient.METHOD_POST,
+		_client_headers(PackedStringArray([USER_AGENT_HEADER, CONTENT_TYPE_HEADER, ACCEPT_HEADER, get_authorization_header()])),
+		JSON.stringify({
+			"currentPassword": current_password,
+			"locale": locale,
+		})
+	)
+	if not bool(response.get("success", false)):
+		return response
+	return {
+		"success": true,
+		"document": _dictionary_from_value(response.get("body", {})),
+	}
+
+
+func delete_account(current_password: String, locale: String) -> Dictionary:
+	if session_token == "":
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + "/privacy/delete",
+		HTTPClient.METHOD_POST,
+		_client_headers(PackedStringArray([USER_AGENT_HEADER, CONTENT_TYPE_HEADER, ACCEPT_HEADER, get_authorization_header()])),
+		JSON.stringify({
+			"currentPassword": current_password,
+			"locale": locale,
+			"confirmation": "DELETE",
+		})
+	)
+	if bool(response.get("success", false)):
+		clear_session()
+	return response
+
+
 func clear_session() -> void:
 	var chat_service: Object = get_node_or_null("/root/ChatRealtimeService")
 	if chat_service != null and chat_service.has_method("disconnect_chat"):

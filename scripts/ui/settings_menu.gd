@@ -32,6 +32,7 @@ const UI_PURPLE_HOVER := Color("#b980ff")
 const UI_DANGER := Color("#ff6b74")
 const UI_DANGER_BG := Color("#2a1015e8")
 const ACCOUNT_DIALOG_STATUS_HEIGHT := 30.0
+const PRIVACY_DIALOG_STATUS_HEIGHT := 38.0
 const LOGOUT_CONFIRM_SIZE := Vector2(360, 154)
 const LOGOUT_CONFIRM_Z_INDEX := 2200
 
@@ -97,6 +98,18 @@ var account_display_name_input: LineEdit
 var account_current_password_input: LineEdit
 var account_new_password_input: LineEdit
 var account_confirm_password_input: LineEdit
+var privacy_export_button: Button
+var delete_account_button: Button
+var privacy_dialog: PanelContainer
+var privacy_dialog_title_label: Label
+var privacy_dialog_message_label: Label
+var privacy_password_input: LineEdit
+var privacy_delete_confirmation_input: LineEdit
+var privacy_dialog_status_label: Label
+var privacy_confirm_button: Button
+var privacy_cancel_button: Button
+var privacy_action := ""
+var privacy_action_busy := false
 var account_status_key := ""
 var account_status_values: Dictionary = {}
 var account_status_is_error := false
@@ -131,6 +144,8 @@ func _ready() -> void:
 	language_options_button.item_selected.connect(_on_language_selected)
 	terminology_options_button.item_selected.connect(_on_terminology_selected)
 	edit_account_button.pressed.connect(_on_edit_account_button_pressed)
+	privacy_export_button.pressed.connect(_on_privacy_export_button_pressed)
+	delete_account_button.pressed.connect(_on_delete_account_button_pressed)
 	logout_button.pressed.connect(_on_logout_button_pressed)
 	exit_game_button.pressed.connect(_on_exit_game_button_pressed)
 	credits_button.pressed.connect(_on_credits_button_pressed)
@@ -163,6 +178,8 @@ func show_impersonation_return_confirmation() -> void:
 func close() -> void:
 	if account_details_dialog != null:
 		_hide_account_details_dialog()
+	if privacy_dialog != null:
+		_hide_privacy_dialog()
 	logout_confirmation_requested = false
 	if logout_confirm_dialog != null:
 		_hide_logout_confirm_dialog()
@@ -174,7 +191,9 @@ func _input(event: InputEvent) -> void:
 	if not visible or not event.is_action_pressed("ui_cancel"):
 		return
 
-	if account_details_dialog != null and account_details_dialog.visible:
+	if privacy_dialog != null and privacy_dialog.visible:
+		_hide_privacy_dialog()
+	elif account_details_dialog != null and account_details_dialog.visible:
 		_hide_account_details_dialog()
 	elif logout_confirm_dialog != null and logout_confirm_dialog.visible:
 		_hide_logout_confirm_dialog()
@@ -531,6 +550,31 @@ func _build_account_tab(account_tab: VBoxContainer) -> void:
 	account_status_label.visible = false
 	account_tab.add_child(account_status_label)
 
+	var privacy_label := Label.new()
+	_set_localized_text(privacy_label, "ui.settings.privacy.title")
+	privacy_label.add_theme_color_override("font_color", UI_SECTION_TEXT)
+	privacy_label.add_theme_font_size_override("font_size", 14)
+	account_tab.add_child(privacy_label)
+
+	var privacy_note := Label.new()
+	_set_localized_text(privacy_note, "ui.settings.privacy.note")
+	privacy_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	privacy_note.add_theme_font_size_override("font_size", 12)
+	account_tab.add_child(privacy_note)
+
+	privacy_export_button = Button.new()
+	_set_localized_text(privacy_export_button, "ui.settings.privacy.export")
+	privacy_export_button.focus_mode = Control.FOCUS_NONE
+	account_tab.add_child(privacy_export_button)
+
+	delete_account_button = Button.new()
+	_set_localized_text(delete_account_button, "ui.settings.privacy.delete")
+	delete_account_button.focus_mode = Control.FOCUS_NONE
+	account_tab.add_child(delete_account_button)
+
+	_setup_privacy_dialog()
+	account_tab.add_child(privacy_dialog)
+
 	account_return_note_label = Label.new()
 	_set_localized_text(account_return_note_label, "ui.settings.account.return_note")
 	account_return_note_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -755,6 +799,77 @@ func _setup_account_details_dialog() -> void:
 	button_row.add_child(account_confirm_button)
 
 
+func _setup_privacy_dialog() -> void:
+	privacy_dialog = PanelContainer.new()
+	privacy_dialog.name = "PrivacyActionPopup"
+	privacy_dialog.visible = false
+	privacy_dialog.mouse_filter = Control.MOUSE_FILTER_STOP
+	privacy_dialog.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 14)
+	margin.add_theme_constant_override("margin_top", 12)
+	margin.add_theme_constant_override("margin_right", 14)
+	margin.add_theme_constant_override("margin_bottom", 12)
+	privacy_dialog.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 7)
+	margin.add_child(layout)
+
+	var title_row := HBoxContainer.new()
+	layout.add_child(title_row)
+
+	privacy_dialog_title_label = Label.new()
+	privacy_dialog_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	privacy_dialog_title_label.add_theme_font_size_override("font_size", 16)
+	title_row.add_child(privacy_dialog_title_label)
+
+	var close_dialog_button := Button.new()
+	close_dialog_button.text = "X"
+	close_dialog_button.custom_minimum_size = Vector2(30, 28)
+	close_dialog_button.pressed.connect(_hide_privacy_dialog)
+	title_row.add_child(close_dialog_button)
+
+	privacy_dialog_message_label = Label.new()
+	privacy_dialog_message_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	privacy_dialog_message_label.add_theme_font_size_override("font_size", 12)
+	layout.add_child(privacy_dialog_message_label)
+
+	privacy_password_input = _create_account_line_edit("ui.settings.account.current_password", true)
+	layout.add_child(privacy_password_input)
+
+	privacy_delete_confirmation_input = _create_account_line_edit("ui.settings.privacy.delete_confirmation", false)
+	privacy_delete_confirmation_input.visible = false
+	layout.add_child(privacy_delete_confirmation_input)
+
+	privacy_dialog_status_label = Label.new()
+	privacy_dialog_status_label.custom_minimum_size = Vector2(0, PRIVACY_DIALOG_STATUS_HEIGHT)
+	privacy_dialog_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	privacy_dialog_status_label.add_theme_font_size_override("font_size", 12)
+	layout.add_child(privacy_dialog_status_label)
+
+	var button_row := HBoxContainer.new()
+	button_row.add_theme_constant_override("separation", 8)
+	layout.add_child(button_row)
+
+	var spacer := Control.new()
+	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button_row.add_child(spacer)
+
+	privacy_cancel_button = Button.new()
+	_set_localized_text(privacy_cancel_button, "common.cancel")
+	privacy_cancel_button.custom_minimum_size = Vector2(92, 32)
+	privacy_cancel_button.pressed.connect(_hide_privacy_dialog)
+	button_row.add_child(privacy_cancel_button)
+
+	privacy_confirm_button = Button.new()
+	_set_localized_text(privacy_confirm_button, "common.confirm")
+	privacy_confirm_button.custom_minimum_size = Vector2(104, 32)
+	privacy_confirm_button.pressed.connect(_privacy_action_confirmed)
+	button_row.add_child(privacy_confirm_button)
+
+
 func _create_account_line_edit(placeholder_key: String, secret: bool) -> LineEdit:
 	var input := LineEdit.new()
 	_set_localized_placeholder(input, placeholder_key)
@@ -824,6 +939,8 @@ func _refresh_localized_content() -> void:
 			account_dialog_status_values,
 			account_dialog_status_is_error
 		)
+	if privacy_dialog != null and privacy_dialog.visible:
+		_refresh_privacy_dialog_copy()
 
 
 func _update_about_version_label() -> void:
@@ -873,8 +990,11 @@ func _apply_premium_styles() -> void:
 		_apply_button_style(logout_button)
 	if exit_game_button != null:
 		_apply_button_style(exit_game_button, "danger")
+	if delete_account_button != null:
+		_apply_button_style(delete_account_button, "danger")
 	_apply_button_style(close_button)
 	_apply_account_dialog_style()
+	_apply_privacy_dialog_style()
 	_apply_logout_confirm_dialog_style()
 	_refresh_navigation_state()
 
@@ -1050,6 +1170,17 @@ func _apply_logout_confirm_dialog_style() -> void:
 		_apply_button_style(logout_confirm_cancel_button)
 
 
+func _apply_privacy_dialog_style() -> void:
+	if privacy_dialog == null:
+		return
+	privacy_dialog.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	if privacy_confirm_button != null:
+		_apply_button_style(
+			privacy_confirm_button,
+			"danger" if privacy_action == "delete" else "default"
+		)
+
+
 func _make_panel_style(background_color: Color, border_color: Color, corner_radius: int, border_width: int) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
 	style.bg_color = background_color
@@ -1111,11 +1242,19 @@ func _refresh_account_tab() -> void:
 		account_user_label.text = LocalizationManager.text("ui.settings.account.no_active")
 		if edit_account_button != null:
 			edit_account_button.disabled = true
-			print("[settings] edit account disabled: no active account")
+		if privacy_export_button != null:
+			privacy_export_button.disabled = true
+		if delete_account_button != null:
+			delete_account_button.disabled = true
+		print("[settings] edit account disabled: no active account")
 		return
 	if edit_account_button != null:
 		edit_account_button.disabled = false
 		print("[settings] edit account enabled")
+	if privacy_export_button != null:
+		privacy_export_button.disabled = AuthService.is_impersonating()
+	if delete_account_button != null:
+		delete_account_button.disabled = AuthService.is_impersonating()
 	if username != "" and username != display_name:
 		account_user_label.text = LocalizationManager.text(
 			"ui.settings.account.logged_in_with_username",
@@ -1352,6 +1491,7 @@ func _on_edit_account_button_pressed() -> void:
 	])
 	var display_name: String = AuthService.get_display_name()
 	var username: String = str(AuthService.current_user.get("username", ""))
+	_hide_privacy_dialog()
 	account_display_name_input.text = display_name if display_name != "" else username
 	account_current_password_input.clear()
 	account_new_password_input.clear()
@@ -1359,6 +1499,150 @@ func _on_edit_account_button_pressed() -> void:
 	_set_account_dialog_status("")
 	_popup_account_details_dialog()
 	account_display_name_input.grab_focus()
+
+
+func _on_privacy_export_button_pressed() -> void:
+	_show_privacy_dialog("export")
+
+
+func _on_delete_account_button_pressed() -> void:
+	_show_privacy_dialog("delete")
+
+
+func _show_privacy_dialog(action: String) -> void:
+	if privacy_action_busy or AuthService.is_impersonating():
+		return
+	_hide_account_details_dialog()
+	privacy_action = action
+	privacy_password_input.clear()
+	privacy_delete_confirmation_input.clear()
+	privacy_delete_confirmation_input.visible = action == "delete"
+	_set_privacy_dialog_status("")
+	_refresh_privacy_dialog_copy()
+	_apply_privacy_dialog_style()
+	privacy_dialog.visible = true
+	privacy_dialog.move_to_front()
+	privacy_password_input.grab_focus()
+
+
+func _refresh_privacy_dialog_copy() -> void:
+	if privacy_dialog_title_label == null or privacy_dialog_message_label == null:
+		return
+	var suffix := "delete" if privacy_action == "delete" else "export"
+	privacy_dialog_title_label.text = LocalizationManager.text("ui.settings.privacy.%s" % suffix)
+	privacy_dialog_message_label.text = LocalizationManager.text(
+		"ui.settings.privacy.%s_message" % suffix
+	)
+
+
+func _hide_privacy_dialog() -> void:
+	if privacy_dialog == null or privacy_action_busy:
+		return
+	privacy_dialog.visible = false
+	privacy_action = ""
+	privacy_password_input.clear()
+	privacy_delete_confirmation_input.clear()
+	_set_privacy_dialog_status("")
+
+
+func _privacy_action_confirmed() -> void:
+	if privacy_action_busy:
+		return
+	var current_password := privacy_password_input.text
+	if current_password.is_empty():
+		_set_privacy_dialog_status_key("ui.settings.privacy.error.password", true)
+		return
+	if privacy_action == "delete" and privacy_delete_confirmation_input.text != "DELETE":
+		_set_privacy_dialog_status_key("ui.settings.privacy.error.confirmation", true)
+		return
+
+	_set_privacy_controls_disabled(true)
+	_set_privacy_dialog_status_key("ui.settings.privacy.%s_working" % privacy_action)
+	var result: Dictionary
+	if privacy_action == "delete":
+		result = await AuthService.delete_account(current_password, LocalizationManager.current_locale)
+	else:
+		result = await AuthService.export_personal_data(current_password, LocalizationManager.current_locale)
+
+	if not bool(result.get("success", false)):
+		_set_privacy_controls_disabled(false)
+		var error_message := str(result.get("error", "")).strip_edges()
+		_set_privacy_dialog_status(
+			error_message if not error_message.is_empty() else LocalizationManager.text("ui.settings.privacy.error.request"),
+			true
+		)
+		return
+
+	if privacy_action == "delete":
+		AuthService.set_pending_login_notice(LocalizationManager.text("ui.settings.privacy.deleted"))
+		var scene_error: Error = get_tree().change_scene_to_file(LOGIN_SCENE_PATH)
+		if scene_error != OK:
+			_set_privacy_controls_disabled(false)
+			_set_privacy_dialog_status(LocalizationManager.text("ui.settings.privacy.error.return_login"), true)
+		return
+
+	var export_result := _save_privacy_export(result.get("document", {}))
+	_set_privacy_controls_disabled(false)
+	if not bool(export_result.get("success", false)):
+		_set_privacy_dialog_status_key("ui.settings.privacy.error.save", true)
+		return
+	_set_privacy_dialog_status_key(
+		"ui.settings.privacy.exported",
+		false,
+		{"path": str(export_result.get("path", ""))}
+	)
+	privacy_password_input.clear()
+
+
+func _save_privacy_export(document_value: Variant) -> Dictionary:
+	if not document_value is Dictionary:
+		return {"success": false}
+	var export_directory := ProjectSettings.globalize_path("user://exports")
+	if DirAccess.make_dir_recursive_absolute(export_directory) != OK:
+		return {"success": false}
+	var timestamp := Time.get_datetime_string_from_system().replace("T", "_").replace(":", "-")
+	var local_path := "user://exports/pokeaether-personal-data-%s.json" % timestamp
+	var file := FileAccess.open(local_path, FileAccess.WRITE)
+	if file == null:
+		return {"success": false}
+	file.store_string(JSON.stringify(document_value, "\t"))
+	file.close()
+	return {
+		"success": true,
+		"path": ProjectSettings.globalize_path(local_path),
+	}
+
+
+func _set_privacy_dialog_status(message: String, is_error: bool = false) -> void:
+	if privacy_dialog_status_label == null:
+		return
+	privacy_dialog_status_label.text = message
+	privacy_dialog_status_label.add_theme_color_override(
+		"font_color",
+		UI_DANGER if is_error else UI_MUTED_TEXT
+	)
+
+
+func _set_privacy_dialog_status_key(key: String, is_error: bool = false, values: Dictionary = {}) -> void:
+	_set_privacy_dialog_status(LocalizationManager.text(key, values), is_error)
+
+
+func _set_privacy_controls_disabled(disabled: bool) -> void:
+	privacy_action_busy = disabled
+	for button: Button in [
+		privacy_export_button,
+		delete_account_button,
+		privacy_confirm_button,
+		privacy_cancel_button,
+	]:
+		if button != null:
+			button.disabled = disabled
+	if privacy_password_input != null:
+		privacy_password_input.editable = not disabled
+	if privacy_delete_confirmation_input != null:
+		privacy_delete_confirmation_input.editable = not disabled
+	if close_button != null:
+		close_button.disabled = disabled
 
 
 func _popup_account_details_dialog() -> void:
@@ -1476,6 +1760,10 @@ func _set_account_controls_disabled(disabled: bool) -> void:
 		account_confirm_button.disabled = disabled
 	if account_cancel_button != null:
 		account_cancel_button.disabled = disabled
+	if privacy_export_button != null:
+		privacy_export_button.disabled = disabled or AuthService.is_impersonating()
+	if delete_account_button != null:
+		delete_account_button.disabled = disabled or AuthService.is_impersonating()
 
 	for input: LineEdit in [
 		account_display_name_input,
@@ -1620,6 +1908,10 @@ func _refresh_impersonation_account_controls() -> void:
 		_set_localized_text(logout_confirm_title_label, button_key)
 	if logout_confirm_message_label != null:
 		_set_localized_text(logout_confirm_message_label, message_key)
+	if privacy_export_button != null:
+		privacy_export_button.disabled = impersonating
+	if delete_account_button != null:
+		delete_account_button.disabled = impersonating
 
 func _leave_ranked_queue_before_logout() -> void:
 	var tree := get_tree()
