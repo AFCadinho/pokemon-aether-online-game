@@ -110,7 +110,15 @@ func _init() -> void:
 	_check(script_source.contains('_position_action_slot_popup(dev_actions_popup, dev_actions_slot)') and script_source.contains('_position_action_slot_popup(staff_tools_popup, staff_tools_slot)'), "internal tool menus open beside their toolbar actions")
 	_check(script_source.contains('{"panel": alpha_tools_popup, "close": Callable(self, "_hide_alpha_tools_popup")}'), "Escape closes the Alpha Tools launcher")
 	_check(script_source.contains('{"panel": content_creator_tools_popup, "close": Callable(self, "_hide_content_creator_tools_popup")}'), "Escape closes the Content Creator Tools launcher")
-	_check(script_source.contains("alpha_create_pokemon_button.visible = can_use_content_creator_generation") and script_source.contains("staff_impersonate_button.visible = can_impersonate"), "launcher polish preserves permission-based action visibility")
+	_check(
+		script_source.contains(
+			"alpha_create_pokemon_button.visible = can_use_content_creator_generation"
+		)
+		and script_source.contains(
+			"staff_impersonate_button.visible = can_return_from_impersonation or can_impersonate"
+		),
+		"launcher actions use permission or active-session visibility as appropriate"
+	)
 	_check(
 		disable_icon_focus_block.contains("socials_button")
 		and disable_icon_focus_block.contains("pvp_button")

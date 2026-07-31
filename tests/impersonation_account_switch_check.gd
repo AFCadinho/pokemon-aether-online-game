@@ -86,6 +86,23 @@ func _run() -> void:
 		"existing account-return control restores the linked staff account"
 	)
 	_expect(
+		overlay.contains(
+			"var can_return_from_impersonation := AuthService.is_impersonating()"
+		)
+		and overlay.contains(
+			"staff_impersonate_button.visible = can_return_from_impersonation or can_impersonate"
+		)
+		and overlay.contains(
+			"(can_show_staff_action_bar or can_return_from_impersonation)"
+		),
+		"return action stays visible when the target account has no staff permissions"
+	)
+	_expect(
+		overlay.contains('settings_menu.call("show_impersonation_return_confirmation")')
+		and settings.contains("func show_impersonation_return_confirmation()"),
+		"visible impersonation action opens the shared secure return confirmation"
+	)
+	_expect(
 		auth.contains("if session_token == \"\" or is_impersonating():"),
 		"temporary impersonation credentials are never saved locally"
 	)

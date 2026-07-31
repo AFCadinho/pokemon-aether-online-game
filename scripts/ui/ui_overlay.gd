@@ -746,6 +746,8 @@ var pvp_room_dragging := false
 var pvp_room_drag_offset := Vector2.ZERO
 var staff_tools_popup: PanelContainer
 var staff_impersonate_button: Button
+var staff_impersonate_button_title: Label
+var staff_impersonate_button_subtitle: Label
 var staff_teleport_button: Button
 var staff_impersonate_popup: PanelContainer
 var staff_impersonate_token_input: LineEdit
@@ -1637,12 +1639,19 @@ func _refresh_dev_tools_visibility() -> void:
 	var can_show_staff_action_bar: bool = _can_show_staff_action_bar()
 	var can_use_dev_tools: bool = _can_use_dev_tools()
 	var can_impersonate: bool = _can_impersonate_accounts()
+	var can_return_from_impersonation := AuthService.is_impersonating()
 	var can_teleport: bool = _can_teleport_self()
 	var can_teleport_to_player: bool = _can_teleport_to_player()
 	var can_teleport_other: bool = _can_teleport_other_player()
 	var can_use_content_creator_tools: bool = _can_use_content_creator_tools()
 	var can_use_content_creator_generation: bool = _can_use_content_creator_generation()
-	var has_staff_tool: bool = can_impersonate or can_teleport or can_teleport_to_player or can_teleport_other
+	var has_staff_tool: bool = (
+		can_return_from_impersonation
+		or can_impersonate
+		or can_teleport
+		or can_teleport_to_player
+		or can_teleport_other
+	)
 	var has_visible_staff_action: bool = has_staff_tool or can_use_dev_tools or can_use_content_creator_tools or can_use_content_creator_generation
 	PlayerSave.is_staff = _current_player_has_staff_role()
 	if content_creator_tools_slot != null:
@@ -1696,15 +1705,18 @@ func _refresh_dev_tools_visibility() -> void:
 		dev_add_money_button.visible = can_use_dev_tools
 		dev_add_money_button.disabled = not can_use_dev_tools
 	if staff_impersonate_button != null:
-		staff_impersonate_button.visible = can_impersonate
-		staff_impersonate_button.disabled = not can_impersonate
+		staff_impersonate_button.visible = can_return_from_impersonation or can_impersonate
+		staff_impersonate_button.disabled = not (
+			can_return_from_impersonation or can_impersonate
+		)
+	_refresh_staff_impersonate_button_copy()
 	if staff_teleport_button != null:
 		staff_teleport_button.visible = can_teleport or can_teleport_to_player or can_teleport_other
 		staff_teleport_button.disabled = not (can_teleport or can_teleport_to_player or can_teleport_other)
 	if not has_staff_tool:
 		if staff_tools_popup != null:
 			staff_tools_popup.visible = false
-	if not can_impersonate:
+	if not can_impersonate or can_return_from_impersonation:
 		if staff_impersonate_popup != null:
 			staff_impersonate_popup.visible = false
 	if not (can_teleport or can_teleport_to_player or can_teleport_other) and staff_teleport_popup != null:
@@ -1729,11 +1741,37 @@ func _refresh_dev_tools_visibility() -> void:
 		content_creator_tools_popup.visible = false
 	if not can_use_content_creator_generation and dev_pokemon_popup_mode == DevPokemonPopupMode.CONTENT_CREATOR:
 		dev_pokemon_popup.visible = false
-	if not can_impersonate and staff_impersonate_popup != null:
+	if (not can_impersonate or can_return_from_impersonation) and staff_impersonate_popup != null:
 		staff_impersonate_popup.visible = false
 	_refresh_action_bar_layouts()
 	_set_collapsible_panel_available("dex_actions", true)
-	_set_collapsible_panel_available("staff_actions", can_show_staff_action_bar and has_visible_staff_action)
+	_set_collapsible_panel_available(
+		"staff_actions",
+		(can_show_staff_action_bar or can_return_from_impersonation)
+		and has_visible_staff_action
+	)
+
+
+func _refresh_staff_impersonate_button_copy() -> void:
+	var returning := AuthService.is_impersonating()
+	var title_key := (
+		"ui.staff.impersonate.return_account"
+		if returning
+		else "ui.staff.impersonate.action"
+	)
+	var subtitle_key := (
+		"ui.staff.impersonate.active_note"
+		if returning
+		else "ui.staff.impersonate.action_description"
+	)
+	if staff_impersonate_button_title != null:
+		_set_localized_control_property(staff_impersonate_button_title, "text", title_key)
+	if staff_impersonate_button_subtitle != null:
+		_set_localized_control_property(
+			staff_impersonate_button_subtitle,
+			"text",
+			subtitle_key
+		)
 
 func _apply_mail_ui_styles() -> void:
 	mail_popup.add_theme_stylebox_override("panel", _make_mail_outer_style())
@@ -5791,6 +5829,7 @@ func _configure_launcher_card_button(
 	row.add_child(labels)
 
 	var title := Label.new()
+	title.name = "LauncherCardTitle"
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	if LocalizationManager.has_key(title_text, LocalizationManager.DEFAULT_LOCALE):
 		_set_localized_control_property(title, "text", title_text)
@@ -5801,6 +5840,7 @@ func _configure_launcher_card_button(
 	labels.add_child(title)
 
 	var subtitle := Label.new()
+	subtitle.name = "LauncherCardSubtitle"
 	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	if LocalizationManager.has_key(subtitle_text, LocalizationManager.DEFAULT_LOCALE):
 		_set_localized_control_property(subtitle, "text", subtitle_text)
@@ -6953,6 +6993,17 @@ func _setup_staff_impersonation_tools() -> void:
 		STAFF_IMPERSONATE_ICON,
 		Color("#b28ae8")
 	)
+	staff_impersonate_button_title = staff_impersonate_button.find_child(
+		"LauncherCardTitle",
+		true,
+		false
+	) as Label
+	staff_impersonate_button_subtitle = staff_impersonate_button.find_child(
+		"LauncherCardSubtitle",
+		true,
+		false
+	) as Label
+	_refresh_staff_impersonate_button_copy()
 
 	staff_impersonate_popup = PanelContainer.new()
 	staff_impersonate_popup.name = "StaffImpersonatePopup"
@@ -8741,6 +8792,7 @@ func _refresh_dev_tools_localized_ui() -> void:
 			_refresh_dev_item_results()
 	if dev_add_money_popup != null:
 		LocalizationManager.localize_tree(dev_add_money_popup)
+	_refresh_staff_impersonate_button_copy()
 
 func _refresh_progression_prompts_localized_ui() -> void:
 	for panel: Control in [
@@ -24317,7 +24369,13 @@ func _on_dev_badge_progress_popup_closed() -> void:
 		_deactivate_ui_panel(dev_badge_progress_popup)
 
 func _on_staff_tools_button_pressed() -> void:
-	if not (_can_impersonate_accounts() or _can_teleport_self() or _can_teleport_to_player() or _can_teleport_other_player()):
+	if not (
+		AuthService.is_impersonating()
+		or _can_impersonate_accounts()
+		or _can_teleport_self()
+		or _can_teleport_to_player()
+		or _can_teleport_other_player()
+	):
 		return
 	if staff_tools_popup == null:
 		return
@@ -24335,6 +24393,18 @@ func _hide_staff_tools_popup() -> void:
 		_deactivate_ui_panel(staff_tools_popup)
 
 func _on_staff_impersonate_button_pressed() -> void:
+	if AuthService.is_impersonating():
+		_hide_staff_impersonate_popup()
+		_hide_staff_tools_popup()
+		if settings_menu != null and settings_menu.has_method(
+			"show_impersonation_return_confirmation"
+		):
+			settings_menu.call("show_impersonation_return_confirmation")
+		return
+		_add_chat_message(LocalizationManager.text(
+			"ui.staff.impersonate.return_failed"
+		))
+		return
 	if not _can_impersonate_accounts():
 		_add_chat_message(LocalizationManager.text("ui.staff.error.no_impersonate_permission"))
 		return

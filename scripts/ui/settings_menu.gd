@@ -150,6 +150,16 @@ func open(context: String = "game") -> void:
 	_focus_active_navigation_button()
 
 
+func show_impersonation_return_confirmation() -> void:
+	if not AuthService.is_impersonating():
+		return
+	open("game")
+	if tab_container != null and account_tab_root != null:
+		tab_container.current_tab = account_tab_root.get_index()
+		_refresh_navigation_state()
+	_show_logout_confirm_dialog()
+
+
 func close() -> void:
 	if account_details_dialog != null:
 		_hide_account_details_dialog()
