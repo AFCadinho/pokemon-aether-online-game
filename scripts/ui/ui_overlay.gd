@@ -121,6 +121,9 @@ const DEV_HEAL_PARTY_ICON: Texture2D = preload("res://assets/ui/tool_heal_party.
 const DEV_PREVIEW_EVOLUTION_ICON: Texture2D = preload("res://assets/ui/global_shiny_boost.svg")
 const DEV_TRAINER_PROGRESS_ICON: Texture2D = preload("res://assets/gym_badges/kanto_badges/Boulder_Badge.png")
 const TOOL_CLEAR_DATA_ICON: Texture2D = preload("res://assets/ui/tool_clear_data.svg")
+const TOOL_DROPDOWN_ARROW: Texture2D = preload("res://assets/ui/photo_mode_dropdown_arrow.svg")
+const TOOL_DROPDOWN_RADIO_CHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_checked.svg")
+const TOOL_DROPDOWN_RADIO_UNCHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_unchecked.svg")
 const STAFF_TELEPORT_ICON: Texture2D = preload("res://assets/ui/location_waypoint.svg")
 const STAFF_IMPERSONATE_ICON: Texture2D = preload("res://assets/ui/staff_impersonate.svg")
 const ALPHA_TOOLS_MENU_ICON: Texture2D = preload("res://assets/ui/alpha_tools.svg")
@@ -6925,8 +6928,99 @@ func _setup_dev_tools_menu_surface() -> void:
 		world_weather_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		world_weather_label.add_theme_font_size_override("font_size", 11)
 
-	_apply_button_style(dev_world_time_select)
-	_apply_button_style(dev_world_weather_select)
+	_apply_developer_dropdown_style(dev_world_time_select)
+	_apply_developer_dropdown_style(dev_world_weather_select)
+
+func _apply_developer_dropdown_style(select: OptionButton) -> void:
+	if select == null:
+		return
+	select.custom_minimum_size.y = maxf(select.custom_minimum_size.y, 36.0)
+	select.focus_mode = Control.FOCUS_NONE
+	select.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	select.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	select.add_theme_font_size_override("font_size", 13)
+	select.add_theme_color_override("font_color", UI_TEXT)
+	select.add_theme_color_override("font_hover_color", Color("#ffffff"))
+	select.add_theme_color_override("font_pressed_color", Color("#ffffff"))
+	select.add_theme_color_override("font_focus_color", Color("#ffffff"))
+	select.add_theme_color_override("font_disabled_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.5))
+	select.add_theme_constant_override("arrow_margin", 11)
+	select.add_theme_icon_override("arrow", TOOL_DROPDOWN_ARROW)
+	select.add_theme_stylebox_override(
+		"normal",
+		_make_developer_dropdown_button_style(UI_SURFACE_INTERACTIVE, Color("#3f7890aa"))
+	)
+	select.add_theme_stylebox_override(
+		"hover",
+		_make_developer_dropdown_button_style(UI_SURFACE_HOVER, Color("#75d9ed"))
+	)
+	select.add_theme_stylebox_override(
+		"pressed",
+		_make_developer_dropdown_button_style(UI_SURFACE_PRESSED, Color("#8edfff"))
+	)
+	select.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	select.add_theme_stylebox_override(
+		"disabled",
+		_make_developer_dropdown_button_style(Color("#07111bc4"), Color("#263b4999"))
+	)
+
+	var popup := select.get_popup()
+	popup.transparent_bg = true
+	popup.borderless = true
+	popup.add_theme_font_size_override("font_size", 13)
+	popup.add_theme_color_override("font_color", Color("#d8e9f4"))
+	popup.add_theme_color_override("font_hover_color", Color("#ffffff"))
+	popup.add_theme_color_override("font_disabled_color", Color("#718899"))
+	popup.add_theme_color_override("font_separator_color", Color("#75d9ed"))
+	popup.add_theme_color_override("font_outline_color", Color("#02070b"))
+	popup.add_theme_constant_override("outline_size", 1)
+	popup.add_theme_constant_override("item_start_padding", 10)
+	popup.add_theme_constant_override("item_end_padding", 12)
+	popup.add_theme_constant_override("v_separation", 6)
+	popup.add_theme_stylebox_override("panel", _make_developer_dropdown_popup_style())
+	popup.add_theme_stylebox_override(
+		"hover",
+		_make_developer_dropdown_item_style(Color("#12344cf7"), Color("#63bfe6"))
+	)
+	popup.add_theme_stylebox_override(
+		"separator",
+		_make_developer_dropdown_item_style(Color("#00000000"), Color("#31566b88"), 0)
+	)
+	popup.add_theme_icon_override("radio_checked", TOOL_DROPDOWN_RADIO_CHECKED)
+	popup.add_theme_icon_override("radio_unchecked", TOOL_DROPDOWN_RADIO_UNCHECKED)
+	popup.add_theme_icon_override("radio_checked_disabled", TOOL_DROPDOWN_RADIO_CHECKED)
+	popup.add_theme_icon_override("radio_unchecked_disabled", TOOL_DROPDOWN_RADIO_UNCHECKED)
+
+func _make_developer_dropdown_button_style(background_color: Color, border_color: Color) -> StyleBoxFlat:
+	var style := _make_button_style(background_color, border_color, 7, 1)
+	style.content_margin_left = 10
+	style.content_margin_top = 5
+	style.content_margin_right = 28
+	style.content_margin_bottom = 5
+	return style
+
+func _make_developer_dropdown_popup_style() -> StyleBoxFlat:
+	var style := _make_developer_dropdown_item_style(Color("#050e18fc"), Color("#4e8caae6"), 9)
+	style.content_margin_left = 5
+	style.content_margin_top = 6
+	style.content_margin_right = 5
+	style.content_margin_bottom = 6
+	style.shadow_color = Color("#00000099")
+	style.shadow_size = 14
+	style.shadow_offset = Vector2(0, 6)
+	return style
+
+func _make_developer_dropdown_item_style(
+	background_color: Color,
+	border_color: Color,
+	corner_radius: int = 6
+) -> StyleBoxFlat:
+	var style := _make_panel_style(background_color, border_color, corner_radius, 1)
+	style.content_margin_left = 8
+	style.content_margin_top = 5
+	style.content_margin_right = 8
+	style.content_margin_bottom = 5
+	return style
 
 func _move_tool_menu_control(control: Control, target: Container) -> void:
 	if control == null or target == null:
