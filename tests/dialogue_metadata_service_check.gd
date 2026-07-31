@@ -115,8 +115,8 @@ func _check_trainer_npc_fallback_behavior() -> void:
 func _check_trainer_battle_behavior_unchanged() -> void:
 	var text := _read_text(TRAINER_NPC_SCRIPT)
 	_check_true(text.contains("TrainerMetadataService.get_trainer_metadata(trainer_id)"), "TrainerNPC still uses trainer metadata by trainer_id")
-	_check_true(text.contains("var battle_started := await start_trainer_battle(trainer_metadata)"), "TrainerNPC still starts battle after intro dialogue")
-	_check_true(text.contains("func start_trainer_battle(trainer_metadata: Dictionary) -> bool:"), "TrainerNPC battle start entrypoint unchanged")
+	_check_true(text.contains("await start_trainer_battle(trainer_metadata)"), "TrainerNPC still starts battle after intro dialogue")
+	_check_true(text.contains("func start_trainer_battle(trainer_metadata: Dictionary) -> Dictionary:"), "TrainerNPC returns structured battle start errors")
 
 
 func _read_text(path: String) -> String:

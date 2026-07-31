@@ -56,7 +56,7 @@ func _check_battle_start_behavior_is_unchanged() -> void:
 	var text := _read_text(TRAINER_NPC_SCRIPT)
 	_check_true(text.contains("dialogue_box.start_dialogue(dialogue_lines, speaker_name, mugshot)"), "TrainerNPC still starts intro dialogue in dialogue box")
 	_check_true(text.contains("await dialogue_box.dialogue_finished"), "TrainerNPC still waits for intro dialogue")
-	_check_true(text.contains("var battle_started := await start_trainer_battle(trainer_metadata)"), "TrainerNPC still starts battle after dialogue")
+	_check_true(text.contains("await start_trainer_battle(trainer_metadata)"), "TrainerNPC still starts battle after dialogue")
 
 
 func _read_text(path: String) -> String:
