@@ -31,11 +31,45 @@ func _run() -> void:
 		manager.localize_tree(launcher)
 		var play := launcher.find_child("PlayButton", true, false) as Button
 		var news_title := launcher.find_child("NewsTitle", true, false) as Label
+		var diagnostics_button := launcher.find_child("DiagnosticsButton", true, false) as Button
+		var diagnostics_card := launcher.find_child("DiagnosticsCard", true, false) as PanelContainer
 		var language_options := launcher.find_child("LanguageOptionsButton", true, false) as OptionButton
 		_check(play != null and play.text == "Spelen", "launcher action renders in Dutch")
 		_check(
 			news_title != null and news_title.text == "LAATSTE NIEUWS VAN AETHER",
 			"launcher news heading renders in Dutch"
+		)
+		_check(
+			diagnostics_button != null and diagnostics_button.text == "Diagnostiek",
+			"launcher diagnostics navigation renders in Dutch"
+		)
+		_check(diagnostics_card != null, "launcher includes the diagnostics view")
+		var sanitized_url := str(launcher.call(
+			"_sanitize_diagnostic_message",
+			"request url=https://updates.example/game.zip?token=private"
+		))
+		_check(
+			sanitized_url == "request url=https://updates.example/game.zip?<redacted>",
+			"launcher diagnostics redact URL query values"
+		)
+		var user_data_path := ProjectSettings.globalize_path("user://").trim_suffix("/")
+		var sanitized_path := str(launcher.call(
+			"_sanitize_diagnostic_message",
+			"file=%s/download.zip" % user_data_path
+		))
+		_check(
+			not sanitized_path.contains(user_data_path) and sanitized_path.contains("<user_data>"),
+			"launcher diagnostics redact local user storage paths"
+		)
+		var sanitized_history := str(launcher.call(
+			"_sanitize_diagnostic_contents",
+			"old file=%s/update.zip\nold url=https://updates.example/game.zip?token=private" % user_data_path
+		))
+		_check(
+			not sanitized_history.contains(user_data_path)
+			and not sanitized_history.contains("token=private")
+			and sanitized_history.contains("\n"),
+			"launcher diagnostics sanitize historical multiline logs before display and copying"
 		)
 		_check(language_options != null, "launcher language selector exists")
 		launcher.free()

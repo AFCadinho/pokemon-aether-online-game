@@ -130,6 +130,12 @@ layout_mode = 2
 text = "Credits"
 alignment = 0
 
+[node name="DiagnosticsButton" type="Button" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav" unique_id=1534481511]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "Diagnostics"
+alignment = 0
+
 [node name="NavDivider" type="HSeparator" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav" unique_id=642521252]
 layout_mode = 2
 
@@ -460,6 +466,76 @@ layout_mode = 2
 size_flags_vertical = 3
 bbcode_enabled = true
 text = "No news available."
+
+[node name="DiagnosticsCard" type="PanelContainer" parent="Shell/MainSplit/Content" unique_id=527660436]
+visible = false
+layout_mode = 2
+
+[node name="DiagnosticsMargin" type="MarginContainer" parent="Shell/MainSplit/Content/DiagnosticsCard" unique_id=649185725]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 24
+
+[node name="DiagnosticsLayout" type="VBoxContainer" parent="Shell/MainSplit/Content/DiagnosticsCard/DiagnosticsMargin" unique_id=963017827]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="HeaderRow" type="HBoxContainer" parent="Shell/MainSplit/Content/DiagnosticsCard/DiagnosticsMargin/DiagnosticsLayout" unique_id=1398445460]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Shell/MainSplit/Content/DiagnosticsCard/DiagnosticsMargin/DiagnosticsLayout/HeaderRow" unique_id=562473500]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.69, 0.48, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "DIAGNOSTICS"
+
+[node name="BackButton" type="Button" parent="Shell/MainSplit/Content/DiagnosticsCard/DiagnosticsMargin/DiagnosticsLayout/HeaderRow" unique_id=1713242723]
+custom_minimum_size = Vector2(130, 40)
+layout_mode = 2
+text = "Back to Home"
+
+[node name="Description" type="Label" parent="Shell/MainSplit/Content/DiagnosticsCard/DiagnosticsMargin/DiagnosticsLayout" unique_id=1079974017]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.71, 0.72, 0.82, 1)
+theme_override_font_sizes/font_size = 14
+text = "Launcher activity and technical details for troubleshooting."
+autowrap_mode = 3
+
+[node name="LogView" type="RichTextLabel" parent="Shell/MainSplit/Content/DiagnosticsCard/DiagnosticsMargin/DiagnosticsLayout" unique_id=991494413]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 2
+bbcode_enabled = true
+text = "No diagnostics recorded yet."
+scroll_following = true
+context_menu_enabled = true
+selection_enabled = true
+
+[node name="ButtonRow" type="HBoxContainer" parent="Shell/MainSplit/Content/DiagnosticsCard/DiagnosticsMargin/DiagnosticsLayout" unique_id=292927375]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="CopyButton" type="Button" parent="Shell/MainSplit/Content/DiagnosticsCard/DiagnosticsMargin/DiagnosticsLayout/ButtonRow" unique_id=682454372]
+custom_minimum_size = Vector2(160, 44)
+layout_mode = 2
+text = "Copy diagnostics"
+
+[node name="OpenFolderButton" type="Button" parent="Shell/MainSplit/Content/DiagnosticsCard/DiagnosticsMargin/DiagnosticsLayout/ButtonRow" unique_id=1811958395]
+custom_minimum_size = Vector2(160, 44)
+layout_mode = 2
+text = "Open log folder"
+
+[node name="ButtonSpacer" type="Control" parent="Shell/MainSplit/Content/DiagnosticsCard/DiagnosticsMargin/DiagnosticsLayout/ButtonRow" unique_id=1505009994]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ClearButton" type="Button" parent="Shell/MainSplit/Content/DiagnosticsCard/DiagnosticsMargin/DiagnosticsLayout/ButtonRow" unique_id=239946805]
+custom_minimum_size = Vector2(120, 44)
+layout_mode = 2
+text = "Clear log"
 
 [node name="HttpRequest" type="HTTPRequest" parent="." unique_id=342281023]
 

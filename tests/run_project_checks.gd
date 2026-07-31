@@ -95,6 +95,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/location_status_card_check.gd",
 	"res://tests/loading_screen_layout_check.gd",
 	"res://tests/launcher_self_update_check.gd",
+	"res://tests/launcher_diagnostics_check.gd",
 	"res://tests/credits_access_check.gd",
 	"res://tests/world_time_service_check.gd",
 	"res://tests/day_night_system_check.gd",

@@ -97,7 +97,7 @@ jobs:
             exit 1
           fi
           echo "LAUNCHER_RELEASE_VERSION=${release_version}" >> "${GITHUB_ENV}"
-          client_build_id="${GITHUB_SHA}-${GITHUB_RUN_ID}"
+          client_build_id="${GITHUB_SHA}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           echo "CLIENT_BUILD_ID=${client_build_id}" >> "${GITHUB_ENV}"
           echo "Release version: ${release_version}"
           echo "Client build: ${client_build_id}"
@@ -351,6 +351,7 @@ jobs:
             --base-url "${UPDATE_BASE_URL}" \
             --game-prefix game \
             --asset-prefix assets \
+            --launcher-prefix "launcher/${LAUNCHER_RELEASE_VERSION}-${CLIENT_BUILD_ID}" \
             --output-dir builds/launcher \
             --default-platform windows \
             --platform "${PACKAGE_PLATFORMS}" \
@@ -495,11 +496,22 @@ jobs:
             echo "published=false" >> "${GITHUB_OUTPUT}"
             exit 0
           fi
-          python3 tools/upload_launcher_release.py builds/launcher --layout updates
-          cp "builds/launcher/game-${LAUNCHER_RELEASE_VERSION}-windows.zip" builds/launcher/PokeAether-windows.zip
-          cp "builds/launcher/game-${LAUNCHER_RELEASE_VERSION}-linux.zip" builds/launcher/PokeAether-linux.zip
+          game_artifact_id="${LAUNCHER_RELEASE_VERSION}-${CLIENT_BUILD_ID}"
+          game_upload_args=(
+            --file "game-${game_artifact_id}-windows.zip"
+            --file "game-${game_artifact_id}-linux.zip"
+          )
           if [ "${BUILD_MACOS}" = "true" ]; then
-            cp "builds/launcher/game-${LAUNCHER_RELEASE_VERSION}-macos.zip" builds/launcher/PokeAether-macos.zip
+            game_upload_args+=(--file "game-${game_artifact_id}-macos.zip")
+          fi
+          python3 tools/upload_launcher_release.py builds/launcher \
+            --layout updates \
+            "${game_upload_args[@]}"
+
+          cp "builds/launcher/game-${game_artifact_id}-windows.zip" builds/launcher/PokeAether-windows.zip
+          cp "builds/launcher/game-${game_artifact_id}-linux.zip" builds/launcher/PokeAether-linux.zip
+          if [ "${BUILD_MACOS}" = "true" ]; then
+            cp "builds/launcher/game-${game_artifact_id}-macos.zip" builds/launcher/PokeAether-macos.zip
           fi
           python3 tools/upload_launcher_release.py builds/launcher \
             --prefix "game/latest" \
@@ -512,17 +524,42 @@ jobs:
           fi
           if [ "${BUILD_LAUNCHER}" = "true" ]; then
             python3 tools/upload_launcher_release.py builds/launcher \
-              --prefix "launcher/${LAUNCHER_RELEASE_VERSION}" \
+              --prefix "launcher/${LAUNCHER_RELEASE_VERSION}-${CLIENT_BUILD_ID}" \
               --file PokeAetherLauncher-windows.zip \
               --file PokeAetherLauncher-linux.zip
             if [ "${BUILD_MACOS}" = "true" ]; then
               python3 tools/upload_launcher_release.py builds/launcher \
-                --prefix "launcher/${LAUNCHER_RELEASE_VERSION}" \
+                --prefix "launcher/${LAUNCHER_RELEASE_VERSION}-${CLIENT_BUILD_ID}" \
+                --file PokeAetherLauncher-macos.zip
+            fi
+            python3 tools/upload_launcher_release.py builds/launcher \
+              --prefix "launcher/latest" \
+              --file PokeAetherLauncher-windows.zip \
+              --file PokeAetherLauncher-linux.zip
+            if [ "${BUILD_MACOS}" = "true" ]; then
+              python3 tools/upload_launcher_release.py builds/launcher \
+                --prefix "launcher/latest" \
                 --file PokeAetherLauncher-macos.zip
             fi
           else
             echo "Skipping launcher download upload because BUILD_LAUNCHER=false."
           fi
+
+          verify_args=()
+          if [ "${BUILD_LAUNCHER}" = "true" ]; then
+            verify_args+=(--include-launcher)
+          fi
+          python3 tools/verify_launcher_release_urls.py builds/launcher "${verify_args[@]}"
+
+          manifest_upload_args=(
+            --file manifest.json
+            --file manifest-windows.json
+            --file manifest-linux.json
+          )
+          if [ "${BUILD_MACOS}" = "true" ]; then
+            manifest_upload_args+=(--file manifest-macos.json)
+          fi
+          python3 tools/upload_launcher_release.py builds/launcher "${manifest_upload_args[@]}"
           echo "published=true" >> "${GITHUB_OUTPUT}"
 
       - name: Post release announcement to Discord

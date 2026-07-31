@@ -5,6 +5,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
@@ -14,7 +15,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 PLATFORMS = {
     "windows": {
         "build_dir": PROJECT_ROOT / "builds" / "windows",
-        "zip_name": "game-{version}-windows.zip",
+        "zip_name": "game-{artifact_id}-windows.zip",
         "manifest_name": "manifest-windows.json",
         "executable": "PokeAether.exe",
         "launcher_build_dir": PROJECT_ROOT / "builds" / "launcher-app" / "windows",
@@ -31,7 +32,7 @@ PLATFORMS = {
     },
     "linux": {
         "build_dir": PROJECT_ROOT / "builds" / "linux",
-        "zip_name": "game-{version}-linux.zip",
+        "zip_name": "game-{artifact_id}-linux.zip",
         "manifest_name": "manifest-linux.json",
         "executable": "PokeAether.x86_64",
         "launcher_build_dir": PROJECT_ROOT / "builds" / "launcher-app" / "linux",
@@ -48,7 +49,7 @@ PLATFORMS = {
     },
     "macos": {
         "build_dir": PROJECT_ROOT / "builds" / "macos",
-        "zip_name": "game-{version}-macos.zip",
+        "zip_name": "game-{artifact_id}-macos.zip",
         "manifest_name": "manifest-macos.json",
         "executable": "PokeAether.app/Contents/MacOS/PokeAether",
         "launcher_build_dir": PROJECT_ROOT / "builds" / "launcher-app" / "macos",
@@ -129,9 +130,14 @@ def main() -> None:
         help="Public URL path prefix for launcher zip URLs.",
     )
     args = parser.parse_args()
+    if re.fullmatch(r"[A-Za-z0-9._+-]+", args.version) is None:
+        raise SystemExit("--version may only contain letters, digits, dots, plus signs, underscores, and hyphens")
     build_id = (args.build_id or args.version).strip()
     if not build_id:
         raise SystemExit("--build-id cannot be empty")
+    if re.fullmatch(r"[A-Za-z0-9._-]+", build_id) is None:
+        raise SystemExit("--build-id may only contain letters, digits, dots, underscores, and hyphens")
+    artifact_id = args.version if build_id == args.version else f"{args.version}-{build_id}"
 
     output_dir = Path(args.output_dir).resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -149,7 +155,7 @@ def main() -> None:
         build_dir = platform_config["build_dir"]
         _assert_required_paths(build_dir, platform_config["required_files"])
 
-        zip_name = platform_config["zip_name"].format(version=args.version)
+        zip_name = platform_config["zip_name"].format(artifact_id=artifact_id)
         zip_path = output_dir / zip_name
         _zip_directory(build_dir, zip_path)
 

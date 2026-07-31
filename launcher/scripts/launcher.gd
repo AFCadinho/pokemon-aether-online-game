@@ -17,6 +17,9 @@ const GAME_INSTALL_SUBDIR := "game"
 const LAUNCHER_SETTINGS_FILE := "user://launcher_settings.json"
 const VERSION_FILE := "user://versions.json"
 const ERROR_LOG_FILE := "user://launcher_error.log"
+const PREVIOUS_ERROR_LOG_FILE := "user://launcher_error.previous.log"
+const MAX_ERROR_LOG_BYTES := 1024 * 1024
+const MAX_CHECKSUM_RETRIES := 1
 const TEMP_DIR := "user://downloads"
 const EXTRACT_PROGRESS_BATCH_SIZE := 25
 const USER_AGENT_HEADER := "User-Agent: PokeAetherLauncher/1.0"
@@ -70,6 +73,13 @@ const SERVER_CHECKING_COLOR := Color(1.0, 0.72, 0.34, 1.0)
 @onready var progress_bar: ProgressBar = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ProgressCard/ProgressMargin/ProgressLayout/ProgressBar
 @onready var progress_percent_label: Label = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ProgressCard/ProgressMargin/ProgressLayout/ProgressHeader/ProgressPercentLabel
 @onready var log_label: RichTextLabel = $Shell/MainSplit/Content/ContentLayout/NewsCard/NewsMargin/NewsLayout/LogLabel
+@onready var content_layout: HBoxContainer = $Shell/MainSplit/Content/ContentLayout
+@onready var diagnostics_card: PanelContainer = $Shell/MainSplit/Content/DiagnosticsCard
+@onready var diagnostics_log_view: RichTextLabel = $Shell/MainSplit/Content/DiagnosticsCard/DiagnosticsMargin/DiagnosticsLayout/LogView
+@onready var diagnostics_back_button: Button = $Shell/MainSplit/Content/DiagnosticsCard/DiagnosticsMargin/DiagnosticsLayout/HeaderRow/BackButton
+@onready var diagnostics_copy_button: Button = $Shell/MainSplit/Content/DiagnosticsCard/DiagnosticsMargin/DiagnosticsLayout/ButtonRow/CopyButton
+@onready var diagnostics_open_folder_button: Button = $Shell/MainSplit/Content/DiagnosticsCard/DiagnosticsMargin/DiagnosticsLayout/ButtonRow/OpenFolderButton
+@onready var diagnostics_clear_button: Button = $Shell/MainSplit/Content/DiagnosticsCard/DiagnosticsMargin/DiagnosticsLayout/ButtonRow/ClearButton
 @onready var check_button: Button = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow/CheckButton
 @onready var update_button: Button = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow/UpdateButton
 @onready var gen5_sprites_button: Button = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow/Gen5SpritesButton
@@ -77,6 +87,8 @@ const SERVER_CHECKING_COLOR := Color(1.0, 0.72, 0.34, 1.0)
 @onready var game_folder_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/GameFolderButton
 @onready var patch_notes_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/PatchNotesButton
 @onready var credits_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/CreditsButton
+@onready var home_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/HomeButton
+@onready var diagnostics_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/DiagnosticsButton
 @onready var uninstall_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/UninstallButton
 @onready var language_options_button: OptionButton = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/LanguageSection/LanguageOptionsButton
 @onready var discord_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton
@@ -116,6 +128,7 @@ var raw_news_data: Dictionary = {}
 var progress_is_indeterminate := false
 var asset_pack_download_total := 0
 var current_asset_pack_download_index := 0
+var has_unseen_diagnostics_error := false
 
 
 func _draw() -> void:
@@ -186,9 +199,16 @@ func _ready() -> void:
 	_load_launcher_config()
 	_load_launcher_settings()
 	LauncherLocalization.set_locale(locale)
+	_initialize_diagnostics_log()
 	_apply_visual_style()
 	_apply_locale()
 	_populate_language_options()
+	home_button.pressed.connect(_show_home)
+	diagnostics_button.pressed.connect(_show_diagnostics)
+	diagnostics_back_button.pressed.connect(_show_home)
+	diagnostics_copy_button.pressed.connect(_copy_diagnostics)
+	diagnostics_open_folder_button.pressed.connect(_open_diagnostics_folder)
+	diagnostics_clear_button.pressed.connect(_clear_diagnostics)
 	check_button.pressed.connect(check_for_updates)
 	update_button.pressed.connect(start_update)
 	gen5_sprites_button.pressed.connect(download_gen5_animated_sprites)
@@ -216,6 +236,13 @@ func _ready() -> void:
 	_refresh_server_health.call_deferred()
 	check_for_updates.call_deferred()
 	fetch_news.call_deferred()
+	_log(
+		"Launcher session started. launcher_version=%s os=%s locale=%s" % [
+			str(ProjectSettings.get_setting("application/config/version", "dev")),
+			OS.get_name(),
+			locale,
+		]
+	)
 	queue_redraw()
 
 
@@ -227,6 +254,7 @@ func _apply_locale() -> void:
 	uninstall_confirm_dialog.dialog_text = _t(
 		"This will permanently remove the selected game folder and all downloaded files.\n\nContinue?"
 	)
+	_refresh_diagnostics_button()
 
 
 func _populate_language_options() -> void:
@@ -267,6 +295,38 @@ func _t(key: String, values: Dictionary = {}) -> String:
 	return LauncherLocalization.text(key, values)
 
 
+func _show_home() -> void:
+	content_layout.show()
+	diagnostics_card.hide()
+	_apply_active_nav_style(home_button)
+
+
+func _show_diagnostics() -> void:
+	content_layout.hide()
+	diagnostics_card.show()
+	has_unseen_diagnostics_error = false
+	_refresh_diagnostics_button()
+	_refresh_diagnostics_view()
+	_apply_active_nav_style(diagnostics_button)
+
+
+func _apply_active_nav_style(active_button: Button) -> void:
+	var inactive_style := _sidebar_button_style(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 0)
+	var active_style := _sidebar_button_style(
+		Color(0.18, 0.13, 0.34, 0.92),
+		Color(0.48, 0.25, 0.92, 0.9),
+		1
+	)
+	for button: Button in [home_button, diagnostics_button]:
+		var style := active_style if button == active_button else inactive_style
+		button.add_theme_stylebox_override("normal", style)
+		button.add_theme_stylebox_override("hover", style if button == active_button else _sidebar_button_style(Color(0.105, 0.085, 0.19, 0.82), Color(0.42, 0.22, 0.82, 0.68), 1))
+		button.add_theme_color_override(
+			"font_color",
+			Color(0.96, 0.96, 1.0) if button == active_button else Color(0.76, 0.78, 0.88, 1.0)
+		)
+
+
 func _apply_visual_style() -> void:
 	add_theme_font_size_override("font_size", 16)
 
@@ -277,11 +337,13 @@ func _apply_visual_style() -> void:
 	meta_card.add_theme_stylebox_override("panel", _panel_style(Color(0.051, 0.086, 0.145, 0.84), Color(0.192, 0.314, 0.439, 0.82), 14, 1))
 	progress_card.add_theme_stylebox_override("panel", _panel_style(Color(0.051, 0.086, 0.145, 0.9), Color(0.192, 0.314, 0.439, 0.82), 14, 1))
 	news_card.add_theme_stylebox_override("panel", _panel_style(Color(0.051, 0.086, 0.145, 0.9), Color(0.192, 0.314, 0.439, 0.88), 14, 1))
+	diagnostics_card.add_theme_stylebox_override("panel", _panel_style(Color(0.037, 0.058, 0.105, 0.96), Color(0.30, 0.39, 0.58, 0.9), 14, 1))
 
 	var nav_buttons: Array[Button] = [
 		$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/HomeButton,
 		$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/PatchNotesButton,
 		$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/CreditsButton,
+		$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/DiagnosticsButton,
 		$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/GameFolderButton,
 		$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/UninstallButton,
 	]
@@ -312,6 +374,14 @@ func _apply_visual_style() -> void:
 	_apply_button_style(update_button, false)
 	_apply_button_style(gen5_sprites_button, false)
 	_apply_button_style(play_button, true)
+	for diagnostics_action_button: Button in [
+		diagnostics_back_button,
+		diagnostics_copy_button,
+		diagnostics_open_folder_button,
+		diagnostics_clear_button,
+	]:
+		_apply_button_style(diagnostics_action_button, false)
+	_apply_active_nav_style(home_button)
 	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/UninstallButton.add_theme_color_override("font_color", Color(1.0, 0.68, 0.68, 1.0))
 	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/UninstallButton.add_theme_color_override("font_hover_color", Color(1.0, 0.74, 0.74, 1.0))
 	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/UninstallButton.add_theme_color_override("font_pressed_color", Color(1.0, 0.56, 0.56, 1.0))
@@ -319,6 +389,9 @@ func _apply_visual_style() -> void:
 	progress_bar.add_theme_stylebox_override("background", _panel_style(Color(0.14, 0.16, 0.27, 0.86), Color(0, 0, 0, 0), 7, 0))
 	progress_bar.add_theme_stylebox_override("fill", _panel_style(Color(0.55, 0.26, 0.96, 1.0), Color(0, 0, 0, 0), 7, 0))
 	log_label.add_theme_color_override("default_color", Color(0.80, 0.81, 0.88))
+	diagnostics_log_view.add_theme_color_override("default_color", Color(0.80, 0.83, 0.91))
+	diagnostics_log_view.add_theme_color_override("font_selected_color", Color(1.0, 1.0, 1.0))
+	diagnostics_log_view.add_theme_color_override("selection_color", Color(0.38, 0.20, 0.72, 0.85))
 
 	launcher_update_card.add_theme_stylebox_override("panel", _panel_style(Color(0.035, 0.055, 0.105, 0.99), Color(0.48, 0.29, 0.92, 0.95), 18, 1))
 	launcher_update_version_badge.add_theme_stylebox_override("panel", _panel_style(Color(0.27, 0.14, 0.54, 0.9), Color(0.66, 0.42, 1.0, 0.7), 12, 1))
@@ -918,9 +991,20 @@ func _on_launcher_update_request_completed(result: int, response_code: int, _hea
 		launch_restart_check_failed("Launcher update download incomplete.")
 		return
 
-	if not expected_sha256.is_empty() and expected_sha256 != FileAccess.get_sha256(downloaded_path).to_lower():
+	var actual_sha256 := FileAccess.get_sha256(downloaded_path).to_lower()
+	if not expected_sha256.is_empty() and expected_sha256 != actual_sha256:
 		_set_status("Launcher update checksum failed.")
-		_log_error("Launcher update checksum mismatch.")
+		_log_error(
+			"LCH-001 launcher update checksum mismatch. version=%s expected_size=%s actual_size=%s expected_sha256=%s actual_sha256=%s url=%s" % [
+				str(launcher_update_info.get("version", "")),
+				expected_size,
+				downloaded_size,
+				expected_sha256,
+				actual_sha256,
+				url,
+			]
+		)
+		_delete_existing_download(downloaded_path)
 		launch_restart_check_failed("Launcher update checksum failed.")
 		return
 
@@ -1436,22 +1520,64 @@ func _exec_make_executable(path: String) -> void:
 func _handle_download_response() -> void:
 	progress_is_indeterminate = false
 	var file_path := str(current_download.get("file_path", ""))
-	var sha256 := str(current_download.get("sha256", ""))
+	var expected_sha256 := str(current_download.get("sha256", "")).to_lower()
 	if not FileAccess.file_exists(file_path):
 		_set_busy(false)
 		_set_status("Downloaded file is missing.")
-		_log_error("Downloaded file is missing.")
+		_log_error(
+			"DL-001 downloaded file is missing. type=%s id=%s version=%s build_id=%s" % [
+				str(current_download.get("type", "")),
+				str(current_download.get("id", "")),
+				str(current_download.get("version", "")),
+				str(current_download.get("build_id", "")),
+			]
+		)
 		current_download.clear()
 		return
 
-	if not sha256.is_empty() and FileAccess.get_sha256(file_path) != sha256:
+	var actual_sha256 := FileAccess.get_sha256(file_path).to_lower()
+	if not expected_sha256.is_empty() and actual_sha256 != expected_sha256:
+		var actual_size := _get_file_size(file_path)
+		var retry_count := int(current_download.get("checksum_retry_count", 0))
+		_log_error(
+			"CHK-001 downloaded file checksum mismatch. type=%s id=%s version=%s build_id=%s expected_size=%s actual_size=%s expected_sha256=%s actual_sha256=%s retry=%s url=%s" % [
+				str(current_download.get("type", "")),
+				str(current_download.get("id", "")),
+				str(current_download.get("version", "")),
+				str(current_download.get("build_id", "")),
+				int(current_download.get("size_bytes", 0)),
+				actual_size,
+				expected_sha256,
+				actual_sha256,
+				retry_count,
+				str(current_download.get("url", "")),
+			]
+		)
+		_delete_existing_download(file_path)
+		if retry_count < MAX_CHECKSUM_RETRIES:
+			current_download["checksum_retry_count"] = retry_count + 1
+			_set_status("Downloaded file integrity check failed. Retrying once...", "updating")
+			_log_warning(
+				"CHK-001 retrying download once with cache revalidation. id=%s version=%s" % [
+					str(current_download.get("id", "")),
+					str(current_download.get("version", "")),
+				]
+			)
+			await get_tree().process_frame
+			_start_current_download()
+			return
+
 		_set_busy(false)
-		_set_status("Downloaded file checksum failed.")
-		_log_error("Downloaded file checksum failed.")
+		_set_status(
+			"Download verification failed (CHK-001). Open Diagnostics for details.",
+			"error"
+		)
 		current_download.clear()
 		return
 
 	var download_label: String = _get_current_download_display_label()
+	if int(current_download.get("checksum_retry_count", 0)) > 0:
+		_log("CHK-001 retry passed integrity verification. id=%s" % str(current_download.get("id", "")))
 	_set_status(_t("Extracting {label}...", {"label": download_label}), "updating")
 	_log("Extracting %s." % download_label)
 	await get_tree().process_frame
@@ -1494,6 +1620,11 @@ func _start_next_download() -> void:
 
 	current_download = pending_downloads.pop_front()
 	_prepare_current_download_progress()
+	current_download["checksum_retry_count"] = 0
+	_start_current_download()
+
+
+func _start_current_download() -> void:
 	var url := str(current_download.get("url", ""))
 	var file_name := str(current_download.get("file_name", "download.zip"))
 	var unique_file_name := "%s-%s.zip" % [file_name.get_basename(), Time.get_ticks_msec()]
@@ -1505,9 +1636,30 @@ func _start_next_download() -> void:
 	DirAccess.make_dir_recursive_absolute(_globalize_storage_path(TEMP_DIR))
 	var download_label: String = _get_current_download_display_label()
 	_set_status(_t("Downloading {label}...", {"label": download_label}), "updating")
-	_log("Downloading %s." % download_label)
+	var checksum_retry_count := int(current_download.get("checksum_retry_count", 0))
+	_log(
+		"Downloading %s. type=%s id=%s version=%s build_id=%s expected_size=%s retry=%s" % [
+			download_label,
+			str(current_download.get("type", "")),
+			str(current_download.get("id", "")),
+			str(current_download.get("version", "")),
+			str(current_download.get("build_id", "")),
+			int(current_download.get("size_bytes", 0)),
+			checksum_retry_count,
+		]
+	)
 	http_request.download_file = target_path
-	var error_code: Error = http_request.request(url, _request_headers())
+	var request_url := url
+	if checksum_retry_count > 0:
+		request_url = "%s%slauncher_retry=%s" % [
+			url,
+			"&" if url.contains("?") else "?",
+			Time.get_unix_time_from_system(),
+		]
+	var error_code: Error = http_request.request(
+		request_url,
+		_request_headers(checksum_retry_count > 0)
+	)
 	if error_code != OK:
 		_set_busy(false)
 		_set_status("Could not start download.")
@@ -1515,11 +1667,15 @@ func _start_next_download() -> void:
 		current_download.clear()
 
 
-func _request_headers() -> PackedStringArray:
-	return PackedStringArray([
+func _request_headers(force_revalidate: bool = false) -> PackedStringArray:
+	var headers := PackedStringArray([
 		USER_AGENT_HEADER,
 		"Accept-Language: %s, en;q=0.8" % LauncherLocalization.get_http_locale(),
 	])
+	if force_revalidate:
+		headers.append("Cache-Control: no-cache")
+		headers.append("Pragma: no-cache")
+	return headers
 
 
 func _build_download_queue() -> void:
@@ -2180,6 +2336,15 @@ func _set_busy(is_busy: bool) -> void:
 func _sync_button_cursors() -> void:
 	for button: Button in [check_button, update_button, gen5_sprites_button, play_button, patch_notes_button, credits_button, uninstall_button]:
 		button.mouse_default_cursor_shape = Control.CURSOR_ARROW if button.disabled else Control.CURSOR_POINTING_HAND
+	for button: Button in [
+		home_button,
+		diagnostics_button,
+		diagnostics_back_button,
+		diagnostics_copy_button,
+		diagnostics_open_folder_button,
+		diagnostics_clear_button,
+	]:
+		button.mouse_default_cursor_shape = Control.CURSOR_ARROW if button.disabled else Control.CURSOR_POINTING_HAND
 	game_folder_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	discord_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	patch_notes_button.tooltip_text = _t("Open patch notes")
@@ -2356,16 +2521,64 @@ func _format_bytes(byte_count: int) -> String:
 	return "%d B" % byte_count
 
 
+func _get_file_size(path: String) -> int:
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		return -1
+	var file_size := file.get_length()
+	file.close()
+	return file_size
+
+
 func _escape_bbcode(value: String) -> String:
 	return value.replace("[", "[lb]").replace("]", "[rb]")
 
 
 func _log(message: String) -> void:
 	print(message)
+	_append_diagnostic("INFO", message)
 
 
 func _log_error(message: String) -> void:
 	print("ERROR: %s" % message)
+	has_unseen_diagnostics_error = not diagnostics_card.visible
+	_refresh_diagnostics_button()
+	_append_diagnostic("ERROR", message)
+
+
+func _log_warning(message: String) -> void:
+	print("WARNING: %s" % message)
+	_append_diagnostic("WARN", message)
+
+
+func _initialize_diagnostics_log() -> void:
+	_rotate_diagnostics_log_if_needed()
+	_sanitize_diagnostics_file(ERROR_LOG_FILE)
+	_sanitize_diagnostics_file(PREVIOUS_ERROR_LOG_FILE)
+
+
+func _rotate_diagnostics_log_if_needed() -> void:
+	if not FileAccess.file_exists(ERROR_LOG_FILE):
+		return
+
+	var file: FileAccess = FileAccess.open(ERROR_LOG_FILE, FileAccess.READ_WRITE)
+	if file == null:
+		return
+	var file_size := file.get_length()
+	file.close()
+	if file_size < MAX_ERROR_LOG_BYTES:
+		return
+
+	var absolute_log_path := _globalize_storage_path(ERROR_LOG_FILE)
+	var absolute_previous_log_path := _globalize_storage_path(PREVIOUS_ERROR_LOG_FILE)
+	if FileAccess.file_exists(absolute_previous_log_path):
+		DirAccess.remove_absolute(absolute_previous_log_path)
+	DirAccess.rename_absolute(absolute_log_path, absolute_previous_log_path)
+
+
+func _append_diagnostic(level: String, message: String) -> void:
+	_rotate_diagnostics_log_if_needed()
+	var sanitized_message := _sanitize_diagnostic_message(message)
 	var file: FileAccess = FileAccess.open(ERROR_LOG_FILE, FileAccess.READ_WRITE)
 	if file == null:
 		file = FileAccess.open(ERROR_LOG_FILE, FileAccess.WRITE)
@@ -2373,4 +2586,115 @@ func _log_error(message: String) -> void:
 		return
 
 	file.seek_end()
-	file.store_line("%s ERROR: %s" % [_format_last_check_time(), message])
+	file.store_line("%s %s: %s" % [_format_diagnostic_timestamp(), level, sanitized_message])
+	file.close()
+	if diagnostics_card.visible:
+		_refresh_diagnostics_view()
+
+
+func _sanitize_diagnostic_message(message: String) -> String:
+	var sanitized := message.replace("\r", " ").replace("\n", " ")
+	var absolute_user_data := _globalize_storage_path("user://").trim_suffix("/")
+	if not absolute_user_data.is_empty():
+		sanitized = sanitized.replace(absolute_user_data, "<user_data>")
+
+	var parts := sanitized.split(" ")
+	for index: int in range(parts.size()):
+		var part := parts[index]
+		var url_start := part.find("https://")
+		if url_start < 0:
+			url_start = part.find("http://")
+		var query_start := -1
+		if url_start >= 0:
+			query_start = part.find("?", url_start)
+		if query_start >= 0:
+			parts[index] = "%s?<redacted>" % part.substr(0, query_start)
+	return " ".join(parts)
+
+
+func _format_diagnostic_timestamp() -> String:
+	var datetime := Time.get_datetime_dict_from_system()
+	return "%04d-%02d-%02d %02d:%02d:%02d" % [
+		int(datetime.get("year", 0)),
+		int(datetime.get("month", 0)),
+		int(datetime.get("day", 0)),
+		int(datetime.get("hour", 0)),
+		int(datetime.get("minute", 0)),
+		int(datetime.get("second", 0)),
+	]
+
+
+func _sanitize_diagnostic_contents(contents: String) -> String:
+	var sanitized_lines := PackedStringArray()
+	for line: String in contents.split("\n", true):
+		sanitized_lines.append(_sanitize_diagnostic_message(line))
+	return "\n".join(sanitized_lines)
+
+
+func _sanitize_diagnostics_file(path: String) -> void:
+	var contents := _read_diagnostics_file(path)
+	if contents.is_empty():
+		return
+	var sanitized_contents := _sanitize_diagnostic_contents(contents)
+	if sanitized_contents == contents:
+		return
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	if file == null:
+		return
+	file.store_string(sanitized_contents)
+	file.close()
+
+
+func _read_diagnostics_file(path: String) -> String:
+	if not FileAccess.file_exists(path):
+		return ""
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		return ""
+	var contents := file.get_as_text()
+	file.close()
+	return contents
+
+
+func _read_diagnostics() -> String:
+	return _sanitize_diagnostic_contents(_read_diagnostics_file(ERROR_LOG_FILE))
+
+
+func _refresh_diagnostics_view() -> void:
+	var contents := _read_diagnostics()
+	if contents.is_empty():
+		diagnostics_log_view.text = _t("No diagnostics recorded yet.")
+		return
+	diagnostics_log_view.text = _escape_bbcode(contents)
+	diagnostics_log_view.scroll_to_line(maxi(diagnostics_log_view.get_line_count() - 1, 0))
+
+
+func _copy_diagnostics() -> void:
+	var contents := _read_diagnostics()
+	if contents.is_empty():
+		contents = _t("No diagnostics recorded yet.")
+	DisplayServer.clipboard_set(contents)
+	_log("Diagnostics copied to clipboard.")
+
+
+func _open_diagnostics_folder() -> void:
+	var diagnostics_folder := _globalize_storage_path("user://")
+	var open_error := OS.shell_open(diagnostics_folder)
+	if open_error != OK:
+		_log_error("Could not open diagnostics folder: %s" % error_string(open_error))
+
+
+func _clear_diagnostics() -> void:
+	var file := FileAccess.open(ERROR_LOG_FILE, FileAccess.WRITE)
+	if file != null:
+		file.close()
+	_append_diagnostic("INFO", "Diagnostics log cleared by user.")
+
+
+func _refresh_diagnostics_button() -> void:
+	if diagnostics_button == null:
+		return
+	diagnostics_button.text = "%s%s" % [
+		_t("Diagnostics"),
+		" •" if has_unseen_diagnostics_error else "",
+	]

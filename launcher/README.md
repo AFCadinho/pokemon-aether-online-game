@@ -13,8 +13,8 @@ Small Godot launcher project for PokeAether.
 7. Starts the configured game executable.
 
 Every published game also has an immutable `game.buildId`. CI derives it from
-the Git commit and workflow run, stamps it into the exported game, and writes
-the same value to the launcher manifest. The launcher compares this build ID,
+the Git commit, workflow run, and run attempt, stamps it into the exported game,
+and writes the same value to the launcher manifest. The launcher compares this build ID,
 so a new build is downloaded even when the human-readable release version was
 left unchanged. The gateway consumes the same manifest to reject obsolete
 clients during authentication and new realtime handshakes.
@@ -84,6 +84,10 @@ launcher/test_server/manifest-linux.json
 launcher/test_server/manifest.json
 ```
 
+When `--build-id` differs from the display version, the immutable build ID is
+included in the game ZIP name. Rebuilding display version `0.1.0` therefore
+creates a new object instead of overwriting a cached release.
+
 For a public release, use the real hosted URL as `--base-url` and the production URL prefixes:
 
 ```bash
@@ -94,7 +98,7 @@ python3 tools/package_launcher_release.py \
   --game-prefix game \
   --asset-prefix assets \
   --include-launcher \
-  --launcher-prefix launcher/latest \
+  --launcher-prefix "launcher/0.1.0-$(git rev-parse HEAD)" \
   --output-dir builds/launcher \
   --default-platform linux
 ```
@@ -109,12 +113,12 @@ manifest-windows.json
 launcher/latest/PokeAetherLauncher-linux.zip
 launcher/latest/PokeAetherLauncher-macos.zip
 launcher/latest/PokeAetherLauncher-windows.zip
-launcher/0.1.0/PokeAetherLauncher-linux.zip
-launcher/0.1.0/PokeAetherLauncher-macos.zip
-launcher/0.1.0/PokeAetherLauncher-windows.zip
-game/game-0.1.0-linux.zip
-game/game-0.1.0-macos.zip
-game/game-0.1.0-windows.zip
+launcher/0.1.0-<build-id>/PokeAetherLauncher-linux.zip
+launcher/0.1.0-<build-id>/PokeAetherLauncher-macos.zip
+launcher/0.1.0-<build-id>/PokeAetherLauncher-windows.zip
+game/game-0.1.0-<build-id>-linux.zip
+game/game-0.1.0-<build-id>-macos.zip
+game/game-0.1.0-<build-id>-windows.zip
 assets/pokemon-front-v1.zip
 assets/pokemon-back-v1.zip
 assets/pokemon-shiny-front-v1.zip
@@ -157,6 +161,11 @@ For the production bucket layout, upload with:
 ```bash
 python3 tools/upload_launcher_release.py builds/launcher --layout updates
 ```
+
+The production workflow performs this automatically. It uploads uniquely named
+artifacts first, verifies their public sizes, and publishes the stable manifest
+URLs last. R2 prefixes are object names rather than folders, so no bucket
+directory setup or migration is required.
 
 ## Upload Sprite Asset Packs
 
