@@ -31657,7 +31657,7 @@ func _render_mail_attachments(attachments: Array) -> void:
 				var currency_id := str(payload.get("currency", "money"))
 				var amount: int = int(payload.get("amount", 0))
 				mail_attachment_list.add_child(_create_mail_attachment_row(
-					null,
+					_mail_currency_icon(currency_id),
 					"%s %s%s" % [
 						amount,
 						LocalizationManager.text("ui.trainer_card.wallet.%s" % currency_id),
@@ -31716,6 +31716,18 @@ func _render_mail_attachments(attachments: Array) -> void:
 					attachment_id,
 					can_claim
 				))
+
+func _mail_currency_icon(currency_id: String) -> Texture2D:
+	match currency_id.strip_edges().to_lower():
+		"money":
+			return TRAINER_WALLET_MONEY_ICON
+		"gems":
+			return TRAINER_WALLET_AETHER_GEM_ICON
+		"aetherite":
+			return TRAINER_WALLET_AETHERITE_ICON
+		"battle_points":
+			return TRAINER_WALLET_BATTLE_POINTS_ICON
+	return null
 
 func _create_mail_attachment_row(
 	icon_texture: Texture2D,
