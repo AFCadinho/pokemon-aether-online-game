@@ -566,6 +566,13 @@ theme_override_colors/font_hover_color = Color(0.84705883, 0.7058824, 0.41568628
 theme_override_font_sizes/font_size = 12
 text = "ui.login.register"
 
+[node name="ForgotPasswordLinkButton" type="LinkButton" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.58, 0.7, 0.87, 1)
+theme_override_colors/font_hover_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_font_sizes/font_size = 12
+text = "ui.login.forgot_password"
+
 [node name="ConnectionStatus" type="Label" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.47, 0.59, 0.72, 0.9)

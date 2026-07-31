@@ -13,6 +13,7 @@ const CODE_TO_KEY: Dictionary = {
 	"unauthorized": "backend.error.auth_required",
 	"not_authenticated": "backend.error.auth_required",
 	"authentication_required": "backend.error.auth_required",
+	"email_not_verified": "ui.login.error.email_not_verified",
 	"missing_bearer_token": "backend.error.auth_required",
 	"invalid_bearer_token": "backend.error.auth_required",
 	"client_update_required": "backend.error.client_update_required",

@@ -6,6 +6,7 @@ const LanguageSelectorStyle := preload("res://scripts/ui/language_selector_style
 signal login_submitted(username: String, password: String)
 
 const REGISTER_URL := "https://pokeaether.com/register"
+const FORGOT_PASSWORD_URL := "https://pokeaether.com/forgot-password"
 const NEWS_URL := "https://updates.pokeaether.com/data/news.json"
 const LOADING_SCENE_PATH := "res://scenes/interface/loading_screen.tscn"
 const USER_AGENT_HEADER := "User-Agent: PokeAether/1.0"
@@ -25,6 +26,7 @@ const PLAYER_PREVIEW_SCALE := Vector2(2.0, 2.0)
 @onready var login_button: Button = $Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout/LoginButton
 @onready var status_label: Label = $Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout/StatusLabel
 @onready var register_link_button: LinkButton = $Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout/RegisterLinkButton
+@onready var forgot_password_link_button: LinkButton = $Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout/ForgotPasswordLinkButton
 @onready var login_card: PanelContainer = $Background/Shell/MainSplit/LoginColumn/LoginCard
 @onready var saved_session_card: PanelContainer = $Background/Shell/MainSplit/LoginColumn/SavedSessionCard
 @onready var saved_display_name_label: Label = $Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout/TrainerCard/TrainerMargin/TrainerLayout/TrainerInfoLayout/SavedDisplayNameLabel
@@ -67,6 +69,7 @@ func _ready() -> void:
 	language_options_button.item_selected.connect(_on_language_selected)
 	login_button.pressed.connect(_on_login_button_pressed)
 	register_link_button.pressed.connect(_on_register_link_pressed)
+	forgot_password_link_button.pressed.connect(_on_forgot_password_link_pressed)
 	continue_button.pressed.connect(_on_continue_button_pressed)
 	logout_button.pressed.connect(_on_logout_button_pressed)
 	options_button.pressed.connect(_on_options_button_pressed)
@@ -291,6 +294,10 @@ func _on_logout_button_pressed() -> void:
 
 func _on_register_link_pressed() -> void:
 	OS.shell_open(REGISTER_URL)
+
+
+func _on_forgot_password_link_pressed() -> void:
+	OS.shell_open(FORGOT_PASSWORD_URL)
 
 
 func _on_options_button_pressed() -> void:
