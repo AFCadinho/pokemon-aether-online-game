@@ -37,6 +37,82 @@ var appearance_hair_style_index := 0
 var flags := {}
 var earned_gym_badges: Array[String] = []
 
+func apply_account_identity(user: Dictionary) -> void:
+	player_name = str(user.get("displayName", user.get("username", "Player"))).strip_edges()
+	if player_name == "":
+		player_name = "Player"
+	player_id = ""
+	for key: String in ["id", "userId", "user_id"]:
+		var value := str(user.get(key, "")).strip_edges()
+		if value != "":
+			player_id = value
+			break
+	gender = CharacterAppearanceService.normalize_gender(str(user.get("gender", "male")))
+	is_staff = _user_has_staff_role(user)
+	flags.erase("join_date")
+	var join_date := str(user.get("createdAt", user.get("created_at", ""))).strip_edges()
+	if join_date != "":
+		flags["join_date"] = join_date
+	ensure_body_matches_gender()
+
+
+func reset_account_state() -> void:
+	player_name = "Player"
+	player_id = ""
+	gender = "male"
+	is_staff = false
+	party = []
+	money = 0
+	gems = 0
+	aetherite = 0
+	battle_points = 0
+	playtime_seconds = 0
+	flags = {}
+	earned_gym_badges.clear()
+	appearance_body_id = CharacterAppearanceService.DEFAULT_MALE_BODY_ID
+	appearance_hair_id = CharacterAppearanceService.DEFAULT_MALE_HAIR_ID
+	appearance_headgear_id = CharacterAppearanceService.DEFAULT_MALE_HEADGEAR_ID
+	appearance_facial_hair_id = ""
+	appearance_facegear_id = ""
+	appearance_top_id = CharacterAppearanceService.DEFAULT_MALE_TOP_ID
+	appearance_bottom_id = CharacterAppearanceService.DEFAULT_MALE_BOTTOM_ID
+	appearance_shoes_id = CharacterAppearanceService.DEFAULT_MALE_SHOES_ID
+	appearance_hair_color = CharacterAppearanceService.resolve_hair_color("", gender)
+	appearance_skin_tone = CharacterAppearanceService.DEFAULT_SKIN_TONE
+	appearance_eye_color = CharacterAppearanceService.resolve_eye_color("", gender)
+	appearance_facegear_color = "#ffffff"
+	appearance_facial_hair_color = "#ffffff"
+	appearance_top_color = "#ffffff"
+	appearance_bottom_color = "#ffffff"
+	appearance_shoes_color = "#ffffff"
+	appearance_hair_style_index = 0
+	ensure_body_matches_gender(true)
+	party_changed.emit()
+	gym_badges_changed.emit()
+
+
+func _user_has_staff_role(user: Dictionary) -> bool:
+	var roles_value: Variant = user.get("roles", [])
+	if not roles_value is Array:
+		return false
+	for role_value: Variant in roles_value as Array:
+		if not role_value is Dictionary:
+			continue
+		var role: Dictionary = role_value as Dictionary
+		var role_id := str(role.get("id", "")).strip_edges().to_lower()
+		var category := str(role.get("category", "")).strip_edges().to_lower()
+		if category == "staff" or role_id in [
+			"owner",
+			"senior_staff",
+			"admin",
+			"developer",
+			"gamemaster",
+			"moderator",
+		]:
+			return true
+	return false
+
+
 func reset_gameplay_progress() -> void:
 	var join_date: Variant = flags.get("join_date", null)
 	party = []

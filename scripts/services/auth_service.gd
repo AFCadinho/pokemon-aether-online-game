@@ -12,11 +12,22 @@ const ACCEPT_HEADER := "Accept: application/json"
 var session_token := ""
 var expires_at := ""
 var current_user: Dictionary = {}
+var session_type := "player"
+var impersonated_by_user_id := 0
+var account_switch_pending := false
 var pending_login_notice := ""
 
 
 func is_authenticated() -> bool:
 	return session_token != "" and not current_user.is_empty()
+
+
+func is_impersonating() -> bool:
+	return (
+		is_authenticated()
+		and session_type == "impersonation"
+		and impersonated_by_user_id > 0
+	)
 
 
 func get_authorization_header() -> String:
@@ -81,17 +92,62 @@ func impersonate_with_token(token: String) -> Dictionary:
 	var response: Dictionary = await _request_json(
 		base_url + "/auth/impersonate/consume",
 		HTTPClient.METHOD_POST,
-		_client_headers(PackedStringArray([USER_AGENT_HEADER, CONTENT_TYPE_HEADER, ACCEPT_HEADER])),
+		_client_headers(PackedStringArray([
+			USER_AGENT_HEADER,
+			CONTENT_TYPE_HEADER,
+			ACCEPT_HEADER,
+			get_authorization_header(),
+		])),
 		JSON.stringify({"token": normalized_token})
 	)
 	if not bool(response.get("success", false)):
 		return response
 
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	_reset_account_runtime_state()
 	_apply_auth_response(body)
+	account_switch_pending = true
 	_refresh_trade_session.call_deferred()
 	_clear_session_file()
 
+	return {
+		"success": true,
+		"user": current_user,
+		"expiresAt": expires_at,
+	}
+
+
+func stop_impersonating() -> Dictionary:
+	if not is_impersonating():
+		return {
+			"success": false,
+			"error": "No active impersonation session.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + "/auth/impersonate/stop",
+		HTTPClient.METHOD_POST,
+		_client_headers(PackedStringArray([
+			USER_AGENT_HEADER,
+			ACCEPT_HEADER,
+			get_authorization_header(),
+		])),
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	var remember_me := bool(body.get("rememberMe", false))
+	_reset_account_runtime_state()
+	_apply_auth_response(body)
+	account_switch_pending = true
+	_refresh_trade_session.call_deferred()
+	if remember_me:
+		_save_session()
+	else:
+		_clear_session_file()
 	return {
 		"success": true,
 		"user": current_user,
@@ -111,6 +167,9 @@ func restore_saved_session() -> Dictionary:
 	session_token = saved_token
 	expires_at = str(saved_session.get("expiresAt", ""))
 	current_user = _dictionary_from_value(saved_session.get("user", {}))
+	session_type = "player"
+	impersonated_by_user_id = 0
+	account_switch_pending = false
 
 	var me_response: Dictionary = await me()
 	if bool(me_response.get("success", false)):
@@ -224,10 +283,17 @@ func clear_session() -> void:
 	var trade_service: Object = get_node_or_null("/root/TradeService")
 	if trade_service != null and trade_service.has_method("clear_capabilities"):
 		trade_service.call("clear_capabilities")
+	var pvp_realtime_service: Object = get_node_or_null("/root/PvpBattleRealtimeService")
+	if pvp_realtime_service != null and pvp_realtime_service.has_method("disconnect_room"):
+		pvp_realtime_service.call("disconnect_room")
 
 	session_token = ""
 	expires_at = ""
 	current_user.clear()
+	session_type = "player"
+	impersonated_by_user_id = 0
+	account_switch_pending = false
+	_reset_account_runtime_state()
 	_clear_session_file()
 
 
@@ -242,8 +308,12 @@ func apply_current_user(value: Dictionary) -> void:
 
 
 func get_user_id_text() -> String:
+	return get_user_id_text_from(current_user)
+
+
+func get_user_id_text_from(user: Dictionary) -> String:
 	for key: String in ["id", "userId", "user_id"]:
-		var value: Variant = current_user.get(key, "")
+		var value: Variant = user.get(key, "")
 		var user_id_text: String = str(value).strip_edges()
 		if user_id_text != "":
 			if user_id_text.is_valid_int():
@@ -273,6 +343,27 @@ func _apply_auth_response(body: Dictionary) -> void:
 	session_token = str(body.get("token", ""))
 	expires_at = str(body.get("expiresAt", ""))
 	current_user = _dictionary_from_value(body.get("user", {}))
+	session_type = str(body.get("sessionType", "player")).strip_edges().to_lower()
+	if session_type == "":
+		session_type = "player"
+	var impersonator_id: Variant = body.get("impersonatedByUserId", null)
+	impersonated_by_user_id = 0 if impersonator_id == null else int(impersonator_id)
+
+
+func finish_account_switch() -> void:
+	account_switch_pending = false
+
+
+func _reset_account_runtime_state() -> void:
+	PlayerSave.reset_account_state()
+	GameState.reset_gameplay_runtime_state()
+	PlayerHotbarService.clear_cached_state()
+	PlayerActionService.clear_cached_state()
+	FieldMoveService.update_owned_charms_from_inventory([])
+	PokedexService.invalidate_owned_species_cache()
+	var trade_workspace: Object = get_node_or_null("/root/TradeWorkspace")
+	if trade_workspace != null and trade_workspace.has_method("clear_account_state"):
+		trade_workspace.call("clear_account_state")
 
 
 func _refresh_trade_session() -> void:
@@ -340,7 +431,7 @@ func _extract_error(body: Dictionary, response_code: int) -> String:
 
 
 func _save_session() -> void:
-	if session_token == "":
+	if session_token == "" or is_impersonating():
 		return
 
 	var file := FileAccess.open(SESSION_FILE_PATH, FileAccess.WRITE)

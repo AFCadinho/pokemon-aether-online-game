@@ -899,11 +899,13 @@ func _get_login_error_message(result: Dictionary) -> String:
 	var status: int = int(result.get("status", 0))
 	var body: Dictionary = _dictionary_from_value(result.get("body", {}))
 	var detail: Dictionary = _dictionary_from_value(body.get("detail", {}))
-	var code := str(detail.get("code", "")).strip_edges().to_lower()
+	var code := BackendErrorLocalizationService.error_code(result)
 	if code in ["account_login_blocked", "server_maintenance"]:
 		var public_message := str(detail.get("message", "")).strip_edges()
 		if public_message != "":
 			return public_message
+	if code != "":
+		return BackendErrorLocalizationService.message(result, "ui.login.error.sign_in")
 	if status == 401:
 		return LocalizationManager.text("ui.login.error.invalid_credentials")
 	if status >= 500:

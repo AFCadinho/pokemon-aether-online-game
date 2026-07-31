@@ -54,6 +54,26 @@ func _run() -> void:
 		},
 	}
 	_check(errors.call("error_code", coded_response) == "guild_name_unavailable", "nested stable code is extracted")
+	var update_response := {
+		"status": 426,
+		"body": {
+			"detail": {
+				"code": "client_update_required",
+				"releaseVersion": "0.3.38",
+				"requiredBuild": "private-build-id",
+				"downloadUrl": "https://updates.example/game.zip",
+			},
+		},
+	}
+	var update_message := str(errors.call("message", update_response))
+	_check(update_message.contains("0.3.38"), "update message shows the friendly release version")
+	_check(not update_message.contains("private-build-id"), "update message hides the build identity")
+	_check(not update_message.contains("https://"), "update message hides technical URLs")
+	var login_source := FileAccess.get_file_as_string("res://scripts/ui/login_screen.gd")
+	_check(
+		login_source.contains('BackendErrorLocalizationService.message(result, "ui.login.error.sign_in")'),
+		"login errors use the shared safe backend message"
+	)
 
 	localization.call("set_locale", "nl")
 	_check(

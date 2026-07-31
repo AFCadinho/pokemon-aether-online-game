@@ -12,10 +12,10 @@ config_version=5
 
 config/name="PokeAether"
 config/version="dev"
-config/build_id="dev"
 run/main_scene="uid://duw5e076ulb3"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://assets/ui/logo.png"
+config/build_id="dev"
 
 [autoload]
 
@@ -68,10 +68,6 @@ PartyHealService="*res://scripts/services/party_heal_service.gd"
 TradeService="*res://scripts/services/trade_service.gd"
 TradeRealtimeService="*res://scripts/services/trade_realtime_service.gd"
 TradeWorkspace="*res://scripts/ui/trade_workspace.gd"
-
-[internationalization]
-
-locale/fallback="en"
 
 [display]
 

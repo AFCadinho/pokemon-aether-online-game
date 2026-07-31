@@ -16,6 +16,7 @@ const OPTION_ID_BY_SPRITE_STYLE: Dictionary = {
 }
 const GEN5_SPRITE_MISSING_KEY := "ui.settings.sprite.not_installed"
 const LOGIN_SCENE_PATH := "res://scenes/interface/login_screen.tscn"
+const LOADING_SCENE_PATH := "res://scenes/interface/loading_screen.tscn"
 const MINIMUM_MENU_SIZE := Vector2(700, 540)
 const NAVIGATION_WIDTH := 168.0
 const UI_BG := Color("#07111ff7")
@@ -84,6 +85,9 @@ var about_version_label: Label
 var logout_confirm_dialog: PanelContainer
 var logout_confirm_return_button: Button
 var logout_confirm_cancel_button: Button
+var logout_confirm_title_label: Label
+var logout_confirm_message_label: Label
+var account_return_note_label: Label
 var account_details_dialog: PanelContainer
 var account_details_panel: PanelContainer
 var account_dialog_status_label: Label
@@ -141,6 +145,7 @@ func _ready() -> void:
 func open(context: String = "game") -> void:
 	_apply_settings_to_controls()
 	_apply_context(context)
+	_refresh_impersonation_account_controls()
 	visible = true
 	_focus_active_navigation_button()
 
@@ -516,11 +521,11 @@ func _build_account_tab(account_tab: VBoxContainer) -> void:
 	account_status_label.visible = false
 	account_tab.add_child(account_status_label)
 
-	var account_note := Label.new()
-	_set_localized_text(account_note, "ui.settings.account.return_note")
-	account_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	account_note.add_theme_font_size_override("font_size", 12)
-	account_tab.add_child(account_note)
+	account_return_note_label = Label.new()
+	_set_localized_text(account_return_note_label, "ui.settings.account.return_note")
+	account_return_note_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	account_return_note_label.add_theme_font_size_override("font_size", 12)
+	account_tab.add_child(account_return_note_label)
 
 	logout_button = Button.new()
 	_set_localized_text(logout_button, "ui.settings.account.return_login")
@@ -613,12 +618,12 @@ func _setup_logout_confirm_dialog() -> void:
 	var header := HBoxContainer.new()
 	stack.add_child(header)
 
-	var title_label := Label.new()
-	_set_localized_text(title_label, "ui.settings.account.return_login")
-	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title_label.add_theme_font_size_override("font_size", 17)
-	title_label.add_theme_color_override("font_color", UI_SECTION_TEXT)
-	header.add_child(title_label)
+	logout_confirm_title_label = Label.new()
+	_set_localized_text(logout_confirm_title_label, "ui.settings.account.return_login")
+	logout_confirm_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	logout_confirm_title_label.add_theme_font_size_override("font_size", 17)
+	logout_confirm_title_label.add_theme_color_override("font_color", UI_SECTION_TEXT)
+	header.add_child(logout_confirm_title_label)
 
 	var close_dialog_button := Button.new()
 	close_dialog_button.text = "X"
@@ -627,12 +632,12 @@ func _setup_logout_confirm_dialog() -> void:
 	close_dialog_button.pressed.connect(_hide_logout_confirm_dialog)
 	header.add_child(close_dialog_button)
 
-	var message_label := Label.new()
-	_set_localized_text(message_label, "ui.settings.logout.message")
-	message_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	message_label.add_theme_font_size_override("font_size", 14)
-	message_label.add_theme_color_override("font_color", UI_TEXT)
-	stack.add_child(message_label)
+	logout_confirm_message_label = Label.new()
+	_set_localized_text(logout_confirm_message_label, "ui.settings.logout.message")
+	logout_confirm_message_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	logout_confirm_message_label.add_theme_font_size_override("font_size", 14)
+	logout_confirm_message_label.add_theme_color_override("font_color", UI_TEXT)
+	stack.add_child(logout_confirm_message_label)
 
 	var button_row := HBoxContainer.new()
 	button_row.alignment = BoxContainer.ALIGNMENT_END
@@ -798,6 +803,7 @@ func _refresh_localized_content() -> void:
 	_apply_language_options_to_control()
 	_apply_terminology_options_to_control()
 	_update_sprite_style_status_label("")
+	_refresh_impersonation_account_controls()
 	if account_user_label != null and account_tab_root != null and account_tab_root.visible:
 		_refresh_account_tab()
 	if not account_status_key.is_empty():
@@ -1292,6 +1298,7 @@ func _on_credits_button_pressed() -> void:
 
 func _show_logout_confirm_dialog() -> void:
 	logout_confirmation_requested = true
+	_refresh_impersonation_account_controls()
 	if logout_confirm_dialog != null:
 		_position_logout_confirm_dialog()
 		logout_confirm_dialog.visible = true
@@ -1502,6 +1509,9 @@ func _logout_confirmed() -> void:
 		logout_confirm_return_button.disabled = true
 	if logout_confirm_cancel_button != null:
 		logout_confirm_cancel_button.disabled = true
+	if AuthService.is_impersonating():
+		await _stop_impersonation_confirmed()
+		return
 	await _leave_ranked_queue_before_logout()
 	# This action only returns to the login scene. Keep AuthService and its
 	# remember-me session intact; the explicit Logout action on the login screen
@@ -1516,6 +1526,90 @@ func _logout_confirmed() -> void:
 		if logout_confirm_cancel_button != null:
 			logout_confirm_cancel_button.disabled = false
 		push_warning("Could not return to login screen: %s" % error_string(error))
+
+
+func _stop_impersonation_confirmed() -> void:
+	var world := GameState.get_world()
+	if world == null or not world.has_method("prepare_for_account_switch"):
+		_restore_account_return_controls()
+		_set_account_status_key("ui.staff.impersonate.return_failed", {}, true)
+		return
+	var prepare_value: Variant = await world.call("prepare_for_account_switch")
+	var prepare_result: Dictionary = (
+		prepare_value as Dictionary if prepare_value is Dictionary else {}
+	)
+	if not bool(prepare_result.get("success", false)):
+		_restore_account_return_controls()
+		_set_account_status(
+			str(prepare_result.get("error", LocalizationManager.text(
+				"ui.staff.impersonate.return_failed"
+			))),
+			true
+		)
+		return
+
+	var result: Dictionary = await AuthService.stop_impersonating()
+	if not bool(result.get("success", false)):
+		if world.has_method("cancel_account_switch"):
+			world.call("cancel_account_switch")
+		_restore_account_return_controls()
+		_set_account_status(
+			str(result.get("error", LocalizationManager.text(
+				"ui.staff.impersonate.return_failed"
+			))),
+			true
+		)
+		return
+
+	_hide_logout_confirm_dialog()
+	GameState.set_prepared_world_state({})
+	var error: Error = get_tree().change_scene_to_file(LOADING_SCENE_PATH)
+	if error != OK:
+		AuthService.clear_session()
+		var login_error: Error = get_tree().change_scene_to_file(LOGIN_SCENE_PATH)
+		if login_error != OK:
+			push_error("Could not restore the staff account after impersonation.")
+
+
+func _restore_account_return_controls() -> void:
+	logging_out = false
+	logout_confirmation_requested = false
+	if logout_button != null:
+		logout_button.disabled = false
+	if close_button != null:
+		close_button.disabled = false
+	if logout_confirm_return_button != null:
+		logout_confirm_return_button.disabled = false
+	if logout_confirm_cancel_button != null:
+		logout_confirm_cancel_button.disabled = false
+	_hide_logout_confirm_dialog()
+
+
+func _refresh_impersonation_account_controls() -> void:
+	var impersonating := AuthService.is_impersonating()
+	var button_key := (
+		"ui.staff.impersonate.return_account"
+		if impersonating
+		else "ui.settings.account.return_login"
+	)
+	var note_key := (
+		"ui.staff.impersonate.active_note"
+		if impersonating
+		else "ui.settings.account.return_note"
+	)
+	var message_key := (
+		"ui.staff.impersonate.return_confirm"
+		if impersonating
+		else "ui.settings.logout.message"
+	)
+	if logout_button != null:
+		_set_localized_text(logout_button, button_key)
+	if account_return_note_label != null:
+		_set_localized_text(account_return_note_label, note_key)
+	if logout_confirm_title_label != null:
+		_set_localized_text(logout_confirm_title_label, button_key)
+	if logout_confirm_message_label != null:
+		_set_localized_text(logout_confirm_message_label, message_key)
 
 func _leave_ranked_queue_before_logout() -> void:
 	var tree := get_tree()

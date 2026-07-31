@@ -25131,71 +25131,24 @@ func _on_staff_impersonate_confirm_pressed() -> void:
 				% error_string(reload_error)
 			)
 
-func _apply_impersonated_profile(profile_response: Dictionary) -> void:
-	var user: Dictionary = _staff_dictionary_from_variant(profile_response.get("user", {}))
-	var preferences: Dictionary = _staff_dictionary_from_variant(profile_response.get("preferences", {}))
-	var party_response: Dictionary = _staff_dictionary_from_variant(profile_response.get("party", {}))
-	var position_response: Dictionary = _staff_dictionary_from_variant(profile_response.get("position", {}))
-	var wallet: Dictionary = _staff_dictionary_from_variant(profile_response.get("wallet", {}))
-	var stats_response: Dictionary = _staff_dictionary_from_variant(profile_response.get("stats", {}))
-	var stats: Dictionary = _staff_dictionary_from_variant(stats_response.get("stats", {}))
-	var badges: Dictionary = _staff_dictionary_from_variant(profile_response.get("badges", {}))
+func get_account_switch_block_reason() -> String:
+	if (
+		pvp_battle_starting
+		or pvp_match_countdown_active
+		or pvp_match_countdown_finishing
+		or pvp_active_queue_match_id.strip_edges() != ""
+		or pvp_active_room_code.strip_edges() != ""
+	):
+		return "Finish the active PvP match flow before switching accounts."
+	if (
+		pvp_ranked_queue_join_preparing
+		or pvp_queue_leave_in_flight
+		or pvp_active_queue_entry_id.strip_edges() != ""
+		or pvp_queue_polling_active
+	):
+		return "Leave the PvP queue before switching accounts."
+	return ""
 
-	PlayerSave.player_name = str(user.get("displayName", user.get("username", PlayerSave.player_name)))
-	PlayerSave.gender = CharacterAppearanceService.normalize_gender(str(user.get("gender", PlayerSave.gender)))
-	PlayerSave.ensure_body_matches_gender()
-	PlayerSave.money = max(int(wallet.get("money", PlayerSave.money)), 0)
-	PlayerSave.gems = max(int(wallet.get("gems", PlayerSave.gems)), 0)
-	PlayerSave.aetherite = max(int(wallet.get("aetherite", PlayerSave.aetherite)), 0)
-	PlayerSave.battle_points = max(int(wallet.get("battle_points", PlayerSave.battle_points)), 0)
-	PlayerSave.playtime_seconds = max(int(stats.get("playtimeSeconds", PlayerSave.playtime_seconds)), 0)
-	PlayerSave.apply_gym_badge_state(badges)
-	_apply_impersonated_saved_world_state(position_response)
-
-	if bool(party_response.get("hasParty", false)):
-		var party_value: Variant = party_response.get("party", [])
-		if party_value is Array:
-			PlayerSave.replace_party_from_state(party_value as Array)
-		else:
-			PlayerSave.replace_party_from_state([])
-	else:
-		PlayerSave.replace_party_from_state([])
-
-	if preferences.has("textSpeed"):
-		PlayerSave.text_speed = str(preferences.get("textSpeed"))
-	if preferences.has("battleStyle"):
-		PlayerSave.battle_style = str(preferences.get("battleStyle"))
-	if preferences.has("soundVolume"):
-		PlayerSave.sound_volume = float(preferences.get("soundVolume"))
-	if preferences.has("musicVolume"):
-		PlayerSave.music_volume = float(preferences.get("musicVolume"))
-	if preferences.has("showFollower"):
-		GameState.show_follower = bool(preferences.get("showFollower"))
-		follower_toggle_button.set_pressed_no_signal(GameState.show_follower)
-		_set_icon_slot_active(follower_slot, GameState.show_follower)
-		_refresh_world_follower_visibility()
-	if preferences.has("showRepel"):
-		GameState.repel_enabled = bool(preferences.get("showRepel"))
-		repel_toggle_button.set_pressed_no_signal(GameState.repel_enabled)
-		_set_icon_slot_active(repel_slot, GameState.repel_enabled)
-	if preferences.has("runningShoes"):
-		GameState.running_shoes_enabled = bool(preferences.get("runningShoes"))
-		running_shoes_button.set_pressed_no_signal(GameState.running_shoes_enabled)
-		_set_icon_slot_active(running_shoes_slot, GameState.running_shoes_enabled)
-		_refresh_world_running_shoes_state()
-	if preferences.has("selectedRoleBadge"):
-		_apply_selected_role_badge_preference(str(preferences.get("selectedRoleBadge")))
-
-	_refresh_player_status_card()
-	_refresh_avatar_previews()
-	_refresh_world_player_display_name()
-	mail_ids_initialized = false
-	play_existing_mail_notification_on_next_inbox_load = true
-	known_mail_ids.clear()
-	_reset_impersonated_account_caches()
-	_load_mailbox.call_deferred()
-	if trainer_card_popup != null and trainer_card_popup.visible:
-		_rebuild_trainer_card_popup(true)
 
 func _refresh_world_player_display_name() -> void:
 	var player_node: Node
@@ -25212,81 +25165,6 @@ func _refresh_world_player_display_name() -> void:
 		player_node.call("set_body_appearance", PlayerSave.appearance_body_id)
 	if player_node != null and player_node.has_method("set_role_from_user"):
 		player_node.call("set_role_from_user", _get_current_user_with_selected_badge())
-
-func _reset_impersonated_account_caches() -> void:
-	bag_inventory_items = []
-	bag_inventory_loaded = false
-	bag_inventory_loading = false
-	if bag_popup != null and bag_popup.visible:
-		_load_bag_inventory()
-
-	var world := GameState.get_world()
-	if world != null and world.has_method("_publish_world_presence"):
-		world.call("_publish_world_presence", true)
-
-func _apply_impersonated_saved_world_state(position_response: Dictionary) -> void:
-	if not bool(position_response.get("hasState", false)):
-		_reset_impersonated_appearance_to_defaults()
-		GameState.set_prepared_world_state({})
-		return
-	var state: Dictionary = _staff_dictionary_from_variant(position_response.get("state", {}))
-	var appearance: Dictionary = _staff_dictionary_from_variant(state.get("appearance", {}))
-	if not appearance.is_empty():
-		PlayerSave.apply_appearance_state(appearance)
-	else:
-		_reset_impersonated_appearance_to_defaults()
-
-	GameState.set_prepared_world_state({
-		"savedState": state,
-		"hasSavedState": not state.is_empty(),
-	})
-
-	var position_data: Dictionary = _staff_dictionary_from_variant(state.get("position", {}))
-	if position_data.is_empty():
-		return
-
-	var saved_position := Vector2(
-		float(position_data.get("x", GameState.player_position.x)),
-		float(position_data.get("y", GameState.player_position.y))
-	)
-	GameState.player_position = saved_position
-	GameState.has_player_position = true
-
-	var saved_scene_path := str(state.get("mapScenePath", "")).strip_edges()
-	var current_scene_path := ""
-	if GameState.current_map != null:
-		current_scene_path = str(GameState.current_map.scene_file_path).strip_edges()
-	if saved_scene_path != "" and current_scene_path != "" and saved_scene_path != current_scene_path:
-		return
-
-	var player_node := get_tree().get_first_node_in_group("player")
-	if player_node == null:
-		var world := GameState.get_world()
-		if world != null:
-			player_node = world.get_node_or_null("Player")
-	if player_node == null:
-		return
-
-	player_node.global_position = saved_position
-	player_node.set("target_position", saved_position)
-	player_node.set("move_start_position", saved_position)
-	var facing_direction := _direction_from_name(str(state.get("facingDirection", "")))
-	if facing_direction != Vector2.ZERO:
-		GameState.player_direction = facing_direction
-		player_node.set("last_direction", facing_direction)
-
-func _direction_from_name(direction_name: String) -> Vector2:
-	match direction_name.strip_edges().to_lower():
-		"up":
-			return Vector2.UP
-		"down":
-			return Vector2.DOWN
-		"left":
-			return Vector2.LEFT
-		"right":
-			return Vector2.RIGHT
-		_:
-			return Vector2.ZERO
 
 func _reset_impersonated_appearance_to_defaults() -> void:
 	PlayerSave.appearance_body_id = CharacterAppearanceService.DEFAULT_FEMALE_BODY_ID if PlayerSave.gender == "female" else CharacterAppearanceService.DEFAULT_MALE_BODY_ID

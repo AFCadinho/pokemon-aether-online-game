@@ -186,9 +186,41 @@ func prepare_for_account_switch() -> Dictionary:
 		return {"success": false, "error": "Finish the active battle before switching accounts."}
 	if is_loading_map or authorized_teleport_in_progress:
 		return {"success": false, "error": "Wait for the map transition to finish before switching accounts."}
+	var trade_realtime_service: Object = get_node_or_null("/root/TradeRealtimeService")
+	if trade_realtime_service != null:
+		var active_trade_id := str(trade_realtime_service.get("active_trade_id")).strip_edges()
+		var active_trade_snapshot_value: Variant = trade_realtime_service.get("active_trade_snapshot")
+		var active_trade_status := ""
+		if active_trade_snapshot_value is Dictionary:
+			active_trade_status = str(
+				(active_trade_snapshot_value as Dictionary).get("status", "")
+			).strip_edges().to_lower()
+		if active_trade_id != "" and active_trade_status in ["invited", "active", "locked"]:
+			return {"success": false, "error": "Finish or leave the active trade before switching accounts."}
+	for overlay: Node in get_tree().get_nodes_in_group("ui_overlay"):
+		if overlay != null and overlay.has_method("get_account_switch_block_reason"):
+			var overlay_reason := str(overlay.call("get_account_switch_block_reason")).strip_edges()
+			if overlay_reason != "":
+				return {"success": false, "error": overlay_reason}
+	var save_result := await save_current_player_state_now()
+	if not bool(save_result.get("success", false)):
+		return {
+			"success": false,
+			"error": str(save_result.get(
+				"error",
+				"Could not save the current account before switching."
+			)),
+		}
+	await _flush_playtime_if_needed(true)
+	if unflushed_playtime_seconds > 0:
+		return {
+			"success": false,
+			"error": "Could not save playtime before switching accounts.",
+		}
 
 	account_switch_in_progress = true
 	WorldPresenceService.disconnect_presence()
+	ChatRealtimeService.disconnect_chat()
 	has_pending_player_position_save = false
 
 	var deadline_msec := Time.get_ticks_msec() + 12000
@@ -207,6 +239,7 @@ func prepare_for_account_switch() -> Dictionary:
 func cancel_account_switch() -> void:
 	account_switch_in_progress = false
 	WorldPresenceService.connect_presence.call_deferred()
+	ChatRealtimeService.connect_chat.call_deferred()
 
 
 func save_current_player_state_now() -> Dictionary:

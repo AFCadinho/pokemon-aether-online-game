@@ -135,13 +135,20 @@ func _prepare_world() -> void:
 	var profile_response: Dictionary = await PlayerGameStateService.load_player_profile()
 	var saved_state: Dictionary = {}
 	if bool(profile_response.get("success", false)):
-		_apply_profile_response(profile_response)
+		if not _apply_profile_response(profile_response):
+			await AuthService.logout()
+			_return_to_login("The authenticated account did not match its profile.")
+			return
 		var position_response: Dictionary = _dictionary_from_value(profile_response.get("position", {}))
 		if bool(position_response.get("hasState", false)):
 			saved_state = _dictionary_from_value(position_response.get("state", {}))
 			_apply_saved_appearance_state(saved_state)
 	else:
 		push_warning("LoadingScreen: player profile load failed: %s" % str(profile_response.get("error", "Unknown error")))
+		if AuthService.account_switch_pending:
+			await AuthService.logout()
+			_return_to_login("The switched account profile could not be loaded safely.")
+			return
 		await _load_legacy_world_state()
 		var position_response: Dictionary = await PlayerGameStateService.load_player_position()
 		if bool(position_response.get("success", false)) and bool(position_response.get("hasState", false)):
@@ -165,6 +172,8 @@ func _prepare_world() -> void:
 	if error != OK:
 		push_error("LoadingScreen: failed to load world scene: %s" % error_string(error))
 		_return_to_login("Could not enter the world. Please contact staff.")
+	else:
+		AuthService.finish_account_switch()
 
 
 func _load_world_scene_threaded() -> PackedScene:
@@ -206,8 +215,16 @@ func _dictionary_from_value(value: Variant) -> Dictionary:
 	return dictionary
 
 
-func _apply_profile_response(profile_response: Dictionary) -> void:
+func _apply_profile_response(profile_response: Dictionary) -> bool:
 	var user: Dictionary = _dictionary_from_value(profile_response.get("user", {}))
+	var authenticated_user_id := AuthService.get_user_id_text()
+	var profile_user_id := AuthService.get_user_id_text_from(user)
+	if profile_user_id != "" and authenticated_user_id != "" and profile_user_id != authenticated_user_id:
+		push_error("LoadingScreen: authenticated user does not match loaded profile")
+		return false
+	PlayerSave.apply_account_identity(
+		user if not user.is_empty() else AuthService.current_user
+	)
 	var gender_text: String = CharacterAppearanceService.normalize_gender(str(user.get("gender", AuthService.get_gender())))
 	PlayerSave.gender = "female" if gender_text == "female" else "male"
 	PlayerSave.ensure_body_matches_gender()
@@ -236,7 +253,9 @@ func _apply_profile_response(profile_response: Dictionary) -> void:
 	var stats_response: Dictionary = _dictionary_from_value(profile_response.get("stats", {}))
 	var stats: Dictionary = _dictionary_from_value(stats_response.get("stats", {}))
 	PlayerSave.playtime_seconds = max(int(stats.get("playtimeSeconds", PlayerSave.playtime_seconds)), 0)
+	PlayerSave.flags["trainer_stats"] = stats.duplicate(true)
 	PlayerSave.apply_gym_badge_state(_dictionary_from_value(profile_response.get("badges", {})))
+	return true
 
 
 func _load_legacy_world_state() -> void:

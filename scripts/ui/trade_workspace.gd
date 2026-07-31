@@ -89,6 +89,21 @@ func _ready() -> void:
 			_on_trade_changed(realtime.active_trade_snapshot)
 
 
+func clear_account_state() -> void:
+	hide()
+	trade.clear()
+	candidates.clear()
+	selected_ids.clear()
+	selected_item_offers.clear()
+	selected_money = 0
+	money_draft_dirty = false
+	inventory_items.clear()
+	mutation_in_flight = false
+	notified_completed_trade_ids.clear()
+	if item_selector_popup != null:
+		item_selector_popup.hide()
+
+
 func _build_ui() -> void:
 	var background := PanelContainer.new()
 	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
