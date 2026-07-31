@@ -19,6 +19,20 @@ func _init() -> void:
 	_expect(player_data.contains("func reset_gameplay_progress() -> void:"), "local player progress has an explicit reset operation")
 	_expect(world.contains("func prepare_for_gameplay_reset() -> Dictionary:"), "world drains in-flight saves before reset")
 	_expect(world.contains("GameState.gameplay_reset_in_progress"), "world persistence honors the reset barrier")
+	_expect(
+		world.contains("await _persist_initial_player_position_during_reset(initial_spawn_name)"),
+		"reset startup persists its initial world position before releasing the reset barrier"
+	)
+	_expect(
+		world.contains("func _is_player_position_save_blocked_by_teleport(allow_gameplay_reset := false)"),
+		"only an explicitly authorized initial reset save may bypass the reset barrier"
+	)
+	var initial_world_setup := world.find("await _setup_initial_world_state()")
+	var reset_unlock := world.find("GameState.finish_gameplay_reset()")
+	_expect(
+		initial_world_setup >= 0 and reset_unlock > initial_world_setup,
+		"the reset remains input-locked until its initial position save has completed"
+	)
 	_expect(overlay.contains('"Reset / New Game"'), "Developer Tools exposes Reset / New Game")
 	_expect(overlay.contains("await PlayerGameplayResetService.reset_gameplay()"), "Developer Tools awaits the server transaction")
 	_expect(overlay.contains("change_scene_to_file(LOADING_SCENE_PATH)"), "successful reset reloads authoritative state")

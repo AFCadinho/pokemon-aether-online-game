@@ -525,17 +525,17 @@ func _mark_authorized_teleport_apply_failed() -> void:
 	authorized_teleport_locked_overworld = false
 
 
-func _is_player_position_save_blocked_by_teleport() -> bool:
+func _is_player_position_save_blocked_by_teleport(allow_gameplay_reset := false) -> bool:
 	return (
-		GameState.gameplay_reset_in_progress
+		(GameState.gameplay_reset_in_progress and not allow_gameplay_reset)
 		or account_switch_in_progress
 		or authorized_teleport_in_progress
 		or authorized_teleport_apply_failed_autosave_blocked
 	)
 
 
-func _get_player_position_save_block_reason() -> String:
-	if GameState.gameplay_reset_in_progress:
+func _get_player_position_save_block_reason(allow_gameplay_reset := false) -> String:
+	if GameState.gameplay_reset_in_progress and not allow_gameplay_reset:
 		return "Gameplay reset is in progress."
 	if account_switch_in_progress:
 		return "Account switch is in progress."
@@ -914,7 +914,10 @@ func _setup_initial_world_state() -> void:
 				)
 	elif not GameState.has_player_position:
 		_position_player_at_spawn(initial_map, initial_spawn_name, player.global_position)
-		_save_current_player_position_if_changed.call_deferred(true, initial_spawn_name)
+		if GameState.gameplay_reset_in_progress:
+			await _persist_initial_player_position_during_reset(initial_spawn_name)
+		else:
+			_save_current_player_position_if_changed.call_deferred(true, initial_spawn_name)
 
 	_apply_camera_limits_for_map(initial_map)
 	player.refresh_map_layers()
@@ -1746,26 +1749,27 @@ func _save_current_player_position(
 	signature: String,
 	spawn_marker: String,
 	use_confirmed_appearance: bool = false,
-	mark_current_appearance_confirmed: bool = false
+	mark_current_appearance_confirmed: bool = false,
+	allow_gameplay_reset: bool = false
 ) -> Dictionary:
-	if _is_player_position_save_blocked_by_teleport():
+	if _is_player_position_save_blocked_by_teleport(allow_gameplay_reset):
 		return {
 			"success": false,
-			"error": _get_player_position_save_block_reason(),
+			"error": _get_player_position_save_block_reason(allow_gameplay_reset),
 		}
 	is_saving_player_position = true
-	if _is_player_position_save_blocked_by_teleport():
+	if _is_player_position_save_blocked_by_teleport(allow_gameplay_reset):
 		is_saving_player_position = false
 		return {
 			"success": false,
-			"error": _get_player_position_save_block_reason(),
+			"error": _get_player_position_save_block_reason(allow_gameplay_reset),
 		}
 	var state: Dictionary = _build_current_player_position_state(spawn_marker, use_confirmed_appearance)
-	if _is_player_position_save_blocked_by_teleport():
+	if _is_player_position_save_blocked_by_teleport(allow_gameplay_reset):
 		is_saving_player_position = false
 		return {
 			"success": false,
-			"error": _get_player_position_save_block_reason(),
+			"error": _get_player_position_save_block_reason(allow_gameplay_reset),
 		}
 	var result: Dictionary = await PlayerGameStateService.save_player_position(state)
 	if bool(result.get("success", false)):
@@ -1787,6 +1791,17 @@ func _save_current_player_position(
 		has_pending_player_position_save = false
 		_save_current_player_position_if_changed.call_deferred(true)
 	return result
+
+
+func _persist_initial_player_position_during_reset(spawn_marker: String) -> Dictionary:
+	var signature: String = _get_current_player_position_signature(true)
+	return await _save_current_player_position(
+		signature,
+		spawn_marker,
+		true,
+		false,
+		true
+	)
 
 
 func _build_current_player_position_state(spawn_marker: String, use_confirmed_appearance: bool = false) -> Dictionary:
