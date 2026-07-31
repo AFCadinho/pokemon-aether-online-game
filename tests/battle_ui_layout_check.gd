@@ -19,6 +19,8 @@ func _init() -> void:
 	_check_world_battle_host()
 	_check_hp_hud_structure()
 	_check_mimikyu_disguise_indicator_contract()
+	_check_kingambit_fallen_indicator_contract()
+	_check_mimikyu_back_sprite_grounding_contract()
 	await _check_stage_scaling()
 	await _check_party_rail_interaction()
 	_check_battle_selection_policy_contract()
@@ -328,6 +330,26 @@ func _check_mimikyu_disguise_indicator_contract() -> void:
 	_check_contains(battle_source, '"line": STAT_STAGE_BADGE_LINE_MODIFIER', "Disguise uses the badge row below the HP HUD alongside stat modifiers")
 	_check_contains(battle_source, '_t("battle.hud.disguise_active"', "active Disguise badge is localized")
 	_check_contains(battle_source, '"battle.hud.disguise_inactive"', "inactive Disguise badge is localized")
+
+
+func _check_kingambit_fallen_indicator_contract() -> void:
+	var battle_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	_check_contains(battle_source, "supreme_overlord_fallen_by_ident", "battle tracks Showdown's Supreme Overlord fallen count")
+	_check_contains(battle_source, 'canonical_species_key == "kingambit"', "Fallen indicator is scoped to canonical Kingambit")
+	_check_contains(battle_source, '_t("battle.hud.fallen")', "Fallen indicator label is localized")
+	_check_contains(battle_source, '"line": STAT_STAGE_BADGE_LINE_MODIFIER', "Fallen indicator uses the badge row above the sprite")
+
+
+func _check_mimikyu_back_sprite_grounding_contract() -> void:
+	var sprite_box_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/sprite_box.gd")
+	_check_contains(sprite_box_source, '"back:mimikyu": Vector2(0, 10)', "Mimikyu back sprite is grounded with a species-only vertical offset")
+	_check_contains(sprite_box_source, '"back:mimikyu-busted": Vector2(0, 10)', "Busted Mimikyu uses the same grounded back-sprite baseline")
+	_check_contains(sprite_box_source, '"shiny_back:mimikyu": Vector2(0, 10)', "shiny Mimikyu keeps the grounded back-sprite baseline")
+	_check_contains(sprite_box_source, '"shiny_back:mimikyu-busted": Vector2(0, 10)', "shiny Busted Mimikyu keeps the grounded back-sprite baseline")
+	_check_contains(sprite_box_source, '"front:mimikyu": Vector2(0, 8)', "Mimikyu front sprite is grounded with a species-only vertical offset")
+	_check_contains(sprite_box_source, '"front:mimikyu-busted": Vector2(0, 8)', "Busted Mimikyu uses the grounded front-sprite baseline")
+	_check_contains(sprite_box_source, '"shiny_front:mimikyu": Vector2(0, 8)', "shiny Mimikyu keeps the grounded front-sprite baseline")
+	_check_contains(sprite_box_source, '"shiny_front:mimikyu-busted": Vector2(0, 8)', "shiny Busted Mimikyu keeps the grounded front-sprite baseline")
 
 
 func _check_stage_scaling() -> void:

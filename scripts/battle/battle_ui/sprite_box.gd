@@ -24,6 +24,14 @@ const BATTLE_SPRITE_ASSET_ALIASES := {
 const SPECIES_POSITION_OFFSETS := {
 	"back:charizard": Vector2(-46, -10),
 	"shiny_back:charizard": Vector2(-46, -10),
+	"back:mimikyu": Vector2(0, 10),
+	"back:mimikyu-busted": Vector2(0, 10),
+	"shiny_back:mimikyu": Vector2(0, 10),
+	"shiny_back:mimikyu-busted": Vector2(0, 10),
+	"front:mimikyu": Vector2(0, 8),
+	"front:mimikyu-busted": Vector2(0, 8),
+	"shiny_front:mimikyu": Vector2(0, 8),
+	"shiny_front:mimikyu-busted": Vector2(0, 8),
 }
 const ATTACK_TWEEN_OFFSET := Vector2(28, -6)
 const DAMAGE_FLASH_COLOR := Color(1.0, 0.18, 0.18, 1.0)

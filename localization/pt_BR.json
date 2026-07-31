@@ -1910,6 +1910,7 @@
   "battle.hud.owned": "Registrado no seu ID de Treinador",
   "battle.hud.disguise_active": "Disfarce: Ativo",
   "battle.hud.disguise_inactive": "Disfarce: Inativo",
+  "battle.hud.fallen": "Fallen:",
   "battle.gender.male": "Masculino",
   "battle.gender.female": "Feminino",
   "battle.event.ability.action": "{ability} de {actor} {action}!",

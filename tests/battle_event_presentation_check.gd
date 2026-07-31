@@ -3,6 +3,7 @@ extends SceneTree
 const BattleEventPresentationScript := preload("res://scripts/battle/battle_event_presentation.gd")
 const BattleEventTextFormatterScript := preload("res://scripts/battle/battle_event_text_formatter.gd")
 const BattleHpEventHelperScript := preload("res://scripts/battle/battle_hp_event_helper.gd")
+const SupremeOverlordEffectScript := preload("res://scripts/battle/battle_supreme_overlord_effect.gd")
 
 var failed := false
 
@@ -40,6 +41,7 @@ func _init() -> void:
 	_check_badly_poisoned_damage_replays_status_effect_animation()
 	_check_burn_damage_replays_status_effect_animation()
 	_check_z_power_event_has_visible_message()
+	_check_supreme_overlord_fallen_counter_protocol()
 	quit(1 if failed else 0)
 
 
@@ -66,6 +68,29 @@ func _check_z_power_event_has_visible_message() -> void:
 		"Pikachu surrounded itself with Z-Power!",
 		"Z-Power event receives visible battle presentation"
 	)
+
+
+func _check_supreme_overlord_fallen_counter_protocol() -> void:
+	_check_equal(SupremeOverlordEffectScript.get_fallen_count("fallen4"), 4, "Showdown fallen4 exposes Supreme Overlord's public count")
+	_check_equal(SupremeOverlordEffectScript.get_fallen_count("fallen5"), 5, "Supreme Overlord count supports Showdown's maximum")
+	_check_equal(SupremeOverlordEffectScript.get_fallen_count("fallen6"), -1, "invalid out-of-range fallen effects are ignored")
+
+	var fallen_by_ident: Dictionary = {}
+	_check_equal(SupremeOverlordEffectScript.update_fallen_by_ident(fallen_by_ident, "p1:kingambit", "fallen4", "start"), true, "fallen start event updates the indicator state")
+	_check_equal(int(fallen_by_ident.get("p1:kingambit", -1)), 4, "fallen indicator starts at the Showdown count")
+	SupremeOverlordEffectScript.update_fallen_by_ident(fallen_by_ident, "p1:kingambit", "fallen5", "activate")
+	_check_equal(int(fallen_by_ident.get("p1:kingambit", -1)), 5, "a later Supreme Overlord activation replaces the count")
+	SupremeOverlordEffectScript.update_fallen_by_ident(fallen_by_ident, "p1:kingambit", "fallen5", "end")
+	_check_equal(fallen_by_ident.has("p1:kingambit"), false, "fallen end event removes the indicator state")
+
+	var presentation = _make_presentation()
+	var result: Dictionary = presentation.build({
+		"type": "pokemonEffect",
+		"target": "p1a: Kingambit",
+		"effect": "fallen4",
+		"state": "start",
+	})
+	_check_equal(str(result.get("log_message", "")), "", "Showdown's silent fallen protocol no longer produces repetitive battle log text")
 
 
 func _check_previous_condition_uses_visible_scale() -> void:

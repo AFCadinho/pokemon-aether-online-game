@@ -2,6 +2,8 @@ extends RefCounted
 
 class_name BattleEventTextFormatter
 
+const BATTLE_SUPREME_OVERLORD_EFFECT := preload("res://scripts/battle/battle_supreme_overlord_effect.gd")
+
 static var _english_fallback_catalog: Dictionary = {}
 
 func format_ability_event(event: Dictionary) -> String:
@@ -555,6 +557,11 @@ func format_field_effect_name(effect: String) -> String:
 func format_pokemon_effect_event(event: Dictionary) -> String:
 	var target := _format_battle_actor(str(event.get("target", event.get("pokemon", ""))))
 	var raw_effect := str(event.get("effect", ""))
+	# Showdown marks Supreme Overlord's fallen counter as [silent]. The backend
+	# preserves the ordered effect but not that presentation hint, so the HUD
+	# badge owns this state instead of emitting repetitive generic log text.
+	if BATTLE_SUPREME_OVERLORD_EFFECT.is_fallen_effect(raw_effect):
+		return ""
 	var effect := format_pokemon_effect_name(raw_effect)
 	if target == "" or effect == "":
 		return ""
