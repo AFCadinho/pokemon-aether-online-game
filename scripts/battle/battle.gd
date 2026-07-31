@@ -120,6 +120,8 @@ var pvp_gateway_epoch := ""
 var pvp_last_connection_server_seq := 0
 var pvp_presentation_actionable_local_msec := 0
 var pvp_presentation_schedule_token := ""
+var pvp_waiting_observability_started_msec := 0
+var pvp_waiting_observability_reported := false
 var pvp_rendered_event_count := 0
 var pvp_allow_setup_animation := false
 var pvp_victory_message_added := false
@@ -649,6 +651,7 @@ func _process(delta: float) -> void:
 			PvpBattleRealtimeService.timer_projection.participant_display_for_local_player("p2", action_flow.local_player_id)
 		)
 	_request_pvp_team_preview_recovery_if_server_advanced()
+	_report_stalled_pvp_waiting_if_needed()
 
 func _connect_pokemon_hover_signals() -> void:
 	if not player_sprite_box.has_method("get_single_sprite_slot"):
@@ -9679,6 +9682,14 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 	_observe_pvp_gateway_epoch(message)
 	var message_type := str(message.get("type", "")).strip_edges().to_lower()
 	if message_type == "pvp.resync_required":
+		PvpBattleRealtimeService.report_diagnostic("pvp.resync_required_received", {
+			"displayedPhase": pvp_last_phase if pvp_last_phase != "" else "unknown",
+			"reasonCode": "resync_required",
+			"serverSeq": max(_get_pvp_message_server_seq(message), pvp_last_applied_server_seq),
+			"phaseSeq": max(pvp_last_phase_update_server_seq, 0),
+			"lastRenderedSeq": max(pvp_event_queue.last_rendered_seq, 0),
+			"inputLocked": true,
+		})
 		pvp_idle_wait_recovery_active = true
 		_set_battle_input_locked(true)
 		current_action_panel.set_message(_t("battle.prompt.resynchronizing"))
@@ -10318,6 +10329,15 @@ func _send_pvp_realtime_action_and_wait(action: String, player_id: String, slot:
 				_discard_realtime_updates_for_request(request_id, action, expected_player_id, battle_state.battle_id)
 				return signal_response
 			_discard_realtime_updates_for_request(request_id, action, expected_player_id, battle_state.battle_id)
+			PvpBattleRealtimeService.report_diagnostic("pvp.invalid_realtime_response", {
+				"requestId": request_id,
+				"displayedPhase": pvp_last_phase if pvp_last_phase != "" else "unknown",
+				"reasonCode": "invalid_response",
+				"serverSeq": max(_get_pvp_message_server_seq(signal_match), pvp_last_applied_server_seq),
+				"phaseSeq": max(pvp_last_phase_update_server_seq, 0),
+				"lastRenderedSeq": max(pvp_event_queue.last_rendered_seq, 0),
+				"pendingAction": true,
+			})
 			return {
 				"success": false,
 				"error": "Invalid PvP realtime response.",
@@ -10341,6 +10361,15 @@ func _send_pvp_realtime_action_and_wait(action: String, player_id: String, slot:
 			var queued_response: Dictionary = _response_from_pvp_realtime_message(matching_message)
 			if not queued_response.is_empty():
 				return queued_response
+			PvpBattleRealtimeService.report_diagnostic("pvp.invalid_realtime_response", {
+				"requestId": request_id,
+				"displayedPhase": pvp_last_phase if pvp_last_phase != "" else "unknown",
+				"reasonCode": "invalid_response",
+				"serverSeq": max(_get_pvp_message_server_seq(matching_message), pvp_last_applied_server_seq),
+				"phaseSeq": max(pvp_last_phase_update_server_seq, 0),
+				"lastRenderedSeq": max(pvp_event_queue.last_rendered_seq, 0),
+				"pendingAction": true,
+			})
 			return {
 				"success": false,
 				"error": "Invalid PvP realtime response.",
@@ -10365,6 +10394,16 @@ func _send_pvp_realtime_action_and_wait(action: String, player_id: String, slot:
 	var recovered_response := await _recover_pvp_realtime_action_timeout(action, player_id, decision)
 	if not recovered_response.is_empty():
 		return recovered_response
+	PvpBattleRealtimeService.report_diagnostic("pvp.realtime_response_timeout", {
+		"requestId": request_id,
+		"displayedPhase": pvp_last_phase if pvp_last_phase != "" else "unknown",
+		"reasonCode": "response_timeout",
+		"serverSeq": max(pvp_last_applied_server_seq, 0),
+		"phaseSeq": max(pvp_last_phase_update_server_seq, 0),
+		"lastRenderedSeq": max(pvp_event_queue.last_rendered_seq, 0),
+		"observedDurationMs": 12000,
+		"pendingAction": true,
+	})
 	return {
 		"success": false,
 		"error": "PvP realtime response timed out.",
@@ -11245,6 +11284,40 @@ func _describe_pvp_realtime_message(message: Dictionary) -> String:
 		has_response
 	]
 
+func _report_stalled_pvp_waiting_if_needed() -> void:
+	var should_observe := (
+		_is_pvp_battle()
+		and not battle_finished
+		and not _is_spectator_battle()
+		and battle_input_locked
+		and pvp_last_phase == "waiting_for_opponent"
+	)
+	if not should_observe:
+		pvp_waiting_observability_started_msec = 0
+		pvp_waiting_observability_reported = false
+		return
+	if pvp_waiting_observability_started_msec <= 0:
+		pvp_waiting_observability_started_msec = Time.get_ticks_msec()
+		pvp_waiting_observability_reported = false
+		return
+	if pvp_waiting_observability_reported:
+		return
+	var observed_duration_msec := Time.get_ticks_msec() - pvp_waiting_observability_started_msec
+	if observed_duration_msec < 10000:
+		return
+	pvp_waiting_observability_reported = true
+	PvpBattleRealtimeService.report_diagnostic("pvp.client_waiting_state", {
+		"eventBatchId": pvp_last_phase_update_batch_id,
+		"displayedPhase": "waiting_for_opponent",
+		"reasonCode": "waiting_state_observed",
+		"serverSeq": max(pvp_last_applied_server_seq, 0),
+		"phaseSeq": max(pvp_last_phase_update_server_seq, 0),
+		"lastRenderedSeq": max(pvp_event_queue.last_rendered_seq, 0),
+		"observedDurationMs": observed_duration_msec,
+		"inputLocked": true,
+		"pendingAction": true,
+	})
+
 func _log_pvp_realtime(tag: String, details: String = "") -> void:
 	if not DEBUG_PVP_REALTIME:
 		return
@@ -11812,6 +11885,15 @@ func _has_pvp_battle_update_event_gap(response: Dictionary) -> bool:
 		]
 		_trace_pvp_flow("event_gap.detected", response, details)
 		push_warning("PvP render event gap detected: %s" % details)
+		PvpBattleRealtimeService.report_diagnostic("pvp.event_sequence_gap", {
+			"eventBatchId": str(response.get("eventBatchId", response.get("deliveryId", ""))),
+			"displayedPhase": pvp_last_phase if pvp_last_phase != "" else "unknown",
+			"reasonCode": "event_sequence_gap",
+			"serverSeq": max(pvp_last_applied_server_seq, 0),
+			"phaseSeq": max(pvp_last_phase_update_server_seq, 0),
+			"lastRenderedSeq": max(last_rendered_seq, 0),
+			"inputLocked": battle_input_locked,
+		})
 		return true
 	return false
 

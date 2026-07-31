@@ -277,6 +277,34 @@ func request_resync(reason: String = "PvP state resynchronization required.") ->
 	_restart_stalled_connection(reason)
 
 
+func report_diagnostic(event_type: String, context: Dictionary = {}) -> bool:
+	if active_viewer_role == "spectator" or not joined:
+		return false
+	if websocket.get_ready_state() != WebSocketPeer.STATE_OPEN:
+		return false
+	var normalized_event_type := event_type.strip_edges().to_lower()
+	if normalized_event_type not in [
+		"pvp.client_waiting_state",
+		"pvp.event_sequence_gap",
+		"pvp.invalid_realtime_response",
+		"pvp.realtime_response_timeout",
+		"pvp.resync_required_received",
+	]:
+		return false
+	var payload := {
+		"type": "diagnostic",
+		"eventType": normalized_event_type,
+	}
+	for key: String in [
+		"requestId", "eventBatchId", "displayedPhase", "reasonCode",
+		"serverSeq", "phaseSeq", "lastRenderedSeq", "observedDurationMs",
+		"inputLocked", "pendingAction",
+	]:
+		if context.has(key):
+			payload[key] = context[key]
+	return websocket.send_text(JSON.stringify(payload)) == OK
+
+
 func send_action(action: String, battle_id: String, player_id: String, slot: int, mega := false, decision_id := "", decision_generation := 0, decision_kind := "", z_move := false) -> String:
 	if active_viewer_role == "spectator":
 		push_warning("PvpBattleRealtimeService: spectator action was blocked locally.")

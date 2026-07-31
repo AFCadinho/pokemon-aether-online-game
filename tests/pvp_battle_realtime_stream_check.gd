@@ -106,6 +106,17 @@ func _init() -> void:
 		"an open realtime socket always drives its join state machine without a three-second polling race"
 	)
 	_check_equal(
+		realtime_source.contains("func report_diagnostic(event_type: String, context: Dictionary = {}) -> bool:") \
+			and realtime_source.contains('"type": "diagnostic"') \
+			and battle_source.contains('"pvp.client_waiting_state"') \
+			and battle_source.contains('"pvp.invalid_realtime_response"') \
+			and battle_source.contains('"pvp.realtime_response_timeout"') \
+			and battle_source.contains('"pvp.event_sequence_gap"') \
+			and battle_source.contains('"pvp.resync_required_received"'),
+		true,
+		"PvP clients report bounded realtime anomalies without changing the battle stream contract"
+	)
+	_check_equal(
 		realtime_source.contains('websocket.send_text(JSON.stringify({"type":"ping"}))') \
 			and realtime_source.contains("CONNECTION_PONG_TIMEOUT_MSEC") \
 			and realtime_source.contains('if message_type == "pong":') \
