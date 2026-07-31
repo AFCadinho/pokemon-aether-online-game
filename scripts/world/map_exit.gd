@@ -3,8 +3,10 @@ extends Area2D
 @export_file("*.tscn") var target_scene_path := ""
 @export var target_spawn_name := ""
 @export var transition_id := ""
-@export_enum("up", "down", "left", "right") var transition_facing_direction := "down"
+@export_enum("up", "down", "left", "right") var transition_facing_direction := ""
 @export var player_node_name := "Player"
+
+const FACING_DIRECTIONS: Array[String] = ["up", "down", "left", "right"]
 
 var is_transitioning := false
 
@@ -37,10 +39,25 @@ func _on_body_entered(body: Node2D) -> void:
 	if normalized_transition_id.is_empty():
 		world.call_deferred("load_map", target_scene_path, target_spawn_name)
 		return
-	_enter_authorized_transition.call_deferred(body, world, normalized_transition_id)
+	var arrival_facing_direction := _resolve_arrival_facing_direction(body)
+	if arrival_facing_direction.is_empty():
+		is_transitioning = false
+		push_error("MapExit failed: could not resolve the player's facing direction.")
+		return
+	_enter_authorized_transition.call_deferred(
+		body,
+		world,
+		normalized_transition_id,
+		arrival_facing_direction
+	)
 
 
-func _enter_authorized_transition(player: Node2D, world: Node, normalized_transition_id: String) -> void:
+func _enter_authorized_transition(
+	player: Node2D,
+	world: Node,
+	normalized_transition_id: String,
+	arrival_facing_direction: String
+) -> void:
 	if (
 		not world.has_method("begin_authorized_teleport")
 		or not world.has_method("apply_authorized_teleport_state")
@@ -56,7 +73,10 @@ func _enter_authorized_transition(player: Node2D, world: Node, normalized_transi
 		push_warning("MapExit transition could not start: %s" % str(begin_result.get("error", "")))
 		return
 
-	var response: Dictionary = await WorldTransitionService.enter_transition(normalized_transition_id)
+	var response: Dictionary = await WorldTransitionService.enter_transition(
+		normalized_transition_id,
+		arrival_facing_direction
+	)
 	if not bool(response.get("success", false)):
 		world.call("cancel_authorized_teleport")
 		is_transitioning = false
@@ -135,3 +155,18 @@ func _resolve_transition_id() -> String:
 	if source_map_id.is_empty():
 		return ""
 	return "%s__%s" % [source_map_id, str(name).to_snake_case()]
+
+
+func _resolve_arrival_facing_direction(player: Node2D) -> String:
+	var configured_direction := transition_facing_direction.strip_edges().to_lower()
+	if not configured_direction.is_empty():
+		return configured_direction if configured_direction in FACING_DIRECTIONS else ""
+	var direction_value: Variant = player.get("last_direction")
+	if typeof(direction_value) != TYPE_VECTOR2:
+		return ""
+	var direction := direction_value as Vector2
+	if direction == Vector2.ZERO:
+		return ""
+	if abs(direction.x) > abs(direction.y):
+		return "right" if direction.x > 0.0 else "left"
+	return "down" if direction.y > 0.0 else "up"

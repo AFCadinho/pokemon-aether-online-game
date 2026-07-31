@@ -5,6 +5,7 @@ class_name WorldTransitionServiceNode
 const TRANSITION_ACCESS_ENDPOINT := "/game/world/transitions/%s/access"
 const TRANSITION_ENTER_ENDPOINT := "/game/world/transitions/%s/enter"
 const REQUEST_TIMEOUT_SECONDS := 8.0
+const FACING_DIRECTIONS: Array[String] = ["up", "down", "left", "right"]
 
 var transition_access_cache: Dictionary = {}
 
@@ -38,10 +39,13 @@ func get_transition_access(transition_id: String, force_refresh := false) -> Dic
 	return {"success": true, "access": access}
 
 
-func enter_transition(transition_id: String) -> Dictionary:
+func enter_transition(transition_id: String, facing_direction: String) -> Dictionary:
 	var normalized_transition_id := transition_id.strip_edges()
+	var normalized_facing_direction := facing_direction.strip_edges().to_lower()
 	if normalized_transition_id.is_empty():
 		return {"success": false, "error": "Missing transition_id."}
+	if normalized_facing_direction not in FACING_DIRECTIONS:
+		return {"success": false, "error": "Invalid transition facing direction."}
 	if not AuthService.is_authenticated():
 		return {"success": false, "error": "Not authenticated."}
 
@@ -50,7 +54,7 @@ func enter_transition(transition_id: String) -> Dictionary:
 		base_url + (TRANSITION_ENTER_ENDPOINT % normalized_transition_id.uri_encode()),
 		HTTPClient.METHOD_POST,
 		GatewayApiConfig.get_json_headers(),
-		"{}"
+		JSON.stringify({"facingDirection": normalized_facing_direction})
 	)
 	if not bool(response.get("success", false)):
 		return response

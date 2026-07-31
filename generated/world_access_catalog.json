@@ -155,7 +155,6 @@
 	"transitions": {
 		"kanto_oaks_lab__to_pallet_town": {
 			"destination": {
-				"facingDirection": "down",
 				"mapId": "kanto_pallet_town",
 				"mapSceneAliases": [
 					"uid://cbb7318supm5h"
@@ -172,7 +171,6 @@
 		},
 		"kanto_pallet_town__to_oaks_lab": {
 			"destination": {
-				"facingDirection": "down",
 				"mapId": "kanto_oaks_lab",
 				"mapSceneAliases": [
 					"uid://brjbfuu4rye1o"
@@ -189,7 +187,6 @@
 		},
 		"kanto_pallet_town__to_players_house": {
 			"destination": {
-				"facingDirection": "down",
 				"mapId": "kanto_players_house",
 				"mapSceneAliases": [
 					"uid://dxi5ghtfb65wq"
@@ -206,7 +203,6 @@
 		},
 		"kanto_pallet_town__to_rivals_house": {
 			"destination": {
-				"facingDirection": "down",
 				"mapId": "kanto_rivals_house",
 				"mapSceneAliases": [
 					"uid://c5ohbprcq5fyb"
@@ -223,7 +219,6 @@
 		},
 		"kanto_pallet_town__to_route_1": {
 			"destination": {
-				"facingDirection": "down",
 				"mapId": "kanto_route_1",
 				"mapSceneAliases": [
 					"uid://b65lnk8twsct"
@@ -240,7 +235,6 @@
 		},
 		"kanto_pewter_city__to_pokecenter": {
 			"destination": {
-				"facingDirection": "down",
 				"mapId": "kanto_pewter_city_pokemon_center",
 				"mapSceneAliases": [
 					"uid://dgo4lvw2as13c"
@@ -257,7 +251,6 @@
 		},
 		"kanto_pewter_city__to_route_2": {
 			"destination": {
-				"facingDirection": "down",
 				"mapId": "kanto_route_2",
 				"mapSceneAliases": [
 					"uid://cnbfksossjfg7"
@@ -274,7 +267,6 @@
 		},
 		"kanto_pewter_city_pokemon_center__to_outside": {
 			"destination": {
-				"facingDirection": "down",
 				"mapId": "kanto_pewter_city",
 				"mapSceneAliases": [
 					"uid://b63qp0afy4rpd"
@@ -291,7 +283,6 @@
 		},
 		"kanto_players_house__to_pallet_town": {
 			"destination": {
-				"facingDirection": "down",
 				"mapId": "kanto_pallet_town",
 				"mapSceneAliases": [
 					"uid://cbb7318supm5h"
@@ -308,7 +299,6 @@
 		},
 		"kanto_rivals_house__to_pallet_town": {
 			"destination": {
-				"facingDirection": "down",
 				"mapId": "kanto_pallet_town",
 				"mapSceneAliases": [
 					"uid://cbb7318supm5h"
@@ -325,7 +315,6 @@
 		},
 		"kanto_route_1__to_pallet_town": {
 			"destination": {
-				"facingDirection": "down",
 				"mapId": "kanto_pallet_town",
 				"mapSceneAliases": [
 					"uid://cbb7318supm5h"
@@ -342,7 +331,6 @@
 		},
 		"kanto_route_2__to_pewter_city": {
 			"destination": {
-				"facingDirection": "down",
 				"mapId": "kanto_pewter_city",
 				"mapSceneAliases": [
 					"uid://b63qp0afy4rpd"
@@ -359,7 +347,6 @@
 		},
 		"kanto_route_2__to_route_2_gate_north": {
 			"destination": {
-				"facingDirection": "down",
 				"mapId": "kanto_route_2_gate",
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/transition_buildings/route_2_gate.tscn",
@@ -374,7 +361,6 @@
 		},
 		"kanto_route_2__to_route_2_gate_south": {
 			"destination": {
-				"facingDirection": "down",
 				"mapId": "kanto_route_2_gate",
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/transition_buildings/route_2_gate.tscn",
@@ -389,7 +375,6 @@
 		},
 		"kanto_route_2__to_viridian_city": {
 			"destination": {
-				"facingDirection": "down",
 				"mapId": "kanto_viridian_city",
 				"mapSceneAliases": [
 					"uid://b8tl17hk3yovn"
@@ -406,7 +391,6 @@
 		},
 		"kanto_route_2__to_viridian_forest_north": {
 			"destination": {
-				"facingDirection": "down",
 				"mapId": "kanto_route_2_viridian_forest_north_gate",
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/transition_buildings/route_2_viridian_forest_north_gate.tscn",
@@ -421,7 +405,6 @@
 		},
 		"kanto_route_2__to_viridian_forest_south": {
 			"destination": {
-				"facingDirection": "down",
 				"mapId": "kanto_route_2_viridian_forest_south_gate",
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/transition_buildings/route_2_viridian_forest_south_gate.tscn",
@@ -436,7 +419,6 @@
 		},
 		"kanto_route_2_gate__to_north": {
 			"destination": {
-				"facingDirection": "down",
 				"mapId": "kanto_route_2",
 				"mapSceneAliases": [
 					"uid://cnbfksossjfg7"
@@ -453,7 +435,6 @@
 		},
 		"kanto_route_2_gate__to_south": {
 			"destination": {
-				"facingDirection": "down",
 				"mapId": "kanto_route_2",
 				"mapSceneAliases": [
 					"uid://cnbfksossjfg7"
@@ -470,7 +451,6 @@
 		},
 		"kanto_route_2_viridian_forest_north_gate__to_north": {
 			"destination": {
-				"facingDirection": "down",
 				"mapId": "kanto_route_2",
 				"mapSceneAliases": [
 					"uid://cnbfksossjfg7"
@@ -487,7 +467,6 @@
 		},
 		"kanto_route_2_viridian_forest_north_gate__to_south": {
 			"destination": {
-				"facingDirection": "down",
 				"mapId": "kanto_viridian_forest",
 				"mapSceneAliases": [
 					"uid://dxrgvafxdtmod"
@@ -504,7 +483,6 @@
 		},
 		"kanto_route_2_viridian_forest_south_gate__to_north": {
 			"destination": {
-				"facingDirection": "down",
 				"mapId": "kanto_viridian_forest",
 				"mapSceneAliases": [
 					"uid://dxrgvafxdtmod"
@@ -521,7 +499,6 @@
 		},
 		"kanto_route_2_viridian_forest_south_gate__to_south": {
 			"destination": {
-				"facingDirection": "down",
 				"mapId": "kanto_route_2",
 				"mapSceneAliases": [
 					"uid://cnbfksossjfg7"
@@ -538,7 +515,6 @@
 		},
 		"kanto_viridian_city__to_route_1": {
 			"destination": {
-				"facingDirection": "down",
 				"mapId": "kanto_route_1",
 				"mapSceneAliases": [
 					"uid://b65lnk8twsct"
@@ -555,7 +531,6 @@
 		},
 		"kanto_viridian_city__to_route_2": {
 			"destination": {
-				"facingDirection": "down",
 				"mapId": "kanto_route_2",
 				"mapSceneAliases": [
 					"uid://cnbfksossjfg7"
@@ -572,7 +547,6 @@
 		},
 		"kanto_viridian_forest__to_route_2_north": {
 			"destination": {
-				"facingDirection": "down",
 				"mapId": "kanto_route_2_viridian_forest_north_gate",
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/transition_buildings/route_2_viridian_forest_north_gate.tscn",
@@ -587,7 +561,6 @@
 		},
 		"kanto_viridian_forest__to_route_2_south": {
 			"destination": {
-				"facingDirection": "down",
 				"mapId": "kanto_route_2_viridian_forest_south_gate",
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/transition_buildings/route_2_viridian_forest_south_gate.tscn",
@@ -602,7 +575,6 @@
 		},
 		"route_1_to_viridian_city": {
 			"destination": {
-				"facingDirection": "down",
 				"mapId": "kanto_viridian_city",
 				"mapSceneAliases": [
 					"uid://b8tl17hk3yovn"

@@ -11,6 +11,7 @@ const AREA_TYPES: Array[String] = [
 	"wilderness",
 	"transition",
 ]
+const FACING_DIRECTIONS: Array[String] = ["up", "down", "left", "right"]
 
 
 func build(scene_root := "res://scenes/overworld") -> Dictionary:
@@ -81,22 +82,25 @@ func build(scene_root := "res://scenes/overworld") -> Dictionary:
 
 			var target_area: Dictionary = target_record.get("area", {})
 			var spawn_position := spawn_value as Vector2
+			var destination := {
+				"mapId": str(target_record.get("mapId", "")),
+				"mapScenePath": target_scene_path,
+				"mapSceneAliases": target_area.get("sceneAliases", []),
+				"position": {
+					"x": spawn_position.x,
+					"y": spawn_position.y,
+				},
+				"spawnMarker": spawn_marker,
+			}
+			var facing_override := str(
+				exit_record.get("transitionFacingDirection", "")
+			).strip_edges()
+			if not facing_override.is_empty():
+				destination["facingDirection"] = facing_override
 			transitions[transition_id] = {
 				"sourceMapId": str(source_record.get("mapId", "")),
 				"destinationAreaId": str(target_record.get("mapId", "")),
-				"destination": {
-					"mapId": str(target_record.get("mapId", "")),
-					"mapScenePath": target_scene_path,
-					"mapSceneAliases": target_area.get("sceneAliases", []),
-					"position": {
-						"x": spawn_position.x,
-						"y": spawn_position.y,
-					},
-					"facingDirection": str(
-						exit_record.get("transitionFacingDirection", "down")
-					),
-					"spawnMarker": spawn_marker,
-				},
+				"destination": destination,
 			}
 
 	if not errors.is_empty():
@@ -183,6 +187,9 @@ func _load_scene_record(scene_path: String) -> Dictionary:
 			var target_spawn_name := str(
 				_property_value(child, "target_spawn_name", "")
 			).strip_edges()
+			var transition_facing_direction := str(
+				_property_value(child, "transition_facing_direction", "")
+			).strip_edges().to_lower()
 			if target_scene_path.is_empty() and target_spawn_name.is_empty():
 				continue
 			if target_scene_path.is_empty() or target_spawn_name.is_empty():
@@ -191,15 +198,22 @@ func _load_scene_record(scene_path: String) -> Dictionary:
 					"success": false,
 					"error": "%s has an incomplete map exit." % str(child.get_path()),
 				}
+			if (
+				not transition_facing_direction.is_empty()
+				and transition_facing_direction not in FACING_DIRECTIONS
+			):
+				root.free()
+				return {
+					"success": false,
+					"error": "%s has an invalid transition facing direction." % str(child.get_path()),
+				}
 			exits.append({
 				"nodeName": str(child.name),
 				"nodePath": "%s:Exits/%s" % [scene_path, str(child.name)],
 				"targetScenePath": target_scene_path,
 				"targetSpawnName": target_spawn_name,
 				"transitionId": str(_property_value(child, "transition_id", "")),
-				"transitionFacingDirection": str(
-					_property_value(child, "transition_facing_direction", "down")
-				),
+				"transitionFacingDirection": transition_facing_direction,
 			})
 
 	var area := {

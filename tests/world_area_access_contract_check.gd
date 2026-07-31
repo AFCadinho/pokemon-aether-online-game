@@ -44,9 +44,12 @@ func _init() -> void:
 		"Account switches clear transition access cached for the previous player"
 	)
 	_expect(
-		map_exit_source.contains('await WorldTransitionService.enter_transition(normalized_transition_id)')
+		map_exit_source.contains("func _resolve_arrival_facing_direction")
+		and map_exit_source.contains('player.get("last_direction")')
+		and map_exit_source.contains("arrival_facing_direction")
+		and service_source.contains('JSON.stringify({"facingDirection": normalized_facing_direction})')
 		and map_exit_source.contains('world.call("apply_authorized_teleport_state", state)'),
-		"Map exits apply only the destination state returned by the server"
+		"Map exits preserve entry direction through the server-authoritative destination state"
 	)
 	_expect(
 		map_exit_source.contains('return "%s__%s" % [source_map_id, str(name).to_snake_case()]'),
