@@ -5,6 +5,7 @@ class_name AuthServiceNode
 const ClientBuild := preload("res://scripts/services/client_build.gd")
 const SESSION_FILE_PATH := "user://auth_session.json"
 const REQUEST_TIMEOUT_SECONDS := 12.0
+const PRIVACY_REQUEST_TIMEOUT_SECONDS := 60.0
 const USER_AGENT_HEADER := "User-Agent: PokeAether/1.0"
 const CONTENT_TYPE_HEADER := "Content-Type: application/json"
 const ACCEPT_HEADER := "Accept: application/json"
@@ -283,7 +284,8 @@ func export_personal_data(current_password: String, locale: String) -> Dictionar
 		JSON.stringify({
 			"currentPassword": current_password,
 			"locale": locale,
-		})
+		}),
+		PRIVACY_REQUEST_TIMEOUT_SECONDS
 	)
 	if not bool(response.get("success", false)):
 		return response
@@ -309,7 +311,8 @@ func delete_account(current_password: String, locale: String) -> Dictionary:
 			"currentPassword": current_password,
 			"locale": locale,
 			"confirmation": "DELETE",
-		})
+		}),
+		PRIVACY_REQUEST_TIMEOUT_SECONDS
 	)
 	if bool(response.get("success", false)):
 		clear_session()
@@ -424,9 +427,15 @@ func _refresh_trade_session() -> void:
 		realtime.call("restore_active_trade_and_connect")
 
 
-func _request_json(url: String, method: HTTPClient.Method, headers: PackedStringArray, body: String) -> Dictionary:
+func _request_json(
+	url: String,
+	method: HTTPClient.Method,
+	headers: PackedStringArray,
+	body: String,
+	timeout_seconds: float = REQUEST_TIMEOUT_SECONDS
+) -> Dictionary:
 	var request := HTTPRequest.new()
-	request.timeout = REQUEST_TIMEOUT_SECONDS
+	request.timeout = timeout_seconds
 	add_child(request)
 
 	var error: Error = request.request(url, headers, method, body)

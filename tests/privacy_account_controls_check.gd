@@ -12,6 +12,8 @@ func _init() -> void:
 
 	_check(auth_service.contains('base_url + "/privacy/export"'), "auth service exposes the privacy export route")
 	_check(auth_service.contains('base_url + "/privacy/delete"'), "auth service exposes the privacy deletion route")
+	_check(auth_service.contains("const PRIVACY_REQUEST_TIMEOUT_SECONDS := 60.0"), "privacy requests allow bounded large exports to finish")
+	_check(auth_service.count("PRIVACY_REQUEST_TIMEOUT_SECONDS") >= 3, "both privacy actions use the extended timeout")
 	_check(auth_service.contains('"confirmation": "DELETE"'), "account deletion uses the server confirmation contract")
 	_check(auth_service.contains("clear_session()"), "successful account deletion clears the player session")
 
