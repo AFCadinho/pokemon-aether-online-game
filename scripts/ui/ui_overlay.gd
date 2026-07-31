@@ -144,6 +144,7 @@ const GUILD_POPUP_SCENE: PackedScene = preload("res://scenes/interface/guild_pop
 const DEV_BADGE_PROGRESS_POPUP_SCENE: PackedScene = preload("res://scenes/interface/dev_badge_progress_popup.tscn")
 const DONATOR_STORE_POPUP_SCENE: PackedScene = preload("res://scenes/interface/donator_store_popup.tscn")
 const PLAYER_INTERACTION_COORDINATOR_SCRIPT: Script = preload("res://scripts/ui/player_interaction_coordinator.gd")
+const QUEST_JOURNAL_VIEW_SCRIPT: Script = preload("res://scripts/ui/quest_journal_view.gd")
 const REMOTE_PLAYER_AVATAR_SCRIPT: Script = preload("res://scripts/world/remote_player_avatar.gd")
 const BATTLE_SUMMARY_SLOT_BG_TEXTURE: Texture2D = preload("res://assets/background/battle/pokemon_x_and_y_battle_background_11_by_phoenixoflight92_d843okx-414w-2x.jpg")
 const STATUS_ICON_SHEET: Texture2D = preload("res://assets/battles/status/icon_statuses.png")
@@ -491,6 +492,7 @@ var donator_store_popup: DonatorStorePopup
 var friendlist_popup: FriendlistPopup
 var guild_popup: GuildPopup
 var player_interaction_coordinator: PlayerInteractionCoordinator
+var quest_journal_view
 @onready var mail_popup: PanelContainer = $Control/MailPopup
 @onready var mail_compose_button: Button = $Control/MailPopup/MarginContainer/VBoxContainer/HeaderRow/ComposeButton
 @onready var mail_close_button: Button = $Control/MailPopup/MarginContainer/VBoxContainer/HeaderRow/CloseButton
@@ -1231,6 +1233,7 @@ func _ready() -> void:
 		LocalizationManager.locale_changed.connect(_on_locale_changed)
 	LocalizationManager.localize_tree(self)
 	_setup_player_status_card()
+	_setup_quest_journal_ui()
 	_setup_status_docks()
 	_setup_trainer_card_popup()
 	_setup_donator_store_popup()
@@ -1461,6 +1464,39 @@ func _on_locale_changed(_locale: String) -> void:
 		_rebuild_staff_teleport_map_options()
 		_rebuild_staff_teleport_player_options()
 		_rebuild_staff_teleport_send_map_options()
+
+
+func _setup_quest_journal_ui() -> void:
+	if quest_journal_view != null:
+		return
+	quest_journal_view = QUEST_JOURNAL_VIEW_SCRIPT.new()
+	quest_journal_view.name = "QuestJournalView"
+	root_control.add_child(quest_journal_view)
+	quest_journal_view.journal_opened.connect(_on_quest_journal_opened)
+	quest_journal_view.journal_closed.connect(_on_quest_journal_closed)
+
+
+func _on_quest_journal_opened() -> void:
+	_focus_overlay_ui_layer()
+
+
+func _on_quest_journal_closed() -> void:
+	if not _has_visible_priority_overlay_panel():
+		layer = UI_OVERLAY_BASE_LAYER
+
+
+func _refresh_quest_tracker_layout() -> void:
+	if quest_journal_view == null:
+		return
+	var right_action_bar_bottom := 0.0
+	for panel_id in ["actions", "staff_actions"]:
+		var state: Dictionary = collapsible_panels.get(panel_id, {})
+		if state.is_empty() or not bool(state.get("available", true)):
+			continue
+		var panel: Control = state.get("panel") as Control
+		if panel != null:
+			right_action_bar_bottom = maxf(right_action_bar_bottom, panel.position.y + panel.size.y)
+	quest_journal_view.set_tracker_top_offset(right_action_bar_bottom + ACTION_BAR_SLOT_GAP)
 
 
 func _refresh_pc_localized_ui() -> void:
@@ -2765,6 +2801,7 @@ func _refresh_action_bar_layouts() -> void:
 	_position_collapsible_button("actions")
 	_position_collapsible_button("dex_actions")
 	_position_collapsible_button("staff_actions")
+	_refresh_quest_tracker_layout()
 
 func _refresh_action_bar_layout(panel: PanelContainer) -> void:
 	if panel == null:
@@ -2782,7 +2819,11 @@ func _refresh_action_bar_layout(panel: PanelContainer) -> void:
 	var slot_gap: float = float(max(visible_slots - 1, 0)) * ACTION_BAR_SLOT_GAP
 	var width: float = (ACTION_BAR_MARGIN_X * 2.0) + (float(visible_slots) * ACTION_BAR_SLOT_SIZE) + slot_gap
 	panel.custom_minimum_size.x = width
-	panel.offset_left = -width
+	if panel == dex_actions_panel:
+		panel.offset_left = 0.0
+		panel.offset_right = width
+	else:
+		panel.offset_left = -width
 
 func _get_scene_action_bar_row(panel: PanelContainer) -> HBoxContainer:
 	if panel == null or panel.get_child_count() <= 0:
@@ -2899,6 +2940,8 @@ func _has_visible_priority_overlay_panel() -> bool:
 		pc_popup,
 		guild_popup,
 	]
+	if quest_journal_view != null:
+		panels.append(quest_journal_view.get_journal_panel())
 	for panel: Control in panels:
 		if panel != null and panel.visible:
 			return true
@@ -21500,7 +21543,7 @@ func _setup_collapsible_panels() -> void:
 	_register_collapsible_panel("location", location_panel, "right_center", null, [global_buffs_panel])
 	_register_collapsible_panel("options", options_panel, "right")
 	_register_collapsible_panel("actions", actions_panel, "action_bar", toggle_actions_collapse_button)
-	_register_collapsible_panel("dex_actions", dex_actions_panel, "action_bar", dex_actions_collapse_button)
+	_register_collapsible_panel("dex_actions", dex_actions_panel, "right", dex_actions_collapse_button)
 	_register_collapsible_panel("staff_actions", staff_actions_panel, "action_bar", staff_actions_collapse_button)
 	_position_collapsible_buttons()
 
@@ -21689,6 +21732,8 @@ func _apply_collapsible_panel_state(panel_id: String) -> void:
 	if panel_id == "options":
 		_refresh_socials_attention_badge()
 	_position_collapsible_button(panel_id)
+	if panel_id in ["actions", "staff_actions"]:
+		_refresh_quest_tracker_layout()
 
 func _collapsible_button_glyph(side: String, collapsed: bool) -> String:
 	var panel_opens_left := side in ["left", "left_center", "action_bar"]
@@ -21857,6 +21902,9 @@ func _is_settings_toggle_event(event: InputEvent) -> bool:
 	return key_event.pressed and not key_event.echo and key_event.keycode == KEY_ESCAPE
 
 func _close_active_overlay_for_escape() -> bool:
+	if quest_journal_view != null and quest_journal_view.is_journal_open():
+		quest_journal_view.close_journal()
+		return true
 	if player_interaction_coordinator != null and player_interaction_coordinator.close_topmost():
 		return true
 	var candidate: Dictionary = _get_active_escape_close_candidate()
@@ -28682,8 +28730,8 @@ func _on_settings_button_pressed() -> void:
 	_activate_ui_panel(settings_menu)
 
 func _on_quest_log_button_pressed() -> void:
-	_focus_normal_ui_group(options_panel)
-	_add_chat_message("Quest Log is not implemented yet.")
+	if quest_journal_view != null:
+		quest_journal_view.open_journal()
 
 func _on_socials_button_pressed() -> void:
 	if socials_menu.visible:

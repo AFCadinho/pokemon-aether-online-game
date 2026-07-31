@@ -29,6 +29,7 @@ func _init() -> void:
 	var hotbar_block := _node_block(scene_source, '[node name="HotkeySidebar"')
 	var player_status_block := _node_block(scene_source, '[node name="PlayerStatusPanel"')
 	var party_block := _node_block(scene_source, '[node name="PartyPanel"')
+	var dex_actions_block := _node_block(scene_source, '[node name="DexActionsPanel"')
 	var party_margin_block := _node_block(scene_source, '[node name="MarginContainer" type="MarginContainer" parent="Control/PartyPanel"')
 	var party_container_block := _node_block(scene_source, '[node name="VBoxContainer" type="VBoxContainer" parent="Control/PartyPanel/MarginContainer"')
 	var chat_block := _node_block(scene_source, '[node name="ChatPanel"')
@@ -47,7 +48,13 @@ func _init() -> void:
 	_check(hotbar_block.contains("offset_right = 0.0"), "hotbar hugs the right screen edge")
 	_check(party_block.contains("anchors_preset = 0"), "normal party is anchored to the left")
 	_check(party_block.contains("offset_left = 0.0"), "normal party hugs the left screen edge")
-	_check(party_block.contains("offset_top = 132.0"), "normal party sits higher while clearing the top toolbar")
+	_check(party_block.contains("offset_top = 152.0"), "normal party clears the stacked left navigation rails")
+	_check(
+		dex_actions_block.contains("anchors_preset = 0")
+		and dex_actions_block.contains("offset_left = 0.0")
+		and dex_actions_block.contains("offset_top = 76.0"),
+		"Town Map and Dex shortcuts sit below the primary left navigation"
+	)
 	_check(party_margin_block.contains("margin_top = 7") and party_container_block.contains("separation = 5"), "normal party rail uses compact spacing")
 	_check(script_source.contains("func _make_party_panel_style()"), "normal party uses a dedicated lighter glass rail")
 	_check(party_slot_scene_source.contains("custom_minimum_size = Vector2(260, 68)"), "normal party slots use a compact readable height")
@@ -332,7 +339,11 @@ func _init() -> void:
 		"Appearance items and palettes share one usable scrolling content area"
 	)
 	_check(script_source.contains('{"panel": donator_store_popup, "close": Callable(self, "_hide_donator_store_popup")}'), "Escape closes the Donator Store")
-	_check(script_source.contains("Quest Log is not implemented yet."), "placeholder Quest Log interaction gives clear feedback")
+	_check(
+		script_source.contains("quest_journal_view.open_journal()")
+		and not script_source.contains("Quest Log is not implemented yet."),
+		"Quest Log navigation opens the implemented journal"
+	)
 	_check(script_source.contains('const REDEEM_CODE_ICON: Texture2D = preload("res://assets/ui/redeem_code.svg")'), "Trainer Card redeem action uses its own gift-code icon")
 	_check(script_source.contains("func _create_trainer_card_redeem_button()") and script_source.contains('header.add_child(_create_trainer_card_redeem_button())'), "Trainer Card places the future Redeem Code action beside Close")
 	_check(not script_source.contains('hint_label.text = "Have a gift code?"') and not script_source.contains("RedeemCodePanel"), "Trainer Card omits the redundant redeem footer copy")

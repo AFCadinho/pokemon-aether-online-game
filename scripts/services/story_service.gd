@@ -83,6 +83,9 @@ func _project_quest(source: Dictionary) -> Dictionary:
 		"questId": str(source.get("questId", "")),
 		"storylineId": str(source.get("storylineId", "")),
 		"definitionVersion": maxi(int(source.get("definitionVersion", 1)), 1),
+		"questType": str(source.get("questType", "main")),
+		"titleKey": str(source.get("titleKey", "")),
+		"summaryKey": str(source.get("summaryKey", "")),
 		"status": str(source.get("status", "")),
 		"steps": projected_steps,
 		"startedAt": _project_optional_timestamp(source.get("startedAt", null)),
@@ -94,6 +97,7 @@ func _project_step(source: Dictionary) -> Dictionary:
 	var target_value := maxi(int(source.get("targetValue", 1)), 1)
 	return {
 		"stepId": str(source.get("stepId", "")),
+		"objectiveKey": str(source.get("objectiveKey", "")),
 		"status": str(source.get("status", "")),
 		"currentValue": clampi(int(source.get("currentValue", 0)), 0, target_value),
 		"targetValue": target_value,

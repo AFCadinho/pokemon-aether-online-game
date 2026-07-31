@@ -24,10 +24,14 @@ func _run() -> void:
 				"questId": "kanto_pallet_intro",
 				"storylineId": "kanto_main",
 				"definitionVersion": 2,
+				"questType": "main",
+				"titleKey": "story.kanto.choose_starter.title",
+				"summaryKey": "story.kanto.choose_starter.summary",
 				"status": "active",
 				"steps": [
 					{
 						"stepId": "meet_oak",
+						"objectiveKey": "story.kanto.choose_starter.choose_starter",
 						"status": "active",
 						"currentValue": 0,
 						"targetValue": 1,
@@ -55,11 +59,20 @@ func _run() -> void:
 		var steps: Array = quest.get("steps", [])
 		_expect(quest.get("questId", "") == "kanto_pallet_intro", "quest identity is projected")
 		_expect(quest.get("storylineId", "") == "kanto_main", "storyline identity is projected")
+		_expect(quest.get("questType", "") == "main", "quest type is projected")
+		_expect(
+			quest.get("titleKey", "") == "story.kanto.choose_starter.title",
+			"quest title localization key is projected"
+		)
 		_expect(not quest.has("serverOnly"), "projection only keeps quest contract fields")
 		_expect(quest.get("completedAt", "unexpected") == null, "nullable quest timestamps remain null")
 		if steps.size() == 1:
 			var step: Dictionary = steps[0] as Dictionary
 			_expect(step.get("targetValue", 0) == 1, "step progress is projected")
+			_expect(
+				step.get("objectiveKey", "") == "story.kanto.choose_starter.choose_starter",
+				"objective localization key is projected"
+			)
 			_expect(not step.has("serverOnly"), "projection only keeps step contract fields")
 			step["currentValue"] = 99
 		quest["status"] = "mutated"
@@ -113,6 +126,10 @@ func _verify_integration_contract() -> void:
 	_expect(
 		project.contains('StoryService="*res://scripts/services/story_service.gd"'),
 		"project registers the story projection"
+	)
+	_expect(
+		project.contains('QuestJournalService="*res://scripts/services/quest_journal_service.gd"'),
+		"project registers the quest journal presentation service"
 	)
 	_expect(
 		game_state_service.contains('const PLAYER_STORY_ENDPOINT := "/game/story"')
