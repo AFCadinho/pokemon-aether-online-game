@@ -98,6 +98,7 @@ var account_display_name_input: LineEdit
 var account_current_password_input: LineEdit
 var account_new_password_input: LineEdit
 var account_confirm_password_input: LineEdit
+var privacy_manage_button: Button
 var privacy_export_button: Button
 var delete_account_button: Button
 var privacy_dialog: PanelContainer
@@ -146,6 +147,7 @@ func _ready() -> void:
 	language_options_button.item_selected.connect(_on_language_selected)
 	terminology_options_button.item_selected.connect(_on_terminology_selected)
 	edit_account_button.pressed.connect(_on_edit_account_button_pressed)
+	privacy_manage_button.pressed.connect(_on_privacy_manage_button_pressed)
 	privacy_export_button.pressed.connect(_on_privacy_export_button_pressed)
 	delete_account_button.pressed.connect(_on_delete_account_button_pressed)
 	logout_button.pressed.connect(_on_logout_button_pressed)
@@ -552,27 +554,10 @@ func _build_account_tab(account_tab: VBoxContainer) -> void:
 	account_status_label.visible = false
 	account_tab.add_child(account_status_label)
 
-	var privacy_label := Label.new()
-	_set_localized_text(privacy_label, "ui.settings.privacy.title")
-	privacy_label.add_theme_color_override("font_color", UI_SECTION_TEXT)
-	privacy_label.add_theme_font_size_override("font_size", 14)
-	account_tab.add_child(privacy_label)
-
-	var privacy_note := Label.new()
-	_set_localized_text(privacy_note, "ui.settings.privacy.note")
-	privacy_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	privacy_note.add_theme_font_size_override("font_size", 12)
-	account_tab.add_child(privacy_note)
-
-	privacy_export_button = Button.new()
-	_set_localized_text(privacy_export_button, "ui.settings.privacy.export")
-	privacy_export_button.focus_mode = Control.FOCUS_NONE
-	account_tab.add_child(privacy_export_button)
-
-	delete_account_button = Button.new()
-	_set_localized_text(delete_account_button, "ui.settings.privacy.delete")
-	delete_account_button.focus_mode = Control.FOCUS_NONE
-	account_tab.add_child(delete_account_button)
+	privacy_manage_button = Button.new()
+	_set_localized_text(privacy_manage_button, "ui.settings.privacy.manage")
+	privacy_manage_button.focus_mode = Control.FOCUS_NONE
+	account_tab.add_child(privacy_manage_button)
 
 	_setup_privacy_dialog()
 	account_tab.add_child(privacy_dialog)
@@ -838,7 +823,18 @@ func _setup_privacy_dialog() -> void:
 	privacy_dialog_message_label.add_theme_font_size_override("font_size", 12)
 	layout.add_child(privacy_dialog_message_label)
 
+	privacy_export_button = Button.new()
+	_set_localized_text(privacy_export_button, "ui.settings.privacy.export")
+	privacy_export_button.focus_mode = Control.FOCUS_NONE
+	layout.add_child(privacy_export_button)
+
+	delete_account_button = Button.new()
+	_set_localized_text(delete_account_button, "ui.settings.privacy.delete")
+	delete_account_button.focus_mode = Control.FOCUS_NONE
+	layout.add_child(delete_account_button)
+
 	privacy_password_input = _create_account_line_edit("ui.settings.account.current_password", true)
+	privacy_password_input.visible = false
 	layout.add_child(privacy_password_input)
 
 	privacy_delete_confirmation_input = _create_account_line_edit("ui.settings.privacy.delete_confirmation", false)
@@ -849,6 +845,7 @@ func _setup_privacy_dialog() -> void:
 	privacy_dialog_status_label.custom_minimum_size = Vector2(0, PRIVACY_DIALOG_STATUS_HEIGHT)
 	privacy_dialog_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	privacy_dialog_status_label.add_theme_font_size_override("font_size", 12)
+	privacy_dialog_status_label.visible = false
 	layout.add_child(privacy_dialog_status_label)
 
 	var button_row := HBoxContainer.new()
@@ -875,6 +872,7 @@ func _setup_privacy_dialog() -> void:
 	privacy_confirm_button = Button.new()
 	_set_localized_text(privacy_confirm_button, "common.confirm")
 	privacy_confirm_button.custom_minimum_size = Vector2(104, 32)
+	privacy_confirm_button.visible = false
 	privacy_confirm_button.pressed.connect(_privacy_action_confirmed)
 	button_row.add_child(privacy_confirm_button)
 
@@ -1251,19 +1249,15 @@ func _refresh_account_tab() -> void:
 		account_user_label.text = LocalizationManager.text("ui.settings.account.no_active")
 		if edit_account_button != null:
 			edit_account_button.disabled = true
-		if privacy_export_button != null:
-			privacy_export_button.disabled = true
-		if delete_account_button != null:
-			delete_account_button.disabled = true
+		if privacy_manage_button != null:
+			privacy_manage_button.disabled = true
 		print("[settings] edit account disabled: no active account")
 		return
 	if edit_account_button != null:
 		edit_account_button.disabled = false
 		print("[settings] edit account enabled")
-	if privacy_export_button != null:
-		privacy_export_button.disabled = AuthService.is_impersonating()
-	if delete_account_button != null:
-		delete_account_button.disabled = AuthService.is_impersonating()
+	if privacy_manage_button != null:
+		privacy_manage_button.disabled = AuthService.is_impersonating()
 	if username != "" and username != display_name:
 		account_user_label.text = LocalizationManager.text(
 			"ui.settings.account.logged_in_with_username",
@@ -1514,6 +1508,10 @@ func _on_privacy_export_button_pressed() -> void:
 	_show_privacy_dialog("export")
 
 
+func _on_privacy_manage_button_pressed() -> void:
+	_show_privacy_dialog("menu")
+
+
 func _on_delete_account_button_pressed() -> void:
 	_show_privacy_dialog("delete")
 
@@ -1527,19 +1525,34 @@ func _show_privacy_dialog(action: String) -> void:
 	privacy_delete_confirmation_input.clear()
 	privacy_last_export_path = ""
 	privacy_open_folder_button.visible = false
+	privacy_export_button.visible = action == "menu"
+	delete_account_button.visible = action == "menu"
+	privacy_password_input.visible = action != "menu"
 	privacy_delete_confirmation_input.visible = action == "delete"
+	privacy_confirm_button.visible = action != "menu"
+	_set_localized_text(
+		privacy_cancel_button,
+		"common.close" if action == "menu" else "common.cancel"
+	)
 	_set_privacy_dialog_status("")
 	_refresh_privacy_dialog_copy()
 	_apply_privacy_dialog_style()
 	privacy_dialog.visible = true
 	privacy_dialog.move_to_front()
-	privacy_password_input.grab_focus()
+	if action == "menu":
+		privacy_export_button.grab_focus()
+	else:
+		privacy_password_input.grab_focus()
 
 
 func _refresh_privacy_dialog_copy() -> void:
 	if privacy_dialog_title_label == null or privacy_dialog_message_label == null:
 		return
-	var suffix := "delete" if privacy_action == "delete" else "export"
+	var suffix := (
+		"manage"
+		if privacy_action == "menu"
+		else ("delete" if privacy_action == "delete" else "export")
+	)
 	privacy_dialog_title_label.text = LocalizationManager.text("ui.settings.privacy.%s" % suffix)
 	privacy_dialog_message_label.text = LocalizationManager.text(
 		"ui.settings.privacy.%s_message" % suffix
@@ -1555,6 +1568,10 @@ func _hide_privacy_dialog() -> void:
 	privacy_delete_confirmation_input.clear()
 	privacy_last_export_path = ""
 	privacy_open_folder_button.visible = false
+	privacy_export_button.visible = false
+	delete_account_button.visible = false
+	privacy_password_input.visible = false
+	privacy_confirm_button.visible = false
 	_set_privacy_dialog_status("")
 
 
@@ -1647,6 +1664,10 @@ func _set_privacy_dialog_status(message: String, is_error: bool = false) -> void
 	if privacy_dialog_status_label == null:
 		return
 	privacy_dialog_status_label.text = message
+	privacy_dialog_status_label.visible = not message.is_empty()
+	privacy_dialog_status_label.custom_minimum_size.y = (
+		PRIVACY_DIALOG_STATUS_HEIGHT if not message.is_empty() else 0.0
+	)
 	privacy_dialog_status_label.add_theme_color_override(
 		"font_color",
 		UI_DANGER if is_error else UI_MUTED_TEXT
@@ -1660,6 +1681,7 @@ func _set_privacy_dialog_status_key(key: String, is_error: bool = false, values:
 func _set_privacy_controls_disabled(disabled: bool) -> void:
 	privacy_action_busy = disabled
 	for button: Button in [
+		privacy_manage_button,
 		privacy_export_button,
 		delete_account_button,
 		privacy_open_folder_button,
@@ -1791,10 +1813,8 @@ func _set_account_controls_disabled(disabled: bool) -> void:
 		account_confirm_button.disabled = disabled
 	if account_cancel_button != null:
 		account_cancel_button.disabled = disabled
-	if privacy_export_button != null:
-		privacy_export_button.disabled = disabled or AuthService.is_impersonating()
-	if delete_account_button != null:
-		delete_account_button.disabled = disabled or AuthService.is_impersonating()
+	if privacy_manage_button != null:
+		privacy_manage_button.disabled = disabled or AuthService.is_impersonating()
 
 	for input: LineEdit in [
 		account_display_name_input,
@@ -1939,10 +1959,8 @@ func _refresh_impersonation_account_controls() -> void:
 		_set_localized_text(logout_confirm_title_label, button_key)
 	if logout_confirm_message_label != null:
 		_set_localized_text(logout_confirm_message_label, message_key)
-	if privacy_export_button != null:
-		privacy_export_button.disabled = impersonating
-	if delete_account_button != null:
-		delete_account_button.disabled = impersonating
+	if privacy_manage_button != null:
+		privacy_manage_button.disabled = impersonating
 
 func _leave_ranked_queue_before_logout() -> void:
 	var tree := get_tree()

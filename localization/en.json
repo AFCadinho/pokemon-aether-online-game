@@ -226,6 +226,8 @@
   "ui.settings.account.updated": "Account details updated.",
   "ui.settings.privacy.title": "Privacy",
   "ui.settings.privacy.note": "Download a copy of your personal data or permanently delete your account. Your current password is required for both actions.",
+  "ui.settings.privacy.manage": "Manage Privacy & Data",
+  "ui.settings.privacy.manage_message": "Choose whether you want to download a copy of your personal data or permanently delete your account.",
   "ui.settings.privacy.export": "Download My Data",
   "ui.settings.privacy.export_message": "Enter your current password. The JSON export will be saved in PokeAether's local data folder on this device.",
   "ui.settings.privacy.export_working": "Preparing your data export...",

@@ -226,6 +226,8 @@
   "ui.settings.account.updated": "Dados da conta atualizados.",
   "ui.settings.privacy.title": "Privacidade",
   "ui.settings.privacy.note": "Baixe uma cópia dos seus dados pessoais ou exclua permanentemente sua conta. Sua senha atual é necessária para ambas as ações.",
+  "ui.settings.privacy.manage": "Gerenciar privacidade e dados",
+  "ui.settings.privacy.manage_message": "Escolha se deseja baixar uma cópia dos seus dados pessoais ou excluir permanentemente sua conta.",
   "ui.settings.privacy.export": "Baixar meus dados",
   "ui.settings.privacy.export_message": "Digite sua senha atual. A exportação JSON será salva na pasta de dados local do PokeAether neste dispositivo.",
   "ui.settings.privacy.export_working": "Preparando sua exportação de dados...",
