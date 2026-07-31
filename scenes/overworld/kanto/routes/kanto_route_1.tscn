@@ -1051,7 +1051,6 @@ mugshot = ExtResource("12_mjhtk")
 [node name="DialogueNPC" parent="Entities/NPCs/Dialogue" unique_id=674634290 instance=ExtResource("16_bnyo4")]
 position = Vector2(944, 560)
 npc_id = "kanto_route_1_alder"
-dialogue_id = "kanto_route_1_alder_intro"
 display_name = "Champion Alder"
 facing_direction = null
 dialogue_lines = null

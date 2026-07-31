@@ -2,6 +2,7 @@ extends SceneTree
 
 const PROJECT_CONFIG := "res://project.godot"
 const DIALOGUE_METADATA_SERVICE_SCRIPT := "res://scripts/services/dialogue_metadata_service.gd"
+const NPC_DIALOGUE_SERVICE_SCRIPT := "res://scripts/services/npc_dialogue_service.gd"
 const DIALOGUE_NPC_SCRIPT := "res://scripts/world/npcs/dialogue_npc.gd"
 const TRAINER_NPC_SCRIPT := "res://scripts/world/npcs/trainer_npc.gd"
 
@@ -29,6 +30,10 @@ func _check_service_is_autoloaded() -> void:
 		text.contains("DialogueMetadataService=\"*res://scripts/services/dialogue_metadata_service.gd\""),
 		"DialogueMetadataService is autoloaded"
 	)
+	_check_true(
+		text.contains("NpcDialogueService=\"*res://scripts/services/npc_dialogue_service.gd\""),
+		"NpcDialogueService is autoloaded"
+	)
 
 
 func _check_service_api() -> void:
@@ -37,6 +42,13 @@ func _check_service_api() -> void:
 	_check_true(text.contains("func get_dialogue(dialogue_id: String) -> Dictionary:"), "get_dialogue API exists")
 	_check_true(text.contains("func get_lines(dialogue_id: String) -> Array[String]:"), "get_lines API exists")
 	_check_true(text.contains("func has_dialogue(dialogue_id: String) -> bool:"), "has_dialogue API exists")
+	var resolver_text := _read_text(NPC_DIALOGUE_SERVICE_SCRIPT)
+	_check_true(
+		resolver_text.contains("func resolve_default_dialogue(")
+		and resolver_text.contains("func select_dialogue_reference(")
+		and resolver_text.contains("func resolve_lines("),
+		"NpcDialogueService exposes selection and resolution APIs"
+	)
 
 
 func _check_service_normalization() -> void:
@@ -64,23 +76,28 @@ func _check_service_locale_contract() -> void:
 func _check_dialogue_npc_uses_dialogue_id_lookup() -> void:
 	var text := _read_text(DIALOGUE_NPC_SCRIPT)
 	_check_true(text.contains("func _get_dialogue_metadata_lines() -> Array[String]:"), "DialogueNPC has dialogue metadata resolver")
-	_check_true(text.contains("DialogueMetadataService.get_dialogue(resolved_dialogue_id)"), "DialogueNPC resolves dialogue through DialogueMetadataService")
-	_check_true(text.contains("dialogue_id.strip_edges()"), "DialogueNPC uses dialogue_id")
+	_check_true(text.contains("NpcDialogueService.resolve_default_dialogue("), "DialogueNPC uses the central NPC resolver")
+	_check_true(text.contains("metadata_dialogue_id"), "DialogueNPC prefers NPC metadata dialogue")
+	_check_true(
+		text.contains('result.get("speakerName", "")')
+		and text.contains("resolved_dialogue_speaker_name"),
+		"DialogueNPC uses the localized dialogue speaker name"
+	)
 
 
 func _check_dialogue_npc_fallback_behavior() -> void:
 	var text := _read_text(DIALOGUE_NPC_SCRIPT)
-	_check_true(text.contains("await super.show_dialogue(lines, speaker_name_override)"), "DialogueNPC keeps explicit lines fallback")
-	_check_true(text.contains("await super.show_dialogue(dialogue_metadata_lines, speaker_name_override)"), "DialogueNPC passes resolved lines to BaseNPC")
-	_check_true(text.contains("await super.show_dialogue(lines, speaker_name_override)"), "DialogueNPC keeps BaseNPC fallback")
+	_check_true(text.contains("await super.show_dialogue(lines, resolved_speaker_name)"), "DialogueNPC keeps explicit lines fallback")
+	_check_true(text.contains("await super.show_dialogue(dialogue_metadata_lines, resolved_speaker_name)"), "DialogueNPC passes resolved lines to BaseNPC")
+	_check_true(text.contains("resolved_dialogue_speaker_name"), "DialogueNPC keeps the resolved speaker fallback")
 
 
 func _check_trainer_npc_uses_intro_dialogue_lookup() -> void:
 	var text := _read_text(TRAINER_NPC_SCRIPT)
 	_check_true(text.contains("func _resolve_intro_dialogue_lines(trainer_metadata: Dictionary) -> Array[String]:"), "TrainerNPC resolves intro dialogue")
-	_check_true(text.contains("var configured_dialogue_id := dialogue_id.strip_edges()"), "TrainerNPC prefers BaseNPC dialogue_id")
+	_check_true(text.contains("var configured_dialogue_id := _get_dialogue_override_id()"), "TrainerNPC prefers an explicit scene override")
 	_check_true(text.contains("func _get_intro_dialogue_id_from_trainer_metadata(trainer_metadata: Dictionary) -> String:"), "TrainerNPC supports trainer metadata dialogue id")
-	_check_true(text.contains("DialogueMetadataService.get_lines(intro_dialogue_id)"), "TrainerNPC uses DialogueMetadataService for intro dialogue")
+	_check_true(text.contains("NpcDialogueService.resolve_lines("), "TrainerNPC uses NpcDialogueService for intro dialogue")
 
 
 func _check_trainer_npc_fallback_behavior() -> void:

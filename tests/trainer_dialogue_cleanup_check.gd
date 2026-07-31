@@ -28,11 +28,11 @@ func _check_trainer_metadata_normalizes_dialogue_ids() -> void:
 
 func _check_fallback_order() -> void:
 	var text := _read_text(TRAINER_NPC_SCRIPT)
-	var configured_index := text.find("var configured_dialogue_id := dialogue_id.strip_edges()")
+	var configured_index := text.find("var configured_dialogue_id := _get_dialogue_override_id()")
 	var metadata_index := text.find("var metadata_dialogue_id := _get_intro_dialogue_id_from_trainer_metadata(trainer_metadata)")
 	var fallback_index := text.find("return _get_dialogue_lines_from_trainer_metadata(trainer_metadata)")
-	_check_true(configured_index != -1, "TrainerNPC reads configured dialogue_id")
-	_check_true(metadata_index > configured_index, "TrainerNPC checks trainer metadata dialogue id after BaseNPC dialogue_id")
+	_check_true(configured_index != -1, "TrainerNPC reads the explicit dialogue override")
+	_check_true(metadata_index > configured_index, "TrainerNPC checks trainer metadata dialogue id after the scene override")
 	_check_true(fallback_index > metadata_index, "TrainerNPC falls back to dialogue_before_battle last")
 
 
@@ -40,7 +40,10 @@ func _check_missing_dialogue_id_falls_back_safely() -> void:
 	var text := _read_text(TRAINER_NPC_SCRIPT)
 	_check_true(text.contains("if not configured_lines.is_empty():"), "TrainerNPC only uses configured dialogue lookup when lines exist")
 	_check_true(text.contains("if not metadata_lines.is_empty():"), "TrainerNPC only uses metadata dialogue lookup when lines exist")
-	_check_true(text.contains("falling back to dialogue_before_battle"), "TrainerNPC warns and falls back when dialogue lookup is empty")
+	_check_true(
+		text.contains("NpcDialogueService.resolve_lines("),
+		"TrainerNPC delegates empty dialogue lookup handling to the central resolver"
+	)
 
 
 func _check_existing_dialogue_before_battle_still_works() -> void:

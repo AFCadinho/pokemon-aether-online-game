@@ -28,7 +28,15 @@ func _init() -> void:
 
 func _check_base_npc_exports_dialogue_id() -> void:
 	var text := _read_text(BASE_NPC_SCRIPT)
-	_check_true(text.contains("@export var dialogue_id := \"\""), "BaseNPC exports dialogue_id")
+	_check_true(
+		text.contains("## Exceptional scene-specific override.")
+		and text.contains("@export var dialogue_id := \"\""),
+		"BaseNPC documents dialogue_id as an explicit override"
+	)
+	_check_true(
+		text.contains("@export var dialogue_id := \"\""),
+		"BaseNPC preserves legacy dialogue_id serialization order"
+	)
 
 
 func _check_base_npc_exports_definition_id() -> void:
@@ -47,28 +55,30 @@ func _check_base_npc_exports_definition_id() -> void:
 func _check_scene_defined_dialogue_id_is_allowed() -> void:
 	var text := _read_text(ROUTE_1_SCENE)
 	_check_true(
-		text.contains("dialogue_id = \"kanto_route_1_alder_intro\""),
-		"placed NPC can define dialogue_id in scene"
+		not text.contains("dialogue_id = \"kanto_route_1_alder_intro\""),
+		"Alder resolves normal dialogue from NPC metadata"
 	)
 
 
 func _check_metadata_populates_dialogue_id() -> void:
 	var text := _read_text(BASE_NPC_SCRIPT)
 	_check_true(
-		text.contains("var metadata_dialogue_id := str(metadata.get(\"dialogueId\", metadata.get(\"dialogue_id\", \"\"))).strip_edges()"),
+		text.contains("metadata_dialogue_id = str(")
+		and text.contains("metadata.get(\"dialogueId\", metadata.get(\"dialogue_id\", \"\"))"),
 		"BaseNPC reads dialogueId/dialogue_id from metadata"
 	)
 	_check_true(
-		text.contains("dialogue_id = metadata_dialogue_id"),
-		"metadata dialogueId populates BaseNPC.dialogue_id"
+		not text.contains("dialogue_id = metadata_dialogue_id"),
+		"metadata dialogueId does not overwrite a scene compatibility field"
 	)
 
 
 func _check_metadata_preserves_scene_dialogue_id_without_override() -> void:
 	var text := _read_text(BASE_NPC_SCRIPT)
 	_check_true(
-		text.contains("if not metadata_dialogue_id.is_empty():\n\t\tdialogue_id = metadata_dialogue_id"),
-		"scene dialogue_id is preserved when metadata has no dialogueId"
+		text.contains("func _get_dialogue_override_id() -> String:")
+		and text.contains("return dialogue_id.strip_edges()"),
+		"BaseNPC exposes the intentional scene override to new runtime logic"
 	)
 
 
@@ -130,6 +140,10 @@ func _check_existing_npc_behavior_entrypoints() -> void:
 	var dialogue_text := _read_text(DIALOGUE_NPC_SCRIPT)
 	_check_true(dialogue_text.contains("extends BaseNPC"), "DialogueNPC still extends BaseNPC")
 	_check_true(dialogue_text.contains("_ready_base_npc()"), "DialogueNPC still initializes BaseNPC")
+	_check_true(
+		dialogue_text.contains("NpcDialogueService.resolve_default_dialogue("),
+		"DialogueNPC delegates default dialogue selection to NpcDialogueService"
+	)
 
 	var trainer_text := _read_text(TRAINER_NPC_SCRIPT)
 	_check_true(trainer_text.contains("extends BaseNPC"), "TrainerNPC still extends BaseNPC")
@@ -142,7 +156,10 @@ func _check_existing_npc_behavior_entrypoints() -> void:
 	_check_true(gate_text.contains("func show_gate_dialogue()"), "GateNPC dialogue entrypoint remains")
 	_check_true(gate_text.contains("func _load_gate_metadata()"), "GateNPC metadata loading remains")
 	_check_true(gate_text.contains("blockedDialogueId"), "GateNPC supports blockedDialogueId")
-	_check_true(gate_text.contains("func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Array[String]) -> Array[String]:"), "GateNPC resolves dialogue IDs with inline fallback")
+	_check_true(
+		gate_text.contains("NpcDialogueService.resolve_lines("),
+		"GateNPC uses the central dialogue resolver"
+	)
 
 	var heal_text := _read_text(HEAL_NPC_SCRIPT)
 	_check_true(heal_text.contains("extends DialogueNPC"), "HealNPC still extends DialogueNPC")
@@ -166,7 +183,10 @@ func _check_existing_npc_behavior_entrypoints() -> void:
 		"HealNPC uses the system message without a duplicate success dialogue"
 	)
 	_check_true(heal_text.contains("func _load_npc_metadata_if_needed()"), "HealNPC metadata loading remains")
-	_check_true(heal_text.contains("func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Array[String]) -> Array[String]:"), "HealNPC resolves dialogue IDs with inline fallback")
+	_check_true(
+		heal_text.contains("NpcDialogueService.resolve_lines("),
+		"HealNPC uses the central dialogue resolver"
+	)
 	_check_true(heal_text.contains("successDialogueId"), "HealNPC supports successDialogueId")
 
 

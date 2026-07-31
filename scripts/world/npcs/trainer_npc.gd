@@ -115,7 +115,7 @@ func _get_dialogue_lines_from_trainer_metadata(trainer_metadata: Dictionary) -> 
 	return dialogue_lines
 
 func _resolve_intro_dialogue_lines(trainer_metadata: Dictionary) -> Array[String]:
-	var configured_dialogue_id := dialogue_id.strip_edges()
+	var configured_dialogue_id := _get_dialogue_override_id()
 	if not configured_dialogue_id.is_empty():
 		var configured_lines := await _get_dialogue_metadata_lines(configured_dialogue_id)
 		if not configured_lines.is_empty():
@@ -145,10 +145,11 @@ func _get_intro_dialogue_id_from_trainer_metadata(trainer_metadata: Dictionary) 
 	return ""
 
 func _get_dialogue_metadata_lines(intro_dialogue_id: String) -> Array[String]:
-	var lines: Array[String] = await DialogueMetadataService.get_lines(intro_dialogue_id)
-	if lines.is_empty():
-		push_warning("TrainerNPC: Dialogue metadata was empty for %s; falling back to dialogue_before_battle." % intro_dialogue_id)
-	return lines
+	return await NpcDialogueService.resolve_lines(
+		intro_dialogue_id,
+		[],
+		"TrainerNPC"
+	)
 
 func _fail_trainer_metadata(dialogue_box: Node, message: String) -> void:
 	push_error("TrainerNPC: %s" % message)

@@ -100,15 +100,11 @@ func _get_metadata_dialogue_id(metadata: Dictionary, camel_key: String, snake_ke
 
 
 func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Array[String]) -> Array[String]:
-	var resolved_dialogue_id := dialogue_reference_id.strip_edges()
-	if resolved_dialogue_id.is_empty():
-		return fallback_lines
-
-	var lines: Array[String] = await DialogueMetadataService.get_lines(resolved_dialogue_id)
-	if lines.is_empty():
-		push_warning("MarketAttendantNPC: Dialogue metadata was empty for %s; falling back to inline dialogue." % resolved_dialogue_id)
-		return fallback_lines
-	return lines
+	return await NpcDialogueService.resolve_lines(
+		dialogue_reference_id,
+		fallback_lines,
+		"MarketAttendantNPC"
+	)
 
 
 func _show_report_to_staff_message() -> void:

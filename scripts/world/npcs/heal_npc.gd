@@ -38,8 +38,9 @@ func interact_with_player(_player: Node2D) -> void:
 		await _show_report_to_staff_message()
 		return
 
-	if not dialogue_lines.is_empty() or not dialogue_id.strip_edges().is_empty():
-		await show_dialogue(dialogue_lines)
+	var intro_dialogue_lines := await _get_dialogue_metadata_lines()
+	if not intro_dialogue_lines.is_empty():
+		await show_dialogue(intro_dialogue_lines)
 
 	if _get_player_party().is_empty():
 		await show_dialogue(await _resolve_dialogue_lines(no_party_dialogue_id, no_party_dialogue_lines))
@@ -152,16 +153,11 @@ func _get_metadata_dialogue_id(metadata: Dictionary, camel_key: String, snake_ke
 
 
 func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Array[String]) -> Array[String]:
-	var resolved_dialogue_id := dialogue_reference_id.strip_edges()
-	if resolved_dialogue_id.is_empty():
-		return fallback_lines
-
-	var lines: Array[String] = await DialogueMetadataService.get_lines(resolved_dialogue_id)
-	if lines.is_empty():
-		push_warning("HealNPC: Dialogue metadata was empty for %s; falling back to inline dialogue." % resolved_dialogue_id)
-		return fallback_lines
-
-	return lines
+	return await NpcDialogueService.resolve_lines(
+		dialogue_reference_id,
+		fallback_lines,
+		"HealNPC"
+	)
 
 
 func _load_npc_metadata_if_needed() -> Dictionary:

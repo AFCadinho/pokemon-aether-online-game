@@ -43,7 +43,7 @@ func _check_overworld_pokemon_script() -> void:
 	_check_true(text.contains("@export var level := 5"), "OverworldPokemon exports level")
 	_check_true(text.contains("@export var auto_resolve_follower_sprite := true"), "OverworldPokemon auto-resolves follower sprites")
 	_check_true(text.contains("OverworldPokemonMetadataService.get_overworld_pokemon_metadata(overworld_pokemon_id)"), "OverworldPokemon loads backend metadata")
-	_check_true(text.contains("DialogueMetadataService.get_lines(dialogue_id)"), "OverworldPokemon resolves backend dialogue")
+	_check_true(text.contains("NpcDialogueService.resolve_lines("), "OverworldPokemon resolves backend dialogue centrally")
 	_check_true(text.contains("FollowerSpriteService.get_sprite_frames(resolved_species_id, false)"), "OverworldPokemon uses follower sprite animations")
 	_check_true(text.contains("sprite.sprite_frames = follower_sprite_frames"), "OverworldPokemon applies resolved follower sprite frames")
 	_check_true(text.contains("sprite.animation != animation_name or not sprite.is_playing()"), "OverworldPokemon does not restart active walk loops")

@@ -122,17 +122,22 @@ func _check_placed_dialogue_references(dialogue_catalog: Dictionary) -> void:
 	var dialogue_ids: Dictionary = dialogue_catalog.get("ids", {})
 	for npc: Dictionary in placed_npcs:
 		var properties: Dictionary = npc.get("properties", {})
-		var dialogue_id := str(properties.get("dialogue_id", "")).strip_edges()
+		var dialogue_id := str(
+			properties.get(
+				"dialogue_override_id",
+				properties.get("dialogue_id", "")
+			)
+		).strip_edges()
 		if dialogue_id.is_empty():
 			continue
 
 		if not has_catalog:
-			push_warning("%s dialogue_id=%s is backend-only; no local dialogue catalog found." % [_npc_context(npc), dialogue_id])
+			push_warning("%s dialogue override=%s is backend-only; no local dialogue catalog found." % [_npc_context(npc), dialogue_id])
 			continue
 
 		_check_true(
 			dialogue_ids.has(dialogue_id),
-			"%s dialogue_id exists in local dialogue catalog: %s" % [_npc_context(npc), dialogue_id]
+			"%s dialogue override exists in local dialogue catalog: %s" % [_npc_context(npc), dialogue_id]
 		)
 
 

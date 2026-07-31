@@ -50,7 +50,11 @@ func _set_idle_frame(direction: Vector2) -> void:
 func interact_with_player(_player: Node2D) -> void:
 	await _load_overworld_pokemon_metadata_if_needed()
 	if not dialogue_id.strip_edges().is_empty():
-		var dialogue_lines: Array[String] = await DialogueMetadataService.get_lines(dialogue_id)
+		var dialogue_lines: Array[String] = await NpcDialogueService.resolve_lines(
+			dialogue_id,
+			cry_dialogue_lines,
+			"OverworldPokemon"
+		)
 		if not dialogue_lines.is_empty():
 			await show_dialogue(dialogue_lines)
 			return

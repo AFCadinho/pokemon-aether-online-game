@@ -33,6 +33,7 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 
 @export var npc_id := ""
 @export var npc_definition_id := ""
+## Exceptional scene-specific override. Normal dialogue comes from NPC metadata.
 @export var dialogue_id := ""
 @export var display_name := ""
 @export var facing_direction := Vector2.DOWN
@@ -67,6 +68,7 @@ var nearby_player: Node2D
 var is_interacting := false
 var npc_metadata_loaded := false
 var npc_metadata_load_failed := false
+var metadata_dialogue_id := ""
 var metadata_display_name := ""
 var nameplate: Control
 var nameplate_background: Panel
@@ -690,9 +692,9 @@ func _get_npc_metadata_id() -> String:
 
 
 func _apply_npc_metadata(metadata: Dictionary) -> void:
-	var metadata_dialogue_id := str(metadata.get("dialogueId", metadata.get("dialogue_id", ""))).strip_edges()
-	if not metadata_dialogue_id.is_empty():
-		dialogue_id = metadata_dialogue_id
+	metadata_dialogue_id = str(
+		metadata.get("dialogueId", metadata.get("dialogue_id", ""))
+	).strip_edges()
 
 	var metadata_name := str(metadata.get("name", ""))
 	if (
@@ -711,6 +713,11 @@ func _apply_npc_metadata(metadata: Dictionary) -> void:
 func _on_locale_changed(_locale: String) -> void:
 	npc_metadata_loaded = false
 	npc_metadata_load_failed = false
+	metadata_dialogue_id = ""
+
+
+func _get_dialogue_override_id() -> String:
+	return dialogue_id.strip_edges()
 
 
 func _get_string_array(value: Variant) -> Array[String]:
