@@ -39,7 +39,10 @@ func interact_with_player(_player: Node2D) -> void:
 	var result: Dictionary = await inventory_service.call("claim_npc_item_reward", reward_id)
 	if not bool(result.get("success", false)):
 		push_warning("ItemGiftNPC: reward claim failed: %s" % str(result.get("error", "Unknown error")))
-		await show_dialogue(await _resolve_dialogue_lines(failure_dialogue_id, failure_dialogue_lines))
+		await GameErrorDialogService.show_response(
+			result,
+			"backend.error.reward_claim"
+		)
 		return
 
 	if bool(result.get("claimed", false)):

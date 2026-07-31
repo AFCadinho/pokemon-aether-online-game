@@ -142,6 +142,15 @@ static func error_code(response: Dictionary) -> String:
 	return ""
 
 
+static func support_id(response: Dictionary) -> String:
+	for source: Dictionary in _response_dictionaries(response):
+		for field: String in ["supportId", "support_id", "referenceId", "reference_id"]:
+			var value := str(source.get(field, "")).strip_edges().to_upper()
+			if _valid_support_id(value):
+				return value
+	return ""
+
+
 static func message(
 	response: Dictionary,
 	fallback_key: String = DEFAULT_FALLBACK_KEY,
@@ -165,8 +174,11 @@ static func decorate(
 	var decorated := response.duplicate(true)
 	var code := error_code(response)
 	var diagnostic := diagnostic_message(response)
+	var reference := support_id(response)
 	if not code.is_empty():
 		decorated["errorCode"] = code
+	if not reference.is_empty():
+		decorated["supportId"] = reference
 	if not diagnostic.is_empty():
 		decorated["diagnosticError"] = diagnostic
 	decorated["error"] = message(response, fallback_key, values)
@@ -209,6 +221,15 @@ static func _response_dictionaries(response: Dictionary) -> Array[Dictionary]:
 		if not source.is_empty():
 			sources.append(source)
 	return sources
+
+
+static func _valid_support_id(value: String) -> bool:
+	if value.length() != 15 or not value.begins_with("PA-"):
+		return false
+	for character: String in value.substr(3):
+		if not character in "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567":
+			return false
+	return true
 
 
 static func _format_values(response: Dictionary) -> Dictionary:

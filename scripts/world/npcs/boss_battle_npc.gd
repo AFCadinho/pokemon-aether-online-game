@@ -47,9 +47,12 @@ func interact_with_player(_player: Node2D) -> void:
 		await _show_report_to_staff_message()
 		return
 
-	var battle_started: bool = await world.start_trainer_battle(trainer_metadata)
-	if not battle_started:
-		await _show_report_to_staff_message()
+	var battle_result: Dictionary = await world.start_trainer_battle(trainer_metadata)
+	if not bool(battle_result.get("success", false)):
+		await GameErrorDialogService.show_response(
+			battle_result,
+			"backend.error.trainer_battle_start"
+		)
 
 
 func _show_difficulty_prompt() -> String:

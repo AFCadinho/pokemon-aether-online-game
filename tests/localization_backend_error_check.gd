@@ -93,6 +93,34 @@ func _run() -> void:
 		errors.call("diagnostic_message", unknown_response) == "database shard secret detail",
 		"raw server detail remains available for diagnostics"
 	)
+	var referenced_response := {
+		"detail": {
+			"code": "service_error",
+			"message": "private upstream failure",
+			"supportId": "PA-ABCDEFGH2345",
+		},
+	}
+	_check(
+		errors.call("support_id", referenced_response) == "PA-ABCDEFGH2345",
+		"safe support reference is extracted"
+	)
+	_check(
+		errors.call("support_id", {"supportId": "PA-ABC]\nINJECTED"}) == "",
+		"malformed support reference is rejected"
+	)
+	var dialog_service := root.get_node_or_null("GameErrorDialogService")
+	_check(dialog_service != null, "GameErrorDialogService is available")
+	if dialog_service != null:
+		var referenced_lines: Array = dialog_service.call("response_lines", referenced_response)
+		_check(referenced_lines.size() == 2, "reportable error includes message and reference")
+		_check(
+			str(referenced_lines[1]) == "Referentie: PA-ABCDEFGH2345",
+			"support reference is localized"
+		)
+		_check(
+			not "\n".join(referenced_lines).contains("private upstream"),
+			"dialogue never exposes diagnostic server text"
+		)
 	var decorated: Dictionary = errors.call("decorate", coded_response)
 	_check(decorated.get("errorCode") == "guild_name_unavailable", "decorated result preserves stable code")
 	_check(decorated.has("diagnosticError"), "decorated result preserves diagnostic message separately")

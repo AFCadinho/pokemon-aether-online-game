@@ -36,7 +36,10 @@ func interact_with_player(_player: Node2D) -> void:
 	var result: Dictionary = await market_service.call("load_market", market_id)
 	if not bool(result.get("success", false)):
 		push_warning("MarketAttendantNPC: market load failed: %s" % str(result.get("error", "Unknown error")))
-		await show_dialogue(await _resolve_dialogue_lines(failure_dialogue_id, failure_dialogue_lines))
+		await GameErrorDialogService.show_response(
+			result,
+			"backend.error.market_load"
+		)
 		return
 
 	var market: Dictionary = _dictionary_from_value(result.get("market", {}))
@@ -48,7 +51,10 @@ func interact_with_player(_player: Node2D) -> void:
 			return
 		var inventory_result: Dictionary = await inventory_service.call("load_inventory")
 		if not bool(inventory_result.get("success", false)):
-			await show_dialogue(await _resolve_dialogue_lines(failure_dialogue_id, failure_dialogue_lines))
+			await GameErrorDialogService.show_response(
+				inventory_result,
+				"backend.error.market_load"
+			)
 			return
 		inventory_items = _array_from_value(inventory_result.get("items", []))
 

@@ -55,7 +55,10 @@ func interact_with_player(_player: Node2D) -> void:
 	var result: Dictionary = await party_heal_service.call("heal_current_party_and_save", respawn_point)
 	if not bool(result.get("success", false)):
 		push_warning("HealNPC: party heal failed: %s" % str(result.get("error", "Unknown error")))
-		await show_dialogue(await _resolve_dialogue_lines(failure_dialogue_id, failure_dialogue_lines))
+		await GameErrorDialogService.show_response(
+			result,
+			"backend.error.party_heal"
+		)
 		return
 
 	if bool(result.get("changed", false)):

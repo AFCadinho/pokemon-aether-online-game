@@ -60,7 +60,7 @@ func _enter_authorized_transition(player: Node2D, world: Node, normalized_transi
 	if not bool(response.get("success", false)):
 		world.call("cancel_authorized_teleport")
 		is_transitioning = false
-		await _show_transition_error()
+		await _show_transition_error(response)
 		return
 
 	if not bool(response.get("allowed", false)):
@@ -112,9 +112,15 @@ func _present_denied_transition(
 	GameState.unlock_overworld_input()
 
 
-func _show_transition_error() -> void:
+func _show_transition_error(response: Dictionary = {}) -> void:
 	GameState.lock_overworld_input()
-	await GameErrorDialogService.show_report_to_staff_message()
+	if response.is_empty():
+		await GameErrorDialogService.show_report_to_staff_message()
+	else:
+		await GameErrorDialogService.show_response(
+			response,
+			"backend.error.world_transition"
+		)
 	GameState.unlock_overworld_input()
 
 

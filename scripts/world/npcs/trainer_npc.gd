@@ -90,16 +90,23 @@ func show_intro_dialogue() -> void:
 	dialogue_box.start_dialogue(dialogue_lines, speaker_name, mugshot)
 	await dialogue_box.dialogue_finished
 	
-	var battle_started := await start_trainer_battle(trainer_metadata)
-	if not battle_started:
-		await _show_generic_trainer_error_dialogue(dialogue_box)
+	var battle_result: Dictionary = await start_trainer_battle(trainer_metadata)
+	if not bool(battle_result.get("success", false)):
+		await GameErrorDialogService.show_response(
+			battle_result,
+			"backend.error.trainer_battle_start",
+			dialogue_box
+		)
 	
-func start_trainer_battle(trainer_metadata: Dictionary) -> bool:
+func start_trainer_battle(trainer_metadata: Dictionary) -> Dictionary:
 	var world := get_tree().get_first_node_in_group("world")
 	if world == null or not world.has_method("start_trainer_battle"):
 		push_warning("TrainerNPC: World cannot start trainer battle.")
 		GameState.unlock_overworld_input()
-		return false
+		return {
+			"success": false,
+			"code": "trainer_battle_world_unavailable",
+		}
 
 	return await world.start_trainer_battle(trainer_metadata)
 

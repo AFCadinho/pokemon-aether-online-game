@@ -2264,16 +2264,22 @@ func _show_wild_encounter_start_error(response: Dictionary) -> void:
 			if not message_lines.is_empty():
 				await GameErrorDialogService.show_message(message_lines)
 			else:
-				await GameErrorDialogService.show_report_to_staff_message()
+				await GameErrorDialogService.show_response(response)
 
-func start_trainer_battle(trainer_data: Dictionary) -> bool:
+func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 	if is_in_battle:
-		return false
+		return {
+			"success": false,
+			"code": "battle_already_active",
+		}
 
 	var trainer_id := str(trainer_data.get("id", ""))
 	if trainer_id == "":
 		push_warning("World.start_trainer_battle failed: trainer has no id.")
-		return false
+		return {
+			"success": false,
+			"code": "trainer_battle_configuration_invalid",
+		}
 
 	is_in_battle = true
 	active_battle_kind = "trainer"
@@ -2286,14 +2292,17 @@ func start_trainer_battle(trainer_data: Dictionary) -> bool:
 	if not response.get("success", false):
 		push_warning("World.start_trainer_battle failed: %s" % str(response.get("error", "Unknown error")))
 		_abort_battle_start()
-		return false
+		return response
 	active_battle_id = str(response.get("battleId", ""))
 	_save_player_activity_state_deferred("battle", _get_current_activity_context())
 
 	if not _mount_battle_ui():
 		push_error("World.start_trainer_battle failed: could not load battle scene.")
 		_abort_battle_start()
-		return false
+		return {
+			"success": false,
+			"code": "battle_ui_unavailable",
+		}
 
 	MusicManager.play_trainer_battle_music()
 
@@ -2303,7 +2312,7 @@ func start_trainer_battle(trainer_data: Dictionary) -> bool:
 		response
 	)
 
-	return true
+	return {"success": true, "battleId": active_battle_id}
 
 func start_pvp_battle_from_response(response: Dictionary) -> bool:
 	if is_in_battle:

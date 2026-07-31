@@ -2,14 +2,38 @@ extends Node
 
 class_name GameErrorDialogServiceNode
 
-const REPORT_TO_STAFF_LINES: Array[String] = [
-	"Something is wrong.",
-	"Please report this to staff.",
-]
 const DEFAULT_SPEAKER := "System"
 
 func show_report_to_staff_message(dialogue_box: Node = null) -> void:
-	await show_message(REPORT_TO_STAFF_LINES, DEFAULT_SPEAKER, dialogue_box)
+	await show_message(
+		[LocalizationManager.text("backend.error.unexpected_report")],
+		DEFAULT_SPEAKER,
+		dialogue_box
+	)
+
+
+func show_response(
+	response: Dictionary,
+	fallback_key: String = "backend.error.generic",
+	dialogue_box: Node = null
+) -> void:
+	await show_message(response_lines(response, fallback_key), DEFAULT_SPEAKER, dialogue_box)
+
+
+func response_lines(
+	response: Dictionary,
+	fallback_key: String = "backend.error.generic"
+) -> Array[String]:
+	var lines: Array[String] = [
+		BackendErrorLocalizationService.message(response, fallback_key),
+	]
+	var reference := BackendErrorLocalizationService.support_id(response)
+	if not reference.is_empty():
+		lines.append(LocalizationManager.text(
+			"backend.error.reference",
+			{"reference": reference}
+		))
+	return lines
 
 
 func show_message(lines: Array[String], speaker: String = DEFAULT_SPEAKER, dialogue_box: Node = null) -> void:
