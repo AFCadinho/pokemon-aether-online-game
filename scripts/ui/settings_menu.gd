@@ -106,10 +106,12 @@ var privacy_dialog_message_label: Label
 var privacy_password_input: LineEdit
 var privacy_delete_confirmation_input: LineEdit
 var privacy_dialog_status_label: Label
+var privacy_open_folder_button: Button
 var privacy_confirm_button: Button
 var privacy_cancel_button: Button
 var privacy_action := ""
 var privacy_action_busy := false
+var privacy_last_export_path := ""
 var account_status_key := ""
 var account_status_values: Dictionary = {}
 var account_status_is_error := false
@@ -853,6 +855,13 @@ func _setup_privacy_dialog() -> void:
 	button_row.add_theme_constant_override("separation", 8)
 	layout.add_child(button_row)
 
+	privacy_open_folder_button = Button.new()
+	_set_localized_text(privacy_open_folder_button, "ui.settings.privacy.open_folder")
+	privacy_open_folder_button.custom_minimum_size = Vector2(112, 32)
+	privacy_open_folder_button.visible = false
+	privacy_open_folder_button.pressed.connect(_on_privacy_open_folder_pressed)
+	button_row.add_child(privacy_open_folder_button)
+
 	var spacer := Control.new()
 	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button_row.add_child(spacer)
@@ -1516,6 +1525,8 @@ func _show_privacy_dialog(action: String) -> void:
 	privacy_action = action
 	privacy_password_input.clear()
 	privacy_delete_confirmation_input.clear()
+	privacy_last_export_path = ""
+	privacy_open_folder_button.visible = false
 	privacy_delete_confirmation_input.visible = action == "delete"
 	_set_privacy_dialog_status("")
 	_refresh_privacy_dialog_copy()
@@ -1542,6 +1553,8 @@ func _hide_privacy_dialog() -> void:
 	privacy_action = ""
 	privacy_password_input.clear()
 	privacy_delete_confirmation_input.clear()
+	privacy_last_export_path = ""
+	privacy_open_folder_button.visible = false
 	_set_privacy_dialog_status("")
 
 
@@ -1555,6 +1568,9 @@ func _privacy_action_confirmed() -> void:
 	if privacy_action == "delete" and privacy_delete_confirmation_input.text != "DELETE":
 		_set_privacy_dialog_status_key("ui.settings.privacy.error.confirmation", true)
 		return
+	if privacy_action == "export":
+		privacy_last_export_path = ""
+		privacy_open_folder_button.visible = false
 
 	_set_privacy_controls_disabled(true)
 	_set_privacy_dialog_status_key("ui.settings.privacy.%s_working" % privacy_action)
@@ -1591,7 +1607,21 @@ func _privacy_action_confirmed() -> void:
 		false,
 		{"path": str(export_result.get("path", ""))}
 	)
+	privacy_last_export_path = str(export_result.get("path", ""))
+	privacy_open_folder_button.visible = not privacy_last_export_path.is_empty()
 	privacy_password_input.clear()
+
+
+func _on_privacy_open_folder_pressed() -> void:
+	if privacy_last_export_path.is_empty():
+		return
+	var open_error := OS.shell_show_in_file_manager(privacy_last_export_path)
+	if open_error != OK:
+		_set_privacy_dialog_status_key(
+			"ui.settings.privacy.error.open_folder",
+			true,
+			{"path": privacy_last_export_path}
+		)
 
 
 func _save_privacy_export(document_value: Variant) -> Dictionary:
@@ -1632,6 +1662,7 @@ func _set_privacy_controls_disabled(disabled: bool) -> void:
 	for button: Button in [
 		privacy_export_button,
 		delete_account_button,
+		privacy_open_folder_button,
 		privacy_confirm_button,
 		privacy_cancel_button,
 	]:
