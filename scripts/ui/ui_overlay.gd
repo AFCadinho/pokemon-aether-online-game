@@ -41,6 +41,8 @@ const CHAT_SEPARATOR_COLOR := "#778194"
 const CHAT_MESSAGE_COLOR := "#d7dce8"
 const CHAT_SYSTEM_LABEL_COLOR := "#d8b767"
 const CHAT_SYSTEM_MESSAGE_COLOR := "#f0d992"
+const CHAT_WARNING_LABEL_COLOR := "#ff7a82"
+const CHAT_WARNING_MESSAGE_COLOR := "#ffd3d6"
 const CHAT_ALL_SECONDARY_CONTENT_ALPHA := 0.68
 const CHAT_TAB_ALL := "all"
 const CHAT_TAB_GENERAL := "general"
@@ -68,6 +70,7 @@ const CHAT_TAB_LABELS := {
 }
 const CHAT_CATEGORY_USER := "user"
 const CHAT_CATEGORY_SYSTEM := "system"
+const CHAT_CATEGORY_SYSTEM_WARNING := "system_warning"
 const CHAT_CHANNEL_GLOBAL := "global"
 const CHAT_CHANNEL_MAP := "map"
 const CHAT_CHANNEL_TRADE := "trade"
@@ -638,6 +641,9 @@ var pvp_match_countdown_flash_dim: ColorRect
 var pvp_match_countdown_flash_tween: Tween
 var pvp_match_countdown_timer_label: Label
 var pvp_match_countdown_status_label: Label
+var session_logout_banner: Control
+var session_logout_banner_message_label: Label
+var session_logout_banner_timer_label: Label
 var pvp_bans_status_label: Label
 var pvp_bans_metadata_list: VBoxContainer
 var pvp_bans_list: VBoxContainer
@@ -1243,6 +1249,7 @@ func _ready() -> void:
 	_setup_pvp_room_popup()
 	_setup_pvp_queue_compact_panel()
 	_setup_pvp_match_countdown_overlay()
+	_setup_session_logout_banner()
 	_setup_pvp_mode_menu()
 	_setup_dev_add_item_tools()
 	_setup_dev_tools_menu_surface()
@@ -1432,6 +1439,7 @@ func _on_locale_changed(_locale: String) -> void:
 	_refresh_mail_localized_ui()
 	_refresh_pc_localized_ui()
 	_refresh_pvp_localized_ui()
+	_refresh_session_logout_banner()
 	_refresh_trainer_card_localized_ui()
 	_refresh_chat_localized_ui()
 	_refresh_buffs_localized_ui()
@@ -10200,6 +10208,114 @@ func _make_pvp_match_countdown_style() -> StyleBoxFlat:
 	style.shadow_size = 18
 	style.shadow_offset = Vector2(0, 6)
 	return style
+
+func _make_session_logout_banner_style() -> StyleBoxFlat:
+	var style := _make_panel_style(Color("#210b10f7"), UI_DANGER, 8, 2)
+	style.shadow_color = Color(0, 0, 0, 0.52)
+	style.shadow_size = 14
+	style.shadow_offset = Vector2(0, 5)
+	return style
+
+func _setup_session_logout_banner() -> void:
+	session_logout_banner = Control.new()
+	session_logout_banner.name = "SessionLogoutBanner"
+	session_logout_banner.visible = false
+	session_logout_banner.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	session_logout_banner.z_index = UI_MODAL_Z_INDEX + 40
+	session_logout_banner.z_as_relative = false
+	session_logout_banner.set_anchors_preset(Control.PRESET_FULL_RECT)
+	root_control.add_child(session_logout_banner)
+
+	var panel := PanelContainer.new()
+	panel.name = "WarningPanel"
+	panel.custom_minimum_size = Vector2(680, 86)
+	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_theme_stylebox_override("panel", _make_session_logout_banner_style())
+	session_logout_banner.add_child(panel)
+
+	var margin := MarginContainer.new()
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	margin.add_theme_constant_override("margin_left", 14)
+	margin.add_theme_constant_override("margin_top", 10)
+	margin.add_theme_constant_override("margin_right", 16)
+	margin.add_theme_constant_override("margin_bottom", 10)
+	panel.add_child(margin)
+
+	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.alignment = BoxContainer.ALIGNMENT_CENTER
+	row.add_theme_constant_override("separation", 14)
+	margin.add_child(row)
+
+	var alert_badge := PanelContainer.new()
+	alert_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	alert_badge.custom_minimum_size = Vector2(44, 44)
+	alert_badge.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#3a1017f5"), UI_DANGER, 8, 2)
+	)
+	row.add_child(alert_badge)
+
+	var alert_label := Label.new()
+	alert_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	alert_label.text = "!"
+	alert_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	alert_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	alert_label.add_theme_font_size_override("font_size", 28)
+	alert_label.add_theme_color_override("font_color", UI_DANGER)
+	alert_badge.add_child(alert_label)
+
+	var text_stack := VBoxContainer.new()
+	text_stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	text_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	text_stack.add_theme_constant_override("separation", 2)
+	row.add_child(text_stack)
+
+	var title := Label.new()
+	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_set_localized_control_property(title, "text", "ui.session.warning.title")
+	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	title.add_theme_font_size_override("font_size", 17)
+	title.add_theme_color_override("font_color", UI_DANGER)
+	text_stack.add_child(title)
+
+	session_logout_banner_message_label = Label.new()
+	session_logout_banner_message_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	session_logout_banner_message_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	session_logout_banner_message_label.max_lines_visible = 2
+	session_logout_banner_message_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	session_logout_banner_message_label.add_theme_font_size_override("font_size", 14)
+	session_logout_banner_message_label.add_theme_color_override("font_color", UI_TEXT)
+	text_stack.add_child(session_logout_banner_message_label)
+
+	session_logout_banner_timer_label = Label.new()
+	session_logout_banner_timer_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	session_logout_banner_timer_label.custom_minimum_size = Vector2(128, 0)
+	session_logout_banner_timer_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	session_logout_banner_timer_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	session_logout_banner_timer_label.add_theme_font_size_override("font_size", 20)
+	session_logout_banner_timer_label.add_theme_color_override("font_color", UI_DANGER)
+	row.add_child(session_logout_banner_timer_label)
+
+func _position_session_logout_banner() -> void:
+	if session_logout_banner == null or not session_logout_banner.visible:
+		return
+	var panel := session_logout_banner.get_node_or_null("WarningPanel") as PanelContainer
+	if panel == null:
+		return
+	var viewport_size := get_viewport().get_visible_rect().size
+	var panel_size := Vector2(
+		minf(680.0, maxf(300.0, viewport_size.x - 24.0)),
+		86.0
+	)
+	var top_offset := (
+		132.0
+		if pvp_match_countdown_overlay != null and pvp_match_countdown_overlay.visible
+		else 16.0
+	)
+	panel.custom_minimum_size = panel_size
+	panel.position = Vector2((viewport_size.x - panel_size.x) * 0.5, top_offset)
+	panel.size = panel_size
 
 func _setup_pvp_match_countdown_overlay() -> void:
 	pvp_match_countdown_overlay = Control.new()
@@ -23136,7 +23252,11 @@ func _apply_chat_row_emphasis(row: Node) -> void:
 	var category: String = str(row.get_meta("chat_category", CHAT_CATEGORY_USER))
 	var is_secondary_in_all := (
 		active_chat_tab == CHAT_TAB_ALL
-		and category not in [CHAT_CHANNEL_GLOBAL, CHAT_CATEGORY_USER]
+		and category not in [
+			CHAT_CHANNEL_GLOBAL,
+			CHAT_CATEGORY_USER,
+			CHAT_CATEGORY_SYSTEM_WARNING,
+		]
 	)
 	var content_alpha := CHAT_ALL_SECONDARY_CONTENT_ALPHA if is_secondary_in_all else 1.0
 	for node_name: StringName in [&"RoleBadge", &"SenderName", &"MessageText"]:
@@ -34683,6 +34803,8 @@ func _add_chat_message(
 	entry.clear()
 	if use_bbcode:
 		entry.append_text(text)
+	elif category == CHAT_CATEGORY_SYSTEM_WARNING:
+		entry.append_text(_format_system_warning_chat_message(text))
 	else:
 		entry.append_text(_format_system_chat_message(text))
 	entry.fit_content = true
@@ -34692,6 +34814,9 @@ func _add_chat_message(
 
 func add_system_message(text: String) -> void:
 	_add_chat_message(text)
+
+func add_system_warning(text: String) -> void:
+	_add_chat_message(text, false, CHAT_CATEGORY_SYSTEM_WARNING)
 
 func add_system_pokemon_message(text: String, pokemon_attachments: Array = []) -> void:
 	var attachments: Array[Dictionary] = []
@@ -34757,6 +34882,15 @@ func _format_system_chat_message(text: String) -> String:
 		CHAT_SYSTEM_LABEL_COLOR,
 		CHAT_SEPARATOR_COLOR,
 		CHAT_SYSTEM_MESSAGE_COLOR,
+		_escape_bbcode(text),
+	]
+
+func _format_system_warning_chat_message(text: String) -> String:
+	return "[color=%s][b]%s[/b][/color][color=%s]:[/color] [color=%s]%s[/color]" % [
+		CHAT_WARNING_LABEL_COLOR,
+		_escape_bbcode(LocalizationManager.text("ui.chat.warning.label")),
+		CHAT_SEPARATOR_COLOR,
+		CHAT_WARNING_MESSAGE_COLOR,
 		_escape_bbcode(text),
 	]
 
@@ -35226,6 +35360,8 @@ func _pokemon_preview_payload_with_current_trainer(
 
 
 func _should_show_chat_category(category: String) -> bool:
+	if category == CHAT_CATEGORY_SYSTEM_WARNING:
+		return true
 	if category == CHAT_CATEGORY_SYSTEM:
 		return active_chat_tab == CHAT_TAB_ALL or active_chat_tab == CHAT_TAB_SYSTEM
 	if active_chat_tab == CHAT_TAB_ALL:
@@ -35540,15 +35676,14 @@ func _start_session_logout_countdown(message: Dictionary) -> void:
 	session_logout_message = str(message.get("message", "")).strip_edges()
 	var remaining := maxi(0, int(ceil(execute_at_unix - Time.get_unix_time_from_system())))
 	session_logout_last_announced_second = remaining
-	add_system_message(LocalizationManager.text(
-		"ui.session.logout_countdown",
-		{"message": session_logout_message, "seconds": remaining}
-	))
+	_show_session_logout_banner(remaining)
+	add_system_warning(_session_logout_countdown_text(remaining))
 
 
 func _refresh_session_logout_countdown() -> void:
 	if session_logout_operation_id == "" or session_logout_execute_at_unix <= 0.0:
 		return
+	_position_session_logout_banner()
 	var remaining := maxi(
 		0,
 		int(ceil(session_logout_execute_at_unix - Time.get_unix_time_from_system()))
@@ -35556,13 +35691,71 @@ func _refresh_session_logout_countdown() -> void:
 	if remaining == session_logout_last_announced_second:
 		return
 	session_logout_last_announced_second = remaining
-	if remaining in [300, 120, 60, 30, 10, 5, 4, 3, 2, 1]:
-		add_system_message(LocalizationManager.text(
-			"ui.session.logout_countdown",
-			{"message": session_logout_message, "seconds": remaining}
-		))
-	elif remaining == 0:
-		add_system_message(LocalizationManager.text("ui.session.logout_now"))
+	_update_session_logout_banner(remaining)
+	if remaining == 0:
+		add_system_warning(LocalizationManager.text("ui.session.logout_now"))
+
+
+func _show_session_logout_banner(remaining: int) -> void:
+	if session_logout_banner == null:
+		return
+	session_logout_banner.visible = true
+	session_logout_banner.move_to_front()
+	_position_session_logout_banner()
+	_update_session_logout_banner(remaining)
+
+
+func _hide_session_logout_banner() -> void:
+	if session_logout_banner != null:
+		session_logout_banner.visible = false
+
+
+func _refresh_session_logout_banner() -> void:
+	if session_logout_operation_id == "" or session_logout_execute_at_unix <= 0.0:
+		return
+	var remaining := maxi(
+		0,
+		int(ceil(session_logout_execute_at_unix - Time.get_unix_time_from_system()))
+	)
+	_update_session_logout_banner(remaining)
+
+
+func _update_session_logout_banner(remaining: int) -> void:
+	if session_logout_banner_message_label != null:
+		session_logout_banner_message_label.text = _session_logout_display_message()
+	if session_logout_banner_timer_label != null:
+		session_logout_banner_timer_label.text = (
+			LocalizationManager.text("ui.session.logout_now")
+			if remaining <= 0
+			else LocalizationManager.text(
+				"ui.session.warning.timer",
+				{"time": _format_session_logout_time(remaining)}
+			)
+		)
+
+
+func _session_logout_display_message() -> String:
+	var message := session_logout_message.strip_edges()
+	if message != "":
+		return message
+	return LocalizationManager.text("ui.session.warning.default_message")
+
+
+func _session_logout_countdown_text(remaining: int) -> String:
+	return LocalizationManager.text(
+		"ui.session.logout_countdown",
+		{
+			"message": _session_logout_display_message(),
+			"seconds": remaining,
+		}
+	)
+
+
+func _format_session_logout_time(remaining: int) -> String:
+	var safe_remaining := maxi(0, remaining)
+	var minutes := int(safe_remaining / 60)
+	var seconds := safe_remaining % 60
+	return "%02d:%02d" % [minutes, seconds]
 
 
 func _cancel_session_logout_countdown(event: Dictionary) -> void:
@@ -35574,6 +35767,7 @@ func _cancel_session_logout_countdown(event: Dictionary) -> void:
 	session_logout_execute_at_unix = 0.0
 	session_logout_message = ""
 	session_logout_last_announced_second = -1
+	_hide_session_logout_banner()
 	add_system_message(
 		message
 		if message.strip_edges() != ""
