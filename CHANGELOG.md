@@ -1,5 +1,26 @@
 # Changelog
 
+## Unreleased
+
+**Added**
+
+- You can now attach Pokédollars to player mail, alongside items and Pokémon. The amount and sending fee are taken from your Wallet when the mail is sent.
+- Added email verification for new accounts and password recovery for accounts with a verified email address. The login screen now includes a Forgot Password link.
+- New Trainers can now receive a one-time welcome mail, including any starter rewards attached to it.
+- Added a Diagnostics screen to the launcher. It lets you copy useful troubleshooting information or open the log folder when you need help.
+
+**Changed**
+
+- Areas that are closed or still in development now show a clear in-world message when you try to enter them.
+- Important session notices now remain visible and show a countdown when your game session is about to end.
+- The launcher now retries a download once if its safety check fails and gives clearer instructions if the problem continues.
+- Unexpected problems during activities such as Trainer battles, healing, claiming rewards, shopping, or entering another area now show a clearer message and a reference you can share with staff.
+- Improved the consistency of translated NPC dialogue throughout the world.
+
+**Fixed**
+
+- Fixed new Trainers sometimes being unable to save their starting position or leave the Player's House for Pallet Town correctly.
+
 ## 0.3.38 - 2026-07-30
 
 **Added**
