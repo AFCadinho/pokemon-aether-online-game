@@ -791,6 +791,8 @@ var staff_teleport_send_destination_results: ItemList
 var staff_teleport_safe_destination_status_label: Label
 var staff_teleport_filtered_safe_destinations: Array = []
 var staff_teleport_send_player_button: Button
+var staff_teleport_send_confirmation: ConfirmationDialog
+var staff_teleport_pending_send_request: Dictionary = {}
 var staff_teleport_maps: Array = []
 var staff_teleport_filtered_destinations: Array = []
 var staff_teleport_safe_maps: Array = []
@@ -7207,6 +7209,17 @@ func _setup_staff_impersonation_tools() -> void:
 	teleport_shell_style.border_color = Color("#55799acc")
 	staff_teleport_popup.add_theme_stylebox_override("panel", teleport_shell_style)
 	root_control.add_child(staff_teleport_popup)
+
+	staff_teleport_send_confirmation = ConfirmationDialog.new()
+	staff_teleport_send_confirmation.name = "StaffTeleportSendConfirmation"
+	staff_teleport_send_confirmation.exclusive = true
+	staff_teleport_send_confirmation.confirmed.connect(
+		_on_staff_teleport_send_player_confirmed
+	)
+	staff_teleport_send_confirmation.canceled.connect(
+		_on_staff_teleport_send_player_confirmation_canceled
+	)
+	root_control.add_child(staff_teleport_send_confirmation)
 
 	var teleport_margin := MarginContainer.new()
 	teleport_margin.add_theme_constant_override("margin_left", 16)
@@ -24596,6 +24609,9 @@ func _on_staff_teleport_button_pressed() -> void:
 
 func _hide_staff_teleport_popup() -> void:
 	staff_teleport_dragging = false
+	staff_teleport_pending_send_request.clear()
+	if staff_teleport_send_confirmation != null:
+		staff_teleport_send_confirmation.hide()
 	if staff_teleport_popup != null:
 		staff_teleport_popup.visible = false
 		_deactivate_ui_panel(staff_teleport_popup)
@@ -25139,6 +25155,55 @@ func _on_staff_teleport_send_player_pressed() -> void:
 			staff_teleport_player_reason_input.grab_focus()
 		return
 
+	staff_teleport_pending_send_request = {
+		"targetPlayerId": target_player_id,
+		"mapId": map_id,
+		"pointId": point_id,
+		"reason": reason,
+		"playerLabel": str(
+			selected_player.get(
+				"displayName",
+				selected_player.get("username", "player")
+			)
+		),
+		"destinationLabel": str(
+			selected_point.get("label", selected_point.get("id", "safe location"))
+		),
+	}
+	if staff_teleport_send_confirmation == null:
+		await _on_staff_teleport_send_player_confirmed()
+		return
+	staff_teleport_send_confirmation.title = LocalizationManager.text(
+		"ui.staff.teleport.move_player_safely"
+	)
+	staff_teleport_send_confirmation.dialog_text = "%s\n\n%s  →  %s" % [
+		LocalizationManager.text("ui.staff.teleport.move_player_warning"),
+		staff_teleport_pending_send_request.get("playerLabel", "player"),
+		staff_teleport_pending_send_request.get(
+			"destinationLabel",
+			"safe location"
+		),
+	]
+	staff_teleport_send_confirmation.popup_centered(Vector2i(520, 240))
+
+
+func _on_staff_teleport_send_player_confirmation_canceled() -> void:
+	staff_teleport_pending_send_request.clear()
+
+
+func _on_staff_teleport_send_player_confirmed() -> void:
+	if staff_teleport_pending_send_request.is_empty() or staff_teleport_in_flight:
+		return
+	var send_request := staff_teleport_pending_send_request.duplicate(true)
+	staff_teleport_pending_send_request.clear()
+	var target_player_id := int(send_request.get("targetPlayerId", 0))
+	var map_id := str(send_request.get("mapId", "")).strip_edges()
+	var point_id := str(send_request.get("pointId", "")).strip_edges()
+	var reason := str(send_request.get("reason", "")).strip_edges()
+	if target_player_id <= 0 or map_id == "" or point_id == "":
+		_add_chat_message("Teleport request is no longer valid.")
+		return
+
 	staff_teleport_in_flight = true
 	if staff_teleport_to_player_button != null:
 		staff_teleport_to_player_button.disabled = true
@@ -25166,10 +25231,26 @@ func _on_staff_teleport_send_player_pressed() -> void:
 
 	_hide_staff_teleport_popup()
 	_hide_staff_tools_popup()
-	_add_chat_message("Sent %s to %s." % [
-		str(selected_player.get("displayName", selected_player.get("username", "player"))),
-		str(selected_point.get("label", selected_point.get("id", "safe location"))),
-	])
+	var command_status := str(result.get("status", "queued")).strip_edges().to_lower()
+	var player_label := str(send_request.get("playerLabel", "player"))
+	var destination_label := str(
+		send_request.get("destinationLabel", "safe location")
+	)
+	if command_status == "applied":
+		_add_chat_message("%s was already moved to %s." % [
+			player_label,
+			destination_label,
+		])
+	elif command_status == "delivered":
+		_add_chat_message("Move delivered to %s; waiting for application at %s." % [
+			player_label,
+			destination_label,
+		])
+	else:
+		_add_chat_message("Move queued for %s to %s." % [
+			player_label,
+			destination_label,
+		])
 
 
 func _get_selected_staff_teleport_map() -> Dictionary:
@@ -35099,6 +35180,9 @@ func _on_authorized_teleport_received(state: Dictionary, _reason: String) -> voi
 
 	if not bool(apply_result.get("success", false)):
 		_add_chat_message("A staff teleport was saved, but applying it failed: %s" % str(apply_result.get("error", "Unknown error")))
+		return
+	if bool(apply_result.get("queued", false)):
+		_add_chat_message("A staff member scheduled a safe move. It will apply as soon as your current activity finishes.")
 		return
 
 	_hide_staff_teleport_popup()

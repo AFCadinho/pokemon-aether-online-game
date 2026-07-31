@@ -59,7 +59,7 @@ func load_safe_teleport_points() -> Dictionary:
 	}
 
 
-func teleport_self(map_id: String, point_id: String, reason: String = "") -> Dictionary:
+func teleport_self(map_id: String, point_id: String, reason: String = "", request_id: String = "") -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {
 			"success": false,
@@ -67,6 +67,7 @@ func teleport_self(map_id: String, point_id: String, reason: String = "") -> Dic
 		}
 
 	var payload := {
+		"requestId": _request_id(request_id),
 		"mapId": map_id.strip_edges(),
 		"pointId": point_id.strip_edges(),
 	}
@@ -88,6 +89,9 @@ func teleport_self(map_id: String, point_id: String, reason: String = "") -> Dic
 	return {
 		"success": true,
 		"state": _dictionary_from_value(body.get("state", {})),
+		"commandId": str(body.get("commandId", "")),
+		"status": str(body.get("status", "")),
+		"idempotent": bool(body.get("idempotent", false)),
 	}
 
 
@@ -115,7 +119,7 @@ func load_online_teleport_players() -> Dictionary:
 	}
 
 
-func teleport_to_player(target_player_id: int, reason: String = "") -> Dictionary:
+func teleport_to_player(target_player_id: int, reason: String = "", request_id: String = "") -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {
 			"success": false,
@@ -123,6 +127,7 @@ func teleport_to_player(target_player_id: int, reason: String = "") -> Dictionar
 		}
 
 	var payload := {
+		"requestId": _request_id(request_id),
 		"targetPlayerId": target_player_id,
 	}
 	var cleaned_reason := reason.strip_edges()
@@ -143,10 +148,19 @@ func teleport_to_player(target_player_id: int, reason: String = "") -> Dictionar
 	return {
 		"success": true,
 		"state": _dictionary_from_value(body.get("state", {})),
+		"commandId": str(body.get("commandId", "")),
+		"status": str(body.get("status", "")),
+		"idempotent": bool(body.get("idempotent", false)),
 	}
 
 
-func teleport_player(target_player_id: int, map_id: String, point_id: String, reason: String = "") -> Dictionary:
+func teleport_player(
+	target_player_id: int,
+	map_id: String,
+	point_id: String,
+	reason: String = "",
+	request_id: String = ""
+) -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {
 			"success": false,
@@ -154,6 +168,7 @@ func teleport_player(target_player_id: int, map_id: String, point_id: String, re
 		}
 
 	var payload := {
+		"requestId": _request_id(request_id),
 		"targetPlayerId": target_player_id,
 		"mapId": map_id.strip_edges(),
 		"pointId": point_id.strip_edges(),
@@ -176,7 +191,24 @@ func teleport_player(target_player_id: int, map_id: String, point_id: String, re
 	return {
 		"success": true,
 		"state": _dictionary_from_value(body.get("state", {})),
+		"commandId": str(body.get("commandId", "")),
+		"status": str(body.get("status", "")),
+		"idempotent": bool(body.get("idempotent", false)),
 	}
+
+
+func _request_id(value: String) -> String:
+	var normalized := value.strip_edges()
+	if normalized != "":
+		return normalized
+	var random_value := Crypto.new().generate_random_bytes(16).hex_encode()
+	return "%s-%s-%s-%s-%s" % [
+		random_value.substr(0, 8),
+		random_value.substr(8, 4),
+		random_value.substr(12, 4),
+		random_value.substr(16, 4),
+		random_value.substr(20, 12),
+	]
 
 
 func _request_json(url: String, method: HTTPClient.Method, headers: PackedStringArray, body: String) -> Dictionary:

@@ -65,6 +65,10 @@ var authorized_teleport_locked_overworld := false
 var authorized_teleport_apply_failed_autosave_blocked := false
 var account_switch_in_progress := false
 var current_teleport_revision := 0
+var pending_remote_authorized_teleport_state: Dictionary = {}
+var active_remote_authorized_teleport_command_id := ""
+var completed_remote_authorized_teleport_commands: Dictionary = {}
+var remote_authorized_teleport_retry_elapsed := 0.0
 var last_saved_position_signature := ""
 var last_presence_position_signature := ""
 var confirmed_appearance_state: Dictionary = {}
@@ -127,6 +131,7 @@ func _current_fishing_area_id() -> String:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	_track_playtime(delta)
+	await _retry_pending_remote_authorized_teleport(delta)
 
 	if is_in_battle or is_loading_map:
 		return
@@ -322,6 +327,12 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 			"success": false,
 			"error": "Teleport response is missing a map scene path.",
 		}
+	if not _is_allowed_authorized_teleport_scene_path(target_scene_path):
+		_mark_authorized_teleport_apply_failed()
+		return {
+			"success": false,
+			"error": "Teleport response references a non-overworld scene.",
+		}
 
 	if not authorized_teleport_locked_overworld:
 		GameState.lock_overworld_input()
@@ -401,14 +412,69 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 
 
 func apply_remote_authorized_teleport_state(state: Dictionary) -> Dictionary:
+	var command_id := str(state.get("teleportCommandId", "")).strip_edges()
+	if command_id != "" and completed_remote_authorized_teleport_commands.has(command_id):
+		return {"success": true, "applied": true, "duplicate": true}
+	if (
+		command_id != ""
+		and (
+			command_id == active_remote_authorized_teleport_command_id
+			or command_id == str(
+				pending_remote_authorized_teleport_state.get("teleportCommandId", "")
+			).strip_edges()
+		)
+	):
+		return {"success": true, "queued": true, "duplicate": true}
 	var block_reason := _get_authorized_teleport_block_reason(false, true)
 	if block_reason != "":
-		_mark_authorized_teleport_apply_failed()
+		pending_remote_authorized_teleport_state = state.duplicate(true)
+		remote_authorized_teleport_retry_elapsed = 0.0
 		return {
-			"success": false,
-			"error": block_reason,
+			"success": true,
+			"queued": true,
+			"blockReason": block_reason,
 		}
-	return await apply_authorized_teleport_state(state)
+	active_remote_authorized_teleport_command_id = command_id
+	var result: Dictionary = await apply_authorized_teleport_state(state)
+	active_remote_authorized_teleport_command_id = ""
+	if bool(result.get("success", false)) and command_id != "":
+		_remember_completed_remote_authorized_teleport(command_id)
+	return result
+
+
+func _retry_pending_remote_authorized_teleport(delta: float) -> void:
+	if pending_remote_authorized_teleport_state.is_empty():
+		return
+	remote_authorized_teleport_retry_elapsed += delta
+	if remote_authorized_teleport_retry_elapsed < 0.5:
+		return
+	remote_authorized_teleport_retry_elapsed = 0.0
+	if _get_authorized_teleport_block_reason(false, true) != "":
+		return
+	var state := pending_remote_authorized_teleport_state.duplicate(true)
+	pending_remote_authorized_teleport_state.clear()
+	var result: Dictionary = await apply_remote_authorized_teleport_state(state)
+	if not bool(result.get("success", false)):
+		push_warning(
+			"World: queued staff teleport failed: %s"
+			% str(result.get("error", "Unknown error"))
+		)
+
+
+func _remember_completed_remote_authorized_teleport(command_id: String) -> void:
+	completed_remote_authorized_teleport_commands[command_id] = true
+	while completed_remote_authorized_teleport_commands.size() > 64:
+		var oldest_key: Variant = completed_remote_authorized_teleport_commands.keys()[0]
+		completed_remote_authorized_teleport_commands.erase(oldest_key)
+
+
+func _is_allowed_authorized_teleport_scene_path(scene_path: String) -> bool:
+	var normalized_path := scene_path.strip_edges()
+	return (
+		normalized_path.begins_with("res://scenes/overworld/")
+		and normalized_path.ends_with(".tscn")
+		and not normalized_path.contains("..")
+	)
 
 
 func get_authorized_teleport_block_reason() -> String:
@@ -480,8 +546,10 @@ func _get_player_position_save_block_reason() -> String:
 
 func _ack_authorized_teleport_state(state: Dictionary) -> Dictionary:
 	var teleport_revision := int(state.get("teleportRevision", current_teleport_revision))
+	var teleport_command_id := str(state.get("teleportCommandId", "")).strip_edges()
 	var result: Dictionary = await PlayerGameStateService.acknowledge_player_teleport(
-		teleport_revision
+		teleport_revision,
+		teleport_command_id
 	)
 	if bool(result.get("success", false)):
 		var response_state: Dictionary = _dictionary_from_value(result.get("state", {}))

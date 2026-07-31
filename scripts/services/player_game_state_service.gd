@@ -129,7 +129,7 @@ func save_player_position(state: Dictionary) -> Dictionary:
 	}
 
 
-func acknowledge_player_teleport(teleport_revision: int) -> Dictionary:
+func acknowledge_player_teleport(teleport_revision: int, teleport_command_id: String = "") -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {
 			"success": false,
@@ -137,11 +137,15 @@ func acknowledge_player_teleport(teleport_revision: int) -> Dictionary:
 		}
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
+	var payload := {"teleportRevision": teleport_revision}
+	var normalized_command_id := teleport_command_id.strip_edges()
+	if normalized_command_id != "":
+		payload["teleportCommandId"] = normalized_command_id
 	var response: Dictionary = await _request_json(
 		base_url + PLAYER_TELEPORT_ACK_ENDPOINT,
 		HTTPClient.METHOD_POST,
 		GatewayApiConfig.get_json_headers(),
-		JSON.stringify({"teleportRevision": teleport_revision})
+		JSON.stringify(payload)
 	)
 	if not bool(response.get("success", false)):
 		return response

@@ -18,6 +18,8 @@ func _init() -> void:
 	_check(source.contains('"ui.staff.teleport.selected_player"'), "Player workflow summarizes the selected player")
 	_check(source.contains('"ui.staff.teleport.go_to_player"') and source.contains('"ui.staff.teleport.move_player_safely"'), "Player actions use clear directional language")
 	_check(source.contains('_apply_button_style(staff_teleport_send_player_button, "danger")'), "Moving another player is visually treated as a sensitive action")
+	_check(source.contains("StaffTeleportSendConfirmation") and source.contains("popup_centered(Vector2i(520, 240))"), "Moving another player requires explicit confirmation")
+	_check(source.contains('command_status == "applied"') and source.contains('command_status == "delivered"') and source.contains("Move queued for"), "Forced teleport reports queued, delivered, and applied command states")
 	_check(source.contains("staff_teleport_player_results.visible = true"), "Online-player results remain visible after selection")
 	_check(source.contains('LocalizationManager.text("common.loading")'), "Destination and player loading states are visible")
 	_check(source.contains("_can_teleport_self()") and source.contains("_can_teleport_to_player()") and source.contains("_can_teleport_other_player()"), "Existing permission gates remain intact")

@@ -63,6 +63,18 @@ func _init() -> void:
 		"Boundary transitions can authorize while a tile movement is finishing"
 	)
 	_expect(
+		world_source.contains("func _is_allowed_authorized_teleport_scene_path")
+		and world_source.contains('normalized_path.begins_with("res://scenes/overworld/")')
+		and world_source.contains('normalized_path.ends_with(".tscn")'),
+		"Authorized teleports refuse non-overworld client scene paths"
+	)
+	_expect(
+		world_source.contains("active_remote_authorized_teleport_command_id")
+		and world_source.contains("completed_remote_authorized_teleport_commands")
+		and world_source.contains("func _retry_pending_remote_authorized_teleport"),
+		"Remote staff teleports deduplicate commands and retry after transient activity"
+	)
+	_expect(
 		gate_source.contains('@export var guarded_transition_id := ""')
 		and gate_source.contains("WorldTransitionService.get_transition_access("),
 		"Gate NPCs depend on a transition policy instead of an area or role list"
