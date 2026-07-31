@@ -57,6 +57,7 @@ func _check_visual_scene(root: Node) -> void:
 		return
 
 	_check_true(not ground.has_meta("tiled_properties"), "layer properties are not copied to visual scene")
+	_check_equal(str(ground.get_meta("pao_rain_surface", "")), "ground", "rain surface metadata is preserved")
 	_check_true(hidden.visible == false, "hidden layer visibility is preserved")
 	_check_equal(float(overlay.modulate.a), 0.5, "overlay opacity is preserved")
 	_check_equal(ground.z_index, 0, "ground z order")

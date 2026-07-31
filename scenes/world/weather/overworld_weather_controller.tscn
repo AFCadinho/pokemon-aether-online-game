@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scripts/world/overworld_weather_controller.gd" id="1_weather"]
+[ext_resource type="Script" path="res://scripts/world/rain_ground_impacts.gd" id="2_impacts"]
 
 [sub_resource type="Gradient" id="Gradient_rain"]
 offsets = PackedFloat32Array(0, 0.18, 0.82, 1)
@@ -64,6 +65,10 @@ local_coords = false
 visibility_rect = Rect2(-720, -96, 1440, 960)
 texture = SubResource("GradientTexture_rain")
 process_material = SubResource("ParticleMaterial_rain")
+
+[node name="RainGroundImpacts" type="Node2D" parent="."]
+visible = false
+script = ExtResource("2_impacts")
 
 [node name="SnowParticles" type="GPUParticles2D" parent="."]
 visible = false

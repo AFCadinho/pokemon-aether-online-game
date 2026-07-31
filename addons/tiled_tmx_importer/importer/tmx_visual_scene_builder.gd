@@ -4,6 +4,7 @@ extends RefCounted
 const PathUtils := preload("res://addons/tiled_tmx_importer/importer/tmx_path_utils.gd")
 
 const OVERLAY_Z_INDEX := 2048
+const RAIN_SURFACE_PROPERTY := "pao_rain_surface"
 
 
 func build_scene(map_data: Dictionary, tile_set: TileSet, tileset_builder: RefCounted) -> Node2D:
@@ -49,6 +50,9 @@ func _create_tile_layer(
 	layer_node.set_meta("tiled_name", str(layer.get("name", "")))
 	layer_node.set_meta("tiled_layer_id", int(layer.get("id", 0)))
 	layer_node.set_meta("tiled_visual_layer", true)
+	var properties: Dictionary = layer.get("properties", {})
+	if properties.has(RAIN_SURFACE_PROPERTY):
+		layer_node.set_meta(RAIN_SURFACE_PROPERTY, str(properties[RAIN_SURFACE_PROPERTY]))
 	return layer_node
 
 

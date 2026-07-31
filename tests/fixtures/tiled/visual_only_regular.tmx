@@ -7,6 +7,7 @@
  <layer id="1" name="Ground" width="4" height="3">
   <properties>
    <property name="not_gameplay" value="ignored"/>
+   <property name="pao_rain_surface" value="ground"/>
   </properties>
   <data encoding="csv">
 1,2,3,4,
