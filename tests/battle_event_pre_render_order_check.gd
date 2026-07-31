@@ -2,6 +2,7 @@ extends SceneTree
 
 const BATTLE_SCRIPT_PATH := "res://scripts/battle/battle.gd"
 const BATTLE_ANIMATION_ROUTER_PATH := "res://scripts/battle/battle_animation_router.gd"
+const DisguiseEventOrderScript := preload("res://scripts/battle/battle_disguise_event_order.gd")
 
 var failed := false
 
@@ -32,7 +33,61 @@ func _init() -> void:
 	_check_force_switch_phase_release_recovers()
 	_check_animation_wait_has_render_barrier_watchdog()
 	_check_instant_prepare_events_render_as_one_action()
+	_check_disguise_form_change_follows_recoil_damage()
+	_check_resolved_response_holds_species_until_ordered_form_event()
 	quit(1 if failed else 0)
+
+
+func _check_disguise_form_change_follows_recoil_damage() -> void:
+	var events := [
+		{"type": "move", "actor": "p1a: Mimikyu", "move": "Swords Dance", "target": "p1a: Mimikyu"},
+		{"type": "statChange", "target": "p1a: Mimikyu", "stat": "atk", "amount": 2},
+		{"type": "move", "actor": "p2a: Hitmonchan", "move": "Bullet Punch", "target": "p1a: Mimikyu"},
+		{"type": "ability", "target": "p1a: Mimikyu", "ability": "Disguise"},
+		{
+			"type": "formeChange",
+			"target": "p1a: Mimikyu-Busted",
+			"species": "Mimikyu-Busted",
+			"source": "ability: Disguise",
+		},
+		{
+			"type": "damage",
+			"target": "p1a: Mimikyu",
+			"previousHp": 251,
+			"hp": 220,
+			"maxHp": 251,
+			"amount": 31,
+			"source": "pokemon: Mimikyu-Busted",
+		},
+		{"type": "turn", "turn": 2},
+	]
+
+	var ordered: Array = DisguiseEventOrderScript.move_busted_form_changes_after_recoil(events)
+	_check_equal(str((ordered[0] as Dictionary).get("move", "")), "Swords Dance", "Mimikyu's earlier move stays ahead of Hitmonchan and Disguise")
+	_check_equal(str((ordered[4] as Dictionary).get("type", "")), "damage", "Disguise recoil renders before Mimikyu becomes Busted")
+	_check_equal(str((ordered[5] as Dictionary).get("type", "")), "formeChange", "Busted form and Inactive badge render after recoil damage")
+
+	var no_recoil_events := [events[0], events[1], events[2], events[3], events[4], events[6]]
+	var no_recoil_ordered: Array = DisguiseEventOrderScript.move_busted_form_changes_after_recoil(no_recoil_events)
+	_check_equal(str((no_recoil_ordered[4] as Dictionary).get("type", "")), "formeChange", "Disguise form timing is unchanged when the generation has no recoil event")
+
+	var unrelated_form_events := [
+		{"type": "formeChange", "target": "p1a: Aegislash", "species": "Aegislash-Blade"},
+		{"type": "damage", "target": "p1a: Aegislash", "source": "pokemon: Mimikyu-Busted"},
+	]
+	var unrelated_ordered: Array = DisguiseEventOrderScript.move_busted_form_changes_after_recoil(unrelated_form_events)
+	_check_equal(str((unrelated_ordered[0] as Dictionary).get("type", "")), "formeChange", "non-Disguise form changes keep their server order")
+
+
+func _check_resolved_response_holds_species_until_ordered_form_event() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var submit_index := source.find("func _submit_player_choice_and_resolve")
+	var capture_index := source.find("_capture_ordered_response_display_species()", submit_index)
+	var request_index := source.find("await action_flow.submit_player_choice_and_resolve", submit_index)
+	_check_equal(capture_index >= 0 and capture_index < request_index, true, "wild resolution captures visible species before the final response arrives")
+	_check_equal(source.contains("ordered_response_display_species_hold.get(player_id"), true, "pre-event sprite and Disguise badge use the held visible species")
+	_check_equal(source.contains("BattleState.get_mimikyu_disguise_state_for_species(canonical_species) == \"\""), true, "the response display hold is scoped to canonical Mimikyu and cannot delay unrelated forms")
+	_check_equal(source.contains("if event_type == \"formeChange\":\n\t\t\t_release_ordered_response_display_species_for_ident"), true, "formeChange releases the display hold only at its ordered event")
 
 
 func _check_pre_event_render_skips_final_team_hud_refresh() -> void:

@@ -18,6 +18,7 @@ func _init() -> void:
 	_check_battle_scene_script_contract()
 	_check_world_battle_host()
 	_check_hp_hud_structure()
+	_check_mimikyu_disguise_indicator_contract()
 	await _check_stage_scaling()
 	await _check_party_rail_interaction()
 	_check_battle_selection_policy_contract()
@@ -319,6 +320,14 @@ func _check_hp_hud_structure() -> void:
 	_check_contains(hud_scene_source, "custom_minimum_size = Vector2(312, 82)", "both sides share the compact HUD dimensions")
 	_check_contains(hud_scene_source, "corner_radius_top_left = 36", "HP HUD uses a pill-shaped outer panel")
 	_check_contains(hud_scene_source, "corner_radius_bottom_right = 36", "HP HUD pill is rounded on every side")
+
+
+func _check_mimikyu_disguise_indicator_contract() -> void:
+	var battle_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	_check_contains(battle_source, "BattleState.get_mimikyu_disguise_state_for_species", "battle derives Mimikyu's Disguise badge from its rendered form")
+	_check_contains(battle_source, '"line": STAT_STAGE_BADGE_LINE_MODIFIER', "Disguise uses the badge row below the HP HUD alongside stat modifiers")
+	_check_contains(battle_source, '_t("battle.hud.disguise_active"', "active Disguise badge is localized")
+	_check_contains(battle_source, '"battle.hud.disguise_inactive"', "inactive Disguise badge is localized")
 
 
 func _check_stage_scaling() -> void:

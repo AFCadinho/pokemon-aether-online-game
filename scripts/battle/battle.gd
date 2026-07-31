@@ -23,6 +23,7 @@ const DEBUG_TRAINER_TEAM_DISPLAY := false
 const TRAINER_TEAM_DEBUG_PREFIX := "[PAO Trainer Team Display Debug]"
 const STATUS_CONDITION_OVERLAY_SCRIPT := preload("res://scripts/battle/animations/status_condition_overlay.gd")
 const BATTLE_PARTY_SLOT_RESOLVER := preload("res://scripts/battle/battle_party_slot_resolver.gd")
+const BATTLE_DISGUISE_EVENT_ORDER := preload("res://scripts/battle/battle_disguise_event_order.gd")
 const CALC_DRAWER_FIELD_WIDTH_RATIO := 0.55
 const CALC_DRAWER_FIELD_MARGIN := 8.0
 const MEGA_EVOLUTION_EFFECT_KEY := "mega_evolution"
@@ -127,6 +128,7 @@ var spectator_latest_raw_response: Dictionary = {}
 var pending_battle_end_result: Dictionary = {}
 var battle_end_signal_emitted := false
 var last_rendered_event_seq := -1
+var ordered_response_display_species_hold: Dictionary = {}
 var rendered_non_pvp_event_keys: Dictionary = {}
 var pvp_event_queue := preload("res://scripts/battle/battle_event_queue.gd").new()
 var pvp_response_order := preload("res://scripts/battle/battle_response_order.gd").new()
@@ -195,6 +197,8 @@ const INITIAL_TRANSFORM_REVEAL_SECONDS := 0.8
 const STAT_STAGE_BADGE_BOOST_COLOR := Color(0.3882353, 0.83137256, 0.44313726, 1.0)
 const STAT_STAGE_BADGE_DROP_COLOR := Color(0.9372549, 0.26666668, 0.26666668, 1.0)
 const VOLATILE_CONDITION_BADGE_COLOR := Color(1.0, 0.74, 0.26, 1.0)
+const DISGUISE_ACTIVE_BADGE_COLOR := Color("#7ee787")
+const DISGUISE_INACTIVE_BADGE_COLOR := Color("#f2a65a")
 const STAT_STAGE_BADGE_LINE_MODIFIER := "modifier"
 const ABILITY_STAT_MODIFIER_SOURCE_FIELD_CONDITION := "field_condition"
 const ABILITY_STAT_MODIFIER_SOURCE_BOOSTER_ENERGY := "booster_energy"
@@ -4978,7 +4982,7 @@ func _update_stat_stage_panel_for_player(player_id: String, sprite_box: Node) ->
 		_set_sprite_box_stat_stage_badges(sprite_box, [])
 		return
 
-	_set_sprite_box_stat_stage_badges(sprite_box, _get_stat_stage_badges_for_ident(ident_key))
+	_set_sprite_box_stat_stage_badges(sprite_box, _get_stat_stage_badges_for_ident(ident_key, player_id))
 
 func _set_sprite_box_stat_stage_badges(sprite_box: Node, badges: Array) -> void:
 	if sprite_box.has_method("set_stat_stage_badges"):
@@ -4986,7 +4990,7 @@ func _set_sprite_box_stat_stage_badges(sprite_box: Node, badges: Array) -> void:
 	elif sprite_box.has_method("set_stat_stages"):
 		sprite_box.call("set_stat_stages", {})
 
-func _get_stat_stage_badges_for_ident(ident_key: String) -> Array:
+func _get_stat_stage_badges_for_ident(ident_key: String, player_id: String) -> Array:
 	var badges: Array[Dictionary] = []
 	var stages_value: Variant = stat_stages_by_ident.get(ident_key, {})
 	if stages_value is Dictionary:
@@ -5014,6 +5018,19 @@ func _get_stat_stage_badges_for_ident(ident_key: String) -> Array:
 				"color": STAT_STAGE_BADGE_BOOST_COLOR,
 				"line": STAT_STAGE_BADGE_LINE_MODIFIER,
 			})
+
+	var active_pokemon := battle_state.get_active_player_pokemon(player_id)
+	var canonical_disguise_state := BattleState.get_mimikyu_disguise_state_for_species(str(active_pokemon.get("species", "")))
+	var disguise_state := ""
+	if canonical_disguise_state != "":
+		disguise_state = BattleState.get_mimikyu_disguise_state_for_species(_get_active_display_species(player_id))
+	if disguise_state != "":
+		badges.append({
+			"label": _t("battle.hud.disguise_active" if disguise_state == "active" else "battle.hud.disguise_inactive"),
+			"value": "",
+			"color": DISGUISE_ACTIVE_BADGE_COLOR if disguise_state == "active" else DISGUISE_INACTIVE_BADGE_COLOR,
+			"line": STAT_STAGE_BADGE_LINE_MODIFIER,
+		})
 
 	var volatile_value: Variant = volatile_conditions_by_ident.get(ident_key, {})
 	if volatile_value is Dictionary:
@@ -7345,7 +7362,11 @@ func _warn_if_pvp_species_change_outside_batch(sprite_box: Node, species: String
 func _render_battle_events(events: Array, render_turn_headers := true, source := "") -> void:
 	if not _guard_pvp_render_runner(source):
 		return
-	var ordered_events: Array = _order_switch_out_heals_before_switches(_order_form_change_events_before_moves(events))
+	var ordered_events: Array = _order_switch_out_heals_before_switches(
+		BATTLE_DISGUISE_EVENT_ORDER.move_busted_form_changes_after_recoil(
+			_order_form_change_events_before_moves(events)
+		)
+	)
 	_debug_battle_start("render.begin source=%s renderTurns=%s input=%s ordered=%s lastRenderedSeq=%d" % [
 		source,
 		str(render_turn_headers),
@@ -7384,6 +7405,7 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 				_summarize_active_battle_state(),
 			])
 		if event_type == "mega" or event_type == "primal":
+			_release_ordered_response_display_species_for_ident(str(event_data.get("target", "")))
 			_fill_mega_event_species(event_data)
 			battle_state.apply_event_conditions([event_data])
 			_update_active_pokemon_presentation_for_ident(str(event_data.get("target", "")))
@@ -7459,6 +7481,7 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			var switch_player_id := _get_switch_event_player_id(event_data)
 			if should_play_switch_ball_animations:
 				await _play_switch_recall_for_event(event_data, switch_player_id)
+			_release_ordered_response_display_species_for_player(switch_player_id)
 			battle_state.apply_event_conditions([event_data])
 			_update_hud_panels()
 			_show_switch_event_active_pokemon(event_data)
@@ -7466,10 +7489,12 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 				await _play_switch_release_for_event(event_data, switch_player_id)
 			await _play_shiny_entrance_if_needed(event_data)
 		if event_type == "transform":
+			_release_ordered_response_display_species_for_ident(str(event_data.get("target", "")))
 			battle_state.apply_event_conditions([event_data])
 			_update_hud_panels()
 			_update_active_sprites()
 		if event_type == "formeChange":
+			_release_ordered_response_display_species_for_ident(str(event_data.get("target", "")))
 			battle_state.apply_event_conditions([event_data])
 			_update_active_pokemon_presentation_for_ident(str(event_data.get("target", "")))
 		if _should_debug_battle_start_event(event_data):
@@ -9382,7 +9407,11 @@ func _submit_player_choice_and_resolve(choice_type: String, slot: int, mega := f
 			"error": "Mega Evolution and Z-Moves cannot be used together.",
 		}
 
-	return await action_flow.submit_player_choice_and_resolve(choice_type, slot, mega, last_rendered_event_seq, z_move)
+	_capture_ordered_response_display_species()
+	var response := await action_flow.submit_player_choice_and_resolve(choice_type, slot, mega, last_rendered_event_seq, z_move)
+	if not bool(response.get("success", false)):
+		_clear_ordered_response_display_species()
+	return response
 
 func _submit_lead(player_id: String, slot: int) -> Dictionary:
 	if _is_pvp_battle():
@@ -12083,9 +12112,11 @@ func _submit_npc_choice_and_render(
 	rendered_event_keys: Dictionary = {},
 	pending_player_choice_events: Array = []
 ) -> bool:
+	_capture_ordered_response_display_species()
 	var opponent_response: Dictionary = await action_flow.submit_npc_choice("p2", last_rendered_event_seq)
 
 	if not bool(opponent_response.get("success", false)):
+		_clear_ordered_response_display_species()
 		return false
 
 	await _render_opponent_response(opponent_response, rendered_event_keys, pending_player_choice_events)
@@ -12097,6 +12128,7 @@ func _render_resolved_player_choice_response(
 	pending_player_choice_events: Array = []
 ) -> bool:
 	if not bool(resolved_response.get("success", false)):
+		_clear_ordered_response_display_species()
 		return false
 
 	await _render_opponent_response(resolved_response, {}, pending_player_choice_events)
@@ -12215,6 +12247,7 @@ func _render_opponent_response(
 	await _render_battle_events(opponent_events, true, "opponent_response_non_pvp")
 	_mark_non_pvp_response_events_rendered(opponent_response, filtered_events)
 	defer_force_switch_active_hide = false
+	_clear_ordered_response_display_species()
 	_update_hud_panels()
 	_update_active_sprites()
 
@@ -12993,6 +13026,12 @@ func _get_vs_player_name(player_id: String) -> String:
 	return _get_player_display_name(player_id)
 
 func _get_active_display_species(player_id: String) -> String:
+	var held_species := str(ordered_response_display_species_hold.get(player_id, "")).strip_edges()
+	if held_species != "":
+		return held_species
+	return _resolve_active_display_species(player_id)
+
+func _resolve_active_display_species(player_id: String) -> String:
 	if _is_spectator_battle():
 		return battle_state.get_active_pokemon_species(player_id)
 	var display_species := display_data_presenter.get_active_display_species(player_id)
@@ -13005,6 +13044,32 @@ func _get_active_display_species(player_id: String) -> String:
 			if display_compare == "" or (display_compare != ident_compare and not _is_specific_battle_form_species(display_species)):
 				return ident_species
 	return display_species
+
+func _capture_ordered_response_display_species() -> void:
+	if _is_pvp_battle():
+		return
+
+	ordered_response_display_species_hold.clear()
+	for player_id in ["p1", "p2"]:
+		var active_pokemon := battle_state.get_active_player_pokemon(player_id)
+		var canonical_species := str(active_pokemon.get("species", "")).strip_edges()
+		if canonical_species == "":
+			canonical_species = _get_species_from_battle_ident(str(active_pokemon.get("ident", "")))
+		if BattleState.get_mimikyu_disguise_state_for_species(canonical_species) == "":
+			continue
+		var species := _resolve_active_display_species(player_id).strip_edges()
+		if species != "":
+			ordered_response_display_species_hold[player_id] = species
+
+func _release_ordered_response_display_species_for_ident(ident: String) -> void:
+	_release_ordered_response_display_species_for_player(_get_player_id_from_ident(ident))
+
+func _release_ordered_response_display_species_for_player(player_id: String) -> void:
+	if player_id != "":
+		ordered_response_display_species_hold.erase(player_id)
+
+func _clear_ordered_response_display_species() -> void:
+	ordered_response_display_species_hold.clear()
 
 func _is_specific_battle_form_species(species: String) -> bool:
 	var normalized := species.strip_edges().to_lower().replace(" ", "-").replace("_", "-")

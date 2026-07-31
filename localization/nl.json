@@ -1908,6 +1908,8 @@
   "battle.hud.level": "Lv. {level}",
   "battle.hud.level_unknown": "Lv. --",
   "battle.hud.owned": "Geregistreerd op jouw Trainer-ID",
+  "battle.hud.disguise_active": "Disguise: Actief",
+  "battle.hud.disguise_inactive": "Disguise: Inactief",
   "battle.gender.male": "Mannelijk",
   "battle.gender.female": "Vrouwelijk",
   "battle.event.ability.action": "{ability} van {actor} {action}!",

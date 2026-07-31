@@ -24,6 +24,18 @@ var timer_contract_version := 0
 var battle_event_seq := 0
 
 
+static func get_mimikyu_disguise_state_for_species(species: String) -> String:
+	var normalized := species.strip_edges().to_lower().replace(" ", "-").replace("_", "-")
+	while normalized.contains("--"):
+		normalized = normalized.replace("--", "-")
+
+	if normalized in ["mimikyu", "mimikyu-disguised", "mimikyu-totem", "mimikyu-totem-disguised"]:
+		return "active"
+	if normalized in ["mimikyu-busted", "mimikyu-busted-totem", "mimikyu-totem-busted"]:
+		return "inactive"
+	return ""
+
+
 ## Laadt een volledige battle response van de API in deze state.
 func load_from_api_response(
 	response: Dictionary,
@@ -32,6 +44,10 @@ func load_from_api_response(
 ) -> void:
 	var next_battle_id := str(response.get("battleId", ""))
 	var battle_changed := battle_id != "" and next_battle_id != battle_id
+	var response_events := _get_response_events_after_cursor(response, since_event_seq)
+	var deferred_form_species_by_player: Dictionary = {}
+	if not apply_event_conditions and not battle_changed:
+		deferred_form_species_by_player = _capture_deferred_form_species_by_player(response_events)
 	if battle_changed:
 		transformed_species_by_ident.clear()
 		mega_species_by_ident.clear()
@@ -73,14 +89,13 @@ func load_from_api_response(
 			operational_state = (next_operational_state as Dictionary).duplicate(true)
 	decisions = (response.get("decisions", {}) as Dictionary).duplicate(true) if response.get("decisions", {}) is Dictionary else {}
 	battle_event_seq = max(battle_event_seq, int(response.get("battleEventSeq", 0)))
-	var response_events := _get_response_events_after_cursor(response, since_event_seq)
 	if apply_event_conditions:
 		_apply_mega_species_to_requests()
 		_apply_transformed_species_to_requests()
 		_apply_event_conditions_to_requests(response_events)
 	else:
 		_apply_mega_species_to_requests()
-		_remove_deferred_display_fields_from_requests(response_events)
+		_remove_deferred_display_fields_from_requests(response_events, deferred_form_species_by_player)
 		_rewind_deferred_hp_events_from_requests(response_events)
 	_remember_hp_fields_from_requests(requests)
 	if DEBUG_PAO_BATTLE_IDENTITY:
@@ -994,7 +1009,39 @@ func _get_active_mega_species_from_request_slot(player_id: String, active_index 
 
 	return ""
 
-func _remove_deferred_display_fields_from_requests(events_value: Variant) -> void:
+func _capture_deferred_form_species_by_player(events_value: Variant) -> Dictionary:
+	var previous_species_by_player: Dictionary = {}
+	if not (events_value is Array):
+		return previous_species_by_player
+
+	for event_value: Variant in events_value:
+		if not (event_value is Dictionary):
+			continue
+
+		var event: Dictionary = event_value as Dictionary
+		if str(event.get("type", "")) != "formeChange":
+			continue
+
+		var player_id := _get_player_id_from_ident(str(event.get("target", "")))
+		if player_id == "" or previous_species_by_player.has(player_id):
+			continue
+
+		var previous_pokemon := _get_active_side_pokemon(player_id)
+		var previous_species := get_species_from_pokemon_data(previous_pokemon)
+		var next_species := str(event.get("species", event.get("displaySpecies", ""))).strip_edges()
+		if previous_species == "" or next_species == "":
+			continue
+		if _normalize_public_species_base_key(previous_species) != _normalize_public_species_base_key(next_species):
+			continue
+
+		previous_species_by_player[player_id] = previous_species
+
+	return previous_species_by_player
+
+func _remove_deferred_display_fields_from_requests(
+	events_value: Variant,
+	deferred_form_species_by_player: Dictionary = {}
+) -> void:
 	if not (events_value is Array):
 		return
 
@@ -1007,6 +1054,8 @@ func _remove_deferred_display_fields_from_requests(events_value: Variant) -> voi
 		match event_type:
 			"transform":
 				_remove_deferred_transform_fields_from_requests(event)
+			"formeChange":
+				_remove_deferred_forme_change_fields_from_requests(event, deferred_form_species_by_player)
 			"mega", "primal":
 				_remove_deferred_mega_fields_from_requests(event)
 
@@ -1056,6 +1105,27 @@ func _remove_deferred_transform_fields_from_requests(event: Dictionary) -> void:
 		return
 
 	pokemon_data.erase("transformedSpecies")
+	pokemon_data.erase("displaySpecies")
+	if original_species != "":
+		pokemon_data["species"] = original_species
+
+func _remove_deferred_forme_change_fields_from_requests(
+	event: Dictionary,
+	deferred_form_species_by_player: Dictionary = {}
+) -> void:
+	var target_ident := str(event.get("target", ""))
+	var player_id := _get_player_id_from_ident(target_ident)
+	var original_species := str(deferred_form_species_by_player.get(player_id, "")).strip_edges()
+	if original_species == "":
+		original_species = _get_original_species_from_ident(target_ident)
+	var pokemon_data := _get_side_pokemon_by_ident(target_ident)
+	if pokemon_data.is_empty():
+		pokemon_data = _get_active_side_pokemon(player_id)
+	if pokemon_data.is_empty():
+		return
+
+	# The request projection already contains the resulting forme. Keep the
+	# pre-event species visible until the ordered formeChange event is rendered.
 	pokemon_data.erase("displaySpecies")
 	if original_species != "":
 		pokemon_data["species"] = original_species

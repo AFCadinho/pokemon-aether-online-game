@@ -176,7 +176,7 @@ func _response_has_deferred_display_event(response: Dictionary, since_event_seq 
 		var event_type := str(event.get("type", ""))
 		if event_type == "damage" or event_type == "heal" or event_type == "faint":
 			return true
-		if event_type == "transform" or event_type == "mega" or event_type == "primal":
+		if event_type == "transform" or event_type == "formeChange" or event_type == "mega" or event_type == "primal":
 			return true
 
 	return false

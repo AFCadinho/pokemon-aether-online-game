@@ -9,7 +9,9 @@ var failed := false
 
 func _init() -> void:
 	_check_damage_response_is_display_deferred()
+	_check_forme_change_response_is_display_deferred()
 	_check_deferred_damage_load_rewinds_to_previous_hp()
+	_check_deferred_mimikyu_forme_change_keeps_disguise_until_event()
 	_check_newer_damage_and_faint_override_hp_memory()
 	_check_stale_switch_event_does_not_revive_canonical_faint()
 	_check_pursuit_faint_keeps_pending_iron_treads_available()
@@ -19,6 +21,7 @@ func _init() -> void:
 	_check_status_event_normalizes_badly_poisoned()
 	_check_public_mimikyu_status_updates_disguised_roster_entry()
 	_check_public_mimikyu_forme_change_updates_active_sprite_species()
+	_check_mimikyu_disguise_state_labels()
 	quit(1 if failed else 0)
 
 
@@ -32,6 +35,19 @@ func _check_damage_response_is_display_deferred() -> void:
 		function_source.contains("event_type == \"damage\""),
 		true,
 		"damage responses defer display-state application"
+	)
+
+
+func _check_forme_change_response_is_display_deferred() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_ACTION_FLOW_PATH)
+	var function_index := source.find("func _response_has_deferred_display_event")
+	var next_function_index := source.find("\nfunc ", function_index + 1)
+	var function_source := source.substr(function_index, next_function_index - function_index)
+
+	_check_equal(
+		function_source.contains("event_type == \"formeChange\""),
+		true,
+		"forme changes defer display-state application"
 	)
 
 
@@ -78,6 +94,56 @@ func _check_deferred_damage_load_rewinds_to_previous_hp() -> void:
 	state.apply_event_conditions([damage_event])
 	_check_equal(state.get_active_pokemon_current_hp("p2"), 0, "damage event applies final HP")
 	_check_equal(state.is_active_pokemon_fainted("p2"), true, "damage event applies fainted state")
+
+
+func _check_deferred_mimikyu_forme_change_keeps_disguise_until_event() -> void:
+	var state = BattleStateScript.new()
+	var forme_change_event := {
+		"type": "formeChange",
+		"target": "p2a: Mimikyu-Busted",
+		"species": "Mimikyu-Busted",
+	}
+	state.load_from_api_response({
+		"success": true,
+		"battleId": "deferred-mimikyu-forme-test",
+		"requests": {
+			"p2": {
+				"side": {
+					"pokemon": [{
+						"ident": "p2: Mimikyu",
+						"species": "Mimikyu-Disguised",
+						"displaySpecies": "Mimikyu-Disguised",
+						"active": true,
+						"condition": "100/100",
+					}],
+				},
+			},
+		},
+		"events": [],
+	}, true)
+
+	state.load_from_api_response({
+		"success": true,
+		"battleId": "deferred-mimikyu-forme-test",
+		"requests": {
+			"p2": {
+				"side": {
+					"pokemon": [{
+						"ident": "p2: Mimikyu-Busted",
+						"species": "Mimikyu-Busted",
+						"displaySpecies": "Mimikyu-Busted",
+						"active": true,
+						"condition": "100/100",
+					}],
+				},
+			},
+		},
+		"events": [forme_change_event],
+	}, false)
+
+	_check_equal(state.get_active_pokemon_species("p2"), "Mimikyu-Disguised", "deferred response preserves the actually visible Mimikyu form even when the new ident is already Busted")
+	state.apply_event_conditions([forme_change_event])
+	_check_equal(state.get_active_pokemon_species("p2"), "Mimikyu-Busted", "ordered forme event reveals Mimikyu's busted form")
 
 
 func _check_status_event_normalizes_badly_poisoned() -> void:
@@ -190,6 +256,12 @@ func _check_public_mimikyu_forme_change_updates_active_sprite_species() -> void:
 	])
 
 	_check_equal(state.get_active_pokemon_species("p1"), "Mimikyu-Busted", "ordered forme change updates active Mimikyu display species")
+
+
+func _check_mimikyu_disguise_state_labels() -> void:
+	_check_equal(BattleStateScript.get_mimikyu_disguise_state_for_species("Mimikyu-Disguised"), "active", "disguised Mimikyu exposes an active Disguise state")
+	_check_equal(BattleStateScript.get_mimikyu_disguise_state_for_species("Mimikyu-Busted"), "inactive", "busted Mimikyu exposes an inactive Disguise state")
+	_check_equal(BattleStateScript.get_mimikyu_disguise_state_for_species("Pikachu"), "", "non-Mimikyu species do not expose a Disguise state")
 
 
 func _check_newer_damage_and_faint_override_hp_memory() -> void:

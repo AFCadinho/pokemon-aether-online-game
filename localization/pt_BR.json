@@ -1908,6 +1908,8 @@
   "battle.hud.level": "Nv. {level}",
   "battle.hud.level_unknown": "Nv. --",
   "battle.hud.owned": "Registrado no seu ID de Treinador",
+  "battle.hud.disguise_active": "Disfarce: Ativo",
+  "battle.hud.disguise_inactive": "Disfarce: Inativo",
   "battle.gender.male": "Masculino",
   "battle.gender.female": "Feminino",
   "battle.event.ability.action": "{ability} de {actor} {action}!",
