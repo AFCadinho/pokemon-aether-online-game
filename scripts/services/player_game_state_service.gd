@@ -10,6 +10,8 @@ const PLAYER_ACTIVITY_ENDPOINT := "/game/player-activity"
 const MAP_PLAYERS_ENDPOINT := "/game/map-players"
 const PLAYER_PREFERENCES_ENDPOINT := "/game/preferences"
 const PLAYER_PROFILE_ENDPOINT := "/game/profile"
+const PLAYER_STORY_ENDPOINT := "/game/story"
+const STORY_INTERACTION_ENDPOINT := "/game/story/interactions/%s"
 const PUBLIC_TRAINER_CARD_ENDPOINT := "/game/trainers/%s/card"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
@@ -38,6 +40,7 @@ func load_player_profile() -> Dictionary:
 	var wallet: Dictionary = _dictionary_from_value(body.get("wallet", {}))
 	var stats: Dictionary = _dictionary_from_value(body.get("stats", {}))
 	var badges: Dictionary = _dictionary_from_value(body.get("badges", {}))
+	var story: Dictionary = _dictionary_from_value(body.get("story", {}))
 	return {
 		"success": true,
 		"user": _dictionary_from_value(body.get("user", {})),
@@ -55,7 +58,212 @@ func load_player_profile() -> Dictionary:
 			"stats": _dictionary_from_value(stats.get("stats", {})),
 		},
 		"badges": badges,
+		"story": story,
 	}
+
+
+func refresh_story() -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + PLAYER_STORY_ENDPOINT,
+		HTTPClient.METHOD_GET,
+		GatewayApiConfig.get_accept_headers(),
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	var story: Dictionary = _dictionary_from_value(body.get("story", body))
+	StoryService.apply_story(story)
+	return {
+		"success": true,
+		"story": StoryService.get_story(),
+	}
+
+
+func resolve_story_interaction(
+	interaction_id: String,
+	map_id: String,
+	entity_id: String,
+	trigger: String
+) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {"success": false, "status": 401, "error": "Not authenticated."}
+
+	var normalized_interaction_id := interaction_id.strip_edges()
+	if normalized_interaction_id == "":
+		return {"success": false, "status": 0, "error": "Missing story interaction id."}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var endpoint := (STORY_INTERACTION_ENDPOINT % normalized_interaction_id.uri_encode()) + "/resolve"
+	var response: Dictionary = await _request_json(
+		base_url + endpoint,
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({
+			"mapId": map_id.strip_edges(),
+			"entityId": entity_id.strip_edges(),
+			"trigger": trigger.strip_edges(),
+		})
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	if not _is_valid_story_resolve_body(body):
+		return {
+			"success": false,
+			"status": int(response.get("status", 0)),
+			"error": "Story interaction resolve response was invalid.",
+		}
+
+	return {
+		"success": true,
+		"handled": bool(body.get("handled", false)),
+		"interactionId": str(body.get("interactionId", "")),
+		"revision": int(body.get("revision", 0)),
+		"actions": _array_from_value(body.get("actions", [])).duplicate(true),
+		"completionRequired": bool(body.get("completionRequired", false)),
+	}
+
+
+func complete_story_interaction(
+	interaction_id: String,
+	request_id: String,
+	expected_revision: int,
+	map_id: String,
+	entity_id: String,
+	trigger: String
+) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {"success": false, "status": 401, "error": "Not authenticated."}
+
+	var normalized_interaction_id := interaction_id.strip_edges()
+	var normalized_request_id := request_id.strip_edges()
+	if normalized_interaction_id == "" or normalized_request_id == "":
+		return {"success": false, "status": 0, "error": "Missing story completion identity."}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var endpoint := (STORY_INTERACTION_ENDPOINT % normalized_interaction_id.uri_encode()) + "/complete"
+	var response: Dictionary = await _request_json(
+		base_url + endpoint,
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({
+			"requestId": normalized_request_id,
+			"expectedRevision": expected_revision,
+			"mapId": map_id.strip_edges(),
+			"entityId": entity_id.strip_edges(),
+			"trigger": trigger.strip_edges(),
+		})
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	if not _is_valid_story_complete_body(body, normalized_request_id, expected_revision):
+		return {
+			"success": false,
+			"status": int(response.get("status", 0)),
+			"error": "Story interaction completion response was invalid.",
+		}
+
+	var story: Dictionary = _dictionary_from_value(body.get("story", {}))
+	var result := body.duplicate(true)
+	result["success"] = true
+	result["story"] = story.duplicate(true)
+	return result
+
+
+func _is_valid_story_complete_body(
+	body: Dictionary,
+	expected_request_id: String,
+	expected_revision: int
+) -> bool:
+	if expected_revision < 0:
+		return false
+	var response_request_id_value: Variant = body.get("requestId", null)
+	if not (response_request_id_value is String):
+		return false
+	var response_request_id := str(response_request_id_value)
+	if (
+		response_request_id != expected_request_id
+		or not _is_canonical_uuid(response_request_id)
+	):
+		return false
+	var story: Dictionary = _dictionary_from_value(body.get("story", {}))
+	if (
+		story.is_empty()
+		or not story.has("revision")
+		or not _is_nonnegative_integer(story.get("revision"))
+		or not story.has("quests")
+		or not (story.get("quests") is Array)
+	):
+		return false
+	if int(story.get("revision", -1)) != expected_revision + 1:
+		return false
+	return (
+		body.has("effects")
+		and body.get("effects") is Array
+		and (body.get("effects") as Array).is_empty()
+	)
+
+
+func _is_canonical_uuid(value: String) -> bool:
+	if value.length() != 36:
+		return false
+	for index: int in range(value.length()):
+		var character := value.substr(index, 1)
+		if index in [8, 13, 18, 23]:
+			if character != "-":
+				return false
+			continue
+		var is_digit := character >= "0" and character <= "9"
+		var is_lower_hex := character >= "a" and character <= "f"
+		if not (is_digit or is_lower_hex):
+			return false
+	return value.substr(14, 1) == "4" and value.substr(19, 1) in ["8", "9", "a", "b"]
+
+
+func _is_valid_story_resolve_body(body: Dictionary) -> bool:
+	if not body.has("handled") or typeof(body.get("handled")) != TYPE_BOOL:
+		return false
+	if not body.has("interactionId") or not (body.get("interactionId") is String):
+		return false
+	var interaction_id := str(body.get("interactionId", ""))
+	if interaction_id == "" or interaction_id != interaction_id.strip_edges():
+		return false
+	if not body.has("revision") or not _is_nonnegative_integer(body.get("revision")):
+		return false
+	if not body.has("actions") or not (body.get("actions") is Array):
+		return false
+	if not body.has("completionRequired") or typeof(body.get("completionRequired")) != TYPE_BOOL:
+		return false
+	if not bool(body.get("handled", false)):
+		return _array_from_value(body.get("actions", [])).is_empty() and not bool(
+			body.get("completionRequired", false)
+		)
+	return true
+
+
+func _is_nonnegative_integer(value: Variant) -> bool:
+	if typeof(value) == TYPE_INT:
+		return int(value) >= 0
+	if typeof(value) != TYPE_FLOAT:
+		return false
+	var numeric_value := float(value)
+	return (
+		is_finite(numeric_value)
+		and numeric_value >= 0.0
+		and floor(numeric_value) == numeric_value
+	)
 
 
 func load_public_trainer_card(user_id: int) -> Dictionary:

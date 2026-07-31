@@ -408,6 +408,7 @@ func finish_account_switch() -> void:
 func _reset_account_runtime_state() -> void:
 	PlayerSave.reset_account_state()
 	GameState.reset_gameplay_runtime_state()
+	StoryService.reset_story()
 	PlayerHotbarService.clear_cached_state()
 	PlayerActionService.clear_cached_state()
 	WorldTransitionService.clear_cache()

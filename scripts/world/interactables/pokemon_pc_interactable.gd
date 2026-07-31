@@ -74,8 +74,9 @@ func _start_manual_interaction(body: Node2D) -> void:
 		if body.has_method("set_idle_frame"):
 			body.call("set_idle_frame")
 
-	await interact_with_player(body)
-	_unlock_overworld_input()
+	var result := await _run_story_or_legacy_interaction(body, "interact")
+	if str(result.get("status", "")) != "pending_battle":
+		_unlock_overworld_input()
 	is_interacting = false
 
 

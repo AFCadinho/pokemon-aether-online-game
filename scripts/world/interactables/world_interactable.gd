@@ -44,11 +44,11 @@ func interact_with_player(_player: Node2D) -> void:
 	await show_dialogue()
 
 
-func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> void:
+func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> bool:
 	var dialogue_box := _get_dialogue_box()
 	if dialogue_box == null:
 		push_warning("%s: DialogueBox/Box not found." % name)
-		return
+		return false
 
 	var valid_dialogue_lines := _get_valid_dialogue_lines(lines)
 	if valid_dialogue_lines.is_empty():
@@ -64,6 +64,7 @@ func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> vo
 
 	dialogue_box.start_dialogue(valid_dialogue_lines, speaker_name)
 	await dialogue_box.dialogue_finished
+	return true
 
 
 func _can_start_manual_interaction() -> bool:
@@ -93,9 +94,51 @@ func _start_manual_interaction(body: Node2D) -> void:
 	if body.has_method("face_world_position"):
 		body.face_world_position(global_position)
 
-	await interact_with_player(body)
-	_unlock_overworld_input()
+	var result := await _run_story_or_legacy_interaction(body, "interact")
+	if str(result.get("status", "")) != "pending_battle":
+		_unlock_overworld_input()
 	is_interacting = false
+
+
+func _run_story_or_legacy_interaction(body: Node2D, trigger: String) -> Dictionary:
+	var story_hook := _find_story_hook()
+	if story_hook == null or not bool(story_hook.call("is_configured")):
+		await interact_with_player(body)
+		return {"success": true, "handled": false, "legacy": true}
+
+	var result_value: Variant = await story_hook.call(
+		"try_handle_interaction",
+		self,
+		body,
+		trigger
+	)
+	if not (result_value is Dictionary):
+		await _show_story_hook_error()
+		return {"success": false, "handled": true, "status": "invalid_story_hook_result"}
+
+	var result: Dictionary = result_value as Dictionary
+	if bool(result.get("success", false)) and result.has("handled") and not bool(result.get("handled", true)):
+		await interact_with_player(body)
+		var fallback_result := result.duplicate(true)
+		fallback_result["legacy"] = true
+		return fallback_result
+	return result
+
+
+func _find_story_hook() -> Node:
+	for child: Node in get_children():
+		if child.has_method("try_handle_interaction") and child.has_method("is_configured"):
+			return child
+	return null
+
+
+func _show_story_hook_error() -> void:
+	var root := get_tree().root
+	var error_service := root.get_node_or_null("GameErrorDialogService") if root != null else null
+	if error_service != null and error_service.has_method("show_report_to_staff_message"):
+		await error_service.call("show_report_to_staff_message")
+	else:
+		push_warning("WorldInteractable: story hook returned an invalid result.")
 
 
 func _is_player_facing_interactable(player: Node2D) -> bool:

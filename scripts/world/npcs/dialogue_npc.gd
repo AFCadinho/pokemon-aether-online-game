@@ -14,22 +14,20 @@ func _process(_delta: float) -> void:
 	await _process_base_npc()
 
 
-func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> void:
+func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> bool:
 	var resolved_speaker_name := speaker_name_override.strip_edges()
 	if resolved_speaker_name.is_empty():
 		resolved_speaker_name = resolved_dialogue_speaker_name
 	if not lines.is_empty():
-		await super.show_dialogue(lines, resolved_speaker_name)
-		return
+		return await super.show_dialogue(lines, resolved_speaker_name)
 
 	var dialogue_metadata_lines := await _get_dialogue_metadata_lines()
 	if not dialogue_metadata_lines.is_empty():
 		if speaker_name_override.strip_edges().is_empty():
 			resolved_speaker_name = resolved_dialogue_speaker_name
-		await super.show_dialogue(dialogue_metadata_lines, resolved_speaker_name)
-		return
+		return await super.show_dialogue(dialogue_metadata_lines, resolved_speaker_name)
 
-	await super.show_dialogue(lines, resolved_speaker_name)
+	return await super.show_dialogue(lines, resolved_speaker_name)
 
 
 func _get_dialogue_metadata_lines() -> Array[String]:

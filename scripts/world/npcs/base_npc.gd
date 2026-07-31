@@ -48,6 +48,8 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 
 const TILE_SIZE := 32
 const MOVE_SPEED := 120.0
+const MAX_STORY_PATH_STEPS := 32
+const STORY_PATH_DIRECTIONS: Array[String] = ["up", "down", "left", "right"]
 const SORT_Z_MIN := -4096
 const SORT_Z_MAX := 4096
 const DEFAULT_PLAYER_VISUAL_SORT_DEPTH := 8
@@ -207,6 +209,131 @@ func _get_step_direction_from_positions(from_position: Vector2, to_position: Vec
 func _face_body(body: Node2D) -> void:
 	var direction := _get_step_direction_from_positions(get_feet_position(), _get_body_feet_position(body))
 	_set_idle_frame(direction)
+
+
+func face_world_position(world_position: Vector2) -> void:
+	var direction := _get_step_direction_from_positions(get_feet_position(), world_position)
+	_set_idle_frame(direction)
+
+
+func can_story_move_path(path: Array[String]) -> bool:
+	if path.is_empty() or path.size() > MAX_STORY_PATH_STEPS or is_npc_moving:
+		return false
+	for direction_name: String in path:
+		if direction_name not in STORY_PATH_DIRECTIONS:
+			return false
+	return true
+
+
+func story_move_path(path: Array[String]) -> bool:
+	if not can_story_move_path(path) or not _preflight_story_move_path(path):
+		return false
+
+	is_npc_moving = true
+	var final_direction := facing_direction
+	for direction_name: String in path:
+		var direction := _story_path_direction(direction_name)
+		var current_tile := _to_tile(get_feet_position())
+		var target_tile := current_tile + Vector2i(int(direction.x), int(direction.y))
+		var target_feet_position := _tile_to_world(target_tile)
+
+		final_direction = direction
+		facing_direction = direction
+		_play_walk_animation(direction)
+		_update_directional_sensors()
+		movement_reserved_tile = target_tile
+		var target_global_position := global_position + (target_feet_position - get_feet_position())
+		var duration := global_position.distance_to(target_global_position) / maxf(
+			movement_speed_pixels,
+			1.0
+		)
+		var tween := create_tween()
+		tween.tween_property(self, "global_position", target_global_position, duration)
+		await tween.finished
+		_update_sort_z()
+
+	_finish_story_path_movement(final_direction)
+	return true
+
+
+func _preflight_story_move_path(path: Array[String]) -> bool:
+	if not _has_story_movement_context():
+		return false
+	var current_tile := _to_tile(get_feet_position())
+	for direction_name: String in path:
+		var direction := _story_path_direction(direction_name)
+		var target_tile := current_tile + Vector2i(int(direction.x), int(direction.y))
+		if not _can_story_npc_move_to(_tile_to_world(target_tile)):
+			return false
+		current_tile = target_tile
+	return true
+
+
+func _can_story_npc_move_to(world_position: Vector2) -> bool:
+	var current_map: Node = GameState.current_map
+	if current_map == null or not is_instance_valid(current_map):
+		return false
+
+	for candidate: Node in get_tree().get_nodes_in_group("player"):
+		var player_node := candidate as Node2D
+		if player_node != null and _to_tile(_get_body_target_feet_position(player_node)) == _to_tile(world_position):
+			return false
+
+	var collision_tilemap := MapLayerResolverScript.find_tilemap_layer(current_map, ["Collision"])
+	if collision_tilemap == null:
+		return false
+	var local_position := collision_tilemap.to_local(world_position)
+	var tile_position := collision_tilemap.local_to_map(local_position)
+	if collision_tilemap.get_cell_source_id(tile_position) != -1:
+		return false
+	if collision_tilemap.get_cell_tile_data(tile_position) != null:
+		return false
+	return not _is_story_position_blocked_by_other_node(current_map, world_position)
+
+
+func _is_story_position_blocked_by_other_node(node: Node, world_position: Vector2) -> bool:
+	for child: Node in node.get_children():
+		if child == self:
+			continue
+		if child.has_method("blocks_world_position") and bool(child.call("blocks_world_position", world_position)):
+			return true
+		if _is_story_position_blocked_by_other_node(child, world_position):
+			return true
+	return false
+
+
+func _has_story_movement_context() -> bool:
+	if not is_inside_tree() or feet_marker == null or sprite == null:
+		return false
+	if not GameState.is_overworld_input_locked():
+		return false
+	var current_map: Node = GameState.current_map
+	if current_map == null or not is_instance_valid(current_map):
+		return false
+	return MapLayerResolverScript.find_tilemap_layer(current_map, ["Collision"]) != null
+
+
+func _finish_story_path_movement(direction: Vector2) -> void:
+	movement_reserved_tile = Vector2i.ZERO
+	is_npc_moving = false
+	movement_origin_tile = _to_tile(get_feet_position())
+	movement_current_offset_tiles = 0
+	_set_idle_frame(direction)
+	_update_directional_sensors()
+	_schedule_next_npc_movement_step()
+
+
+func _story_path_direction(direction_name: String) -> Vector2:
+	match direction_name:
+		"up":
+			return Vector2.UP
+		"down":
+			return Vector2.DOWN
+		"left":
+			return Vector2.LEFT
+		"right":
+			return Vector2.RIGHT
+	return Vector2.ZERO
 
 
 func _play_walk_animation(direction: Vector2) -> void:
@@ -607,20 +734,53 @@ func _start_manual_interaction(body: Node2D) -> void:
 	if body.has_method("face_world_position"):
 		body.face_world_position(get_feet_position())
 
-	await interact_with_player(body)
-	GameState.unlock_overworld_input()
+	var result := await _run_story_or_legacy_interaction(body, "interact")
+	if str(result.get("status", "")) != "pending_battle":
+		GameState.unlock_overworld_input()
 	is_interacting = false
+
+
+func _run_story_or_legacy_interaction(body: Node2D, trigger: String) -> Dictionary:
+	var story_hook := _find_story_hook()
+	if story_hook == null or not bool(story_hook.call("is_configured")):
+		await interact_with_player(body)
+		return {"success": true, "handled": false, "legacy": true}
+
+	var result_value: Variant = await story_hook.call(
+		"try_handle_interaction",
+		self,
+		body,
+		trigger
+	)
+	if not (result_value is Dictionary):
+		await GameErrorDialogService.show_report_to_staff_message()
+		return {"success": false, "handled": true, "status": "invalid_story_hook_result"}
+
+	var result: Dictionary = result_value as Dictionary
+	if bool(result.get("success", false)) and result.has("handled") and not bool(result.get("handled", true)):
+		await interact_with_player(body)
+		var fallback_result := result.duplicate(true)
+		fallback_result["legacy"] = true
+		return fallback_result
+	return result
+
+
+func _find_story_hook() -> Node:
+	for child: Node in get_children():
+		if child.has_method("try_handle_interaction") and child.has_method("is_configured"):
+			return child
+	return null
 
 
 func interact_with_player(_player: Node2D) -> void:
 	await show_dialogue()
 
 
-func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> void:
+func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> bool:
 	var dialogue_box := _get_dialogue_box()
 	if dialogue_box == null:
 		push_warning("%s: DialogueBox/Box not found." % name)
-		return
+		return false
 
 	var source_dialogue_lines := lines
 	if source_dialogue_lines.is_empty():
@@ -628,7 +788,7 @@ func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> vo
 			var metadata_response: Dictionary = await _load_npc_metadata()
 			if not metadata_response.get("success", false):
 				await GameErrorDialogService.show_report_to_staff_message(dialogue_box)
-				return
+				return false
 		source_dialogue_lines = dialogue_lines
 
 	var valid_dialogue_lines := _get_valid_dialogue_lines(source_dialogue_lines)
@@ -636,7 +796,7 @@ func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> vo
 		push_error("%s has no dialogue lines." % name)
 		dialogue_box.start_dialogue(MISSING_DIALOGUE_LINES, "System")
 		await dialogue_box.dialogue_finished
-		return
+		return false
 
 	var speaker_name := speaker_name_override
 	if speaker_name.is_empty():
@@ -646,6 +806,7 @@ func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> vo
 
 	dialogue_box.start_dialogue(valid_dialogue_lines, speaker_name, mugshot)
 	await dialogue_box.dialogue_finished
+	return true
 
 
 func _load_npc_metadata() -> Dictionary:

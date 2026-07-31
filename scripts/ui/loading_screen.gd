@@ -131,6 +131,7 @@ func _prepare_world() -> void:
 		_return_to_login("Your session expired. Please sign in again.")
 		return
 
+	StoryService.reset_story()
 	_set_loading_status("ui.loading.loading_profile", 0)
 	var profile_response: Dictionary = await PlayerGameStateService.load_player_profile()
 	var saved_state: Dictionary = {}
@@ -255,6 +256,7 @@ func _apply_profile_response(profile_response: Dictionary) -> bool:
 	PlayerSave.playtime_seconds = max(int(stats.get("playtimeSeconds", PlayerSave.playtime_seconds)), 0)
 	PlayerSave.flags["trainer_stats"] = stats.duplicate(true)
 	PlayerSave.apply_gym_badge_state(_dictionary_from_value(profile_response.get("badges", {})))
+	StoryService.apply_story(_dictionary_from_value(profile_response.get("story", {})))
 	return true
 
 

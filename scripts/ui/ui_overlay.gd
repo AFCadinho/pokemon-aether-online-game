@@ -28541,6 +28541,7 @@ func _on_dev_reset_game_confirmed() -> void:
 		# the reset. Leave the overworld without allowing another autosave.
 		PlayerSave.reset_gameplay_progress()
 		GameState.reset_gameplay_runtime_state()
+		StoryService.reset_story()
 		PlayerHotbarService.clear_cached_state()
 		PlayerActionService.clear_cached_state()
 		FieldMoveService.update_owned_charms_from_inventory([])
@@ -28553,6 +28554,7 @@ func _on_dev_reset_game_confirmed() -> void:
 
 	PlayerSave.reset_gameplay_progress()
 	GameState.reset_gameplay_runtime_state()
+	StoryService.reset_story()
 	PlayerHotbarService.clear_cached_state()
 	PlayerActionService.clear_cached_state()
 	FieldMoveService.update_owned_charms_from_inventory([])

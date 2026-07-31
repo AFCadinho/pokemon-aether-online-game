@@ -6,6 +6,8 @@ const RUN_TILE_MOVE_DURATION := 0.14
 const MOVE_EASE_AMOUNT := 0.0
 const INPUT_BUFFER_DURATION := 0.14
 const CONTINUOUS_MOVE_HOLD_DELAY := 0.0
+const MAX_STORY_PATH_STEPS := 32
+const STORY_PATH_DIRECTIONS: Array[String] = ["up", "down", "left", "right"]
 const SORT_Z_MIN := -4096
 const SORT_Z_MAX := 4096
 const IDLE_ANIMATION_SPEED := 5.0
@@ -210,6 +212,7 @@ var ledge_right_tilemap: TileMapLayer
 # is_moving voorkomt dat je nieuwe input verwerkt terwijl de speler nog naar
 # de volgende tile aan het lopen is.
 var is_moving := false
+var story_path_movement_active := false
 var next_sand_footprint_is_left := true
 
 # target_position is een wereldpositie in pixels.
@@ -528,6 +531,7 @@ func reset_movement_state() -> void:
 	_finish_fishing_activity()
 	_finish_surf_activity()
 	is_moving = false
+	story_path_movement_active = false
 	global_position = persistent_position
 	target_position = global_position
 	move_start_position = global_position
@@ -550,6 +554,105 @@ func face_world_position(world_position: Vector2) -> void:
 		last_direction = Vector2.DOWN if delta.y > 0 else Vector2.UP
 	
 	set_idle_frame()
+
+func can_story_move_path(path: Array[String]) -> bool:
+	if (
+		path.is_empty()
+		or path.size() > MAX_STORY_PATH_STEPS
+		or is_moving
+		or fishing_activity_active
+		or surf_activity_active
+		or story_path_movement_active
+	):
+		return false
+	for direction_name: String in path:
+		if direction_name not in STORY_PATH_DIRECTIONS:
+			return false
+	return true
+
+func story_move_path(path: Array[String]) -> bool:
+	if not can_story_move_path(path) or not _preflight_story_move_path(path):
+		return false
+
+	story_path_movement_active = true
+	for direction_name: String in path:
+		var direction := _story_path_direction(direction_name)
+		var current_position := _snap_world_position(global_position)
+		var next_position := current_position + direction * TILE_SIZE
+
+		last_direction = direction
+		target_position = _snap_world_position(next_position)
+		move_start_position = current_position
+		global_position = current_position
+		move_elapsed = 0.0
+		move_duration = _get_current_tile_move_duration()
+		is_moving = true
+		play_walk_animation(direction)
+		while is_inside_tree() and is_moving:
+			await get_tree().process_frame
+		if not is_inside_tree():
+			return false
+
+	story_path_movement_active = false
+	set_idle_frame()
+	return true
+
+func _preflight_story_move_path(path: Array[String]) -> bool:
+	if not _has_story_movement_context():
+		return false
+	var current_position := _snap_world_position(global_position)
+	for direction_name: String in path:
+		var direction := _story_path_direction(direction_name)
+		var next_position := current_position + direction * TILE_SIZE
+		if _is_story_grid_step_blocked(current_position, next_position, direction):
+			return false
+		current_position = _snap_world_position(next_position)
+	return true
+
+func _has_story_movement_context() -> bool:
+	if not is_inside_tree():
+		return false
+	if not GameState.is_overworld_input_locked():
+		return false
+	var current_map := _resolve_current_map()
+	if current_map == null or not is_instance_valid(current_map):
+		return false
+	refresh_map_layers()
+	return collision_tilemap != null
+
+func _is_story_grid_step_blocked(
+	current_position: Vector2,
+	next_position: Vector2,
+	direction: Vector2
+) -> bool:
+	if not _has_story_movement_context():
+		return true
+	if direction == Vector2.DOWN and _tilemap_has_tile_at(block_down_tilemap, current_position):
+		return true
+	if direction == Vector2.UP and _tilemap_has_tile_at(block_up_tilemap, current_position):
+		return true
+	if _get_ledge_direction_for_tile(next_position) != Vector2.ZERO:
+		return true
+	var current_map := _resolve_current_map()
+	if (
+		current_map != null
+		and current_map.has_method("get_closed_route_gate_npc")
+		and current_map.call("get_closed_route_gate_npc", next_position) != null
+	):
+		return true
+	return not can_move_to(next_position)
+
+func _story_path_direction(direction_name: String) -> Vector2:
+	match direction_name:
+		"up":
+			return Vector2.UP
+		"down":
+			return Vector2.DOWN
+		"left":
+			return Vector2.LEFT
+		"right":
+			return Vector2.RIGHT
+	return Vector2.ZERO
 
 func _ready() -> void:
 	add_to_group("player")
@@ -1103,20 +1206,21 @@ func _process(delta: float) -> void:
 			global_position = _snap_world_position(target_position)
 			is_moving = false
 
-			if check_for_map_exit():
-				return
+			if not story_path_movement_active:
+				if check_for_map_exit():
+					return
 
-			_sync_surf_state_after_move()
+				_sync_surf_state_after_move()
 
-			var standing_on_tall_grass := is_standing_on_tall_grass()
-			if standing_on_tall_grass:
-				_spawn_tall_grass_rustle_effect()
-			_spawn_sand_footprint_effect()
+				var standing_on_tall_grass := is_standing_on_tall_grass()
+				if standing_on_tall_grass:
+					_spawn_tall_grass_rustle_effect()
+				_spawn_sand_footprint_effect()
 
-			if surf_activity_active:
-				check_for_wild_encounter(ENCOUNTER_TYPE_SURF)
-			elif standing_on_tall_grass:
-				check_for_grass_encounter()
+				if surf_activity_active:
+					check_for_wild_encounter(ENCOUNTER_TYPE_SURF)
+				elif standing_on_tall_grass:
+					check_for_grass_encounter()
 
 			if _can_accept_movement_input():
 				var next_direction := _get_next_movement_direction()
