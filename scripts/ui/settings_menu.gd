@@ -1648,15 +1648,23 @@ func _save_privacy_export(document_value: Variant) -> Dictionary:
 	if DirAccess.make_dir_recursive_absolute(export_directory) != OK:
 		return {"success": false}
 	var timestamp := Time.get_datetime_string_from_system().replace("T", "_").replace(":", "-")
-	var local_path := "user://exports/pokeaether-personal-data-%s.json" % timestamp
+	var request_fragment := str(document_value.get("requestId", "")).validate_filename().left(8)
+	var unique_suffix := "-%s" % request_fragment if not request_fragment.is_empty() else ""
+	var local_path := "user://exports/pokeaether-personal-data-%s%s.json" % [timestamp, unique_suffix]
 	var file := FileAccess.open(local_path, FileAccess.WRITE)
 	if file == null:
 		return {"success": false}
 	file.store_string(JSON.stringify(document_value, "\t"))
 	file.close()
+	var global_path := ProjectSettings.globalize_path(local_path)
+	if OS.get_name() in ["Linux", "macOS"]:
+		var owner_only_permissions := FileAccess.UNIX_READ_OWNER | FileAccess.UNIX_WRITE_OWNER
+		if FileAccess.set_unix_permissions(global_path, owner_only_permissions) != OK:
+			DirAccess.remove_absolute(global_path)
+			return {"success": false}
 	return {
 		"success": true,
-		"path": ProjectSettings.globalize_path(local_path),
+		"path": global_path,
 	}
 
 

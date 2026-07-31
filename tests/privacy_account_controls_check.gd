@@ -22,7 +22,10 @@ func _init() -> void:
 	_check(settings_menu.contains('privacy_delete_confirmation_input.text != "DELETE"'), "the destructive action requires explicit typed confirmation")
 	_check(settings_menu.contains('user://exports/pokeaether-personal-data-'), "exports are written to the application data directory")
 	_check(settings_menu.contains("OS.shell_show_in_file_manager(privacy_last_export_path)"), "successful exports can be revealed in the system file manager")
+	_check(settings_menu.contains("FileAccess.set_unix_permissions"), "desktop exports are restricted to the current OS user")
+	_check(settings_menu.contains("FileAccess.UNIX_READ_OWNER | FileAccess.UNIX_WRITE_OWNER"), "exports do not grant group or public file access")
 	_check(settings_menu.contains("AuthService.is_impersonating()"), "privacy controls reject staff impersonation sessions")
+	_check_export_file_permissions()
 
 	for locale_path: String in [
 		"res://localization/en.json",
@@ -37,6 +40,25 @@ func _init() -> void:
 		_check(catalog.contains('"ui.settings.privacy.error.confirmation"'), "%s has destructive confirmation guidance" % locale_path)
 
 	quit(1 if failed else 0)
+
+
+func _check_export_file_permissions() -> void:
+	var export_directory := ProjectSettings.globalize_path("user://exports")
+	_check(DirAccess.make_dir_recursive_absolute(export_directory) == OK, "the export directory can be created")
+	var path := ProjectSettings.globalize_path(
+		"user://exports/privacy-permission-check-%s.json" % Time.get_ticks_usec()
+	)
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	_check(file != null, "a privacy export can be written to the local data folder")
+	if file != null:
+		file.store_string("{}")
+		file.close()
+	if FileAccess.file_exists(path) and OS.get_name() in ["Linux", "macOS"]:
+		var expected := FileAccess.UNIX_READ_OWNER | FileAccess.UNIX_WRITE_OWNER
+		_check(FileAccess.set_unix_permissions(path, expected) == OK, "owner-only permissions can be applied")
+		_check(FileAccess.get_unix_permissions(path) == expected, "a written desktop export has owner-only 0600 permissions")
+	if FileAccess.file_exists(path):
+		DirAccess.remove_absolute(path)
 
 
 func _check(condition: bool, label: String) -> void:

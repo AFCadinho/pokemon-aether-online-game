@@ -80,6 +80,11 @@ func _run() -> void:
 		errors.call("message", coded_response) == "Die Guildnaam is al in gebruik.",
 		"known backend code displays in Dutch"
 	)
+	_check(
+		errors.call("message", {"detail": {"code": "current_password_incorrect"}})
+		== "Het huidige wachtwoord is onjuist.",
+		"privacy password errors explain how identity verification failed"
+	)
 	var unknown_response := {
 		"detail": {
 			"code": "future_sensitive_failure",
