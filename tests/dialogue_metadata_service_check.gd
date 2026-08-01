@@ -83,6 +83,11 @@ func _check_dialogue_npc_uses_dialogue_id_lookup() -> void:
 		and text.contains("resolved_dialogue_speaker_name"),
 		"DialogueNPC uses the localized dialogue speaker name"
 	)
+	_check_true(
+		text.contains('metadata.get("offeredQuestId", "")')
+		and text.contains('call_group("ui_overlay", "open_quest_offer"'),
+		"DialogueNPC opens a catalog-configured available side-quest offer"
+	)
 
 
 func _check_dialogue_npc_fallback_behavior() -> void:

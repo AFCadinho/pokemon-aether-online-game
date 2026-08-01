@@ -5,6 +5,7 @@ class_name DialogueNPC
 
 var resolved_dialogue_speaker_name := ""
 var story_dialogue_variants: Array[Dictionary] = []
+var offered_quest_id := ""
 
 
 func _ready() -> void:
@@ -26,9 +27,15 @@ func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> bo
 	if not dialogue_metadata_lines.is_empty():
 		if speaker_name_override.strip_edges().is_empty():
 			resolved_speaker_name = resolved_dialogue_speaker_name
-		return await super.show_dialogue(dialogue_metadata_lines, resolved_speaker_name)
+		var shown := await super.show_dialogue(dialogue_metadata_lines, resolved_speaker_name)
+		if shown:
+			_open_available_quest_offer()
+		return shown
 
-	return await super.show_dialogue(lines, resolved_speaker_name)
+	var shown := await super.show_dialogue(lines, resolved_speaker_name)
+	if shown:
+		_open_available_quest_offer()
+	return shown
 
 
 func _get_dialogue_metadata_lines() -> Array[String]:
@@ -56,6 +63,7 @@ func _get_dialogue_metadata_lines() -> Array[String]:
 
 func _apply_npc_metadata(metadata: Dictionary) -> void:
 	super._apply_npc_metadata(metadata)
+	offered_quest_id = str(metadata.get("offeredQuestId", "")).strip_edges()
 	story_dialogue_variants.clear()
 	var variants_value: Variant = metadata.get("dialogueVariants", [])
 	if not variants_value is Array:
@@ -63,6 +71,18 @@ func _apply_npc_metadata(metadata: Dictionary) -> void:
 	for variant_value: Variant in variants_value as Array:
 		if variant_value is Dictionary:
 			story_dialogue_variants.append((variant_value as Dictionary).duplicate(true))
+
+
+func _open_available_quest_offer() -> void:
+	if offered_quest_id.is_empty():
+		return
+	var quest := StoryService.get_quest(offered_quest_id)
+	if (
+		str(quest.get("questType", "")) != "side"
+		or str(quest.get("status", "")) != "available"
+	):
+		return
+	get_tree().call_group("ui_overlay", "open_quest_offer", offered_quest_id)
 
 
 func _resolve_story_dialogue_id() -> String:

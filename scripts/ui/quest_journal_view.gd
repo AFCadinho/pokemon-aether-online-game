@@ -88,6 +88,28 @@ func open_journal() -> void:
 	journal_opened.emit()
 
 
+func open_quest_offer(quest_id: String) -> bool:
+	var normalized_quest_id := quest_id.strip_edges()
+	var journal_service := _journal_service()
+	if normalized_quest_id.is_empty() or journal_service == null:
+		return false
+	var quest := _find_entry(journal_service.get_entries(), normalized_quest_id)
+	if (
+		str(quest.get("questType", "")) != "side"
+		or str(quest.get("status", "")) != "available"
+	):
+		return false
+	selected_filter = "side"
+	selected_quest_id = normalized_quest_id
+	side_offer_pending = false
+	detail_offer_status_label.visible = false
+	if modal_layer.visible:
+		refresh()
+	else:
+		open_journal()
+	return true
+
+
 func close_journal() -> void:
 	if not modal_layer.visible:
 		return
