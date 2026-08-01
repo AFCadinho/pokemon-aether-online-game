@@ -18,7 +18,12 @@ const QUEST_LOCALIZATION_KEYS: Array[String] = [
 	"ui.quest.filter.side",
 	"ui.quest.filter.completed",
 	"ui.quest.section.active",
+	"ui.quest.section.available",
 	"ui.quest.section.history",
+	"ui.quest.offer_prompt",
+	"ui.quest.offer_decline_hint",
+	"ui.quest.offer_accepting",
+	"ui.quest.offer_error",
 	"ui.quest.status.available",
 	"ui.quest.status.active",
 	"ui.quest.status.completed",
@@ -83,6 +88,21 @@ func _run() -> void:
 				"stepId": "find_parcel",
 				"objectiveKey": "",
 				"status": "active",
+				"currentValue": 0,
+				"targetValue": 1,
+			}],
+		}, {
+			"questId": "lost_keepsake",
+			"storylineId": "pallet_side_offer",
+			"definitionVersion": 1,
+			"questType": "side",
+			"titleKey": "",
+			"summaryKey": "",
+			"status": "available",
+			"steps": [{
+				"stepId": "find_keepsake",
+				"objectiveKey": "",
+				"status": "inactive",
 				"currentValue": 0,
 				"targetValue": 1,
 			}],
@@ -187,9 +207,9 @@ func _run() -> void:
 	localization_manager.set_locale("en")
 	await process_frame
 	_expect(view.detail_steps.get_child_count() == 1, "journal renders only revealed objectives")
-	_expect(view.filter_buttons["all"].text == "All  2", "all filter includes main and side quests")
+	_expect(view.filter_buttons["all"].text == "All  3", "all filter includes active quests and offers")
 	_expect(view.filter_buttons["main"].text == "Main  1", "main filter reports its quest count")
-	_expect(view.filter_buttons["side"].text == "Side  1", "side filter reports its quest count")
+	_expect(view.filter_buttons["side"].text == "Side  2", "side filter includes available offers")
 	_expect(
 		view.filter_buttons["completed"].text == "Completed  0",
 		"completed filter reports its quest count"
@@ -201,6 +221,23 @@ func _run() -> void:
 		"side filter selects and identifies a side quest"
 	)
 	_expect(view.detail_title_label.text == "Help Neighbor", "side quests have safe title fallbacks")
+	view.call("_on_quest_selected", "lost_keepsake")
+	_expect(
+		view.detail_offer_panel.visible
+		and not view.detail_objective_heading.visible
+		and view.detail_offer_accept_button.text == "Accept"
+		and view.detail_offer_decline_button.text == "Decline",
+		"available side quests show their summary with accept and decline actions"
+	)
+	view.call("_on_side_offer_declined")
+	_expect(not view.is_journal_open(), "declining closes the offer without activating it")
+	_expect(
+		str(story_service.get_quest("lost_keepsake").get("status", "")) == "available",
+		"declining leaves the side quest available for a later visit"
+	)
+	view.open_journal()
+	view.set_filter("side")
+	view.call("_on_quest_selected", "help_neighbor")
 	_expect(
 		view.tracker_title_label.text == "Dadinho's Surprise"
 		and view.tracker_objective_label.text == "› Go downstairs and speak with your father.",

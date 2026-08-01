@@ -167,9 +167,11 @@ func _verify_integration_contract() -> void:
 	_expect(
 		game_state_service.contains('const PLAYER_STORY_ENDPOINT := "/game/story"')
 		and game_state_service.contains('const STORY_BOOTSTRAP_ENDPOINT := "/game/story/bootstrap"')
+		and game_state_service.contains('const STORY_QUEST_ACCEPT_ENDPOINT := "/game/story/quests/%s/accept"')
 		and game_state_service.contains("func bootstrap_story() -> Dictionary:")
+		and game_state_service.contains("func accept_side_quest(quest_id: String, expected_revision: int) -> Dictionary:")
 		and game_state_service.contains('"story": story'),
-		"game state service exposes bootstrap, profile, and refresh story payloads"
+		"game state service exposes bootstrap, side-quest acceptance, profile, and refresh story payloads"
 	)
 	_expect(
 		loading.contains("await PlayerGameStateService.bootstrap_story()")

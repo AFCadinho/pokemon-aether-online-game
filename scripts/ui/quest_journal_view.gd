@@ -50,11 +50,18 @@ var detail_content: VBoxContainer
 var detail_type_label: Label
 var detail_title_label: Label
 var detail_summary_label: Label
+var detail_offer_panel: PanelContainer
+var detail_offer_prompt_label: Label
+var detail_offer_hint_label: Label
+var detail_offer_status_label: Label
+var detail_offer_accept_button: Button
+var detail_offer_decline_button: Button
 var detail_objective_heading: Label
 var detail_steps: VBoxContainer
 
 var selected_quest_id := ""
 var selected_filter := "all"
+var side_offer_pending := false
 var localization_manager: Node
 
 
@@ -380,6 +387,46 @@ func _build_journal() -> void:
 	detail_summary_label = _label(14, MUTED_TEXT)
 	detail_summary_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	detail_content.add_child(detail_summary_label)
+	detail_offer_panel = PanelContainer.new()
+	detail_offer_panel.visible = false
+	detail_offer_panel.add_theme_stylebox_override(
+		"panel",
+		_style(Color("#1a140beb"), Color("#8a7045"), 10, 1)
+	)
+	detail_content.add_child(detail_offer_panel)
+	var offer_margin := MarginContainer.new()
+	_set_margins(offer_margin, 14, 12, 14, 12)
+	detail_offer_panel.add_child(offer_margin)
+	var offer_stack := VBoxContainer.new()
+	offer_stack.add_theme_constant_override("separation", 8)
+	offer_margin.add_child(offer_stack)
+	detail_offer_prompt_label = _label(13, TEXT)
+	detail_offer_prompt_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	offer_stack.add_child(detail_offer_prompt_label)
+	detail_offer_hint_label = _label(11, MUTED_TEXT)
+	detail_offer_hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	offer_stack.add_child(detail_offer_hint_label)
+	detail_offer_status_label = _label(11, DANGER)
+	detail_offer_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	detail_offer_status_label.visible = false
+	offer_stack.add_child(detail_offer_status_label)
+	var offer_actions := HBoxContainer.new()
+	offer_actions.add_theme_constant_override("separation", 8)
+	offer_stack.add_child(offer_actions)
+	detail_offer_decline_button = Button.new()
+	detail_offer_decline_button.custom_minimum_size = Vector2(130, 38)
+	detail_offer_decline_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	detail_offer_decline_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	detail_offer_decline_button.pressed.connect(_on_side_offer_declined)
+	_style_button(detail_offer_decline_button, false)
+	offer_actions.add_child(detail_offer_decline_button)
+	detail_offer_accept_button = Button.new()
+	detail_offer_accept_button.custom_minimum_size = Vector2(130, 38)
+	detail_offer_accept_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	detail_offer_accept_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	detail_offer_accept_button.pressed.connect(_on_side_offer_accepted)
+	_style_button(detail_offer_accept_button, true)
+	offer_actions.add_child(detail_offer_accept_button)
 	var detail_divider := HSeparator.new()
 	detail_content.add_child(detail_divider)
 	detail_objective_heading = _label(12, ACCENT)
@@ -484,6 +531,10 @@ func _refresh_journal() -> void:
 	close_button.text = localization_manager.text("common.close")
 	list_heading_label.text = localization_manager.text("ui.quest.list_heading").to_upper()
 	detail_objective_heading.text = localization_manager.text("ui.quest.objectives").to_upper()
+	detail_offer_prompt_label.text = localization_manager.text("ui.quest.offer_prompt")
+	detail_offer_hint_label.text = localization_manager.text("ui.quest.offer_decline_hint")
+	detail_offer_accept_button.text = localization_manager.text("common.accept")
+	detail_offer_decline_button.text = localization_manager.text("common.decline")
 
 	_clear_children_except(quest_list, empty_list_label)
 
@@ -517,7 +568,9 @@ func _refresh_journal() -> void:
 		var quest: Dictionary = quest_value as Dictionary
 		var quest_id := str(quest.get("questId", ""))
 		var status := str(quest.get("status", ""))
-		var section := "active" if status == "active" else "history"
+		var section := "available" if status == "available" else (
+			"active" if status == "active" else "history"
+		)
 		if section != current_section:
 			current_section = section
 			var section_label := _label(10, MUTED_TEXT)
@@ -566,6 +619,14 @@ func _show_quest_detail(quest: Dictionary) -> void:
 		str(quest.get("summaryKey", "")),
 		str(quest.get("questId", ""))
 	)
+	var is_side_offer := quest_type == "side" and str(quest.get("status", "")) == "available"
+	detail_offer_panel.visible = is_side_offer
+	detail_offer_accept_button.disabled = side_offer_pending
+	detail_offer_decline_button.disabled = side_offer_pending
+	if is_side_offer:
+		detail_objective_heading.visible = false
+		_clear_children_except(detail_steps)
+		return
 	detail_objective_heading.visible = true
 	_clear_children_except(detail_steps)
 	var journal_service := _journal_service()
@@ -600,6 +661,7 @@ func _show_empty_detail() -> void:
 	detail_title_label.text = localization_manager.text("ui.quest.empty_title")
 	detail_summary_label.text = localization_manager.text("ui.quest.empty_detail")
 	detail_objective_heading.visible = false
+	detail_offer_panel.visible = false
 	_clear_children_except(detail_steps)
 
 
@@ -612,8 +674,60 @@ func set_filter(filter_id: String) -> void:
 
 
 func _on_quest_selected(quest_id: String) -> void:
+	side_offer_pending = false
+	detail_offer_status_label.visible = false
 	selected_quest_id = quest_id
 	_refresh_journal()
+
+
+func _on_side_offer_declined() -> void:
+	if side_offer_pending:
+		return
+	close_journal()
+
+
+func _on_side_offer_accepted() -> void:
+	if side_offer_pending:
+		return
+	var journal_service := _journal_service()
+	var quest := _find_entry(
+		journal_service.get_entries() if journal_service != null else [],
+		selected_quest_id
+	)
+	if (
+		str(quest.get("questType", "")) != "side"
+		or str(quest.get("status", "")) != "available"
+	):
+		return
+	side_offer_pending = true
+	detail_offer_accept_button.disabled = true
+	detail_offer_decline_button.disabled = true
+	detail_offer_status_label.text = localization_manager.text("ui.quest.offer_accepting")
+	detail_offer_status_label.add_theme_color_override("font_color", MUTED_TEXT)
+	detail_offer_status_label.visible = true
+	var game_state_service := get_node_or_null("/root/PlayerGameStateService")
+	var story_service := get_node_or_null("/root/StoryService")
+	if game_state_service == null or story_service == null:
+		side_offer_pending = false
+		detail_offer_accept_button.disabled = false
+		detail_offer_decline_button.disabled = false
+		detail_offer_status_label.text = localization_manager.text("ui.quest.offer_error")
+		detail_offer_status_label.add_theme_color_override("font_color", DANGER)
+		return
+	var result_value: Variant = await game_state_service.call(
+		"accept_side_quest",
+		selected_quest_id,
+		int(story_service.call("get_revision"))
+	)
+	var result: Dictionary = result_value as Dictionary if result_value is Dictionary else {}
+	side_offer_pending = false
+	if bool(result.get("success", false)):
+		return
+	detail_offer_accept_button.disabled = false
+	detail_offer_decline_button.disabled = false
+	detail_offer_status_label.text = localization_manager.text("ui.quest.offer_error")
+	detail_offer_status_label.add_theme_color_override("font_color", DANGER)
+	detail_offer_status_label.visible = true
 
 
 func _on_tracker_gui_input(event: InputEvent) -> void:

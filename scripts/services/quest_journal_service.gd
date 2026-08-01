@@ -12,6 +12,7 @@ func _ready() -> void:
 
 
 func get_entries() -> Array:
+	var offers: Array = []
 	var active: Array = []
 	var history: Array = []
 	var story_service := _story_service()
@@ -22,11 +23,13 @@ func get_entries() -> Array:
 			continue
 		var quest: Dictionary = quest_value as Dictionary
 		match str(quest.get("status", "")):
+			"available":
+				offers.append(quest.duplicate(true))
 			"active":
 				active.append(quest.duplicate(true))
 			"completed", "failed":
 				history.append(quest.duplicate(true))
-	return active + history
+	return active + offers + history
 
 
 func get_active_main_quest() -> Dictionary:
