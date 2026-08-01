@@ -202,7 +202,7 @@ func _run() -> void:
 	)
 	_expect(view.detail_title_label.text == "Help Neighbor", "side quests have safe title fallbacks")
 	_expect(
-		view.tracker_title_label.text == "Choose Your Pokémon Partner"
+		view.tracker_title_label.text == "Dadinho's Surprise"
 		and view.tracker_objective_label.text == "› Go downstairs and speak with your father.",
 		"side quest selection does not replace the MSQ HUD tracker"
 	)
@@ -255,7 +255,7 @@ func _run() -> void:
 	})
 	await process_frame
 	_expect(
-		view.tracker_objective_label.text == "› Meet Professor Oak and choose your starter Pokémon.",
+		view.tracker_objective_label.text == "› Meet Professor Oak and receive the Pokémon Dadinho prepared for you.",
 		"HUD tracker updates automatically when story progress changes"
 	)
 	_expect(

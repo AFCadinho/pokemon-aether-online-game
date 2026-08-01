@@ -6,11 +6,11 @@ extends DialogueNPC
 @export var starter_gift_dialogue_lines: Array[String] = [
 	"Ah, there you are!",
 	"Your father has collected and cared for Pokemon from every region over the years.",
-	"He left a surprise here for you and asked me one question: Which Pokemon did you always dream of having when you were little?",
+	"Before he left, Dadinho prepared a Pokemon especially for you and entrusted it to me. It has been waiting here as his surprise.",
 ]
 @export var starter_confirmed_dialogue_lines: Array[String] = [
-	"{pokemon}... An excellent choice.",
-	"Dadinho hoped you would choose with your heart.",
+	"{pokemon}... So this is the partner Dadinho prepared for you.",
+	"He knew exactly which Pokemon would suit you.",
 	"You received {pokemon}!",
 ]
 @export var starter_received_dialogue_lines: Array[String] = [
