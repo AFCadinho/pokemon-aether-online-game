@@ -45,8 +45,26 @@ func _init() -> void:
 		"a phase update cannot release input unless the server timer release succeeded"
 	)
 	_check(
-		battle_source.contains("if releases_presentation_fence:\n\t\t_release_pvp_presentation_hold_from_ack_barrier(message)"),
+		battle_source.contains("if releases_presentation_fence:")
+		and battle_source.contains("_release_pvp_presentation_hold_from_ack_barrier(message)"),
 		"the shared render barrier releases the local presentation hold"
+	)
+	_check(
+		battle_source.contains("_try_open_pvp_local_prechoice_window.call_deferred(completion.duplicate(true))"),
+		"local controls may pre-open only after the completed render batch leaves the queue"
+	)
+	_check(
+		battle_source.contains("pvp_prechoice_buffer.open_window(")
+		and battle_source.contains("pvp_pending_presentation_fence,"),
+		"prechoice remains correlated to the private decision and pending render fence"
+	)
+	_check(
+		battle_source.contains("_submit_pvp_buffered_prechoice.call_deferred(buffered_choice, phase)"),
+		"a buffered choice is submitted only by the authoritative phase release"
+	)
+	_check(
+		battle_source.contains("pvp_prechoice_buffer.reset()\n\t\tpvp_idle_wait_recovery_active = true"),
+		"resynchronization discards an unsubmitted local prechoice"
 	)
 	_check_duplicate_batch_retries_until_render_cursor_advances()
 	quit(1 if failed else 0)

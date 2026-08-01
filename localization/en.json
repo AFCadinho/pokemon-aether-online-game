@@ -1898,6 +1898,7 @@
   "battle.prompt.choose_another_pokemon": "Choose another Pokémon!",
   "battle.prompt.choose_lead": "Choose your Lead",
   "battle.prompt.waiting_opponent": "Waiting for opponent...",
+  "battle.prompt.choice_buffered": "Choice saved. You can still change it while your opponent finishes.",
   "battle.prompt.waiting_opponent_switch": "Waiting for opponent switch...",
   "battle.prompt.waiting_other_player": "Waiting for the other player...",
   "battle.prompt.waiting_both_players": "Waiting for both players...",
