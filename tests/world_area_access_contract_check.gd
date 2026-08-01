@@ -10,6 +10,8 @@ const ROUTE_1_PATH := "res://scenes/overworld/kanto/routes/kanto_route_1.tscn"
 const CATALOG_BUILDER_PATH := "res://tools/world_access_catalog_builder.gd"
 const CATALOG_GENERATOR_SCENE_PATH := "res://tools/generate_world_access_catalog.tscn"
 const GENERATED_CATALOG_PATH := "res://generated/world_access_catalog.json"
+const LEGACY_STAFF_CATALOG_PATH := "res://generated/staff_teleport_catalog.json"
+const LEGACY_STAFF_GENERATOR_PATH := "res://tools/generate_staff_teleport_catalog.py"
 
 var failed := false
 
@@ -95,8 +97,15 @@ func _init() -> void:
 	_expect(
 		FileAccess.file_exists(CATALOG_GENERATOR_SCENE_PATH)
 		and FileAccess.file_exists(GENERATED_CATALOG_PATH)
-		and catalog_builder_source.contains('scene_path.contains("/reusable_interiors/")'),
+		and catalog_builder_source.contains('scene_path.contains("/reusable_interiors/")')
+		and catalog_builder_source.contains('"spawnPoints": _sorted_dictionary(spawn_points)')
+		and catalog_builder_source.contains('"safeForStaffTeleport"'),
 		"World access is generated from concrete overworld scenes"
+	)
+	_expect(
+		not FileAccess.file_exists(LEGACY_STAFF_CATALOG_PATH)
+			and not FileAccess.file_exists(LEGACY_STAFF_GENERATOR_PATH),
+		"Staff teleportation has no independent generated catalog"
 	)
 
 	quit(1 if failed else 0)

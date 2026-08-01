@@ -10,7 +10,19 @@
 			"sceneAliases": [
 				"uid://brjbfuu4rye1o"
 			],
-			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn"
+			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn",
+			"spawnPoints": {
+				"pallet_town_exit": {
+					"facingDirection": "down",
+					"label": "Pallet Town Exit",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromPalletTown",
+					"tile": {
+						"x": 12,
+						"y": 29
+					}
+				}
+			}
 		},
 		"kanto_pallet_town": {
 			"areaType": "exterior",
@@ -22,7 +34,69 @@
 			"sceneAliases": [
 				"uid://cbb7318supm5h"
 			],
-			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn"
+			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn",
+			"spawnPoints": {
+				"from_players_house": {
+					"facingDirection": "down",
+					"label": "From Players House",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromPlayersHouse",
+					"tile": {
+						"x": 20,
+						"y": 17
+					}
+				},
+				"from_rivals_house": {
+					"facingDirection": "down",
+					"label": "From Rivals House",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromRivalsHouse",
+					"tile": {
+						"x": 35,
+						"y": 13
+					}
+				},
+				"heal_npc": {
+					"facingDirection": "down",
+					"label": "Heal Npc",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "HealNPC",
+					"tile": {
+						"x": 11,
+						"y": 8
+					}
+				},
+				"oaks_lab_entrance": {
+					"facingDirection": "up",
+					"label": "Oak's Lab Entrance",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromOaksLab",
+					"tile": {
+						"x": 40,
+						"y": 26
+					}
+				},
+				"route_1_entrance": {
+					"facingDirection": "down",
+					"label": "Route 1 Entrance",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute1",
+					"tile": {
+						"x": 31,
+						"y": 3
+					}
+				},
+				"spawn": {
+					"facingDirection": "down",
+					"label": "Spawn",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "InitialSpawn",
+					"tile": {
+						"x": 20,
+						"y": 17
+					}
+				}
+			}
 		},
 		"kanto_pewter_city": {
 			"areaType": "exterior",
@@ -34,7 +108,79 @@
 			"sceneAliases": [
 				"uid://b63qp0afy4rpd"
 			],
-			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn"
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn",
+			"spawnPoints": {
+				"from_gym": {
+					"facingDirection": "down",
+					"label": "From Gym",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromGym",
+					"tile": {
+						"x": 18,
+						"y": 18
+					}
+				},
+				"from_house_1": {
+					"facingDirection": "down",
+					"label": "From House 1",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromHouse1",
+					"tile": {
+						"x": 34,
+						"y": 31
+					}
+				},
+				"from_house_2": {
+					"facingDirection": "down",
+					"label": "From House 2",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromHouse2",
+					"tile": {
+						"x": 14,
+						"y": 49
+					}
+				},
+				"from_museum": {
+					"facingDirection": "down",
+					"label": "From Museum",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromMuseum",
+					"tile": {
+						"x": 43,
+						"y": 13
+					}
+				},
+				"from_pokecenter": {
+					"facingDirection": "down",
+					"label": "From Pokecenter",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromPokecenter",
+					"tile": {
+						"x": 44,
+						"y": 49
+					}
+				},
+				"route_2_entrance": {
+					"facingDirection": "up",
+					"label": "Route 2 Entrance",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute2",
+					"tile": {
+						"x": 26,
+						"y": 58
+					}
+				},
+				"route_3_entrance": {
+					"facingDirection": "left",
+					"label": "Route 3 Entrance",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute3",
+					"tile": {
+						"x": 58,
+						"y": 33
+					}
+				}
+			}
 		},
 		"kanto_pewter_city_pokemon_center": {
 			"areaType": "interior",
@@ -46,7 +192,29 @@
 			"sceneAliases": [
 				"uid://dgo4lvw2as13c"
 			],
-			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/pokemon_center.tscn"
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/pokemon_center.tscn",
+			"spawnPoints": {
+				"from_outside": {
+					"facingDirection": "down",
+					"label": "From Outside",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromOutside",
+					"tile": {
+						"x": 14,
+						"y": 31
+					}
+				},
+				"heal_npc": {
+					"facingDirection": "down",
+					"label": "Heal Npc",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "HealNPC",
+					"tile": {
+						"x": 14,
+						"y": 23
+					}
+				}
+			}
 		},
 		"kanto_players_house": {
 			"areaType": "interior",
@@ -58,7 +226,49 @@
 			"sceneAliases": [
 				"uid://dxi5ghtfb65wq"
 			],
-			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/players_house.tscn"
+			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/players_house.tscn",
+			"spawnPoints": {
+				"from_pallet_town": {
+					"facingDirection": "down",
+					"label": "From Pallet Town",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromPalletTown",
+					"tile": {
+						"x": 13,
+						"y": 30
+					}
+				},
+				"ground_floor_stairs": {
+					"facingDirection": "down",
+					"label": "Ground Floor Stairs",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "GroundFloorStairs",
+					"tile": {
+						"x": 15,
+						"y": 23
+					}
+				},
+				"initial_spawn": {
+					"facingDirection": "down",
+					"label": "Initial Spawn",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "InitialSpawn",
+					"tile": {
+						"x": 9,
+						"y": 10
+					}
+				},
+				"upper_floor_stairs": {
+					"facingDirection": "down",
+					"label": "Upper Floor Stairs",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "UpperFloorStairs",
+					"tile": {
+						"x": 11,
+						"y": 8
+					}
+				}
+			}
 		},
 		"kanto_rivals_house": {
 			"areaType": "interior",
@@ -70,7 +280,39 @@
 			"sceneAliases": [
 				"uid://c5ohbprcq5fyb"
 			],
-			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/rivals_house.tscn"
+			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/rivals_house.tscn",
+			"spawnPoints": {
+				"from_pallet_town": {
+					"facingDirection": "down",
+					"label": "From Pallet Town",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromPalletTown",
+					"tile": {
+						"x": 5,
+						"y": 29
+					}
+				},
+				"ground_floor_stairs": {
+					"facingDirection": "down",
+					"label": "Ground Floor Stairs",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "GroundFloorStairs",
+					"tile": {
+						"x": 3,
+						"y": 23
+					}
+				},
+				"upper_floor_stairs": {
+					"facingDirection": "down",
+					"label": "Upper Floor Stairs",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "UpperFloorStairs",
+					"tile": {
+						"x": 8,
+						"y": 7
+					}
+				}
+			}
 		},
 		"kanto_route_1": {
 			"areaType": "route",
@@ -82,7 +324,29 @@
 			"sceneAliases": [
 				"uid://b65lnk8twsct"
 			],
-			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_1.tscn"
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_1.tscn",
+			"spawnPoints": {
+				"pallet_town_entrance": {
+					"facingDirection": "up",
+					"label": "Pallet Town Entrance",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromPalletTown",
+					"tile": {
+						"x": 30,
+						"y": 73
+					}
+				},
+				"viridian_city_entrance": {
+					"facingDirection": "down",
+					"label": "Viridian City Entrance",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromViridianCity",
+					"tile": {
+						"x": 35,
+						"y": 1
+					}
+				}
+			}
 		},
 		"kanto_route_2": {
 			"areaType": "route",
@@ -94,7 +358,69 @@
 			"sceneAliases": [
 				"uid://cnbfksossjfg7"
 			],
-			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_2.tscn"
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_2.tscn",
+			"spawnPoints": {
+				"from_route_2_gate_north": {
+					"facingDirection": "down",
+					"label": "From Route 2 Gate North",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromRoute2GateNorth",
+					"tile": {
+						"x": 43,
+						"y": 24
+					}
+				},
+				"from_route_2_gate_south": {
+					"facingDirection": "down",
+					"label": "From Route 2 Gate South",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromRoute2GateSouth",
+					"tile": {
+						"x": 43,
+						"y": 35
+					}
+				},
+				"pewter_city_entrance": {
+					"facingDirection": "up",
+					"label": "Pewter City Entrance",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromPewterCity",
+					"tile": {
+						"x": 46,
+						"y": 1
+					}
+				},
+				"viridian_city_entrance": {
+					"facingDirection": "up",
+					"label": "Viridian City Entrance",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromViridianCity",
+					"tile": {
+						"x": 18,
+						"y": 73
+					}
+				},
+				"viridian_forest_north_entrance": {
+					"facingDirection": "down",
+					"label": "Viridian Forest North Entrance",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromViridianForestNorth",
+					"tile": {
+						"x": 11,
+						"y": 16
+					}
+				},
+				"viridian_forest_south_entrance": {
+					"facingDirection": "up",
+					"label": "Viridian Forest South Entrance",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromViridianForestSouth",
+					"tile": {
+						"x": 10,
+						"y": 40
+					}
+				}
+			}
 		},
 		"kanto_route_2_gate": {
 			"areaType": "transition",
@@ -104,7 +430,29 @@
 			"locationGroupLabel": "Route 2",
 			"regionName": "Kanto",
 			"sceneAliases": [],
-			"scenePath": "res://scenes/overworld/kanto/transition_buildings/route_2_gate.tscn"
+			"scenePath": "res://scenes/overworld/kanto/transition_buildings/route_2_gate.tscn",
+			"spawnPoints": {
+				"from_north": {
+					"facingDirection": "down",
+					"label": "From North",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromNorth",
+					"tile": {
+						"x": 10,
+						"y": 8
+					}
+				},
+				"from_south": {
+					"facingDirection": "down",
+					"label": "From South",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromSouth",
+					"tile": {
+						"x": 10,
+						"y": 18
+					}
+				}
+			}
 		},
 		"kanto_route_2_viridian_forest_north_gate": {
 			"areaType": "transition",
@@ -114,7 +462,29 @@
 			"locationGroupLabel": "Viridian Forest",
 			"regionName": "Kanto",
 			"sceneAliases": [],
-			"scenePath": "res://scenes/overworld/kanto/transition_buildings/route_2_viridian_forest_north_gate.tscn"
+			"scenePath": "res://scenes/overworld/kanto/transition_buildings/route_2_viridian_forest_north_gate.tscn",
+			"spawnPoints": {
+				"from_north": {
+					"facingDirection": "down",
+					"label": "From North",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromNorth",
+					"tile": {
+						"x": 10,
+						"y": 8
+					}
+				},
+				"from_south": {
+					"facingDirection": "down",
+					"label": "From South",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromSouth",
+					"tile": {
+						"x": 10,
+						"y": 18
+					}
+				}
+			}
 		},
 		"kanto_route_2_viridian_forest_south_gate": {
 			"areaType": "transition",
@@ -124,7 +494,29 @@
 			"locationGroupLabel": "Viridian Forest",
 			"regionName": "Kanto",
 			"sceneAliases": [],
-			"scenePath": "res://scenes/overworld/kanto/transition_buildings/route_2_viridian_forest_south_gate.tscn"
+			"scenePath": "res://scenes/overworld/kanto/transition_buildings/route_2_viridian_forest_south_gate.tscn",
+			"spawnPoints": {
+				"from_north": {
+					"facingDirection": "down",
+					"label": "From North",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromNorth",
+					"tile": {
+						"x": 10,
+						"y": 8
+					}
+				},
+				"from_south": {
+					"facingDirection": "down",
+					"label": "From South",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromSouth",
+					"tile": {
+						"x": 10,
+						"y": 18
+					}
+				}
+			}
 		},
 		"kanto_viridian_city": {
 			"areaType": "exterior",
@@ -136,7 +528,39 @@
 			"sceneAliases": [
 				"uid://b8tl17hk3yovn"
 			],
-			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn"
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
+			"spawnPoints": {
+				"from_pokecenter": {
+					"facingDirection": "down",
+					"label": "From Pokecenter",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromPokecenter",
+					"tile": {
+						"x": 32,
+						"y": 20
+					}
+				},
+				"from_route_2": {
+					"facingDirection": "down",
+					"label": "From Route 2",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromRoute2",
+					"tile": {
+						"x": 24,
+						"y": 1
+					}
+				},
+				"route_1_entrance": {
+					"facingDirection": "up",
+					"label": "Route 1 Entrance",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute1",
+					"tile": {
+						"x": 24,
+						"y": 37
+					}
+				}
+			}
 		},
 		"kanto_viridian_city_pokemon_center": {
 			"areaType": "interior",
@@ -146,7 +570,29 @@
 			"locationGroupLabel": "Viridian City",
 			"regionName": "Kanto",
 			"sceneAliases": [],
-			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn"
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn",
+			"spawnPoints": {
+				"from_outside": {
+					"facingDirection": "down",
+					"label": "From Outside",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromOutside",
+					"tile": {
+						"x": 14,
+						"y": 31
+					}
+				},
+				"heal_npc": {
+					"facingDirection": "down",
+					"label": "Heal Npc",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "HealNPC",
+					"tile": {
+						"x": 14,
+						"y": 23
+					}
+				}
+			}
 		},
 		"kanto_viridian_forest": {
 			"areaType": "wilderness",
@@ -158,10 +604,32 @@
 			"sceneAliases": [
 				"uid://dxrgvafxdtmod"
 			],
-			"scenePath": "res://scenes/overworld/kanto/routes/viridian_forest.tscn"
+			"scenePath": "res://scenes/overworld/kanto/routes/viridian_forest.tscn",
+			"spawnPoints": {
+				"route_2_north_entrance": {
+					"facingDirection": "down",
+					"label": "Route 2 North Entrance",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute2North",
+					"tile": {
+						"x": 11,
+						"y": 8
+					}
+				},
+				"route_2_south_entrance": {
+					"facingDirection": "up",
+					"label": "Route 2 South Entrance",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute2South",
+					"tile": {
+						"x": 39,
+						"y": 68
+					}
+				}
+			}
 		}
 	},
-	"schemaVersion": 2,
+	"schemaVersion": 3,
 	"transitions": {
 		"kanto_oaks_lab__to_pallet_town": {
 			"destination": {

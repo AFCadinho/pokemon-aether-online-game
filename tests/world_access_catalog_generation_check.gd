@@ -17,7 +17,7 @@ func _init() -> void:
 	var payload := payload_value as Dictionary
 	var areas_value: Variant = payload.get("areas", {})
 	var transitions_value: Variant = payload.get("transitions", {})
-	_expect(payload.get("schemaVersion") == 2, "Catalog schema version is supported")
+	_expect(payload.get("schemaVersion") == 3, "Catalog schema version is supported")
 	_expect(areas_value is Dictionary, "Catalog exposes an area dictionary")
 	_expect(transitions_value is Dictionary, "Catalog exposes a transition dictionary")
 	if not areas_value is Dictionary or not transitions_value is Dictionary:
@@ -36,6 +36,24 @@ func _init() -> void:
 	_expect(
 		areas.has("kanto_viridian_city_pokemon_center"),
 		"Viridian City Pokémon Center scene metadata is registered"
+	)
+	var viridian_center := areas.get("kanto_viridian_city_pokemon_center", {}) as Dictionary
+	var viridian_center_points := viridian_center.get("spawnPoints", {}) as Dictionary
+	_expect(
+		viridian_center_points.has("from_outside")
+			and viridian_center_points.has("heal_npc"),
+		"Inherited Pokémon Center spawn points are part of the canonical catalog"
+	)
+	var viridian_city := areas.get("kanto_viridian_city", {}) as Dictionary
+	var viridian_points := viridian_city.get("spawnPoints", {}) as Dictionary
+	_expect(
+		bool((viridian_points.get("route_1_entrance", {}) as Dictionary).get(
+			"safeForStaffTeleport", false
+		))
+			and not bool((viridian_points.get("from_pokecenter", {}) as Dictionary).get(
+				"safeForStaffTeleport", true
+			)),
+		"Staff-safe destinations are explicit and fail closed"
 	)
 	_expect(areas.has("kanto_route_2_gate"), "Inherited transition building is registered")
 	_expect(
