@@ -3879,6 +3879,12 @@ func _drain_pvp_event_queue() -> bool:
 		all_success = all_success and success
 
 	pvp_event_queue.is_rendering = false
+	# A privacy-projected pivot resolution can arrive while this drain is still
+	# waiting for the previous batch's phase release. Its first deferred idle
+	# drain then exits because is_rendering is true. Re-arm after releasing the
+	# queue so an already-buffered U-turn/Volt Switch continuation cannot remain
+	# stranded until a timer or render barrier expires.
+	_drain_idle_pvp_realtime_updates.call_deferred()
 	_retry_pending_pvp_authoritative_terminal.call_deferred()
 	return all_success
 
