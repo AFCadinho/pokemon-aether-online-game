@@ -800,7 +800,11 @@ var staff_teleport_send_confirmation: ConfirmationDialog
 var staff_teleport_pending_send_request: Dictionary = {}
 var staff_teleport_maps: Array = []
 var staff_teleport_filtered_destinations: Array = []
+var staff_teleport_destination_rows: Array = []
+var staff_teleport_expanded_maps: Dictionary = {}
 var staff_teleport_safe_maps: Array = []
+var staff_teleport_send_destination_rows: Array = []
+var staff_teleport_send_expanded_maps: Dictionary = {}
 var staff_teleport_online_players: Array = []
 var staff_teleport_filtered_players: Array = []
 var staff_teleport_points_loading := false
@@ -7481,7 +7485,6 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_destination_results.custom_minimum_size = Vector2(0, 154)
 	staff_teleport_destination_results.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_destination_results.item_selected.connect(_on_staff_teleport_destination_selected)
-	staff_teleport_destination_results.item_activated.connect(_on_staff_teleport_destination_selected)
 	staff_teleport_self_section.add_child(staff_teleport_destination_results)
 
 	staff_teleport_selected_destination_label = Label.new()
@@ -7620,7 +7623,6 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_send_destination_results.custom_minimum_size = Vector2(0, 116)
 	staff_teleport_send_destination_results.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_send_destination_results.item_selected.connect(_on_staff_teleport_send_destination_selected)
-	staff_teleport_send_destination_results.item_activated.connect(_on_staff_teleport_send_destination_selected)
 	staff_teleport_send_section.add_child(staff_teleport_send_destination_results)
 
 	staff_teleport_player_reason_input = LineEdit.new()
@@ -24806,7 +24808,7 @@ func _load_staff_teleport_points_if_needed(force := false) -> void:
 	staff_teleport_maps = maps_value if maps_value is Array else []
 	_rebuild_staff_teleport_map_options()
 	if staff_teleport_confirm_button != null:
-		staff_teleport_confirm_button.disabled = staff_teleport_maps.is_empty()
+		staff_teleport_confirm_button.disabled = _get_selected_staff_teleport_destination().is_empty()
 
 
 func _load_staff_teleport_online_players_if_needed(force := false) -> void:
@@ -24838,7 +24840,10 @@ func _load_staff_teleport_online_players_if_needed(force := false) -> void:
 	if staff_teleport_to_player_button != null:
 		staff_teleport_to_player_button.disabled = staff_teleport_filtered_players.is_empty()
 	if staff_teleport_send_player_button != null:
-		staff_teleport_send_player_button.disabled = staff_teleport_filtered_players.is_empty() or staff_teleport_filtered_safe_destinations.is_empty()
+		staff_teleport_send_player_button.disabled = (
+			staff_teleport_filtered_players.is_empty()
+			or _get_selected_staff_teleport_send_destination().is_empty()
+		)
 
 
 func _load_staff_teleport_safe_points_if_needed(force := false) -> void:
@@ -24868,7 +24873,10 @@ func _load_staff_teleport_safe_points_if_needed(force := false) -> void:
 	staff_teleport_safe_maps = maps_value if maps_value is Array else []
 	_rebuild_staff_teleport_send_map_options()
 	if staff_teleport_send_player_button != null:
-		staff_teleport_send_player_button.disabled = staff_teleport_filtered_safe_destinations.is_empty() or staff_teleport_filtered_players.is_empty()
+		staff_teleport_send_player_button.disabled = (
+			_get_selected_staff_teleport_send_destination().is_empty()
+			or staff_teleport_filtered_players.is_empty()
+		)
 
 
 func _rebuild_staff_teleport_map_options() -> void:
@@ -24886,37 +24894,54 @@ func _rebuild_staff_teleport_map_options() -> void:
 		spawn_query = staff_teleport_spawn_search.text.strip_edges().to_lower()
 
 	staff_teleport_filtered_destinations = []
+	staff_teleport_destination_rows = []
 	staff_teleport_destination_results.clear()
-	var selected_index := -1
+	var selected_row_index := -1
+	var search_active := map_query != "" or spawn_query != ""
 	for map_value: Variant in staff_teleport_maps:
 		var map_entry: Dictionary = _staff_dictionary_from_variant(map_value)
 		var map_id := str(map_entry.get("id", "")).strip_edges()
 		var map_label := str(map_entry.get("label", map_id)).strip_edges()
 		var points: Array = map_entry.get("points", []) if map_entry.get("points", []) is Array else []
+		var map_search_text := "%s %s" % [map_label.to_lower(), map_id.to_lower()]
+		if map_query != "" and not map_search_text.contains(map_query):
+			continue
+		var matching_points: Array = []
 		for point_value: Variant in points:
 			var point_entry: Dictionary = _staff_dictionary_from_variant(point_value)
 			var point_id := str(point_entry.get("id", "")).strip_edges()
 			var point_label := str(point_entry.get("label", point_id)).strip_edges()
-			var map_search_text := "%s %s" % [map_label.to_lower(), map_id.to_lower()]
 			var spawn_search_text := "%s %s" % [point_label.to_lower(), point_id.to_lower()]
-			if map_query != "" and not map_search_text.contains(map_query):
-				continue
 			if spawn_query != "" and not spawn_search_text.contains(spawn_query):
 				continue
-			var destination := {
-				"map": map_entry,
-				"point": point_entry,
-			}
+			matching_points.append(point_entry)
+			var destination := {"map": map_entry, "point": point_entry}
 			staff_teleport_filtered_destinations.append(destination)
-			var destination_index := staff_teleport_filtered_destinations.size() - 1
-			staff_teleport_destination_results.add_item("%s  ·  %s" % [map_label, point_label])
+		if matching_points.is_empty():
+			continue
+		var is_expanded := search_active or bool(staff_teleport_expanded_maps.get(map_id, false))
+		var header_prefix := "▼" if is_expanded else "▶"
+		var header_index := staff_teleport_destination_results.item_count
+		staff_teleport_destination_results.add_item(
+			"%s  %s (%d)" % [header_prefix, map_label, matching_points.size()]
+		)
+		staff_teleport_destination_results.set_item_custom_fg_color(header_index, UI_TEXT)
+		staff_teleport_destination_rows.append({"kind": "map", "map": map_entry})
+		if not is_expanded:
+			continue
+		for point_value: Variant in matching_points:
+			var point_entry: Dictionary = _staff_dictionary_from_variant(point_value)
+			var point_id := str(point_entry.get("id", "")).strip_edges()
+			var point_label := str(point_entry.get("label", point_id)).strip_edges()
+			var destination := {"kind": "point", "map": map_entry, "point": point_entry}
+			var row_index := staff_teleport_destination_results.item_count
+			staff_teleport_destination_results.add_item("    %s" % point_label)
+			staff_teleport_destination_rows.append(destination)
 			if map_id == selected_map_id and point_id == selected_point_id:
-				selected_index = destination_index
+				selected_row_index = row_index
 
-	if not staff_teleport_filtered_destinations.is_empty():
-		if selected_index < 0:
-			selected_index = 0
-		staff_teleport_destination_results.select(selected_index)
+	if selected_row_index >= 0:
+		staff_teleport_destination_results.select(selected_row_index)
 	if staff_teleport_destination_status_label != null:
 		staff_teleport_destination_status_label.text = LocalizationManager.text(
 			"ui.staff.teleport.found",
@@ -24926,7 +24951,9 @@ func _rebuild_staff_teleport_map_options() -> void:
 		)
 	_update_staff_teleport_selected_destination_label()
 	if staff_teleport_confirm_button != null:
-		staff_teleport_confirm_button.disabled = staff_teleport_filtered_destinations.is_empty() or staff_teleport_in_flight
+		staff_teleport_confirm_button.disabled = (
+			_get_selected_staff_teleport_destination().is_empty() or staff_teleport_in_flight
+		)
 
 
 func _on_staff_teleport_map_selected(index: int) -> void:
@@ -24941,8 +24968,24 @@ func _on_staff_teleport_spawn_search_changed(_text: String) -> void:
 	_rebuild_staff_teleport_map_options()
 
 
-func _on_staff_teleport_destination_selected(_index: int) -> void:
+func _on_staff_teleport_destination_selected(index: int) -> void:
+	if index >= 0 and index < staff_teleport_destination_rows.size():
+		var row: Dictionary = _staff_dictionary_from_variant(
+			staff_teleport_destination_rows[index]
+		)
+		if str(row.get("kind", "")) == "map":
+			var map_entry: Dictionary = _staff_dictionary_from_variant(row.get("map", {}))
+			var map_id := str(map_entry.get("id", "")).strip_edges()
+			staff_teleport_expanded_maps[map_id] = not bool(
+				staff_teleport_expanded_maps.get(map_id, false)
+			)
+			_rebuild_staff_teleport_map_options()
+			return
 	_update_staff_teleport_selected_destination_label()
+	if staff_teleport_confirm_button != null:
+		staff_teleport_confirm_button.disabled = (
+			_get_selected_staff_teleport_destination().is_empty() or staff_teleport_in_flight
+		)
 
 
 func _update_staff_teleport_selected_destination_label() -> void:
@@ -24996,29 +25039,56 @@ func _rebuild_staff_teleport_send_map_options() -> void:
 	var spawn_query := staff_teleport_send_spawn_search.text.strip_edges().to_lower() if staff_teleport_send_spawn_search != null else ""
 
 	staff_teleport_filtered_safe_destinations = []
+	staff_teleport_send_destination_rows = []
 	staff_teleport_send_destination_results.clear()
-	var selected_index := -1
+	var selected_row_index := -1
+	var search_active := map_query != "" or spawn_query != ""
 	for map_value: Variant in staff_teleport_safe_maps:
 		var map_entry: Dictionary = _staff_dictionary_from_variant(map_value)
 		var map_id := str(map_entry.get("id", "")).strip_edges()
 		var map_label := str(map_entry.get("label", map_id)).strip_edges()
 		var points: Array = map_entry.get("points", []) if map_entry.get("points", []) is Array else []
+		if map_query != "" and not ("%s %s" % [map_label.to_lower(), map_id.to_lower()]).contains(map_query):
+			continue
+		var matching_points: Array = []
 		for point_value: Variant in points:
 			var point_entry: Dictionary = _staff_dictionary_from_variant(point_value)
 			var point_id := str(point_entry.get("id", "")).strip_edges()
 			var point_label := str(point_entry.get("label", point_id)).strip_edges()
-			if map_query != "" and not ("%s %s" % [map_label.to_lower(), map_id.to_lower()]).contains(map_query):
-				continue
 			if spawn_query != "" and not ("%s %s" % [point_label.to_lower(), point_id.to_lower()]).contains(spawn_query):
 				continue
+			matching_points.append(point_entry)
 			staff_teleport_filtered_safe_destinations.append({"map": map_entry, "point": point_entry})
-			var destination_index := staff_teleport_filtered_safe_destinations.size() - 1
-			staff_teleport_send_destination_results.add_item("%s  ·  %s" % [map_label, point_label])
+		if matching_points.is_empty():
+			continue
+		var is_expanded := search_active or bool(
+			staff_teleport_send_expanded_maps.get(map_id, false)
+		)
+		var header_prefix := "▼" if is_expanded else "▶"
+		var header_index := staff_teleport_send_destination_results.item_count
+		staff_teleport_send_destination_results.add_item(
+			"%s  %s (%d)" % [header_prefix, map_label, matching_points.size()]
+		)
+		staff_teleport_send_destination_results.set_item_custom_fg_color(
+			header_index, UI_TEXT
+		)
+		staff_teleport_send_destination_rows.append({"kind": "map", "map": map_entry})
+		if not is_expanded:
+			continue
+		for point_value: Variant in matching_points:
+			var point_entry: Dictionary = _staff_dictionary_from_variant(point_value)
+			var point_id := str(point_entry.get("id", "")).strip_edges()
+			var point_label := str(point_entry.get("label", point_id)).strip_edges()
+			var row_index := staff_teleport_send_destination_results.item_count
+			staff_teleport_send_destination_results.add_item("    %s" % point_label)
+			staff_teleport_send_destination_rows.append(
+				{"kind": "point", "map": map_entry, "point": point_entry}
+			)
 			if map_id == selected_map_id and point_id == selected_point_id:
-				selected_index = destination_index
+				selected_row_index = row_index
 
-	if not staff_teleport_filtered_safe_destinations.is_empty():
-		staff_teleport_send_destination_results.select(0 if selected_index < 0 else selected_index)
+	if selected_row_index >= 0:
+		staff_teleport_send_destination_results.select(selected_row_index)
 	if staff_teleport_safe_destination_status_label != null:
 		staff_teleport_safe_destination_status_label.text = LocalizationManager.text(
 			"ui.staff.teleport.found",
@@ -25027,7 +25097,11 @@ func _rebuild_staff_teleport_send_map_options() -> void:
 			"ui.staff.teleport.no_matches"
 		)
 	if staff_teleport_send_player_button != null:
-		staff_teleport_send_player_button.disabled = staff_teleport_filtered_players.is_empty() or staff_teleport_filtered_safe_destinations.is_empty() or staff_teleport_in_flight
+		staff_teleport_send_player_button.disabled = (
+			staff_teleport_filtered_players.is_empty()
+			or _get_selected_staff_teleport_send_destination().is_empty()
+			or staff_teleport_in_flight
+		)
 
 
 func _rebuild_staff_teleport_send_point_options(map_index: int) -> void:
@@ -25049,7 +25123,19 @@ func _on_staff_teleport_send_destination_search_changed(_text: String) -> void:
 	_rebuild_staff_teleport_send_map_options()
 
 
-func _on_staff_teleport_send_destination_selected(_index: int) -> void:
+func _on_staff_teleport_send_destination_selected(index: int) -> void:
+	if index >= 0 and index < staff_teleport_send_destination_rows.size():
+		var row: Dictionary = _staff_dictionary_from_variant(
+			staff_teleport_send_destination_rows[index]
+		)
+		if str(row.get("kind", "")) == "map":
+			var map_entry: Dictionary = _staff_dictionary_from_variant(row.get("map", {}))
+			var map_id := str(map_entry.get("id", "")).strip_edges()
+			staff_teleport_send_expanded_maps[map_id] = not bool(
+				staff_teleport_send_expanded_maps.get(map_id, false)
+			)
+			_rebuild_staff_teleport_send_map_options()
+			return
 	if staff_teleport_send_player_button != null:
 		staff_teleport_send_player_button.disabled = (
 			staff_teleport_filtered_players.is_empty()
@@ -25110,7 +25196,11 @@ func _rebuild_staff_teleport_player_options() -> void:
 	if staff_teleport_to_player_button != null:
 		staff_teleport_to_player_button.disabled = staff_teleport_filtered_players.is_empty() or staff_teleport_in_flight
 	if staff_teleport_send_player_button != null:
-		staff_teleport_send_player_button.disabled = staff_teleport_filtered_players.is_empty() or staff_teleport_filtered_safe_destinations.is_empty() or staff_teleport_in_flight
+		staff_teleport_send_player_button.disabled = (
+			staff_teleport_filtered_players.is_empty()
+			or _get_selected_staff_teleport_send_destination().is_empty()
+			or staff_teleport_in_flight
+		)
 
 
 func _update_staff_teleport_selected_player_label() -> void:
@@ -25232,7 +25322,7 @@ func _on_staff_teleport_to_player_pressed() -> void:
 	if not bool(begin_result.get("success", false)):
 		staff_teleport_in_flight = false
 		if staff_teleport_confirm_button != null:
-			staff_teleport_confirm_button.disabled = staff_teleport_maps.is_empty()
+			staff_teleport_confirm_button.disabled = _get_selected_staff_teleport_destination().is_empty()
 		if staff_teleport_to_player_button != null:
 			staff_teleport_to_player_button.disabled = staff_teleport_filtered_players.is_empty()
 		_add_chat_message("Teleport unavailable: %s" % str(begin_result.get("error", "World is not ready.")))
@@ -25246,7 +25336,7 @@ func _on_staff_teleport_to_player_pressed() -> void:
 			world.call("cancel_authorized_teleport")
 		staff_teleport_in_flight = false
 		if staff_teleport_confirm_button != null:
-			staff_teleport_confirm_button.disabled = staff_teleport_maps.is_empty()
+			staff_teleport_confirm_button.disabled = _get_selected_staff_teleport_destination().is_empty()
 			if staff_teleport_to_player_button != null:
 				staff_teleport_to_player_button.disabled = staff_teleport_filtered_players.is_empty()
 			_add_chat_message("Enter a reason before teleporting to a player.")
@@ -25259,7 +25349,7 @@ func _on_staff_teleport_to_player_pressed() -> void:
 			world.call("cancel_authorized_teleport")
 		staff_teleport_in_flight = false
 		if staff_teleport_confirm_button != null:
-			staff_teleport_confirm_button.disabled = staff_teleport_maps.is_empty()
+			staff_teleport_confirm_button.disabled = _get_selected_staff_teleport_destination().is_empty()
 		if staff_teleport_to_player_button != null:
 			staff_teleport_to_player_button.disabled = staff_teleport_filtered_players.is_empty()
 		_add_chat_message("Teleport to player failed: %s" % str(result.get("error", "Unknown error")))
@@ -25270,7 +25360,7 @@ func _on_staff_teleport_to_player_pressed() -> void:
 	var apply_result: Dictionary = await world.call("apply_authorized_teleport_state", state)
 	staff_teleport_in_flight = false
 	if staff_teleport_confirm_button != null:
-		staff_teleport_confirm_button.disabled = staff_teleport_maps.is_empty()
+		staff_teleport_confirm_button.disabled = _get_selected_staff_teleport_destination().is_empty()
 	if staff_teleport_to_player_button != null:
 		staff_teleport_to_player_button.disabled = staff_teleport_filtered_players.is_empty()
 	if not bool(apply_result.get("success", false)):
@@ -25377,11 +25467,14 @@ func _on_staff_teleport_send_player_confirmed() -> void:
 	var result: Dictionary = await ModeratorTeleportService.teleport_player(target_player_id, map_id, point_id, reason)
 	staff_teleport_in_flight = false
 	if staff_teleport_confirm_button != null:
-		staff_teleport_confirm_button.disabled = staff_teleport_maps.is_empty()
+		staff_teleport_confirm_button.disabled = _get_selected_staff_teleport_destination().is_empty()
 	if staff_teleport_to_player_button != null:
 		staff_teleport_to_player_button.disabled = staff_teleport_filtered_players.is_empty()
 	if staff_teleport_send_player_button != null:
-		staff_teleport_send_player_button.disabled = staff_teleport_filtered_players.is_empty() or staff_teleport_filtered_safe_destinations.is_empty()
+		staff_teleport_send_player_button.disabled = (
+			staff_teleport_filtered_players.is_empty()
+			or _get_selected_staff_teleport_send_destination().is_empty()
+		)
 	if not bool(result.get("success", false)):
 		var error_text := str(result.get("error", "Unknown error"))
 		if error_text == "PLAYER_BUSY":
@@ -25432,9 +25525,14 @@ func _get_selected_staff_teleport_destination() -> Dictionary:
 	if selected_items.is_empty():
 		return {}
 	var selected_index := int(selected_items[0])
-	if selected_index < 0 or selected_index >= staff_teleport_filtered_destinations.size():
+	if selected_index < 0 or selected_index >= staff_teleport_destination_rows.size():
 		return {}
-	return _staff_dictionary_from_variant(staff_teleport_filtered_destinations[selected_index])
+	var row: Dictionary = _staff_dictionary_from_variant(
+		staff_teleport_destination_rows[selected_index]
+	)
+	if str(row.get("kind", "")) != "point":
+		return {}
+	return row
 
 
 func _get_selected_staff_teleport_send_map() -> Dictionary:
@@ -25454,9 +25552,14 @@ func _get_selected_staff_teleport_send_destination() -> Dictionary:
 	if selected_items.is_empty():
 		return {}
 	var selected_index := int(selected_items[0])
-	if selected_index < 0 or selected_index >= staff_teleport_filtered_safe_destinations.size():
+	if selected_index < 0 or selected_index >= staff_teleport_send_destination_rows.size():
 		return {}
-	return _staff_dictionary_from_variant(staff_teleport_filtered_safe_destinations[selected_index])
+	var row: Dictionary = _staff_dictionary_from_variant(
+		staff_teleport_send_destination_rows[selected_index]
+	)
+	if str(row.get("kind", "")) != "point":
+		return {}
+	return row
 
 
 func _get_selected_staff_teleport_player() -> Dictionary:
