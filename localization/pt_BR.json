@@ -1551,6 +1551,7 @@
   "ui.staff.error.load_players": "Não foi possível carregar os jogadores online: {error}",
   "ui.staff.error.load_safe_destinations": "Não foi possível carregar os pontos seguros de teletransporte: {error}",
   "ui.staff.teleport.select_player_from_list": "Selecione um jogador na lista para liberar as ações da equipe.",
+  "ui.staff.teleport.select_action_hint": "Escolha o que deseja fazer com o jogador selecionado.",
   "ui.staff.teleport.move_player_warning": "Esta ação move outro jogador. Confirme com cuidado o destino seguro e a nota da equipe.",
   "ui.staff.teleport.go_to_player_hint": "Você será teletransportado para a localização atual do jogador selecionado.",
   "ui.staff.teleport.online_count": "{count} online",

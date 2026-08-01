@@ -785,6 +785,7 @@ var staff_teleport_player_results_status_label: Label
 var staff_teleport_player_action_hint: Label
 var staff_teleport_to_player_mode_button: Button
 var staff_teleport_send_player_mode_button: Button
+var staff_teleport_player_note_caption: Label
 var staff_teleport_player_reason_input: LineEdit
 var staff_teleport_to_player_button: Button
 var staff_teleport_send_section: Control
@@ -813,7 +814,7 @@ var staff_teleport_players_loading := false
 var staff_teleport_in_flight := false
 var staff_teleport_player_selection_confirmed := false
 var staff_teleport_active_tab := "self"
-var staff_teleport_player_action_mode := "to_player"
+var staff_teleport_player_action_mode := ""
 var chat_submit_in_progress: bool = false
 var active_chat_tab: String = CHAT_TAB_ALL
 var pending_chat_pokemon_attachments: Array[Dictionary] = []
@@ -7545,7 +7546,6 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_player_results.custom_minimum_size = Vector2(0, 116)
 	staff_teleport_player_results.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_player_results.item_selected.connect(_on_staff_teleport_player_selected)
-	staff_teleport_player_results.item_activated.connect(_on_staff_teleport_player_selected)
 	staff_teleport_player_section.add_child(staff_teleport_player_results)
 
 	staff_teleport_selected_player_label = Label.new()
@@ -7572,6 +7572,7 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_to_player_mode_button.custom_minimum_size = Vector2(0, 34)
 	staff_teleport_to_player_mode_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_to_player_mode_button.focus_mode = Control.FOCUS_NONE
+	staff_teleport_to_player_mode_button.toggle_mode = true
 	staff_teleport_to_player_mode_button.pressed.connect(_on_staff_teleport_to_player_mode_pressed)
 	player_action_mode_bar.add_child(staff_teleport_to_player_mode_button)
 
@@ -7584,6 +7585,7 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_send_player_mode_button.custom_minimum_size = Vector2(0, 34)
 	staff_teleport_send_player_mode_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_send_player_mode_button.focus_mode = Control.FOCUS_NONE
+	staff_teleport_send_player_mode_button.toggle_mode = true
 	staff_teleport_send_player_mode_button.pressed.connect(_on_staff_teleport_send_player_mode_pressed)
 	player_action_mode_bar.add_child(staff_teleport_send_player_mode_button)
 
@@ -7994,7 +7996,10 @@ func _build_staff_teleport_player_workspace() -> void:
 	var player_spacer := Control.new()
 	player_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	action_layout.add_child(player_spacer)
-	action_layout.add_child(_create_staff_teleport_caption("ui.staff.teleport.staff_note"))
+	staff_teleport_player_note_caption = _create_staff_teleport_caption(
+		"ui.staff.teleport.staff_note"
+	)
+	action_layout.add_child(staff_teleport_player_note_caption)
 	_set_localized_control_property(
 		staff_teleport_player_reason_input,
 		"placeholder_text",
@@ -24692,10 +24697,12 @@ func _refresh_staff_teleport_tab_visibility() -> void:
 		staff_teleport_player_section.visible = show_player
 	if staff_teleport_to_player_mode_button != null:
 		staff_teleport_to_player_mode_button.visible = show_player and player_is_selected and _can_teleport_to_player()
-		_apply_button_style(staff_teleport_to_player_mode_button, "primary" if show_to_player else "default")
+		staff_teleport_to_player_mode_button.button_pressed = show_to_player
+		_apply_button_style(staff_teleport_to_player_mode_button, "primary")
 	if staff_teleport_send_player_mode_button != null:
 		staff_teleport_send_player_mode_button.visible = show_player and player_is_selected and _can_teleport_other_player()
-		_apply_button_style(staff_teleport_send_player_mode_button, "primary" if show_send_safe else "default")
+		staff_teleport_send_player_mode_button.button_pressed = show_send_safe
+		_apply_button_style(staff_teleport_send_player_mode_button, "danger")
 	if staff_teleport_player_action_hint != null:
 		if not player_is_selected:
 			staff_teleport_player_action_hint.text = LocalizationManager.text(
@@ -24707,11 +24714,16 @@ func _refresh_staff_teleport_tab_visibility() -> void:
 				"ui.staff.teleport.move_player_warning"
 			)
 			staff_teleport_player_action_hint.add_theme_color_override("font_color", UI_DANGER)
-		else:
+		elif show_to_player:
 			staff_teleport_player_action_hint.text = LocalizationManager.text(
 				"ui.staff.teleport.go_to_player_hint"
 			)
 			staff_teleport_player_action_hint.add_theme_color_override("font_color", Color("#79d9f2"))
+		else:
+			staff_teleport_player_action_hint.text = LocalizationManager.text(
+				"ui.staff.teleport.select_action_hint"
+			)
+			staff_teleport_player_action_hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	if staff_teleport_send_section != null:
 		staff_teleport_send_section.visible = show_send_safe
 	if staff_teleport_player_divider != null:
@@ -24738,6 +24750,8 @@ func _refresh_staff_teleport_tab_visibility() -> void:
 			requirement_key,
 			{"reason": LocalizationManager.text(reason_key)}
 		)
+	if staff_teleport_player_note_caption != null:
+		staff_teleport_player_note_caption.visible = show_to_player or show_send_safe
 	if staff_teleport_to_player_button != null:
 		staff_teleport_to_player_button.visible = show_to_player
 	if staff_teleport_send_player_button != null:
@@ -24753,13 +24767,16 @@ func _on_staff_teleport_button_pressed() -> void:
 	var opening := not staff_teleport_popup.visible
 	if opening:
 		staff_teleport_player_selection_confirmed = false
+		staff_teleport_player_action_mode = ""
+		if staff_teleport_player_results != null:
+			staff_teleport_player_results.deselect_all()
 		if staff_teleport_player_search_input != null:
 			staff_teleport_player_search_input.clear()
 	if _can_teleport_self():
 		staff_teleport_active_tab = "self"
 	else:
 		staff_teleport_active_tab = "player"
-	staff_teleport_player_action_mode = "to_player" if _can_teleport_to_player() else "send_safe"
+	staff_teleport_player_action_mode = ""
 	_refresh_staff_teleport_tab_visibility()
 	staff_teleport_popup.visible = not staff_teleport_popup.visible
 	if staff_teleport_popup.visible:
@@ -25146,12 +25163,14 @@ func _on_staff_teleport_send_destination_selected(index: int) -> void:
 
 func _on_staff_teleport_player_search_changed(_text: String) -> void:
 	staff_teleport_player_selection_confirmed = false
+	staff_teleport_player_action_mode = ""
 	_rebuild_staff_teleport_player_options()
 	_refresh_staff_teleport_tab_visibility()
 
 
 func _on_staff_teleport_player_selected(_index: int) -> void:
 	staff_teleport_player_selection_confirmed = true
+	staff_teleport_player_action_mode = ""
 	_update_staff_teleport_selected_player_label()
 	_refresh_staff_teleport_tab_visibility()
 
@@ -25176,14 +25195,18 @@ func _rebuild_staff_teleport_player_options() -> void:
 		var option_label := "%s (@%s)" % [display_name, username]
 		staff_teleport_filtered_players.append(player_entry)
 		staff_teleport_player_results.add_item(option_label)
-	if staff_teleport_player_results.item_count > 0:
-		var selected_index := 0
+	if staff_teleport_player_selection_confirmed and staff_teleport_player_results.item_count > 0:
+		var selected_index := -1
 		for index in range(staff_teleport_filtered_players.size()):
 			var candidate: Dictionary = _staff_dictionary_from_variant(staff_teleport_filtered_players[index])
 			if int(candidate.get("targetPlayerId", 0)) == selected_player_id:
 				selected_index = index
 				break
-		staff_teleport_player_results.select(selected_index)
+		if selected_index >= 0:
+			staff_teleport_player_results.select(selected_index)
+		else:
+			staff_teleport_player_selection_confirmed = false
+			staff_teleport_player_action_mode = ""
 	staff_teleport_player_results.visible = true
 	if staff_teleport_player_results_status_label != null:
 		staff_teleport_player_results_status_label.text = LocalizationManager.text(

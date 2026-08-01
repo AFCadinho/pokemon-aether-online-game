@@ -1551,6 +1551,7 @@
   "ui.staff.error.load_players": "Online spelers konden niet worden geladen: {error}",
   "ui.staff.error.load_safe_destinations": "Veilige teleportpunten konden niet worden geladen: {error}",
   "ui.staff.teleport.select_player_from_list": "Selecteer een speler uit de lijst om staffacties beschikbaar te maken.",
+  "ui.staff.teleport.select_action_hint": "Kies wat je met de geselecteerde speler wilt doen.",
   "ui.staff.teleport.move_player_warning": "Deze actie verplaatst een andere speler. Controleer de veilige bestemming en staffnotitie zorgvuldig.",
   "ui.staff.teleport.go_to_player_hint": "Je wordt naar de huidige locatie van de geselecteerde speler geteleporteerd.",
   "ui.staff.teleport.online_count": "{count} online",
