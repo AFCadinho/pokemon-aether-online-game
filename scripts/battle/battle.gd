@@ -11328,14 +11328,36 @@ func _wait_for_pvp_opponent_force_switch_and_render() -> bool:
 	var fallback_render_attempt := -1
 	var phase_release_observed_at_attempt := -1
 	var phase_reconciliation_attempted := false
+	var next_render_reconciliation_msec := (
+		Time.get_ticks_msec() + PVP_OPPONENT_RENDER_RECONCILE_INITIAL_MSEC
+	)
+	var render_reconciliation_attempt := 0
 	var next_barrier_ack_retry_msec := Time.get_ticks_msec() + PVP_FORCE_SWITCH_ACK_RETRY_MSEC
 	var next_barrier_reconciliation_msec := Time.get_ticks_msec() + PVP_FORCE_SWITCH_RECONCILE_INITIAL_MSEC
 	var barrier_reconciliation_attempt := 0
 	while true:
 		if battle_finished:
 			return true
+		var now_msec := Time.get_ticks_msec()
+		if now_msec >= next_render_reconciliation_msec:
+			render_reconciliation_attempt += 1
+			if await _reconcile_pvp_battle_from_room(
+				"pvp_opponent_force_switch_render_watchdog",
+				true
+			):
+				# The immutable room snapshot recovered the switch batch that the
+				# realtime transport missed. Return to the owning queue drain so it
+				# can animate the batch and acknowledge the shared render boundary.
+				return true
+			var render_retry_delay_msec := mini(
+				PVP_OPPONENT_RENDER_RECONCILE_INITIAL_MSEC
+					+ render_reconciliation_attempt * 500,
+				PVP_OPPONENT_RENDER_RECONCILE_MAX_MSEC
+			)
+			next_render_reconciliation_msec = (
+				Time.get_ticks_msec() + render_retry_delay_msec
+			)
 		if _pvp_is_waiting_for_force_switch_phase_release():
-			var now_msec := Time.get_ticks_msec()
 			if now_msec >= next_barrier_ack_retry_msec:
 				_retry_pending_pvp_render_ack()
 				next_barrier_ack_retry_msec = now_msec + PVP_FORCE_SWITCH_ACK_RETRY_MSEC
