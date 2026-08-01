@@ -809,7 +809,10 @@ func _position_player_at_spawn(map: Node, spawn_name: String, fallback_position:
 		player.call("reset_pokemon_follower_position")
 
 func _position_player_at_authorized_teleport_state(map: Node, state: Dictionary) -> Dictionary:
-	var spawn_marker := str(state.get("spawnMarker", "")).strip_edges()
+	var spawn_marker_value: Variant = state.get("spawnMarker", "")
+	var spawn_marker := ""
+	if spawn_marker_value != null:
+		spawn_marker = str(spawn_marker_value).strip_edges()
 	if spawn_marker != "":
 		var spawn: Node = map.get_node_or_null("Spawns/" + spawn_marker)
 		if spawn == null:
