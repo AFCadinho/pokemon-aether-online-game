@@ -242,7 +242,7 @@ func _run() -> void:
 	view.set_filter("side")
 	view.call("_on_quest_selected", "help_neighbor")
 	_expect(
-		view.tracker_title_label.text == "Dadinho's Surprise"
+		view.tracker_title_label.text == "A Journey Begins"
 		and view.tracker_objective_label.text == "› Go downstairs and speak with your father.",
 		"side quest selection does not replace the MSQ HUD tracker"
 	)
@@ -295,7 +295,7 @@ func _run() -> void:
 	})
 	await process_frame
 	_expect(
-		view.tracker_objective_label.text == "› Meet Professor Oak and receive the Pokémon Dadinho prepared for you.",
+		view.tracker_objective_label.text == "› Visit Professor Oak at his lab.",
 		"HUD tracker updates automatically when story progress changes"
 	)
 	_expect(
