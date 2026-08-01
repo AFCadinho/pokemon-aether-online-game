@@ -166,15 +166,24 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/boss_battle_npc_check.gd",
 ]
 
-const LOG_DIR := "/tmp/pokeaether_project_checks"
+const DEFAULT_LOG_DIR := "/tmp/pokeaether_project_checks"
 
 var failed := false
+var log_dir := DEFAULT_LOG_DIR
 
 
 func _init() -> void:
-	var log_error := DirAccess.make_dir_recursive_absolute(LOG_DIR)
+	var configured_log_dir := OS.get_environment("POKEAETHER_TEST_LOG_DIR").strip_edges()
+	if not configured_log_dir.is_empty():
+		if not configured_log_dir.is_absolute_path():
+			push_error("POKEAETHER_TEST_LOG_DIR must be an absolute path.")
+			quit(1)
+			return
+		log_dir = configured_log_dir
+
+	var log_error := DirAccess.make_dir_recursive_absolute(log_dir)
 	if log_error != OK:
-		push_error("Failed to create check log directory: %s" % LOG_DIR)
+		push_error("Failed to create check log directory: %s" % log_dir)
 		quit(1)
 		return
 
@@ -190,7 +199,7 @@ func _init() -> void:
 
 func _run_check(executable: String, project_path: String, script_path: String) -> void:
 	var output: Array = []
-	var log_file := "%s/%s.log" % [LOG_DIR, _script_log_name(script_path)]
+	var log_file := "%s/%s.log" % [log_dir, _script_log_name(script_path)]
 	var exit_code := OS.execute(
 		executable,
 		PackedStringArray([
