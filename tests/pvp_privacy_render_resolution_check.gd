@@ -22,6 +22,7 @@ func _run_checks() -> void:
 	_check_render_ack_retry_generation_ownership()
 	_check_waiters_consume_actionless_render_batches()
 	_check_accepted_local_choice_arms_idle_drain()
+	_check_render_completion_rearms_idle_drain()
 	_check_realtime_render_batch_installs_presentation_fence()
 	_check_stale_and_unrendered_apply_outcomes()
 	_check_stale_snapshot_still_observes_transport_fence()
@@ -597,6 +598,17 @@ func _check_accepted_local_choice_arms_idle_drain() -> void:
 		recovery_helper.contains("pvp_idle_wait_recovery_active = true")
 			and recovery_helper.contains("_drain_idle_pvp_realtime_updates.call_deferred()"),
 		"accepted local choices independently drain actionless realtime batches"
+	)
+
+
+func _check_render_completion_rearms_idle_drain() -> void:
+	var battle_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var drain := _function_source(battle_source, "_drain_pvp_event_queue")
+	var release_index := drain.find("pvp_event_queue.is_rendering = false")
+	var idle_drain_index := drain.find("_drain_idle_pvp_realtime_updates.call_deferred()")
+	_check(
+		release_index >= 0 and idle_drain_index > release_index,
+		"render completion re-arms idle delivery after a pivot batch raced the active queue"
 	)
 
 
