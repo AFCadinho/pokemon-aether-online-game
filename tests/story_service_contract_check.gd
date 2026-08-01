@@ -111,9 +111,42 @@ func _run() -> void:
 	_expect(service.get_quests().is_empty(), "malformed apply safely clears quests")
 	service.reset_story()
 	_expect(emitted_revisions == [0, 7, 0, 0], "apply and reset emit their resulting revisions")
+	_verify_base_npc_story_requirement(service)
 
 	_verify_integration_contract()
 	quit(1 if failed else 0)
+
+
+func _verify_base_npc_story_requirement(service: Node) -> void:
+	_expect(
+		bool(service.call("is_requirement_met", "", "", "completed")),
+		"an empty NPC story requirement remains unrestricted"
+	)
+	service.apply_story({
+		"revision": 8,
+		"quests": [{
+			"questId": "choose_starter",
+			"status": "active",
+			"steps": [{"stepId": "choose_starter", "status": "active"}],
+		}],
+	})
+	_expect(
+		not bool(service.call("is_requirement_met", "choose_starter", "choose_starter", "completed")),
+		"an unfinished required quest step keeps an NPC gated"
+	)
+	service.apply_story({
+		"revision": 9,
+		"quests": [{
+			"questId": "choose_starter",
+			"status": "completed",
+			"steps": [{"stepId": "choose_starter", "status": "completed"}],
+		}],
+	})
+	_expect(
+		bool(service.call("is_requirement_met", "choose_starter", "choose_starter", "completed")),
+		"a completed required quest step unlocks an NPC"
+	)
+	service.reset_story()
 
 
 func _verify_integration_contract() -> void:

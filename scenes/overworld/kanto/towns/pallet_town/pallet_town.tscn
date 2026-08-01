@@ -2308,7 +2308,10 @@ z_index = 5
 [node name="RouteGateNPC" parent="Entities/NPCs" unique_id=1463025 instance=ExtResource("5_n6c5k")]
 position = Vector2(1040, 208)
 staff_blocked_dialogue_lines = Array[String](["This route is closed during the alpha."])
+required_quest_id = "choose_starter"
+required_quest_step_id = "choose_starter"
 blocked_dialogue_id = "kanto_pallet_town_north_guard_blocked"
+story_blocked_dialogue_id = "kanto_pallet_town_north_guard_story_blocked"
 allowed_dialogue_id = "kanto_pallet_town_north_guard_default"
 npc_id = "kanto_pallet_town_north_guard"
 npc_sprite_frames = SubResource("SpriteFrames_0ke4d")

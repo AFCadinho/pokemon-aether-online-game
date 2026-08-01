@@ -1,6 +1,7 @@
 extends SceneTree
 
 const PLAYERS_HOUSE_SCENE_PATH := "res://scenes/overworld/kanto/towns/pallet_town/players_house.tscn"
+const DAD_PROFILE_PATH := "res://resources/npcs/story/dadinho.tres"
 const DAD_SPRITE_PATH := "res://assets/npcs/custom/adinho_dad.png"
 const DAD_FRAMES_PATH := "res://assets/npcs/custom/adinho_dad_frames.tres"
 const DAD_ANIMATIONS: Array[StringName] = [
@@ -46,6 +47,22 @@ func _run() -> void:
 	_expect(hook != null, "father intro trigger has a story hook")
 	var dad_texture := load(DAD_SPRITE_PATH) as Texture2D
 	var dad_frames := load(DAD_FRAMES_PATH) as SpriteFrames
+	var dad_profile := load(DAD_PROFILE_PATH) as Resource
+	_expect(dad_profile != null, "father has a reusable NPC definition profile")
+	if dad_profile != null:
+		_expect(
+			str(dad_profile.get("npc_id")) == "kanto_players_house_father"
+			and str(dad_profile.get("npc_definition_id")) == "kanto_players_house_father",
+			"father profile owns its stable NPC and metadata identities"
+		)
+		_expect(
+			str(dad_profile.get("display_name")) == "Dadinho",
+			"father profile owns the Dadinho cameo name"
+		)
+		_expect(
+			dad_profile.get("sprite_frames") == dad_frames,
+			"father profile owns the dedicated Adinho dad appearance"
+		)
 	_expect(
 		dad_texture != null and dad_texture.get_size() == Vector2(256, 256),
 		"father uses a complete 4x4 Adinho overworld spritesheet"
@@ -60,6 +77,7 @@ func _run() -> void:
 		_expect(dad_frames.get_frame_count(&"idle_up") == 1, "father has a stable upward idle pose")
 		_expect(dad_frames.get_frame_count(&"walk_down") == 4, "father retains the full walk cycle")
 	if father != null:
+		_expect(father.get("npc_profile") == dad_profile, "Player's House uses Dadinho's reusable NPC profile")
 		_expect(
 			str(father.get("npc_id")) == "kanto_players_house_father",
 			"father uses the stable catalog NPC identity"
@@ -71,7 +89,7 @@ func _run() -> void:
 		)
 		_expect(
 			father.get("npc_sprite_frames") == dad_frames,
-			"Player's House equips the dedicated Adinho dad appearance"
+			"Dadinho profile applies the dedicated Adinho dad appearance"
 		)
 	if trigger != null:
 		_expect(trigger.monitoring, "first visit keeps the one-time automatic trigger active")

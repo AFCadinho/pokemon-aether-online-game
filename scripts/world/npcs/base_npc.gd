@@ -33,6 +33,10 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 
 @export var npc_id := ""
 @export var npc_definition_id := ""
+## Optional story condition. An empty quest id keeps the NPC unrestricted.
+@export var required_quest_id := ""
+@export var required_quest_step_id := ""
+@export_enum("active", "completed") var required_quest_status := "completed"
 ## Exceptional scene-specific override. Normal dialogue comes from NPC metadata.
 @export var dialogue_id := ""
 @export var display_name := ""
@@ -156,6 +160,14 @@ func blocks_world_position(world_position: Vector2) -> bool:
 
 func get_feet_position() -> Vector2:
 	return feet_marker.global_position
+
+
+func is_story_requirement_met() -> bool:
+	return StoryService.is_requirement_met(
+		required_quest_id,
+		required_quest_step_id,
+		required_quest_status
+	)
 
 
 func _to_tile(world_position: Vector2) -> Vector2i:
@@ -853,6 +865,26 @@ func _get_npc_metadata_id() -> String:
 
 
 func _apply_npc_metadata(metadata: Dictionary) -> void:
+	var metadata_required_quest_id := str(
+		metadata.get("requiredQuestId", metadata.get("required_quest_id", ""))
+	).strip_edges()
+	if not metadata_required_quest_id.is_empty():
+		required_quest_id = metadata_required_quest_id
+		required_quest_step_id = str(
+			metadata.get(
+				"requiredQuestStepId",
+				metadata.get("required_quest_step_id", required_quest_step_id)
+			)
+		).strip_edges()
+		var metadata_required_quest_status := str(
+			metadata.get(
+				"requiredQuestStatus",
+				metadata.get("required_quest_status", required_quest_status)
+			)
+		).strip_edges().to_lower()
+		if metadata_required_quest_status in ["active", "completed"]:
+			required_quest_status = metadata_required_quest_status
+
 	metadata_dialogue_id = str(
 		metadata.get("dialogueId", metadata.get("dialogue_id", ""))
 	).strip_edges()

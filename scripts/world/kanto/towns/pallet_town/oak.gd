@@ -1,25 +1,28 @@
 extends DialogueNPC
 
 @export var starter_gift_dialogue_id := ""
+@export var starter_confirmed_dialogue_id := ""
 @export var starter_received_dialogue_id := ""
 @export var starter_gift_dialogue_lines: Array[String] = [
 	"Ah, there you are!",
-	"Take this Charmander with you.",
-	"You received Charmander!",
+	"Your father has collected and cared for Pokemon from every region over the years.",
+	"He left a surprise here for you and asked me one question: Which Pokemon did you always dream of having when you were little?",
+]
+@export var starter_confirmed_dialogue_lines: Array[String] = [
+	"{pokemon}... An excellent choice.",
+	"Dadinho hoped you would choose with your heart.",
+	"You received {pokemon}!",
 ]
 @export var starter_received_dialogue_lines: Array[String] = [
-	"Take good care of Charmander!",
+	"Take good care of {pokemon}. Dadinho entrusted that partner to you.",
 ]
 
 var is_creating_starter := false
-var create_pokemon_request: HTTPRequest
 var last_starter_claim_already_completed := false
 
 
 func _ready() -> void:
 	display_name = "Prof. Oak"
-	create_pokemon_request = HTTPRequest.new()
-	add_child(create_pokemon_request)
 	_ready_base_npc()
 
 
@@ -31,28 +34,73 @@ func interact_with_player(_player: Node2D) -> void:
 	if is_creating_starter:
 		return
 
-	if PlayerSave.flags.get("received_starter", false):
-		await show_dialogue(await _resolve_dialogue_lines(starter_received_dialogue_id, starter_received_dialogue_lines))
-		return
-
 	is_creating_starter = true
-	var starter_pokemon: Pokemon = await give_starter_pokemon("Charmander")
-	is_creating_starter = false
-	if starter_pokemon == null:
+	var options_result: Dictionary = await PlayerPartyStateService.get_starter_options()
+	if not bool(options_result.get("success", false)):
+		is_creating_starter = false
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
 
+	if bool(options_result.get("alreadyClaimed", false)):
+		PlayerSave.flags["received_starter"] = true
+		var claimed_species_name := str(options_result.get("selectedSpeciesName", "your Pokemon")).strip_edges()
+		if claimed_species_name.is_empty():
+			claimed_species_name = "your Pokemon"
+		is_creating_starter = false
+		await show_dialogue(
+			_format_dialogue_lines(
+				await _resolve_dialogue_lines(starter_received_dialogue_id, starter_received_dialogue_lines),
+				claimed_species_name
+			)
+		)
+		return
+
+	var choices_value: Variant = options_result.get("choices", [])
+	if not (choices_value is Array) or (choices_value as Array).is_empty():
+		is_creating_starter = false
+		await GameErrorDialogService.show_report_to_staff_message()
+		return
+
+	await show_dialogue(await _resolve_dialogue_lines(starter_gift_dialogue_id, starter_gift_dialogue_lines))
+	var selected_choice: Dictionary = await _choose_starter(choices_value as Array)
+	if selected_choice.is_empty():
+		is_creating_starter = false
+		return
+
+	var selected_species_id := str(selected_choice.get("speciesId", "")).strip_edges()
+	var selected_species_name := str(selected_choice.get("name", selected_species_id)).strip_edges()
+	var create_result: Dictionary = await give_starter_pokemon(selected_species_id)
+	is_creating_starter = false
+	if not bool(create_result.get("success", false)):
+		await GameErrorDialogService.show_report_to_staff_message()
+		return
+
+	var claimed_name := _claimed_species_name(create_result)
+	if not claimed_name.is_empty():
+		selected_species_name = claimed_name
 	PlayerSave.flags["received_starter"] = true
+	PlayerSave.flags["starter_species"] = selected_species_id
 	if last_starter_claim_already_completed:
-		await show_dialogue(await _resolve_dialogue_lines(starter_received_dialogue_id, starter_received_dialogue_lines))
+		await show_dialogue(
+			_format_dialogue_lines(
+				await _resolve_dialogue_lines(starter_received_dialogue_id, starter_received_dialogue_lines),
+				selected_species_name
+			)
+		)
 	else:
-		await show_dialogue(await _resolve_dialogue_lines(starter_gift_dialogue_id, starter_gift_dialogue_lines))
+		await show_dialogue(
+			_format_dialogue_lines(
+				await _resolve_dialogue_lines(starter_confirmed_dialogue_id, starter_confirmed_dialogue_lines),
+				selected_species_name
+			)
+		)
 
 
 func _apply_npc_metadata(metadata: Dictionary) -> void:
 	super._apply_npc_metadata(metadata)
 
 	starter_gift_dialogue_id = _get_metadata_dialogue_id(metadata, "starterGiftDialogueId", "starter_gift_dialogue_id", starter_gift_dialogue_id)
+	starter_confirmed_dialogue_id = _get_metadata_dialogue_id(metadata, "starterConfirmedDialogueId", "starter_confirmed_dialogue_id", starter_confirmed_dialogue_id)
 	starter_received_dialogue_id = _get_metadata_dialogue_id(metadata, "starterReceivedDialogueId", "starter_received_dialogue_id", starter_received_dialogue_id)
 
 
@@ -74,34 +122,25 @@ func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Arra
 		return fallback_lines
 
 	return lines
-	
-func give_starter_pokemon(pokemon_name: String) -> Pokemon:
+
+
+func _choose_starter(choices: Array) -> Dictionary:
+	var chooser := StarterChoiceDialog.new()
+	get_tree().root.add_child(chooser)
+	chooser.open(choices)
+	var selected_value: Variant = await chooser.finished
+	if selected_value is Dictionary:
+		return selected_value as Dictionary
+	return {}
+
+
+func give_starter_pokemon(species_id: String) -> Dictionary:
 	last_starter_claim_already_completed = false
-	var response: Dictionary = await PokemonDataApiClient.create_pokemon(
-		create_pokemon_request,
-		{
-			"species": pokemon_name,
-			"level": 5,
-		}
-	)
-	if not bool(response.get("success", false)):
-		push_warning("Oak.give_starter_pokemon failed: %s" % str(response.get("error", "Unknown error")))
-		return null
-
-	var pokemon_value: Variant = response.get("pokemon", {})
-	if not (pokemon_value is Dictionary):
-		push_warning("Oak.give_starter_pokemon failed: response did not include Pokemon data.")
-		return null
-
-	var pokemon: Pokemon = PokemonFactory.create_pokemon_from_backend_payload(pokemon_value as Dictionary)
-	if pokemon == null:
-		push_warning("Oak.give_starter_pokemon failed: backend Pokemon payload could not be loaded.")
-		return null
-
-	var create_result: Dictionary = await PlayerPartyStateService.claim_starter(pokemon_value as Dictionary)
+	var create_result: Dictionary = await PlayerPartyStateService.claim_starter(species_id)
 	if not bool(create_result.get("success", false)):
-		push_warning("Oak.give_starter_pokemon failed: Pokemon could not be saved: %s" % str(create_result.get("error", "Unknown error")))
-		return null
+		push_warning("Oak.give_starter_pokemon failed: %s" % str(create_result.get("error", "Unknown error")))
+		return create_result
+
 	last_starter_claim_already_completed = bool(create_result.get("alreadyClaimed", false))
 	var story_result: Dictionary = await PlayerGameStateService.refresh_story()
 	if not bool(story_result.get("success", false)):
@@ -109,18 +148,22 @@ func give_starter_pokemon(pokemon_name: String) -> Pokemon:
 			"Oak.give_starter_pokemon could not refresh story progress: %s"
 			% str(story_result.get("error", "Unknown error"))
 		)
+	return create_result
 
-	var owned_pokemon_response: Dictionary = {}
-	var owned_pokemon_response_value: Variant = create_result.get("pokemon", {})
-	if owned_pokemon_response_value is Dictionary:
-		owned_pokemon_response = owned_pokemon_response_value as Dictionary
 
-	var owned_pokemon_value: Variant = owned_pokemon_response.get("pokemon", {})
-	if owned_pokemon_value is Dictionary:
-		var owned_pokemon: Pokemon = PokemonFactory.create_pokemon_from_backend_payload(owned_pokemon_value as Dictionary)
-		if owned_pokemon != null:
-			return owned_pokemon
+func _claimed_species_name(create_result: Dictionary) -> String:
+	var instance_value: Variant = create_result.get("pokemon", {})
+	if not (instance_value is Dictionary):
+		return ""
+	var payload_value: Variant = (instance_value as Dictionary).get("pokemon", {})
+	if not (payload_value is Dictionary):
+		return ""
+	var payload := payload_value as Dictionary
+	return str(payload.get("species", payload.get("name", payload.get("speciesId", "")))).strip_edges()
 
-	return pokemon
-	
-	
+
+func _format_dialogue_lines(lines: Array[String], pokemon_name: String) -> Array[String]:
+	var formatted: Array[String] = []
+	for line: String in lines:
+		formatted.append(line.replace("{pokemon}", pokemon_name))
+	return formatted

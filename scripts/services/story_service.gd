@@ -67,6 +67,37 @@ func get_quest(quest_id: String) -> Dictionary:
 	return {}
 
 
+func is_requirement_met(
+	quest_id: String,
+	quest_step_id := "",
+	required_status := "completed"
+) -> bool:
+	var normalized_quest_id := quest_id.strip_edges()
+	if normalized_quest_id.is_empty():
+		return true
+
+	var quest := get_quest(normalized_quest_id)
+	if quest.is_empty():
+		return false
+
+	var normalized_status := required_status.strip_edges().to_lower()
+	var normalized_step_id := quest_step_id.strip_edges()
+	if normalized_step_id.is_empty():
+		return str(quest.get("status", "")).strip_edges().to_lower() == normalized_status
+
+	var steps_value: Variant = quest.get("steps", [])
+	if not steps_value is Array:
+		return false
+	for step_value: Variant in steps_value as Array:
+		if not step_value is Dictionary:
+			continue
+		var step := step_value as Dictionary
+		if str(step.get("stepId", "")).strip_edges() != normalized_step_id:
+			continue
+		return str(step.get("status", "")).strip_edges().to_lower() == normalized_status
+	return false
+
+
 func get_revision() -> int:
 	return int(_story.get("revision", 0))
 

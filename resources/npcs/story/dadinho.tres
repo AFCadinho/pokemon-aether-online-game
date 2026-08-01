@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="NpcDefinition" format=3 uid="uid://b4hs3up8xaalu"]
+
+[ext_resource type="Texture2D" uid="uid://cxbfneavbrouo" path="res://assets/sprites/mugshots/dadinho_mugshot.png" id="1_0hofx"]
+[ext_resource type="Script" path="res://scripts/world/npcs/npc_definition.gd" id="1_definition"]
+[ext_resource type="SpriteFrames" uid="uid://cqxh37chx4v8a" path="res://assets/npcs/custom/adinho_dad_frames.tres" id="2_frames"]
+
+[resource]
+script = ExtResource("1_definition")
+npc_id = "kanto_players_house_father"
+npc_definition_id = "kanto_players_house_father"
+display_name = "Dadinho"
+sprite_frames = ExtResource("2_frames")
+mugshot = ExtResource("1_0hofx")

@@ -100,9 +100,11 @@ func _normalize_npc_metadata(npc_id: String, metadata: Dictionary) -> Dictionary
 	npc_metadata["name"] = str(npc_metadata.get("name", ""))
 	npc_metadata["dialogue"] = _get_string_array(npc_metadata.get("dialogue", []))
 	npc_metadata["blockedDialogueId"] = str(npc_metadata.get("blockedDialogueId", npc_metadata.get("blocked_dialogue_id", "")))
+	npc_metadata["storyBlockedDialogueId"] = str(npc_metadata.get("storyBlockedDialogueId", npc_metadata.get("story_blocked_dialogue_id", "")))
 	npc_metadata["staffBlockedDialogueId"] = str(npc_metadata.get("staffBlockedDialogueId", npc_metadata.get("staff_blocked_dialogue_id", "")))
 	npc_metadata["allowedDialogueId"] = str(npc_metadata.get("allowedDialogueId", npc_metadata.get("allowed_dialogue_id", "")))
 	npc_metadata["blockedDialogue"] = _get_string_array(npc_metadata.get("blockedDialogue", []))
+	npc_metadata["storyBlockedDialogue"] = _get_string_array(npc_metadata.get("storyBlockedDialogue", []))
 	npc_metadata["allowedDialogue"] = _get_string_array(npc_metadata.get("allowedDialogue", []))
 	npc_metadata["successDialogueId"] = str(npc_metadata.get("successDialogueId", npc_metadata.get("success_dialogue_id", "")))
 	npc_metadata["alreadyHealedDialogueId"] = str(npc_metadata.get("alreadyHealedDialogueId", npc_metadata.get("already_healed_dialogue_id", "")))
@@ -120,6 +122,9 @@ func _normalize_npc_metadata(npc_id: String, metadata: Dictionary) -> Dictionary
 	npc_metadata["marketId"] = str(npc_metadata.get("marketId", npc_metadata.get("market_id", "")))
 	npc_metadata["marketMode"] = str(npc_metadata.get("marketMode", npc_metadata.get("market_mode", "")))
 	npc_metadata["requiresPartyPokemon"] = bool(npc_metadata.get("requiresPartyPokemon", false))
+	npc_metadata["requiredQuestId"] = str(npc_metadata.get("requiredQuestId", npc_metadata.get("required_quest_id", "")))
+	npc_metadata["requiredQuestStepId"] = str(npc_metadata.get("requiredQuestStepId", npc_metadata.get("required_quest_step_id", "")))
+	npc_metadata["requiredQuestStatus"] = str(npc_metadata.get("requiredQuestStatus", npc_metadata.get("required_quest_status", "completed")))
 	return npc_metadata
 
 

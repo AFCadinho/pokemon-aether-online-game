@@ -7,6 +7,7 @@ const TRAINER_NPC_SCRIPT := "res://scripts/world/npcs/trainer_npc.gd"
 const GATE_NPC_SCRIPT := "res://scripts/world/npcs/gate_npc.gd"
 const HEAL_NPC_SCRIPT := "res://scripts/world/npcs/heal_npc.gd"
 const ROUTE_1_SCENE := "res://scenes/overworld/kanto/routes/kanto_route_1.tscn"
+const PALLET_TOWN_SCENE := "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn"
 
 var failed := false
 
@@ -14,6 +15,7 @@ var failed := false
 func _init() -> void:
 	_check_base_npc_exports_dialogue_id()
 	_check_base_npc_exports_definition_id()
+	_check_base_npc_story_requirement()
 	_check_scene_defined_dialogue_id_is_allowed()
 	_check_metadata_populates_dialogue_id()
 	_check_metadata_preserves_scene_dialogue_id_without_override()
@@ -22,6 +24,7 @@ func _init() -> void:
 	_check_npc_metadata_locale_contract()
 	_check_base_npc_movement_behavior()
 	_check_existing_npc_behavior_entrypoints()
+	_check_pallet_guard_story_requirement()
 
 	quit(1 if failed else 0)
 
@@ -50,6 +53,14 @@ func _check_base_npc_exports_definition_id() -> void:
 		text.contains("return npc_id.strip_edges()"),
 		"BaseNPC falls back to the placed npc_id"
 	)
+
+
+func _check_base_npc_story_requirement() -> void:
+	var text := _read_text(BASE_NPC_SCRIPT)
+	_check_true(text.contains("@export var required_quest_id := \"\""), "BaseNPC exposes an optional quest requirement")
+	_check_true(text.contains("@export var required_quest_step_id := \"\""), "BaseNPC can target one quest step")
+	_check_true(text.contains("func is_story_requirement_met() -> bool:"), "BaseNPC evaluates the projected story requirement")
+	_check_true(text.contains("StoryService.is_requirement_met("), "BaseNPC delegates to authoritative projected story state")
 
 
 func _check_scene_defined_dialogue_id_is_allowed() -> void:
@@ -188,6 +199,21 @@ func _check_existing_npc_behavior_entrypoints() -> void:
 		"HealNPC uses the central dialogue resolver"
 	)
 	_check_true(heal_text.contains("successDialogueId"), "HealNPC supports successDialogueId")
+
+
+func _check_pallet_guard_story_requirement() -> void:
+	var scene_text := _read_text(PALLET_TOWN_SCENE)
+	_check_true(
+		scene_text.contains('required_quest_id = "choose_starter"')
+		and scene_text.contains('required_quest_step_id = "choose_starter"'),
+		"Pallet Town guard requires the completed starter-choice step"
+	)
+	var gate_text := _read_text(GATE_NPC_SCRIPT)
+	_check_true(
+		gate_text.contains("requires_party_pokemon and PlayerSave.party.is_empty()")
+		and gate_text.contains("is_story_requirement_met()"),
+		"Pallet guard composes the standard party check with BaseNPC story requirements"
+	)
 
 
 func _read_text(path: String) -> String:

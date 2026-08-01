@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="6_ikli7"]
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="7_father_npc"]
 [ext_resource type="SpriteFrames" uid="uid://cqxh37chx4v8a" path="res://assets/npcs/custom/adinho_dad_frames.tres" id="8_father_frames"]
+[ext_resource type="Resource" uid="uid://b4hs3up8xaalu" path="res://resources/npcs/story/dadinho.tres" id="8_father_profile"]
 [ext_resource type="Script" uid="uid://c0rvsvb5ckinb" path="res://scripts/world/story/story_trigger.gd" id="9_story_trigger"]
 [ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="10_story_hook"]
 [ext_resource type="Script" path="res://scripts/world/story/story_step_scene_variant.gd" id="11_house_story_state"]
@@ -85,7 +86,9 @@ y_sort_enabled = true
 
 [node name="Father" parent="Entities/NPCs" unique_id=499570460 instance=ExtResource("7_father_npc")]
 position = Vector2(432, 944)
+npc_profile = ExtResource("8_father_profile")
 npc_id = "kanto_players_house_father"
+npc_definition_id = "kanto_players_house_father"
 display_name = "Dadinho"
 facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("8_father_frames")

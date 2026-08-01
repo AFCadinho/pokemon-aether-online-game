@@ -70,6 +70,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/world_access_catalog_generation_check.gd",
 	"res://tests/gameplay_reset_contract_check.gd",
 	"res://tests/story_service_contract_check.gd",
+	"res://tests/starter_choice_dialog_check.gd",
 	"res://tests/quest_journal_contract_check.gd",
 	"res://tests/story_interaction_contract_check.gd",
 	"res://tests/players_house_story_intro_check.gd",

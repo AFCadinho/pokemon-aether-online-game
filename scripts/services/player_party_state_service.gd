@@ -161,8 +161,61 @@ func create_pokemon(pokemon_data: Dictionary, add_to_party: bool = true, origin_
 	return await _create_owned_pokemon("/game/pokemon", _with_current_origin(pokemon_data, origin_method), add_to_party)
 
 
-func claim_starter(pokemon_data: Dictionary) -> Dictionary:
-	return await _create_owned_pokemon("/game/starter", _with_current_origin(pokemon_data, "gift"), true)
+func get_starter_options() -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + "/game/starter/options",
+		HTTPClient.METHOD_GET,
+		GatewayApiConfig.get_accept_headers(),
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	return {
+		"success": true,
+		"dataRevision": str(body.get("dataRevision", "")),
+		"choices": _array_from_value(body.get("choices", [])),
+		"total": int(body.get("total", 0)),
+		"alreadyClaimed": bool(body.get("alreadyClaimed", false)),
+		"selectedSpeciesId": str(body.get("selectedSpeciesId", "")),
+		"selectedSpeciesName": str(body.get("selectedSpeciesName", "")),
+	}
+
+
+func claim_starter(species_id: String) -> Dictionary:
+	var normalized_species_id := species_id.strip_edges()
+	if normalized_species_id.is_empty():
+		return {
+			"success": false,
+			"error": "Missing starter species.",
+		}
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + "/game/starter",
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({
+			"speciesId": normalized_species_id,
+			"addToParty": true,
+		})
+	)
+	var result: Dictionary = _pokemon_create_result_from_response(response)
+	_apply_party_response(result)
+	return result
 
 
 func dev_create_pokemon(pokemon_data: Dictionary, add_to_party: bool = true) -> Dictionary:

@@ -12,11 +12,15 @@ const LEGACY_IN_PROGRESS_ACCESS_PERMISSION := "world:areas:access-in-progress"
 @export var blocked_dialogue_lines: Array[String] = [
 	"It's dangerous to go that way without a Pokemon.",
 ]
+@export var story_blocked_dialogue_lines: Array[String] = [
+	"Professor Oak is waiting for you at his lab.",
+]
 @export var staff_blocked_dialogue_lines: Array[String] = [
 	"This area is not available during the alpha.",
 ]
 @export var allowed_dialogue_lines: Array[String] = []
 @export var blocked_dialogue_id := ""
+@export var story_blocked_dialogue_id := ""
 @export var staff_blocked_dialogue_id := ""
 @export var allowed_dialogue_id := ""
 
@@ -34,6 +38,9 @@ func _ready() -> void:
 
 
 func is_gate_open() -> bool:
+	if not is_story_requirement_met():
+		return false
+
 	if requires_party_pokemon and PlayerSave.party.is_empty():
 		return false
 
@@ -69,7 +76,7 @@ func show_gate_dialogue() -> void:
 
 	if (
 		not guarded_transition_id.strip_edges().is_empty()
-		and not (requires_party_pokemon and PlayerSave.party.is_empty())
+		and _are_local_gate_requirements_met()
 	):
 		var access_response := await _refresh_transition_access(true)
 		if not bool(access_response.get("success", false)):
@@ -117,6 +124,18 @@ func _load_gate_metadata() -> Dictionary:
 	requires_party_pokemon = bool(metadata.get("requiresPartyPokemon", requires_party_pokemon))
 	requires_staff_role = bool(metadata.get("requiresStaffRole", requires_staff_role))
 
+	var metadata_story_blocked_dialogue: Array[String] = _get_string_array(
+		metadata.get("storyBlockedDialogue", story_blocked_dialogue_lines)
+	)
+	if not metadata_story_blocked_dialogue.is_empty():
+		story_blocked_dialogue_lines = metadata_story_blocked_dialogue
+	story_blocked_dialogue_id = _get_metadata_dialogue_id(
+		metadata,
+		"storyBlockedDialogueId",
+		"story_blocked_dialogue_id",
+		story_blocked_dialogue_id
+	)
+
 	var metadata_blocked_dialogue: Array[String] = _get_string_array(
 		metadata.get("blockedDialogue", blocked_dialogue_lines)
 	)
@@ -140,6 +159,12 @@ func _load_gate_metadata() -> Dictionary:
 
 
 func _get_blocked_dialogue_lines() -> Array[String]:
+	if not is_story_requirement_met():
+		return await _resolve_dialogue_lines(
+			story_blocked_dialogue_id,
+			story_blocked_dialogue_lines
+		)
+
 	if requires_party_pokemon and PlayerSave.party.is_empty():
 		return await _resolve_dialogue_lines(blocked_dialogue_id, blocked_dialogue_lines)
 
@@ -147,6 +172,13 @@ func _get_blocked_dialogue_lines() -> Array[String]:
 		return await _resolve_dialogue_lines(staff_blocked_dialogue_id, staff_blocked_dialogue_lines)
 
 	return await _resolve_dialogue_lines(blocked_dialogue_id, blocked_dialogue_lines)
+
+
+func _are_local_gate_requirements_met() -> bool:
+	return (
+		is_story_requirement_met()
+		and not (requires_party_pokemon and PlayerSave.party.is_empty())
+	)
 
 
 func _get_metadata_dialogue_id(metadata: Dictionary, camel_key: String, snake_key: String, current_value: String) -> String:

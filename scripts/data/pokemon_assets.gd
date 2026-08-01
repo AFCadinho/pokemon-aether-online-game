@@ -12,9 +12,16 @@ const GEN5_SPRITE_ROOT := "gen5"
 const PARTY_ICON_CROP_PADDING := 4
 const PARTY_ICON_ALPHA_THRESHOLD := 0.01
 const HOME_SPRITE_ALIASES := {
+	"flabébé": ["Flabe-be"],
+	"flabebe": ["Flabe-be"],
+	"flabebe-blue": ["Flabe-be-Blue"],
+	"flabebe-orange": ["Flabe-be-Orange"],
+	"flabebe-white": ["Flabe-be-White"],
+	"flabebe-yellow": ["Flabe-be-Yellow"],
 	"jangmo-o": ["Jangmo-o"],
 	"hakamo-o": ["Hakamo-o"],
 	"kommo-o": ["Kommo-o"],
+	"mime-jr": ["Mime-Jr"],
 	"ninetales-alola": ["Ninetales-Alola"],
 	"vulpix-alola": ["Vulpix-Alola"],
 	"mimikyu": ["Mimikyu-Disguised"],
@@ -109,7 +116,52 @@ static func load_home_sprite(species: String, is_shiny: bool = false) -> Texture
 			if texture != null:
 				return texture
 
+	return _load_front_sprite_fallback(species, is_shiny)
+
+static func _load_front_sprite_fallback(species: String, is_shiny: bool) -> Texture2D:
+	var sprite_directory := "shiny_front" if is_shiny else "front"
+	for species_id: String in _get_battle_sprite_ids(species):
+		for root: String in get_pokemon_sprite_roots():
+			var sprite_root := root.path_join(sprite_directory).path_join(species_id)
+			var sheet := load_texture(sprite_root.path_join("sheet.png"))
+			if sheet == null:
+				continue
+			var animation_path := sprite_root.path_join("animation.json")
+			if not FileAccess.file_exists(animation_path):
+				continue
+			var animation_value: Variant = JSON.parse_string(FileAccess.get_file_as_string(animation_path))
+			if not (animation_value is Dictionary):
+				continue
+			var animation := animation_value as Dictionary
+			var frame_width := int(animation.get("frame_width", 0))
+			var frame_height := int(animation.get("frame_height", 0))
+			if frame_width <= 0 or frame_height <= 0:
+				continue
+			var frame := AtlasTexture.new()
+			frame.atlas = sheet
+			frame.region = Rect2(0, 0, frame_width, frame_height)
+			return frame
 	return null
+
+static func _get_battle_sprite_ids(species: String) -> Array[String]:
+	var ids: Array[String] = []
+	var normalized := _normalize_battle_sprite_id(species)
+	if not normalized.is_empty():
+		ids.append(normalized)
+	var compact := _to_showdown_compact_sprite_name(species)
+	if not compact.is_empty() and not ids.has(compact):
+		ids.append(compact)
+	return ids
+
+static func _normalize_battle_sprite_id(value: String) -> String:
+	return (
+		value.strip_edges().to_lower()
+		.replace("é", "e")
+		.replace("'", "")
+		.replace(".", "")
+		.replace("_", "-")
+		.replace(" ", "-")
+	)
 
 static func _get_home_sprite_names(species: String) -> Array[String]:
 	var names: Array[String] = []

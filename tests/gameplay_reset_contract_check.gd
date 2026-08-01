@@ -37,7 +37,10 @@ func _init() -> void:
 	_expect(overlay.contains("await PlayerGameplayResetService.reset_gameplay()"), "Developer Tools awaits the server transaction")
 	_expect(overlay.contains("change_scene_to_file(LOADING_SCENE_PATH)"), "successful reset reloads authoritative state")
 	_expect(party_service.contains('"/game/starter"'), "starter claim uses the durable server endpoint")
+	_expect(party_service.contains('"/game/starter/options"'), "starter choices come from the authoritative server catalog")
+	_expect(party_service.contains('"speciesId": normalized_species_id'), "starter claim sends only the selected species identity")
 	_expect(starter.contains("PlayerPartyStateService.claim_starter"), "Professor Oak uses the durable starter claim")
+	_expect(starter.contains("StarterChoiceDialog.new()"), "Professor Oak opens the starter catalog selection UI")
 
 	quit(1 if failed else 0)
 
