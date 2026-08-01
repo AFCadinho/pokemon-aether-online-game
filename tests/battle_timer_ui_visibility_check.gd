@@ -78,8 +78,9 @@ func _check_supported_resolutions() -> void:
 			{"bankRemainingMs": 79_000, "bankMaximumMs": 90_000, "scheduledRemainingMs": 2_000, "decisionKind": "FORCED_SWITCH", "state": "SCHEDULED"},
 			{"bankRemainingMs": 80_000, "bankMaximumMs": 90_000, "decisionKind": "MOVE_SELECTION", "state": "PAUSED"}
 		)
-		_check(panel.player_1_timer_state_label.text == "%s · %s" % [_t("battle.timer.forced_switch"), _t("battle.timer.scheduled")], "scheduled Forced Switch is rendered")
-		_check(panel.player_1_timer_label.text == _t("battle.timer.starts", {"time": "00:02"}), "scheduled start countdown is rendered")
+		_check(panel.player_1_timer_state_label.text == _t("common.waiting"), "scheduled render safety is presented as ordinary waiting")
+		_check(not panel.player_1_timer_label.visible, "scheduled render safety countdown stays hidden")
+		_check(not panel.player_1_timer_bar.visible, "scheduled render safety progress stays hidden")
 		_check(panel.player_2_timer_state_label.text == _t("battle.timer.paused"), "paused status is rendered")
 		panel.show_decision_timers(
 			{"bankRemainingMs": 0, "bankMaximumMs": 90_000, "effectiveDecisionRemainingMs": 0, "decisionMaximumMs": 90_000, "decisionKind": "MOVE_SELECTION", "state": "EXPIRED"},
