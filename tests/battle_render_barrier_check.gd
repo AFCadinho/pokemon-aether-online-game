@@ -33,6 +33,21 @@ func _init() -> void:
 		duplicate_ack_index >= 0 and duplicate_ack_index < duplicate_process_index,
 		"duplicate ACK is sent before any force-switch phase-release wait"
 	)
+	var release_index := battle_source.find("func _release_pvp_presentation_hold_from_ack_barrier(")
+	var release_next_index := battle_source.find("\nfunc ", release_index + 1)
+	var release_source := battle_source.substr(release_index, release_next_index - release_index)
+	_check(
+		release_source.contains("if not pvp_presentation_acknowledgements_authoritative:"),
+		"legacy presentation schedules retain their deterministic fallback hold"
+	)
+	_check(
+		release_source.contains('if not bool(message.get("presentationReleased", false)):'),
+		"a phase update cannot release input unless the server timer release succeeded"
+	)
+	_check(
+		battle_source.contains("if releases_presentation_fence:\n\t\t_release_pvp_presentation_hold_from_ack_barrier(message)"),
+		"the shared render barrier releases the local presentation hold"
+	)
 	_check_duplicate_batch_retries_until_render_cursor_advances()
 	quit(1 if failed else 0)
 

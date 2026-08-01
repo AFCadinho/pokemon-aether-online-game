@@ -130,6 +130,7 @@ var pvp_gateway_epoch := ""
 var pvp_last_connection_server_seq := 0
 var pvp_presentation_actionable_local_msec := 0
 var pvp_presentation_schedule_token := ""
+var pvp_presentation_acknowledgements_authoritative := false
 var pvp_waiting_observability_started_msec := 0
 var pvp_waiting_observability_reported := false
 var pvp_waiting_recovery_in_flight := false
@@ -2824,6 +2825,10 @@ func _update_pvp_presentation_schedule(response: Dictionary) -> void:
 	if not _is_pvp_battle():
 		return
 	var presentation: Dictionary = response.get("presentation", {})
+	if presentation.has("acknowledgementsAuthoritative"):
+		pvp_presentation_acknowledgements_authoritative = bool(
+			presentation.get("acknowledgementsAuthoritative", false)
+		)
 	var decisions: Dictionary = presentation.get("decisions", {})
 	var schedule: Dictionary = decisions.get(_get_local_state_player_id(), decisions.get(action_flow.local_player_id, {}))
 	if schedule.is_empty() or str(schedule.get("status", "")) != "SCHEDULED":
@@ -2847,6 +2852,14 @@ func _release_pvp_presentation_hold_after(remaining_msec: int, token: String) ->
 
 func _is_pvp_presentation_hold_active() -> bool:
 	return _is_pvp_battle() and pvp_presentation_actionable_local_msec > Time.get_ticks_msec()
+
+func _release_pvp_presentation_hold_from_ack_barrier(message: Dictionary) -> void:
+	if not pvp_presentation_acknowledgements_authoritative:
+		return
+	if not bool(message.get("presentationReleased", false)):
+		return
+	pvp_presentation_actionable_local_msec = 0
+	pvp_presentation_schedule_token = ""
 
 func _set_battle_actions_ready(is_ready: bool) -> void:
 	if _is_spectator_battle():
@@ -5971,6 +5984,7 @@ func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_poke
 	pvp_last_connection_server_seq = 0
 	pvp_presentation_actionable_local_msec = 0
 	pvp_presentation_schedule_token = ""
+	pvp_presentation_acknowledgements_authoritative = false
 	pvp_response_order.reset()
 	pvp_local_canonical_roster.clear()
 	spectator_sides_swapped = false
@@ -10206,6 +10220,8 @@ func _apply_pvp_phase_update(message: Dictionary) -> void:
 			and str(message.get("eventBatchId", "")).strip_edges()
 				== str(pvp_pending_presentation_fence.get("eventBatchId", "")).strip_edges()
 		)
+	if releases_presentation_fence:
+		_release_pvp_presentation_hold_from_ack_barrier(message)
 
 	var server_seq := _get_pvp_message_server_seq(message)
 	var phase := str(message.get("phase", "")).strip_edges()
