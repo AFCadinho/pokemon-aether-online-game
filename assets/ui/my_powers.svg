@@ -1,0 +1,28 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="powerCore" x1="13" y1="10" x2="52" y2="56" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#173653"/>
+      <stop offset="0.55" stop-color="#0B2740"/>
+      <stop offset="1" stop-color="#081522"/>
+    </linearGradient>
+    <linearGradient id="powerBolt" x1="38" y1="13" x2="25" y2="54" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF3A8"/>
+      <stop offset="0.48" stop-color="#F2C95E"/>
+      <stop offset="1" stop-color="#D38B22"/>
+    </linearGradient>
+    <filter id="powerShadow" x="-30%" y="-30%" width="160%" height="175%">
+      <feDropShadow dx="0" dy="2" stdDeviation="1.6" flood-color="#000814" flood-opacity="0.62"/>
+    </filter>
+    <filter id="powerGlow" x="-45%" y="-45%" width="190%" height="190%">
+      <feDropShadow dx="0" dy="0" stdDeviation="1.8" flood-color="#68E4FF" flood-opacity="0.42"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#powerShadow)" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="32" cy="32" r="27" fill="#050B14" stroke="#07101D" stroke-width="3"/>
+    <circle cx="32" cy="32" r="23" fill="url(#powerCore)" stroke="#46779D" stroke-width="2.5"/>
+    <path d="M13 31a19 19 0 0 1 7-14M51 33a19 19 0 0 1-7 14" stroke="#68E4FF" stroke-width="2.5" opacity="0.8"/>
+    <path d="M37 11 18 36h12l-4 18 20-27H34l3-16Z" fill="url(#powerBolt)" stroke="#07101D" stroke-width="3"/>
+    <path d="m35.5 17-11 15h10l-2.5 11 9-12h-11l5.5-14Z" fill="#FFF8CF" opacity="0.72" filter="url(#powerGlow)"/>
+  </g>
+</svg>

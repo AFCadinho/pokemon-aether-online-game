@@ -419,6 +419,7 @@ enum DevPokemonPopupMode {
 @onready var donator_store_button: Button = $Control/DonatorStoreButton
 var donator_store_popup: DonatorStorePopup
 @onready var settings_button: Button = $Control/SettingsButton
+@onready var my_powers_button: Button = $Control/MyPowersButton
 @onready var global_buff_details_panel: PanelContainer = $Control/GlobalBuffDetailsPanel
 @onready var global_buff_details_icon: TextureRect = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/Header/Icon
 @onready var global_buff_details_title: Label = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/Header/Heading/TitleLabel
@@ -448,7 +449,6 @@ var donator_store_popup: DonatorStorePopup
 @onready var dex_actions_collapse_button: Button = $Control/DexActionsCollapseButton
 @onready var staff_actions_panel: PanelContainer = $Control/StaffActionsPanel
 @onready var staff_actions_row: HBoxContainer = $Control/StaffActionsPanel/MarginContainer/HBoxContainer
-@onready var staff_actions_collapse_button: Button = $Control/StaffActionsCollapseButton
 @onready var message_scroll: ScrollContainer = $Control/ChatPanel/MarginContainer/VBoxContainer/MessageScroll
 @onready var message_list: VBoxContainer = $Control/ChatPanel/MarginContainer/VBoxContainer/MessageScroll/MarginContainer/MessageList
 @onready var message_entry_template: RichTextLabel = $Control/ChatPanel/MarginContainer/VBoxContainer/MessageScroll/MarginContainer/MessageList/MessageEntry
@@ -1380,6 +1380,7 @@ func _ready() -> void:
 	pvp_button.pressed.connect(_on_pvp_button_pressed)
 	quest_button.pressed.connect(_on_quest_log_button_pressed)
 	settings_button.pressed.connect(_on_settings_button_pressed)
+	my_powers_button.pressed.connect(_on_my_powers_button_pressed)
 	running_shoes_button.set_pressed_no_signal(GameState.running_shoes_enabled)
 	_set_icon_slot_active(running_shoes_slot, GameState.running_shoes_enabled)
 	running_shoes_button.toggled.connect(_on_running_shoes_toggled)
@@ -1489,7 +1490,7 @@ func _refresh_quest_tracker_layout() -> void:
 	if quest_journal_view == null:
 		return
 	var right_action_bar_bottom := 0.0
-	for panel_id in ["actions", "staff_actions"]:
+	for panel_id in ["actions", "dex_actions"]:
 		var state: Dictionary = collapsible_panels.get(panel_id, {})
 		if state.is_empty() or not bool(state.get("available", true)):
 			continue
@@ -1786,11 +1787,19 @@ func _refresh_dev_tools_visibility() -> void:
 		staff_impersonate_popup.visible = false
 	_refresh_action_bar_layouts()
 	_set_collapsible_panel_available("dex_actions", true)
-	_set_collapsible_panel_available(
-		"staff_actions",
+	_set_my_powers_available(
 		(can_show_staff_action_bar or can_return_from_impersonation)
 		and has_visible_staff_action
 	)
+
+
+func _set_my_powers_available(available: bool) -> void:
+	if my_powers_button == null:
+		return
+	my_powers_button.set_meta("group_available", available)
+	if not available:
+		_hide_my_powers_menu()
+	_apply_collapsible_panel_state("player_status")
 
 
 func _refresh_staff_impersonate_button_copy() -> void:
@@ -2800,7 +2809,6 @@ func _refresh_action_bar_layouts() -> void:
 	_refresh_action_bar_layout(staff_actions_panel)
 	_position_collapsible_button("actions")
 	_position_collapsible_button("dex_actions")
-	_position_collapsible_button("staff_actions")
 	_refresh_quest_tracker_layout()
 
 func _refresh_action_bar_layout(panel: PanelContainer) -> void:
@@ -2819,11 +2827,12 @@ func _refresh_action_bar_layout(panel: PanelContainer) -> void:
 	var slot_gap: float = float(max(visible_slots - 1, 0)) * ACTION_BAR_SLOT_GAP
 	var width: float = (ACTION_BAR_MARGIN_X * 2.0) + (float(visible_slots) * ACTION_BAR_SLOT_SIZE) + slot_gap
 	panel.custom_minimum_size.x = width
-	if panel == dex_actions_panel:
-		panel.offset_left = 0.0
-		panel.offset_right = width
+	if panel == staff_actions_panel:
+		panel.offset_left = -64.0 - width
+		panel.offset_right = -64.0
 	else:
 		panel.offset_left = -width
+		panel.offset_right = 0.0
 
 func _get_scene_action_bar_row(panel: PanelContainer) -> HBoxContainer:
 	if panel == null or panel.get_child_count() <= 0:
@@ -2844,6 +2853,7 @@ func _apply_ui_z_index_policy() -> void:
 		personal_buffs_panel,
 		donator_store_button,
 		settings_button,
+		my_powers_button,
 		options_panel,
 		actions_panel,
 		dex_actions_panel,
@@ -3067,6 +3077,9 @@ func _setup_normal_ui_focus_groups() -> void:
 		settings_button: [
 			^"SettingsButton",
 		],
+		my_powers_button: [
+			^"MyPowersButton",
+		],
 	}
 
 	for panel_value: Variant in panel_paths_by_group.keys():
@@ -3089,6 +3102,7 @@ func _setup_normal_ui_focus_groups() -> void:
 		personal_buffs_panel: [personal_buffs_panel],
 		donator_store_button: [donator_store_button],
 		settings_button: [settings_button],
+		my_powers_button: [my_powers_button],
 	}
 	for panel_value: Variant in focus_tree_panels.keys():
 		var panel: Control = panel_value as Control
@@ -9604,6 +9618,7 @@ func is_point_over_visible_ui(global_position: Vector2) -> bool:
 		personal_buffs_panel,
 		donator_store_button,
 		settings_button,
+		my_powers_button,
 		options_panel,
 		actions_panel,
 		dex_actions_panel,
@@ -21537,14 +21552,13 @@ func _setup_collapsible_panels() -> void:
 		player_status_panel,
 		"left",
 		null,
-		[personal_buffs_panel, settings_button, donator_store_button]
+		[personal_buffs_panel, settings_button, donator_store_button, my_powers_button]
 	)
 	_register_collapsible_panel("party", party_panel, "right")
 	_register_collapsible_panel("location", location_panel, "right_center", null, [global_buffs_panel])
 	_register_collapsible_panel("options", options_panel, "right")
 	_register_collapsible_panel("actions", actions_panel, "action_bar", toggle_actions_collapse_button)
-	_register_collapsible_panel("dex_actions", dex_actions_panel, "right", dex_actions_collapse_button)
-	_register_collapsible_panel("staff_actions", staff_actions_panel, "action_bar", staff_actions_collapse_button)
+	_register_collapsible_panel("dex_actions", dex_actions_panel, "action_bar", dex_actions_collapse_button)
 	_position_collapsible_buttons()
 
 func _setup_chat_resize_button() -> void:
@@ -21699,19 +21713,8 @@ func _apply_collapsible_panel_state(panel_id: String) -> void:
 		"ui.chat.expand" if collapsed else "ui.chat.collapse"
 	)
 	_apply_collapsible_button_style(button, str(state.get("side", "right")), collapsed)
-	if collapsed and panel_id == "staff_actions":
-		dev_actions_popup.visible = false
-		if alpha_tools_popup != null:
-			alpha_tools_popup.visible = false
-		if content_creator_tools_popup != null:
-			content_creator_tools_popup.visible = false
-		if staff_tools_popup != null:
-			staff_tools_popup.visible = false
-		if staff_impersonate_popup != null:
-			staff_impersonate_popup.visible = false
-		if staff_teleport_popup != null:
-			staff_teleport_popup.visible = false
 	if collapsed and panel_id == "player_status":
+		_hide_my_powers_menu()
 		_hide_donator_store_popup()
 	if collapsed and panel_id == "dex_actions":
 		if item_dex_popup != null:
@@ -21732,7 +21735,7 @@ func _apply_collapsible_panel_state(panel_id: String) -> void:
 	if panel_id == "options":
 		_refresh_socials_attention_badge()
 	_position_collapsible_button(panel_id)
-	if panel_id in ["actions", "staff_actions"]:
+	if panel_id in ["actions", "dex_actions"]:
 		_refresh_quest_tracker_layout()
 
 func _collapsible_button_glyph(side: String, collapsed: bool) -> String:
@@ -21931,6 +21934,7 @@ func _get_active_escape_close_candidate() -> Dictionary:
 
 func _get_escape_close_candidates() -> Array[Dictionary]:
 	var candidates: Array[Dictionary] = [
+		{"panel": staff_actions_panel, "close": Callable(self, "_hide_my_powers_menu")},
 		{"panel": global_buff_details_panel, "close": Callable(self, "_hide_global_buff_details")},
 		{"panel": chat_settings_popup, "close": Callable(self, "_hide_chat_settings_popup")},
 		{"panel": chat_context_popup, "close": Callable(self, "_hide_chat_context_popup")},
@@ -24423,6 +24427,20 @@ func _execute_escape_rope() -> void:
 	_add_chat_message(LocalizationManager.text("ui.hotbar.escape_rope.message.success", {"item": item_name}))
 	_refresh_player_actions.call_deferred()
 
+
+func _on_my_powers_button_pressed() -> void:
+	if not bool(my_powers_button.get_meta("group_available", false)):
+		return
+	staff_actions_panel.visible = not staff_actions_panel.visible
+	if staff_actions_panel.visible:
+		_refresh_action_bar_layout(staff_actions_panel)
+		_focus_normal_ui_group(staff_actions_panel)
+
+
+func _hide_my_powers_menu() -> void:
+	if staff_actions_panel != null:
+		staff_actions_panel.visible = false
+
 func _load_toggle_preferences() -> void:
 	var result: Dictionary = await PlayerGameStateService.load_player_preferences()
 	if not bool(result.get("success", false)):
@@ -24502,6 +24520,7 @@ func _on_dev_actions_button_pressed() -> void:
 	if dev_actions_popup.visible:
 		_refresh_dev_world_time_selector()
 		_position_action_slot_popup(dev_actions_popup, dev_actions_slot)
+		_hide_my_powers_menu()
 		_activate_ui_panel(dev_actions_popup)
 	else:
 		_deactivate_ui_panel(dev_actions_popup)
@@ -24538,6 +24557,7 @@ func _on_staff_tools_button_pressed() -> void:
 	staff_tools_popup.visible = not staff_tools_popup.visible
 	if staff_tools_popup.visible:
 		_position_action_slot_popup(staff_tools_popup, staff_tools_slot)
+		_hide_my_powers_menu()
 		_activate_ui_panel(staff_tools_popup)
 	else:
 		_deactivate_ui_panel(staff_tools_popup)
@@ -25661,6 +25681,7 @@ func _on_alpha_tools_button_pressed() -> void:
 	alpha_tools_popup.visible = not alpha_tools_popup.visible
 	if alpha_tools_popup.visible:
 		_position_alpha_tools_popup()
+		_hide_my_powers_menu()
 		_activate_ui_panel(alpha_tools_popup)
 	else:
 		_deactivate_ui_panel(alpha_tools_popup)
@@ -25671,6 +25692,7 @@ func _on_content_creator_tools_button_pressed() -> void:
 	content_creator_tools_popup.visible = not content_creator_tools_popup.visible
 	if content_creator_tools_popup.visible:
 		_position_action_slot_popup(content_creator_tools_popup, content_creator_tools_slot)
+		_hide_my_powers_menu()
 		_activate_ui_panel(content_creator_tools_popup)
 	else:
 		_deactivate_ui_panel(content_creator_tools_popup)
@@ -35085,6 +35107,7 @@ func _disable_icon_button_focus() -> void:
 		pvp_button,
 		quest_button,
 		settings_button,
+		my_powers_button,
 		donator_store_button,
 		wild_pokemon_button,
 		item_dex_button,

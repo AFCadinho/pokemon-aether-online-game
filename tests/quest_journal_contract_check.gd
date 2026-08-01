@@ -247,7 +247,7 @@ func _verify_integration_contract() -> void:
 	_expect(
 		overlay.contains("quest_journal_view.open_journal()")
 		and overlay.contains("func _refresh_quest_tracker_layout()")
-		and overlay.contains('for panel_id in ["actions", "staff_actions"]')
+		and overlay.contains('for panel_id in ["actions", "dex_actions"]')
 		and overlay.contains("quest_journal_view.set_tracker_top_offset")
 		and not overlay.contains("Quest Log is not implemented yet."),
 		"HUD quest integration opens the journal and clears every available right action bar"

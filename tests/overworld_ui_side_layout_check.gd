@@ -30,6 +30,8 @@ func _init() -> void:
 	var player_status_block := _node_block(scene_source, '[node name="PlayerStatusPanel"')
 	var party_block := _node_block(scene_source, '[node name="PartyPanel"')
 	var dex_actions_block := _node_block(scene_source, '[node name="DexActionsPanel"')
+	var staff_actions_block := _node_block(scene_source, '[node name="StaffActionsPanel"')
+	var my_powers_button_block := _node_block(scene_source, '[node name="MyPowersButton"')
 	var party_margin_block := _node_block(scene_source, '[node name="MarginContainer" type="MarginContainer" parent="Control/PartyPanel"')
 	var party_container_block := _node_block(scene_source, '[node name="VBoxContainer" type="VBoxContainer" parent="Control/PartyPanel/MarginContainer"')
 	var chat_block := _node_block(scene_source, '[node name="ChatPanel"')
@@ -48,12 +50,26 @@ func _init() -> void:
 	_check(hotbar_block.contains("offset_right = 0.0"), "hotbar hugs the right screen edge")
 	_check(party_block.contains("anchors_preset = 0"), "normal party is anchored to the left")
 	_check(party_block.contains("offset_left = 0.0"), "normal party hugs the left screen edge")
-	_check(party_block.contains("offset_top = 152.0"), "normal party clears the stacked left navigation rails")
+	_check(party_block.contains("offset_top = 76.0") and party_block.contains("offset_bottom = 158.0"), "normal party moves up intact below the single primary left navigation rail")
 	_check(
-		dex_actions_block.contains("anchors_preset = 0")
-		and dex_actions_block.contains("offset_left = 0.0")
+		dex_actions_block.contains("anchors_preset = 1")
+		and dex_actions_block.contains("anchor_left = 1.0")
+		and dex_actions_block.contains("offset_left = -264.0")
 		and dex_actions_block.contains("offset_top = 76.0"),
-		"Town Map and Dex shortcuts sit below the primary left navigation"
+		"Town Map and Dex shortcuts occupy the freed secondary right navigation rail"
+	)
+	_check(
+		staff_actions_block.contains("visible = false")
+		and staff_actions_block.contains("anchors_preset = 3")
+		and staff_actions_block.contains("offset_right = -64.0"),
+		"account-specific tool icons start hidden in a bottom-right flyout"
+	)
+	_check(
+		my_powers_button_block.contains("anchors_preset = 3")
+		and my_powers_button_block.contains('tooltip_text = "ui.navigation.my_powers"')
+		and my_powers_button_block.contains('icon = ExtResource("32_my_powers")')
+		and scene_source.contains('path="res://assets/ui/my_powers.svg" id="32_my_powers"'),
+		"one account-bound My Powers button opens privileged tools beside the trainer card"
 	)
 	_check(party_margin_block.contains("margin_top = 7") and party_container_block.contains("separation = 5"), "normal party rail uses compact spacing")
 	_check(script_source.contains("func _make_party_panel_style()"), "normal party uses a dedicated lighter glass rail")
@@ -170,7 +186,8 @@ func _init() -> void:
 
 	_check(script_source.contains('_register_collapsible_panel("hotkey_sidebar", hotkey_sidebar_panel, "left_center")'), "hotbar collapse control sits on its inner edge")
 	_check(script_source.contains('_register_collapsible_panel("chat", chat_panel, "right")'), "chat controls sit on its inner edge")
-	_check(script_source.contains("[personal_buffs_panel, settings_button, donator_store_button]"), "trainer collapse includes personal buffs, Settings, and the Donator Store")
+	_check(script_source.contains("[personal_buffs_panel, settings_button, donator_store_button, my_powers_button]"), "trainer collapse includes personal buffs, utilities, and My Powers")
+	_check(script_source.contains("func _set_my_powers_available") and script_source.contains("func _hide_my_powers_menu"), "My Powers only appears for accounts with available privileged tools")
 	_check(script_source.contains('_register_collapsible_panel("party", party_panel, "right")'), "party collapse control sits on its inner edge")
 	_check(script_source.contains('_register_collapsible_panel("location", location_panel, "right_center", null, [global_buffs_panel])'), "location collapse includes global buffs")
 	_check(script_source.contains("func _collapsible_button_glyph") and script_source.contains("func _apply_collapsible_button_style"), "collapse controls use one directional visual language")

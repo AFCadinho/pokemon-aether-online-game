@@ -63,6 +63,7 @@ func _check_navigation_and_world_status() -> void:
 	var overlay := packed.instantiate()
 	var store_button := overlay.get_node_or_null("Control/DonatorStoreButton") as Button
 	var settings_button := overlay.get_node_or_null("Control/SettingsButton") as Button
+	var my_powers_button := overlay.get_node_or_null("Control/MyPowersButton") as Button
 	var time_of_day := overlay.get_node_or_null(
 		"Control/LocationPanel/MarginContainer/VBoxContainer/StatusRow/TimeOfDayLabel"
 	) as Label
@@ -81,6 +82,10 @@ func _check_navigation_and_world_status() -> void:
 	_check(
 		settings_button != null and settings_button.tooltip_text == "Spelinstellingen wijzigen",
 		"settings navigation tooltip renders in Dutch"
+	)
+	_check(
+		my_powers_button != null and my_powers_button.tooltip_text == "Mijn bevoegdheden",
+		"account powers tooltip renders in Dutch"
 	)
 	_check(
 		not _tree_has_tooltip_prefix(overlay, "ui.navigation."),

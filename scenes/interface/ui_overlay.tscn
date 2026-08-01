@@ -34,6 +34,7 @@
 [ext_resource type="Texture2D" path="res://assets/ui/pvp_queue_ball_blue.svg" id="29_pvp_blue_ball"]
 [ext_resource type="Texture2D" path="res://assets/ui/pvp_queue_ranked_emblem.svg" id="30_pvp_ranked_emblem"]
 [ext_resource type="Script" path="res://scripts/ui/fishing_action_controller.gd" id="31_fishing_action"]
+[ext_resource type="Texture2D" path="res://assets/ui/my_powers.svg" id="32_my_powers"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grslb"]
 bg_color = Color(0.019607844, 0.043137256, 0.078431375, 0.92941177)
@@ -630,13 +631,39 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_utility_button_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_utility_button_hover")
 theme_override_styles/focus = SubResource("StyleBoxFlat_utility_button_hover")
 
+[node name="MyPowersButton" type="Button" parent="Control"]
+visible = false
+custom_minimum_size = Vector2(42, 42)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -58.0
+offset_top = -242.0
+offset_right = -16.0
+offset_bottom = -200.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_default_cursor_shape = 2
+tooltip_text = "ui.navigation.my_powers"
+icon = ExtResource("32_my_powers")
+icon_max_width = 26
+expand_icon = true
+theme_override_styles/normal = SubResource("StyleBoxFlat_utility_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_utility_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_utility_button_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_utility_button_hover")
+metadata/group_available = false
+
 [node name="PartyPanel" type="PanelContainer" parent="Control" unique_id=1949206887]
 layout_mode = 1
 anchors_preset = 0
 offset_left = 0.0
-offset_top = 152.0
+offset_top = 76.0
 offset_right = 282.0
-offset_bottom = 234.0
+offset_bottom = 158.0
 grow_horizontal = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_grslb")
 
@@ -1489,12 +1516,13 @@ text = "-"
 [node name="DexActionsPanel" type="PanelContainer" parent="Control" unique_id=1944597878]
 custom_minimum_size = Vector2(248, 0)
 layout_mode = 1
-anchors_preset = 0
-offset_left = 0.0
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -264.0
 offset_top = 76.0
-offset_right = 264.0
 offset_bottom = 144.0
-grow_horizontal = 1
+grow_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_7g5y2")
 
 [node name="MarginContainer" type="MarginContainer" parent="Control/DexActionsPanel" unique_id=1652238249]
@@ -1566,25 +1594,32 @@ stretch_mode = 5
 [node name="DexActionsCollapseButton" type="Button" parent="Control" unique_id=187874073]
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 1
-anchors_preset = 0
-offset_left = 274.0
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -292.0
 offset_top = 76.0
-offset_right = 302.0
+offset_right = -264.0
 offset_bottom = 104.0
-grow_horizontal = 1
+grow_horizontal = 0
 mouse_default_cursor_shape = 2
 text = "-"
 
 [node name="StaffActionsPanel" type="PanelContainer" parent="Control" unique_id=747754312]
+visible = false
 custom_minimum_size = Vector2(248, 0)
 layout_mode = 1
-anchors_preset = 1
+anchors_preset = 3
 anchor_left = 1.0
+anchor_top = 1.0
 anchor_right = 1.0
-offset_left = -264.0
-offset_top = 76.0
-offset_bottom = 144.0
+anchor_bottom = 1.0
+offset_left = -312.0
+offset_top = -276.0
+offset_right = -64.0
+offset_bottom = -208.0
 grow_horizontal = 0
+grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_7g5y2")
 
 [node name="MarginContainer" type="MarginContainer" parent="Control/StaffActionsPanel" unique_id=1951185166]
@@ -1672,20 +1707,6 @@ texture_disabled = ExtResource("9_s0khl")
 texture_focused = ExtResource("9_s0khl")
 ignore_texture_size = true
 stretch_mode = 5
-
-[node name="StaffActionsCollapseButton" type="Button" parent="Control" unique_id=1893457]
-custom_minimum_size = Vector2(28, 28)
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -292.0
-offset_top = 76.0
-offset_right = -264.0
-offset_bottom = 104.0
-grow_horizontal = 0
-mouse_default_cursor_shape = 2
-text = "-"
 
 [node name="DevActionsPopup" type="PanelContainer" parent="Control" unique_id=1029961477]
 visible = false
