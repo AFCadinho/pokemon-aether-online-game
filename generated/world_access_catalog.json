@@ -39,7 +39,7 @@
 				"from_players_house": {
 					"facingDirection": "down",
 					"label": "From Players House",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "FromPlayersHouse",
 					"tile": {
 						"x": 20,
@@ -49,7 +49,7 @@
 				"from_rivals_house": {
 					"facingDirection": "down",
 					"label": "From Rivals House",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRivalsHouse",
 					"tile": {
 						"x": 35,
@@ -59,7 +59,7 @@
 				"heal_npc": {
 					"facingDirection": "down",
 					"label": "Heal Npc",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "HealNPC",
 					"tile": {
 						"x": 11,
@@ -113,7 +113,7 @@
 				"from_gym": {
 					"facingDirection": "down",
 					"label": "From Gym",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "FromGym",
 					"tile": {
 						"x": 18,
@@ -123,7 +123,7 @@
 				"from_house_1": {
 					"facingDirection": "down",
 					"label": "From House 1",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "FromHouse1",
 					"tile": {
 						"x": 34,
@@ -133,7 +133,7 @@
 				"from_house_2": {
 					"facingDirection": "down",
 					"label": "From House 2",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "FromHouse2",
 					"tile": {
 						"x": 14,
@@ -143,7 +143,7 @@
 				"from_museum": {
 					"facingDirection": "down",
 					"label": "From Museum",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "FromMuseum",
 					"tile": {
 						"x": 43,
@@ -153,7 +153,7 @@
 				"from_pokecenter": {
 					"facingDirection": "down",
 					"label": "From Pokecenter",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "FromPokecenter",
 					"tile": {
 						"x": 44,
@@ -197,7 +197,7 @@
 				"from_outside": {
 					"facingDirection": "down",
 					"label": "From Outside",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "FromOutside",
 					"tile": {
 						"x": 14,
@@ -207,7 +207,7 @@
 				"heal_npc": {
 					"facingDirection": "down",
 					"label": "Heal Npc",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "HealNPC",
 					"tile": {
 						"x": 14,
@@ -231,7 +231,7 @@
 				"from_pallet_town": {
 					"facingDirection": "down",
 					"label": "From Pallet Town",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "FromPalletTown",
 					"tile": {
 						"x": 13,
@@ -241,7 +241,7 @@
 				"ground_floor_stairs": {
 					"facingDirection": "down",
 					"label": "Ground Floor Stairs",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "GroundFloorStairs",
 					"tile": {
 						"x": 15,
@@ -251,7 +251,7 @@
 				"initial_spawn": {
 					"facingDirection": "down",
 					"label": "Initial Spawn",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "InitialSpawn",
 					"tile": {
 						"x": 9,
@@ -261,7 +261,7 @@
 				"upper_floor_stairs": {
 					"facingDirection": "down",
 					"label": "Upper Floor Stairs",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "UpperFloorStairs",
 					"tile": {
 						"x": 11,
@@ -285,7 +285,7 @@
 				"from_pallet_town": {
 					"facingDirection": "down",
 					"label": "From Pallet Town",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "FromPalletTown",
 					"tile": {
 						"x": 5,
@@ -295,7 +295,7 @@
 				"ground_floor_stairs": {
 					"facingDirection": "down",
 					"label": "Ground Floor Stairs",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "GroundFloorStairs",
 					"tile": {
 						"x": 3,
@@ -305,7 +305,7 @@
 				"upper_floor_stairs": {
 					"facingDirection": "down",
 					"label": "Upper Floor Stairs",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "UpperFloorStairs",
 					"tile": {
 						"x": 8,
@@ -363,7 +363,7 @@
 				"from_route_2_gate_north": {
 					"facingDirection": "down",
 					"label": "From Route 2 Gate North",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute2GateNorth",
 					"tile": {
 						"x": 43,
@@ -373,7 +373,7 @@
 				"from_route_2_gate_south": {
 					"facingDirection": "down",
 					"label": "From Route 2 Gate South",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute2GateSouth",
 					"tile": {
 						"x": 43,
@@ -435,7 +435,7 @@
 				"from_north": {
 					"facingDirection": "down",
 					"label": "From North",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "FromNorth",
 					"tile": {
 						"x": 10,
@@ -445,7 +445,7 @@
 				"from_south": {
 					"facingDirection": "down",
 					"label": "From South",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "FromSouth",
 					"tile": {
 						"x": 10,
@@ -467,7 +467,7 @@
 				"from_north": {
 					"facingDirection": "down",
 					"label": "From North",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "FromNorth",
 					"tile": {
 						"x": 10,
@@ -477,7 +477,7 @@
 				"from_south": {
 					"facingDirection": "down",
 					"label": "From South",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "FromSouth",
 					"tile": {
 						"x": 10,
@@ -499,7 +499,7 @@
 				"from_north": {
 					"facingDirection": "down",
 					"label": "From North",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "FromNorth",
 					"tile": {
 						"x": 10,
@@ -509,7 +509,7 @@
 				"from_south": {
 					"facingDirection": "down",
 					"label": "From South",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "FromSouth",
 					"tile": {
 						"x": 10,
@@ -533,7 +533,7 @@
 				"from_pokecenter": {
 					"facingDirection": "down",
 					"label": "From Pokecenter",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "FromPokecenter",
 					"tile": {
 						"x": 32,
@@ -543,7 +543,7 @@
 				"from_route_2": {
 					"facingDirection": "down",
 					"label": "From Route 2",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute2",
 					"tile": {
 						"x": 24,
@@ -575,7 +575,7 @@
 				"from_outside": {
 					"facingDirection": "down",
 					"label": "From Outside",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "FromOutside",
 					"tile": {
 						"x": 14,
@@ -585,7 +585,7 @@
 				"heal_npc": {
 					"facingDirection": "down",
 					"label": "Heal Npc",
-					"safeForStaffTeleport": false,
+					"safeForStaffTeleport": true,
 					"spawnMarker": "HealNPC",
 					"tile": {
 						"x": 14,
