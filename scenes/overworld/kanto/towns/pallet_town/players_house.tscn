@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="4_floor_mask"]
 [ext_resource type="Script" uid="uid://dcir531aqivcy" path="res://scripts/world/internal_floor_transition.gd" id="5_floor_transition"]
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="6_ikli7"]
+[ext_resource type="Texture2D" uid="uid://cxbfneavbrouo" path="res://assets/sprites/mugshots/dadinho_mugshot.png" id="6_rs6s5"]
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="7_father_npc"]
 [ext_resource type="SpriteFrames" uid="uid://cqxh37chx4v8a" path="res://assets/npcs/custom/adinho_dad_frames.tres" id="8_father_frames"]
 [ext_resource type="Resource" uid="uid://b4hs3up8xaalu" path="res://resources/npcs/story/dadinho.tres" id="8_father_profile"]
@@ -89,12 +90,10 @@ position = Vector2(432, 944)
 npc_profile = ExtResource("8_father_profile")
 npc_id = "kanto_players_house_father"
 npc_definition_id = "kanto_players_house_father"
-required_quest_id = null
-required_quest_step_id = null
-required_quest_status = null
 display_name = "Dadinho"
 facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("8_father_frames")
+mugshot = ExtResource("6_rs6s5")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1334826896]
 
