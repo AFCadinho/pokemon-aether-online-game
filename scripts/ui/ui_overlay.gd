@@ -3835,6 +3835,9 @@ func queue_reward_move_learn_candidates(reward_value: Variant) -> void:
 		return
 
 	var reward: Dictionary = reward_value as Dictionary
+	var story_level_ups_value: Variant = reward.get("levelUps", [])
+	if story_level_ups_value is Array and not (story_level_ups_value as Array).is_empty():
+		_refresh_story_after_reward_level_up.call_deferred()
 	var evolution_queued_count := _queue_reward_evolution_prompts_from_reward(reward)
 	var prompts_value: Variant = reward.get("moveLearnPrompts", [])
 	if prompts_value is Array:
@@ -3891,6 +3894,10 @@ func queue_reward_move_learn_candidates(reward_value: Variant) -> void:
 		_show_next_move_learn_prompt()
 	elif evolution_queued_count > 0:
 		_show_next_evolution_prompt()
+
+
+func _refresh_story_after_reward_level_up() -> void:
+	await PlayerGameStateService.refresh_story()
 
 func _queue_reward_evolution_prompts_from_reward(reward: Dictionary) -> int:
 	var queued_count := 0

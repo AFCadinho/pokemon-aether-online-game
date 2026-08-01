@@ -32,6 +32,9 @@ const QUEST_LOCALIZATION_KEYS: Array[String] = [
 	"story.kanto.choose_starter.summary",
 	"story.kanto.choose_starter.talk_to_father",
 	"story.kanto.choose_starter.choose_starter",
+	"story.kanto.train_starter.title",
+	"story.kanto.train_starter.summary",
+	"story.kanto.train_starter.reach_level_10",
 ]
 
 var failed := false
