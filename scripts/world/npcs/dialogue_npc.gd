@@ -4,6 +4,7 @@ extends BaseNPC
 class_name DialogueNPC
 
 var resolved_dialogue_speaker_name := ""
+var story_dialogue_variants: Array[Dictionary] = []
 
 
 func _ready() -> void:
@@ -41,7 +42,7 @@ func _get_dialogue_metadata_lines() -> Array[String]:
 			return []
 
 	var result: Dictionary = await NpcDialogueService.resolve_default_dialogue(
-		metadata_dialogue_id,
+		_resolve_story_dialogue_id(),
 		_get_dialogue_override_id(),
 		"",
 		dialogue_lines,
@@ -51,3 +52,29 @@ func _get_dialogue_metadata_lines() -> Array[String]:
 		result.get("speakerName", "")
 	).strip_edges()
 	return _get_string_array(result.get("lines", []))
+
+
+func _apply_npc_metadata(metadata: Dictionary) -> void:
+	super._apply_npc_metadata(metadata)
+	story_dialogue_variants.clear()
+	var variants_value: Variant = metadata.get("dialogueVariants", [])
+	if not variants_value is Array:
+		return
+	for variant_value: Variant in variants_value as Array:
+		if variant_value is Dictionary:
+			story_dialogue_variants.append((variant_value as Dictionary).duplicate(true))
+
+
+func _resolve_story_dialogue_id() -> String:
+	for variant: Dictionary in story_dialogue_variants:
+		var dialogue_reference := str(variant.get("dialogueId", "")).strip_edges()
+		var quest_id := str(variant.get("requiredQuestId", "")).strip_edges()
+		if dialogue_reference.is_empty() or quest_id.is_empty():
+			continue
+		if StoryService.is_requirement_met(
+			quest_id,
+			str(variant.get("requiredQuestStepId", "")).strip_edges(),
+			str(variant.get("requiredQuestStatus", "completed")).strip_edges()
+		):
+			return dialogue_reference
+	return metadata_dialogue_id

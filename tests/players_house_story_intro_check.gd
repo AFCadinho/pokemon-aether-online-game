@@ -174,6 +174,20 @@ func _run() -> void:
 			revisited_sprite != null and revisited_sprite.animation == &"idle_up",
 			"Dadinho renders his upward idle frame while watching television"
 		)
+		revisited_father.call("_apply_npc_metadata", {
+			"dialogueId": "kanto_players_house_father_after_intro",
+			"dialogueVariants": [{
+				"dialogueId": "kanto_players_house_father_after_starter",
+				"requiredQuestId": "choose_starter",
+				"requiredQuestStepId": "choose_starter",
+				"requiredQuestStatus": "completed",
+			}],
+		})
+		_expect(
+			str(revisited_father.call("_resolve_story_dialogue_id"))
+			== "kanto_players_house_father_after_intro",
+			"Dadinho still reminds the player about Oak before choosing a starter"
+		)
 	if revisited_trigger != null:
 		_expect(
 			not revisited_trigger.monitoring and not revisited_trigger.monitorable,
@@ -193,6 +207,30 @@ func _run() -> void:
 		and story_state_source.contains("@export var step_id"),
 		"Dadinho uses the reusable story-step scene variant layer"
 	)
+
+	story_service.apply_story({
+		"revision": 3,
+		"quests": [{
+			"questId": "choose_starter",
+			"storylineId": "kanto_main",
+			"definitionVersion": 1,
+			"questType": "main",
+			"status": "completed",
+			"steps": [{
+				"stepId": "talk_to_father",
+				"status": "completed",
+			}, {
+				"stepId": "choose_starter",
+				"status": "completed",
+			}],
+		}],
+	})
+	if revisited_father != null:
+		_expect(
+			str(revisited_father.call("_resolve_story_dialogue_id"))
+			== "kanto_players_house_father_after_starter",
+			"Dadinho stops saying Oak is waiting after the starter step completes"
+		)
 
 	revisited_house.queue_free()
 	story_service.reset_story()
