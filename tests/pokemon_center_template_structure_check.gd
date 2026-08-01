@@ -5,6 +5,8 @@ const TEMPLATE_PATH := "res://scenes/overworld/kanto/reusable_interiors/pokemon_
 const HEAL_NPC_PATH := "res://scenes/npcs/heal_npc.tscn"
 const PEWTER_CENTER_PATH := "res://scenes/overworld/kanto/towns/pewter_city/pokemon_center.tscn"
 const PEWTER_CITY_PATH := "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn"
+const VIRIDIAN_CENTER_PATH := "res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn"
+const VIRIDIAN_CITY_PATH := "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn"
 
 var failed := false
 
@@ -131,6 +133,23 @@ func _init() -> void:
 	_check(
 		city_source.contains('target_spawn_name = "FromOutside"'),
 		"Pewter City enters the inherited generic Pokémon Center spawn"
+	)
+
+	var viridian_center_source := FileAccess.get_file_as_string(VIRIDIAN_CENTER_PATH)
+	_check(
+		viridian_center_source.contains('instance=ExtResource("1_template")')
+			and viridian_center_source.contains('map_id = "kanto_viridian_city_pokemon_center"')
+			and viridian_center_source.contains('map_display_name = "Viridian City Pokémon Center"')
+			and viridian_center_source.contains('npc_id = "kanto_viridian_city_pokemon_center_nurse_joy"')
+			and viridian_center_source.contains('target_spawn_name = "FromPokecenter"'),
+		"Viridian City Pokémon Center inherits the shared interior and its local identity"
+	)
+	var viridian_city_source := FileAccess.get_file_as_string(VIRIDIAN_CITY_PATH)
+	_check(
+		viridian_city_source.contains('target_scene_path = "res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn"')
+			and viridian_city_source.contains('target_spawn_name = "FromOutside"')
+			and viridian_city_source.contains('[node name="FromPokecenter" type="Marker2D" parent="Spawns"]'),
+		"Viridian City connects its Pokémon Center entrance and return spawn"
 	)
 
 	quit(1 if failed else 0)

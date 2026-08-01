@@ -33,6 +33,10 @@ func _init() -> void:
 		areas.has("kanto_pewter_city_pokemon_center"),
 		"Inherited Pokémon Center scene metadata is registered"
 	)
+	_expect(
+		areas.has("kanto_viridian_city_pokemon_center"),
+		"Viridian City Pokémon Center scene metadata is registered"
+	)
 	_expect(areas.has("kanto_route_2_gate"), "Inherited transition building is registered")
 	_expect(
 		(areas.get("kanto_oaks_lab", {}) as Dictionary).get("locationGroupId", "")
@@ -47,6 +51,11 @@ func _init() -> void:
 	_expect(
 		transitions.has("route_1_to_viridian_city"),
 		"Stable Route 1 to Viridian transition is retained"
+	)
+	_expect(
+		transitions.has("kanto_viridian_city__to_pokecenter")
+			and transitions.has("kanto_viridian_city_pokemon_center__to_outside"),
+		"Viridian City Pokémon Center has connected entrance and exit transitions"
 	)
 
 	for transition_id: Variant in transitions:

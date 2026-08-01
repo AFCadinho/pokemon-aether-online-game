@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://cnkkdc5ikupld" path="res://scripts/world/kanto/towns/viridian_city.gd" id="2_meta"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_route1"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_340ux"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="5_pokecenter_hint"]
 [ext_resource type="SpriteFrames" uid="uid://iqgaey0tojk7" path="res://assets/npcs/trainers/trainer_red_frames.tres" id="8_uhhgu"]
 [ext_resource type="Texture2D" uid="uid://ckc4i8557tm1l" path="res://assets/sprites/mugshots/trainer_red_mugshot.png" id="9_np5s7"]
 [ext_resource type="PackedScene" uid="uid://bql6a1hbx7o2m" path="res://scenes/npcs/boss_battle_npc.tscn" id="10_8shi4"]
@@ -13,6 +14,9 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route1"]
 size = Vector2(224, 36)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pokecenter"]
+size = Vector2(32, 32)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_340ux"]
 texture = ExtResource("12_n7exw")
@@ -309,6 +313,9 @@ position = Vector2(784, 1200)
 [node name="FromRoute2" type="Marker2D" parent="Spawns" unique_id=1317782286]
 position = Vector2(784, 48)
 
+[node name="FromPokecenter" type="Marker2D" parent="Spawns"]
+position = Vector2(1040, 656)
+
 [node name="Exits" type="Node2D" parent="." unique_id=1188707532]
 
 [node name="ToRoute1" type="Area2D" parent="Exits" unique_id=1702409658]
@@ -340,6 +347,19 @@ shape = SubResource("RectangleShape2D_route1")
 position = Vector2(48, -16)
 width = 196.0
 height = 64.0
+
+[node name="ToPokecenter" type="Area2D" parent="Exits"]
+position = Vector2(1040, 592)
+script = ExtResource("3_route1")
+target_scene_path = "res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn"
+target_spawn_name = "FromOutside"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPokecenter"]
+position = Vector2(0, -16)
+shape = SubResource("RectangleShape2D_pokecenter")
+
+[node name="DoorTransitionHint" parent="Exits/ToPokecenter" instance=ExtResource("5_pokecenter_hint")]
+position = Vector2(0, -16)
 
 [node name="Entities" type="Node2D" parent="." unique_id=1429917979]
 z_index = 5
@@ -382,3 +402,4 @@ tile_set = SubResource("TileSet_n7exw")
 
 [connection signal="body_entered" from="Exits/ToRoute1" to="Exits/ToRoute1" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute2" to="Exits/ToRoute2" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToPokecenter" to="Exits/ToPokecenter" method="_on_body_entered"]
