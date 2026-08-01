@@ -224,10 +224,7 @@ func _run() -> void:
 		"side filter selects and identifies a side quest"
 	)
 	_expect(view.detail_title_label.text == "Help Neighbor", "side quests have safe title fallbacks")
-	_expect(
-		view.open_quest_offer("lost_keepsake"),
-		"an NPC can open its available side-quest offer directly"
-	)
+	view.call("_on_quest_selected", "lost_keepsake")
 	_expect(
 		view.detail_offer_panel.visible
 		and not view.detail_objective_heading.visible

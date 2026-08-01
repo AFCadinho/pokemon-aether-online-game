@@ -28895,11 +28895,6 @@ func _on_quest_log_button_pressed() -> void:
 		quest_journal_view.open_journal()
 
 
-func open_quest_offer(quest_id: String) -> bool:
-	if quest_journal_view == null:
-		return false
-	return bool(quest_journal_view.open_quest_offer(quest_id))
-
 func _on_socials_button_pressed() -> void:
 	if socials_menu.visible:
 		_hide_socials_menu()
