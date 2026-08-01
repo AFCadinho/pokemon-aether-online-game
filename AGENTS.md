@@ -35,4 +35,3 @@
   risks.
 - Worktrees remain after the task. Delete a feature branch only after its
   integration status has been checked and deletion is explicitly intended.
-
