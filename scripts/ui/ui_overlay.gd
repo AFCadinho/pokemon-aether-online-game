@@ -1477,6 +1477,7 @@ func _setup_quest_journal_ui() -> void:
 		return
 	quest_journal_view = QUEST_JOURNAL_VIEW_SCRIPT.new()
 	quest_journal_view.name = "QuestJournalView"
+	quest_journal_view.tracker_layout_changed.connect(_refresh_quest_tracker_layout)
 	root_control.add_child(quest_journal_view)
 	quest_journal_view.journal_opened.connect(_on_quest_journal_opened)
 	quest_journal_view.journal_closed.connect(_on_quest_journal_closed)
@@ -1503,6 +1504,11 @@ func _refresh_quest_tracker_layout() -> void:
 		if panel != null:
 			right_action_bar_bottom = maxf(right_action_bar_bottom, panel.position.y + panel.size.y)
 	quest_journal_view.set_tracker_top_offset(right_action_bar_bottom + ACTION_BAR_SLOT_GAP)
+	var tracker_count := int(quest_journal_view.get_visible_tracker_count())
+	var hotbar_shift := 86.0 if tracker_count > 1 else 0.0
+	hotkey_sidebar_panel.offset_top = -245.0 + hotbar_shift
+	hotkey_sidebar_panel.offset_bottom = 165.0 + hotbar_shift
+	_position_collapsible_button("hotkey_sidebar")
 
 
 func _refresh_pc_localized_ui() -> void:

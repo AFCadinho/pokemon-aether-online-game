@@ -48,7 +48,13 @@ func _init() -> void:
 
 	_check(hotbar_block.contains("anchors_preset = 6"), "hotbar is anchored to the right")
 	_check(hotbar_block.contains("offset_right = 0.0"), "hotbar hugs the right screen edge")
-	_check(hotbar_block.contains("offset_top = -145.0") and hotbar_block.contains("offset_bottom = 265.0"), "hotbar moves below the stacked main and side quest trackers")
+	_check(hotbar_block.contains("offset_top = -245.0") and hotbar_block.contains("offset_bottom = 165.0"), "hotbar keeps its base position when quest trackers are absent")
+	_check(
+		script_source.contains("quest_journal_view.get_visible_tracker_count()")
+		and script_source.contains("var hotbar_shift := 86.0 if tracker_count > 1 else 0.0")
+		and script_source.contains('_position_collapsible_button("hotkey_sidebar")'),
+		"hotbar dynamically clears a second visible quest tracker"
+	)
 	_check(party_block.contains("anchors_preset = 0"), "normal party is anchored to the left")
 	_check(party_block.contains("offset_left = 0.0"), "normal party hugs the left screen edge")
 	_check(party_block.contains("offset_top = 76.0") and party_block.contains("offset_bottom = 158.0"), "normal party moves up intact below the single primary left navigation rail")
