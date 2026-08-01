@@ -23,6 +23,7 @@ func _run_checks() -> void:
 	_check_waiters_consume_actionless_render_batches()
 	_check_accepted_local_choice_arms_idle_drain()
 	_check_render_completion_rearms_idle_drain()
+	_check_public_force_switch_control_contract()
 	_check_realtime_render_batch_installs_presentation_fence()
 	_check_stale_and_unrendered_apply_outcomes()
 	_check_stale_snapshot_still_observes_transport_fence()
@@ -609,6 +610,23 @@ func _check_render_completion_rearms_idle_drain() -> void:
 	_check(
 		release_index >= 0 and idle_drain_index > release_index,
 		"render completion re-arms idle delivery after a pivot batch raced the active queue"
+	)
+
+
+func _check_public_force_switch_control_contract() -> void:
+	var battle_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var phase_update := _function_source(battle_source, "_update_pvp_phase_contract_from_response")
+	var opponent_force := _function_source(battle_source, "_opponent_player_needs_force_switch_ui")
+	var response_force := _function_source(battle_source, "_response_has_opponent_force_switch")
+	_check(
+		phase_update.contains("visibility_contract_version >= 3")
+			and phase_update.contains('viewer_control.get("opponentForceSwitchRequired", false)'),
+		"visibility v3 retains explicit public force-switch ownership"
+	)
+	_check(
+		opponent_force.contains("pvp_opponent_force_switch_required and pvp_opponent_action_required")
+			and response_force.contains('viewer_control.get("opponentForceSwitchRequired", false)'),
+		"pivot waiting uses public control state instead of the redacted opponent request"
 	)
 
 

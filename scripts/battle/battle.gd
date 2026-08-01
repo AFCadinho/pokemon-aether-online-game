@@ -120,6 +120,11 @@ var pvp_last_next_phase := ""
 var pvp_last_phase_update_server_seq := 0
 var pvp_last_phase_update_batch_id := ""
 var pvp_last_phase_update_phase := ""
+var pvp_public_control_contract_version := 0
+var pvp_own_action_required := false
+var pvp_opponent_action_required := false
+var pvp_own_force_switch_required := false
+var pvp_opponent_force_switch_required := false
 var pvp_pending_presentation_fence: Dictionary = {}
 var pvp_gateway_epoch := ""
 var pvp_last_connection_server_seq := 0
@@ -3701,6 +3706,15 @@ func _update_pvp_phase_contract_from_response(response: Dictionary, source: Stri
 		return
 	if not (response is Dictionary):
 		return
+	var visibility_contract_version := _get_int_from_variant(response.get("visibilityContractVersion", 0), 0)
+	var viewer_control_value: Variant = response.get("viewerControl", {})
+	if visibility_contract_version >= 3 and viewer_control_value is Dictionary:
+		var viewer_control := viewer_control_value as Dictionary
+		pvp_public_control_contract_version = visibility_contract_version
+		pvp_own_action_required = bool(viewer_control.get("ownActionRequired", false))
+		pvp_opponent_action_required = bool(viewer_control.get("opponentActionRequired", false))
+		pvp_own_force_switch_required = bool(viewer_control.get("ownForceSwitchRequired", false))
+		pvp_opponent_force_switch_required = bool(viewer_control.get("opponentForceSwitchRequired", false))
 
 	var current_phase := str(response.get("phase", "")).strip_edges()
 	var current_next_phase := str(response.get("nextPhase", current_phase)).strip_edges()
@@ -9353,6 +9367,8 @@ func _pvp_local_decision_allows_choice(local_state_player_id := "") -> bool:
 	return decision.is_empty() or str(decision.get("status", "")).strip_edges().to_upper() == "ACTIVE"
 
 func _local_player_needs_force_switch_ui() -> bool:
+	if _is_pvp_battle() and pvp_public_control_contract_version >= 3:
+		return pvp_own_force_switch_required and pvp_own_action_required
 	var candidate_player_ids := _get_force_switch_candidate_player_ids(_get_local_state_player_id(), "p1")
 	for player_id in candidate_player_ids:
 		var request_is_waiting := false
@@ -9382,6 +9398,8 @@ func _local_player_needs_force_switch_ui() -> bool:
 	return false
 
 func _opponent_player_needs_force_switch_ui() -> bool:
+	if _is_pvp_battle() and pvp_public_control_contract_version >= 3:
+		return pvp_opponent_force_switch_required and pvp_opponent_action_required
 	var candidate_player_ids := _get_force_switch_candidate_player_ids(_get_opponent_state_player_id(), "p2")
 	for player_id in candidate_player_ids:
 		var request_is_waiting := false
@@ -9611,6 +9629,11 @@ func _connect_pvp_realtime(local_player_id: String, battle_id: String, initial_r
 	pvp_idle_wait_recovery_active = false
 	pvp_last_applied_server_seq = 0
 	pvp_last_applied_snapshot_server_seq = 0
+	pvp_public_control_contract_version = 0
+	pvp_own_action_required = false
+	pvp_opponent_action_required = false
+	pvp_own_force_switch_required = false
+	pvp_opponent_force_switch_required = false
 	_clear_pvp_presentation_fence_recovery_state()
 	var initial_display_response: Dictionary = action_flow.map_response_for_local_player(initial_response)
 	pvp_response_order.reset(initial_display_response)
@@ -12629,6 +12652,13 @@ func _response_has_unrendered_pvp_events(response: Dictionary) -> bool:
 	return events.size() > pvp_rendered_event_count
 
 func _response_has_opponent_force_switch(response: Dictionary) -> bool:
+	var viewer_control_value: Variant = response.get("viewerControl", {})
+	if int(response.get("visibilityContractVersion", 0)) >= 3 and viewer_control_value is Dictionary:
+		var viewer_control := viewer_control_value as Dictionary
+		return (
+			bool(viewer_control.get("opponentForceSwitchRequired", false))
+			and bool(viewer_control.get("opponentActionRequired", false))
+		)
 	var requests_value: Variant = response.get("requests", {})
 	if not (requests_value is Dictionary):
 		return false
@@ -12655,6 +12685,13 @@ func _response_has_opponent_force_switch(response: Dictionary) -> bool:
 	return false
 
 func _response_has_force_switch_request(response: Dictionary) -> bool:
+	var viewer_control_value: Variant = response.get("viewerControl", {})
+	if int(response.get("visibilityContractVersion", 0)) >= 3 and viewer_control_value is Dictionary:
+		var viewer_control := viewer_control_value as Dictionary
+		return (
+			bool(viewer_control.get("ownForceSwitchRequired", false))
+			or bool(viewer_control.get("opponentForceSwitchRequired", false))
+		)
 	var requests_value: Variant = response.get("requests", {})
 	if not (requests_value is Dictionary):
 		return false
