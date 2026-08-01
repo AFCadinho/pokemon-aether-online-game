@@ -1,11 +1,23 @@
 [gd_scene format=3 uid="uid://duw5e076ulb3"]
 
 [ext_resource type="Script" uid="uid://cnuvn2omox1om" path="res://scripts/ui/login_screen.gd" id="1_login"]
-[ext_resource type="Texture2D" uid="uid://diu5e64u5vwh8" path="res://assets/background/battle/pokemon_x_and_y_battle_background_11_by_phoenixoflight92_d843okx-414w-2x.jpg" id="3_hero"]
-[ext_resource type="Texture2D" path="res://assets/ui/pokeaether_combo_logo.png" id="4_combo_logo"]
+[ext_resource type="Texture2D" uid="uid://dcvgtnjbesy5q" path="res://assets/background/battle/pokemon_x_and_y_battle_background_11_by_phoenixoflight92_d843okx-414w-2x.jpg" id="3_hero"]
+[ext_resource type="Texture2D" uid="uid://pc6wqmn6c6te" path="res://assets/ui/pokeaether_combo_logo.png" id="4_combo_logo"]
 [ext_resource type="PackedScene" uid="uid://banqvdsruep1l" path="res://scenes/interface/settings/settings_menu.tscn" id="5_settings"]
 [ext_resource type="VideoStream" uid="uid://cg2bb0mtsdr6o" path="res://assets/video/login_background.ogv" id="6_video"]
-[ext_resource type="Texture2D" uid="uid://bucvn1i17alpn" path="res://assets/ui/pokeaether_text_logo.png" id="7_text_logo"]
+[ext_resource type="Texture2D" uid="uid://bw8vsfm32xlmw" path="res://assets/ui/pokeaether_text_logo.png" id="7_text_logo"]
+
+[sub_resource type="Gradient" id="Gradient_login_aura"]
+offsets = PackedFloat32Array(0, 0.42, 1)
+colors = PackedColorArray(0.38, 0.28, 0.9, 0.3, 0.16, 0.35, 0.78, 0.13, 0.03, 0.08, 0.18, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_login_aura"]
+gradient = SubResource("Gradient_login_aura")
+width = 768
+height = 768
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_shell"]
 bg_color = Color(0.019607844, 0.024, 0.043, 0)
@@ -67,18 +79,6 @@ corner_radius_bottom_left = 16
 shadow_color = Color(0.22, 0.18, 0.62, 0.42)
 shadow_size = 38
 shadow_offset = Vector2(0, 12)
-
-[sub_resource type="Gradient" id="Gradient_login_aura"]
-offsets = PackedFloat32Array(0, 0.42, 1)
-colors = PackedColorArray(0.38, 0.28, 0.9, 0.3, 0.16, 0.35, 0.78, 0.13, 0.03, 0.08, 0.18, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_login_aura"]
-gradient = SubResource("Gradient_login_aura")
-width = 768
-height = 768
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(1, 0.5)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input"]
 content_margin_left = 14.0
@@ -284,7 +284,7 @@ grow_horizontal = 2
 mouse_filter = 2
 color = Color(0.39215687, 0.60784316, 0.8784314, 0.11)
 
-[node name="LoginAura" type="TextureRect" parent="Background"]
+[node name="LoginAura" type="TextureRect" parent="Background" unique_id=148525017]
 modulate = Color(1, 1, 1, 0.9)
 layout_mode = 1
 anchors_preset = 8
@@ -397,7 +397,6 @@ layout_mode = 2
 size_flags_vertical = 3
 mouse_default_cursor_shape = 2
 bbcode_enabled = true
-scroll_active = true
 
 [node name="BrandSpacer" type="Control" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout" unique_id=717858600]
 custom_minimum_size = Vector2(0, 8)
@@ -472,13 +471,13 @@ theme_override_constants/margin_bottom = 34
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="AccessEyebrow" type="Label" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout"]
+[node name="AccessEyebrow" type="Label" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout" unique_id=619552354]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.47843137, 0.654902, 0.95686275, 1)
 theme_override_font_sizes/font_size = 12
 text = "ui.login.trainer_access"
 
-[node name="HeaderAccent" type="ColorRect" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout"]
+[node name="HeaderAccent" type="ColorRect" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout" unique_id=1827703025]
 custom_minimum_size = Vector2(52, 2)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -566,14 +565,14 @@ theme_override_colors/font_hover_color = Color(0.84705883, 0.7058824, 0.41568628
 theme_override_font_sizes/font_size = 12
 text = "ui.login.register"
 
-[node name="ForgotPasswordLinkButton" type="LinkButton" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout"]
+[node name="ForgotPasswordLinkButton" type="LinkButton" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout" unique_id=480297039]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.58, 0.7, 0.87, 1)
 theme_override_colors/font_hover_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
 theme_override_font_sizes/font_size = 12
 text = "ui.login.forgot_password"
 
-[node name="ConnectionStatus" type="Label" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout"]
+[node name="ConnectionStatus" type="Label" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout" unique_id=1652249190]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.47, 0.59, 0.72, 0.9)
 theme_override_font_sizes/font_size = 11
@@ -598,13 +597,13 @@ theme_override_constants/margin_bottom = 40
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="SavedEyebrow" type="Label" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout"]
+[node name="SavedEyebrow" type="Label" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout" unique_id=613731215]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.47843137, 0.654902, 0.95686275, 1)
 theme_override_font_sizes/font_size = 12
 text = "ui.login.saved_trainer"
 
-[node name="SavedHeaderAccent" type="ColorRect" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout"]
+[node name="SavedHeaderAccent" type="ColorRect" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout" unique_id=1724573148]
 custom_minimum_size = Vector2(52, 2)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -661,13 +660,11 @@ text = "ui.login.trainer"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.72, 0.56, 1, 1)
 theme_override_font_sizes/font_size = 14
-text = ""
 
 [node name="PlayerPreviewViewportContainer" type="SubViewportContainer" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout/TrainerCard/TrainerMargin/TrainerLayout" unique_id=1587898040]
 custom_minimum_size = Vector2(190, 154)
 layout_mode = 2
 size_flags_horizontal = 4
-stretch = false
 stretch = true
 
 [node name="PlayerPreviewViewport" type="SubViewport" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout/TrainerCard/TrainerMargin/TrainerLayout/PlayerPreviewViewportContainer" unique_id=1524054212]
@@ -706,17 +703,16 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_logout_button")
 theme_override_styles/hover = SubResource("StyleBoxFlat_logout_button_hover")
 text = "ui.login.logout"
 
-[node name="SavedConnectionStatus" type="Label" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout"]
+[node name="SavedConnectionStatus" type="Label" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout" unique_id=928498065]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.47, 0.59, 0.72, 0.9)
 theme_override_font_sizes/font_size = 11
 text = "ui.login.session_ready"
 horizontal_alignment = 1
 
-[node name="LegalNotice" type="Label" parent="Background/Shell/MainSplit/LoginColumn"]
+[node name="LegalNotice" type="Label" parent="Background/Shell/MainSplit/LoginColumn" unique_id=880329447]
 custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
-mouse_filter = 2
 theme_override_colors/font_color = Color(0.62, 0.65, 0.72, 0.66)
 theme_override_font_sizes/font_size = 10
 text = "ui.login.legal_notice"
@@ -743,7 +739,7 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_constants/separation = 10
 
-[node name="LanguageOptionsButton" type="OptionButton" parent="Background/ScreenActions"]
+[node name="LanguageOptionsButton" type="OptionButton" parent="Background/ScreenActions" unique_id=2035964771]
 custom_minimum_size = Vector2(158, 42)
 layout_mode = 2
 tooltip_text = "ui.settings.language"
