@@ -1889,6 +1889,7 @@
   "battle.prompt.choose_another_pokemon": "Escolha outro Pokémon!",
   "battle.prompt.choose_lead": "Escolha seu primeiro Pokémon",
   "battle.prompt.waiting_opponent": "Aguardando o adversário...",
+  "battle.prompt.choice_buffered": "Escolha salva. Você ainda pode alterá-la enquanto o adversário termina.",
   "battle.prompt.waiting_opponent_switch": "Aguardando a troca do adversário...",
   "battle.prompt.waiting_other_player": "Aguardando o outro jogador...",
   "battle.prompt.waiting_both_players": "Aguardando ambos os jogadores...",

@@ -147,6 +147,7 @@ var ordered_response_display_species_hold: Dictionary = {}
 var rendered_non_pvp_event_keys: Dictionary = {}
 var pvp_event_queue := preload("res://scripts/battle/battle_event_queue.gd").new()
 var pvp_response_order := preload("res://scripts/battle/battle_response_order.gd").new()
+var pvp_prechoice_buffer := preload("res://scripts/battle/pvp_prechoice_buffer.gd").new()
 
 #Battle State
 var battle_state := BattleState.new()
@@ -2690,7 +2691,11 @@ func _show_moves() -> void:
 		moves_grid.visible = false
 		mechanics_panel.visible = false
 		return
-	if _is_pvp_battle() and not pvp_pending_presentation_fence.is_empty():
+	if (
+		_is_pvp_battle()
+		and not pvp_pending_presentation_fence.is_empty()
+		and not pvp_prechoice_buffer.is_window_open()
+	):
 		_set_battle_input_locked(true)
 		current_action_view = ActionView.NONE
 		moves_grid.visible = false
@@ -2784,6 +2789,9 @@ func _show_moves() -> void:
 func _pvp_local_request_allows_action_recovery(local_state_player_id: String) -> bool:
 	if not _is_pvp_battle():
 		return false
+	if pvp_prechoice_buffer.is_window_open():
+		var available_prechoice_moves: Array = battle_state.get_available_moves(local_state_player_id)
+		return _pvp_local_request_allows_choice(local_state_player_id) and not available_prechoice_moves.is_empty()
 	# A render response can already contain the next ACTIVE request while the
 	# room-wide render barrier is still waiting for the other participant's ACK.
 	# Only the subsequent `pvp.phase_update` may release that boundary; otherwise
@@ -2801,9 +2809,10 @@ func _show_current_action_prompt() -> void:
 func _set_battle_input_locked(is_locked: bool) -> void:
 	if _is_spectator_battle():
 		is_locked = true
-	if not is_locked and not pvp_pending_presentation_fence.is_empty():
+	var allows_local_prechoice := _is_pvp_battle() and pvp_prechoice_buffer.is_window_open()
+	if not is_locked and not pvp_pending_presentation_fence.is_empty() and not allows_local_prechoice:
 		is_locked = true
-	if not is_locked and _is_pvp_presentation_hold_active():
+	if not is_locked and _is_pvp_presentation_hold_active() and not allows_local_prechoice:
 		is_locked = true
 	battle_input_locked = is_locked
 	if action_buttons.has_method("set_all_actions_disabled"):
@@ -3328,6 +3337,7 @@ func _finish_battle(result: Dictionary) -> void:
 		return
 
 	pvp_pending_authoritative_terminal.clear()
+	pvp_prechoice_buffer.reset()
 	_clear_pvp_render_ack_retry_state()
 	var allows_gameplay_persistence := PvpBattleRealtimeService.allows_gameplay_persistence_for_terminal(result)
 	_warn_if_pvp_finish_has_pending_render_work(result)
@@ -5979,6 +5989,7 @@ func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_poke
 	pvp_last_phase_update_server_seq = 0
 	pvp_last_phase_update_batch_id = ""
 	pvp_last_phase_update_phase = ""
+	pvp_prechoice_buffer.reset()
 	_clear_pvp_presentation_fence_recovery_state()
 	pvp_gateway_epoch = ""
 	pvp_last_connection_server_seq = 0
@@ -7207,7 +7218,6 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 
 	var use_mega := mega_evolution_selected
 	var use_z_move := z_move_selected
-	var pending_player_choice_events: Array = _build_pending_player_mega_events(use_mega)
 	var local_state_player_id := _get_local_state_player_id()
 	if use_z_move and not battle_state.can_active_pokemon_use_z_move_slot(slot, local_state_player_id):
 		_clear_z_move_selection()
@@ -7220,6 +7230,15 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 		"pokemon_name": _get_active_display_species(local_state_player_id),
 		"move_name": _get_move_confirmation_name(selected_move_data),
 	}
+	if _remember_pvp_local_prechoice({
+		"choice_type": "move",
+		"slot": slot,
+		"mega": use_mega,
+		"z_move": use_z_move,
+		"choice_context": pvp_move_context,
+	}):
+		return
+	var pending_player_choice_events: Array = _build_pending_player_mega_events(use_mega)
 	_hide_move_hover()
 	_set_battle_input_locked(true)
 	moves_grid.visible = false
@@ -7391,6 +7410,7 @@ func _observe_pvp_realtime_render_batch_fence(response: Dictionary, batch_contex
 	}
 	if not _should_replace_pvp_presentation_fence(candidate):
 		return
+	pvp_prechoice_buffer.invalidate_for_fence(candidate)
 	pvp_pending_presentation_fence = candidate
 	pvp_last_phase = "rendering_events"
 	var next_phase := str(response.get("nextPhase", response.get("next_phase", pvp_last_next_phase))).strip_edges()
@@ -9105,6 +9125,12 @@ func _on_party_grid_party_selected(slot: int) -> void:
 		"incoming_name": _get_switch_confirmation_pokemon_name(selected_pokemon_data),
 		"replaced_name": _get_active_display_species(_get_local_state_player_id()),
 	}
+	if _remember_pvp_local_prechoice({
+		"choice_type": "switch",
+		"slot": submit_slot,
+		"choice_context": pvp_switch_context,
+	}):
+		return
 	_set_battle_input_locked(true)
 	var was_force_switch := force_switch_flow.player_needs_force_switch(_get_local_state_player_id())
 	player_party_grid.visible = true
@@ -9356,6 +9382,8 @@ func _pvp_timer_allows_control() -> bool:
 		return false
 	if not _is_pvp_battle() or not PvpBattleRealtimeService.timer_projection.contract_enabled:
 		return true
+	if pvp_prechoice_buffer.is_window_open():
+		return true
 	# Only the server-owned presentation hold disables controls. Displayed zero never blocks sending.
 	return str(PvpBattleRealtimeService.timer_projection.participant_display(_get_local_state_player_id()).get("state", "WAITING")) != "SCHEDULED"
 
@@ -9379,6 +9407,44 @@ func _pvp_local_decision_allows_choice(local_state_player_id := "") -> bool:
 	var decision := battle_state.get_active_decision(player_id)
 	# Legacy/non-authoritative snapshots may omit the decision contract.
 	return decision.is_empty() or str(decision.get("status", "")).strip_edges().to_upper() == "ACTIVE"
+
+func _try_open_pvp_local_prechoice_window(completion: Dictionary) -> void:
+	if (
+		not _is_pvp_battle()
+		or _is_spectator_battle()
+		or battle_finished
+		or not bool(completion.get("success", false))
+		or pvp_pending_presentation_fence.is_empty()
+		or str(pvp_event_queue.current_event_batch_id).strip_edges() != ""
+		or not battle_state.actions_enabled()
+	):
+		return
+
+	var local_state_player_id := _get_local_state_player_id()
+	if not _pvp_local_request_allows_choice(local_state_player_id):
+		return
+	var decision := battle_state.get_active_decision(local_state_player_id)
+	if not pvp_prechoice_buffer.open_window(
+		pvp_pending_presentation_fence,
+		completion,
+		decision
+	):
+		return
+
+	pvp_idle_wait_recovery_active = false
+	_set_battle_input_locked(false)
+	if _local_player_needs_force_switch_ui():
+		_show_force_switch_if_needed()
+	else:
+		_show_moves()
+
+func _remember_pvp_local_prechoice(choice: Dictionary) -> bool:
+	if not _is_pvp_battle() or not pvp_prechoice_buffer.is_window_open():
+		return false
+	if not pvp_prechoice_buffer.remember_choice(choice):
+		return false
+	current_action_panel.set_message(_t("battle.prompt.choice_buffered"))
+	return true
 
 func _local_player_needs_force_switch_ui() -> bool:
 	if _is_pvp_battle() and pvp_public_control_contract_version >= 3:
@@ -9689,6 +9755,10 @@ func _on_pvp_render_batch_completed(completion: Dictionary) -> void:
 		if not _is_spectator_battle():
 			_send_pvp_render_ack(completion)
 			_start_pvp_render_ack_retry()
+			# BattleEventQueue clears its active batch immediately after invoking
+			# this callback. Open controls on the next frame so the completed batch
+			# can no longer trip the active-render input guard.
+			_try_open_pvp_local_prechoice_window.call_deferred(completion.duplicate(true))
 		_retry_pending_pvp_reconciliation_snapshot.call_deferred()
 		_retry_pending_pvp_authoritative_terminal.call_deferred()
 
@@ -9820,6 +9890,7 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 			"lastRenderedSeq": max(pvp_event_queue.last_rendered_seq, 0),
 			"inputLocked": true,
 		})
+		pvp_prechoice_buffer.reset()
 		pvp_idle_wait_recovery_active = true
 		_set_battle_input_locked(true)
 		current_action_panel.set_message(_t("battle.prompt.resynchronizing"))
@@ -10051,6 +10122,7 @@ func _observe_pvp_gateway_epoch(message: Dictionary) -> void:
 	# epoch cannot release a fence created by the old process, so retaining it
 	# would permanently keep local controls locked when the replacement snapshot
 	# correctly arrives without a presentationFence.
+	pvp_prechoice_buffer.reset()
 	_clear_pvp_presentation_fence_recovery_state()
 	_trace_pvp_flow(
 		"gateway_epoch.changed",
@@ -10070,6 +10142,7 @@ func _observe_pvp_presentation_fence(message: Dictionary) -> void:
 	if not _should_replace_pvp_presentation_fence(candidate):
 		return
 
+	pvp_prechoice_buffer.invalidate_for_fence(candidate)
 	pvp_pending_presentation_fence = candidate.duplicate(true)
 	pvp_last_phase = "rendering_events"
 	var response_value: Variant = message.get("response", {})
@@ -10105,6 +10178,7 @@ func _clear_pvp_presentation_fence_from_unfenced_snapshot(message: Dictionary) -
 		and not pvp_render_ack_retry_active
 	):
 		return
+	pvp_prechoice_buffer.reset()
 	_clear_pvp_presentation_fence_recovery_state()
 	_trace_pvp_flow(
 		"snapshot.presentation_fence_evicted",
@@ -10161,6 +10235,7 @@ func _acknowledge_pvp_presentation_fence_if_rendered() -> void:
 	pvp_pending_render_ack_completion = completion.duplicate(true)
 	_send_pvp_render_ack(completion)
 	_start_pvp_render_ack_retry()
+	_try_open_pvp_local_prechoice_window(completion)
 
 func _sync_pvp_reconnect_timer_pause() -> void:
 	if vs_panel_container.has_active_reconnect_timer():
@@ -10199,6 +10274,7 @@ func _apply_pvp_phase_update(message: Dictionary) -> void:
 		return
 	var releases_presentation_fence := false
 	var exactly_matches_presentation_fence := false
+	var released_presentation_fence: Dictionary = {}
 	if not pvp_pending_presentation_fence.is_empty():
 		releases_presentation_fence = PvpBattleRealtimeService.phase_update_releases_presentation_fence(
 			message,
@@ -10221,6 +10297,7 @@ func _apply_pvp_phase_update(message: Dictionary) -> void:
 				== str(pvp_pending_presentation_fence.get("eventBatchId", "")).strip_edges()
 		)
 	if releases_presentation_fence:
+		released_presentation_fence = pvp_pending_presentation_fence.duplicate(true)
 		_release_pvp_presentation_hold_from_ack_barrier(message)
 
 	var server_seq := _get_pvp_message_server_seq(message)
@@ -10242,7 +10319,15 @@ func _apply_pvp_phase_update(message: Dictionary) -> void:
 			# A reconnect snapshot may reintroduce transport-only fence state after
 			# this exact release was already applied. The matching rebroadcast is
 			# idempotent: clear only recovery/ACK state and do not open the UI twice.
+			var duplicate_buffered_choice: Dictionary = {}
+			if exactly_matches_presentation_fence:
+				duplicate_buffered_choice = _take_pvp_prechoice_for_release(released_presentation_fence)
+			else:
+				pvp_prechoice_buffer.reset()
 			_clear_pvp_presentation_fence_recovery_state()
+			if not duplicate_buffered_choice.is_empty():
+				_set_battle_input_locked(true)
+				_submit_pvp_buffered_prechoice.call_deferred(duplicate_buffered_choice, phase)
 			_trace_pvp_flow(
 				"phase_update.duplicate_presentation_fence_released",
 				{},
@@ -10259,7 +10344,14 @@ func _apply_pvp_phase_update(message: Dictionary) -> void:
 	pvp_last_phase_update_server_seq = max(pvp_last_phase_update_server_seq, server_seq)
 	pvp_last_phase_update_batch_id = str(message.get("eventBatchId", "")).strip_edges()
 	pvp_last_phase_update_phase = phase
+	var buffered_choice: Dictionary = {}
 	if releases_presentation_fence:
+		if exactly_matches_presentation_fence:
+			buffered_choice = _take_pvp_prechoice_for_release(released_presentation_fence)
+		else:
+			# A cumulative newer cursor may safely release the presentation hold,
+			# but it cannot prove that a private choice still belongs to this turn.
+			pvp_prechoice_buffer.reset()
 		_clear_pvp_presentation_fence_recovery_state()
 	elif phase != "rendering_events":
 		_clear_pvp_render_ack_retry_state()
@@ -10287,7 +10379,80 @@ func _apply_pvp_phase_update(message: Dictionary) -> void:
 	if team_preview_lead_selection_active and phase == "turn_open":
 		_queue_pvp_team_preview_completion_from_room.call_deferred()
 		return
+	if not buffered_choice.is_empty():
+		_set_battle_input_locked(true)
+		_submit_pvp_buffered_prechoice.call_deferred(buffered_choice, phase)
+		return
 	_open_pvp_released_phase(phase)
+
+func _take_pvp_prechoice_for_release(released_fence: Dictionary) -> Dictionary:
+	return pvp_prechoice_buffer.take_for_release(
+		released_fence,
+		battle_state.get_active_decision(_get_local_state_player_id())
+	)
+
+func _submit_pvp_buffered_prechoice(choice: Dictionary, released_phase: String) -> void:
+	if battle_finished or choice.is_empty():
+		return
+
+	var local_state_player_id := _get_local_state_player_id()
+	var choice_type := str(choice.get("choice_type", "")).strip_edges()
+	var slot := int(choice.get("slot", 0))
+	var local_needs_force_switch := _local_player_needs_force_switch_ui()
+	var phase_allows_choice := (
+		_pvp_local_request_allows_choice(local_state_player_id)
+		and (
+			(choice_type == "move" and not local_needs_force_switch and released_phase in ["turn_open", "waiting_for_opponent"])
+			or (choice_type == "switch" and (local_needs_force_switch or released_phase in ["turn_open", "waiting_for_opponent"]))
+		)
+	)
+	if slot <= 0 or not phase_allows_choice:
+		_open_pvp_released_phase(released_phase)
+		return
+
+	var choice_context_value: Variant = choice.get("choice_context", {})
+	var choice_context: Dictionary = (
+		(choice_context_value as Dictionary).duplicate(true)
+		if choice_context_value is Dictionary
+		else {}
+	)
+	var pending_player_choice_events: Array = []
+	var use_mega := bool(choice.get("mega", false))
+	var use_z_move := bool(choice.get("z_move", false))
+	if choice_type == "move":
+		if use_mega and not battle_state.can_active_pokemon_mega_evolve(local_state_player_id):
+			use_mega = false
+		pending_player_choice_events = _build_pending_player_mega_events(use_mega)
+		_hide_move_hover()
+		moves_grid.visible = false
+		if use_mega:
+			current_action_panel.set_message(_t("battle.mechanic.preparing_mega"))
+		elif use_z_move:
+			current_action_panel.set_message(_t("battle.mechanic.unleashing_z_power"))
+		_clear_mega_evolution_selection()
+		_clear_z_move_selection()
+	else:
+		player_party_grid.visible = true
+		opponent_party_grid.visible = true
+		_hide_party_hover()
+
+	_set_battle_input_locked(true)
+	var response := await _submit_player_choice(
+		choice_type,
+		slot,
+		use_mega,
+		pending_player_choice_events,
+		choice_context,
+		use_z_move
+	)
+	if bool(response.get("success", false)):
+		return
+
+	_clear_pending_mega_species_for_events(pending_player_choice_events)
+	var error_message := str(response.get("error", "")).strip_edges()
+	if error_message != "":
+		current_action_panel.set_message(error_message)
+	_open_pvp_released_phase(released_phase)
 
 func _capture_pvp_team_preview_completion_while_picker_open(message: Dictionary) -> bool:
 	if not team_preview_lead_selection_active or current_action_view != ActionView.PARTY:

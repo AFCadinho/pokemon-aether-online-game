@@ -1889,6 +1889,7 @@
   "battle.prompt.choose_another_pokemon": "Kies een andere Pokémon!",
   "battle.prompt.choose_lead": "Kies je eerste Pokémon",
   "battle.prompt.waiting_opponent": "Wachten op tegenstander...",
+  "battle.prompt.choice_buffered": "Keuze opgeslagen. Je kunt deze nog wijzigen terwijl je tegenstander afrondt.",
   "battle.prompt.waiting_opponent_switch": "Wachten op wissel van tegenstander...",
   "battle.prompt.waiting_other_player": "Wachten op de andere speler...",
   "battle.prompt.waiting_both_players": "Wachten op beide spelers...",
