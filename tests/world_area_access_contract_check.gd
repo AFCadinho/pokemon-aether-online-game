@@ -74,6 +74,12 @@ func _init() -> void:
 		"Authorized teleports refuse non-overworld client scene paths"
 	)
 	_expect(
+		world_source.contains('var spawn_marker_value: Variant = state.get("spawnMarker", "")')
+		and world_source.contains("if spawn_marker_value != null:")
+		and world_source.contains("_position_player_at_saved_state(map, state)"),
+		"Authorized teleports with a null spawn marker use the exact saved position"
+	)
+	_expect(
 		world_source.contains("active_remote_authorized_teleport_command_id")
 		and world_source.contains("completed_remote_authorized_teleport_commands")
 		and world_source.contains("func _retry_pending_remote_authorized_teleport"),
