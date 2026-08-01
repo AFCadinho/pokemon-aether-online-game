@@ -313,7 +313,7 @@ position = Vector2(784, 1200)
 [node name="FromRoute2" type="Marker2D" parent="Spawns" unique_id=1317782286]
 position = Vector2(784, 48)
 
-[node name="FromPokecenter" type="Marker2D" parent="Spawns"]
+[node name="FromPokecenter" type="Marker2D" parent="Spawns" unique_id=1102504282]
 position = Vector2(1040, 656)
 
 [node name="Exits" type="Node2D" parent="." unique_id=1188707532]
@@ -348,17 +348,17 @@ position = Vector2(48, -16)
 width = 196.0
 height = 64.0
 
-[node name="ToPokecenter" type="Area2D" parent="Exits"]
+[node name="ToPokecenter" type="Area2D" parent="Exits" unique_id=815958159]
 position = Vector2(1040, 592)
 script = ExtResource("3_route1")
 target_scene_path = "res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn"
 target_spawn_name = "FromOutside"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPokecenter"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPokecenter" unique_id=1819054204]
 position = Vector2(0, -16)
 shape = SubResource("RectangleShape2D_pokecenter")
 
-[node name="DoorTransitionHint" parent="Exits/ToPokecenter" instance=ExtResource("5_pokecenter_hint")]
+[node name="DoorTransitionHint" parent="Exits/ToPokecenter" unique_id=1557132228 instance=ExtResource("5_pokecenter_hint")]
 position = Vector2(0, -16)
 
 [node name="Entities" type="Node2D" parent="." unique_id=1429917979]
