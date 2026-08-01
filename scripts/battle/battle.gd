@@ -7260,6 +7260,7 @@ func _render_pvp_event_batch(
 						]
 					)
 				return false
+			_observe_pvp_realtime_render_batch_fence(response, empty_batch_context)
 			if post_render.is_valid():
 				post_render.call(empty_batch_context)
 			_trace_pvp_flow("render_batch.empty_complete", response, "source=%s context=%s" % [source, JSON.stringify(empty_batch_context)])
@@ -7292,6 +7293,7 @@ func _render_pvp_event_batch(
 			)
 		return false
 
+	_observe_pvp_realtime_render_batch_fence(response, batch_context)
 	_set_battle_input_locked(true)
 	current_action_view = ActionView.NONE
 	moves_grid.visible = false
@@ -7337,6 +7339,36 @@ func _render_pvp_event_batch(
 		)
 	pvp_event_queue.complete_render_batch(batch_context, success)
 	return success
+
+func _observe_pvp_realtime_render_batch_fence(response: Dictionary, batch_context: Dictionary) -> void:
+	if _is_spectator_battle() or not _is_authoritative_pvp_render_batch_response(response):
+		return
+	var event_batch_id := str(batch_context.get("event_batch_id", "")).strip_edges()
+	var batch_seq := _get_int_from_variant(batch_context.get("batch_seq", -1), -1)
+	var event_seq_end := _get_int_from_variant(batch_context.get("event_seq_end", -1), -1)
+	if event_batch_id == "" or batch_seq < 0 or event_seq_end < 0:
+		return
+	var candidate := {
+		"releasePending": true,
+		"eventBatchId": event_batch_id,
+		"batchSeq": batch_seq,
+		"eventSeqEnd": event_seq_end,
+		"turn": _get_int_from_variant(batch_context.get("turn", battle_state.get_turn()), battle_state.get_turn()),
+	}
+	if not _should_replace_pvp_presentation_fence(candidate):
+		return
+	pvp_pending_presentation_fence = candidate
+	pvp_last_phase = "rendering_events"
+	var next_phase := str(response.get("nextPhase", response.get("next_phase", pvp_last_next_phase))).strip_edges()
+	if next_phase != "" and next_phase != "rendering_events":
+		pvp_last_next_phase = next_phase
+	pvp_idle_wait_recovery_active = true
+	_set_battle_input_locked(true)
+	current_action_view = ActionView.NONE
+	if moves_grid != null:
+		moves_grid.visible = false
+	if mechanics_panel != null:
+		mechanics_panel.visible = false
 
 func _acknowledge_already_rendered_pvp_batch(response: Dictionary, source: String) -> void:
 	if _is_spectator_battle():
@@ -10512,6 +10544,12 @@ func _submit_pvp_realtime_choice(
 	if timeout_recovery == PvpBattleRealtimeService.ACTION_TIMEOUT_RECOVERY_ADVANCED:
 		_resume_pvp_after_action_timeout_recovery()
 		return response
+	# The correlated action response can already be mechanically stale when a
+	# newer room update won the transport race. The choice was still accepted,
+	# so keep the independent realtime drain armed; otherwise an actionless
+	# render batch can remain queued while this client stays on its old action
+	# view and never starts the opponent waiter.
+	_arm_pvp_local_choice_wait_recovery()
 	var display_response: Dictionary = action_flow.map_response_for_local_player(response)
 	if choice_type == "switch" and not _response_has_renderable_battle_events(display_response):
 		_show_pvp_switch_confirmation(
@@ -10536,6 +10574,10 @@ func _submit_pvp_realtime_choice(
 			_clear_pvp_switch_confirmation()
 		return display_response
 	return display_response
+
+func _arm_pvp_local_choice_wait_recovery() -> void:
+	pvp_idle_wait_recovery_active = true
+	_drain_idle_pvp_realtime_updates.call_deferred()
 
 func _get_debug_choice_identity(choice_type: String, slot: int) -> String:
 	var local_state_player_id := _get_local_state_player_id()
