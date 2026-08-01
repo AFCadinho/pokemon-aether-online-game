@@ -1551,6 +1551,7 @@
   "ui.staff.error.load_players": "Could not load online players: {error}",
   "ui.staff.error.load_safe_destinations": "Could not load safe teleport points: {error}",
   "ui.staff.teleport.select_player_from_list": "Select a player from the list to unlock staff actions.",
+  "ui.staff.teleport.select_action_hint": "Choose what you want to do with the selected player.",
   "ui.staff.teleport.move_player_warning": "This action moves another player. Confirm the safe destination and staff note carefully.",
   "ui.staff.teleport.go_to_player_hint": "You will be teleported to the selected player's current location.",
   "ui.staff.teleport.online_count": "{count} online",
