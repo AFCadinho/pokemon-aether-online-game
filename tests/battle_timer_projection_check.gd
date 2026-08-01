@@ -32,6 +32,7 @@ func _init() -> void:
 	projection.apply_event({"battleEventSeq":11,"payload":{"timerRevision":3,"playerId":"p2","decisionGeneration":1,"status":"CHOICE_ACCEPTED","decisionKind":"MOVE_SELECTION","maxDecisionMs":20000,"decisionRemainingMs":14500}})
 	_check(projection.has_advanced_beyond_team_preview(), "Move Selection projection proves Team Preview completed")
 	_check_equal(projection.participant_display("p2", 16500).get("effectiveDecisionRemainingMs"), 14500, "accepted choice keeps its trusted frozen decision time")
+	_check_equal(projection.participant_display("p2", 26500).get("effectiveDecisionRemainingMs"), 14500, "accepted choice countdown remains frozen while waiting")
 	_check(not projection.participant_display("p2", 16500).has("decisionId"), "presentation projection never exposes an opaque decision id")
 	_check(not projection.participant_display("p2", 16500).has("decisionGeneration"), "presentation projection never exposes an internal decision generation")
 	_check_equal(projection.participant_display_for_local_player("p1", "p1", 6500).get("playerId"), "p1", "p1 client keeps server p1 on the local display side")

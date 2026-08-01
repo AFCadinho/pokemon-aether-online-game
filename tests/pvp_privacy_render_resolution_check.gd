@@ -25,6 +25,7 @@ func _run_checks() -> void:
 	_check_stale_snapshot_still_observes_transport_fence()
 	_check_prejoin_battle_event_paging()
 	_check_private_action_resync_resolves_only_the_correlated_waiter()
+	_check_idle_wait_watchdog_recovers_canonical_snapshot()
 
 	if failures > 0:
 		quit(1)
@@ -577,6 +578,22 @@ func _check_waiters_consume_actionless_render_batches() -> void:
 		move_wait.contains('"pvp_opponent_render_watchdog"')
 			and battle_source.contains("require_unrendered_events := false"),
 		"the first-chooser waiter has a render-cursor watchdog independent of phase release"
+	)
+
+
+func _check_idle_wait_watchdog_recovers_canonical_snapshot() -> void:
+	var battle_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var observer := _function_source(battle_source, "_report_stalled_pvp_waiting_if_needed")
+	var recovery := _function_source(battle_source, "_recover_stalled_pvp_idle_wait")
+	_check(
+		observer.contains("PVP_IDLE_WAIT_RECONCILE_MSEC")
+			and observer.contains("_recover_stalled_pvp_idle_wait.call_deferred()"),
+		"a stranded waiting UI actively starts canonical recovery"
+	)
+	_check(
+		recovery.contains('"pvp_idle_wait_watchdog"')
+			and recovery.contains("_recover_pvp_idle_wait_ui_after_update"),
+		"idle recovery applies the canonical snapshot and reopens only authoritative controls"
 	)
 
 
