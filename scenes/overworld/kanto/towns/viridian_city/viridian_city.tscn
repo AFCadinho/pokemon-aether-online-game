@@ -4,202 +4,15 @@
 [ext_resource type="Script" uid="uid://cnkkdc5ikupld" path="res://scripts/world/kanto/towns/viridian_city.gd" id="2_meta"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_route1"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_340ux"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/boss_battle_npc.tscn" id="10_8shi4"]
+[ext_resource type="SpriteFrames" uid="uid://iqgaey0tojk7" path="res://assets/npcs/trainers/trainer_red_frames.tres" id="8_uhhgu"]
+[ext_resource type="Texture2D" uid="uid://ckc4i8557tm1l" path="res://assets/sprites/mugshots/trainer_red_mugshot.png" id="9_np5s7"]
+[ext_resource type="PackedScene" uid="uid://bql6a1hbx7o2m" path="res://scenes/npcs/boss_battle_npc.tscn" id="10_8shi4"]
 [ext_resource type="Texture2D" uid="uid://3tny2dss8f2p" path="res://assets/tilesets/fiver/tiles_env2_32.png" id="12_n7exw"]
-[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="16_bddn7"]
-[ext_resource type="Texture2D" uid="uid://bsxw7vgtdrlpk" path="res://assets/followers/HORSEA.png" id="17_v4pkh"]
-[ext_resource type="Texture2D" uid="uid://by43kvi6o5e0g" path="res://assets/followers/PIKACHU.png" id="18_s7hp4"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="21_night_light"]
 [ext_resource type="Resource" path="res://resources/npcs/trainers/trainer_red_boss.tres" id="22_trainer_red_profile"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route1"]
 size = Vector2(224, 36)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_2p5pd"]
-atlas = ExtResource("17_v4pkh")
-region = Rect2(0, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_j8pek"]
-atlas = ExtResource("17_v4pkh")
-region = Rect2(0, 64, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_abkj7"]
-atlas = ExtResource("17_v4pkh")
-region = Rect2(0, 128, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_kveef"]
-atlas = ExtResource("17_v4pkh")
-region = Rect2(0, 64, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_4x353"]
-atlas = ExtResource("17_v4pkh")
-region = Rect2(64, 64, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_m86ow"]
-atlas = ExtResource("17_v4pkh")
-region = Rect2(128, 64, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_q5eg0"]
-atlas = ExtResource("17_v4pkh")
-region = Rect2(192, 64, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_3oirl"]
-atlas = ExtResource("17_v4pkh")
-region = Rect2(0, 128, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_q27eu"]
-atlas = ExtResource("17_v4pkh")
-region = Rect2(64, 128, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_wfrmf"]
-atlas = ExtResource("17_v4pkh")
-region = Rect2(128, 128, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_6wa66"]
-atlas = ExtResource("17_v4pkh")
-region = Rect2(192, 128, 64, 64)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_xi46n"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_2p5pd")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_j8pek")
-}],
-"loop": true,
-"name": &"idle_left",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_abkj7")
-}],
-"loop": true,
-"name": &"idle_right",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_kveef")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_4x353")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_m86ow")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_q5eg0")
-}],
-"loop": true,
-"name": &"walk_left",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_3oirl")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_q27eu")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_wfrmf")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_6wa66")
-}],
-"loop": true,
-"name": &"walk_right",
-"speed": 5.0
-}]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_lfhh0"]
-atlas = ExtResource("18_s7hp4")
-region = Rect2(0, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_bkfw7"]
-atlas = ExtResource("18_s7hp4")
-region = Rect2(0, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ssmip"]
-atlas = ExtResource("18_s7hp4")
-region = Rect2(64, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_l1rkm"]
-atlas = ExtResource("18_s7hp4")
-region = Rect2(128, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_it3rq"]
-atlas = ExtResource("18_s7hp4")
-region = Rect2(192, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_tu82a"]
-atlas = ExtResource("18_s7hp4")
-region = Rect2(0, 192, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_aoenu"]
-atlas = ExtResource("18_s7hp4")
-region = Rect2(64, 192, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_po4ft"]
-atlas = ExtResource("18_s7hp4")
-region = Rect2(128, 192, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_temji"]
-atlas = ExtResource("18_s7hp4")
-region = Rect2(192, 192, 64, 64)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_vc3ys"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_lfhh0")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_bkfw7")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ssmip")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_l1rkm")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_it3rq")
-}],
-"loop": true,
-"name": &"walk_down",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_tu82a")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_aoenu")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_po4ft")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_temji")
-}],
-"loop": true,
-"name": &"walk_up",
-"speed": 5.0
-}]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_340ux"]
 texture = ExtResource("12_n7exw")
@@ -470,25 +283,23 @@ script = ExtResource("2_meta")
 
 [node name="ViridianCity" parent="." unique_id=76574466 instance=ExtResource("1_leyf6")]
 
-[node name="NightLights" type="Node2D" parent="."]
+[node name="NightLights" type="Node2D" parent="." unique_id=1056282238]
 
-[node name="NorthWestStreetLight" parent="NightLights" instance=ExtResource("21_night_light")]
+[node name="NorthWestStreetLight" parent="NightLights" unique_id=1894143865 instance=ExtResource("21_night_light")]
 position = Vector2(272, 224)
 light_color = Color(0.78, 0.9, 1, 1)
 max_energy = 0.75
 light_texture_scale = 0.65
 
-[node name="NorthEastStreetLight" parent="NightLights" instance=ExtResource("21_night_light")]
+[node name="NorthEastStreetLight" parent="NightLights" unique_id=585414437 instance=ExtResource("21_night_light")]
 position = Vector2(368, 224)
 light_color = Color(0.78, 0.9, 1, 1)
 max_energy = 0.75
 light_texture_scale = 0.65
 
-[node name="CentralLantern" parent="NightLights" instance=ExtResource("21_night_light")]
+[node name="CentralLantern" parent="NightLights" unique_id=138144653 instance=ExtResource("21_night_light")]
 position = Vector2(592, 480)
 light_color = Color(1, 0.72, 0.38, 1)
-max_energy = 0.9
-light_texture_scale = 0.8
 
 [node name="Spawns" type="Node2D" parent="." unique_id=2084573961]
 
@@ -545,8 +356,12 @@ normal_trainer_id = "kanto_route_1_trainer_red_normal"
 hard_trainer_id = "kanto_route_1_trainer_red_hard"
 normal_label = "Medium"
 npc_profile = ExtResource("22_trainer_red_profile")
+npc_id = "kanto_route_1_trainer_red_boss"
 dialogue_id = "kanto_pallet_town_trainer_red_default"
+display_name = "Trainer Red"
 facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("8_uhhgu")
+mugshot = ExtResource("9_np5s7")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=784148565]
 
