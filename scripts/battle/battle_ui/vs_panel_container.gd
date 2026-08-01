@@ -157,8 +157,7 @@ func _render_reconnect(state_label: Label, time_label: Label, bar: ProgressBar, 
 
 func _set_timer(state_label: Label, time_label: Label, bar: ProgressBar, timer: Dictionary) -> void:
 	var state := str(timer.get("state", "WAITING"))
-	var has_frozen_waiting_countdown := state == "WAITING" and int(timer.get("decisionMaximumMs", 0)) > 0
-	var has_countdown := state in ["SCHEDULED", "DECIDING", "EXPIRED"] or has_frozen_waiting_countdown
+	var has_countdown := state in ["SCHEDULED", "DECIDING", "EXPIRED"]
 	state_label.visible = true
 	time_label.visible = has_countdown
 	bar.visible = has_countdown
@@ -186,7 +185,7 @@ func _timer_time_text(timer: Dictionary) -> String:
 		return _t("battle.timer.starts", {
 			"time": _format_ms(int(timer.get("scheduledRemainingMs", 0))),
 		})
-	elif state in ["DECIDING", "EXPIRED", "WAITING"] and int(timer.get("decisionMaximumMs", 0)) > 0:
+	elif state in ["DECIDING", "EXPIRED"] and int(timer.get("decisionMaximumMs", 0)) > 0:
 		return _t("battle.timer.time", {
 			"time": _format_ms(int(timer.get("effectiveDecisionRemainingMs", 0))),
 		})
@@ -199,7 +198,7 @@ func _timer_progress(timer: Dictionary) -> float:
 		return 0.0
 	if state == "SCHEDULED":
 		return 100.0
-	if state in ["DECIDING", "WAITING"]:
+	if state == "DECIDING":
 		var maximum := int(timer.get("decisionMaximumMs", 0))
 		if maximum > 0:
 			return clampf(100.0 * float(timer.get("effectiveDecisionRemainingMs", 0)) / float(maximum), 0.0, 100.0)

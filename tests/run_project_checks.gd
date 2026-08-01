@@ -22,6 +22,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/battle_timer_ui_visibility_check.gd",
 	"res://tests/battle_participant_privacy_contract_check.gd",
 	"res://tests/pvp_team_preview_privacy_completion_check.gd",
+	"res://tests/pvp_privacy_render_resolution_check.gd",
 	"res://tests/battle_z_move_type_icons_check.gd",
 	"res://tests/battle_vs_panel_layout_check.gd",
 	"res://tests/moves_grid_disabled_state_check.gd",

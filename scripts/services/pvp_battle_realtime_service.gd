@@ -450,20 +450,7 @@ func _process_packets() -> void:
 		if DEBUG_PVP_REALTIME:
 			_log_realtime("Incoming packet", "type=%s request=%s battle=%s player=%s action=%s room=%s" % [message_type, str(message.get("requestId", "")), str(message.get("battleId", "")), str(message.get("playerId", "")), str(message.get("action", "")), str(message.get("roomCode", ""))])
 		if message_type == "pvp.joined":
-			joined = true
-			join_sent = false
-			join_sent_at_msec = 0
-			connection_heartbeat_timer = 0.0
-			awaiting_pong = false
-			ping_sent_at_msec = 0
-			room_is_ready = false
-			active_room_code = str(message.get("roomCode", active_room_code)).strip_edges().to_upper()
-			active_player_id = "p2" if str(message.get("playerId", active_player_id)) == "p2" else "p1"
-			active_battle_id = str(message.get("battleId", active_battle_id)).strip_edges()
-			active_match_id = str(message.get("matchId", active_match_id)).strip_edges()
-			active_viewer_role = "spectator" if str(message.get("viewerRole", active_viewer_role)).to_lower() == "spectator" else "participant"
-			room_joined.emit(active_room_code, active_player_id, active_battle_id)
-			_send_pending_render_ack_after_join()
+			_handle_joined_message(message)
 			continue
 		if message_type == "pong":
 			awaiting_pong = false
@@ -519,6 +506,14 @@ func _process_packets() -> void:
 			continue
 		if message_type == "pvp.resync_required":
 			battle_update_received.emit(message)
+			# A fail-closed action delivery can carry a private correlated error
+			# for only the initiating participant while both players receive the
+			# same resync instruction. Resolve that action waiter immediately;
+			# the opponent projection has neither requestId nor response.
+			var request_id := str(message.get("requestId", ""))
+			var response_value: Variant = message.get("response", {})
+			if request_id != "" and response_value is Dictionary:
+				action_response_received.emit(request_id, message)
 			continue
 		if message_type in ["pvp.forfeit", "pvp.match_ended", "pvp.match_settled"]:
 			if active_viewer_role == "spectator":
@@ -550,6 +545,41 @@ func _process_packets() -> void:
 			elif not joined:
 				_handle_join_error(message)
 			continue
+
+
+func _handle_joined_message(message: Dictionary) -> bool:
+	active_room_code = str(message.get("roomCode", active_room_code)).strip_edges().to_upper()
+	active_player_id = "p2" if str(message.get("playerId", active_player_id)) == "p2" else "p1"
+	active_battle_id = str(message.get("battleId", active_battle_id)).strip_edges()
+	active_match_id = str(message.get("matchId", active_match_id)).strip_edges()
+	active_viewer_role = (
+		"spectator"
+		if str(message.get("viewerRole", active_viewer_role)).to_lower() == "spectator"
+		else "participant"
+	)
+
+	# Catch-up pages are intentionally accepted before the public join commit even
+	# while their advertised remote head is ahead. At `pvp.joined`, however, that
+	# transaction must have reached the head. Accepting the join with a known gap
+	# can otherwise strand a legacy battle forever when no later durable event is
+	# published to trigger the live-stream gap detector below.
+	if (
+		active_viewer_role == "participant"
+		and battle_event_latest_seq > last_battle_event_seq
+	):
+		_restart_stalled_connection("Durable PvP event catch-up is incomplete.")
+		return false
+
+	joined = true
+	join_sent = false
+	join_sent_at_msec = 0
+	connection_heartbeat_timer = 0.0
+	awaiting_pong = false
+	ping_sent_at_msec = 0
+	room_is_ready = false
+	room_joined.emit(active_room_code, active_player_id, active_battle_id)
+	_send_pending_render_ack_after_join()
+	return true
 
 
 func _apply_timer_projection_from_battle_response(message: Dictionary) -> bool:
@@ -752,6 +782,330 @@ static func is_team_preview_completion_update(message: Dictionary, local_player_
 	return not is_team_preview_response(response)
 
 
+static func is_actionless_opponent_render_batch(
+	message: Dictionary,
+	local_player_id: String,
+	expected_battle_id: String
+) -> bool:
+	# Resolved privacy-v2 batches deliberately hide the other participant's
+	# private action category and request correlation. The public render boundary
+	# itself remains authoritative, but only for the exact authenticated viewer,
+	# battle, actor, and batch identity expected by this client.
+	if str(message.get("type", "")).strip_edges().to_lower() != "pvp.render_batch":
+		return false
+	if (
+		str(message.get("requestId", "")).strip_edges() != ""
+		or str(message.get("action", "")).strip_edges() != ""
+	):
+		return false
+
+	var normalized_local_side := local_player_id.strip_edges().to_lower()
+	if normalized_local_side not in ["p1", "p2"]:
+		return false
+	var actor_side := str(message.get("playerId", "")).strip_edges().to_lower()
+	if actor_side not in ["p1", "p2"] or actor_side == normalized_local_side:
+		return false
+
+	var normalized_expected_battle_id := expected_battle_id.strip_edges()
+	var message_battle_id := str(message.get("battleId", "")).strip_edges()
+	if (
+		normalized_expected_battle_id == ""
+		or message_battle_id == ""
+		or message_battle_id != normalized_expected_battle_id
+	):
+		return false
+
+	var event_batch_id := str(message.get("eventBatchId", "")).strip_edges()
+	var batch_seq_value: Variant = message.get("batchSeq", null)
+	var event_seq_end_value: Variant = message.get("eventSeqEnd", null)
+	if (
+		event_batch_id == ""
+		or typeof(batch_seq_value) not in [TYPE_INT, TYPE_FLOAT]
+		or int(batch_seq_value) < 0
+		or typeof(event_seq_end_value) not in [TYPE_INT, TYPE_FLOAT]
+		or int(event_seq_end_value) < 0
+	):
+		return false
+
+	var response_value: Variant = message.get("response", {})
+	if not (response_value is Dictionary):
+		return false
+	var response := response_value as Dictionary
+	if not bool(response.get("success", false)):
+		return false
+	if int(response.get("visibilityContractVersion", 0)) < 2:
+		return false
+	if str(response.get("battleId", "")).strip_edges() != message_battle_id:
+		return false
+	var latest_batch: Dictionary = {}
+	var response_batches_value: Variant = response.get("eventBatches", [])
+	if response_batches_value is Array and not (response_batches_value as Array).is_empty():
+		var latest_batch_value: Variant = (response_batches_value as Array).back()
+		if latest_batch_value is Dictionary:
+			latest_batch = latest_batch_value as Dictionary
+	if latest_batch.is_empty():
+		return false
+	var latest_batch_seq_value: Variant = latest_batch.get("batchSeq", null)
+	var latest_event_seq_end_value: Variant = latest_batch.get("eventSeqEnd", null)
+	if (
+		str(latest_batch.get("eventBatchId", "")).strip_edges() != event_batch_id
+		or typeof(latest_batch_seq_value) not in [TYPE_INT, TYPE_FLOAT]
+		or int(latest_batch_seq_value) != int(batch_seq_value)
+		or typeof(latest_event_seq_end_value) not in [TYPE_INT, TYPE_FLOAT]
+		or int(latest_event_seq_end_value) != int(event_seq_end_value)
+	):
+		return false
+	var response_batch_id := str(
+		response.get("eventBatchId", latest_batch.get("eventBatchId", ""))
+	).strip_edges()
+	var response_batch_seq_value: Variant = response.get(
+		"batchSeq",
+		latest_batch.get("batchSeq", null)
+	)
+	var response_event_seq_value: Variant = response.get(
+		"eventSeq",
+		latest_batch.get("eventSeqEnd", null)
+	)
+	if (
+		response_batch_id != event_batch_id
+		or typeof(response_batch_seq_value) not in [TYPE_INT, TYPE_FLOAT]
+		or int(response_batch_seq_value) != int(batch_seq_value)
+		or typeof(response_event_seq_value) not in [TYPE_INT, TYPE_FLOAT]
+		or int(response_event_seq_value) != int(event_seq_end_value)
+	):
+		return false
+
+	var viewer_value: Variant = response.get("viewer", {})
+	if not (viewer_value is Dictionary):
+		return false
+	var viewer := viewer_value as Dictionary
+	return (
+		str(viewer.get("role", "")).strip_edges().to_lower() == "participant"
+		and str(viewer.get("side", "")).strip_edges().to_lower() == normalized_local_side
+	)
+
+
+static func is_actionless_participant_render_candidate(
+	message: Dictionary,
+	local_player_id: String,
+	expected_battle_id: String
+) -> bool:
+	# This deliberately validates only the authenticated routing boundary. The
+	# stricter classifier above proves whether the payload is renderable. A
+	# same-battle actionless render that fails that proof must be recovered via a
+	# canonical snapshot; treating it as an unrelated action silently loses the
+	# only batch whose ACK can release both clients.
+	if str(message.get("type", "")).strip_edges().to_lower() != "pvp.render_batch":
+		return false
+	if (
+		str(message.get("requestId", "")).strip_edges() != ""
+		or str(message.get("action", "")).strip_edges() != ""
+	):
+		return false
+	var normalized_local_side := local_player_id.strip_edges().to_lower()
+	var normalized_expected_battle_id := expected_battle_id.strip_edges()
+	return (
+		normalized_local_side in ["p1", "p2"]
+		and normalized_expected_battle_id != ""
+		and str(message.get("battleId", "")).strip_edges()
+			== normalized_expected_battle_id
+	)
+
+
+static func presentation_fence_from_snapshot(
+	message: Dictionary,
+	local_player_id: String,
+	expected_battle_id: String
+) -> Dictionary:
+	if str(message.get("type", "")).strip_edges().to_lower() != "pvp.snapshot":
+		return {}
+	var normalized_local_side := local_player_id.strip_edges().to_lower()
+	if normalized_local_side not in ["p1", "p2"]:
+		return {}
+	var normalized_expected_battle_id := expected_battle_id.strip_edges()
+	var message_battle_id := str(message.get("battleId", "")).strip_edges()
+	if (
+		normalized_expected_battle_id == ""
+		or message_battle_id != normalized_expected_battle_id
+	):
+		return {}
+
+	var response_value: Variant = message.get("response", {})
+	if not (response_value is Dictionary):
+		return {}
+	var response := response_value as Dictionary
+	if (
+		not bool(response.get("success", false))
+		or int(response.get("visibilityContractVersion", 0)) < 2
+		or str(response.get("battleId", "")).strip_edges() != message_battle_id
+	):
+		return {}
+	var viewer_value: Variant = response.get("viewer", {})
+	if not (viewer_value is Dictionary):
+		return {}
+	var viewer := viewer_value as Dictionary
+	if (
+		str(viewer.get("role", "")).strip_edges().to_lower() != "participant"
+		or str(viewer.get("side", "")).strip_edges().to_lower() != normalized_local_side
+	):
+		return {}
+
+	var fence_value: Variant = message.get("presentationFence", {})
+	if not (fence_value is Dictionary):
+		return {}
+	var fence := fence_value as Dictionary
+	var batch_seq_value: Variant = fence.get("batchSeq", null)
+	var event_seq_end_value: Variant = fence.get("eventSeqEnd", null)
+	var turn_value: Variant = fence.get("turn", null)
+	if (
+		not bool(fence.get("releasePending", false))
+		or str(fence.get("eventBatchId", "")).strip_edges() == ""
+		or typeof(batch_seq_value) not in [TYPE_INT, TYPE_FLOAT]
+		or int(batch_seq_value) < 0
+		or typeof(event_seq_end_value) not in [TYPE_INT, TYPE_FLOAT]
+		or int(event_seq_end_value) < 0
+		or typeof(turn_value) not in [TYPE_INT, TYPE_FLOAT]
+		or int(turn_value) < 0
+	):
+		return {}
+	var response_event_seq := -1
+	var response_event_seq_value: Variant = response.get("eventSeq", null)
+	if typeof(response_event_seq_value) in [TYPE_INT, TYPE_FLOAT]:
+		response_event_seq = int(response_event_seq_value)
+	var batches_value: Variant = response.get("eventBatches", [])
+	if batches_value is Array:
+		for batch_index: int in range((batches_value as Array).size() - 1, -1, -1):
+			var batch_value: Variant = (batches_value as Array)[batch_index]
+			if not (batch_value is Dictionary):
+				continue
+			var batch_event_seq_value: Variant = (batch_value as Dictionary).get("eventSeqEnd", null)
+			if typeof(batch_event_seq_value) in [TYPE_INT, TYPE_FLOAT]:
+				response_event_seq = max(response_event_seq, int(batch_event_seq_value))
+				break
+	if response_event_seq < int(event_seq_end_value):
+		return {}
+	return {
+		"releasePending": true,
+		"eventBatchId": str(fence.get("eventBatchId", "")).strip_edges(),
+		"batchSeq": int(batch_seq_value),
+		"eventSeqEnd": int(event_seq_end_value),
+		"turn": int(turn_value),
+	}
+
+
+static func is_valid_unfenced_participant_snapshot(
+	message: Dictionary,
+	local_player_id: String,
+	expected_battle_id: String
+) -> bool:
+	# Absence is an authoritative eviction signal only for a fully validated,
+	# non-stale participant snapshot. A present-but-malformed fence must remain
+	# fail-closed and is therefore deliberately not treated as absence.
+	if (
+		str(message.get("type", "")).strip_edges().to_lower() != "pvp.snapshot"
+		or message.has("presentationFence")
+	):
+		return false
+	var normalized_local_side := local_player_id.strip_edges().to_lower()
+	if normalized_local_side not in ["p1", "p2"]:
+		return false
+	var normalized_expected_battle_id := expected_battle_id.strip_edges()
+	var message_battle_id := str(message.get("battleId", "")).strip_edges()
+	if (
+		normalized_expected_battle_id == ""
+		or message_battle_id != normalized_expected_battle_id
+	):
+		return false
+	var response_value: Variant = message.get("response", {})
+	if not (response_value is Dictionary):
+		return false
+	var response := response_value as Dictionary
+	if (
+		not bool(response.get("success", false))
+		or int(response.get("visibilityContractVersion", 0)) < 2
+		or str(response.get("battleId", "")).strip_edges() != message_battle_id
+	):
+		return false
+	var viewer_value: Variant = response.get("viewer", {})
+	if not (viewer_value is Dictionary):
+		return false
+	var viewer := viewer_value as Dictionary
+	return (
+		str(viewer.get("role", "")).strip_edges().to_lower() == "participant"
+		and str(viewer.get("side", "")).strip_edges().to_lower() == normalized_local_side
+	)
+
+
+static func has_malformed_present_presentation_fence(
+	message: Dictionary,
+	local_player_id: String,
+	expected_battle_id: String
+) -> bool:
+	if not message.has("presentationFence"):
+		return false
+
+	# First prove that this is an otherwise valid snapshot for the authenticated
+	# local participant. A foreign/invalid snapshot remains the responsibility of
+	# the normal identity and stale-message guards; only a malformed fence on an
+	# applicable snapshot is a presentation-integrity failure.
+	var envelope_without_fence := message.duplicate(false)
+	envelope_without_fence.erase("presentationFence")
+	if not is_valid_unfenced_participant_snapshot(
+		envelope_without_fence,
+		local_player_id,
+		expected_battle_id
+	):
+		return false
+
+	return presentation_fence_from_snapshot(
+		message,
+		local_player_id,
+		expected_battle_id
+	).is_empty()
+
+
+static func phase_update_releases_presentation_fence(
+	message: Dictionary,
+	fence: Dictionary,
+	expected_battle_id: String
+) -> bool:
+	if fence.is_empty() or not bool(fence.get("releasePending", false)):
+		return false
+	if str(message.get("type", "")).strip_edges().to_lower() != "pvp.phase_update":
+		return false
+	var normalized_expected_battle_id := expected_battle_id.strip_edges()
+	if (
+		normalized_expected_battle_id == ""
+		or str(message.get("battleId", "")).strip_edges() != normalized_expected_battle_id
+		or str(message.get("phase", "")).strip_edges() in ["", "rendering_events"]
+	):
+		return false
+
+	var incoming_batch_id := str(message.get("eventBatchId", "")).strip_edges()
+	if incoming_batch_id != "" and incoming_batch_id == str(fence.get("eventBatchId", "")).strip_edges():
+		return true
+
+	var incoming_batch_seq_value: Variant = message.get("batchSeq", null)
+	var incoming_rendered_seq_value: Variant = message.get("lastRenderedSeq", null)
+	if (
+		typeof(incoming_batch_seq_value) not in [TYPE_INT, TYPE_FLOAT]
+		or typeof(incoming_rendered_seq_value) not in [TYPE_INT, TYPE_FLOAT]
+	):
+		return false
+	var incoming_batch_seq := int(incoming_batch_seq_value)
+	var incoming_rendered_seq := int(incoming_rendered_seq_value)
+	var fence_batch_seq := int(fence.get("batchSeq", -1))
+	var fence_event_seq := int(fence.get("eventSeqEnd", -1))
+	return (
+		incoming_batch_seq >= fence_batch_seq
+		and incoming_rendered_seq >= fence_event_seq
+		and (
+			incoming_batch_seq > fence_batch_seq
+			or incoming_rendered_seq > fence_event_seq
+		)
+	)
+
+
 static func is_unrequested_local_forced_switch(message: Dictionary, local_player_id: String) -> bool:
 	# Human switch responses remain correlated with their action waiter. An
 	# authoritative timeout switch is broadcast without a request id and must be
@@ -913,7 +1267,11 @@ func _handle_battle_events_message(message: Dictionary) -> void:
 		timer_state_changed.emit(timer_projection)
 	if not terminal_message.is_empty():
 		battle_update_received.emit(terminal_message)
-	if latest_seq > last_battle_event_seq:
+	# The Gateway sends durable catch-up in contiguous pages before `pvp.joined`.
+	# Seeing the remote head beyond the first page is expected there; the Gateway
+	# completes the transaction or fails the join closed. Once joined, the same
+	# condition is a real live-stream gap and still requires reconnect recovery.
+	if joined and latest_seq > last_battle_event_seq:
 		_restart_stalled_connection("Durable PvP event catch-up is required.")
 	if DEBUG_PVP_REALTIME:
 		_log_realtime(

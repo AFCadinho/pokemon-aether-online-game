@@ -146,6 +146,12 @@ func participant_display(player_id: String, local_monotonic_ms: int = Time.get_t
 	var scheduled_remaining: int = max(actionable - now, 0) if actionable > 0 else 0
 	var cap_remaining: int = max(cap_at - now, 0) if cap_at > 0 else 0
 	var effective_remaining: int = int(timer.get("decisionRemainingMs", 0)) if raw_status.begins_with("CHOICE_ACCEPTED") else (max(deadline - now, 0) if deadline > 0 else 0)
+	var decision_maximum := int(timer.get("maxDecisionMs", 0))
+	# The cap and actionable anchors are already public opponent timing data.
+	# Deriving the scale keeps the countdown usable across mixed-version
+	# projections without exposing a decision identity or action.
+	if decision_maximum <= 0 and cap_at > actionable and actionable > 0:
+		decision_maximum = cap_at - actionable
 	var state: String = "PAUSED" if mechanically_suspended else _display_state(timer, now, actionable, deadline)
 	return {
 		"playerId": player_id,
@@ -153,12 +159,10 @@ func participant_display(player_id: String, local_monotonic_ms: int = Time.get_t
 		"bankRemainingMs": bank,
 		"bankMaximumMs": int(timer.get("mainBankMaximumMs", 0)),
 		"decisionCapRemainingMs": cap_remaining,
-		"decisionMaximumMs": int(timer.get("maxDecisionMs", 0)),
+		"decisionMaximumMs": decision_maximum,
 		"effectiveDecisionRemainingMs": effective_remaining,
 		"scheduledRemainingMs": scheduled_remaining,
 		"bankExhaustionRemainingMs": max(exhaustion_at - now, 0) if exhaustion_at > 0 else 0,
-		"decisionId": str(timer.get("decisionId", "")),
-		"decisionGeneration": int(timer.get("decisionGeneration", 0)),
 		"decisionKind": str(timer.get("decisionKind", "")),
 	}
 

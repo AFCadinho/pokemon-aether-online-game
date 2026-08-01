@@ -27,6 +27,8 @@ func _init() -> void:
 	_check_pvp_state_and_field_wait_for_render_cursor()
 	_check_pvp_restore_keeps_rendered_hp_and_field_events()
 	_check_authoritative_render_batch_survives_transport_reordering()
+	_check_stale_local_response_cannot_restart_consumed_waiter()
+	_check_event_ahead_snapshot_bypasses_only_transport_supersession()
 	_check_ended_snapshot_waits_for_final_render()
 	_check_authoritative_terminal_waits_for_render()
 	_check_local_forfeit_terminal_unblocks_action_wait()
@@ -649,7 +651,7 @@ func _check_pvp_state_and_field_wait_for_render_cursor() -> void:
 		ack_callback_index,
 		ack_callback_next_index - ack_callback_index
 	)
-	var ack_retry_index := source.find("func _run_pvp_render_ack_retry() -> void:")
+	var ack_retry_index := source.find("func _run_pvp_render_ack_retry(owned_generation: int) -> void:")
 	var ack_retry_next_index := source.find("\nfunc ", ack_retry_index + 1)
 	var ack_retry_source := source.substr(ack_retry_index, ack_retry_next_index - ack_retry_index)
 	_check_equal(
@@ -730,6 +732,77 @@ func _check_authoritative_render_batch_survives_transport_reordering() -> void:
 
 	_check_equal(stale_source.contains("_is_unrendered_authoritative_pvp_render_batch_response(render_response)"), true, "required render batches bypass transport-sequence stale rejection")
 	_check_equal(process_source.contains("_is_authoritative_pvp_render_batch_response(response)"), true, "idle authoritative batches enter the animation processor")
+
+
+func _check_stale_local_response_cannot_restart_consumed_waiter() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var apply_index := source.find("func _apply_api_response(")
+	var apply_next_index := source.find("\nfunc ", apply_index + 1)
+	var apply_source := source.substr(apply_index, apply_next_index - apply_index)
+	var drain_index := source.find("func _drain_pvp_event_queue() -> bool:")
+	var drain_next_index := source.find("\nfunc ", drain_index + 1)
+	var drain_source := source.substr(drain_index, drain_next_index - drain_index)
+
+	_check_equal(
+		apply_source.contains("and not is_required_render_batch"),
+		true,
+		"an unrendered authoritative batch bypasses stale canonical-state rejection"
+	)
+	_check_equal(
+		apply_source.contains('apply_outcome["status"] = "stale_noop"'),
+		true,
+		"the shared response loader exposes stale success as an explicit no-op"
+	)
+	_check_equal(
+		drain_source.contains('str(apply_outcome.get("status", "")) == "applied"')
+			and drain_source.contains("and not skip_render"),
+		true,
+		"a stale or already-rendered local envelope cannot start a second opponent waiter"
+	)
+	_check_equal(
+		drain_source.find("_acknowledge_already_rendered_pvp_batch(queue_response, source)")
+			< drain_source.find("var should_process_choice_entry :="),
+		true,
+		"duplicate render delivery still retries its ACK before being treated as a no-op"
+	)
+
+
+func _check_event_ahead_snapshot_bypasses_only_transport_supersession() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var reconcile_index := source.find("func _reconcile_pvp_battle_from_room(")
+	var reconcile_next_index := source.find("\nfunc ", reconcile_index + 1)
+	var reconcile_source := source.substr(reconcile_index, reconcile_next_index - reconcile_index)
+	var http_index := source.find("func _apply_pvp_http_reconciliation_when_safe(")
+	var http_next_index := source.find("\nfunc ", http_index + 1)
+	var http_source := source.substr(http_index, http_next_index - http_index)
+	var stale_index := source.find("func _is_stale_pvp_snapshot_response(")
+	var stale_next_index := source.find("\nfunc ", stale_index + 1)
+	var stale_source := source.substr(stale_index, stale_next_index - stale_index)
+
+	_check_equal(
+		reconcile_source.contains("has_required_render_catchup")
+			and reconcile_source.contains(") and not has_required_render_catchup:"),
+		true,
+		"the opponent watchdog accepts a snapshot only when its event cursor advances presentation"
+	)
+	_check_equal(
+		reconcile_source.contains("source,\n\t\thas_required_render_catchup")
+			and http_source.contains("allow_unrendered_event_catchup := false")
+			and http_source.contains("may_apply_unrendered_event_catchup")
+			and http_source.contains("_is_stale_pvp_snapshot_response("),
+		true,
+		"only the event-ahead watchdog forwards catch-up proof into HTTP snapshot ordering"
+	)
+	var battle_guard_index := stale_source.find('response_battle_id != battle_state.battle_id')
+	var turn_guard_index := stale_source.find("response_turn < current_turn")
+	var order_guard_index := stale_source.find("pvp_response_order.is_stale(response)")
+	_check_equal(
+		battle_guard_index >= 0
+			and turn_guard_index > battle_guard_index
+			and order_guard_index > turn_guard_index,
+		true,
+		"event catch-up never bypasses cross-battle or older-turn safety checks"
+	)
 
 
 func _check_ended_snapshot_waits_for_final_render() -> void:
@@ -820,7 +893,7 @@ func _check_force_switch_phase_release_recovers() -> void:
 	var completion_index := source.find("func _on_pvp_render_batch_completed(completion: Dictionary) -> void:")
 	var completion_next_index := source.find("\nfunc ", completion_index + 1)
 	var completion_source := source.substr(completion_index, completion_next_index - completion_index)
-	var reconciliation_index := source.find("func _reconcile_pvp_battle_from_room(source: String) -> bool:")
+	var reconciliation_index := source.find("func _reconcile_pvp_battle_from_room(")
 	var reconciliation_next_index := source.find("\nfunc ", reconciliation_index + 1)
 	var reconciliation_source := source.substr(reconciliation_index, reconciliation_next_index - reconciliation_index)
 	var opponent_wait_index := source.find("func _wait_for_pvp_opponent_force_switch_and_render() -> bool:")

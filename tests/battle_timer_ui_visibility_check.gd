@@ -42,7 +42,6 @@ func _check_supported_resolutions() -> void:
 				"bankMaximumMs": 90_000,
 				"effectiveDecisionRemainingMs": 90_000,
 				"decisionMaximumMs": 90_000,
-				"decisionKind": "MOVE_SELECTION",
 				"state": "DECIDING",
 			}
 		)
@@ -54,8 +53,8 @@ func _check_supported_resolutions() -> void:
 		_check(panel.player_1_timer_state_label.text == "%s · %s" % [_t("battle.timer.team_preview"), _t("battle.timer.choosing")], "Team Preview state is rendered")
 		_check(panel.player_1_timer_label.text == _t("battle.timer.time", {"time": "00:45"}), "Team Preview countdown is rendered")
 		_check(not panel.player_2_timer_label.text.contains("Bank"), "player 2 bank value stays hidden")
-		_check(panel.player_2_timer_state_label.text == "%s · %s" % [_t("battle.timer.move"), _t("battle.timer.choosing")], "Move Selection state is rendered")
-		_check(panel.player_2_timer_label.text == _t("battle.timer.time", {"time": "01:30"}), "Move Selection countdown is rendered")
+		_check(panel.player_2_timer_state_label.text == "%s · %s" % [_t("battle.timer.move"), _t("battle.timer.choosing")], "privacy-stripped active opponent still renders Move Choosing")
+		_check(panel.player_2_timer_label.text == _t("battle.timer.time", {"time": "01:30"}), "privacy-stripped active opponent keeps its countdown")
 		_check_equal(panel.player_1_timer_bar.value, 100.0, "player 1 decision bar starts full")
 		_check_equal(panel.player_2_timer_bar.value, 100.0, "player 2 decision bar starts full")
 		panel.show_decision_timers(
@@ -66,12 +65,13 @@ func _check_supported_resolutions() -> void:
 		_check(not panel.player_2_timer_label.visible, "waiting side hides the irrelevant countdown")
 		_check(not panel.player_2_timer_bar.visible, "waiting side hides the irrelevant progress bar")
 		panel.show_decision_timers(
-			{"effectiveDecisionRemainingMs": 63_000, "decisionMaximumMs": 90_000, "decisionKind": "MOVE_SELECTION", "state": "WAITING"},
+			{"decisionId": "4152e51d-ace8-4cac-9a8c-87c220a02321", "effectiveDecisionRemainingMs": 63_000, "decisionMaximumMs": 90_000, "decisionKind": "MOVE_SELECTION", "state": "WAITING"},
 			{"effectiveDecisionRemainingMs": 45_000, "decisionMaximumMs": 90_000, "decisionKind": "MOVE_SELECTION", "state": "DECIDING"}
 		)
 		_check(panel.player_1_timer_state_label.text == _t("common.waiting"), "accepted choice uses the Waiting heading")
-		_check(panel.player_1_timer_label.text == _t("battle.timer.time", {"time": "01:03"}), "accepted choice keeps its frozen decision time visible")
-		_check_equal(panel.player_1_timer_bar.value, 70.0, "accepted choice keeps its frozen progress visible")
+		_check(not panel.player_1_timer_label.visible, "accepted choice hides its no-longer-actionable countdown")
+		_check(not panel.player_1_timer_bar.visible, "accepted choice hides its no-longer-actionable progress")
+		_check(not panel.player_1_timer_state_label.text.contains("4152e51d"), "timer text never renders an opaque decision id")
 		panel.show_decision_timers(
 			{"bankRemainingMs": 79_000, "bankMaximumMs": 90_000, "scheduledRemainingMs": 2_000, "decisionKind": "FORCED_SWITCH", "state": "SCHEDULED"},
 			{"bankRemainingMs": 80_000, "bankMaximumMs": 90_000, "decisionKind": "MOVE_SELECTION", "state": "PAUSED"}

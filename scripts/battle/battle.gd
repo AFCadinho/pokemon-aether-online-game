@@ -31,6 +31,8 @@ const MEGA_EVOLUTION_EFFECT_KEY := "mega_evolution"
 const PVP_FORCE_SWITCH_ACK_RETRY_MSEC := 1000
 const PVP_FORCE_SWITCH_RECONCILE_INITIAL_MSEC := 2500
 const PVP_FORCE_SWITCH_RECONCILE_MAX_MSEC := 5000
+const PVP_OPPONENT_RENDER_RECONCILE_INITIAL_MSEC := 2500
+const PVP_OPPONENT_RENDER_RECONCILE_MAX_MSEC := 5000
 const Z_MOVE_FALLBACK_ICON: Texture2D = preload("res://assets/battles/mechanics/z-move.png")
 const Z_MOVE_TYPE_ICON_PATH := "res://assets/battles/types/%s.svg"
 const Z_CRYSTAL_NAMES := {
@@ -105,6 +107,7 @@ var pvp_pending_reconciliation_snapshot: Dictionary = {}
 var pvp_pending_authoritative_terminal: Dictionary = {}
 var pvp_pending_render_ack_completion: Dictionary = {}
 var pvp_render_ack_retry_active := false
+var pvp_render_ack_retry_generation := 0
 var pvp_retrying_reconciliation_snapshot := false
 var pvp_room_recovery_request_active := false
 var pvp_idle_realtime_drain_pending := false
@@ -116,6 +119,7 @@ var pvp_last_next_phase := ""
 var pvp_last_phase_update_server_seq := 0
 var pvp_last_phase_update_batch_id := ""
 var pvp_last_phase_update_phase := ""
+var pvp_pending_presentation_fence: Dictionary = {}
 var pvp_gateway_epoch := ""
 var pvp_last_connection_server_seq := 0
 var pvp_presentation_actionable_local_msec := 0
@@ -2678,6 +2682,12 @@ func _show_moves() -> void:
 		moves_grid.visible = false
 		mechanics_panel.visible = false
 		return
+	if _is_pvp_battle() and not pvp_pending_presentation_fence.is_empty():
+		_set_battle_input_locked(true)
+		current_action_view = ActionView.NONE
+		moves_grid.visible = false
+		mechanics_panel.visible = false
+		return
 	if _is_pvp_battle() and not _pvp_local_decision_allows_choice():
 		# Requests retain party and move data while a submitted or automatic
 		# action is locked. Never let that stale data reopen controls before the
@@ -2766,6 +2776,13 @@ func _show_moves() -> void:
 func _pvp_local_request_allows_action_recovery(local_state_player_id: String) -> bool:
 	if not _is_pvp_battle():
 		return false
+	# A render response can already contain the next ACTIVE request while the
+	# room-wide render barrier is still waiting for the other participant's ACK.
+	# Only the subsequent `pvp.phase_update` may release that boundary; otherwise
+	# the faster renderer can enter the next turn while its opponent is still
+	# presenting the previous one.
+	if pvp_last_phase == "rendering_events" or not pvp_pending_presentation_fence.is_empty():
+		return false
 	var available_moves: Array = battle_state.get_available_moves(local_state_player_id)
 	return _pvp_local_request_allows_choice(local_state_player_id) and not available_moves.is_empty()
 
@@ -2775,6 +2792,8 @@ func _show_current_action_prompt() -> void:
 
 func _set_battle_input_locked(is_locked: bool) -> void:
 	if _is_spectator_battle():
+		is_locked = true
+	if not is_locked and not pvp_pending_presentation_fence.is_empty():
 		is_locked = true
 	if not is_locked and _is_pvp_presentation_hold_active():
 		is_locked = true
@@ -3289,7 +3308,7 @@ func _finish_battle(result: Dictionary) -> void:
 		return
 
 	pvp_pending_authoritative_terminal.clear()
-	pvp_pending_render_ack_completion.clear()
+	_clear_pvp_render_ack_retry_state()
 	var allows_gameplay_persistence := PvpBattleRealtimeService.allows_gameplay_persistence_for_terminal(result)
 	_warn_if_pvp_finish_has_pending_render_work(result)
 	if allows_gameplay_persistence or _is_spectator_battle():
@@ -3580,9 +3599,28 @@ func _finish_confirmed_pvp_forfeit(response: Dictionary, forfeiting_player_id: S
 	})
 
 ## Laadt een API-response in de battle state en geeft terug of dat gelukt is.
-func _apply_api_response(response: Dictionary, apply_event_conditions: bool = true, source: String = "") -> bool:
+## `apply_outcome` distinguishes a real apply from an idempotent stale no-op so
+## the ordered PvP queue cannot start a second waiter for an already-consumed
+## local action response.
+func _apply_api_response(
+	response: Dictionary,
+	apply_event_conditions: bool = true,
+	source: String = "",
+	apply_outcome: Dictionary = {}
+) -> bool:
+	apply_outcome.clear()
+	apply_outcome["status"] = "pending"
 	var display_response: Dictionary = action_flow.map_response_for_local_player(response)
-	if _is_pvp_battle() and pvp_response_order.is_stale(display_response):
+	var is_required_render_batch := (
+		_is_pvp_battle()
+		and _is_unrendered_authoritative_pvp_render_batch_response(display_response)
+	)
+	apply_outcome["required_render_batch"] = is_required_render_batch
+	if (
+		_is_pvp_battle()
+		and pvp_response_order.is_stale(display_response)
+		and not is_required_render_batch
+	):
 		_trace_pvp_flow(
 			"apply.skip_stale_projection",
 			display_response,
@@ -3592,6 +3630,7 @@ func _apply_api_response(response: Dictionary, apply_event_conditions: bool = tr
 				JSON.stringify(pvp_response_order.latest_cursor),
 			]
 		)
+		apply_outcome["status"] = "stale_noop"
 		return true
 
 	var defer_state_load := _should_defer_pvp_canonical_state_until_render(display_response)
@@ -3603,6 +3642,7 @@ func _apply_api_response(response: Dictionary, apply_event_conditions: bool = tr
 		rendered_event_cursor
 	)
 	if success:
+		apply_outcome["status"] = "applied"
 		if _is_pvp_battle():
 			pvp_response_order.remember(display_response)
 		_update_pvp_presentation_schedule(response)
@@ -3617,6 +3657,8 @@ func _apply_api_response(response: Dictionary, apply_event_conditions: bool = tr
 		if not defer_state_load and _should_sync_presentation_field_from_response(response, source):
 			_sync_presentation_field_from_battle_state()
 		_refresh_damage_calc_results()
+	else:
+		apply_outcome["status"] = "failed"
 
 	return success
 
@@ -3716,10 +3758,16 @@ func _update_pvp_phase_contract_from_response(response: Dictionary, source: Stri
 			]
 		)
 
+	if not pvp_pending_presentation_fence.is_empty():
+		# A reconnect snapshot can already expose the next mechanical request, but
+		# its transport fence proves the shared presentation release is still pending.
+		pvp_last_phase = "rendering_events"
+		pvp_last_next_phase = current_next_phase
+		return
 	pvp_last_phase = current_phase
 	pvp_last_next_phase = current_next_phase
 	if current_phase != "rendering_events":
-		pvp_pending_render_ack_completion.clear()
+		_clear_pvp_render_ack_retry_state()
 
 func _log_pvp_phase_warning(message: String, details: String) -> void:
 	if not DEBUG_PVP_REALTIME:
@@ -3792,19 +3840,32 @@ func _drain_pvp_event_queue() -> bool:
 			str(apply_event_conditions),
 			JSON.stringify(metadata) if metadata is Dictionary else str(metadata),
 		])
-		var success := _apply_api_response(queue_response, apply_event_conditions, source)
+		var apply_outcome: Dictionary = {}
+		var success := _apply_api_response(
+			queue_response,
+			apply_event_conditions,
+			source,
+			apply_outcome
+		)
 		if success and skip_render and _is_authoritative_pvp_render_batch_response(queue_response):
 			# Phase-release waits below depend on this ACK. Send it before
 			# processing the duplicate response; otherwise a force-switch path
 			# can wait for the very release that this acknowledgement unlocks.
 			_acknowledge_already_rendered_pvp_batch(queue_response, source)
-		_trace_pvp_flow("drain.after_apply", queue_response, "source=%s success=%s skipRender=%s process=%s" % [
+		var should_process_choice_entry := (
+			success
+			and str(apply_outcome.get("status", "")) == "applied"
+			and not skip_render
+			and _should_process_pvp_choice_queue_entry(queue_response, source, metadata)
+		)
+		_trace_pvp_flow("drain.after_apply", queue_response, "source=%s success=%s outcome=%s skipRender=%s process=%s" % [
 			source,
 			str(success),
+			str(apply_outcome.get("status", "unknown")),
 			str(skip_render),
-			str(_should_process_pvp_choice_queue_entry(queue_response, source, metadata)),
+			str(should_process_choice_entry),
 		])
-		if success and _should_process_pvp_choice_queue_entry(queue_response, source, metadata):
+		if should_process_choice_entry:
 			var entry_metadata: Dictionary = {}
 			if metadata is Dictionary:
 				entry_metadata = metadata as Dictionary
@@ -5883,6 +5944,7 @@ func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_poke
 	pvp_last_phase_update_server_seq = 0
 	pvp_last_phase_update_batch_id = ""
 	pvp_last_phase_update_phase = ""
+	_clear_pvp_presentation_fence_recovery_state()
 	pvp_gateway_epoch = ""
 	pvp_last_connection_server_seq = 0
 	pvp_presentation_actionable_local_msec = 0
@@ -9504,12 +9566,12 @@ func _connect_pvp_realtime(local_player_id: String, battle_id: String, initial_r
 	pvp_realtime_activity_seq = 0
 	pvp_pending_reconciliation_snapshot.clear()
 	pvp_pending_authoritative_terminal.clear()
-	pvp_pending_render_ack_completion.clear()
 	pvp_retrying_reconciliation_snapshot = false
 	pvp_idle_realtime_drain_pending = false
 	pvp_idle_wait_recovery_active = false
 	pvp_last_applied_server_seq = 0
 	pvp_last_applied_snapshot_server_seq = 0
+	_clear_pvp_presentation_fence_recovery_state()
 	var initial_display_response: Dictionary = action_flow.map_response_for_local_player(initial_response)
 	pvp_response_order.reset(initial_display_response)
 	pvp_rendered_event_count = 0
@@ -9623,29 +9685,41 @@ func _retry_pending_pvp_render_ack() -> void:
 	_send_pvp_render_ack(pvp_pending_render_ack_completion.duplicate(true))
 
 func _start_pvp_render_ack_retry() -> void:
-	if pvp_render_ack_retry_active or battle_finished or _is_spectator_battle():
+	if battle_finished or _is_spectator_battle():
 		return
 	if pvp_pending_render_ack_completion.is_empty():
 		return
+	pvp_render_ack_retry_generation += 1
+	var owned_generation := pvp_render_ack_retry_generation
 	pvp_render_ack_retry_active = true
-	_run_pvp_render_ack_retry.call_deferred()
+	_run_pvp_render_ack_retry.call_deferred(owned_generation)
 
-func _run_pvp_render_ack_retry() -> void:
+func _run_pvp_render_ack_retry(owned_generation: int) -> void:
 	var expected_batch_id := str(
 		pvp_pending_render_ack_completion.get("event_batch_id", "")
 	).strip_edges()
 	var retry_count := 0
 	while (
-		not battle_finished
+		owned_generation == pvp_render_ack_retry_generation
+		and not battle_finished
 		and not pvp_pending_render_ack_completion.is_empty()
 		and str(pvp_pending_render_ack_completion.get("event_batch_id", "")).strip_edges() == expected_batch_id
 		and retry_count < 20
 	):
 		await get_tree().create_timer(0.5).timeout
-		if battle_finished or pvp_pending_render_ack_completion.is_empty():
+		if (
+			owned_generation != pvp_render_ack_retry_generation
+			or battle_finished
+			or pvp_pending_render_ack_completion.is_empty()
+		):
 			break
 		retry_count += 1
 		_retry_pending_pvp_render_ack()
+	_finish_pvp_render_ack_retry_generation(owned_generation)
+
+func _finish_pvp_render_ack_retry_generation(owned_generation: int) -> void:
+	if owned_generation != pvp_render_ack_retry_generation:
+		return
 	pvp_render_ack_retry_active = false
 
 func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
@@ -9687,6 +9761,21 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 	if _is_spectator_terminal_message(message):
 		_finish_spectator_terminal_message.call_deferred(message.duplicate(true))
 		return
+	if (
+		not _is_spectator_battle()
+		and PvpBattleRealtimeService.is_actionless_participant_render_candidate(
+			message,
+			action_flow.local_player_id,
+			battle_state.battle_id
+		)
+		and not PvpBattleRealtimeService.is_actionless_opponent_render_batch(
+			message,
+			action_flow.local_player_id,
+			battle_state.battle_id
+		)
+	):
+		_reject_invalid_actionless_pvp_render_batch(message)
+		return
 
 	# Phase releases have their own ordering contract. In particular, a
 	# re-broadcast release may legitimately share the latest transport sequence
@@ -9704,6 +9793,42 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 		var mapped_snapshot: Dictionary = {}
 		if not snapshot_response.is_empty():
 			mapped_snapshot = action_flow.map_response_for_local_player(snapshot_response)
+		if PvpBattleRealtimeService.has_malformed_present_presentation_fence(
+			message,
+			action_flow.local_player_id,
+			battle_state.battle_id
+		):
+			# Presence is an explicit transport claim. Treating malformed metadata
+			# as though the key were absent lets a fresh client apply turn_open
+			# without ever proving the unresolved shared render boundary.
+			PvpBattleRealtimeService.report_diagnostic(
+				"pvp.invalid_realtime_response",
+				{
+					"displayedPhase": pvp_last_phase if pvp_last_phase != "" else "unknown",
+					"reasonCode": "snapshot_presentation_fence_malformed",
+					"serverSeq": max(_get_pvp_message_server_seq(message), pvp_last_applied_server_seq),
+					"phaseSeq": max(pvp_last_phase_update_server_seq, 0),
+					"lastRenderedSeq": max(pvp_event_queue.last_rendered_seq, 0),
+					"inputLocked": true,
+				}
+			)
+			pvp_idle_wait_recovery_active = true
+			_set_battle_input_locked(true)
+			current_action_view = ActionView.NONE
+			if moves_grid != null:
+				moves_grid.visible = false
+			if mechanics_panel != null:
+				mechanics_panel.visible = false
+			if current_action_panel != null:
+				current_action_panel.set_message(_t("battle.prompt.resynchronizing_events"))
+			PvpBattleRealtimeService.request_resync(
+				"The PvP snapshot presentation boundary is invalid."
+			)
+			return
+		# Transport presentation metadata can be new even when the canonical
+		# response body is an idempotent reconnect snapshot. Observe and ACK its
+		# validated fence before the mechanical stale-response filter returns.
+		_observe_pvp_presentation_fence(message)
 		if _is_stale_pvp_snapshot_response(message, mapped_snapshot):
 			if DEBUG_PVP_REALTIME:
 				_log_pvp_realtime(
@@ -9711,6 +9836,7 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 					"message=%s snapshot_last_seq=%d" % [_describe_pvp_realtime_message(message), pvp_last_applied_snapshot_server_seq]
 				)
 			return
+		_clear_pvp_presentation_fence_from_unfenced_snapshot(message)
 	elif _is_stale_pvp_realtime_message(message):
 		if DEBUG_PVP_REALTIME:
 			_log_pvp_realtime(
@@ -9718,7 +9844,6 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 				"message=%s last_seq=%d" % [_describe_pvp_realtime_message(message), pvp_last_applied_server_seq]
 			)
 		return
-
 	if _should_apply_pvp_realtime_end_immediately(message):
 		if DEBUG_PVP_REALTIME and _get_pvp_realtime_message_kind(message) == "snapshot":
 			_log_pvp_realtime(
@@ -9747,6 +9872,31 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 		)
 	if _should_drain_idle_pvp_realtime_updates():
 		_drain_idle_pvp_realtime_updates.call_deferred()
+
+func _reject_invalid_actionless_pvp_render_batch(message: Dictionary) -> void:
+	# Fail closed, but remain live: the room snapshot can replay the immutable
+	# event boundary without disclosing the opponent's hidden action category.
+	pvp_idle_wait_recovery_active = true
+	_set_battle_input_locked(true)
+	current_action_view = ActionView.NONE
+	if moves_grid != null:
+		moves_grid.visible = false
+	if mechanics_panel != null:
+		mechanics_panel.visible = false
+	if current_action_panel != null:
+		current_action_panel.set_message(_t("battle.prompt.resynchronizing_events"))
+	PvpBattleRealtimeService.report_diagnostic("pvp.invalid_realtime_response", {
+		"displayedPhase": pvp_last_phase if pvp_last_phase != "" else "unknown",
+		"reasonCode": "actionless_render_contract_invalid",
+		"serverSeq": max(_get_pvp_message_server_seq(message), pvp_last_applied_server_seq),
+		"phaseSeq": max(pvp_last_phase_update_server_seq, 0),
+		"lastRenderedSeq": max(pvp_event_queue.last_rendered_seq, 0),
+		"inputLocked": true,
+		"pendingAction": true,
+	})
+	PvpBattleRealtimeService.request_resync(
+		"An authoritative PvP render batch requires canonical recovery."
+	)
 
 func _apply_pvp_connection_log_event(message_type: String, message: Dictionary) -> bool:
 	if message_type not in [
@@ -9820,11 +9970,120 @@ func _observe_pvp_gateway_epoch(message: Dictionary) -> void:
 	pvp_last_phase_update_server_seq = 0
 	pvp_last_connection_server_seq = 0
 	pvp_response_order.reset_transport_cursor()
+	# Render barriers and their ACK retries live in Gateway process memory. A new
+	# epoch cannot release a fence created by the old process, so retaining it
+	# would permanently keep local controls locked when the replacement snapshot
+	# correctly arrives without a presentationFence.
+	_clear_pvp_presentation_fence_recovery_state()
 	_trace_pvp_flow(
 		"gateway_epoch.changed",
 		{},
 		"previous=%s current=%s" % [previous_epoch, incoming_epoch]
 	)
+
+
+func _observe_pvp_presentation_fence(message: Dictionary) -> void:
+	var candidate := PvpBattleRealtimeService.presentation_fence_from_snapshot(
+		message,
+		action_flow.local_player_id,
+		battle_state.battle_id
+	)
+	if candidate.is_empty():
+		return
+	if not _should_replace_pvp_presentation_fence(candidate):
+		return
+
+	pvp_pending_presentation_fence = candidate.duplicate(true)
+	pvp_last_phase = "rendering_events"
+	var response_value: Variant = message.get("response", {})
+	if response_value is Dictionary:
+		var response := response_value as Dictionary
+		var fenced_next_phase := str(
+			response.get("nextPhase", response.get("phase", pvp_last_next_phase))
+		).strip_edges()
+		if fenced_next_phase != "" and fenced_next_phase != "rendering_events":
+			pvp_last_next_phase = fenced_next_phase
+	pvp_idle_wait_recovery_active = true
+	_set_battle_input_locked(true)
+	current_action_view = ActionView.NONE
+	if moves_grid != null:
+		moves_grid.visible = false
+	if mechanics_panel != null:
+		mechanics_panel.visible = false
+	if current_action_panel != null:
+		current_action_panel.set_message(_t("battle.prompt.resynchronizing_events"))
+	_acknowledge_pvp_presentation_fence_if_rendered()
+
+
+func _clear_pvp_presentation_fence_from_unfenced_snapshot(message: Dictionary) -> void:
+	if not PvpBattleRealtimeService.is_valid_unfenced_participant_snapshot(
+		message,
+		action_flow.local_player_id,
+		battle_state.battle_id
+	):
+		return
+	if (
+		pvp_pending_presentation_fence.is_empty()
+		and pvp_pending_render_ack_completion.is_empty()
+		and not pvp_render_ack_retry_active
+	):
+		return
+	_clear_pvp_presentation_fence_recovery_state()
+	_trace_pvp_flow(
+		"snapshot.presentation_fence_evicted",
+		{},
+		"message=%s" % _describe_pvp_realtime_message(message)
+	)
+
+
+func _clear_pvp_presentation_fence_recovery_state() -> void:
+	pvp_pending_presentation_fence.clear()
+	_clear_pvp_render_ack_retry_state()
+
+
+func _clear_pvp_render_ack_retry_state() -> void:
+	pvp_pending_render_ack_completion.clear()
+	pvp_render_ack_retry_generation += 1
+	pvp_render_ack_retry_active = false
+
+
+func _should_replace_pvp_presentation_fence(candidate: Dictionary) -> bool:
+	if pvp_pending_presentation_fence.is_empty():
+		return true
+	var current_batch_id := str(pvp_pending_presentation_fence.get("eventBatchId", "")).strip_edges()
+	var candidate_batch_id := str(candidate.get("eventBatchId", "")).strip_edges()
+	var current_batch_seq := int(pvp_pending_presentation_fence.get("batchSeq", -1))
+	var candidate_batch_seq := int(candidate.get("batchSeq", -1))
+	var current_event_seq := int(pvp_pending_presentation_fence.get("eventSeqEnd", -1))
+	var candidate_event_seq := int(candidate.get("eventSeqEnd", -1))
+	if candidate_batch_id == current_batch_id:
+		return candidate_batch_seq >= current_batch_seq and candidate_event_seq >= current_event_seq
+	return (
+		candidate_batch_seq >= current_batch_seq
+		and candidate_event_seq >= current_event_seq
+		and (candidate_batch_seq > current_batch_seq or candidate_event_seq > current_event_seq)
+	)
+
+
+func _acknowledge_pvp_presentation_fence_if_rendered() -> void:
+	if pvp_pending_presentation_fence.is_empty() or _is_spectator_battle():
+		return
+	var event_seq_end := int(pvp_pending_presentation_fence.get("eventSeqEnd", -1))
+	if event_seq_end < 0 or pvp_event_queue.last_rendered_seq < event_seq_end:
+		return
+	var completion := {
+		"event_batch_id": str(pvp_pending_presentation_fence.get("eventBatchId", "")),
+		"batch_seq": int(pvp_pending_presentation_fence.get("batchSeq", -1)),
+		"event_seq_end": event_seq_end,
+		"last_rendered_seq": pvp_event_queue.last_rendered_seq,
+		"turn": int(pvp_pending_presentation_fence.get("turn", battle_state.get_turn())),
+		"phase": "rendering_events",
+		"source": "pvp_snapshot_presentation_fence",
+		"success": true,
+	}
+	pvp_pending_render_ack_completion = completion.duplicate(true)
+	_send_pvp_render_ack(completion)
+	_start_pvp_render_ack_retry()
 
 func _sync_pvp_reconnect_timer_pause() -> void:
 	if vs_panel_container.has_active_reconnect_timer():
@@ -9861,10 +10120,37 @@ func _apply_pvp_phase_update(message: Dictionary) -> void:
 				"message_battle=%s current_battle=%s" % [battle_id, battle_state.battle_id]
 			)
 		return
+	var releases_presentation_fence := false
+	var exactly_matches_presentation_fence := false
+	if not pvp_pending_presentation_fence.is_empty():
+		releases_presentation_fence = PvpBattleRealtimeService.phase_update_releases_presentation_fence(
+			message,
+			pvp_pending_presentation_fence,
+			battle_state.battle_id
+		)
+		if not releases_presentation_fence:
+			_trace_pvp_flow(
+				"phase_update.skip_presentation_fence_mismatch",
+				{},
+				"message=%s fence=%s" % [
+					_describe_pvp_realtime_message(message),
+					JSON.stringify(pvp_pending_presentation_fence),
+				]
+			)
+			return
+		exactly_matches_presentation_fence = (
+			str(message.get("eventBatchId", "")).strip_edges() != ""
+			and str(message.get("eventBatchId", "")).strip_edges()
+				== str(pvp_pending_presentation_fence.get("eventBatchId", "")).strip_edges()
+		)
 
 	var server_seq := _get_pvp_message_server_seq(message)
 	var phase := str(message.get("phase", "")).strip_edges()
-	if server_seq > 0 and server_seq < pvp_last_applied_server_seq:
+	if (
+		server_seq > 0
+		and server_seq < pvp_last_applied_server_seq
+		and not exactly_matches_presentation_fence
+	):
 		_trace_pvp_flow("phase_update.skip_stale", {}, "serverSeq=%d lastSeq=%d phase=%s" % [server_seq, pvp_last_applied_server_seq, phase])
 		if DEBUG_PVP_REALTIME:
 			_log_pvp_realtime(
@@ -9873,6 +10159,16 @@ func _apply_pvp_phase_update(message: Dictionary) -> void:
 			)
 		return
 	if server_seq > 0 and server_seq == pvp_last_applied_server_seq and phase == pvp_last_phase:
+		if releases_presentation_fence:
+			# A reconnect snapshot may reintroduce transport-only fence state after
+			# this exact release was already applied. The matching rebroadcast is
+			# idempotent: clear only recovery/ACK state and do not open the UI twice.
+			_clear_pvp_presentation_fence_recovery_state()
+			_trace_pvp_flow(
+				"phase_update.duplicate_presentation_fence_released",
+				{},
+				"serverSeq=%d phase=%s" % [server_seq, phase]
+			)
 		_trace_pvp_flow("phase_update.skip_duplicate", {}, "serverSeq=%d phase=%s" % [server_seq, phase])
 		return
 	if phase == "":
@@ -9881,11 +10177,13 @@ func _apply_pvp_phase_update(message: Dictionary) -> void:
 	var previous_phase := pvp_last_phase if pvp_last_phase != "" else str(message.get("previousPhase", "unknown"))
 	pvp_last_phase = phase
 	pvp_last_next_phase = phase
-	pvp_last_phase_update_server_seq = server_seq
+	pvp_last_phase_update_server_seq = max(pvp_last_phase_update_server_seq, server_seq)
 	pvp_last_phase_update_batch_id = str(message.get("eventBatchId", "")).strip_edges()
 	pvp_last_phase_update_phase = phase
-	if phase != "rendering_events":
-		pvp_pending_render_ack_completion.clear()
+	if releases_presentation_fence:
+		_clear_pvp_presentation_fence_recovery_state()
+	elif phase != "rendering_events":
+		_clear_pvp_render_ack_retry_state()
 	if server_seq > pvp_last_applied_server_seq:
 		pvp_last_applied_server_seq = server_seq
 
@@ -10079,7 +10377,7 @@ func _fetch_pvp_room_serialized(player_id: String) -> Dictionary:
 	return response
 
 
-func _reconcile_pvp_battle_from_room(source: String) -> bool:
+func _reconcile_pvp_battle_from_room(source: String, require_unrendered_events := false) -> bool:
 	if pvp_room_code == "" or action_flow.local_player_id == "":
 		return false
 
@@ -10095,6 +10393,16 @@ func _reconcile_pvp_battle_from_room(source: String) -> bool:
 	var mapped_response: Dictionary = action_flow.map_response_for_local_player(response)
 	if mapped_response.is_empty():
 		return false
+	var snapshot_event_seq := _get_pvp_response_event_seq_end(mapped_response)
+	var has_required_render_catchup := (
+		require_unrendered_events
+		and snapshot_event_seq > pvp_event_queue.last_rendered_seq
+	)
+	if require_unrendered_events and not has_required_render_catchup:
+		# A normal waiting-for-opponent snapshot is not render progress. Returning
+		# success here would let the first chooser leave its waiter before the
+		# resolving batch exists.
+		return false
 
 	var response_server_seq := _get_pvp_response_server_seq(response)
 	var realtime_advanced_during_request := (
@@ -10105,7 +10413,10 @@ func _reconcile_pvp_battle_from_room(source: String) -> bool:
 	if realtime_advanced_during_request and (
 		response_server_seq <= 0
 		or response_server_seq <= pvp_last_applied_server_seq
-	):
+	) and not has_required_render_catchup:
+		# Cursor-equal snapshots remain fenced by newer realtime activity. An
+		# event-ahead watchdog snapshot is different: its immutable batch is the
+		# missing presentation work, so rejecting it would make recovery livelock.
 		if DEBUG_PVP_REALTIME:
 			_log_pvp_realtime(
 				"Canonical room reconciliation superseded by realtime update",
@@ -10128,7 +10439,8 @@ func _reconcile_pvp_battle_from_room(source: String) -> bool:
 	var applied := await _apply_pvp_http_reconciliation_when_safe(
 		message,
 		mapped_response,
-		source
+		source,
+		has_required_render_catchup
 	)
 	if applied and DEBUG_PVP_REALTIME:
 		_log_pvp_realtime(
@@ -10751,7 +11063,29 @@ func _wait_for_pvp_opponent_choice_and_render(pending_player_choice_events: Arra
 	var fallback_render_attempt := -1
 	var phase_release_observed_at_attempt := -1
 	var phase_reconciliation_attempted := false
+	var next_render_reconciliation_msec := (
+		Time.get_ticks_msec() + PVP_OPPONENT_RENDER_RECONCILE_INITIAL_MSEC
+	)
+	var render_reconciliation_attempt := 0
 	while true:
+		if battle_finished:
+			return true
+		var now_msec := Time.get_ticks_msec()
+		if now_msec >= next_render_reconciliation_msec:
+			render_reconciliation_attempt += 1
+			if await _reconcile_pvp_battle_from_room(
+				"pvp_opponent_render_watchdog",
+				true
+			):
+				return true
+			var render_retry_delay_msec := mini(
+				PVP_OPPONENT_RENDER_RECONCILE_INITIAL_MSEC
+					+ render_reconciliation_attempt * 500,
+				PVP_OPPONENT_RENDER_RECONCILE_MAX_MSEC
+			)
+			next_render_reconciliation_msec = (
+				Time.get_ticks_msec() + render_retry_delay_msec
+			)
 		if _has_newer_pvp_phase_update(wait_start_server_seq, ["turn_open", "awaiting_force_switch"]):
 			if phase_release_observed_at_attempt < 0:
 				phase_release_observed_at_attempt = attempt
@@ -10818,6 +11152,25 @@ func _wait_for_pvp_opponent_choice_and_render(pending_player_choice_events: Arra
 				"attempt=%d message=%s" % [attempt, _describe_pvp_realtime_message(message)]
 			)
 		var response: Dictionary = _response_from_pvp_realtime_message(message)
+		if PvpBattleRealtimeService.is_actionless_opponent_render_batch(
+			message,
+			action_flow.local_player_id,
+			battle_state.battle_id
+		):
+			var privacy_batch_metadata := {
+				"choice_type": "render_batch",
+				"privacy_projected_resolution": true,
+			}
+			if not pending_player_choice_events.is_empty():
+				privacy_batch_metadata["pending_player_choice_events"] = pending_player_choice_events.duplicate(true)
+			if not await _enqueue_pvp_battle_response(
+				response,
+				"pvp_privacy_projected_render",
+				not action_flow._response_has_deferred_display_event(response),
+				privacy_batch_metadata
+			):
+				return false
+			return true
 		if message_action == "forfeit" and str(message.get("playerId", "")) != action_flow.local_player_id:
 			if response.is_empty():
 				continue
@@ -11027,6 +11380,27 @@ func _wait_for_pvp_opponent_force_switch_and_render() -> bool:
 				"attempt=%d message=%s" % [attempt, _describe_pvp_realtime_message(message)]
 			)
 		var response: Dictionary = _response_from_pvp_realtime_message(message)
+		if PvpBattleRealtimeService.is_actionless_opponent_render_batch(
+			message,
+			action_flow.local_player_id,
+			battle_state.battle_id
+		):
+			var privacy_display_response: Dictionary = action_flow.map_response_for_local_player(response)
+			if not await _enqueue_pvp_battle_response(
+				response,
+				"pvp_privacy_projected_render",
+				not action_flow._response_has_deferred_display_event(response),
+				{
+					"choice_type": "render_batch",
+					"privacy_projected_resolution": true,
+				}
+			):
+				return false
+			if _response_has_opponent_force_switch(privacy_display_response):
+				current_action_panel.set_message(_t("battle.prompt.waiting_opponent_switch"))
+				attempt += 1
+				continue
+			return true
 		if message_action == "forfeit" and str(message.get("playerId", "")) != action_flow.local_player_id:
 			if not response.is_empty():
 				if not await _enqueue_pvp_battle_response(response, "pvp_forfeit_during_force_switch", not action_flow._response_has_deferred_display_event(response)):
@@ -11190,6 +11564,13 @@ func _recover_pvp_idle_wait_ui_after_update(message: Dictionary) -> void:
 		return
 	if _is_spectator_battle():
 		_enter_spectator_controls()
+		return
+	if not pvp_pending_presentation_fence.is_empty():
+		pvp_idle_wait_recovery_active = true
+		_set_battle_input_locked(true)
+		current_action_view = ActionView.NONE
+		moves_grid.visible = false
+		mechanics_panel.visible = false
 		return
 
 	var local_state_player_id := _get_local_state_player_id()
@@ -11682,9 +12063,21 @@ func _apply_pvp_realtime_snapshot_when_safe(message: Dictionary, mapped_update: 
 func _apply_pvp_http_reconciliation_when_safe(
 	message: Dictionary,
 	mapped_update: Dictionary,
-	source: String
+	source: String,
+	allow_unrendered_event_catchup := false
 ) -> bool:
-	if mapped_update.is_empty() or _is_stale_pvp_snapshot_response(message, mapped_update):
+	if mapped_update.is_empty():
+		return false
+
+	var may_apply_unrendered_event_catchup := (
+		allow_unrendered_event_catchup
+		and _pvp_snapshot_has_unrendered_events(mapped_update)
+	)
+	if _is_stale_pvp_snapshot_response(
+		message,
+		mapped_update,
+		may_apply_unrendered_event_catchup
+	):
 		return false
 
 	var snapshot_event_seq := _get_pvp_response_event_seq_end(mapped_update)
@@ -11936,28 +12329,50 @@ func _is_unrendered_authoritative_pvp_render_batch_response(response: Dictionary
 	var event_seq_end := _get_pvp_response_event_seq_end(response)
 	return event_seq_end >= 0 and event_seq_end > pvp_event_queue.last_rendered_seq
 
-func _is_stale_pvp_snapshot_response(message: Dictionary, response: Dictionary) -> bool:
+func _pvp_snapshot_has_unrendered_events(response: Dictionary) -> bool:
+	if response.is_empty():
+		return false
+	var snapshot_event_seq := _get_pvp_response_event_seq_end(response)
+	return snapshot_event_seq >= 0 and snapshot_event_seq > pvp_event_queue.last_rendered_seq
+
+func _is_stale_pvp_snapshot_response(
+	message: Dictionary,
+	response: Dictionary,
+	allow_unrendered_event_catchup := false
+) -> bool:
 	if response.is_empty():
 		return false
 
 	var response_battle_id := str(response.get("battleId", "")).strip_edges()
 	if battle_state.battle_id != "" and response_battle_id != "" and response_battle_id != battle_state.battle_id:
 		return true
-	if pvp_response_order.is_stale(response):
-		return true
 
-	var server_seq := _get_pvp_message_server_seq(message)
-	if server_seq <= 0:
-		server_seq = _get_pvp_response_server_seq(response)
-	if server_seq > 0 and server_seq <= pvp_last_applied_snapshot_server_seq:
-		return true
-
+	# A recovery exception may bypass projection/transport ordering only for an
+	# event cursor that presentation has not consumed. Battle identity, turn and
+	# Team Preview regression checks remain fail-closed.
 	var response_turn := _get_pvp_response_turn(response)
 	var current_turn := battle_state.get_turn()
 	if response_turn > 0 and current_turn > 0 and response_turn < current_turn:
 		return true
 
 	if _response_has_any_team_preview(response) and not _battle_state_has_any_team_preview():
+		return true
+
+	var has_unrendered_event_catchup := (
+		allow_unrendered_event_catchup
+		and _pvp_snapshot_has_unrendered_events(response)
+	)
+	if pvp_response_order.is_stale(response) and not has_unrendered_event_catchup:
+		return true
+
+	var server_seq := _get_pvp_message_server_seq(message)
+	if server_seq <= 0:
+		server_seq = _get_pvp_response_server_seq(response)
+	if (
+		server_seq > 0
+		and server_seq <= pvp_last_applied_snapshot_server_seq
+		and not has_unrendered_event_catchup
+	):
 		return true
 
 	return false
