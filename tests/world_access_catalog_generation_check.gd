@@ -44,17 +44,21 @@ func _init() -> void:
 			and viridian_center_points.has("heal_npc"),
 		"Inherited Pokémon Center spawn points are part of the canonical catalog"
 	)
-	var viridian_city := areas.get("kanto_viridian_city", {}) as Dictionary
-	var viridian_points := viridian_city.get("spawnPoints", {}) as Dictionary
-	_expect(
-		bool((viridian_points.get("route_1_entrance", {}) as Dictionary).get(
-			"safeForStaffTeleport", false
-		))
-			and not bool((viridian_points.get("from_pokecenter", {}) as Dictionary).get(
-				"safeForStaffTeleport", true
-			)),
-		"Staff-safe destinations are explicit and fail closed"
-	)
+	var all_spawn_points_are_staff_safe := true
+	for area_value: Variant in areas.values():
+		if not area_value is Dictionary:
+			all_spawn_points_are_staff_safe = false
+			continue
+		var spawn_points_value: Variant = area_value.get("spawnPoints", {})
+		if not spawn_points_value is Dictionary:
+			all_spawn_points_are_staff_safe = false
+			continue
+		for point_value: Variant in spawn_points_value.values():
+			if not point_value is Dictionary or not bool(point_value.get(
+				"safeForStaffTeleport", false
+			)):
+				all_spawn_points_are_staff_safe = false
+	_expect(all_spawn_points_are_staff_safe, "Every spawn point is safe for staff teleport")
 	_expect(areas.has("kanto_route_2_gate"), "Inherited transition building is registered")
 	_expect(
 		(areas.get("kanto_oaks_lab", {}) as Dictionary).get("locationGroupId", "")

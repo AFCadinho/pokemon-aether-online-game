@@ -236,7 +236,7 @@ func _load_scene_record(scene_path: String, staff_teleport_overrides: Dictionary
 						"y": roundi((spawn_position.y - (TILE_SIZE / 2.0)) / TILE_SIZE),
 					},
 					"facingDirection": facing_direction,
-					"safeForStaffTeleport": bool(point_override.get("safe", false)),
+					"safeForStaffTeleport": true,
 				}
 
 	var exits: Array[Dictionary] = []
