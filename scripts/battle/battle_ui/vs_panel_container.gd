@@ -157,7 +157,9 @@ func _render_reconnect(state_label: Label, time_label: Label, bar: ProgressBar, 
 
 func _set_timer(state_label: Label, time_label: Label, bar: ProgressBar, timer: Dictionary) -> void:
 	var state := str(timer.get("state", "WAITING"))
-	var has_countdown := state in ["SCHEDULED", "DECIDING", "EXPIRED"] or _has_frozen_countdown(timer)
+	# SCHEDULED is an internal render-safety deadline. Present it as ordinary
+	# waiting so players do not see a second countdown between every turn.
+	var has_countdown := state in ["DECIDING", "EXPIRED"] or _has_frozen_countdown(timer)
 	state_label.visible = true
 	time_label.visible = has_countdown
 	bar.visible = has_countdown
@@ -174,18 +176,16 @@ func _set_timer(state_label: Label, time_label: Label, bar: ProgressBar, timer: 
 
 func _timer_state_text(timer: Dictionary) -> String:
 	var state := str(timer.get("state", "WAITING"))
-	if state in ["SCHEDULED", "DECIDING", "EXPIRED"]:
+	if state in ["DECIDING", "EXPIRED"]:
 		return "%s · %s" % [_decision_text(str(timer.get("decisionKind", ""))), _state_text(state)]
+	if state == "SCHEDULED":
+		return _t("common.waiting")
 	return _state_text(state)
 
 
 func _timer_time_text(timer: Dictionary) -> String:
 	var state := str(timer.get("state", "WAITING"))
-	if state == "SCHEDULED":
-		return _t("battle.timer.starts", {
-			"time": _format_ms(int(timer.get("scheduledRemainingMs", 0))),
-		})
-	elif state in ["DECIDING", "EXPIRED", "WAITING"] and int(timer.get("decisionMaximumMs", 0)) > 0:
+	if state in ["DECIDING", "EXPIRED", "WAITING"] and int(timer.get("decisionMaximumMs", 0)) > 0:
 		return _t("battle.timer.time", {
 			"time": _format_ms(int(timer.get("effectiveDecisionRemainingMs", 0))),
 		})
