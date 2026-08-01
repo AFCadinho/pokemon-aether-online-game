@@ -138,6 +138,16 @@
 			],
 			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn"
 		},
+		"kanto_viridian_city_pokemon_center": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Viridian City Pokémon Center",
+			"locationGroupId": "kanto_viridian_city",
+			"locationGroupLabel": "Viridian City",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn"
+		},
 		"kanto_viridian_forest": {
 			"areaType": "wilderness",
 			"defaultMode": "open",
@@ -513,6 +523,20 @@
 			"destinationAreaId": "kanto_route_2",
 			"sourceMapId": "kanto_route_2_viridian_forest_south_gate"
 		},
+		"kanto_viridian_city__to_pokecenter": {
+			"destination": {
+				"mapId": "kanto_viridian_city_pokemon_center",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn",
+				"position": {
+					"x": 464.0,
+					"y": 1008.0
+				},
+				"spawnMarker": "FromOutside"
+			},
+			"destinationAreaId": "kanto_viridian_city_pokemon_center",
+			"sourceMapId": "kanto_viridian_city"
+		},
 		"kanto_viridian_city__to_route_1": {
 			"destination": {
 				"mapId": "kanto_route_1",
@@ -544,6 +568,22 @@
 			},
 			"destinationAreaId": "kanto_route_2",
 			"sourceMapId": "kanto_viridian_city"
+		},
+		"kanto_viridian_city_pokemon_center__to_outside": {
+			"destination": {
+				"mapId": "kanto_viridian_city",
+				"mapSceneAliases": [
+					"uid://b8tl17hk3yovn"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
+				"position": {
+					"x": 1040.0,
+					"y": 656.0
+				},
+				"spawnMarker": "FromPokecenter"
+			},
+			"destinationAreaId": "kanto_viridian_city",
+			"sourceMapId": "kanto_viridian_city_pokemon_center"
 		},
 		"kanto_viridian_forest__to_route_2_north": {
 			"destination": {
