@@ -83,6 +83,8 @@
   "ui.quest.log_subtitle": "Track the main story, take on side quests, and revisit completed adventures.",
   "ui.quest.main_story": "Main Story",
   "ui.quest.side_quest": "Side Quest",
+  "ui.quest.placeholder.dadinho_belly.title": "Rub Dadinho's belly",
+  "ui.quest.placeholder.dadinho_belly.objective": "Give Dadinho a well-earned belly rub.",
   "ui.quest.objectives": "Objectives",
   "ui.quest.list_heading": "Quest Journal",
   "ui.quest.empty": "No quests yet.",

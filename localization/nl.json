@@ -83,6 +83,8 @@
   "ui.quest.log_subtitle": "Volg het hoofdverhaal, pak side quests op en bekijk je voltooide avonturen.",
   "ui.quest.main_story": "Hoofdverhaal",
   "ui.quest.side_quest": "Side quest",
+  "ui.quest.placeholder.dadinho_belly.title": "Aai Dadinho over zijn buik",
+  "ui.quest.placeholder.dadinho_belly.objective": "Geef Dadinho een welverdiende aai over zijn buik.",
   "ui.quest.objectives": "Doelen",
   "ui.quest.list_heading": "Questoverzicht",
   "ui.quest.empty": "Nog geen quests.",

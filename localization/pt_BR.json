@@ -83,6 +83,8 @@
   "ui.quest.log_subtitle": "Acompanhe a história principal, aceite missões secundárias e reveja suas aventuras concluídas.",
   "ui.quest.main_story": "História Principal",
   "ui.quest.side_quest": "Missão Secundária",
+  "ui.quest.placeholder.dadinho_belly.title": "Faça carinho na barriga do Dadinho",
+  "ui.quest.placeholder.dadinho_belly.objective": "Dê ao Dadinho um merecido carinho na barriga.",
   "ui.quest.objectives": "Objetivos",
   "ui.quest.list_heading": "Diário de Missões",
   "ui.quest.empty": "Ainda não há missões.",

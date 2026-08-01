@@ -24,6 +24,10 @@ var tracker_type_label: Label
 var tracker_title_label: Label
 var tracker_objective_label: Label
 var tracker_progress_label: Label
+var side_tracker_panel: PanelContainer
+var side_tracker_type_label: Label
+var side_tracker_title_label: Label
+var side_tracker_objective_label: Label
 
 var modal_layer: Control
 var journal_panel: PanelContainer
@@ -91,6 +95,12 @@ func set_tracker_top_offset(top_offset: float) -> void:
 	var tracker_height := tracker_panel.custom_minimum_size.y
 	tracker_panel.offset_top = top_offset
 	tracker_panel.offset_bottom = top_offset + tracker_height
+	if side_tracker_panel != null:
+		var side_tracker_top := top_offset + tracker_height + 8.0
+		side_tracker_panel.offset_top = side_tracker_top
+		side_tracker_panel.offset_bottom = (
+			side_tracker_top + side_tracker_panel.custom_minimum_size.y
+		)
 
 
 func refresh() -> void:
@@ -150,6 +160,48 @@ func _build_tracker() -> void:
 	tracker_objective_label.max_lines_visible = 2
 	tracker_objective_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	stack.add_child(tracker_objective_label)
+
+	side_tracker_panel = PanelContainer.new()
+	side_tracker_panel.name = "SideQuestPlaceholderTracker"
+	side_tracker_panel.custom_minimum_size = Vector2(248, 78)
+	side_tracker_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	side_tracker_panel.offset_left = -248.0
+	side_tracker_panel.offset_top = 174.0
+	side_tracker_panel.offset_right = 0.0
+	side_tracker_panel.offset_bottom = 252.0
+	side_tracker_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	side_tracker_panel.z_index = 100
+	side_tracker_panel.add_theme_stylebox_override(
+		"panel",
+		_style(TRACKER_SURFACE, Color("#8a7045"), 10, 1)
+	)
+	add_child(side_tracker_panel)
+
+	var side_margin := MarginContainer.new()
+	_set_margins(side_margin, 8, 7, 10, 8)
+	side_tracker_panel.add_child(side_margin)
+	var side_row := HBoxContainer.new()
+	side_row.add_theme_constant_override("separation", 8)
+	side_margin.add_child(side_row)
+	var side_accent_line := ColorRect.new()
+	side_accent_line.custom_minimum_size = Vector2(2, 0)
+	side_accent_line.color = Color("#d8b767aa")
+	side_accent_line.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	side_row.add_child(side_accent_line)
+	var side_stack := VBoxContainer.new()
+	side_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	side_stack.add_theme_constant_override("separation", 2)
+	side_row.add_child(side_stack)
+	side_tracker_type_label = _label(10, SIDE_QUEST_ACCENT)
+	side_stack.add_child(side_tracker_type_label)
+	side_tracker_title_label = _label(14, TEXT)
+	side_tracker_title_label.clip_text = true
+	side_tracker_title_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	side_stack.add_child(side_tracker_title_label)
+	side_tracker_objective_label = _label(11, MUTED_TEXT)
+	side_tracker_objective_label.clip_text = true
+	side_tracker_objective_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	side_stack.add_child(side_tracker_objective_label)
 
 
 func _build_journal() -> void:
@@ -300,6 +352,7 @@ func _refresh_tracker() -> void:
 	var quest: Dictionary = journal_service.get_active_main_quest() if journal_service != null else {}
 	var objective: Dictionary = journal_service.get_active_objective(quest) if journal_service != null else {}
 	tracker_panel.visible = not quest.is_empty() and not objective.is_empty()
+	side_tracker_panel.visible = tracker_panel.visible
 	if not tracker_panel.visible:
 		return
 	tracker_panel.tooltip_text = localization_manager.text("ui.quest.open_log")
@@ -315,6 +368,13 @@ func _refresh_tracker() -> void:
 	var current := int(objective.get("currentValue", 0))
 	var target := maxi(int(objective.get("targetValue", 1)), 1)
 	tracker_progress_label.text = "%d / %d" % [current, target] if target > 1 else ""
+	side_tracker_type_label.text = localization_manager.text("ui.quest.side_quest").to_upper()
+	side_tracker_title_label.text = localization_manager.text(
+		"ui.quest.placeholder.dadinho_belly.title"
+	)
+	side_tracker_objective_label.text = "› %s" % localization_manager.text(
+		"ui.quest.placeholder.dadinho_belly.objective"
+	)
 
 
 func _refresh_journal() -> void:
