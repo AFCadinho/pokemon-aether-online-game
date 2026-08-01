@@ -145,7 +145,15 @@ func participant_display(player_id: String, local_monotonic_ms: int = Time.get_t
 		bank = max(bank_anchor - (now - charge_start), 0)
 	var scheduled_remaining: int = max(actionable - now, 0) if actionable > 0 else 0
 	var cap_remaining: int = max(cap_at - now, 0) if cap_at > 0 else 0
-	var effective_remaining: int = int(timer.get("decisionRemainingMs", 0)) if raw_status.begins_with("CHOICE_ACCEPTED") else (max(deadline - now, 0) if deadline > 0 else 0)
+	var has_frozen_remaining := (
+		timer.has("decisionRemainingMs")
+		and raw_status in ["LOCKED", "WAITING", "CHOICE_ACCEPTED", "CHOICE_ACCEPTED_AFTER_SHADOW_EXPIRY"]
+	)
+	var effective_remaining: int = (
+		max(int(timer.get("decisionRemainingMs", 0)), 0)
+		if has_frozen_remaining
+		else (max(deadline - now, 0) if deadline > 0 else 0)
+	)
 	var decision_maximum := int(timer.get("maxDecisionMs", 0))
 	# The cap and actionable anchors are already public opponent timing data.
 	# Deriving the scale keeps the countdown usable across mixed-version

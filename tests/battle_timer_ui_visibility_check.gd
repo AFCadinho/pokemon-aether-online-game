@@ -69,8 +69,10 @@ func _check_supported_resolutions() -> void:
 			{"effectiveDecisionRemainingMs": 45_000, "decisionMaximumMs": 90_000, "decisionKind": "MOVE_SELECTION", "state": "DECIDING"}
 		)
 		_check(panel.player_1_timer_state_label.text == _t("common.waiting"), "accepted choice uses the Waiting heading")
-		_check(not panel.player_1_timer_label.visible, "accepted choice hides its no-longer-actionable countdown")
-		_check(not panel.player_1_timer_bar.visible, "accepted choice hides its no-longer-actionable progress")
+		_check(panel.player_1_timer_label.visible, "accepted choice keeps its frozen countdown visible")
+		_check(panel.player_1_timer_label.text == _t("battle.timer.time", {"time": "01:03"}), "accepted choice shows the frozen remaining time")
+		_check(panel.player_1_timer_bar.visible, "accepted choice keeps its frozen progress visible")
+		_check_equal(panel.player_1_timer_bar.value, 70.0, "accepted choice freezes progress at submission")
 		_check(not panel.player_1_timer_state_label.text.contains("4152e51d"), "timer text never renders an opaque decision id")
 		panel.show_decision_timers(
 			{"bankRemainingMs": 79_000, "bankMaximumMs": 90_000, "scheduledRemainingMs": 2_000, "decisionKind": "FORCED_SWITCH", "state": "SCHEDULED"},

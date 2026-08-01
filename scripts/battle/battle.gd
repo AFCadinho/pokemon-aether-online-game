@@ -33,6 +33,7 @@ const PVP_FORCE_SWITCH_RECONCILE_INITIAL_MSEC := 2500
 const PVP_FORCE_SWITCH_RECONCILE_MAX_MSEC := 5000
 const PVP_OPPONENT_RENDER_RECONCILE_INITIAL_MSEC := 2500
 const PVP_OPPONENT_RENDER_RECONCILE_MAX_MSEC := 5000
+const PVP_IDLE_WAIT_RECONCILE_MSEC := 3000
 const Z_MOVE_FALLBACK_ICON: Texture2D = preload("res://assets/battles/mechanics/z-move.png")
 const Z_MOVE_TYPE_ICON_PATH := "res://assets/battles/types/%s.svg"
 const Z_CRYSTAL_NAMES := {
@@ -126,6 +127,7 @@ var pvp_presentation_actionable_local_msec := 0
 var pvp_presentation_schedule_token := ""
 var pvp_waiting_observability_started_msec := 0
 var pvp_waiting_observability_reported := false
+var pvp_waiting_recovery_in_flight := false
 var pvp_rendered_event_count := 0
 var pvp_allow_setup_animation := false
 var pvp_victory_message_added := false
@@ -11688,27 +11690,45 @@ func _report_stalled_pvp_waiting_if_needed() -> void:
 	if not should_observe:
 		pvp_waiting_observability_started_msec = 0
 		pvp_waiting_observability_reported = false
+		pvp_waiting_recovery_in_flight = false
 		return
 	if pvp_waiting_observability_started_msec <= 0:
 		pvp_waiting_observability_started_msec = Time.get_ticks_msec()
 		pvp_waiting_observability_reported = false
 		return
-	if pvp_waiting_observability_reported:
-		return
 	var observed_duration_msec := Time.get_ticks_msec() - pvp_waiting_observability_started_msec
-	if observed_duration_msec < 10000:
+	if observed_duration_msec < PVP_IDLE_WAIT_RECONCILE_MSEC:
 		return
-	pvp_waiting_observability_reported = true
-	PvpBattleRealtimeService.report_diagnostic("pvp.client_waiting_state", {
-		"eventBatchId": pvp_last_phase_update_batch_id,
-		"displayedPhase": "waiting_for_opponent",
-		"reasonCode": "waiting_state_observed",
-		"serverSeq": max(pvp_last_applied_server_seq, 0),
-		"phaseSeq": max(pvp_last_phase_update_server_seq, 0),
-		"lastRenderedSeq": max(pvp_event_queue.last_rendered_seq, 0),
-		"observedDurationMs": observed_duration_msec,
-		"inputLocked": true,
-		"pendingAction": true,
+	if not pvp_waiting_observability_reported:
+		pvp_waiting_observability_reported = true
+		PvpBattleRealtimeService.report_diagnostic("pvp.client_waiting_state", {
+			"eventBatchId": pvp_last_phase_update_batch_id,
+			"displayedPhase": "waiting_for_opponent",
+			"reasonCode": "waiting_state_observed",
+			"serverSeq": max(pvp_last_applied_server_seq, 0),
+			"phaseSeq": max(pvp_last_phase_update_server_seq, 0),
+			"lastRenderedSeq": max(pvp_event_queue.last_rendered_seq, 0),
+			"observedDurationMs": observed_duration_msec,
+			"inputLocked": true,
+			"pendingAction": true,
+		})
+	if not pvp_waiting_recovery_in_flight:
+		pvp_waiting_recovery_in_flight = true
+		_recover_stalled_pvp_idle_wait.call_deferred()
+
+
+func _recover_stalled_pvp_idle_wait() -> void:
+	var reconciled := await _reconcile_pvp_battle_from_room("pvp_idle_wait_watchdog")
+	pvp_waiting_recovery_in_flight = false
+	# Bound both unchanged and successfully applied snapshots. The latter can
+	# still describe a legitimate first-choice wait and must not poll each frame.
+	pvp_waiting_observability_started_msec = Time.get_ticks_msec()
+	if not reconciled or battle_finished:
+		return
+	_recover_pvp_idle_wait_ui_after_update({
+		"type": "pvp.snapshot",
+		"battleId": battle_state.battle_id,
+		"roomCode": pvp_room_code,
 	})
 
 func _log_pvp_realtime(tag: String, details: String = "") -> void:
