@@ -48,6 +48,7 @@ func _init() -> void:
 
 	_check(hotbar_block.contains("anchors_preset = 6"), "hotbar is anchored to the right")
 	_check(hotbar_block.contains("offset_right = 0.0"), "hotbar hugs the right screen edge")
+	_check(hotbar_block.contains("offset_top = -145.0") and hotbar_block.contains("offset_bottom = 265.0"), "hotbar moves below the stacked main and side quest trackers")
 	_check(party_block.contains("anchors_preset = 0"), "normal party is anchored to the left")
 	_check(party_block.contains("offset_left = 0.0"), "normal party hugs the left screen edge")
 	_check(party_block.contains("offset_top = 76.0") and party_block.contains("offset_bottom = 158.0"), "normal party moves up intact below the single primary left navigation rail")

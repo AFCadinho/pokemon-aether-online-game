@@ -7,6 +7,8 @@ const QUEST_LOCALIZATION_KEYS: Array[String] = [
 	"ui.quest.log_subtitle",
 	"ui.quest.main_story",
 	"ui.quest.side_quest",
+	"ui.quest.placeholder.dadinho_belly.title",
+	"ui.quest.placeholder.dadinho_belly.objective",
 	"ui.quest.list_heading",
 	"ui.quest.objectives",
 	"ui.quest.empty",
@@ -132,6 +134,14 @@ func _run() -> void:
 		view.tracker_objective_label.text == "› Go downstairs and speak with your father.",
 		"HUD tracker resolves the objective localization key"
 	)
+	_expect(
+		view.side_tracker_panel.visible
+		and view.side_tracker_panel.size.y == 78.0
+		and view.side_tracker_panel.get_global_rect().position.y == 174.0
+		and view.side_tracker_title_label.text == "Rub Dadinho's belly"
+		and view.side_tracker_objective_label.text == "› Give Dadinho a well-earned belly rub.",
+		"HUD renders the visual side-quest placeholder below the main story"
+	)
 	view.set_tracker_top_offset(152.0)
 	_expect(
 		view.tracker_panel.get_global_rect().position.y == 152.0
@@ -196,6 +206,10 @@ func _run() -> void:
 	_expect(
 		view.tracker_objective_label.text == "› Ga naar beneden en praat met je vader.",
 		"HUD tracker refreshes when the player changes language"
+	)
+	_expect(
+		view.side_tracker_title_label.text == "Aai Dadinho over zijn buik",
+		"visual side-quest placeholder refreshes when the player changes language"
 	)
 	localization_manager.set_locale("en")
 	await process_frame
