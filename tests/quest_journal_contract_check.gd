@@ -7,8 +7,6 @@ const QUEST_LOCALIZATION_KEYS: Array[String] = [
 	"ui.quest.log_subtitle",
 	"ui.quest.main_story",
 	"ui.quest.side_quest",
-	"ui.quest.placeholder.dadinho_belly.title",
-	"ui.quest.placeholder.dadinho_belly.objective",
 	"ui.quest.list_heading",
 	"ui.quest.objectives",
 	"ui.quest.empty",
@@ -138,9 +136,25 @@ func _run() -> void:
 		view.side_tracker_panel.visible
 		and view.side_tracker_panel.size.y == 78.0
 		and view.side_tracker_panel.get_global_rect().position.y == 174.0
-		and view.side_tracker_title_label.text == "Rub Dadinho's belly"
-		and view.side_tracker_objective_label.text == "› Give Dadinho a well-earned belly rub.",
-		"HUD renders the visual side-quest placeholder below the main story"
+		and view.side_tracker_title_label.text == "Help Neighbor"
+		and view.side_tracker_objective_label.text == "› Find Parcel",
+		"HUD renders active side-quest data below the main story"
+	)
+	_expect(view.get_visible_tracker_count() == 2, "HUD reports both active quest trackers")
+	view.tracker_collapse_button.pressed.emit()
+	_expect(
+		not view.tracker_panel.visible
+		and not view.side_tracker_panel.visible
+		and view.tracker_collapse_button.visible
+		and view.get_visible_tracker_count() == 0,
+		"quest tracker group collapses without losing its reopen control"
+	)
+	view.tracker_collapse_button.pressed.emit()
+	_expect(
+		view.tracker_panel.visible
+		and view.side_tracker_panel.visible
+		and view.get_visible_tracker_count() == 2,
+		"quest tracker group expands with its data-driven contents intact"
 	)
 	view.set_tracker_top_offset(152.0)
 	_expect(
@@ -207,10 +221,7 @@ func _run() -> void:
 		view.tracker_objective_label.text == "› Ga naar beneden en praat met je vader.",
 		"HUD tracker refreshes when the player changes language"
 	)
-	_expect(
-		view.side_tracker_title_label.text == "Aai Dadinho over zijn buik",
-		"visual side-quest placeholder refreshes when the player changes language"
-	)
+	_expect(view.side_tracker_title_label.text == "Help Neighbor", "side quests keep safe localized fallbacks")
 	localization_manager.set_locale("en")
 	await process_frame
 
@@ -247,10 +258,52 @@ func _run() -> void:
 		view.tracker_objective_label.text == "› Meet Professor Oak and choose your starter Pokémon.",
 		"HUD tracker updates automatically when story progress changes"
 	)
+	_expect(
+		view.tracker_panel.visible
+		and not view.side_tracker_panel.visible
+		and view.get_visible_tracker_count() == 1,
+		"side tracker disappears when no active side quest remains"
+	)
 	_expect(view.detail_steps.get_child_count() == 2, "journal retains completed objective history")
+
+	story_service.apply_story({
+		"revision": 3,
+		"quests": [{
+			"questId": "help_neighbor",
+			"storylineId": "pallet_side",
+			"definitionVersion": 1,
+			"questType": "side",
+			"titleKey": "",
+			"summaryKey": "",
+			"status": "active",
+			"steps": [{
+				"stepId": "find_parcel",
+				"objectiveKey": "",
+				"status": "active",
+				"currentValue": 0,
+				"targetValue": 1,
+			}],
+		}],
+	})
+	await process_frame
+	_expect(
+		not view.tracker_panel.visible
+		and view.side_tracker_panel.visible
+		and view.side_tracker_panel.get_global_rect().position.y == 76.0
+		and view.get_visible_tracker_count() == 1,
+		"side quests occupy the first tracker position when no main quest is active"
+	)
 
 	view.close_journal()
 	story_service.reset_story()
+	await process_frame
+	_expect(
+		not view.tracker_panel.visible
+		and not view.side_tracker_panel.visible
+		and not view.tracker_collapse_button.visible
+		and view.get_visible_tracker_count() == 0,
+		"quest tracker group disappears when no active objectives remain"
+	)
 	host.queue_free()
 	_verify_integration_contract()
 	quit(1 if failed else 0)
@@ -263,8 +316,10 @@ func _verify_integration_contract() -> void:
 		and overlay.contains("func _refresh_quest_tracker_layout()")
 		and overlay.contains('for panel_id in ["actions", "dex_actions"]')
 		and overlay.contains("quest_journal_view.set_tracker_top_offset")
+		and overlay.contains("tracker_layout_changed.connect(_refresh_quest_tracker_layout)")
+		and overlay.contains("quest_journal_view.get_visible_tracker_count()")
 		and not overlay.contains("Quest Log is not implemented yet."),
-		"HUD quest integration opens the journal and clears every available right action bar"
+		"HUD quest integration opens the journal and dynamically clears the right-side UI"
 	)
 
 

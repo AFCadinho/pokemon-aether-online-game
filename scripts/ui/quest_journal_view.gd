@@ -4,6 +4,7 @@ class_name QuestJournalView
 
 signal journal_opened
 signal journal_closed
+signal tracker_layout_changed
 
 const SURFACE := Color("#050b14f2")
 const TRACKER_SURFACE := Color("#050b14ed")
@@ -28,6 +29,12 @@ var side_tracker_panel: PanelContainer
 var side_tracker_type_label: Label
 var side_tracker_title_label: Label
 var side_tracker_objective_label: Label
+var side_tracker_progress_label: Label
+var tracker_collapse_button: Button
+var tracker_top_offset := 76.0
+var tracker_collapsed := false
+var has_main_tracker := false
+var has_side_tracker := false
 
 var modal_layer: Control
 var journal_panel: PanelContainer
@@ -92,15 +99,14 @@ func get_journal_panel() -> Control:
 func set_tracker_top_offset(top_offset: float) -> void:
 	if tracker_panel == null:
 		return
-	var tracker_height := tracker_panel.custom_minimum_size.y
-	tracker_panel.offset_top = top_offset
-	tracker_panel.offset_bottom = top_offset + tracker_height
-	if side_tracker_panel != null:
-		var side_tracker_top := top_offset + tracker_height + 8.0
-		side_tracker_panel.offset_top = side_tracker_top
-		side_tracker_panel.offset_bottom = (
-			side_tracker_top + side_tracker_panel.custom_minimum_size.y
-		)
+	tracker_top_offset = top_offset
+	_layout_trackers()
+
+
+func get_visible_tracker_count() -> int:
+	if tracker_collapsed:
+		return 0
+	return int(has_main_tracker) + int(has_side_tracker)
 
 
 func refresh() -> void:
@@ -162,19 +168,22 @@ func _build_tracker() -> void:
 	stack.add_child(tracker_objective_label)
 
 	side_tracker_panel = PanelContainer.new()
-	side_tracker_panel.name = "SideQuestPlaceholderTracker"
+	side_tracker_panel.name = "SideQuestObjectiveTracker"
 	side_tracker_panel.custom_minimum_size = Vector2(248, 78)
 	side_tracker_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
 	side_tracker_panel.offset_left = -248.0
 	side_tracker_panel.offset_top = 174.0
 	side_tracker_panel.offset_right = 0.0
 	side_tracker_panel.offset_bottom = 252.0
-	side_tracker_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	side_tracker_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	side_tracker_panel.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	side_tracker_panel.tooltip_text = localization_manager.text("ui.quest.open_log")
 	side_tracker_panel.z_index = 100
 	side_tracker_panel.add_theme_stylebox_override(
 		"panel",
 		_style(TRACKER_SURFACE, Color("#8a7045"), 10, 1)
 	)
+	side_tracker_panel.gui_input.connect(_on_tracker_gui_input)
 	add_child(side_tracker_panel)
 
 	var side_margin := MarginContainer.new()
@@ -192,8 +201,15 @@ func _build_tracker() -> void:
 	side_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	side_stack.add_theme_constant_override("separation", 2)
 	side_row.add_child(side_stack)
+	var side_header := HBoxContainer.new()
+	side_header.add_theme_constant_override("separation", 8)
+	side_stack.add_child(side_header)
 	side_tracker_type_label = _label(10, SIDE_QUEST_ACCENT)
-	side_stack.add_child(side_tracker_type_label)
+	side_tracker_type_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	side_header.add_child(side_tracker_type_label)
+	side_tracker_progress_label = _label(10, MUTED_TEXT)
+	side_tracker_progress_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	side_header.add_child(side_tracker_progress_label)
 	side_tracker_title_label = _label(14, TEXT)
 	side_tracker_title_label.clip_text = true
 	side_tracker_title_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -202,6 +218,32 @@ func _build_tracker() -> void:
 	side_tracker_objective_label.clip_text = true
 	side_tracker_objective_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	side_stack.add_child(side_tracker_objective_label)
+
+	tracker_collapse_button = Button.new()
+	tracker_collapse_button.name = "QuestTrackerCollapseButton"
+	tracker_collapse_button.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	tracker_collapse_button.custom_minimum_size = Vector2(28, 32)
+	tracker_collapse_button.size = Vector2(28, 32)
+	tracker_collapse_button.focus_mode = Control.FOCUS_NONE
+	tracker_collapse_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	tracker_collapse_button.z_index = 101
+	tracker_collapse_button.add_theme_font_size_override("font_size", 16)
+	tracker_collapse_button.add_theme_color_override("font_color", MUTED_TEXT)
+	tracker_collapse_button.add_theme_color_override("font_hover_color", TEXT)
+	tracker_collapse_button.add_theme_stylebox_override(
+		"normal",
+		_style(TRACKER_SURFACE, BORDER_SOFT, 8, 1)
+	)
+	tracker_collapse_button.add_theme_stylebox_override(
+		"hover",
+		_style(SURFACE_RAISED, ACCENT, 8, 1)
+	)
+	tracker_collapse_button.add_theme_stylebox_override(
+		"pressed",
+		_style(SURFACE_INSET, ACCENT, 8, 1)
+	)
+	tracker_collapse_button.pressed.connect(_on_tracker_collapse_pressed)
+	add_child(tracker_collapse_button)
 
 
 func _build_journal() -> void:
@@ -351,30 +393,89 @@ func _refresh_tracker() -> void:
 	var journal_service := _journal_service()
 	var quest: Dictionary = journal_service.get_active_main_quest() if journal_service != null else {}
 	var objective: Dictionary = journal_service.get_active_objective(quest) if journal_service != null else {}
-	tracker_panel.visible = not quest.is_empty() and not objective.is_empty()
-	side_tracker_panel.visible = tracker_panel.visible
-	if not tracker_panel.visible:
-		return
+	var side_quest: Dictionary = {}
+	var side_objective: Dictionary = {}
+	if journal_service != null:
+		for side_quest_value: Variant in journal_service.get_active_side_quests():
+			var candidate: Dictionary = side_quest_value as Dictionary
+			var candidate_objective: Dictionary = journal_service.get_active_objective(candidate)
+			if not candidate_objective.is_empty():
+				side_quest = candidate
+				side_objective = candidate_objective
+				break
+
+	has_main_tracker = not quest.is_empty() and not objective.is_empty()
+	has_side_tracker = not side_quest.is_empty() and not side_objective.is_empty()
 	tracker_panel.tooltip_text = localization_manager.text("ui.quest.open_log")
-	tracker_type_label.text = localization_manager.text("ui.quest.main_story").to_upper()
-	tracker_title_label.text = _localized_definition(
-		str(quest.get("titleKey", "")),
-		str(quest.get("questId", ""))
+	side_tracker_panel.tooltip_text = localization_manager.text("ui.quest.open_log")
+	if has_main_tracker:
+		tracker_type_label.text = localization_manager.text("ui.quest.main_story").to_upper()
+		tracker_title_label.text = _localized_definition(
+			str(quest.get("titleKey", "")),
+			str(quest.get("questId", ""))
+		)
+		tracker_objective_label.text = "› %s" % _localized_definition(
+			str(objective.get("objectiveKey", "")),
+			str(objective.get("stepId", ""))
+		)
+		var current := int(objective.get("currentValue", 0))
+		var target := maxi(int(objective.get("targetValue", 1)), 1)
+		tracker_progress_label.text = "%d / %d" % [current, target] if target > 1 else ""
+	if has_side_tracker:
+		side_tracker_type_label.text = localization_manager.text("ui.quest.side_quest").to_upper()
+		side_tracker_title_label.text = _localized_definition(
+			str(side_quest.get("titleKey", "")),
+			str(side_quest.get("questId", ""))
+		)
+		side_tracker_objective_label.text = "› %s" % _localized_definition(
+			str(side_objective.get("objectiveKey", "")),
+			str(side_objective.get("stepId", ""))
+		)
+		var side_current := int(side_objective.get("currentValue", 0))
+		var side_target := maxi(int(side_objective.get("targetValue", 1)), 1)
+		side_tracker_progress_label.text = (
+			"%d / %d" % [side_current, side_target] if side_target > 1 else ""
+		)
+	_layout_trackers()
+	tracker_layout_changed.emit()
+
+
+func _layout_trackers() -> void:
+	if tracker_panel == null or side_tracker_panel == null or tracker_collapse_button == null:
+		return
+	var content_visible := not tracker_collapsed
+	var next_top := tracker_top_offset
+	tracker_panel.visible = has_main_tracker and content_visible
+	if has_main_tracker:
+		_set_tracker_vertical_offsets(tracker_panel, next_top)
+		next_top += tracker_panel.custom_minimum_size.y + 8.0
+	side_tracker_panel.visible = has_side_tracker and content_visible
+	if has_side_tracker:
+		_set_tracker_vertical_offsets(side_tracker_panel, next_top)
+
+	var has_trackers := has_main_tracker or has_side_tracker
+	tracker_collapse_button.visible = has_trackers
+	if not has_trackers:
+		return
+	tracker_collapse_button.offset_top = tracker_top_offset
+	tracker_collapse_button.offset_bottom = tracker_top_offset + 32.0
+	tracker_collapse_button.offset_left = -28.0 if tracker_collapsed else -280.0
+	tracker_collapse_button.offset_right = 0.0 if tracker_collapsed else -252.0
+	tracker_collapse_button.text = "‹" if tracker_collapsed else "›"
+	tracker_collapse_button.tooltip_text = localization_manager.text(
+		"ui.chat.expand" if tracker_collapsed else "ui.chat.collapse"
 	)
-	tracker_objective_label.text = "› %s" % _localized_definition(
-		str(objective.get("objectiveKey", "")),
-		str(objective.get("stepId", ""))
-	)
-	var current := int(objective.get("currentValue", 0))
-	var target := maxi(int(objective.get("targetValue", 1)), 1)
-	tracker_progress_label.text = "%d / %d" % [current, target] if target > 1 else ""
-	side_tracker_type_label.text = localization_manager.text("ui.quest.side_quest").to_upper()
-	side_tracker_title_label.text = localization_manager.text(
-		"ui.quest.placeholder.dadinho_belly.title"
-	)
-	side_tracker_objective_label.text = "› %s" % localization_manager.text(
-		"ui.quest.placeholder.dadinho_belly.objective"
-	)
+
+
+func _set_tracker_vertical_offsets(panel: Control, top_offset: float) -> void:
+	panel.offset_top = top_offset
+	panel.offset_bottom = top_offset + panel.custom_minimum_size.y
+
+
+func _on_tracker_collapse_pressed() -> void:
+	tracker_collapsed = not tracker_collapsed
+	_layout_trackers()
+	tracker_layout_changed.emit()
 
 
 func _refresh_journal() -> void:
