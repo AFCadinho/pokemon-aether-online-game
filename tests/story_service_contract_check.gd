@@ -156,6 +156,7 @@ func _verify_integration_contract() -> void:
 	var auth := _source("res://scripts/services/auth_service.gd")
 	var overlay := _source("res://scripts/ui/ui_overlay.gd")
 	var oak := _source("res://scripts/world/kanto/towns/pallet_town/oak.gd")
+	var base_npc := _source("res://scripts/world/npcs/base_npc.gd")
 	_expect(
 		project.contains('StoryService="*res://scripts/services/story_service.gd"'),
 		"project registers the story projection"
@@ -183,6 +184,12 @@ func _verify_integration_contract() -> void:
 	_expect(
 		oak.contains("await PlayerGameStateService.refresh_story()"),
 		"the authoritative starter claim refreshes completed quest progress"
+	)
+	_expect(
+		base_npc.contains('quest_marker_label.text = "!"')
+		and base_npc.contains('quest_marker_label.text = "✦"')
+		and base_npc.contains('quest_type == "main"'),
+		"NPC quest markers distinguish main and side quests with main-story priority"
 	)
 	_expect(
 		auth.contains("StoryService.reset_story()")
