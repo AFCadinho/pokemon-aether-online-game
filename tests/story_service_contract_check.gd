@@ -27,6 +27,7 @@ func _run() -> void:
 				"questType": "main",
 				"titleKey": "story.kanto.choose_starter.title",
 				"summaryKey": "story.kanto.choose_starter.summary",
+				"rewardPreviews": [{"type": "item", "itemId": "exp-share", "quantity": 1, "private": true}],
 				"status": "active",
 				"steps": [
 					{
@@ -65,6 +66,10 @@ func _run() -> void:
 			"quest title localization key is projected"
 		)
 		_expect(not quest.has("serverOnly"), "projection only keeps quest contract fields")
+		_expect(
+			quest.get("rewardPreviews", []) == [{"type": "item", "itemId": "exp-share", "quantity": 1}],
+			"quest reward previews are safely projected"
+		)
 		_expect(quest.get("completedAt", "unexpected") == null, "nullable quest timestamps remain null")
 		if steps.size() == 1:
 			var step: Dictionary = steps[0] as Dictionary
