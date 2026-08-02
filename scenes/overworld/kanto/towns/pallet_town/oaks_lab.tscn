@@ -169,7 +169,7 @@ script = ExtResource("16_story_hook")
 interaction_id = "oaks_lab_oak_parcel_request"
 
 [node name="Gary" parent="Entities/NPCs" instance=ExtResource("17_gary")]
-position = Vector2(432, 720)
+position = Vector2(432, 784)
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1966677725]
 

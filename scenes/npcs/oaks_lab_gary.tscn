@@ -11,7 +11,7 @@ size = Vector2(96, 97)
 script = ExtResource("1_script")
 npc_id = "kanto_oaks_lab_gary"
 display_name = "Gary Oak"
-facing_direction = Vector2(1, 0)
+facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("2_frames")
 mugshot = ExtResource("3_mugshot")
 preload_quest_markers = true
@@ -21,7 +21,7 @@ preload_quest_markers = true
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Look"]
 position = Vector2(0, -16)
 sprite_frames = ExtResource("2_frames")
-animation = &"idle_right"
+animation = &"idle_down"
 
 [node name="InteractionArea" type="Area2D" parent="."]
 
