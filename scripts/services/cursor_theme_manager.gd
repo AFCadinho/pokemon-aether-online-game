@@ -2,8 +2,14 @@ extends Node
 
 const ARROW_CURSOR_PATH := "res://assets/ui/cursors/aether_arrow.png"
 const POINTER_CURSOR_PATH := "res://assets/ui/cursors/aether_pointer.png"
+const DRAG_CURSOR_PATH := "res://assets/ui/cursors/aether_drag.png"
+const CAN_DROP_CURSOR_PATH := "res://assets/ui/cursors/aether_can_drop.png"
+const FORBIDDEN_CURSOR_PATH := "res://assets/ui/cursors/aether_forbidden.png"
 const ARROW_HOTSPOT := Vector2(1, 1)
 const POINTER_HOTSPOT := Vector2(1, 1)
+const DRAG_HOTSPOT := Vector2(1, 1)
+const CAN_DROP_HOTSPOT := Vector2(1, 1)
+const FORBIDDEN_HOTSPOT := Vector2(1, 1)
 const MIN_CURSOR_SCALE := 50.0
 const MAX_CURSOR_SCALE := 150.0
 const DEFAULT_CURSOR_SCALE := 75.0
@@ -18,7 +24,16 @@ func _ready() -> void:
 func apply_cursor_theme() -> void:
 	var arrow_cursor := load(ARROW_CURSOR_PATH) as Texture2D
 	var pointer_cursor := load(POINTER_CURSOR_PATH) as Texture2D
-	if arrow_cursor == null or pointer_cursor == null:
+	var drag_cursor := load(DRAG_CURSOR_PATH) as Texture2D
+	var can_drop_cursor := load(CAN_DROP_CURSOR_PATH) as Texture2D
+	var forbidden_cursor := load(FORBIDDEN_CURSOR_PATH) as Texture2D
+	if (
+		arrow_cursor == null
+		or pointer_cursor == null
+		or drag_cursor == null
+		or can_drop_cursor == null
+		or forbidden_cursor == null
+	):
 		push_warning("CursorThemeManager: custom cursor assets are not available yet.")
 		return
 	Input.set_custom_mouse_cursor(
@@ -30,6 +45,26 @@ func apply_cursor_theme() -> void:
 		_scaled_cursor(pointer_cursor),
 		Input.CURSOR_POINTING_HAND,
 		_scaled_hotspot(POINTER_HOTSPOT)
+	)
+	Input.set_custom_mouse_cursor(
+		_scaled_cursor(drag_cursor),
+		Input.CURSOR_DRAG,
+		_scaled_hotspot(DRAG_HOTSPOT)
+	)
+	Input.set_custom_mouse_cursor(
+		_scaled_cursor(drag_cursor),
+		Input.CURSOR_MOVE,
+		_scaled_hotspot(DRAG_HOTSPOT)
+	)
+	Input.set_custom_mouse_cursor(
+		_scaled_cursor(can_drop_cursor),
+		Input.CURSOR_CAN_DROP,
+		_scaled_hotspot(CAN_DROP_HOTSPOT)
+	)
+	Input.set_custom_mouse_cursor(
+		_scaled_cursor(forbidden_cursor),
+		Input.CURSOR_FORBIDDEN,
+		_scaled_hotspot(FORBIDDEN_HOTSPOT)
 	)
 
 
