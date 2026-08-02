@@ -180,12 +180,12 @@ position = Vector2(304, 496)
 interactable_id = "oak_lab_pc"
 
 [node name="StarterBalls" type="Node2D" parent="Entities/Interactables"]
+position = Vector2(64, 64)
 
 [node name="LeftBulbasaur" parent="Entities/Interactables/StarterBalls" instance=ExtResource("18_ball")]
 position = Vector2(368, 624)
 species_id = "bulbasaur"
 species_name = "Bulbasaur"
-selection_stand_offset = Vector2(-32, 80)
 
 [node name="MiddleSquirtle" parent="Entities/Interactables/StarterBalls" instance=ExtResource("18_ball")]
 position = Vector2(400, 624)
