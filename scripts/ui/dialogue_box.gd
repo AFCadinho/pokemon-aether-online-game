@@ -1,5 +1,7 @@
 extends Control
 
+const ITEM_ICON_ROOT := "res://assets/items/icons/"
+
 signal dialogue_finished
 signal quest_offer_resolved(accepted: bool)
 
@@ -15,7 +17,8 @@ signal quest_offer_resolved(accepted: bool)
 @onready var quest_offer_objective_heading: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/ObjectiveHeading
 @onready var quest_offer_objective_label: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/ObjectiveLabel
 @onready var quest_offer_reward_heading: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardHeading
-@onready var quest_offer_reward_label: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardLabel
+@onready var quest_offer_reward_icon: TextureRect = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardRow/RewardIcon
+@onready var quest_offer_reward_label: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardRow/RewardLabel
 @onready var quest_offer_status_label: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferStatus
 @onready var quest_offer_actions: HBoxContainer = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferActions
 @onready var quest_offer_decline_button: Button = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferActions/DeclineButton
@@ -209,7 +212,10 @@ func _populate_quest_offer(quest: Dictionary) -> void:
 				)
 				break
 	quest_offer_objective_label.text = objective
-	quest_offer_reward_label.text = _quest_reward_text(quest.get("rewardPreviews", []))
+	var rewards_value: Variant = quest.get("rewardPreviews", [])
+	quest_offer_reward_label.text = _quest_reward_text(rewards_value)
+	quest_offer_reward_icon.texture = _quest_reward_icon(rewards_value)
+	quest_offer_reward_icon.visible = quest_offer_reward_icon.texture != null
 
 
 func _quest_reward_text(rewards_value: Variant) -> String:
@@ -235,6 +241,29 @@ func _quest_reward_text(rewards_value: Variant) -> String:
 					if not currency.is_empty():
 						reward_parts.append("%s  ×%d" % [currency, amount])
 	return ", ".join(reward_parts) if not reward_parts.is_empty() else "—"
+
+
+func _quest_reward_icon(rewards_value: Variant) -> Texture2D:
+	if rewards_value is not Array:
+		return null
+	for reward_value: Variant in rewards_value as Array:
+		if reward_value is not Dictionary:
+			continue
+		var reward := reward_value as Dictionary
+		if str(reward.get("type", "")) != "item":
+			continue
+		var item_id := str(reward.get("itemId", "")).strip_edges()
+		if item_id.is_empty():
+			continue
+		var normalized := item_id.to_upper().replace("-", "").replace("_", "").replace(" ", "")
+		for icon_path: String in [
+			ITEM_ICON_ROOT + normalized + ".png",
+			ITEM_ICON_ROOT + item_id + ".png",
+			ITEM_ICON_ROOT + "000.png",
+		]:
+			if ResourceLoader.exists(icon_path):
+				return load(icon_path) as Texture2D
+	return null
 
 
 func _localized_definition(key: String, fallback_id: String) -> String:
