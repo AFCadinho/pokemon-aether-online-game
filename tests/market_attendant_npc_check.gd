@@ -58,8 +58,9 @@ func _check_market_attendant_scene() -> void:
 	var viridian_center_source := _read_text(VIRIDIAN_POKEMON_CENTER_SCENE)
 	_check_true(
 		viridian_center_source.contains('npc_id = "kanto_viridian_city_pokemon_center_clerk"')
+		and viridian_center_source.contains('npc_definition_id = "kanto_viridian_city_pokemon_center_clerk"')
 		and viridian_center_source.contains("preload_quest_markers = true"),
-		"Viridian item seller preloads catalog-driven quest markers"
+		"Viridian item seller loads its parcel metadata and quest marker"
 	)
 
 
