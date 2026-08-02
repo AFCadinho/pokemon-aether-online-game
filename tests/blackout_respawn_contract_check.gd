@@ -53,6 +53,17 @@ func _init() -> void:
 		world_source.contains("PlayerGameStateService.acknowledge_player_teleport("),
 		"Teleport acknowledgements send only the server-issued revision"
 	)
+	_expect(
+		world_source.contains(
+			'var teleport_command_id := _optional_string(state.get("teleportCommandId"))'
+		)
+		and world_source.contains(
+			"func _optional_string(value: Variant) -> String:\n"
+			+ "\tif value == null:\n"
+			+ "\t\treturn \"\""
+		),
+		"Blackout respawn acknowledgements omit a null staff command ID"
+	)
 	var ack_position := world_source.find(
 		"var ack_result: Dictionary = await _ack_authorized_teleport_state(state)"
 	)

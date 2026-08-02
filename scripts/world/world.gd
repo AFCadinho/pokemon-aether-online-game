@@ -412,7 +412,7 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 
 
 func apply_remote_authorized_teleport_state(state: Dictionary) -> Dictionary:
-	var command_id := str(state.get("teleportCommandId", "")).strip_edges()
+	var command_id := _optional_string(state.get("teleportCommandId"))
 	if command_id != "" and completed_remote_authorized_teleport_commands.has(command_id):
 		return {"success": true, "applied": true, "duplicate": true}
 	if (
@@ -546,7 +546,7 @@ func _get_player_position_save_block_reason(allow_gameplay_reset := false) -> St
 
 func _ack_authorized_teleport_state(state: Dictionary) -> Dictionary:
 	var teleport_revision := int(state.get("teleportRevision", current_teleport_revision))
-	var teleport_command_id := str(state.get("teleportCommandId", "")).strip_edges()
+	var teleport_command_id := _optional_string(state.get("teleportCommandId"))
 	var result: Dictionary = await PlayerGameStateService.acknowledge_player_teleport(
 		teleport_revision,
 		teleport_command_id
@@ -562,6 +562,12 @@ func _ack_authorized_teleport_state(state: Dictionary) -> Dictionary:
 			"error": "The server is still waiting for the forced teleport destination acknowledgement.",
 		}
 	return result
+
+
+func _optional_string(value: Variant) -> String:
+	if value == null:
+		return ""
+	return str(value).strip_edges()
 
 
 func load_map(target_scene_path: String, target_spawn_name: String) -> void:
