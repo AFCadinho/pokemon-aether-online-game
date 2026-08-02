@@ -161,6 +161,8 @@ func _verify_integration_contract() -> void:
 	var auth := _source("res://scripts/services/auth_service.gd")
 	var overlay := _source("res://scripts/ui/ui_overlay.gd")
 	var oak := _source("res://scripts/world/kanto/towns/pallet_town/oak.gd")
+	var oak_lab := _source("res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn")
+	var inventory := _source("res://scripts/services/inventory_service.gd")
 	var base_npc := _source("res://scripts/world/npcs/base_npc.gd")
 	_expect(
 		project.contains('StoryService="*res://scripts/services/story_service.gd"'),
@@ -189,6 +191,21 @@ func _verify_integration_contract() -> void:
 	_expect(
 		oak.contains("await PlayerGameStateService.refresh_story()"),
 		"the authoritative starter claim refreshes completed quest progress"
+	)
+	_expect(
+		oak_lab.contains('interaction_id = "oaks_lab_oak_parcel_request"')
+		and oak_lab.contains("preload_quest_markers = true"),
+		"Oak starts the parcel quest through a separate marked interaction"
+	)
+	_expect(
+		oak.contains("questTurnInId")
+		and oak.contains('inventory_service.call(\n\t\t"turn_in_npc_quest_item"'),
+		"Oak handles the catalog-driven parcel return"
+	)
+	_expect(
+		inventory.contains('const NPC_QUEST_ITEM_TURN_IN_ENDPOINT := "/game/npc-quest-item-turn-ins/%s/claim"')
+		and inventory.contains("func turn_in_npc_quest_item(turn_in_id: String) -> Dictionary:"),
+		"inventory service exposes the authoritative parcel turn-in"
 	)
 	_expect(
 		base_npc.contains('quest_marker_label.text = "!"')

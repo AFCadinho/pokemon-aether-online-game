@@ -17,6 +17,7 @@ npc_id = "kanto_viridian_city_pokemon_center_nurse_joy"
 
 [node name="Clerk" parent="Entities/NPCs" index="2"]
 npc_id = "kanto_viridian_city_pokemon_center_clerk"
+preload_quest_markers = true
 
 [node name="Clerk2" parent="Entities/NPCs" index="3"]
 npc_id = "kanto_viridian_city_pokemon_center_clerk_2"

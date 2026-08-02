@@ -5,6 +5,7 @@ const MARKET_ATTENDANT_SCENE := "res://scenes/npcs/market_attendant_npc.tscn"
 const MARKET_SELLER_SCENE := "res://scenes/npcs/market_seller_npc.tscn"
 const MARKET_BUYER_SCENE := "res://scenes/npcs/market_buyer_npc.tscn"
 const PALLET_TOWN_SCENE := "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn"
+const VIRIDIAN_POKEMON_CENTER_SCENE := "res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn"
 
 var failed := false
 
@@ -29,6 +30,8 @@ func _check_market_attendant_script() -> void:
 	_check_true(text.contains('ui_overlay.call("open_market", market, market_mode, inventory_items)'), "MarketAttendantNPC opens its configured market mode")
 	_check_true(text.contains('inventory_service.call("load_inventory")'), "Market buyer loads the player's inventory")
 	_check_true(text.contains("failure_dialogue_lines"), "MarketAttendantNPC has fallback failure dialogue")
+	_check_true(text.contains("questRewardId"), "MarketAttendantNPC supports catalog-driven quest rewards")
+	_check_true(text.contains('claim_npc_item_reward", quest_reward_id'), "MarketAttendantNPC claims quest items authoritatively")
 
 
 func _check_market_attendant_scene() -> void:
@@ -51,6 +54,12 @@ func _check_market_attendant_scene() -> void:
 	_check_true(
 		not placed_clerk_source.contains("npc_sprite_frames"),
 		"Pallet Town clerk inherits sprite frames from the shared clerk scene"
+	)
+	var viridian_center_source := _read_text(VIRIDIAN_POKEMON_CENTER_SCENE)
+	_check_true(
+		viridian_center_source.contains('npc_id = "kanto_viridian_city_pokemon_center_clerk"')
+		and viridian_center_source.contains("preload_quest_markers = true"),
+		"Viridian item seller preloads catalog-driven quest markers"
 	)
 
 

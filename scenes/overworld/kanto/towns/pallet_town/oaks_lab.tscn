@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/pokemon_pc_interactable.tscn" id="12_pc_interactable"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/pokemon_laboratory/pokemon_laboratory.visual.tscn" id="14_fkl8t"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="15_floor_mask"]
+[ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="16_story_hook"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jksq5"]
 atlas = ExtResource("8_ywtjb")
@@ -159,6 +160,11 @@ starter_received_dialogue_lines = Array[String](["Take good care of {pokemon}. D
 npc_id = "kanto_oaklab_oak_1"
 display_name = "Prof. Oak"
 npc_sprite_frames = SubResource("SpriteFrames_aw12e")
+preload_quest_markers = true
+
+[node name="ParcelRequestStoryHook" type="Node" parent="Entities/NPCs/Oak"]
+script = ExtResource("16_story_hook")
+interaction_id = "oaks_lab_oak_parcel_request"
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1966677725]
 
