@@ -41,6 +41,18 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_reward_card"]
+bg_color = Color(0.12, 0.102, 0.047, 0.72)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.48, 0.16, 0.9)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_decline_normal"]
 bg_color = Color(0.145, 0.047, 0.071, 0.96)
 border_width_left = 1
@@ -232,24 +244,37 @@ theme_override_colors/font_color = Color(0.96, 0.73, 0.25, 1)
 theme_override_font_sizes/font_size = 12
 text = "REWARDS"
 
-[node name="RewardRow" type="HBoxContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent"]
+[node name="RewardCard" type="PanelContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_reward_card")
+
+[node name="RewardMargin" type="MarginContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardCard"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 5
+
+[node name="RewardRow" type="HBoxContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardCard/RewardMargin"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="RewardIcon" type="TextureRect" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardRow"]
-custom_minimum_size = Vector2(28, 28)
+[node name="RewardIcon" type="TextureRect" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardCard/RewardMargin/RewardRow"]
+custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 texture_filter = 1
 expand_mode = 1
 stretch_mode = 5
 
-[node name="RewardLabel" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardRow"]
+[node name="RewardLabel" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardCard/RewardMargin/RewardRow"]
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 4
 theme_override_colors/font_color = Color(1, 0.87, 0.48, 1)
 theme_override_font_sizes/font_size = 17
 text = "Exp. Share  ×1"
-autowrap_mode = 2
+text_overrun_behavior = 3
 
 [node name="QuestOfferStatus" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
