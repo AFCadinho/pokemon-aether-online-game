@@ -2,6 +2,8 @@ extends SceneTree
 
 const PROJECT_CONFIG := "res://project.godot"
 const CURSOR_MANAGER := "res://scripts/services/cursor_theme_manager.gd"
+const SETTINGS_MANAGER := "res://scripts/services/settings_manager.gd"
+const SETTINGS_MENU := "res://scripts/ui/settings_menu.gd"
 const ARROW_CURSOR := "res://assets/ui/cursors/aether_arrow.png"
 const POINTER_CURSOR := "res://assets/ui/cursors/aether_pointer.png"
 
@@ -11,6 +13,8 @@ var failed := false
 func _init() -> void:
 	var project_text := _read_text(PROJECT_CONFIG)
 	var manager_text := _read_text(CURSOR_MANAGER)
+	var settings_text := _read_text(SETTINGS_MANAGER)
+	var menu_text := _read_text(SETTINGS_MENU)
 	_check(
 		project_text.contains('CursorThemeManager="*res://scripts/services/cursor_theme_manager.gd"'),
 		"cursor theme manager is globally autoloaded"
@@ -40,6 +44,35 @@ func _init() -> void:
 		manager_text.contains("POINTER_HOTSPOT := Vector2(1, 1)"),
 		"hover cursor keeps the same northwest click hotspot"
 	)
+	_check(
+		manager_text.contains("DEFAULT_CURSOR_SCALE := 75.0")
+		and manager_text.contains("func set_cursor_scale(value: float)")
+		and manager_text.contains("Image.INTERPOLATE_LANCZOS"),
+		"cursor theme scales both high-quality cursor textures from a smaller default"
+	)
+	_check(
+		settings_text.contains('"cursor_scale": cursor_scale')
+		and settings_text.contains("CursorThemeManager.set_cursor_scale(cursor_scale)"),
+		"cursor scale persists and applies immediately"
+	)
+	_check(
+		menu_text.contains("func _create_cursor_scale_control()")
+		and menu_text.contains("SettingsManager.set_cursor_scale(value)"),
+		"graphics settings expose the cursor scale control"
+	)
+	var cursor_manager := (load(CURSOR_MANAGER) as Script).new() as Node
+	cursor_manager.set("cursor_scale", 75.0)
+	var scaled_arrow := cursor_manager.call(
+		"_scaled_cursor",
+		load(ARROW_CURSOR) as Texture2D
+	) as ImageTexture
+	_check(
+		scaled_arrow != null
+		and scaled_arrow.get_width() == 30
+		and scaled_arrow.get_height() == 30,
+		"75 percent cursor setting renders the 40 pixel arrow at 30 pixels"
+	)
+	cursor_manager.free()
 	quit(1 if failed else 0)
 
 

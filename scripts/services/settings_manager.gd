@@ -33,6 +33,9 @@ const DEFAULT_CHAT_TAB_ORDER: Array[String] = [
 	CHAT_TAB_GUILD,
 ]
 const DEFAULT_WINDOW_RESOLUTION := Vector2i(1600, 900)
+const DEFAULT_CURSOR_SCALE := 75.0
+const MIN_CURSOR_SCALE := 50.0
+const MAX_CURSOR_SCALE := 150.0
 const AVAILABLE_WINDOW_RESOLUTIONS: Array[Vector2i] = [
 	Vector2i(1280, 720),
 	Vector2i(1600, 900),
@@ -47,6 +50,7 @@ var hide_other_players := false
 var sprite_style := SPRITE_STYLE_ANIMATED
 var fullscreen := false
 var window_resolution := DEFAULT_WINDOW_RESOLUTION
+var cursor_scale := DEFAULT_CURSOR_SCALE
 var master_volume := 80.0
 var music_volume := 55.0
 var sfx_volume := 75.0
@@ -97,6 +101,7 @@ func load_settings() -> void:
 	sprite_style = _validated_sprite_style(str(data.get("sprite_style", sprite_style)))
 	fullscreen = bool(data.get("fullscreen", fullscreen))
 	window_resolution = _validated_window_resolution(data.get("window_resolution", window_resolution))
+	cursor_scale = _validated_cursor_scale(data.get("cursor_scale", cursor_scale))
 	master_volume = _validated_volume(data.get("master_volume", master_volume))
 	music_volume = _validated_volume(data.get("music_volume", music_volume))
 	sfx_volume = _validated_volume(data.get("sfx_volume", sfx_volume))
@@ -146,6 +151,7 @@ func save_settings() -> void:
 			"width": window_resolution.x,
 			"height": window_resolution.y,
 		},
+		"cursor_scale": cursor_scale,
 		"master_volume": master_volume,
 		"music_volume": music_volume,
 		"sfx_volume": sfx_volume,
@@ -239,6 +245,16 @@ func set_window_resolution(resolution: Vector2i) -> void:
 
 	window_resolution = validated_resolution
 	_apply_display_settings()
+	_save_and_emit()
+
+
+func set_cursor_scale(value: float) -> void:
+	var validated_scale := _validated_cursor_scale(value)
+	if is_equal_approx(cursor_scale, validated_scale):
+		return
+
+	cursor_scale = validated_scale
+	CursorThemeManager.set_cursor_scale(cursor_scale)
 	_save_and_emit()
 
 
@@ -401,6 +417,10 @@ func _validated_volume(volume: Variant) -> float:
 	return clampf(float(volume), 0.0, 100.0)
 
 
+func _validated_cursor_scale(value: Variant) -> float:
+	return clampf(float(value), MIN_CURSOR_SCALE, MAX_CURSOR_SCALE)
+
+
 func _validated_chat_tab_visibility(value: Variant) -> Dictionary:
 	var source: Dictionary = value as Dictionary if value is Dictionary else {}
 	if not source.has(CHAT_TAB_GUILD) and source.has(LEGACY_CHAT_TAB_CLAN):
@@ -488,6 +508,7 @@ func _ensure_audio_bus(bus_name: String) -> void:
 
 func _apply_runtime_settings() -> void:
 	LocalizationManager.set_locale(locale)
+	CursorThemeManager.set_cursor_scale(cursor_scale)
 	_apply_audio_settings()
 	_apply_display_settings()
 
