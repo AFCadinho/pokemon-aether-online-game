@@ -224,6 +224,7 @@ func _build_join_payload() -> Dictionary:
 		"timerContractVersions": [1],
 		"decisionContractVersions": [1],
 		"battleCommandContractVersions": [1],
+		"renderProtocolVersions": [2, 1],
 	}
 	if active_match_id != "":
 		payload["matchId"] = active_match_id

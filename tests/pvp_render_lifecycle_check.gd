@@ -6,6 +6,10 @@ func _init() -> void:
 	service.active_battle_id = "battle-1"
 	service.active_player_id = "p1"
 	service.connecting = true
+	_check(
+		service._build_join_payload().get("renderProtocolVersions") == [2, 1],
+		"join negotiates the fast render receipt protocol"
+	)
 
 	var progress_sent := service.send_render_status(
 		"battle-1", "p1", "battle-1:23", 23, 108,
