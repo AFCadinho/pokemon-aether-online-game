@@ -34,6 +34,7 @@ const PVP_FORCE_SWITCH_RECONCILE_MAX_MSEC := 5000
 const PVP_OPPONENT_RENDER_RECONCILE_INITIAL_MSEC := 2500
 const PVP_OPPONENT_RENDER_RECONCILE_MAX_MSEC := 5000
 const PVP_IDLE_WAIT_RECONCILE_MSEC := 3000
+const PVP_RENDER_PROGRESS_HEARTBEAT_SECONDS := 1.0
 const Z_MOVE_FALLBACK_ICON: Texture2D = preload("res://assets/battles/mechanics/z-move.png")
 const Z_MOVE_TYPE_ICON_PATH := "res://assets/battles/types/%s.svg"
 const Z_CRYSTAL_NAMES := {
@@ -109,8 +110,11 @@ var pvp_pending_authoritative_terminal: Dictionary = {}
 var pvp_pending_render_ack_completion: Dictionary = {}
 var pvp_render_ack_retry_active := false
 var pvp_render_ack_retry_generation := 0
+var pvp_active_render_progress: Dictionary = {}
+var pvp_render_progress_generation := 0
 var pvp_retrying_reconciliation_snapshot := false
 var pvp_room_recovery_request_active := false
+var pvp_targeted_render_recovery_active := false
 var pvp_idle_realtime_drain_pending := false
 var pvp_idle_wait_recovery_active := false
 var pvp_last_applied_server_seq := 0
@@ -3836,6 +3840,11 @@ func _enqueue_pvp_battle_response(response: Dictionary, source: String, apply_ev
 				"source=%s key=%s reason=%s" % [source, str(queue_result.get("key", "")), str(queue_result.get("reason", ""))]
 			)
 		return true
+	if (
+		_is_authoritative_pvp_render_batch_response(response)
+		and not bool(queue_result.get("duplicate", false))
+	):
+		_send_pvp_received_render_status(response)
 
 	if pvp_event_queue.is_rendering:
 		return true
@@ -7314,8 +7323,10 @@ func _render_pvp_event_batch(
 					)
 				return false
 			_observe_pvp_realtime_render_batch_fence(response, empty_batch_context)
+			_begin_pvp_render_progress(empty_batch_context, 0)
 			if post_render.is_valid():
 				post_render.call(empty_batch_context)
+			_finish_pvp_render_progress(empty_batch_context, true)
 			_trace_pvp_flow("render_batch.empty_complete", response, "source=%s context=%s" % [source, JSON.stringify(empty_batch_context)])
 			pvp_event_queue.complete_render_batch(empty_batch_context, true)
 			return true
@@ -7347,6 +7358,7 @@ func _render_pvp_event_batch(
 		return false
 
 	_observe_pvp_realtime_render_batch_fence(response, batch_context)
+	_begin_pvp_render_progress(batch_context, events.size())
 	_set_battle_input_locked(true)
 	current_action_view = ActionView.NONE
 	moves_grid.visible = false
@@ -7390,8 +7402,98 @@ func _render_pvp_event_batch(
 				pvp_event_queue.last_rendered_seq,
 			]
 		)
+	_finish_pvp_render_progress(batch_context, success)
 	pvp_event_queue.complete_render_batch(batch_context, success)
 	return success
+
+func _send_pvp_received_render_status(response: Dictionary) -> void:
+	if _is_spectator_battle():
+		return
+	var render_response := pvp_response_order.render_batch_projection_for(response)
+	var event_batch_id := pvp_event_queue.get_response_event_batch_id(render_response)
+	var batch_seq := pvp_event_queue.get_response_batch_seq(render_response)
+	var event_seq_end := pvp_event_queue.get_response_event_seq_end(render_response)
+	if event_batch_id == "" or batch_seq < 0 or event_seq_end < 0:
+		return
+	var events_value: Variant = render_response.get("events", [])
+	var total_event_count: int = events_value.size() if events_value is Array else -1
+	PvpBattleRealtimeService.send_render_status(
+		battle_state.battle_id,
+		action_flow.local_player_id,
+		event_batch_id,
+		batch_seq,
+		max(pvp_event_queue.last_rendered_seq, 0),
+		"RECEIVED",
+		_get_int_from_variant(render_response.get("turn", battle_state.get_turn()), battle_state.get_turn()),
+		str(render_response.get("phase", "rendering_events")),
+		0,
+		total_event_count,
+		0
+	)
+
+func _begin_pvp_render_progress(batch_context: Dictionary, total_event_count: int) -> void:
+	if _is_spectator_battle():
+		return
+	pvp_render_progress_generation += 1
+	pvp_active_render_progress = batch_context.duplicate(true)
+	pvp_active_render_progress["rendered_event_count"] = 0
+	pvp_active_render_progress["total_event_count"] = max(total_event_count, 0)
+	pvp_active_render_progress["started_msec"] = Time.get_ticks_msec()
+	_send_active_pvp_render_status("STARTED")
+	_run_pvp_render_progress_heartbeat.call_deferred(pvp_render_progress_generation)
+
+func _mark_pvp_render_event_completed(completed_event_count: int) -> void:
+	if pvp_active_render_progress.is_empty():
+		return
+	pvp_active_render_progress["rendered_event_count"] = clampi(
+		completed_event_count,
+		0,
+		_get_int_from_variant(pvp_active_render_progress.get("total_event_count", 0), 0)
+	)
+
+func _run_pvp_render_progress_heartbeat(owned_generation: int) -> void:
+	while owned_generation == pvp_render_progress_generation and not pvp_active_render_progress.is_empty():
+		await get_tree().create_timer(PVP_RENDER_PROGRESS_HEARTBEAT_SECONDS).timeout
+		if owned_generation != pvp_render_progress_generation or pvp_active_render_progress.is_empty():
+			return
+		_send_active_pvp_render_status("PROGRESS")
+
+func _send_active_pvp_render_status(render_state: String) -> void:
+	if pvp_active_render_progress.is_empty() or _is_spectator_battle():
+		return
+	var started_msec := _get_int_from_variant(pvp_active_render_progress.get("started_msec", Time.get_ticks_msec()), Time.get_ticks_msec())
+	PvpBattleRealtimeService.send_render_status(
+		battle_state.battle_id,
+		action_flow.local_player_id,
+		str(pvp_active_render_progress.get("event_batch_id", "")),
+		_get_int_from_variant(pvp_active_render_progress.get("batch_seq", -1), -1),
+		max(pvp_event_queue.last_rendered_seq, 0),
+		render_state,
+		_get_int_from_variant(pvp_active_render_progress.get("turn", battle_state.get_turn()), battle_state.get_turn()),
+		str(pvp_active_render_progress.get("phase", "rendering_events")),
+		_get_int_from_variant(pvp_active_render_progress.get("rendered_event_count", 0), 0),
+		_get_int_from_variant(pvp_active_render_progress.get("total_event_count", 0), 0),
+		max(Time.get_ticks_msec() - started_msec, 0)
+	)
+
+func _finish_pvp_render_progress(batch_context: Dictionary, success: bool) -> void:
+	if pvp_active_render_progress.is_empty():
+		return
+	var active_batch_id := str(pvp_active_render_progress.get("event_batch_id", ""))
+	if active_batch_id != str(batch_context.get("event_batch_id", "")):
+		return
+	var total_event_count := _get_int_from_variant(pvp_active_render_progress.get("total_event_count", 0), 0)
+	if success:
+		pvp_active_render_progress["rendered_event_count"] = total_event_count
+		_send_active_pvp_render_status("PROGRESS")
+	batch_context["rendered_event_count"] = _get_int_from_variant(pvp_active_render_progress.get("rendered_event_count", 0), 0)
+	batch_context["total_event_count"] = total_event_count
+	batch_context["observed_duration_ms"] = max(
+		Time.get_ticks_msec() - _get_int_from_variant(pvp_active_render_progress.get("started_msec", Time.get_ticks_msec()), Time.get_ticks_msec()),
+		0
+	)
+	pvp_render_progress_generation += 1
+	pvp_active_render_progress.clear()
 
 func _observe_pvp_realtime_render_batch_fence(response: Dictionary, batch_context: Dictionary) -> void:
 	if _is_spectator_battle() or not _is_authoritative_pvp_render_batch_response(response):
@@ -7553,6 +7655,7 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 	for event_index: int in range(ordered_events.size()):
 		var event: Variant = ordered_events[event_index]
 		if not (event is Dictionary):
+			_mark_pvp_render_event_completed(event_index + 1)
 			continue
 
 		var event_data: Dictionary = event as Dictionary
@@ -7565,6 +7668,7 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			# comparable one-turn releases). The preceding move is the complete
 			# public action in that case; rendering this as a second charge
 			# animation can hold the PvP render boundary and duplicates the move.
+			_mark_pvp_render_event_completed(event_index + 1)
 			continue
 		_remember_battle_modifier_event(event_data)
 		if _should_debug_battle_start_event(event_data):
@@ -7604,6 +7708,7 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 				event_renderer.add_turn_header(turn)
 			_update_battle_status_panels()
 			_update_stat_stage_panels()
+			_mark_pvp_render_event_completed(event_index + 1)
 			continue
 
 		_show_switch_out_heal_target_if_needed(event_data, ordered_events, event_index)
@@ -7674,6 +7779,7 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 				_summarize_battle_event(event_data),
 				_summarize_active_battle_state(),
 			])
+		_mark_pvp_render_event_completed(event_index + 1)
 
 	_remember_rendered_non_pvp_event_keys(ordered_events)
 	# PvP presentation advances through ordered fieldEffect events. Replacing it
@@ -9823,7 +9929,10 @@ func _send_pvp_render_ack(completion: Dictionary) -> void:
 		_get_int_from_variant(completion.get("batch_seq", -1), -1),
 		last_rendered_seq,
 		turn,
-		phase
+		phase,
+		_get_int_from_variant(completion.get("rendered_event_count", -1), -1),
+		_get_int_from_variant(completion.get("total_event_count", -1), -1),
+		_get_int_from_variant(completion.get("observed_duration_ms", -1), -1)
 	)
 
 func _retry_pending_pvp_render_ack() -> void:
@@ -9881,6 +9990,9 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 
 	_observe_pvp_gateway_epoch(message)
 	var message_type := str(message.get("type", "")).strip_edges().to_lower()
+	if message_type == "pvp.render_recovery":
+		_handle_pvp_targeted_render_recovery.call_deferred(message.duplicate(true))
+		return
 	if message_type == "pvp.resync_required":
 		PvpBattleRealtimeService.report_diagnostic("pvp.resync_required_received", {
 			"displayedPhase": pvp_last_phase if pvp_last_phase != "" else "unknown",
@@ -9900,6 +10012,7 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 		return
 	if _apply_pvp_connection_log_event(message_type, message):
 		return
+
 	if PvpBattleRealtimeService.is_infrastructure_no_contest_message(message):
 		_finish_pvp_infrastructure_no_contest.call_deferred(message.duplicate(true))
 		return
@@ -10020,6 +10133,46 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 		)
 	if _should_drain_idle_pvp_realtime_updates():
 		_drain_idle_pvp_realtime_updates.call_deferred()
+
+func _handle_pvp_targeted_render_recovery(message: Dictionary) -> void:
+	if battle_finished or _is_spectator_battle() or pvp_targeted_render_recovery_active:
+		return
+	var message_battle_id := str(message.get("battleId", "")).strip_edges()
+	if message_battle_id != "" and message_battle_id != battle_state.battle_id:
+		return
+	var event_batch_id := str(message.get("eventBatchId", "")).strip_edges()
+	var batch_seq := _get_int_from_variant(message.get("batchSeq", -1), -1)
+	var event_seq_end := _get_int_from_variant(message.get("eventSeqEnd", -1), -1)
+	if event_batch_id == "" or batch_seq < 0 or event_seq_end < 0:
+		return
+
+	if str(pvp_active_render_progress.get("event_batch_id", "")) == event_batch_id:
+		_send_active_pvp_render_status("PROGRESS")
+		return
+	if str(pvp_pending_render_ack_completion.get("event_batch_id", "")) == event_batch_id:
+		_retry_pending_pvp_render_ack()
+		return
+	if pvp_event_queue.last_rendered_seq >= event_seq_end:
+		# The local cumulative presentation cursor is already beyond this exact
+		# server-named boundary. Recreate only its completion proof; no animation
+		# or canonical state is replayed.
+		_send_pvp_render_ack({
+			"event_batch_id": event_batch_id,
+			"batch_seq": batch_seq,
+			"event_seq_end": event_seq_end,
+			"last_rendered_seq": pvp_event_queue.last_rendered_seq,
+			"turn": _get_int_from_variant(message.get("turn", battle_state.get_turn()), battle_state.get_turn()),
+			"phase": "rendering_events",
+			"source": "targeted_render_recovery_cursor",
+			"success": true,
+		})
+		return
+
+	pvp_targeted_render_recovery_active = true
+	pvp_idle_wait_recovery_active = true
+	_set_battle_input_locked(true)
+	await _reconcile_pvp_battle_from_room("pvp_targeted_render_recovery", true)
+	pvp_targeted_render_recovery_active = false
 
 func _reject_invalid_actionless_pvp_render_batch(message: Dictionary) -> void:
 	# Fail closed, but remain live: the room snapshot can replay the immutable
