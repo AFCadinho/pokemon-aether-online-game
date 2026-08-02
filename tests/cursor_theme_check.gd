@@ -36,6 +36,10 @@ func _init() -> void:
 		manager_text.contains("ARROW_HOTSPOT := Vector2(1, 1)"),
 		"arrow hotspot matches its exact northwest tip"
 	)
+	_check(
+		manager_text.contains("POINTER_HOTSPOT := Vector2(1, 1)"),
+		"hover cursor keeps the same northwest click hotspot"
+	)
 	quit(1 if failed else 0)
 
 
