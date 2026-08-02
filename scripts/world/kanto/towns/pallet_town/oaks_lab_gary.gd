@@ -80,11 +80,12 @@ func begin_starter_sequence(
 		await _show_catalogue_dialogue(SELECTED_DIALOGUE_ID, {"pokemon": species_name})
 		selected_ball.call("set_claimed", true)
 
-	if not await _walk_next_to_player(player):
-		starter_sequence_running = false
-		GameState.unlock_overworld_input()
-		await GameErrorDialogService.show_report_to_staff_message()
-		return
+	var reached_player := await _walk_next_to_player(player)
+	if not reached_player:
+		push_warning(
+			"Oak's Lab Gary could not reach a tile beside the player; "
+			+ "continuing the challenge from the starter table."
+		)
 	face_world_position(_get_body_feet_position(player))
 	if player.has_method("face_world_position"):
 		player.face_world_position(get_feet_position())

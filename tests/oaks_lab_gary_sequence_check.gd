@@ -25,6 +25,11 @@ func _init() -> void:
 		"Gary recovers missing automatic starter handoff metadata"
 	)
 	_check_true(gary_text.contains('selected_ball.call("set_claimed", true)'), "Gary removes his selected ball")
+	_check_true(
+		gary_text.contains("var reached_player := await _walk_next_to_player(player)")
+		and gary_text.contains("continuing the challenge from the starter table"),
+		"A blocked player approach does not abort Gary's challenge"
+	)
 	_check_true(gary_text.contains('"start_trainer_battle"'), "Gary starts the server trainer battle")
 	var oak_text := _read_text(OAK_SCRIPT)
 	_check_true(oak_text.contains("_schedule_gary_starter_sequence(player, create_result)"), "Oak hands the new-starter flow to Gary")
