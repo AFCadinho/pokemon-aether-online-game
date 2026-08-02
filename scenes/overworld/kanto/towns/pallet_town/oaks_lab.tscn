@@ -10,6 +10,8 @@
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/pokemon_laboratory/pokemon_laboratory.visual.tscn" id="14_fkl8t"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="15_floor_mask"]
 [ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="16_story_hook"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/oaks_lab_gary.tscn" id="17_gary"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/starter_poke_ball.tscn" id="18_ball"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jksq5"]
 atlas = ExtResource("8_ywtjb")
@@ -166,6 +168,9 @@ preload_quest_markers = true
 script = ExtResource("16_story_hook")
 interaction_id = "oaks_lab_oak_parcel_request"
 
+[node name="Gary" parent="Entities/NPCs" instance=ExtResource("17_gary")]
+position = Vector2(304, 784)
+
 [node name="Players" type="Node2D" parent="Entities" unique_id=1966677725]
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=458338910]
@@ -173,6 +178,24 @@ interaction_id = "oaks_lab_oak_parcel_request"
 [node name="PokemonPC" parent="Entities/Interactables" unique_id=2026070501 instance=ExtResource("12_pc_interactable")]
 position = Vector2(304, 496)
 interactable_id = "oak_lab_pc"
+
+[node name="StarterBalls" type="Node2D" parent="Entities/Interactables"]
+
+[node name="LeftBulbasaur" parent="Entities/Interactables/StarterBalls" instance=ExtResource("18_ball")]
+position = Vector2(368, 624)
+species_id = "bulbasaur"
+species_name = "Bulbasaur"
+selection_stand_offset = Vector2(-32, 80)
+
+[node name="MiddleSquirtle" parent="Entities/Interactables/StarterBalls" instance=ExtResource("18_ball")]
+position = Vector2(400, 624)
+species_id = "squirtle"
+species_name = "Squirtle"
+
+[node name="RightCharmander" parent="Entities/Interactables/StarterBalls" instance=ExtResource("18_ball")]
+position = Vector2(432, 624)
+species_id = "charmander"
+species_name = "Charmander"
 
 [node name="Exits" type="Node2D" parent="." unique_id=1399009799]
 

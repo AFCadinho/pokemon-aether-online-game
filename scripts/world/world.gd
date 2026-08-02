@@ -2673,6 +2673,9 @@ func _award_trainer_battle_rewards(battle_id: String, trainer_name: String) -> v
 		var gym_badge_award := _dictionary_from_value(reward_result.get("gymBadgeAward", {}))
 		if bool(gym_badge_award.get("awarded", false)):
 			await _refresh_fishing_progression()
+		var story_result: Dictionary = await PlayerGameStateService.refresh_story()
+		if not bool(story_result.get("success", false)):
+			push_warning("World: trainer reward story refresh failed: %s" % str(story_result.get("error", "Unknown error")))
 	else:
 		push_warning("World: trainer battle reward failed: %s" % str(reward_result.get("error", "Unknown error")))
 
