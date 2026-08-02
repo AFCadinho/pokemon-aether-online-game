@@ -8,6 +8,14 @@ signal quest_offer_resolved(accepted: bool)
 @onready var portrait_panel: Panel = $PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/PortraitPanel
 @onready var npc_sprite: TextureRect = $PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/PortraitPanel/PortraitMargin/NPCSprite
 @onready var text_label: RichTextLabel = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/RichTextLabel
+@onready var quest_offer_content: VBoxContainer = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent
+@onready var quest_offer_type_label: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/QuestTypeLabel
+@onready var quest_offer_title_label: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/QuestTitleLabel
+@onready var quest_offer_summary_label: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/QuestSummaryLabel
+@onready var quest_offer_objective_heading: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/ObjectiveHeading
+@onready var quest_offer_objective_label: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/ObjectiveLabel
+@onready var quest_offer_reward_heading: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardHeading
+@onready var quest_offer_reward_label: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardLabel
 @onready var quest_offer_status_label: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferStatus
 @onready var quest_offer_actions: HBoxContainer = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferActions
 @onready var quest_offer_decline_button: Button = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferActions/DeclineButton
@@ -81,14 +89,16 @@ func start_quest_offer(quest: Dictionary, speaker_name := "", mugshot: Texture2D
 	name_label.visible = not speaker_name.is_empty()
 	portrait_panel.visible = true
 	npc_sprite.texture = mugshot if mugshot != null else default_mugshot
-	text_label.text = _quest_offer_text(offered_quest)
+	_populate_quest_offer(offered_quest)
+	text_label.visible = false
+	quest_offer_content.visible = true
 	quest_offer_decline_button.text = _localized_text("common.decline", "Decline")
 	quest_offer_accept_button.text = _localized_text("common.accept", "Accept")
 	quest_offer_status_label.visible = false
 	quest_offer_actions.visible = true
 	continue_arrow.visible = false
-	panel_container.offset_top = 52.0
-	panel_container.offset_bottom = 342.0
+	panel_container.offset_top = 36.0
+	panel_container.offset_bottom = 374.0
 	is_open = true
 	just_started = false
 	visible = true
@@ -166,6 +176,8 @@ func _finish_quest_offer(accepted: bool) -> void:
 
 
 func _reset_quest_offer_view() -> void:
+	text_label.visible = true
+	quest_offer_content.visible = false
 	quest_offer_actions.visible = false
 	quest_offer_status_label.visible = false
 	quest_offer_accept_button.disabled = false
@@ -178,10 +190,13 @@ func _restore_dialogue_size() -> void:
 	panel_container.offset_bottom = 262.0
 
 
-func _quest_offer_text(quest: Dictionary) -> String:
+func _populate_quest_offer(quest: Dictionary) -> void:
 	var quest_id := str(quest.get("questId", ""))
-	var title := _localized_definition(str(quest.get("titleKey", "")), quest_id)
-	var summary := _localized_definition(str(quest.get("summaryKey", "")), "")
+	quest_offer_type_label.text = _localized_text("ui.quest.side_quest", "Side Quest").to_upper()
+	quest_offer_title_label.text = _localized_definition(str(quest.get("titleKey", "")), quest_id)
+	quest_offer_summary_label.text = _localized_definition(str(quest.get("summaryKey", "")), "")
+	quest_offer_objective_heading.text = _localized_text("ui.quest.objectives", "Objectives").to_upper()
+	quest_offer_reward_heading.text = _localized_text("ui.quest.rewards", "Rewards").to_upper()
 	var objective := ""
 	var steps_value: Variant = quest.get("steps", [])
 	if steps_value is Array:
@@ -193,13 +208,33 @@ func _quest_offer_text(quest: Dictionary) -> String:
 					str(step.get("stepId", ""))
 				)
 				break
-	return "%s\n%s\n\n%s\n\n%s\n%s" % [
-		_localized_text("ui.quest.side_quest", "Side Quest").to_upper(),
-		title,
-		summary,
-		_localized_text("ui.quest.objectives", "Objectives").to_upper(),
-		objective,
-	]
+	quest_offer_objective_label.text = objective
+	quest_offer_reward_label.text = _quest_reward_text(quest.get("rewardPreviews", []))
+
+
+func _quest_reward_text(rewards_value: Variant) -> String:
+	var reward_parts: Array[String] = []
+	if rewards_value is Array:
+		for reward_value: Variant in rewards_value as Array:
+			if reward_value is not Dictionary:
+				continue
+			var reward := reward_value as Dictionary
+			match str(reward.get("type", "")):
+				"item":
+					var item_id := str(reward.get("itemId", "")).strip_edges()
+					if not item_id.is_empty():
+						var item_name := ItemLocalization.display_name(
+							item_id,
+							item_id.replace("-", " ").capitalize()
+						)
+						var quantity := maxi(int(reward.get("quantity", 1)), 1)
+						reward_parts.append("%s  ×%d" % [item_name, quantity])
+				"currency":
+					var currency := str(reward.get("currency", "")).replace("_", " ").capitalize()
+					var amount := maxi(int(reward.get("amount", 1)), 1)
+					if not currency.is_empty():
+						reward_parts.append("%s  ×%d" % [currency, amount])
+	return ", ".join(reward_parts) if not reward_parts.is_empty() else "—"
 
 
 func _localized_definition(key: String, fallback_id: String) -> String:

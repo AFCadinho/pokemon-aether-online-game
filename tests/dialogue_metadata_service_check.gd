@@ -106,6 +106,8 @@ func _check_dialogue_box_side_quest_offer() -> void:
 	_check_true(text.contains("func start_quest_offer("), "quest details open in the dialogue box")
 	_check_true(text.contains('quest.get("titleKey"') and text.contains('quest.get("summaryKey"'), "quest choice shows title and summary")
 	_check_true(text.contains('step.get("objectiveKey"'), "quest choice shows its objective")
+	_check_true(text.contains('quest.get("rewardPreviews"'), "quest choice shows its server-projected rewards")
+	_check_true(text.contains("ItemLocalization.display_name("), "item rewards use localized item names")
 	_check_true(text.contains("PlayerGameStateService.accept_side_quest("), "accept uses the authoritative side-quest flow")
 	_check_true(text.contains("_finish_quest_offer(false)"), "decline closes the offer without accepting")
 

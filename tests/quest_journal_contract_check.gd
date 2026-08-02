@@ -9,6 +9,7 @@ const QUEST_LOCALIZATION_KEYS: Array[String] = [
 	"ui.quest.side_quest",
 	"ui.quest.list_heading",
 	"ui.quest.objectives",
+	"ui.quest.rewards",
 	"ui.quest.empty",
 	"ui.quest.empty_filter",
 	"ui.quest.empty_title",
