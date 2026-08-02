@@ -32,7 +32,7 @@ func _check_staging_tiles(lab_resource: PackedScene) -> void:
 	var collision := lab.get_node_or_null("Collision") as TileMapLayer
 	_check_true(collision != null, "Oak's Lab exposes its collision layer")
 	if collision != null:
-		var staging_positions: Array[Vector2] = [Vector2(304, 784)]
+		var staging_positions: Array[Vector2] = [Vector2(368, 784)]
 		var stand_offsets := {
 			"LeftBulbasaur": Vector2(0, 80),
 			"MiddleSquirtle": Vector2(0, 80),
@@ -50,8 +50,7 @@ func _check_staging_tiles(lab_resource: PackedScene) -> void:
 		for world_position: Vector2 in staging_positions:
 			var tile := collision.local_to_map(collision.to_local(world_position))
 			_check_true(collision.get_cell_source_id(tile) == -1, "Gary staging tile %s is walkable" % world_position)
-			if world_position != Vector2(304, 784):
-				_check_true(tile not in occupied_npc_tiles, "Gary staging tile %s is not occupied by Oak" % world_position)
+			_check_true(tile not in occupied_npc_tiles, "Gary staging tile %s is not occupied by Oak" % world_position)
 	lab.free()
 
 
