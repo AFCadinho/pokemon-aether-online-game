@@ -46,7 +46,7 @@ func interact_with_player(player: Node2D) -> void:
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
 	if _is_quest_turn_in_available():
-		await _turn_in_quest_item()
+		await _turn_in_quest_item(player)
 		is_creating_starter = false
 		return
 
@@ -163,7 +163,7 @@ func _is_quest_turn_in_available() -> bool:
 	return false
 
 
-func _turn_in_quest_item() -> void:
+func _turn_in_quest_item(player: Node2D) -> void:
 	await show_dialogue(await _resolve_dialogue_lines(
 		quest_turn_in_dialogue_id,
 		["Ah, that is the parcel I was waiting for! Let me take a look."]
@@ -188,6 +188,9 @@ func _turn_in_quest_item() -> void:
 			"You and your new partner handled your first errand well. Your journey has truly begun.",
 		]
 	))
+	var gary := get_parent().get_node_or_null("Gary")
+	if gary != null and gary.has_method("play_parcel_return_departure"):
+		await gary.call("play_parcel_return_departure", player)
 
 
 func _get_metadata_dialogue_id(metadata: Dictionary, camel_key: String, snake_key: String, current_value: String) -> String:

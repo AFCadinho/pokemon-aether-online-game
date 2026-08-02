@@ -31,6 +31,10 @@ func _init() -> void:
 		_check(_count_color(sheet_image, Color8(15, 255, 0)) == 0, "Lillie's original green eye pixels are removed")
 	var scene_source := FileAccess.get_file_as_string(RIVALS_HOUSE)
 	_check(scene_source.contains('reward_id = "kanto_rivals_house_town_map"'), "Lillie grants the Town Map reward")
+	_check(scene_source.contains("preload_quest_markers = true"), "Lillie's quest marker is preloaded")
+	var gift_script := FileAccess.get_file_as_string("res://scripts/world/npcs/item_gift_npc.gd")
+	_check(gift_script.contains("is_story_requirement_met"), "Lillie's gift respects story requirements")
+	_check(gift_script.contains("reward_resolved"), "Lillie's marker clears after receiving the Town Map")
 	if scene != null:
 		var house := scene.instantiate()
 		var collision := house.get_node_or_null("Collision") as TileMapLayer

@@ -85,6 +85,7 @@ npc_definition_id = "kanto_rivals_house_lillie"
 reward_id = "kanto_rivals_house_town_map"
 display_name = "Lillie"
 facing_direction = Vector2(0, 1)
+preload_quest_markers = true
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=2100926305]
 

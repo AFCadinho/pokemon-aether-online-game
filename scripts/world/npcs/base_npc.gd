@@ -461,7 +461,9 @@ func _refresh_quest_marker() -> void:
 		var quest: Dictionary = story_service.get_quest(str(binding.get("questId", "")))
 		if quest.is_empty() or not _quest_marker_binding_matches(binding, quest):
 			continue
-		var quest_type := str(quest.get("questType", "side")).strip_edges().to_lower()
+		var quest_type := str(
+			binding.get("markerType", quest.get("questType", "side"))
+		).strip_edges().to_lower()
 		if selected_type == "" or quest_type == "main":
 			selected_type = quest_type
 		if selected_type == "main":

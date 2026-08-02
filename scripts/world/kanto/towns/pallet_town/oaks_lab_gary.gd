@@ -1,38 +1,30 @@
 extends DialogueNPC
 
-const GARY_QUEST_ID := "gary_starter_battle"
-const GARY_STEP_ID := "battle_gary"
+const PARCEL_QUEST_ID := "oaks_parcel"
 const SELECTED_DIALOGUE_ID := "kanto_oaks_lab_gary_selected_starter"
-const CHALLENGE_DIALOGUE_ID := "kanto_oaks_lab_gary_challenge"
-const AFTER_BATTLE_DIALOGUE_ID := "kanto_oaks_lab_gary_after_battle"
+const STARTER_DEPARTURE_DIALOGUE_ID := "kanto_oaks_lab_gary_starter_departure"
+const PARCEL_WAITING_DIALOGUE_ID := "kanto_oaks_lab_gary_parcel_waiting"
+const ROUTE_22_DEPARTURE_DIALOGUE_ID := "kanto_oaks_lab_gary_route_22_departure"
 const PATH_DIRECTIONS: Array[Vector2i] = [Vector2i.UP, Vector2i.LEFT, Vector2i.RIGHT, Vector2i.DOWN]
 
 var starter_sequence_running := false
+var parcel_departure_running := false
+var starter_already_claimed := false
 
 
 func _ready() -> void:
 	super._ready()
+	var story_service := get_node_or_null("/root/StoryService")
+	if story_service != null and not story_service.story_changed.is_connected(_on_gary_story_changed):
+		story_service.story_changed.connect(_on_gary_story_changed)
 	_sync_persisted_starter_choice.call_deferred()
 
 
 func interact_with_player(player: Node2D) -> void:
-	if starter_sequence_running:
+	if starter_sequence_running or parcel_departure_running:
 		return
-	if _is_gary_battle_active():
-		var options: Dictionary = await PlayerPartyStateService.get_starter_options()
-		if not bool(options.get("success", false)):
-			await GameErrorDialogService.show_response(options)
-			return
-		call_deferred(
-			"begin_starter_sequence",
-			player,
-			str(options.get("rivalStarterSpeciesId", "")),
-			str(options.get("rivalStarterSpeciesName", "")),
-			str(options.get("rivalTrainerId", ""))
-		)
-		return
-	if _is_gary_battle_completed():
-		await _show_catalogue_dialogue(AFTER_BATTLE_DIALOGUE_ID)
+	if _is_parcel_return_active():
+		await _show_catalogue_dialogue(PARCEL_WAITING_DIALOGUE_ID)
 		return
 	await show_dialogue()
 
@@ -47,18 +39,17 @@ func begin_starter_sequence(
 		return
 	var species_id := rival_species_id.strip_edges().to_lower()
 	var species_name := rival_species_name.strip_edges()
-	var trainer_id := rival_trainer_id.strip_edges()
-	if species_id.is_empty() or species_name.is_empty() or trainer_id.is_empty():
+	if species_id.is_empty() or species_name.is_empty():
 		var options: Dictionary = await PlayerPartyStateService.get_starter_options()
 		if bool(options.get("success", false)):
 			species_id = str(options.get("rivalStarterSpeciesId", "")).strip_edges().to_lower()
 			species_name = str(options.get("rivalStarterSpeciesName", "")).strip_edges()
-			trainer_id = str(options.get("rivalTrainerId", "")).strip_edges()
-	if player == null or species_id.is_empty() or species_name.is_empty() or trainer_id.is_empty():
+	if player == null or species_id.is_empty() or species_name.is_empty():
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
 
 	starter_sequence_running = true
+	_set_story_presence(true)
 	GameState.lock_overworld_input()
 	var selected_ball := _starter_ball_for_species(species_id)
 	if selected_ball == null:
@@ -89,36 +80,19 @@ func begin_starter_sequence(
 	face_world_position(_get_body_feet_position(player))
 	if player.has_method("face_world_position"):
 		player.face_world_position(get_feet_position())
-	await _show_catalogue_dialogue(CHALLENGE_DIALOGUE_ID)
-
-	var metadata_response: Dictionary = await TrainerMetadataService.get_trainer_metadata(trainer_id)
-	if not bool(metadata_response.get("success", false)):
-		starter_sequence_running = false
-		GameState.unlock_overworld_input()
-		await GameErrorDialogService.show_response(metadata_response)
-		return
-	var world := get_tree().get_first_node_in_group("world")
-	if world == null or not world.has_method("start_trainer_battle"):
-		starter_sequence_running = false
-		GameState.unlock_overworld_input()
-		await GameErrorDialogService.show_report_to_staff_message()
-		return
-	var battle_result: Dictionary = await world.call(
-		"start_trainer_battle",
-		(metadata_response.get("metadata", {}) as Dictionary).duplicate(true)
-	)
+	await _show_catalogue_dialogue(STARTER_DEPARTURE_DIALOGUE_ID)
 	starter_sequence_running = false
-	if not bool(battle_result.get("success", false)):
-		GameState.unlock_overworld_input()
-		await GameErrorDialogService.show_response(
-			battle_result,
-			"backend.error.trainer_battle_start"
-		)
+	_set_story_presence(false)
+	GameState.unlock_overworld_input()
 
 
 func _sync_persisted_starter_choice() -> void:
 	var options: Dictionary = await PlayerPartyStateService.get_starter_options()
-	if not bool(options.get("success", false)) or not bool(options.get("alreadyClaimed", false)):
+	if not bool(options.get("success", false)):
+		return
+	starter_already_claimed = bool(options.get("alreadyClaimed", false))
+	if not starter_already_claimed:
+		_set_story_presence(true)
 		return
 	if GameState.current_map == null:
 		await get_tree().process_frame
@@ -127,6 +101,40 @@ func _sync_persisted_starter_choice() -> void:
 	)
 	if selected_ball != null:
 		selected_ball.call("set_claimed", true)
+	_sync_story_presence()
+
+
+func play_parcel_return_departure(player: Node2D) -> void:
+	if parcel_departure_running:
+		return
+	parcel_departure_running = true
+	_set_story_presence(true)
+	face_world_position(_get_body_feet_position(player))
+	if player != null and player.has_method("face_world_position"):
+		player.face_world_position(get_feet_position())
+	await _show_catalogue_dialogue(ROUTE_22_DEPARTURE_DIALOGUE_ID)
+	parcel_departure_running = false
+	_set_story_presence(false)
+
+
+func _on_gary_story_changed(_revision: int) -> void:
+	_sync_story_presence()
+
+
+func _sync_story_presence() -> void:
+	if starter_sequence_running or parcel_departure_running:
+		return
+	if not starter_already_claimed:
+		_set_story_presence(true)
+		return
+	_set_story_presence(_is_parcel_return_active())
+
+
+func _set_story_presence(is_present: bool) -> void:
+	visible = is_present
+	if interaction_area != null:
+		interaction_area.set_deferred("monitoring", is_present)
+		interaction_area.set_deferred("monitorable", is_present)
 
 
 func _starter_ball_for_species(species_id: String) -> Node2D:
@@ -234,17 +242,13 @@ func _show_catalogue_dialogue(dialogue_id: String, replacements: Dictionary = {}
 	await show_dialogue(formatted, display_name)
 
 
-func _is_gary_battle_active() -> bool:
-	var quest := StoryService.get_quest(GARY_QUEST_ID)
+func _is_parcel_return_active() -> bool:
+	var quest := StoryService.get_quest(PARCEL_QUEST_ID)
 	if str(quest.get("status", "")) != "active":
 		return false
 	for value: Variant in quest.get("steps", []):
 		if value is Dictionary:
 			var step := value as Dictionary
-			if str(step.get("stepId", "")) == GARY_STEP_ID:
+			if str(step.get("stepId", "")) == "return_to_oak":
 				return str(step.get("status", "")) == "active"
 	return false
-
-
-func _is_gary_battle_completed() -> bool:
-	return str(StoryService.get_quest(GARY_QUEST_ID).get("status", "")) == "completed"
