@@ -29,11 +29,28 @@ func _init() -> void:
 	_check_true(
 		gary_text.contains("var reached_player := await _walk_next_to_player(player)")
 		and gary_text.contains("continuing the challenge from the starter table"),
-		"A blocked player approach does not abort Gary's challenge"
+		"A blocked player approach does not abort Gary's departure scene"
 	)
-	_check_true(gary_text.contains('"start_trainer_battle"'), "Gary starts the server trainer battle")
+	_check_true(
+		gary_text.contains("STARTER_DEPARTURE_DIALOGUE_ID")
+		and not gary_text.contains('"start_trainer_battle"'),
+		"Gary dismisses the player instead of starting an immediate battle"
+	)
+	_check_true(
+		gary_text.contains("play_parcel_return_departure")
+		and gary_text.contains("ROUTE_22_DEPARTURE_DIALOGUE_ID"),
+		"Gary returns after the parcel and announces Route 22"
+	)
+	_check_true(
+		gary_text.contains("_set_story_presence(false)"),
+		"Gary leaves the lab after each departure scene"
+	)
 	var oak_text := _read_text(OAK_SCRIPT)
 	_check_true(oak_text.contains("_schedule_gary_starter_sequence(player, create_result)"), "Oak hands the new-starter flow to Gary")
+	_check_true(
+		oak_text.contains('gary.call("play_parcel_return_departure", player)'),
+		"Oak hands the completed parcel scene to Gary"
+	)
 	var starter_ball_text := _read_text(STARTER_BALL_SCRIPT)
 	_check_true(
 		starter_ball_text.contains("selection_stand_offset := Vector2(0, 32)"),
@@ -44,11 +61,6 @@ func _init() -> void:
 		gary_scene_text.contains("facing_direction = Vector2(0, 1)")
 		and gary_scene_text.contains('animation = &"idle_down"'),
 		"Gary initially faces down beside Oak"
-	)
-	var world_text := _read_text(WORLD_SCRIPT)
-	_check_true(
-		world_text.contains('normalized_winner in ["p1", "player 1", "player1"]'),
-		"Gary's local p1 victory triggers trainer rewards and story progression"
 	)
 	var base_npc_text := _read_text(BASE_NPC_SCRIPT)
 	_check_true(

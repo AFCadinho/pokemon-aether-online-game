@@ -113,6 +113,8 @@ func _normalize_npc_metadata(npc_id: String, metadata: Dictionary) -> Dictionary
 	npc_metadata["openingDialogueId"] = str(npc_metadata.get("openingDialogueId", npc_metadata.get("opening_dialogue_id", "")))
 	npc_metadata["alreadyReceivedDialogueId"] = str(npc_metadata.get("alreadyReceivedDialogueId", npc_metadata.get("already_received_dialogue_id", "")))
 	npc_metadata["rewardId"] = str(npc_metadata.get("rewardId", npc_metadata.get("reward_id", "")))
+	npc_metadata["rewardItemId"] = str(npc_metadata.get("rewardItemId", npc_metadata.get("reward_item_id", "")))
+	npc_metadata["lockedDialogueId"] = str(npc_metadata.get("lockedDialogueId", npc_metadata.get("locked_dialogue_id", "")))
 	npc_metadata["successDialogue"] = _get_string_array(npc_metadata.get("successDialogue", []))
 	npc_metadata["alreadyHealedDialogue"] = _get_string_array(npc_metadata.get("alreadyHealedDialogue", []))
 	npc_metadata["noPartyDialogue"] = _get_string_array(npc_metadata.get("noPartyDialogue", []))

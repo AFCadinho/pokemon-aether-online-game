@@ -1450,6 +1450,7 @@ func _on_locale_changed(_locale: String) -> void:
 	_refresh_bag_localized_ui()
 	_refresh_market_localized_ui()
 	_refresh_pokedex_localized_ui()
+	_refresh_pokedex_unlock_state()
 	_refresh_item_dex_localized_ui()
 	_refresh_wild_pokemon_localized_ui()
 	_refresh_mail_localized_ui()
@@ -8139,6 +8140,25 @@ func _setup_item_dex_button() -> void:
 func _setup_pokedex_button() -> void:
 	if pokedex_button != null:
 		pokedex_button.focus_mode = Control.FOCUS_NONE
+	var story_service := get_node_or_null("/root/StoryService")
+	if story_service != null and not story_service.story_changed.is_connected(_refresh_pokedex_unlock_state):
+		story_service.story_changed.connect(_refresh_pokedex_unlock_state)
+	_refresh_pokedex_unlock_state()
+
+func _is_pokedex_unlocked() -> bool:
+	var story_service := get_node_or_null("/root/StoryService")
+	if story_service == null:
+		return false
+	return str(story_service.get_quest("oaks_parcel").get("status", "")) == "completed"
+
+func _refresh_pokedex_unlock_state(_revision: int = 0) -> void:
+	if pokedex_button == null:
+		return
+	var unlocked := _is_pokedex_unlocked()
+	pokedex_button.modulate = Color.WHITE if unlocked else Color(0.45, 0.5, 0.55, 0.72)
+	pokedex_button.tooltip_text = LocalizationManager.text(
+		"ui.navigation.pokedex" if unlocked else "ui.navigation.pokedex_locked"
+	)
 
 func _setup_item_dex_popup() -> void:
 	item_dex_popup = PanelContainer.new()
@@ -25810,6 +25830,9 @@ func _on_item_dex_button_pressed() -> void:
 	await _show_item_dex_popup()
 
 func _on_pokedex_button_pressed() -> void:
+	if not _is_pokedex_unlocked():
+		add_system_message(LocalizationManager.text("ui.pokedex.locked"))
+		return
 	await _show_pokedex_popup()
 
 func _on_alpha_tools_button_pressed() -> void:
