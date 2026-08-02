@@ -174,6 +174,22 @@ func _init() -> void:
 		"a completed render acknowledgement survives a transient socket reconnect until its phase release arrives"
 	)
 	_check_equal(
+		realtime_source.contains('"renderProtocolVersion": 2') \
+			and realtime_source.contains('"renderState": normalized_render_state') \
+			and realtime_source.contains('if normalized_render_state == "COMPLETED":') \
+			and realtime_source.contains("func send_render_status("),
+		true,
+		"render progress uses the versioned protocol while only completion is retained as release proof"
+	)
+	_check_equal(
+		battle_source.contains('PVP_RENDER_PROGRESS_HEARTBEAT_SECONDS := 1.0') \
+			and battle_source.contains('_send_active_pvp_render_status("STARTED")') \
+			and battle_source.contains('_send_active_pvp_render_status("PROGRESS")') \
+			and battle_source.contains("_send_pvp_received_render_status(response)"),
+		true,
+		"authoritative render batches report received, started, progress, and completion lifecycle evidence"
+	)
+	_check_equal(
 		battle_source.contains("func _observe_pvp_gateway_epoch(message: Dictionary) -> void:") \
 			and battle_source.contains("pvp_response_order.reset_transport_cursor()") \
 			and battle_source.contains("pvp_last_applied_server_seq = 0"),
