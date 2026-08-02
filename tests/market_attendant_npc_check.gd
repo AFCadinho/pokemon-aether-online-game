@@ -40,6 +40,12 @@ func _check_market_attendant_scene() -> void:
 	_check_true(text.contains("display_name = \"Clerk\""), "MarketAttendant scene has display name")
 	_check_true(text.contains("InteractionArea"), "MarketAttendant scene has interaction area")
 	_check_true(text.contains("FeetMarker"), "MarketAttendant scene has feet marker")
+	_check_true(
+		text.contains("manual_interaction_reach_tiles = 4")
+		and text.contains("size = Vector2(256, 32)")
+		and text.contains("position = Vector2(-64, 0)"),
+		"Market attendants can be reached cardinally across the counter"
+	)
 	var seller_source := _read_text(MARKET_SELLER_SCENE)
 	var buyer_source := _read_text(MARKET_BUYER_SCENE)
 	_check_true(seller_source.contains('npc_definition_id = "pokemart_seller"'), "Seller scene uses the generic seller definition")

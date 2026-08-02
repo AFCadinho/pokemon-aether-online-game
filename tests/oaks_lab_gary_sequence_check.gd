@@ -70,8 +70,9 @@ func _init() -> void:
 	var base_npc_text := _read_text(BASE_NPC_SCRIPT)
 	_check_true(
 		base_npc_text.contains("if not _is_player_facing_npc(nearby_player):")
-		and base_npc_text.contains("return facing_tile == _to_tile(get_feet_position())"),
-		"NPC interaction requires the NPC on the cardinal tile the player faces"
+		and base_npc_text.contains("manual_interaction_reach_tiles := 1")
+		and base_npc_text.contains("player_tile + cardinal_direction * distance == npc_tile"),
+		"NPC interaction remains cardinal with a one-tile default reach"
 	)
 	if lab_resource != null:
 		_check_staging_tiles(lab_resource)
