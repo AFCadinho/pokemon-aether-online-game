@@ -6,6 +6,7 @@ signal dialogue_finished
 signal quest_offer_resolved(accepted: bool)
 
 @onready var panel_container: Panel = $PanelContainer
+@onready var quest_offer_close_button: Button = $PanelContainer/QuestOfferCloseButton
 @onready var name_label: Label = $PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/NPCName
 @onready var portrait_panel: Panel = $PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/PortraitPanel
 @onready var npc_sprite: TextureRect = $PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/PortraitPanel/PortraitMargin/NPCSprite
@@ -41,6 +42,7 @@ func _ready() -> void:
 	default_mugshot = npc_sprite.texture
 	quest_offer_decline_button.pressed.connect(_on_quest_offer_declined)
 	quest_offer_accept_button.pressed.connect(_on_quest_offer_accepted)
+	quest_offer_close_button.pressed.connect(hide_dialogue)
 	hide_dialogue()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -99,6 +101,7 @@ func start_quest_offer(quest: Dictionary, speaker_name := "", mugshot: Texture2D
 	quest_offer_accept_button.text = _localized_text("common.accept", "Accept")
 	quest_offer_status_label.visible = false
 	quest_offer_actions.visible = true
+	quest_offer_close_button.visible = true
 	continue_arrow.visible = false
 	panel_container.offset_top = 36.0
 	panel_container.offset_bottom = 374.0
@@ -141,6 +144,7 @@ func _on_quest_offer_accepted() -> void:
 	quest_offer_pending = true
 	quest_offer_accept_button.disabled = true
 	quest_offer_decline_button.disabled = true
+	quest_offer_close_button.disabled = true
 	quest_offer_status_label.text = _localized_text(
 		"ui.quest.offer_accepting",
 		"Accepting side quest..."
@@ -156,6 +160,7 @@ func _on_quest_offer_accepted() -> void:
 		return
 	quest_offer_accept_button.disabled = false
 	quest_offer_decline_button.disabled = false
+	quest_offer_close_button.disabled = false
 	quest_offer_status_label.text = _localized_text(
 		"ui.quest.offer_error",
 		"The side quest could not be accepted. Please try again."
@@ -182,9 +187,11 @@ func _reset_quest_offer_view() -> void:
 	text_label.visible = true
 	quest_offer_content.visible = false
 	quest_offer_actions.visible = false
+	quest_offer_close_button.visible = false
 	quest_offer_status_label.visible = false
 	quest_offer_accept_button.disabled = false
 	quest_offer_decline_button.disabled = false
+	quest_offer_close_button.disabled = false
 	continue_arrow.visible = true
 
 
