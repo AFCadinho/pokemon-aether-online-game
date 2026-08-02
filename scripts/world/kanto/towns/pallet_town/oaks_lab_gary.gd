@@ -48,6 +48,12 @@ func begin_starter_sequence(
 	var species_id := rival_species_id.strip_edges().to_lower()
 	var species_name := rival_species_name.strip_edges()
 	var trainer_id := rival_trainer_id.strip_edges()
+	if species_id.is_empty() or species_name.is_empty() or trainer_id.is_empty():
+		var options: Dictionary = await PlayerPartyStateService.get_starter_options()
+		if bool(options.get("success", false)):
+			species_id = str(options.get("rivalStarterSpeciesId", "")).strip_edges().to_lower()
+			species_name = str(options.get("rivalStarterSpeciesName", "")).strip_edges()
+			trainer_id = str(options.get("rivalTrainerId", "")).strip_edges()
 	if player == null or species_id.is_empty() or species_name.is_empty() or trainer_id.is_empty():
 		await GameErrorDialogService.show_report_to_staff_message()
 		return

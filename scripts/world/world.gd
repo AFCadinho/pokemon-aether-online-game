@@ -2998,7 +2998,7 @@ func _is_player_battle_winner(winner: String) -> bool:
 	var normalized_winner := winner.strip_edges().to_lower()
 	if normalized_winner == "":
 		return false
-	if normalized_winner == "player 1":
+	if normalized_winner in ["p1", "player 1", "player1"]:
 		return true
 
 	var player_names: Array[String] = [

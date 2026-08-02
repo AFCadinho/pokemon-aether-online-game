@@ -5,6 +5,7 @@ const GARY_SCENE := "res://scenes/npcs/oaks_lab_gary.tscn"
 const GARY_SCRIPT := "res://scripts/world/kanto/towns/pallet_town/oaks_lab_gary.gd"
 const OAK_SCRIPT := "res://scripts/world/kanto/towns/pallet_town/oak.gd"
 const STARTER_BALL_SCRIPT := "res://scripts/world/interactables/starter_poke_ball.gd"
+const WORLD_SCRIPT := "res://scripts/world/world.gd"
 
 var failed := false
 
@@ -19,6 +20,10 @@ func _init() -> void:
 	_check_true(lab_text.contains('name="RightCharmander"'), "right ball contains Charmander")
 	var gary_text := _read_text(GARY_SCRIPT)
 	_check_true(gary_text.contains("_walk_to_world_position"), "Gary walks to his selected ball")
+	_check_true(
+		gary_text.contains('var options: Dictionary = await PlayerPartyStateService.get_starter_options()'),
+		"Gary recovers missing automatic starter handoff metadata"
+	)
 	_check_true(gary_text.contains('selected_ball.call("set_claimed", true)'), "Gary removes his selected ball")
 	_check_true(gary_text.contains('"start_trainer_battle"'), "Gary starts the server trainer battle")
 	var oak_text := _read_text(OAK_SCRIPT)
@@ -27,6 +32,17 @@ func _init() -> void:
 	_check_true(
 		starter_ball_text.contains("selection_stand_offset := Vector2(0, 32)"),
 		"starter balls keep Gary on the table-facing row"
+	)
+	var gary_scene_text := _read_text(GARY_SCENE)
+	_check_true(
+		gary_scene_text.contains("facing_direction = Vector2(0, 1)")
+		and gary_scene_text.contains('animation = &"idle_down"'),
+		"Gary initially faces down beside Oak"
+	)
+	var world_text := _read_text(WORLD_SCRIPT)
+	_check_true(
+		world_text.contains('normalized_winner in ["p1", "player 1", "player1"]'),
+		"Gary's local p1 victory triggers trainer rewards and story progression"
 	)
 	if lab_resource != null:
 		_check_staging_tiles(lab_resource)
@@ -38,7 +54,12 @@ func _check_staging_tiles(lab_resource: PackedScene) -> void:
 	var collision := lab.get_node_or_null("Collision") as TileMapLayer
 	_check_true(collision != null, "Oak's Lab exposes its collision layer")
 	if collision != null:
-		var staging_positions: Array[Vector2] = [Vector2(432, 720)]
+		var gary := lab.get_node_or_null("Entities/NPCs/Gary") as Node2D
+		_check_true(gary != null, "Gary exists beside Oak")
+		_check_true(gary != null and gary.global_position == Vector2(432, 784), "Gary starts beside Oak")
+		var staging_positions: Array[Vector2] = []
+		if gary != null:
+			staging_positions.append(gary.global_position)
 		var oak := lab.get_node_or_null("Entities/NPCs/Oak") as Node2D
 		var occupied_npc_tiles: Array[Vector2i] = []
 		if oak != null:
