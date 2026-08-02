@@ -32,7 +32,7 @@ func _check_staging_tiles(lab_resource: PackedScene) -> void:
 	var collision := lab.get_node_or_null("Collision") as TileMapLayer
 	_check_true(collision != null, "Oak's Lab exposes its collision layer")
 	if collision != null:
-		var staging_positions: Array[Vector2] = [Vector2(432, 784)]
+		var staging_positions: Array[Vector2] = [Vector2(432, 720)]
 		var stand_offsets := {
 			"LeftBulbasaur": Vector2(0, 80),
 			"MiddleSquirtle": Vector2(0, 80),
