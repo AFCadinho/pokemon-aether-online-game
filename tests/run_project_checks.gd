@@ -77,6 +77,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/cursor_theme_check.gd",
 	"res://tests/story_interaction_contract_check.gd",
 	"res://tests/players_house_story_intro_check.gd",
+	"res://tests/rivals_house_lillie_check.gd",
 	"res://tests/impersonation_account_switch_check.gd",
 	"res://tests/floor_visibility_mask_camera_check.gd",
 	"res://tests/players_house_visual_depth_check.gd",
