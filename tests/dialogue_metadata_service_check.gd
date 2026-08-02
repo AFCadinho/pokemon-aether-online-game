@@ -4,6 +4,7 @@ const PROJECT_CONFIG := "res://project.godot"
 const DIALOGUE_METADATA_SERVICE_SCRIPT := "res://scripts/services/dialogue_metadata_service.gd"
 const NPC_DIALOGUE_SERVICE_SCRIPT := "res://scripts/services/npc_dialogue_service.gd"
 const DIALOGUE_NPC_SCRIPT := "res://scripts/world/npcs/dialogue_npc.gd"
+const DIALOGUE_BOX_SCRIPT := "res://scripts/ui/dialogue_box.gd"
 const TRAINER_NPC_SCRIPT := "res://scripts/world/npcs/trainer_npc.gd"
 
 var failed := false
@@ -17,6 +18,7 @@ func _init() -> void:
 	_check_service_locale_contract()
 	_check_dialogue_npc_uses_dialogue_id_lookup()
 	_check_dialogue_npc_fallback_behavior()
+	_check_dialogue_box_side_quest_offer()
 	_check_trainer_npc_uses_intro_dialogue_lookup()
 	_check_trainer_npc_fallback_behavior()
 	_check_trainer_battle_behavior_unchanged()
@@ -83,6 +85,12 @@ func _check_dialogue_npc_uses_dialogue_id_lookup() -> void:
 		and text.contains("resolved_dialogue_speaker_name"),
 		"DialogueNPC uses the localized dialogue speaker name"
 	)
+	_check_true(
+		text.contains('metadata.get("offeredQuestId", "")')
+		and text.contains("start_quest_offer(")
+		and text.contains("quest_offer_resolved"),
+		"DialogueNPC opens a catalog-configured side-quest choice dialogue"
+	)
 
 
 func _check_dialogue_npc_fallback_behavior() -> void:
@@ -90,6 +98,16 @@ func _check_dialogue_npc_fallback_behavior() -> void:
 	_check_true(text.contains("await super.show_dialogue(lines, resolved_speaker_name)"), "DialogueNPC keeps explicit lines fallback")
 	_check_true(text.contains("await super.show_dialogue(dialogue_metadata_lines, resolved_speaker_name)"), "DialogueNPC passes resolved lines to BaseNPC")
 	_check_true(text.contains("resolved_dialogue_speaker_name"), "DialogueNPC keeps the resolved speaker fallback")
+
+
+func _check_dialogue_box_side_quest_offer() -> void:
+	var text := _read_text(DIALOGUE_BOX_SCRIPT)
+	_check_true(text.contains("signal quest_offer_resolved(accepted: bool)"), "quest choice exposes a completion signal")
+	_check_true(text.contains("func start_quest_offer("), "quest details open in the dialogue box")
+	_check_true(text.contains('quest.get("titleKey"') and text.contains('quest.get("summaryKey"'), "quest choice shows title and summary")
+	_check_true(text.contains('step.get("objectiveKey"'), "quest choice shows its objective")
+	_check_true(text.contains("PlayerGameStateService.accept_side_quest("), "accept uses the authoritative side-quest flow")
+	_check_true(text.contains("_finish_quest_offer(false)"), "decline closes the offer without accepting")
 
 
 func _check_trainer_npc_uses_intro_dialogue_lookup() -> void:

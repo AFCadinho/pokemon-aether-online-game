@@ -28894,6 +28894,7 @@ func _on_quest_log_button_pressed() -> void:
 	if quest_journal_view != null:
 		quest_journal_view.open_journal()
 
+
 func _on_socials_button_pressed() -> void:
 	if socials_menu.visible:
 		_hide_socials_menu()

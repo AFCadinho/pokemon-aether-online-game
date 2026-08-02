@@ -1,16 +1,26 @@
 extends Control
 
 signal dialogue_finished
+signal quest_offer_resolved(accepted: bool)
 
+@onready var panel_container: Panel = $PanelContainer
 @onready var name_label: Label = $PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/NPCName
 @onready var portrait_panel: Panel = $PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/PortraitPanel
 @onready var npc_sprite: TextureRect = $PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/PortraitPanel/PortraitMargin/NPCSprite
 @onready var text_label: RichTextLabel = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/RichTextLabel
+@onready var quest_offer_status_label: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferStatus
+@onready var quest_offer_actions: HBoxContainer = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferActions
+@onready var quest_offer_decline_button: Button = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferActions/DeclineButton
+@onready var quest_offer_accept_button: Button = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferActions/AcceptButton
+@onready var continue_arrow: Label = $PanelContainer/MarginContainer/HBoxContainer/ConitinueArrow
 
 var default_mugshot: Texture2D
 
 var is_open := false
 var just_started := false
+var quest_offer_open := false
+var quest_offer_pending := false
+var offered_quest: Dictionary = {}
 
 var lines: Array = []
 var current_line_index := 0
@@ -18,11 +28,15 @@ var current_line_index := 0
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	default_mugshot = npc_sprite.texture
+	quest_offer_decline_button.pressed.connect(_on_quest_offer_declined)
+	quest_offer_accept_button.pressed.connect(_on_quest_offer_accepted)
 	hide_dialogue()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	if not is_open:
+		return
+	if quest_offer_open:
 		return
 	
 	if just_started:
@@ -38,6 +52,8 @@ func _process(_delta: float) -> void:
 			show_current_line()
 	
 func start_dialogue(new_lines: Array, speaker_name := "", mugshot: Texture2D = null, show_mugshot := true) -> void:
+	_reset_quest_offer_view()
+	_restore_dialogue_size()
 	lines = new_lines
 	name_label.text = speaker_name
 	name_label.visible = speaker_name != ""
@@ -55,12 +71,38 @@ func start_dialogue(new_lines: Array, speaker_name := "", mugshot: Texture2D = n
 	GameState.lock_input()
 	
 	show_current_line()
+
+
+func start_quest_offer(quest: Dictionary, speaker_name := "", mugshot: Texture2D = null) -> void:
+	offered_quest = quest.duplicate(true)
+	quest_offer_open = true
+	quest_offer_pending = false
+	name_label.text = speaker_name
+	name_label.visible = not speaker_name.is_empty()
+	portrait_panel.visible = true
+	npc_sprite.texture = mugshot if mugshot != null else default_mugshot
+	text_label.text = _quest_offer_text(offered_quest)
+	quest_offer_decline_button.text = _localized_text("common.decline", "Decline")
+	quest_offer_accept_button.text = _localized_text("common.accept", "Accept")
+	quest_offer_status_label.visible = false
+	quest_offer_actions.visible = true
+	continue_arrow.visible = false
+	panel_container.offset_top = 52.0
+	panel_container.offset_bottom = 342.0
+	is_open = true
+	just_started = false
+	visible = true
+	GameState.lock_input()
+	quest_offer_accept_button.grab_focus()
 	
 func show_current_line() -> void:
 	text_label.text = str(lines[current_line_index])
 		
 	
 func hide_dialogue() -> void:
+	if quest_offer_open:
+		_finish_quest_offer(false)
+		return
 	var was_open := is_open
 	
 	is_open = false
@@ -73,4 +115,100 @@ func hide_dialogue() -> void:
 	
 	if was_open:
 		dialogue_finished.emit()
+
+
+func _on_quest_offer_declined() -> void:
+	if not quest_offer_pending:
+		_finish_quest_offer(false)
+
+
+func _on_quest_offer_accepted() -> void:
+	if quest_offer_pending:
+		return
+	quest_offer_pending = true
+	quest_offer_accept_button.disabled = true
+	quest_offer_decline_button.disabled = true
+	quest_offer_status_label.text = _localized_text(
+		"ui.quest.offer_accepting",
+		"Accepting side quest..."
+	)
+	quest_offer_status_label.visible = true
+	var result: Dictionary = await PlayerGameStateService.accept_side_quest(
+		str(offered_quest.get("questId", "")),
+		StoryService.get_revision()
+	)
+	quest_offer_pending = false
+	if bool(result.get("success", false)):
+		_finish_quest_offer(true)
+		return
+	quest_offer_accept_button.disabled = false
+	quest_offer_decline_button.disabled = false
+	quest_offer_status_label.text = _localized_text(
+		"ui.quest.offer_error",
+		"The side quest could not be accepted. Please try again."
+	)
+	quest_offer_status_label.visible = true
+
+
+func _finish_quest_offer(accepted: bool) -> void:
+	var was_open := quest_offer_open
+	quest_offer_open = false
+	quest_offer_pending = false
+	is_open = false
+	just_started = false
+	visible = false
+	offered_quest.clear()
+	_reset_quest_offer_view()
+	_restore_dialogue_size()
+	GameState.unlock_input()
+	if was_open:
+		quest_offer_resolved.emit(accepted)
+
+
+func _reset_quest_offer_view() -> void:
+	quest_offer_actions.visible = false
+	quest_offer_status_label.visible = false
+	quest_offer_accept_button.disabled = false
+	quest_offer_decline_button.disabled = false
+	continue_arrow.visible = true
+
+
+func _restore_dialogue_size() -> void:
+	panel_container.offset_top = 92.0
+	panel_container.offset_bottom = 262.0
+
+
+func _quest_offer_text(quest: Dictionary) -> String:
+	var quest_id := str(quest.get("questId", ""))
+	var title := _localized_definition(str(quest.get("titleKey", "")), quest_id)
+	var summary := _localized_definition(str(quest.get("summaryKey", "")), "")
+	var objective := ""
+	var steps_value: Variant = quest.get("steps", [])
+	if steps_value is Array:
+		for step_value: Variant in steps_value as Array:
+			if step_value is Dictionary:
+				var step := step_value as Dictionary
+				objective = _localized_definition(
+					str(step.get("objectiveKey", "")),
+					str(step.get("stepId", ""))
+				)
+				break
+	return "%s\n%s\n\n%s\n\n%s\n%s" % [
+		_localized_text("ui.quest.side_quest", "Side Quest").to_upper(),
+		title,
+		summary,
+		_localized_text("ui.quest.objectives", "Objectives").to_upper(),
+		objective,
+	]
+
+
+func _localized_definition(key: String, fallback_id: String) -> String:
+	var normalized_key := key.strip_edges()
+	if not normalized_key.is_empty() and LocalizationManager.has_key(normalized_key):
+		return LocalizationManager.text(normalized_key)
+	return fallback_id.replace("_", " ").capitalize()
+
+
+func _localized_text(key: String, fallback: String) -> String:
+	return LocalizationManager.text(key) if LocalizationManager.has_key(key) else fallback
 	
