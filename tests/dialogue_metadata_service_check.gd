@@ -5,6 +5,7 @@ const DIALOGUE_METADATA_SERVICE_SCRIPT := "res://scripts/services/dialogue_metad
 const NPC_DIALOGUE_SERVICE_SCRIPT := "res://scripts/services/npc_dialogue_service.gd"
 const DIALOGUE_NPC_SCRIPT := "res://scripts/world/npcs/dialogue_npc.gd"
 const DIALOGUE_BOX_SCRIPT := "res://scripts/ui/dialogue_box.gd"
+const DIALOGUE_BOX_SCENE := "res://scripts/ui/dialogue_box.tscn"
 const TRAINER_NPC_SCRIPT := "res://scripts/world/npcs/trainer_npc.gd"
 
 var failed := false
@@ -102,12 +103,16 @@ func _check_dialogue_npc_fallback_behavior() -> void:
 
 func _check_dialogue_box_side_quest_offer() -> void:
 	var text := _read_text(DIALOGUE_BOX_SCRIPT)
+	var scene_text := _read_text(DIALOGUE_BOX_SCENE)
 	_check_true(text.contains("signal quest_offer_resolved(accepted: bool)"), "quest choice exposes a completion signal")
 	_check_true(text.contains("func start_quest_offer("), "quest details open in the dialogue box")
 	_check_true(text.contains('quest.get("titleKey"') and text.contains('quest.get("summaryKey"'), "quest choice shows title and summary")
 	_check_true(text.contains('step.get("objectiveKey"'), "quest choice shows its objective")
 	_check_true(text.contains('quest.get("rewardPreviews"'), "quest choice shows its server-projected rewards")
 	_check_true(text.contains("ItemLocalization.display_name("), "item rewards use localized item names")
+	_check_true(text.contains("func _quest_reward_icon("), "item rewards resolve their catalog icon")
+	_check_true(scene_text.contains('name="RewardIcon" type="TextureRect"'), "quest rewards render an item icon")
+	_check_true(scene_text.contains("layer = 100"), "dialogue renders above the normal HUD canvas layer")
 	_check_true(text.contains("PlayerGameStateService.accept_side_quest("), "accept uses the authoritative side-quest flow")
 	_check_true(text.contains("_finish_quest_offer(false)"), "decline closes the offer without accepting")
 

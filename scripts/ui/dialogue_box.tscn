@@ -118,6 +118,7 @@ atlas = ExtResource("2_bnoha")
 region = Rect2(0, 2, 232, 239)
 
 [node name="DialogueBox" type="CanvasLayer" unique_id=1341619813]
+layer = 100
 
 [node name="Box" type="Control" parent="." unique_id=330933920]
 layout_mode = 3
@@ -231,8 +232,20 @@ theme_override_colors/font_color = Color(0.96, 0.73, 0.25, 1)
 theme_override_font_sizes/font_size = 12
 text = "REWARDS"
 
-[node name="RewardLabel" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent"]
+[node name="RewardRow" type="HBoxContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent"]
 layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="RewardIcon" type="TextureRect" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardRow"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+texture_filter = 1
+expand_mode = 1
+stretch_mode = 5
+
+[node name="RewardLabel" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardRow"]
+layout_mode = 2
+size_flags_vertical = 4
 theme_override_colors/font_color = Color(1, 0.87, 0.48, 1)
 theme_override_font_sizes/font_size = 17
 text = "Exp. Share  ×1"
