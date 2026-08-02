@@ -4,6 +4,7 @@ const LAB_SCENE := "res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn
 const GARY_SCENE := "res://scenes/npcs/oaks_lab_gary.tscn"
 const GARY_SCRIPT := "res://scripts/world/kanto/towns/pallet_town/oaks_lab_gary.gd"
 const OAK_SCRIPT := "res://scripts/world/kanto/towns/pallet_town/oak.gd"
+const STARTER_BALL_SCRIPT := "res://scripts/world/interactables/starter_poke_ball.gd"
 
 var failed := false
 
@@ -22,6 +23,11 @@ func _init() -> void:
 	_check_true(gary_text.contains('"start_trainer_battle"'), "Gary starts the server trainer battle")
 	var oak_text := _read_text(OAK_SCRIPT)
 	_check_true(oak_text.contains("_schedule_gary_starter_sequence(player, create_result)"), "Oak hands the new-starter flow to Gary")
+	var starter_ball_text := _read_text(STARTER_BALL_SCRIPT)
+	_check_true(
+		starter_ball_text.contains("selection_stand_offset := Vector2(0, 32)"),
+		"starter balls keep Gary on the table-facing row"
+	)
 	if lab_resource != null:
 		_check_staging_tiles(lab_resource)
 	quit(1 if failed else 0)
@@ -33,11 +39,6 @@ func _check_staging_tiles(lab_resource: PackedScene) -> void:
 	_check_true(collision != null, "Oak's Lab exposes its collision layer")
 	if collision != null:
 		var staging_positions: Array[Vector2] = [Vector2(432, 720)]
-		var stand_offsets := {
-			"LeftBulbasaur": Vector2(0, 80),
-			"MiddleSquirtle": Vector2(0, 80),
-			"RightCharmander": Vector2(0, 80),
-		}
 		var oak := lab.get_node_or_null("Entities/NPCs/Oak") as Node2D
 		var occupied_npc_tiles: Array[Vector2i] = []
 		if oak != null:
@@ -46,7 +47,9 @@ func _check_staging_tiles(lab_resource: PackedScene) -> void:
 			var ball := lab.get_node_or_null("Entities/Interactables/StarterBalls/%s" % ball_name) as Node2D
 			_check_true(ball != null, "%s exists on Oak's table" % ball_name)
 			if ball != null:
-				staging_positions.append(ball.global_position + (stand_offsets[ball_name] as Vector2))
+				var stand_position := ball.global_position + Vector2(0, 32)
+				_check_true(stand_position.y == 720.0, "%s keeps Gary on the table-facing row" % ball_name)
+				staging_positions.append(stand_position)
 		for world_position: Vector2 in staging_positions:
 			var tile := collision.local_to_map(collision.to_local(world_position))
 			_check_true(collision.get_cell_source_id(tile) == -1, "Gary staging tile %s is walkable" % world_position)

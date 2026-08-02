@@ -4,7 +4,7 @@ class_name StarterPokeBall
 
 @export var species_id := "bulbasaur"
 @export var species_name := "Bulbasaur"
-@export var selection_stand_offset := Vector2(0, 80)
+@export var selection_stand_offset := Vector2(0, 32)
 
 @onready var visual: CanvasItem = get_node_or_null("Visual")
 
