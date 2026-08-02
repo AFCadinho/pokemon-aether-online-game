@@ -23,6 +23,11 @@ func _init() -> void:
 		"arrow and pointing-hand shapes receive custom cursors"
 	)
 	_check(
+		manager_text.contains("load(ARROW_CURSOR_PATH)")
+		and manager_text.contains("load(POINTER_CURSOR_PATH)"),
+		"cursor assets load safely after Godot's import scan"
+	)
+	_check(
 		manager_text.contains("ARROW_HOTSPOT")
 		and manager_text.contains("POINTER_HOTSPOT"),
 		"both cursors define explicit click hotspots"
