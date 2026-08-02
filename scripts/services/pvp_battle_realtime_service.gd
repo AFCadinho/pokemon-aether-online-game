@@ -554,6 +554,9 @@ func _process_packets() -> void:
 			_retire_pending_render_ack(str(message.get("eventBatchId", "")))
 			battle_update_received.emit(message)
 			continue
+		if message_type == "pvp.render_recovery":
+			battle_update_received.emit(message)
+			continue
 		if message_type == "pvp.resync_required":
 			battle_update_received.emit(message)
 			# A fail-closed action delivery can carry a private correlated error

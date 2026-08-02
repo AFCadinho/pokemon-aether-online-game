@@ -114,6 +114,7 @@ var pvp_active_render_progress: Dictionary = {}
 var pvp_render_progress_generation := 0
 var pvp_retrying_reconciliation_snapshot := false
 var pvp_room_recovery_request_active := false
+var pvp_targeted_render_recovery_active := false
 var pvp_idle_realtime_drain_pending := false
 var pvp_idle_wait_recovery_active := false
 var pvp_last_applied_server_seq := 0
@@ -7415,7 +7416,7 @@ func _send_pvp_received_render_status(response: Dictionary) -> void:
 	if event_batch_id == "" or batch_seq < 0 or event_seq_end < 0:
 		return
 	var events_value: Variant = render_response.get("events", [])
-	var total_event_count := events_value.size() if events_value is Array else -1
+	var total_event_count: int = events_value.size() if events_value is Array else -1
 	PvpBattleRealtimeService.send_render_status(
 		battle_state.battle_id,
 		action_flow.local_player_id,
@@ -9989,6 +9990,9 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 
 	_observe_pvp_gateway_epoch(message)
 	var message_type := str(message.get("type", "")).strip_edges().to_lower()
+	if message_type == "pvp.render_recovery":
+		_handle_pvp_targeted_render_recovery.call_deferred(message.duplicate(true))
+		return
 	if message_type == "pvp.resync_required":
 		PvpBattleRealtimeService.report_diagnostic("pvp.resync_required_received", {
 			"displayedPhase": pvp_last_phase if pvp_last_phase != "" else "unknown",
@@ -10008,6 +10012,7 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 		return
 	if _apply_pvp_connection_log_event(message_type, message):
 		return
+
 	if PvpBattleRealtimeService.is_infrastructure_no_contest_message(message):
 		_finish_pvp_infrastructure_no_contest.call_deferred(message.duplicate(true))
 		return
@@ -10128,6 +10133,46 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 		)
 	if _should_drain_idle_pvp_realtime_updates():
 		_drain_idle_pvp_realtime_updates.call_deferred()
+
+func _handle_pvp_targeted_render_recovery(message: Dictionary) -> void:
+	if battle_finished or _is_spectator_battle() or pvp_targeted_render_recovery_active:
+		return
+	var message_battle_id := str(message.get("battleId", "")).strip_edges()
+	if message_battle_id != "" and message_battle_id != battle_state.battle_id:
+		return
+	var event_batch_id := str(message.get("eventBatchId", "")).strip_edges()
+	var batch_seq := _get_int_from_variant(message.get("batchSeq", -1), -1)
+	var event_seq_end := _get_int_from_variant(message.get("eventSeqEnd", -1), -1)
+	if event_batch_id == "" or batch_seq < 0 or event_seq_end < 0:
+		return
+
+	if str(pvp_active_render_progress.get("event_batch_id", "")) == event_batch_id:
+		_send_active_pvp_render_status("PROGRESS")
+		return
+	if str(pvp_pending_render_ack_completion.get("event_batch_id", "")) == event_batch_id:
+		_retry_pending_pvp_render_ack()
+		return
+	if pvp_event_queue.last_rendered_seq >= event_seq_end:
+		# The local cumulative presentation cursor is already beyond this exact
+		# server-named boundary. Recreate only its completion proof; no animation
+		# or canonical state is replayed.
+		_send_pvp_render_ack({
+			"event_batch_id": event_batch_id,
+			"batch_seq": batch_seq,
+			"event_seq_end": event_seq_end,
+			"last_rendered_seq": pvp_event_queue.last_rendered_seq,
+			"turn": _get_int_from_variant(message.get("turn", battle_state.get_turn()), battle_state.get_turn()),
+			"phase": "rendering_events",
+			"source": "targeted_render_recovery_cursor",
+			"success": true,
+		})
+		return
+
+	pvp_targeted_render_recovery_active = true
+	pvp_idle_wait_recovery_active = true
+	_set_battle_input_locked(true)
+	await _reconcile_pvp_battle_from_room("pvp_targeted_render_recovery", true)
+	pvp_targeted_render_recovery_active = false
 
 func _reject_invalid_actionless_pvp_render_batch(message: Dictionary) -> void:
 	# Fail closed, but remain live: the room snapshot can replay the immutable

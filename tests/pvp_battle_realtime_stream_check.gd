@@ -190,6 +190,14 @@ func _init() -> void:
 		"authoritative render batches report received, started, progress, and completion lifecycle evidence"
 	)
 	_check_equal(
+		realtime_source.contains('if message_type == "pvp.render_recovery":') \
+			and battle_source.contains("func _handle_pvp_targeted_render_recovery(message: Dictionary) -> void:") \
+			and battle_source.contains('str(pvp_pending_render_ack_completion.get("event_batch_id", "")) == event_batch_id') \
+			and battle_source.contains('await _reconcile_pvp_battle_from_room("pvp_targeted_render_recovery", true)'),
+		true,
+		"a missing render completion retries local proof or reconciles only the requested batch"
+	)
+	_check_equal(
 		battle_source.contains("func _observe_pvp_gateway_epoch(message: Dictionary) -> void:") \
 			and battle_source.contains("pvp_response_order.reset_transport_cursor()") \
 			and battle_source.contains("pvp_last_applied_server_seq = 0"),
