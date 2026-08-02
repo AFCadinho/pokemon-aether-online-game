@@ -6,6 +6,9 @@ const SETTINGS_MANAGER := "res://scripts/services/settings_manager.gd"
 const SETTINGS_MENU := "res://scripts/ui/settings_menu.gd"
 const ARROW_CURSOR := "res://assets/ui/cursors/aether_arrow.png"
 const POINTER_CURSOR := "res://assets/ui/cursors/aether_pointer.png"
+const DRAG_CURSOR := "res://assets/ui/cursors/aether_drag.png"
+const CAN_DROP_CURSOR := "res://assets/ui/cursors/aether_can_drop.png"
+const FORBIDDEN_CURSOR := "res://assets/ui/cursors/aether_forbidden.png"
 
 var failed := false
 
@@ -21,10 +24,20 @@ func _init() -> void:
 	)
 	_check(FileAccess.file_exists(ARROW_CURSOR), "custom arrow cursor asset exists")
 	_check(FileAccess.file_exists(POINTER_CURSOR), "custom pointer cursor asset exists")
+	_check(FileAccess.file_exists(DRAG_CURSOR), "custom drag cursor asset exists")
+	_check(FileAccess.file_exists(CAN_DROP_CURSOR), "custom valid-drop cursor asset exists")
+	_check(FileAccess.file_exists(FORBIDDEN_CURSOR), "custom forbidden cursor asset exists")
 	_check(
 		manager_text.contains("Input.CURSOR_ARROW")
 		and manager_text.contains("Input.CURSOR_POINTING_HAND"),
 		"arrow and pointing-hand shapes receive custom cursors"
+	)
+	_check(
+		manager_text.contains("Input.CURSOR_DRAG")
+		and manager_text.contains("Input.CURSOR_MOVE")
+		and manager_text.contains("Input.CURSOR_CAN_DROP")
+		and manager_text.contains("Input.CURSOR_FORBIDDEN"),
+		"drag, move, valid-drop and forbidden shapes receive themed cursors"
 	)
 	_check(
 		manager_text.contains("load(ARROW_CURSOR_PATH)")
@@ -43,6 +56,12 @@ func _init() -> void:
 	_check(
 		manager_text.contains("POINTER_HOTSPOT := Vector2(1, 1)"),
 		"hover cursor keeps the same northwest click hotspot"
+	)
+	_check(
+		manager_text.contains("DRAG_HOTSPOT := Vector2(1, 1)")
+		and manager_text.contains("CAN_DROP_HOTSPOT := Vector2(1, 1)")
+		and manager_text.contains("FORBIDDEN_HOTSPOT := Vector2(1, 1)"),
+		"drag-state cursors preserve the northwest click hotspot"
 	)
 	_check(
 		manager_text.contains("DEFAULT_CURSOR_SCALE := 75.0")
