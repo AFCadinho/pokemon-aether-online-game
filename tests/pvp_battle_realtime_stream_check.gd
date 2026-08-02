@@ -400,6 +400,7 @@ func _init() -> void:
 	_check_equal(payload.get("timerContractVersions"), [1], "join advertises timer contract v1")
 	_check_equal(payload.get("decisionContractVersions"), [1], "join advertises decision contract v1")
 	_check_equal(payload.get("battleCommandContractVersions"), [1], "join advertises command contract v1")
+	_check_equal(payload.get("renderProtocolVersions"), [2, 1], "join advertises render lifecycle protocols")
 
 	var timer_update_applied := service._apply_timer_projection_from_battle_response({
 		"type": "pvp.battle_update",
