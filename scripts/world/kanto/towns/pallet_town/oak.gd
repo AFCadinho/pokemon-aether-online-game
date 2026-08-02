@@ -19,6 +19,11 @@ extends DialogueNPC
 
 var is_creating_starter := false
 var last_starter_claim_already_completed := false
+var quest_turn_in_id := ""
+var quest_turn_in_quest_id := ""
+var quest_turn_in_step_id := ""
+var quest_turn_in_dialogue_id := ""
+var quest_turn_in_completed_dialogue_id := ""
 
 
 func _ready() -> void:
@@ -35,6 +40,16 @@ func interact_with_player(_player: Node2D) -> void:
 		return
 
 	is_creating_starter = true
+	var metadata_response: Dictionary = await _load_npc_metadata()
+	if not bool(metadata_response.get("success", false)):
+		is_creating_starter = false
+		await GameErrorDialogService.show_report_to_staff_message()
+		return
+	if _is_quest_turn_in_available():
+		await _turn_in_quest_item()
+		is_creating_starter = false
+		return
+
 	var options_result: Dictionary = await PlayerPartyStateService.get_starter_options()
 	if not bool(options_result.get("success", false)):
 		is_creating_starter = false
@@ -102,6 +117,62 @@ func _apply_npc_metadata(metadata: Dictionary) -> void:
 	starter_gift_dialogue_id = _get_metadata_dialogue_id(metadata, "starterGiftDialogueId", "starter_gift_dialogue_id", starter_gift_dialogue_id)
 	starter_confirmed_dialogue_id = _get_metadata_dialogue_id(metadata, "starterConfirmedDialogueId", "starter_confirmed_dialogue_id", starter_confirmed_dialogue_id)
 	starter_received_dialogue_id = _get_metadata_dialogue_id(metadata, "starterReceivedDialogueId", "starter_received_dialogue_id", starter_received_dialogue_id)
+	quest_turn_in_id = str(metadata.get("questTurnInId", "")).strip_edges()
+	quest_turn_in_quest_id = str(metadata.get("questTurnInQuestId", "")).strip_edges()
+	quest_turn_in_step_id = str(metadata.get("questTurnInStepId", "")).strip_edges()
+	quest_turn_in_dialogue_id = str(metadata.get("questTurnInDialogueId", "")).strip_edges()
+	quest_turn_in_completed_dialogue_id = str(
+		metadata.get("questTurnInCompletedDialogueId", "")
+	).strip_edges()
+
+
+func _is_quest_turn_in_available() -> bool:
+	if (
+		quest_turn_in_id.is_empty()
+		or quest_turn_in_quest_id.is_empty()
+		or quest_turn_in_step_id.is_empty()
+	):
+		return false
+	var quest := StoryService.get_quest(quest_turn_in_quest_id)
+	if str(quest.get("status", "")).to_lower() != "active":
+		return false
+	var steps_value: Variant = quest.get("steps", [])
+	if not steps_value is Array:
+		return false
+	for step_value: Variant in steps_value as Array:
+		if not step_value is Dictionary:
+			continue
+		var step := step_value as Dictionary
+		if str(step.get("stepId", "")) == quest_turn_in_step_id:
+			return str(step.get("status", "")).to_lower() == "active"
+	return false
+
+
+func _turn_in_quest_item() -> void:
+	await show_dialogue(await _resolve_dialogue_lines(
+		quest_turn_in_dialogue_id,
+		["Ah, that is the parcel I was waiting for! Let me take a look."]
+	))
+	var inventory_service := get_node_or_null("/root/InventoryService")
+	if inventory_service == null or not inventory_service.has_method("turn_in_npc_quest_item"):
+		await GameErrorDialogService.show_report_to_staff_message()
+		return
+	var result: Dictionary = await inventory_service.call(
+		"turn_in_npc_quest_item",
+		quest_turn_in_id
+	)
+	if not bool(result.get("success", false)):
+		await GameErrorDialogService.show_response(result, "backend.error.reward_claim")
+		return
+	if not bool(result.get("storyRefreshSuccess", false)):
+		push_warning("Oak: parcel turn-in succeeded but story refresh did not complete locally.")
+	await show_dialogue(await _resolve_dialogue_lines(
+		quest_turn_in_completed_dialogue_id,
+		[
+			"Thank you. This will be a great help to my research.",
+			"You and your new partner handled your first errand well. Your journey has truly begun.",
+		]
+	))
 
 
 func _get_metadata_dialogue_id(metadata: Dictionary, camel_key: String, snake_key: String, current_value: String) -> String:

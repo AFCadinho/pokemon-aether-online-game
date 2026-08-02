@@ -6,6 +6,7 @@ const INVENTORY_ENDPOINT := "/game/inventory"
 const FISHING_PROGRESSION_ENDPOINT := "/game/fishing/progression"
 const FISHING_SELECTION_ENDPOINT := "/game/fishing/selection"
 const NPC_ITEM_REWARD_ENDPOINT := "/game/npc-rewards/%s/claim"
+const NPC_QUEST_ITEM_TURN_IN_ENDPOINT := "/game/npc-quest-item-turn-ins/%s/claim"
 const APPEARANCE_INVENTORY_ENDPOINT := "/game/appearance/inventory"
 const INVENTORY_ITEM_USE_ENDPOINT := "/game/inventory/items/%s/use"
 const APPEARANCE_ITEM_RETURN_ENDPOINT := "/game/appearance/inventory/items/%s/return"
@@ -126,6 +127,7 @@ func claim_npc_item_reward(reward_id: String) -> Dictionary:
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
 	var inventory_result: Dictionary = await load_inventory()
 	var progression_result: Dictionary = await load_fishing_progression("")
+	var story_result: Dictionary = await PlayerGameStateService.refresh_story()
 	return {
 		"success": true,
 		"rewardId": str(body.get("rewardId", normalized_reward_id)),
@@ -135,6 +137,39 @@ func claim_npc_item_reward(reward_id: String) -> Dictionary:
 		"alreadyOwned": bool(body.get("alreadyOwned", false)),
 		"inventoryRefreshSuccess": bool(inventory_result.get("success", false)),
 		"fishingProgressionRefreshSuccess": bool(progression_result.get("success", false)),
+		"storyRefreshSuccess": bool(story_result.get("success", false)),
+	}
+
+
+func turn_in_npc_quest_item(turn_in_id: String) -> Dictionary:
+	var normalized_turn_in_id := turn_in_id.strip_edges().to_lower()
+	if not AuthService.is_authenticated():
+		return {"success": false, "error": "Not authenticated."}
+	if normalized_turn_in_id == "":
+		return {"success": false, "error": "Missing NPC quest item turn-in id."}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + NPC_QUEST_ITEM_TURN_IN_ENDPOINT % normalized_turn_in_id.uri_encode(),
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	var inventory_result: Dictionary = await load_inventory()
+	var story_result: Dictionary = await PlayerGameStateService.refresh_story()
+	return {
+		"success": true,
+		"turnInId": str(body.get("turnInId", normalized_turn_in_id)),
+		"itemId": str(body.get("itemId", "")),
+		"quantity": maxi(int(body.get("quantity", 1)), 1),
+		"turnedIn": bool(body.get("turnedIn", false)),
+		"alreadyTurnedIn": bool(body.get("alreadyTurnedIn", false)),
+		"inventoryRefreshSuccess": bool(inventory_result.get("success", false)),
+		"storyRefreshSuccess": bool(story_result.get("success", false)),
 	}
 
 
