@@ -160,8 +160,8 @@ func _run() -> void:
 	if revisited_father != null and watching_tv_marker != null:
 		_expect(
 			revisited_father.global_position == watching_tv_marker.global_position
-			and revisited_father.position == Vector2(336, 880),
-			"completed father intro places Dadinho on the blue cushion"
+			and revisited_father.position == Vector2(336, 848),
+			"completed father intro places Dadinho one tile closer to the television"
 		)
 		_expect(
 			revisited_father.get("facing_direction") == Vector2.UP,

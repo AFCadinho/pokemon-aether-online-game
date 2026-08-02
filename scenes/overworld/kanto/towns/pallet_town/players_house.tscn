@@ -130,7 +130,7 @@ disable_area_path = NodePath("../StoryTriggers/FatherIntro")
 [node name="StoryPositions" type="Node2D" parent="." unique_id=1731557833]
 
 [node name="DadinhoWatchingTV" type="Marker2D" parent="StoryPositions" unique_id=1992104951]
-position = Vector2(336, 880)
+position = Vector2(336, 848)
 
 [node name="LivingRoomTV" type="Marker2D" parent="StoryPositions" unique_id=1420560086]
 position = Vector2(336, 768)
