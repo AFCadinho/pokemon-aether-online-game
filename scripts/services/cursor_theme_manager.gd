@@ -2,7 +2,7 @@ extends Node
 
 const ARROW_CURSOR_PATH := "res://assets/ui/cursors/aether_arrow.png"
 const POINTER_CURSOR_PATH := "res://assets/ui/cursors/aether_pointer.png"
-const ARROW_HOTSPOT := Vector2(18, 0)
+const ARROW_HOTSPOT := Vector2(1, 1)
 const POINTER_HOTSPOT := Vector2(14, 0)
 
 
