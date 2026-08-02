@@ -51,6 +51,7 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 @export var movement_speed_pixels := 90.0
 ## Fetch metadata on spawn when this NPC can display catalog-driven quest markers.
 @export var preload_quest_markers := false
+@export_range(1, 8, 1) var manual_interaction_reach_tiles := 1
 
 const TILE_SIZE := 32
 const MOVE_SPEED := 120.0
@@ -857,8 +858,12 @@ func _is_player_facing_npc(body: Node2D) -> bool:
 	if direction == Vector2.ZERO:
 		return false
 	var player_tile := _to_tile(_get_body_feet_position(body))
-	var facing_tile := player_tile + Vector2i(roundi(direction.x), roundi(direction.y))
-	return facing_tile == _to_tile(get_feet_position())
+	var cardinal_direction := Vector2i(roundi(direction.x), roundi(direction.y))
+	var npc_tile := _to_tile(get_feet_position())
+	for distance: int in range(1, manual_interaction_reach_tiles + 1):
+		if player_tile + cardinal_direction * distance == npc_tile:
+			return true
+	return false
 
 
 func _start_manual_interaction(body: Node2D) -> void:
