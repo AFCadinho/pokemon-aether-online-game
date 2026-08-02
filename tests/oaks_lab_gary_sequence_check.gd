@@ -6,6 +6,7 @@ const GARY_SCRIPT := "res://scripts/world/kanto/towns/pallet_town/oaks_lab_gary.
 const OAK_SCRIPT := "res://scripts/world/kanto/towns/pallet_town/oak.gd"
 const STARTER_BALL_SCRIPT := "res://scripts/world/interactables/starter_poke_ball.gd"
 const WORLD_SCRIPT := "res://scripts/world/world.gd"
+const BASE_NPC_SCRIPT := "res://scripts/world/npcs/base_npc.gd"
 
 var failed := false
 
@@ -48,6 +49,12 @@ func _init() -> void:
 	_check_true(
 		world_text.contains('normalized_winner in ["p1", "player 1", "player1"]'),
 		"Gary's local p1 victory triggers trainer rewards and story progression"
+	)
+	var base_npc_text := _read_text(BASE_NPC_SCRIPT)
+	_check_true(
+		base_npc_text.contains("if not _is_player_facing_npc(nearby_player):")
+		and base_npc_text.contains("return facing_tile == _to_tile(get_feet_position())"),
+		"NPC interaction requires the NPC on the cardinal tile the player faces"
 	)
 	if lab_resource != null:
 		_check_staging_tiles(lab_resource)

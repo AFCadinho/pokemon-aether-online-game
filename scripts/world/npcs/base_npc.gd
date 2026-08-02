@@ -835,12 +835,28 @@ func _can_start_manual_interaction() -> bool:
 
 	if not Input.is_action_just_pressed("interact"):
 		return false
+	if not _is_player_facing_npc(nearby_player):
+		return false
 
 	var dialogue_box := _get_dialogue_box()
 	if dialogue_box != null and dialogue_box.is_open:
 		return false
 
 	return true
+
+
+func _is_player_facing_npc(body: Node2D) -> bool:
+	if body == null:
+		return false
+	var direction_value: Variant = body.get("last_direction")
+	if not direction_value is Vector2:
+		return false
+	var direction := direction_value as Vector2
+	if direction == Vector2.ZERO:
+		return false
+	var player_tile := _to_tile(_get_body_feet_position(body))
+	var facing_tile := player_tile + Vector2i(roundi(direction.x), roundi(direction.y))
+	return facing_tile == _to_tile(get_feet_position())
 
 
 func _start_manual_interaction(body: Node2D) -> void:
