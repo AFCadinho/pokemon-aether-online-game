@@ -124,14 +124,26 @@ func _on_gary_story_changed(_revision: int) -> void:
 func _sync_story_presence() -> void:
 	if starter_sequence_running or parcel_departure_running:
 		return
+	var parcel_quest := StoryService.get_quest(PARCEL_QUEST_ID)
+	var parcel_status := str(parcel_quest.get("status", "")).strip_edges().to_lower()
+	if parcel_status == "active":
+		_set_story_presence(_is_parcel_return_active())
+		return
+	if parcel_status == "completed":
+		_set_story_presence(false)
+		return
 	if not starter_already_claimed:
 		_set_story_presence(true)
 		return
-	_set_story_presence(_is_parcel_return_active())
+	_set_story_presence(false)
 
 
 func _set_story_presence(is_present: bool) -> void:
 	visible = is_present
+	if nameplate != null:
+		nameplate.visible = is_present and not display_name.strip_edges().is_empty()
+	if not is_present and quest_marker != null:
+		quest_marker.visible = false
 	if interaction_area != null:
 		interaction_area.set_deferred("monitoring", is_present)
 		interaction_area.set_deferred("monitorable", is_present)

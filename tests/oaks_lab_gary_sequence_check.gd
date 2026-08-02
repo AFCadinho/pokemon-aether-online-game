@@ -45,6 +45,11 @@ func _init() -> void:
 		gary_text.contains("_set_story_presence(false)"),
 		"Gary leaves the lab after each departure scene"
 	)
+	_check_true(
+		gary_text.contains('if parcel_status == "active":')
+		and gary_text.contains('_set_story_presence(_is_parcel_return_active())'),
+		"Active parcel progress keeps Gary hidden until the return step"
+	)
 	var oak_text := _read_text(OAK_SCRIPT)
 	_check_true(oak_text.contains("_schedule_gary_starter_sequence(player, create_result)"), "Oak hands the new-starter flow to Gary")
 	_check_true(
