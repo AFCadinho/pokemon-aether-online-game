@@ -113,6 +113,8 @@ func _check_dialogue_box_side_quest_offer() -> void:
 	_check_true(text.contains("func _quest_reward_icon("), "item rewards resolve their catalog icon")
 	_check_true(scene_text.contains('name="RewardIcon" type="TextureRect"'), "quest rewards render an item icon")
 	_check_true(scene_text.contains('name="RewardCard" type="PanelContainer"'), "quest rewards render as a compact card")
+	_check_true(scene_text.contains('name="QuestOfferCloseButton" type="Button"'), "quest offer has a top-right close button")
+	_check_true(scene_text.count("mouse_default_cursor_shape = 2") >= 3, "quest offer actions use the pointing-hand cursor")
 	_check_true(scene_text.contains("layer = 100"), "dialogue renders above the normal HUD canvas layer")
 	_check_true(text.contains("PlayerGameStateService.accept_side_quest("), "accept uses the authoritative side-quest flow")
 	_check_true(text.contains("_finish_quest_offer(false)"), "decline closes the offer without accepting")
