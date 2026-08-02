@@ -187,6 +187,9 @@ func get_starter_options() -> Dictionary:
 		"alreadyClaimed": bool(body.get("alreadyClaimed", false)),
 		"selectedSpeciesId": str(body.get("selectedSpeciesId", "")),
 		"selectedSpeciesName": str(body.get("selectedSpeciesName", "")),
+		"rivalStarterSpeciesId": str(body.get("rivalStarterSpeciesId", "")),
+		"rivalStarterSpeciesName": str(body.get("rivalStarterSpeciesName", "")),
+		"rivalTrainerId": str(body.get("rivalTrainerId", "")),
 	}
 
 
@@ -650,6 +653,9 @@ func _pokemon_create_result_from_response(response: Dictionary) -> Dictionary:
 		"party": _array_from_value(party.get("party", [])),
 		"storageLocation": PokemonStorageService.normalize_storage_location(body.get("storageLocation", {})),
 		"alreadyClaimed": bool(body.get("alreadyClaimed", false)),
+		"rivalStarterSpeciesId": str(body.get("rivalStarterSpeciesId", "")),
+		"rivalStarterSpeciesName": str(body.get("rivalStarterSpeciesName", "")),
+		"rivalTrainerId": str(body.get("rivalTrainerId", "")),
 	}
 
 

@@ -35,7 +35,7 @@ func _process(_delta: float) -> void:
 	await _process_base_npc()
 
 
-func interact_with_player(_player: Node2D) -> void:
+func interact_with_player(player: Node2D) -> void:
 	if is_creating_starter:
 		return
 
@@ -109,6 +109,21 @@ func interact_with_player(_player: Node2D) -> void:
 				selected_species_name
 			)
 		)
+		_schedule_gary_starter_sequence(player, create_result)
+
+
+func _schedule_gary_starter_sequence(player: Node2D, create_result: Dictionary) -> void:
+	var gary := get_parent().get_node_or_null("Gary")
+	if gary == null or not gary.has_method("begin_starter_sequence"):
+		push_warning("Oak: Gary is unavailable for the starter battle sequence.")
+		return
+	gary.call_deferred(
+		"begin_starter_sequence",
+		player,
+		str(create_result.get("rivalStarterSpeciesId", "")),
+		str(create_result.get("rivalStarterSpeciesName", "")),
+		str(create_result.get("rivalTrainerId", ""))
+	)
 
 
 func _apply_npc_metadata(metadata: Dictionary) -> void:
