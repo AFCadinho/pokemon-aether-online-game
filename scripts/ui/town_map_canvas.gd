@@ -5,9 +5,11 @@ class_name TownMapCanvas
 signal location_selected(location_id: String)
 
 const MARKER_SIZE := Vector2(22.0, 22.0)
+const CURRENT_PORTRAIT_SIZE := Vector2(34.0, 34.0)
 const PATH_SHADOW := Color("#06111dcc")
 const PATH_COLOR := Color("#63d7f5e8")
 const PATH_HIGHLIGHT := Color("#f3cc69")
+const TrainerHeadPortraitScript := preload("res://scripts/ui/trainer_head_portrait.gd")
 
 var locations: Dictionary = {}
 var paths: Array = []
@@ -15,6 +17,7 @@ var current_location_id := ""
 var selected_location_id := ""
 var marker_buttons: Dictionary = {}
 var background_texture: Texture2D
+var current_location_portrait: TrainerHeadPortrait
 var show_connection_overlay := true
 var show_marker_overlay := true
 
@@ -41,6 +44,7 @@ func set_overlay_visibility(show_connections: bool, show_markers: bool) -> void:
 func set_current_location(location_id: String) -> void:
 	current_location_id = location_id
 	_refresh_markers()
+	_position_current_portrait()
 	queue_redraw()
 
 
@@ -54,6 +58,12 @@ func select_location(location_id: String) -> void:
 
 func _ready() -> void:
 	resized.connect(_position_markers)
+	current_location_portrait = TrainerHeadPortraitScript.new() as TrainerHeadPortrait
+	current_location_portrait.name = "CurrentLocationPortrait"
+	current_location_portrait.custom_minimum_size = CURRENT_PORTRAIT_SIZE
+	current_location_portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	current_location_portrait.visible = false
+	add_child(current_location_portrait)
 	set_process(true)
 
 
@@ -99,10 +109,11 @@ func _draw() -> void:
 		)
 
 	if current_location_id != "" and locations.has(current_location_id):
-		var pulse := (sin(Time.get_ticks_msec() / 180.0) + 1.0) * 0.5
-		var center := _location_point(current_location_id)
-		draw_circle(center, 15.0 + pulse * 5.0, Color(0.35, 0.86, 1.0, 0.2 - pulse * 0.08))
-		draw_arc(center, 14.0 + pulse * 5.0, 0.0, TAU, 32, Color("#8ceaff"), 2.0, true)
+		if current_location_portrait == null or not current_location_portrait.visible:
+			var pulse := (sin(Time.get_ticks_msec() / 180.0) + 1.0) * 0.5
+			var center := _location_point(current_location_id)
+			draw_circle(center, 15.0 + pulse * 5.0, Color(0.35, 0.86, 1.0, 0.2 - pulse * 0.08))
+			draw_arc(center, 14.0 + pulse * 5.0, 0.0, TAU, 32, Color("#8ceaff"), 2.0, true)
 
 
 func _build_markers() -> void:
@@ -143,6 +154,13 @@ func _refresh_markers() -> void:
 		marker.add_theme_stylebox_override("normal", _marker_style(location, selected, current))
 		marker.add_theme_stylebox_override("hover", _marker_style(location, true, current))
 		marker.add_theme_stylebox_override("pressed", _marker_style(location, true, true))
+	if current_location_portrait != null:
+		current_location_portrait.visible = current_location_id != "" and locations.has(current_location_id)
+		if current_location_portrait.visible:
+			var player_save := get_node_or_null("/root/PlayerSave")
+			if player_save != null and player_save.has_method("to_appearance_state"):
+				current_location_portrait.set_appearance_state(player_save.call("to_appearance_state"))
+		_position_current_portrait()
 
 
 func _position_markers() -> void:
@@ -152,6 +170,13 @@ func _position_markers() -> void:
 		if marker == null:
 			continue
 		marker.position = _location_point(location_id) - MARKER_SIZE * 0.5
+	_position_current_portrait()
+
+
+func _position_current_portrait() -> void:
+	if current_location_portrait == null:
+		return
+	current_location_portrait.position = _location_point(current_location_id) - CURRENT_PORTRAIT_SIZE * 0.5
 
 
 func _location_point(location_id: String) -> Vector2:
