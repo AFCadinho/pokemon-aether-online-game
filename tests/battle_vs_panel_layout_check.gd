@@ -75,6 +75,15 @@ func _check_player_appearance_persistence() -> void:
 		state.players.get("p2", {}).get("appearance", {}).get("skin_tone") == "#3f271f",
 		"turn updates preserve opponent appearance metadata"
 	)
+	state.load_from_api_response({
+		"battleId": "battle-a",
+		"players": {"p2": {"name": "adinho"}},
+		"state": {"turn": 1},
+	})
+	_check_true(
+		state.players.get("p2", {}).get("appearance", {}).get("skin_tone") == "#3f271f",
+		"name-only Team Preview updates preserve opponent appearance metadata"
+	)
 	state.load_from_api_response({"battleId": "battle-b", "state": {"turn": 1}})
 	_check_true(state.players.is_empty(), "a new battle clears cached player identities")
 
