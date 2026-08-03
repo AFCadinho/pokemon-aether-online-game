@@ -167,6 +167,10 @@ func _build_ui() -> void:
 	map_stack.add_child(map_canvas)
 	map_canvas.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	map_canvas.mouse_filter = Control.MOUSE_FILTER_PASS
+	map_canvas.set_overlay_visibility(
+		bool(region_data.get("showConnectionOverlay", true)),
+		bool(region_data.get("showMarkerOverlay", true))
+	)
 	var background_path := str(region_data.get("backgroundPath", ""))
 	if ResourceLoader.exists(background_path):
 		map_canvas.set_background(load(background_path) as Texture2D)
