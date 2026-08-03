@@ -13670,6 +13670,19 @@ func _update_battle_presentation_before_event_render(events: Array) -> void:
 func _update_vs_panel_names() -> void:
 	if vs_panel_container != null:
 		vs_panel_container.set_names(_get_vs_player_name("p1"), _get_vs_player_name("p2"))
+		vs_panel_container.set_player_appearances(
+			_get_vs_player_appearance("p1"),
+			_get_vs_player_appearance("p2")
+		)
+
+
+func _get_vs_player_appearance(player_id: String) -> Dictionary:
+	if player_id == "p1" and not _is_spectator_battle():
+		return PlayerSave.to_appearance_state()
+	var player_data_value: Variant = battle_state.players.get(player_id, {})
+	if not (player_data_value is Dictionary):
+		return {}
+	return _get_battle_player_appearance(player_data_value as Dictionary)
 
 func _get_vs_player_name(player_id: String) -> String:
 	if player_id == "p1":
