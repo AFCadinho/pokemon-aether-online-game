@@ -65,7 +65,8 @@ func _create_player_portraits() -> void:
 		portrait.custom_minimum_size = Vector2(28, 28)
 		portrait.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	name_row.add_child(portrait)
+	name_row.add_child(player_1_portrait)
+	name_row.add_child(player_2_portrait)
 	# Keep each portrait directly beside its corresponding name.
 	name_row.move_child(player_1_portrait, player_1_label.get_index())
 	name_row.move_child(player_2_portrait, player_2_label.get_index())
