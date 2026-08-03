@@ -24,8 +24,8 @@ var detail_portrait: TrainerHeadPortrait
 var detail_kind_panel: PanelContainer
 var detail_kind_label: Label
 var detail_description_label: Label
-var exits_title_label: Label
-var detail_exits_container: VBoxContainer
+var interiors_title_label: Label
+var detail_interiors_container: VBoxContainer
 var connections_title_label: Label
 var detail_connections_container: VBoxContainer
 var legend_kind_labels: Dictionary = {}
@@ -40,8 +40,8 @@ func _ready() -> void:
 	visible = false
 	region_data = _load_json(REGION_MAP_PATH)
 	layout_data = _load_json(str(region_data.get("layoutPath", "")))
-	_apply_layout()
 	world_access = _load_json(WORLD_ACCESS_PATH)
+	_apply_layout()
 	_build_ui()
 	get_viewport().size_changed.connect(_position_shell)
 
@@ -334,13 +334,13 @@ func _build_ui() -> void:
 	detail_description_label.add_theme_color_override("font_color", Color("#c0cdd7"))
 	description_margin.add_child(detail_description_label)
 
-	exits_title_label = Label.new()
-	exits_title_label.add_theme_font_size_override("font_size", 10)
-	exits_title_label.add_theme_color_override("font_color", Color("#65d7f3"))
-	detail_column.add_child(exits_title_label)
-	detail_exits_container = VBoxContainer.new()
-	detail_exits_container.add_theme_constant_override("separation", 6)
-	detail_column.add_child(detail_exits_container)
+	interiors_title_label = Label.new()
+	interiors_title_label.add_theme_font_size_override("font_size", 10)
+	interiors_title_label.add_theme_color_override("font_color", Color("#65d7f3"))
+	detail_column.add_child(interiors_title_label)
+	detail_interiors_container = VBoxContainer.new()
+	detail_interiors_container.add_theme_constant_override("separation", 6)
+	detail_column.add_child(detail_interiors_container)
 
 	connections_title_label = Label.new()
 	connections_title_label.add_theme_font_size_override("font_size", 10)
@@ -411,8 +411,8 @@ func _refresh_header() -> void:
 	subtitle_label.text = _t("ui.town_map.subtitle")
 	if detail_overline_label != null:
 		detail_overline_label.text = _t("ui.town_map.selected_location")
-	if exits_title_label != null:
-		exits_title_label.text = _t("ui.town_map.exits")
+	if interiors_title_label != null:
+		interiors_title_label.text = _t("ui.town_map.interiors")
 	if connections_title_label != null:
 		connections_title_label.text = _t("ui.town_map.connections")
 	for kind_value: Variant in legend_kind_labels.keys():
@@ -466,7 +466,7 @@ func _refresh_details(location_id: String) -> void:
 		)
 	var description_key := str(location.get("descriptionKey", "")).strip_edges()
 	detail_description_label.text = _t(description_key) if description_key != "" else str(location.get("description", ""))
-	_refresh_exit_buttons(location.get("exits", []) as Array)
+	_refresh_interior_items(location.get("interiors", []) as Array)
 	var connected_location_ids: Array[String] = []
 	for path_value: Variant in region_data.get("paths", []):
 		var endpoints := _path_endpoints(path_value)
@@ -481,54 +481,26 @@ func _refresh_details(location_id: String) -> void:
 	_refresh_connection_buttons(connected_location_ids)
 
 
-func _refresh_exit_buttons(exits: Array) -> void:
-	if detail_exits_container == null or exits_title_label == null:
+func _refresh_interior_items(interiors: Array) -> void:
+	if detail_interiors_container == null or interiors_title_label == null:
 		return
-	for child: Node in detail_exits_container.get_children():
-		detail_exits_container.remove_child(child)
+	for child: Node in detail_interiors_container.get_children():
+		detail_interiors_container.remove_child(child)
 		child.queue_free()
-	exits_title_label.visible = not exits.is_empty()
-	detail_exits_container.visible = not exits.is_empty()
-	for exit_value: Variant in exits:
-		if not exit_value is Dictionary:
+	interiors_title_label.visible = not interiors.is_empty()
+	detail_interiors_container.visible = not interiors.is_empty()
+	for interior_value: Variant in interiors:
+		if not interior_value is Dictionary:
 			continue
-		var exit_data := exit_value as Dictionary
-		var label := str(exit_data.get("label", "")).strip_edges()
+		var interior_data := interior_value as Dictionary
+		var label := str(interior_data.get("label", "")).strip_edges()
 		if label == "":
 			continue
-		var target_id := str(exit_data.get("targetId", "")).strip_edges()
-		if target_id != "":
-			var button := _make_exit_button(label, str(exit_data.get("kind", "building")))
-			button.pressed.connect(_refresh_details.bind(target_id))
-			detail_exits_container.add_child(button)
-		else:
-			var item := Label.new()
-			item.text = "•  %s" % label
-			item.add_theme_font_size_override("font_size", 13)
-			item.add_theme_color_override("font_color", Color("#b8c9d4"))
-			detail_exits_container.add_child(item)
-
-
-func _make_exit_button(label: String, kind: String) -> Button:
-	var button := Button.new()
-	var prefix := "→"
-	if kind == "facility" or kind == "building":
-		prefix = "◆"
-	button.text = "%s  %s" % [prefix, label]
-	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-	button.custom_minimum_size = Vector2(0, 34)
-	button.focus_mode = Control.FOCUS_ALL
-	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	button.add_theme_font_size_override("font_size", 13)
-	button.add_theme_color_override("font_color", Color("#d5e3eb"))
-	button.add_theme_color_override("font_hover_color", Color.WHITE)
-	var normal_style := _panel_style(Color("#071522"), Color("#27495d"), 8, 1)
-	normal_style.content_margin_left = 11.0
-	var hover_style := _panel_style(Color("#102a3a"), Color("#5cecff"), 8, 1)
-	hover_style.content_margin_left = 11.0
-	button.add_theme_stylebox_override("normal", normal_style)
-	button.add_theme_stylebox_override("hover", hover_style)
-	return button
+		var item := Label.new()
+		item.text = "◆  %s" % label
+		item.add_theme_font_size_override("font_size", 13)
+		item.add_theme_color_override("font_color", Color("#b8c9d4"))
+		detail_interiors_container.add_child(item)
 
 
 func _refresh_connection_buttons(location_ids: Array[String]) -> void:
@@ -617,17 +589,20 @@ func _apply_layout() -> void:
 	for point_id_value: Variant in points.keys():
 		var point_id := str(point_id_value)
 		var point_data := points.get(point_id, {}) as Dictionary
+		var catalog_interiors := _catalog_interiors_for_location(point_id)
 		if locations.has(point_id):
 			var existing_location := locations.get(point_id, {}) as Dictionary
-			if point_data.has("exits"):
-				existing_location["exits"] = point_data.get("exits", [])
+			if not catalog_interiors.is_empty():
+				existing_location["interiors"] = catalog_interiors
+			elif point_data.has("interiors"):
+				existing_location["interiors"] = point_data.get("interiors", [])
 			locations[point_id] = existing_location
 			continue
 		locations[point_id] = {
 			"kind": str(point_data.get("kind", "special")),
 			"name": str(point_data.get("name", point_id)),
 			"description": str(point_data.get("description", "")),
-			"exits": point_data.get("exits", []),
+			"interiors": catalog_interiors if not catalog_interiors.is_empty() else point_data.get("interiors", []),
 			"planned": bool(point_data.get("planned", true)),
 		}
 	for route_value: Variant in layout_data.get("routePoints", []):
@@ -672,6 +647,25 @@ func _apply_layout() -> void:
 		connection["waypoints"] = normalized_waypoints
 		normalized_connections.append(connection)
 	region_data["paths"] = normalized_connections
+
+
+func _catalog_interiors_for_location(location_id: String) -> Array:
+	var interiors: Array = []
+	var areas := world_access.get("areas", {}) as Dictionary
+	for area_id_value: Variant in areas.keys():
+		var area_id := str(area_id_value)
+		var area := areas.get(area_id, {}) as Dictionary
+		if str(area.get("locationGroupId", "")) != location_id:
+			continue
+		if str(area.get("areaType", "")) != "interior":
+			continue
+		var label := str(area.get("label", area_id)).strip_edges()
+		var group_label := str(area.get("locationGroupLabel", "")).strip_edges()
+		if group_label != "" and label.begins_with("%s " % group_label):
+			label = label.trim_prefix("%s " % group_label)
+		interiors.append({"label": label, "mapId": area_id})
+	interiors.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a.get("label", "")) < str(b.get("label", "")))
+	return interiors
 
 
 func _load_json(path: String) -> Dictionary:

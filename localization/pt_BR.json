@@ -659,7 +659,7 @@
   "ui.town_map.current_location": "VOCÊ ESTÁ AQUI · {location}",
   "ui.town_map.current_unknown": "Local desconhecido",
   "ui.town_map.selected_location": "LOCAL SELECIONADO",
-  "ui.town_map.exits": "SAÍDAS E PONTOS DE INTERESSE",
+  "ui.town_map.interiors": "INTERIORES",
   "ui.town_map.connections": "CONECTADO A",
   "ui.town_map.legend": "Dourado: vilas e cidades  ·  Caminhos amarelos: rotas  ·  Azul-claro: locais especiais",
   "ui.town_map.kind.town": "VILA",

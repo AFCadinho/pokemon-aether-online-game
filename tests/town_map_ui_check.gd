@@ -65,11 +65,18 @@ func _run() -> void:
 			and float(point.get("y", layout_height + 1.0)) <= layout_height,
 			"%s has editable map coordinates" % location_id
 		)
+	var configured_location_ids: Dictionary = {}
+	for configured_id_value: Variant in locations.keys():
+		configured_location_ids[str(configured_id_value)] = true
+	for configured_id_value: Variant in layout_points.keys():
+		configured_location_ids[str(configured_id_value)] = true
+	for route_point_value: Variant in route_points:
+		configured_location_ids[str((route_point_value as Dictionary).get("id", ""))] = true
 	for connection_value: Variant in layout_data.get("connections", []):
 		var connection := connection_value as Dictionary
 		var from_id := str(connection.get("from", ""))
 		var to_id := str(connection.get("to", ""))
-		_check(locations.has(from_id) and locations.has(to_id), "Town Map connection endpoints exist")
+		_check(configured_location_ids.has(from_id) and configured_location_ids.has(to_id), "Town Map connection endpoints exist")
 		_check(connection.get("waypoints", []) is Array, "Town Map connection accepts editable waypoints")
 
 	var background_path := str(region_data.get("backgroundPath", ""))
@@ -81,7 +88,7 @@ func _run() -> void:
 	var game_state := root.get_node_or_null("GameState")
 	root.add_child(popup)
 	await process_frame
-	_check((popup.region_data.get("paths", []) as Array).size() == 5, "Editable connections are normalized for rendering")
+	_check((popup.region_data.get("paths", []) as Array).size() == 48, "The complete Kanto route network is normalized for navigation")
 	var popup_locations := popup.region_data.get("locations", {}) as Dictionary
 	var planned_location_count := 0
 	var planned_route_count := 0
@@ -94,12 +101,12 @@ func _run() -> void:
 	_check(popup_locations.size() == 46, "Town Map registers every configured point")
 	_check(planned_location_count == 40, "Future settlements, special locations, and routes are planned points")
 	_check(planned_route_count == 23, "Named future routes are available alongside map points")
-	var towns_without_exits := 0
+	var towns_without_interiors := 0
 	for town_value: Variant in popup_locations.values():
 		if town_value is Dictionary and str((town_value as Dictionary).get("kind", "")) in ["town", "city", "settlement"]:
-			if ((town_value as Dictionary).get("exits", []) as Array).is_empty():
-				towns_without_exits += 1
-	_check(towns_without_exits == 0, "Every town and city has data-driven exits")
+			if ((town_value as Dictionary).get("interiors", []) as Array).is_empty():
+				towns_without_interiors += 1
+	_check(towns_without_interiors == 0, "Every town and city has data-driven interiors")
 	var planned_without_description := 0
 	for planned_location_value: Variant in popup_locations.values():
 		if planned_location_value is Dictionary and bool((planned_location_value as Dictionary).get("planned", false)):
@@ -115,8 +122,33 @@ func _run() -> void:
 	)
 	_check(popup.current_location_id == "kanto_pallet_town", "Interior maps resolve to their parent Town Map location")
 	_check(popup.selected_location_id == "kanto_pallet_town", "Current location is selected when the map opens")
-	_check(popup.detail_exits_container.get_child_count() == 3, "Town details show data-driven exits and points of interest")
-	_check(popup.detail_exits_container.get_child(2) is Button, "Route exits are directly navigable from town details")
+	_check(popup.detail_interiors_container.get_child_count() == 3, "Pallet Town interiors come from the world access catalog")
+	_check(popup.detail_interiors_container.get_child(0) is Label, "Interiors are displayed separately from route navigation")
+	popup._refresh_details("kanto_pewter_city")
+	_check(popup.detail_interiors_container.get_child_count() == 1, "Pewter City only lists its accessible interior")
+	var pewter_connections: Array[String] = []
+	for connection_control: Control in popup.detail_connections_container.get_children():
+		if connection_control is Button:
+			pewter_connections.append((connection_control as Button).text)
+	_check(
+		pewter_connections.size() == 2
+		and pewter_connections.any(func(text: String) -> bool: return text.contains("Route 2"))
+		and pewter_connections.any(func(text: String) -> bool: return text.contains("Route 3")),
+		"Pewter City is connected to Route 2 and Route 3"
+	)
+	popup._refresh_details("kanto_viridian_city")
+	var viridian_connections: Array[String] = []
+	for connection_control: Control in popup.detail_connections_container.get_children():
+		if connection_control is Button:
+			viridian_connections.append((connection_control as Button).text)
+	_check(
+		viridian_connections.size() == 3
+		and viridian_connections.any(func(text: String) -> bool: return text.contains("Route 1"))
+		and viridian_connections.any(func(text: String) -> bool: return text.contains("Route 2"))
+		and viridian_connections.any(func(text: String) -> bool: return text.contains("Route 22")),
+		"Viridian City is connected to Route 1, Route 2, and Route 22"
+	)
+	popup._refresh_details("kanto_pallet_town")
 	_check(popup.map_canvas.marker_buttons.size() == popup_locations.size(), "Every Town Map location has an interactive marker")
 	var hover_marker := popup.map_canvas.marker_buttons.get("kanto_pewter_city") as Button
 	hover_marker.mouse_entered.emit()
