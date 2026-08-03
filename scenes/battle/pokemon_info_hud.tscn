@@ -18,23 +18,18 @@ corner_radius_bottom_right = 9
 corner_radius_bottom_left = 9
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ve8bd"]
-bg_color = Color(0.039215688, 0.047058824, 0.0627451, 0.95)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.6313726, 0.7294118, 0.84705883, 0.72)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+bg_color = Color(0.07058824, 0.13725491, 0.23529412, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qsh65"]
 bg_color = Color(0.38431373, 0.7490196, 1, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
 
 [node name="PokemonInfoHud" type="VBoxContainer" unique_id=523398377]
 theme_override_constants/separation = 2
@@ -118,6 +113,7 @@ layout_mode = 2
 theme_override_constants/separation = 5
 
 [node name="HPTextLabel" type="Label" parent="MarginContainer/VBoxContainer/HPRow" unique_id=1319681010]
+custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 theme_override_font_sizes/font_size = 11
@@ -133,9 +129,21 @@ theme_override_styles/background = SubResource("StyleBoxFlat_h0kxc")
 theme_override_styles/fill = SubResource("StyleBoxFlat_fh7rg")
 value = 100.0
 
-[node name="ExpBar" type="ProgressBar" parent="MarginContainer/VBoxContainer" unique_id=1318107520]
+[node name="ExpRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 visible = false
-custom_minimum_size = Vector2(0, 5)
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="ExpTextLabel" type="Label" parent="MarginContainer/VBoxContainer/ExpRow"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.38431373, 0.7490196, 1, 1)
+theme_override_font_sizes/font_size = 11
+text = "battle.hud.exp"
+
+[node name="ExpBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/ExpRow" unique_id=1318107520]
+custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0, 0, 0, 0)
