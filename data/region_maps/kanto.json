@@ -4,9 +4,11 @@
   "nameKey": "ui.town_map.region.kanto",
   "backgroundPath": "res://assets/ui/maps/kanto_region_map.png",
   "layoutPath": "res://data/region_maps/kanto_layout.json",
+  "showConnectionOverlay": false,
+  "showMarkerOverlay": false,
   "canvasSize": {
-    "x": 1492,
-    "y": 1054
+    "x": 400,
+    "y": 297
   },
   "locations": {
     "kanto_pallet_town": {

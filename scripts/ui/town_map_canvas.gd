@@ -15,6 +15,8 @@ var current_location_id := ""
 var selected_location_id := ""
 var marker_buttons: Dictionary = {}
 var background_texture: Texture2D
+var show_connection_overlay := true
+var show_marker_overlay := true
 
 
 func configure(map_locations: Dictionary, map_paths: Array) -> void:
@@ -26,6 +28,13 @@ func configure(map_locations: Dictionary, map_paths: Array) -> void:
 
 func set_background(texture: Texture2D) -> void:
 	background_texture = texture
+	queue_redraw()
+
+
+func set_overlay_visibility(show_connections: bool, show_markers: bool) -> void:
+	show_connection_overlay = show_connections
+	show_marker_overlay = show_markers
+	_refresh_markers()
 	queue_redraw()
 
 
@@ -56,19 +65,36 @@ func _process(_delta: float) -> void:
 func _draw() -> void:
 	if background_texture != null:
 		draw_texture_rect(background_texture, Rect2(Vector2.ZERO, size), false)
-	for path_value: Variant in paths:
-		var path_location_ids := _path_location_ids(path_value)
-		var path_points := _path_points(path_value)
-		if path_location_ids.size() < 2 or path_points.size() < 2:
-			continue
-		var from_id := path_location_ids[0]
-		var to_id := path_location_ids[1]
-		draw_polyline(PackedVector2Array(path_points), PATH_SHADOW, 8.0, true)
-		var is_selected_path := from_id == selected_location_id or to_id == selected_location_id
-		draw_polyline(
-			PackedVector2Array(path_points),
-			PATH_HIGHLIGHT if is_selected_path else PATH_COLOR,
-			4.0,
+	if show_connection_overlay:
+		for path_value: Variant in paths:
+			var path_location_ids := _path_location_ids(path_value)
+			var path_points := _path_points(path_value)
+			if path_location_ids.size() < 2 or path_points.size() < 2:
+				continue
+			var from_id := path_location_ids[0]
+			var to_id := path_location_ids[1]
+			draw_polyline(PackedVector2Array(path_points), PATH_SHADOW, 8.0, true)
+			var is_selected_path := from_id == selected_location_id or to_id == selected_location_id
+			draw_polyline(
+				PackedVector2Array(path_points),
+				PATH_HIGHLIGHT if is_selected_path else PATH_COLOR,
+				4.0,
+				true
+			)
+
+	if (
+		selected_location_id != ""
+		and selected_location_id != current_location_id
+		and locations.has(selected_location_id)
+	):
+		draw_arc(
+			_location_point(selected_location_id),
+			15.0,
+			0.0,
+			TAU,
+			32,
+			Color("#f3cc69"),
+			3.0,
 			true
 		)
 
@@ -171,7 +197,9 @@ func _path_points(path_value: Variant) -> Array[Vector2]:
 	return points
 
 
-func _marker_style(location: Dictionary, highlighted: bool, current: bool) -> StyleBoxFlat:
+func _marker_style(location: Dictionary, highlighted: bool, current: bool) -> StyleBox:
+	if not show_marker_overlay:
+		return StyleBoxEmpty.new()
 	var kind := str(location.get("kind", "route"))
 	var color := Color("#65d8f4")
 	if kind in ["town", "city"]:

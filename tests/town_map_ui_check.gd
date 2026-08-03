@@ -55,6 +55,8 @@ func _run() -> void:
 
 	var background_path := str(region_data.get("backgroundPath", ""))
 	_check(ResourceLoader.exists(background_path), "Kanto Town Map background asset exists")
+	var background := load(background_path) as Texture2D
+	_check(background != null and background.get_width() == 400 and background.get_height() == 297, "Town Map uses the supplied 400x297 map image")
 
 	var popup := POPUP_SCRIPT.new() as TownMapPopup
 	root.add_child(popup)
@@ -66,6 +68,8 @@ func _run() -> void:
 	_check(popup.current_location_id == "kanto_pallet_town", "Interior maps resolve to their parent Town Map location")
 	_check(popup.selected_location_id == "kanto_pallet_town", "Current location is selected when the map opens")
 	_check(popup.map_canvas.marker_buttons.size() == locations.size(), "Every Town Map location has an interactive marker")
+	_check(not popup.map_canvas.show_connection_overlay, "Baked route lines are not drawn a second time")
+	_check(not popup.map_canvas.show_marker_overlay, "Baked map circles use invisible interactive hotspots")
 	popup.close()
 	_check(not popup.visible, "Town Map can be closed")
 	popup.queue_free()

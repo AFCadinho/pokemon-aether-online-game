@@ -1,46 +1,46 @@
 {
   "schemaVersion": 1,
   "_instructions": [
-    "Dit is het bestand waarin je de punten en routebochten kunt invullen.",
-    "Het raster is 1000 breed en 707 hoog. x=0 is links, y=0 is boven.",
-    "Wijzig onder points alleen x en y om een locatiepunt te verplaatsen.",
-    "Voeg onder connections waypoints toe om een route met rechte hoeken of bochten te tekenen.",
-    "Voorbeeld waypoint: {\"x\": 500, \"y\": 300}. De volgorde loopt van from naar to.",
-    "Laat de location-id's en de waarden van from/to ongewijzigd; die verwijzen naar echte game maps."
+    "Dit bestand gebruikt exact hetzelfde 400x297-pixelraster als kanto_region_map.png.",
+    "x=0 is links en y=0 is boven. Je kunt de gewenste pixel dus rechtstreeks uit een afbeeldingseditor overnemen.",
+    "Wijzig onder points alleen x en y om de onzichtbare klikzone en locatiering te verplaatsen.",
+    "De gele routes en cirkels staan al in de achtergrondafbeelding en worden niet opnieuw door Godot getekend.",
+    "Laat de location-id's en de waarden van from/to ongewijzigd; die verwijzen naar echte game maps.",
+    "needsReview mag je op false zetten zodra je een punt hebt gecontroleerd. Dit veld beïnvloedt de UI niet."
   ],
   "coordinateSpace": {
-    "width": 1000,
-    "height": 707
+    "width": 400,
+    "height": 297
   },
   "points": {
     "kanto_pallet_town": {
-      "x": 270,
-      "y": 527,
+      "x": 80,
+      "y": 239,
       "needsReview": true
     },
     "kanto_route_1": {
-      "x": 280,
-      "y": 463,
+      "x": 80,
+      "y": 224,
       "needsReview": true
     },
     "kanto_viridian_city": {
-      "x": 290,
-      "y": 399,
+      "x": 80,
+      "y": 209,
       "needsReview": true
     },
     "kanto_route_2": {
-      "x": 300,
-      "y": 336,
+      "x": 80,
+      "y": 180,
       "needsReview": true
     },
     "kanto_viridian_forest": {
-      "x": 320,
-      "y": 272,
+      "x": 80,
+      "y": 165,
       "needsReview": true
     },
     "kanto_pewter_city": {
-      "x": 300,
-      "y": 201,
+      "x": 80,
+      "y": 150,
       "needsReview": true
     }
   },
