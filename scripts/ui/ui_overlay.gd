@@ -183,8 +183,8 @@ const KANTO_BADGES := [
 	{"id": "earth", "name": "Earth Badge", "texture": "res://assets/gym_badges/kanto_badges/Earth_Badge.png", "unlocked": false},
 ]
 const PLAYER_STATUS_AVATAR_VIEWPORT_SIZE := Vector2i(68, 68)
-const PLAYER_STATUS_AVATAR_POSITION := Vector2(34, 38)
-const PLAYER_STATUS_AVATAR_SCALE := Vector2(1.5, 1.5)
+const PLAYER_STATUS_HEAD_POSITION := Vector2(34, 58)
+const PLAYER_STATUS_HEAD_SCALE := Vector2(1.55, 1.55)
 const TRAINER_CARD_SIZE := Vector2(720, 500)
 const TRAINER_CARD_AVATAR_VIEWPORT_SIZE := Vector2i(160, 160)
 const TRAINER_CARD_AVATAR_POSITION := Vector2(80, 112)
@@ -10427,7 +10427,7 @@ func _setup_player_status_card() -> void:
 	player_status_panel.gui_input.connect(_on_player_status_panel_gui_input)
 	player_status_panel.mouse_entered.connect(_on_player_status_panel_mouse_entered)
 	player_status_panel.mouse_exited.connect(_on_player_status_panel_mouse_exited)
-	_populate_avatar_preview(player_status_avatar_viewport, PLAYER_STATUS_AVATAR_POSITION, PLAYER_STATUS_AVATAR_SCALE)
+	_populate_avatar_preview(player_status_avatar_viewport, PLAYER_STATUS_HEAD_POSITION, PLAYER_STATUS_HEAD_SCALE)
 	_refresh_player_status_card()
 
 func _setup_pvp_queue_compact_panel() -> void:
@@ -10776,7 +10776,7 @@ func _populate_avatar_preview(viewport: SubViewport, preview_position: Vector2, 
 	_set_avatar_preview_idle_frame(avatar_visual)
 
 func _refresh_avatar_previews() -> void:
-	_populate_avatar_preview(player_status_avatar_viewport, PLAYER_STATUS_AVATAR_POSITION, PLAYER_STATUS_AVATAR_SCALE)
+	_populate_avatar_preview(player_status_avatar_viewport, PLAYER_STATUS_HEAD_POSITION, PLAYER_STATUS_HEAD_SCALE)
 	for viewport: SubViewport in trainer_card_avatar_viewports:
 		var preview_position: Vector2 = viewport.get_meta("preview_position", TRAINER_CARD_AVATAR_POSITION) as Vector2
 		var preview_scale: Vector2 = viewport.get_meta("preview_scale", TRAINER_CARD_AVATAR_SCALE) as Vector2

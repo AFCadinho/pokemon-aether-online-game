@@ -7,6 +7,7 @@ signal closed
 const REGION_MAP_PATH := "res://data/region_maps/kanto.json"
 const WORLD_ACCESS_PATH := "res://generated/world_access_catalog.json"
 const TownMapCanvasScript := preload("res://scripts/ui/town_map_canvas.gd")
+const TrainerHeadPortraitScript := preload("res://scripts/ui/trainer_head_portrait.gd")
 
 var region_data: Dictionary = {}
 var layout_data: Dictionary = {}
@@ -17,6 +18,7 @@ var subtitle_label: Label
 var current_location_label: Label
 var map_canvas: TownMapCanvas
 var detail_name_label: Label
+var detail_portrait: TrainerHeadPortrait
 var detail_kind_label: Label
 var detail_description_label: Label
 var detail_connections_label: Label
@@ -223,6 +225,11 @@ func _build_ui() -> void:
 	detail_name_label.add_theme_color_override("font_color", Color("#f0e6ca"))
 	detail_name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	detail_column.add_child(detail_name_label)
+	detail_portrait = TrainerHeadPortraitScript.new() as TrainerHeadPortrait
+	detail_portrait.custom_minimum_size = Vector2(54, 54)
+	detail_portrait.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	detail_portrait.visible = false
+	detail_column.add_child(detail_portrait)
 	detail_kind_label = Label.new()
 	detail_kind_label.add_theme_font_size_override("font_size", 12)
 	detail_kind_label.add_theme_color_override("font_color", Color("#f2cb6b"))
@@ -294,6 +301,17 @@ func _refresh_details(location_id: String) -> void:
 		map_canvas.select_location(location_id)
 	var location := locations.get(location_id, {}) as Dictionary
 	detail_name_label.text = _location_name(location_id)
+	if detail_portrait != null:
+		var portrait_state: Variant = location.get("portraitAppearance", {})
+		if not portrait_state is Dictionary or (portrait_state as Dictionary).is_empty():
+			portrait_state = {}
+		if (portrait_state as Dictionary).is_empty() and location_id == current_location_id:
+			var player_save := get_node_or_null("/root/PlayerSave")
+			if player_save != null and player_save.has_method("to_appearance_state"):
+				portrait_state = player_save.call("to_appearance_state")
+		detail_portrait.visible = portrait_state is Dictionary and not (portrait_state as Dictionary).is_empty()
+		if detail_portrait.visible:
+			detail_portrait.set_appearance_state(portrait_state as Dictionary)
 	detail_kind_label.text = _t(
 		"ui.town_map.kind.%s" % str(location.get("kind", "route"))
 	)

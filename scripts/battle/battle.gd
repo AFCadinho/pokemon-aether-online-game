@@ -13577,6 +13577,18 @@ func _update_battle_presentation_before_event_render(events: Array) -> void:
 func _update_vs_panel_names() -> void:
 	if vs_panel_container != null:
 		vs_panel_container.set_names(_get_vs_player_name("p1"), _get_vs_player_name("p2"))
+		vs_panel_container.set_player_appearances(
+			_get_vs_player_appearance("p1"),
+			_get_vs_player_appearance("p2")
+		)
+
+
+func _get_vs_player_appearance(player_id: String) -> Dictionary:
+	if player_id == "p1":
+		return PlayerSave.to_appearance_state()
+	var player_data: Dictionary = battle_state.players.get(player_id, {})
+	var appearance_value: Variant = player_data.get("appearance", player_data.get("appearanceState", {}))
+	return appearance_value as Dictionary if appearance_value is Dictionary else {}
 
 func _get_vs_player_name(player_id: String) -> String:
 	if player_id == "p1":
