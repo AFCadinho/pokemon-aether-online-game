@@ -8,6 +8,7 @@ const ROUTE_22_DEPARTURE_DIALOGUE_ID := "kanto_oaks_lab_gary_route_22_departure"
 const PATH_DIRECTIONS: Array[Vector2i] = [Vector2i.UP, Vector2i.LEFT, Vector2i.RIGHT, Vector2i.DOWN]
 
 var starter_sequence_running := false
+var starter_sequence_pending := false
 var parcel_departure_running := false
 var starter_already_claimed := false
 
@@ -37,6 +38,7 @@ func begin_starter_sequence(
 ) -> void:
 	if starter_sequence_running:
 		return
+	starter_sequence_pending = false
 	var species_id := rival_species_id.strip_edges().to_lower()
 	var species_name := rival_species_name.strip_edges()
 	if species_id.is_empty() or species_name.is_empty():
@@ -45,6 +47,7 @@ func begin_starter_sequence(
 			species_id = str(options.get("rivalStarterSpeciesId", "")).strip_edges().to_lower()
 			species_name = str(options.get("rivalStarterSpeciesName", "")).strip_edges()
 	if player == null or species_id.is_empty() or species_name.is_empty():
+		_sync_story_presence()
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
 
@@ -86,6 +89,16 @@ func begin_starter_sequence(
 	GameState.unlock_overworld_input()
 
 
+func prepare_starter_sequence() -> void:
+	starter_sequence_pending = true
+	_set_story_presence(true)
+
+
+func cancel_pending_starter_sequence() -> void:
+	starter_sequence_pending = false
+	_sync_story_presence()
+
+
 func _sync_persisted_starter_choice() -> void:
 	var options: Dictionary = await PlayerPartyStateService.get_starter_options()
 	if not bool(options.get("success", false)):
@@ -122,7 +135,7 @@ func _on_gary_story_changed(_revision: int) -> void:
 
 
 func _sync_story_presence() -> void:
-	if starter_sequence_running or parcel_departure_running:
+	if starter_sequence_pending or starter_sequence_running or parcel_departure_running:
 		return
 	var parcel_quest := StoryService.get_quest(PARCEL_QUEST_ID)
 	var parcel_status := str(parcel_quest.get("status", "")).strip_edges().to_lower()

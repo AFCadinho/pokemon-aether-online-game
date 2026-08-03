@@ -84,9 +84,11 @@ func interact_with_player(player: Node2D) -> void:
 
 	var selected_species_id := str(selected_choice.get("speciesId", "")).strip_edges()
 	var selected_species_name := str(selected_choice.get("name", selected_species_id)).strip_edges()
+	_prepare_gary_starter_sequence()
 	var create_result: Dictionary = await give_starter_pokemon(selected_species_id)
 	is_creating_starter = false
 	if not bool(create_result.get("success", false)):
+		_cancel_gary_starter_sequence()
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
 
@@ -96,6 +98,7 @@ func interact_with_player(player: Node2D) -> void:
 	PlayerSave.flags["received_starter"] = true
 	PlayerSave.flags["starter_species"] = selected_species_id
 	if last_starter_claim_already_completed:
+		_cancel_gary_starter_sequence()
 		await show_dialogue(
 			_format_dialogue_lines(
 				await _resolve_dialogue_lines(starter_received_dialogue_id, starter_received_dialogue_lines),
@@ -124,6 +127,18 @@ func _schedule_gary_starter_sequence(player: Node2D, create_result: Dictionary) 
 		str(create_result.get("rivalStarterSpeciesName", "")),
 		str(create_result.get("rivalTrainerId", ""))
 	)
+
+
+func _prepare_gary_starter_sequence() -> void:
+	var gary := get_parent().get_node_or_null("Gary")
+	if gary != null and gary.has_method("prepare_starter_sequence"):
+		gary.call("prepare_starter_sequence")
+
+
+func _cancel_gary_starter_sequence() -> void:
+	var gary := get_parent().get_node_or_null("Gary")
+	if gary != null and gary.has_method("cancel_pending_starter_sequence"):
+		gary.call("cancel_pending_starter_sequence")
 
 
 func _apply_npc_metadata(metadata: Dictionary) -> void:
