@@ -127,6 +127,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/pokemon_summary_move_reorder_check.gd",
 	"res://tests/pokemon_summary_direct_field_move_check.gd",
 	"res://tests/tmx_visual_importer_check.gd",
+	"res://tests/open_field_visual_check.gd",
 	"res://tests/social_service_contract_check.gd",
 	"res://tests/guild_service_contract_check.gd",
 	"res://tests/guild_popup_check.gd",
