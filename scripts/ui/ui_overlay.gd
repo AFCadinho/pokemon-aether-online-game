@@ -183,8 +183,8 @@ const KANTO_BADGES := [
 	{"id": "earth", "name": "Earth Badge", "texture": "res://assets/gym_badges/kanto_badges/Earth_Badge.png", "unlocked": false},
 ]
 const PLAYER_STATUS_AVATAR_VIEWPORT_SIZE := Vector2i(68, 68)
-const PLAYER_STATUS_HEAD_POSITION := Vector2(34, 58)
-const PLAYER_STATUS_HEAD_SCALE := Vector2(1.55, 1.55)
+const PLAYER_STATUS_HEAD_POSITION := Vector2(34, 48)
+const PLAYER_STATUS_HEAD_SCALE := Vector2(1.75, 1.75)
 const TRAINER_CARD_SIZE := Vector2(720, 500)
 const TRAINER_CARD_AVATAR_VIEWPORT_SIZE := Vector2i(160, 160)
 const TRAINER_CARD_AVATAR_POSITION := Vector2(80, 112)
