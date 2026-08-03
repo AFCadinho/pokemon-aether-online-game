@@ -81,7 +81,7 @@ const STAFF_ACTION_BAR_PERMISSION := "ui:staff:action-bar"
 const WORLD_TELEPORT_SELF_PERMISSION := "world:teleport:self"
 const WORLD_TELEPORT_PLAYER_PERMISSION := "world:teleport:player"
 const WORLD_TELEPORT_OTHER_PERMISSION := "world:teleport:other"
-const CONTENT_CREATOR_TOOLS_PERMISSION := "content:creator:tools"
+const CONTENT_CREATOR_PHOTO_MODE_PERMISSION := "content:creator:photo-mode"
 const CONTENT_CREATOR_GENERATING_PERMISSION := "content:creator:generating"
 const STAFF_ROLE_CATEGORY := "staff"
 const LEGACY_STAFF_ROLE_IDS := ["staff", "owner", "senior_staff", "developer", "moderator", "gamemaster"]
@@ -1617,8 +1617,8 @@ func _play_mail_notification_sound() -> void:
 func _can_use_dev_tools() -> bool:
 	return _has_user_permission(DEV_TOOLS_PERMISSION)
 
-func _can_use_content_creator_tools() -> bool:
-	return _has_user_permission(CONTENT_CREATOR_TOOLS_PERMISSION)
+func _can_use_content_creator_photo_mode() -> bool:
+	return _has_user_permission(CONTENT_CREATOR_PHOTO_MODE_PERMISSION)
 
 func _can_use_content_creator_generation() -> bool:
 	return _has_user_permission(CONTENT_CREATOR_GENERATING_PERMISSION)
@@ -1702,7 +1702,7 @@ func _refresh_dev_tools_visibility() -> void:
 	var can_teleport: bool = _can_teleport_self()
 	var can_teleport_to_player: bool = _can_teleport_to_player()
 	var can_teleport_other: bool = _can_teleport_other_player()
-	var can_use_content_creator_tools: bool = _can_use_content_creator_tools()
+	var can_use_content_creator_photo_mode: bool = _can_use_content_creator_photo_mode()
 	var can_use_content_creator_generation: bool = _can_use_content_creator_generation()
 	var has_staff_tool: bool = (
 		can_return_from_impersonation
@@ -1711,13 +1711,13 @@ func _refresh_dev_tools_visibility() -> void:
 		or can_teleport_to_player
 		or can_teleport_other
 	)
-	var has_visible_staff_action: bool = has_staff_tool or can_use_dev_tools or can_use_content_creator_tools or can_use_content_creator_generation
+	var has_visible_staff_action: bool = has_staff_tool or can_use_dev_tools or can_use_content_creator_photo_mode or can_use_content_creator_generation
 	PlayerSave.is_staff = _current_player_has_staff_role()
 	if content_creator_tools_slot != null:
-		content_creator_tools_slot.visible = can_show_staff_action_bar and can_use_content_creator_tools
+		content_creator_tools_slot.visible = can_show_staff_action_bar and can_use_content_creator_photo_mode
 	if content_creator_tools_button != null:
-		content_creator_tools_button.visible = can_show_staff_action_bar and can_use_content_creator_tools
-		content_creator_tools_button.disabled = not can_use_content_creator_tools
+		content_creator_tools_button.visible = can_show_staff_action_bar and can_use_content_creator_photo_mode
+		content_creator_tools_button.disabled = not can_use_content_creator_photo_mode
 	if alpha_tools_slot != null:
 		alpha_tools_slot.visible = can_show_staff_action_bar and can_use_content_creator_generation
 	if alpha_tools_button != null:
@@ -1796,7 +1796,7 @@ func _refresh_dev_tools_visibility() -> void:
 			dev_badge_progress_popup.close()
 	if not can_use_content_creator_generation and alpha_tools_popup != null:
 		alpha_tools_popup.visible = false
-	if not can_use_content_creator_tools and content_creator_tools_popup != null:
+	if not can_use_content_creator_photo_mode and content_creator_tools_popup != null:
 		content_creator_tools_popup.visible = false
 	if not can_use_content_creator_generation and dev_pokemon_popup_mode == DevPokemonPopupMode.CONTENT_CREATOR:
 		dev_pokemon_popup.visible = false
@@ -25894,7 +25894,7 @@ func _on_alpha_tools_button_pressed() -> void:
 		_deactivate_ui_panel(alpha_tools_popup)
 
 func _on_content_creator_tools_button_pressed() -> void:
-	if not _can_use_content_creator_tools() or content_creator_tools_popup == null:
+	if not _can_use_content_creator_photo_mode() or content_creator_tools_popup == null:
 		return
 	content_creator_tools_popup.visible = not content_creator_tools_popup.visible
 	if content_creator_tools_popup.visible:
@@ -25905,7 +25905,7 @@ func _on_content_creator_tools_button_pressed() -> void:
 		_deactivate_ui_panel(content_creator_tools_popup)
 
 func _on_content_creator_photo_mode_button_pressed() -> void:
-	if not _can_use_content_creator_tools():
+	if not _can_use_content_creator_photo_mode():
 		return
 	_hide_content_creator_tools_popup()
 	get_tree().call_group("content_creator_photo_mode", "open_photo_mode")
