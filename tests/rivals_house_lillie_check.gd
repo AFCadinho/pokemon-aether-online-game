@@ -4,6 +4,7 @@ const RIVALS_HOUSE := "res://scenes/overworld/kanto/towns/pallet_town/rivals_hou
 const LILLIE_PROFILE := "res://resources/npcs/story/lillie.tres"
 const LILLIE_FRAMES := "res://assets/npcs/custom/lillie_aether_blossom_frames.tres"
 const LILLIE_SHEET := "res://assets/npcs/custom/lillie_aether_blossom.png"
+const LILLIE_MUGSHOT := "res://assets/sprites/mugshots/lillie_aether_blossom.png"
 
 var failed := false
 
@@ -29,6 +30,17 @@ func _init() -> void:
 		var sheet_image := sheet_texture.get_image()
 		_check(_count_color(sheet_image, Color8(61, 111, 134)) == 64, "Lillie has blue eyes in every animation frame")
 		_check(_count_color(sheet_image, Color8(15, 255, 0)) == 0, "Lillie's original green eye pixels are removed")
+	var mugshot_texture := load(LILLIE_MUGSHOT) as Texture2D
+	_check(mugshot_texture != null, "Lillie's custom dialogue mugshot loads")
+	if mugshot_texture != null:
+		_check(
+			mugshot_texture.get_size() == Vector2(1024, 1024),
+			"Lillie's custom dialogue mugshot keeps its full square artwork"
+		)
+		_check(
+			mugshot_texture.get_image().get_pixel(0, 0).a == 0.0,
+			"Lillie's custom dialogue mugshot keeps its transparent background"
+		)
 	var scene_source := FileAccess.get_file_as_string(RIVALS_HOUSE)
 	_check(scene_source.contains('reward_id = "kanto_rivals_house_town_map"'), "Lillie grants the Town Map reward")
 	_check(scene_source.contains("preload_quest_markers = true"), "Lillie's quest marker is preloaded")
