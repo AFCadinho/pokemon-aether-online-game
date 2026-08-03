@@ -1,5 +1,36 @@
 # Changelog
 
+## Unreleased
+
+**Added**
+
+- Added the opening Kanto storyline, including the Player's House introduction, starter choice, Dadinho's training side quest, Oak's Parcel, Gary's first partner battle, and Lillie's Town Map gift.
+- Added story-aware NPC dialogue, quest markers, reward previews, a quest journal, and main- and side-quest tracking.
+- Added an interactive Kanto Town Map with current and selected location markers, routes, points of interest, descriptions, and key-item-based access.
+- Added the Viridian City Pokémon Center, guarded route exits, and the west connection to the new Kanto Route 22 scene and Open Field visual.
+- Added overworld Trainer staging and Trainer portraits to battle introductions and PvP presentation.
+- Added a Fallen allies indicator for Kingambit in battle.
+- Added a custom pixel cursor theme with dedicated hover, drag, and drop cursors and configurable scaling.
+- Added a dedicated Photo Mode permission so the tool is shown only to authorized roles.
+
+**Changed**
+
+- Reorganized the overworld navigation and improved the presentation and controls for quest offers and rewards.
+- Staff teleport destinations now use the shared world-access catalog, are grouped by map, and expose every safe spawn point.
+- Rain and snow now react to the surface they land on.
+- Refined the Player's House, Dadinho, Gary, Lillie, market interactions, Trainer portraits, the Town Map, and the battle EXP bar.
+- Account privacy controls are simpler, and completed personal-data exports can be opened directly from the game.
+
+**Fixed**
+
+- Improved PvP recovery across delayed renders, pivots, forced switches, reconnects, timers, Team Preview, and choices submitted while presentation was still finishing.
+- Fixed private battle projections exposing or retaining participant details at the wrong time.
+- Fixed Mimikyu's form presentation and several battle portrait and VS-panel issues.
+- Fixed Trainer appearances and the opponent portrait disappearing or changing during PvP updates.
+- Fixed blackout respawn acknowledgements and new-game spawn persistence.
+- Fixed several opening-story blockers involving NPC facing, occupied approach tiles, starter staging, parcel progression, and market counters.
+- Fixed personal-data export requests being interrupted or exposing unsafe file handling.
+
 ## 0.3.42 - 2026-07-31
 
 **Added**
