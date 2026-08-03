@@ -19,17 +19,17 @@ corner_radius_bottom_left = 9
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ve8bd"]
 bg_color = Color(0.07058824, 0.13725491, 0.23529412, 1)
-corner_radius_top_left = 9
-corner_radius_top_right = 9
-corner_radius_bottom_right = 9
-corner_radius_bottom_left = 9
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qsh65"]
 bg_color = Color(0.38431373, 0.7490196, 1, 1)
-corner_radius_top_left = 9
-corner_radius_top_right = 9
-corner_radius_bottom_right = 9
-corner_radius_bottom_left = 9
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="PokemonInfoHud" type="VBoxContainer" unique_id=523398377]
 theme_override_constants/separation = 2
@@ -131,19 +131,16 @@ value = 100.0
 
 [node name="ExpRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 visible = false
-custom_minimum_size = Vector2(0, 18)
+custom_minimum_size = Vector2(0, 7)
 layout_mode = 2
 theme_override_constants/separation = 5
 
-[node name="ExpTextLabel" type="Label" parent="MarginContainer/VBoxContainer/ExpRow"]
+[node name="ExpIndent" type="Control" parent="MarginContainer/VBoxContainer/ExpRow"]
 custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.38431373, 0.7490196, 1, 1)
-theme_override_font_sizes/font_size = 11
-text = "battle.hud.exp"
 
 [node name="ExpBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/ExpRow" unique_id=1318107520]
-custom_minimum_size = Vector2(0, 18)
+custom_minimum_size = Vector2(0, 7)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0, 0, 0, 0)

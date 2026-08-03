@@ -32,7 +32,7 @@
       "descriptionKey": "ui.town_map.location.route_2.description"
     },
     "kanto_viridian_forest": {
-      "kind": "wilderness",
+      "kind": "special",
       "nameKey": "ui.town_map.location.viridian_forest.name",
       "descriptionKey": "ui.town_map.location.viridian_forest.description"
     },

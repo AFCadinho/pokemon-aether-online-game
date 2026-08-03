@@ -4,7 +4,7 @@
     "Dit bestand gebruikt exact hetzelfde 400x297-pixelraster als kanto_region_map.png.",
     "x=0 is links en y=0 is boven. Je kunt de gewenste pixel dus rechtstreeks uit een afbeeldingseditor overnemen.",
     "Wijzig onder points alleen x en y om de onzichtbare klikzone en locatiering te verplaatsen.",
-    "Alle zichtbare cirkels zijn al ingevuld. Vervang bij kanto_map_point_01 t/m 15 alleen name wanneer je de echte locatie hebt bepaald.",
+    "Alle zichtbare cirkels zijn al ingevuld. Grote cirkels zijn settlements; kleine lichtblauwe cirkels zijn special locations. Vervang later alleen name en eventueel het specifiekere type.",
     "Punten met planned=true hoeven nog niet naar een speelbare game map te verwijzen.",
     "Onder routePoints staat voor elk geel routegedeelte een tijdelijk punt. Vervang daar later alleen name.",
     "De gele routes en cirkels staan al in de achtergrondafbeelding en worden niet opnieuw door Godot getekend.",
@@ -49,97 +49,112 @@
     "kanto_map_point_01": {
       "x": 40,
       "y": 51,
+      "kind": "settlement",
       "name": "Map Point 01",
       "planned": true
     },
     "kanto_map_point_02": {
       "x": 40,
       "y": 72,
-      "name": "Route 22",
+      "kind": "special",
+      "name": "Special Location 01",
       "planned": true
     },
     "kanto_map_point_03": {
       "x": 80,
       "y": 270,
+      "kind": "settlement",
       "name": "Map Point 03",
       "planned": true
     },
     "kanto_map_point_04": {
       "x": 160,
       "y": 270,
-      "name": "Map Point 04",
+      "kind": "special",
+      "name": "Special Location 02",
       "planned": true
     },
     "kanto_map_point_05": {
       "x": 180,
       "y": 48,
-      "name": "Map Point 05",
+      "kind": "special",
+      "name": "Special Location 03",
       "planned": true
     },
     "kanto_map_point_06": {
       "x": 220,
       "y": 109,
+      "kind": "settlement",
       "name": "Map Point 06",
       "planned": true
     },
     "kanto_map_point_07": {
       "x": 240,
       "y": 232,
+      "kind": "settlement",
       "name": "Map Point 07",
       "planned": true
     },
     "kanto_map_point_08": {
       "x": 280,
       "y": 48,
+      "kind": "settlement",
       "name": "Map Point 08",
       "planned": true
     },
     "kanto_map_point_09": {
       "x": 280,
       "y": 109,
+      "kind": "settlement",
       "name": "Map Point 09",
       "planned": true
     },
     "kanto_map_point_10": {
       "x": 280,
       "y": 171,
+      "kind": "settlement",
       "name": "Map Point 10",
       "planned": true
     },
     "kanto_map_point_11": {
       "x": 298,
       "y": 171,
-      "name": "Map Point 11",
+      "kind": "special",
+      "name": "Special Location 04",
       "planned": true
     },
     "kanto_map_point_12": {
       "x": 360,
       "y": 48,
-      "name": "Map Point 12",
+      "kind": "special",
+      "name": "Special Location 05",
       "planned": true
     },
     "kanto_map_point_13": {
       "x": 360,
       "y": 70,
-      "name": "Map Point 13",
+      "kind": "special",
+      "name": "Special Location 06",
       "planned": true
     },
     "kanto_map_point_14": {
       "x": 360,
       "y": 109,
+      "kind": "settlement",
       "name": "Map Point 14",
       "planned": true
     },
     "kanto_map_point_15": {
       "x": 360,
       "y": 128,
-      "name": "Map Point 15",
+      "kind": "special",
+      "name": "Special Location 07",
       "planned": true
     }
   },
   "routePoints": [
     {"id": "kanto_route_segment_01", "x": 40, "y": 101, "name": "Route Placeholder 01", "planned": true},
-    {"id": "kanto_route_segment_02", "x": 60, "y": 151, "name": "Route Placeholder 02", "planned": true},
+    {"id": "kanto_route_segment_02", "x": 60, "y": 151, "name": "Route 22", "planned": true},
     {"id": "kanto_route_segment_03", "x": 80, "y": 130, "name": "Route Placeholder 03", "planned": true},
     {"id": "kanto_route_segment_04", "x": 80, "y": 80, "name": "Route Placeholder 04", "planned": true},
     {"id": "kanto_route_segment_05", "x": 130, "y": 70, "name": "Route Placeholder 05", "planned": true},

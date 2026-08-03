@@ -254,10 +254,9 @@ func _build_ui() -> void:
 	legend_flow.add_theme_constant_override("h_separation", 7)
 	legend_flow.add_theme_constant_override("v_separation", 5)
 	legend_margin.add_child(legend_flow)
-	_add_legend_chip(legend_flow, "town", Color("#f1c85d"))
-	_add_legend_chip(legend_flow, "city", Color("#f1c85d"))
-	_add_legend_chip(legend_flow, "route", Color("#65d8f4"))
-	_add_legend_chip(legend_flow, "wilderness", Color("#69d69b"))
+	_add_legend_chip(legend_flow, "settlement", Color("#f1c85d"))
+	_add_legend_chip(legend_flow, "route", Color("#f5d85c"))
+	_add_legend_chip(legend_flow, "special", Color("#8ceaff"))
 
 	var details := PanelContainer.new()
 	details.custom_minimum_size = Vector2(300, 0)
@@ -502,12 +501,14 @@ func _refresh_connection_buttons(location_ids: Array[String]) -> void:
 
 func _kind_color(kind: String) -> Color:
 	match kind:
-		"town", "city":
+		"town", "city", "settlement":
 			return Color("#f1c85d")
+		"special":
+			return Color("#8ceaff")
 		"wilderness":
 			return Color("#69d69b")
 		_:
-			return Color("#65d8f4")
+			return Color("#f5d85c")
 
 
 func _location_name(location_id: String) -> String:
@@ -551,7 +552,7 @@ func _apply_layout() -> void:
 			continue
 		var point_data := points.get(point_id, {}) as Dictionary
 		locations[point_id] = {
-			"kind": str(point_data.get("kind", "route")),
+			"kind": str(point_data.get("kind", "special")),
 			"name": str(point_data.get("name", point_id)),
 			"description": str(point_data.get("description", "")),
 			"planned": bool(point_data.get("planned", true)),

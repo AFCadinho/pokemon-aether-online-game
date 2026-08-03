@@ -33,8 +33,10 @@ func _run() -> void:
 	_check((layout_points.get("kanto_viridian_city", {}) as Dictionary).get("y") == 151, "Viridian City uses its supplied-map circle")
 	_check((layout_points.get("kanto_pewter_city", {}) as Dictionary).get("y") == 70, "Pewter City uses its supplied-map circle")
 	_check(layout_points.size() == 21, "Every baked map circle has coordinates, alongside Route 1")
-	_check((layout_data.get("routePoints", []) as Array).size() == 19, "Every baked yellow route section has a placeholder coordinate")
-	_check((layout_points.get("kanto_map_point_02", {}) as Dictionary).get("name") == "Route 22", "Route 22 is placed west of Viridian City")
+	var route_points := layout_data.get("routePoints", []) as Array
+	_check(route_points.size() == 19, "Every baked yellow route section has a placeholder coordinate")
+	_check((layout_points.get("kanto_map_point_02", {}) as Dictionary).get("kind") == "special", "Light-blue map circles are special locations")
+	_check((route_points[1] as Dictionary).get("name") == "Route 22", "Route 22 uses its yellow path west of Viridian City")
 	var areas := world_access.get("areas", {}) as Dictionary
 	var location_groups: Dictionary = {}
 	for area_value: Variant in areas.values():
@@ -91,7 +93,12 @@ func _run() -> void:
 	_check(popup.current_location_id == "kanto_pallet_town", "Interior maps resolve to their parent Town Map location")
 	_check(popup.selected_location_id == "kanto_pallet_town", "Current location is selected when the map opens")
 	_check(popup.map_canvas.marker_buttons.size() == popup_locations.size(), "Every Town Map location has an interactive marker")
-	_check(popup.legend_kind_labels.size() == 4, "Town Map presents a structured location legend")
+	var hover_marker := popup.map_canvas.marker_buttons.get("kanto_pewter_city") as Button
+	hover_marker.mouse_entered.emit()
+	_check(popup.map_canvas.hovered_location_id == "kanto_pewter_city", "Town Map hotspots expose a visible hover state")
+	hover_marker.mouse_exited.emit()
+	_check(popup.map_canvas.hovered_location_id == "", "Town Map hover state clears when leaving a hotspot")
+	_check(popup.legend_kind_labels.size() == 3, "Town Map distinguishes settlements, routes, and special locations")
 	_check(
 		popup.detail_connections_container.get_child_count() > 0
 		and popup.detail_connections_container.get_child(0) is Button,
