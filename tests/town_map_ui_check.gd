@@ -32,11 +32,22 @@ func _run() -> void:
 	_check((layout_points.get("kanto_pallet_town", {}) as Dictionary).get("y") == 208, "Pallet Town uses its supplied-map circle")
 	_check((layout_points.get("kanto_viridian_city", {}) as Dictionary).get("y") == 151, "Viridian City uses its supplied-map circle")
 	_check((layout_points.get("kanto_pewter_city", {}) as Dictionary).get("y") == 70, "Pewter City uses its supplied-map circle")
-	_check(layout_points.size() == 21, "Every baked map circle has coordinates, alongside Route 1")
+	_check((layout_points.get("kanto_route_2", {}) as Dictionary).get("y") == 140, "Route 2 uses the yellow path north of Viridian City")
+	_check((layout_points.get("kanto_viridian_forest", {}) as Dictionary).get("y") == 110, "Viridian Forest uses its light-blue special-location circle")
+	_check(layout_points.size() == 23, "Every baked map circle and playable route has coordinates")
 	var route_points := layout_data.get("routePoints", []) as Array
-	_check(route_points.size() == 19, "Every baked yellow route section has a placeholder coordinate")
+	_check(route_points.size() == 23, "Every Kanto route from Route 3 through Route 25 has a map coordinate")
 	_check((layout_points.get("kanto_map_point_02", {}) as Dictionary).get("kind") == "special", "Light-blue map circles are special locations")
-	_check((route_points[1] as Dictionary).get("name") == "Route 22", "Route 22 uses its yellow path west of Viridian City")
+	_check((layout_points.get("kanto_map_point_08", {}) as Dictionary).get("name") == "Cerulean City", "Named settlement points use the supplied Kanto locations")
+	_check((layout_points.get("kanto_map_point_11", {}) as Dictionary).get("name") == "Diglett's Cave (Route 11)", "Named special points use the supplied Kanto locations")
+	_check((layout_points.get("kanto_map_point_16", {}) as Dictionary).get("kind") == "special", "The northern Diglett's Cave entrance is a special location")
+	_check((layout_points.get("kanto_map_point_17", {}) as Dictionary).get("kind") == "special", "Viridian Forest Gate is a special location")
+	var route_names: Dictionary = {}
+	for route_point_value: Variant in route_points:
+		var route_point := route_point_value as Dictionary
+		route_names[str(route_point.get("name", ""))] = true
+	_check(route_names.has("Route 3") and route_names.has("Route 25"), "Named routes cover the remaining classic Kanto route range")
+	_check(route_names.has("Route 22"), "Route 22 uses its yellow path west of Viridian City")
 	var areas := world_access.get("areas", {}) as Dictionary
 	var location_groups: Dictionary = {}
 	for area_value: Variant in areas.values():
@@ -80,9 +91,9 @@ func _run() -> void:
 	for location_id_value: Variant in popup_locations.keys():
 		if str(location_id_value).begins_with("kanto_route_segment_"):
 			planned_route_count += 1
-	_check(popup_locations.size() == 40, "Town Map registers every configured point")
-	_check(planned_location_count == 34, "Unnamed baked circles and route sections are planned points")
-	_check(planned_route_count == 19, "Route placeholders are available alongside map points")
+	_check(popup_locations.size() == 46, "Town Map registers every configured point")
+	_check(planned_location_count == 40, "Future settlements, special locations, and routes are planned points")
+	_check(planned_route_count == 23, "Named future routes are available alongside map points")
 	popup.open_for_map("kanto_oaks_lab")
 	await process_frame
 	_check(popup.visible, "Town Map opens as a modal")

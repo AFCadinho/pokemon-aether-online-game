@@ -6,7 +6,7 @@
     "Wijzig onder points alleen x en y om de onzichtbare klikzone en locatiering te verplaatsen.",
     "Alle zichtbare cirkels zijn al ingevuld. Grote cirkels zijn settlements; kleine lichtblauwe cirkels zijn special locations. Vervang later alleen name en eventueel het specifiekere type.",
     "Punten met planned=true hoeven nog niet naar een speelbare game map te verwijzen.",
-    "Onder routePoints staat voor elk geel routegedeelte een tijdelijk punt. Vervang daar later alleen name.",
+    "Onder routePoints staat voor Route 3 t/m 25 een punt op het bijbehorende gele pad. Route 1 en Route 2 staan als speelbare locaties in kanto.json.",
     "De gele routes en cirkels staan al in de achtergrondafbeelding en worden niet opnieuw door Godot getekend.",
     "Laat de location-id's en de waarden van from/to ongewijzigd; die verwijzen naar echte game maps.",
     "needsReview mag je op false zetten zodra je een punt hebt gecontroleerd. Dit veld beïnvloedt de UI niet."
@@ -33,12 +33,12 @@
     },
     "kanto_route_2": {
       "x": 80,
-      "y": 110,
+      "y": 140,
       "needsReview": false
     },
     "kanto_viridian_forest": {
       "x": 80,
-      "y": 89,
+      "y": 110,
       "needsReview": false
     },
     "kanto_pewter_city": {
@@ -50,128 +50,146 @@
       "x": 40,
       "y": 51,
       "kind": "settlement",
-      "name": "Map Point 01",
+      "name": "Indigo Plateau",
       "planned": true
     },
     "kanto_map_point_02": {
       "x": 40,
       "y": 72,
       "kind": "special",
-      "name": "Special Location 01",
+      "name": "Victory Road",
       "planned": true
     },
     "kanto_map_point_03": {
       "x": 80,
       "y": 270,
-      "kind": "settlement",
-      "name": "Map Point 03",
+      "kind": "town",
+      "name": "Cinnabar Island",
       "planned": true
     },
     "kanto_map_point_04": {
       "x": 160,
       "y": 270,
       "kind": "special",
-      "name": "Special Location 02",
+      "name": "Seafoam Islands",
       "planned": true
     },
     "kanto_map_point_05": {
       "x": 180,
       "y": 48,
       "kind": "special",
-      "name": "Special Location 03",
+      "name": "Mt. Moon",
       "planned": true
     },
     "kanto_map_point_06": {
       "x": 220,
       "y": 109,
-      "kind": "settlement",
-      "name": "Map Point 06",
+      "kind": "city",
+      "name": "Celadon City",
       "planned": true
     },
     "kanto_map_point_07": {
       "x": 240,
       "y": 232,
-      "kind": "settlement",
-      "name": "Map Point 07",
+      "kind": "city",
+      "name": "Fuchsia City",
       "planned": true
     },
     "kanto_map_point_08": {
       "x": 280,
       "y": 48,
-      "kind": "settlement",
-      "name": "Map Point 08",
+      "kind": "city",
+      "name": "Cerulean City",
       "planned": true
     },
     "kanto_map_point_09": {
       "x": 280,
       "y": 109,
-      "kind": "settlement",
-      "name": "Map Point 09",
+      "kind": "city",
+      "name": "Saffron City",
       "planned": true
     },
     "kanto_map_point_10": {
       "x": 280,
       "y": 171,
-      "kind": "settlement",
-      "name": "Map Point 10",
+      "kind": "city",
+      "name": "Vermilion City",
       "planned": true
     },
     "kanto_map_point_11": {
       "x": 298,
       "y": 171,
       "kind": "special",
-      "name": "Special Location 04",
+      "name": "Diglett's Cave (Route 11)",
       "planned": true
     },
     "kanto_map_point_12": {
       "x": 360,
       "y": 48,
       "kind": "special",
-      "name": "Special Location 05",
+      "name": "Rock Tunnel",
       "planned": true
     },
     "kanto_map_point_13": {
       "x": 360,
       "y": 70,
       "kind": "special",
-      "name": "Special Location 06",
+      "name": "Power Plant",
       "planned": true
     },
     "kanto_map_point_14": {
       "x": 360,
       "y": 109,
-      "kind": "settlement",
-      "name": "Map Point 14",
+      "kind": "town",
+      "name": "Lavender Town",
       "planned": true
     },
     "kanto_map_point_15": {
       "x": 360,
       "y": 128,
       "kind": "special",
-      "name": "Special Location 07",
+      "name": "Pokémon Tower",
+      "planned": true
+    },
+    "kanto_map_point_16": {
+      "x": 80,
+      "y": 89,
+      "kind": "special",
+      "name": "Diglett's Cave (Route 2)",
+      "planned": true
+    },
+    "kanto_map_point_17": {
+      "x": 80,
+      "y": 130,
+      "kind": "special",
+      "name": "Viridian Forest Gate",
       "planned": true
     }
   },
   "routePoints": [
-    {"id": "kanto_route_segment_01", "x": 40, "y": 101, "name": "Route Placeholder 01", "planned": true},
-    {"id": "kanto_route_segment_02", "x": 60, "y": 151, "name": "Route 22", "planned": true},
-    {"id": "kanto_route_segment_03", "x": 80, "y": 130, "name": "Route Placeholder 03", "planned": true},
-    {"id": "kanto_route_segment_04", "x": 80, "y": 80, "name": "Route Placeholder 04", "planned": true},
-    {"id": "kanto_route_segment_05", "x": 130, "y": 70, "name": "Route Placeholder 05", "planned": true},
-    {"id": "kanto_route_segment_06", "x": 220, "y": 48, "name": "Route Placeholder 06", "planned": true},
-    {"id": "kanto_route_segment_07", "x": 320, "y": 48, "name": "Route Placeholder 07", "planned": true},
-    {"id": "kanto_route_segment_08", "x": 360, "y": 90, "name": "Route Placeholder 08", "planned": true},
-    {"id": "kanto_route_segment_09", "x": 320, "y": 109, "name": "Route Placeholder 09", "planned": true},
-    {"id": "kanto_route_segment_10", "x": 250, "y": 109, "name": "Route Placeholder 10", "planned": true},
-    {"id": "kanto_route_segment_11", "x": 280, "y": 80, "name": "Route Placeholder 11", "planned": true},
-    {"id": "kanto_route_segment_12", "x": 280, "y": 140, "name": "Route Placeholder 12", "planned": true},
-    {"id": "kanto_route_segment_13", "x": 289, "y": 171, "name": "Route Placeholder 13", "planned": true},
-    {"id": "kanto_route_segment_14", "x": 330, "y": 171, "name": "Route Placeholder 14", "planned": true},
-    {"id": "kanto_route_segment_15", "x": 360, "y": 150, "name": "Route Placeholder 15", "planned": true},
-    {"id": "kanto_route_segment_16", "x": 320, "y": 232, "name": "Route Placeholder 16", "planned": true},
-    {"id": "kanto_route_segment_17", "x": 200, "y": 270, "name": "Route Placeholder 17", "planned": true},
-    {"id": "kanto_route_segment_18", "x": 150, "y": 232, "name": "Route Placeholder 18", "planned": true},
-    {"id": "kanto_route_segment_19", "x": 280, "y": 25, "name": "Route Placeholder 19", "planned": true}
+    {"id": "kanto_route_segment_03", "x": 130, "y": 70, "name": "Route 3", "planned": true},
+    {"id": "kanto_route_segment_04", "x": 220, "y": 48, "name": "Route 4", "planned": true},
+    {"id": "kanto_route_segment_05", "x": 280, "y": 80, "name": "Route 5", "planned": true},
+    {"id": "kanto_route_segment_06", "x": 280, "y": 140, "name": "Route 6", "planned": true},
+    {"id": "kanto_route_segment_07", "x": 250, "y": 109, "name": "Route 7", "planned": true},
+    {"id": "kanto_route_segment_08", "x": 320, "y": 109, "name": "Route 8", "planned": true},
+    {"id": "kanto_route_segment_09", "x": 320, "y": 48, "name": "Route 9", "planned": true},
+    {"id": "kanto_route_segment_10", "x": 360, "y": 90, "name": "Route 10", "planned": true},
+    {"id": "kanto_route_segment_11", "x": 320, "y": 171, "name": "Route 11", "planned": true},
+    {"id": "kanto_route_segment_12", "x": 360, "y": 150, "name": "Route 12", "planned": true},
+    {"id": "kanto_route_segment_13", "x": 360, "y": 195, "name": "Route 13", "planned": true},
+    {"id": "kanto_route_segment_14", "x": 330, "y": 232, "name": "Route 14", "planned": true},
+    {"id": "kanto_route_segment_15", "x": 280, "y": 232, "name": "Route 15", "planned": true},
+    {"id": "kanto_route_segment_16", "x": 180, "y": 109, "name": "Route 16", "planned": true},
+    {"id": "kanto_route_segment_17", "x": 140, "y": 170, "name": "Route 17", "planned": true},
+    {"id": "kanto_route_segment_18", "x": 180, "y": 232, "name": "Route 18", "planned": true},
+    {"id": "kanto_route_segment_19", "x": 240, "y": 251, "name": "Route 19", "planned": true},
+    {"id": "kanto_route_segment_20", "x": 200, "y": 270, "name": "Route 20", "planned": true},
+    {"id": "kanto_route_segment_21", "x": 80, "y": 239, "name": "Route 21", "planned": true},
+    {"id": "kanto_route_segment_22", "x": 60, "y": 151, "name": "Route 22", "planned": true},
+    {"id": "kanto_route_segment_23", "x": 40, "y": 101, "name": "Route 23", "planned": true},
+    {"id": "kanto_route_segment_24", "x": 280, "y": 25, "name": "Route 24", "planned": true},
+    {"id": "kanto_route_segment_25", "x": 310, "y": 8, "name": "Route 25", "planned": true}
   ],
   "connections": [
     {
