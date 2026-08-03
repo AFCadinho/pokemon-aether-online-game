@@ -10,6 +10,8 @@ const MATCHING_STEP_STATUSES: Array[String] = ["completed", "skipped"]
 @export var position_marker_path: NodePath
 @export var facing_marker_path: NodePath
 @export var disable_area_path: NodePath
+@export var override_sprite_offset := false
+@export var sprite_offset_override := Vector2(0, -16)
 
 
 func _ready() -> void:
@@ -28,6 +30,8 @@ func _apply_story_state() -> void:
 		return
 
 	target.global_position = position_marker.global_position
+	if override_sprite_offset and target.has_method("set_story_sprite_offset"):
+		target.call("set_story_sprite_offset", sprite_offset_override)
 	if target.has_method("face_world_position"):
 		target.call("face_world_position", facing_marker.global_position)
 	if target.has_method("_update_sort_z"):
