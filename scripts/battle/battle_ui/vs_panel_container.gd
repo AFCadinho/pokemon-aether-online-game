@@ -72,7 +72,7 @@ func _create_player_portraits() -> void:
 	name_row.add_child(player_1_portrait)
 	name_row.add_child(player_2_portrait)
 	name_row.move_child(player_1_portrait, player_1_label.get_index())
-	name_row.move_child(player_2_portrait, player_2_label.get_index())
+	name_row.move_child(player_2_portrait, player_2_label.get_index() + 1)
 
 
 func _refresh_names_panel_width() -> void:
