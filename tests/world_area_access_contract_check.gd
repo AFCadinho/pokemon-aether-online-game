@@ -89,8 +89,10 @@ func _init() -> void:
 	)
 	_expect(
 		gate_source.contains('@export var guarded_transition_id := ""')
+		and gate_source.contains('@export var route_gate_id := ""')
+		and gate_source.contains("func handles_route_gate")
 		and gate_source.contains("WorldTransitionService.get_transition_access("),
-		"Gate NPCs depend on a transition policy instead of an area or role list"
+		"Gate NPCs bind route-gate tiles to a transition policy instead of an area or role list"
 	)
 	_expect(
 		not gate_source.contains("LEGACY_STAFF_ROLE_IDS")
@@ -126,6 +128,16 @@ func _init() -> void:
 		and viridian_city_source.contains('npc_id = "kanto_viridian_city_south_route_guard"')
 		and viridian_city_source.contains('npc_id = "kanto_viridian_city_west_route_guard"'),
 		"Viridian City has one uniquely identified guard at every route approach"
+	)
+	_expect(
+		viridian_city_source.contains('[node name="RouteGates" type="Node2D" parent="."]')
+		and viridian_city_source.contains('[node name="North" type="TileMapLayer" parent="RouteGates"]')
+		and viridian_city_source.contains('[node name="South" type="TileMapLayer" parent="RouteGates"]')
+		and viridian_city_source.contains('[node name="West" type="TileMapLayer" parent="RouteGates"]')
+		and viridian_city_source.count('metadata/route_gate_id = "kanto_viridian_city__to_route_2"') == 1
+		and viridian_city_source.count('metadata/route_gate_id = "kanto_viridian_city__to_route_1"') == 1
+		and viridian_city_source.count('metadata/route_gate_id = "kanto_viridian_city__to_route_22"') == 1,
+		"Every Viridian route approach has a route-gate layer bound to its own guard"
 	)
 	_expect(
 		FileAccess.file_exists(CATALOG_GENERATOR_SCENE_PATH)

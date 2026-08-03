@@ -7,6 +7,7 @@ const LEGACY_IN_PROGRESS_ACCESS_PERMISSION := "world:areas:access-in-progress"
 
 @export var gate_id := "route_1"
 @export var guarded_transition_id := ""
+@export var route_gate_id := ""
 @export var requires_party_pokemon := true
 @export var requires_staff_role := false
 @export var blocked_dialogue_lines: Array[String] = [
@@ -45,6 +46,8 @@ func is_gate_open() -> bool:
 		return false
 
 	if not guarded_transition_id.strip_edges().is_empty():
+		if transition_access.is_empty():
+			return true
 		return bool(transition_access.get("allowed", false))
 
 	if requires_staff_role and not _current_player_has_legacy_gate_permission():
@@ -98,6 +101,16 @@ func handles_world_transition(candidate_transition_id: String) -> bool:
 	return (
 		not guarded_transition_id.strip_edges().is_empty()
 		and guarded_transition_id.strip_edges() == candidate_transition_id.strip_edges()
+	)
+
+
+func handles_route_gate(candidate_route_gate_id: String) -> bool:
+	var configured_route_gate_id := route_gate_id.strip_edges()
+	if configured_route_gate_id.is_empty():
+		configured_route_gate_id = guarded_transition_id.strip_edges()
+	return (
+		not configured_route_gate_id.is_empty()
+		and configured_route_gate_id == candidate_route_gate_id.strip_edges()
 	)
 
 
