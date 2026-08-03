@@ -652,10 +652,10 @@ func _process(delta: float) -> void:
 		_position_party_hover_card()
 	weather_presentation.animate(delta)
 	if _should_show_bank_timer_projection():
-		vs_panel_container.show_decision_timers(
+		_vs_panel_call("show_decision_timers", [
 			PvpBattleRealtimeService.timer_projection.participant_display_for_local_player("p1", action_flow.local_player_id),
 			PvpBattleRealtimeService.timer_projection.participant_display_for_local_player("p2", action_flow.local_player_id)
-		)
+		])
 	_request_pvp_team_preview_recovery_if_server_advanced()
 	_report_stalled_pvp_waiting_if_needed()
 
@@ -4787,7 +4787,7 @@ func _debug_trainer_team_display(stage: String, payload: Dictionary) -> void:
 ## Reset de battle status UI naar een lege beginstand.
 func _reset_battle_status_panel() -> void:
 	battle_status_panel.reset_status()
-	vs_panel_container.hide_decision_timers(true)
+	_vs_panel_call("hide_decision_timers", [true])
 	field_timers_panel.reset_timers()
 	_update_side_condition_ui([])
 
@@ -5406,12 +5406,12 @@ func _update_battle_status_panels() -> void:
 	var display_turn := _get_battle_presentation_turn()
 	battle_status_panel.set_turn(display_turn)
 	battle_status_panel.hide_timer()
-	vs_panel_container.hide_decision_timers()
+	_vs_panel_call("hide_decision_timers")
 	if _should_show_bank_timer_projection():
-		vs_panel_container.show_decision_timers(
+		_vs_panel_call("show_decision_timers", [
 			PvpBattleRealtimeService.timer_projection.participant_display_for_local_player("p1", action_flow.local_player_id),
 			PvpBattleRealtimeService.timer_projection.participant_display_for_local_player("p2", action_flow.local_player_id)
-		)
+		])
 	var field_effects := _get_display_field_effects()
 	_prune_inactive_field_condition_ability_modifiers(field_effects)
 	field_timers_panel.set_effects(field_effects, display_turn)
@@ -9929,12 +9929,12 @@ func _apply_pvp_connection_log_event(message_type: String, message: Dictionary) 
 			log_message = _t("battle.connection.disconnected", {"player": player_name})
 		"pvp.reconnect_grace_started":
 			var grace_seconds := _get_int_from_variant(message.get("disconnectGraceSeconds", 0), 0)
-			vs_panel_container.show_reconnect_timer(
+			_vs_panel_call("show_reconnect_timer", [
 				_get_pvp_connection_event_display_side(message),
 				str(message.get("reconnectDeadlineAt", "")),
 				grace_seconds,
 				str(message.get("serverNow", ""))
-			)
+			])
 			_sync_pvp_reconnect_timer_pause()
 			if grace_seconds > 0:
 				log_message = _t("battle.connection.reconnect_seconds", {
@@ -9944,7 +9944,7 @@ func _apply_pvp_connection_log_event(message_type: String, message: Dictionary) 
 			else:
 				log_message = _t("battle.connection.waiting_reconnect", {"player": player_name})
 		"pvp.opponent_reconnected":
-			vs_panel_container.clear_reconnect_timer(_get_pvp_connection_event_display_side(message))
+			_vs_panel_call("clear_reconnect_timer", [_get_pvp_connection_event_display_side(message)])
 			_sync_pvp_reconnect_timer_pause()
 			log_message = _t("battle.connection.reconnected", {"player": player_name})
 		_:
@@ -10088,7 +10088,7 @@ func _acknowledge_pvp_presentation_fence_if_rendered() -> void:
 	_start_pvp_render_ack_retry()
 
 func _sync_pvp_reconnect_timer_pause() -> void:
-	if vs_panel_container.has_active_reconnect_timer():
+	if _vs_panel_has_method("has_active_reconnect_timer") and bool(vs_panel_container.call("has_active_reconnect_timer")):
 		PvpBattleRealtimeService.timer_projection.pause_for_reconnect()
 	else:
 		PvpBattleRealtimeService.timer_projection.resume_after_reconnect()
@@ -13576,11 +13576,21 @@ func _update_battle_presentation_before_event_render(events: Array) -> void:
 
 func _update_vs_panel_names() -> void:
 	if vs_panel_container != null:
-		vs_panel_container.set_names(_get_vs_player_name("p1"), _get_vs_player_name("p2"))
-		vs_panel_container.set_player_appearances(
+		_vs_panel_call("set_names", [_get_vs_player_name("p1"), _get_vs_player_name("p2")])
+		_vs_panel_call("set_player_appearances", [
 			_get_vs_player_appearance("p1"),
 			_get_vs_player_appearance("p2")
-		)
+		])
+
+
+func _vs_panel_has_method(method_name: String) -> bool:
+	return vs_panel_container != null and vs_panel_container.has_method(method_name)
+
+
+func _vs_panel_call(method_name: String, arguments: Array = []) -> Variant:
+	if not _vs_panel_has_method(method_name):
+		return null
+	return vs_panel_container.callv(method_name, arguments)
 
 
 func _get_vs_player_appearance(player_id: String) -> Dictionary:
