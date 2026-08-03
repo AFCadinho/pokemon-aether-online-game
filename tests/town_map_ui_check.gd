@@ -29,6 +29,9 @@ func _run() -> void:
 	var layout_height := float(coordinate_space.get("height", 0.0))
 	var layout_points := layout_data.get("points", {}) as Dictionary
 	_check(layout_width > 0.0 and layout_height > 0.0, "Town Map layout has a human-friendly coordinate space")
+	_check((layout_points.get("kanto_pallet_town", {}) as Dictionary).get("y") == 210, "Pallet Town uses its supplied-map circle")
+	_check((layout_points.get("kanto_viridian_city", {}) as Dictionary).get("y") == 158, "Viridian City uses its supplied-map circle")
+	_check((layout_points.get("kanto_pewter_city", {}) as Dictionary).get("y") == 51, "Pewter City uses its supplied-map circle")
 	var areas := world_access.get("areas", {}) as Dictionary
 	var location_groups: Dictionary = {}
 	for area_value: Variant in areas.values():
@@ -59,12 +62,17 @@ func _run() -> void:
 	_check(background != null and background.get_width() == 400 and background.get_height() == 297, "Town Map uses the supplied 400x297 map image")
 
 	var popup := POPUP_SCRIPT.new() as TownMapPopup
+	var game_state := root.get_node_or_null("GameState")
 	root.add_child(popup)
 	await process_frame
 	_check((popup.region_data.get("paths", []) as Array).size() == 5, "Editable connections are normalized for rendering")
 	popup.open_for_map("kanto_oaks_lab")
 	await process_frame
 	_check(popup.visible, "Town Map opens as a modal")
+	_check(
+		game_state != null and bool(game_state.call("is_overworld_input_locked")),
+		"Town Map blocks overworld movement while open"
+	)
 	_check(popup.current_location_id == "kanto_pallet_town", "Interior maps resolve to their parent Town Map location")
 	_check(popup.selected_location_id == "kanto_pallet_town", "Current location is selected when the map opens")
 	_check(popup.map_canvas.marker_buttons.size() == locations.size(), "Every Town Map location has an interactive marker")
@@ -72,6 +80,10 @@ func _run() -> void:
 	_check(not popup.map_canvas.show_marker_overlay, "Baked map circles use invisible interactive hotspots")
 	popup.close()
 	_check(not popup.visible, "Town Map can be closed")
+	_check(
+		game_state != null and not bool(game_state.call("is_overworld_input_locked")),
+		"Town Map restores overworld movement when closed"
+	)
 	popup.queue_free()
 	await process_frame
 	quit(1 if failed else 0)
