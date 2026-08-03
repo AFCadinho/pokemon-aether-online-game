@@ -7,13 +7,13 @@ class_name TerrainFieldVisual
 
 const TILE_SIZE := Vector2(192.0, 192.0)
 const PLAYER_FIELD_POINTS := [
-	Vector2(95.0, 455.0),
-	Vector2(150.0, 500.0),
-	Vector2(235.0, 455.0),
-	Vector2(325.0, 520.0),
-	Vector2(420.0, 470.0),
-	Vector2(500.0, 525.0),
-	Vector2(535.0, 455.0),
+	Vector2(143.0, 455.0),
+	Vector2(198.0, 500.0),
+	Vector2(283.0, 455.0),
+	Vector2(373.0, 520.0),
+	Vector2(468.0, 470.0),
+	Vector2(548.0, 525.0),
+	Vector2(583.0, 455.0),
 ]
 const CENTER_FIELD_POINTS := [
 	Vector2(545.0, 420.0),
@@ -25,13 +25,13 @@ const CENTER_FIELD_POINTS := [
 	Vector2(820.0, 405.0),
 ]
 const ENEMY_FIELD_POINTS := [
-	Vector2(805.0, 285.0),
-	Vector2(850.0, 275.0),
-	Vector2(925.0, 235.0),
-	Vector2(1005.0, 285.0),
-	Vector2(1080.0, 225.0),
-	Vector2(1140.0, 270.0),
-	Vector2(1170.0, 210.0),
+	Vector2(757.0, 285.0),
+	Vector2(802.0, 275.0),
+	Vector2(877.0, 235.0),
+	Vector2(957.0, 285.0),
+	Vector2(1032.0, 225.0),
+	Vector2(1092.0, 270.0),
+	Vector2(1122.0, 210.0),
 ]
 const MISTY_PATTERNS := [0, 1, 2, 4, 5]
 

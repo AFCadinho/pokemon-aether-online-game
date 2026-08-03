@@ -47,7 +47,9 @@ func interact_with_player(_player: Node2D) -> void:
 		await _show_report_to_staff_message()
 		return
 
-	var battle_result: Dictionary = await world.start_trainer_battle(trainer_metadata)
+	var battle_result: Dictionary = await world.start_trainer_battle(
+		build_battle_trainer_metadata(trainer_metadata)
+	)
 	if not bool(battle_result.get("success", false)):
 		await GameErrorDialogService.show_response(
 			battle_result,

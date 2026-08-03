@@ -179,6 +179,16 @@ func set_story_sprite_offset(value: Vector2) -> void:
 		sprite.position = value
 
 
+func build_battle_trainer_metadata(metadata: Dictionary) -> Dictionary:
+	var battle_metadata := metadata.duplicate(true)
+	if npc_sprite_frames != null:
+		# Resources stay client-local; the battle API receives the original
+		# metadata before this visual-only enrichment is added.
+		battle_metadata["_battle_sprite_frames"] = npc_sprite_frames
+		battle_metadata["_battle_sprite_offset"] = sprite_offset
+	return battle_metadata
+
+
 func is_story_requirement_met() -> bool:
 	return StoryService.is_requirement_met(
 		required_quest_id,

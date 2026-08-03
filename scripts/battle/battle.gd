@@ -295,6 +295,8 @@ var wild_owned_request_id := 0
 @onready var battle_stage: Control = %BattleStage
 @onready var enemy_sprite_box: Control = %EnemySpriteBox
 @onready var player_sprite_box: Control = %PlayerSpriteBox
+@onready var player_trainer_sprite: BattleTrainerSprite = %PlayerTrainerSprite
+@onready var enemy_trainer_sprite: BattleTrainerSprite = %EnemyTrainerSprite
 @onready var capture_ball_animation_player: CaptureBallAnimationPlayer = %CaptureBallAnimationPlayer
 @onready var pokeball_summon_animation_player: Control = %PokeballSummonAnimationPlayer
 @onready var enemy_team_preview_layer: Node2D = %EnemyTeamPreviewLayer
@@ -5623,6 +5625,7 @@ func setup_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pok
 
 func prepare_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pokemon, api_response: Dictionary) -> bool:
 	_prepare_battle_setup(BattleType.WILD, player_pokemon, enemy_pokemon)
+	_show_local_player_trainer()
 
 	player_sprite_box.set_single_pokemon(player_pokemon, "back")
 	enemy_sprite_box.set_single_pokemon(enemy_pokemon, "front")
@@ -5671,6 +5674,8 @@ func play_wild_battle_intro(player_pokemon: Pokemon, api_response: Dictionary) -
 
 func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: Dictionary, api_response: Dictionary) -> void:
 	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null)
+	_show_local_player_trainer()
+	_show_npc_opponent_trainer(trainer_data)
 	display_data_presenter.set_trainer_team(api_response.get("trainerTeam", []))
 
 	if not _apply_team_preview_battle_response(api_response):
@@ -5732,6 +5737,7 @@ func setup_pvp_battle_from_response(
 	action_flow.set_local_player_id(local_player_id)
 	var display_response: Dictionary = action_flow.map_response_for_local_player(api_response)
 	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null)
+	_show_pvp_trainers(display_response)
 	_capture_pvp_local_canonical_roster()
 
 	var is_team_preview_response := _should_show_team_preview(display_response)
@@ -5981,6 +5987,7 @@ func _clear_pvp_party_hud_display_override() -> void:
 
 func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_pokemon: Pokemon) -> void:
 	battle_type = type
+	_clear_battle_trainer_sprites()
 	wild_owned_request_id += 1
 	if enemy_hud_panel != null and enemy_hud_panel.has_method("set_owned_icon_visible"):
 		enemy_hud_panel.set_owned_icon_visible(false)
@@ -6022,6 +6029,92 @@ func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_poke
 	presentation_state.reset()
 	pending_mega_species_by_ident.clear()
 	animation_router.prewarm_effect_animations([SHINY_ENTRANCE_EFFECT_KEY, MEGA_EVOLUTION_EFFECT_KEY])
+
+
+func _clear_battle_trainer_sprites() -> void:
+	if player_trainer_sprite != null:
+		player_trainer_sprite.clear()
+	if enemy_trainer_sprite != null:
+		enemy_trainer_sprite.clear()
+
+
+func _show_local_player_trainer() -> void:
+	if player_trainer_sprite == null:
+		return
+	player_trainer_sprite.show_player(PlayerSave.to_appearance_state(), Vector2.RIGHT)
+
+
+func _show_npc_opponent_trainer(trainer_data: Dictionary) -> void:
+	if enemy_trainer_sprite == null:
+		return
+	var sprite_frames_value: Variant = trainer_data.get("_battle_sprite_frames", null)
+	if not (sprite_frames_value is SpriteFrames):
+		return
+	var sprite_offset := Vector2(0.0, -16.0)
+	var sprite_offset_value: Variant = trainer_data.get("_battle_sprite_offset", sprite_offset)
+	if sprite_offset_value is Vector2:
+		sprite_offset = sprite_offset_value as Vector2
+	enemy_trainer_sprite.show_npc(
+		sprite_frames_value as SpriteFrames,
+		Vector2.LEFT,
+		sprite_offset
+	)
+
+
+func _show_pvp_trainers(display_response: Dictionary) -> void:
+	var players_value: Variant = display_response.get("players", {})
+	var players: Dictionary = players_value as Dictionary if players_value is Dictionary else {}
+	if _is_spectator_battle():
+		_show_response_player_trainer(player_trainer_sprite, players.get("p1", {}), Vector2.RIGHT)
+		_show_response_player_trainer(enemy_trainer_sprite, players.get("p2", {}), Vector2.LEFT)
+		return
+
+	_show_local_player_trainer()
+	_show_response_player_trainer(enemy_trainer_sprite, players.get("p2", {}), Vector2.LEFT)
+
+
+func _show_response_player_trainer(
+	trainer_sprite: BattleTrainerSprite,
+	player_data_value: Variant,
+	facing_direction: Vector2
+) -> void:
+	if trainer_sprite == null or not (player_data_value is Dictionary):
+		return
+	var appearance_state := _get_battle_player_appearance(player_data_value as Dictionary)
+	if appearance_state.is_empty():
+		return
+	trainer_sprite.show_player(appearance_state, facing_direction)
+
+
+func _get_battle_player_appearance(player_data: Dictionary) -> Dictionary:
+	var appearance_value: Variant = player_data.get("appearance", {})
+	if appearance_value is Dictionary and not (appearance_value as Dictionary).is_empty():
+		return (appearance_value as Dictionary).duplicate(true)
+
+	var appearance: Dictionary = {}
+	for key: String in [
+		"gender",
+		"body",
+		"hair",
+		"hair_style_index",
+		"headgear",
+		"facial_hair",
+		"facegear",
+		"top",
+		"bottom",
+		"shoes",
+		"hair_color",
+		"skin_tone",
+		"eye_color",
+		"facegear_color",
+		"facial_hair_color",
+		"top_color",
+		"bottom_color",
+		"shoes_color",
+	]:
+		if player_data.has(key):
+			appearance[key] = player_data.get(key)
+	return appearance
 
 func _apply_initial_battle_response(api_response: Dictionary) -> bool:
 	if not _apply_api_response(api_response, false):
