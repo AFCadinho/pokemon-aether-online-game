@@ -45,6 +45,12 @@ func _init() -> void:
 		gary_text.contains("_set_story_presence(false)"),
 		"Gary leaves the lab after each departure scene"
 	)
+	_check_true(
+		gary_text.contains("func blocks_world_position(world_position: Vector2) -> bool:")
+		and gary_text.contains("if not visible:")
+		and gary_text.contains("return super.blocks_world_position(world_position)"),
+		"Gary releases his occupied tile whenever he is absent"
+	)
 	var oak_text := _read_text(OAK_SCRIPT)
 	_check_true(
 		gary_text.contains("starter_sequence_pending")
@@ -93,6 +99,13 @@ func _check_staging_tiles(lab_resource: PackedScene) -> void:
 		var gary := lab.get_node_or_null("Entities/NPCs/Gary") as Node2D
 		_check_true(gary != null, "Gary exists beside Oak")
 		_check_true(gary != null and gary.global_position == Vector2(432, 784), "Gary starts beside Oak")
+		if gary != null:
+			gary.visible = false
+			_check_true(
+				not bool(gary.call("blocks_world_position", gary.global_position)),
+				"Gary's tile becomes walkable after he leaves"
+			)
+			gary.visible = true
 		var staging_positions: Array[Vector2] = []
 		if gary != null:
 			staging_positions.append(gary.global_position)

@@ -162,6 +162,12 @@ func _set_story_presence(is_present: bool) -> void:
 		interaction_area.set_deferred("monitorable", is_present)
 
 
+func blocks_world_position(world_position: Vector2) -> bool:
+	if not visible:
+		return false
+	return super.blocks_world_position(world_position)
+
+
 func _starter_ball_for_species(species_id: String) -> Node2D:
 	var current_map: Node = GameState.current_map
 	if current_map == null:
