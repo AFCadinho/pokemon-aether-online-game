@@ -56,7 +56,17 @@ func load_from_api_response(
 
 	battle_id = next_battle_id
 	format_id = str(response.get("formatId", ""))
-	players = response.get("players", {})
+	if battle_changed:
+		players.clear()
+	var next_players_value: Variant = response.get("players", null)
+	if next_players_value is Dictionary:
+		for player_id: Variant in (next_players_value as Dictionary):
+			var player_value: Variant = (next_players_value as Dictionary).get(player_id)
+			players[player_id] = (
+				(player_value as Dictionary).duplicate(true)
+				if player_value is Dictionary
+				else player_value
+			)
 	if battle_changed or skip_previous_hp_memory_once:
 		skip_previous_hp_memory_once = false
 	else:
