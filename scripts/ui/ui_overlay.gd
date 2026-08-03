@@ -93,6 +93,7 @@ const PvpRankedTeamValidation := preload("res://scripts/services/pvp_ranked_team
 const PC_POKEMON_SLOT_BUTTON_SCRIPT := preload("res://scripts/ui/pc_pokemon_slot_button.gd")
 const PC_PARTY_HOVER_CARD_SCENE: PackedScene = preload("res://scenes/battle/party_hover_card.tscn")
 const POKEMON_SUMMARY_MOVE_REORDER_SLOT_SCRIPT := preload("res://scripts/ui/pokemon_summary_move_reorder_slot.gd")
+const TOWN_MAP_POPUP_SCRIPT := preload("res://scripts/ui/town_map_popup.gd")
 const OVERWORLD_MOVE_ACTION_ICON := preload("res://assets/ui/icons/overworld_move_action.svg")
 const CHAT_RESIZE_ICON: Texture2D = preload("res://assets/ui/chat_resize.svg")
 const GLOBAL_EXP_BUFF_ICON: Texture2D = preload("res://assets/ui/global_exp_boost.svg")
@@ -1174,6 +1175,7 @@ var item_dex_selected_item: Dictionary = {}
 var item_dex_dragging := false
 var item_dex_drag_offset := Vector2.ZERO
 var pokedex_popup: PanelContainer
+var town_map_popup: TownMapPopup
 var pokedex_dex_selector: OptionButton
 var pokedex_variant_buttons: Dictionary = {}
 var pokedex_search_input: LineEdit
@@ -1272,6 +1274,7 @@ func _ready() -> void:
 	_setup_item_dex_button()
 	_setup_item_dex_popup()
 	_setup_pokedex_button()
+	_setup_town_map_popup()
 	_setup_pokedex_popup()
 	_setup_wild_pokemon_popup()
 	_setup_pc_ui()
@@ -1451,6 +1454,8 @@ func _on_locale_changed(_locale: String) -> void:
 	_refresh_market_localized_ui()
 	_refresh_pokedex_localized_ui()
 	_refresh_key_item_unlock_state()
+	if town_map_popup != null:
+		town_map_popup.refresh_localized_ui()
 	_refresh_item_dex_localized_ui()
 	_refresh_wild_pokemon_localized_ui()
 	_refresh_mail_localized_ui()
@@ -2955,6 +2960,7 @@ func _has_visible_priority_overlay_panel() -> bool:
 		staff_teleport_popup,
 		item_dex_popup,
 		pokedex_popup,
+		town_map_popup,
 		settings_menu,
 		socials_menu,
 		mail_popup,
@@ -8151,6 +8157,16 @@ func _setup_pokedex_button() -> void:
 	_refresh_key_item_unlock_state()
 	_refresh_key_item_inventory.call_deferred()
 
+func _setup_town_map_popup() -> void:
+	town_map_popup = TOWN_MAP_POPUP_SCRIPT.new() as TownMapPopup
+	town_map_popup.name = "TownMapPopup"
+	town_map_popup.z_index = UI_MODAL_Z_INDEX
+	town_map_popup.closed.connect(_on_town_map_popup_closed)
+	root_control.add_child(town_map_popup)
+
+func _on_town_map_popup_closed() -> void:
+	_deactivate_ui_panel(town_map_popup)
+
 func _is_pokedex_unlocked() -> bool:
 	var inventory_service := get_node_or_null("/root/InventoryService")
 	if inventory_service == null or not inventory_service.has_method("has_item"):
@@ -9709,6 +9725,7 @@ func is_point_over_visible_ui(global_position: Vector2) -> bool:
 		staff_teleport_popup,
 		item_dex_popup,
 		pokedex_popup,
+		town_map_popup,
 		settings_menu,
 		socials_menu,
 		mail_popup,
@@ -22021,6 +22038,7 @@ func _get_escape_close_candidates() -> Array[Dictionary]:
 		{"panel": pvp_room_popup, "close": Callable(self, "_hide_pvp_room_popup")},
 		{"panel": pvp_mode_menu, "close": Callable(self, "_hide_pvp_mode_menu")},
 		{"panel": pokedex_popup, "close": Callable(self, "_hide_pokedex_popup")},
+		{"panel": town_map_popup, "close": Callable(town_map_popup, "close")},
 		{"panel": item_dex_popup, "close": Callable(self, "_hide_item_dex_popup")},
 		{"panel": mail_popup, "close": Callable(self, "_on_mail_close_button_pressed")},
 		{"panel": friendlist_popup, "close": Callable(self, "_hide_friendlist_popup")},
@@ -35272,7 +35290,17 @@ func _on_map_button_pressed() -> void:
 	if not _is_town_map_unlocked():
 		add_system_message(LocalizationManager.text("ui.town_map.locked"))
 		return
-	_add_chat_message("Town Map is not implemented yet.")
+	if town_map_popup == null:
+		return
+	var map_id := ""
+	if (
+		GameState.current_map != null
+		and is_instance_valid(GameState.current_map)
+		and GameState.current_map.has_method("get_map_id")
+	):
+		map_id = str(GameState.current_map.call("get_map_id")).strip_edges()
+	town_map_popup.open_for_map(map_id)
+	_activate_ui_panel(town_map_popup)
 
 func _on_running_shoes_toggled(enabled: bool) -> void:
 	GameState.running_shoes_enabled = enabled
