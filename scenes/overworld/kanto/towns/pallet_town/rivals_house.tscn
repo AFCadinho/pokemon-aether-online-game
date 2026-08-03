@@ -6,6 +6,8 @@
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="4_floor_mask"]
 [ext_resource type="Script" uid="uid://dcir531aqivcy" path="res://scripts/world/internal_floor_transition.gd" id="5_floor_transition"]
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="6_estsk"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/item_gift_npc.tscn" id="7_gift_npc"]
+[ext_resource type="Resource" path="res://resources/npcs/story/lillie.tres" id="8_lillie_profile"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_house_exit"]
 size = Vector2(32, 32)
@@ -72,6 +74,18 @@ music_profile_id = "kanto.pallet_town"
 [node name="Entities" type="Node2D" parent="." unique_id=1714104150]
 z_index = 10
 y_sort_enabled = true
+
+[node name="NPCs" type="Node2D" parent="Entities"]
+
+[node name="Lillie" parent="Entities/NPCs" instance=ExtResource("7_gift_npc")]
+position = Vector2(336, 816)
+npc_profile = ExtResource("8_lillie_profile")
+npc_id = "kanto_rivals_house_lillie"
+npc_definition_id = "kanto_rivals_house_lillie"
+reward_id = "kanto_rivals_house_town_map"
+display_name = "Lillie"
+facing_direction = Vector2(0, 1)
+preload_quest_markers = true
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=2100926305]
 

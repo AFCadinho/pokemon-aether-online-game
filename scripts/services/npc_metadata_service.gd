@@ -113,6 +113,8 @@ func _normalize_npc_metadata(npc_id: String, metadata: Dictionary) -> Dictionary
 	npc_metadata["openingDialogueId"] = str(npc_metadata.get("openingDialogueId", npc_metadata.get("opening_dialogue_id", "")))
 	npc_metadata["alreadyReceivedDialogueId"] = str(npc_metadata.get("alreadyReceivedDialogueId", npc_metadata.get("already_received_dialogue_id", "")))
 	npc_metadata["rewardId"] = str(npc_metadata.get("rewardId", npc_metadata.get("reward_id", "")))
+	npc_metadata["rewardItemId"] = str(npc_metadata.get("rewardItemId", npc_metadata.get("reward_item_id", "")))
+	npc_metadata["lockedDialogueId"] = str(npc_metadata.get("lockedDialogueId", npc_metadata.get("locked_dialogue_id", "")))
 	npc_metadata["successDialogue"] = _get_string_array(npc_metadata.get("successDialogue", []))
 	npc_metadata["alreadyHealedDialogue"] = _get_string_array(npc_metadata.get("alreadyHealedDialogue", []))
 	npc_metadata["noPartyDialogue"] = _get_string_array(npc_metadata.get("noPartyDialogue", []))
@@ -125,6 +127,9 @@ func _normalize_npc_metadata(npc_id: String, metadata: Dictionary) -> Dictionary
 	npc_metadata["requiredQuestId"] = str(npc_metadata.get("requiredQuestId", npc_metadata.get("required_quest_id", "")))
 	npc_metadata["requiredQuestStepId"] = str(npc_metadata.get("requiredQuestStepId", npc_metadata.get("required_quest_step_id", "")))
 	npc_metadata["requiredQuestStatus"] = str(npc_metadata.get("requiredQuestStatus", npc_metadata.get("required_quest_status", "completed")))
+	npc_metadata["offeredQuestRequiredQuestId"] = str(npc_metadata.get("offeredQuestRequiredQuestId", ""))
+	npc_metadata["offeredQuestRequiredQuestStepId"] = str(npc_metadata.get("offeredQuestRequiredQuestStepId", ""))
+	npc_metadata["offeredQuestRequiredQuestStatus"] = str(npc_metadata.get("offeredQuestRequiredQuestStatus", "completed"))
 	return npc_metadata
 
 

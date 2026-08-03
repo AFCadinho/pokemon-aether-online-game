@@ -224,6 +224,7 @@ func _build_join_payload() -> Dictionary:
 		"timerContractVersions": [1],
 		"decisionContractVersions": [1],
 		"battleCommandContractVersions": [1],
+		"renderProtocolVersions": [2, 1],
 	}
 	if active_match_id != "":
 		payload["matchId"] = active_match_id
@@ -359,14 +360,50 @@ func send_render_ack(
 	batch_seq: int,
 	last_rendered_seq: int,
 	turn := -1,
-	phase := ""
+	phase := "",
+	rendered_event_count := -1,
+	total_event_count := -1,
+	observed_duration_ms := -1
+) -> bool:
+	return send_render_status(
+		battle_id,
+		player_id,
+		event_batch_id,
+		batch_seq,
+		last_rendered_seq,
+		"COMPLETED",
+		turn,
+		phase,
+		rendered_event_count,
+		total_event_count,
+		observed_duration_ms
+	)
+
+
+func send_render_status(
+	battle_id: String,
+	player_id: String,
+	event_batch_id: String,
+	batch_seq: int,
+	last_rendered_seq: int,
+	render_state: String,
+	turn := -1,
+	phase := "",
+	rendered_event_count := -1,
+	total_event_count := -1,
+	observed_duration_ms := -1
 ) -> bool:
 	if active_viewer_role == "spectator":
 		return false
 
 	var normalized_player_id := "p2" if player_id == "p2" else "p1"
+	var normalized_render_state := render_state.strip_edges().to_upper()
+	if normalized_render_state not in ["RECEIVED", "STARTED", "PROGRESS", "COMPLETED"]:
+		return false
 	var payload := {
 		"type": "render_ack",
+		"renderProtocolVersion": 2,
+		"renderState": normalized_render_state,
 		"battleId": battle_id,
 		"roomCode": active_room_code,
 		"playerId": normalized_player_id,
@@ -378,19 +415,30 @@ func send_render_ack(
 		payload["turn"] = turn
 	if phase.strip_edges() != "":
 		payload["phase"] = phase.strip_edges()
-	pending_render_ack_payload = payload.duplicate(true)
+	if rendered_event_count >= 0:
+		payload["renderedEventCount"] = rendered_event_count
+	if total_event_count >= 0:
+		payload["totalEventCount"] = total_event_count
+	if observed_duration_ms >= 0:
+		payload["observedDurationMs"] = observed_duration_ms
+	# Only completion is durable across reconnects. Retaining an intermediate
+	# heartbeat could overwrite the proof that actually releases the shared
+	# presentation fence.
+	if normalized_render_state == "COMPLETED":
+		pending_render_ack_payload = payload.duplicate(true)
 
 	if websocket.get_ready_state() != WebSocketPeer.STATE_OPEN or not joined:
 		if DEBUG_PVP_REALTIME:
 			_log_realtime(
-				"send_render_ack deferred until socket rejoins",
-				"state=%s joined=%s room=%s player=%s battle=%s batch=%s lastRenderedSeq=%d" % [
+				"send_render_status deferred until socket rejoins",
+				"state=%s joined=%s room=%s player=%s battle=%s batch=%s state=%s lastRenderedSeq=%d" % [
 					websocket.get_ready_state(),
 					str(joined),
 					active_room_code,
 					player_id,
 					battle_id,
 					event_batch_id,
+					normalized_render_state,
 					last_rendered_seq,
 				]
 			)
@@ -400,13 +448,16 @@ func send_render_ack(
 
 	if DEBUG_PVP_REALTIME:
 		_log_realtime(
-			"Sending render ACK",
-			"battle=%s player=%s batch=%s batchSeq=%d lastRenderedSeq=%d turn=%d phase=%s" % [
+			"Sending render status",
+			"battle=%s player=%s batch=%s batchSeq=%d state=%s lastRenderedSeq=%d events=%d/%d turn=%d phase=%s" % [
 				battle_id,
 				normalized_player_id,
 				event_batch_id,
 				batch_seq,
+				normalized_render_state,
 				last_rendered_seq,
+				rendered_event_count,
+				total_event_count,
 				turn,
 				phase,
 			]
@@ -414,7 +465,7 @@ func send_render_ack(
 
 	var error := websocket.send_text(JSON.stringify(payload))
 	if DEBUG_PVP_REALTIME:
-		_log_realtime("send_render_ack result", "batch=%s error=%s" % [event_batch_id, error])
+		_log_realtime("send_render_status result", "batch=%s state=%s error=%s" % [event_batch_id, normalized_render_state, error])
 	return error == OK
 
 
@@ -502,6 +553,9 @@ func _process_packets() -> void:
 			continue
 		if message_type == "pvp.phase_update":
 			_retire_pending_render_ack(str(message.get("eventBatchId", "")))
+			battle_update_received.emit(message)
+			continue
+		if message_type == "pvp.render_recovery":
 			battle_update_received.emit(message)
 			continue
 		if message_type == "pvp.resync_required":

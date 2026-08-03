@@ -6,11 +6,11 @@ extends DialogueNPC
 @export var starter_gift_dialogue_lines: Array[String] = [
 	"Ah, there you are!",
 	"Your father has collected and cared for Pokemon from every region over the years.",
-	"He left a surprise here for you and asked me one question: Which Pokemon did you always dream of having when you were little?",
+	"Before he left, Dadinho prepared a Pokemon especially for you and entrusted it to me. It has been waiting here as his surprise.",
 ]
 @export var starter_confirmed_dialogue_lines: Array[String] = [
-	"{pokemon}... An excellent choice.",
-	"Dadinho hoped you would choose with your heart.",
+	"{pokemon}... So this is the partner Dadinho prepared for you.",
+	"He knew exactly which Pokemon would suit you.",
 	"You received {pokemon}!",
 ]
 @export var starter_received_dialogue_lines: Array[String] = [
@@ -19,6 +19,11 @@ extends DialogueNPC
 
 var is_creating_starter := false
 var last_starter_claim_already_completed := false
+var quest_turn_in_id := ""
+var quest_turn_in_quest_id := ""
+var quest_turn_in_step_id := ""
+var quest_turn_in_dialogue_id := ""
+var quest_turn_in_completed_dialogue_id := ""
 
 
 func _ready() -> void:
@@ -30,11 +35,21 @@ func _process(_delta: float) -> void:
 	await _process_base_npc()
 
 
-func interact_with_player(_player: Node2D) -> void:
+func interact_with_player(player: Node2D) -> void:
 	if is_creating_starter:
 		return
 
 	is_creating_starter = true
+	var metadata_response: Dictionary = await _load_npc_metadata()
+	if not bool(metadata_response.get("success", false)):
+		is_creating_starter = false
+		await GameErrorDialogService.show_report_to_staff_message()
+		return
+	if _is_quest_turn_in_available():
+		await _turn_in_quest_item(player)
+		is_creating_starter = false
+		return
+
 	var options_result: Dictionary = await PlayerPartyStateService.get_starter_options()
 	if not bool(options_result.get("success", false)):
 		is_creating_starter = false
@@ -69,9 +84,11 @@ func interact_with_player(_player: Node2D) -> void:
 
 	var selected_species_id := str(selected_choice.get("speciesId", "")).strip_edges()
 	var selected_species_name := str(selected_choice.get("name", selected_species_id)).strip_edges()
+	_prepare_gary_starter_sequence()
 	var create_result: Dictionary = await give_starter_pokemon(selected_species_id)
 	is_creating_starter = false
 	if not bool(create_result.get("success", false)):
+		_cancel_gary_starter_sequence()
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
 
@@ -81,6 +98,7 @@ func interact_with_player(_player: Node2D) -> void:
 	PlayerSave.flags["received_starter"] = true
 	PlayerSave.flags["starter_species"] = selected_species_id
 	if last_starter_claim_already_completed:
+		_cancel_gary_starter_sequence()
 		await show_dialogue(
 			_format_dialogue_lines(
 				await _resolve_dialogue_lines(starter_received_dialogue_id, starter_received_dialogue_lines),
@@ -94,6 +112,33 @@ func interact_with_player(_player: Node2D) -> void:
 				selected_species_name
 			)
 		)
+		_schedule_gary_starter_sequence(player, create_result)
+
+
+func _schedule_gary_starter_sequence(player: Node2D, create_result: Dictionary) -> void:
+	var gary := get_parent().get_node_or_null("Gary")
+	if gary == null or not gary.has_method("begin_starter_sequence"):
+		push_warning("Oak: Gary is unavailable for the starter battle sequence.")
+		return
+	gary.call_deferred(
+		"begin_starter_sequence",
+		player,
+		str(create_result.get("rivalStarterSpeciesId", "")),
+		str(create_result.get("rivalStarterSpeciesName", "")),
+		str(create_result.get("rivalTrainerId", ""))
+	)
+
+
+func _prepare_gary_starter_sequence() -> void:
+	var gary := get_parent().get_node_or_null("Gary")
+	if gary != null and gary.has_method("prepare_starter_sequence"):
+		gary.call("prepare_starter_sequence")
+
+
+func _cancel_gary_starter_sequence() -> void:
+	var gary := get_parent().get_node_or_null("Gary")
+	if gary != null and gary.has_method("cancel_pending_starter_sequence"):
+		gary.call("cancel_pending_starter_sequence")
 
 
 func _apply_npc_metadata(metadata: Dictionary) -> void:
@@ -102,6 +147,71 @@ func _apply_npc_metadata(metadata: Dictionary) -> void:
 	starter_gift_dialogue_id = _get_metadata_dialogue_id(metadata, "starterGiftDialogueId", "starter_gift_dialogue_id", starter_gift_dialogue_id)
 	starter_confirmed_dialogue_id = _get_metadata_dialogue_id(metadata, "starterConfirmedDialogueId", "starter_confirmed_dialogue_id", starter_confirmed_dialogue_id)
 	starter_received_dialogue_id = _get_metadata_dialogue_id(metadata, "starterReceivedDialogueId", "starter_received_dialogue_id", starter_received_dialogue_id)
+	quest_turn_in_id = str(metadata.get("questTurnInId", "")).strip_edges()
+	quest_turn_in_quest_id = str(metadata.get("questTurnInQuestId", "")).strip_edges()
+	quest_turn_in_step_id = str(metadata.get("questTurnInStepId", "")).strip_edges()
+	quest_turn_in_dialogue_id = str(metadata.get("questTurnInDialogueId", "")).strip_edges()
+	quest_turn_in_completed_dialogue_id = str(
+		metadata.get("questTurnInCompletedDialogueId", "")
+	).strip_edges()
+
+
+func _is_quest_turn_in_available() -> bool:
+	if (
+		quest_turn_in_id.is_empty()
+		or quest_turn_in_quest_id.is_empty()
+		or quest_turn_in_step_id.is_empty()
+	):
+		return false
+	var quest := StoryService.get_quest(quest_turn_in_quest_id)
+	if str(quest.get("status", "")).to_lower() != "active":
+		return false
+	var steps_value: Variant = quest.get("steps", [])
+	if not steps_value is Array:
+		return false
+	for step_value: Variant in steps_value as Array:
+		if not step_value is Dictionary:
+			continue
+		var step := step_value as Dictionary
+		if str(step.get("stepId", "")) == quest_turn_in_step_id:
+			return str(step.get("status", "")).to_lower() == "active"
+	return false
+
+
+func _turn_in_quest_item(player: Node2D) -> void:
+	await show_dialogue(await _resolve_dialogue_lines(
+		quest_turn_in_dialogue_id,
+		["Ah, that is the parcel I was waiting for! Let me take a look."]
+	))
+	var inventory_service := get_node_or_null("/root/InventoryService")
+	if inventory_service == null or not inventory_service.has_method("turn_in_npc_quest_item"):
+		await GameErrorDialogService.show_report_to_staff_message()
+		return
+	var result: Dictionary = await inventory_service.call(
+		"turn_in_npc_quest_item",
+		quest_turn_in_id
+	)
+	if not bool(result.get("success", false)):
+		await GameErrorDialogService.show_response(result, "backend.error.reward_claim")
+		return
+	if not bool(result.get("storyRefreshSuccess", false)):
+		push_warning("Oak: parcel turn-in succeeded but story refresh did not complete locally.")
+	await show_dialogue(await _resolve_dialogue_lines(
+		quest_turn_in_completed_dialogue_id,
+		[
+			"Thank you. This will be a great help to my research.",
+			"You and your new partner handled your first errand well. Your journey has truly begun.",
+		]
+	))
+	if bool(result.get("turnedIn", false)):
+		get_tree().call_group(
+			"ui_overlay",
+			"add_system_message",
+			LocalizationManager.text("ui.key_item.received_pokedex")
+		)
+	var gary := get_parent().get_node_or_null("Gary")
+	if gary != null and gary.has_method("play_parcel_return_departure"):
+		await gary.call("play_parcel_return_departure", player)
 
 
 func _get_metadata_dialogue_id(metadata: Dictionary, camel_key: String, snake_key: String, current_value: String) -> String:

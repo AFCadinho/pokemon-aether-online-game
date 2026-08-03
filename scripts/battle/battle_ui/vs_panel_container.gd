@@ -2,10 +2,12 @@ extends HBoxContainer
 
 class_name BattleVsPanelContainer
 
+const TRAINER_HEAD_PORTRAIT_SCRIPT := preload("res://scripts/ui/trainer_head_portrait.gd")
+
 const MIN_NAMES_PANEL_WIDTH := 150.0
 const MAX_NAMES_PANEL_WIDTH := 340.0
-# Margins, both HBox gaps, the VS label, and the panel's 1 px borders.
-const NAMES_PANEL_CHROME_WIDTH := 64.0
+# Margins, four HBox gaps, two portraits, the VS label, and the panel borders.
+const NAMES_PANEL_CHROME_WIDTH := 131.0
 const MIN_PLAYER_NAME_WIDTH := 40.0
 
 @onready var names_panel: PanelContainer = $NamesPanel
@@ -25,9 +27,12 @@ var _player_2_timer: Dictionary = {}
 var _player_1_reconnect: Dictionary = {}
 var _player_2_reconnect: Dictionary = {}
 var _localization_manager: Node
+var player_1_portrait: TrainerHeadPortrait
+var player_2_portrait: TrainerHeadPortrait
 
 
 func _ready() -> void:
+	_create_player_portraits()
 	_localization_manager = get_tree().root.get_node_or_null("LocalizationManager")
 	if (
 		_localization_manager != null
@@ -41,6 +46,34 @@ func set_names(player_1_name: String, player_2_name: String) -> void:
 	player_1_label.text = player_1_name
 	player_2_label.text = player_2_name
 	_refresh_names_panel_width()
+
+
+func set_player_appearances(player_1_state: Dictionary, player_2_state: Dictionary) -> void:
+	if player_1_portrait != null:
+		player_1_portrait.visible = not player_1_state.is_empty()
+		if player_1_portrait.visible:
+			player_1_portrait.set_appearance_state(player_1_state)
+	if player_2_portrait != null:
+		player_2_portrait.visible = not player_2_state.is_empty()
+		if player_2_portrait.visible:
+			player_2_portrait.set_appearance_state(player_2_state)
+
+
+func _create_player_portraits() -> void:
+	var name_row := player_1_label.get_parent() as HBoxContainer
+	if name_row == null:
+		return
+	player_1_portrait = TRAINER_HEAD_PORTRAIT_SCRIPT.new() as TrainerHeadPortrait
+	player_2_portrait = TRAINER_HEAD_PORTRAIT_SCRIPT.new() as TrainerHeadPortrait
+	for portrait: TrainerHeadPortrait in [player_1_portrait, player_2_portrait]:
+		portrait.custom_minimum_size = Vector2(28, 28)
+		portrait.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	name_row.add_child(player_1_portrait)
+	name_row.add_child(player_2_portrait)
+	# Keep each portrait directly beside its corresponding name.
+	name_row.move_child(player_1_portrait, player_1_label.get_index())
+	name_row.move_child(player_2_portrait, player_2_label.get_index() + 1)
 
 
 func _refresh_names_panel_width() -> void:
@@ -157,7 +190,9 @@ func _render_reconnect(state_label: Label, time_label: Label, bar: ProgressBar, 
 
 func _set_timer(state_label: Label, time_label: Label, bar: ProgressBar, timer: Dictionary) -> void:
 	var state := str(timer.get("state", "WAITING"))
-	var has_countdown := state in ["SCHEDULED", "DECIDING", "EXPIRED"] or _has_frozen_countdown(timer)
+	# SCHEDULED is an internal render-safety deadline. Present it as ordinary
+	# waiting so players do not see a second countdown between every turn.
+	var has_countdown := state in ["DECIDING", "EXPIRED"] or _has_frozen_countdown(timer)
 	state_label.visible = true
 	time_label.visible = has_countdown
 	bar.visible = has_countdown
@@ -174,18 +209,16 @@ func _set_timer(state_label: Label, time_label: Label, bar: ProgressBar, timer: 
 
 func _timer_state_text(timer: Dictionary) -> String:
 	var state := str(timer.get("state", "WAITING"))
-	if state in ["SCHEDULED", "DECIDING", "EXPIRED"]:
+	if state in ["DECIDING", "EXPIRED"]:
 		return "%s · %s" % [_decision_text(str(timer.get("decisionKind", ""))), _state_text(state)]
+	if state == "SCHEDULED":
+		return _t("common.waiting")
 	return _state_text(state)
 
 
 func _timer_time_text(timer: Dictionary) -> String:
 	var state := str(timer.get("state", "WAITING"))
-	if state == "SCHEDULED":
-		return _t("battle.timer.starts", {
-			"time": _format_ms(int(timer.get("scheduledRemainingMs", 0))),
-		})
-	elif state in ["DECIDING", "EXPIRED", "WAITING"] and int(timer.get("decisionMaximumMs", 0)) > 0:
+	if state in ["DECIDING", "EXPIRED", "WAITING"] and int(timer.get("decisionMaximumMs", 0)) > 0:
 		return _t("battle.timer.time", {
 			"time": _format_ms(int(timer.get("effectiveDecisionRemainingMs", 0))),
 		})

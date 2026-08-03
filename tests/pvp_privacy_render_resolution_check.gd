@@ -21,6 +21,10 @@ func _run_checks() -> void:
 	_check_authoritative_unfenced_snapshot_evicts_current_fence()
 	_check_render_ack_retry_generation_ownership()
 	_check_waiters_consume_actionless_render_batches()
+	_check_accepted_local_choice_arms_idle_drain()
+	_check_render_completion_rearms_idle_drain()
+	_check_public_force_switch_control_contract()
+	_check_realtime_render_batch_installs_presentation_fence()
 	_check_stale_and_unrendered_apply_outcomes()
 	_check_stale_snapshot_still_observes_transport_fence()
 	_check_prejoin_battle_event_paging()
@@ -578,6 +582,71 @@ func _check_waiters_consume_actionless_render_batches() -> void:
 		move_wait.contains('"pvp_opponent_render_watchdog"')
 			and battle_source.contains("require_unrendered_events := false"),
 		"the first-chooser waiter has a render-cursor watchdog independent of phase release"
+	)
+
+
+func _check_accepted_local_choice_arms_idle_drain() -> void:
+	var battle_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var submit_choice := _function_source(battle_source, "_submit_pvp_realtime_choice")
+	var recovery_helper := _function_source(battle_source, "_arm_pvp_local_choice_wait_recovery")
+	var arm_index := submit_choice.find("_arm_pvp_local_choice_wait_recovery()")
+	var enqueue_index := submit_choice.find("_enqueue_pvp_battle_response")
+	_check(
+		arm_index >= 0 and enqueue_index >= 0 and arm_index < enqueue_index,
+		"an accepted local choice arms recovery before a stale/no-op response can finish queueing"
+	)
+	_check(
+		recovery_helper.contains("pvp_idle_wait_recovery_active = true")
+			and recovery_helper.contains("_drain_idle_pvp_realtime_updates.call_deferred()"),
+		"accepted local choices independently drain actionless realtime batches"
+	)
+
+
+func _check_render_completion_rearms_idle_drain() -> void:
+	var battle_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var drain := _function_source(battle_source, "_drain_pvp_event_queue")
+	var release_index := drain.find("pvp_event_queue.is_rendering = false")
+	var idle_drain_index := drain.find("_drain_idle_pvp_realtime_updates.call_deferred()")
+	_check(
+		release_index >= 0 and idle_drain_index > release_index,
+		"render completion re-arms idle delivery after a pivot batch raced the active queue"
+	)
+
+
+func _check_public_force_switch_control_contract() -> void:
+	var battle_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var phase_update := _function_source(battle_source, "_update_pvp_phase_contract_from_response")
+	var opponent_force := _function_source(battle_source, "_opponent_player_needs_force_switch_ui")
+	var response_force := _function_source(battle_source, "_response_has_opponent_force_switch")
+	_check(
+		phase_update.contains("visibility_contract_version >= 3")
+			and phase_update.contains('viewer_control.get("opponentForceSwitchRequired", false)'),
+		"visibility v3 retains explicit public force-switch ownership"
+	)
+	_check(
+		opponent_force.contains("pvp_opponent_force_switch_required and pvp_opponent_action_required")
+			and response_force.contains('viewer_control.get("opponentForceSwitchRequired", false)'),
+		"pivot waiting uses public control state instead of the redacted opponent request"
+	)
+
+
+func _check_realtime_render_batch_installs_presentation_fence() -> void:
+	var battle_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var render_batch := _function_source(battle_source, "_render_pvp_event_batch")
+	var fence_helper := _function_source(battle_source, "_observe_pvp_realtime_render_batch_fence")
+	var begin_index := render_batch.find("pvp_event_queue.begin_render_batch")
+	var fence_index := render_batch.find("_observe_pvp_realtime_render_batch_fence")
+	var render_index := render_batch.find("await _render_battle_events", fence_index)
+	_check(
+		begin_index >= 0 and fence_index > begin_index and render_index > fence_index,
+		"a realtime render batch installs its local fence before presentation starts"
+	)
+	_check(
+		fence_helper.contains('\"releasePending\": true')
+			and fence_helper.contains('pvp_last_phase = \"rendering_events\"')
+			and fence_helper.contains("pvp_idle_wait_recovery_active = true")
+			and fence_helper.contains("_set_battle_input_locked(true)"),
+		"the realtime fence holds controls and recovery until the matching phase release"
 	)
 
 

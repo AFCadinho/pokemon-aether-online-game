@@ -417,15 +417,22 @@ func _apply_appearance_state(appearance_state: Dictionary) -> void:
 	)
 	var signature: String = _get_appearance_signature(next_appearance_state)
 	if signature == current_appearance_signature \
-			and current_gender == current_body_gender \
-			and next_body_movement_style == current_body_movement_style:
+		and current_gender == current_body_gender \
+		and next_body_movement_style == current_body_movement_style:
 		return
 
+	var previous_skin_tone := str(
+		current_appearance_state.get(
+			"skin_tone",
+			CharacterAppearanceService.DEFAULT_SKIN_TONE
+		)
+	)
 	current_appearance_state = next_appearance_state
 	current_appearance_signature = signature
 	if body_id != current_body_id \
-			or current_gender != current_body_gender \
-			or next_body_movement_style != current_body_movement_style:
+		or current_gender != current_body_gender \
+		or next_body_movement_style != current_body_movement_style \
+		or str(next_appearance_state.get("skin_tone", "")) != previous_skin_tone:
 		_apply_body_frames(body_id, current_gender, next_body_movement_style)
 	else:
 		_apply_appearance_parts(next_body_movement_style)

@@ -2,10 +2,13 @@ extends Node
 
 class_name InventoryServiceNode
 
+signal inventory_changed(items: Array)
+
 const INVENTORY_ENDPOINT := "/game/inventory"
 const FISHING_PROGRESSION_ENDPOINT := "/game/fishing/progression"
 const FISHING_SELECTION_ENDPOINT := "/game/fishing/selection"
 const NPC_ITEM_REWARD_ENDPOINT := "/game/npc-rewards/%s/claim"
+const NPC_QUEST_ITEM_TURN_IN_ENDPOINT := "/game/npc-quest-item-turn-ins/%s/claim"
 const APPEARANCE_INVENTORY_ENDPOINT := "/game/appearance/inventory"
 const INVENTORY_ITEM_USE_ENDPOINT := "/game/inventory/items/%s/use"
 const APPEARANCE_ITEM_RETURN_ENDPOINT := "/game/appearance/inventory/items/%s/return"
@@ -19,9 +22,14 @@ const ITEM_SEARCH_ENDPOINT := "/game/items/search?q=%s"
 const DEV_ITEM_SEARCH_ENDPOINT := "/game/dev/items/search?q=%s"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
+var cached_inventory_items: Array = []
+var cached_inventory_user_id := 0
+var inventory_loaded := false
+
 
 func load_inventory() -> Dictionary:
 	if not AuthService.is_authenticated():
+		_clear_inventory_cache()
 		return {
 			"success": false,
 			"error": "Not authenticated.",
@@ -39,10 +47,41 @@ func load_inventory() -> Dictionary:
 
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
 	var items := _array_from_value(body.get("items", []))
+	cached_inventory_items = items.duplicate(true)
+	cached_inventory_user_id = int(AuthService.current_user.get("id", 0))
+	inventory_loaded = true
+	inventory_changed.emit(cached_inventory_items.duplicate(true))
 	return {
 		"success": true,
 		"items": items,
 	}
+
+
+func has_item(item_id: String) -> bool:
+	var normalized_item_id := item_id.strip_edges().to_lower()
+	if (
+		normalized_item_id.is_empty()
+		or cached_inventory_user_id <= 0
+		or cached_inventory_user_id != int(AuthService.current_user.get("id", 0))
+	):
+		return false
+	for value: Variant in cached_inventory_items:
+		if not value is Dictionary:
+			continue
+		var item := value as Dictionary
+		if (
+			str(item.get("itemId", item.get("item_id", ""))).strip_edges().to_lower() == normalized_item_id
+			and int(item.get("quantity", 0)) > 0
+		):
+			return true
+	return false
+
+
+func _clear_inventory_cache() -> void:
+	cached_inventory_items.clear()
+	cached_inventory_user_id = 0
+	inventory_loaded = false
+	inventory_changed.emit([])
 
 
 func load_fishing_progression(area_id := "") -> Dictionary:
@@ -126,6 +165,7 @@ func claim_npc_item_reward(reward_id: String) -> Dictionary:
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
 	var inventory_result: Dictionary = await load_inventory()
 	var progression_result: Dictionary = await load_fishing_progression("")
+	var story_result: Dictionary = await PlayerGameStateService.refresh_story()
 	return {
 		"success": true,
 		"rewardId": str(body.get("rewardId", normalized_reward_id)),
@@ -135,6 +175,39 @@ func claim_npc_item_reward(reward_id: String) -> Dictionary:
 		"alreadyOwned": bool(body.get("alreadyOwned", false)),
 		"inventoryRefreshSuccess": bool(inventory_result.get("success", false)),
 		"fishingProgressionRefreshSuccess": bool(progression_result.get("success", false)),
+		"storyRefreshSuccess": bool(story_result.get("success", false)),
+	}
+
+
+func turn_in_npc_quest_item(turn_in_id: String) -> Dictionary:
+	var normalized_turn_in_id := turn_in_id.strip_edges().to_lower()
+	if not AuthService.is_authenticated():
+		return {"success": false, "error": "Not authenticated."}
+	if normalized_turn_in_id == "":
+		return {"success": false, "error": "Missing NPC quest item turn-in id."}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + NPC_QUEST_ITEM_TURN_IN_ENDPOINT % normalized_turn_in_id.uri_encode(),
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	var inventory_result: Dictionary = await load_inventory()
+	var story_result: Dictionary = await PlayerGameStateService.refresh_story()
+	return {
+		"success": true,
+		"turnInId": str(body.get("turnInId", normalized_turn_in_id)),
+		"itemId": str(body.get("itemId", "")),
+		"quantity": maxi(int(body.get("quantity", 1)), 1),
+		"turnedIn": bool(body.get("turnedIn", false)),
+		"alreadyTurnedIn": bool(body.get("alreadyTurnedIn", false)),
+		"inventoryRefreshSuccess": bool(inventory_result.get("success", false)),
+		"storyRefreshSuccess": bool(story_result.get("success", false)),
 	}
 
 

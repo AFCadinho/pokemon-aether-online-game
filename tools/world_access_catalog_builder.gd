@@ -2,8 +2,9 @@ extends RefCounted
 
 class_name WorldAccessCatalogBuilder
 
-const SCHEMA_VERSION := 2
+const SCHEMA_VERSION := 3
 const TILE_SIZE := 32.0
+const STAFF_TELEPORT_OVERRIDES_PATH := "res://tools/staff_teleport_overrides.json"
 const AREA_TYPES: Array[String] = [
 	"exterior",
 	"interior",
@@ -14,7 +15,18 @@ const AREA_TYPES: Array[String] = [
 const FACING_DIRECTIONS: Array[String] = ["up", "down", "left", "right"]
 
 
-func build(scene_root := "res://scenes/overworld") -> Dictionary:
+func build(
+	scene_root := "res://scenes/overworld",
+	staff_teleport_overrides_path := STAFF_TELEPORT_OVERRIDES_PATH
+) -> Dictionary:
+	var overrides_result := _load_staff_teleport_overrides(staff_teleport_overrides_path)
+	if not bool(overrides_result.get("success", false)):
+		return {
+			"success": false,
+			"errors": [str(overrides_result.get("error", ""))],
+			"catalog": {},
+		}
+	var staff_teleport_overrides: Dictionary = overrides_result.get("overrides", {})
 	var scene_paths: Array[String] = []
 	_collect_scene_paths(scene_root, scene_paths)
 	scene_paths.sort()
@@ -25,7 +37,7 @@ func build(scene_root := "res://scenes/overworld") -> Dictionary:
 	for scene_path in scene_paths:
 		if scene_path.contains("/reusable_interiors/"):
 			continue
-		var record := _load_scene_record(scene_path)
+		var record := _load_scene_record(scene_path, staff_teleport_overrides)
 		if not bool(record.get("success", false)):
 			var error := str(record.get("error", "")).strip_edges()
 			if not error.is_empty():
@@ -120,7 +132,7 @@ func build(scene_root := "res://scenes/overworld") -> Dictionary:
 	}
 
 
-func _load_scene_record(scene_path: String) -> Dictionary:
+func _load_scene_record(scene_path: String, staff_teleport_overrides: Dictionary) -> Dictionary:
 	var packed_value: Variant = load(scene_path)
 	if not packed_value is PackedScene:
 		return {"success": false, "error": "Could not load map scene %s." % scene_path}
@@ -141,6 +153,12 @@ func _load_scene_record(scene_path: String) -> Dictionary:
 	var region_name := str(_property_value(root, "map_region_name", "Kanto")).strip_edges()
 	if region_name.is_empty():
 		region_name = "Kanto"
+	var maps_value: Variant = staff_teleport_overrides.get("maps", {})
+	var map_overrides: Dictionary = maps_value if maps_value is Dictionary else {}
+	var map_override_value: Variant = map_overrides.get(map_id, {})
+	var map_override: Dictionary = map_override_value if map_override_value is Dictionary else {}
+	display_name = str(map_override.get("label", display_name)).strip_edges()
+	region_name = str(map_override.get("regionName", region_name)).strip_edges()
 	var location_group_id := str(
 		_property_value(root, "world_access_group_id", "")
 	).strip_edges()
@@ -169,11 +187,57 @@ func _load_scene_record(scene_path: String) -> Dictionary:
 		scene_aliases.append(ResourceUID.id_to_text(resource_uid))
 
 	var spawns: Dictionary = {}
+	var spawn_points: Dictionary = {}
+	var point_overrides_value: Variant = map_override.get("points", {})
+	var point_overrides: Dictionary = (
+		point_overrides_value if point_overrides_value is Dictionary else {}
+	)
 	var spawns_root := root.get_node_or_null("Spawns")
 	if spawns_root != null:
 		for child: Node in spawns_root.get_children():
 			if child is Node2D:
-				spawns[child.name] = (child as Node2D).position
+				var spawn_name := str(child.name)
+				var spawn_position := (child as Node2D).position
+				spawns[spawn_name] = spawn_position
+				var default_point_id := spawn_name.to_snake_case()
+				var point_override_value: Variant = point_overrides.get(default_point_id, {})
+				var point_override: Dictionary = (
+					point_override_value if point_override_value is Dictionary else {}
+				)
+				var point_id := str(point_override.get("id", default_point_id)).strip_edges()
+				if point_id.is_empty():
+					root.free()
+					return {
+						"success": false,
+						"error": "%s has an empty staff teleport point id." % scene_path,
+					}
+				if spawn_points.has(point_id):
+					root.free()
+					return {
+						"success": false,
+						"error": "%s has duplicate staff teleport point id %s."
+							% [scene_path, point_id],
+					}
+				var facing_direction := str(
+					point_override.get("facingDirection", "down")
+				).strip_edges().to_lower()
+				if facing_direction not in FACING_DIRECTIONS:
+					root.free()
+					return {
+						"success": false,
+						"error": "%s point %s has invalid facing direction."
+							% [scene_path, point_id],
+					}
+				spawn_points[point_id] = {
+					"label": str(point_override.get("label", _spawn_point_label(point_id))),
+					"spawnMarker": spawn_name,
+					"tile": {
+						"x": roundi((spawn_position.x - (TILE_SIZE / 2.0)) / TILE_SIZE),
+						"y": roundi((spawn_position.y - (TILE_SIZE / 2.0)) / TILE_SIZE),
+					},
+					"facingDirection": facing_direction,
+					"safeForStaffTeleport": true,
+				}
 
 	var exits: Array[Dictionary] = []
 	var exits_root := root.get_node_or_null("Exits")
@@ -225,6 +289,7 @@ func _load_scene_record(scene_path: String) -> Dictionary:
 		"locationGroupLabel": location_group_label,
 		"areaType": area_type,
 		"defaultMode": "open",
+		"spawnPoints": _sorted_dictionary(spawn_points),
 	}
 	var result := {
 		"success": true,
@@ -245,6 +310,22 @@ func _canonical_scene_path(scene_reference: String) -> String:
 	if not resource_value is PackedScene:
 		return normalized
 	return str((resource_value as PackedScene).resource_path).strip_edges()
+
+
+func _load_staff_teleport_overrides(path: String) -> Dictionary:
+	var source := FileAccess.get_file_as_string(path)
+	if source.is_empty():
+		return {
+			"success": false,
+			"error": "Could not read staff teleport overrides from %s." % path,
+		}
+	var parsed_value: Variant = JSON.parse_string(source)
+	if not parsed_value is Dictionary:
+		return {
+			"success": false,
+			"error": "Staff teleport overrides are invalid JSON: %s." % path,
+		}
+	return {"success": true, "overrides": parsed_value as Dictionary}
 
 
 func _collect_scene_paths(directory_path: String, result: Array[String]) -> void:
@@ -291,3 +372,21 @@ func _humanize_id(value: String) -> String:
 	for index in range(words.size()):
 		words[index] = words[index].capitalize()
 	return " ".join(words)
+
+
+func _spawn_point_label(point_id: String) -> String:
+	var semantic_id := point_id.strip_edges().to_lower()
+	for prefix: String in ["from_", "to_"]:
+		if semantic_id.begins_with(prefix):
+			semantic_id = semantic_id.trim_prefix(prefix)
+			break
+	var label := _humanize_id(semantic_id)
+	var replacements := {
+		"Pokecenter": "Pokémon Center",
+		"Players House": "Player's House",
+		"Rivals House": "Rival's House",
+		"Npc": "NPC",
+	}
+	for source: String in replacements:
+		label = label.replace(source, str(replacements[source]))
+	return label

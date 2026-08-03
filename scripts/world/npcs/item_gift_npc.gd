@@ -18,12 +18,27 @@ class_name ItemGiftNPC
 @export var success_dialogue_id := ""
 @export var already_received_dialogue_id := ""
 @export var failure_dialogue_id := ""
+@export var locked_dialogue_id := ""
+@export var reward_item_id := ""
+@export var locked_dialogue_lines: Array[String] = [
+	"I do not have anything for you just yet.",
+]
+
+var reward_resolved := false
+
+
+func _ready() -> void:
+	super._ready()
+	_refresh_reward_resolution.call_deferred()
 
 
 func interact_with_player(_player: Node2D) -> void:
 	var metadata_response: Dictionary = await _load_npc_metadata()
 	if not bool(metadata_response.get("success", false)):
 		await _show_report_to_staff_message()
+		return
+	if not is_story_requirement_met():
+		await show_dialogue(await _resolve_dialogue_lines(locked_dialogue_id, locked_dialogue_lines))
 		return
 
 	if reward_id.strip_edges().is_empty():
@@ -46,8 +61,18 @@ func interact_with_player(_player: Node2D) -> void:
 		return
 
 	if bool(result.get("claimed", false)):
+		reward_resolved = true
+		_refresh_quest_marker()
 		await show_dialogue(await _resolve_dialogue_lines(success_dialogue_id, success_dialogue_lines))
+		if str(result.get("itemId", "")).strip_edges().to_lower() == "town-map":
+			get_tree().call_group(
+				"ui_overlay",
+				"add_system_message",
+				LocalizationManager.text("ui.key_item.received_town_map")
+			)
 	else:
+		reward_resolved = true
+		_refresh_quest_marker()
 		await show_dialogue(await _resolve_dialogue_lines(
 			already_received_dialogue_id,
 			already_received_dialogue_lines
@@ -78,6 +103,46 @@ func _apply_npc_metadata(metadata: Dictionary) -> void:
 		"failure_dialogue_id",
 		failure_dialogue_id
 	)
+	locked_dialogue_id = _get_metadata_dialogue_id(
+		metadata,
+		"lockedDialogueId",
+		"locked_dialogue_id",
+		locked_dialogue_id
+	)
+	var metadata_reward_item_id := str(
+		metadata.get("rewardItemId", metadata.get("reward_item_id", ""))
+	).strip_edges().to_lower()
+	if not metadata_reward_item_id.is_empty():
+		reward_item_id = metadata_reward_item_id
+
+
+func _refresh_reward_resolution() -> void:
+	var metadata_response: Dictionary = await _load_npc_metadata()
+	if not bool(metadata_response.get("success", false)) or reward_item_id.is_empty():
+		return
+	var inventory_service := get_node_or_null("/root/InventoryService")
+	if inventory_service == null or not inventory_service.has_method("load_inventory"):
+		return
+	var result: Dictionary = await inventory_service.call("load_inventory")
+	if not bool(result.get("success", false)):
+		return
+	for value: Variant in result.get("items", []):
+		if not value is Dictionary:
+			continue
+		var item := value as Dictionary
+		if (
+			str(item.get("itemId", item.get("item_id", ""))).strip_edges().to_lower() == reward_item_id
+			and int(item.get("quantity", 0)) > 0
+		):
+			reward_resolved = true
+			break
+	_refresh_quest_marker()
+
+
+func _refresh_quest_marker() -> void:
+	super._refresh_quest_marker()
+	if reward_resolved and not is_story_requirement_met() and quest_marker != null:
+		quest_marker.visible = false
 
 
 func _get_metadata_dialogue_id(

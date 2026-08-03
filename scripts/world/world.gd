@@ -412,7 +412,7 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 
 
 func apply_remote_authorized_teleport_state(state: Dictionary) -> Dictionary:
-	var command_id := str(state.get("teleportCommandId", "")).strip_edges()
+	var command_id := _optional_string(state.get("teleportCommandId"))
 	if command_id != "" and completed_remote_authorized_teleport_commands.has(command_id):
 		return {"success": true, "applied": true, "duplicate": true}
 	if (
@@ -546,7 +546,7 @@ func _get_player_position_save_block_reason(allow_gameplay_reset := false) -> St
 
 func _ack_authorized_teleport_state(state: Dictionary) -> Dictionary:
 	var teleport_revision := int(state.get("teleportRevision", current_teleport_revision))
-	var teleport_command_id := str(state.get("teleportCommandId", "")).strip_edges()
+	var teleport_command_id := _optional_string(state.get("teleportCommandId"))
 	var result: Dictionary = await PlayerGameStateService.acknowledge_player_teleport(
 		teleport_revision,
 		teleport_command_id
@@ -562,6 +562,12 @@ func _ack_authorized_teleport_state(state: Dictionary) -> Dictionary:
 			"error": "The server is still waiting for the forced teleport destination acknowledgement.",
 		}
 	return result
+
+
+func _optional_string(value: Variant) -> String:
+	if value == null:
+		return ""
+	return str(value).strip_edges()
 
 
 func load_map(target_scene_path: String, target_spawn_name: String) -> void:
@@ -809,7 +815,10 @@ func _position_player_at_spawn(map: Node, spawn_name: String, fallback_position:
 		player.call("reset_pokemon_follower_position")
 
 func _position_player_at_authorized_teleport_state(map: Node, state: Dictionary) -> Dictionary:
-	var spawn_marker := str(state.get("spawnMarker", "")).strip_edges()
+	var spawn_marker_value: Variant = state.get("spawnMarker", "")
+	var spawn_marker := ""
+	if spawn_marker_value != null:
+		spawn_marker = str(spawn_marker_value).strip_edges()
 	if spawn_marker != "":
 		var spawn: Node = map.get_node_or_null("Spawns/" + spawn_marker)
 		if spawn == null:
@@ -2670,6 +2679,9 @@ func _award_trainer_battle_rewards(battle_id: String, trainer_name: String) -> v
 		var gym_badge_award := _dictionary_from_value(reward_result.get("gymBadgeAward", {}))
 		if bool(gym_badge_award.get("awarded", false)):
 			await _refresh_fishing_progression()
+		var story_result: Dictionary = await PlayerGameStateService.refresh_story()
+		if not bool(story_result.get("success", false)):
+			push_warning("World: trainer reward story refresh failed: %s" % str(story_result.get("error", "Unknown error")))
 	else:
 		push_warning("World: trainer battle reward failed: %s" % str(reward_result.get("error", "Unknown error")))
 
@@ -2986,7 +2998,7 @@ func _is_player_battle_winner(winner: String) -> bool:
 	var normalized_winner := winner.strip_edges().to_lower()
 	if normalized_winner == "":
 		return false
-	if normalized_winner == "player 1":
+	if normalized_winner in ["p1", "player 1", "player1"]:
 		return true
 
 	var player_names: Array[String] = [

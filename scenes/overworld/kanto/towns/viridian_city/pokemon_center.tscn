@@ -1,0 +1,28 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://bfy37wf81vi6g" path="res://scenes/overworld/kanto/reusable_interiors/pokemon_center_template.tscn" id="1_template"]
+
+[node name="PokemonCenter" instance=ExtResource("1_template")]
+map_id = "kanto_viridian_city_pokemon_center"
+map_display_name = "Viridian City Pokémon Center"
+world_access_group_id = "kanto_viridian_city"
+world_access_group_label = "Viridian City"
+world_access_area_type = "interior"
+location_id = "kanto.viridian_city.pokemon_center"
+location_name = "Viridian City Pokémon Center"
+
+[node name="NurseJoy" parent="Entities/NPCs" index="0"]
+respawn_point_id = "kanto_viridian_city_pokemon_center"
+npc_id = "kanto_viridian_city_pokemon_center_nurse_joy"
+
+[node name="Clerk" parent="Entities/NPCs" index="2"]
+npc_id = "kanto_viridian_city_pokemon_center_clerk"
+npc_definition_id = "kanto_viridian_city_pokemon_center_clerk"
+preload_quest_markers = true
+
+[node name="Clerk2" parent="Entities/NPCs" index="3"]
+npc_id = "kanto_viridian_city_pokemon_center_clerk_2"
+
+[node name="ToOutside" parent="Exits" index="0"]
+target_scene_path = "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn"
+target_spawn_name = "FromPokecenter"
