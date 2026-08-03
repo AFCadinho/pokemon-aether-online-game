@@ -173,9 +173,9 @@ func _run() -> void:
 		_expect(
 			revisited_sprite != null
 			and revisited_sprite.animation == &"idle_up"
-			and revisited_sprite.position == Vector2.ZERO
-			and revisited_sprite.global_position == Vector2(336, 880),
-			"Dadinho's TV sprite is centered on the blue-cushion collision marker"
+			and revisited_sprite.position == Vector2(0, -16)
+			and revisited_sprite.global_position == Vector2(336, 864),
+			"Dadinho's TV sprite renders 16 pixels above the blue-cushion collision marker"
 		)
 		revisited_father.call("_apply_npc_metadata", {
 			"dialogueId": "kanto_players_house_father_after_intro",
