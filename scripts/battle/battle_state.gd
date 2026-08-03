@@ -62,11 +62,15 @@ func load_from_api_response(
 	if next_players_value is Dictionary:
 		for player_id: Variant in (next_players_value as Dictionary):
 			var player_value: Variant = (next_players_value as Dictionary).get(player_id)
-			players[player_id] = (
-				(player_value as Dictionary).duplicate(true)
-				if player_value is Dictionary
-				else player_value
-			)
+			if player_value is Dictionary:
+				var merged_player: Dictionary = {}
+				var current_player_value: Variant = players.get(player_id)
+				if current_player_value is Dictionary:
+					merged_player = (current_player_value as Dictionary).duplicate(true)
+				merged_player.merge((player_value as Dictionary).duplicate(true), true)
+				players[player_id] = merged_player
+			else:
+				players[player_id] = player_value
 	if battle_changed or skip_previous_hp_memory_once:
 		skip_previous_hp_memory_once = false
 	else:
