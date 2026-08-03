@@ -44,6 +44,37 @@ func _init() -> void:
 			and viridian_center_points.has("heal_npc"),
 		"Inherited Pokémon Center spawn points are part of the canonical catalog"
 	)
+	_expect(
+		(areas.get("kanto_pewter_city", {}) as Dictionary)
+			.get("spawnPoints", {})
+			.get("from_pokecenter", {})
+			.get("label", "") == "Pokémon Center",
+		"Staff destinations use the place name instead of From Pokecenter"
+	)
+	_expect(
+		(areas.get("kanto_pallet_town", {}) as Dictionary)
+			.get("spawnPoints", {})
+			.get("from_players_house", {})
+			.get("label", "") == "Player's House",
+		"Staff destinations humanize possessive place names"
+	)
+	var labels_avoid_directional_prefixes := true
+	for area_value: Variant in areas.values():
+		if not area_value is Dictionary:
+			continue
+		var points_value: Variant = (area_value as Dictionary).get("spawnPoints", {})
+		if not points_value is Dictionary:
+			continue
+		for point_value: Variant in (points_value as Dictionary).values():
+			if not point_value is Dictionary:
+				continue
+			var point_label := str((point_value as Dictionary).get("label", "")).to_lower()
+			if point_label.begins_with("from ") or point_label.begins_with("to "):
+				labels_avoid_directional_prefixes = false
+	_expect(
+		labels_avoid_directional_prefixes,
+		"Staff destination labels never expose technical From or To prefixes"
+	)
 	var all_spawn_points_are_staff_safe := true
 	for area_value: Variant in areas.values():
 		if not area_value is Dictionary:
