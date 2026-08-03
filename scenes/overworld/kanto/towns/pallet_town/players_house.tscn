@@ -127,7 +127,7 @@ position_marker_path = NodePath("../StoryPositions/DadinhoWatchingTV")
 facing_marker_path = NodePath("../StoryPositions/LivingRoomTV")
 disable_area_path = NodePath("../StoryTriggers/FatherIntro")
 override_sprite_offset = true
-sprite_offset_override = Vector2(0, 0)
+sprite_offset_override = Vector2(0, -16)
 
 [node name="StoryPositions" type="Node2D" parent="." unique_id=1731557833]
 
