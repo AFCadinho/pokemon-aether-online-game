@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "_instructions": [
+    "Dit is het bestand waarin je de punten en routebochten kunt invullen.",
+    "Het raster is 1000 breed en 707 hoog. x=0 is links, y=0 is boven.",
+    "Wijzig onder points alleen x en y om een locatiepunt te verplaatsen.",
+    "Voeg onder connections waypoints toe om een route met rechte hoeken of bochten te tekenen.",
+    "Voorbeeld waypoint: {\"x\": 500, \"y\": 300}. De volgorde loopt van from naar to.",
+    "Laat de location-id's en de waarden van from/to ongewijzigd; die verwijzen naar echte game maps."
+  ],
+  "coordinateSpace": {
+    "width": 1000,
+    "height": 707
+  },
+  "points": {
+    "kanto_pallet_town": {
+      "x": 270,
+      "y": 527,
+      "needsReview": true
+    },
+    "kanto_route_1": {
+      "x": 280,
+      "y": 463,
+      "needsReview": true
+    },
+    "kanto_viridian_city": {
+      "x": 290,
+      "y": 399,
+      "needsReview": true
+    },
+    "kanto_route_2": {
+      "x": 300,
+      "y": 336,
+      "needsReview": true
+    },
+    "kanto_viridian_forest": {
+      "x": 320,
+      "y": 272,
+      "needsReview": true
+    },
+    "kanto_pewter_city": {
+      "x": 300,
+      "y": 201,
+      "needsReview": true
+    }
+  },
+  "connections": [
+    {
+      "from": "kanto_pallet_town",
+      "to": "kanto_route_1",
+      "waypoints": []
+    },
+    {
+      "from": "kanto_route_1",
+      "to": "kanto_viridian_city",
+      "waypoints": []
+    },
+    {
+      "from": "kanto_viridian_city",
+      "to": "kanto_route_2",
+      "waypoints": []
+    },
+    {
+      "from": "kanto_route_2",
+      "to": "kanto_viridian_forest",
+      "waypoints": []
+    },
+    {
+      "from": "kanto_viridian_forest",
+      "to": "kanto_pewter_city",
+      "waypoints": []
+    }
+  ]
+}

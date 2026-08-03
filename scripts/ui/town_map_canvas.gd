@@ -57,20 +57,16 @@ func _draw() -> void:
 	if background_texture != null:
 		draw_texture_rect(background_texture, Rect2(Vector2.ZERO, size), false)
 	for path_value: Variant in paths:
-		if not path_value is Array or (path_value as Array).size() < 2:
+		var path_location_ids := _path_location_ids(path_value)
+		var path_points := _path_points(path_value)
+		if path_location_ids.size() < 2 or path_points.size() < 2:
 			continue
-		var path := path_value as Array
-		var from_id := str(path[0])
-		var to_id := str(path[1])
-		if not locations.has(from_id) or not locations.has(to_id):
-			continue
-		var from_point := _location_point(from_id)
-		var to_point := _location_point(to_id)
-		draw_line(from_point, to_point, PATH_SHADOW, 8.0, true)
+		var from_id := path_location_ids[0]
+		var to_id := path_location_ids[1]
+		draw_polyline(PackedVector2Array(path_points), PATH_SHADOW, 8.0, true)
 		var is_selected_path := from_id == selected_location_id or to_id == selected_location_id
-		draw_line(
-			from_point,
-			to_point,
+		draw_polyline(
+			PackedVector2Array(path_points),
 			PATH_HIGHLIGHT if is_selected_path else PATH_COLOR,
 			4.0,
 			true
@@ -142,6 +138,37 @@ func _location_point(location_id: String) -> Vector2:
 		float(normalized.get("x", 0.5)) * size.x,
 		float(normalized.get("y", 0.5)) * size.y
 	)
+
+
+func _path_location_ids(path_value: Variant) -> Array[String]:
+	var ids: Array[String] = []
+	if path_value is Array:
+		var path := path_value as Array
+		if path.size() >= 2:
+			ids.assign([str(path[0]), str(path[1])])
+	elif path_value is Dictionary:
+		var path := path_value as Dictionary
+		ids.assign([str(path.get("from", "")), str(path.get("to", ""))])
+	return ids
+
+
+func _path_points(path_value: Variant) -> Array[Vector2]:
+	var ids := _path_location_ids(path_value)
+	var points: Array[Vector2] = []
+	if ids.size() < 2 or not locations.has(ids[0]) or not locations.has(ids[1]):
+		return points
+	points.append(_location_point(ids[0]))
+	if path_value is Dictionary:
+		for waypoint_value: Variant in (path_value as Dictionary).get("waypoints", []):
+			if not waypoint_value is Dictionary:
+				continue
+			var waypoint := waypoint_value as Dictionary
+			points.append(Vector2(
+				float(waypoint.get("x", 0.5)) * size.x,
+				float(waypoint.get("y", 0.5)) * size.y
+			))
+	points.append(_location_point(ids[1]))
+	return points
 
 
 func _marker_style(location: Dictionary, highlighted: bool, current: bool) -> StyleBoxFlat:

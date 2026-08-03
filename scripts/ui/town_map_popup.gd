@@ -9,6 +9,7 @@ const WORLD_ACCESS_PATH := "res://generated/world_access_catalog.json"
 const TownMapCanvasScript := preload("res://scripts/ui/town_map_canvas.gd")
 
 var region_data: Dictionary = {}
+var layout_data: Dictionary = {}
 var world_access: Dictionary = {}
 var shell: PanelContainer
 var title_label: Label
@@ -28,6 +29,8 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	visible = false
 	region_data = _load_json(REGION_MAP_PATH)
+	layout_data = _load_json(str(region_data.get("layoutPath", "")))
+	_apply_layout()
 	world_access = _load_json(WORLD_ACCESS_PATH)
 	_build_ui()
 	get_viewport().size_changed.connect(_position_shell)
@@ -274,11 +277,11 @@ func _refresh_details(location_id: String) -> void:
 	detail_description_label.text = _t(str(location.get("descriptionKey", "")))
 	var connected_names: Array[String] = []
 	for path_value: Variant in region_data.get("paths", []):
-		if not path_value is Array or (path_value as Array).size() < 2:
+		var endpoints := _path_endpoints(path_value)
+		if endpoints.size() < 2:
 			continue
-		var path := path_value as Array
-		var from_id := str(path[0])
-		var to_id := str(path[1])
+		var from_id := endpoints[0]
+		var to_id := endpoints[1]
 		if from_id == location_id:
 			connected_names.append(_location_name(to_id))
 		elif to_id == location_id:
@@ -296,6 +299,56 @@ func _resolve_location_group(map_id: String) -> String:
 	var areas := world_access.get("areas", {}) as Dictionary
 	var area := areas.get(map_id, {}) as Dictionary
 	return str(area.get("locationGroupId", map_id)).strip_edges()
+
+
+func _path_endpoints(path_value: Variant) -> Array[String]:
+	var endpoints: Array[String] = []
+	if path_value is Array:
+		var path := path_value as Array
+		if path.size() >= 2:
+			endpoints.assign([str(path[0]), str(path[1])])
+	elif path_value is Dictionary:
+		var path := path_value as Dictionary
+		endpoints.assign([str(path.get("from", "")), str(path.get("to", ""))])
+	return endpoints
+
+
+func _apply_layout() -> void:
+	if region_data.is_empty() or layout_data.is_empty():
+		return
+	var coordinate_space := layout_data.get("coordinateSpace", {}) as Dictionary
+	var width := maxf(float(coordinate_space.get("width", 1000.0)), 1.0)
+	var height := maxf(float(coordinate_space.get("height", 707.0)), 1.0)
+	var locations := region_data.get("locations", {}) as Dictionary
+	var points := layout_data.get("points", {}) as Dictionary
+	for location_id_value: Variant in locations.keys():
+		var location_id := str(location_id_value)
+		var location := locations.get(location_id, {}) as Dictionary
+		var point := points.get(location_id, {}) as Dictionary
+		location["position"] = {
+			"x": clampf(float(point.get("x", width * 0.5)) / width, 0.0, 1.0),
+			"y": clampf(float(point.get("y", height * 0.5)) / height, 0.0, 1.0),
+		}
+		locations[location_id] = location
+	region_data["locations"] = locations
+
+	var normalized_connections: Array = []
+	for connection_value: Variant in layout_data.get("connections", []):
+		if not connection_value is Dictionary:
+			continue
+		var connection := (connection_value as Dictionary).duplicate(true)
+		var normalized_waypoints: Array = []
+		for waypoint_value: Variant in connection.get("waypoints", []):
+			if not waypoint_value is Dictionary:
+				continue
+			var waypoint := waypoint_value as Dictionary
+			normalized_waypoints.append({
+				"x": clampf(float(waypoint.get("x", width * 0.5)) / width, 0.0, 1.0),
+				"y": clampf(float(waypoint.get("y", height * 0.5)) / height, 0.0, 1.0),
+			})
+		connection["waypoints"] = normalized_waypoints
+		normalized_connections.append(connection)
+	region_data["paths"] = normalized_connections
 
 
 func _load_json(path: String) -> Dictionary:
