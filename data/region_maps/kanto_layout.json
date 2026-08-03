@@ -19,6 +19,11 @@
     "kanto_pallet_town": {
       "x": 80,
       "y": 208,
+      "exits": [
+        {"label": "Player's House", "kind": "building"},
+        {"label": "Oak's Lab", "kind": "building"},
+        {"label": "Route 1", "kind": "route", "targetId": "kanto_route_1"}
+      ],
       "needsReview": false
     },
     "kanto_route_1": {
@@ -29,6 +34,14 @@
     "kanto_viridian_city": {
       "x": 80,
       "y": 151,
+      "exits": [
+        {"label": "Pokémon Center", "kind": "facility"},
+        {"label": "Viridian City Gym", "kind": "facility"},
+        {"label": "Market Seller", "kind": "facility"},
+        {"label": "Route 1", "kind": "route", "targetId": "kanto_route_1"},
+        {"label": "Route 2", "kind": "route", "targetId": "kanto_route_2"},
+        {"label": "Route 22", "kind": "route", "targetId": "kanto_route_segment_22"}
+      ],
       "needsReview": false
     },
     "kanto_route_2": {
@@ -44,6 +57,12 @@
     "kanto_pewter_city": {
       "x": 80,
       "y": 70,
+      "exits": [
+        {"label": "Pokémon Center", "kind": "facility"},
+        {"label": "Pewter City Gym", "kind": "facility"},
+        {"label": "Route 2", "kind": "route", "targetId": "kanto_route_2"},
+        {"label": "Route 3", "kind": "route", "targetId": "kanto_route_segment_03"}
+      ],
       "needsReview": false
     },
     "kanto_map_point_01": {
@@ -52,6 +71,11 @@
       "kind": "settlement",
       "name": "Indigo Plateau",
       "description": "The summit of the Pokémon League, reached through Victory Road.",
+      "exits": [
+        {"label": "Pokémon League", "kind": "facility"},
+        {"label": "Victory Road", "kind": "special", "targetId": "kanto_map_point_02"},
+        {"label": "Route 23", "kind": "route", "targetId": "kanto_route_segment_23"}
+      ],
       "planned": true
     },
     "kanto_map_point_02": {
@@ -68,6 +92,12 @@
       "kind": "town",
       "name": "Cinnabar Island",
       "description": "A volcanic island town surrounded by the warm waters of southern Kanto.",
+      "exits": [
+        {"label": "Pokémon Center", "kind": "facility"},
+        {"label": "Cinnabar Island Gym", "kind": "facility"},
+        {"label": "Route 20", "kind": "route", "targetId": "kanto_route_segment_20"},
+        {"label": "Route 21", "kind": "route", "targetId": "kanto_route_segment_21"}
+      ],
       "planned": true
     },
     "kanto_map_point_04": {
@@ -92,6 +122,13 @@
       "kind": "city",
       "name": "Celadon City",
       "description": "A bustling city known for its department store, gardens, and department-sized ambitions.",
+      "exits": [
+        {"label": "Pokémon Center", "kind": "facility"},
+        {"label": "Celadon City Gym", "kind": "facility"},
+        {"label": "Celadon Department Store", "kind": "facility"},
+        {"label": "Route 7", "kind": "route", "targetId": "kanto_route_segment_07"},
+        {"label": "Route 16", "kind": "route", "targetId": "kanto_route_segment_16"}
+      ],
       "planned": true
     },
     "kanto_map_point_07": {
@@ -100,6 +137,14 @@
       "kind": "city",
       "name": "Fuchsia City",
       "description": "A coastal city beside the Safari Zone and the quiet routes of southern Kanto.",
+      "exits": [
+        {"label": "Pokémon Center", "kind": "facility"},
+        {"label": "Fuchsia City Gym", "kind": "facility"},
+        {"label": "Safari Zone", "kind": "facility"},
+        {"label": "Route 15", "kind": "route", "targetId": "kanto_route_segment_15"},
+        {"label": "Route 18", "kind": "route", "targetId": "kanto_route_segment_18"},
+        {"label": "Route 19", "kind": "route", "targetId": "kanto_route_segment_19"}
+      ],
       "planned": true
     },
     "kanto_map_point_08": {
@@ -108,6 +153,14 @@
       "kind": "city",
       "name": "Cerulean City",
       "description": "A bright city of waterways and bridges at the northern edge of Kanto.",
+      "exits": [
+        {"label": "Pokémon Center", "kind": "facility"},
+        {"label": "Cerulean City Gym", "kind": "facility"},
+        {"label": "Route 4", "kind": "route", "targetId": "kanto_route_segment_04"},
+        {"label": "Route 5", "kind": "route", "targetId": "kanto_route_segment_05"},
+        {"label": "Route 9", "kind": "route", "targetId": "kanto_route_segment_09"},
+        {"label": "Route 24", "kind": "route", "targetId": "kanto_route_segment_24"}
+      ],
       "planned": true
     },
     "kanto_map_point_09": {
@@ -116,6 +169,14 @@
       "kind": "city",
       "name": "Saffron City",
       "description": "Kanto's central metropolis, crossed by major roads connecting the surrounding cities.",
+      "exits": [
+        {"label": "Pokémon Center", "kind": "facility"},
+        {"label": "Saffron City Gym", "kind": "facility"},
+        {"label": "Route 5", "kind": "route", "targetId": "kanto_route_segment_05"},
+        {"label": "Route 6", "kind": "route", "targetId": "kanto_route_segment_06"},
+        {"label": "Route 7", "kind": "route", "targetId": "kanto_route_segment_07"},
+        {"label": "Route 8", "kind": "route", "targetId": "kanto_route_segment_08"}
+      ],
       "planned": true
     },
     "kanto_map_point_10": {
@@ -124,6 +185,13 @@
       "kind": "city",
       "name": "Vermilion City",
       "description": "A busy harbor city where ships arrive from across the region.",
+      "exits": [
+        {"label": "Pokémon Center", "kind": "facility"},
+        {"label": "Vermilion City Gym", "kind": "facility"},
+        {"label": "Harbor", "kind": "facility"},
+        {"label": "Route 6", "kind": "route", "targetId": "kanto_route_segment_06"},
+        {"label": "Route 11", "kind": "route", "targetId": "kanto_route_segment_11"}
+      ],
       "planned": true
     },
     "kanto_map_point_11": {
@@ -156,6 +224,13 @@
       "kind": "town",
       "name": "Lavender Town",
       "description": "A quiet town known for its memorial tower and the roads leading toward eastern Kanto.",
+      "exits": [
+        {"label": "Pokémon Center", "kind": "facility"},
+        {"label": "Pokémon Tower", "kind": "special", "targetId": "kanto_map_point_15"},
+        {"label": "Route 8", "kind": "route", "targetId": "kanto_route_segment_08"},
+        {"label": "Route 10", "kind": "route", "targetId": "kanto_route_segment_10"},
+        {"label": "Route 12", "kind": "route", "targetId": "kanto_route_segment_12"}
+      ],
       "planned": true
     },
     "kanto_map_point_15": {

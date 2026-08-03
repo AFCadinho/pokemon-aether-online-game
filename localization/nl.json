@@ -659,6 +659,7 @@
   "ui.town_map.current_location": "JE BENT HIER · {location}",
   "ui.town_map.current_unknown": "Onbekende locatie",
   "ui.town_map.selected_location": "GESELECTEERDE LOCATIE",
+  "ui.town_map.exits": "UITGANGEN & BEZIENSWAARDIGHEDEN",
   "ui.town_map.connections": "VERBONDEN MET",
   "ui.town_map.legend": "Goud: dorpen en steden  ·  Gele paden: routes  ·  Lichtblauw: bijzondere locaties",
   "ui.town_map.kind.town": "DORP",

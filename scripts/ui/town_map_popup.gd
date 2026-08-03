@@ -24,6 +24,8 @@ var detail_portrait: TrainerHeadPortrait
 var detail_kind_panel: PanelContainer
 var detail_kind_label: Label
 var detail_description_label: Label
+var exits_title_label: Label
+var detail_exits_container: VBoxContainer
 var connections_title_label: Label
 var detail_connections_container: VBoxContainer
 var legend_kind_labels: Dictionary = {}
@@ -271,7 +273,11 @@ func _build_ui() -> void:
 	details.add_child(detail_margin)
 	var detail_column := VBoxContainer.new()
 	detail_column.add_theme_constant_override("separation", 11)
-	detail_margin.add_child(detail_column)
+	var detail_scroll := ScrollContainer.new()
+	detail_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	detail_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	detail_margin.add_child(detail_scroll)
+	detail_scroll.add_child(detail_column)
 
 	detail_overline_label = Label.new()
 	detail_overline_label.add_theme_font_size_override("font_size", 10)
@@ -327,6 +333,14 @@ func _build_ui() -> void:
 	detail_description_label.add_theme_font_size_override("font_size", 14)
 	detail_description_label.add_theme_color_override("font_color", Color("#c0cdd7"))
 	description_margin.add_child(detail_description_label)
+
+	exits_title_label = Label.new()
+	exits_title_label.add_theme_font_size_override("font_size", 10)
+	exits_title_label.add_theme_color_override("font_color", Color("#65d7f3"))
+	detail_column.add_child(exits_title_label)
+	detail_exits_container = VBoxContainer.new()
+	detail_exits_container.add_theme_constant_override("separation", 6)
+	detail_column.add_child(detail_exits_container)
 
 	connections_title_label = Label.new()
 	connections_title_label.add_theme_font_size_override("font_size", 10)
@@ -397,6 +411,8 @@ func _refresh_header() -> void:
 	subtitle_label.text = _t("ui.town_map.subtitle")
 	if detail_overline_label != null:
 		detail_overline_label.text = _t("ui.town_map.selected_location")
+	if exits_title_label != null:
+		exits_title_label.text = _t("ui.town_map.exits")
 	if connections_title_label != null:
 		connections_title_label.text = _t("ui.town_map.connections")
 	for kind_value: Variant in legend_kind_labels.keys():
@@ -450,6 +466,7 @@ func _refresh_details(location_id: String) -> void:
 		)
 	var description_key := str(location.get("descriptionKey", "")).strip_edges()
 	detail_description_label.text = _t(description_key) if description_key != "" else str(location.get("description", ""))
+	_refresh_exit_buttons(location.get("exits", []) as Array)
 	var connected_location_ids: Array[String] = []
 	for path_value: Variant in region_data.get("paths", []):
 		var endpoints := _path_endpoints(path_value)
@@ -462,6 +479,56 @@ func _refresh_details(location_id: String) -> void:
 		elif to_id == location_id:
 			connected_location_ids.append(from_id)
 	_refresh_connection_buttons(connected_location_ids)
+
+
+func _refresh_exit_buttons(exits: Array) -> void:
+	if detail_exits_container == null or exits_title_label == null:
+		return
+	for child: Node in detail_exits_container.get_children():
+		detail_exits_container.remove_child(child)
+		child.queue_free()
+	exits_title_label.visible = not exits.is_empty()
+	detail_exits_container.visible = not exits.is_empty()
+	for exit_value: Variant in exits:
+		if not exit_value is Dictionary:
+			continue
+		var exit_data := exit_value as Dictionary
+		var label := str(exit_data.get("label", "")).strip_edges()
+		if label == "":
+			continue
+		var target_id := str(exit_data.get("targetId", "")).strip_edges()
+		if target_id != "":
+			var button := _make_exit_button(label, str(exit_data.get("kind", "building")))
+			button.pressed.connect(_refresh_details.bind(target_id))
+			detail_exits_container.add_child(button)
+		else:
+			var item := Label.new()
+			item.text = "•  %s" % label
+			item.add_theme_font_size_override("font_size", 13)
+			item.add_theme_color_override("font_color", Color("#b8c9d4"))
+			detail_exits_container.add_child(item)
+
+
+func _make_exit_button(label: String, kind: String) -> Button:
+	var button := Button.new()
+	var prefix := "→"
+	if kind == "facility" or kind == "building":
+		prefix = "◆"
+	button.text = "%s  %s" % [prefix, label]
+	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	button.custom_minimum_size = Vector2(0, 34)
+	button.focus_mode = Control.FOCUS_ALL
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.add_theme_font_size_override("font_size", 13)
+	button.add_theme_color_override("font_color", Color("#d5e3eb"))
+	button.add_theme_color_override("font_hover_color", Color.WHITE)
+	var normal_style := _panel_style(Color("#071522"), Color("#27495d"), 8, 1)
+	normal_style.content_margin_left = 11.0
+	var hover_style := _panel_style(Color("#102a3a"), Color("#5cecff"), 8, 1)
+	hover_style.content_margin_left = 11.0
+	button.add_theme_stylebox_override("normal", normal_style)
+	button.add_theme_stylebox_override("hover", hover_style)
+	return button
 
 
 func _refresh_connection_buttons(location_ids: Array[String]) -> void:
@@ -549,13 +616,18 @@ func _apply_layout() -> void:
 	var points := layout_data.get("points", {}) as Dictionary
 	for point_id_value: Variant in points.keys():
 		var point_id := str(point_id_value)
-		if locations.has(point_id):
-			continue
 		var point_data := points.get(point_id, {}) as Dictionary
+		if locations.has(point_id):
+			var existing_location := locations.get(point_id, {}) as Dictionary
+			if point_data.has("exits"):
+				existing_location["exits"] = point_data.get("exits", [])
+			locations[point_id] = existing_location
+			continue
 		locations[point_id] = {
 			"kind": str(point_data.get("kind", "special")),
 			"name": str(point_data.get("name", point_id)),
 			"description": str(point_data.get("description", "")),
+			"exits": point_data.get("exits", []),
 			"planned": bool(point_data.get("planned", true)),
 		}
 	for route_value: Variant in layout_data.get("routePoints", []):
