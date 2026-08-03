@@ -94,6 +94,12 @@ func _run() -> void:
 	_check(popup_locations.size() == 46, "Town Map registers every configured point")
 	_check(planned_location_count == 40, "Future settlements, special locations, and routes are planned points")
 	_check(planned_route_count == 23, "Named future routes are available alongside map points")
+	var planned_without_description := 0
+	for planned_location_value: Variant in popup_locations.values():
+		if planned_location_value is Dictionary and bool((planned_location_value as Dictionary).get("planned", false)):
+			if str((planned_location_value as Dictionary).get("description", "")).strip_edges() == "":
+				planned_without_description += 1
+	_check(planned_without_description == 0, "Every planned Town Map location has a description")
 	popup.open_for_map("kanto_oaks_lab")
 	await process_frame
 	_check(popup.visible, "Town Map opens as a modal")
@@ -109,6 +115,9 @@ func _run() -> void:
 	_check(popup.map_canvas.hovered_location_id == "kanto_pewter_city", "Town Map hotspots expose a visible hover state")
 	hover_marker.mouse_exited.emit()
 	_check(popup.map_canvas.hovered_location_id == "", "Town Map hover state clears when leaving a hotspot")
+	popup._refresh_details("kanto_route_segment_03")
+	_check(popup.detail_description_label.text != "", "Planned route descriptions appear in the detail panel")
+	popup._refresh_details("kanto_pallet_town")
 	_check(popup.legend_kind_labels.size() == 3, "Town Map distinguishes settlements, routes, and special locations")
 	_check(
 		popup.detail_connections_container.get_child_count() > 0
