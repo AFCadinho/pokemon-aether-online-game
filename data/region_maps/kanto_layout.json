@@ -6,6 +6,7 @@
     "Wijzig onder points alleen x en y om de onzichtbare klikzone en locatiering te verplaatsen.",
     "Alle zichtbare cirkels zijn al ingevuld. Vervang bij kanto_map_point_01 t/m 15 alleen name wanneer je de echte locatie hebt bepaald.",
     "Punten met planned=true hoeven nog niet naar een speelbare game map te verwijzen.",
+    "Onder routePoints staat voor elk geel routegedeelte een tijdelijk punt. Vervang daar later alleen name.",
     "De gele routes en cirkels staan al in de achtergrondafbeelding en worden niet opnieuw door Godot getekend.",
     "Laat de location-id's en de waarden van from/to ongewijzigd; die verwijzen naar echte game maps.",
     "needsReview mag je op false zetten zodra je een punt hebt gecontroleerd. Dit veld beïnvloedt de UI niet."
@@ -136,6 +137,27 @@
       "planned": true
     }
   },
+  "routePoints": [
+    {"id": "kanto_route_segment_01", "x": 40, "y": 101, "name": "Route Placeholder 01", "planned": true},
+    {"id": "kanto_route_segment_02", "x": 60, "y": 151, "name": "Route Placeholder 02", "planned": true},
+    {"id": "kanto_route_segment_03", "x": 80, "y": 130, "name": "Route Placeholder 03", "planned": true},
+    {"id": "kanto_route_segment_04", "x": 80, "y": 80, "name": "Route Placeholder 04", "planned": true},
+    {"id": "kanto_route_segment_05", "x": 130, "y": 70, "name": "Route Placeholder 05", "planned": true},
+    {"id": "kanto_route_segment_06", "x": 220, "y": 48, "name": "Route Placeholder 06", "planned": true},
+    {"id": "kanto_route_segment_07", "x": 320, "y": 48, "name": "Route Placeholder 07", "planned": true},
+    {"id": "kanto_route_segment_08", "x": 360, "y": 90, "name": "Route Placeholder 08", "planned": true},
+    {"id": "kanto_route_segment_09", "x": 320, "y": 109, "name": "Route Placeholder 09", "planned": true},
+    {"id": "kanto_route_segment_10", "x": 250, "y": 109, "name": "Route Placeholder 10", "planned": true},
+    {"id": "kanto_route_segment_11", "x": 280, "y": 80, "name": "Route Placeholder 11", "planned": true},
+    {"id": "kanto_route_segment_12", "x": 280, "y": 140, "name": "Route Placeholder 12", "planned": true},
+    {"id": "kanto_route_segment_13", "x": 289, "y": 171, "name": "Route Placeholder 13", "planned": true},
+    {"id": "kanto_route_segment_14", "x": 330, "y": 171, "name": "Route Placeholder 14", "planned": true},
+    {"id": "kanto_route_segment_15", "x": 360, "y": 150, "name": "Route Placeholder 15", "planned": true},
+    {"id": "kanto_route_segment_16", "x": 320, "y": 232, "name": "Route Placeholder 16", "planned": true},
+    {"id": "kanto_route_segment_17", "x": 200, "y": 270, "name": "Route Placeholder 17", "planned": true},
+    {"id": "kanto_route_segment_18", "x": 150, "y": 232, "name": "Route Placeholder 18", "planned": true},
+    {"id": "kanto_route_segment_19", "x": 280, "y": 25, "name": "Route Placeholder 19", "planned": true}
+  ],
   "connections": [
     {
       "from": "kanto_pallet_town",
