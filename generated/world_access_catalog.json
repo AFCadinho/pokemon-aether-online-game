@@ -422,6 +422,30 @@
 				}
 			}
 		},
+		"kanto_route_22": {
+			"areaType": "route",
+			"defaultMode": "open",
+			"label": "Route 22",
+			"locationGroupId": "kanto_route_22",
+			"locationGroupLabel": "Route 22",
+			"regionName": "Kanto",
+			"sceneAliases": [
+				"uid://5tm2o5wa0335"
+			],
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_22.tscn",
+			"spawnPoints": {
+				"viridian_city_entrance": {
+					"facingDirection": "left",
+					"label": "Viridian City Entrance",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromViridianCity",
+					"tile": {
+						"x": 22,
+						"y": 9
+					}
+				}
+			}
+		},
 		"kanto_route_2_gate": {
 			"areaType": "transition",
 			"defaultMode": "open",
@@ -558,6 +582,16 @@
 					"tile": {
 						"x": 24,
 						"y": 37
+					}
+				},
+				"route_22_entrance": {
+					"facingDirection": "right",
+					"label": "Route 22 Entrance",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute22",
+					"tile": {
+						"x": 1,
+						"y": 19
 					}
 				}
 			}
@@ -807,6 +841,22 @@
 			"destinationAreaId": "kanto_pallet_town",
 			"sourceMapId": "kanto_route_1"
 		},
+		"kanto_route_22__to_viridian_city": {
+			"destination": {
+				"mapId": "kanto_viridian_city",
+				"mapSceneAliases": [
+					"uid://b8tl17hk3yovn"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
+				"position": {
+					"x": 48.0,
+					"y": 624.0
+				},
+				"spawnMarker": "FromRoute22"
+			},
+			"destinationAreaId": "kanto_viridian_city",
+			"sourceMapId": "kanto_route_22"
+		},
 		"kanto_route_2__to_pewter_city": {
 			"destination": {
 				"mapId": "kanto_pewter_city",
@@ -1035,6 +1085,22 @@
 				"spawnMarker": "FromViridianCity"
 			},
 			"destinationAreaId": "kanto_route_2",
+			"sourceMapId": "kanto_viridian_city"
+		},
+		"kanto_viridian_city__to_route_22": {
+			"destination": {
+				"mapId": "kanto_route_22",
+				"mapSceneAliases": [
+					"uid://5tm2o5wa0335"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_22.tscn",
+				"position": {
+					"x": 720.0,
+					"y": 304.0
+				},
+				"spawnMarker": "FromViridianCity"
+			},
+			"destinationAreaId": "kanto_route_22",
 			"sourceMapId": "kanto_viridian_city"
 		},
 		"kanto_viridian_city_pokemon_center__to_outside": {

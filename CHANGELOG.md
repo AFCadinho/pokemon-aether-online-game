@@ -1,5 +1,34 @@
 # Changelog
 
+## 0.3.45 - 2026-08-03
+
+**Added**
+
+- Begin your Kanto adventure with a new opening story: choose your starter, train with Dadinho, deliver Oak's Parcel, battle Gary, and receive the Town Map from Lillie.
+- Follow main quests and side quests with a new quest journal, map markers, reward previews, and changing NPC dialogue.
+- Explore an interactive Kanto Town Map showing your location, routes, points of interest, and useful descriptions.
+- Visit the Pokémon Center in Viridian City and explore the new Route 22 open field.
+- Trainer battles now include character portraits and improved introductions.
+- Kingambit now shows how many allies have fainted during battle.
+- Added a new pixel-style cursor with adjustable size.
+
+**Changed**
+
+- Quests and rewards are now clearer and easier to navigate.
+- Rain and snow now react more naturally when landing on different surfaces.
+- Improved the Player's House, Dadinho, Gary, Lillie, market interactions, Trainer portraits, the Town Map, and the battle EXP bar.
+- Account privacy settings are clearer, and completed data exports can be opened directly from the game.
+
+**Fixed**
+
+- PvP battles now continue more reliably after reconnecting, switching Pokémon, Team Preview, or running low on time.
+- Private battles now hide opponent information at the correct moments.
+- Fixed Mimikyu's forms and several incorrect or disappearing battle portraits.
+- Fixed Trainer appearances sometimes changing during PvP battles.
+- Fixed incorrect starting positions when beginning a new game or returning after a blackout.
+- Fixed several problems that could stop progress during the opening Kanto story.
+- Fixed personal-data exports sometimes being interrupted.
+
 ## 0.3.42 - 2026-07-31
 
 **Added**

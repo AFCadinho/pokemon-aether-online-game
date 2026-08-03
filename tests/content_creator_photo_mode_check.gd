@@ -122,14 +122,15 @@ func _check_sources() -> void:
 	_check(overlay_scene_source.contains('[node name="AlphaToolsSlot"'), "Alpha Tools has its own action slot")
 	_check(overlay_scene_source.contains("assets/ui/content_creator.svg"), "Content Creator Tools uses its own icon")
 	_check(
-		overlay_source.contains("content_creator_tools_slot.visible = can_show_staff_action_bar and can_use_content_creator_tools"),
-		"Content Creator Tools visibility uses the creator-tools permission"
+		overlay_source.contains("content_creator_tools_slot.visible = can_show_staff_action_bar and can_use_content_creator_photo_mode"),
+		"Content Creator Tools visibility uses the Photo Mode permission"
 	)
 	_check(
 		overlay_source.contains("alpha_tools_slot.visible = can_show_staff_action_bar and can_use_content_creator_generation"),
 		"Alpha Tools visibility stays tied to Alpha generation permission"
 	)
-	_check(overlay_source.contains('if not _can_use_content_creator_tools():'), "Photo Mode remains permission gated")
+	_check(overlay_source.contains('const CONTENT_CREATOR_PHOTO_MODE_PERMISSION := "content:creator:photo-mode"'), "Photo Mode uses its dedicated permission")
+	_check(overlay_source.contains('if not _can_use_content_creator_photo_mode():'), "Photo Mode remains permission gated")
 	_check(overlay_source.contains('"open_photo_mode"'), "Creator menu launches Photo Mode")
 
 
