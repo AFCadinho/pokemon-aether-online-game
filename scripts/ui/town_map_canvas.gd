@@ -9,6 +9,8 @@ const CURRENT_PORTRAIT_SIZE := Vector2(34.0, 34.0)
 const PATH_SHADOW := Color("#06111dcc")
 const PATH_COLOR := Color("#63d7f5e8")
 const PATH_HIGHLIGHT := Color("#f3cc69")
+const SELECTED_COLOR := Color("#ffd65a")
+const SELECTED_SHADOW := Color("#07111fd9")
 const TrainerHeadPortraitScript := preload("res://scripts/ui/trainer_head_portrait.gd")
 
 var locations: Dictionary = {}
@@ -68,7 +70,7 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	if current_location_id != "" and is_visible_in_tree():
+	if (current_location_id != "" or selected_location_id != "") and is_visible_in_tree():
 		queue_redraw()
 
 
@@ -92,20 +94,10 @@ func _draw() -> void:
 				true
 			)
 
-	if (
-		selected_location_id != ""
-		and selected_location_id != current_location_id
-		and locations.has(selected_location_id)
-	):
-		draw_arc(
+	if selected_location_id != "" and locations.has(selected_location_id):
+		_draw_selected_indicator(
 			_location_point(selected_location_id),
-			15.0,
-			0.0,
-			TAU,
-			32,
-			Color("#f3cc69"),
-			3.0,
-			true
+			selected_location_id == current_location_id
 		)
 
 	if current_location_id != "" and locations.has(current_location_id):
@@ -114,6 +106,39 @@ func _draw() -> void:
 			var center := _location_point(current_location_id)
 			draw_circle(center, 15.0 + pulse * 5.0, Color(0.35, 0.86, 1.0, 0.2 - pulse * 0.08))
 			draw_arc(center, 14.0 + pulse * 5.0, 0.0, TAU, 32, Color("#8ceaff"), 2.0, true)
+
+
+func _draw_selected_indicator(center: Vector2, surrounds_portrait: bool) -> void:
+	var pulse := (sin(Time.get_ticks_msec() / 170.0) + 1.0) * 0.5
+	var ring_radius := 21.0 if surrounds_portrait else 17.0
+	var pulse_radius := ring_radius + 2.0 + pulse * 2.5
+	draw_circle(center, ring_radius + 1.0, Color(1.0, 0.78, 0.2, 0.10))
+	draw_arc(center, ring_radius, 0.0, TAU, 40, SELECTED_SHADOW, 5.0, true)
+	draw_arc(center, ring_radius, 0.0, TAU, 40, SELECTED_COLOR, 2.5, true)
+	draw_arc(
+		center,
+		pulse_radius,
+		0.0,
+		TAU,
+		40,
+		Color(SELECTED_COLOR.r, SELECTED_COLOR.g, SELECTED_COLOR.b, 0.42 - pulse * 0.18),
+		1.5,
+		true
+	)
+
+	var pointer_tip := center + Vector2(0.0, -ring_radius - 2.0)
+	var pointer_top := center + Vector2(0.0, -ring_radius - 11.0 - pulse * 2.0)
+	var pointer_shadow := PackedVector2Array([
+		pointer_tip + Vector2(0.0, 2.0),
+		pointer_top + Vector2(-7.0, 1.0),
+		pointer_top + Vector2(7.0, 1.0),
+	])
+	draw_colored_polygon(pointer_shadow, SELECTED_SHADOW)
+	draw_colored_polygon(PackedVector2Array([
+		pointer_tip,
+		pointer_top + Vector2(-6.0, 0.0),
+		pointer_top + Vector2(6.0, 0.0),
+	]), SELECTED_COLOR)
 
 
 func _build_markers() -> void:
