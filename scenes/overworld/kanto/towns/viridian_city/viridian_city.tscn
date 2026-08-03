@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://3tny2dss8f2p" path="res://assets/tilesets/fiver/tiles_env2_32.png" id="12_n7exw"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="21_night_light"]
 [ext_resource type="Resource" path="res://resources/npcs/trainers/trainer_red_boss.tres" id="22_trainer_red_profile"]
+[ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="23_gate_npc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route1"]
 size = Vector2(224, 36)
@@ -323,6 +324,7 @@ position = Vector2(752, 1264)
 script = ExtResource("3_route1")
 target_scene_path = "uid://b65lnk8twsct"
 target_spawn_name = "FromViridianCity"
+transition_id = "kanto_viridian_city__to_route_1"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute1" unique_id=1666739729]
 position = Vector2(48, 18)
@@ -338,6 +340,7 @@ position = Vector2(752, 16)
 script = ExtResource("3_route1")
 target_scene_path = "uid://cnbfksossjfg7"
 target_spawn_name = "FromViridianCity"
+transition_id = "kanto_viridian_city__to_route_2"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute2" unique_id=1742512262]
 position = Vector2(48, -18)
@@ -366,6 +369,24 @@ z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1385361605]
 position = Vector2(-656, -80)
+
+[node name="RouteGuards" type="Node2D" parent="Entities/NPCs"]
+
+[node name="NorthRouteGuard" parent="Entities/NPCs/RouteGuards" instance=ExtResource("23_gate_npc")]
+position = Vector2(1376, 160)
+guarded_transition_id = "kanto_viridian_city__to_route_2"
+requires_party_pokemon = false
+blocked_dialogue_id = "area_closed_blocked"
+npc_id = "kanto_viridian_city_north_route_guard"
+facing_direction = Vector2(0, 1)
+
+[node name="SouthRouteGuard" parent="Entities/NPCs/RouteGuards" instance=ExtResource("23_gate_npc")]
+position = Vector2(1536, 1280)
+guarded_transition_id = "kanto_viridian_city__to_route_1"
+requires_party_pokemon = false
+blocked_dialogue_id = "area_closed_blocked"
+npc_id = "kanto_viridian_city_south_route_guard"
+facing_direction = Vector2(0, -1)
 
 [node name="BossBattle" type="Node2D" parent="Entities/NPCs" unique_id=1483942485]
 

@@ -7,6 +7,7 @@ const MAP_EXIT_PATH := "res://scripts/world/map_exit.gd"
 const GATE_NPC_PATH := "res://scripts/world/npcs/gate_npc.gd"
 const WORLD_PATH := "res://scripts/world/world.gd"
 const ROUTE_1_PATH := "res://scenes/overworld/kanto/routes/kanto_route_1.tscn"
+const VIRIDIAN_CITY_PATH := "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn"
 const CATALOG_BUILDER_PATH := "res://tools/world_access_catalog_builder.gd"
 const CATALOG_GENERATOR_SCENE_PATH := "res://tools/generate_world_access_catalog.tscn"
 const GENERATED_CATALOG_PATH := "res://generated/world_access_catalog.json"
@@ -24,6 +25,7 @@ func _init() -> void:
 	var gate_source := FileAccess.get_file_as_string(GATE_NPC_PATH)
 	var world_source := FileAccess.get_file_as_string(WORLD_PATH)
 	var route_source := FileAccess.get_file_as_string(ROUTE_1_PATH)
+	var viridian_city_source := FileAccess.get_file_as_string(VIRIDIAN_CITY_PATH)
 	var catalog_builder_source := FileAccess.get_file_as_string(CATALOG_BUILDER_PATH)
 
 	_expect(
@@ -99,6 +101,24 @@ func _init() -> void:
 		route_source.contains('guarded_transition_id = "route_1_to_viridian_city"')
 		and route_source.contains('transition_id = "route_1_to_viridian_city"'),
 		"Route 1 guard and exit share one stable transition identifier"
+	)
+	_expect(
+		viridian_city_source.contains('[node name="NorthRouteGuard"')
+		and viridian_city_source.contains('guarded_transition_id = "kanto_viridian_city__to_route_2"')
+		and viridian_city_source.contains('transition_id = "kanto_viridian_city__to_route_2"'),
+		"Viridian City north guard protects the Route 2 transition"
+	)
+	_expect(
+		viridian_city_source.contains('[node name="SouthRouteGuard"')
+		and viridian_city_source.contains('guarded_transition_id = "kanto_viridian_city__to_route_1"')
+		and viridian_city_source.contains('transition_id = "kanto_viridian_city__to_route_1"'),
+		"Viridian City south guard protects the Route 1 transition"
+	)
+	_expect(
+		viridian_city_source.count('instance=ExtResource("23_gate_npc")') == 2
+		and viridian_city_source.contains('npc_id = "kanto_viridian_city_north_route_guard"')
+		and viridian_city_source.contains('npc_id = "kanto_viridian_city_south_route_guard"'),
+		"Viridian City has one uniquely identified guard at every route exit"
 	)
 	_expect(
 		FileAccess.file_exists(CATALOG_GENERATOR_SCENE_PATH)

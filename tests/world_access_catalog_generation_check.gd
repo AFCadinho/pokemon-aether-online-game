@@ -106,6 +106,11 @@ func _init() -> void:
 		"Stable Route 1 to Viridian transition is retained"
 	)
 	_expect(
+		transitions.has("kanto_viridian_city__to_route_1")
+			and transitions.has("kanto_viridian_city__to_route_2"),
+		"Viridian City exposes guarded transitions to Route 1 and Route 2"
+	)
+	_expect(
 		transitions.has("kanto_viridian_city__to_pokecenter")
 			and transitions.has("kanto_viridian_city_pokemon_center__to_outside"),
 		"Viridian City Pokémon Center has connected entrance and exit transitions"
