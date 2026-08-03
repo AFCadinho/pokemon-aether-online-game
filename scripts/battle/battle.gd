@@ -309,7 +309,7 @@ var wild_owned_request_id := 0
 
 # Turn Nodes
 @onready var battle_status_panel: BattleStatusPanel = %BattleStatusPanel
-@onready var vs_panel_container: BattleVsPanelContainer = %VSPanelContainer
+@onready var vs_panel_container = %VSPanelContainer
 @onready var player_side_effects_panel: Control = %SideFieldEffectsPanel
 @onready var enemy_side_effects_panel: Control = %SideFieldEffectsPanel2
 @onready var battle_background: TextureRect = %BattleBackground
