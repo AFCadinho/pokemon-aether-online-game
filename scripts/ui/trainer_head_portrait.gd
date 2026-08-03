@@ -5,7 +5,8 @@ class_name TrainerHeadPortrait
 const REMOTE_PLAYER_AVATAR_SCRIPT := preload("res://scripts/world/remote_player_avatar.gd")
 const SOURCE_FRAME_SIZE := 64.0
 const HEAD_CROP_HEIGHT := 44.0
-const PORTRAIT_RENDER_SCALE := 1.6
+const PORTRAIT_RENDER_SCALE := 1.75
+const HEAD_LOCAL_CENTER_X := -1.0
 const HEAD_LOCAL_CENTER_Y := -21.0
 
 var viewport: SubViewport
@@ -46,7 +47,7 @@ func set_appearance_state(state: Dictionary) -> void:
 	# The TextureRect scales that target to each UI use without changing its crop.
 	avatar.scale = Vector2.ONE * PORTRAIT_RENDER_SCALE
 	avatar.position = Vector2(
-		viewport.size.x * 0.5,
+		viewport.size.x * 0.5 - HEAD_LOCAL_CENTER_X * PORTRAIT_RENDER_SCALE,
 		viewport.size.y * 0.5 - HEAD_LOCAL_CENTER_Y * PORTRAIT_RENDER_SCALE
 	)
 	var nameplate := avatar.get_node_or_null("Nameplate") as Control
