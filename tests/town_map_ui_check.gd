@@ -33,6 +33,7 @@ func _run() -> void:
 	_check((layout_points.get("kanto_viridian_city", {}) as Dictionary).get("y") == 151, "Viridian City uses its supplied-map circle")
 	_check((layout_points.get("kanto_pewter_city", {}) as Dictionary).get("y") == 70, "Pewter City uses its supplied-map circle")
 	_check(layout_points.size() == 21, "Every baked map circle has coordinates, alongside Route 1")
+	_check((layout_points.get("kanto_map_point_02", {}) as Dictionary).get("name") == "Route 22", "Route 22 is placed west of Viridian City")
 	var areas := world_access.get("areas", {}) as Dictionary
 	var location_groups: Dictionary = {}
 	for area_value: Variant in areas.values():
