@@ -64,6 +64,12 @@ func interact_with_player(_player: Node2D) -> void:
 		reward_resolved = true
 		_refresh_quest_marker()
 		await show_dialogue(await _resolve_dialogue_lines(success_dialogue_id, success_dialogue_lines))
+		if str(result.get("itemId", "")).strip_edges().to_lower() == "town-map":
+			get_tree().call_group(
+				"ui_overlay",
+				"add_system_message",
+				LocalizationManager.text("ui.key_item.received_town_map")
+			)
 	else:
 		reward_resolved = true
 		_refresh_quest_marker()

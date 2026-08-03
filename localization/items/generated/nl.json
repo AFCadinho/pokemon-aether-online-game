@@ -2691,6 +2691,10 @@
     "name": "Poke-speeltje",
     "shortDesc": "Beëindigt een wild gevecht."
   },
+  "pokedex": {
+    "name": "Pokédex",
+    "shortDesc": "Registreert informatie over Pokémon die je tegenkomt."
+  },
   "pokeblock-case": {
     "name": "Pokeblock-koffer",
     "shortDesc": "Bevat Pokeblocks."

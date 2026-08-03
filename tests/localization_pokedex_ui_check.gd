@@ -21,8 +21,9 @@ func _run() -> void:
 	var original_locale := str(localization_manager.get("current_locale"))
 	_check_pokedex_runtime_translation()
 	var overlay_source := FileAccess.get_file_as_string(OVERLAY_SCRIPT_PATH)
-	_check(overlay_source.contains('_is_pokedex_unlocked'), "Pokédex access is story gated")
-	_check(overlay_source.contains('get_quest("oaks_parcel")'), "Oak's Parcel unlocks the Pokédex")
+	_check(overlay_source.contains('_is_pokedex_unlocked'), "Pokédex access is item gated")
+	_check(overlay_source.contains('has_item", "pokedex"'), "Owning the Pokédex unlocks its UI")
+	_check(overlay_source.contains('has_item", "town-map"'), "Owning the Town Map unlocks its UI")
 	_check(overlay_source.contains('ui.pokedex.locked'), "Locked Pokédex use gives player feedback")
 	localization_manager.call("set_locale", original_locale)
 	await process_frame
