@@ -104,7 +104,12 @@ func _configure_head_only(node: Node) -> void:
 						)
 						head_sprite.texture = head_atlas
 					else:
-						head_sprite.texture = head_texture
+						var source_image := head_texture.get_image()
+						if source_image != null and source_image.get_width() >= 64 and source_image.get_height() >= 34:
+							var head_image := source_image.get_region(Rect2i(0, 0, 64, 34))
+							head_sprite.texture = ImageTexture.create_from_image(head_image)
+						else:
+							head_sprite.texture = head_texture
 					head_sprite.position = sprite.position + Vector2(0.0, -15.0)
 					head_sprite.z_index = sprite.z_index
 					sprite.get_parent().add_child(head_sprite)
