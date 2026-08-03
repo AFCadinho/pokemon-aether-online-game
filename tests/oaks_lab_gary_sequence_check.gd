@@ -95,6 +95,11 @@ func _init() -> void:
 	)
 	var gary_scene_text := _read_text(GARY_SCENE)
 	_check_true(
+		gary_scene_text.contains('region = Rect2(80, 0, 387, 387)')
+		and gary_scene_text.contains('mugshot = SubResource("gary_mugshot_crop")'),
+		"Gary's tall artwork is cropped around his head and shoulders for dialogue"
+	)
+	_check_true(
 		gary_scene_text.contains("facing_direction = Vector2(0, 1)")
 		and gary_scene_text.contains('animation = &"idle_down"'),
 		"Gary initially faces down beside Oak"
