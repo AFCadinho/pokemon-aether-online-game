@@ -50,9 +50,12 @@ func set_names(player_1_name: String, player_2_name: String) -> void:
 
 func set_player_appearances(player_1_state: Dictionary, player_2_state: Dictionary) -> void:
 	if player_1_portrait != null:
+		player_1_portrait.visible = true
 		player_1_portrait.set_appearance_state(player_1_state)
 	if player_2_portrait != null:
-		player_2_portrait.set_appearance_state(player_2_state)
+		player_2_portrait.visible = not player_2_state.is_empty()
+		if player_2_portrait.visible:
+			player_2_portrait.set_appearance_state(player_2_state)
 
 
 func _create_player_portraits() -> void:

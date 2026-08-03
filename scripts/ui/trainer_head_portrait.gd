@@ -36,7 +36,7 @@ func set_appearance_state(state: Dictionary) -> void:
 		"position": {"x": 0.0, "y": 0.0},
 		"facingDirection": "down",
 	})
-	avatar.position = Vector2(viewport.size.x * 0.5, viewport.size.y * 0.88)
+	avatar.position = Vector2(viewport.size.x * 0.5, viewport.size.y * 0.92)
 	avatar.scale = Vector2.ONE * _portrait_scale()
 	var nameplate := avatar.get_node_or_null("Nameplate") as Control
 	if nameplate != null:
@@ -51,7 +51,7 @@ func _set_up_viewport() -> void:
 	viewport = SubViewport.new()
 	viewport.name = "PortraitViewport"
 	viewport.transparent_bg = true
-	viewport.size = Vector2i(64, 64)
+	viewport.size = Vector2i(64, 48)
 	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	var container := SubViewportContainer.new()
 	container.name = "PortraitViewportContainer"
