@@ -31,8 +31,8 @@ func _check_scene_staging() -> void:
 	_check(player_start >= 0, "player overworld trainer marker exists")
 	_check(enemy_start >= 0, "opponent overworld trainer marker exists")
 	_check(player_start < platform_start and enemy_start < platform_start, "trainers render behind both platforms")
-	_check(source.contains("position = Vector2(188, 490)"), "player trainer stands behind the player platform")
-	_check(source.contains("position = Vector2(970, 332)"), "opponent trainer mirrors the player staging")
+	_check(source.contains("position = Vector2(124, 490)"), "player trainer stands beside the player platform")
+	_check(source.contains("position = Vector2(1028, 332)"), "opponent trainer stands beside the opponent platform")
 	_check(source.contains("position = Vector2(300, 412)"), "player team preview remains in its original position")
 	_check(source.contains("position = Vector2(850, 268)"), "opponent team preview remains in its original position")
 
