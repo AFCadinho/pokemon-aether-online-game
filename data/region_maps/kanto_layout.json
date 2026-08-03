@@ -4,6 +4,8 @@
     "Dit bestand gebruikt exact hetzelfde 400x297-pixelraster als kanto_region_map.png.",
     "x=0 is links en y=0 is boven. Je kunt de gewenste pixel dus rechtstreeks uit een afbeeldingseditor overnemen.",
     "Wijzig onder points alleen x en y om de onzichtbare klikzone en locatiering te verplaatsen.",
+    "Alle zichtbare cirkels zijn al ingevuld. Vervang bij kanto_map_point_01 t/m 15 alleen name wanneer je de echte locatie hebt bepaald.",
+    "Punten met planned=true hoeven nog niet naar een speelbare game map te verwijzen.",
     "De gele routes en cirkels staan al in de achtergrondafbeelding en worden niet opnieuw door Godot getekend.",
     "Laat de location-id's en de waarden van from/to ongewijzigd; die verwijzen naar echte game maps.",
     "needsReview mag je op false zetten zodra je een punt hebt gecontroleerd. Dit veld beïnvloedt de UI niet."
@@ -15,33 +17,123 @@
   "points": {
     "kanto_pallet_town": {
       "x": 80,
-      "y": 210,
+      "y": 208,
       "needsReview": false
     },
     "kanto_route_1": {
       "x": 80,
-      "y": 184,
+      "y": 180,
       "needsReview": false
     },
     "kanto_viridian_city": {
       "x": 80,
-      "y": 158,
+      "y": 151,
       "needsReview": false
     },
     "kanto_route_2": {
       "x": 80,
-      "y": 88,
+      "y": 110,
       "needsReview": false
     },
     "kanto_viridian_forest": {
       "x": 80,
-      "y": 110,
+      "y": 89,
       "needsReview": false
     },
     "kanto_pewter_city": {
       "x": 80,
-      "y": 51,
+      "y": 70,
       "needsReview": false
+    },
+    "kanto_map_point_01": {
+      "x": 40,
+      "y": 51,
+      "name": "Map Point 01",
+      "planned": true
+    },
+    "kanto_map_point_02": {
+      "x": 40,
+      "y": 72,
+      "name": "Map Point 02",
+      "planned": true
+    },
+    "kanto_map_point_03": {
+      "x": 80,
+      "y": 270,
+      "name": "Map Point 03",
+      "planned": true
+    },
+    "kanto_map_point_04": {
+      "x": 160,
+      "y": 270,
+      "name": "Map Point 04",
+      "planned": true
+    },
+    "kanto_map_point_05": {
+      "x": 180,
+      "y": 48,
+      "name": "Map Point 05",
+      "planned": true
+    },
+    "kanto_map_point_06": {
+      "x": 220,
+      "y": 109,
+      "name": "Map Point 06",
+      "planned": true
+    },
+    "kanto_map_point_07": {
+      "x": 240,
+      "y": 232,
+      "name": "Map Point 07",
+      "planned": true
+    },
+    "kanto_map_point_08": {
+      "x": 280,
+      "y": 48,
+      "name": "Map Point 08",
+      "planned": true
+    },
+    "kanto_map_point_09": {
+      "x": 280,
+      "y": 109,
+      "name": "Map Point 09",
+      "planned": true
+    },
+    "kanto_map_point_10": {
+      "x": 280,
+      "y": 171,
+      "name": "Map Point 10",
+      "planned": true
+    },
+    "kanto_map_point_11": {
+      "x": 298,
+      "y": 171,
+      "name": "Map Point 11",
+      "planned": true
+    },
+    "kanto_map_point_12": {
+      "x": 360,
+      "y": 48,
+      "name": "Map Point 12",
+      "planned": true
+    },
+    "kanto_map_point_13": {
+      "x": 360,
+      "y": 70,
+      "name": "Map Point 13",
+      "planned": true
+    },
+    "kanto_map_point_14": {
+      "x": 360,
+      "y": 109,
+      "name": "Map Point 14",
+      "planned": true
+    },
+    "kanto_map_point_15": {
+      "x": 360,
+      "y": 128,
+      "name": "Map Point 15",
+      "planned": true
     }
   },
   "connections": [
