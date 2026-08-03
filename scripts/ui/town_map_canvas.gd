@@ -9,7 +9,8 @@ const CURRENT_PORTRAIT_SIZE := Vector2(34.0, 34.0)
 const PATH_SHADOW := Color("#06111dcc")
 const PATH_COLOR := Color("#63d7f5e8")
 const PATH_HIGHLIGHT := Color("#f3cc69")
-const SELECTED_COLOR := Color("#ffd65a")
+const CURRENT_COLOR := Color("#5cecff")
+const SELECTED_COLOR := Color("#ff5bdc")
 const SELECTED_SHADOW := Color("#07111fd9")
 const TrainerHeadPortraitScript := preload("res://scripts/ui/trainer_head_portrait.gd")
 
@@ -94,25 +95,59 @@ func _draw() -> void:
 				true
 			)
 
+	if current_location_id != "" and locations.has(current_location_id):
+		_draw_current_location_indicator(
+			_location_point(current_location_id),
+			current_location_portrait != null and current_location_portrait.visible
+		)
+
 	if selected_location_id != "" and locations.has(selected_location_id):
 		_draw_selected_indicator(
 			_location_point(selected_location_id),
 			selected_location_id == current_location_id
 		)
 
-	if current_location_id != "" and locations.has(current_location_id):
-		if current_location_portrait == null or not current_location_portrait.visible:
-			var pulse := (sin(Time.get_ticks_msec() / 180.0) + 1.0) * 0.5
-			var center := _location_point(current_location_id)
-			draw_circle(center, 15.0 + pulse * 5.0, Color(0.35, 0.86, 1.0, 0.2 - pulse * 0.08))
-			draw_arc(center, 14.0 + pulse * 5.0, 0.0, TAU, 32, Color("#8ceaff"), 2.0, true)
+
+func _draw_current_location_indicator(center: Vector2, surrounds_portrait: bool) -> void:
+	var pulse := (sin(Time.get_ticks_msec() / 180.0) + 1.0) * 0.5
+	var ring_radius := 20.0 if surrounds_portrait else 15.0
+	var glow_radius := ring_radius + 4.0 + pulse * 3.0
+	draw_circle(
+		center,
+		glow_radius,
+		Color(CURRENT_COLOR.r, CURRENT_COLOR.g, CURRENT_COLOR.b, 0.17 - pulse * 0.05)
+	)
+	draw_arc(center, ring_radius, 0.0, TAU, 40, SELECTED_SHADOW, 5.0, true)
+	draw_arc(center, ring_radius, 0.0, TAU, 40, CURRENT_COLOR, 3.0, true)
+	draw_arc(
+		center,
+		ring_radius + 3.0 + pulse * 2.0,
+		0.0,
+		TAU,
+		40,
+		Color(CURRENT_COLOR.r, CURRENT_COLOR.g, CURRENT_COLOR.b, 0.48 - pulse * 0.16),
+		1.5,
+		true
+	)
+	for direction: Vector2 in [Vector2.UP, Vector2.RIGHT, Vector2.DOWN, Vector2.LEFT]:
+		draw_line(
+			center + direction * (ring_radius + 1.0),
+			center + direction * (ring_radius + 6.0),
+			CURRENT_COLOR,
+			2.0,
+			true
+		)
 
 
 func _draw_selected_indicator(center: Vector2, surrounds_portrait: bool) -> void:
 	var pulse := (sin(Time.get_ticks_msec() / 170.0) + 1.0) * 0.5
-	var ring_radius := 21.0 if surrounds_portrait else 17.0
+	var ring_radius := 27.0 if surrounds_portrait else 17.0
 	var pulse_radius := ring_radius + 2.0 + pulse * 2.5
-	draw_circle(center, ring_radius + 1.0, Color(1.0, 0.78, 0.2, 0.10))
+	draw_circle(
+		center,
+		ring_radius + 1.0,
+		Color(SELECTED_COLOR.r, SELECTED_COLOR.g, SELECTED_COLOR.b, 0.13)
+	)
 	draw_arc(center, ring_radius, 0.0, TAU, 40, SELECTED_SHADOW, 5.0, true)
 	draw_arc(center, ring_radius, 0.0, TAU, 40, SELECTED_COLOR, 2.5, true)
 	draw_arc(
