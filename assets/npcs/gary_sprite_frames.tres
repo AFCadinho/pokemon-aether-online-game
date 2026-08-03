@@ -1,6 +1,6 @@
 [gd_resource type="SpriteFrames" load_steps=18 format=3]
 
-[ext_resource type="Texture2D" path="res://assets/npcs/gen4-ow-sprites/trchar017.png" id="1_gary"]
+[ext_resource type="Texture2D" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_179_Champion_Blue_Oak.png" id="1_gary"]
 
 [sub_resource type="AtlasTexture" id="down0"]
 atlas = ExtResource("1_gary")

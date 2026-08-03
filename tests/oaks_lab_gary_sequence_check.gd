@@ -2,6 +2,8 @@ extends SceneTree
 
 const LAB_SCENE := "res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn"
 const GARY_SCENE := "res://scenes/npcs/oaks_lab_gary.tscn"
+const GARY_FRAMES := "res://assets/npcs/gary_sprite_frames.tres"
+const GARY_SHEET := "res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_179_Champion_Blue_Oak.png"
 const GARY_SCRIPT := "res://scripts/world/kanto/towns/pallet_town/oaks_lab_gary.gd"
 const OAK_SCRIPT := "res://scripts/world/kanto/towns/pallet_town/oak.gd"
 const STARTER_BALL_SCRIPT := "res://scripts/world/interactables/starter_poke_ball.gd"
@@ -15,6 +17,24 @@ func _init() -> void:
 	var lab_resource := load(LAB_SCENE) as PackedScene
 	_check_true(lab_resource != null, "Oak's Lab scene loads with starter balls")
 	_check_true(load(GARY_SCENE) is PackedScene, "Oak's Lab Gary scene loads")
+	var gary_frames := load(GARY_FRAMES) as SpriteFrames
+	_check_true(gary_frames != null, "Gary's shared SpriteFrames resource loads")
+	if gary_frames != null:
+		var idle_texture := gary_frames.get_frame_texture(&"idle_down", 0) as AtlasTexture
+		_check_true(
+			idle_texture != null
+			and idle_texture.atlas != null
+			and idle_texture.atlas.resource_path == GARY_SHEET,
+			"Gary's runtime SpriteFrames use the assigned Champion Blue Oak sheet"
+		)
+		for animation_name: StringName in [
+			&"idle_down", &"idle_left", &"idle_right", &"idle_up",
+			&"walk_down", &"walk_left", &"walk_right", &"walk_up",
+		]:
+			_check_true(
+				gary_frames.has_animation(animation_name),
+				"Gary provides the %s animation" % animation_name
+			)
 	var lab_text := _read_text(LAB_SCENE)
 	_check_true(lab_text.contains('name="LeftBulbasaur"'), "left ball contains Bulbasaur")
 	_check_true(lab_text.contains('name="MiddleSquirtle"'), "middle ball contains Squirtle")
