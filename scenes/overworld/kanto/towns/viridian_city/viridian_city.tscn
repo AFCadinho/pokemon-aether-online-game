@@ -372,6 +372,15 @@ position = Vector2(-656, -80)
 
 [node name="RouteGuards" type="Node2D" parent="Entities/NPCs"]
 
+[node name="WestRouteGuard" parent="Entities/NPCs/RouteGuards" instance=ExtResource("23_gate_npc")]
+position = Vector2(736, 736)
+requires_party_pokemon = false
+requires_staff_role = true
+blocked_dialogue_id = "area_closed_blocked"
+staff_blocked_dialogue_id = "area_closed_blocked"
+npc_id = "kanto_viridian_city_west_route_guard"
+facing_direction = Vector2(1, 0)
+
 [node name="NorthRouteGuard" parent="Entities/NPCs/RouteGuards" instance=ExtResource("23_gate_npc")]
 position = Vector2(1376, 160)
 guarded_transition_id = "kanto_viridian_city__to_route_2"

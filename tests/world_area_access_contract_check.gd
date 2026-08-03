@@ -115,10 +115,17 @@ func _init() -> void:
 		"Viridian City south guard protects the Route 1 transition"
 	)
 	_expect(
-		viridian_city_source.count('instance=ExtResource("23_gate_npc")') == 2
+		viridian_city_source.contains('[node name="WestRouteGuard"')
+		and viridian_city_source.contains('requires_staff_role = true')
+		and viridian_city_source.contains('npc_id = "kanto_viridian_city_west_route_guard"'),
+		"Viridian City west guard closes the future Route 22 approach"
+	)
+	_expect(
+		viridian_city_source.count('instance=ExtResource("23_gate_npc")') == 3
 		and viridian_city_source.contains('npc_id = "kanto_viridian_city_north_route_guard"')
-		and viridian_city_source.contains('npc_id = "kanto_viridian_city_south_route_guard"'),
-		"Viridian City has one uniquely identified guard at every route exit"
+		and viridian_city_source.contains('npc_id = "kanto_viridian_city_south_route_guard"')
+		and viridian_city_source.contains('npc_id = "kanto_viridian_city_west_route_guard"'),
+		"Viridian City has one uniquely identified guard at every route approach"
 	)
 	_expect(
 		FileAccess.file_exists(CATALOG_GENERATOR_SCENE_PATH)
