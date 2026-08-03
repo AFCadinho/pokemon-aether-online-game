@@ -15,13 +15,18 @@ var world_access: Dictionary = {}
 var shell: PanelContainer
 var title_label: Label
 var subtitle_label: Label
+var current_location_chip: PanelContainer
 var current_location_label: Label
 var map_canvas: TownMapCanvas
+var detail_overline_label: Label
 var detail_name_label: Label
 var detail_portrait: TrainerHeadPortrait
+var detail_kind_panel: PanelContainer
 var detail_kind_label: Label
 var detail_description_label: Label
-var detail_connections_label: Label
+var connections_title_label: Label
+var detail_connections_container: VBoxContainer
+var legend_kind_labels: Dictionary = {}
 var selected_location_id := ""
 var current_location_id := ""
 var owns_overworld_input_lock := false
@@ -106,7 +111,7 @@ func refresh_localized_ui() -> void:
 
 func _build_ui() -> void:
 	var backdrop := ColorRect.new()
-	backdrop.color = Color("#020812d9")
+	backdrop.color = Color("#010711e6")
 	backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	backdrop.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(backdrop)
@@ -114,48 +119,77 @@ func _build_ui() -> void:
 	shell = PanelContainer.new()
 	shell.name = "TownMapShell"
 	shell.mouse_filter = Control.MOUSE_FILTER_STOP
-	shell.add_theme_stylebox_override("panel", _panel_style(Color("#071421f7"), Color("#5dcce8"), 16, 2))
+	var shell_style := _panel_style(Color("#061522fa"), Color("#4bcce8"), 18, 2)
+	shell_style.shadow_color = Color("#00000099")
+	shell_style.shadow_size = 18
+	shell.add_theme_stylebox_override("panel", shell_style)
 	add_child(shell)
 
 	var outer_margin := MarginContainer.new()
-	outer_margin.add_theme_constant_override("margin_left", 20)
-	outer_margin.add_theme_constant_override("margin_top", 18)
-	outer_margin.add_theme_constant_override("margin_right", 20)
-	outer_margin.add_theme_constant_override("margin_bottom", 20)
+	outer_margin.add_theme_constant_override("margin_left", 18)
+	outer_margin.add_theme_constant_override("margin_top", 16)
+	outer_margin.add_theme_constant_override("margin_right", 18)
+	outer_margin.add_theme_constant_override("margin_bottom", 16)
 	shell.add_child(outer_margin)
 
 	var main_column := VBoxContainer.new()
-	main_column.add_theme_constant_override("separation", 14)
+	main_column.add_theme_constant_override("separation", 12)
 	outer_margin.add_child(main_column)
 
 	var header := HBoxContainer.new()
-	header.add_theme_constant_override("separation", 14)
+	header.add_theme_constant_override("separation", 12)
 	main_column.add_child(header)
 	var heading := VBoxContainer.new()
 	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.add_theme_constant_override("separation", 1)
 	header.add_child(heading)
 	title_label = Label.new()
-	title_label.add_theme_font_size_override("font_size", 28)
-	title_label.add_theme_color_override("font_color", Color("#f3d477"))
+	title_label.add_theme_font_size_override("font_size", 27)
+	title_label.add_theme_color_override("font_color", Color("#f5d77b"))
 	heading.add_child(title_label)
 	subtitle_label = Label.new()
-	subtitle_label.add_theme_font_size_override("font_size", 13)
+	subtitle_label.add_theme_font_size_override("font_size", 12)
 	subtitle_label.add_theme_color_override("font_color", Color("#9eb1c3"))
 	heading.add_child(subtitle_label)
+
+	current_location_chip = PanelContainer.new()
+	current_location_chip.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	current_location_chip.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color("#082739e8"), Color("#52dced"), 12, 1)
+	)
+	var current_margin := MarginContainer.new()
+	current_margin.add_theme_constant_override("margin_left", 11)
+	current_margin.add_theme_constant_override("margin_top", 7)
+	current_margin.add_theme_constant_override("margin_right", 12)
+	current_margin.add_theme_constant_override("margin_bottom", 7)
+	current_location_chip.add_child(current_margin)
+	var current_row := HBoxContainer.new()
+	current_row.add_theme_constant_override("separation", 7)
+	current_margin.add_child(current_row)
+	var current_dot := Label.new()
+	current_dot.text = "●"
+	current_dot.add_theme_font_size_override("font_size", 12)
+	current_dot.add_theme_color_override("font_color", Color("#5cecff"))
+	current_row.add_child(current_dot)
 	current_location_label = Label.new()
-	current_location_label.add_theme_font_size_override("font_size", 14)
-	current_location_label.add_theme_color_override("font_color", Color("#7ee5fa"))
+	current_location_label.add_theme_font_size_override("font_size", 12)
+	current_location_label.add_theme_color_override("font_color", Color("#c8f8ff"))
 	current_location_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	header.add_child(current_location_label)
+	current_row.add_child(current_location_label)
+	header.add_child(current_location_chip)
+
 	var close_button := Button.new()
 	close_button.name = "CloseButton"
 	close_button.text = "×"
-	close_button.custom_minimum_size = Vector2(42, 42)
+	close_button.custom_minimum_size = Vector2(44, 44)
 	close_button.focus_mode = Control.FOCUS_ALL
 	close_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	close_button.add_theme_font_size_override("font_size", 22)
-	close_button.add_theme_stylebox_override("normal", _panel_style(Color("#0b1d2d"), Color("#31536c"), 10, 1))
-	close_button.add_theme_stylebox_override("hover", _panel_style(Color("#12324a"), Color("#66d9f4"), 10, 1))
+	close_button.add_theme_color_override("font_color", Color("#d8e4eb"))
+	close_button.add_theme_color_override("font_hover_color", Color.WHITE)
+	close_button.add_theme_stylebox_override("normal", _panel_style(Color("#0a1b2a"), Color("#365970"), 11, 1))
+	close_button.add_theme_stylebox_override("hover", _panel_style(Color("#3a1733"), Color("#ff65df"), 11, 1))
 	close_button.pressed.connect(close)
 	header.add_child(close_button)
 
@@ -165,19 +199,25 @@ func _build_ui() -> void:
 
 	var body := HBoxContainer.new()
 	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	body.add_theme_constant_override("separation", 16)
+	body.add_theme_constant_override("separation", 14)
 	main_column.add_child(body)
+
+	var map_column := VBoxContainer.new()
+	map_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	map_column.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	map_column.add_theme_constant_override("separation", 9)
+	body.add_child(map_column)
 
 	var map_frame := PanelContainer.new()
 	map_frame.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	map_frame.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	map_frame.add_theme_stylebox_override("panel", _panel_style(Color("#03101a"), Color("#264a60"), 12, 1))
-	body.add_child(map_frame)
+	map_frame.add_theme_stylebox_override("panel", _panel_style(Color("#020d16"), Color("#315b70"), 14, 1))
+	map_column.add_child(map_frame)
 	var map_margin := MarginContainer.new()
-	map_margin.add_theme_constant_override("margin_left", 8)
-	map_margin.add_theme_constant_override("margin_top", 8)
-	map_margin.add_theme_constant_override("margin_right", 8)
-	map_margin.add_theme_constant_override("margin_bottom", 8)
+	map_margin.add_theme_constant_override("margin_left", 7)
+	map_margin.add_theme_constant_override("margin_top", 7)
+	map_margin.add_theme_constant_override("margin_right", 7)
+	map_margin.add_theme_constant_override("margin_bottom", 7)
 	map_frame.add_child(map_margin)
 	var map_stack := Control.new()
 	map_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -201,66 +241,139 @@ func _build_ui() -> void:
 	)
 	map_canvas.location_selected.connect(_refresh_details)
 
+	var legend_bar := PanelContainer.new()
+	legend_bar.add_theme_stylebox_override("panel", _panel_style(Color("#081a28e8"), Color("#24465a"), 10, 1))
+	map_column.add_child(legend_bar)
+	var legend_margin := MarginContainer.new()
+	legend_margin.add_theme_constant_override("margin_left", 10)
+	legend_margin.add_theme_constant_override("margin_top", 7)
+	legend_margin.add_theme_constant_override("margin_right", 10)
+	legend_margin.add_theme_constant_override("margin_bottom", 7)
+	legend_bar.add_child(legend_margin)
+	var legend_flow := HFlowContainer.new()
+	legend_flow.add_theme_constant_override("h_separation", 7)
+	legend_flow.add_theme_constant_override("v_separation", 5)
+	legend_margin.add_child(legend_flow)
+	_add_legend_chip(legend_flow, "town", Color("#f1c85d"))
+	_add_legend_chip(legend_flow, "city", Color("#f1c85d"))
+	_add_legend_chip(legend_flow, "route", Color("#65d8f4"))
+	_add_legend_chip(legend_flow, "wilderness", Color("#69d69b"))
+
 	var details := PanelContainer.new()
-	details.custom_minimum_size = Vector2(286, 0)
+	details.custom_minimum_size = Vector2(300, 0)
 	details.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	details.add_theme_stylebox_override("panel", _panel_style(Color("#081827e8"), Color("#294a61"), 12, 1))
+	details.add_theme_stylebox_override("panel", _panel_style(Color("#081a29f2"), Color("#31566c"), 14, 1))
 	body.add_child(details)
 	var detail_margin := MarginContainer.new()
-	detail_margin.add_theme_constant_override("margin_left", 18)
-	detail_margin.add_theme_constant_override("margin_top", 18)
-	detail_margin.add_theme_constant_override("margin_right", 18)
-	detail_margin.add_theme_constant_override("margin_bottom", 18)
+	detail_margin.add_theme_constant_override("margin_left", 17)
+	detail_margin.add_theme_constant_override("margin_top", 16)
+	detail_margin.add_theme_constant_override("margin_right", 17)
+	detail_margin.add_theme_constant_override("margin_bottom", 16)
 	details.add_child(detail_margin)
 	var detail_column := VBoxContainer.new()
-	detail_column.add_theme_constant_override("separation", 12)
+	detail_column.add_theme_constant_override("separation", 11)
 	detail_margin.add_child(detail_column)
-	var detail_overline := Label.new()
-	detail_overline.text = _t("ui.town_map.selected_location")
-	detail_overline.add_theme_font_size_override("font_size", 11)
-	detail_overline.add_theme_color_override("font_color", Color("#65d7f3"))
-	detail_column.add_child(detail_overline)
+
+	detail_overline_label = Label.new()
+	detail_overline_label.add_theme_font_size_override("font_size", 10)
+	detail_overline_label.add_theme_color_override("font_color", Color("#ff73e2"))
+	detail_column.add_child(detail_overline_label)
+
+	var detail_heading_row := HBoxContainer.new()
+	detail_heading_row.add_theme_constant_override("separation", 10)
+	detail_column.add_child(detail_heading_row)
+	var detail_heading := VBoxContainer.new()
+	detail_heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	detail_heading.add_theme_constant_override("separation", 7)
+	detail_heading_row.add_child(detail_heading)
 	detail_name_label = Label.new()
-	detail_name_label.add_theme_font_size_override("font_size", 23)
+	detail_name_label.add_theme_font_size_override("font_size", 24)
 	detail_name_label.add_theme_color_override("font_color", Color("#f0e6ca"))
 	detail_name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	detail_column.add_child(detail_name_label)
-	detail_portrait = TrainerHeadPortraitScript.new() as TrainerHeadPortrait
-	detail_portrait.custom_minimum_size = Vector2(54, 54)
-	detail_portrait.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-	detail_portrait.visible = false
-	detail_column.add_child(detail_portrait)
+	detail_heading.add_child(detail_name_label)
+	detail_kind_panel = PanelContainer.new()
+	detail_kind_panel.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	detail_heading.add_child(detail_kind_panel)
+	var kind_margin := MarginContainer.new()
+	kind_margin.add_theme_constant_override("margin_left", 8)
+	kind_margin.add_theme_constant_override("margin_top", 3)
+	kind_margin.add_theme_constant_override("margin_right", 8)
+	kind_margin.add_theme_constant_override("margin_bottom", 3)
+	detail_kind_panel.add_child(kind_margin)
 	detail_kind_label = Label.new()
-	detail_kind_label.add_theme_font_size_override("font_size", 12)
-	detail_kind_label.add_theme_color_override("font_color", Color("#f2cb6b"))
-	detail_column.add_child(detail_kind_label)
+	detail_kind_label.add_theme_font_size_override("font_size", 10)
+	kind_margin.add_child(detail_kind_label)
+	detail_portrait = TrainerHeadPortraitScript.new() as TrainerHeadPortrait
+	detail_portrait.custom_minimum_size = Vector2(58, 58)
+	detail_portrait.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	detail_portrait.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	detail_portrait.visible = false
+	detail_heading_row.add_child(detail_portrait)
+
 	var detail_divider := HSeparator.new()
+	detail_divider.add_theme_color_override("separator", Color("#355064"))
 	detail_column.add_child(detail_divider)
+
+	var description_card := PanelContainer.new()
+	description_card.add_theme_stylebox_override("panel", _panel_style(Color("#06131f"), Color("#203d50"), 10, 1))
+	detail_column.add_child(description_card)
+	var description_margin := MarginContainer.new()
+	description_margin.add_theme_constant_override("margin_left", 11)
+	description_margin.add_theme_constant_override("margin_top", 10)
+	description_margin.add_theme_constant_override("margin_right", 11)
+	description_margin.add_theme_constant_override("margin_bottom", 10)
+	description_card.add_child(description_margin)
 	detail_description_label = Label.new()
 	detail_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	detail_description_label.add_theme_font_size_override("font_size", 14)
-	detail_description_label.add_theme_color_override("font_color", Color("#bdc9d4"))
-	detail_column.add_child(detail_description_label)
-	var connections_title := Label.new()
-	connections_title.text = _t("ui.town_map.connections")
-	connections_title.add_theme_font_size_override("font_size", 11)
-	connections_title.add_theme_color_override("font_color", Color("#65d7f3"))
-	detail_column.add_child(connections_title)
-	detail_connections_label = Label.new()
-	detail_connections_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	detail_connections_label.add_theme_font_size_override("font_size", 14)
-	detail_connections_label.add_theme_color_override("font_color", Color("#e2e9ef"))
-	detail_column.add_child(detail_connections_label)
+	detail_description_label.add_theme_color_override("font_color", Color("#c0cdd7"))
+	description_margin.add_child(detail_description_label)
+
+	connections_title_label = Label.new()
+	connections_title_label.add_theme_font_size_override("font_size", 10)
+	connections_title_label.add_theme_color_override("font_color", Color("#65d7f3"))
+	detail_column.add_child(connections_title_label)
+	detail_connections_container = VBoxContainer.new()
+	detail_connections_container.add_theme_constant_override("separation", 7)
+	detail_column.add_child(detail_connections_container)
+
 	var spacer := Control.new()
 	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	detail_column.add_child(spacer)
-	var legend := Label.new()
-	legend.text = _t("ui.town_map.legend")
-	legend.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	legend.add_theme_font_size_override("font_size", 12)
-	legend.add_theme_color_override("font_color", Color("#879cad"))
-	detail_column.add_child(legend)
 	_position_shell.call_deferred()
+
+
+func _add_legend_chip(parent: Container, kind: String, color: Color) -> void:
+	var chip := PanelContainer.new()
+	chip.add_theme_stylebox_override(
+		"panel",
+		_panel_style(
+			Color(color.r * 0.13, color.g * 0.13, color.b * 0.13, 0.94),
+			Color(color.r, color.g, color.b, 0.48),
+			8,
+			1
+		)
+	)
+	parent.add_child(chip)
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 7)
+	margin.add_theme_constant_override("margin_top", 4)
+	margin.add_theme_constant_override("margin_right", 8)
+	margin.add_theme_constant_override("margin_bottom", 4)
+	chip.add_child(margin)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 5)
+	margin.add_child(row)
+	var dot := Label.new()
+	dot.text = "●"
+	dot.add_theme_font_size_override("font_size", 10)
+	dot.add_theme_color_override("font_color", color)
+	row.add_child(dot)
+	var label := Label.new()
+	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_color_override("font_color", Color("#d4e0e8"))
+	row.add_child(label)
+	legend_kind_labels[kind] = label
 
 
 func _position_shell() -> void:
@@ -283,6 +396,15 @@ func _refresh_header() -> void:
 		return
 	title_label.text = _t("ui.town_map.title")
 	subtitle_label.text = _t("ui.town_map.subtitle")
+	if detail_overline_label != null:
+		detail_overline_label.text = _t("ui.town_map.selected_location")
+	if connections_title_label != null:
+		connections_title_label.text = _t("ui.town_map.connections")
+	for kind_value: Variant in legend_kind_labels.keys():
+		var kind := str(kind_value)
+		var kind_label := legend_kind_labels.get(kind) as Label
+		if kind_label != null:
+			kind_label.text = _t("ui.town_map.kind.%s" % kind)
 	var current_name := _t("ui.town_map.current_unknown")
 	if current_location_id != "":
 		current_name = _location_name(current_location_id)
@@ -315,8 +437,20 @@ func _refresh_details(location_id: String) -> void:
 	detail_kind_label.text = _t(
 		"ui.town_map.kind.%s" % str(location.get("kind", "route"))
 	)
+	var kind_color := _kind_color(str(location.get("kind", "route")))
+	detail_kind_label.add_theme_color_override("font_color", kind_color)
+	if detail_kind_panel != null:
+		detail_kind_panel.add_theme_stylebox_override(
+			"panel",
+			_panel_style(
+				Color(kind_color.r * 0.13, kind_color.g * 0.13, kind_color.b * 0.13, 0.96),
+				Color(kind_color.r, kind_color.g, kind_color.b, 0.55),
+				7,
+				1
+			)
+		)
 	detail_description_label.text = _t(str(location.get("descriptionKey", "")))
-	var connected_names: Array[String] = []
+	var connected_location_ids: Array[String] = []
 	for path_value: Variant in region_data.get("paths", []):
 		var endpoints := _path_endpoints(path_value)
 		if endpoints.size() < 2:
@@ -324,10 +458,56 @@ func _refresh_details(location_id: String) -> void:
 		var from_id := endpoints[0]
 		var to_id := endpoints[1]
 		if from_id == location_id:
-			connected_names.append(_location_name(to_id))
+			connected_location_ids.append(to_id)
 		elif to_id == location_id:
-			connected_names.append(_location_name(from_id))
-	detail_connections_label.text = " • " + "\n • ".join(connected_names)
+			connected_location_ids.append(from_id)
+	_refresh_connection_buttons(connected_location_ids)
+
+
+func _refresh_connection_buttons(location_ids: Array[String]) -> void:
+	if detail_connections_container == null:
+		return
+	for child: Node in detail_connections_container.get_children():
+		detail_connections_container.remove_child(child)
+		child.queue_free()
+	if location_ids.is_empty():
+		var unavailable := Label.new()
+		unavailable.text = _t("common.unavailable")
+		unavailable.add_theme_font_size_override("font_size", 13)
+		unavailable.add_theme_color_override("font_color", Color("#788d9d"))
+		detail_connections_container.add_child(unavailable)
+		return
+	for location_id: String in location_ids:
+		var button := Button.new()
+		button.text = "→  %s" % _location_name(location_id)
+		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		button.custom_minimum_size = Vector2(0, 38)
+		button.focus_mode = Control.FOCUS_ALL
+		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		button.add_theme_font_size_override("font_size", 13)
+		button.add_theme_color_override("font_color", Color("#d5e3eb"))
+		button.add_theme_color_override("font_hover_color", Color.WHITE)
+		var normal_style := _panel_style(Color("#071522"), Color("#27495d"), 8, 1)
+		normal_style.content_margin_left = 11.0
+		var hover_style := _panel_style(Color("#102a3a"), Color("#5cecff"), 8, 1)
+		hover_style.content_margin_left = 11.0
+		var pressed_style := _panel_style(Color("#32162f"), Color("#ff5bdc"), 8, 1)
+		pressed_style.content_margin_left = 11.0
+		button.add_theme_stylebox_override("normal", normal_style)
+		button.add_theme_stylebox_override("hover", hover_style)
+		button.add_theme_stylebox_override("pressed", pressed_style)
+		button.pressed.connect(_refresh_details.bind(location_id))
+		detail_connections_container.add_child(button)
+
+
+func _kind_color(kind: String) -> Color:
+	match kind:
+		"town", "city":
+			return Color("#f1c85d")
+		"wilderness":
+			return Color("#69d69b")
+		_:
+			return Color("#65d8f4")
 
 
 func _location_name(location_id: String) -> String:

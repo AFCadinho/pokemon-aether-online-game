@@ -2005,6 +2005,7 @@
   "battle.hover.evs": "EVs: {values}",
   "battle.hud.level": "Nv. {level}",
   "battle.hud.level_unknown": "Nv. --",
+  "battle.hud.exp": "EXP:",
   "battle.hud.owned": "Registrado no seu ID de Treinador",
   "battle.hud.disguise_active": "Disfarce: Ativo",
   "battle.hud.disguise_inactive": "Disfarce: Inativo",

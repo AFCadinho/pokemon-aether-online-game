@@ -91,6 +91,12 @@ func _run() -> void:
 	_check(popup.current_location_id == "kanto_pallet_town", "Interior maps resolve to their parent Town Map location")
 	_check(popup.selected_location_id == "kanto_pallet_town", "Current location is selected when the map opens")
 	_check(popup.map_canvas.marker_buttons.size() == popup_locations.size(), "Every Town Map location has an interactive marker")
+	_check(popup.legend_kind_labels.size() == 4, "Town Map presents a structured location legend")
+	_check(
+		popup.detail_connections_container.get_child_count() > 0
+		and popup.detail_connections_container.get_child(0) is Button,
+		"Connected locations are directly navigable from the detail card"
+	)
 	_check(not popup.map_canvas.show_connection_overlay, "Baked route lines are not drawn a second time")
 	_check(not popup.map_canvas.show_marker_overlay, "Baked map circles use invisible interactive hotspots")
 	popup.close()
