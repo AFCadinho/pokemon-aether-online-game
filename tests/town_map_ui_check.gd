@@ -33,6 +33,7 @@ func _run() -> void:
 	_check((layout_points.get("kanto_viridian_city", {}) as Dictionary).get("y") == 151, "Viridian City uses its supplied-map circle")
 	_check((layout_points.get("kanto_pewter_city", {}) as Dictionary).get("y") == 70, "Pewter City uses its supplied-map circle")
 	_check(layout_points.size() == 21, "Every baked map circle has coordinates, alongside Route 1")
+	_check((layout_data.get("routePoints", []) as Array).size() == 19, "Every baked yellow route section has a placeholder coordinate")
 	_check((layout_points.get("kanto_map_point_02", {}) as Dictionary).get("name") == "Route 22", "Route 22 is placed west of Viridian City")
 	var areas := world_access.get("areas", {}) as Dictionary
 	var location_groups: Dictionary = {}
@@ -70,11 +71,16 @@ func _run() -> void:
 	_check((popup.region_data.get("paths", []) as Array).size() == 5, "Editable connections are normalized for rendering")
 	var popup_locations := popup.region_data.get("locations", {}) as Dictionary
 	var planned_location_count := 0
+	var planned_route_count := 0
 	for location_value: Variant in popup_locations.values():
 		if location_value is Dictionary and bool((location_value as Dictionary).get("planned", false)):
 			planned_location_count += 1
-	_check(popup_locations.size() == 21, "Town Map registers every configured point")
-	_check(planned_location_count == 15, "Unnamed baked circles are available as planned map points")
+	for location_id_value: Variant in popup_locations.keys():
+		if str(location_id_value).begins_with("kanto_route_segment_"):
+			planned_route_count += 1
+	_check(popup_locations.size() == 40, "Town Map registers every configured point")
+	_check(planned_location_count == 34, "Unnamed baked circles and route sections are planned points")
+	_check(planned_route_count == 19, "Route placeholders are available alongside map points")
 	popup.open_for_map("kanto_oaks_lab")
 	await process_frame
 	_check(popup.visible, "Town Map opens as a modal")

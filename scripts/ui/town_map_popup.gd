@@ -358,6 +358,20 @@ func _apply_layout() -> void:
 			"description": str(point_data.get("description", "")),
 			"planned": bool(point_data.get("planned", true)),
 		}
+	for route_value: Variant in layout_data.get("routePoints", []):
+		if not route_value is Dictionary:
+			continue
+		var route_point := route_value as Dictionary
+		var route_id := str(route_point.get("id", "")).strip_edges()
+		if route_id == "" or locations.has(route_id):
+			continue
+		locations[route_id] = {
+			"kind": "route",
+			"name": str(route_point.get("name", route_id)),
+			"description": str(route_point.get("description", "")),
+			"planned": bool(route_point.get("planned", true)),
+		}
+		points[route_id] = route_point
 	for location_id_value: Variant in locations.keys():
 		var location_id := str(location_id_value)
 		var location := locations.get(location_id, {}) as Dictionary
