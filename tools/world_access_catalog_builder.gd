@@ -229,7 +229,7 @@ func _load_scene_record(scene_path: String, staff_teleport_overrides: Dictionary
 							% [scene_path, point_id],
 					}
 				spawn_points[point_id] = {
-					"label": str(point_override.get("label", _humanize_id(point_id))),
+					"label": str(point_override.get("label", _spawn_point_label(point_id))),
 					"spawnMarker": spawn_name,
 					"tile": {
 						"x": roundi((spawn_position.x - (TILE_SIZE / 2.0)) / TILE_SIZE),
@@ -372,3 +372,21 @@ func _humanize_id(value: String) -> String:
 	for index in range(words.size()):
 		words[index] = words[index].capitalize()
 	return " ".join(words)
+
+
+func _spawn_point_label(point_id: String) -> String:
+	var semantic_id := point_id.strip_edges().to_lower()
+	for prefix: String in ["from_", "to_"]:
+		if semantic_id.begins_with(prefix):
+			semantic_id = semantic_id.trim_prefix(prefix)
+			break
+	var label := _humanize_id(semantic_id)
+	var replacements := {
+		"Pokecenter": "Pokémon Center",
+		"Players House": "Player's House",
+		"Rivals House": "Rival's House",
+		"Npc": "NPC",
+	}
+	for source: String in replacements:
+		label = label.replace(source, str(replacements[source]))
+	return label
