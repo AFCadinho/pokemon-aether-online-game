@@ -1,6 +1,7 @@
 extends SceneTree
 
 const REGION_MAP_PATH := "res://data/region_maps/kanto.json"
+const REGION_LAYOUT_PATH := "res://data/region_maps/kanto_layout.json"
 const WORLD_ACCESS_PATH := "res://generated/world_access_catalog.json"
 const POPUP_SCRIPT := preload("res://scripts/ui/town_map_popup.gd")
 
@@ -13,14 +14,21 @@ func _init() -> void:
 
 func _run() -> void:
 	var region_data := _load_json(REGION_MAP_PATH)
+	var layout_data := _load_json(REGION_LAYOUT_PATH)
 	var world_access := _load_json(WORLD_ACCESS_PATH)
 	_check(not region_data.is_empty(), "Kanto Town Map presentation catalog loads")
+	_check(not layout_data.is_empty(), "Editable Kanto Town Map point layout loads")
 	_check(not world_access.is_empty(), "Town Map can resolve the world access catalog")
-	if region_data.is_empty() or world_access.is_empty():
+	if region_data.is_empty() or layout_data.is_empty() or world_access.is_empty():
 		quit(1)
 		return
 
 	var locations := region_data.get("locations", {}) as Dictionary
+	var coordinate_space := layout_data.get("coordinateSpace", {}) as Dictionary
+	var layout_width := float(coordinate_space.get("width", 0.0))
+	var layout_height := float(coordinate_space.get("height", 0.0))
+	var layout_points := layout_data.get("points", {}) as Dictionary
+	_check(layout_width > 0.0 and layout_height > 0.0, "Town Map layout has a human-friendly coordinate space")
 	var areas := world_access.get("areas", {}) as Dictionary
 	var location_groups: Dictionary = {}
 	for area_value: Variant in areas.values():
@@ -29,21 +37,21 @@ func _run() -> void:
 	_check(locations.size() == 6, "Town Map contains the currently playable Kanto location groups")
 	for location_id_value: Variant in locations.keys():
 		var location_id := str(location_id_value)
-		var location := locations.get(location_id, {}) as Dictionary
 		_check(location_groups.has(location_id), "%s is backed by a playable world location" % location_id)
-		var position := location.get("position", {}) as Dictionary
+		var point := layout_points.get(location_id, {}) as Dictionary
 		_check(
-			float(position.get("x", -1.0)) >= 0.0
-			and float(position.get("x", 2.0)) <= 1.0
-			and float(position.get("y", -1.0)) >= 0.0
-			and float(position.get("y", 2.0)) <= 1.0,
-			"%s has normalized map coordinates" % location_id
+			float(point.get("x", -1.0)) >= 0.0
+			and float(point.get("x", layout_width + 1.0)) <= layout_width
+			and float(point.get("y", -1.0)) >= 0.0
+			and float(point.get("y", layout_height + 1.0)) <= layout_height,
+			"%s has editable map coordinates" % location_id
 		)
-	for path_value: Variant in region_data.get("paths", []):
-		var path := path_value as Array
-		_check(path.size() == 2, "Town Map path has two endpoints")
-		if path.size() == 2:
-			_check(locations.has(str(path[0])) and locations.has(str(path[1])), "Town Map path endpoints exist")
+	for connection_value: Variant in layout_data.get("connections", []):
+		var connection := connection_value as Dictionary
+		var from_id := str(connection.get("from", ""))
+		var to_id := str(connection.get("to", ""))
+		_check(locations.has(from_id) and locations.has(to_id), "Town Map connection endpoints exist")
+		_check(connection.get("waypoints", []) is Array, "Town Map connection accepts editable waypoints")
 
 	var background_path := str(region_data.get("backgroundPath", ""))
 	_check(ResourceLoader.exists(background_path), "Kanto Town Map background asset exists")
@@ -51,6 +59,7 @@ func _run() -> void:
 	var popup := POPUP_SCRIPT.new() as TownMapPopup
 	root.add_child(popup)
 	await process_frame
+	_check((popup.region_data.get("paths", []) as Array).size() == 5, "Editable connections are normalized for rendering")
 	popup.open_for_map("kanto_oaks_lab")
 	await process_frame
 	_check(popup.visible, "Town Map opens as a modal")
