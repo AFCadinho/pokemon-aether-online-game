@@ -160,8 +160,8 @@ func _run() -> void:
 	if revisited_father != null and watching_tv_marker != null:
 		_expect(
 			revisited_father.global_position == watching_tv_marker.global_position
-			and revisited_father.position == Vector2(336, 848),
-			"completed father intro places Dadinho one tile closer to the television"
+			and revisited_father.position == Vector2(336, 880),
+			"completed father intro keeps Dadinho's collision on the blue-cushion tile"
 		)
 		_expect(
 			revisited_father.get("facing_direction") == Vector2.UP,
@@ -171,8 +171,11 @@ func _run() -> void:
 			"Look/AnimatedSprite2D"
 		) as AnimatedSprite2D
 		_expect(
-			revisited_sprite != null and revisited_sprite.animation == &"idle_up",
-			"Dadinho renders his upward idle frame while watching television"
+			revisited_sprite != null
+			and revisited_sprite.animation == &"idle_up"
+			and revisited_sprite.position == Vector2(0, -48)
+			and revisited_sprite.global_position == Vector2(336, 832),
+			"Dadinho renders one tile above his collision while watching television"
 		)
 		revisited_father.call("_apply_npc_metadata", {
 			"dialogueId": "kanto_players_house_father_after_intro",
