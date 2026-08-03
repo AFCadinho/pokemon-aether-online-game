@@ -22,6 +22,7 @@ var detail_description_label: Label
 var detail_connections_label: Label
 var selected_location_id := ""
 var current_location_id := ""
+var owns_overworld_input_lock := false
 
 
 func _ready() -> void:
@@ -39,6 +40,10 @@ func _ready() -> void:
 func open_for_map(map_id: String) -> void:
 	if region_data.is_empty():
 		return
+	var game_state := get_node_or_null("/root/GameState")
+	if game_state != null and not bool(game_state.call("is_overworld_input_locked")):
+		game_state.call("lock_overworld_input")
+		owns_overworld_input_lock = true
 	current_location_id = _resolve_location_group(map_id)
 	if not region_data.get("locations", {}).has(current_location_id):
 		current_location_id = ""
@@ -62,7 +67,21 @@ func close() -> void:
 	if not visible:
 		return
 	visible = false
+	_release_overworld_input_lock()
 	closed.emit()
+
+
+func _exit_tree() -> void:
+	_release_overworld_input_lock()
+
+
+func _release_overworld_input_lock() -> void:
+	if not owns_overworld_input_lock:
+		return
+	owns_overworld_input_lock = false
+	var game_state := get_node_or_null("/root/GameState")
+	if game_state != null:
+		game_state.call("unlock_overworld_input")
 
 
 func _unhandled_key_input(event: InputEvent) -> void:

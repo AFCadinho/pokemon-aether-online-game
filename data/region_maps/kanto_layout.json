@@ -15,33 +15,33 @@
   "points": {
     "kanto_pallet_town": {
       "x": 80,
-      "y": 239,
-      "needsReview": true
+      "y": 210,
+      "needsReview": false
     },
     "kanto_route_1": {
       "x": 80,
-      "y": 224,
-      "needsReview": true
+      "y": 184,
+      "needsReview": false
     },
     "kanto_viridian_city": {
       "x": 80,
-      "y": 209,
-      "needsReview": true
+      "y": 158,
+      "needsReview": false
     },
     "kanto_route_2": {
       "x": 80,
-      "y": 180,
-      "needsReview": true
+      "y": 88,
+      "needsReview": false
     },
     "kanto_viridian_forest": {
       "x": 80,
-      "y": 165,
-      "needsReview": true
+      "y": 110,
+      "needsReview": false
     },
     "kanto_pewter_city": {
       "x": 80,
-      "y": 150,
-      "needsReview": true
+      "y": 51,
+      "needsReview": false
     }
   },
   "connections": [
