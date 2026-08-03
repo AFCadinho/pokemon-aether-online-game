@@ -101,6 +101,11 @@ movement_tiles = 0
 movement_speed_pixels = 0.0
 preload_quest_markers = null
 
+[node name="BeforeJourneyStoryHook" type="Node" parent="Entities/NPCs/Father"]
+script = ExtResource("10_story_hook")
+interaction_id = "players_house_father_before_journey"
+entity_id = "kanto_players_house_father"
+
 [node name="Players" type="Node2D" parent="Entities" unique_id=1334826896]
 
 [node name="StoryTriggers" type="Node2D" parent="." unique_id=823735186]

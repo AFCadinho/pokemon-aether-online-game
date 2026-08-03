@@ -487,6 +487,16 @@ func _refresh_quest_marker() -> void:
 
 
 func _quest_marker_binding_matches(binding: Dictionary, quest: Dictionary) -> bool:
+	var visibility_quest_id := str(binding.get("visibilityQuestId", "")).strip_edges()
+	if (
+		not visibility_quest_id.is_empty()
+		and not StoryService.is_requirement_met(
+			visibility_quest_id,
+			str(binding.get("visibilityQuestStepId", "")).strip_edges(),
+			str(binding.get("visibilityQuestStatus", "completed")).strip_edges()
+		)
+	):
+		return false
 	var statuses_value: Variant = binding.get("statuses", [])
 	var statuses: Array[String] = []
 	if statuses_value is Array:

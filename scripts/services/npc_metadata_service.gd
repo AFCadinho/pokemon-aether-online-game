@@ -127,6 +127,9 @@ func _normalize_npc_metadata(npc_id: String, metadata: Dictionary) -> Dictionary
 	npc_metadata["requiredQuestId"] = str(npc_metadata.get("requiredQuestId", npc_metadata.get("required_quest_id", "")))
 	npc_metadata["requiredQuestStepId"] = str(npc_metadata.get("requiredQuestStepId", npc_metadata.get("required_quest_step_id", "")))
 	npc_metadata["requiredQuestStatus"] = str(npc_metadata.get("requiredQuestStatus", npc_metadata.get("required_quest_status", "completed")))
+	npc_metadata["offeredQuestRequiredQuestId"] = str(npc_metadata.get("offeredQuestRequiredQuestId", ""))
+	npc_metadata["offeredQuestRequiredQuestStepId"] = str(npc_metadata.get("offeredQuestRequiredQuestStepId", ""))
+	npc_metadata["offeredQuestRequiredQuestStatus"] = str(npc_metadata.get("offeredQuestRequiredQuestStatus", "completed"))
 	return npc_metadata
 
 

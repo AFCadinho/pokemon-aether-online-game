@@ -88,9 +88,11 @@ func _check_dialogue_npc_uses_dialogue_id_lookup() -> void:
 	)
 	_check_true(
 		text.contains('metadata.get("offeredQuestId", "")')
+		and text.contains('metadata.get("offeredQuestRequiredQuestId", "")')
+		and text.contains("offered_quest_required_quest_id")
 		and text.contains("start_quest_offer(")
 		and text.contains("quest_offer_resolved"),
-		"DialogueNPC opens a catalog-configured side-quest choice dialogue"
+		"DialogueNPC opens a story-gated catalog side-quest choice dialogue"
 	)
 
 
