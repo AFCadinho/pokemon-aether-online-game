@@ -448,7 +448,8 @@ func _refresh_details(location_id: String) -> void:
 				1
 			)
 		)
-	detail_description_label.text = _t(str(location.get("descriptionKey", "")))
+	var description_key := str(location.get("descriptionKey", "")).strip_edges()
+	detail_description_label.text = _t(description_key) if description_key != "" else str(location.get("description", ""))
 	var connected_location_ids: Array[String] = []
 	for path_value: Variant in region_data.get("paths", []):
 		var endpoints := _path_endpoints(path_value)
