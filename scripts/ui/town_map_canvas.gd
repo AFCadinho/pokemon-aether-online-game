@@ -10,6 +10,7 @@ const PATH_SHADOW := Color("#06111dcc")
 const PATH_COLOR := Color("#63d7f5e8")
 const PATH_HIGHLIGHT := Color("#f3cc69")
 const CURRENT_COLOR := Color("#5cecff")
+const HOVER_COLOR := Color("#f4fbff")
 const SELECTED_COLOR := Color("#ff5bdc")
 const SELECTED_SHADOW := Color("#07111fd9")
 const TrainerHeadPortraitScript := preload("res://scripts/ui/trainer_head_portrait.gd")
@@ -18,6 +19,7 @@ var locations: Dictionary = {}
 var paths: Array = []
 var current_location_id := ""
 var selected_location_id := ""
+var hovered_location_id := ""
 var marker_buttons: Dictionary = {}
 var background_texture: Texture2D
 var current_location_portrait: TrainerHeadPortrait
@@ -71,7 +73,11 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	if (current_location_id != "" or selected_location_id != "") and is_visible_in_tree():
+	if (
+		current_location_id != ""
+		or selected_location_id != ""
+		or hovered_location_id != ""
+	) and is_visible_in_tree():
 		queue_redraw()
 
 
@@ -101,11 +107,26 @@ func _draw() -> void:
 			current_location_portrait != null and current_location_portrait.visible
 		)
 
+	if (
+		hovered_location_id != ""
+		and hovered_location_id != current_location_id
+		and hovered_location_id != selected_location_id
+		and locations.has(hovered_location_id)
+	):
+		_draw_hover_indicator(_location_point(hovered_location_id))
+
 	if selected_location_id != "" and locations.has(selected_location_id):
 		_draw_selected_indicator(
 			_location_point(selected_location_id),
 			selected_location_id == current_location_id
 		)
+
+
+func _draw_hover_indicator(center: Vector2) -> void:
+	var pulse := (sin(Time.get_ticks_msec() / 145.0) + 1.0) * 0.5
+	draw_circle(center, 15.0 + pulse * 1.5, Color(0.55, 0.92, 1.0, 0.15))
+	draw_arc(center, 15.0 + pulse, 0.0, TAU, 32, SELECTED_SHADOW, 4.0, true)
+	draw_arc(center, 15.0 + pulse, 0.0, TAU, 32, HOVER_COLOR, 2.0, true)
 
 
 func _draw_current_location_indicator(center: Vector2, surrounds_portrait: bool) -> void:
@@ -196,6 +217,8 @@ func _build_markers() -> void:
 		marker.add_theme_stylebox_override("normal", _marker_style(location, false, false))
 		marker.add_theme_stylebox_override("hover", _marker_style(location, true, false))
 		marker.add_theme_stylebox_override("pressed", _marker_style(location, true, true))
+		marker.mouse_entered.connect(_on_marker_mouse_entered.bind(location_id))
+		marker.mouse_exited.connect(_on_marker_mouse_exited.bind(location_id))
 		marker.pressed.connect(_on_marker_pressed.bind(location_id))
 		add_child(marker)
 		marker_buttons[location_id] = marker
@@ -286,9 +309,11 @@ func _marker_style(location: Dictionary, highlighted: bool, current: bool) -> St
 	if not show_marker_overlay:
 		return StyleBoxEmpty.new()
 	var kind := str(location.get("kind", "route"))
-	var color := Color("#65d8f4")
-	if kind in ["town", "city"]:
+	var color := Color("#f5d85c")
+	if kind in ["town", "city", "settlement"]:
 		color = Color("#f1c85d")
+	elif kind == "special":
+		color = Color("#8ceaff")
 	elif kind == "wilderness":
 		color = Color("#69d69b")
 	var style := StyleBoxFlat.new()
@@ -304,6 +329,18 @@ func _marker_style(location: Dictionary, highlighted: bool, current: bool) -> St
 func _on_marker_pressed(location_id: String) -> void:
 	select_location(location_id)
 	location_selected.emit(location_id)
+
+
+func _on_marker_mouse_entered(location_id: String) -> void:
+	hovered_location_id = location_id
+	queue_redraw()
+
+
+func _on_marker_mouse_exited(location_id: String) -> void:
+	if hovered_location_id != location_id:
+		return
+	hovered_location_id = ""
+	queue_redraw()
 
 
 func _t(key: String) -> String:
