@@ -203,6 +203,12 @@ func _turn_in_quest_item(player: Node2D) -> void:
 			"You and your new partner handled your first errand well. Your journey has truly begun.",
 		]
 	))
+	if bool(result.get("turnedIn", false)):
+		get_tree().call_group(
+			"ui_overlay",
+			"add_system_message",
+			LocalizationManager.text("ui.key_item.received_pokedex")
+		)
 	var gary := get_parent().get_node_or_null("Gary")
 	if gary != null and gary.has_method("play_parcel_return_departure"):
 		await gary.call("play_parcel_return_departure", player)

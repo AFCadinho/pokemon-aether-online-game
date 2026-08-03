@@ -1450,7 +1450,7 @@ func _on_locale_changed(_locale: String) -> void:
 	_refresh_bag_localized_ui()
 	_refresh_market_localized_ui()
 	_refresh_pokedex_localized_ui()
-	_refresh_pokedex_unlock_state()
+	_refresh_key_item_unlock_state()
 	_refresh_item_dex_localized_ui()
 	_refresh_wild_pokemon_localized_ui()
 	_refresh_mail_localized_ui()
@@ -8140,25 +8140,50 @@ func _setup_item_dex_button() -> void:
 func _setup_pokedex_button() -> void:
 	if pokedex_button != null:
 		pokedex_button.focus_mode = Control.FOCUS_NONE
-	var story_service := get_node_or_null("/root/StoryService")
-	if story_service != null and not story_service.story_changed.is_connected(_refresh_pokedex_unlock_state):
-		story_service.story_changed.connect(_refresh_pokedex_unlock_state)
-	_refresh_pokedex_unlock_state()
+	if map_button != null:
+		map_button.focus_mode = Control.FOCUS_NONE
+	var inventory_service := get_node_or_null("/root/InventoryService")
+	if (
+		inventory_service != null
+		and not inventory_service.inventory_changed.is_connected(_refresh_key_item_unlock_state)
+	):
+		inventory_service.inventory_changed.connect(_refresh_key_item_unlock_state)
+	_refresh_key_item_unlock_state()
+	_refresh_key_item_inventory.call_deferred()
 
 func _is_pokedex_unlocked() -> bool:
-	var story_service := get_node_or_null("/root/StoryService")
-	if story_service == null:
+	var inventory_service := get_node_or_null("/root/InventoryService")
+	if inventory_service == null or not inventory_service.has_method("has_item"):
 		return false
-	return str(story_service.get_quest("oaks_parcel").get("status", "")) == "completed"
+	return bool(inventory_service.call("has_item", "pokedex"))
 
-func _refresh_pokedex_unlock_state(_revision: int = 0) -> void:
-	if pokedex_button == null:
+func _is_town_map_unlocked() -> bool:
+	var inventory_service := get_node_or_null("/root/InventoryService")
+	if inventory_service == null or not inventory_service.has_method("has_item"):
+		return false
+	return bool(inventory_service.call("has_item", "town-map"))
+
+func _refresh_key_item_unlock_state(_items: Array = []) -> void:
+	if pokedex_button != null:
+		var pokedex_unlocked := _is_pokedex_unlocked()
+		pokedex_button.disabled = not pokedex_unlocked
+		pokedex_button.modulate = Color.WHITE if pokedex_unlocked else Color(0.45, 0.5, 0.55, 0.72)
+		pokedex_button.tooltip_text = LocalizationManager.text(
+			"ui.navigation.pokedex" if pokedex_unlocked else "ui.navigation.pokedex_locked"
+		)
+	if map_button != null:
+		var town_map_unlocked := _is_town_map_unlocked()
+		map_button.disabled = not town_map_unlocked
+		map_button.modulate = Color.WHITE if town_map_unlocked else Color(0.45, 0.5, 0.55, 0.72)
+		map_button.tooltip_text = LocalizationManager.text(
+			"ui.navigation.town_map" if town_map_unlocked else "ui.navigation.town_map_locked"
+		)
+
+func _refresh_key_item_inventory() -> void:
+	var inventory_service := get_node_or_null("/root/InventoryService")
+	if inventory_service == null or not inventory_service.has_method("load_inventory"):
 		return
-	var unlocked := _is_pokedex_unlocked()
-	pokedex_button.modulate = Color.WHITE if unlocked else Color(0.45, 0.5, 0.55, 0.72)
-	pokedex_button.tooltip_text = LocalizationManager.text(
-		"ui.navigation.pokedex" if unlocked else "ui.navigation.pokedex_locked"
-	)
+	await inventory_service.call("load_inventory")
 
 func _setup_item_dex_popup() -> void:
 	item_dex_popup = PanelContainer.new()
@@ -17647,6 +17672,8 @@ func _load_item_icon(item_id: String, machine_kind: String = "", machine_move_ty
 	var candidates: Array[String] = [
 		BAG_ICON_ROOT + "field_move_charms/" + normalized + ".png",
 	]
+	if normalized == "POKEDEX":
+		candidates.append("res://assets/ui/pokedex.svg")
 	var machine_icon_path := _machine_item_icon_path(item_id, machine_kind, machine_move_type)
 	if machine_icon_path != "":
 		candidates.append(machine_icon_path)
@@ -35242,6 +35269,9 @@ func _set_pvp_queue_status_key(key: String, values: Dictionary = {}) -> void:
 
 
 func _on_map_button_pressed() -> void:
+	if not _is_town_map_unlocked():
+		add_system_message(LocalizationManager.text("ui.town_map.locked"))
+		return
 	_add_chat_message("Town Map is not implemented yet.")
 
 func _on_running_shoes_toggled(enabled: bool) -> void:

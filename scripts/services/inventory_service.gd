@@ -2,6 +2,8 @@ extends Node
 
 class_name InventoryServiceNode
 
+signal inventory_changed(items: Array)
+
 const INVENTORY_ENDPOINT := "/game/inventory"
 const FISHING_PROGRESSION_ENDPOINT := "/game/fishing/progression"
 const FISHING_SELECTION_ENDPOINT := "/game/fishing/selection"
@@ -20,9 +22,14 @@ const ITEM_SEARCH_ENDPOINT := "/game/items/search?q=%s"
 const DEV_ITEM_SEARCH_ENDPOINT := "/game/dev/items/search?q=%s"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
+var cached_inventory_items: Array = []
+var cached_inventory_user_id := 0
+var inventory_loaded := false
+
 
 func load_inventory() -> Dictionary:
 	if not AuthService.is_authenticated():
+		_clear_inventory_cache()
 		return {
 			"success": false,
 			"error": "Not authenticated.",
@@ -40,10 +47,41 @@ func load_inventory() -> Dictionary:
 
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
 	var items := _array_from_value(body.get("items", []))
+	cached_inventory_items = items.duplicate(true)
+	cached_inventory_user_id = int(AuthService.current_user.get("id", 0))
+	inventory_loaded = true
+	inventory_changed.emit(cached_inventory_items.duplicate(true))
 	return {
 		"success": true,
 		"items": items,
 	}
+
+
+func has_item(item_id: String) -> bool:
+	var normalized_item_id := item_id.strip_edges().to_lower()
+	if (
+		normalized_item_id.is_empty()
+		or cached_inventory_user_id <= 0
+		or cached_inventory_user_id != int(AuthService.current_user.get("id", 0))
+	):
+		return false
+	for value: Variant in cached_inventory_items:
+		if not value is Dictionary:
+			continue
+		var item := value as Dictionary
+		if (
+			str(item.get("itemId", item.get("item_id", ""))).strip_edges().to_lower() == normalized_item_id
+			and int(item.get("quantity", 0)) > 0
+		):
+			return true
+	return false
+
+
+func _clear_inventory_cache() -> void:
+	cached_inventory_items.clear()
+	cached_inventory_user_id = 0
+	inventory_loaded = false
+	inventory_changed.emit([])
 
 
 func load_fishing_progression(area_id := "") -> Dictionary:
