@@ -94,6 +94,12 @@ func _run() -> void:
 	_check(popup_locations.size() == 46, "Town Map registers every configured point")
 	_check(planned_location_count == 40, "Future settlements, special locations, and routes are planned points")
 	_check(planned_route_count == 23, "Named future routes are available alongside map points")
+	var towns_without_exits := 0
+	for town_value: Variant in popup_locations.values():
+		if town_value is Dictionary and str((town_value as Dictionary).get("kind", "")) in ["town", "city", "settlement"]:
+			if ((town_value as Dictionary).get("exits", []) as Array).is_empty():
+				towns_without_exits += 1
+	_check(towns_without_exits == 0, "Every town and city has data-driven exits")
 	var planned_without_description := 0
 	for planned_location_value: Variant in popup_locations.values():
 		if planned_location_value is Dictionary and bool((planned_location_value as Dictionary).get("planned", false)):
@@ -109,6 +115,8 @@ func _run() -> void:
 	)
 	_check(popup.current_location_id == "kanto_pallet_town", "Interior maps resolve to their parent Town Map location")
 	_check(popup.selected_location_id == "kanto_pallet_town", "Current location is selected when the map opens")
+	_check(popup.detail_exits_container.get_child_count() == 3, "Town details show data-driven exits and points of interest")
+	_check(popup.detail_exits_container.get_child(2) is Button, "Route exits are directly navigable from town details")
 	_check(popup.map_canvas.marker_buttons.size() == popup_locations.size(), "Every Town Map location has an interactive marker")
 	var hover_marker := popup.map_canvas.marker_buttons.get("kanto_pewter_city") as Button
 	hover_marker.mouse_entered.emit()

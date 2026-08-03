@@ -659,6 +659,7 @@
   "ui.town_map.current_location": "YOU ARE HERE · {location}",
   "ui.town_map.current_unknown": "Unknown location",
   "ui.town_map.selected_location": "SELECTED LOCATION",
+  "ui.town_map.exits": "EXITS & POINTS OF INTEREST",
   "ui.town_map.connections": "CONNECTED TO",
   "ui.town_map.legend": "Gold: towns and cities  ·  Yellow paths: routes  ·  Light blue: special locations",
   "ui.town_map.kind.town": "TOWN",
