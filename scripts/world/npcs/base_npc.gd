@@ -173,12 +173,6 @@ func get_feet_position() -> Vector2:
 	return feet_marker.global_position
 
 
-func set_story_sprite_offset(value: Vector2) -> void:
-	sprite_offset = value
-	if sprite != null:
-		sprite.position = value
-
-
 func is_story_requirement_met() -> bool:
 	return StoryService.is_requirement_met(
 		required_quest_id,
