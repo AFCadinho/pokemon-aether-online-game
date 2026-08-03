@@ -99,7 +99,7 @@ mugshot = ExtResource("6_rs6s5")
 movement_behavior = ""
 movement_tiles = 0
 movement_speed_pixels = 0.0
-preload_quest_markers = null
+manual_interaction_reach_tiles = null
 
 [node name="BeforeJourneyStoryHook" type="Node" parent="Entities/NPCs/Father"]
 script = ExtResource("10_story_hook")
