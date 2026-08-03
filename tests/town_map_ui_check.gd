@@ -122,6 +122,7 @@ func _run() -> void:
 	)
 	_check(popup.current_location_id == "kanto_pallet_town", "Interior maps resolve to their parent Town Map location")
 	_check(popup.selected_location_id == "kanto_pallet_town", "Current location is selected when the map opens")
+	_check(popup.detail_name_label.size.x > 0.0, "Current location details use the full sidebar width without a duplicate portrait")
 	_check(popup.detail_interiors_container.get_child_count() == 3, "Pallet Town interiors come from the world access catalog")
 	_check(popup.detail_interiors_container.get_child(0) is Label, "Interiors are displayed separately from route navigation")
 	popup._refresh_details("kanto_pewter_city")
