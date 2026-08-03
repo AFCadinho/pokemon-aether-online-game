@@ -87,9 +87,19 @@ func _configure_head_only(node: Node) -> void:
 		var sprite := node as AnimatedSprite2D
 		match sprite.name:
 			"BodySprite":
-				# Gen 4 body frames are 64x64; keep only the head/neck rows.
-				sprite.region_enabled = true
-				sprite.region_rect = Rect2(-32.0, -32.0, 64.0, 34.0)
+				# AnimatedSprite2D has no region_enabled property. Replace its
+				# current 64x64 frame with a Sprite2D showing only head/neck rows.
+				var head_texture := sprite.sprite_frames.get_frame_texture(sprite.animation, sprite.frame)
+				if head_texture != null:
+					var head_sprite := Sprite2D.new()
+					head_sprite.name = "HeadBaseSprite"
+					head_sprite.texture = head_texture
+					head_sprite.region_enabled = true
+					head_sprite.region_rect = Rect2(0.0, 0.0, 64.0, 34.0)
+					head_sprite.position = sprite.position + Vector2(0.0, -15.0)
+					head_sprite.z_index = sprite.z_index
+					sprite.get_parent().add_child(head_sprite)
+					sprite.visible = false
 			"TopSprite", "BottomSprite", "ShoesSprite":
 				sprite.visible = false
 	for child in node.get_children():
