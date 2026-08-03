@@ -56,14 +56,14 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_market"]
-size = Vector2(256, 32)
+size = Vector2(160, 32)
 
 [node name="MarketAttendantNPC" type="Node2D" unique_id=854794050]
 script = ExtResource("1_4gxk4")
 display_name = "Clerk"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = SubResource("SpriteFrames_d06u6")
-manual_interaction_reach_tiles = 4
+manual_interaction_reach_tiles = 2
 
 [node name="Look" type="Node2D" parent="." unique_id=556909464]
 
@@ -72,7 +72,7 @@ position = Vector2(0, -16)
 sprite_frames = ExtResource("2_4yape")
 
 [node name="InteractionArea" type="Area2D" parent="." unique_id=1201885725]
-position = Vector2(-64, 0)
+position = Vector2(-32, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=787493254]
 shape = SubResource("RectangleShape2D_market")

@@ -41,9 +41,9 @@ func _check_market_attendant_scene() -> void:
 	_check_true(text.contains("InteractionArea"), "MarketAttendant scene has interaction area")
 	_check_true(text.contains("FeetMarker"), "MarketAttendant scene has feet marker")
 	_check_true(
-		text.contains("manual_interaction_reach_tiles = 4")
-		and text.contains("size = Vector2(256, 32)")
-		and text.contains("position = Vector2(-64, 0)"),
+		text.contains("manual_interaction_reach_tiles = 2")
+		and text.contains("size = Vector2(160, 32)")
+		and text.contains("position = Vector2(-32, 0)"),
 		"Market attendants can be reached cardinally across the counter"
 	)
 	var seller_source := _read_text(MARKET_SELLER_SCENE)
