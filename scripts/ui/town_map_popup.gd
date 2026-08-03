@@ -315,7 +315,10 @@ func _refresh_details(location_id: String) -> void:
 func _location_name(location_id: String) -> String:
 	var locations := region_data.get("locations", {}) as Dictionary
 	var location := locations.get(location_id, {}) as Dictionary
-	return _t(str(location.get("nameKey", "")))
+	var name_key := str(location.get("nameKey", "")).strip_edges()
+	if name_key != "":
+		return _t(name_key)
+	return str(location.get("name", location_id)).strip_edges()
 
 
 func _resolve_location_group(map_id: String) -> String:
@@ -344,6 +347,17 @@ func _apply_layout() -> void:
 	var height := maxf(float(coordinate_space.get("height", 707.0)), 1.0)
 	var locations := region_data.get("locations", {}) as Dictionary
 	var points := layout_data.get("points", {}) as Dictionary
+	for point_id_value: Variant in points.keys():
+		var point_id := str(point_id_value)
+		if locations.has(point_id):
+			continue
+		var point_data := points.get(point_id, {}) as Dictionary
+		locations[point_id] = {
+			"kind": str(point_data.get("kind", "route")),
+			"name": str(point_data.get("name", point_id)),
+			"description": str(point_data.get("description", "")),
+			"planned": bool(point_data.get("planned", true)),
+		}
 	for location_id_value: Variant in locations.keys():
 		var location_id := str(location_id_value)
 		var location := locations.get(location_id, {}) as Dictionary

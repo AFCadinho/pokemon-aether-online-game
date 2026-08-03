@@ -29,9 +29,10 @@ func _run() -> void:
 	var layout_height := float(coordinate_space.get("height", 0.0))
 	var layout_points := layout_data.get("points", {}) as Dictionary
 	_check(layout_width > 0.0 and layout_height > 0.0, "Town Map layout has a human-friendly coordinate space")
-	_check((layout_points.get("kanto_pallet_town", {}) as Dictionary).get("y") == 210, "Pallet Town uses its supplied-map circle")
-	_check((layout_points.get("kanto_viridian_city", {}) as Dictionary).get("y") == 158, "Viridian City uses its supplied-map circle")
-	_check((layout_points.get("kanto_pewter_city", {}) as Dictionary).get("y") == 51, "Pewter City uses its supplied-map circle")
+	_check((layout_points.get("kanto_pallet_town", {}) as Dictionary).get("y") == 208, "Pallet Town uses its supplied-map circle")
+	_check((layout_points.get("kanto_viridian_city", {}) as Dictionary).get("y") == 151, "Viridian City uses its supplied-map circle")
+	_check((layout_points.get("kanto_pewter_city", {}) as Dictionary).get("y") == 70, "Pewter City uses its supplied-map circle")
+	_check(layout_points.size() == 21, "Every baked map circle has coordinates, alongside Route 1")
 	var areas := world_access.get("areas", {}) as Dictionary
 	var location_groups: Dictionary = {}
 	for area_value: Variant in areas.values():
@@ -66,6 +67,13 @@ func _run() -> void:
 	root.add_child(popup)
 	await process_frame
 	_check((popup.region_data.get("paths", []) as Array).size() == 5, "Editable connections are normalized for rendering")
+	var popup_locations := popup.region_data.get("locations", {}) as Dictionary
+	var planned_location_count := 0
+	for location_value: Variant in popup_locations.values():
+		if location_value is Dictionary and bool((location_value as Dictionary).get("planned", false)):
+			planned_location_count += 1
+	_check(popup_locations.size() == 21, "Town Map registers every configured point")
+	_check(planned_location_count == 15, "Unnamed baked circles are available as planned map points")
 	popup.open_for_map("kanto_oaks_lab")
 	await process_frame
 	_check(popup.visible, "Town Map opens as a modal")
@@ -75,7 +83,7 @@ func _run() -> void:
 	)
 	_check(popup.current_location_id == "kanto_pallet_town", "Interior maps resolve to their parent Town Map location")
 	_check(popup.selected_location_id == "kanto_pallet_town", "Current location is selected when the map opens")
-	_check(popup.map_canvas.marker_buttons.size() == locations.size(), "Every Town Map location has an interactive marker")
+	_check(popup.map_canvas.marker_buttons.size() == popup_locations.size(), "Every Town Map location has an interactive marker")
 	_check(not popup.map_canvas.show_connection_overlay, "Baked route lines are not drawn a second time")
 	_check(not popup.map_canvas.show_marker_overlay, "Baked map circles use invisible interactive hotspots")
 	popup.close()
