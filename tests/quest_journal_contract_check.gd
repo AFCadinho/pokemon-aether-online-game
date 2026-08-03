@@ -46,6 +46,7 @@ const QUEST_LOCALIZATION_KEYS: Array[String] = [
 	"story.kanto.oaks_parcel.return_to_oak",
 	"story.kanto.get_town_map.title",
 	"story.kanto.get_town_map.summary",
+	"story.kanto.get_town_map.visit_father",
 	"story.kanto.get_town_map.receive_town_map",
 ]
 

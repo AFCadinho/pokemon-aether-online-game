@@ -6,6 +6,9 @@ class_name DialogueNPC
 var resolved_dialogue_speaker_name := ""
 var story_dialogue_variants: Array[Dictionary] = []
 var offered_quest_id := ""
+var offered_quest_required_quest_id := ""
+var offered_quest_required_quest_step_id := ""
+var offered_quest_required_quest_status := "completed"
 
 
 func _ready() -> void:
@@ -64,6 +67,15 @@ func _get_dialogue_metadata_lines() -> Array[String]:
 func _apply_npc_metadata(metadata: Dictionary) -> void:
 	super._apply_npc_metadata(metadata)
 	offered_quest_id = str(metadata.get("offeredQuestId", "")).strip_edges()
+	offered_quest_required_quest_id = str(
+		metadata.get("offeredQuestRequiredQuestId", "")
+	).strip_edges()
+	offered_quest_required_quest_step_id = str(
+		metadata.get("offeredQuestRequiredQuestStepId", "")
+	).strip_edges()
+	offered_quest_required_quest_status = str(
+		metadata.get("offeredQuestRequiredQuestStatus", "completed")
+	).strip_edges().to_lower()
 	story_dialogue_variants.clear()
 	var variants_value: Variant = metadata.get("dialogueVariants", [])
 	if not variants_value is Array:
@@ -75,6 +87,15 @@ func _apply_npc_metadata(metadata: Dictionary) -> void:
 
 func _show_available_quest_offer(speaker_name: String) -> void:
 	if offered_quest_id.is_empty():
+		return
+	if (
+		not offered_quest_required_quest_id.is_empty()
+		and not StoryService.is_requirement_met(
+			offered_quest_required_quest_id,
+			offered_quest_required_quest_step_id,
+			offered_quest_required_quest_status
+		)
+	):
 		return
 	var quest := StoryService.get_quest(offered_quest_id)
 	if (
