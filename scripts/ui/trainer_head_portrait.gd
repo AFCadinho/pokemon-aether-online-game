@@ -5,8 +5,8 @@ class_name TrainerHeadPortrait
 const REMOTE_PLAYER_AVATAR_SCRIPT := preload("res://scripts/world/remote_player_avatar.gd")
 const SOURCE_FRAME_SIZE := 64.0
 const HEAD_CROP_HEIGHT := 44.0
-const PORTRAIT_RENDER_SCALE := 1.35
-const HEAD_LOCAL_CENTER_Y := -26.0
+const PORTRAIT_RENDER_SCALE := 1.6
+const HEAD_LOCAL_CENTER_Y := -21.0
 
 var viewport: SubViewport
 var avatar: RemotePlayerAvatar
