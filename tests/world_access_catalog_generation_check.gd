@@ -107,8 +107,10 @@ func _init() -> void:
 	)
 	_expect(
 		transitions.has("kanto_viridian_city__to_route_1")
-			and transitions.has("kanto_viridian_city__to_route_2"),
-		"Viridian City exposes guarded transitions to Route 1 and Route 2"
+			and transitions.has("kanto_viridian_city__to_route_2")
+			and transitions.has("kanto_viridian_city__to_route_22")
+			and transitions.has("kanto_route_22__to_viridian_city"),
+		"Viridian City exposes guarded route transitions including Route 22"
 	)
 	_expect(
 		transitions.has("kanto_viridian_city__to_pokecenter")
