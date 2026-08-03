@@ -135,7 +135,7 @@ func _refresh_reward_resolution() -> void:
 
 func _refresh_quest_marker() -> void:
 	super._refresh_quest_marker()
-	if reward_resolved and quest_marker != null:
+	if reward_resolved and not is_story_requirement_met() and quest_marker != null:
 		quest_marker.visible = false
 
 
