@@ -14128,11 +14128,13 @@ func _vs_panel_call(method_name: String, arguments: Array = []) -> Variant:
 
 
 func _get_vs_player_appearance(player_id: String) -> Dictionary:
-	if player_id == "p1":
+	if player_id == "p1" and not _is_spectator_battle():
 		return PlayerSave.to_appearance_state()
-	var player_data: Dictionary = battle_state.players.get(player_id, {})
-	var appearance_value: Variant = player_data.get("appearance", player_data.get("appearanceState", {}))
-	return appearance_value as Dictionary if appearance_value is Dictionary else {}
+	var player_data_value: Variant = battle_state.players.get(player_id, {})
+	if not (player_data_value is Dictionary):
+		return {}
+	return _get_battle_player_appearance(player_data_value as Dictionary)
+
 
 func _get_vs_player_name(player_id: String) -> String:
 	if player_id == "p1":

@@ -71,6 +71,55 @@ func _check_runtime_renderer() -> void:
 	_check(not renderer.visible, "clearing a trainer removes its battle visual")
 	renderer.free()
 
+	var default_image := _render_player_trainer_skin("#f8d0b8")
+	var deep_image := _render_player_trainer_skin("#3f271f")
+	var changed_skin_pixels := _count_changed_opaque_pixels(default_image, deep_image)
+	_check(
+		changed_skin_pixels > 12,
+		"inward-facing battle trainers render their selected skin tone"
+	)
+
+
+func _render_player_trainer_skin(skin_tone: String) -> Image:
+	var renderer := BattleTrainerScene.instantiate() as BattleTrainerSprite
+	root.add_child(renderer)
+	renderer.show_player({
+		"gender": "male",
+		"body": "Gen4_Base_v1",
+		"hair": "Adinho_Hair",
+		"facial_hair": "Adinho_Beard",
+		"skin_tone": skin_tone,
+	}, Vector2.RIGHT)
+	var body_sprite := renderer.player_avatar.find_child("BodySprite", true, false) as AnimatedSprite2D
+	var image: Image
+	if body_sprite != null and body_sprite.sprite_frames != null:
+		var texture := body_sprite.sprite_frames.get_frame_texture(body_sprite.animation, body_sprite.frame)
+		if texture != null:
+			image = texture.get_image()
+	renderer.free()
+	return image
+
+
+func _count_changed_opaque_pixels(first: Image, second: Image) -> int:
+	if first == null or second == null or first.get_size() != second.get_size():
+		return 0
+	var changed := 0
+	for y: int in range(first.get_height()):
+		for x: int in range(first.get_width()):
+			var first_pixel := first.get_pixel(x, y)
+			var second_pixel := second.get_pixel(x, y)
+			if first_pixel.a <= 0.01 and second_pixel.a <= 0.01:
+				continue
+			var difference := Vector4(
+				first_pixel.r - second_pixel.r,
+				first_pixel.g - second_pixel.g,
+				first_pixel.b - second_pixel.b,
+				first_pixel.a - second_pixel.a
+			).length()
+			if difference > 0.02:
+				changed += 1
+	return changed
+
 
 func _check(condition: bool, label: String) -> void:
 	if condition:

@@ -2,7 +2,7 @@ extends Control
 
 class_name TrainerHeadPortrait
 
-const REMOTE_PLAYER_AVATAR_SCRIPT := preload("res://scripts/world/remote_player_avatar.gd")
+const REMOTE_PLAYER_AVATAR_SCRIPT_PATH := "res://scripts/world/remote_player_avatar.gd"
 const SOURCE_FRAME_SIZE := 64.0
 const HEAD_CROP_HEIGHT := 44.0
 const PORTRAIT_RENDER_SCALE := 1.75
@@ -10,7 +10,7 @@ const HEAD_LOCAL_CENTER_X := -1.0
 const HEAD_LOCAL_CENTER_Y := -21.0
 
 var viewport: SubViewport
-var avatar: RemotePlayerAvatar
+var avatar: Node2D
 var appearance_state: Dictionary = {}
 
 
@@ -18,10 +18,9 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_resolve_size()
 	_set_up_viewport()
-	if appearance_state.is_empty():
-		var player_save := get_node_or_null("/root/PlayerSave")
-		if player_save != null and player_save.has_method("to_appearance_state"):
-			set_appearance_state(player_save.call("to_appearance_state"))
+	visible = not appearance_state.is_empty()
+	if visible:
+		set_appearance_state(appearance_state)
 
 
 func set_appearance_state(state: Dictionary) -> void:
@@ -32,11 +31,14 @@ func set_appearance_state(state: Dictionary) -> void:
 	if avatar != null and is_instance_valid(avatar):
 		avatar.queue_free()
 		avatar = null
-	avatar = REMOTE_PLAYER_AVATAR_SCRIPT.new() as RemotePlayerAvatar
+	var avatar_script := load(REMOTE_PLAYER_AVATAR_SCRIPT_PATH) as Script
+	if avatar_script == null:
+		return
+	avatar = avatar_script.new() as Node2D
 	if avatar == null:
 		return
 	viewport.add_child(avatar)
-	avatar.apply_state({
+	avatar.call("apply_state", {
 		"appearance": appearance_state,
 		"position": {"x": 0.0, "y": 0.0},
 		"facingDirection": "down",
@@ -120,11 +122,16 @@ func _configure_head_only(node: Node) -> void:
 							and source_image.get_width() >= int(SOURCE_FRAME_SIZE)
 							and source_image.get_height() >= int(HEAD_CROP_HEIGHT)
 						):
-							var head_image := source_image.get_region(Rect2i(0, 0, int(SOURCE_FRAME_SIZE), int(HEAD_CROP_HEIGHT)))
+							var head_image := source_image.get_region(
+								Rect2i(0, 0, int(SOURCE_FRAME_SIZE), int(HEAD_CROP_HEIGHT))
+							)
 							head_sprite.texture = ImageTexture.create_from_image(head_image)
 						else:
 							head_sprite.texture = head_texture
-					head_sprite.position = sprite.position + Vector2(0.0, (HEAD_CROP_HEIGHT - SOURCE_FRAME_SIZE) * 0.5)
+					head_sprite.position = sprite.position + Vector2(
+						0.0,
+						(HEAD_CROP_HEIGHT - SOURCE_FRAME_SIZE) * 0.5
+					)
 					head_sprite.z_index = sprite.z_index
 					sprite.get_parent().add_child(head_sprite)
 					sprite.visible = false

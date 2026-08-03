@@ -6,8 +6,8 @@ const TRAINER_HEAD_PORTRAIT_SCRIPT := preload("res://scripts/ui/trainer_head_por
 
 const MIN_NAMES_PANEL_WIDTH := 150.0
 const MAX_NAMES_PANEL_WIDTH := 340.0
-# Margins, both HBox gaps, the VS label, and the panel's 1 px borders.
-const NAMES_PANEL_CHROME_WIDTH := 64.0
+# Margins, four HBox gaps, two portraits, the VS label, and the panel borders.
+const NAMES_PANEL_CHROME_WIDTH := 131.0
 const MIN_PLAYER_NAME_WIDTH := 40.0
 
 @onready var names_panel: PanelContainer = $NamesPanel
@@ -50,8 +50,9 @@ func set_names(player_1_name: String, player_2_name: String) -> void:
 
 func set_player_appearances(player_1_state: Dictionary, player_2_state: Dictionary) -> void:
 	if player_1_portrait != null:
-		player_1_portrait.visible = true
-		player_1_portrait.set_appearance_state(player_1_state)
+		player_1_portrait.visible = not player_1_state.is_empty()
+		if player_1_portrait.visible:
+			player_1_portrait.set_appearance_state(player_1_state)
 	if player_2_portrait != null:
 		player_2_portrait.visible = not player_2_state.is_empty()
 		if player_2_portrait.visible:
