@@ -36,7 +36,8 @@ func set_appearance_state(state: Dictionary) -> void:
 		"position": {"x": 0.0, "y": 0.0},
 		"facingDirection": "down",
 	})
-	avatar.position = Vector2(viewport.size.x * 0.5, viewport.size.y * 0.92)
+	_configure_head_only(avatar)
+	avatar.position = Vector2(viewport.size.x * 0.5, viewport.size.y * 0.62)
 	avatar.scale = Vector2.ONE * _portrait_scale()
 	var nameplate := avatar.get_node_or_null("Nameplate") as Control
 	if nameplate != null:
@@ -51,7 +52,7 @@ func _set_up_viewport() -> void:
 	viewport = SubViewport.new()
 	viewport.name = "PortraitViewport"
 	viewport.transparent_bg = true
-	viewport.size = Vector2i(64, 48)
+	viewport.size = Vector2i(64, 64)
 	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	var container := SubViewportContainer.new()
 	container.name = "PortraitViewportContainer"
@@ -79,6 +80,20 @@ func _disable_processing(node: Node) -> void:
 	node.set_process_unhandled_key_input(false)
 	for child in node.get_children():
 		_disable_processing(child)
+
+
+func _configure_head_only(node: Node) -> void:
+	if node is AnimatedSprite2D:
+		var sprite := node as AnimatedSprite2D
+		match sprite.name:
+			"BodySprite":
+				# Gen 4 body frames are 64x64; keep only the head/neck rows.
+				sprite.region_enabled = true
+				sprite.region_rect = Rect2(-32.0, -32.0, 64.0, 34.0)
+			"TopSprite", "BottomSprite", "ShoesSprite":
+				sprite.visible = false
+	for child in node.get_children():
+		_configure_head_only(child)
 
 
 func _set_idle_frame(node: Node) -> void:
