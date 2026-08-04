@@ -25,6 +25,7 @@ const STATUS_CONDITION_OVERLAY_SCRIPT := preload("res://scripts/battle/animation
 const BATTLE_PARTY_SLOT_RESOLVER := preload("res://scripts/battle/battle_party_slot_resolver.gd")
 const BATTLE_DISGUISE_EVENT_ORDER := preload("res://scripts/battle/battle_disguise_event_order.gd")
 const BATTLE_SUPREME_OVERLORD_EFFECT := preload("res://scripts/battle/battle_supreme_overlord_effect.gd")
+const BATTLE_PUBLIC_POKEMON_KNOWLEDGE := preload("res://scripts/battle/battle_public_pokemon_knowledge.gd")
 const CALC_DRAWER_FIELD_WIDTH_RATIO := 0.55
 const CALC_DRAWER_FIELD_MARGIN := 8.0
 const MEGA_EVOLUTION_EFFECT_KEY := "mega_evolution"
@@ -1058,25 +1059,7 @@ func _filter_public_opponent_hover_moves(moves: Array) -> Array:
 	return public_moves
 
 func _with_max_pp_assumption_for_opponent_moves(moves: Array) -> Array:
-	var normalized_moves: Array = []
-	for move_value in moves:
-		if not (move_value is Dictionary):
-			continue
-
-		var move_data: Dictionary = (move_value as Dictionary).duplicate(true)
-		var current_pp := _get_hover_move_pp_value(move_data, ["pp", "currentPp", "currentPP", "current_pp"])
-		var base_max_pp := _get_hover_move_pp_value(move_data, ["maxpp", "maxPp", "maxPP", "max_pp"])
-		if current_pp < 0 or base_max_pp <= 0:
-			normalized_moves.append(move_data)
-			continue
-
-		var used_pp: int = max(0, base_max_pp - current_pp)
-		var assumed_max_pp: int = _calculate_max_pp(base_max_pp)
-		move_data["maxpp"] = assumed_max_pp
-		move_data["pp"] = max(0, assumed_max_pp - used_pp)
-		normalized_moves.append(move_data)
-
-	return normalized_moves
+	return BATTLE_PUBLIC_POKEMON_KNOWLEDGE.with_max_pp_assumption(moves)
 
 func _hover_move_has_visible_pp_use(move_data: Dictionary) -> bool:
 	var current_pp := _get_hover_move_pp_value(move_data, ["pp", "currentPp", "currentPP", "current_pp"])
