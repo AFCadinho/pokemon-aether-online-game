@@ -94,6 +94,7 @@ const PC_POKEMON_SLOT_BUTTON_SCRIPT := preload("res://scripts/ui/pc_pokemon_slot
 const PC_PARTY_HOVER_CARD_SCENE: PackedScene = preload("res://scenes/battle/party_hover_card.tscn")
 const POKEMON_SUMMARY_MOVE_REORDER_SLOT_SCRIPT := preload("res://scripts/ui/pokemon_summary_move_reorder_slot.gd")
 const TOWN_MAP_POPUP_SCRIPT := preload("res://scripts/ui/town_map_popup.gd")
+const MOUNT_LOADOUT_PANEL_SCENE: PackedScene = preload("res://scenes/interface/mount_loadout_panel.tscn")
 const OVERWORLD_MOVE_ACTION_ICON := preload("res://assets/ui/icons/overworld_move_action.svg")
 const CHAT_RESIZE_ICON: Texture2D = preload("res://assets/ui/chat_resize.svg")
 const GLOBAL_EXP_BUFF_ICON: Texture2D = preload("res://assets/ui/global_exp_boost.svg")
@@ -1176,6 +1177,7 @@ var item_dex_dragging := false
 var item_dex_drag_offset := Vector2.ZERO
 var pokedex_popup: PanelContainer
 var town_map_popup: TownMapPopup
+var mount_loadout_panel: MountLoadoutPanel
 var pokedex_dex_selector: OptionButton
 var pokedex_variant_buttons: Dictionary = {}
 var pokedex_search_input: LineEdit
@@ -1275,6 +1277,7 @@ func _ready() -> void:
 	_setup_item_dex_popup()
 	_setup_pokedex_button()
 	_setup_town_map_popup()
+	_setup_mount_loadout_panel()
 	_setup_pokedex_popup()
 	_setup_wild_pokemon_popup()
 	_setup_pc_ui()
@@ -8163,6 +8166,15 @@ func _setup_town_map_popup() -> void:
 	town_map_popup.z_index = UI_MODAL_Z_INDEX
 	town_map_popup.closed.connect(_on_town_map_popup_closed)
 	root_control.add_child(town_map_popup)
+
+
+func _setup_mount_loadout_panel() -> void:
+	mount_loadout_panel = MOUNT_LOADOUT_PANEL_SCENE.instantiate() as MountLoadoutPanel
+	if mount_loadout_panel == null:
+		push_warning("UIOverlay: mount loadout panel could not be created.")
+		return
+	root_control.add_child(mount_loadout_panel)
+
 
 func _on_town_map_popup_closed() -> void:
 	_deactivate_ui_panel(town_map_popup)

@@ -2,8 +2,10 @@ extends Node
 
 signal settings_changed
 signal world_pixel_scale_changed(scale: int)
+signal mount_loadout_changed(movement_mode: String, mount_id: String)
 
 const PixelPerfectRendering := preload("res://scripts/services/pixel_perfect_rendering.gd")
+const MountServiceScript := preload("res://scripts/services/mount_service.gd")
 
 const SETTINGS_PATH := "user://settings.json"
 const SPRITE_STYLE_ANIMATED := "animated"
@@ -39,6 +41,8 @@ const DEFAULT_WINDOW_RESOLUTION := Vector2i(1600, 900)
 const WORLD_PIXEL_SCALE_AUTO := PixelPerfectRendering.SCALE_AUTO
 const DEFAULT_WORLD_PIXEL_SCALE := PixelPerfectRendering.DEFAULT_SCALE
 const AVAILABLE_WORLD_PIXEL_SCALES: Array[int] = PixelPerfectRendering.AVAILABLE_SCALES
+const MOUNT_MODE_LAND := MountServiceScript.MOVEMENT_MODE_LAND
+const MOUNT_MODE_SURF := MountServiceScript.MOVEMENT_MODE_SURF
 const DEFAULT_CURSOR_SCALE := 75.0
 const MIN_CURSOR_SCALE := 50.0
 const MAX_CURSOR_SCALE := 150.0
@@ -57,6 +61,8 @@ var sprite_style := SPRITE_STYLE_ANIMATED
 var fullscreen := false
 var window_resolution := DEFAULT_WINDOW_RESOLUTION
 var world_pixel_scale := DEFAULT_WORLD_PIXEL_SCALE
+var selected_land_mount_id := MountServiceScript.get_default_mount_id(MOUNT_MODE_LAND)
+var selected_surf_mount_id := MountServiceScript.get_default_mount_id(MOUNT_MODE_SURF)
 var cursor_scale := DEFAULT_CURSOR_SCALE
 var master_volume := 80.0
 var music_volume := 55.0
@@ -111,6 +117,16 @@ func load_settings() -> void:
 	world_pixel_scale = PixelPerfectRendering.validate_scale(
 		data.get("world_pixel_scale", world_pixel_scale)
 	)
+	selected_land_mount_id = MountServiceScript.resolve_mount_id_for_mode(
+		str(data.get("selected_land_mount_id", selected_land_mount_id)),
+		MOUNT_MODE_LAND,
+		true
+	)
+	selected_surf_mount_id = MountServiceScript.resolve_mount_id_for_mode(
+		str(data.get("selected_surf_mount_id", selected_surf_mount_id)),
+		MOUNT_MODE_SURF,
+		true
+	)
 	cursor_scale = _validated_cursor_scale(data.get("cursor_scale", cursor_scale))
 	master_volume = _validated_volume(data.get("master_volume", master_volume))
 	music_volume = _validated_volume(data.get("music_volume", music_volume))
@@ -162,6 +178,8 @@ func save_settings() -> void:
 			"height": window_resolution.y,
 		},
 		"world_pixel_scale": world_pixel_scale,
+		"selected_land_mount_id": selected_land_mount_id,
+		"selected_surf_mount_id": selected_surf_mount_id,
 		"cursor_scale": cursor_scale,
 		"master_volume": master_volume,
 		"music_volume": music_volume,
@@ -274,6 +292,37 @@ func get_effective_world_pixel_scale(viewport_size: Vector2i = Vector2i.ZERO) ->
 	if resolved_viewport_size == Vector2i.ZERO and get_tree() != null:
 		resolved_viewport_size = Vector2i(get_tree().root.get_visible_rect().size)
 	return PixelPerfectRendering.resolve_scale(world_pixel_scale, resolved_viewport_size)
+
+
+func get_selected_mount_id(movement_mode: String) -> String:
+	match movement_mode.strip_edges().to_lower():
+		MOUNT_MODE_LAND:
+			return selected_land_mount_id
+		MOUNT_MODE_SURF:
+			return selected_surf_mount_id
+	return ""
+
+
+func set_selected_mount_id(movement_mode: String, mount_id: String) -> bool:
+	var normalized_mode := movement_mode.strip_edges().to_lower()
+	if normalized_mode not in MountServiceScript.AVAILABLE_MOVEMENT_MODES:
+		return false
+	var resolved_mount_id := MountServiceScript.resolve_mount_id_for_mode(
+		mount_id,
+		normalized_mode
+	)
+	if resolved_mount_id == "":
+		return false
+	if get_selected_mount_id(normalized_mode) == resolved_mount_id:
+		return true
+
+	if normalized_mode == MOUNT_MODE_LAND:
+		selected_land_mount_id = resolved_mount_id
+	else:
+		selected_surf_mount_id = resolved_mount_id
+	mount_loadout_changed.emit(normalized_mode, resolved_mount_id)
+	_save_and_emit()
+	return true
 
 
 func set_cursor_scale(value: float) -> void:
