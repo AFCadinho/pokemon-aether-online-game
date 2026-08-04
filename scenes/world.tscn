@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" path="res://scenes/interface/content_creator_photo_mode.tscn" id="10_creator_photo"]
 
 [node name="World" type="Node2D" unique_id=618561729]
+texture_filter = 1
 script = ExtResource("1_4wyf3")
 
 [node name="CurrentMap" type="Node2D" parent="." unique_id=1205265542 groups=["current_map"]]
