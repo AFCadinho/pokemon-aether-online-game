@@ -27,11 +27,12 @@ static func from_pokemon_data(pokemon_data: Dictionary) -> Dictionary:
 			var max_pp := -1
 			for key in ["pp", "maxpp"]:
 				var amount: Variant = move.get(key, null)
-				if typeof(amount) != TYPE_INT or int(amount) < 0 or int(amount) > 99:
+				var normalized_amount: Variant = _get_bounded_integer(amount, 0, 99)
+				if normalized_amount == null:
 					continue
-				safe_move[key] = int(amount)
+				safe_move[key] = int(normalized_amount)
 				if key == "maxpp":
-					max_pp = int(amount)
+					max_pp = int(normalized_amount)
 			if safe_move.has("pp") and max_pp >= 0 and int(safe_move.get("pp")) > max_pp:
 				safe_move.erase("pp")
 			safe_moves.append(safe_move)
@@ -51,9 +52,25 @@ static func from_pokemon_data(pokemon_data: Dictionary) -> Dictionary:
 		var safe_stat_changes := {}
 		for stat in ["atk", "def", "spa", "spd", "spe", "accuracy", "evasion"]:
 			var amount: Variant = (stat_changes_value as Dictionary).get(stat, null)
-			if typeof(amount) == TYPE_INT and int(amount) >= -6 and int(amount) <= 6:
-				safe_stat_changes[stat] = int(amount)
+			var normalized_amount: Variant = _get_bounded_integer(amount, -6, 6)
+			if normalized_amount != null:
+				safe_stat_changes[stat] = int(normalized_amount)
 		if not safe_stat_changes.is_empty():
 			safe_knowledge["statChanges"] = safe_stat_changes
 
 	return safe_knowledge
+
+
+static func _get_bounded_integer(value: Variant, minimum: int, maximum: int) -> Variant:
+	if typeof(value) != TYPE_INT and typeof(value) != TYPE_FLOAT:
+		return null
+
+	var numeric_value := float(value)
+	if not is_finite(numeric_value) or numeric_value != floor(numeric_value):
+		return null
+
+	var integer_value := int(numeric_value)
+	if integer_value < minimum or integer_value > maximum:
+		return null
+
+	return integer_value

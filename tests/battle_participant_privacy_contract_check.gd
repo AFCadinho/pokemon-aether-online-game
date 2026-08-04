@@ -41,9 +41,10 @@ func _init() -> void:
 		"moves": [{"name": "Hidden Power"}],
 		"knowledge": {
 			"confirmedMoves": [
-				{"name": "Volt Switch", "pp": 19, "maxpp": 20, "private": "hidden"},
+				{"name": "Volt Switch", "pp": 19.0, "maxpp": 20.0, "private": "hidden"},
 			],
 			"confirmedAbility": "Electric Surge",
+			"statChanges": {"spe": 1.0, "atk": 1.5},
 			"privateSet": {"item": "Choice Specs"},
 		},
 	})
@@ -56,6 +57,10 @@ func _init() -> void:
 	_check(
 		str(embedded_knowledge.get("confirmedAbility", "")) == "Electric Surge",
 		"side-preview hover keeps a confirmed public ability"
+	)
+	_check(
+		embedded_knowledge.get("statChanges", {}) == {"spe": 1},
+		"side-preview hover accepts integral JSON numbers and rejects fractions"
 	)
 	_check(
 		not embedded_knowledge.has("privateSet") \
