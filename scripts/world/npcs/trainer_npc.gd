@@ -108,7 +108,7 @@ func start_trainer_battle(trainer_metadata: Dictionary) -> Dictionary:
 			"code": "trainer_battle_world_unavailable",
 		}
 
-	return await world.start_trainer_battle(trainer_metadata)
+	return await world.start_trainer_battle(build_battle_trainer_metadata(trainer_metadata))
 
 func _get_dialogue_lines_from_trainer_metadata(trainer_metadata: Dictionary) -> Array[String]:
 	var dialogue_lines: Array[String] = []

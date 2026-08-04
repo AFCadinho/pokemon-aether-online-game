@@ -2691,6 +2691,10 @@
     "name": "Poke Toy",
     "shortDesc": "Ends a wild battle."
   },
+  "pokedex": {
+    "name": "Pokédex",
+    "shortDesc": "Records information about Pokémon you encounter."
+  },
   "pokeblock-case": {
     "name": "Pokeblock Case",
     "shortDesc": "Holds Pokeblocks."

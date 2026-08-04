@@ -4,6 +4,7 @@ class_name QuestJournalView
 
 signal journal_opened
 signal journal_closed
+signal tracker_layout_changed
 
 const SURFACE := Color("#050b14f2")
 const TRACKER_SURFACE := Color("#050b14ed")
@@ -24,6 +25,16 @@ var tracker_type_label: Label
 var tracker_title_label: Label
 var tracker_objective_label: Label
 var tracker_progress_label: Label
+var side_tracker_panel: PanelContainer
+var side_tracker_type_label: Label
+var side_tracker_title_label: Label
+var side_tracker_objective_label: Label
+var side_tracker_progress_label: Label
+var tracker_collapse_button: Button
+var tracker_top_offset := 76.0
+var tracker_collapsed := false
+var has_main_tracker := false
+var has_side_tracker := false
 
 var modal_layer: Control
 var journal_panel: PanelContainer
@@ -39,11 +50,18 @@ var detail_content: VBoxContainer
 var detail_type_label: Label
 var detail_title_label: Label
 var detail_summary_label: Label
+var detail_offer_panel: PanelContainer
+var detail_offer_prompt_label: Label
+var detail_offer_hint_label: Label
+var detail_offer_status_label: Label
+var detail_offer_accept_button: Button
+var detail_offer_decline_button: Button
 var detail_objective_heading: Label
 var detail_steps: VBoxContainer
 
 var selected_quest_id := ""
 var selected_filter := "all"
+var side_offer_pending := false
 var localization_manager: Node
 
 
@@ -88,9 +106,14 @@ func get_journal_panel() -> Control:
 func set_tracker_top_offset(top_offset: float) -> void:
 	if tracker_panel == null:
 		return
-	var tracker_height := tracker_panel.custom_minimum_size.y
-	tracker_panel.offset_top = top_offset
-	tracker_panel.offset_bottom = top_offset + tracker_height
+	tracker_top_offset = top_offset
+	_layout_trackers()
+
+
+func get_visible_tracker_count() -> int:
+	if tracker_collapsed:
+		return 0
+	return int(has_main_tracker) + int(has_side_tracker)
 
 
 func refresh() -> void:
@@ -150,6 +173,84 @@ func _build_tracker() -> void:
 	tracker_objective_label.max_lines_visible = 2
 	tracker_objective_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	stack.add_child(tracker_objective_label)
+
+	side_tracker_panel = PanelContainer.new()
+	side_tracker_panel.name = "SideQuestObjectiveTracker"
+	side_tracker_panel.custom_minimum_size = Vector2(248, 78)
+	side_tracker_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	side_tracker_panel.offset_left = -248.0
+	side_tracker_panel.offset_top = 174.0
+	side_tracker_panel.offset_right = 0.0
+	side_tracker_panel.offset_bottom = 252.0
+	side_tracker_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	side_tracker_panel.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	side_tracker_panel.tooltip_text = localization_manager.text("ui.quest.open_log")
+	side_tracker_panel.z_index = 100
+	side_tracker_panel.add_theme_stylebox_override(
+		"panel",
+		_style(TRACKER_SURFACE, Color("#8a7045"), 10, 1)
+	)
+	side_tracker_panel.gui_input.connect(_on_tracker_gui_input)
+	add_child(side_tracker_panel)
+
+	var side_margin := MarginContainer.new()
+	_set_margins(side_margin, 8, 7, 10, 8)
+	side_tracker_panel.add_child(side_margin)
+	var side_row := HBoxContainer.new()
+	side_row.add_theme_constant_override("separation", 8)
+	side_margin.add_child(side_row)
+	var side_accent_line := ColorRect.new()
+	side_accent_line.custom_minimum_size = Vector2(2, 0)
+	side_accent_line.color = Color("#d8b767aa")
+	side_accent_line.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	side_row.add_child(side_accent_line)
+	var side_stack := VBoxContainer.new()
+	side_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	side_stack.add_theme_constant_override("separation", 2)
+	side_row.add_child(side_stack)
+	var side_header := HBoxContainer.new()
+	side_header.add_theme_constant_override("separation", 8)
+	side_stack.add_child(side_header)
+	side_tracker_type_label = _label(10, SIDE_QUEST_ACCENT)
+	side_tracker_type_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	side_header.add_child(side_tracker_type_label)
+	side_tracker_progress_label = _label(10, MUTED_TEXT)
+	side_tracker_progress_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	side_header.add_child(side_tracker_progress_label)
+	side_tracker_title_label = _label(14, TEXT)
+	side_tracker_title_label.clip_text = true
+	side_tracker_title_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	side_stack.add_child(side_tracker_title_label)
+	side_tracker_objective_label = _label(11, MUTED_TEXT)
+	side_tracker_objective_label.clip_text = true
+	side_tracker_objective_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	side_stack.add_child(side_tracker_objective_label)
+
+	tracker_collapse_button = Button.new()
+	tracker_collapse_button.name = "QuestTrackerCollapseButton"
+	tracker_collapse_button.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	tracker_collapse_button.custom_minimum_size = Vector2(28, 32)
+	tracker_collapse_button.size = Vector2(28, 32)
+	tracker_collapse_button.focus_mode = Control.FOCUS_NONE
+	tracker_collapse_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	tracker_collapse_button.z_index = 101
+	tracker_collapse_button.add_theme_font_size_override("font_size", 16)
+	tracker_collapse_button.add_theme_color_override("font_color", MUTED_TEXT)
+	tracker_collapse_button.add_theme_color_override("font_hover_color", TEXT)
+	tracker_collapse_button.add_theme_stylebox_override(
+		"normal",
+		_style(TRACKER_SURFACE, BORDER_SOFT, 8, 1)
+	)
+	tracker_collapse_button.add_theme_stylebox_override(
+		"hover",
+		_style(SURFACE_RAISED, ACCENT, 8, 1)
+	)
+	tracker_collapse_button.add_theme_stylebox_override(
+		"pressed",
+		_style(SURFACE_INSET, ACCENT, 8, 1)
+	)
+	tracker_collapse_button.pressed.connect(_on_tracker_collapse_pressed)
+	add_child(tracker_collapse_button)
 
 
 func _build_journal() -> void:
@@ -286,6 +387,46 @@ func _build_journal() -> void:
 	detail_summary_label = _label(14, MUTED_TEXT)
 	detail_summary_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	detail_content.add_child(detail_summary_label)
+	detail_offer_panel = PanelContainer.new()
+	detail_offer_panel.visible = false
+	detail_offer_panel.add_theme_stylebox_override(
+		"panel",
+		_style(Color("#1a140beb"), Color("#8a7045"), 10, 1)
+	)
+	detail_content.add_child(detail_offer_panel)
+	var offer_margin := MarginContainer.new()
+	_set_margins(offer_margin, 14, 12, 14, 12)
+	detail_offer_panel.add_child(offer_margin)
+	var offer_stack := VBoxContainer.new()
+	offer_stack.add_theme_constant_override("separation", 8)
+	offer_margin.add_child(offer_stack)
+	detail_offer_prompt_label = _label(13, TEXT)
+	detail_offer_prompt_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	offer_stack.add_child(detail_offer_prompt_label)
+	detail_offer_hint_label = _label(11, MUTED_TEXT)
+	detail_offer_hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	offer_stack.add_child(detail_offer_hint_label)
+	detail_offer_status_label = _label(11, DANGER)
+	detail_offer_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	detail_offer_status_label.visible = false
+	offer_stack.add_child(detail_offer_status_label)
+	var offer_actions := HBoxContainer.new()
+	offer_actions.add_theme_constant_override("separation", 8)
+	offer_stack.add_child(offer_actions)
+	detail_offer_decline_button = Button.new()
+	detail_offer_decline_button.custom_minimum_size = Vector2(130, 38)
+	detail_offer_decline_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	detail_offer_decline_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	detail_offer_decline_button.pressed.connect(_on_side_offer_declined)
+	_style_button(detail_offer_decline_button, false)
+	offer_actions.add_child(detail_offer_decline_button)
+	detail_offer_accept_button = Button.new()
+	detail_offer_accept_button.custom_minimum_size = Vector2(130, 38)
+	detail_offer_accept_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	detail_offer_accept_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	detail_offer_accept_button.pressed.connect(_on_side_offer_accepted)
+	_style_button(detail_offer_accept_button, true)
+	offer_actions.add_child(detail_offer_accept_button)
 	var detail_divider := HSeparator.new()
 	detail_content.add_child(detail_divider)
 	detail_objective_heading = _label(12, ACCENT)
@@ -299,22 +440,89 @@ func _refresh_tracker() -> void:
 	var journal_service := _journal_service()
 	var quest: Dictionary = journal_service.get_active_main_quest() if journal_service != null else {}
 	var objective: Dictionary = journal_service.get_active_objective(quest) if journal_service != null else {}
-	tracker_panel.visible = not quest.is_empty() and not objective.is_empty()
-	if not tracker_panel.visible:
-		return
+	var side_quest: Dictionary = {}
+	var side_objective: Dictionary = {}
+	if journal_service != null:
+		for side_quest_value: Variant in journal_service.get_active_side_quests():
+			var candidate: Dictionary = side_quest_value as Dictionary
+			var candidate_objective: Dictionary = journal_service.get_active_objective(candidate)
+			if not candidate_objective.is_empty():
+				side_quest = candidate
+				side_objective = candidate_objective
+				break
+
+	has_main_tracker = not quest.is_empty() and not objective.is_empty()
+	has_side_tracker = not side_quest.is_empty() and not side_objective.is_empty()
 	tracker_panel.tooltip_text = localization_manager.text("ui.quest.open_log")
-	tracker_type_label.text = localization_manager.text("ui.quest.main_story").to_upper()
-	tracker_title_label.text = _localized_definition(
-		str(quest.get("titleKey", "")),
-		str(quest.get("questId", ""))
+	side_tracker_panel.tooltip_text = localization_manager.text("ui.quest.open_log")
+	if has_main_tracker:
+		tracker_type_label.text = localization_manager.text("ui.quest.main_story").to_upper()
+		tracker_title_label.text = _localized_definition(
+			str(quest.get("titleKey", "")),
+			str(quest.get("questId", ""))
+		)
+		tracker_objective_label.text = "› %s" % _localized_definition(
+			str(objective.get("objectiveKey", "")),
+			str(objective.get("stepId", ""))
+		)
+		var current := int(objective.get("currentValue", 0))
+		var target := maxi(int(objective.get("targetValue", 1)), 1)
+		tracker_progress_label.text = "%d / %d" % [current, target] if target > 1 else ""
+	if has_side_tracker:
+		side_tracker_type_label.text = localization_manager.text("ui.quest.side_quest").to_upper()
+		side_tracker_title_label.text = _localized_definition(
+			str(side_quest.get("titleKey", "")),
+			str(side_quest.get("questId", ""))
+		)
+		side_tracker_objective_label.text = "› %s" % _localized_definition(
+			str(side_objective.get("objectiveKey", "")),
+			str(side_objective.get("stepId", ""))
+		)
+		var side_current := int(side_objective.get("currentValue", 0))
+		var side_target := maxi(int(side_objective.get("targetValue", 1)), 1)
+		side_tracker_progress_label.text = (
+			"%d / %d" % [side_current, side_target] if side_target > 1 else ""
+		)
+	_layout_trackers()
+	tracker_layout_changed.emit()
+
+
+func _layout_trackers() -> void:
+	if tracker_panel == null or side_tracker_panel == null or tracker_collapse_button == null:
+		return
+	var content_visible := not tracker_collapsed
+	var next_top := tracker_top_offset
+	tracker_panel.visible = has_main_tracker and content_visible
+	if has_main_tracker:
+		_set_tracker_vertical_offsets(tracker_panel, next_top)
+		next_top += tracker_panel.custom_minimum_size.y + 8.0
+	side_tracker_panel.visible = has_side_tracker and content_visible
+	if has_side_tracker:
+		_set_tracker_vertical_offsets(side_tracker_panel, next_top)
+
+	var has_trackers := has_main_tracker or has_side_tracker
+	tracker_collapse_button.visible = has_trackers
+	if not has_trackers:
+		return
+	tracker_collapse_button.offset_top = tracker_top_offset
+	tracker_collapse_button.offset_bottom = tracker_top_offset + 32.0
+	tracker_collapse_button.offset_left = -28.0 if tracker_collapsed else -280.0
+	tracker_collapse_button.offset_right = 0.0 if tracker_collapsed else -252.0
+	tracker_collapse_button.text = "‹" if tracker_collapsed else "›"
+	tracker_collapse_button.tooltip_text = localization_manager.text(
+		"ui.chat.expand" if tracker_collapsed else "ui.chat.collapse"
 	)
-	tracker_objective_label.text = "› %s" % _localized_definition(
-		str(objective.get("objectiveKey", "")),
-		str(objective.get("stepId", ""))
-	)
-	var current := int(objective.get("currentValue", 0))
-	var target := maxi(int(objective.get("targetValue", 1)), 1)
-	tracker_progress_label.text = "%d / %d" % [current, target] if target > 1 else ""
+
+
+func _set_tracker_vertical_offsets(panel: Control, top_offset: float) -> void:
+	panel.offset_top = top_offset
+	panel.offset_bottom = top_offset + panel.custom_minimum_size.y
+
+
+func _on_tracker_collapse_pressed() -> void:
+	tracker_collapsed = not tracker_collapsed
+	_layout_trackers()
+	tracker_layout_changed.emit()
 
 
 func _refresh_journal() -> void:
@@ -323,6 +531,10 @@ func _refresh_journal() -> void:
 	close_button.text = localization_manager.text("common.close")
 	list_heading_label.text = localization_manager.text("ui.quest.list_heading").to_upper()
 	detail_objective_heading.text = localization_manager.text("ui.quest.objectives").to_upper()
+	detail_offer_prompt_label.text = localization_manager.text("ui.quest.offer_prompt")
+	detail_offer_hint_label.text = localization_manager.text("ui.quest.offer_decline_hint")
+	detail_offer_accept_button.text = localization_manager.text("common.accept")
+	detail_offer_decline_button.text = localization_manager.text("common.decline")
 
 	_clear_children_except(quest_list, empty_list_label)
 
@@ -356,7 +568,9 @@ func _refresh_journal() -> void:
 		var quest: Dictionary = quest_value as Dictionary
 		var quest_id := str(quest.get("questId", ""))
 		var status := str(quest.get("status", ""))
-		var section := "active" if status == "active" else "history"
+		var section := "available" if status == "available" else (
+			"active" if status == "active" else "history"
+		)
 		if section != current_section:
 			current_section = section
 			var section_label := _label(10, MUTED_TEXT)
@@ -405,6 +619,14 @@ func _show_quest_detail(quest: Dictionary) -> void:
 		str(quest.get("summaryKey", "")),
 		str(quest.get("questId", ""))
 	)
+	var is_side_offer := quest_type == "side" and str(quest.get("status", "")) == "available"
+	detail_offer_panel.visible = is_side_offer
+	detail_offer_accept_button.disabled = side_offer_pending
+	detail_offer_decline_button.disabled = side_offer_pending
+	if is_side_offer:
+		detail_objective_heading.visible = false
+		_clear_children_except(detail_steps)
+		return
 	detail_objective_heading.visible = true
 	_clear_children_except(detail_steps)
 	var journal_service := _journal_service()
@@ -439,6 +661,7 @@ func _show_empty_detail() -> void:
 	detail_title_label.text = localization_manager.text("ui.quest.empty_title")
 	detail_summary_label.text = localization_manager.text("ui.quest.empty_detail")
 	detail_objective_heading.visible = false
+	detail_offer_panel.visible = false
 	_clear_children_except(detail_steps)
 
 
@@ -451,8 +674,60 @@ func set_filter(filter_id: String) -> void:
 
 
 func _on_quest_selected(quest_id: String) -> void:
+	side_offer_pending = false
+	detail_offer_status_label.visible = false
 	selected_quest_id = quest_id
 	_refresh_journal()
+
+
+func _on_side_offer_declined() -> void:
+	if side_offer_pending:
+		return
+	close_journal()
+
+
+func _on_side_offer_accepted() -> void:
+	if side_offer_pending:
+		return
+	var journal_service := _journal_service()
+	var quest := _find_entry(
+		journal_service.get_entries() if journal_service != null else [],
+		selected_quest_id
+	)
+	if (
+		str(quest.get("questType", "")) != "side"
+		or str(quest.get("status", "")) != "available"
+	):
+		return
+	side_offer_pending = true
+	detail_offer_accept_button.disabled = true
+	detail_offer_decline_button.disabled = true
+	detail_offer_status_label.text = localization_manager.text("ui.quest.offer_accepting")
+	detail_offer_status_label.add_theme_color_override("font_color", MUTED_TEXT)
+	detail_offer_status_label.visible = true
+	var game_state_service := get_node_or_null("/root/PlayerGameStateService")
+	var story_service := get_node_or_null("/root/StoryService")
+	if game_state_service == null or story_service == null:
+		side_offer_pending = false
+		detail_offer_accept_button.disabled = false
+		detail_offer_decline_button.disabled = false
+		detail_offer_status_label.text = localization_manager.text("ui.quest.offer_error")
+		detail_offer_status_label.add_theme_color_override("font_color", DANGER)
+		return
+	var result_value: Variant = await game_state_service.call(
+		"accept_side_quest",
+		selected_quest_id,
+		int(story_service.call("get_revision"))
+	)
+	var result: Dictionary = result_value as Dictionary if result_value is Dictionary else {}
+	side_offer_pending = false
+	if bool(result.get("success", false)):
+		return
+	detail_offer_accept_button.disabled = false
+	detail_offer_decline_button.disabled = false
+	detail_offer_status_label.text = localization_manager.text("ui.quest.offer_error")
+	detail_offer_status_label.add_theme_color_override("font_color", DANGER)
+	detail_offer_status_label.visible = true
 
 
 func _on_tracker_gui_input(event: InputEvent) -> void:

@@ -27,6 +27,7 @@ func _run() -> void:
 				"questType": "main",
 				"titleKey": "story.kanto.choose_starter.title",
 				"summaryKey": "story.kanto.choose_starter.summary",
+				"rewardPreviews": [{"type": "item", "itemId": "exp-share", "quantity": 1, "private": true}],
 				"status": "active",
 				"steps": [
 					{
@@ -65,6 +66,10 @@ func _run() -> void:
 			"quest title localization key is projected"
 		)
 		_expect(not quest.has("serverOnly"), "projection only keeps quest contract fields")
+		_expect(
+			quest.get("rewardPreviews", []) == [{"type": "item", "itemId": "exp-share", "quantity": 1}],
+			"quest reward previews are safely projected"
+		)
 		_expect(quest.get("completedAt", "unexpected") == null, "nullable quest timestamps remain null")
 		if steps.size() == 1:
 			var step: Dictionary = steps[0] as Dictionary
@@ -156,6 +161,9 @@ func _verify_integration_contract() -> void:
 	var auth := _source("res://scripts/services/auth_service.gd")
 	var overlay := _source("res://scripts/ui/ui_overlay.gd")
 	var oak := _source("res://scripts/world/kanto/towns/pallet_town/oak.gd")
+	var oak_lab := _source("res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn")
+	var inventory := _source("res://scripts/services/inventory_service.gd")
+	var base_npc := _source("res://scripts/world/npcs/base_npc.gd")
 	_expect(
 		project.contains('StoryService="*res://scripts/services/story_service.gd"'),
 		"project registers the story projection"
@@ -167,9 +175,11 @@ func _verify_integration_contract() -> void:
 	_expect(
 		game_state_service.contains('const PLAYER_STORY_ENDPOINT := "/game/story"')
 		and game_state_service.contains('const STORY_BOOTSTRAP_ENDPOINT := "/game/story/bootstrap"')
+		and game_state_service.contains('const STORY_QUEST_ACCEPT_ENDPOINT := "/game/story/quests/%s/accept"')
 		and game_state_service.contains("func bootstrap_story() -> Dictionary:")
+		and game_state_service.contains("func accept_side_quest(quest_id: String, expected_revision: int) -> Dictionary:")
 		and game_state_service.contains('"story": story'),
-		"game state service exposes bootstrap, profile, and refresh story payloads"
+		"game state service exposes bootstrap, side-quest acceptance, profile, and refresh story payloads"
 	)
 	_expect(
 		loading.contains("await PlayerGameStateService.bootstrap_story()")
@@ -181,6 +191,27 @@ func _verify_integration_contract() -> void:
 	_expect(
 		oak.contains("await PlayerGameStateService.refresh_story()"),
 		"the authoritative starter claim refreshes completed quest progress"
+	)
+	_expect(
+		oak_lab.contains('interaction_id = "oaks_lab_oak_parcel_request"')
+		and oak_lab.contains("preload_quest_markers = true"),
+		"Oak starts the parcel quest through a separate marked interaction"
+	)
+	_expect(
+		oak.contains("questTurnInId")
+		and oak.contains('inventory_service.call(\n\t\t"turn_in_npc_quest_item"'),
+		"Oak handles the catalog-driven parcel return"
+	)
+	_expect(
+		inventory.contains('const NPC_QUEST_ITEM_TURN_IN_ENDPOINT := "/game/npc-quest-item-turn-ins/%s/claim"')
+		and inventory.contains("func turn_in_npc_quest_item(turn_in_id: String) -> Dictionary:"),
+		"inventory service exposes the authoritative parcel turn-in"
+	)
+	_expect(
+		base_npc.contains('quest_marker_label.text = "!"')
+		and base_npc.contains('quest_marker_label.text = "✦"')
+		and base_npc.contains('quest_type == "main"'),
+		"NPC quest markers distinguish main and side quests with main-story priority"
 	)
 	_expect(
 		auth.contains("StoryService.reset_story()")

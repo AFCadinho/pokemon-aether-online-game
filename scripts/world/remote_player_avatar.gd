@@ -6,6 +6,7 @@ signal interaction_requested(player_state: Dictionary, world_position: Vector2)
 
 const PLAYER_SCENE: PackedScene = preload("res://scenes/player.tscn")
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
+const MountService := preload("res://scripts/services/mount_service.gd")
 const GuildEmblemTexture := preload("res://scripts/ui/guild_emblem_texture.gd")
 const NameplateLayout := preload("res://scripts/ui/nameplate_layout.gd")
 const MapChatBubbleScript := preload("res://scripts/world/map_chat_bubble.gd")
@@ -38,6 +39,8 @@ const NAMEPLATE_MIN_NAME_WIDTH := 44.0
 const NAMEPLATE_MAX_NAME_WIDTH := 132.0
 const NAMEPLATE_LAYER_GAP := 2.0
 const BODY_SPRITE_NAME := "BodySprite"
+const MOUNT_SPRITE_NAME := "MountSprite"
+const MOUNT_FOREGROUND_SPRITE_NAME := "MountForegroundSprite"
 const UNEQUIPPED_APPEARANCE_PART_META := "unequipped_appearance_part"
 const ACTIVITY_BASE_SPRITE_OFFSET_META := "activity_base_sprite_offset"
 const ACTIVITY_LAYER_OFFSETS := {
@@ -147,7 +150,11 @@ var is_replaying_tile_move := false
 var pending_tile_moves: Array[Dictionary] = []
 var last_direction := Vector2.DOWN
 var look_node: Node2D
+var mount_sprite: AnimatedSprite2D
+var mount_foreground_sprite: AnimatedSprite2D
+var rider_node: Node2D
 var base_look_position := Vector2.ZERO
+var base_rider_position := Vector2.ZERO
 var appearance_sprites: Array[AnimatedSprite2D] = []
 var nameplate: Control
 var nameplate_background: Panel
@@ -164,6 +171,7 @@ var current_body_id := ""
 var current_body_gender := ""
 var current_body_movement_style := CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
 var current_activity_style := CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
+var current_mount_id := ""
 var current_gender := "male"
 var current_appearance_state: Dictionary = {}
 var current_appearance_signature := ""
@@ -224,6 +232,13 @@ func apply_state(state: Dictionary) -> void:
 	)
 	var movement_data := _dictionary_from_value(state.get("movement", {}))
 	current_activity_style = _resolve_activity_style(state, movement_data)
+	var next_mount_id := MountService.normalize_mount_id(str(
+		movement_data.get("mountId", state.get("mountId", ""))
+	))
+	if next_mount_id != current_mount_id:
+		current_mount_id = next_mount_id
+		current_appearance_signature = ""
+		current_body_movement_style = ""
 	var packet_direction := _direction_from_name(str(state.get("facingDirection", "down")))
 	if not has_position:
 		target_position = new_target_position
@@ -248,6 +263,7 @@ func apply_state(state: Dictionary) -> void:
 
 	_update_animation(_is_visually_moving(false))
 	_apply_appearance_state(appearance_state)
+	_sync_mount_visual()
 	_apply_follower_state(_dictionary_from_value(state.get("follower", {})))
 	_update_sort_z()
 
@@ -417,15 +433,22 @@ func _apply_appearance_state(appearance_state: Dictionary) -> void:
 	)
 	var signature: String = _get_appearance_signature(next_appearance_state)
 	if signature == current_appearance_signature \
-			and current_gender == current_body_gender \
-			and next_body_movement_style == current_body_movement_style:
+		and current_gender == current_body_gender \
+		and next_body_movement_style == current_body_movement_style:
 		return
 
+	var previous_skin_tone := str(
+		current_appearance_state.get(
+			"skin_tone",
+			CharacterAppearanceService.DEFAULT_SKIN_TONE
+		)
+	)
 	current_appearance_state = next_appearance_state
 	current_appearance_signature = signature
 	if body_id != current_body_id \
-			or current_gender != current_body_gender \
-			or next_body_movement_style != current_body_movement_style:
+		or current_gender != current_body_gender \
+		or next_body_movement_style != current_body_movement_style \
+		or str(next_appearance_state.get("skin_tone", "")) != previous_skin_tone:
 		_apply_body_frames(body_id, current_gender, next_body_movement_style)
 	else:
 		_apply_appearance_parts(next_body_movement_style)
@@ -618,12 +641,93 @@ func _create_visual() -> void:
 	look_node = look_copy as Node2D
 	if look_node != null:
 		base_look_position = look_node.position
+		mount_sprite = look_node.get_node_or_null(MOUNT_SPRITE_NAME) as AnimatedSprite2D
+		mount_foreground_sprite = look_node.get_node_or_null(
+			MOUNT_FOREGROUND_SPRITE_NAME
+		) as AnimatedSprite2D
+		rider_node = look_node.get_node_or_null("Rider") as Node2D
+		if rider_node != null:
+			base_rider_position = rider_node.position
 	_collect_appearance_sprites(look_copy)
 	_apply_appearance_state({"body": CharacterAppearanceService.DEFAULT_MALE_BODY_ID})
 	_create_nameplate_from_player_scene(player_instance)
 	_setup_map_chat_bubble()
 	_create_interaction_hit_area()
 	player_instance.queue_free()
+
+
+func _sync_mount_visual() -> void:
+	if mount_sprite == null:
+		return
+	if current_mount_id == "":
+		mount_sprite.stop()
+		mount_sprite.sprite_frames = null
+		mount_sprite.visible = false
+		mount_foreground_sprite.stop()
+		mount_foreground_sprite.sprite_frames = null
+		mount_foreground_sprite.visible = false
+		_sync_mount_rider_delta()
+		return
+	var mount_frames := MountService.get_mount_frames(current_mount_id)
+	if mount_frames == null:
+		mount_sprite.visible = false
+		return
+	mount_sprite.sprite_frames = mount_frames
+	mount_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	mount_sprite.visible = true
+	var foreground_frames := MountService.get_mount_foreground_frames(current_mount_id)
+	mount_foreground_sprite.sprite_frames = foreground_frames
+	mount_foreground_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	mount_foreground_sprite.visible = foreground_frames != null
+	_sync_mount_animation(_is_visually_moving(false), last_direction)
+
+
+func _sync_mount_animation(moving: bool, direction: Vector2) -> void:
+	if mount_sprite == null or not mount_sprite.visible or mount_sprite.sprite_frames == null:
+		return
+	var animation_name := _get_walk_animation_name(direction) \
+		if moving \
+		else _get_idle_animation_name(direction)
+	if not mount_sprite.sprite_frames.has_animation(animation_name):
+		return
+	var animation_changed := mount_sprite.animation != animation_name
+	if animation_changed or not moving and mount_sprite.is_playing():
+		mount_sprite.animation = animation_name
+		mount_sprite.frame = 0
+		mount_sprite.frame_progress = 0.0
+	if moving:
+		mount_sprite.play(animation_name)
+	else:
+		mount_sprite.animation = animation_name
+		mount_sprite.frame = 0
+		mount_sprite.frame_progress = 0.0
+		mount_sprite.stop()
+	_sync_mount_foreground_frame()
+
+
+func _sync_mount_foreground_frame() -> void:
+	if mount_foreground_sprite == null or not mount_foreground_sprite.visible:
+		return
+	if mount_sprite == null or mount_sprite.sprite_frames == null:
+		return
+	mount_foreground_sprite.animation = mount_sprite.animation
+	mount_foreground_sprite.frame = mount_sprite.frame
+	mount_foreground_sprite.frame_progress = mount_sprite.frame_progress
+	mount_foreground_sprite.stop()
+
+
+func _sync_mount_rider_delta() -> void:
+	if rider_node == null:
+		return
+	if mount_sprite == null or not mount_sprite.visible or current_mount_id == "":
+		rider_node.position = base_rider_position
+		return
+	var rider_offset := MountService.get_rider_frame_offset(
+		current_mount_id,
+		_get_activity_offset_direction(),
+		mount_sprite.frame
+	)
+	rider_node.position = base_rider_position + Vector2(rider_offset)
 
 func _create_interaction_hit_area() -> void:
 	var hit_area := Area2D.new()
@@ -962,8 +1066,10 @@ func _make_role_badge_style(role_id: String, fallback_color: Color) -> StyleBoxF
 func _collect_appearance_sprites(node: Node) -> void:
 	if node is AnimatedSprite2D:
 		var sprite := node as AnimatedSprite2D
-		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-		appearance_sprites.append(sprite)
+		if sprite.name != MOUNT_SPRITE_NAME \
+			and sprite.name != MOUNT_FOREGROUND_SPRITE_NAME:
+			sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+			appearance_sprites.append(sprite)
 
 	for child in node.get_children():
 		_collect_appearance_sprites(child)
@@ -1027,6 +1133,7 @@ func _apply_body_frames(body_id: String, gender: String, movement_style: String)
 	)
 	if body_frames == null:
 		return
+	body_frames = MountService.get_mounted_rider_frames(body_frames, current_mount_id)
 
 	for sprite in appearance_sprites:
 		if sprite.name != "BodySprite":
@@ -1141,6 +1248,7 @@ func _apply_appearance_part(category: String, part_id: String, movement_style: S
 	if part_frames == null:
 		_clear_appearance_part_sprite(normalized_category)
 		return
+	part_frames = MountService.get_mounted_rider_frames(part_frames, current_mount_id)
 
 	sprite.sprite_frames = part_frames
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -1458,6 +1566,9 @@ func _update_animation(is_moving: bool) -> void:
 			sprite.frame_progress = 0.0
 			sprite.stop()
 	_sync_all_part_sprites_to_body()
+	_sync_mount_animation(is_moving, last_direction)
+	_sync_mount_rider_delta()
+	_sync_mount_foreground_frame()
 	_apply_activity_visual_offset()
 
 

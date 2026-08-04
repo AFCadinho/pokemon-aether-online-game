@@ -1,0 +1,350 @@
+extends Control
+
+class_name TownMapCanvas
+
+signal location_selected(location_id: String)
+
+const MARKER_SIZE := Vector2(22.0, 22.0)
+const CURRENT_PORTRAIT_SIZE := Vector2(34.0, 34.0)
+const PATH_SHADOW := Color("#06111dcc")
+const PATH_COLOR := Color("#63d7f5e8")
+const PATH_HIGHLIGHT := Color("#f3cc69")
+const CURRENT_COLOR := Color("#5cecff")
+const HOVER_COLOR := Color("#f4fbff")
+const SELECTED_COLOR := Color("#ff5bdc")
+const SELECTED_SHADOW := Color("#07111fd9")
+const TrainerHeadPortraitScript := preload("res://scripts/ui/trainer_head_portrait.gd")
+
+var locations: Dictionary = {}
+var paths: Array = []
+var current_location_id := ""
+var selected_location_id := ""
+var hovered_location_id := ""
+var marker_buttons: Dictionary = {}
+var background_texture: Texture2D
+var current_location_portrait: TrainerHeadPortrait
+var show_connection_overlay := true
+var show_marker_overlay := true
+
+
+func configure(map_locations: Dictionary, map_paths: Array) -> void:
+	locations = map_locations.duplicate(true)
+	paths = map_paths.duplicate(true)
+	_build_markers()
+	queue_redraw()
+
+
+func set_background(texture: Texture2D) -> void:
+	background_texture = texture
+	queue_redraw()
+
+
+func set_overlay_visibility(show_connections: bool, show_markers: bool) -> void:
+	show_connection_overlay = show_connections
+	show_marker_overlay = show_markers
+	_refresh_markers()
+	queue_redraw()
+
+
+func set_current_location(location_id: String) -> void:
+	current_location_id = location_id
+	_refresh_markers()
+	_position_current_portrait()
+	queue_redraw()
+
+
+func select_location(location_id: String) -> void:
+	if not locations.has(location_id):
+		return
+	selected_location_id = location_id
+	_refresh_markers()
+	queue_redraw()
+
+
+func _ready() -> void:
+	resized.connect(_position_markers)
+	current_location_portrait = TrainerHeadPortraitScript.new() as TrainerHeadPortrait
+	current_location_portrait.name = "CurrentLocationPortrait"
+	current_location_portrait.custom_minimum_size = CURRENT_PORTRAIT_SIZE
+	current_location_portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	current_location_portrait.visible = false
+	add_child(current_location_portrait)
+	set_process(true)
+
+
+func _process(_delta: float) -> void:
+	if (
+		current_location_id != ""
+		or selected_location_id != ""
+		or hovered_location_id != ""
+	) and is_visible_in_tree():
+		queue_redraw()
+
+
+func _draw() -> void:
+	if background_texture != null:
+		draw_texture_rect(background_texture, Rect2(Vector2.ZERO, size), false)
+	if show_connection_overlay:
+		for path_value: Variant in paths:
+			var path_location_ids := _path_location_ids(path_value)
+			var path_points := _path_points(path_value)
+			if path_location_ids.size() < 2 or path_points.size() < 2:
+				continue
+			var from_id := path_location_ids[0]
+			var to_id := path_location_ids[1]
+			draw_polyline(PackedVector2Array(path_points), PATH_SHADOW, 8.0, true)
+			var is_selected_path := from_id == selected_location_id or to_id == selected_location_id
+			draw_polyline(
+				PackedVector2Array(path_points),
+				PATH_HIGHLIGHT if is_selected_path else PATH_COLOR,
+				4.0,
+				true
+			)
+
+	if current_location_id != "" and locations.has(current_location_id):
+		_draw_current_location_indicator(
+			_location_point(current_location_id),
+			current_location_portrait != null and current_location_portrait.visible
+		)
+
+	if (
+		hovered_location_id != ""
+		and hovered_location_id != current_location_id
+		and hovered_location_id != selected_location_id
+		and locations.has(hovered_location_id)
+	):
+		_draw_hover_indicator(_location_point(hovered_location_id))
+
+	if selected_location_id != "" and locations.has(selected_location_id):
+		_draw_selected_indicator(
+			_location_point(selected_location_id),
+			selected_location_id == current_location_id
+		)
+
+
+func _draw_hover_indicator(center: Vector2) -> void:
+	var pulse := (sin(Time.get_ticks_msec() / 145.0) + 1.0) * 0.5
+	draw_circle(center, 15.0 + pulse * 1.5, Color(0.55, 0.92, 1.0, 0.15))
+	draw_arc(center, 15.0 + pulse, 0.0, TAU, 32, SELECTED_SHADOW, 4.0, true)
+	draw_arc(center, 15.0 + pulse, 0.0, TAU, 32, HOVER_COLOR, 2.0, true)
+
+
+func _draw_current_location_indicator(center: Vector2, surrounds_portrait: bool) -> void:
+	var pulse := (sin(Time.get_ticks_msec() / 180.0) + 1.0) * 0.5
+	var ring_radius := 20.0 if surrounds_portrait else 15.0
+	var glow_radius := ring_radius + 4.0 + pulse * 3.0
+	draw_circle(
+		center,
+		glow_radius,
+		Color(CURRENT_COLOR.r, CURRENT_COLOR.g, CURRENT_COLOR.b, 0.17 - pulse * 0.05)
+	)
+	draw_arc(center, ring_radius, 0.0, TAU, 40, SELECTED_SHADOW, 5.0, true)
+	draw_arc(center, ring_radius, 0.0, TAU, 40, CURRENT_COLOR, 3.0, true)
+	draw_arc(
+		center,
+		ring_radius + 3.0 + pulse * 2.0,
+		0.0,
+		TAU,
+		40,
+		Color(CURRENT_COLOR.r, CURRENT_COLOR.g, CURRENT_COLOR.b, 0.48 - pulse * 0.16),
+		1.5,
+		true
+	)
+	for direction: Vector2 in [Vector2.UP, Vector2.RIGHT, Vector2.DOWN, Vector2.LEFT]:
+		draw_line(
+			center + direction * (ring_radius + 1.0),
+			center + direction * (ring_radius + 6.0),
+			CURRENT_COLOR,
+			2.0,
+			true
+		)
+
+
+func _draw_selected_indicator(center: Vector2, surrounds_portrait: bool) -> void:
+	var pulse := (sin(Time.get_ticks_msec() / 170.0) + 1.0) * 0.5
+	var ring_radius := 27.0 if surrounds_portrait else 17.0
+	var pulse_radius := ring_radius + 2.0 + pulse * 2.5
+	draw_circle(
+		center,
+		ring_radius + 1.0,
+		Color(SELECTED_COLOR.r, SELECTED_COLOR.g, SELECTED_COLOR.b, 0.13)
+	)
+	draw_arc(center, ring_radius, 0.0, TAU, 40, SELECTED_SHADOW, 5.0, true)
+	draw_arc(center, ring_radius, 0.0, TAU, 40, SELECTED_COLOR, 2.5, true)
+	draw_arc(
+		center,
+		pulse_radius,
+		0.0,
+		TAU,
+		40,
+		Color(SELECTED_COLOR.r, SELECTED_COLOR.g, SELECTED_COLOR.b, 0.42 - pulse * 0.18),
+		1.5,
+		true
+	)
+
+	var pointer_tip := center + Vector2(0.0, -ring_radius - 2.0)
+	var pointer_top := center + Vector2(0.0, -ring_radius - 11.0 - pulse * 2.0)
+	var pointer_shadow := PackedVector2Array([
+		pointer_tip + Vector2(0.0, 2.0),
+		pointer_top + Vector2(-7.0, 1.0),
+		pointer_top + Vector2(7.0, 1.0),
+	])
+	draw_colored_polygon(pointer_shadow, SELECTED_SHADOW)
+	draw_colored_polygon(PackedVector2Array([
+		pointer_tip,
+		pointer_top + Vector2(-6.0, 0.0),
+		pointer_top + Vector2(6.0, 0.0),
+	]), SELECTED_COLOR)
+
+
+func _build_markers() -> void:
+	for marker_value: Variant in marker_buttons.values():
+		var marker := marker_value as Button
+		if marker != null:
+			marker.queue_free()
+	marker_buttons.clear()
+
+	for location_id_value: Variant in locations.keys():
+		var location_id := str(location_id_value)
+		var location := locations.get(location_id, {}) as Dictionary
+		var marker := Button.new()
+		marker.name = "Marker_%s" % location_id
+		marker.custom_minimum_size = MARKER_SIZE
+		marker.size = MARKER_SIZE
+		marker.focus_mode = Control.FOCUS_NONE
+		marker.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		marker.tooltip_text = _t(str(location.get("nameKey", "")))
+		marker.add_theme_stylebox_override("normal", _marker_style(location, false, false))
+		marker.add_theme_stylebox_override("hover", _marker_style(location, true, false))
+		marker.add_theme_stylebox_override("pressed", _marker_style(location, true, true))
+		marker.mouse_entered.connect(_on_marker_mouse_entered.bind(location_id))
+		marker.mouse_exited.connect(_on_marker_mouse_exited.bind(location_id))
+		marker.pressed.connect(_on_marker_pressed.bind(location_id))
+		add_child(marker)
+		marker_buttons[location_id] = marker
+	_position_markers.call_deferred()
+
+
+func _refresh_markers() -> void:
+	for location_id_value: Variant in marker_buttons.keys():
+		var location_id := str(location_id_value)
+		var marker := marker_buttons.get(location_id) as Button
+		if marker == null:
+			continue
+		var location := locations.get(location_id, {}) as Dictionary
+		var selected := location_id == selected_location_id
+		var current := location_id == current_location_id
+		marker.add_theme_stylebox_override("normal", _marker_style(location, selected, current))
+		marker.add_theme_stylebox_override("hover", _marker_style(location, true, current))
+		marker.add_theme_stylebox_override("pressed", _marker_style(location, true, true))
+	if current_location_portrait != null:
+		current_location_portrait.visible = current_location_id != "" and locations.has(current_location_id)
+		if current_location_portrait.visible:
+			var player_save := get_node_or_null("/root/PlayerSave")
+			if player_save != null and player_save.has_method("to_appearance_state"):
+				current_location_portrait.set_appearance_state(player_save.call("to_appearance_state"))
+		_position_current_portrait()
+
+
+func _position_markers() -> void:
+	for location_id_value: Variant in marker_buttons.keys():
+		var location_id := str(location_id_value)
+		var marker := marker_buttons.get(location_id) as Button
+		if marker == null:
+			continue
+		marker.position = _location_point(location_id) - MARKER_SIZE * 0.5
+	_position_current_portrait()
+
+
+func _position_current_portrait() -> void:
+	if current_location_portrait == null:
+		return
+	current_location_portrait.position = _location_point(current_location_id) - CURRENT_PORTRAIT_SIZE * 0.5
+
+
+func _location_point(location_id: String) -> Vector2:
+	var location := locations.get(location_id, {}) as Dictionary
+	var position_value: Variant = location.get("position", {})
+	if not position_value is Dictionary:
+		return size * 0.5
+	var normalized := position_value as Dictionary
+	return Vector2(
+		float(normalized.get("x", 0.5)) * size.x,
+		float(normalized.get("y", 0.5)) * size.y
+	)
+
+
+func _path_location_ids(path_value: Variant) -> Array[String]:
+	var ids: Array[String] = []
+	if path_value is Array:
+		var path := path_value as Array
+		if path.size() >= 2:
+			ids.assign([str(path[0]), str(path[1])])
+	elif path_value is Dictionary:
+		var path := path_value as Dictionary
+		ids.assign([str(path.get("from", "")), str(path.get("to", ""))])
+	return ids
+
+
+func _path_points(path_value: Variant) -> Array[Vector2]:
+	var ids := _path_location_ids(path_value)
+	var points: Array[Vector2] = []
+	if ids.size() < 2 or not locations.has(ids[0]) or not locations.has(ids[1]):
+		return points
+	points.append(_location_point(ids[0]))
+	if path_value is Dictionary:
+		for waypoint_value: Variant in (path_value as Dictionary).get("waypoints", []):
+			if not waypoint_value is Dictionary:
+				continue
+			var waypoint := waypoint_value as Dictionary
+			points.append(Vector2(
+				float(waypoint.get("x", 0.5)) * size.x,
+				float(waypoint.get("y", 0.5)) * size.y
+			))
+	points.append(_location_point(ids[1]))
+	return points
+
+
+func _marker_style(location: Dictionary, highlighted: bool, current: bool) -> StyleBox:
+	if not show_marker_overlay:
+		return StyleBoxEmpty.new()
+	var kind := str(location.get("kind", "route"))
+	var color := Color("#f5d85c")
+	if kind in ["town", "city", "settlement"]:
+		color = Color("#f1c85d")
+	elif kind == "special":
+		color = Color("#8ceaff")
+	elif kind == "wilderness":
+		color = Color("#69d69b")
+	var style := StyleBoxFlat.new()
+	style.bg_color = color.lightened(0.14) if highlighted else color
+	style.border_color = Color("#e9f8ff") if current else Color("#07111f")
+	style.set_border_width_all(3 if current else 2)
+	style.set_corner_radius_all(11)
+	style.shadow_color = Color(0.0, 0.0, 0.0, 0.65)
+	style.shadow_size = 5 if highlighted or current else 3
+	return style
+
+
+func _on_marker_pressed(location_id: String) -> void:
+	select_location(location_id)
+	location_selected.emit(location_id)
+
+
+func _on_marker_mouse_entered(location_id: String) -> void:
+	hovered_location_id = location_id
+	queue_redraw()
+
+
+func _on_marker_mouse_exited(location_id: String) -> void:
+	if hovered_location_id != location_id:
+		return
+	hovered_location_id = ""
+	queue_redraw()
+
+
+func _t(key: String) -> String:
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	if localization_manager != null and localization_manager.has_method("text"):
+		return str(localization_manager.call("text", key))
+	return key

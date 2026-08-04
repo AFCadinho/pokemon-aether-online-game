@@ -9,6 +9,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/battle_presentation_state_check.gd",
 	"res://tests/battle_state_field_delta_check.gd",
 	"res://tests/battle_render_barrier_check.gd",
+	"res://tests/pvp_prechoice_buffer_check.gd",
 	"res://tests/battle_response_order_check.gd",
 	"res://tests/battle_result_overlay_check.gd",
 	"res://tests/battle_event_renderer_order_check.gd",
@@ -27,6 +28,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/battle_vs_panel_layout_check.gd",
 	"res://tests/moves_grid_disabled_state_check.gd",
 	"res://tests/battle_ui_layout_check.gd",
+	"res://tests/battle_trainer_staging_check.gd",
 	"res://tests/battle_animation_anchor_check.gd",
 	"res://tests/battle_terrain_field_visual_check.gd",
 	"res://tests/status_condition_overlay_check.gd",
@@ -51,6 +53,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/localization_launcher_news_check.gd",
 	"res://tests/localization_market_ui_check.gd",
 	"res://tests/localization_pokedex_ui_check.gd",
+	"res://tests/town_map_ui_check.gd",
 	"res://tests/localization_mail_ui_check.gd",
 	"res://tests/localization_friendlist_ui_check.gd",
 	"res://tests/localization_storage_ui_check.gd",
@@ -67,13 +70,19 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/new_player_spawn_check.gd",
 	"res://tests/blackout_respawn_contract_check.gd",
 	"res://tests/world_area_access_contract_check.gd",
+	"res://tests/map_character_route_gate_check.gd",
 	"res://tests/world_access_catalog_generation_check.gd",
 	"res://tests/gameplay_reset_contract_check.gd",
 	"res://tests/story_service_contract_check.gd",
 	"res://tests/starter_choice_dialog_check.gd",
+	"res://tests/oaks_lab_gary_sequence_check.gd",
 	"res://tests/quest_journal_contract_check.gd",
+	"res://tests/market_attendant_npc_check.gd",
+	"res://tests/cursor_theme_check.gd",
+	"res://tests/pixel_perfect_rendering_check.gd",
 	"res://tests/story_interaction_contract_check.gd",
 	"res://tests/players_house_story_intro_check.gd",
+	"res://tests/rivals_house_lillie_check.gd",
 	"res://tests/impersonation_account_switch_check.gd",
 	"res://tests/floor_visibility_mask_camera_check.gd",
 	"res://tests/players_house_visual_depth_check.gd",
@@ -94,6 +103,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/pvp_battle_history_reference_check.gd",
 	"res://tests/map_encounter_provider_check.gd",
 	"res://tests/surf_activity_presence_check.gd",
+	"res://tests/surf_mount_render_check.gd",
 	"res://tests/fishing_inventory_check.gd",
 	"res://tests/fishing_action_controller_check.gd",
 	"res://tests/wild_encounter_error_rules_check.gd",
@@ -120,6 +130,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/pokemon_summary_move_reorder_check.gd",
 	"res://tests/pokemon_summary_direct_field_move_check.gd",
 	"res://tests/tmx_visual_importer_check.gd",
+	"res://tests/open_field_visual_check.gd",
 	"res://tests/social_service_contract_check.gd",
 	"res://tests/guild_service_contract_check.gd",
 	"res://tests/guild_popup_check.gd",
@@ -166,15 +177,24 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/boss_battle_npc_check.gd",
 ]
 
-const LOG_DIR := "/tmp/pokeaether_project_checks"
+const DEFAULT_LOG_DIR := "/tmp/pokeaether_project_checks"
 
 var failed := false
+var log_dir := DEFAULT_LOG_DIR
 
 
 func _init() -> void:
-	var log_error := DirAccess.make_dir_recursive_absolute(LOG_DIR)
+	var configured_log_dir := OS.get_environment("POKEAETHER_TEST_LOG_DIR").strip_edges()
+	if not configured_log_dir.is_empty():
+		if not configured_log_dir.is_absolute_path():
+			push_error("POKEAETHER_TEST_LOG_DIR must be an absolute path.")
+			quit(1)
+			return
+		log_dir = configured_log_dir
+
+	var log_error := DirAccess.make_dir_recursive_absolute(log_dir)
 	if log_error != OK:
-		push_error("Failed to create check log directory: %s" % LOG_DIR)
+		push_error("Failed to create check log directory: %s" % log_dir)
 		quit(1)
 		return
 
@@ -190,7 +210,7 @@ func _init() -> void:
 
 func _run_check(executable: String, project_path: String, script_path: String) -> void:
 	var output: Array = []
-	var log_file := "%s/%s.log" % [LOG_DIR, _script_log_name(script_path)]
+	var log_file := "%s/%s.log" % [log_dir, _script_log_name(script_path)]
 	var exit_code := OS.execute(
 		executable,
 		PackedStringArray([

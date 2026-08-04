@@ -2691,6 +2691,10 @@
     "name": "Brinquedo de cutucar",
     "shortDesc": "Termina uma batalha selvagem."
   },
+  "pokedex": {
+    "name": "Pokédex",
+    "shortDesc": "Registra informações sobre os Pokémon que você encontra."
+  },
   "pokeblock-case": {
     "name": "Estojo Pokéblock",
     "shortDesc": "Segura Pokeblocks."

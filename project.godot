@@ -25,6 +25,7 @@ PlayerSave="*uid://x788vwp521n4"
 BattleApiConfig="*uid://wra74wdmekx5"
 BattleApiClient="*uid://dwil5tlkmdb7p"
 WindowFit="*res://scripts/core/window_fit.gd"
+CursorThemeManager="*res://scripts/services/cursor_theme_manager.gd"
 GatewayApiConfig="*res://scripts/services/gateway_api_config.gd"
 TrainerMetadataService="*res://scripts/services/trainer_metadata_service.gd"
 NpcMetadataService="*res://scripts/services/npc_metadata_service.gd"
@@ -148,5 +149,7 @@ battle_move_4={
 
 [rendering]
 
+2d/snap/snap_2d_transforms_to_pixel=true
+2d/snap/snap_2d_vertices_to_pixel=true
 rendering_device/driver.windows="d3d12"
 textures/vram_compression/import_etc2_astc=true

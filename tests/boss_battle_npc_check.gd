@@ -31,8 +31,8 @@ func _check_boss_battle_npc_script() -> void:
 	_check_true(text.contains("_make_difficulty_button(easy_label, \"easy\""), "BossBattleNPC has easy option")
 	_check_true(text.contains("_make_cancel_button()"), "BossBattleNPC has custom cancel option")
 	_check_true(text.contains("TrainerMetadataService.get_trainer_metadata(trainer_id)"), "BossBattleNPC loads trainer metadata")
-	_check_true(text.contains("var battle_result: Dictionary = await world.start_trainer_battle(trainer_metadata)"), "BossBattleNPC preserves structured battle errors")
-	_check_true(text.contains("world.start_trainer_battle(trainer_metadata)"), "BossBattleNPC starts trainer battle")
+	_check_true(text.contains("var battle_result: Dictionary = await world.start_trainer_battle("), "BossBattleNPC preserves structured battle errors")
+	_check_true(text.contains("build_battle_trainer_metadata(trainer_metadata)"), "BossBattleNPC starts trainer battle with its overworld visual")
 
 
 func _check_boss_battle_npc_scene() -> void:

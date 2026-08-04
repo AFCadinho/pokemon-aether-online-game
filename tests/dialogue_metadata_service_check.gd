@@ -4,6 +4,8 @@ const PROJECT_CONFIG := "res://project.godot"
 const DIALOGUE_METADATA_SERVICE_SCRIPT := "res://scripts/services/dialogue_metadata_service.gd"
 const NPC_DIALOGUE_SERVICE_SCRIPT := "res://scripts/services/npc_dialogue_service.gd"
 const DIALOGUE_NPC_SCRIPT := "res://scripts/world/npcs/dialogue_npc.gd"
+const DIALOGUE_BOX_SCRIPT := "res://scripts/ui/dialogue_box.gd"
+const DIALOGUE_BOX_SCENE := "res://scripts/ui/dialogue_box.tscn"
 const TRAINER_NPC_SCRIPT := "res://scripts/world/npcs/trainer_npc.gd"
 
 var failed := false
@@ -17,6 +19,7 @@ func _init() -> void:
 	_check_service_locale_contract()
 	_check_dialogue_npc_uses_dialogue_id_lookup()
 	_check_dialogue_npc_fallback_behavior()
+	_check_dialogue_box_side_quest_offer()
 	_check_trainer_npc_uses_intro_dialogue_lookup()
 	_check_trainer_npc_fallback_behavior()
 	_check_trainer_battle_behavior_unchanged()
@@ -83,6 +86,14 @@ func _check_dialogue_npc_uses_dialogue_id_lookup() -> void:
 		and text.contains("resolved_dialogue_speaker_name"),
 		"DialogueNPC uses the localized dialogue speaker name"
 	)
+	_check_true(
+		text.contains('metadata.get("offeredQuestId", "")')
+		and text.contains('metadata.get("offeredQuestRequiredQuestId", "")')
+		and text.contains("offered_quest_required_quest_id")
+		and text.contains("start_quest_offer(")
+		and text.contains("quest_offer_resolved"),
+		"DialogueNPC opens a story-gated catalog side-quest choice dialogue"
+	)
 
 
 func _check_dialogue_npc_fallback_behavior() -> void:
@@ -90,6 +101,25 @@ func _check_dialogue_npc_fallback_behavior() -> void:
 	_check_true(text.contains("await super.show_dialogue(lines, resolved_speaker_name)"), "DialogueNPC keeps explicit lines fallback")
 	_check_true(text.contains("await super.show_dialogue(dialogue_metadata_lines, resolved_speaker_name)"), "DialogueNPC passes resolved lines to BaseNPC")
 	_check_true(text.contains("resolved_dialogue_speaker_name"), "DialogueNPC keeps the resolved speaker fallback")
+
+
+func _check_dialogue_box_side_quest_offer() -> void:
+	var text := _read_text(DIALOGUE_BOX_SCRIPT)
+	var scene_text := _read_text(DIALOGUE_BOX_SCENE)
+	_check_true(text.contains("signal quest_offer_resolved(accepted: bool)"), "quest choice exposes a completion signal")
+	_check_true(text.contains("func start_quest_offer("), "quest details open in the dialogue box")
+	_check_true(text.contains('quest.get("titleKey"') and text.contains('quest.get("summaryKey"'), "quest choice shows title and summary")
+	_check_true(text.contains('step.get("objectiveKey"'), "quest choice shows its objective")
+	_check_true(text.contains('quest.get("rewardPreviews"'), "quest choice shows its server-projected rewards")
+	_check_true(text.contains("ItemLocalization.display_name("), "item rewards use localized item names")
+	_check_true(text.contains("func _quest_reward_icon("), "item rewards resolve their catalog icon")
+	_check_true(scene_text.contains('name="RewardIcon" type="TextureRect"'), "quest rewards render an item icon")
+	_check_true(scene_text.contains('name="RewardCard" type="PanelContainer"'), "quest rewards render as a compact card")
+	_check_true(scene_text.contains('name="QuestOfferCloseButton" type="Button"'), "quest offer has a top-right close button")
+	_check_true(scene_text.count("mouse_default_cursor_shape = 2") >= 3, "quest offer actions use the pointing-hand cursor")
+	_check_true(scene_text.contains("layer = 100"), "dialogue renders above the normal HUD canvas layer")
+	_check_true(text.contains("PlayerGameStateService.accept_side_quest("), "accept uses the authoritative side-quest flow")
+	_check_true(text.contains("_finish_quest_offer(false)"), "decline closes the offer without accepting")
 
 
 func _check_trainer_npc_uses_intro_dialogue_lookup() -> void:

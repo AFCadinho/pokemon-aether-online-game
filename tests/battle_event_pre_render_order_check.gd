@@ -928,6 +928,13 @@ func _check_force_switch_phase_release_recovers() -> void:
 	_check_equal(opponent_wait_source.contains("_retry_pending_pvp_render_ack()"), true, "the non-pivoting client also retries its barrier acknowledgement")
 	_check_equal(opponent_wait_source.contains('await _reconcile_pvp_battle_from_room("pvp_opponent_force_switch_barrier_recovery")'), true, "the non-pivoting client also recovers a missed barrier release")
 	_check_equal(
+		opponent_wait_source.contains('"pvp_opponent_force_switch_render_watchdog",\n\t\t\t\ttrue')
+			and opponent_wait_source.find("pvp_opponent_force_switch_render_watchdog")
+				< opponent_wait_source.find("if _pvp_is_waiting_for_force_switch_phase_release():"),
+		true,
+		"the forced-switch waiter recovers a missing post-pivot render batch without waiting for a phase update"
+	)
+	_check_equal(
 		opponent_wait_source.contains("reconciled and pvp_event_queue.has_pending()"),
 		true,
 		"the non-pivoting client unwinds its wait so an HTTP-recovered switch can render"

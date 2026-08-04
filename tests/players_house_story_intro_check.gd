@@ -36,6 +36,9 @@ func _run() -> void:
 	await process_frame
 
 	var father := house.get_node_or_null("Entities/NPCs/Father") as Node2D
+	var before_journey_hook := house.get_node_or_null(
+		"Entities/NPCs/Father/BeforeJourneyStoryHook"
+	)
 	var trigger := house.get_node_or_null("StoryTriggers/FatherIntro") as Area2D
 	var hook := house.get_node_or_null("StoryTriggers/FatherIntro/StoryHook")
 	var trigger_shape := house.get_node_or_null(
@@ -43,6 +46,13 @@ func _run() -> void:
 	) as CollisionShape2D
 
 	_expect(father != null, "father NPC exists downstairs")
+	_expect(before_journey_hook != null, "Dadinho has a manual pre-journey story interaction")
+	if before_journey_hook != null:
+		_expect(
+			str(before_journey_hook.get("interaction_id"))
+			== "players_house_father_before_journey",
+			"Dadinho's manual interaction matches the Town Map quest step"
+		)
 	_expect(trigger != null, "father intro has an automatic area trigger")
 	_expect(hook != null, "father intro trigger has a story hook")
 	var dad_texture := load(DAD_SPRITE_PATH) as Texture2D
@@ -90,6 +100,13 @@ func _run() -> void:
 		_expect(
 			father.get("npc_sprite_frames") == dad_frames,
 			"Dadinho profile applies the dedicated Adinho dad appearance"
+		)
+		var intro_sprite := father.get_node_or_null("Look/AnimatedSprite2D") as AnimatedSprite2D
+		_expect(
+			intro_sprite != null
+			and intro_sprite.position == Vector2(0, -16)
+			and intro_sprite.global_position == Vector2(432, 928),
+			"Dadinho's door sprite renders 16 pixels above his collision position"
 		)
 	if trigger != null:
 		_expect(trigger.monitoring, "first visit keeps the one-time automatic trigger active")
@@ -161,7 +178,7 @@ func _run() -> void:
 		_expect(
 			revisited_father.global_position == watching_tv_marker.global_position
 			and revisited_father.position == Vector2(336, 880),
-			"completed father intro places Dadinho on the blue cushion"
+			"completed father intro keeps Dadinho's collision on the blue-cushion tile"
 		)
 		_expect(
 			revisited_father.get("facing_direction") == Vector2.UP,
@@ -171,8 +188,25 @@ func _run() -> void:
 			"Look/AnimatedSprite2D"
 		) as AnimatedSprite2D
 		_expect(
-			revisited_sprite != null and revisited_sprite.animation == &"idle_up",
-			"Dadinho renders his upward idle frame while watching television"
+			revisited_sprite != null
+			and revisited_sprite.animation == &"idle_up"
+			and revisited_sprite.position == Vector2(0, -16)
+			and revisited_sprite.global_position == Vector2(336, 864),
+			"Dadinho's TV sprite renders 16 pixels above the blue-cushion collision marker"
+		)
+		revisited_father.call("_apply_npc_metadata", {
+			"dialogueId": "kanto_players_house_father_after_intro",
+			"dialogueVariants": [{
+				"dialogueId": "kanto_players_house_father_after_starter",
+				"requiredQuestId": "choose_starter",
+				"requiredQuestStepId": "choose_starter",
+				"requiredQuestStatus": "completed",
+			}],
+		})
+		_expect(
+			str(revisited_father.call("_resolve_story_dialogue_id"))
+			== "kanto_players_house_father_after_intro",
+			"Dadinho still reminds the player about Oak before choosing a starter"
 		)
 	if revisited_trigger != null:
 		_expect(
@@ -193,6 +227,109 @@ func _run() -> void:
 		and story_state_source.contains("@export var step_id"),
 		"Dadinho uses the reusable story-step scene variant layer"
 	)
+
+	story_service.apply_story({
+		"revision": 3,
+		"quests": [{
+			"questId": "choose_starter",
+			"storylineId": "kanto_main",
+			"definitionVersion": 1,
+			"questType": "main",
+			"status": "completed",
+			"steps": [{
+				"stepId": "talk_to_father",
+				"status": "completed",
+			}, {
+				"stepId": "choose_starter",
+				"status": "completed",
+			}],
+		}],
+	})
+	if revisited_father != null:
+		_expect(
+			str(revisited_father.call("_resolve_story_dialogue_id"))
+			== "kanto_players_house_father_after_starter",
+			"Dadinho stops saying Oak is waiting after the starter step completes"
+		)
+
+	story_service.apply_story({
+		"revision": 4,
+		"quests": [{
+			"questId": "get_town_map",
+			"questType": "main",
+			"status": "active",
+			"steps": [{
+				"stepId": "visit_father",
+				"status": "active",
+			}],
+		}, {
+			"questId": "train_starter_to_level_10",
+			"questType": "side",
+			"status": "available",
+			"steps": [],
+		}],
+	})
+	if revisited_father != null:
+		revisited_father.call("_apply_npc_metadata", {
+			"dialogueId": "kanto_players_house_father_after_intro",
+			"offeredQuestId": "train_starter_to_level_10",
+			"offeredQuestRequiredQuestId": "get_town_map",
+			"offeredQuestRequiredQuestStepId": "visit_father",
+			"offeredQuestRequiredQuestStatus": "completed",
+			"questMarkers": [{
+				"questId": "get_town_map",
+				"stepId": "visit_father",
+				"statuses": ["active"],
+			}, {
+				"questId": "train_starter_to_level_10",
+				"statuses": ["available"],
+				"visibilityQuestId": "get_town_map",
+				"visibilityQuestStepId": "visit_father",
+				"visibilityQuestStatus": "completed",
+			}],
+			"dialogueVariants": [{
+				"dialogueId": "kanto_players_house_father_after_pokedex",
+				"requiredQuestId": "get_town_map",
+				"requiredQuestStepId": "visit_father",
+				"requiredQuestStatus": "completed",
+			}],
+		})
+		revisited_father.call("_refresh_quest_marker")
+		var marker_label := revisited_father.get("quest_marker_label") as Label
+		_expect(
+			marker_label != null and marker_label.text == "!",
+			"Dadinho shows the main-story marker while Oak sends the player home"
+		)
+
+	story_service.apply_story({
+		"revision": 5,
+		"quests": [{
+			"questId": "get_town_map",
+			"questType": "main",
+			"status": "active",
+			"steps": [{
+				"stepId": "visit_father",
+				"status": "completed",
+			}],
+		}, {
+			"questId": "train_starter_to_level_10",
+			"questType": "side",
+			"status": "available",
+			"steps": [],
+		}],
+	})
+	if revisited_father != null:
+		revisited_father.call("_refresh_quest_marker")
+		_expect(
+			str(revisited_father.call("_resolve_story_dialogue_id"))
+			== "kanto_players_house_father_after_pokedex",
+			"Dadinho offers his training challenge only after the farewell visit"
+		)
+		var side_marker_label := revisited_father.get("quest_marker_label") as Label
+		_expect(
+			side_marker_label != null and side_marker_label.text == "✦",
+			"Dadinho's side-quest marker appears after the farewell visit"
+		)
 
 	revisited_house.queue_free()
 	story_service.reset_story()

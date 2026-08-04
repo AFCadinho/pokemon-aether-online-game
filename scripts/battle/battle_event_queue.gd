@@ -87,6 +87,9 @@ func complete_render_batch(context: Dictionary, success := true) -> void:
 		"source": context_source,
 		"success": success,
 	}
+	for optional_key: String in ["rendered_event_count", "total_event_count", "observed_duration_ms"]:
+		if context.has(optional_key):
+			completion[optional_key] = context[optional_key]
 	if render_completed_callback.is_valid():
 		render_completed_callback.call(completion)
 

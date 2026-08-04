@@ -174,6 +174,30 @@ func _init() -> void:
 		"a completed render acknowledgement survives a transient socket reconnect until its phase release arrives"
 	)
 	_check_equal(
+		realtime_source.contains('"renderProtocolVersion": 2') \
+			and realtime_source.contains('"renderState": normalized_render_state') \
+			and realtime_source.contains('if normalized_render_state == "COMPLETED":') \
+			and realtime_source.contains("func send_render_status("),
+		true,
+		"render progress uses the versioned protocol while only completion is retained as release proof"
+	)
+	_check_equal(
+		battle_source.contains('PVP_RENDER_PROGRESS_HEARTBEAT_SECONDS := 1.0') \
+			and battle_source.contains('_send_active_pvp_render_status("STARTED")') \
+			and battle_source.contains('_send_active_pvp_render_status("PROGRESS")') \
+			and battle_source.contains("_send_pvp_received_render_status(response)"),
+		true,
+		"authoritative render batches report received, started, progress, and completion lifecycle evidence"
+	)
+	_check_equal(
+		realtime_source.contains('if message_type == "pvp.render_recovery":') \
+			and battle_source.contains("func _handle_pvp_targeted_render_recovery(message: Dictionary) -> void:") \
+			and battle_source.contains('str(pvp_pending_render_ack_completion.get("event_batch_id", "")) == event_batch_id') \
+			and battle_source.contains('await _reconcile_pvp_battle_from_room("pvp_targeted_render_recovery", true)'),
+		true,
+		"a missing render completion retries local proof or reconciles only the requested batch"
+	)
+	_check_equal(
 		battle_source.contains("func _observe_pvp_gateway_epoch(message: Dictionary) -> void:") \
 			and battle_source.contains("pvp_response_order.reset_transport_cursor()") \
 			and battle_source.contains("pvp_last_applied_server_seq = 0"),
@@ -326,9 +350,89 @@ func _init() -> void:
 		"events": [{"battleEventSeq": 2, "type": "battle.turn_resolved"}],
 	})
 	_check_equal(gap_service.last_battle_event_seq, 0, "durable stream never skips a missing event")
-	_check_equal(gap_service.joined, false, "durable event gap restarts the realtime join")
-	_check_equal(gap_service.awaiting_pong, false, "durable event gap clears the old heartbeat state")
+	_check_equal(gap_service.joined, true, "a transient durable event gap keeps the realtime join open")
+	_check_equal(gap_service.pending_battle_events.has(2), true, "an out-of-order event remains buffered across packets")
+	_check_equal(gap_service.battle_event_gap_expected_seq, 1, "the gap watchdog tracks the oldest missing event")
+	var original_gap_deadline: int = gap_service.battle_event_gap_deadline_msec
+	gap_service._handle_battle_events_message({
+		"type": "pvp.battle_events",
+		"battleId": "battle-gap",
+		"battleEventLatestSeq": 3,
+		"events": [{"battleEventSeq": 3, "type": "battle.choice_submitted"}],
+	})
+	_check_equal(gap_service.battle_event_gap_deadline_msec, original_gap_deadline, "later events do not extend the oldest gap deadline")
+	gap_service._handle_battle_events_message({
+		"type": "pvp.battle_events",
+		"battleId": "battle-gap",
+		"battleEventLatestSeq": 3,
+		"events": [{"battleEventSeq": 1, "type": "battle.created"}],
+	})
+	_check_equal(gap_service.last_battle_event_seq, 3, "the missing event drains all now-contiguous buffered events")
+	_check_equal(gap_service.pending_battle_events.is_empty(), true, "the persistent buffer is empty after contiguous drain")
+	_check_equal(gap_service.battle_event_gap_expected_seq, 0, "the gap watchdog stops when the gap resolves")
+	_check_equal(gap_service.connection_attempt_generation, 0, "a resolved transient gap never reconnects")
 	gap_service.free()
+
+	var timeout_gap_service := PvpBattleRealtimeServiceNode.new()
+	timeout_gap_service.active_room_code = "ROOM"
+	timeout_gap_service.should_reconnect = true
+	timeout_gap_service.joined = true
+	timeout_gap_service.join_sent = true
+	timeout_gap_service.awaiting_pong = true
+	timeout_gap_service._handle_battle_events_message({
+		"type": "pvp.battle_events",
+		"battleId": "battle-timeout-gap",
+		"battleEventLatestSeq": 2,
+		"events": [{"battleEventSeq": 2, "type": "battle.turn_resolved"}],
+	})
+	var timeout_generation: int = timeout_gap_service.connection_attempt_generation
+	_check_equal(
+		timeout_gap_service._process_battle_event_gap_timeout(timeout_gap_service.battle_event_gap_deadline_msec),
+		true,
+		"an unresolved durable event gap reconnects after its bounded timeout"
+	)
+	_check_equal(timeout_gap_service.connection_attempt_generation, timeout_generation + 1, "gap timeout advances the connection generation")
+	_check_equal(timeout_gap_service.joined, false, "gap timeout clears the old realtime join")
+	_check_equal(timeout_gap_service.awaiting_pong, false, "gap timeout clears the old heartbeat state")
+	timeout_gap_service.free()
+
+	var terminal_gap_service := PvpBattleRealtimeServiceNode.new()
+	terminal_gap_service.active_room_code = "ROOM"
+	terminal_gap_service.joined = true
+	terminal_gap_service._handle_battle_events_message({
+		"type": "pvp.battle_events",
+		"battleId": "battle-terminal-gap",
+		"battleEventLatestSeq": 1,
+		"events": [],
+	})
+	_check_equal(terminal_gap_service.battle_event_gap_expected_seq, 1, "an advertised terminal-stream gap starts one watchdog")
+	terminal_gap_service._handle_battle_events_message({
+		"type": "pvp.battle_events",
+		"battleId": "battle-terminal-gap",
+		"battleEventLatestSeq": 2,
+		"events": [{
+			"battleEventSeq": 1,
+			"type": "battle.ended",
+			"payload": {"winnerSide":"p1","loserSide":"p2","endReason":"forfeit"},
+		}],
+	})
+	_check_equal(terminal_gap_service.battle_event_gap_expected_seq, 0, "a terminal event cancels the gap watchdog")
+	_check_equal(terminal_gap_service.pending_battle_events.is_empty(), true, "terminal state discards irrelevant later buffered events")
+	terminal_gap_service.free()
+
+	var deliberate_close_service := PvpBattleRealtimeServiceNode.new()
+	deliberate_close_service.active_room_code = "ROOM"
+	deliberate_close_service.joined = true
+	deliberate_close_service._handle_battle_events_message({
+		"type": "pvp.battle_events",
+		"battleId": "battle-deliberate-close-gap",
+		"battleEventLatestSeq": 2,
+		"events": [{"battleEventSeq": 2, "type": "battle.turn_resolved"}],
+	})
+	deliberate_close_service.disconnect_room()
+	_check_equal(deliberate_close_service.battle_event_gap_expected_seq, 0, "a deliberate room close cancels the gap watchdog")
+	_check_equal(deliberate_close_service.pending_battle_events.is_empty(), true, "a deliberate room close clears the event buffer")
+	deliberate_close_service.free()
 
 	var terminal_messages: Array[Dictionary] = []
 	service.battle_update_received.connect(func(message: Dictionary) -> void: terminal_messages.append(message))
@@ -376,6 +480,7 @@ func _init() -> void:
 	_check_equal(payload.get("timerContractVersions"), [1], "join advertises timer contract v1")
 	_check_equal(payload.get("decisionContractVersions"), [1], "join advertises decision contract v1")
 	_check_equal(payload.get("battleCommandContractVersions"), [1], "join advertises command contract v1")
+	_check_equal(payload.get("renderProtocolVersions"), [2, 1], "join advertises render lifecycle protocols")
 
 	var timer_update_applied := service._apply_timer_projection_from_battle_response({
 		"type": "pvp.battle_update",

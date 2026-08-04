@@ -49,6 +49,9 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 @export_range(1, 12, 1) var movement_tiles := 3
 @export var movement_wait_seconds := 0.0
 @export var movement_speed_pixels := 90.0
+## Fetch metadata on spawn when this NPC can display catalog-driven quest markers.
+@export var preload_quest_markers := false
+@export_range(1, 8, 1) var manual_interaction_reach_tiles := 1
 
 const TILE_SIZE := 32
 const MOVE_SPEED := 120.0
@@ -79,6 +82,9 @@ var metadata_display_name := ""
 var nameplate: Control
 var nameplate_background: Panel
 var nameplate_label: Label
+var quest_marker_bindings: Array[Dictionary] = []
+var quest_marker: PanelContainer
+var quest_marker_label: Label
 var movement_origin_tile := Vector2i.ZERO
 var movement_current_offset_tiles := 0
 var movement_direction_sign := 1
@@ -109,8 +115,13 @@ func _ready_base_npc() -> void:
 	_schedule_next_npc_movement_step()
 	_update_sort_z()
 	_setup_nameplate()
+	var story_service := get_node_or_null("/root/StoryService")
+	if story_service != null and not story_service.story_changed.is_connected(_on_story_changed):
+		story_service.story_changed.connect(_on_story_changed)
 	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
 		LocalizationManager.locale_changed.connect(_on_locale_changed)
+	if preload_quest_markers:
+		_initialize_quest_markers.call_deferred()
 
 
 func _apply_npc_profile() -> void:
@@ -160,6 +171,22 @@ func blocks_world_position(world_position: Vector2) -> bool:
 
 func get_feet_position() -> Vector2:
 	return feet_marker.global_position
+
+
+func set_story_sprite_offset(value: Vector2) -> void:
+	sprite_offset = value
+	if sprite != null:
+		sprite.position = value
+
+
+func build_battle_trainer_metadata(metadata: Dictionary) -> Dictionary:
+	var battle_metadata := metadata.duplicate(true)
+	if npc_sprite_frames != null:
+		# Resources stay client-local; the battle API receives the original
+		# metadata before this visual-only enrichment is added.
+		battle_metadata["_battle_sprite_frames"] = npc_sprite_frames
+		battle_metadata["_battle_sprite_offset"] = sprite_offset
+	return battle_metadata
 
 
 func is_story_requirement_met() -> bool:
@@ -405,6 +432,112 @@ func _setup_nameplate() -> void:
 	nameplate.add_child(nameplate_label)
 
 	_sync_nameplate()
+
+
+func _initialize_quest_markers() -> void:
+	if not _get_npc_metadata_id().is_empty():
+		await _load_npc_metadata()
+	_refresh_quest_marker()
+
+
+func _setup_quest_marker() -> void:
+	if quest_marker != null:
+		return
+	quest_marker = PanelContainer.new()
+	quest_marker.name = "QuestMarker"
+	quest_marker.visible = false
+	quest_marker.z_index = 513
+	quest_marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	quest_marker.position = Vector2(-15.0, -116.0)
+	quest_marker.custom_minimum_size = Vector2(30.0, 30.0)
+	add_child(quest_marker)
+
+	quest_marker_label = Label.new()
+	quest_marker_label.name = "Icon"
+	quest_marker_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	quest_marker_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	quest_marker_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	quest_marker_label.add_theme_font_size_override("font_size", 20)
+	quest_marker_label.add_theme_constant_override("outline_size", 4)
+	quest_marker_label.add_theme_color_override("font_outline_color", Color("#07111cff"))
+	quest_marker.add_child(quest_marker_label)
+
+
+func _refresh_quest_marker() -> void:
+	if quest_marker_bindings.is_empty():
+		if quest_marker != null:
+			quest_marker.visible = false
+		return
+	_setup_quest_marker()
+	var story_service := get_node_or_null("/root/StoryService")
+	if story_service == null:
+		quest_marker.visible = false
+		return
+	var selected_type := ""
+	for binding: Dictionary in quest_marker_bindings:
+		var quest: Dictionary = story_service.get_quest(str(binding.get("questId", "")))
+		if quest.is_empty() or not _quest_marker_binding_matches(binding, quest):
+			continue
+		var quest_type := str(
+			binding.get("markerType", quest.get("questType", "side"))
+		).strip_edges().to_lower()
+		if selected_type == "" or quest_type == "main":
+			selected_type = quest_type
+		if selected_type == "main":
+			break
+	quest_marker.visible = selected_type != ""
+	if selected_type == "main":
+		quest_marker_label.text = "!"
+		quest_marker_label.add_theme_color_override("font_color", Color("#ffd75aff"))
+		quest_marker.add_theme_stylebox_override("panel", _quest_marker_style(Color("#9a691fff")))
+	elif selected_type == "side":
+		quest_marker_label.text = "✦"
+		quest_marker_label.add_theme_color_override("font_color", Color("#75ddffff"))
+		quest_marker.add_theme_stylebox_override("panel", _quest_marker_style(Color("#176b8fff")))
+
+
+func _quest_marker_binding_matches(binding: Dictionary, quest: Dictionary) -> bool:
+	var visibility_quest_id := str(binding.get("visibilityQuestId", "")).strip_edges()
+	if (
+		not visibility_quest_id.is_empty()
+		and not StoryService.is_requirement_met(
+			visibility_quest_id,
+			str(binding.get("visibilityQuestStepId", "")).strip_edges(),
+			str(binding.get("visibilityQuestStatus", "completed")).strip_edges()
+		)
+	):
+		return false
+	var statuses_value: Variant = binding.get("statuses", [])
+	var statuses: Array[String] = []
+	if statuses_value is Array:
+		for value: Variant in statuses_value as Array:
+			statuses.append(str(value).strip_edges().to_lower())
+	if not statuses.is_empty() and str(quest.get("status", "")).to_lower() not in statuses:
+		return false
+	var step_id := str(binding.get("stepId", "")).strip_edges()
+	if step_id.is_empty():
+		return true
+	var steps_value: Variant = quest.get("steps", [])
+	if not (steps_value is Array):
+		return false
+	for step_value: Variant in steps_value as Array:
+		if not (step_value is Dictionary):
+			continue
+		var step := step_value as Dictionary
+		if str(step.get("stepId", "")) == step_id:
+			return str(step.get("status", "")).to_lower() in statuses
+	return false
+
+
+func _quest_marker_style(border_color: Color) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color("#081521ed")
+	style.border_color = border_color
+	style.set_border_width_all(2)
+	style.set_corner_radius_all(15)
+	style.shadow_color = Color(0.0, 0.0, 0.0, 0.55)
+	style.shadow_size = 3
+	return style
 
 
 func _sync_nameplate() -> void:
@@ -731,12 +864,32 @@ func _can_start_manual_interaction() -> bool:
 
 	if not Input.is_action_just_pressed("interact"):
 		return false
+	if not _is_player_facing_npc(nearby_player):
+		return false
 
 	var dialogue_box := _get_dialogue_box()
 	if dialogue_box != null and dialogue_box.is_open:
 		return false
 
 	return true
+
+
+func _is_player_facing_npc(body: Node2D) -> bool:
+	if body == null:
+		return false
+	var direction_value: Variant = body.get("last_direction")
+	if not direction_value is Vector2:
+		return false
+	var direction := direction_value as Vector2
+	if direction == Vector2.ZERO:
+		return false
+	var player_tile := _to_tile(_get_body_feet_position(body))
+	var cardinal_direction := Vector2i(roundi(direction.x), roundi(direction.y))
+	var npc_tile := _to_tile(get_feet_position())
+	for distance: int in range(1, manual_interaction_reach_tiles + 1):
+		if player_tile + cardinal_direction * distance == npc_tile:
+			return true
+	return false
 
 
 func _start_manual_interaction(body: Node2D) -> void:
@@ -902,11 +1055,27 @@ func _apply_npc_metadata(metadata: Dictionary) -> void:
 	if not metadata_dialogue.is_empty():
 		dialogue_lines = metadata_dialogue
 
+	quest_marker_bindings.clear()
+	var marker_values: Variant = metadata.get("questMarkers", [])
+	if marker_values is Array:
+		for marker_value: Variant in marker_values as Array:
+			if marker_value is Dictionary:
+				quest_marker_bindings.append((marker_value as Dictionary).duplicate(true))
+	_refresh_quest_marker()
+
 
 func _on_locale_changed(_locale: String) -> void:
 	npc_metadata_loaded = false
 	npc_metadata_load_failed = false
 	metadata_dialogue_id = ""
+	quest_marker_bindings.clear()
+	_refresh_quest_marker()
+	if preload_quest_markers:
+		_initialize_quest_markers.call_deferred()
+
+
+func _on_story_changed(_revision: int) -> void:
+	_refresh_quest_marker()
 
 
 func _get_dialogue_override_id() -> String:
