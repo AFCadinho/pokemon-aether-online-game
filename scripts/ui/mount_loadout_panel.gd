@@ -12,9 +12,12 @@ const SLOT_SELECTED_BACKGROUND := Color("#0b2940f2")
 const SLOT_SELECTED_BORDER := Color("#58c8ebcc")
 const TEXT_COLOR := Color("#f4f0de")
 const MUTED_TEXT_COLOR := Color("#aeb8c5")
+const CARD_WIDTH := 116.0
+const CARD_HEIGHT := 72.0
 
 var slots_panel: PanelContainer
 var title_label: Label
+var manager_close_button: Button
 var slot_buttons: Dictionary = {}
 var selector_panel: PanelContainer
 var selector_title_label: Label
@@ -83,51 +86,83 @@ func _build_interface() -> void:
 	slots_panel = PanelContainer.new()
 	slots_panel.name = "SlotsPanel"
 	slots_panel.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	slots_panel.offset_bottom = 100.0
+	slots_panel.offset_bottom = 132.0
 	slots_panel.mouse_filter = Control.MOUSE_FILTER_STOP
-	slots_panel.add_theme_stylebox_override(
-		"panel",
-		_make_panel_style(PANEL_BACKGROUND, PANEL_BORDER, 10, 1)
-	)
+	var main_style := _make_panel_style(PANEL_BACKGROUND, PANEL_BORDER, 12, 1)
+	main_style.content_margin_left = 0.0
+	main_style.content_margin_top = 0.0
+	main_style.content_margin_right = 0.0
+	main_style.content_margin_bottom = 0.0
+	main_style.shadow_color = Color("#00081480")
+	main_style.shadow_size = 8
+	main_style.shadow_offset = Vector2(0, 3)
+	slots_panel.add_theme_stylebox_override("panel", main_style)
 	add_child(slots_panel)
 
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 8)
-	margin.add_theme_constant_override("margin_top", 6)
-	margin.add_theme_constant_override("margin_right", 8)
-	margin.add_theme_constant_override("margin_bottom", 8)
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_top", 9)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_bottom", 11)
 	slots_panel.add_child(margin)
 
 	var content := VBoxContainer.new()
-	content.add_theme_constant_override("separation", 4)
+	content.add_theme_constant_override("separation", 8)
 	margin.add_child(content)
+
+	var header := HBoxContainer.new()
+	header.name = "Header"
+	header.custom_minimum_size.y = 24.0
+	header.add_theme_constant_override("separation", 8)
+	content.add_child(header)
 
 	title_label = Label.new()
 	title_label.name = "TitleLabel"
-	title_label.add_theme_color_override("font_color", MUTED_TEXT_COLOR)
-	title_label.add_theme_font_size_override("font_size", 11)
-	content.add_child(title_label)
+	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	title_label.add_theme_color_override("font_color", TEXT_COLOR)
+	title_label.add_theme_font_size_override("font_size", 13)
+	header.add_child(title_label)
+
+	manager_close_button = Button.new()
+	manager_close_button.name = "ManagerCloseButton"
+	manager_close_button.custom_minimum_size = Vector2(26, 24)
+	manager_close_button.text = "×"
+	manager_close_button.focus_mode = Control.FOCUS_NONE
+	manager_close_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	manager_close_button.add_theme_color_override("font_color", MUTED_TEXT_COLOR)
+	manager_close_button.add_theme_color_override("font_hover_color", TEXT_COLOR)
+	manager_close_button.add_theme_font_size_override("font_size", 16)
+	manager_close_button.add_theme_stylebox_override("normal", StyleBoxEmpty.new())
+	manager_close_button.add_theme_stylebox_override(
+		"hover",
+		_make_panel_style(SLOT_HOVER_BACKGROUND, PANEL_BORDER, 6, 1)
+	)
+	manager_close_button.add_theme_stylebox_override("pressed", StyleBoxEmpty.new())
+	manager_close_button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	manager_close_button.pressed.connect(close_manager)
+	header.add_child(manager_close_button)
 
 	var slot_row := HBoxContainer.new()
 	slot_row.name = "SlotRow"
-	slot_row.add_theme_constant_override("separation", 6)
+	slot_row.add_theme_constant_override("separation", 8)
 	content.add_child(slot_row)
 
 	for movement_mode: String in MountServiceScript.AVAILABLE_MOVEMENT_MODES:
 		var button := Button.new()
 		button.name = "%sMountButton" % movement_mode.capitalize()
-		button.custom_minimum_size = Vector2(95, 54)
+		button.custom_minimum_size = Vector2(CARD_WIDTH, CARD_HEIGHT)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.focus_mode = Control.FOCUS_NONE
 		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		button.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
-		button.add_theme_constant_override("icon_max_width", 42)
+		button.add_theme_constant_override("icon_max_width", 48)
 		button.expand_icon = true
 		button.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 		button.add_theme_color_override("font_color", TEXT_COLOR)
 		button.add_theme_color_override("font_hover_color", TEXT_COLOR)
-		button.add_theme_font_size_override("font_size", 11)
+		button.add_theme_font_size_override("font_size", 12)
 		button.add_theme_stylebox_override(
 			"normal",
 			_make_panel_style(SLOT_BACKGROUND, PANEL_BORDER, 8, 1)
@@ -151,8 +186,8 @@ func _build_interface() -> void:
 	selector_panel = PanelContainer.new()
 	selector_panel.name = "SelectorPanel"
 	selector_panel.visible = false
-	selector_panel.position = Vector2(0, 106)
-	selector_panel.custom_minimum_size = Vector2(228, 0)
+	selector_panel.position = Vector2(0, 140)
+	selector_panel.custom_minimum_size = Vector2(272, 0)
 	selector_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	selector_panel.z_index = 5
 	selector_panel.add_theme_stylebox_override(
@@ -220,6 +255,7 @@ func _refresh_localized_content() -> void:
 	if title_label == null:
 		return
 	title_label.text = _text("ui.mounts.title").to_upper()
+	manager_close_button.tooltip_text = _text("common.close")
 	selector_empty_label.text = _text("ui.mounts.none_available")
 	selector_close_button.tooltip_text = _text("common.close")
 	_refresh_slots()
@@ -235,8 +271,17 @@ func _refresh_slots() -> void:
 		var mount_id := _get_selected_mount_id(movement_mode)
 		var mount_name := MountServiceScript.get_mount_display_name(mount_id) \
 			if mount_id != "" else _text("ui.mounts.none_selected")
-		button.text = "%s\n%s" % [_mode_label(movement_mode), mount_name]
+		button.text = "%s\n%s" % [_mode_label(movement_mode).to_upper(), mount_name]
 		button.icon = MountServiceScript.get_mount_icon_texture(mount_id)
+		button.add_theme_stylebox_override(
+			"normal",
+			_make_panel_style(
+				SLOT_SELECTED_BACKGROUND if mount_id != "" else SLOT_BACKGROUND,
+				SLOT_SELECTED_BORDER if mount_id != "" else PANEL_BORDER,
+				8,
+				1
+			)
+		)
 		button.tooltip_text = _text(
 			"ui.mounts.%s_tooltip" % movement_mode
 		)
