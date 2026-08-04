@@ -100,6 +100,17 @@ func _run() -> void:
 		"substitute end message"
 	)
 	_check_equal(
+		formatter.format_status_source_ability_event({
+			"target": "p2a: Landorus",
+			"status": "par",
+			"source": "ability: Static",
+			"sourceTarget": "p1a: Zapdos",
+			"sourceAbility": "Static",
+		}),
+		"Zapdos's Static activated!",
+		"status event reports its public source ability"
+	)
+	_check_equal(
 		formatter.format_field_effect_event({"effectType": "weather", "effect": "none", "endedEffect": "Snow", "state": "end"}),
 		"The snow stopped.",
 		"snow end message retains the ended weather"
