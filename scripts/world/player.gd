@@ -746,6 +746,8 @@ func _ready() -> void:
 	add_to_group("player")
 	if not SettingsManager.world_pixel_scale_changed.is_connected(_on_world_pixel_scale_changed):
 		SettingsManager.world_pixel_scale_changed.connect(_on_world_pixel_scale_changed)
+	if not SettingsManager.mount_loadout_changed.is_connected(_on_mount_loadout_changed):
+		SettingsManager.mount_loadout_changed.connect(_on_mount_loadout_changed)
 	if not get_viewport().size_changed.is_connected(_on_render_viewport_size_changed):
 		get_viewport().size_changed.connect(_on_render_viewport_size_changed)
 	_apply_world_pixel_scale()
@@ -799,6 +801,19 @@ func _ready() -> void:
 
 func _on_world_pixel_scale_changed(_scale: int) -> void:
 	_apply_world_pixel_scale()
+
+
+func _on_mount_loadout_changed(movement_mode: String, mount_id: String) -> void:
+	if movement_mode != SettingsManager.MOUNT_MODE_SURF or not surf_activity_active:
+		return
+	active_mount_id = MountService.resolve_mount_id_for_mode(
+		mount_id,
+		SettingsManager.MOUNT_MODE_SURF,
+		true
+	)
+	_sync_mount_visual()
+	_sync_body_sprite_frames_for_movement()
+
 
 func _on_render_viewport_size_changed() -> void:
 	if SettingsManager.world_pixel_scale == SettingsManager.WORLD_PIXEL_SCALE_AUTO:
@@ -1515,7 +1530,11 @@ func _on_locale_changed(_locale: String) -> void:
 
 func _start_surf_activity(clear_input := true) -> void:
 	surf_activity_active = true
-	active_mount_id = MountService.get_default_mount_id("surf")
+	active_mount_id = MountService.resolve_mount_id_for_mode(
+		SettingsManager.get_selected_mount_id(SettingsManager.MOUNT_MODE_SURF),
+		SettingsManager.MOUNT_MODE_SURF,
+		true
+	)
 	_sync_mount_visual()
 	if clear_input:
 		_clear_input_buffer()

@@ -8,6 +8,9 @@ const FRAME_ROWS := 4
 const DEFAULT_FRAME_SIZE := Vector2i(64, 64)
 const IDLE_ANIMATION_SPEED := 5.0
 const WALK_ANIMATION_SPEED := 7.5
+const MOVEMENT_MODE_LAND := "land"
+const MOVEMENT_MODE_SURF := "surf"
+const AVAILABLE_MOVEMENT_MODES: Array[String] = [MOVEMENT_MODE_LAND, MOVEMENT_MODE_SURF]
 
 static var _catalog: Dictionary = {}
 static var _mount_frames_cache: Dictionary = {}
@@ -44,6 +47,46 @@ static func get_mount_definition(mount_id: String) -> Dictionary:
 
 static func get_mount_movement_mode(mount_id: String) -> String:
 	return str(get_mount_definition(mount_id).get("movementMode", "")).strip_edges().to_lower()
+
+
+static func get_mount_display_name(mount_id: String) -> String:
+	var definition := get_mount_definition(mount_id)
+	var fallback := normalize_mount_id(mount_id).replace("_", " ").replace("-", " ").capitalize()
+	return str(definition.get("displayName", fallback)).strip_edges()
+
+
+static func get_mount_ids_for_mode(movement_mode: String) -> Array[String]:
+	var normalized_mode := movement_mode.strip_edges().to_lower()
+	if normalized_mode not in AVAILABLE_MOVEMENT_MODES:
+		return []
+	var mount_ids: Array[String] = []
+	for mount_id_value: Variant in _get_mount_definitions().keys():
+		var mount_id := normalize_mount_id(str(mount_id_value))
+		if mount_id != "" and get_mount_movement_mode(mount_id) == normalized_mode:
+			mount_ids.append(mount_id)
+	mount_ids.sort()
+	return mount_ids
+
+
+static func resolve_mount_id_for_mode(
+	mount_id: String,
+	movement_mode: String,
+	use_default_fallback := false
+) -> String:
+	var normalized_mode := movement_mode.strip_edges().to_lower()
+	var normalized_id := normalize_mount_id(mount_id)
+	if normalized_id != "" and get_mount_movement_mode(normalized_id) == normalized_mode:
+		return normalized_id
+	return get_default_mount_id(normalized_mode) if use_default_fallback else ""
+
+
+static func get_mount_icon_texture(mount_id: String) -> Texture2D:
+	var frames := get_mount_frames(mount_id)
+	if frames == null or not frames.has_animation(&"idle_down"):
+		return null
+	if frames.get_frame_count(&"idle_down") <= 0:
+		return null
+	return frames.get_frame_texture(&"idle_down", 0)
 
 
 static func get_rider_frame_delta(mount_id: String, direction: String, frame_index: int) -> Vector2i:
