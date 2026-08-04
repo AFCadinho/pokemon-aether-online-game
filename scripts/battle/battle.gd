@@ -13390,8 +13390,8 @@ func _reapply_rendered_condition_events(events: Array) -> void:
 			"damage", "heal", "faint", "status":
 				condition_events.append(event_data.duplicate(true))
 			"switch", "drag":
-				# Spectator batches contain no participant request projection.
-				# Their ordered public switches are therefore authoritative for
+				# Spectator batches contain only a read-only public side projection.
+				# Their ordered public switches remain authoritative for
 				# the visible active slot during a forced replacement.
 				if _is_spectator_battle():
 					condition_events.append(event_data.duplicate(true))
