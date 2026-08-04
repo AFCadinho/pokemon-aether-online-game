@@ -61,10 +61,17 @@ func _run() -> void:
 	)
 
 	var overlay_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
+	var overlay_scene_source := FileAccess.get_file_as_string("res://scenes/interface/ui_overlay.tscn")
 	_check(
 		overlay_source.contains("MOUNT_LOADOUT_PANEL_SCENE")
-		and overlay_source.contains("func _setup_mount_loadout_panel()"),
-		"overworld overlay creates the mount loadout panel"
+		and overlay_source.contains("func _setup_mount_loadout_panel()")
+		and overlay_source.contains("mount_button.pressed.connect(_on_mount_button_pressed)"),
+		"overworld overlay connects one utility button to the mount manager"
+	)
+	_check(
+		overlay_scene_source.contains('[node name="MountButton" type="Button" parent="Control"]')
+		and not overlay_scene_source.contains('[node name="MountSlot"'),
+		"mount management uses one bottom-right character utility button"
 	)
 
 	var panel_scene := load(MOUNT_LOADOUT_PANEL_PATH) as PackedScene
@@ -72,13 +79,9 @@ func _run() -> void:
 	var panel := panel_scene.instantiate() as Control
 	root.add_child(panel)
 	await process_frame
-	_check(
-		is_equal_approx(panel.anchor_left, 1.0)
-		and is_equal_approx(panel.anchor_right, 1.0)
-		and is_equal_approx(panel.offset_top, 76.0)
-		and is_equal_approx(panel.offset_right, -360.0),
-		"mount loadout occupies the top-right cluster without covering its action rails"
-	)
+	_check(not panel.visible, "mount manager stays hidden until its utility button is pressed")
+	panel.call("open_manager")
+	_check(panel.visible, "mount utility button can open the manager")
 	_check(
 		(panel.get("slots_panel") as PanelContainer).size.x <= panel.size.x
 		and (panel.get("selector_panel") as PanelContainer).position.y

@@ -47,11 +47,36 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if selector_panel == null or not selector_panel.visible:
+	if not visible:
 		return
 	if event.is_action_pressed("ui_cancel"):
-		_close_selector()
+		if selector_panel != null and selector_panel.visible:
+			_close_selector()
+		else:
+			close_manager()
 		get_viewport().set_input_as_handled()
+
+
+func toggle_manager() -> void:
+	if visible:
+		close_manager()
+	else:
+		open_manager()
+
+
+func open_manager() -> void:
+	_close_selector()
+	_refresh_slots()
+	visible = true
+
+
+func close_manager() -> void:
+	_close_selector()
+	visible = false
+
+
+func is_manager_open() -> bool:
+	return visible
 
 
 func _build_interface() -> void:
