@@ -1,6 +1,9 @@
 extends Node
 
 signal settings_changed
+signal world_pixel_scale_changed(scale: int)
+
+const PixelPerfectRendering := preload("res://scripts/services/pixel_perfect_rendering.gd")
 
 const SETTINGS_PATH := "user://settings.json"
 const SPRITE_STYLE_ANIMATED := "animated"
@@ -33,6 +36,9 @@ const DEFAULT_CHAT_TAB_ORDER: Array[String] = [
 	CHAT_TAB_GUILD,
 ]
 const DEFAULT_WINDOW_RESOLUTION := Vector2i(1600, 900)
+const WORLD_PIXEL_SCALE_AUTO := PixelPerfectRendering.SCALE_AUTO
+const DEFAULT_WORLD_PIXEL_SCALE := PixelPerfectRendering.DEFAULT_SCALE
+const AVAILABLE_WORLD_PIXEL_SCALES: Array[int] = PixelPerfectRendering.AVAILABLE_SCALES
 const DEFAULT_CURSOR_SCALE := 75.0
 const MIN_CURSOR_SCALE := 50.0
 const MAX_CURSOR_SCALE := 150.0
@@ -50,6 +56,7 @@ var hide_other_players := false
 var sprite_style := SPRITE_STYLE_ANIMATED
 var fullscreen := false
 var window_resolution := DEFAULT_WINDOW_RESOLUTION
+var world_pixel_scale := DEFAULT_WORLD_PIXEL_SCALE
 var cursor_scale := DEFAULT_CURSOR_SCALE
 var master_volume := 80.0
 var music_volume := 55.0
@@ -101,6 +108,9 @@ func load_settings() -> void:
 	sprite_style = _validated_sprite_style(str(data.get("sprite_style", sprite_style)))
 	fullscreen = bool(data.get("fullscreen", fullscreen))
 	window_resolution = _validated_window_resolution(data.get("window_resolution", window_resolution))
+	world_pixel_scale = PixelPerfectRendering.validate_scale(
+		data.get("world_pixel_scale", world_pixel_scale)
+	)
 	cursor_scale = _validated_cursor_scale(data.get("cursor_scale", cursor_scale))
 	master_volume = _validated_volume(data.get("master_volume", master_volume))
 	music_volume = _validated_volume(data.get("music_volume", music_volume))
@@ -151,6 +161,7 @@ func save_settings() -> void:
 			"width": window_resolution.x,
 			"height": window_resolution.y,
 		},
+		"world_pixel_scale": world_pixel_scale,
 		"cursor_scale": cursor_scale,
 		"master_volume": master_volume,
 		"music_volume": music_volume,
@@ -246,6 +257,23 @@ func set_window_resolution(resolution: Vector2i) -> void:
 	window_resolution = validated_resolution
 	_apply_display_settings()
 	_save_and_emit()
+
+
+func set_world_pixel_scale(value: int) -> void:
+	var validated_scale := PixelPerfectRendering.validate_scale(value)
+	if world_pixel_scale == validated_scale:
+		return
+
+	world_pixel_scale = validated_scale
+	world_pixel_scale_changed.emit(world_pixel_scale)
+	_save_and_emit()
+
+
+func get_effective_world_pixel_scale(viewport_size: Vector2i = Vector2i.ZERO) -> int:
+	var resolved_viewport_size := viewport_size
+	if resolved_viewport_size == Vector2i.ZERO and get_tree() != null:
+		resolved_viewport_size = Vector2i(get_tree().root.get_visible_rect().size)
+	return PixelPerfectRendering.resolve_scale(world_pixel_scale, resolved_viewport_size)
 
 
 func set_cursor_scale(value: float) -> void:
@@ -507,10 +535,19 @@ func _ensure_audio_bus(bus_name: String) -> void:
 
 
 func _apply_runtime_settings() -> void:
+	_apply_pixel_rendering_defaults()
 	LocalizationManager.set_locale(locale)
 	CursorThemeManager.set_cursor_scale(cursor_scale)
 	_apply_audio_settings()
 	_apply_display_settings()
+
+
+func _apply_pixel_rendering_defaults() -> void:
+	if get_tree() == null:
+		return
+	var root_viewport := get_tree().root
+	root_viewport.snap_2d_transforms_to_pixel = true
+	root_viewport.snap_2d_vertices_to_pixel = true
 
 
 func _apply_audio_settings() -> void:
