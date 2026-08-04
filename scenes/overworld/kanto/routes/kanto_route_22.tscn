@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=4 uid="uid://5tm2o5wa0335"]
+[gd_scene format=4 uid="uid://5tm2o5wa0335"]
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/open_field/open_field.visual.tscn" id="1_hodeu"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
@@ -23,38 +23,37 @@ region_id = "kanto"
 
 [node name="OpenField" parent="." unique_id=618531668 instance=ExtResource("1_hodeu")]
 
-[node name="Entities" type="Node2D" parent="."]
+[node name="Entities" type="Node2D" parent="." unique_id=301522726]
 z_index = 5
 
-[node name="NPCs" type="Node2D" parent="Entities"]
+[node name="NPCs" type="Node2D" parent="Entities" unique_id=2014189405]
 
-[node name="Pokemon" type="Node2D" parent="Entities"]
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=217716802]
 
-[node name="Players" type="Node2D" parent="Entities"]
+[node name="Players" type="Node2D" parent="Entities" unique_id=206724298]
 
-[node name="Spawns" type="Node2D" parent="."]
+[node name="Spawns" type="Node2D" parent="." unique_id=1642080505]
 
-[node name="FromViridianCity" type="Marker2D" parent="Spawns"]
+[node name="FromViridianCity" type="Marker2D" parent="Spawns" unique_id=317183969]
 position = Vector2(720, 304)
 
-[node name="Exits" type="Node2D" parent="."]
+[node name="Exits" type="Node2D" parent="." unique_id=1557337054]
 
-[node name="ToViridianCity" type="Area2D" parent="Exits"]
+[node name="ToViridianCity" type="Area2D" parent="Exits" unique_id=1939957445]
 position = Vector2(752, 288)
 script = ExtResource("3_exit")
 target_scene_path = "uid://b8tl17hk3yovn"
 target_spawn_name = "FromRoute22"
 transition_id = "kanto_route_22__to_viridian_city"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToViridianCity"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToViridianCity" unique_id=690172120]
 shape = SubResource("RectangleShape2D_viridian")
 
-[node name="RouteTransitionHint" parent="Exits/ToViridianCity" instance=ExtResource("4_route_hint")]
+[node name="RouteTransitionHint" parent="Exits/ToViridianCity" unique_id=694042665 instance=ExtResource("4_route_hint")]
 rotation = 1.5708
-width = 128.0
 height = 64.0
 
-[node name="Collision" type="TileMapLayer" parent="."]
+[node name="Collision" type="TileMapLayer" parent="." unique_id=1113342710]
 visible = false
 tile_map_data = PackedByteArray("AAAAAAAAAQAAAAAAAAAAABEAAQAAAAAAAAABAAAAAQAAAAAAAAABABEAAQAAAAAAAAACAAAAAQAAAAAAAAACABEAAQAAAAAAAAADAAAAAQAAAAAAAAADABEAAQAAAAAAAAAEAAAAAQAAAAAAAAAEABEAAQAAAAAAAAAFAAAAAQAAAAAAAAAFABEAAQAAAAAAAAAGAAAAAQAAAAAAAAAGABEAAQAAAAAAAAAHAAAAAQAAAAAAAAAHABEAAQAAAAAAAAAIAAAAAQAAAAAAAAAIABEAAQAAAAAAAAAJAAAAAQAAAAAAAAAJABEAAQAAAAAAAAAKAAAAAQAAAAAAAAAKABEAAQAAAAAAAAALAAAAAQAAAAAAAAALABEAAQAAAAAAAAAMAAAAAQAAAAAAAAAMABEAAQAAAAAAAAANAAAAAQAAAAAAAAANABEAAQAAAAAAAAAOAAAAAQAAAAAAAAAOABEAAQAAAAAAAAAPAAAAAQAAAAAAAAAPABEAAQAAAAAAAAAQAAAAAQAAAAAAAAAQABEAAQAAAAAAAAARAAAAAQAAAAAAAAARABEAAQAAAAAAAAASAAAAAQAAAAAAAAASABEAAQAAAAAAAAATAAAAAQAAAAAAAAATABEAAQAAAAAAAAAUAAAAAQAAAAAAAAAUABEAAQAAAAAAAAAVAAAAAQAAAAAAAAAVABEAAQAAAAAAAAAWAAAAAQAAAAAAAAAWABEAAQAAAAAAAAAXAAAAAQAAAAAAAAAXABEAAQAAAAAAAAAAAAEAAQAAAAAAAAAXAAEAAQAAAAAAAAAAAAIAAQAAAAAAAAAXAAIAAQAAAAAAAAAAAAMAAQAAAAAAAAAXAAMAAQAAAAAAAAAAAAQAAQAAAAAAAAAXAAQAAQAAAAAAAAAAAAUAAQAAAAAAAAAXAAUAAQAAAAAAAAAAAAYAAQAAAAAAAAAXAAYAAQAAAAAAAAAAAAcAAQAAAAAAAAAAAAgAAQAAAAAAAAAAAAkAAQAAAAAAAAAAAAoAAQAAAAAAAAAAAAsAAQAAAAAAAAAXAAsAAQAAAAAAAAAAAAwAAQAAAAAAAAAXAAwAAQAAAAAAAAAAAA0AAQAAAAAAAAAXAA0AAQAAAAAAAAAAAA4AAQAAAAAAAAAXAA4AAQAAAAAAAAAAAA8AAQAAAAAAAAAXAA8AAQAAAAAAAAAAABAAAQAAAAAAAAAXABAAAQAAAAAAAAA=")
 tile_set = ExtResource("5_tileset")

@@ -1933,7 +1933,10 @@ func _get_current_player_position_signature(use_confirmed_appearance: bool = fal
 	var activity_style := str(player.call("get_activity_style")) \
 		if player.has_method("get_activity_style") \
 		else CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
-	return "%s|%s|%0.1f|%0.1f|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s" % [
+	var active_mount_id := str(player.call("get_active_mount_id")) \
+		if player.has_method("get_active_mount_id") \
+		else ""
+	return "%s|%s|%0.1f|%0.1f|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s" % [
 		_get_map_id(current_map),
 		_get_map_scene_path(current_map),
 		roundf(position.x / POSITION_SAVE_EPSILON) * POSITION_SAVE_EPSILON,
@@ -1941,6 +1944,7 @@ func _get_current_player_position_signature(use_confirmed_appearance: bool = fal
 		PlayerSave.gender,
 		_direction_to_name(player.last_direction),
 		activity_style,
+		active_mount_id,
 		GameState.selected_role_badge,
 		str(follower_state.get("visible", false)),
 		str(follower_state.get("species", "")),

@@ -32,7 +32,7 @@ func _check_water_position_restores_surf_without_rechecking_entitlement() -> voi
 func _check_presence_payload_and_signature_include_activity_style() -> void:
 	var service := WorldPresenceServiceScript.new()
 	var movement := service._build_movement_payload(
-		{"isMoving": false, "activityStyle": "ride"},
+		{"isMoving": false, "activityStyle": "ride", "mountId": "lapras"},
 		{},
 		"",
 		{}
@@ -41,14 +41,19 @@ func _check_presence_payload_and_signature_include_activity_style() -> void:
 		str(movement.get("activityStyle", "")) == "ride",
 		"world presence payload retains the local activity style"
 	)
+	_expect(
+		str(movement.get("mountId", "")) == "lapras",
+		"world presence payload retains the active Surf mount"
+	)
 	service.free()
 
 	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
 	var signature_source := _function_source(world_source, "_get_current_player_position_signature")
 	_expect(
 		signature_source.contains('player.call("get_activity_style")')
-		and signature_source.contains("activity_style,"),
-		"presence signature changes when the Surf pose changes"
+		and signature_source.contains('player.call("get_active_mount_id")')
+		and signature_source.contains("active_mount_id,"),
+		"presence signature changes when the Surf pose or mount changes"
 	)
 
 
@@ -62,8 +67,9 @@ func _check_remote_avatar_resolves_replicated_surf_pose() -> void:
 	)
 	_expect(
 		source.contains("current_activity_style = _resolve_activity_style(state, movement_data)")
+		and source.contains('movement_data.get("mountId"')
 		and source.contains("return current_activity_style"),
-		"remote avatars apply the replicated Surf pose to their body frames"
+		"remote avatars apply the replicated Surf pose and mount"
 	)
 
 
@@ -93,13 +99,19 @@ func _check_remote_surf_render_matches_local_pose_rules() -> void:
 		and _function_source(remote_source, "_update_animation").contains(
 			"_sync_activity_layer_offsets()"
 		)
+		and _function_source(remote_source, "_update_animation").contains(
+			"_sync_mount_animation(is_moving, last_direction)"
+		)
+		and _function_source(local_source, "play_walk_animation").contains(
+			"_sync_mount_animation(true, direction)"
+		)
 		and _function_source(remote_source, "_uses_static_activity_movement_pose").contains(
 			"BODY_MOVEMENT_RIDE"
 		)
 		and _function_source(local_source, "_uses_static_activity_movement_pose").contains(
 			"BODY_MOVEMENT_RIDE"
 		),
-		"local and remote Surf both use a static movement pose"
+		"local and remote riders stay stable while the Surf mount animates"
 	)
 
 
