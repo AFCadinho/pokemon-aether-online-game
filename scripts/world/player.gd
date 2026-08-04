@@ -20,6 +20,7 @@ const HIDDEN_FOR_MISSING_ANIMATION_META := "hidden_for_missing_animation"
 const UNEQUIPPED_APPEARANCE_PART_META := "unequipped_appearance_part"
 const ACTIVITY_BASE_SPRITE_OFFSET_META := "activity_base_sprite_offset"
 const MOUNT_SPRITE_NAME := "MountSprite"
+const MOUNT_FOREGROUND_SPRITE_NAME := "MountForegroundSprite"
 const FACE_GEAR_SPRITE_NAME := "FaceGearSprite"
 const BODY_SPRITE_NAME := "BodySprite"
 const HAIR_SPRITE_NAME := "HairSprite"
@@ -187,6 +188,7 @@ const FISHING_RIPPLE_DISTANCE := TILE_SIZE * 1.45
 
 @onready var look_node: Node2D = $Look
 @onready var mount_sprite: AnimatedSprite2D = $Look/MountSprite
+@onready var mount_foreground_sprite: AnimatedSprite2D = $Look/MountForegroundSprite
 @onready var rider_node: Node2D = $Look/Rider
 @onready var feet_marker: Marker2D = $FeetMarker
 @onready var nameplate: Control = $Nameplate
@@ -305,6 +307,9 @@ func _sync_mount_visual() -> void:
 		mount_sprite.stop()
 		mount_sprite.sprite_frames = null
 		mount_sprite.visible = false
+		mount_foreground_sprite.stop()
+		mount_foreground_sprite.sprite_frames = null
+		mount_foreground_sprite.visible = false
 		_sync_mount_rider_delta()
 		return
 
@@ -315,6 +320,10 @@ func _sync_mount_visual() -> void:
 	mount_sprite.sprite_frames = mount_frames
 	mount_sprite.texture_filter = PLAYER_SPRITE_TEXTURE_FILTER
 	mount_sprite.visible = true
+	var foreground_frames := MountService.get_mount_foreground_frames(normalized_mount_id)
+	mount_foreground_sprite.sprite_frames = foreground_frames
+	mount_foreground_sprite.texture_filter = PLAYER_SPRITE_TEXTURE_FILTER
+	mount_foreground_sprite.visible = foreground_frames != null
 	_sync_mount_animation(is_moving, last_direction)
 
 func _sync_mount_animation(moving: bool, direction: Vector2) -> void:
@@ -332,6 +341,17 @@ func _sync_mount_animation(moving: bool, direction: Vector2) -> void:
 		mount_sprite.frame = 0
 		mount_sprite.frame_progress = 0.0
 		mount_sprite.stop()
+	_sync_mount_foreground_frame()
+
+func _sync_mount_foreground_frame() -> void:
+	if mount_foreground_sprite == null or not mount_foreground_sprite.visible:
+		return
+	if mount_sprite == null or mount_sprite.sprite_frames == null:
+		return
+	mount_foreground_sprite.animation = mount_sprite.animation
+	mount_foreground_sprite.frame = mount_sprite.frame
+	mount_foreground_sprite.frame_progress = mount_sprite.frame_progress
+	mount_foreground_sprite.stop()
 
 func _sync_mount_rider_delta() -> void:
 	if rider_node == null:
@@ -340,12 +360,12 @@ func _sync_mount_rider_delta() -> void:
 		rider_node.position = base_rider_position
 		return
 	var direction := _get_activity_offset_direction()
-	var rider_delta := MountService.get_rider_frame_delta(
+	var rider_offset := MountService.get_rider_frame_offset(
 		active_mount_id,
 		direction,
 		mount_sprite.frame
 	)
-	rider_node.position = base_rider_position + Vector2(rider_delta)
+	rider_node.position = base_rider_position + Vector2(rider_offset)
 
 func is_fishing_activity_active() -> bool:
 	return fishing_activity_active
@@ -1236,6 +1256,7 @@ func _process(delta: float) -> void:
 	_sync_body_sprite_frames_for_movement()
 	_sync_appearance_sprite_frames()
 	_sync_mount_rider_delta()
+	_sync_mount_foreground_frame()
 	_update_fishing_activity(delta)
 	_sync_fishing_prompt_visibility()
 	_sync_surf_prompt_visibility()
@@ -2214,7 +2235,9 @@ func _cache_appearance_sprites() -> void:
 func _collect_appearance_sprites(parent: Node) -> void:
 	for child: Node in parent.get_children():
 		var sprite: AnimatedSprite2D = child as AnimatedSprite2D
-		if sprite != null and sprite.name != MOUNT_SPRITE_NAME:
+		if sprite != null \
+			and sprite.name != MOUNT_SPRITE_NAME \
+			and sprite.name != MOUNT_FOREGROUND_SPRITE_NAME:
 			sprite.texture_filter = PLAYER_SPRITE_TEXTURE_FILTER
 			appearance_sprites.append(sprite)
 

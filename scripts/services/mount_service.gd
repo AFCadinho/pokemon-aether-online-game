@@ -11,6 +11,7 @@ const WALK_ANIMATION_SPEED := 7.5
 
 static var _catalog: Dictionary = {}
 static var _mount_frames_cache: Dictionary = {}
+static var _mount_foreground_frames_cache: Dictionary = {}
 static var _rider_frames_cache: Dictionary = {}
 static var _mask_image_cache: Dictionary = {}
 
@@ -46,13 +47,16 @@ static func get_mount_movement_mode(mount_id: String) -> String:
 
 
 static func get_rider_frame_delta(mount_id: String, direction: String, frame_index: int) -> Vector2i:
+	return get_rider_frame_offset(mount_id, direction, frame_index) \
+		- get_rider_frame_offset(mount_id, direction, 0)
+
+
+static func get_rider_frame_offset(mount_id: String, direction: String, frame_index: int) -> Vector2i:
 	var definition := get_mount_definition(mount_id)
 	var rider_offsets_value: Variant = definition.get("riderOffsets", {})
 	if not rider_offsets_value is Dictionary:
 		return Vector2i.ZERO
-	var rider_offsets := rider_offsets_value as Dictionary
-	var base_offset := _get_rider_offset(rider_offsets, direction, 0)
-	return _get_rider_offset(rider_offsets, direction, frame_index) - base_offset
+	return _get_rider_offset(rider_offsets_value as Dictionary, direction, frame_index)
 
 
 static func get_mount_frames(mount_id: String) -> SpriteFrames:
@@ -73,6 +77,53 @@ static func get_mount_frames(mount_id: String) -> SpriteFrames:
 	var frames := _build_sprite_frames(texture)
 	_mount_frames_cache[normalized_id] = frames
 	return frames
+
+
+static func get_mount_foreground_frames(mount_id: String) -> SpriteFrames:
+	var normalized_id := normalize_mount_id(mount_id)
+	if normalized_id == "":
+		return null
+	if _mount_foreground_frames_cache.has(normalized_id):
+		return _mount_foreground_frames_cache[normalized_id] as SpriteFrames
+
+	var definition := get_mount_definition(normalized_id)
+	var regions_value: Variant = definition.get("foregroundRegions", {})
+	if not regions_value is Dictionary or (regions_value as Dictionary).is_empty():
+		return null
+	var mount_frames := get_mount_frames(normalized_id)
+	if mount_frames == null:
+		return null
+
+	var foreground_frames := SpriteFrames.new()
+	if foreground_frames.has_animation(&"default"):
+		foreground_frames.remove_animation(&"default")
+	for animation_name_text: String in mount_frames.get_animation_names():
+		var animation_name := StringName(animation_name_text)
+		foreground_frames.add_animation(animation_name)
+		foreground_frames.set_animation_speed(
+			animation_name,
+			mount_frames.get_animation_speed(animation_name)
+		)
+		foreground_frames.set_animation_loop(
+			animation_name,
+			mount_frames.get_animation_loop(animation_name)
+		)
+		var direction := _direction_from_animation(animation_name_text)
+		var region := _foreground_region(regions_value as Dictionary, direction)
+		var frame_count := mount_frames.get_frame_count(animation_name)
+		for frame_index: int in range(frame_count):
+			var source_image := _get_texture_image(
+				mount_frames.get_frame_texture(animation_name, frame_index)
+			)
+			var foreground_image := _extract_foreground(source_image, region)
+			foreground_frames.add_frame(
+				animation_name,
+				ImageTexture.create_from_image(foreground_image),
+				mount_frames.get_frame_duration(animation_name, frame_index)
+			)
+
+	_mount_foreground_frames_cache[normalized_id] = foreground_frames
+	return foreground_frames
 
 
 static func get_mounted_rider_frames(base_frames: SpriteFrames, mount_id: String) -> SpriteFrames:
@@ -189,19 +240,44 @@ static func _transform_rider_frame(
 		for source_x: int in range(source.get_width()):
 			var target_x := source_x + offset.x
 			var target_y := source_y + offset.y
-			if target_x < 0 or target_y < 0 \
-				or target_x >= DEFAULT_FRAME_SIZE.x or target_y >= DEFAULT_FRAME_SIZE.y:
-				continue
-			output.set_pixel(target_x, target_y, source.get_pixel(source_x, source_y))
+			var source_color := source.get_pixel(source_x, source_y)
+			if target_x >= 0 and target_y >= 0 \
+				and target_x < DEFAULT_FRAME_SIZE.x and target_y < DEFAULT_FRAME_SIZE.y:
+				var mask_position := Vector2i(
+					frame_column * DEFAULT_FRAME_SIZE.x + target_x,
+					direction_row * DEFAULT_FRAME_SIZE.y + target_y
+				)
+				if mask_image.get_pixelv(mask_position).a > 0.001:
+					source_color = Color.TRANSPARENT
+			output.set_pixel(source_x, source_y, source_color)
+	return output
 
-	var mask_origin := Vector2i(
-		frame_column * DEFAULT_FRAME_SIZE.x,
-		direction_row * DEFAULT_FRAME_SIZE.y
+
+static func _foreground_region(regions: Dictionary, direction: String) -> Rect2i:
+	var region_value: Variant = regions.get(direction, [])
+	if not region_value is Array or (region_value as Array).size() < 4:
+		return Rect2i()
+	var values := region_value as Array
+	return Rect2i(int(values[0]), int(values[1]), int(values[2]), int(values[3]))
+
+
+static func _extract_foreground(source_image: Image, region: Rect2i) -> Image:
+	var output := Image.create(
+		DEFAULT_FRAME_SIZE.x,
+		DEFAULT_FRAME_SIZE.y,
+		false,
+		Image.FORMAT_RGBA8
 	)
-	for y: int in range(DEFAULT_FRAME_SIZE.y):
-		for x: int in range(DEFAULT_FRAME_SIZE.x):
-			if mask_image.get_pixelv(mask_origin + Vector2i(x, y)).a > 0.001:
-				output.set_pixel(x, y, Color.TRANSPARENT)
+	output.fill(Color.TRANSPARENT)
+	if source_image == null or region.size.x <= 0 or region.size.y <= 0:
+		return output
+	var source := source_image
+	if source.get_format() != Image.FORMAT_RGBA8:
+		source = source_image.duplicate()
+		source.convert(Image.FORMAT_RGBA8)
+	var clipped_region := region.intersection(Rect2i(Vector2i.ZERO, DEFAULT_FRAME_SIZE))
+	if clipped_region.size.x > 0 and clipped_region.size.y > 0:
+		output.blit_rect(source, clipped_region, clipped_region.position)
 	return output
 
 

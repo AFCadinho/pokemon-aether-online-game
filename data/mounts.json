@@ -10,6 +10,9 @@
       "spriteSheet": "res://assets/mounts/lapras/mount.png",
       "riderMaskSheet": "res://assets/mounts/lapras/rider_mask.png",
       "frameSize": [64, 64],
+      "foregroundRegions": {
+        "down": [0, 0, 64, 50]
+      },
       "riderOffsets": {
         "down": [[2, -16], [2, -14], [2, -14], [2, -14]],
         "left": [[20, -4], [20, -4], [18, -2], [18, -2]],
