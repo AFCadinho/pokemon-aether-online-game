@@ -631,8 +631,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_utility_button_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_utility_button_hover")
 theme_override_styles/focus = SubResource("StyleBoxFlat_utility_button_hover")
 
-[node name="MyPowersButton" type="Button" parent="Control"]
-visible = false
+[node name="MountButton" type="Button" parent="Control"]
 custom_minimum_size = Vector2(42, 42)
 layout_mode = 1
 anchors_preset = 3
@@ -644,6 +643,31 @@ offset_left = -58.0
 offset_top = -242.0
 offset_right = -16.0
 offset_bottom = -200.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_default_cursor_shape = 2
+tooltip_text = "ui.mounts.title"
+toggle_mode = true
+icon_max_width = 34
+expand_icon = true
+theme_override_styles/normal = SubResource("StyleBoxFlat_utility_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_utility_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_utility_button_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_utility_button_hover")
+
+[node name="MyPowersButton" type="Button" parent="Control"]
+visible = false
+custom_minimum_size = Vector2(42, 42)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -58.0
+offset_top = -290.0
+offset_right = -16.0
+offset_bottom = -248.0
 grow_horizontal = 0
 grow_vertical = 0
 mouse_default_cursor_shape = 2
