@@ -84,6 +84,11 @@ func _run() -> void:
 	_check(not panel.visible, "mount manager stays hidden until its utility button is pressed")
 	panel.call("open_manager")
 	_check(panel.visible, "mount utility button can open the manager")
+	var manager_close_button := panel.get("manager_close_button") as Button
+	_check(
+		manager_close_button != null and manager_close_button.text == "×",
+		"mount manager has a clear header close button"
+	)
 	_check(
 		(panel.get("slots_panel") as PanelContainer).size.x <= panel.size.x
 		and (panel.get("selector_panel") as PanelContainer).position.y
@@ -102,6 +107,9 @@ func _run() -> void:
 		surf_button != null and surf_button.text.contains("Lapras") and surf_button.icon != null,
 		"Surf slot shows the selected Lapras name and preview"
 	)
+	manager_close_button.pressed.emit()
+	_check(not panel.visible, "mount manager close button hides the complete popup")
+	panel.call("open_manager")
 
 	panel.call("_open_selector", "surf")
 	var selector_panel := panel.get("selector_panel") as PanelContainer
