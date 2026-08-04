@@ -807,7 +807,7 @@ func _ready() -> void:
 	_update_sort_z()
 	_setup_pokemon_follower.call_deferred()
 
-func _on_world_pixel_scale_changed(_scale: int) -> void:
+func _on_world_pixel_scale_changed(_scale: float) -> void:
 	_apply_world_pixel_scale()
 
 
@@ -824,8 +824,7 @@ func _on_mount_loadout_changed(movement_mode: String, mount_id: String) -> void:
 
 
 func _on_render_viewport_size_changed() -> void:
-	if SettingsManager.world_pixel_scale == SettingsManager.WORLD_PIXEL_SCALE_AUTO:
-		_apply_world_pixel_scale()
+	_apply_world_pixel_scale()
 
 func _apply_world_pixel_scale() -> void:
 	if world_camera == null:
