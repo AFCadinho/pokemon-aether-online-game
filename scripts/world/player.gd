@@ -30,6 +30,7 @@ const SHOES_SPRITE_NAME := "ShoesSprite"
 const EYES_SPRITE_NAME := "EyesSprite"
 const EYEBROWS_SPRITE_NAME := "EyebrowsSprite"
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
+const PixelPerfectRenderingScript := preload("res://scripts/services/pixel_perfect_rendering.gd")
 const WildEncounterProvider := preload("res://scripts/world/map_encounter_provider.gd")
 const MapChatBubbleScript := preload("res://scripts/world/map_chat_bubble.gd")
 const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.gd")
@@ -184,6 +185,7 @@ const SURF_PROMPT_POSITION := Vector2(-48.0, -72.0)
 const FISHING_RIPPLE_DISTANCE := TILE_SIZE * 1.45
 
 @onready var look_node: Node2D = $Look
+@onready var world_camera: Camera2D = $Camera2D
 @onready var feet_marker: Marker2D = $FeetMarker
 @onready var nameplate: Control = $Nameplate
 @onready var nameplate_background: Panel = $Nameplate/NameplateBackground
@@ -656,6 +658,11 @@ func _story_path_direction(direction_name: String) -> Vector2:
 
 func _ready() -> void:
 	add_to_group("player")
+	if not SettingsManager.world_pixel_scale_changed.is_connected(_on_world_pixel_scale_changed):
+		SettingsManager.world_pixel_scale_changed.connect(_on_world_pixel_scale_changed)
+	if not get_viewport().size_changed.is_connected(_on_render_viewport_size_changed):
+		get_viewport().size_changed.connect(_on_render_viewport_size_changed)
+	_apply_world_pixel_scale()
 	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
 		LocalizationManager.locale_changed.connect(_on_locale_changed)
 	z_as_relative = false
@@ -702,6 +709,22 @@ func _ready() -> void:
 	set_idle_frame()
 	_update_sort_z()
 	_setup_pokemon_follower.call_deferred()
+
+func _on_world_pixel_scale_changed(_scale: int) -> void:
+	_apply_world_pixel_scale()
+
+func _on_render_viewport_size_changed() -> void:
+	if SettingsManager.world_pixel_scale == SettingsManager.WORLD_PIXEL_SCALE_AUTO:
+		_apply_world_pixel_scale()
+
+func _apply_world_pixel_scale() -> void:
+	if world_camera == null:
+		return
+	PixelPerfectRenderingScript.apply_to_camera(
+		world_camera,
+		SettingsManager.world_pixel_scale,
+		get_window().size
+	)
 
 func _exit_tree() -> void:
 	var had_activity := fishing_activity_active or surf_activity_active
