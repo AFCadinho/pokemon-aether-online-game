@@ -19,6 +19,8 @@ const TEXT_INPUT_WINDOW_GROUP := "text_input_windows"
 const HIDDEN_FOR_MISSING_ANIMATION_META := "hidden_for_missing_animation"
 const UNEQUIPPED_APPEARANCE_PART_META := "unequipped_appearance_part"
 const ACTIVITY_BASE_SPRITE_OFFSET_META := "activity_base_sprite_offset"
+const MOUNT_SPRITE_NAME := "MountSprite"
+const MOUNT_FOREGROUND_SPRITE_NAME := "MountForegroundSprite"
 const FACE_GEAR_SPRITE_NAME := "FaceGearSprite"
 const BODY_SPRITE_NAME := "BodySprite"
 const HAIR_SPRITE_NAME := "HairSprite"
@@ -30,6 +32,8 @@ const SHOES_SPRITE_NAME := "ShoesSprite"
 const EYES_SPRITE_NAME := "EyesSprite"
 const EYEBROWS_SPRITE_NAME := "EyebrowsSprite"
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
+const MountService := preload("res://scripts/services/mount_service.gd")
+const PixelPerfectRenderingScript := preload("res://scripts/services/pixel_perfect_rendering.gd")
 const WildEncounterProvider := preload("res://scripts/world/map_encounter_provider.gd")
 const MapChatBubbleScript := preload("res://scripts/world/map_chat_bubble.gd")
 const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.gd")
@@ -118,6 +122,14 @@ const ACTIVITY_LAYER_OFFSETS := {
 			"eyes": Vector2(0.0, 6.0),
 			"eyebrows": Vector2(0.0, 5.0),
 		},
+		"up": {
+			"hair": Vector2.ZERO,
+			"headgear": Vector2.ZERO,
+			"facial_hair": Vector2.ZERO,
+			"facegear": Vector2.ZERO,
+			"eyes": Vector2.ZERO,
+			"eyebrows": Vector2.ZERO,
+		},
 		"left": {
 			"hair": Vector2(-4.0, 4.0),
 			"headgear": Vector2(-4.0, 4.0),
@@ -184,6 +196,10 @@ const SURF_PROMPT_POSITION := Vector2(-48.0, -72.0)
 const FISHING_RIPPLE_DISTANCE := TILE_SIZE * 1.45
 
 @onready var look_node: Node2D = $Look
+@onready var mount_sprite: AnimatedSprite2D = $Look/MountSprite
+@onready var mount_foreground_sprite: AnimatedSprite2D = $Look/MountForegroundSprite
+@onready var rider_node: Node2D = $Look/Rider
+@onready var world_camera: Camera2D = $Camera2D
 @onready var feet_marker: Marker2D = $FeetMarker
 @onready var nameplate: Control = $Nameplate
 @onready var nameplate_background: Panel = $Nameplate/NameplateBackground
@@ -242,7 +258,9 @@ var fishing_activity_time_left := 0.0
 var fishing_activity_tier := 0
 var fishing_activity_state := FISHING_STATE_NONE
 var surf_activity_active := false
+var active_mount_id := ""
 var base_look_position := Vector2.ZERO
+var base_rider_position := Vector2.ZERO
 var fishing_prompt_button: Button
 var fishing_bite_prompt_button: Button
 var surf_prompt_button: Button
@@ -287,6 +305,82 @@ func clear_activity_style() -> void:
 
 func get_activity_style() -> String:
 	return activity_style
+
+func get_active_mount_id() -> String:
+	return active_mount_id
+
+func _sync_mount_visual() -> void:
+	if mount_sprite == null:
+		return
+	var normalized_mount_id := MountService.normalize_mount_id(active_mount_id)
+	if normalized_mount_id == "":
+		mount_sprite.stop()
+		mount_sprite.sprite_frames = null
+		mount_sprite.visible = false
+		mount_foreground_sprite.stop()
+		mount_foreground_sprite.sprite_frames = null
+		mount_foreground_sprite.visible = false
+		_sync_mount_rider_delta()
+		return
+
+	var mount_frames := MountService.get_mount_frames(normalized_mount_id)
+	if mount_frames == null:
+		mount_sprite.visible = false
+		return
+	mount_sprite.sprite_frames = mount_frames
+	mount_sprite.texture_filter = PLAYER_SPRITE_TEXTURE_FILTER
+	mount_sprite.visible = true
+	var foreground_frames := MountService.get_mount_foreground_frames(normalized_mount_id)
+	mount_foreground_sprite.sprite_frames = foreground_frames
+	mount_foreground_sprite.texture_filter = PLAYER_SPRITE_TEXTURE_FILTER
+	mount_foreground_sprite.visible = foreground_frames != null
+	_sync_mount_animation(is_moving, last_direction)
+
+func _sync_mount_animation(moving: bool, direction: Vector2) -> void:
+	if mount_sprite == null or not mount_sprite.visible or mount_sprite.sprite_frames == null:
+		return
+	var animation_name := _get_walk_animation_name(direction) \
+		if moving \
+		else _get_idle_animation_name(direction)
+	if not mount_sprite.sprite_frames.has_animation(animation_name):
+		return
+	var animation_changed := mount_sprite.animation != animation_name
+	if animation_changed or not moving and mount_sprite.is_playing():
+		mount_sprite.animation = animation_name
+		mount_sprite.frame = 0
+		mount_sprite.frame_progress = 0.0
+	if moving:
+		mount_sprite.play(animation_name)
+	else:
+		mount_sprite.animation = animation_name
+		mount_sprite.frame = 0
+		mount_sprite.frame_progress = 0.0
+		mount_sprite.stop()
+	_sync_mount_foreground_frame()
+
+func _sync_mount_foreground_frame() -> void:
+	if mount_foreground_sprite == null or not mount_foreground_sprite.visible:
+		return
+	if mount_sprite == null or mount_sprite.sprite_frames == null:
+		return
+	mount_foreground_sprite.animation = mount_sprite.animation
+	mount_foreground_sprite.frame = mount_sprite.frame
+	mount_foreground_sprite.frame_progress = mount_sprite.frame_progress
+	mount_foreground_sprite.stop()
+
+func _sync_mount_rider_delta() -> void:
+	if rider_node == null:
+		return
+	if mount_sprite == null or not mount_sprite.visible or active_mount_id == "":
+		rider_node.position = base_rider_position
+		return
+	var direction := _get_activity_offset_direction()
+	var rider_offset := MountService.get_rider_frame_offset(
+		active_mount_id,
+		direction,
+		mount_sprite.frame
+	)
+	rider_node.position = base_rider_position + Vector2(rider_offset)
 
 func is_fishing_activity_active() -> bool:
 	return fishing_activity_active
@@ -521,6 +615,8 @@ func get_network_movement_state() -> Dictionary:
 	}
 	if activity_style != CharacterAppearanceService.BODY_MOVEMENT_DEFAULT:
 		movement_state["activityStyle"] = activity_style
+	if active_mount_id != "":
+		movement_state["mountId"] = active_mount_id
 	return movement_state
 
 func get_persistent_world_position() -> Vector2:
@@ -656,13 +752,21 @@ func _story_path_direction(direction_name: String) -> Vector2:
 
 func _ready() -> void:
 	add_to_group("player")
+	if not SettingsManager.world_pixel_scale_changed.is_connected(_on_world_pixel_scale_changed):
+		SettingsManager.world_pixel_scale_changed.connect(_on_world_pixel_scale_changed)
+	if not SettingsManager.mount_loadout_changed.is_connected(_on_mount_loadout_changed):
+		SettingsManager.mount_loadout_changed.connect(_on_mount_loadout_changed)
+	if not get_viewport().size_changed.is_connected(_on_render_viewport_size_changed):
+		get_viewport().size_changed.connect(_on_render_viewport_size_changed)
+	_apply_world_pixel_scale()
 	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
 		LocalizationManager.locale_changed.connect(_on_locale_changed)
 	z_as_relative = false
 	base_look_position = look_node.position
+	base_rider_position = rider_node.position
 	PlayerSave.ensure_body_matches_gender(false)
-	_apply_body_appearance(PlayerSave.appearance_body_id)
 	_cache_appearance_sprites()
+	_apply_body_appearance(PlayerSave.appearance_body_id)
 	set_display_name(PlayerSave.player_name, true)
 	set_role_from_user(AuthService.current_user)
 	set_guild_emblem(_current_guild_emblem())
@@ -703,6 +807,35 @@ func _ready() -> void:
 	_update_sort_z()
 	_setup_pokemon_follower.call_deferred()
 
+func _on_world_pixel_scale_changed(_scale: int) -> void:
+	_apply_world_pixel_scale()
+
+
+func _on_mount_loadout_changed(movement_mode: String, mount_id: String) -> void:
+	if movement_mode != SettingsManager.MOUNT_MODE_SURF or not surf_activity_active:
+		return
+	active_mount_id = MountService.resolve_mount_id_for_mode(
+		mount_id,
+		SettingsManager.MOUNT_MODE_SURF,
+		true
+	)
+	_sync_mount_visual()
+	_sync_body_sprite_frames_for_movement()
+
+
+func _on_render_viewport_size_changed() -> void:
+	if SettingsManager.world_pixel_scale == SettingsManager.WORLD_PIXEL_SCALE_AUTO:
+		_apply_world_pixel_scale()
+
+func _apply_world_pixel_scale() -> void:
+	if world_camera == null:
+		return
+	PixelPerfectRenderingScript.apply_to_camera(
+		world_camera,
+		SettingsManager.world_pixel_scale,
+		get_window().size
+	)
+
 func _exit_tree() -> void:
 	var had_activity := fishing_activity_active or surf_activity_active
 	var should_unlock_overworld := fishing_activity_active
@@ -713,6 +846,8 @@ func _exit_tree() -> void:
 	fishing_activity_state = FISHING_STATE_NONE
 	_sync_fishing_bite_prompt_visibility()
 	surf_activity_active = false
+	active_mount_id = ""
+	_sync_mount_visual()
 	if had_activity:
 		activity_style = CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
 		_restore_activity_visual_offset()
@@ -1171,6 +1306,8 @@ func _process(delta: float) -> void:
 	_update_sort_z()
 	_sync_body_sprite_frames_for_movement()
 	_sync_appearance_sprite_frames()
+	_sync_mount_rider_delta()
+	_sync_mount_foreground_frame()
 	_update_fishing_activity(delta)
 	_sync_fishing_prompt_visibility()
 	_sync_surf_prompt_visibility()
@@ -1401,6 +1538,12 @@ func _on_locale_changed(_locale: String) -> void:
 
 func _start_surf_activity(clear_input := true) -> void:
 	surf_activity_active = true
+	active_mount_id = MountService.resolve_mount_id_for_mode(
+		SettingsManager.get_selected_mount_id(SettingsManager.MOUNT_MODE_SURF),
+		SettingsManager.MOUNT_MODE_SURF,
+		true
+	)
+	_sync_mount_visual()
 	if clear_input:
 		_clear_input_buffer()
 		_clear_held_direction()
@@ -1415,6 +1558,8 @@ func _finish_surf_activity(reason := "left_water") -> void:
 		return
 
 	surf_activity_active = false
+	active_mount_id = ""
+	_sync_mount_visual()
 	clear_activity_style()
 	_sync_fishing_prompt_visibility()
 	_sync_surf_prompt_visibility()
@@ -1712,7 +1857,8 @@ func _try_start_move(direction: Vector2) -> bool:
 
 func play_walk_animation(direction: Vector2) -> void:
 	if _uses_static_activity_movement_pose():
-		set_idle_frame()
+		_apply_static_activity_idle_pose(direction)
+		_sync_mount_animation(true, direction)
 		return
 
 	_apply_directional_appearance_layer_order(direction)
@@ -1734,6 +1880,7 @@ func play_walk_animation(direction: Vector2) -> void:
 			sprite.play(animation_name)
 		else:
 			_hide_layer_for_missing_animation(sprite)
+	_sync_mount_animation(true, direction)
 
 func can_move_to(check_position: Vector2) -> bool:
 	refresh_map_layers()
@@ -1839,10 +1986,14 @@ func _handle_route_gate_interaction(gate_npc: Node) -> void:
 	route_gate_interaction_in_progress = false
 	
 func set_idle_frame() -> void:
-	_apply_directional_appearance_layer_order(last_direction)
+	_apply_static_activity_idle_pose(last_direction)
+	_sync_mount_animation(false, last_direction)
+
+func _apply_static_activity_idle_pose(direction: Vector2) -> void:
+	_apply_directional_appearance_layer_order(direction)
 	for sprite in appearance_sprites:
 		sprite.stop()
-		_set_idle_animation(sprite, last_direction)
+		_set_idle_animation(sprite, direction)
 	_sync_activity_layer_offsets()
 	_apply_activity_visual_offset()
 	
@@ -2142,7 +2293,9 @@ func _cache_appearance_sprites() -> void:
 func _collect_appearance_sprites(parent: Node) -> void:
 	for child: Node in parent.get_children():
 		var sprite: AnimatedSprite2D = child as AnimatedSprite2D
-		if sprite != null:
+		if sprite != null \
+			and sprite.name != MOUNT_SPRITE_NAME \
+			and sprite.name != MOUNT_FOREGROUND_SPRITE_NAME:
 			sprite.texture_filter = PLAYER_SPRITE_TEXTURE_FILTER
 			appearance_sprites.append(sprite)
 
@@ -2159,7 +2312,7 @@ func _get_master_appearance_sprite() -> AnimatedSprite2D:
 	return appearance_sprites[0]
 
 func _apply_body_appearance(body_id: String) -> void:
-	var body_sprite := look_node.get_node_or_null(BODY_SPRITE_NAME) as AnimatedSprite2D
+	var body_sprite := _get_appearance_sprite(BODY_SPRITE_NAME)
 	if body_sprite == null:
 		push_warning("Player: BodySprite node is missing.")
 		return
@@ -2189,6 +2342,7 @@ func _apply_body_appearance(body_id: String) -> void:
 	if body_frames == null:
 		push_warning("Player: body appearance '%s' could not be loaded." % normalized_body_id)
 		return
+	body_frames = MountService.get_mounted_rider_frames(body_frames, active_mount_id)
 
 	body_sprite.sprite_frames = body_frames
 	body_sprite.texture_filter = PLAYER_SPRITE_TEXTURE_FILTER
@@ -2197,7 +2351,7 @@ func _apply_body_appearance(body_id: String) -> void:
 	_apply_appearance_parts(movement_style)
 
 func _sync_body_sprite_frames_for_movement() -> void:
-	var body_sprite := look_node.get_node_or_null(BODY_SPRITE_NAME) as AnimatedSprite2D
+	var body_sprite := _get_appearance_sprite(BODY_SPRITE_NAME)
 	if body_sprite == null:
 		return
 
@@ -2217,6 +2371,7 @@ func _sync_body_sprite_frames_for_movement() -> void:
 	)
 	if body_frames == null:
 		return
+	body_frames = MountService.get_mounted_rider_frames(body_frames, active_mount_id)
 
 	body_sprite.sprite_frames = body_frames
 	body_sprite.texture_filter = PLAYER_SPRITE_TEXTURE_FILTER
@@ -2312,6 +2467,7 @@ func _apply_appearance_part(category: String, part_id: String, movement_style: S
 	if part_frames == null:
 		_clear_appearance_part_sprite(normalized_category)
 		return
+	part_frames = MountService.get_mounted_rider_frames(part_frames, active_mount_id)
 
 	sprite.sprite_frames = part_frames
 	sprite.texture_filter = PLAYER_SPRITE_TEXTURE_FILTER
@@ -2342,9 +2498,10 @@ func _sync_part_sprite_to_animation(sprite: AnimatedSprite2D) -> void:
 		sprite.stop()
 
 func _get_appearance_sprite(sprite_name: String) -> AnimatedSprite2D:
-	if look_node == null:
-		return null
-	return look_node.get_node_or_null(sprite_name) as AnimatedSprite2D
+	for sprite in appearance_sprites:
+		if sprite.name == sprite_name:
+			return sprite
+	return null
 
 func _clear_appearance_part_sprite(category: String) -> void:
 	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category)

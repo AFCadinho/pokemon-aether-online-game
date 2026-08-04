@@ -1275,7 +1275,8 @@ func _show_pokemon_hover(
 		public_confirmed_items_by_ident,
 		_get_raw_pvp_hover_viewer_id(),
 		hover_api_ident,
-		battle_state.get_species_from_pokemon_data(display_pokemon_data)
+		battle_state.get_species_from_pokemon_data(display_pokemon_data),
+		public_confirmed_only
 	)
 	if is_instance_valid(hover_info_request):
 		hover_info_request.queue_free()
@@ -1339,8 +1340,16 @@ func _show_pokemon_hover(
 		confirmed_moves = _filter_public_opponent_hover_moves(confirmed_moves)
 		if public_confirmed_only:
 			var public_ident_key := _normalize_battle_ident(str(request_pokemon_data.get("ident", "")))
-			confirmed_item = str(public_confirmed_items_by_ident.get(public_ident_key, "")).strip_edges()
-			confirmed_ability = str(public_confirmed_abilities_by_ident.get(public_ident_key, "")).strip_edges()
+			var cached_confirmed_item := str(
+				public_confirmed_items_by_ident.get(public_ident_key, "")
+			).strip_edges()
+			if cached_confirmed_item != "":
+				confirmed_item = cached_confirmed_item
+			var cached_confirmed_ability := str(
+				public_confirmed_abilities_by_ident.get(public_ident_key, "")
+			).strip_edges()
+			if cached_confirmed_ability != "":
+				confirmed_ability = cached_confirmed_ability
 		display_data.erase("moves")
 		display_data.erase("moveSlots")
 		display_data.erase("baseMoves")
