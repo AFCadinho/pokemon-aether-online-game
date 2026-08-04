@@ -690,10 +690,15 @@ func _sync_mount_animation(moving: bool, direction: Vector2) -> void:
 		else _get_idle_animation_name(direction)
 	if not mount_sprite.sprite_frames.has_animation(animation_name):
 		return
-	mount_sprite.animation = animation_name
+	var animation_changed := mount_sprite.animation != animation_name
+	if animation_changed or not moving and mount_sprite.is_playing():
+		mount_sprite.animation = animation_name
+		mount_sprite.frame = 0
+		mount_sprite.frame_progress = 0.0
 	if moving:
 		mount_sprite.play(animation_name)
 	else:
+		mount_sprite.animation = animation_name
 		mount_sprite.frame = 0
 		mount_sprite.frame_progress = 0.0
 		mount_sprite.stop()

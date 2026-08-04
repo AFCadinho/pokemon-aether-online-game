@@ -334,10 +334,15 @@ func _sync_mount_animation(moving: bool, direction: Vector2) -> void:
 		else _get_idle_animation_name(direction)
 	if not mount_sprite.sprite_frames.has_animation(animation_name):
 		return
-	mount_sprite.animation = animation_name
+	var animation_changed := mount_sprite.animation != animation_name
+	if animation_changed or not moving and mount_sprite.is_playing():
+		mount_sprite.animation = animation_name
+		mount_sprite.frame = 0
+		mount_sprite.frame_progress = 0.0
 	if moving:
 		mount_sprite.play(animation_name)
 	else:
+		mount_sprite.animation = animation_name
 		mount_sprite.frame = 0
 		mount_sprite.frame_progress = 0.0
 		mount_sprite.stop()
@@ -1802,7 +1807,7 @@ func _try_start_move(direction: Vector2) -> bool:
 
 func play_walk_animation(direction: Vector2) -> void:
 	if _uses_static_activity_movement_pose():
-		set_idle_frame()
+		_apply_static_activity_idle_pose(direction)
 		_sync_mount_animation(true, direction)
 		return
 
@@ -1931,13 +1936,16 @@ func _handle_route_gate_interaction(gate_npc: Node) -> void:
 	route_gate_interaction_in_progress = false
 	
 func set_idle_frame() -> void:
-	_apply_directional_appearance_layer_order(last_direction)
+	_apply_static_activity_idle_pose(last_direction)
+	_sync_mount_animation(false, last_direction)
+
+func _apply_static_activity_idle_pose(direction: Vector2) -> void:
+	_apply_directional_appearance_layer_order(direction)
 	for sprite in appearance_sprites:
 		sprite.stop()
-		_set_idle_animation(sprite, last_direction)
+		_set_idle_animation(sprite, direction)
 	_sync_activity_layer_offsets()
 	_apply_activity_visual_offset()
-	_sync_mount_animation(false, last_direction)
 	
 func refresh_map_layers() -> void:
 	var current_map: Node = _resolve_current_map()
