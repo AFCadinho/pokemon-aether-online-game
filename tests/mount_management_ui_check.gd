@@ -69,7 +69,7 @@ func _run() -> void:
 
 	var panel_scene := load(MOUNT_LOADOUT_PANEL_PATH) as PackedScene
 	_check(panel_scene != null, "mount loadout panel scene loads")
-	var panel := panel_scene.instantiate() as MountLoadoutPanel
+	var panel := panel_scene.instantiate() as Control
 	root.add_child(panel)
 	await process_frame
 	_check(
@@ -80,12 +80,14 @@ func _run() -> void:
 		"mount loadout occupies the top-right cluster without covering its action rails"
 	)
 	_check(
-		panel.slots_panel.size.x <= panel.size.x
-		and panel.selector_panel.position.y >= panel.slots_panel.size.y + 6.0,
+		(panel.get("slots_panel") as PanelContainer).size.x <= panel.size.x
+		and (panel.get("selector_panel") as PanelContainer).position.y
+		>= (panel.get("slots_panel") as PanelContainer).size.y + 6.0,
 		"mount cards fit their rail and the selector opens below it"
 	)
-	var land_button := panel.slot_buttons.get("land") as Button
-	var surf_button := panel.slot_buttons.get("surf") as Button
+	var slot_buttons := panel.get("slot_buttons") as Dictionary
+	var land_button := slot_buttons.get("land") as Button
+	var surf_button := slot_buttons.get("surf") as Button
 	_check(
 		land_button != null
 		and land_button.text.contains(str(localization_manager.call("text", "ui.mounts.none_selected"))),
@@ -97,15 +99,18 @@ func _run() -> void:
 	)
 
 	panel.call("_open_selector", "surf")
-	_check(panel.selector_panel.visible, "clicking a slot opens its mount selector")
+	var selector_panel := panel.get("selector_panel") as PanelContainer
+	var selector_options := panel.get("selector_options") as VBoxContainer
+	var selector_empty_label := panel.get("selector_empty_label") as Label
+	_check(selector_panel.visible, "clicking a slot opens its mount selector")
 	_check(
-		panel.selector_options.get_child_count() == 1
-		and (panel.selector_options.get_child(0) as Button).text.contains("Lapras"),
+		selector_options.get_child_count() == 1
+		and (selector_options.get_child(0) as Button).text.contains("Lapras"),
 		"Surf selector lists Lapras"
 	)
 	panel.call("_open_selector", "land")
 	_check(
-		panel.selector_options.get_child_count() == 0 and panel.selector_empty_label.visible,
+		selector_options.get_child_count() == 0 and selector_empty_label.visible,
 		"land selector explains that no land mounts are available yet"
 	)
 

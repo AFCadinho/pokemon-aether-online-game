@@ -1177,7 +1177,7 @@ var item_dex_dragging := false
 var item_dex_drag_offset := Vector2.ZERO
 var pokedex_popup: PanelContainer
 var town_map_popup: TownMapPopup
-var mount_loadout_panel: MountLoadoutPanel
+var mount_loadout_panel: Control
 var pokedex_dex_selector: OptionButton
 var pokedex_variant_buttons: Dictionary = {}
 var pokedex_search_input: LineEdit
@@ -8169,7 +8169,7 @@ func _setup_town_map_popup() -> void:
 
 
 func _setup_mount_loadout_panel() -> void:
-	mount_loadout_panel = MOUNT_LOADOUT_PANEL_SCENE.instantiate() as MountLoadoutPanel
+	mount_loadout_panel = MOUNT_LOADOUT_PANEL_SCENE.instantiate() as Control
 	if mount_loadout_panel == null:
 		push_warning("UIOverlay: mount loadout panel could not be created.")
 		return
