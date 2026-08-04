@@ -1,10 +1,10 @@
 [gd_scene format=4 uid="uid://5tm2o5wa0335"]
 
-[ext_resource type="PackedScene" path="res://generated/tiled_visuals/open_field/open_field.visual.tscn" id="1_hodeu"]
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/kanto_route_22/kanto_route_22.visual.tscn" id="1_hodeu"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_route_hint"]
-[ext_resource type="TileSet" path="res://generated/tiled_visuals/open_field/open_field.visual.tileset.tres" id="5_tileset"]
+[ext_resource type="TileSet" path="res://generated/tiled_visuals/kanto_route_22/kanto_route_22.visual.tileset.tres" id="5_tileset"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_viridian"]
 size = Vector2(32, 128)
