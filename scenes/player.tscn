@@ -57,6 +57,10 @@ position = Vector2(0, -16)
 visible = false
 z_index = -1
 
+[node name="MountForegroundSprite" type="AnimatedSprite2D" parent="Look"]
+visible = false
+z_index = 10
+
 [node name="Rider" type="Node2D" parent="Look"]
 
 [node name="BodySprite" type="AnimatedSprite2D" parent="Look/Rider" unique_id=2078077717]

@@ -11,6 +11,7 @@ var failed := false
 func _init() -> void:
 	_check_catalog_and_assets()
 	_check_rider_mask_and_offsets()
+	_check_rider_pixels_do_not_clip_at_frame_edges()
 	_check_player_scene_mount_layer()
 	quit(1 if failed else 0)
 
@@ -34,6 +35,17 @@ func _check_catalog_and_assets() -> void:
 	if mount_frames != null:
 		_expect(mount_frames.get_frame_count(&"walk_left") == 4, "Lapras has four movement frames")
 		_expect(mount_frames.get_frame_count(&"idle_down") == 1, "Lapras has a stable idle frame")
+	var foreground_frames := MountServiceScript.get_mount_foreground_frames("lapras")
+	_expect(foreground_frames != null, "Lapras has a foreground head layer")
+	if foreground_frames != null:
+		_expect(
+			_opaque_pixel_count(foreground_frames.get_frame_texture(&"idle_down", 0).get_image()) > 0,
+			"Lapras's head renders in front of the down-facing rider"
+		)
+		_expect(
+			_opaque_pixel_count(foreground_frames.get_frame_texture(&"idle_left", 0).get_image()) == 0,
+			"side-facing Lapras does not cover the rider with an unnecessary foreground layer"
+		)
 
 
 func _check_rider_mask_and_offsets() -> void:
@@ -53,8 +65,16 @@ func _check_rider_mask_and_offsets() -> void:
 	_expect(_opaque_pixel_count(left_image) == 908, "left rider frame removes the 20 masked leg pixels")
 	_expect(_opaque_pixel_count(right_image) == 908, "right rider frame removes the 20 masked leg pixels")
 	_expect(_opaque_pixel_count(down_image) == 1064, "down rider frame keeps all unmasked pixels")
-	_expect(left_image.get_used_rect().position.x == 36, "left rider uses the Lapras seat offset")
-	_expect(right_image.get_used_rect().position.x == 0, "right rider uses the mirrored Lapras seat offset")
+	_expect(left_image.get_used_rect().position.x == 16, "left rider pixels remain inside their source frame")
+	_expect(right_image.get_used_rect().position.x == 20, "right rider pixels remain inside their source frame")
+	_expect(
+		MountServiceScript.get_rider_frame_offset("lapras", "down", 0) == Vector2i(2, -16),
+		"down rider node uses the Lapras back-seat offset"
+	)
+	_expect(
+		MountServiceScript.get_rider_frame_offset("lapras", "left", 0) == Vector2i(20, -4),
+		"left rider node uses the Lapras back-seat offset"
+	)
 	_expect(
 		MountServiceScript.get_rider_frame_delta("lapras", "left", 2) == Vector2i(-2, 2),
 		"left rider follows Lapras animation bobbing as one layered unit"
@@ -62,6 +82,29 @@ func _check_rider_mask_and_offsets() -> void:
 	_expect(
 		MountServiceScript.get_rider_frame_delta("lapras", "right", 2) == Vector2i(2, 2),
 		"right rider follows mirrored Lapras animation bobbing"
+	)
+
+
+func _check_rider_pixels_do_not_clip_at_frame_edges() -> void:
+	var source_image := Image.create(64, 64, false, Image.FORMAT_RGBA8)
+	source_image.fill(Color.TRANSPARENT)
+	source_image.set_pixel(20, 0, Color.WHITE)
+	source_image.set_pixel(63, 20, Color.WHITE)
+	var source_texture := ImageTexture.create_from_image(source_image)
+	var source_frames := SpriteFrames.new()
+	source_frames.remove_animation(&"default")
+	for animation_name: StringName in [&"idle_down", &"idle_left"]:
+		source_frames.add_animation(animation_name)
+		source_frames.add_frame(animation_name, source_texture)
+
+	var mounted_frames := MountServiceScript.get_mounted_rider_frames(source_frames, "lapras")
+	_expect(
+		_opaque_pixel_count(mounted_frames.get_frame_texture(&"idle_down", 0).get_image()) == 2,
+		"negative down offset does not cut off headgear at the top frame edge"
+	)
+	_expect(
+		_opaque_pixel_count(mounted_frames.get_frame_texture(&"idle_left", 0).get_image()) == 2,
+		"positive side offset does not cut off hair at the right frame edge"
 	)
 
 
@@ -74,6 +117,10 @@ func _check_player_scene_mount_layer() -> void:
 	_expect(
 		scene_source.contains('[node name="Rider" type="Node2D" parent="Look"]'),
 		"all layered appearance sprites share a rider transform"
+	)
+	_expect(
+		scene_source.contains('[node name="MountForegroundSprite" type="AnimatedSprite2D" parent="Look"]'),
+		"player scene can render Lapras's head in front of the rider"
 	)
 	_expect(scene_source.contains("visible = false"), "mount is hidden while the player is not Surfing")
 	_expect(scene_source.contains("z_index = -1"), "Lapras renders behind the masked rider")

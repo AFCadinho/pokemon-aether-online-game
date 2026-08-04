@@ -40,6 +40,7 @@ const NAMEPLATE_MAX_NAME_WIDTH := 132.0
 const NAMEPLATE_LAYER_GAP := 2.0
 const BODY_SPRITE_NAME := "BodySprite"
 const MOUNT_SPRITE_NAME := "MountSprite"
+const MOUNT_FOREGROUND_SPRITE_NAME := "MountForegroundSprite"
 const UNEQUIPPED_APPEARANCE_PART_META := "unequipped_appearance_part"
 const ACTIVITY_BASE_SPRITE_OFFSET_META := "activity_base_sprite_offset"
 const ACTIVITY_LAYER_OFFSETS := {
@@ -150,6 +151,7 @@ var pending_tile_moves: Array[Dictionary] = []
 var last_direction := Vector2.DOWN
 var look_node: Node2D
 var mount_sprite: AnimatedSprite2D
+var mount_foreground_sprite: AnimatedSprite2D
 var rider_node: Node2D
 var base_look_position := Vector2.ZERO
 var base_rider_position := Vector2.ZERO
@@ -640,6 +642,9 @@ func _create_visual() -> void:
 	if look_node != null:
 		base_look_position = look_node.position
 		mount_sprite = look_node.get_node_or_null(MOUNT_SPRITE_NAME) as AnimatedSprite2D
+		mount_foreground_sprite = look_node.get_node_or_null(
+			MOUNT_FOREGROUND_SPRITE_NAME
+		) as AnimatedSprite2D
 		rider_node = look_node.get_node_or_null("Rider") as Node2D
 		if rider_node != null:
 			base_rider_position = rider_node.position
@@ -658,6 +663,9 @@ func _sync_mount_visual() -> void:
 		mount_sprite.stop()
 		mount_sprite.sprite_frames = null
 		mount_sprite.visible = false
+		mount_foreground_sprite.stop()
+		mount_foreground_sprite.sprite_frames = null
+		mount_foreground_sprite.visible = false
 		_sync_mount_rider_delta()
 		return
 	var mount_frames := MountService.get_mount_frames(current_mount_id)
@@ -667,6 +675,10 @@ func _sync_mount_visual() -> void:
 	mount_sprite.sprite_frames = mount_frames
 	mount_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	mount_sprite.visible = true
+	var foreground_frames := MountService.get_mount_foreground_frames(current_mount_id)
+	mount_foreground_sprite.sprite_frames = foreground_frames
+	mount_foreground_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	mount_foreground_sprite.visible = foreground_frames != null
 	_sync_mount_animation(_is_visually_moving(false), last_direction)
 
 
@@ -685,6 +697,18 @@ func _sync_mount_animation(moving: bool, direction: Vector2) -> void:
 		mount_sprite.frame = 0
 		mount_sprite.frame_progress = 0.0
 		mount_sprite.stop()
+	_sync_mount_foreground_frame()
+
+
+func _sync_mount_foreground_frame() -> void:
+	if mount_foreground_sprite == null or not mount_foreground_sprite.visible:
+		return
+	if mount_sprite == null or mount_sprite.sprite_frames == null:
+		return
+	mount_foreground_sprite.animation = mount_sprite.animation
+	mount_foreground_sprite.frame = mount_sprite.frame
+	mount_foreground_sprite.frame_progress = mount_sprite.frame_progress
+	mount_foreground_sprite.stop()
 
 
 func _sync_mount_rider_delta() -> void:
@@ -693,12 +717,12 @@ func _sync_mount_rider_delta() -> void:
 	if mount_sprite == null or not mount_sprite.visible or current_mount_id == "":
 		rider_node.position = base_rider_position
 		return
-	var rider_delta := MountService.get_rider_frame_delta(
+	var rider_offset := MountService.get_rider_frame_offset(
 		current_mount_id,
 		_get_activity_offset_direction(),
 		mount_sprite.frame
 	)
-	rider_node.position = base_rider_position + Vector2(rider_delta)
+	rider_node.position = base_rider_position + Vector2(rider_offset)
 
 func _create_interaction_hit_area() -> void:
 	var hit_area := Area2D.new()
@@ -1037,7 +1061,8 @@ func _make_role_badge_style(role_id: String, fallback_color: Color) -> StyleBoxF
 func _collect_appearance_sprites(node: Node) -> void:
 	if node is AnimatedSprite2D:
 		var sprite := node as AnimatedSprite2D
-		if sprite.name != MOUNT_SPRITE_NAME:
+		if sprite.name != MOUNT_SPRITE_NAME \
+			and sprite.name != MOUNT_FOREGROUND_SPRITE_NAME:
 			sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 			appearance_sprites.append(sprite)
 
@@ -1538,6 +1563,7 @@ func _update_animation(is_moving: bool) -> void:
 	_sync_all_part_sprites_to_body()
 	_sync_mount_animation(is_moving, last_direction)
 	_sync_mount_rider_delta()
+	_sync_mount_foreground_frame()
 	_apply_activity_visual_offset()
 
 
