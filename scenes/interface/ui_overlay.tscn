@@ -35,6 +35,7 @@
 [ext_resource type="Texture2D" path="res://assets/ui/pvp_queue_ranked_emblem.svg" id="30_pvp_ranked_emblem"]
 [ext_resource type="Script" path="res://scripts/ui/fishing_action_controller.gd" id="31_fishing_action"]
 [ext_resource type="Texture2D" path="res://assets/ui/my_powers.svg" id="32_my_powers"]
+[ext_resource type="Texture2D" path="res://assets/ui/mount_management.svg" id="33_mounts"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grslb"]
 bg_color = Color(0.019607844, 0.043137256, 0.078431375, 0.92941177)
@@ -648,6 +649,7 @@ grow_vertical = 0
 mouse_default_cursor_shape = 2
 tooltip_text = "ui.mounts.title"
 toggle_mode = true
+icon = ExtResource("33_mounts")
 icon_max_width = 34
 expand_icon = true
 theme_override_styles/normal = SubResource("StyleBoxFlat_utility_button")

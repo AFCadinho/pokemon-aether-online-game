@@ -109,7 +109,9 @@ func _init() -> void:
 	_check(
 		mount_button_block.contains("custom_minimum_size = Vector2(42, 42)")
 		and mount_button_block.contains("offset_top = -242.0")
-		and mount_button_block.contains('tooltip_text = "ui.mounts.title"'),
+		and mount_button_block.contains('tooltip_text = "ui.mounts.title"')
+		and mount_button_block.contains('icon = ExtResource("33_mounts")')
+		and scene_source.contains('path="res://assets/ui/mount_management.svg" id="33_mounts"'),
 		"Mount management joins the bottom-right character utility rail"
 	)
 	_check(
