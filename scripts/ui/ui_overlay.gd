@@ -95,7 +95,6 @@ const PC_PARTY_HOVER_CARD_SCENE: PackedScene = preload("res://scenes/battle/part
 const POKEMON_SUMMARY_MOVE_REORDER_SLOT_SCRIPT := preload("res://scripts/ui/pokemon_summary_move_reorder_slot.gd")
 const TOWN_MAP_POPUP_SCRIPT := preload("res://scripts/ui/town_map_popup.gd")
 const MOUNT_LOADOUT_PANEL_SCENE: PackedScene = preload("res://scenes/interface/mount_loadout_panel.tscn")
-const MountServiceScript := preload("res://scripts/services/mount_service.gd")
 const OVERWORLD_MOVE_ACTION_ICON := preload("res://assets/ui/icons/overworld_move_action.svg")
 const CHAT_RESIZE_ICON: Texture2D = preload("res://assets/ui/chat_resize.svg")
 const GLOBAL_EXP_BUFF_ICON: Texture2D = preload("res://assets/ui/global_exp_boost.svg")
@@ -8185,9 +8184,6 @@ func _setup_mount_loadout_panel() -> void:
 	mount_loadout_panel.z_index = UI_ACTIVE_Z_INDEX
 	root_control.add_child(mount_loadout_panel)
 	mount_loadout_panel.visibility_changed.connect(_on_mount_manager_visibility_changed)
-	if not SettingsManager.mount_loadout_changed.is_connected(_on_mount_button_loadout_changed):
-		SettingsManager.mount_loadout_changed.connect(_on_mount_button_loadout_changed)
-	_refresh_mount_button_icon()
 
 
 func _on_mount_button_pressed() -> void:
@@ -8202,21 +8198,6 @@ func _on_mount_button_pressed() -> void:
 func _on_mount_manager_visibility_changed() -> void:
 	if mount_button != null and mount_loadout_panel != null:
 		mount_button.set_pressed_no_signal(mount_loadout_panel.visible)
-
-
-func _on_mount_button_loadout_changed(_movement_mode: String, _mount_id: String) -> void:
-	_refresh_mount_button_icon()
-
-
-func _refresh_mount_button_icon() -> void:
-	if mount_button == null:
-		return
-	var mount_id := SettingsManager.get_selected_mount_id(MountServiceScript.MOVEMENT_MODE_SURF)
-	if mount_id == "":
-		mount_id = SettingsManager.get_selected_mount_id(MountServiceScript.MOVEMENT_MODE_LAND)
-	mount_button.icon = MountServiceScript.get_mount_icon_texture(mount_id)
-	mount_button.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	mount_button.tooltip_text = LocalizationManager.text("ui.mounts.title")
 
 
 func _position_mount_loadout_panel() -> void:

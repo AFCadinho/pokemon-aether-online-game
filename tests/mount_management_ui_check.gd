@@ -70,7 +70,9 @@ func _run() -> void:
 	)
 	_check(
 		overlay_scene_source.contains('[node name="MountButton" type="Button" parent="Control"]')
-		and not overlay_scene_source.contains('[node name="MountSlot"'),
+		and not overlay_scene_source.contains('[node name="MountSlot"')
+		and overlay_scene_source.contains('path="res://assets/ui/mount_management.svg" id="33_mounts"')
+		and overlay_scene_source.contains('icon = ExtResource("33_mounts")'),
 		"mount management uses one bottom-right character utility button"
 	)
 
