@@ -10,6 +10,7 @@ func _init() -> void:
 	_check_presence_payload_and_signature_include_activity_style()
 	_check_remote_avatar_resolves_replicated_surf_pose()
 	_check_remote_surf_render_matches_local_pose_rules()
+	_check_mount_animation_continues_across_tiles()
 	quit(1 if failed else 0)
 
 
@@ -112,6 +113,27 @@ func _check_remote_surf_render_matches_local_pose_rules() -> void:
 			"BODY_MOVEMENT_RIDE"
 		),
 		"local and remote riders stay stable while the Surf mount animates"
+	)
+
+
+func _check_mount_animation_continues_across_tiles() -> void:
+	var local_source := FileAccess.get_file_as_string("res://scripts/world/player.gd")
+	var local_walk_source := _function_source(local_source, "play_walk_animation")
+	var mount_sync_source := _function_source(local_source, "_sync_mount_animation")
+	_expect(
+		local_walk_source.contains("_apply_static_activity_idle_pose(direction)")
+		and not local_walk_source.contains("set_idle_frame()")
+		and mount_sync_source.contains("animation_changed")
+		and mount_sync_source.contains("mount_sprite.is_playing()"),
+		"local Surf keeps Lapras animation frames across chained tile moves"
+	)
+
+	var remote_source := FileAccess.get_file_as_string("res://scripts/world/remote_player_avatar.gd")
+	var remote_mount_sync_source := _function_source(remote_source, "_sync_mount_animation")
+	_expect(
+		remote_mount_sync_source.contains("animation_changed")
+		and remote_mount_sync_source.contains("mount_sprite.is_playing()"),
+		"remote Surf keeps Lapras animation frames across replicated tile moves"
 	)
 
 
