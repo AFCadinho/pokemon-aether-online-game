@@ -208,6 +208,7 @@ const DEBUG_PVP_REALTIME := false
 const DEBUG_PVP_FLOW_TRACE := false
 const DEBUG_BATTLE_HP_EVENTS := false
 const DEBUG_BATTLE_MOVE_EVENTS := false
+const DEBUG_BATTLE_SIDE_HOVER := true
 const DEBUG_SIDE_CONDITION_EFFECTS := false
 const DEBUG_BATTLE_PRESENTATION_ORDER := false
 const DEBUG_BATTLE_START_EVENTS := false
@@ -218,6 +219,7 @@ const INITIAL_TRANSFORM_REVEAL_SECONDS := 0.8
 const STAT_STAGE_BADGE_BOOST_COLOR := Color(0.3882353, 0.83137256, 0.44313726, 1.0)
 const STAT_STAGE_BADGE_DROP_COLOR := Color(0.9372549, 0.26666668, 0.26666668, 1.0)
 const VOLATILE_CONDITION_BADGE_COLOR := Color(1.0, 0.74, 0.26, 1.0)
+const PublicPokemonKnowledge := preload("res://scripts/battle/battle_public_pokemon_knowledge.gd")
 const DISGUISE_ACTIVE_BADGE_COLOR := Color("#7ee787")
 const DISGUISE_INACTIVE_BADGE_COLOR := Color("#f2a65a")
 const SUPREME_OVERLORD_BADGE_COLOR := Color("#d6a84b")
@@ -1224,11 +1226,26 @@ func _show_hud_pokemon_hover(pokemon_data: Dictionary) -> void:
 	hover_state.begin_hud_hover(hover_ident)
 	var player_id := _get_player_id_from_ident(hover_ident)
 	if player_id == "":
+		_debug_battle_side_hover("lookup_rejected", {
+			"iconIdent": hover_ident,
+			"reason": "missing_player_id",
+		})
 		return
 
 	var source_pokemon_data: Dictionary = _get_team_pokemon_data_for_hover(player_id, pokemon_data)
+	var matched_battle_state := not source_pokemon_data.is_empty()
 	if source_pokemon_data.is_empty():
 		source_pokemon_data = pokemon_data
+	_debug_battle_side_hover("lookup", {
+		"iconIdent": hover_ident,
+		"iconSpecies": battle_state.get_species_from_pokemon_data(pokemon_data),
+		"playerId": player_id,
+		"matchedBattleState": matched_battle_state,
+		"sourceIdent": str(source_pokemon_data.get("ident", "")),
+		"sourceSpecies": battle_state.get_species_from_pokemon_data(source_pokemon_data),
+		"iconKnowledge": _get_safe_side_hover_knowledge(pokemon_data),
+		"sourceKnowledge": _get_safe_side_hover_knowledge(source_pokemon_data),
+	})
 
 	var display_pokemon_data: Dictionary = _get_display_pokemon_data(player_id, source_pokemon_data)
 	await _show_pokemon_hover(source_pokemon_data, display_pokemon_data, player_id, true)
@@ -1283,6 +1300,12 @@ func _show_pokemon_hover(
 	if is_instance_valid(hover_stats_request):
 		hover_stats_request.queue_free()
 	if not hover_state.is_hover_request_current(request_token, hover_ident, hover_owner_player_id):
+		if public_confirmed_only:
+			_debug_battle_side_hover("dropped", {
+				"reason": "stale_request",
+				"requestIdent": hover_ident,
+				"requestToken": request_token,
+			})
 		_debug_battle_move("hover dropped stale owner=%s token=%s requestIdent=%s hoverData=%s" % [
 			hover_owner_player_id,
 			str(request_token),
@@ -1291,6 +1314,13 @@ func _show_pokemon_hover(
 		])
 		return
 	if not _hover_data_matches_pokemon_request(hover_data, request_pokemon_data):
+		if public_confirmed_only:
+			_debug_battle_side_hover("dropped", {
+				"reason": "response_mismatch",
+				"requestIdent": hover_ident,
+				"lookupIdent": hover_lookup_ident,
+				"requestedSpecies": str(hover_data.get("requested_species", "")),
+			})
 		_debug_battle_move("hover dropped mismatch owner=%s token=%s requestIdent=%s hoverData=%s requestPokemon=%s" % [
 			hover_owner_player_id,
 			str(request_token),
@@ -1306,6 +1336,15 @@ func _show_pokemon_hover(
 	var stat_changes: Dictionary = hover_data.get("stat_changes", {})
 	var speed_data: Dictionary = hover_data.get("speed_data", {})
 	var species_metadata: Dictionary = hover_data.get("species_metadata", {})
+	if public_confirmed_only:
+		_debug_battle_side_hover("service_result", {
+			"requestIdent": hover_ident,
+			"lookupIdent": hover_lookup_ident,
+			"embeddedKnowledge": _get_safe_side_hover_knowledge(request_pokemon_data),
+			"confirmedMoves": _get_safe_side_hover_moves(confirmed_moves),
+			"confirmedItem": confirmed_item,
+			"confirmedAbility": confirmed_ability,
+		})
 	_debug_battle_move("pokemon-info parsed player=%s moves=%s item=%s ability=%s statChanges=%s speed=%s info=%s" % [
 		hover_owner_player_id,
 		JSON.stringify(confirmed_moves),
@@ -1337,7 +1376,14 @@ func _show_pokemon_hover(
 				JSON.stringify(confirmed_moves),
 			])
 	else:
+		var confirmed_moves_before_filter := confirmed_moves.duplicate(true)
 		confirmed_moves = _filter_public_opponent_hover_moves(confirmed_moves)
+		if public_confirmed_only:
+			_debug_battle_side_hover("move_filter", {
+				"requestIdent": hover_ident,
+				"before": _get_safe_side_hover_moves(confirmed_moves_before_filter),
+				"after": _get_safe_side_hover_moves(confirmed_moves),
+			})
 		if public_confirmed_only:
 			var public_ident_key := _normalize_battle_ident(str(request_pokemon_data.get("ident", "")))
 			var cached_confirmed_item := str(
@@ -1362,6 +1408,14 @@ func _show_pokemon_hover(
 		])
 
 	if pokemon_hover_card.has_method("show_for_pokemon"):
+		if public_confirmed_only:
+			_debug_battle_side_hover("card_render", {
+				"requestIdent": hover_ident,
+				"displaySpecies": battle_state.get_species_from_pokemon_data(display_data),
+				"confirmedMoves": _get_safe_side_hover_moves(confirmed_moves),
+				"confirmedItem": confirmed_item,
+				"confirmedAbility": confirmed_ability,
+			})
 		_debug_battle_move("hover render owner=%s localStateOwner=%s rawLocalOwner=%s displayIdent=%s displaySpecies=%s confirmedMoves=%s confirmedAbility=%s confirmedItem=%s" % [
 			hover_owner_player_id,
 			local_hover_owner,
@@ -9089,6 +9143,21 @@ func _is_ability_heal_event(event_data: Dictionary) -> bool:
 func _debug_battle_move(message: String) -> void:
 	if DEBUG_BATTLE_MOVE_EVENTS:
 		print("[battle-move] " + message)
+
+func _debug_battle_side_hover(event: String, data: Dictionary) -> void:
+	if not DEBUG_BATTLE_SIDE_HOVER:
+		return
+
+	print("[battle-side-hover] event=%s data=%s" % [event, JSON.stringify(data)])
+
+func _get_safe_side_hover_knowledge(pokemon_data: Dictionary) -> Dictionary:
+	return PublicPokemonKnowledge.from_pokemon_data(pokemon_data)
+
+func _get_safe_side_hover_moves(moves: Array) -> Array:
+	var knowledge := _get_safe_side_hover_knowledge({
+		"knowledge": {"confirmedMoves": moves},
+	})
+	return knowledge.get("confirmedMoves", [])
 
 func _debug_battle_start(message: String) -> void:
 	if DEBUG_BATTLE_START_EVENTS:
