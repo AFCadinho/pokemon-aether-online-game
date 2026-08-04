@@ -124,6 +124,32 @@ func _check_player_scene_mount_layer() -> void:
 	)
 	_expect(scene_source.contains("visible = false"), "mount is hidden while the player is not Surfing")
 	_expect(scene_source.contains("z_index = -1"), "Lapras renders behind the masked rider")
+	_check_up_facing_head_layer_offsets()
+
+
+func _check_up_facing_head_layer_offsets() -> void:
+	for script_path: String in [
+		"res://scripts/world/player.gd",
+		"res://scripts/world/remote_player_avatar.gd",
+	]:
+		var script_source := FileAccess.get_file_as_string(script_path)
+		var ride_section_start := script_source.find('\t"ride": {')
+		var activity_visual_start := script_source.find("const ACTIVITY_VISUAL_OFFSETS", ride_section_start)
+		var ride_section := script_source.substr(
+			ride_section_start,
+			activity_visual_start - ride_section_start
+		)
+		var up_section_start := ride_section.find('\t\t"up": {')
+		var left_section_start := ride_section.find('\t\t"left": {', up_section_start)
+		var up_section := ride_section.substr(up_section_start, left_section_start - up_section_start)
+		_expect(
+			up_section.contains('\t\t\t"hair": Vector2.ZERO'),
+			"%s keeps up-facing hair aligned with the rider head" % script_path
+		)
+		_expect(
+			up_section.contains('\t\t\t"headgear": Vector2.ZERO'),
+			"%s keeps up-facing headgear aligned with the rider head" % script_path
+		)
 
 
 func _opaque_pixel_count(image: Image) -> int:

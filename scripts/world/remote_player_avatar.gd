@@ -95,6 +95,14 @@ const ACTIVITY_LAYER_OFFSETS := {
 			"eyes": Vector2(0.0, 6.0),
 			"eyebrows": Vector2(0.0, 5.0),
 		},
+		"up": {
+			"hair": Vector2.ZERO,
+			"headgear": Vector2.ZERO,
+			"facial_hair": Vector2.ZERO,
+			"facegear": Vector2.ZERO,
+			"eyes": Vector2.ZERO,
+			"eyebrows": Vector2.ZERO,
+		},
 		"left": {
 			"hair": Vector2(-4.0, 4.0),
 			"headgear": Vector2(-4.0, 4.0),
