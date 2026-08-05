@@ -1,7 +1,6 @@
 [gd_scene format=4 uid="uid://cbb7318supm5h"]
 
 [ext_resource type="Script" uid="uid://dgwpkenum0n5a" path="res://scripts/world/kanto/towns/pallet_town.gd" id="1_f4ndu"]
-[ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="2_gell4"]
 [ext_resource type="Texture2D" uid="uid://c5801ltimr4ed" path="res://assets/npcs/gen4-ow-sprites/trchar101.png" id="4_3oirl"]
 [ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="5_n6c5k"]
 [ext_resource type="Texture2D" uid="uid://ba8f0l65uv4cv" path="res://assets/tilesets/overworld/JohtoFX.png" id="5_uujun"]
@@ -2194,61 +2193,6 @@ texture_region_size = Vector2i(32, 32)
 [sub_resource type="TileSet" id="TileSet_n6c5k"]
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_3e7rq")
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_j16lr"]
-texture = ExtResource("2_gell4")
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-1:0/0 = 0
-2:0/0 = 0
-3:0/0 = 0
-4:0/0 = 0
-5:0/0 = 0
-6:0/0 = 0
-7:0/0 = 0
-8:0/0 = 0
-0:1/0 = 0
-1:1/0 = 0
-2:1/0 = 0
-3:1/0 = 0
-4:1/0 = 0
-5:1/0 = 0
-6:1/0 = 0
-7:1/0 = 0
-8:1/0 = 0
-0:2/0 = 0
-1:2/0 = 0
-2:2/0 = 0
-3:2/0 = 0
-4:2/0 = 0
-0:3/0 = 0
-1:3/0 = 0
-2:3/0 = 0
-3:3/0 = 0
-4:3/0 = 0
-5:3/0 = 0
-6:3/0 = 0
-7:3/0 = 0
-0:4/0 = 0
-1:4/0 = 0
-2:4/0 = 0
-3:4/0 = 0
-4:4/0 = 0
-5:4/0 = 0
-6:4/0 = 0
-7:4/0 = 0
-0:5/0 = 0
-1:5/0 = 0
-2:5/0 = 0
-3:5/0 = 0
-4:5/0 = 0
-5:5/0 = 0
-6:5/0 = 0
-7:5/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_0ke4d"]
-tile_size = Vector2i(32, 32)
-sources/0 = SubResource("TileSetAtlasSource_j16lr")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wfrmf"]
 texture = ExtResource("27_q27eu")
