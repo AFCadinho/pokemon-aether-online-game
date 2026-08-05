@@ -122,6 +122,7 @@ const TRAINER_WALLET_BATTLE_POINTS_ICON: Texture2D = preload("res://assets/ui/ba
 const DEV_HEAL_PARTY_ICON: Texture2D = preload("res://assets/ui/tool_heal_party.svg")
 const DEV_PREVIEW_EVOLUTION_ICON: Texture2D = preload("res://assets/ui/global_shiny_boost.svg")
 const DEV_TRAINER_PROGRESS_ICON: Texture2D = preload("res://assets/gym_badges/kanto_badges/Boulder_Badge.png")
+const DEV_PICKPOCKET_POSE_DURATION := 0.55
 const TOOL_CLEAR_DATA_ICON: Texture2D = preload("res://assets/ui/tool_clear_data.svg")
 const TOOL_DROPDOWN_ARROW: Texture2D = preload("res://assets/ui/photo_mode_dropdown_arrow.svg")
 const TOOL_DROPDOWN_RADIO_CHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_checked.svg")
@@ -1155,6 +1156,7 @@ var dev_battle_points_confirm_button: Button
 var dev_heal_party_button: Button
 var dev_badge_progress_button: Button
 var dev_pickpocket_pose_button: Button
+var dev_pickpocket_pose_running := false
 var dev_badge_progress_popup: DevBadgeProgressPopup
 var dev_item_catalog: Array[Dictionary] = []
 var dev_selected_item: Dictionary = {}
@@ -28367,7 +28369,7 @@ func _on_dev_preview_evolution_button_pressed() -> void:
 	await play_evolution_preview("Pidgey", "Pidgeotto")
 
 func _on_dev_pickpocket_pose_button_pressed() -> void:
-	if not _can_use_dev_tools():
+	if not _can_use_dev_tools() or dev_pickpocket_pose_running:
 		return
 
 	var player_node := get_tree().get_first_node_in_group("player")
@@ -28387,16 +28389,27 @@ func _on_dev_pickpocket_pose_button_pressed() -> void:
 	)
 	if current_style == CharacterAppearanceService.BODY_MOVEMENT_PICKPOCKET:
 		player_node.call("clear_activity_style")
-		add_system_message(LocalizationManager.text("ui.staff.dev.pickpocket_pose_disabled"))
-	elif current_style == CharacterAppearanceService.BODY_MOVEMENT_DEFAULT:
-		player_node.call("set_activity_style", CharacterAppearanceService.BODY_MOVEMENT_PICKPOCKET)
-		add_system_message(LocalizationManager.text("ui.staff.dev.pickpocket_pose_enabled"))
-	else:
+		current_style = CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
+	if current_style != CharacterAppearanceService.BODY_MOVEMENT_DEFAULT:
 		add_system_warning(LocalizationManager.text("ui.staff.dev.pickpocket_pose_busy"))
 		return
 
+	dev_pickpocket_pose_running = true
+	dev_pickpocket_pose_button.disabled = true
 	dev_actions_popup.visible = false
 	_deactivate_ui_panel(dev_actions_popup)
+	player_node.call("set_activity_style", CharacterAppearanceService.BODY_MOVEMENT_PICKPOCKET)
+	await get_tree().create_timer(DEV_PICKPOCKET_POSE_DURATION).timeout
+
+	if is_instance_valid(player_node):
+		var ending_style := CharacterAppearanceService.normalize_movement_style(
+			str(player_node.call("get_activity_style"))
+		)
+		if ending_style == CharacterAppearanceService.BODY_MOVEMENT_PICKPOCKET:
+			player_node.call("clear_activity_style")
+	dev_pickpocket_pose_running = false
+	dev_pickpocket_pose_button.disabled = not _can_use_dev_tools()
+	add_system_message(LocalizationManager.text("ui.staff.dev.pickpocket_pose_completed"))
 
 func _position_dev_add_menu_popup() -> void:
 	_position_dev_slot_popup(dev_add_menu_popup)
