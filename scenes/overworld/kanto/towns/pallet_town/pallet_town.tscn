@@ -6,10 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="5_n6c5k"]
 [ext_resource type="Texture2D" uid="uid://ba8f0l65uv4cv" path="res://assets/tilesets/overworld/JohtoFX.png" id="5_uujun"]
 [ext_resource type="PackedScene" uid="uid://br7n6hywfrl2a" path="res://scenes/npcs/heal_npc.tscn" id="6_jhh0g"]
-[ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/acetrainer-gen6.png" id="7_66okb"]
+[ext_resource type="Texture2D" uid="uid://dwsfb8bgfvnmo" path="res://assets/sprites/trainer_cards/showdown/acetrainer-gen6.png" id="7_66okb"]
 [ext_resource type="Texture2D" uid="uid://b6drbo1a67h55" path="res://assets/tilesets/overworld/nature/ledges/ledges.png" id="7_fiq1l"]
 [ext_resource type="Texture2D" uid="uid://cnixsmivuhykq" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_068_Fisherman.png" id="9_q27eu"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/market_seller_npc.tscn" id="12_4x353"]
+[ext_resource type="PackedScene" uid="uid://cwgvvyjm4vwh4" path="res://scenes/npcs/market_seller_npc.tscn" id="12_4x353"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="12_h1bkg"]
 [ext_resource type="Texture2D" uid="uid://bsxw7vgtdrlpk" path="res://assets/followers/HORSEA.png" id="13_j8pek"]
 [ext_resource type="Texture2D" uid="uid://3tny2dss8f2p" path="res://assets/tilesets/fiver/tiles_env2_32.png" id="14_2e47g"]
@@ -22,11 +22,11 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="23_route_hint"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="24_door_hint"]
 [ext_resource type="PackedScene" uid="uid://b8s7eihsl5ikf" path="res://scenes/world/interactables/sign_interactable.tscn" id="25_sign"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/item_gift_npc.tscn" id="26_item_gift"]
+[ext_resource type="PackedScene" uid="uid://rnbee61xiftm" path="res://scenes/npcs/item_gift_npc.tscn" id="26_item_gift"]
 [ext_resource type="Texture2D" uid="uid://e2ksljyggppg" path="res://assets/tilesets/fiver/tiles_env2_floors32.png" id="27_q27eu"]
-[ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/fisherman-gen6.png" id="29_fisherman_card"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="30_dialogue_npc"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="31_poke_fan_f"]
+[ext_resource type="Texture2D" uid="uid://l4jsju4s8v3a" path="res://assets/sprites/trainer_cards/showdown/fisherman-gen6.png" id="29_fisherman_card"]
+[ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="30_dialogue_npc"]
+[ext_resource type="SpriteFrames" uid="uid://yaxkjlx3spjb" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="31_poke_fan_f"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6lp0i"]
 atlas = ExtResource("4_3oirl")
@@ -2311,12 +2311,12 @@ position = Vector2(1040, 208)
 guard_role = "transition_guard"
 guarded_transition_id = "kanto_pallet_town__to_route_1"
 staff_blocked_dialogue_lines = Array[String](["This route is closed during the alpha."])
-required_quest_id = "choose_starter"
-required_quest_step_id = "choose_starter"
 blocked_dialogue_id = "kanto_pallet_town_north_guard_blocked"
 story_blocked_dialogue_id = "kanto_pallet_town_north_guard_story_blocked"
 allowed_dialogue_id = "kanto_pallet_town_north_guard_default"
 npc_id = "kanto_pallet_town_north_guard"
+required_quest_id = "choose_starter"
+required_quest_step_id = "choose_starter"
 display_name = "Pallet Route Guide"
 npc_sprite_frames = SubResource("SpriteFrames_0ke4d")
 mugshot = ExtResource("7_66okb")
@@ -2333,7 +2333,7 @@ facing_direction = Vector2(0, 1)
 npc_sprite_frames = SubResource("SpriteFrames_27c3h")
 mugshot = ExtResource("29_fisherman_card")
 
-[node name="PalletResident" parent="Entities/NPCs" instance=ExtResource("30_dialogue_npc")]
+[node name="PalletResident" parent="Entities/NPCs" unique_id=346251658 instance=ExtResource("30_dialogue_npc")]
 position = Vector2(784, 1008)
 npc_id = "kanto_pallet_town_resident_mara"
 npc_definition_id = "trainer_class_poke_fan_f"
@@ -2345,13 +2345,14 @@ npc_sprite_frames = ExtResource("31_poke_fan_f")
 position = Vector2(272, 240)
 npc_id = "kanto_pallet_town_market_attendant"
 mugshot = ExtResource("14_m86ow")
+manual_interaction_reach_tiles = 2
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=245092271]
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=689328441]
 
 [node name="Horsea" parent="Entities/Pokemon" unique_id=448121141 instance=ExtResource("12_h1bkg")]
-position = Vector2(432, 944)
+position = Vector2(480, 1024)
 overworld_pokemon_id = "kanto_pallet_town_horsea_1"
 species_id = "horsea"
 display_name = "Horsea"
@@ -2367,7 +2368,7 @@ npc_sprite_frames = SubResource("SpriteFrames_ih4yo")
 movement_behavior = "pace_vertical"
 movement_speed_pixels = 60.0
 
-[node name="Krabby" parent="Entities/Pokemon" instance=ExtResource("12_h1bkg")]
+[node name="Krabby" parent="Entities/Pokemon" unique_id=680981176 instance=ExtResource("12_h1bkg")]
 position = Vector2(336, 912)
 overworld_pokemon_id = "kanto_pallet_town_krabby_1"
 species_id = "krabby"
