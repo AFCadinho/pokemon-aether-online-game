@@ -621,7 +621,7 @@ z_index = 5
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=394772807]
 
 [node name="YoungsterLiam" parent="Entities/NPCs" unique_id=333931483 instance=ExtResource("8_lmnv3")]
-position = Vector2(1456, 1648)
+position = Vector2(1520, 1648)
 trainer_id = "kanto_route_1_youngster_liam"
 sight_range_tiles = 2
 npc_id = "kanto_route_1_youngster_liam"
@@ -668,7 +668,7 @@ mugshot = ExtResource("15_4m8jl")
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=861955121]
 
 [node name="Lillipup" parent="Entities/Pokemon" unique_id=2091997393 instance=ExtResource("27_pokemon")]
-position = Vector2(816, 688)
+position = Vector2(784, 656)
 overworld_pokemon_id = "kanto_route_1_lillipup_1"
 npc_sprite_frames = SubResource("SpriteFrames_oup8f")
 movement_behavior = "pace_horizontal"
@@ -682,7 +682,7 @@ npc_sprite_frames = SubResource("SpriteFrames_mxhnq")
 movement_behavior = "pace_horizontal"
 
 [node name="Rattata" parent="Entities/Pokemon" unique_id=959521182 instance=ExtResource("27_pokemon")]
-position = Vector2(1104, 1408)
+position = Vector2(1104, 1360)
 overworld_pokemon_id = "kanto_route_1_rattata_1"
 species_id = "rattata"
 level = 3
@@ -694,7 +694,7 @@ movement_wait_seconds = 1.0
 movement_speed_pixels = 55.0
 
 [node name="Sentret" parent="Entities/Pokemon" unique_id=1898673972 instance=ExtResource("27_pokemon")]
-position = Vector2(400, 1120)
+position = Vector2(368, 1072)
 overworld_pokemon_id = "kanto_route_1_sentret_1"
 species_id = "sentret"
 level = 3
