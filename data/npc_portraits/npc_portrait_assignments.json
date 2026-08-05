@@ -43,10 +43,14 @@
     "trainer_class_youngster": "showdown_youngster_gen6"
   },
   "preserve_existing": [
-    "kanto_players_house_father"
+    "kanto_players_house_father",
+    "kanto_players_house_mom",
+    "kanto_route_1_dadinho"
   ],
   "notes": {
     "kanto_alpha_gym_lt_surge": "Uses the exact sprite from the full Pokémon Showdown trainer catalog.",
-    "kanto_players_house_father": "Dadinho keeps his existing custom portrait."
+    "kanto_players_house_father": "Dadinho keeps his existing custom portrait.",
+    "kanto_players_house_mom": "Mom uses the scene-assigned Johto Mom portrait.",
+    "kanto_route_1_dadinho": "Route 1 Dadinho keeps the same custom portrait as at home."
   }
 }

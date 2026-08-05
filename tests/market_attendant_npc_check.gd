@@ -54,16 +54,9 @@ func _check_market_attendant_scene() -> void:
 	_check_true(buyer_source.contains('market_mode = "player_sells"'), "Buyer scene opens player selling")
 
 	var pallet_source := _read_text(PALLET_TOWN_SCENE)
-	var clerk_start := pallet_source.find('[node name="MarketSellerNPC" parent="Entities/NPCs"')
-	var players_start := pallet_source.find('[node name="Players"', clerk_start)
-	var placed_clerk_source := pallet_source.substr(clerk_start, players_start - clerk_start)
 	_check_true(
-		not placed_clerk_source.contains("npc_sprite_frames"),
-		"Pallet Town clerk inherits sprite frames from the shared clerk scene"
-	)
-	_check_true(
-		placed_clerk_source.contains('npc_metadata_id = "pokemart_seller"'),
-		"Pallet Town clerk explicitly reuses the generic seller metadata"
+		not pallet_source.contains('[node name="MarketSellerNPC" parent="Entities/NPCs"'),
+		"Pallet Town no longer places an exterior market clerk"
 	)
 	var viridian_center_source := _read_text(VIRIDIAN_POKEMON_CENTER_SCENE)
 	_check_true(

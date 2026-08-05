@@ -75,8 +75,8 @@ func _check_metadata_identity_precedence() -> void:
 			"%s can fall back to its reusable server definition" % scene_path.get_file()
 		)
 	_check_true(
-		_read_text(PALLET_TOWN_SCENE).contains('npc_metadata_id = "pokemart_seller"'),
-		"Pallet Town market attendant explicitly reuses seller metadata"
+		not _read_text(PALLET_TOWN_SCENE).contains('[node name="MarketSellerNPC"'),
+		"Pallet Town no longer places its temporary market attendant"
 	)
 
 
@@ -86,6 +86,12 @@ func _check_base_npc_story_requirement() -> void:
 	_check_true(text.contains("@export var required_quest_step_id := \"\""), "BaseNPC can target one quest step")
 	_check_true(text.contains("func is_story_requirement_met() -> bool:"), "BaseNPC evaluates the projected story requirement")
 	_check_true(text.contains("StoryService.is_requirement_met("), "BaseNPC delegates to authoritative projected story state")
+	_check_true(
+		text.contains("visibility_required_quest_id")
+		and text.contains("visibility_hidden_quest_id")
+		and text.contains("func _apply_story_visibility()"),
+		"BaseNPC supports story-driven scene presence"
+	)
 
 
 func _check_scene_defined_dialogue_id_is_allowed() -> void:
@@ -224,6 +230,11 @@ func _check_existing_npc_behavior_entrypoints() -> void:
 		"HealNPC uses the central dialogue resolver"
 	)
 	_check_true(heal_text.contains("successDialogueId"), "HealNPC supports successDialogueId")
+	_check_true(
+		heal_text.contains("func _after_story_interaction")
+		and heal_text.contains("await _run_heal_interaction(false)"),
+		"HealNPC heals and saves its respawn point after a handled story interaction"
+	)
 
 
 func _check_pallet_guard_story_requirement() -> void:

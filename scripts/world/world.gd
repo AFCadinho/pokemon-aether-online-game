@@ -2537,15 +2537,15 @@ func _fallback_respawn_after_battle_loss() -> void:
 
 func _get_default_healer_respawn_state() -> Dictionary:
 	return {
-		"mapId": "kanto_pallet_town",
-		"mapScenePath": "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn",
+		"mapId": "kanto_players_house",
+		"mapScenePath": "res://scenes/overworld/kanto/towns/pallet_town/players_house.tscn",
 		"position": {
-			"x": 368.0,
-			"y": 272.0,
+			"x": 336.0,
+			"y": 912.0,
 		},
-		"facingDirection": "down",
-		"spawnMarker": "HealNPC",
-		"markerId": "pallet_town_heal_npc",
+		"facingDirection": "up",
+		"spawnMarker": "MomHeal",
+		"markerId": "kanto_players_house_mom",
 	}
 
 
@@ -2554,19 +2554,18 @@ func _normalize_respawn_position_state(position_state: Dictionary) -> Dictionary
 	var map_id := str(normalized_state.get("mapId", "")).strip_edges()
 	var marker_id := str(normalized_state.get("markerId", "")).strip_edges()
 	var spawn_marker := str(normalized_state.get("spawnMarker", "")).strip_edges()
-	if map_id != "kanto_pallet_town" or spawn_marker != "":
+	var is_legacy_pallet_healer := (
+		map_id == "kanto_pallet_town"
+		and (
+			spawn_marker == "HealNPC"
+			or marker_id in ["kanto_pallet_town_nurse", "pallet_town_heal_npc"]
+			or (spawn_marker == "" and marker_id in ["", "pallet_town_initial_spawn"])
+		)
+	)
+	if not is_legacy_pallet_healer:
 		return normalized_state
 
-	if marker_id not in ["", "pallet_town_heal_npc", "pallet_town_initial_spawn"]:
-		return normalized_state
-
-	normalized_state["spawnMarker"] = "HealNPC"
-	normalized_state["markerId"] = "pallet_town_heal_npc"
-	normalized_state["position"] = {
-		"x": 368.0,
-		"y": 272.0,
-	}
-	return normalized_state
+	return _get_default_healer_respawn_state()
 
 
 func _apply_respawn_party_response(party_response: Dictionary) -> void:
