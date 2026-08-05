@@ -19,11 +19,9 @@ func _ready() -> void:
 	_sync_to_movement_target()
 
 
-func _process(_delta: float) -> void:
-	await _process_base_npc()
-	# Let BaseNPC finish the dialogue interaction before applying the formation
-	# transform again. This keeps the dialogue coroutine and input unlock path
-	# independent from Pikachu's visual follow update.
+func _physics_process(_delta: float) -> void:
+	# Keep DialogueNPC's normal async _process untouched. The formation is a
+	# visual concern and must never participate in the dialogue coroutine.
 	if not Engine.is_editor_hint() and not is_interacting:
 		_sync_to_movement_target()
 
