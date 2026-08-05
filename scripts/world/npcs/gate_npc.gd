@@ -4,10 +4,12 @@ extends DialogueNPC
 class_name GateNPC
 
 const LEGACY_IN_PROGRESS_ACCESS_PERMISSION := "world:areas:access-in-progress"
+const GUARD_ROLE_ATTENDANT := "attendant"
+const GUARD_ROLE_TRANSITION := "transition_guard"
 
 @export var gate_id := "route_1"
+@export_enum("attendant", "transition_guard") var guard_role := GUARD_ROLE_ATTENDANT
 @export var guarded_transition_id := ""
-@export var route_gate_id := ""
 @export var requires_party_pokemon := true
 @export var requires_staff_role := false
 @export var blocked_dialogue_lines: Array[String] = [
@@ -26,6 +28,7 @@ const LEGACY_IN_PROGRESS_ACCESS_PERMISSION := "world:areas:access-in-progress"
 @export var allowed_dialogue_id := ""
 
 var transition_access: Dictionary = {}
+var guarded_exit: Node
 
 
 func _ready() -> void:
@@ -104,13 +107,14 @@ func handles_world_transition(candidate_transition_id: String) -> bool:
 	)
 
 
-func handles_route_gate(candidate_route_gate_id: String) -> bool:
-	var configured_route_gate_id := route_gate_id.strip_edges()
-	if configured_route_gate_id.is_empty():
-		configured_route_gate_id = guarded_transition_id.strip_edges()
+func guards_world_position(world_position: Vector2) -> bool:
+	if guard_role != GUARD_ROLE_TRANSITION or is_gate_open():
+		return false
+	var exit := _resolve_guarded_exit()
 	return (
-		not configured_route_gate_id.is_empty()
-		and configured_route_gate_id == candidate_route_gate_id.strip_edges()
+		exit != null
+		and exit.has_method("contains_world_position")
+		and bool(exit.call("contains_world_position", world_position))
 	)
 
 
@@ -238,3 +242,24 @@ func _current_player_has_legacy_gate_permission() -> bool:
 		if str(permission_value).strip_edges().to_lower() == LEGACY_IN_PROGRESS_ACCESS_PERMISSION:
 			return true
 	return false
+
+
+func _resolve_guarded_exit() -> Node:
+	if guarded_exit != null and is_instance_valid(guarded_exit):
+		return guarded_exit
+	var transition_id := guarded_transition_id.strip_edges()
+	if transition_id.is_empty():
+		return null
+	var map_node: Node = self
+	while map_node != null:
+		var exits := map_node.get_node_or_null("Exits")
+		if exits != null:
+			for candidate: Node in exits.get_children():
+				if (
+					candidate.has_method("handles_transition")
+					and bool(candidate.call("handles_transition", transition_id))
+				):
+					guarded_exit = candidate
+					return guarded_exit
+		map_node = map_node.get_parent()
+	return null

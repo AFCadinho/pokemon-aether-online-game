@@ -122,6 +122,14 @@ const ACTIVITY_LAYER_OFFSETS := {
 			"eyes": Vector2(0.0, 6.0),
 			"eyebrows": Vector2(0.0, 5.0),
 		},
+		"up": {
+			"hair": Vector2.ZERO,
+			"headgear": Vector2.ZERO,
+			"facial_hair": Vector2.ZERO,
+			"facegear": Vector2.ZERO,
+			"eyes": Vector2.ZERO,
+			"eyebrows": Vector2.ZERO,
+		},
 		"left": {
 			"hair": Vector2(-4.0, 4.0),
 			"headgear": Vector2(-4.0, 4.0),
@@ -799,7 +807,7 @@ func _ready() -> void:
 	_update_sort_z()
 	_setup_pokemon_follower.call_deferred()
 
-func _on_world_pixel_scale_changed(_scale: int) -> void:
+func _on_world_pixel_scale_changed(_scale: float) -> void:
 	_apply_world_pixel_scale()
 
 
@@ -816,8 +824,7 @@ func _on_mount_loadout_changed(movement_mode: String, mount_id: String) -> void:
 
 
 func _on_render_viewport_size_changed() -> void:
-	if SettingsManager.world_pixel_scale == SettingsManager.WORLD_PIXEL_SCALE_AUTO:
-		_apply_world_pixel_scale()
+	_apply_world_pixel_scale()
 
 func _apply_world_pixel_scale() -> void:
 	if world_camera == null:

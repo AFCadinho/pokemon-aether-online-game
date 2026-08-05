@@ -533,6 +533,7 @@ var quest_journal_view
 @onready var escape_rope_button: TextureButton = $Control/ToggleActionsPanel/MarginContainer/HBoxContainer/EscapeRopeSlot/EscapeRopeButton
 @onready var follower_slot: PanelContainer = $Control/ToggleActionsPanel/MarginContainer/HBoxContainer/FollowerSlot
 @onready var follower_toggle_button: TextureButton = $Control/ToggleActionsPanel/MarginContainer/HBoxContainer/FollowerSlot/FollowerToggle
+@onready var mount_button: Button = $Control/MountButton
 @onready var item_dex_slot: PanelContainer = $Control/DexActionsPanel/MarginContainer/HBoxContainer/ItemDexSlot
 @onready var item_dex_button: TextureButton = $Control/DexActionsPanel/MarginContainer/HBoxContainer/ItemDexSlot/ItemDexButton
 @onready var pokedex_slot: PanelContainer = $Control/DexActionsPanel/MarginContainer/HBoxContainer/PokedexSlot
@@ -1409,6 +1410,7 @@ func _ready() -> void:
 	_refresh_player_actions.call_deferred()
 	follower_toggle_button.set_pressed_no_signal(GameState.show_follower)
 	follower_toggle_button.toggled.connect(_on_follower_toggle_toggled)
+	mount_button.pressed.connect(_on_mount_button_pressed)
 	_load_toggle_preferences.call_deferred()
 	aether_exchange_button.pressed.connect(_on_aether_exchange_button_pressed)
 	dev_actions_button.pressed.connect(_on_dev_actions_button_pressed)
@@ -2873,7 +2875,9 @@ func _apply_ui_z_index_policy() -> void:
 		personal_buffs_panel,
 		donator_store_button,
 		settings_button,
+		mount_button,
 		my_powers_button,
+		mount_loadout_panel,
 		options_panel,
 		actions_panel,
 		dex_actions_panel,
@@ -3098,6 +3102,9 @@ func _setup_normal_ui_focus_groups() -> void:
 		settings_button: [
 			^"SettingsButton",
 		],
+		mount_button: [
+			^"MountButton",
+		],
 		my_powers_button: [
 			^"MyPowersButton",
 		],
@@ -3123,6 +3130,7 @@ func _setup_normal_ui_focus_groups() -> void:
 		personal_buffs_panel: [personal_buffs_panel],
 		donator_store_button: [donator_store_button],
 		settings_button: [settings_button],
+		mount_button: [mount_button],
 		my_powers_button: [my_powers_button],
 	}
 	for panel_value: Variant in focus_tree_panels.keys():
@@ -8173,7 +8181,42 @@ func _setup_mount_loadout_panel() -> void:
 	if mount_loadout_panel == null:
 		push_warning("UIOverlay: mount loadout panel could not be created.")
 		return
+	mount_loadout_panel.z_index = UI_ACTIVE_Z_INDEX
 	root_control.add_child(mount_loadout_panel)
+	mount_loadout_panel.visibility_changed.connect(_on_mount_manager_visibility_changed)
+
+
+func _on_mount_button_pressed() -> void:
+	if mount_loadout_panel == null:
+		return
+	mount_loadout_panel.call("toggle_manager")
+	if mount_loadout_panel.visible:
+		_position_mount_loadout_panel()
+	_on_mount_manager_visibility_changed()
+
+
+func _on_mount_manager_visibility_changed() -> void:
+	if mount_button != null and mount_loadout_panel != null:
+		mount_button.set_pressed_no_signal(mount_loadout_panel.visible)
+
+
+func _position_mount_loadout_panel() -> void:
+	if mount_loadout_panel == null or mount_button == null:
+		return
+	var parent_control := mount_loadout_panel.get_parent_control()
+	if parent_control == null:
+		return
+	var button_rect := mount_button.get_global_rect()
+	var popup_size := mount_loadout_panel.size
+	var parent_origin := parent_control.global_position
+	var target_position := Vector2(
+		button_rect.position.x - popup_size.x - 8.0,
+		button_rect.end.y - popup_size.y
+	) - parent_origin
+	var parent_size := parent_control.size
+	target_position.x = clampf(target_position.x, 12.0, maxf(parent_size.x - popup_size.x - 12.0, 12.0))
+	target_position.y = clampf(target_position.y, 12.0, maxf(parent_size.y - popup_size.y - 12.0, 12.0))
+	mount_loadout_panel.position = target_position
 
 
 func _on_town_map_popup_closed() -> void:
@@ -9442,6 +9485,7 @@ func _create_wild_pokemon_row(entry: Dictionary) -> Control:
 	row.add_child(name_label)
 
 	row.add_child(_create_wild_pokemon_rarity_badge(rarity))
+	row.add_child(_create_encounter_time_badge(str(entry.get("timeOfDay", "any"))))
 
 	var level_label := Label.new()
 	level_label.text = (
@@ -9457,6 +9501,39 @@ func _create_wild_pokemon_row(entry: Dictionary) -> Control:
 	level_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	row.add_child(level_label)
 	return panel
+
+func _create_encounter_time_badge(time_of_day: String) -> Control:
+	var normalized_time := _normalize_encounter_time_of_day(time_of_day)
+	var color := Color("#ffd45a")
+	if normalized_time == "night":
+		color = Color("#9e9cff")
+	elif normalized_time == "any":
+		color = Color("#aeb8c5")
+
+	var badge := PanelContainer.new()
+	badge.custom_minimum_size = Vector2(48, 24)
+	badge.add_theme_stylebox_override("panel", _make_panel_style(
+		Color(color.r, color.g, color.b, 0.14),
+		Color(color.r, color.g, color.b, 0.68),
+		7,
+		1
+	))
+
+	var label := Label.new()
+	label.text = _encounter_time_of_day_label(normalized_time)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 9)
+	label.add_theme_color_override("font_color", color)
+	badge.add_child(label)
+	return badge
+
+func _normalize_encounter_time_of_day(time_of_day: String) -> String:
+	var normalized_time := time_of_day.strip_edges().to_lower()
+	return normalized_time if normalized_time in ["day", "night"] else "any"
+
+func _encounter_time_of_day_label(time_of_day: String) -> String:
+	return LocalizationManager.text("ui.encounter.time.%s" % _normalize_encounter_time_of_day(time_of_day))
 
 func _create_wild_pokemon_rarity_badge(rarity: String) -> Control:
 	var normalized_rarity := rarity.replace("-", "_").replace(" ", "_")
@@ -9711,7 +9788,9 @@ func is_point_over_visible_ui(global_position: Vector2) -> bool:
 		personal_buffs_panel,
 		donator_store_button,
 		settings_button,
+		mount_button,
 		my_powers_button,
+		mount_loadout_panel,
 		options_panel,
 		actions_panel,
 		dex_actions_panel,
@@ -21648,7 +21727,7 @@ func _setup_collapsible_panels() -> void:
 		player_status_panel,
 		"left",
 		null,
-		[personal_buffs_panel, settings_button, donator_store_button, my_powers_button]
+		[personal_buffs_panel, settings_button, mount_button, donator_store_button, my_powers_button]
 	)
 	_register_collapsible_panel("party", party_panel, "right")
 	_register_collapsible_panel("location", location_panel, "right_center", null, [global_buffs_panel])
@@ -27055,11 +27134,13 @@ func _create_pokedex_location_row(location: Dictionary) -> Control:
 		LocalizationManager.text("ui.pokedex.locations.wild")
 	)).strip_edges()
 	var level_text := _format_pokedex_location_level_range(location)
+	var time_of_day := str(location.get("timeOfDay", "any"))
 	var method_label := Label.new()
-	method_label.text = "%s - %s" % [
+	method_label.text = "%s · %s - %s" % [
 		encounter_type
 		if encounter_type != ""
 		else LocalizationManager.text("ui.pokedex.locations.wild"),
+		_encounter_time_of_day_label(time_of_day),
 		level_text,
 	]
 	method_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -35340,6 +35421,7 @@ func _disable_icon_button_focus() -> void:
 		pvp_button,
 		quest_button,
 		settings_button,
+		mount_button,
 		my_powers_button,
 		donator_store_button,
 		wild_pokemon_button,

@@ -12,16 +12,19 @@ var failed := false
 
 
 func _init() -> void:
-	_check(PixelPerfectRenderingScript.validate_scale(-1) == 2, "invalid scale falls back to 2x")
-	_check(PixelPerfectRenderingScript.resolve_scale(1, Vector2i(1920, 1080)) == 1, "explicit 1x remains exact")
-	_check(PixelPerfectRenderingScript.resolve_scale(2, Vector2i(1280, 720)) == 2, "explicit 2x remains exact")
-	_check(PixelPerfectRenderingScript.resolve_scale(3, Vector2i(1920, 1080)) == 3, "explicit 3x remains exact")
-	_check(PixelPerfectRenderingScript.resolve_scale(0, Vector2i(1280, 720)) == 1, "automatic scale selects 1x at 720p")
-	_check(PixelPerfectRenderingScript.resolve_scale(0, Vector2i(1600, 900)) == 2, "automatic scale selects 2x at 900p")
-	_check(PixelPerfectRenderingScript.resolve_scale(0, Vector2i(2560, 1440)) == 3, "automatic scale selects 3x at 1440p")
 	_check(
-		PixelPerfectRenderingScript.camera_zoom_for_output_scale(2, Vector2(5.0 / 6.0, 5.0 / 6.0)).is_equal_approx(Vector2(2.4, 2.4)),
-		"camera compensates for 1920-to-1600 canvas stretch"
+		PixelPerfectRenderingScript.AVAILABLE_SCALES == [1.0, 1.5, 2.0],
+		"settings expose only 1x, 1.5x, and 2x"
+	)
+	_check(PixelPerfectRenderingScript.validate_scale(-1) == 1.0, "invalid scale falls back to 1x")
+	_check(PixelPerfectRenderingScript.resolve_scale(1.0, Vector2i(1920, 1080)) == 1.0, "explicit 1x remains exact")
+	_check(PixelPerfectRenderingScript.resolve_scale(1.5, Vector2i(1280, 720)) == 1.5, "explicit 1.5x remains exact")
+	_check(PixelPerfectRenderingScript.resolve_scale(2.0, Vector2i(1920, 1080)) == 2.0, "explicit 2x remains exact")
+	_check(PixelPerfectRenderingScript.validate_scale(0) == 1.0, "legacy automatic scale migrates to 1x")
+	_check(PixelPerfectRenderingScript.validate_scale(3) == 1.0, "legacy 3x scale migrates to 1x")
+	_check(
+		PixelPerfectRenderingScript.camera_zoom_for_output_scale(1.5, Vector2(5.0 / 6.0, 5.0 / 6.0)).is_equal_approx(Vector2(1.8, 1.8)),
+		"balanced camera zoom compensates for 1920-to-1600 canvas stretch"
 	)
 
 	var project_text := _read_text(PROJECT_CONFIG)
@@ -36,12 +39,15 @@ func _init() -> void:
 	_check(
 		settings_text.contains("DEFAULT_WORLD_PIXEL_SCALE := PixelPerfectRendering.DEFAULT_SCALE")
 		and settings_text.contains('"world_pixel_scale": world_pixel_scale')
-		and settings_text.contains("func set_world_pixel_scale(value: int)"),
-		"world pixel scale defaults to 2x and persists"
+		and settings_text.contains("func set_world_pixel_scale(value: float)"),
+		"world zoom defaults to 1x and persists"
 	)
 	_check(
 		menu_text.contains("WorldPixelScaleOptionsButton")
-		and menu_text.contains("SettingsManager.set_world_pixel_scale"),
+		and menu_text.contains("SettingsManager.set_world_pixel_scale")
+		and menu_text.contains('"ui.settings.world_pixel_scale_overview"')
+		and menu_text.contains('"ui.settings.world_pixel_scale_balanced"')
+		and menu_text.contains('"ui.settings.world_pixel_scale_close"'),
 		"graphics settings expose world pixel scale choices"
 	)
 	_check(
@@ -49,13 +55,15 @@ func _init() -> void:
 		and player_text.contains("PixelPerfectRenderingScript.apply_to_camera"),
 		"player camera follows dedicated pixel scale changes"
 	)
-	_check(_read_text(PLAYER_SCENE).contains("zoom = Vector2(2, 2)"), "player camera scene defaults to 2x")
+	_check(_read_text(PLAYER_SCENE).contains("zoom = Vector2(1, 1)"), "player camera scene defaults to 1x")
 	_check(_read_text(WORLD_SCENE).contains("texture_filter = 1"), "overworld uses nearest texture filtering")
 	for locale_path: String in ["res://localization/en.json", "res://localization/nl.json", "res://localization/pt_BR.json"]:
 		var locale_text := _read_text(locale_path)
 		_check(
 			locale_text.contains('"ui.settings.world_pixel_scale"')
-			and locale_text.contains('"ui.settings.world_pixel_scale_auto"')
+			and locale_text.contains('"ui.settings.world_pixel_scale_overview"')
+			and locale_text.contains('"ui.settings.world_pixel_scale_balanced"')
+			and locale_text.contains('"ui.settings.world_pixel_scale_close"')
 			and locale_text.contains('"ui.settings.world_pixel_scale_hint"'),
 			"%s contains pixel scale translations" % locale_path
 		)

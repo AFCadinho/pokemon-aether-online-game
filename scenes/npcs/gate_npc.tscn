@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://d2h473tsb8r3a" path="res://scripts/world/npcs/gate_npc.gd" id="1_3cqkf"]
 [ext_resource type="Texture2D" uid="uid://clkvciqjhtjin" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_088_Policeman.png" id="2_reiw8"]
-[ext_resource type="SpriteFrames" uid="uid://phqssxcvumu3" path="res://assets/npcs/generic_npc_fallback_frames.tres" id="2_tkf64"]
 [ext_resource type="Texture2D" uid="uid://d2gv5y1jhfkvj" path="res://assets/sprites/mugshots/policeman.png" id="3_nhg1y"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nhg1y"]
@@ -69,7 +68,8 @@ mugshot = ExtResource("3_nhg1y")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Look" unique_id=1154074731]
 position = Vector2(0, -16)
-sprite_frames = ExtResource("2_tkf64")
+sprite_frames = SubResource("SpriteFrames_cwv1k")
+animation = &"idle_down"
 
 [node name="InteractionArea" type="Area2D" parent="." unique_id=112793544]
 

@@ -12,7 +12,7 @@
 [ext_resource type="Resource" uid="uid://b4hs3up8xaalu" path="res://resources/npcs/story/dadinho.tres" id="8_father_profile"]
 [ext_resource type="Script" uid="uid://c0rvsvb5ckinb" path="res://scripts/world/story/story_trigger.gd" id="9_story_trigger"]
 [ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="10_story_hook"]
-[ext_resource type="Script" path="res://scripts/world/story/story_step_scene_variant.gd" id="11_house_story_state"]
+[ext_resource type="Script" uid="uid://cpot2cgdah8f3" path="res://scripts/world/story/story_step_scene_variant.gd" id="11_house_story_state"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_father_intro"]
 size = Vector2(160, 32)
@@ -86,7 +86,7 @@ y_sort_enabled = true
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=888018697]
 
 [node name="Father" parent="Entities/NPCs" unique_id=499570460 instance=ExtResource("7_father_npc")]
-position = Vector2(432, 944)
+position = Vector2(448, 896)
 npc_profile = ExtResource("8_father_profile")
 npc_id = "kanto_players_house_father"
 npc_definition_id = "kanto_players_house_father"
@@ -94,14 +94,13 @@ required_quest_status = ""
 display_name = "Dadinho"
 facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("8_father_frames")
-sprite_offset = Vector2(0, -16)
+sprite_offset = Vector2(16, -16)
 mugshot = ExtResource("6_rs6s5")
 movement_behavior = ""
 movement_tiles = 0
 movement_speed_pixels = 0.0
-manual_interaction_reach_tiles = null
 
-[node name="BeforeJourneyStoryHook" type="Node" parent="Entities/NPCs/Father"]
+[node name="BeforeJourneyStoryHook" type="Node" parent="Entities/NPCs/Father" unique_id=1074855499]
 script = ExtResource("10_story_hook")
 interaction_id = "players_house_father_before_journey"
 entity_id = "kanto_players_house_father"
@@ -111,7 +110,7 @@ entity_id = "kanto_players_house_father"
 [node name="StoryTriggers" type="Node2D" parent="." unique_id=823735186]
 
 [node name="FatherIntro" type="Area2D" parent="StoryTriggers" unique_id=567174086]
-position = Vector2(432, 896)
+position = Vector2(448, 848)
 script = ExtResource("9_story_trigger")
 story_host_path = NodePath("../../Entities/NPCs/Father")
 
@@ -132,7 +131,6 @@ position_marker_path = NodePath("../StoryPositions/DadinhoWatchingTV")
 facing_marker_path = NodePath("../StoryPositions/LivingRoomTV")
 disable_area_path = NodePath("../StoryTriggers/FatherIntro")
 override_sprite_offset = true
-sprite_offset_override = Vector2(0, -16)
 
 [node name="StoryPositions" type="Node2D" parent="." unique_id=1731557833]
 

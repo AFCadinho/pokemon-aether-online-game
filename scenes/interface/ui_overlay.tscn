@@ -35,6 +35,7 @@
 [ext_resource type="Texture2D" path="res://assets/ui/pvp_queue_ranked_emblem.svg" id="30_pvp_ranked_emblem"]
 [ext_resource type="Script" path="res://scripts/ui/fishing_action_controller.gd" id="31_fishing_action"]
 [ext_resource type="Texture2D" path="res://assets/ui/my_powers.svg" id="32_my_powers"]
+[ext_resource type="Texture2D" path="res://assets/ui/mount_management.svg" id="33_mounts"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grslb"]
 bg_color = Color(0.019607844, 0.043137256, 0.078431375, 0.92941177)
@@ -631,8 +632,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_utility_button_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_utility_button_hover")
 theme_override_styles/focus = SubResource("StyleBoxFlat_utility_button_hover")
 
-[node name="MyPowersButton" type="Button" parent="Control"]
-visible = false
+[node name="MountButton" type="Button" parent="Control"]
 custom_minimum_size = Vector2(42, 42)
 layout_mode = 1
 anchors_preset = 3
@@ -644,6 +644,32 @@ offset_left = -58.0
 offset_top = -242.0
 offset_right = -16.0
 offset_bottom = -200.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_default_cursor_shape = 2
+tooltip_text = "ui.mounts.title"
+toggle_mode = true
+icon = ExtResource("33_mounts")
+icon_max_width = 34
+expand_icon = true
+theme_override_styles/normal = SubResource("StyleBoxFlat_utility_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_utility_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_utility_button_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_utility_button_hover")
+
+[node name="MyPowersButton" type="Button" parent="Control"]
+visible = false
+custom_minimum_size = Vector2(42, 42)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -58.0
+offset_top = -290.0
+offset_right = -16.0
+offset_bottom = -248.0
 grow_horizontal = 0
 grow_vertical = 0
 mouse_default_cursor_shape = 2

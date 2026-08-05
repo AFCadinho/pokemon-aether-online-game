@@ -2,6 +2,8 @@ extends RefCounted
 
 class_name BattlePokemonHoverService
 
+const PublicPokemonKnowledge := preload("res://scripts/battle/battle_public_pokemon_knowledge.gd")
+
 var pokemon_stats_cache: Dictionary = {}
 var debug_enabled := false
 
@@ -17,43 +19,59 @@ func get_hover_card_data(
 	public_confirmed_items_by_ident: Dictionary = {},
 	viewer_id_override: String = "",
 	ident_override: String = "",
-	stats_species_override: String = ""
+	stats_species_override: String = "",
+	embedded_public_only := false
 ) -> Dictionary:
 	var requested_ident := str(pokemon_data.get("ident", ""))
 	var requested_lookup_ident := ident_override.strip_edges()
 	if requested_lookup_ident == "":
 		requested_lookup_ident = requested_ident
 	var requested_species := battle_state.get_species_from_pokemon_data(pokemon_data)
-	var pokemon_info: Dictionary = await _fetch_hover_pokemon_info(
-		battle_state,
-		pokemon_info_request,
-		pokemon_data,
-		viewer_id_override,
-		ident_override
-	)
+	var embedded_knowledge := PublicPokemonKnowledge.from_pokemon_data(pokemon_data)
+	var pokemon_info: Dictionary = {}
+	if not embedded_public_only:
+		pokemon_info = await _fetch_hover_pokemon_info(
+			battle_state,
+			pokemon_info_request,
+			pokemon_data,
+			viewer_id_override,
+			ident_override
+		)
 	var pokemon_stats: Dictionary = await _fetch_hover_pokemon_stats(
 		battle_state,
 		pokemon_stats_request,
 		pokemon_data,
 		stats_species_override
 	)
+	var confirmed_moves := _get_confirmed_info_moves(pokemon_info)
+	if confirmed_moves.is_empty():
+		confirmed_moves = _get_confirmed_info_moves(embedded_knowledge)
+	var confirmed_item := _get_confirmed_item_for_hover(
+		pokemon_info,
+		pokemon_data,
+		public_confirmed_items_by_ident
+	)
+	if confirmed_item == "":
+		confirmed_item = _get_optional_known_info_string(embedded_knowledge, "confirmedItem")
+	var confirmed_ability := _get_confirmed_ability_for_hover(
+		pokemon_info,
+		pokemon_data,
+		public_confirmed_abilities_by_ident
+	)
+	if confirmed_ability == "":
+		confirmed_ability = _get_optional_known_info_string(embedded_knowledge, "confirmedAbility")
+	var stat_changes := _get_confirmed_info_stat_changes(pokemon_info)
+	if stat_changes.is_empty():
+		stat_changes = _get_confirmed_info_stat_changes(embedded_knowledge)
 
 	return {
 		"requested_ident": requested_ident,
 		"requested_lookup_ident": requested_lookup_ident,
 		"requested_species": requested_species,
-		"confirmed_moves": _get_confirmed_info_moves(pokemon_info),
-		"confirmed_item": _get_confirmed_item_for_hover(
-			pokemon_info,
-			pokemon_data,
-			public_confirmed_items_by_ident
-		),
-		"confirmed_ability": _get_confirmed_ability_for_hover(
-			pokemon_info,
-			pokemon_data,
-			public_confirmed_abilities_by_ident
-		),
-		"stat_changes": _get_confirmed_info_stat_changes(pokemon_info),
+		"confirmed_moves": confirmed_moves,
+		"confirmed_item": confirmed_item,
+		"confirmed_ability": confirmed_ability,
+		"stat_changes": stat_changes,
 		"speed_data": _get_hover_speed_data(pokemon_stats),
 		"species_metadata": _get_hover_species_metadata(pokemon_stats),
 		"pokemon_info": pokemon_info,

@@ -1,7 +1,7 @@
 extends Node
 
 signal settings_changed
-signal world_pixel_scale_changed(scale: int)
+signal world_pixel_scale_changed(scale: float)
 signal mount_loadout_changed(movement_mode: String, mount_id: String)
 
 const PixelPerfectRendering := preload("res://scripts/services/pixel_perfect_rendering.gd")
@@ -38,9 +38,8 @@ const DEFAULT_CHAT_TAB_ORDER: Array[String] = [
 	CHAT_TAB_GUILD,
 ]
 const DEFAULT_WINDOW_RESOLUTION := Vector2i(1600, 900)
-const WORLD_PIXEL_SCALE_AUTO := PixelPerfectRendering.SCALE_AUTO
 const DEFAULT_WORLD_PIXEL_SCALE := PixelPerfectRendering.DEFAULT_SCALE
-const AVAILABLE_WORLD_PIXEL_SCALES: Array[int] = PixelPerfectRendering.AVAILABLE_SCALES
+const AVAILABLE_WORLD_PIXEL_SCALES: Array[float] = PixelPerfectRendering.AVAILABLE_SCALES
 const MOUNT_MODE_LAND := MountServiceScript.MOVEMENT_MODE_LAND
 const MOUNT_MODE_SURF := MountServiceScript.MOVEMENT_MODE_SURF
 const DEFAULT_CURSOR_SCALE := 75.0
@@ -277,7 +276,7 @@ func set_window_resolution(resolution: Vector2i) -> void:
 	_save_and_emit()
 
 
-func set_world_pixel_scale(value: int) -> void:
+func set_world_pixel_scale(value: float) -> void:
 	var validated_scale := PixelPerfectRendering.validate_scale(value)
 	if world_pixel_scale == validated_scale:
 		return
@@ -287,7 +286,7 @@ func set_world_pixel_scale(value: int) -> void:
 	_save_and_emit()
 
 
-func get_effective_world_pixel_scale(viewport_size: Vector2i = Vector2i.ZERO) -> int:
+func get_effective_world_pixel_scale(viewport_size: Vector2i = Vector2i.ZERO) -> float:
 	var resolved_viewport_size := viewport_size
 	if resolved_viewport_size == Vector2i.ZERO and get_tree() != null:
 		resolved_viewport_size = Vector2i(get_tree().root.get_visible_rect().size)

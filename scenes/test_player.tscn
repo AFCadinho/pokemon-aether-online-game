@@ -122,4 +122,4 @@ sprite_frames = SubResource("SpriteFrames_ot1g1")
 sprite_frames = SubResource("SpriteFrames_5mocb")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2089356309]
-zoom = Vector2(2, 2)
+zoom = Vector2(1, 1)

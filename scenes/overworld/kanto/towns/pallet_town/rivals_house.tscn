@@ -7,7 +7,7 @@
 [ext_resource type="Script" uid="uid://dcir531aqivcy" path="res://scripts/world/internal_floor_transition.gd" id="5_floor_transition"]
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="6_estsk"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/item_gift_npc.tscn" id="7_gift_npc"]
-[ext_resource type="Resource" path="res://resources/npcs/story/lillie.tres" id="8_lillie_profile"]
+[ext_resource type="Resource" path="res://resources/npcs/story/daisy_oak.tres" id="8_daisy_profile"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_house_exit"]
 size = Vector2(32, 32)
@@ -77,13 +77,13 @@ y_sort_enabled = true
 
 [node name="NPCs" type="Node2D" parent="Entities"]
 
-[node name="Lillie" parent="Entities/NPCs" instance=ExtResource("7_gift_npc")]
+[node name="DaisyOak" parent="Entities/NPCs" instance=ExtResource("7_gift_npc")]
 position = Vector2(336, 816)
-npc_profile = ExtResource("8_lillie_profile")
-npc_id = "kanto_rivals_house_lillie"
-npc_definition_id = "kanto_rivals_house_lillie"
+npc_profile = ExtResource("8_daisy_profile")
+npc_id = "kanto_rivals_house_daisy"
+npc_definition_id = "kanto_rivals_house_daisy"
 reward_id = "kanto_rivals_house_town_map"
-display_name = "Lillie"
+display_name = "Daisy Oak"
 facing_direction = Vector2(0, 1)
 preload_quest_markers = true
 

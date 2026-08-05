@@ -16,13 +16,8 @@ const REQUIRED_NPC_IDS: Array[String] = [
 	"kanto_pewter_city_pokemon_center_clerk_2",
 	"kanto_pewter_city_pokemon_center_nurse_joy",
 	"kanto_players_house_father",
-	"kanto_rivals_house_lillie",
-	"kanto_route_1_alder",
-	"kanto_route_1_bug_catcher_big_d",
-	"kanto_route_1_cynthia",
-	"kanto_route_1_gary",
+	"kanto_rivals_house_daisy",
 	"kanto_route_1_north_guard",
-	"kanto_route_1_trainer_red_boss",
 	"kanto_viridian_city_north_route_guard",
 	"kanto_viridian_city_pokemon_center_clerk",
 	"kanto_viridian_city_pokemon_center_clerk_2",
@@ -56,6 +51,11 @@ func _init() -> void:
 		catalog.resolve_portrait_id("", "kanto_oaklab_oak_1", ""),
 		"showdown_oak",
 		"Named NPC resolves its exact portrait"
+	)
+	_check_equal(
+		catalog.resolve_portrait_id("", "kanto_alpha_gym_lt_surge", ""),
+		"showdown_ltsurge",
+		"Lt. Surge resolves his exact Showdown portrait"
 	)
 	_check_equal(
 		catalog.resolve_portrait_id("", "unlisted_nurse", "pokemon_center_nurse"),

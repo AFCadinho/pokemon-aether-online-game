@@ -2,31 +2,26 @@ extends RefCounted
 
 class_name PixelPerfectRendering
 
-const SCALE_AUTO := 0
-const DEFAULT_SCALE := 2
-const MIN_SCALE := 1
-const MAX_SCALE := 3
-const AUTO_REFERENCE_VIEW_SIZE := Vector2i(800, 450)
-const AVAILABLE_SCALES: Array[int] = [SCALE_AUTO, 1, 2, 3]
+const SCALE_OVERVIEW := 1.0
+const SCALE_BALANCED := 1.5
+const SCALE_CLOSE := 2.0
+const DEFAULT_SCALE := SCALE_OVERVIEW
+const AVAILABLE_SCALES: Array[float] = [SCALE_OVERVIEW, SCALE_BALANCED, SCALE_CLOSE]
 
 
-static func validate_scale(value: Variant) -> int:
-	var scale := int(value)
-	return scale if scale in AVAILABLE_SCALES else DEFAULT_SCALE
+static func validate_scale(value: Variant) -> float:
+	var scale := float(value)
+	for available_scale: float in AVAILABLE_SCALES:
+		if is_equal_approx(scale, available_scale):
+			return available_scale
+	return DEFAULT_SCALE
 
 
-static func resolve_scale(configured_scale: int, viewport_size: Vector2i) -> int:
-	var validated_scale := validate_scale(configured_scale)
-	if validated_scale != SCALE_AUTO:
-		return validated_scale
-	if viewport_size.x <= 0 or viewport_size.y <= 0:
-		return DEFAULT_SCALE
-	var horizontal_fit := floori(float(viewport_size.x) / float(AUTO_REFERENCE_VIEW_SIZE.x))
-	var vertical_fit := floori(float(viewport_size.y) / float(AUTO_REFERENCE_VIEW_SIZE.y))
-	return clampi(mini(horizontal_fit, vertical_fit), MIN_SCALE, MAX_SCALE)
+static func resolve_scale(configured_scale: Variant, _viewport_size: Vector2i) -> float:
+	return validate_scale(configured_scale)
 
 
-static func camera_zoom_for_output_scale(output_scale: int, canvas_scale: Vector2) -> Vector2:
+static func camera_zoom_for_output_scale(output_scale: float, canvas_scale: Vector2) -> Vector2:
 	var safe_canvas_scale := Vector2(
 		canvas_scale.x if canvas_scale.x > 0.0 else 1.0,
 		canvas_scale.y if canvas_scale.y > 0.0 else 1.0
@@ -36,9 +31,9 @@ static func camera_zoom_for_output_scale(output_scale: int, canvas_scale: Vector
 
 static func apply_to_camera(
 	camera: Camera2D,
-	configured_scale: int,
+	configured_scale: float,
 	output_size: Vector2i
-) -> int:
+) -> float:
 	var resolved_scale := resolve_scale(configured_scale, output_size)
 	if camera != null:
 		var canvas_scale := camera.get_viewport().get_screen_transform().get_scale()
