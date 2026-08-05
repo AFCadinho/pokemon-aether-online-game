@@ -219,6 +219,8 @@ var water_tilemap: TileMapLayer
 var sand_tilemaps: Dictionary = {}
 var block_down_tilemap: TileMapLayer
 var block_up_tilemap: TileMapLayer
+var block_left_tilemap: TileMapLayer
+var block_right_tilemap: TileMapLayer
 var ledge_down_tilemap: TileMapLayer
 var ledge_up_tilemap: TileMapLayer
 var ledge_left_tilemap: TileMapLayer
@@ -727,6 +729,10 @@ func _is_story_grid_step_blocked(
 		return true
 	if direction == Vector2.UP and _tilemap_has_tile_at(block_up_tilemap, current_position):
 		return true
+	if direction == Vector2.LEFT and _tilemap_has_tile_at(block_left_tilemap, current_position):
+		return true
+	if direction == Vector2.RIGHT and _tilemap_has_tile_at(block_right_tilemap, current_position):
+		return true
 	if _get_ledge_direction_for_tile(next_position) != Vector2.ZERO:
 		return true
 	var current_map := _resolve_current_map()
@@ -787,6 +793,8 @@ func _ready() -> void:
 		collision_tilemap = _find_tilemap_layer(GameState.current_map, ["Collision"])
 		block_down_tilemap = _find_tilemap_layer(GameState.current_map, ["BlockDown"])
 		block_up_tilemap = _find_tilemap_layer(GameState.current_map, ["BlockUp"])
+		block_left_tilemap = _find_tilemap_layer(GameState.current_map, ["BlockLeft"])
+		block_right_tilemap = _find_tilemap_layer(GameState.current_map, ["BlockRight"])
 		ledge_down_tilemap = _find_tilemap_layer(GameState.current_map, ["LedgeDown"])
 		ledge_up_tilemap = _find_tilemap_layer(GameState.current_map, ["LedgeUp"])
 		ledge_left_tilemap = _find_tilemap_layer(GameState.current_map, ["LedgeLeft"])
@@ -1932,6 +1940,10 @@ func _is_direction_blocked_by_current_tile(direction: Vector2) -> bool:
 		return _tilemap_has_tile_at(block_down_tilemap, global_position)
 	if direction == Vector2.UP:
 		return _tilemap_has_tile_at(block_up_tilemap, global_position)
+	if direction == Vector2.LEFT:
+		return _tilemap_has_tile_at(block_left_tilemap, global_position)
+	if direction == Vector2.RIGHT:
+		return _tilemap_has_tile_at(block_right_tilemap, global_position)
 
 	return false
 
@@ -2006,6 +2018,8 @@ func refresh_map_layers() -> void:
 		sand_tilemaps.clear()
 		block_down_tilemap = null
 		block_up_tilemap = null
+		block_left_tilemap = null
+		block_right_tilemap = null
 		ledge_down_tilemap = null
 		ledge_up_tilemap = null
 		ledge_left_tilemap = null
@@ -2021,6 +2035,8 @@ func refresh_map_layers() -> void:
 	_refresh_sand_tilemaps(current_map)
 	block_down_tilemap = _find_tilemap_layer(current_map, ["BlockDown"])
 	block_up_tilemap = _find_tilemap_layer(current_map, ["BlockUp"])
+	block_left_tilemap = _find_tilemap_layer(current_map, ["BlockLeft"])
+	block_right_tilemap = _find_tilemap_layer(current_map, ["BlockRight"])
 	ledge_down_tilemap = _find_tilemap_layer(current_map, ["LedgeDown"])
 	ledge_up_tilemap = _find_tilemap_layer(current_map, ["LedgeUp"])
 	ledge_left_tilemap = _find_tilemap_layer(current_map, ["LedgeLeft"])
