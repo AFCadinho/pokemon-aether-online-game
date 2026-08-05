@@ -120,9 +120,7 @@ const TRAINER_WALLET_AETHER_GEM_ICON: Texture2D = preload("res://assets/ui/donat
 const TRAINER_WALLET_AETHERITE_ICON: Texture2D = preload("res://assets/ui/aetherite.svg")
 const TRAINER_WALLET_BATTLE_POINTS_ICON: Texture2D = preload("res://assets/ui/battle_points.svg")
 const DEV_HEAL_PARTY_ICON: Texture2D = preload("res://assets/ui/tool_heal_party.svg")
-const DEV_PREVIEW_EVOLUTION_ICON: Texture2D = preload("res://assets/ui/global_shiny_boost.svg")
 const DEV_TRAINER_PROGRESS_ICON: Texture2D = preload("res://assets/gym_badges/kanto_badges/Boulder_Badge.png")
-const DEV_PICKPOCKET_POSE_DURATION := 0.55
 const TOOL_CLEAR_DATA_ICON: Texture2D = preload("res://assets/ui/tool_clear_data.svg")
 const TOOL_DROPDOWN_ARROW: Texture2D = preload("res://assets/ui/photo_mode_dropdown_arrow.svg")
 const TOOL_DROPDOWN_RADIO_CHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_checked.svg")
@@ -1137,7 +1135,6 @@ var alpha_create_pokemon_button: Button
 var alpha_clear_party_button: Button
 var alpha_tools_close_button: Button
 var dev_add_button: Button
-var dev_preview_evolution_button: Button
 var dev_add_menu_popup: PanelContainer
 var dev_add_menu_close_button: Button
 var dev_add_item_button: Button
@@ -1155,8 +1152,6 @@ var dev_aetherite_confirm_button: Button
 var dev_battle_points_confirm_button: Button
 var dev_heal_party_button: Button
 var dev_badge_progress_button: Button
-var dev_pickpocket_pose_button: Button
-var dev_pickpocket_pose_running := false
 var dev_badge_progress_popup: DevBadgeProgressPopup
 var dev_item_catalog: Array[Dictionary] = []
 var dev_selected_item: Dictionary = {}
@@ -1432,10 +1427,8 @@ func _ready() -> void:
 	dev_add_team_button.disabled = true
 	dev_spawn_pokemon_button.pressed.connect(_on_dev_spawn_pokemon_button_pressed)
 	dev_add_button.pressed.connect(_on_dev_add_button_pressed)
-	dev_preview_evolution_button.pressed.connect(_on_dev_preview_evolution_button_pressed)
 	dev_heal_party_button.pressed.connect(_on_dev_heal_party_button_pressed)
 	dev_badge_progress_button.pressed.connect(_on_dev_badge_progress_button_pressed)
-	dev_pickpocket_pose_button.pressed.connect(_on_dev_pickpocket_pose_button_pressed)
 	dev_add_item_button.pressed.connect(_on_dev_add_item_button_pressed)
 	dev_add_money_button.pressed.connect(_on_dev_add_money_button_pressed)
 	dev_clear_party_button.pressed.connect(_on_dev_clear_party_button_pressed)
@@ -1754,18 +1747,12 @@ func _refresh_dev_tools_visibility() -> void:
 	if dev_add_button != null:
 		dev_add_button.visible = can_use_dev_tools
 		dev_add_button.disabled = not can_use_dev_tools
-	if dev_preview_evolution_button != null:
-		dev_preview_evolution_button.visible = can_use_dev_tools
-		dev_preview_evolution_button.disabled = not can_use_dev_tools
 	if dev_heal_party_button != null:
 		dev_heal_party_button.visible = can_use_dev_tools
 		dev_heal_party_button.disabled = not can_use_dev_tools
 	if dev_badge_progress_button != null:
 		dev_badge_progress_button.visible = can_use_dev_tools
 		dev_badge_progress_button.disabled = not can_use_dev_tools
-	if dev_pickpocket_pose_button != null:
-		dev_pickpocket_pose_button.visible = can_use_dev_tools
-		dev_pickpocket_pose_button.disabled = not can_use_dev_tools
 	dev_clear_party_button.visible = can_use_dev_tools
 	dev_clear_party_button.disabled = not can_use_dev_tools
 	dev_pokemon_add_button.disabled = not can_use_dev_tools
@@ -6535,14 +6522,6 @@ func _setup_dev_add_item_tools() -> void:
 		dev_actions_container.add_child(dev_heal_party_button)
 		dev_actions_container.move_child(dev_heal_party_button, dev_clear_party_button.get_index())
 
-	dev_preview_evolution_button = Button.new()
-	_set_localized_control_property(dev_preview_evolution_button, "text", "ui.staff.dev.preview_evolution")
-	dev_preview_evolution_button.custom_minimum_size = Vector2(190, 34)
-	dev_preview_evolution_button.focus_mode = Control.FOCUS_NONE
-	if dev_actions_container != null:
-		dev_actions_container.add_child(dev_preview_evolution_button)
-		dev_actions_container.move_child(dev_preview_evolution_button, dev_clear_party_button.get_index())
-
 	dev_badge_progress_button = Button.new()
 	_set_localized_control_property(dev_badge_progress_button, "text", "ui.staff.dev.trainer_progress")
 	dev_badge_progress_button.custom_minimum_size = Vector2(190, 34)
@@ -6550,14 +6529,6 @@ func _setup_dev_add_item_tools() -> void:
 	if dev_actions_container != null:
 		dev_actions_container.add_child(dev_badge_progress_button)
 		dev_actions_container.move_child(dev_badge_progress_button, dev_clear_party_button.get_index())
-
-	dev_pickpocket_pose_button = Button.new()
-	_set_localized_control_property(dev_pickpocket_pose_button, "text", "ui.staff.dev.pickpocket_pose")
-	dev_pickpocket_pose_button.custom_minimum_size = Vector2(190, 34)
-	dev_pickpocket_pose_button.focus_mode = Control.FOCUS_NONE
-	if dev_actions_container != null:
-		dev_actions_container.add_child(dev_pickpocket_pose_button)
-		dev_actions_container.move_child(dev_pickpocket_pose_button, dev_clear_party_button.get_index())
 
 	dev_add_menu_popup = PanelContainer.new()
 	dev_add_menu_popup.name = "DevAddMenuPopup"
@@ -6622,7 +6593,6 @@ func _setup_dev_add_item_tools() -> void:
 
 	_apply_button_style(dev_add_button, "primary")
 	_apply_button_style(dev_heal_party_button, "primary")
-	_apply_button_style(dev_preview_evolution_button, "primary")
 
 	dev_add_item_popup = PanelContainer.new()
 	dev_add_item_popup.name = "DevAddItemPopup"
@@ -6936,9 +6906,7 @@ func _setup_dev_tools_menu_surface() -> void:
 		dev_spawn_pokemon_button,
 		dev_add_button,
 		dev_heal_party_button,
-		dev_preview_evolution_button,
 		dev_badge_progress_button,
-		dev_pickpocket_pose_button,
 		dev_clear_party_button,
 	]:
 		_move_tool_menu_control(action_button, action_grid)
@@ -6972,25 +6940,11 @@ func _setup_dev_tools_menu_surface() -> void:
 		Color("#6ee7a2")
 	)
 	_configure_tool_tile_button(
-		dev_preview_evolution_button,
-		"ui.staff.dev.preview_evolution",
-		"ui.staff.dev.preview_evolution_description",
-		DEV_PREVIEW_EVOLUTION_ICON,
-		Color("#b28ae8")
-	)
-	_configure_tool_tile_button(
 		dev_badge_progress_button,
 		"ui.staff.dev.trainer_progress",
 		"ui.staff.dev.trainer_progress_description",
 		DEV_TRAINER_PROGRESS_ICON,
 		Color("#e3bd68")
-	)
-	_configure_tool_tile_button(
-		dev_pickpocket_pose_button,
-		"ui.staff.dev.pickpocket_pose",
-		"ui.staff.dev.pickpocket_pose_description",
-		DEV_PREVIEW_EVOLUTION_ICON,
-		Color("#c98cf1")
 	)
 	_configure_tool_tile_button(
 		dev_clear_party_button,
@@ -28359,57 +28313,6 @@ func _on_dev_add_button_pressed() -> void:
 		_activate_ui_panel(dev_add_menu_popup)
 	else:
 		_deactivate_ui_panel(dev_add_menu_popup)
-
-func _on_dev_preview_evolution_button_pressed() -> void:
-	if not _can_use_dev_tools():
-		return
-
-	dev_actions_popup.visible = false
-	_hide_dev_add_menu_popup()
-	await play_evolution_preview("Pidgey", "Pidgeotto")
-
-func _on_dev_pickpocket_pose_button_pressed() -> void:
-	if not _can_use_dev_tools() or dev_pickpocket_pose_running:
-		return
-
-	var player_node := get_tree().get_first_node_in_group("player")
-	if player_node == null:
-		var world := GameState.get_world()
-		if world != null:
-			player_node = world.get_node_or_null("Player")
-	if player_node == null \
-			or not player_node.has_method("get_activity_style") \
-			or not player_node.has_method("set_activity_style") \
-			or not player_node.has_method("clear_activity_style"):
-		add_system_warning(LocalizationManager.text("ui.staff.dev.pickpocket_pose_unavailable"))
-		return
-
-	var current_style := CharacterAppearanceService.normalize_movement_style(
-		str(player_node.call("get_activity_style"))
-	)
-	if current_style == CharacterAppearanceService.BODY_MOVEMENT_PICKPOCKET:
-		player_node.call("clear_activity_style")
-		current_style = CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
-	if current_style != CharacterAppearanceService.BODY_MOVEMENT_DEFAULT:
-		add_system_warning(LocalizationManager.text("ui.staff.dev.pickpocket_pose_busy"))
-		return
-
-	dev_pickpocket_pose_running = true
-	dev_pickpocket_pose_button.disabled = true
-	dev_actions_popup.visible = false
-	_deactivate_ui_panel(dev_actions_popup)
-	player_node.call("set_activity_style", CharacterAppearanceService.BODY_MOVEMENT_PICKPOCKET)
-	await get_tree().create_timer(DEV_PICKPOCKET_POSE_DURATION).timeout
-
-	if is_instance_valid(player_node):
-		var ending_style := CharacterAppearanceService.normalize_movement_style(
-			str(player_node.call("get_activity_style"))
-		)
-		if ending_style == CharacterAppearanceService.BODY_MOVEMENT_PICKPOCKET:
-			player_node.call("clear_activity_style")
-	dev_pickpocket_pose_running = false
-	dev_pickpocket_pose_button.disabled = not _can_use_dev_tools()
-	add_system_message(LocalizationManager.text("ui.staff.dev.pickpocket_pose_completed"))
 
 func _position_dev_add_menu_popup() -> void:
 	_position_dev_slot_popup(dev_add_menu_popup)
