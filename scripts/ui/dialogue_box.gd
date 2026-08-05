@@ -1,6 +1,7 @@
 extends Control
 
 const ITEM_ICON_ROOT := "res://assets/items/icons/"
+const TRAINER_CARD_TEXTURE_ROOT := "res://assets/sprites/trainer_cards/"
 
 signal dialogue_finished
 signal quest_offer_resolved(accepted: bool)
@@ -72,9 +73,9 @@ func start_dialogue(new_lines: Array, speaker_name := "", mugshot: Texture2D = n
 	name_label.visible = speaker_name != ""
 	portrait_panel.visible = show_mugshot
 	if show_mugshot:
-		npc_sprite.texture = mugshot if mugshot != null else default_mugshot
+		_set_portrait_texture(mugshot if mugshot != null else default_mugshot)
 	else:
-		npc_sprite.texture = null
+		_set_portrait_texture(null)
 	
 	current_line_index = 0
 	is_open = true
@@ -93,7 +94,7 @@ func start_quest_offer(quest: Dictionary, speaker_name := "", mugshot: Texture2D
 	name_label.text = speaker_name
 	name_label.visible = not speaker_name.is_empty()
 	portrait_panel.visible = true
-	npc_sprite.texture = mugshot if mugshot != null else default_mugshot
+	_set_portrait_texture(mugshot if mugshot != null else default_mugshot)
 	_populate_quest_offer(offered_quest)
 	text_label.visible = false
 	quest_offer_content.visible = true
@@ -110,6 +111,17 @@ func start_quest_offer(quest: Dictionary, speaker_name := "", mugshot: Texture2D
 	visible = true
 	GameState.lock_input()
 	quest_offer_accept_button.grab_focus()
+
+
+func _set_portrait_texture(texture: Texture2D) -> void:
+	npc_sprite.texture = texture
+	var is_trainer_card := texture != null and texture.resource_path.begins_with(TRAINER_CARD_TEXTURE_ROOT)
+	if is_trainer_card:
+		npc_sprite.stretch_mode = TextureRect.STRETCH_KEEP_CENTERED
+		npc_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	else:
+		npc_sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+		npc_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	
 func show_current_line() -> void:
 	text_label.text = str(lines[current_line_index])
