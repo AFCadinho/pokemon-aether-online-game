@@ -1,7 +1,7 @@
 extends SceneTree
 
 const MAP_NPCS := {
-	"res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn": ["Entities/NPCs/PalletResident"],
+	"res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn": ["Entities/NPCs/PalletResident", "Entities/NPCs/PlayFamilyFather", "Entities/NPCs/PlayFamilyMother", "Entities/NPCs/PlayFamilyChild"],
 	"res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn": ["Entities/NPCs/ResearchAideNoah", "Entities/NPCs/ResearchAideEmma"],
 	"res://scenes/overworld/kanto/towns/pallet_town/rivals_house.tscn": ["Entities/NPCs/DaisyOak"],
 	"res://scenes/overworld/kanto/routes/kanto_route_1.tscn": ["Entities/NPCs/YoungsterLiam", "Entities/NPCs/LassZoe", "Entities/NPCs/Dialogue/Dadinho", "Entities/NPCs/Dialogue/MartEmployee", "Entities/NPCs/Dialogue/CamperQuinn"],
@@ -21,6 +21,7 @@ const CLASS_FRAME_PATHS := [
 	"res://assets/npcs/classes/lass_frames.tres",
 	"res://assets/npcs/classes/mart_m_frames.tres",
 	"res://assets/npcs/classes/poke_fan_f_frames.tres",
+	"res://assets/npcs/classes/poke_fan_m_frames.tres",
 	"res://assets/npcs/classes/school_kid_f_frames.tres",
 	"res://assets/npcs/classes/school_kid_m_frames.tres",
 	"res://assets/npcs/classes/scientist_f_frames.tres",
@@ -88,8 +89,7 @@ func _check_map(scene_path: String, npc_paths: Array) -> void:
 		_check(npc != null, "%s places %s" % [scene_path.get_file(), npc_path.get_file()])
 		if npc == null or collision == null:
 			continue
-		var npc_script := npc.get_script() as Script
-		if npc_script != null and npc_script.resource_path == "res://scripts/world/npcs/dialogue_npc.gd":
+		if npc.has_method("_get_npc_metadata_id"):
 			_check(
 				str(npc.call("_get_npc_metadata_id")) == str(npc.get("npc_id")),
 				"%s loads dialogue with its placed NPC identity" % npc_path.get_file()
