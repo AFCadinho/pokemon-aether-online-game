@@ -24,6 +24,11 @@ FIGURE_RE = re.compile(r'<figure id="([^"]+\.png)">')
 ARTIST_RE = re.compile(r'<h3[^>]*>By\s+([^<]+)</h3>')
 SUPPLEMENTAL_ENTRIES = [
     {
+        "filename": "alder.png",
+        "artist": "Pokémon Showdown",
+        "catalog_source": ALL_SPRITES_PAGE_URL,
+    },
+    {
         "filename": "ltsurge.png",
         "artist": "Pokémon Showdown",
         "catalog_source": ALL_SPRITES_PAGE_URL,

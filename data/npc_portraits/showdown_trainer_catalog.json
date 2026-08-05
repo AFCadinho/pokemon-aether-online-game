@@ -211,6 +211,15 @@
       "sha256": "43553361ced2996fd10f835bade2ef870f3520f1441b624acd836e1e9504fad3"
     },
     {
+      "id": "showdown_alder",
+      "filename": "alder.png",
+      "texture": "res://assets/sprites/trainer_cards/showdown/alder.png",
+      "artist": "Pokémon Showdown",
+      "source": "https://play.pokemonshowdown.com/sprites/trainers/alder.png",
+      "catalog_source": "https://play.pokemonshowdown.com/sprites/trainers/?view=sprites",
+      "sha256": "ac324eb79781f26171bdebbd435b8c907cfc8aef8b5fbf4d25f6be397efccd06"
+    },
+    {
       "id": "showdown_alec_anime",
       "filename": "alec-anime.png",
       "texture": "res://assets/sprites/trainer_cards/showdown/alec-anime.png",

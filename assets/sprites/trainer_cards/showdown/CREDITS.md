@@ -832,6 +832,7 @@ Source index: https://play.pokemonshowdown.com/sprites/trainers/?view=sprites&fi
 
 ## Pokémon Showdown
 
+- `alder.png` — [source](https://play.pokemonshowdown.com/sprites/trainers/alder.png)
 - `ltsurge.png` — [source](https://play.pokemonshowdown.com/sprites/trainers/ltsurge.png)
 
 ## RADU

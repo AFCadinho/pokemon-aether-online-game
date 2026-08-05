@@ -13,7 +13,7 @@
     "kanto_pewter_city_pokemon_center_clerk_2": "showdown_clerkf_gen8",
     "kanto_pewter_city_pokemon_center_nurse_joy": "showdown_pokemoncenterlady",
     "kanto_rivals_house_lillie": "showdown_lillie",
-    "kanto_route_1_alder": "showdown_veteran_gen6",
+    "kanto_route_1_alder": "showdown_alder",
     "kanto_route_1_bug_catcher_big_d": "showdown_bugcatcher_gen6",
     "kanto_route_1_cynthia": "showdown_cynthia_gen7",
     "kanto_route_1_gary": "showdown_blue_lgpe",
@@ -38,7 +38,7 @@
   ],
   "notes": {
     "kanto_alpha_gym_lt_surge": "Uses the exact sprite from the full Pokémon Showdown trainer catalog.",
-    "kanto_route_1_alder": "The credited catalog has no Alder portrait yet; veteran-gen6 is the temporary class match.",
+    "kanto_route_1_alder": "Uses the exact sprite from the full Pokémon Showdown trainer catalog.",
     "kanto_players_house_father": "Dadinho keeps his existing custom portrait."
   }
 }
