@@ -10,6 +10,10 @@ const GUARD_ROLE_TRANSITION := "transition_guard"
 @export var gate_id := "route_1"
 @export_enum("attendant", "transition_guard") var guard_role := GUARD_ROLE_ATTENDANT
 @export var guarded_transition_id := ""
+## Optional guard-owned passage zone, centered at this offset from the NPC.
+## A zero size keeps the guarded MapExit as the fallback zone.
+@export var guard_blocking_offset := Vector2.ZERO
+@export var guard_blocking_size := Vector2.ZERO
 @export var requires_party_pokemon := true
 @export var requires_staff_role := false
 @export var blocked_dialogue_lines: Array[String] = [
@@ -110,6 +114,12 @@ func handles_world_transition(candidate_transition_id: String) -> bool:
 func guards_world_position(world_position: Vector2) -> bool:
 	if guard_role != GUARD_ROLE_TRANSITION or is_gate_open():
 		return false
+	if guard_blocking_size.x > 0.0 and guard_blocking_size.y > 0.0:
+		var blocking_center := global_position + guard_blocking_offset
+		return Rect2(
+			blocking_center - guard_blocking_size * 0.5,
+			guard_blocking_size
+		).has_point(world_position)
 	var exit := _resolve_guarded_exit()
 	return (
 		exit != null
