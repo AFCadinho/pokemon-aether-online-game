@@ -33,6 +33,8 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 
 @export var npc_id := ""
 @export var npc_definition_id := ""
+## Optional server-content identity for reusable NPC scenes. Placed NPCs normally use npc_id.
+@export var npc_metadata_id := ""
 ## Optional story condition. An empty quest id keeps the NPC unrestricted.
 @export var required_quest_id := ""
 @export var required_quest_step_id := ""
@@ -1033,10 +1035,16 @@ func _load_npc_metadata() -> Dictionary:
 
 
 func _get_npc_metadata_id() -> String:
+	var explicit_metadata_id := npc_metadata_id.strip_edges()
+	if not explicit_metadata_id.is_empty():
+		return explicit_metadata_id
+	var placed_npc_id := npc_id.strip_edges()
+	if not placed_npc_id.is_empty():
+		return placed_npc_id
 	var definition_id := npc_definition_id.strip_edges()
 	if not definition_id.is_empty():
 		return definition_id
-	return npc_id.strip_edges()
+	return ""
 
 
 func _apply_npc_metadata(metadata: Dictionary) -> void:
