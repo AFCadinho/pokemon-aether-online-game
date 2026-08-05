@@ -2288,6 +2288,7 @@ npc_sprite_frames = ExtResource("31_poke_fan_f")
 [node name="MarketSellerNPC" parent="Entities/NPCs" unique_id=634307267 instance=ExtResource("12_4x353")]
 position = Vector2(272, 240)
 npc_id = "kanto_pallet_town_market_attendant"
+npc_metadata_id = "pokemart_seller"
 mugshot = ExtResource("14_m86ow")
 manual_interaction_reach_tiles = 2
 

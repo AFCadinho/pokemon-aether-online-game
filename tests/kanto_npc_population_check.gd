@@ -88,6 +88,12 @@ func _check_map(scene_path: String, npc_paths: Array) -> void:
 		_check(npc != null, "%s places %s" % [scene_path.get_file(), npc_path.get_file()])
 		if npc == null or collision == null:
 			continue
+		var npc_script := npc.get_script() as Script
+		if npc_script != null and npc_script.resource_path == "res://scripts/world/npcs/dialogue_npc.gd":
+			_check(
+				str(npc.call("_get_npc_metadata_id")) == str(npc.get("npc_id")),
+				"%s loads dialogue with its placed NPC identity" % npc_path.get_file()
+			)
 		var cell := collision.local_to_map(collision.to_local(npc.global_position))
 		_check(collision.get_cell_source_id(cell) == -1, "%s stands on a walkable tile" % npc_path.get_file())
 	map.free()
