@@ -61,19 +61,10 @@ func _on_locale_changed(_locale: String) -> void:
 func _refresh() -> void:
 	if panel == null:
 		return
-	var currency := maxi(int(current_state.get("currency", 0)), 0)
-	var wanted := clampi(int(current_state.get("wanted", 0)), 0, 100)
 	var jailed := bool(current_state.get("jailed", false))
-	panel.visible = jailed or currency > 0 or wanted > 0
-	if jailed:
+	panel.visible = jailed
+	if not jailed:
 		return
-	if wanted >= 100:
-		label.text = LocalizationManager.text("ui.thieving.most_wanted", {"currency": currency})
-		label.add_theme_color_override("font_color", Color("#ff7878"))
-		return
+	var seconds := maxi(ceili(jail_deadline - Time.get_unix_time_from_system()), 0)
 	label.add_theme_color_override("font_color", Color("#f6e5a8"))
-	label.text = LocalizationManager.text("ui.thieving.status", {
-		"level": maxi(int(current_state.get("level", 1)), 1),
-		"currency": currency,
-		"wanted": wanted,
-	})
+	label.text = LocalizationManager.text("ui.thieving.jailed", {"seconds": seconds})
