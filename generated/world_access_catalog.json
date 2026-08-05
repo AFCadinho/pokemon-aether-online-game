@@ -56,16 +56,6 @@
 						"y": 13
 					}
 				},
-				"heal_npc": {
-					"facingDirection": "down",
-					"label": "Heal NPC",
-					"safeForStaffTeleport": true,
-					"spawnMarker": "HealNPC",
-					"tile": {
-						"x": 11,
-						"y": 8
-					}
-				},
 				"oaks_lab_entrance": {
 					"facingDirection": "up",
 					"label": "Oak's Lab Entrance",
@@ -258,6 +248,16 @@
 						"y": 10
 					}
 				},
+				"mom_heal": {
+					"facingDirection": "down",
+					"label": "Mom Heal",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "MomHeal",
+					"tile": {
+						"x": 10,
+						"y": 28
+					}
+				},
 				"upper_floor_stairs": {
 					"facingDirection": "down",
 					"label": "Upper Floor Stairs",
@@ -440,8 +440,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromViridianCity",
 					"tile": {
-						"x": 22,
-						"y": 9
+						"x": 83,
+						"y": 15
 					}
 				}
 			}
@@ -1095,8 +1095,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_22.tscn",
 				"position": {
-					"x": 720.0,
-					"y": 304.0
+					"x": 2656.0,
+					"y": 480.0
 				},
 				"spawnMarker": "FromViridianCity"
 			},
