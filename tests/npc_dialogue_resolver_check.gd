@@ -64,31 +64,31 @@ func _check_route_1_serialization() -> void:
 	if packed_scene == null:
 		return
 	var route := packed_scene.instantiate()
-	var bug_catcher := route.get_node_or_null(
-		"Entities/NPCs/BugCatcherTrainerNPC"
+	var youngster := route.get_node_or_null(
+		"Entities/NPCs/YoungsterLiam"
 	)
-	var alder := route.get_node_or_null(
-		"Entities/NPCs/Dialogue/DialogueNPC"
+	var camper := route.get_node_or_null(
+		"Entities/NPCs/Dialogue/CamperQuinn"
 	)
-	_check_true(bug_catcher != null, "Route 1 Bug Catcher still instantiates")
-	_check_true(alder != null, "Route 1 Alder still instantiates")
-	if bug_catcher != null:
+	_check_true(youngster != null, "Route 1 Youngster Liam instantiates")
+	_check_true(camper != null, "Route 1 Camper Quinn instantiates")
+	if youngster != null:
 		_check_equal(
-			str(bug_catcher.get("trainer_id")),
-			"kanto_route_1_bug_catcher_1",
+			str(youngster.get("trainer_id")),
+			"kanto_route_1_youngster_liam",
 			"Route 1 trainer serialization is not shifted"
 		)
 		_check_equal(
-			str(bug_catcher.get("display_name")),
-			"Bug Catcher Big D",
+			str(youngster.get("display_name")),
+			"Youngster Liam",
 			"Route 1 NPC presentation serialization is not shifted"
 		)
 		_check_true(
-			bug_catcher.get("npc_sprite_frames") is SpriteFrames,
+			youngster.get("npc_sprite_frames") is SpriteFrames,
 			"Route 1 NPC sprite serialization is not shifted"
 		)
-	if alder != null:
-		_check_equal(str(alder.get("dialogue_id")), "", "Alder has no legacy scene dialogue")
+	if camper != null:
+		_check_equal(str(camper.get("dialogue_id")), "", "Camper Quinn uses metadata dialogue")
 	route.free()
 
 

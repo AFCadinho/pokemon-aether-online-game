@@ -24,7 +24,6 @@ Use these tile layers in this order unless a map needs additional visual-only la
 10. `LedgeUp`
 11. `LedgeLeft`
 12. `LedgeRight`
-13. `RouteGates`
 
 Use these object layers exactly:
 
@@ -49,6 +48,10 @@ Use these object layers exactly:
 9. For signs or other map objects with behavior, paint the visual tile on a visual layer and place a matching point object on `PA_Interactables`.
 10. Keep ids unique within each object layer, for example unique `spawn_id`, `warp_id`, `npc_id`, and `interactable_id`.
 11. Run the importer/check workflow before handing the map to engineering.
+
+Route guards do not use a tile layer. Place their marker through `PA_NPCs`; when
+the runtime NPC scene is authored, configure it as a transition guard and bind
+it to the guarded map exit through their shared transition id.
 
 ## NPCs
 

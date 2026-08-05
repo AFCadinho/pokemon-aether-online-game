@@ -5,9 +5,12 @@ const SERVICE_PATH := "res://scripts/services/world_transition_service.gd"
 const AUTH_SERVICE_PATH := "res://scripts/services/auth_service.gd"
 const MAP_EXIT_PATH := "res://scripts/world/map_exit.gd"
 const GATE_NPC_PATH := "res://scripts/world/npcs/gate_npc.gd"
+const GATE_SCENE_PATH := "res://scenes/npcs/gate_npc.tscn"
 const WORLD_PATH := "res://scripts/world/world.gd"
 const ROUTE_1_PATH := "res://scenes/overworld/kanto/routes/kanto_route_1.tscn"
 const ROUTE_22_PATH := "res://scenes/overworld/kanto/routes/kanto_route_22.tscn"
+const PALLET_TOWN_PATH := "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn"
+const PEWTER_CITY_PATH := "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn"
 const VIRIDIAN_CITY_PATH := "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn"
 const CATALOG_BUILDER_PATH := "res://tools/world_access_catalog_builder.gd"
 const CATALOG_GENERATOR_SCENE_PATH := "res://tools/generate_world_access_catalog.tscn"
@@ -24,9 +27,12 @@ func _init() -> void:
 	var auth_service_source := FileAccess.get_file_as_string(AUTH_SERVICE_PATH)
 	var map_exit_source := FileAccess.get_file_as_string(MAP_EXIT_PATH)
 	var gate_source := FileAccess.get_file_as_string(GATE_NPC_PATH)
+	var gate_scene_source := FileAccess.get_file_as_string(GATE_SCENE_PATH)
 	var world_source := FileAccess.get_file_as_string(WORLD_PATH)
 	var route_source := FileAccess.get_file_as_string(ROUTE_1_PATH)
 	var route_22_source := FileAccess.get_file_as_string(ROUTE_22_PATH)
+	var pallet_town_source := FileAccess.get_file_as_string(PALLET_TOWN_PATH)
+	var pewter_city_source := FileAccess.get_file_as_string(PEWTER_CITY_PATH)
 	var viridian_city_source := FileAccess.get_file_as_string(VIRIDIAN_CITY_PATH)
 	var catalog_builder_source := FileAccess.get_file_as_string(CATALOG_BUILDER_PATH)
 
@@ -90,11 +96,22 @@ func _init() -> void:
 		"Remote staff teleports deduplicate commands and retry after transient activity"
 	)
 	_expect(
-		gate_source.contains('@export var guarded_transition_id := ""')
-		and gate_source.contains('@export var route_gate_id := ""')
-		and gate_source.contains("func handles_route_gate")
+		gate_source.contains('@export_enum("attendant", "transition_guard")')
+		and gate_source.contains('@export var guarded_transition_id := ""')
+		and gate_source.contains("func guards_world_position")
+		and gate_source.contains('exit.has_method("contains_world_position")')
 		and gate_source.contains("WorldTransitionService.get_transition_access("),
-		"Gate NPCs bind route-gate tiles to a transition policy instead of an area or role list"
+		"Gate NPCs own an explicit role and derive transition blocking from their guarded exit"
+	)
+	_expect(
+		gate_scene_source.contains("NPC_088_Policeman.png")
+		and gate_scene_source.contains("trainer_cards/showdown/policeman-gen7.png"),
+		"All route guards share the police overworld sprite and Showdown police portrait"
+	)
+	_expect(
+		map_exit_source.contains("func handles_transition")
+		and map_exit_source.contains("func contains_world_position"),
+		"Map exits expose their identity and spatial zone to transition guards"
 	)
 	_expect(
 		not gate_source.contains("LEGACY_STAFF_ROLE_IDS")
@@ -103,8 +120,19 @@ func _init() -> void:
 	)
 	_expect(
 		route_source.contains('guarded_transition_id = "route_1_to_viridian_city"')
-		and route_source.contains('transition_id = "route_1_to_viridian_city"'),
+		and route_source.contains('guard_role = "transition_guard"')
+		and route_source.contains('transition_id = "route_1_to_viridian_city"')
+		and route_source.contains('[node name="ViridianGuide"')
+		and route_source.contains('position = Vector2(1072, 272)'),
 		"Route 1 guard and exit share one stable transition identifier"
+	)
+	_expect(
+		pallet_town_source.contains('guarded_transition_id = "kanto_pallet_town__to_route_1"')
+		and pallet_town_source.contains('transition_id = "kanto_pallet_town__to_route_1"')
+		and pallet_town_source.contains('guard_role = "transition_guard"')
+		and pallet_town_source.contains('[node name="RouteGateNPC"')
+		and pallet_town_source.contains('position = Vector2(1040, 208)'),
+		"Pallet Town guard owns its starter-gated Route 1 transition"
 	)
 	_expect(
 		viridian_city_source.contains('[node name="NorthRouteGuard"')
@@ -127,11 +155,10 @@ func _init() -> void:
 	)
 	_expect(
 		route_22_source.contains('map_id = "kanto_route_22"')
-		and route_22_source.contains('[node name="OpenField" parent="."')
-		and route_22_source.contains('[node name="FromViridianCity" type="Marker2D" parent="Spawns"]')
+		and route_22_source.contains('[node name="FromViridianCity" type="Marker2D" parent="Spawns"')
 		and route_22_source.contains('transition_id = "kanto_route_22__to_viridian_city"')
 		and route_22_source.contains('target_spawn_name = "FromRoute22"')
-		and route_22_source.contains('[node name="Collision" type="TileMapLayer" parent="."]'),
+		and route_22_source.contains('[node name="Collision" type="TileMapLayer" parent="."'),
 		"Route 22 is a bounded gameplay map with a return transition to Viridian City"
 	)
 	_expect(
@@ -142,14 +169,12 @@ func _init() -> void:
 		"Viridian City has one uniquely identified guard at every route approach"
 	)
 	_expect(
-		viridian_city_source.contains('[node name="RouteGates" type="Node2D" parent="."')
-		and viridian_city_source.contains('[node name="North" type="TileMapLayer" parent="RouteGates"')
-		and viridian_city_source.contains('[node name="South" type="TileMapLayer" parent="RouteGates"')
-		and viridian_city_source.contains('[node name="West" type="TileMapLayer" parent="RouteGates"')
-		and viridian_city_source.count('metadata/route_gate_id = "kanto_viridian_city__to_route_2"') == 1
-		and viridian_city_source.count('metadata/route_gate_id = "kanto_viridian_city__to_route_1"') == 1
-		and viridian_city_source.count('metadata/route_gate_id = "kanto_viridian_city__to_route_22"') == 1,
-		"Every Viridian route approach has a route-gate layer bound to its own guard"
+		viridian_city_source.count('guard_role = "transition_guard"') == 3
+		and not viridian_city_source.contains('[node name="RouteGates"')
+		and not route_source.contains('[node name="RouteGates"')
+		and not pallet_town_source.contains('[node name="RouteGates"')
+		and not pewter_city_source.contains('[node name="RouteGates"'),
+		"Transition guards replace every separate runtime RouteGates layer"
 	)
 	_expect(
 		FileAccess.file_exists(CATALOG_GENERATOR_SCENE_PATH)

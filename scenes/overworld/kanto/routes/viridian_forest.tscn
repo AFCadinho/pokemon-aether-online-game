@@ -7,6 +7,12 @@
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_j4fnm"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="6_exit"]
 [ext_resource type="Texture2D" uid="uid://e2ksljyggppg" path="res://assets/tilesets/fiver/tiles_env2_floors32.png" id="7_b5ds1"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="8_dialogue"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/trainer_npc.tscn" id="9_trainer"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="10_bug_catcher"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/camper_frames.tres" id="11_camper"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/scientist_f_frames.tres" id="12_scientist_f"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="13_pokemon"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route2_exit"]
 size = Vector2(160, 32)
@@ -503,6 +509,101 @@ tile_map_data = PackedByteArray("AAApADAAAAABAAEAAAAoADAAAAABAAEAAAAiABIAAAABAAE
 tile_set = SubResource("TileSet_pmba4")
 
 [node name="Entities" type="Node2D" parent="." unique_id=1962237010]
+
+[node name="NPCs" type="Node2D" parent="Entities"]
+
+[node name="BugCatcherRick" parent="Entities/NPCs" instance=ExtResource("9_trainer")]
+position = Vector2(1248, 2112)
+npc_id = "kanto_viridian_forest_bug_catcher_rick"
+npc_definition_id = "trainer_class_bug_catcher"
+trainer_id = "kanto_viridian_forest_bug_catcher_rick"
+display_name = "Bug Catcher Rick"
+facing_direction = Vector2(0, -1)
+sight_range_tiles = 3
+npc_sprite_frames = ExtResource("10_bug_catcher")
+
+[node name="BugCatcherDoug" parent="Entities/NPCs" instance=ExtResource("9_trainer")]
+position = Vector2(1888, 1776)
+npc_id = "kanto_viridian_forest_bug_catcher_doug"
+npc_definition_id = "trainer_class_bug_catcher"
+trainer_id = "kanto_viridian_forest_bug_catcher_doug"
+display_name = "Bug Catcher Doug"
+facing_direction = Vector2(-1, 0)
+sight_range_tiles = 2
+npc_sprite_frames = ExtResource("10_bug_catcher")
+
+[node name="BugCatcherAnthony" parent="Entities/NPCs" instance=ExtResource("9_trainer")]
+position = Vector2(704, 1312)
+npc_id = "kanto_viridian_forest_bug_catcher_anthony"
+npc_definition_id = "trainer_class_bug_catcher"
+trainer_id = "kanto_viridian_forest_bug_catcher_anthony"
+display_name = "Bug Catcher Anthony"
+facing_direction = Vector2(1, 0)
+sight_range_tiles = 3
+npc_sprite_frames = ExtResource("10_bug_catcher")
+
+[node name="BugCatcherSammy" parent="Entities/NPCs" instance=ExtResource("9_trainer")]
+position = Vector2(1792, 704)
+npc_id = "kanto_viridian_forest_bug_catcher_sammy"
+npc_definition_id = "trainer_class_bug_catcher"
+trainer_id = "kanto_viridian_forest_bug_catcher_sammy"
+display_name = "Bug Catcher Sammy"
+facing_direction = Vector2(0, 1)
+sight_range_tiles = 3
+npc_sprite_frames = ExtResource("10_bug_catcher")
+
+[node name="LostCamperDana" parent="Entities/NPCs" instance=ExtResource("8_dialogue")]
+position = Vector2(560, 1664)
+npc_id = "kanto_viridian_forest_lost_camper_dana"
+npc_definition_id = "trainer_class_camper"
+display_name = "Camper Dana"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("11_camper")
+
+[node name="ForestResearcherLeah" parent="Entities/NPCs" instance=ExtResource("8_dialogue")]
+position = Vector2(1280, 416)
+npc_id = "kanto_viridian_forest_researcher_leah"
+npc_definition_id = "trainer_class_scientist_f"
+display_name = "Researcher Leah"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("12_scientist_f")
+
+[node name="Pokemon" type="Node2D" parent="Entities"]
+
+[node name="Caterpie" parent="Entities/Pokemon" instance=ExtResource("13_pokemon")]
+position = Vector2(960, 1968)
+overworld_pokemon_id = "kanto_viridian_forest_caterpie_1"
+species_id = "caterpie"
+level = 3
+display_name = "Caterpie"
+facing_direction = Vector2(1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 2.0
+movement_speed_pixels = 38.0
+
+[node name="Weedle" parent="Entities/Pokemon" instance=ExtResource("13_pokemon")]
+position = Vector2(1088, 1968)
+overworld_pokemon_id = "kanto_viridian_forest_weedle_1"
+species_id = "weedle"
+level = 3
+display_name = "Weedle"
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 2.0
+movement_speed_pixels = 38.0
+
+[node name="Pikachu" parent="Entities/Pokemon" instance=ExtResource("13_pokemon")]
+position = Vector2(1120, 864)
+overworld_pokemon_id = "kanto_viridian_forest_pikachu_1"
+species_id = "pikachu"
+level = 5
+display_name = "Pikachu"
+facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.0
+movement_speed_pixels = 55.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=224807989]
 

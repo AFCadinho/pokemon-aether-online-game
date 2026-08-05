@@ -13,6 +13,14 @@ const EFFECT_ICONS := {
 	"stickywebs": "res://assets/background/hazards/sticky_webs.png",
 }
 
+const HAZARD_EFFECT_KEYS := {
+	"stealthrock": true,
+	"spikes": true,
+	"toxicspikes": true,
+	"stickyweb": true,
+	"stickywebs": true,
+}
+
 const EFFECT_NAME_ALIASES := {
 	"lightscreen": "battle.field.effect.light_screen",
 	"reflect": "battle.field.effect.reflect",
@@ -99,11 +107,14 @@ func _add_effect_row(effect_key: String, raw_effect: String, effect_data: Dictio
 
 	var label_node: Label = row.get_node("EffectLabel")
 	var full_effect_name := _format_effect_name(effect_key, raw_effect)
-	# Hazard artwork already identifies the condition. Text-only effects use a
-	# compact abbreviation so indicator chips remain recognizable without
-	# covering battle sprites.
+	# Hazards stay visible for long stretches and need to be readable at a
+	# glance. Short-lived screens and side effects keep their compact labels.
 	var short_name_key := str(EFFECT_SHORT_NAMES.get(effect_key, ""))
-	label_node.text = _t(short_name_key) if short_name_key != "" else full_effect_name
+	label_node.text = (
+		full_effect_name
+		if HAZARD_EFFECT_KEYS.has(effect_key)
+		else _t(short_name_key) if short_name_key != "" else full_effect_name
+	)
 	label_node.visible = label_node.text != ""
 	row.tooltip_text = full_effect_name
 	icon_node.tooltip_text = full_effect_name
@@ -134,9 +145,9 @@ func _format_effect_amount(effect_key: String, effect_data: Dictionary, current_
 
 		var amount: int = int(effect_data.get(key, 0))
 		if amount > 1:
-			return "%sx" % amount
+			return "×%s" % amount
 		if amount == 1 and _is_layered_effect(effect_key):
-			return "1x"
+			return "×1"
 
 	var min_remaining: int = _get_remaining_turns(effect_data, current_turn, "minRemainingTurns", "minDuration")
 	var max_remaining: int = _get_remaining_turns(effect_data, current_turn, "maxRemainingTurns", "maxDuration")

@@ -1,19 +1,9 @@
 extends SceneTree
 
-const PLAYERS_HOUSE_SCENE_PATH := "res://scenes/overworld/kanto/towns/pallet_town/players_house.tscn"
-const DAD_PROFILE_PATH := "res://resources/npcs/story/dadinho.tres"
-const DAD_SPRITE_PATH := "res://assets/npcs/custom/adinho_dad.png"
+const HOUSE_PATH := "res://scenes/overworld/kanto/towns/pallet_town/players_house.tscn"
+const ROUTE_1_PATH := "res://scenes/overworld/kanto/routes/kanto_route_1.tscn"
 const DAD_FRAMES_PATH := "res://assets/npcs/custom/adinho_dad_frames.tres"
-const DAD_ANIMATIONS: Array[StringName] = [
-	&"idle_down",
-	&"idle_left",
-	&"idle_right",
-	&"idle_up",
-	&"walk_down",
-	&"walk_left",
-	&"walk_right",
-	&"walk_up",
-]
+const MOM_FRAMES_PATH := "res://assets/npcs/named/mom_frames.tres"
 
 var failed := false
 
@@ -25,308 +15,112 @@ func _init() -> void:
 func _run() -> void:
 	var story_service := get_root().get_node("StoryService")
 	story_service.reset_story()
-	var packed := load(PLAYERS_HOUSE_SCENE_PATH) as PackedScene
-	_expect(packed != null, "Player's House story scene loads")
-	if packed == null:
+	var house_scene := load(HOUSE_PATH) as PackedScene
+	var route_scene := load(ROUTE_1_PATH) as PackedScene
+	_expect(house_scene != null, "Player's House scene loads")
+	_expect(route_scene != null, "Route 1 scene loads")
+	if house_scene == null or route_scene == null:
 		quit(1)
 		return
 
-	var house := packed.instantiate()
+	var house := house_scene.instantiate()
 	get_root().add_child(house)
 	await process_frame
-
 	var father := house.get_node_or_null("Entities/NPCs/Father") as Node2D
-	var before_journey_hook := house.get_node_or_null(
-		"Entities/NPCs/Father/BeforeJourneyStoryHook"
-	)
-	var trigger := house.get_node_or_null("StoryTriggers/FatherIntro") as Area2D
-	var hook := house.get_node_or_null("StoryTriggers/FatherIntro/StoryHook")
-	var trigger_shape := house.get_node_or_null(
-		"StoryTriggers/FatherIntro/CollisionShape2D"
-	) as CollisionShape2D
-
-	_expect(father != null, "father NPC exists downstairs")
-	_expect(before_journey_hook != null, "Dadinho has a manual pre-journey story interaction")
-	if before_journey_hook != null:
-		_expect(
-			str(before_journey_hook.get("interaction_id"))
-			== "players_house_father_before_journey",
-			"Dadinho's manual interaction matches the Town Map quest step"
-		)
-	_expect(trigger != null, "father intro has an automatic area trigger")
-	_expect(hook != null, "father intro trigger has a story hook")
-	var dad_texture := load(DAD_SPRITE_PATH) as Texture2D
-	var dad_frames := load(DAD_FRAMES_PATH) as SpriteFrames
-	var dad_profile := load(DAD_PROFILE_PATH) as Resource
-	_expect(dad_profile != null, "father has a reusable NPC definition profile")
-	if dad_profile != null:
-		_expect(
-			str(dad_profile.get("npc_id")) == "kanto_players_house_father"
-			and str(dad_profile.get("npc_definition_id")) == "kanto_players_house_father",
-			"father profile owns its stable NPC and metadata identities"
-		)
-		_expect(
-			str(dad_profile.get("display_name")) == "Dadinho",
-			"father profile owns the Dadinho cameo name"
-		)
-		_expect(
-			dad_profile.get("sprite_frames") == dad_frames,
-			"father profile owns the dedicated Adinho dad appearance"
-		)
-	_expect(
-		dad_texture != null and dad_texture.get_size() == Vector2(256, 256),
-		"father uses a complete 4x4 Adinho overworld spritesheet"
-	)
-	_expect(dad_frames != null, "father animation resource loads")
-	if dad_frames != null:
-		for animation_name: StringName in DAD_ANIMATIONS:
-			_expect(
-				dad_frames.has_animation(animation_name),
-				"father provides %s animation" % animation_name
-			)
-		_expect(dad_frames.get_frame_count(&"idle_up") == 1, "father has a stable upward idle pose")
-		_expect(dad_frames.get_frame_count(&"walk_down") == 4, "father retains the full walk cycle")
+	var mom := house.get_node_or_null("Entities/NPCs/Mom") as Node2D
+	var intro_trigger := house.get_node_or_null("StoryTriggers/FatherIntro") as Area2D
+	_expect(father != null and father.visible, "Dadinho is present for the opening")
+	_expect(mom != null and not mom.visible, "Mom is hidden before Oak's Parcel is returned")
+	_expect(intro_trigger != null and intro_trigger.monitoring, "Dadinho's opening trigger remains active")
 	if father != null:
-		_expect(father.get("npc_profile") == dad_profile, "Player's House uses Dadinho's reusable NPC profile")
+		_expect(father.position == Vector2(448, 896), "Dadinho starts beside the downstairs door")
+		_expect(father.get("npc_sprite_frames") == load(DAD_FRAMES_PATH), "Dadinho keeps his custom sprite")
 		_expect(
-			str(father.get("npc_id")) == "kanto_players_house_father",
-			"father uses the stable catalog NPC identity"
+			str(father.get("visibility_hidden_quest_id")) == "oaks_parcel"
+			and str(father.get("visibility_hidden_quest_step_id")) == "return_to_oak",
+			"Dadinho is tied to the Parcel hand-in"
 		)
-		_expect(str(father.get("display_name")) == "Dadinho", "father uses the Dadinho cameo name")
+	if mom != null:
+		_expect(mom.get("npc_sprite_frames") == load(MOM_FRAMES_PATH), "Mom uses her dedicated overworld sprite")
+		_expect(str(mom.get("respawn_spawn_marker")) == "MomHeal", "Mom owns the house heal spawn")
+		var mom_hook := mom.get_node_or_null("BeforeJourneyStoryHook")
 		_expect(
-			father.position == Vector2(432, 944),
-			"first visit keeps Dadinho at his downstairs intro position"
+			mom_hook != null
+			and str(mom_hook.get("interaction_id")) == "players_house_mom_before_journey"
+			and str(mom_hook.get("entity_id")) == "kanto_players_house_mom",
+			"Mom completes the post-Pokedex family visit"
 		)
-		_expect(
-			father.get("npc_sprite_frames") == dad_frames,
-			"Dadinho profile applies the dedicated Adinho dad appearance"
-		)
-	if trigger != null:
-		_expect(trigger.monitoring, "first visit keeps the one-time automatic trigger active")
-		_expect(
-			trigger.position.y < father.position.y,
-			"the intro catches a player approaching father from upstairs"
-		)
-		_expect(
-			trigger.get_node_or_null(trigger.get("story_host_path")) == father,
-			"the story sequence resolves father as its actor"
-		)
-	if trigger_shape != null and trigger_shape.shape is RectangleShape2D:
-		var rectangle := trigger_shape.shape as RectangleShape2D
-		_expect(
-			rectangle.size.x >= 160.0,
-			"the trigger spans the downstairs approach corridor"
-		)
-	else:
-		_expect(false, "father intro has a rectangular collision shape")
-	if hook != null:
-		_expect(
-			str(hook.get("interaction_id")) == "players_house_father_intro",
-			"scene interaction id matches the storyline catalog"
-		)
-		_expect(
-			str(hook.get("entity_id")) == "kanto_players_house_father",
-			"scene entity id matches the storyline catalog"
-		)
+	_expect(house.get_node_or_null("Spawns/MomHeal") != null, "Player's House exposes Mom's stable respawn marker")
 
-	house.queue_free()
-	await process_frame
-
-	story_service.apply_story({
-		"revision": 2,
-		"quests": [{
-			"questId": "choose_starter",
-			"storylineId": "kanto_main",
-			"definitionVersion": 1,
-			"questType": "main",
-			"status": "active",
-			"steps": [{
-				"stepId": "talk_to_father",
-				"status": "completed",
-				"currentValue": 1,
-				"targetValue": 1,
-			}, {
-				"stepId": "choose_starter",
-				"status": "active",
-				"currentValue": 0,
-				"targetValue": 1,
-			}],
-		}],
-	})
-	var revisited_house := packed.instantiate()
-	get_root().add_child(revisited_house)
+	story_service.apply_story(_story_after_parcel("available"))
 	await process_frame
 	await process_frame
-	var revisited_father := revisited_house.get_node_or_null("Entities/NPCs/Father") as Node2D
-	var revisited_trigger := revisited_house.get_node_or_null("StoryTriggers/FatherIntro") as Area2D
-	var watching_tv_marker := revisited_house.get_node_or_null(
-		"StoryPositions/DadinhoWatchingTV"
-	) as Marker2D
-	var television_marker := revisited_house.get_node_or_null(
-		"StoryPositions/LivingRoomTV"
-	) as Marker2D
-	_expect(watching_tv_marker != null, "Player's House defines Dadinho's blue-cushion position")
-	_expect(television_marker != null, "Player's House defines the living-room television position")
-	if revisited_father != null and watching_tv_marker != null:
-		_expect(
-			revisited_father.global_position == watching_tv_marker.global_position
-			and revisited_father.position == Vector2(336, 880),
-			"completed father intro keeps Dadinho's collision on the blue-cushion tile"
-		)
-		_expect(
-			revisited_father.get("facing_direction") == Vector2.UP,
-			"Dadinho faces the television after the intro"
-		)
-		var revisited_sprite := revisited_father.get_node_or_null(
-			"Look/AnimatedSprite2D"
-		) as AnimatedSprite2D
-		_expect(
-			revisited_sprite != null
-			and revisited_sprite.animation == &"idle_up"
-			and revisited_sprite.position == Vector2(0, -16)
-			and revisited_sprite.global_position == Vector2(336, 864),
-			"Dadinho's TV sprite renders 16 pixels above the blue-cushion collision marker"
-		)
-		revisited_father.call("_apply_npc_metadata", {
-			"dialogueId": "kanto_players_house_father_after_intro",
-			"dialogueVariants": [{
-				"dialogueId": "kanto_players_house_father_after_starter",
-				"requiredQuestId": "choose_starter",
-				"requiredQuestStepId": "choose_starter",
-				"requiredQuestStatus": "completed",
-			}],
-		})
-		_expect(
-			str(revisited_father.call("_resolve_story_dialogue_id"))
-			== "kanto_players_house_father_after_intro",
-			"Dadinho still reminds the player about Oak before choosing a starter"
-		)
-	if revisited_trigger != null:
-		_expect(
-			not revisited_trigger.monitoring and not revisited_trigger.monitorable,
-			"completed father intro disables the one-time automatic trigger"
-		)
-	var story_state_source := FileAccess.get_file_as_string(
-		"res://scripts/world/story/story_step_scene_variant.gd"
-	)
-	_expect(
-		story_state_source.contains("_apply_story_state.call_deferred()")
-		and not story_state_source.contains("story_changed.connect"),
-		"Dadinho changes position on scene entry instead of teleporting after the conversation"
-	)
-	_expect(
-		story_state_source.contains("class_name StoryStepSceneVariant")
-		and story_state_source.contains("@export var quest_id")
-		and story_state_source.contains("@export var step_id"),
-		"Dadinho uses the reusable story-step scene variant layer"
-	)
-
-	story_service.apply_story({
-		"revision": 3,
-		"quests": [{
-			"questId": "choose_starter",
-			"storylineId": "kanto_main",
-			"definitionVersion": 1,
-			"questType": "main",
-			"status": "completed",
-			"steps": [{
-				"stepId": "talk_to_father",
-				"status": "completed",
-			}, {
-				"stepId": "choose_starter",
-				"status": "completed",
-			}],
-		}],
-	})
-	if revisited_father != null:
-		_expect(
-			str(revisited_father.call("_resolve_story_dialogue_id"))
-			== "kanto_players_house_father_after_starter",
-			"Dadinho stops saying Oak is waiting after the starter step completes"
-		)
-
-	story_service.apply_story({
-		"revision": 4,
-		"quests": [{
-			"questId": "get_town_map",
-			"questType": "main",
-			"status": "active",
-			"steps": [{
-				"stepId": "visit_father",
-				"status": "active",
-			}],
-		}, {
-			"questId": "train_starter_to_level_10",
-			"questType": "side",
-			"status": "available",
-			"steps": [],
-		}],
-	})
-	if revisited_father != null:
-		revisited_father.call("_apply_npc_metadata", {
-			"dialogueId": "kanto_players_house_father_after_intro",
-			"offeredQuestId": "train_starter_to_level_10",
-			"offeredQuestRequiredQuestId": "get_town_map",
-			"offeredQuestRequiredQuestStepId": "visit_father",
-			"offeredQuestRequiredQuestStatus": "completed",
+	_expect(father != null and not father.visible, "Dadinho leaves home after Oak returns the Parcel")
+	_expect(mom != null and mom.visible, "Mom appears after Oak returns the Parcel")
+	if father != null:
+		_expect(not father.call("blocks_world_position", father.global_position), "Hidden Dadinho no longer blocks his old tile")
+	if mom != null:
+		mom.call("_apply_npc_metadata", {
 			"questMarkers": [{
 				"questId": "get_town_map",
 				"stepId": "visit_father",
 				"statuses": ["active"],
-			}, {
-				"questId": "train_starter_to_level_10",
-				"statuses": ["available"],
-				"visibilityQuestId": "get_town_map",
-				"visibilityQuestStepId": "visit_father",
-				"visibilityQuestStatus": "completed",
-			}],
-			"dialogueVariants": [{
-				"dialogueId": "kanto_players_house_father_after_pokedex",
-				"requiredQuestId": "get_town_map",
-				"requiredQuestStepId": "visit_father",
-				"requiredQuestStatus": "completed",
 			}],
 		})
-		revisited_father.call("_refresh_quest_marker")
-		var marker_label := revisited_father.get("quest_marker_label") as Label
+		var marker := mom.get("quest_marker_label") as Label
+		mom.call("_refresh_quest_marker")
+		_expect(marker != null and marker.text == "!", "Mom shows the main-story visit marker")
+
+	var route := route_scene.instantiate()
+	get_root().add_child(route)
+	await process_frame
+	await process_frame
+	var route_dad := route.get_node_or_null("Entities/NPCs/Dialogue/Dadinho") as Node2D
+	_expect(route_dad != null and not route_dad.visible, "Dadinho does not offer the challenge before the family visit")
+	story_service.apply_story(_story_after_parcel("available", "completed"))
+	await process_frame
+	await process_frame
+	_expect(route_dad != null and route_dad.visible, "Dadinho waits near the start of Route 1 after the family visit")
+	if route_dad != null:
+		_expect(str(route_dad.get("npc_id")) == "kanto_route_1_dadinho", "Route Dadinho has his own metadata identity")
+		_expect(route_dad.get("npc_sprite_frames") == load(DAD_FRAMES_PATH), "Route Dadinho keeps the same appearance")
 		_expect(
-			marker_label != null and marker_label.text == "!",
-			"Dadinho shows the main-story marker while Oak sends the player home"
+			str(route_dad.get("visibility_hidden_quest_id")) == "train_starter_to_level_10",
+			"Route Dadinho leaves when his side quest is completed"
 		)
 
-	story_service.apply_story({
+	story_service.apply_story(_story_after_parcel("completed", "completed"))
+	await process_frame
+	await process_frame
+	_expect(route_dad != null and not route_dad.visible, "Dadinho disappears from Route 1 after the challenge")
+	_expect(mom != null and mom.visible, "Mom remains at home after Dadinho's challenge")
+
+	route.queue_free()
+	house.queue_free()
+	story_service.reset_story()
+	quit(1 if failed else 0)
+
+
+func _story_after_parcel(training_status: String, family_visit_status := "active") -> Dictionary:
+	return {
 		"revision": 5,
 		"quests": [{
+			"questId": "oaks_parcel",
+			"questType": "main",
+			"status": "completed",
+			"steps": [{"stepId": "return_to_oak", "status": "completed"}],
+		}, {
 			"questId": "get_town_map",
 			"questType": "main",
 			"status": "active",
-			"steps": [{
-				"stepId": "visit_father",
-				"status": "completed",
-			}],
+			"steps": [{"stepId": "visit_father", "status": family_visit_status}],
 		}, {
 			"questId": "train_starter_to_level_10",
 			"questType": "side",
-			"status": "available",
+			"status": training_status,
 			"steps": [],
 		}],
-	})
-	if revisited_father != null:
-		revisited_father.call("_refresh_quest_marker")
-		_expect(
-			str(revisited_father.call("_resolve_story_dialogue_id"))
-			== "kanto_players_house_father_after_pokedex",
-			"Dadinho offers his training challenge only after the farewell visit"
-		)
-		var side_marker_label := revisited_father.get("quest_marker_label") as Label
-		_expect(
-			side_marker_label != null and side_marker_label.text == "✦",
-			"Dadinho's side-quest marker appears after the farewell visit"
-		)
-
-	revisited_house.queue_free()
-	story_service.reset_story()
-	quit(1 if failed else 0)
+	}
 
 
 func _expect(condition: bool, label: String) -> void:

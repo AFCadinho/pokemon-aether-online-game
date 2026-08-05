@@ -41,6 +41,7 @@ func _init() -> void:
 	var personal_buffs_block := _node_block(scene_source, '[node name="PersonalBuffsPanel"')
 	var store_block := _node_block(scene_source, '[node name="DonatorStoreButton"')
 	var settings_block := _node_block(scene_source, '[node name="SettingsButton" type="Button" parent="Control"]')
+	var mount_button_block := _node_block(scene_source, '[node name="MountButton" type="Button" parent="Control"]')
 	var quest_slot_block := _node_block(scene_source, '[node name="QuestSlot"')
 	var quest_button_block := _node_block(scene_source, '[node name="QuestButton"')
 	var socials_menu_block := _node_block(scene_source, '[node name="SocialsMenu"')
@@ -105,6 +106,18 @@ func _init() -> void:
 	_check(store_block.contains("custom_minimum_size = Vector2(42, 42)") and store_block.contains("icon_max_width = 26"), "Donator Store aligns with the personal status rail")
 	_check(settings_block.contains("custom_minimum_size = Vector2(42, 42)") and settings_block.contains("offset_bottom = -152.0"), "Settings forms a matching utility button above the Donator Store")
 	_check(settings_block.contains('icon = ExtResource("7_settings_icon")'), "relocated Settings keeps its familiar gear icon")
+	_check(
+		mount_button_block.contains("custom_minimum_size = Vector2(42, 42)")
+		and mount_button_block.contains("offset_top = -242.0")
+		and mount_button_block.contains('tooltip_text = "ui.mounts.title"')
+		and mount_button_block.contains('icon = ExtResource("33_mounts")')
+		and scene_source.contains('path="res://assets/ui/mount_management.svg" id="33_mounts"'),
+		"Mount management joins the bottom-right character utility rail"
+	)
+	_check(
+		my_powers_button_block.contains("offset_top = -290.0"),
+		"My Powers moves up one slot to keep the character utility rail evenly spaced"
+	)
 	_check(quest_slot_block.contains("custom_minimum_size = Vector2(52, 52)") and quest_button_block.contains('texture_normal = ExtResource("27_quest_log")'), "Quest Log replaces Settings in the primary navigation bar")
 	_check(scene_source.contains('path="res://assets/ui/pvp_battles.svg" id="18_pvp"'), "PvP uses a dedicated versus icon instead of a generic Poke Ball")
 	_check(script_source.contains('pvp_mode_menu.custom_minimum_size = Vector2(390, 0)') and script_source.contains('"ui.pvp.title"'), "PvP opens a deliberate battle-mode launcher")
@@ -128,7 +141,8 @@ func _init() -> void:
 	_check(script_source.contains('dev_actions_popup.custom_minimum_size = Vector2(420, 0)') and script_source.contains('"ui.staff.dev.title"'), "Developer Tools uses a structured launcher surface")
 	_check(script_source.contains('"DeveloperQuickActions"') and script_source.contains('"ui.staff.dev.world_preview"'), "Developer actions and world preview have separate visual groups")
 	_check(script_source.contains('"ui.staff.dev.create_pokemon"') and script_source.contains('"ui.staff.dev.start_encounter"') and script_source.contains('"ui.staff.dev.resources"'), "Developer quick actions use clear task-oriented labels")
-	_check(script_source.contains('"ui.staff.dev.heal_party"') and script_source.contains('"ui.staff.dev.preview_evolution"') and script_source.contains('"ui.staff.dev.clear_data"'), "Developer utility and destructive actions remain available")
+	_check(script_source.contains('"ui.staff.dev.heal_party"') and script_source.contains('"ui.staff.dev.trainer_progress"') and script_source.contains('"ui.staff.dev.clear_data"'), "Developer utility and destructive actions remain available")
+	_check(not script_source.contains("dev_preview_evolution_button") and not script_source.contains("dev_pickpocket_pose_button"), "Developer Tools omits temporary animation preview actions")
 	_check(script_source.contains('staff_tools_popup.custom_minimum_size = Vector2(390, 0)') and script_source.contains('"ui.staff.tools.subtitle"'), "Staff Tools uses the shared compact launcher")
 	_check(script_source.contains('"ui.staff.teleport.action_description"') and script_source.contains('"ui.staff.impersonate.action_description"'), "Staff actions explain Teleport and Impersonate")
 	_check(script_source.contains('alpha_tools_popup.custom_minimum_size = Vector2(390, 0)') and script_source.contains('"ui.staff.alpha.subtitle"'), "Alpha Tools uses the shared compact launcher")
@@ -193,7 +207,7 @@ func _init() -> void:
 
 	_check(script_source.contains('_register_collapsible_panel("hotkey_sidebar", hotkey_sidebar_panel, "left_center")'), "hotbar collapse control sits on its inner edge")
 	_check(script_source.contains('_register_collapsible_panel("chat", chat_panel, "right")'), "chat controls sit on its inner edge")
-	_check(script_source.contains("[personal_buffs_panel, settings_button, donator_store_button, my_powers_button]"), "trainer collapse includes personal buffs, utilities, and My Powers")
+	_check(script_source.contains("[personal_buffs_panel, settings_button, mount_button, donator_store_button, my_powers_button]"), "trainer collapse includes personal buffs, mount management, utilities, and My Powers")
 	_check(script_source.contains("func _set_my_powers_available") and script_source.contains("func _hide_my_powers_menu"), "My Powers only appears for accounts with available privileged tools")
 	_check(script_source.contains('_register_collapsible_panel("party", party_panel, "right")'), "party collapse control sits on its inner edge")
 	_check(script_source.contains('_register_collapsible_panel("location", location_panel, "right_center", null, [global_buffs_panel])'), "location collapse includes global buffs")

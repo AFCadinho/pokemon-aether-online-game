@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.3.46 - 2026-08-05
+
+**Added**
+
+- Added the Thieving skill. Pickpocket supported NPCs to earn Thieving XP and Loot, build Wanted, and risk arrest and public service.
+- Added a Skills overview for Fishing and Thieving with levels, XP progress, bonuses, unlocks, and daily Thieving targets.
+- Added Surf mounts, starting with Lapras, plus a mount manager for choosing available travel companions.
+- Wild Pokémon can now vary by time of day. Encounter information shows when each Pokémon is available.
+- Early Kanto areas now feel livelier with more Trainers, residents, ambient Pokémon, route signs, and character portraits.
+
+**Changed**
+
+- Expanded Route 22 with complete gameplay and wild encounters, and refreshed Viridian City's layout, residents, and collision boundaries.
+- Improved overworld presentation with pixel-perfect scaling, revised zoom options, cleaner Surf animations, and clearer route guards.
+- Updated Pallet Town family dialogue and moved Dadinho's training quest to Route 1 so the opening story flows more naturally.
+
+**Fixed**
+
+- Fixed several PvP issues involving reconnect recovery, repeated turn choices, battle hazards, spectator information, and spectator forfeits.
+- Fixed Surf rider layering and animation problems, including the upward-facing rider alignment.
+- Fixed route guards or NPC dialogue occasionally blocking passage or failing to start correctly.
+
 ## 0.3.45 - 2026-08-03
 
 **Added**

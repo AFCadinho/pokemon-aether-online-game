@@ -12,6 +12,11 @@ location_id = "kanto.route_2.viridian_forest.south_gate"
 location_name = "Viridian Forest Gate"
 music_track_path = "res://assets/music/overworld/kanto/routes/route1.ogg"
 
+[node name="GateNPC" parent="Entities/NPCs" index="0"]
+npc_id = "kanto_viridian_forest_south_gate_attendant"
+display_name = "Forest Gate Attendant"
+requires_party_pokemon = false
+
 [node name="ToNorth" parent="Exits" index="0"]
 target_scene_path = "res://scenes/overworld/kanto/routes/viridian_forest.tscn"
 target_spawn_name = "FromRoute2South"

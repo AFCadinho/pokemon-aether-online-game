@@ -33,10 +33,19 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 
 @export var npc_id := ""
 @export var npc_definition_id := ""
+## Optional server-content identity for reusable NPC scenes. Placed NPCs normally use npc_id.
+@export var npc_metadata_id := ""
 ## Optional story condition. An empty quest id keeps the NPC unrestricted.
 @export var required_quest_id := ""
 @export var required_quest_step_id := ""
 @export_enum("active", "completed") var required_quest_status := "completed"
+## Optional scene-presence window driven by projected story state.
+@export var visibility_required_quest_id := ""
+@export var visibility_required_quest_step_id := ""
+@export_enum("available", "active", "completed") var visibility_required_quest_status := "completed"
+@export var visibility_hidden_quest_id := ""
+@export var visibility_hidden_quest_step_id := ""
+@export_enum("available", "active", "completed") var visibility_hidden_quest_status := "completed"
 ## Exceptional scene-specific override. Normal dialogue comes from NPC metadata.
 @export var dialogue_id := ""
 @export var display_name := ""
@@ -44,6 +53,8 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 @export var dialogue_lines: Array[String] = []
 @export var npc_sprite_frames: SpriteFrames
 @export var sprite_offset := Vector2(0, -16)
+## Optional catalog id. Empty values use the central NPC assignment table.
+@export var portrait_id := ""
 @export var mugshot: Texture2D
 @export_enum("idle", "pace_horizontal", "pace_vertical") var movement_behavior := "idle"
 @export_range(1, 12, 1) var movement_tiles := 3
@@ -52,6 +63,9 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 ## Fetch metadata on spawn when this NPC can display catalog-driven quest markers.
 @export var preload_quest_markers := false
 @export_range(1, 8, 1) var manual_interaction_reach_tiles := 1
+@export var pickpocket_enabled := false
+@export var pickpocket_npc_type := ""
+@export_range(1, 100, 1) var pickpocket_required_level := 1
 
 const TILE_SIZE := 32
 const MOVE_SPEED := 120.0
@@ -90,6 +104,7 @@ var movement_current_offset_tiles := 0
 var movement_direction_sign := 1
 var movement_next_step_at_msec := 0
 var movement_reserved_tile := Vector2i.ZERO
+var story_visibility_active := true
 var is_npc_moving := false
 
 
@@ -98,6 +113,7 @@ func _ready_base_npc() -> void:
 	if Engine.is_editor_hint():
 		_refresh_npc_profile_preview()
 		return
+	_resolve_catalog_mugshot()
 
 	z_as_relative = false
 	if npc_sprite_frames != null:
@@ -122,6 +138,7 @@ func _ready_base_npc() -> void:
 		LocalizationManager.locale_changed.connect(_on_locale_changed)
 	if preload_quest_markers:
 		_initialize_quest_markers.call_deferred()
+	_apply_story_visibility()
 
 
 func _apply_npc_profile() -> void:
@@ -136,8 +153,27 @@ func _apply_npc_profile() -> void:
 		display_name = npc_profile.display_name
 	if npc_profile.sprite_frames != null:
 		npc_sprite_frames = npc_profile.sprite_frames
+	if not npc_profile.portrait_id.strip_edges().is_empty():
+		portrait_id = npc_profile.portrait_id
 	if npc_profile.mugshot != null:
 		mugshot = npc_profile.mugshot
+
+
+func _resolve_catalog_mugshot() -> void:
+	var catalog := get_node_or_null("/root/TrainerPortraitCatalog")
+	if catalog == null:
+		return
+	var resolved_portrait_id: String = catalog.resolve_portrait_id(
+		portrait_id,
+		npc_id,
+		npc_definition_id
+	)
+	if resolved_portrait_id.is_empty():
+		return
+	var resolved_texture: Texture2D = catalog.get_texture(resolved_portrait_id)
+	if resolved_texture != null:
+		portrait_id = resolved_portrait_id
+		mugshot = resolved_texture
 
 
 func _on_npc_profile_changed() -> void:
@@ -162,6 +198,8 @@ func _refresh_npc_profile_preview() -> void:
 
 
 func blocks_world_position(world_position: Vector2) -> bool:
+	if not story_visibility_active:
+		return false
 	var blocked_tile := _to_tile(feet_marker.global_position)
 	if is_npc_moving:
 		var checked_tile := _to_tile(world_position)
@@ -545,6 +583,8 @@ func _sync_nameplate() -> void:
 		return
 
 	var name_text := display_name.strip_edges()
+	if pickpocket_enabled and player_nearby:
+		name_text += "  [T]"
 	nameplate_label.text = name_text
 	nameplate.visible = name_text != ""
 	nameplate_label.visible = name_text != ""
@@ -729,6 +769,9 @@ func _process_base_npc() -> void:
 
 	_update_sort_z()
 	await _process_npc_movement()
+	if _can_start_pickpocket():
+		await _start_pickpocket(nearby_player)
+		return
 	if _can_start_manual_interaction():
 		await _start_manual_interaction(nearby_player)
 
@@ -850,6 +893,8 @@ func _update_directional_sensors() -> void:
 
 
 func _can_start_manual_interaction() -> bool:
+	if not story_visibility_active:
+		return false
 	if is_interacting:
 		return false
 
@@ -872,6 +917,59 @@ func _can_start_manual_interaction() -> bool:
 		return false
 
 	return true
+
+
+func _can_start_pickpocket() -> bool:
+	if not pickpocket_enabled or not story_visibility_active or is_interacting:
+		return false
+	if not player_nearby or nearby_player == null:
+		return false
+	if GameState.is_overworld_input_locked() or _is_ui_typing():
+		return false
+	if not Input.is_action_just_pressed("pickpocket") or not _is_player_facing_npc(nearby_player):
+		return false
+	var dialogue_box := _get_dialogue_box()
+	return dialogue_box == null or not dialogue_box.is_open
+
+
+func _start_pickpocket(body: Node2D) -> void:
+	is_interacting = true
+	GameState.lock_overworld_input()
+	_face_body(body)
+	if body.has_method("face_world_position"):
+		body.face_world_position(get_feet_position())
+
+	var target_id := _get_npc_metadata_id().strip_edges().to_lower()
+	if ThievingService.state_loaded and ThievingService.get_level() < pickpocket_required_level:
+		_add_system_warning(LocalizationManager.text(
+			"ui.thieving.level_required",
+			{"level": pickpocket_required_level}
+		))
+	elif ThievingService.is_npc_attempted_today(target_id):
+		_add_system_warning(LocalizationManager.text("ui.thieving.already_attempted"))
+	else:
+		if body.has_method("set_activity_style"):
+			body.call("set_activity_style", CharacterAppearanceService.BODY_MOVEMENT_PICKPOCKET)
+		await get_tree().create_timer(0.55).timeout
+		if is_instance_valid(body) and body.has_method("get_activity_style") \
+				and CharacterAppearanceService.normalize_movement_style(str(body.call("get_activity_style"))) \
+				== CharacterAppearanceService.BODY_MOVEMENT_PICKPOCKET:
+			body.call("clear_activity_style")
+		var result: Dictionary = await ThievingService.attempt_pickpocket(target_id)
+		if bool(result.get("success", false)):
+			if str(result.get("outcome", "")) == "success":
+				_add_system_message(LocalizationManager.text(
+					"ui.thieving.success",
+					{
+						"amount": int(result.get("rewardCurrency", 0)),
+						"wanted": int((result.get("state", {}) as Dictionary).get("wanted", 0)),
+					}
+				))
+		else:
+			_add_system_warning(str(result.get("error", LocalizationManager.text("ui.thieving.unavailable"))))
+
+	GameState.unlock_overworld_input()
+	is_interacting = false
 
 
 func _is_player_facing_npc(body: Node2D) -> bool:
@@ -927,6 +1025,8 @@ func _run_story_or_legacy_interaction(body: Node2D, trigger: String) -> Dictiona
 		var fallback_result := result.duplicate(true)
 		fallback_result["legacy"] = true
 		return fallback_result
+	if bool(result.get("success", false)) and bool(result.get("handled", false)):
+		await _after_story_interaction(body, result)
 	return result
 
 
@@ -939,6 +1039,10 @@ func _find_story_hook() -> Node:
 
 func interact_with_player(_player: Node2D) -> void:
 	await show_dialogue()
+
+
+func _after_story_interaction(_player: Node2D, _result: Dictionary) -> void:
+	pass
 
 
 func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> bool:
@@ -1011,10 +1115,16 @@ func _load_npc_metadata() -> Dictionary:
 
 
 func _get_npc_metadata_id() -> String:
+	var explicit_metadata_id := npc_metadata_id.strip_edges()
+	if not explicit_metadata_id.is_empty():
+		return explicit_metadata_id
+	var placed_npc_id := npc_id.strip_edges()
+	if not placed_npc_id.is_empty():
+		return placed_npc_id
 	var definition_id := npc_definition_id.strip_edges()
 	if not definition_id.is_empty():
 		return definition_id
-	return npc_id.strip_edges()
+	return ""
 
 
 func _apply_npc_metadata(metadata: Dictionary) -> void:
@@ -1055,6 +1165,13 @@ func _apply_npc_metadata(metadata: Dictionary) -> void:
 	if not metadata_dialogue.is_empty():
 		dialogue_lines = metadata_dialogue
 
+	var pickpocket_profile: Variant = metadata.get("pickpocketProfile", {})
+	if pickpocket_profile is Dictionary:
+		var profile := pickpocket_profile as Dictionary
+		pickpocket_enabled = not profile.is_empty()
+		pickpocket_npc_type = str(profile.get("npcType", "")).strip_edges().to_lower()
+		pickpocket_required_level = clampi(int(profile.get("requiredLevel", 1)), 1, 100)
+
 	quest_marker_bindings.clear()
 	var marker_values: Variant = metadata.get("questMarkers", [])
 	if marker_values is Array:
@@ -1075,7 +1192,45 @@ func _on_locale_changed(_locale: String) -> void:
 
 
 func _on_story_changed(_revision: int) -> void:
+	_apply_story_visibility()
 	_refresh_quest_marker()
+
+
+func _apply_story_visibility() -> void:
+	story_visibility_active = _is_story_visibility_active()
+	visible = story_visibility_active
+	if interaction_area != null:
+		interaction_area.monitoring = story_visibility_active
+		interaction_area.monitorable = story_visibility_active
+	if not story_visibility_active:
+		player_nearby = false
+		nearby_player = null
+		if quest_marker != null:
+			quest_marker.visible = false
+
+
+func _is_story_visibility_active() -> bool:
+	var required_id := visibility_required_quest_id.strip_edges()
+	if (
+		not required_id.is_empty()
+		and not StoryService.is_requirement_met(
+			required_id,
+			visibility_required_quest_step_id,
+			visibility_required_quest_status
+		)
+	):
+		return false
+	var hidden_id := visibility_hidden_quest_id.strip_edges()
+	if (
+		not hidden_id.is_empty()
+		and StoryService.is_requirement_met(
+			hidden_id,
+			visibility_hidden_quest_step_id,
+			visibility_hidden_quest_status
+		)
+	):
+		return false
+	return true
 
 
 func _get_dialogue_override_id() -> String:
@@ -1108,9 +1263,10 @@ func _get_dialogue_box() -> Node:
 
 
 func _on_interaction_area_body_entered(body: Node2D) -> void:
-	if body.name == "Player":
+	if story_visibility_active and body.name == "Player":
 		player_nearby = true
 		nearby_player = body
+		_sync_nameplate()
 
 
 func _on_interaction_area_body_exited(body: Node2D) -> void:
@@ -1118,6 +1274,7 @@ func _on_interaction_area_body_exited(body: Node2D) -> void:
 		player_nearby = false
 		if body == nearby_player:
 			nearby_player = null
+		_sync_nameplate()
 
 
 func _wait_for_body_tile_movement(body: Node2D) -> void:
@@ -1128,6 +1285,14 @@ func _wait_for_body_tile_movement(body: Node2D) -> void:
 func _is_ui_typing() -> bool:
 	var focused_control := get_viewport().gui_get_focus_owner()
 	return focused_control is LineEdit or focused_control is TextEdit
+
+
+func _add_system_message(message: String) -> void:
+	get_tree().call_group("ui_overlay", "add_system_message", message)
+
+
+func _add_system_warning(message: String) -> void:
+	get_tree().call_group("ui_overlay", "add_system_warning", message)
 
 
 func _update_sort_z() -> void:

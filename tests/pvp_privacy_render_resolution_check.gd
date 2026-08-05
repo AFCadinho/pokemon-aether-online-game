@@ -817,6 +817,8 @@ func _check_prejoin_battle_event_paging() -> void:
 
 	service.joined = true
 	service.last_battle_event_seq = 6
+	service.battle_event_latest_seq = 6
+	service._reset_battle_event_buffer()
 	initial_generation = service.connection_attempt_generation
 	initial_socket = service.websocket
 	service._handle_battle_events_message({
@@ -825,9 +827,20 @@ func _check_prejoin_battle_event_paging() -> void:
 	})
 	_check(
 		service.last_battle_event_seq == 7
-			and service.connection_attempt_generation == initial_generation + 1
-			and service.websocket != initial_socket,
-		"a genuine joined live-stream gap still restarts for fail-closed recovery"
+			and service.connection_attempt_generation == initial_generation
+			and service.websocket == initial_socket
+			and service.battle_event_gap_expected_seq == 8,
+		"a joined live-stream gap waits briefly for the next durable packet"
+	)
+	service._handle_battle_events_message({
+		"battleEventLatestSeq": 9,
+		"events": _battle_events(8, 9),
+	})
+	_check(
+		service.last_battle_event_seq == 9
+			and service.connection_attempt_generation == initial_generation
+			and service.battle_event_gap_expected_seq == 0,
+		"the following packet resolves the live-stream gap without reconnecting"
 	)
 	service.free()
 
