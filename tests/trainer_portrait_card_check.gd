@@ -16,7 +16,7 @@ var failed := false
 func _init() -> void:
 	var dialogue_text := _read_text(DIALOGUE_BOX_SCRIPT)
 	_check_true(dialogue_text.contains("TRAINER_CARD_TEXTURE_ROOT"), "Dialogue box recognizes trainer-card textures")
-	_check_true(dialogue_text.contains("STRETCH_KEEP_CENTERED"), "Trainer cards remain at native size")
+	_check_true(dialogue_text.contains("STRETCH_KEEP_ASPECT_CENTERED"), "Trainer cards fill the portrait while preserving their aspect ratio")
 	_check_true(dialogue_text.contains("TEXTURE_FILTER_NEAREST"), "Trainer cards use nearest-neighbour filtering")
 
 	for file_name: String in CARD_FILES:
