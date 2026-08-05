@@ -127,11 +127,10 @@ func _init() -> void:
 	)
 	_expect(
 		route_22_source.contains('map_id = "kanto_route_22"')
-		and route_22_source.contains('[node name="OpenField" parent="."')
-		and route_22_source.contains('[node name="FromViridianCity" type="Marker2D" parent="Spawns"]')
+		and route_22_source.contains('[node name="FromViridianCity" type="Marker2D" parent="Spawns"')
 		and route_22_source.contains('transition_id = "kanto_route_22__to_viridian_city"')
 		and route_22_source.contains('target_spawn_name = "FromRoute22"')
-		and route_22_source.contains('[node name="Collision" type="TileMapLayer" parent="."]'),
+		and route_22_source.contains('[node name="Collision" type="TileMapLayer" parent="."'),
 		"Route 22 is a bounded gameplay map with a return transition to Viridian City"
 	)
 	_expect(

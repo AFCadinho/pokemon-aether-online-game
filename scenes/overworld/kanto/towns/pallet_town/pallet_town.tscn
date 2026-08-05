@@ -9,7 +9,6 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/acetrainer-gen6.png" id="7_66okb"]
 [ext_resource type="Texture2D" uid="uid://b6drbo1a67h55" path="res://assets/tilesets/overworld/nature/ledges/ledges.png" id="7_fiq1l"]
 [ext_resource type="Texture2D" uid="uid://cnixsmivuhykq" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_068_Fisherman.png" id="9_q27eu"]
-[ext_resource type="PackedScene" uid="uid://bql6a1hbx7o2m" path="res://scenes/npcs/boss_battle_npc.tscn" id="9_s3ag2"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/market_seller_npc.tscn" id="12_4x353"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="12_h1bkg"]
 [ext_resource type="Texture2D" uid="uid://bsxw7vgtdrlpk" path="res://assets/followers/HORSEA.png" id="13_j8pek"]
@@ -25,8 +24,9 @@
 [ext_resource type="PackedScene" uid="uid://b8s7eihsl5ikf" path="res://scenes/world/interactables/sign_interactable.tscn" id="25_sign"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/item_gift_npc.tscn" id="26_item_gift"]
 [ext_resource type="Texture2D" uid="uid://e2ksljyggppg" path="res://assets/tilesets/fiver/tiles_env2_floors32.png" id="27_q27eu"]
-[ext_resource type="Resource" path="res://resources/npcs/trainers/trainer_red_boss.tres" id="28_trainer_red_profile"]
 [ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/fisherman-gen6.png" id="29_fisherman_card"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="30_dialogue_npc"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="31_poke_fan_f"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6lp0i"]
 atlas = ExtResource("4_3oirl")
@@ -2315,6 +2315,7 @@ blocked_dialogue_id = "kanto_pallet_town_north_guard_blocked"
 story_blocked_dialogue_id = "kanto_pallet_town_north_guard_story_blocked"
 allowed_dialogue_id = "kanto_pallet_town_north_guard_default"
 npc_id = "kanto_pallet_town_north_guard"
+display_name = "Pallet Route Guide"
 npc_sprite_frames = SubResource("SpriteFrames_0ke4d")
 mugshot = ExtResource("7_66okb")
 
@@ -2330,17 +2331,13 @@ facing_direction = Vector2(0, 1)
 npc_sprite_frames = SubResource("SpriteFrames_27c3h")
 mugshot = ExtResource("29_fisherman_card")
 
-[node name="BossBattle" type="Node2D" parent="Entities/NPCs" unique_id=1297212386]
-
-[node name="AshKetchum" parent="Entities/NPCs/BossBattle" unique_id=1887464688 instance=ExtResource("9_s3ag2")]
+[node name="PalletResident" parent="Entities/NPCs" instance=ExtResource("30_dialogue_npc")]
 position = Vector2(784, 1008)
-easy_trainer_id = "kanto_route_1_trainer_red_easy"
-normal_trainer_id = "kanto_route_1_trainer_red_normal"
-hard_trainer_id = "kanto_route_1_trainer_red_hard"
-normal_label = "Medium"
-npc_profile = ExtResource("28_trainer_red_profile")
-dialogue_id = "kanto_pallet_town_trainer_red_default"
-facing_direction = Vector2(1, 0)
+npc_id = "kanto_pallet_town_resident_mara"
+npc_definition_id = "trainer_class_poke_fan_f"
+display_name = "Pallet Resident Mara"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("31_poke_fan_f")
 
 [node name="MarketSellerNPC" parent="Entities/NPCs" unique_id=634307267 instance=ExtResource("12_4x353")]
 position = Vector2(272, 240)

@@ -23,8 +23,8 @@ func _init() -> void:
 	_check_true(inventory_source.contains('NPC_ITEM_REWARD_ENDPOINT := "/game/npc-rewards/%s/claim"'), "inventory service uses NPC reward endpoint")
 	_check_true(pallet_source.contains('npc_id = "kanto_pallet_town_fishing_guru"'), "Pallet Town places the Fishing Guru")
 	_check_true(pallet_source.contains('reward_id = "kanto_pallet_town_old_rod"'), "Fishing Guru grants the Old Rod reward")
-	_check_true(rivals_house_source.contains('npc_id = "kanto_rivals_house_lillie"'), "Rival's House places Lillie")
-	_check_true(rivals_house_source.contains('reward_id = "kanto_rivals_house_town_map"'), "Lillie grants the Town Map reward")
+	_check_true(rivals_house_source.contains('npc_id = "kanto_rivals_house_daisy"'), "Rival's House places Daisy Oak")
+	_check_true(rivals_house_source.contains('reward_id = "kanto_rivals_house_town_map"'), "Daisy grants the Town Map reward")
 
 	quit(1 if failed else 0)
 

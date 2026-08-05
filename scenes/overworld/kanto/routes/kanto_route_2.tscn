@@ -11,6 +11,11 @@
 [ext_resource type="Texture2D" uid="uid://e2ksljyggppg" path="res://assets/tilesets/fiver/tiles_env2_floors32.png" id="9_gac6d"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/cuttable_tree.tscn" id="10_j62p7"]
 [ext_resource type="PackedScene" uid="uid://b6sun8ubp3uia" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="12_suwgg"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="13_dialogue"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/trainer_npc.tscn" id="14_trainer"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/hiker_frames.tres" id="15_hiker"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="16_bug_catcher"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/youngster_frames.tres" id="17_youngster"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_r7yom"]
 texture = ExtResource("2_yrfmu")
@@ -396,6 +401,42 @@ tile_set = SubResource("TileSet_bej5m")
 [node name="Entities" type="Node2D" parent="." unique_id=1080027364]
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=563925856]
+
+[node name="CaveResearcherOwen" parent="Entities/NPCs" instance=ExtResource("13_dialogue")]
+position = Vector2(1056, 688)
+npc_id = "kanto_route_2_cave_researcher_owen"
+npc_definition_id = "trainer_class_hiker"
+display_name = "Cave Researcher Owen"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("15_hiker")
+
+[node name="ForestWatcherIvy" parent="Entities/NPCs" instance=ExtResource("13_dialogue")]
+position = Vector2(896, 1280)
+npc_id = "kanto_route_2_forest_watcher_ivy"
+npc_definition_id = "trainer_class_bug_catcher"
+display_name = "Bug Catcher Ivy"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("16_bug_catcher")
+
+[node name="YoungsterMason" parent="Entities/NPCs" instance=ExtResource("14_trainer")]
+position = Vector2(480, 2016)
+npc_id = "kanto_route_2_youngster_mason"
+npc_definition_id = "trainer_class_youngster"
+trainer_id = "kanto_route_2_youngster_mason"
+display_name = "Youngster Mason"
+facing_direction = Vector2(1, 0)
+sight_range_tiles = 3
+npc_sprite_frames = ExtResource("17_youngster")
+
+[node name="BugCatcherCale" parent="Entities/NPCs" instance=ExtResource("14_trainer")]
+position = Vector2(1248, 1088)
+npc_id = "kanto_route_2_bug_catcher_cale"
+npc_definition_id = "trainer_class_bug_catcher"
+trainer_id = "kanto_route_2_bug_catcher_cale"
+display_name = "Bug Catcher Cale"
+facing_direction = Vector2(-1, 0)
+sight_range_tiles = 2
+npc_sprite_frames = ExtResource("16_bug_catcher")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=2131252454]
 

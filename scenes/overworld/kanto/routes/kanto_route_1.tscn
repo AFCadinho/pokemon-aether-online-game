@@ -23,6 +23,10 @@
 [ext_resource type="Texture2D" uid="uid://e2ksljyggppg" path="res://assets/tilesets/fiver/tiles_env2_floors32.png" id="22_qefnj"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_1/route_1.visual.tscn" id="26_c1ijh"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="27_pokemon"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/youngster_frames.tres" id="28_youngster"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/lass_frames.tres" id="29_lass"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/mart_m_frames.tres" id="30_mart"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/camper_frames.tres" id="31_camper"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_14rri"]
 atlas = ExtResource("16_cd607")
@@ -1021,44 +1025,48 @@ z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=394772807]
 
-[node name="BugCatcherTrainerNPC" parent="Entities/NPCs" unique_id=168052101 instance=ExtResource("8_lmnv3")]
+[node name="YoungsterLiam" parent="Entities/NPCs" instance=ExtResource("8_lmnv3")]
 position = Vector2(1456, 1648)
 sight_range_tiles = 2
-npc_id = "kanto_route_1_bug_catcher_big_d"
-display_name = "Bug Catcher Big D"
+npc_id = "kanto_route_1_youngster_liam"
+npc_definition_id = "trainer_class_youngster"
+trainer_id = "kanto_route_1_youngster_liam"
+display_name = "Youngster Liam"
 facing_direction = Vector2(-1, 0)
-npc_sprite_frames = SubResource("SpriteFrames_y12x5")
+npc_sprite_frames = ExtResource("28_youngster")
 
-[node name="GaryTrainerNPC" parent="Entities/NPCs" unique_id=874508670 instance=ExtResource("8_lmnv3")]
-position = Vector2(400, 2064)
-trainer_id = "route_1_gary_1"
-sight_range_tiles = 3
-npc_id = "kanto_route_1_gary"
-display_name = "Gary Oak"
-npc_sprite_frames = SubResource("SpriteFrames_cd607")
-mugshot = ExtResource("10_6o5ht")
-
-[node name="CynthiaNPC" parent="Entities/NPCs" unique_id=1292990089 instance=ExtResource("8_lmnv3")]
+[node name="LassZoe" parent="Entities/NPCs" instance=ExtResource("8_lmnv3")]
 position = Vector2(816, 1104)
-trainer_id = "kanto_route_1_cynthia_1"
-sight_range_tiles = 3
-npc_id = "kanto_route_1_cynthia"
-display_name = "Champion Cynthia"
-npc_sprite_frames = SubResource("SpriteFrames_m8cit")
-mugshot = ExtResource("12_mjhtk")
+trainer_id = "kanto_route_1_lass_zoe"
+sight_range_tiles = 2
+npc_id = "kanto_route_1_lass_zoe"
+npc_definition_id = "trainer_class_lass"
+display_name = "Lass Zoe"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("29_lass")
 
 [node name="Dialogue" type="Node2D" parent="Entities/NPCs" unique_id=1893184129]
 
-[node name="DialogueNPC" parent="Entities/NPCs/Dialogue" unique_id=674634290 instance=ExtResource("16_bnyo4")]
+[node name="MartEmployee" parent="Entities/NPCs/Dialogue" instance=ExtResource("16_bnyo4")]
 position = Vector2(944, 560)
-npc_id = "kanto_route_1_alder"
-display_name = "Champion Alder"
-npc_sprite_frames = SubResource("SpriteFrames_bnyo4")
+npc_id = "kanto_route_1_mart_employee_eli"
+npc_definition_id = "trainer_class_mart_employee"
+display_name = "Mart Employee Eli"
+npc_sprite_frames = ExtResource("30_mart")
 
-[node name="GateNPC" parent="Entities/NPCs/Dialogue" unique_id=586724815 instance=ExtResource("13_8kkc8")]
+[node name="CamperQuinn" parent="Entities/NPCs/Dialogue" instance=ExtResource("16_bnyo4")]
+position = Vector2(400, 2064)
+npc_id = "kanto_route_1_camper_quinn"
+npc_definition_id = "trainer_class_camper"
+display_name = "Camper Quinn"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("31_camper")
+
+[node name="ViridianGuide" parent="Entities/NPCs/Dialogue" instance=ExtResource("13_8kkc8")]
 position = Vector2(1072, 272)
 guarded_transition_id = "route_1_to_viridian_city"
 npc_id = "kanto_route_1_north_guard"
+display_name = "Viridian Route Guide"
 npc_sprite_frames = SubResource("SpriteFrames_gd1nu")
 mugshot = ExtResource("15_4m8jl")
 
