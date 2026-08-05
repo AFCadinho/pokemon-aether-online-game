@@ -2579,6 +2579,8 @@ func _get_activity_visual_offset() -> Vector2:
 	var normalized_style: String = CharacterAppearanceService.normalize_movement_style(activity_style)
 	if normalized_style == CharacterAppearanceService.BODY_MOVEMENT_SURF_FISH:
 		normalized_style = CharacterAppearanceService.BODY_MOVEMENT_FISH
+	elif normalized_style == CharacterAppearanceService.BODY_MOVEMENT_PICKPOCKET:
+		normalized_style = CharacterAppearanceService.BODY_MOVEMENT_FISH
 	var style_offsets: Variant = ACTIVITY_VISUAL_OFFSETS.get(normalized_style, {})
 	if not style_offsets is Dictionary:
 		return Vector2.ZERO
@@ -2599,6 +2601,8 @@ func _get_activity_layer_offset(category: String) -> Vector2:
 	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category)
 	var normalized_style: String = CharacterAppearanceService.normalize_movement_style(body_sprite_frames_movement_style)
 	if normalized_style == CharacterAppearanceService.BODY_MOVEMENT_SURF_FISH:
+		normalized_style = CharacterAppearanceService.BODY_MOVEMENT_FISH
+	elif normalized_style == CharacterAppearanceService.BODY_MOVEMENT_PICKPOCKET:
 		normalized_style = CharacterAppearanceService.BODY_MOVEMENT_FISH
 	var style_offsets: Variant = ACTIVITY_LAYER_OFFSETS.get(normalized_style, {})
 	if not style_offsets is Dictionary:
