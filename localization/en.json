@@ -2973,5 +2973,20 @@
   "ui.skills.unlock.super_rod": "Super Rod",
   "ui.skills.unlock.civilian": "Civilian targets",
   "ui.skills.unlock.trainer": "Trainer targets",
-  "ui.skills.unlock.veteran": "Veteran targets"
+  "ui.skills.unlock.veteran": "Veteran targets",
+  "ui.skills.thieving.targets.title": "DAILY PICKPOCKET TARGETS",
+  "ui.skills.thieving.targets.summary": "{available} available  •  {completed}/{total} attempted",
+  "ui.skills.thieving.targets.reset": "Each target can be attempted once per day. Resets at 00:00 UTC.",
+  "ui.skills.thieving.target.dorian": "League Fan Dorian",
+  "ui.skills.thieving.target.nico": "Bug Catcher Nico",
+  "ui.skills.thieving.target.gideon": "Catching Mentor Gideon",
+  "ui.skills.thieving.location.viridian_city": "Viridian City",
+  "ui.skills.thieving.target_type.civilian": "Civilian",
+  "ui.skills.thieving.target_type.trainer": "Trainer",
+  "ui.skills.thieving.target_type.veteran": "Veteran",
+  "ui.skills.thieving.target.detail": "{type}  •  {location}  •  Lv. {level}",
+  "ui.skills.thieving.target.available": "Available",
+  "ui.skills.thieving.target.completed": "Attempted today",
+  "ui.skills.thieving.target.level_required": "Requires Lv. {level}",
+  "ui.skills.thieving.target.unavailable": "Unavailable"
 }
