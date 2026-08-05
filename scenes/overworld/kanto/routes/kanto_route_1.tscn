@@ -1028,6 +1028,7 @@ npc_id = "kanto_route_1_bug_catcher_big_d"
 display_name = "Bug Catcher Big D"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = SubResource("SpriteFrames_y12x5")
+portrait_id = null
 
 [node name="GaryTrainerNPC" parent="Entities/NPCs" unique_id=874508670 instance=ExtResource("8_lmnv3")]
 position = Vector2(400, 2064)
@@ -1036,6 +1037,7 @@ sight_range_tiles = 3
 npc_id = "kanto_route_1_gary"
 display_name = "Gary Oak"
 npc_sprite_frames = SubResource("SpriteFrames_cd607")
+portrait_id = null
 mugshot = ExtResource("10_6o5ht")
 
 [node name="CynthiaNPC" parent="Entities/NPCs" unique_id=1292990089 instance=ExtResource("8_lmnv3")]
@@ -1045,6 +1047,7 @@ sight_range_tiles = 3
 npc_id = "kanto_route_1_cynthia"
 display_name = "Champion Cynthia"
 npc_sprite_frames = SubResource("SpriteFrames_m8cit")
+portrait_id = null
 mugshot = ExtResource("12_mjhtk")
 
 [node name="Dialogue" type="Node2D" parent="Entities/NPCs" unique_id=1893184129]
@@ -1054,12 +1057,14 @@ position = Vector2(944, 560)
 npc_id = "kanto_route_1_alder"
 display_name = "Champion Alder"
 npc_sprite_frames = SubResource("SpriteFrames_bnyo4")
+portrait_id = null
 
 [node name="GateNPC" parent="Entities/NPCs/Dialogue" unique_id=586724815 instance=ExtResource("13_8kkc8")]
 position = Vector2(1072, 272)
 guarded_transition_id = "route_1_to_viridian_city"
 npc_id = "kanto_route_1_north_guard"
 npc_sprite_frames = SubResource("SpriteFrames_gd1nu")
+portrait_id = null
 mugshot = ExtResource("15_4m8jl")
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=861955121]
@@ -1068,6 +1073,7 @@ mugshot = ExtResource("15_4m8jl")
 position = Vector2(816, 688)
 overworld_pokemon_id = "kanto_route_1_lillipup_1"
 npc_sprite_frames = SubResource("SpriteFrames_oup8f")
+portrait_id = null
 movement_behavior = "pace_horizontal"
 
 [node name="Pidgey" parent="Entities/Pokemon" unique_id=1921985172 instance=ExtResource("27_pokemon")]
@@ -1076,6 +1082,7 @@ overworld_pokemon_id = "kanto_route_1_pidgey_1"
 species_id = "pidgey"
 display_name = "Pidgey"
 npc_sprite_frames = SubResource("SpriteFrames_mxhnq")
+portrait_id = null
 movement_behavior = "pace_horizontal"
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1572197135]
