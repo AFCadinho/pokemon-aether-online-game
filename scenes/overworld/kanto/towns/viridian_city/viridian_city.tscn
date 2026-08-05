@@ -1,6 +1,6 @@
 [gd_scene format=4 uid="uid://b8tl17hk3yovn"]
 
-[ext_resource type="PackedScene" uid="uid://cl640v0bnx8tq" path="res://generated/tiled_visuals/viridian_city/viridian_city.visual.tscn" id="1_leyf6"]
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/viridian_city/viridian_city.visual.tscn" id="1_leyf6"]
 [ext_resource type="Script" uid="uid://cnkkdc5ikupld" path="res://scripts/world/kanto/towns/viridian_city.gd" id="2_meta"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_route1"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_340ux"]
