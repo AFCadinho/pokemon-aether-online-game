@@ -10,6 +10,7 @@ func _init() -> void:
 	var heal := FileAccess.get_file_as_string("res://scripts/world/npcs/heal_npc.gd")
 	var market := FileAccess.get_file_as_string("res://scripts/world/npcs/market_attendant_npc.gd")
 	var party_heal := FileAccess.get_file_as_string("res://scripts/services/party_heal_service.gd")
+	var status_hud := FileAccess.get_file_as_string("res://scripts/ui/thieving_status_hud.gd")
 	var viridian := FileAccess.get_file_as_string(
 		"res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn"
 	)
@@ -31,6 +32,11 @@ func _init() -> void:
 	_check("use_public_service(\"market\")" in market, "Markets check Most Wanted")
 	_check("\"publicService\": public_service" in party_heal, "Heal authority receives the public-service flag")
 	_check("BODY_MOVEMENT_FISH" not in npc, "Pickpocket does not alter fishing behavior")
+	_check(
+		"panel.visible = jailed" in status_hud
+		and "jailed or currency > 0 or wanted > 0" not in status_hud,
+		"Contraband and Wanted stay in the Skills interface instead of the overworld HUD"
+	)
 	quit(1 if failed else 0)
 
 
