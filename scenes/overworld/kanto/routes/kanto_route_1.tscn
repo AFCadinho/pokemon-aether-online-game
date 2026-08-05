@@ -18,11 +18,11 @@
 [ext_resource type="Texture2D" uid="uid://be0o6e0g6umxc" path="res://assets/followers/LILLIPUP.png" id="16_qefnj"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="17_bnyo4"]
 [ext_resource type="Texture2D" uid="uid://bywpecaqt7jd3" path="res://assets/npcs/gen5-g4-ow-sprites/OW PACK/trChampion01.png" id="17_cd607"]
+[ext_resource type="PackedScene" uid="uid://b6sun8ubp3uia" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="17_gd1nu"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="20_viridian"]
 [ext_resource type="Texture2D" uid="uid://e2ksljyggppg" path="res://assets/tilesets/fiver/tiles_env2_floors32.png" id="22_qefnj"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_1/route_1.visual.tscn" id="26_c1ijh"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="27_pokemon"]
-[ext_resource type="PackedScene" path="res://scenes/world/interactables/sign_interactable.tscn" id="28_route_sign"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_14rri"]
 atlas = ExtResource("16_cd607")
@@ -443,7 +443,7 @@ region = Rect2(128, 0, 64, 64)
 atlas = ExtResource("13_cd607")
 region = Rect2(192, 0, 64, 64)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_qefnj"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_bc3mu"]
 resource_local_to_scene = true
 animations = [{
 "frames": [{
@@ -1059,7 +1059,7 @@ npc_sprite_frames = SubResource("SpriteFrames_bnyo4")
 position = Vector2(1072, 272)
 guarded_transition_id = "route_1_to_viridian_city"
 npc_id = "kanto_route_1_north_guard"
-npc_sprite_frames = SubResource("SpriteFrames_qefnj")
+npc_sprite_frames = SubResource("SpriteFrames_bc3mu")
 mugshot = ExtResource("15_4m8jl")
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=861955121]
@@ -1080,13 +1080,17 @@ movement_behavior = "pace_horizontal"
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1572197135]
 
-[node name="Interactables" type="Node2D" parent="Entities"]
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=58269271]
 
-[node name="RouteSign" parent="Entities/Interactables" instance=ExtResource("28_route_sign")]
-position = Vector2(896, 2336)
+[node name="Route1Sign" parent="Entities/Interactables" unique_id=2051182483 instance=ExtResource("17_gd1nu")]
+position = Vector2(880, 1968)
 sign_id = "kanto_route_1_route_sign"
 sign_type = "road"
-required_facing_direction = "up"
+
+[node name="ViridianCitySign" parent="Entities/Interactables" unique_id=1237220014 instance=ExtResource("17_gd1nu")]
+position = Vector2(1232, 304)
+sign_id = "kanto_route_1_viridian_city_sign"
+sign_type = "road"
 
 [node name="Exits" type="Node2D" parent="." unique_id=2121403612]
 
