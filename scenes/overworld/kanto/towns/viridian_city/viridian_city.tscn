@@ -528,22 +528,23 @@ z_index = 5
 position = Vector2(-656, -80)
 
 [node name="LeagueFanDorian" parent="Entities/NPCs" unique_id=224334671 instance=ExtResource("24_dialogue")]
-position = Vector2(928, 672)
+position = Vector2(2048, 1024)
 npc_id = "kanto_viridian_city_league_fan_dorian"
 npc_definition_id = "trainer_class_hiker"
 display_name = "League Fan Dorian"
-facing_direction = Vector2(1, 0)
+facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("28_hiker")
 
 [node name="ForestScoutNico" parent="Entities/NPCs" unique_id=636499515 instance=ExtResource("24_dialogue")]
-position = Vector2(1248, 352)
+position = Vector2(1408, 640)
 npc_id = "kanto_viridian_city_forest_scout_nico"
 npc_definition_id = "trainer_class_bug_catcher"
 display_name = "Bug Catcher Nico"
+facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("27_bug_catcher")
 
 [node name="SchoolKidJune" parent="Entities/NPCs" unique_id=1310082468 instance=ExtResource("24_dialogue")]
-position = Vector2(1376, 1088)
+position = Vector2(1792, 1024)
 npc_id = "kanto_viridian_city_school_kid_june"
 npc_definition_id = "trainer_class_school_kid_f"
 display_name = "School Kid June"
@@ -551,10 +552,11 @@ facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("26_school_kid_f")
 
 [node name="CatchingMentorGideon" parent="Entities/NPCs" unique_id=1414764182 instance=ExtResource("24_dialogue")]
-position = Vector2(1248, 784)
+position = Vector2(1312, 1536)
 npc_id = "kanto_viridian_city_catching_mentor_gideon"
 npc_definition_id = "trainer_class_elder"
 display_name = "Catching Mentor Gideon"
+facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("25_elder")
 
 [node name="RouteGuards" type="Node2D" parent="Entities/NPCs" unique_id=286755846]
@@ -594,7 +596,7 @@ facing_direction = Vector2(0, -1)
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=1638304908]
 
 [node name="Slowpoke" parent="Entities/Pokemon" unique_id=1045510988 instance=ExtResource("29_pokemon")]
-position = Vector2(608, 864)
+position = Vector2(592, 1456)
 overworld_pokemon_id = "kanto_viridian_city_slowpoke_1"
 species_id = "slowpoke"
 level = 20
@@ -606,12 +608,12 @@ movement_wait_seconds = 2.5
 movement_speed_pixels = 36.0
 
 [node name="Poliwag" parent="Entities/Pokemon" unique_id=949286541 instance=ExtResource("29_pokemon")]
-position = Vector2(720, 864)
+position = Vector2(592, 1616)
 overworld_pokemon_id = "kanto_viridian_city_poliwag_1"
 species_id = "poliwag"
 level = 8
 display_name = "Poliwag"
-facing_direction = Vector2(-1, 0)
+facing_direction = Vector2(0, -1)
 movement_behavior = "pace_vertical"
 movement_tiles = 1
 movement_wait_seconds = 1.5
