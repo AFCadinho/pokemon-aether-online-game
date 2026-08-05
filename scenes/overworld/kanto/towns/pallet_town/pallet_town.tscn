@@ -2365,6 +2365,18 @@ npc_sprite_frames = SubResource("SpriteFrames_ih4yo")
 movement_behavior = "pace_vertical"
 movement_speed_pixels = 60.0
 
+[node name="Krabby" parent="Entities/Pokemon" instance=ExtResource("12_h1bkg")]
+position = Vector2(336, 912)
+overworld_pokemon_id = "kanto_pallet_town_krabby_1"
+species_id = "krabby"
+level = 7
+display_name = "Krabby"
+facing_direction = Vector2(1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.5
+movement_speed_pixels = 48.0
+
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1829912001]
 
 [node name="TownSign" parent="Entities/Interactables" unique_id=1776127209 instance=ExtResource("19_3oirl")]

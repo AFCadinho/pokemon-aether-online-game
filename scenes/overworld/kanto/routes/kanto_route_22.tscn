@@ -15,6 +15,7 @@
 [ext_resource type="SpriteFrames" path="res://assets/npcs/classes/hiker_frames.tres" id="12_hiker"]
 [ext_resource type="SpriteFrames" path="res://assets/npcs/classes/youngster_frames.tres" id="13_youngster"]
 [ext_resource type="SpriteFrames" path="res://assets/npcs/classes/lass_frames.tres" id="14_lass"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="15_pokemon"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_viridian"]
 size = Vector2(64, 176)
@@ -341,6 +342,29 @@ sight_range_tiles = 2
 npc_sprite_frames = ExtResource("14_lass")
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=217716802]
+
+[node name="Mankey" parent="Entities/Pokemon" instance=ExtResource("15_pokemon")]
+position = Vector2(1760, 704)
+overworld_pokemon_id = "kanto_route_22_mankey_1"
+species_id = "mankey"
+level = 4
+display_name = "Mankey"
+facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.0
+movement_speed_pixels = 58.0
+
+[node name="Spearow" parent="Entities/Pokemon" instance=ExtResource("15_pokemon")]
+position = Vector2(1120, 576)
+overworld_pokemon_id = "kanto_route_22_spearow_1"
+species_id = "spearow"
+level = 4
+display_name = "Spearow"
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.5
+movement_speed_pixels = 52.0
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=206724298]
 
