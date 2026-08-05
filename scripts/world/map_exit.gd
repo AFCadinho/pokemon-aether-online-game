@@ -11,6 +11,24 @@ const FACING_DIRECTIONS: Array[String] = ["up", "down", "left", "right"]
 var is_transitioning := false
 
 
+func handles_transition(candidate_transition_id: String) -> bool:
+	var normalized_transition_id := candidate_transition_id.strip_edges()
+	return not normalized_transition_id.is_empty() and _resolve_transition_id() == normalized_transition_id
+
+
+func contains_world_position(world_position: Vector2) -> bool:
+	for child: Node in get_children():
+		if not child is CollisionShape2D:
+			continue
+		var collision_shape := child as CollisionShape2D
+		if collision_shape.disabled or collision_shape.shape == null:
+			continue
+		var local_position := collision_shape.to_local(world_position)
+		if _shape_contains_local_position(collision_shape.shape, local_position):
+			return true
+	return false
+
+
 func _on_body_entered(body: Node2D) -> void:
 	if is_transitioning:
 		return
@@ -170,3 +188,13 @@ func _resolve_arrival_facing_direction(player: Node2D) -> String:
 	if abs(direction.x) > abs(direction.y):
 		return "right" if direction.x > 0.0 else "left"
 	return "down" if direction.y > 0.0 else "up"
+
+
+func _shape_contains_local_position(shape: Shape2D, local_position: Vector2) -> bool:
+	if shape is RectangleShape2D:
+		var rectangle := shape as RectangleShape2D
+		return Rect2(-rectangle.size * 0.5, rectangle.size).has_point(local_position)
+	if shape is CircleShape2D:
+		var radius := (shape as CircleShape2D).radius
+		return local_position.length_squared() <= radius * radius
+	return false
