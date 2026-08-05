@@ -95,6 +95,7 @@ const PC_PARTY_HOVER_CARD_SCENE: PackedScene = preload("res://scenes/battle/part
 const POKEMON_SUMMARY_MOVE_REORDER_SLOT_SCRIPT := preload("res://scripts/ui/pokemon_summary_move_reorder_slot.gd")
 const TOWN_MAP_POPUP_SCRIPT := preload("res://scripts/ui/town_map_popup.gd")
 const MOUNT_LOADOUT_PANEL_SCENE: PackedScene = preload("res://scenes/interface/mount_loadout_panel.tscn")
+const SKILLS_PANEL_SCENE: PackedScene = preload("res://scenes/interface/skills_panel.tscn")
 const OVERWORLD_MOVE_ACTION_ICON := preload("res://assets/ui/icons/overworld_move_action.svg")
 const CHAT_RESIZE_ICON: Texture2D = preload("res://assets/ui/chat_resize.svg")
 const GLOBAL_EXP_BUFF_ICON: Texture2D = preload("res://assets/ui/global_exp_boost.svg")
@@ -533,6 +534,8 @@ var quest_journal_view
 @onready var follower_slot: PanelContainer = $Control/ToggleActionsPanel/MarginContainer/HBoxContainer/FollowerSlot
 @onready var follower_toggle_button: TextureButton = $Control/ToggleActionsPanel/MarginContainer/HBoxContainer/FollowerSlot/FollowerToggle
 @onready var mount_button: Button = $Control/MountButton
+@onready var skills_button: Button = $Control/SkillsButton
+var skills_panel: Control
 @onready var item_dex_slot: PanelContainer = $Control/DexActionsPanel/MarginContainer/HBoxContainer/ItemDexSlot
 @onready var item_dex_button: TextureButton = $Control/DexActionsPanel/MarginContainer/HBoxContainer/ItemDexSlot/ItemDexButton
 @onready var pokedex_slot: PanelContainer = $Control/DexActionsPanel/MarginContainer/HBoxContainer/PokedexSlot
@@ -1277,6 +1280,7 @@ func _ready() -> void:
 	_setup_pokedex_button()
 	_setup_town_map_popup()
 	_setup_mount_loadout_panel()
+	_setup_skills_panel()
 	_setup_pokedex_popup()
 	_setup_wild_pokemon_popup()
 	_setup_pc_ui()
@@ -1409,6 +1413,7 @@ func _ready() -> void:
 	follower_toggle_button.set_pressed_no_signal(GameState.show_follower)
 	follower_toggle_button.toggled.connect(_on_follower_toggle_toggled)
 	mount_button.pressed.connect(_on_mount_button_pressed)
+	skills_button.pressed.connect(_on_skills_button_pressed)
 	_load_toggle_preferences.call_deferred()
 	aether_exchange_button.pressed.connect(_on_aether_exchange_button_pressed)
 	dev_actions_button.pressed.connect(_on_dev_actions_button_pressed)
@@ -2870,8 +2875,10 @@ func _apply_ui_z_index_policy() -> void:
 		donator_store_button,
 		settings_button,
 		mount_button,
+		skills_button,
 		my_powers_button,
 		mount_loadout_panel,
+		skills_panel,
 		options_panel,
 		actions_panel,
 		dex_actions_panel,
@@ -2962,6 +2969,7 @@ func _has_visible_priority_overlay_panel() -> bool:
 		item_dex_popup,
 		pokedex_popup,
 		town_map_popup,
+		skills_panel,
 		settings_menu,
 		socials_menu,
 		mail_popup,
@@ -3099,6 +3107,9 @@ func _setup_normal_ui_focus_groups() -> void:
 		mount_button: [
 			^"MountButton",
 		],
+		skills_button: [
+			^"SkillsButton",
+		],
 		my_powers_button: [
 			^"MyPowersButton",
 		],
@@ -3125,6 +3136,7 @@ func _setup_normal_ui_focus_groups() -> void:
 		donator_store_button: [donator_store_button],
 		settings_button: [settings_button],
 		mount_button: [mount_button],
+		skills_button: [skills_button],
 		my_powers_button: [my_powers_button],
 	}
 	for panel_value: Variant in focus_tree_panels.keys():
@@ -8166,6 +8178,8 @@ func _setup_mount_loadout_panel() -> void:
 func _on_mount_button_pressed() -> void:
 	if mount_loadout_panel == null:
 		return
+	if not mount_loadout_panel.visible and skills_panel != null and skills_panel.visible:
+		skills_panel.call("close_manager")
 	mount_loadout_panel.call("toggle_manager")
 	if mount_loadout_panel.visible:
 		_position_mount_loadout_panel()
@@ -8194,6 +8208,56 @@ func _position_mount_loadout_panel() -> void:
 	target_position.x = clampf(target_position.x, 12.0, maxf(parent_size.x - popup_size.x - 12.0, 12.0))
 	target_position.y = clampf(target_position.y, 12.0, maxf(parent_size.y - popup_size.y - 12.0, 12.0))
 	mount_loadout_panel.position = target_position
+
+
+func _setup_skills_panel() -> void:
+	skills_panel = SKILLS_PANEL_SCENE.instantiate() as Control
+	if skills_panel == null:
+		push_warning("UIOverlay: skills panel could not be created.")
+		return
+	skills_panel.z_index = UI_WINDOW_Z_INDEX
+	root_control.add_child(skills_panel)
+	skills_panel.visibility_changed.connect(_on_skills_panel_visibility_changed)
+
+
+func _on_skills_button_pressed() -> void:
+	if skills_panel == null:
+		return
+	if not skills_panel.visible and mount_loadout_panel != null and mount_loadout_panel.visible:
+		mount_loadout_panel.call("close_manager")
+	skills_panel.call("toggle_manager")
+	if skills_panel.visible:
+		_position_skills_panel()
+		_activate_ui_panel(skills_panel)
+	else:
+		_deactivate_ui_panel(skills_panel)
+	_on_skills_panel_visibility_changed()
+
+
+func _on_skills_panel_visibility_changed() -> void:
+	if skills_button != null and skills_panel != null:
+		skills_button.set_pressed_no_signal(skills_panel.visible)
+	if skills_panel != null and not skills_panel.visible:
+		_deactivate_ui_panel(skills_panel)
+
+
+func _position_skills_panel() -> void:
+	if skills_panel == null or skills_button == null:
+		return
+	var parent_control := skills_panel.get_parent_control()
+	if parent_control == null:
+		return
+	var button_rect := skills_button.get_global_rect()
+	var popup_size := skills_panel.size
+	var parent_origin := parent_control.global_position
+	var target_position := Vector2(
+		button_rect.position.x - popup_size.x - 10.0,
+		button_rect.end.y - popup_size.y
+	) - parent_origin
+	var parent_size := parent_control.size
+	target_position.x = clampf(target_position.x, 12.0, maxf(parent_size.x - popup_size.x - 12.0, 12.0))
+	target_position.y = clampf(target_position.y, 12.0, maxf(parent_size.y - popup_size.y - 12.0, 12.0))
+	skills_panel.position = target_position
 
 
 func _on_town_map_popup_closed() -> void:
@@ -9766,8 +9830,10 @@ func is_point_over_visible_ui(global_position: Vector2) -> bool:
 		donator_store_button,
 		settings_button,
 		mount_button,
+		skills_button,
 		my_powers_button,
 		mount_loadout_panel,
+		skills_panel,
 		options_panel,
 		actions_panel,
 		dex_actions_panel,
@@ -21704,7 +21770,7 @@ func _setup_collapsible_panels() -> void:
 		player_status_panel,
 		"left",
 		null,
-		[personal_buffs_panel, settings_button, mount_button, donator_store_button, my_powers_button]
+		[personal_buffs_panel, settings_button, mount_button, skills_button, donator_store_button, my_powers_button]
 	)
 	_register_collapsible_panel("party", party_panel, "right")
 	_register_collapsible_panel("location", location_panel, "right_center", null, [global_buffs_panel])
@@ -35391,6 +35457,7 @@ func _disable_icon_button_focus() -> void:
 		quest_button,
 		settings_button,
 		mount_button,
+		skills_button,
 		my_powers_button,
 		donator_store_button,
 		wild_pokemon_button,

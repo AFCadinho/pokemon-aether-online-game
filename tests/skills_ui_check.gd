@@ -1,0 +1,116 @@
+extends SceneTree
+
+const SKILLS_PANEL_PATH := "res://scenes/interface/skills_panel.tscn"
+
+var failed := false
+
+
+func _init() -> void:
+	_run.call_deferred()
+
+
+func _run() -> void:
+	var skills_service := root.get_node_or_null("SkillsService")
+	_check(skills_service != null, "SkillsService is available as an autoload")
+	if skills_service == null:
+		quit(1)
+		return
+
+	var overlay_scene := FileAccess.get_file_as_string("res://scenes/interface/ui_overlay.tscn")
+	var overlay_script := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
+	_check(
+		overlay_scene.contains('[node name="SkillsButton" type="Button" parent="Control"]')
+		and overlay_scene.contains('path="res://assets/ui/skills.svg" id="34_skills"')
+		and overlay_scene.contains('icon = ExtResource("34_skills")'),
+		"the bottom-right utility rail contains one Skills button"
+	)
+	_check(
+		overlay_script.contains("SKILLS_PANEL_SCENE")
+		and overlay_script.contains("skills_button.pressed.connect(_on_skills_button_pressed)")
+		and overlay_script.contains("func _position_skills_panel()"),
+		"the overlay connects and positions the Skills window"
+	)
+	var overlay_packed := load("res://scenes/interface/ui_overlay.tscn") as PackedScene
+	_check(overlay_packed != null, "the complete overworld overlay still loads")
+	var overlay := overlay_packed.instantiate() as CanvasLayer
+	root.add_child(overlay)
+	await process_frame
+	_check(overlay.get_node_or_null("Control/SkillsButton") is Button, "the runtime overlay exposes the Skills button")
+	_check(overlay.get("skills_panel") is Control, "the runtime overlay creates the Skills window")
+	overlay.queue_free()
+	await process_frame
+
+	var panel_scene := load(SKILLS_PANEL_PATH) as PackedScene
+	_check(panel_scene != null, "Skills panel scene loads")
+	var panel := panel_scene.instantiate() as Control
+	root.add_child(panel)
+	await process_frame
+	_check(not panel.visible, "Skills panel starts hidden")
+
+	var test_skills: Array = [
+		{
+			"id": "fishing",
+			"nameKey": "ui.skills.fishing.name",
+			"descriptionKey": "ui.skills.fishing.description",
+			"level": 10,
+			"maxLevel": 100,
+			"totalExperience": 300,
+			"experienceIntoLevel": 30,
+			"experienceForNextLevel": 70,
+			"progressPercent": 42.86,
+			"stats": {"activeTier": 2, "badgeCount": 3},
+			"unlocks": [
+				{"id": "old_rod", "requiredLevel": 1, "unlocked": true, "labelKey": "ui.skills.unlock.old_rod"},
+				{"id": "good_rod", "requiredLevel": 10, "unlocked": true, "labelKey": "ui.skills.unlock.good_rod"},
+			],
+		},
+		{
+			"id": "thieving",
+			"nameKey": "ui.skills.thieving.name",
+			"descriptionKey": "ui.skills.thieving.description",
+			"level": 20,
+			"maxLevel": 100,
+			"totalExperience": 9500,
+			"experienceIntoLevel": 0,
+			"experienceForNextLevel": 1000,
+			"progressPercent": 0.0,
+			"stats": {"currency": 42, "wanted": 65, "rewardBonusPercent": 19, "wantedReductionPercent": 9.5, "maximumCatchReductionPercent": 3.8},
+			"unlocks": [
+				{"id": "civilian", "requiredLevel": 1, "unlocked": true, "labelKey": "ui.skills.unlock.civilian"},
+				{"id": "trainer", "requiredLevel": 10, "unlocked": true, "labelKey": "ui.skills.unlock.trainer"},
+				{"id": "veteran", "requiredLevel": 20, "unlocked": true, "labelKey": "ui.skills.unlock.veteran"},
+			],
+		},
+	]
+	skills_service.set("skills", test_skills)
+	skills_service.set("state_loaded", true)
+	panel.call("_render_skills", test_skills)
+	panel.visible = true
+	_check((panel.get("skill_cards") as HBoxContainer).get_child_count() == 2, "Fishing and Thieving receive separate skill cards")
+	_check((panel.get("detail_name") as Label).text == "Thieving", "Thieving is the initial detailed skill")
+	_check((panel.get("detail_level") as Label).text.contains("20"), "the detail view shows the server level")
+	_check((panel.get("stats_label") as Label).text.contains("42"), "Thieving currency and modifiers are visible")
+	_check((panel.get("unlocks_container") as VBoxContainer).get_child_count() == 3, "level-gated target unlocks are listed")
+	panel.call("_select_skill", "fishing")
+	_check((panel.get("detail_name") as Label).text == "Fishing", "skill cards switch the detailed view")
+	_check(is_equal_approx((panel.get("experience_bar") as ProgressBar).value, 42.86), "XP progress uses the server percentage")
+
+	for locale_path: String in [
+		"res://localization/en.json",
+		"res://localization/nl.json",
+		"res://localization/pt_BR.json",
+	]:
+		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(locale_path))
+		_check(parsed is Dictionary and (parsed as Dictionary).has("ui.skills.thieving.name"), "%s contains Skills translations" % locale_path)
+
+	panel.queue_free()
+	await process_frame
+	quit(1 if failed else 0)
+
+
+func _check(condition: bool, message: String) -> void:
+	if condition:
+		print("PASS ", message)
+		return
+	failed = true
+	push_error("FAIL %s" % message)
