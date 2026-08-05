@@ -23,6 +23,9 @@
 [ext_resource type="Texture2D" uid="uid://l4jsju4s8v3a" path="res://assets/sprites/trainer_cards/showdown/fisherman-gen6.png" id="29_fisherman_card"]
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="30_dialogue_npc"]
 [ext_resource type="SpriteFrames" uid="uid://yaxkjlx3spjb" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="31_poke_fan_f"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/poke_fan_m_frames.tres" id="32_poke_fan_m"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/school_kid_m_frames.tres" id="33_school_kid_m"]
+[ext_resource type="Script" path="res://scripts/world/npcs/synchronized_playmate_npc.gd" id="34_playmate"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6lp0i"]
 atlas = ExtResource("4_3oirl")
@@ -2279,6 +2282,33 @@ npc_definition_id = "trainer_class_poke_fan_f"
 display_name = "Pallet Resident Mara"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("31_poke_fan_f")
+
+[node name="PlayFamilyFather" parent="Entities/NPCs" instance=ExtResource("30_dialogue_npc")]
+position = Vector2(272, 240)
+npc_id = "kanto_pallet_town_play_family_father"
+npc_definition_id = "trainer_class_poke_fan_m"
+display_name = "Pallet Parent Aaron"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("32_poke_fan_m")
+
+[node name="PlayFamilyMother" parent="Entities/NPCs" instance=ExtResource("30_dialogue_npc")]
+position = Vector2(368, 240)
+npc_id = "kanto_pallet_town_play_family_mother"
+npc_definition_id = "trainer_class_poke_fan_f"
+display_name = "Pallet Parent Mina"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("31_poke_fan_f")
+
+[node name="PlayFamilyChild" parent="Entities/NPCs" instance=ExtResource("30_dialogue_npc")]
+position = Vector2(240, 400)
+script = ExtResource("34_playmate")
+npc_id = "kanto_pallet_town_play_family_child"
+npc_definition_id = "trainer_class_school_kid_m"
+display_name = "Pallet Kid Leo"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("33_school_kid_m")
+movement_target_path = NodePath("../../Pokemon/Pikachu")
+movement_offset = Vector2(0, -64)
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=245092271]
 

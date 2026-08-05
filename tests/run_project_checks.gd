@@ -110,6 +110,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/wild_encounter_error_rules_check.gd",
 	"res://tests/wild_encounter_transition_check.gd",
 	"res://tests/pallet_town_encounter_check.gd",
+	"res://tests/pallet_town_play_family_check.gd",
 	"res://tests/route_2_viridian_forest_encounter_check.gd",
 	"res://tests/route_2_viridian_forest_gate_transition_check.gd",
 	"res://tests/ambient_overworld_pokemon_check.gd",
