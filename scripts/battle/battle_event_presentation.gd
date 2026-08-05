@@ -289,6 +289,7 @@ func build(event_data: Dictionary) -> Dictionary:
 			recent_move_event = false
 			presentation["effect_animation_key"] = _get_status_condition_effect_animation_key(event_data)
 			presentation["effect_animation_target_ident"] = str(event_data.get("target", event_data.get("pokemon", "")))
+			presentation["pre_log_message"] = event_text_formatter.format_status_source_ability_event(event_data)
 			presentation["log_message"] = event_text_formatter.format_status_event(event_data)
 			presentation["battle_message"] = str(presentation["log_message"])
 			presentation["add_blank_after"] = str(presentation["log_message"]) != ""

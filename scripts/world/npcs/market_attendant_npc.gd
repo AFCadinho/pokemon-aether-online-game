@@ -26,6 +26,12 @@ var quest_reward_received_dialogue_id := ""
 
 
 func interact_with_player(_player: Node2D) -> void:
+	var access: Dictionary = await ThievingService.use_public_service("market")
+	if not bool(access.get("success", false)):
+		await GameErrorDialogService.show_response(access, "backend.error.market_load")
+		return
+	if not bool(access.get("allowed", true)):
+		return
 	var metadata_response: Dictionary = await _load_npc_metadata()
 	if not bool(metadata_response.get("success", false)):
 		await _show_report_to_staff_message()

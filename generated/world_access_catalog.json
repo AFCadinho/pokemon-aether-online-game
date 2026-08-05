@@ -56,16 +56,6 @@
 						"y": 13
 					}
 				},
-				"heal_npc": {
-					"facingDirection": "down",
-					"label": "Heal NPC",
-					"safeForStaffTeleport": true,
-					"spawnMarker": "HealNPC",
-					"tile": {
-						"x": 11,
-						"y": 8
-					}
-				},
 				"oaks_lab_entrance": {
 					"facingDirection": "up",
 					"label": "Oak's Lab Entrance",
@@ -258,6 +248,16 @@
 						"y": 10
 					}
 				},
+				"mom_heal": {
+					"facingDirection": "down",
+					"label": "Mom Heal",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "MomHeal",
+					"tile": {
+						"x": 10,
+						"y": 28
+					}
+				},
 				"upper_floor_stairs": {
 					"facingDirection": "down",
 					"label": "Upper Floor Stairs",
@@ -440,8 +440,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromViridianCity",
 					"tile": {
-						"x": 22,
-						"y": 9
+						"x": 83,
+						"y": 15
 					}
 				}
 			}
@@ -560,8 +560,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromPokecenter",
 					"tile": {
-						"x": 32,
-						"y": 20
+						"x": 35,
+						"y": 46
 					}
 				},
 				"from_route_2": {
@@ -570,8 +570,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute2",
 					"tile": {
-						"x": 24,
-						"y": 1
+						"x": 28,
+						"y": 2
 					}
 				},
 				"route_1_entrance": {
@@ -580,8 +580,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute1",
 					"tile": {
-						"x": 24,
-						"y": 37
+						"x": 42,
+						"y": 62
 					}
 				},
 				"route_22_entrance": {
@@ -590,8 +590,18 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute22",
 					"tile": {
-						"x": 1,
-						"y": 19
+						"x": 2,
+						"y": 38
+					}
+				},
+				"viridian_jail": {
+					"facingDirection": "down",
+					"label": "Viridian Jail",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "ViridianJail",
+					"tile": {
+						"x": 48,
+						"y": 43
 					}
 				}
 			}
@@ -849,8 +859,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
 				"position": {
-					"x": 48.0,
-					"y": 624.0
+					"x": 80.0,
+					"y": 1232.0
 				},
 				"spawnMarker": "FromRoute22"
 			},
@@ -909,8 +919,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
 				"position": {
-					"x": 784.0,
-					"y": 48.0
+					"x": 912.0,
+					"y": 80.0
 				},
 				"spawnMarker": "FromRoute2"
 			},
@@ -1095,8 +1105,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_22.tscn",
 				"position": {
-					"x": 720.0,
-					"y": 304.0
+					"x": 2656.0,
+					"y": 480.0
 				},
 				"spawnMarker": "FromViridianCity"
 			},
@@ -1111,8 +1121,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
 				"position": {
-					"x": 1040.0,
-					"y": 656.0
+					"x": 1136.0,
+					"y": 1488.0
 				},
 				"spawnMarker": "FromPokecenter"
 			},
@@ -1155,8 +1165,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
 				"position": {
-					"x": 784.0,
-					"y": 1200.0
+					"x": 1360.0,
+					"y": 2000.0
 				},
 				"spawnMarker": "FromRoute1"
 			},

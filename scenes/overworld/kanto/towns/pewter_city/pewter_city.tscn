@@ -6,7 +6,6 @@
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="4_metadata"]
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="5_2mtwu"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="6_frcun"]
-[ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="6_iv6v0"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="6_kp2ru"]
 [ext_resource type="Texture2D" uid="uid://2qey36patp5j" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_080_Worker.png" id="6_rwph1"]
 [ext_resource type="Script" uid="uid://babnhtwtaiewv" path="res://scripts/world/map_door_animator.gd" id="7_door_animator"]
@@ -20,6 +19,13 @@
 [ext_resource type="Resource" uid="uid://bnjoxn7rvxpam" path="res://resources/npcs/gym_leaders/alpha_brock.tres" id="15_brock"]
 [ext_resource type="Resource" uid="uid://c3alv8nu8paur" path="res://resources/npcs/gym_leaders/alpha_misty.tres" id="16_misty"]
 [ext_resource type="Resource" uid="uid://dmm23s1e2m34y" path="res://resources/npcs/gym_leaders/alpha_lt_surge.tres" id="17_surge"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="18_dialogue"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/scientist_m_frames.tres" id="19_scientist"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/hiker_frames.tres" id="20_hiker"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/youngster_frames.tres" id="21_youngster"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/worker_frames.tres" id="22_worker"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="23_poke_fan_f"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="24_pokemon"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2mtwu"]
 size = Vector2(32, 32)
@@ -289,14 +295,6 @@ z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1616337549]
 
-[node name="GateNPC" parent="Entities/NPCs" unique_id=257955404 instance=ExtResource("6_iv6v0")]
-position = Vector2(1776, 1008)
-requires_staff_role = true
-blocked_dialogue_id = "kanto_pallet_town_north_guard_blocked"
-allowed_dialogue_id = "kanto_pallet_town_north_guard_default"
-npc_id = "kanto_pallet_town_north_guard"
-npc_sprite_frames = SubResource("SpriteFrames_2pdw6")
-
 [node name="AlphaGymBrock" parent="Entities/NPCs" unique_id=101151216 instance=ExtResource("14_gym_leader")]
 position = Vector2(464, 624)
 trainer_id = "kanto_alpha_gym_brock"
@@ -305,25 +303,72 @@ npc_id = "kanto_alpha_gym_brock"
 display_name = "Alpha Trial · Brock"
 npc_sprite_frames = ExtResource("11_yr2ka")
 
-[node name="AlphaGymMisty" parent="Entities/NPCs" unique_id=142669909 instance=ExtResource("14_gym_leader")]
-position = Vector2(656, 624)
-trainer_id = "kanto_alpha_gym_misty"
-npc_profile = ExtResource("16_misty")
-npc_id = "kanto_alpha_gym_misty"
-display_name = "Alpha Trial · Misty"
-npc_sprite_frames = ExtResource("13_cisdr")
+[node name="MuseumGuideTheo" parent="Entities/NPCs" instance=ExtResource("18_dialogue")]
+position = Vector2(1504, 400)
+npc_id = "kanto_pewter_city_museum_guide_theo"
+npc_definition_id = "trainer_class_scientist_m"
+display_name = "Museum Guide Theo"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("19_scientist")
 
-[node name="AlphaGymLtSurge" parent="Entities/NPCs" unique_id=451315257 instance=ExtResource("14_gym_leader")]
-position = Vector2(816, 624)
-trainer_id = "kanto_alpha_gym_lt_surge"
-npc_profile = ExtResource("17_surge")
-npc_id = "kanto_alpha_gym_lt_surge"
-display_name = "Alpha Trial · Lt. Surge"
-npc_sprite_frames = ExtResource("15_3ghgs")
+[node name="HikerBruno" parent="Entities/NPCs" instance=ExtResource("18_dialogue")]
+position = Vector2(256, 416)
+npc_id = "kanto_pewter_city_hiker_bruno"
+npc_definition_id = "trainer_class_hiker"
+display_name = "Hiker Bruno"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("20_hiker")
+
+[node name="GymFanMax" parent="Entities/NPCs" instance=ExtResource("18_dialogue")]
+position = Vector2(576, 528)
+npc_id = "kanto_pewter_city_gym_fan_max"
+npc_definition_id = "trainer_class_youngster"
+display_name = "Gym Fan Max"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("21_youngster")
+
+[node name="DigSiteWorkerCole" parent="Entities/NPCs" instance=ExtResource("18_dialogue")]
+position = Vector2(352, 608)
+npc_id = "kanto_pewter_city_worker_cole"
+npc_definition_id = "trainer_class_worker"
+display_name = "Worker Cole"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("22_worker")
+
+[node name="PewterResidentNora" parent="Entities/NPCs" instance=ExtResource("18_dialogue")]
+position = Vector2(1024, 832)
+npc_id = "kanto_pewter_city_resident_nora"
+npc_definition_id = "trainer_class_poke_fan_f"
+display_name = "Pewter Resident Nora"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("23_poke_fan_f")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=913732015]
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=644053637]
+
+[node name="Geodude" parent="Entities/Pokemon" instance=ExtResource("24_pokemon")]
+position = Vector2(1376, 400)
+overworld_pokemon_id = "kanto_pewter_city_geodude_1"
+species_id = "geodude"
+level = 7
+display_name = "Geodude"
+facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 2.0
+movement_speed_pixels = 38.0
+
+[node name="Pidgey" parent="Entities/Pokemon" instance=ExtResource("24_pokemon")]
+position = Vector2(896, 832)
+overworld_pokemon_id = "kanto_pewter_city_pidgey_1"
+species_id = "pidgey"
+level = 5
+display_name = "Pidgey"
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.5
+movement_speed_pixels = 48.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1638978152]
 
@@ -346,11 +391,6 @@ visible = false
 z_index = 100
 tile_map_data = PackedByteArray("AAAKACUAAAABAAEAAAAJACUAAAABAAEAAAAIACUAAAABAAEAAAAHACUAAAABAAEAAAAQACQAAAABAAEAAAARACQAAAABAAEAAAASACQAAAABAAEAAAATACQAAAABAAEAAAAUACQAAAABAAEAAAAVACQAAAABAAEAAAAWACQAAAABAAEAAAAXACQAAAABAAEAAAAQACMAAAABAAEAAAARACMAAAABAAEAAAASACMAAAABAAEAAAATACMAAAABAAEAAAAUACMAAAABAAEAAAAVACMAAAABAAEAAAAWACMAAAABAAEAAAAXACMAAAABAAEAAAAMACMAAAABAAEAAAALACMAAAABAAEAAAAKACMAAAABAAEAAAAJACMAAAABAAEAAAA=")
 tile_set = SubResource("TileSet_2pdw6")
-
-[node name="RouteGates" type="TileMapLayer" parent="." unique_id=19996405]
-visible = false
-tile_map_data = PackedByteArray("AAA4AB8AAAABAAIAAAA4ACAAAAABAAIAAAA4ACEAAAABAAIAAAA4ACIAAAABAAIAAAA4ACMAAAABAAIAAAA4ACQAAAABAAIAAAA=")
-tile_set = SubResource("TileSet_frcun")
 
 [node name="NightLights" type="Node2D" parent="." unique_id=1917691000]
 

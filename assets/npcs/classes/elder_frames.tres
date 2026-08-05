@@ -1,0 +1,18 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://ctgjk0yaqmm8o"]
+
+[ext_resource type="Texture2D" uid="uid://bd44eqmxx8uk2" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_073_Elder.png" id="1_texture"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_default"]
+atlas = ExtResource("1_texture")
+region = Rect2(0, 0, 64, 64)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_default")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
