@@ -100,12 +100,19 @@ func _collect_npc_cells(map: Node, collision: TileMapLayer) -> Dictionary:
 	if npc_root == null:
 		return cells
 	for node: Node in npc_root.find_children("*", "", true, false):
-		if not node is BaseNPC:
+		if not node is Node2D or not _has_property(node, &"npc_id"):
 			continue
 		var npc := node as Node2D
 		var cell := collision.local_to_map(collision.to_local(npc.global_position))
 		cells[cell] = true
 	return cells
+
+
+func _has_property(object: Object, property_name: StringName) -> bool:
+	for property: Dictionary in object.get_property_list():
+		if property.get("name") == property_name:
+			return true
+	return false
 
 
 func _check_movement_lane(pokemon: Node2D, collision: TileMapLayer, cell: Vector2i) -> void:
