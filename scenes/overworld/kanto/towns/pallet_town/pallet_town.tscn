@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="5_n6c5k"]
 [ext_resource type="Texture2D" uid="uid://ba8f0l65uv4cv" path="res://assets/tilesets/overworld/JohtoFX.png" id="5_uujun"]
 [ext_resource type="PackedScene" uid="uid://br7n6hywfrl2a" path="res://scenes/npcs/heal_npc.tscn" id="6_jhh0g"]
-[ext_resource type="Texture2D" uid="uid://dgvhjpghervgq" path="res://assets/sprites/mugshots/ace_trainer.png" id="7_66okb"]
+[ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/acetrainer-gen6.png" id="7_66okb"]
 [ext_resource type="Texture2D" uid="uid://b6drbo1a67h55" path="res://assets/tilesets/overworld/nature/ledges/ledges.png" id="7_fiq1l"]
 [ext_resource type="Texture2D" uid="uid://cnixsmivuhykq" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_068_Fisherman.png" id="9_q27eu"]
 [ext_resource type="PackedScene" uid="uid://bql6a1hbx7o2m" path="res://scenes/npcs/boss_battle_npc.tscn" id="9_s3ag2"]
@@ -26,6 +26,7 @@
 [ext_resource type="PackedScene" path="res://scenes/npcs/item_gift_npc.tscn" id="26_item_gift"]
 [ext_resource type="Texture2D" uid="uid://e2ksljyggppg" path="res://assets/tilesets/fiver/tiles_env2_floors32.png" id="27_q27eu"]
 [ext_resource type="Resource" path="res://resources/npcs/trainers/trainer_red_boss.tres" id="28_trainer_red_profile"]
+[ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/fisherman-gen6.png" id="29_fisherman_card"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6lp0i"]
 atlas = ExtResource("4_3oirl")
@@ -2327,6 +2328,7 @@ reward_id = "kanto_pallet_town_old_rod"
 npc_id = "kanto_pallet_town_fishing_guru"
 facing_direction = Vector2(0, 1)
 npc_sprite_frames = SubResource("SpriteFrames_27c3h")
+mugshot = ExtResource("29_fisherman_card")
 
 [node name="BossBattle" type="Node2D" parent="Entities/NPCs" unique_id=1297212386]
 
