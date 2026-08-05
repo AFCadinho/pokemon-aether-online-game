@@ -16,6 +16,18 @@ const BADGES: Array[Dictionary] = [
 	{"id": "volcano", "name": "Volcano", "texture": "res://assets/gym_badges/kanto_badges/Volcano_Badge.png"},
 	{"id": "earth", "name": "Earth", "texture": "res://assets/gym_badges/kanto_badges/Earth_Badge.png"},
 ]
+const KEY_ITEMS: Array[Dictionary] = [
+	{
+		"id": "pokedex",
+		"name_key": "ui.staff.key_items.pokedex",
+		"texture": "res://assets/ui/pokedex.svg",
+	},
+	{
+		"id": "town-map",
+		"name_key": "ui.staff.key_items.town_map",
+		"texture": "res://assets/ui/town_map_navigation.svg",
+	},
+]
 
 const UI_BG := Color("#050b14fa")
 const UI_SURFACE := Color("#0a1726f5")
@@ -28,10 +40,19 @@ const UI_SUCCESS := Color("#79e49b")
 const UI_ERROR := Color("#ff8393")
 
 var status_label: Label
+var key_item_status_label: Label
+var badge_content: VBoxContainer
+var key_item_content: VBoxContainer
+var badge_tab_button: Button
+var key_item_tab_button: Button
 var badge_buttons: Dictionary = {}
 var badge_icon_rects: Dictionary = {}
 var badge_status_labels: Dictionary = {}
 var badge_state: Dictionary = {}
+var key_item_buttons: Dictionary = {}
+var key_item_status_labels: Dictionary = {}
+var key_item_state: Dictionary = {}
+var active_tab := "badges"
 var busy := false
 var dragging := false
 
@@ -53,6 +74,8 @@ func _ready() -> void:
 func open() -> void:
 	visible = true
 	_center_in_viewport()
+	_show_tab(active_tab)
+	_load_key_items.call_deferred()
 	_set_status(_t("ui.staff.badges.loading"), false)
 	_set_busy(true)
 	var service := get_node_or_null("/root/BadgeProgressionService")
@@ -113,7 +136,7 @@ func _build_ui() -> void:
 	heading.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	header.add_child(heading)
 	heading.add_child(_localized_label("ui.staff.dev.trainer_progress", 20, UI_TEXT))
-	heading.add_child(_localized_label("ui.staff.badges.subtitle", 11, UI_MUTED))
+	heading.add_child(_localized_label("ui.staff.dev.trainer_progress_description", 11, UI_MUTED))
 
 	var close_button := Button.new()
 	close_button.name = "CloseButton"
@@ -125,9 +148,38 @@ func _build_ui() -> void:
 	_apply_button_style(close_button, false)
 	header.add_child(close_button)
 
+	var tabs := HBoxContainer.new()
+	tabs.name = "ProgressTabs"
+	tabs.add_theme_constant_override("separation", 8)
+	layout.add_child(tabs)
+
+	badge_tab_button = Button.new()
+	badge_tab_button.name = "BadgesTabButton"
+	badge_tab_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	badge_tab_button.custom_minimum_size = Vector2(0, 38)
+	badge_tab_button.focus_mode = Control.FOCUS_NONE
+	_set_localized_property(badge_tab_button, "text", "ui.staff.trainer_progress.badges")
+	badge_tab_button.pressed.connect(_show_tab.bind("badges"))
+	tabs.add_child(badge_tab_button)
+
+	key_item_tab_button = Button.new()
+	key_item_tab_button.name = "KeyItemsTabButton"
+	key_item_tab_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	key_item_tab_button.custom_minimum_size = Vector2(0, 38)
+	key_item_tab_button.focus_mode = Control.FOCUS_NONE
+	_set_localized_property(key_item_tab_button, "text", "ui.staff.trainer_progress.key_items")
+	key_item_tab_button.pressed.connect(_show_tab.bind("key_items"))
+	tabs.add_child(key_item_tab_button)
+
+	badge_content = VBoxContainer.new()
+	badge_content.name = "BadgesContent"
+	badge_content.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	badge_content.add_theme_constant_override("separation", 12)
+	layout.add_child(badge_content)
+
 	var notice := PanelContainer.new()
 	notice.add_theme_stylebox_override("panel", _panel_style(Color("#112033e8"), Color("#486888aa"), 9, 1))
-	layout.add_child(notice)
+	badge_content.add_child(notice)
 	var notice_margin := MarginContainer.new()
 	_set_margins(notice_margin, 12, 9, 12, 9)
 	notice.add_child(notice_margin)
@@ -145,7 +197,7 @@ func _build_ui() -> void:
 	grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	grid.add_theme_constant_override("h_separation", 9)
 	grid.add_theme_constant_override("v_separation", 9)
-	layout.add_child(grid)
+	badge_content.add_child(grid)
 
 	for definition: Dictionary in BADGES:
 		var button := Button.new()
@@ -195,7 +247,7 @@ func _build_ui() -> void:
 
 	var footer := HBoxContainer.new()
 	footer.add_theme_constant_override("separation", 8)
-	layout.add_child(footer)
+	badge_content.add_child(footer)
 
 	var first_three_button := Button.new()
 	first_three_button.name = "GrantFirstThreeButton"
@@ -223,7 +275,101 @@ func _build_ui() -> void:
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	footer.add_child(status_label)
+
+	_build_key_items_ui(layout)
+	_show_tab(active_tab)
 	_render_badges()
+	_render_key_items()
+
+
+func _build_key_items_ui(layout: VBoxContainer) -> void:
+	key_item_content = VBoxContainer.new()
+	key_item_content.name = "KeyItemsContent"
+	key_item_content.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	key_item_content.add_theme_constant_override("separation", 12)
+	layout.add_child(key_item_content)
+
+	var notice := PanelContainer.new()
+	notice.add_theme_stylebox_override("panel", _panel_style(Color("#112033e8"), Color("#486888aa"), 9, 1))
+	key_item_content.add_child(notice)
+	var notice_margin := MarginContainer.new()
+	_set_margins(notice_margin, 12, 9, 12, 9)
+	notice.add_child(notice_margin)
+	notice_margin.add_child(_localized_label("ui.staff.key_items.notice", 11, UI_MUTED))
+
+	var item_grid := GridContainer.new()
+	item_grid.name = "KeyItemGrid"
+	item_grid.columns = 2
+	item_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	item_grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	item_grid.add_theme_constant_override("h_separation", 12)
+	key_item_content.add_child(item_grid)
+
+	for definition: Dictionary in KEY_ITEMS:
+		var item_id := str(definition.get("id", ""))
+		var button := Button.new()
+		button.name = "%sKeyItemButton" % item_id.replace("-", " ").capitalize().replace(" ", "")
+		button.custom_minimum_size = Vector2(0, 230)
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		button.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		button.focus_mode = Control.FOCUS_NONE
+		button.pressed.connect(_grant_key_items.bind([item_id]))
+
+		var tile_margin := MarginContainer.new()
+		tile_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		tile_margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		_set_margins(tile_margin, 12, 12, 12, 12)
+		button.add_child(tile_margin)
+		var tile_layout := VBoxContainer.new()
+		tile_layout.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		tile_layout.alignment = BoxContainer.ALIGNMENT_CENTER
+		tile_layout.add_theme_constant_override("separation", 8)
+		tile_margin.add_child(tile_layout)
+
+		var icon_center := CenterContainer.new()
+		icon_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		icon_center.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		tile_layout.add_child(icon_center)
+		var icon := TextureRect.new()
+		icon.custom_minimum_size = Vector2(92, 92)
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var texture_path := str(definition.get("texture", ""))
+		if ResourceLoader.exists(texture_path):
+			icon.texture = load(texture_path) as Texture2D
+		icon_center.add_child(icon)
+
+		var name_label := _localized_label(str(definition.get("name_key", "")), 16, UI_TEXT)
+		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		tile_layout.add_child(name_label)
+		var state_label := _localized_label("ui.staff.key_items.missing", 10, UI_MUTED)
+		state_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		state_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		tile_layout.add_child(state_label)
+
+		_apply_button_style(button, false)
+		item_grid.add_child(button)
+		key_item_buttons[item_id] = button
+		key_item_status_labels[item_id] = state_label
+
+	var footer := HBoxContainer.new()
+	footer.add_theme_constant_override("separation", 8)
+	key_item_content.add_child(footer)
+	var grant_all_button := Button.new()
+	grant_all_button.name = "GrantAllKeyItemsButton"
+	grant_all_button.custom_minimum_size = Vector2(190, 38)
+	_set_localized_property(grant_all_button, "text", "ui.staff.key_items.grant_all")
+	grant_all_button.pressed.connect(_grant_all_key_items)
+	_apply_button_style(grant_all_button, true)
+	footer.add_child(grant_all_button)
+
+	key_item_status_label = _label("", 11, UI_MUTED)
+	key_item_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	key_item_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	key_item_status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	footer.add_child(key_item_status_label)
 
 
 func _toggle_badge(badge_id: String) -> void:
@@ -262,6 +408,125 @@ func _submit_badges(badge_ids: Array[String], earned: bool) -> void:
 		_set_status(str(result.get("error", _t("ui.staff.badges.update_failed"))), true)
 		return
 	set_badge_state(result)
+
+
+func _show_tab(tab_id: String) -> void:
+	active_tab = "key_items" if tab_id == "key_items" else "badges"
+	if badge_content != null:
+		badge_content.visible = active_tab == "badges"
+	if key_item_content != null:
+		key_item_content.visible = active_tab == "key_items"
+	if badge_tab_button != null:
+		_apply_button_style(badge_tab_button, active_tab == "badges")
+	if key_item_tab_button != null:
+		_apply_button_style(key_item_tab_button, active_tab == "key_items")
+
+
+func _load_key_items() -> void:
+	_set_key_item_status(_t("ui.staff.key_items.loading"), false)
+	var service := get_node_or_null("/root/InventoryService")
+	if service == null or not service.has_method("load_inventory"):
+		_set_key_item_status(_t("ui.staff.key_items.unavailable"), true)
+		return
+	var result: Dictionary = await service.call("load_inventory")
+	if not visible:
+		return
+	if not bool(result.get("success", false)):
+		_set_key_item_status(str(result.get("error", _t("ui.staff.key_items.load_failed"))), true)
+		return
+	_set_key_item_state(result.get("items", []))
+
+
+func _set_key_item_state(items_value: Variant) -> void:
+	key_item_state.clear()
+	if items_value is Array:
+		for value: Variant in items_value as Array:
+			if not (value is Dictionary):
+				continue
+			var item := value as Dictionary
+			var item_id := str(item.get("itemId", item.get("item_id", item.get("id", "")))).strip_edges().to_lower()
+			if item_id != "" and int(item.get("quantity", 0)) > 0:
+				key_item_state[item_id] = true
+	_set_key_item_status("", false)
+	_render_key_items()
+
+
+func _grant_all_key_items() -> void:
+	var item_ids: Array[String] = []
+	for definition: Dictionary in KEY_ITEMS:
+		item_ids.append(str(definition.get("id", "")))
+	await _grant_key_items(item_ids)
+
+
+func _grant_key_items(item_ids: Array) -> void:
+	if busy:
+		return
+	var missing_ids: Array[String] = []
+	for item_id_value: Variant in item_ids:
+		var item_id := str(item_id_value).strip_edges().to_lower()
+		if item_id != "" and not bool(key_item_state.get(item_id, false)):
+			missing_ids.append(item_id)
+	if missing_ids.is_empty():
+		_set_key_item_status(_t("ui.staff.key_items.already_owned"), false)
+		return
+
+	var service := get_node_or_null("/root/InventoryService")
+	if service == null or not service.has_method("dev_add_item"):
+		_set_key_item_status(_t("ui.staff.key_items.unavailable"), true)
+		return
+
+	_set_busy(true)
+	_set_key_item_status(_t("ui.staff.key_items.saving"), false)
+	var latest_items: Variant = []
+	for item_id: String in missing_ids:
+		var result: Dictionary = await service.call("dev_add_item", item_id, 1)
+		if not bool(result.get("success", false)):
+			_set_busy(false)
+			_set_key_item_status(str(result.get("error", _t("ui.staff.key_items.update_failed"))), true)
+			_render_key_items()
+			return
+		latest_items = result.get("items", latest_items)
+
+	if service.has_method("load_inventory"):
+		var inventory_result: Dictionary = await service.call("load_inventory")
+		if bool(inventory_result.get("success", false)):
+			latest_items = inventory_result.get("items", latest_items)
+	_set_busy(false)
+	_set_key_item_state(latest_items)
+	_set_key_item_status(_t("ui.staff.key_items.added"), false)
+
+
+func _render_key_items() -> void:
+	var owned_count := 0
+	for definition: Dictionary in KEY_ITEMS:
+		var item_id := str(definition.get("id", ""))
+		var owned := bool(key_item_state.get(item_id, false))
+		if owned:
+			owned_count += 1
+		var button := key_item_buttons.get(item_id) as Button
+		if button != null:
+			button.disabled = busy or owned
+			button.tooltip_text = _t(
+				"ui.staff.key_items.owned" if owned else "ui.staff.key_items.grant"
+			)
+			button.add_theme_stylebox_override(
+				"normal",
+				_panel_style(
+					Color("#112b27f2") if owned else UI_SURFACE,
+					UI_SUCCESS if owned else UI_BORDER,
+					9,
+					1
+				)
+			)
+		var state_label := key_item_status_labels.get(item_id) as Label
+		if state_label != null:
+			state_label.text = _t("ui.staff.key_items.owned" if owned else "ui.staff.key_items.missing")
+			state_label.add_theme_color_override("font_color", UI_SUCCESS if owned else UI_MUTED)
+	if not busy and key_item_status_label != null and key_item_status_label.text == "":
+		_set_key_item_status(_t("ui.staff.key_items.progress", {
+			"owned": owned_count,
+			"total": KEY_ITEMS.size(),
+		}), false)
 
 
 func _render_badges() -> void:
@@ -318,6 +583,7 @@ func _set_busy(value: bool) -> void:
 		var button := button_node as Button
 		if button != null and button.name != "CloseButton":
 			button.disabled = value
+	_render_key_items()
 
 
 func _set_status(message: String, is_error: bool) -> void:
@@ -325,6 +591,13 @@ func _set_status(message: String, is_error: bool) -> void:
 		return
 	status_label.text = message
 	status_label.add_theme_color_override("font_color", UI_ERROR if is_error else UI_MUTED)
+
+
+func _set_key_item_status(message: String, is_error: bool) -> void:
+	if key_item_status_label == null:
+		return
+	key_item_status_label.text = message
+	key_item_status_label.add_theme_color_override("font_color", UI_ERROR if is_error else UI_MUTED)
 
 
 func _t(key: String, replacements: Dictionary = {}) -> String:
@@ -350,6 +623,7 @@ func _on_locale_changed(_locale: String) -> void:
 	if localization_manager != null:
 		localization_manager.call("localize_tree", self)
 	_render_badges()
+	_render_key_items()
 
 
 func _on_header_gui_input(event: InputEvent) -> void:
