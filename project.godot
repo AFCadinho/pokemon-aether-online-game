@@ -58,6 +58,7 @@ PlayerGameplayResetService="*res://scripts/services/player_gameplay_reset_servic
 FieldMoveService="*res://scripts/services/field_move_service.gd"
 PlayerWalletService="*res://scripts/services/player_wallet_service.gd"
 ThievingService="*res://scripts/services/thieving_service.gd"
+SkillsService="*res://scripts/services/skills_service.gd"
 ThievingStatusHud="*res://scripts/ui/thieving_status_hud.gd"
 InventoryService="*res://scripts/services/inventory_service.gd"
 PlayerActionService="*res://scripts/services/player_action_service.gd"
