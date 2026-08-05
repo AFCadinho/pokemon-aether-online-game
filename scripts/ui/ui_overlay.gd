@@ -9430,6 +9430,7 @@ func _create_wild_pokemon_row(entry: Dictionary) -> Control:
 	row.add_child(name_label)
 
 	row.add_child(_create_wild_pokemon_rarity_badge(rarity))
+	row.add_child(_create_encounter_time_badge(str(entry.get("timeOfDay", "any"))))
 
 	var level_label := Label.new()
 	level_label.text = (
@@ -9445,6 +9446,39 @@ func _create_wild_pokemon_row(entry: Dictionary) -> Control:
 	level_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	row.add_child(level_label)
 	return panel
+
+func _create_encounter_time_badge(time_of_day: String) -> Control:
+	var normalized_time := _normalize_encounter_time_of_day(time_of_day)
+	var color := Color("#ffd45a")
+	if normalized_time == "night":
+		color = Color("#9e9cff")
+	elif normalized_time == "any":
+		color = Color("#aeb8c5")
+
+	var badge := PanelContainer.new()
+	badge.custom_minimum_size = Vector2(48, 24)
+	badge.add_theme_stylebox_override("panel", _make_panel_style(
+		Color(color.r, color.g, color.b, 0.14),
+		Color(color.r, color.g, color.b, 0.68),
+		7,
+		1
+	))
+
+	var label := Label.new()
+	label.text = _encounter_time_of_day_label(normalized_time)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 9)
+	label.add_theme_color_override("font_color", color)
+	badge.add_child(label)
+	return badge
+
+func _normalize_encounter_time_of_day(time_of_day: String) -> String:
+	var normalized_time := time_of_day.strip_edges().to_lower()
+	return normalized_time if normalized_time in ["day", "night"] else "any"
+
+func _encounter_time_of_day_label(time_of_day: String) -> String:
+	return LocalizationManager.text("ui.encounter.time.%s" % _normalize_encounter_time_of_day(time_of_day))
 
 func _create_wild_pokemon_rarity_badge(rarity: String) -> Control:
 	var normalized_rarity := rarity.replace("-", "_").replace(" ", "_")
@@ -27043,11 +27077,13 @@ func _create_pokedex_location_row(location: Dictionary) -> Control:
 		LocalizationManager.text("ui.pokedex.locations.wild")
 	)).strip_edges()
 	var level_text := _format_pokedex_location_level_range(location)
+	var time_of_day := str(location.get("timeOfDay", "any"))
 	var method_label := Label.new()
-	method_label.text = "%s - %s" % [
+	method_label.text = "%s · %s - %s" % [
 		encounter_type
 		if encounter_type != ""
 		else LocalizationManager.text("ui.pokedex.locations.wild"),
+		_encounter_time_of_day_label(time_of_day),
 		level_text,
 	]
 	method_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
