@@ -681,7 +681,7 @@ display_name = "Pidgey"
 npc_sprite_frames = SubResource("SpriteFrames_mxhnq")
 movement_behavior = "pace_horizontal"
 
-[node name="Rattata" parent="Entities/Pokemon" instance=ExtResource("27_pokemon")]
+[node name="Rattata" parent="Entities/Pokemon" unique_id=959521182 instance=ExtResource("27_pokemon")]
 position = Vector2(1104, 1408)
 overworld_pokemon_id = "kanto_route_1_rattata_1"
 species_id = "rattata"
@@ -693,7 +693,7 @@ movement_tiles = 1
 movement_wait_seconds = 1.0
 movement_speed_pixels = 55.0
 
-[node name="Sentret" parent="Entities/Pokemon" instance=ExtResource("27_pokemon")]
+[node name="Sentret" parent="Entities/Pokemon" unique_id=1898673972 instance=ExtResource("27_pokemon")]
 position = Vector2(400, 1120)
 overworld_pokemon_id = "kanto_route_1_sentret_1"
 species_id = "sentret"
