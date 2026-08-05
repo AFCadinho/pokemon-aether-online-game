@@ -20,9 +20,12 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	if not Engine.is_editor_hint():
-		_sync_to_movement_target()
 	await _process_base_npc()
+	# Let BaseNPC finish the dialogue interaction before applying the formation
+	# transform again. This keeps the dialogue coroutine and input unlock path
+	# independent from Pikachu's visual follow update.
+	if not Engine.is_editor_hint() and not is_interacting:
+		_sync_to_movement_target()
 
 
 func _resolve_movement_target() -> void:
