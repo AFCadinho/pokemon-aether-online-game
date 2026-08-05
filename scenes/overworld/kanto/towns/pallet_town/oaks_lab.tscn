@@ -12,6 +12,8 @@
 [ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="16_story_hook"]
 [ext_resource type="PackedScene" uid="uid://da1n3xa4a5jnh" path="res://scenes/npcs/oaks_lab_gary.tscn" id="17_gary"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/starter_poke_ball.tscn" id="18_ball"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/scientist_m_frames.tres" id="19_scientist_m"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/scientist_f_frames.tres" id="20_scientist_f"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jksq5"]
 atlas = ExtResource("8_ywtjb")
@@ -170,6 +172,22 @@ interaction_id = "oaks_lab_oak_parcel_request"
 
 [node name="Gary" parent="Entities/NPCs" unique_id=2130040430 instance=ExtResource("17_gary")]
 position = Vector2(432, 784)
+
+[node name="ResearchAideNoah" parent="Entities/NPCs" instance=ExtResource("10_7ad88")]
+position = Vector2(240, 560)
+npc_id = "kanto_oaks_lab_aide_noah"
+npc_definition_id = "trainer_class_scientist_m"
+display_name = "Research Aide Noah"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("19_scientist_m")
+
+[node name="ResearchAideEmma" parent="Entities/NPCs" instance=ExtResource("10_7ad88")]
+position = Vector2(496, 528)
+npc_id = "kanto_oaks_lab_aide_emma"
+npc_definition_id = "trainer_class_scientist_f"
+display_name = "Research Aide Emma"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("20_scientist_f")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1966677725]
 

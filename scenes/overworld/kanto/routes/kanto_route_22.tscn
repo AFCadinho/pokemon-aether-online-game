@@ -9,6 +9,12 @@
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="6_3bfoe"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="7_hn4jb"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="8_sbmso"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="9_dialogue"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/trainer_npc.tscn" id="10_trainer"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/blue_frames.tres" id="11_blue"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/hiker_frames.tres" id="12_hiker"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/youngster_frames.tres" id="13_youngster"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/lass_frames.tres" id="14_lass"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_viridian"]
 size = Vector2(64, 176)
@@ -297,6 +303,42 @@ grass_encounter_chance = 0.21
 z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=2014189405]
+
+[node name="GaryOak" parent="Entities/NPCs" instance=ExtResource("9_dialogue")]
+position = Vector2(2480, 480)
+npc_id = "kanto_route_22_gary_oak"
+npc_definition_id = "trainer_class_blue"
+display_name = "Gary Oak"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("11_blue")
+
+[node name="LeagueHikerGrant" parent="Entities/NPCs" instance=ExtResource("9_dialogue")]
+position = Vector2(656, 544)
+npc_id = "kanto_route_22_league_hiker_grant"
+npc_definition_id = "trainer_class_hiker"
+display_name = "Hiker Grant"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("12_hiker")
+
+[node name="YoungsterCaleb" parent="Entities/NPCs" instance=ExtResource("10_trainer")]
+position = Vector2(2144, 736)
+npc_id = "kanto_route_22_youngster_caleb"
+npc_definition_id = "trainer_class_youngster"
+trainer_id = "kanto_route_22_youngster_caleb"
+display_name = "Youngster Caleb"
+facing_direction = Vector2(-1, 0)
+sight_range_tiles = 3
+npc_sprite_frames = ExtResource("13_youngster")
+
+[node name="LassPaige" parent="Entities/NPCs" instance=ExtResource("10_trainer")]
+position = Vector2(1440, 1120)
+npc_id = "kanto_route_22_lass_paige"
+npc_definition_id = "trainer_class_lass"
+trainer_id = "kanto_route_22_lass_paige"
+display_name = "Lass Paige"
+facing_direction = Vector2(0, -1)
+sight_range_tiles = 2
+npc_sprite_frames = ExtResource("14_lass")
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=217716802]
 

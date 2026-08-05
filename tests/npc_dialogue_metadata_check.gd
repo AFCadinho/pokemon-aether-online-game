@@ -66,8 +66,8 @@ func _check_base_npc_story_requirement() -> void:
 func _check_scene_defined_dialogue_id_is_allowed() -> void:
 	var text := _read_text(ROUTE_1_SCENE)
 	_check_true(
-		not text.contains("dialogue_id = \"kanto_route_1_alder_intro\""),
-		"Alder resolves normal dialogue from NPC metadata"
+		not text.contains("dialogue_id = \"kanto_route_1_camper_quinn_default\""),
+		"Route 1 residents resolve normal dialogue from NPC metadata"
 	)
 
 
