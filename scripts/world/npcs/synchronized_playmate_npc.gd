@@ -19,10 +19,11 @@ func _ready() -> void:
 	_sync_to_movement_target()
 
 
-func _process(_delta: float) -> void:
-	if not Engine.is_editor_hint():
+func _physics_process(_delta: float) -> void:
+	# Keep DialogueNPC's normal async _process untouched. The formation is a
+	# visual concern and must never participate in the dialogue coroutine.
+	if not Engine.is_editor_hint() and not is_interacting:
 		_sync_to_movement_target()
-	await _process_base_npc()
 
 
 func _resolve_movement_target() -> void:

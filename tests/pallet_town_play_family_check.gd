@@ -33,6 +33,9 @@ func _run() -> void:
 		_check(child.get("movement_offset") == Vector2(0, -64), "Child stays two tiles behind Pikachu")
 		_check(child.position == pikachu.position + Vector2(0, -64), "Initial play formation is aligned")
 		_check(pikachu.get("movement_behavior") == "pace_vertical", "Pikachu keeps its vertical play route")
+		var playmate_source := FileAccess.get_file_as_string(PLAYMATE_SCRIPT)
+		_check(playmate_source.contains("func _physics_process(_delta: float)"), "Playmate synchronization uses a separate physics update")
+		_check(not playmate_source.contains("func _process(_delta: float)"), "Playmate does not replace DialogueNPC's interaction process")
 
 		child.set("is_interacting", true)
 		child.call("_resolve_movement_target")

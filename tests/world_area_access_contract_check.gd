@@ -5,6 +5,7 @@ const SERVICE_PATH := "res://scripts/services/world_transition_service.gd"
 const AUTH_SERVICE_PATH := "res://scripts/services/auth_service.gd"
 const MAP_EXIT_PATH := "res://scripts/world/map_exit.gd"
 const GATE_NPC_PATH := "res://scripts/world/npcs/gate_npc.gd"
+const GATE_SCENE_PATH := "res://scenes/npcs/gate_npc.tscn"
 const WORLD_PATH := "res://scripts/world/world.gd"
 const ROUTE_1_PATH := "res://scenes/overworld/kanto/routes/kanto_route_1.tscn"
 const ROUTE_22_PATH := "res://scenes/overworld/kanto/routes/kanto_route_22.tscn"
@@ -26,6 +27,7 @@ func _init() -> void:
 	var auth_service_source := FileAccess.get_file_as_string(AUTH_SERVICE_PATH)
 	var map_exit_source := FileAccess.get_file_as_string(MAP_EXIT_PATH)
 	var gate_source := FileAccess.get_file_as_string(GATE_NPC_PATH)
+	var gate_scene_source := FileAccess.get_file_as_string(GATE_SCENE_PATH)
 	var world_source := FileAccess.get_file_as_string(WORLD_PATH)
 	var route_source := FileAccess.get_file_as_string(ROUTE_1_PATH)
 	var route_22_source := FileAccess.get_file_as_string(ROUTE_22_PATH)
@@ -102,6 +104,11 @@ func _init() -> void:
 		"Gate NPCs own an explicit role and derive transition blocking from their guarded exit"
 	)
 	_expect(
+		gate_scene_source.contains("NPC_088_Policeman.png")
+		and gate_scene_source.contains("trainer_cards/showdown/policeman-gen7.png"),
+		"All route guards share the police overworld sprite and Showdown police portrait"
+	)
+	_expect(
 		map_exit_source.contains("func handles_transition")
 		and map_exit_source.contains("func contains_world_position"),
 		"Map exits expose their identity and spatial zone to transition guards"
@@ -114,13 +121,17 @@ func _init() -> void:
 	_expect(
 		route_source.contains('guarded_transition_id = "route_1_to_viridian_city"')
 		and route_source.contains('guard_role = "transition_guard"')
-		and route_source.contains('transition_id = "route_1_to_viridian_city"'),
+		and route_source.contains('transition_id = "route_1_to_viridian_city"')
+		and route_source.contains('[node name="ViridianGuide"')
+		and route_source.contains('position = Vector2(1072, 272)'),
 		"Route 1 guard and exit share one stable transition identifier"
 	)
 	_expect(
 		pallet_town_source.contains('guarded_transition_id = "kanto_pallet_town__to_route_1"')
 		and pallet_town_source.contains('transition_id = "kanto_pallet_town__to_route_1"')
-		and pallet_town_source.contains('guard_role = "transition_guard"'),
+		and pallet_town_source.contains('guard_role = "transition_guard"')
+		and pallet_town_source.contains('[node name="RouteGateNPC"')
+		and pallet_town_source.contains('position = Vector2(1040, 208)'),
 		"Pallet Town guard owns its starter-gated Route 1 transition"
 	)
 	_expect(

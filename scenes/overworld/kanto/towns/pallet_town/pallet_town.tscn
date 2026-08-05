@@ -2264,8 +2264,6 @@ npc_id = "kanto_pallet_town_north_guard"
 required_quest_id = "choose_starter"
 required_quest_step_id = "choose_starter"
 display_name = "Pallet Route Guide"
-npc_sprite_frames = SubResource("SpriteFrames_0ke4d")
-mugshot = ExtResource("7_66okb")
 
 [node name="FishingGuru" parent="Entities/NPCs" unique_id=1517982080 instance=ExtResource("26_item_gift")]
 position = Vector2(368, 816)

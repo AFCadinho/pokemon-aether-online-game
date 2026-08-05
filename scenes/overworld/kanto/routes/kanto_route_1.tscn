@@ -681,8 +681,6 @@ guard_role = "transition_guard"
 guarded_transition_id = "route_1_to_viridian_city"
 npc_id = "kanto_route_1_north_guard"
 display_name = "Viridian Route Guide"
-npc_sprite_frames = SubResource("SpriteFrames_cd607")
-mugshot = ExtResource("15_4m8jl")
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=861955121]
 
