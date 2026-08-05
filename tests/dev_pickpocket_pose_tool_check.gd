@@ -17,11 +17,17 @@ func _init() -> void:
 		"Developer tool activates the dedicated pickpocket movement style"
 	)
 	_check(
-		source.contains('player_node.call("clear_activity_style")'),
-		"Developer tool can restore the normal player pose"
+		source.contains("await get_tree().create_timer(DEV_PICKPOCKET_POSE_DURATION).timeout"),
+		"Pickpocket pose is a short one-shot action"
 	)
 	_check(
-		source.contains("current_style == CharacterAppearanceService.BODY_MOVEMENT_DEFAULT"),
+		source.contains("ending_style == CharacterAppearanceService.BODY_MOVEMENT_PICKPOCKET")
+			and source.contains('player_node.call("clear_activity_style")'),
+		"Developer tool automatically restores the normal player pose"
+	)
+	_check(
+		source.contains("current_style != CharacterAppearanceService.BODY_MOVEMENT_DEFAULT")
+			and source.contains("ending_style == CharacterAppearanceService.BODY_MOVEMENT_PICKPOCKET"),
 		"Developer tool does not overwrite fishing, surfing, or riding poses"
 	)
 	quit(1 if failed else 0)
