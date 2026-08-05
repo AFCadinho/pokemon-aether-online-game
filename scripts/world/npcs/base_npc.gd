@@ -44,6 +44,8 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 @export var dialogue_lines: Array[String] = []
 @export var npc_sprite_frames: SpriteFrames
 @export var sprite_offset := Vector2(0, -16)
+## Optional catalog id. Empty values use the central NPC assignment table.
+@export var portrait_id := ""
 @export var mugshot: Texture2D
 @export_enum("idle", "pace_horizontal", "pace_vertical") var movement_behavior := "idle"
 @export_range(1, 12, 1) var movement_tiles := 3
@@ -98,6 +100,7 @@ func _ready_base_npc() -> void:
 	if Engine.is_editor_hint():
 		_refresh_npc_profile_preview()
 		return
+	_resolve_catalog_mugshot()
 
 	z_as_relative = false
 	if npc_sprite_frames != null:
@@ -136,8 +139,27 @@ func _apply_npc_profile() -> void:
 		display_name = npc_profile.display_name
 	if npc_profile.sprite_frames != null:
 		npc_sprite_frames = npc_profile.sprite_frames
+	if not npc_profile.portrait_id.strip_edges().is_empty():
+		portrait_id = npc_profile.portrait_id
 	if npc_profile.mugshot != null:
 		mugshot = npc_profile.mugshot
+
+
+func _resolve_catalog_mugshot() -> void:
+	var catalog := get_node_or_null("/root/TrainerPortraitCatalog")
+	if catalog == null:
+		return
+	var resolved_portrait_id: String = catalog.resolve_portrait_id(
+		portrait_id,
+		npc_id,
+		npc_definition_id
+	)
+	if resolved_portrait_id.is_empty():
+		return
+	var resolved_texture: Texture2D = catalog.get_texture(resolved_portrait_id)
+	if resolved_texture != null:
+		portrait_id = resolved_portrait_id
+		mugshot = resolved_texture
 
 
 func _on_npc_profile_changed() -> void:
