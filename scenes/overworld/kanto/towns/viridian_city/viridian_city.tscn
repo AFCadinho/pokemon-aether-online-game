@@ -13,6 +13,7 @@
 [ext_resource type="SpriteFrames" path="res://assets/npcs/classes/school_kid_f_frames.tres" id="26_school_kid_f"]
 [ext_resource type="SpriteFrames" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="27_bug_catcher"]
 [ext_resource type="SpriteFrames" path="res://assets/npcs/classes/hiker_frames.tres" id="28_hiker"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="29_pokemon"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route1"]
 size = Vector2(224, 36)
@@ -460,6 +461,30 @@ facing_direction = Vector2(0, -1)
 [node name="Players" type="Node2D" parent="Entities" unique_id=784148565]
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=1638304908]
+
+[node name="Slowpoke" parent="Entities/Pokemon" instance=ExtResource("29_pokemon")]
+position = Vector2(608, 864)
+overworld_pokemon_id = "kanto_viridian_city_slowpoke_1"
+species_id = "slowpoke"
+level = 20
+display_name = "Slowpoke"
+facing_direction = Vector2(1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 2.5
+movement_speed_pixels = 36.0
+
+[node name="Poliwag" parent="Entities/Pokemon" instance=ExtResource("29_pokemon")]
+position = Vector2(720, 864)
+overworld_pokemon_id = "kanto_viridian_city_poliwag_1"
+species_id = "poliwag"
+level = 8
+display_name = "Poliwag"
+facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.5
+movement_speed_pixels = 48.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=841850023]
 
