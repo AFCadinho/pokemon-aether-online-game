@@ -105,6 +105,38 @@ func _check_map_guard_bindings() -> void:
 			if collision_shape != null:
 				_check(bool(exit.call("contains_world_position", collision_shape.global_position)), "%s owns the exit center" % guard.name)
 				_check(not bool(exit.call("contains_world_position", collision_shape.global_position + Vector2(10000, 10000))), "%s excludes unrelated map positions" % guard.name)
+			if guard.name == "RouteGateNPC":
+				_check(
+					guard.get("guard_blocking_offset") == Vector2(-64, -32)
+					and guard.get("guard_blocking_size") == Vector2(160, 32),
+					"Pallet route guard owns the former five-tile passage barrier"
+				)
+				_check(
+					bool(guard.call("guards_world_position", Vector2(976, 176))),
+					"Pallet route guard blocks the approach before visiting Oak"
+				)
+				var story_service := get_root().get_node("StoryService")
+				story_service.call("apply_story", {
+					"revision": 1,
+					"quests": [{
+						"questId": "choose_starter",
+						"status": "completed",
+						"steps": [{"stepId": "choose_starter", "status": "completed"}],
+					}],
+				})
+				var player_save := get_root().get_node("PlayerSave")
+				var party_value: Variant = player_save.get("party")
+				if party_value is Array:
+					(party_value as Array).clear()
+				_check(
+					bool(guard.call("guards_world_position", Vector2(976, 176))),
+					"Pallet route guard stays closed after Oak when the party is empty"
+				)
+				_check(
+					not bool(guard.call("guards_world_position", Vector2(976, 208))),
+					"Pallet route guard leaves the town-side row walkable"
+				)
+				story_service.call("reset_story")
 		map.free()
 
 
