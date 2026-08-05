@@ -28477,7 +28477,7 @@ func _on_dev_heal_party_button_pressed() -> void:
 	dev_actions_popup.visible = false
 	_hide_dev_add_menu_popup()
 	dev_heal_party_button.disabled = true
-	var result: Dictionary = await PartyHealService.heal_current_party_and_save()
+	var result: Dictionary = await PartyHealService.heal_current_party_and_save({}, false)
 	dev_heal_party_button.disabled = false
 	if not bool(result.get("success", false)):
 		_add_chat_message("Could not save healed party: %s" % str(result.get("error", "Unknown error")))
@@ -33170,7 +33170,7 @@ func _heal_party_before_pvp(action_label: String = "PvP") -> bool:
 		_set_pvp_queue_status_key("ui.pvp.queue.add_pokemon")
 		_set_pvp_status_key("ui.pvp.queue.add_pokemon")
 		return false
-	var result: Dictionary = await PartyHealService.heal_current_party_and_save()
+	var result: Dictionary = await PartyHealService.heal_current_party_and_save({}, false)
 	if bool(result.get("success", false)):
 		return true
 	var error := str(result.get("error", "Unknown error"))

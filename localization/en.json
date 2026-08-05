@@ -2949,5 +2949,14 @@
   "ui.chat.open.help": "Open Help chat",
   "ui.chat.open.pm": "Open PM chat",
   "ui.chat.open.guild": "Open Guild chat",
-  "ui.chat.open.private": "Open this private conversation"
+  "ui.chat.open.private": "Open this private conversation",
+  "ui.thieving.success": "You stole {amount} contraband. Wanted: {wanted}%.",
+  "ui.thieving.already_attempted": "You already tried this person today.",
+  "ui.thieving.level_required": "You need Thieving level {level} for this target.",
+  "ui.thieving.unavailable": "Pickpocketing is unavailable right now.",
+  "ui.thieving.arrested": "You were arrested and lost {amount} contraband.",
+  "ui.thieving.released": "Your sentence is over. You have been released.",
+  "ui.thieving.status": "THIEVING Lv.{level}  Contraband {currency}  Wanted {wanted}%",
+  "ui.thieving.most_wanted": "MOST WANTED  Contraband {currency}",
+  "ui.thieving.jailed": "JAILED  {seconds}s"
 }
