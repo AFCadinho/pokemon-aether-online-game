@@ -354,6 +354,71 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_v5rc5")
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_g5rpj"]
+texture = ExtResource("15_g5rpj")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_v5rc5"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_g5rpj")
+
 [node name="ViridianCity" type="Node2D" unique_id=1723060210]
 script = ExtResource("2_meta")
 
@@ -568,6 +633,25 @@ visible = false
 [node name="LedgeDown" type="TileMapLayer" parent="Ledges" unique_id=1271039670]
 tile_map_data = PackedByteArray("AAAvADIAAAABAAEAAAAwADIAAAABAAEAAAAxADIAAAABAAEAAAAyADIAAAABAAEAAAAzADIAAAABAAEAAAA0ADIAAAABAAEAAAA1ADIAAAABAAEAAAA2ADIAAAABAAEAAAA3ADIAAAABAAEAAAA4ADIAAAABAAEAAAA5ADIAAAABAAEAAAA6ADIAAAABAAEAAAA7ADIAAAABAAEAAAA8ADIAAAABAAEAAAA9ADIAAAABAAEAAAA=")
 tile_set = SubResource("TileSet_ygbus")
+
+[node name="BlockDirection" type="Node2D" parent="." unique_id=1342919821]
+visible = false
+
+[node name="BlockUp" type="TileMapLayer" parent="BlockDirection" unique_id=1586854709]
+tile_map_data = PackedByteArray("AAAuACYAAAABAAEAAAAvACYAAAABAAEAAAAwACYAAAABAAEAAAAxACYAAAABAAEAAAAyACYAAAABAAEAAAAzACYAAAABAAEAAAAuAC0AAAABAAEAAAAvAC0AAAABAAEAAAAwAC0AAAABAAEAAAAxAC0AAAABAAEAAAAyAC0AAAABAAEAAAAzAC0AAAABAAEAAAA=")
+tile_set = SubResource("TileSet_v5rc5")
+
+[node name="BlockDown" type="TileMapLayer" parent="BlockDirection" unique_id=629841515]
+tile_map_data = PackedByteArray("AAAuACUAAAABAAEAAAAvACUAAAABAAEAAAAwACUAAAABAAEAAAAxACUAAAABAAEAAAAyACUAAAABAAEAAAAzACUAAAABAAEAAAAuACwAAAABAAEAAAAvACwAAAABAAEAAAAwACwAAAABAAEAAAAxACwAAAABAAEAAAAyACwAAAABAAEAAAAzACwAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_v5rc5")
+
+[node name="BlockLeft" type="TileMapLayer" parent="BlockDirection" unique_id=177154737]
+tile_map_data = PackedByteArray("AAAuACwAAAABAAEAAAAuACsAAAABAAEAAAAuACoAAAABAAEAAAAuACkAAAABAAEAAAAuACgAAAABAAEAAAAuACcAAAABAAEAAAAuACYAAAABAAEAAAA0AC0AAAABAAEAAAA0ACwAAAABAAEAAAA0ACsAAAABAAEAAAA0ACoAAAABAAEAAAA0ACkAAAABAAEAAAA0ACgAAAABAAEAAAA0ACcAAAABAAEAAAA0ACYAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_v5rc5")
+
+[node name="BlockRight" type="TileMapLayer" parent="BlockDirection" unique_id=1465455531]
+tile_map_data = PackedByteArray("AAAtACYAAAABAAEAAAAtACcAAAABAAEAAAAtACgAAAABAAEAAAAtACkAAAABAAEAAAAtACoAAAABAAEAAAAtACsAAAABAAEAAAAtACwAAAABAAEAAAAtAC0AAAABAAEAAAAzACYAAAABAAEAAAAzACcAAAABAAEAAAAzACgAAAABAAEAAAAzACkAAAABAAEAAAAzACoAAAABAAEAAAAzACsAAAABAAEAAAAzACwAAAABAAEAAAAzAC0AAAABAAEAAAA=")
+tile_set = SubResource("TileSet_v5rc5")
 
 [connection signal="body_entered" from="Exits/ToRoute1" to="Exits/ToRoute1" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute2" to="Exits/ToRoute2" method="_on_body_entered"]
