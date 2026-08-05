@@ -2949,5 +2949,14 @@
   "ui.chat.open.help": "Open de Help-chat",
   "ui.chat.open.pm": "Open de PM-chat",
   "ui.chat.open.guild": "Open de Guild-chat",
-  "ui.chat.open.private": "Open dit privégesprek"
+  "ui.chat.open.private": "Open dit privégesprek",
+  "ui.thieving.success": "Je stal {amount} smokkelwaar. Wanted: {wanted}%.",
+  "ui.thieving.already_attempted": "Je hebt deze persoon vandaag al geprobeerd.",
+  "ui.thieving.level_required": "Je hebt Thieving level {level} nodig voor dit doelwit.",
+  "ui.thieving.unavailable": "Pickpocket is nu niet beschikbaar.",
+  "ui.thieving.arrested": "Je bent gearresteerd en verloor {amount} smokkelwaar.",
+  "ui.thieving.released": "Je straf zit erop. Je bent vrijgelaten.",
+  "ui.thieving.status": "THIEVING Lv.{level}  Smokkelwaar {currency}  Wanted {wanted}%",
+  "ui.thieving.most_wanted": "MOST WANTED  Smokkelwaar {currency}",
+  "ui.thieving.jailed": "IN DE CEL  {seconds}s"
 }

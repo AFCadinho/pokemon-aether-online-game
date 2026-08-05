@@ -534,6 +534,9 @@ npc_definition_id = "trainer_class_hiker"
 display_name = "League Fan Dorian"
 facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("28_hiker")
+pickpocket_enabled = true
+pickpocket_npc_type = "civilian"
+pickpocket_required_level = 1
 
 [node name="ForestScoutNico" parent="Entities/NPCs" unique_id=636499515 instance=ExtResource("24_dialogue")]
 position = Vector2(1408, 640)
@@ -542,6 +545,9 @@ npc_definition_id = "trainer_class_bug_catcher"
 display_name = "Bug Catcher Nico"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("27_bug_catcher")
+pickpocket_enabled = true
+pickpocket_npc_type = "trainer"
+pickpocket_required_level = 10
 
 [node name="SchoolKidJune" parent="Entities/NPCs" unique_id=1310082468 instance=ExtResource("24_dialogue")]
 position = Vector2(1792, 1024)
@@ -558,6 +564,9 @@ npc_definition_id = "trainer_class_elder"
 display_name = "Catching Mentor Gideon"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("25_elder")
+pickpocket_enabled = true
+pickpocket_npc_type = "veteran"
+pickpocket_required_level = 20
 
 [node name="RouteGuards" type="Node2D" parent="Entities/NPCs" unique_id=286755846]
 

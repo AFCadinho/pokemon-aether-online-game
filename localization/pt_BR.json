@@ -2949,5 +2949,14 @@
   "ui.chat.open.help": "Abrir o chat de Ajuda",
   "ui.chat.open.pm": "Abrir o chat por PM",
   "ui.chat.open.guild": "Abrir o chat da Guilda",
-  "ui.chat.open.private": "Abrir esta conversa privada"
+  "ui.chat.open.private": "Abrir esta conversa privada",
+  "ui.thieving.success": "Você roubou {amount} de contrabando. Procurado: {wanted}%.",
+  "ui.thieving.already_attempted": "Você já tentou roubar esta pessoa hoje.",
+  "ui.thieving.level_required": "Você precisa de Thieving nível {level} para este alvo.",
+  "ui.thieving.unavailable": "Furto indisponível no momento.",
+  "ui.thieving.arrested": "Você foi preso e perdeu {amount} de contrabando.",
+  "ui.thieving.released": "Sua pena terminou. Você foi libertado.",
+  "ui.thieving.status": "THIEVING Nv.{level}  Contrabando {currency}  Procurado {wanted}%",
+  "ui.thieving.most_wanted": "MAIS PROCURADO  Contrabando {currency}",
+  "ui.thieving.jailed": "PRESO  {seconds}s"
 }

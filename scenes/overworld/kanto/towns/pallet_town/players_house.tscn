@@ -121,6 +121,7 @@ visibility_required_quest_status = "completed"
 respawn_point_id = "kanto_players_house_mom"
 respawn_spawn_marker = "MomHeal"
 respawn_facing_direction = "up"
+public_service = false
 
 [node name="BeforeJourneyStoryHook" type="Node" parent="Entities/NPCs/Mom"]
 script = ExtResource("10_story_hook")

@@ -30,6 +30,7 @@ const DEFAULT_HEAL_ANIMATION_DURATION_SECONDS := 0.8
 @export var respawn_marker_path: NodePath = ^"RespawnMarker"
 @export var respawn_spawn_marker := "HealNPC"
 @export_enum("up", "down", "left", "right") var respawn_facing_direction := "down"
+@export var public_service := true
 
 
 func interact_with_player(_player: Node2D) -> void:
@@ -41,6 +42,13 @@ func _after_story_interaction(_player: Node2D, _result: Dictionary) -> void:
 
 
 func _run_heal_interaction(show_intro := true) -> void:
+	if public_service:
+		var access: Dictionary = await ThievingService.use_public_service("pokemon_center")
+		if not bool(access.get("success", false)):
+			await GameErrorDialogService.show_response(access, "backend.error.party_heal")
+			return
+		if not bool(access.get("allowed", true)):
+			return
 	var metadata_response: Dictionary = await _load_npc_metadata_if_needed()
 	if not bool(metadata_response.get("success", false)):
 		await _show_report_to_staff_message()
@@ -61,7 +69,7 @@ func _run_heal_interaction(show_intro := true) -> void:
 		return
 
 	var respawn_point := _build_respawn_point_payload()
-	var result: Dictionary = await party_heal_service.call("heal_current_party_and_save", respawn_point)
+	var result: Dictionary = await party_heal_service.call("heal_current_party_and_save", respawn_point, public_service)
 	if not bool(result.get("success", false)):
 		push_warning("HealNPC: party heal failed: %s" % str(result.get("error", "Unknown error")))
 		await GameErrorDialogService.show_response(
