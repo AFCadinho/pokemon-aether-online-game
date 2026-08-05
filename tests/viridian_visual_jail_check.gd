@@ -10,7 +10,7 @@ func _init() -> void:
 	_check(packed != null, "Viridian visual scene loads")
 	if packed != null:
 		var root := packed.instantiate()
-		var structure_top := root.get_node_or_null("StructureTop") as TileMapLayer
+		var structure_top := _find_layer_by_tiled_id(root, 4)
 		_check(structure_top != null, "Viridian visual exposes StructureTop")
 		if structure_top != null:
 			for cell: Vector2i in [Vector2i(46, 43), Vector2i(51, 44)]:
@@ -28,3 +28,11 @@ func _check(condition: bool, label: String) -> void:
 		return
 	failed = true
 	push_error("FAIL %s" % label)
+
+
+func _find_layer_by_tiled_id(root: Node, layer_id: int) -> TileMapLayer:
+	for child: Node in root.get_children():
+		var layer := child as TileMapLayer
+		if layer != null and int(layer.get_meta("tiled_layer_id", -1)) == layer_id:
+			return layer
+	return null
