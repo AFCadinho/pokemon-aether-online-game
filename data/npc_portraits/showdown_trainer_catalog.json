@@ -3838,6 +3838,15 @@
       "sha256": "c634035a8d380658df564141abfdc01c2b8b0ea1727e907d6197cc277f73d238"
     },
     {
+      "id": "showdown_ltsurge",
+      "filename": "ltsurge.png",
+      "texture": "res://assets/sprites/trainer_cards/showdown/ltsurge.png",
+      "artist": "Pokémon Showdown",
+      "source": "https://play.pokemonshowdown.com/sprites/trainers/ltsurge.png",
+      "catalog_source": "https://play.pokemonshowdown.com/sprites/trainers/?view=sprites",
+      "sha256": "adab47aa1fbd814484ee9697f4d2b1153169c9e0412696139de0f1372f6e03ce"
+    },
+    {
       "id": "showdown_lucas_contest",
       "filename": "lucas-contest.png",
       "texture": "res://assets/sprites/trainer_cards/showdown/lucas-contest.png",

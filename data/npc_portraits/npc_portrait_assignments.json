@@ -1,7 +1,7 @@
 {
   "npc_ids": {
     "kanto_alpha_gym_brock": "showdown_brock_lgpe",
-    "kanto_alpha_gym_lt_surge": "showdown_veteran_gen7",
+    "kanto_alpha_gym_lt_surge": "showdown_ltsurge",
     "kanto_alpha_gym_misty": "showdown_misty_lgpe",
     "kanto_oaklab_oak_1": "showdown_oak",
     "kanto_oaks_lab_gary": "showdown_blue_lgpe",
@@ -37,7 +37,7 @@
     "kanto_players_house_father"
   ],
   "notes": {
-    "kanto_alpha_gym_lt_surge": "The credited catalog has no Lt. Surge portrait yet; veteran-gen7 is the temporary class match.",
+    "kanto_alpha_gym_lt_surge": "Uses the exact sprite from the full Pokémon Showdown trainer catalog.",
     "kanto_route_1_alder": "The credited catalog has no Alder portrait yet; veteran-gen6 is the temporary class match.",
     "kanto_players_house_father": "Dadinho keeps his existing custom portrait."
   }

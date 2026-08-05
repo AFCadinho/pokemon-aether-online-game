@@ -1,6 +1,6 @@
-# Pokémon Showdown credited trainer sprites
+# Pokémon Showdown trainer sprites
 
-These PNGs are the original credited files imported without edits.
+These PNGs are the original files imported without edits. Entries without a listed artist are credited to Pokémon Showdown.
 Source index: https://play.pokemonshowdown.com/sprites/trainers/?view=sprites&filter=credited
 
 ## Beliot419
@@ -829,6 +829,10 @@ Source index: https://play.pokemonshowdown.com/sprites/trainers/?view=sprites&fi
 - `yukito-hideko.png` — [source](https://play.pokemonshowdown.com/sprites/trainers/yukito-hideko.png)
 - `zinnia-masters.png` — [source](https://play.pokemonshowdown.com/sprites/trainers/zinnia-masters.png)
 - `zirco-unite.png` — [source](https://play.pokemonshowdown.com/sprites/trainers/zirco-unite.png)
+
+## Pokémon Showdown
+
+- `ltsurge.png` — [source](https://play.pokemonshowdown.com/sprites/trainers/ltsurge.png)
 
 ## RADU
 
