@@ -1,6 +1,6 @@
-[gd_scene format=4]
+[gd_scene format=4 uid="uid://cl640v0bnx8tq"]
 
-[ext_resource type="TileSet" path="res://generated/tiled_visuals/viridian_city/viridian_city.visual.tileset.tres" id="1_u2r82"]
+[ext_resource type="TileSet" uid="uid://b1hs20f78v8lq" path="res://generated/tiled_visuals/viridian_city/viridian_city.visual.tileset.tres" id="1_u2r82"]
 
 [node name="ViridianCity" type="Node2D" unique_id=760905229]
 metadata/pao_generated_visual = true
