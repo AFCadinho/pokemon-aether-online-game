@@ -6,7 +6,6 @@
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="4_metadata"]
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="5_2mtwu"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="6_frcun"]
-[ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="6_iv6v0"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="6_kp2ru"]
 [ext_resource type="Texture2D" uid="uid://2qey36patp5j" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_080_Worker.png" id="6_rwph1"]
 [ext_resource type="Script" uid="uid://babnhtwtaiewv" path="res://scripts/world/map_door_animator.gd" id="7_door_animator"]
@@ -392,11 +391,6 @@ visible = false
 z_index = 100
 tile_map_data = PackedByteArray("AAAKACUAAAABAAEAAAAJACUAAAABAAEAAAAIACUAAAABAAEAAAAHACUAAAABAAEAAAAQACQAAAABAAEAAAARACQAAAABAAEAAAASACQAAAABAAEAAAATACQAAAABAAEAAAAUACQAAAABAAEAAAAVACQAAAABAAEAAAAWACQAAAABAAEAAAAXACQAAAABAAEAAAAQACMAAAABAAEAAAARACMAAAABAAEAAAASACMAAAABAAEAAAATACMAAAABAAEAAAAUACMAAAABAAEAAAAVACMAAAABAAEAAAAWACMAAAABAAEAAAAXACMAAAABAAEAAAAMACMAAAABAAEAAAALACMAAAABAAEAAAAKACMAAAABAAEAAAAJACMAAAABAAEAAAA=")
 tile_set = SubResource("TileSet_2pdw6")
-
-[node name="RouteGates" type="TileMapLayer" parent="." unique_id=19996405]
-visible = false
-tile_map_data = PackedByteArray("AAA4AB8AAAABAAIAAAA4ACAAAAABAAIAAAA4ACEAAAABAAIAAAA4ACIAAAABAAIAAAA4ACMAAAABAAIAAAA4ACQAAAABAAIAAAA=")
-tile_set = SubResource("TileSet_frcun")
 
 [node name="NightLights" type="Node2D" parent="." unique_id=1917691000]
 
