@@ -120,10 +120,11 @@ const FRAME_COLUMNS := 4
 const FRAME_ROWS := 4
 const IDLE_ANIMATION_SPEED := 5.0
 const WALK_ANIMATION_SPEED := 7.5
-const NON_SELECTABLE_BODY_DIRECTORIES: Array[String] = ["run", "running", "fish", "ride", "surf", "mount"]
+const NON_SELECTABLE_BODY_DIRECTORIES: Array[String] = ["run", "running", "fish", "pickpocket", "ride", "surf", "mount"]
 const BODY_MOVEMENT_DEFAULT := "walk"
 const BODY_MOVEMENT_RUN := "run"
 const BODY_MOVEMENT_FISH := "fish"
+const BODY_MOVEMENT_PICKPOCKET := "pickpocket"
 const BODY_MOVEMENT_RIDE := "ride"
 const BODY_MOVEMENT_SURF := "surf"
 const BODY_MOVEMENT_SURF_FISH := "surf_fish"
@@ -911,6 +912,8 @@ static func normalize_movement_style(movement_style: String) -> String:
 		return BODY_MOVEMENT_SURF_FISH
 	if normalized == BODY_MOVEMENT_FISH or normalized == "fishing":
 		return BODY_MOVEMENT_FISH
+	if normalized == BODY_MOVEMENT_PICKPOCKET or normalized == "thieving":
+		return BODY_MOVEMENT_PICKPOCKET
 	if normalized == BODY_MOVEMENT_RIDE \
 			or normalized == BODY_MOVEMENT_SURF \
 			or normalized == BODY_MOVEMENT_MOUNT \
@@ -919,8 +922,10 @@ static func normalize_movement_style(movement_style: String) -> String:
 	return BODY_MOVEMENT_DEFAULT
 
 
-static func resolve_layer_movement_style(movement_style: String, _category: String = BODY_CATEGORY) -> String:
+static func resolve_layer_movement_style(movement_style: String, category: String = BODY_CATEGORY) -> String:
 	var normalized_style := normalize_movement_style(movement_style)
+	if normalized_style == BODY_MOVEMENT_PICKPOCKET and category != BODY_CATEGORY:
+		return BODY_MOVEMENT_FISH
 	return BODY_MOVEMENT_FISH \
 		if normalized_style == BODY_MOVEMENT_SURF_FISH \
 		else normalized_style
