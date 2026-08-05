@@ -1,0 +1,10 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_route_1",
+  "signs": [
+    {"id": "kanto_route_1_route_sign", "type": "road", "title": "Route 1", "lines": ["Route 1", "Pallet Town ↔ Viridian City."]},
+    {"id": "kanto_route_2_route_sign", "type": "road", "mapId": "kanto_route_2", "title": "Route 2", "lines": ["Route 2", "Viridian City ↔ Pewter City."]},
+    {"id": "kanto_route_2_digletts_cave", "type": "road", "mapId": "kanto_route_2", "title": "Diglett's Cave", "lines": ["Diglett's Cave", "A tunnel connecting Route 2 and Vermilion City."]},
+    {"id": "kanto_route_22_route_sign", "type": "road", "mapId": "kanto_route_22", "title": "Route 22", "lines": ["Route 22", "Viridian City ↔ Indigo Plateau."]}
+  ]
+}

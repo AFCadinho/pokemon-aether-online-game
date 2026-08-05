@@ -22,6 +22,7 @@
 [ext_resource type="Texture2D" uid="uid://e2ksljyggppg" path="res://assets/tilesets/fiver/tiles_env2_floors32.png" id="22_qefnj"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_1/route_1.visual.tscn" id="26_c1ijh"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="27_pokemon"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/sign_interactable.tscn" id="28_route_sign"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_14rri"]
 atlas = ExtResource("16_cd607")
@@ -1078,6 +1079,14 @@ npc_sprite_frames = SubResource("SpriteFrames_mxhnq")
 movement_behavior = "pace_horizontal"
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1572197135]
+
+[node name="Interactables" type="Node2D" parent="Entities"]
+
+[node name="RouteSign" parent="Entities/Interactables" instance=ExtResource("28_route_sign")]
+position = Vector2(896, 2336)
+sign_id = "kanto_route_1_route_sign"
+sign_type = "road"
+required_facing_direction = "up"
 
 [node name="Exits" type="Node2D" parent="." unique_id=2121403612]
 

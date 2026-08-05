@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="6_3bfoe"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="7_hn4jb"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="8_sbmso"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/sign_interactable.tscn" id="9_route_sign"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_viridian"]
 size = Vector2(64, 176)
@@ -300,6 +301,14 @@ z_index = 5
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=217716802]
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=206724298]
+
+[node name="Interactables" type="Node2D" parent="Entities"]
+
+[node name="RouteSign" parent="Entities/Interactables" instance=ExtResource("9_route_sign")]
+position = Vector2(2544, 480)
+sign_id = "kanto_route_22_route_sign"
+sign_type = "road"
+required_facing_direction = "up"
 
 [node name="Spawns" type="Node2D" parent="." unique_id=1642080505]
 

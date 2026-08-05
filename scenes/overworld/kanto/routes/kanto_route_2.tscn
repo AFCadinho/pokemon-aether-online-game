@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="8_metadata"]
 [ext_resource type="Texture2D" uid="uid://e2ksljyggppg" path="res://assets/tilesets/fiver/tiles_env2_floors32.png" id="9_gac6d"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/cuttable_tree.tscn" id="10_j62p7"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/sign_interactable.tscn" id="11_route_sign"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_r7yom"]
 texture = ExtResource("2_yrfmu")
@@ -411,6 +412,18 @@ position = Vector2(1392, 752)
 
 [node name="CuttableTree4" parent="Entities/Interactables" unique_id=1958687555 instance=ExtResource("10_j62p7")]
 position = Vector2(1360, 752)
+
+[node name="RouteSign" parent="Entities/Interactables" instance=ExtResource("11_route_sign")]
+position = Vector2(528, 2240)
+sign_id = "kanto_route_2_route_sign"
+sign_type = "road"
+required_facing_direction = "up"
+
+[node name="DiglettsCaveSign" parent="Entities/Interactables" instance=ExtResource("11_route_sign")]
+position = Vector2(1296, 944)
+sign_id = "kanto_route_2_digletts_cave"
+sign_type = "road"
+required_facing_direction = "up"
 
 [connection signal="body_entered" from="Exits/ToViridianCity" to="Exits/ToViridianCity" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToPewterCity" to="Exits/ToPewterCity" method="_on_body_entered"]
