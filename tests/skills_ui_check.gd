@@ -130,6 +130,11 @@ func _run() -> void:
 	]:
 		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(locale_path))
 		_check(parsed is Dictionary and (parsed as Dictionary).has("ui.skills.thieving.name"), "%s contains Skills translations" % locale_path)
+		_check(
+			parsed is Dictionary
+			and "Loot:" in str((parsed as Dictionary).get("ui.skills.thieving.stats", "")),
+			"%s presents the Thieving balance as countable Loot" % locale_path
+		)
 
 	panel.queue_free()
 	await process_frame
