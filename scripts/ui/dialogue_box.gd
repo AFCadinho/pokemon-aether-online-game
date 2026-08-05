@@ -117,7 +117,7 @@ func _set_portrait_texture(texture: Texture2D) -> void:
 	npc_sprite.texture = texture
 	var is_trainer_card := texture != null and texture.resource_path.begins_with(TRAINER_CARD_TEXTURE_ROOT)
 	if is_trainer_card:
-		npc_sprite.stretch_mode = TextureRect.STRETCH_KEEP_CENTERED
+		npc_sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		npc_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	else:
 		npc_sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
