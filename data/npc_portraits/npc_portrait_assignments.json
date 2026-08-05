@@ -1,0 +1,44 @@
+{
+  "npc_ids": {
+    "kanto_alpha_gym_brock": "showdown_brock_lgpe",
+    "kanto_alpha_gym_lt_surge": "showdown_veteran_gen7",
+    "kanto_alpha_gym_misty": "showdown_misty_lgpe",
+    "kanto_oaklab_oak_1": "showdown_oak",
+    "kanto_oaks_lab_gary": "showdown_blue_lgpe",
+    "kanto_pallet_town_fishing_guru": "showdown_fisherman_gen6",
+    "kanto_pallet_town_market_attendant": "showdown_clerk_gen8",
+    "kanto_pallet_town_north_guard": "showdown_acetrainer_gen6",
+    "kanto_pallet_town_nurse": "showdown_pokemoncenterlady",
+    "kanto_pewter_city_pokemon_center_clerk": "showdown_clerk_gen8",
+    "kanto_pewter_city_pokemon_center_clerk_2": "showdown_clerkf_gen8",
+    "kanto_pewter_city_pokemon_center_nurse_joy": "showdown_pokemoncenterlady",
+    "kanto_rivals_house_lillie": "showdown_lillie",
+    "kanto_route_1_alder": "showdown_veteran_gen6",
+    "kanto_route_1_bug_catcher_big_d": "showdown_bugcatcher_gen6",
+    "kanto_route_1_cynthia": "showdown_cynthia_gen7",
+    "kanto_route_1_gary": "showdown_blue_lgpe",
+    "kanto_route_1_north_guard": "showdown_acetrainer_gen6",
+    "kanto_route_1_trainer_red_boss": "showdown_red_lgpe",
+    "kanto_viridian_city_north_route_guard": "showdown_policeman_gen7",
+    "kanto_viridian_city_pokemon_center_clerk": "showdown_clerk_gen8",
+    "kanto_viridian_city_pokemon_center_clerk_2": "showdown_clerkf_gen8",
+    "kanto_viridian_city_pokemon_center_nurse_joy": "showdown_pokemoncenterlady",
+    "kanto_viridian_city_south_route_guard": "showdown_policeman_gen7",
+    "kanto_viridian_city_west_route_guard": "showdown_policeman_gen7"
+  },
+  "npc_definition_ids": {
+    "aether_atelier_tailor": "showdown_beauty_gen6",
+    "kanto_rivals_house_lillie": "showdown_lillie",
+    "pokemon_center_nurse": "showdown_pokemoncenterlady",
+    "pokemart_buyer": "showdown_clerkf_gen8",
+    "pokemart_seller": "showdown_clerk_gen8"
+  },
+  "preserve_existing": [
+    "kanto_players_house_father"
+  ],
+  "notes": {
+    "kanto_alpha_gym_lt_surge": "The credited catalog has no Lt. Surge portrait yet; veteran-gen7 is the temporary class match.",
+    "kanto_route_1_alder": "The credited catalog has no Alder portrait yet; veteran-gen6 is the temporary class match.",
+    "kanto_players_house_father": "Dadinho keeps his existing custom portrait."
+  }
+}
