@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_route_hint"]
 [ext_resource type="TileSet" path="res://generated/tiled_visuals/open_field/open_field.visual.tileset.tres" id="5_tileset"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/sign_interactable.tscn" id="6_route_sign"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_viridian"]
 size = Vector2(32, 128)
@@ -31,6 +32,14 @@ z_index = 5
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=217716802]
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=206724298]
+
+[node name="Interactables" type="Node2D" parent="Entities"]
+
+[node name="RouteSign" parent="Entities/Interactables" instance=ExtResource("6_route_sign")]
+position = Vector2(656, 304)
+sign_id = "kanto_route_22_route_sign"
+sign_type = "road"
+required_facing_direction = "up"
 
 [node name="Spawns" type="Node2D" parent="." unique_id=1642080505]
 
