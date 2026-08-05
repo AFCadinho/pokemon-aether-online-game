@@ -456,6 +456,9 @@ position = Vector2(1136, 1488)
 [node name="FromRoute22" type="Marker2D" parent="Spawns" unique_id=514163280]
 position = Vector2(80, 1232)
 
+[node name="ViridianJail" type="Marker2D" parent="Spawns" unique_id=2358741031]
+position = Vector2(1552, 1392)
+
 [node name="Exits" type="Node2D" parent="." unique_id=1188707532]
 
 [node name="ToRoute1" type="Area2D" parent="Exits" unique_id=1702409658]
