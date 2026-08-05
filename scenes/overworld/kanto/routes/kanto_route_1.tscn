@@ -443,7 +443,7 @@ region = Rect2(128, 0, 64, 64)
 atlas = ExtResource("13_cd607")
 region = Rect2(192, 0, 64, 64)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_bc3mu"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_gd1nu"]
 resource_local_to_scene = true
 animations = [{
 "frames": [{
@@ -1059,7 +1059,7 @@ npc_sprite_frames = SubResource("SpriteFrames_bnyo4")
 position = Vector2(1072, 272)
 guarded_transition_id = "route_1_to_viridian_city"
 npc_id = "kanto_route_1_north_guard"
-npc_sprite_frames = SubResource("SpriteFrames_bc3mu")
+npc_sprite_frames = SubResource("SpriteFrames_gd1nu")
 mugshot = ExtResource("15_4m8jl")
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=861955121]
