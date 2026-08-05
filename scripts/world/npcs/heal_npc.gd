@@ -33,14 +33,23 @@ const DEFAULT_HEAL_ANIMATION_DURATION_SECONDS := 0.8
 
 
 func interact_with_player(_player: Node2D) -> void:
+	await _run_heal_interaction(true)
+
+
+func _after_story_interaction(_player: Node2D, _result: Dictionary) -> void:
+	await _run_heal_interaction(false)
+
+
+func _run_heal_interaction(show_intro := true) -> void:
 	var metadata_response: Dictionary = await _load_npc_metadata_if_needed()
 	if not bool(metadata_response.get("success", false)):
 		await _show_report_to_staff_message()
 		return
 
-	var intro_dialogue_lines := await _get_dialogue_metadata_lines()
-	if not intro_dialogue_lines.is_empty():
-		await show_dialogue(intro_dialogue_lines)
+	if show_intro:
+		var intro_dialogue_lines := await _get_dialogue_metadata_lines()
+		if not intro_dialogue_lines.is_empty():
+			await show_dialogue(intro_dialogue_lines)
 
 	if _get_player_party().is_empty():
 		await show_dialogue(await _resolve_dialogue_lines(no_party_dialogue_id, no_party_dialogue_lines))

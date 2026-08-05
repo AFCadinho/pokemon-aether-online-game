@@ -4,16 +4,13 @@
 [ext_resource type="Texture2D" uid="uid://c5801ltimr4ed" path="res://assets/npcs/gen4-ow-sprites/trchar101.png" id="4_3oirl"]
 [ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="5_n6c5k"]
 [ext_resource type="Texture2D" uid="uid://ba8f0l65uv4cv" path="res://assets/tilesets/overworld/JohtoFX.png" id="5_uujun"]
-[ext_resource type="PackedScene" uid="uid://br7n6hywfrl2a" path="res://scenes/npcs/heal_npc.tscn" id="6_jhh0g"]
 [ext_resource type="Texture2D" uid="uid://dwsfb8bgfvnmo" path="res://assets/sprites/trainer_cards/showdown/acetrainer-gen6.png" id="7_66okb"]
 [ext_resource type="Texture2D" uid="uid://b6drbo1a67h55" path="res://assets/tilesets/overworld/nature/ledges/ledges.png" id="7_fiq1l"]
 [ext_resource type="Texture2D" uid="uid://cnixsmivuhykq" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_068_Fisherman.png" id="9_q27eu"]
-[ext_resource type="PackedScene" uid="uid://cwgvvyjm4vwh4" path="res://scenes/npcs/market_seller_npc.tscn" id="12_4x353"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="12_h1bkg"]
 [ext_resource type="Texture2D" uid="uid://bsxw7vgtdrlpk" path="res://assets/followers/HORSEA.png" id="13_j8pek"]
 [ext_resource type="Texture2D" uid="uid://3tny2dss8f2p" path="res://assets/tilesets/fiver/tiles_env2_32.png" id="14_2e47g"]
 [ext_resource type="Texture2D" uid="uid://by43kvi6o5e0g" path="res://assets/followers/PIKACHU.png" id="14_2p5pd"]
-[ext_resource type="Texture2D" uid="uid://wf0tl5jvqhhw" path="res://assets/sprites/mugshots/market_attendance.png" id="14_m86ow"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="14_voysl"]
 [ext_resource type="PackedScene" uid="uid://b6sun8ubp3uia" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="19_3oirl"]
 [ext_resource type="PackedScene" uid="uid://mkdk7jtd37sw" path="res://generated/tiled_visuals/pallet_town/pallet_town.visual.tscn" id="21_visual"]
@@ -2267,10 +2264,6 @@ display_name = "Pallet Route Guide"
 npc_sprite_frames = SubResource("SpriteFrames_0ke4d")
 mugshot = ExtResource("7_66okb")
 
-[node name="HealNPC" parent="Entities/NPCs" unique_id=437133988 instance=ExtResource("6_jhh0g")]
-position = Vector2(368, 240)
-npc_id = "kanto_pallet_town_nurse"
-
 [node name="FishingGuru" parent="Entities/NPCs" unique_id=1517982080 instance=ExtResource("26_item_gift")]
 position = Vector2(368, 816)
 reward_id = "kanto_pallet_town_old_rod"
@@ -2286,13 +2279,6 @@ npc_definition_id = "trainer_class_poke_fan_f"
 display_name = "Pallet Resident Mara"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("31_poke_fan_f")
-
-[node name="MarketSellerNPC" parent="Entities/NPCs" unique_id=634307267 instance=ExtResource("12_4x353")]
-position = Vector2(272, 240)
-npc_id = "kanto_pallet_town_market_attendant"
-npc_metadata_id = "pokemart_seller"
-mugshot = ExtResource("14_m86ow")
-manual_interaction_reach_tiles = 2
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=245092271]
 
@@ -2352,9 +2338,6 @@ tile_set = SubResource("TileSet_3e7rq")
 
 [node name="InitialSpawn" type="Marker2D" parent="Spawns" unique_id=1909342481]
 position = Vector2(656, 560)
-
-[node name="HealNPC" type="Marker2D" parent="Spawns" unique_id=138697794]
-position = Vector2(368, 272)
 
 [node name="FromRoute1" type="Marker2D" parent="Spawns" unique_id=1105260285]
 position = Vector2(1008, 112)

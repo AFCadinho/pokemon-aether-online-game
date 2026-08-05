@@ -39,6 +39,13 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 @export var required_quest_id := ""
 @export var required_quest_step_id := ""
 @export_enum("active", "completed") var required_quest_status := "completed"
+## Optional scene-presence window driven by projected story state.
+@export var visibility_required_quest_id := ""
+@export var visibility_required_quest_step_id := ""
+@export_enum("available", "active", "completed") var visibility_required_quest_status := "completed"
+@export var visibility_hidden_quest_id := ""
+@export var visibility_hidden_quest_step_id := ""
+@export_enum("available", "active", "completed") var visibility_hidden_quest_status := "completed"
 ## Exceptional scene-specific override. Normal dialogue comes from NPC metadata.
 @export var dialogue_id := ""
 @export var display_name := ""
@@ -94,6 +101,7 @@ var movement_current_offset_tiles := 0
 var movement_direction_sign := 1
 var movement_next_step_at_msec := 0
 var movement_reserved_tile := Vector2i.ZERO
+var story_visibility_active := true
 var is_npc_moving := false
 
 
@@ -127,6 +135,7 @@ func _ready_base_npc() -> void:
 		LocalizationManager.locale_changed.connect(_on_locale_changed)
 	if preload_quest_markers:
 		_initialize_quest_markers.call_deferred()
+	_apply_story_visibility()
 
 
 func _apply_npc_profile() -> void:
@@ -186,6 +195,8 @@ func _refresh_npc_profile_preview() -> void:
 
 
 func blocks_world_position(world_position: Vector2) -> bool:
+	if not story_visibility_active:
+		return false
 	var blocked_tile := _to_tile(feet_marker.global_position)
 	if is_npc_moving:
 		var checked_tile := _to_tile(world_position)
@@ -874,6 +885,8 @@ func _update_directional_sensors() -> void:
 
 
 func _can_start_manual_interaction() -> bool:
+	if not story_visibility_active:
+		return false
 	if is_interacting:
 		return false
 
@@ -951,6 +964,8 @@ func _run_story_or_legacy_interaction(body: Node2D, trigger: String) -> Dictiona
 		var fallback_result := result.duplicate(true)
 		fallback_result["legacy"] = true
 		return fallback_result
+	if bool(result.get("success", false)) and bool(result.get("handled", false)):
+		await _after_story_interaction(body, result)
 	return result
 
 
@@ -963,6 +978,10 @@ func _find_story_hook() -> Node:
 
 func interact_with_player(_player: Node2D) -> void:
 	await show_dialogue()
+
+
+func _after_story_interaction(_player: Node2D, _result: Dictionary) -> void:
+	pass
 
 
 func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> bool:
@@ -1105,7 +1124,45 @@ func _on_locale_changed(_locale: String) -> void:
 
 
 func _on_story_changed(_revision: int) -> void:
+	_apply_story_visibility()
 	_refresh_quest_marker()
+
+
+func _apply_story_visibility() -> void:
+	story_visibility_active = _is_story_visibility_active()
+	visible = story_visibility_active
+	if interaction_area != null:
+		interaction_area.monitoring = story_visibility_active
+		interaction_area.monitorable = story_visibility_active
+	if not story_visibility_active:
+		player_nearby = false
+		nearby_player = null
+		if quest_marker != null:
+			quest_marker.visible = false
+
+
+func _is_story_visibility_active() -> bool:
+	var required_id := visibility_required_quest_id.strip_edges()
+	if (
+		not required_id.is_empty()
+		and not StoryService.is_requirement_met(
+			required_id,
+			visibility_required_quest_step_id,
+			visibility_required_quest_status
+		)
+	):
+		return false
+	var hidden_id := visibility_hidden_quest_id.strip_edges()
+	if (
+		not hidden_id.is_empty()
+		and StoryService.is_requirement_met(
+			hidden_id,
+			visibility_hidden_quest_step_id,
+			visibility_hidden_quest_status
+		)
+	):
+		return false
+	return true
 
 
 func _get_dialogue_override_id() -> String:
@@ -1138,7 +1195,7 @@ func _get_dialogue_box() -> Node:
 
 
 func _on_interaction_area_body_entered(body: Node2D) -> void:
-	if body.name == "Player":
+	if story_visibility_active and body.name == "Player":
 		player_nearby = true
 		nearby_player = body
 

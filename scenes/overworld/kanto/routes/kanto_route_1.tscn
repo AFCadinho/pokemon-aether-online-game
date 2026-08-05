@@ -21,6 +21,8 @@
 [ext_resource type="SpriteFrames" uid="uid://uqldn2vhcla4" path="res://assets/npcs/classes/lass_frames.tres" id="29_lass"]
 [ext_resource type="SpriteFrames" uid="uid://cdhq6bete0vs8" path="res://assets/npcs/classes/mart_m_frames.tres" id="30_mart"]
 [ext_resource type="SpriteFrames" uid="uid://gy0k4ju8k6vq" path="res://assets/npcs/classes/camper_frames.tres" id="31_camper"]
+[ext_resource type="SpriteFrames" uid="uid://cqxh37chx4v8a" path="res://assets/npcs/custom/adinho_dad_frames.tres" id="32_dad_frames"]
+[ext_resource type="Texture2D" uid="uid://cxbfneavbrouo" path="res://assets/sprites/mugshots/dadinho_mugshot.png" id="33_dad_mugshot"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oup8f"]
 atlas = ExtResource("13_cd607")
@@ -641,6 +643,22 @@ facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("29_lass")
 
 [node name="Dialogue" type="Node2D" parent="Entities/NPCs" unique_id=1893184129]
+
+[node name="Dadinho" parent="Entities/NPCs/Dialogue" instance=ExtResource("16_bnyo4")]
+position = Vector2(896, 2272)
+npc_id = "kanto_route_1_dadinho"
+npc_definition_id = "kanto_players_house_father"
+display_name = "Dadinho"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("32_dad_frames")
+sprite_offset = Vector2(16, -16)
+mugshot = ExtResource("33_dad_mugshot")
+preload_quest_markers = true
+visibility_required_quest_id = "get_town_map"
+visibility_required_quest_step_id = "visit_father"
+visibility_required_quest_status = "completed"
+visibility_hidden_quest_id = "train_starter_to_level_10"
+visibility_hidden_quest_status = "completed"
 
 [node name="MartEmployee" parent="Entities/NPCs/Dialogue" unique_id=149252873 instance=ExtResource("16_bnyo4")]
 position = Vector2(944, 560)

@@ -4,7 +4,7 @@ const MAP_NPCS := {
 	"res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn": ["Entities/NPCs/PalletResident"],
 	"res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn": ["Entities/NPCs/ResearchAideNoah", "Entities/NPCs/ResearchAideEmma"],
 	"res://scenes/overworld/kanto/towns/pallet_town/rivals_house.tscn": ["Entities/NPCs/DaisyOak"],
-	"res://scenes/overworld/kanto/routes/kanto_route_1.tscn": ["Entities/NPCs/YoungsterLiam", "Entities/NPCs/LassZoe", "Entities/NPCs/Dialogue/MartEmployee", "Entities/NPCs/Dialogue/CamperQuinn"],
+	"res://scenes/overworld/kanto/routes/kanto_route_1.tscn": ["Entities/NPCs/YoungsterLiam", "Entities/NPCs/LassZoe", "Entities/NPCs/Dialogue/Dadinho", "Entities/NPCs/Dialogue/MartEmployee", "Entities/NPCs/Dialogue/CamperQuinn"],
 	"res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn": ["Entities/NPCs/LeagueFanDorian", "Entities/NPCs/ForestScoutNico", "Entities/NPCs/SchoolKidJune", "Entities/NPCs/CatchingMentorGideon"],
 	"res://scenes/overworld/kanto/routes/kanto_route_22.tscn": ["Entities/NPCs/GaryOak", "Entities/NPCs/LeagueHikerGrant", "Entities/NPCs/YoungsterCaleb", "Entities/NPCs/LassPaige"],
 	"res://scenes/overworld/kanto/routes/kanto_route_2.tscn": ["Entities/NPCs/CaveResearcherOwen", "Entities/NPCs/ForestWatcherIvy", "Entities/NPCs/YoungsterMason", "Entities/NPCs/BugCatcherCale"],
