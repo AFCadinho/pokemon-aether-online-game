@@ -58,6 +58,16 @@ func _init() -> void:
 		"Lt. Surge resolves his exact Showdown portrait"
 	)
 	_check_equal(
+		catalog.resolve_portrait_id("", "kanto_pallet_town_north_guard", ""),
+		"showdown_policeman_gen7",
+		"Pallet Town route guard resolves the shared police portrait"
+	)
+	_check_equal(
+		catalog.resolve_portrait_id("", "kanto_route_1_north_guard", ""),
+		"showdown_policeman_gen7",
+		"Route 1 route guard resolves the shared police portrait"
+	)
+	_check_equal(
 		catalog.resolve_portrait_id("", "unlisted_nurse", "pokemon_center_nurse"),
 		"showdown_pokemoncenterlady",
 		"Reusable NPC resolves its profile portrait"
