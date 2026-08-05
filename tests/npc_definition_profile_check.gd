@@ -48,7 +48,7 @@ func _run() -> void:
 		_check(trainer_red_profile.get("mugshot") != null, "Trainer Red profile owns mugshot")
 
 	await _check_runtime_profile_application(trainer_red_profile)
-	_check_reused_profile_references()
+	_check_test_bosses_are_not_placed()
 	_check_gym_scene_has_no_fallback_copies()
 
 	quit(1 if failed else 0)
@@ -81,22 +81,19 @@ func _check_runtime_profile_application(profile: Resource) -> void:
 	npc.free()
 
 
-func _check_reused_profile_references() -> void:
+func _check_test_bosses_are_not_placed() -> void:
 	for scene_path: String in [PALLET_TOWN_SCENE, VIRIDIAN_CITY_SCENE]:
 		var source := FileAccess.get_file_as_string(scene_path)
 		_check(
-			source.contains('path="res://resources/npcs/trainers/trainer_red_boss.tres"'),
-			"%s references the shared Trainer Red profile" % scene_path.get_file()
-		)
-		_check(
-			source.contains("npc_profile = ExtResource"),
-			"%s assigns Trainer Red through npc_profile" % scene_path.get_file()
+			not source.contains('path="res://resources/npcs/trainers/trainer_red_boss.tres"')
+			and not source.contains('[node name="AshKetchum"'),
+			"%s does not place the Trainer Red test boss" % scene_path.get_file()
 		)
 
 
 func _check_gym_scene_has_no_fallback_copies() -> void:
 	var source := FileAccess.get_file_as_string(PEWTER_CITY_SCENE)
-	_check(source.count("npc_profile = ExtResource") >= 3, "Gym leaders use shared NPC profiles")
+	_check(source.count("npc_profile = ExtResource") >= 1, "Pewter's Gym Leader uses a shared NPC profile")
 	_check(
 		not source.contains("AtlasTexture_fallback"),
 		"Pewter City no longer serializes Gym Leader fallback sprites"

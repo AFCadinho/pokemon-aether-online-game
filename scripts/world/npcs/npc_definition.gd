@@ -12,4 +12,6 @@ class_name NpcDefinition
 
 @export_group("Presentation")
 @export var sprite_frames: SpriteFrames
+## Optional catalog id. Empty values use the central NPC assignment table.
+@export var portrait_id := ""
 @export var mugshot: Texture2D

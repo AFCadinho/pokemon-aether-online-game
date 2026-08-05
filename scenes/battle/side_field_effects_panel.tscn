@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://scripts/battle/battle_ui/side_field_effects_panel.gd" id="1_vyowf"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_menk3"]
-bg_color = Color(0.006, 0.025, 0.07, 0.86)
+bg_color = Color(0.006, 0.025, 0.07, 0.94)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
@@ -23,20 +23,20 @@ script = ExtResource("1_vyowf")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1162063764]
 layout_mode = 2
-theme_override_constants/margin_left = 6
-theme_override_constants/margin_top = 3
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=2132250053]
 layout_mode = 2
 
 [node name="FieldEffectRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1969953174]
 layout_mode = 2
-theme_override_constants/separation = 5
+theme_override_constants/separation = 6
 
 [node name="EffectIcon" type="TextureRect" parent="MarginContainer/VBoxContainer/FieldEffectRow" unique_id=1590265083]
-custom_minimum_size = Vector2(18, 18)
+custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
 texture = ExtResource("1_menk3")
 expand_mode = 2
@@ -45,11 +45,15 @@ stretch_mode = 6
 [node name="EffectLabel" type="Label" parent="MarginContainer/VBoxContainer/FieldEffectRow" unique_id=1491164831]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8745098, 0.92156863, 0.9843137, 1)
-theme_override_font_sizes/font_size = 12
+theme_override_colors/font_outline_color = Color(0.001, 0.008, 0.024, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 14
 text = ""
 
 [node name="EffectAmount" type="Label" parent="MarginContainer/VBoxContainer/FieldEffectRow" unique_id=53707715]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
-theme_override_font_sizes/font_size = 12
+theme_override_colors/font_outline_color = Color(0.001, 0.008, 0.024, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 14
 text = ""

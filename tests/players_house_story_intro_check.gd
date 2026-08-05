@@ -94,12 +94,19 @@ func _run() -> void:
 		)
 		_expect(str(father.get("display_name")) == "Dadinho", "father uses the Dadinho cameo name")
 		_expect(
-			father.position == Vector2(432, 944),
+			father.position == Vector2(448, 896),
 			"first visit keeps Dadinho at his downstairs intro position"
 		)
 		_expect(
 			father.get("npc_sprite_frames") == dad_frames,
 			"Dadinho profile applies the dedicated Adinho dad appearance"
+		)
+		var intro_sprite := father.get_node_or_null("Look/AnimatedSprite2D") as AnimatedSprite2D
+		_expect(
+			intro_sprite != null
+			and intro_sprite.position == Vector2(0, -16)
+			and intro_sprite.global_position == Vector2(448, 880),
+			"Dadinho's door sprite renders 16 pixels above his collision position"
 		)
 	if trigger != null:
 		_expect(trigger.monitoring, "first visit keeps the one-time automatic trigger active")

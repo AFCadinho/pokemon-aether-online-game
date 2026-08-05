@@ -51,6 +51,9 @@ var terminology_hint_label: Label
 @onready var sprite_style_status_label: Label = $MarginContainer/VBoxContainer/SpriteStyleStatusLabel
 @onready var fullscreen_check_box: CheckBox = $MarginContainer/VBoxContainer/FullscreenCheckBox
 @onready var resolution_options_button: OptionButton = $MarginContainer/VBoxContainer/ResolutionOptionsButton
+var world_pixel_scale_label: Label
+var world_pixel_scale_options_button: OptionButton
+var world_pixel_scale_hint_label: Label
 var cursor_scale_label: Label
 var cursor_scale_slider: HSlider
 var cursor_scale_value_label: Label
@@ -140,6 +143,7 @@ func _ready() -> void:
 	sprite_style_options_button.item_selected.connect(_on_sprite_style_selected)
 	fullscreen_check_box.toggled.connect(_on_fullscreen_toggled)
 	resolution_options_button.item_selected.connect(_on_resolution_selected)
+	world_pixel_scale_options_button.item_selected.connect(_on_world_pixel_scale_selected)
 	cursor_scale_slider.value_changed.connect(_on_cursor_scale_changed)
 	master_volume_slider.value_changed.connect(_on_master_volume_changed)
 	music_volume_slider.value_changed.connect(_on_music_volume_changed)
@@ -229,6 +233,7 @@ func _apply_settings_to_controls() -> void:
 
 	fullscreen_check_box.button_pressed = SettingsManager.fullscreen
 	_apply_resolution_options_to_control()
+	_apply_world_pixel_scale_options_to_control()
 	resolution_options_button.disabled = SettingsManager.fullscreen
 	_set_percentage_control(cursor_scale_slider, cursor_scale_value_label, SettingsManager.cursor_scale)
 
@@ -299,6 +304,7 @@ func _setup_tabs() -> void:
 	var about_tab: VBoxContainer = _create_tab_content("About", "ui.settings.tab.about")
 	account_tab_root = account_tab.get_parent().get_parent() as Control
 	_build_navigation()
+	_create_world_pixel_scale_control()
 	_create_cursor_scale_control()
 
 	language_label = Label.new()
@@ -349,6 +355,9 @@ func _setup_tabs() -> void:
 		fullscreen_check_box,
 		resolution_options_button.get_node("../ResolutionLabel"),
 		resolution_options_button,
+		world_pixel_scale_label,
+		world_pixel_scale_options_button,
+		world_pixel_scale_hint_label,
 		cursor_scale_label,
 		cursor_scale_slider.get_parent(),
 	])
@@ -362,6 +371,9 @@ func _setup_tabs() -> void:
 		fullscreen_check_box,
 		resolution_options_button.get_node("../ResolutionLabel"),
 		resolution_options_button,
+		world_pixel_scale_label,
+		world_pixel_scale_options_button,
+		world_pixel_scale_hint_label,
 		cursor_scale_label,
 		cursor_scale_slider.get_parent(),
 	])
@@ -488,6 +500,21 @@ func _create_tab_content(tab_name: String, translation_key: String) -> VBoxConta
 	content.add_theme_constant_override("separation", 12)
 	margin.add_child(content)
 	return content
+
+
+func _create_world_pixel_scale_control() -> void:
+	world_pixel_scale_label = Label.new()
+	world_pixel_scale_label.name = "WorldPixelScaleLabel"
+	_set_localized_text(world_pixel_scale_label, "ui.settings.world_pixel_scale")
+
+	world_pixel_scale_options_button = OptionButton.new()
+	world_pixel_scale_options_button.name = "WorldPixelScaleOptionsButton"
+	world_pixel_scale_options_button.focus_mode = Control.FOCUS_NONE
+
+	world_pixel_scale_hint_label = Label.new()
+	world_pixel_scale_hint_label.name = "WorldPixelScaleHintLabel"
+	world_pixel_scale_hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_set_localized_text(world_pixel_scale_hint_label, "ui.settings.world_pixel_scale_hint")
 
 
 func _create_cursor_scale_control() -> void:
@@ -970,6 +997,7 @@ func _refresh_localized_content() -> void:
 	_apply_sprite_style_option_labels()
 	_apply_language_options_to_control()
 	_apply_terminology_options_to_control()
+	_apply_world_pixel_scale_options_to_control()
 	_update_sprite_style_status_label("")
 	_refresh_impersonation_account_controls()
 	if account_user_label != null and account_tab_root != null and account_tab_root.visible:
@@ -1069,6 +1097,7 @@ func _apply_label_style(label: Label) -> void:
 		"SpriteStyleLabel",
 		"DisplayLabel",
 		"ResolutionLabel",
+		"WorldPixelScaleLabel",
 		"CursorScaleLabel",
 		"AudioLabel",
 		"BattleMusicLabel",
@@ -1374,6 +1403,17 @@ func _on_resolution_selected(index: int) -> void:
 		return
 
 	SettingsManager.set_window_resolution(resolution_metadata as Vector2i)
+
+
+func _on_world_pixel_scale_selected(index: int) -> void:
+	if loading_controls:
+		return
+
+	var scale_metadata: Variant = world_pixel_scale_options_button.get_item_metadata(index)
+	if not scale_metadata is float and not scale_metadata is int:
+		return
+
+	SettingsManager.set_world_pixel_scale(float(scale_metadata))
 
 
 func _on_cursor_scale_changed(value: float) -> void:
@@ -2156,3 +2196,33 @@ func _apply_resolution_options_to_control() -> void:
 
 	if resolution_options_button.item_count > 0:
 		resolution_options_button.select(selected_index)
+
+
+func _apply_world_pixel_scale_options_to_control() -> void:
+	if world_pixel_scale_options_button == null:
+		return
+
+	var was_loading_controls := loading_controls
+	loading_controls = true
+	world_pixel_scale_options_button.clear()
+
+	var selected_index := 0
+	for index: int in range(SettingsManager.AVAILABLE_WORLD_PIXEL_SCALES.size()):
+		var scale: float = SettingsManager.AVAILABLE_WORLD_PIXEL_SCALES[index]
+		var option_text := _world_pixel_scale_option_text(scale)
+		world_pixel_scale_options_button.add_item(option_text, index)
+		world_pixel_scale_options_button.set_item_metadata(index, scale)
+		if is_equal_approx(scale, SettingsManager.world_pixel_scale):
+			selected_index = index
+
+	if world_pixel_scale_options_button.item_count > 0:
+		world_pixel_scale_options_button.select(selected_index)
+	loading_controls = was_loading_controls
+
+
+func _world_pixel_scale_option_text(scale: float) -> String:
+	if is_equal_approx(scale, 1.0):
+		return LocalizationManager.text("ui.settings.world_pixel_scale_overview")
+	if is_equal_approx(scale, 1.5):
+		return LocalizationManager.text("ui.settings.world_pixel_scale_balanced")
+	return LocalizationManager.text("ui.settings.world_pixel_scale_close")

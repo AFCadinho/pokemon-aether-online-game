@@ -339,6 +339,25 @@ func format_status_event(event: Dictionary) -> String:
 
 	return _t("battle.event.status.affected", {"target": target, "status": status})
 
+func format_status_source_ability_event(event: Dictionary) -> String:
+	var ability_source := str(event.get("sourceAbility", "")).strip_edges()
+	if ability_source == "":
+		var raw_source := str(event.get("source", "")).strip_edges()
+		if not raw_source.to_lower().begins_with("ability:"):
+			return ""
+		ability_source = raw_source
+
+	var source_target := _format_battle_actor(str(event.get("sourceTarget", "")))
+	var ability := _format_ability_name(ability_source)
+	if ability == "":
+		return ""
+	if source_target == "":
+		return _t("battle.event.ability.activated_no_actor", {"ability": ability})
+	return _t("battle.event.ability.activated", {
+		"actor": source_target,
+		"ability": ability,
+	})
+
 func format_cant_event(event: Dictionary) -> String:
 	var actor := _format_battle_actor(str(event.get("actor", event.get("target", ""))))
 	var reason := _format_event_reason(str(event.get("reason", event.get("source", ""))))

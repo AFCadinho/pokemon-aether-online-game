@@ -26,6 +26,7 @@ func _init() -> void:
 	_check_protect_activation_uses_block_animation()
 	_check_evasion_drop_uses_normalized_negative_amount()
 	_check_paralysis_status_event_uses_status_effect_animation()
+	_check_status_event_logs_public_source_ability()
 	_check_paralysis_cant_event_replays_status_effect_animation()
 	_check_freeze_status_event_uses_status_effect_animation()
 	_check_freeze_cant_event_replays_status_effect_animation()
@@ -411,6 +412,29 @@ func _check_paralysis_status_event_uses_status_effect_animation() -> void:
 
 	_check_equal(str(result.get("effect_animation_key", "")), "status_paralysis", "paralysis status start uses status effect animation")
 	_check_equal(str(result.get("effect_animation_target_ident", "")), "p2a: Garchomp", "paralysis status start targets affected Pokemon")
+
+
+func _check_status_event_logs_public_source_ability() -> void:
+	var presentation = _make_presentation()
+	var result: Dictionary = presentation.build({
+		"type": "status",
+		"target": "p2a: Landorus",
+		"status": "par",
+		"source": "ability: Static",
+		"sourceTarget": "p1a: Zapdos",
+		"sourceAbility": "Static",
+	})
+
+	_check_equal(
+		str(result.get("pre_log_message", "")),
+		"Zapdos's Static activated!",
+		"status presentation logs its public source ability before the condition"
+	)
+	_check_equal(
+		str(result.get("log_message", "")),
+		"The opposing Landorus was paralyzed!",
+		"status presentation retains the affected Pokemon message"
+	)
 
 
 func _check_paralysis_cant_event_replays_status_effect_animation() -> void:
