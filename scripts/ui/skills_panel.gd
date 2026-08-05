@@ -14,6 +14,7 @@ const ACCENT_COLOR := Color("#70d8f6")
 const GOLD_COLOR := Color("#f3cf70")
 const SUCCESS_COLOR := Color("#79d99b")
 const LOCKED_COLOR := Color("#738092")
+const COMPLETE_COLOR := Color("#84a0b8")
 const FISHING_ICON: Texture2D = preload("res://assets/ui/fishing_rod.svg")
 const THIEVING_ICON: Texture2D = preload("res://assets/ui/skills.svg")
 
@@ -32,6 +33,10 @@ var experience_bar: ProgressBar
 var experience_label: Label
 var stats_label: Label
 var unlocks_container: VBoxContainer
+var targets_section: VBoxContainer
+var targets_summary_label: Label
+var targets_reset_label: Label
+var targets_container: VBoxContainer
 var skill_buttons: Dictionary = {}
 var selected_skill_id := "thieving"
 var loading := false
@@ -242,6 +247,36 @@ func _build_interface() -> void:
 	unlocks_container.add_theme_constant_override("separation", 4)
 	detail_content.add_child(unlocks_container)
 
+	targets_section = VBoxContainer.new()
+	targets_section.name = "TargetsSection"
+	targets_section.add_theme_constant_override("separation", 5)
+	detail_content.add_child(targets_section)
+
+	var targets_header := HBoxContainer.new()
+	targets_section.add_child(targets_header)
+
+	var targets_title := Label.new()
+	targets_title.name = "TargetsTitle"
+	targets_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	targets_title.add_theme_color_override("font_color", ACCENT_COLOR)
+	targets_title.add_theme_font_size_override("font_size", 12)
+	targets_header.add_child(targets_title)
+
+	targets_summary_label = Label.new()
+	targets_summary_label.add_theme_color_override("font_color", MUTED_TEXT_COLOR)
+	targets_summary_label.add_theme_font_size_override("font_size", 10)
+	targets_header.add_child(targets_summary_label)
+
+	targets_reset_label = Label.new()
+	targets_reset_label.add_theme_color_override("font_color", MUTED_TEXT_COLOR)
+	targets_reset_label.add_theme_font_size_override("font_size", 9)
+	targets_section.add_child(targets_reset_label)
+
+	targets_container = VBoxContainer.new()
+	targets_container.name = "TargetsContainer"
+	targets_container.add_theme_constant_override("separation", 5)
+	targets_section.add_child(targets_container)
+
 	_render_skills([])
 
 
@@ -311,6 +346,9 @@ func _render_detail(skill: Dictionary) -> void:
 		})
 	stats_label.text = _stats_text(skill_id, skill.get("stats", {}) as Dictionary)
 	_render_unlocks(skill.get("unlocks", []) as Array)
+	targets_section.visible = skill_id == "thieving"
+	if targets_section.visible:
+		_render_targets(skill.get("targets", []) as Array)
 
 
 func _render_unlocks(unlocks: Array) -> void:
@@ -333,6 +371,85 @@ func _render_unlocks(unlocks: Array) -> void:
 			}),
 		]
 		unlocks_container.add_child(row)
+
+
+func _render_targets(targets: Array) -> void:
+	for child: Node in targets_container.get_children():
+		targets_container.remove_child(child)
+		child.queue_free()
+	var available_count := 0
+	var completed_count := 0
+	for target_value: Variant in targets:
+		var target := target_value as Dictionary
+		if bool(target.get("availableToday", false)):
+			available_count += 1
+		if bool(target.get("attemptedToday", false)):
+			completed_count += 1
+		targets_container.add_child(_create_target_row(target))
+	targets_summary_label.text = _text("ui.skills.thieving.targets.summary", {
+		"available": available_count,
+		"completed": completed_count,
+		"total": targets.size(),
+	})
+	targets_reset_label.text = _text("ui.skills.thieving.targets.reset")
+
+
+func _create_target_row(target: Dictionary) -> Control:
+	var row := PanelContainer.new()
+	row.custom_minimum_size.y = 47.0
+	row.add_theme_stylebox_override("panel", _make_panel_style(Color("#07111ceb"), Color("#233d52"), 7, 1))
+
+	var content := HBoxContainer.new()
+	content.add_theme_constant_override("separation", 10)
+	row.add_child(content)
+
+	var identity := VBoxContainer.new()
+	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	identity.add_theme_constant_override("separation", 1)
+	content.add_child(identity)
+
+	var name_label := Label.new()
+	name_label.add_theme_color_override("font_color", TEXT_COLOR)
+	name_label.add_theme_font_size_override("font_size", 11)
+	name_label.text = _text(str(target.get("nameKey", "")))
+	identity.add_child(name_label)
+
+	var detail_label := Label.new()
+	detail_label.add_theme_color_override("font_color", MUTED_TEXT_COLOR)
+	detail_label.add_theme_font_size_override("font_size", 9)
+	detail_label.text = _text("ui.skills.thieving.target.detail", {
+		"type": _text("ui.skills.thieving.target_type.%s" % str(target.get("npcType", "civilian"))),
+		"location": _text(str(target.get("locationKey", ""))),
+		"level": int(target.get("requiredLevel", 1)),
+	})
+	identity.add_child(detail_label)
+
+	var status := Label.new()
+	status.custom_minimum_size = Vector2(104, 28)
+	status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	status.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	status.add_theme_font_size_override("font_size", 10)
+	var attempted := bool(target.get("attemptedToday", false))
+	var unlocked := bool(target.get("unlocked", false))
+	var available := bool(target.get("availableToday", false))
+	if attempted:
+		status.text = _text("ui.skills.thieving.target.completed")
+		status.add_theme_color_override("font_color", COMPLETE_COLOR)
+		status.add_theme_stylebox_override("normal", _make_panel_style(Color("#111d28"), Color("#38536a"), 7, 1))
+	elif not unlocked:
+		status.text = _text("ui.skills.thieving.target.level_required", {"level": int(target.get("requiredLevel", 1))})
+		status.add_theme_color_override("font_color", LOCKED_COLOR)
+		status.add_theme_stylebox_override("normal", _make_panel_style(Color("#10151c"), Color("#2c3540"), 7, 1))
+	elif available:
+		status.text = _text("ui.skills.thieving.target.available")
+		status.add_theme_color_override("font_color", SUCCESS_COLOR)
+		status.add_theme_stylebox_override("normal", _make_panel_style(Color("#0b241a"), Color("#397858"), 7, 1))
+	else:
+		status.text = _text("ui.skills.thieving.target.unavailable")
+		status.add_theme_color_override("font_color", LOCKED_COLOR)
+		status.add_theme_stylebox_override("normal", _make_panel_style(Color("#10151c"), Color("#2c3540"), 7, 1))
+	content.add_child(status)
+	return row
 
 
 func _stats_text(skill_id: String, stats: Dictionary) -> String:
@@ -375,6 +492,9 @@ func _refresh_localized_content() -> void:
 	var unlock_title := main_panel.find_child("UnlockTitle", true, false) as Label
 	if unlock_title != null:
 		unlock_title.text = _text("ui.skills.unlocks")
+	var targets_title := main_panel.find_child("TargetsTitle", true, false) as Label
+	if targets_title != null:
+		targets_title.text = _text("ui.skills.thieving.targets.title")
 
 
 func _current_area_id() -> String:

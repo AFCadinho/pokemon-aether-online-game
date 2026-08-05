@@ -2973,5 +2973,20 @@
   "ui.skills.unlock.super_rod": "Super Vara",
   "ui.skills.unlock.civilian": "Alvos civis",
   "ui.skills.unlock.trainer": "Alvos treinadores",
-  "ui.skills.unlock.veteran": "Alvos veteranos"
+  "ui.skills.unlock.veteran": "Alvos veteranos",
+  "ui.skills.thieving.targets.title": "ALVOS DIÁRIOS DE FURTO",
+  "ui.skills.thieving.targets.summary": "{available} disponíveis  •  {completed}/{total} tentados",
+  "ui.skills.thieving.targets.reset": "Cada alvo pode ser tentado uma vez por dia. Reinicia às 00:00 UTC.",
+  "ui.skills.thieving.target.dorian": "Fã da Liga Dorian",
+  "ui.skills.thieving.target.nico": "Bug Catcher Nico",
+  "ui.skills.thieving.target.gideon": "Mentor Gideon",
+  "ui.skills.thieving.location.viridian_city": "Cidade de Viridian",
+  "ui.skills.thieving.target_type.civilian": "Civil",
+  "ui.skills.thieving.target_type.trainer": "Treinador",
+  "ui.skills.thieving.target_type.veteran": "Veterano",
+  "ui.skills.thieving.target.detail": "{type}  •  {location}  •  Nv. {level}",
+  "ui.skills.thieving.target.available": "Disponível",
+  "ui.skills.thieving.target.completed": "Tentado hoje",
+  "ui.skills.thieving.target.level_required": "Requer Nv. {level}",
+  "ui.skills.thieving.target.unavailable": "Indisponível"
 }

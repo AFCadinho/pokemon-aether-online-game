@@ -92,6 +92,21 @@ func _on_thieving_state_changed(thieving_state: Dictionary) -> void:
 				unlock["unlocked"] = level >= int(unlock.get("requiredLevel", 1))
 				unlocks[unlock_index] = unlock
 			skill["unlocks"] = unlocks
+		var targets_value: Variant = skill.get("targets", [])
+		if targets_value is Array:
+			var attempted_value: Variant = thieving_state.get("attemptedNpcIds", [])
+			var attempted_ids: Array = attempted_value as Array if attempted_value is Array else []
+			var jailed := bool(thieving_state.get("jailed", false))
+			var targets: Array = targets_value as Array
+			for target_index in range(targets.size()):
+				var target := _dictionary_from_value(targets[target_index])
+				var attempted_today := str(target.get("npcId", "")) in attempted_ids
+				var unlocked := level >= int(target.get("requiredLevel", 1))
+				target["unlocked"] = unlocked
+				target["attemptedToday"] = attempted_today
+				target["availableToday"] = unlocked and not attempted_today and not jailed
+				targets[target_index] = target
+			skill["targets"] = targets
 		skills[index] = skill
 		state_changed.emit(skills.duplicate(true))
 		return

@@ -80,6 +80,11 @@ func _run() -> void:
 				{"id": "trainer", "requiredLevel": 10, "unlocked": true, "labelKey": "ui.skills.unlock.trainer"},
 				{"id": "veteran", "requiredLevel": 20, "unlocked": true, "labelKey": "ui.skills.unlock.veteran"},
 			],
+			"targets": [
+				{"npcId": "kanto_viridian_city_league_fan_dorian", "npcType": "civilian", "nameKey": "ui.skills.thieving.target.dorian", "locationKey": "ui.skills.thieving.location.viridian_city", "requiredLevel": 1, "unlocked": true, "attemptedToday": true, "availableToday": false},
+				{"npcId": "kanto_viridian_city_forest_scout_nico", "npcType": "trainer", "nameKey": "ui.skills.thieving.target.nico", "locationKey": "ui.skills.thieving.location.viridian_city", "requiredLevel": 10, "unlocked": true, "attemptedToday": false, "availableToday": true},
+				{"npcId": "kanto_viridian_city_catching_mentor_gideon", "npcType": "veteran", "nameKey": "ui.skills.thieving.target.gideon", "locationKey": "ui.skills.thieving.location.viridian_city", "requiredLevel": 20, "unlocked": true, "attemptedToday": false, "availableToday": true},
+			],
 		},
 	]
 	skills_service.set("skills", test_skills)
@@ -91,8 +96,31 @@ func _run() -> void:
 	_check((panel.get("detail_level") as Label).text.contains("20"), "the detail view shows the server level")
 	_check((panel.get("stats_label") as Label).text.contains("42"), "Thieving currency and modifiers are visible")
 	_check((panel.get("unlocks_container") as VBoxContainer).get_child_count() == 3, "level-gated target unlocks are listed")
+	_check((panel.get("targets_container") as VBoxContainer).get_child_count() == 3, "daily pickpocket targets are listed")
+	_check((panel.get("targets_summary_label") as Label).text.contains("2") and (panel.get("targets_summary_label") as Label).text.contains("1/3"), "target summary shows available and attempted counts")
+	var first_target := (panel.get("targets_container") as VBoxContainer).get_child(0) as PanelContainer
+	var first_target_content := first_target.get_child(0) as HBoxContainer
+	var first_target_status := first_target_content.get_child(1) as Label
+	_check(first_target_status.text == "Attempted today", "attempted targets have a clear daily status")
+	skills_service.call("_on_thieving_state_changed", {
+		"level": 20,
+		"totalExperience": 9500,
+		"experienceIntoLevel": 0,
+		"experienceForNextLevel": 1000,
+		"currency": 50,
+		"wanted": 70,
+		"attemptedNpcIds": [
+			"kanto_viridian_city_league_fan_dorian",
+			"kanto_viridian_city_forest_scout_nico",
+		],
+		"jailed": false,
+	})
+	var refreshed_second_target := (panel.get("targets_container") as VBoxContainer).get_child(1) as PanelContainer
+	var refreshed_second_content := refreshed_second_target.get_child(0) as HBoxContainer
+	_check((refreshed_second_content.get_child(1) as Label).text == "Attempted today", "a successful pickpocket refreshes the daily target status immediately")
 	panel.call("_select_skill", "fishing")
 	_check((panel.get("detail_name") as Label).text == "Fishing", "skill cards switch the detailed view")
+	_check(not (panel.get("targets_section") as VBoxContainer).visible, "the target catalog only appears for Thieving")
 	_check(is_equal_approx((panel.get("experience_bar") as ProgressBar).value, 42.86), "XP progress uses the server percentage")
 
 	for locale_path: String in [
