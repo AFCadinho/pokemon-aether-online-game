@@ -104,6 +104,12 @@ func _init() -> void:
 	var oak_texture := catalog.get_texture("showdown_oak")
 	_check_true(oak_texture != null, "Assigned portrait texture loads on demand")
 	_check_true(catalog.get_texture("showdown_oak") == oak_texture, "Loaded portrait texture is cached")
+	var breeder_texture := catalog.get_texture("showdown_pokemonbreeder_gen4")
+	_check_true(breeder_texture != null, "Gen 4 Pokémon Breeder portrait texture loads on demand")
+	_check_true(
+		breeder_texture != null and breeder_texture.get_size() == Vector2(80, 80),
+		"Gen 4 Pokémon Breeder portrait keeps its catalog dimensions"
+	)
 
 	catalog.queue_free()
 	quit(1 if failed else 0)
