@@ -51,6 +51,7 @@ const QUEST_LOCALIZATION_KEYS: Array[String] = [
 	"story.kanto.reach_viridian_city.title",
 	"story.kanto.reach_viridian_city.summary",
 	"story.kanto.reach_viridian_city.travel",
+	"story.kanto.reach_viridian_city.return",
 ]
 
 var failed := false

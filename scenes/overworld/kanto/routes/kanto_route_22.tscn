@@ -16,6 +16,7 @@
 [ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="13_youngster"]
 [ext_resource type="SpriteFrames" uid="uid://uqldn2vhcla4" path="res://assets/npcs/classes/lass_frames.tres" id="14_lass"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="15_pokemon"]
+[ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="16_story_hook"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_viridian"]
 size = Vector2(64, 176)
@@ -312,6 +313,12 @@ npc_definition_id = "trainer_class_blue"
 display_name = "Gary Oak"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("11_blue")
+preload_quest_markers = true
+
+[node name="MeetGaryStoryHook" type="Node" parent="Entities/NPCs/GaryOak"]
+script = ExtResource("16_story_hook")
+interaction_id = "route_22_meet_gary"
+entity_id = "kanto_route_22_gary_oak"
 
 [node name="LeagueHikerGrant" parent="Entities/NPCs" unique_id=181329504 instance=ExtResource("9_dialogue")]
 position = Vector2(656, 560)

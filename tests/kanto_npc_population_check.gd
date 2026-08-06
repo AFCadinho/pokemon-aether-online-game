@@ -48,6 +48,7 @@ func _run() -> void:
 	_check_class_frames()
 	for scene_path: String in MAP_NPCS:
 		_check_map(scene_path, MAP_NPCS[scene_path])
+	_check_route_22_gary_story_hook()
 	for scene_path: String in TRANSITION_ATTENDANTS:
 		_check_transition_attendant(scene_path, TRANSITION_ATTENDANTS[scene_path])
 	quit(1 if failed else 0)
@@ -96,6 +97,22 @@ func _check_map(scene_path: String, npc_paths: Array) -> void:
 			)
 		var cell := collision.local_to_map(collision.to_local(npc.global_position))
 		_check(collision.get_cell_source_id(cell) == -1, "%s stands on a walkable tile" % npc_path.get_file())
+	map.free()
+
+
+func _check_route_22_gary_story_hook() -> void:
+	var packed := load("res://scenes/overworld/kanto/routes/kanto_route_22.tscn") as PackedScene
+	_check(packed != null, "Route 22 loads for Gary story contract")
+	if packed == null:
+		return
+	var map := packed.instantiate()
+	var gary := map.get_node_or_null("Entities/NPCs/GaryOak")
+	var hook := map.get_node_or_null("Entities/NPCs/GaryOak/MeetGaryStoryHook")
+	_check(gary != null and bool(gary.get("preload_quest_markers")), "Gary preloads his quest marker")
+	_check(hook != null, "Gary owns the Route 22 story hook")
+	if hook != null:
+		_check(str(hook.get("interaction_id")) == "route_22_meet_gary", "Gary uses the Route 22 meeting interaction")
+		_check(str(hook.get("entity_id")) == "kanto_route_22_gary_oak", "Gary's story hook uses his NPC identity")
 	map.free()
 
 
