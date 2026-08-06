@@ -968,6 +968,8 @@ var market_items: Array[Dictionary] = []
 var market_selected_item: Dictionary = {}
 var market_purchase_in_progress := false
 var market_mode := "player_buys"
+var movement_blocking_ui_panels: Dictionary = {}
+var owns_modal_overworld_input_lock := false
 var market_context: Dictionary = {}
 var mailbox_messages: Array[Dictionary] = []
 var selected_mail_id := -1
@@ -2995,11 +2997,63 @@ func _activate_ui_panel(panel: Control) -> void:
 	_focus_overlay_ui_layer()
 	panel.z_index = UI_WINDOW_Z_INDEX
 	panel.move_to_front()
+	_track_movement_blocking_ui_panel(panel)
 
 func _deactivate_ui_panel(panel: Control) -> void:
+	_untrack_movement_blocking_ui_panel(panel)
 	_set_ui_panel_base_z(panel)
 	if not _has_visible_priority_overlay_panel():
 		layer = UI_OVERLAY_BASE_LAYER
+
+
+func _track_movement_blocking_ui_panel(panel: Control) -> void:
+	if panel == null or not panel.visible or panel == town_map_popup:
+		return
+	var panel_id := panel.get_instance_id()
+	if not movement_blocking_ui_panels.has(panel_id):
+		movement_blocking_ui_panels[panel_id] = weakref(panel)
+		var callback := Callable(self, "_on_movement_blocking_panel_visibility_changed").bind(panel)
+		if not panel.visibility_changed.is_connected(callback):
+			panel.visibility_changed.connect(callback)
+		var exit_callback := Callable(self, "_on_movement_blocking_panel_tree_exiting").bind(panel_id)
+		if not panel.tree_exiting.is_connected(exit_callback):
+			panel.tree_exiting.connect(exit_callback)
+	_refresh_modal_overworld_input_lock()
+
+
+func _untrack_movement_blocking_ui_panel(panel: Control) -> void:
+	if panel != null:
+		movement_blocking_ui_panels.erase(panel.get_instance_id())
+	_refresh_modal_overworld_input_lock()
+
+
+func _on_movement_blocking_panel_visibility_changed(panel: Control) -> void:
+	if panel == null or panel.visible:
+		return
+	_untrack_movement_blocking_ui_panel(panel)
+
+
+func _on_movement_blocking_panel_tree_exiting(panel_id: int) -> void:
+	movement_blocking_ui_panels.erase(panel_id)
+	_refresh_modal_overworld_input_lock()
+
+
+func _refresh_modal_overworld_input_lock() -> void:
+	for panel_id: Variant in movement_blocking_ui_panels.keys():
+		var panel_reference := movement_blocking_ui_panels.get(panel_id) as WeakRef
+		var panel := panel_reference.get_ref() as Control if panel_reference != null else null
+		if panel == null or not panel.visible:
+			movement_blocking_ui_panels.erase(panel_id)
+
+	if not movement_blocking_ui_panels.is_empty():
+		if not owns_modal_overworld_input_lock and not GameState.is_overworld_input_locked():
+			GameState.lock_overworld_input()
+			owns_modal_overworld_input_lock = true
+		return
+
+	if owns_modal_overworld_input_lock:
+		owns_modal_overworld_input_lock = false
+		GameState.unlock_overworld_input()
 
 func _on_focusable_overlay_panel_gui_input(event: InputEvent, panel: Control) -> void:
 	if not (event is InputEventMouseButton):
