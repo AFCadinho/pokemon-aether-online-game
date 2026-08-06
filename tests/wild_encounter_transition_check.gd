@@ -36,6 +36,16 @@ func _run_checks() -> void:
 	await transition.reveal()
 	_check_true(not transition.visible, "ranked transition hides after battle reveal")
 
+	transition.begin(WildEncounterTransition.STYLE_TRAINER)
+	_check_true(transition.transition_style == WildEncounterTransition.STYLE_TRAINER, "ordinary NPC battles use the trainer transition")
+	await transition.wait_until_covered()
+	await transition.reveal()
+
+	transition.begin(WildEncounterTransition.STYLE_SPECIAL_TRAINER)
+	_check_true(transition.transition_style == WildEncounterTransition.STYLE_SPECIAL_TRAINER, "special NPC battles use the cinematic trainer transition")
+	await transition.wait_until_covered()
+	await transition.reveal()
+
 	var ui_source := FileAccess.get_file_as_string(UI_OVERLAY_PATH)
 	var world_source := FileAccess.get_file_as_string(WORLD_PATH)
 	var battle_source := FileAccess.get_file_as_string(BATTLE_PATH)
@@ -59,6 +69,23 @@ func _run_checks() -> void:
 	_check_true(
 		ready_index > setup_index and ready_index < lead_selection_index,
 		"ranked transition reveals when Team Preview is ready"
+	)
+	var world_trainer_start_index := world_source.find("func start_trainer_battle")
+	var trainer_transition_index := world_source.find("_begin_trainer_battle_transition(trainer_data)", world_trainer_start_index)
+	var trainer_request_index := world_source.find("await create_trainer_battle_response", world_trainer_start_index)
+	var trainer_mount_index := world_source.find("if not _mount_battle_ui():", world_trainer_start_index)
+	_check_true(
+		trainer_transition_index > world_trainer_start_index
+		and trainer_transition_index < trainer_request_index
+		and trainer_request_index < trainer_mount_index,
+		"NPC transition covers trainer loading before the battle scene mounts"
+	)
+	var trainer_setup_index := battle_source.find("func setup_trainer_battle_from_response")
+	var trainer_ready_index := battle_source.find("await _notify_trainer_entry_ready(entry_ready_callback)", trainer_setup_index)
+	var trainer_lead_index := battle_source.find("var lead_response := await _run_trainer_lead_selection", trainer_setup_index)
+	_check_true(
+		trainer_ready_index > trainer_setup_index and trainer_ready_index < trainer_lead_index,
+		"NPC transition reveals before trainer lead selection begins"
 	)
 
 	transition.queue_free()

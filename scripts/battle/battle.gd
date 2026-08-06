@@ -5648,7 +5648,12 @@ func play_wild_battle_intro(player_pokemon: Pokemon, api_response: Dictionary) -
 	_show_battle_controls_after_initial_events()
 	_set_battle_actions_ready(true)
 
-func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: Dictionary, api_response: Dictionary) -> void:
+func setup_trainer_battle_from_response(
+	player_pokemon: Pokemon,
+	trainer_data: Dictionary,
+	api_response: Dictionary,
+	entry_ready_callback: Callable = Callable()
+) -> void:
 	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null)
 	battle_banter_presenter.configure(trainer_data)
 	battle_voice_director.configure(str(api_response.get("battleId", "")), "trainer", trainer_data)
@@ -5657,10 +5662,13 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 	display_data_presenter.set_trainer_team(api_response.get("trainerTeam", []))
 
 	if not _apply_team_preview_battle_response(api_response):
+		await _notify_trainer_entry_ready(entry_ready_callback)
 		return
 
 	if not _should_show_team_preview(api_response):
 		_show_default_trainer_leads_before_selection(player_pokemon, api_response)
+
+	await _notify_trainer_entry_ready(entry_ready_callback)
 
 	var lead_response := await _run_trainer_lead_selection(api_response)
 	if lead_response.is_empty():
@@ -5695,6 +5703,11 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 	await _present_battle_banter_cues(battle_banter_presenter.take_battle_start_cues())
 	_show_battle_controls_after_initial_events()
 	_set_battle_actions_ready(true)
+
+
+func _notify_trainer_entry_ready(entry_ready_callback: Callable) -> void:
+	if entry_ready_callback.is_valid():
+		await entry_ready_callback.call()
 
 func setup_pvp_battle_from_response(
 	player_pokemon: Pokemon,

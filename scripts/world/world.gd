@@ -741,6 +741,38 @@ func _begin_wild_encounter_transition() -> int:
 	return Time.get_ticks_msec()
 
 
+func _begin_trainer_battle_transition(trainer_data: Dictionary) -> int:
+	wild_encounter_transition.begin(_trainer_battle_transition_style(trainer_data))
+	return Time.get_ticks_msec()
+
+
+func _trainer_battle_transition_style(trainer_data: Dictionary) -> String:
+	var configured_style := str(
+		trainer_data.get(
+			"battleTransitionStyle",
+			trainer_data.get("battle_transition_style", "")
+		)
+	).strip_edges().to_lower()
+	if configured_style in [
+		WildEncounterTransition.STYLE_TRAINER,
+		WildEncounterTransition.STYLE_SPECIAL_TRAINER,
+	]:
+		return configured_style
+
+	var trainer_class := str(
+		trainer_data.get("trainer_class", trainer_data.get("trainerClass", ""))
+	).strip_edges().to_lower().replace(" ", "_").replace("-", "_")
+	if trainer_class in [
+		"rival",
+		"gym_leader",
+		"elite_four",
+		"champion",
+		"boss",
+	]:
+		return WildEncounterTransition.STYLE_SPECIAL_TRAINER
+	return WildEncounterTransition.STYLE_TRAINER
+
+
 func begin_pvp_battle_transition() -> void:
 	if wild_encounter_transition == null or not is_instance_valid(wild_encounter_transition):
 		return
@@ -2342,30 +2374,39 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 	active_trainer_outro_dialogue_id = str(trainer_data.get("outroDialogueId", "")).strip_edges()
 	active_trainer_mugshot = trainer_data.get("_battle_mugshot") as Texture2D
 	_lock_overworld_for_battle()
+	var transition_started_at_msec := _begin_trainer_battle_transition(trainer_data)
 
 	var response: Dictionary = await create_trainer_battle_response(trainer_id)
 	if not response.get("success", false):
 		push_warning("World.start_trainer_battle failed: %s" % str(response.get("error", "Unknown error")))
+		await _cancel_wild_encounter_transition()
 		_abort_battle_start()
 		return response
 	active_battle_id = str(response.get("battleId", ""))
 	_save_player_activity_state_deferred("battle", _get_current_activity_context())
 
+	await _wait_for_wild_encounter_cover(transition_started_at_msec)
+
 	if not _mount_battle_ui():
 		push_error("World.start_trainer_battle failed: could not load battle scene.")
+		await _cancel_wild_encounter_transition()
 		_abort_battle_start()
 		return {
 			"success": false,
 			"code": "battle_ui_unavailable",
 		}
 
+	_prepare_battle_instance_reveal()
 	MusicManager.play_trainer_battle_music()
 
 	await battle_instance.setup_trainer_battle_from_response(
 		PlayerSave.party[0],
 		trainer_data,
-		response
+		response,
+		Callable(self, "_reveal_prepared_wild_battle")
 	)
+	if wild_encounter_transition.visible:
+		await _reveal_prepared_wild_battle()
 
 	return {"success": true, "battleId": active_battle_id}
 
