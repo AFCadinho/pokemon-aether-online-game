@@ -10,6 +10,7 @@ var message_timing: BattleMessageTiming
 var host_node: Node
 var set_active_hud_hp_from_event: Callable
 var animation_guard: Callable
+var show_trainer_command: Callable
 var last_battle_log_player_id := ""
 
 
@@ -21,7 +22,8 @@ func setup(
 	timing: BattleMessageTiming,
 	host: Node,
 	hp_event_callback: Callable,
-	animation_guard_callback: Callable = Callable()
+	animation_guard_callback: Callable = Callable(),
+	trainer_command_callback: Callable = Callable()
 ) -> void:
 	battle_log_panel = battle_log
 	mini_battle_feed = mini_feed
@@ -31,6 +33,7 @@ func setup(
 	host_node = host
 	set_active_hud_hp_from_event = hp_event_callback
 	animation_guard = animation_guard_callback
+	show_trainer_command = trainer_command_callback
 
 
 func reset_battle_log_player_gap() -> void:
@@ -109,6 +112,8 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 			"faint_target": faint_target_ident,
 			"stat_target": stat_change_target_ident,
 		})
+	if animations_allowed and attack_actor_ident != "" and move_animation_name != "":
+		_show_trainer_move_command(attack_actor_ident, move_animation_name)
 	var defer_stat_change_effect := (
 		stat_change_target_ident != ""
 		and effect_animation_key in ["stat_up", "stat_down"]
@@ -206,6 +211,17 @@ func _can_start_battle_animation(source: String, details: Dictionary = {}) -> bo
 		return true
 
 	return bool(animation_guard.call(source, details))
+
+
+func _show_trainer_move_command(actor_ident: String, move_name: String) -> void:
+	if not show_trainer_command.is_valid():
+		return
+	show_trainer_command.call({
+		"kind": "move",
+		"player_id": _get_player_id_from_ident(actor_ident),
+		"pokemon": actor_ident,
+		"move": move_name,
+	})
 
 
 func _add_battle_log_player_gap(event: Dictionary) -> void:

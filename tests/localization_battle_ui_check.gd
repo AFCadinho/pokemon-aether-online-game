@@ -117,11 +117,29 @@ func _run() -> void:
 		"Chuva: 3",
 		"Atq"
 	)
+	_check_command_localization()
 
 	localization_manager.call("set_locale", original_locale)
 	host.queue_free()
 	await process_frame
 	quit(1 if failed else 0)
+
+
+func _check_command_localization() -> void:
+	localization_manager.call("set_locale", "en")
+	_check(
+		localization_manager.call("text", "battle.command.move", {"pokemon": "Lopunny", "move": "Fake Out"}) == "Lopunny, use Fake Out!",
+		"English trainer move command is localized"
+	)
+	_check(
+		localization_manager.call("text", "battle.command.switch", {"from": "Lopunny", "to": "Garchomp"}) == "Lopunny, return! Go, Garchomp!",
+		"English trainer switch command is localized"
+	)
+	localization_manager.call("set_locale", "nl")
+	_check(
+		localization_manager.call("text", "battle.command.go", {"pokemon": "Garchomp"}) == "Ga ervoor, Garchomp!",
+		"Dutch trainer send-out command is localized"
+	)
 
 
 func _check_locale(

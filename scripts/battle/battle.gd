@@ -455,7 +455,8 @@ func _ready() -> void:
 		message_timing,
 		self,
 		Callable(self, "_set_active_hud_hp_from_event"),
-		Callable(self, "_can_start_pvp_render_animation")
+		Callable(self, "_can_start_pvp_render_animation"),
+		Callable(self, "_show_trainer_command")
 	)
 	_setup_status_condition_overlays()
 	_setup_mechanic_buttons()
@@ -7820,6 +7821,7 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 		if event_type == "switch" or event_type == "drag":
 			var switch_player_id := _get_switch_event_player_id(event_data)
 			if should_play_switch_ball_animations:
+				_show_switch_trainer_command(event_data, switch_player_id)
 				await _play_switch_recall_for_event(event_data, switch_player_id)
 			_release_ordered_response_display_species_for_player(switch_player_id)
 			battle_state.apply_event_conditions([event_data])
@@ -8794,6 +8796,64 @@ func _get_player_id_from_ident(ident: String) -> String:
 		return "p2"
 
 	return ""
+
+
+func _show_trainer_command(command: Dictionary) -> void:
+	if battle_type != BattleType.TRAINER:
+		return
+	if str(command.get("kind", "")) != "move":
+		return
+
+	var player_id := str(command.get("player_id", ""))
+	var pokemon_name := _format_battle_actor(str(command.get("pokemon", "")), false)
+	var move_name := str(command.get("move", "")).strip_edges()
+	if player_id == "" or pokemon_name == "" or move_name == "":
+		return
+
+	_show_trainer_command_text(player_id, _t("battle.command.move", {
+		"pokemon": pokemon_name,
+		"move": move_name,
+	}))
+
+
+func _show_switch_trainer_command(event_data: Dictionary, player_id: String) -> void:
+	if battle_type != BattleType.TRAINER or str(event_data.get("type", "")) == "drag":
+		return
+
+	var to_name := str(event_data.get("to", "")).strip_edges()
+	if to_name == "":
+		to_name = _format_battle_actor(str(event_data.get("toIdent", event_data.get("pokemon", ""))), false)
+	if player_id == "" or to_name == "":
+		return
+
+	var from_name := str(event_data.get("from", "")).strip_edges()
+	if from_name == "":
+		from_name = _format_battle_actor(str(event_data.get("fromIdent", "")), false)
+	var forced_switch := (
+		bool(event_data.get("forced", false))
+		or battle_state.is_active_pokemon_fainted(player_id)
+	)
+	var message := _t("battle.command.go", {"pokemon": to_name})
+	if not forced_switch and from_name != "":
+		message = _t("battle.command.switch", {
+			"from": from_name,
+			"to": to_name,
+		})
+
+	_show_trainer_command_text(player_id, message)
+
+
+func _show_trainer_command_text(player_id: String, message: String) -> void:
+	var trainer_sprite: BattleTrainerSprite
+	match player_id:
+		"p1":
+			trainer_sprite = player_trainer_sprite
+		"p2":
+			trainer_sprite = enemy_trainer_sprite
+		_:
+			return
+	if trainer_sprite != null:
+		trainer_sprite.show_command(message)
 
 func _play_shiny_entrance_if_needed(event_data: Dictionary) -> void:
 	var player_id := str(event_data.get("playerId", ""))

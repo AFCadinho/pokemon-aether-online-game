@@ -43,6 +43,11 @@ func _check_battle_setup_contract() -> void:
 	_check(source.contains("_show_npc_opponent_trainer(trainer_data)"), "trainer battles render the placed NPC")
 	_check(source.contains("_show_pvp_trainers(display_response)"), "PvP consumes appearances only from its projected response")
 	_check(source.contains("if appearance_state.is_empty():\n\t\treturn"), "missing opponent appearances stay hidden instead of using a false identity")
+	var switch_command_index := source.find("_show_switch_trainer_command(event_data, switch_player_id)")
+	var switch_recall_index := source.find("await _play_switch_recall_for_event(event_data, switch_player_id)", switch_command_index)
+	_check(switch_command_index >= 0, "switch events present a trainer command")
+	_check(switch_recall_index > switch_command_index, "switch commands appear immediately before recall animation")
+	_check(source.contains("if battle_type != BattleType.TRAINER:"), "wild battles do not show trainer command callouts")
 	var renderer_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/battle_trainer_sprite.gd")
 	_check(renderer_source.contains("REMOTE_PLAYER_AVATAR_SCRIPT_PATH"), "player staging reuses the overworld avatar renderer lazily")
 	_check(renderer_source.contains('"facingDirection": _direction_name(facing_direction)'), "player staging selects an inward-facing overworld pose")
@@ -72,9 +77,16 @@ func _check_runtime_renderer() -> void:
 	_check(renderer.visible, "NPC renderer becomes visible with valid frames")
 	_check(renderer.npc_sprite.visible, "NPC renderer exposes its still overworld pose")
 	_check(renderer.npc_sprite.animation == &"idle_left", "NPC battle trainers idle facing left")
+	renderer.show_command("Spearow, use Peck!")
+	var command_callout := renderer.command_callout as Control
+	var command_label := command_callout.get_node("Panel/MarginContainer/MessageLabel") as Label
+	_check(command_callout.visible, "trainer command callout becomes visible")
+	_check(command_label.text == "Spearow, use Peck!", "trainer command callout renders the requested command")
+	_check(command_callout.position.x < 0.0, "opponent command callout opens toward the battlefield")
 
 	renderer.clear()
 	_check(not renderer.visible, "clearing a trainer removes its battle visual")
+	_check(not command_callout.visible, "clearing a trainer also clears its command callout")
 	renderer.free()
 	npc.free()
 

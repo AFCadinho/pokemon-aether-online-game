@@ -9,6 +9,7 @@ func _init() -> void:
 	_check_faint_hp_update_is_before_faint_animation()
 	_check_stat_particles_and_sprite_response_share_one_presentation()
 	_check_heal_particles_and_sprite_response_share_one_presentation()
+	_check_trainer_command_is_before_move_animation()
 	quit(1 if failed else 0)
 
 
@@ -52,6 +53,19 @@ func _check_heal_particles_and_sprite_response_share_one_presentation() -> void:
 	_check_equal(combined_index >= 0, true, "healing particles and sprite response use one presentation path")
 	_check_equal(wish_effect_index >= 0, true, "Wish fulfillment retains its dedicated first effect")
 	_check_equal(wish_effect_index < combined_index, true, "Wish fulfillment plays before the combined normal heal presentation")
+
+
+func _check_trainer_command_is_before_move_animation() -> void:
+	var source := FileAccess.get_file_as_string(RENDERER_PATH)
+	var command_index := source.find("_show_trainer_move_command(attack_actor_ident, move_animation_name)")
+	var attack_index := source.find("await animation_router.play_attack_tween_for_actor(attack_actor_ident)")
+	var move_index := source.find("await animation_router.play_move_animation(move_animation_name")
+
+	_check_equal(command_index >= 0, true, "trainer move command presentation exists")
+	_check_equal(attack_index >= 0, true, "attack tween exists")
+	_check_equal(move_index >= 0, true, "move animation exists")
+	_check_equal(command_index < attack_index, true, "trainer command appears before the attack tween")
+	_check_equal(command_index < move_index, true, "trainer command appears before the move animation")
 
 
 func _check_equal(actual: Variant, expected: Variant, label: String) -> void:
