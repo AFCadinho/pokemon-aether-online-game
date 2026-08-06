@@ -18,7 +18,7 @@
 [ext_resource type="SpriteFrames" uid="uid://57e7bp514fh2" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="27_bug_catcher"]
 [ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="28_hiker"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="29_pokemon"]
-[ext_resource type="Script" uid="uid://uknpm86reiv4" path="res://scripts/world/kanto/towns/catching_mentor_gideon.gd" id="30_gideon_quest"]
+[ext_resource type="Script" uid="uid://rsoytxgppfk0" path="res://scripts/world/kanto/towns/catching_mentor_gideon.gd" id="30_gideon_quest"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route1"]
 size = Vector2(208, 34)
