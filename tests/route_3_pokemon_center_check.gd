@@ -11,7 +11,7 @@ func _init() -> void:
 	var center_source := FileAccess.get_file_as_string(CENTER_PATH)
 	_check(center_source.contains('map_id = "kanto_route_3_pokemon_center"'), "center has a unique map id")
 	_check(center_source.contains('npc_id = "kanto_route_3_pokemon_center_nurse_joy"'), "center places Nurse Joy")
-	_check(center_source.contains('target_spawn_name = "FromOutside"'), "center returns to the route")
+	_check(center_source.contains('target_spawn_name = "FromPokecenter"'), "center returns to the route")
 	var exit := _node_block(route_source, "ToPokecenter")
 	_check(exit.contains('target_scene_path = "res://scenes/overworld/kanto/routes/route_3_pokemon_center.tscn"'), "route exit targets the center")
 	_check(exit.contains('target_spawn_name = "FromOutside"'), "route exit uses the center doorway")
