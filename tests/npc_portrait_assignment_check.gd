@@ -73,6 +73,25 @@ func _init() -> void:
 		"Reusable NPC resolves its profile portrait"
 	)
 	_check_equal(
+		catalog.resolve_portrait_id("", "unlisted_seller", "pokemart_seller"),
+		"showdown_pokemonbreeder_gen4",
+		"Poké Mart item sellers use the Gen 4 Pokémon Breeder portrait"
+	)
+	_check_equal(
+		catalog.resolve_portrait_id("", "unlisted_buyer", "pokemart_buyer"),
+		"showdown_pokemonbreeder_gen4",
+		"Poké Mart item buyers use the Gen 4 Pokémon Breeder portrait"
+	)
+	_check_equal(
+		catalog.resolve_portrait_id(
+			"",
+			"kanto_viridian_city_pokemon_center_clerk_2",
+			"pokemart_buyer"
+		),
+		"showdown_pokemonbreeder_gen4",
+		"Placed Poké Mart buyers keep the shared breeder portrait"
+	)
+	_check_equal(
 		catalog.resolve_portrait_id("showdown_red_lgpe", "kanto_oaklab_oak_1", ""),
 		"showdown_red_lgpe",
 		"Scene/profile override takes precedence"

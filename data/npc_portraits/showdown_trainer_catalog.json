@@ -5224,6 +5224,15 @@
       "sha256": "f5f49610b04bdec844f8bf93cec5f7d0ccb85cd91f9447bae6132e0e00548366"
     },
     {
+      "id": "showdown_pokemonbreeder_gen4",
+      "filename": "pokemonbreeder-gen4.png",
+      "texture": "res://assets/sprites/trainer_cards/showdown/pokemonbreeder-gen4.png",
+      "artist": "Pokémon Showdown",
+      "source": "https://play.pokemonshowdown.com/sprites/trainers/pokemonbreeder-gen4.png",
+      "catalog_source": "https://play.pokemonshowdown.com/sprites/trainers/?view=sprites",
+      "sha256": "34f06b486d267a8d7c5e680d341283835355c0ef00e4c43e5d05178409ec575c"
+    },
+    {
       "id": "showdown_pokemonbreeder_gen6",
       "filename": "pokemonbreeder-gen6.png",
       "texture": "res://assets/sprites/trainer_cards/showdown/pokemonbreeder-gen6.png",
