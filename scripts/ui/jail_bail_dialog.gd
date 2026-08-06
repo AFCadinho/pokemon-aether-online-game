@@ -129,13 +129,18 @@ func _create_detainee_row(detainee: Dictionary) -> Control:
 	name_label.add_theme_color_override("font_color", Color("#eaf6ff"))
 	details.add_child(name_label)
 	var remaining := maxi(int(detainee.get("remainingSeconds", 0)), 0)
+	var wanted_level := clampi(int(detainee.get("wantedLevel", 0)), 0, 100)
 	var bail_cost := maxi(int(detainee.get("bailCost", 0)), 0)
 	var info := Label.new()
-	info.text = "%s remaining  •  ₽%d bail" % [_format_duration(remaining), bail_cost]
+	info.text = "%s remaining  •  Wanted %d%%  •  ₽%s bail" % [
+		_format_duration(remaining),
+		wanted_level,
+		_format_money(bail_cost),
+	]
 	info.add_theme_color_override("font_color", Color("#a9bfd0"))
 	details.add_child(info)
 	var pay_button := Button.new()
-	pay_button.text = "Pay ₽%d" % bail_cost
+	pay_button.text = "Pay ₽%s" % _format_money(bail_cost)
 	pay_button.custom_minimum_size = Vector2(120, 42)
 	pay_button.pressed.connect(_pay_bail.bind(int(detainee.get("targetPlayerId", 0))))
 	content.add_child(pay_button)
@@ -154,9 +159,9 @@ func _pay_bail(target_player_id: int) -> void:
 	if not bool(result.get("success", false)):
 		status_label.text = str(result.get("error", "Could not pay bail."))
 		return
-	get_tree().call_group("ui_overlay", "add_system_message", "%s was released for ₽%d." % [
+	get_tree().call_group("ui_overlay", "add_system_message", "%s was released for ₽%s." % [
 		str(result.get("targetDisplayName", "The trainer")),
-		int(result.get("paidAmount", 0)),
+		_format_money(int(result.get("paidAmount", 0))),
 	])
 	var refreshed: Dictionary = await ThievingService.load_bailable_detainees()
 	if bool(refreshed.get("success", false)):
@@ -170,6 +175,15 @@ func _format_duration(seconds: int) -> String:
 	if seconds >= 60:
 		return "%dm %02ds" % [seconds / 60, seconds % 60]
 	return "%ds" % seconds
+
+
+func _format_money(amount: int) -> String:
+	var digits := str(maxi(amount, 0))
+	var formatted := ""
+	while digits.length() > 3:
+		formatted = ",%s%s" % [digits.right(3), formatted]
+		digits = digits.left(digits.length() - 3)
+	return digits + formatted
 
 
 func _close() -> void:
