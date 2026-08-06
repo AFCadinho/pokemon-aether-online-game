@@ -346,6 +346,26 @@ position = Vector2(1424, 1504)
 display_name = "Pewter City Pokémon Center"
 area_id = "kanto_pewter_city_pokemon_center"
 
+[node name="GymDoorLock" parent="Entities/Interactables" instance=ExtResource("25_locked_door")]
+position = Vector2(592, 512)
+display_name = "Pewter City Gym"
+area_id = "kanto_pewter_city_gym"
+
+[node name="MuseumDoorLock" parent="Entities/Interactables" instance=ExtResource("25_locked_door")]
+position = Vector2(1392, 352)
+display_name = "Pewter City Museum"
+area_id = "kanto_pewter_city_museum"
+
+[node name="House1DoorLock" parent="Entities/Interactables" instance=ExtResource("25_locked_door")]
+position = Vector2(1200, 1024)
+display_name = "Pewter City House 1"
+area_id = "kanto_pewter_city_house_1"
+
+[node name="House2DoorLock" parent="Entities/Interactables" instance=ExtResource("25_locked_door")]
+position = Vector2(464, 1504)
+display_name = "Pewter City House 2"
+area_id = "kanto_pewter_city_house_2"
+
 [node name="Collision" type="TileMapLayer" parent="." unique_id=1977913234]
 visible = false
 z_index = 1000

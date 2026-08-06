@@ -92,6 +92,12 @@ func _init() -> void:
 	_expect(all_spawn_points_are_staff_safe, "Every spawn point is safe for staff teleport")
 	_expect(areas.has("kanto_route_2_gate"), "Inherited transition building is registered")
 	_expect(
+		areas.has("kanto_pewter_city_gym")
+			and bool((areas.get("kanto_pewter_city_gym", {}) as Dictionary).get("accessOnly", false))
+			and (areas.get("kanto_pewter_city_gym", {}) as Dictionary).get("defaultMode", "") == "closed",
+		"Future Pewter doors are registered as closed access-only areas"
+	)
+	_expect(
 		(areas.get("kanto_oaks_lab", {}) as Dictionary).get("locationGroupId", "")
 			== "kanto_pallet_town",
 		"Oak's Lab is grouped under Pallet Town"

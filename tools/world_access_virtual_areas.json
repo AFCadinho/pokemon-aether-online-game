@@ -1,0 +1,8 @@
+{
+  "areas": [
+    {"areaId":"kanto_pewter_city_gym","definition":{"areaType":"interior","defaultMode":"closed","label":"Pewter City Gym","locationGroupId":"kanto_pewter_city","locationGroupLabel":"Pewter City","regionName":"Kanto"}},
+    {"areaId":"kanto_pewter_city_museum","definition":{"areaType":"interior","defaultMode":"closed","label":"Pewter City Museum","locationGroupId":"kanto_pewter_city","locationGroupLabel":"Pewter City","regionName":"Kanto"}},
+    {"areaId":"kanto_pewter_city_house_1","definition":{"areaType":"interior","defaultMode":"closed","label":"Pewter City House 1","locationGroupId":"kanto_pewter_city","locationGroupLabel":"Pewter City","regionName":"Kanto"}},
+    {"areaId":"kanto_pewter_city_house_2","definition":{"areaType":"interior","defaultMode":"closed","label":"Pewter City House 2","locationGroupId":"kanto_pewter_city","locationGroupLabel":"Pewter City","regionName":"Kanto"}}
+  ]
+}
