@@ -343,6 +343,8 @@ npc_sprite_frames = ExtResource("11_firebreather")
 
 [node name="MtMoonSign" parent="Entities/Interactables" unique_id=764906515 instance=ExtResource("10_pprsw")]
 position = Vector2(2512, 976)
+sign_id = "kanto_route_3_mt_moon_sign"
+sign_type = "road"
 
 [node name="Spawns" type="Node2D" parent="." unique_id=120000001]
 
