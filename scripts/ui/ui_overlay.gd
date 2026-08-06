@@ -25032,6 +25032,7 @@ func _on_staff_teleport_button_pressed() -> void:
 		return
 	var opening := not staff_teleport_popup.visible
 	if opening:
+		_hide_staff_tools_popup()
 		staff_teleport_player_selection_confirmed = false
 		staff_teleport_player_action_mode = ""
 		if staff_teleport_player_results != null:
