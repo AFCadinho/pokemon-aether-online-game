@@ -23,6 +23,7 @@ var should_reconnect: bool = false
 var reconnect_timer: float = 0.0
 var session_check_timer: float = SESSION_CHECK_INTERVAL_SECONDS
 var session_invalid_handled: bool = false
+var connection_attempt_generation := 0
 
 
 func _process(delta: float) -> void:
@@ -62,22 +63,29 @@ func _process(delta: float) -> void:
 
 
 func connect_chat() -> void:
-	if connecting:
-		return
 	if not AuthService.is_authenticated():
 		return
 
 	should_reconnect = true
+	var ready_state := websocket.get_ready_state()
+	if connecting or ready_state != WebSocketPeer.STATE_CLOSED:
+		return
 	connecting = true
 	session_invalid_handled = false
 	session_check_timer = SESSION_CHECK_INTERVAL_SECONDS
-	_connect_chat_async.call_deferred()
+	connection_attempt_generation += 1
+	_connect_chat_async.call_deferred(connection_attempt_generation)
 
 
-func _connect_chat_async() -> void:
+func _connect_chat_async(attempt_generation: int) -> void:
 	var base_url: String = await GatewayApiConfig.get_base_url()
+	if attempt_generation != connection_attempt_generation:
+		return
 	if not AuthService.is_authenticated():
 		connecting = false
+		return
+	if websocket.get_ready_state() != WebSocketPeer.STATE_CLOSED:
+		connecting = websocket.get_ready_state() == WebSocketPeer.STATE_CONNECTING
 		return
 
 	var websocket_url: String = ClientBuild.append_websocket_query(
@@ -95,6 +103,7 @@ func _connect_chat_async() -> void:
 func disconnect_chat() -> void:
 	should_reconnect = false
 	connecting = false
+	connection_attempt_generation += 1
 	if websocket.get_ready_state() != WebSocketPeer.STATE_CLOSED:
 		websocket.close()
 	websocket = WebSocketPeer.new()
