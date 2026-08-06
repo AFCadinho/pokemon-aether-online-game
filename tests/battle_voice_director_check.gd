@@ -24,6 +24,14 @@ func _check_public_context_intents() -> void:
 	_check_equal(_resolve_switch(director, {"from_hp_percent": 25}).get("intent"), "save_wounded_pokemon", "low public HP selects protective switch intent")
 	_check_equal(_resolve_switch(director, {"foe_hp_percent": 25}).get("intent"), "press_weak_opponent", "low foe public HP selects pressure intent")
 	_check_equal(_resolve_switch(director, {}).get("intent"), "voluntary_switch", "ordinary switch keeps voluntary intent")
+	var first_summon := director.resolve_command({
+		"kind": "switch",
+		"player_id": "p1",
+		"from": "",
+		"to": "Charmander",
+		"pokemon": "Charmander",
+	}, {"turn": 0})
+	_check_equal(first_summon.get("intent"), "send_out", "first summons use the dedicated send-out voice variants")
 
 
 func _check_viewer_independent_selection() -> void:
@@ -125,6 +133,8 @@ func _check_battle_integration_contract() -> void:
 	_check(not command_source.contains("_is_spectator_battle"), "spectators are not excluded from public command callouts")
 	_check(renderer_source.count('"event": event_data') == 2, "move and true-miss dodge callouts retain the same public source event")
 	_check(source.contains("PvP public projections expose HP with the same ceiling rule"), "context HP follows the spectator-safe public projection rule")
+	_check(source.contains("func _present_initial_summon_command"), "trainer and PvP lead summons receive command callouts")
+	_check(source.contains("func _show_pvp_team_preview_greetings"), "PvP Team Preview exposes the shared sportsmanship greeting")
 
 
 func _resolve_switch(director: RefCounted, context: Dictionary) -> Dictionary:

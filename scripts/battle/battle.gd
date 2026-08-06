@@ -203,6 +203,7 @@ var summon_original_z_index := 0
 var summon_original_z_as_relative := true
 var summon_release_audio_mode := SUMMON_RELEASE_AUDIO_BALL
 var summon_release_cry_species := ""
+var pvp_team_preview_greeting_shown := false
 var current_move_hover_rect := Rect2()
 var current_party_hover_rect := Rect2()
 const OPPONENT_RESPONSE_HOLD_SECONDS := 0.0
@@ -5688,6 +5689,7 @@ func setup_trainer_battle_from_response(
 	# Keep the real lead containers hidden while their sprites are populated so
 	# they can only become visible at the Pokeball release frame.
 	await _prepare_team_preview_lead_summon_transition()
+	await _present_special_npc_battle_opening(trainer_data)
 	_show_original_player_lead_before_initial_events(player_species, player_pokemon)
 	_show_original_active_pokemon_for_player("p2", opponent_species)
 	await get_tree().process_frame
@@ -5696,11 +5698,12 @@ func setup_trainer_battle_from_response(
 		opponent_species,
 		last_rendered_event_seq,
 	])
+	await _present_initial_summon_command("p1", player_species)
 	await _play_lead_summon(_get_active_summon_ball_item_id("p1", player_pokemon.ball_item_id), player_species, player_sprite_box, "back")
+	await _present_initial_summon_command("p2", opponent_species)
 	await _play_lead_summon(_get_active_summon_ball_item_id("p2", "poke-ball"), opponent_species, enemy_sprite_box, "front")
 	_debug_battle_start("trainer.setup.after_lead_summons lastRenderedSeq=%d" % last_rendered_event_seq)
 	await _render_initial_battle_events(lead_response)
-	await _present_battle_banter_cues(battle_banter_presenter.take_battle_start_cues())
 	_show_battle_controls_after_initial_events()
 	_set_battle_actions_ready(true)
 
@@ -5786,7 +5789,9 @@ func setup_pvp_battle_from_response(
 	_show_original_player_lead_before_initial_events(player_species, player_pokemon)
 	_show_original_active_pokemon_for_player("p2", opponent_species)
 	await get_tree().process_frame
+	await _present_initial_summon_command("p1", player_species)
 	await _play_lead_summon(_get_active_summon_ball_item_id("p1", player_pokemon.ball_item_id), player_species, player_sprite_box, "back")
+	await _present_initial_summon_command("p2", opponent_species)
 	await _play_lead_summon(_get_active_summon_ball_item_id("p2", "poke-ball"), opponent_species, enemy_sprite_box, "front")
 	if not restored_history_log:
 		await _render_initial_battle_events(lead_response)
@@ -5999,6 +6004,7 @@ func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_poke
 	pvp_last_phase_update_batch_id = ""
 	pvp_last_phase_update_phase = ""
 	pvp_prechoice_buffer.reset()
+	pvp_team_preview_greeting_shown = false
 	_clear_pvp_presentation_fence_recovery_state()
 	pvp_gateway_epoch = ""
 	pvp_last_connection_server_seq = 0
@@ -6742,6 +6748,7 @@ func _run_pvp_team_preview_lead_selection(local_player_id: String) -> Dictionary
 	team_preview_lead_selection_active = true
 	queued_battle_action.clear()
 	_show_team_preview_layers()
+	_show_pvp_team_preview_greetings()
 	_set_battle_input_locked(false)
 	current_action_panel.set_message(_t("battle.prompt.choose_lead"))
 	current_action_view = ActionView.PARTY
@@ -6813,6 +6820,7 @@ func _run_pvp_spectator_team_preview() -> Dictionary:
 	team_preview_lead_selection_active = true
 	queued_battle_action.clear()
 	_show_team_preview_layers()
+	_show_pvp_team_preview_greetings()
 	_set_battle_input_locked(true)
 	current_action_view = ActionView.NONE
 	moves_grid.visible = false
@@ -8939,6 +8947,59 @@ func _show_trainer_command_text(player_id: String, message: String) -> bool:
 		return false
 	trainer_sprite.show_command(message)
 	return true
+
+
+func _present_initial_summon_command(player_id: String, pokemon_name: String) -> void:
+	if battle_type != BattleType.TRAINER:
+		return
+	var cleaned_name := _format_battle_actor(pokemon_name, false)
+	if player_id not in ["p1", "p2"] or cleaned_name == "":
+		return
+	var selection := battle_voice_director.resolve_command({
+		"kind": "switch",
+		"player_id": player_id,
+		"from": "",
+		"to": cleaned_name,
+		"pokemon": cleaned_name,
+	}, {
+		"turn": 0,
+		"forced": false,
+		"from_fainted": false,
+	})
+	var result := _show_battle_voice_selection(selection, "switch")
+	if not bool(result.get("shown", false)):
+		return
+	var minimum_read_seconds := clampf(
+		float(result.get("minimum_read_seconds", 0.45)),
+		0.45,
+		0.80
+	)
+	await get_tree().create_timer(minimum_read_seconds).timeout
+
+
+func _present_special_npc_battle_opening(trainer_data: Dictionary) -> void:
+	if _is_pvp_battle():
+		return
+	if str(trainer_data.get("battleTransitionStyle", "")) != WildEncounterTransition.STYLE_SPECIAL_TRAINER:
+		return
+	var opening_cues := battle_banter_presenter.take_battle_start_cues()
+	if not opening_cues.is_empty():
+		await _present_battle_banter_cues(opening_cues)
+		return
+	var message := _t("battle.banter.special.opening", {
+		"trainer": _get_player_display_name("p2"),
+	})
+	if _show_trainer_command_text("p2", message):
+		await get_tree().create_timer(1.10).timeout
+
+
+func _show_pvp_team_preview_greetings() -> void:
+	if not _is_pvp_battle() or pvp_team_preview_greeting_shown:
+		return
+	pvp_team_preview_greeting_shown = true
+	var greeting := _t("battle.voice.team_preview.greeting")
+	_show_trainer_command_text("p1", greeting)
+	_show_trainer_command_text("p2", greeting)
 
 
 func _present_battle_banter_cues(cues: Array[Dictionary]) -> void:

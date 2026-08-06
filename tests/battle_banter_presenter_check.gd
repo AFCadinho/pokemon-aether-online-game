@@ -92,6 +92,14 @@ func _check_battle_integration_contract() -> void:
 	_check(source.contains("battle_banter_presenter.take_battle_start_cues()"), "trainer intro renders battle-start banter")
 	_check(source.contains("battle_banter_presenter.take_cues_for_event(event_data)"), "ordered battle events drive banter")
 	_check(source.contains('source != "initial_battle_events" and not _is_pvp_battle()'), "initial lead history and PvP cannot trigger NPC banter")
+	var trainer_setup_start := source.find("func setup_trainer_battle_from_response")
+	var trainer_setup_end := source.find("\nfunc ", trainer_setup_start + 1)
+	var trainer_setup := source.substr(trainer_setup_start, trainer_setup_end - trainer_setup_start)
+	_check(
+		trainer_setup.find("_present_special_npc_battle_opening(trainer_data)")
+		< trainer_setup.find("_play_lead_summon"),
+		"special NPC opening banter appears before the first summon"
+	)
 
 
 func _check_equal(actual: Variant, expected: Variant, label: String) -> void:

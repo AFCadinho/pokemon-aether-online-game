@@ -2366,6 +2366,8 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 			"code": "trainer_battle_configuration_invalid",
 		}
 
+	var battle_trainer_data := trainer_data.duplicate(true)
+	battle_trainer_data["battleTransitionStyle"] = _trainer_battle_transition_style(trainer_data)
 	is_in_battle = true
 	active_battle_kind = "trainer"
 	active_battle_id = ""
@@ -2374,7 +2376,7 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 	active_trainer_outro_dialogue_id = str(trainer_data.get("outroDialogueId", "")).strip_edges()
 	active_trainer_mugshot = trainer_data.get("_battle_mugshot") as Texture2D
 	_lock_overworld_for_battle()
-	var transition_started_at_msec := _begin_trainer_battle_transition(trainer_data)
+	var transition_started_at_msec := _begin_trainer_battle_transition(battle_trainer_data)
 
 	var response: Dictionary = await create_trainer_battle_response(trainer_id)
 	if not response.get("success", false):
@@ -2401,7 +2403,7 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 
 	await battle_instance.setup_trainer_battle_from_response(
 		PlayerSave.party[0],
-		trainer_data,
+		battle_trainer_data,
 		response,
 		Callable(self, "_reveal_prepared_wild_battle")
 	)

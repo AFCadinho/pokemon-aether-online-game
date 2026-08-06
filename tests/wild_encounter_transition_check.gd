@@ -71,7 +71,7 @@ func _run_checks() -> void:
 		"ranked transition reveals when Team Preview is ready"
 	)
 	var world_trainer_start_index := world_source.find("func start_trainer_battle")
-	var trainer_transition_index := world_source.find("_begin_trainer_battle_transition(trainer_data)", world_trainer_start_index)
+	var trainer_transition_index := world_source.find("_begin_trainer_battle_transition(battle_trainer_data)", world_trainer_start_index)
 	var trainer_request_index := world_source.find("await create_trainer_battle_response", world_trainer_start_index)
 	var trainer_mount_index := world_source.find("if not _mount_battle_ui():", world_trainer_start_index)
 	_check_true(
