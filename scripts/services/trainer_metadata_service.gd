@@ -89,6 +89,15 @@ func _normalize_trainer_metadata(trainer_id: String, metadata: Dictionary) -> Di
 	trainer_metadata["dialogue_before_battle"] = _get_string_array(
 		trainer_metadata.get("dialogue_before_battle", [])
 	)
+	var battle_banter_value: Variant = trainer_metadata.get(
+		"battle_banter",
+		trainer_metadata.get("battleBanter", {})
+	)
+	trainer_metadata["battle_banter"] = (
+		(battle_banter_value as Dictionary).duplicate(true)
+		if battle_banter_value is Dictionary
+		else {}
+	)
 	return trainer_metadata
 
 func _get_string_array(value: Variant) -> Array[String]:

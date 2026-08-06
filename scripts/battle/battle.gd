@@ -169,6 +169,7 @@ var display_data_presenter := preload("res://scripts/battle/battle_display_data_
 var message_timing := preload("res://scripts/battle/battle_message_timing.gd").new()
 var event_presentation := preload("res://scripts/battle/battle_event_presentation.gd").new()
 var event_renderer := preload("res://scripts/battle/battle_event_renderer.gd").new()
+var battle_banter_presenter := preload("res://scripts/battle/battle_banter_presenter.gd").new()
 var animation_router := preload("res://scripts/battle/battle_animation_router.gd").new()
 var setup_flow := preload("res://scripts/battle/battle_setup_flow.gd").new()
 var presentation_state := preload("res://scripts/battle/battle_presentation_state.gd").new()
@@ -5647,6 +5648,7 @@ func play_wild_battle_intro(player_pokemon: Pokemon, api_response: Dictionary) -
 
 func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: Dictionary, api_response: Dictionary) -> void:
 	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null)
+	battle_banter_presenter.configure(trainer_data)
 	_show_local_player_trainer()
 	_show_npc_opponent_trainer(trainer_data)
 	display_data_presenter.set_trainer_team(api_response.get("trainerTeam", []))
@@ -5687,6 +5689,7 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 	await _play_lead_summon(_get_active_summon_ball_item_id("p2", "poke-ball"), opponent_species, enemy_sprite_box, "front")
 	_debug_battle_start("trainer.setup.after_lead_summons lastRenderedSeq=%d" % last_rendered_event_seq)
 	await _render_initial_battle_events(lead_response)
+	await _present_battle_banter_cues(battle_banter_presenter.take_battle_start_cues())
 	_show_battle_controls_after_initial_events()
 	_set_battle_actions_ready(true)
 
@@ -6000,6 +6003,7 @@ func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_poke
 	display_data_presenter.set_battle_context(type, active_enemy_pokemon)
 	_reset_battle_effect_tracking()
 	presentation_state.reset()
+	battle_banter_presenter.reset()
 	pending_mega_species_by_ident.clear()
 	animation_router.prewarm_effect_animations([SHINY_ENTRANCE_EFFECT_KEY, MEGA_EVOLUTION_EFFECT_KEY])
 
@@ -7774,6 +7778,8 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 				event_renderer.add_turn_header(turn)
 			_update_battle_status_panels()
 			_update_stat_stage_panels()
+			if source != "initial_battle_events" and not _is_pvp_battle():
+				await _present_battle_banter_cues(battle_banter_presenter.take_cues_for_event(event_data))
 			_mark_pvp_render_event_completed(event_index + 1)
 			continue
 
@@ -7846,6 +7852,8 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 				_summarize_battle_event(event_data),
 				_summarize_active_battle_state(),
 			])
+		if source != "initial_battle_events" and not _is_pvp_battle():
+			await _present_battle_banter_cues(battle_banter_presenter.take_cues_for_event(event_data))
 		_mark_pvp_render_event_completed(event_index + 1)
 
 	_remember_rendered_non_pvp_event_keys(ordered_events)
@@ -8865,6 +8873,35 @@ func _show_trainer_command_text(player_id: String, message: String) -> bool:
 		return false
 	trainer_sprite.show_command(message)
 	return true
+
+
+func _present_battle_banter_cues(cues: Array[Dictionary]) -> void:
+	if battle_type != BattleType.TRAINER or _is_pvp_battle():
+		return
+	for cue: Dictionary in cues:
+		var text_key := str(cue.get("text_key", "")).strip_edges()
+		if text_key == "" or not LocalizationManager.has_key(text_key):
+			push_warning("Battle banter cue %s has an unknown localization key: %s" % [
+				str(cue.get("id", "<unknown>")),
+				text_key,
+			])
+			continue
+		var speaker := str(cue.get("speaker", "opponent")).strip_edges().to_lower()
+		var player_id := "p1" if speaker == "player" else "p2"
+		var replacements: Dictionary = {}
+		var context_value: Variant = cue.get("context", {})
+		if context_value is Dictionary:
+			replacements.merge((context_value as Dictionary).duplicate(true), true)
+		var configured_values: Variant = cue.get("values", {})
+		if configured_values is Dictionary:
+			replacements.merge((configured_values as Dictionary).duplicate(true), true)
+		replacements["pokemon"] = str(replacements.get("species", ""))
+		replacements["trainer"] = _get_player_display_name(player_id)
+		if not _show_trainer_command_text(player_id, _t(text_key, replacements)):
+			continue
+		var pause_seconds := float(clampi(int(cue.get("pause_ms", cue.get("pauseMs", 1000))), 0, 3000)) / 1000.0
+		if pause_seconds > 0.0:
+			await get_tree().create_timer(pause_seconds).timeout
 
 func _play_shiny_entrance_if_needed(event_data: Dictionary) -> void:
 	var player_id := str(event_data.get("playerId", ""))

@@ -2191,6 +2191,8 @@
   "battle.command.dodge": "{pokemon}, dodge!",
   "battle.command.switch": "{from}, volte! Vai, {to}!",
   "battle.command.go": "Vai, {pokemon}!",
+  "battle.banter.kanto.brock.opening": "Mostre-me a força da sua base!",
+  "battle.banter.kanto.brock.onix_sent_out": "Onix, fique firme!",
   "battle.event.trainer.generic": "Treinador",
   "battle.event.trainer.opposing": "O Treinador adversário",
   "battle.event.trainer_wants_battle": "{trainer} quer batalhar!",
