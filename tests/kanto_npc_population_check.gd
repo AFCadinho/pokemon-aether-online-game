@@ -109,6 +109,12 @@ func _check_route_22_gary_story_hook() -> void:
 	var gary := map.get_node_or_null("Entities/NPCs/GaryOak")
 	var hook := map.get_node_or_null("Entities/NPCs/GaryOak/MeetGaryStoryHook")
 	_check(gary != null and bool(gary.get("preload_quest_markers")), "Gary preloads his quest marker")
+	_check(
+		gary != null
+		and str(gary.get("visibility_hidden_quest_id")) == "reach_viridian_city"
+		and bool(gary.get("defer_story_hide_until_reload")),
+		"Gary leaves Route 22 after the completed battle and the player leaves the map"
+	)
 	_check(hook != null, "Gary owns the Route 22 story hook")
 	if hook != null:
 		_check(str(hook.get("interaction_id")) == "route_22_meet_gary", "Gary uses the Route 22 meeting interaction")

@@ -229,6 +229,8 @@ func build_battle_trainer_metadata(metadata: Dictionary) -> Dictionary:
 		# staging can select the inward-facing idle pose from atlas-only NPCs.
 		battle_metadata["_battle_sprite_frames"] = _get_directional_sprite_frames(npc_sprite_frames)
 		battle_metadata["_battle_sprite_offset"] = sprite_offset
+	if mugshot != null:
+		battle_metadata["_battle_mugshot"] = mugshot
 	return battle_metadata
 
 

@@ -55,6 +55,7 @@ func _check_npc_metadata_contract() -> void:
 	var boss_source := FileAccess.get_file_as_string(BOSS_NPC_SCRIPT_PATH)
 	_check(base_source.contains("func build_battle_trainer_metadata"), "BaseNPC owns visual-only battle metadata")
 	_check(base_source.contains('battle_metadata["_battle_sprite_frames"] = _get_directional_sprite_frames(npc_sprite_frames)'), "NPC battle metadata reuses directional overworld frames")
+	_check(base_source.contains('battle_metadata["_battle_mugshot"] = mugshot'), "NPC battle metadata preserves its local portrait for battle outros")
 	_check(trainer_source.contains("build_battle_trainer_metadata(trainer_metadata)"), "regular trainers pass their placed overworld sprite")
 	_check(boss_source.contains("build_battle_trainer_metadata(trainer_metadata)"), "boss trainers pass their placed overworld sprite")
 

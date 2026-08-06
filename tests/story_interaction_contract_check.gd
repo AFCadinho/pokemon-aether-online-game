@@ -302,6 +302,11 @@ func _test_hook_and_api_integration_contract() -> void:
 		"sequence verifies fetched dialogue and trainer identities before side effects"
 	)
 	_expect(
+		runner.contains('host.has_method("build_battle_trainer_metadata")')
+		and runner.contains('host.call("build_battle_trainer_metadata", trainer_metadata)'),
+		"story battles reuse the placed NPC's battle sprite and portrait"
+	)
+	_expect(
 		npc.contains("func story_move_path(path: Array[String]) -> bool:")
 		and player.contains("func story_move_path(path: Array[String]) -> bool:")
 		and npc.contains(

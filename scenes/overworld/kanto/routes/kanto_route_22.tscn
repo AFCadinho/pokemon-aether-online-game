@@ -314,6 +314,9 @@ display_name = "Gary Oak"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("11_blue")
 preload_quest_markers = true
+visibility_hidden_quest_id = "reach_viridian_city"
+visibility_hidden_quest_status = "completed"
+defer_story_hide_until_reload = true
 
 [node name="MeetGaryStoryHook" type="Node" parent="Entities/NPCs/GaryOak"]
 script = ExtResource("16_story_hook")

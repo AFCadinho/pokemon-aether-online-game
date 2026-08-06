@@ -8,6 +8,7 @@ var failed := false
 
 func _init() -> void:
 	_check_trainer_metadata_normalizes_dialogue_ids()
+	_check_post_battle_dialogue_contract()
 	_check_fallback_order()
 	_check_missing_dialogue_id_falls_back_safely()
 	_check_existing_dialogue_before_battle_still_works()
@@ -24,6 +25,14 @@ func _check_trainer_metadata_normalizes_dialogue_ids() -> void:
 	_check_true(text.contains("trainer_metadata.get(\"dialogue_id\""), "TrainerMetadataService accepts dialogue_id")
 	_check_true(text.contains("trainer_metadata.get(\"intro_dialogue_id\""), "TrainerMetadataService accepts intro_dialogue_id")
 	_check_true(text.contains("trainer_metadata.get(\"battle_intro_dialogue_id\""), "TrainerMetadataService accepts battle_intro_dialogue_id")
+
+
+func _check_post_battle_dialogue_contract() -> void:
+	var metadata_text := _read_text(TRAINER_METADATA_SERVICE_SCRIPT)
+	var world_text := _read_text("res://scripts/world/world.gd")
+	_check_true(metadata_text.contains('trainer_metadata["outroDialogueId"]'), "TrainerMetadataService normalizes outroDialogueId")
+	_check_true(world_text.contains("await _show_trainer_outro_dialogue"), "trainer wins present configured outro dialogue")
+	_check_true(world_text.contains("keep_locked_for_outro"), "overworld remains locked until trainer outro dialogue finishes")
 
 
 func _check_fallback_order() -> void:
