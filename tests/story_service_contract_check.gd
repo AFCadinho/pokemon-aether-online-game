@@ -208,6 +208,12 @@ func _verify_integration_contract() -> void:
 		"inventory service exposes the authoritative parcel turn-in"
 	)
 	_expect(
+		inventory.contains('if bool(body.get("caught", false))')
+		and inventory.contains("PlayerGameStateService.refresh_story()")
+		and inventory.contains('"storyRefreshSuccess": story_refresh_success'),
+		"successful wild captures refresh local story progress"
+	)
+	_expect(
 		base_npc.contains('quest_marker_label.text = "!"')
 		and base_npc.contains('quest_marker_label.text = "✦"')
 		and base_npc.contains('quest_type == "main"'),
