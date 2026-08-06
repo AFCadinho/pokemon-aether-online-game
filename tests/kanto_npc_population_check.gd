@@ -49,6 +49,7 @@ func _run() -> void:
 	for scene_path: String in MAP_NPCS:
 		_check_map(scene_path, MAP_NPCS[scene_path])
 	_check_route_22_gary_story_hook()
+	_check_viridian_gideon_quest_hook()
 	for scene_path: String in TRANSITION_ATTENDANTS:
 		_check_transition_attendant(scene_path, TRANSITION_ATTENDANTS[scene_path])
 	quit(1 if failed else 0)
@@ -119,6 +120,26 @@ func _check_route_22_gary_story_hook() -> void:
 	if hook != null:
 		_check(str(hook.get("interaction_id")) == "route_22_meet_gary", "Gary uses the Route 22 meeting interaction")
 		_check(str(hook.get("entity_id")) == "kanto_route_22_gary_oak", "Gary's story hook uses his NPC identity")
+	map.free()
+
+
+func _check_viridian_gideon_quest_hook() -> void:
+	var packed := load("res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn") as PackedScene
+	_check(packed != null, "Viridian City loads for Gideon's catching quest contract")
+	if packed == null:
+		return
+	var map := packed.instantiate()
+	var gideon := map.get_node_or_null("Entities/NPCs/CatchingMentorGideon")
+	_check(gideon != null, "Viridian City places Catching Mentor Gideon")
+	_check(
+		gideon != null and bool(gideon.get("preload_quest_markers")),
+		"Gideon preloads his quest markers"
+	)
+	_check(
+		gideon != null
+		and str(gideon.get_script().resource_path) == "res://scripts/world/kanto/towns/catching_mentor_gideon.gd",
+		"Gideon uses the catching quest reward handler"
+	)
 	map.free()
 
 

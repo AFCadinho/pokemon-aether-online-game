@@ -15,6 +15,7 @@
 [ext_resource type="SpriteFrames" uid="uid://57e7bp514fh2" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="27_bug_catcher"]
 [ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="28_hiker"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="29_pokemon"]
+[ext_resource type="Script" path="res://scripts/world/kanto/towns/catching_mentor_gideon.gd" id="30_gideon_quest"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route1"]
 size = Vector2(208, 34)
@@ -558,11 +559,13 @@ npc_sprite_frames = ExtResource("26_school_kid_f")
 
 [node name="CatchingMentorGideon" parent="Entities/NPCs" unique_id=1414764182 instance=ExtResource("24_dialogue")]
 position = Vector2(1312, 1536)
+script = ExtResource("30_gideon_quest")
 npc_id = "kanto_viridian_city_catching_mentor_gideon"
 npc_definition_id = "trainer_class_elder"
 display_name = "Catching Mentor Gideon"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("25_elder")
+preload_quest_markers = true
 pickpocket_enabled = true
 pickpocket_npc_type = "veteran"
 pickpocket_required_level = 20
