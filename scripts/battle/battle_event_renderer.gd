@@ -2,8 +2,9 @@ extends RefCounted
 
 class_name BattleEventRenderer
 
-const DODGE_RESPONSE_DELAY_SECONDS := 0.22
-const DODGE_ACTION_LEAD_SECONDS := 0.16
+const DODGE_RESPONSE_DELAY_SECONDS := 0.10
+const FALLBACK_MOVE_ACTION_LEAD_SECONDS := 0.40
+const FALLBACK_DODGE_ACTION_LEAD_SECONDS := 0.70
 
 var battle_log_panel: BattleLogPanel
 var mini_battle_feed: MiniBattleFeed
@@ -231,25 +232,50 @@ func _show_trainer_move_commands(
 ) -> void:
 	if not show_trainer_command.is_valid():
 		return
-	var attack_command_shown := bool(show_trainer_command.call({
+	var attack_command_result: Variant = show_trainer_command.call({
 		"kind": "move",
 		"player_id": _get_player_id_from_ident(actor_ident),
 		"pokemon": actor_ident,
 		"move": move_name,
 		"event": event_data,
-	}))
+	})
+	var attack_command_shown := _command_was_shown(attack_command_result)
+	if attack_command_shown:
+		await _wait(_get_command_minimum_read_seconds(
+			attack_command_result,
+			FALLBACK_MOVE_ACTION_LEAD_SECONDS
+		))
 	if not attack_command_shown or animation_result != "miss" or target_ident == "":
 		return
 
 	await _wait(DODGE_RESPONSE_DELAY_SECONDS)
-	var dodge_command_shown := bool(show_trainer_command.call({
+	var dodge_command_result: Variant = show_trainer_command.call({
 		"kind": "dodge",
 		"player_id": _get_player_id_from_ident(target_ident),
 		"pokemon": target_ident,
 		"event": event_data,
-	}))
-	if dodge_command_shown:
-		await _wait(DODGE_ACTION_LEAD_SECONDS)
+	})
+	if _command_was_shown(dodge_command_result):
+		await _wait(_get_command_minimum_read_seconds(
+			dodge_command_result,
+			FALLBACK_DODGE_ACTION_LEAD_SECONDS
+		))
+
+
+func _command_was_shown(result: Variant) -> bool:
+	if result is Dictionary:
+		return bool((result as Dictionary).get("shown", false))
+	return bool(result)
+
+
+func _get_command_minimum_read_seconds(result: Variant, fallback_seconds: float) -> float:
+	if not (result is Dictionary):
+		return fallback_seconds
+	return clampf(
+		float((result as Dictionary).get("minimum_read_seconds", fallback_seconds)),
+		0.0,
+		0.80
+	)
 
 
 func _add_battle_log_player_gap(event: Dictionary) -> void:

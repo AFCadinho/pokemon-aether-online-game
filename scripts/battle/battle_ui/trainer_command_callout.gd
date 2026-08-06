@@ -2,7 +2,7 @@ extends Control
 
 class_name TrainerCommandCallout
 
-const DISPLAY_SECONDS := 1.45
+const DISPLAY_SECONDS := 1.80
 const FADE_IN_SECONDS := 0.12
 const FADE_OUT_SECONDS := 0.18
 const BUBBLE_SIZE := Vector2(214.0, 56.0)

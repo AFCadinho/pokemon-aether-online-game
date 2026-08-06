@@ -119,7 +119,7 @@ func _check_battle_integration_contract() -> void:
 	var renderer_source := FileAccess.get_file_as_string(EVENT_RENDERER_PATH)
 	_check(source.contains("battle_voice_director.resolve_command"), "battle command callouts use the voice director")
 	_check(source.contains('battle_voice_director.configure('), "trainer and PvP setup configure the voice director")
-	var command_start := source.find("func _show_trainer_command(command: Dictionary) -> bool:")
+	var command_start := source.find("func _show_trainer_command(command: Dictionary) -> Dictionary:")
 	var command_end := source.find("\nfunc ", command_start + 1)
 	var command_source := source.substr(command_start, command_end - command_start)
 	_check(not command_source.contains("_is_spectator_battle"), "spectators are not excluded from public command callouts")

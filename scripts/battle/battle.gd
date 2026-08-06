@@ -26,6 +26,7 @@ const BATTLE_PARTY_SLOT_RESOLVER := preload("res://scripts/battle/battle_party_s
 const BATTLE_DISGUISE_EVENT_ORDER := preload("res://scripts/battle/battle_disguise_event_order.gd")
 const BATTLE_SUPREME_OVERLORD_EFFECT := preload("res://scripts/battle/battle_supreme_overlord_effect.gd")
 const BATTLE_PUBLIC_POKEMON_KNOWLEDGE := preload("res://scripts/battle/battle_public_pokemon_knowledge.gd")
+const BATTLE_VOICE_TIMING := preload("res://scripts/battle/battle_voice_timing.gd")
 const CALC_DRAWER_FIELD_WIDTH_RATIO := 0.55
 const CALC_DRAWER_FIELD_MARGIN := 8.0
 const MEGA_EVOLUTION_EFFECT_KEY := "mega_evolution"
@@ -7831,7 +7832,7 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 		if event_type == "switch" or event_type == "drag":
 			var switch_player_id := _get_switch_event_player_id(event_data)
 			if should_play_switch_ball_animations:
-				_show_switch_trainer_command(event_data, switch_player_id)
+				await _show_switch_trainer_command(event_data, switch_player_id)
 				await _play_switch_recall_for_event(event_data, switch_player_id)
 			_release_ordered_response_display_species_for_player(switch_player_id)
 			battle_state.apply_event_conditions([event_data])
@@ -8810,25 +8811,25 @@ func _get_player_id_from_ident(ident: String) -> String:
 	return ""
 
 
-func _show_trainer_command(command: Dictionary) -> bool:
+func _show_trainer_command(command: Dictionary) -> Dictionary:
 	if battle_type != BattleType.TRAINER:
-		return false
+		return {}
 
 	var command_kind := str(command.get("kind", ""))
 	var player_id := str(command.get("player_id", ""))
 	var pokemon_name := _format_battle_actor(str(command.get("pokemon", "")), false)
 	if player_id == "" or pokemon_name == "":
-		return false
+		return {}
 
 	var public_command := command.duplicate(true)
 	public_command["pokemon"] = pokemon_name
 	if command_kind == "move":
 		var move_name := str(command.get("move", "")).strip_edges()
 		if move_name == "":
-			return false
+			return {}
 		public_command["move"] = move_name
 	elif command_kind != "dodge":
-		return false
+		return {}
 
 	var public_context := {"turn": presentation_state.get_turn()}
 	var event_value: Variant = command.get("event", {})
@@ -8837,7 +8838,7 @@ func _show_trainer_command(command: Dictionary) -> bool:
 			if (event_value as Dictionary).has(field):
 				public_context[field] = (event_value as Dictionary).get(field)
 	var selection: Dictionary = battle_voice_director.resolve_command(public_command, public_context)
-	return _show_battle_voice_selection(selection)
+	return _show_battle_voice_selection(selection, command_kind)
 
 
 func _show_switch_trainer_command(event_data: Dictionary, player_id: String) -> void:
@@ -8869,22 +8870,36 @@ func _show_switch_trainer_command(event_data: Dictionary, player_id: String) -> 
 		"from_hp_percent": _get_public_active_hp_percent(player_id),
 		"foe_hp_percent": _get_public_active_hp_percent(opponent_id),
 	})
-	_show_battle_voice_selection(selection)
+	var presentation_result := _show_battle_voice_selection(selection, "switch")
+	if bool(presentation_result.get("shown", false)):
+		var minimum_read_seconds := clampf(
+			float(presentation_result.get("minimum_read_seconds", 0.45)),
+			0.0,
+			0.80
+		)
+		if minimum_read_seconds > 0.0:
+			await get_tree().create_timer(minimum_read_seconds).timeout
 
 
-func _show_battle_voice_selection(selection: Dictionary) -> bool:
+func _show_battle_voice_selection(selection: Dictionary, command_kind: String) -> Dictionary:
 	if selection.is_empty():
-		return false
+		return {}
 	var text_key := str(selection.get("text_key", "")).strip_edges()
 	if text_key == "" or not LocalizationManager.has_key(text_key):
 		push_warning("Battle voice selection has an unknown localization key: %s" % text_key)
-		return false
+		return {}
 	var values_value: Variant = selection.get("values", {})
 	var values: Dictionary = values_value as Dictionary if values_value is Dictionary else {}
-	return _show_trainer_command_text(
-		str(selection.get("player_id", "")),
-		_t(text_key, values)
-	)
+	var message := _t(text_key, values)
+	var shown := _show_trainer_command_text(str(selection.get("player_id", "")), message)
+	return {
+		"shown": shown,
+		"minimum_read_seconds": (
+			BATTLE_VOICE_TIMING.get_minimum_read_seconds(command_kind, message)
+			if shown
+			else 0.0
+		),
+	}
 
 
 func _get_public_active_hp_percent(player_id: String) -> int:

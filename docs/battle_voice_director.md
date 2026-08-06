@@ -18,6 +18,16 @@ stream and selects a localized callout; it never submits or changes an action.
 5. The existing trainer speech bubble renders the selected text at the same
    presentation boundary it already used.
 
+## Presentation timing
+
+`battle_voice_timing.gd` provides a bounded minimum read time; the renderer does
+not wait for the bubble's full fade-out. Short move commands lead their attack
+by 0.40 seconds, a true-miss dodge gets 0.70 seconds before the miss animation,
+and switch commands scale from 0.45 to at most 0.80 seconds based on localized
+text length. The bubble remains visible for about 2.1 seconds unless a later
+callout replaces it after that minimum read boundary. These waits are part of
+ordered presentation only and never alter battle resolution or server RNG.
+
 The seed deliberately excludes local `p1`/`p2` identity. Participant responses
 are side-relative while spectator responses are canonical, so including side
 would allow viewers to select different lines. HP context uses the same public
