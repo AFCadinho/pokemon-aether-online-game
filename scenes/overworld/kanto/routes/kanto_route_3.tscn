@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="5_metadata"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="6_exit"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="7_route_hint"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="12_pokecenter_hint"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="8_trainer"]
 [ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="9_youngster"]
 [ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="10_hiker"]
@@ -243,6 +244,9 @@ sources/0 = SubResource("TileSetAtlasSource_skkmb")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route3_exit"]
 size = Vector2(64, 176)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_route3_pokecenter"]
+size = Vector2(32, 32)
+
 [node name="KantoRoute3" type="Node2D" unique_id=685382640]
 script = ExtResource("5_metadata")
 map_id = "kanto_route_3"
@@ -345,6 +349,9 @@ position = Vector2(2512, 976)
 [node name="FromPewterCity" type="Marker2D" parent="Spawns" unique_id=120000002]
 position = Vector2(48, 656)
 
+[node name="FromPokecenter" type="Marker2D" parent="Spawns" unique_id=120000007]
+position = Vector2(1760, 688)
+
 [node name="Exits" type="Node2D" parent="." unique_id=120000003]
 
 [node name="ToPewterCity" type="Area2D" parent="Exits" unique_id=120000004]
@@ -362,4 +369,17 @@ shape = SubResource("RectangleShape2D_route3_exit")
 rotation = -1.5708
 height = 64.0
 
+[node name="ToPokecenter" type="Area2D" parent="Exits" unique_id=120000008]
+position = Vector2(1760, 656)
+script = ExtResource("6_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/route_3_pokemon_center.tscn"
+target_spawn_name = "FromOutside"
+transition_id = "kanto_route_3__to_pokecenter"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPokecenter" unique_id=120000009]
+shape = SubResource("RectangleShape2D_route3_pokecenter")
+
+[node name="DoorTransitionHint" parent="Exits/ToPokecenter" unique_id=120000010 instance=ExtResource("12_pokecenter_hint")]
+
+[connection signal="body_entered" from="Exits/ToPokecenter" to="Exits/ToPokecenter" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToPewterCity" to="Exits/ToPewterCity" method="_on_body_entered"]
