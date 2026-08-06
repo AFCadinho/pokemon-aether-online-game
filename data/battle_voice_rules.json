@@ -1,0 +1,157 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "id": "move_command_classic",
+      "intent": "move_command",
+      "priority": 10,
+      "profiles": ["classic", "playful", "dramatic"],
+      "modes": ["trainer", "pvp"],
+      "variants": [
+        {"id": "use", "text_key": "battle.voice.move.use", "weight": 4},
+        {"id": "direct", "text_key": "battle.voice.move.direct", "weight": 3},
+        {"id": "lets_go", "text_key": "battle.voice.move.lets_go", "weight": 2}
+      ]
+    },
+    {
+      "id": "move_command_respectful",
+      "intent": "move_command",
+      "priority": 20,
+      "profiles": ["respectful"],
+      "modes": ["trainer", "pvp"],
+      "variants": [
+        {"id": "trust", "text_key": "battle.voice.move.trust", "weight": 2},
+        {"id": "use", "text_key": "battle.voice.move.use", "weight": 3}
+      ]
+    },
+    {
+      "id": "move_command_confident",
+      "intent": "move_command",
+      "priority": 20,
+      "profiles": ["confident"],
+      "modes": ["trainer", "pvp"],
+      "variants": [
+        {"id": "show_them", "text_key": "battle.voice.move.show_them", "weight": 2},
+        {"id": "direct", "text_key": "battle.voice.move.direct", "weight": 3}
+      ]
+    },
+    {
+      "id": "move_command_tactical",
+      "intent": "move_command",
+      "priority": 20,
+      "profiles": ["tactical"],
+      "modes": ["trainer", "pvp"],
+      "variants": [
+        {"id": "now", "text_key": "battle.voice.move.now", "weight": 2},
+        {"id": "direct", "text_key": "battle.voice.move.direct", "weight": 3}
+      ]
+    },
+    {
+      "id": "move_command_silent_fallback",
+      "intent": "move_command",
+      "priority": 1,
+      "profiles": ["silent"],
+      "modes": ["trainer", "pvp"],
+      "variants": [
+        {"id": "use", "text_key": "battle.voice.move.use", "weight": 1}
+      ]
+    },
+    {
+      "id": "true_miss_dodge",
+      "intent": "miss_dodge",
+      "priority": 100,
+      "profiles": ["any"],
+      "modes": ["trainer", "pvp"],
+      "variants": [
+        {"id": "dodge", "text_key": "battle.voice.dodge", "weight": 1}
+      ]
+    },
+    {
+      "id": "forced_by_effect",
+      "intent": "forced_by_effect",
+      "priority": 100,
+      "profiles": ["any"],
+      "modes": ["trainer", "pvp"],
+      "variants": [
+        {"id": "handle_this", "text_key": "battle.voice.switch.forced", "weight": 1}
+      ]
+    },
+    {
+      "id": "replacement_after_faint",
+      "intent": "replacement_after_faint",
+      "priority": 90,
+      "profiles": ["any"],
+      "modes": ["trainer", "pvp"],
+      "variants": [
+        {"id": "fought_well", "text_key": "battle.voice.switch.after_faint", "weight": 2},
+        {"id": "take_over", "text_key": "battle.voice.switch.take_over", "weight": 1}
+      ]
+    },
+    {
+      "id": "save_wounded_pokemon",
+      "intent": "save_wounded_pokemon",
+      "priority": 80,
+      "profiles": ["any"],
+      "modes": ["trainer", "pvp"],
+      "variants": [
+        {"id": "good_work", "text_key": "battle.voice.switch.good_work", "weight": 2},
+        {"id": "rest", "text_key": "battle.voice.switch.rest", "weight": 1}
+      ]
+    },
+    {
+      "id": "press_weak_opponent",
+      "intent": "press_weak_opponent",
+      "priority": 70,
+      "profiles": ["any"],
+      "modes": ["trainer", "pvp"],
+      "variants": [
+        {"id": "foe_weak", "text_key": "battle.voice.switch.foe_weak", "weight": 1}
+      ]
+    },
+    {
+      "id": "send_out_classic",
+      "intent": "voluntary_switch",
+      "priority": 10,
+      "profiles": ["classic", "respectful", "playful", "dramatic", "silent"],
+      "modes": ["trainer", "pvp"],
+      "variants": [
+        {"id": "return_go", "text_key": "battle.voice.switch.return_go", "weight": 3},
+        {"id": "come_back", "text_key": "battle.voice.switch.come_back", "weight": 2},
+        {"id": "good_work", "text_key": "battle.voice.switch.good_work", "weight": 1}
+      ]
+    },
+    {
+      "id": "send_out_confident",
+      "intent": "voluntary_switch",
+      "priority": 20,
+      "profiles": ["confident"],
+      "modes": ["trainer", "pvp"],
+      "variants": [
+        {"id": "your_turn", "text_key": "battle.voice.switch.your_turn", "weight": 2},
+        {"id": "return_go", "text_key": "battle.voice.switch.return_go", "weight": 1}
+      ]
+    },
+    {
+      "id": "send_out_tactical",
+      "intent": "voluntary_switch",
+      "priority": 20,
+      "profiles": ["tactical"],
+      "modes": ["trainer", "pvp"],
+      "variants": [
+        {"id": "change_plan", "text_key": "battle.voice.switch.change_plan", "weight": 2},
+        {"id": "return_go", "text_key": "battle.voice.switch.return_go", "weight": 1}
+      ]
+    },
+    {
+      "id": "send_out_without_return",
+      "intent": "send_out",
+      "priority": 10,
+      "profiles": ["any"],
+      "modes": ["trainer", "pvp"],
+      "variants": [
+        {"id": "go", "text_key": "battle.voice.switch.go", "weight": 3},
+        {"id": "youre_up", "text_key": "battle.voice.switch.youre_up", "weight": 2}
+      ]
+    }
+  ]
+}

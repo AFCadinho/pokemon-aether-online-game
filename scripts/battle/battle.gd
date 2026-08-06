@@ -170,6 +170,7 @@ var message_timing := preload("res://scripts/battle/battle_message_timing.gd").n
 var event_presentation := preload("res://scripts/battle/battle_event_presentation.gd").new()
 var event_renderer := preload("res://scripts/battle/battle_event_renderer.gd").new()
 var battle_banter_presenter := preload("res://scripts/battle/battle_banter_presenter.gd").new()
+var battle_voice_director := preload("res://scripts/battle/battle_voice_director.gd").new()
 var animation_router := preload("res://scripts/battle/battle_animation_router.gd").new()
 var setup_flow := preload("res://scripts/battle/battle_setup_flow.gd").new()
 var presentation_state := preload("res://scripts/battle/battle_presentation_state.gd").new()
@@ -5649,6 +5650,7 @@ func play_wild_battle_intro(player_pokemon: Pokemon, api_response: Dictionary) -
 func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: Dictionary, api_response: Dictionary) -> void:
 	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null)
 	battle_banter_presenter.configure(trainer_data)
+	battle_voice_director.configure(str(api_response.get("battleId", "")), "trainer", trainer_data)
 	_show_local_player_trainer()
 	_show_npc_opponent_trainer(trainer_data)
 	display_data_presenter.set_trainer_team(api_response.get("trainerTeam", []))
@@ -5713,6 +5715,7 @@ func setup_pvp_battle_from_response(
 	action_flow.set_local_player_id(local_player_id)
 	var display_response: Dictionary = action_flow.map_response_for_local_player(api_response)
 	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null)
+	battle_voice_director.configure(str(api_response.get("battleId", "")), "pvp")
 	_show_pvp_trainers(display_response)
 	_capture_pvp_local_canonical_roster()
 
@@ -6004,6 +6007,7 @@ func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_poke
 	_reset_battle_effect_tracking()
 	presentation_state.reset()
 	battle_banter_presenter.reset()
+	battle_voice_director.reset()
 	pending_mega_species_by_ident.clear()
 	animation_router.prewarm_effect_animations([SHINY_ENTRANCE_EFFECT_KEY, MEGA_EVOLUTION_EFFECT_KEY])
 
@@ -8816,21 +8820,24 @@ func _show_trainer_command(command: Dictionary) -> bool:
 	if player_id == "" or pokemon_name == "":
 		return false
 
-	match command_kind:
-		"move":
-			var move_name := str(command.get("move", "")).strip_edges()
-			if move_name == "":
-				return false
-			return _show_trainer_command_text(player_id, _t("battle.command.move", {
-				"pokemon": pokemon_name,
-				"move": move_name,
-			}))
-		"dodge":
-			return _show_trainer_command_text(player_id, _t("battle.command.dodge", {
-				"pokemon": pokemon_name,
-			}))
+	var public_command := command.duplicate(true)
+	public_command["pokemon"] = pokemon_name
+	if command_kind == "move":
+		var move_name := str(command.get("move", "")).strip_edges()
+		if move_name == "":
+			return false
+		public_command["move"] = move_name
+	elif command_kind != "dodge":
+		return false
 
-	return false
+	var public_context := {"turn": presentation_state.get_turn()}
+	var event_value: Variant = command.get("event", {})
+	if event_value is Dictionary:
+		for field: String in ["source", "reason", "forced"]:
+			if (event_value as Dictionary).has(field):
+				public_context[field] = (event_value as Dictionary).get(field)
+	var selection: Dictionary = battle_voice_director.resolve_command(public_command, public_context)
+	return _show_battle_voice_selection(selection)
 
 
 func _show_switch_trainer_command(event_data: Dictionary, player_id: String) -> void:
@@ -8846,18 +8853,49 @@ func _show_switch_trainer_command(event_data: Dictionary, player_id: String) -> 
 	var from_name := str(event_data.get("from", "")).strip_edges()
 	if from_name == "":
 		from_name = _format_battle_actor(str(event_data.get("fromIdent", "")), false)
-	var forced_switch := (
-		bool(event_data.get("forced", false))
-		or battle_state.is_active_pokemon_fainted(player_id)
-	)
-	var message := _t("battle.command.go", {"pokemon": to_name})
-	if not forced_switch and from_name != "":
-		message = _t("battle.command.switch", {
-			"from": from_name,
-			"to": to_name,
-		})
+	var opponent_id := "p2" if player_id == "p1" else "p1"
+	var selection: Dictionary = battle_voice_director.resolve_command({
+		"kind": "switch",
+		"player_id": player_id,
+		"from": from_name,
+		"to": to_name,
+		"pokemon": to_name,
+		"source": str(event_data.get("source", "")),
+		"reason": str(event_data.get("reason", "")),
+	}, {
+		"turn": presentation_state.get_turn(),
+		"forced": bool(event_data.get("forced", false)),
+		"from_fainted": battle_state.is_active_pokemon_fainted(player_id),
+		"from_hp_percent": _get_public_active_hp_percent(player_id),
+		"foe_hp_percent": _get_public_active_hp_percent(opponent_id),
+	})
+	_show_battle_voice_selection(selection)
 
-	_show_trainer_command_text(player_id, message)
+
+func _show_battle_voice_selection(selection: Dictionary) -> bool:
+	if selection.is_empty():
+		return false
+	var text_key := str(selection.get("text_key", "")).strip_edges()
+	if text_key == "" or not LocalizationManager.has_key(text_key):
+		push_warning("Battle voice selection has an unknown localization key: %s" % text_key)
+		return false
+	var values_value: Variant = selection.get("values", {})
+	var values: Dictionary = values_value as Dictionary if values_value is Dictionary else {}
+	return _show_trainer_command_text(
+		str(selection.get("player_id", "")),
+		_t(text_key, values)
+	)
+
+
+func _get_public_active_hp_percent(player_id: String) -> int:
+	var current_hp := battle_state.get_active_pokemon_current_hp(player_id)
+	var max_hp := battle_state.get_active_pokemon_max_hp(player_id)
+	if current_hp < 0 or max_hp <= 0:
+		return -1
+	# PvP public projections expose HP with the same ceiling rule. Applying it
+	# to both own exact HP and opponent public HP keeps intent selection identical
+	# for both participants and spectators at threshold boundaries.
+	return clampi(int(ceil(float(current_hp) * 100.0 / float(max_hp))), 0, 100)
 
 
 func _show_trainer_command_text(player_id: String, message: String) -> bool:

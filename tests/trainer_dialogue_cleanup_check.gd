@@ -26,6 +26,7 @@ func _check_trainer_metadata_normalizes_dialogue_ids() -> void:
 	_check_true(text.contains("trainer_metadata.get(\"intro_dialogue_id\""), "TrainerMetadataService accepts intro_dialogue_id")
 	_check_true(text.contains("trainer_metadata.get(\"battle_intro_dialogue_id\""), "TrainerMetadataService accepts battle_intro_dialogue_id")
 	_check_true(text.contains('trainer_metadata["battle_banter"]'), "TrainerMetadataService preserves structured battle banter")
+	_check_true(text.contains('trainer_metadata["battle_voice"]'), "TrainerMetadataService preserves structured battle voice profiles")
 
 
 func _check_post_battle_dialogue_contract() -> void:

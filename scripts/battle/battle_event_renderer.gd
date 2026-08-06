@@ -117,6 +117,7 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 		})
 	if animations_allowed and attack_actor_ident != "" and move_animation_name != "":
 		await _show_trainer_move_commands(
+			event_data,
 			attack_actor_ident,
 			move_animation_name,
 			move_animation_target_ident,
@@ -222,6 +223,7 @@ func _can_start_battle_animation(source: String, details: Dictionary = {}) -> bo
 
 
 func _show_trainer_move_commands(
+	event_data: Dictionary,
 	actor_ident: String,
 	move_name: String,
 	target_ident: String,
@@ -234,6 +236,7 @@ func _show_trainer_move_commands(
 		"player_id": _get_player_id_from_ident(actor_ident),
 		"pokemon": actor_ident,
 		"move": move_name,
+		"event": event_data,
 	}))
 	if not attack_command_shown or animation_result != "miss" or target_ident == "":
 		return
@@ -243,6 +246,7 @@ func _show_trainer_move_commands(
 		"kind": "dodge",
 		"player_id": _get_player_id_from_ident(target_ident),
 		"pokemon": target_ident,
+		"event": event_data,
 	}))
 	if dodge_command_shown:
 		await _wait(DODGE_ACTION_LEAD_SECONDS)

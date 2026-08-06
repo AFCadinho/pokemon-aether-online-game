@@ -35,6 +35,7 @@ func show_command(message: String, trainer_faces_left: bool) -> void:
 	# the local variant stays between the party rail and the player's Pokemon.
 	position = Vector2(-107.0, -154.0) if points_right else Vector2(-55.0, -158.0)
 	message_label.text = cleaned_message
+	message_label.add_theme_font_size_override("font_size", 14 if cleaned_message.length() > 42 else 16)
 	visible = true
 	modulate.a = 0.0
 	scale = Vector2(0.94, 0.94)
