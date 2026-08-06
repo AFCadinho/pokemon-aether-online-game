@@ -225,7 +225,9 @@ func build_battle_trainer_metadata(metadata: Dictionary) -> Dictionary:
 	if npc_sprite_frames != null:
 		# Resources stay client-local; the battle API receives the original
 		# metadata before this visual-only enrichment is added.
-		battle_metadata["_battle_sprite_frames"] = npc_sprite_frames
+		# Use the same directional frames as the overworld renderer so battle
+		# staging can select the inward-facing idle pose from atlas-only NPCs.
+		battle_metadata["_battle_sprite_frames"] = _get_directional_sprite_frames(npc_sprite_frames)
 		battle_metadata["_battle_sprite_offset"] = sprite_offset
 	return battle_metadata
 

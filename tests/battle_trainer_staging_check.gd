@@ -54,22 +54,28 @@ func _check_npc_metadata_contract() -> void:
 	var trainer_source := FileAccess.get_file_as_string(TRAINER_NPC_SCRIPT_PATH)
 	var boss_source := FileAccess.get_file_as_string(BOSS_NPC_SCRIPT_PATH)
 	_check(base_source.contains("func build_battle_trainer_metadata"), "BaseNPC owns visual-only battle metadata")
-	_check(base_source.contains('battle_metadata["_battle_sprite_frames"] = npc_sprite_frames'), "NPC battle metadata reuses actual overworld frames")
+	_check(base_source.contains('battle_metadata["_battle_sprite_frames"] = _get_directional_sprite_frames(npc_sprite_frames)'), "NPC battle metadata reuses directional overworld frames")
 	_check(trainer_source.contains("build_battle_trainer_metadata(trainer_metadata)"), "regular trainers pass their placed overworld sprite")
 	_check(boss_source.contains("build_battle_trainer_metadata(trainer_metadata)"), "boss trainers pass their placed overworld sprite")
 
 
 func _check_runtime_renderer() -> void:
+	var npc: Object = (load(BASE_NPC_SCRIPT_PATH) as Script).new()
+	npc.set("npc_sprite_frames", NPC_FRAMES)
+	var battle_metadata: Dictionary = npc.call("build_battle_trainer_metadata", {})
+	var battle_frames := battle_metadata.get("_battle_sprite_frames") as SpriteFrames
+
 	var renderer := BattleTrainerScene.instantiate() as BattleTrainerSprite
 	root.add_child(renderer)
-	renderer.show_npc(NPC_FRAMES, Vector2.LEFT)
+	renderer.show_npc(battle_frames, Vector2.LEFT)
 	_check(renderer.visible, "NPC renderer becomes visible with valid frames")
 	_check(renderer.npc_sprite.visible, "NPC renderer exposes its still overworld pose")
-	_check(NPC_FRAMES.has_animation(renderer.npc_sprite.animation), "NPC renderer selects an available directional fallback")
+	_check(renderer.npc_sprite.animation == &"idle_left", "NPC battle trainers idle facing left")
 
 	renderer.clear()
 	_check(not renderer.visible, "clearing a trainer removes its battle visual")
 	renderer.free()
+	npc.free()
 
 	var default_image := _render_player_trainer_skin("#f8d0b8")
 	var deep_image := _render_player_trainer_skin("#3f271f")
