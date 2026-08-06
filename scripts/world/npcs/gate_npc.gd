@@ -33,6 +33,8 @@ const GUARD_ROLE_TRANSITION := "transition_guard"
 
 var transition_access: Dictionary = {}
 var guarded_exit: Node
+var transition_access_resolved := false
+var guard_present := true
 
 
 func _ready() -> void:
@@ -41,6 +43,9 @@ func _ready() -> void:
 		return
 	if not guarded_transition_id.strip_edges().is_empty():
 		add_to_group("world_transition_denial_presenters")
+		if guard_role == GUARD_ROLE_TRANSITION:
+			_set_guard_present(true)
+			_connect_guard_presence_signals()
 		Callable(self, "_refresh_transition_access").call_deferred()
 	Callable(self, "_load_gate_metadata").call_deferred()
 
@@ -53,8 +58,8 @@ func is_gate_open() -> bool:
 		return false
 
 	if not guarded_transition_id.strip_edges().is_empty():
-		if transition_access.is_empty():
-			return true
+		if not transition_access_resolved or transition_access.is_empty():
+			return false
 		return bool(transition_access.get("allowed", false))
 
 	if requires_staff_role and not _current_player_has_legacy_gate_permission():
@@ -130,6 +135,8 @@ func guards_world_position(world_position: Vector2) -> bool:
 
 func present_world_transition_denied(access: Dictionary, player: Node2D) -> void:
 	transition_access = access.duplicate(true)
+	transition_access_resolved = true
+	_sync_guard_presence()
 	GameState.lock_overworld_input()
 	_face_body(player)
 	if player.has_method("face_world_position"):
@@ -182,6 +189,7 @@ func _load_gate_metadata() -> Dictionary:
 	)
 	allowed_dialogue_lines = metadata_allowed_dialogue
 	allowed_dialogue_id = _get_metadata_dialogue_id(metadata, "allowedDialogueId", "allowed_dialogue_id", allowed_dialogue_id)
+	_sync_guard_presence()
 	return response
 
 
@@ -231,7 +239,51 @@ func _refresh_transition_access(force_refresh := false) -> Dictionary:
 	if bool(response.get("success", false)):
 		var access_value: Variant = response.get("access", {})
 		transition_access = access_value as Dictionary if access_value is Dictionary else {}
+		transition_access_resolved = not transition_access.is_empty()
+	else:
+		transition_access_resolved = false
+	_sync_guard_presence()
 	return response
+
+
+func _connect_guard_presence_signals() -> void:
+	var party_changed_callable := Callable(self, "_on_guard_party_changed")
+	if not PlayerSave.party_changed.is_connected(party_changed_callable):
+		PlayerSave.party_changed.connect(party_changed_callable)
+	var story_changed_callable := Callable(self, "_on_guard_story_changed")
+	if not StoryService.story_changed.is_connected(story_changed_callable):
+		StoryService.story_changed.connect(story_changed_callable)
+
+
+func _on_guard_party_changed() -> void:
+	_sync_guard_presence()
+
+
+func _on_guard_story_changed(_revision: int) -> void:
+	_sync_guard_presence()
+
+
+func _sync_guard_presence() -> void:
+	if guard_role != GUARD_ROLE_TRANSITION:
+		return
+	var should_be_present := (
+		not transition_access_resolved
+		or not _are_local_gate_requirements_met()
+		or not bool(transition_access.get("allowed", false))
+	)
+	_set_guard_present(should_be_present)
+
+
+func _set_guard_present(present: bool) -> void:
+	guard_present = present
+	var effective_presence := present and story_visibility_active
+	visible = effective_presence
+	if interaction_area != null:
+		interaction_area.monitoring = effective_presence
+		interaction_area.monitorable = effective_presence
+	if not effective_presence:
+		player_nearby = false
+		nearby_player = null
 
 
 func _show_transition_denied_dialogue(access: Dictionary) -> void:

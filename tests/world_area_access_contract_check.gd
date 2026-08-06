@@ -121,6 +121,13 @@ func _init() -> void:
 		"Gate NPCs own an explicit role and derive transition blocking from their guarded exit"
 	)
 	_expect(
+		gate_source.contains("transition_access_resolved")
+		and gate_source.contains("func _sync_guard_presence()")
+		and gate_source.contains("guard_role != GUARD_ROLE_TRANSITION")
+		and gate_source.contains("not _are_local_gate_requirements_met()"),
+		"Exterior transition guards appear only while server or local access is blocked"
+	)
+	_expect(
 		gate_scene_source.contains("NPC_088_Policeman.png")
 		and gate_scene_source.contains("trainer_cards/showdown/policeman-gen7.png"),
 		"All route guards share the police overworld sprite and Showdown police portrait"
