@@ -46,6 +46,8 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 @export var visibility_hidden_quest_id := ""
 @export var visibility_hidden_quest_step_id := ""
 @export_enum("available", "active", "completed") var visibility_hidden_quest_status := "completed"
+## Keep an NPC visible for the rest of the current map visit after its hide condition becomes true.
+@export var defer_story_hide_until_reload := false
 ## Exceptional scene-specific override. Normal dialogue comes from NPC metadata.
 @export var dialogue_id := ""
 @export var display_name := ""
@@ -74,6 +76,7 @@ const STORY_PATH_DIRECTIONS: Array[String] = ["up", "down", "left", "right"]
 const SORT_Z_MIN := -4096
 const SORT_Z_MAX := 4096
 const DEFAULT_PLAYER_VISUAL_SORT_DEPTH := 8
+const MANUAL_INTERACTION_DELAY_SECONDS := 0.15
 const PLAYER_OVERLAP_SORT_Y_EPSILON := 0.1
 const NAMEPLATE_WIDTH := 164.0
 const NAMEPLATE_CENTER_X := NAMEPLATE_WIDTH * 0.5
@@ -222,8 +225,12 @@ func build_battle_trainer_metadata(metadata: Dictionary) -> Dictionary:
 	if npc_sprite_frames != null:
 		# Resources stay client-local; the battle API receives the original
 		# metadata before this visual-only enrichment is added.
-		battle_metadata["_battle_sprite_frames"] = npc_sprite_frames
+		# Use the same directional frames as the overworld renderer so battle
+		# staging can select the inward-facing idle pose from atlas-only NPCs.
+		battle_metadata["_battle_sprite_frames"] = _get_directional_sprite_frames(npc_sprite_frames)
 		battle_metadata["_battle_sprite_offset"] = sprite_offset
+	if mugshot != null:
+		battle_metadata["_battle_mugshot"] = mugshot
 	return battle_metadata
 
 
@@ -996,6 +1003,7 @@ func _start_manual_interaction(body: Node2D) -> void:
 	_face_body(body)
 	if body.has_method("face_world_position"):
 		body.face_world_position(get_feet_position())
+	await get_tree().create_timer(MANUAL_INTERACTION_DELAY_SECONDS).timeout
 
 	var result := await _run_story_or_legacy_interaction(body, "interact")
 	if str(result.get("status", "")) != "pending_battle":
@@ -1192,12 +1200,20 @@ func _on_locale_changed(_locale: String) -> void:
 
 
 func _on_story_changed(_revision: int) -> void:
-	_apply_story_visibility()
+	_apply_story_visibility(true)
 	_refresh_quest_marker()
 
 
-func _apply_story_visibility() -> void:
-	story_visibility_active = _is_story_visibility_active()
+func _apply_story_visibility(allow_deferred_hide := false) -> void:
+	var next_visibility := _is_story_visibility_active()
+	if (
+		allow_deferred_hide
+		and defer_story_hide_until_reload
+		and story_visibility_active
+		and not next_visibility
+	):
+		return
+	story_visibility_active = next_visibility
 	visible = story_visibility_active
 	if interaction_area != null:
 		interaction_area.monitoring = story_visibility_active

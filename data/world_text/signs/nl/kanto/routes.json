@@ -6,6 +6,7 @@
     {"id": "kanto_route_1_viridian_city_sign", "type": "road", "title": "Viridian City", "lines": ["Viridian City", "De toegangspoort tot de westelijke routes van Kanto."]},
     {"id": "kanto_route_2_route_sign", "type": "road", "mapId": "kanto_route_2", "title": "Route 2", "lines": ["Route 2", "Viridian City ↔ Pewter City."]},
     {"id": "kanto_route_2_digletts_cave", "type": "road", "mapId": "kanto_route_2", "title": "Diglett's grot", "lines": ["Diglett's grot", "Een tunnel die Route 2 met Vermilion City verbindt."]},
-    {"id": "kanto_route_22_route_sign", "type": "road", "mapId": "kanto_route_22", "title": "Route 22", "lines": ["Route 22", "Viridian City ↔ Indigo Plateau."]}
+    {"id": "kanto_route_22_route_sign", "type": "road", "mapId": "kanto_route_22", "title": "Route 22", "lines": ["Route 22", "Viridian City ↔ Indigo Plateau."]},
+    {"id": "kanto_route_3_mt_moon_sign", "type": "road", "mapId": "kanto_route_3", "title": "Mt. Moon", "lines": ["Mt. Moon", "Een grot die Route 3 met Route 4 en Cerulean City verbindt."]}
   ]
 }

@@ -6,7 +6,10 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_340ux"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="5_pokecenter_hint"]
 [ext_resource type="Texture2D" uid="uid://3tny2dss8f2p" path="res://assets/tilesets/fiver/tiles_env2_32.png" id="12_n7exw"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/jail_manager_npc.tscn" id="14_ygbus"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="15_g5rpj"]
+[ext_resource type="PackedScene" uid="uid://csmsqlujka4ma" path="res://scenes/world/interactables/locked_door_interactable.tscn" id="15_locked_door"]
+[ext_resource type="PackedScene" uid="uid://b8s7eihsl5ikf" path="res://scenes/world/interactables/sign_interactable.tscn" id="16_vofo1"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="21_night_light"]
 [ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="23_gate_npc"]
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="24_dialogue"]
@@ -15,6 +18,7 @@
 [ext_resource type="SpriteFrames" uid="uid://57e7bp514fh2" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="27_bug_catcher"]
 [ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="28_hiker"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="29_pokemon"]
+[ext_resource type="Script" uid="uid://uknpm86reiv4" path="res://scripts/world/kanto/towns/catching_mentor_gideon.gd" id="30_gideon_quest"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route1"]
 size = Vector2(208, 34)
@@ -23,7 +27,7 @@ size = Vector2(208, 34)
 size = Vector2(32, 192)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pokecenter"]
-size = Vector2(32, 32)
+size = Vector2(32, 48)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_340ux"]
 texture = ExtResource("12_n7exw")
@@ -456,6 +460,15 @@ position = Vector2(1136, 1488)
 [node name="FromRoute22" type="Marker2D" parent="Spawns" unique_id=514163280]
 position = Vector2(80, 1232)
 
+[node name="FromGym" type="Marker2D" parent="Spawns" unique_id=1774247635]
+position = Vector2(1792, 480)
+
+[node name="FromTrainerSchool" type="Marker2D" parent="Spawns" unique_id=1126615116]
+position = Vector2(1840, 944)
+
+[node name="FromHouse1" type="Marker2D" parent="Spawns" unique_id=1613464911]
+position = Vector2(592, 1488)
+
 [node name="ViridianJail" type="Marker2D" parent="Spawns" unique_id=-1936226265]
 position = Vector2(1552, 1392)
 
@@ -521,6 +534,27 @@ shape = SubResource("RectangleShape2D_pokecenter")
 [node name="DoorTransitionHint" parent="Exits/ToPokecenter" unique_id=1557132228 instance=ExtResource("5_pokecenter_hint")]
 position = Vector2(0, -16)
 
+[node name="ToGym" type="Area2D" parent="Exits" unique_id=1148981725]
+position = Vector2(1328, 400)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToGym" unique_id=1048069670]
+position = Vector2(0, -16)
+shape = SubResource("RectangleShape2D_pokecenter")
+
+[node name="ToTrainerSchool" type="Area2D" parent="Exits" unique_id=560727093]
+position = Vector2(1904, 880)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToTrainerSchool" unique_id=1936541123]
+position = Vector2(0, -16)
+shape = SubResource("RectangleShape2D_pokecenter")
+
+[node name="ToHouse1" type="Area2D" parent="Exits" unique_id=107727932]
+position = Vector2(1552, 880)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse1" unique_id=1913481857]
+position = Vector2(0, -8)
+shape = SubResource("RectangleShape2D_pokecenter")
+
 [node name="Entities" type="Node2D" parent="." unique_id=1429917979]
 z_index = 5
 
@@ -532,7 +566,6 @@ position = Vector2(2048, 1024)
 npc_id = "kanto_viridian_city_league_fan_dorian"
 npc_definition_id = "trainer_class_hiker"
 display_name = "League Fan Dorian"
-facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("28_hiker")
 pickpocket_enabled = true
 pickpocket_npc_type = "civilian"
@@ -549,7 +582,7 @@ pickpocket_npc_type = "trainer"
 pickpocket_required_level = 10
 
 [node name="SchoolKidJune" parent="Entities/NPCs" unique_id=1310082468 instance=ExtResource("24_dialogue")]
-position = Vector2(1792, 1024)
+position = Vector2(2624, 992)
 npc_id = "kanto_viridian_city_school_kid_june"
 npc_definition_id = "trainer_class_school_kid_f"
 display_name = "School Kid June"
@@ -558,11 +591,13 @@ npc_sprite_frames = ExtResource("26_school_kid_f")
 
 [node name="CatchingMentorGideon" parent="Entities/NPCs" unique_id=1414764182 instance=ExtResource("24_dialogue")]
 position = Vector2(1312, 1536)
+script = ExtResource("30_gideon_quest")
 npc_id = "kanto_viridian_city_catching_mentor_gideon"
 npc_definition_id = "trainer_class_elder"
 display_name = "Catching Mentor Gideon"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("25_elder")
+preload_quest_markers = true
 pickpocket_enabled = true
 pickpocket_npc_type = "veteran"
 pickpocket_required_level = 20
@@ -599,6 +634,10 @@ npc_id = "kanto_viridian_city_south_route_guard"
 display_name = "Pallet Route Guard"
 facing_direction = Vector2(0, -1)
 
+[node name="JailManager" parent="Entities/NPCs" unique_id=1914758393 instance=ExtResource("14_ygbus")]
+position = Vector2(2144, 1536)
+facing_direction = Vector2(0, 1)
+
 [node name="Players" type="Node2D" parent="Entities" unique_id=784148565]
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=1638304908]
@@ -628,6 +667,36 @@ movement_wait_seconds = 1.5
 movement_speed_pixels = 48.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=841850023]
+
+[node name="Signs" type="Node2D" parent="Entities/Interactables" unique_id=521022578]
+
+[node name="JailSign" parent="Entities/Interactables/Signs" unique_id=1449815395 instance=ExtResource("16_vofo1")]
+position = Vector2(1680, 1456)
+
+[node name="TrainerSchoolSign" parent="Entities/Interactables/Signs" unique_id=1013177921 instance=ExtResource("16_vofo1")]
+position = Vector2(1840, 912)
+
+[node name="Locks" type="Node2D" parent="Entities/Interactables" unique_id=1310467494]
+
+[node name="PokemonCenterDoorLock" parent="Entities/Interactables/Locks" unique_id=594228519 instance=ExtResource("15_locked_door")]
+position = Vector2(1136, 1440)
+area_id = "kanto_viridian_city_pokemon_center"
+display_name = "Viridian City Pokémon Center"
+
+[node name="GymDoorLock" parent="Entities/Interactables/Locks" unique_id=941498240 instance=ExtResource("15_locked_door")]
+position = Vector2(1328, 384)
+area_id = "kanto_viridian_city_gym"
+display_name = "Viridian City Gym"
+
+[node name="TrainerSchoolDoorLock" parent="Entities/Interactables/Locks" unique_id=757374845 instance=ExtResource("15_locked_door")]
+position = Vector2(1904, 864)
+area_id = "kanto_viridian_city_trainer_school"
+display_name = "Viridian City Trainer School"
+
+[node name="House1DoorLock" parent="Entities/Interactables/Locks" unique_id=589545217 instance=ExtResource("15_locked_door")]
+position = Vector2(1552, 864)
+area_id = "kanto_viridian_city_house_1"
+display_name = "Viridian City House 1"
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=408927125]
 visible = false
@@ -659,11 +728,11 @@ tile_map_data = PackedByteArray("AAAuACUAAAABAAEAAAAvACUAAAABAAEAAAAwACUAAAABAAE
 tile_set = SubResource("TileSet_v5rc5")
 
 [node name="BlockLeft" type="TileMapLayer" parent="BlockDirection" unique_id=177154737]
-tile_map_data = PackedByteArray("AAAuACwAAAABAAEAAAAuACsAAAABAAEAAAAuACoAAAABAAEAAAAuACkAAAABAAEAAAAuACgAAAABAAEAAAAuACcAAAABAAEAAAAuACYAAAABAAEAAAA0AC0AAAABAAEAAAA0ACwAAAABAAEAAAA0ACsAAAABAAEAAAA0ACoAAAABAAEAAAA0ACkAAAABAAEAAAA0ACgAAAABAAEAAAA0ACcAAAABAAEAAAA0ACYAAAABAAEAAAA=")
+tile_map_data = PackedByteArray("AAAuACwAAAABAAEAAAAuACsAAAABAAEAAAAuACoAAAABAAEAAAAuACkAAAABAAEAAAAuACgAAAABAAEAAAAuACcAAAABAAEAAAAuACYAAAABAAEAAAA0ACwAAAABAAEAAAA0ACsAAAABAAEAAAA0ACoAAAABAAEAAAA0ACkAAAABAAEAAAA0ACgAAAABAAEAAAA0ACcAAAABAAEAAAA0ACYAAAABAAEAAAA=")
 tile_set = SubResource("TileSet_v5rc5")
 
 [node name="BlockRight" type="TileMapLayer" parent="BlockDirection" unique_id=1465455531]
-tile_map_data = PackedByteArray("AAAtACYAAAABAAEAAAAtACcAAAABAAEAAAAtACgAAAABAAEAAAAtACkAAAABAAEAAAAtACoAAAABAAEAAAAtACsAAAABAAEAAAAtACwAAAABAAEAAAAtAC0AAAABAAEAAAAzACYAAAABAAEAAAAzACcAAAABAAEAAAAzACgAAAABAAEAAAAzACkAAAABAAEAAAAzACoAAAABAAEAAAAzACsAAAABAAEAAAAzACwAAAABAAEAAAAzAC0AAAABAAEAAAA=")
+tile_map_data = PackedByteArray("AAAtACYAAAABAAEAAAAtACcAAAABAAEAAAAtACgAAAABAAEAAAAtACkAAAABAAEAAAAtACoAAAABAAEAAAAtACsAAAABAAEAAAAtACwAAAABAAEAAAAzACYAAAABAAEAAAAzACcAAAABAAEAAAAzACgAAAABAAEAAAAzACkAAAABAAEAAAAzACoAAAABAAEAAAAzACsAAAABAAEAAAAzACwAAAABAAEAAAA=")
 tile_set = SubResource("TileSet_v5rc5")
 
 [connection signal="body_entered" from="Exits/ToRoute1" to="Exits/ToRoute1" method="_on_body_entered"]

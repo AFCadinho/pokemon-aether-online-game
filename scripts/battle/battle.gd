@@ -26,6 +26,7 @@ const BATTLE_PARTY_SLOT_RESOLVER := preload("res://scripts/battle/battle_party_s
 const BATTLE_DISGUISE_EVENT_ORDER := preload("res://scripts/battle/battle_disguise_event_order.gd")
 const BATTLE_SUPREME_OVERLORD_EFFECT := preload("res://scripts/battle/battle_supreme_overlord_effect.gd")
 const BATTLE_PUBLIC_POKEMON_KNOWLEDGE := preload("res://scripts/battle/battle_public_pokemon_knowledge.gd")
+const BATTLE_VOICE_TIMING := preload("res://scripts/battle/battle_voice_timing.gd")
 const CALC_DRAWER_FIELD_WIDTH_RATIO := 0.55
 const CALC_DRAWER_FIELD_MARGIN := 8.0
 const MEGA_EVOLUTION_EFFECT_KEY := "mega_evolution"
@@ -169,6 +170,8 @@ var display_data_presenter := preload("res://scripts/battle/battle_display_data_
 var message_timing := preload("res://scripts/battle/battle_message_timing.gd").new()
 var event_presentation := preload("res://scripts/battle/battle_event_presentation.gd").new()
 var event_renderer := preload("res://scripts/battle/battle_event_renderer.gd").new()
+var battle_banter_presenter := preload("res://scripts/battle/battle_banter_presenter.gd").new()
+var battle_voice_director := preload("res://scripts/battle/battle_voice_director.gd").new()
 var animation_router := preload("res://scripts/battle/battle_animation_router.gd").new()
 var setup_flow := preload("res://scripts/battle/battle_setup_flow.gd").new()
 var presentation_state := preload("res://scripts/battle/battle_presentation_state.gd").new()
@@ -200,6 +203,7 @@ var summon_original_z_index := 0
 var summon_original_z_as_relative := true
 var summon_release_audio_mode := SUMMON_RELEASE_AUDIO_BALL
 var summon_release_cry_species := ""
+var pvp_team_preview_greeting_shown := false
 var current_move_hover_rect := Rect2()
 var current_party_hover_rect := Rect2()
 const OPPONENT_RESPONSE_HOLD_SECONDS := 0.0
@@ -455,7 +459,8 @@ func _ready() -> void:
 		message_timing,
 		self,
 		Callable(self, "_set_active_hud_hp_from_event"),
-		Callable(self, "_can_start_pvp_render_animation")
+		Callable(self, "_can_start_pvp_render_animation"),
+		Callable(self, "_show_trainer_command")
 	)
 	_setup_status_condition_overlays()
 	_setup_mechanic_buttons()
@@ -5340,34 +5345,14 @@ func _get_fallback_knock_off_item_message(event: Dictionary) -> String:
 	})
 
 func _get_public_confirmed_item_from_event(event: Dictionary) -> String:
-	match str(event.get("type", "")):
-		"item":
-			return str(event.get("item", "")).strip_edges()
-		"damage", "heal", "status", "fieldEffect", "pokemonEffect":
-			return _get_item_name_from_source(str(event.get("source", "")))
-
-	return _get_item_name_from_source(str(event.get("source", "")))
+	return str(
+		BATTLE_PUBLIC_POKEMON_KNOWLEDGE.confirmed_item_reveal_from_event(event).get("item", "")
+	)
 
 func _get_public_confirmed_item_ident_from_event(event: Dictionary) -> String:
-	if str(event.get("type", "")) == "item":
-		return str(event.get("target", ""))
-
-	var item_name := _get_item_name_from_source(str(event.get("source", "")))
-	if item_name == "":
-		return ""
-
-	var source_target := str(event.get("sourceTarget", ""))
-	if source_target != "":
-		return source_target
-
-	return _get_first_event_text_value(event, ["target", "pokemon", "actor", "sourcePokemon"])
-
-func _get_item_name_from_source(source: String) -> String:
-	var cleaned := source.strip_edges()
-	if not cleaned.to_lower().begins_with("item:"):
-		return ""
-
-	return cleaned.split(":", false, 1)[1].strip_edges()
+	return str(
+		BATTLE_PUBLIC_POKEMON_KNOWLEDGE.confirmed_item_reveal_from_event(event).get("ident", "")
+	)
 
 func _mark_item_knocked_off(item_name: String) -> String:
 	var cleaned := item_name.strip_edges()
@@ -5664,17 +5649,27 @@ func play_wild_battle_intro(player_pokemon: Pokemon, api_response: Dictionary) -
 	_show_battle_controls_after_initial_events()
 	_set_battle_actions_ready(true)
 
-func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: Dictionary, api_response: Dictionary) -> void:
+func setup_trainer_battle_from_response(
+	player_pokemon: Pokemon,
+	trainer_data: Dictionary,
+	api_response: Dictionary,
+	entry_ready_callback: Callable = Callable()
+) -> void:
 	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null)
+	battle_banter_presenter.configure(trainer_data)
+	battle_voice_director.configure(str(api_response.get("battleId", "")), "trainer", trainer_data)
 	_show_local_player_trainer()
 	_show_npc_opponent_trainer(trainer_data)
 	display_data_presenter.set_trainer_team(api_response.get("trainerTeam", []))
 
 	if not _apply_team_preview_battle_response(api_response):
+		await _notify_trainer_entry_ready(entry_ready_callback)
 		return
 
 	if not _should_show_team_preview(api_response):
 		_show_default_trainer_leads_before_selection(player_pokemon, api_response)
+
+	await _notify_trainer_entry_ready(entry_ready_callback)
 
 	var lead_response := await _run_trainer_lead_selection(api_response)
 	if lead_response.is_empty():
@@ -5694,6 +5689,7 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 	# Keep the real lead containers hidden while their sprites are populated so
 	# they can only become visible at the Pokeball release frame.
 	await _prepare_team_preview_lead_summon_transition()
+	await _present_special_npc_battle_opening(trainer_data)
 	_show_original_player_lead_before_initial_events(player_species, player_pokemon)
 	_show_original_active_pokemon_for_player("p2", opponent_species)
 	await get_tree().process_frame
@@ -5702,12 +5698,19 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 		opponent_species,
 		last_rendered_event_seq,
 	])
+	await _present_initial_summon_command("p1", player_species)
 	await _play_lead_summon(_get_active_summon_ball_item_id("p1", player_pokemon.ball_item_id), player_species, player_sprite_box, "back")
+	await _present_initial_summon_command("p2", opponent_species)
 	await _play_lead_summon(_get_active_summon_ball_item_id("p2", "poke-ball"), opponent_species, enemy_sprite_box, "front")
 	_debug_battle_start("trainer.setup.after_lead_summons lastRenderedSeq=%d" % last_rendered_event_seq)
 	await _render_initial_battle_events(lead_response)
 	_show_battle_controls_after_initial_events()
 	_set_battle_actions_ready(true)
+
+
+func _notify_trainer_entry_ready(entry_ready_callback: Callable) -> void:
+	if entry_ready_callback.is_valid():
+		await entry_ready_callback.call()
 
 func setup_pvp_battle_from_response(
 	player_pokemon: Pokemon,
@@ -5729,6 +5732,7 @@ func setup_pvp_battle_from_response(
 	action_flow.set_local_player_id(local_player_id)
 	var display_response: Dictionary = action_flow.map_response_for_local_player(api_response)
 	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null)
+	battle_voice_director.configure(str(api_response.get("battleId", "")), "pvp")
 	_show_pvp_trainers(display_response)
 	_capture_pvp_local_canonical_roster()
 
@@ -5785,7 +5789,9 @@ func setup_pvp_battle_from_response(
 	_show_original_player_lead_before_initial_events(player_species, player_pokemon)
 	_show_original_active_pokemon_for_player("p2", opponent_species)
 	await get_tree().process_frame
+	await _present_initial_summon_command("p1", player_species)
 	await _play_lead_summon(_get_active_summon_ball_item_id("p1", player_pokemon.ball_item_id), player_species, player_sprite_box, "back")
+	await _present_initial_summon_command("p2", opponent_species)
 	await _play_lead_summon(_get_active_summon_ball_item_id("p2", "poke-ball"), opponent_species, enemy_sprite_box, "front")
 	if not restored_history_log:
 		await _render_initial_battle_events(lead_response)
@@ -5998,6 +6004,7 @@ func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_poke
 	pvp_last_phase_update_batch_id = ""
 	pvp_last_phase_update_phase = ""
 	pvp_prechoice_buffer.reset()
+	pvp_team_preview_greeting_shown = false
 	_clear_pvp_presentation_fence_recovery_state()
 	pvp_gateway_epoch = ""
 	pvp_last_connection_server_seq = 0
@@ -6019,6 +6026,8 @@ func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_poke
 	display_data_presenter.set_battle_context(type, active_enemy_pokemon)
 	_reset_battle_effect_tracking()
 	presentation_state.reset()
+	battle_banter_presenter.reset()
+	battle_voice_director.reset()
 	pending_mega_species_by_ident.clear()
 	animation_router.prewarm_effect_animations([SHINY_ENTRANCE_EFFECT_KEY, MEGA_EVOLUTION_EFFECT_KEY])
 
@@ -6739,6 +6748,7 @@ func _run_pvp_team_preview_lead_selection(local_player_id: String) -> Dictionary
 	team_preview_lead_selection_active = true
 	queued_battle_action.clear()
 	_show_team_preview_layers()
+	_show_pvp_team_preview_greetings()
 	_set_battle_input_locked(false)
 	current_action_panel.set_message(_t("battle.prompt.choose_lead"))
 	current_action_view = ActionView.PARTY
@@ -6810,6 +6820,7 @@ func _run_pvp_spectator_team_preview() -> Dictionary:
 	team_preview_lead_selection_active = true
 	queued_battle_action.clear()
 	_show_team_preview_layers()
+	_show_pvp_team_preview_greetings()
 	_set_battle_input_locked(true)
 	current_action_view = ActionView.NONE
 	moves_grid.visible = false
@@ -7793,6 +7804,8 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 				event_renderer.add_turn_header(turn)
 			_update_battle_status_panels()
 			_update_stat_stage_panels()
+			if source != "initial_battle_events" and not _is_pvp_battle():
+				await _present_battle_banter_cues(battle_banter_presenter.take_cues_for_event(event_data))
 			_mark_pvp_render_event_completed(event_index + 1)
 			continue
 
@@ -7840,6 +7853,7 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 		if event_type == "switch" or event_type == "drag":
 			var switch_player_id := _get_switch_event_player_id(event_data)
 			if should_play_switch_ball_animations:
+				await _show_switch_trainer_command(event_data, switch_player_id)
 				await _play_switch_recall_for_event(event_data, switch_player_id)
 			_release_ordered_response_display_species_for_player(switch_player_id)
 			battle_state.apply_event_conditions([event_data])
@@ -7864,6 +7878,8 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 				_summarize_battle_event(event_data),
 				_summarize_active_battle_state(),
 			])
+		if source != "initial_battle_events" and not _is_pvp_battle():
+			await _present_battle_banter_cues(battle_banter_presenter.take_cues_for_event(event_data))
 		_mark_pvp_render_event_completed(event_index + 1)
 
 	_remember_rendered_non_pvp_event_keys(ordered_events)
@@ -8814,6 +8830,205 @@ func _get_player_id_from_ident(ident: String) -> String:
 		return "p2"
 
 	return ""
+
+
+func _show_trainer_command(command: Dictionary) -> Dictionary:
+	if battle_type != BattleType.TRAINER:
+		return {}
+
+	var command_kind := str(command.get("kind", ""))
+	var player_id := str(command.get("player_id", ""))
+	var pokemon_name := _format_battle_actor(str(command.get("pokemon", "")), false)
+	if player_id == "" or pokemon_name == "":
+		return {}
+
+	var public_command := command.duplicate(true)
+	public_command["pokemon"] = pokemon_name
+	if command_kind == "move":
+		var move_name := str(command.get("move", "")).strip_edges()
+		if move_name == "":
+			return {}
+		public_command["move"] = move_name
+	elif command_kind != "dodge":
+		return {}
+
+	var public_context := {"turn": presentation_state.get_turn()}
+	var event_value: Variant = command.get("event", {})
+	if event_value is Dictionary:
+		for field: String in ["source", "reason", "forced"]:
+			if (event_value as Dictionary).has(field):
+				public_context[field] = (event_value as Dictionary).get(field)
+	var selection: Dictionary = battle_voice_director.resolve_command(public_command, public_context)
+	return _show_battle_voice_selection(selection, command_kind)
+
+
+func _show_switch_trainer_command(event_data: Dictionary, player_id: String) -> void:
+	if battle_type != BattleType.TRAINER or str(event_data.get("type", "")) == "drag":
+		return
+
+	var to_name := str(event_data.get("to", "")).strip_edges()
+	if to_name == "":
+		to_name = _format_battle_actor(str(event_data.get("toIdent", event_data.get("pokemon", ""))), false)
+	if player_id == "" or to_name == "":
+		return
+
+	var from_name := str(event_data.get("from", "")).strip_edges()
+	if from_name == "":
+		from_name = _format_battle_actor(str(event_data.get("fromIdent", "")), false)
+	var opponent_id := "p2" if player_id == "p1" else "p1"
+	var selection: Dictionary = battle_voice_director.resolve_command({
+		"kind": "switch",
+		"player_id": player_id,
+		"from": from_name,
+		"to": to_name,
+		"pokemon": to_name,
+		"source": str(event_data.get("source", "")),
+		"reason": str(event_data.get("reason", "")),
+	}, {
+		"turn": presentation_state.get_turn(),
+		"forced": bool(event_data.get("forced", false)),
+		"from_fainted": battle_state.is_active_pokemon_fainted(player_id),
+		"from_hp_percent": _get_public_active_hp_percent(player_id),
+		"foe_hp_percent": _get_public_active_hp_percent(opponent_id),
+	})
+	var presentation_result := _show_battle_voice_selection(selection, "switch")
+	if bool(presentation_result.get("shown", false)):
+		var minimum_read_seconds := clampf(
+			float(presentation_result.get("minimum_read_seconds", 0.45)),
+			0.0,
+			0.80
+		)
+		if minimum_read_seconds > 0.0:
+			await get_tree().create_timer(minimum_read_seconds).timeout
+
+
+func _show_battle_voice_selection(selection: Dictionary, command_kind: String) -> Dictionary:
+	if selection.is_empty():
+		return {}
+	var text_key := str(selection.get("text_key", "")).strip_edges()
+	if text_key == "" or not LocalizationManager.has_key(text_key):
+		push_warning("Battle voice selection has an unknown localization key: %s" % text_key)
+		return {}
+	var values_value: Variant = selection.get("values", {})
+	var values: Dictionary = values_value as Dictionary if values_value is Dictionary else {}
+	var message := _t(text_key, values)
+	var shown := _show_trainer_command_text(str(selection.get("player_id", "")), message)
+	return {
+		"shown": shown,
+		"minimum_read_seconds": (
+			BATTLE_VOICE_TIMING.get_minimum_read_seconds(command_kind, message)
+			if shown
+			else 0.0
+		),
+	}
+
+
+func _get_public_active_hp_percent(player_id: String) -> int:
+	var current_hp := battle_state.get_active_pokemon_current_hp(player_id)
+	var max_hp := battle_state.get_active_pokemon_max_hp(player_id)
+	if current_hp < 0 or max_hp <= 0:
+		return -1
+	# PvP public projections expose HP with the same ceiling rule. Applying it
+	# to both own exact HP and opponent public HP keeps intent selection identical
+	# for both participants and spectators at threshold boundaries.
+	return clampi(int(ceil(float(current_hp) * 100.0 / float(max_hp))), 0, 100)
+
+
+func _show_trainer_command_text(player_id: String, message: String) -> bool:
+	var trainer_sprite: BattleTrainerSprite
+	match player_id:
+		"p1":
+			trainer_sprite = player_trainer_sprite
+		"p2":
+			trainer_sprite = enemy_trainer_sprite
+		_:
+			return false
+	if trainer_sprite == null or not trainer_sprite.visible:
+		return false
+	trainer_sprite.show_command(message)
+	return true
+
+
+func _present_initial_summon_command(player_id: String, pokemon_name: String) -> void:
+	if battle_type != BattleType.TRAINER:
+		return
+	var cleaned_name := _format_battle_actor(pokemon_name, false)
+	if player_id not in ["p1", "p2"] or cleaned_name == "":
+		return
+	var selection := battle_voice_director.resolve_command({
+		"kind": "switch",
+		"player_id": player_id,
+		"from": "",
+		"to": cleaned_name,
+		"pokemon": cleaned_name,
+	}, {
+		"turn": 0,
+		"forced": false,
+		"from_fainted": false,
+	})
+	var result := _show_battle_voice_selection(selection, "switch")
+	if not bool(result.get("shown", false)):
+		return
+	var minimum_read_seconds := clampf(
+		float(result.get("minimum_read_seconds", 0.45)),
+		0.45,
+		0.80
+	)
+	await get_tree().create_timer(minimum_read_seconds).timeout
+
+
+func _present_special_npc_battle_opening(trainer_data: Dictionary) -> void:
+	if _is_pvp_battle():
+		return
+	if str(trainer_data.get("battleTransitionStyle", "")) != WildEncounterTransition.STYLE_SPECIAL_TRAINER:
+		return
+	var opening_cues := battle_banter_presenter.take_battle_start_cues()
+	if not opening_cues.is_empty():
+		await _present_battle_banter_cues(opening_cues)
+		return
+	var message := _t("battle.banter.special.opening", {
+		"trainer": _get_player_display_name("p2"),
+	})
+	if _show_trainer_command_text("p2", message):
+		await get_tree().create_timer(1.10).timeout
+
+
+func _show_pvp_team_preview_greetings() -> void:
+	if not _is_pvp_battle() or pvp_team_preview_greeting_shown:
+		return
+	pvp_team_preview_greeting_shown = true
+	var greeting := _t("battle.voice.team_preview.greeting")
+	_show_trainer_command_text("p1", greeting)
+	_show_trainer_command_text("p2", greeting)
+
+
+func _present_battle_banter_cues(cues: Array[Dictionary]) -> void:
+	if battle_type != BattleType.TRAINER or _is_pvp_battle():
+		return
+	for cue: Dictionary in cues:
+		var text_key := str(cue.get("text_key", "")).strip_edges()
+		if text_key == "" or not LocalizationManager.has_key(text_key):
+			push_warning("Battle banter cue %s has an unknown localization key: %s" % [
+				str(cue.get("id", "<unknown>")),
+				text_key,
+			])
+			continue
+		var speaker := str(cue.get("speaker", "opponent")).strip_edges().to_lower()
+		var player_id := "p1" if speaker == "player" else "p2"
+		var replacements: Dictionary = {}
+		var context_value: Variant = cue.get("context", {})
+		if context_value is Dictionary:
+			replacements.merge((context_value as Dictionary).duplicate(true), true)
+		var configured_values: Variant = cue.get("values", {})
+		if configured_values is Dictionary:
+			replacements.merge((configured_values as Dictionary).duplicate(true), true)
+		replacements["pokemon"] = str(replacements.get("species", ""))
+		replacements["trainer"] = _get_player_display_name(player_id)
+		if not _show_trainer_command_text(player_id, _t(text_key, replacements)):
+			continue
+		var pause_seconds := float(clampi(int(cue.get("pause_ms", cue.get("pauseMs", 1000))), 0, 3000)) / 1000.0
+		if pause_seconds > 0.0:
+			await get_tree().create_timer(pause_seconds).timeout
 
 func _play_shiny_entrance_if_needed(event_data: Dictionary) -> void:
 	var player_id := str(event_data.get("playerId", ""))

@@ -91,8 +91,13 @@ func _run() -> void:
 	skills_service.set("state_loaded", true)
 	panel.call("_render_skills", test_skills)
 	panel.visible = true
-	_check((panel.get("skill_cards") as HBoxContainer).get_child_count() == 2, "Fishing and Thieving receive separate skill cards")
-	_check((panel.get("detail_name") as Label).text == "Thieving", "Thieving is the initial detailed skill")
+	_check((panel.get("skill_cards") as GridContainer).get_child_count() == 2, "Fishing and Thieving receive separate overview cards")
+	_check((panel.get("overview_panel") as VBoxContainer).visible, "Skills opens on the level overview")
+	_check(not (panel.get("detail_panel") as PanelContainer).visible, "Skill details stay hidden until a skill is selected")
+	panel.call("_select_skill", "thieving")
+	_check(not (panel.get("overview_panel") as VBoxContainer).visible, "Selecting Thieving leaves the overview")
+	_check((panel.get("detail_panel") as PanelContainer).visible, "Selecting Thieving opens its dedicated interface")
+	_check((panel.get("detail_name") as Label).text == "Thieving", "Thieving is the selected detailed skill")
 	_check((panel.get("detail_level") as Label).text.contains("20"), "the detail view shows the server level")
 	_check((panel.get("stats_label") as Label).text.contains("42"), "Thieving currency and modifiers are visible")
 	_check((panel.get("unlocks_container") as VBoxContainer).get_child_count() == 3, "level-gated target unlocks are listed")
@@ -119,9 +124,12 @@ func _run() -> void:
 	var refreshed_second_content := refreshed_second_target.get_child(0) as HBoxContainer
 	_check((refreshed_second_content.get_child(1) as Label).text == "Attempted today", "a successful pickpocket refreshes the daily target status immediately")
 	panel.call("_select_skill", "fishing")
-	_check((panel.get("detail_name") as Label).text == "Fishing", "skill cards switch the detailed view")
+	_check((panel.get("detail_name") as Label).text == "Fishing", "Fishing opens its own detailed interface")
 	_check(not (panel.get("targets_section") as VBoxContainer).visible, "the target catalog only appears for Thieving")
 	_check(is_equal_approx((panel.get("experience_bar") as ProgressBar).value, 42.86), "XP progress uses the server percentage")
+	panel.call("_show_overview")
+	_check((panel.get("overview_panel") as VBoxContainer).visible, "the detail back action returns to all skill levels")
+	_check(not (panel.get("detail_panel") as PanelContainer).visible, "returning to the overview hides skill-specific content")
 
 	for locale_path: String in [
 		"res://localization/en.json",

@@ -86,6 +86,8 @@ var pvp_battle_transition_started_at_msec := -1
 var active_battle_id := ""
 var active_wild_pokemon_species := ""
 var active_trainer_name := ""
+var active_trainer_outro_dialogue_id := ""
+var active_trainer_mugshot: Texture2D
 var map_transition_layer: CanvasLayer
 var map_transition_rect: ColorRect
 var map_transition_content: Control
@@ -281,8 +283,16 @@ func save_current_player_state_now() -> Dictionary:
 	return result
 
 
-func begin_authorized_teleport(ignore_player_movement := false) -> Dictionary:
-	var block_reason := _get_authorized_teleport_block_reason(false, false, ignore_player_movement)
+func begin_authorized_teleport(
+	ignore_player_movement := false,
+	ignore_existing_overworld_lock := false
+) -> Dictionary:
+	var block_reason := _get_authorized_teleport_block_reason(
+		false,
+		false,
+		ignore_player_movement,
+		ignore_existing_overworld_lock
+	)
 	if block_reason != "":
 		return {
 			"success": false,
@@ -294,7 +304,12 @@ func begin_authorized_teleport(ignore_player_movement := false) -> Dictionary:
 	authorized_teleport_locked_overworld = true
 	while is_saving_player_position:
 		await get_tree().process_frame
-	block_reason = _get_authorized_teleport_block_reason(true, false, ignore_player_movement)
+	block_reason = _get_authorized_teleport_block_reason(
+		true,
+		false,
+		ignore_player_movement,
+		ignore_existing_overworld_lock
+	)
 	if block_reason != "":
 		cancel_authorized_teleport()
 		return {
@@ -477,14 +492,20 @@ func _is_allowed_authorized_teleport_scene_path(scene_path: String) -> bool:
 	)
 
 
-func get_authorized_teleport_block_reason() -> String:
-	return _get_authorized_teleport_block_reason(false)
+func get_authorized_teleport_block_reason(ignore_existing_overworld_lock := false) -> String:
+	return _get_authorized_teleport_block_reason(
+		false,
+		false,
+		false,
+		ignore_existing_overworld_lock
+	)
 
 
 func _get_authorized_teleport_block_reason(
 	ignore_teleport_in_progress := false,
 	ignore_failed_autosave_block := false,
-	ignore_player_movement := false
+	ignore_player_movement := false,
+	ignore_existing_overworld_lock := false
 ) -> String:
 	if authorized_teleport_in_progress and not ignore_teleport_in_progress:
 		return "Another teleport is already in progress."
@@ -498,7 +519,11 @@ func _get_authorized_teleport_block_reason(
 		return "World is not ready."
 	if GameState.input_locked:
 		return "Cannot teleport while dialogue or a global input lock is active."
-	if GameState.overworld_input_locked and not ignore_teleport_in_progress:
+	if (
+		GameState.overworld_input_locked
+		and not ignore_teleport_in_progress
+		and not ignore_existing_overworld_lock
+	):
 		return "Cannot teleport while overworld movement is locked."
 	if GameState.ui_input_locked:
 		return "Cannot teleport while a menu lock is active."
@@ -714,6 +739,38 @@ func _ensure_map_transition_overlay() -> void:
 func _begin_wild_encounter_transition() -> int:
 	wild_encounter_transition.begin()
 	return Time.get_ticks_msec()
+
+
+func _begin_trainer_battle_transition(trainer_data: Dictionary) -> int:
+	wild_encounter_transition.begin(_trainer_battle_transition_style(trainer_data))
+	return Time.get_ticks_msec()
+
+
+func _trainer_battle_transition_style(trainer_data: Dictionary) -> String:
+	var configured_style := str(
+		trainer_data.get(
+			"battleTransitionStyle",
+			trainer_data.get("battle_transition_style", "")
+		)
+	).strip_edges().to_lower()
+	if configured_style in [
+		WildEncounterTransition.STYLE_TRAINER,
+		WildEncounterTransition.STYLE_SPECIAL_TRAINER,
+	]:
+		return configured_style
+
+	var trainer_class := str(
+		trainer_data.get("trainer_class", trainer_data.get("trainerClass", ""))
+	).strip_edges().to_lower().replace(" ", "_").replace("-", "_")
+	if trainer_class in [
+		"rival",
+		"gym_leader",
+		"elite_four",
+		"champion",
+		"boss",
+	]:
+		return WildEncounterTransition.STYLE_SPECIAL_TRAINER
+	return WildEncounterTransition.STYLE_TRAINER
 
 
 func begin_pvp_battle_transition() -> void:
@@ -2309,36 +2366,49 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 			"code": "trainer_battle_configuration_invalid",
 		}
 
+	var battle_trainer_data := trainer_data.duplicate(true)
+	battle_trainer_data["battleTransitionStyle"] = _trainer_battle_transition_style(trainer_data)
 	is_in_battle = true
 	active_battle_kind = "trainer"
 	active_battle_id = ""
 	active_wild_pokemon_species = ""
 	active_trainer_name = str(trainer_data.get("name", "Trainer"))
+	active_trainer_outro_dialogue_id = str(trainer_data.get("outroDialogueId", "")).strip_edges()
+	active_trainer_mugshot = trainer_data.get("_battle_mugshot") as Texture2D
 	_lock_overworld_for_battle()
+	var transition_started_at_msec := _begin_trainer_battle_transition(battle_trainer_data)
 
 	var response: Dictionary = await create_trainer_battle_response(trainer_id)
 	if not response.get("success", false):
 		push_warning("World.start_trainer_battle failed: %s" % str(response.get("error", "Unknown error")))
+		await _cancel_wild_encounter_transition()
 		_abort_battle_start()
 		return response
 	active_battle_id = str(response.get("battleId", ""))
 	_save_player_activity_state_deferred("battle", _get_current_activity_context())
 
+	await _wait_for_wild_encounter_cover(transition_started_at_msec)
+
 	if not _mount_battle_ui():
 		push_error("World.start_trainer_battle failed: could not load battle scene.")
+		await _cancel_wild_encounter_transition()
 		_abort_battle_start()
 		return {
 			"success": false,
 			"code": "battle_ui_unavailable",
 		}
 
+	_prepare_battle_instance_reveal()
 	MusicManager.play_trainer_battle_music()
 
 	await battle_instance.setup_trainer_battle_from_response(
 		PlayerSave.party[0],
-		trainer_data,
-		response
+		battle_trainer_data,
+		response,
+		Callable(self, "_reveal_prepared_wild_battle")
 	)
+	if wild_encounter_transition.visible:
+		await _reveal_prepared_wild_battle()
 
 	return {"success": true, "battleId": active_battle_id}
 
@@ -2358,6 +2428,8 @@ func start_pvp_battle_from_response(response: Dictionary) -> bool:
 	active_battle_id = str(response.get("battleId", ""))
 	active_wild_pokemon_species = ""
 	active_trainer_name = ""
+	active_trainer_outro_dialogue_id = ""
+	active_trainer_mugshot = null
 	_save_player_activity_state_deferred("battle", _get_current_activity_context())
 	_lock_overworld_for_battle()
 
@@ -2426,6 +2498,8 @@ func end_wild_battle(keep_overworld_locked := false) -> void:
 	active_battle_id = ""
 	active_wild_pokemon_species = ""
 	active_trainer_name = ""
+	active_trainer_outro_dialogue_id = ""
+	active_trainer_mugshot = null
 	_save_player_activity_state_deferred("idle")
 	if keep_overworld_locked:
 		if player.has_method("reset_movement_state"):
@@ -2444,9 +2518,14 @@ func _on_battle_ended(result: Dictionary) -> void:
 	var reward_battle_id := active_battle_id
 	var reward_species := active_wild_pokemon_species
 	var reward_trainer_name := active_trainer_name
+	var trainer_outro_dialogue_id := active_trainer_outro_dialogue_id
+	var trainer_mugshot := active_trainer_mugshot
+	var keep_locked_for_outro := should_claim_trainer_reward and not trainer_outro_dialogue_id.is_empty()
 	if should_respawn_after_loss:
 		_begin_blackout_respawn_transition()
 	end_wild_battle(should_respawn_after_loss)
+	if keep_locked_for_outro:
+		_lock_overworld_for_battle()
 	_notify_caught_pokemon_if_needed(result)
 	if should_respawn_after_loss:
 		await _respawn_after_battle_loss()
@@ -2454,7 +2533,11 @@ func _on_battle_ended(result: Dictionary) -> void:
 	if should_claim_wild_reward and reward_battle_id != "":
 		await _award_wild_battle_money(reward_battle_id, reward_species)
 	if should_claim_trainer_reward and reward_battle_id != "":
-		await _award_trainer_battle_rewards(reward_battle_id, reward_trainer_name)
+		var reward_claimed := await _award_trainer_battle_rewards(reward_battle_id, reward_trainer_name)
+		if reward_claimed and keep_locked_for_outro:
+			await _show_trainer_outro_dialogue(trainer_outro_dialogue_id, trainer_mugshot)
+	if keep_locked_for_outro:
+		_unlock_overworld_after_battle()
 
 
 func _should_respawn_after_battle_loss(result: Dictionary, battle_kind: String) -> bool:
@@ -2667,7 +2750,7 @@ func _award_wild_battle_money(battle_id: String, pokemon_species: String) -> voi
 	else:
 		push_warning("World: wild battle money reward failed: %s" % str(wallet_result.get("error", "Unknown error")))
 
-func _award_trainer_battle_rewards(battle_id: String, trainer_name: String) -> void:
+func _award_trainer_battle_rewards(battle_id: String, trainer_name: String) -> bool:
 	var previous_money: int = max(int(PlayerSave.money), 0)
 	var reward_result: Dictionary = await PlayerWalletService.award_trainer_battle_rewards(battle_id)
 	if bool(reward_result.get("success", false)):
@@ -2685,8 +2768,28 @@ func _award_trainer_battle_rewards(battle_id: String, trainer_name: String) -> v
 		var story_result: Dictionary = await PlayerGameStateService.refresh_story()
 		if not bool(story_result.get("success", false)):
 			push_warning("World: trainer reward story refresh failed: %s" % str(story_result.get("error", "Unknown error")))
+		return true
 	else:
 		push_warning("World: trainer battle reward failed: %s" % str(reward_result.get("error", "Unknown error")))
+	return false
+
+
+func _show_trainer_outro_dialogue(dialogue_id: String, mugshot: Texture2D) -> void:
+	var response: Dictionary = await DialogueMetadataService.get_dialogue(dialogue_id)
+	if not bool(response.get("success", false)):
+		push_warning("World: trainer outro dialogue failed: %s" % str(response.get("error", "Unknown error")))
+		return
+	var metadata := _dictionary_from_value(response.get("metadata", {}))
+	var lines: Array[String] = []
+	for value: Variant in metadata.get("lines", []):
+		var line := str(value).strip_edges()
+		if not line.is_empty():
+			lines.append(line)
+	var dialogue_box := get_tree().current_scene.get_node_or_null("DialogueBox/Box") if get_tree().current_scene != null else null
+	if dialogue_box == null or lines.is_empty():
+		return
+	dialogue_box.start_dialogue(lines, str(metadata.get("speakerName", "")), mugshot)
+	await dialogue_box.dialogue_finished
 
 func _notify_gym_badge_award(value: Variant) -> void:
 	if not (value is Dictionary):
@@ -3038,6 +3141,8 @@ func _abort_battle_start() -> void:
 	active_battle_id = ""
 	active_wild_pokemon_species = ""
 	active_trainer_name = ""
+	active_trainer_outro_dialogue_id = ""
+	active_trainer_mugshot = null
 	_save_player_activity_state_deferred("idle")
 	_unlock_overworld_after_battle()
 	MusicManager.play_overworld_music()

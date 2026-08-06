@@ -73,6 +73,25 @@ func _init() -> void:
 		"Reusable NPC resolves its profile portrait"
 	)
 	_check_equal(
+		catalog.resolve_portrait_id("", "unlisted_seller", "pokemart_seller"),
+		"showdown_pokemonbreeder_gen4",
+		"Poké Mart item sellers use the Gen 4 Pokémon Breeder portrait"
+	)
+	_check_equal(
+		catalog.resolve_portrait_id("", "unlisted_buyer", "pokemart_buyer"),
+		"showdown_pokemonbreeder_gen4",
+		"Poké Mart item buyers use the Gen 4 Pokémon Breeder portrait"
+	)
+	_check_equal(
+		catalog.resolve_portrait_id(
+			"",
+			"kanto_viridian_city_pokemon_center_clerk_2",
+			"pokemart_buyer"
+		),
+		"showdown_pokemonbreeder_gen4",
+		"Placed Poké Mart buyers keep the shared breeder portrait"
+	)
+	_check_equal(
 		catalog.resolve_portrait_id("showdown_red_lgpe", "kanto_oaklab_oak_1", ""),
 		"showdown_red_lgpe",
 		"Scene/profile override takes precedence"
@@ -85,6 +104,12 @@ func _init() -> void:
 	var oak_texture := catalog.get_texture("showdown_oak")
 	_check_true(oak_texture != null, "Assigned portrait texture loads on demand")
 	_check_true(catalog.get_texture("showdown_oak") == oak_texture, "Loaded portrait texture is cached")
+	var breeder_texture := catalog.get_texture("showdown_pokemonbreeder_gen4")
+	_check_true(breeder_texture != null, "Gen 4 Pokémon Breeder portrait texture loads on demand")
+	_check_true(
+		breeder_texture != null and breeder_texture.get_size() == Vector2(80, 80),
+		"Gen 4 Pokémon Breeder portrait keeps its catalog dimensions"
+	)
 
 	catalog.queue_free()
 	quit(1 if failed else 0)

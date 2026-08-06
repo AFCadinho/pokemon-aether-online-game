@@ -6,6 +6,7 @@
     {"id": "kanto_route_1_viridian_city_sign", "type": "road", "title": "Cidade de Viridian", "lines": ["Cidade de Viridian", "A porta de entrada para as rotas ocidentais de Kanto."]},
     {"id": "kanto_route_2_route_sign", "type": "road", "mapId": "kanto_route_2", "title": "Rota 2", "lines": ["Rota 2", "Viridian City ↔ Pewter City."]},
     {"id": "kanto_route_2_digletts_cave", "type": "road", "mapId": "kanto_route_2", "title": "Caverna dos Diglett", "lines": ["Caverna dos Diglett", "Um túnel que conecta a Rota 2 à Cidade de Vermilion."]},
-    {"id": "kanto_route_22_route_sign", "type": "road", "mapId": "kanto_route_22", "title": "Rota 22", "lines": ["Rota 22", "Viridian City ↔ Indigo Plateau."]}
+    {"id": "kanto_route_22_route_sign", "type": "road", "mapId": "kanto_route_22", "title": "Rota 22", "lines": ["Rota 22", "Viridian City ↔ Indigo Plateau."]},
+    {"id": "kanto_route_3_mt_moon_sign", "type": "road", "mapId": "kanto_route_3", "title": "Mt. Moon", "lines": ["Mt. Moon", "Uma caverna que conecta a Rota 3 à Rota 4 e à Cidade de Cerulean."]}
   ]
 }

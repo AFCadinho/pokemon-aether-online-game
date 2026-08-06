@@ -2,6 +2,8 @@ extends SceneTree
 
 const PROJECT_PATH := "res://project.godot"
 const SERVICE_PATH := "res://scripts/services/world_transition_service.gd"
+const LOCKED_DOOR_PATH := "res://scripts/world/interactables/locked_door_interactable.gd"
+const LOCKED_DOOR_SCENE_PATH := "res://scenes/world/interactables/locked_door_interactable.tscn"
 const AUTH_SERVICE_PATH := "res://scripts/services/auth_service.gd"
 const MAP_EXIT_PATH := "res://scripts/world/map_exit.gd"
 const GATE_NPC_PATH := "res://scripts/world/npcs/gate_npc.gd"
@@ -24,6 +26,8 @@ var failed := false
 func _init() -> void:
 	var project_source := FileAccess.get_file_as_string(PROJECT_PATH)
 	var service_source := FileAccess.get_file_as_string(SERVICE_PATH)
+	var locked_door_source := FileAccess.get_file_as_string(LOCKED_DOOR_PATH)
+	var locked_door_scene_source := FileAccess.get_file_as_string(LOCKED_DOOR_SCENE_PATH)
 	var auth_service_source := FileAccess.get_file_as_string(AUTH_SERVICE_PATH)
 	var map_exit_source := FileAccess.get_file_as_string(MAP_EXIT_PATH)
 	var gate_source := FileAccess.get_file_as_string(GATE_NPC_PATH)
@@ -46,6 +50,19 @@ func _init() -> void:
 		service_source.contains('"/game/world/transitions/%s/access"')
 		and service_source.contains('"/game/world/transitions/%s/enter"'),
 		"Client uses the transition-scoped preview and authoritative enter endpoints"
+	)
+	_expect(
+		service_source.contains('"/game/world/areas/%s/access"')
+		and service_source.contains("func get_area_access")
+		and service_source.contains("area_access_cache"),
+		"Door locks use the shared server-authoritative world area access service"
+	)
+	_expect(
+		locked_door_source.contains("get_area_access")
+		and locked_door_source.contains("dialogueId")
+		and locked_door_source.contains("blocks_movement = not allowed")
+		and locked_door_scene_source.contains("LockedDoorInteractable"),
+		"Locked door interactables block movement and display backend-provided reasons"
 	)
 	_expect(
 		service_source.contains("transition_access_cache[normalized_transition_id] = access"),
@@ -73,7 +90,7 @@ func _init() -> void:
 		"Denied transitions release the teleport lock and route presentation to the guard"
 	)
 	_expect(
-		world_source.contains("func begin_authorized_teleport(ignore_player_movement := false)")
+		world_source.contains("ignore_player_movement := false,")
 		and world_source.contains("not ignore_player_movement"),
 		"Boundary transitions can authorize while a tile movement is finishing"
 	)
@@ -102,6 +119,15 @@ func _init() -> void:
 		and gate_source.contains('exit.has_method("contains_world_position")')
 		and gate_source.contains("WorldTransitionService.get_transition_access("),
 		"Gate NPCs own an explicit role and derive transition blocking from their guarded exit"
+	)
+	_expect(
+		gate_source.contains("transition_access_resolved")
+		and gate_source.contains("func _sync_guard_presence()")
+		and gate_source.contains("guard_role != GUARD_ROLE_TRANSITION")
+		and gate_source.contains("not _are_local_gate_requirements_met()")
+		and gate_source.contains("guard_role == GUARD_ROLE_TRANSITION and not guard_present")
+		and gate_source.contains("return super.blocks_world_position(world_position)"),
+		"Exterior transition guards appear only while server or local access is blocked"
 	)
 	_expect(
 		gate_scene_source.contains("NPC_088_Policeman.png")

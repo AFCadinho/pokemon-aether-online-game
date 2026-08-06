@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="23_route_hint"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="24_door_hint"]
 [ext_resource type="PackedScene" uid="uid://b8s7eihsl5ikf" path="res://scenes/world/interactables/sign_interactable.tscn" id="25_sign"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/locked_door_interactable.tscn" id="35_locked_door"]
 [ext_resource type="PackedScene" uid="uid://rnbee61xiftm" path="res://scenes/npcs/item_gift_npc.tscn" id="26_item_gift"]
 [ext_resource type="Texture2D" uid="uid://e2ksljyggppg" path="res://assets/tilesets/fiver/tiles_env2_floors32.png" id="27_q27eu"]
 [ext_resource type="Texture2D" uid="uid://l4jsju4s8v3a" path="res://assets/sprites/trainer_cards/showdown/fisherman-gen6.png" id="29_fisherman_card"]
@@ -2351,6 +2352,21 @@ sign_type = "town"
 [node name="OaksLabSign" parent="Entities/Interactables" unique_id=1449815395 instance=ExtResource("25_sign")]
 position = Vector2(1200, 880)
 sign_id = "kanto_pallet_town_oaks_lab"
+
+[node name="OaksLabDoorLock" parent="Entities/Interactables" instance=ExtResource("35_locked_door")]
+position = Vector2(1296, 816)
+display_name = "Oak's Lab"
+area_id = "kanto_oaks_lab"
+
+[node name="PlayersHouseDoorLock" parent="Entities/Interactables" instance=ExtResource("35_locked_door")]
+position = Vector2(656, 528)
+display_name = "Player's House"
+area_id = "kanto_players_house"
+
+[node name="RivalsHouseDoorLock" parent="Entities/Interactables" instance=ExtResource("35_locked_door")]
+position = Vector2(1136, 400)
+display_name = "Rival's House"
+area_id = "kanto_rivals_house"
 
 [node name="Water" type="TileMapLayer" parent="." unique_id=1009891667]
 visible = false

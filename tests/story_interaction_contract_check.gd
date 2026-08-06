@@ -288,7 +288,7 @@ func _test_hook_and_api_integration_contract() -> void:
 	)
 	_expect(
 		runner.contains("GameState.lock_input()")
-		and runner.contains("DialogueBox releases every GameState lock")
+		and runner.contains("DialogueBox restores")
 		and runner.contains('"dialogue_not_presented"')
 		and runner.contains('"status": "pending_battle"'),
 		"sequence requires presented dialogue, stays locked, and leaves battle pending"
@@ -300,6 +300,11 @@ func _test_hook_and_api_integration_contract() -> void:
 		and runner.contains('str(trainer_metadata.get("id", "")) != trainer_id')
 		and runner.contains('"status": "trainer_identity_mismatch"'),
 		"sequence verifies fetched dialogue and trainer identities before side effects"
+	)
+	_expect(
+		runner.contains('host.has_method("build_battle_trainer_metadata")')
+		and runner.contains('host.call("build_battle_trainer_metadata", trainer_metadata)'),
+		"story battles reuse the placed NPC's battle sprite and portrait"
 	)
 	_expect(
 		npc.contains("func story_move_path(path: Array[String]) -> bool:")

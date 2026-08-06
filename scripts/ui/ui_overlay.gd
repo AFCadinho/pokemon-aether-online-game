@@ -790,10 +790,18 @@ var staff_teleport_player_results_status_label: Label
 var staff_teleport_player_action_hint: Label
 var staff_teleport_to_player_mode_button: Button
 var staff_teleport_send_player_mode_button: Button
+var staff_jail_mode_button: Button
 var staff_teleport_player_note_caption: Label
 var staff_teleport_player_reason_input: LineEdit
 var staff_teleport_to_player_button: Button
 var staff_teleport_send_section: Control
+var staff_jail_section: Control
+var staff_jail_duration_input: SpinBox
+var staff_jail_permanent_check: CheckBox
+var staff_jail_reason_input: LineEdit
+var staff_jail_status_label: Label
+var staff_jail_detain_button: Button
+var staff_jail_release_button: Button
 var staff_teleport_send_map_select: OptionButton
 var staff_teleport_send_point_select: OptionButton
 var staff_teleport_send_map_search: LineEdit
@@ -968,6 +976,8 @@ var market_items: Array[Dictionary] = []
 var market_selected_item: Dictionary = {}
 var market_purchase_in_progress := false
 var market_mode := "player_buys"
+var movement_blocking_ui_panels: Dictionary = {}
+var owns_modal_overworld_input_lock := false
 var market_context: Dictionary = {}
 var mailbox_messages: Array[Dictionary] = []
 var selected_mail_id := -1
@@ -1645,6 +1655,13 @@ func _can_teleport_to_player() -> bool:
 func _can_teleport_other_player() -> bool:
 	return _has_user_permission(WORLD_TELEPORT_OTHER_PERMISSION)
 
+func _can_manage_jail() -> bool:
+	var role_ids := _current_user_role_ids()
+	for role_id: String in role_ids:
+		if role_id in ["moderator", "gamemaster", "developer", "senior_staff", "admin", "owner"]:
+			return true
+	return false
+
 func _current_player_has_staff_role() -> bool:
 	var roles_value: Variant = AuthService.current_user.get("roles", [])
 	if not roles_value is Array:
@@ -1717,6 +1734,7 @@ func _refresh_dev_tools_visibility() -> void:
 		or can_teleport
 		or can_teleport_to_player
 		or can_teleport_other
+		or _can_manage_jail()
 	)
 	var has_visible_staff_action: bool = has_staff_tool or can_use_dev_tools or can_use_content_creator_photo_mode or can_use_content_creator_generation
 	PlayerSave.is_staff = _current_player_has_staff_role()
@@ -1774,15 +1792,15 @@ func _refresh_dev_tools_visibility() -> void:
 		)
 	_refresh_staff_impersonate_button_copy()
 	if staff_teleport_button != null:
-		staff_teleport_button.visible = can_teleport or can_teleport_to_player or can_teleport_other
-		staff_teleport_button.disabled = not (can_teleport or can_teleport_to_player or can_teleport_other)
+		staff_teleport_button.visible = can_teleport or can_teleport_to_player or can_teleport_other or _can_manage_jail()
+		staff_teleport_button.disabled = not (can_teleport or can_teleport_to_player or can_teleport_other or _can_manage_jail())
 	if not has_staff_tool:
 		if staff_tools_popup != null:
 			staff_tools_popup.visible = false
 	if not can_impersonate or can_return_from_impersonation:
 		if staff_impersonate_popup != null:
 			staff_impersonate_popup.visible = false
-	if not (can_teleport or can_teleport_to_player or can_teleport_other) and staff_teleport_popup != null:
+	if not (can_teleport or can_teleport_to_player or can_teleport_other or _can_manage_jail()) and staff_teleport_popup != null:
 		staff_teleport_popup.visible = false
 	if not can_use_dev_tools:
 		dev_actions_popup.visible = false
@@ -2995,11 +3013,63 @@ func _activate_ui_panel(panel: Control) -> void:
 	_focus_overlay_ui_layer()
 	panel.z_index = UI_WINDOW_Z_INDEX
 	panel.move_to_front()
+	_track_movement_blocking_ui_panel(panel)
 
 func _deactivate_ui_panel(panel: Control) -> void:
+	_untrack_movement_blocking_ui_panel(panel)
 	_set_ui_panel_base_z(panel)
 	if not _has_visible_priority_overlay_panel():
 		layer = UI_OVERLAY_BASE_LAYER
+
+
+func _track_movement_blocking_ui_panel(panel: Control) -> void:
+	if panel == null or not panel.visible or panel == town_map_popup:
+		return
+	var panel_id := panel.get_instance_id()
+	if not movement_blocking_ui_panels.has(panel_id):
+		movement_blocking_ui_panels[panel_id] = weakref(panel)
+		var callback := Callable(self, "_on_movement_blocking_panel_visibility_changed").bind(panel)
+		if not panel.visibility_changed.is_connected(callback):
+			panel.visibility_changed.connect(callback)
+		var exit_callback := Callable(self, "_on_movement_blocking_panel_tree_exiting").bind(panel_id)
+		if not panel.tree_exiting.is_connected(exit_callback):
+			panel.tree_exiting.connect(exit_callback)
+	_refresh_modal_overworld_input_lock()
+
+
+func _untrack_movement_blocking_ui_panel(panel: Control) -> void:
+	if panel != null:
+		movement_blocking_ui_panels.erase(panel.get_instance_id())
+	_refresh_modal_overworld_input_lock()
+
+
+func _on_movement_blocking_panel_visibility_changed(panel: Control) -> void:
+	if panel == null or panel.visible:
+		return
+	_untrack_movement_blocking_ui_panel(panel)
+
+
+func _on_movement_blocking_panel_tree_exiting(panel_id: int) -> void:
+	movement_blocking_ui_panels.erase(panel_id)
+	_refresh_modal_overworld_input_lock()
+
+
+func _refresh_modal_overworld_input_lock() -> void:
+	for panel_id: Variant in movement_blocking_ui_panels.keys():
+		var panel_reference := movement_blocking_ui_panels.get(panel_id) as WeakRef
+		var panel := panel_reference.get_ref() as Control if panel_reference != null else null
+		if panel == null or not panel.visible:
+			movement_blocking_ui_panels.erase(panel_id)
+
+	if not movement_blocking_ui_panels.is_empty():
+		if not GameState.is_overworld_input_locked():
+			GameState.lock_overworld_input()
+			owns_modal_overworld_input_lock = true
+		return
+
+	if owns_modal_overworld_input_lock:
+		owns_modal_overworld_input_lock = false
+		GameState.unlock_overworld_input()
 
 func _on_focusable_overlay_panel_gui_input(event: InputEvent, panel: Control) -> void:
 	if not (event is InputEventMouseButton):
@@ -7609,6 +7679,15 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_send_player_mode_button.pressed.connect(_on_staff_teleport_send_player_mode_pressed)
 	player_action_mode_bar.add_child(staff_teleport_send_player_mode_button)
 
+	staff_jail_mode_button = Button.new()
+	staff_jail_mode_button.text = "Jail"
+	staff_jail_mode_button.custom_minimum_size = Vector2(0, 34)
+	staff_jail_mode_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_jail_mode_button.focus_mode = Control.FOCUS_NONE
+	staff_jail_mode_button.toggle_mode = true
+	staff_jail_mode_button.pressed.connect(_on_staff_jail_mode_pressed)
+	player_action_mode_bar.add_child(staff_jail_mode_button)
+
 	staff_teleport_send_section = VBoxContainer.new()
 	staff_teleport_send_section.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_send_section.add_theme_constant_override("separation", 7)
@@ -7681,6 +7760,47 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_send_player_button.pressed.connect(_on_staff_teleport_send_player_pressed)
 	staff_teleport_player_section.add_child(staff_teleport_send_player_button)
 
+	staff_jail_section = VBoxContainer.new()
+	staff_jail_section.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_jail_section.add_theme_constant_override("separation", 7)
+	staff_teleport_player_section.add_child(staff_jail_section)
+	staff_jail_section.add_child(_create_staff_teleport_section_title("Staff detention"))
+	var jail_duration_row := HBoxContainer.new()
+	jail_duration_row.add_theme_constant_override("separation", 10)
+	staff_jail_section.add_child(jail_duration_row)
+	staff_jail_duration_input = SpinBox.new()
+	staff_jail_duration_input.min_value = 1
+	staff_jail_duration_input.max_value = 525600
+	staff_jail_duration_input.value = 60
+	staff_jail_duration_input.suffix = " minutes"
+	staff_jail_duration_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	jail_duration_row.add_child(staff_jail_duration_input)
+	staff_jail_permanent_check = CheckBox.new()
+	staff_jail_permanent_check.text = "Permanent"
+	staff_jail_permanent_check.toggled.connect(_on_staff_jail_permanent_toggled)
+	jail_duration_row.add_child(staff_jail_permanent_check)
+	staff_jail_reason_input = LineEdit.new()
+	staff_jail_reason_input.placeholder_text = "Moderation reason (required)"
+	staff_jail_reason_input.max_length = 255
+	staff_jail_section.add_child(staff_jail_reason_input)
+	var jail_actions := HBoxContainer.new()
+	jail_actions.add_theme_constant_override("separation", 8)
+	staff_jail_section.add_child(jail_actions)
+	staff_jail_detain_button = Button.new()
+	staff_jail_detain_button.text = "Detain player"
+	staff_jail_detain_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_jail_detain_button.pressed.connect(_on_staff_jail_detain_pressed)
+	jail_actions.add_child(staff_jail_detain_button)
+	staff_jail_release_button = Button.new()
+	staff_jail_release_button.text = "Release detention"
+	staff_jail_release_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_jail_release_button.pressed.connect(_on_staff_jail_release_pressed)
+	jail_actions.add_child(staff_jail_release_button)
+	staff_jail_status_label = Label.new()
+	staff_jail_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	staff_jail_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	staff_jail_section.add_child(staff_jail_status_label)
+
 	_apply_button_style(close_button)
 	_apply_line_edit_style(staff_impersonate_token_input)
 	_apply_button_style(impersonate_cancel_button)
@@ -7690,6 +7810,7 @@ func _setup_staff_impersonation_tools() -> void:
 	_apply_button_style(staff_teleport_player_tab_button)
 	_apply_button_style(staff_teleport_to_player_mode_button, "primary")
 	_apply_button_style(staff_teleport_send_player_mode_button)
+	_apply_button_style(staff_jail_mode_button)
 	_apply_line_edit_style(staff_teleport_destination_search)
 	_apply_line_edit_style(staff_teleport_spawn_search)
 	_apply_line_edit_style(staff_teleport_send_map_search)
@@ -7700,6 +7821,9 @@ func _setup_staff_impersonation_tools() -> void:
 	_apply_line_edit_style(staff_teleport_player_search_input)
 	_apply_button_style(staff_teleport_to_player_button, "primary")
 	_apply_button_style(staff_teleport_send_player_button, "danger")
+	_apply_line_edit_style(staff_jail_reason_input)
+	_apply_button_style(staff_jail_detain_button, "danger")
+	_apply_button_style(staff_jail_release_button, "primary")
 	_apply_staff_teleport_revamp(
 		teleport_header,
 		teleport_title,
@@ -8012,6 +8136,9 @@ func _build_staff_teleport_player_workspace() -> void:
 		send_content.reparent(safe_margin)
 		action_layout.add_child(safe_panel)
 		staff_teleport_send_section = safe_panel
+
+	if staff_jail_section != null:
+		staff_jail_section.reparent(action_layout)
 
 	var player_spacer := Control.new()
 	player_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -9774,7 +9901,7 @@ func _input(event: InputEvent) -> void:
 			var hotbar_index := _hotbar_index_from_keycode(key_event.keycode)
 			var focus_owner := get_viewport().gui_get_focus_owner()
 			var typing := focus_owner is LineEdit or focus_owner is TextEdit
-			if hotbar_index >= 0 and not typing:
+			if hotbar_index >= 0 and not typing and not _is_world_battle_active():
 				_on_hotbar_slot_pressed(hotbar_index)
 				get_viewport().set_input_as_handled()
 				return
@@ -16519,6 +16646,8 @@ func _refresh_bag_items() -> void:
 		var item_category := str(item.get("category", "general"))
 		var item_name := str(item.get("name", ""))
 		var item_id := str(item.get("id", ""))
+		if active_bag_category == "all" and item_category == "key_items":
+			continue
 		if active_bag_category != "all" and item_category != active_bag_category:
 			continue
 		if search_text != "" and not item_name.to_lower().contains(search_text) and not item_id.to_lower().contains(search_text):
@@ -18084,11 +18213,12 @@ func _apply_bag_category_button_style(button: Button, selected: bool) -> void:
 	button.add_theme_stylebox_override("focus", hover)
 
 func _bag_category_item_count(category_id: String) -> int:
-	if category_id == "all":
-		return bag_inventory_items.size()
 	var count := 0
 	for item: Dictionary in bag_inventory_items:
-		if str(item.get("category", "general")) == category_id:
+		var item_category := str(item.get("category", "general"))
+		if category_id == "all" and item_category != "key_items":
+			count += 1
+		elif category_id != "all" and item_category == category_id:
 			count += 1
 	return count
 
@@ -24768,6 +24898,7 @@ func _on_staff_tools_button_pressed() -> void:
 		or _can_teleport_self()
 		or _can_teleport_to_player()
 		or _can_teleport_other_player()
+		or _can_manage_jail()
 	):
 		return
 	if staff_tools_popup == null:
@@ -24869,6 +25000,10 @@ func _on_staff_teleport_send_player_mode_pressed() -> void:
 	_set_staff_teleport_player_action_mode("send_safe")
 
 
+func _on_staff_jail_mode_pressed() -> void:
+	_set_staff_teleport_player_action_mode("jail")
+
+
 func _set_staff_teleport_active_tab(tab_id: String) -> void:
 	staff_teleport_active_tab = tab_id
 	_refresh_staff_teleport_tab_visibility()
@@ -24881,7 +25016,7 @@ func _set_staff_teleport_player_action_mode(mode_id: String) -> void:
 
 func _refresh_staff_teleport_tab_visibility() -> void:
 	var can_self := _can_teleport_self()
-	var can_player := _can_teleport_to_player() or _can_teleport_other_player()
+	var can_player := _can_teleport_to_player() or _can_teleport_other_player() or _can_manage_jail()
 	if staff_teleport_active_tab == "self" and not can_self:
 		staff_teleport_active_tab = "player"
 	if staff_teleport_active_tab == "player" and not can_player:
@@ -24890,12 +25025,15 @@ func _refresh_staff_teleport_tab_visibility() -> void:
 		staff_teleport_player_action_mode = "send_safe"
 	if staff_teleport_player_action_mode == "send_safe" and not _can_teleport_other_player():
 		staff_teleport_player_action_mode = "to_player"
+	if staff_teleport_player_action_mode == "jail" and not _can_manage_jail():
+		staff_teleport_player_action_mode = "to_player"
 	var show_self := staff_teleport_active_tab == "self" and can_self
 	var show_player := staff_teleport_active_tab == "player" and can_player
 	var selected_player := _get_selected_staff_teleport_player()
 	var player_is_selected := staff_teleport_player_selection_confirmed and int(selected_player.get("targetPlayerId", 0)) > 0
 	var show_to_player := show_player and player_is_selected and staff_teleport_player_action_mode == "to_player" and _can_teleport_to_player()
 	var show_send_safe := show_player and player_is_selected and staff_teleport_player_action_mode == "send_safe" and _can_teleport_other_player()
+	var show_jail := show_player and player_is_selected and staff_teleport_player_action_mode == "jail" and _can_manage_jail()
 
 	if staff_teleport_self_tab_button != null:
 		staff_teleport_self_tab_button.visible = can_self
@@ -24915,12 +25053,19 @@ func _refresh_staff_teleport_tab_visibility() -> void:
 		staff_teleport_send_player_mode_button.visible = show_player and player_is_selected and _can_teleport_other_player()
 		staff_teleport_send_player_mode_button.button_pressed = show_send_safe
 		_apply_button_style(staff_teleport_send_player_mode_button, "danger")
+	if staff_jail_mode_button != null:
+		staff_jail_mode_button.visible = show_player and player_is_selected and _can_manage_jail()
+		staff_jail_mode_button.button_pressed = show_jail
+		_apply_button_style(staff_jail_mode_button, "danger")
 	if staff_teleport_player_action_hint != null:
 		if not player_is_selected:
 			staff_teleport_player_action_hint.text = LocalizationManager.text(
 				"ui.staff.teleport.select_player_from_list"
 			)
 			staff_teleport_player_action_hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		elif show_jail:
+			staff_teleport_player_action_hint.text = "Detain this player in Viridian City jail or release an active staff detention."
+			staff_teleport_player_action_hint.add_theme_color_override("font_color", UI_DANGER)
 		elif show_send_safe:
 			staff_teleport_player_action_hint.text = LocalizationManager.text(
 				"ui.staff.teleport.move_player_warning"
@@ -24938,6 +25083,8 @@ func _refresh_staff_teleport_tab_visibility() -> void:
 			staff_teleport_player_action_hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	if staff_teleport_send_section != null:
 		staff_teleport_send_section.visible = show_send_safe
+	if staff_jail_section != null:
+		staff_jail_section.visible = show_jail
 	if staff_teleport_player_divider != null:
 		staff_teleport_player_divider.visible = false
 	if staff_teleport_self_reason_input != null:
@@ -24970,14 +25117,71 @@ func _refresh_staff_teleport_tab_visibility() -> void:
 		staff_teleport_send_player_button.visible = show_send_safe
 
 
+func _on_staff_jail_permanent_toggled(permanent: bool) -> void:
+	if staff_jail_duration_input != null:
+		staff_jail_duration_input.editable = not permanent
+
+
+func _on_staff_jail_detain_pressed() -> void:
+	await _submit_staff_jail_action(false)
+
+
+func _on_staff_jail_release_pressed() -> void:
+	await _submit_staff_jail_action(true)
+
+
+func _submit_staff_jail_action(release: bool) -> void:
+	if not _can_manage_jail() or staff_teleport_in_flight:
+		return
+	var selected_player := _get_selected_staff_teleport_player()
+	var target_player_id := int(selected_player.get("targetPlayerId", 0))
+	var reason := staff_jail_reason_input.text.strip_edges() if staff_jail_reason_input != null else ""
+	if target_player_id <= 0:
+		staff_jail_status_label.text = "Select an online player first."
+		return
+	if reason.length() < 3:
+		staff_jail_status_label.text = "Enter a moderation reason of at least 3 characters."
+		staff_jail_reason_input.grab_focus()
+		return
+	staff_teleport_in_flight = true
+	staff_jail_detain_button.disabled = true
+	staff_jail_release_button.disabled = true
+	staff_jail_status_label.text = "Applying moderation action..."
+	var result: Dictionary
+	if release:
+		result = await ModeratorTeleportService.release_player_from_jail(target_player_id, reason)
+	else:
+		result = await ModeratorTeleportService.detain_player(
+			target_player_id,
+			int(staff_jail_duration_input.value),
+			staff_jail_permanent_check.button_pressed,
+			reason
+		)
+	staff_teleport_in_flight = false
+	staff_jail_detain_button.disabled = false
+	staff_jail_release_button.disabled = false
+	if not bool(result.get("success", false)):
+		staff_jail_status_label.text = str(result.get("error", "The jail action failed."))
+		staff_jail_status_label.add_theme_color_override("font_color", UI_DANGER)
+		return
+	staff_jail_status_label.add_theme_color_override("font_color", Color("#79d9f2"))
+	staff_jail_status_label.text = (
+		"Staff detention released."
+		if release
+		else "Player detained in Viridian City jail."
+	)
+	staff_jail_reason_input.clear()
+
+
 func _on_staff_teleport_button_pressed() -> void:
-	if not (_can_teleport_self() or _can_teleport_to_player() or _can_teleport_other_player()):
+	if not (_can_teleport_self() or _can_teleport_to_player() or _can_teleport_other_player() or _can_manage_jail()):
 		_add_chat_message(LocalizationManager.text("ui.staff.error.no_teleport_permission"))
 		return
 	if staff_teleport_popup == null:
 		return
 	var opening := not staff_teleport_popup.visible
 	if opening:
+		_hide_staff_tools_popup()
 		staff_teleport_player_selection_confirmed = false
 		staff_teleport_player_action_mode = ""
 		if staff_teleport_player_results != null:
@@ -25041,7 +25245,7 @@ func _load_staff_teleport_points_if_needed(force := false) -> void:
 
 
 func _load_staff_teleport_online_players_if_needed(force := false) -> void:
-	if not (_can_teleport_to_player() or _can_teleport_other_player()):
+	if not (_can_teleport_to_player() or _can_teleport_other_player() or _can_manage_jail()):
 		return
 	if (not force and not staff_teleport_online_players.is_empty()) or staff_teleport_players_loading:
 		return
@@ -25117,10 +25321,10 @@ func _rebuild_staff_teleport_map_options() -> void:
 	var selected_point_id := str(selected_destination.get("point", {}).get("id", "")).strip_edges()
 	var map_query := ""
 	if staff_teleport_destination_search != null:
-		map_query = staff_teleport_destination_search.text.strip_edges().to_lower()
+		map_query = _staff_teleport_search_key(staff_teleport_destination_search.text)
 	var spawn_query := ""
 	if staff_teleport_spawn_search != null:
-		spawn_query = staff_teleport_spawn_search.text.strip_edges().to_lower()
+		spawn_query = _staff_teleport_search_key(staff_teleport_spawn_search.text)
 
 	staff_teleport_filtered_destinations = []
 	staff_teleport_destination_rows = []
@@ -25130,17 +25334,21 @@ func _rebuild_staff_teleport_map_options() -> void:
 	for map_value: Variant in staff_teleport_maps:
 		var map_entry: Dictionary = _staff_dictionary_from_variant(map_value)
 		var map_id := str(map_entry.get("id", "")).strip_edges()
-		var map_label := str(map_entry.get("label", map_id)).strip_edges()
+		var map_label := _staff_teleport_label(map_entry.get("label", map_id), map_id)
 		var points: Array = map_entry.get("points", []) if map_entry.get("points", []) is Array else []
-		var map_search_text := "%s %s" % [map_label.to_lower(), map_id.to_lower()]
+		var map_search_text := _staff_teleport_search_key("%s %s" % [map_label, map_id])
 		if map_query != "" and not map_search_text.contains(map_query):
 			continue
 		var matching_points: Array = []
 		for point_value: Variant in points:
 			var point_entry: Dictionary = _staff_dictionary_from_variant(point_value)
 			var point_id := str(point_entry.get("id", "")).strip_edges()
-			var point_label := str(point_entry.get("label", point_id)).strip_edges()
-			var spawn_search_text := "%s %s" % [point_label.to_lower(), point_id.to_lower()]
+			var point_label := _staff_teleport_label(
+				point_entry.get("label", point_id), point_id
+			)
+			var spawn_search_text := _staff_teleport_search_key(
+				"%s %s" % [point_label, point_id]
+			)
 			if spawn_query != "" and not spawn_search_text.contains(spawn_query):
 				continue
 			matching_points.append(point_entry)
@@ -25161,7 +25369,9 @@ func _rebuild_staff_teleport_map_options() -> void:
 		for point_value: Variant in matching_points:
 			var point_entry: Dictionary = _staff_dictionary_from_variant(point_value)
 			var point_id := str(point_entry.get("id", "")).strip_edges()
-			var point_label := str(point_entry.get("label", point_id)).strip_edges()
+			var point_label := _staff_teleport_label(
+				point_entry.get("label", point_id), point_id
+			)
 			var destination := {"kind": "point", "map": map_entry, "point": point_entry}
 			var row_index := staff_teleport_destination_results.item_count
 			staff_teleport_destination_results.add_item("    %s" % point_label)
@@ -25187,6 +25397,17 @@ func _rebuild_staff_teleport_map_options() -> void:
 
 func _on_staff_teleport_map_selected(index: int) -> void:
 	_rebuild_staff_teleport_point_options(index)
+
+
+func _staff_teleport_label(value: Variant, fallback := "") -> String:
+	var label := str(value).strip_edges()
+	if label.is_empty():
+		label = str(fallback).strip_edges()
+	return label.replace("Pokémon", "Pokemon").replace("pokémon", "pokemon")
+
+
+func _staff_teleport_search_key(value: Variant) -> String:
+	return _staff_teleport_label(value).to_lower().replace("é", "e")
 
 
 func _on_staff_teleport_destination_search_changed(_text: String) -> void:
@@ -25223,8 +25444,8 @@ func _update_staff_teleport_selected_destination_label() -> void:
 	var destination := _get_selected_staff_teleport_destination()
 	var map_entry: Dictionary = _staff_dictionary_from_variant(destination.get("map", {}))
 	var point_entry: Dictionary = _staff_dictionary_from_variant(destination.get("point", {}))
-	var map_label := str(map_entry.get("label", "")).strip_edges()
-	var point_label := str(point_entry.get("label", "")).strip_edges()
+	var map_label := _staff_teleport_label(map_entry.get("label", ""))
+	var point_label := _staff_teleport_label(point_entry.get("label", ""))
 	if map_label == "" or point_label == "":
 		staff_teleport_selected_destination_label.text = LocalizationManager.text(
 			"ui.staff.teleport.select_destination"
@@ -25250,7 +25471,13 @@ func _rebuild_staff_teleport_point_options(map_index: int) -> void:
 	var points: Array = points_value if points_value is Array else []
 	for index in range(points.size()):
 		var point_entry: Dictionary = _staff_dictionary_from_variant(points[index])
-		staff_teleport_point_select.add_item(str(point_entry.get("label", point_entry.get("id", "Point"))), index)
+		staff_teleport_point_select.add_item(
+			_staff_teleport_label(
+				point_entry.get("label", point_entry.get("id", "Point")),
+				"Point"
+			),
+			index
+		)
 	if staff_teleport_point_select.item_count > 0:
 		staff_teleport_point_select.select(0)
 
@@ -25264,8 +25491,8 @@ func _rebuild_staff_teleport_send_map_options() -> void:
 	var selected_point: Dictionary = _staff_dictionary_from_variant(selected_destination.get("point", {}))
 	var selected_map_id := str(selected_map.get("id", "")).strip_edges()
 	var selected_point_id := str(selected_point.get("id", "")).strip_edges()
-	var map_query := staff_teleport_send_map_search.text.strip_edges().to_lower() if staff_teleport_send_map_search != null else ""
-	var spawn_query := staff_teleport_send_spawn_search.text.strip_edges().to_lower() if staff_teleport_send_spawn_search != null else ""
+	var map_query := _staff_teleport_search_key(staff_teleport_send_map_search.text) if staff_teleport_send_map_search != null else ""
+	var spawn_query := _staff_teleport_search_key(staff_teleport_send_spawn_search.text) if staff_teleport_send_spawn_search != null else ""
 
 	staff_teleport_filtered_safe_destinations = []
 	staff_teleport_send_destination_rows = []
@@ -25275,16 +25502,22 @@ func _rebuild_staff_teleport_send_map_options() -> void:
 	for map_value: Variant in staff_teleport_safe_maps:
 		var map_entry: Dictionary = _staff_dictionary_from_variant(map_value)
 		var map_id := str(map_entry.get("id", "")).strip_edges()
-		var map_label := str(map_entry.get("label", map_id)).strip_edges()
+		var map_label := _staff_teleport_label(map_entry.get("label", map_id), map_id)
 		var points: Array = map_entry.get("points", []) if map_entry.get("points", []) is Array else []
-		if map_query != "" and not ("%s %s" % [map_label.to_lower(), map_id.to_lower()]).contains(map_query):
+		if map_query != "" and not _staff_teleport_search_key(
+			"%s %s" % [map_label, map_id]
+		).contains(map_query):
 			continue
 		var matching_points: Array = []
 		for point_value: Variant in points:
 			var point_entry: Dictionary = _staff_dictionary_from_variant(point_value)
 			var point_id := str(point_entry.get("id", "")).strip_edges()
-			var point_label := str(point_entry.get("label", point_id)).strip_edges()
-			if spawn_query != "" and not ("%s %s" % [point_label.to_lower(), point_id.to_lower()]).contains(spawn_query):
+			var point_label := _staff_teleport_label(
+				point_entry.get("label", point_id), point_id
+			)
+			if spawn_query != "" and not _staff_teleport_search_key(
+				"%s %s" % [point_label, point_id]
+			).contains(spawn_query):
 				continue
 			matching_points.append(point_entry)
 			staff_teleport_filtered_safe_destinations.append({"map": map_entry, "point": point_entry})
@@ -25307,7 +25540,9 @@ func _rebuild_staff_teleport_send_map_options() -> void:
 		for point_value: Variant in matching_points:
 			var point_entry: Dictionary = _staff_dictionary_from_variant(point_value)
 			var point_id := str(point_entry.get("id", "")).strip_edges()
-			var point_label := str(point_entry.get("label", point_id)).strip_edges()
+			var point_label := _staff_teleport_label(
+				point_entry.get("label", point_id), point_id
+			)
 			var row_index := staff_teleport_send_destination_results.item_count
 			staff_teleport_send_destination_results.add_item("    %s" % point_label)
 			staff_teleport_send_destination_rows.append(
@@ -25343,7 +25578,13 @@ func _rebuild_staff_teleport_send_point_options(map_index: int) -> void:
 	var points: Array = map_entry.get("points", []) if map_entry.get("points", []) is Array else []
 	for index in range(points.size()):
 		var point_entry: Dictionary = _staff_dictionary_from_variant(points[index])
-		staff_teleport_send_point_select.add_item(str(point_entry.get("label", point_entry.get("id", "Point"))), index)
+		staff_teleport_send_point_select.add_item(
+			_staff_teleport_label(
+				point_entry.get("label", point_entry.get("id", "Point")),
+				"Point"
+			),
+			index
+		)
 	if staff_teleport_send_point_select.item_count > 0:
 		staff_teleport_send_point_select.select(0)
 
@@ -25488,8 +25729,13 @@ func _on_staff_teleport_confirm_pressed() -> void:
 	if staff_teleport_confirm_button != null:
 		staff_teleport_confirm_button.disabled = true
 
-	var begin_result: Dictionary = await world.call("begin_authorized_teleport")
+	var begin_result: Dictionary = await world.call(
+		"begin_authorized_teleport",
+		false,
+		_can_ignore_staff_teleporter_overworld_lock()
+	)
 	if not bool(begin_result.get("success", false)):
+		_refresh_modal_overworld_input_lock()
 		staff_teleport_in_flight = false
 		if staff_teleport_confirm_button != null:
 			staff_teleport_confirm_button.disabled = false
@@ -25502,6 +25748,7 @@ func _on_staff_teleport_confirm_pressed() -> void:
 	if not bool(result.get("success", false)):
 		if world.has_method("cancel_authorized_teleport"):
 			world.call("cancel_authorized_teleport")
+		_refresh_modal_overworld_input_lock()
 		staff_teleport_in_flight = false
 		if staff_teleport_confirm_button != null:
 			staff_teleport_confirm_button.disabled = false
@@ -25514,6 +25761,7 @@ func _on_staff_teleport_confirm_pressed() -> void:
 	if staff_teleport_confirm_button != null:
 		staff_teleport_confirm_button.disabled = false
 	if not bool(apply_result.get("success", false)):
+		_refresh_modal_overworld_input_lock()
 		_add_chat_message("Teleport was saved, but applying it failed: %s" % str(apply_result.get("error", "Unknown error")))
 		return
 
@@ -25553,8 +25801,13 @@ func _on_staff_teleport_to_player_pressed() -> void:
 	if staff_teleport_to_player_button != null:
 		staff_teleport_to_player_button.disabled = true
 
-	var begin_result: Dictionary = await world.call("begin_authorized_teleport")
+	var begin_result: Dictionary = await world.call(
+		"begin_authorized_teleport",
+		false,
+		_can_ignore_staff_teleporter_overworld_lock()
+	)
 	if not bool(begin_result.get("success", false)):
+		_refresh_modal_overworld_input_lock()
 		staff_teleport_in_flight = false
 		if staff_teleport_confirm_button != null:
 			staff_teleport_confirm_button.disabled = _get_selected_staff_teleport_destination().is_empty()
@@ -25582,6 +25835,7 @@ func _on_staff_teleport_to_player_pressed() -> void:
 	if not bool(result.get("success", false)):
 		if world.has_method("cancel_authorized_teleport"):
 			world.call("cancel_authorized_teleport")
+		_refresh_modal_overworld_input_lock()
 		staff_teleport_in_flight = false
 		if staff_teleport_confirm_button != null:
 			staff_teleport_confirm_button.disabled = _get_selected_staff_teleport_destination().is_empty()
@@ -25599,6 +25853,7 @@ func _on_staff_teleport_to_player_pressed() -> void:
 	if staff_teleport_to_player_button != null:
 		staff_teleport_to_player_button.disabled = staff_teleport_filtered_players.is_empty()
 	if not bool(apply_result.get("success", false)):
+		_refresh_modal_overworld_input_lock()
 		_add_chat_message("Teleport was saved, but applying it failed: %s" % str(apply_result.get("error", "Unknown error")))
 		return
 
@@ -25813,10 +26068,29 @@ func _get_staff_teleport_local_block_reason(world: Node) -> String:
 	if staff_teleport_in_flight:
 		return "Another teleport is already in progress."
 	if world != null and world.has_method("get_authorized_teleport_block_reason"):
-		var reason := str(world.call("get_authorized_teleport_block_reason")).strip_edges()
+		var reason := str(world.call(
+			"get_authorized_teleport_block_reason",
+			_can_ignore_staff_teleporter_overworld_lock()
+		)).strip_edges()
 		if reason != "":
 			return reason
 	return ""
+
+
+func _can_ignore_staff_teleporter_overworld_lock() -> bool:
+	if (
+		not owns_modal_overworld_input_lock
+		or staff_teleport_popup == null
+		or not staff_teleport_popup.visible
+		or not GameState.overworld_input_locked
+	):
+		return false
+	for panel_value: Variant in movement_blocking_ui_panels.values():
+		var panel_reference := panel_value as WeakRef
+		var panel := panel_reference.get_ref() as Control if panel_reference != null else null
+		if panel != null and panel.visible and panel != staff_teleport_popup:
+			return false
+	return true
 
 
 func _on_staff_impersonate_confirm_pressed() -> void:

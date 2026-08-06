@@ -48,6 +48,17 @@ const QUEST_LOCALIZATION_KEYS: Array[String] = [
 	"story.kanto.get_town_map.summary",
 	"story.kanto.get_town_map.visit_father",
 	"story.kanto.get_town_map.receive_town_map",
+	"story.kanto.catch_mankey.title",
+	"story.kanto.catch_mankey.summary",
+	"story.kanto.catch_mankey.catch",
+	"story.kanto.catch_mankey.return",
+	"story.kanto.reach_viridian_city.title",
+	"story.kanto.reach_viridian_city.summary",
+	"story.kanto.reach_viridian_city.travel",
+	"story.kanto.reach_viridian_city.return",
+	"story.kanto.challenge_pewter_gym.title",
+	"story.kanto.challenge_pewter_gym.summary",
+	"story.kanto.challenge_pewter_gym.challenge_brock",
 ]
 
 var failed := false

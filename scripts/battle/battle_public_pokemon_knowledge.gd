@@ -61,6 +61,41 @@ static func from_pokemon_data(pokemon_data: Dictionary) -> Dictionary:
 	return safe_knowledge
 
 
+static func confirmed_item_reveal_from_event(event: Dictionary) -> Dictionary:
+	var event_type := str(event.get("type", ""))
+	var item := ""
+	var ident := ""
+	if event_type == "item":
+		item = str(event.get("item", "")).strip_edges()
+		ident = str(event.get("target", "")).strip_edges()
+	elif event_type == "pokemonEffect":
+		item = _item_name_from_source(str(event.get("effect", "")))
+		if item != "":
+			ident = str(event.get("target", "")).strip_edges()
+		else:
+			item = _item_name_from_source(str(event.get("source", "")))
+	else:
+		item = _item_name_from_source(str(event.get("source", "")))
+
+	if item == "":
+		return {}
+	if ident == "":
+		ident = str(event.get("sourceTarget", "")).strip_edges()
+	if ident == "":
+		for key in ["target", "pokemon", "actor", "sourcePokemon"]:
+			var value := str(event.get(key, "")).strip_edges()
+			if value != "":
+				ident = value
+				break
+	if ident == "":
+		return {}
+
+	return {
+		"ident": ident,
+		"item": item,
+	}
+
+
 static func with_max_pp_assumption(moves: Array) -> Array:
 	var normalized_moves: Array = []
 	for move_value in moves:
@@ -108,6 +143,14 @@ static func _calculate_max_pp(base_pp: int) -> int:
 		return max(base_pp, 0)
 
 	return int(floor(float(base_pp) * 1.6))
+
+
+static func _item_name_from_source(source: String) -> String:
+	var cleaned := source.strip_edges()
+	if not cleaned.to_lower().begins_with("item:"):
+		return ""
+
+	return cleaned.split(":", false, 1)[1].strip_edges()
 
 
 static func _get_bounded_integer(value: Variant, minimum: int, maximum: int) -> Variant:

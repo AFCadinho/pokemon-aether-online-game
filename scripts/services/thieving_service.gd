@@ -9,6 +9,8 @@ const THIEVING_ENDPOINT := "/game/thieving"
 const PICKPOCKET_ENDPOINT := "/game/thieving/pickpocket"
 const PUBLIC_SERVICE_ENDPOINT := "/game/thieving/public-service"
 const JAIL_RELEASE_ENDPOINT := "/game/thieving/jail/release"
+const JAIL_DETAINEES_ENDPOINT := "/game/thieving/jail/detainees"
+const JAIL_BAIL_ENDPOINT := "/game/thieving/jail/bail"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 var state: Dictionary = {}
@@ -19,6 +21,8 @@ var was_authenticated := false
 
 func _ready() -> void:
 	set_process(true)
+	if not ChatRealtimeService.message_received.is_connected(_on_realtime_message_received):
+		ChatRealtimeService.message_received.connect(_on_realtime_message_received)
 
 
 func _process(_delta: float) -> void:
@@ -115,14 +119,51 @@ func is_most_wanted() -> bool:
 	return int(state.get("wanted", 0)) >= 100
 
 
+func load_bailable_detainees() -> Dictionary:
+	var response := await _request_json(JAIL_DETAINEES_ENDPOINT, HTTPClient.METHOD_GET, "")
+	if not bool(response.get("success", false)):
+		return response
+	var body := _dictionary_from_value(response.get("body", {}))
+	return {"success": true, "detainees": _array_from_value(body.get("detainees", []))}
+
+
+func pay_bail(target_player_id: int) -> Dictionary:
+	var response := await _request_json(
+		JAIL_BAIL_ENDPOINT,
+		HTTPClient.METHOD_POST,
+		JSON.stringify({
+			"targetPlayerId": target_player_id,
+			"requestId": _new_uuid(),
+		})
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var body := _dictionary_from_value(response.get("body", {}))
+	var next_state := _dictionary_from_value(body.get("state", {}))
+	if not next_state.is_empty():
+		_apply_state(next_state)
+	PlayerSave.money = maxi(int(body.get("payerMoney", PlayerSave.money)), 0)
+	return {
+		"success": true,
+		"targetPlayerId": int(body.get("targetPlayerId", target_player_id)),
+		"targetDisplayName": str(body.get("targetDisplayName", "")),
+		"paidAmount": maxi(int(body.get("paidAmount", 0)), 0),
+		"payerMoney": maxi(int(body.get("payerMoney", 0)), 0),
+	}
+
+
 func _apply_state(next_state: Dictionary) -> void:
 	state = next_state.duplicate(true)
 	state_loaded = true
 	state_changed.emit(state.duplicate(true))
-	if bool(state.get("jailed", false)):
+	if bool(state.get("jailed", false)) and not bool(state.get("jailPermanent", false)):
 		_schedule_jail_release(max(int(state.get("jailRemainingSeconds", 0)), 0))
 	elif bool(state.get("releaseAvailable", false)):
 		_schedule_jail_release(0)
+	else:
+		# Cancel a timer from an earlier theft sentence when bail or a permanent
+		# staff detention replaces that state.
+		jail_release_generation += 1
 
 
 func _apply_arrest(arrest: Dictionary) -> void:
@@ -217,6 +258,26 @@ func _new_request_id() -> String:
 		Time.get_ticks_usec(),
 		randi(),
 	]
+
+
+func _new_uuid() -> String:
+	var random_value := Crypto.new().generate_random_bytes(16).hex_encode()
+	return "%s-%s-%s-%s-%s" % [
+		random_value.substr(0, 8),
+		random_value.substr(8, 4),
+		random_value.substr(12, 4),
+		random_value.substr(16, 4),
+		random_value.substr(20, 12),
+	]
+
+
+func _on_realtime_message_received(message: Dictionary) -> void:
+	if str(message.get("type", "")).strip_edges().to_lower() == "jail.state.changed":
+		load_state.call_deferred()
+
+
+func _array_from_value(value: Variant) -> Array:
+	return value as Array if value is Array else []
 
 
 func _dictionary_from_value(value: Variant) -> Dictionary:

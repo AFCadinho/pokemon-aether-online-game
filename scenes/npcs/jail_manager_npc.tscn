@@ -1,0 +1,16 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="1"]
+[ext_resource type="Script" path="res://scripts/world/kanto/towns/jail_manager_npc.gd" id="2"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/policeman_frames.tres" id="3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/policeman-gen7.png" id="4"]
+
+[node name="JailManager" instance=ExtResource("1")]
+script = ExtResource("2")
+npc_id = "kanto_viridian_city_jail_manager"
+npc_definition_id = "trainer_class_policeman"
+display_name = "Jail Officer"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("3")
+mugshot = ExtResource("4")
+manual_interaction_reach_tiles = 3

@@ -8,6 +8,7 @@ const MAP_NPCS := {
 	"res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn": ["Entities/NPCs/LeagueFanDorian", "Entities/NPCs/ForestScoutNico", "Entities/NPCs/SchoolKidJune", "Entities/NPCs/CatchingMentorGideon"],
 	"res://scenes/overworld/kanto/routes/kanto_route_22.tscn": ["Entities/NPCs/GaryOak", "Entities/NPCs/LeagueHikerGrant", "Entities/NPCs/YoungsterCaleb", "Entities/NPCs/LassPaige"],
 	"res://scenes/overworld/kanto/routes/kanto_route_2.tscn": ["Entities/NPCs/CaveResearcherOwen", "Entities/NPCs/ForestWatcherIvy", "Entities/NPCs/YoungsterMason", "Entities/NPCs/BugCatcherCale"],
+	"res://scenes/overworld/kanto/routes/kanto_route_3.tscn": ["Entities/NPCs/YoungsterWarren", "Entities/NPCs/HikerBruce", "Entities/NPCs/FirebreatherOtis"],
 	"res://scenes/overworld/kanto/routes/viridian_forest.tscn": ["Entities/NPCs/BugCatcherRick", "Entities/NPCs/BugCatcherDoug", "Entities/NPCs/BugCatcherAnthony", "Entities/NPCs/BugCatcherSammy", "Entities/NPCs/LostCamperDana", "Entities/NPCs/ForestResearcherLeah"],
 	"res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn": ["Entities/NPCs/MuseumGuideTheo", "Entities/NPCs/HikerBruno", "Entities/NPCs/GymFanMax", "Entities/NPCs/DigSiteWorkerCole", "Entities/NPCs/PewterResidentNora"],
 }
@@ -17,6 +18,7 @@ const CLASS_FRAME_PATHS := [
 	"res://assets/npcs/classes/bug_catcher_frames.tres",
 	"res://assets/npcs/classes/camper_frames.tres",
 	"res://assets/npcs/classes/elder_frames.tres",
+	"res://assets/npcs/classes/firebreather_frames.tres",
 	"res://assets/npcs/classes/hiker_frames.tres",
 	"res://assets/npcs/classes/lass_frames.tres",
 	"res://assets/npcs/classes/mart_m_frames.tres",
@@ -48,6 +50,8 @@ func _run() -> void:
 	_check_class_frames()
 	for scene_path: String in MAP_NPCS:
 		_check_map(scene_path, MAP_NPCS[scene_path])
+	_check_route_22_gary_story_hook()
+	_check_viridian_gideon_quest_hook()
 	for scene_path: String in TRANSITION_ATTENDANTS:
 		_check_transition_attendant(scene_path, TRANSITION_ATTENDANTS[scene_path])
 	quit(1 if failed else 0)
@@ -96,6 +100,48 @@ func _check_map(scene_path: String, npc_paths: Array) -> void:
 			)
 		var cell := collision.local_to_map(collision.to_local(npc.global_position))
 		_check(collision.get_cell_source_id(cell) == -1, "%s stands on a walkable tile" % npc_path.get_file())
+	map.free()
+
+
+func _check_route_22_gary_story_hook() -> void:
+	var packed := load("res://scenes/overworld/kanto/routes/kanto_route_22.tscn") as PackedScene
+	_check(packed != null, "Route 22 loads for Gary story contract")
+	if packed == null:
+		return
+	var map := packed.instantiate()
+	var gary := map.get_node_or_null("Entities/NPCs/GaryOak")
+	var hook := map.get_node_or_null("Entities/NPCs/GaryOak/MeetGaryStoryHook")
+	_check(gary != null and bool(gary.get("preload_quest_markers")), "Gary preloads his quest marker")
+	_check(
+		gary != null
+		and str(gary.get("visibility_hidden_quest_id")) == "reach_viridian_city"
+		and bool(gary.get("defer_story_hide_until_reload")),
+		"Gary leaves Route 22 after the completed battle and the player leaves the map"
+	)
+	_check(hook != null, "Gary owns the Route 22 story hook")
+	if hook != null:
+		_check(str(hook.get("interaction_id")) == "route_22_meet_gary", "Gary uses the Route 22 meeting interaction")
+		_check(str(hook.get("entity_id")) == "kanto_route_22_gary_oak", "Gary's story hook uses his NPC identity")
+	map.free()
+
+
+func _check_viridian_gideon_quest_hook() -> void:
+	var packed := load("res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn") as PackedScene
+	_check(packed != null, "Viridian City loads for Gideon's catching quest contract")
+	if packed == null:
+		return
+	var map := packed.instantiate()
+	var gideon := map.get_node_or_null("Entities/NPCs/CatchingMentorGideon")
+	_check(gideon != null, "Viridian City places Catching Mentor Gideon")
+	_check(
+		gideon != null and bool(gideon.get("preload_quest_markers")),
+		"Gideon preloads his quest markers"
+	)
+	_check(
+		gideon != null
+		and str(gideon.get_script().resource_path) == "res://scripts/world/kanto/towns/catching_mentor_gideon.gd",
+		"Gideon uses the catching quest reward handler"
+	)
 	map.free()
 
 

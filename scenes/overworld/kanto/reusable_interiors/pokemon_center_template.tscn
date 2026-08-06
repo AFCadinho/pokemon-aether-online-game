@@ -117,6 +117,7 @@ y_sort_enabled = true
 
 [node name="NurseJoy" parent="Entities/NPCs" unique_id=1839105410 instance=ExtResource("6_nurse")]
 position = Vector2(464, 688)
+manual_interaction_reach_tiles = 2
 
 [node name="HealMachineEffect" type="Node2D" parent="Entities/NPCs" unique_id=1029628802]
 position = Vector2(464, 600)

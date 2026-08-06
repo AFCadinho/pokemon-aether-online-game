@@ -20,7 +20,7 @@ func get_hover_card_data(
 	viewer_id_override: String = "",
 	ident_override: String = "",
 	stats_species_override: String = "",
-	embedded_public_only := false
+	_embedded_public_only := false
 ) -> Dictionary:
 	var requested_ident := str(pokemon_data.get("ident", ""))
 	var requested_lookup_ident := ident_override.strip_edges()
@@ -28,15 +28,16 @@ func get_hover_card_data(
 		requested_lookup_ident = requested_ident
 	var requested_species := battle_state.get_species_from_pokemon_data(pokemon_data)
 	var embedded_knowledge := PublicPokemonKnowledge.from_pokemon_data(pokemon_data)
-	var pokemon_info: Dictionary = {}
-	if not embedded_public_only:
-		pokemon_info = await _fetch_hover_pokemon_info(
-			battle_state,
-			pokemon_info_request,
-			pokemon_data,
-			viewer_id_override,
-			ident_override
-		)
+	# The server resolves the authenticated viewer and returns only confirmed
+	# knowledge. Side-slot hovers must use this same authoritative history as
+	# active-sprite hovers; the embedded projection is only a reconnect fallback.
+	var pokemon_info: Dictionary = await _fetch_hover_pokemon_info(
+		battle_state,
+		pokemon_info_request,
+		pokemon_data,
+		viewer_id_override,
+		ident_override
+	)
 	var pokemon_stats: Dictionary = await _fetch_hover_pokemon_stats(
 		battle_state,
 		pokemon_stats_request,

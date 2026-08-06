@@ -161,10 +161,7 @@ func _heal_current_party_on_server(respawn_point: Dictionary = {}, public_servic
 		}
 
 	var base_url: String = str(await gateway_config.call("get_base_url"))
-	var request_body := JSON.stringify({
-		"respawnPoint": respawn_point,
-		"publicService": public_service,
-	})
+	var request_body := JSON.stringify(build_heal_request_body(respawn_point, public_service))
 	var headers_value: Variant = gateway_config.call("get_json_headers")
 	var headers := PackedStringArray()
 	if headers_value is PackedStringArray:
@@ -221,6 +218,15 @@ func _heal_current_party_on_server(respawn_point: Dictionary = {}, public_servic
 		"hasParty": bool(body.get("hasParty", false)),
 		"party": _array_from_value(body.get("party", [])),
 	}
+
+
+static func build_heal_request_body(respawn_point: Dictionary = {}, public_service := true) -> Dictionary:
+	var body := {
+		"publicService": public_service,
+	}
+	if not respawn_point.is_empty():
+		body["respawnPoint"] = respawn_point.duplicate(true)
+	return body
 
 
 func _apply_party_response(player_save: Node, result: Dictionary) -> void:

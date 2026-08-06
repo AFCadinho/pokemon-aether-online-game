@@ -17,8 +17,11 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if panel == null or not bool(current_state.get("jailed", false)):
 		return
+	if bool(current_state.get("jailPermanent", false)):
+		label.text = "Staff detention • Permanent"
+		return
 	var seconds := maxi(ceili(jail_deadline - Time.get_unix_time_from_system()), 0)
-	label.text = LocalizationManager.text("ui.thieving.jailed", {"seconds": seconds})
+	label.text = _jail_label(seconds)
 
 
 func _build_hud() -> void:
@@ -67,4 +70,12 @@ func _refresh() -> void:
 		return
 	var seconds := maxi(ceili(jail_deadline - Time.get_unix_time_from_system()), 0)
 	label.add_theme_color_override("font_color", Color("#f6e5a8"))
-	label.text = LocalizationManager.text("ui.thieving.jailed", {"seconds": seconds})
+	label.text = _jail_label(seconds)
+
+
+func _jail_label(seconds: int) -> String:
+	if bool(current_state.get("jailPermanent", false)):
+		return "Staff detention • Permanent"
+	if str(current_state.get("jailType", "")) == "staff":
+		return "Staff detention • %ds remaining" % seconds
+	return LocalizationManager.text("ui.thieving.jailed", {"seconds": seconds})

@@ -89,7 +89,7 @@ func _check_base_npc_story_requirement() -> void:
 	_check_true(
 		text.contains("visibility_required_quest_id")
 		and text.contains("visibility_hidden_quest_id")
-		and text.contains("func _apply_story_visibility()"),
+		and text.contains("func _apply_story_visibility("),
 		"BaseNPC supports story-driven scene presence"
 	)
 

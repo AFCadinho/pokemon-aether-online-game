@@ -43,6 +43,11 @@ func _check_battle_setup_contract() -> void:
 	_check(source.contains("_show_npc_opponent_trainer(trainer_data)"), "trainer battles render the placed NPC")
 	_check(source.contains("_show_pvp_trainers(display_response)"), "PvP consumes appearances only from its projected response")
 	_check(source.contains("if appearance_state.is_empty():\n\t\treturn"), "missing opponent appearances stay hidden instead of using a false identity")
+	var switch_command_index := source.find("_show_switch_trainer_command(event_data, switch_player_id)")
+	var switch_recall_index := source.find("await _play_switch_recall_for_event(event_data, switch_player_id)", switch_command_index)
+	_check(switch_command_index >= 0, "switch events present a trainer command")
+	_check(switch_recall_index > switch_command_index, "switch commands appear immediately before recall animation")
+	_check(source.contains("if battle_type != BattleType.TRAINER:"), "wild battles do not show trainer command callouts")
 	var renderer_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/battle_trainer_sprite.gd")
 	_check(renderer_source.contains("REMOTE_PLAYER_AVATAR_SCRIPT_PATH"), "player staging reuses the overworld avatar renderer lazily")
 	_check(renderer_source.contains('"facingDirection": _direction_name(facing_direction)'), "player staging selects an inward-facing overworld pose")
@@ -54,22 +59,38 @@ func _check_npc_metadata_contract() -> void:
 	var trainer_source := FileAccess.get_file_as_string(TRAINER_NPC_SCRIPT_PATH)
 	var boss_source := FileAccess.get_file_as_string(BOSS_NPC_SCRIPT_PATH)
 	_check(base_source.contains("func build_battle_trainer_metadata"), "BaseNPC owns visual-only battle metadata")
-	_check(base_source.contains('battle_metadata["_battle_sprite_frames"] = npc_sprite_frames'), "NPC battle metadata reuses actual overworld frames")
+	_check(base_source.contains('battle_metadata["_battle_sprite_frames"] = _get_directional_sprite_frames(npc_sprite_frames)'), "NPC battle metadata reuses directional overworld frames")
+	_check(base_source.contains('battle_metadata["_battle_mugshot"] = mugshot'), "NPC battle metadata preserves its local portrait for battle outros")
 	_check(trainer_source.contains("build_battle_trainer_metadata(trainer_metadata)"), "regular trainers pass their placed overworld sprite")
 	_check(boss_source.contains("build_battle_trainer_metadata(trainer_metadata)"), "boss trainers pass their placed overworld sprite")
 
 
 func _check_runtime_renderer() -> void:
+	var npc: Object = (load(BASE_NPC_SCRIPT_PATH) as Script).new()
+	npc.set("npc_sprite_frames", NPC_FRAMES)
+	var battle_metadata: Dictionary = npc.call("build_battle_trainer_metadata", {})
+	var battle_frames := battle_metadata.get("_battle_sprite_frames") as SpriteFrames
+
 	var renderer := BattleTrainerScene.instantiate() as BattleTrainerSprite
 	root.add_child(renderer)
-	renderer.show_npc(NPC_FRAMES, Vector2.LEFT)
+	renderer.show_npc(battle_frames, Vector2.LEFT)
 	_check(renderer.visible, "NPC renderer becomes visible with valid frames")
 	_check(renderer.npc_sprite.visible, "NPC renderer exposes its still overworld pose")
-	_check(NPC_FRAMES.has_animation(renderer.npc_sprite.animation), "NPC renderer selects an available directional fallback")
+	_check(renderer.npc_sprite.animation == &"idle_left", "NPC battle trainers idle facing left")
+	renderer.show_command("Spearow, use Peck!")
+	var command_callout := renderer.command_callout as Control
+	var command_label := command_callout.get_node("Panel/MarginContainer/MessageLabel") as Label
+	_check(command_callout.visible, "trainer command callout becomes visible")
+	_check(command_label.text == "Spearow, use Peck!", "trainer command callout renders the requested command")
+	_check(command_callout.position.x < 0.0, "opponent command callout opens toward the battlefield")
+	_check(command_callout.size.x <= 214.0, "trainer command callout stays compact")
+	_check(command_callout.position.y <= -150.0, "trainer command callout stays above the trainer sprite")
 
 	renderer.clear()
 	_check(not renderer.visible, "clearing a trainer removes its battle visual")
+	_check(not command_callout.visible, "clearing a trainer also clears its command callout")
 	renderer.free()
+	npc.free()
 
 	var default_image := _render_player_trainer_skin("#f8d0b8")
 	var deep_image := _render_player_trainer_skin("#3f271f")

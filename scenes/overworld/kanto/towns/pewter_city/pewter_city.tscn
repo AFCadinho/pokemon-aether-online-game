@@ -6,44 +6,27 @@
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="4_metadata"]
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="5_2mtwu"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="6_frcun"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/locked_door_interactable.tscn" id="25_locked_door"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="6_kp2ru"]
-[ext_resource type="Texture2D" uid="uid://2qey36patp5j" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_080_Worker.png" id="6_rwph1"]
 [ext_resource type="Script" uid="uid://babnhtwtaiewv" path="res://scripts/world/map_door_animator.gd" id="7_door_animator"]
-[ext_resource type="Texture2D" uid="uid://dr2fy1qoutvvi" path="res://assets/tilesets/dirt path.png" id="9_iv6v0"]
 [ext_resource type="SpriteFrames" uid="uid://dlh8wgpn7hn78" path="res://assets/npcs/gym_leaders/alpha_brock_frames.tres" id="11_yr2ka"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="12_vw642"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/building_window_light.tscn" id="13_4hm78"]
-[ext_resource type="SpriteFrames" uid="uid://wgkh3id1848j" path="res://assets/npcs/gym_leaders/alpha_misty_frames.tres" id="13_cisdr"]
 [ext_resource type="PackedScene" uid="uid://ds0lg7oj5khbm" path="res://scenes/npcs/gym_leader_npc.tscn" id="14_gym_leader"]
-[ext_resource type="SpriteFrames" uid="uid://cjm3wij7i0akx" path="res://assets/npcs/gym_leaders/alpha_lt_surge_frames.tres" id="15_3ghgs"]
 [ext_resource type="Resource" uid="uid://bnjoxn7rvxpam" path="res://resources/npcs/gym_leaders/alpha_brock.tres" id="15_brock"]
-[ext_resource type="Resource" uid="uid://c3alv8nu8paur" path="res://resources/npcs/gym_leaders/alpha_misty.tres" id="16_misty"]
-[ext_resource type="Resource" uid="uid://dmm23s1e2m34y" path="res://resources/npcs/gym_leaders/alpha_lt_surge.tres" id="17_surge"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="18_dialogue"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/scientist_m_frames.tres" id="19_scientist"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/hiker_frames.tres" id="20_hiker"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/youngster_frames.tres" id="21_youngster"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/worker_frames.tres" id="22_worker"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="23_poke_fan_f"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="24_pokemon"]
+[ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="18_dialogue"]
+[ext_resource type="SpriteFrames" uid="uid://caas815hh7buy" path="res://assets/npcs/classes/scientist_m_frames.tres" id="19_scientist"]
+[ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="20_hiker"]
+[ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="21_youngster"]
+[ext_resource type="SpriteFrames" uid="uid://itfidf78jmm5" path="res://assets/npcs/classes/worker_frames.tres" id="22_worker"]
+[ext_resource type="SpriteFrames" uid="uid://yaxkjlx3spjb" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="23_poke_fan_f"]
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="24_pokemon"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2mtwu"]
-size = Vector2(32, 32)
+size = Vector2(192, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_frcun"]
-atlas = ExtResource("6_rwph1")
-region = Rect2(0, 0, 64, 64)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_2pdw6"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_frcun")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_route3_exit"]
+size = Vector2(32, 160)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kp2ru"]
 texture = ExtResource("5_2mtwu")
@@ -152,26 +135,6 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_swpx7")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rwph1"]
-texture = ExtResource("9_iv6v0")
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-1:0/0 = 0
-2:0/0 = 0
-0:1/0 = 0
-1:1/0 = 0
-2:1/0 = 0
-0:2/0 = 0
-1:2/0 = 0
-2:2/0 = 0
-0:3/0 = 0
-1:3/0 = 0
-2:3/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_frcun"]
-tile_size = Vector2i(32, 32)
-sources/0 = SubResource("TileSetAtlasSource_rwph1")
-
 [node name="PewterCity2" type="Node2D" unique_id=2051045385]
 script = ExtResource("4_metadata")
 map_id = "kanto_pewter_city"
@@ -238,11 +201,20 @@ position = Vector2(-16, 0)
 width = 194.0
 
 [node name="ToRoute3" type="Area2D" parent="Exits" unique_id=755761727]
-position = Vector2(1936, 1072)
+position = Vector2(1920, 1056)
+script = ExtResource("2_jtxgn")
+target_scene_path = "uid://bsfma5bbk6lxj"
+target_spawn_name = "FromPewterCity"
+transition_id = "kanto_pewter_city__to_route_3"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute3" unique_id=1591807988]
-position = Vector2(-16, 0)
-shape = SubResource("RectangleShape2D_2mtwu")
+position = Vector2(-16, 16)
+shape = SubResource("RectangleShape2D_route3_exit")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute3" unique_id=755761728 instance=ExtResource("3_2hpv6")]
+position = Vector2(-16, 16)
+width = 32.0
+height = 160.0
 
 [node name="ToPokecenter" type="Area2D" parent="Exits" unique_id=1851330212]
 position = Vector2(1424, 1520)
@@ -296,59 +268,57 @@ z_index = 5
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1616337549]
 
 [node name="AlphaGymBrock" parent="Entities/NPCs" unique_id=101151216 instance=ExtResource("14_gym_leader")]
-position = Vector2(464, 624)
+position = Vector2(592, 560)
 trainer_id = "kanto_alpha_gym_brock"
 npc_profile = ExtResource("15_brock")
 npc_id = "kanto_alpha_gym_brock"
 display_name = "Alpha Trial · Brock"
 npc_sprite_frames = ExtResource("11_yr2ka")
 
-[node name="MuseumGuideTheo" parent="Entities/NPCs" instance=ExtResource("18_dialogue")]
-position = Vector2(1504, 400)
+[node name="MuseumGuideTheo" parent="Entities/NPCs" unique_id=1013507065 instance=ExtResource("18_dialogue")]
+position = Vector2(1456, 560)
 npc_id = "kanto_pewter_city_museum_guide_theo"
 npc_definition_id = "trainer_class_scientist_m"
 display_name = "Museum Guide Theo"
-facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("19_scientist")
 
-[node name="HikerBruno" parent="Entities/NPCs" instance=ExtResource("18_dialogue")]
-position = Vector2(256, 416)
+[node name="HikerBruno" parent="Entities/NPCs" unique_id=1591412735 instance=ExtResource("18_dialogue")]
+position = Vector2(240, 208)
 npc_id = "kanto_pewter_city_hiker_bruno"
 npc_definition_id = "trainer_class_hiker"
 display_name = "Hiker Bruno"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("20_hiker")
 
-[node name="GymFanMax" parent="Entities/NPCs" instance=ExtResource("18_dialogue")]
-position = Vector2(576, 528)
+[node name="GymFanMax" parent="Entities/NPCs" unique_id=399681030 instance=ExtResource("18_dialogue")]
+position = Vector2(688, 560)
 npc_id = "kanto_pewter_city_gym_fan_max"
 npc_definition_id = "trainer_class_youngster"
 display_name = "Gym Fan Max"
 facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("21_youngster")
 
-[node name="DigSiteWorkerCole" parent="Entities/NPCs" instance=ExtResource("18_dialogue")]
-position = Vector2(352, 608)
+[node name="DigSiteWorkerCole" parent="Entities/NPCs" unique_id=49453546 instance=ExtResource("18_dialogue")]
+position = Vector2(400, 976)
 npc_id = "kanto_pewter_city_worker_cole"
 npc_definition_id = "trainer_class_worker"
 display_name = "Worker Cole"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("22_worker")
 
-[node name="PewterResidentNora" parent="Entities/NPCs" instance=ExtResource("18_dialogue")]
-position = Vector2(1024, 832)
+[node name="PewterResidentNora" parent="Entities/NPCs" unique_id=2012849326 instance=ExtResource("18_dialogue")]
+position = Vector2(1360, 912)
 npc_id = "kanto_pewter_city_resident_nora"
 npc_definition_id = "trainer_class_poke_fan_f"
 display_name = "Pewter Resident Nora"
-facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("23_poke_fan_f")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=913732015]
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=644053637]
 
-[node name="Geodude" parent="Entities/Pokemon" instance=ExtResource("24_pokemon")]
-position = Vector2(1376, 400)
+[node name="Geodude" parent="Entities/Pokemon" unique_id=1776570972 instance=ExtResource("24_pokemon")]
+position = Vector2(1392, 432)
 overworld_pokemon_id = "kanto_pewter_city_geodude_1"
 species_id = "geodude"
 level = 7
@@ -359,11 +329,10 @@ movement_tiles = 1
 movement_wait_seconds = 2.0
 movement_speed_pixels = 38.0
 
-[node name="Pidgey" parent="Entities/Pokemon" instance=ExtResource("24_pokemon")]
-position = Vector2(896, 832)
+[node name="Pidgey" parent="Entities/Pokemon" unique_id=942070838 instance=ExtResource("24_pokemon")]
+position = Vector2(880, 848)
 overworld_pokemon_id = "kanto_pewter_city_pidgey_1"
 species_id = "pidgey"
-level = 5
 display_name = "Pidgey"
 movement_behavior = "pace_vertical"
 movement_tiles = 1
@@ -371,6 +340,31 @@ movement_wait_seconds = 1.5
 movement_speed_pixels = 48.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1638978152]
+
+[node name="PokemonCenterDoorLock" parent="Entities/Interactables" instance=ExtResource("25_locked_door")]
+position = Vector2(1424, 1504)
+display_name = "Pewter City Pokémon Center"
+area_id = "kanto_pewter_city_pokemon_center"
+
+[node name="GymDoorLock" parent="Entities/Interactables" instance=ExtResource("25_locked_door")]
+position = Vector2(592, 512)
+display_name = "Pewter City Gym"
+area_id = "kanto_pewter_city_gym"
+
+[node name="MuseumDoorLock" parent="Entities/Interactables" instance=ExtResource("25_locked_door")]
+position = Vector2(1392, 352)
+display_name = "Pewter City Museum"
+area_id = "kanto_pewter_city_museum"
+
+[node name="House1DoorLock" parent="Entities/Interactables" instance=ExtResource("25_locked_door")]
+position = Vector2(1200, 1024)
+display_name = "Pewter City House 1"
+area_id = "kanto_pewter_city_house_1"
+
+[node name="House2DoorLock" parent="Entities/Interactables" instance=ExtResource("25_locked_door")]
+position = Vector2(464, 1504)
+display_name = "Pewter City House 2"
+area_id = "kanto_pewter_city_house_2"
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=1977913234]
 visible = false
@@ -474,4 +468,5 @@ position = Vector2(1520, 1488)
 position = Vector2(1424, 1488)
 
 [connection signal="body_entered" from="Exits/ToRoute2" to="Exits/ToRoute2" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute3" to="Exits/ToRoute3" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToPokecenter" to="Exits/ToPokecenter" method="_on_body_entered"]

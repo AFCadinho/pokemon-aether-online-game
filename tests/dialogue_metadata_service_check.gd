@@ -98,9 +98,17 @@ func _check_dialogue_npc_uses_dialogue_id_lookup() -> void:
 
 func _check_dialogue_npc_fallback_behavior() -> void:
 	var text := _read_text(DIALOGUE_NPC_SCRIPT)
+	var base_npc_text := _read_text("res://scripts/world/npcs/base_npc.gd")
 	_check_true(text.contains("await super.show_dialogue(lines, resolved_speaker_name)"), "DialogueNPC keeps explicit lines fallback")
 	_check_true(text.contains("await super.show_dialogue(dialogue_metadata_lines, resolved_speaker_name)"), "DialogueNPC passes resolved lines to BaseNPC")
 	_check_true(text.contains("resolved_dialogue_speaker_name"), "DialogueNPC keeps the resolved speaker fallback")
+	_check_true(
+		base_npc_text.contains("MANUAL_INTERACTION_DELAY_SECONDS")
+		and base_npc_text.contains(
+			"create_timer(MANUAL_INTERACTION_DELAY_SECONDS)"
+		),
+		"manual NPC dialogue starts after a short interaction pause"
+	)
 
 
 func _check_dialogue_box_side_quest_offer() -> void:
@@ -120,6 +128,11 @@ func _check_dialogue_box_side_quest_offer() -> void:
 	_check_true(scene_text.contains("layer = 100"), "dialogue renders above the normal HUD canvas layer")
 	_check_true(text.contains("PlayerGameStateService.accept_side_quest("), "accept uses the authoritative side-quest flow")
 	_check_true(text.contains("_finish_quest_offer(false)"), "decline closes the offer without accepting")
+	_check_true(
+		text.contains("_capture_input_state_before_open()")
+		and text.contains("_restore_input_state_after_close()"),
+		"chained dialogue preserves the interaction input lock"
+	)
 
 
 func _check_trainer_npc_uses_intro_dialogue_lookup() -> void:
@@ -147,6 +160,11 @@ func _check_trainer_battle_behavior_unchanged() -> void:
 	_check_true(text.contains("TrainerMetadataService.get_trainer_metadata(trainer_id)"), "TrainerNPC still uses trainer metadata by trainer_id")
 	_check_true(text.contains("await start_trainer_battle(trainer_metadata)"), "TrainerNPC still starts battle after intro dialogue")
 	_check_true(text.contains("func start_trainer_battle(trainer_metadata: Dictionary) -> Dictionary:"), "TrainerNPC returns structured battle start errors")
+	_check_true(
+		text.contains("INTRO_DIALOGUE_DELAY_SECONDS")
+		and text.contains("BATTLE_TRANSITION_DELAY_SECONDS"),
+		"trainer dialogue and battle transition include readable pauses"
+	)
 
 
 func _read_text(path: String) -> String:

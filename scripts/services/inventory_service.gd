@@ -359,6 +359,10 @@ func catch_wild_pokemon(battle_id: String, item_id: String) -> Dictionary:
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
 	var inventory: Dictionary = _dictionary_from_value(body.get("inventory", {}))
 	var party: Dictionary = _dictionary_from_value(body.get("party", {}))
+	var story_refresh_success := false
+	if bool(body.get("caught", false)):
+		var story_result: Dictionary = await PlayerGameStateService.refresh_story()
+		story_refresh_success = bool(story_result.get("success", false))
 	return {
 		"success": true,
 		"battleId": str(body.get("battleId", battle_id)),
@@ -372,6 +376,7 @@ func catch_wild_pokemon(battle_id: String, item_id: String) -> Dictionary:
 		"pokemon": _dictionary_from_value(body.get("pokemon", {})),
 		"inventory": _array_from_value(inventory.get("items", [])),
 		"party": _array_from_value(party.get("party", [])),
+		"storyRefreshSuccess": story_refresh_success,
 	}
 
 
