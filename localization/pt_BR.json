@@ -2967,6 +2967,7 @@
   "ui.thieving.jailed": "PRESO  {seconds}s",
   "ui.skills.title": "Habilidades",
   "ui.skills.subtitle": "Níveis, experiência e desbloqueios",
+  "ui.skills.back": "Todas as habilidades",
   "ui.skills.loading": "Carregando habilidades...",
   "ui.skills.load_failed": "Não foi possível carregar as habilidades.",
   "ui.skills.level": "Nível {level}",

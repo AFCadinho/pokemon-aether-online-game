@@ -2967,6 +2967,7 @@
   "ui.thieving.jailed": "IN DE CEL  {seconds}s",
   "ui.skills.title": "Skills",
   "ui.skills.subtitle": "Levels, ervaring en unlocks",
+  "ui.skills.back": "Alle skills",
   "ui.skills.loading": "Skills laden...",
   "ui.skills.load_failed": "De skills konden niet worden geladen.",
   "ui.skills.level": "Level {level}",

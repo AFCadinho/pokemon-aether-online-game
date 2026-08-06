@@ -21,9 +21,11 @@ const THIEVING_ICON: Texture2D = preload("res://assets/ui/skills.svg")
 var main_panel: PanelContainer
 var title_label: Label
 var subtitle_label: Label
+var back_button: Button
 var close_button: Button
 var status_label: Label
-var skill_cards: HBoxContainer
+var overview_panel: VBoxContainer
+var skill_cards: GridContainer
 var detail_panel: PanelContainer
 var detail_icon: TextureRect
 var detail_name: Label
@@ -39,6 +41,7 @@ var targets_reset_label: Label
 var targets_container: VBoxContainer
 var skill_buttons: Dictionary = {}
 var selected_skill_id := "thieving"
+var showing_detail := false
 var loading := false
 
 
@@ -53,7 +56,10 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if visible and event.is_action_pressed("ui_cancel"):
-		close_manager()
+		if showing_detail:
+			_show_overview()
+		else:
+			close_manager()
 		get_viewport().set_input_as_handled()
 
 
@@ -66,6 +72,7 @@ func toggle_manager() -> void:
 
 func open_manager() -> void:
 	visible = true
+	showing_detail = false
 	_render_skills(SkillsService.get_skills())
 	_load_skills()
 
@@ -122,6 +129,20 @@ func _build_interface() -> void:
 	header.add_theme_constant_override("separation", 10)
 	content.add_child(header)
 
+	back_button = Button.new()
+	back_button.visible = false
+	back_button.custom_minimum_size = Vector2(108, 34)
+	back_button.focus_mode = Control.FOCUS_NONE
+	back_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	back_button.add_theme_color_override("font_color", ACCENT_COLOR)
+	back_button.add_theme_color_override("font_hover_color", TEXT_COLOR)
+	back_button.add_theme_stylebox_override("normal", _make_panel_style(CARD_BACKGROUND, PANEL_BORDER, 7, 1))
+	back_button.add_theme_stylebox_override("hover", _make_panel_style(CARD_HOVER, CARD_SELECTED_BORDER, 7, 1))
+	back_button.add_theme_stylebox_override("pressed", _make_panel_style(CARD_SELECTED, CARD_SELECTED_BORDER, 7, 1))
+	back_button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	back_button.pressed.connect(_show_overview)
+	header.add_child(back_button)
+
 	var heading := VBoxContainer.new()
 	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	heading.add_theme_constant_override("separation", 1)
@@ -159,10 +180,17 @@ func _build_interface() -> void:
 	status_label.add_theme_font_size_override("font_size", 11)
 	content.add_child(status_label)
 
-	skill_cards = HBoxContainer.new()
-	skill_cards.custom_minimum_size.y = 72.0
-	skill_cards.add_theme_constant_override("separation", 10)
-	content.add_child(skill_cards)
+	overview_panel = VBoxContainer.new()
+	overview_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	overview_panel.add_theme_constant_override("separation", 10)
+	content.add_child(overview_panel)
+
+	skill_cards = GridContainer.new()
+	skill_cards.columns = 2
+	skill_cards.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	skill_cards.add_theme_constant_override("h_separation", 10)
+	skill_cards.add_theme_constant_override("v_separation", 10)
+	overview_panel.add_child(skill_cards)
 
 	detail_panel = PanelContainer.new()
 	detail_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -287,16 +315,16 @@ func _render_skills(skills: Array) -> void:
 	skill_buttons.clear()
 
 	if skills.is_empty():
+		overview_panel.visible = true
 		detail_panel.visible = false
 		return
-	detail_panel.visible = true
 	if not _has_skill(skills, selected_skill_id):
 		selected_skill_id = str((skills[0] as Dictionary).get("id", ""))
 	for skill_value: Variant in skills:
 		var skill := skill_value as Dictionary
 		var skill_id := str(skill.get("id", ""))
 		var button := Button.new()
-		button.custom_minimum_size = Vector2(0, 68)
+		button.custom_minimum_size = Vector2(0, 96)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.focus_mode = Control.FOCUS_NONE
 		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -312,15 +340,22 @@ func _render_skills(skills: Array) -> void:
 			_text(str(skill.get("nameKey", "ui.skills.%s.name" % skill_id))),
 			_text("ui.skills.level_short", {"level": maxi(int(skill.get("level", 1)), 1)}),
 		]
-		var selected := skill_id == selected_skill_id
-		button.add_theme_stylebox_override("normal", _make_panel_style(CARD_SELECTED if selected else CARD_BACKGROUND, CARD_SELECTED_BORDER if selected else PANEL_BORDER, 9, 1))
+		button.add_theme_stylebox_override("normal", _make_panel_style(CARD_BACKGROUND, PANEL_BORDER, 9, 1))
 		button.add_theme_stylebox_override("hover", _make_panel_style(CARD_HOVER, CARD_SELECTED_BORDER, 9, 1))
 		button.add_theme_stylebox_override("pressed", _make_panel_style(CARD_SELECTED, CARD_SELECTED_BORDER, 9, 1))
 		button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 		button.pressed.connect(_select_skill.bind(skill_id))
 		skill_cards.add_child(button)
 		skill_buttons[skill_id] = button
-	_render_detail(SkillsService.get_skill(selected_skill_id))
+	if showing_detail:
+		overview_panel.visible = false
+		detail_panel.visible = true
+		back_button.visible = true
+		_render_detail(SkillsService.get_skill(selected_skill_id))
+	else:
+		overview_panel.visible = true
+		detail_panel.visible = false
+		back_button.visible = false
 
 
 func _render_detail(skill: Dictionary) -> void:
@@ -469,6 +504,12 @@ func _stats_text(skill_id: String, stats: Dictionary) -> String:
 
 func _select_skill(skill_id: String) -> void:
 	selected_skill_id = skill_id
+	showing_detail = true
+	_render_skills(SkillsService.get_skills())
+
+
+func _show_overview() -> void:
+	showing_detail = false
 	_render_skills(SkillsService.get_skills())
 
 
@@ -488,6 +529,7 @@ func _refresh_localized_content() -> void:
 		return
 	title_label.text = _text("ui.skills.title")
 	subtitle_label.text = _text("ui.skills.subtitle")
+	back_button.text = "←  %s" % _text("ui.skills.back")
 	close_button.tooltip_text = _text("common.close")
 	var unlock_title := main_panel.find_child("UnlockTitle", true, false) as Label
 	if unlock_title != null:
