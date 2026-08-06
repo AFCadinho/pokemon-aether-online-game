@@ -34,6 +34,8 @@ var just_started := false
 var quest_offer_open := false
 var quest_offer_pending := false
 var offered_quest: Dictionary = {}
+var input_state_before_open: Dictionary = {}
+var has_captured_input_state := false
 
 var lines: Array = []
 var current_line_index := 0
@@ -66,6 +68,7 @@ func _process(_delta: float) -> void:
 			show_current_line()
 	
 func start_dialogue(new_lines: Array, speaker_name := "", mugshot: Texture2D = null, show_mugshot := true) -> void:
+	_capture_input_state_before_open()
 	_reset_quest_offer_view()
 	_restore_dialogue_size()
 	lines = new_lines
@@ -88,6 +91,7 @@ func start_dialogue(new_lines: Array, speaker_name := "", mugshot: Texture2D = n
 
 
 func start_quest_offer(quest: Dictionary, speaker_name := "", mugshot: Texture2D = null) -> void:
+	_capture_input_state_before_open()
 	offered_quest = quest.duplicate(true)
 	quest_offer_open = true
 	quest_offer_pending = false
@@ -139,7 +143,8 @@ func hide_dialogue() -> void:
 	lines = []
 	current_line_index = 0
 	
-	GameState.unlock_input()
+	if was_open:
+		_restore_input_state_after_close()
 	
 	if was_open:
 		dialogue_finished.emit()
@@ -190,9 +195,35 @@ func _finish_quest_offer(accepted: bool) -> void:
 	offered_quest.clear()
 	_reset_quest_offer_view()
 	_restore_dialogue_size()
-	GameState.unlock_input()
+	if was_open:
+		_restore_input_state_after_close()
 	if was_open:
 		quest_offer_resolved.emit(accepted)
+
+
+func _capture_input_state_before_open() -> void:
+	if has_captured_input_state:
+		return
+	input_state_before_open = {
+		"input": bool(GameState.input_locked),
+		"overworld": bool(GameState.overworld_input_locked),
+		"ui": bool(GameState.ui_input_locked),
+	}
+	has_captured_input_state = true
+
+
+func _restore_input_state_after_close() -> void:
+	var previous_state := input_state_before_open.duplicate()
+	input_state_before_open.clear()
+	has_captured_input_state = false
+	GameState.unlock_input()
+	if bool(previous_state.get("input", false)):
+		GameState.lock_input()
+		return
+	if bool(previous_state.get("overworld", false)):
+		GameState.lock_overworld_input()
+	if bool(previous_state.get("ui", false)):
+		GameState.lock_ui_input()
 
 
 func _reset_quest_offer_view() -> void:

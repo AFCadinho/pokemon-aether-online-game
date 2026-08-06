@@ -165,6 +165,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/npc_dialogue_metadata_check.gd",
 	"res://tests/npc_dialogue_resolver_check.gd",
 	"res://tests/dialogue_metadata_service_check.gd",
+	"res://tests/dialogue_input_lock_check.gd",
 	"res://tests/trainer_dialogue_cleanup_check.gd",
 	"res://tests/npc_content_validation_check.gd",
 	"res://tests/item_gift_npc_check.gd",

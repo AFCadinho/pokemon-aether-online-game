@@ -90,8 +90,8 @@ func run_sequence(actions: Variant, host: Node, player: Node2D = null) -> Dictio
 			failed_result["actionIndex"] = index
 			return failed_result
 
-		# DialogueBox releases every GameState lock when it closes. Reassert the
-		# sequence lock before the next action can run.
+		# Keep the sequence lock explicit between actions. DialogueBox restores
+		# the lock state it inherited when it opened.
 		GameState.lock_input()
 
 	_is_running = false

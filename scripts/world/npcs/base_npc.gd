@@ -74,6 +74,7 @@ const STORY_PATH_DIRECTIONS: Array[String] = ["up", "down", "left", "right"]
 const SORT_Z_MIN := -4096
 const SORT_Z_MAX := 4096
 const DEFAULT_PLAYER_VISUAL_SORT_DEPTH := 8
+const MANUAL_INTERACTION_DELAY_SECONDS := 0.15
 const PLAYER_OVERLAP_SORT_Y_EPSILON := 0.1
 const NAMEPLATE_WIDTH := 164.0
 const NAMEPLATE_CENTER_X := NAMEPLATE_WIDTH * 0.5
@@ -996,6 +997,7 @@ func _start_manual_interaction(body: Node2D) -> void:
 	_face_body(body)
 	if body.has_method("face_world_position"):
 		body.face_world_position(get_feet_position())
+	await get_tree().create_timer(MANUAL_INTERACTION_DELAY_SECONDS).timeout
 
 	var result := await _run_story_or_legacy_interaction(body, "interact")
 	if str(result.get("status", "")) != "pending_battle":

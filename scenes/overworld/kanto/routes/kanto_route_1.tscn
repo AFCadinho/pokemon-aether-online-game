@@ -645,7 +645,7 @@ npc_sprite_frames = ExtResource("29_lass")
 [node name="Dialogue" type="Node2D" parent="Entities/NPCs" unique_id=1893184129]
 
 [node name="Dadinho" parent="Entities/NPCs/Dialogue" instance=ExtResource("16_bnyo4")]
-position = Vector2(896, 2272)
+position = Vector2(896, 2288)
 npc_id = "kanto_route_1_dadinho"
 npc_definition_id = "kanto_players_house_father"
 display_name = "Dadinho"

@@ -9774,7 +9774,7 @@ func _input(event: InputEvent) -> void:
 			var hotbar_index := _hotbar_index_from_keycode(key_event.keycode)
 			var focus_owner := get_viewport().gui_get_focus_owner()
 			var typing := focus_owner is LineEdit or focus_owner is TextEdit
-			if hotbar_index >= 0 and not typing:
+			if hotbar_index >= 0 and not typing and not _is_world_battle_active():
 				_on_hotbar_slot_pressed(hotbar_index)
 				get_viewport().set_input_as_handled()
 				return

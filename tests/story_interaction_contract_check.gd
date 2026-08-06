@@ -288,7 +288,7 @@ func _test_hook_and_api_integration_contract() -> void:
 	)
 	_expect(
 		runner.contains("GameState.lock_input()")
-		and runner.contains("DialogueBox releases every GameState lock")
+		and runner.contains("DialogueBox restores")
 		and runner.contains('"dialogue_not_presented"')
 		and runner.contains('"status": "pending_battle"'),
 		"sequence requires presented dialogue, stays locked, and leaves battle pending"

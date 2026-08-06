@@ -82,6 +82,7 @@ func _run() -> void:
 	await process_frame
 	_expect(route_dad != null and route_dad.visible, "Dadinho waits near the start of Route 1 after the family visit")
 	if route_dad != null:
+		_expect(route_dad.position == Vector2(896, 2288), "Route Dadinho stands 16 pixels lower")
 		_expect(str(route_dad.get("npc_id")) == "kanto_route_1_dadinho", "Route Dadinho has his own metadata identity")
 		_expect(route_dad.get("npc_sprite_frames") == load(DAD_FRAMES_PATH), "Route Dadinho keeps the same appearance")
 		_expect(

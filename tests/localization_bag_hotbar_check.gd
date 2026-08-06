@@ -1,6 +1,7 @@
 extends SceneTree
 
 const OVERLAY_SCENE_PATH := "res://scenes/interface/ui_overlay.tscn"
+const OVERLAY_SCRIPT_PATH := "res://scripts/ui/ui_overlay.gd"
 const PREVIEW := preload("res://scripts/ui/bag_item_effect_preview.gd")
 
 var failed := false
@@ -20,6 +21,13 @@ func _run() -> void:
 	_check(localization_manager != null, "Bag and hotbar check can access LocalizationManager")
 	_check(item_localization != null, "Bag and hotbar check can access ItemLocalization")
 	_check(settings_manager != null, "Bag and hotbar check can access SettingsManager")
+	var overlay_source := FileAccess.get_file_as_string(OVERLAY_SCRIPT_PATH)
+	_check(
+		overlay_source.contains(
+			"hotbar_index >= 0 and not typing and not _is_world_battle_active()"
+		),
+		"number keys bypass the overworld hotbar during battle"
+	)
 	if localization_manager == null or item_localization == null or settings_manager == null:
 		quit(1)
 		return

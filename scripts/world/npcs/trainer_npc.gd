@@ -4,6 +4,8 @@ extends BaseNPC
 class_name TrainerNPC
 
 const TrainerDefinitionResource := preload("res://scripts/world/npcs/trainer_definition.gd")
+const INTRO_DIALOGUE_DELAY_SECONDS := 0.2
+const BATTLE_TRANSITION_DELAY_SECONDS := 0.35
 
 @export var trainer_id := "kanto_route_1_bug_catcher_1"
 @export var sight_range_tiles := 5
@@ -86,9 +88,12 @@ func show_intro_dialogue() -> void:
 	if dialogue_lines.is_empty():
 		await _fail_trainer_metadata(dialogue_box, "Trainer metadata for %s is missing dialogue_before_battle." % trainer_id)
 		return
+
+	await get_tree().create_timer(INTRO_DIALOGUE_DELAY_SECONDS).timeout
 	
 	dialogue_box.start_dialogue(dialogue_lines, speaker_name, mugshot)
 	await dialogue_box.dialogue_finished
+	await get_tree().create_timer(BATTLE_TRANSITION_DELAY_SECONDS).timeout
 	
 	var battle_result: Dictionary = await start_trainer_battle(trainer_metadata)
 	if not bool(battle_result.get("success", false)):
