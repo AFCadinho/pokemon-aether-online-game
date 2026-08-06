@@ -679,6 +679,21 @@ position = Vector2(1136, 1440)
 area_id = "kanto_viridian_city_pokemon_center"
 display_name = "Viridian City Pokémon Center"
 
+[node name="GymDoorLock" parent="Entities/Interactables" instance=ExtResource("15_locked_door")]
+position = Vector2(1792, 448)
+display_name = "Viridian City Gym"
+area_id = "kanto_viridian_city_gym"
+
+[node name="TrainerSchoolDoorLock" parent="Entities/Interactables" instance=ExtResource("15_locked_door")]
+position = Vector2(1840, 912)
+display_name = "Viridian City Trainer School"
+area_id = "kanto_viridian_city_trainer_school"
+
+[node name="House1DoorLock" parent="Entities/Interactables" instance=ExtResource("15_locked_door")]
+position = Vector2(592, 1456)
+display_name = "Viridian City House 1"
+area_id = "kanto_viridian_city_house_1"
+
 [node name="Collision" type="TileMapLayer" parent="." unique_id=408927125]
 visible = false
 z_index = 100
