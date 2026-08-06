@@ -25171,10 +25171,10 @@ func _rebuild_staff_teleport_map_options() -> void:
 	var selected_point_id := str(selected_destination.get("point", {}).get("id", "")).strip_edges()
 	var map_query := ""
 	if staff_teleport_destination_search != null:
-		map_query = staff_teleport_destination_search.text.strip_edges().to_lower()
+		map_query = _staff_teleport_search_key(staff_teleport_destination_search.text)
 	var spawn_query := ""
 	if staff_teleport_spawn_search != null:
-		spawn_query = staff_teleport_spawn_search.text.strip_edges().to_lower()
+		spawn_query = _staff_teleport_search_key(staff_teleport_spawn_search.text)
 
 	staff_teleport_filtered_destinations = []
 	staff_teleport_destination_rows = []
@@ -25184,17 +25184,21 @@ func _rebuild_staff_teleport_map_options() -> void:
 	for map_value: Variant in staff_teleport_maps:
 		var map_entry: Dictionary = _staff_dictionary_from_variant(map_value)
 		var map_id := str(map_entry.get("id", "")).strip_edges()
-		var map_label := str(map_entry.get("label", map_id)).strip_edges()
+		var map_label := _staff_teleport_label(map_entry.get("label", map_id), map_id)
 		var points: Array = map_entry.get("points", []) if map_entry.get("points", []) is Array else []
-		var map_search_text := "%s %s" % [map_label.to_lower(), map_id.to_lower()]
+		var map_search_text := _staff_teleport_search_key("%s %s" % [map_label, map_id])
 		if map_query != "" and not map_search_text.contains(map_query):
 			continue
 		var matching_points: Array = []
 		for point_value: Variant in points:
 			var point_entry: Dictionary = _staff_dictionary_from_variant(point_value)
 			var point_id := str(point_entry.get("id", "")).strip_edges()
-			var point_label := str(point_entry.get("label", point_id)).strip_edges()
-			var spawn_search_text := "%s %s" % [point_label.to_lower(), point_id.to_lower()]
+			var point_label := _staff_teleport_label(
+				point_entry.get("label", point_id), point_id
+			)
+			var spawn_search_text := _staff_teleport_search_key(
+				"%s %s" % [point_label, point_id]
+			)
 			if spawn_query != "" and not spawn_search_text.contains(spawn_query):
 				continue
 			matching_points.append(point_entry)
@@ -25215,7 +25219,9 @@ func _rebuild_staff_teleport_map_options() -> void:
 		for point_value: Variant in matching_points:
 			var point_entry: Dictionary = _staff_dictionary_from_variant(point_value)
 			var point_id := str(point_entry.get("id", "")).strip_edges()
-			var point_label := str(point_entry.get("label", point_id)).strip_edges()
+			var point_label := _staff_teleport_label(
+				point_entry.get("label", point_id), point_id
+			)
 			var destination := {"kind": "point", "map": map_entry, "point": point_entry}
 			var row_index := staff_teleport_destination_results.item_count
 			staff_teleport_destination_results.add_item("    %s" % point_label)
@@ -25241,6 +25247,17 @@ func _rebuild_staff_teleport_map_options() -> void:
 
 func _on_staff_teleport_map_selected(index: int) -> void:
 	_rebuild_staff_teleport_point_options(index)
+
+
+func _staff_teleport_label(value: Variant, fallback := "") -> String:
+	var label := str(value).strip_edges()
+	if label.is_empty():
+		label = str(fallback).strip_edges()
+	return label.replace("Pokémon", "Pokemon").replace("pokémon", "pokemon")
+
+
+func _staff_teleport_search_key(value: Variant) -> String:
+	return _staff_teleport_label(value).to_lower().replace("é", "e")
 
 
 func _on_staff_teleport_destination_search_changed(_text: String) -> void:
@@ -25277,8 +25294,8 @@ func _update_staff_teleport_selected_destination_label() -> void:
 	var destination := _get_selected_staff_teleport_destination()
 	var map_entry: Dictionary = _staff_dictionary_from_variant(destination.get("map", {}))
 	var point_entry: Dictionary = _staff_dictionary_from_variant(destination.get("point", {}))
-	var map_label := str(map_entry.get("label", "")).strip_edges()
-	var point_label := str(point_entry.get("label", "")).strip_edges()
+	var map_label := _staff_teleport_label(map_entry.get("label", ""))
+	var point_label := _staff_teleport_label(point_entry.get("label", ""))
 	if map_label == "" or point_label == "":
 		staff_teleport_selected_destination_label.text = LocalizationManager.text(
 			"ui.staff.teleport.select_destination"
@@ -25304,7 +25321,13 @@ func _rebuild_staff_teleport_point_options(map_index: int) -> void:
 	var points: Array = points_value if points_value is Array else []
 	for index in range(points.size()):
 		var point_entry: Dictionary = _staff_dictionary_from_variant(points[index])
-		staff_teleport_point_select.add_item(str(point_entry.get("label", point_entry.get("id", "Point"))), index)
+		staff_teleport_point_select.add_item(
+			_staff_teleport_label(
+				point_entry.get("label", point_entry.get("id", "Point")),
+				"Point"
+			),
+			index
+		)
 	if staff_teleport_point_select.item_count > 0:
 		staff_teleport_point_select.select(0)
 
@@ -25318,8 +25341,8 @@ func _rebuild_staff_teleport_send_map_options() -> void:
 	var selected_point: Dictionary = _staff_dictionary_from_variant(selected_destination.get("point", {}))
 	var selected_map_id := str(selected_map.get("id", "")).strip_edges()
 	var selected_point_id := str(selected_point.get("id", "")).strip_edges()
-	var map_query := staff_teleport_send_map_search.text.strip_edges().to_lower() if staff_teleport_send_map_search != null else ""
-	var spawn_query := staff_teleport_send_spawn_search.text.strip_edges().to_lower() if staff_teleport_send_spawn_search != null else ""
+	var map_query := _staff_teleport_search_key(staff_teleport_send_map_search.text) if staff_teleport_send_map_search != null else ""
+	var spawn_query := _staff_teleport_search_key(staff_teleport_send_spawn_search.text) if staff_teleport_send_spawn_search != null else ""
 
 	staff_teleport_filtered_safe_destinations = []
 	staff_teleport_send_destination_rows = []
@@ -25329,16 +25352,22 @@ func _rebuild_staff_teleport_send_map_options() -> void:
 	for map_value: Variant in staff_teleport_safe_maps:
 		var map_entry: Dictionary = _staff_dictionary_from_variant(map_value)
 		var map_id := str(map_entry.get("id", "")).strip_edges()
-		var map_label := str(map_entry.get("label", map_id)).strip_edges()
+		var map_label := _staff_teleport_label(map_entry.get("label", map_id), map_id)
 		var points: Array = map_entry.get("points", []) if map_entry.get("points", []) is Array else []
-		if map_query != "" and not ("%s %s" % [map_label.to_lower(), map_id.to_lower()]).contains(map_query):
+		if map_query != "" and not _staff_teleport_search_key(
+			"%s %s" % [map_label, map_id]
+		).contains(map_query):
 			continue
 		var matching_points: Array = []
 		for point_value: Variant in points:
 			var point_entry: Dictionary = _staff_dictionary_from_variant(point_value)
 			var point_id := str(point_entry.get("id", "")).strip_edges()
-			var point_label := str(point_entry.get("label", point_id)).strip_edges()
-			if spawn_query != "" and not ("%s %s" % [point_label.to_lower(), point_id.to_lower()]).contains(spawn_query):
+			var point_label := _staff_teleport_label(
+				point_entry.get("label", point_id), point_id
+			)
+			if spawn_query != "" and not _staff_teleport_search_key(
+				"%s %s" % [point_label, point_id]
+			).contains(spawn_query):
 				continue
 			matching_points.append(point_entry)
 			staff_teleport_filtered_safe_destinations.append({"map": map_entry, "point": point_entry})
@@ -25361,7 +25390,9 @@ func _rebuild_staff_teleport_send_map_options() -> void:
 		for point_value: Variant in matching_points:
 			var point_entry: Dictionary = _staff_dictionary_from_variant(point_value)
 			var point_id := str(point_entry.get("id", "")).strip_edges()
-			var point_label := str(point_entry.get("label", point_id)).strip_edges()
+			var point_label := _staff_teleport_label(
+				point_entry.get("label", point_id), point_id
+			)
 			var row_index := staff_teleport_send_destination_results.item_count
 			staff_teleport_send_destination_results.add_item("    %s" % point_label)
 			staff_teleport_send_destination_rows.append(
@@ -25397,7 +25428,13 @@ func _rebuild_staff_teleport_send_point_options(map_index: int) -> void:
 	var points: Array = map_entry.get("points", []) if map_entry.get("points", []) is Array else []
 	for index in range(points.size()):
 		var point_entry: Dictionary = _staff_dictionary_from_variant(points[index])
-		staff_teleport_send_point_select.add_item(str(point_entry.get("label", point_entry.get("id", "Point"))), index)
+		staff_teleport_send_point_select.add_item(
+			_staff_teleport_label(
+				point_entry.get("label", point_entry.get("id", "Point")),
+				"Point"
+			),
+			index
+		)
 	if staff_teleport_send_point_select.item_count > 0:
 		staff_teleport_send_point_select.select(0)
 
