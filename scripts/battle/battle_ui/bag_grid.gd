@@ -142,9 +142,11 @@ func _create_item_button(item_data: Dictionary) -> Button:
 		item_name = item_id
 
 	var button := Button.new()
-	button.custom_minimum_size = Vector2(260, 54)
+	button.custom_minimum_size = Vector2(0, 50)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	button.add_theme_font_size_override("font_size", 15)
 	button.text = _t("battle.bag.item_quantity", {
 		"item": item_name,
 		"quantity": quantity,
