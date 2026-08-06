@@ -8,6 +8,7 @@ const MAP_NPCS := {
 	"res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn": ["Entities/NPCs/LeagueFanDorian", "Entities/NPCs/ForestScoutNico", "Entities/NPCs/SchoolKidJune", "Entities/NPCs/CatchingMentorGideon"],
 	"res://scenes/overworld/kanto/routes/kanto_route_22.tscn": ["Entities/NPCs/GaryOak", "Entities/NPCs/LeagueHikerGrant", "Entities/NPCs/YoungsterCaleb", "Entities/NPCs/LassPaige"],
 	"res://scenes/overworld/kanto/routes/kanto_route_2.tscn": ["Entities/NPCs/CaveResearcherOwen", "Entities/NPCs/ForestWatcherIvy", "Entities/NPCs/YoungsterMason", "Entities/NPCs/BugCatcherCale"],
+	"res://scenes/overworld/kanto/routes/kanto_route_3.tscn": ["Entities/NPCs/YoungsterWarren", "Entities/NPCs/HikerBruce", "Entities/NPCs/FirebreatherOtis"],
 	"res://scenes/overworld/kanto/routes/viridian_forest.tscn": ["Entities/NPCs/BugCatcherRick", "Entities/NPCs/BugCatcherDoug", "Entities/NPCs/BugCatcherAnthony", "Entities/NPCs/BugCatcherSammy", "Entities/NPCs/LostCamperDana", "Entities/NPCs/ForestResearcherLeah"],
 	"res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn": ["Entities/NPCs/MuseumGuideTheo", "Entities/NPCs/HikerBruno", "Entities/NPCs/GymFanMax", "Entities/NPCs/DigSiteWorkerCole", "Entities/NPCs/PewterResidentNora"],
 }
@@ -17,6 +18,7 @@ const CLASS_FRAME_PATHS := [
 	"res://assets/npcs/classes/bug_catcher_frames.tres",
 	"res://assets/npcs/classes/camper_frames.tres",
 	"res://assets/npcs/classes/elder_frames.tres",
+	"res://assets/npcs/classes/firebreather_frames.tres",
 	"res://assets/npcs/classes/hiker_frames.tres",
 	"res://assets/npcs/classes/lass_frames.tres",
 	"res://assets/npcs/classes/mart_m_frames.tres",

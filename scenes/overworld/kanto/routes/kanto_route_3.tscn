@@ -1,12 +1,16 @@
 [gd_scene format=4 uid="uid://bsfma5bbk6lxj"]
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_3/route_3.visual.tscn" id="1_8pife"]
-[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="5_metadata"]
-[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="6_exit"]
-[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="7_route_hint"]
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="2_jmvwp"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="3_3df0w"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="4_2mnmk"]
+[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="5_metadata"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="6_exit"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="7_route_hint"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="8_trainer"]
+[ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="9_youngster"]
+[ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="10_hiker"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/firebreather_frames.tres" id="11_firebreather"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nuuyr"]
 texture = ExtResource("2_jmvwp")
@@ -288,15 +292,60 @@ visible = false
 tile_map_data = PackedByteArray("AAAkACUAAAAEAAAAAAAlACUAAAAEAAAAAAAmACUAAAAEAAAAAAAnACUAAAAEAAAAAAAoACUAAAAEAAAAAAAqACoAAAAEAAAAAAArACoAAAAEAAAAAAAsACoAAAAEAAAAAAAtACoAAAAEAAAAAAAuACoAAAAEAAAAAAAvACoAAAAEAAAAAAAwACoAAAAEAAAAAAAxACoAAAAEAAAAAAAyACoAAAAEAAAAAAAzACoAAAAEAAAAAAA0ACoAAAAEAAAAAAA1ACoAAAAEAAAAAAA2ACoAAAAEAAAAAAA3ACoAAAAEAAAAAAA4ACoAAAAEAAAAAAA5ACoAAAAEAAAAAAA6ACoAAAAEAAAAAAA7ACoAAAAEAAAAAAA8ACoAAAAEAAAAAAA9ACoAAAAEAAAAAAA+ACoAAAAEAAAAAAA/ACoAAAAEAAAAAABAACoAAAAEAAAAAAALACQAAAAEAAAAAAAMACQAAAAEAAAAAAANACQAAAAEAAAAAAAOACQAAAAEAAAAAAAPACQAAAAEAAAAAAAQACQAAAAEAAAAAAAWACQAAAAEAAAAAAAXACQAAAAEAAAAAAA=")
 tile_set = SubResource("TileSet_vrfbg")
 
+[node name="BlockUp" type="TileMapLayer" parent="BlockDirection" unique_id=449095996]
+tile_map_data = PackedByteArray("AAAlACYAAAAEAAAAAAAmACYAAAAEAAAAAAAnACYAAAAEAAAAAAAoACYAAAAEAAAAAAAqACsAAAAEAAAAAAArACsAAAAEAAAAAAAsACsAAAAEAAAAAAAtACsAAAAEAAAAAAAuACsAAAAEAAAAAAAvACsAAAAEAAAAAAAwACsAAAAEAAAAAAAxACsAAAAEAAAAAAAyACsAAAAEAAAAAAAzACsAAAAEAAAAAAA0ACsAAAAEAAAAAAA1ACsAAAAEAAAAAAA2ACsAAAAEAAAAAAA3ACsAAAAEAAAAAAA4ACsAAAAEAAAAAAA5ACsAAAAEAAAAAAA6ACsAAAAEAAAAAAA7ACsAAAAEAAAAAAA8ACsAAAAEAAAAAAA9ACsAAAAEAAAAAAA+ACsAAAAEAAAAAAA/ACsAAAAEAAAAAABAACsAAAAEAAAAAABBACsAAAAEAAAAAABCACsAAAAEAAAAAABDACsAAAAEAAAAAAAUACUAAAAEAAAAAAAVACUAAAAEAAAAAAAWACUAAAAEAAAAAAAXACUAAAAEAAAAAAAYACUAAAAEAAAAAAAMACUAAAAEAAAAAAANACUAAAAEAAAAAAAOACUAAAAEAAAAAAAPACUAAAAEAAAAAAAQACUAAAAEAAAAAAA=")
+tile_set = SubResource("TileSet_vrfbg")
+
+[node name="Entities" type="Node2D" parent="." unique_id=120000010]
+z_index = 5
+
+[node name="NPCs" type="Node2D" parent="Entities" unique_id=120000011]
+
+[node name="YoungsterWarren" parent="Entities/NPCs" unique_id=120000012 instance=ExtResource("8_trainer")]
+position = Vector2(656, 432)
+trainer_id = "kanto_route_3_youngster_warren"
+sight_range_tiles = 3
+npc_id = "kanto_route_3_youngster_warren"
+npc_definition_id = "trainer_class_youngster"
+display_name = "Youngster Warren"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("9_youngster")
+
+[node name="HikerBruce" parent="Entities/NPCs" unique_id=120000013 instance=ExtResource("8_trainer")]
+position = Vector2(1520, 656)
+trainer_id = "kanto_route_3_hiker_bruce"
+sight_range_tiles = 2
+npc_id = "kanto_route_3_hiker_bruce"
+npc_definition_id = "trainer_class_hiker"
+display_name = "Hiker Bruce"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("10_hiker")
+
+[node name="FirebreatherOtis" parent="Entities/NPCs" unique_id=120000014 instance=ExtResource("8_trainer")]
+position = Vector2(2288, 1008)
+trainer_id = "kanto_route_3_firebreather_otis"
+sight_range_tiles = 3
+npc_id = "kanto_route_3_firebreather_otis"
+npc_definition_id = "trainer_class_worker"
+display_name = "Firebreather Otis"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("11_firebreather")
+
+[node name="Players" type="Node2D" parent="Entities" unique_id=120000015]
+
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=120000016]
+
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=120000017]
+
 [node name="Spawns" type="Node2D" parent="." unique_id=120000001]
 
 [node name="FromPewterCity" type="Marker2D" parent="Spawns" unique_id=120000002]
-position = Vector2(48, 1072)
+position = Vector2(48, 656)
 
 [node name="Exits" type="Node2D" parent="." unique_id=120000003]
 
 [node name="ToPewterCity" type="Area2D" parent="Exits" unique_id=120000004]
-position = Vector2(16, 1072)
+position = Vector2(16, 656)
 script = ExtResource("6_exit")
 target_scene_path = "uid://b65lnk8twsct"
 target_spawn_name = "FromRoute3"
@@ -311,7 +360,3 @@ rotation = -1.5708
 height = 64.0
 
 [connection signal="body_entered" from="Exits/ToPewterCity" to="Exits/ToPewterCity" method="_on_body_entered"]
-
-[node name="BlockUp" type="TileMapLayer" parent="BlockDirection" unique_id=449095996]
-tile_map_data = PackedByteArray("AAAlACYAAAAEAAAAAAAmACYAAAAEAAAAAAAnACYAAAAEAAAAAAAoACYAAAAEAAAAAAAqACsAAAAEAAAAAAArACsAAAAEAAAAAAAsACsAAAAEAAAAAAAtACsAAAAEAAAAAAAuACsAAAAEAAAAAAAvACsAAAAEAAAAAAAwACsAAAAEAAAAAAAxACsAAAAEAAAAAAAyACsAAAAEAAAAAAAzACsAAAAEAAAAAAA0ACsAAAAEAAAAAAA1ACsAAAAEAAAAAAA2ACsAAAAEAAAAAAA3ACsAAAAEAAAAAAA4ACsAAAAEAAAAAAA5ACsAAAAEAAAAAAA6ACsAAAAEAAAAAAA7ACsAAAAEAAAAAAA8ACsAAAAEAAAAAAA9ACsAAAAEAAAAAAA+ACsAAAAEAAAAAAA/ACsAAAAEAAAAAABAACsAAAAEAAAAAABBACsAAAAEAAAAAABCACsAAAAEAAAAAABDACsAAAAEAAAAAAAUACUAAAAEAAAAAAAVACUAAAAEAAAAAAAWACUAAAAEAAAAAAAXACUAAAAEAAAAAAAYACUAAAAEAAAAAAAMACUAAAAEAAAAAAANACUAAAAEAAAAAAAOACUAAAAEAAAAAAAPACUAAAAEAAAAAAAQACUAAAAEAAAAAAA=")
-tile_set = SubResource("TileSet_vrfbg")
