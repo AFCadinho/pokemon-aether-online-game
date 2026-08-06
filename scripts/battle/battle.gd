@@ -8798,22 +8798,31 @@ func _get_player_id_from_ident(ident: String) -> String:
 	return ""
 
 
-func _show_trainer_command(command: Dictionary) -> void:
+func _show_trainer_command(command: Dictionary) -> bool:
 	if battle_type != BattleType.TRAINER:
-		return
-	if str(command.get("kind", "")) != "move":
-		return
+		return false
 
+	var command_kind := str(command.get("kind", ""))
 	var player_id := str(command.get("player_id", ""))
 	var pokemon_name := _format_battle_actor(str(command.get("pokemon", "")), false)
-	var move_name := str(command.get("move", "")).strip_edges()
-	if player_id == "" or pokemon_name == "" or move_name == "":
-		return
+	if player_id == "" or pokemon_name == "":
+		return false
 
-	_show_trainer_command_text(player_id, _t("battle.command.move", {
-		"pokemon": pokemon_name,
-		"move": move_name,
-	}))
+	match command_kind:
+		"move":
+			var move_name := str(command.get("move", "")).strip_edges()
+			if move_name == "":
+				return false
+			return _show_trainer_command_text(player_id, _t("battle.command.move", {
+				"pokemon": pokemon_name,
+				"move": move_name,
+			}))
+		"dodge":
+			return _show_trainer_command_text(player_id, _t("battle.command.dodge", {
+				"pokemon": pokemon_name,
+			}))
+
+	return false
 
 
 func _show_switch_trainer_command(event_data: Dictionary, player_id: String) -> void:
@@ -8843,7 +8852,7 @@ func _show_switch_trainer_command(event_data: Dictionary, player_id: String) -> 
 	_show_trainer_command_text(player_id, message)
 
 
-func _show_trainer_command_text(player_id: String, message: String) -> void:
+func _show_trainer_command_text(player_id: String, message: String) -> bool:
 	var trainer_sprite: BattleTrainerSprite
 	match player_id:
 		"p1":
@@ -8851,9 +8860,11 @@ func _show_trainer_command_text(player_id: String, message: String) -> void:
 		"p2":
 			trainer_sprite = enemy_trainer_sprite
 		_:
-			return
-	if trainer_sprite != null:
-		trainer_sprite.show_command(message)
+			return false
+	if trainer_sprite == null or not trainer_sprite.visible:
+		return false
+	trainer_sprite.show_command(message)
+	return true
 
 func _play_shiny_entrance_if_needed(event_data: Dictionary) -> void:
 	var player_id := str(event_data.get("playerId", ""))

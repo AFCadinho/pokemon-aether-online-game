@@ -135,10 +135,18 @@ func _check_command_localization() -> void:
 		localization_manager.call("text", "battle.command.switch", {"from": "Lopunny", "to": "Garchomp"}) == "Lopunny, return! Go, Garchomp!",
 		"English trainer switch command is localized"
 	)
+	_check(
+		localization_manager.call("text", "battle.command.dodge", {"pokemon": "Garchomp"}) == "Garchomp, dodge!",
+		"English trainer dodge command is localized"
+	)
 	localization_manager.call("set_locale", "nl")
 	_check(
 		localization_manager.call("text", "battle.command.go", {"pokemon": "Garchomp"}) == "Ga ervoor, Garchomp!",
 		"Dutch trainer send-out command is localized"
+	)
+	_check(
+		localization_manager.call("text", "battle.command.dodge", {"pokemon": "Garchomp"}) == "Garchomp, dodge!",
+		"trainer dodge meme stays recognizable across locales"
 	)
 
 

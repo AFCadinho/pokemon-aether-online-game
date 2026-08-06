@@ -2,6 +2,9 @@ extends RefCounted
 
 class_name BattleEventRenderer
 
+const DODGE_RESPONSE_DELAY_SECONDS := 0.22
+const DODGE_ACTION_LEAD_SECONDS := 0.16
+
 var battle_log_panel: BattleLogPanel
 var mini_battle_feed: MiniBattleFeed
 var current_action_panel: CurrentActionPanel
@@ -113,7 +116,12 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 			"stat_target": stat_change_target_ident,
 		})
 	if animations_allowed and attack_actor_ident != "" and move_animation_name != "":
-		_show_trainer_move_command(attack_actor_ident, move_animation_name)
+		await _show_trainer_move_commands(
+			attack_actor_ident,
+			move_animation_name,
+			move_animation_target_ident,
+			move_animation_result
+		)
 	var defer_stat_change_effect := (
 		stat_change_target_ident != ""
 		and effect_animation_key in ["stat_up", "stat_down"]
@@ -213,15 +221,31 @@ func _can_start_battle_animation(source: String, details: Dictionary = {}) -> bo
 	return bool(animation_guard.call(source, details))
 
 
-func _show_trainer_move_command(actor_ident: String, move_name: String) -> void:
+func _show_trainer_move_commands(
+	actor_ident: String,
+	move_name: String,
+	target_ident: String,
+	animation_result: String
+) -> void:
 	if not show_trainer_command.is_valid():
 		return
-	show_trainer_command.call({
+	var attack_command_shown := bool(show_trainer_command.call({
 		"kind": "move",
 		"player_id": _get_player_id_from_ident(actor_ident),
 		"pokemon": actor_ident,
 		"move": move_name,
-	})
+	}))
+	if not attack_command_shown or animation_result != "miss" or target_ident == "":
+		return
+
+	await _wait(DODGE_RESPONSE_DELAY_SECONDS)
+	var dodge_command_shown := bool(show_trainer_command.call({
+		"kind": "dodge",
+		"player_id": _get_player_id_from_ident(target_ident),
+		"pokemon": target_ident,
+	}))
+	if dodge_command_shown:
+		await _wait(DODGE_ACTION_LEAD_SECONDS)
 
 
 func _add_battle_log_player_gap(event: Dictionary) -> void:

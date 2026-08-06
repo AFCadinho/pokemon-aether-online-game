@@ -57,15 +57,18 @@ func _check_heal_particles_and_sprite_response_share_one_presentation() -> void:
 
 func _check_trainer_command_is_before_move_animation() -> void:
 	var source := FileAccess.get_file_as_string(RENDERER_PATH)
-	var command_index := source.find("_show_trainer_move_command(attack_actor_ident, move_animation_name)")
+	var command_index := source.find("await _show_trainer_move_commands(")
+	var dodge_index := source.find('"kind": "dodge"', command_index)
 	var attack_index := source.find("await animation_router.play_attack_tween_for_actor(attack_actor_ident)")
 	var move_index := source.find("await animation_router.play_move_animation(move_animation_name")
 
 	_check_equal(command_index >= 0, true, "trainer move command presentation exists")
+	_check_equal(dodge_index >= 0, true, "real misses receive a trainer dodge response")
 	_check_equal(attack_index >= 0, true, "attack tween exists")
 	_check_equal(move_index >= 0, true, "move animation exists")
 	_check_equal(command_index < attack_index, true, "trainer command appears before the attack tween")
 	_check_equal(command_index < move_index, true, "trainer command appears before the move animation")
+	_check_equal(source.contains('animation_result != "miss"'), true, "dodge response is restricted to an explicit miss result")
 
 
 func _check_equal(actual: Variant, expected: Variant, label: String) -> void:

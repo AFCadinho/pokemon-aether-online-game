@@ -2188,6 +2188,7 @@
   "battle.event.switch.player": "{from}, volte!\nVai, {to}!",
   "battle.event.switch.sent_out": "{trainer} enviou {pokemon}!",
   "battle.command.move": "{pokemon}, use {move}!",
+  "battle.command.dodge": "{pokemon}, dodge!",
   "battle.command.switch": "{from}, volte! Vai, {to}!",
   "battle.command.go": "Vai, {pokemon}!",
   "battle.event.trainer.generic": "Treinador",

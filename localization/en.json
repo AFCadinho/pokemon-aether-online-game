@@ -2188,6 +2188,7 @@
   "battle.event.switch.player": "{from}, come back!\nGo! {to}!",
   "battle.event.switch.sent_out": "{trainer} sent out {pokemon}!",
   "battle.command.move": "{pokemon}, use {move}!",
+  "battle.command.dodge": "{pokemon}, dodge!",
   "battle.command.switch": "{from}, return! Go, {to}!",
   "battle.command.go": "Go, {pokemon}!",
   "battle.event.trainer.generic": "Trainer",

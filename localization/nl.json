@@ -2188,6 +2188,7 @@
   "battle.event.switch.player": "{from}, kom terug!\nGa ervoor, {to}!",
   "battle.event.switch.sent_out": "{trainer} stuurde {pokemon} het veld in!",
   "battle.command.move": "{pokemon}, gebruik {move}!",
+  "battle.command.dodge": "{pokemon}, dodge!",
   "battle.command.switch": "{from}, kom terug! Ga ervoor, {to}!",
   "battle.command.go": "Ga ervoor, {pokemon}!",
   "battle.event.trainer.generic": "Trainer",
