@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://3tny2dss8f2p" path="res://assets/tilesets/fiver/tiles_env2_32.png" id="12_n7exw"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/jail_manager_npc.tscn" id="14_ygbus"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="15_g5rpj"]
-[ext_resource type="PackedScene" path="res://scenes/world/interactables/locked_door_interactable.tscn" id="15_locked_door"]
+[ext_resource type="PackedScene" uid="uid://csmsqlujka4ma" path="res://scenes/world/interactables/locked_door_interactable.tscn" id="15_locked_door"]
 [ext_resource type="PackedScene" uid="uid://b8s7eihsl5ikf" path="res://scenes/world/interactables/sign_interactable.tscn" id="16_vofo1"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="21_night_light"]
 [ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="23_gate_npc"]
@@ -668,31 +668,35 @@ movement_speed_pixels = 48.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=841850023]
 
-[node name="JailSign" parent="Entities/Interactables" unique_id=1449815395 instance=ExtResource("16_vofo1")]
+[node name="Signs" type="Node2D" parent="Entities/Interactables" unique_id=521022578]
+
+[node name="JailSign" parent="Entities/Interactables/Signs" unique_id=1449815395 instance=ExtResource("16_vofo1")]
 position = Vector2(1680, 1456)
 
-[node name="TrainerSchoolSign" parent="Entities/Interactables" unique_id=1013177921 instance=ExtResource("16_vofo1")]
+[node name="TrainerSchoolSign" parent="Entities/Interactables/Signs" unique_id=1013177921 instance=ExtResource("16_vofo1")]
 position = Vector2(1840, 912)
 
-[node name="PokemonCenterDoorLock" parent="Entities/Interactables" unique_id=594228519 instance=ExtResource("15_locked_door")]
+[node name="Locks" type="Node2D" parent="Entities/Interactables" unique_id=1310467494]
+
+[node name="PokemonCenterDoorLock" parent="Entities/Interactables/Locks" unique_id=594228519 instance=ExtResource("15_locked_door")]
 position = Vector2(1136, 1440)
 area_id = "kanto_viridian_city_pokemon_center"
 display_name = "Viridian City Pokémon Center"
 
-[node name="GymDoorLock" parent="Entities/Interactables" instance=ExtResource("15_locked_door")]
-position = Vector2(1792, 448)
-display_name = "Viridian City Gym"
+[node name="GymDoorLock" parent="Entities/Interactables/Locks" unique_id=941498240 instance=ExtResource("15_locked_door")]
+position = Vector2(1328, 384)
 area_id = "kanto_viridian_city_gym"
+display_name = "Viridian City Gym"
 
-[node name="TrainerSchoolDoorLock" parent="Entities/Interactables" instance=ExtResource("15_locked_door")]
-position = Vector2(1840, 912)
-display_name = "Viridian City Trainer School"
+[node name="TrainerSchoolDoorLock" parent="Entities/Interactables/Locks" unique_id=757374845 instance=ExtResource("15_locked_door")]
+position = Vector2(1904, 864)
 area_id = "kanto_viridian_city_trainer_school"
+display_name = "Viridian City Trainer School"
 
-[node name="House1DoorLock" parent="Entities/Interactables" instance=ExtResource("15_locked_door")]
-position = Vector2(592, 1456)
-display_name = "Viridian City House 1"
+[node name="House1DoorLock" parent="Entities/Interactables/Locks" unique_id=589545217 instance=ExtResource("15_locked_door")]
+position = Vector2(1552, 864)
 area_id = "kanto_viridian_city_house_1"
+display_name = "Viridian City House 1"
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=408927125]
 visible = false
