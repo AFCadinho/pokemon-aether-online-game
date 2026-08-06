@@ -5340,34 +5340,14 @@ func _get_fallback_knock_off_item_message(event: Dictionary) -> String:
 	})
 
 func _get_public_confirmed_item_from_event(event: Dictionary) -> String:
-	match str(event.get("type", "")):
-		"item":
-			return str(event.get("item", "")).strip_edges()
-		"damage", "heal", "status", "fieldEffect", "pokemonEffect":
-			return _get_item_name_from_source(str(event.get("source", "")))
-
-	return _get_item_name_from_source(str(event.get("source", "")))
+	return str(
+		BATTLE_PUBLIC_POKEMON_KNOWLEDGE.confirmed_item_reveal_from_event(event).get("item", "")
+	)
 
 func _get_public_confirmed_item_ident_from_event(event: Dictionary) -> String:
-	if str(event.get("type", "")) == "item":
-		return str(event.get("target", ""))
-
-	var item_name := _get_item_name_from_source(str(event.get("source", "")))
-	if item_name == "":
-		return ""
-
-	var source_target := str(event.get("sourceTarget", ""))
-	if source_target != "":
-		return source_target
-
-	return _get_first_event_text_value(event, ["target", "pokemon", "actor", "sourcePokemon"])
-
-func _get_item_name_from_source(source: String) -> String:
-	var cleaned := source.strip_edges()
-	if not cleaned.to_lower().begins_with("item:"):
-		return ""
-
-	return cleaned.split(":", false, 1)[1].strip_edges()
+	return str(
+		BATTLE_PUBLIC_POKEMON_KNOWLEDGE.confirmed_item_reveal_from_event(event).get("ident", "")
+	)
 
 func _mark_item_knocked_off(item_name: String) -> String:
 	var cleaned := item_name.strip_edges()

@@ -79,9 +79,22 @@ func _init() -> void:
 	)
 	_check(
 		battle_source.contains("public_confirmed_only\n\t)") \
-			and hover_service_source.contains("if not embedded_public_only:") \
+			and hover_service_source.contains("var pokemon_info: Dictionary = await _fetch_hover_pokemon_info(") \
 			and hover_service_source.contains("PublicPokemonKnowledge.from_pokemon_data(pokemon_data)"),
-		"public side-preview delegates only the sanitized embedded knowledge contract"
+		"public side-preview uses server-confirmed knowledge with a sanitized embedded fallback"
+	)
+	var item_reveal := PublicPokemonKnowledge.confirmed_item_reveal_from_event({
+		"type": "pokemonEffect",
+		"target": "p2a: Great Tusk",
+		"effect": "item: Protective Pads",
+		"state": "activate",
+	})
+	_check(
+		item_reveal == {
+			"ident": "p2a: Great Tusk",
+			"item": "Protective Pads",
+		},
+		"direct item activations are retained for subsequent hover cards"
 	)
 	print("PASS battle_participant_privacy_contract_check")
 	quit(0)
