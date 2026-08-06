@@ -83,6 +83,8 @@ func _check_runtime_renderer() -> void:
 	_check(command_callout.visible, "trainer command callout becomes visible")
 	_check(command_label.text == "Spearow, use Peck!", "trainer command callout renders the requested command")
 	_check(command_callout.position.x < 0.0, "opponent command callout opens toward the battlefield")
+	_check(command_callout.size.x <= 214.0, "trainer command callout stays compact")
+	_check(command_callout.position.y <= -150.0, "trainer command callout stays above the trainer sprite")
 
 	renderer.clear()
 	_check(not renderer.visible, "clearing a trainer removes its battle visual")

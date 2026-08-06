@@ -5,7 +5,7 @@ class_name TrainerCommandCallout
 const DISPLAY_SECONDS := 1.45
 const FADE_IN_SECONDS := 0.12
 const FADE_OUT_SECONDS := 0.18
-const BUBBLE_SIZE := Vector2(286.0, 68.0)
+const BUBBLE_SIZE := Vector2(214.0, 56.0)
 const BUBBLE_FILL := Color(0.025, 0.055, 0.09, 0.96)
 const BUBBLE_BORDER := Color(0.12, 0.72, 1.0, 1.0)
 
@@ -30,7 +30,10 @@ func show_command(message: String, trainer_faces_left: bool) -> void:
 		return
 
 	points_right = trainer_faces_left
-	position = Vector2(-314.0, -130.0) if points_right else Vector2(28.0, -130.0)
+	# Keep commands over the trainer who gives them, outside the space occupied
+	# by the active Pokemon. The opponent variant sits against the right edge;
+	# the local variant stays between the party rail and the player's Pokemon.
+	position = Vector2(-107.0, -154.0) if points_right else Vector2(-55.0, -158.0)
 	message_label.text = cleaned_message
 	visible = true
 	modulate.a = 0.0
@@ -57,13 +60,13 @@ func clear_command() -> void:
 
 func _draw() -> void:
 	var tail_points := PackedVector2Array([
-		Vector2(244.0, 66.0),
-		Vector2(270.0, 66.0),
-		Vector2(282.0, 84.0),
+		Vector2(95.0, 54.0),
+		Vector2(119.0, 54.0),
+		Vector2(107.0, 72.0),
 	]) if points_right else PackedVector2Array([
-		Vector2(16.0, 66.0),
-		Vector2(42.0, 66.0),
-		Vector2(4.0, 84.0),
+		Vector2(43.0, 54.0),
+		Vector2(67.0, 54.0),
+		Vector2(55.0, 72.0),
 	])
 	draw_colored_polygon(tail_points, BUBBLE_FILL)
 	draw_polyline(PackedVector2Array([
