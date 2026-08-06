@@ -8,12 +8,12 @@ size = Vector2(96, 64)
 [node name="LockedDoorInteractable" type="Node2D"]
 script = ExtResource("1_locked_door")
 interactable_kind = "locked_door"
-display_name = "Viridian Gym"
+display_name = "Building Entrance"
 blocks_movement = true
 requires_facing = false
 interaction_shape_size = Vector2(96, 64)
-required_badge_region = "kanto"
-required_badge_count = 7
+area_id = ""
+default_locked = true
 
 [node name="InteractionArea" type="Area2D" parent="."]
 

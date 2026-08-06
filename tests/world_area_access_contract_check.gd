@@ -2,6 +2,8 @@ extends SceneTree
 
 const PROJECT_PATH := "res://project.godot"
 const SERVICE_PATH := "res://scripts/services/world_transition_service.gd"
+const LOCKED_DOOR_PATH := "res://scripts/world/interactables/locked_door_interactable.gd"
+const LOCKED_DOOR_SCENE_PATH := "res://scenes/world/interactables/locked_door_interactable.tscn"
 const AUTH_SERVICE_PATH := "res://scripts/services/auth_service.gd"
 const MAP_EXIT_PATH := "res://scripts/world/map_exit.gd"
 const GATE_NPC_PATH := "res://scripts/world/npcs/gate_npc.gd"
@@ -24,6 +26,8 @@ var failed := false
 func _init() -> void:
 	var project_source := FileAccess.get_file_as_string(PROJECT_PATH)
 	var service_source := FileAccess.get_file_as_string(SERVICE_PATH)
+	var locked_door_source := FileAccess.get_file_as_string(LOCKED_DOOR_PATH)
+	var locked_door_scene_source := FileAccess.get_file_as_string(LOCKED_DOOR_SCENE_PATH)
 	var auth_service_source := FileAccess.get_file_as_string(AUTH_SERVICE_PATH)
 	var map_exit_source := FileAccess.get_file_as_string(MAP_EXIT_PATH)
 	var gate_source := FileAccess.get_file_as_string(GATE_NPC_PATH)
@@ -46,6 +50,19 @@ func _init() -> void:
 		service_source.contains('"/game/world/transitions/%s/access"')
 		and service_source.contains('"/game/world/transitions/%s/enter"'),
 		"Client uses the transition-scoped preview and authoritative enter endpoints"
+	)
+	_expect(
+		service_source.contains('"/game/world/areas/%s/access"')
+		and service_source.contains("func get_area_access")
+		and service_source.contains("area_access_cache"),
+		"Door locks use the shared server-authoritative world area access service"
+	)
+	_expect(
+		locked_door_source.contains("get_area_access")
+		and locked_door_source.contains("dialogueId")
+		and locked_door_source.contains("blocks_movement = not allowed")
+		and locked_door_scene_source.contains("LockedDoorInteractable"),
+		"Locked door interactables block movement and display backend-provided reasons"
 	)
 	_expect(
 		service_source.contains("transition_access_cache[normalized_transition_id] = access"),

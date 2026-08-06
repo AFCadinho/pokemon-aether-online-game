@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="4_metadata"]
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="5_2mtwu"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="6_frcun"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/locked_door_interactable.tscn" id="25_locked_door"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="6_kp2ru"]
 [ext_resource type="Script" uid="uid://babnhtwtaiewv" path="res://scripts/world/map_door_animator.gd" id="7_door_animator"]
 [ext_resource type="SpriteFrames" uid="uid://dlh8wgpn7hn78" path="res://assets/npcs/gym_leaders/alpha_brock_frames.tres" id="11_yr2ka"]
@@ -339,6 +340,11 @@ movement_wait_seconds = 1.5
 movement_speed_pixels = 48.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1638978152]
+
+[node name="PokemonCenterDoorLock" parent="Entities/Interactables" instance=ExtResource("25_locked_door")]
+position = Vector2(1424, 1504)
+display_name = "Pewter City Pokémon Center"
+area_id = "kanto_pewter_city_pokemon_center"
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=1977913234]
 visible = false
