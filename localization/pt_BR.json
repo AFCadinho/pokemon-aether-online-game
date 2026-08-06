@@ -707,6 +707,8 @@
   "ui.town_map.location.viridian_forest.description": "Uma floresta densa atravessada pela parte norte da Route 2.",
   "ui.town_map.location.pewter_city.name": "Pewter City",
   "ui.town_map.location.pewter_city.description": "Uma cidade cinza-pedra junto às montanhas do noroeste de Kanto.",
+  "ui.town_map.location.route_3.name": "Route 3",
+  "ui.town_map.location.route_3.description": "Uma rota montanhosa a leste de Pewter City, rumo ao Mt. Moon.",
   "ui.key_item.received_pokedex": "Você recebeu a Pokédex! Ela foi colocada no bolso de Itens-Chave.",
   "ui.key_item.received_town_map": "Você recebeu o Mapa da Cidade! Ele foi colocado no bolso de Itens-Chave.",
   "ui.pokedex.subtitle": "Pesquisa de espécies e dados de habitat",

@@ -707,6 +707,8 @@
   "ui.town_map.location.viridian_forest.description": "Een dicht bos waar het noordelijke deel van Route 2 doorheen loopt.",
   "ui.town_map.location.pewter_city.name": "Pewter City",
   "ui.town_map.location.pewter_city.description": "Een steengrijze stad bij de bergen van noordwestelijk Kanto.",
+  "ui.town_map.location.route_3.name": "Route 3",
+  "ui.town_map.location.route_3.description": "Een bergroute ten oosten van Pewter City richting Mt. Moon.",
   "ui.key_item.received_pokedex": "Je hebt de Pokédex ontvangen! Hij is in het vak voor key items geplaatst.",
   "ui.key_item.received_town_map": "Je hebt de Town Map ontvangen! Hij is in het vak voor key items geplaatst.",
   "ui.pokedex.subtitle": "Onderzoek naar soorten en leefgebieden",

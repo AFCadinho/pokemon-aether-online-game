@@ -707,6 +707,8 @@
   "ui.town_map.location.viridian_forest.description": "A dense woodland crossed by the northern section of Route 2.",
   "ui.town_map.location.pewter_city.name": "Pewter City",
   "ui.town_map.location.pewter_city.description": "A stone-gray city nestled near the mountains of northwestern Kanto.",
+  "ui.town_map.location.route_3.name": "Route 3",
+  "ui.town_map.location.route_3.description": "A mountain route east of Pewter City, leading toward Mt. Moon.",
   "ui.key_item.received_pokedex": "You received the Pokédex! It was placed in the Key Items pocket.",
   "ui.key_item.received_town_map": "You received the Town Map! It was placed in the Key Items pocket.",
   "ui.pokedex.subtitle": "Species research and habitat data",
