@@ -73,7 +73,7 @@ func _init() -> void:
 		"Denied transitions release the teleport lock and route presentation to the guard"
 	)
 	_expect(
-		world_source.contains("func begin_authorized_teleport(ignore_player_movement := false)")
+		world_source.contains("ignore_player_movement := false,")
 		and world_source.contains("not ignore_player_movement"),
 		"Boundary transitions can authorize while a tile movement is finishing"
 	)

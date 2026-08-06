@@ -3046,7 +3046,7 @@ func _refresh_modal_overworld_input_lock() -> void:
 			movement_blocking_ui_panels.erase(panel_id)
 
 	if not movement_blocking_ui_panels.is_empty():
-		if not owns_modal_overworld_input_lock and not GameState.is_overworld_input_locked():
+		if not GameState.is_overworld_input_locked():
 			GameState.lock_overworld_input()
 			owns_modal_overworld_input_lock = true
 		return
@@ -25579,8 +25579,13 @@ func _on_staff_teleport_confirm_pressed() -> void:
 	if staff_teleport_confirm_button != null:
 		staff_teleport_confirm_button.disabled = true
 
-	var begin_result: Dictionary = await world.call("begin_authorized_teleport")
+	var begin_result: Dictionary = await world.call(
+		"begin_authorized_teleport",
+		false,
+		_can_ignore_staff_teleporter_overworld_lock()
+	)
 	if not bool(begin_result.get("success", false)):
+		_refresh_modal_overworld_input_lock()
 		staff_teleport_in_flight = false
 		if staff_teleport_confirm_button != null:
 			staff_teleport_confirm_button.disabled = false
@@ -25593,6 +25598,7 @@ func _on_staff_teleport_confirm_pressed() -> void:
 	if not bool(result.get("success", false)):
 		if world.has_method("cancel_authorized_teleport"):
 			world.call("cancel_authorized_teleport")
+		_refresh_modal_overworld_input_lock()
 		staff_teleport_in_flight = false
 		if staff_teleport_confirm_button != null:
 			staff_teleport_confirm_button.disabled = false
@@ -25605,6 +25611,7 @@ func _on_staff_teleport_confirm_pressed() -> void:
 	if staff_teleport_confirm_button != null:
 		staff_teleport_confirm_button.disabled = false
 	if not bool(apply_result.get("success", false)):
+		_refresh_modal_overworld_input_lock()
 		_add_chat_message("Teleport was saved, but applying it failed: %s" % str(apply_result.get("error", "Unknown error")))
 		return
 
@@ -25644,8 +25651,13 @@ func _on_staff_teleport_to_player_pressed() -> void:
 	if staff_teleport_to_player_button != null:
 		staff_teleport_to_player_button.disabled = true
 
-	var begin_result: Dictionary = await world.call("begin_authorized_teleport")
+	var begin_result: Dictionary = await world.call(
+		"begin_authorized_teleport",
+		false,
+		_can_ignore_staff_teleporter_overworld_lock()
+	)
 	if not bool(begin_result.get("success", false)):
+		_refresh_modal_overworld_input_lock()
 		staff_teleport_in_flight = false
 		if staff_teleport_confirm_button != null:
 			staff_teleport_confirm_button.disabled = _get_selected_staff_teleport_destination().is_empty()
@@ -25673,6 +25685,7 @@ func _on_staff_teleport_to_player_pressed() -> void:
 	if not bool(result.get("success", false)):
 		if world.has_method("cancel_authorized_teleport"):
 			world.call("cancel_authorized_teleport")
+		_refresh_modal_overworld_input_lock()
 		staff_teleport_in_flight = false
 		if staff_teleport_confirm_button != null:
 			staff_teleport_confirm_button.disabled = _get_selected_staff_teleport_destination().is_empty()
@@ -25690,6 +25703,7 @@ func _on_staff_teleport_to_player_pressed() -> void:
 	if staff_teleport_to_player_button != null:
 		staff_teleport_to_player_button.disabled = staff_teleport_filtered_players.is_empty()
 	if not bool(apply_result.get("success", false)):
+		_refresh_modal_overworld_input_lock()
 		_add_chat_message("Teleport was saved, but applying it failed: %s" % str(apply_result.get("error", "Unknown error")))
 		return
 
@@ -25904,10 +25918,29 @@ func _get_staff_teleport_local_block_reason(world: Node) -> String:
 	if staff_teleport_in_flight:
 		return "Another teleport is already in progress."
 	if world != null and world.has_method("get_authorized_teleport_block_reason"):
-		var reason := str(world.call("get_authorized_teleport_block_reason")).strip_edges()
+		var reason := str(world.call(
+			"get_authorized_teleport_block_reason",
+			_can_ignore_staff_teleporter_overworld_lock()
+		)).strip_edges()
 		if reason != "":
 			return reason
 	return ""
+
+
+func _can_ignore_staff_teleporter_overworld_lock() -> bool:
+	if (
+		not owns_modal_overworld_input_lock
+		or staff_teleport_popup == null
+		or not staff_teleport_popup.visible
+		or not GameState.overworld_input_locked
+	):
+		return false
+	for panel_value: Variant in movement_blocking_ui_panels.values():
+		var panel_reference := panel_value as WeakRef
+		var panel := panel_reference.get_ref() as Control if panel_reference != null else null
+		if panel != null and panel.visible and panel != staff_teleport_popup:
+			return false
+	return true
 
 
 func _on_staff_impersonate_confirm_pressed() -> void:

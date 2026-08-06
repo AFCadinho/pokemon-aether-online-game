@@ -283,8 +283,16 @@ func save_current_player_state_now() -> Dictionary:
 	return result
 
 
-func begin_authorized_teleport(ignore_player_movement := false) -> Dictionary:
-	var block_reason := _get_authorized_teleport_block_reason(false, false, ignore_player_movement)
+func begin_authorized_teleport(
+	ignore_player_movement := false,
+	ignore_existing_overworld_lock := false
+) -> Dictionary:
+	var block_reason := _get_authorized_teleport_block_reason(
+		false,
+		false,
+		ignore_player_movement,
+		ignore_existing_overworld_lock
+	)
 	if block_reason != "":
 		return {
 			"success": false,
@@ -296,7 +304,12 @@ func begin_authorized_teleport(ignore_player_movement := false) -> Dictionary:
 	authorized_teleport_locked_overworld = true
 	while is_saving_player_position:
 		await get_tree().process_frame
-	block_reason = _get_authorized_teleport_block_reason(true, false, ignore_player_movement)
+	block_reason = _get_authorized_teleport_block_reason(
+		true,
+		false,
+		ignore_player_movement,
+		ignore_existing_overworld_lock
+	)
 	if block_reason != "":
 		cancel_authorized_teleport()
 		return {
@@ -479,14 +492,20 @@ func _is_allowed_authorized_teleport_scene_path(scene_path: String) -> bool:
 	)
 
 
-func get_authorized_teleport_block_reason() -> String:
-	return _get_authorized_teleport_block_reason(false)
+func get_authorized_teleport_block_reason(ignore_existing_overworld_lock := false) -> String:
+	return _get_authorized_teleport_block_reason(
+		false,
+		false,
+		false,
+		ignore_existing_overworld_lock
+	)
 
 
 func _get_authorized_teleport_block_reason(
 	ignore_teleport_in_progress := false,
 	ignore_failed_autosave_block := false,
-	ignore_player_movement := false
+	ignore_player_movement := false,
+	ignore_existing_overworld_lock := false
 ) -> String:
 	if authorized_teleport_in_progress and not ignore_teleport_in_progress:
 		return "Another teleport is already in progress."
@@ -500,7 +519,11 @@ func _get_authorized_teleport_block_reason(
 		return "World is not ready."
 	if GameState.input_locked:
 		return "Cannot teleport while dialogue or a global input lock is active."
-	if GameState.overworld_input_locked and not ignore_teleport_in_progress:
+	if (
+		GameState.overworld_input_locked
+		and not ignore_teleport_in_progress
+		and not ignore_existing_overworld_lock
+	):
 		return "Cannot teleport while overworld movement is locked."
 	if GameState.ui_input_locked:
 		return "Cannot teleport while a menu lock is active."

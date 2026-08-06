@@ -31,6 +31,7 @@ func _init() -> void:
 	_check(source.contains('var search_active := map_query != "" or spawn_query != ""'), "Map and spawn searches automatically reveal matching points")
 	_check(source.contains('replace("Pokémon", "Pokemon")') and source.contains("_staff_teleport_search_key"), "Staff destination labels use easy-to-type Pokemon spelling and accent-insensitive search")
 	_check(source.contains("_can_teleport_self()") and source.contains("_can_teleport_to_player()") and source.contains("_can_teleport_other_player()"), "Existing permission gates remain intact")
+	_check(source.contains("_can_ignore_staff_teleporter_overworld_lock()") and source.contains('"get_authorized_teleport_block_reason",'), "Staff teleports may bypass only their own modal movement lock")
 	_check(source.contains("ModeratorTeleportService.teleport_self") and source.contains("ModeratorTeleportService.teleport_to_player") and source.contains("ModeratorTeleportService.teleport_player"), "Existing authoritative teleport actions remain intact")
 
 	quit(1 if failures > 0 else 0)
