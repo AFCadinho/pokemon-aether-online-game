@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/interactables/locked_door_interactable.gd" id="1_locked_door"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_locked_door"]
+size = Vector2(96, 64)
+
+[node name="LockedDoorInteractable" type="Node2D"]
+script = ExtResource("1_locked_door")
+interactable_kind = "locked_door"
+display_name = "Viridian Gym"
+blocks_movement = true
+requires_facing = false
+interaction_shape_size = Vector2(96, 64)
+required_badge_region = "kanto"
+required_badge_count = 7
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+shape = SubResource("RectangleShape2D_locked_door")
