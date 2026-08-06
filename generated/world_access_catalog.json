@@ -672,10 +672,10 @@
 				}
 			}
 		},
-		"kanto_pewter_city_gym": {"accessOnly": true, "areaType": "interior", "defaultMode": "closed", "label": "Pewter City Gym", "locationGroupId": "kanto_pewter_city", "locationGroupLabel": "Pewter City", "regionName": "Kanto", "sceneAliases": [], "scenePath": "", "spawnPoints": {}},
-		"kanto_pewter_city_house_1": {"accessOnly": true, "areaType": "interior", "defaultMode": "closed", "label": "Pewter City House 1", "locationGroupId": "kanto_pewter_city", "locationGroupLabel": "Pewter City", "regionName": "Kanto", "sceneAliases": [], "scenePath": "", "spawnPoints": {}},
-		"kanto_pewter_city_house_2": {"accessOnly": true, "areaType": "interior", "defaultMode": "closed", "label": "Pewter City House 2", "locationGroupId": "kanto_pewter_city", "locationGroupLabel": "Pewter City", "regionName": "Kanto", "sceneAliases": [], "scenePath": "", "spawnPoints": {}},
-		"kanto_pewter_city_museum": {"accessOnly": true, "areaType": "interior", "defaultMode": "closed", "label": "Pewter City Museum", "locationGroupId": "kanto_pewter_city", "locationGroupLabel": "Pewter City", "regionName": "Kanto", "sceneAliases": [], "scenePath": "", "spawnPoints": {}}
+		"kanto_pewter_city_gym": {"accessOnly": true, "areaType": "interior", "defaultMode": "open", "label": "Pewter City Gym", "locationGroupId": "kanto_pewter_city", "locationGroupLabel": "Pewter City", "regionName": "Kanto", "sceneAliases": [], "scenePath": "", "spawnPoints": {}},
+		"kanto_pewter_city_house_1": {"accessOnly": true, "areaType": "interior", "defaultMode": "open", "label": "Pewter City House 1", "locationGroupId": "kanto_pewter_city", "locationGroupLabel": "Pewter City", "regionName": "Kanto", "sceneAliases": [], "scenePath": "", "spawnPoints": {}},
+		"kanto_pewter_city_house_2": {"accessOnly": true, "areaType": "interior", "defaultMode": "open", "label": "Pewter City House 2", "locationGroupId": "kanto_pewter_city", "locationGroupLabel": "Pewter City", "regionName": "Kanto", "sceneAliases": [], "scenePath": "", "spawnPoints": {}},
+		"kanto_pewter_city_museum": {"accessOnly": true, "areaType": "interior", "defaultMode": "open", "label": "Pewter City Museum", "locationGroupId": "kanto_pewter_city", "locationGroupLabel": "Pewter City", "regionName": "Kanto", "sceneAliases": [], "scenePath": "", "spawnPoints": {}}
 	},
 	"schemaVersion": 3,
 	"transitions": {

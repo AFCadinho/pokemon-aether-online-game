@@ -94,8 +94,8 @@ func _init() -> void:
 	_expect(
 		areas.has("kanto_pewter_city_gym")
 			and bool((areas.get("kanto_pewter_city_gym", {}) as Dictionary).get("accessOnly", false))
-			and (areas.get("kanto_pewter_city_gym", {}) as Dictionary).get("defaultMode", "") == "closed",
-		"Future Pewter doors are registered as closed access-only areas"
+			and (areas.get("kanto_pewter_city_gym", {}) as Dictionary).get("defaultMode", "") == "open",
+		"Future Pewter doors are registered as open access-only areas"
 	)
 	_expect(
 		(areas.get("kanto_oaks_lab", {}) as Dictionary).get("locationGroupId", "")
