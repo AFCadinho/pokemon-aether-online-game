@@ -24,6 +24,9 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2mtwu"]
 size = Vector2(32, 32)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_route3_exit"]
+size = Vector2(160, 32)
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kp2ru"]
 texture = ExtResource("5_2mtwu")
 texture_region_size = Vector2i(32, 32)
@@ -197,19 +200,11 @@ position = Vector2(-16, 0)
 width = 194.0
 
 [node name="ToRoute3" type="Area2D" parent="Exits" unique_id=755761727]
-position = Vector2(1936, 1072)
-script = ExtResource("2_jtxgn")
-target_scene_path = "uid://bsfma5bbk6lxj"
-target_spawn_name = "FromPewterCity"
-transition_id = "kanto_pewter_city__to_route_3"
+position = Vector2(1920, 1056)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute3" unique_id=1591807988]
-position = Vector2(-16, 0)
-shape = SubResource("RectangleShape2D_2mtwu")
-
-[node name="RouteTransitionHint" parent="Exits/ToRoute3" unique_id=755761728 instance=ExtResource("3_2hpv6")]
-position = Vector2(16, 0)
-width = 194.0
+position = Vector2(-16, 16)
+shape = SubResource("RectangleShape2D_route3_exit")
 
 [node name="ToPokecenter" type="Area2D" parent="Exits" unique_id=1851330212]
 position = Vector2(1424, 1520)
@@ -438,5 +433,4 @@ position = Vector2(1520, 1488)
 position = Vector2(1424, 1488)
 
 [connection signal="body_entered" from="Exits/ToRoute2" to="Exits/ToRoute2" method="_on_body_entered"]
-[connection signal="body_entered" from="Exits/ToRoute3" to="Exits/ToRoute3" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToPokecenter" to="Exits/ToPokecenter" method="_on_body_entered"]
