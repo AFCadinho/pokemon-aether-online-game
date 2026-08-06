@@ -16573,6 +16573,8 @@ func _refresh_bag_items() -> void:
 		var item_category := str(item.get("category", "general"))
 		var item_name := str(item.get("name", ""))
 		var item_id := str(item.get("id", ""))
+		if active_bag_category == "all" and item_category == "key_items":
+			continue
 		if active_bag_category != "all" and item_category != active_bag_category:
 			continue
 		if search_text != "" and not item_name.to_lower().contains(search_text) and not item_id.to_lower().contains(search_text):
@@ -18138,11 +18140,12 @@ func _apply_bag_category_button_style(button: Button, selected: bool) -> void:
 	button.add_theme_stylebox_override("focus", hover)
 
 func _bag_category_item_count(category_id: String) -> int:
-	if category_id == "all":
-		return bag_inventory_items.size()
 	var count := 0
 	for item: Dictionary in bag_inventory_items:
-		if str(item.get("category", "general")) == category_id:
+		var item_category := str(item.get("category", "general"))
+		if category_id == "all" and item_category != "key_items":
+			count += 1
+		elif category_id != "all" and item_category == category_id:
 			count += 1
 	return count
 
