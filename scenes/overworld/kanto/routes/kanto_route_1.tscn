@@ -23,6 +23,7 @@
 [ext_resource type="SpriteFrames" uid="uid://gy0k4ju8k6vq" path="res://assets/npcs/classes/camper_frames.tres" id="31_camper"]
 [ext_resource type="SpriteFrames" uid="uid://cqxh37chx4v8a" path="res://assets/npcs/custom/adinho_dad_frames.tres" id="32_dad_frames"]
 [ext_resource type="Texture2D" uid="uid://cxbfneavbrouo" path="res://assets/sprites/mugshots/dadinho_mugshot.png" id="33_dad_mugshot"]
+[ext_resource type="Script" path="res://scripts/world/kanto/routes/dadinho_training_npc.gd" id="34_dadinho_training"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oup8f"]
 atlas = ExtResource("13_cd607")
@@ -646,6 +647,7 @@ npc_sprite_frames = ExtResource("29_lass")
 
 [node name="Dadinho" parent="Entities/NPCs/Dialogue" instance=ExtResource("16_bnyo4")]
 position = Vector2(896, 2288)
+script = ExtResource("34_dadinho_training")
 npc_id = "kanto_route_1_dadinho"
 npc_definition_id = "kanto_players_house_father"
 display_name = "Dadinho"
@@ -659,6 +661,7 @@ visibility_required_quest_step_id = "visit_father"
 visibility_required_quest_status = "completed"
 visibility_hidden_quest_id = "train_starter_to_level_10"
 visibility_hidden_quest_status = "completed"
+defer_story_hide_until_reload = true
 
 [node name="MartEmployee" parent="Entities/NPCs/Dialogue" unique_id=149252873 instance=ExtResource("16_bnyo4")]
 position = Vector2(944, 560)

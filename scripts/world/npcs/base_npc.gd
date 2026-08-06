@@ -46,6 +46,8 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 @export var visibility_hidden_quest_id := ""
 @export var visibility_hidden_quest_step_id := ""
 @export_enum("available", "active", "completed") var visibility_hidden_quest_status := "completed"
+## Keep an NPC visible for the rest of the current map visit after its hide condition becomes true.
+@export var defer_story_hide_until_reload := false
 ## Exceptional scene-specific override. Normal dialogue comes from NPC metadata.
 @export var dialogue_id := ""
 @export var display_name := ""
@@ -1194,12 +1196,20 @@ func _on_locale_changed(_locale: String) -> void:
 
 
 func _on_story_changed(_revision: int) -> void:
-	_apply_story_visibility()
+	_apply_story_visibility(true)
 	_refresh_quest_marker()
 
 
-func _apply_story_visibility() -> void:
-	story_visibility_active = _is_story_visibility_active()
+func _apply_story_visibility(allow_deferred_hide := false) -> void:
+	var next_visibility := _is_story_visibility_active()
+	if (
+		allow_deferred_hide
+		and defer_story_hide_until_reload
+		and story_visibility_active
+		and not next_visibility
+	):
+		return
+	story_visibility_active = next_visibility
 	visible = story_visibility_active
 	if interaction_area != null:
 		interaction_area.monitoring = story_visibility_active
