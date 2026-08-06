@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_340ux"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="5_pokecenter_hint"]
 [ext_resource type="Texture2D" uid="uid://3tny2dss8f2p" path="res://assets/tilesets/fiver/tiles_env2_32.png" id="12_n7exw"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/jail_manager_npc.tscn" id="14_ygbus"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="15_g5rpj"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="21_night_light"]
 [ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="23_gate_npc"]
@@ -15,7 +16,7 @@
 [ext_resource type="SpriteFrames" uid="uid://57e7bp514fh2" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="27_bug_catcher"]
 [ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="28_hiker"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="29_pokemon"]
-[ext_resource type="Script" path="res://scripts/world/kanto/towns/catching_mentor_gideon.gd" id="30_gideon_quest"]
+[ext_resource type="Script" uid="uid://uknpm86reiv4" path="res://scripts/world/kanto/towns/catching_mentor_gideon.gd" id="30_gideon_quest"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route1"]
 size = Vector2(208, 34)
@@ -602,6 +603,10 @@ npc_id = "kanto_viridian_city_south_route_guard"
 display_name = "Pallet Route Guard"
 facing_direction = Vector2(0, -1)
 
+[node name="JailManager" parent="Entities/NPCs" unique_id=1914758393 instance=ExtResource("14_ygbus")]
+position = Vector2(2144, 1536)
+facing_direction = Vector2(0, 1)
+
 [node name="Players" type="Node2D" parent="Entities" unique_id=784148565]
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=1638304908]
@@ -662,11 +667,11 @@ tile_map_data = PackedByteArray("AAAuACUAAAABAAEAAAAvACUAAAABAAEAAAAwACUAAAABAAE
 tile_set = SubResource("TileSet_v5rc5")
 
 [node name="BlockLeft" type="TileMapLayer" parent="BlockDirection" unique_id=177154737]
-tile_map_data = PackedByteArray("AAAuACwAAAABAAEAAAAuACsAAAABAAEAAAAuACoAAAABAAEAAAAuACkAAAABAAEAAAAuACgAAAABAAEAAAAuACcAAAABAAEAAAAuACYAAAABAAEAAAA0AC0AAAABAAEAAAA0ACwAAAABAAEAAAA0ACsAAAABAAEAAAA0ACoAAAABAAEAAAA0ACkAAAABAAEAAAA0ACgAAAABAAEAAAA0ACcAAAABAAEAAAA0ACYAAAABAAEAAAA=")
+tile_map_data = PackedByteArray("AAAuACwAAAABAAEAAAAuACsAAAABAAEAAAAuACoAAAABAAEAAAAuACkAAAABAAEAAAAuACgAAAABAAEAAAAuACcAAAABAAEAAAAuACYAAAABAAEAAAA0ACwAAAABAAEAAAA0ACsAAAABAAEAAAA0ACoAAAABAAEAAAA0ACkAAAABAAEAAAA0ACgAAAABAAEAAAA0ACcAAAABAAEAAAA0ACYAAAABAAEAAAA=")
 tile_set = SubResource("TileSet_v5rc5")
 
 [node name="BlockRight" type="TileMapLayer" parent="BlockDirection" unique_id=1465455531]
-tile_map_data = PackedByteArray("AAAtACYAAAABAAEAAAAtACcAAAABAAEAAAAtACgAAAABAAEAAAAtACkAAAABAAEAAAAtACoAAAABAAEAAAAtACsAAAABAAEAAAAtACwAAAABAAEAAAAtAC0AAAABAAEAAAAzACYAAAABAAEAAAAzACcAAAABAAEAAAAzACgAAAABAAEAAAAzACkAAAABAAEAAAAzACoAAAABAAEAAAAzACsAAAABAAEAAAAzACwAAAABAAEAAAAzAC0AAAABAAEAAAA=")
+tile_map_data = PackedByteArray("AAAtACYAAAABAAEAAAAtACcAAAABAAEAAAAtACgAAAABAAEAAAAtACkAAAABAAEAAAAtACoAAAABAAEAAAAtACsAAAABAAEAAAAtACwAAAABAAEAAAAzACYAAAABAAEAAAAzACcAAAABAAEAAAAzACgAAAABAAEAAAAzACkAAAABAAEAAAAzACoAAAABAAEAAAAzACsAAAABAAEAAAAzACwAAAABAAEAAAA=")
 tile_set = SubResource("TileSet_v5rc5")
 
 [connection signal="body_entered" from="Exits/ToRoute1" to="Exits/ToRoute1" method="_on_body_entered"]

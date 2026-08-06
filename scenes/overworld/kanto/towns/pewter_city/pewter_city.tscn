@@ -22,10 +22,10 @@
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="24_pokemon"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2mtwu"]
-size = Vector2(32, 32)
+size = Vector2(192, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route3_exit"]
-size = Vector2(160, 32)
+size = Vector2(32, 160)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kp2ru"]
 texture = ExtResource("5_2mtwu")
@@ -211,8 +211,9 @@ position = Vector2(-16, 16)
 shape = SubResource("RectangleShape2D_route3_exit")
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute3" unique_id=755761728 instance=ExtResource("3_2hpv6")]
-position = Vector2(16, 0)
-width = 194.0
+position = Vector2(-16, 16)
+width = 32.0
+height = 160.0
 
 [node name="ToPokecenter" type="Area2D" parent="Exits" unique_id=1851330212]
 position = Vector2(1424, 1520)

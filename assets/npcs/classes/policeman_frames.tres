@@ -1,6 +1,6 @@
-[gd_resource type="SpriteFrames" load_steps=6 format=3]
+[gd_resource type="SpriteFrames" format=3 uid="uid://c3damqagxht62"]
 
-[ext_resource type="Texture2D" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_088_Policeman.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://clkvciqjhtjin" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_088_Policeman.png" id="1"]
 
 [sub_resource type="AtlasTexture" id="down"]
 atlas = ExtResource("1")
@@ -20,22 +20,34 @@ region = Rect2(0, 192, 64, 64)
 
 [resource]
 animations = [{
-"frames": [{"duration": 1.0, "texture": SubResource("down")}],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("down")
+}],
 "loop": true,
 "name": &"idle_down",
 "speed": 5.0
 }, {
-"frames": [{"duration": 1.0, "texture": SubResource("left")}],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("left")
+}],
 "loop": true,
 "name": &"idle_left",
 "speed": 5.0
 }, {
-"frames": [{"duration": 1.0, "texture": SubResource("right")}],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("right")
+}],
 "loop": true,
 "name": &"idle_right",
 "speed": 5.0
 }, {
-"frames": [{"duration": 1.0, "texture": SubResource("up")}],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("up")
+}],
 "loop": true,
 "name": &"idle_up",
 "speed": 5.0
