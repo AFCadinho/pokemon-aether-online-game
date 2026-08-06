@@ -1,5 +1,33 @@
 # Changelog
 
+## Unreleased
+
+**Added**
+
+- Added Route 3 as a playable Kanto route, including new Trainer battles, wild encounters, a Pokémon Center, route signs, and the connection between Pewter City and Route 3.
+- Added Catching Mentor Gideon's Route 22 side quest. Learn how catching works, catch a Mankey, and receive 10 Great Balls as a reward.
+- Added the next part of the opening story: Gary's childhood-rival battle on Route 22, the journey toward Pewter City, and the first Gym challenge. Professor Oak now also gives you 10 Poké Balls with the Pokédex, and Dadinho's training reward is claimed by returning to him.
+- Added richer battle presentation for special Trainer battles, including battle introductions, Pokémon send-out callouts, contextual Trainer banter, and “Dodge!” reactions after genuine misses. These callouts are also visible to spectators.
+- Added the Viridian City jail manager, wanted-level-based bail costs, and staff detention support.
+
+**Changed**
+
+- Building entrances can now be controlled through world access. Buildings without an interior map remain blocked with a clear “This building is closed.” message.
+- Route guards now appear only when a route is actually blocked for the current Trainer. Story and party requirements still keep the Pallet Town guard in place until you collect a Pokémon from Oak.
+- Improved the battle Bag layout so it sits cleanly above the move controls, and key items no longer clutter the All Items category.
+- Skills now open with a simple overview first, with detailed information shown after selecting an individual skill.
+- Staff teleport tools now close their parent menu automatically, and staff map search uses the standard “Pokémon” spelling.
+- Removed Fearow from Route 22 wild encounters and adjusted the early-route encounter progression.
+
+**Fixed**
+
+- Fixed the Mankey catching quest not recognizing a Mankey caught on Route 22.
+- Fixed Pokémon move-learning choices failing to save.
+- Fixed early Kanto story progression stopping after the Town Map or after the Route 22 rival battle.
+- Fixed PvP hover information so revealed Pokémon usage history and activated held items are shown consistently.
+- Fixed movement remaining available behind modal shop, Atelier, and other overworld windows, while preserving authorized staff teleports.
+- Fixed duplicate chat reconnect attempts after progress resets and improved NPC battle transition handling.
+
 ## 0.3.46 - 2026-08-05
 
 **Added**
