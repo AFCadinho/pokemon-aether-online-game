@@ -68,6 +68,12 @@ func is_gate_open() -> bool:
 	return true
 
 
+func blocks_world_position(world_position: Vector2) -> bool:
+	if guard_role == GUARD_ROLE_TRANSITION and not guard_present:
+		return false
+	return super.blocks_world_position(world_position)
+
+
 func on_route_gate_blocked(player: Node2D) -> void:
 	GameState.lock_overworld_input()
 	_face_body(player)

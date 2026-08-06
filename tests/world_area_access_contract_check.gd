@@ -124,7 +124,9 @@ func _init() -> void:
 		gate_source.contains("transition_access_resolved")
 		and gate_source.contains("func _sync_guard_presence()")
 		and gate_source.contains("guard_role != GUARD_ROLE_TRANSITION")
-		and gate_source.contains("not _are_local_gate_requirements_met()"),
+		and gate_source.contains("not _are_local_gate_requirements_met()")
+		and gate_source.contains("guard_role == GUARD_ROLE_TRANSITION and not guard_present")
+		and gate_source.contains("return super.blocks_world_position(world_position)"),
 		"Exterior transition guards appear only while server or local access is blocked"
 	)
 	_expect(
