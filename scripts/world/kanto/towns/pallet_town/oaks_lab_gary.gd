@@ -10,6 +10,7 @@ const PATH_DIRECTIONS: Array[Vector2i] = [Vector2i.UP, Vector2i.LEFT, Vector2i.R
 var starter_sequence_running := false
 var starter_sequence_pending := false
 var parcel_departure_running := false
+var parcel_departure_pending := false
 var starter_already_claimed := false
 
 
@@ -120,6 +121,7 @@ func _sync_persisted_starter_choice() -> void:
 func play_parcel_return_departure(player: Node2D) -> void:
 	if parcel_departure_running:
 		return
+	parcel_departure_pending = false
 	parcel_departure_running = true
 	_set_story_presence(true)
 	face_world_position(_get_body_feet_position(player))
@@ -130,12 +132,27 @@ func play_parcel_return_departure(player: Node2D) -> void:
 	_set_story_presence(false)
 
 
+func prepare_parcel_return_departure() -> void:
+	parcel_departure_pending = true
+	_set_story_presence(true)
+
+
+func cancel_pending_parcel_return_departure() -> void:
+	parcel_departure_pending = false
+	_sync_story_presence()
+
+
 func _on_gary_story_changed(_revision: int) -> void:
 	_sync_story_presence()
 
 
 func _sync_story_presence() -> void:
-	if starter_sequence_pending or starter_sequence_running or parcel_departure_running:
+	if (
+		starter_sequence_pending
+		or starter_sequence_running
+		or parcel_departure_pending
+		or parcel_departure_running
+	):
 		return
 	var parcel_quest := StoryService.get_quest(PARCEL_QUEST_ID)
 	var parcel_status := str(parcel_quest.get("status", "")).strip_edges().to_lower()

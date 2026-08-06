@@ -58,8 +58,9 @@ func _init() -> void:
 	)
 	_check_true(
 		gary_text.contains("play_parcel_return_departure")
-		and gary_text.contains("ROUTE_22_DEPARTURE_DIALOGUE_ID"),
-		"Gary returns after the parcel and announces Route 22"
+		and gary_text.contains("ROUTE_22_DEPARTURE_DIALOGUE_ID")
+		and gary_text.contains("parcel_departure_pending"),
+		"Gary stays present through the parcel scene and then announces Route 22"
 	)
 	_check_true(
 		gary_text.contains("_set_story_presence(false)"),
@@ -85,8 +86,9 @@ func _init() -> void:
 	)
 	_check_true(oak_text.contains("_schedule_gary_starter_sequence(player, create_result)"), "Oak hands the new-starter flow to Gary")
 	_check_true(
-		oak_text.contains('gary.call("play_parcel_return_departure", player)'),
-		"Oak hands the completed parcel scene to Gary"
+		oak_text.contains('gary.call("prepare_parcel_return_departure")')
+		and oak_text.contains('gary.call("play_parcel_return_departure", player)'),
+		"Oak keeps Gary staged throughout the completed parcel scene"
 	)
 	var starter_ball_text := _read_text(STARTER_BALL_SCRIPT)
 	_check_true(
