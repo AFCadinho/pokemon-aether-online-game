@@ -534,6 +534,7 @@ mouse_filter = 2
 [node name="BagDrawer" type="PanelContainer" parent="BattleDrawerLayer" unique_id=799622140]
 unique_name_in_owner = true
 visible = false
+z_index = 6
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5

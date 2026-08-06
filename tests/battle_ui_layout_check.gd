@@ -182,6 +182,7 @@ func _check_scene_structure() -> void:
 	var bag_drawer_block := scene_source.substr(bag_drawer_start, bag_drawer_end - bag_drawer_start)
 	_check_contains(bag_drawer_block, "offset_left = -230.0", "Bag drawer stays compact horizontally")
 	_check_contains(bag_drawer_block, "offset_top = -330.0", "Bag drawer stays compact vertically")
+	_check_contains(bag_drawer_block, "z_index = 6", "Bag drawer renders above battlefield move controls")
 	var bag_grid_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/bag_grid.gd")
 	_check_contains(bag_grid_source, "button.custom_minimum_size = Vector2(0, 50)", "battle capture items use compact full-width rows")
 	_check_contains(scene_source, "[node name=\"CalcDrawerCloseButton\" type=\"Button\"", "Calc drawer has a close button")
