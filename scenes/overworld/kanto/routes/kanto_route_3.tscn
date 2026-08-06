@@ -347,7 +347,7 @@ position = Vector2(48, 656)
 [node name="ToPewterCity" type="Area2D" parent="Exits" unique_id=120000004]
 position = Vector2(16, 656)
 script = ExtResource("6_exit")
-target_scene_path = "uid://b65lnk8twsct"
+target_scene_path = "uid://b63qp0afy4rpd"
 target_spawn_name = "FromRoute3"
 transition_id = "kanto_route_3__to_pewter_city"
 
