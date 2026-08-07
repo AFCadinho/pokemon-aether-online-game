@@ -702,10 +702,7 @@ func _process(delta: float) -> void:
 		_position_party_hover_card()
 	weather_presentation.animate(delta)
 	if _should_show_bank_timer_projection():
-		_vs_panel_call("show_decision_timers", [
-			PvpBattleRealtimeService.timer_projection.participant_display_for_local_player("p1", action_flow.local_player_id),
-			PvpBattleRealtimeService.timer_projection.participant_display_for_local_player("p2", action_flow.local_player_id)
-		])
+		_show_pvp_decision_timers()
 	_request_pvp_team_preview_recovery_if_server_advanced()
 	_report_stalled_pvp_waiting_if_needed()
 
@@ -5470,10 +5467,7 @@ func _update_battle_status_panels() -> void:
 	battle_status_panel.hide_timer()
 	_vs_panel_call("hide_decision_timers")
 	if _should_show_bank_timer_projection():
-		_vs_panel_call("show_decision_timers", [
-			PvpBattleRealtimeService.timer_projection.participant_display_for_local_player("p1", action_flow.local_player_id),
-			PvpBattleRealtimeService.timer_projection.participant_display_for_local_player("p2", action_flow.local_player_id)
-		])
+		_show_pvp_decision_timers()
 	var field_effects := _get_display_field_effects()
 	_prune_inactive_field_condition_ability_modifiers(field_effects)
 	field_timers_panel.set_effects(field_effects, display_turn)
@@ -5487,6 +5481,13 @@ func _should_show_bank_timer_projection() -> bool:
 		_is_pvp_battle(),
 		bool(ProjectSettings.get_setting("battle/show_shadow_bank_timer", true))
 	)
+
+func _show_pvp_decision_timers() -> void:
+	_vs_panel_call("show_decision_timers", [
+		PvpBattleRealtimeService.timer_projection.participant_display_for_local_player("p1", action_flow.local_player_id),
+		PvpBattleRealtimeService.timer_projection.participant_display_for_local_player("p2", action_flow.local_player_id),
+		"TEAM_PREVIEW" if team_preview_lead_selection_active else "",
+	])
 
 func _get_display_field_effects() -> Array:
 	if presentation_state.has_field_snapshot:
