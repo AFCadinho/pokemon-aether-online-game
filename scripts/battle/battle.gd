@@ -4977,6 +4977,12 @@ func _remember_battle_modifier_event(event: Dictionary) -> void:
 			_clear_ability_stat_modifier_for_ident(str(event.get("target", "")))
 			_clear_pending_booster_energy_modifier_for_ident(str(event.get("target", "")))
 			tera_shell_consumed_by_ident.erase(_normalize_battle_ident(str(event.get("target", ""))))
+		"heal":
+			var healed_ident_key := _normalize_battle_ident(str(event.get("target", "")))
+			var healed_hp := int(event.get("hp", 0))
+			var healed_max_hp := int(event.get("maxHp", 0))
+			if healed_ident_key != "" and healed_max_hp > 0 and healed_hp >= healed_max_hp:
+				tera_shell_consumed_by_ident.erase(healed_ident_key)
 		"pokemonEffect":
 			_apply_supreme_overlord_fallen_event(event)
 			_apply_pokemon_effect_modifier_event(event)
