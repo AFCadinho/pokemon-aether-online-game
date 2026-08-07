@@ -58,7 +58,7 @@ func get_animation_preload_keys_for_event(event_data: Dictionary) -> Dictionary:
 			if field_effect_key != "":
 				effect_keys.append(field_effect_key)
 		"heal":
-			if not bool(event_data.get("maxHpIncreaseSync", false)):
+			if not bool(event_data.get("maxHpIncreaseSync", false)) and not bool(event_data.get("silent", false)):
 				var heal_effect_key: String = _get_heal_effect_animation_key(event_data)
 				if heal_effect_key != "":
 					effect_keys.append(heal_effect_key)
@@ -401,7 +401,7 @@ func build(event_data: Dictionary) -> Dictionary:
 		"heal":
 			recent_ability_event = false
 			recent_move_event = false
-			if bool(event_data.get("maxHpIncreaseSync", false)):
+			if bool(event_data.get("maxHpIncreaseSync", false)) or bool(event_data.get("silent", false)):
 				return presentation
 			presentation["heal_target_ident"] = str(event_data.get("target", ""))
 			presentation["effect_animation_key"] = _get_heal_effect_animation_key(event_data)
