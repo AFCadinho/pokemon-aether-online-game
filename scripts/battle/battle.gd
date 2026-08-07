@@ -7822,6 +7822,8 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 				str(event_data.get("species", "")),
 				str(event_data.get("displaySpecies", "")),
 			])
+			if str(event_data.get("type", "")) == "pokemonEffect":
+				print("[TeraShiftTrace] pokemonEffect payload=%s" % JSON.stringify(event_data))
 		_ensure_spectator_active_pokemon_for_event(event_data)
 		var fallback_knock_off_message := _get_fallback_knock_off_item_message(event_data) if not has_explicit_item_events else ""
 
