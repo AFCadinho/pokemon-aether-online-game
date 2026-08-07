@@ -27,6 +27,7 @@ const BATTLE_DISGUISE_EVENT_ORDER := preload("res://scripts/battle/battle_disgui
 const BATTLE_SUPREME_OVERLORD_EFFECT := preload("res://scripts/battle/battle_supreme_overlord_effect.gd")
 const BATTLE_PUBLIC_POKEMON_KNOWLEDGE := preload("res://scripts/battle/battle_public_pokemon_knowledge.gd")
 const BATTLE_VOICE_TIMING := preload("res://scripts/battle/battle_voice_timing.gd")
+const BATTLE_ENVIRONMENT_CATALOG := preload("res://scripts/battle/battle_environment_catalog.gd")
 const CALC_DRAWER_FIELD_WIDTH_RATIO := 0.55
 const CALC_DRAWER_FIELD_MARGIN := 8.0
 const MEGA_EVOLUTION_EFFECT_KEY := "mega_evolution"
@@ -98,6 +99,8 @@ var mechanic_orb_style: StyleBoxFlat
 var mega_mechanic_label: Label
 var z_move_mechanic_label: Label
 var pending_mega_species_by_ident: Dictionary = {}
+var active_battle_environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
+var active_battle_environment_loops_video := false
 var pvp_room_code := ""
 var pvp_match_id := ""
 var pvp_viewer_role := "participant"
@@ -320,7 +323,7 @@ var wild_owned_request_id := 0
 @onready var player_side_effects_panel: Control = %SideFieldEffectsPanel
 @onready var enemy_side_effects_panel: Control = %SideFieldEffectsPanel2
 @onready var battle_background: TextureRect = %BattleBackground
-@onready var pvp_battle_background: VideoStreamPlayer = %PvpBattleBackground
+@onready var battle_background_video: VideoStreamPlayer = %BattleBackgroundVideo
 @onready var weather_particles: GPUParticles2D = %GPUParticles2D
 @onready var weather_tint: ColorRect = %WeatherTint
 @onready var terrain_tint: ColorRect = %TerrainTint
@@ -403,8 +406,8 @@ func _ready() -> void:
 	_connect_forfeit_confirm_dialog_signals()
 	if not battle_result_continue_button.pressed.is_connected(_on_battle_result_continue_pressed):
 		battle_result_continue_button.pressed.connect(_on_battle_result_continue_pressed)
-	if not pvp_battle_background.finished.is_connected(_on_pvp_battle_background_finished):
-		pvp_battle_background.finished.connect(_on_pvp_battle_background_finished)
+	if not battle_background_video.finished.is_connected(_on_battle_background_video_finished):
+		battle_background_video.finished.connect(_on_battle_background_video_finished)
 	if not calc_panel.defender_assumptions_changed.is_connected(_on_calc_panel_defender_assumptions_changed):
 		calc_panel.defender_assumptions_changed.connect(_on_calc_panel_defender_assumptions_changed)
 	if not calc_panel.assumption_catalog_requested.is_connected(_on_calc_panel_assumption_catalog_requested):
@@ -649,22 +652,32 @@ func _setup_weather_presentation() -> void:
 		electric_terrain_layer,
 		trick_room_layer,
 		snow_particles,
-		pvp_battle_background
+		battle_background_video
 	)
 
-func _set_pvp_battle_background_enabled(enabled: bool) -> void:
-	var can_play_video := enabled and pvp_battle_background.stream != null
-	pvp_battle_background.visible = can_play_video
-	battle_background.visible = not can_play_video
-	if can_play_video:
-		if not pvp_battle_background.is_playing():
-			pvp_battle_background.play()
-	else:
-		pvp_battle_background.stop()
+func _apply_battle_environment(environment_id: StringName) -> void:
+	var profile := BATTLE_ENVIRONMENT_CATALOG.get_profile(environment_id)
+	if profile == null or not profile.is_valid():
+		push_error("Battle environment profile is invalid: %s" % environment_id)
+		return
+	active_battle_environment_id = profile.environment_id
+	active_battle_environment_loops_video = profile.loop_background_video
+	battle_background.texture = profile.background_texture
+	battle_background.visible = true
+	battle_background_video.stop()
+	battle_background_video.stream = profile.background_video
+	battle_background_video.visible = profile.background_video != null
+	if player_battle_platform.has_method("set_platform_texture"):
+		player_battle_platform.call("set_platform_texture", profile.platform_texture)
+	if enemy_battle_platform.has_method("set_platform_texture"):
+		enemy_battle_platform.call("set_platform_texture", profile.platform_texture)
+	if battle_background_video.visible:
+		battle_background_video.play()
 
-func _on_pvp_battle_background_finished() -> void:
-	if pvp_battle_background.visible:
-		pvp_battle_background.play()
+
+func _on_battle_background_video_finished() -> void:
+	if battle_background_video.visible and active_battle_environment_loops_video:
+		battle_background_video.play()
 
 func _setup_side_condition_presentation() -> void:
 	side_condition_presentation.setup(
@@ -5613,13 +5626,23 @@ func _update_battle_platform_hazards() -> void:
 	_update_side_condition_ui(_get_display_field_effects())
 
 ## Initialiseert een wild battle vanuit een al gemaakte API battle response.
-func setup_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pokemon, api_response: Dictionary) -> void:
-	if not prepare_wild_battle_from_response(player_pokemon, enemy_pokemon, api_response):
+func setup_wild_battle_from_response(
+	player_pokemon: Pokemon,
+	enemy_pokemon: Pokemon,
+	api_response: Dictionary,
+	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
+) -> void:
+	if not prepare_wild_battle_from_response(player_pokemon, enemy_pokemon, api_response, environment_id):
 		return
 	await play_wild_battle_intro(player_pokemon, api_response)
 
-func prepare_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pokemon, api_response: Dictionary) -> bool:
-	_prepare_battle_setup(BattleType.WILD, player_pokemon, enemy_pokemon)
+func prepare_wild_battle_from_response(
+	player_pokemon: Pokemon,
+	enemy_pokemon: Pokemon,
+	api_response: Dictionary,
+	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
+) -> bool:
+	_prepare_battle_setup(BattleType.WILD, player_pokemon, enemy_pokemon, environment_id)
 	_show_local_player_trainer()
 
 	player_sprite_box.set_single_pokemon(player_pokemon, "back")
@@ -5671,9 +5694,10 @@ func setup_trainer_battle_from_response(
 	player_pokemon: Pokemon,
 	trainer_data: Dictionary,
 	api_response: Dictionary,
-	entry_ready_callback: Callable = Callable()
+	entry_ready_callback: Callable = Callable(),
+	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
 ) -> void:
-	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null)
+	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null, environment_id)
 	battle_banter_presenter.configure(trainer_data)
 	battle_voice_director.configure(str(api_response.get("battleId", "")), "trainer", trainer_data)
 	_show_local_player_trainer()
@@ -5733,7 +5757,8 @@ func _notify_trainer_entry_ready(entry_ready_callback: Callable) -> void:
 func setup_pvp_battle_from_response(
 	player_pokemon: Pokemon,
 	api_response: Dictionary,
-	entry_ready_callback: Callable = Callable()
+	entry_ready_callback: Callable = Callable(),
+	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.PVP_STADIUM_ENVIRONMENT_ID
 ) -> void:
 	pvp_viewer_role = "spectator" if str(api_response.get("viewerRole", "participant")).to_lower() == "spectator" else "participant"
 	pvp_room_code = str(api_response.get("roomCode", "")).strip_edges()
@@ -5749,7 +5774,7 @@ func setup_pvp_battle_from_response(
 			return
 	action_flow.set_local_player_id(local_player_id)
 	var display_response: Dictionary = action_flow.map_response_for_local_player(api_response)
-	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null, true)
+	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null, environment_id)
 	battle_voice_director.configure(str(api_response.get("battleId", "")), "pvp")
 	_show_pvp_trainers(display_response)
 	_capture_pvp_local_canonical_roster()
@@ -6005,10 +6030,10 @@ func _prepare_battle_setup(
 	type: BattleType,
 	player_pokemon: Pokemon,
 	enemy_pokemon: Pokemon,
-	is_pvp: bool = false
+	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
 ) -> void:
 	battle_type = type
-	_set_pvp_battle_background_enabled(is_pvp)
+	_apply_battle_environment(environment_id)
 	_clear_battle_trainer_sprites()
 	wild_owned_request_id += 1
 	if enemy_hud_panel != null and enemy_hud_panel.has_method("set_owned_icon_visible"):
