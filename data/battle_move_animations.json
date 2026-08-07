@@ -1503,6 +1503,7 @@
         1.0
       ],
       "category": "field",
+      "reverse_battlefield_vertical": false,
       "show_pink_visual": false,
       "show_timing_foregrounds": false,
       "pattern_offset": 0,
