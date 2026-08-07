@@ -62,6 +62,19 @@ func _run() -> void:
 	_check(popup.find_child("GrantFirstThreeButton", true, false) != null, "first-three bulk developer action exists")
 	_check(popup.find_child("GrantAllButton", true, false) != null, "grant-all developer action exists")
 	_check(popup.find_child("ClearAllButton", true, false) != null, "clear-all developer action exists")
+	_check(popup.find_child("BadgesTabButton", true, false) != null, "trainer progress exposes a badges tab")
+	_check(popup.find_child("KeyItemsTabButton", true, false) != null, "trainer progress exposes a key-items tab")
+	popup.call("_set_key_item_state", [
+		{"itemId": "pokedex", "quantity": 1},
+	])
+	popup.call("_show_tab", "key_items")
+	await process_frame
+	var pokedex_button := popup.find_child("PokedexKeyItemButton", true, false) as Button
+	var town_map_button := popup.find_child("TownMapKeyItemButton", true, false) as Button
+	_check(popup.key_item_buttons.size() == 2, "key-items tab renders Pokédex and Town Map")
+	_check(pokedex_button != null and pokedex_button.disabled, "owned Pokédex is visibly complete")
+	_check(town_map_button != null and not town_map_button.disabled, "missing Town Map remains grantable")
+	_check(popup.find_child("GrantAllKeyItemsButton", true, false) != null, "bulk key-item action exists")
 	if localization_manager != null:
 		localization_manager.set_locale("nl")
 		await process_frame
@@ -69,6 +82,11 @@ func _run() -> void:
 		_check(
 			grant_all_button != null and grant_all_button.text == "Alles toekennen",
 			"developer badge actions refresh live in Dutch"
+		)
+		var grant_key_items_button := popup.find_child("GrantAllKeyItemsButton", true, false) as Button
+		_check(
+			grant_key_items_button != null and grant_key_items_button.text == "Pokédex en Town Map toevoegen",
+			"developer key-item actions refresh live in Dutch"
 		)
 		localization_manager.set_locale("en")
 		await process_frame

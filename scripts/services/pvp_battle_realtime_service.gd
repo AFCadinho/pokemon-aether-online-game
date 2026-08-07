@@ -17,6 +17,8 @@ const RECONNECT_DELAY_SECONDS := 3.0
 const CONNECTION_HEARTBEAT_SECONDS := 5.0
 const CONNECTION_PONG_TIMEOUT_MSEC := 12000
 const JOIN_ACK_TIMEOUT_MSEC := 10000
+const BATTLE_EVENT_GAP_TIMEOUT_MSEC := 1000
+const MAX_BUFFERED_BATTLE_EVENTS := 256
 const SESSION_INVALID_CLOSE_CODE := 1008
 const DEBUG_PVP_REALTIME := false
 const WEBSOCKET_BUFFER_BYTES := 1024 * 1024
@@ -49,6 +51,11 @@ var joined := false
 var room_is_ready := false
 var battle_event_latest_seq := 0
 var last_battle_event_seq := 0
+var pending_battle_events: Dictionary = {}
+var battle_event_gap_expected_seq := 0
+var battle_event_gap_started_at_msec := 0
+var battle_event_gap_deadline_msec := 0
+var battle_event_stream_terminal := false
 var last_spectator_event_seq := 0
 var spectator_cursor_valid := false
 var received_battle_event_count := 0
@@ -64,6 +71,8 @@ func _process(delta: float) -> void:
 	if websocket.get_ready_state() != WebSocketPeer.STATE_CLOSED:
 		websocket.poll()
 		_process_packets()
+		if _process_battle_event_gap_timeout(Time.get_ticks_msec()):
+			return
 
 	var ready_state := websocket.get_ready_state()
 	if ready_state == WebSocketPeer.STATE_CLOSED:
@@ -126,6 +135,7 @@ func connect_room(
 	if active_battle_id != "" and normalized_battle_id != active_battle_id:
 		battle_event_latest_seq = 0
 		last_battle_event_seq = 0
+		_reset_battle_event_buffer()
 		last_spectator_event_seq = 0
 		spectator_cursor_valid = false
 		received_battle_event_count = 0
@@ -224,6 +234,7 @@ func _build_join_payload() -> Dictionary:
 		"timerContractVersions": [1],
 		"decisionContractVersions": [1],
 		"battleCommandContractVersions": [1],
+		"renderProtocolVersions": [2, 1],
 	}
 	if active_match_id != "":
 		payload["matchId"] = active_match_id
@@ -261,6 +272,7 @@ func disconnect_room() -> void:
 	last_spectator_event_seq = 0
 	spectator_cursor_valid = false
 	received_battle_event_count = 0
+	_reset_battle_event_buffer()
 	timer_projection.reset()
 	pending_render_ack_payload.clear()
 	if websocket.get_ready_state() != WebSocketPeer.STATE_CLOSED:
@@ -359,14 +371,50 @@ func send_render_ack(
 	batch_seq: int,
 	last_rendered_seq: int,
 	turn := -1,
-	phase := ""
+	phase := "",
+	rendered_event_count := -1,
+	total_event_count := -1,
+	observed_duration_ms := -1
+) -> bool:
+	return send_render_status(
+		battle_id,
+		player_id,
+		event_batch_id,
+		batch_seq,
+		last_rendered_seq,
+		"COMPLETED",
+		turn,
+		phase,
+		rendered_event_count,
+		total_event_count,
+		observed_duration_ms
+	)
+
+
+func send_render_status(
+	battle_id: String,
+	player_id: String,
+	event_batch_id: String,
+	batch_seq: int,
+	last_rendered_seq: int,
+	render_state: String,
+	turn := -1,
+	phase := "",
+	rendered_event_count := -1,
+	total_event_count := -1,
+	observed_duration_ms := -1
 ) -> bool:
 	if active_viewer_role == "spectator":
 		return false
 
 	var normalized_player_id := "p2" if player_id == "p2" else "p1"
+	var normalized_render_state := render_state.strip_edges().to_upper()
+	if normalized_render_state not in ["RECEIVED", "STARTED", "PROGRESS", "COMPLETED"]:
+		return false
 	var payload := {
 		"type": "render_ack",
+		"renderProtocolVersion": 2,
+		"renderState": normalized_render_state,
 		"battleId": battle_id,
 		"roomCode": active_room_code,
 		"playerId": normalized_player_id,
@@ -378,19 +426,30 @@ func send_render_ack(
 		payload["turn"] = turn
 	if phase.strip_edges() != "":
 		payload["phase"] = phase.strip_edges()
-	pending_render_ack_payload = payload.duplicate(true)
+	if rendered_event_count >= 0:
+		payload["renderedEventCount"] = rendered_event_count
+	if total_event_count >= 0:
+		payload["totalEventCount"] = total_event_count
+	if observed_duration_ms >= 0:
+		payload["observedDurationMs"] = observed_duration_ms
+	# Only completion is durable across reconnects. Retaining an intermediate
+	# heartbeat could overwrite the proof that actually releases the shared
+	# presentation fence.
+	if normalized_render_state == "COMPLETED":
+		pending_render_ack_payload = payload.duplicate(true)
 
 	if websocket.get_ready_state() != WebSocketPeer.STATE_OPEN or not joined:
 		if DEBUG_PVP_REALTIME:
 			_log_realtime(
-				"send_render_ack deferred until socket rejoins",
-				"state=%s joined=%s room=%s player=%s battle=%s batch=%s lastRenderedSeq=%d" % [
+				"send_render_status deferred until socket rejoins",
+				"state=%s joined=%s room=%s player=%s battle=%s batch=%s state=%s lastRenderedSeq=%d" % [
 					websocket.get_ready_state(),
 					str(joined),
 					active_room_code,
 					player_id,
 					battle_id,
 					event_batch_id,
+					normalized_render_state,
 					last_rendered_seq,
 				]
 			)
@@ -400,13 +459,16 @@ func send_render_ack(
 
 	if DEBUG_PVP_REALTIME:
 		_log_realtime(
-			"Sending render ACK",
-			"battle=%s player=%s batch=%s batchSeq=%d lastRenderedSeq=%d turn=%d phase=%s" % [
+			"Sending render status",
+			"battle=%s player=%s batch=%s batchSeq=%d state=%s lastRenderedSeq=%d events=%d/%d turn=%d phase=%s" % [
 				battle_id,
 				normalized_player_id,
 				event_batch_id,
 				batch_seq,
+				normalized_render_state,
 				last_rendered_seq,
+				rendered_event_count,
+				total_event_count,
 				turn,
 				phase,
 			]
@@ -414,7 +476,7 @@ func send_render_ack(
 
 	var error := websocket.send_text(JSON.stringify(payload))
 	if DEBUG_PVP_REALTIME:
-		_log_realtime("send_render_ack result", "batch=%s error=%s" % [event_batch_id, error])
+		_log_realtime("send_render_status result", "batch=%s state=%s error=%s" % [event_batch_id, normalized_render_state, error])
 	return error == OK
 
 
@@ -504,6 +566,9 @@ func _process_packets() -> void:
 			_retire_pending_render_ack(str(message.get("eventBatchId", "")))
 			battle_update_received.emit(message)
 			continue
+		if message_type == "pvp.render_recovery":
+			battle_update_received.emit(message)
+			continue
 		if message_type == "pvp.resync_required":
 			battle_update_received.emit(message)
 			# A fail-closed action delivery can carry a private correlated error
@@ -565,6 +630,7 @@ func _handle_joined_message(message: Dictionary) -> bool:
 	# published to trigger the live-stream gap detector below.
 	if (
 		active_viewer_role == "participant"
+		and not battle_event_stream_terminal
 		and battle_event_latest_seq > last_battle_event_seq
 	):
 		_restart_stalled_connection("Durable PvP event catch-up is incomplete.")
@@ -1146,6 +1212,7 @@ static func is_local_terminal_winner(
 
 
 func _handle_closed_socket() -> void:
+	_reset_battle_event_buffer()
 	if session_invalid_handled:
 		return
 
@@ -1162,6 +1229,7 @@ func _handle_closed_socket() -> void:
 
 
 func _restart_stalled_connection(reason: String) -> void:
+	_reset_battle_event_buffer()
 	connection_attempt_generation += 1
 	joined = false
 	join_sent = false
@@ -1204,8 +1272,7 @@ func _handle_join_error(message: Dictionary) -> void:
 func _handle_battle_events_message(message: Dictionary) -> void:
 	var latest_seq := _nonnegative_int(message.get("battleEventLatestSeq", battle_event_latest_seq), battle_event_latest_seq)
 	var events_value: Variant = message.get("events", [])
-	var valid_event_count := 0
-	var pending_events: Dictionary = {}
+	var highest_received_seq := 0
 	var terminal_message: Dictionary = {}
 	if events_value is Array:
 		for event_value in events_value:
@@ -1217,13 +1284,16 @@ func _handle_battle_events_message(message: Dictionary) -> void:
 				continue
 			if event_seq <= last_battle_event_seq:
 				continue
-			if pending_events.has(event_seq):
+			highest_received_seq = max(highest_received_seq, event_seq)
+			if pending_battle_events.has(event_seq):
 				continue
-			pending_events[event_seq] = event
+			pending_battle_events[event_seq] = event
 
+	var valid_event_count := 0
 	var next_event_seq := last_battle_event_seq + 1
-	while pending_events.has(next_event_seq):
-		var event: Dictionary = pending_events[next_event_seq] as Dictionary
+	while pending_battle_events.has(next_event_seq):
+		var event: Dictionary = pending_battle_events[next_event_seq] as Dictionary
+		pending_battle_events.erase(next_event_seq)
 		valid_event_count += 1
 		if str(event.get("type", "")).begins_with("battle.timer_"):
 			timer_projection.apply_event(event)
@@ -1231,6 +1301,7 @@ func _handle_battle_events_message(message: Dictionary) -> void:
 			timer_projection.mark_event_applied(next_event_seq)
 		var terminal_payload_value: Variant = event.get("payload", {})
 		if str(event.get("type", "")) == "battle.ended" and terminal_payload_value is Dictionary:
+			battle_event_stream_terminal = true
 			var terminal_payload := terminal_payload_value as Dictionary
 			if is_infrastructure_no_contest_payload(terminal_payload):
 				terminal_message = {
@@ -1260,19 +1331,21 @@ func _handle_battle_events_message(message: Dictionary) -> void:
 		last_battle_event_seq = next_event_seq
 		next_event_seq += 1
 
-	battle_event_latest_seq = max(battle_event_latest_seq, latest_seq)
+	battle_event_latest_seq = max(battle_event_latest_seq, latest_seq, highest_received_seq)
 	# latestSeq describes the remote head, not locally applied domain order.
 	received_battle_event_count += valid_event_count
 	if valid_event_count > 0:
 		timer_state_changed.emit(timer_projection)
 	if not terminal_message.is_empty():
 		battle_update_received.emit(terminal_message)
-	# The Gateway sends durable catch-up in contiguous pages before `pvp.joined`.
-	# Seeing the remote head beyond the first page is expected there; the Gateway
-	# completes the transaction or fails the join closed. Once joined, the same
-	# condition is a real live-stream gap and still requires reconnect recovery.
-	if joined and latest_seq > last_battle_event_seq:
-		_restart_stalled_connection("Durable PvP event catch-up is required.")
+	if battle_event_stream_terminal:
+		_clear_battle_event_gap_tracking()
+		pending_battle_events.clear()
+	elif pending_battle_events.size() > MAX_BUFFERED_BATTLE_EVENTS:
+		_report_battle_event_gap("buffer_overflow")
+		_restart_stalled_connection("Durable PvP event buffer exceeded its safety limit.")
+	else:
+		_update_battle_event_gap_tracking(Time.get_ticks_msec())
 	if DEBUG_PVP_REALTIME:
 		_log_realtime(
 			"Received battle event stream update",
@@ -1284,6 +1357,104 @@ func _handle_battle_events_message(message: Dictionary) -> void:
 				received_battle_event_count,
 			]
 		)
+
+
+func _update_battle_event_gap_tracking(now_msec: int) -> void:
+	if (
+		battle_event_stream_terminal
+		or not joined
+		or battle_event_latest_seq <= last_battle_event_seq
+	):
+		_resolve_battle_event_gap(now_msec)
+		return
+
+	var expected_seq := last_battle_event_seq + 1
+	if battle_event_gap_expected_seq == expected_seq:
+		return
+	_resolve_battle_event_gap(now_msec)
+	battle_event_gap_expected_seq = expected_seq
+	battle_event_gap_started_at_msec = now_msec
+	battle_event_gap_deadline_msec = now_msec + BATTLE_EVENT_GAP_TIMEOUT_MSEC
+	if DEBUG_PVP_REALTIME:
+		_log_realtime(
+			"battle_event_gap_started",
+			"expected_seq=%d remote_latest_seq=%d buffered_sequences=%s" % [
+				battle_event_gap_expected_seq,
+				battle_event_latest_seq,
+				str(_buffered_battle_event_sequences()),
+			]
+		)
+
+
+func _process_battle_event_gap_timeout(now_msec: int) -> bool:
+	if (
+		battle_event_gap_deadline_msec <= 0
+		or now_msec < battle_event_gap_deadline_msec
+		or not joined
+		or battle_event_stream_terminal
+	):
+		return false
+	if battle_event_latest_seq <= last_battle_event_seq:
+		_resolve_battle_event_gap(now_msec)
+		return false
+	_report_battle_event_gap("timeout", now_msec)
+	_restart_stalled_connection("Durable PvP event catch-up timed out.")
+	return true
+
+
+func _report_battle_event_gap(trigger: String, now_msec: int = -1) -> void:
+	var observed_at_msec: int = Time.get_ticks_msec() if now_msec < 0 else now_msec
+	var waited_msec: int = max(0, observed_at_msec - battle_event_gap_started_at_msec)
+	if DEBUG_PVP_REALTIME:
+		_log_realtime(
+			"battle_event_gap_%s" % trigger,
+			"expected_seq=%d remote_latest_seq=%d buffered_sequences=%s waited_ms=%d" % [
+				last_battle_event_seq + 1,
+				battle_event_latest_seq,
+				str(_buffered_battle_event_sequences()),
+				waited_msec,
+			]
+		)
+	report_diagnostic("pvp.event_sequence_gap", {
+		"reasonCode": "event_sequence_gap",
+		"serverSeq": battle_event_latest_seq,
+		"phaseSeq": last_battle_event_seq,
+		"observedDurationMs": waited_msec,
+	})
+
+
+func _resolve_battle_event_gap(now_msec: int) -> void:
+	if battle_event_gap_expected_seq <= 0:
+		return
+	if DEBUG_PVP_REALTIME:
+		_log_realtime(
+			"battle_event_gap_resolved",
+			"expected_seq=%d waited_ms=%d" % [
+				battle_event_gap_expected_seq,
+				max(0, now_msec - battle_event_gap_started_at_msec),
+			]
+		)
+	_clear_battle_event_gap_tracking()
+
+
+func _clear_battle_event_gap_tracking() -> void:
+	battle_event_gap_expected_seq = 0
+	battle_event_gap_started_at_msec = 0
+	battle_event_gap_deadline_msec = 0
+
+
+func _reset_battle_event_buffer() -> void:
+	pending_battle_events.clear()
+	_clear_battle_event_gap_tracking()
+	battle_event_stream_terminal = false
+
+
+func _buffered_battle_event_sequences() -> Array[int]:
+	var sequences: Array[int] = []
+	for sequence_value in pending_battle_events.keys():
+		sequences.append(int(sequence_value))
+	sequences.sort()
+	return sequences
 
 
 func decision_for_action(player_id: String, battle_decision: Dictionary) -> Dictionary:

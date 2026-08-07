@@ -119,9 +119,38 @@ func _project_quest(source: Dictionary) -> Dictionary:
 		"summaryKey": str(source.get("summaryKey", "")),
 		"status": str(source.get("status", "")),
 		"steps": projected_steps,
+		"rewardPreviews": _project_reward_previews(source.get("rewardPreviews", [])),
 		"startedAt": _project_optional_timestamp(source.get("startedAt", null)),
 		"completedAt": _project_optional_timestamp(source.get("completedAt", null)),
 	}
+
+
+func _project_reward_previews(source: Variant) -> Array:
+	var projected: Array = []
+	if source is not Array:
+		return projected
+	for value: Variant in source as Array:
+		if value is not Dictionary:
+			continue
+		var reward := value as Dictionary
+		match str(reward.get("type", "")):
+			"item":
+				var item_id := str(reward.get("itemId", "")).strip_edges()
+				if not item_id.is_empty():
+					projected.append({
+						"type": "item",
+						"itemId": item_id,
+						"quantity": maxi(int(reward.get("quantity", 1)), 1),
+					})
+			"currency":
+				var currency := str(reward.get("currency", "")).strip_edges()
+				if not currency.is_empty():
+					projected.append({
+						"type": "currency",
+						"currency": currency,
+						"amount": maxi(int(reward.get("amount", 1)), 1),
+					})
+	return projected
 
 
 func _project_step(source: Dictionary) -> Dictionary:

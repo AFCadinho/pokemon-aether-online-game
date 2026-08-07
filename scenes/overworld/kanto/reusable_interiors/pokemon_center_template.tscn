@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://br7n6hywfrl2a" path="res://scenes/npcs/heal_npc.tscn" id="6_nurse"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/aether_atelier_npc.tscn" id="7_atelier"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/market_buyer_npc.tscn" id="7_buyer"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/market_seller_npc.tscn" id="7_seller"]
+[ext_resource type="PackedScene" uid="uid://cwgvvyjm4vwh4" path="res://scenes/npcs/market_seller_npc.tscn" id="7_seller"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/pokemon_pc_interactable.tscn" id="8_dptnb"]
 [ext_resource type="Script" uid="uid://cm7fo281e44an" path="res://scripts/world/npcs/heal_machine_effect.gd" id="9_heal_effect"]
 [ext_resource type="Texture2D" uid="uid://bb62an6t47c7m" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_044_Beauty.png" id="10_k6grd"]
@@ -117,6 +117,7 @@ y_sort_enabled = true
 
 [node name="NurseJoy" parent="Entities/NPCs" unique_id=1839105410 instance=ExtResource("6_nurse")]
 position = Vector2(464, 688)
+manual_interaction_reach_tiles = 2
 
 [node name="HealMachineEffect" type="Node2D" parent="Entities/NPCs" unique_id=1029628802]
 position = Vector2(464, 600)
@@ -124,6 +125,7 @@ script = ExtResource("9_heal_effect")
 
 [node name="Clerk" parent="Entities/NPCs" unique_id=554856490 instance=ExtResource("7_seller")]
 position = Vector2(592, 912)
+manual_interaction_reach_tiles = 2
 
 [node name="Clerk2" parent="Entities/NPCs" unique_id=854794050 instance=ExtResource("7_buyer")]
 position = Vector2(592, 976)

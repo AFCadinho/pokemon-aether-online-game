@@ -69,6 +69,13 @@ func _check_collision_consumers_use_recursive_lookup() -> void:
 		),
 		"Player refresh resolves nested collision"
 	)
+	_check(
+		player_source.contains('block_left_tilemap = _find_tilemap_layer(current_map, ["BlockLeft"])')
+		and player_source.contains('block_right_tilemap = _find_tilemap_layer(current_map, ["BlockRight"])')
+		and player_source.contains('direction == Vector2.LEFT')
+		and player_source.contains('direction == Vector2.RIGHT'),
+		"Player movement resolves and checks horizontal direction blocks"
+	)
 	var npc_source := FileAccess.get_file_as_string(NPC_SCRIPT_PATH)
 	_check(
 		npc_source.contains(

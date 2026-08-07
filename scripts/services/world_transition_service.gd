@@ -4,10 +4,41 @@ class_name WorldTransitionServiceNode
 
 const TRANSITION_ACCESS_ENDPOINT := "/game/world/transitions/%s/access"
 const TRANSITION_ENTER_ENDPOINT := "/game/world/transitions/%s/enter"
+const AREA_ACCESS_ENDPOINT := "/game/world/areas/%s/access"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 const FACING_DIRECTIONS: Array[String] = ["up", "down", "left", "right"]
 
 var transition_access_cache: Dictionary = {}
+var area_access_cache: Dictionary = {}
+
+
+func get_area_access(area_id: String, force_refresh := false) -> Dictionary:
+	var normalized_area_id := area_id.strip_edges()
+	if normalized_area_id.is_empty():
+		return {"success": false, "error": "Missing area_id."}
+	if not AuthService.is_authenticated():
+		return {"success": false, "error": "Not authenticated."}
+	if not force_refresh and area_access_cache.has(normalized_area_id):
+		return {
+			"success": true,
+			"access": area_access_cache[normalized_area_id],
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response := await _request_json(
+		base_url + (AREA_ACCESS_ENDPOINT % normalized_area_id.uri_encode()),
+		HTTPClient.METHOD_GET,
+		GatewayApiConfig.get_accept_headers(),
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var access := _dictionary_from_value(response.get("body", {}))
+	if access.is_empty():
+		return {"success": false, "error": "Area access response was empty."}
+	area_access_cache[normalized_area_id] = access
+	return {"success": true, "access": access}
 
 
 func get_transition_access(transition_id: String, force_refresh := false) -> Dictionary:
@@ -74,6 +105,7 @@ func enter_transition(transition_id: String, facing_direction: String) -> Dictio
 
 func clear_cache() -> void:
 	transition_access_cache.clear()
+	area_access_cache.clear()
 
 
 func _request_json(

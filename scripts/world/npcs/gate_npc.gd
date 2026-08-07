@@ -4,9 +4,16 @@ extends DialogueNPC
 class_name GateNPC
 
 const LEGACY_IN_PROGRESS_ACCESS_PERMISSION := "world:areas:access-in-progress"
+const GUARD_ROLE_ATTENDANT := "attendant"
+const GUARD_ROLE_TRANSITION := "transition_guard"
 
 @export var gate_id := "route_1"
+@export_enum("attendant", "transition_guard") var guard_role := GUARD_ROLE_ATTENDANT
 @export var guarded_transition_id := ""
+## Optional guard-owned passage zone, centered at this offset from the NPC.
+## A zero size keeps the guarded MapExit as the fallback zone.
+@export var guard_blocking_offset := Vector2.ZERO
+@export var guard_blocking_size := Vector2.ZERO
 @export var requires_party_pokemon := true
 @export var requires_staff_role := false
 @export var blocked_dialogue_lines: Array[String] = [
@@ -25,6 +32,9 @@ const LEGACY_IN_PROGRESS_ACCESS_PERMISSION := "world:areas:access-in-progress"
 @export var allowed_dialogue_id := ""
 
 var transition_access: Dictionary = {}
+var guarded_exit: Node
+var transition_access_resolved := false
+var guard_present := true
 
 
 func _ready() -> void:
@@ -33,6 +43,9 @@ func _ready() -> void:
 		return
 	if not guarded_transition_id.strip_edges().is_empty():
 		add_to_group("world_transition_denial_presenters")
+		if guard_role == GUARD_ROLE_TRANSITION:
+			_set_guard_present(true)
+			_connect_guard_presence_signals()
 		Callable(self, "_refresh_transition_access").call_deferred()
 	Callable(self, "_load_gate_metadata").call_deferred()
 
@@ -45,12 +58,20 @@ func is_gate_open() -> bool:
 		return false
 
 	if not guarded_transition_id.strip_edges().is_empty():
+		if not transition_access_resolved or transition_access.is_empty():
+			return false
 		return bool(transition_access.get("allowed", false))
 
 	if requires_staff_role and not _current_player_has_legacy_gate_permission():
 		return false
 
 	return true
+
+
+func blocks_world_position(world_position: Vector2) -> bool:
+	if guard_role == GUARD_ROLE_TRANSITION and not guard_present:
+		return false
+	return super.blocks_world_position(world_position)
 
 
 func on_route_gate_blocked(player: Node2D) -> void:
@@ -101,8 +122,27 @@ func handles_world_transition(candidate_transition_id: String) -> bool:
 	)
 
 
+func guards_world_position(world_position: Vector2) -> bool:
+	if guard_role != GUARD_ROLE_TRANSITION or is_gate_open():
+		return false
+	if guard_blocking_size.x > 0.0 and guard_blocking_size.y > 0.0:
+		var blocking_center := global_position + guard_blocking_offset
+		return Rect2(
+			blocking_center - guard_blocking_size * 0.5,
+			guard_blocking_size
+		).has_point(world_position)
+	var exit := _resolve_guarded_exit()
+	return (
+		exit != null
+		and exit.has_method("contains_world_position")
+		and bool(exit.call("contains_world_position", world_position))
+	)
+
+
 func present_world_transition_denied(access: Dictionary, player: Node2D) -> void:
 	transition_access = access.duplicate(true)
+	transition_access_resolved = true
+	_sync_guard_presence()
 	GameState.lock_overworld_input()
 	_face_body(player)
 	if player.has_method("face_world_position"):
@@ -155,6 +195,7 @@ func _load_gate_metadata() -> Dictionary:
 	)
 	allowed_dialogue_lines = metadata_allowed_dialogue
 	allowed_dialogue_id = _get_metadata_dialogue_id(metadata, "allowedDialogueId", "allowed_dialogue_id", allowed_dialogue_id)
+	_sync_guard_presence()
 	return response
 
 
@@ -204,7 +245,51 @@ func _refresh_transition_access(force_refresh := false) -> Dictionary:
 	if bool(response.get("success", false)):
 		var access_value: Variant = response.get("access", {})
 		transition_access = access_value as Dictionary if access_value is Dictionary else {}
+		transition_access_resolved = not transition_access.is_empty()
+	else:
+		transition_access_resolved = false
+	_sync_guard_presence()
 	return response
+
+
+func _connect_guard_presence_signals() -> void:
+	var party_changed_callable := Callable(self, "_on_guard_party_changed")
+	if not PlayerSave.party_changed.is_connected(party_changed_callable):
+		PlayerSave.party_changed.connect(party_changed_callable)
+	var story_changed_callable := Callable(self, "_on_guard_story_changed")
+	if not StoryService.story_changed.is_connected(story_changed_callable):
+		StoryService.story_changed.connect(story_changed_callable)
+
+
+func _on_guard_party_changed() -> void:
+	_sync_guard_presence()
+
+
+func _on_guard_story_changed(_revision: int) -> void:
+	_sync_guard_presence()
+
+
+func _sync_guard_presence() -> void:
+	if guard_role != GUARD_ROLE_TRANSITION:
+		return
+	var should_be_present := (
+		not transition_access_resolved
+		or not _are_local_gate_requirements_met()
+		or not bool(transition_access.get("allowed", false))
+	)
+	_set_guard_present(should_be_present)
+
+
+func _set_guard_present(present: bool) -> void:
+	guard_present = present
+	var effective_presence := present and story_visibility_active
+	visible = effective_presence
+	if interaction_area != null:
+		interaction_area.monitoring = effective_presence
+		interaction_area.monitorable = effective_presence
+	if not effective_presence:
+		player_nearby = false
+		nearby_player = null
 
 
 func _show_transition_denied_dialogue(access: Dictionary) -> void:
@@ -225,3 +310,24 @@ func _current_player_has_legacy_gate_permission() -> bool:
 		if str(permission_value).strip_edges().to_lower() == LEGACY_IN_PROGRESS_ACCESS_PERMISSION:
 			return true
 	return false
+
+
+func _resolve_guarded_exit() -> Node:
+	if guarded_exit != null and is_instance_valid(guarded_exit):
+		return guarded_exit
+	var transition_id := guarded_transition_id.strip_edges()
+	if transition_id.is_empty():
+		return null
+	var map_node: Node = self
+	while map_node != null:
+		var exits := map_node.get_node_or_null("Exits")
+		if exits != null:
+			for candidate: Node in exits.get_children():
+				if (
+					candidate.has_method("handles_transition")
+					and bool(candidate.call("handles_transition", transition_id))
+				):
+					guarded_exit = candidate
+					return guarded_exit
+		map_node = map_node.get_parent()
+	return null

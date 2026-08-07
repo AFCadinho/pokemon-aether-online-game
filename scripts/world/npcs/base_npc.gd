@@ -33,10 +33,21 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 
 @export var npc_id := ""
 @export var npc_definition_id := ""
+## Optional server-content identity for reusable NPC scenes. Placed NPCs normally use npc_id.
+@export var npc_metadata_id := ""
 ## Optional story condition. An empty quest id keeps the NPC unrestricted.
 @export var required_quest_id := ""
 @export var required_quest_step_id := ""
 @export_enum("active", "completed") var required_quest_status := "completed"
+## Optional scene-presence window driven by projected story state.
+@export var visibility_required_quest_id := ""
+@export var visibility_required_quest_step_id := ""
+@export_enum("available", "active", "completed") var visibility_required_quest_status := "completed"
+@export var visibility_hidden_quest_id := ""
+@export var visibility_hidden_quest_step_id := ""
+@export_enum("available", "active", "completed") var visibility_hidden_quest_status := "completed"
+## Keep an NPC visible for the rest of the current map visit after its hide condition becomes true.
+@export var defer_story_hide_until_reload := false
 ## Exceptional scene-specific override. Normal dialogue comes from NPC metadata.
 @export var dialogue_id := ""
 @export var display_name := ""
@@ -44,11 +55,22 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 @export var dialogue_lines: Array[String] = []
 @export var npc_sprite_frames: SpriteFrames
 @export var sprite_offset := Vector2(0, -16)
+## Optional catalog id. Empty values use the central NPC assignment table.
+@export var portrait_id := ""
 @export var mugshot: Texture2D
+@export_group("Battle")
+@export_enum("inherit", "grass", "water", "cave", "pvp_stadium") var battle_environment_id := "inherit"
+@export_group("")
 @export_enum("idle", "pace_horizontal", "pace_vertical") var movement_behavior := "idle"
 @export_range(1, 12, 1) var movement_tiles := 3
 @export var movement_wait_seconds := 0.0
 @export var movement_speed_pixels := 90.0
+## Fetch metadata on spawn when this NPC can display catalog-driven quest markers.
+@export var preload_quest_markers := false
+@export_range(1, 8, 1) var manual_interaction_reach_tiles := 1
+@export var pickpocket_enabled := false
+@export var pickpocket_npc_type := ""
+@export_range(1, 100, 1) var pickpocket_required_level := 1
 
 const TILE_SIZE := 32
 const MOVE_SPEED := 120.0
@@ -57,6 +79,7 @@ const STORY_PATH_DIRECTIONS: Array[String] = ["up", "down", "left", "right"]
 const SORT_Z_MIN := -4096
 const SORT_Z_MAX := 4096
 const DEFAULT_PLAYER_VISUAL_SORT_DEPTH := 8
+const MANUAL_INTERACTION_DELAY_SECONDS := 0.15
 const PLAYER_OVERLAP_SORT_Y_EPSILON := 0.1
 const NAMEPLATE_WIDTH := 164.0
 const NAMEPLATE_CENTER_X := NAMEPLATE_WIDTH * 0.5
@@ -79,11 +102,15 @@ var metadata_display_name := ""
 var nameplate: Control
 var nameplate_background: Panel
 var nameplate_label: Label
+var quest_marker_bindings: Array[Dictionary] = []
+var quest_marker: PanelContainer
+var quest_marker_label: Label
 var movement_origin_tile := Vector2i.ZERO
 var movement_current_offset_tiles := 0
 var movement_direction_sign := 1
 var movement_next_step_at_msec := 0
 var movement_reserved_tile := Vector2i.ZERO
+var story_visibility_active := true
 var is_npc_moving := false
 
 
@@ -92,6 +119,7 @@ func _ready_base_npc() -> void:
 	if Engine.is_editor_hint():
 		_refresh_npc_profile_preview()
 		return
+	_resolve_catalog_mugshot()
 
 	z_as_relative = false
 	if npc_sprite_frames != null:
@@ -109,8 +137,14 @@ func _ready_base_npc() -> void:
 	_schedule_next_npc_movement_step()
 	_update_sort_z()
 	_setup_nameplate()
+	var story_service := get_node_or_null("/root/StoryService")
+	if story_service != null and not story_service.story_changed.is_connected(_on_story_changed):
+		story_service.story_changed.connect(_on_story_changed)
 	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
 		LocalizationManager.locale_changed.connect(_on_locale_changed)
+	if preload_quest_markers:
+		_initialize_quest_markers.call_deferred()
+	_apply_story_visibility()
 
 
 func _apply_npc_profile() -> void:
@@ -125,8 +159,27 @@ func _apply_npc_profile() -> void:
 		display_name = npc_profile.display_name
 	if npc_profile.sprite_frames != null:
 		npc_sprite_frames = npc_profile.sprite_frames
+	if not npc_profile.portrait_id.strip_edges().is_empty():
+		portrait_id = npc_profile.portrait_id
 	if npc_profile.mugshot != null:
 		mugshot = npc_profile.mugshot
+
+
+func _resolve_catalog_mugshot() -> void:
+	var catalog := get_node_or_null("/root/TrainerPortraitCatalog")
+	if catalog == null:
+		return
+	var resolved_portrait_id: String = catalog.resolve_portrait_id(
+		portrait_id,
+		npc_id,
+		npc_definition_id
+	)
+	if resolved_portrait_id.is_empty():
+		return
+	var resolved_texture: Texture2D = catalog.get_texture(resolved_portrait_id)
+	if resolved_texture != null:
+		portrait_id = resolved_portrait_id
+		mugshot = resolved_texture
 
 
 func _on_npc_profile_changed() -> void:
@@ -151,6 +204,8 @@ func _refresh_npc_profile_preview() -> void:
 
 
 func blocks_world_position(world_position: Vector2) -> bool:
+	if not story_visibility_active:
+		return false
 	var blocked_tile := _to_tile(feet_marker.global_position)
 	if is_npc_moving:
 		var checked_tile := _to_tile(world_position)
@@ -160,6 +215,29 @@ func blocks_world_position(world_position: Vector2) -> bool:
 
 func get_feet_position() -> Vector2:
 	return feet_marker.global_position
+
+
+func set_story_sprite_offset(value: Vector2) -> void:
+	sprite_offset = value
+	if sprite != null:
+		sprite.position = value
+
+
+func build_battle_trainer_metadata(metadata: Dictionary) -> Dictionary:
+	var battle_metadata := metadata.duplicate(true)
+	if npc_sprite_frames != null:
+		# Resources stay client-local; the battle API receives the original
+		# metadata before this visual-only enrichment is added.
+		# Use the same directional frames as the overworld renderer so battle
+		# staging can select the inward-facing idle pose from atlas-only NPCs.
+		battle_metadata["_battle_sprite_frames"] = _get_directional_sprite_frames(npc_sprite_frames)
+		battle_metadata["_battle_sprite_offset"] = sprite_offset
+	if mugshot != null:
+		battle_metadata["_battle_mugshot"] = mugshot
+	var normalized_environment_id := battle_environment_id.strip_edges()
+	if normalized_environment_id != "" and normalized_environment_id != "inherit":
+		battle_metadata["battleEnvironmentId"] = normalized_environment_id
+	return battle_metadata
 
 
 func is_story_requirement_met() -> bool:
@@ -407,11 +485,119 @@ func _setup_nameplate() -> void:
 	_sync_nameplate()
 
 
+func _initialize_quest_markers() -> void:
+	if not _get_npc_metadata_id().is_empty():
+		await _load_npc_metadata()
+	_refresh_quest_marker()
+
+
+func _setup_quest_marker() -> void:
+	if quest_marker != null:
+		return
+	quest_marker = PanelContainer.new()
+	quest_marker.name = "QuestMarker"
+	quest_marker.visible = false
+	quest_marker.z_index = 513
+	quest_marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	quest_marker.position = Vector2(-15.0, -116.0)
+	quest_marker.custom_minimum_size = Vector2(30.0, 30.0)
+	add_child(quest_marker)
+
+	quest_marker_label = Label.new()
+	quest_marker_label.name = "Icon"
+	quest_marker_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	quest_marker_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	quest_marker_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	quest_marker_label.add_theme_font_size_override("font_size", 20)
+	quest_marker_label.add_theme_constant_override("outline_size", 4)
+	quest_marker_label.add_theme_color_override("font_outline_color", Color("#07111cff"))
+	quest_marker.add_child(quest_marker_label)
+
+
+func _refresh_quest_marker() -> void:
+	if quest_marker_bindings.is_empty():
+		if quest_marker != null:
+			quest_marker.visible = false
+		return
+	_setup_quest_marker()
+	var story_service := get_node_or_null("/root/StoryService")
+	if story_service == null:
+		quest_marker.visible = false
+		return
+	var selected_type := ""
+	for binding: Dictionary in quest_marker_bindings:
+		var quest: Dictionary = story_service.get_quest(str(binding.get("questId", "")))
+		if quest.is_empty() or not _quest_marker_binding_matches(binding, quest):
+			continue
+		var quest_type := str(
+			binding.get("markerType", quest.get("questType", "side"))
+		).strip_edges().to_lower()
+		if selected_type == "" or quest_type == "main":
+			selected_type = quest_type
+		if selected_type == "main":
+			break
+	quest_marker.visible = selected_type != ""
+	if selected_type == "main":
+		quest_marker_label.text = "!"
+		quest_marker_label.add_theme_color_override("font_color", Color("#ffd75aff"))
+		quest_marker.add_theme_stylebox_override("panel", _quest_marker_style(Color("#9a691fff")))
+	elif selected_type == "side":
+		quest_marker_label.text = "✦"
+		quest_marker_label.add_theme_color_override("font_color", Color("#75ddffff"))
+		quest_marker.add_theme_stylebox_override("panel", _quest_marker_style(Color("#176b8fff")))
+
+
+func _quest_marker_binding_matches(binding: Dictionary, quest: Dictionary) -> bool:
+	var visibility_quest_id := str(binding.get("visibilityQuestId", "")).strip_edges()
+	if (
+		not visibility_quest_id.is_empty()
+		and not StoryService.is_requirement_met(
+			visibility_quest_id,
+			str(binding.get("visibilityQuestStepId", "")).strip_edges(),
+			str(binding.get("visibilityQuestStatus", "completed")).strip_edges()
+		)
+	):
+		return false
+	var statuses_value: Variant = binding.get("statuses", [])
+	var statuses: Array[String] = []
+	if statuses_value is Array:
+		for value: Variant in statuses_value as Array:
+			statuses.append(str(value).strip_edges().to_lower())
+	if not statuses.is_empty() and str(quest.get("status", "")).to_lower() not in statuses:
+		return false
+	var step_id := str(binding.get("stepId", "")).strip_edges()
+	if step_id.is_empty():
+		return true
+	var steps_value: Variant = quest.get("steps", [])
+	if not (steps_value is Array):
+		return false
+	for step_value: Variant in steps_value as Array:
+		if not (step_value is Dictionary):
+			continue
+		var step := step_value as Dictionary
+		if str(step.get("stepId", "")) == step_id:
+			return str(step.get("status", "")).to_lower() in statuses
+	return false
+
+
+func _quest_marker_style(border_color: Color) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color("#081521ed")
+	style.border_color = border_color
+	style.set_border_width_all(2)
+	style.set_corner_radius_all(15)
+	style.shadow_color = Color(0.0, 0.0, 0.0, 0.55)
+	style.shadow_size = 3
+	return style
+
+
 func _sync_nameplate() -> void:
 	if nameplate == null or nameplate_label == null:
 		return
 
 	var name_text := display_name.strip_edges()
+	if pickpocket_enabled and player_nearby:
+		name_text += "  [T]"
 	nameplate_label.text = name_text
 	nameplate.visible = name_text != ""
 	nameplate_label.visible = name_text != ""
@@ -596,6 +782,9 @@ func _process_base_npc() -> void:
 
 	_update_sort_z()
 	await _process_npc_movement()
+	if _can_start_pickpocket():
+		await _start_pickpocket(nearby_player)
+		return
 	if _can_start_manual_interaction():
 		await _start_manual_interaction(nearby_player)
 
@@ -717,6 +906,8 @@ func _update_directional_sensors() -> void:
 
 
 func _can_start_manual_interaction() -> bool:
+	if not story_visibility_active:
+		return false
 	if is_interacting:
 		return false
 
@@ -731,6 +922,8 @@ func _can_start_manual_interaction() -> bool:
 
 	if not Input.is_action_just_pressed("interact"):
 		return false
+	if not _is_player_facing_npc(nearby_player):
+		return false
 
 	var dialogue_box := _get_dialogue_box()
 	if dialogue_box != null and dialogue_box.is_open:
@@ -739,12 +932,84 @@ func _can_start_manual_interaction() -> bool:
 	return true
 
 
+func _can_start_pickpocket() -> bool:
+	if not pickpocket_enabled or not story_visibility_active or is_interacting:
+		return false
+	if not player_nearby or nearby_player == null:
+		return false
+	if GameState.is_overworld_input_locked() or _is_ui_typing():
+		return false
+	if not Input.is_action_just_pressed("pickpocket") or not _is_player_facing_npc(nearby_player):
+		return false
+	var dialogue_box := _get_dialogue_box()
+	return dialogue_box == null or not dialogue_box.is_open
+
+
+func _start_pickpocket(body: Node2D) -> void:
+	is_interacting = true
+	GameState.lock_overworld_input()
+	_face_body(body)
+	if body.has_method("face_world_position"):
+		body.face_world_position(get_feet_position())
+
+	var target_id := _get_npc_metadata_id().strip_edges().to_lower()
+	if ThievingService.state_loaded and ThievingService.get_level() < pickpocket_required_level:
+		_add_system_warning(LocalizationManager.text(
+			"ui.thieving.level_required",
+			{"level": pickpocket_required_level}
+		))
+	elif ThievingService.is_npc_attempted_today(target_id):
+		_add_system_warning(LocalizationManager.text("ui.thieving.already_attempted"))
+	else:
+		if body.has_method("set_activity_style"):
+			body.call("set_activity_style", CharacterAppearanceService.BODY_MOVEMENT_PICKPOCKET)
+		await get_tree().create_timer(0.55).timeout
+		if is_instance_valid(body) and body.has_method("get_activity_style") \
+				and CharacterAppearanceService.normalize_movement_style(str(body.call("get_activity_style"))) \
+				== CharacterAppearanceService.BODY_MOVEMENT_PICKPOCKET:
+			body.call("clear_activity_style")
+		var result: Dictionary = await ThievingService.attempt_pickpocket(target_id)
+		if bool(result.get("success", false)):
+			if str(result.get("outcome", "")) == "success":
+				_add_system_message(LocalizationManager.text(
+					"ui.thieving.success",
+					{
+						"amount": int(result.get("rewardCurrency", 0)),
+						"wanted": int((result.get("state", {}) as Dictionary).get("wanted", 0)),
+					}
+				))
+		else:
+			_add_system_warning(str(result.get("error", LocalizationManager.text("ui.thieving.unavailable"))))
+
+	GameState.unlock_overworld_input()
+	is_interacting = false
+
+
+func _is_player_facing_npc(body: Node2D) -> bool:
+	if body == null:
+		return false
+	var direction_value: Variant = body.get("last_direction")
+	if not direction_value is Vector2:
+		return false
+	var direction := direction_value as Vector2
+	if direction == Vector2.ZERO:
+		return false
+	var player_tile := _to_tile(_get_body_feet_position(body))
+	var cardinal_direction := Vector2i(roundi(direction.x), roundi(direction.y))
+	var npc_tile := _to_tile(get_feet_position())
+	for distance: int in range(1, manual_interaction_reach_tiles + 1):
+		if player_tile + cardinal_direction * distance == npc_tile:
+			return true
+	return false
+
+
 func _start_manual_interaction(body: Node2D) -> void:
 	is_interacting = true
 	GameState.lock_overworld_input()
 	_face_body(body)
 	if body.has_method("face_world_position"):
 		body.face_world_position(get_feet_position())
+	await get_tree().create_timer(MANUAL_INTERACTION_DELAY_SECONDS).timeout
 
 	var result := await _run_story_or_legacy_interaction(body, "interact")
 	if str(result.get("status", "")) != "pending_battle":
@@ -774,6 +1039,8 @@ func _run_story_or_legacy_interaction(body: Node2D, trigger: String) -> Dictiona
 		var fallback_result := result.duplicate(true)
 		fallback_result["legacy"] = true
 		return fallback_result
+	if bool(result.get("success", false)) and bool(result.get("handled", false)):
+		await _after_story_interaction(body, result)
 	return result
 
 
@@ -786,6 +1053,10 @@ func _find_story_hook() -> Node:
 
 func interact_with_player(_player: Node2D) -> void:
 	await show_dialogue()
+
+
+func _after_story_interaction(_player: Node2D, _result: Dictionary) -> void:
+	pass
 
 
 func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> bool:
@@ -858,10 +1129,16 @@ func _load_npc_metadata() -> Dictionary:
 
 
 func _get_npc_metadata_id() -> String:
+	var explicit_metadata_id := npc_metadata_id.strip_edges()
+	if not explicit_metadata_id.is_empty():
+		return explicit_metadata_id
+	var placed_npc_id := npc_id.strip_edges()
+	if not placed_npc_id.is_empty():
+		return placed_npc_id
 	var definition_id := npc_definition_id.strip_edges()
 	if not definition_id.is_empty():
 		return definition_id
-	return npc_id.strip_edges()
+	return ""
 
 
 func _apply_npc_metadata(metadata: Dictionary) -> void:
@@ -902,11 +1179,80 @@ func _apply_npc_metadata(metadata: Dictionary) -> void:
 	if not metadata_dialogue.is_empty():
 		dialogue_lines = metadata_dialogue
 
+	var pickpocket_profile: Variant = metadata.get("pickpocketProfile", {})
+	if pickpocket_profile is Dictionary:
+		var profile := pickpocket_profile as Dictionary
+		pickpocket_enabled = not profile.is_empty()
+		pickpocket_npc_type = str(profile.get("npcType", "")).strip_edges().to_lower()
+		pickpocket_required_level = clampi(int(profile.get("requiredLevel", 1)), 1, 100)
+
+	quest_marker_bindings.clear()
+	var marker_values: Variant = metadata.get("questMarkers", [])
+	if marker_values is Array:
+		for marker_value: Variant in marker_values as Array:
+			if marker_value is Dictionary:
+				quest_marker_bindings.append((marker_value as Dictionary).duplicate(true))
+	_refresh_quest_marker()
+
 
 func _on_locale_changed(_locale: String) -> void:
 	npc_metadata_loaded = false
 	npc_metadata_load_failed = false
 	metadata_dialogue_id = ""
+	quest_marker_bindings.clear()
+	_refresh_quest_marker()
+	if preload_quest_markers:
+		_initialize_quest_markers.call_deferred()
+
+
+func _on_story_changed(_revision: int) -> void:
+	_apply_story_visibility(true)
+	_refresh_quest_marker()
+
+
+func _apply_story_visibility(allow_deferred_hide := false) -> void:
+	var next_visibility := _is_story_visibility_active()
+	if (
+		allow_deferred_hide
+		and defer_story_hide_until_reload
+		and story_visibility_active
+		and not next_visibility
+	):
+		return
+	story_visibility_active = next_visibility
+	visible = story_visibility_active
+	if interaction_area != null:
+		interaction_area.monitoring = story_visibility_active
+		interaction_area.monitorable = story_visibility_active
+	if not story_visibility_active:
+		player_nearby = false
+		nearby_player = null
+		if quest_marker != null:
+			quest_marker.visible = false
+
+
+func _is_story_visibility_active() -> bool:
+	var required_id := visibility_required_quest_id.strip_edges()
+	if (
+		not required_id.is_empty()
+		and not StoryService.is_requirement_met(
+			required_id,
+			visibility_required_quest_step_id,
+			visibility_required_quest_status
+		)
+	):
+		return false
+	var hidden_id := visibility_hidden_quest_id.strip_edges()
+	if (
+		not hidden_id.is_empty()
+		and StoryService.is_requirement_met(
+			hidden_id,
+			visibility_hidden_quest_step_id,
+			visibility_hidden_quest_status
+		)
+	):
+		return false
+	return true
 
 
 func _get_dialogue_override_id() -> String:
@@ -939,9 +1285,10 @@ func _get_dialogue_box() -> Node:
 
 
 func _on_interaction_area_body_entered(body: Node2D) -> void:
-	if body.name == "Player":
+	if story_visibility_active and body.name == "Player":
 		player_nearby = true
 		nearby_player = body
+		_sync_nameplate()
 
 
 func _on_interaction_area_body_exited(body: Node2D) -> void:
@@ -949,6 +1296,7 @@ func _on_interaction_area_body_exited(body: Node2D) -> void:
 		player_nearby = false
 		if body == nearby_player:
 			nearby_player = null
+		_sync_nameplate()
 
 
 func _wait_for_body_tile_movement(body: Node2D) -> void:
@@ -959,6 +1307,14 @@ func _wait_for_body_tile_movement(body: Node2D) -> void:
 func _is_ui_typing() -> bool:
 	var focused_control := get_viewport().gui_get_focus_owner()
 	return focused_control is LineEdit or focused_control is TextEdit
+
+
+func _add_system_message(message: String) -> void:
+	get_tree().call_group("ui_overlay", "add_system_message", message)
+
+
+func _add_system_warning(message: String) -> void:
+	get_tree().call_group("ui_overlay", "add_system_warning", message)
 
 
 func _update_sort_z() -> void:

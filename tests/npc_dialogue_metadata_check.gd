@@ -6,6 +6,12 @@ const DIALOGUE_NPC_SCRIPT := "res://scripts/world/npcs/dialogue_npc.gd"
 const TRAINER_NPC_SCRIPT := "res://scripts/world/npcs/trainer_npc.gd"
 const GATE_NPC_SCRIPT := "res://scripts/world/npcs/gate_npc.gd"
 const HEAL_NPC_SCRIPT := "res://scripts/world/npcs/heal_npc.gd"
+const DEFINITION_FALLBACK_SCENES: Dictionary = {
+	"res://scenes/npcs/heal_npc.tscn": "pokemon_center_nurse",
+	"res://scenes/npcs/market_seller_npc.tscn": "pokemart_seller",
+	"res://scenes/npcs/market_buyer_npc.tscn": "pokemart_buyer",
+	"res://scenes/npcs/aether_atelier_npc.tscn": "aether_atelier_tailor",
+}
 const ROUTE_1_SCENE := "res://scenes/overworld/kanto/routes/kanto_route_1.tscn"
 const PALLET_TOWN_SCENE := "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn"
 
@@ -15,6 +21,7 @@ var failed := false
 func _init() -> void:
 	_check_base_npc_exports_dialogue_id()
 	_check_base_npc_exports_definition_id()
+	_check_metadata_identity_precedence()
 	_check_base_npc_story_requirement()
 	_check_scene_defined_dialogue_id_is_allowed()
 	_check_metadata_populates_dialogue_id()
@@ -45,13 +52,31 @@ func _check_base_npc_exports_dialogue_id() -> void:
 func _check_base_npc_exports_definition_id() -> void:
 	var text := _read_text(BASE_NPC_SCRIPT)
 	_check_true(text.contains("@export var npc_definition_id := \"\""), "BaseNPC exports npc_definition_id")
+	_check_true(text.contains("@export var npc_metadata_id := \"\""), "BaseNPC exports an explicit server metadata id")
 	_check_true(
 		text.contains("func _get_npc_metadata_id() -> String:"),
-		"BaseNPC resolves a shared NPC definition id"
+		"BaseNPC resolves the server-owned NPC metadata id"
 	)
+
+
+func _check_metadata_identity_precedence() -> void:
+	var text := _read_text(BASE_NPC_SCRIPT)
+	var explicit_index := text.find("var explicit_metadata_id := npc_metadata_id.strip_edges()")
+	var placed_index := text.find("var placed_npc_id := npc_id.strip_edges()")
+	var definition_index := text.find("var definition_id := npc_definition_id.strip_edges()")
 	_check_true(
-		text.contains("return npc_id.strip_edges()"),
-		"BaseNPC falls back to the placed npc_id"
+		explicit_index >= 0 and explicit_index < placed_index and placed_index < definition_index,
+		"placed NPC identity wins over its presentation definition"
+	)
+	for scene_path: String in DEFINITION_FALLBACK_SCENES:
+		var metadata_id := str(DEFINITION_FALLBACK_SCENES[scene_path])
+		_check_true(
+			_read_text(scene_path).contains('npc_definition_id = "%s"' % metadata_id),
+			"%s can fall back to its reusable server definition" % scene_path.get_file()
+		)
+	_check_true(
+		not _read_text(PALLET_TOWN_SCENE).contains('[node name="MarketSellerNPC"'),
+		"Pallet Town no longer places its temporary market attendant"
 	)
 
 
@@ -61,13 +86,19 @@ func _check_base_npc_story_requirement() -> void:
 	_check_true(text.contains("@export var required_quest_step_id := \"\""), "BaseNPC can target one quest step")
 	_check_true(text.contains("func is_story_requirement_met() -> bool:"), "BaseNPC evaluates the projected story requirement")
 	_check_true(text.contains("StoryService.is_requirement_met("), "BaseNPC delegates to authoritative projected story state")
+	_check_true(
+		text.contains("visibility_required_quest_id")
+		and text.contains("visibility_hidden_quest_id")
+		and text.contains("func _apply_story_visibility("),
+		"BaseNPC supports story-driven scene presence"
+	)
 
 
 func _check_scene_defined_dialogue_id_is_allowed() -> void:
 	var text := _read_text(ROUTE_1_SCENE)
 	_check_true(
-		not text.contains("dialogue_id = \"kanto_route_1_alder_intro\""),
-		"Alder resolves normal dialogue from NPC metadata"
+		not text.contains("dialogue_id = \"kanto_route_1_camper_quinn_default\""),
+		"Route 1 residents resolve normal dialogue from NPC metadata"
 	)
 
 
@@ -199,6 +230,11 @@ func _check_existing_npc_behavior_entrypoints() -> void:
 		"HealNPC uses the central dialogue resolver"
 	)
 	_check_true(heal_text.contains("successDialogueId"), "HealNPC supports successDialogueId")
+	_check_true(
+		heal_text.contains("func _after_story_interaction")
+		and heal_text.contains("await _run_heal_interaction(false)"),
+		"HealNPC heals and saves its respawn point after a handled story interaction"
+	)
 
 
 func _check_pallet_guard_story_requirement() -> void:

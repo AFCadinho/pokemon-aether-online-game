@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://csmsqlujka4ma"]
+
+[ext_resource type="Script" uid="uid://bl4sc4tpjilik" path="res://scripts/world/interactables/locked_door_interactable.gd" id="1_locked_door"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_locked_door"]
+size = Vector2(64, 64)
+
+[node name="LockedDoorInteractable" type="Node2D" unique_id=1008443052]
+script = ExtResource("1_locked_door")
+interactable_kind = "locked_door"
+display_name = "Building Entrance"
+requires_facing = false
+interaction_shape_size = Vector2(96, 64)
+
+[node name="InteractionArea" type="Area2D" parent="." unique_id=872169059]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=1605869592]
+shape = SubResource("RectangleShape2D_locked_door")

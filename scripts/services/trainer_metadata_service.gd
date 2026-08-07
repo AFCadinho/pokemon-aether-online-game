@@ -85,8 +85,33 @@ func _normalize_trainer_metadata(trainer_id: String, metadata: Dictionary) -> Di
 	trainer_metadata["dialogueId"] = str(trainer_metadata.get("dialogueId", trainer_metadata.get("dialogue_id", "")))
 	trainer_metadata["introDialogueId"] = str(trainer_metadata.get("introDialogueId", trainer_metadata.get("intro_dialogue_id", "")))
 	trainer_metadata["battleIntroDialogueId"] = str(trainer_metadata.get("battleIntroDialogueId", trainer_metadata.get("battle_intro_dialogue_id", "")))
+	trainer_metadata["outroDialogueId"] = str(trainer_metadata.get("outroDialogueId", trainer_metadata.get("outro_dialogue_id", "")))
+	trainer_metadata["battleTransitionStyle"] = str(
+		trainer_metadata.get(
+			"battleTransitionStyle",
+			trainer_metadata.get("battle_transition_style", "")
+		)
+	).strip_edges().to_lower()
 	trainer_metadata["dialogue_before_battle"] = _get_string_array(
 		trainer_metadata.get("dialogue_before_battle", [])
+	)
+	var battle_banter_value: Variant = trainer_metadata.get(
+		"battle_banter",
+		trainer_metadata.get("battleBanter", {})
+	)
+	trainer_metadata["battle_banter"] = (
+		(battle_banter_value as Dictionary).duplicate(true)
+		if battle_banter_value is Dictionary
+		else {}
+	)
+	var battle_voice_value: Variant = trainer_metadata.get(
+		"battle_voice",
+		trainer_metadata.get("battleVoice", {})
+	)
+	trainer_metadata["battle_voice"] = (
+		(battle_voice_value as Dictionary).duplicate(true)
+		if battle_voice_value is Dictionary
+		else {}
 	)
 	return trainer_metadata
 

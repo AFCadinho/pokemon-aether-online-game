@@ -1,0 +1,295 @@
+{
+  "schemaVersion": 1,
+  "_instructions": [
+    "Dit bestand gebruikt exact hetzelfde 400x297-pixelraster als kanto_region_map.png.",
+    "x=0 is links en y=0 is boven. Je kunt de gewenste pixel dus rechtstreeks uit een afbeeldingseditor overnemen.",
+    "Wijzig onder points alleen x en y om de onzichtbare klikzone en locatiering te verplaatsen.",
+    "Alle zichtbare cirkels zijn al ingevuld. Grote cirkels zijn settlements; kleine lichtblauwe cirkels zijn special locations. Vervang later alleen name en eventueel het specifiekere type.",
+    "Punten met planned=true hoeven nog niet naar een speelbare game map te verwijzen.",
+    "Onder routePoints staat voor Route 3 t/m 25 een punt op het bijbehorende gele pad. Route 1 en Route 2 staan als speelbare locaties in kanto.json.",
+    "De gele routes en cirkels staan al in de achtergrondafbeelding en worden niet opnieuw door Godot getekend.",
+    "Laat de location-id's en de waarden van from/to ongewijzigd; die verwijzen naar echte game maps.",
+    "needsReview mag je op false zetten zodra je een punt hebt gecontroleerd. Dit veld beïnvloedt de UI niet."
+  ],
+  "coordinateSpace": {
+    "width": 400,
+    "height": 297
+  },
+  "points": {
+    "kanto_pallet_town": {
+      "x": 80,
+      "y": 208,
+      "needsReview": false
+    },
+    "kanto_route_1": {
+      "x": 80,
+      "y": 180,
+      "needsReview": false
+    },
+    "kanto_viridian_city": {
+      "x": 80,
+      "y": 151,
+      "needsReview": false
+    },
+    "kanto_route_2": {
+      "x": 80,
+      "y": 140,
+      "needsReview": false
+    },
+    "kanto_viridian_forest": {
+      "x": 80,
+      "y": 110,
+      "needsReview": false
+    },
+    "kanto_pewter_city": {
+      "x": 80,
+      "y": 70,
+      "needsReview": false
+    },
+    "kanto_map_point_01": {
+      "x": 40,
+      "y": 51,
+      "kind": "settlement",
+      "name": "Indigo Plateau",
+      "description": "The summit of the Pokémon League, reached through Victory Road.",
+      "interiors": [
+        {"label": "Pokémon League"}
+      ],
+      "planned": true
+    },
+    "kanto_map_point_02": {
+      "x": 40,
+      "y": 72,
+      "kind": "special",
+      "name": "Victory Road",
+      "description": "A demanding mountain pass guarding the entrance to the Pokémon League.",
+      "planned": true
+    },
+    "kanto_map_point_03": {
+      "x": 80,
+      "y": 270,
+      "kind": "town",
+      "name": "Cinnabar Island",
+      "description": "A volcanic island town surrounded by the warm waters of southern Kanto.",
+      "interiors": [
+        {"label": "Pokémon Center"},
+        {"label": "Cinnabar Island Gym"}
+      ],
+      "planned": true
+    },
+    "kanto_map_point_04": {
+      "x": 160,
+      "y": 270,
+      "kind": "special",
+      "name": "Seafoam Islands",
+      "description": "A chain of icy sea caves and islands drifting off Kanto's southern coast.",
+      "planned": true
+    },
+    "kanto_map_point_05": {
+      "x": 180,
+      "y": 48,
+      "kind": "special",
+      "name": "Mt. Moon",
+      "description": "A vast mountain cave where fossils, rare stones, and wild Pokémon can be found.",
+      "planned": true
+    },
+    "kanto_map_point_06": {
+      "x": 220,
+      "y": 109,
+      "kind": "city",
+      "name": "Celadon City",
+      "description": "A bustling city known for its department store, gardens, and department-sized ambitions.",
+      "interiors": [
+        {"label": "Pokémon Center"},
+        {"label": "Celadon City Gym"},
+        {"label": "Celadon Department Store"}
+      ],
+      "planned": true
+    },
+    "kanto_map_point_07": {
+      "x": 240,
+      "y": 232,
+      "kind": "city",
+      "name": "Fuchsia City",
+      "description": "A coastal city beside the Safari Zone and the quiet routes of southern Kanto.",
+      "interiors": [
+        {"label": "Pokémon Center"},
+        {"label": "Fuchsia City Gym"},
+        {"label": "Safari Zone Entrance"}
+      ],
+      "planned": true
+    },
+    "kanto_map_point_08": {
+      "x": 280,
+      "y": 48,
+      "kind": "city",
+      "name": "Cerulean City",
+      "description": "A bright city of waterways and bridges at the northern edge of Kanto.",
+      "interiors": [
+        {"label": "Pokémon Center"},
+        {"label": "Cerulean City Gym"}
+      ],
+      "planned": true
+    },
+    "kanto_map_point_09": {
+      "x": 280,
+      "y": 109,
+      "kind": "city",
+      "name": "Saffron City",
+      "description": "Kanto's central metropolis, crossed by major roads connecting the surrounding cities.",
+      "interiors": [
+        {"label": "Pokémon Center"},
+        {"label": "Saffron City Gym"}
+      ],
+      "planned": true
+    },
+    "kanto_map_point_10": {
+      "x": 280,
+      "y": 171,
+      "kind": "city",
+      "name": "Vermilion City",
+      "description": "A busy harbor city where ships arrive from across the region.",
+      "interiors": [
+        {"label": "Pokémon Center"},
+        {"label": "Vermilion City Gym"},
+        {"label": "Harbor Terminal"}
+      ],
+      "planned": true
+    },
+    "kanto_map_point_11": {
+      "x": 298,
+      "y": 171,
+      "kind": "special",
+      "name": "Diglett's Cave (Route 11)",
+      "description": "A tunnel dug by Diglett that links the Vermilion side of Kanto with Route 2.",
+      "planned": true
+    },
+    "kanto_map_point_12": {
+      "x": 360,
+      "y": 48,
+      "kind": "special",
+      "name": "Rock Tunnel",
+      "description": "A dark mountain passage connecting the central routes with Lavender Town.",
+      "planned": true
+    },
+    "kanto_map_point_13": {
+      "x": 360,
+      "y": 70,
+      "kind": "special",
+      "name": "Power Plant",
+      "description": "An abandoned power station hidden beside the water near Route 10.",
+      "planned": true
+    },
+    "kanto_map_point_14": {
+      "x": 360,
+      "y": 109,
+      "kind": "town",
+      "name": "Lavender Town",
+      "description": "A quiet town known for its memorial tower and the roads leading toward eastern Kanto.",
+      "interiors": [
+        {"label": "Pokémon Center"},
+        {"label": "Pokémon Tower"}
+      ],
+      "planned": true
+    },
+    "kanto_map_point_15": {
+      "x": 360,
+      "y": 128,
+      "kind": "special",
+      "name": "Pokémon Tower",
+      "description": "A solemn tower where the spirits of Pokémon are remembered.",
+      "planned": true
+    },
+    "kanto_map_point_16": {
+      "x": 80,
+      "y": 89,
+      "kind": "special",
+      "name": "Diglett's Cave (Route 2)",
+      "description": "The northern entrance to the long underground tunnel carved by Diglett.",
+      "planned": true
+    },
+    "kanto_map_point_17": {
+      "x": 80,
+      "y": 130,
+      "kind": "special",
+      "name": "Viridian Forest Gate",
+      "description": "A small gateway marking the approach to Viridian Forest from Route 2.",
+      "planned": true
+    }
+  },
+  "routePoints": [
+    {"id": "kanto_route_3", "x": 130, "y": 70, "name": "Route 3", "description": "A mountain route winding east from Pewter City toward Mt. Moon.", "planned": false},
+    {"id": "kanto_route_segment_04", "x": 220, "y": 48, "name": "Route 4", "description": "A rocky trail leading from Mt. Moon to the outskirts of Cerulean City.", "planned": true},
+    {"id": "kanto_route_segment_05", "x": 280, "y": 80, "name": "Route 5", "description": "A southern approach from Cerulean City toward the Saffron City gates.", "planned": true},
+    {"id": "kanto_route_segment_06", "x": 280, "y": 140, "name": "Route 6", "description": "A tree-lined road connecting Vermilion City with Saffron City.", "planned": true},
+    {"id": "kanto_route_segment_07", "x": 250, "y": 109, "name": "Route 7", "description": "A short western passage between Celadon City and Saffron City.", "planned": true},
+    {"id": "kanto_route_segment_08", "x": 320, "y": 109, "name": "Route 8", "description": "An eastern road from Saffron City toward Lavender Town.", "planned": true},
+    {"id": "kanto_route_segment_09", "x": 320, "y": 48, "name": "Route 9", "description": "A rugged route east of Cerulean City leading to Rock Tunnel.", "planned": true},
+    {"id": "kanto_route_segment_10", "x": 360, "y": 90, "name": "Route 10", "description": "A route around Rock Tunnel and the Power Plant on the way to Lavender Town.", "planned": true},
+    {"id": "kanto_route_segment_11", "x": 320, "y": 171, "name": "Route 11", "description": "A long coastal route east of Vermilion City, near Diglett's Cave.", "planned": true},
+    {"id": "kanto_route_segment_12", "x": 360, "y": 150, "name": "Route 12", "description": "A quiet fishing route stretching south from Lavender Town.", "planned": true},
+    {"id": "kanto_route_segment_13", "x": 360, "y": 195, "name": "Route 13", "description": "A winding coastal route continuing south toward Fuchsia City.", "planned": true},
+    {"id": "kanto_route_segment_14", "x": 330, "y": 232, "name": "Route 14", "description": "A narrow southern route leading from Route 13 toward Fuchsia City.", "planned": true},
+    {"id": "kanto_route_segment_15", "x": 280, "y": 232, "name": "Route 15", "description": "The final eastern approach to Fuchsia City from the coastal routes.", "planned": true},
+    {"id": "kanto_route_segment_16", "x": 180, "y": 109, "name": "Route 16", "description": "The western entrance to Cycling Road, leaving Celadon City behind.", "planned": true},
+    {"id": "kanto_route_segment_17", "x": 140, "y": 170, "name": "Route 17", "description": "Cycling Road, a long downhill route along Kanto's western coast.", "planned": true},
+    {"id": "kanto_route_segment_18", "x": 180, "y": 232, "name": "Route 18", "description": "A short coastal road connecting Cycling Road with Fuchsia City.", "planned": true},
+    {"id": "kanto_route_segment_19", "x": 240, "y": 251, "name": "Route 19", "description": "A sea route south of Fuchsia City toward the Seafoam Islands.", "planned": true},
+    {"id": "kanto_route_segment_20", "x": 200, "y": 270, "name": "Route 20", "description": "A wide ocean route linking the Seafoam Islands with Cinnabar Island.", "planned": true},
+    {"id": "kanto_route_segment_21", "x": 80, "y": 239, "name": "Route 21", "description": "A long southern sea route connecting Cinnabar Island and Pallet Town.", "planned": true},
+    {"id": "kanto_route_segment_22", "x": 60, "y": 151, "name": "Route 22", "description": "A western route from Viridian City toward the Pokémon League entrance.", "planned": true},
+    {"id": "kanto_route_segment_23", "x": 40, "y": 101, "name": "Route 23", "description": "The final victory route leading from Route 22 to Indigo Plateau.", "planned": true},
+    {"id": "kanto_route_segment_24", "x": 280, "y": 25, "name": "Route 24", "description": "A northern bridge route leaving Cerulean City toward Nugget Bridge.", "planned": true},
+    {"id": "kanto_route_segment_25", "x": 310, "y": 8, "name": "Route 25", "description": "A winding northeastern path ending at Bill's house by the sea.", "planned": true}
+  ],
+  "connections": [
+    {"from": "kanto_pallet_town", "to": "kanto_route_1", "waypoints": []},
+    {"from": "kanto_route_1", "to": "kanto_viridian_city", "waypoints": []},
+    {"from": "kanto_viridian_city", "to": "kanto_route_2", "waypoints": []},
+    {"from": "kanto_viridian_city", "to": "kanto_route_segment_22", "waypoints": []},
+    {"from": "kanto_route_2", "to": "kanto_viridian_forest", "waypoints": []},
+    {"from": "kanto_route_2", "to": "kanto_map_point_16", "waypoints": []},
+    {"from": "kanto_route_2", "to": "kanto_map_point_17", "waypoints": []},
+    {"from": "kanto_route_2", "to": "kanto_pewter_city", "waypoints": []},
+    {"from": "kanto_pewter_city", "to": "kanto_route_3", "waypoints": []},
+    {"from": "kanto_route_3", "to": "kanto_map_point_05", "waypoints": []},
+    {"from": "kanto_map_point_05", "to": "kanto_route_segment_04", "waypoints": []},
+    {"from": "kanto_route_segment_04", "to": "kanto_map_point_08", "waypoints": []},
+    {"from": "kanto_map_point_08", "to": "kanto_route_segment_05", "waypoints": []},
+    {"from": "kanto_map_point_08", "to": "kanto_route_segment_09", "waypoints": []},
+    {"from": "kanto_map_point_08", "to": "kanto_route_segment_24", "waypoints": []},
+    {"from": "kanto_route_segment_24", "to": "kanto_route_segment_25", "waypoints": []},
+    {"from": "kanto_route_segment_05", "to": "kanto_map_point_09", "waypoints": []},
+    {"from": "kanto_route_segment_09", "to": "kanto_map_point_12", "waypoints": []},
+    {"from": "kanto_map_point_12", "to": "kanto_route_segment_10", "waypoints": []},
+    {"from": "kanto_route_segment_10", "to": "kanto_map_point_13", "waypoints": []},
+    {"from": "kanto_route_segment_10", "to": "kanto_map_point_14", "waypoints": []},
+    {"from": "kanto_map_point_06", "to": "kanto_route_segment_07", "waypoints": []},
+    {"from": "kanto_map_point_06", "to": "kanto_route_segment_16", "waypoints": []},
+    {"from": "kanto_route_segment_07", "to": "kanto_map_point_09", "waypoints": []},
+    {"from": "kanto_map_point_09", "to": "kanto_route_segment_06", "waypoints": []},
+    {"from": "kanto_map_point_09", "to": "kanto_route_segment_08", "waypoints": []},
+    {"from": "kanto_route_segment_06", "to": "kanto_map_point_10", "waypoints": []},
+    {"from": "kanto_route_segment_08", "to": "kanto_map_point_14", "waypoints": []},
+    {"from": "kanto_map_point_10", "to": "kanto_route_segment_11", "waypoints": []},
+    {"from": "kanto_route_segment_11", "to": "kanto_map_point_11", "waypoints": []},
+    {"from": "kanto_route_segment_11", "to": "kanto_route_segment_12", "waypoints": []},
+    {"from": "kanto_map_point_14", "to": "kanto_route_segment_12", "waypoints": []},
+    {"from": "kanto_route_segment_12", "to": "kanto_route_segment_13", "waypoints": []},
+    {"from": "kanto_route_segment_13", "to": "kanto_route_segment_14", "waypoints": []},
+    {"from": "kanto_route_segment_14", "to": "kanto_route_segment_15", "waypoints": []},
+    {"from": "kanto_route_segment_15", "to": "kanto_map_point_07", "waypoints": []},
+    {"from": "kanto_route_segment_16", "to": "kanto_route_segment_17", "waypoints": []},
+    {"from": "kanto_route_segment_17", "to": "kanto_route_segment_18", "waypoints": []},
+    {"from": "kanto_route_segment_18", "to": "kanto_map_point_07", "waypoints": []},
+    {"from": "kanto_map_point_07", "to": "kanto_route_segment_19", "waypoints": []},
+    {"from": "kanto_route_segment_19", "to": "kanto_route_segment_20", "waypoints": []},
+    {"from": "kanto_route_segment_20", "to": "kanto_map_point_04", "waypoints": []},
+    {"from": "kanto_route_segment_20", "to": "kanto_map_point_03", "waypoints": []},
+    {"from": "kanto_map_point_03", "to": "kanto_route_segment_21", "waypoints": []},
+    {"from": "kanto_route_segment_21", "to": "kanto_pallet_town", "waypoints": []},
+    {"from": "kanto_route_segment_22", "to": "kanto_route_segment_23", "waypoints": []},
+    {"from": "kanto_route_segment_23", "to": "kanto_map_point_02", "waypoints": []},
+    {"from": "kanto_route_segment_23", "to": "kanto_map_point_01", "waypoints": []}
+  ]
+}

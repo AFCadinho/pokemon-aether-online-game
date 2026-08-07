@@ -5,6 +5,7 @@ const MARKET_ATTENDANT_SCENE := "res://scenes/npcs/market_attendant_npc.tscn"
 const MARKET_SELLER_SCENE := "res://scenes/npcs/market_seller_npc.tscn"
 const MARKET_BUYER_SCENE := "res://scenes/npcs/market_buyer_npc.tscn"
 const PALLET_TOWN_SCENE := "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn"
+const VIRIDIAN_POKEMON_CENTER_SCENE := "res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn"
 
 var failed := false
 
@@ -29,6 +30,8 @@ func _check_market_attendant_script() -> void:
 	_check_true(text.contains('ui_overlay.call("open_market", market, market_mode, inventory_items)'), "MarketAttendantNPC opens its configured market mode")
 	_check_true(text.contains('inventory_service.call("load_inventory")'), "Market buyer loads the player's inventory")
 	_check_true(text.contains("failure_dialogue_lines"), "MarketAttendantNPC has fallback failure dialogue")
+	_check_true(text.contains("questRewardId"), "MarketAttendantNPC supports catalog-driven quest rewards")
+	_check_true(text.contains('claim_npc_item_reward", quest_reward_id'), "MarketAttendantNPC claims quest items authoritatively")
 
 
 func _check_market_attendant_scene() -> void:
@@ -37,6 +40,12 @@ func _check_market_attendant_scene() -> void:
 	_check_true(text.contains("display_name = \"Clerk\""), "MarketAttendant scene has display name")
 	_check_true(text.contains("InteractionArea"), "MarketAttendant scene has interaction area")
 	_check_true(text.contains("FeetMarker"), "MarketAttendant scene has feet marker")
+	_check_true(
+		text.contains("manual_interaction_reach_tiles = 2")
+		and text.contains("size = Vector2(160, 32)")
+		and text.contains("position = Vector2(-32, 0)"),
+		"Market attendants can be reached cardinally across the counter"
+	)
 	var seller_source := _read_text(MARKET_SELLER_SCENE)
 	var buyer_source := _read_text(MARKET_BUYER_SCENE)
 	_check_true(seller_source.contains('npc_definition_id = "pokemart_seller"'), "Seller scene uses the generic seller definition")
@@ -45,12 +54,17 @@ func _check_market_attendant_scene() -> void:
 	_check_true(buyer_source.contains('market_mode = "player_sells"'), "Buyer scene opens player selling")
 
 	var pallet_source := _read_text(PALLET_TOWN_SCENE)
-	var clerk_start := pallet_source.find('[node name="MarketSellerNPC" parent="Entities/NPCs"')
-	var players_start := pallet_source.find('[node name="Players"', clerk_start)
-	var placed_clerk_source := pallet_source.substr(clerk_start, players_start - clerk_start)
 	_check_true(
-		not placed_clerk_source.contains("npc_sprite_frames"),
-		"Pallet Town clerk inherits sprite frames from the shared clerk scene"
+		not pallet_source.contains('[node name="MarketSellerNPC" parent="Entities/NPCs"'),
+		"Pallet Town no longer places an exterior market clerk"
+	)
+	var viridian_center_source := _read_text(VIRIDIAN_POKEMON_CENTER_SCENE)
+	_check_true(
+		viridian_center_source.contains('npc_id = "kanto_viridian_city_pokemon_center_clerk"')
+		and viridian_center_source.contains('npc_definition_id = "kanto_viridian_city_pokemon_center_clerk"')
+		and not viridian_center_source.contains("npc_metadata_id")
+		and viridian_center_source.contains("preload_quest_markers = true"),
+		"Viridian item seller loads its parcel metadata and quest marker"
 	)
 
 

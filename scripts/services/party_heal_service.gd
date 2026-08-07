@@ -20,7 +20,7 @@ func heal_party_locally(party: Array) -> bool:
 	return changed
 
 
-func heal_current_party_and_save(respawn_point: Dictionary = {}) -> Dictionary:
+func heal_current_party_and_save(respawn_point: Dictionary = {}, public_service := true) -> Dictionary:
 	var player_save := _get_player_save()
 	if player_save == null:
 		return {
@@ -38,7 +38,7 @@ func heal_current_party_and_save(respawn_point: Dictionary = {}) -> Dictionary:
 		}
 
 	var server_changed := _party_needs_heal(party)
-	var server_result := await _heal_current_party_on_server(respawn_point)
+	var server_result := await _heal_current_party_on_server(respawn_point, public_service)
 	if bool(server_result.get("success", false)):
 		_apply_party_response(player_save, server_result)
 		server_result["changed"] = server_changed
@@ -152,7 +152,7 @@ func _get_player_party_state_service() -> Node:
 	return get_node_or_null("/root/PlayerPartyStateService")
 
 
-func _heal_current_party_on_server(respawn_point: Dictionary = {}) -> Dictionary:
+func _heal_current_party_on_server(respawn_point: Dictionary = {}, public_service := true) -> Dictionary:
 	var gateway_config := get_node_or_null("/root/GatewayApiConfig")
 	if gateway_config == null or not gateway_config.has_method("get_base_url") or not gateway_config.has_method("get_accept_headers") or not gateway_config.has_method("get_json_headers"):
 		return {
@@ -161,11 +161,8 @@ func _heal_current_party_on_server(respawn_point: Dictionary = {}) -> Dictionary
 		}
 
 	var base_url: String = str(await gateway_config.call("get_base_url"))
-	var request_body := ""
-	var headers_value: Variant = gateway_config.call("get_accept_headers")
-	if not respawn_point.is_empty():
-		request_body = JSON.stringify({"respawnPoint": respawn_point})
-		headers_value = gateway_config.call("get_json_headers")
+	var request_body := JSON.stringify(build_heal_request_body(respawn_point, public_service))
+	var headers_value: Variant = gateway_config.call("get_json_headers")
 	var headers := PackedStringArray()
 	if headers_value is PackedStringArray:
 		headers = headers_value as PackedStringArray
@@ -221,6 +218,15 @@ func _heal_current_party_on_server(respawn_point: Dictionary = {}) -> Dictionary
 		"hasParty": bool(body.get("hasParty", false)),
 		"party": _array_from_value(body.get("party", [])),
 	}
+
+
+static func build_heal_request_body(respawn_point: Dictionary = {}, public_service := true) -> Dictionary:
+	var body := {
+		"publicService": public_service,
+	}
+	if not respawn_point.is_empty():
+		body["respawnPoint"] = respawn_point.duplicate(true)
+	return body
 
 
 func _apply_party_response(player_save: Node, result: Dictionary) -> void:

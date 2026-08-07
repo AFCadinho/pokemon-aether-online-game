@@ -142,12 +142,14 @@ func _set_active_info_row_data(
 	_set_status(row, status)
 
 func _update_experience_bar(row: Node, experience_data: Dictionary) -> void:
-	var exp_bar: ProgressBar = row.get_node_or_null("MarginContainer/VBoxContainer/ExpBar") as ProgressBar
+	var exp_row := row.get_node_or_null("MarginContainer/VBoxContainer/ExpRow") as Control
+	var exp_bar: ProgressBar = row.get_node_or_null("MarginContainer/VBoxContainer/ExpRow/ExpBar") as ProgressBar
 	if exp_bar == null:
 		return
 
 	if not experience_bar_enabled or experience_data.is_empty():
-		exp_bar.visible = false
+		if exp_row != null:
+			exp_row.visible = false
 		exp_bar.value = 0
 		return
 
@@ -155,14 +157,16 @@ func _update_experience_bar(row: Node, experience_data: Dictionary) -> void:
 	var current_level_exp: int = int(experience_data.get("currentLevelExp", experience_data.get("current_level_exp", 0)))
 	var next_level_exp: int = int(experience_data.get("nextLevelExp", experience_data.get("next_level_exp", 0)))
 	if next_level_exp <= current_level_exp:
-		exp_bar.visible = false
+		if exp_row != null:
+			exp_row.visible = false
 		exp_bar.value = 0
 		return
 
 	var earned_level_exp: int = clamp(current_exp - current_level_exp, 0, next_level_exp - current_level_exp)
 	exp_bar.max_value = next_level_exp - current_level_exp
 	exp_bar.value = earned_level_exp
-	exp_bar.visible = true
+	if exp_row != null:
+		exp_row.visible = true
 
 func _set_shiny_badge(row: Node, is_shiny: bool) -> void:
 	var shiny_badge: Label = row.get_node_or_null("MarginContainer/VBoxContainer/TopRow/NameContainer/ShinyBadge") as Label

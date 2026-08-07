@@ -41,11 +41,96 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_reward_card"]
+bg_color = Color(0.12, 0.102, 0.047, 0.72)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.48, 0.16, 0.9)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_decline_normal"]
+bg_color = Color(0.145, 0.047, 0.071, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.82, 0.286, 0.337, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_decline_hover"]
+bg_color = Color(0.255, 0.067, 0.102, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.42, 0.47, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_decline_pressed"]
+bg_color = Color(0.105, 0.027, 0.045, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.92, 0.31, 0.38, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_accept_normal"]
+bg_color = Color(0.035, 0.176, 0.133, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.78, 0.557, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_accept_hover"]
+bg_color = Color(0.047, 0.278, 0.2, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.357, 0.945, 0.686, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_accept_pressed"]
+bg_color = Color(0.02, 0.118, 0.09, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.25, 0.82, 0.59, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_bnoha"]
 atlas = ExtResource("2_bnoha")
 region = Rect2(0, 2, 232, 239)
 
 [node name="DialogueBox" type="CanvasLayer" unique_id=1341619813]
+layer = 100
 
 [node name="Box" type="Control" parent="." unique_id=330933920]
 layout_mode = 3
@@ -115,6 +200,125 @@ text = "Leave some for me."
 fit_content = true
 scroll_active = false
 
+[node name="QuestOfferContent" type="VBoxContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="QuestTypeLabel" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.36, 0.82, 0.91, 1)
+theme_override_font_sizes/font_size = 13
+text = "SIDE QUEST"
+
+[node name="QuestTitleLabel" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.93, 0.76, 1)
+theme_override_font_sizes/font_size = 20
+text = "Dadinho's Training Challenge"
+autowrap_mode = 2
+
+[node name="QuestSummaryLabel" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.82, 0.86, 0.9, 1)
+theme_override_constants/line_spacing = 2
+theme_override_font_sizes/font_size = 16
+text = "Train the partner Dadinho prepared for you to level 10."
+autowrap_mode = 2
+
+[node name="ObjectiveHeading" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.36, 0.82, 0.91, 1)
+theme_override_font_sizes/font_size = 12
+text = "OBJECTIVES"
+
+[node name="ObjectiveLabel" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.94, 0.95, 0.96, 1)
+theme_override_font_sizes/font_size = 16
+text = "Train your starter to level 10."
+autowrap_mode = 2
+
+[node name="RewardHeading" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.73, 0.25, 1)
+theme_override_font_sizes/font_size = 12
+text = "REWARDS"
+
+[node name="RewardCard" type="PanelContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_reward_card")
+
+[node name="RewardMargin" type="MarginContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardCard"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 5
+
+[node name="RewardRow" type="HBoxContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardCard/RewardMargin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="RewardIcon" type="TextureRect" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardCard/RewardMargin/RewardRow"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture_filter = 1
+expand_mode = 1
+stretch_mode = 5
+
+[node name="RewardLabel" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardCard/RewardMargin/RewardRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(1, 0.87, 0.48, 1)
+theme_override_font_sizes/font_size = 17
+text = "Exp. Share  ×1"
+text_overrun_behavior = 3
+
+[node name="QuestOfferStatus" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9137255, 0.47058824, 0.49019608, 1)
+theme_override_font_sizes/font_size = 14
+text = "The side quest could not be accepted. Please try again."
+autowrap_mode = 2
+
+[node name="QuestOfferActions" type="HBoxContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="DeclineButton" type="Button" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferActions"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_neighbor_right = NodePath("../AcceptButton")
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 0.78, 0.8, 1)
+theme_override_colors/font_hover_color = Color(1, 0.9, 0.91, 1)
+theme_override_font_sizes/font_size = 15
+theme_override_styles/normal = SubResource("StyleBoxFlat_decline_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_decline_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_decline_pressed")
+theme_override_styles/focus = SubResource("StyleBoxFlat_decline_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_decline_pressed")
+text = "Decline"
+
+[node name="AcceptButton" type="Button" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferActions"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_neighbor_left = NodePath("../DeclineButton")
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.84, 1, 0.92, 1)
+theme_override_colors/font_hover_color = Color(0.94, 1, 0.97, 1)
+theme_override_font_sizes/font_size = 15
+theme_override_styles/normal = SubResource("StyleBoxFlat_accept_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_accept_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_accept_pressed")
+theme_override_styles/focus = SubResource("StyleBoxFlat_accept_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_accept_pressed")
+text = "Accept"
+
 [node name="ConitinueArrow" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer" unique_id=1864270790]
 layout_mode = 2
 size_flags_vertical = 8
@@ -157,3 +361,25 @@ theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
 theme_override_font_sizes/font_size = 15
 text = "Prof. Oak"
 horizontal_alignment = 1
+
+[node name="QuestOfferCloseButton" type="Button" parent="Box/PanelContainer"]
+z_index = 10
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -42.0
+offset_top = 8.0
+offset_right = -10.0
+offset_bottom = 40.0
+grow_horizontal = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 0.78, 0.8, 1)
+theme_override_colors/font_hover_color = Color(1, 0.94, 0.95, 1)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_decline_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_decline_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_decline_pressed")
+theme_override_styles/focus = SubResource("StyleBoxFlat_decline_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_decline_pressed")
+text = "×"

@@ -42,8 +42,6 @@ func _run() -> void:
 
 	var expected := {
 		"AlphaGymBrock": ["kanto_alpha_gym_brock", "boulder"],
-		"AlphaGymMisty": ["kanto_alpha_gym_misty", "cascade"],
-		"AlphaGymLtSurge": ["kanto_alpha_gym_lt_surge", "thunder"],
 	}
 	var leaders: Dictionary = {}
 	var collision := map.get_node_or_null("Collision") as TileMapLayer
@@ -66,22 +64,11 @@ func _run() -> void:
 				"%s stands on a walkable tile" % node_name
 			)
 
-	var player_save := root.get_node_or_null("PlayerSave")
-	_check(player_save != null, "PlayerSave is available for Gym trial gates")
-	if player_save != null and leaders.has("AlphaGymMisty"):
-		player_save.call("apply_gym_badge_state", {"badges": []})
-		var misty: Node = leaders["AlphaGymMisty"] as Node
-		_check(
-			misty.call("_missing_required_badges") == ["boulder"],
-			"Misty requires the Boulder Badge"
-		)
-		player_save.call("apply_gym_badge_state", {
-			"badges": [{"region": "kanto", "badgeId": "boulder", "earned": true}],
-		})
-		_check(
-			(misty.call("_missing_required_badges") as Array).is_empty(),
-			"Misty unlocks after the Boulder Badge"
-		)
+	_check(
+		map.get_node_or_null("Entities/NPCs/AlphaGymMisty") == null
+		and map.get_node_or_null("Entities/NPCs/AlphaGymLtSurge") == null,
+		"Pewter City only places its local Gym Leader"
+	)
 
 	root.remove_child(map)
 	map.free()

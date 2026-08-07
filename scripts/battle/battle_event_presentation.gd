@@ -50,17 +50,21 @@ func get_animation_preload_keys_for_event(event_data: Dictionary) -> Dictionary:
 			var move_name: String = str(event_data.get("move", ""))
 			if move_name != "":
 				move_names.append(move_name)
+		"ability":
+			if _is_tera_shift_event(event_data):
+				effect_keys.append("tera_shift")
 		"fieldEffect":
 			var field_effect_key: String = _get_field_effect_animation_key(event_data)
 			if field_effect_key != "":
 				effect_keys.append(field_effect_key)
 		"heal":
-			var heal_effect_key: String = _get_heal_effect_animation_key(event_data)
-			if heal_effect_key != "":
-				effect_keys.append(heal_effect_key)
-			var heal_followup_effect_key: String = _get_heal_followup_effect_animation_key(event_data)
-			if heal_followup_effect_key != "":
-				effect_keys.append(heal_followup_effect_key)
+			if not bool(event_data.get("maxHpIncreaseSync", false)) and not bool(event_data.get("silent", false)):
+				var heal_effect_key: String = _get_heal_effect_animation_key(event_data)
+				if heal_effect_key != "":
+					effect_keys.append(heal_effect_key)
+				var heal_followup_effect_key: String = _get_heal_followup_effect_animation_key(event_data)
+				if heal_followup_effect_key != "":
+					effect_keys.append(heal_followup_effect_key)
 		"statChange":
 			var stat_effect_key: String = _get_stat_change_effect_animation_key(event_text_formatter.get_stat_change_amount(event_data))
 			if stat_effect_key != "":
@@ -73,6 +77,8 @@ func get_animation_preload_keys_for_event(event_data: Dictionary) -> Dictionary:
 			var pokemon_effect_key: String = _get_pokemon_effect_animation_key(event_data)
 			if pokemon_effect_key != "":
 				effect_keys.append(pokemon_effect_key)
+			if _is_tera_shift_event(event_data):
+				effect_keys.append("tera_shift")
 		"cant":
 			var cant_effect_key: String = _get_cant_status_effect_animation_key(event_data)
 			if cant_effect_key != "":
@@ -257,6 +263,8 @@ func build(event_data: Dictionary) -> Dictionary:
 			recent_move_event = false
 			_track_pokemon_effect_event(event_data)
 			presentation["effect_animation_key"] = _get_pokemon_effect_animation_key(event_data)
+			if _is_tera_shift_event(event_data):
+				presentation["effect_animation_key"] = "tera_shift"
 			presentation["effect_animation_target_ident"] = str(event_data.get("target", event_data.get("pokemon", "")))
 			presentation["log_message"] = event_text_formatter.format_pokemon_effect_event(event_data)
 			presentation["add_blank_after"] = str(presentation["log_message"]) != ""
@@ -267,6 +275,9 @@ func build(event_data: Dictionary) -> Dictionary:
 			presentation["log_message"] = event_text_formatter.format_ability_event(event_data)
 			presentation["battle_message"] = str(presentation["log_message"])
 			presentation["add_blank_after"] = str(presentation["log_message"]) != ""
+			if _is_tera_shift_event(event_data):
+				presentation["effect_animation_key"] = "tera_shift"
+				presentation["effect_animation_target_ident"] = str(event_data.get("target", event_data.get("actor", "")))
 			if event_text_formatter.is_ability_boost_event(event_data):
 				presentation["ability_boost_target_ident"] = str(event_data.get("target", event_data.get("actor", "")))
 			recent_ability_event = str(presentation["log_message"]) != ""
@@ -289,6 +300,7 @@ func build(event_data: Dictionary) -> Dictionary:
 			recent_move_event = false
 			presentation["effect_animation_key"] = _get_status_condition_effect_animation_key(event_data)
 			presentation["effect_animation_target_ident"] = str(event_data.get("target", event_data.get("pokemon", "")))
+			presentation["pre_log_message"] = event_text_formatter.format_status_source_ability_event(event_data)
 			presentation["log_message"] = event_text_formatter.format_status_event(event_data)
 			presentation["battle_message"] = str(presentation["log_message"])
 			presentation["add_blank_after"] = str(presentation["log_message"]) != ""
@@ -389,6 +401,8 @@ func build(event_data: Dictionary) -> Dictionary:
 		"heal":
 			recent_ability_event = false
 			recent_move_event = false
+			if bool(event_data.get("maxHpIncreaseSync", false)) or bool(event_data.get("silent", false)):
+				return presentation
 			presentation["heal_target_ident"] = str(event_data.get("target", ""))
 			presentation["effect_animation_key"] = _get_heal_effect_animation_key(event_data)
 			presentation["heal_followup_effect_animation_key"] = _get_heal_followup_effect_animation_key(event_data)
@@ -412,6 +426,14 @@ func build(event_data: Dictionary) -> Dictionary:
 			recent_move_event = false
 
 	return presentation
+
+
+func _is_tera_shift_event(event_data: Dictionary) -> bool:
+	var ability := str(event_data.get("ability", event_data.get("abilityName", "")))
+	var effect := str(event_data.get("effect", ""))
+	var normalized_ability := ability.to_lower().replace(" ", "").replace("-", "").replace("_", "")
+	var normalized_effect := effect.to_lower().replace(" ", "").replace("-", "").replace("_", "")
+	return normalized_ability == "terashift" or normalized_effect.ends_with("terashift")
 
 
 func _new_presentation() -> Dictionary:

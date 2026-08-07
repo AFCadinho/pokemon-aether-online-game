@@ -13,8 +13,11 @@ const PLAYER_PROFILE_ENDPOINT := "/game/profile"
 const PLAYER_STORY_ENDPOINT := "/game/story"
 const STORY_BOOTSTRAP_ENDPOINT := "/game/story/bootstrap"
 const STORY_INTERACTION_ENDPOINT := "/game/story/interactions/%s"
+const STORY_QUEST_ACCEPT_ENDPOINT := "/game/story/quests/%s/accept"
 const PUBLIC_TRAINER_CARD_ENDPOINT := "/game/trainers/%s/card"
 const REQUEST_TIMEOUT_SECONDS := 8.0
+
+var pending_side_quest_accept_request_ids: Dictionary = {}
 
 
 func load_player_profile() -> Dictionary:
@@ -119,6 +122,47 @@ func bootstrap_story() -> Dictionary:
 		"success": true,
 		"story": StoryService.get_story(),
 	}
+
+
+func accept_side_quest(quest_id: String, expected_revision: int) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {"success": false, "status": 401, "error": "Not authenticated."}
+	var normalized_quest_id := quest_id.strip_edges()
+	if normalized_quest_id.is_empty() or expected_revision < 0:
+		return {"success": false, "status": 0, "error": "Invalid side quest offer."}
+	var request_key := "%s:%d" % [normalized_quest_id, expected_revision]
+	var request_id := str(pending_side_quest_accept_request_ids.get(request_key, ""))
+	if request_id.is_empty():
+		request_id = _new_request_id()
+		pending_side_quest_accept_request_ids[request_key] = request_id
+	if request_id.is_empty():
+		return {"success": false, "status": 0, "error": "Could not create quest request."}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + (STORY_QUEST_ACCEPT_ENDPOINT % normalized_quest_id.uri_encode()),
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({
+			"requestId": request_id,
+			"expectedRevision": expected_revision,
+		})
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var story: Dictionary = _dictionary_from_value(response.get("body", {}))
+	if (
+		not _is_valid_story_projection_body(story)
+		or int(story.get("revision", -1)) != expected_revision + 1
+	):
+		return {
+			"success": false,
+			"status": int(response.get("status", 0)),
+			"error": "Side quest acceptance response was invalid.",
+		}
+	pending_side_quest_accept_request_ids.erase(request_key)
+	StoryService.apply_story(story)
+	return {"success": true, "story": StoryService.get_story()}
 
 
 func resolve_story_interaction(
@@ -267,6 +311,22 @@ func _is_canonical_uuid(value: String) -> bool:
 		if not (is_digit or is_lower_hex):
 			return false
 	return value.substr(14, 1) == "4" and value.substr(19, 1) in ["8", "9", "a", "b"]
+
+
+func _new_request_id() -> String:
+	var bytes := Crypto.new().generate_random_bytes(16)
+	if bytes.size() != 16:
+		return ""
+	bytes[6] = (bytes[6] & 0x0f) | 0x40
+	bytes[8] = (bytes[8] & 0x3f) | 0x80
+	var value := bytes.hex_encode()
+	return "%s-%s-%s-%s-%s" % [
+		value.substr(0, 8),
+		value.substr(8, 4),
+		value.substr(12, 4),
+		value.substr(16, 4),
+		value.substr(20, 12),
+	]
 
 
 func _is_valid_story_resolve_body(body: Dictionary) -> bool:

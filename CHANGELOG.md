@@ -1,5 +1,84 @@
 # Changelog
 
+## 0.3.47 - 2026-08-06
+
+**Added**
+
+- Added Route 3 as a playable Kanto route, including new Trainer battles, wild encounters, a Pokémon Center, route signs, and the connection between Pewter City and Route 3.
+- Added Catching Mentor Gideon's Route 22 side quest. Learn how catching works, catch a Mankey, and receive 10 Great Balls as a reward.
+- Added the next part of the opening story: Gary's childhood-rival battle on Route 22, the journey toward Pewter City, and the first Gym challenge. Professor Oak now also gives you 10 Poké Balls with the Pokédex, and Dadinho's training reward is claimed by returning to him.
+- Added richer battle presentation for special Trainer battles, including battle introductions, Pokémon send-out callouts, contextual Trainer banter, and “Dodge!” reactions after genuine misses. These callouts are also visible to spectators.
+- Added the Viridian City jail manager, wanted-level-based bail costs, and staff detention support.
+
+**Changed**
+
+- Building entrances can now be controlled through world access. Buildings without an interior map remain blocked with a clear “This building is closed.” message.
+- Route guards now appear only when a route is actually blocked for the current Trainer. Story and party requirements still keep the Pallet Town guard in place until you collect a Pokémon from Oak.
+- Improved the battle Bag layout so it sits cleanly above the move controls, and key items no longer clutter the All Items category.
+- Skills now open with a simple overview first, with detailed information shown after selecting an individual skill.
+- Staff teleport tools now close their parent menu automatically, and staff map search uses the standard “Pokémon” spelling.
+- Removed Fearow from Route 22 wild encounters and adjusted the early-route encounter progression.
+
+**Fixed**
+
+- Fixed the Mankey catching quest not recognizing a Mankey caught on Route 22.
+- Fixed Pokémon move-learning choices failing to save.
+- Fixed early Kanto story progression stopping after the Town Map or after the Route 22 rival battle.
+- Fixed PvP hover information so revealed Pokémon usage history and activated held items are shown consistently.
+- Fixed movement remaining available behind modal shop, Atelier, and other overworld windows, while preserving authorized staff teleports.
+- Fixed duplicate chat reconnect attempts after progress resets and improved NPC battle transition handling.
+
+## 0.3.46 - 2026-08-05
+
+**Added**
+
+- Added the Thieving skill. Pickpocket supported NPCs to earn Thieving XP and Loot, build Wanted, and risk arrest and public service.
+- Added a Skills overview for Fishing and Thieving with levels, XP progress, bonuses, unlocks, and daily Thieving targets.
+- Added Surf mounts, starting with Lapras, plus a mount manager for choosing available travel companions.
+- Wild Pokémon can now vary by time of day. Encounter information shows when each Pokémon is available.
+- Early Kanto areas now feel livelier with more Trainers, residents, ambient Pokémon, route signs, and character portraits.
+
+**Changed**
+
+- Expanded Route 22 with complete gameplay and wild encounters, and refreshed Viridian City's layout, residents, and collision boundaries.
+- Improved overworld presentation with pixel-perfect scaling, revised zoom options, cleaner Surf animations, and clearer route guards.
+- Updated Pallet Town family dialogue and moved Dadinho's training quest to Route 1 so the opening story flows more naturally.
+
+**Fixed**
+
+- Fixed several PvP issues involving reconnect recovery, repeated turn choices, battle hazards, spectator information, and spectator forfeits.
+- Fixed Surf rider layering and animation problems, including the upward-facing rider alignment.
+- Fixed route guards or NPC dialogue occasionally blocking passage or failing to start correctly.
+
+## 0.3.45 - 2026-08-03
+
+**Added**
+
+- Begin your Kanto adventure with a new opening story: choose your starter, train with Dadinho, deliver Oak's Parcel, battle Gary, and receive the Town Map from Lillie.
+- Follow main quests and side quests with a new quest journal, map markers, reward previews, and changing NPC dialogue.
+- Explore an interactive Kanto Town Map showing your location, routes, points of interest, and useful descriptions.
+- Visit the Pokémon Center in Viridian City and explore the new Route 22 open field.
+- Trainer battles now include character portraits and improved introductions.
+- Kingambit now shows how many allies have fainted during battle.
+- Added a new pixel-style cursor with adjustable size.
+
+**Changed**
+
+- Quests and rewards are now clearer and easier to navigate.
+- Rain and snow now react more naturally when landing on different surfaces.
+- Improved the Player's House, Dadinho, Gary, Lillie, market interactions, Trainer portraits, the Town Map, and the battle EXP bar.
+- Account privacy settings are clearer, and completed data exports can be opened directly from the game.
+
+**Fixed**
+
+- PvP battles now continue more reliably after reconnecting, switching Pokémon, Team Preview, or running low on time.
+- Private battles now hide opponent information at the correct moments.
+- Fixed Mimikyu's forms and several incorrect or disappearing battle portraits.
+- Fixed Trainer appearances sometimes changing during PvP battles.
+- Fixed incorrect starting positions when beginning a new game or returning after a blackout.
+- Fixed several problems that could stop progress during the opening Kanto story.
+- Fixed personal-data exports sometimes being interrupted.
+
 ## 0.3.42 - 2026-07-31
 
 **Added**

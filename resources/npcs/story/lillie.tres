@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="NpcDefinition" format=3 uid="uid://bjspngihn0sjy"]
+
+[ext_resource type="Script" path="res://scripts/world/npcs/npc_definition.gd" id="1_definition"]
+[ext_resource type="SpriteFrames" uid="uid://cblxtom6qt02u" path="res://assets/npcs/custom/lillie_aether_blossom_frames.tres" id="2_frames"]
+[ext_resource type="Texture2D" uid="uid://dg7yg0aek46wc" path="res://assets/sprites/mugshots/lillie_aether_blossom.png" id="3_mugshot"]
+
+[resource]
+script = ExtResource("1_definition")
+npc_id = "kanto_rivals_house_lillie"
+npc_definition_id = "kanto_rivals_house_lillie"
+display_name = "Lillie"
+sprite_frames = ExtResource("2_frames")
+mugshot = ExtResource("3_mugshot")

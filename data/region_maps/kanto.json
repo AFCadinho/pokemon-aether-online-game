@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "regionId": "kanto",
+  "nameKey": "ui.town_map.region.kanto",
+  "backgroundPath": "res://assets/ui/maps/kanto_region_map.png",
+  "layoutPath": "res://data/region_maps/kanto_layout.json",
+  "showConnectionOverlay": false,
+  "showMarkerOverlay": false,
+  "canvasSize": {
+    "x": 400,
+    "y": 297
+  },
+  "locations": {
+    "kanto_pallet_town": {
+      "kind": "town",
+      "nameKey": "ui.town_map.location.pallet_town.name",
+      "descriptionKey": "ui.town_map.location.pallet_town.description"
+    },
+    "kanto_route_1": {
+      "kind": "route",
+      "nameKey": "ui.town_map.location.route_1.name",
+      "descriptionKey": "ui.town_map.location.route_1.description"
+    },
+    "kanto_viridian_city": {
+      "kind": "city",
+      "nameKey": "ui.town_map.location.viridian_city.name",
+      "descriptionKey": "ui.town_map.location.viridian_city.description"
+    },
+    "kanto_route_2": {
+      "kind": "route",
+      "nameKey": "ui.town_map.location.route_2.name",
+      "descriptionKey": "ui.town_map.location.route_2.description"
+    },
+    "kanto_viridian_forest": {
+      "kind": "special",
+      "nameKey": "ui.town_map.location.viridian_forest.name",
+      "descriptionKey": "ui.town_map.location.viridian_forest.description"
+    },
+    "kanto_pewter_city": {
+      "kind": "city",
+      "nameKey": "ui.town_map.location.pewter_city.name",
+      "descriptionKey": "ui.town_map.location.pewter_city.description"
+    },
+    "kanto_route_3": {
+      "kind": "route",
+      "nameKey": "ui.town_map.location.route_3.name",
+      "descriptionKey": "ui.town_map.location.route_3.description"
+    }
+  }
+}

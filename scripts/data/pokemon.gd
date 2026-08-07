@@ -29,6 +29,7 @@ var experience_to_next_level: int
 var growth_rate: String
 var base_experience: int
 var status: String
+var happiness: int
 
 var current_hp: int
 var max_hp: int
@@ -62,7 +63,8 @@ func _init(
 	_experience_to_next_level: int = 0,
 	_growth_rate: String = "",
 	_base_experience: int = 0,
-	_status: String = ""
+	_status: String = "",
+	_happiness: int = 255
 	) -> void:
 	species = _species
 	level = _level
@@ -113,6 +115,7 @@ func _init(
 	growth_rate = _growth_rate.strip_edges()
 	base_experience = max(_base_experience, 0)
 	status = _normalize_status(_status)
+	happiness = clampi(_happiness, 0, 255)
 
 	max_hp = 20
 	current_hp = max_hp
@@ -135,6 +138,7 @@ func to_battle_dict() -> Dictionary:
 		"item": item,
 		"ability": ability,
 		"nature": nature,
+		"happiness": happiness,
 		"evs": evs,
 		"storedEvs": stored_evs,
 		"ivs": ivs,

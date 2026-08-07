@@ -65,6 +65,16 @@
         }
       }
     },
+    "kanto_route_22": {
+      "points": {
+        "from_viridian_city": {
+          "facingDirection": "left",
+          "id": "viridian_city_entrance",
+          "label": "Viridian City Entrance",
+          "safe": true
+        }
+      }
+    },
     "kanto_route_2": {
       "label": "Route 2",
       "points": {
@@ -100,6 +110,12 @@
           "facingDirection": "up",
           "id": "route_1_entrance",
           "label": "Route 1 Entrance",
+          "safe": true
+        },
+        "from_route_22": {
+          "facingDirection": "right",
+          "id": "route_22_entrance",
+          "label": "Route 22 Entrance",
           "safe": true
         }
       }

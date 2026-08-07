@@ -90,8 +90,8 @@ func run_sequence(actions: Variant, host: Node, player: Node2D = null) -> Dictio
 			failed_result["actionIndex"] = index
 			return failed_result
 
-		# DialogueBox releases every GameState lock when it closes. Reassert the
-		# sequence lock before the next action can run.
+		# Keep the sequence lock explicit between actions. DialogueBox restores
+		# the lock state it inherited when it opened.
 		GameState.lock_input()
 
 	_is_running = false
@@ -196,7 +196,7 @@ func _run_action(action: Dictionary, host: Node, player: Node2D) -> Dictionary:
 		"move_actor":
 			return await _run_move_actor(action, host, player)
 		"battle":
-			return await _run_battle(action)
+			return await _run_battle(action, host)
 	return {"success": false, "status": "unsupported_action"}
 
 
@@ -261,7 +261,7 @@ func _run_move_actor(action: Dictionary, host: Node, player: Node2D) -> Dictiona
 	}
 
 
-func _run_battle(action: Dictionary) -> Dictionary:
+func _run_battle(action: Dictionary, host: Node) -> Dictionary:
 	var trainer_id := str(action.get("trainerId", ""))
 	var response: Dictionary = await TrainerMetadataService.get_trainer_metadata(
 		trainer_id
@@ -271,6 +271,8 @@ func _run_battle(action: Dictionary) -> Dictionary:
 	var trainer_metadata: Dictionary = response.get("metadata", {}) as Dictionary
 	if str(trainer_metadata.get("id", "")) != trainer_id:
 		return {"success": false, "status": "trainer_identity_mismatch"}
+	if host.has_method("build_battle_trainer_metadata"):
+		trainer_metadata = host.call("build_battle_trainer_metadata", trainer_metadata)
 	var world := GameState.get_world()
 	if world == null or not world.has_method("start_trainer_battle"):
 		return {"success": false, "status": "battle_world_unavailable"}

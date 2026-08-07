@@ -19,11 +19,25 @@ const MARKET_MODE_PLAYER_SELLS := "player_sells"
 @export var opening_dialogue_id := ""
 @export var failure_dialogue_id := ""
 
+var quest_reward_id := ""
+var quest_reward_quest_id := ""
+var quest_reward_step_id := ""
+var quest_reward_received_dialogue_id := ""
+
 
 func interact_with_player(_player: Node2D) -> void:
+	var access: Dictionary = await ThievingService.use_public_service("market")
+	if not bool(access.get("success", false)):
+		await GameErrorDialogService.show_response(access, "backend.error.market_load")
+		return
+	if not bool(access.get("allowed", true)):
+		return
 	var metadata_response: Dictionary = await _load_npc_metadata()
 	if not bool(metadata_response.get("success", false)):
 		await _show_report_to_staff_message()
+		return
+	if _is_quest_reward_available():
+		await _claim_quest_reward()
 		return
 
 	await show_dialogue(await _resolve_dialogue_lines(opening_dialogue_id, opening_dialogue_lines))
@@ -96,6 +110,51 @@ func _apply_npc_metadata(metadata: Dictionary) -> void:
 		"failure_dialogue_id",
 		failure_dialogue_id
 	)
+	quest_reward_id = str(metadata.get("questRewardId", "")).strip_edges()
+	quest_reward_quest_id = str(metadata.get("questRewardQuestId", "")).strip_edges()
+	quest_reward_step_id = str(metadata.get("questRewardStepId", "")).strip_edges()
+	quest_reward_received_dialogue_id = str(
+		metadata.get("questRewardReceivedDialogueId", "")
+	).strip_edges()
+
+
+func _is_quest_reward_available() -> bool:
+	if (
+		quest_reward_id.is_empty()
+		or quest_reward_quest_id.is_empty()
+		or quest_reward_step_id.is_empty()
+	):
+		return false
+	var quest := StoryService.get_quest(quest_reward_quest_id)
+	if str(quest.get("status", "")).to_lower() != "active":
+		return false
+	var steps_value: Variant = quest.get("steps", [])
+	if not steps_value is Array:
+		return false
+	for step_value: Variant in steps_value as Array:
+		if not step_value is Dictionary:
+			continue
+		var step := step_value as Dictionary
+		if str(step.get("stepId", "")) == quest_reward_step_id:
+			return str(step.get("status", "")).to_lower() == "active"
+	return false
+
+
+func _claim_quest_reward() -> void:
+	var inventory_service := get_node_or_null("/root/InventoryService")
+	if inventory_service == null or not inventory_service.has_method("claim_npc_item_reward"):
+		await show_dialogue(await _resolve_dialogue_lines(failure_dialogue_id, failure_dialogue_lines))
+		return
+	var result: Dictionary = await inventory_service.call("claim_npc_item_reward", quest_reward_id)
+	if not bool(result.get("success", false)):
+		await GameErrorDialogService.show_response(result, "backend.error.reward_claim")
+		return
+	if not bool(result.get("storyRefreshSuccess", false)):
+		push_warning("MarketAttendantNPC: Oak's Parcel story refresh did not complete locally.")
+	await show_dialogue(await _resolve_dialogue_lines(
+		quest_reward_received_dialogue_id,
+		["You received Oak's Parcel!", "Please deliver it to Professor Oak."]
+	))
 
 
 func _get_metadata_dialogue_id(metadata: Dictionary, camel_key: String, snake_key: String, current_value: String) -> String:
