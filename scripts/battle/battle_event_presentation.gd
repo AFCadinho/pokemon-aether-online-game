@@ -77,6 +77,8 @@ func get_animation_preload_keys_for_event(event_data: Dictionary) -> Dictionary:
 			var pokemon_effect_key: String = _get_pokemon_effect_animation_key(event_data)
 			if pokemon_effect_key != "":
 				effect_keys.append(pokemon_effect_key)
+			if _is_tera_shift_event(event_data):
+				effect_keys.append("tera_shift")
 		"cant":
 			var cant_effect_key: String = _get_cant_status_effect_animation_key(event_data)
 			if cant_effect_key != "":
@@ -261,6 +263,8 @@ func build(event_data: Dictionary) -> Dictionary:
 			recent_move_event = false
 			_track_pokemon_effect_event(event_data)
 			presentation["effect_animation_key"] = _get_pokemon_effect_animation_key(event_data)
+			if _is_tera_shift_event(event_data):
+				presentation["effect_animation_key"] = "tera_shift"
 			presentation["effect_animation_target_ident"] = str(event_data.get("target", event_data.get("pokemon", "")))
 			presentation["log_message"] = event_text_formatter.format_pokemon_effect_event(event_data)
 			presentation["add_blank_after"] = str(presentation["log_message"]) != ""
@@ -426,7 +430,10 @@ func build(event_data: Dictionary) -> Dictionary:
 
 func _is_tera_shift_event(event_data: Dictionary) -> bool:
 	var ability := str(event_data.get("ability", event_data.get("abilityName", "")))
-	return ability.to_lower().replace(" ", "").replace("-", "").replace("_", "") == "terashift"
+	var effect := str(event_data.get("effect", ""))
+	var normalized_ability := ability.to_lower().replace(" ", "").replace("-", "").replace("_", "")
+	var normalized_effect := effect.to_lower().replace(" ", "").replace("-", "").replace("_", "")
+	return normalized_ability == "terashift" or normalized_effect.ends_with("terashift")
 
 
 func _new_presentation() -> Dictionary:
