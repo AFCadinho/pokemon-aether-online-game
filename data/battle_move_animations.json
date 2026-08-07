@@ -7420,6 +7420,7 @@
     "recover": {
       "template": "imported_sheet",
       "category": "heal",
+      "static_visual_anchor": "actor",
       "show_timing_backgrounds": false,
       "show_timing_foregrounds": false,
       "show_pink_visual": false,
