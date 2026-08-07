@@ -7497,6 +7497,30 @@
         "PRSFX- Outrage1.wav": "res://assets/battles/animations/outrage/PRSFX- Outrage1.wav",
         "PRSFX- Outrage2.wav": "res://assets/battles/animations/outrage/PRSFX- Outrage2.wav"
       }
+    },
+    "fakeout": {
+      "template": "imported_sheet",
+      "category": "uncategorized",
+      "data_path": "res://assets/battles/animations/fakeout/fakeout.json",
+      "sheet_path": "res://assets/battles/animations/fakeout/PRAS- Strike.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Fake Out1.wav": "res://assets/battles/animations/fakeout/PRSFX- Fake Out1.wav",
+        "PRSFX- Fake Out2.wav": "res://assets/battles/animations/fakeout/PRSFX- Fake Out2.wav"
+      }
+    },
+    "return": {
+      "template": "imported_sheet",
+      "category": "uncategorized",
+      "data_path": "res://assets/battles/animations/return/return.json",
+      "sheet_path": "res://assets/battles/animations/return/PRAS- Love.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Return1.wav": "res://assets/battles/animations/return/PRSFX- Return1.wav",
+        "PRSFX- Return2.wav": "res://assets/battles/animations/return/PRSFX- Return2.wav"
+      }
     }
   }
 }
