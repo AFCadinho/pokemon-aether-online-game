@@ -7471,7 +7471,10 @@
           ]
         }
       ],
-      "show_timing_backgrounds": false,
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "timing_background_persist_until_clear": false,
+      "background_below_sprites": true,
       "show_timing_foregrounds": false,
       "show_pink_visual": false,
       "show_sheet_sprites": true,
