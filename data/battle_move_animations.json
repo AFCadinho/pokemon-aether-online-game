@@ -7328,6 +7328,17 @@
       "sound_paths": {
         "PRSFX- Razor Shell.wav": "res://assets/battles/animations/razorshell/PRSFX- Razor Shell.wav"
       }
+    },
+    "hex": {
+      "template": "imported_sheet",
+      "category": "uncategorized",
+      "data_path": "res://assets/battles/animations/hex/hex.json",
+      "sheet_path": "res://assets/battles/animations/hex/PRAS- Grudge.png",
+      "background_path": "res://assets/battles/animations/hex/PRAS- Ghost BG.png",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Hex.wav": "res://assets/battles/animations/hex/PRSFX- Hex.wav"
+      }
     }
   }
 }
