@@ -83,7 +83,7 @@ func _set_move_data(move_data: Dictionary) -> void:
 	var category := str(move_data.get("category", ""))
 	_set_category_icon_or_text(category)
 	power_row.visible = category.to_lower() != "status"
-	power_value_label.text = _format_power(move_data.get("basePower", move_data.get("base_power", "")))
+	power_value_label.text = _format_power(effective_base_power(move_data))
 	accuracy_value_label.text = _format_accuracy(move_data.get("accuracy", ""))
 	var z_effect := str(move_data.get("zEffect", move_data.get("z_effect", ""))).strip_edges()
 	z_effect_row.visible = z_effect != ""
@@ -134,15 +134,33 @@ func _set_node_visible(node: Node, is_visible: bool) -> void:
 		canvas_item.visible = is_visible
 
 
-func _format_power(power_value: Variant) -> String:
-	if power_value == null or str(power_value) == "":
+static func effective_base_power(move_data: Dictionary) -> int:
+	var power_value: Variant = move_data.get("basePower", move_data.get("base_power", ""))
+	if power_value != null and str(power_value) != "" and int(power_value) > 0:
+		return int(power_value)
+
+	var move_id := str(move_data.get(
+		"id",
+		move_data.get("move", move_data.get("moveId", move_data.get("move_id", move_data.get("name", ""))))
+	)).to_lower()
+	move_id = move_id.replace("-", "").replace("_", "").replace(" ", "")
+	if move_id != "frustration" and move_id != "return":
+		return 0
+
+	var happiness_value: Variant = move_data.get("pokemonHappiness", move_data.get("happiness", null))
+	if happiness_value == null or str(happiness_value) == "":
+		return 0
+	var happiness := clampi(int(happiness_value), 0, 255)
+	if move_id == "frustration":
+		return maxi(1, floori(float(255 - happiness) * 10.0 / 25.0))
+	return maxi(1, floori(float(happiness) * 10.0 / 25.0))
+
+
+static func _format_power(power_value: Variant) -> String:
+	if power_value == null or str(power_value) == "" or int(power_value) <= 0:
 		return "--"
 
-	var power: int = int(power_value)
-	if power <= 0:
-		return "--"
-
-	return str(power)
+	return str(int(power_value))
 
 
 func _format_accuracy(accuracy_value: Variant) -> String:

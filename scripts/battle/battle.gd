@@ -753,7 +753,15 @@ func _connect_forfeit_confirm_dialog_signals() -> void:
 func _show_move_hover(move_data: Dictionary, slot_rect: Rect2) -> void:
 	current_move_hover_rect = slot_rect
 	if move_hover_card.has_method("show_for_move"):
-		move_hover_card.call("show_for_move", move_data)
+		var hover_move_data := move_data.duplicate(true)
+		var saved_active_pokemon := active_player_pokemon
+		if saved_active_pokemon == null:
+			saved_active_pokemon = _get_saved_pokemon_for_active_data(
+				battle_state.get_active_player_pokemon(_get_local_state_player_id())
+			)
+		if saved_active_pokemon != null:
+			hover_move_data["pokemonHappiness"] = saved_active_pokemon.happiness
+		move_hover_card.call("show_for_move", hover_move_data)
 	_position_move_hover_card()
 
 func _hide_move_hover() -> void:
