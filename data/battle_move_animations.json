@@ -7539,7 +7539,8 @@
           "offset": [
             0.0,
             50.0
-          ]
+          ],
+          "mirror_with_battlefield": true
         }
       ],
       "overlay_peak_alpha": 0.0,
