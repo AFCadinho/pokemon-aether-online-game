@@ -214,7 +214,6 @@ const CAPTURE_SUCCESS_RESULT_HOLD_SECONDS := 0.40
 const BATTLE_END_RESULT_HOLD_SECONDS := 0.12
 const DEBUG_PVP_REALTIME := false
 const DEBUG_PVP_FLOW_TRACE := false
-const DEBUG_TERA_SHIFT_TRACE := true
 const DEBUG_BATTLE_HP_EVENTS := false
 const DEBUG_BATTLE_MOVE_EVENTS := false
 const DEBUG_SIDE_CONDITION_EFFECTS := false
@@ -5768,12 +5767,6 @@ func setup_pvp_battle_from_response(
 	pvp_match_id = str(api_response.get("matchId", "")).strip_edges()
 	_remember_spectator_raw_response(api_response)
 	var local_player_id := str(api_response.get("playerId", "p1"))
-	if DEBUG_TERA_SHIFT_TRACE:
-		print("[TeraShiftTrace] PvP battle setup loaded battle=%s local_player=%s phase=%s" % [
-			str(api_response.get("battleId", "")),
-			local_player_id,
-			str(api_response.get("phase", "")),
-		])
 	if _is_spectator_battle():
 		local_player_id = "p1"
 		player_pokemon = _build_spectator_active_pokemon(api_response, "p1")
@@ -7813,17 +7806,6 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			continue
 
 		var event_data: Dictionary = event as Dictionary
-		if DEBUG_TERA_SHIFT_TRACE:
-			print("[TeraShiftTrace] render event type=%s target=%s actor=%s ability=%s species=%s displaySpecies=%s" % [
-				str(event_data.get("type", "")),
-				str(event_data.get("target", "")),
-				str(event_data.get("actor", "")),
-				str(event_data.get("ability", event_data.get("abilityName", ""))),
-				str(event_data.get("species", "")),
-				str(event_data.get("displaySpecies", "")),
-			])
-			if str(event_data.get("type", "")) == "pokemonEffect":
-				print("[TeraShiftTrace] pokemonEffect payload=%s" % JSON.stringify(event_data))
 		_ensure_spectator_active_pokemon_for_event(event_data)
 		var fallback_knock_off_message := _get_fallback_knock_off_item_message(event_data) if not has_explicit_item_events else ""
 
@@ -7853,22 +7835,8 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			var ability_target := str(event_data.get("target", ""))
 			var ability_player_id := _get_player_id_from_ident(ability_target)
 			var previous_ability_species := _get_active_display_species(ability_player_id) if ability_player_id != "" else ""
-			if DEBUG_TERA_SHIFT_TRACE:
-				print("[TeraShiftTrace] render form effect target=%s player=%s species_before=%s eventType=%s event=%s" % [
-					ability_target,
-					ability_player_id,
-					previous_ability_species,
-					event_type,
-					str(event_data.get("ability", event_data.get("abilityName", ""))),
-				])
 			battle_state.apply_event_conditions([event_data])
 			var next_ability_species := _get_active_display_species(ability_player_id) if ability_player_id != "" else ""
-			if DEBUG_TERA_SHIFT_TRACE:
-				print("[TeraShiftTrace] render form effect target=%s species_after=%s changed=%s" % [
-					ability_target,
-					next_ability_species,
-					str(previous_ability_species != next_ability_species),
-				])
 			if ability_player_id != "" and previous_ability_species != next_ability_species:
 				_update_active_pokemon_presentation_for_ident(ability_target)
 
@@ -13588,18 +13556,7 @@ func _restore_pvp_authoritative_presentation(
 	)
 	_preserve_terminal_presentation_requests(canonical_response)
 	battle_state.load_from_api_response(canonical_response, false)
-	if DEBUG_TERA_SHIFT_TRACE:
-		print("[TeraShiftTrace] canonical restore loaded active_p1=%s active_p2=%s rendered_events=%d" % [
-			_get_active_display_species("p1"),
-			_get_active_display_species("p2"),
-			rendered_events.size(),
-		])
 	_reapply_rendered_condition_events(rendered_events)
-	if DEBUG_TERA_SHIFT_TRACE:
-		print("[TeraShiftTrace] canonical restore after reapply active_p1=%s active_p2=%s" % [
-			_get_active_display_species("p1"),
-			_get_active_display_species("p2"),
-		])
 	_sync_player_save_party_status_from_battle_state()
 	# PvP field presentation advances through the ordered fieldEffect stream.
 	# Re-seeding it from a transport projection after every rendered batch can
@@ -13617,11 +13574,6 @@ func _reapply_rendered_condition_events(events: Array) -> void:
 			continue
 
 		var event_data: Dictionary = event_value as Dictionary
-		if DEBUG_TERA_SHIFT_TRACE and str(event_data.get("type", "")) == "ability":
-			print("[TeraShiftTrace] restore reapply ability target=%s ability=%s" % [
-				str(event_data.get("target", "")),
-				str(event_data.get("ability", event_data.get("abilityName", ""))),
-			])
 		match str(event_data.get("type", "")):
 			"damage", "heal", "faint", "status", "ability", "pokemonEffect":
 				condition_events.append(event_data.duplicate(true))
