@@ -7419,7 +7419,31 @@
     },
     "recover": {
       "template": "imported_sheet",
-      "category": "uncategorized",
+      "category": "heal",
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "sprite_zoom_multiplier": 0.68,
+      "sprite_position_offset": [
+        0.0,
+        -72.0
+      ],
+      "visual_color": [
+        0.55,
+        0.95,
+        0.72,
+        1.0
+      ],
+      "sprite_tint": [
+        0.92,
+        1.0,
+        0.96,
+        1.0
+      ],
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/recover/recover.json",
       "sheet_path": "res://assets/battles/animations/recover/PRAS- Recovery.png",
       "background_path": "",
