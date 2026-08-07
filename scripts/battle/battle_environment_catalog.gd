@@ -3,10 +3,14 @@ extends RefCounted
 class_name BattleEnvironmentCatalog
 
 const DEFAULT_ENVIRONMENT_ID := &"grass"
+const WATER_ENVIRONMENT_ID := &"water"
+const CAVE_ENVIRONMENT_ID := &"cave"
 const PVP_STADIUM_ENVIRONMENT_ID := &"pvp_stadium"
 
 const PROFILES: Dictionary = {
 	DEFAULT_ENVIRONMENT_ID: preload("res://resources/battle/environments/grass.tres"),
+	WATER_ENVIRONMENT_ID: preload("res://resources/battle/environments/water.tres"),
+	CAVE_ENVIRONMENT_ID: preload("res://resources/battle/environments/cave.tres"),
 	PVP_STADIUM_ENVIRONMENT_ID: preload("res://resources/battle/environments/pvp_stadium.tres"),
 }
 

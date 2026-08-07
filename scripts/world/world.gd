@@ -5,6 +5,7 @@ const BATTLE_SCENE: PackedScene = preload(BATTLE_SCENE_PATH)
 const REMOTE_PLAYER_AVATAR_SCRIPT: Script = preload("res://scripts/world/remote_player_avatar.gd")
 const MAP_TRANSITION_INDICATOR_SCRIPT: Script = preload("res://scripts/ui/map_transition_indicator.gd")
 const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.gd")
+const BattleEnvironmentResolverScript := preload("res://scripts/battle/battle_environment_resolver.gd")
 const POSITION_AUTOSAVE_INTERVAL_SECONDS := 12.0
 const POSITION_PRESENCE_UPDATE_INTERVAL_SECONDS := 0.06
 const POSITION_SAVE_EPSILON := 1.0
@@ -2318,10 +2319,12 @@ func start_triggered_wild_battle_for_area(area_id: String, encounter_type: Strin
 		return
 
 	_prepare_battle_instance_reveal()
+	var battle_environment_id := _resolve_battle_environment_id("wild", response, encounter_type)
 	if not battle_instance.prepare_wild_battle_from_response(
 		PlayerSave.party[0],
 		wild_pokemon,
-		response
+		response,
+		battle_environment_id
 	):
 		push_error("World.start_triggered_wild_battle_for_area failed: battle response could not be prepared.")
 		await _cancel_wild_encounter_transition()
@@ -2400,12 +2403,14 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 
 	_prepare_battle_instance_reveal()
 	MusicManager.play_trainer_battle_music()
+	var battle_environment_id := _resolve_battle_environment_id("trainer", battle_trainer_data)
 
 	await battle_instance.setup_trainer_battle_from_response(
 		PlayerSave.party[0],
 		battle_trainer_data,
 		response,
-		Callable(self, "_reveal_prepared_wild_battle")
+		Callable(self, "_reveal_prepared_wild_battle"),
+		battle_environment_id
 	)
 	if wild_encounter_transition.visible:
 		await _reveal_prepared_wild_battle()
@@ -2441,10 +2446,12 @@ func start_pvp_battle_from_response(response: Dictionary) -> bool:
 
 	_prepare_battle_instance_reveal()
 	MusicManager.play_pvp_battle_music()
+	var battle_environment_id := _resolve_battle_environment_id("pvp", response)
 	await battle_instance.setup_pvp_battle_from_response(
 		PlayerSave.party[0] if not PlayerSave.party.is_empty() else null,
 		response,
-		Callable(self, "_reveal_prepared_pvp_battle")
+		Callable(self, "_reveal_prepared_pvp_battle"),
+		battle_environment_id
 	)
 	if pvp_battle_transition_started_at_msec >= 0:
 		await _reveal_prepared_pvp_battle()
@@ -2926,6 +2933,63 @@ func _reward_pokemon_name(pokemon_id: int) -> String:
 	for pokemon: Pokemon in PlayerSave.party:
 		if pokemon != null and pokemon.owned_pokemon_id == pokemon_id:
 			return pokemon.species
+	return ""
+
+
+func _resolve_battle_environment_id(
+	battle_kind: String,
+	battle_metadata: Dictionary = {},
+	encounter_type: String = ""
+) -> StringName:
+	var player_on_water := false
+	var player_on_tall_grass := false
+	if battle_kind.strip_edges().to_lower() == "wild" and player != null:
+		if player.has_method("is_standing_on_water"):
+			player_on_water = bool(player.call("is_standing_on_water"))
+		if player.has_method("is_standing_on_tall_grass"):
+			player_on_tall_grass = bool(player.call("is_standing_on_tall_grass"))
+	return BattleEnvironmentResolverScript.resolve({
+		"battle_kind": battle_kind,
+		"explicit_environment_id": _get_battle_environment_override(battle_metadata),
+		"encounter_type": encounter_type,
+		"player_on_water": player_on_water,
+		"player_on_tall_grass": player_on_tall_grass,
+		"map_environment_id": _get_current_map_battle_environment_id(),
+	})
+
+
+func _get_battle_environment_override(metadata: Dictionary) -> String:
+	for key: String in [
+		"battleEnvironmentId",
+		"battle_environment_id",
+		"environmentId",
+		"environment_id",
+	]:
+		var value := str(metadata.get(key, "")).strip_edges()
+		if not value.is_empty():
+			return value
+	return ""
+
+
+func _get_current_map_battle_environment_id() -> String:
+	var current_map := GameState.current_map as Node
+	if current_map == null or not is_instance_valid(current_map):
+		return ""
+	if current_map.has_method("get_battle_environment_id"):
+		var method_value := str(current_map.call("get_battle_environment_id")).strip_edges()
+		if not method_value.is_empty():
+			return method_value
+	if current_map.has_method("get_location_metadata"):
+		var metadata_value: Variant = current_map.call("get_location_metadata")
+		if metadata_value is Dictionary:
+			var metadata_environment := _get_battle_environment_override(metadata_value as Dictionary)
+			if not metadata_environment.is_empty():
+				return metadata_environment
+	if current_map.has_meta("battle_environment_id"):
+		return str(current_map.get_meta("battle_environment_id", "")).strip_edges()
+	for property: Dictionary in current_map.get_property_list():
+		if str(property.get("name", "")) == "battle_environment_id":
+			return str(current_map.get("battle_environment_id")).strip_edges()
 	return ""
 
 func _notify_reward_effort_gains(reward_value: Variant) -> void:
