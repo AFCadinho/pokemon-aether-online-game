@@ -7576,6 +7576,18 @@
         "PRSFX- Frustration1.wav": "res://assets/battles/animations/frustration/PRSFX- Frustration1.wav",
         "PRSFX- Frustration2.wav": "res://assets/battles/animations/frustration/PRSFX- Frustration2.wav"
       }
+    },
+    "terastarstorm": {
+      "template": "imported_sheet",
+      "category": "uncategorized",
+      "data_path": "res://assets/battles/animations/terastarstorm/terastarstorm.json",
+      "sheet_path": "res://assets/battles/animations/terastarstorm/Custom_Tera Starstorm.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Barrier": "res://assets/battles/animations/terastarstorm/PRSFX- Barrier.wav",
+        "PRSFX- Recover": "res://assets/battles/animations/terastarstorm/PRSFX- Recover.wav"
+      }
     }
   }
 }
