@@ -1507,6 +1507,10 @@
       "show_timing_foregrounds": false,
       "pattern_offset": 0,
       "pattern_override": -1,
+      "sprite_position_offset": [
+        0.0,
+        24.0
+      ],
       "template": "imported_sheet",
       "speed_scale": 1.08,
       "data_path": "res://assets/battles/animations/stealthrock/stealthrock.json",
