@@ -7512,7 +7512,20 @@
     },
     "return": {
       "template": "imported_sheet",
-      "category": "uncategorized",
+      "category": "physical_contact",
+      "static_visual_anchor": "actor",
+      "sheet_anchor_source_position": [
+        128.0,
+        224.0
+      ],
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "sprite_zoom_multiplier": 0.78,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/return/return.json",
       "sheet_path": "res://assets/battles/animations/return/PRAS- Love.png",
       "background_path": "",
