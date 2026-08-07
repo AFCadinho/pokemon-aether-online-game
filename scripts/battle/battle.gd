@@ -5768,6 +5768,12 @@ func setup_pvp_battle_from_response(
 	pvp_match_id = str(api_response.get("matchId", "")).strip_edges()
 	_remember_spectator_raw_response(api_response)
 	var local_player_id := str(api_response.get("playerId", "p1"))
+	if DEBUG_TERA_SHIFT_TRACE:
+		print("[TeraShiftTrace] PvP battle setup loaded battle=%s local_player=%s phase=%s" % [
+			str(api_response.get("battleId", "")),
+			local_player_id,
+			str(api_response.get("phase", "")),
+		])
 	if _is_spectator_battle():
 		local_player_id = "p1"
 		player_pokemon = _build_spectator_active_pokemon(api_response, "p1")
@@ -7807,6 +7813,15 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			continue
 
 		var event_data: Dictionary = event as Dictionary
+		if DEBUG_TERA_SHIFT_TRACE:
+			print("[TeraShiftTrace] render event type=%s target=%s actor=%s ability=%s species=%s displaySpecies=%s" % [
+				str(event_data.get("type", "")),
+				str(event_data.get("target", "")),
+				str(event_data.get("actor", "")),
+				str(event_data.get("ability", event_data.get("abilityName", ""))),
+				str(event_data.get("species", "")),
+				str(event_data.get("displaySpecies", "")),
+			])
 		_ensure_spectator_active_pokemon_for_event(event_data)
 		var fallback_knock_off_message := _get_fallback_knock_off_item_message(event_data) if not has_explicit_item_events else ""
 
