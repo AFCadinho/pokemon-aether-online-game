@@ -214,6 +214,7 @@ const CAPTURE_SUCCESS_RESULT_HOLD_SECONDS := 0.40
 const BATTLE_END_RESULT_HOLD_SECONDS := 0.12
 const DEBUG_PVP_REALTIME := false
 const DEBUG_PVP_FLOW_TRACE := false
+const DEBUG_TERA_SHIFT_TRACE := true
 const DEBUG_BATTLE_HP_EVENTS := false
 const DEBUG_BATTLE_MOVE_EVENTS := false
 const DEBUG_SIDE_CONDITION_EFFECTS := false
@@ -7835,8 +7836,21 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			var ability_target := str(event_data.get("target", ""))
 			var ability_player_id := _get_player_id_from_ident(ability_target)
 			var previous_ability_species := _get_active_display_species(ability_player_id) if ability_player_id != "" else ""
+			if DEBUG_TERA_SHIFT_TRACE:
+				print("[TeraShiftTrace] render ability target=%s player=%s species_before=%s event=%s" % [
+					ability_target,
+					ability_player_id,
+					previous_ability_species,
+					str(event_data.get("ability", event_data.get("abilityName", ""))),
+				])
 			battle_state.apply_event_conditions([event_data])
 			var next_ability_species := _get_active_display_species(ability_player_id) if ability_player_id != "" else ""
+			if DEBUG_TERA_SHIFT_TRACE:
+				print("[TeraShiftTrace] render ability target=%s species_after=%s changed=%s" % [
+					ability_target,
+					next_ability_species,
+					str(previous_ability_species != next_ability_species),
+				])
 			if ability_player_id != "" and previous_ability_species != next_ability_species:
 				_update_active_pokemon_presentation_for_ident(ability_target)
 
@@ -13556,7 +13570,18 @@ func _restore_pvp_authoritative_presentation(
 	)
 	_preserve_terminal_presentation_requests(canonical_response)
 	battle_state.load_from_api_response(canonical_response, false)
+	if DEBUG_TERA_SHIFT_TRACE:
+		print("[TeraShiftTrace] canonical restore loaded active_p1=%s active_p2=%s rendered_events=%d" % [
+			_get_active_display_species("p1"),
+			_get_active_display_species("p2"),
+			rendered_events.size(),
+		])
 	_reapply_rendered_condition_events(rendered_events)
+	if DEBUG_TERA_SHIFT_TRACE:
+		print("[TeraShiftTrace] canonical restore after reapply active_p1=%s active_p2=%s" % [
+			_get_active_display_species("p1"),
+			_get_active_display_species("p2"),
+		])
 	_sync_player_save_party_status_from_battle_state()
 	# PvP field presentation advances through the ordered fieldEffect stream.
 	# Re-seeding it from a transport projection after every rendered batch can
@@ -13574,6 +13599,11 @@ func _reapply_rendered_condition_events(events: Array) -> void:
 			continue
 
 		var event_data: Dictionary = event_value as Dictionary
+		if DEBUG_TERA_SHIFT_TRACE and str(event_data.get("type", "")) == "ability":
+			print("[TeraShiftTrace] restore reapply ability target=%s ability=%s" % [
+				str(event_data.get("target", "")),
+				str(event_data.get("ability", event_data.get("abilityName", ""))),
+			])
 		match str(event_data.get("type", "")):
 			"damage", "heal", "faint", "status", "ability":
 				condition_events.append(event_data.duplicate(true))

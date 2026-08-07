@@ -4,6 +4,7 @@ class_name BattleState
 
 const DEBUG_PAO_BATTLE_IDENTITY := false
 const DEBUG_PREFIX := "[PAO Battle Identity Debug]"
+const DEBUG_TERA_SHIFT_TRACE := true
 
 var battle_id := ""
 var format_id := ""
@@ -921,6 +922,8 @@ func _apply_forme_change_event_to_requests(event: Dictionary) -> void:
 
 func _apply_ability_event_to_requests(event: Dictionary) -> void:
 	var ability := str(event.get("ability", event.get("abilityName", ""))).strip_edges().to_lower().replace(" ", "-")
+	if DEBUG_TERA_SHIFT_TRACE:
+		print("[TeraShiftTrace] BattleState ability target=%s ability=%s" % [str(event.get("target", "")), ability])
 	if ability != "tera-shift":
 		return
 
@@ -932,10 +935,21 @@ func _apply_ability_event_to_requests(event: Dictionary) -> void:
 	if pokemon_data.is_empty():
 		pokemon_data = _get_active_side_pokemon(_get_player_id_from_ident(target_ident))
 	if pokemon_data.is_empty():
+		if DEBUG_TERA_SHIFT_TRACE:
+			print("[TeraShiftTrace] BattleState no target data target=%s" % target_ident)
 		return
 
 	var species := get_species_from_pokemon_data(pokemon_data).strip_edges()
+	if DEBUG_TERA_SHIFT_TRACE:
+		print("[TeraShiftTrace] BattleState target data target=%s species_before=%s ident=%s active=%s" % [
+			target_ident,
+			species,
+			str(pokemon_data.get("ident", "")),
+			str(pokemon_data.get("active", false)),
+		])
 	if _normalize_public_species_base_key(species) != "terapagos":
+		if DEBUG_TERA_SHIFT_TRACE:
+			print("[TeraShiftTrace] BattleState ignored Tera Shift because base species=%s" % _normalize_public_species_base_key(species))
 		return
 
 	var transformed_species := "Terapagos-Terastal"
@@ -944,6 +958,12 @@ func _apply_ability_event_to_requests(event: Dictionary) -> void:
 		transformed_species_by_ident[transform_key] = transformed_species
 	pokemon_data["displaySpecies"] = transformed_species
 	pokemon_data["transformedSpecies"] = transformed_species
+	if DEBUG_TERA_SHIFT_TRACE:
+		print("[TeraShiftTrace] BattleState applied target=%s species_after=%s transform_key=%s" % [
+			target_ident,
+			transformed_species,
+			transform_key,
+		])
 
 func _apply_mega_event_to_requests(event: Dictionary) -> void:
 	var target_ident := str(event.get("target", ""))
