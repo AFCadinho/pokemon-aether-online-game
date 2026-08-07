@@ -7458,8 +7458,8 @@
       "category": "special_projectile",
       "static_visual_anchor": "actor",
       "sheet_anchor_source_position": [
-        184.0,
-        178.0
+        132.0,
+        205.0
       ],
       "show_timing_backgrounds": false,
       "show_timing_foregrounds": false,
