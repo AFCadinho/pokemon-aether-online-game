@@ -1577,6 +1577,7 @@ func _normalize_species_base_for_compare(species: String) -> String:
 	for suffix in [
 		"-alola", "-galar", "-hisui", "-paldea",
 		"-therian", "-incarnate", "-origin", "-altered",
+		"-terastal",
 		"-wash", "-heat", "-frost", "-fan", "-mow",
 		"-sky", "-land", "-blade", "-shield",
 	]:
@@ -14461,6 +14462,7 @@ func _is_specific_battle_form_species(species: String) -> bool:
 	for suffix in [
 		"-alola", "-galar", "-hisui", "-paldea",
 		"-therian", "-incarnate", "-origin", "-altered",
+		"-terastal",
 		"-wash", "-heat", "-frost", "-fan", "-mow",
 		"-sky", "-land", "-blade", "-shield",
 		"-busted", "-disguised",

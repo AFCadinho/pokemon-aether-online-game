@@ -300,6 +300,18 @@ func _check_initial_setup_keeps_specific_form_species() -> void:
 		true,
 		"specific battle form helper treats spaced form names as form species"
 	)
+	_check_equal(
+		form_check_source.contains("\"-terastal\""),
+		true,
+		"PvP identity correction preserves Terapagos Terastal form"
+	)
+
+	var metadata_source := FileAccess.get_file_as_string("res://scripts/battle/battle_display_metadata.gd")
+	_check_equal(
+		metadata_source.contains("\"-terastal\""),
+		true,
+		"battle display metadata preserves Terapagos Terastal form"
+	)
 
 
 func _check_wild_player_lead_waits_for_summon_reveal() -> void:
