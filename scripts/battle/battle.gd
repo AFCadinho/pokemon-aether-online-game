@@ -183,6 +183,7 @@ var public_confirmed_items_by_ident := {}
 var status_condition_overlays: Dictionary = {}
 var volatile_conditions_by_ident: Dictionary = {}
 var supreme_overlord_fallen_by_ident: Dictionary = {}
+var tera_shell_consumed_by_ident: Dictionary = {}
 var pending_status_condition_overlay_players: Dictionary = {}
 var pending_knock_off_targets_by_ident := {}
 var pending_booster_energy_modifier_targets_by_ident := {}
@@ -228,6 +229,8 @@ const STAT_STAGE_BADGE_DROP_COLOR := Color(0.9372549, 0.26666668, 0.26666668, 1.
 const VOLATILE_CONDITION_BADGE_COLOR := Color(1.0, 0.74, 0.26, 1.0)
 const DISGUISE_ACTIVE_BADGE_COLOR := Color("#7ee787")
 const DISGUISE_INACTIVE_BADGE_COLOR := Color("#f2a65a")
+const TERA_SHELL_ACTIVE_BADGE_COLOR := Color("#74d7f5")
+const TERA_SHELL_INACTIVE_BADGE_COLOR := Color("#aab4bd")
 const SUPREME_OVERLORD_BADGE_COLOR := Color("#d6a84b")
 const STAT_STAGE_BADGE_LINE_MODIFIER := "modifier"
 const ABILITY_STAT_MODIFIER_SOURCE_FIELD_CONDITION := "field_condition"
@@ -4876,6 +4879,7 @@ func _reset_battle_effect_tracking() -> void:
 	public_confirmed_items_by_ident.clear()
 	volatile_conditions_by_ident.clear()
 	supreme_overlord_fallen_by_ident.clear()
+	tera_shell_consumed_by_ident.clear()
 	pending_knock_off_targets_by_ident.clear()
 	pending_booster_energy_modifier_targets_by_ident.clear()
 	stat_stages_by_ident.clear()
@@ -4963,6 +4967,8 @@ func _remember_battle_modifier_event(event: Dictionary) -> void:
 			_clear_ability_stat_modifier_for_ident(str(event.get("toIdent", event.get("pokemon", ""))))
 			_clear_pending_booster_energy_modifier_for_ident(str(event.get("fromIdent", "")))
 			_clear_pending_booster_energy_modifier_for_ident(str(event.get("toIdent", event.get("pokemon", ""))))
+			tera_shell_consumed_by_ident.erase(_normalize_battle_ident(str(event.get("fromIdent", ""))))
+			tera_shell_consumed_by_ident.erase(_normalize_battle_ident(str(event.get("toIdent", event.get("pokemon", "")))))
 		"faint":
 			animation_router.clear_substitute_for_ident(str(event.get("target", "")))
 			_clear_volatile_condition_for_ident(str(event.get("target", "")))
@@ -4970,9 +4976,11 @@ func _remember_battle_modifier_event(event: Dictionary) -> void:
 			_clear_stat_stages_for_ident(str(event.get("target", "")))
 			_clear_ability_stat_modifier_for_ident(str(event.get("target", "")))
 			_clear_pending_booster_energy_modifier_for_ident(str(event.get("target", "")))
+			tera_shell_consumed_by_ident.erase(_normalize_battle_ident(str(event.get("target", ""))))
 		"pokemonEffect":
 			_apply_supreme_overlord_fallen_event(event)
 			_apply_pokemon_effect_modifier_event(event)
+			_apply_tera_shell_event(event)
 		"ability":
 			_apply_ability_stat_modifier_event(event)
 		"statChange":
@@ -5072,6 +5080,16 @@ func _apply_pokemon_effect_modifier_event(event: Dictionary) -> void:
 
 	if state == "end":
 		_clear_ability_stat_modifier_for_ident(str(event.get("target", "")))
+
+func _apply_tera_shell_event(event: Dictionary) -> void:
+	var effect := str(event.get("effect", "")).strip_edges().to_lower().replace(" ", "").replace("-", "").replace("_", "")
+	if str(event.get("state", "")).strip_edges().to_lower() != "activate" or not effect.ends_with("terashell"):
+		return
+
+	var ident_key := _normalize_battle_ident(str(event.get("target", event.get("actor", ""))))
+	if ident_key != "":
+		tera_shell_consumed_by_ident[ident_key] = true
+		_update_stat_stage_panels()
 
 func _apply_supreme_overlord_fallen_event(event: Dictionary) -> void:
 	var ident_key := _normalize_battle_ident(str(event.get("target", event.get("actor", ""))))
@@ -5200,6 +5218,16 @@ func _get_stat_stage_badges_for_ident(ident_key: String, player_id: String) -> A
 			"label": _t("battle.hud.disguise_active" if disguise_state == "active" else "battle.hud.disguise_inactive"),
 			"value": "",
 			"color": DISGUISE_ACTIVE_BADGE_COLOR if disguise_state == "active" else DISGUISE_INACTIVE_BADGE_COLOR,
+			"line": STAT_STAGE_BADGE_LINE_MODIFIER,
+		})
+
+	var display_species_key := _get_active_display_species(player_id).to_lower().replace(" ", "").replace("-", "").replace("_", "")
+	if display_species_key == "terapagosterastal":
+		var tera_shell_active := not tera_shell_consumed_by_ident.has(ident_key)
+		badges.append({
+			"label": _t("battle.hud.tera_shell_active" if tera_shell_active else "battle.hud.tera_shell_inactive"),
+			"value": "",
+			"color": TERA_SHELL_ACTIVE_BADGE_COLOR if tera_shell_active else TERA_SHELL_INACTIVE_BADGE_COLOR,
 			"line": STAT_STAGE_BADGE_LINE_MODIFIER,
 		})
 
