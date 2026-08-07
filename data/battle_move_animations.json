@@ -7452,6 +7452,18 @@
       "sound_paths": {
         "PRSFX- Recover.wav": "res://assets/battles/animations/recover/PRSFX- Recover.wav"
       }
+    },
+    "outrage": {
+      "template": "imported_sheet",
+      "category": "uncategorized",
+      "data_path": "res://assets/battles/animations/outrage/outrage.json",
+      "sheet_path": "res://assets/battles/animations/outrage/PRAS- Fire.png",
+      "background_path": "res://assets/battles/animations/outrage/PRAS- Outrage BG.png",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Outrage1.wav": "res://assets/battles/animations/outrage/PRSFX- Outrage1.wav",
+        "PRSFX- Outrage2.wav": "res://assets/battles/animations/outrage/PRSFX- Outrage2.wav"
+      }
     }
   }
 }
