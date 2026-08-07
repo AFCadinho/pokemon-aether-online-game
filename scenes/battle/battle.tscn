@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://db3id5etb8cwp" path="res://scenes/battle/pokemon_hud_panel.tscn" id="2_01pft"]
 [ext_resource type="PackedScene" uid="uid://cir3bfnfoy4l4" path="res://scenes/battle/move_slot.tscn" id="2_h0kxc"]
 [ext_resource type="Texture2D" uid="uid://diu5e64u5vwh8" path="res://assets/background/battle/pokemon_x_and_y_battle_background_11_by_phoenixoflight92_d843okx-414w-2x.jpg" id="2_sgdsx"]
+[ext_resource type="VideoStream" uid="uid://cj4nhhujxji2n" path="res://assets/video/battle/pvp_stadium.ogv" id="2_pvp_video"]
 [ext_resource type="PackedScene" uid="uid://bt1b4mxyftlk7" path="res://scenes/battle/battle_platform.tscn" id="3_8eh2s"]
 [ext_resource type="PackedScene" uid="uid://3gsmmeerkva2" path="res://scenes/battle/party_slot.tscn" id="3_fh7rg"]
 [ext_resource type="PackedScene" uid="uid://dpltq23uv3kvb" path="res://scenes/battle/sprite_box.tscn" id="3_kd6yx"]
@@ -777,6 +778,19 @@ mouse_filter = 2
 texture = ExtResource("2_sgdsx")
 expand_mode = 1
 stretch_mode = 6
+
+[node name="PvpBattleBackground" type="VideoStreamPlayer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stream = ExtResource("2_pvp_video")
+expand = true
 
 [node name="WeatherTint" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=1569297772]
 unique_name_in_owner = true

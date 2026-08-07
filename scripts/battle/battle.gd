@@ -320,6 +320,7 @@ var wild_owned_request_id := 0
 @onready var player_side_effects_panel: Control = %SideFieldEffectsPanel
 @onready var enemy_side_effects_panel: Control = %SideFieldEffectsPanel2
 @onready var battle_background: TextureRect = %BattleBackground
+@onready var pvp_battle_background: VideoStreamPlayer = %PvpBattleBackground
 @onready var weather_particles: GPUParticles2D = %GPUParticles2D
 @onready var weather_tint: ColorRect = %WeatherTint
 @onready var terrain_tint: ColorRect = %TerrainTint
@@ -402,6 +403,8 @@ func _ready() -> void:
 	_connect_forfeit_confirm_dialog_signals()
 	if not battle_result_continue_button.pressed.is_connected(_on_battle_result_continue_pressed):
 		battle_result_continue_button.pressed.connect(_on_battle_result_continue_pressed)
+	if not pvp_battle_background.finished.is_connected(_on_pvp_battle_background_finished):
+		pvp_battle_background.finished.connect(_on_pvp_battle_background_finished)
 	if not calc_panel.defender_assumptions_changed.is_connected(_on_calc_panel_defender_assumptions_changed):
 		calc_panel.defender_assumptions_changed.connect(_on_calc_panel_defender_assumptions_changed)
 	if not calc_panel.assumption_catalog_requested.is_connected(_on_calc_panel_assumption_catalog_requested):
@@ -645,8 +648,23 @@ func _setup_weather_presentation() -> void:
 		psychic_terrain_layer,
 		electric_terrain_layer,
 		trick_room_layer,
-		snow_particles
+		snow_particles,
+		pvp_battle_background
 	)
+
+func _set_pvp_battle_background_enabled(enabled: bool) -> void:
+	var can_play_video := enabled and pvp_battle_background.stream != null
+	pvp_battle_background.visible = can_play_video
+	battle_background.visible = not can_play_video
+	if can_play_video:
+		if not pvp_battle_background.is_playing():
+			pvp_battle_background.play()
+	else:
+		pvp_battle_background.stop()
+
+func _on_pvp_battle_background_finished() -> void:
+	if pvp_battle_background.visible:
+		pvp_battle_background.play()
 
 func _setup_side_condition_presentation() -> void:
 	side_condition_presentation.setup(
@@ -5731,7 +5749,7 @@ func setup_pvp_battle_from_response(
 			return
 	action_flow.set_local_player_id(local_player_id)
 	var display_response: Dictionary = action_flow.map_response_for_local_player(api_response)
-	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null)
+	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null, true)
 	battle_voice_director.configure(str(api_response.get("battleId", "")), "pvp")
 	_show_pvp_trainers(display_response)
 	_capture_pvp_local_canonical_roster()
@@ -5983,8 +6001,14 @@ func _set_pvp_party_hud_display_override() -> void:
 func _clear_pvp_party_hud_display_override() -> void:
 	get_tree().call_group("ui_overlay", "clear_party_display_override")
 
-func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_pokemon: Pokemon) -> void:
+func _prepare_battle_setup(
+	type: BattleType,
+	player_pokemon: Pokemon,
+	enemy_pokemon: Pokemon,
+	is_pvp: bool = false
+) -> void:
 	battle_type = type
+	_set_pvp_battle_background_enabled(is_pvp)
 	_clear_battle_trainer_sprites()
 	wild_owned_request_id += 1
 	if enemy_hud_panel != null and enemy_hud_panel.has_method("set_owned_icon_visible"):
