@@ -7305,6 +7305,18 @@
         "PRSFX- Clangorous Soulblaze1.ogg": "res://assets/battles/animations/clangoroussoulblaze/PRSFX- Clangorous Soulblaze1.ogg",
         "PRSFX- Clangorous Soulblaze2.ogg": "res://assets/battles/animations/clangoroussoulblaze/PRSFX- Clangorous Soulblaze2.ogg"
       }
+    },
+    "ceaselessedge": {
+      "template": "imported_sheet",
+      "category": "uncategorized",
+      "data_path": "res://assets/battles/animations/ceaselessedge/ceaselessedge.json",
+      "sheet_path": "res://assets/battles/animations/ceaselessedge/PRAS- Slash.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Night Slash1.wav": "res://assets/battles/animations/ceaselessedge/PRSFX- Night Slash1.wav",
+        "PRSFX- Night Slash2.wav": "res://assets/battles/animations/ceaselessedge/PRSFX- Night Slash2.wav"
+      }
     }
   }
 }
