@@ -2834,6 +2834,16 @@
         1.0
       ],
       "sprite_zoom_multiplier": 0.78,
+      "sheet_frame_offsets": [
+        {
+          "start_frame": 13,
+          "end_frame": 15,
+          "offset": [
+            -60.0,
+            110.0
+          ]
+        }
+      ],
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/wish/wish.json",
