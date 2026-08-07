@@ -549,6 +549,10 @@ func _apply_event_conditions_to_requests(events_value: Variant, allow_historical
 			_apply_ability_event_to_requests(event)
 			continue
 
+		if event_type == "pokemonEffect":
+			_apply_pokemon_effect_event_to_requests(event)
+			continue
+
 		if event_type == "mega" or event_type == "primal":
 			_apply_mega_event_to_requests(event)
 			continue
@@ -926,6 +930,18 @@ func _apply_ability_event_to_requests(event: Dictionary) -> void:
 		print("[TeraShiftTrace] BattleState ability target=%s ability=%s" % [str(event.get("target", "")), ability])
 	if ability != "tera-shift":
 		return
+	_apply_tera_shift_form_to_target(event)
+
+func _apply_pokemon_effect_event_to_requests(event: Dictionary) -> void:
+	var effect := str(event.get("effect", "")).strip_edges().to_lower().replace(" ", "-")
+	var state := str(event.get("state", "")).strip_edges().to_lower()
+	if DEBUG_TERA_SHIFT_TRACE:
+		print("[TeraShiftTrace] BattleState pokemonEffect target=%s effect=%s state=%s" % [str(event.get("target", "")), effect, state])
+	if effect != "ability:-tera-shift" or state != "activate":
+		return
+	_apply_tera_shift_form_to_target(event)
+
+func _apply_tera_shift_form_to_target(event: Dictionary) -> void:
 
 	var target_ident := str(event.get("target", ""))
 	if target_ident == "":

@@ -7849,21 +7849,22 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			battle_state.apply_event_conditions([event_data])
 			_update_active_pokemon_presentation_for_ident(str(event_data.get("target", "")))
 			_clear_pending_mega_species_for_event(event_data)
-		if event_type == "ability":
+		if event_type == "ability" or event_type == "pokemonEffect":
 			var ability_target := str(event_data.get("target", ""))
 			var ability_player_id := _get_player_id_from_ident(ability_target)
 			var previous_ability_species := _get_active_display_species(ability_player_id) if ability_player_id != "" else ""
 			if DEBUG_TERA_SHIFT_TRACE:
-				print("[TeraShiftTrace] render ability target=%s player=%s species_before=%s event=%s" % [
+				print("[TeraShiftTrace] render form effect target=%s player=%s species_before=%s eventType=%s event=%s" % [
 					ability_target,
 					ability_player_id,
 					previous_ability_species,
+					event_type,
 					str(event_data.get("ability", event_data.get("abilityName", ""))),
 				])
 			battle_state.apply_event_conditions([event_data])
 			var next_ability_species := _get_active_display_species(ability_player_id) if ability_player_id != "" else ""
 			if DEBUG_TERA_SHIFT_TRACE:
-				print("[TeraShiftTrace] render ability target=%s species_after=%s changed=%s" % [
+				print("[TeraShiftTrace] render form effect target=%s species_after=%s changed=%s" % [
 					ability_target,
 					next_ability_species,
 					str(previous_ability_species != next_ability_species),
@@ -13622,7 +13623,7 @@ func _reapply_rendered_condition_events(events: Array) -> void:
 				str(event_data.get("ability", event_data.get("abilityName", ""))),
 			])
 		match str(event_data.get("type", "")):
-			"damage", "heal", "faint", "status", "ability":
+			"damage", "heal", "faint", "status", "ability", "pokemonEffect":
 				condition_events.append(event_data.duplicate(true))
 			"switch", "drag":
 				# Spectator batches contain only a read-only public side projection.

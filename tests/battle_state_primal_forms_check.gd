@@ -11,6 +11,7 @@ func _init() -> void:
 	_check_event_species_is_preserved("Groudon-Primal")
 	_check_event_species_is_preserved("Kyogre-Primal")
 	_check_tera_shift_ability_updates_display_form()
+	_check_tera_shift_pokemon_effect_updates_display_form()
 	_check_late_join_snapshot_preserves_public_mega_form()
 
 	quit(1 if failed else 0)
@@ -111,6 +112,37 @@ func _check_tera_shift_ability_updates_display_form() -> void:
 		state.get_active_pokemon_species("p2"),
 		"Terapagos-Terastal",
 		"Tera Shift ability updates the remote active form"
+	)
+
+
+func _check_tera_shift_pokemon_effect_updates_display_form() -> void:
+	var state = BattleStateScript.new()
+	state.load_from_api_response({
+		"battleId": "tera-shift-pokemon-effect-test",
+		"requests": {
+			"p2": {
+				"active": [{}],
+				"side": {
+					"pokemon": [{
+						"ident": "p2a: Terapagos",
+						"species": "Terapagos",
+						"active": true,
+					}],
+				},
+			},
+		},
+	}, false)
+
+	state.apply_event_conditions([{
+		"type": "pokemonEffect",
+		"target": "p2a: Terapagos",
+		"effect": "ability: Tera Shift",
+		"state": "activate",
+	}])
+	_check_equal(
+		state.get_active_pokemon_species("p2"),
+		"Terapagos-Terastal",
+		"Tera Shift pokemon effect updates the remote active form"
 	)
 
 
