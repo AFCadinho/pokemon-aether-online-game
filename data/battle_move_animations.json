@@ -1510,7 +1510,7 @@
       "pattern_override": -1,
       "sprite_position_offset": [
         0.0,
-        24.0
+        48.0
       ],
       "template": "imported_sheet",
       "speed_scale": 1.08,
