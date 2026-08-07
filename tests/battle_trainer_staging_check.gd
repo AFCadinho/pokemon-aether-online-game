@@ -42,6 +42,8 @@ func _check_battle_setup_contract() -> void:
 	_check(source.contains("_show_local_player_trainer()"), "battle setup renders the local overworld appearance")
 	_check(source.contains("_show_npc_opponent_trainer(trainer_data)"), "trainer battles render the placed NPC")
 	_check(source.contains("_show_pvp_trainers(display_response)"), "PvP consumes appearances only from its projected response")
+	_check(source.contains("_show_pvp_trainers(mapped_snapshot)"), "spectator side swaps rebuild side-owned trainer visuals")
+	_check(source.contains("# their attached command callouts cannot remain tied to the old side."), "spectator side swaps document callout reset ownership")
 	_check(source.contains("if appearance_state.is_empty():\n\t\treturn"), "missing opponent appearances stay hidden instead of using a false identity")
 	var switch_command_index := source.find("_show_switch_trainer_command(event_data, switch_player_id)")
 	var switch_recall_index := source.find("await _play_switch_recall_for_event(event_data, switch_player_id)", switch_command_index)

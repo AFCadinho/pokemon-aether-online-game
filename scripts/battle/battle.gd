@@ -5998,6 +5998,10 @@ func _on_spectator_switch_sides_pressed() -> void:
 	battle_state.reset_side_relative_presentation_memory()
 	battle_state.load_from_api_response(mapped_snapshot, false)
 	_swap_spectator_public_knowledge_sides()
+	# Side-relative state is now mapped to the new spectator perspective. Rebuild
+	# all side-owned visuals from that same snapshot so trainers, portraits, and
+	# their attached command callouts cannot remain tied to the old side.
+	_show_pvp_trainers(mapped_snapshot)
 	_sync_presentation_field_from_battle_state()
 	_update_battle_presentation("spectator_switch_sides")
 	if team_preview_lead_selection_active:
