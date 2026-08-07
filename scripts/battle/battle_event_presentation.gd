@@ -56,6 +56,10 @@ func get_animation_preload_keys_for_event(event_data: Dictionary) -> Dictionary:
 				effect_keys.append(field_effect_key)
 		"heal":
 			print("[HealDebug][godot] heal event: ", event_data)
+			if bool(event_data.get("maxHpIncreaseSync", false)):
+				recent_ability_event = false
+				recent_move_event = false
+				return _new_presentation()
 			var heal_effect_key: String = _get_heal_effect_animation_key(event_data)
 			if heal_effect_key != "":
 				effect_keys.append(heal_effect_key)
