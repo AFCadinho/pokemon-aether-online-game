@@ -7455,7 +7455,20 @@
     },
     "outrage": {
       "template": "imported_sheet",
-      "category": "uncategorized",
+      "category": "special_projectile",
+      "static_visual_anchor": "actor",
+      "sheet_anchor_source_position": [
+        184.0,
+        178.0
+      ],
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "sprite_zoom_multiplier": 0.72,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/outrage/outrage.json",
       "sheet_path": "res://assets/battles/animations/outrage/PRAS- Fire.png",
       "background_path": "res://assets/battles/animations/outrage/PRAS- Outrage BG.png",
