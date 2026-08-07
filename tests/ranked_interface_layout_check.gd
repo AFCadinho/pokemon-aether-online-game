@@ -37,6 +37,8 @@ func _init() -> void:
 	_check(source.contains("pvp_join_queue_button.visible = not is_waiting and not has_match"), "Find Match only appears while idle")
 	_check(source.contains("pvp_leave_queue_button.visible = is_waiting and not has_match"), "Leave Queue replaces Find Match while searching")
 	_check(source.contains("pvp_reconnect_battle_button.visible = has_match"), "Reconnect only appears when a match exists")
+	_check(source.contains("pvp_queue_ball_spin.gdshader") and source.contains("_setup_pvp_queue_ball_spin()"), "Ranked queue balls use shader-based smooth rotation")
+	_check(not source.contains("pvp_queue_red_ball.rotation +="), "Ranked queue balls avoid pixel-snapped Control rotation")
 	_check(not source.contains('_create_pvp_section_title("General Information")'), "Play no longer spends its main panel on static general information")
 
 	quit(1 if failed else 0)

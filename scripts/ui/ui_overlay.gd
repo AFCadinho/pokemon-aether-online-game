@@ -107,6 +107,7 @@ const PVP_MODE_RANKED_ICON: Texture2D = preload("res://assets/ui/pvp_battles.svg
 const PVP_MODE_CUSTOM_ICON: Texture2D = preload("res://assets/ui/pvp_custom_battle.svg")
 const PVP_MODE_TOURNAMENT_ICON: Texture2D = preload("res://assets/ui/pvp_tournament.svg")
 const PVP_QUEUE_BALL_ROTATION_SPEED := 3.4
+const PVP_QUEUE_BALL_SPIN_SHADER: Shader = preload("res://shaders/ui/pvp_queue_ball_spin.gdshader")
 const SOCIALS_FRIENDS_ICON: Texture2D = preload("res://assets/ui/friendlist.svg")
 const SOCIALS_NEARBY_ICON: Texture2D = preload("res://assets/ui/socials_nearby.svg")
 const SOCIALS_MAIL_ICON: Texture2D = preload("res://assets/ui/socials_mail.svg")
@@ -1250,6 +1251,7 @@ func _ready() -> void:
 	add_to_group("ui_overlay")
 	layer = UI_OVERLAY_BASE_LAYER
 	root_control.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_setup_pvp_queue_ball_spin()
 	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
 		LocalizationManager.locale_changed.connect(_on_locale_changed)
 	LocalizationManager.localize_tree(self)
@@ -35322,17 +35324,26 @@ func _refresh_pvp_queue_button_animation(delta: float) -> void:
 
 	if not pvp_queue_animation.visible:
 		pvp_queue_animation.visible = true
-		pvp_queue_red_ball.rotation = 0.0
-		pvp_queue_blue_ball.rotation = 0.0
 		pvp_button.texture_normal = null
 		pvp_button.texture_pressed = null
 		pvp_button.texture_hover = null
 		pvp_button.texture_disabled = null
 		pvp_button.texture_focused = null
-	pvp_queue_red_ball.pivot_offset = pvp_queue_red_ball.size * 0.5
-	pvp_queue_blue_ball.pivot_offset = pvp_queue_blue_ball.size * 0.5
-	pvp_queue_red_ball.rotation += PVP_QUEUE_BALL_ROTATION_SPEED * delta
-	pvp_queue_blue_ball.rotation -= PVP_QUEUE_BALL_ROTATION_SPEED * delta
+
+
+func _setup_pvp_queue_ball_spin() -> void:
+	for ball_data: Array in [
+		[pvp_queue_red_ball, PVP_QUEUE_BALL_ROTATION_SPEED],
+		[pvp_queue_blue_ball, -PVP_QUEUE_BALL_ROTATION_SPEED],
+	]:
+		var ball: TextureRect = ball_data[0] as TextureRect
+		if ball == null:
+			continue
+		var material := ShaderMaterial.new()
+		material.shader = PVP_QUEUE_BALL_SPIN_SHADER
+		material.set_shader_parameter("spin_speed", float(ball_data[1]))
+		ball.material = material
+		ball.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 
 func _position_pvp_queue_compact_panel() -> void:
 	if pvp_queue_compact_panel == null or player_status_panel == null:
