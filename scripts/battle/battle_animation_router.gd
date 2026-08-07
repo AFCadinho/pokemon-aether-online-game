@@ -464,6 +464,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.fire_stream_config = (config.get("fire_stream", {}) as Dictionary).duplicate(true)
 	animation_node.heat_wave_config = (config.get("heat_wave", {}) as Dictionary).duplicate(true)
 	animation_node.draco_meteor_config = (config.get("draco_meteor", {}) as Dictionary).duplicate(true)
+	animation_node.coin_rain_config = (config.get("coin_rain", {}) as Dictionary).duplicate(true)
 	animation_node.solar_beam_config = (config.get("solar_beam", {}) as Dictionary).duplicate(true)
 	animation_node.bloom_doom_config = (config.get("bloom_doom", {}) as Dictionary).duplicate(true)
 	animation_node.solar_charge_config = (config.get("solar_charge", {}) as Dictionary).duplicate(true)

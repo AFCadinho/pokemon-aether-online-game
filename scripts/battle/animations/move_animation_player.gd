@@ -31,6 +31,7 @@ signal animation_finished
 @export var fire_stream_config: Dictionary = {}
 @export var heat_wave_config: Dictionary = {}
 @export var draco_meteor_config: Dictionary = {}
+@export var coin_rain_config: Dictionary = {}
 @export var solar_beam_config: Dictionary = {}
 @export var bloom_doom_config: Dictionary = {}
 @export var solar_charge_config: Dictionary = {}
@@ -341,6 +342,7 @@ func _draw() -> void:
 	_draw_fire_stream_visual()
 	_draw_heat_wave_visual()
 	_draw_draco_meteor_visual()
+	_draw_coin_rain_visual()
 	_draw_solar_beam_visual()
 	_draw_bloom_doom_visual()
 	_draw_solar_charge_visual()
@@ -889,6 +891,74 @@ func _draw_draco_meteor_visual() -> void:
 				core_color,
 				impact_color
 			)
+
+
+func _draw_coin_rain_visual() -> void:
+	if not bool(coin_rain_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var progress := clampf(float(frame_index) / float(maxi(frames.size() - 1, 1)), 0.0, 1.0)
+	var visible_start := clampf(float(coin_rain_config.get("visible_start", 0.0)), 0.0, 1.0)
+	var visible_end := clampf(float(coin_rain_config.get("visible_end", 1.0)), visible_start + 0.01, 1.0)
+	if progress < visible_start or progress > visible_end:
+		return
+
+	var rain_progress := clampf((progress - visible_start) / maxf(visible_end - visible_start, 0.001), 0.0, 1.0)
+	var target := _battlefield_position(_vector2_from_value(coin_rain_config.get("target", [384.0, 132.0])))
+	var coin_count := clampi(int(coin_rain_config.get("coin_count", 24)), 8, 48)
+	var spread_x := maxf(float(coin_rain_config.get("spread_x", 150.0)), 40.0)
+	var spread_y := maxf(float(coin_rain_config.get("spread_y", 44.0)), 12.0)
+	var flight_height := maxf(float(coin_rain_config.get("flight_height", 205.0)), 80.0)
+	var flight_duration := clampf(float(coin_rain_config.get("flight_duration", 0.34)), 0.14, 0.7)
+	var coin_scale := clampf(float(coin_rain_config.get("coin_scale", 1.0)), 0.35, 2.2)
+	var gold := _color_from_value(coin_rain_config.get("gold_color", [1.0, 0.63, 0.04, 1.0]), Color(1.0, 0.63, 0.04, 1.0))
+	var bright_gold := _color_from_value(coin_rain_config.get("bright_color", [1.0, 0.94, 0.42, 1.0]), Color(1.0, 0.94, 0.42, 1.0))
+	var shadow_gold := _color_from_value(coin_rain_config.get("shadow_color", [0.7, 0.22, 0.01, 1.0]), Color(0.7, 0.22, 0.01, 1.0))
+
+	for coin_index: int in range(coin_count):
+		var lane := fmod(float(coin_index) * 0.61803398875, 1.0) * 2.0 - 1.0
+		var row_seed := fmod(float(coin_index * 29), 9.0) / 8.0
+		var impact_position := target + Vector2(lane * spread_x * 0.62, (row_seed - 0.5) * spread_y)
+		var start_position := target + Vector2(lane * spread_x, -flight_height - row_seed * 72.0)
+		var stagger := fmod(float(coin_index) * 0.071, 0.58)
+		var coin_life := (rain_progress - stagger) / flight_duration
+		if coin_life < 0.0 or coin_life > 1.22:
+			continue
+
+		if coin_life <= 1.0:
+			var fall := coin_life * coin_life * (3.0 - 2.0 * coin_life)
+			var position := start_position.lerp(impact_position, fall)
+			var velocity := (impact_position - start_position).normalized()
+			var alpha := clampf(coin_life / 0.12, 0.0, 1.0) * clampf((1.12 - coin_life) / 0.12, 0.0, 1.0)
+			var size := coin_scale * (0.78 + float(coin_index % 4) * 0.11)
+			draw_line(position - velocity * (34.0 + float(coin_index % 3) * 10.0) * size, position, _color_with_alpha(bright_gold, alpha * 0.42), 3.0 * size, true)
+			_draw_coin(position, size, alpha, gold, bright_gold, shadow_gold, float(coin_index) * 1.7 + float(frame_index) * 0.34)
+
+		var impact_progress := (coin_life - 1.0) / 0.22
+		if impact_progress >= 0.0 and impact_progress <= 1.0:
+			var impact_alpha := sin(PI * impact_progress)
+			var impact_radius := 12.0 + (1.0 - pow(1.0 - impact_progress, 2.0)) * 28.0 * coin_scale
+			draw_circle(impact_position, impact_radius * 0.58, _color_with_alpha(gold, impact_alpha * 0.3))
+			draw_arc(impact_position, impact_radius, float(coin_index) * 0.47, float(coin_index) * 0.47 + TAU * 0.82, 28, _color_with_alpha(bright_gold, impact_alpha * 0.86), 2.2, true)
+
+	var ring_progress := clampf((rain_progress - 0.2) / 0.8, 0.0, 1.0)
+	var ring_alpha := (1.0 - ring_progress) * 0.7
+	if ring_alpha > 0.01:
+		var ring_radius := 34.0 + ring_progress * 94.0
+		draw_arc(target, ring_radius, -PI * 0.82, PI * 0.34, 64, _color_with_alpha(bright_gold, ring_alpha), 4.0, true)
+		draw_arc(target, ring_radius * 0.72, PI * 0.18, PI * 1.28, 48, _color_with_alpha(gold, ring_alpha * 0.72), 2.2, true)
+
+
+func _draw_coin(position: Vector2, scale_value: float, alpha: float, gold: Color, bright_gold: Color, shadow_gold: Color, rotation: float) -> void:
+	var pulse := 1.0 + sin(rotation * 1.7) * 0.08
+	draw_set_transform(position, rotation, Vector2(scale_value * 1.3, scale_value * 0.58 * pulse))
+	draw_circle(Vector2(2.0, 3.0), 10.0, _color_with_alpha(shadow_gold, alpha * 0.72))
+	draw_circle(Vector2.ZERO, 10.0, _color_with_alpha(gold, alpha * 0.96))
+	draw_arc(Vector2.ZERO, 8.0, 0.0, TAU, 32, _color_with_alpha(bright_gold, alpha * 0.92), 2.0, true)
+	draw_line(Vector2(-3.0, -4.0), Vector2(3.0, 4.0), _color_with_alpha(bright_gold, alpha * 0.7), 1.8, true)
+	draw_line(Vector2(3.0, -4.0), Vector2(-3.0, 4.0), _color_with_alpha(shadow_gold, alpha * 0.42), 1.2, true)
+	draw_set_transform(Vector2.ZERO)
 
 
 func _draw_draco_meteor_trail(
