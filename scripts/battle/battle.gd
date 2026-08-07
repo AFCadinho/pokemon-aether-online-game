@@ -5223,7 +5223,9 @@ func _get_stat_stage_badges_for_ident(ident_key: String, player_id: String) -> A
 
 	var display_species_key := _get_active_display_species(player_id).to_lower().replace(" ", "").replace("-", "").replace("_", "")
 	if display_species_key == "terapagosterastal":
-		var tera_shell_active := not tera_shell_consumed_by_ident.has(ident_key)
+		var current_hp := int(active_pokemon.get("hp", active_pokemon.get("currentHp", 0)))
+		var max_hp := int(active_pokemon.get("maxHp", active_pokemon.get("max_hp", 0)))
+		var tera_shell_active := max_hp > 0 and current_hp >= max_hp and not tera_shell_consumed_by_ident.has(ident_key)
 		badges.append({
 			"label": _t("battle.hud.tera_shell_active" if tera_shell_active else "battle.hud.tera_shell_inactive"),
 			"value": "",
