@@ -430,7 +430,16 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 		config.get("sprite_position_anchor", [EFFECT_SOURCE_PLAYER_POSITION.x, EFFECT_SOURCE_PLAYER_POSITION.y]),
 		EFFECT_SOURCE_PLAYER_POSITION
 	)
-	animation_node.sprite_position_offset = _vector2_from_config_value(config.get("sprite_position_offset", [0.0, 0.0]), Vector2.ZERO)
+	var sprite_position_offset := _vector2_from_config_value(
+		config.get("sprite_position_offset", [0.0, 0.0]),
+		Vector2.ZERO
+	)
+	if reverse_battlefield:
+		sprite_position_offset += _vector2_from_config_value(
+			config.get("reverse_sprite_position_offset", [0.0, 0.0]),
+			Vector2.ZERO
+		)
+	animation_node.sprite_position_offset = sprite_position_offset
 	animation_node.sheet_visual_offset = _vector2_from_config_value(config.get("sheet_visual_offset", [0.0, 0.0]), Vector2.ZERO)
 	animation_node.sheet_frame_offsets = (config.get("sheet_frame_offsets", []) as Array).duplicate(true)
 	animation_node.sparkle_size_multiplier = float(config.get("sparkle_size_multiplier", 1.0))

@@ -1512,6 +1512,10 @@
         0.0,
         48.0
       ],
+      "reverse_sprite_position_offset": [
+        0.0,
+        64.0
+      ],
       "template": "imported_sheet",
       "speed_scale": 1.08,
       "data_path": "res://assets/battles/animations/stealthrock/stealthrock.json",
