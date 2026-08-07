@@ -18856,7 +18856,7 @@ func _render_pokemon_summary_general(pokemon: Pokemon) -> void:
 	top_metrics.add_child(_create_summary_experience_metric_card(pokemon, Color("#62d7ff"), 148.0))
 	top_metrics.add_child(_create_summary_metric_card(
 		LocalizationManager.text("ui.pokemon_summary.happiness"),
-		"%s / 255" % pokemon.happiness,
+		"Happiness: %s / 255" % pokemon.happiness,
 		pokemon.happiness,
 		255,
 		Color("#f2cf78"),
