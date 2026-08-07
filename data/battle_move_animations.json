@@ -7416,6 +7416,17 @@
         "PRSFX- Pay Day2": "res://assets/battles/animations/makeitrain/PRSFX- Pay Day2.wav",
         "PRSFX- Zing Zap3": "res://assets/battles/animations/makeitrain/PRSFX- Zing Zap3.wav"
       }
+    },
+    "recover": {
+      "template": "imported_sheet",
+      "category": "uncategorized",
+      "data_path": "res://assets/battles/animations/recover/recover.json",
+      "sheet_path": "res://assets/battles/animations/recover/PRAS- Recovery.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Recover.wav": "res://assets/battles/animations/recover/PRSFX- Recover.wav"
+      }
     }
   }
 }
