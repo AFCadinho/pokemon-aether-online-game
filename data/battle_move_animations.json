@@ -7461,6 +7461,16 @@
         132.0,
         205.0
       ],
+      "sheet_frame_offsets": [
+        {
+          "start_frame": 17,
+          "end_frame": 26,
+          "offset": [
+            0.0,
+            90.0
+          ]
+        }
+      ],
       "show_timing_backgrounds": false,
       "show_timing_foregrounds": false,
       "show_pink_visual": false,
