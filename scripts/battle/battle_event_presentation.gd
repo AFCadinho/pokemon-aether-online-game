@@ -50,6 +50,9 @@ func get_animation_preload_keys_for_event(event_data: Dictionary) -> Dictionary:
 			var move_name: String = str(event_data.get("move", ""))
 			if move_name != "":
 				move_names.append(move_name)
+		"ability":
+			if _is_tera_shift_event(event_data):
+				effect_keys.append("tera_shift")
 		"fieldEffect":
 			var field_effect_key: String = _get_field_effect_animation_key(event_data)
 			if field_effect_key != "":
@@ -268,6 +271,9 @@ func build(event_data: Dictionary) -> Dictionary:
 			presentation["log_message"] = event_text_formatter.format_ability_event(event_data)
 			presentation["battle_message"] = str(presentation["log_message"])
 			presentation["add_blank_after"] = str(presentation["log_message"]) != ""
+			if _is_tera_shift_event(event_data):
+				presentation["effect_animation_key"] = "tera_shift"
+				presentation["effect_animation_target_ident"] = str(event_data.get("target", event_data.get("actor", "")))
 			if event_text_formatter.is_ability_boost_event(event_data):
 				presentation["ability_boost_target_ident"] = str(event_data.get("target", event_data.get("actor", "")))
 			recent_ability_event = str(presentation["log_message"]) != ""
@@ -416,6 +422,11 @@ func build(event_data: Dictionary) -> Dictionary:
 			recent_move_event = false
 
 	return presentation
+
+
+func _is_tera_shift_event(event_data: Dictionary) -> bool:
+	var ability := str(event_data.get("ability", event_data.get("abilityName", "")))
+	return ability.to_lower().replace(" ", "").replace("-", "").replace("_", "") == "terashift"
 
 
 func _new_presentation() -> Dictionary:
