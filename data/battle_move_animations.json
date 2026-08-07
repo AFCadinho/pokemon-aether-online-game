@@ -7370,12 +7370,12 @@
           384.0,
           132.0
         ],
-        "coin_count": 26,
+        "coin_count": 30,
         "spread_x": 168.0,
         "spread_y": 54.0,
         "flight_height": 210.0,
         "flight_duration": 0.34,
-        "coin_scale": 1.0,
+        "coin_scale": 0.72,
         "gold_color": [
           1.0,
           0.58,
