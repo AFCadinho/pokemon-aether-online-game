@@ -55,6 +55,7 @@ func get_animation_preload_keys_for_event(event_data: Dictionary) -> Dictionary:
 			if field_effect_key != "":
 				effect_keys.append(field_effect_key)
 		"heal":
+			print("[HealDebug][godot] heal event: ", event_data)
 			var heal_effect_key: String = _get_heal_effect_animation_key(event_data)
 			if heal_effect_key != "":
 				effect_keys.append(heal_effect_key)
