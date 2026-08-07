@@ -13575,7 +13575,7 @@ func _reapply_rendered_condition_events(events: Array) -> void:
 
 		var event_data: Dictionary = event_value as Dictionary
 		match str(event_data.get("type", "")):
-			"damage", "heal", "faint", "status":
+			"damage", "heal", "faint", "status", "ability":
 				condition_events.append(event_data.duplicate(true))
 			"switch", "drag":
 				# Spectator batches contain only a read-only public side projection.
