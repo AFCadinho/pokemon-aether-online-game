@@ -7831,6 +7831,14 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			battle_state.apply_event_conditions([event_data])
 			_update_active_pokemon_presentation_for_ident(str(event_data.get("target", "")))
 			_clear_pending_mega_species_for_event(event_data)
+		if event_type == "ability":
+			var ability_target := str(event_data.get("target", ""))
+			var ability_player_id := _get_player_id_from_ident(ability_target)
+			var previous_ability_species := _get_active_display_species(ability_player_id) if ability_player_id != "" else ""
+			battle_state.apply_event_conditions([event_data])
+			var next_ability_species := _get_active_display_species(ability_player_id) if ability_player_id != "" else ""
+			if ability_player_id != "" and previous_ability_species != next_ability_species:
+				_update_active_pokemon_presentation_for_ident(ability_target)
 
 		var presentation: Dictionary = event_presentation.build(event_data)
 		if event_type == "move":

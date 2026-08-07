@@ -473,6 +473,7 @@ func _normalize_public_species_base_key(species: String) -> String:
 	for suffix in [
 		"-alola", "-galar", "-hisui", "-paldea",
 		"-therian", "-incarnate", "-origin", "-altered",
+		"-terastal",
 		"-wash", "-heat", "-frost", "-fan", "-mow",
 		"-sky", "-land", "-blade", "-shield",
 		"-disguised", "-busted",
@@ -541,6 +542,10 @@ func _apply_event_conditions_to_requests(events_value: Variant, allow_historical
 
 		if event_type == "formeChange":
 			_apply_forme_change_event_to_requests(event)
+			continue
+
+		if event_type == "ability":
+			_apply_ability_event_to_requests(event)
 			continue
 
 		if event_type == "mega" or event_type == "primal":
@@ -913,6 +918,32 @@ func _apply_forme_change_event_to_requests(event: Dictionary) -> void:
 		return
 
 	pokemon_data["displaySpecies"] = species
+
+func _apply_ability_event_to_requests(event: Dictionary) -> void:
+	var ability := str(event.get("ability", event.get("abilityName", ""))).strip_edges().to_lower().replace(" ", "-")
+	if ability != "tera-shift":
+		return
+
+	var target_ident := str(event.get("target", ""))
+	if target_ident == "":
+		return
+
+	var pokemon_data: Dictionary = _get_side_pokemon_by_ident(target_ident)
+	if pokemon_data.is_empty():
+		pokemon_data = _get_active_side_pokemon(_get_player_id_from_ident(target_ident))
+	if pokemon_data.is_empty():
+		return
+
+	var species := get_species_from_pokemon_data(pokemon_data).strip_edges()
+	if _normalize_public_species_base_key(species) != "terapagos":
+		return
+
+	var transformed_species := "Terapagos-Terastal"
+	var transform_key := _get_transform_key_from_ident(target_ident)
+	if transform_key != "":
+		transformed_species_by_ident[transform_key] = transformed_species
+	pokemon_data["displaySpecies"] = transformed_species
+	pokemon_data["transformedSpecies"] = transformed_species
 
 func _apply_mega_event_to_requests(event: Dictionary) -> void:
 	var target_ident := str(event.get("target", ""))
