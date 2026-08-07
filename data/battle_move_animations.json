@@ -7309,9 +7309,16 @@
     "ceaselessedge": {
       "template": "imported_sheet",
       "category": "uncategorized",
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "timing_background_persist_until_clear": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
       "data_path": "res://assets/battles/animations/ceaselessedge/ceaselessedge.json",
       "sheet_path": "res://assets/battles/animations/ceaselessedge/PRAS- Slash.png",
-      "background_path": "",
+      "background_path": "res://assets/battles/animations/ceaselessedge/PRAS- Ominous Wind BG.png",
       "foreground_path": "",
       "sound_paths": {
         "PRSFX- Night Slash1.wav": "res://assets/battles/animations/ceaselessedge/PRSFX- Night Slash1.wav",

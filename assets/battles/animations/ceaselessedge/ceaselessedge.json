@@ -548,6 +548,36 @@
   ],
   "timings": [
     {
+      "frame": 0,
+      "type": 1,
+      "name": "PRAS- Ominous Wind BG.png",
+      "duration": 5,
+      "opacity": 0,
+      "volume": 80,
+      "pitch": 100,
+      "color": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "frame": 0,
+      "type": 2,
+      "name": "",
+      "duration": 5,
+      "opacity": 140,
+      "volume": 80,
+      "pitch": 100,
+      "color": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
       "frame": 7,
       "type": 0,
       "name": "PRSFX- Night Slash1.wav",
@@ -570,6 +600,21 @@
       "opacity": null,
       "volume": 100,
       "pitch": 90,
+      "color": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "frame": 14,
+      "type": 2,
+      "name": "",
+      "duration": 3,
+      "opacity": 0,
+      "volume": 80,
+      "pitch": 100,
       "color": [
         0,
         0,
