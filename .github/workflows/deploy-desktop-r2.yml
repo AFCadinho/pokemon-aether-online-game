@@ -53,7 +53,7 @@ env:
 
   POKEMON_HOME_SHINY_ASSET_VERSION: pokemon-home-shiny-dac02a2f4694
   POKEMON_FRONT_ASSET_VERSION: pokemon-front-scale1-128-a6578f59db64
-  POKEMON_BACK_ASSET_VERSION: pokemon-back-scale1-128-5b9d3e32779d
+  POKEMON_BACK_ASSET_VERSION: pokemon-back-scale1-128-repair-20260807
   POKEMON_SHINY_FRONT_ASSET_VERSION: pokemon-shiny-front-scale1-128-d51a21f2f09f
   POKEMON_SHINY_BACK_ASSET_VERSION: pokemon-shiny-back-scale1-128-02c03e08d6fb
   POKEMON_GEN5_FRONT_ASSET_VERSION: pokemon-gen5-front-14ff66f7c2b7
