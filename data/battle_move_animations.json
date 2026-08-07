@@ -7551,6 +7551,31 @@
         "PRSFX- Return1.wav": "res://assets/battles/animations/return/PRSFX- Return1.wav",
         "PRSFX- Return2.wav": "res://assets/battles/animations/return/PRSFX- Return2.wav"
       }
+    },
+    "frustration": {
+      "template": "imported_sheet",
+      "category": "physical_contact",
+      "static_visual_anchor": "actor",
+      "sheet_anchor_source_position": [
+        176.0,
+        165.0
+      ],
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "sprite_zoom_multiplier": 0.78,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/frustration/frustration.json",
+      "sheet_path": "res://assets/battles/animations/frustration/PRAS- Strike.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Frustration1.wav": "res://assets/battles/animations/frustration/PRSFX- Frustration1.wav",
+        "PRSFX- Frustration2.wav": "res://assets/battles/animations/frustration/PRSFX- Frustration2.wav"
+      }
     }
   }
 }
