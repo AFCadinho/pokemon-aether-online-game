@@ -7482,7 +7482,8 @@
           "offset": [
             0.0,
             45.0
-          ]
+          ],
+          "mirror_with_battlefield": true
         }
       ],
       "show_timing_backgrounds": true,
