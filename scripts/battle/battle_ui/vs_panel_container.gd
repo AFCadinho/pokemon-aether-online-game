@@ -24,6 +24,7 @@ const MIN_PLAYER_NAME_WIDTH := 40.0
 
 var _player_1_timer: Dictionary = {}
 var _player_2_timer: Dictionary = {}
+var _decision_kind_override := ""
 var _player_1_reconnect: Dictionary = {}
 var _player_2_reconnect: Dictionary = {}
 var _localization_manager: Node
@@ -123,9 +124,14 @@ func hide_decision_timers(clear_reconnect_state := false) -> void:
 	player_2_timer_bar.visible = false
 
 
-func show_decision_timers(player_1_timer: Dictionary, player_2_timer: Dictionary) -> void:
+func show_decision_timers(
+	player_1_timer: Dictionary,
+	player_2_timer: Dictionary,
+	decision_kind_override := ""
+) -> void:
 	_player_1_timer = player_1_timer.duplicate(true)
 	_player_2_timer = player_2_timer.duplicate(true)
+	_decision_kind_override = str(decision_kind_override).strip_edges().to_upper()
 	player_1_timer_panel.visible = true
 	player_2_timer_panel.visible = true
 	if _player_1_reconnect.is_empty():
@@ -210,7 +216,12 @@ func _set_timer(state_label: Label, time_label: Label, bar: ProgressBar, timer: 
 func _timer_state_text(timer: Dictionary) -> String:
 	var state := str(timer.get("state", "WAITING"))
 	if state in ["DECIDING", "EXPIRED"]:
-		return "%s · %s" % [_decision_text(str(timer.get("decisionKind", ""))), _state_text(state)]
+		var decision_kind := (
+			_decision_kind_override
+			if not _decision_kind_override.is_empty()
+			else str(timer.get("decisionKind", ""))
+		)
+		return "%s · %s" % [_decision_text(decision_kind), _state_text(state)]
 	if state == "SCHEDULED":
 		return _t("common.waiting")
 	return _state_text(state)

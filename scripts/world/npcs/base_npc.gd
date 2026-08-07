@@ -58,6 +58,9 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 ## Optional catalog id. Empty values use the central NPC assignment table.
 @export var portrait_id := ""
 @export var mugshot: Texture2D
+@export_group("Battle")
+@export_enum("inherit", "grass", "water", "cave", "pvp_stadium") var battle_environment_id := "inherit"
+@export_group("")
 @export_enum("idle", "pace_horizontal", "pace_vertical") var movement_behavior := "idle"
 @export_range(1, 12, 1) var movement_tiles := 3
 @export var movement_wait_seconds := 0.0
@@ -231,6 +234,9 @@ func build_battle_trainer_metadata(metadata: Dictionary) -> Dictionary:
 		battle_metadata["_battle_sprite_offset"] = sprite_offset
 	if mugshot != null:
 		battle_metadata["_battle_mugshot"] = mugshot
+	var normalized_environment_id := battle_environment_id.strip_edges()
+	if normalized_environment_id != "" and normalized_environment_id != "inherit":
+		battle_metadata["battleEnvironmentId"] = normalized_environment_id
 	return battle_metadata
 
 

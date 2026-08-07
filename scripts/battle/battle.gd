@@ -27,6 +27,7 @@ const BATTLE_DISGUISE_EVENT_ORDER := preload("res://scripts/battle/battle_disgui
 const BATTLE_SUPREME_OVERLORD_EFFECT := preload("res://scripts/battle/battle_supreme_overlord_effect.gd")
 const BATTLE_PUBLIC_POKEMON_KNOWLEDGE := preload("res://scripts/battle/battle_public_pokemon_knowledge.gd")
 const BATTLE_VOICE_TIMING := preload("res://scripts/battle/battle_voice_timing.gd")
+const BATTLE_ENVIRONMENT_CATALOG := preload("res://scripts/battle/battle_environment_catalog.gd")
 const CALC_DRAWER_FIELD_WIDTH_RATIO := 0.55
 const CALC_DRAWER_FIELD_MARGIN := 8.0
 const MEGA_EVOLUTION_EFFECT_KEY := "mega_evolution"
@@ -98,6 +99,8 @@ var mechanic_orb_style: StyleBoxFlat
 var mega_mechanic_label: Label
 var z_move_mechanic_label: Label
 var pending_mega_species_by_ident: Dictionary = {}
+var active_battle_environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
+var active_battle_environment_loops_video := false
 var pvp_room_code := ""
 var pvp_match_id := ""
 var pvp_viewer_role := "participant"
@@ -180,6 +183,7 @@ var public_confirmed_items_by_ident := {}
 var status_condition_overlays: Dictionary = {}
 var volatile_conditions_by_ident: Dictionary = {}
 var supreme_overlord_fallen_by_ident: Dictionary = {}
+var tera_shell_consumed_by_ident: Dictionary = {}
 var pending_status_condition_overlay_players: Dictionary = {}
 var pending_knock_off_targets_by_ident := {}
 var pending_booster_energy_modifier_targets_by_ident := {}
@@ -225,6 +229,8 @@ const STAT_STAGE_BADGE_DROP_COLOR := Color(0.9372549, 0.26666668, 0.26666668, 1.
 const VOLATILE_CONDITION_BADGE_COLOR := Color(1.0, 0.74, 0.26, 1.0)
 const DISGUISE_ACTIVE_BADGE_COLOR := Color("#7ee787")
 const DISGUISE_INACTIVE_BADGE_COLOR := Color("#f2a65a")
+const TERA_SHELL_ACTIVE_BADGE_COLOR := Color("#74d7f5")
+const TERA_SHELL_INACTIVE_BADGE_COLOR := Color("#aab4bd")
 const SUPREME_OVERLORD_BADGE_COLOR := Color("#d6a84b")
 const STAT_STAGE_BADGE_LINE_MODIFIER := "modifier"
 const ABILITY_STAT_MODIFIER_SOURCE_FIELD_CONDITION := "field_condition"
@@ -320,6 +326,7 @@ var wild_owned_request_id := 0
 @onready var player_side_effects_panel: Control = %SideFieldEffectsPanel
 @onready var enemy_side_effects_panel: Control = %SideFieldEffectsPanel2
 @onready var battle_background: TextureRect = %BattleBackground
+@onready var battle_background_video: VideoStreamPlayer = %BattleBackgroundVideo
 @onready var weather_particles: GPUParticles2D = %GPUParticles2D
 @onready var weather_tint: ColorRect = %WeatherTint
 @onready var terrain_tint: ColorRect = %TerrainTint
@@ -402,6 +409,8 @@ func _ready() -> void:
 	_connect_forfeit_confirm_dialog_signals()
 	if not battle_result_continue_button.pressed.is_connected(_on_battle_result_continue_pressed):
 		battle_result_continue_button.pressed.connect(_on_battle_result_continue_pressed)
+	if not battle_background_video.finished.is_connected(_on_battle_background_video_finished):
+		battle_background_video.finished.connect(_on_battle_background_video_finished)
 	if not calc_panel.defender_assumptions_changed.is_connected(_on_calc_panel_defender_assumptions_changed):
 		calc_panel.defender_assumptions_changed.connect(_on_calc_panel_defender_assumptions_changed)
 	if not calc_panel.assumption_catalog_requested.is_connected(_on_calc_panel_assumption_catalog_requested):
@@ -645,8 +654,33 @@ func _setup_weather_presentation() -> void:
 		psychic_terrain_layer,
 		electric_terrain_layer,
 		trick_room_layer,
-		snow_particles
+		snow_particles,
+		battle_background_video
 	)
+
+func _apply_battle_environment(environment_id: StringName) -> void:
+	var profile := BATTLE_ENVIRONMENT_CATALOG.get_profile(environment_id)
+	if profile == null or not profile.is_valid():
+		push_error("Battle environment profile is invalid: %s" % environment_id)
+		return
+	active_battle_environment_id = profile.environment_id
+	active_battle_environment_loops_video = profile.loop_background_video
+	battle_background.texture = profile.background_texture
+	battle_background.visible = true
+	battle_background_video.stop()
+	battle_background_video.stream = profile.background_video
+	battle_background_video.visible = profile.background_video != null
+	if player_battle_platform.has_method("set_platform_texture"):
+		player_battle_platform.call("set_platform_texture", profile.platform_texture)
+	if enemy_battle_platform.has_method("set_platform_texture"):
+		enemy_battle_platform.call("set_platform_texture", profile.platform_texture)
+	if battle_background_video.visible:
+		battle_background_video.play()
+
+
+func _on_battle_background_video_finished() -> void:
+	if battle_background_video.visible and active_battle_environment_loops_video:
+		battle_background_video.play()
 
 func _setup_side_condition_presentation() -> void:
 	side_condition_presentation.setup(
@@ -671,10 +705,7 @@ func _process(delta: float) -> void:
 		_position_party_hover_card()
 	weather_presentation.animate(delta)
 	if _should_show_bank_timer_projection():
-		_vs_panel_call("show_decision_timers", [
-			PvpBattleRealtimeService.timer_projection.participant_display_for_local_player("p1", action_flow.local_player_id),
-			PvpBattleRealtimeService.timer_projection.participant_display_for_local_player("p2", action_flow.local_player_id)
-		])
+		_show_pvp_decision_timers()
 	_request_pvp_team_preview_recovery_if_server_advanced()
 	_report_stalled_pvp_waiting_if_needed()
 
@@ -1549,6 +1580,7 @@ func _normalize_species_base_for_compare(species: String) -> String:
 	for suffix in [
 		"-alola", "-galar", "-hisui", "-paldea",
 		"-therian", "-incarnate", "-origin", "-altered",
+		"-terastal",
 		"-wash", "-heat", "-frost", "-fan", "-mow",
 		"-sky", "-land", "-blade", "-shield",
 	]:
@@ -4847,6 +4879,7 @@ func _reset_battle_effect_tracking() -> void:
 	public_confirmed_items_by_ident.clear()
 	volatile_conditions_by_ident.clear()
 	supreme_overlord_fallen_by_ident.clear()
+	tera_shell_consumed_by_ident.clear()
 	pending_knock_off_targets_by_ident.clear()
 	pending_booster_energy_modifier_targets_by_ident.clear()
 	stat_stages_by_ident.clear()
@@ -4934,6 +4967,8 @@ func _remember_battle_modifier_event(event: Dictionary) -> void:
 			_clear_ability_stat_modifier_for_ident(str(event.get("toIdent", event.get("pokemon", ""))))
 			_clear_pending_booster_energy_modifier_for_ident(str(event.get("fromIdent", "")))
 			_clear_pending_booster_energy_modifier_for_ident(str(event.get("toIdent", event.get("pokemon", ""))))
+			tera_shell_consumed_by_ident.erase(_normalize_battle_ident(str(event.get("fromIdent", ""))))
+			tera_shell_consumed_by_ident.erase(_normalize_battle_ident(str(event.get("toIdent", event.get("pokemon", "")))))
 		"faint":
 			animation_router.clear_substitute_for_ident(str(event.get("target", "")))
 			_clear_volatile_condition_for_ident(str(event.get("target", "")))
@@ -4941,9 +4976,17 @@ func _remember_battle_modifier_event(event: Dictionary) -> void:
 			_clear_stat_stages_for_ident(str(event.get("target", "")))
 			_clear_ability_stat_modifier_for_ident(str(event.get("target", "")))
 			_clear_pending_booster_energy_modifier_for_ident(str(event.get("target", "")))
+			tera_shell_consumed_by_ident.erase(_normalize_battle_ident(str(event.get("target", ""))))
+		"heal":
+			var healed_ident_key := _normalize_battle_ident(str(event.get("target", "")))
+			var healed_hp := int(event.get("hp", 0))
+			var healed_max_hp := int(event.get("maxHp", 0))
+			if healed_ident_key != "" and healed_max_hp > 0 and healed_hp >= healed_max_hp:
+				tera_shell_consumed_by_ident.erase(healed_ident_key)
 		"pokemonEffect":
 			_apply_supreme_overlord_fallen_event(event)
 			_apply_pokemon_effect_modifier_event(event)
+			_apply_tera_shell_event(event)
 		"ability":
 			_apply_ability_stat_modifier_event(event)
 		"statChange":
@@ -5043,6 +5086,16 @@ func _apply_pokemon_effect_modifier_event(event: Dictionary) -> void:
 
 	if state == "end":
 		_clear_ability_stat_modifier_for_ident(str(event.get("target", "")))
+
+func _apply_tera_shell_event(event: Dictionary) -> void:
+	var effect := str(event.get("effect", "")).strip_edges().to_lower().replace(" ", "").replace("-", "").replace("_", "")
+	if str(event.get("state", "")).strip_edges().to_lower() != "activate" or not effect.ends_with("terashell"):
+		return
+
+	var ident_key := _normalize_battle_ident(str(event.get("target", event.get("actor", ""))))
+	if ident_key != "":
+		tera_shell_consumed_by_ident[ident_key] = true
+		_update_stat_stage_panels()
 
 func _apply_supreme_overlord_fallen_event(event: Dictionary) -> void:
 	var ident_key := _normalize_battle_ident(str(event.get("target", event.get("actor", ""))))
@@ -5171,6 +5224,18 @@ func _get_stat_stage_badges_for_ident(ident_key: String, player_id: String) -> A
 			"label": _t("battle.hud.disguise_active" if disguise_state == "active" else "battle.hud.disguise_inactive"),
 			"value": "",
 			"color": DISGUISE_ACTIVE_BADGE_COLOR if disguise_state == "active" else DISGUISE_INACTIVE_BADGE_COLOR,
+			"line": STAT_STAGE_BADGE_LINE_MODIFIER,
+		})
+
+	var display_species_key := _get_active_display_species(player_id).to_lower().replace(" ", "").replace("-", "").replace("_", "")
+	if display_species_key == "terapagosterastal":
+		var current_hp := int(active_pokemon.get("hp", active_pokemon.get("currentHp", 0)))
+		var max_hp := int(active_pokemon.get("maxHp", active_pokemon.get("max_hp", 0)))
+		var tera_shell_active := max_hp > 0 and current_hp >= max_hp and not tera_shell_consumed_by_ident.has(ident_key)
+		badges.append({
+			"label": _t("battle.hud.tera_shell_active" if tera_shell_active else "battle.hud.tera_shell_inactive"),
+			"value": "",
+			"color": TERA_SHELL_ACTIVE_BADGE_COLOR if tera_shell_active else TERA_SHELL_INACTIVE_BADGE_COLOR,
 			"line": STAT_STAGE_BADGE_LINE_MODIFIER,
 		})
 
@@ -5439,10 +5504,7 @@ func _update_battle_status_panels() -> void:
 	battle_status_panel.hide_timer()
 	_vs_panel_call("hide_decision_timers")
 	if _should_show_bank_timer_projection():
-		_vs_panel_call("show_decision_timers", [
-			PvpBattleRealtimeService.timer_projection.participant_display_for_local_player("p1", action_flow.local_player_id),
-			PvpBattleRealtimeService.timer_projection.participant_display_for_local_player("p2", action_flow.local_player_id)
-		])
+		_show_pvp_decision_timers()
 	var field_effects := _get_display_field_effects()
 	_prune_inactive_field_condition_ability_modifiers(field_effects)
 	field_timers_panel.set_effects(field_effects, display_turn)
@@ -5456,6 +5518,13 @@ func _should_show_bank_timer_projection() -> bool:
 		_is_pvp_battle(),
 		bool(ProjectSettings.get_setting("battle/show_shadow_bank_timer", true))
 	)
+
+func _show_pvp_decision_timers() -> void:
+	_vs_panel_call("show_decision_timers", [
+		PvpBattleRealtimeService.timer_projection.participant_display_for_local_player("p1", action_flow.local_player_id),
+		PvpBattleRealtimeService.timer_projection.participant_display_for_local_player("p2", action_flow.local_player_id),
+		"TEAM_PREVIEW" if team_preview_lead_selection_active else "",
+	])
 
 func _get_display_field_effects() -> Array:
 	if presentation_state.has_field_snapshot:
@@ -5595,13 +5664,23 @@ func _update_battle_platform_hazards() -> void:
 	_update_side_condition_ui(_get_display_field_effects())
 
 ## Initialiseert een wild battle vanuit een al gemaakte API battle response.
-func setup_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pokemon, api_response: Dictionary) -> void:
-	if not prepare_wild_battle_from_response(player_pokemon, enemy_pokemon, api_response):
+func setup_wild_battle_from_response(
+	player_pokemon: Pokemon,
+	enemy_pokemon: Pokemon,
+	api_response: Dictionary,
+	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
+) -> void:
+	if not prepare_wild_battle_from_response(player_pokemon, enemy_pokemon, api_response, environment_id):
 		return
 	await play_wild_battle_intro(player_pokemon, api_response)
 
-func prepare_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pokemon, api_response: Dictionary) -> bool:
-	_prepare_battle_setup(BattleType.WILD, player_pokemon, enemy_pokemon)
+func prepare_wild_battle_from_response(
+	player_pokemon: Pokemon,
+	enemy_pokemon: Pokemon,
+	api_response: Dictionary,
+	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
+) -> bool:
+	_prepare_battle_setup(BattleType.WILD, player_pokemon, enemy_pokemon, environment_id)
 	_show_local_player_trainer()
 
 	player_sprite_box.set_single_pokemon(player_pokemon, "back")
@@ -5653,9 +5732,10 @@ func setup_trainer_battle_from_response(
 	player_pokemon: Pokemon,
 	trainer_data: Dictionary,
 	api_response: Dictionary,
-	entry_ready_callback: Callable = Callable()
+	entry_ready_callback: Callable = Callable(),
+	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
 ) -> void:
-	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null)
+	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null, environment_id)
 	battle_banter_presenter.configure(trainer_data)
 	battle_voice_director.configure(str(api_response.get("battleId", "")), "trainer", trainer_data)
 	_show_local_player_trainer()
@@ -5715,7 +5795,8 @@ func _notify_trainer_entry_ready(entry_ready_callback: Callable) -> void:
 func setup_pvp_battle_from_response(
 	player_pokemon: Pokemon,
 	api_response: Dictionary,
-	entry_ready_callback: Callable = Callable()
+	entry_ready_callback: Callable = Callable(),
+	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.PVP_STADIUM_ENVIRONMENT_ID
 ) -> void:
 	pvp_viewer_role = "spectator" if str(api_response.get("viewerRole", "participant")).to_lower() == "spectator" else "participant"
 	pvp_room_code = str(api_response.get("roomCode", "")).strip_edges()
@@ -5731,7 +5812,7 @@ func setup_pvp_battle_from_response(
 			return
 	action_flow.set_local_player_id(local_player_id)
 	var display_response: Dictionary = action_flow.map_response_for_local_player(api_response)
-	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null)
+	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null, environment_id)
 	battle_voice_director.configure(str(api_response.get("battleId", "")), "pvp")
 	_show_pvp_trainers(display_response)
 	_capture_pvp_local_canonical_roster()
@@ -5983,8 +6064,14 @@ func _set_pvp_party_hud_display_override() -> void:
 func _clear_pvp_party_hud_display_override() -> void:
 	get_tree().call_group("ui_overlay", "clear_party_display_override")
 
-func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_pokemon: Pokemon) -> void:
+func _prepare_battle_setup(
+	type: BattleType,
+	player_pokemon: Pokemon,
+	enemy_pokemon: Pokemon,
+	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
+) -> void:
 	battle_type = type
+	_apply_battle_environment(environment_id)
 	_clear_battle_trainer_sprites()
 	wild_owned_request_id += 1
 	if enemy_hud_panel != null and enemy_hud_panel.has_method("set_owned_icon_visible"):
@@ -7780,6 +7867,14 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			battle_state.apply_event_conditions([event_data])
 			_update_active_pokemon_presentation_for_ident(str(event_data.get("target", "")))
 			_clear_pending_mega_species_for_event(event_data)
+		if event_type == "ability" or event_type == "pokemonEffect":
+			var ability_target := str(event_data.get("target", ""))
+			var ability_player_id := _get_player_id_from_ident(ability_target)
+			var previous_ability_species := _get_active_display_species(ability_player_id) if ability_player_id != "" else ""
+			battle_state.apply_event_conditions([event_data])
+			var next_ability_species := _get_active_display_species(ability_player_id) if ability_player_id != "" else ""
+			if ability_player_id != "" and previous_ability_species != next_ability_species:
+				_update_active_pokemon_presentation_for_ident(ability_target)
 
 		var presentation: Dictionary = event_presentation.build(event_data)
 		if event_type == "move":
@@ -13516,7 +13611,7 @@ func _reapply_rendered_condition_events(events: Array) -> void:
 
 		var event_data: Dictionary = event_value as Dictionary
 		match str(event_data.get("type", "")):
-			"damage", "heal", "faint", "status":
+			"damage", "heal", "faint", "status", "ability", "pokemonEffect":
 				condition_events.append(event_data.duplicate(true))
 			"switch", "drag":
 				# Spectator batches contain only a read-only public side projection.
@@ -14411,6 +14506,7 @@ func _is_specific_battle_form_species(species: String) -> bool:
 	for suffix in [
 		"-alola", "-galar", "-hisui", "-paldea",
 		"-therian", "-incarnate", "-origin", "-altered",
+		"-terastal",
 		"-wash", "-heat", "-frost", "-fan", "-mow",
 		"-sky", "-land", "-blade", "-shield",
 		"-busted", "-disguised",

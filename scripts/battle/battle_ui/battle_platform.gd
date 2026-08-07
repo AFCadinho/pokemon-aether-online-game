@@ -9,6 +9,7 @@ enum PlatformSide {
 
 @export var platform_side: PlatformSide = PlatformSide.PLAYER
 
+@onready var platform_image: TextureRect = $PlatformImage
 @onready var hazards: CanvasItem = $Hazards
 @onready var sticky_webs_image: TextureRect = $Hazards/StickyWebsImage
 @onready var stealth_rock_image: TextureRect = $Hazards/StealthRockImage
@@ -25,6 +26,15 @@ enum PlatformSide {
 
 func _ready() -> void:
 	clear_side_effect_visuals()
+
+
+func set_platform_texture(texture: Texture2D) -> void:
+	if texture != null:
+		platform_image.texture = texture
+
+
+func get_platform_texture() -> Texture2D:
+	return platform_image.texture
 
 func clear_side_effect_visuals() -> void:
 	hazards.visible = false

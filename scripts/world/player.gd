@@ -2078,6 +2078,10 @@ func is_standing_on_tall_grass() -> bool:
 	var tile_data := grass_tilemap.get_cell_tile_data(tile_position)
 	
 	return tile_data != null
+
+
+func is_standing_on_water() -> bool:
+	return _is_water_tile_at(global_position)
 		
 func check_for_grass_encounter() -> void:
 	check_for_wild_encounter(ENCOUNTER_TYPE_GRASS)

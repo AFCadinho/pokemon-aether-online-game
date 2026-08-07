@@ -2058,6 +2058,8 @@
   "battle.hud.owned": "Registered to your Trainer ID",
   "battle.hud.disguise_active": "Disguise: Active",
   "battle.hud.disguise_inactive": "Disguise: Inactive",
+  "battle.hud.tera_shell_active": "Tera Shell: Active",
+  "battle.hud.tera_shell_inactive": "Tera Shell: Inactive",
   "battle.hud.fallen": "Fallen:",
   "battle.gender.male": "Male",
   "battle.gender.female": "Female",

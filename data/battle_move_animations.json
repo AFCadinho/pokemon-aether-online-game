@@ -1503,10 +1503,19 @@
         1.0
       ],
       "category": "field",
+      "reverse_battlefield_vertical": false,
       "show_pink_visual": false,
       "show_timing_foregrounds": false,
       "pattern_offset": 0,
       "pattern_override": -1,
+      "sprite_position_offset": [
+        0.0,
+        48.0
+      ],
+      "reverse_sprite_position_offset": [
+        0.0,
+        64.0
+      ],
       "template": "imported_sheet",
       "speed_scale": 1.08,
       "data_path": "res://assets/battles/animations/stealthrock/stealthrock.json",
@@ -7304,6 +7313,291 @@
       "sound_paths": {
         "PRSFX- Clangorous Soulblaze1.ogg": "res://assets/battles/animations/clangoroussoulblaze/PRSFX- Clangorous Soulblaze1.ogg",
         "PRSFX- Clangorous Soulblaze2.ogg": "res://assets/battles/animations/clangoroussoulblaze/PRSFX- Clangorous Soulblaze2.ogg"
+      }
+    },
+    "ceaselessedge": {
+      "template": "imported_sheet",
+      "category": "uncategorized",
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "timing_background_persist_until_clear": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "data_path": "res://assets/battles/animations/ceaselessedge/ceaselessedge.json",
+      "sheet_path": "res://assets/battles/animations/ceaselessedge/PRAS- Slash.png",
+      "background_path": "res://assets/battles/animations/ceaselessedge/PRAS- Ominous Wind BG.png",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Night Slash1.wav": "res://assets/battles/animations/ceaselessedge/PRSFX- Night Slash1.wav",
+        "PRSFX- Night Slash2.wav": "res://assets/battles/animations/ceaselessedge/PRSFX- Night Slash2.wav"
+      }
+    },
+    "razorshell": {
+      "template": "imported_sheet",
+      "category": "uncategorized",
+      "data_path": "res://assets/battles/animations/razorshell/razorshell.json",
+      "sheet_path": "res://assets/battles/animations/razorshell/PRAS- Razor Shell.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Razor Shell.wav": "res://assets/battles/animations/razorshell/PRSFX- Razor Shell.wav"
+      }
+    },
+    "hex": {
+      "template": "imported_sheet",
+      "category": "uncategorized",
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "timing_background_persist_until_clear": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "data_path": "res://assets/battles/animations/hex/hex.json",
+      "sheet_path": "res://assets/battles/animations/hex/PRAS- Grudge.png",
+      "background_path": "res://assets/battles/animations/hex/PRAS- Ghost BG.png",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Hex.wav": "res://assets/battles/animations/hex/PRSFX- Hex.wav"
+      }
+    },
+    "makeitrain": {
+      "template": "imported_sheet",
+      "category": "special_projectile",
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": false,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        1.0,
+        0.68,
+        0.08,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "coin_rain": {
+        "enabled": true,
+        "visible_start": 0.02,
+        "visible_end": 0.98,
+        "target": [
+          384.0,
+          132.0
+        ],
+        "coin_count": 30,
+        "spread_x": 168.0,
+        "spread_y": 54.0,
+        "flight_height": 210.0,
+        "flight_duration": 0.34,
+        "coin_scale": 0.72,
+        "gold_color": [
+          1.0,
+          0.58,
+          0.02,
+          1.0
+        ],
+        "bright_color": [
+          1.0,
+          0.94,
+          0.38,
+          1.0
+        ],
+        "shadow_color": [
+          0.68,
+          0.18,
+          0.01,
+          1.0
+        ]
+      },
+      "flash": {
+        "enabled": true,
+        "start": 0.0,
+        "peak": 0.14,
+        "end": 0.96,
+        "alpha": 0.16,
+        "color": [
+          0.03,
+          0.08,
+          0.18,
+          1.0
+        ]
+      },
+      "data_path": "res://assets/battles/animations/makeitrain/makeitrain.json",
+      "sheet_path": "res://assets/battles/animations/makeitrain/PRAS- Pay Day.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Pay Day2": "res://assets/battles/animations/makeitrain/PRSFX- Pay Day2.wav",
+        "PRSFX- Zing Zap3": "res://assets/battles/animations/makeitrain/PRSFX- Zing Zap3.wav"
+      }
+    },
+    "recover": {
+      "template": "imported_sheet",
+      "category": "heal",
+      "static_visual_anchor": "actor",
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "sprite_zoom_multiplier": 0.68,
+      "sprite_position_offset": [
+        0.0,
+        0.0
+      ],
+      "visual_color": [
+        0.55,
+        0.95,
+        0.72,
+        1.0
+      ],
+      "sprite_tint": [
+        0.92,
+        1.0,
+        0.96,
+        1.0
+      ],
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/recover/recover.json",
+      "sheet_path": "res://assets/battles/animations/recover/PRAS- Recovery.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Recover.wav": "res://assets/battles/animations/recover/PRSFX- Recover.wav"
+      }
+    },
+    "outrage": {
+      "template": "imported_sheet",
+      "category": "special_projectile",
+      "static_visual_anchor": "actor",
+      "sheet_anchor_source_position": [
+        132.0,
+        205.0
+      ],
+      "sheet_frame_offsets": [
+        {
+          "start_frame": 17,
+          "end_frame": 26,
+          "offset": [
+            0.0,
+            45.0
+          ],
+          "mirror_with_battlefield": true
+        }
+      ],
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "timing_background_persist_until_clear": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "sprite_zoom_multiplier": 0.72,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/outrage/outrage.json",
+      "sheet_path": "res://assets/battles/animations/outrage/PRAS- Fire.png",
+      "background_path": "res://assets/battles/animations/outrage/PRAS- Outrage BG.png",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Outrage1.wav": "res://assets/battles/animations/outrage/PRSFX- Outrage1.wav",
+        "PRSFX- Outrage2.wav": "res://assets/battles/animations/outrage/PRSFX- Outrage2.wav"
+      }
+    },
+    "fakeout": {
+      "template": "imported_sheet",
+      "category": "uncategorized",
+      "data_path": "res://assets/battles/animations/fakeout/fakeout.json",
+      "sheet_path": "res://assets/battles/animations/fakeout/PRAS- Strike.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Fake Out1.wav": "res://assets/battles/animations/fakeout/PRSFX- Fake Out1.wav",
+        "PRSFX- Fake Out2.wav": "res://assets/battles/animations/fakeout/PRSFX- Fake Out2.wav"
+      }
+    },
+    "return": {
+      "template": "imported_sheet",
+      "category": "physical_contact",
+      "static_visual_anchor": "actor",
+      "sheet_anchor_source_position": [
+        128.0,
+        224.0
+      ],
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "sprite_zoom_multiplier": 0.78,
+      "sheet_frame_offsets": [
+        {
+          "start_frame": 13,
+          "end_frame": 15,
+          "offset": [
+            0.0,
+            50.0
+          ],
+          "mirror_with_battlefield": true
+        }
+      ],
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/return/return.json",
+      "sheet_path": "res://assets/battles/animations/return/PRAS- Love.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Return1.wav": "res://assets/battles/animations/return/PRSFX- Return1.wav",
+        "PRSFX- Return2.wav": "res://assets/battles/animations/return/PRSFX- Return2.wav"
+      }
+    },
+    "frustration": {
+      "template": "imported_sheet",
+      "category": "physical_contact",
+      "static_visual_anchor": "actor",
+      "sheet_anchor_source_position": [
+        176.0,
+        165.0
+      ],
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "sprite_zoom_multiplier": 0.78,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/frustration/frustration.json",
+      "sheet_path": "res://assets/battles/animations/frustration/PRAS- Strike.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Frustration1.wav": "res://assets/battles/animations/frustration/PRSFX- Frustration1.wav",
+        "PRSFX- Frustration2.wav": "res://assets/battles/animations/frustration/PRSFX- Frustration2.wav"
+      }
+    },
+    "terastarstorm": {
+      "template": "imported_sheet",
+      "category": "uncategorized",
+      "data_path": "res://assets/battles/animations/terastarstorm/terastarstorm.json",
+      "sheet_path": "res://assets/battles/animations/terastarstorm/Custom_Tera Starstorm.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Barrier": "res://assets/battles/animations/terastarstorm/PRSFX- Barrier.wav",
+        "PRSFX- Recover": "res://assets/battles/animations/terastarstorm/PRSFX- Recover.wav"
       }
     }
   }

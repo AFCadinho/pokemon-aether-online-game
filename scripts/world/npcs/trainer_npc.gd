@@ -30,6 +30,9 @@ func _apply_npc_profile() -> void:
 		return
 	if not trainer_profile.trainer_id.strip_edges().is_empty():
 		trainer_id = trainer_profile.trainer_id
+	var profile_environment_id := trainer_profile.battle_environment_id.strip_edges()
+	if profile_environment_id != "" and profile_environment_id != "inherit":
+		battle_environment_id = profile_environment_id
 	
 
 func walk_to_player(body: Node2D) -> void:

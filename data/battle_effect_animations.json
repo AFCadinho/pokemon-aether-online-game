@@ -1111,6 +1111,8 @@
     "mega": "mega_evolution",
     "mega_evolution": "mega_evolution",
     "megaevolution": "mega_evolution",
+    "tera_shift": "mega_evolution",
+    "terashift": "mega_evolution",
     "common_megaevolution": "mega_evolution",
     "mega_evolve": "mega_evolution"
   }

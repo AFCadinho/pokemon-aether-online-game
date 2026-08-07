@@ -778,6 +778,18 @@ texture = ExtResource("2_sgdsx")
 expand_mode = 1
 stretch_mode = 6
 
+[node name="BattleBackgroundVideo" type="VideoStreamPlayer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand = true
+
 [node name="WeatherTint" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=1569297772]
 unique_name_in_owner = true
 visible = false
