@@ -513,6 +513,8 @@ func _normalize_damage_calc_response(response: Dictionary) -> Dictionary:
 		return _make_malformed_damage_calc_response(response, "defender")
 	if not (response.get("results") is Array):
 		return _make_malformed_damage_calc_response(response, "results")
+	if not CALCDEX_SNAPSHOT.is_valid_mechanics_manifest(response.get("mechanicsManifest")):
+		return _make_malformed_damage_calc_response(response, "mechanicsManifest")
 
 	var normalized := {
 		"success": true,
@@ -523,6 +525,7 @@ func _normalize_damage_calc_response(response: Dictionary) -> Dictionary:
 		"attacker": response.get("attacker", {}),
 		"defender": response.get("defender", {}),
 		"results": response.get("results", []),
+		"mechanicsManifest": (response.get("mechanicsManifest") as Dictionary).duplicate(true),
 		"warnings": _as_array(response.get("warnings", [])),
 		"emptyReason": str(response.get("emptyReason", "")),
 	}

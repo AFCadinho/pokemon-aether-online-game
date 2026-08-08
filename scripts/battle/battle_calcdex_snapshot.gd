@@ -5,6 +5,7 @@ class_name BattleCalcdexSnapshot
 const SCHEMA_VERSION := 1
 const ROUTE_REVISION := "calc1.3-2026-08-08"
 const VISIBILITY_CONTRACT_VERSION := 3
+const FORMAT_DATA_FINGERPRINT := "fd94c49ab26ddf8daff2259dfc2b3857f957e37b166557412c4fe303c87e54b0"
 const REVISION_FIELDS := [
 	"visibilityContractVersion",
 	"snapshotFingerprint",
@@ -104,6 +105,19 @@ static func get_knowledge_value(pokemon: Dictionary, field_name: String) -> Dict
 	if value is Dictionary and _validate_knowledge_value(value as Dictionary) == "":
 		return (value as Dictionary).duplicate(true)
 	return {}
+
+
+static func is_valid_mechanics_manifest(value: Variant) -> bool:
+	if not (value is Dictionary):
+		return false
+	var manifest: Dictionary = value as Dictionary
+	return (
+		_has_exact_fields(manifest, ["contractRevision", "damageCalcVersion", "showdownVersion", "formatDataFingerprint"])
+		and str(manifest.get("contractRevision", "")) == "calc0-2026-08-08"
+		and str(manifest.get("damageCalcVersion", "")) == "0.10.0"
+		and str(manifest.get("showdownVersion", "")) == "0.11.10"
+		and str(manifest.get("formatDataFingerprint", "")) == FORMAT_DATA_FINGERPRINT
+	)
 
 
 static func _validate_snapshot(snapshot: Dictionary, expected_revision: Dictionary) -> String:
@@ -326,9 +340,7 @@ static func _validate_contract_containers(snapshot: Dictionary) -> String:
 	if str(format.get("formatKey", "")) not in ["aether-ou", "gen9nationaldex-casual", "gen9nationaldex-pve"] or str(format.get("engineFormatId", "")) != "gen9nationaldex" or int(format.get("generation", 0)) != 9 or str(format.get("gameType", "")) != "singles":
 		return "Calcdex format identity is unsupported."
 	var manifest := _as_dictionary(snapshot.get("mechanicsManifest"))
-	if not _has_exact_fields(manifest, ["contractRevision", "damageCalcVersion", "showdownVersion", "formatDataFingerprint"]):
-		return "Calcdex mechanics manifest is invalid."
-	if str(manifest.get("contractRevision", "")) != "calc0-2026-08-08" or str(manifest.get("damageCalcVersion", "")) != "0.10.0" or str(manifest.get("showdownVersion", "")) != "0.11.10" or not _is_sha256(str(manifest.get("formatDataFingerprint", ""))):
+	if not is_valid_mechanics_manifest(manifest):
 		return "Calcdex mechanics manifest is unsupported."
 	var field := _as_dictionary(snapshot.get("field"))
 	if not _has_exact_fields(field, ["effects"]) or not (field.get("effects") is Array) or (field.get("effects") as Array).size() > 64:

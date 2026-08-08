@@ -31,6 +31,10 @@ func _init() -> void:
 		not damage_payload_source.contains('"viewerId"'),
 		"damage calculation authority comes from the authenticated session"
 	)
+	_check(
+		api_source.contains('CALCDEX_SNAPSHOT.is_valid_mechanics_manifest(response.get("mechanicsManifest"))'),
+		"legacy calculator responses fail closed without the approved engine manifest"
+	)
 	var snapshot_request_start := api_source.find("func get_calcdex_snapshot(")
 	var snapshot_request_end := api_source.find("\nfunc ", snapshot_request_start + 1)
 	var snapshot_request_source := api_source.substr(

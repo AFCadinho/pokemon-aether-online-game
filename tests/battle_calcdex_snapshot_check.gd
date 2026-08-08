@@ -60,6 +60,17 @@ func _init() -> void:
 	state.load_from_api_response({"battleId": "battle-2"})
 	_check(state.get_calcdex_projection_revision().is_empty(), "a battle change clears the Calcdex cursor")
 
+	_check(
+		CalcdexSnapshot.is_valid_mechanics_manifest(_mechanics_manifest()),
+		"accepts the exact approved mechanics manifest"
+	)
+	var mismatched_manifest := _mechanics_manifest()
+	mismatched_manifest["damageCalcVersion"] = "0.10.1"
+	_check(
+		not CalcdexSnapshot.is_valid_mechanics_manifest(mismatched_manifest),
+		"rejects an unapproved mechanics manifest"
+	)
+
 	print("PASS battle_calcdex_snapshot_check")
 	quit(0)
 
@@ -77,12 +88,7 @@ func _snapshot(revision: Dictionary) -> Dictionary:
 		},
 		"turn": 7,
 		"projectionRevision": revision.duplicate(true),
-		"mechanicsManifest": {
-			"contractRevision": "calc0-2026-08-08",
-			"damageCalcVersion": "0.10.0",
-			"showdownVersion": "0.11.10",
-			"formatDataFingerprint": FINGERPRINT,
-		},
+		"mechanicsManifest": _mechanics_manifest(),
 		"field": {"effects": []},
 		"viewerPokemon": [_pokemon("viewer", true)],
 		"opponentPokemon": [_pokemon("opponent", false)],
@@ -152,6 +158,15 @@ func _revision() -> Dictionary:
 		"mechanicalRevision": 3,
 		"aggregateRevision": 2,
 		"battleEventSeq": -1,
+	}
+
+
+func _mechanics_manifest() -> Dictionary:
+	return {
+		"contractRevision": "calc0-2026-08-08",
+		"damageCalcVersion": "0.10.0",
+		"showdownVersion": "0.11.10",
+		"formatDataFingerprint": CalcdexSnapshot.FORMAT_DATA_FINGERPRINT,
 	}
 
 
