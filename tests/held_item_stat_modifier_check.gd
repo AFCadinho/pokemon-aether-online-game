@@ -11,6 +11,11 @@ func _init() -> void:
 		"Choice Scarf boosts only Speed with Showdown-style flooring"
 	)
 	_check_equal(
+		ModifierService.effective_stats({"spe": 295}, "Choicescarf", "Samurott-Hisui"),
+		{"spe": 442},
+		"compact backend item names resolve like spaced item names"
+	)
+	_check_equal(
 		ModifierService.effective_stats({"atk": 201, "spa": 199, "spe": 150}, "choice-band", "Garchomp"),
 		{"atk": 301, "spa": 199, "spe": 150},
 		"Choice Band boosts Attack"

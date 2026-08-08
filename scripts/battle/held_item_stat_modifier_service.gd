@@ -26,11 +26,11 @@ static func stat_modifiers(item_value: Variant, species_value: Variant = "") -> 
 	var item_id := _normalize_id(item_value)
 	var species_id := _normalize_id(species_value)
 	match item_id:
-		"choice-band":
+		"choice-band", "choiceband":
 			return {"atk": 1.5}
-		"choice-scarf":
+		"choice-scarf", "choicescarf":
 			return {"spe": 1.5}
-		"choice-specs":
+		"choice-specs", "choicespecs":
 			return {"spa": 1.5}
 		"assault-vest":
 			return {"spd": 1.5}
