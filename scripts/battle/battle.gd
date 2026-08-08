@@ -215,6 +215,8 @@ const CAPTURE_SUCCESS_RESULT_HOLD_SECONDS := 0.40
 const BATTLE_END_RESULT_HOLD_SECONDS := 0.12
 const DEBUG_PVP_REALTIME := false
 const DEBUG_PVP_FLOW_TRACE := false
+const DEBUG_SPECTATOR_SIDE_SWITCH := true
+const SPECTATOR_SIDE_DEBUG_PREFIX := "[PAO Spectator Side Debug]"
 const DEBUG_BATTLE_HP_EVENTS := false
 const DEBUG_BATTLE_MOVE_EVENTS := false
 const DEBUG_SIDE_CONDITION_EFFECTS := false
@@ -5996,15 +5998,18 @@ func _on_spectator_switch_sides_pressed() -> void:
 		current_action_panel.set_message(_t("battle.spectator.waiting_snapshot"))
 		return
 
+	_debug_spectator_side_switch("before", spectator_latest_raw_response)
 	spectator_sides_swapped = not spectator_sides_swapped
 	action_flow.set_local_player_id("p2" if spectator_sides_swapped else "p1")
 	var mapped_snapshot: Dictionary = action_flow.map_response_for_local_player(
 		spectator_latest_raw_response.duplicate(true)
 	)
+	_debug_spectator_side_switch("mapped", mapped_snapshot)
 	mapped_snapshot["events"] = []
 	mapped_snapshot["eventBatches"] = []
 	battle_state.reset_side_relative_presentation_memory()
 	battle_state.load_from_api_response(mapped_snapshot, false)
+	_debug_spectator_side_switch("state_loaded", mapped_snapshot)
 	_swap_spectator_public_knowledge_sides()
 	# Side-relative state is now mapped to the new spectator perspective. Rebuild
 	# all side-owned visuals from that same snapshot so trainers, portraits, and
@@ -6012,9 +6017,100 @@ func _on_spectator_switch_sides_pressed() -> void:
 	_show_pvp_trainers(mapped_snapshot)
 	_sync_presentation_field_from_battle_state()
 	_update_battle_presentation("spectator_switch_sides")
+	_debug_spectator_side_switch("visuals_rebuilt", mapped_snapshot)
 	if team_preview_lead_selection_active:
 		_show_team_preview_layers()
 	_enter_spectator_controls()
+
+
+func _debug_spectator_side_switch(stage: String, snapshot: Dictionary = {}) -> void:
+	if not DEBUG_SPECTATOR_SIDE_SWITCH or not _is_spectator_battle():
+		return
+
+	var panel_left_portrait: Variant = null
+	var panel_right_portrait: Variant = null
+	if vs_panel_container != null:
+		panel_left_portrait = vs_panel_container.get("player_1_portrait")
+		panel_right_portrait = vs_panel_container.get("player_2_portrait")
+
+	print(SPECTATOR_SIDE_DEBUG_PREFIX, " ", stage, " ", JSON.stringify({
+		"displaySide": action_flow.local_player_id,
+		"swapped": spectator_sides_swapped,
+		"snapshotPlayers": _debug_spectator_players(snapshot.get("players", {})),
+		"statePlayers": _debug_spectator_players(battle_state.players),
+		"teams": {
+			"left": _debug_spectator_team_species(battle_state.get_player_team("p1")),
+			"right": _debug_spectator_team_species(battle_state.get_player_team("p2")),
+		},
+		"stageTrainers": {
+			"left": _debug_spectator_avatar(player_trainer_sprite.player_avatar if player_trainer_sprite != null else null),
+			"right": _debug_spectator_avatar(enemy_trainer_sprite.player_avatar if enemy_trainer_sprite != null else null),
+		},
+		"vsPortraits": {
+			"left": _debug_spectator_portrait(panel_left_portrait),
+			"right": _debug_spectator_portrait(panel_right_portrait),
+		},
+	}))
+
+
+func _debug_spectator_players(players_value: Variant) -> Dictionary:
+	var summary: Dictionary = {}
+	if not (players_value is Dictionary):
+		return summary
+	for side: String in ["p1", "p2"]:
+		var player_value: Variant = (players_value as Dictionary).get(side, {})
+		var player: Dictionary = player_value as Dictionary if player_value is Dictionary else {}
+		var appearance := _get_battle_player_appearance(player)
+		summary[side] = {
+			"name": str(player.get("name", "")),
+			"hasAppearance": not appearance.is_empty(),
+			"appearanceSignature": _debug_spectator_appearance_signature(appearance),
+		}
+	return summary
+
+
+func _debug_spectator_team_species(team: Array) -> Array[String]:
+	var species: Array[String] = []
+	for pokemon_value: Variant in team:
+		if not (pokemon_value is Dictionary):
+			continue
+		var pokemon: Dictionary = pokemon_value as Dictionary
+		species.append(str(pokemon.get("displaySpecies", pokemon.get("species", ""))))
+	return species
+
+
+func _debug_spectator_avatar(avatar: Node) -> Dictionary:
+	if avatar == null or not is_instance_valid(avatar):
+		return {"instanceId": 0, "appearanceSignature": 0}
+	var appearance_value: Variant = avatar.get("current_appearance_state")
+	var appearance: Dictionary = appearance_value as Dictionary if appearance_value is Dictionary else {}
+	return {
+		"instanceId": avatar.get_instance_id(),
+		"appearanceSignature": _debug_spectator_appearance_signature(appearance),
+	}
+
+
+func _debug_spectator_portrait(portrait_value: Variant) -> Dictionary:
+	if not (portrait_value is TrainerHeadPortrait) or not is_instance_valid(portrait_value):
+		return {"instanceId": 0, "appearanceSignature": 0}
+	var portrait := portrait_value as TrainerHeadPortrait
+	return {
+		"instanceId": portrait.get_instance_id(),
+		"appearanceSignature": _debug_spectator_appearance_signature(portrait.appearance_state),
+	}
+
+
+func _debug_spectator_appearance_signature(appearance: Dictionary) -> int:
+	if appearance.is_empty():
+		return 0
+	var parts: PackedStringArray = []
+	for key: String in [
+		"gender", "body", "hair", "hair_style_index", "headgear", "facial_hair",
+		"facegear", "top", "bottom", "shoes", "hair_color", "skin_tone",
+		"eye_color", "facial_hair_color", "top_color", "bottom_color", "shoes_color",
+	]:
+		parts.append("%s=%s" % [key, str(appearance.get(key, ""))])
+	return "|".join(parts).hash()
 
 
 func _remember_spectator_raw_response(response: Dictionary) -> void:
