@@ -196,7 +196,8 @@ func _set_pokemon_data(pokemon_data: Dictionary) -> void:
 	_set_stats(
 		pokemon_data.get("stats", pokemon_data.get("evs", {})),
 		pokemon_data.get("statStages", pokemon_data.get("stat_stages", {})),
-		str(pokemon_data.get("nature", ""))
+		str(pokemon_data.get("nature", "")),
+		pokemon_data.get("itemStatModifiers", pokemon_data.get("item_stat_modifiers", {}))
 	)
 	_set_ivs(pokemon_data.get("ivs", {}))
 	_set_evs(pokemon_data.get("evs", {}))
@@ -282,7 +283,12 @@ func _set_hp(pokemon_data: Dictionary) -> void:
 	hp_value_label.text = "(%s/%s)" % [clamped_hp, max_hp]
 
 
-func _set_stats(stats_value: Variant, stat_stages_value: Variant = {}, nature_value: String = "") -> void:
+func _set_stats(
+	stats_value: Variant,
+	stat_stages_value: Variant = {},
+	nature_value: String = "",
+	item_modifiers_value: Variant = {}
+) -> void:
 	var stats: Dictionary = {}
 	if stats_value is Dictionary:
 		stats = stats_value as Dictionary
@@ -292,11 +298,12 @@ func _set_stats(stats_value: Variant, stat_stages_value: Variant = {}, nature_va
 		stat_stages = stat_stages_value as Dictionary
 
 	var nature_modifiers := _nature_modifiers(nature_value)
-	_set_stat_label(atk_value_label, stats, stat_stages, "atk", nature_modifiers)
-	_set_stat_label(def_value_label, stats, stat_stages, "def", nature_modifiers)
-	_set_stat_label(spa_value_label, stats, stat_stages, "spa", nature_modifiers)
-	_set_stat_label(spd_value_label, stats, stat_stages, "spd", nature_modifiers)
-	_set_stat_label(spe_value_label, stats, stat_stages, "spe", nature_modifiers)
+	var item_modifiers: Dictionary = item_modifiers_value if item_modifiers_value is Dictionary else {}
+	_set_stat_label(atk_value_label, stats, stat_stages, "atk", nature_modifiers, item_modifiers)
+	_set_stat_label(def_value_label, stats, stat_stages, "def", nature_modifiers, item_modifiers)
+	_set_stat_label(spa_value_label, stats, stat_stages, "spa", nature_modifiers, item_modifiers)
+	_set_stat_label(spd_value_label, stats, stat_stages, "spd", nature_modifiers, item_modifiers)
+	_set_stat_label(spe_value_label, stats, stat_stages, "spe", nature_modifiers, item_modifiers)
 
 
 func _nature_modifiers(nature_value: String) -> Dictionary:
@@ -363,7 +370,14 @@ func _set_evs(evs_value: Variant) -> void:
 	ev_value_label.visible = not parts.is_empty()
 
 
-func _set_stat_label(label: Label, stats: Dictionary, stat_stages: Dictionary, stat_key: String, nature_modifiers: Dictionary = {}) -> void:
+func _set_stat_label(
+	label: Label,
+	stats: Dictionary,
+	stat_stages: Dictionary,
+	stat_key: String,
+	nature_modifiers: Dictionary = {},
+	item_modifiers: Dictionary = {}
+) -> void:
 	var stage_value: int = int(stat_stages.get(stat_key, 0))
 	label.text = _format_stat_value(stats, stat_stages, stat_key)
 	if stage_value > 0:
@@ -374,6 +388,8 @@ func _set_stat_label(label: Label, stats: Dictionary, stat_stages: Dictionary, s
 		label.add_theme_color_override("font_color", STAT_BOOST_COLOR)
 	elif str(nature_modifiers.get("down", "")) == stat_key:
 		label.add_theme_color_override("font_color", NATURE_DROP_COLOR)
+	elif item_modifiers.has(stat_key) and float(item_modifiers.get(stat_key, 1.0)) != 1.0:
+		label.add_theme_color_override("font_color", STAT_BOOST_COLOR if float(item_modifiers[stat_key]) > 1.0 else STAT_DROP_COLOR)
 	else:
 		label.remove_theme_color_override("font_color")
 

@@ -2,6 +2,7 @@ extends Node2D
 
 class_name BattleTrainerSprite
 
+const BattleRenderLayers := preload("res://scripts/battle/battle_render_layers.gd")
 const REMOTE_PLAYER_AVATAR_SCRIPT_PATH := "res://scripts/world/remote_player_avatar.gd"
 const DEFAULT_DISPLAY_SCALE := 2.0
 
@@ -12,6 +13,13 @@ const DEFAULT_DISPLAY_SCALE := 2.0
 
 var player_avatar: Node2D
 var facing_direction := Vector2.RIGHT
+
+
+func _ready() -> void:
+	# Move animations intentionally cover Pokemon at MOVE_FOREGROUND. Trainer
+	# identities and their callouts must remain color-stable above that band.
+	z_as_relative = true
+	z_index = BattleRenderLayers.TRAINERS
 
 
 func clear() -> void:
@@ -46,6 +54,9 @@ func show_player(appearance_state: Dictionary, facing_direction: Vector2) -> voi
 	# local position, so restore the avatar to this marker after applying state.
 	player_avatar.position = Vector2.ZERO
 	player_avatar.scale = Vector2.ONE * display_scale
+	# RemotePlayerAvatar is absolute in the overworld. In battle it must inherit
+	# this trainer's render band or its layered body parts fall back below moves.
+	player_avatar.z_as_relative = true
 	player_avatar.z_index = 0
 	player_avatar.call("set_interaction_enabled", false)
 	player_avatar.call("set_creator_nameplate_visible", false)

@@ -112,6 +112,7 @@ var movement_next_step_at_msec := 0
 var movement_reserved_tile := Vector2i.ZERO
 var story_visibility_active := true
 var is_npc_moving := false
+var _base_npc_process_active := false
 
 
 func _ready_base_npc() -> void:
@@ -779,14 +780,31 @@ func _create_atlas_frame(atlas: Texture2D, frame_size: Vector2, column: int, row
 func _process_base_npc() -> void:
 	if Engine.is_editor_hint():
 		return
+	# `_process()` is invoked again while an awaited interaction is still
+	# suspended. Keep one owner for the full async cycle so the input that
+	# closes a dialogue cannot start the same NPC again later in that frame.
+	if _base_npc_process_active:
+		return
+	_base_npc_process_active = true
 
 	_update_sort_z()
 	await _process_npc_movement()
 	if _can_start_pickpocket():
 		await _start_pickpocket(nearby_player)
+		_after_base_npc_process()
+		_base_npc_process_active = false
 		return
 	if _can_start_manual_interaction():
 		await _start_manual_interaction(nearby_player)
+	_after_base_npc_process()
+	_base_npc_process_active = false
+
+
+## Extension point for NPC-specific visual updates that must run after the
+## complete movement/interaction cycle. Subclasses should use this instead of
+## starting a competing process callback around the async NPC lifecycle.
+func _after_base_npc_process() -> void:
+	pass
 
 
 func _process_npc_movement() -> void:
@@ -1013,6 +1031,11 @@ func _start_manual_interaction(body: Node2D) -> void:
 
 	var result := await _run_story_or_legacy_interaction(body, "interact")
 	if str(result.get("status", "")) != "pending_battle":
+		# DialogueBox closes on the interaction action. Retain ownership until
+		# that action is released, otherwise the closing press can immediately
+		# satisfy a new manual-interaction check on another process tick.
+		while Input.is_action_pressed("interact") and is_inside_tree():
+			await get_tree().process_frame
 		GameState.unlock_overworld_input()
 	is_interacting = false
 

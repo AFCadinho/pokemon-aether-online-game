@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.3.52 - 2026-08-08
+
+**Added**
+
+- Your Pokémon's party hover card now shows the effective stats from stat-changing held items, including Choice items, Eviolite, Assault Vest, Iron Ball, Macho Brace, Power items, and several Pokémon-specific items.
+- PvP battles now show when a Pokémon is floating with an Air Balloon, including a clear indicator, battle-log message, and the correct “It had no effect!” feedback when a Ground-type move misses because of the balloon.
+
+**Changed**
+
+- The battle log now uses clearer colors to distinguish turns, actions, important battle events, and results.
+- Spectator side switching now moves the Trainer portraits, Trainer icons, and team information together with the Pokémon and player names.
+
+**Fixed**
+
+- Trainer appearances no longer change color when move animations pass over them.
+- Other players now see the correct beard color instead of a white beard.
+- Talking to Palet Kid Leo no longer traps you in an endless conversation.
+- Public held-item effects and effectiveness feedback in PvP are now shown consistently to both players and spectators.
+
 ## 0.3.47 - 2026-08-06
 
 **Added**

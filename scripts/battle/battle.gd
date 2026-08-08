@@ -801,6 +801,7 @@ func _get_owned_party_hover_data(pokemon_data: Dictionary) -> Dictionary:
 	var display_data: Dictionary = _get_display_pokemon_data("p1", pokemon_data).duplicate(true)
 	var saved_pokemon := _get_player_save_pokemon_for_hover(display_data)
 	if saved_pokemon == null:
+		_apply_held_item_stat_hover_data(display_data)
 		return display_data
 
 	var hover_data := saved_pokemon.to_battle_dict()
@@ -830,6 +831,9 @@ func _get_owned_party_hover_data(pokemon_data: Dictionary) -> Dictionary:
 		hover_data["maxHp"] = saved_pokemon.max_hp
 
 	_apply_temporary_form_party_hover_data(hover_data, display_data, saved_pokemon)
+	if display_data.has("item"):
+		hover_data["item"] = display_data.get("item")
+	_apply_held_item_stat_hover_data(hover_data)
 
 	var stat_stages := _get_active_stat_stages_for_party_hover(display_data)
 	if not stat_stages.is_empty():
@@ -840,6 +844,22 @@ func _get_owned_party_hover_data(pokemon_data: Dictionary) -> Dictionary:
 		hover_data["moves"] = moves
 
 	return hover_data
+
+func _apply_held_item_stat_hover_data(hover_data: Dictionary) -> void:
+	# The persisted stats are the normal calculated stats. Derive a separate
+	# presentation value so held items never mutate battle or save data.
+	var item_stat_modifiers := HeldItemStatModifierService.stat_modifiers(
+		hover_data.get("item", ""),
+		hover_data.get("species", ""),
+		bool(hover_data.get("canEvolve", hover_data.get("can_evolve", false)))
+	)
+	hover_data["stats"] = HeldItemStatModifierService.effective_stats(
+		hover_data.get("stats", {}),
+		hover_data.get("item", ""),
+		hover_data.get("species", ""),
+		bool(hover_data.get("canEvolve", hover_data.get("can_evolve", false)))
+	)
+	hover_data["itemStatModifiers"] = item_stat_modifiers
 
 func _apply_temporary_form_party_hover_data(
 	hover_data: Dictionary,
@@ -3348,9 +3368,18 @@ func _update_party_slots() -> void:
 	var opponent_display_team := _get_display_team_data("p2")
 	_mark_active_party_slot(player_display_team, "p1")
 	_mark_active_party_slot(opponent_display_team, "p2")
-	player_party_grid.set_party(player_display_team)
-	opponent_party_grid.set_party(opponent_display_team)
+	_set_display_party_grids(player_display_team, opponent_display_team)
 	opponent_party_grid.set_selection_enabled(false)
+
+
+func _set_display_party_grids(player_display_team: Array, opponent_display_team: Array) -> void:
+	# Keep the drawer grids and the always-visible stage rails in one explicit
+	# update path. The signal bridge is useful for ordinary party changes, but a
+	# spectator perspective swap changes both owners synchronously and must not
+	# depend on deferred signal delivery.
+	player_party_grid.set_party(player_display_team)
+	player_stage_party_grid.set_party(player_display_team)
+	opponent_party_grid.set_party(opponent_display_team)
 
 func _mark_active_party_slot(display_team: Array, player_id: String) -> void:
 	var active_slot := _get_active_canonical_party_slot(player_id)
@@ -4591,8 +4620,7 @@ func _update_hud_panels(include_team_data := true) -> void:
 	})
 	_mark_active_party_slot(player_display_team, "p1")
 	_mark_active_party_slot(enemy_display_team, "p2")
-	player_party_grid.set_party(player_display_team)
-	opponent_party_grid.set_party(enemy_display_team)
+	_set_display_party_grids(player_display_team, enemy_display_team)
 	opponent_party_grid.set_selection_enabled(false)
 	_sync_status_condition_overlays()
 
@@ -6014,7 +6042,25 @@ func _remember_spectator_raw_response(response: Dictionary) -> void:
 		return
 	var requests_value: Variant = response.get("requests", null)
 	if requests_value is Dictionary:
-		spectator_latest_raw_response = response.duplicate(true)
+		var remembered := response.duplicate(true)
+		var previous_players_value: Variant = spectator_latest_raw_response.get("players", {})
+		var incoming_players_value: Variant = remembered.get("players", {})
+		if previous_players_value is Dictionary and incoming_players_value is Dictionary:
+			var merged_players: Dictionary = {}
+			for side: String in ["p1", "p2"]:
+				var previous_player_value: Variant = (previous_players_value as Dictionary).get(side, {})
+				var incoming_player_value: Variant = (incoming_players_value as Dictionary).get(side, {})
+				var merged_player: Dictionary = (
+					(previous_player_value as Dictionary).duplicate(true)
+					if previous_player_value is Dictionary
+					else {}
+				)
+				if incoming_player_value is Dictionary:
+					merged_player.merge((incoming_player_value as Dictionary).duplicate(true), true)
+				if not merged_player.is_empty():
+					merged_players[side] = merged_player
+			remembered["players"] = merged_players
+		spectator_latest_raw_response = remembered
 
 
 func _update_spectator_perspective_label() -> void:
@@ -7310,13 +7356,13 @@ func _add_battle_log_messages(messages: Array[String]) -> void:
 
 		_add_battle_log_message(message)
 
-func _add_battle_log_message(message: String) -> void:
+func _add_battle_log_message(message: String, kind := "") -> void:
 	if message == "":
 		return
 
-	battle_log_panel.add_message(message)
+	battle_log_panel.add_message(message, kind)
 	if mini_battle_feed != null:
-		mini_battle_feed.add_message(message)
+		mini_battle_feed.add_message(message, kind)
 
 func _restore_battle_log_from_snapshot(response: Dictionary) -> void:
 	if _restore_battle_log_from_history_response(response):
@@ -7371,10 +7417,10 @@ func _restore_battle_log_from_history_response(response: Dictionary) -> bool:
 		var pre_log_message := str(presentation.get("pre_log_message", ""))
 		var log_message := str(presentation.get("log_message", ""))
 		if pre_log_message != "":
-			_add_battle_log_message(pre_log_message)
+			_add_battle_log_message(pre_log_message, str(presentation.get("pre_log_kind", "")))
 			restored_count += 1
 		if log_message != "":
-			_add_battle_log_message(log_message)
+			_add_battle_log_message(log_message, str(presentation.get("log_kind", "")))
 			restored_count += 1
 
 	if restored_count > 0:
@@ -7811,7 +7857,13 @@ func _warn_if_pvp_species_change_outside_batch(sprite_box: Node, species: String
 		return
 	if str(pvp_event_queue.current_event_batch_id) != "":
 		return
-	if context in ["initial_setup", "team_preview_setup", "snapshot_reconciliation", "settings_sprite_refresh"]:
+	if context in [
+		"initial_setup",
+		"team_preview_setup",
+		"snapshot_reconciliation",
+		"settings_sprite_refresh",
+		"spectator_switch_sides",
+	]:
 		return
 	if sprite_box != null and sprite_box.has_method("is_showing_species") and bool(sprite_box.call("is_showing_species", species)):
 		return

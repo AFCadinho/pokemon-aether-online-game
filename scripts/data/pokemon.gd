@@ -21,6 +21,7 @@ var stats: Dictionary
 var moves: Array
 var types: Array
 var possible_abilities: Array
+var can_evolve: bool
 var tradable: bool
 var experience: int
 var current_level_exp: int
@@ -107,6 +108,7 @@ func _init(
 	moves = _moves
 	types = _normalize_types(_types)
 	possible_abilities = _normalize_string_array(_possible_abilities)
+	can_evolve = false
 	tradable = _tradable
 	experience = max(_experience, 0)
 	current_level_exp = max(_current_level_exp, 0)
@@ -147,6 +149,7 @@ func to_battle_dict() -> Dictionary:
 		"savedMoves": _moves_to_persistence_list(),
 		"types": types,
 		"possibleAbilities": possible_abilities,
+		"canEvolve": can_evolve,
 		"instanceId": instance_id,
 		"ballItemId": ball_item_id,
 		"shiny": shiny,
