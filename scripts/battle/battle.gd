@@ -801,6 +801,7 @@ func _get_owned_party_hover_data(pokemon_data: Dictionary) -> Dictionary:
 	var display_data: Dictionary = _get_display_pokemon_data("p1", pokemon_data).duplicate(true)
 	var saved_pokemon := _get_player_save_pokemon_for_hover(display_data)
 	if saved_pokemon == null:
+		_apply_held_item_stat_hover_data(display_data)
 		return display_data
 
 	var hover_data := saved_pokemon.to_battle_dict()
@@ -830,6 +831,9 @@ func _get_owned_party_hover_data(pokemon_data: Dictionary) -> Dictionary:
 		hover_data["maxHp"] = saved_pokemon.max_hp
 
 	_apply_temporary_form_party_hover_data(hover_data, display_data, saved_pokemon)
+	if display_data.has("item"):
+		hover_data["item"] = display_data.get("item")
+	_apply_held_item_stat_hover_data(hover_data)
 
 	var stat_stages := _get_active_stat_stages_for_party_hover(display_data)
 	if not stat_stages.is_empty():
@@ -840,6 +844,20 @@ func _get_owned_party_hover_data(pokemon_data: Dictionary) -> Dictionary:
 		hover_data["moves"] = moves
 
 	return hover_data
+
+func _apply_held_item_stat_hover_data(hover_data: Dictionary) -> void:
+	# The persisted stats are the normal calculated stats. Derive a separate
+	# presentation value so held items never mutate battle or save data.
+	var item_stat_modifiers := HeldItemStatModifierService.stat_modifiers(
+		hover_data.get("item", ""),
+		hover_data.get("species", "")
+	)
+	hover_data["stats"] = HeldItemStatModifierService.effective_stats(
+		hover_data.get("stats", {}),
+		hover_data.get("item", ""),
+		hover_data.get("species", "")
+	)
+	hover_data["itemStatModifiers"] = item_stat_modifiers
 
 func _apply_temporary_form_party_hover_data(
 	hover_data: Dictionary,
