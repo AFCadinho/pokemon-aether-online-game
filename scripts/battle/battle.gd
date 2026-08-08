@@ -215,6 +215,8 @@ const CAPTURE_SUCCESS_RESULT_HOLD_SECONDS := 0.40
 const BATTLE_END_RESULT_HOLD_SECONDS := 0.12
 const DEBUG_PVP_REALTIME := false
 const DEBUG_PVP_FLOW_TRACE := false
+const DEBUG_PVP_AIR_BALLOON := true
+const AIR_BALLOON_DEBUG_PREFIX := "[PAO Air Balloon Debug]"
 const DEBUG_BATTLE_HP_EVENTS := false
 const DEBUG_BATTLE_MOVE_EVENTS := false
 const DEBUG_SIDE_CONDITION_EFFECTS := false
@@ -4883,6 +4885,55 @@ func _debug_trainer_team_display(stage: String, payload: Dictionary) -> void:
 
 	print(TRAINER_TEAM_DEBUG_PREFIX, " ", stage, " ", JSON.stringify(payload))
 
+func _debug_air_balloon_item_state(item_name: String) -> String:
+	var item_key := _normalize_item_key(item_name)
+	if item_key == "airballoon":
+		return "air_balloon"
+	if item_key == "":
+		return "missing"
+	return "other_item"
+
+func _debug_air_balloon_event(stage: String, event: Dictionary, details: Dictionary = {}) -> void:
+	if not DEBUG_PVP_AIR_BALLOON or not _is_pvp_battle():
+		return
+	if str(event.get("type", "")) != "item":
+		return
+
+	var payload := {
+		"targetSide": _get_player_id_from_ident(str(event.get("target", ""))),
+		"state": str(event.get("state", "")),
+		"itemState": _debug_air_balloon_item_state(str(event.get("item", ""))),
+	}
+	for key: Variant in details:
+		payload[key] = details[key]
+	print(AIR_BALLOON_DEBUG_PREFIX, " ", stage, " ", JSON.stringify(payload))
+
+func _debug_air_balloon_response(stage: String, response: Dictionary) -> void:
+	if not DEBUG_PVP_AIR_BALLOON or not _is_pvp_battle():
+		return
+
+	var item_events: Array = []
+	var events_value: Variant = response.get("events", [])
+	var events: Array = events_value as Array if events_value is Array else []
+	for event_value: Variant in events:
+		if not (event_value is Dictionary):
+			continue
+		var event: Dictionary = event_value as Dictionary
+		if str(event.get("type", "")) != "item":
+			continue
+		item_events.append({
+			"targetSide": _get_player_id_from_ident(str(event.get("target", ""))),
+			"state": str(event.get("state", "")),
+			"itemState": _debug_air_balloon_item_state(str(event.get("item", ""))),
+		})
+
+	print(AIR_BALLOON_DEBUG_PREFIX, " ", stage, " ", JSON.stringify({
+		"eventSeq": _get_int_from_variant(response.get("eventSeq", -1), -1),
+		"batchSeq": _get_int_from_variant(response.get("batchSeq", -1), -1),
+		"eventsCount": events.size(),
+		"itemEvents": item_events,
+	}))
+
 ## Reset de battle status UI naar een lege beginstand.
 func _reset_battle_status_panel() -> void:
 	battle_status_panel.reset_status()
@@ -4906,6 +4957,7 @@ func _reset_battle_effect_tracking() -> void:
 	event_presentation.reset()
 
 func _remember_public_confirmed_abilities_from_response(response: Dictionary) -> void:
+	_debug_air_balloon_response("client.response_callback", response)
 	var events_value: Variant = response.get("events", [])
 	if not (events_value is Array):
 		return
@@ -5011,6 +5063,7 @@ func _remember_battle_modifier_event(event: Dictionary) -> void:
 			_apply_item_modifier_event(event)
 
 func _apply_item_modifier_event(event: Dictionary) -> void:
+	_debug_air_balloon_event("client.item_modifier.received", event)
 	if _normalize_item_key(str(event.get("item", ""))) != "airballoon":
 		return
 
@@ -5021,8 +5074,10 @@ func _apply_item_modifier_event(event: Dictionary) -> void:
 	match str(event.get("state", "")).strip_edges().to_lower():
 		"start":
 			_add_volatile_condition_for_ident(ident_key, "air_balloon", event)
+			_debug_air_balloon_event("client.item_modifier.applied", event, {"indicatorState": "present"})
 		"end":
 			_remove_volatile_condition_for_ident(ident_key, "air_balloon")
+			_debug_air_balloon_event("client.item_modifier.applied", event, {"indicatorState": "removed"})
 
 func _apply_stat_stage_event(event: Dictionary) -> void:
 	var ident_key: String = _normalize_battle_ident(str(event.get("target", "")))
@@ -7862,6 +7917,7 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			continue
 
 		var event_data: Dictionary = event as Dictionary
+		_debug_air_balloon_event("client.render.event", event_data, {"source": source})
 		_ensure_spectator_active_pokemon_for_event(event_data)
 		var fallback_knock_off_message := _get_fallback_knock_off_item_message(event_data) if not has_explicit_item_events else ""
 
@@ -12837,10 +12893,12 @@ func _apply_pvp_realtime_battle_update(message: Dictionary) -> bool:
 	if update_payload.is_empty():
 		return false
 
+	_debug_air_balloon_response("client.realtime.raw", update_payload)
 	_remember_spectator_raw_response(update_payload)
 	var mapped_update := action_flow.map_response_for_local_player(update_payload)
 	if mapped_update.is_empty():
 		return false
+	_debug_air_balloon_response("client.realtime.mapped", mapped_update)
 	if realtime_message_kind == "snapshot":
 		return await _apply_pvp_realtime_snapshot_when_safe(message, mapped_update)
 	var is_required_render_batch := _is_unrendered_authoritative_pvp_render_batch_response(mapped_update)
