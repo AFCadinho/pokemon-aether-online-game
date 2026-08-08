@@ -31,6 +31,25 @@ func _init() -> void:
 		not damage_payload_source.contains('"viewerId"'),
 		"damage calculation authority comes from the authenticated session"
 	)
+	var snapshot_request_start := api_source.find("func get_calcdex_snapshot(")
+	var snapshot_request_end := api_source.find("\nfunc ", snapshot_request_start + 1)
+	var snapshot_request_source := api_source.substr(
+		snapshot_request_start,
+		snapshot_request_end - snapshot_request_start
+	)
+	_check(
+		snapshot_request_source.contains('"lastProjectionRevision"') \
+			and not snapshot_request_source.contains('"viewerId"') \
+			and not snapshot_request_source.contains('"pokemon"') \
+			and not snapshot_request_source.contains('"team"'),
+		"Calcdex snapshot requests contain only the authenticated projection cursor"
+	)
+	_check(
+		not battle_source.contains("_apply_known_damage_calc_defender_info") \
+			and not battle_source.contains("_get_known_damage_calc_defender_item") \
+			and not battle_source.contains("_get_known_damage_calc_defender_ability"),
+		"public reveals are not copied into user scenario assumptions"
+	)
 	_check(
 		realtime_source.contains('if message_type == "pvp.choice_confirmed":') \
 			and realtime_source.contains("_apply_timer_projection_from_battle_response(message)"),

@@ -2,6 +2,7 @@ extends MarginContainer
 
 class_name BattleDamageCalcPanel
 
+const CALCDEX_SNAPSHOT := preload("res://scripts/battle/battle_calcdex_snapshot.gd")
 signal defender_assumptions_changed(assumptions: Dictionary, edited_fields: Dictionary)
 signal assumption_catalog_requested(kind: String, query: String, species: String)
 
@@ -56,6 +57,7 @@ var last_response: Dictionary = {}
 var last_error := ""
 var defender_assumptions: Dictionary = {}
 var edited_assumption_fields: Dictionary = {}
+var knowledge_snapshot: Dictionary = {}
 var live_ev_inputs: Dictionary = {}
 var live_ev_total_label: Label
 var live_ev_focus_stat := ""
@@ -146,6 +148,14 @@ func show_response(response: Dictionary) -> void:
 func set_defender_assumptions(assumptions: Dictionary, edited_fields: Dictionary = {}) -> void:
 	defender_assumptions = _duplicate_dictionary(assumptions)
 	edited_assumption_fields = _duplicate_dictionary(edited_fields)
+	if _is_catalog_search_active():
+		return
+	if is_inside_tree():
+		_render_current_state()
+
+
+func set_knowledge_snapshot(snapshot: Dictionary) -> void:
+	knowledge_snapshot = snapshot.duplicate(true)
 	if _is_catalog_search_active():
 		return
 	if is_inside_tree():
@@ -356,8 +366,51 @@ func _add_status(text: String, color: Color) -> void:
 
 
 func _add_assumption_chips(defender: Dictionary, _response: Dictionary) -> void:
+	_add_public_fact_chips()
 	var assumptions := _get_display_assumptions(defender)
 	_add_live_assumption_controls(assumptions)
+
+
+func _add_public_fact_chips() -> void:
+	var opponent := CALCDEX_SNAPSHOT.get_active_pokemon(knowledge_snapshot, "opponent")
+	if opponent.is_empty():
+		return
+	var facts: Array[String] = []
+	for field_name: String in ["item", "ability"]:
+		var knowledge := CALCDEX_SNAPSHOT.get_knowledge_value(opponent, field_name)
+		if str(knowledge.get("state", "")) != "known":
+			continue
+		var value := str(knowledge.get("value", "")).strip_edges()
+		if value == "":
+			continue
+		facts.append(_t("battle.calc.fact_with_provenance", {
+			"field": _t("battle.calc.%s" % field_name),
+			"value": value,
+			"provenance": _get_provenance_label(knowledge),
+		}))
+	var boosts := CALCDEX_SNAPSHOT.get_knowledge_value(opponent, "boosts")
+	var boost_values := _as_dictionary(boosts.get("value", {}))
+	if str(boosts.get("state", "")) == "known" and not boost_values.is_empty():
+		facts.append(_t("battle.calc.fact_with_provenance", {
+			"field": _t("battle.calc.boosts_field"),
+			"value": _get_boosts_text(boost_values),
+			"provenance": _get_provenance_label(boosts),
+		}))
+	if facts.is_empty():
+		return
+	var title := _make_label(_t("battle.calc.public_facts"), 10, TEXT_MUTED)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	content.add_child(title)
+	for fact: String in facts:
+		var chip := _make_chip(fact)
+		chip.add_theme_stylebox_override("normal", _make_stylebox(CHIP_BG, CHIP_PUBLIC_BORDER, 4, 5.0, 2.0))
+		content.add_child(chip)
+
+
+func _get_provenance_label(knowledge: Dictionary) -> String:
+	var provenance := _as_dictionary(knowledge.get("provenance", {}))
+	var source := str(provenance.get("source", "unknown"))
+	return _t("battle.calc.provenance.%s" % source)
 
 
 func _add_move_result_row(result: Dictionary, defender: Dictionary) -> void:
@@ -582,20 +635,15 @@ func _make_assumption_summary_button(text: String, editor_kind: String) -> Butto
 	button.clip_text = true
 	button.add_theme_font_size_override("font_size", 11)
 	var is_active: bool = active_selector == editor_kind
-	var is_edited: bool = text.ends_with("*")
-	var is_known_value: bool = not is_edited and text != _get_assumption_fallback_label(editor_kind)
+	var is_edited: bool = bool(edited_assumption_fields.get(editor_kind, false))
 	var chip_border: Color = CHIP_BORDER
 	if is_edited:
 		chip_border = CHIP_EDITED_BORDER
-	elif is_known_value:
-		chip_border = CHIP_PUBLIC_BORDER
 	var font_color: Color = TEXT_SECONDARY
 	if is_active:
 		font_color = TEXT_PRIMARY
 	elif is_edited:
 		font_color = TEXT_ACCENT
-	elif is_known_value:
-		font_color = TEXT_PRIMARY
 	button.add_theme_color_override("font_color", font_color)
 	button.add_theme_stylebox_override(
 		"normal",
@@ -1319,8 +1367,8 @@ func _get_named_assumption_label(assumptions: Dictionary, key: String, fallback:
 func _get_assumption_chip_label(assumptions: Dictionary, key: String, fallback: String) -> String:
 	var label := _get_named_assumption_label(assumptions, key, fallback)
 	if label == fallback:
-		return label
-	return "%s*" % label if bool(edited_assumption_fields.get(key, false)) else label
+		return "%s · %s" % [label, _t("battle.calc.provenance.unknown")]
+	return _get_scenario_label(label, key)
 
 
 func _get_display_assumptions(defender: Dictionary) -> Dictionary:
@@ -1339,7 +1387,7 @@ func _get_display_assumptions(defender: Dictionary) -> Dictionary:
 func _get_nature_chip_label(assumptions: Dictionary) -> String:
 	var canonical_nature := _fallback_text(str(assumptions.get("nature", "")).strip_edges(), "Hardy")
 	var label := _localized_nature_name(canonical_nature)
-	return "%s*" % label if bool(edited_assumption_fields.get("nature", false)) else label
+	return _get_scenario_label(label, "nature")
 
 
 func _localized_nature_name(nature: String) -> String:
@@ -1366,7 +1414,12 @@ func _get_evs_summary_chip_label(evs: Dictionary) -> String:
 		"total": _get_evs_total(evs),
 		"limit": EV_TOTAL_LIMIT,
 	})
-	return "%s*" % label if bool(edited_assumption_fields.get("evs", false)) else label
+	return _get_scenario_label(label, "evs")
+
+
+func _get_scenario_label(label: String, field_name: String) -> String:
+	var edited_marker := "*" if bool(edited_assumption_fields.get(field_name, false)) else ""
+	return "%s%s · %s" % [label, edited_marker, _t("battle.calc.provenance.user_scenario")]
 
 
 func _get_nature_option_names() -> Array[String]:
@@ -1466,6 +1519,11 @@ func _get_boosts_label(pokemon: Dictionary) -> String:
 	var boosts := _as_dictionary(pokemon.get("boosts", {}))
 	if boosts.is_empty():
 		return ""
+	var values := _get_boosts_text(boosts)
+	return "" if values == "" else _t("battle.calc.boosts", {"values": values})
+
+
+func _get_boosts_text(boosts: Dictionary) -> String:
 	var parts: Array[String] = []
 	for stat_key: String in ["atk", "def", "spa", "spd", "spe", "accuracy", "evasion"]:
 		if not boosts.has(stat_key):
@@ -1476,7 +1534,7 @@ func _get_boosts_label(pokemon: Dictionary) -> String:
 		parts.append("%s %s%d" % [_format_boost_stat_name(stat_key), "+" if amount > 0 else "", amount])
 	if parts.is_empty():
 		return ""
-	return _t("battle.calc.boosts", {"values": " / ".join(parts)})
+	return " / ".join(parts)
 
 
 func _format_boost_stat_name(stat_key: String) -> String:

@@ -199,6 +199,9 @@ var damage_calc_defender_species_key := ""
 var damage_calc_defender_assumptions: Dictionary = {}
 var damage_calc_assumption_edited_fields: Dictionary = {}
 var damage_calc_saved_assumptions: Dictionary = {}
+var damage_calc_knowledge_snapshot: Dictionary = {}
+var damage_calc_snapshot_battle_id := ""
+var damage_calc_snapshot_disabled_for_battle := false
 var bag_inventory_request_token := 0
 var capture_target_visibility_tween: Tween
 var summon_target_visibility_tween: Tween
@@ -2311,7 +2314,6 @@ func _refresh_damage_calc_results() -> void:
 	if current_action_panel_mode != BattleActionsPanelMode.CALC:
 		return
 	_sync_damage_calc_matchup_assumptions()
-	_apply_known_damage_calc_defender_info()
 	if battle_finished:
 		calc_panel.show_error(_t("battle.error.ended"))
 		return
@@ -2331,6 +2333,28 @@ func _refresh_damage_calc_results() -> void:
 	damage_calc_refresh_queued = false
 	calc_panel.set_defender_assumptions(damage_calc_defender_assumptions, damage_calc_assumption_edited_fields)
 	calc_panel.show_loading(_get_active_display_species("p1"), _get_active_display_species("p2"))
+
+	var projection_revision := battle_state.get_calcdex_projection_revision()
+	if not damage_calc_snapshot_disabled_for_battle and not projection_revision.is_empty():
+		var snapshot_response: Dictionary = await BattleApiClient.get_calcdex_snapshot(
+			damage_calc_request,
+			battle_state.battle_id,
+			projection_revision
+		)
+		if request_token != damage_calc_request_token:
+			damage_calc_request_in_flight = false
+			if damage_calc_refresh_queued and current_action_panel_mode == BattleActionsPanelMode.CALC:
+				_refresh_damage_calc_results()
+			return
+		if bool(snapshot_response.get("success", false)):
+			damage_calc_knowledge_snapshot = _damage_calc_as_dictionary(snapshot_response.get("snapshot", {})).duplicate(true)
+			calc_panel.set_knowledge_snapshot(damage_calc_knowledge_snapshot)
+		else:
+			damage_calc_knowledge_snapshot.clear()
+			calc_panel.set_knowledge_snapshot({})
+			var snapshot_error_code := _get_damage_calc_error_code(snapshot_response)
+			if snapshot_error_code == "CALC_UNSUPPORTED_MECHANIC":
+				damage_calc_snapshot_disabled_for_battle = true
 
 	var response: Dictionary = await BattleApiClient.calculate_battle_damage(
 		damage_calc_request,
@@ -2404,11 +2428,19 @@ func _on_calc_panel_assumption_catalog_requested(kind: String, query: String, sp
 		calc_panel.show_assumption_catalog_error(kind, str(response.get("error", "Could not load assumptions.")))
 
 func _sync_damage_calc_matchup_assumptions() -> void:
+	var current_battle_id := battle_state.battle_id.strip_edges()
+	if current_battle_id != damage_calc_snapshot_battle_id:
+		damage_calc_snapshot_battle_id = current_battle_id
+		damage_calc_snapshot_disabled_for_battle = false
+		damage_calc_knowledge_snapshot.clear()
+		calc_panel.set_knowledge_snapshot({})
 	var matchup_key := _get_damage_calc_matchup_key()
 	if matchup_key == damage_calc_matchup_key:
 		return
 
 	damage_calc_matchup_key = matchup_key
+	damage_calc_knowledge_snapshot.clear()
+	calc_panel.set_knowledge_snapshot({})
 	damage_calc_defender_species_key = _get_damage_calc_defender_species_key()
 	_load_damage_calc_assumptions_for_current_defender()
 
@@ -2428,27 +2460,7 @@ func _load_damage_calc_assumptions_for_current_defender() -> void:
 	if not saved_entry.is_empty():
 		damage_calc_defender_assumptions = _sanitize_damage_calc_assumptions(saved_entry)
 		damage_calc_assumption_edited_fields = _build_damage_calc_edited_fields(damage_calc_defender_assumptions)
-	_apply_known_damage_calc_defender_info(false)
 	calc_panel.set_defender_assumptions(damage_calc_defender_assumptions, damage_calc_assumption_edited_fields)
-
-func _apply_known_damage_calc_defender_info(update_panel: bool = true) -> void:
-	var changed: bool = false
-	if not bool(damage_calc_assumption_edited_fields.get("item", false)):
-		var known_item: String = _get_known_damage_calc_defender_item()
-		var current_item: String = str(damage_calc_defender_assumptions.get("item", "")).strip_edges()
-		if known_item != "" and current_item != known_item:
-			damage_calc_defender_assumptions["item"] = known_item
-			changed = true
-
-	if not bool(damage_calc_assumption_edited_fields.get("ability", false)):
-		var known_ability: String = _get_known_damage_calc_defender_ability()
-		var current_ability: String = str(damage_calc_defender_assumptions.get("ability", "")).strip_edges()
-		if known_ability != "" and current_ability != known_ability:
-			damage_calc_defender_assumptions["ability"] = known_ability
-			changed = true
-
-	if changed and update_panel:
-		calc_panel.set_defender_assumptions(damage_calc_defender_assumptions, damage_calc_assumption_edited_fields)
 
 func _persist_current_damage_calc_assumptions() -> void:
 	if damage_calc_defender_species_key == "":
@@ -2576,34 +2588,6 @@ func _get_damage_calc_defender_species_key() -> String:
 func _slugify_damage_calc_species(species: String) -> String:
 	return species.strip_edges().to_lower().replace(" ", "").replace("-", "").replace("_", "").replace("'", "").replace(".", "")
 
-func _get_known_damage_calc_defender_item() -> String:
-	var active_pokemon: Dictionary = battle_state.get_active_player_pokemon("p2")
-	var ident_key: String = _normalize_battle_ident(str(active_pokemon.get("ident", "")))
-	if ident_key != "" and public_confirmed_items_by_ident.has(ident_key):
-		var confirmed_item: String = str(public_confirmed_items_by_ident.get(ident_key, "")).strip_edges()
-		if confirmed_item != "":
-			return confirmed_item
-
-	for key: String in ["confirmedItem", "confirmed_item", "revealedItem", "revealed_item", "publicItem", "public_item"]:
-		var value: String = str(active_pokemon.get(key, "")).strip_edges()
-		if value != "":
-			return value
-	return ""
-
-func _get_known_damage_calc_defender_ability() -> String:
-	var active_pokemon: Dictionary = battle_state.get_active_player_pokemon("p2")
-	var ident_key: String = _normalize_battle_ident(str(active_pokemon.get("ident", "")))
-	if ident_key != "" and public_confirmed_abilities_by_ident.has(ident_key):
-		var confirmed_ability: String = str(public_confirmed_abilities_by_ident.get(ident_key, "")).strip_edges()
-		if confirmed_ability != "":
-			return confirmed_ability
-
-	for key: String in ["confirmedAbility", "confirmed_ability", "revealedAbility", "revealed_ability", "publicAbility", "public_ability"]:
-		var value: String = str(active_pokemon.get(key, "")).strip_edges()
-		if value != "":
-			return value
-	return ""
-
 func _damage_calc_as_dictionary(value: Variant) -> Dictionary:
 	if value is Dictionary:
 		return value as Dictionary
@@ -2634,6 +2618,13 @@ func _get_damage_calc_defender_assumptions_payload() -> Dictionary:
 		if str(payload.get(key, "")).strip_edges() == "":
 			payload.erase(key)
 	return payload
+
+func _get_damage_calc_error_code(response: Dictionary) -> String:
+	var code := str(response.get("code", "")).strip_edges()
+	var detail: Variant = response.get("detail")
+	if detail is Dictionary:
+		code = str((detail as Dictionary).get("code", code)).strip_edges()
+	return code
 
 ## Handelt de gekozen hoofdactie af.
 func _on_action_selected(action: String) -> void:
