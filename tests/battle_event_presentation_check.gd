@@ -4,6 +4,7 @@ const BattleEventPresentationScript := preload("res://scripts/battle/battle_even
 const BattleEventTextFormatterScript := preload("res://scripts/battle/battle_event_text_formatter.gd")
 const BattleHpEventHelperScript := preload("res://scripts/battle/battle_hp_event_helper.gd")
 const SupremeOverlordEffectScript := preload("res://scripts/battle/battle_supreme_overlord_effect.gd")
+const BattleLogPanelScript := preload("res://scripts/battle/battle_ui/battle_log_panel.gd")
 
 var failed := false
 
@@ -42,6 +43,7 @@ func _init() -> void:
 	_check_badly_poisoned_damage_replays_status_effect_animation()
 	_check_burn_damage_replays_status_effect_animation()
 	_check_z_power_event_has_visible_message()
+	_check_semantic_battle_log_colors()
 	_check_supreme_overlord_fallen_counter_protocol()
 	quit(1 if failed else 0)
 
@@ -69,6 +71,38 @@ func _check_z_power_event_has_visible_message() -> void:
 		"Pikachu surrounded itself with Z-Power!",
 		"Z-Power event receives visible battle presentation"
 	)
+
+
+func _check_semantic_battle_log_colors() -> void:
+	var presentation = _make_presentation()
+	var cases := [
+		[{"type": "move", "actor": "p1a: Pikachu", "move": "Thunderbolt"}, "move"],
+		[{"type": "switch", "playerId": "p1", "to": "Pikachu"}, "switch"],
+		[{"type": "damage", "target": "p2a: Garchomp", "previousCondition": "100/100", "condition": "75/100"}, "damage"],
+		[{"type": "fieldEffect", "effect": "Electric Terrain", "state": "start"}, "field"],
+		[{"type": "ability", "target": "p2a: Landorus", "ability": "Intimidate"}, "effect"],
+		[{"type": "status", "target": "p1a: Pikachu", "status": "par"}, "status"],
+		[{"type": "effectiveness", "target": "p1a: Gholdengo", "effectiveness": "immune"}, "warning"],
+		[{"type": "effectiveness", "target": "p2a: Garchomp", "effectiveness": "resisted"}, "detail"],
+		[{"type": "effectiveness", "target": "p2a: Garchomp", "effectiveness": "super"}, "result"],
+		[{"type": "faint", "target": "p2a: Garchomp"}, "faint"],
+	]
+	for test_case: Array in cases:
+		var event_data: Dictionary = test_case[0] as Dictionary
+		var result: Dictionary = presentation.build(event_data)
+		_check_equal(
+			str(result.get("log_kind", "")),
+			str(test_case[1]),
+			"%s event receives a semantic battle-log color" % str(event_data.get("type", ""))
+		)
+
+	var panel = BattleLogPanelScript.new()
+	_check_equal(
+		panel._format_line("Volledig vertaalde schademelding", "damage"),
+		"[color=#ff929f]Volledig vertaalde schademelding[/color]",
+		"semantic battle-log colors do not depend on English message text"
+	)
+	panel.free()
 
 
 func _check_supreme_overlord_fallen_counter_protocol() -> void:

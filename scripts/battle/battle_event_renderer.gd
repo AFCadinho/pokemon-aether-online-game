@@ -56,7 +56,9 @@ func add_turn_header(turn: int) -> void:
 
 func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 	var pre_log_message := str(presentation.get("pre_log_message", ""))
+	var pre_log_kind := str(presentation.get("pre_log_kind", ""))
 	var log_message := str(presentation.get("log_message", ""))
+	var log_kind := str(presentation.get("log_kind", ""))
 	var battle_message := str(presentation.get("battle_message", ""))
 	var add_blank_after := bool(presentation.get("add_blank_after", false))
 	var suppress_player_gap := bool(presentation.get("suppress_player_gap", false))
@@ -78,12 +80,12 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 	if pre_log_message != "":
 		if not suppress_player_gap:
 			_add_battle_log_player_gap(event_data)
-		_add_log_message(pre_log_message)
+		_add_log_message(pre_log_message, pre_log_kind)
 
 	if log_message != "":
 		if not suppress_player_gap:
 			_add_battle_log_player_gap(event_data)
-		_add_log_message(log_message)
+		_add_log_message(log_message, log_kind)
 
 	if add_blank_after:
 		battle_log_panel.add_blank_line()
@@ -202,11 +204,11 @@ func _set_active_hud_hp_from_event(target_ident: String, event: Dictionary, use_
 	if set_active_hud_hp_from_event.is_valid():
 		set_active_hud_hp_from_event.call(target_ident, event, use_previous_hp)
 
-func _add_log_message(message: String) -> void:
+func _add_log_message(message: String, kind := "") -> void:
 	if battle_log_panel != null:
-		battle_log_panel.add_message(message)
+		battle_log_panel.add_message(message, kind)
 	if mini_battle_feed != null:
-		mini_battle_feed.add_message(message)
+		mini_battle_feed.add_message(message, kind)
 
 
 func _wait(seconds: float) -> void:

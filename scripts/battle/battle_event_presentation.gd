@@ -425,7 +425,48 @@ func build(event_data: Dictionary) -> Dictionary:
 			recent_ability_event = false
 			recent_move_event = false
 
+	_assign_log_kinds(presentation, event_data)
 	return presentation
+
+
+func _assign_log_kinds(presentation: Dictionary, event_data: Dictionary) -> void:
+	var event_type := str(event_data.get("type", ""))
+	var kind := _get_log_kind(event_type, event_data)
+	presentation["log_kind"] = kind
+	presentation["pre_log_kind"] = "effect" if event_type == "move" else kind
+
+
+func _get_log_kind(event_type: String, event_data: Dictionary) -> String:
+	match event_type:
+		"move", "prepare":
+			return "move"
+		"switch", "drag":
+			return "switch"
+		"damage":
+			return "damage"
+		"heal":
+			return "heal"
+		"fieldEffect":
+			return "field"
+		"ability", "item", "pokemonEffect", "statChange", "transform", "mega", "primal", "formeChange", "zPower":
+			return "effect"
+		"status":
+			return "status"
+		"fail", "cant", "miss", "criticalHit":
+			return "warning"
+		"effectiveness":
+			match str(event_data.get("effectiveness", "")):
+				"super":
+					return "result"
+				"resisted":
+					return "detail"
+				"immune":
+					return "warning"
+		"faint":
+			return "faint"
+		"win":
+			return "result"
+	return ""
 
 
 func _is_tera_shift_event(event_data: Dictionary) -> bool:
@@ -439,7 +480,9 @@ func _is_tera_shift_event(event_data: Dictionary) -> bool:
 func _new_presentation() -> Dictionary:
 	return {
 		"pre_log_message": "",
+		"pre_log_kind": "",
 		"log_message": "",
+		"log_kind": "",
 		"battle_message": "",
 		"add_blank_after": false,
 		"suppress_player_gap": false,
