@@ -134,6 +134,14 @@ func _check_side_identities(
 		"%s right name portrait follows its player" % phase
 	)
 	_check(
+		_portrait_avatar_appearance(panel.player_1_portrait).get("eye_color") == left_appearance.get("eye_color"),
+		"%s left portrait renderer follows its player" % phase
+	)
+	_check(
+		_portrait_avatar_appearance(panel.player_2_portrait).get("eye_color") == right_appearance.get("eye_color"),
+		"%s right portrait renderer follows its player" % phase
+	)
+	_check(
 		_battle_stage_lead_species(battle.player_stage_party_grid) == left_lead_species,
 		"%s left party rail follows its player" % phase
 	)
@@ -156,6 +164,13 @@ func _battle_stage_lead_species(party_grid: PartyGrid) -> String:
 		return ""
 	var first_value: Variant = party_grid.current_party_data[0]
 	return str((first_value as Dictionary).get("species", "")) if first_value is Dictionary else ""
+
+
+func _portrait_avatar_appearance(portrait: TrainerHeadPortrait) -> Dictionary:
+	if portrait == null or portrait.avatar == null:
+		return {}
+	var appearance_value: Variant = portrait.avatar.get("current_appearance_state")
+	return appearance_value as Dictionary if appearance_value is Dictionary else {}
 
 
 func _stage_appearance(trainer_sprite: BattleTrainerSprite) -> Dictionary:
