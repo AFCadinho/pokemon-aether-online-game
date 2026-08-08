@@ -19,10 +19,10 @@ func _ready() -> void:
 	_sync_to_movement_target()
 
 
-func _physics_process(_delta: float) -> void:
-	# Keep DialogueNPC's normal async _process untouched. The formation is a
-	# visual concern and must never participate in the dialogue coroutine.
-	if not Engine.is_editor_hint() and not is_interacting:
+func _after_base_npc_process() -> void:
+	# Formation updates share BaseNPC's serialized lifecycle, so closing the
+	# dialogue cannot race a second process callback into reopening it.
+	if not is_interacting:
 		_sync_to_movement_target()
 
 
