@@ -2,6 +2,7 @@ extends RefCounted
 
 class_name BattleAnimationRouter
 
+const BattleRenderLayers := preload("res://scripts/battle/battle_render_layers.gd")
 const MOVE_ANIMATION_CATALOG_PATH := "res://data/battle_move_animations.json"
 const EFFECT_ANIMATION_CATALOG_PATH := "res://data/battle_effect_animations.json"
 const TAKE_DAMAGE_SOUND_PATH := "res://assets/battles/animations/common/damage/normaldamage.ogg"
@@ -187,7 +188,7 @@ func _play_animation_config(
 			underlay_overlay.queue_free()
 		return
 
-	animation_node.z_index = 50
+	animation_node.z_index = BattleRenderLayers.MOVE_FOREGROUND
 	_fit_animation_to_parent(animation_node, parent_node)
 	_apply_move_projectile_endpoint_anchors(animation_node, move_actor_ident, move_target_ident, parent_node, config, animation_options)
 	_apply_move_sheet_anchor(animation_node, move_actor_ident, move_target_ident, parent_node, config)
@@ -886,7 +887,11 @@ func _create_animation_overlay(parent_node: Node, config: Dictionary = {}) -> Co
 	overlay.name = "MoveAnimationOverlay"
 	overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	overlay.clip_contents = true
-	overlay.z_index = 0 if bool(config.get("render_below_sprites", false)) else 50
+	overlay.z_index = (
+		BattleRenderLayers.FIELD
+		if bool(config.get("render_below_sprites", false))
+		else BattleRenderLayers.MOVE_FOREGROUND
+	)
 	overlay.anchor_left = 0.0
 	overlay.anchor_top = 0.0
 	overlay.anchor_right = 0.0
