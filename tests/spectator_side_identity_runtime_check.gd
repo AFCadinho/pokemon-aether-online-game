@@ -39,6 +39,25 @@ func _ready() -> void:
 	battle._show_pvp_trainers(canonical_snapshot)
 	battle._update_battle_presentation("snapshot_reconciliation")
 	await get_tree().process_frame
+	# Realtime spectator updates historically contained names but omitted the
+	# already-public appearance. Treat the omission as unchanged so a later
+	# perspective swap still owns a complete canonical player identity.
+	battle._remember_spectator_raw_response({
+		"battleId": canonical_snapshot.get("battleId"),
+		"players": {
+			"p1": {"name": "Alpha"},
+			"p2": {"name": "Bravo"},
+		},
+		"requests": canonical_snapshot.get("requests"),
+	})
+	_check(
+		not (battle.spectator_latest_raw_response.get("players", {}).get("p1", {}).get("appearance", {}) as Dictionary).is_empty(),
+		"partial spectator snapshots preserve canonical p1 appearance"
+	)
+	_check(
+		not (battle.spectator_latest_raw_response.get("players", {}).get("p2", {}).get("appearance", {}) as Dictionary).is_empty(),
+		"partial spectator snapshots preserve canonical p2 appearance"
+	)
 
 	_check_side_identities(
 		battle,
