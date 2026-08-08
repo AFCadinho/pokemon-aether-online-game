@@ -3348,9 +3348,18 @@ func _update_party_slots() -> void:
 	var opponent_display_team := _get_display_team_data("p2")
 	_mark_active_party_slot(player_display_team, "p1")
 	_mark_active_party_slot(opponent_display_team, "p2")
-	player_party_grid.set_party(player_display_team)
-	opponent_party_grid.set_party(opponent_display_team)
+	_set_display_party_grids(player_display_team, opponent_display_team)
 	opponent_party_grid.set_selection_enabled(false)
+
+
+func _set_display_party_grids(player_display_team: Array, opponent_display_team: Array) -> void:
+	# Keep the drawer grids and the always-visible stage rails in one explicit
+	# update path. The signal bridge is useful for ordinary party changes, but a
+	# spectator perspective swap changes both owners synchronously and must not
+	# depend on deferred signal delivery.
+	player_party_grid.set_party(player_display_team)
+	player_stage_party_grid.set_party(player_display_team)
+	opponent_party_grid.set_party(opponent_display_team)
 
 func _mark_active_party_slot(display_team: Array, player_id: String) -> void:
 	var active_slot := _get_active_canonical_party_slot(player_id)
@@ -4591,8 +4600,7 @@ func _update_hud_panels(include_team_data := true) -> void:
 	})
 	_mark_active_party_slot(player_display_team, "p1")
 	_mark_active_party_slot(enemy_display_team, "p2")
-	player_party_grid.set_party(player_display_team)
-	opponent_party_grid.set_party(enemy_display_team)
+	_set_display_party_grids(player_display_team, enemy_display_team)
 	opponent_party_grid.set_selection_enabled(false)
 	_sync_status_condition_overlays()
 

@@ -29,7 +29,10 @@ func set_appearance_state(state: Dictionary) -> void:
 		return
 	_set_up_viewport()
 	if avatar != null and is_instance_valid(avatar):
-		avatar.queue_free()
+		# Perspective swaps replace the owner in the same frame. A deferred free
+		# leaves the old head in the SubViewport long enough for the swapped
+		# portrait to render the previous player's face.
+		avatar.free()
 		avatar = null
 	var avatar_script := load(REMOTE_PLAYER_AVATAR_SCRIPT_PATH) as Script
 	if avatar_script == null:

@@ -37,10 +37,14 @@ func _ready() -> void:
 	battle.spectator_latest_raw_response = canonical_snapshot.duplicate(true)
 	battle.battle_state.load_from_api_response(canonical_snapshot, false)
 	battle._show_pvp_trainers(canonical_snapshot)
-	battle._update_vs_panel_names()
+	battle._update_battle_presentation("snapshot_reconciliation")
 	await get_tree().process_frame
 
-	_check_side_identities(battle, "Alpha", ALPHA_APPEARANCE, "Bravo", BRAVO_APPEARANCE, "initial")
+	_check_side_identities(
+		battle,
+		"Alpha", ALPHA_APPEARANCE, "Bravo", BRAVO_APPEARANCE,
+		"Pikachu", "Eevee", "initial"
+	)
 	battle.player_trainer_sprite.show_command("Alpha command")
 	battle.enemy_trainer_sprite.show_command("Bravo command")
 
@@ -48,7 +52,11 @@ func _ready() -> void:
 	await get_tree().process_frame
 
 	_check(battle.action_flow.local_player_id == "p2", "spectator perspective maps canonical p2 to the left side")
-	_check_side_identities(battle, "Bravo", BRAVO_APPEARANCE, "Alpha", ALPHA_APPEARANCE, "swapped")
+	_check_side_identities(
+		battle,
+		"Bravo", BRAVO_APPEARANCE, "Alpha", ALPHA_APPEARANCE,
+		"Eevee", "Pikachu", "swapped"
+	)
 	_check(not battle.player_trainer_sprite.command_callout.visible, "left trainer callout is cleared when its owner changes")
 	_check(not battle.enemy_trainer_sprite.command_callout.visible, "right trainer callout is cleared when its owner changes")
 
@@ -68,8 +76,8 @@ func _build_snapshot() -> Dictionary:
 			"p2": {"name": "Bravo", "appearance": BRAVO_APPEARANCE.duplicate(true)},
 		},
 		"requests": {
-			"p1": _build_request(),
-			"p2": _build_request(),
+			"p1": _build_request("p1", ["Pikachu", "Garchomp"]),
+			"p2": _build_request("p2", ["Eevee", "Snorlax"]),
 		},
 		"state": {"turn": 1},
 		"field": {"effects": []},
@@ -78,11 +86,25 @@ func _build_snapshot() -> Dictionary:
 	}
 
 
-func _build_request() -> Dictionary:
+func _build_request(player_id: String, species_list: Array[String]) -> Dictionary:
+	var team: Array = []
+	for species in species_list:
+		team.append({
+			"ident": "%sa: %s" % [player_id, species],
+			"details": "%s, L50" % species,
+			"species": species,
+			"displaySpecies": species,
+			"level": 50,
+			"active": team.is_empty(),
+			"condition": "100/100",
+			"hp": 100,
+			"maxHp": 100,
+			"fainted": false,
+		})
 	return {
 		"wait": true,
-		"side": {"pokemon": []},
-		"active": [],
+		"side": {"pokemon": team},
+		"active": [{"moves": []}] if not team.is_empty() else [],
 	}
 
 
@@ -92,6 +114,8 @@ func _check_side_identities(
 	left_appearance: Dictionary,
 	right_name: String,
 	right_appearance: Dictionary,
+	left_lead_species: String,
+	right_lead_species: String,
 	phase: String
 ) -> void:
 	var left_stage := _stage_appearance(battle.player_trainer_sprite)
@@ -109,6 +133,29 @@ func _check_side_identities(
 		panel.player_2_portrait.appearance_state.get("eye_color") == right_appearance.get("eye_color"),
 		"%s right name portrait follows its player" % phase
 	)
+	_check(
+		_battle_stage_lead_species(battle.player_stage_party_grid) == left_lead_species,
+		"%s left party rail follows its player" % phase
+	)
+	_check(
+		_battle_stage_lead_species(battle.opponent_party_grid) == right_lead_species,
+		"%s right party rail follows its player" % phase
+	)
+	_check(
+		_battle_stage_lead_species(battle.player_stage_party_grid) == left_lead_species,
+		"%s visible left party icons follow their player" % phase
+	)
+	_check(
+		_battle_stage_lead_species(battle.opponent_party_grid) == right_lead_species,
+		"%s visible right party icons follow their player" % phase
+	)
+
+
+func _battle_stage_lead_species(party_grid: PartyGrid) -> String:
+	if party_grid == null or party_grid.current_party_data.is_empty():
+		return ""
+	var first_value: Variant = party_grid.current_party_data[0]
+	return str((first_value as Dictionary).get("species", "")) if first_value is Dictionary else ""
 
 
 func _stage_appearance(trainer_sprite: BattleTrainerSprite) -> Dictionary:
