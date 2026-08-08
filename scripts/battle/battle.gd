@@ -850,12 +850,14 @@ func _apply_held_item_stat_hover_data(hover_data: Dictionary) -> void:
 	# presentation value so held items never mutate battle or save data.
 	var item_stat_modifiers := HeldItemStatModifierService.stat_modifiers(
 		hover_data.get("item", ""),
-		hover_data.get("species", "")
+		hover_data.get("species", ""),
+		bool(hover_data.get("canEvolve", hover_data.get("can_evolve", false)))
 	)
 	hover_data["stats"] = HeldItemStatModifierService.effective_stats(
 		hover_data.get("stats", {}),
 		hover_data.get("item", ""),
-		hover_data.get("species", "")
+		hover_data.get("species", ""),
+		bool(hover_data.get("canEvolve", hover_data.get("can_evolve", false)))
 	)
 	hover_data["itemStatModifiers"] = item_stat_modifiers
 

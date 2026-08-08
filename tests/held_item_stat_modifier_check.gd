@@ -50,6 +50,16 @@ func _init() -> void:
 		{"spe": 147},
 		"Power items halve Speed"
 	)
+	_check_equal(
+		ModifierService.effective_stats({"def": 196, "spd": 167}, "Eviolite", "Samurott-Hisui", true),
+		{"def": 294, "spd": 250},
+		"Eviolite boosts Defense and Special Defense for an evolving species"
+	)
+	_check_equal(
+		ModifierService.effective_stats({"def": 196, "spd": 167}, "Eviolite", "Samurott-Hisui", false),
+		{"def": 196, "spd": 167},
+		"Eviolite does not boost a fully evolved species"
+	)
 	print("PASS held_item_stat_modifier_check" if failures == 0 else "FAIL held_item_stat_modifier_check")
 	quit(1 if failures > 0 else 0)
 

@@ -10,19 +10,28 @@ class_name HeldItemStatModifierService
 
 const STAT_KEYS := ["atk", "def", "spa", "spd", "spe"]
 
-static func effective_stats(stats_value: Variant, item_value: Variant, species_value: Variant = "") -> Dictionary:
+static func effective_stats(
+	stats_value: Variant,
+	item_value: Variant,
+	species_value: Variant = "",
+	can_evolve: bool = false
+) -> Dictionary:
 	var stats: Dictionary = {}
 	if stats_value is Dictionary:
 		stats = (stats_value as Dictionary).duplicate(true)
 
-	var modifiers := stat_modifiers(item_value, species_value)
+	var modifiers := stat_modifiers(item_value, species_value, can_evolve)
 	for stat_key: String in STAT_KEYS:
 		if not modifiers.has(stat_key) or not stats.has(stat_key):
 			continue
 		stats[stat_key] = int(floor(float(int(stats[stat_key])) * float(modifiers[stat_key])))
 	return stats
 
-static func stat_modifiers(item_value: Variant, species_value: Variant = "") -> Dictionary:
+static func stat_modifiers(
+	item_value: Variant,
+	species_value: Variant = "",
+	can_evolve: bool = false
+) -> Dictionary:
 	var item_id := _normalize_id(item_value)
 	var species_id := _normalize_id(species_value)
 	match item_id:
@@ -34,6 +43,9 @@ static func stat_modifiers(item_value: Variant, species_value: Variant = "") -> 
 			return {"spa": 1.5}
 		"assault-vest":
 			return {"spd": 1.5}
+		"eviolite":
+			if can_evolve:
+				return {"def": 1.5, "spd": 1.5}
 		"iron-ball", "ironball", "macho-brace", "machobrace", \
 		"power-weight", "powerweight", "power-bracer", "powerbracer", \
 		"power-belt", "powerbelt", "power-lens", "powerlens", \
