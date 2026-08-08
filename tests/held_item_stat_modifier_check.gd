@@ -40,6 +40,16 @@ func _init() -> void:
 		{"atk": 100, "spa": 100},
 		"species-specific item does not leak to evolved species"
 	)
+	_check_equal(
+		ModifierService.effective_stats({"spe": 295}, "Iron Ball", "Samurott-Hisui"),
+		{"spe": 147},
+		"Iron Ball halves Speed with Showdown-style flooring"
+	)
+	_check_equal(
+		ModifierService.effective_stats({"spe": 295}, "Power Anklet", "Samurott-Hisui"),
+		{"spe": 147},
+		"Power items halve Speed"
+	)
 	print("PASS held_item_stat_modifier_check" if failures == 0 else "FAIL held_item_stat_modifier_check")
 	quit(1 if failures > 0 else 0)
 

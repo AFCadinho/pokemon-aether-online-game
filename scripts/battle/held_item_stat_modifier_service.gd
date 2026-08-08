@@ -34,6 +34,11 @@ static func stat_modifiers(item_value: Variant, species_value: Variant = "") -> 
 			return {"spa": 1.5}
 		"assault-vest":
 			return {"spd": 1.5}
+		"iron-ball", "ironball", "macho-brace", "machobrace", \
+		"power-weight", "powerweight", "power-bracer", "powerbracer", \
+		"power-belt", "powerbelt", "power-lens", "powerlens", \
+		"power-band", "powerband", "power-anklet", "poweranklet":
+			return {"spe": 0.5}
 		"light-ball":
 			if species_id == "pikachu":
 				return {"atk": 2.0, "spa": 2.0}
