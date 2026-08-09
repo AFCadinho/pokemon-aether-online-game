@@ -116,12 +116,44 @@ func _run() -> void:
 	if panel.defender_assumptions.get("ability") != "Synchronize" or not panel.edited_assumption_fields.is_empty():
 		_fail("Current must use the first public species ability without marking it as a manual edit")
 		return
+	panel.active_selector = "move"
+	panel.active_move_slot = 0
+	panel._on_selector_result_pressed({"name": "Psychic", "calcName": "Psychic", "type": "psychic", "category": "special"})
+	if panel.defender_assumptions.get("assumedMoves") != ["Psychic"] or panel.selected_sample_set_id != "":
+		_fail("choosing an opponent move must add it to the current custom scenario")
+		return
+	panel.active_selector = "move"
+	panel.active_move_slot = 1
+	panel._on_selector_result_pressed({"name": "U-turn", "calcName": "U-turn", "type": "bug", "category": "physical"})
+	if panel.defender_assumptions.get("assumedMoves") != ["Psychic", "U-turn"]:
+		_fail("opponent move slots must preserve their visible order")
+		return
+	panel.active_selector = "move"
+	panel.active_move_slot = 0
+	panel._on_selector_result_pressed({"name": "Aura Sphere", "calcName": "Aura Sphere", "type": "fighting", "category": "special"})
+	if panel.defender_assumptions.get("assumedMoves") != ["Aura Sphere", "U-turn"]:
+		_fail("choosing a move in a filled slot must replace it")
+		return
+	panel.active_selector = "move"
+	panel.active_move_slot = 0
+	panel._on_catalog_assumption_clear_pressed("move")
+	if panel.defender_assumptions.get("assumedMoves") != ["U-turn"]:
+		_fail("clearing an opponent move slot must remove only that move")
+		return
 	var known_snapshot := _selection_snapshot()
 	known_snapshot["opponentPokemon"][0]["item"] = {"state": "known", "value": "Leftovers"}
 	known_snapshot["opponentPokemon"][0]["ability"] = {"state": "known", "value": "Pressure"}
 	panel.set_knowledge_snapshot(known_snapshot)
 	if panel.defender_assumptions.get("item") != "Leftovers" or panel.defender_assumptions.get("ability") != "Pressure":
 		_fail("Current must automatically prefer confirmed item and ability values")
+		return
+	var reverse_response := response.duplicate(true)
+	reverse_response["direction"] = "opponent-to-own"
+	panel.active_subtab = "their"
+	panel.show_response(reverse_response)
+	await process_frame
+	if not _has_button_text(panel, "U-turn") or _count_button_text(panel, panel._t("battle.calc.add_move")) != 3:
+		_fail("Damage taken must render four directly editable opponent move slots")
 		return
 	print("PASS battle_calcdex_candidates_check")
 	quit(0)
@@ -164,6 +196,17 @@ func _selection_snapshot() -> Dictionary:
 		"viewerPokemon": [{"pokemonRef": "viewer:public-slot-1", "active": true, "fainted": false, "identity": {"state": "known", "value": "Pikachu"}}],
 		"opponentPokemon": [{"pokemonRef": "opponent:public-slot-1", "active": true, "fainted": false, "identity": {"state": "known", "value": "Mew"}}],
 	}
+
+
+func _has_button_text(node: Node, text: String) -> bool:
+	return _count_button_text(node, text) > 0
+
+
+func _count_button_text(node: Node, text: String) -> int:
+	var count := 1 if node is Button and (node as Button).text == text else 0
+	for child: Node in node.get_children():
+		count += _count_button_text(child, text)
+	return count
 
 
 func _fail(message: String) -> void:

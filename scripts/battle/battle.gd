@@ -2447,6 +2447,8 @@ func _on_calc_panel_assumption_catalog_requested(kind: String, query: String, sp
 			response = await PokemonDataApiClient.search_damage_calc_abilities(request_node, query, species, 30)
 		"nature":
 			response = await PokemonDataApiClient.search_damage_calc_natures(request_node, query, 30)
+		"move":
+			response = await PokemonDataApiClient.search_damage_calc_moves(request_node, query, species, 30)
 		_:
 			response = {
 				"success": false,

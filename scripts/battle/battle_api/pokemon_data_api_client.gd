@@ -79,6 +79,18 @@ func search_damage_calc_natures(request_node: HTTPRequest, q: String = "", limit
 		"/damage-calc/catalog/natures%s" % query
 	)
 
+func search_damage_calc_moves(request_node: HTTPRequest, q: String, species: String = "", limit: int = 30) -> Dictionary:
+	var normalized_limit: int = max(1, min(int(limit), 100))
+	var query: String = "?q=%s&species=%s&limit=%s" % [
+		q.uri_encode(),
+		str(species).uri_encode(),
+		str(normalized_limit).uri_encode(),
+	]
+	return await send_get_request(
+		request_node,
+		"/damage-calc/catalog/moves%s" % query
+	)
+
 func get_calcdex_sample_sets(request_node: HTTPRequest, format_id: String, species: String) -> Dictionary:
 	var normalized_format := format_id.strip_edges().to_lower()
 	var normalized_species := species.strip_edges()
