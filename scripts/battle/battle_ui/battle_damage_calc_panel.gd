@@ -86,7 +86,10 @@ const EV_PRESETS := [
 	{"label": "252 HP / 252 Def", "chip": "EVs HP/Def", "evs": {"hp": 252, "def": 252}},
 	{"label": "252 HP / 252 SpD", "chip": "EVs HP/SpD", "evs": {"hp": 252, "spd": 252}},
 ]
-const EV_INPUT_ROWS := [["hp", "atk"], ["def", "spa"], ["spd", "spe"]]
+const EV_INPUT_GROUPS := [
+	{"label": "battle.calc.ev_group_bulk", "stats": ["hp", "def", "spd"]},
+	{"label": "battle.calc.ev_group_offense", "stats": ["atk", "spa", "spe"]},
+]
 const BOOST_STAT_KEYS := ["atk", "def", "spa", "spd", "spe"]
 
 var content: VBoxContainer
@@ -101,7 +104,9 @@ var defender_assumptions: Dictionary = {}
 var edited_assumption_fields: Dictionary = {}
 var knowledge_snapshot: Dictionary = {}
 var live_ev_inputs: Dictionary = {}
+var live_ev_bars: Dictionary = {}
 var live_ev_total_label: Label
+var live_ev_total_bar: ProgressBar
 var live_ev_focus_stat := ""
 var live_ev_focus_caret := -1
 var item_assumption_input: LineEdit
@@ -250,7 +255,9 @@ func close_assumption_popover() -> void:
 	if catalog_search_timer != null:
 		catalog_search_timer.stop()
 	live_ev_inputs.clear()
+	live_ev_bars.clear()
 	live_ev_total_label = null
+	live_ev_total_bar = null
 	live_ev_focus_stat = ""
 	live_ev_focus_caret = -1
 	item_assumption_input = null
@@ -1456,7 +1463,9 @@ func _make_label(text: String, font_size: int, color: Color) -> Label:
 func _add_live_assumption_controls(assumptions: Dictionary, _prior_provenance: String = "") -> void:
 	is_syncing_assumption_controls = true
 	live_ev_inputs.clear()
+	live_ev_bars.clear()
 	live_ev_total_label = null
+	live_ev_total_bar = null
 	item_assumption_input = null
 	ability_assumption_input = null
 	move_assumption_input = null
@@ -1800,47 +1809,78 @@ func _on_field_scenario_selected(index: int, selector: OptionButton, key: String
 
 
 func _make_live_ev_input(stat_key: String, value: int) -> Control:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.custom_minimum_size = Vector2(0, 40)
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_stylebox(Color(0.012, 0.024, 0.040, 0.94), Color(0.13, 0.25, 0.38, 0.72), 5, 5.0, 4.0)
+	)
+	var box := VBoxContainer.new()
+	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	box.add_theme_constant_override("separation", 3)
+	panel.add_child(box)
 	var row := HBoxContainer.new()
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.clip_contents = true
-	row.add_theme_constant_override("separation", 2)
+	row.add_theme_constant_override("separation", 4)
+	box.add_child(row)
 
-	var label := _make_label(_get_ev_display_name(stat_key), 10, TEXT_MUTED)
-	label.custom_minimum_size = Vector2(24, 0)
-	label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	var label := _make_label(_get_ev_full_display_name(stat_key), 10, TEXT_SECONDARY)
+	label.custom_minimum_size = Vector2(82, 0)
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.tooltip_text = "%s (%s)" % [_get_ev_full_display_name(stat_key), _get_ev_display_name(stat_key)]
 	row.add_child(label)
 
 	var input := LineEdit.new()
 	input.text = str(clampi(value, 0, 252))
 	input.placeholder_text = "0"
-	input.custom_minimum_size = Vector2(36, 24)
-	input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	input.custom_minimum_size = Vector2(54, 25)
+	input.size_flags_horizontal = Control.SIZE_SHRINK_END
 	input.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	input.max_length = 3
 	input.add_theme_font_size_override("font_size", 11)
+	input.add_theme_color_override("font_color", TEXT_PRIMARY)
+	input.add_theme_color_override("font_placeholder_color", TEXT_MUTED)
+	input.add_theme_stylebox_override("normal", _make_stylebox(Color(0.006, 0.014, 0.025, 0.98), Color(0.15, 0.30, 0.45, 0.86), 4, 5.0, 2.0))
+	input.add_theme_stylebox_override("focus", _make_stylebox(Color(0.028, 0.065, 0.10, 0.98), DROPDOWN_FOCUS_BORDER, 4, 5.0, 2.0))
 	input.focus_entered.connect(_remember_live_ev_input_focus.bind(stat_key))
 	input.text_changed.connect(_on_live_ev_text_changed.bind(stat_key))
 	live_ev_inputs[stat_key] = input
 	row.add_child(input)
 
-	row.add_child(_make_ev_quick_button("0", _on_live_ev_quick_value_pressed.bind(stat_key, 0)))
-	row.add_child(_make_ev_quick_button("252", _on_live_ev_quick_value_pressed.bind(stat_key, 252)))
-	return row
+	row.add_child(_make_ev_quick_button("0", _t("battle.calc.ev_set_zero"), _on_live_ev_quick_value_pressed.bind(stat_key, 0)))
+	row.add_child(_make_ev_quick_button("252", _t("battle.calc.ev_set_max"), _on_live_ev_quick_value_pressed.bind(stat_key, 252)))
+	var bar := ProgressBar.new()
+	bar.custom_minimum_size = Vector2(0, 4)
+	bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bar.min_value = 0.0
+	bar.max_value = 252.0
+	bar.value = clampi(value, 0, 252)
+	bar.show_percentage = false
+	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bar.add_theme_stylebox_override("background", _make_stylebox(Color(0.006, 0.014, 0.024, 0.98), Color(0.08, 0.17, 0.25, 0.72), 3, 0.0, 0.0))
+	bar.add_theme_stylebox_override("fill", _make_stylebox(Color(0.22, 0.56, 0.78, 0.96), Color(0.32, 0.70, 0.92, 0.98), 3, 0.0, 0.0))
+	live_ev_bars[stat_key] = bar
+	box.add_child(bar)
+	return panel
 
 
-func _make_ev_quick_button(text: String, pressed_callback: Callable) -> Button:
+func _make_ev_quick_button(text: String, tooltip: String, pressed_callback: Callable) -> Button:
 	var button := Button.new()
 	button.text = text
+	button.tooltip_text = tooltip
 	button.focus_mode = Control.FOCUS_ALL
-	button.custom_minimum_size = Vector2(28, 22)
+	button.custom_minimum_size = Vector2(32 if text == "252" else 25, 23)
 	button.size_flags_horizontal = Control.SIZE_SHRINK_END
 	button.clip_text = true
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	button.add_theme_font_size_override("font_size", 9)
 	button.add_theme_color_override("font_color", TEXT_SECONDARY)
 	button.add_theme_stylebox_override("normal", _make_stylebox(CHIP_BG, CHIP_BORDER, 4, 3.0, 1.0))
 	button.add_theme_stylebox_override("hover", _make_stylebox(TAB_ACTIVE_BG.lightened(0.08), CHIP_BORDER.lightened(0.12), 4, 3.0, 1.0))
 	button.add_theme_stylebox_override("pressed", _make_stylebox(TAB_ACTIVE_BG, CHIP_BORDER.lightened(0.18), 4, 3.0, 1.0))
+	button.add_theme_stylebox_override("focus", _make_stylebox(TAB_ACTIVE_BG, DROPDOWN_FOCUS_BORDER, 4, 3.0, 1.0))
 	button.pressed.connect(pressed_callback)
 	return button
 
@@ -2082,28 +2122,54 @@ func _ensure_inline_assumption_results() -> void:
 
 
 func _render_evs_assumption_editor(evs: Dictionary) -> void:
-	var header := VBoxContainer.new()
+	var editor_panel := PanelContainer.new()
+	editor_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	editor_panel.add_theme_stylebox_override(
+		"panel",
+		_make_stylebox(Color(0.008, 0.019, 0.034, 0.98), Color(0.20, 0.43, 0.62, 0.82), 7, 7.0, 6.0)
+	)
+	catalog_suggestions_box.add_child(editor_panel)
+	var editor := VBoxContainer.new()
+	editor.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	editor.add_theme_constant_override("separation", 5)
+	editor_panel.add_child(editor)
+	var header := HBoxContainer.new()
 	header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	header.clip_contents = true
-	header.add_theme_constant_override("separation", 3)
-	catalog_suggestions_box.add_child(header)
-
+	header.add_theme_constant_override("separation", 6)
+	editor.add_child(header)
+	var title := _make_label(_t("battle.calc.ev_spread").to_upper(), 9, Color(0.62, 0.78, 0.90, 1.0))
+	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	header.add_child(title)
 	live_ev_total_label = _make_label("", 11, TEXT_MUTED)
-	live_ev_total_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	live_ev_total_label.size_flags_horizontal = Control.SIZE_SHRINK_END
+	live_ev_total_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	live_ev_total_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	header.add_child(live_ev_total_label)
-
-	_update_live_ev_total()
-
-	for pair_value: Variant in EV_INPUT_ROWS:
-		var pair: Array = pair_value as Array
-		var ev_row := HBoxContainer.new()
-		ev_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		ev_row.clip_contents = true
-		ev_row.add_theme_constant_override("separation", 6)
-		catalog_suggestions_box.add_child(ev_row)
-		for stat_key_value: Variant in pair:
-			var stat_key: String = str(stat_key_value)
-			ev_row.add_child(_make_live_ev_input(stat_key, int(evs.get(stat_key, 0))))
+	live_ev_total_bar = ProgressBar.new()
+	live_ev_total_bar.custom_minimum_size = Vector2(0, 5)
+	live_ev_total_bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	live_ev_total_bar.min_value = 0.0
+	live_ev_total_bar.max_value = EV_TOTAL_LIMIT
+	live_ev_total_bar.show_percentage = false
+	live_ev_total_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	editor.add_child(live_ev_total_bar)
+	var groups_row := HBoxContainer.new()
+	groups_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	groups_row.add_theme_constant_override("separation", 6)
+	editor.add_child(groups_row)
+	for group_value: Variant in EV_INPUT_GROUPS:
+		var group := group_value as Dictionary
+		var group_box := VBoxContainer.new()
+		group_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		group_box.add_theme_constant_override("separation", 3)
+		groups_row.add_child(group_box)
+		var group_label := _make_label(_t(str(group.get("label", ""))).to_upper(), 8, TEXT_MUTED)
+		group_label.custom_minimum_size = Vector2(0, 15)
+		group_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		group_box.add_child(group_label)
+		for stat_key_value: Variant in group.get("stats", []):
+			var stat_key := str(stat_key_value)
+			group_box.add_child(_make_live_ev_input(stat_key, int(evs.get(stat_key, 0))))
 	_update_live_ev_total()
 
 
@@ -2166,6 +2232,9 @@ func _apply_live_ev_value(stat_key: String, raw_value: int, sync_input_text: boo
 	else:
 		evs[stat_key] = clamped_value
 	defender_assumptions["evs"] = evs
+	var stat_bar: ProgressBar = live_ev_bars.get(stat_key) as ProgressBar
+	if stat_bar != null:
+		stat_bar.value = clamped_value
 	edited_assumption_fields["evs"] = true
 	_update_live_ev_total()
 	if _get_evs_total(evs) <= EV_TOTAL_LIMIT:
@@ -2203,8 +2272,15 @@ func _update_live_ev_total() -> void:
 	for stat_key: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
 		total += clampi(int(evs.get(stat_key, 0)), 0, 252)
 
-	live_ev_total_label.text = "%d / %d" % [total, EV_TOTAL_LIMIT]
-	live_ev_total_label.add_theme_color_override("font_color", TEXT_ERROR if total > EV_TOTAL_LIMIT else TEXT_MUTED)
+	var is_over_limit := total > EV_TOTAL_LIMIT
+	var is_complete := total == EV_TOTAL_LIMIT
+	live_ev_total_label.text = _t("battle.calc.evs_allocated", {"total": total, "limit": EV_TOTAL_LIMIT})
+	live_ev_total_label.add_theme_color_override("font_color", TEXT_ERROR if is_over_limit else (STAGE_POSITIVE if is_complete else TEXT_ACCENT))
+	if live_ev_total_bar != null:
+		live_ev_total_bar.value = mini(total, EV_TOTAL_LIMIT)
+		var fill_color := TEXT_ERROR if is_over_limit else (STAGE_POSITIVE if is_complete else Color(0.22, 0.56, 0.78, 0.96))
+		live_ev_total_bar.add_theme_stylebox_override("background", _make_stylebox(Color(0.006, 0.014, 0.024, 0.98), Color(0.08, 0.17, 0.25, 0.72), 3, 0.0, 0.0))
+		live_ev_total_bar.add_theme_stylebox_override("fill", _make_stylebox(fill_color, fill_color.lightened(0.10), 3, 0.0, 0.0))
 
 
 func _reset_live_assumptions() -> void:
@@ -2690,6 +2766,10 @@ func _get_ev_display_name(stat_key: String) -> String:
 			return _t("battle.stat.short.speed")
 		_:
 			return stat_key.to_upper()
+
+
+func _get_ev_full_display_name(stat_key: String) -> String:
+	return _t("battle.calc.ev_stat.%s" % stat_key)
 
 
 func _apply_calcdex_dropdown_style(selector: OptionButton, minimum_height: float, font_size: int) -> void:

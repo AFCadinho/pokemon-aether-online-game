@@ -157,6 +157,22 @@ func _run() -> void:
 			_fail("Inline %s edits must retain user-scenario provenance" % field_name)
 			return
 	panel._reset_to_current()
+	panel._on_assumption_summary_pressed("evs")
+	await process_frame
+	if panel.live_ev_inputs.size() != 6 or panel.live_ev_bars.size() != 6 or panel.live_ev_total_bar == null:
+		_fail("EV editor must render six clearly tracked stat rows and a total allocation bar")
+		return
+	for stat_label: String in ["HP", "Defense", "Sp. Defense", "Attack", "Sp. Attack", "Speed"]:
+		if not _has_label_text(panel.catalog_suggestions_box, stat_label):
+			_fail("EV editor is missing the full stat label %s" % stat_label)
+			return
+	panel._on_live_ev_quick_value_pressed("hp", 252)
+	panel._on_live_ev_quick_value_pressed("def", 252)
+	panel._apply_live_ev_value("spd", 4, true)
+	if panel.live_ev_total_bar.value != 508.0 or not panel.live_ev_total_label.get_theme_color("font_color").is_equal_approx(panel.STAGE_POSITIVE):
+		_fail("A complete 508 EV spread must have a clear completed allocation state")
+		return
+	panel._reset_to_current()
 	panel.active_selector = "move"
 	panel.active_move_slot = 0
 	panel._on_selector_result_pressed({"name": "Psychic", "calcName": "Psychic", "type": "psychic", "category": "special"})
