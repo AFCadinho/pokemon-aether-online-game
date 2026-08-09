@@ -41,6 +41,9 @@ const DROPDOWN_POPUP_BG := Color(0.008, 0.019, 0.034, 0.995)
 const DROPDOWN_BORDER := Color(0.16, 0.34, 0.50, 0.9)
 const DROPDOWN_HOVER_BORDER := Color(0.30, 0.67, 0.86, 0.96)
 const DROPDOWN_FOCUS_BORDER := Color(0.56, 0.87, 1.0, 1.0)
+const CONDITION_GLOBAL_ACCENT := Color(0.30, 0.72, 0.92, 1.0)
+const CONDITION_OWN_ACCENT := Color(0.24, 0.66, 0.88, 1.0)
+const CONDITION_OPPONENT_ACCENT := Color(0.90, 0.66, 0.28, 1.0)
 const SUSPICIOUS_PERCENT_LIMIT := 999.0
 const DAMAGE_COLUMN_WIDTH := 132.0
 const KO_COLUMN_WIDTH := 92.0
@@ -1837,10 +1840,13 @@ func _add_advanced_scenario_controls(parent: VBoxContainer, assumptions: Diction
 
 	var editor := VBoxContainer.new()
 	editor.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	editor.add_theme_constant_override("separation", 6)
+	editor.add_theme_constant_override("separation", 8)
 	parent.add_child(editor)
 
-	var global_panel := _make_field_condition_panel(_t("battle.calc.conditions_global"))
+	var global_panel := _make_field_condition_panel(
+		_t("battle.calc.conditions_global"),
+		CONDITION_GLOBAL_ACCENT
+	)
 	var global_content := global_panel.get_meta("content") as VBoxContainer
 	var field_row := HBoxContainer.new()
 	field_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1850,14 +1856,14 @@ func _add_advanced_scenario_controls(parent: VBoxContainer, assumptions: Diction
 	global_content.add_child(field_row)
 	editor.add_child(global_panel)
 
-	var side_row := HBoxContainer.new()
-	side_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	side_row.add_theme_constant_override("separation", 6)
-	side_row.add_child(_make_field_side_condition_panel("own", _t("battle.calc.conditions_your_side")))
-	side_row.add_child(_make_field_side_condition_panel("opponent", _t("battle.calc.conditions_opponent_side")))
-	editor.add_child(side_row)
+	var side_stack := VBoxContainer.new()
+	side_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	side_stack.add_theme_constant_override("separation", 8)
+	side_stack.add_child(_make_field_side_condition_panel("own", _t("battle.calc.conditions_your_side")))
+	side_stack.add_child(_make_field_side_condition_panel("opponent", _t("battle.calc.conditions_opponent_side")))
+	editor.add_child(side_stack)
 
-	var scope_note := _make_label(_t("battle.calc.conditions_direct_only"), 9, TEXT_MUTED)
+	var scope_note := _make_label(_t("battle.calc.conditions_direct_only"), 10, TEXT_SECONDARY)
 	scope_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	scope_note.clip_text = false
 	editor.add_child(scope_note)
@@ -1885,20 +1891,35 @@ func _make_disclosure_button(text: String, expanded: bool, pressed_callback: Cal
 	return button
 
 
-func _make_field_condition_panel(title_text: String) -> PanelContainer:
+func _make_field_condition_panel(title_text: String, accent_color: Color) -> PanelContainer:
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.add_theme_stylebox_override(
 		"panel",
-		_make_stylebox(Color(0.012, 0.025, 0.043, 0.96), Color(0.13, 0.28, 0.43, 0.82), 6, 7.0, 5.0)
+		_make_card_stylebox(
+			Color(0.012, 0.027, 0.047, 0.98),
+			Color(accent_color, 0.74),
+			7,
+			10.0,
+			8.0
+		)
 	)
 	var content_box := VBoxContainer.new()
 	content_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	content_box.add_theme_constant_override("separation", 5)
+	content_box.add_theme_constant_override("separation", 7)
 	panel.add_child(content_box)
-	var title := _make_label(title_text.to_upper(), 9, TEXT_MUTED)
+	var title_row := HBoxContainer.new()
+	title_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_row.add_theme_constant_override("separation", 7)
+	content_box.add_child(title_row)
+	var accent := ColorRect.new()
+	accent.color = accent_color
+	accent.custom_minimum_size = Vector2(3, 17)
+	accent.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title_row.add_child(accent)
+	var title := _make_label(title_text.to_upper(), 11, TEXT_PRIMARY)
 	title.clip_text = false
-	content_box.add_child(title)
+	title_row.add_child(title)
 	panel.set_meta("content", content_box)
 	return panel
 
@@ -1907,7 +1928,7 @@ func _make_field_scenario_selector_card(key: String, values: Array, label_text: 
 	var card := VBoxContainer.new()
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	card.add_theme_constant_override("separation", 3)
-	var label := _make_label(label_text.to_upper(), 8, TEXT_MUTED)
+	var label := _make_label(label_text.to_upper(), 10, TEXT_SECONDARY)
 	label.clip_text = false
 	card.add_child(label)
 	card.add_child(_make_field_scenario_selector(key, values))
@@ -1924,40 +1945,67 @@ func _make_field_scenario_selector(key: String, values: Array) -> OptionButton:
 		if normalized == str(field_scenario.get(key, "")):
 			selector.select(selector.item_count - 1)
 	selector.item_selected.connect(_on_field_scenario_selected.bind(selector, key))
-	_apply_calcdex_dropdown_style(selector, 32.0, 11)
+	_apply_calcdex_dropdown_style(selector, 36.0, 12)
 	return selector
 
 
 func _make_field_side_condition_panel(relation: String, title_text: String) -> PanelContainer:
-	var panel := _make_field_condition_panel(title_text)
+	var accent_color := CONDITION_OWN_ACCENT if relation == "own" else CONDITION_OPPONENT_ACCENT
+	var panel := _make_field_condition_panel(title_text, accent_color)
 	var content_box := panel.get_meta("content") as VBoxContainer
-	var defense_label := _make_label(_t("battle.calc.condition.defensive_effects").to_upper(), 8, TEXT_MUTED)
+	var section_row := HBoxContainer.new()
+	section_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	section_row.add_theme_constant_override("separation", 12)
+	content_box.add_child(section_row)
+
+	var defense_column := VBoxContainer.new()
+	defense_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	defense_column.add_theme_constant_override("separation", 5)
+	section_row.add_child(defense_column)
+	var defense_label := _make_label(
+		_t("battle.calc.condition.defensive_effects").to_upper(),
+		9,
+		Color(accent_color, 0.94)
+	)
 	defense_label.clip_text = false
-	content_box.add_child(defense_label)
+	defense_column.add_child(defense_label)
 	var grid := GridContainer.new()
 	grid.columns = 2
 	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	grid.add_theme_constant_override("h_separation", 5)
-	grid.add_theme_constant_override("v_separation", 5)
-	content_box.add_child(grid)
+	grid.add_theme_constant_override("h_separation", 6)
+	grid.add_theme_constant_override("v_separation", 6)
+	defense_column.add_child(grid)
 	for condition: Dictionary in FIELD_SIDE_CONDITIONS:
 		grid.add_child(_make_field_side_condition_button(relation, condition))
-	var hazard_label := _make_label(_t("battle.calc.condition.entry_hazards").to_upper(), 8, TEXT_MUTED)
+
+	var state_column := VBoxContainer.new()
+	state_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	state_column.add_theme_constant_override("separation", 5)
+	section_row.add_child(state_column)
+	var hazard_label := _make_label(
+		_t("battle.calc.condition.entry_hazards").to_upper(),
+		9,
+		Color(accent_color, 0.94)
+	)
 	hazard_label.clip_text = false
-	content_box.add_child(hazard_label)
+	state_column.add_child(hazard_label)
 	var hazard_grid := GridContainer.new()
 	hazard_grid.columns = 2
 	hazard_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	hazard_grid.add_theme_constant_override("h_separation", 5)
-	hazard_grid.add_theme_constant_override("v_separation", 5)
-	content_box.add_child(hazard_grid)
+	hazard_grid.add_theme_constant_override("h_separation", 6)
+	hazard_grid.add_theme_constant_override("v_separation", 6)
+	state_column.add_child(hazard_grid)
 	for condition: Dictionary in FIELD_SIDE_HAZARDS:
 		hazard_grid.add_child(_make_field_side_condition_button(relation, condition))
 	hazard_grid.add_child(_make_field_side_spikes_selector(relation))
-	var status_label := _make_label(_t("battle.calc.condition.status").to_upper(), 8, TEXT_MUTED)
+	var status_label := _make_label(
+		_t("battle.calc.condition.status").to_upper(),
+		9,
+		Color(accent_color, 0.94)
+	)
 	status_label.clip_text = false
-	content_box.add_child(status_label)
-	content_box.add_child(_make_pokemon_status_selector(relation))
+	state_column.add_child(status_label)
+	state_column.add_child(_make_pokemon_status_selector(relation))
 	return panel
 
 
@@ -1982,7 +2030,9 @@ func _make_pokemon_status_selector(relation: String) -> OptionButton:
 	else:
 		selector.tooltip_text = _t("battle.calc.status_scenario_tooltip")
 		selector.item_selected.connect(_on_pokemon_status_selected.bind(selector))
-	_apply_calcdex_dropdown_style(selector, 30.0, 10)
+	_apply_calcdex_dropdown_style(selector, 32.0, 11)
+	if selector.disabled:
+		selector.add_theme_color_override("font_disabled_color", TEXT_SECONDARY)
 	return selector
 
 
@@ -2011,10 +2061,10 @@ func _make_field_side_condition_button(relation: String, condition: Dictionary) 
 	button.button_pressed = public_active or bool(field_scenario.get(scenario_key, false))
 	button.disabled = public_active
 	button.focus_mode = Control.FOCUS_ALL
-	button.custom_minimum_size = Vector2(0, 28)
+	button.custom_minimum_size = Vector2(0, 32)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.add_theme_font_size_override("font_size", 10)
-	button.add_theme_color_override("font_color", TEXT_SECONDARY)
+	button.add_theme_font_size_override("font_size", 11)
+	button.add_theme_color_override("font_color", TEXT_PRIMARY)
 	button.add_theme_color_override("font_pressed_color", TEXT_PRIMARY)
 	button.add_theme_color_override("font_disabled_color", STAGE_POSITIVE)
 	button.add_theme_stylebox_override("normal", _make_stylebox(CHIP_BG, CHIP_BORDER, 5, 6.0, 3.0))
@@ -2055,7 +2105,9 @@ func _make_field_side_spikes_selector(relation: String) -> OptionButton:
 	selector.tooltip_text = _t("battle.calc.condition_confirmed_tooltip") if selector.disabled else _t("battle.calc.hazard_scenario_tooltip")
 	if not selector.disabled:
 		selector.item_selected.connect(_on_field_side_spikes_selected.bind(selector, scenario_key))
-	_apply_calcdex_dropdown_style(selector, 28.0, 10)
+	_apply_calcdex_dropdown_style(selector, 32.0, 11)
+	if selector.disabled:
+		selector.add_theme_color_override("font_disabled_color", TEXT_SECONDARY)
 	return selector
 
 

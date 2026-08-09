@@ -2303,7 +2303,7 @@
   "battle.calc.public_usage_role.physical": "Fysiek",
   "battle.calc.public_usage_role.special": "Speciaal",
   "battle.calc.battle_conditions": "Battlecondities · {conditions}",
-  "battle.calc.conditions_global": "Algemeen",
+  "battle.calc.conditions_global": "Slagveld",
   "battle.calc.conditions_your_side": "Jouw kant",
   "battle.calc.conditions_opponent_side": "Kant tegenstander",
   "battle.calc.conditions_direct_only": "Movepercentages tonen alleen directe schade. Relevante status, entry hazards, restschade en herstel tellen apart mee in de KO-summary.",

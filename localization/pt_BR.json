@@ -2303,7 +2303,7 @@
   "battle.calc.public_usage_role.physical": "Físico",
   "battle.calc.public_usage_role.special": "Especial",
   "battle.calc.battle_conditions": "Condições da batalha · {conditions}",
-  "battle.calc.conditions_global": "Global",
+  "battle.calc.conditions_global": "Campo de batalha",
   "battle.calc.conditions_your_side": "Seu lado",
   "battle.calc.conditions_opponent_side": "Lado adversário",
   "battle.calc.conditions_direct_only": "As porcentagens dos golpes mostram apenas dano direto. Status, riscos de entrada, dano residual e recuperação aplicáveis entram separadamente no resumo de nocaute.",

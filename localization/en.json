@@ -2303,7 +2303,7 @@
   "battle.calc.public_usage_role.physical": "Physical",
   "battle.calc.public_usage_role.special": "Special",
   "battle.calc.battle_conditions": "Battle conditions · {conditions}",
-  "battle.calc.conditions_global": "Global",
+  "battle.calc.conditions_global": "Battlefield",
   "battle.calc.conditions_your_side": "Your side",
   "battle.calc.conditions_opponent_side": "Opponent side",
   "battle.calc.conditions_direct_only": "Move percentages show direct damage only. Applicable status, entry hazards, residual damage, and recovery are included separately in the KO summary.",
