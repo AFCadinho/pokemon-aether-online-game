@@ -53,6 +53,18 @@ func _run() -> void:
 	_assert(panel.last_error != "", "direction mismatch must render an explicit safe error")
 	panel.show_response(response)
 	_assert(not panel.last_response.is_empty(), "reverse tab must accept a matching damage-taken response")
+	await process_frame
+	var selectors := _collect_option_buttons(content)
+	_assert(selectors.size() >= 2, "the matchup profile selectors must render")
+	if selectors.size() >= 2:
+		_assert(
+			str(selectors[0].get_item_metadata(selectors[0].selected)).begins_with("viewer:"),
+			"the viewer must remain on the left in damage taken",
+		)
+		_assert(
+			str(selectors[1].get_item_metadata(selectors[1].selected)).begins_with("opponent:"),
+			"the opponent must remain on the right in damage taken",
+		)
 	print("PASS battle_calcdex_matchup_check")
 	quit(0)
 
@@ -120,3 +132,12 @@ func _assert(condition: bool, message: String) -> void:
 		return
 	push_error(message)
 	quit(1)
+
+
+func _collect_option_buttons(node: Node) -> Array[OptionButton]:
+	var result: Array[OptionButton] = []
+	if node is OptionButton:
+		result.append(node as OptionButton)
+	for child: Node in node.get_children():
+		result.append_array(_collect_option_buttons(child))
+	return result

@@ -2328,7 +2328,6 @@ func _refresh_damage_calc_results() -> void:
 	if current_action_panel_mode != BattleActionsPanelMode.CALC:
 		return
 	_sync_damage_calc_matchup_assumptions()
-	var requested_direction := str(calc_panel.get_matchup_selection().get("direction", "own-to-opponent"))
 	if battle_finished:
 		calc_panel.show_error(_t("battle.error.ended"))
 		return
@@ -2339,7 +2338,7 @@ func _refresh_damage_calc_results() -> void:
 	if damage_calc_request_in_flight:
 		damage_calc_refresh_queued = true
 		calc_panel.set_defender_assumptions(damage_calc_defender_assumptions, damage_calc_assumption_edited_fields)
-		_show_damage_calc_loading(requested_direction)
+		_show_damage_calc_loading()
 		return
 
 	damage_calc_request_token += 1
@@ -2347,7 +2346,7 @@ func _refresh_damage_calc_results() -> void:
 	damage_calc_request_in_flight = true
 	damage_calc_refresh_queued = false
 	calc_panel.set_defender_assumptions(damage_calc_defender_assumptions, damage_calc_assumption_edited_fields)
-	_show_damage_calc_loading(requested_direction)
+	_show_damage_calc_loading()
 
 	var projection_revision := battle_state.get_calcdex_projection_revision()
 	var use_safe_matchup := false
@@ -2407,11 +2406,8 @@ func _refresh_damage_calc_results() -> void:
 	else:
 		calc_panel.show_error(str(response.get("error", _t("battle.calc.error.failed"))))
 
-func _show_damage_calc_loading(direction: String) -> void:
-	if direction == "opponent-to-own":
-		calc_panel.show_loading(_get_active_display_species("p2"), _get_active_display_species("p1"))
-	else:
-		calc_panel.show_loading(_get_active_display_species("p1"), _get_active_display_species("p2"))
+func _show_damage_calc_loading() -> void:
+	calc_panel.show_loading(_get_active_display_species("p1"), _get_active_display_species("p2"))
 
 func _on_calc_panel_defender_assumptions_changed(assumptions: Dictionary, edited_fields: Dictionary) -> void:
 	_sync_damage_calc_matchup_assumptions()

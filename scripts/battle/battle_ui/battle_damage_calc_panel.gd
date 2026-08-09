@@ -298,20 +298,23 @@ func _is_catalog_search_active() -> bool:
 func _render_your_damage_response(response: Dictionary) -> void:
 	var attacker: Dictionary = _as_dictionary(response.get("attacker", {}))
 	var defender: Dictionary = _as_dictionary(response.get("defender", {}))
+	var viewer := attacker if str(attacker.get("relation", "")) == "viewer" else defender
+	var opponent := attacker if str(attacker.get("relation", "")) == "opponent" else defender
 	_add_profile_summary(
-		_get_pokemon_label(attacker, _t("battle.calc.your_pokemon")),
-		_get_pokemon_label(defender, _t("battle.calc.opponent")),
-		_get_hp_label(defender),
-		_get_level_label(defender),
-		_get_boosts_label(attacker),
-		_get_hp_label(attacker),
-		_get_level_label(attacker),
-		str(attacker.get("species", "")),
-		str(defender.get("species", "")),
-		_get_defender_hp_percent(attacker),
-		_get_defender_hp_percent(defender)
+		_get_pokemon_label(viewer, _t("battle.calc.your_pokemon")),
+		_get_pokemon_label(opponent, _t("battle.calc.opponent")),
+		_get_hp_label(opponent),
+		_get_level_label(opponent),
+		_get_boosts_label(viewer),
+		_get_hp_label(viewer),
+		_get_level_label(viewer),
+		str(viewer.get("species", "")),
+		str(opponent.get("species", "")),
+		_get_defender_hp_percent(viewer),
+		_get_defender_hp_percent(opponent),
+		_get_boosts_label(opponent)
 	)
-	_add_assumption_chips(attacker if str(attacker.get("relation", "")) == "opponent" else defender, response)
+	_add_assumption_chips(opponent, response)
 
 	var results: Array = _as_array(response.get("results", []))
 	if results.is_empty():
@@ -662,39 +665,38 @@ func _snapshot_pokemon_name(entry: Dictionary) -> String:
 
 
 func _add_profile_summary(
-	attacker_name: String,
-	defender_name: String,
-	hp_label: String,
-	level_label: String,
-	boosts_label: String = "",
-	attacker_hp_label: String = "",
-	attacker_level_label: String = "",
-	attacker_sprite_species: String = "",
-	defender_sprite_species: String = "",
-	attacker_hp_percent: Variant = null,
-	defender_hp_percent: Variant = null
+	viewer_name: String,
+	opponent_name: String,
+	opponent_hp_label: String,
+	opponent_level_label: String,
+	viewer_boosts_label: String = "",
+	viewer_hp_label: String = "",
+	viewer_level_label: String = "",
+	viewer_sprite_species: String = "",
+	opponent_sprite_species: String = "",
+	viewer_hp_percent: Variant = null,
+	opponent_hp_percent: Variant = null,
+	opponent_boosts_label: String = ""
 ) -> void:
 	var matchup_row := HBoxContainer.new()
 	matchup_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	matchup_row.alignment = BoxContainer.ALIGNMENT_CENTER
 	matchup_row.add_theme_constant_override("separation", 6)
 	content.add_child(matchup_row)
-	var attacker_relation := "opponent" if active_subtab == SUBTAB_THEIR_DAMAGE else "viewer"
-	var defender_relation := "viewer" if active_subtab == SUBTAB_THEIR_DAMAGE else "opponent"
-	var attacker_details: Array[String] = []
-	if attacker_hp_label.strip_edges() != "":
-		attacker_details.append(attacker_hp_label)
-	attacker_details.append(_fallback_text(attacker_level_label, _t("battle.calc.level_unknown")))
-	if boosts_label.strip_edges() != "":
-		attacker_details.append(boosts_label)
+	var viewer_details: Array[String] = []
+	if viewer_hp_label.strip_edges() != "":
+		viewer_details.append(viewer_hp_label)
+	viewer_details.append(_fallback_text(viewer_level_label, _t("battle.calc.level_unknown")))
+	if viewer_boosts_label.strip_edges() != "":
+		viewer_details.append(viewer_boosts_label)
 	matchup_row.add_child(_make_matchup_side(
-		_t("battle.calc.attacker"),
-		_fallback_text(attacker_name, _t("battle.calc.your_pokemon")),
-		attacker_relation,
-		_join_string_array(attacker_details, "  ·  "),
-		true,
-		_fallback_text(attacker_sprite_species, attacker_name),
-		attacker_hp_percent
+		_t("battle.calc.your_pokemon"),
+		_fallback_text(viewer_name, _t("battle.calc.your_pokemon")),
+		"viewer",
+		_join_string_array(viewer_details, "  ·  "),
+		active_subtab == SUBTAB_YOUR_DAMAGE,
+		_fallback_text(viewer_sprite_species, viewer_name),
+		viewer_hp_percent
 	))
 	var arrow := _make_label("VS", 10, TEXT_ACCENT)
 	arrow.custom_minimum_size = Vector2(30, 0)
@@ -702,17 +704,20 @@ func _add_profile_summary(
 	arrow.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	arrow.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	matchup_row.add_child(arrow)
+	var opponent_details: Array[String] = [
+		_fallback_text(opponent_hp_label, _t("battle.calc.hp_unknown")),
+		_fallback_text(opponent_level_label, _t("battle.calc.level_unknown")),
+	]
+	if opponent_boosts_label.strip_edges() != "":
+		opponent_details.append(opponent_boosts_label)
 	matchup_row.add_child(_make_matchup_side(
-		_t("battle.calc.target"),
-		_fallback_text(defender_name, _t("battle.calc.opponent")),
-		defender_relation,
-		"%s  ·  %s" % [
-			_fallback_text(hp_label, _t("battle.calc.hp_unknown")),
-			_fallback_text(level_label, _t("battle.calc.level_unknown")),
-		],
-		false,
-		_fallback_text(defender_sprite_species, defender_name),
-		defender_hp_percent
+		_t("battle.calc.opponent"),
+		_fallback_text(opponent_name, _t("battle.calc.opponent")),
+		"opponent",
+		_join_string_array(opponent_details, "  ·  "),
+		active_subtab == SUBTAB_THEIR_DAMAGE,
+		_fallback_text(opponent_sprite_species, opponent_name),
+		opponent_hp_percent
 	))
 
 
