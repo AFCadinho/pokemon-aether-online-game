@@ -51,6 +51,11 @@ func _run() -> void:
 	if bool(Candidates.normalize_response(leaked, revision).get("success", false)):
 		_fail("unknown effective-input fields must fail closed")
 		return
+	var invalid_boost := response.duplicate(true)
+	invalid_boost["candidates"][0]["effectiveInput"]["boosts"] = {"spa": 7}
+	if bool(Candidates.normalize_response(invalid_boost, revision).get("success", false)):
+		_fail("manual stat stages outside -6 through +6 must fail closed")
+		return
 
 	var panel := DamageCalcPanel.new()
 	var content := VBoxContainer.new()
@@ -143,9 +148,22 @@ func _run() -> void:
 	var known_snapshot := _selection_snapshot()
 	known_snapshot["opponentPokemon"][0]["item"] = {"state": "known", "value": "Leftovers"}
 	known_snapshot["opponentPokemon"][0]["ability"] = {"state": "known", "value": "Pressure"}
+	known_snapshot["opponentPokemon"][0]["boosts"] = {
+		"state": "known",
+		"value": {"spa": 1, "spe": 1},
+		"provenance": {"source": "public_derived", "reasonCode": "TEST_KNOWN"},
+	}
 	panel.set_knowledge_snapshot(known_snapshot)
 	if panel.defender_assumptions.get("item") != "Leftovers" or panel.defender_assumptions.get("ability") != "Pressure":
 		_fail("Current must automatically prefer confirmed item and ability values")
+		return
+	if panel._get_effective_opponent_boosts().get("spa") != 1 or panel._get_effective_opponent_boosts().get("spe") != 1:
+		_fail("confirmed opponent stat stages must automatically fill the selectors")
+		return
+	panel._set_opponent_boost_stage("spa", 2)
+	var selected_boosts: Dictionary = panel.defender_assumptions.get("boosts", {})
+	if selected_boosts.get("spa") != 2 or selected_boosts.get("spe") != 1 or selected_boosts.size() != 5:
+		_fail("editing one stat stage must create a complete explicit opponent boost scenario")
 		return
 	var reverse_response := response.duplicate(true)
 	reverse_response["direction"] = "opponent-to-own"
@@ -173,7 +191,7 @@ func _response(revision: Dictionary) -> Dictionary:
 		"warningCodes": [],
 	}
 	return {
-		"success": true, "schemaVersion": 1, "routeRevision": "calc4.2-2026-08-09",
+		"success": true, "schemaVersion": 1, "routeRevision": "calc4.3-2026-08-09",
 		"safeInputFingerprint": "b".repeat(64), "projectionRevision": revision.duplicate(true),
 		"mechanicsManifest": {"contractRevision": "calc0-2026-08-08", "damageCalcVersion": "0.10.0", "showdownVersion": "0.11.10", "formatDataFingerprint": "fd94c49ab26ddf8daff2259dfc2b3857f957e37b166557412c4fe303c87e54b0"},
 		"presetRevision": "test-v1", "presetFingerprint": "c".repeat(64),

@@ -587,9 +587,26 @@ func _normalize_damage_calc_assumptions(defender_assumptions: Dictionary) -> Dic
 		assumptions["evs"] = _normalize_damage_calc_stat_table(defender_assumptions.get("evs"))
 	if defender_assumptions.has("ivs"):
 		assumptions["ivs"] = _normalize_damage_calc_stat_table(defender_assumptions.get("ivs"))
+	if defender_assumptions.has("boosts"):
+		assumptions["boosts"] = _normalize_damage_calc_boost_table(defender_assumptions.get("boosts"))
 	if defender_assumptions.has("exactStats"):
 		assumptions["exactStats"] = bool(defender_assumptions.get("exactStats", false))
 	return assumptions
+
+func _normalize_damage_calc_boost_table(value: Variant) -> Dictionary:
+	if not (value is Dictionary):
+		return {}
+	var source: Dictionary = value as Dictionary
+	var result := {}
+	for key: String in ["atk", "def", "spa", "spd", "spe"]:
+		if not source.has(key):
+			continue
+		var stat_value: Variant = source.get(key)
+		if typeof(stat_value) == TYPE_INT or typeof(stat_value) == TYPE_FLOAT:
+			result[key] = clampi(int(stat_value), -6, 6)
+		elif typeof(stat_value) == TYPE_STRING and str(stat_value).strip_edges().is_valid_int():
+			result[key] = clampi(int(str(stat_value).strip_edges()), -6, 6)
+	return result
 
 func _normalize_damage_calc_stat_table(value: Variant) -> Dictionary:
 	if not (value is Dictionary):

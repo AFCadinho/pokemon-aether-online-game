@@ -27,7 +27,6 @@ const HERO_BORDER := Color(0.16, 0.48, 0.70, 0.92)
 const CHIP_BG := Color(0.028, 0.043, 0.073, 0.96)
 const CHIP_BORDER := Color(0.2, 0.34, 0.52, 0.82)
 const CHIP_EDITED_BORDER := Color(0.62, 0.48, 0.23, 0.9)
-const CHIP_PUBLIC_BORDER := Color(0.25, 0.39, 0.58, 0.9)
 const KO_BORDER := Color(0.72, 0.55, 0.23, 0.88)
 const TAB_BG := Color(0.024, 0.036, 0.062, 0.92)
 const TAB_ACTIVE_BG := Color(0.124, 0.203, 0.332, 0.98)
@@ -84,6 +83,7 @@ const EV_PRESETS := [
 	{"label": "252 HP / 252 SpD", "chip": "EVs HP/SpD", "evs": {"hp": 252, "spd": 252}},
 ]
 const EV_INPUT_ROWS := [["hp", "atk"], ["def", "spa"], ["spd", "spe"]]
+const BOOST_STAT_KEYS := ["atk", "def", "spa", "spd", "spe"]
 
 var content: VBoxContainer
 
@@ -899,45 +899,8 @@ func _add_status(text: String, color: Color) -> void:
 
 
 func _add_assumption_chips(defender: Dictionary, _response: Dictionary) -> void:
-	_add_public_fact_chips()
 	var assumptions := _get_display_assumptions(defender)
 	_add_live_assumption_controls(assumptions)
-
-
-func _add_public_fact_chips() -> void:
-	var opponent := _get_snapshot_pokemon_by_ref(selected_opponent_ref)
-	if opponent.is_empty():
-		return
-	var facts: Array[String] = []
-	for field_name: String in ["item", "ability"]:
-		var knowledge := CALCDEX_SNAPSHOT.get_knowledge_value(opponent, field_name)
-		if str(knowledge.get("state", "")) != "known":
-			continue
-		var value := str(knowledge.get("value", "")).strip_edges()
-		if value == "":
-			continue
-		facts.append(_t("battle.calc.fact_with_provenance", {
-			"field": _t("battle.calc.%s" % field_name),
-			"value": value,
-			"provenance": _get_provenance_label(knowledge),
-		}))
-	var boosts := CALCDEX_SNAPSHOT.get_knowledge_value(opponent, "boosts")
-	var boost_values := _as_dictionary(boosts.get("value", {}))
-	if str(boosts.get("state", "")) == "known" and not boost_values.is_empty():
-		facts.append(_t("battle.calc.fact_with_provenance", {
-			"field": _t("battle.calc.boosts_field"),
-			"value": _get_boosts_text(boost_values),
-			"provenance": _get_provenance_label(boosts),
-		}))
-	if facts.is_empty():
-		return
-	var title := _make_label(_t("battle.calc.public_facts"), 10, TEXT_MUTED)
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	content.add_child(title)
-	for fact: String in facts:
-		var chip := _make_chip(fact)
-		chip.add_theme_stylebox_override("normal", _make_stylebox(CHIP_BG, CHIP_PUBLIC_BORDER, 4, 5.0, 2.0))
-		content.add_child(chip)
 
 
 func _get_snapshot_pokemon_by_ref(pokemon_ref: String) -> Dictionary:
@@ -947,12 +910,6 @@ func _get_snapshot_pokemon_by_ref(pokemon_ref: String) -> Dictionary:
 			if str(entry.get("pokemonRef", "")) == pokemon_ref:
 				return entry
 	return {}
-
-
-func _get_provenance_label(knowledge: Dictionary) -> String:
-	var provenance := _as_dictionary(knowledge.get("provenance", {}))
-	var source := str(provenance.get("source", "unknown"))
-	return _t("battle.calc.provenance.%s" % source)
 
 
 func _add_move_results_table(results: Array, defender: Dictionary) -> void:
@@ -1149,6 +1106,7 @@ func _add_result_footnotes(response: Dictionary, results: Array) -> void:
 			"CALC_SCENARIO_NATURE",
 			"CALC_SCENARIO_EVS",
 			"CALC_SCENARIO_IVS",
+			"CALC_SCENARIO_BOOSTS",
 			"CALC_UNKNOWN_ITEM_NOT_INCLUDED",
 		]:
 			continue
@@ -1211,16 +1169,6 @@ func _warning_label(value: String) -> String:
 	var key := "battle.calc.warning.%s" % value.to_lower()
 	var translated := _t(key)
 	return value if translated == key else translated
-
-
-func _make_chip(text: String) -> Label:
-	var label := _make_label(text, 11, TEXT_SECONDARY)
-	label.custom_minimum_size = Vector2(44, 20)
-	label.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	label.add_theme_stylebox_override("normal", _make_stylebox(CHIP_BG, CHIP_BORDER, 4, 5.0, 2.0))
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	return label
 
 
 func _make_result_badge(text: String) -> Label:
@@ -1327,6 +1275,7 @@ func _add_live_assumption_controls(assumptions: Dictionary, _prior_provenance: S
 		SELECTOR_EVS,
 		_get_evs_summary_chip_label(_as_dictionary(assumptions.get("evs", {})))
 	))
+	_add_boost_stage_controls(box, assumptions)
 	if active_subtab == SUBTAB_THEIR_DAMAGE:
 		_add_opponent_move_controls(box, assumptions)
 	if _is_current_ability_assumed():
@@ -1350,6 +1299,71 @@ func _add_live_assumption_controls(assumptions: Dictionary, _prior_provenance: S
 	is_syncing_assumption_controls = false
 	if live_ev_focus_stat != "":
 		call_deferred("_restore_live_ev_input_focus")
+
+
+func _add_boost_stage_controls(parent: VBoxContainer, assumptions: Dictionary) -> void:
+	var header := _make_label(_t("battle.calc.stat_modifiers").to_upper(), 8, TEXT_MUTED)
+	header.custom_minimum_size = Vector2(0, 14)
+	parent.add_child(header)
+	var values := _get_effective_opponent_boosts(assumptions)
+	var row := HBoxContainer.new()
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.clip_contents = true
+	row.add_theme_constant_override("separation", 4)
+	parent.add_child(row)
+	for stat_key: String in BOOST_STAT_KEYS:
+		var cell := HBoxContainer.new()
+		cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		cell.clip_contents = true
+		cell.add_theme_constant_override("separation", 2)
+		row.add_child(cell)
+		var label := _make_label(_get_ev_display_name(stat_key), 9, TEXT_MUTED)
+		label.custom_minimum_size = Vector2(25, 28)
+		label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		cell.add_child(label)
+		var selector := OptionButton.new()
+		selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		for stage in range(-6, 7):
+			selector.add_item("+%d" % stage if stage > 0 else str(stage))
+			selector.set_item_metadata(selector.item_count - 1, stage)
+			if stage == clampi(int(values.get(stat_key, 0)), -6, 6):
+				selector.select(selector.item_count - 1)
+		selector.item_selected.connect(_on_boost_stage_selected.bind(selector, stat_key))
+		_apply_calcdex_dropdown_style(selector, 28.0, 10)
+		cell.add_child(selector)
+
+
+func _get_effective_opponent_boosts(assumptions: Dictionary = {}) -> Dictionary:
+	var values: Dictionary = {}
+	var opponent := _get_snapshot_pokemon_by_ref(selected_opponent_ref)
+	if not opponent.is_empty():
+		var knowledge := CALCDEX_SNAPSHOT.get_knowledge_value(opponent, "boosts")
+		if str(knowledge.get("state", "")) == "known":
+			values = _as_dictionary(knowledge.get("value", {})).duplicate(true)
+	var scenario_boosts := _as_dictionary(assumptions.get("boosts", defender_assumptions.get("boosts", {})))
+	for stat_key: String in BOOST_STAT_KEYS:
+		if scenario_boosts.has(stat_key):
+			values[stat_key] = clampi(int(scenario_boosts.get(stat_key, 0)), -6, 6)
+	return values
+
+
+func _on_boost_stage_selected(index: int, selector: OptionButton, stat_key: String) -> void:
+	_set_opponent_boost_stage(stat_key, int(selector.get_item_metadata(index)))
+
+
+func _set_opponent_boost_stage(stat_key: String, stage: int) -> void:
+	if stat_key not in BOOST_STAT_KEYS:
+		return
+	_mark_sample_set_custom()
+	var effective := _get_effective_opponent_boosts(defender_assumptions)
+	var boosts: Dictionary = {}
+	for key: String in BOOST_STAT_KEYS:
+		boosts[key] = clampi(stage if key == stat_key else int(effective.get(key, 0)), -6, 6)
+	defender_assumptions["boosts"] = boosts
+	edited_assumption_fields["boosts"] = true
+	_emit_defender_assumptions_changed()
+	_render_current_state()
 
 
 func _add_opponent_move_controls(parent: VBoxContainer, assumptions: Dictionary) -> void:

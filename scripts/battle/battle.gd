@@ -2616,6 +2616,10 @@ func _sanitize_damage_calc_assumptions(assumptions: Dictionary) -> Dictionary:
 	if not ivs.is_empty():
 		sanitized["ivs"] = ivs
 
+	var boosts: Dictionary = _sanitize_damage_calc_boost_table(_damage_calc_as_dictionary(assumptions.get("boosts", {})))
+	if not boosts.is_empty():
+		sanitized["boosts"] = boosts
+
 	var assumed_moves: Array[String] = []
 	for move_value: Variant in _damage_calc_as_array(assumptions.get("assumedMoves", [])):
 		var move_name := str(move_value).strip_edges()
@@ -2630,7 +2634,7 @@ func _sanitize_damage_calc_assumptions(assumptions: Dictionary) -> Dictionary:
 
 func _get_persistable_damage_calc_assumptions(assumptions: Dictionary, edited_fields: Dictionary) -> Dictionary:
 	var edited_assumptions: Dictionary = {}
-	for key: String in ["item", "ability", "nature", "evs", "ivs", "assumedMoves", "exactStats"]:
+	for key: String in ["item", "ability", "nature", "evs", "ivs", "boosts", "assumedMoves", "exactStats"]:
 		if bool(edited_fields.get(key, false)) and assumptions.has(key):
 			edited_assumptions[key] = assumptions.get(key)
 	return _sanitize_damage_calc_assumptions(edited_assumptions)
@@ -2648,9 +2652,16 @@ func _sanitize_damage_calc_stat_table(stats: Dictionary, omit_default_ivs: bool)
 		sanitized[stat_key] = value
 	return sanitized
 
+func _sanitize_damage_calc_boost_table(boosts: Dictionary) -> Dictionary:
+	var sanitized: Dictionary = {}
+	for stat_key: String in ["atk", "def", "spa", "spd", "spe"]:
+		if boosts.has(stat_key):
+			sanitized[stat_key] = clampi(int(boosts.get(stat_key, 0)), -6, 6)
+	return sanitized
+
 func _build_damage_calc_edited_fields(assumptions: Dictionary) -> Dictionary:
 	var edited: Dictionary = {}
-	for key: String in ["item", "ability", "nature", "evs", "ivs", "assumedMoves", "exactStats"]:
+	for key: String in ["item", "ability", "nature", "evs", "ivs", "boosts", "assumedMoves", "exactStats"]:
 		if not assumptions.has(key):
 			continue
 		var value: Variant = assumptions.get(key)
@@ -2662,7 +2673,7 @@ func _build_damage_calc_edited_fields(assumptions: Dictionary) -> Dictionary:
 	return edited
 
 func _should_store_damage_calc_assumptions(assumptions: Dictionary, edited_fields: Dictionary) -> bool:
-	for key: String in ["item", "ability", "nature", "evs", "ivs", "assumedMoves"]:
+	for key: String in ["item", "ability", "nature", "evs", "ivs", "boosts", "assumedMoves"]:
 		if not bool(edited_fields.get(key, false)):
 			continue
 		if not assumptions.has(key):
