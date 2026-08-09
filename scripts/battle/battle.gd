@@ -28,8 +28,9 @@ const BATTLE_SUPREME_OVERLORD_EFFECT := preload("res://scripts/battle/battle_sup
 const BATTLE_PUBLIC_POKEMON_KNOWLEDGE := preload("res://scripts/battle/battle_public_pokemon_knowledge.gd")
 const BATTLE_VOICE_TIMING := preload("res://scripts/battle/battle_voice_timing.gd")
 const BATTLE_ENVIRONMENT_CATALOG := preload("res://scripts/battle/battle_environment_catalog.gd")
-const CALC_DRAWER_FIELD_WIDTH_RATIO := 0.55
+const CALC_DRAWER_FIELD_WIDTH_RATIO := 0.60
 const CALC_DRAWER_FIELD_MARGIN := 8.0
+const CALC_DRAWER_OPPONENT_HUD_CLEARANCE := 10.0
 const MEGA_EVOLUTION_EFFECT_KEY := "mega_evolution"
 const PVP_FORCE_SWITCH_ACK_RETRY_MSEC := 1000
 const PVP_FORCE_SWITCH_RECONCILE_INITIAL_MSEC := 2500
@@ -2265,9 +2266,16 @@ func _update_calc_drawer_layout() -> void:
 	var local_top_left: Vector2 = drawer_layer_inverse * frame_rect.position
 	var local_bottom_right: Vector2 = drawer_layer_inverse * frame_rect.end
 	var frame_size: Vector2 = local_bottom_right - local_top_left
-	calc_drawer.position = local_top_left + Vector2(CALC_DRAWER_FIELD_MARGIN, CALC_DRAWER_FIELD_MARGIN)
+	var drawer_position := local_top_left + Vector2(CALC_DRAWER_FIELD_MARGIN, CALC_DRAWER_FIELD_MARGIN)
+	var drawer_width := frame_size.x * CALC_DRAWER_FIELD_WIDTH_RATIO - CALC_DRAWER_FIELD_MARGIN * 2.0
+	if is_instance_valid(enemy_hud_panel):
+		var opponent_hud_left := drawer_layer_inverse * enemy_hud_panel.get_global_rect().position
+		var opponent_safe_width := opponent_hud_left.x - drawer_position.x - CALC_DRAWER_OPPONENT_HUD_CLEARANCE
+		if opponent_safe_width > 0.0:
+			drawer_width = minf(drawer_width, opponent_safe_width)
+	calc_drawer.position = drawer_position
 	calc_drawer.size = Vector2(
-		frame_size.x * CALC_DRAWER_FIELD_WIDTH_RATIO - CALC_DRAWER_FIELD_MARGIN * 2.0,
+		drawer_width,
 		frame_size.y - CALC_DRAWER_FIELD_MARGIN * 2.0
 	)
 

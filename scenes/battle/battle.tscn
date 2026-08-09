@@ -599,7 +599,7 @@ script = ExtResource("41_bag")
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
-offset_right = 620.0
+offset_right = 680.0
 offset_bottom = 568.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_kd6yx")
 
