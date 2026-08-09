@@ -11,6 +11,8 @@ const ROUTE_REVISION := "calc4.2-2026-08-09"
 static func normalize_response(response: Dictionary, expected_revision: Dictionary) -> Dictionary:
 	if not bool(response.get("success", false)):
 		return response.duplicate(true)
+	response = SNAPSHOT.canonicalize_success_response(response)
+	expected_revision = SNAPSHOT.canonicalize_success_response(expected_revision)
 	var top_fields: Array[String] = ["success", "schemaVersion", "routeRevision", "safeInputFingerprint", "projectionRevision", "mechanicsManifest", "presetRevision", "presetFingerprint", "direction", "rangeMode", "attacker", "defender", "candidates", "ranges", "candidateCoverage", "cacheStatus", "warningCodes"]
 	if not _has_exact_fields(response, top_fields):
 		return _malformed("Unexpected smart-matchup fields.")

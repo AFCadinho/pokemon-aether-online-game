@@ -15,6 +15,13 @@ func _init() -> void:
 	}
 	var normalized: Dictionary = CalcdexSnapshot.normalize_response(response, revision)
 	_check(bool(normalized.get("success", false)), "accepts the frozen provenance snapshot")
+	var wire_response: Dictionary = JSON.parse_string(JSON.stringify(response))
+	wire_response["status"] = 200.0
+	var wire_revision: Dictionary = JSON.parse_string(JSON.stringify(revision))
+	_check(
+		bool(CalcdexSnapshot.normalize_response(wire_response, wire_revision).get("success", false)),
+		"accepts integral JSON numbers and strips known HTTP transport metadata"
+	)
 	_check(
 		str(CalcdexSnapshot.get_active_pokemon(normalized.get("snapshot", {}), "opponent").get("pokemonRef", "")) \
 			== "opponent:public-slot-1",
@@ -44,6 +51,9 @@ func _init() -> void:
 	var stale_revision := revision.duplicate(true)
 	stale_revision["eventSeq"] = 6
 	_check_rejected(response, stale_revision, "rejects a snapshot from another projection revision")
+	var fractional_turn := wire_response.duplicate(true)
+	fractional_turn["snapshot"]["turn"] = 7.5
+	_check_rejected(fractional_turn, wire_revision, "rejects fractional values in integer contract fields")
 
 	var state := State.new()
 	state.load_from_api_response({

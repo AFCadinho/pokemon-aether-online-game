@@ -13,6 +13,8 @@ const MOVE_SOURCES := ["owned_exact", "public_reveal", "user_scenario", "public_
 static func normalize_response(response: Dictionary, expected_revision: Dictionary) -> Dictionary:
 	if not bool(response.get("success", false)):
 		return response.duplicate(true)
+	response = SNAPSHOT.canonicalize_success_response(response)
+	expected_revision = SNAPSHOT.canonicalize_success_response(expected_revision)
 	if not _has_exact_fields(response, ["success", "schemaVersion", "routeRevision", "safeInputFingerprint", "projectionRevision", "mechanicsManifest", "direction", "attacker", "defender", "results", "warningCodes"]):
 		return _malformed("Unexpected Calcdex matchup fields.")
 	if int(response.get("schemaVersion", 0)) != SCHEMA_VERSION or str(response.get("routeRevision", "")) != ROUTE_REVISION:

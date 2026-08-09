@@ -14,6 +14,12 @@ func _run() -> void:
 	var normalized := Matchup.normalize_response(response, revision)
 	_assert(bool(normalized.get("success", false)), "valid matchup must normalize")
 	_assert(str(normalized["results"][0]["move"]["source"]) == "public_reveal", "move provenance must survive")
+	var wire_response: Dictionary = JSON.parse_string(JSON.stringify(response))
+	wire_response["status"] = 200.0
+	_assert(
+		bool(Matchup.normalize_response(wire_response, JSON.parse_string(JSON.stringify(revision))).get("success", false)),
+		"matchup accepts integral JSON numbers and known HTTP transport metadata"
+	)
 
 	var leaked := response.duplicate(true)
 	leaked["privateTeam"] = {"moves": ["Secret Move"]}

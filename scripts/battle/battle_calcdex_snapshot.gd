@@ -69,6 +69,8 @@ const PROVENANCE_SOURCES := [
 static func normalize_response(response: Dictionary, expected_revision: Dictionary) -> Dictionary:
 	if not bool(response.get("success", false)):
 		return response.duplicate(true)
+	response = canonicalize_success_response(response)
+	expected_revision = canonicalize_success_response(expected_revision)
 	if int(response.get("schemaVersion", 0)) != SCHEMA_VERSION:
 		return _malformed("Unsupported Calcdex response schema.")
 	if str(response.get("routeRevision", "")) != ROUTE_REVISION:
@@ -87,6 +89,33 @@ static func normalize_response(response: Dictionary, expected_revision: Dictiona
 		"routeRevision": ROUTE_REVISION,
 		"snapshot": snapshot.duplicate(true),
 	}
+
+
+static func canonicalize_success_response(response: Dictionary) -> Dictionary:
+	var canonical_value: Variant = _canonicalize_json_integers(response)
+	var canonical: Dictionary = canonical_value as Dictionary if canonical_value is Dictionary else {}
+	# HTTP status is client-side transport metadata added after JSON parsing and
+	# is not part of any frozen Calcdex response contract.
+	canonical.erase("status")
+	return canonical
+
+
+static func _canonicalize_json_integers(value: Variant) -> Variant:
+	if value is Dictionary:
+		var result: Dictionary = {}
+		for key: Variant in (value as Dictionary).keys():
+			result[key] = _canonicalize_json_integers((value as Dictionary).get(key))
+		return result
+	if value is Array:
+		var result: Array = []
+		for entry: Variant in value as Array:
+			result.append(_canonicalize_json_integers(entry))
+		return result
+	if typeof(value) == TYPE_FLOAT:
+		var number := float(value)
+		if is_finite(number) and number >= -9007199254740991.0 and number <= 9007199254740991.0 and number == floor(number):
+			return int(number)
+	return value
 
 
 static func get_active_pokemon(snapshot: Dictionary, relation: String) -> Dictionary:

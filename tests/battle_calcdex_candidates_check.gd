@@ -18,6 +18,11 @@ func _run() -> void:
 	if normalized["results"][0]["shortLabel"] != "20.0-40.0%":
 		_fail("displayed candidate envelope must drive the visible result")
 		return
+	var wire_response: Dictionary = JSON.parse_string(JSON.stringify(response))
+	wire_response["status"] = 200.0
+	if not bool(Candidates.normalize_response(wire_response, JSON.parse_string(JSON.stringify(revision))).get("success", false)):
+		_fail("smart candidates must accept integral JSON numbers and known HTTP transport metadata")
+		return
 	var usage_response := response.duplicate(true)
 	usage_response["candidates"][0]["candidateId"] = "usage:mew-1630-01"
 	usage_response["candidates"][0]["source"] = "public_usage_prior"

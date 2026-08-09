@@ -9,6 +9,8 @@ const ROUTE_REVISION := "calc5.1-2026-08-09"
 static func normalize_response(response: Dictionary, expected_revision: Dictionary) -> Dictionary:
 	if not bool(response.get("success", false)):
 		return response.duplicate(true)
+	response = CANDIDATES.SNAPSHOT.canonicalize_success_response(response)
+	expected_revision = CANDIDATES.SNAPSHOT.canonicalize_success_response(expected_revision)
 	var extras := ["inferenceRevision", "inferenceMode", "consideredEvidenceCount", "appliedEvidence", "inferenceExplanationKeys"]
 	var calc4 := response.duplicate(true)
 	for key: String in extras:

@@ -12,6 +12,12 @@ func _init() -> void:
 	var normalized := Inference.normalize_response(response, revision)
 	_check(bool(normalized.get("success", false)), "valid public inference response normalizes")
 	_check(normalized.get("inferenceExplanationKeys", []).size() == 1, "inference explanation remains visible")
+	var wire_response: Dictionary = JSON.parse_string(JSON.stringify(response))
+	wire_response["status"] = 200.0
+	_check(
+		bool(Inference.normalize_response(wire_response, JSON.parse_string(JSON.stringify(revision))).get("success", false)),
+		"inference accepts integral JSON numbers and known HTTP transport metadata"
+	)
 	var leaked := response.duplicate(true)
 	leaked["appliedEvidence"][0]["privateDamage"] = 999
 	_check(not bool(Inference.normalize_response(leaked, revision).get("success", false)), "unexpected inference fields fail closed")
