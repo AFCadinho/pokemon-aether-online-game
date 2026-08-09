@@ -89,7 +89,7 @@ func _response(revision: Dictionary) -> Dictionary:
 	return {
 		"success": true,
 		"schemaVersion": 1,
-		"routeRevision": "calc3.5-2026-08-09",
+		"routeRevision": "calc3.6-2026-08-09",
 		"safeInputFingerprint": "b".repeat(64),
 		"projectionRevision": revision.duplicate(true),
 		"mechanicsManifest": {
@@ -112,7 +112,7 @@ func _response(revision: Dictionary) -> Dictionary:
 			"minPercent": 30.0,
 			"maxPercent": 31.0,
 			"description": "safe",
-			"endOfTurn": {"state": "not_included", "reasonCode": "CALC_END_OF_TURN_NOT_INCLUDED"},
+			"koProjection": {"state": "available", "chance": 1.0, "hits": 2, "text": "guaranteed 2HKO", "basedOn": "exact_current_hp", "effects": []},
 			"warningCodes": [],
 		}],
 		"warningCodes": ["CALC_SCENARIO_NATURE"],

@@ -1392,20 +1392,7 @@ func _make_move_source_label(source: String) -> Label:
 	label.add_theme_stylebox_override("normal", _make_stylebox(CHIP_BG, CHIP_BORDER, 8, 5.0, 1.0))
 	return label
 
-func _add_result_footnotes(response: Dictionary, results: Array) -> void:
-	var excludes_end_of_turn := false
-	for result_value: Variant in results:
-		var result := _as_dictionary(result_value)
-		var end_of_turn := _as_dictionary(result.get("endOfTurn", {}))
-		if str(end_of_turn.get("state", "")) == "not_included":
-			excludes_end_of_turn = true
-			break
-	if excludes_end_of_turn:
-		var direct_note := _make_label(_t("battle.calc.end_of_turn_not_included"), 10, TEXT_MUTED)
-		direct_note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		direct_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		direct_note.clip_text = false
-		content.add_child(direct_note)
+func _add_result_footnotes(response: Dictionary, _results: Array) -> void:
 	var details: Array[String] = []
 	for warning_value: Variant in _as_array(response.get("warnings", [])):
 		var warning := str(warning_value).strip_edges()
@@ -3405,6 +3392,16 @@ func _get_primary_result_label(result: Dictionary, defender: Dictionary) -> Stri
 	if min_percent_value != null and max_percent_value != null \
 			and is_zero_approx(float(min_percent_value)) and is_zero_approx(float(max_percent_value)):
 		return _t("battle.calc.no_effect")
+	var ko_projection := _as_dictionary(result.get("koProjection", {}))
+	if str(ko_projection.get("state", "")) == "available":
+		var projected_hits: Variant = ko_projection.get("hits")
+		if typeof(projected_hits) == TYPE_INT and int(projected_hits) >= 1:
+			if int(projected_hits) == 1:
+				var projected_chance: Variant = ko_projection.get("chance")
+				if typeof(projected_chance) in [TYPE_INT, TYPE_FLOAT] and float(projected_chance) < 0.999999:
+					return _t("battle.calc.possible_ohko")
+				return "OHKO"
+			return "%dHKO" % int(projected_hits)
 	if min_percent_value != null and float(min_percent_value) >= 100.0:
 		return "OHKO"
 	var ko_summary_label := str(result.get("koSummaryLabel", "")).strip_edges()

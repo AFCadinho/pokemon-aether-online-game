@@ -3,7 +3,7 @@ extends RefCounted
 class_name BattleCalcdexInference
 
 const CANDIDATES := preload("res://scripts/battle/battle_calcdex_candidates.gd")
-const ROUTE_REVISION := "calc5.2-2026-08-09"
+const ROUTE_REVISION := "calc5.3-2026-08-09"
 
 
 static func normalize_response(response: Dictionary, expected_revision: Dictionary) -> Dictionary:

@@ -345,11 +345,11 @@ func _response(revision: Dictionary) -> Dictionary:
 		"damageDistribution": {"kind": "exact_rolls", "rolls": [20, 40]},
 		"minDamage": 20, "maxDamage": 40, "averageDamage": 30.0,
 		"minPercent": 20.0, "maxPercent": 40.0, "description": "safe",
-		"endOfTurn": {"state": "not_included", "reasonCode": "CALC_END_OF_TURN_NOT_INCLUDED"},
+		"koProjection": {"state": "available", "chance": 1.0, "hits": 2, "text": "guaranteed 2HKO", "basedOn": "public_percent_upper_bound", "effects": []},
 		"warningCodes": [],
 	}
 	return {
-		"success": true, "schemaVersion": 1, "routeRevision": "calc4.5-2026-08-09",
+		"success": true, "schemaVersion": 1, "routeRevision": "calc4.6-2026-08-09",
 		"safeInputFingerprint": "b".repeat(64), "projectionRevision": revision.duplicate(true),
 		"mechanicsManifest": {"contractRevision": "calc0-2026-08-08", "damageCalcVersion": "0.10.0", "showdownVersion": "0.11.10", "formatDataFingerprint": "fd94c49ab26ddf8daff2259dfc2b3857f957e37b166557412c4fe303c87e54b0"},
 		"presetRevision": "test-v1", "presetFingerprint": "c".repeat(64),

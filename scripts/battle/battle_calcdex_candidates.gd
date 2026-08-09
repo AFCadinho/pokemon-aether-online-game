@@ -5,7 +5,7 @@ class_name BattleCalcdexCandidates
 const SNAPSHOT := preload("res://scripts/battle/battle_calcdex_snapshot.gd")
 const MATCHUP := preload("res://scripts/battle/battle_calcdex_matchup.gd")
 const SCHEMA_VERSION := 1
-const ROUTE_REVISION := "calc4.5-2026-08-09"
+const ROUTE_REVISION := "calc4.6-2026-08-09"
 
 
 static func normalize_response(response: Dictionary, expected_revision: Dictionary) -> Dictionary:
@@ -49,7 +49,10 @@ static func normalize_response(response: Dictionary, expected_revision: Dictiona
 			"maxPercent": maximum,
 			"shortLabel": "%.1f-%.1f%%" % [float(minimum), float(maximum)] if minimum != null and maximum != null else "--",
 			"damageDistribution": {"kind": "unavailable", "rolls": []},
-			"endOfTurn": {"state": "not_included", "reasonCode": "CALC_END_OF_TURN_NOT_INCLUDED"},
+			"koProjection": {
+				"state": "unavailable", "chance": null, "hits": null, "text": "",
+				"basedOn": "full_hp", "effects": [], "reasonCode": "CALC_KO_CANDIDATE_ENVELOPE",
+			},
 			"warnings": [],
 			"candidateRange": range_row,
 		})

@@ -33,21 +33,23 @@ func _run() -> void:
 			"description": "0 SpA Pikachu Unsupported Move vs. 0 HP / 0 SpD Mew: 0-0 (0 - 0%)",
 			"warnings": ["Unsupported public mechanic."],
 			"koWarnings": ["Recovery is unknown."],
-			"endOfTurn": {
-				"state": "not_included",
-				"reasonCode": "CALC_END_OF_TURN_NOT_INCLUDED",
-			},
+			"koProjection": {"state": "unavailable", "chance": null, "hits": null, "text": "", "basedOn": "public_percent_upper_bound", "effects": [], "reasonCode": "CALC_UNSUPPORTED_MECHANIC"},
 		}, {
 			"move": {"name": "Thunderbolt", "type": "Electric", "category": "Special"},
 			"shortLabel": "44.0-52.0%",
 			"minPercent": 44.0,
 			"maxPercent": 52.0,
 			"resultState": "supported",
-			"description": "252 SpA Pikachu Thunderbolt vs. 252 HP / 8 SpD Mew: 176-210 (43.5 - 51.9%) -- 10.9% chance to 2HKO",
+			"description": "252 SpA Pikachu Thunderbolt vs. 252 HP / 8 SpD Mew: 176-210 (43.5 - 51.9%) -- 10.9% chance to 2HKO after Stealth Rock, burn damage, and Leftovers recovery",
 			"warnings": [],
-			"endOfTurn": {
-				"state": "not_included",
-				"reasonCode": "CALC_END_OF_TURN_NOT_INCLUDED",
+			"koProjection": {
+				"state": "available", "chance": 0.109, "hits": 2, "text": "10.9% chance to 2HKO",
+				"basedOn": "public_percent_upper_bound",
+				"effects": [
+					{"id": "stealth_rock", "kind": "entry_hazard", "timing": "before_first_attack"},
+					{"id": "burn_damage", "kind": "status", "timing": "between_attacks"},
+					{"id": "leftovers_recovery", "kind": "recovery", "timing": "between_attacks"},
+				],
 			},
 		}],
 		"warnings": ["Opponent nature is assumed."],
@@ -84,8 +86,21 @@ func _run() -> void:
 		quit(1)
 		return
 	var expanded_summary_text := _collect_label_text(panel.result_summary_panels[second_summary_key])
-	if not _contains_fragment(expanded_summary_text, ["252 SpA Pikachu Thunderbolt", "10.9% chance to 2HKO"]):
-		push_error("Expanded move rows must show the calculator's safe Showdown-style description")
+	for summary_fragment: String in ["252 SpA Pikachu Thunderbolt", "10.9% chance to 2HKO", "Stealth Rock", "burn damage", "Leftovers recovery"]:
+		if not _contains_fragment(expanded_summary_text, [summary_fragment]):
+			push_error("Expanded move rows must show the complete Showdown-style KO projection: %s" % summary_fragment)
+			quit(1)
+			return
+	var projected_result := {
+		"shortLabel": "44.0-52.0%", "minPercent": 44.0, "maxPercent": 52.0,
+		"koProjection": {"state": "available", "chance": 0.109, "hits": 2},
+	}
+	if panel._get_percent_label(projected_result) != "44.0-52.0%":
+		push_error("KO projection effects must never alter the move's direct damage percentage")
+		quit(1)
+		return
+	if panel._get_primary_result_label(projected_result, {"hp": {"percent": 75.0}}) != "2HKO":
+		push_error("The compact KO badge must use the structured projection while chance details stay in the summary")
 		quit(1)
 		return
 	var envelope_summary := panel._get_result_summary_text({
@@ -176,10 +191,6 @@ func _run() -> void:
 	inline_move_input.queue_free()
 
 	var rendered_text := _collect_label_text(panel)
-	if not _contains_fragment(rendered_text, ["end-of-turn effects", "einde-van-de-beurt-effecten", "efeitos de fim de turno"]):
-		push_error("Missing consolidated end-of-turn footnote")
-		quit(1)
-		return
 	var expected := [
 		["battle.calc.unsupported_mechanic", "This mechanic is not safely supported.", "Deze mechanic wordt nog niet veilig ondersteund."],
 		["Unsupported public mechanic."],

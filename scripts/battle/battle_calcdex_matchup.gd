@@ -4,7 +4,7 @@ class_name BattleCalcdexMatchup
 
 const SNAPSHOT := preload("res://scripts/battle/battle_calcdex_snapshot.gd")
 const SCHEMA_VERSION := 1
-const ROUTE_REVISION := "calc3.5-2026-08-09"
+const ROUTE_REVISION := "calc3.6-2026-08-09"
 const DIRECTIONS := ["own-to-opponent", "opponent-to-own"]
 const RESULT_STATES := ["supported", "unsupported", "error"]
 const MOVE_SOURCES := ["owned_exact", "public_reveal", "user_scenario", "public_usage_prior", "curated_prior"]
@@ -90,8 +90,8 @@ static func _normalize_row(value: Variant) -> Dictionary:
 	var source: Dictionary = value as Dictionary
 	if not _has_required_allowed_fields(
 		source,
-		["moveName", "moveSource", "resultState", "damageDistribution", "endOfTurn", "warningCodes"],
-		["moveName", "moveSource", "resultState", "reasonCode", "damageDistribution", "minDamage", "maxDamage", "averageDamage", "minPercent", "maxPercent", "description", "endOfTurn", "warningCodes"]
+		["moveName", "moveSource", "resultState", "damageDistribution", "koProjection", "warningCodes"],
+		["moveName", "moveSource", "resultState", "reasonCode", "damageDistribution", "minDamage", "maxDamage", "averageDamage", "minPercent", "maxPercent", "description", "koProjection", "warningCodes"]
 	):
 		return {}
 	var move_name := str(source.get("moveName", "")).strip_edges()
@@ -106,15 +106,15 @@ static func _normalize_row(value: Variant) -> Dictionary:
 	for roll: Variant in rolls:
 		if not (typeof(roll) in [TYPE_INT, TYPE_FLOAT]) or float(roll) < 0.0 or not is_finite(float(roll)):
 			return {}
-	var end_of_turn: Dictionary = source.get("endOfTurn", {}) if source.get("endOfTurn") is Dictionary else {}
-	if end_of_turn != {"state": "not_included", "reasonCode": "CALC_END_OF_TURN_NOT_INCLUDED"}:
+	var ko_projection := _normalize_ko_projection(source.get("koProjection"))
+	if ko_projection.is_empty():
 		return {}
 	var result := {
 		"move": {"name": move_name, "source": move_source},
 		"resultState": state,
 		"damageDistribution": {"kind": str(distribution.get("kind")), "rolls": rolls.duplicate(true)},
 		"damage": rolls.duplicate(true),
-		"endOfTurn": end_of_turn.duplicate(true),
+		"koProjection": ko_projection,
 		"warnings": _reason_codes(source.get("warningCodes", [])),
 	}
 	for key: String in ["minDamage", "maxDamage", "averageDamage", "minPercent", "maxPercent"]:
@@ -127,6 +127,64 @@ static func _normalize_row(value: Variant) -> Dictionary:
 		result["description"] = str(source.get("description", ""))
 	if source.has("reasonCode"):
 		result["reasonCode"] = str(source.get("reasonCode", ""))
+	return result
+
+
+static func _normalize_ko_projection(value: Variant) -> Dictionary:
+	if not (value is Dictionary):
+		return {}
+	var source: Dictionary = value as Dictionary
+	if not _has_required_allowed_fields(
+		source,
+		["state", "text", "basedOn", "effects"],
+		["state", "chance", "hits", "text", "basedOn", "effects", "reasonCode"]
+	):
+		return {}
+	var state := str(source.get("state", ""))
+	var based_on := str(source.get("basedOn", ""))
+	if state not in ["available", "unavailable"] or based_on not in ["exact_current_hp", "public_percent_upper_bound", "full_hp"]:
+		return {}
+	var chance: Variant = source.get("chance")
+	if chance != null and (typeof(chance) not in [TYPE_INT, TYPE_FLOAT] or not is_finite(float(chance)) or float(chance) < 0.0 or float(chance) > 1.0):
+		return {}
+	var hits: Variant = source.get("hits")
+	if hits != null and (typeof(hits) != TYPE_INT or int(hits) < 1 or int(hits) > 9):
+		return {}
+	var text := str(source.get("text", ""))
+	if text.length() > 300 or not (source.get("effects") is Array) or (source.get("effects") as Array).size() > 16:
+		return {}
+	var effects: Array[Dictionary] = []
+	for effect_value: Variant in source.get("effects", []):
+		if not (effect_value is Dictionary):
+			return {}
+		var effect: Dictionary = effect_value as Dictionary
+		if not _has_required_allowed_fields(effect, ["id", "kind", "timing"], ["id", "kind", "timing", "layers"]):
+			return {}
+		var effect_id := str(effect.get("id", ""))
+		var kind := str(effect.get("kind", ""))
+		var timing := str(effect.get("timing", ""))
+		if effect_id == "" or effect_id.length() > 64 or kind not in ["entry_hazard", "status", "recovery", "residual"] or timing not in ["before_first_attack", "between_attacks"]:
+			return {}
+		var normalized_effect := {"id": effect_id, "kind": kind, "timing": timing}
+		if effect.has("layers"):
+			var layers: Variant = effect.get("layers")
+			if typeof(layers) != TYPE_INT or int(layers) < 1 or int(layers) > 3:
+				return {}
+			normalized_effect["layers"] = int(layers)
+		effects.append(normalized_effect)
+	var result := {
+		"state": state,
+		"chance": chance,
+		"hits": hits,
+		"text": text,
+		"basedOn": based_on,
+		"effects": effects,
+	}
+	if source.has("reasonCode"):
+		var reason_code := str(source.get("reasonCode", ""))
+		if reason_code == "" or reason_code.length() > 96:
+			return {}
+		result["reasonCode"] = reason_code
 	return result
 
 
