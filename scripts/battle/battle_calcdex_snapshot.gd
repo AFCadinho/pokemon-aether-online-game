@@ -373,9 +373,44 @@ static func _validate_contract_containers(snapshot: Dictionary) -> String:
 			return "Calcdex move evidence is invalid."
 		if evidence_type == "stat_stage" and _validate_known_value("boosts", evidence.get("value")) != "":
 			return "Calcdex stat-stage evidence is invalid."
-		if evidence_type not in ["confirmed_move", "stat_stage"]:
+		if evidence_type == "damage_interval" and not _is_valid_damage_evidence(evidence.get("value")):
+			return "Calcdex damage evidence is invalid."
+		if evidence_type == "speed_order" and not _is_valid_speed_evidence(evidence.get("value")):
+			return "Calcdex speed evidence is invalid."
+		if evidence_type not in ["confirmed_move", "stat_stage", "damage_interval", "speed_order"]:
 			return "Calcdex public evidence type is invalid."
 	return ""
+
+
+static func _is_valid_damage_evidence(value: Variant) -> bool:
+	if not (value is Dictionary):
+		return false
+	var evidence: Dictionary = value as Dictionary
+	if not _has_exact_fields(evidence, ["attackerRef", "targetRef", "moveName", "previousPublicHp", "currentPublicHp", "minDamagePercent", "maxDamagePercent", "quantizationPolicy"]):
+		return false
+	if (
+		str(evidence.get("attackerRef", "")).begins_with("viewer:public-slot-")
+		and str(evidence.get("targetRef", "")).begins_with("opponent:public-slot-")
+	) == false or str(evidence.get("moveName", "")).strip_edges() == "" or str(evidence.get("quantizationPolicy", "")) != "showdown_ceil_percent_v1":
+		return false
+	for key: String in ["previousPublicHp", "currentPublicHp", "minDamagePercent", "maxDamagePercent"]:
+		if not typeof(evidence.get(key)) in [TYPE_INT, TYPE_FLOAT] or float(evidence.get(key)) < 0.0 or float(evidence.get(key)) > 100.0:
+			return false
+	return float(evidence.get("minDamagePercent")) <= float(evidence.get("maxDamagePercent"))
+
+
+static func _is_valid_speed_evidence(value: Variant) -> bool:
+	if not (value is Dictionary):
+		return false
+	var evidence: Dictionary = value as Dictionary
+	return (
+		_has_exact_fields(evidence, ["viewerPokemonRef", "opponentPokemonRef", "relation", "viewerMove", "opponentMove"])
+		and str(evidence.get("viewerPokemonRef", "")).begins_with("viewer:public-slot-")
+		and str(evidence.get("opponentPokemonRef", "")).begins_with("opponent:public-slot-")
+		and str(evidence.get("relation", "")) in ["opponent_faster", "opponent_slower"]
+		and str(evidence.get("viewerMove", "")).strip_edges() != ""
+		and str(evidence.get("opponentMove", "")).strip_edges() != ""
+	)
 
 
 static func _revisions_equal(left: Dictionary, right: Dictionary) -> bool:

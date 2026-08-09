@@ -82,6 +82,7 @@ var selected_opponent_ref := ""
 var field_scenario: Dictionary = {}
 var smart_range_mode := "likely"
 var pinned_candidate_id := ""
+var use_observation_inference := false
 
 
 func _ready() -> void:
@@ -347,7 +348,11 @@ func get_field_scenario() -> Dictionary:
 
 
 func get_smart_options() -> Dictionary:
-	return {"rangeMode": smart_range_mode, "pinnedCandidateId": pinned_candidate_id}
+	return {
+		"rangeMode": smart_range_mode,
+		"pinnedCandidateId": pinned_candidate_id,
+		"useObservationInference": use_observation_inference,
+	}
 
 
 func _add_smart_range_controls() -> void:
@@ -366,12 +371,27 @@ func _add_smart_range_controls() -> void:
 		button.toggle_mode = true
 		button.button_pressed = smart_range_mode == mode
 		row.add_child(button)
+	var inference_button := _make_small_button(
+		_t("battle.calc.inference_use" if use_observation_inference else "battle.calc.inference_ignore"),
+		_on_inference_toggle_pressed
+	)
+	inference_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	inference_button.toggle_mode = true
+	inference_button.button_pressed = use_observation_inference
+	inference_button.tooltip_text = _t("battle.calc.inference_tooltip")
+	row.add_child(inference_button)
 
 
 func _on_smart_range_pressed(mode: String) -> void:
 	if mode == smart_range_mode:
 		return
 	smart_range_mode = mode
+	last_response = {}
+	matchup_selection_changed.emit()
+
+
+func _on_inference_toggle_pressed() -> void:
+	use_observation_inference = not use_observation_inference
 	last_response = {}
 	matchup_selection_changed.emit()
 
@@ -383,6 +403,11 @@ func _add_candidate_summary(response: Dictionary) -> void:
 	var title := _make_label(_t("battle.calc.candidate_estimates"), 10, TEXT_MUTED)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	content.add_child(title)
+	for explanation_value: Variant in _as_array(response.get("inferenceExplanationKeys", [])):
+		var explanation_key := str(explanation_value)
+		var explanation := _t(explanation_key)
+		if explanation != explanation_key:
+			_add_status(explanation, TEXT_MUTED)
 	for candidate_value: Variant in candidates:
 		var candidate := _as_dictionary(candidate_value)
 		var candidate_id := str(candidate.get("candidateId", ""))

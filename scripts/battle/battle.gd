@@ -2368,20 +2368,9 @@ func _refresh_damage_calc_results() -> void:
 			response = {"success": false, "error": _t("battle.calc.error.selection")}
 		else:
 			var smart_options: Dictionary = calc_panel.get_smart_options()
-			response = await BattleApiClient.calculate_calcdex_smart_matchup(
-				damage_calc_request,
-				battle_state.battle_id,
-				projection_revision,
-				str(selection.get("direction", "own-to-opponent")),
-				str(selection.get("attackerRef", "")),
-				str(selection.get("defenderRef", "")),
-				_get_damage_calc_defender_assumptions_payload(),
-				calc_panel.get_field_scenario(),
-				str(smart_options.get("rangeMode", "likely")),
-				str(smart_options.get("pinnedCandidateId", ""))
-			)
-			if not bool(response.get("success", false)) and _get_damage_calc_error_code(response) == "CALC_UNSUPPORTED_MECHANIC":
-				response = await BattleApiClient.calculate_calcdex_matchup(
+			var use_inference := bool(smart_options.get("useObservationInference", false))
+			if use_inference:
+				response = await BattleApiClient.calculate_calcdex_inferred_matchup(
 					damage_calc_request,
 					battle_state.battle_id,
 					projection_revision,
@@ -2389,7 +2378,42 @@ func _refresh_damage_calc_results() -> void:
 					str(selection.get("attackerRef", "")),
 					str(selection.get("defenderRef", "")),
 					_get_damage_calc_defender_assumptions_payload(),
-					calc_panel.get_field_scenario()
+					calc_panel.get_field_scenario(),
+					str(smart_options.get("rangeMode", "likely")),
+					str(smart_options.get("pinnedCandidateId", ""))
+				)
+			else:
+				response = await BattleApiClient.calculate_calcdex_smart_matchup(
+					damage_calc_request,
+					battle_state.battle_id,
+					projection_revision,
+					str(selection.get("direction", "own-to-opponent")),
+					str(selection.get("attackerRef", "")),
+					str(selection.get("defenderRef", "")),
+					_get_damage_calc_defender_assumptions_payload(),
+					calc_panel.get_field_scenario(),
+					str(smart_options.get("rangeMode", "likely")),
+					str(smart_options.get("pinnedCandidateId", ""))
+				)
+			if use_inference and not bool(response.get("success", false)) and _get_damage_calc_error_code(response) == "CALC_UNSUPPORTED_MECHANIC":
+				response = await BattleApiClient.calculate_calcdex_smart_matchup(
+					damage_calc_request,
+					battle_state.battle_id,
+					projection_revision,
+					str(selection.get("direction", "own-to-opponent")),
+					str(selection.get("attackerRef", "")),
+					str(selection.get("defenderRef", "")),
+					_get_damage_calc_defender_assumptions_payload(),
+					calc_panel.get_field_scenario(),
+					str(smart_options.get("rangeMode", "likely")),
+					str(smart_options.get("pinnedCandidateId", ""))
+				)
+			if not bool(response.get("success", false)) and _get_damage_calc_error_code(response) == "CALC_UNSUPPORTED_MECHANIC":
+				response = await BattleApiClient.calculate_calcdex_matchup(
+					damage_calc_request, battle_state.battle_id, projection_revision,
+					str(selection.get("direction", "own-to-opponent")),
+					str(selection.get("attackerRef", "")), str(selection.get("defenderRef", "")),
+					_get_damage_calc_defender_assumptions_payload(), calc_panel.get_field_scenario()
 				)
 	else:
 		response = await BattleApiClient.calculate_battle_damage(

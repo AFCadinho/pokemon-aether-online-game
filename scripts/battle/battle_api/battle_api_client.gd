@@ -4,6 +4,7 @@ const FORMAT_ID = "gen9nationaldex"
 const CALCDEX_SNAPSHOT := preload("res://scripts/battle/battle_calcdex_snapshot.gd")
 const CALCDEX_MATCHUP := preload("res://scripts/battle/battle_calcdex_matchup.gd")
 const CALCDEX_CANDIDATES := preload("res://scripts/battle/battle_calcdex_candidates.gd")
+const CALCDEX_INFERENCE := preload("res://scripts/battle/battle_calcdex_inference.gd")
 
 func create_triggered_wild_battle(
 	request_node: HTTPRequest,
@@ -445,6 +446,44 @@ func calculate_calcdex_smart_matchup(
 		payload
 	)
 	return CALCDEX_CANDIDATES.normalize_response(response, last_projection_revision)
+
+func calculate_calcdex_inferred_matchup(
+	request_node: HTTPRequest,
+	battle_id: String,
+	last_projection_revision: Dictionary,
+	direction: String,
+	attacker_ref: String,
+	defender_ref: String,
+	opponent_scenario: Dictionary = {},
+	field_scenario: Dictionary = {},
+	range_mode: String = "likely",
+	pinned_candidate_id: String = ""
+) -> Dictionary:
+	var normalized_battle_id := battle_id.strip_edges()
+	if normalized_battle_id == "" or not CALCDEX_SNAPSHOT.is_valid_projection_revision(last_projection_revision):
+		return {"success": false, "code": "invalid_calcdex_request", "error": "A valid battle revision is required."}
+	var scenario := _normalize_damage_calc_assumptions(opponent_scenario)
+	if opponent_scenario.get("assumedMoves") is Array:
+		scenario["assumedMoves"] = (opponent_scenario.get("assumedMoves") as Array).duplicate(true)
+	var payload := {
+		"schemaVersion": CALCDEX_CANDIDATES.SCHEMA_VERSION,
+		"lastProjectionRevision": last_projection_revision.duplicate(true),
+		"direction": direction,
+		"attackerRef": attacker_ref,
+		"defenderRef": defender_ref,
+		"opponentScenario": scenario,
+		"fieldScenario": field_scenario.duplicate(true),
+		"rangeMode": range_mode,
+		"inferenceMode": "public_observations",
+	}
+	if pinned_candidate_id.strip_edges() != "":
+		payload["pinnedCandidateId"] = pinned_candidate_id.strip_edges()
+	var response: Dictionary = await send_post_request(
+		request_node,
+		"/battle/%s/calcdex/v1/inferred-matchup" % normalized_battle_id.uri_encode(),
+		payload
+	)
+	return CALCDEX_INFERENCE.normalize_response(response, last_projection_revision)
 
 func send_get_request(request_node: HTTPRequest, path: String) -> Dictionary:
 	var api_base_url: String = await GatewayApiConfig.get_base_url()
