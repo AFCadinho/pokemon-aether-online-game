@@ -2257,6 +2257,8 @@
   "battle.calc.nature": "Nature",
   "battle.calc.evs": "EVs",
   "battle.calc.stat_modifiers": "Opponent stat stages",
+  "battle.calc.stage": "Stage",
+  "battle.calc.set_label": "Set",
   "battle.calc.opponent_moves": "Opponent moves",
   "battle.calc.add_move": "+ Add move",
   "battle.calc.inline_move_hint": "Type a move here, choose a suggestion, or press Enter",

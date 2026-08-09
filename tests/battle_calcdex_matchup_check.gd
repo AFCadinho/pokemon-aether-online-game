@@ -57,6 +57,12 @@ func _run() -> void:
 	var selected_viewer_icon := content.find_child("ViewerTeamIcon2", true, false) as Button
 	var selected_opponent_icon := content.find_child("OpponentTeamIcon1", true, false) as Button
 	_assert(selected_viewer_icon != null and selected_opponent_icon != null, "both clickable team strips must render")
+	var matchup_team_strip := content.find_child("MatchupTeamStrip", true, false)
+	var viewer_team_strip := content.find_child("ViewerTeamStrip", true, false)
+	var opponent_team_strip := content.find_child("OpponentTeamStrip", true, false)
+	_assert(matchup_team_strip != null and viewer_team_strip != null and opponent_team_strip != null, "the compact matchup team header must render")
+	if matchup_team_strip != null and viewer_team_strip != null and opponent_team_strip != null:
+		_assert(viewer_team_strip.get_parent() == matchup_team_strip and opponent_team_strip.get_parent() == matchup_team_strip, "both teams must share one Showdex-style header row")
 	if selected_viewer_icon != null and selected_opponent_icon != null:
 		_assert(str(selected_viewer_icon.get_meta("pokemon_ref", "")) == "viewer:public-slot-2", "the selected viewer icon must remain on the left")
 		_assert(str(selected_opponent_icon.get_meta("pokemon_ref", "")) == "opponent:public-slot-1", "the selected opponent icon must remain on the right")
@@ -71,6 +77,15 @@ func _run() -> void:
 	_assert(panel.selected_opponent_ref == "opponent:public-slot-1", "direct selection must also reject an unknown opponent slot")
 	_assert(_has_line_edit_text(content, "Thunderbolt"), "damage taken must keep the opponent move directly editable")
 	_assert(panel.result_summary_panels.size() == 1, "an editable damage-taken move must retain its calculation summary")
+	var move_table := content.find_child("MoveResultsTable", true, false)
+	var stat_grid := content.find_child("ShowdexStatGrid", true, false)
+	var field_controls := content.find_child("ShowdexFieldControls", true, false)
+	_assert(move_table != null and stat_grid != null and field_controls != null, "moves, stat grid, and field controls must render as separate compact sections")
+	if move_table != null and stat_grid != null and field_controls != null:
+		_assert(move_table.get_index() < stat_grid.get_index() and stat_grid.get_index() < field_controls.get_index(), "the Showdex layout must place stats below moves and field controls last")
+	_assert(content.find_child("ShowdexEvHp", true, false) is LineEdit, "the stat grid must expose EV editing directly")
+	_assert(content.find_child("ShowdexStageAtk", true, false) is OptionButton, "the stat grid must expose stages directly")
+	_assert(content.find_child("SampleSetField", true, false) != null, "the sample-set selector must have a compact labeled field")
 	var disclosure_metadata: Dictionary = panel.result_disclosure_buttons.values()[0] if not panel.result_disclosure_buttons.is_empty() else {}
 	_assert(bool(disclosure_metadata.get("compact", false)), "damage-taken summaries must use a separate compact disclosure beside the move input")
 	panel._on_team_icon_pressed("viewer", "viewer:public-slot-1")

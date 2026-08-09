@@ -2257,6 +2257,8 @@
   "battle.calc.nature": "Nature",
   "battle.calc.evs": "EVs",
   "battle.calc.stat_modifiers": "Stat modifiers tegenstander",
+  "battle.calc.stage": "Stage",
+  "battle.calc.set_label": "Set",
   "battle.calc.opponent_moves": "Moves van tegenstander",
   "battle.calc.add_move": "+ Move kiezen",
   "battle.calc.inline_move_hint": "Typ hier een move, kies een suggestie of druk op Enter",

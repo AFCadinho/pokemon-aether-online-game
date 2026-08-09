@@ -377,19 +377,23 @@ func _render_your_damage_response(response: Dictionary) -> void:
 		_get_effective_pokemon_status("own"),
 		_get_effective_pokemon_status("opponent")
 	)
-	_add_assumption_chips(opponent, response)
+	var assumptions := _get_display_assumptions(opponent)
+	_add_live_assumption_controls(assumptions)
 
 	var results: Array = _as_array(response.get("results", []))
 	if str(response.get("direction", "")) == "opponent-to-own":
 		_add_editable_opponent_move_results_table(results, defender)
+		_add_showdex_detail_controls(assumptions)
 		if not results.is_empty():
 			_add_result_footnotes(response, results)
 		return
 	if results.is_empty():
 		_add_status(_fallback_text(str(response.get("emptyReason", "")), _t("battle.calc.no_results")), TEXT_SECONDARY)
+		_add_showdex_detail_controls(assumptions)
 		return
 
 	_add_move_results_table(results, defender)
+	_add_showdex_detail_controls(assumptions)
 	_add_result_footnotes(response, results)
 
 
@@ -708,6 +712,7 @@ func _is_current_ability_assumed() -> bool:
 
 func _add_sample_set_selector(parent: Container) -> void:
 	var selector := OptionButton.new()
+	selector.name = "SampleSetSelector"
 	selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	selector.tooltip_text = _t("battle.calc.set_selector_tooltip")
 	selector.add_item(_t("battle.calc.current"))
@@ -874,28 +879,37 @@ func _add_team_selector_strips() -> void:
 	panel.clip_contents = true
 	panel.add_theme_stylebox_override(
 		"panel",
-		_make_stylebox(Color(0.012, 0.026, 0.044, 0.94), Color(PROFILE_BORDER, 0.46), 8, 7.0, 5.0)
+		_make_stylebox(Color(0.012, 0.026, 0.044, 0.94), Color(PROFILE_BORDER, 0.46), 8, 6.0, 4.0)
 	)
 	content.add_child(panel)
-	var rows := VBoxContainer.new()
-	rows.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	rows.add_theme_constant_override("separation", 3)
-	panel.add_child(rows)
-	rows.add_child(_make_team_selector_row("viewer"))
-	rows.add_child(_make_team_selector_row("opponent"))
+	var matchup_strip := HBoxContainer.new()
+	matchup_strip.name = "MatchupTeamStrip"
+	matchup_strip.custom_minimum_size = Vector2(0, 36)
+	matchup_strip.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	matchup_strip.clip_contents = true
+	matchup_strip.add_theme_constant_override("separation", 4)
+	panel.add_child(matchup_strip)
+	matchup_strip.add_child(_make_team_selector_row("viewer"))
+	var separator := _make_label("VS", 8, TEXT_ACCENT)
+	separator.custom_minimum_size = Vector2(18, 0)
+	separator.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	separator.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	separator.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	matchup_strip.add_child(separator)
+	matchup_strip.add_child(_make_team_selector_row("opponent"))
 
 
 func _make_team_selector_row(relation: String) -> HBoxContainer:
 	var row := HBoxContainer.new()
 	row.name = "ViewerTeamStrip" if relation == "viewer" else "OpponentTeamStrip"
-	row.custom_minimum_size = Vector2(0, 40)
+	row.custom_minimum_size = Vector2(0, 34)
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.clip_contents = true
-	row.add_theme_constant_override("separation", 6)
+	row.add_theme_constant_override("separation", 3)
 	var accent := CONDITION_OWN_ACCENT if relation == "viewer" else CONDITION_OPPONENT_ACCENT
 	var label_key := "battle.calc.your_team" if relation == "viewer" else "battle.calc.opponent_team"
-	var label := _make_label(_t(label_key).to_upper(), 9, Color(accent, 0.94))
-	label.custom_minimum_size = Vector2(88, 0)
+	var label := _make_label(_t(label_key).to_upper(), 8, Color(accent, 0.94))
+	label.custom_minimum_size = Vector2(48, 0)
 	label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	row.add_child(label)
@@ -903,7 +917,7 @@ func _make_team_selector_row(relation: String) -> HBoxContainer:
 	icons.name = "ViewerTeamIcons" if relation == "viewer" else "OpponentTeamIcons"
 	icons.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	icons.alignment = BoxContainer.ALIGNMENT_END
-	icons.add_theme_constant_override("separation", 4)
+	icons.add_theme_constant_override("separation", 2)
 	row.add_child(icons)
 	var collection := _as_array(knowledge_snapshot.get("viewerPokemon" if relation == "viewer" else "opponentPokemon", []))
 	for index in range(mini(collection.size(), 6)):
@@ -914,7 +928,7 @@ func _make_team_selector_row(relation: String) -> HBoxContainer:
 func _make_team_icon_button(entry: Dictionary, relation: String, slot_index: int) -> Button:
 	var button := Button.new()
 	button.name = "%sTeamIcon%d" % ["Viewer" if relation == "viewer" else "Opponent", slot_index + 1]
-	button.custom_minimum_size = Vector2(42, 38)
+	button.custom_minimum_size = Vector2(34, 34)
 	button.size_flags_horizontal = Control.SIZE_SHRINK_END
 	button.focus_mode = Control.FOCUS_ALL
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -940,16 +954,16 @@ func _make_team_icon_button(entry: Dictionary, relation: String, slot_index: int
 
 	var stack := VBoxContainer.new()
 	stack.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	stack.offset_left = 3.0
-	stack.offset_top = 2.0
-	stack.offset_right = -3.0
-	stack.offset_bottom = -3.0
+	stack.offset_left = 2.0
+	stack.offset_top = 1.0
+	stack.offset_right = -2.0
+	stack.offset_bottom = -2.0
 	stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stack.add_theme_constant_override("separation", 1)
 	button.add_child(stack)
 	if identity_known:
 		var icon := TextureRect.new()
-		icon.custom_minimum_size = Vector2(32, 29)
+		icon.custom_minimum_size = Vector2(27, 26)
 		icon.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		icon.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -959,7 +973,7 @@ func _make_team_icon_button(entry: Dictionary, relation: String, slot_index: int
 		stack.add_child(icon)
 	else:
 		var unknown := _make_label("?", 18, TEXT_MUTED)
-		unknown.custom_minimum_size = Vector2(32, 29)
+		unknown.custom_minimum_size = Vector2(27, 26)
 		unknown.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		unknown.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		unknown.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -1117,7 +1131,7 @@ func _make_matchup_side(
 	panel.name = "ViewerProfileCard" if relation == "viewer" else "OpponentProfileCard"
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.clip_contents = true
-	panel.custom_minimum_size = Vector2(0, 84)
+	panel.custom_minimum_size = Vector2(0, 74)
 	var relation_accent := CONDITION_OWN_ACCENT if relation == "viewer" else CONDITION_OPPONENT_ACCENT
 	var card_background := HERO_BG.lightened(0.018) if is_attacker else HERO_BG
 	panel.add_theme_stylebox_override("panel", _make_stylebox(card_background, relation_accent, 9, 8.0, 5.0))
@@ -1126,7 +1140,7 @@ func _make_matchup_side(
 	card_row.add_theme_constant_override("separation", 7)
 	panel.add_child(card_row)
 	var icon := TextureRect.new()
-	icon.custom_minimum_size = Vector2(50, 50)
+	icon.custom_minimum_size = Vector2(44, 44)
 	icon.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -1221,11 +1235,6 @@ func _add_status(text: String, color: Color) -> void:
 	content.add_child(label)
 
 
-func _add_assumption_chips(defender: Dictionary, _response: Dictionary) -> void:
-	var assumptions := _get_display_assumptions(defender)
-	_add_live_assumption_controls(assumptions)
-
-
 func _get_snapshot_pokemon_by_ref(pokemon_ref: String) -> Dictionary:
 	for collection_key: String in ["viewerPokemon", "opponentPokemon"]:
 		for entry_value: Variant in _as_array(knowledge_snapshot.get(collection_key, [])):
@@ -1247,6 +1256,7 @@ func _add_move_results_table(results: Array, defender: Dictionary) -> void:
 
 func _add_move_results_table_shell() -> VBoxContainer:
 	var table := PanelContainer.new()
+	table.name = "MoveResultsTable"
 	table.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	table.clip_contents = true
 	table.add_theme_stylebox_override(
@@ -1388,7 +1398,7 @@ func _add_move_result_row(
 	panel.name = "MoveResultRow_%d" % row_index
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.clip_contents = true
-	panel.custom_minimum_size = Vector2(0, 52)
+	panel.custom_minimum_size = Vector2(0, 40)
 	panel.add_theme_stylebox_override(
 		"panel",
 		_make_result_row_style(primary_result_label, row_index, move_type, expanded_result_key == result_key, is_top_damage)
@@ -1442,24 +1452,24 @@ func _add_move_result_row(
 	var percent_label: String = "" if is_status_move else _get_percent_label(result)
 	var move_category := _get_move_category(result)
 	var move_source := _get_move_source(result)
-	if move_type != "" or move_category != "" or move_source != "":
-		var meta_row := HBoxContainer.new()
-		meta_row.add_theme_constant_override("separation", 5)
-		move_box.add_child(meta_row)
-		if move_type != "":
-			meta_row.add_child(_make_move_type_badge(move_type))
-		if move_category != "":
-			meta_row.add_child(_make_move_category_label(move_category))
-		if move_source != "":
-			var source_label := _make_move_source_label(move_source)
-			if source_label != null:
-				meta_row.add_child(source_label)
+	var move_metadata: Array[String] = []
+	if move_type != "":
+		move_metadata.append(move_type.capitalize())
+	if move_category != "":
+		move_metadata.append(move_category.capitalize())
+	if move_source != "" and move_source != "owned_exact":
+		var provenance_key := "aggregate_prior" if move_source == "public_usage_prior" else move_source
+		move_metadata.append(_t("battle.calc.provenance.%s" % provenance_key))
+	if not move_metadata.is_empty():
+		panel.tooltip_text = _join_string_array(move_metadata, " · ")
+	if move_category != "":
+		result_row.add_child(_make_move_category_label(move_category))
 	var percent_color := TEXT_MUTED if is_status_move else DAMAGE_TEXT
 	if not is_status_move and percent_label != "":
 		percent_color = _get_result_badge_colors(primary_result_label)["text"]
 	if is_top_damage:
 		percent_color = TOP_DAMAGE_ACCENT
-	var percent := _make_label(percent_label if percent_label != "" else "--", 15, percent_color)
+	var percent := _make_label(percent_label if percent_label != "" else "--", 13, percent_color)
 	percent.custom_minimum_size = Vector2(DAMAGE_COLUMN_WIDTH, 0)
 	percent.size_flags_horizontal = Control.SIZE_SHRINK_END
 	percent.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -1653,23 +1663,22 @@ func _make_result_row_style(
 func _make_move_type_badge(move_type: String) -> Label:
 	var type_color: Color = TYPE_COLORS.get(move_type.to_lower(), PROFILE_BORDER)
 	var label := _make_label(move_type.to_upper(), 8, Color(1.0, 1.0, 1.0, 0.96))
-	label.custom_minimum_size = Vector2(48, 17)
+	label.custom_minimum_size = Vector2(44, 18)
 	label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	label.add_theme_stylebox_override("normal", _make_stylebox(type_color.darkened(0.12), type_color.lightened(0.12), 8, 5.0, 1.0))
+	label.add_theme_stylebox_override("normal", _make_stylebox(type_color.darkened(0.12), type_color.lightened(0.12), 8, 4.0, 1.0))
 	return label
 
 
 func _make_move_category_label(category: String) -> Label:
 	var label := _make_label(category.to_upper(), 8, TEXT_MUTED)
-	label.custom_minimum_size = Vector2(62, 17)
-	label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	label.custom_minimum_size = Vector2(54, 18)
+	label.size_flags_horizontal = Control.SIZE_SHRINK_END
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	label.add_theme_stylebox_override("normal", _make_stylebox(Color(0.035, 0.05, 0.075, 0.92), Color(0.20, 0.28, 0.38, 0.75), 8, 5.0, 1.0))
 	return label
 
 
@@ -1687,6 +1696,7 @@ func _make_move_source_label(source: String) -> Label:
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	label.add_theme_stylebox_override("normal", _make_stylebox(CHIP_BG, CHIP_BORDER, 8, 5.0, 1.0))
 	return label
+
 
 func _add_result_footnotes(response: Dictionary, _results: Array) -> void:
 	var details: Array[String] = []
@@ -1837,9 +1847,18 @@ func _add_live_assumption_controls(assumptions: Dictionary, _prior_provenance: S
 	setup_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	setup_row.add_theme_constant_override("separation", 4)
 	box.add_child(setup_row)
-	_add_sample_set_selector(setup_row)
+	var set_field := VBoxContainer.new()
+	set_field.name = "SampleSetField"
+	set_field.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	set_field.add_theme_constant_override("separation", 1)
+	setup_row.add_child(set_field)
+	var set_label := _make_label(_t("battle.calc.set_label").to_upper(), 8, TEXT_MUTED)
+	set_label.custom_minimum_size = Vector2(0, 11)
+	set_field.add_child(set_label)
+	_add_sample_set_selector(set_field)
 	if not edited_assumption_fields.is_empty() or not field_scenario.is_empty():
 		var reset_button := _make_assumption_reset_button()
+		reset_button.size_flags_vertical = Control.SIZE_SHRINK_END
 		setup_row.add_child(reset_button)
 
 	var primary_row := HBoxContainer.new()
@@ -1848,12 +1867,6 @@ func _add_live_assumption_controls(assumptions: Dictionary, _prior_provenance: S
 	primary_row.add_theme_constant_override("separation", 3)
 	box.add_child(primary_row)
 
-	primary_row.add_child(_make_inline_assumption_field(
-		_t("battle.calc.item"),
-		_get_catalog_assumption_value(assumptions, SELECTOR_ITEM),
-		SELECTOR_ITEM,
-		_get_assumption_chip_label(assumptions, "item", _t("battle.calc.item_none"))
-	))
 	primary_row.add_child(_make_inline_assumption_field(
 		_t("battle.calc.ability"),
 		_get_catalog_assumption_value(assumptions, SELECTOR_ABILITY),
@@ -1866,18 +1879,17 @@ func _add_live_assumption_controls(assumptions: Dictionary, _prior_provenance: S
 		SELECTOR_NATURE,
 		_get_nature_chip_label(assumptions)
 	))
-	primary_row.add_child(_make_assumption_summary_button(
-		_t("battle.calc.evs"),
-		_get_assumption_control_value(assumptions, SELECTOR_EVS),
-		SELECTOR_EVS,
-		_get_evs_summary_chip_label(_as_dictionary(assumptions.get("evs", {})))
+	primary_row.add_child(_make_inline_assumption_field(
+		_t("battle.calc.item"),
+		_get_catalog_assumption_value(assumptions, SELECTOR_ITEM),
+		SELECTOR_ITEM,
+		_get_assumption_chip_label(assumptions, "item", _t("battle.calc.item_none"))
 	))
 	catalog_suggestions_box = VBoxContainer.new()
 	catalog_suggestions_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	catalog_suggestions_box.clip_contents = true
 	catalog_suggestions_box.add_theme_constant_override("separation", 3)
 	box.add_child(catalog_suggestions_box)
-	_add_boost_stage_controls(box, assumptions)
 	if _is_current_ability_assumed():
 		var ability_warning := _make_label(_t("battle.calc.assumed_ability_warning", {
 			"ability": current_default_ability,
@@ -1888,7 +1900,6 @@ func _add_live_assumption_controls(assumptions: Dictionary, _prior_provenance: S
 	elif current_default_ability_loading and str(assumptions.get("ability", "")).strip_edges() == "":
 		box.add_child(_make_label(_t("battle.calc.loading_default_ability"), 10, TEXT_MUTED))
 
-	_add_advanced_scenario_controls(box, assumptions)
 	_render_active_assumption_editor(assumptions)
 
 	is_syncing_assumption_controls = false
@@ -1931,6 +1942,161 @@ func _add_boost_stage_controls(parent: VBoxContainer, assumptions: Dictionary) -
 		_apply_calcdex_dropdown_style(selector, 28.0, 10)
 		_apply_boost_stage_style(selector, current_stage, public_values.has(stat_key), boosts_are_edited)
 		cell.add_child(selector)
+
+
+func _add_showdex_detail_controls(assumptions: Dictionary) -> void:
+	_add_showdex_stat_grid(assumptions)
+	_add_showdex_condition_controls(assumptions)
+
+
+func _add_showdex_stat_grid(assumptions: Dictionary) -> void:
+	var panel := PanelContainer.new()
+	panel.name = "ShowdexStatGrid"
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.clip_contents = true
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_stylebox(Color(0.012, 0.025, 0.041, 0.96), Color(0.18, 0.36, 0.52, 0.76), 8, 7.0, 5.0)
+	)
+	content.add_child(panel)
+	var box := VBoxContainer.new()
+	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	box.add_theme_constant_override("separation", 3)
+	panel.add_child(box)
+	var title_row := HBoxContainer.new()
+	title_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_row.add_theme_constant_override("separation", 6)
+	box.add_child(title_row)
+	var title := _make_label(_t("battle.calc.ev_spread").to_upper(), 8, EV_LABEL_ACCENT)
+	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	title_row.add_child(title)
+	live_ev_total_label = _make_label("", 9, TEXT_MUTED)
+	live_ev_total_label.size_flags_horizontal = Control.SIZE_SHRINK_END
+	live_ev_total_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	live_ev_total_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	title_row.add_child(live_ev_total_label)
+	live_ev_total_bar = ProgressBar.new()
+	live_ev_total_bar.custom_minimum_size = Vector2(0, 3)
+	live_ev_total_bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	live_ev_total_bar.min_value = 0.0
+	live_ev_total_bar.max_value = EV_TOTAL_LIMIT
+	live_ev_total_bar.show_percentage = false
+	live_ev_total_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	box.add_child(live_ev_total_bar)
+
+	var stat_keys: Array[String] = ["hp", "atk", "def", "spa", "spd", "spe"]
+	var grid := GridContainer.new()
+	grid.columns = 7
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.add_theme_constant_override("h_separation", 3)
+	grid.add_theme_constant_override("v_separation", 2)
+	box.add_child(grid)
+	var corner := _make_label("", 8, TEXT_MUTED)
+	corner.custom_minimum_size = Vector2(42, 0)
+	grid.add_child(corner)
+	for stat_key: String in stat_keys:
+		var stat_header := _make_label(_get_ev_display_name(stat_key).to_upper(), 8, _get_stat_label_accent(stat_key))
+		stat_header.custom_minimum_size = Vector2(46, 18)
+		stat_header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		stat_header.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		grid.add_child(stat_header)
+
+	var ivs := _as_dictionary(assumptions.get("ivs", {}))
+	var iv_row_label := _make_label("IVs", 8, TEXT_MUTED)
+	iv_row_label.custom_minimum_size = Vector2(42, 24)
+	iv_row_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	grid.add_child(iv_row_label)
+	for stat_key: String in stat_keys:
+		var iv_value := clampi(int(ivs.get(stat_key, 31)), 0, 31)
+		var iv_label := _make_label(str(iv_value), 10, TEXT_PRIMARY if iv_value == 31 else MANUAL_ACCENT)
+		iv_label.custom_minimum_size = Vector2(46, 24)
+		iv_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		iv_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		grid.add_child(iv_label)
+
+	var evs := _as_dictionary(assumptions.get("evs", {}))
+	var ev_row_label := _make_label("EVs", 8, EV_LABEL_ACCENT)
+	ev_row_label.custom_minimum_size = Vector2(42, 26)
+	ev_row_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	grid.add_child(ev_row_label)
+	for stat_key: String in stat_keys:
+		grid.add_child(_make_showdex_ev_input(stat_key, int(evs.get(stat_key, 0))))
+
+	var values := _get_effective_opponent_boosts(assumptions)
+	var public_values := _get_public_opponent_boosts()
+	var boosts_are_edited := bool(edited_assumption_fields.get("boosts", false))
+	var stage_row_label := _make_label(_t("battle.calc.stage"), 8, Color(CONDITION_OPPONENT_ACCENT, 0.94))
+	stage_row_label.custom_minimum_size = Vector2(42, 26)
+	stage_row_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	grid.add_child(stage_row_label)
+	for stat_key: String in stat_keys:
+		if stat_key == "hp":
+			var unavailable := _make_label("—", 10, TEXT_MUTED)
+			unavailable.custom_minimum_size = Vector2(46, 26)
+			unavailable.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			unavailable.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			grid.add_child(unavailable)
+			continue
+		grid.add_child(_make_showdex_stage_selector(
+			stat_key,
+			clampi(int(values.get(stat_key, 0)), -6, 6),
+			public_values.has(stat_key),
+			boosts_are_edited
+		))
+	_update_live_ev_total()
+
+
+func _make_showdex_ev_input(stat_key: String, value: int) -> LineEdit:
+	var input := LineEdit.new()
+	input.name = "ShowdexEv%s" % stat_key.capitalize()
+	input.text = str(clampi(value, 0, 252))
+	input.placeholder_text = "0"
+	input.custom_minimum_size = Vector2(46, 26)
+	input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	input.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	input.max_length = 3
+	input.tooltip_text = _get_ev_full_display_name(stat_key)
+	input.add_theme_font_size_override("font_size", 10)
+	input.add_theme_color_override("font_color", EV_LABEL_ACCENT if value > 0 else TEXT_SECONDARY)
+	input.add_theme_color_override("font_placeholder_color", TEXT_MUTED)
+	input.add_theme_stylebox_override("normal", _make_stylebox(Color(0.008, 0.018, 0.030, 0.98), Color(0.13, 0.27, 0.40, 0.76), 4, 3.0, 1.0))
+	input.add_theme_stylebox_override("focus", _make_stylebox(Color(0.028, 0.065, 0.10, 0.98), DROPDOWN_FOCUS_BORDER, 4, 3.0, 1.0))
+	input.focus_entered.connect(_remember_live_ev_input_focus.bind(stat_key))
+	input.text_changed.connect(_on_live_ev_text_changed.bind(stat_key))
+	live_ev_inputs[stat_key] = input
+	return input
+
+
+func _make_showdex_stage_selector(stat_key: String, current_stage: int, is_public: bool, is_edited: bool) -> OptionButton:
+	var selector := OptionButton.new()
+	selector.name = "ShowdexStage%s" % stat_key.capitalize()
+	selector.custom_minimum_size = Vector2(46, 26)
+	selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	selector.tooltip_text = _t("battle.calc.stat_modifiers")
+	for stage in range(-6, 7):
+		selector.add_item("+%d" % stage if stage > 0 else str(stage))
+		selector.set_item_metadata(selector.item_count - 1, stage)
+		if stage == current_stage:
+			selector.select(selector.item_count - 1)
+	selector.item_selected.connect(_on_boost_stage_selected.bind(selector, stat_key))
+	_apply_calcdex_dropdown_style(selector, 26.0, 9)
+	_apply_boost_stage_style(selector, current_stage, is_public, is_edited)
+	return selector
+
+
+func _add_showdex_condition_controls(assumptions: Dictionary) -> void:
+	var panel := PanelContainer.new()
+	panel.name = "ShowdexFieldControls"
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_stylebox(Color(0.010, 0.021, 0.036, 0.92), Color(CHIP_BORDER, 0.48), 7, 6.0, 4.0)
+	)
+	content.add_child(panel)
+	var box := VBoxContainer.new()
+	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_child(box)
+	_add_advanced_scenario_controls(box, assumptions)
 
 
 func _get_public_opponent_boosts() -> Dictionary:
