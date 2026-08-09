@@ -2354,6 +2354,7 @@
   "battle.calc.loading_natures": "Natures laden...",
   "battle.calc.matchup": "{attacker} -> {defender}",
   "battle.calc.no_ko": "Geen K.O.",
+  "battle.calc.no_effect": "Geen effect",
   "battle.calc.no_results": "Geen schaderesultaten beschikbaar.",
   "battle.calc.no_damage_taken_moves": "Er zijn nog geen moves van de tegenstander gekozen. Kies hierboven een move of selecteer een sampleset.",
   "battle.calc.no_results_short": "Geen resultaten.",

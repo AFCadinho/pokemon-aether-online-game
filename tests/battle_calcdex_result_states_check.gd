@@ -140,6 +140,21 @@ func _run() -> void:
 		push_error("A guaranteed percent range must override a contradictory KO summary")
 		quit(1)
 		return
+	var immune_result := {
+		"minDamage": 0,
+		"maxDamage": 0,
+		"minPercent": 0.0,
+		"maxPercent": 0.0,
+		"resultState": "supported",
+	}
+	if panel._get_percent_label(immune_result) != "0.0%":
+		push_error("A supported immunity must render as zero damage instead of an unavailable result")
+		quit(1)
+		return
+	if panel._get_primary_result_label(immune_result, {"hp": {"percent": 100.0}}) != panel._t("battle.calc.no_effect"):
+		push_error("A supported immunity must use the localized no-effect result badge")
+		quit(1)
+		return
 	if panel._format_level_value(100.0) != "100" or panel._format_level_value("50.0") != "50":
 		push_error("Calcdex levels must render as whole numbers")
 		quit(1)

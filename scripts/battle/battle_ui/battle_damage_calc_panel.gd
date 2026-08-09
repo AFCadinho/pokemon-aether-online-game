@@ -3026,6 +3026,12 @@ func _get_move_source(result: Dictionary) -> String:
 
 
 func _get_percent_label(result: Dictionary) -> String:
+	var min_percent_value: Variant = _get_percent_number(result.get("minPercent"))
+	var max_percent_value: Variant = _get_percent_number(result.get("maxPercent"))
+	if min_percent_value != null and max_percent_value != null \
+			and is_zero_approx(float(min_percent_value)) and is_zero_approx(float(max_percent_value)):
+		return "0.0%"
+
 	for key: String in ["shortLabel", "compactPercentLabel", "percentLabel", "damagePercentLabel"]:
 		var text := str(result.get(key, "")).strip_edges()
 		if text != "":
@@ -3054,6 +3060,9 @@ func _get_primary_result_label(result: Dictionary, defender: Dictionary) -> Stri
 
 	var min_percent_value: Variant = _get_percent_number(result.get("minPercent"))
 	var max_percent_value: Variant = _get_percent_number(result.get("maxPercent"))
+	if min_percent_value != null and max_percent_value != null \
+			and is_zero_approx(float(min_percent_value)) and is_zero_approx(float(max_percent_value)):
+		return _t("battle.calc.no_effect")
 	if min_percent_value != null and float(min_percent_value) >= 100.0:
 		return "OHKO"
 	var ko_summary_label := str(result.get("koSummaryLabel", "")).strip_edges()

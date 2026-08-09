@@ -2354,6 +2354,7 @@
   "battle.calc.loading_natures": "Carregando naturezas...",
   "battle.calc.matchup": "{attacker} -> {defender}",
   "battle.calc.no_ko": "Sem nocaute",
+  "battle.calc.no_effect": "Sem efeito",
   "battle.calc.no_results": "Nenhum resultado de dano disponível.",
   "battle.calc.no_damage_taken_moves": "Nenhum movimento do oponente foi escolhido. Escolha um movimento acima ou selecione um set de exemplo.",
   "battle.calc.no_results_short": "Nenhum resultado.",

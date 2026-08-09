@@ -2354,6 +2354,7 @@
   "battle.calc.loading_natures": "Loading natures...",
   "battle.calc.matchup": "{attacker} -> {defender}",
   "battle.calc.no_ko": "No KO",
+  "battle.calc.no_effect": "No effect",
   "battle.calc.no_results": "No damage results available.",
   "battle.calc.no_damage_taken_moves": "No opponent moves selected yet. Choose a move above or select a sample set.",
   "battle.calc.no_results_short": "No results.",
