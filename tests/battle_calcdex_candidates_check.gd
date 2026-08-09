@@ -251,6 +251,11 @@ func _run() -> void:
 	if panel.defender_assumptions.get("assumedMoves") != ["U-turn", "Bug Buzz"]:
 		_fail("Enter must accept the first visible move suggestion instead of committing partial text")
 		return
+	panel.selector_results = [{"name": "Hidden Power Ice", "calcName": "Hidden Power Ice", "type": "ice", "category": "special"}]
+	panel._on_inline_move_text_submitted("hidden power i", 1)
+	if panel.defender_assumptions.get("assumedMoves") != ["U-turn", "Hidden Power Ice"]:
+		_fail("Hidden Power selections must preserve their explicit type in the calculator scenario")
+		return
 	panel._on_inline_move_text_submitted("Aura Sphere", 1)
 	if panel.defender_assumptions.get("assumedMoves") != ["U-turn", "Aura Sphere"]:
 		_fail("pressing Enter in an opponent result row must commit that move in place")
