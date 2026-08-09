@@ -1679,13 +1679,19 @@ func _on_inline_move_text_changed(text: String, slot: int, input: LineEdit) -> v
 
 
 func _on_inline_move_text_submitted(text: String, slot: int) -> void:
+	if catalog_search_timer != null:
+		catalog_search_timer.stop()
 	active_selector = SELECTOR_MOVE
 	active_move_slot = slot
 	var move_name := text.strip_edges()
 	if move_name == "":
 		_on_catalog_assumption_clear_pressed(SELECTOR_MOVE)
-	else:
-		_on_selector_result_pressed({"name": move_name, "calcName": move_name})
+		return
+	var first_suggestion := _get_first_selector_result()
+	if not first_suggestion.is_empty():
+		_on_selector_result_pressed(first_suggestion)
+		return
+	_on_selector_result_pressed({"name": move_name, "calcName": move_name})
 
 
 func _get_visible_opponent_move_names(results: Array = []) -> Array[String]:
@@ -2387,10 +2393,12 @@ func _on_inline_assumption_text_submitted(text: String, kind: String) -> void:
 func _commit_inline_assumption(text: String, kind: String) -> void:
 	if kind not in [SELECTOR_ITEM, SELECTOR_ABILITY, SELECTOR_NATURE]:
 		return
+	if catalog_search_timer != null:
+		catalog_search_timer.stop()
 	active_selector = kind
 	var cleaned := text.strip_edges()
 	if kind == SELECTOR_NATURE:
-		var nature := _resolve_nature_calc_name(cleaned)
+		var nature := _get_first_nature_suggestion(cleaned) if cleaned != "" else _resolve_nature_calc_name(cleaned)
 		if nature == "":
 			selector_error = _t("battle.calc.no_results_short")
 			_refresh_catalog_results()
@@ -2400,14 +2408,29 @@ func _commit_inline_assumption(text: String, kind: String) -> void:
 	if cleaned == "" or cleaned.to_lower() == "none" or cleaned.to_lower() == _t("common.none").to_lower():
 		_on_catalog_assumption_clear_pressed(kind)
 		return
+	var first_suggestion := _get_first_selector_result()
+	if not first_suggestion.is_empty():
+		_on_selector_result_pressed(first_suggestion)
+		return
+	_on_selector_result_pressed({"name": cleaned, "calcName": cleaned})
+
+
+func _get_first_selector_result() -> Dictionary:
 	for result_value: Variant in selector_results:
 		var result := _as_dictionary(result_value)
-		var name := str(result.get("name", "")).strip_edges()
+		var name := str(result.get("name", result.get("calcName", ""))).strip_edges()
 		var calc_name := str(result.get("calcName", name)).strip_edges()
-		if cleaned.to_lower() == name.to_lower() or cleaned.to_lower() == calc_name.to_lower():
-			_on_selector_result_pressed(result)
-			return
-	_on_selector_result_pressed({"name": cleaned, "calcName": cleaned})
+		if calc_name != "":
+			return result
+	return {}
+
+
+func _get_first_nature_suggestion(value: String) -> String:
+	var query := value.strip_edges().to_lower()
+	for nature: String in _get_nature_option_names():
+		if query == "" or nature.to_lower().contains(query) or _localized_nature_name(nature).to_lower().contains(query):
+			return nature
+	return _resolve_nature_calc_name(value)
 
 
 func _resolve_nature_calc_name(value: String) -> String:

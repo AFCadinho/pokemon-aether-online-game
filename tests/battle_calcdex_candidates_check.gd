@@ -146,7 +146,7 @@ func _run() -> void:
 	if not _has_label_text(panel.catalog_suggestions_box, "Leftovers") or not _has_label_text(panel.catalog_suggestions_box, panel._t("battle.calc.use_default_value")):
 		_fail("Inline setup autocomplete must separate suggestions from its explicit default action")
 		return
-	panel._on_inline_assumption_text_submitted("Leftovers", "item")
+	panel._on_inline_assumption_text_submitted("left", "item")
 	panel._on_inline_assumption_text_submitted("Pressure", "ability")
 	panel._on_inline_assumption_text_submitted("Modest", "nature")
 	if panel.defender_assumptions.get("item") != "Leftovers" or panel.defender_assumptions.get("ability") != "Pressure" or panel.defender_assumptions.get("nature") != "Modest":
@@ -220,6 +220,13 @@ func _run() -> void:
 		if suggestions_panel == null or not suggestions_panel.has_theme_stylebox_override("panel"):
 			_fail("Opponent move autocomplete must use the shared Calcdex suggestion styling")
 			return
+	panel.active_selector = "move"
+	panel.active_move_slot = 1
+	panel.selector_results = [{"name": "Bug Buzz", "calcName": "Bug Buzz", "type": "bug", "category": "special"}]
+	panel._on_inline_move_text_submitted("bug buz", 1)
+	if panel.defender_assumptions.get("assumedMoves") != ["U-turn", "Bug Buzz"]:
+		_fail("Enter must accept the first visible move suggestion instead of committing partial text")
+		return
 	panel._on_inline_move_text_submitted("Aura Sphere", 1)
 	if panel.defender_assumptions.get("assumedMoves") != ["U-turn", "Aura Sphere"]:
 		_fail("pressing Enter in an opponent result row must commit that move in place")
