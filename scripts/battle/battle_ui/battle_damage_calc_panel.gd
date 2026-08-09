@@ -257,6 +257,11 @@ func _render_your_damage_response(response: Dictionary) -> void:
 		if result_value is Dictionary:
 			_add_move_result_row(result_value as Dictionary, defender)
 
+	for warning_value: Variant in _as_array(response.get("warnings", [])):
+		var warning := str(warning_value).strip_edges()
+		if warning != "":
+			_add_status(warning, TEXT_MUTED)
+
 
 func _clear_content() -> void:
 	for child: Node in content.get_children():
@@ -463,7 +468,30 @@ func _add_move_result_row(result: Dictionary, defender: Dictionary) -> void:
 			meta_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 			bottom.add_child(meta_label)
 
+	var result_state := str(result.get("resultState", "supported"))
+	if result_state == "unsupported":
+		_add_row_notice(box, _t("battle.calc.unsupported_mechanic"), TEXT_ERROR)
+	elif result_state == "partial":
+		_add_row_notice(box, _t("battle.calc.partial_result"), TEXT_ACCENT)
+
+	for warning_value: Variant in _as_array(result.get("warnings", [])) + _as_array(result.get("koWarnings", [])):
+		var warning := str(warning_value).strip_edges()
+		if warning != "":
+			_add_row_notice(box, warning, TEXT_ERROR if result_state in ["unsupported", "error"] else TEXT_MUTED)
+
+	var end_of_turn := _as_dictionary(result.get("endOfTurn", {}))
+	if str(end_of_turn.get("state", "")) == "not_included":
+		_add_row_notice(box, _t("battle.calc.end_of_turn_not_included"), TEXT_MUTED)
+
 	content.add_child(panel)
+
+
+func _add_row_notice(parent: VBoxContainer, text: String, color: Color) -> void:
+	var label := _make_label(text, 10, color)
+	label.clip_text = false
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
+	parent.add_child(label)
 
 
 func _make_chip(text: String) -> Label:
