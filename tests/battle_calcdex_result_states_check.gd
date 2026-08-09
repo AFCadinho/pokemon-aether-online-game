@@ -89,6 +89,21 @@ func _run() -> void:
 		push_error("Calcdex levels must render as whole numbers")
 		quit(1)
 		return
+	if panel._make_move_source_label("owned_exact") != null:
+		push_error("Exact owned moves must not carry a redundant provenance badge")
+		quit(1)
+		return
+	var water_row_style: StyleBoxFlat = panel._make_result_row_style("OHKO", 0, "Water")
+	if not water_row_style.border_color.is_equal_approx(Color(0.20, 0.45, 0.80, 1.0)):
+		push_error("Move rows must use move-type color instead of KO severity for their accent rail")
+		quit(1)
+		return
+	var inline_move_input: LineEdit = panel._make_result_move_selector_button(0, "Thunderbolt")
+	if inline_move_input.right_icon == null or inline_move_input.mouse_default_cursor_shape != Control.CURSOR_IBEAM:
+		push_error("Inline opponent moves must visibly behave like editable text fields")
+		quit(1)
+		return
+	inline_move_input.queue_free()
 
 	var rendered_text := _collect_label_text(panel)
 	if not _contains_fragment(rendered_text, ["end-of-turn effects", "einde-van-de-beurt-effecten", "efeitos de fim de turno"]):

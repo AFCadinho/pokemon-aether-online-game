@@ -38,6 +38,18 @@ func _run() -> void:
 	var field_selector: OptionButton = panel._make_field_scenario_selector("weather", ["", "Rain"])
 	content.add_child(field_selector)
 	_assert_dropdown_style(field_selector, "Field selector")
+	var positive_stage_selector := OptionButton.new()
+	content.add_child(positive_stage_selector)
+	panel._apply_calcdex_dropdown_style(positive_stage_selector, 28.0, 10)
+	panel._apply_boost_stage_style(positive_stage_selector, 1, true, false)
+	if not positive_stage_selector.get_theme_color("font_color").is_equal_approx(Color(0.36, 0.86, 0.53, 1.0)):
+		_fail("Positive public stat stages lack their semantic color")
+	var negative_stage_selector := OptionButton.new()
+	content.add_child(negative_stage_selector)
+	panel._apply_calcdex_dropdown_style(negative_stage_selector, 28.0, 10)
+	panel._apply_boost_stage_style(negative_stage_selector, -1, false, true)
+	if not negative_stage_selector.get_theme_color("font_color").is_equal_approx(Color(0.96, 0.39, 0.39, 1.0)):
+		_fail("Negative edited stat stages lack their semantic color")
 
 	panel.sample_set_options = [{
 		"id": "fixture-set",

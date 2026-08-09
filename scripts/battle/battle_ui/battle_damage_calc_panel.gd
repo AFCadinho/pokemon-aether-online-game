@@ -17,6 +17,9 @@ const TEXT_SECONDARY := Color(0.72156864, 0.72156864, 0.72156864, 1.0)
 const TEXT_MUTED := Color(0.56, 0.6, 0.68, 1.0)
 const TEXT_ACCENT := Color(0.84705883, 0.7058824, 0.41568628, 1.0)
 const TEXT_ERROR := Color(0.9372549, 0.26666668, 0.26666668, 1.0)
+const DAMAGE_TEXT := Color(0.78, 0.88, 0.97, 1.0)
+const STAGE_POSITIVE := Color(0.36, 0.86, 0.53, 1.0)
+const STAGE_NEGATIVE := Color(0.96, 0.39, 0.39, 1.0)
 const ROW_BG := Color(0.014, 0.021, 0.036, 0.98)
 const ROW_BG_ALT := Color(0.022, 0.033, 0.052, 0.98)
 const ROW_BORDER := Color(0.14, 0.26, 0.42, 0.76)
@@ -145,7 +148,7 @@ func _ready() -> void:
 		localization_manager.locale_changed.connect(_on_locale_changed)
 	clip_contents = true
 	content.clip_contents = true
-	content.add_theme_constant_override("separation", 8)
+	content.add_theme_constant_override("separation", 6)
 	assumption_change_timer = Timer.new()
 	assumption_change_timer.one_shot = true
 	assumption_change_timer.wait_time = ASSUMPTION_CHANGE_DEBOUNCE_SECONDS
@@ -363,10 +366,10 @@ func _make_subtab_button(text: String, tab_id: String) -> Button:
 	var button := Button.new()
 	button.text = text
 	button.focus_mode = Control.FOCUS_ALL
-	button.custom_minimum_size = Vector2(0, 38)
+	button.custom_minimum_size = Vector2(0, 34)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.clip_text = true
-	button.add_theme_font_size_override("font_size", 13)
+	button.add_theme_font_size_override("font_size", 12)
 	button.add_theme_color_override("font_color", TEXT_PRIMARY if active_subtab == tab_id else TEXT_SECONDARY)
 	button.add_theme_stylebox_override(
 		"normal",
@@ -627,7 +630,7 @@ func _add_sample_set_selector(parent: Container) -> void:
 		selector.add_item(sample_set_error)
 		selector.set_item_disabled(selector.item_count - 1, true)
 	selector.item_selected.connect(_on_sample_set_selected.bind(selector))
-	_apply_calcdex_dropdown_style(selector, 34.0, 12)
+	_apply_calcdex_dropdown_style(selector, 32.0, 11)
 	parent.add_child(selector)
 
 
@@ -839,14 +842,15 @@ func _make_matchup_side(
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.clip_contents = true
-	panel.custom_minimum_size = Vector2(0, 98)
-	panel.add_theme_stylebox_override("panel", _make_card_stylebox(HERO_BG, HERO_BORDER, 10, 10.0, 8.0))
+	panel.custom_minimum_size = Vector2(0, 84)
+	var card_border := TEXT_ACCENT if is_attacker else Color(HERO_BORDER.r, HERO_BORDER.g, HERO_BORDER.b, 0.62)
+	panel.add_theme_stylebox_override("panel", _make_stylebox(HERO_BG, card_border, 9, 8.0, 5.0))
 	var card_row := HBoxContainer.new()
 	card_row.clip_contents = true
-	card_row.add_theme_constant_override("separation", 9)
+	card_row.add_theme_constant_override("separation", 7)
 	panel.add_child(card_row)
 	var icon := TextureRect.new()
-	icon.custom_minimum_size = Vector2(58, 58)
+	icon.custom_minimum_size = Vector2(50, 50)
 	icon.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -857,19 +861,19 @@ func _make_matchup_side(
 	var side := VBoxContainer.new()
 	side.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	side.clip_contents = true
-	side.add_theme_constant_override("separation", 3)
+	side.add_theme_constant_override("separation", 2)
 	card_row.add_child(side)
-	var caption_label := _make_label(caption.to_upper(), 10, TEXT_MUTED)
+	var caption_label := _make_label(caption.to_upper(), 9, TEXT_MUTED)
 	caption_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	side.add_child(caption_label)
 	if knowledge_snapshot.is_empty():
-		var name_label := _make_label(pokemon_name, 16, TEXT_PRIMARY)
+		var name_label := _make_label(pokemon_name, 15, TEXT_PRIMARY)
 		name_label.tooltip_text = pokemon_name
 		side.add_child(name_label)
 	else:
 		var selector := _make_pokemon_selector(relation, is_attacker)
-		selector.custom_minimum_size = Vector2(0, 30)
-		selector.add_theme_font_size_override("font_size", 14)
+		selector.custom_minimum_size = Vector2(0, 28)
+		selector.add_theme_font_size_override("font_size", 13)
 		side.add_child(selector)
 	var detail_label := _make_label(details, 10, TEXT_SECONDARY)
 	detail_label.tooltip_text = details
@@ -881,7 +885,7 @@ func _make_matchup_side(
 
 func _make_hp_bar(hp_percent: float) -> ProgressBar:
 	var bar := ProgressBar.new()
-	bar.custom_minimum_size = Vector2(0, 7)
+	bar.custom_minimum_size = Vector2(0, 6)
 	bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	bar.min_value = 0.0
 	bar.max_value = 100.0
@@ -932,7 +936,10 @@ func _add_move_results_table_shell() -> VBoxContainer:
 	var table := PanelContainer.new()
 	table.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	table.clip_contents = true
-	table.add_theme_stylebox_override("panel", _make_card_stylebox(PROFILE_BG, PROFILE_BORDER, 10, 8.0, 7.0))
+	table.add_theme_stylebox_override(
+		"panel",
+		_make_stylebox(PROFILE_BG, Color(PROFILE_BORDER.r, PROFILE_BORDER.g, PROFILE_BORDER.b, 0.42), 8, 6.0, 5.0)
+	)
 	content.add_child(table)
 	var table_box := VBoxContainer.new()
 	table_box.clip_contents = true
@@ -942,7 +949,7 @@ func _add_move_results_table_shell() -> VBoxContainer:
 	header_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header_panel.add_theme_stylebox_override(
 		"panel",
-		_make_stylebox(Color(0.025, 0.045, 0.072, 0.98), Color(0.16, 0.31, 0.48, 0.84), 6, 10.0, 2.0)
+		_make_stylebox(Color(0.025, 0.045, 0.072, 0.72), Color(0.16, 0.31, 0.48, 0.52), 5, 8.0, 1.0)
 	)
 	table_box.add_child(header_panel)
 	var header := HBoxContainer.new()
@@ -1008,7 +1015,7 @@ func _add_empty_editable_move_row(parent: VBoxContainer, slot: int, move_name: S
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.clip_contents = true
-	panel.custom_minimum_size = Vector2(0, 54)
+	panel.custom_minimum_size = Vector2(0, 52)
 	panel.add_theme_stylebox_override("panel", _make_result_row_style("", slot))
 	var row := HBoxContainer.new()
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1041,11 +1048,12 @@ func _make_table_header(text: String) -> Label:
 
 func _add_move_result_row(result: Dictionary, defender: Dictionary, parent: VBoxContainer, row_index: int, editable_slot: int = -1) -> void:
 	var primary_result_label := _get_primary_result_label(result, defender)
+	var move_type := _get_move_type(result)
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.clip_contents = true
-	panel.custom_minimum_size = Vector2(0, 54)
-	panel.add_theme_stylebox_override("panel", _make_result_row_style(primary_result_label, row_index))
+	panel.custom_minimum_size = Vector2(0, 52)
+	panel.add_theme_stylebox_override("panel", _make_result_row_style(primary_result_label, row_index, move_type))
 
 	var box := VBoxContainer.new()
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1075,7 +1083,6 @@ func _add_move_result_row(result: Dictionary, defender: Dictionary, parent: VBox
 
 	var is_status_move: bool = _is_status_result(result)
 	var percent_label: String = "" if is_status_move else _get_percent_label(result)
-	var move_type := _get_move_type(result)
 	var move_category := _get_move_category(result)
 	var move_source := _get_move_source(result)
 	if move_type != "" or move_category != "" or move_source != "":
@@ -1087,8 +1094,11 @@ func _add_move_result_row(result: Dictionary, defender: Dictionary, parent: VBox
 		if move_category != "":
 			meta_row.add_child(_make_move_category_label(move_category))
 		if move_source != "":
-			meta_row.add_child(_make_move_source_label(move_source))
-	var percent := _make_label(percent_label if percent_label != "" else "--", 15, TEXT_ACCENT)
+			var source_label := _make_move_source_label(move_source)
+			if source_label != null:
+				meta_row.add_child(source_label)
+	var percent_color := TEXT_MUTED if is_status_move else DAMAGE_TEXT
+	var percent := _make_label(percent_label if percent_label != "" else "--", 15, percent_color)
 	percent.custom_minimum_size = Vector2(DAMAGE_COLUMN_WIDTH, 0)
 	percent.size_flags_horizontal = Control.SIZE_SHRINK_END
 	percent.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -1123,9 +1133,10 @@ func _make_result_move_selector_button(slot: int, move_name: String) -> LineEdit
 	input.add_theme_font_size_override("font_size", 14 if move_name != "" else 12)
 	input.add_theme_color_override("font_color", TEXT_PRIMARY)
 	input.add_theme_color_override("font_placeholder_color", TEXT_MUTED)
-	input.add_theme_icon_override("right_icon", DROPDOWN_ARROW)
+	input.right_icon = DROPDOWN_ARROW
+	input.mouse_default_cursor_shape = Control.CURSOR_IBEAM
 	input.add_theme_stylebox_override("normal", _make_stylebox(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 5, 4.0, 1.0))
-	input.add_theme_stylebox_override("focus", _make_stylebox(TAB_ACTIVE_BG, CHIP_BORDER, 5, 4.0, 1.0))
+	input.add_theme_stylebox_override("focus", _make_stylebox(Color(TAB_ACTIVE_BG.r, TAB_ACTIVE_BG.g, TAB_ACTIVE_BG.b, 0.72), TEXT_ACCENT, 5, 4.0, 1.0))
 	input.focus_entered.connect(_on_inline_move_focus_entered.bind(slot, input))
 	input.focus_exited.connect(_on_catalog_assumption_focus_exited.bind(SELECTOR_MOVE))
 	input.text_changed.connect(_on_inline_move_text_changed.bind(slot, input))
@@ -1133,14 +1144,14 @@ func _make_result_move_selector_button(slot: int, move_name: String) -> LineEdit
 	return input
 
 
-func _make_result_row_style(primary_result_label: String, row_index: int) -> StyleBoxFlat:
+func _make_result_row_style(_primary_result_label: String, row_index: int, move_type: String = "") -> StyleBoxFlat:
 	var background := ROW_BG_ALT if row_index % 2 == 0 else ROW_BG
-	var style := _make_stylebox(background, Color(0, 0, 0, 0), 7, 10.0, 6.0)
+	var style := _make_stylebox(background, Color(0, 0, 0, 0), 7, 8.0, 5.0)
 	style.border_width_left = 3
 	style.border_width_top = 0
 	style.border_width_right = 0
 	style.border_width_bottom = 0
-	style.border_color = _get_result_border(primary_result_label)
+	style.border_color = TYPE_COLORS.get(move_type.to_lower(), ROW_BORDER)
 	return style
 
 
@@ -1166,6 +1177,8 @@ func _make_move_category_label(category: String) -> Label:
 
 
 func _make_move_source_label(source: String) -> Label:
+	if source == "owned_exact":
+		return null
 	var provenance_key := source
 	if source == "public_usage_prior":
 		provenance_key = "aggregate_prior"
@@ -1176,16 +1189,6 @@ func _make_move_source_label(source: String) -> Label:
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.add_theme_stylebox_override("normal", _make_stylebox(CHIP_BG, CHIP_BORDER, 8, 5.0, 1.0))
 	return label
-
-
-func _get_result_border(primary_result_label: String) -> Color:
-	var label := primary_result_label.to_upper()
-	if label == "OHKO" or label.contains("CHANCE"):
-		return KO_BORDER
-	if label.contains("2HKO"):
-		return Color(0.28, 0.48, 0.66, 0.9)
-	return ROW_BORDER
-
 
 func _add_result_footnotes(response: Dictionary, results: Array) -> void:
 	var excludes_end_of_turn := false
@@ -1332,17 +1335,17 @@ func _add_live_assumption_controls(assumptions: Dictionary, _prior_provenance: S
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.clip_contents = true
-	panel.add_theme_stylebox_override("panel", _make_card_stylebox(PROFILE_BG, Color(PROFILE_BORDER.r, PROFILE_BORDER.g, PROFILE_BORDER.b, 0.52), 9, 10.0, 8.0))
+	panel.add_theme_stylebox_override("panel", _make_stylebox(PROFILE_BG, Color(PROFILE_BORDER.r, PROFILE_BORDER.g, PROFILE_BORDER.b, 0.38), 8, 8.0, 6.0))
 	content.add_child(panel)
 
 	var box := VBoxContainer.new()
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	box.clip_contents = true
-	box.add_theme_constant_override("separation", 4)
+	box.add_theme_constant_override("separation", 3)
 	panel.add_child(box)
 	var setup_row := HBoxContainer.new()
 	setup_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	setup_row.add_theme_constant_override("separation", 6)
+	setup_row.add_theme_constant_override("separation", 4)
 	box.add_child(setup_row)
 	_add_sample_set_selector(setup_row)
 	if not edited_assumption_fields.is_empty() or not field_scenario.is_empty():
@@ -1352,7 +1355,7 @@ func _add_live_assumption_controls(assumptions: Dictionary, _prior_provenance: S
 	var primary_row := HBoxContainer.new()
 	primary_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	primary_row.clip_contents = true
-	primary_row.add_theme_constant_override("separation", 4)
+	primary_row.add_theme_constant_override("separation", 3)
 	box.add_child(primary_row)
 
 	primary_row.add_child(_make_assumption_summary_button(
@@ -1408,6 +1411,8 @@ func _add_boost_stage_controls(parent: VBoxContainer, assumptions: Dictionary) -
 	header.custom_minimum_size = Vector2(0, 14)
 	parent.add_child(header)
 	var values := _get_effective_opponent_boosts(assumptions)
+	var public_values := _get_public_opponent_boosts()
+	var boosts_are_edited := bool(edited_assumption_fields.get("boosts", false))
 	var row := HBoxContainer.new()
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.clip_contents = true
@@ -1426,14 +1431,49 @@ func _add_boost_stage_controls(parent: VBoxContainer, assumptions: Dictionary) -
 		cell.add_child(label)
 		var selector := OptionButton.new()
 		selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		var current_stage := clampi(int(values.get(stat_key, 0)), -6, 6)
 		for stage in range(-6, 7):
 			selector.add_item("+%d" % stage if stage > 0 else str(stage))
 			selector.set_item_metadata(selector.item_count - 1, stage)
-			if stage == clampi(int(values.get(stat_key, 0)), -6, 6):
+			if stage == current_stage:
 				selector.select(selector.item_count - 1)
 		selector.item_selected.connect(_on_boost_stage_selected.bind(selector, stat_key))
 		_apply_calcdex_dropdown_style(selector, 28.0, 10)
+		_apply_boost_stage_style(selector, current_stage, public_values.has(stat_key), boosts_are_edited)
 		cell.add_child(selector)
+
+
+func _get_public_opponent_boosts() -> Dictionary:
+	var opponent := _get_snapshot_pokemon_by_ref(selected_opponent_ref)
+	if opponent.is_empty():
+		return {}
+	var knowledge := CALCDEX_SNAPSHOT.get_knowledge_value(opponent, "boosts")
+	if str(knowledge.get("state", "")) != "known":
+		return {}
+	return _as_dictionary(knowledge.get("value", {})).duplicate(true)
+
+
+func _apply_boost_stage_style(selector: OptionButton, stage: int, is_public: bool, is_edited: bool) -> void:
+	var font_color := TEXT_SECONDARY
+	var background := Color(0.018, 0.029, 0.047, 0.84)
+	if stage > 0:
+		font_color = STAGE_POSITIVE
+		background = Color(0.035, 0.12, 0.075, 0.88)
+	elif stage < 0:
+		font_color = STAGE_NEGATIVE
+		background = Color(0.14, 0.035, 0.045, 0.88)
+	var border := Color(0.18, 0.31, 0.46, 0.68)
+	if is_public and not is_edited:
+		border = Color(HERO_BORDER.r, HERO_BORDER.g, HERO_BORDER.b, 0.86)
+	elif is_edited:
+		border = CHIP_EDITED_BORDER
+	selector.add_theme_color_override("font_color", font_color)
+	selector.add_theme_color_override("font_hover_color", font_color.lightened(0.08))
+	selector.add_theme_color_override("font_pressed_color", font_color)
+	selector.add_theme_stylebox_override("normal", _make_stylebox(background, border, 6, 7.0, 2.0))
+	selector.add_theme_stylebox_override("hover", _make_stylebox(background.lightened(0.05), border.lightened(0.10), 6, 7.0, 2.0))
+	selector.add_theme_stylebox_override("pressed", _make_stylebox(background.lightened(0.02), border.lightened(0.16), 6, 7.0, 2.0))
+	selector.add_theme_stylebox_override("focus", _make_stylebox(background, TEXT_ACCENT, 6, 7.0, 2.0))
 
 
 func _get_effective_opponent_boosts(assumptions: Dictionary = {}) -> Dictionary:
@@ -1581,11 +1621,11 @@ func _make_disclosure_button(text: String, expanded: bool, pressed_callback: Cal
 	var button := Button.new()
 	button.text = "%s  %s" % ["-" if expanded else "+", text]
 	button.focus_mode = Control.FOCUS_ALL
-	button.custom_minimum_size = Vector2(0, 30)
+	button.custom_minimum_size = Vector2(0, 28)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.clip_text = true
-	button.add_theme_font_size_override("font_size", 11)
+	button.add_theme_font_size_override("font_size", 10)
 	button.add_theme_color_override("font_color", TEXT_MUTED)
 	button.add_theme_stylebox_override("normal", _make_stylebox(CHIP_BG, CHIP_BORDER, 4, 6.0, 2.0))
 	button.add_theme_stylebox_override("hover", _make_stylebox(TAB_ACTIVE_BG, CHIP_BORDER.lightened(0.12), 4, 6.0, 2.0))
@@ -1684,16 +1724,16 @@ func _make_assumption_reset_button() -> Button:
 	button.text = _t("common.reset").to_upper()
 	button.tooltip_text = _t("battle.calc.reset_setup_tooltip")
 	button.focus_mode = Control.FOCUS_ALL
-	button.custom_minimum_size = Vector2(68, 26)
+	button.custom_minimum_size = Vector2(58, 24)
 	button.size_flags_horizontal = Control.SIZE_SHRINK_END
 	button.clip_text = true
-	button.add_theme_font_size_override("font_size", 9)
+	button.add_theme_font_size_override("font_size", 8)
 	button.add_theme_color_override("font_color", Color(0.62, 0.70, 0.80, 1.0))
 	button.add_theme_color_override("font_hover_color", TEXT_PRIMARY)
 	button.add_theme_color_override("font_pressed_color", TEXT_ACCENT)
 	button.add_theme_stylebox_override(
 		"normal",
-		_make_stylebox(Color(0.018, 0.029, 0.047, 0.76), Color(0.18, 0.29, 0.43, 0.72), 6, 8.0, 2.0)
+		_make_stylebox(Color(0.018, 0.029, 0.047, 0.58), Color(0.18, 0.29, 0.43, 0.46), 5, 6.0, 1.0)
 	)
 	button.add_theme_stylebox_override(
 		"hover",
@@ -1716,11 +1756,11 @@ func _make_assumption_summary_button(caption: String, value: String, editor_kind
 	var button := Button.new()
 	button.tooltip_text = _fallback_text(tooltip, "%s: %s" % [caption, value])
 	button.focus_mode = Control.FOCUS_ALL
-	button.custom_minimum_size = Vector2(0, 52)
+	button.custom_minimum_size = Vector2(0, 46)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	var is_active: bool = active_selector == editor_kind
 	var is_edited: bool = bool(edited_assumption_fields.get(editor_kind, false))
-	var chip_border: Color = CHIP_BORDER
+	var chip_border := Color(CHIP_BORDER.r, CHIP_BORDER.g, CHIP_BORDER.b, 0.46)
 	if is_edited:
 		chip_border = CHIP_EDITED_BORDER
 	var value_color: Color = TEXT_SECONDARY
@@ -1730,24 +1770,24 @@ func _make_assumption_summary_button(caption: String, value: String, editor_kind
 		value_color = TEXT_ACCENT
 	button.add_theme_stylebox_override(
 		"normal",
-		_make_stylebox(TAB_ACTIVE_BG if is_active else CHIP_BG, chip_border, 7, 8.0, 5.0)
+		_make_stylebox(TAB_ACTIVE_BG if is_active else Color(CHIP_BG.r, CHIP_BG.g, CHIP_BG.b, 0.72), chip_border, 6, 7.0, 4.0)
 	)
 	button.add_theme_stylebox_override("hover", _make_stylebox(TAB_ACTIVE_BG.lightened(0.08), chip_border.lightened(0.12), 7, 8.0, 5.0))
 	button.add_theme_stylebox_override("pressed", _make_stylebox(TAB_ACTIVE_BG, chip_border.lightened(0.18), 7, 8.0, 5.0))
 
 	var labels := VBoxContainer.new()
 	labels.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	labels.offset_left = 9.0
-	labels.offset_top = 5.0
-	labels.offset_right = -9.0
-	labels.offset_bottom = -5.0
+	labels.offset_left = 8.0
+	labels.offset_top = 4.0
+	labels.offset_right = -8.0
+	labels.offset_bottom = -4.0
 	labels.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	labels.add_theme_constant_override("separation", 1)
 	button.add_child(labels)
 	var caption_label := _make_label(caption.to_upper(), 8, TEXT_MUTED if not is_active else Color(0.65, 0.82, 0.94, 1.0))
 	caption_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	labels.add_child(caption_label)
-	var value_label := _make_label(value, 12, value_color)
+	var value_label := _make_label(value, 11, value_color)
 	value_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	value_label.tooltip_text = button.tooltip_text
 	labels.add_child(value_label)
