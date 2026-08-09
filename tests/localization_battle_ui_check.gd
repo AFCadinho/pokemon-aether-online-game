@@ -81,7 +81,7 @@ func _run() -> void:
 		"Team Preview · Choosing",
 		"Time 00:45",
 		"FNT",
-		"Your Dmg",
+		"Damage dealt",
 		"Rain: 3",
 		"Atk"
 	)
@@ -97,7 +97,7 @@ func _run() -> void:
 		"Teamvoorbeeld · Kiezen",
 		"Tijd 00:45",
 		"K.O.",
-		"Jouw schade",
+		"Uitgedeelde schade",
 		"Regen: 3",
 		"Aan"
 	)
@@ -113,7 +113,7 @@ func _run() -> void:
 		"Prévia da Equipe · Escolhendo",
 		"Tempo 00:45",
 		"FNT",
-		"Seu dano",
+		"Dano causado",
 		"Chuva: 3",
 		"Atq"
 	)

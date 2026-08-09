@@ -16,6 +16,8 @@ const ROW_BG := Color(0.014, 0.021, 0.036, 0.98)
 const ROW_BORDER := Color(0.14, 0.26, 0.42, 0.76)
 const PROFILE_BG := Color(0.021, 0.033, 0.058, 0.95)
 const PROFILE_BORDER := Color(0.18, 0.31, 0.49, 0.74)
+const HERO_BG := Color(0.018, 0.047, 0.078, 0.98)
+const HERO_BORDER := Color(0.16, 0.48, 0.70, 0.92)
 const CHIP_BG := Color(0.028, 0.043, 0.073, 0.96)
 const CHIP_BORDER := Color(0.2, 0.34, 0.52, 0.82)
 const CHIP_EDITED_BORDER := Color(0.62, 0.48, 0.23, 0.9)
@@ -83,6 +85,8 @@ var field_scenario: Dictionary = {}
 var smart_range_mode := "likely"
 var pinned_candidate_id := ""
 var use_observation_inference := false
+var advanced_scenario_expanded := false
+var warning_details_expanded := false
 
 
 func _ready() -> void:
@@ -263,11 +267,7 @@ func _render_your_damage_response(response: Dictionary) -> void:
 	for result_value: Variant in results:
 		if result_value is Dictionary:
 			_add_move_result_row(result_value as Dictionary, defender)
-
-	for warning_value: Variant in _as_array(response.get("warnings", [])):
-		var warning := str(warning_value).strip_edges()
-		if warning != "":
-			_add_status(_warning_label(warning), TEXT_MUTED)
+	_add_result_footnotes(response, results)
 
 
 func _clear_content() -> void:
@@ -291,7 +291,7 @@ func _make_subtab_button(text: String, tab_id: String) -> Button:
 	var button := Button.new()
 	button.text = text
 	button.focus_mode = Control.FOCUS_ALL
-	button.custom_minimum_size = Vector2(0, 24)
+	button.custom_minimum_size = Vector2(0, 30)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.clip_text = true
 	button.add_theme_font_size_override("font_size", 12)
@@ -510,7 +510,7 @@ func _add_profile_summary(attacker_name: String, defender_name: String, hp_label
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.clip_contents = true
-	panel.add_theme_stylebox_override("panel", _make_stylebox(PROFILE_BG, PROFILE_BORDER, 5, 8.0, 5.0))
+	panel.add_theme_stylebox_override("panel", _make_stylebox(HERO_BG, HERO_BORDER, 7, 10.0, 7.0))
 	content.add_child(panel)
 
 	var box := VBoxContainer.new()
@@ -519,16 +519,26 @@ func _add_profile_summary(attacker_name: String, defender_name: String, hp_label
 	box.add_theme_constant_override("separation", 3)
 	panel.add_child(box)
 
-	var matchup := _make_label(
-		_t("battle.calc.matchup", {
-			"attacker": _fallback_text(attacker_name, _t("battle.calc.your_pokemon")),
-			"defender": _fallback_text(defender_name, _t("battle.calc.opponent")),
-		}),
-		13,
-		TEXT_PRIMARY
-	)
-	matchup.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	box.add_child(matchup)
+	var matchup_row := HBoxContainer.new()
+	matchup_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	matchup_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	matchup_row.add_theme_constant_override("separation", 8)
+	box.add_child(matchup_row)
+	matchup_row.add_child(_make_matchup_side(
+		_t("battle.calc.attacker"),
+		_fallback_text(attacker_name, _t("battle.calc.your_pokemon")),
+		HORIZONTAL_ALIGNMENT_RIGHT
+	))
+	var arrow := _make_label("->", 13, TEXT_ACCENT)
+	arrow.custom_minimum_size = Vector2(28, 0)
+	arrow.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	arrow.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	matchup_row.add_child(arrow)
+	matchup_row.add_child(_make_matchup_side(
+		_t("battle.calc.target"),
+		_fallback_text(defender_name, _t("battle.calc.opponent")),
+		HORIZONTAL_ALIGNMENT_LEFT
+	))
 
 	var info := HBoxContainer.new()
 	info.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -544,6 +554,20 @@ func _add_profile_summary(attacker_name: String, defender_name: String, hp_label
 		var boosts := _make_label(boosts_label, 10, TEXT_ACCENT)
 		boosts.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		box.add_child(boosts)
+
+
+func _make_matchup_side(caption: String, pokemon_name: String, alignment: HorizontalAlignment) -> VBoxContainer:
+	var side := VBoxContainer.new()
+	side.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	side.add_theme_constant_override("separation", 0)
+	var caption_label := _make_label(caption.to_upper(), 9, TEXT_MUTED)
+	caption_label.horizontal_alignment = alignment
+	side.add_child(caption_label)
+	var name_label := _make_label(pokemon_name, 14, TEXT_PRIMARY)
+	name_label.horizontal_alignment = alignment
+	name_label.tooltip_text = pokemon_name
+	side.add_child(name_label)
+	return side
 
 
 func _add_status(text: String, color: Color) -> void:
@@ -595,10 +619,11 @@ func _add_public_fact_chips() -> void:
 
 
 func _get_snapshot_pokemon_by_ref(pokemon_ref: String) -> Dictionary:
-	for entry_value: Variant in _as_array(knowledge_snapshot.get("opponentPokemon", [])):
-		var entry := _as_dictionary(entry_value)
-		if str(entry.get("pokemonRef", "")) == pokemon_ref:
-			return entry
+	for collection_key: String in ["viewerPokemon", "opponentPokemon"]:
+		for entry_value: Variant in _as_array(knowledge_snapshot.get(collection_key, [])):
+			var entry := _as_dictionary(entry_value)
+			if str(entry.get("pokemonRef", "")) == pokemon_ref:
+				return entry
 	return {}
 
 
@@ -609,10 +634,11 @@ func _get_provenance_label(knowledge: Dictionary) -> String:
 
 
 func _add_move_result_row(result: Dictionary, defender: Dictionary) -> void:
+	var primary_result_label := _get_primary_result_label(result, defender)
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.clip_contents = true
-	panel.add_theme_stylebox_override("panel", _make_stylebox(ROW_BG, ROW_BORDER, 5, 7.0, 5.0))
+	panel.add_theme_stylebox_override("panel", _make_stylebox(ROW_BG, _get_result_border(primary_result_label), 6, 9.0, 6.0))
 
 	var box := VBoxContainer.new()
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -632,7 +658,7 @@ func _add_move_result_row(result: Dictionary, defender: Dictionary) -> void:
 	move_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	top.add_child(move_label)
 
-	var ko_label := _make_result_badge(_get_primary_result_label(result, defender))
+	var ko_label := _make_result_badge(primary_result_label)
 	ko_label.custom_minimum_size = Vector2(KO_COLUMN_WIDTH, 0)
 	ko_label.size_flags_horizontal = Control.SIZE_SHRINK_END
 	top.add_child(ko_label)
@@ -648,7 +674,7 @@ func _add_move_result_row(result: Dictionary, defender: Dictionary) -> void:
 		box.add_child(bottom)
 
 		if percent_label != "" and percent_label != "--":
-			var percent := _make_label(percent_label, 12, TEXT_SECONDARY)
+			var percent := _make_label(percent_label, 15, TEXT_ACCENT)
 			percent.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			bottom.add_child(percent)
 
@@ -669,11 +695,63 @@ func _add_move_result_row(result: Dictionary, defender: Dictionary) -> void:
 		if warning != "":
 			_add_row_notice(box, _warning_label(warning), TEXT_ERROR if result_state in ["unsupported", "error"] else TEXT_MUTED)
 
-	var end_of_turn := _as_dictionary(result.get("endOfTurn", {}))
-	if str(end_of_turn.get("state", "")) == "not_included":
-		_add_row_notice(box, _t("battle.calc.end_of_turn_not_included"), TEXT_MUTED)
-
 	content.add_child(panel)
+
+
+func _get_result_border(primary_result_label: String) -> Color:
+	var label := primary_result_label.to_upper()
+	if label == "OHKO" or label.contains("CHANCE"):
+		return KO_BORDER
+	if label.contains("2HKO"):
+		return Color(0.28, 0.48, 0.66, 0.9)
+	return ROW_BORDER
+
+
+func _add_result_footnotes(response: Dictionary, results: Array) -> void:
+	var excludes_end_of_turn := false
+	for result_value: Variant in results:
+		var result := _as_dictionary(result_value)
+		var end_of_turn := _as_dictionary(result.get("endOfTurn", {}))
+		if str(end_of_turn.get("state", "")) == "not_included":
+			excludes_end_of_turn = true
+			break
+	if excludes_end_of_turn:
+		var direct_note := _make_label(_t("battle.calc.end_of_turn_not_included"), 10, TEXT_MUTED)
+		direct_note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		direct_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		direct_note.clip_text = false
+		content.add_child(direct_note)
+	var details: Array[String] = []
+	for warning_value: Variant in _as_array(response.get("warnings", [])):
+		var warning := str(warning_value).strip_edges()
+		if warning != "":
+			details.append(_warning_label(warning))
+	if details.is_empty():
+		return
+	var notes_panel := PanelContainer.new()
+	notes_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	notes_panel.add_theme_stylebox_override("panel", _make_stylebox(PROFILE_BG, PROFILE_BORDER, 6, 7.0, 5.0))
+	content.add_child(notes_panel)
+	var notes_box := VBoxContainer.new()
+	notes_box.add_theme_constant_override("separation", 3)
+	notes_panel.add_child(notes_box)
+	var summary := _make_disclosure_button(
+		_t("battle.calc.notes_count", {"count": details.size()}),
+		warning_details_expanded,
+		_on_warning_details_pressed
+	)
+	notes_box.add_child(summary)
+	if warning_details_expanded:
+		for detail: String in details:
+			var detail_label := _make_label("• %s" % detail, 10, TEXT_MUTED)
+			detail_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			detail_label.clip_text = false
+			notes_box.add_child(detail_label)
+
+
+func _on_warning_details_pressed() -> void:
+	warning_details_expanded = not warning_details_expanded
+	_render_current_state()
 
 
 func _add_row_notice(parent: VBoxContainer, text: String, color: Color) -> void:
@@ -752,6 +830,9 @@ func _add_live_assumption_controls(assumptions: Dictionary) -> void:
 	box.clip_contents = true
 	box.add_theme_constant_override("separation", 5)
 	panel.add_child(box)
+	var setup_title := _make_label(_t("battle.calc.opponent_setup"), 11, TEXT_SECONDARY)
+	setup_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	box.add_child(setup_title)
 
 	var primary_row := HBoxContainer.new()
 	primary_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -789,10 +870,22 @@ func _add_live_assumption_controls(assumptions: Dictionary) -> void:
 
 
 func _add_advanced_scenario_controls(parent: VBoxContainer, assumptions: Dictionary) -> void:
-	var title := _make_label(_t("battle.calc.advanced_scenario"), 10, TEXT_MUTED)
-	parent.add_child(title)
+	var active_conditions: Array[String] = []
+	for key: String in ["weather", "terrain"]:
+		var condition := str(field_scenario.get(key, "")).strip_edges()
+		if condition != "":
+			active_conditions.append(condition)
+	var condition_summary := _t("common.none") if active_conditions.is_empty() else _join_string_array(active_conditions, " · ")
+	parent.add_child(_make_disclosure_button(
+		_t("battle.calc.battle_conditions", {"conditions": condition_summary}),
+		advanced_scenario_expanded,
+		_on_advanced_scenario_pressed
+	))
+	if not advanced_scenario_expanded:
+		return
 	var field_row := HBoxContainer.new()
 	field_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	field_row.add_theme_constant_override("separation", 5)
 	field_row.add_child(_make_field_scenario_selector("weather", ["", "Rain", "Sun", "Sand", "Hail", "Snow"]))
 	field_row.add_child(_make_field_scenario_selector("terrain", ["", "Electric", "Grassy", "Misty", "Psychic"]))
 	parent.add_child(field_row)
@@ -803,6 +896,28 @@ func _add_advanced_scenario_controls(parent: VBoxContainer, assumptions: Diction
 		moves_input.max_length = 403
 		moves_input.text_changed.connect(_on_assumed_moves_changed)
 		parent.add_child(moves_input)
+
+
+func _on_advanced_scenario_pressed() -> void:
+	advanced_scenario_expanded = not advanced_scenario_expanded
+	_render_current_state()
+
+
+func _make_disclosure_button(text: String, expanded: bool, pressed_callback: Callable) -> Button:
+	var button := Button.new()
+	button.text = "%s  %s" % ["-" if expanded else "+", text]
+	button.focus_mode = Control.FOCUS_ALL
+	button.custom_minimum_size = Vector2(0, 26)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	button.clip_text = true
+	button.add_theme_font_size_override("font_size", 10)
+	button.add_theme_color_override("font_color", TEXT_MUTED)
+	button.add_theme_stylebox_override("normal", _make_stylebox(CHIP_BG, CHIP_BORDER, 4, 6.0, 2.0))
+	button.add_theme_stylebox_override("hover", _make_stylebox(TAB_ACTIVE_BG, CHIP_BORDER.lightened(0.12), 4, 6.0, 2.0))
+	button.add_theme_stylebox_override("pressed", _make_stylebox(TAB_ACTIVE_BG, TEXT_ACCENT, 4, 6.0, 2.0))
+	button.pressed.connect(pressed_callback)
+	return button
 
 
 func _make_field_scenario_selector(key: String, values: Array) -> OptionButton:
@@ -1497,10 +1612,19 @@ func _get_pokemon_label(value: Variant, fallback: String) -> String:
 
 
 func _get_hp_label(pokemon: Dictionary) -> String:
-	var hp := _as_dictionary(pokemon.get("hp", {}))
-	var display := str(hp.get("display", "")).strip_edges()
+	var hp := _get_pokemon_hp(pokemon)
+	var display_value: Variant = hp.get("display", "")
+	var display := str(display_value).strip_edges() if not (display_value is Dictionary) else ""
 	if display != "":
 		return _t("battle.calc.hp_value", {"value": display})
+	if display_value is Dictionary:
+		var display_data := _as_dictionary(display_value)
+		var current_value: Variant = display_data.get("current")
+		var maximum_value: Variant = display_data.get("maximum")
+		if typeof(current_value) == TYPE_INT and typeof(maximum_value) == TYPE_INT and int(maximum_value) > 0:
+			if str(display_data.get("scale", "")) == "public_percent_100":
+				return _t("battle.calc.hp_percent", {"percent": int(current_value)})
+			return _t("battle.calc.hp_value", {"value": "%d/%d" % [int(current_value), int(maximum_value)]})
 
 	var percent_value: Variant = _get_percent_number(hp.get("percent"))
 	if percent_value != null:
@@ -1509,8 +1633,23 @@ func _get_hp_label(pokemon: Dictionary) -> String:
 
 
 func _get_level_label(pokemon: Dictionary) -> String:
-	var level := str(pokemon.get("level", "")).strip_edges()
+	var level_value: Variant = pokemon.get("level", "")
+	if level_value is Dictionary:
+		level_value = (level_value as Dictionary).get("value", "")
+	if str(level_value).strip_edges() == "":
+		var snapshot_pokemon := _get_snapshot_pokemon_by_ref(str(pokemon.get("pokemonRef", "")))
+		var snapshot_level := _as_dictionary(snapshot_pokemon.get("level", {}))
+		level_value = snapshot_level.get("value", "")
+	var level := str(level_value).strip_edges()
 	return _t("battle.calc.level", {"level": level}) if level != "" else _t("battle.calc.level_unknown")
+
+
+func _get_pokemon_hp(pokemon: Dictionary) -> Dictionary:
+	var hp := _as_dictionary(pokemon.get("hp", {}))
+	if not hp.is_empty():
+		return hp
+	var snapshot_pokemon := _get_snapshot_pokemon_by_ref(str(pokemon.get("pokemonRef", "")))
+	return _as_dictionary(snapshot_pokemon.get("hp", {}))
 
 
 func _get_move_name(result: Dictionary) -> String:
@@ -1571,13 +1710,15 @@ func _get_primary_result_label(result: Dictionary, defender: Dictionary) -> Stri
 	if _is_status_result(result):
 		return _t("battle.calc.status")
 
+	var min_percent_value: Variant = _get_percent_number(result.get("minPercent"))
+	var max_percent_value: Variant = _get_percent_number(result.get("maxPercent"))
+	if min_percent_value != null and float(min_percent_value) >= 100.0:
+		return "OHKO"
 	var ko_summary_label := str(result.get("koSummaryLabel", "")).strip_edges()
 	if ko_summary_label != "":
 		return ko_summary_label
 
 	var hp_percent_value: Variant = _get_defender_hp_percent(defender)
-	var min_percent_value: Variant = _get_percent_number(result.get("minPercent"))
-	var max_percent_value: Variant = _get_percent_number(result.get("maxPercent"))
 	if hp_percent_value != null and min_percent_value != null and max_percent_value != null:
 		var hp_percent := float(hp_percent_value)
 		var min_percent := float(min_percent_value)
@@ -1597,7 +1738,6 @@ func _get_primary_result_label(result: Dictionary, defender: Dictionary) -> Stri
 				if best_hits == worst_hits:
 					return "%dHKO" % best_hits
 				return "%d-%dHKO" % [best_hits, worst_hits]
-
 	var hko_label := _get_hko_label(result)
 	return hko_label
 
@@ -1794,8 +1934,16 @@ func _evs_equal(left: Dictionary, right: Dictionary) -> bool:
 
 
 func _get_defender_hp_percent(defender: Dictionary) -> Variant:
-	var hp := _as_dictionary(defender.get("hp", {}))
-	return _get_percent_number(hp.get("percent"))
+	var hp := _get_pokemon_hp(defender)
+	var percent: Variant = _get_percent_number(hp.get("percent"))
+	if percent != null:
+		return percent
+	var display := _as_dictionary(hp.get("display", {}))
+	var current_value: Variant = _get_percent_number(display.get("current"))
+	var maximum_value: Variant = _get_percent_number(display.get("maximum"))
+	if current_value != null and maximum_value != null and float(maximum_value) > 0.0:
+		return float(current_value) * 100.0 / float(maximum_value)
+	return null
 
 
 func _get_boosts_label(pokemon: Dictionary) -> String:

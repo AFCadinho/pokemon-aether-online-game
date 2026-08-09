@@ -33,17 +33,35 @@ func _run() -> void:
 		"warnings": ["Opponent nature is assumed."],
 	})
 	await process_frame
+	var collapsed_text := _collect_visible_text(panel)
+	if not _contains_fragment(collapsed_text, ["calculation notes", "opmerkingen bij de berekening", "observações do cálculo"]):
+		push_error("Calcdex calculation notes must have a compact summary")
+		quit(1)
+		return
+	panel._on_warning_details_pressed()
+	await process_frame
+	var corrected_ko := panel._get_primary_result_label(
+		{"minPercent": 147.2, "maxPercent": 173.6, "koSummaryLabel": "0% chance to OHKO"},
+		{"hp": {"percent": 100.0}}
+	)
+	if corrected_ko != "OHKO":
+		push_error("A guaranteed percent range must override a contradictory KO summary")
+		quit(1)
+		return
 
 	var rendered_text := _collect_label_text(panel)
+	if not _contains_fragment(rendered_text, ["end-of-turn effects", "einde-van-de-beurt-effecten", "efeitos de fim de turno"]):
+		push_error("Missing consolidated end-of-turn footnote")
+		quit(1)
+		return
 	var expected := [
 		["battle.calc.unsupported_mechanic", "This mechanic is not safely supported.", "Deze mechanic wordt nog niet veilig ondersteund."],
 		["Unsupported public mechanic."],
 		["Recovery is unknown."],
-		["battle.calc.end_of_turn_not_included", "Direct damage only; end-of-turn effects are not included.", "Alleen directe schade; einde-van-de-beurt-effecten zijn niet meegenomen."],
 		["Opponent nature is assumed."],
 	]
 	for alternatives: Array in expected:
-		if not _contains_any(rendered_text, alternatives):
+		if not _contains_fragment(rendered_text, alternatives):
 			push_error("Missing visible Calcdex result state: %s" % str(alternatives))
 			quit(1)
 			return
@@ -60,8 +78,20 @@ func _collect_label_text(node: Node) -> Array[String]:
 	return result
 
 
-func _contains_any(values: Array[String], alternatives: Array) -> bool:
-	for alternative: Variant in alternatives:
-		if str(alternative) in values:
-			return true
+func _collect_visible_text(node: Node) -> Array[String]:
+	var result: Array[String] = []
+	if node is Label:
+		result.append((node as Label).text)
+	elif node is Button:
+		result.append((node as Button).text)
+	for child: Node in node.get_children():
+		result.append_array(_collect_visible_text(child))
+	return result
+
+
+func _contains_fragment(values: Array[String], alternatives: Array) -> bool:
+	for value: String in values:
+		for alternative: Variant in alternatives:
+			if value.contains(str(alternative)):
+				return true
 	return false
