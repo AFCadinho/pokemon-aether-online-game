@@ -28,6 +28,7 @@ const TAB_BG := Color(0.024, 0.036, 0.062, 0.92)
 const TAB_ACTIVE_BG := Color(0.124, 0.203, 0.332, 0.98)
 const TAB_BORDER := Color(0.19, 0.31, 0.48, 0.9)
 const SUSPICIOUS_PERCENT_LIMIT := 999.0
+const DAMAGE_COLUMN_WIDTH := 132.0
 const KO_COLUMN_WIDTH := 92.0
 const SUBTAB_YOUR_DAMAGE := "your"
 const SUBTAB_THEIR_DAMAGE := "their"
@@ -50,7 +51,7 @@ const EV_PRESETS := [
 ]
 const EV_INPUT_ROWS := [["hp", "atk"], ["def", "spa"], ["spd", "spe"]]
 
-@onready var content: VBoxContainer = $VBoxContainer
+var content: VBoxContainer
 
 var active_subtab := SUBTAB_YOUR_DAMAGE
 var is_loading := false
@@ -90,6 +91,12 @@ var warning_details_expanded := false
 
 
 func _ready() -> void:
+	content = get_node_or_null("CalcScroll/VBoxContainer") as VBoxContainer
+	if content == null:
+		content = get_node_or_null("VBoxContainer") as VBoxContainer
+	if content == null:
+		push_error("BattleDamageCalcPanel requires a VBoxContainer content node")
+		return
 	localization_manager = get_tree().root.get_node_or_null("LocalizationManager")
 	if localization_manager != null and not localization_manager.locale_changed.is_connected(_on_locale_changed):
 		localization_manager.locale_changed.connect(_on_locale_changed)
@@ -209,7 +216,6 @@ func _flush_pending_assumption_changes() -> void:
 func _render_current_state() -> void:
 	_clear_content()
 	_add_subtabs()
-	_add_matchup_selectors()
 	_add_smart_range_controls()
 
 	if not last_response.is_empty():
@@ -254,7 +260,9 @@ func _render_your_damage_response(response: Dictionary) -> void:
 		_get_pokemon_label(defender, _t("battle.calc.opponent")),
 		_get_hp_label(defender),
 		_get_level_label(defender),
-		_get_boosts_label(attacker)
+		_get_boosts_label(attacker),
+		_get_hp_label(attacker),
+		_get_level_label(attacker)
 	)
 	_add_assumption_chips(attacker if str(attacker.get("relation", "")) == "opponent" else defender, response)
 	_add_candidate_summary(response)
@@ -264,9 +272,7 @@ func _render_your_damage_response(response: Dictionary) -> void:
 		_add_status(_fallback_text(str(response.get("emptyReason", "")), _t("battle.calc.no_results")), TEXT_SECONDARY)
 		return
 
-	for result_value: Variant in results:
-		if result_value is Dictionary:
-			_add_move_result_row(result_value as Dictionary, defender)
+	_add_move_results_table(results, defender)
 	_add_result_footnotes(response, results)
 
 
@@ -441,19 +447,6 @@ func _on_candidate_pin_pressed(candidate_id: String) -> void:
 	matchup_selection_changed.emit()
 
 
-func _add_matchup_selectors() -> void:
-	if knowledge_snapshot.is_empty():
-		return
-	var row := HBoxContainer.new()
-	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.add_theme_constant_override("separation", 4)
-	content.add_child(row)
-	var attacker_relation := "opponent" if active_subtab == SUBTAB_THEIR_DAMAGE else "viewer"
-	var defender_relation := "viewer" if active_subtab == SUBTAB_THEIR_DAMAGE else "opponent"
-	row.add_child(_make_pokemon_selector(attacker_relation, true))
-	row.add_child(_make_pokemon_selector(defender_relation, false))
-
-
 func _make_pokemon_selector(relation: String, is_attacker: bool) -> OptionButton:
 	var selector := OptionButton.new()
 	selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -506,68 +499,78 @@ func _snapshot_pokemon_name(entry: Dictionary) -> String:
 	return _fallback_text(name, _t("battle.move.unknown"))
 
 
-func _add_profile_summary(attacker_name: String, defender_name: String, hp_label: String, level_label: String, boosts_label: String = "") -> void:
-	var panel := PanelContainer.new()
-	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	panel.clip_contents = true
-	panel.add_theme_stylebox_override("panel", _make_stylebox(HERO_BG, HERO_BORDER, 7, 10.0, 7.0))
-	content.add_child(panel)
-
-	var box := VBoxContainer.new()
-	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	box.clip_contents = true
-	box.add_theme_constant_override("separation", 3)
-	panel.add_child(box)
-
+func _add_profile_summary(
+	attacker_name: String,
+	defender_name: String,
+	hp_label: String,
+	level_label: String,
+	boosts_label: String = "",
+	attacker_hp_label: String = "",
+	attacker_level_label: String = ""
+) -> void:
 	var matchup_row := HBoxContainer.new()
 	matchup_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	matchup_row.alignment = BoxContainer.ALIGNMENT_CENTER
-	matchup_row.add_theme_constant_override("separation", 8)
-	box.add_child(matchup_row)
+	matchup_row.add_theme_constant_override("separation", 6)
+	content.add_child(matchup_row)
+	var attacker_relation := "opponent" if active_subtab == SUBTAB_THEIR_DAMAGE else "viewer"
+	var defender_relation := "viewer" if active_subtab == SUBTAB_THEIR_DAMAGE else "opponent"
+	var attacker_details: Array[String] = []
+	if attacker_hp_label.strip_edges() != "":
+		attacker_details.append(attacker_hp_label)
+	attacker_details.append(_fallback_text(attacker_level_label, _t("battle.calc.level_unknown")))
+	if boosts_label.strip_edges() != "":
+		attacker_details.append(boosts_label)
 	matchup_row.add_child(_make_matchup_side(
 		_t("battle.calc.attacker"),
 		_fallback_text(attacker_name, _t("battle.calc.your_pokemon")),
-		HORIZONTAL_ALIGNMENT_RIGHT
+		attacker_relation,
+		_join_string_array(attacker_details, "  ·  "),
+		true
 	))
-	var arrow := _make_label("->", 13, TEXT_ACCENT)
-	arrow.custom_minimum_size = Vector2(28, 0)
+	var arrow := _make_label("VS", 10, TEXT_ACCENT)
+	arrow.custom_minimum_size = Vector2(30, 0)
 	arrow.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	arrow.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	arrow.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	matchup_row.add_child(arrow)
 	matchup_row.add_child(_make_matchup_side(
 		_t("battle.calc.target"),
 		_fallback_text(defender_name, _t("battle.calc.opponent")),
-		HORIZONTAL_ALIGNMENT_LEFT
+		defender_relation,
+		"%s  ·  %s" % [
+			_fallback_text(hp_label, _t("battle.calc.hp_unknown")),
+			_fallback_text(level_label, _t("battle.calc.level_unknown")),
+		],
+		false
 	))
 
-	var info := HBoxContainer.new()
-	info.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	info.alignment = BoxContainer.ALIGNMENT_CENTER
-	info.clip_contents = true
-	info.add_theme_constant_override("separation", 10)
-	box.add_child(info)
 
-	info.add_child(_make_info_label(_fallback_text(hp_label, _t("battle.calc.hp_unknown"))))
-	info.add_child(_make_info_label(_fallback_text(level_label, _t("battle.calc.level_unknown"))))
-
-	if boosts_label.strip_edges() != "":
-		var boosts := _make_label(boosts_label, 10, TEXT_ACCENT)
-		boosts.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		box.add_child(boosts)
-
-
-func _make_matchup_side(caption: String, pokemon_name: String, alignment: HorizontalAlignment) -> VBoxContainer:
+func _make_matchup_side(caption: String, pokemon_name: String, relation: String, details: String, is_attacker: bool) -> PanelContainer:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.clip_contents = true
+	panel.add_theme_stylebox_override("panel", _make_stylebox(HERO_BG, HERO_BORDER, 7, 8.0, 6.0))
 	var side := VBoxContainer.new()
-	side.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	side.add_theme_constant_override("separation", 0)
+	side.clip_contents = true
+	side.add_theme_constant_override("separation", 2)
+	panel.add_child(side)
 	var caption_label := _make_label(caption.to_upper(), 9, TEXT_MUTED)
-	caption_label.horizontal_alignment = alignment
+	caption_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	side.add_child(caption_label)
-	var name_label := _make_label(pokemon_name, 14, TEXT_PRIMARY)
-	name_label.horizontal_alignment = alignment
-	name_label.tooltip_text = pokemon_name
-	side.add_child(name_label)
-	return side
+	if knowledge_snapshot.is_empty():
+		var name_label := _make_label(pokemon_name, 14, TEXT_PRIMARY)
+		name_label.tooltip_text = pokemon_name
+		side.add_child(name_label)
+	else:
+		var selector := _make_pokemon_selector(relation, is_attacker)
+		selector.custom_minimum_size = Vector2(0, 26)
+		selector.add_theme_font_size_override("font_size", 13)
+		side.add_child(selector)
+	var detail_label := _make_label(details, 9, TEXT_SECONDARY)
+	detail_label.tooltip_text = details
+	side.add_child(detail_label)
+	return panel
 
 
 func _add_status(text: String, color: Color) -> void:
@@ -633,56 +636,92 @@ func _get_provenance_label(knowledge: Dictionary) -> String:
 	return _t("battle.calc.provenance.%s" % source)
 
 
-func _add_move_result_row(result: Dictionary, defender: Dictionary) -> void:
+func _add_move_results_table(results: Array, defender: Dictionary) -> void:
+	var table := PanelContainer.new()
+	table.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	table.clip_contents = true
+	table.add_theme_stylebox_override("panel", _make_stylebox(PROFILE_BG, PROFILE_BORDER, 8, 5.0, 5.0))
+	content.add_child(table)
+	var table_box := VBoxContainer.new()
+	table_box.clip_contents = true
+	table_box.add_theme_constant_override("separation", 3)
+	table.add_child(table_box)
+	var header := HBoxContainer.new()
+	header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_theme_constant_override("separation", 6)
+	table_box.add_child(header)
+	var move_header := _make_table_header(_t("battle.calc.move_header"))
+	move_header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_child(move_header)
+	var damage_header := _make_table_header(_t("battle.calc.damage_header"))
+	damage_header.custom_minimum_size = Vector2(DAMAGE_COLUMN_WIDTH, 0)
+	damage_header.size_flags_horizontal = Control.SIZE_SHRINK_END
+	damage_header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	header.add_child(damage_header)
+	var ko_header := _make_table_header(_t("battle.calc.ko_header"))
+	ko_header.custom_minimum_size = Vector2(KO_COLUMN_WIDTH, 0)
+	ko_header.size_flags_horizontal = Control.SIZE_SHRINK_END
+	ko_header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	header.add_child(ko_header)
+	for result_value: Variant in results:
+		if result_value is Dictionary:
+			_add_move_result_row(result_value as Dictionary, defender, table_box)
+
+
+func _make_table_header(text: String) -> Label:
+	var label := _make_label(text.to_upper(), 9, TEXT_MUTED)
+	label.custom_minimum_size = Vector2(0, 18)
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	return label
+
+
+func _add_move_result_row(result: Dictionary, defender: Dictionary, parent: VBoxContainer) -> void:
 	var primary_result_label := _get_primary_result_label(result, defender)
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.clip_contents = true
-	panel.add_theme_stylebox_override("panel", _make_stylebox(ROW_BG, _get_result_border(primary_result_label), 6, 9.0, 6.0))
+	panel.add_theme_stylebox_override("panel", _make_stylebox(ROW_BG, _get_result_border(primary_result_label), 5, 7.0, 4.0))
 
 	var box := VBoxContainer.new()
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	box.clip_contents = true
-	box.add_theme_constant_override("separation", 3)
+	box.add_theme_constant_override("separation", 2)
 	panel.add_child(box)
 
-	var top := HBoxContainer.new()
-	top.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	top.clip_contents = true
-	top.add_theme_constant_override("separation", 8)
-	box.add_child(top)
+	var result_row := HBoxContainer.new()
+	result_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	result_row.clip_contents = true
+	result_row.add_theme_constant_override("separation", 6)
+	box.add_child(result_row)
 
+	var move_box := VBoxContainer.new()
+	move_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	move_box.clip_contents = true
+	move_box.add_theme_constant_override("separation", 0)
+	result_row.add_child(move_box)
 	var move_name := _get_move_name(result)
-	var move_label := _make_label(_fallback_text(move_name, _t("battle.move.unknown")), 13, TEXT_PRIMARY)
+	var move_label := _make_label(_fallback_text(move_name, _t("battle.move.unknown")), 12, TEXT_PRIMARY)
 	move_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	move_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	top.add_child(move_label)
-
-	var ko_label := _make_result_badge(primary_result_label)
-	ko_label.custom_minimum_size = Vector2(KO_COLUMN_WIDTH, 0)
-	ko_label.size_flags_horizontal = Control.SIZE_SHRINK_END
-	top.add_child(ko_label)
+	move_box.add_child(move_label)
 
 	var is_status_move: bool = _is_status_result(result)
 	var percent_label: String = "" if is_status_move else _get_percent_label(result)
 	var meta := _get_move_meta(result)
-	if (percent_label != "" and percent_label != "--") or meta != "":
-		var bottom := HBoxContainer.new()
-		bottom.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		bottom.clip_contents = true
-		bottom.add_theme_constant_override("separation", 8)
-		box.add_child(bottom)
-
-		if percent_label != "" and percent_label != "--":
-			var percent := _make_label(percent_label, 15, TEXT_ACCENT)
-			percent.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			bottom.add_child(percent)
-
-		if meta != "":
-			var meta_label := _make_label(meta, 10, TEXT_MUTED)
-			meta_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			meta_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-			bottom.add_child(meta_label)
+	if meta != "":
+		var meta_label := _make_label(meta, 9, TEXT_MUTED)
+		meta_label.tooltip_text = meta
+		move_box.add_child(meta_label)
+	var percent := _make_label(percent_label if percent_label != "" else "--", 12, TEXT_PRIMARY)
+	percent.custom_minimum_size = Vector2(DAMAGE_COLUMN_WIDTH, 0)
+	percent.size_flags_horizontal = Control.SIZE_SHRINK_END
+	percent.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	percent.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	result_row.add_child(percent)
+	var ko_label := _make_result_badge(primary_result_label)
+	ko_label.custom_minimum_size = Vector2(KO_COLUMN_WIDTH, 22)
+	ko_label.size_flags_horizontal = Control.SIZE_SHRINK_END
+	result_row.add_child(ko_label)
 
 	var result_state := str(result.get("resultState", "supported"))
 	if result_state == "unsupported":
@@ -695,7 +734,7 @@ func _add_move_result_row(result: Dictionary, defender: Dictionary) -> void:
 		if warning != "":
 			_add_row_notice(box, _warning_label(warning), TEXT_ERROR if result_state in ["unsupported", "error"] else TEXT_MUTED)
 
-	content.add_child(panel)
+	parent.add_child(panel)
 
 
 func _get_result_border(primary_result_label: String) -> Color:
@@ -782,13 +821,6 @@ func _make_chip(text: String) -> Label:
 	return label
 
 
-func _make_info_label(text: String) -> Label:
-	var label := _make_label(text, 11, TEXT_SECONDARY)
-	label.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	return label
-
-
 func _make_result_badge(text: String) -> Label:
 	var label := _make_label(_get_compact_result_label(text), 10, TEXT_ACCENT)
 	label.custom_minimum_size = Vector2(KO_COLUMN_WIDTH, 20)
@@ -828,33 +860,30 @@ func _add_live_assumption_controls(assumptions: Dictionary) -> void:
 	var box := VBoxContainer.new()
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	box.clip_contents = true
-	box.add_theme_constant_override("separation", 5)
+	box.add_theme_constant_override("separation", 4)
 	panel.add_child(box)
+	var title_row := HBoxContainer.new()
+	title_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_row.add_theme_constant_override("separation", 6)
+	box.add_child(title_row)
 	var setup_title := _make_label(_t("battle.calc.opponent_setup"), 11, TEXT_SECONDARY)
 	setup_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	box.add_child(setup_title)
+	setup_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	title_row.add_child(setup_title)
+	var reset_button := _make_small_button(_t("common.reset"), _reset_live_assumptions)
+	reset_button.custom_minimum_size = Vector2(48, 22)
+	title_row.add_child(reset_button)
 
 	var primary_row := HBoxContainer.new()
 	primary_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	primary_row.clip_contents = true
-	primary_row.add_theme_constant_override("separation", 5)
+	primary_row.add_theme_constant_override("separation", 4)
 	box.add_child(primary_row)
 
 	primary_row.add_child(_make_assumption_summary_button(_get_assumption_chip_label(assumptions, "item", _t("battle.calc.item_unknown")), SELECTOR_ITEM))
 	primary_row.add_child(_make_assumption_summary_button(_get_assumption_chip_label(assumptions, "ability", _t("battle.calc.ability_unknown")), SELECTOR_ABILITY))
-
-	var secondary_row := HBoxContainer.new()
-	secondary_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	secondary_row.clip_contents = true
-	secondary_row.add_theme_constant_override("separation", 5)
-	box.add_child(secondary_row)
-
-	secondary_row.add_child(_make_assumption_summary_button(_get_nature_chip_label(assumptions), SELECTOR_NATURE))
-	secondary_row.add_child(_make_assumption_summary_button(_get_evs_summary_chip_label(_as_dictionary(assumptions.get("evs", {}))), SELECTOR_EVS))
-
-	var reset_button := _make_small_button(_t("common.reset"), _reset_live_assumptions)
-	reset_button.custom_minimum_size = Vector2(48, 24)
-	secondary_row.add_child(reset_button)
+	primary_row.add_child(_make_assumption_summary_button(_get_nature_chip_label(assumptions), SELECTOR_NATURE))
+	primary_row.add_child(_make_assumption_summary_button(_get_evs_summary_chip_label(_as_dictionary(assumptions.get("evs", {}))), SELECTOR_EVS))
 
 	catalog_suggestions_box = VBoxContainer.new()
 	catalog_suggestions_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1026,6 +1055,7 @@ func _get_catalog_assumption_value(assumptions: Dictionary, kind: String) -> Str
 func _make_assumption_summary_button(text: String, editor_kind: String) -> Button:
 	var button := Button.new()
 	button.text = text
+	button.tooltip_text = text
 	button.focus_mode = Control.FOCUS_ALL
 	button.custom_minimum_size = Vector2(0, 25)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL

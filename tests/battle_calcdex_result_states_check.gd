@@ -34,6 +34,15 @@ func _run() -> void:
 	})
 	await process_frame
 	var collapsed_text := _collect_visible_text(panel)
+	for header_alternatives: Array in [
+		["battle.calc.move_header", "MOVE", "AANVAL", "GOLPE"],
+		["battle.calc.damage_header", "DAMAGE", "SCHADE", "DANO"],
+		["battle.calc.ko_header", "KO %"],
+	]:
+		if not _contains_fragment(collapsed_text, header_alternatives):
+			push_error("Missing Showdex-style Calcdex table header: %s" % str(header_alternatives))
+			quit(1)
+			return
 	if not _contains_fragment(collapsed_text, ["calculation notes", "opmerkingen bij de berekening", "observações do cálculo"]):
 		push_error("Calcdex calculation notes must have a compact summary")
 		quit(1)
