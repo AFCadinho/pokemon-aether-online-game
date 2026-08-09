@@ -83,7 +83,9 @@ func _run() -> void:
 		"libraryRevision": "test-v1",
 		"manifestFingerprint": "c".repeat(64),
 		"speciesFingerprint": "d".repeat(64),
-		"formatId": "gen9nationaldex",
+		"formatId": "aether-ou",
+		"engineFormatId": "gen9nationaldex",
+		"dataFormatId": "gen9nationaldex",
 		"source": "pokeaether_curated",
 		"species": "Mew",
 		"sets": [{
@@ -100,7 +102,7 @@ func _run() -> void:
 		}],
 	})
 	await process_frame
-	if panel.sample_set_options.size() != 1:
+	if panel.sample_set_format_id != "aether-ou" or panel.sample_set_options.size() != 1:
 		_fail("the curated sample-set catalog must be available as scenarios")
 		return
 	panel._apply_sample_set(panel.sample_set_options[0])
@@ -397,6 +399,7 @@ func _response(revision: Dictionary) -> Dictionary:
 func _selection_snapshot() -> Dictionary:
 	return {
 		"viewerSide": "p1",
+		"format": {"formatKey": "aether-ou", "engineFormatId": "gen9nationaldex"},
 		"field": {"effects": []},
 		"viewerPokemon": [{"pokemonRef": "viewer:public-slot-1", "active": true, "fainted": false, "identity": {"state": "known", "value": "Pikachu"}}],
 		"opponentPokemon": [{"pokemonRef": "opponent:public-slot-1", "active": true, "fainted": false, "identity": {"state": "known", "value": "Mew"}}],

@@ -2510,7 +2510,7 @@ func _on_calc_panel_assumption_catalog_requested(kind: String, query: String, sp
 	else:
 		calc_panel.show_assumption_catalog_error(kind, str(response.get("error", "Could not load assumptions.")))
 
-func _on_calc_panel_sample_set_catalog_requested(species: String) -> void:
+func _on_calc_panel_sample_set_catalog_requested(species: String, format_id: String) -> void:
 	if current_action_panel_mode != BattleActionsPanelMode.CALC:
 		return
 	damage_calc_sample_set_request_token += 1
@@ -2519,7 +2519,7 @@ func _on_calc_panel_sample_set_catalog_requested(species: String) -> void:
 	add_child(request_node)
 	var response := await PokemonDataApiClient.get_calcdex_sample_sets(
 		request_node,
-		"gen9nationaldex",
+		format_id,
 		species
 	)
 	request_node.queue_free()

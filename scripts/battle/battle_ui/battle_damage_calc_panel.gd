@@ -8,7 +8,7 @@ const DROPDOWN_RADIO_CHECKED: Texture2D = preload("res://assets/ui/photo_mode_ra
 const DROPDOWN_RADIO_UNCHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_unchecked.svg")
 signal defender_assumptions_changed(assumptions: Dictionary, edited_fields: Dictionary)
 signal assumption_catalog_requested(kind: String, query: String, species: String)
-signal sample_set_catalog_requested(species: String)
+signal sample_set_catalog_requested(species: String, format_id: String)
 signal default_ability_requested(species: String)
 signal matchup_selection_changed()
 
@@ -150,6 +150,7 @@ var warning_details_expanded := false
 var warning_details_panel: Control
 var sample_set_options: Array[Dictionary] = []
 var sample_set_species := ""
+var sample_set_format_id := ""
 var sample_set_loading := false
 var sample_set_error := ""
 var selected_sample_set_id := ""
@@ -479,6 +480,7 @@ func get_field_scenario() -> Dictionary:
 func _clear_sample_sets() -> void:
 	sample_set_options.clear()
 	sample_set_species = ""
+	sample_set_format_id = ""
 	sample_set_loading = false
 	sample_set_error = ""
 	selected_sample_set_id = ""
@@ -486,14 +488,30 @@ func _clear_sample_sets() -> void:
 
 func _request_sample_sets_if_needed() -> void:
 	var species := _get_selected_opponent_species()
-	if species == "" or species.to_lower() == sample_set_species.to_lower():
+	var format_id := _get_sample_set_format_id()
+	if (
+		species == ""
+		or (
+			species.to_lower() == sample_set_species.to_lower()
+			and format_id == sample_set_format_id
+		)
+	):
 		return
 	sample_set_options.clear()
 	sample_set_species = species
+	sample_set_format_id = format_id
 	sample_set_loading = true
 	sample_set_error = ""
 	selected_sample_set_id = ""
-	sample_set_catalog_requested.emit(species)
+	sample_set_catalog_requested.emit(species, format_id)
+
+
+func _get_sample_set_format_id() -> String:
+	var format := _as_dictionary(knowledge_snapshot.get("format", {}))
+	var format_key := str(format.get("formatKey", "")).strip_edges().to_lower()
+	if format_key in ["aether-ou", "ranked-aether-ou"]:
+		return "aether-ou"
+	return "gen9nationaldex"
 
 
 func show_sample_set_catalog_response(species: String, response: Dictionary) -> void:
@@ -503,7 +521,9 @@ func show_sample_set_catalog_response(species: String, response: Dictionary) -> 
 	sample_set_error = ""
 	var valid_envelope := (
 		int(response.get("schemaVersion", 0)) == 1
-		and str(response.get("formatId", "")) == "gen9nationaldex"
+		and str(response.get("formatId", "")) == sample_set_format_id
+		and str(response.get("engineFormatId", "")) == "gen9nationaldex"
+		and str(response.get("dataFormatId", "")) == "gen9nationaldex"
 		and str(response.get("source", "")) == "pokeaether_curated"
 		and str(response.get("species", "")).to_lower() == species.to_lower()
 		and response.get("sets") is Array
