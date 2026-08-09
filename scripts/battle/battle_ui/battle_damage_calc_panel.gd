@@ -44,6 +44,8 @@ const DROPDOWN_FOCUS_BORDER := Color(0.56, 0.87, 1.0, 1.0)
 const CONDITION_GLOBAL_ACCENT := Color(0.30, 0.72, 0.92, 1.0)
 const CONDITION_OWN_ACCENT := Color(0.24, 0.66, 0.88, 1.0)
 const CONDITION_OPPONENT_ACCENT := Color(0.90, 0.66, 0.28, 1.0)
+const CONFIRMED_ACCENT := Color(0.34, 0.84, 0.54, 1.0)
+const MANUAL_ACCENT := Color(0.95, 0.73, 0.31, 1.0)
 const SUSPICIOUS_PERCENT_LIMIT := 999.0
 const DAMAGE_COLUMN_WIDTH := 132.0
 const KO_COLUMN_WIDTH := 92.0
@@ -925,11 +927,13 @@ func _make_matchup_side(
 	status: String = ""
 ) -> PanelContainer:
 	var panel := PanelContainer.new()
+	panel.name = "ViewerProfileCard" if relation == "viewer" else "OpponentProfileCard"
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.clip_contents = true
 	panel.custom_minimum_size = Vector2(0, 84)
-	var card_border := TEXT_ACCENT if is_attacker else Color(HERO_BORDER.r, HERO_BORDER.g, HERO_BORDER.b, 0.62)
-	panel.add_theme_stylebox_override("panel", _make_stylebox(HERO_BG, card_border, 9, 8.0, 5.0))
+	var relation_accent := CONDITION_OWN_ACCENT if relation == "viewer" else CONDITION_OPPONENT_ACCENT
+	var card_background := HERO_BG.lightened(0.018) if is_attacker else HERO_BG
+	panel.add_theme_stylebox_override("panel", _make_stylebox(card_background, relation_accent, 9, 8.0, 5.0))
 	var card_row := HBoxContainer.new()
 	card_row.clip_contents = true
 	card_row.add_theme_constant_override("separation", 7)
@@ -948,7 +952,7 @@ func _make_matchup_side(
 	side.clip_contents = true
 	side.add_theme_constant_override("separation", 2)
 	card_row.add_child(side)
-	var caption_label := _make_label(caption.to_upper(), 9, TEXT_MUTED)
+	var caption_label := _make_label(caption.to_upper(), 9, Color(relation_accent, 0.92))
 	caption_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	side.add_child(caption_label)
 	if knowledge_snapshot.is_empty():
@@ -1241,6 +1245,8 @@ func _add_move_result_row(result: Dictionary, defender: Dictionary, parent: VBox
 			if source_label != null:
 				meta_row.add_child(source_label)
 	var percent_color := TEXT_MUTED if is_status_move else DAMAGE_TEXT
+	if not is_status_move and percent_label != "":
+		percent_color = _get_result_badge_colors(primary_result_label)["text"]
 	var percent := _make_label(percent_label if percent_label != "" else "--", 15, percent_color)
 	percent.custom_minimum_size = Vector2(DAMAGE_COLUMN_WIDTH, 0)
 	percent.size_flags_horizontal = Control.SIZE_SHRINK_END
@@ -1571,7 +1577,10 @@ func _add_live_assumption_controls(assumptions: Dictionary, _prior_provenance: S
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.clip_contents = true
-	panel.add_theme_stylebox_override("panel", _make_stylebox(PROFILE_BG, Color(PROFILE_BORDER.r, PROFILE_BORDER.g, PROFILE_BORDER.b, 0.38), 8, 8.0, 6.0))
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_stylebox(PROFILE_BG, Color(CONDITION_OPPONENT_ACCENT, 0.34), 8, 8.0, 6.0)
+	)
 	content.add_child(panel)
 
 	var box := VBoxContainer.new()
@@ -1699,8 +1708,8 @@ func _apply_boost_stage_style(selector: OptionButton, stage: int, is_public: boo
 		font_color = STAGE_NEGATIVE
 		background = Color(0.14, 0.035, 0.045, 0.88)
 	var border := Color(0.18, 0.31, 0.46, 0.68)
-	if is_public and not is_edited:
-		border = Color(HERO_BORDER.r, HERO_BORDER.g, HERO_BORDER.b, 0.86)
+	if is_public and not is_edited and stage != 0:
+		border = Color(CONFIRMED_ACCENT, 0.88)
 	elif is_edited:
 		border = CHIP_EDITED_BORDER
 	selector.add_theme_color_override("font_color", font_color)
@@ -2422,18 +2431,17 @@ func _get_catalog_assumption_value(assumptions: Dictionary, kind: String) -> Str
 
 func _make_inline_assumption_field(caption: String, value: String, editor_kind: String, tooltip: String = "") -> PanelContainer:
 	var panel := PanelContainer.new()
+	panel.name = "%sAssumptionField" % editor_kind.capitalize()
 	panel.tooltip_text = _fallback_text(tooltip, "%s: %s" % [caption, value])
 	panel.custom_minimum_size = Vector2(0, 46)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.clip_contents = true
 	var is_active: bool = active_selector == editor_kind
-	var is_edited: bool = bool(edited_assumption_fields.get(editor_kind, false))
-	var border := Color(CHIP_BORDER.r, CHIP_BORDER.g, CHIP_BORDER.b, 0.46)
-	if is_edited:
-		border = CHIP_EDITED_BORDER
+	var visual_palette := _get_assumption_visual_palette(_get_assumption_visual_state(editor_kind))
+	var border: Color = visual_palette["border"]
 	panel.add_theme_stylebox_override(
 		"panel",
-		_make_stylebox(TAB_ACTIVE_BG if is_active else Color(CHIP_BG.r, CHIP_BG.g, CHIP_BG.b, 0.72), border, 6, 7.0, 3.0)
+		_make_stylebox(TAB_ACTIVE_BG if is_active else visual_palette["background"], border, 6, 7.0, 3.0)
 	)
 
 	var labels := VBoxContainer.new()
@@ -2441,7 +2449,7 @@ func _make_inline_assumption_field(caption: String, value: String, editor_kind: 
 	labels.clip_contents = true
 	labels.add_theme_constant_override("separation", 0)
 	panel.add_child(labels)
-	var caption_label := _make_label(caption.to_upper(), 8, TEXT_MUTED if not is_active else Color(0.65, 0.82, 0.94, 1.0))
+	var caption_label := _make_label(caption.to_upper(), 8, Color(0.65, 0.82, 0.94, 1.0) if is_active else visual_palette["caption"])
 	caption_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	labels.add_child(caption_label)
 
@@ -2455,7 +2463,7 @@ func _make_inline_assumption_field(caption: String, value: String, editor_kind: 
 	input.right_icon = DROPDOWN_ARROW
 	input.mouse_default_cursor_shape = Control.CURSOR_IBEAM
 	input.add_theme_font_size_override("font_size", 11)
-	input.add_theme_color_override("font_color", TEXT_ACCENT if is_edited else TEXT_SECONDARY)
+	input.add_theme_color_override("font_color", TEXT_PRIMARY if is_active else visual_palette["value"])
 	input.add_theme_color_override("font_placeholder_color", TEXT_MUTED)
 	input.add_theme_stylebox_override("normal", _make_stylebox(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 4, 0.0, 0.0))
 	input.add_theme_stylebox_override("focus", _make_stylebox(Color(TAB_ACTIVE_BG.r, TAB_ACTIVE_BG.g, TAB_ACTIVE_BG.b, 0.54), TEXT_ACCENT, 4, 3.0, 0.0))
@@ -2481,18 +2489,12 @@ func _make_assumption_summary_button(caption: String, value: String, editor_kind
 	button.custom_minimum_size = Vector2(0, 46)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	var is_active: bool = active_selector == editor_kind
-	var is_edited: bool = bool(edited_assumption_fields.get(editor_kind, false))
-	var chip_border := Color(CHIP_BORDER.r, CHIP_BORDER.g, CHIP_BORDER.b, 0.46)
-	if is_edited:
-		chip_border = CHIP_EDITED_BORDER
-	var value_color: Color = TEXT_SECONDARY
-	if is_active:
-		value_color = TEXT_PRIMARY
-	elif is_edited:
-		value_color = TEXT_ACCENT
+	var visual_palette := _get_assumption_visual_palette(_get_assumption_visual_state(editor_kind))
+	var chip_border: Color = visual_palette["border"]
+	var value_color: Color = TEXT_PRIMARY if is_active else visual_palette["value"]
 	button.add_theme_stylebox_override(
 		"normal",
-		_make_stylebox(TAB_ACTIVE_BG if is_active else Color(CHIP_BG.r, CHIP_BG.g, CHIP_BG.b, 0.72), chip_border, 6, 7.0, 4.0)
+		_make_stylebox(TAB_ACTIVE_BG if is_active else visual_palette["background"], chip_border, 6, 7.0, 4.0)
 	)
 	button.add_theme_stylebox_override("hover", _make_stylebox(TAB_ACTIVE_BG.lightened(0.08), chip_border.lightened(0.12), 7, 8.0, 5.0))
 	button.add_theme_stylebox_override("pressed", _make_stylebox(TAB_ACTIVE_BG, chip_border.lightened(0.18), 7, 8.0, 5.0))
@@ -2506,7 +2508,7 @@ func _make_assumption_summary_button(caption: String, value: String, editor_kind
 	labels.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	labels.add_theme_constant_override("separation", 1)
 	button.add_child(labels)
-	var caption_label := _make_label(caption.to_upper(), 8, TEXT_MUTED if not is_active else Color(0.65, 0.82, 0.94, 1.0))
+	var caption_label := _make_label(caption.to_upper(), 8, Color(0.65, 0.82, 0.94, 1.0) if is_active else visual_palette["caption"])
 	caption_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	labels.add_child(caption_label)
 	var value_label := _make_label(value, 11, value_color)
@@ -2515,6 +2517,40 @@ func _make_assumption_summary_button(caption: String, value: String, editor_kind
 	labels.add_child(value_label)
 	button.pressed.connect(_on_assumption_summary_pressed.bind(editor_kind))
 	return button
+
+
+func _get_assumption_visual_state(editor_kind: String) -> String:
+	if bool(edited_assumption_fields.get(editor_kind, false)):
+		return "manual"
+	var opponent := _get_snapshot_pokemon_by_ref(selected_opponent_ref)
+	var knowledge := _as_dictionary(opponent.get("evs" if editor_kind == SELECTOR_EVS else editor_kind, {}))
+	if str(knowledge.get("state", "")) == "known":
+		return "confirmed"
+	return "default"
+
+
+func _get_assumption_visual_palette(visual_state: String) -> Dictionary:
+	match visual_state:
+		"confirmed":
+			return {
+				"background": Color(0.018, 0.075, 0.052, 0.86),
+				"border": Color(CONFIRMED_ACCENT, 0.80),
+				"caption": Color(CONFIRMED_ACCENT, 0.88),
+				"value": Color(0.73, 0.96, 0.80, 1.0),
+			}
+		"manual":
+			return {
+				"background": Color(0.095, 0.066, 0.022, 0.86),
+				"border": Color(MANUAL_ACCENT, 0.88),
+				"caption": Color(MANUAL_ACCENT, 0.90),
+				"value": Color(1.0, 0.86, 0.57, 1.0),
+			}
+	return {
+		"background": Color(CHIP_BG.r, CHIP_BG.g, CHIP_BG.b, 0.72),
+		"border": Color(CHIP_BORDER.r, CHIP_BORDER.g, CHIP_BORDER.b, 0.58),
+		"caption": TEXT_MUTED,
+		"value": TEXT_SECONDARY,
+	}
 
 
 func _get_assumption_control_value(assumptions: Dictionary, editor_kind: String, prior_provenance: String = "") -> String:

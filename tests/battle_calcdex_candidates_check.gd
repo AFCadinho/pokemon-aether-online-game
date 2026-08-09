@@ -138,8 +138,27 @@ func _run() -> void:
 	if panel.defender_assumptions.get("ability") != "Synchronize" or not panel.edited_assumption_fields.is_empty():
 		_fail("Current must use the first public species ability without marking it as a manual edit")
 		return
+	if panel._get_assumption_visual_state("item") != "default":
+		_fail("Unconfirmed current setup fields must retain the neutral visual state")
+		return
+	if panel._get_assumption_visual_palette("default")["border"] == panel._get_assumption_visual_palette("manual")["border"] \
+			or panel._get_assumption_visual_palette("default")["border"] == panel._get_assumption_visual_palette("confirmed")["border"]:
+		_fail("Default, manual, and confirmed setup fields must have distinct semantic colors")
+		return
 	panel.show_response(response)
 	await process_frame
+	var viewer_profile := panel.find_child("ViewerProfileCard", true, false) as PanelContainer
+	var opponent_profile := panel.find_child("OpponentProfileCard", true, false) as PanelContainer
+	if viewer_profile == null or opponent_profile == null:
+		_fail("The matchup must expose stable viewer and opponent profile cards")
+		return
+	var viewer_profile_style := viewer_profile.get_theme_stylebox("panel") as StyleBoxFlat
+	var opponent_profile_style := opponent_profile.get_theme_stylebox("panel") as StyleBoxFlat
+	if viewer_profile_style == null or opponent_profile_style == null \
+			or not viewer_profile_style.border_color.is_equal_approx(panel.CONDITION_OWN_ACCENT) \
+			or not opponent_profile_style.border_color.is_equal_approx(panel.CONDITION_OPPONENT_ACCENT):
+		_fail("Viewer and opponent profile cards must retain distinct relation colors")
+		return
 	var condition_snapshot := _selection_snapshot()
 	condition_snapshot["field"]["effects"] = [
 		{"effectId": "Rain Dance", "scope": "field"},
@@ -269,6 +288,9 @@ func _run() -> void:
 	for field_name: String in ["item", "ability", "nature"]:
 		if not bool(panel.edited_assumption_fields.get(field_name, false)):
 			_fail("Inline %s edits must retain user-scenario provenance" % field_name)
+			return
+		if panel._get_assumption_visual_state(field_name) != "manual":
+			_fail("Inline %s edits must use the manual scenario color" % field_name)
 			return
 	panel._reset_to_current()
 	panel._on_assumption_summary_pressed("evs")
