@@ -37,11 +37,12 @@ static func normalize_response(response: Dictionary, expected_revision: Dictiona
 	if ranges == null:
 		return _malformed("Invalid smart-matchup ranges.")
 	var results: Array[Dictionary] = []
+	var result_source := "public_usage_prior" if _has_candidate_source(candidates, "public_usage_prior") else "curated_prior"
 	for range_row: Dictionary in ranges:
 		var minimum: Variant = range_row.get("displayedMinPercent")
 		var maximum: Variant = range_row.get("displayedMaxPercent")
 		results.append({
-			"move": {"name": range_row["moveName"], "source": "curated_prior"},
+			"move": {"name": range_row["moveName"], "source": result_source},
 			"resultState": "supported" if minimum != null and maximum != null else "error",
 			"minPercent": minimum,
 			"maxPercent": maximum,
@@ -83,7 +84,8 @@ static func _normalize_candidates(value: Variant) -> Array[Dictionary]:
 		if not _has_exact_fields(candidate, ["candidateId", "labelKey", "source", "weight", "coverage", "pinned", "effectiveInput", "explanationKeys", "results"]):
 			return []
 		var candidate_id := str(candidate.get("candidateId", ""))
-		if candidate_id == "" or candidate_id.length() > 128 or seen.has(candidate_id) or str(candidate.get("source", "")) != "curated_prior":
+		var source := str(candidate.get("source", ""))
+		if candidate_id == "" or candidate_id.length() > 128 or seen.has(candidate_id) or source not in ["curated_prior", "public_usage_prior"]:
 			return []
 		var effective: Dictionary = candidate.get("effectiveInput", {}) if candidate.get("effectiveInput") is Dictionary else {}
 		for key: Variant in effective.keys():
@@ -101,7 +103,7 @@ static func _normalize_candidates(value: Variant) -> Array[Dictionary]:
 		result.append({
 			"candidateId": candidate_id,
 			"labelKey": str(candidate.get("labelKey", "")),
-			"source": "curated_prior",
+			"source": source,
 			"weight": float(candidate.get("weight", 0.0)),
 			"coverage": float(candidate.get("coverage", 0.0)),
 			"pinned": bool(candidate.get("pinned", false)),
@@ -110,6 +112,13 @@ static func _normalize_candidates(value: Variant) -> Array[Dictionary]:
 			"results": normalized_rows,
 		})
 	return result
+
+
+static func _has_candidate_source(candidates: Array[Dictionary], source: String) -> bool:
+	for candidate: Dictionary in candidates:
+		if str(candidate.get("source", "")) == source:
+			return true
+	return false
 
 
 static func _normalize_ranges(value: Variant) -> Variant:

@@ -659,10 +659,14 @@ func _add_status(text: String, color: Color) -> void:
 	content.add_child(label)
 
 
-func _add_assumption_chips(defender: Dictionary, _response: Dictionary) -> void:
+func _add_assumption_chips(defender: Dictionary, response: Dictionary) -> void:
 	_add_public_fact_chips()
 	var assumptions := _get_display_assumptions(defender)
-	_add_live_assumption_controls(assumptions)
+	var prior_provenance := ""
+	if not defender_assumptions.has("nature") and response.get("candidates") is Array and not (response.get("candidates") as Array).is_empty():
+		var first_candidate := _as_dictionary((response.get("candidates") as Array)[0])
+		prior_provenance = "aggregate_prior" if str(first_candidate.get("source", "")) == "public_usage_prior" else "curated_prior"
+	_add_live_assumption_controls(assumptions, prior_provenance)
 
 
 func _add_public_fact_chips() -> void:
@@ -998,7 +1002,7 @@ func _make_label(text: String, font_size: int, color: Color) -> Label:
 	return label
 
 
-func _add_live_assumption_controls(assumptions: Dictionary) -> void:
+func _add_live_assumption_controls(assumptions: Dictionary, prior_provenance: String = "") -> void:
 	is_syncing_assumption_controls = true
 	live_ev_inputs.clear()
 	live_ev_total_label = null
@@ -1036,7 +1040,7 @@ func _add_live_assumption_controls(assumptions: Dictionary) -> void:
 
 	primary_row.add_child(_make_assumption_summary_button(_get_assumption_chip_label(assumptions, "item", _t("battle.calc.item_unknown")), SELECTOR_ITEM))
 	primary_row.add_child(_make_assumption_summary_button(_get_assumption_chip_label(assumptions, "ability", _t("battle.calc.ability_unknown")), SELECTOR_ABILITY))
-	primary_row.add_child(_make_assumption_summary_button(_get_nature_chip_label(assumptions), SELECTOR_NATURE))
+	primary_row.add_child(_make_assumption_summary_button(_get_nature_chip_label(assumptions, prior_provenance), SELECTOR_NATURE))
 	primary_row.add_child(_make_assumption_summary_button(_get_evs_summary_chip_label(_as_dictionary(assumptions.get("evs", {}))), SELECTOR_EVS))
 
 	catalog_suggestions_box = VBoxContainer.new()
@@ -2010,7 +2014,9 @@ func _get_display_assumptions(defender: Dictionary) -> Dictionary:
 	return assumptions
 
 
-func _get_nature_chip_label(assumptions: Dictionary) -> String:
+func _get_nature_chip_label(assumptions: Dictionary, prior_provenance: String = "") -> String:
+	if prior_provenance != "" and not bool(edited_assumption_fields.get("nature", false)):
+		return "%s · %s" % [_t("battle.calc.set_range"), _t("battle.calc.provenance.%s" % prior_provenance)]
 	var canonical_nature := _fallback_text(str(assumptions.get("nature", "")).strip_edges(), "Hardy")
 	var label := _localized_nature_name(canonical_nature)
 	return _get_scenario_label(label, "nature")

@@ -18,6 +18,15 @@ func _run() -> void:
 	if normalized["results"][0]["shortLabel"] != "20.0-40.0%":
 		_fail("displayed candidate envelope must drive the visible result")
 		return
+	var usage_response := response.duplicate(true)
+	usage_response["candidates"][0]["candidateId"] = "usage:mew-1630-01"
+	usage_response["candidates"][0]["source"] = "public_usage_prior"
+	usage_response["candidates"][0]["labelKey"] = "calcdex.preset.public_usage"
+	usage_response["ranges"][0]["extremaCandidateIds"] = ["usage:mew-1630-01"]
+	var normalized_usage := Candidates.normalize_response(usage_response, revision)
+	if not bool(normalized_usage.get("success", false)) or normalized_usage["candidates"][0]["source"] != "public_usage_prior":
+		_fail("public aggregate usage candidates must normalize without becoming confirmed facts")
+		return
 	var leaked := response.duplicate(true)
 	leaked["candidates"][0]["effectiveInput"]["privateSetId"] = "secret"
 	if bool(Candidates.normalize_response(leaked, revision).get("success", false)):
@@ -33,6 +42,9 @@ func _run() -> void:
 	panel.set_knowledge_snapshot(_selection_snapshot())
 	panel.show_response(normalized)
 	await process_frame
+	if panel._get_nature_chip_label({}, "aggregate_prior").contains("Hardy"):
+		_fail("a public candidate range must not be presented as an assumed Hardy nature")
+		return
 	if panel.get_smart_options()["rangeMode"] != "likely":
 		_fail("likely range must be the safe default")
 		return
