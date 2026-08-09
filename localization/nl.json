@@ -2331,6 +2331,8 @@
   "battle.calc.ev_group_offense": "Aanval en snelheid",
   "battle.calc.ev_set_zero": "Zet deze stat op 0 EV's",
   "battle.calc.ev_set_max": "Zet deze stat op 252 EV's",
+  "battle.calc.ev_min_short": "MIN",
+  "battle.calc.ev_max_short": "MAX",
   "battle.calc.ev_stat.hp": "HP",
   "battle.calc.ev_stat.atk": "Aanval",
   "battle.calc.ev_stat.def": "Verdediging",

@@ -1849,8 +1849,8 @@ func _make_live_ev_input(stat_key: String, value: int) -> Control:
 	live_ev_inputs[stat_key] = input
 	row.add_child(input)
 
-	row.add_child(_make_ev_quick_button("0", _t("battle.calc.ev_set_zero"), _on_live_ev_quick_value_pressed.bind(stat_key, 0)))
-	row.add_child(_make_ev_quick_button("252", _t("battle.calc.ev_set_max"), _on_live_ev_quick_value_pressed.bind(stat_key, 252)))
+	row.add_child(_make_ev_quick_button(_t("battle.calc.ev_min_short"), _t("battle.calc.ev_set_zero"), false, _on_live_ev_quick_value_pressed.bind(stat_key, 0)))
+	row.add_child(_make_ev_quick_button(_t("battle.calc.ev_max_short"), _t("battle.calc.ev_set_max"), true, _on_live_ev_quick_value_pressed.bind(stat_key, 252)))
 	var bar := ProgressBar.new()
 	bar.custom_minimum_size = Vector2(0, 4)
 	bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1866,21 +1866,31 @@ func _make_live_ev_input(stat_key: String, value: int) -> Control:
 	return panel
 
 
-func _make_ev_quick_button(text: String, tooltip: String, pressed_callback: Callable) -> Button:
+func _make_ev_quick_button(text: String, tooltip: String, is_maximum: bool, pressed_callback: Callable) -> Button:
 	var button := Button.new()
 	button.text = text
 	button.tooltip_text = tooltip
 	button.focus_mode = Control.FOCUS_ALL
-	button.custom_minimum_size = Vector2(32 if text == "252" else 25, 23)
+	button.custom_minimum_size = Vector2(40, 23)
 	button.size_flags_horizontal = Control.SIZE_SHRINK_END
 	button.clip_text = true
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	button.add_theme_font_size_override("font_size", 9)
-	button.add_theme_color_override("font_color", TEXT_SECONDARY)
-	button.add_theme_stylebox_override("normal", _make_stylebox(CHIP_BG, CHIP_BORDER, 4, 3.0, 1.0))
-	button.add_theme_stylebox_override("hover", _make_stylebox(TAB_ACTIVE_BG.lightened(0.08), CHIP_BORDER.lightened(0.12), 4, 3.0, 1.0))
-	button.add_theme_stylebox_override("pressed", _make_stylebox(TAB_ACTIVE_BG, CHIP_BORDER.lightened(0.18), 4, 3.0, 1.0))
-	button.add_theme_stylebox_override("focus", _make_stylebox(TAB_ACTIVE_BG, DROPDOWN_FOCUS_BORDER, 4, 3.0, 1.0))
+	var font_color := Color(0.54, 0.68, 0.80, 1.0)
+	var background := Color(0.025, 0.052, 0.078, 0.98)
+	var border := Color(0.20, 0.40, 0.56, 0.88)
+	if is_maximum:
+		font_color = Color(0.66, 0.95, 0.74, 1.0)
+		background = Color(0.035, 0.12, 0.075, 0.96)
+		border = Color(0.27, 0.68, 0.42, 0.92)
+	button.add_theme_color_override("font_color", font_color)
+	button.add_theme_color_override("font_hover_color", font_color.lightened(0.12))
+	button.add_theme_color_override("font_pressed_color", Color.WHITE)
+	button.add_theme_color_override("font_focus_color", font_color.lightened(0.12))
+	button.add_theme_stylebox_override("normal", _make_stylebox(background, border, 4, 4.0, 1.0))
+	button.add_theme_stylebox_override("hover", _make_stylebox(background.lightened(0.07), border.lightened(0.12), 4, 4.0, 1.0))
+	button.add_theme_stylebox_override("pressed", _make_stylebox(background.lightened(0.03), TEXT_ACCENT if is_maximum else DROPDOWN_HOVER_BORDER, 4, 4.0, 1.0))
+	button.add_theme_stylebox_override("focus", _make_stylebox(background, DROPDOWN_FOCUS_BORDER, 4, 4.0, 1.0))
 	button.pressed.connect(pressed_callback)
 	return button
 

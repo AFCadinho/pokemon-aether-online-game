@@ -166,6 +166,14 @@ func _run() -> void:
 		if not _has_label_text(panel.catalog_suggestions_box, stat_label):
 			_fail("EV editor is missing the full stat label %s" % stat_label)
 			return
+	var min_button := _find_button_text(panel.catalog_suggestions_box, panel._t("battle.calc.ev_min_short"))
+	var max_button := _find_button_text(panel.catalog_suggestions_box, panel._t("battle.calc.ev_max_short"))
+	if min_button == null or max_button == null:
+		_fail("EV quick actions must use explicit MIN and MAX labels instead of ambiguous numeric buttons")
+		return
+	if min_button.get_theme_color("font_color").is_equal_approx(max_button.get_theme_color("font_color")):
+		_fail("EV MIN and MAX actions must have distinct semantic colors")
+		return
 	panel._on_live_ev_quick_value_pressed("hp", 252)
 	panel._on_live_ev_quick_value_pressed("def", 252)
 	panel._apply_live_ev_value("spd", 4, true)
@@ -306,6 +314,16 @@ func _has_label_text(node: Node, text: String) -> bool:
 		if _has_label_text(child, text):
 			return true
 	return false
+
+
+func _find_button_text(node: Node, text: String) -> Button:
+	if node is Button and (node as Button).text == text:
+		return node as Button
+	for child: Node in node.get_children():
+		var result := _find_button_text(child, text)
+		if result != null:
+			return result
+	return null
 
 
 func _count_nodes_of_type(node: Node, type_name: String) -> int:

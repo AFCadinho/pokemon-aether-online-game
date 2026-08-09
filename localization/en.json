@@ -2331,6 +2331,8 @@
   "battle.calc.ev_group_offense": "Offense and speed",
   "battle.calc.ev_set_zero": "Set this stat to 0 EVs",
   "battle.calc.ev_set_max": "Set this stat to 252 EVs",
+  "battle.calc.ev_min_short": "MIN",
+  "battle.calc.ev_max_short": "MAX",
   "battle.calc.ev_stat.hp": "HP",
   "battle.calc.ev_stat.atk": "Attack",
   "battle.calc.ev_stat.def": "Defense",
