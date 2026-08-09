@@ -1,7 +1,6 @@
 extends SceneTree
 
 const Inference := preload("res://scripts/battle/battle_calcdex_inference.gd")
-const CalcPanel := preload("res://scripts/battle/battle_ui/battle_damage_calc_panel.gd")
 
 var failed := false
 
@@ -21,21 +20,13 @@ func _init() -> void:
 	var leaked := response.duplicate(true)
 	leaked["appliedEvidence"][0]["privateDamage"] = 999
 	_check(not bool(Inference.normalize_response(leaked, revision).get("success", false)), "unexpected inference fields fail closed")
-	var panel := CalcPanel.new()
-	_check(not bool(panel.get_smart_options().get("useObservationInference", true)), "inference is opt-in")
-	panel._on_inference_toggle_pressed()
-	_check(bool(panel.get_smart_options().get("useObservationInference", false)), "inference can be enabled and reversed")
-	panel._on_inference_toggle_pressed()
-	_check(not bool(panel.get_smart_options().get("useObservationInference", true)), "ignore restores Calc-4 request mode")
-	panel.free()
 	var battle_source := FileAccess.get_file_as_string("res://scripts/battle/battle.gd")
 	var refresh_start := battle_source.find("func _refresh_damage_calc_results")
 	var refresh_end := battle_source.find("\nfunc ", refresh_start + 5)
 	var refresh_source := battle_source.substr(refresh_start, refresh_end - refresh_start)
-	var inferred_index := refresh_source.find("calculate_calcdex_inferred_matchup")
-	var smart_index := refresh_source.find("calculate_calcdex_smart_matchup", inferred_index)
-	var base_index := refresh_source.find("calculate_calcdex_matchup", smart_index)
-	_check(inferred_index >= 0 and smart_index > inferred_index and base_index > smart_index, "downgrade order is inferred to smart to base")
+	_check(refresh_source.find("calculate_calcdex_matchup") >= 0, "the calculator uses the confirmed-information matchup route")
+	_check(refresh_source.find("calculate_calcdex_inferred_matchup") < 0, "inference is not a hidden UI calculation mode")
+	_check(refresh_source.find("calculate_calcdex_smart_matchup") < 0, "usage candidates are not a hidden UI calculation mode")
 	if not failed:
 		print("PASS battle_calcdex_inference_check")
 	quit(1 if failed else 0)

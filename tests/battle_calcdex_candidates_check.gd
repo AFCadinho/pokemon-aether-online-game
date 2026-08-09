@@ -59,49 +59,57 @@ func _run() -> void:
 	root.add_child(panel)
 	await process_frame
 	panel.set_knowledge_snapshot(_selection_snapshot())
-	panel.show_response(normalized_usage)
+	panel.show_sample_set_catalog_response("Mew", {
+		"schemaVersion": 1,
+		"libraryRevision": "test-v1",
+		"manifestFingerprint": "c".repeat(64),
+		"speciesFingerprint": "d".repeat(64),
+		"formatId": "gen9nationaldex",
+		"source": "pokeaether_curated",
+		"species": "Mew",
+		"sets": [{
+			"id": "defensive-pivot",
+			"name": "Defensive Pivot",
+			"item": "Heavy-Duty Boots",
+			"ability": "Synchronize",
+			"nature": "Bold",
+			"evs": {"hp": 252, "def": 252, "spd": 4},
+			"ivs": {"hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 0},
+			"teraType": "Ghost",
+			"moves": ["Psychic", "U-turn", "Will-O-Wisp", "Roost"],
+			"provenance": {"kind": "pokeaether_curated"},
+		}],
+	})
 	await process_frame
-	if panel.public_usage_set_options.size() != 2:
-		_fail("all public usage candidates must be available as named scenarios")
+	if panel.sample_set_options.size() != 1:
+		_fail("the curated sample-set catalog must be available as scenarios")
 		return
-	panel._apply_public_usage_set(panel.public_usage_set_options[0])
-	if panel.selected_public_usage_set_id != "usage:mew-1630-01":
-		_fail("selecting a public usage set must retain its explicit scenario identity")
+	panel._apply_sample_set(panel.sample_set_options[0])
+	if panel.selected_sample_set_id != "defensive-pivot":
+		_fail("selecting a sample set must retain its explicit scenario identity")
 		return
-	if panel.defender_assumptions.get("item") != "Heavy-Duty Boots" or panel.defender_assumptions.get("ability") != "Flame Body" or panel.defender_assumptions.get("nature") != "Timid":
-		_fail("selecting a public usage set must fill item, ability, and nature")
+	if panel.defender_assumptions.get("item") != "Heavy-Duty Boots" or panel.defender_assumptions.get("ability") != "Synchronize" or panel.defender_assumptions.get("nature") != "Bold":
+		_fail("selecting a sample set must fill item, ability, and nature")
 		return
-	if panel.defender_assumptions.get("evs") != {"spa": 252, "spd": 4, "spe": 252} or (panel.defender_assumptions.get("assumedMoves", []) as Array).size() != 4:
-		_fail("selecting a public usage set must fill EVs and assumed moves")
+	if panel.defender_assumptions.get("evs") != {"hp": 252, "def": 252, "spd": 4} or (panel.defender_assumptions.get("assumedMoves", []) as Array).size() != 4:
+		_fail("selecting a sample set must fill EVs and assumed moves")
 		return
-	if panel.defender_assumptions.has("ivs"):
-		_fail("default 31 IVs should not become redundant manual assumptions")
+	if panel.defender_assumptions.get("ivs") != {"spe": 0}:
+		_fail("only non-default IVs should become explicit assumptions")
+		return
+	if not bool(panel.defender_assumptions.get("exactStats", false)):
+		_fail("a selected sample set must be calculated as an exact user scenario")
 		return
 	panel._on_nature_option_pressed("Modest")
-	if panel.selected_public_usage_set_id != "":
-		_fail("editing a selected usage set must turn it into a custom scenario")
+	if panel.selected_sample_set_id != "":
+		_fail("editing a selected sample set must turn it into a custom scenario")
 		return
-	panel._apply_automatic_public_usage_range()
+	panel._reset_to_confirmed_information()
 	if not panel.defender_assumptions.is_empty() or not panel.edited_assumption_fields.is_empty():
-		_fail("Auto must restore the unpinned public candidate range")
+		_fail("confirmed information must clear all user scenarios")
 		return
-	if panel._get_nature_chip_label({}, "aggregate_prior").contains("Hardy"):
-		_fail("a public candidate range must not be presented as an assumed Hardy nature")
-		return
-	if panel.get_smart_options()["rangeMode"] != "likely":
-		_fail("likely range must be the safe default")
-		return
-	panel._on_smart_range_pressed("full")
-	if panel.get_smart_options()["rangeMode"] != "full":
-		_fail("full envelope switch must be reversible")
-		return
-	panel._on_candidate_pin_pressed("curated:fast-special")
-	if panel.get_smart_options()["pinnedCandidateId"] != "curated:fast-special":
-		_fail("candidate pin must be explicit")
-		return
-	panel._on_candidate_pin_pressed("curated:fast-special")
-	if panel.get_smart_options()["pinnedCandidateId"] != "":
-		_fail("candidate pin must reset")
+	if panel._get_nature_chip_label({}).contains("Hardy"):
+		_fail("unknown nature must never be presented as assumed Hardy")
 		return
 	print("PASS battle_calcdex_candidates_check")
 	quit(0)

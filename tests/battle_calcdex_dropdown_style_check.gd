@@ -39,19 +39,19 @@ func _run() -> void:
 	content.add_child(field_selector)
 	_assert_dropdown_style(field_selector, "Field selector")
 
-	panel.public_usage_set_options = [{
-		"candidateId": "fixture-set",
-		"weight": 1.0,
-		"effectiveInput": {
-			"item": "Heavy-Duty Boots",
-			"ability": "Flame Body",
-			"nature": "Timid",
-			"evs": {"spa": 252, "spe": 252},
-		},
+	panel.sample_set_options = [{
+		"id": "fixture-set",
+		"name": "Offensive",
+		"item": "Heavy-Duty Boots",
+		"ability": "Flame Body",
+		"nature": "Timid",
+		"evs": {"spa": 252, "spe": 252},
+		"ivs": {},
+		"moves": ["Fiery Dance"],
 	}]
 	var usage_host := VBoxContainer.new()
 	content.add_child(usage_host)
-	panel._add_public_usage_set_selector(usage_host)
+	panel._add_sample_set_selector(usage_host)
 	var usage_selector := _find_option_button(usage_host)
 	if usage_selector == null:
 		_fail("Usage/sample-set selector was not created")

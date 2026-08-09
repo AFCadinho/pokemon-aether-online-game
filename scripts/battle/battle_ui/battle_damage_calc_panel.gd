@@ -8,6 +8,7 @@ const DROPDOWN_RADIO_CHECKED: Texture2D = preload("res://assets/ui/photo_mode_ra
 const DROPDOWN_RADIO_UNCHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_unchecked.svg")
 signal defender_assumptions_changed(assumptions: Dictionary, edited_fields: Dictionary)
 signal assumption_catalog_requested(kind: String, query: String, species: String)
+signal sample_set_catalog_requested(species: String)
 signal matchup_selection_changed()
 
 const TEXT_PRIMARY := Color(0.95686275, 0.94509804, 0.91764706, 1.0)
@@ -67,7 +68,7 @@ const SELECTOR_ITEM := "item"
 const SELECTOR_ABILITY := "ability"
 const SELECTOR_NATURE := "nature"
 const SELECTOR_EVS := "evs"
-const PUBLIC_USAGE_SET_CUSTOM := "__custom__"
+const SAMPLE_SET_CUSTOM := "__custom__"
 const EV_TOTAL_LIMIT := 508
 const ASSUMPTION_CHANGE_DEBOUNCE_SECONDS := 0.35
 const CATALOG_SEARCH_DEBOUNCE_SECONDS := 0.3
@@ -114,15 +115,15 @@ var localization_manager: Node
 var selected_viewer_ref := ""
 var selected_opponent_ref := ""
 var field_scenario: Dictionary = {}
-var smart_range_mode := "likely"
-var pinned_candidate_id := ""
-var use_observation_inference := false
 var advanced_scenario_expanded := false
+var manual_scenario_expanded := false
 var warning_details_expanded := false
 var warning_details_panel: Control
-var public_usage_set_options: Array[Dictionary] = []
-var public_usage_set_context_key := ""
-var selected_public_usage_set_id := ""
+var sample_set_options: Array[Dictionary] = []
+var sample_set_species := ""
+var sample_set_loading := false
+var sample_set_error := ""
+var selected_sample_set_id := ""
 
 
 func _ready() -> void:
@@ -152,7 +153,7 @@ func _ready() -> void:
 
 func show_idle() -> void:
 	close_assumption_popover()
-	_clear_public_usage_sets()
+	_clear_sample_sets()
 	is_loading = false
 	loading_attacker_name = ""
 	loading_defender_name = ""
@@ -196,7 +197,6 @@ func show_response(response: Dictionary) -> void:
 		last_error = _t("battle.calc.error.direction_mismatch")
 	else:
 		last_response = response
-		_capture_public_usage_sets(response)
 
 	if _is_catalog_search_active():
 		return
@@ -218,7 +218,8 @@ func set_knowledge_snapshot(snapshot: Dictionary) -> void:
 	selected_viewer_ref = _resolve_selected_ref("viewer", selected_viewer_ref)
 	selected_opponent_ref = _resolve_selected_ref("opponent", selected_opponent_ref)
 	if previous_opponent_ref != "" and selected_opponent_ref != previous_opponent_ref:
-		_clear_public_usage_sets()
+		_clear_sample_sets()
+	_request_sample_sets_if_needed()
 	if _is_catalog_search_active():
 		return
 	if is_inside_tree():
@@ -259,7 +260,6 @@ func _flush_pending_assumption_changes() -> void:
 func _render_current_state() -> void:
 	_clear_content()
 	_add_subtabs()
-	_add_smart_range_controls()
 
 	if not last_response.is_empty():
 		_render_your_damage_response(last_response)
@@ -317,11 +317,9 @@ func _render_your_damage_response(response: Dictionary) -> void:
 	if results.is_empty():
 		var empty_fallback := _t("battle.calc.no_damage_taken_moves") if str(response.get("direction", "")) == "opponent-to-own" else _t("battle.calc.no_results")
 		_add_status(_fallback_text(str(response.get("emptyReason", "")), empty_fallback), TEXT_SECONDARY)
-		_add_candidate_summary(response)
 		return
 
 	_add_move_results_table(results, defender)
-	_add_candidate_summary(response)
 	_add_result_footnotes(response, results)
 
 
@@ -403,242 +401,190 @@ func get_field_scenario() -> Dictionary:
 	return field_scenario.duplicate(true)
 
 
-func get_smart_options() -> Dictionary:
-	return {
-		"rangeMode": smart_range_mode,
-		"pinnedCandidateId": pinned_candidate_id,
-		"useObservationInference": use_observation_inference,
-	}
+func _clear_sample_sets() -> void:
+	sample_set_options.clear()
+	sample_set_species = ""
+	sample_set_loading = false
+	sample_set_error = ""
+	selected_sample_set_id = ""
 
 
-func _add_smart_range_controls() -> void:
-	if knowledge_snapshot.is_empty():
+func _request_sample_sets_if_needed() -> void:
+	var species := _get_selected_opponent_species()
+	if species == "" or species.to_lower() == sample_set_species.to_lower():
 		return
-	var row := HBoxContainer.new()
-	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.add_theme_constant_override("separation", 4)
-	content.add_child(row)
-	for mode: String in ["likely", "full"]:
-		var button := _make_small_button(
-			_t("battle.calc.range_%s" % mode),
-			_on_smart_range_pressed.bind(mode)
-		)
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.toggle_mode = true
-		button.button_pressed = smart_range_mode == mode
-		row.add_child(button)
-	var inference_button := _make_small_button(
-		_t("battle.calc.inference_use" if use_observation_inference else "battle.calc.inference_ignore"),
-		_on_inference_toggle_pressed
+	sample_set_options.clear()
+	sample_set_species = species
+	sample_set_loading = true
+	sample_set_error = ""
+	selected_sample_set_id = ""
+	sample_set_catalog_requested.emit(species)
+
+
+func show_sample_set_catalog_response(species: String, response: Dictionary) -> void:
+	if species.to_lower() != sample_set_species.to_lower():
+		return
+	sample_set_loading = false
+	sample_set_error = ""
+	var valid_envelope := (
+		int(response.get("schemaVersion", 0)) == 1
+		and str(response.get("formatId", "")) == "gen9nationaldex"
+		and str(response.get("source", "")) == "pokeaether_curated"
+		and str(response.get("species", "")).to_lower() == species.to_lower()
+		and response.get("sets") is Array
+		and (response.get("sets") as Array).size() <= 64
 	)
-	inference_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	inference_button.toggle_mode = true
-	inference_button.button_pressed = use_observation_inference
-	inference_button.tooltip_text = _t("battle.calc.inference_tooltip")
-	row.add_child(inference_button)
+	if not valid_envelope:
+		sample_set_options.clear()
+		sample_set_error = _t("battle.calc.sample_sets_unavailable")
+	else:
+		var options: Array[Dictionary] = []
+		for value: Variant in response.get("sets", []):
+			var entry := _as_dictionary(value)
+			if _is_valid_sample_set(entry):
+				options.append(entry.duplicate(true))
+		sample_set_options = options
+	if is_inside_tree():
+		_render_current_state()
 
 
-func _on_smart_range_pressed(mode: String) -> void:
-	if mode == smart_range_mode:
+func show_sample_set_catalog_error(species: String, _error: String) -> void:
+	if species.to_lower() != sample_set_species.to_lower():
 		return
-	smart_range_mode = mode
-	last_response = {}
-	matchup_selection_changed.emit()
+	sample_set_loading = false
+	sample_set_options.clear()
+	sample_set_error = _t("battle.calc.sample_sets_unavailable")
+	if is_inside_tree():
+		_render_current_state()
 
 
-func _on_inference_toggle_pressed() -> void:
-	use_observation_inference = not use_observation_inference
-	last_response = {}
-	matchup_selection_changed.emit()
+func _is_valid_sample_set(entry: Dictionary) -> bool:
+	if str(entry.get("id", "")).strip_edges() == "" or str(entry.get("name", "")).strip_edges() == "":
+		return false
+	if str(entry.get("ability", "")).strip_edges() == "" or str(entry.get("nature", "")).strip_edges() == "":
+		return false
+	if not (entry.get("evs") is Dictionary) or not (entry.get("ivs") is Dictionary) or not (entry.get("moves") is Array):
+		return false
+	if not _is_valid_sample_stat_table(entry.get("evs"), 252) or not _is_valid_sample_stat_table(entry.get("ivs"), 31):
+		return false
+	var moves: Array = entry.get("moves") as Array
+	return moves.size() <= 4 and moves.all(func(value: Variant) -> bool: return value is String and not str(value).strip_edges().is_empty())
 
 
-func _add_candidate_summary(response: Dictionary) -> void:
-	var candidates: Array = _as_array(response.get("candidates", []))
-	if candidates.is_empty():
-		return
-	var title := _make_label(_t("battle.calc.candidate_estimates"), 10, TEXT_MUTED)
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	content.add_child(title)
-	for explanation_value: Variant in _as_array(response.get("inferenceExplanationKeys", [])):
-		var explanation_key := str(explanation_value)
-		var explanation := _t(explanation_key)
-		if explanation != explanation_key:
-			_add_status(explanation, TEXT_MUTED)
-	for candidate_value: Variant in candidates:
-		var candidate := _as_dictionary(candidate_value)
-		var candidate_id := str(candidate.get("candidateId", ""))
-		var label_key := str(candidate.get("labelKey", ""))
-		var label := _t(label_key)
-		if label == label_key:
-			label = candidate_id
-		var effective := _as_dictionary(candidate.get("effectiveInput", {}))
-		var details: Array[String] = []
-		for key: String in ["nature", "item", "ability"]:
-			var value := str(effective.get(key, "")).strip_edges()
-			if value != "":
-				details.append(value)
-		var weight_percent := roundi(float(candidate.get("weight", 0.0)) * 100.0)
-		var text := _t("battle.calc.candidate_estimate", {
-			"label": label,
-			"weight": weight_percent,
-			"details": _join_string_array(details, " · "),
-		})
-		var button := _make_small_button(text, _on_candidate_pin_pressed.bind(candidate_id))
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.toggle_mode = true
-		button.tooltip_text = _t("battle.calc.candidate_not_confirmed")
-		button.button_pressed = bool(candidate.get("pinned", false))
-		content.add_child(button)
+func _is_valid_sample_stat_table(value: Variant, maximum: int) -> bool:
+	if not (value is Dictionary):
+		return false
+	var stats := value as Dictionary
+	for key: Variant in stats.keys():
+		if str(key) not in ["hp", "atk", "def", "spa", "spd", "spe"]:
+			return false
+		var stat_value: Variant = stats.get(key)
+		if typeof(stat_value) not in [TYPE_INT, TYPE_FLOAT]:
+			return false
+		if not is_finite(float(stat_value)) or float(stat_value) != float(int(stat_value)):
+			return false
+		if int(stat_value) < 0 or int(stat_value) > maximum:
+			return false
+	return true
 
 
-func _on_candidate_pin_pressed(candidate_id: String) -> void:
-	pinned_candidate_id = "" if pinned_candidate_id == candidate_id else candidate_id
-	last_response = {}
-	matchup_selection_changed.emit()
-
-
-func _capture_public_usage_sets(response: Dictionary) -> void:
-	var context_key := _get_public_usage_set_context_key(response)
-	if context_key == "":
-		return
-	if public_usage_set_context_key != context_key:
-		_clear_public_usage_sets()
-		public_usage_set_context_key = context_key
-
-	# A selected/manual scenario can make equivalent server candidates collapse.
-	# Keep the last automatic catalog so the other public priors stay selectable.
-	if not edited_assumption_fields.is_empty() and not public_usage_set_options.is_empty():
-		return
-
-	var options: Array[Dictionary] = []
-	for candidate_value: Variant in _as_array(response.get("candidates", [])):
-		var candidate := _as_dictionary(candidate_value)
-		if str(candidate.get("source", "")) != "public_usage_prior":
-			continue
-		var candidate_id := str(candidate.get("candidateId", "")).strip_edges()
-		var effective := _as_dictionary(candidate.get("effectiveInput", {}))
-		if candidate_id == "" or effective.is_empty():
-			continue
-		options.append(candidate.duplicate(true))
-	if not options.is_empty():
-		public_usage_set_options = options
-
-
-func _get_public_usage_set_context_key(response: Dictionary) -> String:
-	var attacker := _as_dictionary(response.get("attacker", {}))
-	var defender := _as_dictionary(response.get("defender", {}))
-	var opponent := attacker if str(attacker.get("relation", "")) == "opponent" else defender
-	if str(opponent.get("relation", "")) != "opponent":
+func _get_selected_opponent_species() -> String:
+	var opponent := _get_snapshot_pokemon_by_ref(selected_opponent_ref)
+	if opponent.is_empty():
 		return ""
-	var pokemon_ref := str(opponent.get("pokemonRef", "")).strip_edges()
-	var species := str(opponent.get("species", "")).strip_edges()
-	if pokemon_ref == "" and species == "":
+	var identity := _as_dictionary(opponent.get("identity", {}))
+	if str(identity.get("state", "")) != "known":
 		return ""
-	return "%s|%s|%s" % [pokemon_ref, species.to_lower(), str(response.get("presetRevision", ""))]
+	return str(identity.get("value", "")).strip_edges()
 
 
-func _clear_public_usage_sets() -> void:
-	public_usage_set_options.clear()
-	public_usage_set_context_key = ""
-	selected_public_usage_set_id = ""
-
-
-func _add_public_usage_set_selector(parent: VBoxContainer) -> void:
-	if public_usage_set_options.is_empty():
-		return
-	var row := HBoxContainer.new()
-	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.add_theme_constant_override("separation", 6)
-	parent.add_child(row)
-
-	var label := _make_label(_t("battle.calc.public_usage_set"), 11, TEXT_MUTED)
-	label.custom_minimum_size = Vector2(112, 0)
-	label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	row.add_child(label)
-
+func _add_sample_set_selector(parent: VBoxContainer) -> void:
 	var selector := OptionButton.new()
 	selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	selector.custom_minimum_size = Vector2(0, 30)
-	selector.clip_text = true
-	selector.add_theme_font_size_override("font_size", 11)
-	selector.tooltip_text = _t("battle.calc.public_usage_set_disclaimer")
-	selector.add_item(_t("battle.calc.public_usage_set_auto"))
+	selector.tooltip_text = _t("battle.calc.sample_set_disclaimer")
+	selector.add_item(_t("battle.calc.confirmed_information"))
 	selector.set_item_metadata(0, "")
-	if selected_public_usage_set_id == "" and not edited_assumption_fields.is_empty():
-		selector.add_item(_t("battle.calc.public_usage_set_custom"))
-		selector.set_item_metadata(selector.item_count - 1, PUBLIC_USAGE_SET_CUSTOM)
+	if selected_sample_set_id == "" and (not edited_assumption_fields.is_empty() or not field_scenario.is_empty()):
+		selector.add_item(_t("battle.calc.custom_scenario"))
+		selector.set_item_metadata(selector.item_count - 1, SAMPLE_SET_CUSTOM)
 		selector.select(selector.item_count - 1)
-	for index: int in range(public_usage_set_options.size()):
-		var candidate := public_usage_set_options[index]
-		var candidate_id := str(candidate.get("candidateId", ""))
-		selector.add_item(_get_public_usage_set_name(candidate, index))
-		selector.set_item_metadata(selector.item_count - 1, candidate_id)
-		selector.set_item_tooltip(selector.item_count - 1, _get_public_usage_set_tooltip(candidate))
-		if candidate_id == selected_public_usage_set_id:
+	for option: Dictionary in sample_set_options:
+		var option_id := str(option.get("id", ""))
+		selector.add_item(str(option.get("name", option_id)))
+		selector.set_item_metadata(selector.item_count - 1, option_id)
+		selector.set_item_tooltip(selector.item_count - 1, _get_sample_set_tooltip(option))
+		if option_id == selected_sample_set_id:
 			selector.select(selector.item_count - 1)
-	selector.item_selected.connect(_on_public_usage_set_selected.bind(selector))
-	_apply_calcdex_dropdown_style(selector, 30.0, 11)
-	row.add_child(selector)
+	if sample_set_loading:
+		selector.add_item(_t("battle.calc.sample_sets_loading"))
+		selector.set_item_disabled(selector.item_count - 1, true)
+	elif sample_set_error != "":
+		selector.add_item(sample_set_error)
+		selector.set_item_disabled(selector.item_count - 1, true)
+	selector.item_selected.connect(_on_sample_set_selected.bind(selector))
+	_apply_calcdex_dropdown_style(selector, 34.0, 12)
+	parent.add_child(selector)
 
 
-func _on_public_usage_set_selected(index: int, selector: OptionButton) -> void:
-	var candidate_id := str(selector.get_item_metadata(index))
-	if candidate_id == PUBLIC_USAGE_SET_CUSTOM:
+func _on_sample_set_selected(index: int, selector: OptionButton) -> void:
+	var option_id := str(selector.get_item_metadata(index))
+	if option_id == SAMPLE_SET_CUSTOM:
 		return
-	if candidate_id == "":
-		_apply_automatic_public_usage_range()
+	if option_id == "":
+		_reset_to_confirmed_information()
 		return
-	for candidate: Dictionary in public_usage_set_options:
-		if str(candidate.get("candidateId", "")) == candidate_id:
-			_apply_public_usage_set(candidate)
+	for option: Dictionary in sample_set_options:
+		if str(option.get("id", "")) == option_id:
+			_apply_sample_set(option)
 			return
 
 
-func _apply_automatic_public_usage_range() -> void:
-	selected_public_usage_set_id = ""
-	pinned_candidate_id = ""
+func _reset_to_confirmed_information() -> void:
 	defender_assumptions.clear()
 	edited_assumption_fields.clear()
+	field_scenario.clear()
+	selected_sample_set_id = ""
+	manual_scenario_expanded = false
+	advanced_scenario_expanded = false
+	active_selector = SELECTOR_NONE
 	_emit_defender_assumptions_changed()
 	_render_current_state()
 
 
-func _apply_public_usage_set(candidate: Dictionary) -> void:
-	var candidate_id := str(candidate.get("candidateId", "")).strip_edges()
-	var effective := _as_dictionary(candidate.get("effectiveInput", {}))
-	if candidate_id == "" or effective.is_empty():
-		return
+func _apply_sample_set(option: Dictionary) -> void:
 	defender_assumptions.clear()
 	edited_assumption_fields.clear()
 	for key: String in ["item", "ability", "nature"]:
-		var value := str(effective.get(key, "")).strip_edges()
+		var value := str(option.get(key, "")).strip_edges()
 		if value != "" and value != "<null>":
 			defender_assumptions[key] = value
 			edited_assumption_fields[key] = true
-	var evs := _sanitize_public_usage_stats(_as_dictionary(effective.get("evs", {})), 252, false)
-	if not evs.is_empty():
-		defender_assumptions["evs"] = evs
-		edited_assumption_fields["evs"] = true
-	var ivs := _sanitize_public_usage_stats(_as_dictionary(effective.get("ivs", {})), 31, true)
-	if not ivs.is_empty():
-		defender_assumptions["ivs"] = ivs
-		edited_assumption_fields["ivs"] = true
+	defender_assumptions["evs"] = _sanitize_sample_set_stats(_as_dictionary(option.get("evs", {})), 252, false)
+	defender_assumptions["ivs"] = _sanitize_sample_set_stats(_as_dictionary(option.get("ivs", {})), 31, true)
+	defender_assumptions["exactStats"] = true
+	edited_assumption_fields["evs"] = true
+	edited_assumption_fields["ivs"] = true
+	edited_assumption_fields["exactStats"] = true
 	var moves: Array[String] = []
-	for move_value: Variant in _as_array(effective.get("assumedMoves", [])):
+	for move_value: Variant in _as_array(option.get("moves", [])):
 		var move_name := str(move_value).strip_edges()
 		if move_name != "" and move_name.length() <= 100 and move_name not in moves and moves.size() < 4:
 			moves.append(move_name)
 	if not moves.is_empty():
 		defender_assumptions["assumedMoves"] = moves
 		edited_assumption_fields["assumedMoves"] = true
-	selected_public_usage_set_id = candidate_id
-	pinned_candidate_id = ""
+	selected_sample_set_id = str(option.get("id", ""))
+	manual_scenario_expanded = false
+	active_selector = SELECTOR_NONE
 	_emit_defender_assumptions_changed()
 	_render_current_state()
 
 
-func _sanitize_public_usage_stats(stats: Dictionary, maximum: int, omit_default: bool) -> Dictionary:
+func _mark_sample_set_custom() -> void:
+	selected_sample_set_id = ""
+
+
+func _sanitize_sample_set_stats(stats: Dictionary, maximum: int, omit_default: bool) -> Dictionary:
 	var sanitized: Dictionary = {}
 	for key: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
 		if not stats.has(key):
@@ -650,65 +596,13 @@ func _sanitize_public_usage_stats(stats: Dictionary, maximum: int, omit_default:
 	return sanitized
 
 
-func _mark_public_usage_set_custom() -> void:
-	selected_public_usage_set_id = ""
-
-
-func _get_public_usage_set_name(candidate: Dictionary, index: int) -> String:
-	var effective := _as_dictionary(candidate.get("effectiveInput", {}))
-	var item := str(effective.get("item", "")).strip_edges()
-	return _t("battle.calc.public_usage_set_name", {
-		"index": index + 1,
-		"role": _get_public_usage_set_role(_as_dictionary(effective.get("evs", {}))),
-		"item": _fallback_text(item, _t("battle.calc.public_usage_set_no_item")),
-	})
-
-
-func _get_public_usage_set_role(evs: Dictionary) -> String:
-	var hp := int(evs.get("hp", 0))
-	var attack := int(evs.get("atk", 0))
-	var defense := int(evs.get("def", 0))
-	var special_attack := int(evs.get("spa", 0))
-	var special_defense := int(evs.get("spd", 0))
-	var speed := int(evs.get("spe", 0))
-	var role := "balanced"
-	if hp >= 200 and maxi(defense, special_defense) >= 160:
-		role = "bulky"
-	elif attack >= 200 and special_attack >= 200:
-		role = "mixed"
-	elif attack >= 200 and speed >= 200:
-		role = "fast_physical"
-	elif special_attack >= 200 and speed >= 200:
-		role = "fast_special"
-	elif attack >= 200:
-		role = "physical"
-	elif special_attack >= 200:
-		role = "special"
-	return _t("battle.calc.public_usage_role.%s" % role)
-
-
-func _get_public_usage_set_tooltip(candidate: Dictionary) -> String:
-	var effective := _as_dictionary(candidate.get("effectiveInput", {}))
+func _get_sample_set_tooltip(option: Dictionary) -> String:
 	var details: Array[String] = []
-	for key: String in ["nature", "ability"]:
-		var value := str(effective.get(key, "")).strip_edges()
-		if value != "":
+	for key: String in ["item", "ability", "nature"]:
+		var value := str(option.get(key, "")).strip_edges()
+		if value != "" and value != "<null>":
 			details.append(value)
-	var ev_parts: Array[String] = []
-	var evs := _as_dictionary(effective.get("evs", {}))
-	for stat_key: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
-		var value := int(evs.get(stat_key, 0))
-		if value > 0:
-			ev_parts.append("%d %s" % [value, _get_ev_display_name(stat_key)])
-	if not ev_parts.is_empty():
-		details.append(_join_string_array(ev_parts, " / "))
-	var moves := _as_array(effective.get("assumedMoves", []))
-	if not moves.is_empty():
-		details.append(_join_string_array(moves, " / "))
-	return _t("battle.calc.public_usage_set_tooltip", {
-		"weight": roundi(float(candidate.get("weight", 0.0)) * 100.0),
-		"details": _join_string_array(details, " · "),
-	})
+	return _join_string_array(details, " · ")
 
 
 func _make_pokemon_selector(relation: String, is_attacker: bool) -> OptionButton:
@@ -737,8 +631,9 @@ func _on_pokemon_selected(index: int, selector: OptionButton, relation: String) 
 		selected_viewer_ref = pokemon_ref
 	else:
 		if pokemon_ref != selected_opponent_ref:
-			_clear_public_usage_sets()
+			_clear_sample_sets()
 		selected_opponent_ref = pokemon_ref
+		_request_sample_sets_if_needed()
 	last_response = {}
 	matchup_selection_changed.emit()
 
@@ -900,14 +795,10 @@ func _add_status(text: String, color: Color) -> void:
 	content.add_child(label)
 
 
-func _add_assumption_chips(defender: Dictionary, response: Dictionary) -> void:
+func _add_assumption_chips(defender: Dictionary, _response: Dictionary) -> void:
 	_add_public_fact_chips()
 	var assumptions := _get_display_assumptions(defender)
-	var prior_provenance := ""
-	if not defender_assumptions.has("nature") and response.get("candidates") is Array and not (response.get("candidates") as Array).is_empty():
-		var first_candidate := _as_dictionary((response.get("candidates") as Array)[0])
-		prior_provenance = "aggregate_prior" if str(first_candidate.get("source", "")) == "public_usage_prior" else "curated_prior"
-	_add_live_assumption_controls(assumptions, prior_provenance)
+	_add_live_assumption_controls(assumptions)
 
 
 func _add_public_fact_chips() -> void:
@@ -1266,7 +1157,7 @@ func _make_label(text: String, font_size: int, color: Color) -> Label:
 	return label
 
 
-func _add_live_assumption_controls(assumptions: Dictionary, prior_provenance: String = "") -> void:
+func _add_live_assumption_controls(assumptions: Dictionary, _prior_provenance: String = "") -> void:
 	is_syncing_assumption_controls = true
 	live_ev_inputs.clear()
 	live_ev_total_label = null
@@ -1288,13 +1179,27 @@ func _add_live_assumption_controls(assumptions: Dictionary, prior_provenance: St
 	title_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title_row.add_theme_constant_override("separation", 6)
 	box.add_child(title_row)
-	var setup_title := _make_label(_t("battle.calc.opponent_setup"), 13, TEXT_PRIMARY)
+	var setup_title := _make_label(_t("battle.calc.sample_set"), 13, TEXT_PRIMARY)
 	setup_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	setup_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	title_row.add_child(setup_title)
-	var reset_button := _make_assumption_reset_button()
-	title_row.add_child(reset_button)
-	_add_public_usage_set_selector(box)
+	if not edited_assumption_fields.is_empty() or not field_scenario.is_empty():
+		var reset_button := _make_assumption_reset_button()
+		title_row.add_child(reset_button)
+	_add_sample_set_selector(box)
+	var scenario_status := _t("battle.calc.sample_set_disclaimer")
+	var status_label := _make_label(scenario_status, 10, TEXT_MUTED)
+	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	status_label.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
+	box.add_child(status_label)
+	box.add_child(_make_disclosure_button(
+		_t("battle.calc.hide_manual" if manual_scenario_expanded else "battle.calc.edit_manually"),
+		manual_scenario_expanded,
+		_on_manual_scenario_pressed
+	))
+	if not manual_scenario_expanded:
+		is_syncing_assumption_controls = false
+		return
 
 	var primary_row := HBoxContainer.new()
 	primary_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1304,25 +1209,25 @@ func _add_live_assumption_controls(assumptions: Dictionary, prior_provenance: St
 
 	primary_row.add_child(_make_assumption_summary_button(
 		_t("battle.calc.item"),
-		_get_assumption_control_value(assumptions, SELECTOR_ITEM, prior_provenance),
+		_get_assumption_control_value(assumptions, SELECTOR_ITEM),
 		SELECTOR_ITEM,
 		_get_assumption_chip_label(assumptions, "item", _t("battle.calc.item_unknown"))
 	))
 	primary_row.add_child(_make_assumption_summary_button(
 		_t("battle.calc.ability"),
-		_get_assumption_control_value(assumptions, SELECTOR_ABILITY, prior_provenance),
+		_get_assumption_control_value(assumptions, SELECTOR_ABILITY),
 		SELECTOR_ABILITY,
 		_get_assumption_chip_label(assumptions, "ability", _t("battle.calc.ability_unknown"))
 	))
 	primary_row.add_child(_make_assumption_summary_button(
 		_t("battle.calc.nature"),
-		_get_assumption_control_value(assumptions, SELECTOR_NATURE, prior_provenance),
+		_get_assumption_control_value(assumptions, SELECTOR_NATURE),
 		SELECTOR_NATURE,
-		_get_nature_chip_label(assumptions, prior_provenance)
+		_get_nature_chip_label(assumptions)
 	))
 	primary_row.add_child(_make_assumption_summary_button(
 		_t("battle.calc.evs"),
-		_get_assumption_control_value(assumptions, SELECTOR_EVS, prior_provenance),
+		_get_assumption_control_value(assumptions, SELECTOR_EVS),
 		SELECTOR_EVS,
 		_get_evs_summary_chip_label(_as_dictionary(assumptions.get("evs", {})))
 	))
@@ -1338,6 +1243,13 @@ func _add_live_assumption_controls(assumptions: Dictionary, prior_provenance: St
 	is_syncing_assumption_controls = false
 	if live_ev_focus_stat != "":
 		call_deferred("_restore_live_ev_input_focus")
+
+
+func _on_manual_scenario_pressed() -> void:
+	manual_scenario_expanded = not manual_scenario_expanded
+	if not manual_scenario_expanded:
+		active_selector = SELECTOR_NONE
+	_render_current_state()
 
 
 func _add_advanced_scenario_controls(parent: VBoxContainer, assumptions: Dictionary) -> void:
@@ -1415,7 +1327,7 @@ func _on_field_scenario_selected(index: int, selector: OptionButton, key: String
 
 
 func _on_assumed_moves_changed(text: String) -> void:
-	_mark_public_usage_set_custom()
+	_mark_sample_set_custom()
 	var moves: Array[String] = []
 	for raw_name: String in text.split(","):
 		var name := raw_name.strip_edges()
@@ -1575,7 +1487,8 @@ func _get_assumption_control_value(assumptions: Dictionary, editor_kind: String,
 		SELECTOR_NATURE:
 			if prior_provenance != "" and not bool(edited_assumption_fields.get("nature", false)):
 				return _t("battle.calc.set_range")
-			return _localized_nature_name(_fallback_text(str(assumptions.get("nature", "")).strip_edges(), "Hardy"))
+			var nature := str(assumptions.get("nature", "")).strip_edges()
+			return _t("common.unknown") if nature == "" else _localized_nature_name(nature)
 		SELECTOR_EVS:
 			return "%d / %d" % [_get_evs_total(_as_dictionary(assumptions.get("evs", {}))), EV_TOTAL_LIMIT]
 		_:
@@ -1589,7 +1502,7 @@ func _get_assumption_fallback_label(editor_kind: String) -> String:
 		SELECTOR_ABILITY:
 			return _t("battle.calc.ability_unknown")
 		SELECTOR_NATURE:
-			return _localized_nature_name("Hardy")
+			return _t("common.unknown")
 		SELECTOR_EVS:
 			return _t("battle.calc.evs_total", {"total": 0, "limit": EV_TOTAL_LIMIT})
 		_:
@@ -1742,7 +1655,7 @@ func _make_compact_option_button(text: String, selected: bool, pressed_callback:
 
 
 func _on_nature_option_pressed(nature: String) -> void:
-	_mark_public_usage_set_custom()
+	_mark_sample_set_custom()
 	defender_assumptions["nature"] = nature
 	edited_assumption_fields["nature"] = true
 	_close_assumption_suggestions()
@@ -1771,7 +1684,7 @@ func _on_live_ev_quick_value_pressed(stat_key: String, value: int) -> void:
 
 
 func _apply_live_ev_value(stat_key: String, raw_value: int, sync_input_text: bool) -> void:
-	_mark_public_usage_set_custom()
+	_mark_sample_set_custom()
 	var evs: Dictionary = _as_dictionary(defender_assumptions.get("evs", {})).duplicate(true)
 	var clamped_value: int = clampi(raw_value, 0, 252)
 	var input: LineEdit = live_ev_inputs.get(stat_key) as LineEdit
@@ -1829,8 +1742,9 @@ func _reset_live_assumptions() -> void:
 	defender_assumptions.clear()
 	field_scenario.clear()
 	edited_assumption_fields.clear()
-	selected_public_usage_set_id = ""
-	pinned_candidate_id = ""
+	selected_sample_set_id = ""
+	manual_scenario_expanded = false
+	advanced_scenario_expanded = false
 	if assumption_change_timer != null:
 		assumption_change_timer.stop()
 	if catalog_search_timer != null:
@@ -1983,7 +1897,7 @@ func _request_active_catalog() -> void:
 
 
 func _on_catalog_assumption_clear_pressed(kind: String) -> void:
-	_mark_public_usage_set_custom()
+	_mark_sample_set_custom()
 	var key: String = kind
 	defender_assumptions[key] = ""
 	edited_assumption_fields.erase(key)
@@ -1998,7 +1912,7 @@ func _on_selector_result_pressed(result: Dictionary) -> void:
 	var calc_name: String = str(result.get("calcName", result.get("name", ""))).strip_edges()
 	if calc_name == "":
 		return
-	_mark_public_usage_set_custom()
+	_mark_sample_set_custom()
 	var key: String = active_selector
 	defender_assumptions[key] = calc_name
 	edited_assumption_fields[key] = true
@@ -2466,8 +2380,6 @@ func _get_display_assumptions(defender: Dictionary) -> Dictionary:
 	var assumptions := _as_dictionary(defender.get("assumptions", {})).duplicate(true)
 	for key: Variant in defender_assumptions.keys():
 		assumptions[key] = defender_assumptions[key]
-	if not assumptions.has("nature") or str(assumptions.get("nature", "")).strip_edges() == "":
-		assumptions["nature"] = "Hardy"
 	if not assumptions.has("evs"):
 		assumptions["evs"] = {}
 	if not assumptions.has("ivs"):
@@ -2478,7 +2390,9 @@ func _get_display_assumptions(defender: Dictionary) -> Dictionary:
 func _get_nature_chip_label(assumptions: Dictionary, prior_provenance: String = "") -> String:
 	if prior_provenance != "" and not bool(edited_assumption_fields.get("nature", false)):
 		return "%s · %s" % [_t("battle.calc.set_range"), _t("battle.calc.provenance.%s" % prior_provenance)]
-	var canonical_nature := _fallback_text(str(assumptions.get("nature", "")).strip_edges(), "Hardy")
+	var canonical_nature := str(assumptions.get("nature", "")).strip_edges()
+	if canonical_nature == "":
+		return "%s · %s" % [_t("common.unknown"), _t("battle.calc.provenance.unknown")]
 	var label := _localized_nature_name(canonical_nature)
 	return _get_scenario_label(label, "nature")
 

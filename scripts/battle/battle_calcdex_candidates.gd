@@ -90,8 +90,10 @@ static func _normalize_candidates(value: Variant) -> Array[Dictionary]:
 			return []
 		var effective: Dictionary = candidate.get("effectiveInput", {}) if candidate.get("effectiveInput") is Dictionary else {}
 		for key: Variant in effective.keys():
-			if str(key) not in ["nature", "item", "ability", "evs", "ivs", "assumedMoves"]:
+			if str(key) not in ["nature", "item", "ability", "evs", "ivs", "assumedMoves", "exactStats"]:
 				return []
+		if effective.has("exactStats") and typeof(effective.get("exactStats")) != TYPE_BOOL:
+			return []
 		var normalized_rows: Array[Dictionary] = []
 		if not (candidate.get("results") is Array) or (candidate.get("results") as Array).size() > 4:
 			return []

@@ -587,6 +587,8 @@ func _normalize_damage_calc_assumptions(defender_assumptions: Dictionary) -> Dic
 		assumptions["evs"] = _normalize_damage_calc_stat_table(defender_assumptions.get("evs"))
 	if defender_assumptions.has("ivs"):
 		assumptions["ivs"] = _normalize_damage_calc_stat_table(defender_assumptions.get("ivs"))
+	if defender_assumptions.has("exactStats"):
+		assumptions["exactStats"] = bool(defender_assumptions.get("exactStats", false))
 	return assumptions
 
 func _normalize_damage_calc_stat_table(value: Variant) -> Dictionary:

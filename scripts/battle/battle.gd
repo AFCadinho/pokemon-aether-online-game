@@ -195,6 +195,7 @@ var damage_calc_request_token := 0
 var damage_calc_request_in_flight := false
 var damage_calc_refresh_queued := false
 var damage_calc_catalog_request_token := 0
+var damage_calc_sample_set_request_token := 0
 var damage_calc_matchup_key := ""
 var damage_calc_defender_species_key := ""
 var damage_calc_defender_assumptions: Dictionary = {}
@@ -420,6 +421,8 @@ func _ready() -> void:
 		calc_panel.defender_assumptions_changed.connect(_on_calc_panel_defender_assumptions_changed)
 	if not calc_panel.assumption_catalog_requested.is_connected(_on_calc_panel_assumption_catalog_requested):
 		calc_panel.assumption_catalog_requested.connect(_on_calc_panel_assumption_catalog_requested)
+	if not calc_panel.sample_set_catalog_requested.is_connected(_on_calc_panel_sample_set_catalog_requested):
+		calc_panel.sample_set_catalog_requested.connect(_on_calc_panel_sample_set_catalog_requested)
 	if not calc_panel.matchup_selection_changed.is_connected(_on_calc_panel_matchup_selection_changed):
 		calc_panel.matchup_selection_changed.connect(_on_calc_panel_matchup_selection_changed)
 	if not bag_grid.item_selected.is_connected(_on_bag_grid_item_selected):
@@ -2376,67 +2379,17 @@ func _refresh_damage_calc_results() -> void:
 		if str(selection.get("attackerRef", "")) == "" or str(selection.get("defenderRef", "")) == "":
 			response = {"success": false, "error": _t("battle.calc.error.selection")}
 		else:
-			var smart_options: Dictionary = calc_panel.get_smart_options()
-			var use_inference := bool(smart_options.get("useObservationInference", false))
-			if use_inference:
-				response = await BattleApiClient.calculate_calcdex_inferred_matchup(
-					damage_calc_request,
-					battle_state.battle_id,
-					projection_revision,
-					str(selection.get("direction", "own-to-opponent")),
-					str(selection.get("attackerRef", "")),
-					str(selection.get("defenderRef", "")),
-					_get_damage_calc_defender_assumptions_payload(),
-					calc_panel.get_field_scenario(),
-					str(smart_options.get("rangeMode", "likely")),
-					str(smart_options.get("pinnedCandidateId", ""))
-				)
-			else:
-				response = await BattleApiClient.calculate_calcdex_smart_matchup(
-					damage_calc_request,
-					battle_state.battle_id,
-					projection_revision,
-					str(selection.get("direction", "own-to-opponent")),
-					str(selection.get("attackerRef", "")),
-					str(selection.get("defenderRef", "")),
-					_get_damage_calc_defender_assumptions_payload(),
-					calc_panel.get_field_scenario(),
-					str(smart_options.get("rangeMode", "likely")),
-					str(smart_options.get("pinnedCandidateId", ""))
-				)
-			if use_inference and not bool(response.get("success", false)) and _get_damage_calc_error_code(response) == "CALC_UNSUPPORTED_MECHANIC":
-				response = await BattleApiClient.calculate_calcdex_smart_matchup(
-					damage_calc_request,
-					battle_state.battle_id,
-					projection_revision,
-					str(selection.get("direction", "own-to-opponent")),
-					str(selection.get("attackerRef", "")),
-					str(selection.get("defenderRef", "")),
-					_get_damage_calc_defender_assumptions_payload(),
-					calc_panel.get_field_scenario(),
-					str(smart_options.get("rangeMode", "likely")),
-					str(smart_options.get("pinnedCandidateId", ""))
-				)
-			if not bool(response.get("success", false)) and _get_damage_calc_error_code(response) == "CALC_UNSUPPORTED_MECHANIC":
-				response = await BattleApiClient.calculate_calcdex_matchup(
-					damage_calc_request, battle_state.battle_id, projection_revision,
-					str(selection.get("direction", "own-to-opponent")),
-					str(selection.get("attackerRef", "")), str(selection.get("defenderRef", "")),
-					_get_damage_calc_defender_assumptions_payload(), calc_panel.get_field_scenario()
-				)
-	else:
-		if requested_direction == "opponent-to-own":
-			response = {
-				"success": false,
-				"error": _t("battle.calc.error.reverse_requires_safe_snapshot"),
-			}
-		else:
-			response = await BattleApiClient.calculate_battle_damage(
-				damage_calc_request,
-				battle_state.battle_id,
-				"own-to-opponent",
-				_get_damage_calc_defender_assumptions_payload()
+			response = await BattleApiClient.calculate_calcdex_matchup(
+				damage_calc_request, battle_state.battle_id, projection_revision,
+				str(selection.get("direction", "own-to-opponent")),
+				str(selection.get("attackerRef", "")), str(selection.get("defenderRef", "")),
+				_get_damage_calc_defender_assumptions_payload(), calc_panel.get_field_scenario()
 			)
+	else:
+		response = {
+			"success": false,
+			"error": _t("battle.calc.error.safe_snapshot_required"),
+		}
 
 	damage_calc_request_in_flight = false
 	if request_token != damage_calc_request_token:
@@ -2513,6 +2466,26 @@ func _on_calc_panel_assumption_catalog_requested(kind: String, query: String, sp
 		calc_panel.show_assumption_catalog_response(kind, response)
 	else:
 		calc_panel.show_assumption_catalog_error(kind, str(response.get("error", "Could not load assumptions.")))
+
+func _on_calc_panel_sample_set_catalog_requested(species: String) -> void:
+	if current_action_panel_mode != BattleActionsPanelMode.CALC:
+		return
+	damage_calc_sample_set_request_token += 1
+	var request_token := damage_calc_sample_set_request_token
+	var request_node := HTTPRequest.new()
+	add_child(request_node)
+	var response := await PokemonDataApiClient.get_calcdex_sample_sets(
+		request_node,
+		"gen9nationaldex",
+		species
+	)
+	request_node.queue_free()
+	if request_token != damage_calc_sample_set_request_token or current_action_panel_mode != BattleActionsPanelMode.CALC:
+		return
+	if bool(response.get("success", true)):
+		calc_panel.show_sample_set_catalog_response(species, response)
+	else:
+		calc_panel.show_sample_set_catalog_error(species, str(response.get("error", "Could not load sample sets.")))
 
 func _sync_damage_calc_matchup_assumptions() -> void:
 	var current_battle_id := battle_state.battle_id.strip_edges()
@@ -2633,12 +2606,14 @@ func _sanitize_damage_calc_assumptions(assumptions: Dictionary) -> Dictionary:
 			assumed_moves.append(move_name)
 	if not assumed_moves.is_empty():
 		sanitized["assumedMoves"] = assumed_moves
+	if bool(assumptions.get("exactStats", false)):
+		sanitized["exactStats"] = true
 
 	return sanitized
 
 func _get_persistable_damage_calc_assumptions(assumptions: Dictionary, edited_fields: Dictionary) -> Dictionary:
 	var edited_assumptions: Dictionary = {}
-	for key: String in ["item", "ability", "nature", "evs", "ivs", "assumedMoves"]:
+	for key: String in ["item", "ability", "nature", "evs", "ivs", "assumedMoves", "exactStats"]:
 		if bool(edited_fields.get(key, false)) and assumptions.has(key):
 			edited_assumptions[key] = assumptions.get(key)
 	return _sanitize_damage_calc_assumptions(edited_assumptions)
@@ -2658,7 +2633,7 @@ func _sanitize_damage_calc_stat_table(stats: Dictionary, omit_default_ivs: bool)
 
 func _build_damage_calc_edited_fields(assumptions: Dictionary) -> Dictionary:
 	var edited: Dictionary = {}
-	for key: String in ["item", "ability", "nature", "evs", "ivs", "assumedMoves"]:
+	for key: String in ["item", "ability", "nature", "evs", "ivs", "assumedMoves", "exactStats"]:
 		if not assumptions.has(key):
 			continue
 		var value: Variant = assumptions.get(key)
@@ -2730,6 +2705,13 @@ func _get_damage_calc_defender_assumptions_payload() -> Dictionary:
 	for key: String in ["item", "ability"]:
 		if str(payload.get(key, "")).strip_edges() == "":
 			payload.erase(key)
+	payload["exactStats"] = (
+		bool(damage_calc_assumption_edited_fields.get("nature", false))
+		and (
+			bool(damage_calc_assumption_edited_fields.get("evs", false))
+			or bool(damage_calc_defender_assumptions.get("exactStats", false))
+		)
+	)
 	return payload
 
 func _get_damage_calc_error_code(response: Dictionary) -> String:
