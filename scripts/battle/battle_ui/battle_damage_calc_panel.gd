@@ -3,6 +3,9 @@ extends MarginContainer
 class_name BattleDamageCalcPanel
 
 const CALCDEX_SNAPSHOT := preload("res://scripts/battle/battle_calcdex_snapshot.gd")
+const DROPDOWN_ARROW: Texture2D = preload("res://assets/ui/photo_mode_dropdown_arrow.svg")
+const DROPDOWN_RADIO_CHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_checked.svg")
+const DROPDOWN_RADIO_UNCHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_unchecked.svg")
 signal defender_assumptions_changed(assumptions: Dictionary, edited_fields: Dictionary)
 signal assumption_catalog_requested(kind: String, query: String, species: String)
 signal matchup_selection_changed()
@@ -27,6 +30,13 @@ const KO_BORDER := Color(0.72, 0.55, 0.23, 0.88)
 const TAB_BG := Color(0.024, 0.036, 0.062, 0.92)
 const TAB_ACTIVE_BG := Color(0.124, 0.203, 0.332, 0.98)
 const TAB_BORDER := Color(0.19, 0.31, 0.48, 0.9)
+const DROPDOWN_BG := Color(0.018, 0.035, 0.059, 0.98)
+const DROPDOWN_HOVER_BG := Color(0.035, 0.105, 0.164, 0.99)
+const DROPDOWN_PRESSED_BG := Color(0.045, 0.137, 0.211, 1.0)
+const DROPDOWN_POPUP_BG := Color(0.008, 0.019, 0.034, 0.995)
+const DROPDOWN_BORDER := Color(0.16, 0.34, 0.50, 0.9)
+const DROPDOWN_HOVER_BORDER := Color(0.30, 0.67, 0.86, 0.96)
+const DROPDOWN_FOCUS_BORDER := Color(0.56, 0.87, 1.0, 1.0)
 const SUSPICIOUS_PERCENT_LIMIT := 999.0
 const DAMAGE_COLUMN_WIDTH := 132.0
 const KO_COLUMN_WIDTH := 92.0
@@ -568,6 +578,7 @@ func _add_public_usage_set_selector(parent: VBoxContainer) -> void:
 		if candidate_id == selected_public_usage_set_id:
 			selector.select(selector.item_count - 1)
 	selector.item_selected.connect(_on_public_usage_set_selected.bind(selector))
+	_apply_calcdex_dropdown_style(selector, 30.0, 11)
 	row.add_child(selector)
 
 
@@ -716,6 +727,7 @@ func _make_pokemon_selector(relation: String, is_attacker: bool) -> OptionButton
 		if pokemon_ref == selected_ref:
 			selector.select(selector.item_count - 1)
 	selector.item_selected.connect(_on_pokemon_selected.bind(selector, relation))
+	_apply_calcdex_dropdown_style(selector, 30.0, 14)
 	return selector
 
 
@@ -1389,6 +1401,7 @@ func _make_field_scenario_selector(key: String, values: Array) -> OptionButton:
 		if normalized == str(field_scenario.get(key, "")):
 			selector.select(selector.item_count - 1)
 	selector.item_selected.connect(_on_field_scenario_selected.bind(selector, key))
+	_apply_calcdex_dropdown_style(selector, 32.0, 11)
 	return selector
 
 
@@ -2093,6 +2106,105 @@ func _get_ev_display_name(stat_key: String) -> String:
 			return _t("battle.stat.short.speed")
 		_:
 			return stat_key.to_upper()
+
+
+func _apply_calcdex_dropdown_style(selector: OptionButton, minimum_height: float, font_size: int) -> void:
+	if selector == null:
+		return
+	selector.custom_minimum_size.y = maxf(selector.custom_minimum_size.y, minimum_height)
+	selector.focus_mode = Control.FOCUS_ALL
+	selector.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	selector.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	selector.clip_text = true
+	selector.add_theme_font_size_override("font_size", font_size)
+	selector.add_theme_color_override("font_color", TEXT_PRIMARY)
+	selector.add_theme_color_override("font_hover_color", Color.WHITE)
+	selector.add_theme_color_override("font_pressed_color", Color.WHITE)
+	selector.add_theme_color_override("font_focus_color", Color.WHITE)
+	selector.add_theme_color_override("font_disabled_color", Color(TEXT_MUTED, 0.48))
+	selector.add_theme_constant_override("arrow_margin", 10)
+	selector.add_theme_icon_override("arrow", DROPDOWN_ARROW)
+	selector.add_theme_stylebox_override(
+		"normal",
+		_make_dropdown_button_style(DROPDOWN_BG, DROPDOWN_BORDER)
+	)
+	selector.add_theme_stylebox_override(
+		"hover",
+		_make_dropdown_button_style(DROPDOWN_HOVER_BG, DROPDOWN_HOVER_BORDER)
+	)
+	selector.add_theme_stylebox_override(
+		"pressed",
+		_make_dropdown_button_style(DROPDOWN_PRESSED_BG, DROPDOWN_FOCUS_BORDER)
+	)
+	selector.add_theme_stylebox_override(
+		"focus",
+		_make_dropdown_button_style(DROPDOWN_BG, DROPDOWN_FOCUS_BORDER, 2)
+	)
+	selector.add_theme_stylebox_override(
+		"disabled",
+		_make_dropdown_button_style(Color(0.014, 0.024, 0.039, 0.76), Color(0.12, 0.19, 0.27, 0.6))
+	)
+
+	var popup := selector.get_popup()
+	if popup == null:
+		return
+	popup.transparent_bg = true
+	popup.borderless = true
+	popup.add_theme_font_size_override("font_size", maxi(font_size, 12))
+	popup.add_theme_color_override("font_color", TEXT_PRIMARY)
+	popup.add_theme_color_override("font_hover_color", Color.WHITE)
+	popup.add_theme_color_override("font_disabled_color", Color(TEXT_MUTED, 0.48))
+	popup.add_theme_color_override("font_separator_color", DROPDOWN_HOVER_BORDER)
+	popup.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.9))
+	popup.add_theme_constant_override("outline_size", 1)
+	popup.add_theme_constant_override("item_start_padding", 10)
+	popup.add_theme_constant_override("item_end_padding", 12)
+	popup.add_theme_constant_override("v_separation", 6)
+	popup.add_theme_stylebox_override("panel", _make_dropdown_popup_style())
+	popup.add_theme_stylebox_override(
+		"hover",
+		_make_dropdown_popup_item_style(DROPDOWN_HOVER_BG, DROPDOWN_HOVER_BORDER)
+	)
+	popup.add_theme_stylebox_override(
+		"separator",
+		_make_dropdown_popup_item_style(Color.TRANSPARENT, Color(0.16, 0.31, 0.45, 0.58), 0)
+	)
+	popup.add_theme_icon_override("radio_checked", DROPDOWN_RADIO_CHECKED)
+	popup.add_theme_icon_override("radio_unchecked", DROPDOWN_RADIO_UNCHECKED)
+	popup.add_theme_icon_override("radio_checked_disabled", DROPDOWN_RADIO_CHECKED)
+	popup.add_theme_icon_override("radio_unchecked_disabled", DROPDOWN_RADIO_UNCHECKED)
+
+
+func _make_dropdown_button_style(background: Color, border: Color, border_width: int = 1) -> StyleBoxFlat:
+	var style := _make_stylebox(background, border, 7, 10.0, 5.0)
+	style.set_border_width_all(border_width)
+	style.content_margin_right = 30.0
+	return style
+
+
+func _make_dropdown_popup_style() -> StyleBoxFlat:
+	var style := _make_dropdown_popup_item_style(DROPDOWN_POPUP_BG, DROPDOWN_HOVER_BORDER, 9)
+	style.content_margin_left = 5.0
+	style.content_margin_top = 6.0
+	style.content_margin_right = 5.0
+	style.content_margin_bottom = 6.0
+	style.shadow_color = Color(0.0, 0.0, 0.0, 0.58)
+	style.shadow_size = 12
+	style.shadow_offset = Vector2(0, 5)
+	return style
+
+
+func _make_dropdown_popup_item_style(background: Color, border: Color, radius: int = 6) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = background
+	style.border_color = border
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(radius)
+	style.content_margin_left = 5.0
+	style.content_margin_top = 4.0
+	style.content_margin_right = 5.0
+	style.content_margin_bottom = 4.0
+	return style
 
 
 func _make_stylebox(
