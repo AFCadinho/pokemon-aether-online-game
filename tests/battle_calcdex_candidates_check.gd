@@ -22,7 +22,19 @@ func _run() -> void:
 	usage_response["candidates"][0]["candidateId"] = "usage:mew-1630-01"
 	usage_response["candidates"][0]["source"] = "public_usage_prior"
 	usage_response["candidates"][0]["labelKey"] = "calcdex.preset.public_usage"
+	usage_response["candidates"][0]["effectiveInput"] = {
+		"nature": "Timid", "item": "Heavy-Duty Boots", "ability": "Flame Body",
+		"evs": {"spa": 252, "spd": 4, "spe": 252},
+		"ivs": {"hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31},
+		"assumedMoves": ["Quiver Dance", "Bug Buzz", "Flamethrower", "Fiery Dance"],
+	}
 	usage_response["candidates"][0]["results"][0]["moveSource"] = "public_usage_prior"
+	var second_usage_candidate: Dictionary = usage_response["candidates"][0].duplicate(true)
+	second_usage_candidate["candidateId"] = "usage:mew-1630-02"
+	second_usage_candidate["weight"] = 0.25
+	second_usage_candidate["effectiveInput"]["nature"] = "Modest"
+	second_usage_candidate["effectiveInput"]["item"] = "Leftovers"
+	usage_response["candidates"].append(second_usage_candidate)
 	usage_response["ranges"][0]["moveSource"] = "public_usage_prior"
 	usage_response["ranges"][0]["extremaCandidateIds"] = ["usage:mew-1630-01"]
 	var normalized_usage := Candidates.normalize_response(usage_response, revision)
@@ -42,8 +54,32 @@ func _run() -> void:
 	root.add_child(panel)
 	await process_frame
 	panel.set_knowledge_snapshot(_selection_snapshot())
-	panel.show_response(normalized)
+	panel.show_response(normalized_usage)
 	await process_frame
+	if panel.public_usage_set_options.size() != 2:
+		_fail("all public usage candidates must be available as named scenarios")
+		return
+	panel._apply_public_usage_set(panel.public_usage_set_options[0])
+	if panel.selected_public_usage_set_id != "usage:mew-1630-01":
+		_fail("selecting a public usage set must retain its explicit scenario identity")
+		return
+	if panel.defender_assumptions.get("item") != "Heavy-Duty Boots" or panel.defender_assumptions.get("ability") != "Flame Body" or panel.defender_assumptions.get("nature") != "Timid":
+		_fail("selecting a public usage set must fill item, ability, and nature")
+		return
+	if panel.defender_assumptions.get("evs") != {"spa": 252, "spd": 4, "spe": 252} or (panel.defender_assumptions.get("assumedMoves", []) as Array).size() != 4:
+		_fail("selecting a public usage set must fill EVs and assumed moves")
+		return
+	if panel.defender_assumptions.has("ivs"):
+		_fail("default 31 IVs should not become redundant manual assumptions")
+		return
+	panel._on_nature_option_pressed("Modest")
+	if panel.selected_public_usage_set_id != "":
+		_fail("editing a selected usage set must turn it into a custom scenario")
+		return
+	panel._apply_automatic_public_usage_range()
+	if not panel.defender_assumptions.is_empty() or not panel.edited_assumption_fields.is_empty():
+		_fail("Auto must restore the unpinned public candidate range")
+		return
 	if panel._get_nature_chip_label({}, "aggregate_prior").contains("Hardy"):
 		_fail("a public candidate range must not be presented as an assumed Hardy nature")
 		return
