@@ -127,6 +127,26 @@ func _run() -> void:
 	if panel.defender_assumptions.get("ability") != "Synchronize" or not panel.edited_assumption_fields.is_empty():
 		_fail("Current must use the first public species ability without marking it as a manual edit")
 		return
+	panel.show_response(response)
+	await process_frame
+	if panel.item_assumption_input == null or panel.ability_assumption_input == null or panel.nature_assumption_input == null:
+		_fail("Item, ability, and nature must be directly editable in their setup cards")
+		return
+	panel._on_catalog_assumption_focus_entered("item")
+	if _count_nodes_of_type(panel.catalog_suggestions_box, "LineEdit") != 0:
+		_fail("Inline setup autocomplete must not create a duplicate input below the setup cards")
+		return
+	panel._on_inline_assumption_text_submitted("Leftovers", "item")
+	panel._on_inline_assumption_text_submitted("Pressure", "ability")
+	panel._on_inline_assumption_text_submitted("Modest", "nature")
+	if panel.defender_assumptions.get("item") != "Leftovers" or panel.defender_assumptions.get("ability") != "Pressure" or panel.defender_assumptions.get("nature") != "Modest":
+		_fail("Submitting an inline setup field must apply the custom scenario directly")
+		return
+	for field_name: String in ["item", "ability", "nature"]:
+		if not bool(panel.edited_assumption_fields.get(field_name, false)):
+			_fail("Inline %s edits must retain user-scenario provenance" % field_name)
+			return
+	panel._reset_to_current()
 	panel.active_selector = "move"
 	panel.active_move_slot = 0
 	panel._on_selector_result_pressed({"name": "Psychic", "calcName": "Psychic", "type": "psychic", "category": "special"})
@@ -236,6 +256,15 @@ func _has_line_edit_text(node: Node, text: String) -> bool:
 		if _has_line_edit_text(child, text):
 			return true
 	return false
+
+
+func _count_nodes_of_type(node: Node, type_name: String) -> int:
+	if node == null:
+		return 0
+	var count := 1 if node.is_class(type_name) else 0
+	for child: Node in node.get_children():
+		count += _count_nodes_of_type(child, type_name)
+	return count
 
 
 func _count_line_edit_placeholder(node: Node, text: String) -> int:
