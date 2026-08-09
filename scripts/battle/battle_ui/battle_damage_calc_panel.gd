@@ -5,6 +5,7 @@ class_name BattleDamageCalcPanel
 const CALCDEX_SNAPSHOT := preload("res://scripts/battle/battle_calcdex_snapshot.gd")
 signal defender_assumptions_changed(assumptions: Dictionary, edited_fields: Dictionary)
 signal assumption_catalog_requested(kind: String, query: String, species: String)
+signal matchup_selection_changed()
 
 const TEXT_PRIMARY := Color(0.95686275, 0.94509804, 0.91764706, 1.0)
 const TEXT_SECONDARY := Color(0.72156864, 0.72156864, 0.72156864, 1.0)
@@ -76,6 +77,9 @@ var selector_error: String = ""
 var nature_catalog_options: Array = []
 var is_syncing_assumption_controls := false
 var localization_manager: Node
+var selected_viewer_ref := ""
+var selected_opponent_ref := ""
+var field_scenario: Dictionary = {}
 
 
 func _ready() -> void:
@@ -156,6 +160,8 @@ func set_defender_assumptions(assumptions: Dictionary, edited_fields: Dictionary
 
 func set_knowledge_snapshot(snapshot: Dictionary) -> void:
 	knowledge_snapshot = snapshot.duplicate(true)
+	selected_viewer_ref = _resolve_selected_ref("viewer", selected_viewer_ref)
+	selected_opponent_ref = _resolve_selected_ref("opponent", selected_opponent_ref)
 	if _is_catalog_search_active():
 		return
 	if is_inside_tree():
@@ -196,11 +202,7 @@ func _flush_pending_assumption_changes() -> void:
 func _render_current_state() -> void:
 	_clear_content()
 	_add_subtabs()
-
-	if active_subtab == SUBTAB_THEIR_DAMAGE:
-		_add_profile_summary(_t("battle.calc.opponent"), _t("battle.calc.your_pokemon"), _t("battle.calc.hp_unknown"), _t("battle.calc.level_unknown"))
-		_add_status(_t("battle.calc.coming_soon"), TEXT_SECONDARY)
-		return
+	_add_matchup_selectors()
 
 	if not last_response.is_empty():
 		_render_your_damage_response(last_response)
@@ -246,7 +248,7 @@ func _render_your_damage_response(response: Dictionary) -> void:
 		_get_level_label(defender),
 		_get_boosts_label(attacker)
 	)
-	_add_assumption_chips(defender, response)
+	_add_assumption_chips(attacker if str(attacker.get("relation", "")) == "opponent" else defender, response)
 
 	var results: Array = _as_array(response.get("results", []))
 	if results.is_empty():
@@ -260,7 +262,7 @@ func _render_your_damage_response(response: Dictionary) -> void:
 	for warning_value: Variant in _as_array(response.get("warnings", [])):
 		var warning := str(warning_value).strip_edges()
 		if warning != "":
-			_add_status(warning, TEXT_MUTED)
+			_add_status(_warning_label(warning), TEXT_MUTED)
 
 
 func _clear_content() -> void:
@@ -283,7 +285,7 @@ func _add_subtabs() -> void:
 func _make_subtab_button(text: String, tab_id: String) -> Button:
 	var button := Button.new()
 	button.text = text
-	button.focus_mode = Control.FOCUS_NONE
+	button.focus_mode = Control.FOCUS_ALL
 	button.custom_minimum_size = Vector2(0, 24)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.clip_text = true
@@ -313,7 +315,9 @@ func _on_your_damage_tab_pressed() -> void:
 		return
 	close_assumption_popover()
 	active_subtab = SUBTAB_YOUR_DAMAGE
+	last_response = {}
 	_render_current_state()
+	matchup_selection_changed.emit()
 
 
 func _on_their_damage_tab_pressed() -> void:
@@ -321,7 +325,86 @@ func _on_their_damage_tab_pressed() -> void:
 		return
 	close_assumption_popover()
 	active_subtab = SUBTAB_THEIR_DAMAGE
+	last_response = {}
 	_render_current_state()
+	matchup_selection_changed.emit()
+
+
+func get_matchup_selection() -> Dictionary:
+	return {
+		"direction": "opponent-to-own" if active_subtab == SUBTAB_THEIR_DAMAGE else "own-to-opponent",
+		"attackerRef": selected_opponent_ref if active_subtab == SUBTAB_THEIR_DAMAGE else selected_viewer_ref,
+		"defenderRef": selected_viewer_ref if active_subtab == SUBTAB_THEIR_DAMAGE else selected_opponent_ref,
+	}
+
+
+func get_field_scenario() -> Dictionary:
+	return field_scenario.duplicate(true)
+
+
+func _add_matchup_selectors() -> void:
+	if knowledge_snapshot.is_empty():
+		return
+	var row := HBoxContainer.new()
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_theme_constant_override("separation", 4)
+	content.add_child(row)
+	var attacker_relation := "opponent" if active_subtab == SUBTAB_THEIR_DAMAGE else "viewer"
+	var defender_relation := "viewer" if active_subtab == SUBTAB_THEIR_DAMAGE else "opponent"
+	row.add_child(_make_pokemon_selector(attacker_relation, true))
+	row.add_child(_make_pokemon_selector(defender_relation, false))
+
+
+func _make_pokemon_selector(relation: String, is_attacker: bool) -> OptionButton:
+	var selector := OptionButton.new()
+	selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	selector.tooltip_text = _t("battle.calc.attacker_selector" if is_attacker else "battle.calc.defender_selector")
+	var collection: Array = _as_array(knowledge_snapshot.get("viewerPokemon" if relation == "viewer" else "opponentPokemon", []))
+	var selected_ref := selected_viewer_ref if relation == "viewer" else selected_opponent_ref
+	for entry_value: Variant in collection:
+		var entry := _as_dictionary(entry_value)
+		if entry.is_empty() or bool(entry.get("fainted", false)):
+			continue
+		var pokemon_ref := str(entry.get("pokemonRef", ""))
+		selector.add_item(_snapshot_pokemon_name(entry))
+		selector.set_item_metadata(selector.item_count - 1, pokemon_ref)
+		if pokemon_ref == selected_ref:
+			selector.select(selector.item_count - 1)
+	selector.item_selected.connect(_on_pokemon_selected.bind(selector, relation))
+	return selector
+
+
+func _on_pokemon_selected(index: int, selector: OptionButton, relation: String) -> void:
+	var pokemon_ref := str(selector.get_item_metadata(index))
+	if relation == "viewer":
+		selected_viewer_ref = pokemon_ref
+	else:
+		selected_opponent_ref = pokemon_ref
+	last_response = {}
+	matchup_selection_changed.emit()
+
+
+func _resolve_selected_ref(relation: String, current_ref: String) -> String:
+	var collection: Array = _as_array(knowledge_snapshot.get("viewerPokemon" if relation == "viewer" else "opponentPokemon", []))
+	var fallback := ""
+	for entry_value: Variant in collection:
+		var entry := _as_dictionary(entry_value)
+		if entry.is_empty() or bool(entry.get("fainted", false)):
+			continue
+		var pokemon_ref := str(entry.get("pokemonRef", ""))
+		if pokemon_ref == current_ref:
+			return current_ref
+		if bool(entry.get("active", false)):
+			fallback = pokemon_ref
+		elif fallback == "":
+			fallback = pokemon_ref
+	return fallback
+
+
+func _snapshot_pokemon_name(entry: Dictionary) -> String:
+	var identity := _as_dictionary(entry.get("identity", {}))
+	var name := str(identity.get("value", "")).strip_edges()
+	return _fallback_text(name, _t("battle.move.unknown"))
 
 
 func _add_profile_summary(attacker_name: String, defender_name: String, hp_label: String, level_label: String, boosts_label: String = "") -> void:
@@ -377,7 +460,7 @@ func _add_assumption_chips(defender: Dictionary, _response: Dictionary) -> void:
 
 
 func _add_public_fact_chips() -> void:
-	var opponent := CALCDEX_SNAPSHOT.get_active_pokemon(knowledge_snapshot, "opponent")
+	var opponent := _get_snapshot_pokemon_by_ref(selected_opponent_ref)
 	if opponent.is_empty():
 		return
 	var facts: Array[String] = []
@@ -410,6 +493,14 @@ func _add_public_fact_chips() -> void:
 		var chip := _make_chip(fact)
 		chip.add_theme_stylebox_override("normal", _make_stylebox(CHIP_BG, CHIP_PUBLIC_BORDER, 4, 5.0, 2.0))
 		content.add_child(chip)
+
+
+func _get_snapshot_pokemon_by_ref(pokemon_ref: String) -> Dictionary:
+	for entry_value: Variant in _as_array(knowledge_snapshot.get("opponentPokemon", [])):
+		var entry := _as_dictionary(entry_value)
+		if str(entry.get("pokemonRef", "")) == pokemon_ref:
+			return entry
+	return {}
 
 
 func _get_provenance_label(knowledge: Dictionary) -> String:
@@ -477,7 +568,7 @@ func _add_move_result_row(result: Dictionary, defender: Dictionary) -> void:
 	for warning_value: Variant in _as_array(result.get("warnings", [])) + _as_array(result.get("koWarnings", [])):
 		var warning := str(warning_value).strip_edges()
 		if warning != "":
-			_add_row_notice(box, warning, TEXT_ERROR if result_state in ["unsupported", "error"] else TEXT_MUTED)
+			_add_row_notice(box, _warning_label(warning), TEXT_ERROR if result_state in ["unsupported", "error"] else TEXT_MUTED)
 
 	var end_of_turn := _as_dictionary(result.get("endOfTurn", {}))
 	if str(end_of_turn.get("state", "")) == "not_included":
@@ -492,6 +583,16 @@ func _add_row_notice(parent: VBoxContainer, text: String, color: Color) -> void:
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
 	parent.add_child(label)
+
+
+func _warning_label(value: String) -> String:
+	if not value.begins_with("CALC_"):
+		return value
+	if value.begins_with("CALC_SCENARIO_ATTACKER_") or value.begins_with("CALC_SCENARIO_DEFENDER_"):
+		return _t("battle.calc.warning.field_scenario")
+	var key := "battle.calc.warning.%s" % value.to_lower()
+	var translated := _t(key)
+	return value if translated == key else translated
 
 
 func _make_chip(text: String) -> Label:
@@ -580,11 +681,65 @@ func _add_live_assumption_controls(assumptions: Dictionary) -> void:
 	catalog_suggestions_box.clip_contents = true
 	catalog_suggestions_box.add_theme_constant_override("separation", 3)
 	box.add_child(catalog_suggestions_box)
+	_add_advanced_scenario_controls(box, assumptions)
 	_render_active_assumption_editor(assumptions)
 
 	is_syncing_assumption_controls = false
 	if live_ev_focus_stat != "":
 		call_deferred("_restore_live_ev_input_focus")
+
+
+func _add_advanced_scenario_controls(parent: VBoxContainer, assumptions: Dictionary) -> void:
+	var title := _make_label(_t("battle.calc.advanced_scenario"), 10, TEXT_MUTED)
+	parent.add_child(title)
+	var field_row := HBoxContainer.new()
+	field_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	field_row.add_child(_make_field_scenario_selector("weather", ["", "Rain", "Sun", "Sand", "Hail", "Snow"]))
+	field_row.add_child(_make_field_scenario_selector("terrain", ["", "Electric", "Grassy", "Misty", "Psychic"]))
+	parent.add_child(field_row)
+	if active_subtab == SUBTAB_THEIR_DAMAGE:
+		var moves_input := LineEdit.new()
+		moves_input.placeholder_text = _t("battle.calc.assumed_moves_placeholder")
+		moves_input.text = _join_string_array(_as_array(assumptions.get("assumedMoves", [])), ", ")
+		moves_input.max_length = 403
+		moves_input.text_changed.connect(_on_assumed_moves_changed)
+		parent.add_child(moves_input)
+
+
+func _make_field_scenario_selector(key: String, values: Array) -> OptionButton:
+	var selector := OptionButton.new()
+	selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	for value: Variant in values:
+		var normalized := str(value)
+		selector.add_item(_t("common.none") if normalized == "" else normalized)
+		selector.set_item_metadata(selector.item_count - 1, normalized)
+		if normalized == str(field_scenario.get(key, "")):
+			selector.select(selector.item_count - 1)
+	selector.item_selected.connect(_on_field_scenario_selected.bind(selector, key))
+	return selector
+
+
+func _on_field_scenario_selected(index: int, selector: OptionButton, key: String) -> void:
+	var value := str(selector.get_item_metadata(index))
+	if value == "":
+		field_scenario.erase(key)
+	else:
+		field_scenario[key] = value
+	matchup_selection_changed.emit()
+
+
+func _on_assumed_moves_changed(text: String) -> void:
+	var moves: Array[String] = []
+	for raw_name: String in text.split(","):
+		var name := raw_name.strip_edges()
+		if name != "" and name.length() <= 100 and name not in moves and moves.size() < 4:
+			moves.append(name)
+	if moves.is_empty():
+		defender_assumptions.erase("assumedMoves")
+	else:
+		defender_assumptions["assumedMoves"] = moves
+	edited_assumption_fields["assumedMoves"] = true
+	_queue_defender_assumptions_changed()
 
 
 func _make_live_ev_input(stat_key: String, value: int) -> Control:
@@ -620,7 +775,7 @@ func _make_live_ev_input(stat_key: String, value: int) -> Control:
 func _make_ev_quick_button(text: String, pressed_callback: Callable) -> Button:
 	var button := Button.new()
 	button.text = text
-	button.focus_mode = Control.FOCUS_NONE
+	button.focus_mode = Control.FOCUS_ALL
 	button.custom_minimum_size = Vector2(28, 22)
 	button.size_flags_horizontal = Control.SIZE_SHRINK_END
 	button.clip_text = true
@@ -636,7 +791,7 @@ func _make_ev_quick_button(text: String, pressed_callback: Callable) -> Button:
 func _make_small_button(text: String, pressed_callback: Callable) -> Button:
 	var button := Button.new()
 	button.text = text
-	button.focus_mode = Control.FOCUS_NONE
+	button.focus_mode = Control.FOCUS_ALL
 	button.custom_minimum_size = Vector2(52, 23)
 	button.size_flags_horizontal = Control.SIZE_SHRINK_END
 	button.clip_text = true
@@ -657,7 +812,7 @@ func _get_catalog_assumption_value(assumptions: Dictionary, kind: String) -> Str
 func _make_assumption_summary_button(text: String, editor_kind: String) -> Button:
 	var button := Button.new()
 	button.text = text
-	button.focus_mode = Control.FOCUS_NONE
+	button.focus_mode = Control.FOCUS_ALL
 	button.custom_minimum_size = Vector2(0, 25)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.clip_text = true
@@ -829,7 +984,7 @@ func _render_evs_assumption_editor(evs: Dictionary) -> void:
 func _make_compact_option_button(text: String, selected: bool, pressed_callback: Callable) -> Button:
 	var button := Button.new()
 	button.text = text
-	button.focus_mode = Control.FOCUS_NONE
+	button.focus_mode = Control.FOCUS_ALL
 	button.custom_minimum_size = Vector2(0, 22)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.clip_text = true
@@ -926,6 +1081,7 @@ func _update_live_ev_total() -> void:
 
 func _reset_live_assumptions() -> void:
 	defender_assumptions.clear()
+	field_scenario.clear()
 	defender_assumptions["item"] = ""
 	defender_assumptions["ability"] = ""
 	defender_assumptions["nature"] = "Hardy"

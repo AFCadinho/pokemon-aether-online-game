@@ -2,6 +2,7 @@ extends Node
 
 const FORMAT_ID = "gen9nationaldex"
 const CALCDEX_SNAPSHOT := preload("res://scripts/battle/battle_calcdex_snapshot.gd")
+const CALCDEX_MATCHUP := preload("res://scripts/battle/battle_calcdex_matchup.gd")
 
 func create_triggered_wild_battle(
 	request_node: HTTPRequest,
@@ -375,6 +376,37 @@ func get_calcdex_snapshot(
 		}
 	)
 	return CALCDEX_SNAPSHOT.normalize_response(response, last_projection_revision)
+
+func calculate_calcdex_matchup(
+	request_node: HTTPRequest,
+	battle_id: String,
+	last_projection_revision: Dictionary,
+	direction: String,
+	attacker_ref: String,
+	defender_ref: String,
+	opponent_scenario: Dictionary = {},
+	field_scenario: Dictionary = {}
+) -> Dictionary:
+	var normalized_battle_id := battle_id.strip_edges()
+	if normalized_battle_id == "" or not CALCDEX_SNAPSHOT.is_valid_projection_revision(last_projection_revision):
+		return {"success": false, "code": "invalid_calcdex_request", "error": "A valid battle revision is required."}
+	var payload := {
+		"schemaVersion": CALCDEX_MATCHUP.SCHEMA_VERSION,
+		"lastProjectionRevision": last_projection_revision.duplicate(true),
+		"direction": direction,
+		"attackerRef": attacker_ref,
+		"defenderRef": defender_ref,
+		"opponentScenario": _normalize_damage_calc_assumptions(opponent_scenario),
+		"fieldScenario": field_scenario.duplicate(true),
+	}
+	if opponent_scenario.get("assumedMoves") is Array:
+		payload["opponentScenario"]["assumedMoves"] = (opponent_scenario.get("assumedMoves") as Array).duplicate(true)
+	var response: Dictionary = await send_post_request(
+		request_node,
+		"/battle/%s/calcdex/v1/matchup" % normalized_battle_id.uri_encode(),
+		payload
+	)
+	return CALCDEX_MATCHUP.normalize_response(response, last_projection_revision)
 
 func send_get_request(request_node: HTTPRequest, path: String) -> Dictionary:
 	var api_base_url: String = await GatewayApiConfig.get_base_url()

@@ -239,7 +239,8 @@ const STAT_STAGE_BADGE_LINE_MODIFIER := "modifier"
 const ABILITY_STAT_MODIFIER_SOURCE_FIELD_CONDITION := "field_condition"
 const ABILITY_STAT_MODIFIER_SOURCE_BOOSTER_ENERGY := "booster_energy"
 const DAMAGE_CALC_ASSUMPTIONS_PATH := "user://damage_calc_assumptions.json"
-const DAMAGE_CALC_ASSUMPTIONS_VERSION := 1
+const DAMAGE_CALC_ASSUMPTIONS_VERSION := 2
+const DAMAGE_CALC_DEFAULT_SCOPE := "gen9nationaldex"
 const BATTLE_LOG_RESPONSIVE_COLLAPSE_WIDTH := 1200
 const BATTLE_LOG_MEMORY_UNSET := -1
 const BATTLE_WINDOW_OPEN_SIZE := Vector2(1500.0, 780.0)
@@ -418,6 +419,8 @@ func _ready() -> void:
 		calc_panel.defender_assumptions_changed.connect(_on_calc_panel_defender_assumptions_changed)
 	if not calc_panel.assumption_catalog_requested.is_connected(_on_calc_panel_assumption_catalog_requested):
 		calc_panel.assumption_catalog_requested.connect(_on_calc_panel_assumption_catalog_requested)
+	if not calc_panel.matchup_selection_changed.is_connected(_on_calc_panel_matchup_selection_changed):
+		calc_panel.matchup_selection_changed.connect(_on_calc_panel_matchup_selection_changed)
 	if not bag_grid.item_selected.is_connected(_on_bag_grid_item_selected):
 		bag_grid.item_selected.connect(_on_bag_grid_item_selected)
 	if player_hud_panel.has_method("set_experience_bar_enabled"):
@@ -2335,6 +2338,7 @@ func _refresh_damage_calc_results() -> void:
 	calc_panel.show_loading(_get_active_display_species("p1"), _get_active_display_species("p2"))
 
 	var projection_revision := battle_state.get_calcdex_projection_revision()
+	var use_safe_matchup := false
 	if not damage_calc_snapshot_disabled_for_battle and not projection_revision.is_empty():
 		var snapshot_response: Dictionary = await BattleApiClient.get_calcdex_snapshot(
 			damage_calc_request,
@@ -2349,6 +2353,7 @@ func _refresh_damage_calc_results() -> void:
 		if bool(snapshot_response.get("success", false)):
 			damage_calc_knowledge_snapshot = _damage_calc_as_dictionary(snapshot_response.get("snapshot", {})).duplicate(true)
 			calc_panel.set_knowledge_snapshot(damage_calc_knowledge_snapshot)
+			use_safe_matchup = true
 		else:
 			damage_calc_knowledge_snapshot.clear()
 			calc_panel.set_knowledge_snapshot({})
@@ -2356,12 +2361,29 @@ func _refresh_damage_calc_results() -> void:
 			if snapshot_error_code == "CALC_UNSUPPORTED_MECHANIC":
 				damage_calc_snapshot_disabled_for_battle = true
 
-	var response: Dictionary = await BattleApiClient.calculate_battle_damage(
-		damage_calc_request,
-		battle_state.battle_id,
-		"own-to-opponent",
-		_get_damage_calc_defender_assumptions_payload()
-	)
+	var response: Dictionary
+	if use_safe_matchup:
+		var selection: Dictionary = calc_panel.get_matchup_selection()
+		if str(selection.get("attackerRef", "")) == "" or str(selection.get("defenderRef", "")) == "":
+			response = {"success": false, "error": _t("battle.calc.error.selection")}
+		else:
+			response = await BattleApiClient.calculate_calcdex_matchup(
+				damage_calc_request,
+				battle_state.battle_id,
+				projection_revision,
+				str(selection.get("direction", "own-to-opponent")),
+				str(selection.get("attackerRef", "")),
+				str(selection.get("defenderRef", "")),
+				_get_damage_calc_defender_assumptions_payload(),
+				calc_panel.get_field_scenario()
+			)
+	else:
+		response = await BattleApiClient.calculate_battle_damage(
+			damage_calc_request,
+			battle_state.battle_id,
+			"own-to-opponent",
+			_get_damage_calc_defender_assumptions_payload()
+		)
 
 	damage_calc_request_in_flight = false
 	if request_token != damage_calc_request_token:
@@ -2384,6 +2406,12 @@ func _on_calc_panel_defender_assumptions_changed(assumptions: Dictionary, edited
 	damage_calc_defender_assumptions = assumptions.duplicate(true)
 	damage_calc_assumption_edited_fields = edited_fields.duplicate(true)
 	_persist_current_damage_calc_assumptions()
+	if damage_calc_request_in_flight:
+		damage_calc_request_token += 1
+	if current_action_panel_mode == BattleActionsPanelMode.CALC:
+		_refresh_damage_calc_results()
+
+func _on_calc_panel_matchup_selection_changed() -> void:
 	if damage_calc_request_in_flight:
 		damage_calc_request_token += 1
 	if current_action_panel_mode == BattleActionsPanelMode.CALC:
@@ -2487,7 +2515,13 @@ func _load_damage_calc_saved_assumptions() -> void:
 		return
 
 	var data: Dictionary = parsed_data as Dictionary
-	var species_data: Dictionary = _damage_calc_as_dictionary(data.get("species", data))
+	var scopes: Dictionary = _damage_calc_as_dictionary(data.get("scopes", {}))
+	var scoped_data: Dictionary = _damage_calc_as_dictionary(scopes.get(DAMAGE_CALC_DEFAULT_SCOPE, {}))
+	# V1 stored `species` at the root. Keep it backward-readable while all new
+	# writes are explicitly scoped to the enabled engine format.
+	var species_data: Dictionary = _damage_calc_as_dictionary(
+		scoped_data.get("species", data.get("species", data))
+	)
 	for key_value: Variant in species_data.keys():
 		var species_key: String = str(key_value).strip_edges()
 		if species_key == "":
@@ -2504,7 +2538,11 @@ func _save_damage_calc_saved_assumptions() -> void:
 
 	file.store_string(JSON.stringify({
 		"version": DAMAGE_CALC_ASSUMPTIONS_VERSION,
-		"species": damage_calc_saved_assumptions,
+		"scopes": {
+			DAMAGE_CALC_DEFAULT_SCOPE: {
+				"species": damage_calc_saved_assumptions,
+			},
+		},
 	}, "\t"))
 
 func _sanitize_damage_calc_assumptions(assumptions: Dictionary) -> Dictionary:
@@ -2529,11 +2567,19 @@ func _sanitize_damage_calc_assumptions(assumptions: Dictionary) -> Dictionary:
 	if not ivs.is_empty():
 		sanitized["ivs"] = ivs
 
+	var assumed_moves: Array[String] = []
+	for move_value: Variant in _damage_calc_as_array(assumptions.get("assumedMoves", [])):
+		var move_name := str(move_value).strip_edges()
+		if move_name != "" and move_name.length() <= 100 and move_name not in assumed_moves and assumed_moves.size() < 4:
+			assumed_moves.append(move_name)
+	if not assumed_moves.is_empty():
+		sanitized["assumedMoves"] = assumed_moves
+
 	return sanitized
 
 func _get_persistable_damage_calc_assumptions(assumptions: Dictionary, edited_fields: Dictionary) -> Dictionary:
 	var edited_assumptions: Dictionary = {}
-	for key: String in ["item", "ability", "nature", "evs", "ivs"]:
+	for key: String in ["item", "ability", "nature", "evs", "ivs", "assumedMoves"]:
 		if bool(edited_fields.get(key, false)) and assumptions.has(key):
 			edited_assumptions[key] = assumptions.get(key)
 	return _sanitize_damage_calc_assumptions(edited_assumptions)
@@ -2553,7 +2599,7 @@ func _sanitize_damage_calc_stat_table(stats: Dictionary, omit_default_ivs: bool)
 
 func _build_damage_calc_edited_fields(assumptions: Dictionary) -> Dictionary:
 	var edited: Dictionary = {}
-	for key: String in ["item", "ability", "nature", "evs", "ivs"]:
+	for key: String in ["item", "ability", "nature", "evs", "ivs", "assumedMoves"]:
 		if not assumptions.has(key):
 			continue
 		var value: Variant = assumptions.get(key)
@@ -2565,7 +2611,7 @@ func _build_damage_calc_edited_fields(assumptions: Dictionary) -> Dictionary:
 	return edited
 
 func _should_store_damage_calc_assumptions(assumptions: Dictionary, edited_fields: Dictionary) -> bool:
-	for key: String in ["item", "ability", "nature", "evs", "ivs"]:
+	for key: String in ["item", "ability", "nature", "evs", "ivs", "assumedMoves"]:
 		if not bool(edited_fields.get(key, false)):
 			continue
 		if not assumptions.has(key):
@@ -2573,6 +2619,9 @@ func _should_store_damage_calc_assumptions(assumptions: Dictionary, edited_field
 		var value: Variant = assumptions.get(key)
 		if value is Dictionary:
 			if not (value as Dictionary).is_empty():
+				return true
+		elif value is Array:
+			if not (value as Array).is_empty():
 				return true
 		elif str(value).strip_edges() != "":
 			return true
@@ -2592,6 +2641,11 @@ func _damage_calc_as_dictionary(value: Variant) -> Dictionary:
 	if value is Dictionary:
 		return value as Dictionary
 	return {}
+
+func _damage_calc_as_array(value: Variant) -> Array:
+	if value is Array:
+		return value as Array
+	return []
 
 func _get_damage_calc_matchup_key() -> String:
 	return "%s|%s|%s|%s" % [
