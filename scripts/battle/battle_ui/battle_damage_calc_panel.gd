@@ -959,10 +959,17 @@ func _add_move_results_table(results: Array, defender: Dictionary) -> void:
 	table_box.clip_contents = true
 	table_box.add_theme_constant_override("separation", 3)
 	table.add_child(table_box)
+	var header_panel := PanelContainer.new()
+	header_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header_panel.add_theme_stylebox_override(
+		"panel",
+		_make_stylebox(Color(0.025, 0.045, 0.072, 0.98), Color(0.16, 0.31, 0.48, 0.84), 6, 10.0, 2.0)
+	)
+	table_box.add_child(header_panel)
 	var header := HBoxContainer.new()
 	header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_theme_constant_override("separation", 6)
-	table_box.add_child(header)
+	header_panel.add_child(header)
 	var move_header := _make_table_header(_t("battle.calc.move_header"))
 	move_header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(move_header)
@@ -983,8 +990,8 @@ func _add_move_results_table(results: Array, defender: Dictionary) -> void:
 
 
 func _make_table_header(text: String) -> Label:
-	var label := _make_label(text.to_upper(), 10, TEXT_MUTED)
-	label.custom_minimum_size = Vector2(0, 24)
+	var label := _make_label(text.to_upper(), 9, Color(0.68, 0.76, 0.86, 1.0))
+	label.custom_minimum_size = Vector2(0, 26)
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	return label
 
@@ -1273,8 +1280,7 @@ func _add_live_assumption_controls(assumptions: Dictionary, prior_provenance: St
 	setup_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	setup_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	title_row.add_child(setup_title)
-	var reset_button := _make_small_button(_t("common.reset"), _reset_live_assumptions)
-	reset_button.custom_minimum_size = Vector2(48, 22)
+	var reset_button := _make_assumption_reset_button()
 	title_row.add_child(reset_button)
 	_add_public_usage_set_selector(box)
 
@@ -1284,10 +1290,30 @@ func _add_live_assumption_controls(assumptions: Dictionary, prior_provenance: St
 	primary_row.add_theme_constant_override("separation", 4)
 	box.add_child(primary_row)
 
-	primary_row.add_child(_make_assumption_summary_button(_get_assumption_chip_label(assumptions, "item", _t("battle.calc.item_unknown")), SELECTOR_ITEM))
-	primary_row.add_child(_make_assumption_summary_button(_get_assumption_chip_label(assumptions, "ability", _t("battle.calc.ability_unknown")), SELECTOR_ABILITY))
-	primary_row.add_child(_make_assumption_summary_button(_get_nature_chip_label(assumptions, prior_provenance), SELECTOR_NATURE))
-	primary_row.add_child(_make_assumption_summary_button(_get_evs_summary_chip_label(_as_dictionary(assumptions.get("evs", {}))), SELECTOR_EVS))
+	primary_row.add_child(_make_assumption_summary_button(
+		_t("battle.calc.item"),
+		_get_assumption_control_value(assumptions, SELECTOR_ITEM, prior_provenance),
+		SELECTOR_ITEM,
+		_get_assumption_chip_label(assumptions, "item", _t("battle.calc.item_unknown"))
+	))
+	primary_row.add_child(_make_assumption_summary_button(
+		_t("battle.calc.ability"),
+		_get_assumption_control_value(assumptions, SELECTOR_ABILITY, prior_provenance),
+		SELECTOR_ABILITY,
+		_get_assumption_chip_label(assumptions, "ability", _t("battle.calc.ability_unknown"))
+	))
+	primary_row.add_child(_make_assumption_summary_button(
+		_t("battle.calc.nature"),
+		_get_assumption_control_value(assumptions, SELECTOR_NATURE, prior_provenance),
+		SELECTOR_NATURE,
+		_get_nature_chip_label(assumptions, prior_provenance)
+	))
+	primary_row.add_child(_make_assumption_summary_button(
+		_t("battle.calc.evs"),
+		_get_assumption_control_value(assumptions, SELECTOR_EVS, prior_provenance),
+		SELECTOR_EVS,
+		_get_evs_summary_chip_label(_as_dictionary(assumptions.get("evs", {})))
+	))
 
 	catalog_suggestions_box = VBoxContainer.new()
 	catalog_suggestions_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1452,39 +1478,95 @@ func _make_small_button(text: String, pressed_callback: Callable) -> Button:
 	return button
 
 
+func _make_assumption_reset_button() -> Button:
+	var button := Button.new()
+	button.text = _t("common.reset").to_upper()
+	button.tooltip_text = _t("battle.calc.reset_setup_tooltip")
+	button.focus_mode = Control.FOCUS_ALL
+	button.custom_minimum_size = Vector2(68, 26)
+	button.size_flags_horizontal = Control.SIZE_SHRINK_END
+	button.clip_text = true
+	button.add_theme_font_size_override("font_size", 9)
+	button.add_theme_color_override("font_color", Color(0.62, 0.70, 0.80, 1.0))
+	button.add_theme_color_override("font_hover_color", TEXT_PRIMARY)
+	button.add_theme_color_override("font_pressed_color", TEXT_ACCENT)
+	button.add_theme_stylebox_override(
+		"normal",
+		_make_stylebox(Color(0.018, 0.029, 0.047, 0.76), Color(0.18, 0.29, 0.43, 0.72), 6, 8.0, 2.0)
+	)
+	button.add_theme_stylebox_override(
+		"hover",
+		_make_stylebox(Color(0.055, 0.086, 0.13, 0.98), Color(0.30, 0.48, 0.66, 0.92), 6, 8.0, 2.0)
+	)
+	button.add_theme_stylebox_override(
+		"pressed",
+		_make_stylebox(Color(0.075, 0.10, 0.14, 0.98), TEXT_ACCENT.darkened(0.12), 6, 8.0, 2.0)
+	)
+	button.pressed.connect(_reset_live_assumptions)
+	return button
+
+
 func _get_catalog_assumption_value(assumptions: Dictionary, kind: String) -> String:
 	var value: String = str(assumptions.get(kind, "")).strip_edges()
 	return "" if value == "<null>" else value
 
 
-func _make_assumption_summary_button(text: String, editor_kind: String) -> Button:
+func _make_assumption_summary_button(caption: String, value: String, editor_kind: String, tooltip: String = "") -> Button:
 	var button := Button.new()
-	button.text = text
-	button.tooltip_text = text
+	button.tooltip_text = _fallback_text(tooltip, "%s: %s" % [caption, value])
 	button.focus_mode = Control.FOCUS_ALL
-	button.custom_minimum_size = Vector2(0, 31)
+	button.custom_minimum_size = Vector2(0, 52)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.clip_text = true
-	button.add_theme_font_size_override("font_size", 12)
 	var is_active: bool = active_selector == editor_kind
 	var is_edited: bool = bool(edited_assumption_fields.get(editor_kind, false))
 	var chip_border: Color = CHIP_BORDER
 	if is_edited:
 		chip_border = CHIP_EDITED_BORDER
-	var font_color: Color = TEXT_SECONDARY
+	var value_color: Color = TEXT_SECONDARY
 	if is_active:
-		font_color = TEXT_PRIMARY
+		value_color = TEXT_PRIMARY
 	elif is_edited:
-		font_color = TEXT_ACCENT
-	button.add_theme_color_override("font_color", font_color)
+		value_color = TEXT_ACCENT
 	button.add_theme_stylebox_override(
 		"normal",
-		_make_stylebox(TAB_ACTIVE_BG if is_active else CHIP_BG, chip_border, 4, 6.0, 2.0)
+		_make_stylebox(TAB_ACTIVE_BG if is_active else CHIP_BG, chip_border, 7, 8.0, 5.0)
 	)
-	button.add_theme_stylebox_override("hover", _make_stylebox(TAB_ACTIVE_BG.lightened(0.08), chip_border.lightened(0.12), 4, 6.0, 2.0))
-	button.add_theme_stylebox_override("pressed", _make_stylebox(TAB_ACTIVE_BG, chip_border.lightened(0.18), 4, 6.0, 2.0))
+	button.add_theme_stylebox_override("hover", _make_stylebox(TAB_ACTIVE_BG.lightened(0.08), chip_border.lightened(0.12), 7, 8.0, 5.0))
+	button.add_theme_stylebox_override("pressed", _make_stylebox(TAB_ACTIVE_BG, chip_border.lightened(0.18), 7, 8.0, 5.0))
+
+	var labels := VBoxContainer.new()
+	labels.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	labels.offset_left = 9.0
+	labels.offset_top = 5.0
+	labels.offset_right = -9.0
+	labels.offset_bottom = -5.0
+	labels.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	labels.add_theme_constant_override("separation", 1)
+	button.add_child(labels)
+	var caption_label := _make_label(caption.to_upper(), 8, TEXT_MUTED if not is_active else Color(0.65, 0.82, 0.94, 1.0))
+	caption_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	labels.add_child(caption_label)
+	var value_label := _make_label(value, 12, value_color)
+	value_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	value_label.tooltip_text = button.tooltip_text
+	labels.add_child(value_label)
 	button.pressed.connect(_on_assumption_summary_pressed.bind(editor_kind))
 	return button
+
+
+func _get_assumption_control_value(assumptions: Dictionary, editor_kind: String, prior_provenance: String = "") -> String:
+	match editor_kind:
+		SELECTOR_ITEM, SELECTOR_ABILITY:
+			var value := str(assumptions.get(editor_kind, "")).strip_edges()
+			return _t("common.unknown") if value == "" or value == "<null>" else value
+		SELECTOR_NATURE:
+			if prior_provenance != "" and not bool(edited_assumption_fields.get("nature", false)):
+				return _t("battle.calc.set_range")
+			return _localized_nature_name(_fallback_text(str(assumptions.get("nature", "")).strip_edges(), "Hardy"))
+		SELECTOR_EVS:
+			return "%d / %d" % [_get_evs_total(_as_dictionary(assumptions.get("evs", {}))), EV_TOTAL_LIMIT]
+		_:
+			return _t("common.unknown")
 
 
 func _get_assumption_fallback_label(editor_kind: String) -> String:
@@ -2093,8 +2175,17 @@ func _get_level_label(pokemon: Dictionary) -> String:
 		var snapshot_pokemon := _get_snapshot_pokemon_by_ref(str(pokemon.get("pokemonRef", "")))
 		var snapshot_level := _as_dictionary(snapshot_pokemon.get("level", {}))
 		level_value = snapshot_level.get("value", "")
-	var level := str(level_value).strip_edges()
+	var level := _format_level_value(level_value)
 	return _t("battle.calc.level", {"level": level}) if level != "" else _t("battle.calc.level_unknown")
+
+
+func _format_level_value(level_value: Variant) -> String:
+	if typeof(level_value) == TYPE_INT or typeof(level_value) == TYPE_FLOAT:
+		return str(roundi(float(level_value)))
+	var text := str(level_value).strip_edges()
+	if text.is_valid_float():
+		return str(roundi(float(text)))
+	return text
 
 
 func _get_pokemon_hp(pokemon: Dictionary) -> Dictionary:

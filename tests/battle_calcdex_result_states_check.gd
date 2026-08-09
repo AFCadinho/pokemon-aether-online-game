@@ -85,6 +85,10 @@ func _run() -> void:
 		push_error("A guaranteed percent range must override a contradictory KO summary")
 		quit(1)
 		return
+	if panel._format_level_value(100.0) != "100" or panel._format_level_value("50.0") != "50":
+		push_error("Calcdex levels must render as whole numbers")
+		quit(1)
+		return
 
 	var rendered_text := _collect_label_text(panel)
 	if not _contains_fragment(rendered_text, ["end-of-turn effects", "einde-van-de-beurt-effecten", "efeitos de fim de turno"]):
