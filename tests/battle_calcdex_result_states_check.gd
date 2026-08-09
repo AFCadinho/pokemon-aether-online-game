@@ -215,6 +215,25 @@ func _run() -> void:
 		push_error("The selected move row must have a distinct active background and outline")
 		quit(1)
 		return
+	var damage_rows: Array[Dictionary] = [
+		{"resultState": "supported", "minPercent": 40.0, "maxPercent": 50.0},
+		{"resultState": "supported", "minPercent": 70.0, "maxPercent": 80.0},
+		{"resultState": "supported", "minPercent": 75.0, "maxPercent": 80.0},
+	]
+	var top_damage_percent := panel._get_top_damage_percent(damage_rows)
+	if not is_equal_approx(top_damage_percent, 80.0) \
+			or panel._is_top_damage_result(damage_rows[0], top_damage_percent) \
+			or not panel._is_top_damage_result(damage_rows[1], top_damage_percent) \
+			or not panel._is_top_damage_result(damage_rows[2], top_damage_percent):
+		push_error("The highest maximum damage, including ties, must drive the top-damage highlight")
+		quit(1)
+		return
+	var top_damage_style := panel._make_result_row_style("2HKO", 1, "Water", false, true)
+	if not top_damage_style.border_color.is_equal_approx(panel.TOP_DAMAGE_ACCENT) \
+			or top_damage_style.bg_color.is_equal_approx(water_row_style.bg_color):
+		push_error("The highest-damage move row must use the dedicated gold visual state")
+		quit(1)
+		return
 	var inline_move_input: LineEdit = panel._make_result_move_selector_button(0, "Thunderbolt")
 	if inline_move_input.right_icon == null or inline_move_input.mouse_default_cursor_shape != Control.CURSOR_IBEAM:
 		push_error("Inline opponent moves must visibly behave like editable text fields")

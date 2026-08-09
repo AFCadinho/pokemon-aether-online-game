@@ -53,6 +53,7 @@ const EV_LABEL_ACCENT := Color(0.36, 0.76, 0.96, 1.0)
 const OFFENSE_LABEL_ACCENT := Color(0.96, 0.55, 0.43, 1.0)
 const DEFENSE_LABEL_ACCENT := Color(0.43, 0.72, 0.96, 1.0)
 const SPEED_LABEL_ACCENT := Color(0.48, 0.88, 0.61, 1.0)
+const TOP_DAMAGE_ACCENT := Color(1.0, 0.76, 0.28, 1.0)
 const SUSPICIOUS_PERCENT_LIMIT := 999.0
 const DAMAGE_COLUMN_WIDTH := 132.0
 const KO_COLUMN_WIDTH := 92.0
@@ -1075,10 +1076,12 @@ func _get_snapshot_pokemon_by_ref(pokemon_ref: String) -> Dictionary:
 
 func _add_move_results_table(results: Array, defender: Dictionary) -> void:
 	var table_box := _add_move_results_table_shell()
+	var top_damage_percent := _get_top_damage_percent(results)
 	for result_index: int in range(results.size()):
 		var result_value: Variant = results[result_index]
 		if result_value is Dictionary:
-			_add_move_result_row(result_value as Dictionary, defender, table_box, result_index)
+			var result := result_value as Dictionary
+			_add_move_result_row(result, defender, table_box, result_index, -1, _is_top_damage_result(result, top_damage_percent))
 
 
 func _add_move_results_table_shell() -> VBoxContainer:
@@ -1126,13 +1129,21 @@ func _add_editable_opponent_move_results_table(results: Array, defender: Diction
 	inline_move_result_boxes.clear()
 	inline_move_result_panels.clear()
 	var move_names := _get_visible_opponent_move_names(results)
+	var top_damage_percent := _get_top_damage_percent(results)
 	for slot in range(4):
 		var move_name := str(move_names[slot]).strip_edges() if slot < move_names.size() else ""
 		var matching_result := _find_move_result(results, move_name)
 		if matching_result.is_empty():
 			_add_empty_editable_move_row(table_box, slot, move_name)
 		else:
-			_add_move_result_row(matching_result, defender, table_box, slot, slot)
+			_add_move_result_row(
+				matching_result,
+				defender,
+				table_box,
+				slot,
+				slot,
+				_is_top_damage_result(matching_result, top_damage_percent)
+			)
 		_add_inline_move_results_box(table_box, slot)
 
 
@@ -1199,7 +1210,14 @@ func _make_table_header(text: String, accent: Color = Color(0.68, 0.76, 0.86, 1.
 	return label
 
 
-func _add_move_result_row(result: Dictionary, defender: Dictionary, parent: VBoxContainer, row_index: int, editable_slot: int = -1) -> void:
+func _add_move_result_row(
+	result: Dictionary,
+	defender: Dictionary,
+	parent: VBoxContainer,
+	row_index: int,
+	editable_slot: int = -1,
+	is_top_damage: bool = false
+) -> void:
 	var primary_result_label := _get_primary_result_label(result, defender)
 	var move_type := _get_move_type(result)
 	var move_name := _get_move_name(result)
@@ -1212,13 +1230,14 @@ func _add_move_result_row(result: Dictionary, defender: Dictionary, parent: VBox
 	panel.custom_minimum_size = Vector2(0, 52)
 	panel.add_theme_stylebox_override(
 		"panel",
-		_make_result_row_style(primary_result_label, row_index, move_type, expanded_result_key == result_key)
+		_make_result_row_style(primary_result_label, row_index, move_type, expanded_result_key == result_key, is_top_damage)
 	)
 	result_row_panels[result_key] = {
 		"panel": panel,
 		"primaryResultLabel": primary_result_label,
 		"rowIndex": row_index,
 		"moveType": move_type,
+		"isTopDamage": is_top_damage,
 	}
 	if summary_text != "":
 		panel.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -1277,6 +1296,8 @@ func _add_move_result_row(result: Dictionary, defender: Dictionary, parent: VBox
 	var percent_color := TEXT_MUTED if is_status_move else DAMAGE_TEXT
 	if not is_status_move and percent_label != "":
 		percent_color = _get_result_badge_colors(primary_result_label)["text"]
+	if is_top_damage:
+		percent_color = TOP_DAMAGE_ACCENT
 	var percent := _make_label(percent_label if percent_label != "" else "--", 15, percent_color)
 	percent.custom_minimum_size = Vector2(DAMAGE_COLUMN_WIDTH, 0)
 	percent.size_flags_horizontal = Control.SIZE_SHRINK_END
@@ -1414,7 +1435,8 @@ func _update_result_row_highlight(result_key: String) -> void:
 			str(metadata.get("primaryResultLabel", "")),
 			int(metadata.get("rowIndex", 0)),
 			str(metadata.get("moveType", "")),
-			result_key == expanded_result_key
+			result_key == expanded_result_key,
+			bool(metadata.get("isTopDamage", false))
 		)
 	)
 
@@ -1445,9 +1467,12 @@ func _make_result_row_style(
 	_primary_result_label: String,
 	row_index: int,
 	move_type: String = "",
-	is_selected: bool = false
+	is_selected: bool = false,
+	is_top_damage: bool = false
 ) -> StyleBoxFlat:
 	var background := ROW_BG_ALT if row_index % 2 == 0 else ROW_BG
+	if is_top_damage:
+		background = Color(0.085, 0.058, 0.015, 0.96)
 	if is_selected:
 		background = Color(0.025, 0.095, 0.14, 0.98)
 	var style := _make_stylebox(background, Color(0, 0, 0, 0), 7, 8.0, 5.0)
@@ -1455,7 +1480,12 @@ func _make_result_row_style(
 	style.border_width_top = 1 if is_selected else 0
 	style.border_width_right = 1 if is_selected else 0
 	style.border_width_bottom = 1 if is_selected else 0
-	style.border_color = Color(TEXT_ACCENT, 0.96) if is_selected else TYPE_COLORS.get(move_type.to_lower(), ROW_BORDER)
+	if is_selected:
+		style.border_color = Color(TEXT_ACCENT, 0.96)
+	elif is_top_damage:
+		style.border_color = TOP_DAMAGE_ACCENT
+	else:
+		style.border_color = TYPE_COLORS.get(move_type.to_lower(), ROW_BORDER)
 	return style
 
 
@@ -3633,6 +3663,27 @@ func _get_move_source(result: Dictionary) -> String:
 	if move_value is Dictionary:
 		return str((move_value as Dictionary).get("source", "")).strip_edges()
 	return str(result.get("moveSource", "")).strip_edges()
+
+
+func _get_top_damage_percent(results: Array) -> float:
+	var highest := -1.0
+	for result_value: Variant in results:
+		var result := _as_dictionary(result_value)
+		if result.is_empty() or str(result.get("resultState", "supported")) != "supported" \
+				or _is_status_result(result) or _has_suspicious_percent_values(result):
+			continue
+		var maximum: Variant = _get_percent_number(result.get("maxPercent"))
+		if maximum != null and float(maximum) > highest:
+			highest = float(maximum)
+	return highest if highest > 0.0 else -1.0
+
+
+func _is_top_damage_result(result: Dictionary, top_damage_percent: float) -> bool:
+	if top_damage_percent < 0.0 or str(result.get("resultState", "supported")) != "supported" \
+			or _is_status_result(result) or _has_suspicious_percent_values(result):
+		return false
+	var maximum: Variant = _get_percent_number(result.get("maxPercent"))
+	return maximum != null and is_equal_approx(float(maximum), top_damage_percent)
 
 
 func _get_percent_label(result: Dictionary) -> String:
