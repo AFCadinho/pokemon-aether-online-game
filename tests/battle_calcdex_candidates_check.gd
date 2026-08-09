@@ -104,6 +104,9 @@ func _run() -> void:
 	if panel.defender_assumptions.get("evs") != {"hp": 252, "def": 252, "spd": 4} or (panel.defender_assumptions.get("assumedMoves", []) as Array).size() != 4:
 		_fail("selecting a sample set must fill EVs and assumed moves")
 		return
+	if not bool(panel.defender_assumptions.get("replaceMoves", false)):
+		_fail("a selected sample set must own its four editable move slots")
+		return
 	if panel.defender_assumptions.get("ivs") != {"spe": 0}:
 		_fail("only non-default IVs should become explicit assumptions")
 		return
@@ -118,6 +121,9 @@ func _run() -> void:
 	if panel.defender_assumptions.get("nature") != "Hardy" or panel.defender_assumptions.get("evs") != {}:
 		_fail("Current must restore a neutral nature and empty EV spread")
 		return
+	if panel.defender_assumptions.has("replaceMoves") or panel.defender_assumptions.has("assumedMoves"):
+		_fail("Current must return move slots to confirmed battle information")
+		return
 	if panel.defender_assumptions.get("ability") != "Synchronize" or not panel.edited_assumption_fields.is_empty():
 		_fail("Current must use the first public species ability without marking it as a manual edit")
 		return
@@ -126,6 +132,9 @@ func _run() -> void:
 	panel._on_selector_result_pressed({"name": "Psychic", "calcName": "Psychic", "type": "psychic", "category": "special"})
 	if panel.defender_assumptions.get("assumedMoves") != ["Psychic"] or panel.selected_sample_set_id != "":
 		_fail("choosing an opponent move must add it to the current custom scenario")
+		return
+	if not bool(panel.defender_assumptions.get("replaceMoves", false)):
+		_fail("editing an opponent move slot must create an explicit move loadout")
 		return
 	panel.active_selector = "move"
 	panel.active_move_slot = 1
@@ -191,7 +200,7 @@ func _response(revision: Dictionary) -> Dictionary:
 		"warningCodes": [],
 	}
 	return {
-		"success": true, "schemaVersion": 1, "routeRevision": "calc4.3-2026-08-09",
+		"success": true, "schemaVersion": 1, "routeRevision": "calc4.4-2026-08-09",
 		"safeInputFingerprint": "b".repeat(64), "projectionRevision": revision.duplicate(true),
 		"mechanicsManifest": {"contractRevision": "calc0-2026-08-08", "damageCalcVersion": "0.10.0", "showdownVersion": "0.11.10", "formatDataFingerprint": "fd94c49ab26ddf8daff2259dfc2b3857f957e37b166557412c4fe303c87e54b0"},
 		"presetRevision": "test-v1", "presetFingerprint": "c".repeat(64),

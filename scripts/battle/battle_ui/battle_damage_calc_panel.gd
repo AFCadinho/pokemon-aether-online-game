@@ -326,9 +326,13 @@ func _render_your_damage_response(response: Dictionary) -> void:
 	_add_assumption_chips(opponent, response)
 
 	var results: Array = _as_array(response.get("results", []))
+	if str(response.get("direction", "")) == "opponent-to-own":
+		_add_editable_opponent_move_results_table(results, defender)
+		if not results.is_empty():
+			_add_result_footnotes(response, results)
+		return
 	if results.is_empty():
-		var empty_fallback := _t("battle.calc.no_damage_taken_moves") if str(response.get("direction", "")) == "opponent-to-own" else _t("battle.calc.no_results")
-		_add_status(_fallback_text(str(response.get("emptyReason", "")), empty_fallback), TEXT_SECONDARY)
+		_add_status(_fallback_text(str(response.get("emptyReason", "")), _t("battle.calc.no_results")), TEXT_SECONDARY)
 		return
 
 	_add_move_results_table(results, defender)
@@ -671,7 +675,9 @@ func _apply_sample_set(option: Dictionary) -> void:
 			moves.append(move_name)
 	if not moves.is_empty():
 		defender_assumptions["assumedMoves"] = moves
+		defender_assumptions["replaceMoves"] = true
 		edited_assumption_fields["assumedMoves"] = true
+		edited_assumption_fields["replaceMoves"] = true
 	selected_sample_set_id = str(option.get("id", ""))
 	active_selector = SELECTOR_NONE
 	active_move_slot = -1
@@ -913,6 +919,14 @@ func _get_snapshot_pokemon_by_ref(pokemon_ref: String) -> Dictionary:
 
 
 func _add_move_results_table(results: Array, defender: Dictionary) -> void:
+	var table_box := _add_move_results_table_shell()
+	for result_index: int in range(results.size()):
+		var result_value: Variant = results[result_index]
+		if result_value is Dictionary:
+			_add_move_result_row(result_value as Dictionary, defender, table_box, result_index)
+
+
+func _add_move_results_table_shell() -> VBoxContainer:
 	var table := PanelContainer.new()
 	table.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	table.clip_contents = true
@@ -946,10 +960,62 @@ func _add_move_results_table(results: Array, defender: Dictionary) -> void:
 	ko_header.size_flags_horizontal = Control.SIZE_SHRINK_END
 	ko_header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	header.add_child(ko_header)
-	for result_index: int in range(results.size()):
-		var result_value: Variant = results[result_index]
-		if result_value is Dictionary:
-			_add_move_result_row(result_value as Dictionary, defender, table_box, result_index)
+	return table_box
+
+
+func _add_editable_opponent_move_results_table(results: Array, defender: Dictionary) -> void:
+	var table_box := _add_move_results_table_shell()
+	var move_names := _get_visible_opponent_move_names(results)
+	for slot in range(4):
+		var move_name := str(move_names[slot]).strip_edges() if slot < move_names.size() else ""
+		var matching_result := _find_move_result(results, move_name)
+		if matching_result.is_empty():
+			_add_empty_editable_move_row(table_box, slot, move_name)
+		else:
+			_add_move_result_row(matching_result, defender, table_box, slot, slot)
+
+
+func _find_move_result(results: Array, move_name: String) -> Dictionary:
+	var normalized_name := _normalize_move_name(move_name)
+	if normalized_name == "":
+		return {}
+	for result_value: Variant in results:
+		var result := _as_dictionary(result_value)
+		if _normalize_move_name(_get_move_name(result)) == normalized_name:
+			return result
+	return {}
+
+
+func _normalize_move_name(move_name: String) -> String:
+	return move_name.to_lower().replace(" ", "").replace("-", "").replace("'", "").replace("’", "").replace(".", "")
+
+
+func _add_empty_editable_move_row(parent: VBoxContainer, slot: int, move_name: String = "") -> void:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.clip_contents = true
+	panel.custom_minimum_size = Vector2(0, 54)
+	panel.add_theme_stylebox_override("panel", _make_result_row_style("", slot))
+	var row := HBoxContainer.new()
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.clip_contents = true
+	row.add_theme_constant_override("separation", 6)
+	panel.add_child(row)
+	row.add_child(_make_result_move_selector_button(slot, move_name))
+	var damage := _make_label("--", 15, TEXT_MUTED)
+	damage.custom_minimum_size = Vector2(DAMAGE_COLUMN_WIDTH, 0)
+	damage.size_flags_horizontal = Control.SIZE_SHRINK_END
+	damage.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	damage.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	row.add_child(damage)
+	var ko := _make_label("--", 11, TEXT_MUTED)
+	ko.custom_minimum_size = Vector2(KO_COLUMN_WIDTH, 28)
+	ko.size_flags_horizontal = Control.SIZE_SHRINK_END
+	ko.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	ko.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	ko.add_theme_stylebox_override("normal", _make_stylebox(CHIP_BG, CHIP_BORDER, 7, 7.0, 3.0))
+	row.add_child(ko)
+	parent.add_child(panel)
 
 
 func _make_table_header(text: String) -> Label:
@@ -959,7 +1025,7 @@ func _make_table_header(text: String) -> Label:
 	return label
 
 
-func _add_move_result_row(result: Dictionary, defender: Dictionary, parent: VBoxContainer, row_index: int) -> void:
+func _add_move_result_row(result: Dictionary, defender: Dictionary, parent: VBoxContainer, row_index: int, editable_slot: int = -1) -> void:
 	var primary_result_label := _get_primary_result_label(result, defender)
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -985,10 +1051,13 @@ func _add_move_result_row(result: Dictionary, defender: Dictionary, parent: VBox
 	move_box.add_theme_constant_override("separation", 0)
 	result_row.add_child(move_box)
 	var move_name := _get_move_name(result)
-	var move_label := _make_label(_fallback_text(move_name, _t("battle.move.unknown")), 14, TEXT_PRIMARY)
-	move_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	move_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	move_box.add_child(move_label)
+	if editable_slot >= 0:
+		move_box.add_child(_make_result_move_selector_button(editable_slot, move_name))
+	else:
+		var move_label := _make_label(_fallback_text(move_name, _t("battle.move.unknown")), 14, TEXT_PRIMARY)
+		move_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		move_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		move_box.add_child(move_label)
 
 	var is_status_move: bool = _is_status_result(result)
 	var percent_label: String = "" if is_status_move else _get_percent_label(result)
@@ -1027,6 +1096,27 @@ func _add_move_result_row(result: Dictionary, defender: Dictionary, parent: VBox
 			_add_row_notice(box, _warning_label(warning), TEXT_ERROR if result_state in ["unsupported", "error"] else TEXT_MUTED)
 
 	parent.add_child(panel)
+
+
+func _make_result_move_selector_button(slot: int, move_name: String) -> Button:
+	var button := Button.new()
+	button.text = move_name if move_name != "" else _t("battle.calc.add_move")
+	button.tooltip_text = button.text
+	button.focus_mode = Control.FOCUS_ALL
+	button.custom_minimum_size = Vector2(0, 28)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.clip_text = true
+	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	button.icon = DROPDOWN_ARROW
+	button.icon_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	button.expand_icon = false
+	button.add_theme_font_size_override("font_size", 14 if move_name != "" else 12)
+	button.add_theme_color_override("font_color", TEXT_PRIMARY if move_name != "" else TEXT_MUTED)
+	button.add_theme_stylebox_override("normal", _make_stylebox(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 5, 4.0, 1.0))
+	button.add_theme_stylebox_override("hover", _make_stylebox(TAB_ACTIVE_BG, CHIP_BORDER, 5, 4.0, 1.0))
+	button.add_theme_stylebox_override("pressed", _make_stylebox(TAB_ACTIVE_BG.lightened(0.05), TEXT_ACCENT, 5, 4.0, 1.0))
+	button.pressed.connect(_on_move_slot_pressed.bind(slot))
+	return button
 
 
 func _make_result_row_style(primary_result_label: String, row_index: int) -> StyleBoxFlat:
@@ -1276,8 +1366,6 @@ func _add_live_assumption_controls(assumptions: Dictionary, _prior_provenance: S
 		_get_evs_summary_chip_label(_as_dictionary(assumptions.get("evs", {})))
 	))
 	_add_boost_stage_controls(box, assumptions)
-	if active_subtab == SUBTAB_THEIR_DAMAGE:
-		_add_opponent_move_controls(box, assumptions)
 	if _is_current_ability_assumed():
 		var ability_warning := _make_label(_t("battle.calc.assumed_ability_warning", {
 			"ability": current_default_ability,
@@ -1366,55 +1454,58 @@ func _set_opponent_boost_stage(stat_key: String, stage: int) -> void:
 	_render_current_state()
 
 
-func _add_opponent_move_controls(parent: VBoxContainer, assumptions: Dictionary) -> void:
-	var header := _make_label(_t("battle.calc.opponent_moves").to_upper(), 8, TEXT_MUTED)
-	header.custom_minimum_size = Vector2(0, 14)
-	parent.add_child(header)
-
-	var moves := _as_array(assumptions.get("assumedMoves", []))
-	var row := HBoxContainer.new()
-	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.clip_contents = true
-	row.add_theme_constant_override("separation", 4)
-	parent.add_child(row)
-	for slot in range(4):
-		var move_name := str(moves[slot]).strip_edges() if slot < moves.size() else ""
-		row.add_child(_make_move_slot_button(slot, move_name))
-
-
-func _make_move_slot_button(slot: int, move_name: String) -> Button:
-	var button := Button.new()
-	button.text = move_name if move_name != "" else _t("battle.calc.add_move")
-	button.tooltip_text = button.text
-	button.focus_mode = Control.FOCUS_ALL
-	button.custom_minimum_size = Vector2(0, 32)
-	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.clip_text = true
-	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-	button.add_theme_font_size_override("font_size", 10)
-	var is_active := active_selector == SELECTOR_MOVE and active_move_slot == slot
-	var border := CHIP_EDITED_BORDER if move_name != "" else CHIP_BORDER
-	button.add_theme_color_override("font_color", TEXT_ACCENT if move_name != "" else TEXT_MUTED)
-	button.add_theme_stylebox_override("normal", _make_stylebox(TAB_ACTIVE_BG if is_active else CHIP_BG, border, 6, 7.0, 3.0))
-	button.add_theme_stylebox_override("hover", _make_stylebox(TAB_ACTIVE_BG.lightened(0.08), border.lightened(0.12), 6, 7.0, 3.0))
-	button.add_theme_stylebox_override("pressed", _make_stylebox(TAB_ACTIVE_BG, border.lightened(0.18), 6, 7.0, 3.0))
-	button.pressed.connect(_on_move_slot_pressed.bind(slot))
-	return button
-
-
 func _on_move_slot_pressed(slot: int) -> void:
 	if active_selector == SELECTOR_MOVE and active_move_slot == slot:
 		_close_assumption_suggestions()
 		return
 	active_selector = SELECTOR_MOVE
 	active_move_slot = slot
-	var moves := _as_array(defender_assumptions.get("assumedMoves", []))
+	var moves := _get_visible_opponent_move_names(_as_array(last_response.get("results", [])))
 	selector_query = str(moves[slot]).strip_edges() if slot < moves.size() else ""
 	selector_results = []
 	selector_loading = true
 	selector_error = ""
 	_render_current_state()
 	_request_active_catalog()
+
+
+func _get_visible_opponent_move_names(results: Array = []) -> Array[String]:
+	var names: Array[String] = []
+	if bool(defender_assumptions.get("replaceMoves", false)):
+		for value: Variant in _as_array(defender_assumptions.get("assumedMoves", [])):
+			_append_unique_move_name(names, str(value))
+		return names
+
+	for result_value: Variant in results:
+		_append_unique_move_name(names, _get_move_name(_as_dictionary(result_value)))
+	if names.is_empty():
+		var opponent := _get_snapshot_pokemon_by_ref(selected_opponent_ref)
+		for move_value: Variant in _as_array(opponent.get("moves", [])):
+			_append_unique_move_name(names, str(_as_dictionary(move_value).get("name", "")))
+	for value: Variant in _as_array(defender_assumptions.get("assumedMoves", [])):
+		_append_unique_move_name(names, str(value))
+	return names
+
+
+func _append_unique_move_name(names: Array[String], raw_name: String) -> void:
+	var move_name := raw_name.strip_edges()
+	if move_name == "" or move_name.length() > 100 or names.size() >= 4:
+		return
+	var normalized := _normalize_move_name(move_name)
+	for existing: String in names:
+		if _normalize_move_name(existing) == normalized:
+			return
+	names.append(move_name)
+
+
+func _set_explicit_opponent_move_names(move_values: Array) -> void:
+	var moves: Array[String] = []
+	for value: Variant in move_values:
+		_append_unique_move_name(moves, str(value))
+	defender_assumptions["assumedMoves"] = moves
+	defender_assumptions["replaceMoves"] = true
+	edited_assumption_fields["assumedMoves"] = true
+	edited_assumption_fields["replaceMoves"] = true
 
 func _add_advanced_scenario_controls(parent: VBoxContainer, assumptions: Dictionary) -> void:
 	var active_conditions: Array[String] = []
@@ -1706,7 +1797,7 @@ func _render_catalog_assumption_editor(kind: String, assumptions: Dictionary) ->
 
 	var input := LineEdit.new()
 	if kind == SELECTOR_MOVE:
-		var moves := _as_array(assumptions.get("assumedMoves", []))
+		var moves := _get_visible_opponent_move_names(_as_array(last_response.get("results", [])))
 		input.text = str(moves[active_move_slot]).strip_edges() if active_move_slot >= 0 and active_move_slot < moves.size() else ""
 	else:
 		input.text = _get_catalog_assumption_value(assumptions, kind)
@@ -2051,14 +2142,10 @@ func _request_active_catalog() -> void:
 func _on_catalog_assumption_clear_pressed(kind: String) -> void:
 	_mark_sample_set_custom()
 	if kind == SELECTOR_MOVE:
-		var moves := _as_array(defender_assumptions.get("assumedMoves", [])).duplicate()
+		var moves: Array = _get_visible_opponent_move_names(_as_array(last_response.get("results", []))).duplicate()
 		if active_move_slot >= 0 and active_move_slot < moves.size():
 			moves.remove_at(active_move_slot)
-		if moves.is_empty():
-			defender_assumptions.erase("assumedMoves")
-		else:
-			defender_assumptions["assumedMoves"] = moves
-		edited_assumption_fields["assumedMoves"] = true
+		_set_explicit_opponent_move_names(moves)
 		_close_assumption_suggestions()
 		_emit_defender_assumptions_changed()
 		return
@@ -2078,7 +2165,7 @@ func _on_selector_result_pressed(result: Dictionary) -> void:
 		return
 	_mark_sample_set_custom()
 	if active_selector == SELECTOR_MOVE:
-		var moves := _as_array(defender_assumptions.get("assumedMoves", [])).duplicate()
+		var moves: Array = _get_visible_opponent_move_names(_as_array(last_response.get("results", []))).duplicate()
 		if active_move_slot >= 0 and active_move_slot < moves.size():
 			moves.remove_at(active_move_slot)
 		moves.erase(calc_name)
@@ -2086,8 +2173,7 @@ func _on_selector_result_pressed(result: Dictionary) -> void:
 		moves.insert(insert_at, calc_name)
 		if moves.size() > 4:
 			moves.resize(4)
-		defender_assumptions["assumedMoves"] = moves
-		edited_assumption_fields["assumedMoves"] = true
+		_set_explicit_opponent_move_names(moves)
 		_close_assumption_suggestions()
 		_emit_defender_assumptions_changed()
 		return
