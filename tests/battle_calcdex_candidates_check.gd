@@ -136,6 +136,16 @@ func _run() -> void:
 	if _count_nodes_of_type(panel.catalog_suggestions_box, "LineEdit") != 0:
 		_fail("Inline setup autocomplete must not create a duplicate input below the setup cards")
 		return
+	panel.show_assumption_catalog_response("item", {
+		"success": true,
+		"items": [{"name": "Leftovers", "calcName": "Leftovers"}],
+	})
+	if not _has_label_text(panel.catalog_suggestions_box, panel._t("battle.calc.suggestions_for", {"field": panel._t("battle.calc.item")}).to_upper()):
+		_fail("Inline setup autocomplete must clearly identify its suggestion field")
+		return
+	if not _has_label_text(panel.catalog_suggestions_box, "Leftovers") or not _has_label_text(panel.catalog_suggestions_box, panel._t("battle.calc.use_default_value")):
+		_fail("Inline setup autocomplete must separate suggestions from its explicit default action")
+		return
 	panel._on_inline_assumption_text_submitted("Leftovers", "item")
 	panel._on_inline_assumption_text_submitted("Pressure", "ability")
 	panel._on_inline_assumption_text_submitted("Modest", "nature")
@@ -202,6 +212,14 @@ func _run() -> void:
 	if not _has_line_edit_text(panel, "U-turn") or _count_line_edit_placeholder(panel, panel._t("battle.calc.add_move")) != 4:
 		_fail("Damage taken must render four directly editable opponent move slots")
 		return
+	if panel.inline_move_result_panels.size() != 4:
+		_fail("Every editable opponent move slot must own a styled autocomplete panel")
+		return
+	for panel_value: Variant in panel.inline_move_result_panels.values():
+		var suggestions_panel := panel_value as PanelContainer
+		if suggestions_panel == null or not suggestions_panel.has_theme_stylebox_override("panel"):
+			_fail("Opponent move autocomplete must use the shared Calcdex suggestion styling")
+			return
 	panel._on_inline_move_text_submitted("Aura Sphere", 1)
 	if panel.defender_assumptions.get("assumedMoves") != ["U-turn", "Aura Sphere"]:
 		_fail("pressing Enter in an opponent result row must commit that move in place")
@@ -254,6 +272,15 @@ func _has_line_edit_text(node: Node, text: String) -> bool:
 		return true
 	for child: Node in node.get_children():
 		if _has_line_edit_text(child, text):
+			return true
+	return false
+
+
+func _has_label_text(node: Node, text: String) -> bool:
+	if node is Label and (node as Label).text == text:
+		return true
+	for child: Node in node.get_children():
+		if _has_label_text(child, text):
 			return true
 	return false
 

@@ -51,6 +51,20 @@ func _run() -> void:
 	if not negative_stage_selector.get_theme_color("font_color").is_equal_approx(Color(0.96, 0.39, 0.39, 1.0)):
 		_fail("Negative edited stat stages lack their semantic color")
 
+	var suggestions_panel := panel._make_selector_suggestions_panel()
+	content.add_child(suggestions_panel)
+	if not suggestions_panel.has_theme_stylebox_override("panel"):
+		_fail("Autocomplete suggestions lack their own Calcdex dropdown panel")
+	var suggestion_button := panel._make_selector_result_button("Flame Body", "Ability", func() -> void: pass, true)
+	suggestions_panel.add_child(suggestion_button)
+	for style_name: String in ["normal", "hover", "pressed", "focus"]:
+		if not suggestion_button.has_theme_stylebox_override(style_name):
+			_fail("Autocomplete suggestion lacks its %s state" % style_name)
+	if suggestion_button.mouse_default_cursor_shape != Control.CURSOR_POINTING_HAND:
+		_fail("Autocomplete suggestions lack an interactive cursor")
+	if not _has_label_text(suggestion_button, "Flame Body") or not _has_label_text(suggestion_button, "Ability"):
+		_fail("Autocomplete suggestions must visually separate their title and subtitle")
+
 	panel.sample_set_options = [{
 		"id": "fixture-set",
 		"name": "Offensive",
@@ -112,6 +126,15 @@ func _find_option_button(node: Node) -> OptionButton:
 		if result != null:
 			return result
 	return null
+
+
+func _has_label_text(node: Node, expected: String) -> bool:
+	if node is Label and (node as Label).text == expected:
+		return true
+	for child: Node in node.get_children():
+		if _has_label_text(child, expected):
+			return true
+	return false
 
 
 func _fail(message: String) -> void:

@@ -111,6 +111,7 @@ var move_assumption_input: LineEdit
 var catalog_suggestions_box: VBoxContainer
 var catalog_results_box: VBoxContainer
 var inline_move_result_boxes: Dictionary = {}
+var inline_move_result_panels: Dictionary = {}
 var result_summary_panels: Dictionary = {}
 var result_disclosure_buttons: Dictionary = {}
 var expanded_result_key := ""
@@ -259,6 +260,7 @@ func close_assumption_popover() -> void:
 	catalog_suggestions_box = null
 	catalog_results_box = null
 	inline_move_result_boxes.clear()
+	inline_move_result_panels.clear()
 	active_selector = SELECTOR_NONE
 	active_move_slot = -1
 	selector_query = ""
@@ -986,6 +988,7 @@ func _add_move_results_table_shell() -> VBoxContainer:
 func _add_editable_opponent_move_results_table(results: Array, defender: Dictionary) -> void:
 	var table_box := _add_move_results_table_shell()
 	inline_move_result_boxes.clear()
+	inline_move_result_panels.clear()
 	var move_names := _get_visible_opponent_move_names(results)
 	for slot in range(4):
 		var move_name := str(move_names[slot]).strip_edges() if slot < move_names.size() else ""
@@ -998,13 +1001,16 @@ func _add_editable_opponent_move_results_table(results: Array, defender: Diction
 
 
 func _add_inline_move_results_box(parent: VBoxContainer, slot: int) -> void:
+	var suggestions_panel := _make_selector_suggestions_panel()
+	suggestions_panel.visible = false
+	parent.add_child(suggestions_panel)
 	var results_box := VBoxContainer.new()
-	results_box.visible = false
 	results_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	results_box.clip_contents = true
-	results_box.add_theme_constant_override("separation", 2)
-	parent.add_child(results_box)
+	results_box.add_theme_constant_override("separation", 3)
+	suggestions_panel.add_child(results_box)
 	inline_move_result_boxes[slot] = results_box
+	inline_move_result_panels[slot] = suggestions_panel
 
 
 func _find_move_result(results: Array, move_name: String) -> Dictionary:
@@ -1645,9 +1651,16 @@ func _on_inline_move_focus_entered(slot: int, input: LineEdit) -> void:
 		var box := box_value as VBoxContainer
 		if box != null:
 			box.visible = false
+	for panel_value: Variant in inline_move_result_panels.values():
+		var suggestions_panel := panel_value as PanelContainer
+		if suggestions_panel != null:
+			suggestions_panel.visible = false
 	catalog_results_box = inline_move_result_boxes.get(slot) as VBoxContainer
 	if catalog_results_box != null:
 		catalog_results_box.visible = true
+		var active_panel := inline_move_result_panels.get(slot) as PanelContainer
+		if active_panel != null:
+			active_panel.visible = true
 	_refresh_catalog_results()
 	_request_active_catalog()
 
@@ -2031,12 +2044,25 @@ func _render_active_assumption_editor(assumptions: Dictionary) -> void:
 
 
 func _render_inline_assumption_results() -> void:
+	var suggestions_panel := _make_selector_suggestions_panel()
+	catalog_suggestions_box.add_child(suggestions_panel)
 	catalog_results_box = VBoxContainer.new()
 	catalog_results_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	catalog_results_box.clip_contents = true
-	catalog_results_box.add_theme_constant_override("separation", 2)
-	catalog_suggestions_box.add_child(catalog_results_box)
+	catalog_results_box.add_theme_constant_override("separation", 3)
+	suggestions_panel.add_child(catalog_results_box)
 	_refresh_catalog_results()
+
+
+func _make_selector_suggestions_panel() -> PanelContainer:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.clip_contents = true
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_stylebox(Color(0.008, 0.019, 0.034, 0.99), Color(0.20, 0.43, 0.62, 0.88), 7, 6.0, 6.0)
+	)
+	return panel
 
 
 func _ensure_inline_assumption_results() -> void:
@@ -2232,26 +2258,59 @@ func is_assumption_catalog_request_current(kind: String, query: String) -> bool:
 	return kind == active_selector and query == selector_query
 
 
-func _make_selector_result_button(title: String, subtitle: String, pressed_callback: Callable) -> Button:
+func _make_selector_result_button(title: String, subtitle: String, pressed_callback: Callable, selected: bool = false, is_clear_action: bool = false) -> Button:
 	var button := Button.new()
-	button.text = title if subtitle == "" else "%s  %s" % [title, subtitle]
 	button.focus_mode = Control.FOCUS_ALL
-	button.custom_minimum_size = Vector2(0, 24)
+	button.custom_minimum_size = Vector2(0, 31)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.clip_text = true
-	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-	button.add_theme_font_size_override("font_size", 11)
-	button.add_theme_color_override("font_color", TEXT_PRIMARY)
-	button.add_theme_stylebox_override("normal", _make_stylebox(ROW_BG, ROW_BORDER, 4, 6.0, 3.0))
-	button.add_theme_stylebox_override("hover", _make_stylebox(TAB_ACTIVE_BG.lightened(0.08), ROW_BORDER.lightened(0.1), 4, 6.0, 3.0))
-	button.add_theme_stylebox_override("pressed", _make_stylebox(TAB_ACTIVE_BG, ROW_BORDER.lightened(0.18), 4, 6.0, 3.0))
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.tooltip_text = title if subtitle == "" else "%s · %s" % [title, subtitle]
+	var normal_bg := Color(0.018, 0.029, 0.047, 0.98)
+	var normal_border := Color(0.12, 0.25, 0.38, 0.78)
+	if selected:
+		normal_bg = Color(0.045, 0.11, 0.17, 0.99)
+		normal_border = Color(0.31, 0.67, 0.86, 0.94)
+	button.add_theme_stylebox_override("normal", _make_stylebox(normal_bg, normal_border, 5, 7.0, 3.0))
+	button.add_theme_stylebox_override("hover", _make_stylebox(Color(0.035, 0.105, 0.164, 0.99), DROPDOWN_HOVER_BORDER, 5, 7.0, 3.0))
+	button.add_theme_stylebox_override("pressed", _make_stylebox(Color(0.045, 0.137, 0.211, 1.0), TEXT_ACCENT, 5, 7.0, 3.0))
+	button.add_theme_stylebox_override("focus", _make_stylebox(normal_bg, DROPDOWN_FOCUS_BORDER, 5, 7.0, 3.0))
+
+	var row := HBoxContainer.new()
+	row.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	row.offset_left = 8.0
+	row.offset_top = 3.0
+	row.offset_right = -8.0
+	row.offset_bottom = -3.0
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_theme_constant_override("separation", 6)
+	button.add_child(row)
+	var indicator := _make_label("×" if is_clear_action else ("✓" if selected else ""), 11, TEXT_MUTED if is_clear_action else TEXT_ACCENT)
+	indicator.custom_minimum_size = Vector2(14, 0)
+	indicator.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	indicator.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	indicator.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	indicator.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(indicator)
+	var title_label := _make_label(title, 11, TEXT_SECONDARY if is_clear_action else TEXT_PRIMARY)
+	title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	title_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(title_label)
+	if subtitle != "":
+		var subtitle_label := _make_label(subtitle, 9, TEXT_MUTED)
+		subtitle_label.size_flags_horizontal = Control.SIZE_SHRINK_END
+		subtitle_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		subtitle_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		subtitle_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		row.add_child(subtitle_label)
 	button.pressed.connect(pressed_callback)
 	return button
 
 
 func _add_selector_status(parent: VBoxContainer, text: String, color: Color) -> void:
 	var label := _make_label(text, 11, color)
+	label.custom_minimum_size = Vector2(0, 28)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	parent.add_child(label)
 
 
@@ -2426,13 +2485,21 @@ func _refresh_catalog_results() -> void:
 	catalog_results_box.visible = active_selector in [SELECTOR_ITEM, SELECTOR_ABILITY, SELECTOR_NATURE, SELECTOR_MOVE]
 	if not catalog_results_box.visible:
 		return
+	_add_selector_suggestions_header(catalog_results_box)
 	if active_selector == SELECTOR_NATURE:
 		_refresh_nature_catalog_results()
 		return
 
-	var clear_title := _t("common.clear") if active_selector == SELECTOR_MOVE else _t("battle.calc.unknown_none")
-	var clear_subtitle := "" if active_selector == SELECTOR_MOVE else _t("common.clear")
-	var clear_button := _make_selector_result_button(clear_title, clear_subtitle, Callable(self, "_on_catalog_assumption_clear_pressed").bind(active_selector))
+	var clear_title := _t("battle.calc.clear_move_slot") if active_selector == SELECTOR_MOVE else _t("battle.calc.use_default_value")
+	var clear_subtitle := "" if active_selector == SELECTOR_MOVE else _get_selector_default_label(active_selector)
+	var clear_selected := active_selector != SELECTOR_MOVE and _get_catalog_input_text(active_selector) == ""
+	var clear_button := _make_selector_result_button(
+		clear_title,
+		clear_subtitle,
+		Callable(self, "_on_catalog_assumption_clear_pressed").bind(active_selector),
+		clear_selected,
+		true
+	)
 	catalog_results_box.add_child(clear_button)
 
 	if selector_loading:
@@ -2454,12 +2521,54 @@ func _refresh_catalog_results() -> void:
 		if active_selector == SELECTOR_MOVE:
 			var move_type := str(result.get("type", "")).strip_edges()
 			var category := str(result.get("category", "")).strip_edges()
-			subtitle = "· %s / %s" % [move_type.capitalize(), category.capitalize()]
+			subtitle = _join_string_array([move_type.capitalize(), category.capitalize()], " · ")
+		var calc_name := str(result.get("calcName", name)).strip_edges()
 		catalog_results_box.add_child(_make_selector_result_button(
 			_fallback_text(name, _t("common.unknown")),
 			subtitle,
-			Callable(self, "_on_selector_result_pressed").bind(result)
+			Callable(self, "_on_selector_result_pressed").bind(result),
+			calc_name.to_lower() == _get_catalog_input_text(active_selector).to_lower()
 		))
+
+
+func _add_selector_suggestions_header(parent: VBoxContainer) -> void:
+	var header := HBoxContainer.new()
+	header.custom_minimum_size = Vector2(0, 20)
+	header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	parent.add_child(header)
+	var title := _make_label(_t("battle.calc.suggestions_for", {
+		"field": _get_selector_field_label(active_selector),
+	}).to_upper(), 8, Color(0.62, 0.78, 0.90, 1.0))
+	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header.add_child(title)
+
+
+func _get_selector_field_label(kind: String) -> String:
+	match kind:
+		SELECTOR_ITEM:
+			return _t("battle.calc.item")
+		SELECTOR_ABILITY:
+			return _t("battle.calc.ability")
+		SELECTOR_NATURE:
+			return _t("battle.calc.nature")
+		SELECTOR_MOVE:
+			return _t("battle.calc.move_header")
+		_:
+			return _t("battle.calc.sample_set")
+
+
+func _get_selector_default_label(kind: String) -> String:
+	match kind:
+		SELECTOR_ITEM:
+			return _t("battle.calc.item_none")
+		SELECTOR_ABILITY:
+			return _t("battle.calc.automatic_value")
+		SELECTOR_NATURE:
+			return _localized_nature_name("Hardy")
+		_:
+			return _t("common.none")
 
 
 func _refresh_nature_catalog_results() -> void:
@@ -2483,10 +2592,11 @@ func _refresh_nature_catalog_results() -> void:
 	var selected_nature := _fallback_text(str(defender_assumptions.get("nature", "")).strip_edges(), "Hardy")
 	for index in range(mini(matches.size(), 6)):
 		var nature := matches[index]
-		catalog_results_box.add_child(_make_compact_option_button(
+		catalog_results_box.add_child(_make_selector_result_button(
 			_localized_nature_name(nature),
-			nature == selected_nature,
-			_on_nature_option_pressed.bind(nature)
+			_t("battle.calc.neutral_nature") if nature == "Hardy" else "",
+			_on_nature_option_pressed.bind(nature),
+			nature == selected_nature
 		))
 
 
