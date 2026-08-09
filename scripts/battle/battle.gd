@@ -2325,6 +2325,7 @@ func _refresh_damage_calc_results() -> void:
 	if current_action_panel_mode != BattleActionsPanelMode.CALC:
 		return
 	_sync_damage_calc_matchup_assumptions()
+	var requested_direction := str(calc_panel.get_matchup_selection().get("direction", "own-to-opponent"))
 	if battle_finished:
 		calc_panel.show_error(_t("battle.error.ended"))
 		return
@@ -2335,7 +2336,7 @@ func _refresh_damage_calc_results() -> void:
 	if damage_calc_request_in_flight:
 		damage_calc_refresh_queued = true
 		calc_panel.set_defender_assumptions(damage_calc_defender_assumptions, damage_calc_assumption_edited_fields)
-		calc_panel.show_loading(_get_active_display_species("p1"), _get_active_display_species("p2"))
+		_show_damage_calc_loading(requested_direction)
 		return
 
 	damage_calc_request_token += 1
@@ -2343,7 +2344,7 @@ func _refresh_damage_calc_results() -> void:
 	damage_calc_request_in_flight = true
 	damage_calc_refresh_queued = false
 	calc_panel.set_defender_assumptions(damage_calc_defender_assumptions, damage_calc_assumption_edited_fields)
-	calc_panel.show_loading(_get_active_display_species("p1"), _get_active_display_species("p2"))
+	_show_damage_calc_loading(requested_direction)
 
 	var projection_revision := battle_state.get_calcdex_projection_revision()
 	var use_safe_matchup := false
@@ -2424,12 +2425,18 @@ func _refresh_damage_calc_results() -> void:
 					_get_damage_calc_defender_assumptions_payload(), calc_panel.get_field_scenario()
 				)
 	else:
-		response = await BattleApiClient.calculate_battle_damage(
-			damage_calc_request,
-			battle_state.battle_id,
-			"own-to-opponent",
-			_get_damage_calc_defender_assumptions_payload()
-		)
+		if requested_direction == "opponent-to-own":
+			response = {
+				"success": false,
+				"error": _t("battle.calc.error.reverse_requires_safe_snapshot"),
+			}
+		else:
+			response = await BattleApiClient.calculate_battle_damage(
+				damage_calc_request,
+				battle_state.battle_id,
+				"own-to-opponent",
+				_get_damage_calc_defender_assumptions_payload()
+			)
 
 	damage_calc_request_in_flight = false
 	if request_token != damage_calc_request_token:
@@ -2446,6 +2453,12 @@ func _refresh_damage_calc_results() -> void:
 		calc_panel.show_response(response)
 	else:
 		calc_panel.show_error(str(response.get("error", _t("battle.calc.error.failed"))))
+
+func _show_damage_calc_loading(direction: String) -> void:
+	if direction == "opponent-to-own":
+		calc_panel.show_loading(_get_active_display_species("p2"), _get_active_display_species("p1"))
+	else:
+		calc_panel.show_loading(_get_active_display_species("p1"), _get_active_display_species("p2"))
 
 func _on_calc_panel_defender_assumptions_changed(assumptions: Dictionary, edited_fields: Dictionary) -> void:
 	_sync_damage_calc_matchup_assumptions()

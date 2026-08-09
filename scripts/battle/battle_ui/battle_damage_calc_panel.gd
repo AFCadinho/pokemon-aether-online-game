@@ -176,6 +176,9 @@ func show_response(response: Dictionary) -> void:
 	if not bool(response.get("success", false)):
 		last_response = {}
 		last_error = str(response.get("error", _t("battle.calc.error.failed")))
+	elif str(response.get("direction", "")) != str(get_matchup_selection().get("direction", "")):
+		last_response = {}
+		last_error = _t("battle.calc.error.direction_mismatch")
 	else:
 		last_response = response
 

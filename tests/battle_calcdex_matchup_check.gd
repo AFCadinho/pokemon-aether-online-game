@@ -40,6 +40,13 @@ func _run() -> void:
 	_assert(selection["direction"] == "opponent-to-own", "reverse direction must be available")
 	_assert(selection["attackerRef"] == "opponent:public-slot-1", "reverse attacker must stay public opponent")
 	_assert(selection["defenderRef"] == "viewer:public-slot-2", "reverse defender must stay owned")
+	var wrong_direction := response.duplicate(true)
+	wrong_direction["direction"] = "own-to-opponent"
+	panel.show_response(wrong_direction)
+	_assert(panel.last_response.is_empty(), "reverse tab must reject a stale own-damage response")
+	_assert(panel.last_error != "", "direction mismatch must render an explicit safe error")
+	panel.show_response(response)
+	_assert(not panel.last_response.is_empty(), "reverse tab must accept a matching damage-taken response")
 	print("PASS battle_calcdex_matchup_check")
 	quit(0)
 

@@ -23,6 +23,7 @@ func _run() -> void:
 
 	panel.show_response({
 		"success": true,
+		"direction": "own-to-opponent",
 		"attacker": {"species": "Pikachu", "hp": {"display": "100%", "percent": 100}},
 		"defender": {"species": "Mew", "hp": {"display": "75%", "percent": 75}},
 		"results": [{
