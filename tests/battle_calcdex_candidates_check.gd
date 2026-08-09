@@ -157,7 +157,7 @@ func _run() -> void:
 		return
 	for condition_label: String in [
 		panel._t("battle.calc.conditions_global").to_upper(),
-		panel._t("battle.calc.conditions_opponent_side").to_upper(),
+		panel._get_condition_target_title("opponent").to_upper(),
 		panel._t("battle.calc.condition.weather").to_upper(),
 		panel._t("battle.calc.condition.terrain").to_upper(),
 		panel._t("battle.calc.condition.entry_hazards").to_upper(),

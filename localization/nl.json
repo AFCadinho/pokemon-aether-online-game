@@ -2306,7 +2306,7 @@
   "battle.calc.conditions_global": "Slagveld",
   "battle.calc.conditions_your_side": "Jouw kant",
   "battle.calc.conditions_opponent_side": "Kant tegenstander",
-  "battle.calc.conditions_direct_only": "Movepercentages tonen alleen directe schade. Relevante status, entry hazards, restschade en herstel tellen apart mee in de KO-summary.",
+  "battle.calc.conditions_direct_only": "Condities tellen mee in de KO-summary; movepercentages blijven directe schade.",
   "battle.calc.condition.weather": "Weer",
   "battle.calc.condition.terrain": "Terrein",
   "battle.calc.condition.status": "Pokémonstatus",

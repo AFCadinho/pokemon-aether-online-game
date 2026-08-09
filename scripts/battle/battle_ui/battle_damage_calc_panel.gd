@@ -971,7 +971,7 @@ func _make_matchup_side(
 	if relation == "opponent" and confirmed_status == "" and not knowledge_snapshot.is_empty():
 		var status_selector := _make_pokemon_status_selector(relation, true)
 		status_selector.name = "OpponentStatusSelector"
-		status_selector.custom_minimum_size.x = 124
+		status_selector.custom_minimum_size.x = 108
 		status_selector.size_flags_horizontal = Control.SIZE_SHRINK_END
 		detail_row.add_child(status_selector)
 	elif status in POKEMON_STATUS_VALUES and status != "":
@@ -1852,29 +1852,32 @@ func _add_advanced_scenario_controls(parent: VBoxContainer, assumptions: Diction
 
 	var editor := VBoxContainer.new()
 	editor.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	editor.add_theme_constant_override("separation", 8)
-	parent.add_child(editor)
+	editor.add_theme_constant_override("separation", 7)
+	var condition_surface := PanelContainer.new()
+	condition_surface.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	condition_surface.add_theme_stylebox_override(
+		"panel",
+		_make_stylebox(Color(0.012, 0.027, 0.047, 0.82), Color(CHIP_BORDER, 0.58), 7, 9.0, 7.0)
+	)
+	condition_surface.add_child(editor)
+	parent.add_child(condition_surface)
 
-	var global_panel := _make_field_condition_panel(
+	editor.add_child(_make_condition_section_header(
 		_t("battle.calc.conditions_global"),
 		CONDITION_GLOBAL_ACCENT
-	)
-	var global_content := global_panel.get_meta("content") as VBoxContainer
+	))
 	var field_row := HBoxContainer.new()
 	field_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	field_row.add_theme_constant_override("separation", 6)
+	field_row.add_theme_constant_override("separation", 7)
 	field_row.add_child(_make_field_scenario_selector_card("weather", FIELD_WEATHER_VALUES, _t("battle.calc.condition.weather")))
 	field_row.add_child(_make_field_scenario_selector_card("terrain", FIELD_TERRAIN_VALUES, _t("battle.calc.condition.terrain")))
-	global_content.add_child(field_row)
-	editor.add_child(global_panel)
+	editor.add_child(field_row)
+	editor.add_child(_make_condition_separator())
 
 	var target_relation := _get_condition_target_relation()
-	var target_title := (
-		_t("battle.calc.conditions_your_side")
-		if target_relation == "own"
-		else _t("battle.calc.conditions_opponent_side")
-	)
-	editor.add_child(_make_field_side_condition_panel(target_relation, target_title))
+	var target_accent := CONDITION_OWN_ACCENT if target_relation == "own" else CONDITION_OPPONENT_ACCENT
+	editor.add_child(_make_condition_section_header(_get_condition_target_title(target_relation), target_accent))
+	editor.add_child(_make_field_side_condition_content(target_relation, target_accent))
 
 	var scope_note := _make_label(_t("battle.calc.conditions_direct_only"), 10, TEXT_SECONDARY)
 	scope_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -1904,37 +1907,37 @@ func _make_disclosure_button(text: String, expanded: bool, pressed_callback: Cal
 	return button
 
 
-func _make_field_condition_panel(title_text: String, accent_color: Color) -> PanelContainer:
-	var panel := PanelContainer.new()
-	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	panel.add_theme_stylebox_override(
-		"panel",
-		_make_card_stylebox(
-			Color(0.012, 0.027, 0.047, 0.98),
-			Color(accent_color, 0.74),
-			7,
-			10.0,
-			8.0
-		)
-	)
-	var content_box := VBoxContainer.new()
-	content_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	content_box.add_theme_constant_override("separation", 7)
-	panel.add_child(content_box)
+func _make_condition_section_header(title_text: String, accent_color: Color) -> HBoxContainer:
 	var title_row := HBoxContainer.new()
 	title_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title_row.add_theme_constant_override("separation", 7)
-	content_box.add_child(title_row)
+	title_row.add_theme_constant_override("separation", 6)
 	var accent := ColorRect.new()
 	accent.color = accent_color
-	accent.custom_minimum_size = Vector2(3, 17)
+	accent.custom_minimum_size = Vector2(3, 15)
 	accent.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title_row.add_child(accent)
-	var title := _make_label(title_text.to_upper(), 11, TEXT_PRIMARY)
+	var title := _make_label(title_text.to_upper(), 10, TEXT_PRIMARY)
 	title.clip_text = false
 	title_row.add_child(title)
-	panel.set_meta("content", content_box)
-	return panel
+	return title_row
+
+
+func _make_condition_separator() -> HSeparator:
+	var separator := HSeparator.new()
+	separator.add_theme_constant_override("separation", 3)
+	separator.add_theme_stylebox_override(
+		"separator",
+		_make_stylebox(Color.TRANSPARENT, Color(CHIP_BORDER, 0.42), 0, 0.0, 0.0)
+	)
+	return separator
+
+
+func _get_condition_target_title(relation: String) -> String:
+	var pokemon_ref := selected_viewer_ref if relation == "own" else selected_opponent_ref
+	var pokemon := _get_snapshot_pokemon_by_ref(pokemon_ref)
+	var fallback := _t("battle.calc.your_pokemon") if relation == "own" else _t("battle.calc.opponent")
+	var pokemon_name := fallback if pokemon.is_empty() else _snapshot_pokemon_name(pokemon)
+	return "%s · %s" % [_t("battle.calc.target"), pokemon_name]
 
 
 func _make_field_scenario_selector_card(key: String, values: Array, label_text: String) -> VBoxContainer:
@@ -1958,18 +1961,14 @@ func _make_field_scenario_selector(key: String, values: Array) -> OptionButton:
 		if normalized == str(field_scenario.get(key, "")):
 			selector.select(selector.item_count - 1)
 	selector.item_selected.connect(_on_field_scenario_selected.bind(selector, key))
-	_apply_calcdex_dropdown_style(selector, 36.0, 12)
+	_apply_calcdex_dropdown_style(selector, 34.0, 11)
 	return selector
 
 
-func _make_field_side_condition_panel(relation: String, title_text: String) -> PanelContainer:
-	var accent_color := CONDITION_OWN_ACCENT if relation == "own" else CONDITION_OPPONENT_ACCENT
-	var panel := _make_field_condition_panel(title_text, accent_color)
-	var content_box := panel.get_meta("content") as VBoxContainer
+func _make_field_side_condition_content(relation: String, accent_color: Color) -> HBoxContainer:
 	var section_row := HBoxContainer.new()
 	section_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	section_row.add_theme_constant_override("separation", 12)
-	content_box.add_child(section_row)
+	section_row.add_theme_constant_override("separation", 10)
 
 	var defense_column := VBoxContainer.new()
 	defense_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -2011,7 +2010,7 @@ func _make_field_side_condition_panel(relation: String, title_text: String) -> P
 	for condition: Dictionary in FIELD_SIDE_HAZARDS:
 		hazard_grid.add_child(_make_field_side_condition_button(relation, condition))
 	hazard_grid.add_child(_make_field_side_spikes_selector(relation))
-	return panel
+	return section_row
 
 
 func _make_pokemon_status_selector(relation: String, compact: bool = false) -> OptionButton:
@@ -2025,7 +2024,8 @@ func _make_pokemon_status_selector(relation: String, compact: bool = false) -> O
 			var current_label := _get_status_label(confirmed_status)
 			option_label = _t("battle.calc.condition.current", {"value": current_label})
 		if compact:
-			option_label = "%s · %s" % [_t("battle.calc.status"), option_label]
+			var compact_value := _get_status_label(confirmed_status) if status == "" else _get_status_label(status)
+			option_label = "%s: %s" % [_t("battle.calc.status"), compact_value]
 		selector.add_item(option_label)
 		selector.set_item_metadata(selector.item_count - 1, status)
 		if confirmed_status == "" and status == scenario_status:
@@ -2068,7 +2068,7 @@ func _make_field_side_condition_button(relation: String, condition: Dictionary) 
 	button.button_pressed = public_active or bool(field_scenario.get(scenario_key, false))
 	button.disabled = public_active
 	button.focus_mode = Control.FOCUS_ALL
-	button.custom_minimum_size = Vector2(0, 32)
+	button.custom_minimum_size = Vector2(0, 30)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.add_theme_font_size_override("font_size", 11)
 	button.add_theme_color_override("font_color", TEXT_PRIMARY)
@@ -2112,7 +2112,7 @@ func _make_field_side_spikes_selector(relation: String) -> OptionButton:
 	selector.tooltip_text = _t("battle.calc.condition_confirmed_tooltip") if selector.disabled else _t("battle.calc.hazard_scenario_tooltip")
 	if not selector.disabled:
 		selector.item_selected.connect(_on_field_side_spikes_selected.bind(selector, scenario_key))
-	_apply_calcdex_dropdown_style(selector, 32.0, 11)
+	_apply_calcdex_dropdown_style(selector, 30.0, 10)
 	if selector.disabled:
 		selector.add_theme_color_override("font_disabled_color", TEXT_SECONDARY)
 	return selector
@@ -2148,8 +2148,9 @@ func _get_field_scenario_option_label(key: String, value: String) -> String:
 	if value != "":
 		return _get_field_condition_value_label(key, value)
 	var current_value := _get_public_global_field_value(key)
-	var current_label := _t("common.none") if current_value == "" else _get_field_condition_value_label(key, current_value)
-	return _t("battle.calc.condition.current", {"value": current_label})
+	if current_value == "":
+		return _t("common.none")
+	return _t("battle.calc.condition.current", {"value": _get_field_condition_value_label(key, current_value)})
 
 
 func _get_field_condition_value_label(key: String, value: String) -> String:

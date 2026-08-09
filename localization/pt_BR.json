@@ -2306,7 +2306,7 @@
   "battle.calc.conditions_global": "Campo de batalha",
   "battle.calc.conditions_your_side": "Seu lado",
   "battle.calc.conditions_opponent_side": "Lado adversário",
-  "battle.calc.conditions_direct_only": "As porcentagens dos golpes mostram apenas dano direto. Status, riscos de entrada, dano residual e recuperação aplicáveis entram separadamente no resumo de nocaute.",
+  "battle.calc.conditions_direct_only": "As condições afetam o resumo de nocaute; as porcentagens dos golpes continuam mostrando dano direto.",
   "battle.calc.condition.weather": "Clima",
   "battle.calc.condition.terrain": "Terreno",
   "battle.calc.condition.status": "Status do Pokémon",
