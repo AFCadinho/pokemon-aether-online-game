@@ -91,6 +91,16 @@ func _run() -> void:
 			push_error("Expanded move rows must show the complete Showdown-style KO projection: %s" % summary_fragment)
 			quit(1)
 			return
+	var copy_button := (panel.result_summary_panels[second_summary_key] as Control).find_child("CopyResultSummaryButton", true, false) as Button
+	if copy_button == null:
+		push_error("Expanded calculation summaries must expose a clipboard action")
+		quit(1)
+		return
+	panel._on_copy_result_summary_pressed(" ".join(expanded_summary_text), copy_button)
+	if not _contains_fragment([copy_button.text], ["Copied", "Gekopieerd", "Copiado"]):
+		push_error("The summary copy action must confirm that the text was copied")
+		quit(1)
+		return
 	var projected_result := {
 		"shortLabel": "44.0-52.0%", "minPercent": 44.0, "maxPercent": 52.0,
 		"koProjection": {"state": "available", "chance": 0.109, "hits": 2},

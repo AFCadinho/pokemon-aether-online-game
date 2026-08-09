@@ -200,6 +200,7 @@ var damage_calc_refresh_queued := false
 var damage_calc_catalog_request_token := 0
 var damage_calc_sample_set_request_token := 0
 var damage_calc_default_ability_request_token := 0
+var damage_calc_forme_request_tokens: Dictionary = {}
 var damage_calc_matchup_key := ""
 var damage_calc_defender_species_key := ""
 var damage_calc_defender_assumptions: Dictionary = {}
@@ -429,6 +430,8 @@ func _ready() -> void:
 		calc_panel.assumption_catalog_requested.connect(_on_calc_panel_assumption_catalog_requested)
 	if not calc_panel.sample_set_catalog_requested.is_connected(_on_calc_panel_sample_set_catalog_requested):
 		calc_panel.sample_set_catalog_requested.connect(_on_calc_panel_sample_set_catalog_requested)
+	if not calc_panel.forme_catalog_requested.is_connected(_on_calc_panel_forme_catalog_requested):
+		calc_panel.forme_catalog_requested.connect(_on_calc_panel_forme_catalog_requested)
 	if not calc_panel.default_ability_requested.is_connected(_on_calc_panel_default_ability_requested):
 		calc_panel.default_ability_requested.connect(_on_calc_panel_default_ability_requested)
 	if not calc_panel.matchup_selection_changed.is_connected(_on_calc_panel_matchup_selection_changed):
@@ -2157,6 +2160,8 @@ func _set_action_panel_mode(mode: BattleActionsPanelMode) -> void:
 	if previous_mode == BattleActionsPanelMode.CALC and mode != BattleActionsPanelMode.CALC:
 		damage_calc_request_token += 1
 		damage_calc_catalog_request_token += 1
+		for relation: String in ["viewer", "opponent"]:
+			damage_calc_forme_request_tokens[relation] = int(damage_calc_forme_request_tokens.get(relation, 0)) + 1
 		calc_panel.close_assumption_popover()
 	_sync_action_panel_mode_visibility()
 	if mode == BattleActionsPanelMode.CALC:
@@ -2427,7 +2432,8 @@ func _refresh_damage_calc_results() -> void:
 				damage_calc_request, battle_state.battle_id, projection_revision,
 				str(selection.get("direction", "own-to-opponent")),
 				str(selection.get("attackerRef", "")), str(selection.get("defenderRef", "")),
-				_get_damage_calc_defender_assumptions_payload(), calc_panel.get_field_scenario()
+				_get_damage_calc_defender_assumptions_payload(), calc_panel.get_field_scenario(),
+				calc_panel.get_species_scenario()
 			)
 	else:
 		response = {
@@ -2529,6 +2535,22 @@ func _on_calc_panel_sample_set_catalog_requested(species: String, format_id: Str
 		calc_panel.show_sample_set_catalog_response(species, response)
 	else:
 		calc_panel.show_sample_set_catalog_error(species, str(response.get("error", "Could not load sample sets.")))
+
+func _on_calc_panel_forme_catalog_requested(relation: String, species: String, format_id: String) -> void:
+	if current_action_panel_mode != BattleActionsPanelMode.CALC:
+		return
+	var request_token := int(damage_calc_forme_request_tokens.get(relation, 0)) + 1
+	damage_calc_forme_request_tokens[relation] = request_token
+	var request_node := HTTPRequest.new()
+	add_child(request_node)
+	var response := await PokemonDataApiClient.get_damage_calc_formes(request_node, species, format_id)
+	request_node.queue_free()
+	if request_token != int(damage_calc_forme_request_tokens.get(relation, 0)) or current_action_panel_mode != BattleActionsPanelMode.CALC:
+		return
+	if bool(response.get("success", false)):
+		calc_panel.show_forme_catalog_response(relation, species, response)
+	else:
+		calc_panel.show_forme_catalog_error(relation, species, str(response.get("error", "Could not load formes.")))
 
 func _on_calc_panel_default_ability_requested(species: String) -> void:
 	if current_action_panel_mode != BattleActionsPanelMode.CALC:

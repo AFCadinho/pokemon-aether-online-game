@@ -9,6 +9,7 @@ const DROPDOWN_RADIO_UNCHECKED: Texture2D = preload("res://assets/ui/photo_mode_
 signal defender_assumptions_changed(assumptions: Dictionary, edited_fields: Dictionary)
 signal assumption_catalog_requested(kind: String, query: String, species: String)
 signal sample_set_catalog_requested(species: String, format_id: String)
+signal forme_catalog_requested(relation: String, species: String, format_id: String)
 signal default_ability_requested(species: String)
 signal matchup_selection_changed()
 
@@ -171,6 +172,9 @@ var selected_sample_set_id := ""
 var current_default_ability := ""
 var current_default_ability_species := ""
 var current_default_ability_loading := false
+var species_scenarios: Dictionary = {}
+var forme_catalogs: Dictionary = {}
+var forme_menu_buttons: Dictionary = {}
 
 
 func _ready() -> void:
@@ -201,6 +205,9 @@ func _ready() -> void:
 func show_idle() -> void:
 	close_assumption_popover()
 	_clear_sample_sets()
+	species_scenarios.clear()
+	forme_catalogs.clear()
+	forme_menu_buttons.clear()
 	is_loading = false
 	loading_attacker_name = ""
 	loading_defender_name = ""
@@ -269,6 +276,7 @@ func set_knowledge_snapshot(snapshot: Dictionary) -> void:
 	knowledge_snapshot = snapshot.duplicate(true)
 	selected_viewer_ref = _resolve_selected_ref("viewer", selected_viewer_ref)
 	selected_opponent_ref = _resolve_selected_ref("opponent", selected_opponent_ref)
+	_prune_species_scenarios()
 	_clear_confirmed_status_scenarios()
 	if previous_opponent_ref != "" and selected_opponent_ref != previous_opponent_ref:
 		_clear_sample_sets()
@@ -402,6 +410,7 @@ func _clear_content() -> void:
 	result_summary_panels.clear()
 	result_disclosure_buttons.clear()
 	result_row_panels.clear()
+	forme_menu_buttons.clear()
 	for child: Node in content.get_children():
 		content.remove_child(child)
 		child.queue_free()
@@ -474,6 +483,40 @@ func get_matchup_selection() -> Dictionary:
 		"attackerRef": selected_opponent_ref if active_subtab == SUBTAB_THEIR_DAMAGE else selected_viewer_ref,
 		"defenderRef": selected_viewer_ref if active_subtab == SUBTAB_THEIR_DAMAGE else selected_opponent_ref,
 	}
+
+
+func get_species_scenario() -> Dictionary:
+	var result := {}
+	for relation: String in ["viewer", "opponent"]:
+		var pokemon_ref := selected_viewer_ref if relation == "viewer" else selected_opponent_ref
+		var selected_species := str(species_scenarios.get(pokemon_ref, "")).strip_edges()
+		var snapshot_species := _get_snapshot_species(pokemon_ref)
+		if selected_species != "" and _normalize_move_name(selected_species) != _normalize_move_name(snapshot_species):
+			result[relation] = selected_species
+	return result
+
+
+func show_forme_catalog_response(relation: String, species: String, response: Dictionary) -> void:
+	var key := _get_forme_catalog_key(relation)
+	if key == "" or _normalize_move_name(species) != _normalize_move_name(_get_snapshot_species_for_relation(relation)):
+		return
+	var options: Array[Dictionary] = []
+	for value: Variant in _as_array(response.get("forms", [])):
+		var option := _as_dictionary(value)
+		var name := str(option.get("name", "")).strip_edges()
+		if name == "" or name.length() > 128:
+			continue
+		options.append({"id": str(option.get("id", "")), "name": name})
+	forme_catalogs[key] = {"loading": false, "options": options, "error": ""}
+	_refresh_forme_menu(relation)
+
+
+func show_forme_catalog_error(relation: String, species: String, message: String) -> void:
+	var key := _get_forme_catalog_key(relation)
+	if key == "" or _normalize_move_name(species) != _normalize_move_name(_get_snapshot_species_for_relation(relation)):
+		return
+	forme_catalogs[key] = {"loading": false, "options": [], "error": message.strip_edges()}
+	_refresh_forme_menu(relation)
 
 
 func get_field_scenario() -> Dictionary:
@@ -1127,6 +1170,11 @@ func _make_matchup_side(
 	hp_percent: Variant,
 	status: String = ""
 ) -> PanelContainer:
+	var pokemon_ref := selected_viewer_ref if relation == "viewer" else selected_opponent_ref
+	var scenario_species := str(species_scenarios.get(pokemon_ref, "")).strip_edges()
+	if scenario_species != "":
+		pokemon_name = scenario_species
+		sprite_species = scenario_species
 	var panel := PanelContainer.new()
 	panel.name = "ViewerProfileCard" if relation == "viewer" else "OpponentProfileCard"
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1156,9 +1204,12 @@ func _make_matchup_side(
 	var caption_label := _make_label(caption.to_upper(), 9, Color(relation_accent, 0.92))
 	caption_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	side.add_child(caption_label)
-	var name_label := _make_label(pokemon_name, 15, TEXT_PRIMARY)
-	name_label.tooltip_text = pokemon_name
-	side.add_child(name_label)
+	if knowledge_snapshot.is_empty():
+		var name_label := _make_label(pokemon_name, 15, TEXT_PRIMARY)
+		name_label.tooltip_text = pokemon_name
+		side.add_child(name_label)
+	else:
+		side.add_child(_make_forme_menu_button(relation, pokemon_name))
 	var detail_row := HBoxContainer.new()
 	detail_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	detail_row.add_theme_constant_override("separation", 4)
@@ -1179,6 +1230,113 @@ func _make_matchup_side(
 	if hp_percent != null:
 		side.add_child(_make_hp_bar(float(hp_percent)))
 	return panel
+
+
+func _make_forme_menu_button(relation: String, pokemon_name: String) -> MenuButton:
+	var button := MenuButton.new()
+	button.name = "ViewerFormeSelector" if relation == "viewer" else "OpponentFormeSelector"
+	button.text = "%s  ▾" % pokemon_name
+	button.tooltip_text = _t("battle.calc.forme_tooltip")
+	button.focus_mode = Control.FOCUS_ALL
+	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	button.custom_minimum_size = Vector2(0, 23)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.clip_text = true
+	button.add_theme_font_size_override("font_size", 15)
+	var snapshot_species := _get_snapshot_species_for_relation(relation)
+	var is_scenario := snapshot_species != "" and _normalize_move_name(snapshot_species) != _normalize_move_name(pokemon_name)
+	button.add_theme_color_override("font_color", TEXT_ACCENT if is_scenario else TEXT_PRIMARY)
+	button.add_theme_color_override("font_hover_color", TEXT_ACCENT)
+	button.add_theme_color_override("font_pressed_color", TEXT_ACCENT)
+	for style_name: String in ["normal", "hover", "pressed", "focus"]:
+		var background := Color.TRANSPARENT if style_name == "normal" else Color(TAB_ACTIVE_BG, 0.45)
+		var border := Color.TRANSPARENT if style_name != "focus" else Color(TEXT_ACCENT, 0.72)
+		button.add_theme_stylebox_override(style_name, _make_stylebox(background, border, 5, 3.0, 1.0))
+	forme_menu_buttons[relation] = button
+	var popup := button.get_popup()
+	_apply_calcdex_popup_style(popup)
+	popup.about_to_popup.connect(_on_forme_menu_about_to_popup.bind(relation))
+	popup.id_pressed.connect(_on_forme_menu_item_pressed.bind(relation))
+	_refresh_forme_menu(relation)
+	return button
+
+
+func _on_forme_menu_about_to_popup(relation: String) -> void:
+	var key := _get_forme_catalog_key(relation)
+	if key == "":
+		return
+	var catalog := _as_dictionary(forme_catalogs.get(key, {}))
+	if bool(catalog.get("loading", false)) or catalog.has("options"):
+		return
+	forme_catalogs[key] = {"loading": true, "options": [], "error": ""}
+	_refresh_forme_menu(relation)
+	var snapshot_species := _get_snapshot_species_for_relation(relation)
+	var format_data := _as_dictionary(knowledge_snapshot.get("format", {}))
+	var format_id := str(format_data.get("engineFormatId", "gen9nationaldex")).strip_edges()
+	forme_catalog_requested.emit(relation, snapshot_species, format_id)
+
+
+func _refresh_forme_menu(relation: String) -> void:
+	var button: MenuButton = forme_menu_buttons.get(relation) as MenuButton
+	if button == null:
+		return
+	var popup := button.get_popup()
+	popup.clear()
+	var pokemon_ref := selected_viewer_ref if relation == "viewer" else selected_opponent_ref
+	var snapshot_species := _get_snapshot_species(pokemon_ref)
+	var selected_species := str(species_scenarios.get(pokemon_ref, snapshot_species)).strip_edges()
+	popup.add_item(_t("battle.calc.forme_current", {"species": snapshot_species}), 0)
+	popup.set_item_metadata(0, snapshot_species)
+	popup.set_item_as_radio_checkable(0, true)
+	popup.set_item_checked(0, _normalize_move_name(selected_species) == _normalize_move_name(snapshot_species))
+	var catalog := _as_dictionary(forme_catalogs.get(_get_forme_catalog_key(relation), {}))
+	var alternate_count := 0
+	for option_value: Variant in _as_array(catalog.get("options", [])):
+		var option := _as_dictionary(option_value)
+		var forme_name := str(option.get("name", "")).strip_edges()
+		if forme_name == "" or _normalize_move_name(forme_name) == _normalize_move_name(snapshot_species):
+			continue
+		var item_id := popup.item_count
+		popup.add_item(forme_name, item_id)
+		popup.set_item_metadata(popup.item_count - 1, forme_name)
+		popup.set_item_as_radio_checkable(popup.item_count - 1, true)
+		popup.set_item_checked(popup.item_count - 1, _normalize_move_name(selected_species) == _normalize_move_name(forme_name))
+		alternate_count += 1
+	if bool(catalog.get("loading", false)):
+		popup.add_separator()
+		popup.add_item(_t("battle.calc.formes_loading"), popup.item_count)
+		popup.set_item_disabled(popup.item_count - 1, true)
+	elif str(catalog.get("error", "")).strip_edges() != "":
+		popup.add_separator()
+		popup.add_item(_t("battle.calc.formes_unavailable"), popup.item_count)
+		popup.set_item_disabled(popup.item_count - 1, true)
+	elif catalog.has("options") and alternate_count == 0:
+		popup.add_separator()
+		popup.add_item(_t("battle.calc.formes_unavailable"), popup.item_count)
+		popup.set_item_disabled(popup.item_count - 1, true)
+
+
+func _on_forme_menu_item_pressed(item_id: int, relation: String) -> void:
+	var button: MenuButton = forme_menu_buttons.get(relation) as MenuButton
+	if button == null:
+		return
+	var popup := button.get_popup()
+	var item_index := popup.get_item_index(item_id)
+	if item_index < 0 or popup.is_item_disabled(item_index):
+		return
+	var selected_species := str(popup.get_item_metadata(item_index)).strip_edges()
+	var pokemon_ref := selected_viewer_ref if relation == "viewer" else selected_opponent_ref
+	var snapshot_species := _get_snapshot_species(pokemon_ref)
+	if selected_species == "" or snapshot_species == "":
+		return
+	if _normalize_move_name(selected_species) == _normalize_move_name(snapshot_species):
+		species_scenarios.erase(pokemon_ref)
+	else:
+		species_scenarios[pokemon_ref] = selected_species
+	expanded_result_key = ""
+	last_response = {}
+	_render_current_state()
+	matchup_selection_changed.emit()
 
 
 func _make_pokemon_status_badge(status: String) -> Label:
@@ -1242,6 +1400,42 @@ func _get_snapshot_pokemon_by_ref(pokemon_ref: String) -> Dictionary:
 			if str(entry.get("pokemonRef", "")) == pokemon_ref:
 				return entry
 	return {}
+
+
+func _get_snapshot_species(pokemon_ref: String) -> String:
+	var pokemon := _get_snapshot_pokemon_by_ref(pokemon_ref)
+	if pokemon.is_empty():
+		return ""
+	return _snapshot_pokemon_name(pokemon)
+
+
+func _get_snapshot_species_for_relation(relation: String) -> String:
+	var pokemon_ref := selected_viewer_ref if relation == "viewer" else selected_opponent_ref
+	return _get_snapshot_species(pokemon_ref)
+
+
+func _get_forme_catalog_key(relation: String) -> String:
+	if relation not in ["viewer", "opponent"]:
+		return ""
+	var pokemon_ref := selected_viewer_ref if relation == "viewer" else selected_opponent_ref
+	var species := _get_snapshot_species(pokemon_ref)
+	if pokemon_ref == "" or species == "":
+		return ""
+	return "%s:%s" % [pokemon_ref, _normalize_move_name(species)]
+
+
+func _prune_species_scenarios() -> void:
+	var available_refs: Dictionary = {}
+	for collection_key: String in ["viewerPokemon", "opponentPokemon"]:
+		for entry_value: Variant in _as_array(knowledge_snapshot.get(collection_key, [])):
+			var entry := _as_dictionary(entry_value)
+			var pokemon_ref := str(entry.get("pokemonRef", ""))
+			if pokemon_ref != "":
+				available_refs[pokemon_ref] = true
+	for ref_value: Variant in species_scenarios.keys():
+		var pokemon_ref := str(ref_value)
+		if not available_refs.has(pokemon_ref):
+			species_scenarios.erase(pokemon_ref)
 
 
 func _add_move_results_table(results: Array, defender: Dictionary) -> void:
@@ -1555,18 +1749,47 @@ func _make_result_disclosure_button(result_key: String, move_name: String, compa
 func _make_result_summary_panel(summary_text: String) -> PanelContainer:
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.mouse_filter = Control.MOUSE_FILTER_PASS
 	panel.add_theme_stylebox_override(
 		"panel",
 		_make_stylebox(Color(0.018, 0.041, 0.064, 0.92), Color(0.15, 0.36, 0.52, 0.68), 6, 9.0, 6.0)
 	)
+	var row := HBoxContainer.new()
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_theme_constant_override("separation", 7)
+	panel.add_child(row)
 	var label := _make_label(summary_text, 11, TEXT_SECONDARY)
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	label.clip_text = false
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	panel.add_child(label)
+	row.add_child(label)
+	var copy_button := Button.new()
+	copy_button.name = "CopyResultSummaryButton"
+	copy_button.text = _t("battle.calc.copy_summary")
+	copy_button.tooltip_text = _t("battle.calc.copy_summary_tooltip")
+	copy_button.custom_minimum_size = Vector2(68, 27)
+	copy_button.size_flags_horizontal = Control.SIZE_SHRINK_END
+	copy_button.focus_mode = Control.FOCUS_ALL
+	copy_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	copy_button.add_theme_font_size_override("font_size", 10)
+	copy_button.add_theme_color_override("font_color", DAMAGE_TEXT)
+	copy_button.add_theme_color_override("font_hover_color", Color.WHITE)
+	copy_button.add_theme_stylebox_override("normal", _make_stylebox(CHIP_BG, CHIP_BORDER, 5, 6.0, 2.0))
+	copy_button.add_theme_stylebox_override("hover", _make_stylebox(DROPDOWN_HOVER_BG, DROPDOWN_HOVER_BORDER, 5, 6.0, 2.0))
+	copy_button.add_theme_stylebox_override("pressed", _make_stylebox(DROPDOWN_PRESSED_BG, DROPDOWN_FOCUS_BORDER, 5, 6.0, 2.0))
+	copy_button.add_theme_stylebox_override("focus", _make_stylebox(CHIP_BG, DROPDOWN_FOCUS_BORDER, 5, 6.0, 2.0))
+	copy_button.pressed.connect(_on_copy_result_summary_pressed.bind(summary_text, copy_button))
+	row.add_child(copy_button)
 	return panel
+
+
+func _on_copy_result_summary_pressed(summary_text: String, button: Button) -> void:
+	DisplayServer.clipboard_set(summary_text)
+	if button != null:
+		button.text = _t("battle.calc.summary_copied")
+		button.tooltip_text = _t("battle.calc.summary_copied")
 
 
 func _on_result_disclosure_pressed(result_key: String) -> void:
@@ -3787,6 +4010,12 @@ func _apply_calcdex_dropdown_style(selector: OptionButton, minimum_height: float
 	)
 
 	var popup := selector.get_popup()
+	if popup == null:
+		return
+	_apply_calcdex_popup_style(popup, font_size)
+
+
+func _apply_calcdex_popup_style(popup: PopupMenu, font_size: int = 12) -> void:
 	if popup == null:
 		return
 	popup.transparent_bg = true

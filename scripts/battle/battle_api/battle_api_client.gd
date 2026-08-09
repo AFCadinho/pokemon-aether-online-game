@@ -387,7 +387,8 @@ func calculate_calcdex_matchup(
 	attacker_ref: String,
 	defender_ref: String,
 	opponent_scenario: Dictionary = {},
-	field_scenario: Dictionary = {}
+	field_scenario: Dictionary = {},
+	species_scenario: Dictionary = {}
 ) -> Dictionary:
 	var normalized_battle_id := battle_id.strip_edges()
 	if normalized_battle_id == "" or not CALCDEX_SNAPSHOT.is_valid_projection_revision(last_projection_revision):
@@ -400,6 +401,7 @@ func calculate_calcdex_matchup(
 		"defenderRef": defender_ref,
 		"opponentScenario": _normalize_damage_calc_assumptions(opponent_scenario),
 		"fieldScenario": field_scenario.duplicate(true),
+		"speciesScenario": _normalize_calcdex_species_scenario(species_scenario),
 	}
 	if opponent_scenario.get("assumedMoves") is Array:
 		payload["opponentScenario"]["assumedMoves"] = (opponent_scenario.get("assumedMoves") as Array).duplicate(true)
@@ -409,6 +411,14 @@ func calculate_calcdex_matchup(
 		payload
 	)
 	return CALCDEX_MATCHUP.normalize_response(response, last_projection_revision)
+
+func _normalize_calcdex_species_scenario(value: Dictionary) -> Dictionary:
+	var result := {}
+	for relation: String in ["viewer", "opponent"]:
+		var species := str(value.get(relation, "")).strip_edges()
+		if species != "" and species.length() <= 128:
+			result[relation] = species
+	return result
 
 func calculate_calcdex_smart_matchup(
 	request_node: HTTPRequest,

@@ -90,6 +90,16 @@ func _run() -> void:
 	_assert(bool(disclosure_metadata.get("compact", false)), "damage-taken summaries must use a separate compact disclosure beside the move input")
 	panel._on_team_icon_pressed("viewer", "viewer:public-slot-1")
 	_assert(panel.selected_viewer_ref == "viewer:public-slot-1", "clicking a team icon must select that public Pokémon directly")
+	var viewer_forme_selector := content.find_child("ViewerFormeSelector", true, false) as MenuButton
+	var opponent_forme_selector := content.find_child("OpponentFormeSelector", true, false) as MenuButton
+	_assert(viewer_forme_selector != null and opponent_forme_selector != null, "both Pokémon names must be clickable forme selectors")
+	panel.show_forme_catalog_response("opponent", "Pikachu", {
+		"success": true,
+		"forms": [{"id": "pikachu", "name": "Pikachu"}, {"id": "pikachurockstar", "name": "Pikachu-Rock-Star"}],
+	})
+	panel._on_forme_menu_item_pressed(1, "opponent")
+	_assert(panel.get_species_scenario() == {"opponent": "Pikachu-Rock-Star"}, "a clicked forme must remain an explicit opponent calculation scenario")
+	_assert(str(panel.species_scenarios.get("opponent:public-slot-1", "")) == "Pikachu-Rock-Star", "a forme scenario must be scoped to the selected public slot")
 	print("PASS battle_calcdex_matchup_check")
 	quit(0)
 
@@ -110,7 +120,7 @@ func _response(revision: Dictionary) -> Dictionary:
 	return {
 		"success": true,
 		"schemaVersion": 1,
-		"routeRevision": "calc3.8-2026-08-10",
+		"routeRevision": "calc3.9-2026-08-10",
 		"safeInputFingerprint": "b".repeat(64),
 		"projectionRevision": revision.duplicate(true),
 		"mechanicsManifest": {

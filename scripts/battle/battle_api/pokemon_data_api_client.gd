@@ -91,6 +91,16 @@ func search_damage_calc_moves(request_node: HTTPRequest, q: String, species: Str
 		"/damage-calc/catalog/moves%s" % query
 	)
 
+func get_damage_calc_formes(request_node: HTTPRequest, species: String, format_id: String = "gen9nationaldex") -> Dictionary:
+	var normalized_species := species.strip_edges()
+	var normalized_format := format_id.strip_edges().to_lower()
+	if normalized_species == "" or normalized_format == "":
+		return {"success": false, "error": "A format and species are required."}
+	return await send_get_request(
+		request_node,
+		"/damage-calc/catalog/formes/%s?formatId=%s" % [normalized_species.uri_encode(), normalized_format.uri_encode()]
+	)
+
 func get_calcdex_sample_sets(request_node: HTTPRequest, format_id: String, species: String) -> Dictionary:
 	var normalized_format := format_id.strip_edges().to_lower()
 	var normalized_species := species.strip_edges()
