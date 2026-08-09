@@ -196,6 +196,7 @@ var damage_calc_request_in_flight := false
 var damage_calc_refresh_queued := false
 var damage_calc_catalog_request_token := 0
 var damage_calc_sample_set_request_token := 0
+var damage_calc_default_ability_request_token := 0
 var damage_calc_matchup_key := ""
 var damage_calc_defender_species_key := ""
 var damage_calc_defender_assumptions: Dictionary = {}
@@ -423,6 +424,8 @@ func _ready() -> void:
 		calc_panel.assumption_catalog_requested.connect(_on_calc_panel_assumption_catalog_requested)
 	if not calc_panel.sample_set_catalog_requested.is_connected(_on_calc_panel_sample_set_catalog_requested):
 		calc_panel.sample_set_catalog_requested.connect(_on_calc_panel_sample_set_catalog_requested)
+	if not calc_panel.default_ability_requested.is_connected(_on_calc_panel_default_ability_requested):
+		calc_panel.default_ability_requested.connect(_on_calc_panel_default_ability_requested)
 	if not calc_panel.matchup_selection_changed.is_connected(_on_calc_panel_matchup_selection_changed):
 		calc_panel.matchup_selection_changed.connect(_on_calc_panel_matchup_selection_changed)
 	if not bag_grid.item_selected.is_connected(_on_bag_grid_item_selected):
@@ -2483,6 +2486,22 @@ func _on_calc_panel_sample_set_catalog_requested(species: String) -> void:
 	else:
 		calc_panel.show_sample_set_catalog_error(species, str(response.get("error", "Could not load sample sets.")))
 
+func _on_calc_panel_default_ability_requested(species: String) -> void:
+	if current_action_panel_mode != BattleActionsPanelMode.CALC:
+		return
+	damage_calc_default_ability_request_token += 1
+	var request_token := damage_calc_default_ability_request_token
+	var request_node := HTTPRequest.new()
+	add_child(request_node)
+	var response := await PokemonDataApiClient.search_damage_calc_abilities(request_node, "", species, 30)
+	request_node.queue_free()
+	if request_token != damage_calc_default_ability_request_token or current_action_panel_mode != BattleActionsPanelMode.CALC:
+		return
+	if bool(response.get("success", false)):
+		calc_panel.show_default_ability_response(species, response)
+	else:
+		calc_panel.show_default_ability_error(species)
+
 func _sync_damage_calc_matchup_assumptions() -> void:
 	var current_battle_id := battle_state.battle_id.strip_edges()
 	if current_battle_id != damage_calc_snapshot_battle_id:
@@ -2701,12 +2720,9 @@ func _get_damage_calc_defender_assumptions_payload() -> Dictionary:
 	for key: String in ["item", "ability"]:
 		if str(payload.get(key, "")).strip_edges() == "":
 			payload.erase(key)
-	payload["exactStats"] = (
+	payload["exactStats"] = bool(damage_calc_defender_assumptions.get("exactStats", false)) or (
 		bool(damage_calc_assumption_edited_fields.get("nature", false))
-		and (
-			bool(damage_calc_assumption_edited_fields.get("evs", false))
-			or bool(damage_calc_defender_assumptions.get("exactStats", false))
-		)
+		and bool(damage_calc_assumption_edited_fields.get("evs", false))
 	)
 	return payload
 

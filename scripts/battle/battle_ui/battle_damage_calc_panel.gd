@@ -9,6 +9,7 @@ const DROPDOWN_RADIO_UNCHECKED: Texture2D = preload("res://assets/ui/photo_mode_
 signal defender_assumptions_changed(assumptions: Dictionary, edited_fields: Dictionary)
 signal assumption_catalog_requested(kind: String, query: String, species: String)
 signal sample_set_catalog_requested(species: String)
+signal default_ability_requested(species: String)
 signal matchup_selection_changed()
 
 const TEXT_PRIMARY := Color(0.95686275, 0.94509804, 0.91764706, 1.0)
@@ -116,7 +117,6 @@ var selected_viewer_ref := ""
 var selected_opponent_ref := ""
 var field_scenario: Dictionary = {}
 var advanced_scenario_expanded := false
-var manual_scenario_expanded := false
 var warning_details_expanded := false
 var warning_details_panel: Control
 var sample_set_options: Array[Dictionary] = []
@@ -124,6 +124,9 @@ var sample_set_species := ""
 var sample_set_loading := false
 var sample_set_error := ""
 var selected_sample_set_id := ""
+var current_default_ability := ""
+var current_default_ability_species := ""
+var current_default_ability_loading := false
 
 
 func _ready() -> void:
@@ -220,6 +223,7 @@ func set_knowledge_snapshot(snapshot: Dictionary) -> void:
 	if previous_opponent_ref != "" and selected_opponent_ref != previous_opponent_ref:
 		_clear_sample_sets()
 	_request_sample_sets_if_needed()
+	_refresh_current_scenario()
 	if _is_catalog_search_active():
 		return
 	if is_inside_tree():
@@ -501,11 +505,98 @@ func _get_selected_opponent_species() -> String:
 	return str(identity.get("value", "")).strip_edges()
 
 
-func _add_sample_set_selector(parent: VBoxContainer) -> void:
+func _refresh_current_scenario() -> void:
+	var species := _get_selected_opponent_species()
+	if species == "":
+		return
+	var known_ability := _get_known_opponent_value("ability")
+	if known_ability == "" and current_default_ability_species.to_lower() != species.to_lower():
+		current_default_ability_species = species
+		current_default_ability = ""
+		current_default_ability_loading = true
+		default_ability_requested.emit(species)
+	var previous_assumptions := defender_assumptions.duplicate(true)
+	var previous_edited := edited_assumption_fields.duplicate(true)
+	if selected_sample_set_id == "" and edited_assumption_fields.is_empty():
+		_apply_current_defaults()
+	else:
+		_apply_known_opponent_facts()
+	if defender_assumptions != previous_assumptions or edited_assumption_fields != previous_edited:
+		defender_assumptions_changed.emit(defender_assumptions.duplicate(true), edited_assumption_fields.duplicate(true))
+
+
+func _apply_current_defaults() -> void:
+	defender_assumptions = {
+		"nature": "Hardy",
+		"evs": {},
+		"exactStats": true,
+	}
+	var known_item := _get_known_opponent_value("item")
+	if known_item != "":
+		defender_assumptions["item"] = known_item
+	var known_ability := _get_known_opponent_value("ability")
+	if known_ability != "":
+		defender_assumptions["ability"] = known_ability
+	elif current_default_ability != "":
+		defender_assumptions["ability"] = current_default_ability
+
+
+func _apply_known_opponent_facts() -> void:
+	for key: String in ["item", "ability"]:
+		var known_value := _get_known_opponent_value(key)
+		if known_value == "":
+			continue
+		defender_assumptions[key] = known_value
+		edited_assumption_fields.erase(key)
+
+
+func _get_known_opponent_value(field_name: String) -> String:
+	var opponent := _get_snapshot_pokemon_by_ref(selected_opponent_ref)
+	var knowledge := _as_dictionary(opponent.get(field_name, {}))
+	if str(knowledge.get("state", "")) != "known":
+		return ""
+	return str(knowledge.get("value", "")).strip_edges()
+
+
+func show_default_ability_response(species: String, response: Dictionary) -> void:
+	if species.to_lower() != current_default_ability_species.to_lower():
+		return
+	current_default_ability_loading = false
+	var abilities := _as_array(response.get("abilities", []))
+	if bool(response.get("success", false)) and bool(response.get("filteredBySpecies", false)) and not abilities.is_empty():
+		var first_ability := _as_dictionary(abilities[0])
+		current_default_ability = str(first_ability.get("calcName", first_ability.get("name", ""))).strip_edges()
+	if selected_sample_set_id == "" and edited_assumption_fields.is_empty():
+		var previous := defender_assumptions.duplicate(true)
+		_apply_current_defaults()
+		if defender_assumptions != previous:
+			defender_assumptions_changed.emit(defender_assumptions.duplicate(true), {})
+	if is_inside_tree():
+		_render_current_state()
+
+
+func show_default_ability_error(species: String) -> void:
+	if species.to_lower() != current_default_ability_species.to_lower():
+		return
+	current_default_ability_loading = false
+	if is_inside_tree():
+		_render_current_state()
+
+
+func _is_current_ability_assumed() -> bool:
+	return (
+		_get_known_opponent_value("ability") == ""
+		and current_default_ability != ""
+		and str(defender_assumptions.get("ability", "")) == current_default_ability
+		and not bool(edited_assumption_fields.get("ability", false))
+	)
+
+
+func _add_sample_set_selector(parent: Container) -> void:
 	var selector := OptionButton.new()
 	selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	selector.tooltip_text = _t("battle.calc.sample_set_disclaimer")
-	selector.add_item(_t("battle.calc.confirmed_information"))
+	selector.tooltip_text = _t("battle.calc.set_selector_tooltip")
+	selector.add_item(_t("battle.calc.current"))
 	selector.set_item_metadata(0, "")
 	if selected_sample_set_id == "" and (not edited_assumption_fields.is_empty() or not field_scenario.is_empty()):
 		selector.add_item(_t("battle.calc.custom_scenario"))
@@ -534,7 +625,7 @@ func _on_sample_set_selected(index: int, selector: OptionButton) -> void:
 	if option_id == SAMPLE_SET_CUSTOM:
 		return
 	if option_id == "":
-		_reset_to_confirmed_information()
+		_reset_to_current()
 		return
 	for option: Dictionary in sample_set_options:
 		if str(option.get("id", "")) == option_id:
@@ -542,14 +633,13 @@ func _on_sample_set_selected(index: int, selector: OptionButton) -> void:
 			return
 
 
-func _reset_to_confirmed_information() -> void:
-	defender_assumptions.clear()
+func _reset_to_current() -> void:
 	edited_assumption_fields.clear()
 	field_scenario.clear()
 	selected_sample_set_id = ""
-	manual_scenario_expanded = false
 	advanced_scenario_expanded = false
 	active_selector = SELECTOR_NONE
+	_apply_current_defaults()
 	_emit_defender_assumptions_changed()
 	_render_current_state()
 
@@ -577,14 +667,15 @@ func _apply_sample_set(option: Dictionary) -> void:
 		defender_assumptions["assumedMoves"] = moves
 		edited_assumption_fields["assumedMoves"] = true
 	selected_sample_set_id = str(option.get("id", ""))
-	manual_scenario_expanded = false
 	active_selector = SELECTOR_NONE
+	_apply_known_opponent_facts()
 	_emit_defender_assumptions_changed()
 	_render_current_state()
 
 
 func _mark_sample_set_custom() -> void:
 	selected_sample_set_id = ""
+	edited_assumption_fields["exactStats"] = true
 
 
 func _sanitize_sample_set_stats(stats: Dictionary, maximum: int, omit_default: bool) -> Dictionary:
@@ -1045,6 +1136,15 @@ func _add_result_footnotes(response: Dictionary, results: Array) -> void:
 	var details: Array[String] = []
 	for warning_value: Variant in _as_array(response.get("warnings", [])):
 		var warning := str(warning_value).strip_edges()
+		if warning in [
+			"CALC_SCENARIO_ABILITY",
+			"CALC_SCENARIO_ITEM",
+			"CALC_SCENARIO_NATURE",
+			"CALC_SCENARIO_EVS",
+			"CALC_SCENARIO_IVS",
+			"CALC_UNKNOWN_ITEM_NOT_INCLUDED",
+		]:
+			continue
 		if warning != "":
 			details.append(_warning_label(warning))
 	if details.is_empty():
@@ -1180,31 +1280,14 @@ func _add_live_assumption_controls(assumptions: Dictionary, _prior_provenance: S
 	box.clip_contents = true
 	box.add_theme_constant_override("separation", 4)
 	panel.add_child(box)
-	var title_row := HBoxContainer.new()
-	title_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title_row.add_theme_constant_override("separation", 6)
-	box.add_child(title_row)
-	var setup_title := _make_label(_t("battle.calc.sample_set"), 13, TEXT_PRIMARY)
-	setup_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	setup_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	title_row.add_child(setup_title)
+	var setup_row := HBoxContainer.new()
+	setup_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	setup_row.add_theme_constant_override("separation", 6)
+	box.add_child(setup_row)
+	_add_sample_set_selector(setup_row)
 	if not edited_assumption_fields.is_empty() or not field_scenario.is_empty():
 		var reset_button := _make_assumption_reset_button()
-		title_row.add_child(reset_button)
-	_add_sample_set_selector(box)
-	var scenario_status := _t("battle.calc.sample_set_disclaimer")
-	var status_label := _make_label(scenario_status, 10, TEXT_MUTED)
-	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	status_label.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
-	box.add_child(status_label)
-	box.add_child(_make_disclosure_button(
-		_t("battle.calc.hide_manual" if manual_scenario_expanded else "battle.calc.edit_manually"),
-		manual_scenario_expanded,
-		_on_manual_scenario_pressed
-	))
-	if not manual_scenario_expanded:
-		is_syncing_assumption_controls = false
-		return
+		setup_row.add_child(reset_button)
 
 	var primary_row := HBoxContainer.new()
 	primary_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1216,7 +1299,7 @@ func _add_live_assumption_controls(assumptions: Dictionary, _prior_provenance: S
 		_t("battle.calc.item"),
 		_get_assumption_control_value(assumptions, SELECTOR_ITEM),
 		SELECTOR_ITEM,
-		_get_assumption_chip_label(assumptions, "item", _t("battle.calc.item_unknown"))
+		_get_assumption_chip_label(assumptions, "item", _t("battle.calc.item_none"))
 	))
 	primary_row.add_child(_make_assumption_summary_button(
 		_t("battle.calc.ability"),
@@ -1236,6 +1319,15 @@ func _add_live_assumption_controls(assumptions: Dictionary, _prior_provenance: S
 		SELECTOR_EVS,
 		_get_evs_summary_chip_label(_as_dictionary(assumptions.get("evs", {})))
 	))
+	if _is_current_ability_assumed():
+		var ability_warning := _make_label(_t("battle.calc.assumed_ability_warning", {
+			"ability": current_default_ability,
+		}), 10, TEXT_ACCENT)
+		ability_warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		ability_warning.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
+		box.add_child(ability_warning)
+	elif current_default_ability_loading and str(assumptions.get("ability", "")).strip_edges() == "":
+		box.add_child(_make_label(_t("battle.calc.loading_default_ability"), 10, TEXT_MUTED))
 
 	catalog_suggestions_box = VBoxContainer.new()
 	catalog_suggestions_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1248,14 +1340,6 @@ func _add_live_assumption_controls(assumptions: Dictionary, _prior_provenance: S
 	is_syncing_assumption_controls = false
 	if live_ev_focus_stat != "":
 		call_deferred("_restore_live_ev_input_focus")
-
-
-func _on_manual_scenario_pressed() -> void:
-	manual_scenario_expanded = not manual_scenario_expanded
-	if not manual_scenario_expanded:
-		active_selector = SELECTOR_NONE
-	_render_current_state()
-
 
 func _add_advanced_scenario_controls(parent: VBoxContainer, assumptions: Dictionary) -> void:
 	var active_conditions: Array[String] = []
@@ -1486,16 +1570,20 @@ func _make_assumption_summary_button(caption: String, value: String, editor_kind
 
 func _get_assumption_control_value(assumptions: Dictionary, editor_kind: String, prior_provenance: String = "") -> String:
 	match editor_kind:
-		SELECTOR_ITEM, SELECTOR_ABILITY:
-			var value := str(assumptions.get(editor_kind, "")).strip_edges()
-			return _t("common.unknown") if value == "" or value == "<null>" else value
+		SELECTOR_ITEM:
+			var item := str(assumptions.get("item", "")).strip_edges()
+			return _t("common.none") if item == "" or item == "<null>" else item
+		SELECTOR_ABILITY:
+			var ability := str(assumptions.get("ability", "")).strip_edges()
+			return _t("common.none") if ability == "" or ability == "<null>" else ability
 		SELECTOR_NATURE:
 			if prior_provenance != "" and not bool(edited_assumption_fields.get("nature", false)):
 				return _t("battle.calc.set_range")
 			var nature := str(assumptions.get("nature", "")).strip_edges()
-			return _t("common.unknown") if nature == "" else _localized_nature_name(nature)
+			return _localized_nature_name("Hardy" if nature == "" else nature)
 		SELECTOR_EVS:
-			return "%d / %d" % [_get_evs_total(_as_dictionary(assumptions.get("evs", {}))), EV_TOTAL_LIMIT]
+			var ev_total := _get_evs_total(_as_dictionary(assumptions.get("evs", {})))
+			return _t("common.none") if ev_total == 0 else "%d / %d" % [ev_total, EV_TOTAL_LIMIT]
 		_:
 			return _t("common.unknown")
 
@@ -1503,13 +1591,13 @@ func _get_assumption_control_value(assumptions: Dictionary, editor_kind: String,
 func _get_assumption_fallback_label(editor_kind: String) -> String:
 	match editor_kind:
 		SELECTOR_ITEM:
-			return _t("battle.calc.item_unknown")
+			return _t("battle.calc.item_none")
 		SELECTOR_ABILITY:
-			return _t("battle.calc.ability_unknown")
+			return _t("common.none")
 		SELECTOR_NATURE:
-			return _t("common.unknown")
+			return _localized_nature_name("Hardy")
 		SELECTOR_EVS:
-			return _t("battle.calc.evs_total", {"total": 0, "limit": EV_TOTAL_LIMIT})
+			return _t("common.none")
 		_:
 			return ""
 
@@ -1744,23 +1832,11 @@ func _update_live_ev_total() -> void:
 
 
 func _reset_live_assumptions() -> void:
-	defender_assumptions.clear()
-	field_scenario.clear()
-	edited_assumption_fields.clear()
-	selected_sample_set_id = ""
-	manual_scenario_expanded = false
-	advanced_scenario_expanded = false
 	if assumption_change_timer != null:
 		assumption_change_timer.stop()
 	if catalog_search_timer != null:
 		catalog_search_timer.stop()
-	active_selector = SELECTOR_NONE
-	selector_query = ""
-	selector_results = []
-	selector_loading = false
-	selector_error = ""
-	_emit_defender_assumptions_changed()
-	_render_current_state()
+	_reset_to_current()
 
 
 func show_assumption_catalog_loading(kind: String, query: String) -> void:

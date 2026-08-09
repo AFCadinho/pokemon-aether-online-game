@@ -59,6 +59,11 @@ func _run() -> void:
 	root.add_child(panel)
 	await process_frame
 	panel.set_knowledge_snapshot(_selection_snapshot())
+	panel.show_default_ability_response("Mew", {
+		"success": true,
+		"filteredBySpecies": true,
+		"abilities": [{"name": "Synchronize", "calcName": "Synchronize"}],
+	})
 	panel.show_sample_set_catalog_response("Mew", {
 		"schemaVersion": 1,
 		"libraryRevision": "test-v1",
@@ -104,12 +109,19 @@ func _run() -> void:
 	if panel.selected_sample_set_id != "":
 		_fail("editing a selected sample set must turn it into a custom scenario")
 		return
-	panel._reset_to_confirmed_information()
-	if not panel.defender_assumptions.is_empty() or not panel.edited_assumption_fields.is_empty():
-		_fail("confirmed information must clear all user scenarios")
+	panel._reset_to_current()
+	if panel.defender_assumptions.get("nature") != "Hardy" or panel.defender_assumptions.get("evs") != {}:
+		_fail("Current must restore a neutral nature and empty EV spread")
 		return
-	if panel._get_nature_chip_label({}).contains("Hardy"):
-		_fail("unknown nature must never be presented as assumed Hardy")
+	if panel.defender_assumptions.get("ability") != "Synchronize" or not panel.edited_assumption_fields.is_empty():
+		_fail("Current must use the first public species ability without marking it as a manual edit")
+		return
+	var known_snapshot := _selection_snapshot()
+	known_snapshot["opponentPokemon"][0]["item"] = {"state": "known", "value": "Leftovers"}
+	known_snapshot["opponentPokemon"][0]["ability"] = {"state": "known", "value": "Pressure"}
+	panel.set_knowledge_snapshot(known_snapshot)
+	if panel.defender_assumptions.get("item") != "Leftovers" or panel.defender_assumptions.get("ability") != "Pressure":
+		_fail("Current must automatically prefer confirmed item and ability values")
 		return
 	print("PASS battle_calcdex_candidates_check")
 	quit(0)
