@@ -80,6 +80,8 @@ var localization_manager: Node
 var selected_viewer_ref := ""
 var selected_opponent_ref := ""
 var field_scenario: Dictionary = {}
+var smart_range_mode := "likely"
+var pinned_candidate_id := ""
 
 
 func _ready() -> void:
@@ -203,6 +205,7 @@ func _render_current_state() -> void:
 	_clear_content()
 	_add_subtabs()
 	_add_matchup_selectors()
+	_add_smart_range_controls()
 
 	if not last_response.is_empty():
 		_render_your_damage_response(last_response)
@@ -249,6 +252,7 @@ func _render_your_damage_response(response: Dictionary) -> void:
 		_get_boosts_label(attacker)
 	)
 	_add_assumption_chips(attacker if str(attacker.get("relation", "")) == "opponent" else defender, response)
+	_add_candidate_summary(response)
 
 	var results: Array = _as_array(response.get("results", []))
 	if results.is_empty():
@@ -340,6 +344,76 @@ func get_matchup_selection() -> Dictionary:
 
 func get_field_scenario() -> Dictionary:
 	return field_scenario.duplicate(true)
+
+
+func get_smart_options() -> Dictionary:
+	return {"rangeMode": smart_range_mode, "pinnedCandidateId": pinned_candidate_id}
+
+
+func _add_smart_range_controls() -> void:
+	if knowledge_snapshot.is_empty():
+		return
+	var row := HBoxContainer.new()
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_theme_constant_override("separation", 4)
+	content.add_child(row)
+	for mode: String in ["likely", "full"]:
+		var button := _make_small_button(
+			_t("battle.calc.range_%s" % mode),
+			_on_smart_range_pressed.bind(mode)
+		)
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		button.toggle_mode = true
+		button.button_pressed = smart_range_mode == mode
+		row.add_child(button)
+
+
+func _on_smart_range_pressed(mode: String) -> void:
+	if mode == smart_range_mode:
+		return
+	smart_range_mode = mode
+	last_response = {}
+	matchup_selection_changed.emit()
+
+
+func _add_candidate_summary(response: Dictionary) -> void:
+	var candidates: Array = _as_array(response.get("candidates", []))
+	if candidates.is_empty():
+		return
+	var title := _make_label(_t("battle.calc.candidate_estimates"), 10, TEXT_MUTED)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	content.add_child(title)
+	for candidate_value: Variant in candidates:
+		var candidate := _as_dictionary(candidate_value)
+		var candidate_id := str(candidate.get("candidateId", ""))
+		var label_key := str(candidate.get("labelKey", ""))
+		var label := _t(label_key)
+		if label == label_key:
+			label = candidate_id
+		var effective := _as_dictionary(candidate.get("effectiveInput", {}))
+		var details: Array[String] = []
+		for key: String in ["nature", "item", "ability"]:
+			var value := str(effective.get(key, "")).strip_edges()
+			if value != "":
+				details.append(value)
+		var weight_percent := roundi(float(candidate.get("weight", 0.0)) * 100.0)
+		var text := _t("battle.calc.candidate_estimate", {
+			"label": label,
+			"weight": weight_percent,
+			"details": _join_string_array(details, " · "),
+		})
+		var button := _make_small_button(text, _on_candidate_pin_pressed.bind(candidate_id))
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		button.toggle_mode = true
+		button.tooltip_text = _t("battle.calc.candidate_not_confirmed")
+		button.button_pressed = bool(candidate.get("pinned", false))
+		content.add_child(button)
+
+
+func _on_candidate_pin_pressed(candidate_id: String) -> void:
+	pinned_candidate_id = "" if pinned_candidate_id == candidate_id else candidate_id
+	last_response = {}
+	matchup_selection_changed.emit()
 
 
 func _add_matchup_selectors() -> void:

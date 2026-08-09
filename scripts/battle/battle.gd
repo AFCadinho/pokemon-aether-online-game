@@ -2367,7 +2367,8 @@ func _refresh_damage_calc_results() -> void:
 		if str(selection.get("attackerRef", "")) == "" or str(selection.get("defenderRef", "")) == "":
 			response = {"success": false, "error": _t("battle.calc.error.selection")}
 		else:
-			response = await BattleApiClient.calculate_calcdex_matchup(
+			var smart_options: Dictionary = calc_panel.get_smart_options()
+			response = await BattleApiClient.calculate_calcdex_smart_matchup(
 				damage_calc_request,
 				battle_state.battle_id,
 				projection_revision,
@@ -2375,8 +2376,21 @@ func _refresh_damage_calc_results() -> void:
 				str(selection.get("attackerRef", "")),
 				str(selection.get("defenderRef", "")),
 				_get_damage_calc_defender_assumptions_payload(),
-				calc_panel.get_field_scenario()
+				calc_panel.get_field_scenario(),
+				str(smart_options.get("rangeMode", "likely")),
+				str(smart_options.get("pinnedCandidateId", ""))
 			)
+			if not bool(response.get("success", false)) and _get_damage_calc_error_code(response) == "CALC_UNSUPPORTED_MECHANIC":
+				response = await BattleApiClient.calculate_calcdex_matchup(
+					damage_calc_request,
+					battle_state.battle_id,
+					projection_revision,
+					str(selection.get("direction", "own-to-opponent")),
+					str(selection.get("attackerRef", "")),
+					str(selection.get("defenderRef", "")),
+					_get_damage_calc_defender_assumptions_payload(),
+					calc_panel.get_field_scenario()
+				)
 	else:
 		response = await BattleApiClient.calculate_battle_damage(
 			damage_calc_request,
