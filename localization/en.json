@@ -2260,6 +2260,8 @@
   "battle.calc.opponent_moves": "Opponent moves",
   "battle.calc.add_move": "+ Add move",
   "battle.calc.inline_move_hint": "Type a move here, choose a suggestion, or press Enter",
+  "battle.calc.result_details_tooltip": "Show or hide the calculation summary",
+  "battle.calc.result_envelope_summary": "This range combines multiple privacy-safe scenarios and does not represent one exact set.",
   "battle.calc.reset_setup_tooltip": "Clear opponent assumptions and battle conditions",
   "battle.calc.advanced_scenario": "Advanced field scenario",
   "battle.calc.assumptions": "Assumptions: {values}",

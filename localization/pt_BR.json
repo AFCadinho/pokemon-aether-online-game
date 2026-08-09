@@ -2260,6 +2260,8 @@
   "battle.calc.opponent_moves": "Movimentos do oponente",
   "battle.calc.add_move": "+ Escolher movimento",
   "battle.calc.inline_move_hint": "Digite um movimento, escolha uma sugestão ou pressione Enter",
+  "battle.calc.result_details_tooltip": "Mostrar ou ocultar o resumo do cálculo",
+  "battle.calc.result_envelope_summary": "Este intervalo combina vários cenários seguros para a privacidade e não representa um único conjunto exato.",
   "battle.calc.reset_setup_tooltip": "Limpar suposições do adversário e condições da batalha",
   "battle.calc.advanced_scenario": "Cenário de campo avançado",
   "battle.calc.assumptions": "Suposições: {values}",

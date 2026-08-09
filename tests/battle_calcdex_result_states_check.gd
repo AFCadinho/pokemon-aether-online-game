@@ -30,8 +30,21 @@ func _run() -> void:
 			"move": {"name": "Unsupported Move", "type": null, "category": "Special"},
 			"shortLabel": "--",
 			"resultState": "unsupported",
+			"description": "0 SpA Pikachu Unsupported Move vs. 0 HP / 0 SpD Mew: 0-0 (0 - 0%)",
 			"warnings": ["Unsupported public mechanic."],
 			"koWarnings": ["Recovery is unknown."],
+			"endOfTurn": {
+				"state": "not_included",
+				"reasonCode": "CALC_END_OF_TURN_NOT_INCLUDED",
+			},
+		}, {
+			"move": {"name": "Thunderbolt", "type": "Electric", "category": "Special"},
+			"shortLabel": "44.0-52.0%",
+			"minPercent": 44.0,
+			"maxPercent": 52.0,
+			"resultState": "supported",
+			"description": "252 SpA Pikachu Thunderbolt vs. 252 HP / 8 SpD Mew: 176-210 (43.5 - 51.9%) -- 10.9% chance to 2HKO",
+			"warnings": [],
 			"endOfTurn": {
 				"state": "not_included",
 				"reasonCode": "CALC_END_OF_TURN_NOT_INCLUDED",
@@ -40,6 +53,48 @@ func _run() -> void:
 		"warnings": ["Opponent nature is assumed."],
 	})
 	await process_frame
+	if panel.result_summary_panels.size() != 2 or panel.result_disclosure_buttons.size() != 2:
+		push_error("Every safely described move result must expose a calculation-summary disclosure")
+		quit(1)
+		return
+	var first_summary_key := ""
+	var second_summary_key := ""
+	for key_value: Variant in panel.result_summary_panels.keys():
+		var key := str(key_value)
+		if key.contains("unsupportedmove"):
+			first_summary_key = key
+		elif key.contains("thunderbolt"):
+			second_summary_key = key
+	if first_summary_key == "" or second_summary_key == "":
+		push_error("Calculation-summary disclosures must have stable per-move keys")
+		quit(1)
+		return
+	if (panel.result_summary_panels[first_summary_key] as Control).visible or (panel.result_summary_panels[second_summary_key] as Control).visible:
+		push_error("Calculation summaries must start collapsed")
+		quit(1)
+		return
+	panel._on_result_disclosure_pressed(first_summary_key)
+	if not (panel.result_summary_panels[first_summary_key] as Control).visible:
+		push_error("Clicking a move row must expand its calculation summary")
+		quit(1)
+		return
+	panel._on_result_disclosure_pressed(second_summary_key)
+	if (panel.result_summary_panels[first_summary_key] as Control).visible or not (panel.result_summary_panels[second_summary_key] as Control).visible:
+		push_error("Opening a calculation summary must close the previously expanded move")
+		quit(1)
+		return
+	var expanded_summary_text := _collect_label_text(panel.result_summary_panels[second_summary_key])
+	if not _contains_fragment(expanded_summary_text, ["252 SpA Pikachu Thunderbolt", "10.9% chance to 2HKO"]):
+		push_error("Expanded move rows must show the calculator's safe Showdown-style description")
+		quit(1)
+		return
+	var envelope_summary := panel._get_result_summary_text({
+		"description": panel.CONFIRMED_INFORMATION_ENVELOPE_DESCRIPTION,
+	})
+	if envelope_summary == panel.CONFIRMED_INFORMATION_ENVELOPE_DESCRIPTION or not _contains_fragment([envelope_summary], ["privacy-safe", "privacyveilige", "privacidade"]):
+		push_error("Privacy-safe envelopes must be presented as non-exact scenario ranges")
+		quit(1)
+		return
 	var collapsed_text := _collect_visible_text(panel)
 	if _count_nodes_of_type(panel, "TextureRect") < 2 or _count_nodes_of_type(panel, "ProgressBar") < 2:
 		push_error("Calcdex matchup cards must render Pokemon art and HP bars")

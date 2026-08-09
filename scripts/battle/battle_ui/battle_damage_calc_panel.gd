@@ -44,6 +44,7 @@ const DROPDOWN_FOCUS_BORDER := Color(0.56, 0.87, 1.0, 1.0)
 const SUSPICIOUS_PERCENT_LIMIT := 999.0
 const DAMAGE_COLUMN_WIDTH := 132.0
 const KO_COLUMN_WIDTH := 92.0
+const CONFIRMED_INFORMATION_ENVELOPE_DESCRIPTION := "Confirmed-information envelope across unknown opponent stats."
 const TYPE_COLORS := {
 	"bug": Color(0.52, 0.63, 0.08, 1.0),
 	"dark": Color(0.25, 0.22, 0.27, 1.0),
@@ -110,6 +111,9 @@ var move_assumption_input: LineEdit
 var catalog_suggestions_box: VBoxContainer
 var catalog_results_box: VBoxContainer
 var inline_move_result_boxes: Dictionary = {}
+var result_summary_panels: Dictionary = {}
+var result_disclosure_buttons: Dictionary = {}
+var expanded_result_key := ""
 var assumption_change_timer: Timer
 var catalog_search_timer: Timer
 var active_selector: String = SELECTOR_NONE
@@ -348,6 +352,8 @@ func _render_your_damage_response(response: Dictionary) -> void:
 
 func _clear_content() -> void:
 	warning_details_panel = null
+	result_summary_panels.clear()
+	result_disclosure_buttons.clear()
 	for child: Node in content.get_children():
 		content.remove_child(child)
 		child.queue_free()
@@ -396,6 +402,7 @@ func _on_your_damage_tab_pressed() -> void:
 	if active_subtab == SUBTAB_YOUR_DAMAGE:
 		return
 	close_assumption_popover()
+	expanded_result_key = ""
 	active_subtab = SUBTAB_YOUR_DAMAGE
 	last_response = {}
 	_render_current_state()
@@ -406,6 +413,7 @@ func _on_their_damage_tab_pressed() -> void:
 	if active_subtab == SUBTAB_THEIR_DAMAGE:
 		return
 	close_assumption_popover()
+	expanded_result_key = ""
 	active_subtab = SUBTAB_THEIR_DAMAGE
 	last_response = {}
 	_render_current_state()
@@ -748,6 +756,7 @@ func _on_pokemon_selected(index: int, selector: OptionButton, relation: String) 
 			_clear_sample_sets()
 		selected_opponent_ref = pokemon_ref
 		_request_sample_sets_if_needed()
+	expanded_result_key = ""
 	last_response = {}
 	matchup_selection_changed.emit()
 
@@ -1051,11 +1060,17 @@ func _make_table_header(text: String) -> Label:
 func _add_move_result_row(result: Dictionary, defender: Dictionary, parent: VBoxContainer, row_index: int, editable_slot: int = -1) -> void:
 	var primary_result_label := _get_primary_result_label(result, defender)
 	var move_type := _get_move_type(result)
+	var move_name := _get_move_name(result)
+	var summary_text := _get_result_summary_text(result)
+	var result_key := _get_result_row_key(move_name, row_index, editable_slot)
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.clip_contents = true
 	panel.custom_minimum_size = Vector2(0, 52)
 	panel.add_theme_stylebox_override("panel", _make_result_row_style(primary_result_label, row_index, move_type))
+	if summary_text != "":
+		panel.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		panel.gui_input.connect(_on_result_row_gui_input.bind(result_key))
 
 	var box := VBoxContainer.new()
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1074,14 +1089,22 @@ func _add_move_result_row(result: Dictionary, defender: Dictionary, parent: VBox
 	move_box.clip_contents = true
 	move_box.add_theme_constant_override("separation", 0)
 	result_row.add_child(move_box)
-	var move_name := _get_move_name(result)
 	if editable_slot >= 0:
-		move_box.add_child(_make_result_move_selector_button(editable_slot, move_name))
+		var editable_row := HBoxContainer.new()
+		editable_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		editable_row.add_theme_constant_override("separation", 3)
+		move_box.add_child(editable_row)
+		editable_row.add_child(_make_result_move_selector_button(editable_slot, move_name))
+		if summary_text != "":
+			editable_row.add_child(_make_result_disclosure_button(result_key, move_name, true))
 	else:
-		var move_label := _make_label(_fallback_text(move_name, _t("battle.move.unknown")), 14, TEXT_PRIMARY)
-		move_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		move_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		move_box.add_child(move_label)
+		if summary_text != "":
+			move_box.add_child(_make_result_disclosure_button(result_key, _fallback_text(move_name, _t("battle.move.unknown")), false))
+		else:
+			var move_label := _make_label(_fallback_text(move_name, _t("battle.move.unknown")), 14, TEXT_PRIMARY)
+			move_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			move_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			move_box.add_child(move_label)
 
 	var is_status_move: bool = _is_status_result(result)
 	var percent_label: String = "" if is_status_move else _get_percent_label(result)
@@ -1105,10 +1128,18 @@ func _add_move_result_row(result: Dictionary, defender: Dictionary, parent: VBox
 	percent.size_flags_horizontal = Control.SIZE_SHRINK_END
 	percent.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	percent.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	percent.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	result_row.add_child(percent)
 	var ko_label := _make_result_badge(primary_result_label)
 	ko_label.size_flags_horizontal = Control.SIZE_SHRINK_END
+	ko_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	result_row.add_child(ko_label)
+
+	if summary_text != "":
+		var summary_panel := _make_result_summary_panel(summary_text)
+		summary_panel.visible = expanded_result_key == result_key
+		box.add_child(summary_panel)
+		result_summary_panels[result_key] = summary_panel
 
 	var result_state := str(result.get("resultState", "supported"))
 	if result_state == "unsupported":
@@ -1122,6 +1153,93 @@ func _add_move_result_row(result: Dictionary, defender: Dictionary, parent: VBox
 			_add_row_notice(box, _warning_label(warning), TEXT_ERROR if result_state in ["unsupported", "error"] else TEXT_MUTED)
 
 	parent.add_child(panel)
+
+
+func _get_result_row_key(move_name: String, row_index: int, editable_slot: int) -> String:
+	var direction := str(last_response.get("direction", get_matchup_selection().get("direction", "")))
+	var slot := editable_slot if editable_slot >= 0 else row_index
+	return "%s:%s:%d:%s" % [direction, "editable" if editable_slot >= 0 else "fixed", slot, _normalize_move_name(move_name)]
+
+
+func _get_result_summary_text(result: Dictionary) -> String:
+	var description := str(result.get("description", "")).strip_edges()
+	if description == "":
+		return ""
+	if description == CONFIRMED_INFORMATION_ENVELOPE_DESCRIPTION:
+		return _t("battle.calc.result_envelope_summary")
+	return description.left(600)
+
+
+func _make_result_disclosure_button(result_key: String, move_name: String, compact: bool) -> Button:
+	var button := Button.new()
+	button.focus_mode = Control.FOCUS_ALL
+	button.custom_minimum_size = Vector2(28 if compact else 0, 30 if compact else 22)
+	button.size_flags_horizontal = Control.SIZE_SHRINK_END if compact else Control.SIZE_EXPAND_FILL
+	button.alignment = HORIZONTAL_ALIGNMENT_CENTER if compact else HORIZONTAL_ALIGNMENT_LEFT
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.tooltip_text = _t("battle.calc.result_details_tooltip")
+	button.add_theme_font_size_override("font_size", 14)
+	button.add_theme_color_override("font_color", TEXT_PRIMARY)
+	button.add_theme_color_override("font_hover_color", TEXT_ACCENT)
+	button.add_theme_color_override("font_focus_color", TEXT_ACCENT)
+	for style_name: String in ["normal", "hover", "pressed", "focus"]:
+		var background := Color(0, 0, 0, 0)
+		var border := Color(0, 0, 0, 0)
+		if style_name in ["hover", "focus"]:
+			background = Color(TAB_ACTIVE_BG.r, TAB_ACTIVE_BG.g, TAB_ACTIVE_BG.b, 0.48)
+		if style_name == "focus":
+			border = Color(TEXT_ACCENT.r, TEXT_ACCENT.g, TEXT_ACCENT.b, 0.72)
+		button.add_theme_stylebox_override(style_name, _make_stylebox(background, border, 5, 4.0, 1.0))
+	result_disclosure_buttons[result_key] = {
+		"button": button,
+		"moveName": move_name,
+		"compact": compact,
+	}
+	_update_result_disclosure_button(result_key)
+	button.pressed.connect(_on_result_disclosure_pressed.bind(result_key))
+	return button
+
+
+func _make_result_summary_panel(summary_text: String) -> PanelContainer:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_stylebox(Color(0.018, 0.041, 0.064, 0.92), Color(0.15, 0.36, 0.52, 0.68), 6, 9.0, 6.0)
+	)
+	var label := _make_label(summary_text, 11, TEXT_SECONDARY)
+	label.clip_text = false
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_child(label)
+	return panel
+
+
+func _on_result_disclosure_pressed(result_key: String) -> void:
+	expanded_result_key = "" if expanded_result_key == result_key else result_key
+	for key_value: Variant in result_summary_panels.keys():
+		var key := str(key_value)
+		var summary_panel: Control = result_summary_panels.get(key) as Control
+		if summary_panel != null:
+			summary_panel.visible = key == expanded_result_key
+		_update_result_disclosure_button(key)
+
+
+func _on_result_row_gui_input(event: InputEvent, result_key: String) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		_on_result_disclosure_pressed(result_key)
+		accept_event()
+
+
+func _update_result_disclosure_button(result_key: String) -> void:
+	var metadata := _as_dictionary(result_disclosure_buttons.get(result_key, {}))
+	var button: Button = metadata.get("button") as Button
+	if button == null:
+		return
+	var symbol := "▾" if result_key == expanded_result_key else "▸"
+	button.text = symbol if bool(metadata.get("compact", false)) else "%s  %s" % [symbol, str(metadata.get("moveName", ""))]
 
 
 func _make_result_move_selector_button(slot: int, move_name: String) -> LineEdit:
@@ -1164,6 +1282,7 @@ func _make_move_type_badge(move_type: String) -> Label:
 	label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	label.add_theme_stylebox_override("normal", _make_stylebox(type_color.darkened(0.12), type_color.lightened(0.12), 8, 5.0, 1.0))
 	return label
 
@@ -1174,6 +1293,7 @@ func _make_move_category_label(category: String) -> Label:
 	label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	label.add_theme_stylebox_override("normal", _make_stylebox(Color(0.035, 0.05, 0.075, 0.92), Color(0.20, 0.28, 0.38, 0.75), 8, 5.0, 1.0))
 	return label
 
@@ -1189,6 +1309,7 @@ func _make_move_source_label(source: String) -> Label:
 	label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	label.add_theme_stylebox_override("normal", _make_stylebox(CHIP_BG, CHIP_BORDER, 8, 5.0, 1.0))
 	return label
 

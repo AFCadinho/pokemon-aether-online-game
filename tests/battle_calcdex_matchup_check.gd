@@ -65,6 +65,10 @@ func _run() -> void:
 			str(selectors[1].get_item_metadata(selectors[1].selected)).begins_with("opponent:"),
 			"the opponent must remain on the right in damage taken",
 		)
+	_assert(_has_line_edit_text(content, "Thunderbolt"), "damage taken must keep the opponent move directly editable")
+	_assert(panel.result_summary_panels.size() == 1, "an editable damage-taken move must retain its calculation summary")
+	var disclosure_metadata: Dictionary = panel.result_disclosure_buttons.values()[0] if not panel.result_disclosure_buttons.is_empty() else {}
+	_assert(bool(disclosure_metadata.get("compact", false)), "damage-taken summaries must use a separate compact disclosure beside the move input")
 	print("PASS battle_calcdex_matchup_check")
 	quit(0)
 
@@ -141,3 +145,12 @@ func _collect_option_buttons(node: Node) -> Array[OptionButton]:
 	for child: Node in node.get_children():
 		result.append_array(_collect_option_buttons(child))
 	return result
+
+
+func _has_line_edit_text(node: Node, expected: String) -> bool:
+	if node is LineEdit and (node as LineEdit).text == expected:
+		return true
+	for child: Node in node.get_children():
+		if _has_line_edit_text(child, expected):
+			return true
+	return false
