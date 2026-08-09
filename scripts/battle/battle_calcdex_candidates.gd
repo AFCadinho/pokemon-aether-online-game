@@ -5,7 +5,7 @@ class_name BattleCalcdexCandidates
 const SNAPSHOT := preload("res://scripts/battle/battle_calcdex_snapshot.gd")
 const MATCHUP := preload("res://scripts/battle/battle_calcdex_matchup.gd")
 const SCHEMA_VERSION := 1
-const ROUTE_REVISION := "calc4.1-2026-08-09"
+const ROUTE_REVISION := "calc4.2-2026-08-09"
 
 
 static func normalize_response(response: Dictionary, expected_revision: Dictionary) -> Dictionary:
@@ -37,12 +37,11 @@ static func normalize_response(response: Dictionary, expected_revision: Dictiona
 	if ranges == null:
 		return _malformed("Invalid smart-matchup ranges.")
 	var results: Array[Dictionary] = []
-	var result_source := "public_usage_prior" if _has_candidate_source(candidates, "public_usage_prior") else "curated_prior"
 	for range_row: Dictionary in ranges:
 		var minimum: Variant = range_row.get("displayedMinPercent")
 		var maximum: Variant = range_row.get("displayedMaxPercent")
 		results.append({
-			"move": {"name": range_row["moveName"], "source": result_source},
+			"move": {"name": range_row["moveName"], "source": range_row["moveSource"]},
 			"resultState": "supported" if minimum != null and maximum != null else "error",
 			"minPercent": minimum,
 			"maxPercent": maximum,
@@ -114,13 +113,6 @@ static func _normalize_candidates(value: Variant) -> Array[Dictionary]:
 	return result
 
 
-static func _has_candidate_source(candidates: Array[Dictionary], source: String) -> bool:
-	for candidate: Dictionary in candidates:
-		if str(candidate.get("source", "")) == source:
-			return true
-	return false
-
-
 static func _normalize_ranges(value: Variant) -> Variant:
 	var result: Array[Dictionary] = []
 	if not (value is Array) or (value as Array).size() > 4:
@@ -129,9 +121,9 @@ static func _normalize_ranges(value: Variant) -> Variant:
 		if not (range_value is Dictionary):
 			return null
 		var row: Dictionary = range_value as Dictionary
-		var required: Array[String] = ["moveName", "likelyCandidateCount", "fullCandidateCount", "extremaCandidateIds"]
-		var allowed: Array[String] = ["moveName", "likelyCandidateCount", "fullCandidateCount", "extremaCandidateIds", "likelyMinPercent", "likelyMaxPercent", "fullMinPercent", "fullMaxPercent", "displayedMinPercent", "displayedMaxPercent"]
-		if not _has_required_allowed_fields(row, required, allowed) or str(row.get("moveName", "")) == "":
+		var required: Array[String] = ["moveName", "moveSource", "likelyCandidateCount", "fullCandidateCount", "extremaCandidateIds"]
+		var allowed: Array[String] = ["moveName", "moveSource", "likelyCandidateCount", "fullCandidateCount", "extremaCandidateIds", "likelyMinPercent", "likelyMaxPercent", "fullMinPercent", "fullMaxPercent", "displayedMinPercent", "displayedMaxPercent"]
+		if not _has_required_allowed_fields(row, required, allowed) or str(row.get("moveName", "")) == "" or str(row.get("moveSource", "")) not in MATCHUP.MOVE_SOURCES:
 			return null
 		for key: String in ["likelyMinPercent", "likelyMaxPercent", "fullMinPercent", "fullMaxPercent", "displayedMinPercent", "displayedMaxPercent"]:
 			if row.has(key) and (not typeof(row.get(key)) in [TYPE_INT, TYPE_FLOAT] or float(row.get(key)) < 0.0 or not is_finite(float(row.get(key)))):

@@ -22,9 +22,11 @@ func _run() -> void:
 	usage_response["candidates"][0]["candidateId"] = "usage:mew-1630-01"
 	usage_response["candidates"][0]["source"] = "public_usage_prior"
 	usage_response["candidates"][0]["labelKey"] = "calcdex.preset.public_usage"
+	usage_response["candidates"][0]["results"][0]["moveSource"] = "public_usage_prior"
+	usage_response["ranges"][0]["moveSource"] = "public_usage_prior"
 	usage_response["ranges"][0]["extremaCandidateIds"] = ["usage:mew-1630-01"]
 	var normalized_usage := Candidates.normalize_response(usage_response, revision)
-	if not bool(normalized_usage.get("success", false)) or normalized_usage["candidates"][0]["source"] != "public_usage_prior":
+	if not bool(normalized_usage.get("success", false)) or normalized_usage["candidates"][0]["source"] != "public_usage_prior" or normalized_usage["results"][0]["move"]["source"] != "public_usage_prior":
 		_fail("public aggregate usage candidates must normalize without becoming confirmed facts")
 		return
 	var leaked := response.duplicate(true)
@@ -78,7 +80,7 @@ func _response(revision: Dictionary) -> Dictionary:
 		"warningCodes": [],
 	}
 	return {
-		"success": true, "schemaVersion": 1, "routeRevision": "calc4.1-2026-08-09",
+		"success": true, "schemaVersion": 1, "routeRevision": "calc4.2-2026-08-09",
 		"safeInputFingerprint": "b".repeat(64), "projectionRevision": revision.duplicate(true),
 		"mechanicsManifest": {"contractRevision": "calc0-2026-08-08", "damageCalcVersion": "0.10.0", "showdownVersion": "0.11.10", "formatDataFingerprint": "fd94c49ab26ddf8daff2259dfc2b3857f957e37b166557412c4fe303c87e54b0"},
 		"presetRevision": "test-v1", "presetFingerprint": "c".repeat(64),
@@ -91,7 +93,7 @@ func _response(revision: Dictionary) -> Dictionary:
 			"effectiveInput": {"nature": "Timid", "evs": {"spa": 252, "spe": 252}, "ivs": {"hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31}, "assumedMoves": []},
 			"explanationKeys": ["calcdex.explain.curated_preset"], "results": [row],
 		}],
-		"ranges": [{"moveName": "Thunderbolt", "likelyMinPercent": 20.0, "likelyMaxPercent": 40.0, "fullMinPercent": 10.0, "fullMaxPercent": 50.0, "displayedMinPercent": 20.0, "displayedMaxPercent": 40.0, "likelyCandidateCount": 1, "fullCandidateCount": 1, "extremaCandidateIds": ["curated:fast-special"]}],
+		"ranges": [{"moveName": "Thunderbolt", "moveSource": "owned_exact", "likelyMinPercent": 20.0, "likelyMaxPercent": 40.0, "fullMinPercent": 10.0, "fullMaxPercent": 50.0, "displayedMinPercent": 20.0, "displayedMaxPercent": 40.0, "likelyCandidateCount": 1, "fullCandidateCount": 1, "extremaCandidateIds": ["curated:fast-special"]}],
 		"candidateCoverage": 0.6, "cacheStatus": "miss", "warningCodes": [],
 	}
 

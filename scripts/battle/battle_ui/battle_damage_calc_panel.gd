@@ -290,14 +290,16 @@ func _render_your_damage_response(response: Dictionary) -> void:
 		_get_defender_hp_percent(defender)
 	)
 	_add_assumption_chips(attacker if str(attacker.get("relation", "")) == "opponent" else defender, response)
-	_add_candidate_summary(response)
 
 	var results: Array = _as_array(response.get("results", []))
 	if results.is_empty():
-		_add_status(_fallback_text(str(response.get("emptyReason", "")), _t("battle.calc.no_results")), TEXT_SECONDARY)
+		var empty_fallback := _t("battle.calc.no_damage_taken_moves") if str(response.get("direction", "")) == "opponent-to-own" else _t("battle.calc.no_results")
+		_add_status(_fallback_text(str(response.get("emptyReason", "")), empty_fallback), TEXT_SECONDARY)
+		_add_candidate_summary(response)
 		return
 
 	_add_move_results_table(results, defender)
+	_add_candidate_summary(response)
 	_add_result_footnotes(response, results)
 
 
@@ -795,7 +797,8 @@ func _add_move_result_row(result: Dictionary, defender: Dictionary, parent: VBox
 	var percent_label: String = "" if is_status_move else _get_percent_label(result)
 	var move_type := _get_move_type(result)
 	var move_category := _get_move_category(result)
-	if move_type != "" or move_category != "":
+	var move_source := _get_move_source(result)
+	if move_type != "" or move_category != "" or move_source != "":
 		var meta_row := HBoxContainer.new()
 		meta_row.add_theme_constant_override("separation", 5)
 		move_box.add_child(meta_row)
@@ -803,6 +806,8 @@ func _add_move_result_row(result: Dictionary, defender: Dictionary, parent: VBox
 			meta_row.add_child(_make_move_type_badge(move_type))
 		if move_category != "":
 			meta_row.add_child(_make_move_category_label(move_category))
+		if move_source != "":
+			meta_row.add_child(_make_move_source_label(move_source))
 	var percent := _make_label(percent_label if percent_label != "" else "--", 15, TEXT_ACCENT)
 	percent.custom_minimum_size = Vector2(DAMAGE_COLUMN_WIDTH, 0)
 	percent.size_flags_horizontal = Control.SIZE_SHRINK_END
@@ -856,6 +861,19 @@ func _make_move_category_label(category: String) -> Label:
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.add_theme_stylebox_override("normal", _make_stylebox(Color(0.035, 0.05, 0.075, 0.92), Color(0.20, 0.28, 0.38, 0.75), 8, 5.0, 1.0))
+	return label
+
+
+func _make_move_source_label(source: String) -> Label:
+	var provenance_key := source
+	if source == "public_usage_prior":
+		provenance_key = "aggregate_prior"
+	var label := _make_label(_t("battle.calc.provenance.%s" % provenance_key).to_upper(), 8, TEXT_SECONDARY)
+	label.custom_minimum_size = Vector2(56, 17)
+	label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_stylebox_override("normal", _make_stylebox(CHIP_BG, CHIP_BORDER, 8, 5.0, 1.0))
 	return label
 
 
@@ -1888,6 +1906,13 @@ func _get_move_category(result: Dictionary) -> String:
 	if move_value is Dictionary:
 		move = move_value as Dictionary
 	return _first_non_empty_string(result, move, ["moveCategory", "category"])
+
+
+func _get_move_source(result: Dictionary) -> String:
+	var move_value: Variant = result.get("move", {})
+	if move_value is Dictionary:
+		return str((move_value as Dictionary).get("source", "")).strip_edges()
+	return str(result.get("moveSource", "")).strip_edges()
 
 
 func _get_percent_label(result: Dictionary) -> String:

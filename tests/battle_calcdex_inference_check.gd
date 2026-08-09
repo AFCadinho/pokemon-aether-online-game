@@ -66,7 +66,7 @@ func _response(revision: Dictionary) -> Dictionary:
 		"presetRevision": "test-v1", "presetFingerprint": "d".repeat(64),
 		"direction": "own-to-opponent", "rangeMode": "likely", "attacker": pokemon, "defender": opponent,
 		"candidates": [{"candidateId": "curated:bulky", "labelKey": "calcdex.preset.bulky", "source": "curated_prior", "weight": 1.0, "coverage": 1.0, "pinned": false, "effectiveInput": {"nature": "Bold", "evs": {"hp": 252}, "ivs": {"hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31}, "assumedMoves": []}, "explanationKeys": ["calcdex.explain.curated_preset"], "results": [result]}],
-		"ranges": [{"moveName": "Surf", "likelyMinPercent": 20.0, "likelyMaxPercent": 20.0, "fullMinPercent": 20.0, "fullMaxPercent": 20.0, "displayedMinPercent": 20.0, "displayedMaxPercent": 20.0, "likelyCandidateCount": 1, "fullCandidateCount": 1, "extremaCandidateIds": ["curated:bulky"]}],
+		"ranges": [{"moveName": "Surf", "moveSource": "owned_exact", "likelyMinPercent": 20.0, "likelyMaxPercent": 20.0, "fullMinPercent": 20.0, "fullMaxPercent": 20.0, "displayedMinPercent": 20.0, "displayedMaxPercent": 20.0, "likelyCandidateCount": 1, "fullCandidateCount": 1, "extremaCandidateIds": ["curated:bulky"]}],
 		"candidateCoverage": 1.0, "cacheStatus": "miss", "warningCodes": [],
 		"inferenceRevision": "public-observations-v1", "inferenceMode": "public_observations", "consideredEvidenceCount": 1,
 		"appliedEvidence": [{"evidenceType": "damage_interval", "opponentRef": "opponent:public-slot-1", "turn": 7, "explanationKey": "calcdex.inference.damage_interval", "excludedCandidateIds": ["curated:fast"]}],
