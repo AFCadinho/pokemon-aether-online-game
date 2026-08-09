@@ -129,6 +129,44 @@ func _run() -> void:
 		return
 	panel.show_response(response)
 	await process_frame
+	var condition_snapshot := _selection_snapshot()
+	condition_snapshot["field"]["effects"] = [
+		{"effectId": "Rain Dance", "scope": "field"},
+		{"effectId": "Light Screen", "scope": "side", "side": "p1"},
+	]
+	panel.set_knowledge_snapshot(condition_snapshot)
+	panel.advanced_scenario_expanded = true
+	panel._render_current_state()
+	await process_frame
+	for condition_label: String in [
+		panel._t("battle.calc.conditions_global").to_upper(),
+		panel._t("battle.calc.conditions_your_side").to_upper(),
+		panel._t("battle.calc.conditions_opponent_side").to_upper(),
+		panel._t("battle.calc.condition.weather").to_upper(),
+		panel._t("battle.calc.condition.terrain").to_upper(),
+	]:
+		if not _has_label_text(panel, condition_label):
+			_fail("Battle-condition editor is missing the clearly labeled section %s" % condition_label)
+			return
+	if panel._get_field_scenario_option_label("weather", "") != panel._t("battle.calc.condition_current", {"value": panel._t("battle.calc.condition.weather.rain")}):
+		_fail("Battle-condition selectors must identify the confirmed current weather")
+		return
+	var confirmed_light_screen := _find_button_text(panel, panel._t("battle.calc.condition.light_screen"))
+	if confirmed_light_screen == null or not confirmed_light_screen.button_pressed or not confirmed_light_screen.disabled:
+		_fail("Confirmed public side conditions must be visible, active, and protected from manual removal")
+		return
+	panel._on_field_side_condition_toggled(true, "opponentReflect")
+	if panel.get_field_scenario().get("defenderReflect") != true:
+		_fail("Opponent-side conditions must map to the defender while viewing damage dealt")
+		return
+	panel.active_subtab = panel.SUBTAB_THEIR_DAMAGE
+	if panel.get_field_scenario().get("attackerReflect") != true or panel.get_field_scenario().has("defenderReflect"):
+		_fail("Opponent-side conditions must stay with the opponent while viewing damage taken")
+		return
+	panel.active_subtab = panel.SUBTAB_YOUR_DAMAGE
+	panel._on_field_side_condition_toggled(false, "opponentReflect")
+	panel.set_knowledge_snapshot(_selection_snapshot())
+	panel.advanced_scenario_expanded = false
 	if panel.item_assumption_input == null or panel.ability_assumption_input == null or panel.nature_assumption_input == null:
 		_fail("Item, ability, and nature must be directly editable in their setup cards")
 		return
@@ -298,6 +336,8 @@ func _response(revision: Dictionary) -> Dictionary:
 
 func _selection_snapshot() -> Dictionary:
 	return {
+		"viewerSide": "p1",
+		"field": {"effects": []},
 		"viewerPokemon": [{"pokemonRef": "viewer:public-slot-1", "active": true, "fainted": false, "identity": {"state": "known", "value": "Pikachu"}}],
 		"opponentPokemon": [{"pokemonRef": "opponent:public-slot-1", "active": true, "fainted": false, "identity": {"state": "known", "value": "Mew"}}],
 	}

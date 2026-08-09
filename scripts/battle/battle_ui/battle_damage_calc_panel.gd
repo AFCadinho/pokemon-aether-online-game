@@ -91,6 +91,13 @@ const EV_INPUT_GROUPS := [
 	{"label": "battle.calc.ev_group_offense", "stats": ["atk", "spa", "spe"]},
 ]
 const BOOST_STAT_KEYS := ["atk", "def", "spa", "spd", "spe"]
+const FIELD_SIDE_CONDITIONS := [
+	{"suffix": "Reflect", "label_key": "battle.calc.condition.reflect"},
+	{"suffix": "LightScreen", "label_key": "battle.calc.condition.light_screen"},
+	{"suffix": "AuroraVeil", "label_key": "battle.calc.condition.aurora_veil"},
+]
+const FIELD_WEATHER_VALUES := ["", "Rain", "Sun", "Sand", "Hail", "Snow"]
+const FIELD_TERRAIN_VALUES := ["", "Electric", "Grassy", "Misty", "Psychic"]
 
 var content: VBoxContainer
 
@@ -438,7 +445,22 @@ func get_matchup_selection() -> Dictionary:
 
 
 func get_field_scenario() -> Dictionary:
-	return field_scenario.duplicate(true)
+	var payload: Dictionary = {}
+	for key: String in ["weather", "terrain"]:
+		var value := str(field_scenario.get(key, "")).strip_edges()
+		if value != "":
+			payload[key] = value
+	var own_prefix := "defender" if active_subtab == SUBTAB_THEIR_DAMAGE else "attacker"
+	var opponent_prefix := "attacker" if active_subtab == SUBTAB_THEIR_DAMAGE else "defender"
+	for relation_data: Dictionary in [
+		{"relation": "own", "prefix": own_prefix},
+		{"relation": "opponent", "prefix": opponent_prefix},
+	]:
+		for condition: Dictionary in FIELD_SIDE_CONDITIONS:
+			var suffix := str(condition.get("suffix", ""))
+			if bool(field_scenario.get("%s%s" % [relation_data["relation"], suffix], false)):
+				payload["%s%s" % [relation_data["prefix"], suffix]] = true
+	return payload
 
 
 func _clear_sample_sets() -> void:
@@ -1742,11 +1764,7 @@ func _set_explicit_opponent_move_names(move_values: Array) -> void:
 	edited_assumption_fields["replaceMoves"] = true
 
 func _add_advanced_scenario_controls(parent: VBoxContainer, assumptions: Dictionary) -> void:
-	var active_conditions: Array[String] = []
-	for key: String in ["weather", "terrain"]:
-		var condition := str(field_scenario.get(key, "")).strip_edges()
-		if condition != "":
-			active_conditions.append(condition)
+	var active_conditions := _get_effective_field_condition_labels()
 	var condition_summary := _t("common.none") if active_conditions.is_empty() else _join_string_array(active_conditions, " · ")
 	parent.add_child(_make_disclosure_button(
 		_t("battle.calc.battle_conditions", {"conditions": condition_summary}),
@@ -1755,12 +1773,33 @@ func _add_advanced_scenario_controls(parent: VBoxContainer, assumptions: Diction
 	))
 	if not advanced_scenario_expanded:
 		return
+
+	var editor := VBoxContainer.new()
+	editor.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	editor.add_theme_constant_override("separation", 6)
+	parent.add_child(editor)
+
+	var global_panel := _make_field_condition_panel(_t("battle.calc.conditions_global"))
+	var global_content := global_panel.get_meta("content") as VBoxContainer
 	var field_row := HBoxContainer.new()
 	field_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	field_row.add_theme_constant_override("separation", 5)
-	field_row.add_child(_make_field_scenario_selector("weather", ["", "Rain", "Sun", "Sand", "Hail", "Snow"]))
-	field_row.add_child(_make_field_scenario_selector("terrain", ["", "Electric", "Grassy", "Misty", "Psychic"]))
-	parent.add_child(field_row)
+	field_row.add_theme_constant_override("separation", 6)
+	field_row.add_child(_make_field_scenario_selector_card("weather", FIELD_WEATHER_VALUES, _t("battle.calc.condition.weather")))
+	field_row.add_child(_make_field_scenario_selector_card("terrain", FIELD_TERRAIN_VALUES, _t("battle.calc.condition.terrain")))
+	global_content.add_child(field_row)
+	editor.add_child(global_panel)
+
+	var side_row := HBoxContainer.new()
+	side_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	side_row.add_theme_constant_override("separation", 6)
+	side_row.add_child(_make_field_side_condition_panel("own", _t("battle.calc.conditions_your_side")))
+	side_row.add_child(_make_field_side_condition_panel("opponent", _t("battle.calc.conditions_opponent_side")))
+	editor.add_child(side_row)
+
+	var scope_note := _make_label(_t("battle.calc.conditions_direct_only"), 9, TEXT_MUTED)
+	scope_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	scope_note.clip_text = false
+	editor.add_child(scope_note)
 
 
 func _on_advanced_scenario_pressed() -> void:
@@ -1785,18 +1824,97 @@ func _make_disclosure_button(text: String, expanded: bool, pressed_callback: Cal
 	return button
 
 
+func _make_field_condition_panel(title_text: String) -> PanelContainer:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_stylebox(Color(0.012, 0.025, 0.043, 0.96), Color(0.13, 0.28, 0.43, 0.82), 6, 7.0, 5.0)
+	)
+	var content_box := VBoxContainer.new()
+	content_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content_box.add_theme_constant_override("separation", 5)
+	panel.add_child(content_box)
+	var title := _make_label(title_text.to_upper(), 9, TEXT_MUTED)
+	title.clip_text = false
+	content_box.add_child(title)
+	panel.set_meta("content", content_box)
+	return panel
+
+
+func _make_field_scenario_selector_card(key: String, values: Array, label_text: String) -> VBoxContainer:
+	var card := VBoxContainer.new()
+	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	card.add_theme_constant_override("separation", 3)
+	var label := _make_label(label_text.to_upper(), 8, TEXT_MUTED)
+	label.clip_text = false
+	card.add_child(label)
+	card.add_child(_make_field_scenario_selector(key, values))
+	return card
+
+
 func _make_field_scenario_selector(key: String, values: Array) -> OptionButton:
 	var selector := OptionButton.new()
 	selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	for value: Variant in values:
 		var normalized := str(value)
-		selector.add_item(_t("common.none") if normalized == "" else normalized)
+		selector.add_item(_get_field_scenario_option_label(key, normalized))
 		selector.set_item_metadata(selector.item_count - 1, normalized)
 		if normalized == str(field_scenario.get(key, "")):
 			selector.select(selector.item_count - 1)
 	selector.item_selected.connect(_on_field_scenario_selected.bind(selector, key))
 	_apply_calcdex_dropdown_style(selector, 32.0, 11)
 	return selector
+
+
+func _make_field_side_condition_panel(relation: String, title_text: String) -> PanelContainer:
+	var panel := _make_field_condition_panel(title_text)
+	var content_box := panel.get_meta("content") as VBoxContainer
+	var grid := GridContainer.new()
+	grid.columns = 2
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.add_theme_constant_override("h_separation", 5)
+	grid.add_theme_constant_override("v_separation", 5)
+	content_box.add_child(grid)
+	for condition: Dictionary in FIELD_SIDE_CONDITIONS:
+		grid.add_child(_make_field_side_condition_button(relation, condition))
+	return panel
+
+
+func _make_field_side_condition_button(relation: String, condition: Dictionary) -> Button:
+	var suffix := str(condition.get("suffix", ""))
+	var scenario_key := "%s%s" % [relation, suffix]
+	var public_active := _is_public_side_condition_active(relation, suffix)
+	var button := Button.new()
+	button.text = _t(str(condition.get("label_key", "")))
+	button.toggle_mode = true
+	button.button_pressed = public_active or bool(field_scenario.get(scenario_key, false))
+	button.disabled = public_active
+	button.focus_mode = Control.FOCUS_ALL
+	button.custom_minimum_size = Vector2(0, 28)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.add_theme_font_size_override("font_size", 10)
+	button.add_theme_color_override("font_color", TEXT_SECONDARY)
+	button.add_theme_color_override("font_pressed_color", TEXT_PRIMARY)
+	button.add_theme_color_override("font_disabled_color", STAGE_POSITIVE)
+	button.add_theme_stylebox_override("normal", _make_stylebox(CHIP_BG, CHIP_BORDER, 5, 6.0, 3.0))
+	button.add_theme_stylebox_override("hover", _make_stylebox(DROPDOWN_HOVER_BG, DROPDOWN_HOVER_BORDER, 5, 6.0, 3.0))
+	button.add_theme_stylebox_override("pressed", _make_stylebox(TAB_ACTIVE_BG, TEXT_ACCENT, 5, 6.0, 3.0))
+	button.add_theme_stylebox_override("disabled", _make_stylebox(Color(0.025, 0.10, 0.065, 0.92), STAGE_POSITIVE.darkened(0.2), 5, 6.0, 3.0))
+	if public_active:
+		button.tooltip_text = _t("battle.calc.condition_confirmed_tooltip")
+	else:
+		button.toggled.connect(_on_field_side_condition_toggled.bind(scenario_key))
+	return button
+
+
+func _on_field_side_condition_toggled(enabled: bool, scenario_key: String) -> void:
+	if enabled:
+		field_scenario[scenario_key] = true
+	else:
+		field_scenario.erase(scenario_key)
+	matchup_selection_changed.emit()
+	_render_current_state()
 
 
 func _on_field_scenario_selected(index: int, selector: OptionButton, key: String) -> void:
@@ -1806,6 +1924,98 @@ func _on_field_scenario_selected(index: int, selector: OptionButton, key: String
 	else:
 		field_scenario[key] = value
 	matchup_selection_changed.emit()
+	_render_current_state()
+
+
+func _get_field_scenario_option_label(key: String, value: String) -> String:
+	if value != "":
+		return _get_field_condition_value_label(key, value)
+	var current_value := _get_public_global_field_value(key)
+	var current_label := _t("common.none") if current_value == "" else _get_field_condition_value_label(key, current_value)
+	return _t("battle.calc.condition_current", {"value": current_label})
+
+
+func _get_field_condition_value_label(key: String, value: String) -> String:
+	var localization_key := "battle.calc.condition.%s.%s" % [key, value.to_lower()]
+	var translated := _t(localization_key)
+	return value if translated == localization_key else translated
+
+
+func _get_effective_field_condition_labels() -> Array[String]:
+	var labels: Array[String] = []
+	for key: String in ["weather", "terrain"]:
+		var value := str(field_scenario.get(key, "")).strip_edges()
+		if value == "":
+			value = _get_public_global_field_value(key)
+		if value != "":
+			labels.append(_get_field_condition_value_label(key, value))
+	for relation: String in ["own", "opponent"]:
+		var relation_label := _t("battle.calc.conditions_your_side") if relation == "own" else _t("battle.calc.conditions_opponent_side")
+		for condition: Dictionary in FIELD_SIDE_CONDITIONS:
+			var suffix := str(condition.get("suffix", ""))
+			if bool(field_scenario.get("%s%s" % [relation, suffix], false)) or _is_public_side_condition_active(relation, suffix):
+				labels.append("%s: %s" % [relation_label, _t(str(condition.get("label_key", "")))])
+	return labels
+
+
+func _get_public_global_field_value(key: String) -> String:
+	for effect_value: Variant in _get_public_field_effects():
+		var effect := _as_dictionary(effect_value)
+		var effect_id := _normalize_field_effect_id(str(effect.get("effectId", "")))
+		if key == "weather":
+			match effect_id:
+				"rain", "raindance":
+					return "Rain"
+				"sun", "sunnyday":
+					return "Sun"
+				"sandstorm":
+					return "Sand"
+				"hail":
+					return "Hail"
+				"snow":
+					return "Snow"
+		elif key == "terrain":
+			match effect_id:
+				"electricterrain":
+					return "Electric"
+				"grassyterrain":
+					return "Grassy"
+				"mistyterrain":
+					return "Misty"
+				"psychicterrain":
+					return "Psychic"
+	return ""
+
+
+func _is_public_side_condition_active(relation: String, suffix: String) -> bool:
+	var viewer_side := str(knowledge_snapshot.get("viewerSide", ""))
+	if viewer_side not in ["p1", "p2"]:
+		return false
+	var expected_side := viewer_side if relation == "own" else ("p2" if viewer_side == "p1" else "p1")
+	var expected_effect_id: String = str({
+		"Reflect": "reflect",
+		"LightScreen": "lightscreen",
+		"AuroraVeil": "auroraveil",
+	}.get(suffix, ""))
+	for effect_value: Variant in _get_public_field_effects():
+		var effect := _as_dictionary(effect_value)
+		if str(effect.get("side", "")) == expected_side \
+				and _normalize_field_effect_id(str(effect.get("effectId", ""))) == expected_effect_id:
+			return true
+	return false
+
+
+func _get_public_field_effects() -> Array:
+	var field := _as_dictionary(knowledge_snapshot.get("field", {}))
+	return _as_array(field.get("effects", []))
+
+
+func _normalize_field_effect_id(value: String) -> String:
+	var normalized := ""
+	for character: String in value.to_lower():
+		if character >= "a" and character <= "z" or character >= "0" and character <= "9":
+			normalized += character
+	return normalized
 
 
 func _make_live_ev_input(stat_key: String, value: int) -> Control:
