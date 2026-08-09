@@ -1285,6 +1285,12 @@ func _get_result_summary_text(result: Dictionary) -> String:
 		return ""
 	if description == CONFIRMED_INFORMATION_ENVELOPE_DESCRIPTION:
 		return _t("battle.calc.result_envelope_summary")
+	var ko_projection := _as_dictionary(result.get("koProjection", {}))
+	var projection_text := str(ko_projection.get("text", "")).strip_edges()
+	if str(ko_projection.get("state", "")) == "available" and projection_text != "":
+		var separator_index := description.find(" -- ")
+		var direct_description := description.left(separator_index) if separator_index >= 0 else description
+		return ("%s -- %s" % [direct_description, projection_text]).left(600)
 	return description.left(600)
 
 

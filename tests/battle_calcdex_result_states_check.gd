@@ -43,7 +43,7 @@ func _run() -> void:
 			"description": "252 SpA Pikachu Thunderbolt vs. 252 HP / 8 SpD Mew: 176-210 (43.5 - 51.9%) -- 10.9% chance to 2HKO after Stealth Rock, burn damage, and Leftovers recovery",
 			"warnings": [],
 			"koProjection": {
-				"state": "available", "chance": 0.109, "hits": 2, "text": "10.9% chance to 2HKO",
+				"state": "available", "chance": 0.109, "hits": 2, "text": "10.9% chance to 2HKO after Stealth Rock, burn damage, and Leftovers recovery",
 				"basedOn": "public_percent_upper_bound",
 				"effects": [
 					{"id": "stealth_rock", "kind": "entry_hazard", "timing": "before_first_attack"},
@@ -101,6 +101,19 @@ func _run() -> void:
 		return
 	if panel._get_primary_result_label(projected_result, {"hp": {"percent": 75.0}}) != "2HKO":
 		push_error("The compact KO badge must use the structured projection while chance details stay in the summary")
+		quit(1)
+		return
+	var stealth_rock_summary := panel._get_result_summary_text({
+		"description": "252 Atk Sharpness Samurott-Hisui Ceaseless Edge vs. 0 HP / 0 Def Volcarona: 198-234 (63.6 - 75.2%) -- guaranteed 2HKO",
+		"koProjection": {
+			"state": "available",
+			"chance": 1.0,
+			"hits": 1,
+			"text": "guaranteed OHKO after Stealth Rock",
+		},
+	})
+	if not stealth_rock_summary.contains("guaranteed OHKO after Stealth Rock") or stealth_rock_summary.contains("guaranteed 2HKO"):
+		push_error("Structured entry-hazard KO projections must override a stale direct-damage description")
 		quit(1)
 		return
 	var envelope_summary := panel._get_result_summary_text({
