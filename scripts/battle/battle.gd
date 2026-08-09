@@ -2650,6 +2650,10 @@ func _sanitize_damage_calc_assumptions(assumptions: Dictionary) -> Dictionary:
 	if nature != "" and nature != "<null>":
 		sanitized["nature"] = nature
 
+	var status: String = str(assumptions.get("status", "")).strip_edges().to_lower()
+	if status in ["brn", "par", "psn", "tox", "slp", "frz"]:
+		sanitized["status"] = status
+
 	var evs: Dictionary = _sanitize_damage_calc_stat_table(_damage_calc_as_dictionary(assumptions.get("evs", {})), false)
 	if not evs.is_empty():
 		sanitized["evs"] = evs
@@ -2678,7 +2682,7 @@ func _sanitize_damage_calc_assumptions(assumptions: Dictionary) -> Dictionary:
 
 func _get_persistable_damage_calc_assumptions(assumptions: Dictionary, edited_fields: Dictionary) -> Dictionary:
 	var edited_assumptions: Dictionary = {}
-	for key: String in ["item", "ability", "nature", "evs", "ivs", "boosts", "assumedMoves", "replaceMoves", "exactStats"]:
+	for key: String in ["item", "ability", "nature", "status", "evs", "ivs", "boosts", "assumedMoves", "replaceMoves", "exactStats"]:
 		if bool(edited_fields.get(key, false)) and assumptions.has(key):
 			edited_assumptions[key] = assumptions.get(key)
 	return _sanitize_damage_calc_assumptions(edited_assumptions)
@@ -2705,7 +2709,7 @@ func _sanitize_damage_calc_boost_table(boosts: Dictionary) -> Dictionary:
 
 func _build_damage_calc_edited_fields(assumptions: Dictionary) -> Dictionary:
 	var edited: Dictionary = {}
-	for key: String in ["item", "ability", "nature", "evs", "ivs", "boosts", "assumedMoves", "replaceMoves", "exactStats"]:
+	for key: String in ["item", "ability", "nature", "status", "evs", "ivs", "boosts", "assumedMoves", "replaceMoves", "exactStats"]:
 		if not assumptions.has(key):
 			continue
 		var value: Variant = assumptions.get(key)
@@ -2717,7 +2721,7 @@ func _build_damage_calc_edited_fields(assumptions: Dictionary) -> Dictionary:
 	return edited
 
 func _should_store_damage_calc_assumptions(assumptions: Dictionary, edited_fields: Dictionary) -> bool:
-	for key: String in ["item", "ability", "nature", "evs", "ivs", "boosts", "assumedMoves", "replaceMoves"]:
+	for key: String in ["item", "ability", "nature", "status", "evs", "ivs", "boosts", "assumedMoves", "replaceMoves"]:
 		if not bool(edited_fields.get(key, false)):
 			continue
 		if not assumptions.has(key):

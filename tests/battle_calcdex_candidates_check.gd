@@ -29,6 +29,7 @@ func _run() -> void:
 	usage_response["candidates"][0]["labelKey"] = "calcdex.preset.public_usage"
 	usage_response["candidates"][0]["effectiveInput"] = {
 		"nature": "Timid", "item": "Heavy-Duty Boots", "ability": "Flame Body",
+		"status": "brn",
 		"evs": {"spa": 252, "spd": 4, "spe": 252},
 		"ivs": {"hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31},
 		"assumedMoves": ["Quiver Dance", "Bug Buzz", "Flamethrower", "Fiery Dance"],
@@ -45,6 +46,14 @@ func _run() -> void:
 	var normalized_usage := Candidates.normalize_response(usage_response, revision)
 	if not bool(normalized_usage.get("success", false)) or normalized_usage["candidates"][0]["source"] != "public_usage_prior" or normalized_usage["results"][0]["move"]["source"] != "public_usage_prior":
 		_fail("public aggregate usage candidates must normalize without becoming confirmed facts")
+		return
+	if normalized_usage["candidates"][0]["effectiveInput"].get("status") != "brn":
+		_fail("A supported manual status must survive smart-candidate normalization")
+		return
+	var invalid_status := usage_response.duplicate(true)
+	invalid_status["candidates"][0]["effectiveInput"]["status"] = "burned"
+	if bool(Candidates.normalize_response(invalid_status, revision).get("success", false)):
+		_fail("Unknown status identifiers must fail closed")
 		return
 	var leaked := response.duplicate(true)
 	leaked["candidates"][0]["effectiveInput"]["privateSetId"] = "secret"
@@ -144,6 +153,7 @@ func _run() -> void:
 		panel._t("battle.calc.conditions_opponent_side").to_upper(),
 		panel._t("battle.calc.condition.weather").to_upper(),
 		panel._t("battle.calc.condition.terrain").to_upper(),
+		panel._t("battle.calc.condition.status").to_upper(),
 	]:
 		if not _has_label_text(panel, condition_label):
 			_fail("Battle-condition editor is missing the clearly labeled section %s" % condition_label)
@@ -165,6 +175,29 @@ func _run() -> void:
 		return
 	panel.active_subtab = panel.SUBTAB_YOUR_DAMAGE
 	panel._on_field_side_condition_toggled(false, "opponentReflect")
+	var status_selector := panel._make_pokemon_status_selector("opponent")
+	var burn_index := -1
+	for index in range(status_selector.item_count):
+		if str(status_selector.get_item_metadata(index)) == "brn":
+			burn_index = index
+			break
+	if burn_index < 0:
+		_fail("Opponent status selector must expose burn as an explicit scenario")
+		return
+	panel._on_pokemon_status_selected(burn_index, status_selector)
+	if panel.defender_assumptions.get("status") != "brn" or not bool(panel.edited_assumption_fields.get("status", false)):
+		_fail("A hypothetical opponent burn must become an explicit calculator input")
+		return
+	var burned_snapshot := _selection_snapshot()
+	burned_snapshot["opponentPokemon"][0]["status"] = {"state": "known", "value": "brn"}
+	panel.set_knowledge_snapshot(burned_snapshot)
+	if panel._get_effective_pokemon_status("opponent") != "brn" or panel.defender_assumptions.has("status"):
+		_fail("Confirmed public burn must take priority and remove a stale hypothetical status")
+		return
+	var confirmed_status_selector := panel._make_pokemon_status_selector("opponent")
+	if not confirmed_status_selector.disabled:
+		_fail("Confirmed public status must be visible but not manually erasable")
+		return
 	panel.set_knowledge_snapshot(_selection_snapshot())
 	panel.advanced_scenario_expanded = false
 	if panel.item_assumption_input == null or panel.ability_assumption_input == null or panel.nature_assumption_input == null:
@@ -316,7 +349,7 @@ func _response(revision: Dictionary) -> Dictionary:
 		"warningCodes": [],
 	}
 	return {
-		"success": true, "schemaVersion": 1, "routeRevision": "calc4.4-2026-08-09",
+		"success": true, "schemaVersion": 1, "routeRevision": "calc4.5-2026-08-09",
 		"safeInputFingerprint": "b".repeat(64), "projectionRevision": revision.duplicate(true),
 		"mechanicsManifest": {"contractRevision": "calc0-2026-08-08", "damageCalcVersion": "0.10.0", "showdownVersion": "0.11.10", "formatDataFingerprint": "fd94c49ab26ddf8daff2259dfc2b3857f957e37b166557412c4fe303c87e54b0"},
 		"presetRevision": "test-v1", "presetFingerprint": "c".repeat(64),

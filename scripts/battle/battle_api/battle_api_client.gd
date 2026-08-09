@@ -581,6 +581,9 @@ func _normalize_damage_calc_assumptions(defender_assumptions: Dictionary) -> Dic
 		assumptions["item"] = defender_assumptions.get("item")
 	if defender_assumptions.has("ability"):
 		assumptions["ability"] = defender_assumptions.get("ability")
+	var status := str(defender_assumptions.get("status", "")).strip_edges().to_lower()
+	if status in ["brn", "par", "psn", "tox", "slp", "frz"]:
+		assumptions["status"] = status
 	if defender_assumptions.has("nature"):
 		assumptions["nature"] = str(defender_assumptions.get("nature", "Hardy")).strip_edges()
 	if defender_assumptions.has("evs"):

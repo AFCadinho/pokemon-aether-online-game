@@ -5,7 +5,7 @@ class_name BattleCalcdexCandidates
 const SNAPSHOT := preload("res://scripts/battle/battle_calcdex_snapshot.gd")
 const MATCHUP := preload("res://scripts/battle/battle_calcdex_matchup.gd")
 const SCHEMA_VERSION := 1
-const ROUTE_REVISION := "calc4.4-2026-08-09"
+const ROUTE_REVISION := "calc4.5-2026-08-09"
 
 
 static func normalize_response(response: Dictionary, expected_revision: Dictionary) -> Dictionary:
@@ -90,8 +90,10 @@ static func _normalize_candidates(value: Variant) -> Array[Dictionary]:
 			return []
 		var effective: Dictionary = candidate.get("effectiveInput", {}) if candidate.get("effectiveInput") is Dictionary else {}
 		for key: Variant in effective.keys():
-			if str(key) not in ["nature", "item", "ability", "evs", "ivs", "boosts", "assumedMoves", "replaceMoves", "exactStats"]:
+			if str(key) not in ["nature", "item", "ability", "status", "evs", "ivs", "boosts", "assumedMoves", "replaceMoves", "exactStats"]:
 				return []
+		if effective.has("status") and str(effective.get("status", "")) not in ["brn", "par", "psn", "tox", "slp", "frz"]:
+			return []
 		if effective.has("boosts") and not _is_valid_boost_table(effective.get("boosts")):
 			return []
 		if effective.has("exactStats") and typeof(effective.get("exactStats")) != TYPE_BOOL:

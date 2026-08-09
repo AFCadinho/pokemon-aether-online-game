@@ -98,6 +98,7 @@ const FIELD_SIDE_CONDITIONS := [
 ]
 const FIELD_WEATHER_VALUES := ["", "Rain", "Sun", "Sand", "Hail", "Snow"]
 const FIELD_TERRAIN_VALUES := ["", "Electric", "Grassy", "Misty", "Psychic"]
+const POKEMON_STATUS_VALUES := ["", "brn", "par", "psn", "tox", "slp", "frz"]
 
 var content: VBoxContainer
 
@@ -348,7 +349,9 @@ func _render_your_damage_response(response: Dictionary) -> void:
 		str(opponent.get("species", "")),
 		_get_defender_hp_percent(viewer),
 		_get_defender_hp_percent(opponent),
-		_get_boosts_label(opponent)
+		_get_boosts_label(opponent),
+		_get_effective_pokemon_status("own"),
+		_get_effective_pokemon_status("opponent")
 	)
 	_add_assumption_chips(opponent, response)
 
@@ -603,6 +606,9 @@ func _apply_known_opponent_facts() -> void:
 			continue
 		defender_assumptions[key] = known_value
 		edited_assumption_fields.erase(key)
+	if _get_known_opponent_value("status") != "":
+		defender_assumptions.erase("status")
+		edited_assumption_fields.erase("status")
 
 
 func _get_known_opponent_value(field_name: String) -> String:
@@ -827,7 +833,9 @@ func _add_profile_summary(
 	opponent_sprite_species: String = "",
 	viewer_hp_percent: Variant = null,
 	opponent_hp_percent: Variant = null,
-	opponent_boosts_label: String = ""
+	opponent_boosts_label: String = "",
+	viewer_status: String = "",
+	opponent_status: String = ""
 ) -> void:
 	var matchup_row := HBoxContainer.new()
 	matchup_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -847,7 +855,8 @@ func _add_profile_summary(
 		_join_string_array(viewer_details, "  ·  "),
 		active_subtab == SUBTAB_YOUR_DAMAGE,
 		_fallback_text(viewer_sprite_species, viewer_name),
-		viewer_hp_percent
+		viewer_hp_percent,
+		viewer_status
 	))
 	var arrow := _make_label("VS", 10, TEXT_ACCENT)
 	arrow.custom_minimum_size = Vector2(30, 0)
@@ -868,7 +877,8 @@ func _add_profile_summary(
 		_join_string_array(opponent_details, "  ·  "),
 		active_subtab == SUBTAB_THEIR_DAMAGE,
 		_fallback_text(opponent_sprite_species, opponent_name),
-		opponent_hp_percent
+		opponent_hp_percent,
+		opponent_status
 	))
 
 
@@ -879,7 +889,8 @@ func _make_matchup_side(
 	details: String,
 	is_attacker: bool,
 	sprite_species: String,
-	hp_percent: Variant
+	hp_percent: Variant,
+	status: String = ""
 ) -> PanelContainer:
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -917,12 +928,45 @@ func _make_matchup_side(
 		selector.custom_minimum_size = Vector2(0, 28)
 		selector.add_theme_font_size_override("font_size", 13)
 		side.add_child(selector)
+	var detail_row := HBoxContainer.new()
+	detail_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	detail_row.add_theme_constant_override("separation", 4)
+	side.add_child(detail_row)
 	var detail_label := _make_label(details, 10, TEXT_SECONDARY)
 	detail_label.tooltip_text = details
-	side.add_child(detail_label)
+	detail_row.add_child(detail_label)
+	if status in POKEMON_STATUS_VALUES and status != "":
+		detail_row.add_child(_make_pokemon_status_badge(status))
 	if hp_percent != null:
 		side.add_child(_make_hp_bar(float(hp_percent)))
 	return panel
+
+
+func _make_pokemon_status_badge(status: String) -> Label:
+	var colors := _get_pokemon_status_colors(status)
+	var badge := _make_label(_get_status_compact_label(status), 9, colors["text"])
+	badge.custom_minimum_size = Vector2(32, 17)
+	badge.size_flags_horizontal = Control.SIZE_SHRINK_END
+	badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	badge.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	badge.tooltip_text = _get_status_label(status)
+	badge.add_theme_stylebox_override("normal", _make_stylebox(colors["background"], colors["border"], 4, 4.0, 1.0))
+	return badge
+
+
+func _get_pokemon_status_colors(status: String) -> Dictionary:
+	match status:
+		"brn":
+			return {"text": Color(1.0, 0.78, 0.56), "background": Color(0.24, 0.075, 0.025, 0.96), "border": Color(0.90, 0.35, 0.12, 0.92)}
+		"par":
+			return {"text": Color(1.0, 0.91, 0.48), "background": Color(0.22, 0.17, 0.025, 0.96), "border": Color(0.90, 0.69, 0.12, 0.92)}
+		"psn", "tox":
+			return {"text": Color(0.92, 0.72, 1.0), "background": Color(0.16, 0.055, 0.22, 0.96), "border": Color(0.62, 0.28, 0.80, 0.92)}
+		"slp":
+			return {"text": Color(0.80, 0.84, 0.91), "background": Color(0.09, 0.11, 0.16, 0.96), "border": Color(0.39, 0.45, 0.56, 0.92)}
+		"frz":
+			return {"text": Color(0.74, 0.94, 1.0), "background": Color(0.025, 0.15, 0.21, 0.96), "border": Color(0.20, 0.68, 0.82, 0.92)}
+	return {"text": TEXT_SECONDARY, "background": CHIP_BG, "border": CHIP_BORDER}
 
 
 func _make_hp_bar(hp_percent: float) -> ProgressBar:
@@ -1878,7 +1922,51 @@ func _make_field_side_condition_panel(relation: String, title_text: String) -> P
 	content_box.add_child(grid)
 	for condition: Dictionary in FIELD_SIDE_CONDITIONS:
 		grid.add_child(_make_field_side_condition_button(relation, condition))
+	var status_label := _make_label(_t("battle.calc.condition.status").to_upper(), 8, TEXT_MUTED)
+	status_label.clip_text = false
+	content_box.add_child(status_label)
+	content_box.add_child(_make_pokemon_status_selector(relation))
 	return panel
+
+
+func _make_pokemon_status_selector(relation: String) -> OptionButton:
+	var selector := OptionButton.new()
+	selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var confirmed_status := _get_public_pokemon_status(relation)
+	var scenario_status := str(defender_assumptions.get("status", "")) if relation == "opponent" else ""
+	for status: String in POKEMON_STATUS_VALUES:
+		var option_label := _get_status_label(status)
+		if status == "":
+			var current_label := _get_status_label(confirmed_status)
+			option_label = _t("battle.calc.condition_current", {"value": current_label})
+		selector.add_item(option_label)
+		selector.set_item_metadata(selector.item_count - 1, status)
+		if confirmed_status == "" and status == scenario_status:
+			selector.select(selector.item_count - 1)
+	selector.disabled = relation == "own" or confirmed_status != ""
+	if selector.disabled:
+		selector.select(0)
+		selector.tooltip_text = _t("battle.calc.condition_confirmed_tooltip")
+	else:
+		selector.tooltip_text = _t("battle.calc.status_scenario_tooltip")
+		selector.item_selected.connect(_on_pokemon_status_selected.bind(selector))
+	_apply_calcdex_dropdown_style(selector, 30.0, 10)
+	return selector
+
+
+func _on_pokemon_status_selected(index: int, selector: OptionButton) -> void:
+	if _get_public_pokemon_status("opponent") != "":
+		return
+	var status := str(selector.get_item_metadata(index)).to_lower()
+	_mark_sample_set_custom()
+	if status == "":
+		defender_assumptions.erase("status")
+		edited_assumption_fields.erase("status")
+	else:
+		defender_assumptions["status"] = status
+		edited_assumption_fields["status"] = true
+	_emit_defender_assumptions_changed()
+	_render_current_state()
 
 
 func _make_field_side_condition_button(relation: String, condition: Dictionary) -> Button:
@@ -1955,7 +2043,51 @@ func _get_effective_field_condition_labels() -> Array[String]:
 			var suffix := str(condition.get("suffix", ""))
 			if bool(field_scenario.get("%s%s" % [relation, suffix], false)) or _is_public_side_condition_active(relation, suffix):
 				labels.append("%s: %s" % [relation_label, _t(str(condition.get("label_key", "")))])
+		var status := _get_effective_pokemon_status(relation)
+		if status != "":
+			labels.append("%s: %s" % [relation_label, _get_status_label(status)])
 	return labels
+
+
+func _get_effective_pokemon_status(relation: String) -> String:
+	var confirmed_status := _get_public_pokemon_status(relation)
+	if confirmed_status != "":
+		return confirmed_status
+	if relation == "opponent":
+		var scenario_status := str(defender_assumptions.get("status", "")).strip_edges().to_lower()
+		if scenario_status in POKEMON_STATUS_VALUES:
+			return scenario_status
+	return ""
+
+
+func _get_public_pokemon_status(relation: String) -> String:
+	var pokemon_ref := selected_viewer_ref if relation == "own" else selected_opponent_ref
+	var pokemon := _get_snapshot_pokemon_by_ref(pokemon_ref)
+	var knowledge := _as_dictionary(pokemon.get("status", {}))
+	if str(knowledge.get("state", "")) != "known":
+		return ""
+	var status := str(knowledge.get("value", "")).strip_edges().to_lower()
+	return status if status in POKEMON_STATUS_VALUES else ""
+
+
+func _get_status_label(status: String) -> String:
+	if status == "":
+		return _t("common.none")
+	var key := "battle.calc.condition.status.%s" % status
+	var translated := _t(key)
+	return status.to_upper() if translated == key else translated
+
+
+func _get_status_compact_label(status: String) -> String:
+	var key := str({
+		"brn": "battle.status.compact.burn",
+		"par": "battle.status.compact.paralysis",
+		"slp": "battle.status.compact.sleep",
+		"frz": "battle.status.compact.freeze",
+		"psn": "battle.status.compact.poison",
+		"tox": "battle.status.compact.toxic",
+	}.get(status, ""))
+	return _t(key) if key != "" else status.to_upper()
 
 
 func _get_public_global_field_value(key: String) -> String:

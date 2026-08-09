@@ -57,7 +57,7 @@ func _response(revision: Dictionary) -> Dictionary:
 		"description": "safe", "endOfTurn": {"state": "not_included", "reasonCode": "CALC_END_OF_TURN_NOT_INCLUDED"}, "warningCodes": [],
 	}
 	return {
-		"success": true, "schemaVersion": 1, "routeRevision": "calc5.1-2026-08-09",
+		"success": true, "schemaVersion": 1, "routeRevision": "calc5.2-2026-08-09",
 		"safeInputFingerprint": "b".repeat(64), "projectionRevision": revision,
 		"mechanicsManifest": {"contractRevision": "calc0-2026-08-08", "damageCalcVersion": "0.10.0", "showdownVersion": "0.11.10", "formatDataFingerprint": "fd94c49ab26ddf8daff2259dfc2b3857f957e37b166557412c4fe303c87e54b0"},
 		"presetRevision": "test-v1", "presetFingerprint": "d".repeat(64),
