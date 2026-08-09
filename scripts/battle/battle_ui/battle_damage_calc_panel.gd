@@ -96,6 +96,9 @@ const FIELD_SIDE_CONDITIONS := [
 	{"suffix": "LightScreen", "label_key": "battle.calc.condition.light_screen"},
 	{"suffix": "AuroraVeil", "label_key": "battle.calc.condition.aurora_veil"},
 ]
+const FIELD_SIDE_HAZARDS := [
+	{"suffix": "StealthRock", "label_key": "battle.field.effect.stealth_rock"},
+]
 const FIELD_WEATHER_VALUES := ["", "Rain", "Sun", "Sand", "Hail", "Snow"]
 const FIELD_TERRAIN_VALUES := ["", "Electric", "Grassy", "Misty", "Psychic"]
 const POKEMON_STATUS_VALUES := ["", "brn", "par", "psn", "tox", "slp", "frz"]
@@ -463,6 +466,13 @@ func get_field_scenario() -> Dictionary:
 			var suffix := str(condition.get("suffix", ""))
 			if bool(field_scenario.get("%s%s" % [relation_data["relation"], suffix], false)):
 				payload["%s%s" % [relation_data["prefix"], suffix]] = true
+		for condition: Dictionary in FIELD_SIDE_HAZARDS:
+			var suffix := str(condition.get("suffix", ""))
+			if bool(field_scenario.get("%s%s" % [relation_data["relation"], suffix], false)):
+				payload["%s%s" % [relation_data["prefix"], suffix]] = true
+		var spikes := clampi(int(field_scenario.get("%sSpikes" % relation_data["relation"], 0)), 0, 3)
+		if spikes > 0:
+			payload["%sSpikes" % relation_data["prefix"]] = spikes
 	return payload
 
 
@@ -1901,6 +1911,9 @@ func _make_field_scenario_selector(key: String, values: Array) -> OptionButton:
 func _make_field_side_condition_panel(relation: String, title_text: String) -> PanelContainer:
 	var panel := _make_field_condition_panel(title_text)
 	var content_box := panel.get_meta("content") as VBoxContainer
+	var defense_label := _make_label(_t("battle.calc.condition.defensive_effects").to_upper(), 8, TEXT_MUTED)
+	defense_label.clip_text = false
+	content_box.add_child(defense_label)
 	var grid := GridContainer.new()
 	grid.columns = 2
 	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1909,6 +1922,18 @@ func _make_field_side_condition_panel(relation: String, title_text: String) -> P
 	content_box.add_child(grid)
 	for condition: Dictionary in FIELD_SIDE_CONDITIONS:
 		grid.add_child(_make_field_side_condition_button(relation, condition))
+	var hazard_label := _make_label(_t("battle.calc.condition.entry_hazards").to_upper(), 8, TEXT_MUTED)
+	hazard_label.clip_text = false
+	content_box.add_child(hazard_label)
+	var hazard_grid := GridContainer.new()
+	hazard_grid.columns = 2
+	hazard_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hazard_grid.add_theme_constant_override("h_separation", 5)
+	hazard_grid.add_theme_constant_override("v_separation", 5)
+	content_box.add_child(hazard_grid)
+	for condition: Dictionary in FIELD_SIDE_HAZARDS:
+		hazard_grid.add_child(_make_field_side_condition_button(relation, condition))
+	hazard_grid.add_child(_make_field_side_spikes_selector(relation))
 	var status_label := _make_label(_t("battle.calc.condition.status").to_upper(), 8, TEXT_MUTED)
 	status_label.clip_text = false
 	content_box.add_child(status_label)
@@ -1925,7 +1950,7 @@ func _make_pokemon_status_selector(relation: String) -> OptionButton:
 		var option_label := _get_status_label(status)
 		if status == "":
 			var current_label := _get_status_label(confirmed_status)
-			option_label = _t("battle.calc.condition_current", {"value": current_label})
+			option_label = _t("battle.calc.condition.current", {"value": current_label})
 		selector.add_item(option_label)
 		selector.set_item_metadata(selector.item_count - 1, status)
 		if confirmed_status == "" and status == scenario_status:
@@ -1992,6 +2017,44 @@ func _on_field_side_condition_toggled(enabled: bool, scenario_key: String) -> vo
 	_render_current_state()
 
 
+func _make_field_side_spikes_selector(relation: String) -> OptionButton:
+	var selector := OptionButton.new()
+	selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var public_layers := _get_public_side_spikes_layers(relation)
+	var scenario_key := "%sSpikes" % relation
+	var selected_layers := public_layers if public_layers > 0 else clampi(int(field_scenario.get(scenario_key, 0)), 0, 3)
+	for layers in range(0, 4):
+		var label := _get_spikes_option_label(layers)
+		if public_layers > 0 and layers == public_layers:
+			label = _t("battle.calc.condition.current", {"value": label})
+		selector.add_item(label)
+		selector.set_item_metadata(selector.item_count - 1, layers)
+		if layers == selected_layers:
+			selector.select(selector.item_count - 1)
+	selector.disabled = public_layers > 0
+	selector.tooltip_text = _t("battle.calc.condition_confirmed_tooltip") if selector.disabled else _t("battle.calc.hazard_scenario_tooltip")
+	if not selector.disabled:
+		selector.item_selected.connect(_on_field_side_spikes_selected.bind(selector, scenario_key))
+	_apply_calcdex_dropdown_style(selector, 28.0, 10)
+	return selector
+
+
+func _get_spikes_option_label(layers: int) -> String:
+	if layers <= 0:
+		return _t("battle.calc.condition.spikes_none")
+	return _t("battle.calc.condition.spikes_layers", {"layers": layers})
+
+
+func _on_field_side_spikes_selected(index: int, selector: OptionButton, scenario_key: String) -> void:
+	var layers := clampi(int(selector.get_item_metadata(index)), 0, 3)
+	if layers > 0:
+		field_scenario[scenario_key] = layers
+	else:
+		field_scenario.erase(scenario_key)
+	matchup_selection_changed.emit()
+	_render_current_state()
+
+
 func _on_field_scenario_selected(index: int, selector: OptionButton, key: String) -> void:
 	var value := str(selector.get_item_metadata(index))
 	if value == "":
@@ -2007,7 +2070,7 @@ func _get_field_scenario_option_label(key: String, value: String) -> String:
 		return _get_field_condition_value_label(key, value)
 	var current_value := _get_public_global_field_value(key)
 	var current_label := _t("common.none") if current_value == "" else _get_field_condition_value_label(key, current_value)
-	return _t("battle.calc.condition_current", {"value": current_label})
+	return _t("battle.calc.condition.current", {"value": current_label})
 
 
 func _get_field_condition_value_label(key: String, value: String) -> String:
@@ -2030,6 +2093,15 @@ func _get_effective_field_condition_labels() -> Array[String]:
 			var suffix := str(condition.get("suffix", ""))
 			if bool(field_scenario.get("%s%s" % [relation, suffix], false)) or _is_public_side_condition_active(relation, suffix):
 				labels.append("%s: %s" % [relation_label, _t(str(condition.get("label_key", "")))])
+		for condition: Dictionary in FIELD_SIDE_HAZARDS:
+			var suffix := str(condition.get("suffix", ""))
+			if bool(field_scenario.get("%s%s" % [relation, suffix], false)) or _is_public_side_condition_active(relation, suffix):
+				labels.append("%s: %s" % [relation_label, _t(str(condition.get("label_key", "")))])
+		var spikes := _get_public_side_spikes_layers(relation)
+		if spikes <= 0:
+			spikes = clampi(int(field_scenario.get("%sSpikes" % relation, 0)), 0, 3)
+		if spikes > 0:
+			labels.append("%s: %s" % [relation_label, _get_spikes_option_label(spikes)])
 		var status := _get_effective_pokemon_status(relation)
 		if status != "":
 			labels.append("%s: %s" % [relation_label, _get_status_label(status)])
@@ -2115,6 +2187,7 @@ func _is_public_side_condition_active(relation: String, suffix: String) -> bool:
 		"Reflect": "reflect",
 		"LightScreen": "lightscreen",
 		"AuroraVeil": "auroraveil",
+		"StealthRock": "stealthrock",
 	}.get(suffix, ""))
 	for effect_value: Variant in _get_public_field_effects():
 		var effect := _as_dictionary(effect_value)
@@ -2122,6 +2195,19 @@ func _is_public_side_condition_active(relation: String, suffix: String) -> bool:
 				and _normalize_field_effect_id(str(effect.get("effectId", ""))) == expected_effect_id:
 			return true
 	return false
+
+
+func _get_public_side_spikes_layers(relation: String) -> int:
+	var viewer_side := str(knowledge_snapshot.get("viewerSide", ""))
+	if viewer_side not in ["p1", "p2"]:
+		return 0
+	var expected_side := viewer_side if relation == "own" else ("p2" if viewer_side == "p1" else "p1")
+	for effect_value: Variant in _get_public_field_effects():
+		var effect := _as_dictionary(effect_value)
+		if str(effect.get("side", "")) == expected_side \
+				and _normalize_field_effect_id(str(effect.get("effectId", ""))) == "spikes":
+			return clampi(int(effect.get("layers", 1)), 1, 3)
+	return 0
 
 
 func _get_public_field_effects() -> Array:

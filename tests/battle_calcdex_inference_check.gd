@@ -57,7 +57,7 @@ func _response(revision: Dictionary) -> Dictionary:
 		"description": "safe", "koProjection": {"state": "available", "chance": 1.0, "hits": 2, "text": "guaranteed 2HKO", "basedOn": "public_percent_upper_bound", "effects": []}, "warningCodes": [],
 	}
 	return {
-		"success": true, "schemaVersion": 1, "routeRevision": "calc5.3-2026-08-09",
+		"success": true, "schemaVersion": 1, "routeRevision": "calc5.4-2026-08-09",
 		"safeInputFingerprint": "b".repeat(64), "projectionRevision": revision,
 		"mechanicsManifest": {"contractRevision": "calc0-2026-08-08", "damageCalcVersion": "0.10.0", "showdownVersion": "0.11.10", "formatDataFingerprint": "fd94c49ab26ddf8daff2259dfc2b3857f957e37b166557412c4fe303c87e54b0"},
 		"presetRevision": "test-v1", "presetFingerprint": "d".repeat(64),

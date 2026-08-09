@@ -5,7 +5,7 @@ class_name BattleCalcdexCandidates
 const SNAPSHOT := preload("res://scripts/battle/battle_calcdex_snapshot.gd")
 const MATCHUP := preload("res://scripts/battle/battle_calcdex_matchup.gd")
 const SCHEMA_VERSION := 1
-const ROUTE_REVISION := "calc4.6-2026-08-09"
+const ROUTE_REVISION := "calc4.7-2026-08-09"
 
 
 static func normalize_response(response: Dictionary, expected_revision: Dictionary) -> Dictionary:

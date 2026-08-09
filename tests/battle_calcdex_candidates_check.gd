@@ -142,6 +142,8 @@ func _run() -> void:
 	condition_snapshot["field"]["effects"] = [
 		{"effectId": "Rain Dance", "scope": "field"},
 		{"effectId": "Light Screen", "scope": "side", "side": "p1"},
+		{"effectId": "Stealth Rock", "scope": "side", "side": "p1"},
+		{"effectId": "Spikes", "scope": "side", "side": "p1", "layers": 2},
 	]
 	panel.set_knowledge_snapshot(condition_snapshot)
 	panel.advanced_scenario_expanded = true
@@ -153,18 +155,43 @@ func _run() -> void:
 		panel._t("battle.calc.conditions_opponent_side").to_upper(),
 		panel._t("battle.calc.condition.weather").to_upper(),
 		panel._t("battle.calc.condition.terrain").to_upper(),
+		panel._t("battle.calc.condition.entry_hazards").to_upper(),
 		panel._t("battle.calc.condition.status").to_upper(),
 	]:
 		if not _has_label_text(panel, condition_label):
 			_fail("Battle-condition editor is missing the clearly labeled section %s" % condition_label)
 			return
-	if panel._get_field_scenario_option_label("weather", "") != panel._t("battle.calc.condition_current", {"value": panel._t("battle.calc.condition.weather.rain")}):
+	if panel._get_field_scenario_option_label("weather", "") != panel._t("battle.calc.condition.current", {"value": panel._t("battle.calc.condition.weather.rain")}):
 		_fail("Battle-condition selectors must identify the confirmed current weather")
 		return
 	var confirmed_light_screen := _find_button_text(panel, panel._t("battle.calc.condition.light_screen"))
 	if confirmed_light_screen == null or not confirmed_light_screen.button_pressed or not confirmed_light_screen.disabled:
 		_fail("Confirmed public side conditions must be visible, active, and protected from manual removal")
 		return
+	var confirmed_stealth_rock := _find_button_text(panel, panel._t("battle.field.effect.stealth_rock"))
+	if confirmed_stealth_rock == null or not confirmed_stealth_rock.button_pressed or not confirmed_stealth_rock.disabled:
+		_fail("Confirmed Stealth Rock must be visible, active, and protected from manual removal")
+		return
+	var confirmed_spikes := panel._make_field_side_spikes_selector("own")
+	if not confirmed_spikes.disabled or int(confirmed_spikes.get_item_metadata(confirmed_spikes.selected)) != 2 \
+			or not confirmed_spikes.get_item_text(confirmed_spikes.selected).contains("2"):
+		_fail("Confirmed Spikes layers must be visible and protected from manual removal")
+		return
+	confirmed_spikes.queue_free()
+	panel._on_field_side_condition_toggled(true, "opponentStealthRock")
+	var scenario_spikes := panel._make_field_side_spikes_selector("opponent")
+	panel._on_field_side_spikes_selected(3, scenario_spikes, "opponentSpikes")
+	if panel.get_field_scenario().get("defenderStealthRock") != true or panel.get_field_scenario().get("defenderSpikes") != 3:
+		_fail("Opponent entry-hazard scenarios must map to the defender while viewing damage dealt")
+		return
+	panel.active_subtab = panel.SUBTAB_THEIR_DAMAGE
+	if panel.get_field_scenario().get("attackerStealthRock") != true or panel.get_field_scenario().get("attackerSpikes") != 3:
+		_fail("Entry hazards must stay attached to the same battle side when changing damage direction")
+		return
+	panel.active_subtab = panel.SUBTAB_YOUR_DAMAGE
+	panel._on_field_side_condition_toggled(false, "opponentStealthRock")
+	panel._on_field_side_spikes_selected(0, scenario_spikes, "opponentSpikes")
+	scenario_spikes.queue_free()
 	panel._on_field_side_condition_toggled(true, "opponentReflect")
 	if panel.get_field_scenario().get("defenderReflect") != true:
 		_fail("Opponent-side conditions must map to the defender while viewing damage dealt")
@@ -349,7 +376,7 @@ func _response(revision: Dictionary) -> Dictionary:
 		"warningCodes": [],
 	}
 	return {
-		"success": true, "schemaVersion": 1, "routeRevision": "calc4.6-2026-08-09",
+		"success": true, "schemaVersion": 1, "routeRevision": "calc4.7-2026-08-09",
 		"safeInputFingerprint": "b".repeat(64), "projectionRevision": revision.duplicate(true),
 		"mechanicsManifest": {"contractRevision": "calc0-2026-08-08", "damageCalcVersion": "0.10.0", "showdownVersion": "0.11.10", "formatDataFingerprint": "fd94c49ab26ddf8daff2259dfc2b3857f957e37b166557412c4fe303c87e54b0"},
 		"presetRevision": "test-v1", "presetFingerprint": "c".repeat(64),
