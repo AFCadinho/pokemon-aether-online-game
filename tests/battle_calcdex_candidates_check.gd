@@ -179,8 +179,12 @@ func _run() -> void:
 	panel.active_subtab = "their"
 	panel.show_response(reverse_response)
 	await process_frame
-	if not _has_button_text(panel, "U-turn") or _count_button_text(panel, panel._t("battle.calc.add_move")) != 3:
+	if not _has_line_edit_text(panel, "U-turn") or _count_line_edit_placeholder(panel, panel._t("battle.calc.add_move")) != 4:
 		_fail("Damage taken must render four directly editable opponent move slots")
+		return
+	panel._on_inline_move_text_submitted("Aura Sphere", 1)
+	if panel.defender_assumptions.get("assumedMoves") != ["U-turn", "Aura Sphere"]:
+		_fail("pressing Enter in an opponent result row must commit that move in place")
 		return
 	print("PASS battle_calcdex_candidates_check")
 	quit(0)
@@ -225,14 +229,19 @@ func _selection_snapshot() -> Dictionary:
 	}
 
 
-func _has_button_text(node: Node, text: String) -> bool:
-	return _count_button_text(node, text) > 0
-
-
-func _count_button_text(node: Node, text: String) -> int:
-	var count := 1 if node is Button and (node as Button).text == text else 0
+func _has_line_edit_text(node: Node, text: String) -> bool:
+	if node is LineEdit and (node as LineEdit).text == text:
+		return true
 	for child: Node in node.get_children():
-		count += _count_button_text(child, text)
+		if _has_line_edit_text(child, text):
+			return true
+	return false
+
+
+func _count_line_edit_placeholder(node: Node, text: String) -> int:
+	var count := 1 if node is LineEdit and (node as LineEdit).placeholder_text == text else 0
+	for child: Node in node.get_children():
+		count += _count_line_edit_placeholder(child, text)
 	return count
 
 

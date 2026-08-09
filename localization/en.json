@@ -2259,6 +2259,7 @@
   "battle.calc.stat_modifiers": "Opponent stat stages",
   "battle.calc.opponent_moves": "Opponent moves",
   "battle.calc.add_move": "+ Add move",
+  "battle.calc.inline_move_hint": "Type a move here, choose a suggestion, or press Enter",
   "battle.calc.reset_setup_tooltip": "Clear opponent assumptions and battle conditions",
   "battle.calc.advanced_scenario": "Advanced field scenario",
   "battle.calc.assumptions": "Assumptions: {values}",

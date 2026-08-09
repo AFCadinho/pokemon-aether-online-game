@@ -2259,6 +2259,7 @@
   "battle.calc.stat_modifiers": "Stat modifiers tegenstander",
   "battle.calc.opponent_moves": "Moves van tegenstander",
   "battle.calc.add_move": "+ Move kiezen",
+  "battle.calc.inline_move_hint": "Typ hier een move, kies een suggestie of druk op Enter",
   "battle.calc.reset_setup_tooltip": "Wis aannames over de tegenstander en battlecondities",
   "battle.calc.advanced_scenario": "Geavanceerd veldscenario",
   "battle.calc.assumptions": "Aannames: {values}",

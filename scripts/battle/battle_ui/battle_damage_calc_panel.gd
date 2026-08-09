@@ -105,6 +105,7 @@ var ability_assumption_input: LineEdit
 var move_assumption_input: LineEdit
 var catalog_suggestions_box: VBoxContainer
 var catalog_results_box: VBoxContainer
+var inline_move_result_boxes: Dictionary = {}
 var assumption_change_timer: Timer
 var catalog_search_timer: Timer
 var active_selector: String = SELECTOR_NONE
@@ -248,6 +249,7 @@ func close_assumption_popover() -> void:
 	move_assumption_input = null
 	catalog_suggestions_box = null
 	catalog_results_box = null
+	inline_move_result_boxes.clear()
 	active_selector = SELECTOR_NONE
 	active_move_slot = -1
 	selector_query = ""
@@ -965,6 +967,7 @@ func _add_move_results_table_shell() -> VBoxContainer:
 
 func _add_editable_opponent_move_results_table(results: Array, defender: Dictionary) -> void:
 	var table_box := _add_move_results_table_shell()
+	inline_move_result_boxes.clear()
 	var move_names := _get_visible_opponent_move_names(results)
 	for slot in range(4):
 		var move_name := str(move_names[slot]).strip_edges() if slot < move_names.size() else ""
@@ -973,6 +976,17 @@ func _add_editable_opponent_move_results_table(results: Array, defender: Diction
 			_add_empty_editable_move_row(table_box, slot, move_name)
 		else:
 			_add_move_result_row(matching_result, defender, table_box, slot, slot)
+		_add_inline_move_results_box(table_box, slot)
+
+
+func _add_inline_move_results_box(parent: VBoxContainer, slot: int) -> void:
+	var results_box := VBoxContainer.new()
+	results_box.visible = false
+	results_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	results_box.clip_contents = true
+	results_box.add_theme_constant_override("separation", 2)
+	parent.add_child(results_box)
+	inline_move_result_boxes[slot] = results_box
 
 
 func _find_move_result(results: Array, move_name: String) -> Dictionary:
@@ -1098,25 +1112,25 @@ func _add_move_result_row(result: Dictionary, defender: Dictionary, parent: VBox
 	parent.add_child(panel)
 
 
-func _make_result_move_selector_button(slot: int, move_name: String) -> Button:
-	var button := Button.new()
-	button.text = move_name if move_name != "" else _t("battle.calc.add_move")
-	button.tooltip_text = button.text
-	button.focus_mode = Control.FOCUS_ALL
-	button.custom_minimum_size = Vector2(0, 28)
-	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.clip_text = true
-	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-	button.icon = DROPDOWN_ARROW
-	button.icon_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	button.expand_icon = false
-	button.add_theme_font_size_override("font_size", 14 if move_name != "" else 12)
-	button.add_theme_color_override("font_color", TEXT_PRIMARY if move_name != "" else TEXT_MUTED)
-	button.add_theme_stylebox_override("normal", _make_stylebox(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 5, 4.0, 1.0))
-	button.add_theme_stylebox_override("hover", _make_stylebox(TAB_ACTIVE_BG, CHIP_BORDER, 5, 4.0, 1.0))
-	button.add_theme_stylebox_override("pressed", _make_stylebox(TAB_ACTIVE_BG.lightened(0.05), TEXT_ACCENT, 5, 4.0, 1.0))
-	button.pressed.connect(_on_move_slot_pressed.bind(slot))
-	return button
+func _make_result_move_selector_button(slot: int, move_name: String) -> LineEdit:
+	var input := LineEdit.new()
+	input.text = move_name
+	input.placeholder_text = _t("battle.calc.add_move")
+	input.tooltip_text = _t("battle.calc.inline_move_hint")
+	input.custom_minimum_size = Vector2(0, 30)
+	input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	input.max_length = 100
+	input.add_theme_font_size_override("font_size", 14 if move_name != "" else 12)
+	input.add_theme_color_override("font_color", TEXT_PRIMARY)
+	input.add_theme_color_override("font_placeholder_color", TEXT_MUTED)
+	input.add_theme_icon_override("right_icon", DROPDOWN_ARROW)
+	input.add_theme_stylebox_override("normal", _make_stylebox(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 5, 4.0, 1.0))
+	input.add_theme_stylebox_override("focus", _make_stylebox(TAB_ACTIVE_BG, CHIP_BORDER, 5, 4.0, 1.0))
+	input.focus_entered.connect(_on_inline_move_focus_entered.bind(slot, input))
+	input.focus_exited.connect(_on_catalog_assumption_focus_exited.bind(SELECTOR_MOVE))
+	input.text_changed.connect(_on_inline_move_text_changed.bind(slot, input))
+	input.text_submitted.connect(_on_inline_move_text_submitted.bind(slot))
+	return input
 
 
 func _make_result_row_style(primary_result_label: String, row_index: int) -> StyleBoxFlat:
@@ -1454,19 +1468,48 @@ func _set_opponent_boost_stage(stat_key: String, stage: int) -> void:
 	_render_current_state()
 
 
-func _on_move_slot_pressed(slot: int) -> void:
-	if active_selector == SELECTOR_MOVE and active_move_slot == slot:
-		_close_assumption_suggestions()
-		return
+func _on_inline_move_focus_entered(slot: int, input: LineEdit) -> void:
+	if catalog_search_timer != null:
+		catalog_search_timer.stop()
 	active_selector = SELECTOR_MOVE
 	active_move_slot = slot
-	var moves := _get_visible_opponent_move_names(_as_array(last_response.get("results", [])))
-	selector_query = str(moves[slot]).strip_edges() if slot < moves.size() else ""
+	move_assumption_input = input
+	selector_query = input.text.strip_edges()
 	selector_results = []
 	selector_loading = true
 	selector_error = ""
-	_render_current_state()
+	for box_value: Variant in inline_move_result_boxes.values():
+		var box := box_value as VBoxContainer
+		if box != null:
+			box.visible = false
+	catalog_results_box = inline_move_result_boxes.get(slot) as VBoxContainer
+	if catalog_results_box != null:
+		catalog_results_box.visible = true
+	_refresh_catalog_results()
 	_request_active_catalog()
+
+
+func _on_inline_move_text_changed(text: String, slot: int, input: LineEdit) -> void:
+	if is_syncing_assumption_controls:
+		return
+	active_selector = SELECTOR_MOVE
+	active_move_slot = slot
+	move_assumption_input = input
+	selector_query = text
+	if catalog_search_timer == null:
+		_request_active_catalog()
+	else:
+		catalog_search_timer.start()
+
+
+func _on_inline_move_text_submitted(text: String, slot: int) -> void:
+	active_selector = SELECTOR_MOVE
+	active_move_slot = slot
+	var move_name := text.strip_edges()
+	if move_name == "":
+		_on_catalog_assumption_clear_pressed(SELECTOR_MOVE)
+	else:
+		_on_selector_result_pressed({"name": move_name, "calcName": move_name})
 
 
 func _get_visible_opponent_move_names(results: Array = []) -> Array[String]:
@@ -1775,12 +1818,12 @@ func _render_active_assumption_editor(assumptions: Dictionary) -> void:
 		catalog_suggestions_box.remove_child(child)
 		child.queue_free()
 
-	catalog_suggestions_box.visible = active_selector != SELECTOR_NONE
-	if active_selector == SELECTOR_NONE:
+	catalog_suggestions_box.visible = active_selector != SELECTOR_NONE and active_selector != SELECTOR_MOVE
+	if active_selector == SELECTOR_NONE or active_selector == SELECTOR_MOVE:
 		return
 
 	match active_selector:
-		SELECTOR_ITEM, SELECTOR_ABILITY, SELECTOR_MOVE:
+		SELECTOR_ITEM, SELECTOR_ABILITY:
 			_render_catalog_assumption_editor(active_selector, assumptions)
 		SELECTOR_NATURE:
 			_render_nature_assumption_editor(assumptions)
@@ -1796,11 +1839,7 @@ func _render_catalog_assumption_editor(kind: String, assumptions: Dictionary) ->
 	catalog_suggestions_box.add_child(row)
 
 	var input := LineEdit.new()
-	if kind == SELECTOR_MOVE:
-		var moves := _get_visible_opponent_move_names(_as_array(last_response.get("results", [])))
-		input.text = str(moves[active_move_slot]).strip_edges() if active_move_slot >= 0 and active_move_slot < moves.size() else ""
-	else:
-		input.text = _get_catalog_assumption_value(assumptions, kind)
+	input.text = _get_catalog_assumption_value(assumptions, kind)
 	input.placeholder_text = _get_catalog_search_placeholder(kind)
 	input.custom_minimum_size = Vector2(0, 24)
 	input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1810,7 +1849,7 @@ func _render_catalog_assumption_editor(kind: String, assumptions: Dictionary) ->
 	input.text_changed.connect(_on_catalog_assumption_text_changed.bind(kind))
 	row.add_child(input)
 
-	var clear_button := _make_small_button(_t("common.clear") if kind == SELECTOR_MOVE else _t("common.none"), _on_catalog_assumption_clear_pressed.bind(kind))
+	var clear_button := _make_small_button(_t("common.none"), _on_catalog_assumption_clear_pressed.bind(kind))
 	clear_button.custom_minimum_size = Vector2(46, 22)
 	row.add_child(clear_button)
 
@@ -1818,8 +1857,6 @@ func _render_catalog_assumption_editor(kind: String, assumptions: Dictionary) ->
 		item_assumption_input = input
 	elif kind == SELECTOR_ABILITY:
 		ability_assumption_input = input
-	else:
-		move_assumption_input = input
 
 	catalog_results_box = VBoxContainer.new()
 	catalog_results_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -2103,6 +2140,8 @@ func _close_assumption_suggestions_if_focus_left(kind: String) -> void:
 		return
 	if catalog_suggestions_box != null and focus_owner != null and catalog_suggestions_box.is_ancestor_of(focus_owner):
 		return
+	if catalog_results_box != null and focus_owner != null and catalog_results_box.is_ancestor_of(focus_owner):
+		return
 	_close_assumption_suggestions()
 
 
@@ -2196,7 +2235,9 @@ func _refresh_catalog_results() -> void:
 	if not catalog_results_box.visible:
 		return
 
-	var clear_button := _make_selector_result_button(_t("battle.calc.unknown_none"), _t("common.clear"), Callable(self, "_on_catalog_assumption_clear_pressed").bind(active_selector))
+	var clear_title := _t("common.clear") if active_selector == SELECTOR_MOVE else _t("battle.calc.unknown_none")
+	var clear_subtitle := "" if active_selector == SELECTOR_MOVE else _t("common.clear")
+	var clear_button := _make_selector_result_button(clear_title, clear_subtitle, Callable(self, "_on_catalog_assumption_clear_pressed").bind(active_selector))
 	catalog_results_box.add_child(clear_button)
 
 	if selector_loading:

@@ -2259,6 +2259,7 @@
   "battle.calc.stat_modifiers": "Estágios de atributos do oponente",
   "battle.calc.opponent_moves": "Movimentos do oponente",
   "battle.calc.add_move": "+ Escolher movimento",
+  "battle.calc.inline_move_hint": "Digite um movimento, escolha uma sugestão ou pressione Enter",
   "battle.calc.reset_setup_tooltip": "Limpar suposições do adversário e condições da batalha",
   "battle.calc.advanced_scenario": "Cenário de campo avançado",
   "battle.calc.assumptions": "Suposições: {values}",
