@@ -54,15 +54,16 @@ func _run() -> void:
 	panel.show_response(response)
 	_assert(not panel.last_response.is_empty(), "reverse tab must accept a matching damage-taken response")
 	await process_frame
-	var selectors := _collect_option_buttons(content)
-	_assert(selectors.size() >= 2, "the matchup profile selectors must render")
-	if selectors.size() >= 2:
+	var viewer_selector := content.find_child("ViewerPokemonSelector", true, false) as OptionButton
+	var opponent_selector := content.find_child("OpponentPokemonSelector", true, false) as OptionButton
+	_assert(viewer_selector != null and opponent_selector != null, "the matchup profile selectors must render")
+	if viewer_selector != null and opponent_selector != null:
 		_assert(
-			str(selectors[0].get_item_metadata(selectors[0].selected)).begins_with("viewer:"),
+			str(viewer_selector.get_item_metadata(viewer_selector.selected)).begins_with("viewer:"),
 			"the viewer must remain on the left in damage taken",
 		)
 		_assert(
-			str(selectors[1].get_item_metadata(selectors[1].selected)).begins_with("opponent:"),
+			str(opponent_selector.get_item_metadata(opponent_selector.selected)).begins_with("opponent:"),
 			"the opponent must remain on the right in damage taken",
 		)
 	_assert(_has_line_edit_text(content, "Thunderbolt"), "damage taken must keep the opponent move directly editable")
@@ -89,7 +90,7 @@ func _response(revision: Dictionary) -> Dictionary:
 	return {
 		"success": true,
 		"schemaVersion": 1,
-		"routeRevision": "calc3.7-2026-08-09",
+		"routeRevision": "calc3.8-2026-08-10",
 		"safeInputFingerprint": "b".repeat(64),
 		"projectionRevision": revision.duplicate(true),
 		"mechanicsManifest": {
@@ -136,15 +137,6 @@ func _assert(condition: bool, message: String) -> void:
 		return
 	push_error(message)
 	quit(1)
-
-
-func _collect_option_buttons(node: Node) -> Array[OptionButton]:
-	var result: Array[OptionButton] = []
-	if node is OptionButton:
-		result.append(node as OptionButton)
-	for child: Node in node.get_children():
-		result.append_array(_collect_option_buttons(child))
-	return result
 
 
 func _has_line_edit_text(node: Node, expected: String) -> bool:

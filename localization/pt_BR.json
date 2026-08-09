@@ -2315,7 +2315,7 @@
   "battle.calc.condition.spikes_none": "Spikes · Nenhum",
   "battle.calc.condition.spikes_layers": "Spikes ×{layers}",
   "battle.calc.hazard_scenario_tooltip": "Escolha riscos de entrada hipotéticos para este lado. Riscos públicos confirmados sempre têm prioridade.",
-  "battle.calc.status_scenario_tooltip": "Escolha um status hipotético para o adversário. O status público confirmado sempre tem prioridade.",
+  "battle.calc.status_scenario_tooltip": "Escolha um status hipotético para o Pokémon defensor. O status público confirmado sempre tem prioridade.",
   "battle.calc.condition.current": "Atual · {value}",
   "battle.calc.condition.reflect": "Reflect",
   "battle.calc.condition.light_screen": "Light Screen",

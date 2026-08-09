@@ -252,6 +252,11 @@ func show_response(response: Dictionary) -> void:
 func set_defender_assumptions(assumptions: Dictionary, edited_fields: Dictionary = {}) -> void:
 	defender_assumptions = _duplicate_dictionary(assumptions)
 	edited_assumption_fields = _duplicate_dictionary(edited_fields)
+	var legacy_status := str(defender_assumptions.get("status", "")).strip_edges().to_lower()
+	if legacy_status in POKEMON_STATUS_VALUES and legacy_status != "":
+		field_scenario["opponentStatus"] = legacy_status
+	defender_assumptions.erase("status")
+	edited_assumption_fields.erase("status")
 	if _is_catalog_search_active():
 		return
 	if is_inside_tree():
@@ -263,6 +268,7 @@ func set_knowledge_snapshot(snapshot: Dictionary) -> void:
 	knowledge_snapshot = snapshot.duplicate(true)
 	selected_viewer_ref = _resolve_selected_ref("viewer", selected_viewer_ref)
 	selected_opponent_ref = _resolve_selected_ref("opponent", selected_opponent_ref)
+	_clear_confirmed_status_scenarios()
 	if previous_opponent_ref != "" and selected_opponent_ref != previous_opponent_ref:
 		_clear_sample_sets()
 	_request_sample_sets_if_needed()
@@ -472,6 +478,9 @@ func get_field_scenario() -> Dictionary:
 		if value != "":
 			payload[key] = value
 	var target_relation := _get_condition_target_relation()
+	var target_status := str(field_scenario.get("%sStatus" % target_relation, "")).strip_edges().to_lower()
+	if target_status in POKEMON_STATUS_VALUES and target_status != "":
+		payload["defenderStatus"] = target_status
 	for condition: Dictionary in FIELD_SIDE_CONDITIONS:
 		var suffix := str(condition.get("suffix", ""))
 		if bool(field_scenario.get("%s%s" % [target_relation, suffix], false)):
@@ -809,6 +818,7 @@ func _get_sample_set_tooltip(option: Dictionary) -> String:
 
 func _make_pokemon_selector(relation: String, is_attacker: bool) -> OptionButton:
 	var selector := OptionButton.new()
+	selector.name = "ViewerPokemonSelector" if relation == "viewer" else "OpponentPokemonSelector"
 	selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	selector.tooltip_text = _t("battle.calc.attacker_selector" if is_attacker else "battle.calc.defender_selector")
 	var collection: Array = _as_array(knowledge_snapshot.get("viewerPokemon" if relation == "viewer" else "opponentPokemon", []))
@@ -980,10 +990,11 @@ func _make_matchup_side(
 	var detail_label := _make_label(details, 10, TEXT_SECONDARY)
 	detail_label.tooltip_text = details
 	detail_row.add_child(detail_label)
-	var confirmed_status := _get_public_pokemon_status(relation) if not knowledge_snapshot.is_empty() else status
-	if relation == "opponent" and confirmed_status == "" and not knowledge_snapshot.is_empty():
-		var status_selector := _make_pokemon_status_selector(relation, true)
-		status_selector.name = "OpponentStatusSelector"
+	var status_relation := "own" if relation == "viewer" else "opponent"
+	var confirmed_status := _get_public_pokemon_status(status_relation) if not knowledge_snapshot.is_empty() else status
+	if status_relation == _get_condition_target_relation() and confirmed_status == "" and not knowledge_snapshot.is_empty():
+		var status_selector := _make_pokemon_status_selector(status_relation, true)
+		status_selector.name = "DefenderStatusSelector"
 		status_selector.custom_minimum_size.x = 108
 		status_selector.size_flags_horizontal = Control.SIZE_SHRINK_END
 		detail_row.add_child(status_selector)
@@ -2069,7 +2080,8 @@ func _make_pokemon_status_selector(relation: String, compact: bool = false) -> O
 	var selector := OptionButton.new()
 	selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	var confirmed_status := _get_public_pokemon_status(relation)
-	var scenario_status := str(defender_assumptions.get("status", "")) if relation == "opponent" else ""
+	var scenario_key := "%sStatus" % relation
+	var scenario_status := str(field_scenario.get(scenario_key, "")).strip_edges().to_lower()
 	for status: String in POKEMON_STATUS_VALUES:
 		var option_label := _get_status_label(status)
 		if status == "":
@@ -2082,30 +2094,29 @@ func _make_pokemon_status_selector(relation: String, compact: bool = false) -> O
 		selector.set_item_metadata(selector.item_count - 1, status)
 		if confirmed_status == "" and status == scenario_status:
 			selector.select(selector.item_count - 1)
-	selector.disabled = relation == "own" or confirmed_status != ""
+	selector.disabled = confirmed_status != ""
 	if selector.disabled:
 		selector.select(0)
 		selector.tooltip_text = _t("battle.calc.condition_confirmed_tooltip")
 	else:
 		selector.tooltip_text = _t("battle.calc.status_scenario_tooltip")
-		selector.item_selected.connect(_on_pokemon_status_selected.bind(selector))
+		selector.item_selected.connect(_on_pokemon_status_selected.bind(selector, relation))
 	_apply_calcdex_dropdown_style(selector, 28.0 if compact else 32.0, 10 if compact else 11)
 	if selector.disabled:
 		selector.add_theme_color_override("font_disabled_color", TEXT_SECONDARY)
 	return selector
 
 
-func _on_pokemon_status_selected(index: int, selector: OptionButton) -> void:
-	if _get_public_pokemon_status("opponent") != "":
+func _on_pokemon_status_selected(index: int, selector: OptionButton, relation: String = "opponent") -> void:
+	if relation not in ["own", "opponent"] or _get_public_pokemon_status(relation) != "":
 		return
 	var status := str(selector.get_item_metadata(index)).to_lower()
+	var scenario_key := "%sStatus" % relation
 	_mark_sample_set_custom()
 	if status == "":
-		defender_assumptions.erase("status")
-		edited_assumption_fields.erase("status")
+		field_scenario.erase(scenario_key)
 	else:
-		defender_assumptions["status"] = status
-		edited_assumption_fields["status"] = true
+		field_scenario[scenario_key] = status
 	_emit_defender_assumptions_changed()
 	_render_current_state()
 
@@ -2241,11 +2252,16 @@ func _get_effective_pokemon_status(relation: String) -> String:
 	var confirmed_status := _get_public_pokemon_status(relation)
 	if confirmed_status != "":
 		return confirmed_status
-	if relation == "opponent":
-		var scenario_status := str(defender_assumptions.get("status", "")).strip_edges().to_lower()
-		if scenario_status in POKEMON_STATUS_VALUES:
-			return scenario_status
+	var scenario_status := str(field_scenario.get("%sStatus" % relation, "")).strip_edges().to_lower()
+	if scenario_status in POKEMON_STATUS_VALUES:
+		return scenario_status
 	return ""
+
+
+func _clear_confirmed_status_scenarios() -> void:
+	for relation: String in ["own", "opponent"]:
+		if _get_public_pokemon_status(relation) != "":
+			field_scenario.erase("%sStatus" % relation)
 
 
 func _get_public_pokemon_status(relation: String) -> String:

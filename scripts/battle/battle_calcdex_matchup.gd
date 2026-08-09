@@ -4,7 +4,7 @@ class_name BattleCalcdexMatchup
 
 const SNAPSHOT := preload("res://scripts/battle/battle_calcdex_snapshot.gd")
 const SCHEMA_VERSION := 1
-const ROUTE_REVISION := "calc3.7-2026-08-09"
+const ROUTE_REVISION := "calc3.8-2026-08-10"
 const DIRECTIONS := ["own-to-opponent", "opponent-to-own"]
 const RESULT_STATES := ["supported", "unsupported", "error"]
 const MOVE_SOURCES := ["owned_exact", "public_reveal", "user_scenario", "public_usage_prior", "curated_prior"]

@@ -2315,7 +2315,7 @@
   "battle.calc.condition.spikes_none": "Spikes · Geen",
   "battle.calc.condition.spikes_layers": "Spikes ×{layers}",
   "battle.calc.hazard_scenario_tooltip": "Kies hypothetische entry hazards voor deze kant. Bevestigde openbare hazards hebben altijd voorrang.",
-  "battle.calc.status_scenario_tooltip": "Kies een hypothetische status voor de tegenstander. Bevestigde openbare status heeft altijd voorrang.",
+  "battle.calc.status_scenario_tooltip": "Kies een hypothetische status voor de verdedigende Pokémon. Bevestigde openbare status heeft altijd voorrang.",
   "battle.calc.condition.current": "Huidig · {value}",
   "battle.calc.condition.reflect": "Reflect",
   "battle.calc.condition.light_screen": "Light Screen",

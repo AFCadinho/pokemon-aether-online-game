@@ -174,7 +174,7 @@ func _run() -> void:
 	panel.advanced_scenario_expanded = true
 	panel._render_current_state()
 	await process_frame
-	var profile_status_selector := panel.find_child("OpponentStatusSelector", true, false) as OptionButton
+	var profile_status_selector := panel.find_child("DefenderStatusSelector", true, false) as OptionButton
 	if profile_status_selector == null or profile_status_selector.get_item_text(0) != panel._t("battle.calc.condition.status.healthy"):
 		_fail("Editable opponent status must show Healthy directly in the opponent profile card")
 		return
@@ -250,14 +250,14 @@ func _run() -> void:
 	if burn_index < 0:
 		_fail("Opponent status selector must expose burn as an explicit scenario")
 		return
-	panel._on_pokemon_status_selected(burn_index, status_selector)
-	if panel.defender_assumptions.get("status") != "brn" or not bool(panel.edited_assumption_fields.get("status", false)):
-		_fail("A hypothetical opponent burn must become an explicit calculator input")
+	panel._on_pokemon_status_selected(burn_index, status_selector, "opponent")
+	if panel.field_scenario.get("opponentStatus") != "brn" or panel.get_field_scenario().get("defenderStatus") != "brn":
+		_fail("A hypothetical opponent burn must become an explicit defender-status input")
 		return
 	var burned_snapshot := _selection_snapshot()
 	burned_snapshot["opponentPokemon"][0]["status"] = {"state": "known", "value": "brn"}
 	panel.set_knowledge_snapshot(burned_snapshot)
-	if panel._get_effective_pokemon_status("opponent") != "brn" or panel.defender_assumptions.has("status"):
+	if panel._get_effective_pokemon_status("opponent") != "brn" or panel.field_scenario.has("opponentStatus"):
 		_fail("Confirmed public burn must take priority and remove a stale hypothetical status")
 		return
 	var confirmed_status_selector := panel._make_pokemon_status_selector("opponent")
@@ -265,6 +265,32 @@ func _run() -> void:
 		_fail("Confirmed public status must be visible but not manually erasable")
 		return
 	panel.set_knowledge_snapshot(_selection_snapshot())
+	panel.active_subtab = panel.SUBTAB_THEIR_DAMAGE
+	panel._render_current_state()
+	await process_frame
+	var viewer_profile_card := panel.find_child("ViewerProfileCard", true, false) as PanelContainer
+	var opponent_profile_card := panel.find_child("OpponentProfileCard", true, false) as PanelContainer
+	var own_defender_status := viewer_profile_card.find_child("DefenderStatusSelector", true, false) as OptionButton if viewer_profile_card != null else null
+	var misplaced_opponent_status := opponent_profile_card.find_child("DefenderStatusSelector", true, false) if opponent_profile_card != null else null
+	if own_defender_status == null or own_defender_status.disabled or misplaced_opponent_status != null:
+		_fail("Damage taken must place the editable target status on the viewer defender card")
+		return
+	var own_burn_index := -1
+	for index in range(own_defender_status.item_count):
+		if str(own_defender_status.get_item_metadata(index)) == "brn":
+			own_burn_index = index
+			break
+	if own_burn_index < 0:
+		_fail("Viewer defender status selector must expose burn")
+		return
+	panel._on_pokemon_status_selected(own_burn_index, own_defender_status, "own")
+	if panel.field_scenario.get("ownStatus") != "brn" or panel.get_field_scenario().get("defenderStatus") != "brn":
+		_fail("Damage taken must map the viewer status scenario to the selected defender")
+		return
+	panel._on_pokemon_status_selected(0, own_defender_status, "own")
+	panel.active_subtab = panel.SUBTAB_YOUR_DAMAGE
+	panel._render_current_state()
+	await process_frame
 	panel.advanced_scenario_expanded = false
 	if panel.item_assumption_input == null or panel.ability_assumption_input == null or panel.nature_assumption_input == null:
 		_fail("Item, ability, and nature must be directly editable in their setup cards")
