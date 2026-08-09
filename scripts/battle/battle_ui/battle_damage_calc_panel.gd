@@ -108,6 +108,7 @@ var pinned_candidate_id := ""
 var use_observation_inference := false
 var advanced_scenario_expanded := false
 var warning_details_expanded := false
+var warning_details_panel: Control
 
 
 func _ready() -> void:
@@ -301,6 +302,7 @@ func _render_your_damage_response(response: Dictionary) -> void:
 
 
 func _clear_content() -> void:
+	warning_details_panel = null
 	for child: Node in content.get_children():
 		content.remove_child(child)
 		child.queue_free()
@@ -887,6 +889,7 @@ func _add_result_footnotes(response: Dictionary, results: Array) -> void:
 	notes_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	notes_panel.add_theme_stylebox_override("panel", _make_stylebox(PROFILE_BG, PROFILE_BORDER, 6, 7.0, 5.0))
 	content.add_child(notes_panel)
+	warning_details_panel = notes_panel
 	var notes_box := VBoxContainer.new()
 	notes_box.add_theme_constant_override("separation", 3)
 	notes_panel.add_child(notes_box)
@@ -898,15 +901,27 @@ func _add_result_footnotes(response: Dictionary, results: Array) -> void:
 	notes_box.add_child(summary)
 	if warning_details_expanded:
 		for detail: String in details:
-			var detail_label := _make_label("• %s" % detail, 10, TEXT_MUTED)
+			var detail_label := _make_label("-  %s" % detail, 11, TEXT_MUTED)
+			detail_label.custom_minimum_size = Vector2(0, 20)
 			detail_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			detail_label.clip_text = false
+			detail_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 			notes_box.add_child(detail_label)
 
 
 func _on_warning_details_pressed() -> void:
 	warning_details_expanded = not warning_details_expanded
 	_render_current_state()
+	if warning_details_expanded:
+		call_deferred("_scroll_warning_details_into_view")
+
+
+func _scroll_warning_details_into_view() -> void:
+	await get_tree().process_frame
+	var scroll := get_node_or_null("CalcScroll") as ScrollContainer
+	if scroll == null or not is_instance_valid(warning_details_panel):
+		return
+	scroll.ensure_control_visible(warning_details_panel)
 
 
 func _add_row_notice(parent: VBoxContainer, text: String, color: Color) -> void:

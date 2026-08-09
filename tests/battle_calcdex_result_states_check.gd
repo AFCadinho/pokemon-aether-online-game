@@ -9,9 +9,15 @@ func _init() -> void:
 
 func _run() -> void:
 	var panel := DamageCalcPanel.new()
+	panel.size = Vector2(640, 320)
+	var scroll := ScrollContainer.new()
+	scroll.name = "CalcScroll"
+	scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var content := VBoxContainer.new()
 	content.name = "VBoxContainer"
-	panel.add_child(content)
+	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.add_child(content)
+	panel.add_child(scroll)
 	root.add_child(panel)
 	await process_frame
 
@@ -61,6 +67,15 @@ func _run() -> void:
 		return
 	panel._on_warning_details_pressed()
 	await process_frame
+	await process_frame
+	if not _expanded_notes_have_visible_height(panel):
+		push_error("Expanded Calcdex notes must occupy visible layout space")
+		quit(1)
+		return
+	if scroll.scroll_vertical <= 0:
+		push_error("Opening Calcdex notes must scroll the disclosure into view")
+		quit(1)
+		return
 	var corrected_ko := panel._get_primary_result_label(
 		{"minPercent": 147.2, "maxPercent": 173.6, "koSummaryLabel": "0% chance to OHKO"},
 		{"hp": {"percent": 100.0}}
@@ -123,3 +138,21 @@ func _count_nodes_of_type(node: Node, type_name: String) -> int:
 	for child: Node in node.get_children():
 		count += _count_nodes_of_type(child, type_name)
 	return count
+
+
+func _expanded_notes_have_visible_height(node: Node) -> bool:
+	var note_labels: Array[Label] = []
+	_collect_note_labels(node, note_labels)
+	if note_labels.is_empty():
+		return false
+	for label: Label in note_labels:
+		if label.size.y < 20.0 or not label.is_visible_in_tree():
+			return false
+	return true
+
+
+func _collect_note_labels(node: Node, result: Array[Label]) -> void:
+	if node is Label and (node as Label).text.begins_with("-  "):
+		result.append(node as Label)
+	for child: Node in node.get_children():
+		_collect_note_labels(child, result)
