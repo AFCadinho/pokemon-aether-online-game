@@ -17,10 +17,10 @@ func _run() -> void:
 
 	panel.show_response({
 		"success": true,
-		"attacker": {"species": "Pikachu"},
-		"defender": {"species": "Mew", "hp": {"display": "75%"}},
+		"attacker": {"species": "Pikachu", "hp": {"display": "100%", "percent": 100}},
+		"defender": {"species": "Mew", "hp": {"display": "75%", "percent": 75}},
 		"results": [{
-			"move": {"name": "Unsupported Move", "category": "Special"},
+			"move": {"name": "Unsupported Move", "type": null, "category": "Special"},
 			"shortLabel": "--",
 			"resultState": "unsupported",
 			"warnings": ["Unsupported public mechanic."],
@@ -34,6 +34,18 @@ func _run() -> void:
 	})
 	await process_frame
 	var collapsed_text := _collect_visible_text(panel)
+	if _count_nodes_of_type(panel, "TextureRect") < 2 or _count_nodes_of_type(panel, "ProgressBar") < 2:
+		push_error("Calcdex matchup cards must render Pokemon art and HP bars")
+		quit(1)
+		return
+	if _contains_fragment(collapsed_text, ["<null>", "<nil>"]):
+		push_error("Null move metadata must never be rendered to players")
+		quit(1)
+		return
+	if not _contains_fragment(collapsed_text, ["SPECIAL", "Special"]):
+		push_error("Known move categories must remain visible when move type is unknown")
+		quit(1)
+		return
 	for header_alternatives: Array in [
 		["battle.calc.move_header", "MOVE", "AANVAL", "GOLPE"],
 		["battle.calc.damage_header", "DAMAGE", "SCHADE", "DANO"],
@@ -104,3 +116,10 @@ func _contains_fragment(values: Array[String], alternatives: Array) -> bool:
 			if value.contains(str(alternative)):
 				return true
 	return false
+
+
+func _count_nodes_of_type(node: Node, type_name: String) -> int:
+	var count := 1 if node.is_class(type_name) else 0
+	for child: Node in node.get_children():
+		count += _count_nodes_of_type(child, type_name)
+	return count

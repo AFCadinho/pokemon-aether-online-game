@@ -13,6 +13,7 @@ const TEXT_MUTED := Color(0.56, 0.6, 0.68, 1.0)
 const TEXT_ACCENT := Color(0.84705883, 0.7058824, 0.41568628, 1.0)
 const TEXT_ERROR := Color(0.9372549, 0.26666668, 0.26666668, 1.0)
 const ROW_BG := Color(0.014, 0.021, 0.036, 0.98)
+const ROW_BG_ALT := Color(0.022, 0.033, 0.052, 0.98)
 const ROW_BORDER := Color(0.14, 0.26, 0.42, 0.76)
 const PROFILE_BG := Color(0.021, 0.033, 0.058, 0.95)
 const PROFILE_BORDER := Color(0.18, 0.31, 0.49, 0.74)
@@ -22,7 +23,6 @@ const CHIP_BG := Color(0.028, 0.043, 0.073, 0.96)
 const CHIP_BORDER := Color(0.2, 0.34, 0.52, 0.82)
 const CHIP_EDITED_BORDER := Color(0.62, 0.48, 0.23, 0.9)
 const CHIP_PUBLIC_BORDER := Color(0.25, 0.39, 0.58, 0.9)
-const KO_BG := Color(0.13, 0.094, 0.032, 0.95)
 const KO_BORDER := Color(0.72, 0.55, 0.23, 0.88)
 const TAB_BG := Color(0.024, 0.036, 0.062, 0.92)
 const TAB_ACTIVE_BG := Color(0.124, 0.203, 0.332, 0.98)
@@ -30,6 +30,26 @@ const TAB_BORDER := Color(0.19, 0.31, 0.48, 0.9)
 const SUSPICIOUS_PERCENT_LIMIT := 999.0
 const DAMAGE_COLUMN_WIDTH := 132.0
 const KO_COLUMN_WIDTH := 92.0
+const TYPE_COLORS := {
+	"bug": Color(0.52, 0.63, 0.08, 1.0),
+	"dark": Color(0.25, 0.22, 0.27, 1.0),
+	"dragon": Color(0.30, 0.32, 0.77, 1.0),
+	"electric": Color(0.88, 0.68, 0.08, 1.0),
+	"fairy": Color(0.82, 0.39, 0.64, 1.0),
+	"fighting": Color(0.72, 0.20, 0.22, 1.0),
+	"fire": Color(0.90, 0.25, 0.18, 1.0),
+	"flying": Color(0.42, 0.58, 0.82, 1.0),
+	"ghost": Color(0.37, 0.31, 0.60, 1.0),
+	"grass": Color(0.24, 0.61, 0.25, 1.0),
+	"ground": Color(0.66, 0.49, 0.20, 1.0),
+	"ice": Color(0.25, 0.68, 0.72, 1.0),
+	"normal": Color(0.48, 0.48, 0.45, 1.0),
+	"poison": Color(0.58, 0.25, 0.65, 1.0),
+	"psychic": Color(0.86, 0.31, 0.51, 1.0),
+	"rock": Color(0.58, 0.49, 0.19, 1.0),
+	"steel": Color(0.40, 0.48, 0.56, 1.0),
+	"water": Color(0.20, 0.45, 0.80, 1.0),
+}
 const SUBTAB_YOUR_DAMAGE := "your"
 const SUBTAB_THEIR_DAMAGE := "their"
 const SELECTOR_NONE := ""
@@ -102,7 +122,7 @@ func _ready() -> void:
 		localization_manager.locale_changed.connect(_on_locale_changed)
 	clip_contents = true
 	content.clip_contents = true
-	content.add_theme_constant_override("separation", 5)
+	content.add_theme_constant_override("separation", 8)
 	assumption_change_timer = Timer.new()
 	assumption_change_timer.one_shot = true
 	assumption_change_timer.wait_time = ASSUMPTION_CHANGE_DEBOUNCE_SECONDS
@@ -262,7 +282,11 @@ func _render_your_damage_response(response: Dictionary) -> void:
 		_get_level_label(defender),
 		_get_boosts_label(attacker),
 		_get_hp_label(attacker),
-		_get_level_label(attacker)
+		_get_level_label(attacker),
+		str(attacker.get("species", "")),
+		str(defender.get("species", "")),
+		_get_defender_hp_percent(attacker),
+		_get_defender_hp_percent(defender)
 	)
 	_add_assumption_chips(attacker if str(attacker.get("relation", "")) == "opponent" else defender, response)
 	_add_candidate_summary(response)
@@ -297,22 +321,22 @@ func _make_subtab_button(text: String, tab_id: String) -> Button:
 	var button := Button.new()
 	button.text = text
 	button.focus_mode = Control.FOCUS_ALL
-	button.custom_minimum_size = Vector2(0, 30)
+	button.custom_minimum_size = Vector2(0, 38)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.clip_text = true
-	button.add_theme_font_size_override("font_size", 12)
+	button.add_theme_font_size_override("font_size", 13)
 	button.add_theme_color_override("font_color", TEXT_PRIMARY if active_subtab == tab_id else TEXT_SECONDARY)
 	button.add_theme_stylebox_override(
 		"normal",
-		_make_stylebox(TAB_ACTIVE_BG if active_subtab == tab_id else TAB_BG, TAB_BORDER, 4, 5.0, 1.0)
+		_make_stylebox(TAB_ACTIVE_BG if active_subtab == tab_id else TAB_BG, TEXT_ACCENT if active_subtab == tab_id else TAB_BORDER, 7, 8.0, 3.0)
 	)
 	button.add_theme_stylebox_override(
 		"hover",
-		_make_stylebox(TAB_ACTIVE_BG.lightened(0.08), TAB_BORDER.lightened(0.1), 4, 5.0, 1.0)
+		_make_stylebox(TAB_ACTIVE_BG.lightened(0.08), TAB_BORDER.lightened(0.1), 7, 8.0, 3.0)
 	)
 	button.add_theme_stylebox_override(
 		"pressed",
-		_make_stylebox(TAB_ACTIVE_BG, TAB_BORDER.lightened(0.18), 4, 5.0, 1.0)
+		_make_stylebox(TAB_ACTIVE_BG, TEXT_ACCENT, 7, 8.0, 3.0)
 	)
 	if tab_id == SUBTAB_YOUR_DAMAGE:
 		button.pressed.connect(_on_your_damage_tab_pressed)
@@ -506,7 +530,11 @@ func _add_profile_summary(
 	level_label: String,
 	boosts_label: String = "",
 	attacker_hp_label: String = "",
-	attacker_level_label: String = ""
+	attacker_level_label: String = "",
+	attacker_sprite_species: String = "",
+	defender_sprite_species: String = "",
+	attacker_hp_percent: Variant = null,
+	defender_hp_percent: Variant = null
 ) -> void:
 	var matchup_row := HBoxContainer.new()
 	matchup_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -526,7 +554,9 @@ func _add_profile_summary(
 		_fallback_text(attacker_name, _t("battle.calc.your_pokemon")),
 		attacker_relation,
 		_join_string_array(attacker_details, "  ·  "),
-		true
+		true,
+		_fallback_text(attacker_sprite_species, attacker_name),
+		attacker_hp_percent
 	))
 	var arrow := _make_label("VS", 10, TEXT_ACCENT)
 	arrow.custom_minimum_size = Vector2(30, 0)
@@ -542,35 +572,83 @@ func _add_profile_summary(
 			_fallback_text(hp_label, _t("battle.calc.hp_unknown")),
 			_fallback_text(level_label, _t("battle.calc.level_unknown")),
 		],
-		false
+		false,
+		_fallback_text(defender_sprite_species, defender_name),
+		defender_hp_percent
 	))
 
 
-func _make_matchup_side(caption: String, pokemon_name: String, relation: String, details: String, is_attacker: bool) -> PanelContainer:
+func _make_matchup_side(
+	caption: String,
+	pokemon_name: String,
+	relation: String,
+	details: String,
+	is_attacker: bool,
+	sprite_species: String,
+	hp_percent: Variant
+) -> PanelContainer:
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.clip_contents = true
-	panel.add_theme_stylebox_override("panel", _make_stylebox(HERO_BG, HERO_BORDER, 7, 8.0, 6.0))
+	panel.custom_minimum_size = Vector2(0, 98)
+	panel.add_theme_stylebox_override("panel", _make_card_stylebox(HERO_BG, HERO_BORDER, 10, 10.0, 8.0))
+	var card_row := HBoxContainer.new()
+	card_row.clip_contents = true
+	card_row.add_theme_constant_override("separation", 9)
+	panel.add_child(card_row)
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(58, 58)
+	icon.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.texture = PokemonAssets.load_party_icon(sprite_species)
+	card_row.add_child(icon)
 	var side := VBoxContainer.new()
+	side.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	side.clip_contents = true
-	side.add_theme_constant_override("separation", 2)
-	panel.add_child(side)
-	var caption_label := _make_label(caption.to_upper(), 9, TEXT_MUTED)
+	side.add_theme_constant_override("separation", 3)
+	card_row.add_child(side)
+	var caption_label := _make_label(caption.to_upper(), 10, TEXT_MUTED)
 	caption_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	side.add_child(caption_label)
 	if knowledge_snapshot.is_empty():
-		var name_label := _make_label(pokemon_name, 14, TEXT_PRIMARY)
+		var name_label := _make_label(pokemon_name, 16, TEXT_PRIMARY)
 		name_label.tooltip_text = pokemon_name
 		side.add_child(name_label)
 	else:
 		var selector := _make_pokemon_selector(relation, is_attacker)
-		selector.custom_minimum_size = Vector2(0, 26)
-		selector.add_theme_font_size_override("font_size", 13)
+		selector.custom_minimum_size = Vector2(0, 30)
+		selector.add_theme_font_size_override("font_size", 14)
 		side.add_child(selector)
-	var detail_label := _make_label(details, 9, TEXT_SECONDARY)
+	var detail_label := _make_label(details, 10, TEXT_SECONDARY)
 	detail_label.tooltip_text = details
 	side.add_child(detail_label)
+	if hp_percent != null:
+		side.add_child(_make_hp_bar(float(hp_percent)))
 	return panel
+
+
+func _make_hp_bar(hp_percent: float) -> ProgressBar:
+	var bar := ProgressBar.new()
+	bar.custom_minimum_size = Vector2(0, 7)
+	bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bar.min_value = 0.0
+	bar.max_value = 100.0
+	bar.value = clampf(hp_percent, 0.0, 100.0)
+	bar.show_percentage = false
+	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var background := _make_stylebox(Color(0.015, 0.024, 0.038, 0.98), Color(0.08, 0.16, 0.23, 0.75), 4, 0.0, 0.0)
+	var fill_color := Color(0.25, 0.78, 0.42, 1.0)
+	if hp_percent <= 20.0:
+		fill_color = Color(0.92, 0.25, 0.22, 1.0)
+	elif hp_percent <= 50.0:
+		fill_color = Color(0.92, 0.68, 0.16, 1.0)
+	var fill := _make_stylebox(fill_color, fill_color.lightened(0.12), 4, 0.0, 0.0)
+	bar.add_theme_stylebox_override("background", background)
+	bar.add_theme_stylebox_override("fill", fill)
+	return bar
 
 
 func _add_status(text: String, color: Color) -> void:
@@ -640,7 +718,7 @@ func _add_move_results_table(results: Array, defender: Dictionary) -> void:
 	var table := PanelContainer.new()
 	table.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	table.clip_contents = true
-	table.add_theme_stylebox_override("panel", _make_stylebox(PROFILE_BG, PROFILE_BORDER, 8, 5.0, 5.0))
+	table.add_theme_stylebox_override("panel", _make_card_stylebox(PROFILE_BG, PROFILE_BORDER, 10, 8.0, 7.0))
 	content.add_child(table)
 	var table_box := VBoxContainer.new()
 	table_box.clip_contents = true
@@ -663,24 +741,26 @@ func _add_move_results_table(results: Array, defender: Dictionary) -> void:
 	ko_header.size_flags_horizontal = Control.SIZE_SHRINK_END
 	ko_header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	header.add_child(ko_header)
-	for result_value: Variant in results:
+	for result_index: int in range(results.size()):
+		var result_value: Variant = results[result_index]
 		if result_value is Dictionary:
-			_add_move_result_row(result_value as Dictionary, defender, table_box)
+			_add_move_result_row(result_value as Dictionary, defender, table_box, result_index)
 
 
 func _make_table_header(text: String) -> Label:
-	var label := _make_label(text.to_upper(), 9, TEXT_MUTED)
-	label.custom_minimum_size = Vector2(0, 18)
+	var label := _make_label(text.to_upper(), 10, TEXT_MUTED)
+	label.custom_minimum_size = Vector2(0, 24)
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	return label
 
 
-func _add_move_result_row(result: Dictionary, defender: Dictionary, parent: VBoxContainer) -> void:
+func _add_move_result_row(result: Dictionary, defender: Dictionary, parent: VBoxContainer, row_index: int) -> void:
 	var primary_result_label := _get_primary_result_label(result, defender)
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.clip_contents = true
-	panel.add_theme_stylebox_override("panel", _make_stylebox(ROW_BG, _get_result_border(primary_result_label), 5, 7.0, 4.0))
+	panel.custom_minimum_size = Vector2(0, 54)
+	panel.add_theme_stylebox_override("panel", _make_result_row_style(primary_result_label, row_index))
 
 	var box := VBoxContainer.new()
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -700,26 +780,30 @@ func _add_move_result_row(result: Dictionary, defender: Dictionary, parent: VBox
 	move_box.add_theme_constant_override("separation", 0)
 	result_row.add_child(move_box)
 	var move_name := _get_move_name(result)
-	var move_label := _make_label(_fallback_text(move_name, _t("battle.move.unknown")), 12, TEXT_PRIMARY)
+	var move_label := _make_label(_fallback_text(move_name, _t("battle.move.unknown")), 14, TEXT_PRIMARY)
 	move_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	move_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	move_box.add_child(move_label)
 
 	var is_status_move: bool = _is_status_result(result)
 	var percent_label: String = "" if is_status_move else _get_percent_label(result)
-	var meta := _get_move_meta(result)
-	if meta != "":
-		var meta_label := _make_label(meta, 9, TEXT_MUTED)
-		meta_label.tooltip_text = meta
-		move_box.add_child(meta_label)
-	var percent := _make_label(percent_label if percent_label != "" else "--", 12, TEXT_PRIMARY)
+	var move_type := _get_move_type(result)
+	var move_category := _get_move_category(result)
+	if move_type != "" or move_category != "":
+		var meta_row := HBoxContainer.new()
+		meta_row.add_theme_constant_override("separation", 5)
+		move_box.add_child(meta_row)
+		if move_type != "":
+			meta_row.add_child(_make_move_type_badge(move_type))
+		if move_category != "":
+			meta_row.add_child(_make_move_category_label(move_category))
+	var percent := _make_label(percent_label if percent_label != "" else "--", 15, TEXT_ACCENT)
 	percent.custom_minimum_size = Vector2(DAMAGE_COLUMN_WIDTH, 0)
 	percent.size_flags_horizontal = Control.SIZE_SHRINK_END
 	percent.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	percent.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	result_row.add_child(percent)
 	var ko_label := _make_result_badge(primary_result_label)
-	ko_label.custom_minimum_size = Vector2(KO_COLUMN_WIDTH, 22)
 	ko_label.size_flags_horizontal = Control.SIZE_SHRINK_END
 	result_row.add_child(ko_label)
 
@@ -735,6 +819,38 @@ func _add_move_result_row(result: Dictionary, defender: Dictionary, parent: VBox
 			_add_row_notice(box, _warning_label(warning), TEXT_ERROR if result_state in ["unsupported", "error"] else TEXT_MUTED)
 
 	parent.add_child(panel)
+
+
+func _make_result_row_style(primary_result_label: String, row_index: int) -> StyleBoxFlat:
+	var background := ROW_BG_ALT if row_index % 2 == 0 else ROW_BG
+	var style := _make_stylebox(background, Color(0, 0, 0, 0), 7, 10.0, 6.0)
+	style.border_width_left = 3
+	style.border_width_top = 0
+	style.border_width_right = 0
+	style.border_width_bottom = 0
+	style.border_color = _get_result_border(primary_result_label)
+	return style
+
+
+func _make_move_type_badge(move_type: String) -> Label:
+	var type_color: Color = TYPE_COLORS.get(move_type.to_lower(), PROFILE_BORDER)
+	var label := _make_label(move_type.to_upper(), 8, Color(1.0, 1.0, 1.0, 0.96))
+	label.custom_minimum_size = Vector2(48, 17)
+	label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_stylebox_override("normal", _make_stylebox(type_color.darkened(0.12), type_color.lightened(0.12), 8, 5.0, 1.0))
+	return label
+
+
+func _make_move_category_label(category: String) -> Label:
+	var label := _make_label(category.to_upper(), 8, TEXT_MUTED)
+	label.custom_minimum_size = Vector2(62, 17)
+	label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_stylebox_override("normal", _make_stylebox(Color(0.035, 0.05, 0.075, 0.92), Color(0.20, 0.28, 0.38, 0.75), 8, 5.0, 1.0))
+	return label
 
 
 func _get_result_border(primary_result_label: String) -> Color:
@@ -822,13 +938,36 @@ func _make_chip(text: String) -> Label:
 
 
 func _make_result_badge(text: String) -> Label:
-	var label := _make_label(_get_compact_result_label(text), 10, TEXT_ACCENT)
-	label.custom_minimum_size = Vector2(KO_COLUMN_WIDTH, 20)
+	var compact_text := _get_compact_result_label(text)
+	var colors := _get_result_badge_colors(compact_text)
+	var label := _make_label(compact_text, 11, colors["text"])
+	label.custom_minimum_size = Vector2(KO_COLUMN_WIDTH, 28)
 	label.size_flags_horizontal = Control.SIZE_SHRINK_END
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.add_theme_stylebox_override("normal", _make_stylebox(KO_BG, KO_BORDER, 4, 6.0, 2.0))
+	label.add_theme_stylebox_override("normal", _make_stylebox(colors["background"], colors["border"], 7, 7.0, 3.0))
 	return label
+
+
+func _get_result_badge_colors(text: String) -> Dictionary:
+	var normalized := text.to_upper()
+	if normalized == "OHKO":
+		return {
+			"text": Color(1.0, 0.91, 0.66, 1.0),
+			"background": Color(0.28, 0.12, 0.035, 0.98),
+			"border": Color(0.90, 0.57, 0.16, 0.95),
+		}
+	if normalized.contains("2HKO") and not normalized.begins_with("0%"):
+		return {
+			"text": Color(0.76, 0.91, 1.0, 1.0),
+			"background": Color(0.035, 0.14, 0.25, 0.98),
+			"border": Color(0.19, 0.55, 0.82, 0.92),
+		}
+	return {
+		"text": TEXT_SECONDARY,
+		"background": Color(0.035, 0.05, 0.075, 0.98),
+		"border": Color(0.22, 0.31, 0.43, 0.80),
+	}
 
 
 func _make_label(text: String, font_size: int, color: Color) -> Label:
@@ -854,7 +993,7 @@ func _add_live_assumption_controls(assumptions: Dictionary) -> void:
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.clip_contents = true
-	panel.add_theme_stylebox_override("panel", _make_stylebox(PROFILE_BG, PROFILE_BORDER, 5, 7.0, 5.0))
+	panel.add_theme_stylebox_override("panel", _make_card_stylebox(PROFILE_BG, Color(PROFILE_BORDER.r, PROFILE_BORDER.g, PROFILE_BORDER.b, 0.52), 9, 10.0, 8.0))
 	content.add_child(panel)
 
 	var box := VBoxContainer.new()
@@ -866,7 +1005,7 @@ func _add_live_assumption_controls(assumptions: Dictionary) -> void:
 	title_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title_row.add_theme_constant_override("separation", 6)
 	box.add_child(title_row)
-	var setup_title := _make_label(_t("battle.calc.opponent_setup"), 11, TEXT_SECONDARY)
+	var setup_title := _make_label(_t("battle.calc.opponent_setup"), 13, TEXT_PRIMARY)
 	setup_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	setup_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	title_row.add_child(setup_title)
@@ -936,11 +1075,11 @@ func _make_disclosure_button(text: String, expanded: bool, pressed_callback: Cal
 	var button := Button.new()
 	button.text = "%s  %s" % ["-" if expanded else "+", text]
 	button.focus_mode = Control.FOCUS_ALL
-	button.custom_minimum_size = Vector2(0, 26)
+	button.custom_minimum_size = Vector2(0, 30)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.clip_text = true
-	button.add_theme_font_size_override("font_size", 10)
+	button.add_theme_font_size_override("font_size", 11)
 	button.add_theme_color_override("font_color", TEXT_MUTED)
 	button.add_theme_stylebox_override("normal", _make_stylebox(CHIP_BG, CHIP_BORDER, 4, 6.0, 2.0))
 	button.add_theme_stylebox_override("hover", _make_stylebox(TAB_ACTIVE_BG, CHIP_BORDER.lightened(0.12), 4, 6.0, 2.0))
@@ -1057,10 +1196,10 @@ func _make_assumption_summary_button(text: String, editor_kind: String) -> Butto
 	button.text = text
 	button.tooltip_text = text
 	button.focus_mode = Control.FOCUS_ALL
-	button.custom_minimum_size = Vector2(0, 25)
+	button.custom_minimum_size = Vector2(0, 31)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.clip_text = true
-	button.add_theme_font_size_override("font_size", 11)
+	button.add_theme_font_size_override("font_size", 12)
 	var is_active: bool = active_selector == editor_kind
 	var is_edited: bool = bool(edited_assumption_fields.get(editor_kind, false))
 	var chip_border: Color = CHIP_BORDER
@@ -1629,6 +1768,20 @@ func _make_stylebox(
 	return style
 
 
+func _make_card_stylebox(
+	bg_color: Color,
+	border_color: Color,
+	radius: int,
+	horizontal_margin: float,
+	vertical_margin: float
+) -> StyleBoxFlat:
+	var style := _make_stylebox(bg_color, border_color, radius, horizontal_margin, vertical_margin)
+	style.shadow_color = Color(0.0, 0.0, 0.0, 0.32)
+	style.shadow_size = 7
+	style.shadow_offset = Vector2(0, 3)
+	return style
+
+
 func _get_pokemon_label(value: Variant, fallback: String) -> String:
 	if not (value is Dictionary):
 		return fallback
@@ -1699,18 +1852,23 @@ func _get_move_name(result: Dictionary) -> String:
 
 
 func _get_move_meta(result: Dictionary) -> String:
+	return _join_string_array([_get_move_type(result), _get_move_category(result)], " / ")
+
+
+func _get_move_type(result: Dictionary) -> String:
 	var move_value: Variant = result.get("move", {})
 	var move: Dictionary = {}
 	if move_value is Dictionary:
 		move = move_value as Dictionary
-	var move_type := _first_non_empty_string(result, move, ["moveType", "type"])
-	var category := _first_non_empty_string(result, move, ["moveCategory", "category"])
-	var parts := []
-	if move_type != "":
-		parts.append(move_type)
-	if category != "":
-		parts.append(category)
-	return _join_string_array(parts, " / ")
+	return _first_non_empty_string(result, move, ["moveType", "type"])
+
+
+func _get_move_category(result: Dictionary) -> String:
+	var move_value: Variant = result.get("move", {})
+	var move: Dictionary = {}
+	if move_value is Dictionary:
+		move = move_value as Dictionary
+	return _first_non_empty_string(result, move, ["moveCategory", "category"])
 
 
 func _get_percent_label(result: Dictionary) -> String:
@@ -2057,13 +2215,17 @@ func _get_percent_number(value: Variant) -> Variant:
 func _first_non_empty_string(primary: Dictionary, secondary: Dictionary, keys: Array) -> String:
 	for key: String in keys:
 		var text := str(primary.get(key, "")).strip_edges()
-		if text != "":
+		if _is_meaningful_text(text):
 			return text
 	for key: String in keys:
 		var text := str(secondary.get(key, "")).strip_edges()
-		if text != "":
+		if _is_meaningful_text(text):
 			return text
 	return ""
+
+
+func _is_meaningful_text(value: String) -> bool:
+	return value != "" and value.to_lower() not in ["<null>", "null", "<nil>", "nil"]
 
 
 func _as_dictionary(value: Variant) -> Dictionary:
