@@ -2320,6 +2320,7 @@
   "battle.calc.condition.reflect": "Reflect",
   "battle.calc.condition.light_screen": "Light Screen",
   "battle.calc.condition.aurora_veil": "Aurora Veil",
+  "battle.calc.condition.status.healthy": "Saudável",
   "battle.calc.condition.status.brn": "Queimado",
   "battle.calc.condition.status.par": "Paralisado",
   "battle.calc.condition.status.psn": "Envenenado",

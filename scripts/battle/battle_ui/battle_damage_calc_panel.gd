@@ -2070,7 +2070,7 @@ func _make_pokemon_status_selector(relation: String, compact: bool = false) -> O
 			option_label = _t("battle.calc.condition.current", {"value": current_label})
 		if compact:
 			var compact_value := _get_status_label(confirmed_status) if status == "" else _get_status_label(status)
-			option_label = "%s: %s" % [_t("battle.calc.status"), compact_value]
+			option_label = compact_value
 		selector.add_item(option_label)
 		selector.set_item_metadata(selector.item_count - 1, status)
 		if confirmed_status == "" and status == scenario_status:
@@ -2253,7 +2253,7 @@ func _get_public_pokemon_status(relation: String) -> String:
 
 func _get_status_label(status: String) -> String:
 	if status == "":
-		return _t("common.none")
+		return _t("battle.calc.condition.status.healthy")
 	var key := "battle.calc.condition.status.%s" % status
 	var translated := _t(key)
 	return status.to_upper() if translated == key else translated

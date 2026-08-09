@@ -171,8 +171,8 @@ func _run() -> void:
 	panel._render_current_state()
 	await process_frame
 	var profile_status_selector := panel.find_child("OpponentStatusSelector", true, false) as OptionButton
-	if profile_status_selector == null or not profile_status_selector.get_item_text(0).begins_with(panel._t("battle.calc.status")):
-		_fail("Editable opponent status must live directly in the opponent profile card")
+	if profile_status_selector == null or profile_status_selector.get_item_text(0) != panel._t("battle.calc.condition.status.healthy"):
+		_fail("Editable opponent status must show Healthy directly in the opponent profile card")
 		return
 	for condition_label: String in [
 		panel._t("battle.calc.conditions_global").to_upper(),
