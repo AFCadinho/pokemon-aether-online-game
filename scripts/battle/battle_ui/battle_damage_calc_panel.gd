@@ -135,6 +135,7 @@ var inline_move_result_boxes: Dictionary = {}
 var inline_move_result_panels: Dictionary = {}
 var result_summary_panels: Dictionary = {}
 var result_disclosure_buttons: Dictionary = {}
+var result_row_panels: Dictionary = {}
 var expanded_result_key := ""
 var assumption_change_timer: Timer
 var catalog_search_timer: Timer
@@ -382,6 +383,7 @@ func _clear_content() -> void:
 	warning_details_panel = null
 	result_summary_panels.clear()
 	result_disclosure_buttons.clear()
+	result_row_panels.clear()
 	for child: Node in content.get_children():
 		content.remove_child(child)
 		child.queue_free()
@@ -1186,10 +1188,20 @@ func _add_move_result_row(result: Dictionary, defender: Dictionary, parent: VBox
 	var summary_text := _get_result_summary_text(result)
 	var result_key := _get_result_row_key(move_name, row_index, editable_slot)
 	var panel := PanelContainer.new()
+	panel.name = "MoveResultRow_%d" % row_index
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.clip_contents = true
 	panel.custom_minimum_size = Vector2(0, 52)
-	panel.add_theme_stylebox_override("panel", _make_result_row_style(primary_result_label, row_index, move_type))
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_result_row_style(primary_result_label, row_index, move_type, expanded_result_key == result_key)
+	)
+	result_row_panels[result_key] = {
+		"panel": panel,
+		"primaryResultLabel": primary_result_label,
+		"rowIndex": row_index,
+		"moveType": move_type,
+	}
 	if summary_text != "":
 		panel.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		panel.gui_input.connect(_on_result_row_gui_input.bind(result_key))
@@ -1355,6 +1367,7 @@ func _on_result_disclosure_pressed(result_key: String) -> void:
 		if summary_panel != null:
 			summary_panel.visible = key == expanded_result_key
 		_update_result_disclosure_button(key)
+		_update_result_row_highlight(key)
 
 
 func _on_result_row_gui_input(event: InputEvent, result_key: String) -> void:
@@ -1370,6 +1383,22 @@ func _update_result_disclosure_button(result_key: String) -> void:
 		return
 	var symbol := "▾" if result_key == expanded_result_key else "▸"
 	button.text = symbol if bool(metadata.get("compact", false)) else "%s  %s" % [symbol, str(metadata.get("moveName", ""))]
+
+
+func _update_result_row_highlight(result_key: String) -> void:
+	var metadata := _as_dictionary(result_row_panels.get(result_key, {}))
+	var panel: PanelContainer = metadata.get("panel") as PanelContainer
+	if panel == null:
+		return
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_result_row_style(
+			str(metadata.get("primaryResultLabel", "")),
+			int(metadata.get("rowIndex", 0)),
+			str(metadata.get("moveType", "")),
+			result_key == expanded_result_key
+		)
+	)
 
 
 func _make_result_move_selector_button(slot: int, move_name: String) -> LineEdit:
@@ -1394,14 +1423,21 @@ func _make_result_move_selector_button(slot: int, move_name: String) -> LineEdit
 	return input
 
 
-func _make_result_row_style(_primary_result_label: String, row_index: int, move_type: String = "") -> StyleBoxFlat:
+func _make_result_row_style(
+	_primary_result_label: String,
+	row_index: int,
+	move_type: String = "",
+	is_selected: bool = false
+) -> StyleBoxFlat:
 	var background := ROW_BG_ALT if row_index % 2 == 0 else ROW_BG
+	if is_selected:
+		background = Color(0.025, 0.095, 0.14, 0.98)
 	var style := _make_stylebox(background, Color(0, 0, 0, 0), 7, 8.0, 5.0)
 	style.border_width_left = 3
-	style.border_width_top = 0
-	style.border_width_right = 0
-	style.border_width_bottom = 0
-	style.border_color = TYPE_COLORS.get(move_type.to_lower(), ROW_BORDER)
+	style.border_width_top = 1 if is_selected else 0
+	style.border_width_right = 1 if is_selected else 0
+	style.border_width_bottom = 1 if is_selected else 0
+	style.border_color = Color(TEXT_ACCENT, 0.96) if is_selected else TYPE_COLORS.get(move_type.to_lower(), ROW_BORDER)
 	return style
 
 

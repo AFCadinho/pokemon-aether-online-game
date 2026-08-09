@@ -196,6 +196,15 @@ func _run() -> void:
 		push_error("Move rows must use move-type color instead of KO severity for their accent rail")
 		quit(1)
 		return
+	var selected_row_style: StyleBoxFlat = panel._make_result_row_style("OHKO", 0, "Water", true)
+	if selected_row_style.bg_color.is_equal_approx(water_row_style.bg_color) \
+			or not selected_row_style.border_color.is_equal_approx(Color(panel.TEXT_ACCENT, 0.96)) \
+			or selected_row_style.border_width_top != 1 \
+			or selected_row_style.border_width_right != 1 \
+			or selected_row_style.border_width_bottom != 1:
+		push_error("The selected move row must have a distinct active background and outline")
+		quit(1)
+		return
 	var inline_move_input: LineEdit = panel._make_result_move_selector_button(0, "Thunderbolt")
 	if inline_move_input.right_icon == null or inline_move_input.mouse_default_cursor_shape != Control.CURSOR_IBEAM:
 		push_error("Inline opponent moves must visibly behave like editable text fields")
