@@ -190,6 +190,7 @@ func _ready() -> void:
 	clip_contents = true
 	content.clip_contents = true
 	content.add_theme_constant_override("separation", 6)
+	_apply_calcdex_scroll_style()
 	assumption_change_timer = Timer.new()
 	assumption_change_timer.one_shot = true
 	assumption_change_timer.wait_time = ASSUMPTION_CHANGE_DEBOUNCE_SECONDS
@@ -778,7 +779,10 @@ func _add_sample_set_selector(parent: Container) -> void:
 		selector.add_item(sample_set_error)
 		selector.set_item_disabled(selector.item_count - 1, true)
 	selector.item_selected.connect(_on_sample_set_selected.bind(selector))
-	_apply_calcdex_dropdown_style(selector, 32.0, 11)
+	_apply_calcdex_dropdown_style(selector, 36.0, 12)
+	selector.add_theme_constant_override("arrow_margin", 12)
+	if selected_sample_set_id != "" or not edited_assumption_fields.is_empty() or not field_scenario.is_empty():
+		selector.add_theme_color_override("font_color", TEXT_ACCENT)
 	parent.add_child(selector)
 
 
@@ -1218,8 +1222,10 @@ func _make_matchup_side(
 	detail_label.tooltip_text = details
 	detail_row.add_child(detail_label)
 	var status_relation := "own" if relation == "viewer" else "opponent"
-	var confirmed_status := _get_public_pokemon_status(status_relation) if not knowledge_snapshot.is_empty() else status
-	if status_relation == _get_condition_target_relation() and confirmed_status == "" and not knowledge_snapshot.is_empty():
+	# Keep the editable status control on the defender side in both tabs. A
+	# confirmed status is rendered as a disabled, labelled selector; this keeps
+	# the two tabs structurally identical when the damage direction changes.
+	if status_relation == _get_condition_target_relation() and not knowledge_snapshot.is_empty():
 		var status_selector := _make_pokemon_status_selector(status_relation, true)
 		status_selector.name = "DefenderStatusSelector"
 		status_selector.custom_minimum_size.x = 108
@@ -2042,6 +2048,34 @@ func _make_label(text: String, font_size: int, color: Color) -> Label:
 	return label
 
 
+func _apply_calcdex_scroll_style() -> void:
+	var scroll := get_node_or_null("CalcScroll") as ScrollContainer
+	if scroll == null:
+		return
+	scroll.add_theme_constant_override("scrollbar_width", 9)
+	var vertical_bar := scroll.get_v_scroll_bar()
+	if vertical_bar == null:
+		return
+	vertical_bar.custom_minimum_size.x = 9
+	vertical_bar.add_theme_constant_override("minimum_grabber_size", 28)
+	vertical_bar.add_theme_stylebox_override(
+		"scroll",
+		_make_stylebox(Color(0.008, 0.018, 0.032, 0.78), Color(0.10, 0.22, 0.34, 0.72), 5, 0.0, 0.0)
+	)
+	vertical_bar.add_theme_stylebox_override(
+		"grabber",
+		_make_stylebox(Color(0.10, 0.31, 0.48, 0.96), Color(0.23, 0.63, 0.84, 0.92), 5, 0.0, 0.0)
+	)
+	vertical_bar.add_theme_stylebox_override(
+		"grabber_highlight",
+		_make_stylebox(Color(0.16, 0.43, 0.62, 1.0), Color(0.42, 0.82, 1.0, 1.0), 5, 0.0, 0.0)
+	)
+	vertical_bar.add_theme_stylebox_override(
+		"grabber_pressed",
+		_make_stylebox(Color(0.24, 0.56, 0.72, 1.0), Color(0.64, 0.9, 1.0, 1.0), 5, 0.0, 0.0)
+	)
+
+
 func _add_live_assumption_controls(assumptions: Dictionary, _prior_provenance: String = "") -> void:
 	is_syncing_assumption_controls = true
 	live_ev_inputs.clear()
@@ -2075,7 +2109,7 @@ func _add_live_assumption_controls(assumptions: Dictionary, _prior_provenance: S
 	set_field.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	set_field.add_theme_constant_override("separation", 1)
 	setup_row.add_child(set_field)
-	var set_label := _make_label(_t("battle.calc.set_label").to_upper(), 8, TEXT_MUTED)
+	var set_label := _make_label(_t("battle.calc.set_label").to_upper(), 9, CONDITION_OPPONENT_ACCENT)
 	set_label.custom_minimum_size = Vector2(0, 11)
 	set_field.add_child(set_label)
 	_add_sample_set_selector(set_field)
