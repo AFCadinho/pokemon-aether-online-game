@@ -460,24 +460,23 @@ func get_field_scenario() -> Dictionary:
 		var value := str(field_scenario.get(key, "")).strip_edges()
 		if value != "":
 			payload[key] = value
-	var own_prefix := "defender" if active_subtab == SUBTAB_THEIR_DAMAGE else "attacker"
-	var opponent_prefix := "attacker" if active_subtab == SUBTAB_THEIR_DAMAGE else "defender"
-	for relation_data: Dictionary in [
-		{"relation": "own", "prefix": own_prefix},
-		{"relation": "opponent", "prefix": opponent_prefix},
-	]:
-		for condition: Dictionary in FIELD_SIDE_CONDITIONS:
-			var suffix := str(condition.get("suffix", ""))
-			if bool(field_scenario.get("%s%s" % [relation_data["relation"], suffix], false)):
-				payload["%s%s" % [relation_data["prefix"], suffix]] = true
-		for condition: Dictionary in FIELD_SIDE_HAZARDS:
-			var suffix := str(condition.get("suffix", ""))
-			if bool(field_scenario.get("%s%s" % [relation_data["relation"], suffix], false)):
-				payload["%s%s" % [relation_data["prefix"], suffix]] = true
-		var spikes := clampi(int(field_scenario.get("%sSpikes" % relation_data["relation"], 0)), 0, 3)
-		if spikes > 0:
-			payload["%sSpikes" % relation_data["prefix"]] = spikes
+	var target_relation := _get_condition_target_relation()
+	for condition: Dictionary in FIELD_SIDE_CONDITIONS:
+		var suffix := str(condition.get("suffix", ""))
+		if bool(field_scenario.get("%s%s" % [target_relation, suffix], false)):
+			payload["defender%s" % suffix] = true
+	for condition: Dictionary in FIELD_SIDE_HAZARDS:
+		var suffix := str(condition.get("suffix", ""))
+		if bool(field_scenario.get("%s%s" % [target_relation, suffix], false)):
+			payload["defender%s" % suffix] = true
+	var spikes := clampi(int(field_scenario.get("%sSpikes" % target_relation, 0)), 0, 3)
+	if spikes > 0:
+		payload["defenderSpikes"] = spikes
 	return payload
+
+
+func _get_condition_target_relation() -> String:
+	return "own" if active_subtab == SUBTAB_THEIR_DAMAGE else "opponent"
 
 
 func _clear_sample_sets() -> void:
@@ -968,7 +967,14 @@ func _make_matchup_side(
 	var detail_label := _make_label(details, 10, TEXT_SECONDARY)
 	detail_label.tooltip_text = details
 	detail_row.add_child(detail_label)
-	if status in POKEMON_STATUS_VALUES and status != "":
+	var confirmed_status := _get_public_pokemon_status(relation) if not knowledge_snapshot.is_empty() else status
+	if relation == "opponent" and confirmed_status == "" and not knowledge_snapshot.is_empty():
+		var status_selector := _make_pokemon_status_selector(relation, true)
+		status_selector.name = "OpponentStatusSelector"
+		status_selector.custom_minimum_size.x = 124
+		status_selector.size_flags_horizontal = Control.SIZE_SHRINK_END
+		detail_row.add_child(status_selector)
+	elif status in POKEMON_STATUS_VALUES and status != "":
 		detail_row.add_child(_make_pokemon_status_badge(status))
 	if hp_percent != null:
 		side.add_child(_make_hp_bar(float(hp_percent)))
@@ -1856,12 +1862,13 @@ func _add_advanced_scenario_controls(parent: VBoxContainer, assumptions: Diction
 	global_content.add_child(field_row)
 	editor.add_child(global_panel)
 
-	var side_stack := VBoxContainer.new()
-	side_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	side_stack.add_theme_constant_override("separation", 8)
-	side_stack.add_child(_make_field_side_condition_panel("own", _t("battle.calc.conditions_your_side")))
-	side_stack.add_child(_make_field_side_condition_panel("opponent", _t("battle.calc.conditions_opponent_side")))
-	editor.add_child(side_stack)
+	var target_relation := _get_condition_target_relation()
+	var target_title := (
+		_t("battle.calc.conditions_your_side")
+		if target_relation == "own"
+		else _t("battle.calc.conditions_opponent_side")
+	)
+	editor.add_child(_make_field_side_condition_panel(target_relation, target_title))
 
 	var scope_note := _make_label(_t("battle.calc.conditions_direct_only"), 10, TEXT_SECONDARY)
 	scope_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -1998,18 +2005,10 @@ func _make_field_side_condition_panel(relation: String, title_text: String) -> P
 	for condition: Dictionary in FIELD_SIDE_HAZARDS:
 		hazard_grid.add_child(_make_field_side_condition_button(relation, condition))
 	hazard_grid.add_child(_make_field_side_spikes_selector(relation))
-	var status_label := _make_label(
-		_t("battle.calc.condition.status").to_upper(),
-		9,
-		Color(accent_color, 0.94)
-	)
-	status_label.clip_text = false
-	state_column.add_child(status_label)
-	state_column.add_child(_make_pokemon_status_selector(relation))
 	return panel
 
 
-func _make_pokemon_status_selector(relation: String) -> OptionButton:
+func _make_pokemon_status_selector(relation: String, compact: bool = false) -> OptionButton:
 	var selector := OptionButton.new()
 	selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	var confirmed_status := _get_public_pokemon_status(relation)
@@ -2019,6 +2018,8 @@ func _make_pokemon_status_selector(relation: String) -> OptionButton:
 		if status == "":
 			var current_label := _get_status_label(confirmed_status)
 			option_label = _t("battle.calc.condition.current", {"value": current_label})
+		if compact:
+			option_label = "%s · %s" % [_t("battle.calc.status"), option_label]
 		selector.add_item(option_label)
 		selector.set_item_metadata(selector.item_count - 1, status)
 		if confirmed_status == "" and status == scenario_status:
@@ -2030,7 +2031,7 @@ func _make_pokemon_status_selector(relation: String) -> OptionButton:
 	else:
 		selector.tooltip_text = _t("battle.calc.status_scenario_tooltip")
 		selector.item_selected.connect(_on_pokemon_status_selected.bind(selector))
-	_apply_calcdex_dropdown_style(selector, 32.0, 11)
+	_apply_calcdex_dropdown_style(selector, 28.0 if compact else 32.0, 10 if compact else 11)
 	if selector.disabled:
 		selector.add_theme_color_override("font_disabled_color", TEXT_SECONDARY)
 	return selector
@@ -2159,24 +2160,21 @@ func _get_effective_field_condition_labels() -> Array[String]:
 			value = _get_public_global_field_value(key)
 		if value != "":
 			labels.append(_get_field_condition_value_label(key, value))
-	for relation: String in ["own", "opponent"]:
-		var relation_label := _t("battle.calc.conditions_your_side") if relation == "own" else _t("battle.calc.conditions_opponent_side")
-		for condition: Dictionary in FIELD_SIDE_CONDITIONS:
-			var suffix := str(condition.get("suffix", ""))
-			if bool(field_scenario.get("%s%s" % [relation, suffix], false)) or _is_public_side_condition_active(relation, suffix):
-				labels.append("%s: %s" % [relation_label, _t(str(condition.get("label_key", "")))])
-		for condition: Dictionary in FIELD_SIDE_HAZARDS:
-			var suffix := str(condition.get("suffix", ""))
-			if bool(field_scenario.get("%s%s" % [relation, suffix], false)) or _is_public_side_condition_active(relation, suffix):
-				labels.append("%s: %s" % [relation_label, _t(str(condition.get("label_key", "")))])
-		var spikes := _get_public_side_spikes_layers(relation)
-		if spikes <= 0:
-			spikes = clampi(int(field_scenario.get("%sSpikes" % relation, 0)), 0, 3)
-		if spikes > 0:
-			labels.append("%s: %s" % [relation_label, _get_spikes_option_label(spikes)])
-		var status := _get_effective_pokemon_status(relation)
-		if status != "":
-			labels.append("%s: %s" % [relation_label, _get_status_label(status)])
+	var relation := _get_condition_target_relation()
+	var relation_label := _t("battle.calc.conditions_your_side") if relation == "own" else _t("battle.calc.conditions_opponent_side")
+	for condition: Dictionary in FIELD_SIDE_CONDITIONS:
+		var suffix := str(condition.get("suffix", ""))
+		if bool(field_scenario.get("%s%s" % [relation, suffix], false)) or _is_public_side_condition_active(relation, suffix):
+			labels.append("%s: %s" % [relation_label, _t(str(condition.get("label_key", "")))])
+	for condition: Dictionary in FIELD_SIDE_HAZARDS:
+		var suffix := str(condition.get("suffix", ""))
+		if bool(field_scenario.get("%s%s" % [relation, suffix], false)) or _is_public_side_condition_active(relation, suffix):
+			labels.append("%s: %s" % [relation_label, _t(str(condition.get("label_key", "")))])
+	var spikes := _get_public_side_spikes_layers(relation)
+	if spikes <= 0:
+		spikes = clampi(int(field_scenario.get("%sSpikes" % relation, 0)), 0, 3)
+	if spikes > 0:
+		labels.append("%s: %s" % [relation_label, _get_spikes_option_label(spikes)])
 	return labels
 
 

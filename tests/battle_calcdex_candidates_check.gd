@@ -143,22 +143,24 @@ func _run() -> void:
 	var condition_snapshot := _selection_snapshot()
 	condition_snapshot["field"]["effects"] = [
 		{"effectId": "Rain Dance", "scope": "field"},
-		{"effectId": "Light Screen", "scope": "side", "side": "p1"},
-		{"effectId": "Stealth Rock", "scope": "side", "side": "p1"},
-		{"effectId": "Spikes", "scope": "side", "side": "p1", "layers": 2},
+		{"effectId": "Light Screen", "scope": "side", "side": "p2"},
+		{"effectId": "Stealth Rock", "scope": "side", "side": "p2"},
+		{"effectId": "Spikes", "scope": "side", "side": "p2", "layers": 2},
 	]
 	panel.set_knowledge_snapshot(condition_snapshot)
 	panel.advanced_scenario_expanded = true
 	panel._render_current_state()
 	await process_frame
+	var profile_status_selector := panel.find_child("OpponentStatusSelector", true, false) as OptionButton
+	if profile_status_selector == null or not profile_status_selector.get_item_text(0).begins_with(panel._t("battle.calc.status")):
+		_fail("Editable opponent status must live directly in the opponent profile card")
+		return
 	for condition_label: String in [
 		panel._t("battle.calc.conditions_global").to_upper(),
-		panel._t("battle.calc.conditions_your_side").to_upper(),
 		panel._t("battle.calc.conditions_opponent_side").to_upper(),
 		panel._t("battle.calc.condition.weather").to_upper(),
 		panel._t("battle.calc.condition.terrain").to_upper(),
 		panel._t("battle.calc.condition.entry_hazards").to_upper(),
-		panel._t("battle.calc.condition.status").to_upper(),
 	]:
 		if not _has_label_text(panel, condition_label):
 			_fail("Battle-condition editor is missing the clearly labeled section %s" % condition_label)
@@ -174,7 +176,7 @@ func _run() -> void:
 	if confirmed_stealth_rock == null or not confirmed_stealth_rock.button_pressed or not confirmed_stealth_rock.disabled:
 		_fail("Confirmed Stealth Rock must be visible, active, and protected from manual removal")
 		return
-	var confirmed_spikes := panel._make_field_side_spikes_selector("own")
+	var confirmed_spikes := panel._make_field_side_spikes_selector("opponent")
 	if not confirmed_spikes.disabled or int(confirmed_spikes.get_item_metadata(confirmed_spikes.selected)) != 2 \
 			or not confirmed_spikes.get_item_text(confirmed_spikes.selected).contains("2"):
 		_fail("Confirmed Spikes layers must be visible and protected from manual removal")
@@ -187,9 +189,21 @@ func _run() -> void:
 		_fail("Opponent entry-hazard scenarios must map to the defender while viewing damage dealt")
 		return
 	panel.active_subtab = panel.SUBTAB_THEIR_DAMAGE
-	if panel.get_field_scenario().get("attackerStealthRock") != true or panel.get_field_scenario().get("attackerSpikes") != 3:
-		_fail("Entry hazards must stay attached to the same battle side when changing damage direction")
+	if panel._get_condition_target_relation() != "own":
+		_fail("Damage taken must expose only your defending side conditions")
 		return
+	if panel.get_field_scenario().has("defenderStealthRock") or panel.get_field_scenario().has("defenderSpikes"):
+		_fail("Hidden attacker-side hazards must not affect damage-taken calculations")
+		return
+	panel._on_field_side_condition_toggled(true, "ownStealthRock")
+	var own_spikes := panel._make_field_side_spikes_selector("own")
+	panel._on_field_side_spikes_selected(2, own_spikes, "ownSpikes")
+	if panel.get_field_scenario().get("defenderStealthRock") != true or panel.get_field_scenario().get("defenderSpikes") != 2:
+		_fail("Your entry hazards must map to the defender while viewing damage taken")
+		return
+	panel._on_field_side_condition_toggled(false, "ownStealthRock")
+	panel._on_field_side_spikes_selected(0, own_spikes, "ownSpikes")
+	own_spikes.queue_free()
 	panel.active_subtab = panel.SUBTAB_YOUR_DAMAGE
 	panel._on_field_side_condition_toggled(false, "opponentStealthRock")
 	panel._on_field_side_spikes_selected(0, scenario_spikes, "opponentSpikes")
@@ -199,8 +213,8 @@ func _run() -> void:
 		_fail("Opponent-side conditions must map to the defender while viewing damage dealt")
 		return
 	panel.active_subtab = panel.SUBTAB_THEIR_DAMAGE
-	if panel.get_field_scenario().get("attackerReflect") != true or panel.get_field_scenario().has("defenderReflect"):
-		_fail("Opponent-side conditions must stay with the opponent while viewing damage taken")
+	if panel.get_field_scenario().has("defenderReflect"):
+		_fail("Hidden opponent screens must not affect damage-taken calculations")
 		return
 	panel.active_subtab = panel.SUBTAB_YOUR_DAMAGE
 	panel._on_field_side_condition_toggled(false, "opponentReflect")
