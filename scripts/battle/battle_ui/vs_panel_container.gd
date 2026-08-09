@@ -9,6 +9,10 @@ const MAX_NAMES_PANEL_WIDTH := 340.0
 # Margins, four HBox gaps, two portraits, the VS label, and the panel borders.
 const NAMES_PANEL_CHROME_WIDTH := 131.0
 const MIN_PLAYER_NAME_WIDTH := 40.0
+const TIMER_WARNING_THRESHOLD_MS := 15_000
+const TIMER_URGENT_THRESHOLD_MS := 5_000
+const TIMER_WARNING_COLOR := Color(1.0, 0.72, 0.24)
+const TIMER_URGENT_COLOR := Color(1.0, 0.35, 0.25)
 
 @onready var names_panel: PanelContainer = $NamesPanel
 @onready var player_1_label: Label = $NamesPanel/MarginContainer/HBoxContainer/Player1
@@ -27,6 +31,9 @@ var _player_2_timer: Dictionary = {}
 var _decision_kind_override := ""
 var _player_1_reconnect: Dictionary = {}
 var _player_2_reconnect: Dictionary = {}
+var _compact_mode := false
+var _compact_show_opponent := true
+var _timers_presented := false
 var _localization_manager: Node
 var player_1_portrait: TrainerHeadPortrait
 var player_2_portrait: TrainerHeadPortrait
@@ -97,6 +104,38 @@ func _refresh_names_panel_width() -> void:
 	names_panel.custom_minimum_size.x = clampf(content_width, MIN_NAMES_PANEL_WIDTH, MAX_NAMES_PANEL_WIDTH)
 
 
+func configure_compact_timer_mode(enabled: bool, show_opponent: bool = true) -> void:
+	_compact_mode = enabled
+	_compact_show_opponent = show_opponent
+	names_panel.visible = not enabled
+	player_1_timer_panel.custom_minimum_size = Vector2(170, 50) if enabled else Vector2(220, 50)
+	player_2_timer_panel.custom_minimum_size = Vector2(170, 50) if enabled else Vector2(220, 50)
+	player_1_timer_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL if enabled else Control.SIZE_FILL
+	player_2_timer_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL if enabled else Control.SIZE_FILL
+	add_theme_constant_override("separation", 8 if enabled else 10)
+	if enabled:
+		_set_mouse_filter_recursive(self, Control.MOUSE_FILTER_IGNORE)
+	_sync_compact_timer_panel_visibility()
+
+
+func _set_mouse_filter_recursive(node: Node, filter: Control.MouseFilter) -> void:
+	if node is Control:
+		(node as Control).mouse_filter = filter
+	for child: Node in node.get_children():
+		_set_mouse_filter_recursive(child, filter)
+
+
+func _sync_compact_timer_panel_visibility() -> void:
+	if not _compact_mode:
+		return
+	player_1_timer_panel.visible = _timers_presented and (
+		not _player_1_timer.is_empty() or not _player_1_reconnect.is_empty()
+	)
+	player_2_timer_panel.visible = _compact_show_opponent and _timers_presented and (
+		not _player_2_timer.is_empty() or not _player_2_reconnect.is_empty()
+	)
+
+
 func _measure_name_width(label: Label) -> float:
 	var font: Font = label.get_theme_font("font")
 	var font_size: int = label.get_theme_font_size("font_size")
@@ -105,12 +144,13 @@ func _measure_name_width(label: Label) -> float:
 
 func _process(_delta: float) -> void:
 	if not _player_1_reconnect.is_empty():
-		_render_reconnect(player_1_timer_state_label, player_1_timer_label, player_1_timer_bar, _player_1_reconnect)
+		_render_reconnect(player_1_timer_state_label, player_1_timer_label, player_1_timer_bar, _player_1_reconnect, "local")
 	if not _player_2_reconnect.is_empty():
-		_render_reconnect(player_2_timer_state_label, player_2_timer_label, player_2_timer_bar, _player_2_reconnect)
+		_render_reconnect(player_2_timer_state_label, player_2_timer_label, player_2_timer_bar, _player_2_reconnect, "opponent")
 
 
 func hide_decision_timers(clear_reconnect_state := false) -> void:
+	_timers_presented = false
 	if clear_reconnect_state:
 		_player_1_reconnect.clear()
 		_player_2_reconnect.clear()
@@ -129,15 +169,17 @@ func show_decision_timers(
 	player_2_timer: Dictionary,
 	decision_kind_override := ""
 ) -> void:
+	_timers_presented = true
 	_player_1_timer = player_1_timer.duplicate(true)
 	_player_2_timer = player_2_timer.duplicate(true)
 	_decision_kind_override = str(decision_kind_override).strip_edges().to_upper()
 	player_1_timer_panel.visible = true
 	player_2_timer_panel.visible = true
 	if _player_1_reconnect.is_empty():
-		_set_timer(player_1_timer_state_label, player_1_timer_label, player_1_timer_bar, player_1_timer)
+		_set_timer(player_1_timer_state_label, player_1_timer_label, player_1_timer_bar, player_1_timer, "local")
 	if _player_2_reconnect.is_empty():
-		_set_timer(player_2_timer_state_label, player_2_timer_label, player_2_timer_bar, player_2_timer)
+		_set_timer(player_2_timer_state_label, player_2_timer_label, player_2_timer_bar, player_2_timer, "opponent")
+	_sync_compact_timer_panel_visibility()
 
 
 func show_reconnect_timer(display_side: String, reconnect_deadline_at: String, grace_seconds: int, server_now: String = "") -> void:
@@ -154,37 +196,44 @@ func show_reconnect_timer(display_side: String, reconnect_deadline_at: String, g
 		"expiresTicksMs": Time.get_ticks_msec() + remaining_ms,
 		"graceSeconds": grace_seconds,
 	}
+	_timers_presented = true
 	if display_side == "p1":
 		_player_1_reconnect = reconnect
 		player_1_timer_panel.visible = true
-		_render_reconnect(player_1_timer_state_label, player_1_timer_label, player_1_timer_bar, reconnect)
+		_render_reconnect(player_1_timer_state_label, player_1_timer_label, player_1_timer_bar, reconnect, "local")
 	elif display_side == "p2":
 		_player_2_reconnect = reconnect
 		player_2_timer_panel.visible = true
-		_render_reconnect(player_2_timer_state_label, player_2_timer_label, player_2_timer_bar, reconnect)
+		_render_reconnect(player_2_timer_state_label, player_2_timer_label, player_2_timer_bar, reconnect, "opponent")
+	_sync_compact_timer_panel_visibility()
 
 
 func clear_reconnect_timer(display_side: String) -> void:
 	if display_side == "p1":
 		_player_1_reconnect.clear()
-		_set_timer(player_1_timer_state_label, player_1_timer_label, player_1_timer_bar, _player_1_timer)
+		_set_timer(player_1_timer_state_label, player_1_timer_label, player_1_timer_bar, _player_1_timer, "local")
 	elif display_side == "p2":
 		_player_2_reconnect.clear()
-		_set_timer(player_2_timer_state_label, player_2_timer_label, player_2_timer_bar, _player_2_timer)
+		_set_timer(player_2_timer_state_label, player_2_timer_label, player_2_timer_bar, _player_2_timer, "opponent")
+	_sync_compact_timer_panel_visibility()
 
 
 func has_active_reconnect_timer() -> bool:
 	return not _player_1_reconnect.is_empty() or not _player_2_reconnect.is_empty()
 
 
-func _render_reconnect(state_label: Label, time_label: Label, bar: ProgressBar, reconnect: Dictionary) -> void:
+func has_presented_timer() -> bool:
+	return player_1_timer_panel.visible or player_2_timer_panel.visible
+
+
+func _render_reconnect(state_label: Label, time_label: Label, bar: ProgressBar, reconnect: Dictionary, owner: String = "") -> void:
 	var remaining_ms := maxi(int(reconnect.get("expiresTicksMs", 0)) - Time.get_ticks_msec(), 0)
 	var remaining_seconds := int(ceil(float(remaining_ms) / 1000.0))
 	var grace_seconds := maxi(int(reconnect.get("graceSeconds", 0)), 1)
 	state_label.visible = true
 	time_label.visible = true
 	bar.visible = true
-	state_label.text = _t("battle.timer.disconnected")
+	state_label.text = _with_compact_timer_owner(_t("battle.timer.disconnected"), owner)
 	time_label.text = _t("battle.timer.reconnect", {
 		"time": "%02d:%02d" % [remaining_seconds / 60, remaining_seconds % 60],
 	})
@@ -194,7 +243,7 @@ func _render_reconnect(state_label: Label, time_label: Label, bar: ProgressBar, 
 	time_label.modulate = Color(1.0, 0.35, 0.25) if urgent else Color.WHITE
 
 
-func _set_timer(state_label: Label, time_label: Label, bar: ProgressBar, timer: Dictionary) -> void:
+func _set_timer(state_label: Label, time_label: Label, bar: ProgressBar, timer: Dictionary, owner: String = "") -> void:
 	var state := str(timer.get("state", "WAITING"))
 	# SCHEDULED is an internal render-safety deadline. Present it as ordinary
 	# waiting so players do not see a second countdown between every turn.
@@ -202,15 +251,30 @@ func _set_timer(state_label: Label, time_label: Label, bar: ProgressBar, timer: 
 	state_label.visible = true
 	time_label.visible = has_countdown
 	bar.visible = has_countdown
-	state_label.text = _timer_state_text(timer)
+	state_label.text = _with_compact_timer_owner(_timer_state_text(timer), owner)
 	time_label.text = _timer_time_text(timer)
 	bar.value = _timer_progress(timer)
-	var urgent := (
-		str(timer.get("state", "")) == "DECIDING"
-		and int(timer.get("effectiveDecisionRemainingMs", 999999)) <= 5000
-	)
-	state_label.modulate = Color(1.0, 0.35, 0.25) if urgent else Color.WHITE
-	time_label.modulate = Color(1.0, 0.35, 0.25) if urgent else Color.WHITE
+	var emphasis_color := _timer_emphasis_color(timer)
+	state_label.modulate = emphasis_color
+	time_label.modulate = emphasis_color
+
+
+func _with_compact_timer_owner(text: String, owner: String) -> String:
+	if not _compact_mode or owner == "":
+		return text
+	var owner_label := _t("ui.chat.you") if owner == "local" else _t("battle.player.opponent")
+	return "%s · %s" % [owner_label, text]
+
+
+func _timer_emphasis_color(timer: Dictionary) -> Color:
+	if str(timer.get("state", "")) != "DECIDING":
+		return Color.WHITE
+	var remaining_ms := int(timer.get("effectiveDecisionRemainingMs", 999_999))
+	if remaining_ms <= TIMER_URGENT_THRESHOLD_MS:
+		return TIMER_URGENT_COLOR
+	if remaining_ms <= TIMER_WARNING_THRESHOLD_MS:
+		return TIMER_WARNING_COLOR
+	return Color.WHITE
 
 
 func _timer_state_text(timer: Dictionary) -> String:

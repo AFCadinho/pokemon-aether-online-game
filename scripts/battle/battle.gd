@@ -31,6 +31,9 @@ const BATTLE_ENVIRONMENT_CATALOG := preload("res://scripts/battle/battle_environ
 const CALC_DRAWER_FIELD_WIDTH_RATIO := 0.60
 const CALC_DRAWER_FIELD_MARGIN := 8.0
 const CALC_DRAWER_OPPONENT_HUD_CLEARANCE := 10.0
+const CALC_TIMER_DOCK_MAX_WIDTH := 370.0
+const CALC_TIMER_DOCK_TWO_PANEL_MIN_WIDTH := 348.0
+const CALC_TIMER_DOCK_HEIGHT := 50.0
 const MEGA_EVOLUTION_EFFECT_KEY := "mega_evolution"
 const PVP_FORCE_SWITCH_ACK_RETRY_MSEC := 1000
 const PVP_FORCE_SWITCH_RECONCILE_INITIAL_MSEC := 2500
@@ -280,6 +283,7 @@ var wild_owned_request_id := 0
 @onready var battle_drawer_layer: Control = %BattleDrawerLayer
 @onready var bag_drawer: Control = %BagDrawer
 @onready var calc_drawer: Control = %CalcDrawer
+@onready var calc_timer_dock: BattleVsPanelContainer = %CalcTimerDock
 @onready var bag_drawer_close_button: Button = %BagDrawerCloseButton
 @onready var calc_drawer_close_button: Button = %CalcDrawerCloseButton
 @onready var context_hint: Label = %ContextHint
@@ -377,6 +381,7 @@ func _ready() -> void:
 	# GUI hit-testing follows sibling order even when a Control draws at a higher
 	# z-index. Keep drawers last so stage controls cannot intercept their clicks.
 	battle_drawer_layer.move_to_front()
+	calc_timer_dock.configure_compact_timer_mode(true)
 	_setup_battle_focus_surfaces()
 	# The action buttons are declared before the instanced log in the scene file;
 	# keep the log visually above the compact Bag/Run row.
@@ -2169,6 +2174,7 @@ func _sync_action_panel_mode_visibility() -> void:
 	calc_log_button.button_pressed = is_calc_mode
 	calc_panel.visible = is_calc_mode
 	calc_drawer.visible = is_calc_mode
+	_sync_calc_timer_dock_visibility()
 	var show_pvp_switch_confirmation := (
 		_is_pvp_battle()
 		and pvp_switch_confirmation_active
@@ -2283,6 +2289,42 @@ func _update_calc_drawer_layout() -> void:
 	calc_drawer.size = Vector2(
 		drawer_width,
 		frame_size.y - CALC_DRAWER_FIELD_MARGIN * 2.0
+	)
+	_update_calc_timer_dock_layout(local_bottom_right)
+
+
+func _update_calc_timer_dock_layout(frame_bottom_right: Vector2) -> void:
+	if not is_instance_valid(calc_timer_dock):
+		return
+	var right_area_left := calc_drawer.position.x + calc_drawer.size.x + CALC_DRAWER_FIELD_MARGIN
+	var right_area_right := frame_bottom_right.x - CALC_DRAWER_FIELD_MARGIN
+	var available_width := maxf(right_area_right - right_area_left, 0.0)
+	var show_opponent := available_width >= CALC_TIMER_DOCK_TWO_PANEL_MIN_WIDTH
+	calc_timer_dock.configure_compact_timer_mode(true, show_opponent)
+	var dock_width := minf(CALC_TIMER_DOCK_MAX_WIDTH, available_width)
+	calc_timer_dock.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	calc_timer_dock.position = Vector2(
+		right_area_left + maxf((available_width - dock_width) * 0.5, 0.0),
+		frame_bottom_right.y - CALC_TIMER_DOCK_HEIGHT - CALC_DRAWER_FIELD_MARGIN
+	)
+	calc_timer_dock.size = Vector2(dock_width, CALC_TIMER_DOCK_HEIGHT)
+
+
+func _sync_calc_timer_dock_visibility() -> void:
+	if not is_instance_valid(calc_timer_dock):
+		return
+	var reconnect_active := (
+		_vs_panel_has_method("has_active_reconnect_timer")
+		and bool(vs_panel_container.call("has_active_reconnect_timer"))
+	)
+	var dock_has_content := (
+		calc_timer_dock.has_method("has_presented_timer")
+		and bool(calc_timer_dock.call("has_presented_timer"))
+	)
+	calc_timer_dock.visible = (
+		current_action_panel_mode == BattleActionsPanelMode.CALC
+		and dock_has_content
+		and (_should_show_bank_timer_projection() or reconnect_active)
 	)
 
 func _sync_party_rail_interaction() -> void:
@@ -5019,7 +5061,7 @@ func _debug_trainer_team_display(stage: String, payload: Dictionary) -> void:
 ## Reset de battle status UI naar een lege beginstand.
 func _reset_battle_status_panel() -> void:
 	battle_status_panel.reset_status()
-	_vs_panel_call("hide_decision_timers", [true])
+	_timer_panels_call("hide_decision_timers", [true])
 	field_timers_panel.reset_timers()
 	_update_side_condition_ui([])
 
@@ -5651,9 +5693,10 @@ func _update_battle_status_panels() -> void:
 	var display_turn := _get_battle_presentation_turn()
 	battle_status_panel.set_turn(display_turn)
 	battle_status_panel.hide_timer()
-	_vs_panel_call("hide_decision_timers")
+	_timer_panels_call("hide_decision_timers")
 	if _should_show_bank_timer_projection():
 		_show_pvp_decision_timers()
+	_sync_calc_timer_dock_visibility()
 	var field_effects := _get_display_field_effects()
 	_prune_inactive_field_condition_ability_modifiers(field_effects)
 	field_timers_panel.set_effects(field_effects, display_turn)
@@ -5669,9 +5712,11 @@ func _should_show_bank_timer_projection() -> bool:
 	)
 
 func _show_pvp_decision_timers() -> void:
-	_vs_panel_call("show_decision_timers", [
-		PvpBattleRealtimeService.timer_projection.participant_display_for_local_player("p1", action_flow.local_player_id),
-		PvpBattleRealtimeService.timer_projection.participant_display_for_local_player("p2", action_flow.local_player_id),
+	var local_timer := PvpBattleRealtimeService.timer_projection.participant_display_for_local_player("p1", action_flow.local_player_id)
+	var opponent_timer := PvpBattleRealtimeService.timer_projection.participant_display_for_local_player("p2", action_flow.local_player_id)
+	_timer_panels_call("show_decision_timers", [
+		local_timer,
+		opponent_timer,
 		"TEAM_PREVIEW" if team_preview_lead_selection_active else "",
 	])
 
@@ -10800,12 +10845,13 @@ func _apply_pvp_connection_log_event(message_type: String, message: Dictionary) 
 			log_message = _t("battle.connection.disconnected", {"player": player_name})
 		"pvp.reconnect_grace_started":
 			var grace_seconds := _get_int_from_variant(message.get("disconnectGraceSeconds", 0), 0)
-			_vs_panel_call("show_reconnect_timer", [
+			_timer_panels_call("show_reconnect_timer", [
 				_get_pvp_connection_event_display_side(message),
 				str(message.get("reconnectDeadlineAt", "")),
 				grace_seconds,
 				str(message.get("serverNow", ""))
 			])
+			_sync_calc_timer_dock_visibility()
 			_sync_pvp_reconnect_timer_pause()
 			if grace_seconds > 0:
 				log_message = _t("battle.connection.reconnect_seconds", {
@@ -10815,7 +10861,8 @@ func _apply_pvp_connection_log_event(message_type: String, message: Dictionary) 
 			else:
 				log_message = _t("battle.connection.waiting_reconnect", {"player": player_name})
 		"pvp.opponent_reconnected":
-			_vs_panel_call("clear_reconnect_timer", [_get_pvp_connection_event_display_side(message)])
+			_timer_panels_call("clear_reconnect_timer", [_get_pvp_connection_event_display_side(message)])
+			_sync_calc_timer_dock_visibility()
 			_sync_pvp_reconnect_timer_pause()
 			log_message = _t("battle.connection.reconnected", {"player": player_name})
 		_:
@@ -14604,6 +14651,12 @@ func _vs_panel_call(method_name: String, arguments: Array = []) -> Variant:
 	if not _vs_panel_has_method(method_name):
 		return null
 	return vs_panel_container.callv(method_name, arguments)
+
+
+func _timer_panels_call(method_name: String, arguments: Array = []) -> void:
+	_vs_panel_call(method_name, arguments)
+	if calc_timer_dock != null and calc_timer_dock.has_method(method_name):
+		calc_timer_dock.callv(method_name, arguments)
 
 
 func _get_vs_player_appearance(player_id: String) -> Dictionary:

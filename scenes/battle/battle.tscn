@@ -666,6 +666,19 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 4
 
+[node name="CalcTimerDock" parent="BattleDrawerLayer" instance=ExtResource("9_pyfix")]
+unique_name_in_owner = true
+visible = false
+z_index = 8
+layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_right = 0.0
+offset_left = 700.0
+offset_top = 500.0
+offset_right = 1060.0
+offset_bottom = 550.0
+
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1662798329]
 unique_name_in_owner = true
 layout_mode = 1
