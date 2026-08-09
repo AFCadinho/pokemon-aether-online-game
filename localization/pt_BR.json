@@ -2444,6 +2444,8 @@
   "battle.calc.unknown_none": "Desconhecido / Nenhum",
   "battle.calc.your_damage": "Dano causado",
   "battle.calc.your_pokemon": "Seu Pokémon",
+  "battle.calc.your_team": "Sua equipe",
+  "battle.calc.opponent_team": "Adversário",
   "calcdex.preset.bulky_physical": "Defensivo físico",
   "calcdex.preset.bulky_special": "Defensivo especial",
   "calcdex.preset.fast_physical": "Físico rápido",

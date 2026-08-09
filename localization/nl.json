@@ -2444,6 +2444,8 @@
   "battle.calc.unknown_none": "Onbekend / Geen",
   "battle.calc.your_damage": "Uitgedeelde schade",
   "battle.calc.your_pokemon": "Jouw Pokémon",
+  "battle.calc.your_team": "Jouw team",
+  "battle.calc.opponent_team": "Tegenstander",
   "calcdex.preset.bulky_physical": "Fysiek defensief",
   "calcdex.preset.bulky_special": "Speciaal defensief",
   "calcdex.preset.fast_physical": "Snel fysiek",

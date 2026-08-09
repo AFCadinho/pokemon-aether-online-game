@@ -23,6 +23,7 @@ func _run() -> void:
 			"active": true,
 			"fainted": false,
 			"identity": {"state": "known", "value": "Samurott-Hisui"},
+			"hp": {"display": {"current": 75, "maximum": 100, "scale": "exact"}},
 		}],
 		"opponentPokemon": [{
 			"pokemonRef": "opponent:public-slot-1",
@@ -35,6 +36,16 @@ func _run() -> void:
 	var pokemon_selector: OptionButton = panel._make_pokemon_selector("viewer", true)
 	content.add_child(pokemon_selector)
 	_assert_dropdown_style(pokemon_selector, "Pokemon selector")
+	var team_icon := panel._make_team_icon_button(panel.knowledge_snapshot["viewerPokemon"][0], "viewer", 0)
+	content.add_child(team_icon)
+	var team_icon_style := team_icon.get_theme_stylebox("normal") as StyleBoxFlat
+	if team_icon_style == null or not team_icon_style.border_color.is_equal_approx(panel.CONDITION_OWN_ACCENT):
+		_fail("The selected team icon lacks its relation-colored active outline")
+	if str(team_icon.get_meta("pokemon_ref", "")) != "viewer:public-slot-1" or team_icon.mouse_default_cursor_shape != Control.CURSOR_POINTING_HAND:
+		_fail("Team icons must expose their public Pokémon ref as a direct click target")
+	var team_hp_bar := _find_progress_bar(team_icon)
+	if team_hp_bar == null or not is_equal_approx(float(team_hp_bar.value), 75.0):
+		_fail("Team icons must show their privacy-safe HP value")
 	var field_selector: OptionButton = panel._make_field_scenario_selector("weather", ["", "Rain"])
 	content.add_child(field_selector)
 	_assert_dropdown_style(field_selector, "Field selector")
@@ -135,6 +146,16 @@ func _has_label_text(node: Node, expected: String) -> bool:
 		if _has_label_text(child, expected):
 			return true
 	return false
+
+
+func _find_progress_bar(node: Node) -> ProgressBar:
+	if node is ProgressBar:
+		return node as ProgressBar
+	for child: Node in node.get_children():
+		var result := _find_progress_bar(child)
+		if result != null:
+			return result
+	return null
 
 
 func _fail(message: String) -> void:

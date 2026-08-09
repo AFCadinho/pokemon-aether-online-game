@@ -828,6 +828,9 @@ func _make_pokemon_selector(relation: String, is_attacker: bool) -> OptionButton
 		var entry := _as_dictionary(entry_value)
 		if entry.is_empty() or bool(entry.get("fainted", false)):
 			continue
+		var identity := _as_dictionary(entry.get("identity", {}))
+		if str(identity.get("state", "")) != "known" or str(identity.get("value", "")).strip_edges() == "":
+			continue
 		var pokemon_ref := str(entry.get("pokemonRef", ""))
 		selector.add_item(_snapshot_pokemon_name(entry))
 		selector.set_item_metadata(selector.item_count - 1, pokemon_ref)
@@ -840,16 +843,175 @@ func _make_pokemon_selector(relation: String, is_attacker: bool) -> OptionButton
 
 func _on_pokemon_selected(index: int, selector: OptionButton, relation: String) -> void:
 	var pokemon_ref := str(selector.get_item_metadata(index))
+	_on_team_icon_pressed(relation, pokemon_ref)
+
+
+func _on_team_icon_pressed(relation: String, pokemon_ref: String) -> void:
+	if relation not in ["viewer", "opponent"] or pokemon_ref == "":
+		return
+	if _resolve_selected_ref(relation, pokemon_ref) != pokemon_ref:
+		return
 	if relation == "viewer":
+		if pokemon_ref == selected_viewer_ref:
+			return
 		selected_viewer_ref = pokemon_ref
 	else:
-		if pokemon_ref != selected_opponent_ref:
-			_clear_sample_sets()
+		if pokemon_ref == selected_opponent_ref:
+			return
+		_clear_sample_sets()
 		selected_opponent_ref = pokemon_ref
 		_request_sample_sets_if_needed()
 	expanded_result_key = ""
 	last_response = {}
+	_render_current_state()
 	matchup_selection_changed.emit()
+
+
+func _add_team_selector_strips() -> void:
+	var panel := PanelContainer.new()
+	panel.name = "TeamSelectorPanel"
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.clip_contents = true
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_stylebox(Color(0.012, 0.026, 0.044, 0.94), Color(PROFILE_BORDER, 0.46), 8, 7.0, 5.0)
+	)
+	content.add_child(panel)
+	var rows := VBoxContainer.new()
+	rows.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	rows.add_theme_constant_override("separation", 3)
+	panel.add_child(rows)
+	rows.add_child(_make_team_selector_row("viewer"))
+	rows.add_child(_make_team_selector_row("opponent"))
+
+
+func _make_team_selector_row(relation: String) -> HBoxContainer:
+	var row := HBoxContainer.new()
+	row.name = "ViewerTeamStrip" if relation == "viewer" else "OpponentTeamStrip"
+	row.custom_minimum_size = Vector2(0, 40)
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.clip_contents = true
+	row.add_theme_constant_override("separation", 6)
+	var accent := CONDITION_OWN_ACCENT if relation == "viewer" else CONDITION_OPPONENT_ACCENT
+	var label_key := "battle.calc.your_team" if relation == "viewer" else "battle.calc.opponent_team"
+	var label := _make_label(_t(label_key).to_upper(), 9, Color(accent, 0.94))
+	label.custom_minimum_size = Vector2(88, 0)
+	label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	row.add_child(label)
+	var icons := HBoxContainer.new()
+	icons.name = "ViewerTeamIcons" if relation == "viewer" else "OpponentTeamIcons"
+	icons.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	icons.alignment = BoxContainer.ALIGNMENT_END
+	icons.add_theme_constant_override("separation", 4)
+	row.add_child(icons)
+	var collection := _as_array(knowledge_snapshot.get("viewerPokemon" if relation == "viewer" else "opponentPokemon", []))
+	for index in range(mini(collection.size(), 6)):
+		icons.add_child(_make_team_icon_button(_as_dictionary(collection[index]), relation, index))
+	return row
+
+
+func _make_team_icon_button(entry: Dictionary, relation: String, slot_index: int) -> Button:
+	var button := Button.new()
+	button.name = "%sTeamIcon%d" % ["Viewer" if relation == "viewer" else "Opponent", slot_index + 1]
+	button.custom_minimum_size = Vector2(42, 38)
+	button.size_flags_horizontal = Control.SIZE_SHRINK_END
+	button.focus_mode = Control.FOCUS_ALL
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	var pokemon_ref := str(entry.get("pokemonRef", ""))
+	button.set_meta("pokemon_ref", pokemon_ref)
+	button.set_meta("relation", relation)
+	var identity := _as_dictionary(entry.get("identity", {}))
+	var species := str(identity.get("value", "")).strip_edges()
+	var identity_known := str(identity.get("state", "")) == "known" and species != ""
+	var fainted := bool(entry.get("fainted", false))
+	var selected_ref := selected_viewer_ref if relation == "viewer" else selected_opponent_ref
+	var is_selected := pokemon_ref != "" and pokemon_ref == selected_ref
+	var is_active := bool(entry.get("active", false))
+	var accent := CONDITION_OWN_ACCENT if relation == "viewer" else CONDITION_OPPONENT_ACCENT
+	_apply_team_icon_button_style(button, accent, is_selected, is_active)
+	button.disabled = fainted or not identity_known or pokemon_ref == ""
+	if button.disabled:
+		button.focus_mode = Control.FOCUS_NONE
+		button.mouse_default_cursor_shape = Control.CURSOR_ARROW
+	button.modulate = Color(1, 1, 1, 0.38) if fainted else Color.WHITE
+	var display_name := species if identity_known else _t("common.unknown")
+	button.tooltip_text = "%s · %s" % [display_name, _get_hp_label(entry)]
+
+	var stack := VBoxContainer.new()
+	stack.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	stack.offset_left = 3.0
+	stack.offset_top = 2.0
+	stack.offset_right = -3.0
+	stack.offset_bottom = -3.0
+	stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stack.add_theme_constant_override("separation", 1)
+	button.add_child(stack)
+	if identity_known:
+		var icon := TextureRect.new()
+		icon.custom_minimum_size = Vector2(32, 29)
+		icon.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		icon.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.texture = PokemonAssets.load_party_icon(species)
+		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		stack.add_child(icon)
+	else:
+		var unknown := _make_label("?", 18, TEXT_MUTED)
+		unknown.custom_minimum_size = Vector2(32, 29)
+		unknown.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		unknown.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		unknown.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		stack.add_child(unknown)
+	var hp_percent: Variant = _get_defender_hp_percent(entry)
+	var hp_bar := _make_team_icon_hp_bar(float(hp_percent) if hp_percent != null else 0.0)
+	hp_bar.visible = hp_percent != null
+	stack.add_child(hp_bar)
+	if not button.disabled:
+		button.pressed.connect(_on_team_icon_pressed.bind(relation, pokemon_ref))
+	return button
+
+
+func _apply_team_icon_button_style(button: Button, accent: Color, is_selected: bool, is_active: bool) -> void:
+	var background := Color(0.014, 0.031, 0.052, 0.96)
+	var border := Color(0.15, 0.28, 0.40, 0.72)
+	if is_active:
+		background = Color(accent, 0.10)
+		border = Color(accent, 0.52)
+	if is_selected:
+		background = Color(accent, 0.20)
+		border = accent
+	var normal := _make_stylebox(background, border, 7, 2.0, 2.0)
+	if is_selected:
+		normal.border_width_left = 2
+		normal.border_width_top = 2
+		normal.border_width_right = 2
+		normal.border_width_bottom = 2
+	button.add_theme_stylebox_override("normal", normal)
+	button.add_theme_stylebox_override("hover", _make_stylebox(background.lightened(0.08), accent.lightened(0.10), 7, 2.0, 2.0))
+	button.add_theme_stylebox_override("pressed", _make_stylebox(Color(accent, 0.26), accent.lightened(0.18), 7, 2.0, 2.0))
+	button.add_theme_stylebox_override("focus", _make_stylebox(Color(accent, 0.18), DROPDOWN_FOCUS_BORDER, 7, 2.0, 2.0))
+	button.add_theme_stylebox_override("disabled", _make_stylebox(Color(0.012, 0.022, 0.035, 0.80), Color(0.10, 0.16, 0.23, 0.58), 7, 2.0, 2.0))
+
+
+func _make_team_icon_hp_bar(hp_percent: float) -> ProgressBar:
+	var bar := ProgressBar.new()
+	bar.custom_minimum_size = Vector2(0, 3)
+	bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bar.min_value = 0.0
+	bar.max_value = 100.0
+	bar.value = clampf(hp_percent, 0.0, 100.0)
+	bar.show_percentage = false
+	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var fill_color := Color(0.25, 0.78, 0.42, 1.0)
+	if hp_percent <= 20.0:
+		fill_color = Color(0.92, 0.25, 0.22, 1.0)
+	elif hp_percent <= 50.0:
+		fill_color = Color(0.92, 0.68, 0.16, 1.0)
+	bar.add_theme_stylebox_override("background", _make_stylebox(Color(0.01, 0.02, 0.03, 0.98), Color(0, 0, 0, 0), 2, 0.0, 0.0))
+	bar.add_theme_stylebox_override("fill", _make_stylebox(fill_color, fill_color, 2, 0.0, 0.0))
+	return bar
 
 
 func _resolve_selected_ref(relation: String, current_ref: String) -> String:
@@ -858,6 +1020,9 @@ func _resolve_selected_ref(relation: String, current_ref: String) -> String:
 	for entry_value: Variant in collection:
 		var entry := _as_dictionary(entry_value)
 		if entry.is_empty() or bool(entry.get("fainted", false)):
+			continue
+		var identity := _as_dictionary(entry.get("identity", {}))
+		if str(identity.get("state", "")) != "known" or str(identity.get("value", "")).strip_edges() == "":
 			continue
 		var pokemon_ref := str(entry.get("pokemonRef", ""))
 		if pokemon_ref == current_ref:
@@ -891,6 +1056,8 @@ func _add_profile_summary(
 	viewer_status: String = "",
 	opponent_status: String = ""
 ) -> void:
+	if not knowledge_snapshot.is_empty():
+		_add_team_selector_strips()
 	var matchup_row := HBoxContainer.new()
 	matchup_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	matchup_row.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -975,15 +1142,9 @@ func _make_matchup_side(
 	var caption_label := _make_label(caption.to_upper(), 9, Color(relation_accent, 0.92))
 	caption_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	side.add_child(caption_label)
-	if knowledge_snapshot.is_empty():
-		var name_label := _make_label(pokemon_name, 15, TEXT_PRIMARY)
-		name_label.tooltip_text = pokemon_name
-		side.add_child(name_label)
-	else:
-		var selector := _make_pokemon_selector(relation, is_attacker)
-		selector.custom_minimum_size = Vector2(0, 28)
-		selector.add_theme_font_size_override("font_size", 13)
-		side.add_child(selector)
+	var name_label := _make_label(pokemon_name, 15, TEXT_PRIMARY)
+	name_label.tooltip_text = pokemon_name
+	side.add_child(name_label)
 	var detail_row := HBoxContainer.new()
 	detail_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	detail_row.add_theme_constant_override("separation", 4)

@@ -54,22 +54,27 @@ func _run() -> void:
 	panel.show_response(response)
 	_assert(not panel.last_response.is_empty(), "reverse tab must accept a matching damage-taken response")
 	await process_frame
-	var viewer_selector := content.find_child("ViewerPokemonSelector", true, false) as OptionButton
-	var opponent_selector := content.find_child("OpponentPokemonSelector", true, false) as OptionButton
-	_assert(viewer_selector != null and opponent_selector != null, "the matchup profile selectors must render")
-	if viewer_selector != null and opponent_selector != null:
-		_assert(
-			str(viewer_selector.get_item_metadata(viewer_selector.selected)).begins_with("viewer:"),
-			"the viewer must remain on the left in damage taken",
-		)
-		_assert(
-			str(opponent_selector.get_item_metadata(opponent_selector.selected)).begins_with("opponent:"),
-			"the opponent must remain on the right in damage taken",
-		)
+	var selected_viewer_icon := content.find_child("ViewerTeamIcon2", true, false) as Button
+	var selected_opponent_icon := content.find_child("OpponentTeamIcon1", true, false) as Button
+	_assert(selected_viewer_icon != null and selected_opponent_icon != null, "both clickable team strips must render")
+	if selected_viewer_icon != null and selected_opponent_icon != null:
+		_assert(str(selected_viewer_icon.get_meta("pokemon_ref", "")) == "viewer:public-slot-2", "the selected viewer icon must remain on the left")
+		_assert(str(selected_opponent_icon.get_meta("pokemon_ref", "")) == "opponent:public-slot-1", "the selected opponent icon must remain on the right")
+	_assert(content.find_child("ViewerPokemonSelector", true, false) == null, "the visible viewer dropdown must be replaced by team icons")
+	_assert(content.find_child("OpponentPokemonSelector", true, false) == null, "the visible opponent dropdown must be replaced by team icons")
+	var fainted_icon := content.find_child("ViewerTeamIcon3", true, false) as Button
+	var unknown_icon := content.find_child("OpponentTeamIcon2", true, false) as Button
+	_assert(fainted_icon != null and fainted_icon.disabled and fainted_icon.modulate.a < 0.5, "fainted team icons must be disabled and dimmed")
+	_assert(unknown_icon != null and unknown_icon.disabled and _has_label_text(unknown_icon, "?"), "unknown opponent slots must remain privacy-safe question icons")
+	_assert(panel._resolve_selected_ref("opponent", "opponent:public-slot-2") == "opponent:public-slot-1", "unknown opponent slots must never become the calculation selection")
+	panel._on_team_icon_pressed("opponent", "opponent:public-slot-2")
+	_assert(panel.selected_opponent_ref == "opponent:public-slot-1", "direct selection must also reject an unknown opponent slot")
 	_assert(_has_line_edit_text(content, "Thunderbolt"), "damage taken must keep the opponent move directly editable")
 	_assert(panel.result_summary_panels.size() == 1, "an editable damage-taken move must retain its calculation summary")
 	var disclosure_metadata: Dictionary = panel.result_disclosure_buttons.values()[0] if not panel.result_disclosure_buttons.is_empty() else {}
 	_assert(bool(disclosure_metadata.get("compact", false)), "damage-taken summaries must use a separate compact disclosure beside the move input")
+	panel._on_team_icon_pressed("viewer", "viewer:public-slot-1")
+	_assert(panel.selected_viewer_ref == "viewer:public-slot-1", "clicking a team icon must select that public Pokémon directly")
 	print("PASS battle_calcdex_matchup_check")
 	quit(0)
 
@@ -123,11 +128,13 @@ func _response(revision: Dictionary) -> Dictionary:
 func _selection_snapshot() -> Dictionary:
 	return {
 		"viewerPokemon": [
-			{"pokemonRef": "viewer:public-slot-1", "active": false, "fainted": false, "identity": {"state": "known", "value": "Bulbasaur"}},
-			{"pokemonRef": "viewer:public-slot-2", "active": true, "fainted": false, "identity": {"state": "known", "value": "Mew"}},
+			{"pokemonRef": "viewer:public-slot-1", "active": false, "fainted": false, "identity": {"state": "known", "value": "Bulbasaur"}, "hp": {"display": {"current": 100, "maximum": 100, "scale": "exact"}}},
+			{"pokemonRef": "viewer:public-slot-2", "active": true, "fainted": false, "identity": {"state": "known", "value": "Mew"}, "hp": {"display": {"current": 73, "maximum": 100, "scale": "exact"}}},
+			{"pokemonRef": "viewer:public-slot-3", "active": false, "fainted": true, "identity": {"state": "known", "value": "Charizard"}, "hp": {"display": {"current": 0, "maximum": 100, "scale": "exact"}}},
 		],
 		"opponentPokemon": [
-			{"pokemonRef": "opponent:public-slot-1", "active": true, "fainted": false, "identity": {"state": "known", "value": "Pikachu"}},
+			{"pokemonRef": "opponent:public-slot-1", "active": true, "fainted": false, "identity": {"state": "known", "value": "Pikachu"}, "hp": {"display": {"current": 88, "maximum": 100, "scale": "public_percent_100"}}},
+			{"pokemonRef": "opponent:public-slot-2", "active": false, "fainted": false, "identity": {"state": "unknown"}},
 		],
 	}
 
@@ -144,5 +151,14 @@ func _has_line_edit_text(node: Node, expected: String) -> bool:
 		return true
 	for child: Node in node.get_children():
 		if _has_line_edit_text(child, expected):
+			return true
+	return false
+
+
+func _has_label_text(node: Node, expected: String) -> bool:
+	if node is Label and (node as Label).text == expected:
+		return true
+	for child: Node in node.get_children():
+		if _has_label_text(child, expected):
 			return true
 	return false

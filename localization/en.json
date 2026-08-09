@@ -2444,6 +2444,8 @@
   "battle.calc.unknown_none": "Unknown / None",
   "battle.calc.your_damage": "Damage dealt",
   "battle.calc.your_pokemon": "Your Pokémon",
+  "battle.calc.your_team": "Your team",
+  "battle.calc.opponent_team": "Opponent",
   "calcdex.preset.bulky_physical": "Physically bulky",
   "calcdex.preset.bulky_special": "Specially bulky",
   "calcdex.preset.fast_physical": "Fast physical",
