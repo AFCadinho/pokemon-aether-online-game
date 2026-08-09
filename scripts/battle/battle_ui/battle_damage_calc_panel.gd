@@ -46,6 +46,13 @@ const CONDITION_OWN_ACCENT := Color(0.24, 0.66, 0.88, 1.0)
 const CONDITION_OPPONENT_ACCENT := Color(0.90, 0.66, 0.28, 1.0)
 const CONFIRMED_ACCENT := Color(0.34, 0.84, 0.54, 1.0)
 const MANUAL_ACCENT := Color(0.95, 0.73, 0.31, 1.0)
+const ITEM_LABEL_ACCENT := Color(0.96, 0.73, 0.32, 1.0)
+const ABILITY_LABEL_ACCENT := Color(0.76, 0.58, 0.96, 1.0)
+const NATURE_LABEL_ACCENT := Color(0.45, 0.86, 0.63, 1.0)
+const EV_LABEL_ACCENT := Color(0.36, 0.76, 0.96, 1.0)
+const OFFENSE_LABEL_ACCENT := Color(0.96, 0.55, 0.43, 1.0)
+const DEFENSE_LABEL_ACCENT := Color(0.43, 0.72, 0.96, 1.0)
+const SPEED_LABEL_ACCENT := Color(0.48, 0.88, 0.61, 1.0)
 const SUSPICIOUS_PERCENT_LIMIT := 999.0
 const DAMAGE_COLUMN_WIDTH := 132.0
 const KO_COLUMN_WIDTH := 92.0
@@ -1087,15 +1094,15 @@ func _add_move_results_table_shell() -> VBoxContainer:
 	header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_theme_constant_override("separation", 6)
 	header_panel.add_child(header)
-	var move_header := _make_table_header(_t("battle.calc.move_header"))
+	var move_header := _make_table_header(_t("battle.calc.move_header"), EV_LABEL_ACCENT)
 	move_header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(move_header)
-	var damage_header := _make_table_header(_t("battle.calc.damage_header"))
+	var damage_header := _make_table_header(_t("battle.calc.damage_header"), MANUAL_ACCENT)
 	damage_header.custom_minimum_size = Vector2(DAMAGE_COLUMN_WIDTH, 0)
 	damage_header.size_flags_horizontal = Control.SIZE_SHRINK_END
 	damage_header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	header.add_child(damage_header)
-	var ko_header := _make_table_header(_t("battle.calc.ko_header"))
+	var ko_header := _make_table_header(_t("battle.calc.ko_header"), Color(1.0, 0.58, 0.38, 1.0))
 	ko_header.custom_minimum_size = Vector2(KO_COLUMN_WIDTH, 0)
 	ko_header.size_flags_horizontal = Control.SIZE_SHRINK_END
 	ko_header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -1174,8 +1181,8 @@ func _add_empty_editable_move_row(parent: VBoxContainer, slot: int, move_name: S
 	parent.add_child(panel)
 
 
-func _make_table_header(text: String) -> Label:
-	var label := _make_label(text.to_upper(), 9, Color(0.68, 0.76, 0.86, 1.0))
+func _make_table_header(text: String, accent: Color = Color(0.68, 0.76, 0.86, 1.0)) -> Label:
+	var label := _make_label(text.to_upper(), 9, accent)
 	label.custom_minimum_size = Vector2(0, 26)
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	return label
@@ -1688,7 +1695,7 @@ func _add_live_assumption_controls(assumptions: Dictionary, _prior_provenance: S
 
 
 func _add_boost_stage_controls(parent: VBoxContainer, assumptions: Dictionary) -> void:
-	var header := _make_label(_t("battle.calc.stat_modifiers").to_upper(), 8, TEXT_MUTED)
+	var header := _make_label(_t("battle.calc.stat_modifiers").to_upper(), 8, Color(CONDITION_OPPONENT_ACCENT, 0.94))
 	header.custom_minimum_size = Vector2(0, 14)
 	parent.add_child(header)
 	var values := _get_effective_opponent_boosts(assumptions)
@@ -1705,7 +1712,7 @@ func _add_boost_stage_controls(parent: VBoxContainer, assumptions: Dictionary) -
 		cell.clip_contents = true
 		cell.add_theme_constant_override("separation", 2)
 		row.add_child(cell)
-		var label := _make_label(_get_ev_display_name(stat_key), 9, TEXT_MUTED)
+		var label := _make_label(_get_ev_display_name(stat_key), 9, _get_stat_label_accent(stat_key))
 		label.custom_minimum_size = Vector2(25, 28)
 		label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -2473,7 +2480,7 @@ func _make_inline_assumption_field(caption: String, value: String, editor_kind: 
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.clip_contents = true
 	var is_active: bool = active_selector == editor_kind
-	var visual_palette := _get_assumption_visual_palette(_get_assumption_visual_state(editor_kind))
+	var visual_palette := _get_assumption_visual_palette(_get_assumption_visual_state(editor_kind), editor_kind)
 	var border: Color = visual_palette["border"]
 	panel.add_theme_stylebox_override(
 		"panel",
@@ -2525,7 +2532,7 @@ func _make_assumption_summary_button(caption: String, value: String, editor_kind
 	button.custom_minimum_size = Vector2(0, 46)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	var is_active: bool = active_selector == editor_kind
-	var visual_palette := _get_assumption_visual_palette(_get_assumption_visual_state(editor_kind))
+	var visual_palette := _get_assumption_visual_palette(_get_assumption_visual_state(editor_kind), editor_kind)
 	var chip_border: Color = visual_palette["border"]
 	var value_color: Color = TEXT_PRIMARY if is_active else visual_palette["value"]
 	button.add_theme_stylebox_override(
@@ -2565,7 +2572,7 @@ func _get_assumption_visual_state(editor_kind: String) -> String:
 	return "default"
 
 
-func _get_assumption_visual_palette(visual_state: String) -> Dictionary:
+func _get_assumption_visual_palette(visual_state: String, editor_kind: String = "") -> Dictionary:
 	match visual_state:
 		"confirmed":
 			return {
@@ -2584,9 +2591,32 @@ func _get_assumption_visual_palette(visual_state: String) -> Dictionary:
 	return {
 		"background": Color(CHIP_BG.r, CHIP_BG.g, CHIP_BG.b, 0.72),
 		"border": Color(CHIP_BORDER.r, CHIP_BORDER.g, CHIP_BORDER.b, 0.58),
-		"caption": TEXT_MUTED,
+		"caption": _get_assumption_label_accent(editor_kind),
 		"value": TEXT_SECONDARY,
 	}
+
+
+func _get_assumption_label_accent(editor_kind: String) -> Color:
+	match editor_kind:
+		SELECTOR_ITEM:
+			return ITEM_LABEL_ACCENT
+		SELECTOR_ABILITY:
+			return ABILITY_LABEL_ACCENT
+		SELECTOR_NATURE:
+			return NATURE_LABEL_ACCENT
+		SELECTOR_EVS:
+			return EV_LABEL_ACCENT
+	return TEXT_MUTED
+
+
+func _get_stat_label_accent(stat_key: String) -> Color:
+	if stat_key in ["atk", "spa"]:
+		return OFFENSE_LABEL_ACCENT
+	if stat_key in ["def", "spd"]:
+		return DEFENSE_LABEL_ACCENT
+	if stat_key == "spe":
+		return SPEED_LABEL_ACCENT
+	return TEXT_MUTED
 
 
 func _get_assumption_control_value(assumptions: Dictionary, editor_kind: String, prior_provenance: String = "") -> String:

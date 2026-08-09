@@ -145,6 +145,10 @@ func _run() -> void:
 			or panel._get_assumption_visual_palette("default")["border"] == panel._get_assumption_visual_palette("confirmed")["border"]:
 		_fail("Default, manual, and confirmed setup fields must have distinct semantic colors")
 		return
+	if panel._get_assumption_visual_palette("default", "item")["caption"] == panel._get_assumption_visual_palette("default", "ability")["caption"] \
+			or panel._get_assumption_visual_palette("default", "nature")["caption"] == panel._get_assumption_visual_palette("default", "evs")["caption"]:
+		_fail("Default setup labels must retain distinct category colors")
+		return
 	panel.show_response(response)
 	await process_frame
 	var viewer_profile := panel.find_child("ViewerProfileCard", true, false) as PanelContainer

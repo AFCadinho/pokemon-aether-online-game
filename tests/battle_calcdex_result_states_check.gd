@@ -196,6 +196,16 @@ func _run() -> void:
 		push_error("Move rows must use move-type color instead of KO severity for their accent rail")
 		quit(1)
 		return
+	var move_table_header := panel._make_table_header("Move", panel.EV_LABEL_ACCENT)
+	var damage_table_header := panel._make_table_header("Damage", panel.MANUAL_ACCENT)
+	var move_header_color := move_table_header.get_theme_color("font_color")
+	var damage_header_color := damage_table_header.get_theme_color("font_color")
+	move_table_header.free()
+	damage_table_header.free()
+	if move_header_color == damage_header_color:
+		push_error("Move and damage table labels must use distinct category colors")
+		quit(1)
+		return
 	var selected_row_style: StyleBoxFlat = panel._make_result_row_style("OHKO", 0, "Water", true)
 	if selected_row_style.bg_color.is_equal_approx(water_row_style.bg_color) \
 			or not selected_row_style.border_color.is_equal_approx(Color(panel.TEXT_ACCENT, 0.96)) \
