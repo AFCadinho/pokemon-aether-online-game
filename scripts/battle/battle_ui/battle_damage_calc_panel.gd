@@ -1454,8 +1454,8 @@ func _make_battle_state_side(_caption: String, relation: String) -> PanelContain
 	hp_input.placeholder_text = "HP" if relation == "viewer" else "HP %"
 	hp_input.text = _get_battle_state_hp_text(relation)
 	hp_input.tooltip_text = "Current HP" if relation == "viewer" else "Current HP percentage"
-	hp_input.text_submitted.connect(_on_battle_state_hp_changed.bind(relation, hp_input))
-	hp_input.focus_exited.connect(_on_battle_state_hp_focus_exited.bind(relation, hp_input))
+	hp_input.text_submitted.connect(_on_battle_state_hp_changed.bind(relation, hp_input, false))
+	hp_input.focus_exited.connect(_on_battle_state_hp_focus_exited.bind(relation, hp_input, false))
 	hp_input.add_theme_stylebox_override("normal", _make_stylebox(SURFACE_CANVAS, BORDER_NEUTRAL, 4, 4.0, 1.0))
 	hp_input.add_theme_stylebox_override("focus", _make_stylebox(SURFACE_CANVAS, INTERACTION_ACCENT, 4, 4.0, 1.0))
 	controls.add_child(hp_input)
@@ -1463,6 +1463,23 @@ func _make_battle_state_side(_caption: String, relation: String) -> PanelContain
 	var slash := _make_label("/ %s HP" % str(hp_display.get("maximum", "--")), 10, TEXT_SECONDARY)
 	slash.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	controls.add_child(slash)
+	var percent_input := LineEdit.new()
+	percent_input.name = "ViewerCurrentHpPercent" if relation == "viewer" else "OpponentCurrentHpPercent"
+	percent_input.custom_minimum_size.x = 42
+	percent_input.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	percent_input.placeholder_text = "%"
+	percent_input.text = _format_percent_value(hp_display.get("percent"))
+	percent_input.tooltip_text = "Current HP percentage"
+	percent_input.max_length = 5
+	percent_input.alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	percent_input.add_theme_stylebox_override("normal", _make_stylebox(SURFACE_CANVAS, BORDER_NEUTRAL, 4, 4.0, 1.0))
+	percent_input.add_theme_stylebox_override("focus", _make_stylebox(SURFACE_RAISED, INTERACTION_ACCENT, 4, 4.0, 1.0))
+	percent_input.text_submitted.connect(_on_battle_state_hp_changed.bind(relation, percent_input, true))
+	percent_input.focus_exited.connect(_on_battle_state_hp_focus_exited.bind(relation, percent_input, true))
+	controls.add_child(percent_input)
+	var percent_suffix := _make_label("%", 10, TEXT_SECONDARY)
+	percent_suffix.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	controls.add_child(percent_suffix)
 	var status_caption := _make_label("Status:", 10, TEXT_ACCENT)
 	status_caption.custom_minimum_size.x = 38
 	status_caption.size_flags_vertical = Control.SIZE_SHRINK_CENTER
@@ -1524,27 +1541,32 @@ func _get_battle_state_hp_display(relation: String) -> Dictionary:
 func _get_expected_opponent_max_hp() -> int:
 	for result_value: Variant in _as_array(last_response.get("results", [])):
 		var result := _as_dictionary(result_value)
-		var min_damage := _get_percent_number(result.get("minDamage"))
-		var min_percent := _get_percent_number(result.get("minPercent"))
+		var min_damage: Variant = _get_percent_number(result.get("minDamage"))
+		var min_percent: Variant = _get_percent_number(result.get("minPercent"))
 		if min_damage != null and min_percent != null and min_damage > 0.0 and min_percent > 0.0:
 			return maxi(1, roundi(float(min_damage) * 100.0 / float(min_percent)))
 	return 100
 
 
-func _on_battle_state_hp_focus_exited(relation: String, input: LineEdit) -> void:
+func _on_battle_state_hp_focus_exited(relation: String, input: LineEdit, is_percent: bool) -> void:
 	if is_clearing_content:
 		return
-	_on_battle_state_hp_changed(input.text, relation, input)
+	_on_battle_state_hp_changed(input.text, relation, input, is_percent)
 
 
-func _on_battle_state_hp_changed(value: String, relation: String, input: LineEdit) -> void:
+func _on_battle_state_hp_changed(value: String, relation: String, input: LineEdit, is_percent: bool = false) -> void:
 	var number := value.strip_edges().to_float()
 	var ref := selected_viewer_ref if relation == "viewer" else selected_opponent_ref
 	if ref == "" or number < 0.0:
 		input.text = _get_battle_state_hp_text(relation)
 		return
 	var state := _as_dictionary(battle_state_scenarios.get(ref, {})).duplicate(true)
-	if relation == "viewer":
+	if is_percent:
+		var maximum := int(_get_battle_state_hp_display(relation).get("maximum", 100))
+		state["currentHp"] = maxi(0, roundi(float(maximum) * clampf(number, 0.0, 100.0) / 100.0)) if relation == "viewer" else state.get("currentHp", 0)
+		if relation == "opponent":
+			state["currentHpPercent"] = clampf(number, 0.0, 100.0)
+	elif relation == "viewer":
 		state["currentHp"] = maxi(0, int(number))
 	else:
 		state["currentHpPercent"] = clampf(number, 0.0, 100.0)
