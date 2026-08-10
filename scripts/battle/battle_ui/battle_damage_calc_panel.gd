@@ -1568,11 +1568,11 @@ func _get_battle_state_hp_display(relation: String) -> Dictionary:
 		percent = float(current)
 		current = int(roundf(float(maximum) * percent / 100.0))
 	if state.has("currentHp"):
-		current = maxi(0, int(state.get("currentHp", 0)))
+		current = clampi(int(state.get("currentHp", 0)), 0, maximum)
 		percent = float(current) * 100.0 / float(maximum) if maximum > 0 else 0.0
-	if state.has("currentHpPercent"):
+	elif state.has("currentHpPercent"):
 		percent = clampf(float(state.get("currentHpPercent", 0.0)), 0.0, 100.0)
-		current = int(roundf(percent))
+		current = roundi(float(maximum) * percent / 100.0)
 	return {"current": current, "maximum": maximum, "percent": percent}
 
 
@@ -1599,15 +1599,16 @@ func _on_battle_state_hp_changed(value: String, relation: String, input: LineEdi
 		input.text = _get_battle_state_hp_text(relation)
 		return
 	var state := _as_dictionary(battle_state_scenarios.get(ref, {})).duplicate(true)
+	var maximum := int(_get_battle_state_hp_display(relation).get("maximum", 100))
 	if is_percent:
-		var maximum := int(_get_battle_state_hp_display(relation).get("maximum", 100))
-		state["currentHp"] = maxi(0, roundi(float(maximum) * clampf(number, 0.0, 100.0) / 100.0)) if relation == "viewer" else state.get("currentHp", 0)
-		if relation == "opponent":
-			state["currentHpPercent"] = clampf(number, 0.0, 100.0)
-	elif relation == "viewer":
-		state["currentHp"] = maxi(0, int(number))
+		var percent := clampf(number, 0.0, 100.0)
+		var current := clampi(roundi(float(maximum) * percent / 100.0), 0, maximum)
+		state["currentHp"] = current
+		state["currentHpPercent"] = float(current) * 100.0 / float(maximum) if maximum > 0 else 0.0
 	else:
-		state["currentHpPercent"] = clampf(number, 0.0, 100.0)
+		var current := clampi(int(number), 0, maximum)
+		state["currentHp"] = current
+		state["currentHpPercent"] = float(current) * 100.0 / float(maximum) if maximum > 0 else 0.0
 	battle_state_scenarios[ref] = state
 	_mark_sample_set_custom()
 	_emit_defender_assumptions_changed()
