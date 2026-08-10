@@ -445,12 +445,12 @@ func _render_your_damage_response(response: Dictionary) -> void:
 	match active_inspector_tab:
 		INSPECTOR_SET:
 			_add_viewer_stat_grid()
-			_add_opponent_setup_card(assumptions)
+			_add_opponent_setup_card(assumptions, _get_opponent_calculated_stats(results))
 		INSPECTOR_FIELD:
 			_add_showdex_condition_controls(assumptions)
 		_:
 			_add_viewer_stat_grid()
-			_add_opponent_setup_card(assumptions)
+			_add_opponent_setup_card(assumptions, _get_opponent_calculated_stats(results))
 	render_target = content
 
 
@@ -2914,7 +2914,15 @@ func _apply_viewer_stage_to_stat(base_stat: int, stage: int) -> int:
 	return int(floor(float(base_stat * 2) / float(2 - stage)))
 
 
-func _add_opponent_setup_card(assumptions: Dictionary) -> void:
+func _get_opponent_calculated_stats(results: Array) -> Dictionary:
+	for value: Variant in results:
+		var result := _as_dictionary(value)
+		if result.get("defenderStats") is Dictionary:
+			return _as_dictionary(result.get("defenderStats"))
+	return {}
+
+
+func _add_opponent_setup_card(assumptions: Dictionary, calculated_stats: Dictionary = {}) -> void:
 	var panel := PanelContainer.new()
 	panel.name = "OpponentSetupCard"
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -2936,7 +2944,7 @@ func _add_opponent_setup_card(assumptions: Dictionary) -> void:
 	divider.color = Color(CONDITION_OPPONENT_ACCENT, 0.34)
 	divider.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	box.add_child(divider)
-	_add_showdex_stat_grid(assumptions, box, false)
+	_add_showdex_stat_grid(assumptions, box, false, calculated_stats)
 
 
 func _add_viewer_readonly_stat_row(grid: GridContainer, row_name: String, stat_keys: Array[String], values: Dictionary) -> void:
@@ -3008,7 +3016,8 @@ func _on_viewer_stages_reset() -> void:
 func _add_showdex_stat_grid(
 	assumptions: Dictionary,
 	shared_box: VBoxContainer = null,
-	show_opponent_identity: bool = true
+	show_opponent_identity: bool = true,
+	calculated_stats: Dictionary = {}
 ) -> void:
 	var box := VBoxContainer.new()
 	box.name = "ShowdexStatGrid"
@@ -3091,6 +3100,17 @@ func _add_showdex_stat_grid(
 		iv_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		iv_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		grid.add_child(iv_label)
+	if not calculated_stats.is_empty():
+		var stats_label := _make_label(_t("battle.calc.stats"), 8, CONDITION_OPPONENT_ACCENT)
+		stats_label.custom_minimum_size = Vector2(42, 24)
+		stats_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		grid.add_child(stats_label)
+		for stat_key: String in stat_keys:
+			var stat_value := _make_label(str(int(calculated_stats.get(stat_key, 0))), 10, TEXT_PRIMARY)
+			stat_value.custom_minimum_size = Vector2(46, 24)
+			stat_value.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			stat_value.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			grid.add_child(stat_value)
 
 	var evs := _as_dictionary(assumptions.get("evs", {}))
 	var ev_row_label := _make_label("EVs", 8, EV_LABEL_ACCENT)

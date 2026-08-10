@@ -140,6 +140,8 @@ static func _normalize_row(value: Variant, require_options: bool = true) -> Dict
 			if not (typeof(number) in [TYPE_INT, TYPE_FLOAT]) or float(number) < 0.0 or not is_finite(float(number)):
 				return {}
 			result[key] = number
+	if source.get("defenderStats") is Dictionary:
+		result["defenderStats"] = (source.get("defenderStats") as Dictionary).duplicate(true)
 	if source.has("description"):
 		result["description"] = str(source.get("description", ""))
 	if source.has("reasonCode"):
