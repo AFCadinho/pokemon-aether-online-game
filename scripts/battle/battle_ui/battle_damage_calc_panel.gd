@@ -175,6 +175,7 @@ var localization_manager: Node
 var selected_viewer_ref := ""
 var selected_opponent_ref := ""
 var field_scenario: Dictionary = {}
+var viewer_boost_scenarios: Dictionary = {}
 var advanced_scenario_expanded := true
 var warning_details_expanded := false
 var warning_details_panel: Control
@@ -237,6 +238,7 @@ func show_idle() -> void:
 	active_inspector_tab = INSPECTOR_SET
 	selected_move_index = 0
 	move_scenarios.clear()
+	viewer_boost_scenarios.clear()
 	pending_move_index = -1
 	_render_current_state()
 
@@ -303,6 +305,7 @@ func set_knowledge_snapshot(snapshot: Dictionary) -> void:
 	knowledge_snapshot = snapshot.duplicate(true)
 	selected_viewer_ref = _resolve_selected_ref("viewer", selected_viewer_ref)
 	selected_opponent_ref = _resolve_selected_ref("opponent", selected_opponent_ref)
+	_prune_viewer_boost_scenarios()
 	_prune_species_scenarios()
 	_clear_confirmed_status_scenarios()
 	if previous_opponent_ref != "" and selected_opponent_ref != previous_opponent_ref:
@@ -433,11 +436,13 @@ func _render_your_damage_response(response: Dictionary) -> void:
 	_add_inspector_tabs()
 	match active_inspector_tab:
 		INSPECTOR_SET:
+			_add_viewer_stat_grid()
 			_add_live_assumption_controls(assumptions)
 			_add_showdex_stat_grid(assumptions)
 		INSPECTOR_FIELD:
 			_add_showdex_condition_controls(assumptions)
 		_:
+			_add_viewer_stat_grid()
 			_add_live_assumption_controls(assumptions)
 			_add_showdex_stat_grid(assumptions)
 	render_target = content
@@ -612,6 +617,11 @@ func get_species_scenario() -> Dictionary:
 		if selected_species != "" and _normalize_move_name(selected_species) != _normalize_move_name(snapshot_species):
 			result[relation] = selected_species
 	return result
+
+
+func get_viewer_scenario() -> Dictionary:
+	var boosts := _as_dictionary(viewer_boost_scenarios.get(selected_viewer_ref, {}))
+	return {"boosts": boosts.duplicate(true)} if not boosts.is_empty() else {}
 
 
 func show_forme_catalog_response(relation: String, species: String, response: Dictionary) -> void:
@@ -1608,6 +1618,17 @@ func _prune_species_scenarios() -> void:
 			species_scenarios.erase(pokemon_ref)
 
 
+func _prune_viewer_boost_scenarios() -> void:
+	var available_refs: Dictionary = {}
+	for entry_value: Variant in _as_array(knowledge_snapshot.get("viewerPokemon", [])):
+		var pokemon_ref := str(_as_dictionary(entry_value).get("pokemonRef", ""))
+		if pokemon_ref != "":
+			available_refs[pokemon_ref] = true
+	for ref_value: Variant in viewer_boost_scenarios.keys():
+		if not available_refs.has(str(ref_value)):
+			viewer_boost_scenarios.erase(ref_value)
+
+
 func _add_move_results_table(results: Array, defender: Dictionary) -> void:
 	var table_box := _add_move_results_table_shell()
 	var top_damage_percent := _get_top_damage_percent(results)
@@ -2333,6 +2354,25 @@ func _add_live_assumption_controls(assumptions: Dictionary, _prior_provenance: S
 	box.clip_contents = true
 	box.add_theme_constant_override("separation", 3)
 	panel.add_child(box)
+	var opponent := _get_snapshot_pokemon_by_ref(selected_opponent_ref)
+	var identity_row := HBoxContainer.new()
+	identity_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	identity_row.add_theme_constant_override("separation", 6)
+	box.add_child(identity_row)
+	var opponent_name := _snapshot_pokemon_name(opponent) if not opponent.is_empty() else _t("battle.calc.opponent")
+	var identity_title := _make_label("%s · %s" % [
+		_t("battle.calc.opponent").to_upper(),
+		opponent_name.to_upper(),
+	], 9, CONDITION_OPPONENT_ACCENT)
+	identity_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	identity_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	identity_row.add_child(identity_title)
+	var opponent_role_text := _t("battle.calc.attacker") if active_subtab == SUBTAB_THEIR_DAMAGE else _t("battle.calc.target")
+	var opponent_role := _make_label(opponent_role_text.to_upper(), 8, TEXT_MUTED)
+	opponent_role.size_flags_horizontal = Control.SIZE_SHRINK_END
+	opponent_role.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	opponent_role.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	identity_row.add_child(opponent_role)
 	var setup_row := HBoxContainer.new()
 	setup_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	setup_row.add_theme_constant_override("separation", 4)
@@ -2437,6 +2477,158 @@ func _add_boost_stage_controls(parent: VBoxContainer, assumptions: Dictionary) -
 func _add_showdex_detail_controls(assumptions: Dictionary) -> void:
 	_add_showdex_stat_grid(assumptions)
 	_add_showdex_condition_controls(assumptions)
+
+
+func _add_viewer_stat_grid() -> void:
+	var viewer := _get_snapshot_pokemon_by_ref(selected_viewer_ref)
+	if viewer.is_empty():
+		return
+	var panel := PanelContainer.new()
+	panel.name = "ViewerStatGrid"
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.clip_contents = true
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_stylebox(Color(SURFACE_PANEL, 0.96), Color(CONDITION_OWN_ACCENT, 0.72), 8, 8.0, 6.0)
+	)
+	_add_render_child(panel)
+	var box := VBoxContainer.new()
+	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	box.add_theme_constant_override("separation", 4)
+	panel.add_child(box)
+
+	var header := HBoxContainer.new()
+	header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_theme_constant_override("separation", 6)
+	box.add_child(header)
+	var title := _make_label("%s · %s" % [
+		_t("battle.calc.your_pokemon").to_upper(),
+		_snapshot_pokemon_name(viewer).to_upper(),
+	], 9, CONDITION_OWN_ACCENT)
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	header.add_child(title)
+	var role_text := _t("battle.calc.target") if active_subtab == SUBTAB_THEIR_DAMAGE else _t("battle.calc.attacker")
+	var role := _make_label(role_text.to_upper(), 8, TEXT_MUTED)
+	role.size_flags_horizontal = Control.SIZE_SHRINK_END
+	role.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	role.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	header.add_child(role)
+	if not _as_dictionary(viewer_boost_scenarios.get(selected_viewer_ref, {})).is_empty():
+		var reset := Button.new()
+		reset.name = "ViewerStagesReset"
+		reset.text = _t("battle.calc.reset_stages").to_upper()
+		reset.custom_minimum_size = Vector2(54, 23)
+		reset.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		reset.add_theme_font_size_override("font_size", 8)
+		reset.add_theme_color_override("font_color", TEXT_MUTED)
+		reset.add_theme_color_override("font_hover_color", TEXT_PRIMARY)
+		reset.add_theme_stylebox_override("normal", _make_stylebox(CHIP_BG, CHIP_BORDER, 5, 5.0, 2.0))
+		reset.add_theme_stylebox_override("hover", _make_stylebox(DROPDOWN_HOVER_BG, CONDITION_OWN_ACCENT, 5, 5.0, 2.0))
+		reset.pressed.connect(_on_viewer_stages_reset)
+		header.add_child(reset)
+
+	var stat_keys: Array[String] = ["hp", "atk", "def", "spa", "spd", "spe"]
+	var grid := GridContainer.new()
+	grid.columns = 7
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.add_theme_constant_override("h_separation", 3)
+	grid.add_theme_constant_override("v_separation", 2)
+	box.add_child(grid)
+	var corner := _make_label("", 8, TEXT_MUTED)
+	corner.custom_minimum_size = Vector2(42, 0)
+	grid.add_child(corner)
+	for stat_key: String in stat_keys:
+		var stat_header := _make_label(_get_ev_display_name(stat_key).to_upper(), 8, _get_stat_label_accent(stat_key))
+		stat_header.custom_minimum_size = Vector2(46, 18)
+		stat_header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		stat_header.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		grid.add_child(stat_header)
+
+	_add_viewer_readonly_stat_row(grid, "IVs", stat_keys, _get_known_stat_table(viewer, "ivs"), 31)
+	_add_viewer_readonly_stat_row(grid, "EVs", stat_keys, _get_known_stat_table(viewer, "evs"), 0)
+	var stage_label := _make_label(_t("battle.calc.stage"), 8, Color(CONDITION_OWN_ACCENT, 0.94))
+	stage_label.custom_minimum_size = Vector2(42, 26)
+	stage_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	grid.add_child(stage_label)
+	var public_boosts := _get_known_stat_table(viewer, "boosts")
+	var scenario_boosts := _as_dictionary(viewer_boost_scenarios.get(selected_viewer_ref, {}))
+	for stat_key: String in stat_keys:
+		if stat_key == "hp":
+			var unavailable := _make_label("—", 10, TEXT_MUTED)
+			unavailable.custom_minimum_size = Vector2(46, 26)
+			unavailable.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			unavailable.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			grid.add_child(unavailable)
+			continue
+		var current_stage := int(scenario_boosts.get(stat_key, public_boosts.get(stat_key, 0)))
+		grid.add_child(_make_viewer_stage_selector(stat_key, clampi(current_stage, -6, 6), public_boosts.has(stat_key), scenario_boosts.has(stat_key)))
+
+
+func _add_viewer_readonly_stat_row(grid: GridContainer, row_name: String, stat_keys: Array[String], values: Dictionary, fallback: int) -> void:
+	var row_label := _make_label(row_name, 8, TEXT_MUTED if row_name == "IVs" else EV_LABEL_ACCENT)
+	row_label.custom_minimum_size = Vector2(42, 24)
+	row_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	grid.add_child(row_label)
+	for stat_key: String in stat_keys:
+		var has_value := values.has(stat_key)
+		var text := str(int(values.get(stat_key, fallback))) if has_value else "—"
+		var value_label := _make_label(text, 10, TEXT_PRIMARY if has_value else TEXT_MUTED)
+		value_label.custom_minimum_size = Vector2(46, 24)
+		value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		value_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		grid.add_child(value_label)
+
+
+func _get_known_stat_table(pokemon: Dictionary, field_name: String) -> Dictionary:
+	var knowledge := CALCDEX_SNAPSHOT.get_knowledge_value(pokemon, field_name)
+	return _as_dictionary(knowledge.get("value", {})) if str(knowledge.get("state", "")) == "known" else {}
+
+
+func _make_viewer_stage_selector(stat_key: String, current_stage: int, is_public: bool, is_edited: bool) -> OptionButton:
+	var selector := OptionButton.new()
+	selector.name = "ViewerStage%s" % stat_key.capitalize()
+	selector.custom_minimum_size = Vector2(46, 26)
+	selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	selector.tooltip_text = _t("battle.calc.stat_modifiers")
+	for stage in range(-6, 7):
+		selector.add_item("+%d" % stage if stage > 0 else str(stage))
+		selector.set_item_metadata(selector.item_count - 1, stage)
+		if stage == current_stage:
+			selector.select(selector.item_count - 1)
+	selector.item_selected.connect(_on_viewer_stage_selected.bind(selector, stat_key))
+	_apply_calcdex_dropdown_style(selector, 26.0, 9)
+	_apply_boost_stage_style(selector, current_stage, is_public, is_edited)
+	return selector
+
+
+func _on_viewer_stage_selected(index: int, selector: OptionButton, stat_key: String) -> void:
+	if stat_key not in BOOST_STAT_KEYS or selected_viewer_ref == "":
+		return
+	var viewer := _get_snapshot_pokemon_by_ref(selected_viewer_ref)
+	var public_boosts := _get_known_stat_table(viewer, "boosts")
+	var selected_stage := clampi(int(selector.get_item_metadata(index)), -6, 6)
+	var scenario := _as_dictionary(viewer_boost_scenarios.get(selected_viewer_ref, {})).duplicate(true)
+	if selected_stage == int(public_boosts.get(stat_key, 0)):
+		scenario.erase(stat_key)
+	else:
+		scenario[stat_key] = selected_stage
+	if scenario.is_empty():
+		viewer_boost_scenarios.erase(selected_viewer_ref)
+	else:
+		viewer_boost_scenarios[selected_viewer_ref] = scenario
+	last_response = {}
+	_render_current_state()
+	matchup_selection_changed.emit()
+
+
+func _on_viewer_stages_reset() -> void:
+	if selected_viewer_ref == "" or not viewer_boost_scenarios.has(selected_viewer_ref):
+		return
+	viewer_boost_scenarios.erase(selected_viewer_ref)
+	last_response = {}
+	_render_current_state()
+	matchup_selection_changed.emit()
 
 
 func _add_showdex_stat_grid(assumptions: Dictionary) -> void:

@@ -2277,6 +2277,7 @@
   "battle.calc.formes_unavailable": "No other supported formes",
   "battle.calc.result_envelope_summary": "This range combines multiple privacy-safe scenarios and does not represent one exact set.",
   "battle.calc.reset_setup_tooltip": "Clear opponent assumptions and battle conditions",
+  "battle.calc.reset_stages": "Reset stages",
   "battle.calc.advanced_scenario": "Advanced field scenario",
   "battle.calc.assumptions": "Assumptions: {values}",
   "battle.calc.assumed_moves_placeholder": "Assumed opponent moves (comma separated, max 4)",

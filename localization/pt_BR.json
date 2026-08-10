@@ -2277,6 +2277,7 @@
   "battle.calc.formes_unavailable": "Nenhuma outra forma compatível",
   "battle.calc.result_envelope_summary": "Este intervalo combina vários cenários seguros para a privacidade e não representa um único conjunto exato.",
   "battle.calc.reset_setup_tooltip": "Limpar suposições do adversário e condições da batalha",
+  "battle.calc.reset_stages": "Redefinir estágios",
   "battle.calc.advanced_scenario": "Cenário de campo avançado",
   "battle.calc.assumptions": "Suposições: {values}",
   "battle.calc.assumed_moves_placeholder": "Movimentos supostos do oponente (vírgulas, máx. 4)",

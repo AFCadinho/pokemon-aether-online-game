@@ -91,6 +91,13 @@ func _run() -> void:
 	_assert(stat_grid != null, "the set inspector must expose the stat grid")
 	_assert(content.find_child("ShowdexEvHp", true, false) is LineEdit, "the stat grid must expose EV editing directly")
 	_assert(content.find_child("ShowdexStageAtk", true, false) is OptionButton, "the stat grid must expose stages directly")
+	var viewer_stage_atk := content.find_child("ViewerStageAtk", true, false) as OptionButton
+	_assert(content.find_child("ViewerStatGrid", true, false) != null and viewer_stage_atk != null, "the selected viewer Pokémon must have a clearly labeled read-only stat card with stage controls")
+	if viewer_stage_atk != null:
+		panel._on_viewer_stage_selected(viewer_stage_atk.get_item_index(8), viewer_stage_atk, "atk")
+		_assert(panel.get_viewer_scenario() == {"boosts": {"atk": 2}}, "viewer stage controls must create a relation-scoped +2 Attack scenario")
+		panel.viewer_boost_scenarios.clear()
+		panel.show_response(response)
 	_assert(content.find_child("SampleSetField", true, false) != null, "the sample-set selector must have a compact labeled field")
 	panel._on_inspector_tab_pressed(panel.INSPECTOR_FIELD)
 	_assert(panel.advanced_scenario_expanded, "field conditions must be expanded by default")
@@ -132,7 +139,7 @@ func _response(revision: Dictionary) -> Dictionary:
 	return {
 		"success": true,
 		"schemaVersion": 1,
-		"routeRevision": "calc4.0-2026-08-10",
+		"routeRevision": "calc4.1-2026-08-10",
 		"safeInputFingerprint": "b".repeat(64),
 		"projectionRevision": revision.duplicate(true),
 		"mechanicsManifest": {

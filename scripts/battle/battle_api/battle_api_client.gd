@@ -389,7 +389,8 @@ func calculate_calcdex_matchup(
 	opponent_scenario: Dictionary = {},
 	field_scenario: Dictionary = {},
 	species_scenario: Dictionary = {},
-	move_scenarios: Array = []
+	move_scenarios: Array = [],
+	viewer_scenario: Dictionary = {}
 ) -> Dictionary:
 	var normalized_battle_id := battle_id.strip_edges()
 	if normalized_battle_id == "" or not CALCDEX_SNAPSHOT.is_valid_projection_revision(last_projection_revision):
@@ -400,6 +401,9 @@ func calculate_calcdex_matchup(
 		"direction": direction,
 		"attackerRef": attacker_ref,
 		"defenderRef": defender_ref,
+		"viewerScenario": {
+			"boosts": _normalize_damage_calc_boost_table(viewer_scenario.get("boosts", {})),
+		},
 		"opponentScenario": _normalize_damage_calc_assumptions(opponent_scenario),
 		"fieldScenario": field_scenario.duplicate(true),
 		"speciesScenario": _normalize_calcdex_species_scenario(species_scenario),

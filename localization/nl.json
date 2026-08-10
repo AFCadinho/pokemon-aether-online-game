@@ -2277,6 +2277,7 @@
   "battle.calc.formes_unavailable": "Geen andere ondersteunde formes",
   "battle.calc.result_envelope_summary": "Dit bereik combineert meerdere privacyveilige scenario's en vertegenwoordigt niet één exacte set.",
   "battle.calc.reset_setup_tooltip": "Wis aannames over de tegenstander en battlecondities",
+  "battle.calc.reset_stages": "Stages resetten",
   "battle.calc.advanced_scenario": "Geavanceerd veldscenario",
   "battle.calc.assumptions": "Aannames: {values}",
   "battle.calc.assumed_moves_placeholder": "Aangenomen moves van tegenstander (komma's, max. 4)",
