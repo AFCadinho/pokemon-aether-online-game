@@ -93,9 +93,17 @@ func _init() -> void:
 	_expect(areas.has("kanto_route_2_gate"), "Inherited transition building is registered")
 	_expect(
 		areas.has("kanto_pewter_city_gym")
-			and bool((areas.get("kanto_pewter_city_gym", {}) as Dictionary).get("accessOnly", false))
+			and not bool((areas.get("kanto_pewter_city_gym", {}) as Dictionary).get("accessOnly", false))
+			and (areas.get("kanto_pewter_city_gym", {}) as Dictionary).get("scenePath", "")
+			== "res://scenes/overworld/kanto/towns/pewter_city/pewter_gym.tscn"
 			and (areas.get("kanto_pewter_city_gym", {}) as Dictionary).get("defaultMode", "") == "open",
-		"Future Pewter doors are registered as open access-only areas"
+		"Pewter Gym is registered as an open scene-backed area"
+	)
+	_expect(
+		bool((areas.get("kanto_pewter_city_museum", {}) as Dictionary).get("accessOnly", false))
+			and bool((areas.get("kanto_pewter_city_house_1", {}) as Dictionary).get("accessOnly", false))
+			and bool((areas.get("kanto_pewter_city_house_2", {}) as Dictionary).get("accessOnly", false)),
+		"Future Pewter doors remain open access-only areas"
 	)
 	_expect(
 		(areas.get("kanto_oaks_lab", {}) as Dictionary).get("locationGroupId", "")
