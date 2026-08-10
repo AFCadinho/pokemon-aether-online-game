@@ -2258,6 +2258,7 @@
   "battle.calc.evs": "EVs",
   "battle.calc.stat_modifiers": "Stat modifiers tegenstander",
   "battle.calc.stage": "Stage",
+  "battle.calc.stats": "Stats",
   "battle.calc.set_label": "Set",
   "battle.calc.opponent_moves": "Moves van tegenstander",
   "battle.calc.add_move": "+ Move kiezen",

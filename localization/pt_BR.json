@@ -2258,6 +2258,7 @@
   "battle.calc.evs": "EVs",
   "battle.calc.stat_modifiers": "Estágios de atributos do oponente",
   "battle.calc.stage": "Estágio",
+  "battle.calc.stats": "Atributos",
   "battle.calc.set_label": "Conjunto",
   "battle.calc.opponent_moves": "Movimentos do oponente",
   "battle.calc.add_move": "+ Escolher movimento",

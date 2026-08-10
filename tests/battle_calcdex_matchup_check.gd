@@ -35,6 +35,9 @@ func _run() -> void:
 	panel.add_child(content)
 	root.add_child(panel)
 	await process_frame
+	panel.set_viewer_stats_by_ref({
+		"viewer:public-slot-2": {"hp": 321, "atk": 315, "def": 196, "spa": 212, "spd": 206, "spe": 295},
+	})
 	panel.set_knowledge_snapshot(_selection_snapshot())
 	var selection := panel.get_matchup_selection()
 	_assert(selection == {
@@ -92,7 +95,12 @@ func _run() -> void:
 	_assert(content.find_child("ShowdexEvHp", true, false) is LineEdit, "the stat grid must expose EV editing directly")
 	_assert(content.find_child("ShowdexStageAtk", true, false) is OptionButton, "the stat grid must expose stages directly")
 	var viewer_stage_atk := content.find_child("ViewerStageAtk", true, false) as OptionButton
-	_assert(content.find_child("ViewerStatGrid", true, false) != null and viewer_stage_atk != null, "the selected viewer Pokémon must have a clearly labeled read-only stat card with stage controls")
+	var matchup_stat_grid := content.find_child("MatchupStatGrid", true, false)
+	var viewer_stat_grid := content.find_child("ViewerStatGrid", true, false)
+	_assert(matchup_stat_grid != null and viewer_stat_grid != null and viewer_stage_atk != null, "the selected viewer Pokémon must have actual stats and stage controls")
+	if viewer_stat_grid != null and stat_grid != null:
+		_assert(viewer_stat_grid.get_parent() == stat_grid.get_parent(), "viewer and opponent stats must share one clearly grouped card")
+		_assert(_has_label_text(viewer_stat_grid, "315"), "the viewer stat row must show the actual calculated Attack instead of IVs and EVs")
 	if viewer_stage_atk != null:
 		panel._on_viewer_stage_selected(viewer_stage_atk.get_item_index(8), viewer_stage_atk, "atk")
 		_assert(panel.get_viewer_scenario() == {"boosts": {"atk": 2}}, "viewer stage controls must create a relation-scoped +2 Attack scenario")

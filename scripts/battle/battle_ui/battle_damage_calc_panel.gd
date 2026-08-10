@@ -176,6 +176,7 @@ var selected_viewer_ref := ""
 var selected_opponent_ref := ""
 var field_scenario: Dictionary = {}
 var viewer_boost_scenarios: Dictionary = {}
+var viewer_stats_by_ref: Dictionary = {}
 var advanced_scenario_expanded := true
 var warning_details_expanded := false
 var warning_details_panel: Control
@@ -318,6 +319,10 @@ func set_knowledge_snapshot(snapshot: Dictionary) -> void:
 		_render_current_state()
 
 
+func set_viewer_stats_by_ref(stats_by_ref: Dictionary) -> void:
+	viewer_stats_by_ref = stats_by_ref.duplicate(true)
+
+
 func close_assumption_popover() -> void:
 	_flush_pending_assumption_changes()
 	if assumption_change_timer != null:
@@ -436,15 +441,13 @@ func _render_your_damage_response(response: Dictionary) -> void:
 	_add_inspector_tabs()
 	match active_inspector_tab:
 		INSPECTOR_SET:
-			_add_viewer_stat_grid()
 			_add_live_assumption_controls(assumptions)
-			_add_showdex_stat_grid(assumptions)
+			_add_viewer_stat_grid(assumptions)
 		INSPECTOR_FIELD:
 			_add_showdex_condition_controls(assumptions)
 		_:
-			_add_viewer_stat_grid()
 			_add_live_assumption_controls(assumptions)
-			_add_showdex_stat_grid(assumptions)
+			_add_viewer_stat_grid(assumptions)
 	render_target = content
 
 
@@ -2360,8 +2363,9 @@ func _add_live_assumption_controls(assumptions: Dictionary, _prior_provenance: S
 	identity_row.add_theme_constant_override("separation", 6)
 	box.add_child(identity_row)
 	var opponent_name := _snapshot_pokemon_name(opponent) if not opponent.is_empty() else _t("battle.calc.opponent")
-	var identity_title := _make_label("%s · %s" % [
+	var identity_title := _make_label("%s %s · %s" % [
 		_t("battle.calc.opponent").to_upper(),
+		_t("battle.calc.set_label").to_upper(),
 		opponent_name.to_upper(),
 	], 9, CONDITION_OPPONENT_ACCENT)
 	identity_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -2479,28 +2483,33 @@ func _add_showdex_detail_controls(assumptions: Dictionary) -> void:
 	_add_showdex_condition_controls(assumptions)
 
 
-func _add_viewer_stat_grid() -> void:
+func _add_viewer_stat_grid(assumptions: Dictionary) -> void:
 	var viewer := _get_snapshot_pokemon_by_ref(selected_viewer_ref)
 	if viewer.is_empty():
 		return
 	var panel := PanelContainer.new()
-	panel.name = "ViewerStatGrid"
+	panel.name = "MatchupStatGrid"
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.clip_contents = true
 	panel.add_theme_stylebox_override(
 		"panel",
-		_make_stylebox(Color(SURFACE_PANEL, 0.96), Color(CONDITION_OWN_ACCENT, 0.72), 8, 8.0, 6.0)
+		_make_stylebox(Color(SURFACE_PANEL, 0.96), Color(BORDER_NEUTRAL, 0.86), 8, 8.0, 7.0)
 	)
 	_add_render_child(panel)
 	var box := VBoxContainer.new()
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	box.add_theme_constant_override("separation", 4)
+	box.add_theme_constant_override("separation", 7)
 	panel.add_child(box)
+	var viewer_box := VBoxContainer.new()
+	viewer_box.name = "ViewerStatGrid"
+	viewer_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	viewer_box.add_theme_constant_override("separation", 4)
+	box.add_child(viewer_box)
 
 	var header := HBoxContainer.new()
 	header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_theme_constant_override("separation", 6)
-	box.add_child(header)
+	viewer_box.add_child(header)
 	var title := _make_label("%s · %s" % [
 		_t("battle.calc.your_pokemon").to_upper(),
 		_snapshot_pokemon_name(viewer).to_upper(),
@@ -2534,7 +2543,7 @@ func _add_viewer_stat_grid() -> void:
 	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	grid.add_theme_constant_override("h_separation", 3)
 	grid.add_theme_constant_override("v_separation", 2)
-	box.add_child(grid)
+	viewer_box.add_child(grid)
 	var corner := _make_label("", 8, TEXT_MUTED)
 	corner.custom_minimum_size = Vector2(42, 0)
 	grid.add_child(corner)
@@ -2545,8 +2554,12 @@ func _add_viewer_stat_grid() -> void:
 		stat_header.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		grid.add_child(stat_header)
 
-	_add_viewer_readonly_stat_row(grid, "IVs", stat_keys, _get_known_stat_table(viewer, "ivs"), 31)
-	_add_viewer_readonly_stat_row(grid, "EVs", stat_keys, _get_known_stat_table(viewer, "evs"), 0)
+	_add_viewer_readonly_stat_row(
+		grid,
+		_t("battle.calc.stats"),
+		stat_keys,
+		_as_dictionary(viewer_stats_by_ref.get(selected_viewer_ref, {}))
+	)
 	var stage_label := _make_label(_t("battle.calc.stage"), 8, Color(CONDITION_OWN_ACCENT, 0.94))
 	stage_label.custom_minimum_size = Vector2(42, 26)
 	stage_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -2564,15 +2577,23 @@ func _add_viewer_stat_grid() -> void:
 		var current_stage := int(scenario_boosts.get(stat_key, public_boosts.get(stat_key, 0)))
 		grid.add_child(_make_viewer_stage_selector(stat_key, clampi(current_stage, -6, 6), public_boosts.has(stat_key), scenario_boosts.has(stat_key)))
 
+	var divider := ColorRect.new()
+	divider.custom_minimum_size = Vector2(0, 1)
+	divider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	divider.color = Color(CONDITION_OPPONENT_ACCENT, 0.38)
+	divider.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	box.add_child(divider)
+	_add_showdex_stat_grid(assumptions, box)
 
-func _add_viewer_readonly_stat_row(grid: GridContainer, row_name: String, stat_keys: Array[String], values: Dictionary, fallback: int) -> void:
-	var row_label := _make_label(row_name, 8, TEXT_MUTED if row_name == "IVs" else EV_LABEL_ACCENT)
+
+func _add_viewer_readonly_stat_row(grid: GridContainer, row_name: String, stat_keys: Array[String], values: Dictionary) -> void:
+	var row_label := _make_label(row_name, 8, CONDITION_OWN_ACCENT)
 	row_label.custom_minimum_size = Vector2(42, 24)
 	row_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	grid.add_child(row_label)
 	for stat_key: String in stat_keys:
 		var has_value := values.has(stat_key)
-		var text := str(int(values.get(stat_key, fallback))) if has_value else "—"
+		var text := str(int(values.get(stat_key, 0))) if has_value else "—"
 		var value_label := _make_label(text, 10, TEXT_PRIMARY if has_value else TEXT_MUTED)
 		value_label.custom_minimum_size = Vector2(46, 24)
 		value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -2631,27 +2652,41 @@ func _on_viewer_stages_reset() -> void:
 	matchup_selection_changed.emit()
 
 
-func _add_showdex_stat_grid(assumptions: Dictionary) -> void:
-	var panel := PanelContainer.new()
-	panel.name = "ShowdexStatGrid"
-	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	panel.clip_contents = true
-	panel.add_theme_stylebox_override(
-		"panel",
-		_make_stylebox(Color(SURFACE_PANEL, 0.96), Color(BORDER_NEUTRAL, 0.86), 8, 7.0, 5.0)
-	)
-	_add_render_child(panel)
+func _add_showdex_stat_grid(assumptions: Dictionary, shared_box: VBoxContainer = null) -> void:
 	var box := VBoxContainer.new()
+	box.name = "ShowdexStatGrid"
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	box.add_theme_constant_override("separation", 3)
-	panel.add_child(box)
+	if shared_box != null:
+		shared_box.add_child(box)
+	else:
+		var panel := PanelContainer.new()
+		panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		panel.clip_contents = true
+		panel.add_theme_stylebox_override(
+			"panel",
+			_make_stylebox(Color(SURFACE_PANEL, 0.96), Color(BORDER_NEUTRAL, 0.86), 8, 7.0, 5.0)
+		)
+		_add_render_child(panel)
+		panel.add_child(box)
 	var title_row := HBoxContainer.new()
 	title_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title_row.add_theme_constant_override("separation", 6)
 	box.add_child(title_row)
-	var title := _make_label(_t("battle.calc.ev_spread").to_upper(), 8, EV_LABEL_ACCENT)
+	var opponent := _get_snapshot_pokemon_by_ref(selected_opponent_ref)
+	var opponent_name := _snapshot_pokemon_name(opponent) if not opponent.is_empty() else _t("battle.calc.opponent")
+	var title := _make_label("%s · %s" % [
+		_t("battle.calc.opponent").to_upper(),
+		opponent_name.to_upper(),
+	], 9, CONDITION_OPPONENT_ACCENT)
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	title_row.add_child(title)
+	var role_text := _t("battle.calc.attacker") if active_subtab == SUBTAB_THEIR_DAMAGE else _t("battle.calc.target")
+	var role := _make_label(role_text.to_upper(), 8, TEXT_MUTED)
+	role.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	role.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	title_row.add_child(role)
 	live_ev_total_label = _make_label("", 9, TEXT_MUTED)
 	live_ev_total_label.size_flags_horizontal = Control.SIZE_SHRINK_END
 	live_ev_total_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT

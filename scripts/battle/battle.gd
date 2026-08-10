@@ -2422,6 +2422,7 @@ func _refresh_damage_calc_results() -> void:
 			return
 		if bool(snapshot_response.get("success", false)):
 			damage_calc_knowledge_snapshot = _damage_calc_as_dictionary(snapshot_response.get("snapshot", {})).duplicate(true)
+			calc_panel.set_viewer_stats_by_ref(_get_damage_calc_viewer_stats_by_ref(damage_calc_knowledge_snapshot))
 			calc_panel.set_knowledge_snapshot(damage_calc_knowledge_snapshot)
 			use_safe_matchup = true
 		else:
@@ -2469,6 +2470,30 @@ func _refresh_damage_calc_results() -> void:
 
 func _show_damage_calc_loading() -> void:
 	calc_panel.show_loading(_get_active_display_species("p1"), _get_active_display_species("p2"))
+
+
+func _get_damage_calc_viewer_stats_by_ref(snapshot: Dictionary) -> Dictionary:
+	var result: Dictionary = {}
+	var viewer_entries := _damage_calc_as_array(snapshot.get("viewerPokemon", []))
+	var display_team := _get_display_team_data("p1")
+	for index in range(mini(viewer_entries.size(), display_team.size())):
+		var viewer := _damage_calc_as_dictionary(viewer_entries[index])
+		var pokemon_ref := str(viewer.get("pokemonRef", ""))
+		var display_data := _damage_calc_as_dictionary(display_team[index])
+		if pokemon_ref == "" or display_data.is_empty():
+			continue
+		var stats := _damage_calc_as_dictionary(display_data.get("stats", {}))
+		if stats.is_empty():
+			var saved_pokemon := _get_player_save_pokemon_for_battle_display_data(display_data, index)
+			if saved_pokemon != null:
+				stats = saved_pokemon.stats.duplicate(true)
+		var safe_stats: Dictionary = {}
+		for stat_key: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
+			if stats.has(stat_key) and int(stats.get(stat_key, 0)) > 0:
+				safe_stats[stat_key] = int(stats.get(stat_key, 0))
+		if not safe_stats.is_empty():
+			result[pokemon_ref] = safe_stats
+	return result
 
 func _on_calc_panel_defender_assumptions_changed(assumptions: Dictionary, edited_fields: Dictionary) -> void:
 	_sync_damage_calc_matchup_assumptions()
