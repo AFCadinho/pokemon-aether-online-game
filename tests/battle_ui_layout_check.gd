@@ -198,6 +198,7 @@ func _check_scene_structure() -> void:
 	_check_contains(pokemon_info_hud_source, "custom_minimum_size = Vector2(0, 7)", "battle EXP bar remains visually subordinate to HP")
 	_check_contains(battle_script_source, "func _refresh_wild_opponent_owned_icon", "wild battles resolve OT Pokédex ownership")
 	_check_contains(battle_script_source, "CALC_DRAWER_OPPONENT_RAIL_CLEARANCE := 8.0", "Calc drawer reserves only the opponent preview rail clearance")
+	_check_contains(battle_script_source, "CALC_DRAWER_OPPONENT_RAIL_RESERVE := 78.0", "Calc drawer reserves a stable opponent preview strip during stage layout")
 	_check_contains(battle_script_source, "size = target_size", "collapsing the battle log resizes the actual free-positioned battle window")
 	_check_contains(battle_script_source, "previous_center - size * 0.5", "battle log resizing preserves the battle window center")
 	_check_contains(battle_script_source, "battle_drawer_layer.get_global_transform().affine_inverse()", "Calc drawer tracks the battlefield instead of the battle log")

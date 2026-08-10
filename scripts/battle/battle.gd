@@ -30,6 +30,10 @@ const BATTLE_VOICE_TIMING := preload("res://scripts/battle/battle_voice_timing.g
 const BATTLE_ENVIRONMENT_CATALOG := preload("res://scripts/battle/battle_environment_catalog.gd")
 const CALC_DRAWER_FIELD_MARGIN := 8.0
 const CALC_DRAWER_OPPONENT_RAIL_CLEARANCE := 8.0
+# Keep a stable strip open for the vertical opponent preview rail. The rail is
+# rendered inside the scaled battlefield, so its global rect can temporarily
+# be outside the drawer layer while the stage is being laid out.
+const CALC_DRAWER_OPPONENT_RAIL_RESERVE := 78.0
 const MEGA_EVOLUTION_EFFECT_KEY := "mega_evolution"
 const PVP_FORCE_SWITCH_ACK_RETRY_MSEC := 1000
 const PVP_FORCE_SWITCH_RECONCILE_INITIAL_MSEC := 2500
@@ -2288,6 +2292,10 @@ func _update_calc_drawer_layout() -> void:
 	var frame_size: Vector2 = local_bottom_right - local_top_left
 	var drawer_position := local_top_left + Vector2(CALC_DRAWER_FIELD_MARGIN, CALC_DRAWER_FIELD_MARGIN)
 	var drawer_width := frame_size.x - CALC_DRAWER_FIELD_MARGIN * 2.0
+	drawer_width = minf(
+		drawer_width,
+		maxf(0.0, frame_size.x - CALC_DRAWER_OPPONENT_RAIL_RESERVE)
+	)
 	if is_instance_valid(opponent_stage_party_rail):
 		var opponent_rail_left := drawer_layer_inverse * opponent_stage_party_rail.get_global_rect().position
 		var opponent_safe_width := opponent_rail_left.x - drawer_position.x - CALC_DRAWER_OPPONENT_RAIL_CLEARANCE
