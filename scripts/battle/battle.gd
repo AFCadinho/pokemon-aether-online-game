@@ -782,6 +782,11 @@ func _on_calc_panel_team_pokemon_hovered(relation: String, pokemon_data: Diction
 	if relation == "viewer":
 		_show_party_hover(hover_data, slot_rect)
 	else:
+		# Resolve the compact Calcdex reference back to the battle's public
+		# team record so the normal public-info hover card can enrich it.
+		var public_team_data: Dictionary = _get_team_pokemon_data_for_hover("p2", hover_data)
+		if not public_team_data.is_empty():
+			hover_data = public_team_data
 		_show_public_party_hover(hover_data, slot_rect)
 
 func _prepare_calcdex_hover_data(pokemon_data: Dictionary) -> Dictionary:
