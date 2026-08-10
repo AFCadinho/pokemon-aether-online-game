@@ -442,13 +442,11 @@ func _render_your_damage_response(response: Dictionary) -> void:
 	_add_inspector_tabs()
 	match active_inspector_tab:
 		INSPECTOR_SET:
-			_add_viewer_ability_card()
 			_add_viewer_stat_grid()
 			_add_opponent_setup_card(assumptions)
 		INSPECTOR_FIELD:
 			_add_showdex_condition_controls(assumptions)
 		_:
-			_add_viewer_ability_card()
 			_add_viewer_stat_grid()
 			_add_opponent_setup_card(assumptions)
 	render_target = content
@@ -2638,22 +2636,10 @@ func _add_showdex_detail_controls(assumptions: Dictionary) -> void:
 	_add_showdex_condition_controls(assumptions)
 
 
-func _add_viewer_ability_card() -> void:
-	var viewer := _get_snapshot_pokemon_by_ref(selected_viewer_ref)
-	if viewer.is_empty():
-		return
-	var panel := PanelContainer.new()
-	panel.name = "ViewerAbilityCard"
-	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	panel.add_theme_stylebox_override("panel", _make_stylebox(PROFILE_BG, Color(CONDITION_OWN_ACCENT, 0.62), 8, 8.0, 7.0))
-	_add_render_child(panel)
-	var box := VBoxContainer.new()
-	box.add_theme_constant_override("separation", 2)
-	panel.add_child(box)
-	var title := _make_label("%s · %s" % [_t("battle.calc.your_pokemon").to_upper(), _snapshot_pokemon_name(viewer).to_upper()], 9, CONDITION_OWN_ACCENT)
-	box.add_child(title)
+func _add_viewer_ability_controls(parent: VBoxContainer, viewer: Dictionary) -> void:
 	var ability_row := HBoxContainer.new()
-	box.add_child(ability_row)
+	ability_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	parent.add_child(ability_row)
 	var ability_label := _make_label(_t("battle.calc.ability").to_upper(), 8, TEXT_MUTED)
 	ability_label.custom_minimum_size.x = 58
 	ability_row.add_child(ability_label)
@@ -2753,6 +2739,7 @@ func _add_viewer_stat_grid() -> void:
 		reset.add_theme_stylebox_override("hover", _make_stylebox(DROPDOWN_HOVER_BG, CONDITION_OWN_ACCENT, 5, 5.0, 2.0))
 		reset.pressed.connect(_on_viewer_stages_reset)
 		header.add_child(reset)
+	_add_viewer_ability_controls(viewer_box, viewer)
 
 	var stat_keys: Array[String] = ["hp", "atk", "def", "spa", "spd", "spe"]
 	var grid := GridContainer.new()
