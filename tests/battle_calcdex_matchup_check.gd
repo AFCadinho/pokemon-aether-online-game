@@ -105,6 +105,13 @@ func _run() -> void:
 		_assert(opponent_setup_card.find_child("SampleSetField", true, false) != null, "the opponent card must contain its set controls")
 		_assert(opponent_setup_card.find_child("ShowdexStatGrid", true, false) == stat_grid, "the opponent card must also contain its IV, EV, and stage controls")
 		_assert(_has_label_text(viewer_stat_grid, "315"), "the viewer stat row must show the actual calculated Attack instead of IVs and EVs")
+	var nature_field := content.find_child("NatureAssumptionField", true, false)
+	var nature_inputs := nature_field.find_children("*", "LineEdit", true, false) if nature_field != null else []
+	if not nature_inputs.is_empty():
+		var nature_input := nature_inputs[0] as LineEdit
+		panel._on_catalog_assumption_focus_entered(panel.SELECTOR_NATURE)
+		_assert(nature_input.get_selected_text() == "Hardy", "the default Hardy nature must be selected for replacement on first typing")
+		panel._close_assumption_suggestions()
 	if viewer_stage_atk != null:
 		panel._on_viewer_stage_selected(viewer_stage_atk.get_item_index(8), viewer_stage_atk, "atk")
 		_assert(panel.get_viewer_scenario() == {"boosts": {"atk": 2}}, "viewer stage controls must create a relation-scoped +2 Attack scenario")

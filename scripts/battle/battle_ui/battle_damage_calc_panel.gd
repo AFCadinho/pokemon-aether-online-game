@@ -4121,6 +4121,16 @@ func _add_selector_status(parent: VBoxContainer, text: String, color: Color) -> 
 func _on_catalog_assumption_focus_entered(kind: String) -> void:
 	if catalog_search_timer != null:
 		catalog_search_timer.stop()
+	var input := _get_catalog_input(kind)
+	if (
+		kind == SELECTOR_NATURE
+		and input != null
+		and not bool(edited_assumption_fields.get("nature", false))
+		and input.text.strip_edges().to_lower() == _localized_nature_name("Hardy").to_lower()
+	):
+		# Hardy is the neutral display default. Keep it visible until typing starts,
+		# but select it so the first keystroke replaces it instead of appending.
+		input.select_all()
 	var input_text: String = _get_catalog_input_text(kind)
 	if active_selector == kind and selector_query == input_text and selector_loading:
 		return
