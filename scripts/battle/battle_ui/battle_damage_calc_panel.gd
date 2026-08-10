@@ -197,6 +197,7 @@ var active_inspector_tab := INSPECTOR_SET
 var selected_move_index := 0
 var move_scenarios: Dictionary = {}
 var pending_move_index := -1
+var is_clearing_content := false
 
 
 func _ready() -> void:
@@ -528,6 +529,7 @@ func _add_render_child(node: Control) -> void:
 
 
 func _clear_content() -> void:
+	is_clearing_content = true
 	render_target = content
 	warning_details_panel = null
 	result_summary_panels.clear()
@@ -537,6 +539,7 @@ func _clear_content() -> void:
 	for child: Node in content.get_children():
 		content.remove_child(child)
 		child.queue_free()
+	is_clearing_content = false
 
 
 func _add_subtabs() -> void:
@@ -1513,6 +1516,8 @@ func _get_battle_state_hp_display(relation: String) -> Dictionary:
 
 
 func _on_battle_state_hp_focus_exited(relation: String, input: LineEdit) -> void:
+	if is_clearing_content:
+		return
 	_on_battle_state_hp_changed(input.text, relation, input)
 
 
