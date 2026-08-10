@@ -4,32 +4,29 @@
 
 **Added**
 
-- The battle damage calculator now gives you a much larger, clearer workspace while keeping the battle field, team previews, and opponent previews available.
-- You can now hover over your own team members and revealed opponent Pokémon while using the calculator to see the information available about them.
-- You can edit the calculator's battle state for both sides, including current HP, HP percentage, and status condition.
-- Opponent IVs, EVs, stat stages, abilities, natures, items, and field conditions can now be adjusted for more accurate what-if calculations.
-- Your active Pokémon's ability can be changed in the calculator, which is useful when testing a different form or battle situation.
-- Move slots now support Z-Moves and critical-hit scenarios, with the selected move recalculated immediately.
+- The battle damage calculator now has more room and keeps the battlefield and both teams in view.
+- While using the calculator, you can hover over your own Pokémon and revealed opposing Pokémon to view their known information.
+- You can adjust HP, status conditions, moves, abilities, items, stats, and field effects to explore different battle situations.
+- The calculator now supports Z-Moves and critical hits.
 
 **Changed**
 
-- Damage results now use precise one-decimal percentages, including public battle-log damage information, without revealing an opponent's exact maximum HP.
-- The calculator now shows raw stats and battle stages more clearly, with separate sections for your Pokémon and the opponent.
-- Move suggestions, editable opponent moves, calculation summaries, KO chances, and field effects now have clearer visual emphasis and feedback.
-- Weather, terrain, screens, hazards, and Spikes layers are easier to recognize and adjust for the selected side.
-- The calculator now follows the active party slot correctly when you switch Pokémon.
+- Damage results and battle-log percentages are now shown more precisely.
+- The calculator makes your Pokémon's stats, stat changes, move suggestions, KO chances, and field effects easier to read and adjust.
+- Weather, terrain, screens, hazards, and Spikes are easier to recognize and set for the correct side.
+- The calculator now follows the Pokémon you have sent out when you switch.
 
 **Fixed**
 
-- Fixed calculator results failing to load in some battles and after switching between Pokémon or battle tabs.
-- Fixed fainted Pokémon being unavailable for damage investigations.
-- Fixed HP and HP percentage fields from incorrectly overwriting each other instead of converting between the two values.
-- Fixed team and opponent hover cards showing incomplete information or incorrect sizing while the calculator was open.
-- Fixed the calculator occasionally showing the wrong Pokémon in a party slot after a switch.
-- Consumable held items such as Eject Button, Focus Sash, and Berries now show the correct battle message and activation animation.
-- Fixed temporary PvP connection-authority hiccups incorrectly disconnecting an active player and starting reconnect grace.
-- Weather and terrain timers now show the correct public duration range after a faint or pivot, while keeping duration-extending held items private.
-- Fixed Terapagos's Tera Shift max-HP update being shown as a health restore in PvP battles.
+- Fixed calculator results sometimes failing to load after switching Pokémon or changing battle tabs.
+- Fixed fainted Pokémon being unavailable in the calculator.
+- Fixed HP and HP percentage fields interfering with each other.
+- Fixed incomplete or incorrectly sized team information cards in the calculator.
+- Fixed the calculator occasionally showing the wrong Pokémon after a switch.
+- Consumable held items such as Eject Button, Focus Sash, and Berries now show the correct battle message and animation.
+- Fixed some active PvP players being incorrectly shown as disconnected.
+- Weather and terrain timers now show the correct remaining range after a faint or a pivot move, without revealing duration-extending items.
+- Fixed Terapagos's Tera Shift being shown as restoring health in PvP battles.
 
 ## 0.3.52 - 2026-08-08
 
