@@ -49,6 +49,7 @@ func _init() -> void:
 	_check_badly_poisoned_damage_replays_status_effect_animation()
 	_check_burn_damage_replays_status_effect_animation()
 	_check_z_power_event_has_visible_message()
+	_check_stat_reset_events_have_visible_messages()
 	_check_semantic_battle_log_colors()
 	_check_supreme_overlord_fallen_counter_protocol()
 	quit(1 if failed else 0)
@@ -76,6 +77,24 @@ func _check_z_power_event_has_visible_message() -> void:
 		str(result.get("battle_message", "")),
 		"Pikachu surrounded itself with Z-Power!",
 		"Z-Power event receives visible battle presentation"
+	)
+
+
+func _check_stat_reset_events_have_visible_messages() -> void:
+	var presentation = _make_presentation()
+	var result: Dictionary = presentation.build({
+		"type": "statStage",
+		"operation": "clearAll",
+	})
+	_check_equal(
+		str(result.get("battle_message", "")),
+		"All stat changes were eliminated!",
+		"Haze receives a visible all-stat reset presentation"
+	)
+	_check_equal(
+		str(result.get("log_message", "")),
+		"All stat changes were eliminated!",
+		"Haze receives a battle-log all-stat reset presentation"
 	)
 
 

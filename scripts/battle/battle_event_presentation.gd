@@ -300,6 +300,14 @@ func build(event_data: Dictionary) -> Dictionary:
 			presentation["add_blank_after"] = str(presentation["log_message"]) != ""
 			presentation["suppress_player_gap"] = is_ability_detail
 
+		"statStage":
+			recent_field_effect_source = ""
+			recent_ability_event = false
+			recent_move_event = false
+			presentation["log_message"] = event_text_formatter.format_stat_stage_event(event_data)
+			presentation["battle_message"] = str(presentation["log_message"])
+			presentation["add_blank_after"] = str(presentation["log_message"]) != ""
+
 		"status":
 			recent_field_effect_source = ""
 			recent_ability_event = false

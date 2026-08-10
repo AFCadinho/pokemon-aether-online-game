@@ -7599,6 +7599,23 @@
         "PRSFX- Barrier": "res://assets/battles/animations/terastarstorm/PRSFX- Barrier.wav",
         "PRSFX- Recover": "res://assets/battles/animations/terastarstorm/PRSFX- Recover.wav"
       }
+    },
+    "haze": {
+      "template": "imported_sheet",
+      "category": "field",
+      "data_path": "res://assets/battles/animations/haze/haze.json",
+      "sheet_path": "res://assets/battles/animations/haze/PRAS- Smokescreen.png",
+      "background_path": "",
+      "foreground_path": "res://assets/battles/animations/haze/PRAS- Haze FG.png",
+      "speed_scale": 1.1,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": true,
+      "foreground_opacity_multiplier": 0.45,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "sound_paths": {
+        "PRSFX- Haze.wav": "res://assets/battles/animations/haze/PRSFX- Haze.wav"
+      }
     }
   }
 }

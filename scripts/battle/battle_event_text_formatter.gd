@@ -274,6 +274,34 @@ func format_stat_change_battle_message(event: Dictionary) -> String:
 
 	return _t("battle.event.stat.changed", {"target": target, "stat": stat, "action": action})
 
+
+func format_stat_stage_event(event: Dictionary) -> String:
+	var operation := str(event.get("operation", "")).strip_edges()
+	var target := _format_battle_actor(_get_first_event_text_value(event, [
+		"target",
+		"pokemon",
+		"actor",
+	]))
+	match operation:
+		"clearAll":
+			return _t("battle.event.stat.reset.all")
+		"clear":
+			return _t("battle.event.stat.reset.target", {"target": target}) if target != "" else ""
+		"clearPositive":
+			return _t("battle.event.stat.reset.positive", {"target": target}) if target != "" else ""
+		"invert":
+			return _t("battle.event.stat.reset.inverted", {"target": target}) if target != "" else ""
+		"swap":
+			var source_target := _format_battle_actor(str(event.get("sourceTarget", "")))
+			if target == "" or source_target == "":
+				return ""
+			return _t("battle.event.stat.reset.swapped", {
+				"target": target,
+				"source": source_target,
+			})
+
+	return ""
+
 func is_stat_change_from_ability(event: Dictionary) -> bool:
 	var source := str(event.get("source", "")).strip_edges()
 	if source.begins_with("[from] "):

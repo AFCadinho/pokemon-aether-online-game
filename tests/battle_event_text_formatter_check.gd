@@ -65,6 +65,16 @@ func _run() -> void:
 		"resisted message"
 	)
 	_check_equal(
+		formatter.format_stat_stage_event({"type": "statStage", "operation": "clearAll"}),
+		"All stat changes were eliminated!",
+		"Haze stat reset message"
+	)
+	_check_equal(
+		formatter.format_stat_stage_event({"type": "statStage", "operation": "clear", "target": "p2a: Gholdengo"}),
+		"The opposing Gholdengo's stat changes were eliminated!",
+		"Clear Smog stat reset message"
+	)
+	_check_equal(
 		formatter.format_direct_damage_message("Pikachu", 12, true, false),
 		"(Pikachu lost 12.0% of its health!)",
 		"direct damage message"
