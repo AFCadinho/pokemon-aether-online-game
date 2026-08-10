@@ -2476,15 +2476,19 @@ func _get_damage_calc_viewer_stats_by_ref(snapshot: Dictionary) -> Dictionary:
 	var result: Dictionary = {}
 	var viewer_entries := _damage_calc_as_array(snapshot.get("viewerPokemon", []))
 	var display_team := _get_display_team_data("p1")
-	for index in range(mini(viewer_entries.size(), display_team.size())):
-		var viewer := _damage_calc_as_dictionary(viewer_entries[index])
+	for viewer_value: Variant in viewer_entries:
+		var viewer := _damage_calc_as_dictionary(viewer_value)
 		var pokemon_ref := str(viewer.get("pokemonRef", ""))
-		var display_data := _damage_calc_as_dictionary(display_team[index])
-		if pokemon_ref == "" or display_data.is_empty():
+		var slot_text := pokemon_ref.trim_prefix("viewer:public-slot-")
+		var slot_index := int(slot_text) - 1
+		if pokemon_ref == "" or str(slot_index + 1) != slot_text or slot_index < 0 or slot_index >= display_team.size():
+			continue
+		var display_data := _damage_calc_as_dictionary(display_team[slot_index])
+		if display_data.is_empty():
 			continue
 		var stats := _damage_calc_as_dictionary(display_data.get("stats", {}))
 		if stats.is_empty():
-			var saved_pokemon := _get_player_save_pokemon_for_battle_display_data(display_data, index)
+			var saved_pokemon := _get_player_save_pokemon_for_battle_display_data(display_data, slot_index)
 			if saved_pokemon != null:
 				stats = saved_pokemon.stats.duplicate(true)
 		var safe_stats: Dictionary = {}
