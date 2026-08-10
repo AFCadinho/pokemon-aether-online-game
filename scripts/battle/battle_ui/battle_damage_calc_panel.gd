@@ -1428,7 +1428,7 @@ func _add_battle_state_controls() -> void:
 	_add_render_child(section)
 
 
-func _make_battle_state_side(caption: String, relation: String) -> PanelContainer:
+func _make_battle_state_side(_caption: String, relation: String) -> PanelContainer:
 	var card := PanelContainer.new()
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	card.add_theme_stylebox_override(
@@ -1438,8 +1438,6 @@ func _make_battle_state_side(caption: String, relation: String) -> PanelContaine
 	var side := VBoxContainer.new()
 	side.add_theme_constant_override("separation", 3)
 	card.add_child(side)
-	var label := _make_label(caption, 9, CONDITION_OWN_ACCENT if relation == "viewer" else CONDITION_OPPONENT_ACCENT)
-	side.add_child(label)
 	var controls := HBoxContainer.new()
 	controls.add_theme_constant_override("separation", 2)
 	side.add_child(controls)
