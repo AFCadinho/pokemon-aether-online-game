@@ -29,11 +29,6 @@ const BATTLE_PUBLIC_POKEMON_KNOWLEDGE := preload("res://scripts/battle/battle_pu
 const BATTLE_VOICE_TIMING := preload("res://scripts/battle/battle_voice_timing.gd")
 const BATTLE_ENVIRONMENT_CATALOG := preload("res://scripts/battle/battle_environment_catalog.gd")
 const CALC_DRAWER_FIELD_MARGIN := 8.0
-const CALC_DRAWER_OPPONENT_RAIL_CLEARANCE := 8.0
-# Keep a stable strip open for the vertical opponent preview rail. The rail is
-# rendered inside the scaled battlefield, so its global rect can temporarily
-# be outside the drawer layer while the stage is being laid out.
-const CALC_DRAWER_OPPONENT_RAIL_RESERVE := 78.0
 const MEGA_EVOLUTION_EFFECT_KEY := "mega_evolution"
 const PVP_FORCE_SWITCH_ACK_RETRY_MSEC := 1000
 const PVP_FORCE_SWITCH_RECONCILE_INITIAL_MSEC := 2500
@@ -442,6 +437,10 @@ func _ready() -> void:
 		calc_panel.matchup_selection_changed.connect(_on_calc_panel_matchup_selection_changed)
 	if not calc_panel.move_scenarios_changed.is_connected(_on_calc_panel_move_scenarios_changed):
 		calc_panel.move_scenarios_changed.connect(_on_calc_panel_move_scenarios_changed)
+	if not calc_panel.team_pokemon_hovered.is_connected(_on_calc_panel_team_pokemon_hovered):
+		calc_panel.team_pokemon_hovered.connect(_on_calc_panel_team_pokemon_hovered)
+	if not calc_panel.team_pokemon_unhovered.is_connected(_on_calc_panel_team_pokemon_unhovered):
+		calc_panel.team_pokemon_unhovered.connect(_on_calc_panel_team_pokemon_unhovered)
 	if not bag_grid.item_selected.is_connected(_on_bag_grid_item_selected):
 		bag_grid.item_selected.connect(_on_bag_grid_item_selected)
 	if player_hud_panel.has_method("set_experience_bar_enabled"):
@@ -771,6 +770,25 @@ func _connect_party_hover_signals() -> void:
 
 func _show_public_party_hover(pokemon_data: Dictionary, _slot_rect: Rect2) -> void:
 	_show_hud_pokemon_hover(pokemon_data)
+
+func _on_calc_panel_team_pokemon_hovered(relation: String, pokemon_data: Dictionary, slot_rect: Rect2) -> void:
+	var pokemon_ref := str(pokemon_data.get("pokemonRef", ""))
+	var slot_index := int(pokemon_ref.get_slice("-", 2)) if pokemon_ref.begins_with(relation + ":public-slot-") else 0
+	if slot_index < 1 or slot_index > 6:
+		return
+	var hover_data := pokemon_data.duplicate(true)
+	hover_data["ident"] = ("p1" if relation == "viewer" else "p2") + ":slot:" + str(slot_index)
+	hover_data["metadataSlot"] = slot_index
+	if relation == "viewer":
+		_show_party_hover(hover_data, slot_rect)
+	else:
+		_show_public_party_hover(hover_data, slot_rect)
+
+func _on_calc_panel_team_pokemon_unhovered(relation: String) -> void:
+	if relation == "viewer":
+		_hide_party_hover()
+	else:
+		_hide_hud_pokemon_hover()
 
 func _connect_forfeit_confirm_dialog_signals() -> void:
 	if forfeit_confirm_dialog.has_signal("confirmed"):
@@ -2278,7 +2296,7 @@ func _get_move_confirmation_name(move_data: Dictionary) -> String:
 			return value
 	return _t("battle.fallback.selected_move")
 
-## Vult het battlefield tot vlak voor de hoverbare tegenstander-previewrail.
+## Vult het battlefield met de volledige Calcdex werkruimte.
 func _queue_calc_drawer_layout_update() -> void:
 	call_deferred("_update_calc_drawer_layout")
 
@@ -2288,20 +2306,11 @@ func _update_calc_drawer_layout() -> void:
 	var frame_rect: Rect2 = battle_frame.get_global_rect()
 	var drawer_layer_inverse: Transform2D = battle_drawer_layer.get_global_transform().affine_inverse()
 	var local_top_left: Vector2 = drawer_layer_inverse * frame_rect.position
-	# Use the frame's rendered size here. Converting both corners through the
-	# drawer transform expands the width when the battle stage is scaled to fill.
+	# Use the frame's rendered size here so tab changes keep the same full-width
+	# workspace even while the battle stage is scaled to fill.
 	var frame_size := frame_rect.size
 	var drawer_position: Vector2 = local_top_left + Vector2(CALC_DRAWER_FIELD_MARGIN, CALC_DRAWER_FIELD_MARGIN)
 	var drawer_width: float = frame_size.x - CALC_DRAWER_FIELD_MARGIN * 2.0
-	drawer_width = minf(
-		drawer_width,
-		maxf(0.0, frame_size.x - CALC_DRAWER_OPPONENT_RAIL_RESERVE)
-	)
-	if is_instance_valid(opponent_stage_party_rail):
-		var opponent_rail_left: Vector2 = drawer_layer_inverse * opponent_stage_party_rail.get_global_rect().position
-		var opponent_safe_width: float = opponent_rail_left.x - drawer_position.x - CALC_DRAWER_OPPONENT_RAIL_CLEARANCE
-		if opponent_safe_width > 0.0:
-			drawer_width = minf(drawer_width, opponent_safe_width)
 	calc_drawer.position = drawer_position
 	calc_drawer.size = Vector2(
 		drawer_width,

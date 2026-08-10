@@ -14,6 +14,8 @@ signal default_ability_requested(species: String)
 signal viewer_ability_catalog_requested(species: String)
 signal matchup_selection_changed()
 signal move_scenarios_changed(move_scenarios: Array)
+signal team_pokemon_hovered(relation: String, pokemon_data: Dictionary, slot_rect: Rect2)
+signal team_pokemon_unhovered(relation: String)
 
 const SURFACE_CANVAS := Color("#050a10")
 const SURFACE_PANEL := Color("#0b1520")
@@ -1224,7 +1226,17 @@ func _make_team_icon_button(entry: Dictionary, relation: String, slot_index: int
 	stack.add_child(hp_bar)
 	if not button.disabled:
 		button.pressed.connect(_on_team_icon_pressed.bind(relation, pokemon_ref))
+		button.mouse_entered.connect(_on_team_icon_mouse_entered.bind(entry, relation, button))
+		button.mouse_exited.connect(_on_team_icon_mouse_exited.bind(relation))
 	return button
+
+
+func _on_team_icon_mouse_entered(entry: Dictionary, relation: String, button: Button) -> void:
+	team_pokemon_hovered.emit(relation, entry.duplicate(true), button.get_global_rect())
+
+
+func _on_team_icon_mouse_exited(relation: String) -> void:
+	team_pokemon_unhovered.emit(relation)
 
 
 func _apply_team_icon_button_style(button: Button, accent: Color, is_selected: bool, is_active: bool) -> void:
