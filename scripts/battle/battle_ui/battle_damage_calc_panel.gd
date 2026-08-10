@@ -90,7 +90,6 @@ const TYPE_COLORS := {
 }
 const SUBTAB_YOUR_DAMAGE := "your"
 const SUBTAB_THEIR_DAMAGE := "their"
-const INSPECTOR_MOVE := "move"
 const INSPECTOR_SET := "set"
 const INSPECTOR_FIELD := "field"
 const SELECTOR_NONE := ""
@@ -188,7 +187,7 @@ var current_default_ability_loading := false
 var species_scenarios: Dictionary = {}
 var forme_catalogs: Dictionary = {}
 var forme_menu_buttons: Dictionary = {}
-var active_inspector_tab := INSPECTOR_MOVE
+var active_inspector_tab := INSPECTOR_SET
 var selected_move_index := 0
 var move_scenarios: Dictionary = {}
 var pending_move_index := -1
@@ -232,7 +231,7 @@ func show_idle() -> void:
 	last_response = {}
 	last_error = ""
 	active_subtab = SUBTAB_YOUR_DAMAGE
-	active_inspector_tab = INSPECTOR_MOVE
+	active_inspector_tab = INSPECTOR_SET
 	selected_move_index = 0
 	move_scenarios.clear()
 	pending_move_index = -1
@@ -436,7 +435,8 @@ func _render_your_damage_response(response: Dictionary) -> void:
 		INSPECTOR_FIELD:
 			_add_showdex_condition_controls(assumptions)
 		_:
-			_add_move_inspector(results, defender)
+			_add_live_assumption_controls(assumptions)
+			_add_showdex_stat_grid(assumptions)
 	render_target = content
 
 
@@ -485,7 +485,6 @@ func _add_inspector_tabs() -> void:
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_theme_constant_override("separation", 4)
 	_add_render_child(row)
-	row.add_child(_make_inspector_tab_button(_t("battle.calc.inspector.move"), INSPECTOR_MOVE))
 	row.add_child(_make_inspector_tab_button(_t("battle.calc.inspector.set"), INSPECTOR_SET))
 	row.add_child(_make_inspector_tab_button(_t("battle.calc.inspector.field"), INSPECTOR_FIELD))
 
@@ -507,51 +506,11 @@ func _make_inspector_tab_button(label: String, tab_id: String) -> Button:
 
 
 func _on_inspector_tab_pressed(tab_id: String) -> void:
-	if tab_id not in [INSPECTOR_MOVE, INSPECTOR_SET, INSPECTOR_FIELD] or active_inspector_tab == tab_id:
+	if tab_id not in [INSPECTOR_SET, INSPECTOR_FIELD] or active_inspector_tab == tab_id:
 		return
 	close_assumption_popover()
 	active_inspector_tab = tab_id
 	_render_current_state()
-
-
-func _add_move_inspector(results: Array, defender: Dictionary) -> void:
-	if results.is_empty():
-		_add_status(_t("battle.calc.inspector.select_move"), TEXT_SECONDARY)
-		return
-	selected_move_index = clampi(selected_move_index, 0, results.size() - 1)
-	var result := _as_dictionary(results[selected_move_index])
-	var move_name := _get_move_name(result)
-	var panel := PanelContainer.new()
-	panel.name = "MoveInspector"
-	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	panel.add_theme_stylebox_override("panel", _make_card_stylebox(HERO_BG, HERO_BORDER, 8, 10.0, 8.0))
-	_add_render_child(panel)
-	var box := VBoxContainer.new()
-	box.add_theme_constant_override("separation", 7)
-	panel.add_child(box)
-	var title_row := HBoxContainer.new()
-	title_row.add_theme_constant_override("separation", 6)
-	box.add_child(title_row)
-	var title := _make_label(_fallback_text(move_name, _t("battle.move.unknown")), 17, TEXT_PRIMARY)
-	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	title_row.add_child(title)
-	var modifier_row := _make_move_modifier_controls(selected_move_index, move_name, true)
-	title_row.add_child(modifier_row)
-	var damage := _make_label(_get_percent_label(result), 22, DAMAGE_TEXT)
-	damage.custom_minimum_size = Vector2(0, 32)
-	damage.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	box.add_child(damage)
-	var ko_text := _get_primary_result_label(result, defender)
-	var ko := _make_label(ko_text, 12, _get_result_badge_colors(ko_text)["text"])
-	ko.add_theme_stylebox_override("normal", _make_stylebox(_get_result_badge_colors(ko_text)["background"], _get_result_badge_colors(ko_text)["border"], 6, 7.0, 3.0))
-	box.add_child(ko)
-	var summary_text := _get_result_summary_text(result)
-	if summary_text != "":
-		box.add_child(_make_result_summary_panel(summary_text))
-	if pending_move_index == selected_move_index:
-		var pending := _make_label(_t("battle.calc.inspector.recalculating"), 11, INTERACTION_ACCENT)
-		pending.name = "MoveInspectorRecalculating"
-		box.add_child(pending)
 
 
 func _add_render_child(node: Control) -> void:
@@ -1972,7 +1931,6 @@ func _on_move_modifier_toggled(enabled: bool, row_index: int, move_name: String,
 	else:
 		move_scenarios.erase(row_index)
 	selected_move_index = row_index
-	active_inspector_tab = INSPECTOR_MOVE
 	pending_move_index = row_index
 	_render_current_state()
 	move_scenarios_changed.emit(get_move_scenarios())
@@ -2079,7 +2037,6 @@ func _on_result_disclosure_pressed(result_key: String) -> void:
 	var selected_metadata := _as_dictionary(result_row_panels.get(result_key, {}))
 	if not selected_metadata.is_empty():
 		selected_move_index = int(selected_metadata.get("rowIndex", selected_move_index))
-		active_inspector_tab = INSPECTOR_MOVE
 	expanded_result_key = "" if expanded_result_key == result_key else result_key
 	_render_current_state()
 
