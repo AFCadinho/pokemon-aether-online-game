@@ -543,6 +543,9 @@ shape = SubResource("RectangleShape2D_pokecenter")
 
 [node name="ToTrainerSchool" type="Area2D" parent="Exits" unique_id=560727093]
 position = Vector2(1904, 880)
+script = ExtResource("3_route1")
+target_scene_path = "res://scenes/overworld/kanto/towns/viridian_city/trainer_school.tscn"
+target_spawn_name = "FromViridianCity"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToTrainerSchool" unique_id=1936541123]
 position = Vector2(0, -16)

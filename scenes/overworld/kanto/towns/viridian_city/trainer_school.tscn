@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://dv0aevldj7iyb"]
+
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/pokemon_school/pokemon_school.visual.tscn" id="1_v7tsg"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="2_map_exit"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_school_exit"]
+size = Vector2(32, 32)
+
+[node name="TrainerSchool" type="Node2D" unique_id=583102159]
+
+[node name="PokémonSchool" parent="." unique_id=792709348 instance=ExtResource("1_v7tsg")]
+
+[node name="FromViridianCity" type="Marker2D" parent="."]
+position = Vector2(400, 912)
+
+[node name="Exits" type="Node2D" parent="."]
+
+[node name="ToViridianCity" type="Area2D" parent="Exits"]
+position = Vector2(400, 944)
+script = ExtResource("2_map_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn"
+target_spawn_name = "FromTrainerSchool"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToViridianCity"]
+position = Vector2(0, -16)
+shape = SubResource("RectangleShape2D_school_exit")
+
+[connection signal="body_entered" from="Exits/ToViridianCity" to="Exits/ToViridianCity" method="_on_body_entered"]
