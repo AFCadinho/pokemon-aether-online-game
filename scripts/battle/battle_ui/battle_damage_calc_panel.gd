@@ -2255,15 +2255,25 @@ func _make_result_summary_panel(summary_text: String) -> PanelContainer:
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.mouse_filter = Control.MOUSE_FILTER_PASS
+	var summary_style := _make_stylebox(
+		Color(SURFACE_CANVAS, 0.94),
+		Color(INTERACTION_ACCENT, 0.56),
+		6,
+		9.0,
+		6.0
+	)
+	# Treat the calculation text as an explanatory callout, with a stronger
+	# leading edge that visually ties it to the selected move row.
+	summary_style.border_width_left = 3
 	panel.add_theme_stylebox_override(
 		"panel",
-		_make_stylebox(Color(SURFACE_RAISED, 0.96), Color(BORDER_NEUTRAL, 0.86), 6, 9.0, 6.0)
+		summary_style
 	)
 	var row := HBoxContainer.new()
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_theme_constant_override("separation", 7)
 	panel.add_child(row)
-	var label := _make_label(summary_text, 11, TEXT_SECONDARY)
+	var label := _make_label(summary_text, 11, TEXT_PRIMARY)
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	label.clip_text = false
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
