@@ -794,8 +794,6 @@ func _hide_move_hover() -> void:
 		move_hover_card.visible = false
 
 func _show_party_hover(pokemon_data: Dictionary, slot_rect: Rect2) -> void:
-	if current_action_panel_mode == BattleActionsPanelMode.CALC:
-		return
 	if pokemon_data.is_empty():
 		return
 
@@ -2337,7 +2335,9 @@ func _sync_party_rail_interaction() -> void:
 
 	var was_selectable := player_party_grid.is_selection_enabled()
 	var party_selection_active := _is_party_rail_selection_allowed()
+	player_party_grid.set_hover_enabled(true)
 	player_party_grid.set_selection_enabled(party_selection_active)
+	opponent_party_grid.set_hover_enabled(false)
 	opponent_party_grid.set_selection_enabled(false)
 
 	if party_selection_active:
