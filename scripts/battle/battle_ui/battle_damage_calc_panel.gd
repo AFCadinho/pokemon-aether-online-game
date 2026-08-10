@@ -1508,9 +1508,10 @@ func _get_battle_state_hp_display(relation: String) -> Dictionary:
 	var current := int(exact.get("current", maximum))
 	var percent := float(current) * 100.0 / float(maximum) if maximum > 0 else 0.0
 	if relation == "opponent":
-		maximum = 100
+		maximum = _get_expected_opponent_max_hp()
 		current = int(roundf(float(_get_defender_hp_percent(pokemon) if _get_defender_hp_percent(pokemon) != null else 100.0)))
 		percent = float(current)
+		current = int(roundf(float(maximum) * percent / 100.0))
 	if state.has("currentHp"):
 		current = maxi(0, int(state.get("currentHp", 0)))
 		percent = float(current) * 100.0 / float(maximum) if maximum > 0 else 0.0
@@ -1518,6 +1519,16 @@ func _get_battle_state_hp_display(relation: String) -> Dictionary:
 		percent = clampf(float(state.get("currentHpPercent", 0.0)), 0.0, 100.0)
 		current = int(roundf(percent))
 	return {"current": current, "maximum": maximum, "percent": percent}
+
+
+func _get_expected_opponent_max_hp() -> int:
+	for result_value: Variant in _as_array(last_response.get("results", [])):
+		var result := _as_dictionary(result_value)
+		var min_damage := _get_percent_number(result.get("minDamage"))
+		var min_percent := _get_percent_number(result.get("minPercent"))
+		if min_damage != null and min_percent != null and min_damage > 0.0 and min_percent > 0.0:
+			return maxi(1, roundi(float(min_damage) * 100.0 / float(min_percent)))
+	return 100
 
 
 func _on_battle_state_hp_focus_exited(relation: String, input: LineEdit) -> void:
