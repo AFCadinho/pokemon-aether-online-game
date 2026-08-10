@@ -2903,7 +2903,7 @@ func _add_viewer_stat_grid() -> void:
 
 	# HP is already represented by the battle-state controls above; keep the
 	# own-side stat card focused on the stats that can change during battle.
-	var stat_keys: Array[String] = BOOST_STAT_KEYS.duplicate()
+	var stat_keys: Array[String] = ["atk", "def", "spa", "spd", "spe"]
 	var grid := GridContainer.new()
 	grid.columns = stat_keys.size() + 1
 	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
