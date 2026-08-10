@@ -643,7 +643,20 @@ func get_viewer_scenario() -> Dictionary:
 func get_battle_state_scenario() -> Dictionary:
 	var viewer_state := _as_dictionary(battle_state_scenarios.get(selected_viewer_ref, {}))
 	var opponent_state := _as_dictionary(battle_state_scenarios.get(selected_opponent_ref, {}))
-	return {"viewer": viewer_state.duplicate(true), "opponent": opponent_state.duplicate(true)}
+	return {
+		"viewer": _get_public_battle_state(viewer_state),
+		"opponent": _get_public_battle_state(opponent_state),
+	}
+
+
+func _get_public_battle_state(state: Dictionary) -> Dictionary:
+	var result: Dictionary = {}
+	for key: Variant in state.keys():
+		var name := str(key)
+		if name.begins_with("_"):
+			continue
+		result[name] = state[key]
+	return result
 
 
 func show_forme_catalog_response(relation: String, species: String, response: Dictionary) -> void:
@@ -1559,11 +1572,15 @@ func _get_battle_state_hp_display(relation: String) -> Dictionary:
 	var pokemon := _get_snapshot_pokemon_by_ref(ref)
 	var hp := _get_pokemon_hp(pokemon)
 	var exact := _as_dictionary(hp.get("exact", {}))
-	var maximum := int(exact.get("maximum", 100))
+	var maximum := int(state.get("_maximumHp", exact.get("maximum", 100)))
 	var current := int(exact.get("current", maximum))
 	var percent := float(current) * 100.0 / float(maximum) if maximum > 0 else 0.0
 	if relation == "opponent":
-		maximum = _get_expected_opponent_max_hp()
+		if not state.has("_maximumHp"):
+			maximum = _get_expected_opponent_max_hp()
+			var snapshot_maximum := int(exact.get("maximum", 0))
+			if maximum <= 100 and snapshot_maximum > 100:
+				maximum = snapshot_maximum
 		current = int(roundf(float(_get_defender_hp_percent(pokemon) if _get_defender_hp_percent(pokemon) != null else 100.0)))
 		percent = float(current)
 		current = int(roundf(float(maximum) * percent / 100.0))
@@ -1604,11 +1621,12 @@ func _on_battle_state_hp_changed(value: String, relation: String, input: LineEdi
 		var percent := clampf(number, 0.0, 100.0)
 		var current := clampi(roundi(float(maximum) * percent / 100.0), 0, maximum)
 		state["currentHp"] = current
-		state["currentHpPercent"] = float(current) * 100.0 / float(maximum) if maximum > 0 else 0.0
+		state.erase("currentHpPercent")
 	else:
 		var current := clampi(int(number), 0, maximum)
 		state["currentHp"] = current
-		state["currentHpPercent"] = float(current) * 100.0 / float(maximum) if maximum > 0 else 0.0
+		state.erase("currentHpPercent")
+	state["_maximumHp"] = maximum
 	battle_state_scenarios[ref] = state
 	_mark_sample_set_custom()
 	_emit_defender_assumptions_changed()
