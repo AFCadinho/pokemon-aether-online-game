@@ -714,6 +714,7 @@ var pvp_ranked_queue_availability_in_flight := false
 var pvp_ranked_queue_availability_elapsed := RANKED_QUEUE_AVAILABILITY_POLL_INTERVAL_SECONDS
 var pvp_ranked_queue_has_waiting_player := false
 var pvp_queue_auto_open_in_flight := false
+var pvp_queue_join_in_flight := false
 var pvp_queue_leave_in_flight := false
 var pvp_queue_compact_minimized := false
 var pvp_queue_wait_started_msec := 0
@@ -33632,19 +33633,22 @@ func _spectator_response_has_public_teams(response: Dictionary) -> bool:
 
 
 func _on_pvp_join_queue_pressed() -> void:
-	if pvp_battle_starting:
+	if pvp_battle_starting or pvp_queue_join_in_flight or pvp_ranked_queue_join_preparing:
 		return
+	pvp_queue_join_in_flight = true
+	_set_pvp_room_busy(true)
 	pvp_ranked_queue_join_preparing = true
 	if _is_selected_pvp_queue_ranked():
 		pvp_ranked_team_validation_party_signature = ""
 		await _refresh_pvp_ranked_team_validation(true)
 		if not PvpRankedTeamValidation.allows_ranked_join(pvp_ranked_team_validation_result):
 			pvp_ranked_queue_join_preparing = false
+			pvp_queue_join_in_flight = false
+			_set_pvp_room_busy(false)
 			_set_pvp_queue_status_key("ui.pvp.queue.validation_failed")
 			_refresh_pvp_team_validator()
 			return
 	pvp_ranked_queue_join_preparing = false
-	_set_pvp_room_busy(true)
 	_set_pvp_queue_status_key("ui.pvp.queue.joining")
 	var request := _create_pvp_request_node()
 	var response: Dictionary = await BattleApiClient.join_pvp_queue(
@@ -33653,6 +33657,7 @@ func _on_pvp_join_queue_pressed() -> void:
 		BattleApiPayloads.from_player_save(PlayerSave)
 	)
 	request.queue_free()
+	pvp_queue_join_in_flight = false
 	_set_pvp_room_busy(false)
 
 	if not bool(response.get("success", false)):
@@ -33662,6 +33667,11 @@ func _on_pvp_join_queue_pressed() -> void:
 		if validation_value is Dictionary:
 			pvp_ranked_team_validation_result = PvpRankedTeamValidation.normalize_response(validation_value as Dictionary)
 			_refresh_pvp_team_validator()
+		return
+
+	var active_match := _pvp_active_queue_match_from_response(response)
+	if not active_match.is_empty():
+		await _resume_pvp_queue_active_match(active_match)
 		return
 
 	var entry: Dictionary = _pvp_queue_entry_from_response(response)
@@ -35401,6 +35411,11 @@ func _poll_pvp_queue_status() -> void:
 		push_warning("UIOverlay: PVP queue status check failed: %s" % str(response.get("error", "Unknown error")))
 		return
 
+	var active_match := _pvp_active_queue_match_from_response(response)
+	if not active_match.is_empty():
+		await _resume_pvp_queue_active_match(active_match)
+		return
+
 	var entry: Dictionary = _latest_relevant_pvp_queue_entry(response)
 	if entry.is_empty():
 		pvp_queue_polling_active = false
@@ -35427,6 +35442,31 @@ func _pvp_queue_entry_from_response(response: Dictionary) -> Dictionary:
 	if entry_value is Dictionary:
 		return (entry_value as Dictionary).duplicate(true)
 	return {}
+
+func _pvp_active_queue_match_from_response(response: Dictionary) -> Dictionary:
+	var active_match_value: Variant = response.get("activeMatch", {})
+	if active_match_value is Dictionary:
+		var active_match: Dictionary = active_match_value as Dictionary
+		if _pvp_optional_id(active_match.get("matchId", "")) != "":
+			return active_match.duplicate(true)
+	return {}
+
+func _resume_pvp_queue_active_match(active_match: Dictionary) -> void:
+	var match_id := _pvp_optional_id(active_match.get("matchId", ""))
+	if match_id == "":
+		return
+	var status := str(active_match.get("status", "")).strip_edges().to_lower()
+	pvp_active_queue_match_id = match_id
+	pvp_active_queue_status = status
+	pvp_active_queue_starts_at = str(active_match.get("startsAt", "")).strip_edges()
+	pvp_queue_polling_active = false
+	if pvp_poll_timer != null:
+		pvp_poll_timer.stop()
+	_refresh_pvp_queue_buttons("matched")
+	if status == "matched":
+		_begin_pvp_match_countdown(match_id, pvp_active_queue_starts_at)
+		return
+	await _open_pvp_queue_match(true)
 
 func _latest_relevant_pvp_queue_entry(response: Dictionary) -> Dictionary:
 	var entries_value: Variant = response.get("entries", [])
@@ -35637,6 +35677,7 @@ func _start_pvp_battle_from_response(response: Dictionary) -> void:
 	pvp_queue_polling_active = false
 	pvp_queue_poll_in_flight = false
 	pvp_queue_auto_open_in_flight = false
+	pvp_queue_join_in_flight = false
 	pvp_polling_active = false
 	pvp_poll_elapsed = 0.0
 	pvp_room_code_label.text = LocalizationManager.text("ui.pvp.room.code", {"code": "-"})
