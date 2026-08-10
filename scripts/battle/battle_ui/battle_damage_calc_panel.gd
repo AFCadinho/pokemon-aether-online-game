@@ -1448,6 +1448,10 @@ func _make_battle_state_side(_caption: String, relation: String) -> PanelContain
 	var controls := HBoxContainer.new()
 	controls.add_theme_constant_override("separation", 2)
 	side.add_child(controls)
+	var current_label := _make_label("Current HP", 10, TEXT_SECONDARY)
+	current_label.custom_minimum_size.x = 62
+	current_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	controls.add_child(current_label)
 	var hp_input := LineEdit.new()
 	hp_input.name = "ViewerCurrentHp" if relation == "viewer" else "OpponentCurrentHp"
 	hp_input.custom_minimum_size.x = 40
@@ -1463,6 +1467,13 @@ func _make_battle_state_side(_caption: String, relation: String) -> PanelContain
 	var slash := _make_label("/ %s HP" % str(hp_display.get("maximum", "--")), 10, TEXT_SECONDARY)
 	slash.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	controls.add_child(slash)
+	var scenario_row := HBoxContainer.new()
+	scenario_row.add_theme_constant_override("separation", 2)
+	side.add_child(scenario_row)
+	var percent_label := _make_label("HP %", 10, TEXT_SECONDARY)
+	percent_label.custom_minimum_size.x = 62
+	percent_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	scenario_row.add_child(percent_label)
 	var percent_input := LineEdit.new()
 	percent_input.name = "ViewerCurrentHpPercent" if relation == "viewer" else "OpponentCurrentHpPercent"
 	percent_input.custom_minimum_size.x = 42
@@ -1476,18 +1487,18 @@ func _make_battle_state_side(_caption: String, relation: String) -> PanelContain
 	percent_input.add_theme_stylebox_override("focus", _make_stylebox(SURFACE_RAISED, INTERACTION_ACCENT, 4, 4.0, 1.0))
 	percent_input.text_submitted.connect(_on_battle_state_hp_changed.bind(relation, percent_input, true))
 	percent_input.focus_exited.connect(_on_battle_state_hp_focus_exited.bind(relation, percent_input, true))
-	controls.add_child(percent_input)
+	scenario_row.add_child(percent_input)
 	var percent_suffix := _make_label("%", 10, TEXT_SECONDARY)
 	percent_suffix.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	controls.add_child(percent_suffix)
+	scenario_row.add_child(percent_suffix)
 	var status_caption := _make_label("Status:", 10, TEXT_ACCENT)
 	status_caption.custom_minimum_size.x = 38
 	status_caption.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	controls.add_child(status_caption)
+	scenario_row.add_child(status_caption)
 	var status_selector := _make_battle_state_status_selector(relation)
 	status_selector.custom_minimum_size.x = 86
 	status_selector.size_flags_horizontal = Control.SIZE_SHRINK_END
-	controls.add_child(status_selector)
+	scenario_row.add_child(status_selector)
 	return card
 
 
