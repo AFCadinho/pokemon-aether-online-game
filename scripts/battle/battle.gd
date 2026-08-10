@@ -773,16 +773,34 @@ func _show_public_party_hover(pokemon_data: Dictionary, _slot_rect: Rect2) -> vo
 
 func _on_calc_panel_team_pokemon_hovered(relation: String, pokemon_data: Dictionary, slot_rect: Rect2) -> void:
 	var pokemon_ref := str(pokemon_data.get("pokemonRef", ""))
-	var slot_index := int(pokemon_ref.get_slice("-", 2)) if pokemon_ref.begins_with(relation + ":public-slot-") else 0
+	var slot_index: int = int(pokemon_ref.get_slice("-", 2)) if pokemon_ref.begins_with(relation + ":public-slot-") else 0
 	if slot_index < 1 or slot_index > 6:
 		return
-	var hover_data := pokemon_data.duplicate(true)
+	var hover_data := _prepare_calcdex_hover_data(pokemon_data)
 	hover_data["ident"] = ("p1" if relation == "viewer" else "p2") + ":slot:" + str(slot_index)
 	hover_data["metadataSlot"] = slot_index
 	if relation == "viewer":
 		_show_party_hover(hover_data, slot_rect)
 	else:
 		_show_public_party_hover(hover_data, slot_rect)
+
+func _prepare_calcdex_hover_data(pokemon_data: Dictionary) -> Dictionary:
+	var hover_data: Dictionary = pokemon_data.duplicate(true)
+	var identity_value: Variant = hover_data.get("identity", {})
+	var identity: Dictionary = identity_value as Dictionary if identity_value is Dictionary else {}
+	var species := str(identity.get("value", "")).strip_edges()
+	if species != "":
+		hover_data["species"] = species
+		hover_data["displaySpecies"] = species
+	var hp_value: Variant = hover_data.get("hp")
+	if hp_value is Dictionary:
+		var display_value: Variant = (hp_value as Dictionary).get("display", {})
+		var display_hp: Dictionary = display_value as Dictionary if display_value is Dictionary else {}
+		if display_hp.has("current"):
+			hover_data["hp"] = int(display_hp.get("current", 0))
+		if display_hp.has("maximum"):
+			hover_data["maxHp"] = int(display_hp.get("maximum", 1))
+	return hover_data
 
 func _on_calc_panel_team_pokemon_unhovered(relation: String) -> void:
 	if relation == "viewer":
@@ -878,7 +896,13 @@ func _get_owned_party_hover_data(pokemon_data: Dictionary) -> Dictionary:
 
 	_apply_temporary_form_party_hover_data(hover_data, display_data, saved_pokemon)
 	if display_data.has("item"):
-		hover_data["item"] = display_data.get("item")
+		var display_item: Variant = display_data.get("item")
+		if display_item is String:
+			hover_data["item"] = display_item
+		elif display_item is Dictionary:
+			var item_knowledge := display_item as Dictionary
+			if str(item_knowledge.get("state", "")) == "known":
+				hover_data["item"] = str(item_knowledge.get("value", ""))
 	_apply_held_item_stat_hover_data(hover_data)
 
 	var stat_stages := _get_active_stat_stages_for_party_hover(display_data)
