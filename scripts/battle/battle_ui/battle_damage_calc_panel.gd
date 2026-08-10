@@ -2901,9 +2901,11 @@ func _add_viewer_stat_grid() -> void:
 		header.add_child(reset)
 	_add_viewer_ability_controls(viewer_box, viewer)
 
-	var stat_keys: Array[String] = ["hp", "atk", "def", "spa", "spd", "spe"]
+	# HP is already represented by the battle-state controls above; keep the
+	# own-side stat card focused on the stats that can change during battle.
+	var stat_keys: Array[String] = BOOST_STAT_KEYS.duplicate()
 	var grid := GridContainer.new()
-	grid.columns = 7
+	grid.columns = stat_keys.size() + 1
 	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	grid.add_theme_constant_override("h_separation", 3)
 	grid.add_theme_constant_override("v_separation", 2)
