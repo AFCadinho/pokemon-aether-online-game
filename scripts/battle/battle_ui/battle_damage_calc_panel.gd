@@ -148,10 +148,13 @@ var edited_assumption_fields: Dictionary = {}
 var knowledge_snapshot: Dictionary = {}
 var live_ev_inputs: Dictionary = {}
 var live_ev_bars: Dictionary = {}
+var live_iv_inputs: Dictionary = {}
 var live_ev_total_label: Label
 var live_ev_total_bar: ProgressBar
 var live_ev_focus_stat := ""
 var live_ev_focus_caret := -1
+var live_iv_focus_stat := ""
+var live_iv_focus_caret := -1
 var item_assumption_input: LineEdit
 var ability_assumption_input: LineEdit
 var nature_assumption_input: LineEdit
@@ -339,6 +342,7 @@ func close_assumption_popover() -> void:
 		catalog_search_timer.stop()
 	live_ev_inputs.clear()
 	live_ev_bars.clear()
+	live_iv_inputs.clear()
 	live_ev_total_label = null
 	live_ev_total_bar = null
 	live_ev_focus_stat = ""
@@ -3119,18 +3123,6 @@ func _add_showdex_stat_grid(
 		stat_header.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		grid.add_child(stat_header)
 
-	var ivs := _as_dictionary(assumptions.get("ivs", {}))
-	var iv_row_label := _make_label("IVs", 8, TEXT_MUTED)
-	iv_row_label.custom_minimum_size = Vector2(42, 24)
-	iv_row_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	grid.add_child(iv_row_label)
-	for stat_key: String in stat_keys:
-		var iv_value := clampi(int(ivs.get(stat_key, 31)), 0, 31)
-		var iv_label := _make_label(str(iv_value), 10, TEXT_PRIMARY if iv_value == 31 else MANUAL_ACCENT)
-		iv_label.custom_minimum_size = Vector2(46, 24)
-		iv_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		iv_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		grid.add_child(iv_label)
 	if not calculated_stats.is_empty():
 		var stats_label := _make_label(_t("battle.calc.stats"), 8, CONDITION_OPPONENT_ACCENT)
 		stats_label.custom_minimum_size = Vector2(42, 24)
@@ -3142,6 +3134,14 @@ func _add_showdex_stat_grid(
 			stat_value.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			stat_value.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 			grid.add_child(stat_value)
+
+	var ivs := _as_dictionary(assumptions.get("ivs", {}))
+	var iv_row_label := _make_label("IVs", 8, TEXT_MUTED)
+	iv_row_label.custom_minimum_size = Vector2(42, 24)
+	iv_row_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	grid.add_child(iv_row_label)
+	for stat_key: String in stat_keys:
+		grid.add_child(_make_showdex_iv_input(stat_key, int(ivs.get(stat_key, 31))))
 
 	var evs := _as_dictionary(assumptions.get("evs", {}))
 	var ev_row_label := _make_label("EVs", 8, EV_LABEL_ACCENT)
@@ -3173,6 +3173,27 @@ func _add_showdex_stat_grid(
 			boosts_are_edited
 		))
 	_update_live_ev_total()
+
+
+func _make_showdex_iv_input(stat_key: String, value: int) -> LineEdit:
+	var input := LineEdit.new()
+	input.name = "ShowdexIv%s" % stat_key.capitalize()
+	input.text = str(clampi(value, 0, 31))
+	input.placeholder_text = "31"
+	input.custom_minimum_size = Vector2(46, 24)
+	input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	input.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	input.max_length = 2
+	input.tooltip_text = _get_ev_full_display_name(stat_key)
+	input.add_theme_font_size_override("font_size", 10)
+	input.add_theme_color_override("font_color", TEXT_PRIMARY)
+	input.add_theme_color_override("font_placeholder_color", TEXT_MUTED)
+	input.add_theme_stylebox_override("normal", _make_stylebox(Color(SURFACE_CANVAS, 0.98), Color(BORDER_NEUTRAL, 0.90), 4, 3.0, 1.0))
+	input.add_theme_stylebox_override("focus", _make_stylebox(Color(SURFACE_RAISED, 0.98), DROPDOWN_FOCUS_BORDER, 4, 3.0, 1.0))
+	input.focus_entered.connect(_remember_showdex_iv_input_focus.bind(stat_key))
+	input.text_changed.connect(_on_showdex_iv_text_changed.bind(stat_key))
+	live_iv_inputs[stat_key] = input
+	return input
 
 
 func _make_showdex_ev_input(stat_key: String, value: int) -> LineEdit:
@@ -4296,6 +4317,40 @@ func _on_live_ev_text_changed(text: String, stat_key: String) -> void:
 			return
 		parsed_value = int(stripped_text)
 	_apply_live_ev_value(stat_key, parsed_value, false)
+
+
+func _on_showdex_iv_text_changed(text: String, stat_key: String) -> void:
+	if is_syncing_assumption_controls:
+		return
+	_remember_showdex_iv_input_focus(stat_key)
+	var stripped_text: String = text.strip_edges()
+	var parsed_value: int = 31
+	if stripped_text != "":
+		if not stripped_text.is_valid_int():
+			return
+		parsed_value = int(stripped_text)
+	_apply_showdex_iv_value(stat_key, parsed_value)
+
+
+func _apply_showdex_iv_value(stat_key: String, raw_value: int) -> void:
+	var ivs: Dictionary = _as_dictionary(defender_assumptions.get("ivs", {})).duplicate(true)
+	var clamped_value: int = clampi(raw_value, 0, 31)
+	var input: LineEdit = live_iv_inputs.get(stat_key) as LineEdit
+	if raw_value != clamped_value and input != null and input.text != str(clamped_value):
+		input.text = str(clamped_value)
+		input.caret_column = input.text.length()
+	ivs[stat_key] = clamped_value
+	defender_assumptions["ivs"] = ivs
+	edited_assumption_fields["ivs"] = true
+	_queue_defender_assumptions_changed()
+
+
+func _remember_showdex_iv_input_focus(stat_key: String) -> void:
+	live_iv_focus_stat = stat_key
+	live_iv_focus_caret = -1
+	var input: LineEdit = live_iv_inputs.get(stat_key) as LineEdit
+	if input != null:
+		live_iv_focus_caret = input.caret_column
 
 
 func _on_live_ev_quick_value_pressed(stat_key: String, value: int) -> void:
