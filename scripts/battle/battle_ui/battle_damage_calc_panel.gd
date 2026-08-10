@@ -4381,6 +4381,8 @@ func _on_catalog_assumption_focus_exited(kind: String) -> void:
 
 
 func _close_assumption_suggestions_if_focus_left(kind: String) -> void:
+	if is_clearing_content:
+		return
 	if active_selector != kind:
 		return
 	var focus_owner: Control = get_viewport().gui_get_focus_owner()
@@ -4389,6 +4391,9 @@ func _close_assumption_suggestions_if_focus_left(kind: String) -> void:
 	if catalog_suggestions_box != null and focus_owner != null and catalog_suggestions_box.is_ancestor_of(focus_owner):
 		return
 	if catalog_results_box != null and focus_owner != null and catalog_results_box.is_ancestor_of(focus_owner):
+		return
+	if kind == SELECTOR_MOVE and move_assumption_input != null and is_instance_valid(move_assumption_input):
+		_on_inline_move_text_submitted(move_assumption_input.text, active_move_slot)
 		return
 	_close_assumption_suggestions()
 
