@@ -3072,13 +3072,10 @@ func _add_showdex_stat_grid(
 	box.add_child(title_row)
 	var opponent := _get_snapshot_pokemon_by_ref(selected_opponent_ref)
 	var opponent_name := _snapshot_pokemon_name(opponent) if not opponent.is_empty() else _t("battle.calc.opponent")
-	var ev_total := _get_evs_total(_as_dictionary(assumptions.get("evs", {})))
 	var title_text := "%s · %s" % [
 		_t("battle.calc.opponent").to_upper(),
 		opponent_name.to_upper(),
 	] if show_opponent_identity else _t("battle.calc.ev_spread").to_upper()
-	if not show_opponent_identity:
-		title_text += " · %d / %d EVs" % [ev_total, EV_TOTAL_LIMIT]
 	var title := _make_label(title_text, 9 if show_opponent_identity else 8, CONDITION_OPPONENT_ACCENT)
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -3089,20 +3086,8 @@ func _add_showdex_stat_grid(
 		role.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 		role.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		title_row.add_child(role)
-	if not show_opponent_identity:
-		live_ev_total_label = _make_label("", 9, TEXT_MUTED)
-		live_ev_total_label.size_flags_horizontal = Control.SIZE_SHRINK_END
-		live_ev_total_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-		live_ev_total_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		title_row.add_child(live_ev_total_label)
-		live_ev_total_bar = ProgressBar.new()
-		live_ev_total_bar.custom_minimum_size = Vector2(0, 3)
-		live_ev_total_bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		live_ev_total_bar.min_value = 0.0
-		live_ev_total_bar.max_value = EV_TOTAL_LIMIT
-		live_ev_total_bar.show_percentage = false
-		live_ev_total_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		box.add_child(live_ev_total_bar)
+	live_ev_total_label = null
+	live_ev_total_bar = null
 
 	var stat_keys: Array[String] = ["hp", "atk", "def", "spa", "spd", "spe"]
 	var grid := GridContainer.new()
@@ -4128,8 +4113,7 @@ func _get_assumption_control_value(assumptions: Dictionary, editor_kind: String,
 			var nature := str(assumptions.get("nature", "")).strip_edges()
 			return _localized_nature_name("Hardy" if nature == "" else nature)
 		SELECTOR_EVS:
-			var ev_total := _get_evs_total(_as_dictionary(assumptions.get("evs", {})))
-			return _t("common.none") if ev_total == 0 else "%d / %d" % [ev_total, EV_TOTAL_LIMIT]
+			return _t("battle.calc.ev_spread")
 		_:
 			return _t("common.unknown")
 
