@@ -14,6 +14,7 @@ func _run() -> void:
 	var normalized := Matchup.normalize_response(response, revision)
 	_assert(bool(normalized.get("success", false)), "valid matchup must normalize")
 	_assert(str(normalized["results"][0]["move"]["source"]) == "public_reveal", "move provenance must survive")
+	_assert(normalized["results"][0]["move"]["options"] == {"useZ": false, "isCrit": false}, "move modifiers must survive normalization")
 	var wire_response: Dictionary = JSON.parse_string(JSON.stringify(response))
 	wire_response["status"] = 200.0
 	_assert(
@@ -78,14 +79,22 @@ func _run() -> void:
 	_assert(_has_line_edit_text(content, "Thunderbolt"), "damage taken must keep the opponent move directly editable")
 	_assert(panel.result_summary_panels.size() == 1, "an editable damage-taken move must retain its calculation summary")
 	var move_table := content.find_child("MoveResultsTable", true, false)
+	var workspace := content.find_child("CalcdexWorkspace", true, false)
+	var inspector := content.find_child("CalcdexInspector", true, false)
+	_assert(move_table != null and workspace != null and inspector != null, "the overview and contextual inspector must render side by side")
+	_assert(content.find_child("MoveInspector", true, false) != null, "the move inspector must be active by default")
+	_assert(content.find_child("ZToggle_0", true, false) is Button and content.find_child("CritToggle_0", true, false) is Button, "every calculated move row must expose Z and critical-hit toggles")
+	panel._on_move_modifier_toggled(true, 0, "Thunderbolt", "isCrit")
+	_assert(panel.get_move_scenarios() == [{"moveIndex": 0, "moveName": "Thunderbolt", "useZ": false, "isCrit": true}], "critical-hit toggles must create one row-scoped scenario")
+	_assert(panel.pending_move_index == 0, "only the changed move row must enter recalculating state")
+	panel._on_inspector_tab_pressed(panel.INSPECTOR_SET)
 	var stat_grid := content.find_child("ShowdexStatGrid", true, false)
-	var field_controls := content.find_child("ShowdexFieldControls", true, false)
-	_assert(move_table != null and stat_grid != null and field_controls != null, "moves, stat grid, and field controls must render as separate compact sections")
-	if move_table != null and stat_grid != null and field_controls != null:
-		_assert(move_table.get_index() < stat_grid.get_index() and stat_grid.get_index() < field_controls.get_index(), "the Showdex layout must place stats below moves and field controls last")
+	_assert(stat_grid != null, "the set inspector must expose the stat grid")
 	_assert(content.find_child("ShowdexEvHp", true, false) is LineEdit, "the stat grid must expose EV editing directly")
 	_assert(content.find_child("ShowdexStageAtk", true, false) is OptionButton, "the stat grid must expose stages directly")
 	_assert(content.find_child("SampleSetField", true, false) != null, "the sample-set selector must have a compact labeled field")
+	panel._on_inspector_tab_pressed(panel.INSPECTOR_FIELD)
+	_assert(content.find_child("ShowdexFieldControls", true, false) != null, "the field inspector must expose battle conditions")
 	var disclosure_metadata: Dictionary = panel.result_disclosure_buttons.values()[0] if not panel.result_disclosure_buttons.is_empty() else {}
 	_assert(bool(disclosure_metadata.get("compact", false)), "damage-taken summaries must use a separate compact disclosure beside the move input")
 	panel._on_team_icon_pressed("viewer", "viewer:public-slot-1")
@@ -120,7 +129,7 @@ func _response(revision: Dictionary) -> Dictionary:
 	return {
 		"success": true,
 		"schemaVersion": 1,
-		"routeRevision": "calc3.9-2026-08-10",
+		"routeRevision": "calc4.0-2026-08-10",
 		"safeInputFingerprint": "b".repeat(64),
 		"projectionRevision": revision.duplicate(true),
 		"mechanicsManifest": {
@@ -135,6 +144,7 @@ func _response(revision: Dictionary) -> Dictionary:
 		"results": [{
 			"moveName": "Thunderbolt",
 			"moveSource": "public_reveal",
+			"options": {"useZ": false, "isCrit": false},
 			"resultState": "supported",
 			"damageDistribution": {"kind": "exact_rolls", "rolls": [42, 43]},
 			"minDamage": 42,

@@ -12,6 +12,7 @@ signal sample_set_catalog_requested(species: String, format_id: String)
 signal forme_catalog_requested(relation: String, species: String, format_id: String)
 signal default_ability_requested(species: String)
 signal matchup_selection_changed()
+signal move_scenarios_changed(move_scenarios: Array)
 
 const SURFACE_CANVAS := Color("#050a10")
 const SURFACE_PANEL := Color("#0b1520")
@@ -89,6 +90,9 @@ const TYPE_COLORS := {
 }
 const SUBTAB_YOUR_DAMAGE := "your"
 const SUBTAB_THEIR_DAMAGE := "their"
+const INSPECTOR_MOVE := "move"
+const INSPECTOR_SET := "set"
+const INSPECTOR_FIELD := "field"
 const SELECTOR_NONE := ""
 const SELECTOR_ITEM := "item"
 const SELECTOR_ABILITY := "ability"
@@ -126,6 +130,7 @@ const FIELD_TERRAIN_VALUES := ["", "Electric", "Grassy", "Misty", "Psychic"]
 const POKEMON_STATUS_VALUES := ["", "brn", "par", "psn", "tox", "slp", "frz"]
 
 var content: VBoxContainer
+var render_target: VBoxContainer
 
 var active_subtab := SUBTAB_YOUR_DAMAGE
 var is_loading := false
@@ -183,6 +188,10 @@ var current_default_ability_loading := false
 var species_scenarios: Dictionary = {}
 var forme_catalogs: Dictionary = {}
 var forme_menu_buttons: Dictionary = {}
+var active_inspector_tab := INSPECTOR_MOVE
+var selected_move_index := 0
+var move_scenarios: Dictionary = {}
+var pending_move_index := -1
 
 
 func _ready() -> void:
@@ -223,6 +232,10 @@ func show_idle() -> void:
 	last_response = {}
 	last_error = ""
 	active_subtab = SUBTAB_YOUR_DAMAGE
+	active_inspector_tab = INSPECTOR_MOVE
+	selected_move_index = 0
+	move_scenarios.clear()
+	pending_move_index = -1
 	_render_current_state()
 
 
@@ -243,6 +256,7 @@ func show_error(message: String) -> void:
 	loading_defender_name = ""
 	last_response = {}
 	last_error = _fallback_text(message, _t("battle.calc.error.failed"))
+	pending_move_index = -1
 	_render_current_state()
 
 
@@ -251,6 +265,7 @@ func show_response(response: Dictionary) -> void:
 	loading_attacker_name = ""
 	loading_defender_name = ""
 	last_error = ""
+	pending_move_index = -1
 
 	if not bool(response.get("success", false)):
 		last_response = {}
@@ -260,6 +275,7 @@ func show_response(response: Dictionary) -> void:
 		last_error = _t("battle.calc.error.direction_mismatch")
 	else:
 		last_response = response
+		_reconcile_move_scenarios(_as_array(response.get("results", [])))
 
 	if _is_catalog_search_active():
 		return
@@ -337,6 +353,7 @@ func _flush_pending_assumption_changes() -> void:
 
 func _render_current_state() -> void:
 	_clear_content()
+	render_target = content
 	_add_subtabs()
 
 	if not last_response.is_empty():
@@ -378,6 +395,10 @@ func _render_your_damage_response(response: Dictionary) -> void:
 	var defender: Dictionary = _as_dictionary(response.get("defender", {}))
 	var viewer := attacker if str(attacker.get("relation", "")) == "viewer" else defender
 	var opponent := attacker if str(attacker.get("relation", "")) == "opponent" else defender
+	var workspace := _make_workspace_columns()
+	var overview: VBoxContainer = workspace.get("overview") as VBoxContainer
+	var inspector: VBoxContainer = workspace.get("inspector") as VBoxContainer
+	render_target = overview
 	_add_profile_summary(
 		_get_pokemon_label(viewer, _t("battle.calc.your_pokemon")),
 		_get_pokemon_label(opponent, _t("battle.calc.opponent")),
@@ -395,26 +416,150 @@ func _render_your_damage_response(response: Dictionary) -> void:
 		_get_effective_pokemon_status("opponent")
 	)
 	var assumptions := _get_display_assumptions(opponent)
-	_add_live_assumption_controls(assumptions)
-
 	var results: Array = _as_array(response.get("results", []))
 	if str(response.get("direction", "")) == "opponent-to-own":
 		_add_editable_opponent_move_results_table(results, defender)
-		_add_showdex_detail_controls(assumptions)
 		if not results.is_empty():
 			_add_result_footnotes(response, results)
-		return
-	if results.is_empty():
+	elif results.is_empty():
 		_add_status(_fallback_text(str(response.get("emptyReason", "")), _t("battle.calc.no_results")), TEXT_SECONDARY)
-		_add_showdex_detail_controls(assumptions)
-		return
+	else:
+		_add_move_results_table(results, defender)
+		_add_result_footnotes(response, results)
 
-	_add_move_results_table(results, defender)
-	_add_showdex_detail_controls(assumptions)
-	_add_result_footnotes(response, results)
+	render_target = inspector
+	_add_inspector_tabs()
+	match active_inspector_tab:
+		INSPECTOR_SET:
+			_add_live_assumption_controls(assumptions)
+			_add_showdex_stat_grid(assumptions)
+		INSPECTOR_FIELD:
+			_add_showdex_condition_controls(assumptions)
+		_:
+			_add_move_inspector(results, defender)
+	render_target = content
+
+
+func _make_workspace_columns() -> Dictionary:
+	var workspace := HBoxContainer.new()
+	workspace.name = "CalcdexWorkspace"
+	workspace.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	workspace.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	workspace.clip_contents = true
+	workspace.add_theme_constant_override("separation", 10)
+	content.add_child(workspace)
+
+	var overview := VBoxContainer.new()
+	overview.name = "CalcdexOverview"
+	overview.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	overview.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	overview.size_flags_stretch_ratio = 1.38
+	overview.clip_contents = true
+	overview.add_theme_constant_override("separation", 6)
+	workspace.add_child(overview)
+
+	var inspector_panel := PanelContainer.new()
+	inspector_panel.name = "CalcdexInspectorPanel"
+	inspector_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	inspector_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	inspector_panel.size_flags_stretch_ratio = 1.0
+	inspector_panel.clip_contents = true
+	inspector_panel.add_theme_stylebox_override(
+		"panel",
+		_make_stylebox(Color(SURFACE_CANVAS, 0.92), Color(BORDER_NEUTRAL, 0.92), 9, 8.0, 7.0)
+	)
+	workspace.add_child(inspector_panel)
+	var inspector := VBoxContainer.new()
+	inspector.name = "CalcdexInspector"
+	inspector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	inspector.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	inspector.clip_contents = true
+	inspector.add_theme_constant_override("separation", 6)
+	inspector_panel.add_child(inspector)
+	return {"overview": overview, "inspector": inspector}
+
+
+func _add_inspector_tabs() -> void:
+	var row := HBoxContainer.new()
+	row.name = "CalcdexInspectorTabs"
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_theme_constant_override("separation", 4)
+	_add_render_child(row)
+	row.add_child(_make_inspector_tab_button(_t("battle.calc.inspector.move"), INSPECTOR_MOVE))
+	row.add_child(_make_inspector_tab_button(_t("battle.calc.inspector.set"), INSPECTOR_SET))
+	row.add_child(_make_inspector_tab_button(_t("battle.calc.inspector.field"), INSPECTOR_FIELD))
+
+
+func _make_inspector_tab_button(label: String, tab_id: String) -> Button:
+	var button := Button.new()
+	button.name = "InspectorTab%s" % tab_id.capitalize()
+	button.text = label.to_upper()
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.custom_minimum_size = Vector2(0, 30)
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.add_theme_font_size_override("font_size", 10)
+	button.add_theme_color_override("font_color", TEXT_PRIMARY if active_inspector_tab == tab_id else TEXT_MUTED)
+	button.add_theme_stylebox_override("normal", _make_stylebox(TAB_ACTIVE_BG if active_inspector_tab == tab_id else TAB_BG, TEXT_ACCENT if active_inspector_tab == tab_id else TAB_BORDER, 6, 6.0, 2.0))
+	button.add_theme_stylebox_override("hover", _make_stylebox(DROPDOWN_HOVER_BG, DROPDOWN_HOVER_BORDER, 6, 6.0, 2.0))
+	button.add_theme_stylebox_override("pressed", _make_stylebox(TAB_ACTIVE_BG, TEXT_ACCENT, 6, 6.0, 2.0))
+	button.pressed.connect(_on_inspector_tab_pressed.bind(tab_id))
+	return button
+
+
+func _on_inspector_tab_pressed(tab_id: String) -> void:
+	if tab_id not in [INSPECTOR_MOVE, INSPECTOR_SET, INSPECTOR_FIELD] or active_inspector_tab == tab_id:
+		return
+	close_assumption_popover()
+	active_inspector_tab = tab_id
+	_render_current_state()
+
+
+func _add_move_inspector(results: Array, defender: Dictionary) -> void:
+	if results.is_empty():
+		_add_status(_t("battle.calc.inspector.select_move"), TEXT_SECONDARY)
+		return
+	selected_move_index = clampi(selected_move_index, 0, results.size() - 1)
+	var result := _as_dictionary(results[selected_move_index])
+	var move_name := _get_move_name(result)
+	var panel := PanelContainer.new()
+	panel.name = "MoveInspector"
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_card_stylebox(HERO_BG, HERO_BORDER, 8, 10.0, 8.0))
+	_add_render_child(panel)
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override("separation", 7)
+	panel.add_child(box)
+	var title_row := HBoxContainer.new()
+	title_row.add_theme_constant_override("separation", 6)
+	box.add_child(title_row)
+	var title := _make_label(_fallback_text(move_name, _t("battle.move.unknown")), 17, TEXT_PRIMARY)
+	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	title_row.add_child(title)
+	var modifier_row := _make_move_modifier_controls(selected_move_index, move_name, true)
+	title_row.add_child(modifier_row)
+	var damage := _make_label(_get_percent_label(result), 22, DAMAGE_TEXT)
+	damage.custom_minimum_size = Vector2(0, 32)
+	damage.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	box.add_child(damage)
+	var ko_text := _get_primary_result_label(result, defender)
+	var ko := _make_label(ko_text, 12, _get_result_badge_colors(ko_text)["text"])
+	ko.add_theme_stylebox_override("normal", _make_stylebox(_get_result_badge_colors(ko_text)["background"], _get_result_badge_colors(ko_text)["border"], 6, 7.0, 3.0))
+	box.add_child(ko)
+	var summary_text := _get_result_summary_text(result)
+	if summary_text != "":
+		box.add_child(_make_result_summary_panel(summary_text))
+	if pending_move_index == selected_move_index:
+		var pending := _make_label(_t("battle.calc.inspector.recalculating"), 11, INTERACTION_ACCENT)
+		pending.name = "MoveInspectorRecalculating"
+		box.add_child(pending)
+
+
+func _add_render_child(node: Control) -> void:
+	(render_target if render_target != null else content).add_child(node)
 
 
 func _clear_content() -> void:
+	render_target = content
 	warning_details_panel = null
 	result_summary_panels.clear()
 	result_disclosure_buttons.clear()
@@ -469,6 +614,7 @@ func _on_your_damage_tab_pressed() -> void:
 		return
 	close_assumption_popover()
 	expanded_result_key = ""
+	_clear_move_scenarios()
 	active_subtab = SUBTAB_YOUR_DAMAGE
 	last_response = {}
 	_render_current_state()
@@ -480,6 +626,7 @@ func _on_their_damage_tab_pressed() -> void:
 		return
 	close_assumption_popover()
 	expanded_result_key = ""
+	_clear_move_scenarios()
 	active_subtab = SUBTAB_THEIR_DAMAGE
 	last_response = {}
 	_render_current_state()
@@ -550,6 +697,49 @@ func get_field_scenario() -> Dictionary:
 	if spikes > 0:
 		payload["defenderSpikes"] = spikes
 	return payload
+
+
+func get_move_scenarios() -> Array:
+	var payload: Array = []
+	var indexes: Array = move_scenarios.keys()
+	indexes.sort()
+	for index_value: Variant in indexes:
+		var scenario := _as_dictionary(move_scenarios.get(index_value, {}))
+		if scenario.is_empty():
+			continue
+		payload.append({
+			"moveIndex": int(scenario.get("moveIndex", index_value)),
+			"moveName": str(scenario.get("moveName", "")),
+			"useZ": bool(scenario.get("useZ", false)),
+			"isCrit": bool(scenario.get("isCrit", false)),
+		})
+	return payload
+
+
+func _reconcile_move_scenarios(results: Array) -> void:
+	var reconciled: Dictionary = {}
+	for index: int in range(results.size()):
+		var result := _as_dictionary(results[index])
+		var move_name := _get_move_name(result)
+		var existing := _as_dictionary(move_scenarios.get(index, {}))
+		if _normalize_move_name(str(existing.get("moveName", ""))) != _normalize_move_name(move_name):
+			var response_options := _as_dictionary(_as_dictionary(result.get("move", {})).get("options", {}))
+			existing = {
+				"moveIndex": index,
+				"moveName": move_name,
+				"useZ": bool(response_options.get("useZ", false)),
+				"isCrit": bool(response_options.get("isCrit", false)),
+			}
+		if bool(existing.get("useZ", false)) or bool(existing.get("isCrit", false)):
+			reconciled[index] = existing
+	move_scenarios = reconciled
+	selected_move_index = clampi(selected_move_index, 0, maxi(results.size() - 1, 0))
+
+
+func _clear_move_scenarios() -> void:
+	move_scenarios.clear()
+	pending_move_index = -1
+	selected_move_index = 0
 
 
 func _get_condition_target_relation() -> String:
@@ -814,6 +1004,7 @@ func _reset_to_current() -> void:
 	advanced_scenario_expanded = false
 	active_selector = SELECTOR_NONE
 	active_move_slot = -1
+	_clear_move_scenarios()
 	_apply_current_defaults()
 	_emit_defender_assumptions_changed()
 	_render_current_state()
@@ -846,6 +1037,7 @@ func _apply_sample_set(option: Dictionary) -> void:
 	selected_sample_set_id = str(option.get("id", ""))
 	active_selector = SELECTOR_NONE
 	active_move_slot = -1
+	_clear_move_scenarios()
 	_apply_known_opponent_facts()
 	_emit_defender_assumptions_changed()
 	_render_current_state()
@@ -922,6 +1114,7 @@ func _on_team_icon_pressed(relation: String, pokemon_ref: String) -> void:
 		selected_opponent_ref = pokemon_ref
 		_request_sample_sets_if_needed()
 	expanded_result_key = ""
+	_clear_move_scenarios()
 	last_response = {}
 	_render_current_state()
 	matchup_selection_changed.emit()
@@ -936,7 +1129,7 @@ func _add_team_selector_strips() -> void:
 		"panel",
 		_make_stylebox(Color(SURFACE_PANEL, 0.96), Color(BORDER_NEUTRAL, 0.86), 8, 6.0, 4.0)
 	)
-	content.add_child(panel)
+	_add_render_child(panel)
 	var matchup_strip := HBoxContainer.new()
 	matchup_strip.name = "MatchupTeamStrip"
 	matchup_strip.custom_minimum_size = Vector2(0, 36)
@@ -1131,7 +1324,7 @@ func _add_profile_summary(
 	matchup_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	matchup_row.alignment = BoxContainer.ALIGNMENT_CENTER
 	matchup_row.add_theme_constant_override("separation", 6)
-	content.add_child(matchup_row)
+	_add_render_child(matchup_row)
 	var viewer_details: Array[String] = []
 	if viewer_hp_label.strip_edges() != "":
 		viewer_details.append(viewer_hp_label)
@@ -1348,6 +1541,7 @@ func _on_forme_menu_item_pressed(item_id: int, relation: String) -> void:
 	else:
 		species_scenarios[pokemon_ref] = selected_species
 	expanded_result_key = ""
+	_clear_move_scenarios()
 	last_response = {}
 	_render_current_state()
 	matchup_selection_changed.emit()
@@ -1404,7 +1598,7 @@ func _make_hp_bar(hp_percent: float) -> ProgressBar:
 func _add_status(text: String, color: Color) -> void:
 	var label := _make_label(text, 13, color)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	content.add_child(label)
+	_add_render_child(label)
 
 
 func _get_snapshot_pokemon_by_ref(pokemon_ref: String) -> Dictionary:
@@ -1471,7 +1665,7 @@ func _add_move_results_table_shell() -> VBoxContainer:
 		"panel",
 		_make_stylebox(PROFILE_BG, Color(BORDER_NEUTRAL, 0.82), 8, 6.0, 5.0)
 	)
-	content.add_child(table)
+	_add_render_child(table)
 	var table_box := VBoxContainer.new()
 	table_box.clip_contents = true
 	table_box.add_theme_constant_override("separation", 3)
@@ -1490,6 +1684,11 @@ func _add_move_results_table_shell() -> VBoxContainer:
 	var move_header := _make_table_header(_t("battle.calc.move_header"), EV_LABEL_ACCENT)
 	move_header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(move_header)
+	var modifier_header := _make_table_header(_t("battle.calc.modifiers_header"), INTERACTION_ACCENT)
+	modifier_header.custom_minimum_size = Vector2(86, 0)
+	modifier_header.size_flags_horizontal = Control.SIZE_SHRINK_END
+	modifier_header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	header.add_child(modifier_header)
 	var damage_header := _make_table_header(_t("battle.calc.damage_header"), MANUAL_ACCENT)
 	damage_header.custom_minimum_size = Vector2(DAMAGE_COLUMN_WIDTH, 0)
 	damage_header.size_flags_horizontal = Control.SIZE_SHRINK_END
@@ -1609,7 +1808,7 @@ func _add_move_result_row(
 	panel.custom_minimum_size = Vector2(0, 40)
 	panel.add_theme_stylebox_override(
 		"panel",
-		_make_result_row_style(primary_result_label, row_index, move_type, expanded_result_key == result_key, is_top_damage)
+		_make_result_row_style(primary_result_label, row_index, move_type, selected_move_index == row_index or expanded_result_key == result_key, is_top_damage)
 	)
 	result_row_panels[result_key] = {
 		"panel": panel,
@@ -1618,9 +1817,8 @@ func _add_move_result_row(
 		"moveType": move_type,
 		"isTopDamage": is_top_damage,
 	}
-	if summary_text != "":
-		panel.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-		panel.gui_input.connect(_on_result_row_gui_input.bind(result_key))
+	panel.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	panel.gui_input.connect(_on_result_row_gui_input.bind(result_key))
 
 	var box := VBoxContainer.new()
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1655,6 +1853,7 @@ func _add_move_result_row(
 			move_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			move_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 			move_box.add_child(move_label)
+	result_row.add_child(_make_move_modifier_controls(row_index, move_name))
 
 	var is_status_move: bool = _is_status_result(result)
 	var percent_label: String = "" if is_status_move else _get_percent_label(result)
@@ -1688,6 +1887,13 @@ func _add_move_result_row(
 	ko_label.size_flags_horizontal = Control.SIZE_SHRINK_END
 	ko_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	result_row.add_child(ko_label)
+	if pending_move_index == row_index:
+		var recalculating := _make_label("…", 15, INTERACTION_ACCENT)
+		recalculating.name = "MoveRowRecalculating_%d" % row_index
+		recalculating.custom_minimum_size = Vector2(18, 0)
+		recalculating.size_flags_horizontal = Control.SIZE_SHRINK_END
+		recalculating.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		result_row.add_child(recalculating)
 
 	if summary_text != "":
 		var summary_panel := _make_result_summary_panel(summary_text)
@@ -1707,6 +1913,69 @@ func _add_move_result_row(
 			_add_row_notice(box, _warning_label(warning), TEXT_ERROR if result_state in ["unsupported", "error"] else TEXT_MUTED)
 
 	parent.add_child(panel)
+
+
+func _make_move_modifier_controls(row_index: int, move_name: String, roomy: bool = false) -> HBoxContainer:
+	var row := HBoxContainer.new()
+	row.name = "MoveModifiers_%d" % row_index
+	row.custom_minimum_size = Vector2(104 if roomy else 86, 28)
+	row.size_flags_horizontal = Control.SIZE_SHRINK_END
+	row.add_theme_constant_override("separation", 3)
+	var scenario := _as_dictionary(move_scenarios.get(row_index, {}))
+	row.add_child(_make_move_modifier_button("Z", "useZ", bool(scenario.get("useZ", false)), row_index, move_name, roomy))
+	row.add_child(_make_move_modifier_button("CRIT", "isCrit", bool(scenario.get("isCrit", false)), row_index, move_name, roomy))
+	return row
+
+
+func _make_move_modifier_button(
+	label: String,
+	option_key: String,
+	enabled: bool,
+	row_index: int,
+	move_name: String,
+	roomy: bool
+) -> Button:
+	var button := Button.new()
+	button.name = "%sToggle_%d" % [label.capitalize(), row_index]
+	button.text = label
+	button.toggle_mode = true
+	button.button_pressed = enabled
+	button.custom_minimum_size = Vector2(48 if roomy or label == "CRIT" else 34, 27)
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.tooltip_text = _t("battle.calc.modifier.%s_tooltip" % ("z" if option_key == "useZ" else "crit"))
+	button.add_theme_font_size_override("font_size", 9)
+	button.add_theme_color_override("font_color", TEXT_MUTED)
+	button.add_theme_color_override("font_pressed_color", TEXT_PRIMARY)
+	button.add_theme_color_override("font_hover_color", TEXT_PRIMARY)
+	button.add_theme_stylebox_override("normal", _make_stylebox(Color(SURFACE_CANVAS, 0.82), Color(BORDER_NEUTRAL, 0.9), 5, 5.0, 2.0))
+	button.add_theme_stylebox_override("hover", _make_stylebox(DROPDOWN_HOVER_BG, DROPDOWN_HOVER_BORDER, 5, 5.0, 2.0))
+	button.add_theme_stylebox_override("pressed", _make_stylebox(Color(TAB_ACTIVE_BG, 0.99), WARNING_ACCENT if option_key == "useZ" else INTERACTION_ACCENT, 5, 5.0, 2.0))
+	button.add_theme_stylebox_override("focus", _make_stylebox(Color(TAB_ACTIVE_BG, 0.99), TEXT_ACCENT, 5, 5.0, 2.0))
+	button.toggled.connect(_on_move_modifier_toggled.bind(row_index, move_name, option_key))
+	return button
+
+
+func _on_move_modifier_toggled(enabled: bool, row_index: int, move_name: String, option_key: String) -> void:
+	var scenario := _as_dictionary(move_scenarios.get(row_index, {
+		"moveIndex": row_index,
+		"moveName": move_name,
+		"useZ": false,
+		"isCrit": false,
+	}))
+	if bool(scenario.get(option_key, false)) == enabled:
+		return
+	scenario["moveIndex"] = row_index
+	scenario["moveName"] = move_name
+	scenario[option_key] = enabled
+	if bool(scenario.get("useZ", false)) or bool(scenario.get("isCrit", false)):
+		move_scenarios[row_index] = scenario
+	else:
+		move_scenarios.erase(row_index)
+	selected_move_index = row_index
+	active_inspector_tab = INSPECTOR_MOVE
+	pending_move_index = row_index
+	_render_current_state()
+	move_scenarios_changed.emit(get_move_scenarios())
 
 
 func _get_result_row_key(move_name: String, row_index: int, editable_slot: int) -> String:
@@ -1807,14 +2076,12 @@ func _on_copy_result_summary_pressed(summary_text: String, button: Button) -> vo
 
 
 func _on_result_disclosure_pressed(result_key: String) -> void:
+	var selected_metadata := _as_dictionary(result_row_panels.get(result_key, {}))
+	if not selected_metadata.is_empty():
+		selected_move_index = int(selected_metadata.get("rowIndex", selected_move_index))
+		active_inspector_tab = INSPECTOR_MOVE
 	expanded_result_key = "" if expanded_result_key == result_key else result_key
-	for key_value: Variant in result_summary_panels.keys():
-		var key := str(key_value)
-		var summary_panel: Control = result_summary_panels.get(key) as Control
-		if summary_panel != null:
-			summary_panel.visible = key == expanded_result_key
-		_update_result_disclosure_button(key)
-		_update_result_row_highlight(key)
+	_render_current_state()
 
 
 func _on_result_row_gui_input(event: InputEvent, result_key: String) -> void:
@@ -1954,7 +2221,7 @@ func _add_result_footnotes(response: Dictionary, _results: Array) -> void:
 	var notes_panel := PanelContainer.new()
 	notes_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	notes_panel.add_theme_stylebox_override("panel", _make_stylebox(PROFILE_BG, PROFILE_BORDER, 6, 7.0, 5.0))
-	content.add_child(notes_panel)
+	_add_render_child(notes_panel)
 	warning_details_panel = notes_panel
 	var notes_box := VBoxContainer.new()
 	notes_box.add_theme_constant_override("separation", 3)
@@ -2099,7 +2366,7 @@ func _add_live_assumption_controls(assumptions: Dictionary, _prior_provenance: S
 		"panel",
 		_make_stylebox(PROFILE_BG, Color(CONDITION_OPPONENT_ACCENT, 0.34), 8, 8.0, 6.0)
 	)
-	content.add_child(panel)
+	_add_render_child(panel)
 
 	var box := VBoxContainer.new()
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -2221,7 +2488,7 @@ func _add_showdex_stat_grid(assumptions: Dictionary) -> void:
 		"panel",
 		_make_stylebox(Color(SURFACE_PANEL, 0.96), Color(BORDER_NEUTRAL, 0.86), 8, 7.0, 5.0)
 	)
-	content.add_child(panel)
+	_add_render_child(panel)
 	var box := VBoxContainer.new()
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	box.add_theme_constant_override("separation", 3)
@@ -2355,7 +2622,7 @@ func _add_showdex_condition_controls(assumptions: Dictionary) -> void:
 		"panel",
 		_make_stylebox(Color(SURFACE_PANEL, 0.92), Color(BORDER_NEUTRAL, 0.72), 7, 6.0, 4.0)
 	)
-	content.add_child(panel)
+	_add_render_child(panel)
 	var box := VBoxContainer.new()
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.add_child(box)
@@ -2521,6 +2788,7 @@ func _set_explicit_opponent_move_names(move_values: Array) -> void:
 	defender_assumptions["replaceMoves"] = true
 	edited_assumption_fields["assumedMoves"] = true
 	edited_assumption_fields["replaceMoves"] = true
+	_clear_move_scenarios()
 
 func _add_advanced_scenario_controls(parent: VBoxContainer, assumptions: Dictionary) -> void:
 	var active_conditions := _get_effective_field_condition_labels()

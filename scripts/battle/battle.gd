@@ -28,12 +28,8 @@ const BATTLE_SUPREME_OVERLORD_EFFECT := preload("res://scripts/battle/battle_sup
 const BATTLE_PUBLIC_POKEMON_KNOWLEDGE := preload("res://scripts/battle/battle_public_pokemon_knowledge.gd")
 const BATTLE_VOICE_TIMING := preload("res://scripts/battle/battle_voice_timing.gd")
 const BATTLE_ENVIRONMENT_CATALOG := preload("res://scripts/battle/battle_environment_catalog.gd")
-const CALC_DRAWER_FIELD_WIDTH_RATIO := 0.66
 const CALC_DRAWER_FIELD_MARGIN := 8.0
-const CALC_DRAWER_OPPONENT_HUD_CLEARANCE := 10.0
-const CALC_TIMER_DOCK_MAX_WIDTH := 370.0
-const CALC_TIMER_DOCK_TWO_PANEL_MIN_WIDTH := 348.0
-const CALC_TIMER_DOCK_HEIGHT := 50.0
+const CALC_DRAWER_OPPONENT_RAIL_CLEARANCE := 8.0
 const MEGA_EVOLUTION_EFFECT_KEY := "mega_evolution"
 const PVP_FORCE_SWITCH_ACK_RETRY_MSEC := 1000
 const PVP_FORCE_SWITCH_RECONCILE_INITIAL_MSEC := 2500
@@ -285,6 +281,7 @@ var wild_owned_request_id := 0
 @onready var bag_drawer: Control = %BagDrawer
 @onready var calc_drawer: Control = %CalcDrawer
 @onready var calc_timer_dock: BattleVsPanelContainer = %CalcTimerDock
+@onready var calc_turn_label: Label = %CalcTurnLabel
 @onready var bag_drawer_close_button: Button = %BagDrawerCloseButton
 @onready var calc_drawer_close_button: Button = %CalcDrawerCloseButton
 @onready var context_hint: Label = %ContextHint
@@ -312,6 +309,7 @@ var wild_owned_request_id := 0
 
 # Battle Sprites
 @onready var battle_frame: Control = %BattleFrame
+@onready var opponent_stage_party_rail: Control = %OpponentStagePartyRail
 @onready var player_battle_platform: Control = %BattlePlatform
 @onready var enemy_battle_platform: Control = %BattlePlatform2
 @onready var battle_stage_viewport: Control = %BattleStageViewport
@@ -436,6 +434,8 @@ func _ready() -> void:
 		calc_panel.default_ability_requested.connect(_on_calc_panel_default_ability_requested)
 	if not calc_panel.matchup_selection_changed.is_connected(_on_calc_panel_matchup_selection_changed):
 		calc_panel.matchup_selection_changed.connect(_on_calc_panel_matchup_selection_changed)
+	if not calc_panel.move_scenarios_changed.is_connected(_on_calc_panel_move_scenarios_changed):
+		calc_panel.move_scenarios_changed.connect(_on_calc_panel_move_scenarios_changed)
 	if not bag_grid.item_selected.is_connected(_on_bag_grid_item_selected):
 		bag_grid.item_selected.connect(_on_bag_grid_item_selected)
 	if player_hud_panel.has_method("set_experience_bar_enabled"):
@@ -2270,8 +2270,7 @@ func _get_move_confirmation_name(move_data: Dictionary) -> String:
 			return value
 	return _t("battle.fallback.selected_move")
 
-## Houdt de calculator boven uitsluitend de spelershelft van het battlefield.
-## Daardoor blijven de battle log, tegenstander en move-informatie bereikbaar.
+## Vult het battlefield tot vlak voor de hoverbare tegenstander-previewrail.
 func _queue_calc_drawer_layout_update() -> void:
 	call_deferred("_update_calc_drawer_layout")
 
@@ -2284,10 +2283,10 @@ func _update_calc_drawer_layout() -> void:
 	var local_bottom_right: Vector2 = drawer_layer_inverse * frame_rect.end
 	var frame_size: Vector2 = local_bottom_right - local_top_left
 	var drawer_position := local_top_left + Vector2(CALC_DRAWER_FIELD_MARGIN, CALC_DRAWER_FIELD_MARGIN)
-	var drawer_width := frame_size.x * CALC_DRAWER_FIELD_WIDTH_RATIO - CALC_DRAWER_FIELD_MARGIN * 2.0
-	if is_instance_valid(enemy_hud_panel):
-		var opponent_hud_left := drawer_layer_inverse * enemy_hud_panel.get_global_rect().position
-		var opponent_safe_width := opponent_hud_left.x - drawer_position.x - CALC_DRAWER_OPPONENT_HUD_CLEARANCE
+	var drawer_width := frame_size.x - CALC_DRAWER_FIELD_MARGIN * 2.0
+	if is_instance_valid(opponent_stage_party_rail):
+		var opponent_rail_left := drawer_layer_inverse * opponent_stage_party_rail.get_global_rect().position
+		var opponent_safe_width := opponent_rail_left.x - drawer_position.x - CALC_DRAWER_OPPONENT_RAIL_CLEARANCE
 		if opponent_safe_width > 0.0:
 			drawer_width = minf(drawer_width, opponent_safe_width)
 	calc_drawer.position = drawer_position
@@ -2295,24 +2294,20 @@ func _update_calc_drawer_layout() -> void:
 		drawer_width,
 		frame_size.y - CALC_DRAWER_FIELD_MARGIN * 2.0
 	)
-	_update_calc_timer_dock_layout(local_bottom_right)
+	_update_calc_timer_dock_layout()
 
 
-func _update_calc_timer_dock_layout(frame_bottom_right: Vector2) -> void:
+func _update_calc_timer_dock_layout() -> void:
 	if not is_instance_valid(calc_timer_dock):
 		return
-	var right_area_left := calc_drawer.position.x + calc_drawer.size.x + CALC_DRAWER_FIELD_MARGIN
-	var right_area_right := frame_bottom_right.x - CALC_DRAWER_FIELD_MARGIN
-	var available_width := maxf(right_area_right - right_area_left, 0.0)
-	var show_opponent := available_width >= CALC_TIMER_DOCK_TWO_PANEL_MIN_WIDTH
-	calc_timer_dock.configure_compact_timer_mode(true, show_opponent)
-	var dock_width := minf(CALC_TIMER_DOCK_MAX_WIDTH, available_width)
-	calc_timer_dock.set_anchors_preset(Control.PRESET_TOP_LEFT)
-	calc_timer_dock.position = Vector2(
-		right_area_left + maxf((available_width - dock_width) * 0.5, 0.0),
-		frame_bottom_right.y - CALC_TIMER_DOCK_HEIGHT - CALC_DRAWER_FIELD_MARGIN
-	)
-	calc_timer_dock.size = Vector2(dock_width, CALC_TIMER_DOCK_HEIGHT)
+	calc_timer_dock.configure_compact_timer_mode(true, true)
+	_update_calc_turn_label(_get_battle_presentation_turn())
+
+
+func _update_calc_turn_label(turn: int) -> void:
+	if not is_instance_valid(calc_turn_label):
+		return
+	calc_turn_label.text = _t("battle.status.turn", {"turn": turn}) if turn > 0 else _t("common.waiting")
 
 
 func _sync_calc_timer_dock_visibility() -> void:
@@ -2433,7 +2428,7 @@ func _refresh_damage_calc_results() -> void:
 				str(selection.get("direction", "own-to-opponent")),
 				str(selection.get("attackerRef", "")), str(selection.get("defenderRef", "")),
 				_get_damage_calc_defender_assumptions_payload(), calc_panel.get_field_scenario(),
-				calc_panel.get_species_scenario()
+				calc_panel.get_species_scenario(), calc_panel.get_move_scenarios()
 			)
 	else:
 		response = {
@@ -2471,6 +2466,13 @@ func _on_calc_panel_defender_assumptions_changed(assumptions: Dictionary, edited
 		_refresh_damage_calc_results()
 
 func _on_calc_panel_matchup_selection_changed() -> void:
+	if damage_calc_request_in_flight:
+		damage_calc_request_token += 1
+	if current_action_panel_mode == BattleActionsPanelMode.CALC:
+		_refresh_damage_calc_results()
+
+
+func _on_calc_panel_move_scenarios_changed(_move_scenarios: Array) -> void:
 	if damage_calc_request_in_flight:
 		damage_calc_request_token += 1
 	if current_action_panel_mode == BattleActionsPanelMode.CALC:
@@ -5718,6 +5720,7 @@ func _get_ability_name_from_source(source: String) -> String:
 func _update_battle_status_panels() -> void:
 	var display_turn := _get_battle_presentation_turn()
 	battle_status_panel.set_turn(display_turn)
+	_update_calc_turn_label(display_turn)
 	battle_status_panel.hide_timer()
 	_timer_panels_call("hide_decision_timers")
 	if _should_show_bank_timer_projection():

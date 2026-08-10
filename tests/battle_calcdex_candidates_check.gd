@@ -176,6 +176,7 @@ func _run() -> void:
 	]
 	panel.set_knowledge_snapshot(condition_snapshot)
 	panel.advanced_scenario_expanded = true
+	panel.active_inspector_tab = panel.INSPECTOR_FIELD
 	panel._render_current_state()
 	await process_frame
 	var profile_status_selector := panel.find_child("DefenderStatusSelector", true, false) as OptionButton
@@ -293,6 +294,7 @@ func _run() -> void:
 		return
 	panel._on_pokemon_status_selected(0, own_defender_status, "own")
 	panel.active_subtab = panel.SUBTAB_YOUR_DAMAGE
+	panel.active_inspector_tab = panel.INSPECTOR_SET
 	panel._render_current_state()
 	await process_frame
 	panel.advanced_scenario_expanded = false

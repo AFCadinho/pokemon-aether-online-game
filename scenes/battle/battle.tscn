@@ -625,7 +625,7 @@ size_flags_vertical = 3
 theme_override_constants/separation = 4
 
 [node name="CalcDrawerHeader" type="MarginContainer" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent" unique_id=124943495]
-custom_minimum_size = Vector2(0, 42)
+custom_minimum_size = Vector2(0, 58)
 layout_mode = 2
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 6
@@ -643,6 +643,24 @@ theme_override_colors/font_color = Color(0.54901963, 0.79607844, 0.9098039, 1)
 theme_override_font_sizes/font_size = 18
 text = "battle.ui.damage_calculator"
 vertical_alignment = 1
+
+[node name="CalcTurnLabel" type="Label" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcDrawerHeader/HeaderRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(88, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0.65882355, 0.7058824, 0.7607843, 1)
+theme_override_font_sizes/font_size = 12
+text = "common.waiting"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CalcTimerDock" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcDrawerHeader/HeaderRow" instance=ExtResource("9_pyfix")]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(348, 50)
+layout_mode = 2
+size_flags_horizontal = 0
 
 [node name="CalcDrawerCloseButton" type="Button" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcDrawerHeader/HeaderRow" unique_id=2014048764]
 unique_name_in_owner = true
@@ -674,25 +692,14 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
+vertical_scroll_mode = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcPanel/CalcScroll" unique_id=500652918]
 clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_override_constants/separation = 4
-
-[node name="CalcTimerDock" parent="BattleDrawerLayer" instance=ExtResource("9_pyfix")]
-unique_name_in_owner = true
-visible = false
-z_index = 8
-layout_mode = 0
-anchors_preset = 0
-anchor_left = 0.0
-anchor_right = 0.0
-offset_left = 700.0
-offset_top = 500.0
-offset_right = 1060.0
-offset_bottom = 550.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1662798329]
 unique_name_in_owner = true

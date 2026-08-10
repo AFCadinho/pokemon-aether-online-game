@@ -4,7 +4,7 @@ class_name BattleCalcdexMatchup
 
 const SNAPSHOT := preload("res://scripts/battle/battle_calcdex_snapshot.gd")
 const SCHEMA_VERSION := 1
-const ROUTE_REVISION := "calc3.9-2026-08-10"
+const ROUTE_REVISION := "calc4.0-2026-08-10"
 const DIRECTIONS := ["own-to-opponent", "opponent-to-own"]
 const RESULT_STATES := ["supported", "unsupported", "error"]
 const MOVE_SOURCES := ["owned_exact", "public_reveal", "user_scenario", "public_usage_prior", "curated_prior"]
@@ -84,14 +84,17 @@ static func _normalize_pokemon(value: Variant, _role: String) -> Dictionary:
 	}
 
 
-static func _normalize_row(value: Variant) -> Dictionary:
+static func _normalize_row(value: Variant, require_options: bool = true) -> Dictionary:
 	if not (value is Dictionary):
 		return {}
 	var source: Dictionary = value as Dictionary
+	var required_fields: Array[String] = ["moveName", "moveSource", "resultState", "damageDistribution", "koProjection", "warningCodes"]
+	if require_options:
+		required_fields.append("options")
 	if not _has_required_allowed_fields(
 		source,
-		["moveName", "moveSource", "resultState", "damageDistribution", "koProjection", "warningCodes"],
-		["moveName", "moveSource", "resultState", "reasonCode", "damageDistribution", "minDamage", "maxDamage", "averageDamage", "minPercent", "maxPercent", "description", "koProjection", "warningCodes"]
+		required_fields,
+		["moveName", "moveSource", "options", "resultState", "reasonCode", "damageDistribution", "minDamage", "maxDamage", "averageDamage", "minPercent", "maxPercent", "description", "koProjection", "warningCodes"]
 	):
 		return {}
 	var move_name := str(source.get("moveName", "")).strip_edges()
@@ -99,6 +102,16 @@ static func _normalize_row(value: Variant) -> Dictionary:
 	var state := str(source.get("resultState", ""))
 	if move_name == "" or move_name.length() > 100 or move_source not in MOVE_SOURCES or state not in RESULT_STATES:
 		return {}
+	var options: Dictionary = {"useZ": false, "isCrit": false}
+	if source.has("options"):
+		var options_value: Variant = source.get("options")
+		if not (options_value is Dictionary):
+			return {}
+		options = options_value as Dictionary
+		if not _has_exact_fields(options, ["useZ", "isCrit"]):
+			return {}
+		if typeof(options.get("useZ")) != TYPE_BOOL or typeof(options.get("isCrit")) != TYPE_BOOL:
+			return {}
 	var distribution: Dictionary = source.get("damageDistribution", {}) if source.get("damageDistribution") is Dictionary else {}
 	var rolls: Array = distribution.get("rolls", []) if distribution.get("rolls") is Array else []
 	if str(distribution.get("kind", "")) not in ["exact_rolls", "unavailable"] or rolls.size() > 256:
@@ -110,7 +123,11 @@ static func _normalize_row(value: Variant) -> Dictionary:
 	if ko_projection.is_empty():
 		return {}
 	var result := {
-		"move": {"name": move_name, "source": move_source},
+		"move": {
+			"name": move_name,
+			"source": move_source,
+			"options": {"useZ": bool(options.get("useZ")), "isCrit": bool(options.get("isCrit"))},
+		},
 		"resultState": state,
 		"damageDistribution": {"kind": str(distribution.get("kind")), "rolls": rolls.duplicate(true)},
 		"damage": rolls.duplicate(true),

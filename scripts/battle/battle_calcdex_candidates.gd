@@ -107,7 +107,7 @@ static func _normalize_candidates(value: Variant) -> Array[Dictionary]:
 		if not (candidate.get("results") is Array) or (candidate.get("results") as Array).size() > 4:
 			return []
 		for row_value: Variant in candidate.get("results", []):
-			var row := MATCHUP._normalize_row(row_value)
+			var row := MATCHUP._normalize_row(row_value, false)
 			if row.is_empty():
 				return []
 			normalized_rows.append(row)
