@@ -1415,10 +1415,8 @@ func _add_battle_state_controls() -> void:
 	section.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	section.add_theme_stylebox_override("panel", _make_stylebox(SURFACE_PANEL, INTERACTION_ACCENT, 8, 9.0, 8.0))
 	var body := VBoxContainer.new()
-	body.add_theme_constant_override("separation", 5)
+	body.add_theme_constant_override("separation", 0)
 	section.add_child(body)
-	var title := _make_label("BATTLE STATE", 9, TEXT_ACCENT)
-	body.add_child(title)
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 8)
 	body.add_child(row)
