@@ -428,7 +428,6 @@ func _render_your_damage_response(response: Dictionary) -> void:
 		_get_effective_pokemon_status("own"),
 		_get_effective_pokemon_status("opponent")
 	)
-	_add_battle_state_controls()
 	var assumptions := _get_display_assumptions(opponent)
 	var results: Array = _as_array(response.get("results", []))
 	if str(response.get("direction", "")) == "opponent-to-own":
@@ -1416,6 +1415,12 @@ func _make_matchup_side(
 		detail_row.add_child(_make_pokemon_status_badge(status))
 	if hp_percent != null:
 		side.add_child(_make_hp_bar(float(hp_percent)))
+	var state_card := _make_battle_state_side("", relation)
+	var state_body := state_card.get_child(0) as VBoxContainer
+	if state_body != null:
+		state_card.remove_child(state_body)
+		state_card.queue_free()
+		side.add_child(state_body)
 	return panel
 
 
