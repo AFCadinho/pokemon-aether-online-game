@@ -2378,7 +2378,7 @@ func _add_live_assumption_controls(assumptions: Dictionary, _prior_provenance: S
 	catalog_suggestions_box = VBoxContainer.new()
 	catalog_suggestions_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	catalog_suggestions_box.clip_contents = true
-	catalog_suggestions_box.add_theme_constant_override("separation", 3)
+	catalog_suggestions_box.add_theme_constant_override("separation", 5)
 	box.add_child(catalog_suggestions_box)
 	if _is_current_ability_assumed():
 		var ability_warning := _make_label(_t("battle.calc.assumed_ability_warning", {
@@ -3574,7 +3574,7 @@ func _make_selector_suggestions_panel() -> PanelContainer:
 	panel.clip_contents = true
 	panel.add_theme_stylebox_override(
 		"panel",
-		_make_stylebox(Color(SURFACE_CANVAS, 0.99), Color(INTERACTION_ACCENT, 0.66), 7, 6.0, 6.0)
+		_make_stylebox(Color(SURFACE_RAISED, 0.98), Color(INTERACTION_ACCENT, 0.82), 7, 8.0, 8.0)
 	)
 	return panel
 
@@ -3811,18 +3811,21 @@ func is_assumption_catalog_request_current(kind: String, query: String) -> bool:
 func _make_selector_result_button(title: String, subtitle: String, pressed_callback: Callable, selected: bool = false, is_clear_action: bool = false) -> Button:
 	var button := Button.new()
 	button.focus_mode = Control.FOCUS_ALL
-	button.custom_minimum_size = Vector2(0, 31)
+	button.custom_minimum_size = Vector2(0, 34)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	button.tooltip_text = title if subtitle == "" else "%s · %s" % [title, subtitle]
 	var normal_bg := Color(SURFACE_PANEL, 0.98)
-	var normal_border := Color(BORDER_NEUTRAL, 0.86)
+	var normal_border := Color(BORDER_NEUTRAL, 0.92)
 	if selected:
-		normal_bg = TAB_ACTIVE_BG
-		normal_border = Color(INTERACTION_ACCENT, 0.94)
+		normal_bg = Color(INTERACTION_ACCENT, 0.18)
+		normal_border = Color(INTERACTION_ACCENT, 0.98)
+	elif is_clear_action:
+		normal_bg = Color(CHIP_BG, 0.96)
+		normal_border = Color(BORDER_NEUTRAL, 0.78)
 	button.add_theme_stylebox_override("normal", _make_stylebox(normal_bg, normal_border, 5, 7.0, 3.0))
-	button.add_theme_stylebox_override("hover", _make_stylebox(DROPDOWN_HOVER_BG, DROPDOWN_HOVER_BORDER, 5, 7.0, 3.0))
-	button.add_theme_stylebox_override("pressed", _make_stylebox(DROPDOWN_PRESSED_BG, INTERACTION_ACCENT, 5, 7.0, 3.0))
+	button.add_theme_stylebox_override("hover", _make_stylebox(Color(INTERACTION_ACCENT, 0.12), Color(INTERACTION_ACCENT, 0.72), 5, 7.0, 3.0))
+	button.add_theme_stylebox_override("pressed", _make_stylebox(Color(INTERACTION_ACCENT, 0.28), INTERACTION_ACCENT, 5, 7.0, 3.0))
 	button.add_theme_stylebox_override("focus", _make_stylebox(normal_bg, DROPDOWN_FOCUS_BORDER, 5, 7.0, 3.0))
 
 	var row := HBoxContainer.new()
