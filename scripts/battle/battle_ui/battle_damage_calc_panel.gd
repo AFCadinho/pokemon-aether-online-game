@@ -3022,16 +3022,6 @@ func _set_explicit_opponent_move_names(move_values: Array) -> void:
 	_clear_move_scenarios()
 
 func _add_advanced_scenario_controls(parent: VBoxContainer, assumptions: Dictionary) -> void:
-	var active_conditions := _get_effective_field_condition_labels()
-	var condition_summary := _t("common.none") if active_conditions.is_empty() else _join_string_array(active_conditions, " · ")
-	parent.add_child(_make_disclosure_button(
-		_t("battle.calc.battle_conditions", {"conditions": condition_summary}),
-		advanced_scenario_expanded,
-		_on_advanced_scenario_pressed
-	))
-	if not advanced_scenario_expanded:
-		return
-
 	var editor := VBoxContainer.new()
 	editor.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	editor.add_theme_constant_override("separation", 7)
