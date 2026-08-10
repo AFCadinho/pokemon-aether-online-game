@@ -15,6 +15,7 @@ func _run() -> void:
 	_assert(bool(normalized.get("success", false)), "valid matchup must normalize")
 	_assert(str(normalized["results"][0]["move"]["source"]) == "public_reveal", "move provenance must survive")
 	_assert(normalized["results"][0]["move"]["options"] == {"useZ": false, "isCrit": false}, "move modifiers must survive normalization")
+	_assert(normalized["results"][0]["defenderStats"] == {"hp": 207, "atk": 108, "def": 120, "spa": 120, "spd": 167, "spe": 120}, "calculated defender stats must survive normalization")
 	var wire_response: Dictionary = JSON.parse_string(JSON.stringify(response))
 	wire_response["status"] = 200.0
 	_assert(
@@ -28,6 +29,9 @@ func _run() -> void:
 	var stale := revision.duplicate(true)
 	stale["eventSeq"] += 1
 	_assert(not bool(Matchup.normalize_response(response, stale).get("success", false)), "stale result must fail closed")
+	var malformed_stats := response.duplicate(true)
+	malformed_stats["results"][0]["defenderStats"]["hp"] = -1
+	_assert(not bool(Matchup.normalize_response(malformed_stats, revision).get("success", false)), "invalid calculated defender stats must fail closed")
 
 	var panel := DamageCalcPanel.new()
 	_assert(panel._apply_viewer_stage_to_stat(315, -1) == 210, "a -1 viewer stage must lower the displayed stat")
@@ -184,6 +188,7 @@ func _response(revision: Dictionary) -> Dictionary:
 			"minPercent": 30.0,
 			"maxPercent": 31.0,
 			"description": "safe",
+			"defenderStats": {"hp": 207, "atk": 108, "def": 120, "spa": 120, "spd": 167, "spe": 120},
 			"koProjection": {"state": "available", "chance": 1.0, "hits": 2, "text": "guaranteed 2HKO", "basedOn": "exact_current_hp", "effects": []},
 			"warningCodes": [],
 		}],

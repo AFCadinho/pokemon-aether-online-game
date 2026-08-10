@@ -94,7 +94,7 @@ static func _normalize_row(value: Variant, require_options: bool = true) -> Dict
 	if not _has_required_allowed_fields(
 		source,
 		required_fields,
-		["moveName", "moveSource", "options", "resultState", "reasonCode", "damageDistribution", "minDamage", "maxDamage", "averageDamage", "minPercent", "maxPercent", "description", "koProjection", "warningCodes"]
+		["moveName", "moveSource", "options", "resultState", "reasonCode", "damageDistribution", "minDamage", "maxDamage", "averageDamage", "minPercent", "maxPercent", "description", "defenderStats", "koProjection", "warningCodes"]
 	):
 		return {}
 	var move_name := str(source.get("moveName", "")).strip_edges()
@@ -140,12 +140,31 @@ static func _normalize_row(value: Variant, require_options: bool = true) -> Dict
 			if not (typeof(number) in [TYPE_INT, TYPE_FLOAT]) or float(number) < 0.0 or not is_finite(float(number)):
 				return {}
 			result[key] = number
-	if source.get("defenderStats") is Dictionary:
-		result["defenderStats"] = (source.get("defenderStats") as Dictionary).duplicate(true)
+	if source.has("defenderStats"):
+		var defender_stats := _normalize_raw_stats(source.get("defenderStats"))
+		if defender_stats.is_empty():
+			return {}
+		result["defenderStats"] = defender_stats
 	if source.has("description"):
 		result["description"] = str(source.get("description", ""))
 	if source.has("reasonCode"):
 		result["reasonCode"] = str(source.get("reasonCode", ""))
+	return result
+
+
+static func _normalize_raw_stats(value: Variant) -> Dictionary:
+	if not (value is Dictionary):
+		return {}
+	var source: Dictionary = value as Dictionary
+	var stat_keys: Array[String] = ["hp", "atk", "def", "spa", "spd", "spe"]
+	if not _has_exact_fields(source, stat_keys):
+		return {}
+	var result: Dictionary = {}
+	for stat_key: String in stat_keys:
+		var stat_value: Variant = source.get(stat_key)
+		if typeof(stat_value) != TYPE_INT or int(stat_value) < 0 or int(stat_value) > 9999:
+			return {}
+		result[stat_key] = int(stat_value)
 	return result
 
 
