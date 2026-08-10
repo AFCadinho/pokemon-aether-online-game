@@ -23,6 +23,7 @@ func _init() -> void:
 	_check_booster_energy_quark_drive_messages()
 	_check_air_balloon_messages()
 	_check_consumable_item_activation_animations()
+	_check_eat_berry_sheet_tile_size()
 	_check_future_sight_lifecycle_messages()
 	_check_solar_beam_prepare_uses_charge_animation()
 	_check_electro_shot_prepare_uses_charge_animation()
@@ -406,6 +407,17 @@ func _check_consumable_item_activation_animations() -> void:
 		"state": "end",
 	})
 	_check_equal(str(balloon.get("effect_animation_key", "")), "", "Air Balloon pop keeps its dedicated presentation")
+
+
+func _check_eat_berry_sheet_tile_size() -> void:
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(
+		"res://assets/battles/animations/common/eatberry/eatberry.json"
+	))
+	_check_equal(parsed is Dictionary, true, "Eat Berry animation data is readable")
+	if not parsed is Dictionary:
+		return
+	var tile_size: Variant = (parsed as Dictionary).get("tile_size", [])
+	_check_equal(tile_size, [192.0, 192.0], "GEN8 Eat Berry sheet uses complete 192px cells")
 
 
 func _check_future_sight_lifecycle_messages() -> void:
