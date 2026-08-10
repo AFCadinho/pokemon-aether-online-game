@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://c518t3j64b286"]
+
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/viridian_house_template/viridian_house_template.visual.tscn" id="1_bmpmk"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="2_map_exit"]
+[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="3_map_meta"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_house_exit"]
+size = Vector2(32, 32)
+
+[node name="House1" type="Node2D" unique_id=992766721]
+script = ExtResource("3_map_meta")
+map_id = "kanto_viridian_city_house_1"
+map_region_name = "Kanto"
+map_display_name = "Viridian City House 1"
+world_access_group_id = "kanto_viridian_city"
+world_access_group_label = "Viridian City"
+world_access_area_type = "interior"
+location_id = "kanto.viridian_city.house_1"
+location_name = "Viridian City House 1"
+lighting_profile = "indoor"
+weather_profile = "disabled"
+music_profile_id = "kanto.viridian_city"
+
+[node name="ViridianHouseTemplate" parent="." unique_id=455492845 instance=ExtResource("1_bmpmk")]
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="FromViridianCity" type="Marker2D" parent="Spawns"]
+position = Vector2(320, 480)
+
+[node name="Exits" type="Node2D" parent="."]
+
+[node name="ToViridianCity" type="Area2D" parent="Exits"]
+position = Vector2(320, 512)
+script = ExtResource("2_map_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn"
+target_spawn_name = "FromHouse1"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToViridianCity"]
+position = Vector2(0, 16)
+shape = SubResource("RectangleShape2D_house_exit")
+
+[connection signal="body_entered" from="Exits/ToViridianCity" to="Exits/ToViridianCity" method="_on_body_entered"]

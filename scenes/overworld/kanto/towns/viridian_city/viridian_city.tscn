@@ -461,10 +461,10 @@ position = Vector2(1136, 1488)
 position = Vector2(80, 1232)
 
 [node name="FromGym" type="Marker2D" parent="Spawns" unique_id=1774247635]
-position = Vector2(1792, 480)
+position = Vector2(1328, 432)
 
 [node name="FromTrainerSchool" type="Marker2D" parent="Spawns" unique_id=1126615116]
-position = Vector2(1840, 944)
+position = Vector2(1904, 912)
 
 [node name="FromHouse1" type="Marker2D" parent="Spawns" unique_id=1613464911]
 position = Vector2(592, 1488)
@@ -553,6 +553,9 @@ shape = SubResource("RectangleShape2D_pokecenter")
 
 [node name="ToHouse1" type="Area2D" parent="Exits" unique_id=107727932]
 position = Vector2(1552, 880)
+script = ExtResource("3_route1")
+target_scene_path = "res://scenes/overworld/kanto/towns/viridian_city/house1.tscn"
+target_spawn_name = "FromViridianCity"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse1" unique_id=1913481857]
 position = Vector2(0, -8)
