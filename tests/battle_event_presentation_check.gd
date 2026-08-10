@@ -16,6 +16,7 @@ func _init() -> void:
 	_check_full_hp_reveal_damage_has_no_damage_target()
 	_check_real_damage_keeps_damage_target()
 	_check_direct_damage_logs_one_decimal_precision()
+	_check_public_damage_percent_is_preferred_over_quantized_hp_delta()
 	_check_damage_after_hazard_uses_numeric_delta_when_previous_condition_is_stale()
 	_check_damage_after_hazard_logs_when_conditions_repeat()
 	_check_damage_after_hazard_logs_mixed_visible_and_exact_conditions()
@@ -239,6 +240,28 @@ func _check_direct_damage_logs_one_decimal_precision() -> void:
 	})
 
 	_check_equal(str(result.get("log_message", "")), "(Dragonite lost 44.5% of its health!)", "direct damage logs one decimal when exact HP is available")
+
+
+func _check_public_damage_percent_is_preferred_over_quantized_hp_delta() -> void:
+	var presentation = _make_presentation()
+	presentation.build({
+		"type": "move",
+		"actor": "p1a: Samurott",
+		"move": "Knock Off",
+		"target": "p2a: Heatran",
+	})
+	var result: Dictionary = presentation.build({
+		"type": "damage",
+		"target": "p2a: Heatran",
+		"previousCondition": "100/100",
+		"condition": "73/100",
+		"previousHp": 100,
+		"hp": 73,
+		"maxHp": 100,
+		"damagePercent": 27.9,
+	})
+
+	_check_equal(str(result.get("log_message", "")), "(Heatran lost 27.9% of its health!)", "public exact damage percent overrides quantized HP delta")
 
 
 func _check_damage_after_hazard_uses_numeric_delta_when_previous_condition_is_stale() -> void:

@@ -185,6 +185,10 @@ func get_event_visible_hp_change(event: Dictionary) -> int:
 	return 0
 
 func get_event_damage_percent(event: Dictionary) -> float:
+	var public_damage_percent: float = float(event.get("damagePercent", 0.0))
+	if is_finite(public_damage_percent) and public_damage_percent > 0.0:
+		return public_damage_percent
+
 	var previous_hp: int = int(event.get("previousHp", 0))
 	var hp: int = int(event.get("hp", 0))
 	var max_hp: int = int(event.get("maxHp", 0))
