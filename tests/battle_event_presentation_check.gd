@@ -23,6 +23,7 @@ func _init() -> void:
 	_check_booster_energy_quark_drive_messages()
 	_check_air_balloon_messages()
 	_check_consumable_item_activation_animations()
+	_check_tera_shift_max_hp_sync_is_silent()
 	_check_eat_berry_sheet_tile_size()
 	_check_eat_berry_sheet_presentation_tuning()
 	_check_future_sight_lifecycle_messages()
@@ -108,6 +109,21 @@ func _check_semantic_battle_log_colors() -> void:
 		"semantic battle-log colors do not depend on English message text"
 	)
 	panel.free()
+
+
+func _check_tera_shift_max_hp_sync_is_silent() -> void:
+	var presentation = _make_presentation()
+	var result: Dictionary = presentation.build({
+		"type": "heal",
+		"target": "p1a: Terapagos",
+		"previousCondition": "100/100",
+		"condition": "100/100",
+		"maxHpIncreaseSync": true,
+		"silent": true,
+	})
+	_check_equal(str(result.get("log_message", "")), "", "Tera Shift max-HP sync has no battle-log heal")
+	_check_equal(str(result.get("effect_animation_key", "")), "", "Tera Shift max-HP sync has no heal animation")
+	_check_equal(str(result.get("heal_target_ident", "")), "", "Tera Shift max-HP sync has no heal target")
 
 
 func _check_supreme_overlord_fallen_counter_protocol() -> void:
