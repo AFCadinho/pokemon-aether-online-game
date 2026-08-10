@@ -2643,20 +2643,35 @@ func _add_viewer_ability_controls(parent: VBoxContainer, viewer: Dictionary) -> 
 	var ability_label := _make_label(_t("battle.calc.ability").to_upper(), 8, TEXT_MUTED)
 	ability_label.custom_minimum_size.x = 58
 	ability_row.add_child(ability_label)
-	var input := LineEdit.new()
-	input.name = "ViewerAbilityInput"
-	input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	input.custom_minimum_size.y = 25
-	input.max_length = 100
-	input.text = _get_viewer_ability_value(viewer)
-	input.placeholder_text = _t("battle.calc.ability_unknown")
-	input.tooltip_text = "Edit the ability used for this calculation"
-	input.add_theme_font_size_override("font_size", 11)
-	input.add_theme_stylebox_override("normal", _make_stylebox(SURFACE_CANVAS, BORDER_NEUTRAL, 4, 4.0, 1.0))
-	input.add_theme_stylebox_override("focus", _make_stylebox(SURFACE_RAISED, INTERACTION_ACCENT, 4, 4.0, 1.0))
-	input.focus_exited.connect(_on_viewer_ability_focus_exited.bind(input))
-	input.text_submitted.connect(_on_viewer_ability_submitted.bind(input))
-	ability_row.add_child(input)
+	var selector := OptionButton.new()
+	selector.name = "ViewerAbilitySelector"
+	selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	selector.tooltip_text = "Choose the ability used for this calculation"
+	var selected_ability := _get_viewer_ability_value(viewer)
+	var options := _get_viewer_ability_options(viewer)
+	for ability: String in options:
+		selector.add_item(ability)
+		selector.set_item_metadata(selector.item_count - 1, ability)
+		if ability.to_lower() == selected_ability.to_lower():
+			selector.select(selector.item_count - 1)
+	selector.item_selected.connect(_on_viewer_ability_option_selected.bind(selector))
+	_apply_calcdex_dropdown_style(selector, 27.0, 10)
+	ability_row.add_child(selector)
+
+
+func _get_viewer_ability_options(viewer: Dictionary) -> Array[String]:
+	var options: Array[String] = []
+	for value: Variant in _as_array(viewer.get("possibleAbilities", viewer.get("possible_abilities", []))):
+		var ability := str(value).strip_edges()
+		if ability != "" and not options.has(ability):
+			options.append(ability)
+	var known := _get_known_viewer_ability(viewer)
+	if known != "" and not options.has(known):
+		options.push_front(known)
+	var selected := str(viewer_ability_scenarios.get(selected_viewer_ref, "")).strip_edges()
+	if selected != "" and not options.has(selected):
+		options.push_front(selected)
+	return options
 func _get_viewer_ability_value(viewer: Dictionary) -> String:
 	var scenario := str(viewer_ability_scenarios.get(selected_viewer_ref, "")).strip_edges()
 	if scenario != "":
@@ -2673,6 +2688,19 @@ func _on_viewer_ability_focus_exited(input: LineEdit) -> void:
 	if is_clearing_content:
 		return
 	_on_viewer_ability_submitted(input.text, input)
+
+
+func _on_viewer_ability_option_selected(index: int, selector: OptionButton) -> void:
+	if selected_viewer_ref == "":
+		return
+	var ability := str(selector.get_item_metadata(index)).strip_edges()
+	var known := _get_known_viewer_ability(_get_snapshot_pokemon_by_ref(selected_viewer_ref))
+	if ability == "" or ability == known:
+		viewer_ability_scenarios.erase(selected_viewer_ref)
+	else:
+		viewer_ability_scenarios[selected_viewer_ref] = ability
+	_mark_sample_set_custom()
+	_emit_defender_assumptions_changed()
 
 
 func _on_viewer_ability_submitted(value: String, _input: LineEdit) -> void:
