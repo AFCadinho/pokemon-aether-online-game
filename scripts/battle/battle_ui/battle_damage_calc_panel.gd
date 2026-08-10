@@ -1398,12 +1398,22 @@ func _make_matchup_side(
 	side.clip_contents = true
 	side.add_theme_constant_override("separation", 2)
 	card_row.add_child(side)
+	var name_row := HBoxContainer.new()
+	name_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	name_row.add_theme_constant_override("separation", 5)
+	side.add_child(name_row)
 	if knowledge_snapshot.is_empty():
 		var name_label := _make_label(pokemon_name, 15, TEXT_PRIMARY)
 		name_label.tooltip_text = pokemon_name
-		side.add_child(name_label)
+		name_row.add_child(name_label)
 	else:
-		side.add_child(_make_forme_menu_button(relation, pokemon_name))
+		name_row.add_child(_make_forme_menu_button(relation, pokemon_name))
+	if relation == "opponent" and not knowledge_snapshot.is_empty():
+		_add_sample_set_selector(name_row)
+		var set_selector := name_row.get_child(name_row.get_child_count() - 1) as OptionButton
+		if set_selector != null:
+			set_selector.custom_minimum_size.x = 118
+			set_selector.size_flags_horizontal = Control.SIZE_SHRINK_END
 	var detail_row := HBoxContainer.new()
 	detail_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	detail_row.add_theme_constant_override("separation", 4)
@@ -2593,20 +2603,11 @@ func _add_live_assumption_controls(
 	opponent_role.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	opponent_role.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	identity_row.add_child(opponent_role)
-	var setup_row := HBoxContainer.new()
-	setup_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	setup_row.add_theme_constant_override("separation", 4)
-	box.add_child(setup_row)
-	var set_field := VBoxContainer.new()
-	set_field.name = "SampleSetField"
-	set_field.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	set_field.add_theme_constant_override("separation", 1)
-	setup_row.add_child(set_field)
-	var set_label := _make_label(_t("battle.calc.set_label").to_upper(), 9, CONDITION_OPPONENT_ACCENT)
-	set_label.custom_minimum_size = Vector2(0, 11)
-	set_field.add_child(set_label)
-	_add_sample_set_selector(set_field)
 	if not edited_assumption_fields.is_empty() or not field_scenario.is_empty():
+		var setup_row := HBoxContainer.new()
+		setup_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		setup_row.add_theme_constant_override("separation", 4)
+		box.add_child(setup_row)
 		var reset_button := _make_assumption_reset_button()
 		reset_button.size_flags_vertical = Control.SIZE_SHRINK_END
 		setup_row.add_child(reset_button)
