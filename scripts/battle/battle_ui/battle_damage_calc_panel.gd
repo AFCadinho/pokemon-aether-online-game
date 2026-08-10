@@ -1439,9 +1439,12 @@ func _make_battle_state_side(caption: String, relation: String) -> VBoxContainer
 	var controls := HBoxContainer.new()
 	controls.add_theme_constant_override("separation", 5)
 	side.add_child(controls)
+	var hp_caption := _make_label("Current HP", 10, TEXT_SECONDARY)
+	hp_caption.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	controls.add_child(hp_caption)
 	var hp_input := LineEdit.new()
 	hp_input.name = "ViewerCurrentHp" if relation == "viewer" else "OpponentCurrentHp"
-	hp_input.custom_minimum_size.x = 92
+	hp_input.custom_minimum_size.x = 46
 	hp_input.placeholder_text = "HP" if relation == "viewer" else "HP %"
 	hp_input.text = _get_battle_state_hp_text(relation)
 	hp_input.tooltip_text = "Current HP" if relation == "viewer" else "Current HP percentage"
@@ -1450,6 +1453,13 @@ func _make_battle_state_side(caption: String, relation: String) -> VBoxContainer
 	hp_input.add_theme_stylebox_override("normal", _make_stylebox(SURFACE_CANVAS, BORDER_NEUTRAL, 4, 4.0, 1.0))
 	hp_input.add_theme_stylebox_override("focus", _make_stylebox(SURFACE_CANVAS, INTERACTION_ACCENT, 4, 4.0, 1.0))
 	controls.add_child(hp_input)
+	var hp_display := _get_battle_state_hp_display(relation)
+	var slash := _make_label("/ %s" % str(hp_display.get("maximum", "--")), 10, TEXT_SECONDARY)
+	slash.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	controls.add_child(slash)
+	var percent := _make_label("(%s%%)" % _format_percent_value(hp_display.get("percent")), 10, TEXT_SECONDARY)
+	percent.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	controls.add_child(percent)
 	controls.add_child(_make_battle_state_status_selector(relation))
 	return side
 
@@ -1472,19 +1482,29 @@ func _make_battle_state_status_selector(relation: String) -> OptionButton:
 
 
 func _get_battle_state_hp_text(relation: String) -> String:
+	return str(_get_battle_state_hp_display(relation).get("current", ""))
+
+
+func _get_battle_state_hp_display(relation: String) -> Dictionary:
 	var ref := selected_viewer_ref if relation == "viewer" else selected_opponent_ref
 	var state := _as_dictionary(battle_state_scenarios.get(ref, {}))
-	if state.has("currentHp"):
-		return str(int(state.get("currentHp", 0)))
-	if state.has("currentHpPercent"):
-		return _format_percent_value(state.get("currentHpPercent"))
 	var pokemon := _get_snapshot_pokemon_by_ref(ref)
 	var hp := _get_pokemon_hp(pokemon)
-	if relation == "viewer":
-		var exact := _as_dictionary(hp.get("exact", {}))
-		if exact.has("current"):
-			return str(int(exact.get("current", 0)))
-	return _format_percent_value(_get_defender_hp_percent(pokemon))
+	var exact := _as_dictionary(hp.get("exact", {}))
+	var maximum := int(exact.get("maximum", 100))
+	var current := int(exact.get("current", maximum))
+	var percent := float(current) * 100.0 / float(maximum) if maximum > 0 else 0.0
+	if relation == "opponent":
+		maximum = 100
+		current = int(roundf(float(_get_defender_hp_percent(pokemon) if _get_defender_hp_percent(pokemon) != null else 100.0)))
+		percent = float(current)
+	if state.has("currentHp"):
+		current = maxi(0, int(state.get("currentHp", 0)))
+		percent = float(current) * 100.0 / float(maximum) if maximum > 0 else 0.0
+	if state.has("currentHpPercent"):
+		percent = clampf(float(state.get("currentHpPercent", 0.0)), 0.0, 100.0)
+		current = int(roundf(percent))
+	return {"current": current, "maximum": maximum, "percent": percent}
 
 
 func _on_battle_state_hp_focus_exited(relation: String, input: LineEdit) -> void:
