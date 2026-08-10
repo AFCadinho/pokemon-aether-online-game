@@ -1442,9 +1442,7 @@ func _make_battle_state_side(caption: String, relation: String) -> PanelContaine
 	side.add_child(controls)
 	var hp_input := LineEdit.new()
 	hp_input.name = "ViewerCurrentHp" if relation == "viewer" else "OpponentCurrentHp"
-	hp_input.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-	hp_input.custom_minimum_size.x = 32
-	hp_input.add_theme_constant_override("minimum_character_width", 0)
+	hp_input.custom_minimum_size.x = 40
 	hp_input.placeholder_text = "HP" if relation == "viewer" else "HP %"
 	hp_input.text = _get_battle_state_hp_text(relation)
 	hp_input.tooltip_text = "Current HP" if relation == "viewer" else "Current HP percentage"
