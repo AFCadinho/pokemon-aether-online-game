@@ -24,11 +24,19 @@ func _init() -> void:
 	var preview_drain_position := battle_source.find("await _drain_pvp_team_preview_completion_updates()")
 	var initial_render_position := battle_source.rfind("await _render_initial_battle_events(lead_response)", preview_drain_position)
 	var initial_controls_position := battle_source.find("_show_battle_controls_after_initial_events()", preview_drain_position)
+	var connection_log_start := battle_source.find("func _apply_pvp_connection_log_event(message_type: String, message: Dictionary) -> bool:")
 	_check_equal(action_wait_start >= 0, true, "realtime action wait implementation exists")
 	_check_equal(
 		show_moves_decision_guard >= show_moves_start and show_moves_decision_guard < timer_control_start,
 		true,
 		"move controls stay closed while the local decision is locked"
+	)
+	_check_equal(
+		connection_log_start >= 0 \
+			and battle_source.find("pvp_reconnect_grace_deadline_by_side", connection_log_start) >= connection_log_start \
+			and battle_source.find("if duplicate_grace:", connection_log_start) >= connection_log_start,
+		true,
+		"duplicate reconnect-grace packets refresh the timer without repeating Battle Text"
 	)
 	_check_equal(
 		timer_decision_guard >= timer_control_start and timer_decision_guard < request_control_start,

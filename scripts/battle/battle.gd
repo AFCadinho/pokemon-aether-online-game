@@ -136,6 +136,7 @@ var pvp_opponent_force_switch_required := false
 var pvp_pending_presentation_fence: Dictionary = {}
 var pvp_gateway_epoch := ""
 var pvp_last_connection_server_seq := 0
+var pvp_reconnect_grace_deadline_by_side: Dictionary = {}
 var pvp_presentation_actionable_local_msec := 0
 var pvp_presentation_schedule_token := ""
 var pvp_presentation_acknowledgements_authoritative := false
@@ -6444,6 +6445,7 @@ func _prepare_battle_setup(
 	_clear_pvp_presentation_fence_recovery_state()
 	pvp_gateway_epoch = ""
 	pvp_last_connection_server_seq = 0
+	pvp_reconnect_grace_deadline_by_side.clear()
 	pvp_presentation_actionable_local_msec = 0
 	pvp_presentation_schedule_token = ""
 	pvp_presentation_acknowledgements_authoritative = false
@@ -10973,19 +10975,27 @@ func _apply_pvp_connection_log_event(message_type: String, message: Dictionary) 
 
 	var log_message := ""
 	var player_name := _get_pvp_connection_event_display_name(message)
+	var event_side := _get_pvp_connection_event_display_side(message)
 	match message_type:
 		"pvp.opponent_disconnected":
 			log_message = _t("battle.connection.disconnected", {"player": player_name})
 		"pvp.reconnect_grace_started":
 			var grace_seconds := _get_int_from_variant(message.get("disconnectGraceSeconds", 0), 0)
+			var reconnect_deadline := str(message.get("reconnectDeadlineAt", ""))
+			var duplicate_grace: bool = reconnect_deadline != "" \
+				and pvp_reconnect_grace_deadline_by_side.get(event_side, "") == reconnect_deadline
 			_timer_panels_call("show_reconnect_timer", [
-				_get_pvp_connection_event_display_side(message),
-				str(message.get("reconnectDeadlineAt", "")),
+				event_side,
+				reconnect_deadline,
 				grace_seconds,
 				str(message.get("serverNow", ""))
 			])
 			_sync_calc_timer_dock_visibility()
 			_sync_pvp_reconnect_timer_pause()
+			if reconnect_deadline != "":
+				pvp_reconnect_grace_deadline_by_side[event_side] = reconnect_deadline
+			if duplicate_grace:
+				return true
 			if grace_seconds > 0:
 				log_message = _t("battle.connection.reconnect_seconds", {
 					"player": player_name,
@@ -10994,7 +11004,8 @@ func _apply_pvp_connection_log_event(message_type: String, message: Dictionary) 
 			else:
 				log_message = _t("battle.connection.waiting_reconnect", {"player": player_name})
 		"pvp.opponent_reconnected":
-			_timer_panels_call("clear_reconnect_timer", [_get_pvp_connection_event_display_side(message)])
+			pvp_reconnect_grace_deadline_by_side.erase(event_side)
+			_timer_panels_call("clear_reconnect_timer", [event_side])
 			_sync_calc_timer_dock_visibility()
 			_sync_pvp_reconnect_timer_pause()
 			log_message = _t("battle.connection.reconnected", {"player": player_name})
@@ -11022,6 +11033,7 @@ func _observe_pvp_gateway_epoch(message: Dictionary) -> void:
 	pvp_last_applied_snapshot_server_seq = 0
 	pvp_last_phase_update_server_seq = 0
 	pvp_last_connection_server_seq = 0
+	pvp_reconnect_grace_deadline_by_side.clear()
 	pvp_response_order.reset_transport_cursor()
 	# Render barriers and their ACK retries live in Gateway process memory. A new
 	# epoch cannot release a fence created by the old process, so retaining it
