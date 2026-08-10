@@ -12,6 +12,7 @@
 [ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="10_hiker"]
 [ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="11_youngster"]
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="12_dialogue"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/gym_guide_frames.tres" id="13_gym_guide"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="12_wgakp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gym_exit"]
@@ -185,12 +186,11 @@ z_index = 5
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=488623025]
 
 [node name="GymGuideRocky" parent="Entities/NPCs" unique_id=488623029 instance=ExtResource("12_dialogue")]
-position = Vector2(400, 832)
+position = Vector2(592, 784)
 npc_id = "kanto_pewter_city_gym_guide_rocky"
 npc_definition_id = "trainer_class_hiker"
 display_name = "Gym Guide Rocky"
-facing_direction = Vector2(1, 0)
-npc_sprite_frames = ExtResource("10_hiker")
+npc_sprite_frames = ExtResource("13_gym_guide")
 
 [node name="GymLeaderBrock" parent="Entities/NPCs" unique_id=488623026 instance=ExtResource("7_gym_leader")]
 position = Vector2(528, 272)
