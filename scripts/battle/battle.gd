@@ -432,6 +432,8 @@ func _ready() -> void:
 		calc_panel.forme_catalog_requested.connect(_on_calc_panel_forme_catalog_requested)
 	if not calc_panel.default_ability_requested.is_connected(_on_calc_panel_default_ability_requested):
 		calc_panel.default_ability_requested.connect(_on_calc_panel_default_ability_requested)
+	if not calc_panel.viewer_ability_catalog_requested.is_connected(_on_calc_panel_viewer_ability_catalog_requested):
+		calc_panel.viewer_ability_catalog_requested.connect(_on_calc_panel_viewer_ability_catalog_requested)
 	if not calc_panel.matchup_selection_changed.is_connected(_on_calc_panel_matchup_selection_changed):
 		calc_panel.matchup_selection_changed.connect(_on_calc_panel_matchup_selection_changed)
 	if not calc_panel.move_scenarios_changed.is_connected(_on_calc_panel_move_scenarios_changed):
@@ -2561,6 +2563,17 @@ func _on_calc_panel_assumption_catalog_requested(kind: String, query: String, sp
 		calc_panel.show_assumption_catalog_response(kind, response)
 	else:
 		calc_panel.show_assumption_catalog_error(kind, str(response.get("error", "Could not load assumptions.")))
+
+
+func _on_calc_panel_viewer_ability_catalog_requested(species: String) -> void:
+	if current_action_panel_mode != BattleActionsPanelMode.CALC:
+		return
+	var request_node := HTTPRequest.new()
+	add_child(request_node)
+	var response := await PokemonDataApiClient.search_damage_calc_abilities(request_node, "", species, 10)
+	request_node.queue_free()
+	if current_action_panel_mode == BattleActionsPanelMode.CALC:
+		calc_panel.show_viewer_ability_catalog_response(species, response)
 
 func _on_calc_panel_sample_set_catalog_requested(species: String, format_id: String) -> void:
 	if current_action_panel_mode != BattleActionsPanelMode.CALC:

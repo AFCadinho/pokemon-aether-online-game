@@ -11,6 +11,7 @@ signal assumption_catalog_requested(kind: String, query: String, species: String
 signal sample_set_catalog_requested(species: String, format_id: String)
 signal forme_catalog_requested(relation: String, species: String, format_id: String)
 signal default_ability_requested(species: String)
+signal viewer_ability_catalog_requested(species: String)
 signal matchup_selection_changed()
 signal move_scenarios_changed(move_scenarios: Array)
 
@@ -177,6 +178,8 @@ var selected_opponent_ref := ""
 var field_scenario: Dictionary = {}
 var viewer_boost_scenarios: Dictionary = {}
 var viewer_ability_scenarios: Dictionary = {}
+var viewer_ability_catalogs: Dictionary = {}
+var viewer_ability_catalog_loading := false
 var battle_state_scenarios: Dictionary = {}
 var viewer_stats_by_ref: Dictionary = {}
 var advanced_scenario_expanded := true
@@ -2731,7 +2734,27 @@ func _get_viewer_ability_options(viewer: Dictionary) -> Array[String]:
 	var selected := str(viewer_ability_scenarios.get(selected_viewer_ref, "")).strip_edges()
 	if selected != "" and not options.has(selected):
 		options.push_front(selected)
+	var species := _snapshot_pokemon_name(viewer)
+	for ability_value: Variant in _as_array(viewer_ability_catalogs.get(species, [])):
+		var ability := str(ability_value).strip_edges()
+		if ability != "" and not options.has(ability):
+			options.append(ability)
+	if options.size() <= 1 and not viewer_ability_catalog_loading:
+		viewer_ability_catalog_loading = true
+		viewer_ability_catalog_requested.emit(species)
 	return options
+
+
+func show_viewer_ability_catalog_response(species: String, response: Dictionary) -> void:
+	viewer_ability_catalog_loading = false
+	var abilities: Array[String] = []
+	for value: Variant in _as_array(response.get("abilities", [])):
+		var ability := str(_as_dictionary(value).get("calcName", _as_dictionary(value).get("name", value))).strip_edges()
+		if ability != "" and not abilities.has(ability):
+			abilities.append(ability)
+	viewer_ability_catalogs[species] = abilities
+	if is_inside_tree():
+		_render_current_state()
 func _get_viewer_ability_value(viewer: Dictionary) -> String:
 	var scenario := str(viewer_ability_scenarios.get(selected_viewer_ref, "")).strip_edges()
 	if scenario != "":
