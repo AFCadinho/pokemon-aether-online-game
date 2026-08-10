@@ -8,6 +8,7 @@
 - While using the calculator, you can hover over your own Pokémon and revealed opposing Pokémon to view their known information.
 - You can adjust HP, status conditions, moves, abilities, items, stats, and field effects to explore different battle situations.
 - The calculator now supports Z-Moves and critical hits.
+- Haze now has its own mist animation and sound, and clearly shows when stat changes are removed.
 
 **Changed**
 
@@ -27,6 +28,9 @@
 - Fixed some active PvP players being incorrectly shown as disconnected.
 - Weather and terrain timers now show the correct remaining range after a faint or a pivot move, without revealing duration-extending items.
 - Fixed Terapagos's Tera Shift being shown as restoring health in PvP battles.
+- Fixed Team Preview occasionally opening without showing either team's Pokémon for one player.
+- Fixed some ranked matches leaving a player behind in the queue instead of bringing both players into the battle.
+- Fixed moves such as Haze and Clear Smog not clearly showing when they reset stat changes.
 
 ## 0.3.52 - 2026-08-08
 
