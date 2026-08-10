@@ -2555,18 +2555,19 @@ func _add_viewer_stat_grid() -> void:
 		stat_header.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		grid.add_child(stat_header)
 
+	var public_boosts := _get_known_stat_table(viewer, "boosts")
+	var scenario_boosts := _as_dictionary(viewer_boost_scenarios.get(selected_viewer_ref, {}))
+	var effective_stats := _get_viewer_effective_stats(stat_keys, public_boosts, scenario_boosts)
 	_add_viewer_readonly_stat_row(
 		grid,
 		_t("battle.calc.stats"),
 		stat_keys,
-		_as_dictionary(viewer_stats_by_ref.get(selected_viewer_ref, {}))
+		effective_stats
 	)
 	var stage_label := _make_label(_t("battle.calc.stage"), 8, Color(CONDITION_OWN_ACCENT, 0.94))
 	stage_label.custom_minimum_size = Vector2(42, 26)
 	stage_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	grid.add_child(stage_label)
-	var public_boosts := _get_known_stat_table(viewer, "boosts")
-	var scenario_boosts := _as_dictionary(viewer_boost_scenarios.get(selected_viewer_ref, {}))
 	for stat_key: String in stat_keys:
 		if stat_key == "hp":
 			var unavailable := _make_label("—", 10, TEXT_MUTED)
@@ -2577,6 +2578,25 @@ func _add_viewer_stat_grid() -> void:
 			continue
 		var current_stage := int(scenario_boosts.get(stat_key, public_boosts.get(stat_key, 0)))
 		grid.add_child(_make_viewer_stage_selector(stat_key, clampi(current_stage, -6, 6), public_boosts.has(stat_key), scenario_boosts.has(stat_key)))
+
+
+func _get_viewer_effective_stats(stat_keys: Array[String], public_boosts: Dictionary, scenario_boosts: Dictionary) -> Dictionary:
+	var base_stats := _as_dictionary(viewer_stats_by_ref.get(selected_viewer_ref, {}))
+	var result: Dictionary = {}
+	for stat_key: String in stat_keys:
+		if not base_stats.has(stat_key):
+			continue
+		var stage := clampi(int(scenario_boosts.get(stat_key, public_boosts.get(stat_key, 0))), -6, 6)
+		result[stat_key] = _apply_viewer_stage_to_stat(int(base_stats.get(stat_key, 0)), stage) if stat_key != "hp" else int(base_stats.get(stat_key, 0))
+	return result
+
+
+func _apply_viewer_stage_to_stat(base_stat: int, stage: int) -> int:
+	if stage == 0:
+		return base_stat
+	if stage > 0:
+		return int(floor(float(base_stat * (2 + stage)) / 2.0))
+	return int(floor(float(base_stat * 2) / float(2 - stage)))
 
 
 func _add_opponent_setup_card(assumptions: Dictionary) -> void:

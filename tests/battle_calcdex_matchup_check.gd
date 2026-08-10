@@ -30,6 +30,8 @@ func _run() -> void:
 	_assert(not bool(Matchup.normalize_response(response, stale).get("success", false)), "stale result must fail closed")
 
 	var panel := DamageCalcPanel.new()
+	_assert(panel._apply_viewer_stage_to_stat(315, -1) == 210, "a -1 viewer stage must lower the displayed stat")
+	_assert(panel._apply_viewer_stage_to_stat(315, 1) == 472, "a +1 viewer stage must raise the displayed stat")
 	var content := VBoxContainer.new()
 	content.name = "VBoxContainer"
 	panel.add_child(content)
