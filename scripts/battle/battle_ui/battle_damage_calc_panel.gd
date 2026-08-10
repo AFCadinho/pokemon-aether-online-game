@@ -2265,9 +2265,23 @@ func _make_result_move_selector_button(slot: int, move_name: String) -> LineEdit
 	input.add_theme_stylebox_override("focus", _make_stylebox(Color(TAB_ACTIVE_BG.r, TAB_ACTIVE_BG.g, TAB_ACTIVE_BG.b, 0.72), TEXT_ACCENT, 5, 4.0, 1.0))
 	input.focus_entered.connect(_on_inline_move_focus_entered.bind(slot, input))
 	input.focus_exited.connect(_on_catalog_assumption_focus_exited.bind(SELECTOR_MOVE))
+	input.gui_input.connect(_on_inline_move_input_gui.bind(slot, input))
 	input.text_changed.connect(_on_inline_move_text_changed.bind(slot, input))
 	input.text_submitted.connect(_on_inline_move_text_submitted.bind(slot))
 	return input
+
+
+func _on_inline_move_input_gui(event: InputEvent, _slot: int, input: LineEdit) -> void:
+	if not (event is InputEventMouseButton):
+		return
+	var mouse_event := event as InputEventMouseButton
+	if mouse_event.button_index != MOUSE_BUTTON_LEFT or not mouse_event.pressed:
+		return
+	if mouse_event.position.x < input.size.x - 28.0:
+		return
+	if active_selector == SELECTOR_MOVE:
+		call_deferred("_close_assumption_suggestions")
+		input.accept_event()
 
 
 func _make_result_row_style(
