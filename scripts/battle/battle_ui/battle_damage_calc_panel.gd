@@ -1437,6 +1437,7 @@ func _make_battle_state_side(caption: String, relation: String) -> VBoxContainer
 	controls.add_theme_constant_override("separation", 5)
 	side.add_child(controls)
 	var hp_caption := _make_label("Current HP", 10, TEXT_SECONDARY)
+	hp_caption.custom_minimum_size.x = 64
 	hp_caption.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	controls.add_child(hp_caption)
 	var hp_input := LineEdit.new()
@@ -1457,7 +1458,16 @@ func _make_battle_state_side(caption: String, relation: String) -> VBoxContainer
 	var percent := _make_label("(%s%%)" % _format_percent_value(hp_display.get("percent")), 10, TEXT_SECONDARY)
 	percent.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	controls.add_child(percent)
-	controls.add_child(_make_battle_state_status_selector(relation))
+	var status_row := HBoxContainer.new()
+	status_row.add_theme_constant_override("separation", 5)
+	side.add_child(status_row)
+	var status_caption := _make_label("Status", 10, TEXT_SECONDARY)
+	status_caption.custom_minimum_size.x = 64
+	status_caption.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	status_row.add_child(status_caption)
+	var status_selector := _make_battle_state_status_selector(relation)
+	status_selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	status_row.add_child(status_selector)
 	return side
 
 
