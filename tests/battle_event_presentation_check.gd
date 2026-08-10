@@ -24,6 +24,7 @@ func _init() -> void:
 	_check_air_balloon_messages()
 	_check_consumable_item_activation_animations()
 	_check_eat_berry_sheet_tile_size()
+	_check_eat_berry_sheet_presentation_tuning()
 	_check_future_sight_lifecycle_messages()
 	_check_solar_beam_prepare_uses_charge_animation()
 	_check_electro_shot_prepare_uses_charge_animation()
@@ -418,6 +419,26 @@ func _check_eat_berry_sheet_tile_size() -> void:
 		return
 	var tile_size: Variant = (parsed as Dictionary).get("tile_size", [])
 	_check_equal(tile_size, [192.0, 192.0], "GEN8 Eat Berry sheet uses complete 192px cells")
+
+
+func _check_eat_berry_sheet_presentation_tuning() -> void:
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(
+		"res://data/battle_effect_animations.json"
+	))
+	_check_equal(parsed is Dictionary, true, "battle effect animation catalog is readable")
+	if not parsed is Dictionary:
+		return
+	var effects: Variant = (parsed as Dictionary).get("effects", {})
+	_check_equal(effects is Dictionary, true, "battle effect animation catalog has effects")
+	if not effects is Dictionary:
+		return
+	var berry_effect: Variant = (effects as Dictionary).get("eat_berry", {})
+	_check_equal(berry_effect is Dictionary, true, "Eat Berry has a catalog entry")
+	if not berry_effect is Dictionary:
+		return
+	var config: Dictionary = berry_effect as Dictionary
+	_check_equal(float(config.get("sprite_zoom_multiplier", 0.0)), 0.6, "Eat Berry scales its imported 150 percent source down for battle presentation")
+	_check_equal(config.get("sheet_visual_offset", []), [-104.0, 19.0], "Eat Berry centers its fixed source coordinates on the holder")
 
 
 func _check_future_sight_lifecycle_messages() -> void:
