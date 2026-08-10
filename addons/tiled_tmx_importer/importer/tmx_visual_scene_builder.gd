@@ -62,6 +62,10 @@ func _resolve_layer_z_index(layer: Dictionary, layer_index: int) -> int:
 		if properties.has(property_name):
 			return int(properties[property_name])
 
+	var layer_name := str(layer.get("name", "")).strip_edges().to_lower()
+	if layer_name in ["objecttop", "object_top", "object top"]:
+		return OVERLAY_Z_INDEX + layer_index
+
 	var render_layer := str(properties.get("pao_render_layer", properties.get("render_layer", ""))).strip_edges().to_lower()
 	if render_layer in ["overlay", "top", "foreground", "above_player"]:
 		return OVERLAY_Z_INDEX + layer_index
