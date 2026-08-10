@@ -4822,7 +4822,7 @@ func _get_hp_label(pokemon: Dictionary) -> String:
 
 
 func _get_hp_percent_label(pokemon: Dictionary) -> String:
-	var percent := _get_defender_hp_percent(pokemon)
+	var percent: Variant = _get_defender_hp_percent(pokemon)
 	if percent == null:
 		return _t("battle.calc.hp_unknown")
 	return _t("battle.calc.hp_percent", {"percent": _format_percent_value(percent)})
