@@ -2253,16 +2253,17 @@ func _make_result_move_selector_button(slot: int, move_name: String) -> LineEdit
 	var input := LineEdit.new()
 	input.text = move_name
 	input.placeholder_text = _t("battle.calc.add_move")
-	input.tooltip_text = _t("battle.calc.inline_move_hint")
+	input.tooltip_text = "Click to edit the opponent move"
 	input.custom_minimum_size = Vector2(0, 30)
 	input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	input.max_length = 100
 	input.add_theme_font_size_override("font_size", 14 if move_name != "" else 12)
-	input.add_theme_color_override("font_color", TEXT_PRIMARY)
+	input.add_theme_color_override("font_color", TEXT_ACCENT if move_name != "" else TEXT_MUTED)
 	input.add_theme_color_override("font_placeholder_color", TEXT_MUTED)
 	input.right_icon = DROPDOWN_ARROW
 	input.mouse_default_cursor_shape = Control.CURSOR_IBEAM
-	input.add_theme_stylebox_override("normal", _make_stylebox(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 5, 4.0, 1.0))
+	input.add_theme_stylebox_override("normal", _make_stylebox(Color(SURFACE_CANVAS, 0.72), Color(INTERACTION_ACCENT, 0.52), 5, 5.0, 1.0))
+	input.add_theme_stylebox_override("hover", _make_stylebox(Color(TAB_ACTIVE_BG, 0.82), Color(INTERACTION_ACCENT, 0.84), 5, 5.0, 1.0))
 	input.add_theme_stylebox_override("focus", _make_stylebox(Color(TAB_ACTIVE_BG.r, TAB_ACTIVE_BG.g, TAB_ACTIVE_BG.b, 0.72), TEXT_ACCENT, 5, 4.0, 1.0))
 	input.focus_entered.connect(_on_inline_move_focus_entered.bind(slot, input))
 	input.focus_exited.connect(_on_catalog_assumption_focus_exited.bind(SELECTOR_MOVE))
