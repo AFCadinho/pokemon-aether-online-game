@@ -413,10 +413,10 @@ func _render_your_damage_response(response: Dictionary) -> void:
 	_add_profile_summary(
 		_get_pokemon_label(viewer, _t("battle.calc.your_pokemon")),
 		_get_pokemon_label(opponent, _t("battle.calc.opponent")),
-		_get_hp_label(opponent),
+		_get_hp_percent_label(opponent),
 		_get_level_label(opponent),
 		_get_boosts_label(viewer),
-		_get_hp_label(viewer),
+		_get_hp_percent_label(viewer),
 		_get_level_label(viewer),
 		str(viewer.get("species", "")),
 		str(opponent.get("species", "")),
@@ -4819,6 +4819,13 @@ func _get_hp_label(pokemon: Dictionary) -> String:
 	if percent_value != null:
 		return _t("battle.calc.hp_percent", {"percent": _format_percent_value(percent_value)})
 	return _t("battle.calc.hp_unknown")
+
+
+func _get_hp_percent_label(pokemon: Dictionary) -> String:
+	var percent := _get_defender_hp_percent(pokemon)
+	if percent == null:
+		return _t("battle.calc.hp_unknown")
+	return _t("battle.calc.hp_percent", {"percent": _format_percent_value(percent)})
 
 
 func _get_level_label(pokemon: Dictionary) -> String:
