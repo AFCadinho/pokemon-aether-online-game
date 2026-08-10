@@ -1440,11 +1440,11 @@ func _make_battle_state_side(caption: String, relation: String) -> PanelContaine
 	var label := _make_label(caption, 9, CONDITION_OWN_ACCENT if relation == "viewer" else CONDITION_OPPONENT_ACCENT)
 	side.add_child(label)
 	var controls := HBoxContainer.new()
-	controls.add_theme_constant_override("separation", 3)
+	controls.add_theme_constant_override("separation", 2)
 	side.add_child(controls)
 	var hp_input := LineEdit.new()
 	hp_input.name = "ViewerCurrentHp" if relation == "viewer" else "OpponentCurrentHp"
-	hp_input.custom_minimum_size.x = 46
+	hp_input.custom_minimum_size.x = 40
 	hp_input.placeholder_text = "HP" if relation == "viewer" else "HP %"
 	hp_input.text = _get_battle_state_hp_text(relation)
 	hp_input.tooltip_text = "Current HP" if relation == "viewer" else "Current HP percentage"
@@ -1457,7 +1457,8 @@ func _make_battle_state_side(caption: String, relation: String) -> PanelContaine
 	var slash := _make_label("/ %s HP" % str(hp_display.get("maximum", "--")), 10, TEXT_SECONDARY)
 	slash.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	controls.add_child(slash)
-	var status_caption := _make_label("Status", 10, TEXT_SECONDARY)
+	var status_caption := _make_label("Status:", 10, TEXT_ACCENT)
+	status_caption.custom_minimum_size.x = 38
 	status_caption.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	controls.add_child(status_caption)
 	var status_selector := _make_battle_state_status_selector(relation)
