@@ -716,7 +716,8 @@ func _on_settings_changed() -> void:
 	_update_active_sprites("settings_sprite_refresh")
 
 func _process(delta: float) -> void:
-	if hover_state.should_poll_sprite_hover():
+	var calcdex_active := current_action_panel_mode == BattleActionsPanelMode.CALC
+	if not calcdex_active and hover_state.should_poll_sprite_hover():
 		_update_sprite_hover()
 	if pokemon_hover_card.visible:
 		_position_pokemon_hover_card()
@@ -793,6 +794,8 @@ func _hide_move_hover() -> void:
 		move_hover_card.visible = false
 
 func _show_party_hover(pokemon_data: Dictionary, slot_rect: Rect2) -> void:
+	if current_action_panel_mode == BattleActionsPanelMode.CALC:
+		return
 	if pokemon_data.is_empty():
 		return
 
@@ -2196,6 +2199,7 @@ func _sync_action_panel_mode_visibility() -> void:
 	if is_calc_mode:
 		moves_grid.visible = false
 		context_hint.visible = false
+		_hide_pokemon_hover()
 		_hide_party_hover()
 		_hide_move_hover()
 		_sync_party_rail_interaction()
