@@ -26,6 +26,10 @@
 - Fixed HP and HP percentage fields from incorrectly overwriting each other instead of converting between the two values.
 - Fixed team and opponent hover cards showing incomplete information or incorrect sizing while the calculator was open.
 - Fixed the calculator occasionally showing the wrong Pokémon in a party slot after a switch.
+- Consumable held items such as Eject Button, Focus Sash, and Berries now show the correct battle message and activation animation.
+- Fixed temporary PvP connection-authority hiccups incorrectly disconnecting an active player and starting reconnect grace.
+- Weather and terrain timers now show the correct public duration range after a faint or pivot, while keeping duration-extending held items private.
+- Fixed Terapagos's Tera Shift max-HP update being shown as a health restore in PvP battles.
 
 ## 0.3.52 - 2026-08-08
 
