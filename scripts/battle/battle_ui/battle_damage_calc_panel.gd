@@ -1451,11 +1451,11 @@ func _make_battle_state_side(caption: String, relation: String) -> VBoxContainer
 	var slash := _make_label("/ %s HP" % str(hp_display.get("maximum", "--")), 10, TEXT_SECONDARY)
 	slash.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	controls.add_child(slash)
-	var percent := _make_label("(%s%%)" % _format_percent_value(hp_display.get("percent")), 10, TEXT_SECONDARY)
-	percent.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	controls.add_child(percent)
+	var status_caption := _make_label("Status", 10, TEXT_SECONDARY)
+	status_caption.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	controls.add_child(status_caption)
 	var status_selector := _make_battle_state_status_selector(relation)
-	status_selector.custom_minimum_size.x = 74
+	status_selector.custom_minimum_size.x = 86
 	status_selector.size_flags_horizontal = Control.SIZE_SHRINK_END
 	controls.add_child(status_selector)
 	return side
@@ -1469,7 +1469,10 @@ func _make_battle_state_status_selector(relation: String) -> OptionButton:
 	var selected_status := str(scenario.get("status", "")).to_lower()
 	var current_status := _get_effective_pokemon_status("own" if relation == "viewer" else "opponent")
 	for status: String in POKEMON_STATUS_VALUES:
-		selector.add_item("Current (%s)" % _get_status_label(current_status) if status == "" else _get_status_label(status))
+		var option_label := _get_status_label(status)
+		if status == "":
+			option_label = "Healthy" if current_status == "" else "Current (%s)" % _get_status_label(current_status)
+		selector.add_item(option_label)
 		selector.set_item_metadata(selector.item_count - 1, status)
 		if status == selected_status:
 			selector.select(selector.item_count - 1)
