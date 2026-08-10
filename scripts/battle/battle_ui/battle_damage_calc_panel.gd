@@ -2642,13 +2642,9 @@ func _add_live_assumption_controls(
 	opponent_role.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	identity_row.add_child(opponent_role)
 	if not edited_assumption_fields.is_empty() or not field_scenario.is_empty():
-		var setup_row := HBoxContainer.new()
-		setup_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		setup_row.add_theme_constant_override("separation", 4)
-		box.add_child(setup_row)
 		var reset_button := _make_assumption_reset_button()
 		reset_button.size_flags_vertical = Control.SIZE_SHRINK_END
-		setup_row.add_child(reset_button)
+		identity_row.add_child(reset_button)
 
 	var primary_row := HBoxContainer.new()
 	primary_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
