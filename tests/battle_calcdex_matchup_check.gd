@@ -95,11 +95,15 @@ func _run() -> void:
 	_assert(content.find_child("ShowdexEvHp", true, false) is LineEdit, "the stat grid must expose EV editing directly")
 	_assert(content.find_child("ShowdexStageAtk", true, false) is OptionButton, "the stat grid must expose stages directly")
 	var viewer_stage_atk := content.find_child("ViewerStageAtk", true, false) as OptionButton
-	var matchup_stat_grid := content.find_child("MatchupStatGrid", true, false)
+	var viewer_stat_card := content.find_child("ViewerStatCard", true, false)
+	var opponent_setup_card := content.find_child("OpponentSetupCard", true, false)
 	var viewer_stat_grid := content.find_child("ViewerStatGrid", true, false)
-	_assert(matchup_stat_grid != null and viewer_stat_grid != null and viewer_stage_atk != null, "the selected viewer Pokémon must have actual stats and stage controls")
-	if viewer_stat_grid != null and stat_grid != null:
-		_assert(viewer_stat_grid.get_parent() == stat_grid.get_parent(), "viewer and opponent stats must share one clearly grouped card")
+	_assert(viewer_stat_card != null and viewer_stat_grid != null and viewer_stage_atk != null, "the selected viewer Pokémon must have its own actual-stat and stage card")
+	_assert(opponent_setup_card != null, "the opponent set and stat assumptions must share one opponent card")
+	if viewer_stat_grid != null and stat_grid != null and opponent_setup_card != null:
+		_assert(viewer_stat_card.find_child("ShowdexStatGrid", true, false) == null, "opponent assumptions must not appear inside the viewer card")
+		_assert(opponent_setup_card.find_child("SampleSetField", true, false) != null, "the opponent card must contain its set controls")
+		_assert(opponent_setup_card.find_child("ShowdexStatGrid", true, false) == stat_grid, "the opponent card must also contain its IV, EV, and stage controls")
 		_assert(_has_label_text(viewer_stat_grid, "315"), "the viewer stat row must show the actual calculated Attack instead of IVs and EVs")
 	if viewer_stage_atk != null:
 		panel._on_viewer_stage_selected(viewer_stage_atk.get_item_index(8), viewer_stage_atk, "atk")

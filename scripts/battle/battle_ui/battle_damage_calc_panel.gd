@@ -441,13 +441,13 @@ func _render_your_damage_response(response: Dictionary) -> void:
 	_add_inspector_tabs()
 	match active_inspector_tab:
 		INSPECTOR_SET:
-			_add_live_assumption_controls(assumptions)
-			_add_viewer_stat_grid(assumptions)
+			_add_viewer_stat_grid()
+			_add_opponent_setup_card(assumptions)
 		INSPECTOR_FIELD:
 			_add_showdex_condition_controls(assumptions)
 		_:
-			_add_live_assumption_controls(assumptions)
-			_add_viewer_stat_grid(assumptions)
+			_add_viewer_stat_grid()
+			_add_opponent_setup_card(assumptions)
 	render_target = content
 
 
@@ -2333,7 +2333,11 @@ func _apply_calcdex_scroll_style() -> void:
 	)
 
 
-func _add_live_assumption_controls(assumptions: Dictionary, _prior_provenance: String = "") -> void:
+func _add_live_assumption_controls(
+	assumptions: Dictionary,
+	_prior_provenance: String = "",
+	shared_box: VBoxContainer = null
+) -> void:
 	is_syncing_assumption_controls = true
 	live_ev_inputs.clear()
 	live_ev_bars.clear()
@@ -2343,20 +2347,21 @@ func _add_live_assumption_controls(assumptions: Dictionary, _prior_provenance: S
 	ability_assumption_input = null
 	move_assumption_input = null
 	catalog_results_box = null
-	var panel := PanelContainer.new()
-	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	panel.clip_contents = true
-	panel.add_theme_stylebox_override(
-		"panel",
-		_make_stylebox(PROFILE_BG, Color(CONDITION_OPPONENT_ACCENT, 0.34), 8, 8.0, 6.0)
-	)
-	_add_render_child(panel)
-
-	var box := VBoxContainer.new()
-	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	box.clip_contents = true
-	box.add_theme_constant_override("separation", 3)
-	panel.add_child(box)
+	var box := shared_box
+	if box == null:
+		var panel := PanelContainer.new()
+		panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		panel.clip_contents = true
+		panel.add_theme_stylebox_override(
+			"panel",
+			_make_stylebox(PROFILE_BG, Color(CONDITION_OPPONENT_ACCENT, 0.34), 8, 8.0, 6.0)
+		)
+		_add_render_child(panel)
+		box = VBoxContainer.new()
+		box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		box.clip_contents = true
+		box.add_theme_constant_override("separation", 3)
+		panel.add_child(box)
 	var opponent := _get_snapshot_pokemon_by_ref(selected_opponent_ref)
 	var identity_row := HBoxContainer.new()
 	identity_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -2483,28 +2488,24 @@ func _add_showdex_detail_controls(assumptions: Dictionary) -> void:
 	_add_showdex_condition_controls(assumptions)
 
 
-func _add_viewer_stat_grid(assumptions: Dictionary) -> void:
+func _add_viewer_stat_grid() -> void:
 	var viewer := _get_snapshot_pokemon_by_ref(selected_viewer_ref)
 	if viewer.is_empty():
 		return
 	var panel := PanelContainer.new()
-	panel.name = "MatchupStatGrid"
+	panel.name = "ViewerStatCard"
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.clip_contents = true
 	panel.add_theme_stylebox_override(
 		"panel",
-		_make_stylebox(Color(SURFACE_PANEL, 0.96), Color(BORDER_NEUTRAL, 0.86), 8, 8.0, 7.0)
+		_make_stylebox(Color(SURFACE_PANEL, 0.96), Color(CONDITION_OWN_ACCENT, 0.72), 8, 8.0, 7.0)
 	)
 	_add_render_child(panel)
-	var box := VBoxContainer.new()
-	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	box.add_theme_constant_override("separation", 7)
-	panel.add_child(box)
 	var viewer_box := VBoxContainer.new()
 	viewer_box.name = "ViewerStatGrid"
 	viewer_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	viewer_box.add_theme_constant_override("separation", 4)
-	box.add_child(viewer_box)
+	panel.add_child(viewer_box)
 
 	var header := HBoxContainer.new()
 	header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -2577,13 +2578,30 @@ func _add_viewer_stat_grid(assumptions: Dictionary) -> void:
 		var current_stage := int(scenario_boosts.get(stat_key, public_boosts.get(stat_key, 0)))
 		grid.add_child(_make_viewer_stage_selector(stat_key, clampi(current_stage, -6, 6), public_boosts.has(stat_key), scenario_boosts.has(stat_key)))
 
+
+func _add_opponent_setup_card(assumptions: Dictionary) -> void:
+	var panel := PanelContainer.new()
+	panel.name = "OpponentSetupCard"
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.clip_contents = true
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_stylebox(PROFILE_BG, Color(CONDITION_OPPONENT_ACCENT, 0.62), 8, 8.0, 7.0)
+	)
+	_add_render_child(panel)
+	var box := VBoxContainer.new()
+	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	box.clip_contents = true
+	box.add_theme_constant_override("separation", 7)
+	panel.add_child(box)
+	_add_live_assumption_controls(assumptions, "", box)
 	var divider := ColorRect.new()
 	divider.custom_minimum_size = Vector2(0, 1)
 	divider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	divider.color = Color(CONDITION_OPPONENT_ACCENT, 0.38)
+	divider.color = Color(CONDITION_OPPONENT_ACCENT, 0.34)
 	divider.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	box.add_child(divider)
-	_add_showdex_stat_grid(assumptions, box)
+	_add_showdex_stat_grid(assumptions, box, false)
 
 
 func _add_viewer_readonly_stat_row(grid: GridContainer, row_name: String, stat_keys: Array[String], values: Dictionary) -> void:
@@ -2652,7 +2670,11 @@ func _on_viewer_stages_reset() -> void:
 	matchup_selection_changed.emit()
 
 
-func _add_showdex_stat_grid(assumptions: Dictionary, shared_box: VBoxContainer = null) -> void:
+func _add_showdex_stat_grid(
+	assumptions: Dictionary,
+	shared_box: VBoxContainer = null,
+	show_opponent_identity: bool = true
+) -> void:
 	var box := VBoxContainer.new()
 	box.name = "ShowdexStatGrid"
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -2675,18 +2697,20 @@ func _add_showdex_stat_grid(assumptions: Dictionary, shared_box: VBoxContainer =
 	box.add_child(title_row)
 	var opponent := _get_snapshot_pokemon_by_ref(selected_opponent_ref)
 	var opponent_name := _snapshot_pokemon_name(opponent) if not opponent.is_empty() else _t("battle.calc.opponent")
-	var title := _make_label("%s · %s" % [
+	var title_text := "%s · %s" % [
 		_t("battle.calc.opponent").to_upper(),
 		opponent_name.to_upper(),
-	], 9, CONDITION_OPPONENT_ACCENT)
+	] if show_opponent_identity else _t("battle.calc.ev_spread").to_upper()
+	var title := _make_label(title_text, 9 if show_opponent_identity else 8, CONDITION_OPPONENT_ACCENT)
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	title_row.add_child(title)
-	var role_text := _t("battle.calc.attacker") if active_subtab == SUBTAB_THEIR_DAMAGE else _t("battle.calc.target")
-	var role := _make_label(role_text.to_upper(), 8, TEXT_MUTED)
-	role.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	role.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	title_row.add_child(role)
+	if show_opponent_identity:
+		var role_text := _t("battle.calc.attacker") if active_subtab == SUBTAB_THEIR_DAMAGE else _t("battle.calc.target")
+		var role := _make_label(role_text.to_upper(), 8, TEXT_MUTED)
+		role.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		role.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		title_row.add_child(role)
 	live_ev_total_label = _make_label("", 9, TEXT_MUTED)
 	live_ev_total_label.size_flags_horizontal = Control.SIZE_SHRINK_END
 	live_ev_total_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
