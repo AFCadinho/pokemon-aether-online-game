@@ -1,5 +1,32 @@
 # Changelog
 
+## Unreleased
+
+**Added**
+
+- The battle damage calculator now gives you a much larger, clearer workspace while keeping the battle field, team previews, and opponent previews available.
+- You can now hover over your own team members and revealed opponent Pokémon while using the calculator to see the information available about them.
+- You can edit the calculator's battle state for both sides, including current HP, HP percentage, and status condition.
+- Opponent IVs, EVs, stat stages, abilities, natures, items, and field conditions can now be adjusted for more accurate what-if calculations.
+- Your active Pokémon's ability can be changed in the calculator, which is useful when testing a different form or battle situation.
+- Move slots now support Z-Moves and critical-hit scenarios, with the selected move recalculated immediately.
+
+**Changed**
+
+- Damage results now use precise one-decimal percentages, including public battle-log damage information, without revealing an opponent's exact maximum HP.
+- The calculator now shows raw stats and battle stages more clearly, with separate sections for your Pokémon and the opponent.
+- Move suggestions, editable opponent moves, calculation summaries, KO chances, and field effects now have clearer visual emphasis and feedback.
+- Weather, terrain, screens, hazards, and Spikes layers are easier to recognize and adjust for the selected side.
+- The calculator now follows the active party slot correctly when you switch Pokémon.
+
+**Fixed**
+
+- Fixed calculator results failing to load in some battles and after switching between Pokémon or battle tabs.
+- Fixed fainted Pokémon being unavailable for damage investigations.
+- Fixed HP and HP percentage fields from incorrectly overwriting each other instead of converting between the two values.
+- Fixed team and opponent hover cards showing incomplete information or incorrect sizing while the calculator was open.
+- Fixed the calculator occasionally showing the wrong Pokémon in a party slot after a switch.
+
 ## 0.3.52 - 2026-08-08
 
 **Added**
