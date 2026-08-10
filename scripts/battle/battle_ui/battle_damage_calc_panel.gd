@@ -3031,10 +3031,12 @@ func _add_showdex_stat_grid(
 	box.add_child(title_row)
 	var opponent := _get_snapshot_pokemon_by_ref(selected_opponent_ref)
 	var opponent_name := _snapshot_pokemon_name(opponent) if not opponent.is_empty() else _t("battle.calc.opponent")
+	var ev_total := _get_evs_total(_as_dictionary(assumptions.get("evs", {})))
 	var title_text := "%s · %s" % [
 		_t("battle.calc.opponent").to_upper(),
 		opponent_name.to_upper(),
 	] if show_opponent_identity else _t("battle.calc.ev_spread").to_upper()
+	title_text += " · %d / %d EVs" % [ev_total, EV_TOTAL_LIMIT]
 	var title := _make_label(title_text, 9 if show_opponent_identity else 8, CONDITION_OPPONENT_ACCENT)
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
