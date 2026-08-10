@@ -390,7 +390,8 @@ func calculate_calcdex_matchup(
 	field_scenario: Dictionary = {},
 	species_scenario: Dictionary = {},
 	move_scenarios: Array = [],
-	viewer_scenario: Dictionary = {}
+	viewer_scenario: Dictionary = {},
+	battle_state_scenario: Dictionary = {}
 ) -> Dictionary:
 	var normalized_battle_id := battle_id.strip_edges()
 	if normalized_battle_id == "" or not CALCDEX_SNAPSHOT.is_valid_projection_revision(last_projection_revision):
@@ -409,6 +410,16 @@ func calculate_calcdex_matchup(
 		"speciesScenario": _normalize_calcdex_species_scenario(species_scenario),
 		"moveScenarios": move_scenarios.duplicate(true),
 	}
+	var viewer_state: Dictionary = battle_state_scenario.get("viewer", {}) as Dictionary if battle_state_scenario.get("viewer", {}) is Dictionary else {}
+	var opponent_state: Dictionary = battle_state_scenario.get("opponent", {}) as Dictionary if battle_state_scenario.get("opponent", {}) is Dictionary else {}
+	if viewer_state.has("status"):
+		payload["viewerScenario"]["status"] = str(viewer_state.get("status", ""))
+	if viewer_state.has("currentHp"):
+		payload["viewerScenario"]["currentHp"] = maxi(0, int(viewer_state.get("currentHp", 0)))
+	if opponent_state.has("status"):
+		payload["opponentScenario"]["status"] = str(opponent_state.get("status", ""))
+	if opponent_state.has("currentHpPercent"):
+		payload["opponentScenario"]["currentHpPercent"] = clampf(float(opponent_state.get("currentHpPercent", 0.0)), 0.0, 100.0)
 	if opponent_scenario.get("assumedMoves") is Array:
 		payload["opponentScenario"]["assumedMoves"] = (opponent_scenario.get("assumedMoves") as Array).duplicate(true)
 	var response: Dictionary = await send_post_request(

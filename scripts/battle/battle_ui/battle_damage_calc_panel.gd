@@ -176,6 +176,7 @@ var selected_viewer_ref := ""
 var selected_opponent_ref := ""
 var field_scenario: Dictionary = {}
 var viewer_boost_scenarios: Dictionary = {}
+var battle_state_scenarios: Dictionary = {}
 var viewer_stats_by_ref: Dictionary = {}
 var advanced_scenario_expanded := true
 var warning_details_expanded := false
@@ -425,6 +426,7 @@ func _render_your_damage_response(response: Dictionary) -> void:
 		_get_effective_pokemon_status("own"),
 		_get_effective_pokemon_status("opponent")
 	)
+	_add_battle_state_controls()
 	var assumptions := _get_display_assumptions(opponent)
 	var results: Array = _as_array(response.get("results", []))
 	if str(response.get("direction", "")) == "opponent-to-own":
@@ -625,6 +627,12 @@ func get_species_scenario() -> Dictionary:
 func get_viewer_scenario() -> Dictionary:
 	var boosts := _as_dictionary(viewer_boost_scenarios.get(selected_viewer_ref, {}))
 	return {"boosts": boosts.duplicate(true)} if not boosts.is_empty() else {}
+
+
+func get_battle_state_scenario() -> Dictionary:
+	var viewer_state := _as_dictionary(battle_state_scenarios.get(selected_viewer_ref, {}))
+	var opponent_state := _as_dictionary(battle_state_scenarios.get(selected_opponent_ref, {}))
+	return {"viewer": viewer_state.duplicate(true), "opponent": opponent_state.duplicate(true)}
 
 
 func show_forme_catalog_response(relation: String, species: String, response: Dictionary) -> void:
@@ -1397,21 +1405,125 @@ func _make_matchup_side(
 	var detail_label := _make_label(details, 10, TEXT_SECONDARY)
 	detail_label.tooltip_text = details
 	detail_row.add_child(detail_label)
-	var status_relation := "own" if relation == "viewer" else "opponent"
-	# Keep the editable status control on the defender side in both tabs. A
-	# confirmed status is rendered as a disabled, labelled selector; this keeps
-	# the two tabs structurally identical when the damage direction changes.
-	if status_relation == _get_condition_target_relation() and not knowledge_snapshot.is_empty():
-		var status_selector := _make_pokemon_status_selector(status_relation, true)
-		status_selector.name = "DefenderStatusSelector"
-		status_selector.custom_minimum_size.x = 108
-		status_selector.size_flags_horizontal = Control.SIZE_SHRINK_END
-		detail_row.add_child(status_selector)
-	elif status in POKEMON_STATUS_VALUES and status != "":
+	if status in POKEMON_STATUS_VALUES and status != "":
 		detail_row.add_child(_make_pokemon_status_badge(status))
 	if hp_percent != null:
 		side.add_child(_make_hp_bar(float(hp_percent)))
 	return panel
+
+
+func _add_battle_state_controls() -> void:
+	var section := PanelContainer.new()
+	section.name = "BattleStateControls"
+	section.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	section.add_theme_stylebox_override("panel", _make_stylebox(SURFACE_PANEL, INTERACTION_ACCENT, 8, 9.0, 8.0))
+	var body := VBoxContainer.new()
+	body.add_theme_constant_override("separation", 5)
+	section.add_child(body)
+	var title := _make_label("BATTLE STATE", 9, TEXT_ACCENT)
+	body.add_child(title)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 8)
+	body.add_child(row)
+	row.add_child(_make_battle_state_side("YOUR POKÉMON", "viewer"))
+	row.add_child(_make_battle_state_side("OPPONENT", "opponent"))
+	_add_render_child(section)
+
+
+func _make_battle_state_side(caption: String, relation: String) -> VBoxContainer:
+	var side := VBoxContainer.new()
+	side.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	side.add_theme_constant_override("separation", 3)
+	var label := _make_label(caption, 9, CONDITION_OWN_ACCENT if relation == "viewer" else CONDITION_OPPONENT_ACCENT)
+	side.add_child(label)
+	var controls := HBoxContainer.new()
+	controls.add_theme_constant_override("separation", 5)
+	side.add_child(controls)
+	var hp_input := LineEdit.new()
+	hp_input.name = "ViewerCurrentHp" if relation == "viewer" else "OpponentCurrentHp"
+	hp_input.custom_minimum_size.x = 92
+	hp_input.placeholder_text = "HP" if relation == "viewer" else "HP %"
+	hp_input.text = _get_battle_state_hp_text(relation)
+	hp_input.tooltip_text = "Current HP" if relation == "viewer" else "Current HP percentage"
+	hp_input.text_submitted.connect(_on_battle_state_hp_changed.bind(relation, hp_input))
+	hp_input.focus_exited.connect(_on_battle_state_hp_focus_exited.bind(relation, hp_input))
+	hp_input.add_theme_stylebox_override("normal", _make_stylebox(SURFACE_CANVAS, BORDER_NEUTRAL, 4, 4.0, 1.0))
+	hp_input.add_theme_stylebox_override("focus", _make_stylebox(SURFACE_CANVAS, INTERACTION_ACCENT, 4, 4.0, 1.0))
+	controls.add_child(hp_input)
+	controls.add_child(_make_battle_state_status_selector(relation))
+	return side
+
+
+func _make_battle_state_status_selector(relation: String) -> OptionButton:
+	var selector := OptionButton.new()
+	selector.name = "ViewerBattleStatus" if relation == "viewer" else "OpponentBattleStatus"
+	selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var scenario := _as_dictionary(battle_state_scenarios.get(selected_viewer_ref if relation == "viewer" else selected_opponent_ref, {}))
+	var selected_status := str(scenario.get("status", "")).to_lower()
+	var current_status := _get_effective_pokemon_status("own" if relation == "viewer" else "opponent")
+	for status: String in POKEMON_STATUS_VALUES:
+		selector.add_item("Current (%s)" % _get_status_label(current_status) if status == "" else _get_status_label(status))
+		selector.set_item_metadata(selector.item_count - 1, status)
+		if status == selected_status:
+			selector.select(selector.item_count - 1)
+	selector.item_selected.connect(_on_battle_state_status_changed.bind(relation, selector))
+	_apply_calcdex_dropdown_style(selector, 28.0, 10)
+	return selector
+
+
+func _get_battle_state_hp_text(relation: String) -> String:
+	var ref := selected_viewer_ref if relation == "viewer" else selected_opponent_ref
+	var state := _as_dictionary(battle_state_scenarios.get(ref, {}))
+	if state.has("currentHp"):
+		return str(int(state.get("currentHp", 0)))
+	if state.has("currentHpPercent"):
+		return _format_percent_value(state.get("currentHpPercent"))
+	var pokemon := _get_snapshot_pokemon_by_ref(ref)
+	var hp := _get_pokemon_hp(pokemon)
+	if relation == "viewer":
+		var exact := _as_dictionary(hp.get("exact", {}))
+		if exact.has("current"):
+			return str(int(exact.get("current", 0)))
+	return _format_percent_value(_get_defender_hp_percent(pokemon))
+
+
+func _on_battle_state_hp_focus_exited(relation: String, input: LineEdit) -> void:
+	_on_battle_state_hp_changed(input.text, relation, input)
+
+
+func _on_battle_state_hp_changed(value: String, relation: String, input: LineEdit) -> void:
+	var number := value.strip_edges().to_float()
+	var ref := selected_viewer_ref if relation == "viewer" else selected_opponent_ref
+	if ref == "" or number < 0.0:
+		input.text = _get_battle_state_hp_text(relation)
+		return
+	var state := _as_dictionary(battle_state_scenarios.get(ref, {})).duplicate(true)
+	if relation == "viewer":
+		state["currentHp"] = maxi(0, int(number))
+	else:
+		state["currentHpPercent"] = clampf(number, 0.0, 100.0)
+	battle_state_scenarios[ref] = state
+	_mark_sample_set_custom()
+	_emit_defender_assumptions_changed()
+
+
+func _on_battle_state_status_changed(index: int, relation: String, selector: OptionButton) -> void:
+	var ref := selected_viewer_ref if relation == "viewer" else selected_opponent_ref
+	if ref == "":
+		return
+	var status := str(selector.get_item_metadata(index)).to_lower()
+	var state := _as_dictionary(battle_state_scenarios.get(ref, {})).duplicate(true)
+	if status == "":
+		state.erase("status")
+	else:
+		state["status"] = status
+	if state.is_empty():
+		battle_state_scenarios.erase(ref)
+	else:
+		battle_state_scenarios[ref] = state
+	_mark_sample_set_custom()
+	_emit_defender_assumptions_changed()
+	_render_current_state()
 
 
 func _make_forme_menu_button(relation: String, pokemon_name: String) -> MenuButton:

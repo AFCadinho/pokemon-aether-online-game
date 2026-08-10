@@ -2444,7 +2444,7 @@ func _refresh_damage_calc_results() -> void:
 				str(selection.get("attackerRef", "")), str(selection.get("defenderRef", "")),
 				_get_damage_calc_defender_assumptions_payload(), calc_panel.get_field_scenario(),
 				calc_panel.get_species_scenario(), calc_panel.get_move_scenarios(),
-				calc_panel.get_viewer_scenario()
+				calc_panel.get_viewer_scenario(), calc_panel.get_battle_state_scenario()
 			)
 	else:
 		response = {

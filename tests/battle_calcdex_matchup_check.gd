@@ -160,7 +160,7 @@ func _response(revision: Dictionary) -> Dictionary:
 	return {
 		"success": true,
 		"schemaVersion": 1,
-		"routeRevision": "calc4.1-2026-08-10",
+		"routeRevision": "calc4.2-2026-08-10",
 		"safeInputFingerprint": "b".repeat(64),
 		"projectionRevision": revision.duplicate(true),
 		"mechanicsManifest": {
