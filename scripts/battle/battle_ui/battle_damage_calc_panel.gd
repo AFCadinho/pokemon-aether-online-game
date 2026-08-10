@@ -446,7 +446,7 @@ func _make_workspace_columns() -> Dictionary:
 	workspace.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	workspace.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	workspace.clip_contents = true
-	workspace.add_theme_constant_override("separation", 10)
+	workspace.add_theme_constant_override("separation", 14)
 	content.add_child(workspace)
 
 	var overview := VBoxContainer.new()
@@ -455,7 +455,7 @@ func _make_workspace_columns() -> Dictionary:
 	overview.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	overview.size_flags_stretch_ratio = 1.38
 	overview.clip_contents = true
-	overview.add_theme_constant_override("separation", 6)
+	overview.add_theme_constant_override("separation", 9)
 	workspace.add_child(overview)
 
 	var inspector_panel := PanelContainer.new()
@@ -466,7 +466,7 @@ func _make_workspace_columns() -> Dictionary:
 	inspector_panel.clip_contents = true
 	inspector_panel.add_theme_stylebox_override(
 		"panel",
-		_make_stylebox(Color(SURFACE_CANVAS, 0.92), Color(BORDER_NEUTRAL, 0.92), 9, 8.0, 7.0)
+		_make_stylebox(Color(SURFACE_CANVAS, 0.92), Color(BORDER_NEUTRAL, 0.92), 9, 12.0, 10.0)
 	)
 	workspace.add_child(inspector_panel)
 	var inspector := VBoxContainer.new()
@@ -474,7 +474,7 @@ func _make_workspace_columns() -> Dictionary:
 	inspector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	inspector.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	inspector.clip_contents = true
-	inspector.add_theme_constant_override("separation", 6)
+	inspector.add_theme_constant_override("separation", 9)
 	inspector_panel.add_child(inspector)
 	return {"overview": overview, "inspector": inspector}
 
@@ -1282,7 +1282,7 @@ func _add_profile_summary(
 	var matchup_row := HBoxContainer.new()
 	matchup_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	matchup_row.alignment = BoxContainer.ALIGNMENT_CENTER
-	matchup_row.add_theme_constant_override("separation", 6)
+	matchup_row.add_theme_constant_override("separation", 10)
 	_add_render_child(matchup_row)
 	var viewer_details: Array[String] = []
 	if viewer_hp_label.strip_edges() != "":
@@ -1343,10 +1343,10 @@ func _make_matchup_side(
 	panel.name = "ViewerProfileCard" if relation == "viewer" else "OpponentProfileCard"
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.clip_contents = true
-	panel.custom_minimum_size = Vector2(0, 74)
+	panel.custom_minimum_size = Vector2(0, 82)
 	var relation_accent := CONDITION_OWN_ACCENT if relation == "viewer" else CONDITION_OPPONENT_ACCENT
 	var card_background := HERO_BG.lightened(0.018) if is_attacker else HERO_BG
-	panel.add_theme_stylebox_override("panel", _make_stylebox(card_background, relation_accent, 9, 8.0, 5.0))
+	panel.add_theme_stylebox_override("panel", _make_stylebox(card_background, relation_accent, 9, 11.0, 8.0))
 	var card_row := HBoxContainer.new()
 	card_row.clip_contents = true
 	card_row.add_theme_constant_override("separation", 7)
@@ -1622,18 +1622,18 @@ func _add_move_results_table_shell() -> VBoxContainer:
 	table.clip_contents = true
 	table.add_theme_stylebox_override(
 		"panel",
-		_make_stylebox(PROFILE_BG, Color(BORDER_NEUTRAL, 0.82), 8, 6.0, 5.0)
+		_make_stylebox(PROFILE_BG, Color(BORDER_NEUTRAL, 0.82), 8, 9.0, 7.0)
 	)
 	_add_render_child(table)
 	var table_box := VBoxContainer.new()
 	table_box.clip_contents = true
-	table_box.add_theme_constant_override("separation", 3)
+	table_box.add_theme_constant_override("separation", 5)
 	table.add_child(table_box)
 	var header_panel := PanelContainer.new()
 	header_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header_panel.add_theme_stylebox_override(
 		"panel",
-		_make_stylebox(Color(SURFACE_RAISED, 0.90), Color(BORDER_NEUTRAL, 0.72), 5, 8.0, 1.0)
+		_make_stylebox(Color(SURFACE_RAISED, 0.90), Color(BORDER_NEUTRAL, 0.72), 5, 10.0, 3.0)
 	)
 	table_box.add_child(header_panel)
 	var header := HBoxContainer.new()
@@ -1764,7 +1764,7 @@ func _add_move_result_row(
 	panel.name = "MoveResultRow_%d" % row_index
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.clip_contents = true
-	panel.custom_minimum_size = Vector2(0, 40)
+	panel.custom_minimum_size = Vector2(0, 46)
 	panel.add_theme_stylebox_override(
 		"panel",
 		_make_result_row_style(primary_result_label, row_index, move_type, selected_move_index == row_index or expanded_result_key == result_key, is_top_damage)
@@ -1782,7 +1782,7 @@ func _add_move_result_row(
 	var box := VBoxContainer.new()
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	box.clip_contents = true
-	box.add_theme_constant_override("separation", 2)
+	box.add_theme_constant_override("separation", 4)
 	panel.add_child(box)
 
 	var result_row := HBoxContainer.new()
