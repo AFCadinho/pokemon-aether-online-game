@@ -819,17 +819,27 @@
 			}
 		},
 		"kanto_viridian_city_trainer_school": {
-			"accessOnly": true,
 			"areaType": "interior",
 			"defaultMode": "open",
 			"label": "Viridian City Trainer School",
 			"locationGroupId": "kanto_viridian_city",
 			"locationGroupLabel": "Viridian City",
 			"regionName": "Kanto",
-			"sceneAliases": [],
-			"scenePath": "",
+			"sceneAliases": [
+				"uid://dv0aevldj7iyb"
+			],
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/trainer_school.tscn",
 			"spawnPoints": {
-
+				"from_viridian_city": {
+					"facingDirection": "down",
+					"label": "Viridian City",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromViridianCity",
+					"tile": {
+						"x": 12,
+						"y": 28
+					}
+				}
 			}
 		},
 		"kanto_viridian_forest": {
@@ -1369,6 +1379,22 @@
 			"destinationAreaId": "kanto_route_22",
 			"sourceMapId": "kanto_viridian_city"
 		},
+		"kanto_viridian_city__to_trainer_school": {
+			"destination": {
+				"mapId": "kanto_viridian_city_trainer_school",
+				"mapSceneAliases": [
+					"uid://dv0aevldj7iyb"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/viridian_city/trainer_school.tscn",
+				"position": {
+					"x": 400.0,
+					"y": 912.0
+				},
+				"spawnMarker": "FromViridianCity"
+			},
+			"destinationAreaId": "kanto_viridian_city_trainer_school",
+			"sourceMapId": "kanto_viridian_city"
+		},
 		"kanto_viridian_city_pokemon_center__to_outside": {
 			"destination": {
 				"mapId": "kanto_viridian_city",
@@ -1384,6 +1410,22 @@
 			},
 			"destinationAreaId": "kanto_viridian_city",
 			"sourceMapId": "kanto_viridian_city_pokemon_center"
+		},
+		"kanto_viridian_city_trainer_school__to_viridian_city": {
+			"destination": {
+				"mapId": "kanto_viridian_city",
+				"mapSceneAliases": [
+					"uid://b8tl17hk3yovn"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
+				"position": {
+					"x": 1840.0,
+					"y": 944.0
+				},
+				"spawnMarker": "FromTrainerSchool"
+			},
+			"destinationAreaId": "kanto_viridian_city",
+			"sourceMapId": "kanto_viridian_city_trainer_school"
 		},
 		"kanto_viridian_forest__to_route_2_north": {
 			"destination": {

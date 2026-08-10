@@ -2,15 +2,30 @@
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/pokemon_school/pokemon_school.visual.tscn" id="1_v7tsg"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="2_map_exit"]
+[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="3_map_meta"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_school_exit"]
 size = Vector2(32, 32)
 
 [node name="TrainerSchool" type="Node2D" unique_id=583102159]
+script = ExtResource("3_map_meta")
+map_id = "kanto_viridian_city_trainer_school"
+map_region_name = "Kanto"
+map_display_name = "Viridian City Trainer School"
+world_access_group_id = "kanto_viridian_city"
+world_access_group_label = "Viridian City"
+world_access_area_type = "interior"
+location_id = "kanto.viridian_city.trainer_school"
+location_name = "Viridian City Trainer School"
+lighting_profile = "indoor"
+weather_profile = "disabled"
+music_profile_id = "kanto.viridian_city"
 
 [node name="PokémonSchool" parent="." unique_id=792709348 instance=ExtResource("1_v7tsg")]
 
-[node name="FromViridianCity" type="Marker2D" parent="."]
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="FromViridianCity" type="Marker2D" parent="Spawns"]
 position = Vector2(400, 912)
 
 [node name="Exits" type="Node2D" parent="."]
