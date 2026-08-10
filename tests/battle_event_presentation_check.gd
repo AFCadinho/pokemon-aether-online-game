@@ -439,6 +439,7 @@ func _check_eat_berry_sheet_presentation_tuning() -> void:
 	var config: Dictionary = berry_effect as Dictionary
 	_check_equal(float(config.get("sprite_zoom_multiplier", 0.0)), 0.6, "Eat Berry scales its imported 150 percent source down for battle presentation")
 	_check_equal(config.get("sheet_visual_offset", []), [-104.0, 19.0], "Eat Berry centers its fixed source coordinates on the holder")
+	_check_equal(int(config.get("animation_end_frame", -1)), 9, "Eat Berry presents one bite cycle instead of replaying the imported sequence")
 
 
 func _check_future_sight_lifecycle_messages() -> void:

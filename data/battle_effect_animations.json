@@ -578,6 +578,7 @@
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "speed_scale": 1.1,
+      "animation_end_frame": 9,
       "sprite_zoom_multiplier": 0.6,
       "sheet_visual_offset": [
         -104.0,
