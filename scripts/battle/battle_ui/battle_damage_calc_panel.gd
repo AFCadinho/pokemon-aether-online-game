@@ -2537,6 +2537,13 @@ func _get_result_badge_colors(text: String) -> Dictionary:
 			"background": Color(0.055, 0.125, 0.18, 0.98),
 			"border": Color(INTERACTION_ACCENT, 0.78),
 		}
+	var chance_label := _t("battle.calc.chance").to_upper()
+	if normalized == "CHANCE" or (chance_label != "" and normalized == chance_label):
+		return {
+			"text": Color("#ffe4a3"),
+			"background": Color(0.22, 0.15, 0.045, 0.98),
+			"border": Color(WARNING_ACCENT, 0.96),
+		}
 	return {
 		"text": TEXT_SECONDARY,
 		"background": CHIP_BG,
