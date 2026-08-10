@@ -4128,9 +4128,10 @@ func _on_catalog_assumption_focus_entered(kind: String) -> void:
 		and not bool(edited_assumption_fields.get("nature", false))
 		and input.text.strip_edges().to_lower() == _localized_nature_name("Hardy").to_lower()
 	):
-		# Hardy is the neutral display default. Keep it visible until typing starts,
-		# but select it so the first keystroke replaces it instead of appending.
-		input.select_all()
+		# Hardy is the neutral display default. Clear the display value on focus;
+		# the Hardy placeholder remains visible while the user types a replacement.
+		input.clear()
+		input.caret_column = 0
 	var input_text: String = _get_catalog_input_text(kind)
 	if active_selector == kind and selector_query == input_text and selector_loading:
 		return

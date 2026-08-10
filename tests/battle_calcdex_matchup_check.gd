@@ -110,7 +110,7 @@ func _run() -> void:
 	if not nature_inputs.is_empty():
 		var nature_input := nature_inputs[0] as LineEdit
 		panel._on_catalog_assumption_focus_entered(panel.SELECTOR_NATURE)
-		_assert(nature_input.get_selected_text() == "Hardy", "the default Hardy nature must be selected for replacement on first typing")
+		_assert(nature_input.text == "" and nature_input.placeholder_text == "Hardy", "the default Hardy nature must clear on focus while remaining visible as a placeholder")
 		panel._close_assumption_suggestions()
 	if viewer_stage_atk != null:
 		panel._on_viewer_stage_selected(viewer_stage_atk.get_item_index(8), viewer_stage_atk, "atk")
