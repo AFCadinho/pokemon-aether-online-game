@@ -15,6 +15,7 @@ func _init() -> void:
 	_check_legitimate_full_hp_rewind_is_preserved()
 	_check_full_hp_reveal_damage_has_no_damage_target()
 	_check_real_damage_keeps_damage_target()
+	_check_direct_damage_logs_one_decimal_precision()
 	_check_damage_after_hazard_uses_numeric_delta_when_previous_condition_is_stale()
 	_check_damage_after_hazard_logs_when_conditions_repeat()
 	_check_damage_after_hazard_logs_mixed_visible_and_exact_conditions()
@@ -218,6 +219,28 @@ func _check_real_damage_keeps_damage_target() -> void:
 	_check_equal(str(result.get("damage_target_ident", "")), "p2a: Garchomp", "real damage still animates")
 
 
+func _check_direct_damage_logs_one_decimal_precision() -> void:
+	var presentation = _make_presentation()
+	presentation.build({
+		"type": "move",
+		"actor": "p1a: Samurott",
+		"move": "Ceaseless Edge",
+		"target": "p2a: Dragonite",
+	})
+	var result: Dictionary = presentation.build({
+		"type": "damage",
+		"target": "p2a: Dragonite",
+		"previousCondition": "400/400",
+		"condition": "222/400",
+		"previousHp": 400,
+		"hp": 222,
+		"maxHp": 400,
+		"amount": 178,
+	})
+
+	_check_equal(str(result.get("log_message", "")), "(Dragonite lost 44.5% of its health!)", "direct damage logs one decimal when exact HP is available")
+
+
 func _check_damage_after_hazard_uses_numeric_delta_when_previous_condition_is_stale() -> void:
 	var presentation = _make_presentation()
 	presentation.build({
@@ -237,7 +260,7 @@ func _check_damage_after_hazard_uses_numeric_delta_when_previous_condition_is_st
 		"amount": 120,
 	})
 
-	_check_equal(str(result.get("log_message", "")), "(Charizard lost 30% of its health!)", "damage after hazard ignores stale previous condition")
+	_check_equal(str(result.get("log_message", "")), "(Charizard lost 30.0% of its health!)", "damage after hazard ignores stale previous condition")
 
 
 func _check_damage_after_hazard_logs_when_conditions_repeat() -> void:
@@ -259,7 +282,7 @@ func _check_damage_after_hazard_logs_when_conditions_repeat() -> void:
 		"amount": 120,
 	})
 
-	_check_equal(str(result.get("log_message", "")), "(Charizard lost 30% of its health!)", "damage after hazard logs repeated-condition numeric loss")
+	_check_equal(str(result.get("log_message", "")), "(Charizard lost 30.0% of its health!)", "damage after hazard logs repeated-condition numeric loss")
 
 
 func _check_damage_after_hazard_logs_mixed_visible_and_exact_conditions() -> void:
@@ -281,7 +304,7 @@ func _check_damage_after_hazard_logs_mixed_visible_and_exact_conditions() -> voi
 		"amount": 189,
 	})
 
-	_check_equal(str(result.get("log_message", "")), "(Alomomola lost 34% of its health!)", "damage after hazard logs visible delta before exact HP reveal")
+	_check_equal(str(result.get("log_message", "")), "(Alomomola lost 34.0% of its health!)", "damage after hazard logs visible delta before exact HP reveal")
 
 
 func _check_booster_energy_quark_drive_messages() -> void:

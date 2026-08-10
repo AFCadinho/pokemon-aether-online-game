@@ -360,7 +360,7 @@ func build(event_data: Dictionary) -> Dictionary:
 			var damage_target_ident := str(event_data.get("target", ""))
 			var has_hp_loss: bool = hp_event_helper.event_has_hp_loss(event_data)
 			var has_sub_percent_hp_loss: bool = hp_event_helper.event_has_sub_percent_hp_loss(event_data)
-			var visible_hp_change: int = hp_event_helper.get_event_visible_hp_change(event_data)
+			var damage_percent: float = hp_event_helper.get_event_damage_percent(event_data)
 			if not has_hp_loss and not has_sub_percent_hp_loss:
 				recent_field_effect_source = ""
 			else:
@@ -387,7 +387,7 @@ func build(event_data: Dictionary) -> Dictionary:
 				else:
 					presentation["log_message"] = event_text_formatter.format_direct_damage_message(
 						target,
-						visible_hp_change,
+						damage_percent,
 						has_hp_loss,
 						has_sub_percent_hp_loss
 					)

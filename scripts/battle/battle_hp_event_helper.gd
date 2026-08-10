@@ -184,6 +184,15 @@ func get_event_visible_hp_change(event: Dictionary) -> int:
 
 	return 0
 
+func get_event_damage_percent(event: Dictionary) -> float:
+	var previous_hp: int = int(event.get("previousHp", 0))
+	var hp: int = int(event.get("hp", 0))
+	var max_hp: int = int(event.get("maxHp", 0))
+	var amount: int = int(event.get("amount", 0))
+	if previous_hp > hp and amount > 0 and max_hp > 0:
+		return (float(amount) / float(max_hp)) * 100.0
+	return float(get_event_visible_hp_change(event))
+
 func event_has_hp_loss(event: Dictionary) -> bool:
 	if is_percentage_only_condition_event(event, false):
 		return false

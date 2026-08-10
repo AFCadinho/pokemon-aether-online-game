@@ -403,12 +403,12 @@ func format_critical_hit_event(_event: Dictionary) -> String:
 
 func format_direct_damage_message(
 	target: String,
-	visible_hp_change: int,
+	damage_percent: float,
 	has_hp_loss: bool,
 	has_sub_percent_hp_loss: bool
 	) -> String:
 	if has_hp_loss:
-		var percent: int = max(1, visible_hp_change)
+		var percent := "%.1f" % maxf(0.1, damage_percent)
 		return _t("battle.event.damage.direct", {"target": target, "percent": percent})
 	if has_sub_percent_hp_loss:
 		return _t("battle.event.damage.direct_small", {"target": target})

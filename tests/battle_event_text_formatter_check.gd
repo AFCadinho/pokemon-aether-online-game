@@ -66,7 +66,7 @@ func _run() -> void:
 	)
 	_check_equal(
 		formatter.format_direct_damage_message("Pikachu", 12, true, false),
-		"(Pikachu lost 12% of its health!)",
+		"(Pikachu lost 12.0% of its health!)",
 		"direct damage message"
 	)
 	_check_equal(
