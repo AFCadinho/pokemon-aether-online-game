@@ -380,6 +380,7 @@ func _check_consumable_item_activation_animations() -> void:
 		[{"type": "item", "target": "p1a: Ferrothorn", "item": "Eject Button", "state": "end"}, "use_item", "Eject Button uses the generic consumable animation"],
 		[{"type": "item", "target": "p2a: Alakazam", "item": "Focus Sash", "state": "end"}, "use_item", "Focus Sash uses the generic consumable animation"],
 		[{"type": "item", "target": "p1a: Tapu Fini", "item": "Sitrus Berry", "state": "end"}, "eat_berry", "Sitrus Berry uses the berry animation"],
+		[{"type": "item", "target": "p1a: Garchomp", "item": "Shuca Berry", "state": "end"}, "eat_berry", "Shuca Berry uses the berry animation"],
 	]
 	for test_case: Array in cases:
 		var event_data: Dictionary = test_case[0] as Dictionary
