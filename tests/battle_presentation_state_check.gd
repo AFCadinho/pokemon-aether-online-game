@@ -14,6 +14,7 @@ func _init() -> void:
 	_check_screen_start()
 	_check_snapshot_direct_sync_for_reconnect()
 	_check_rendered_turn_tracks_effect_start()
+	_check_server_remaining_field_range_is_preserved()
 	_check_court_change_swaps_side_conditions()
 
 	quit(1 if failed else 0)
@@ -264,6 +265,28 @@ func _check_rendered_turn_tracks_effect_start() -> void:
 	var sun := _find_effect(state.get_field_effects(), "sunnyday")
 	_check_equal(int(sun.get("startedTurn", 0)), 7, "weather start keeps the rendered turn")
 	_check_equal(state.get_turn(), 8, "turn cursor advances only at the rendered turn event")
+
+
+func _check_server_remaining_field_range_is_preserved() -> void:
+	var state = BattlePresentationStateScript.new()
+	state.sync_field_from_snapshot({"effects": []}, 18)
+	state.apply_event({
+		"type": "fieldEffect",
+		"scope": "field",
+		"effectType": "fieldCondition",
+		"effectGroup": "terrain",
+		"effect": "move: Misty Terrain",
+		"effectId": "MistyTerrain",
+		"state": "start",
+		"minDuration": 5,
+		"maxDuration": 8,
+		"minRemainingTurns": 5,
+		"maxRemainingTurns": 8,
+	}, 18)
+
+	var terrain := _find_effect(state.get_field_effects(), "mistyterrain")
+	_check_equal(int(terrain.get("minRemainingTurns", 0)), 5, "field presentation retains the backend post-faint minimum")
+	_check_equal(int(terrain.get("maxRemainingTurns", 0)), 8, "field presentation retains the backend privacy-safe maximum")
 
 func _check_court_change_swaps_side_conditions() -> void:
 	var state = BattlePresentationStateScript.new()
