@@ -416,6 +416,8 @@ func calculate_calcdex_matchup(
 		payload["viewerScenario"]["status"] = str(viewer_state.get("status", ""))
 	if viewer_state.has("currentHp"):
 		payload["viewerScenario"]["currentHp"] = maxi(0, int(viewer_state.get("currentHp", 0)))
+	if viewer_scenario.has("ability"):
+		payload["viewerScenario"]["ability"] = str(viewer_scenario.get("ability", ""))
 	if opponent_state.has("status"):
 		payload["opponentScenario"]["status"] = str(opponent_state.get("status", ""))
 	if opponent_state.has("currentHpPercent"):

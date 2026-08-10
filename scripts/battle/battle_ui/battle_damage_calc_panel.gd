@@ -176,6 +176,7 @@ var selected_viewer_ref := ""
 var selected_opponent_ref := ""
 var field_scenario: Dictionary = {}
 var viewer_boost_scenarios: Dictionary = {}
+var viewer_ability_scenarios: Dictionary = {}
 var battle_state_scenarios: Dictionary = {}
 var viewer_stats_by_ref: Dictionary = {}
 var advanced_scenario_expanded := true
@@ -441,11 +442,13 @@ func _render_your_damage_response(response: Dictionary) -> void:
 	_add_inspector_tabs()
 	match active_inspector_tab:
 		INSPECTOR_SET:
+			_add_viewer_ability_card()
 			_add_viewer_stat_grid()
 			_add_opponent_setup_card(assumptions)
 		INSPECTOR_FIELD:
 			_add_showdex_condition_controls(assumptions)
 		_:
+			_add_viewer_ability_card()
 			_add_viewer_stat_grid()
 			_add_opponent_setup_card(assumptions)
 	render_target = content
@@ -626,7 +629,13 @@ func get_species_scenario() -> Dictionary:
 
 func get_viewer_scenario() -> Dictionary:
 	var boosts := _as_dictionary(viewer_boost_scenarios.get(selected_viewer_ref, {}))
-	return {"boosts": boosts.duplicate(true)} if not boosts.is_empty() else {}
+	var scenario: Dictionary = {}
+	if not boosts.is_empty():
+		scenario["boosts"] = boosts.duplicate(true)
+	var ability := str(viewer_ability_scenarios.get(selected_viewer_ref, "")).strip_edges()
+	if ability != "":
+		scenario["ability"] = ability
+	return scenario
 
 
 func get_battle_state_scenario() -> Dictionary:
@@ -2626,6 +2635,72 @@ func _add_boost_stage_controls(parent: VBoxContainer, assumptions: Dictionary) -
 func _add_showdex_detail_controls(assumptions: Dictionary) -> void:
 	_add_showdex_stat_grid(assumptions)
 	_add_showdex_condition_controls(assumptions)
+
+
+func _add_viewer_ability_card() -> void:
+	var viewer := _get_snapshot_pokemon_by_ref(selected_viewer_ref)
+	if viewer.is_empty():
+		return
+	var panel := PanelContainer.new()
+	panel.name = "ViewerAbilityCard"
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_stylebox(PROFILE_BG, Color(CONDITION_OWN_ACCENT, 0.62), 8, 8.0, 7.0))
+	_add_render_child(panel)
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override("separation", 2)
+	panel.add_child(box)
+	var title := _make_label("%s · %s" % [_t("battle.calc.your_pokemon").to_upper(), _snapshot_pokemon_name(viewer).to_upper()], 9, CONDITION_OWN_ACCENT)
+	box.add_child(title)
+	var ability_row := HBoxContainer.new()
+	box.add_child(ability_row)
+	var ability_label := _make_label(_t("battle.calc.ability").to_upper(), 8, TEXT_MUTED)
+	ability_label.custom_minimum_size.x = 58
+	ability_row.add_child(ability_label)
+	var input := LineEdit.new()
+	input.name = "ViewerAbilityInput"
+	input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	input.custom_minimum_size.y = 25
+	input.max_length = 100
+	input.text = _get_viewer_ability_value(viewer)
+	input.placeholder_text = _t("battle.calc.ability_unknown")
+	input.tooltip_text = "Edit the ability used for this calculation"
+	input.add_theme_font_size_override("font_size", 11)
+	input.add_theme_stylebox_override("normal", _make_stylebox(SURFACE_CANVAS, BORDER_NEUTRAL, 4, 4.0, 1.0))
+	input.add_theme_stylebox_override("focus", _make_stylebox(SURFACE_RAISED, INTERACTION_ACCENT, 4, 4.0, 1.0))
+	input.focus_exited.connect(_on_viewer_ability_focus_exited.bind(input))
+	input.text_submitted.connect(_on_viewer_ability_submitted.bind(input))
+	ability_row.add_child(input)
+func _get_viewer_ability_value(viewer: Dictionary) -> String:
+	var scenario := str(viewer_ability_scenarios.get(selected_viewer_ref, "")).strip_edges()
+	if scenario != "":
+		return scenario
+	return _get_known_viewer_ability(viewer)
+
+
+func _get_known_viewer_ability(viewer: Dictionary) -> String:
+	var knowledge := CALCDEX_SNAPSHOT.get_knowledge_value(viewer, "ability")
+	return str(knowledge.get("value", "")).strip_edges() if str(knowledge.get("state", "")) == "known" else ""
+
+
+func _on_viewer_ability_focus_exited(input: LineEdit) -> void:
+	if is_clearing_content:
+		return
+	_on_viewer_ability_submitted(input.text, input)
+
+
+func _on_viewer_ability_submitted(value: String, _input: LineEdit) -> void:
+	if selected_viewer_ref == "":
+		return
+	var ability := value.strip_edges()
+	var known := _get_known_viewer_ability(_get_snapshot_pokemon_by_ref(selected_viewer_ref))
+	if ability == known:
+		viewer_ability_scenarios.erase(selected_viewer_ref)
+	elif ability == "":
+		viewer_ability_scenarios.erase(selected_viewer_ref)
+	else:
+		viewer_ability_scenarios[selected_viewer_ref] = ability
+	_mark_sample_set_custom()
+	_emit_defender_assumptions_changed()
 
 
 func _add_viewer_stat_grid() -> void:
