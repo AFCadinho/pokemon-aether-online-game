@@ -2398,6 +2398,16 @@ func _refresh_damage_calc_results() -> void:
 	_show_damage_calc_loading()
 
 	var projection_revision := battle_state.get_calcdex_projection_revision()
+	if projection_revision.is_empty() and _is_pvp_battle():
+		# PvP realtime packets can arrive before the participant projection fence
+		# has been seeded locally. Recover the canonical room snapshot before
+		# refusing the calculator, instead of leaving the user on a generic wait
+		# message indefinitely.
+		await _reconcile_pvp_battle_from_room("calcdex_projection_recovery")
+		if request_token != damage_calc_request_token or current_action_panel_mode != BattleActionsPanelMode.CALC:
+			damage_calc_request_in_flight = false
+			return
+		projection_revision = battle_state.get_calcdex_projection_revision()
 	var use_safe_matchup := false
 	if not damage_calc_snapshot_disabled_for_battle and not projection_revision.is_empty():
 		var snapshot_response: Dictionary = await BattleApiClient.get_calcdex_snapshot(

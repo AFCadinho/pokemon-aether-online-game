@@ -205,6 +205,7 @@ func _check_scene_structure() -> void:
 	_check_contains(battle_script_source, "opponent_stage_party_rail.get_global_rect().position", "Calc drawer measures the hoverable opponent preview rail boundary")
 	_check_contains(battle_script_source, "if not calcdex_active and hover_state.should_poll_sprite_hover()", "Calcdex suppresses active battlefield sprite hover polling")
 	_check_contains(battle_script_source, "if current_action_panel_mode == BattleActionsPanelMode.CALC", "owned party hover is suppressed while Calcdex is open")
+	_check_contains(battle_script_source, "calcdex_projection_recovery", "PvP Calcdex recovers a missing projection fence before showing an error")
 	_check_contains(battle_script_source, "drawer_width = minf(drawer_width, opponent_safe_width)", "Calc drawer never covers the opponent preview rail")
 	_check_contains(battle_script_source, "_timer_panels_call(\"show_decision_timers\"", "Calc and VS timer views receive one shared timer projection")
 	_check_contains(battle_script_source, "current_action_panel_mode == BattleActionsPanelMode.CALC", "Calc timer dock is scoped to calculator mode")
