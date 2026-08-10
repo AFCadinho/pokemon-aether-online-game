@@ -64,7 +64,10 @@ const EV_LABEL_ACCENT := Color("#8bb9cf")
 const OFFENSE_LABEL_ACCENT := Color("#d59a88")
 const DEFENSE_LABEL_ACCENT := Color("#83aecf")
 const SPEED_LABEL_ACCENT := Color("#8ebd9b")
-const SUSPICIOUS_PERCENT_LIMIT := 999.0
+# Extreme overkill is valid when a high-level attacker hits a low-level target
+# (for example, a wild encounter). Keep malformed-value protection well above
+# that range so legitimate OHKO projections are not rendered as "Calc issue".
+const SUSPICIOUS_PERCENT_LIMIT := 100000.0
 const DAMAGE_COLUMN_WIDTH := 132.0
 const KO_COLUMN_WIDTH := 92.0
 const CONFIRMED_INFORMATION_ENVELOPE_DESCRIPTION := "Confirmed-information envelope across unknown opponent stats."

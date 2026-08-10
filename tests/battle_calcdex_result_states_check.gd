@@ -55,6 +55,11 @@ func _run() -> void:
 		"warnings": ["Opponent nature is assumed."],
 	})
 	await process_frame
+	var overkill_result := {"move": {"name": "Ceaseless Edge"}, "minPercent": 20460.0, "maxPercent": 24075.0}
+	if panel._get_percent_label(overkill_result) == panel._t("battle.calc.issue"):
+		push_error("Legitimate extreme overkill percentages must remain displayable")
+		quit(1)
+		return
 	if panel.result_summary_panels.size() != 2 or panel.result_disclosure_buttons.size() != 2:
 		push_error("Every safely described move result must expose a calculation-summary disclosure")
 		quit(1)
