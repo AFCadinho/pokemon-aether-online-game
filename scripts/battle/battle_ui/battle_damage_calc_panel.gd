@@ -1037,7 +1037,7 @@ func _make_pokemon_selector(relation: String, is_attacker: bool) -> OptionButton
 	var selected_ref := selected_viewer_ref if relation == "viewer" else selected_opponent_ref
 	for entry_value: Variant in collection:
 		var entry := _as_dictionary(entry_value)
-		if entry.is_empty() or bool(entry.get("fainted", false)):
+		if entry.is_empty():
 			continue
 		var identity := _as_dictionary(entry.get("identity", {}))
 		if str(identity.get("state", "")) != "known" or str(identity.get("value", "")).strip_edges() == "":
@@ -1151,7 +1151,7 @@ func _make_team_icon_button(entry: Dictionary, relation: String, slot_index: int
 	var is_active := bool(entry.get("active", false))
 	var accent := CONDITION_OWN_ACCENT if relation == "viewer" else CONDITION_OPPONENT_ACCENT
 	_apply_team_icon_button_style(button, accent, is_selected, is_active)
-	button.disabled = fainted or not identity_known or pokemon_ref == ""
+	button.disabled = not identity_known or pokemon_ref == ""
 	if button.disabled:
 		button.focus_mode = Control.FOCUS_NONE
 		button.mouse_default_cursor_shape = Control.CURSOR_ARROW
@@ -1240,7 +1240,7 @@ func _resolve_selected_ref(relation: String, current_ref: String) -> String:
 	var fallback := ""
 	for entry_value: Variant in collection:
 		var entry := _as_dictionary(entry_value)
-		if entry.is_empty() or bool(entry.get("fainted", false)):
+		if entry.is_empty():
 			continue
 		var identity := _as_dictionary(entry.get("identity", {}))
 		if str(identity.get("state", "")) != "known" or str(identity.get("value", "")).strip_edges() == "":

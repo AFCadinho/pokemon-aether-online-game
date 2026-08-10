@@ -71,7 +71,7 @@ func _run() -> void:
 	_assert(content.find_child("OpponentPokemonSelector", true, false) == null, "the visible opponent dropdown must be replaced by team icons")
 	var fainted_icon := content.find_child("ViewerTeamIcon3", true, false) as Button
 	var unknown_icon := content.find_child("OpponentTeamIcon2", true, false) as Button
-	_assert(fainted_icon != null and fainted_icon.disabled and fainted_icon.modulate.a < 0.5, "fainted team icons must be disabled and dimmed")
+	_assert(fainted_icon != null and not fainted_icon.disabled and fainted_icon.modulate.a < 0.5, "known fainted team icons must remain selectable while dimmed")
 	_assert(unknown_icon != null and unknown_icon.disabled and _has_label_text(unknown_icon, "?"), "unknown opponent slots must remain privacy-safe question icons")
 	_assert(panel._resolve_selected_ref("opponent", "opponent:public-slot-2") == "opponent:public-slot-1", "unknown opponent slots must never become the calculation selection")
 	panel._on_team_icon_pressed("opponent", "opponent:public-slot-2")
@@ -109,6 +109,9 @@ func _run() -> void:
 	panel._on_forme_menu_item_pressed(1, "opponent")
 	_assert(panel.get_species_scenario() == {"opponent": "Pikachu-Rock-Star"}, "a clicked forme must remain an explicit opponent calculation scenario")
 	_assert(str(panel.species_scenarios.get("opponent:public-slot-1", "")) == "Pikachu-Rock-Star", "a forme scenario must be scoped to the selected public slot")
+	if fainted_icon != null:
+		panel._on_team_icon_pressed("viewer", str(fainted_icon.get_meta("pokemon_ref", "")))
+		_assert(panel.selected_viewer_ref == str(fainted_icon.get_meta("pokemon_ref", "")), "fainted viewer Pokémon must remain selectable for damage analysis")
 	print("PASS battle_calcdex_matchup_check")
 	quit(0)
 
