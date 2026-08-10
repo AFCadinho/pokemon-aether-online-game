@@ -93,6 +93,7 @@ func _run() -> void:
 	_assert(content.find_child("ShowdexStageAtk", true, false) is OptionButton, "the stat grid must expose stages directly")
 	_assert(content.find_child("SampleSetField", true, false) != null, "the sample-set selector must have a compact labeled field")
 	panel._on_inspector_tab_pressed(panel.INSPECTOR_FIELD)
+	_assert(panel.advanced_scenario_expanded, "field conditions must be expanded by default")
 	_assert(content.find_child("ShowdexFieldControls", true, false) != null, "the field inspector must expose battle conditions")
 	var disclosure_metadata: Dictionary = panel.result_disclosure_buttons.values()[0] if not panel.result_disclosure_buttons.is_empty() else {}
 	_assert(bool(disclosure_metadata.get("compact", false)), "damage-taken summaries must use a separate compact disclosure beside the move input")

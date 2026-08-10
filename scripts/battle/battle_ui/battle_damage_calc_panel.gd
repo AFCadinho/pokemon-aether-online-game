@@ -172,7 +172,7 @@ var localization_manager: Node
 var selected_viewer_ref := ""
 var selected_opponent_ref := ""
 var field_scenario: Dictionary = {}
-var advanced_scenario_expanded := false
+var advanced_scenario_expanded := true
 var warning_details_expanded := false
 var warning_details_panel: Control
 var sample_set_options: Array[Dictionary] = []
@@ -960,7 +960,7 @@ func _reset_to_current() -> void:
 	edited_assumption_fields.clear()
 	field_scenario.clear()
 	selected_sample_set_id = ""
-	advanced_scenario_expanded = false
+	advanced_scenario_expanded = true
 	active_selector = SELECTOR_NONE
 	active_move_slot = -1
 	_clear_move_scenarios()
