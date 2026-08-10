@@ -13,48 +13,56 @@ signal forme_catalog_requested(relation: String, species: String, format_id: Str
 signal default_ability_requested(species: String)
 signal matchup_selection_changed()
 
-const TEXT_PRIMARY := Color(0.95686275, 0.94509804, 0.91764706, 1.0)
-const TEXT_SECONDARY := Color(0.72156864, 0.72156864, 0.72156864, 1.0)
-const TEXT_MUTED := Color(0.56, 0.6, 0.68, 1.0)
-const TEXT_ACCENT := Color(0.84705883, 0.7058824, 0.41568628, 1.0)
-const TEXT_ERROR := Color(0.9372549, 0.26666668, 0.26666668, 1.0)
-const DAMAGE_TEXT := Color(0.78, 0.88, 0.97, 1.0)
-const STAGE_POSITIVE := Color(0.36, 0.86, 0.53, 1.0)
-const STAGE_NEGATIVE := Color(0.96, 0.39, 0.39, 1.0)
-const ROW_BG := Color(0.014, 0.021, 0.036, 0.98)
-const ROW_BG_ALT := Color(0.022, 0.033, 0.052, 0.98)
-const ROW_BORDER := Color(0.14, 0.26, 0.42, 0.76)
-const PROFILE_BG := Color(0.021, 0.033, 0.058, 0.95)
-const PROFILE_BORDER := Color(0.18, 0.31, 0.49, 0.74)
-const HERO_BG := Color(0.018, 0.047, 0.078, 0.98)
-const HERO_BORDER := Color(0.16, 0.48, 0.70, 0.92)
-const CHIP_BG := Color(0.028, 0.043, 0.073, 0.96)
-const CHIP_BORDER := Color(0.2, 0.34, 0.52, 0.82)
-const CHIP_EDITED_BORDER := Color(0.62, 0.48, 0.23, 0.9)
-const KO_BORDER := Color(0.72, 0.55, 0.23, 0.88)
-const TAB_BG := Color(0.024, 0.036, 0.062, 0.92)
-const TAB_ACTIVE_BG := Color(0.124, 0.203, 0.332, 0.98)
-const TAB_BORDER := Color(0.19, 0.31, 0.48, 0.9)
-const DROPDOWN_BG := Color(0.018, 0.035, 0.059, 0.98)
-const DROPDOWN_HOVER_BG := Color(0.035, 0.105, 0.164, 0.99)
-const DROPDOWN_PRESSED_BG := Color(0.045, 0.137, 0.211, 1.0)
-const DROPDOWN_POPUP_BG := Color(0.008, 0.019, 0.034, 0.995)
-const DROPDOWN_BORDER := Color(0.16, 0.34, 0.50, 0.9)
-const DROPDOWN_HOVER_BORDER := Color(0.30, 0.67, 0.86, 0.96)
-const DROPDOWN_FOCUS_BORDER := Color(0.56, 0.87, 1.0, 1.0)
-const CONDITION_GLOBAL_ACCENT := Color(0.30, 0.72, 0.92, 1.0)
-const CONDITION_OWN_ACCENT := Color(0.24, 0.66, 0.88, 1.0)
-const CONDITION_OPPONENT_ACCENT := Color(0.90, 0.66, 0.28, 1.0)
-const CONFIRMED_ACCENT := Color(0.34, 0.84, 0.54, 1.0)
-const MANUAL_ACCENT := Color(0.95, 0.73, 0.31, 1.0)
-const ITEM_LABEL_ACCENT := Color(0.96, 0.73, 0.32, 1.0)
-const ABILITY_LABEL_ACCENT := Color(0.76, 0.58, 0.96, 1.0)
-const NATURE_LABEL_ACCENT := Color(0.45, 0.86, 0.63, 1.0)
-const EV_LABEL_ACCENT := Color(0.36, 0.76, 0.96, 1.0)
-const OFFENSE_LABEL_ACCENT := Color(0.96, 0.55, 0.43, 1.0)
-const DEFENSE_LABEL_ACCENT := Color(0.43, 0.72, 0.96, 1.0)
-const SPEED_LABEL_ACCENT := Color(0.48, 0.88, 0.61, 1.0)
-const TOP_DAMAGE_ACCENT := Color(1.0, 0.76, 0.28, 1.0)
+const SURFACE_CANVAS := Color("#050a10")
+const SURFACE_PANEL := Color("#0b1520")
+const SURFACE_RAISED := Color("#101d2a")
+const BORDER_NEUTRAL := Color("#26394d")
+const INTERACTION_ACCENT := Color("#8ccbe8")
+const LABEL_NEUTRAL := Color("#91a0b4")
+const WARNING_ACCENT := Color("#f0b84b")
+const DANGER_ACCENT := Color("#f06b5d")
+
+const TEXT_PRIMARY := Color("#f2f0ea")
+const TEXT_SECONDARY := Color("#a8b4c2")
+const TEXT_MUTED := Color("#718096")
+const TEXT_ACCENT := INTERACTION_ACCENT
+const TEXT_ERROR := DANGER_ACCENT
+const DAMAGE_TEXT := Color("#c7e0f7")
+const STAGE_POSITIVE := Color("#55d68b")
+const STAGE_NEGATIVE := DANGER_ACCENT
+const ROW_BG := Color(0.043, 0.082, 0.125, 0.98)
+const ROW_BG_ALT := Color(0.063, 0.114, 0.165, 0.98)
+const ROW_BORDER := Color(0.15, 0.23, 0.31, 0.88)
+const PROFILE_BG := Color(0.043, 0.082, 0.125, 0.96)
+const PROFILE_BORDER := Color(0.19, 0.28, 0.37, 0.86)
+const HERO_BG := Color(0.047, 0.102, 0.149, 0.98)
+const HERO_BORDER := Color(0.27, 0.48, 0.62, 0.92)
+const CHIP_BG := Color(0.063, 0.114, 0.165, 0.98)
+const CHIP_BORDER := Color(0.22, 0.32, 0.41, 0.90)
+const CHIP_EDITED_BORDER := Color(0.78, 0.58, 0.31, 0.92)
+const KO_BORDER := Color(0.72, 0.43, 0.26, 0.90)
+const TAB_BG := Color(0.043, 0.082, 0.125, 0.96)
+const TAB_ACTIVE_BG := Color(0.086, 0.157, 0.227, 0.99)
+const TAB_BORDER := Color(0.17, 0.25, 0.34, 0.92)
+const DROPDOWN_BG := Color(0.055, 0.102, 0.149, 0.99)
+const DROPDOWN_HOVER_BG := Color(0.078, 0.157, 0.216, 0.99)
+const DROPDOWN_PRESSED_BG := Color(0.094, 0.184, 0.251, 1.0)
+const DROPDOWN_POPUP_BG := Color(0.027, 0.063, 0.102, 0.995)
+const DROPDOWN_BORDER := Color(0.18, 0.29, 0.38, 0.94)
+const DROPDOWN_HOVER_BORDER := Color(0.42, 0.68, 0.80, 0.98)
+const DROPDOWN_FOCUS_BORDER := INTERACTION_ACCENT
+const CONDITION_GLOBAL_ACCENT := Color("#70b8d8")
+const CONDITION_OWN_ACCENT := Color("#42beeb")
+const CONDITION_OPPONENT_ACCENT := Color("#e7a93d")
+const CONFIRMED_ACCENT := STAGE_POSITIVE
+const MANUAL_ACCENT := Color("#c9a66b")
+const ITEM_LABEL_ACCENT := LABEL_NEUTRAL
+const ABILITY_LABEL_ACCENT := LABEL_NEUTRAL
+const NATURE_LABEL_ACCENT := LABEL_NEUTRAL
+const EV_LABEL_ACCENT := Color("#8bb9cf")
+const OFFENSE_LABEL_ACCENT := Color("#d59a88")
+const DEFENSE_LABEL_ACCENT := Color("#83aecf")
+const SPEED_LABEL_ACCENT := Color("#8ebd9b")
 const SUSPICIOUS_PERCENT_LIMIT := 999.0
 const DAMAGE_COLUMN_WIDTH := 132.0
 const KO_COLUMN_WIDTH := 92.0
@@ -926,7 +934,7 @@ func _add_team_selector_strips() -> void:
 	panel.clip_contents = true
 	panel.add_theme_stylebox_override(
 		"panel",
-		_make_stylebox(Color(0.012, 0.026, 0.044, 0.94), Color(PROFILE_BORDER, 0.46), 8, 6.0, 4.0)
+		_make_stylebox(Color(SURFACE_PANEL, 0.96), Color(BORDER_NEUTRAL, 0.86), 8, 6.0, 4.0)
 	)
 	content.add_child(panel)
 	var matchup_strip := HBoxContainer.new()
@@ -937,7 +945,7 @@ func _add_team_selector_strips() -> void:
 	matchup_strip.add_theme_constant_override("separation", 4)
 	panel.add_child(matchup_strip)
 	matchup_strip.add_child(_make_team_selector_row("viewer"))
-	var separator := _make_label("VS", 8, TEXT_ACCENT)
+	var separator := _make_label("VS", 8, TEXT_MUTED)
 	separator.custom_minimum_size = Vector2(18, 0)
 	separator.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	separator.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -1035,8 +1043,8 @@ func _make_team_icon_button(entry: Dictionary, relation: String, slot_index: int
 
 
 func _apply_team_icon_button_style(button: Button, accent: Color, is_selected: bool, is_active: bool) -> void:
-	var background := Color(0.014, 0.031, 0.052, 0.96)
-	var border := Color(0.15, 0.28, 0.40, 0.72)
+	var background := Color(SURFACE_RAISED, 0.96)
+	var border := Color(BORDER_NEUTRAL, 0.84)
 	if is_active:
 		background = Color(accent, 0.10)
 		border = Color(accent, 0.52)
@@ -1053,7 +1061,7 @@ func _apply_team_icon_button_style(button: Button, accent: Color, is_selected: b
 	button.add_theme_stylebox_override("hover", _make_stylebox(background.lightened(0.08), accent.lightened(0.10), 7, 2.0, 2.0))
 	button.add_theme_stylebox_override("pressed", _make_stylebox(Color(accent, 0.26), accent.lightened(0.18), 7, 2.0, 2.0))
 	button.add_theme_stylebox_override("focus", _make_stylebox(Color(accent, 0.18), DROPDOWN_FOCUS_BORDER, 7, 2.0, 2.0))
-	button.add_theme_stylebox_override("disabled", _make_stylebox(Color(0.012, 0.022, 0.035, 0.80), Color(0.10, 0.16, 0.23, 0.58), 7, 2.0, 2.0))
+	button.add_theme_stylebox_override("disabled", _make_stylebox(Color(SURFACE_PANEL, 0.80), Color(BORDER_NEUTRAL, 0.58), 7, 2.0, 2.0))
 
 
 func _make_team_icon_hp_bar(hp_percent: float) -> ProgressBar:
@@ -1065,12 +1073,12 @@ func _make_team_icon_hp_bar(hp_percent: float) -> ProgressBar:
 	bar.value = clampf(hp_percent, 0.0, 100.0)
 	bar.show_percentage = false
 	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var fill_color := Color(0.25, 0.78, 0.42, 1.0)
+	var fill_color := STAGE_POSITIVE
 	if hp_percent <= 20.0:
-		fill_color = Color(0.92, 0.25, 0.22, 1.0)
+		fill_color = DANGER_ACCENT
 	elif hp_percent <= 50.0:
-		fill_color = Color(0.92, 0.68, 0.16, 1.0)
-	bar.add_theme_stylebox_override("background", _make_stylebox(Color(0.01, 0.02, 0.03, 0.98), Color(0, 0, 0, 0), 2, 0.0, 0.0))
+		fill_color = WARNING_ACCENT
+	bar.add_theme_stylebox_override("background", _make_stylebox(Color(SURFACE_CANVAS, 0.98), Color.TRANSPARENT, 2, 0.0, 0.0))
 	bar.add_theme_stylebox_override("fill", _make_stylebox(fill_color, fill_color, 2, 0.0, 0.0))
 	return bar
 
@@ -1140,7 +1148,7 @@ func _add_profile_summary(
 		viewer_hp_percent,
 		viewer_status
 	))
-	var arrow := _make_label("VS", 10, TEXT_ACCENT)
+	var arrow := _make_label("VS", 10, TEXT_MUTED)
 	arrow.custom_minimum_size = Vector2(30, 0)
 	arrow.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	arrow.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -1251,12 +1259,12 @@ func _make_forme_menu_button(relation: String, pokemon_name: String) -> MenuButt
 	button.add_theme_font_size_override("font_size", 15)
 	var snapshot_species := _get_snapshot_species_for_relation(relation)
 	var is_scenario := snapshot_species != "" and _normalize_move_name(snapshot_species) != _normalize_move_name(pokemon_name)
-	button.add_theme_color_override("font_color", TEXT_ACCENT if is_scenario else TEXT_PRIMARY)
+	button.add_theme_color_override("font_color", MANUAL_ACCENT if is_scenario else TEXT_PRIMARY)
 	button.add_theme_color_override("font_hover_color", TEXT_ACCENT)
 	button.add_theme_color_override("font_pressed_color", TEXT_ACCENT)
 	for style_name: String in ["normal", "hover", "pressed", "focus"]:
 		var background := Color.TRANSPARENT if style_name == "normal" else Color(TAB_ACTIVE_BG, 0.45)
-		var border := Color.TRANSPARENT if style_name != "focus" else Color(TEXT_ACCENT, 0.72)
+		var border := Color.TRANSPARENT if style_name != "focus" else Color(INTERACTION_ACCENT, 0.82)
 		button.add_theme_stylebox_override(style_name, _make_stylebox(background, border, 5, 3.0, 1.0))
 	forme_menu_buttons[relation] = button
 	var popup := button.get_popup()
@@ -1461,7 +1469,7 @@ func _add_move_results_table_shell() -> VBoxContainer:
 	table.clip_contents = true
 	table.add_theme_stylebox_override(
 		"panel",
-		_make_stylebox(PROFILE_BG, Color(PROFILE_BORDER.r, PROFILE_BORDER.g, PROFILE_BORDER.b, 0.42), 8, 6.0, 5.0)
+		_make_stylebox(PROFILE_BG, Color(BORDER_NEUTRAL, 0.82), 8, 6.0, 5.0)
 	)
 	content.add_child(table)
 	var table_box := VBoxContainer.new()
@@ -1472,7 +1480,7 @@ func _add_move_results_table_shell() -> VBoxContainer:
 	header_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header_panel.add_theme_stylebox_override(
 		"panel",
-		_make_stylebox(Color(0.025, 0.045, 0.072, 0.72), Color(0.16, 0.31, 0.48, 0.52), 5, 8.0, 1.0)
+		_make_stylebox(Color(SURFACE_RAISED, 0.90), Color(BORDER_NEUTRAL, 0.72), 5, 8.0, 1.0)
 	)
 	table_box.add_child(header_panel)
 	var header := HBoxContainer.new()
@@ -1487,7 +1495,7 @@ func _add_move_results_table_shell() -> VBoxContainer:
 	damage_header.size_flags_horizontal = Control.SIZE_SHRINK_END
 	damage_header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	header.add_child(damage_header)
-	var ko_header := _make_table_header(_t("battle.calc.ko_header"), Color(1.0, 0.58, 0.38, 1.0))
+	var ko_header := _make_table_header(_t("battle.calc.ko_header"), DANGER_ACCENT)
 	ko_header.custom_minimum_size = Vector2(KO_COLUMN_WIDTH, 0)
 	ko_header.size_flags_horizontal = Control.SIZE_SHRINK_END
 	ko_header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -1668,7 +1676,7 @@ func _add_move_result_row(
 	if not is_status_move and percent_label != "":
 		percent_color = _get_result_badge_colors(primary_result_label)["text"]
 	if is_top_damage:
-		percent_color = TOP_DAMAGE_ACCENT
+		percent_color = WARNING_ACCENT
 	var percent := _make_label(percent_label if percent_label != "" else "--", 13, percent_color)
 	percent.custom_minimum_size = Vector2(DAMAGE_COLUMN_WIDTH, 0)
 	percent.size_flags_horizontal = Control.SIZE_SHRINK_END
@@ -1691,7 +1699,7 @@ func _add_move_result_row(
 	if result_state == "unsupported":
 		_add_row_notice(box, _t("battle.calc.unsupported_mechanic"), TEXT_ERROR)
 	elif result_state == "partial":
-		_add_row_notice(box, _t("battle.calc.partial_result"), TEXT_ACCENT)
+		_add_row_notice(box, _t("battle.calc.partial_result"), WARNING_ACCENT)
 
 	for warning_value: Variant in _as_array(result.get("warnings", [])) + _as_array(result.get("koWarnings", [])):
 		var warning := str(warning_value).strip_edges()
@@ -1758,7 +1766,7 @@ func _make_result_summary_panel(summary_text: String) -> PanelContainer:
 	panel.mouse_filter = Control.MOUSE_FILTER_PASS
 	panel.add_theme_stylebox_override(
 		"panel",
-		_make_stylebox(Color(0.018, 0.041, 0.064, 0.92), Color(0.15, 0.36, 0.52, 0.68), 6, 9.0, 6.0)
+		_make_stylebox(Color(SURFACE_RAISED, 0.96), Color(BORDER_NEUTRAL, 0.86), 6, 9.0, 6.0)
 	)
 	var row := HBoxContainer.new()
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1872,18 +1880,16 @@ func _make_result_row_style(
 ) -> StyleBoxFlat:
 	var background := ROW_BG_ALT if row_index % 2 == 0 else ROW_BG
 	if is_top_damage:
-		background = Color(0.085, 0.058, 0.015, 0.96)
+		background = Color(0.075, 0.127, 0.176, 0.98)
 	if is_selected:
-		background = Color(0.025, 0.095, 0.14, 0.98)
+		background = Color(0.086, 0.157, 0.227, 0.99)
 	var style := _make_stylebox(background, Color(0, 0, 0, 0), 7, 8.0, 5.0)
 	style.border_width_left = 3
 	style.border_width_top = 1 if is_selected else 0
 	style.border_width_right = 1 if is_selected else 0
 	style.border_width_bottom = 1 if is_selected else 0
 	if is_selected:
-		style.border_color = Color(TEXT_ACCENT, 0.96)
-	elif is_top_damage:
-		style.border_color = TOP_DAMAGE_ACCENT
+		style.border_color = Color(INTERACTION_ACCENT, 0.96)
 	else:
 		style.border_color = TYPE_COLORS.get(move_type.to_lower(), ROW_BORDER)
 	return style
@@ -1902,7 +1908,7 @@ func _make_move_type_badge(move_type: String) -> Label:
 
 
 func _make_move_category_label(category: String) -> Label:
-	var label := _make_label(category.to_upper(), 8, TEXT_MUTED)
+	var label := _make_label(category.to_upper(), 8, LABEL_NEUTRAL)
 	label.custom_minimum_size = Vector2(54, 18)
 	label.size_flags_horizontal = Control.SIZE_SHRINK_END
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -2018,20 +2024,20 @@ func _get_result_badge_colors(text: String) -> Dictionary:
 	var normalized := text.to_upper()
 	if normalized == "OHKO":
 		return {
-			"text": Color(1.0, 0.91, 0.66, 1.0),
-			"background": Color(0.28, 0.12, 0.035, 0.98),
-			"border": Color(0.90, 0.57, 0.16, 0.95),
+			"text": Color("#ffd2cc"),
+			"background": Color(0.25, 0.075, 0.065, 0.98),
+			"border": Color(DANGER_ACCENT, 0.96),
 		}
 	if normalized.contains("2HKO") and not normalized.begins_with("0%"):
 		return {
-			"text": Color(0.76, 0.91, 1.0, 1.0),
-			"background": Color(0.035, 0.14, 0.25, 0.98),
-			"border": Color(0.19, 0.55, 0.82, 0.92),
+			"text": DAMAGE_TEXT,
+			"background": Color(0.055, 0.125, 0.18, 0.98),
+			"border": Color(INTERACTION_ACCENT, 0.78),
 		}
 	return {
 		"text": TEXT_SECONDARY,
-		"background": Color(0.035, 0.05, 0.075, 0.98),
-		"border": Color(0.22, 0.31, 0.43, 0.80),
+		"background": CHIP_BG,
+		"border": CHIP_BORDER,
 	}
 
 
@@ -2060,19 +2066,19 @@ func _apply_calcdex_scroll_style() -> void:
 	vertical_bar.add_theme_constant_override("minimum_grabber_size", 28)
 	vertical_bar.add_theme_stylebox_override(
 		"scroll",
-		_make_stylebox(Color(0.008, 0.018, 0.032, 0.78), Color(0.10, 0.22, 0.34, 0.72), 5, 0.0, 0.0)
+		_make_stylebox(Color(SURFACE_CANVAS, 0.78), Color(BORDER_NEUTRAL, 0.72), 5, 0.0, 0.0)
 	)
 	vertical_bar.add_theme_stylebox_override(
 		"grabber",
-		_make_stylebox(Color(0.10, 0.31, 0.48, 0.96), Color(0.23, 0.63, 0.84, 0.92), 5, 0.0, 0.0)
+		_make_stylebox(Color(INTERACTION_ACCENT, 0.46), Color(INTERACTION_ACCENT, 0.74), 5, 0.0, 0.0)
 	)
 	vertical_bar.add_theme_stylebox_override(
 		"grabber_highlight",
-		_make_stylebox(Color(0.16, 0.43, 0.62, 1.0), Color(0.42, 0.82, 1.0, 1.0), 5, 0.0, 0.0)
+		_make_stylebox(Color(INTERACTION_ACCENT, 0.66), INTERACTION_ACCENT, 5, 0.0, 0.0)
 	)
 	vertical_bar.add_theme_stylebox_override(
 		"grabber_pressed",
-		_make_stylebox(Color(0.24, 0.56, 0.72, 1.0), Color(0.64, 0.9, 1.0, 1.0), 5, 0.0, 0.0)
+		_make_stylebox(Color(INTERACTION_ACCENT, 0.82), INTERACTION_ACCENT.lightened(0.12), 5, 0.0, 0.0)
 	)
 
 
@@ -2150,7 +2156,7 @@ func _add_live_assumption_controls(assumptions: Dictionary, _prior_provenance: S
 	if _is_current_ability_assumed():
 		var ability_warning := _make_label(_t("battle.calc.assumed_ability_warning", {
 			"ability": current_default_ability,
-		}), 10, TEXT_ACCENT)
+		}), 10, WARNING_ACCENT)
 		ability_warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		ability_warning.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
 		box.add_child(ability_warning)
@@ -2213,7 +2219,7 @@ func _add_showdex_stat_grid(assumptions: Dictionary) -> void:
 	panel.clip_contents = true
 	panel.add_theme_stylebox_override(
 		"panel",
-		_make_stylebox(Color(0.012, 0.025, 0.041, 0.96), Color(0.18, 0.36, 0.52, 0.76), 8, 7.0, 5.0)
+		_make_stylebox(Color(SURFACE_PANEL, 0.96), Color(BORDER_NEUTRAL, 0.86), 8, 7.0, 5.0)
 	)
 	content.add_child(panel)
 	var box := VBoxContainer.new()
@@ -2316,8 +2322,8 @@ func _make_showdex_ev_input(stat_key: String, value: int) -> LineEdit:
 	input.add_theme_font_size_override("font_size", 10)
 	input.add_theme_color_override("font_color", EV_LABEL_ACCENT if value > 0 else TEXT_SECONDARY)
 	input.add_theme_color_override("font_placeholder_color", TEXT_MUTED)
-	input.add_theme_stylebox_override("normal", _make_stylebox(Color(0.008, 0.018, 0.030, 0.98), Color(0.13, 0.27, 0.40, 0.76), 4, 3.0, 1.0))
-	input.add_theme_stylebox_override("focus", _make_stylebox(Color(0.028, 0.065, 0.10, 0.98), DROPDOWN_FOCUS_BORDER, 4, 3.0, 1.0))
+	input.add_theme_stylebox_override("normal", _make_stylebox(Color(SURFACE_CANVAS, 0.98), Color(BORDER_NEUTRAL, 0.86), 4, 3.0, 1.0))
+	input.add_theme_stylebox_override("focus", _make_stylebox(Color(SURFACE_RAISED, 0.98), DROPDOWN_FOCUS_BORDER, 4, 3.0, 1.0))
 	input.focus_entered.connect(_remember_live_ev_input_focus.bind(stat_key))
 	input.text_changed.connect(_on_live_ev_text_changed.bind(stat_key))
 	live_ev_inputs[stat_key] = input
@@ -2347,7 +2353,7 @@ func _add_showdex_condition_controls(assumptions: Dictionary) -> void:
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.add_theme_stylebox_override(
 		"panel",
-		_make_stylebox(Color(0.010, 0.021, 0.036, 0.92), Color(CHIP_BORDER, 0.48), 7, 6.0, 4.0)
+		_make_stylebox(Color(SURFACE_PANEL, 0.92), Color(BORDER_NEUTRAL, 0.72), 7, 6.0, 4.0)
 	)
 	content.add_child(panel)
 	var box := VBoxContainer.new()
@@ -2368,14 +2374,14 @@ func _get_public_opponent_boosts() -> Dictionary:
 
 func _apply_boost_stage_style(selector: OptionButton, stage: int, is_public: bool, is_edited: bool) -> void:
 	var font_color := TEXT_SECONDARY
-	var background := Color(0.018, 0.029, 0.047, 0.84)
+	var background := Color(SURFACE_RAISED, 0.84)
 	if stage > 0:
 		font_color = STAGE_POSITIVE
 		background = Color(0.035, 0.12, 0.075, 0.88)
 	elif stage < 0:
 		font_color = STAGE_NEGATIVE
 		background = Color(0.14, 0.035, 0.045, 0.88)
-	var border := Color(0.18, 0.31, 0.46, 0.68)
+	var border := Color(BORDER_NEUTRAL, 0.86)
 	if is_public and not is_edited and stage != 0:
 		border = Color(CONFIRMED_ACCENT, 0.88)
 	elif is_edited:
@@ -2534,7 +2540,7 @@ func _add_advanced_scenario_controls(parent: VBoxContainer, assumptions: Diction
 	condition_surface.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	condition_surface.add_theme_stylebox_override(
 		"panel",
-		_make_stylebox(Color(0.012, 0.027, 0.047, 0.82), Color(CHIP_BORDER, 0.58), 7, 9.0, 7.0)
+		_make_stylebox(Color(SURFACE_RAISED, 0.86), Color(BORDER_NEUTRAL, 0.78), 7, 9.0, 7.0)
 	)
 	condition_surface.add_child(editor)
 	parent.add_child(condition_surface)
@@ -2988,7 +2994,7 @@ func _make_live_ev_input(stat_key: String, value: int) -> Control:
 	panel.custom_minimum_size = Vector2(0, 40)
 	panel.add_theme_stylebox_override(
 		"panel",
-		_make_stylebox(Color(0.012, 0.024, 0.040, 0.94), Color(0.13, 0.25, 0.38, 0.72), 5, 5.0, 4.0)
+		_make_stylebox(Color(SURFACE_PANEL, 0.96), Color(BORDER_NEUTRAL, 0.82), 5, 5.0, 4.0)
 	)
 	var box := VBoxContainer.new()
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -3016,8 +3022,8 @@ func _make_live_ev_input(stat_key: String, value: int) -> Control:
 	input.add_theme_font_size_override("font_size", 11)
 	input.add_theme_color_override("font_color", TEXT_PRIMARY)
 	input.add_theme_color_override("font_placeholder_color", TEXT_MUTED)
-	input.add_theme_stylebox_override("normal", _make_stylebox(Color(0.006, 0.014, 0.025, 0.98), Color(0.15, 0.30, 0.45, 0.86), 4, 5.0, 2.0))
-	input.add_theme_stylebox_override("focus", _make_stylebox(Color(0.028, 0.065, 0.10, 0.98), DROPDOWN_FOCUS_BORDER, 4, 5.0, 2.0))
+	input.add_theme_stylebox_override("normal", _make_stylebox(Color(SURFACE_CANVAS, 0.98), Color(BORDER_NEUTRAL, 0.90), 4, 5.0, 2.0))
+	input.add_theme_stylebox_override("focus", _make_stylebox(Color(SURFACE_RAISED, 0.98), DROPDOWN_FOCUS_BORDER, 4, 5.0, 2.0))
 	input.focus_entered.connect(_remember_live_ev_input_focus.bind(stat_key))
 	input.text_changed.connect(_on_live_ev_text_changed.bind(stat_key))
 	live_ev_inputs[stat_key] = input
@@ -3033,8 +3039,8 @@ func _make_live_ev_input(stat_key: String, value: int) -> Control:
 	bar.value = clampi(value, 0, 252)
 	bar.show_percentage = false
 	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	bar.add_theme_stylebox_override("background", _make_stylebox(Color(0.006, 0.014, 0.024, 0.98), Color(0.08, 0.17, 0.25, 0.72), 3, 0.0, 0.0))
-	bar.add_theme_stylebox_override("fill", _make_stylebox(Color(0.22, 0.56, 0.78, 0.96), Color(0.32, 0.70, 0.92, 0.98), 3, 0.0, 0.0))
+	bar.add_theme_stylebox_override("background", _make_stylebox(Color(SURFACE_CANVAS, 0.98), Color(BORDER_NEUTRAL, 0.72), 3, 0.0, 0.0))
+	bar.add_theme_stylebox_override("fill", _make_stylebox(Color(INTERACTION_ACCENT, 0.76), INTERACTION_ACCENT, 3, 0.0, 0.0))
 	live_ev_bars[stat_key] = bar
 	box.add_child(bar)
 	return panel
@@ -3050,9 +3056,9 @@ func _make_ev_quick_button(text: String, tooltip: String, is_maximum: bool, pres
 	button.clip_text = true
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	button.add_theme_font_size_override("font_size", 9)
-	var font_color := Color(0.54, 0.68, 0.80, 1.0)
-	var background := Color(0.025, 0.052, 0.078, 0.98)
-	var border := Color(0.20, 0.40, 0.56, 0.88)
+	var font_color := LABEL_NEUTRAL
+	var background := Color(SURFACE_RAISED, 0.98)
+	var border := Color(BORDER_NEUTRAL, 0.92)
 	if is_maximum:
 		font_color = Color(0.66, 0.95, 0.74, 1.0)
 		background = Color(0.035, 0.12, 0.075, 0.96)
@@ -3083,15 +3089,15 @@ func _make_assumption_reset_button() -> Button:
 	button.add_theme_color_override("font_pressed_color", TEXT_ACCENT)
 	button.add_theme_stylebox_override(
 		"normal",
-		_make_stylebox(Color(0.018, 0.029, 0.047, 0.58), Color(0.18, 0.29, 0.43, 0.46), 5, 6.0, 1.0)
+		_make_stylebox(Color(SURFACE_PANEL, 0.72), Color(BORDER_NEUTRAL, 0.58), 5, 6.0, 1.0)
 	)
 	button.add_theme_stylebox_override(
 		"hover",
-		_make_stylebox(Color(0.055, 0.086, 0.13, 0.98), Color(0.30, 0.48, 0.66, 0.92), 6, 8.0, 2.0)
+		_make_stylebox(Color(SURFACE_RAISED, 0.98), Color(INTERACTION_ACCENT, 0.72), 6, 8.0, 2.0)
 	)
 	button.add_theme_stylebox_override(
 		"pressed",
-		_make_stylebox(Color(0.075, 0.10, 0.14, 0.98), TEXT_ACCENT.darkened(0.12), 6, 8.0, 2.0)
+		_make_stylebox(TAB_ACTIVE_BG, INTERACTION_ACCENT, 6, 8.0, 2.0)
 	)
 	button.pressed.connect(_reset_live_assumptions)
 	return button
@@ -3340,7 +3346,7 @@ func _make_selector_suggestions_panel() -> PanelContainer:
 	panel.clip_contents = true
 	panel.add_theme_stylebox_override(
 		"panel",
-		_make_stylebox(Color(0.008, 0.019, 0.034, 0.99), Color(0.20, 0.43, 0.62, 0.88), 7, 6.0, 6.0)
+		_make_stylebox(Color(SURFACE_CANVAS, 0.99), Color(INTERACTION_ACCENT, 0.66), 7, 6.0, 6.0)
 	)
 	return panel
 
@@ -3360,7 +3366,7 @@ func _render_evs_assumption_editor(evs: Dictionary) -> void:
 	editor_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	editor_panel.add_theme_stylebox_override(
 		"panel",
-		_make_stylebox(Color(0.008, 0.019, 0.034, 0.98), Color(0.20, 0.43, 0.62, 0.82), 7, 7.0, 6.0)
+		_make_stylebox(Color(SURFACE_PANEL, 0.98), Color(BORDER_NEUTRAL, 0.88), 7, 7.0, 6.0)
 	)
 	catalog_suggestions_box.add_child(editor_panel)
 	var editor := VBoxContainer.new()
@@ -3512,8 +3518,8 @@ func _update_live_ev_total() -> void:
 	live_ev_total_label.add_theme_color_override("font_color", TEXT_ERROR if is_over_limit else (STAGE_POSITIVE if is_complete else TEXT_ACCENT))
 	if live_ev_total_bar != null:
 		live_ev_total_bar.value = mini(total, EV_TOTAL_LIMIT)
-		var fill_color := TEXT_ERROR if is_over_limit else (STAGE_POSITIVE if is_complete else Color(0.22, 0.56, 0.78, 0.96))
-		live_ev_total_bar.add_theme_stylebox_override("background", _make_stylebox(Color(0.006, 0.014, 0.024, 0.98), Color(0.08, 0.17, 0.25, 0.72), 3, 0.0, 0.0))
+		var fill_color := TEXT_ERROR if is_over_limit else (STAGE_POSITIVE if is_complete else Color(INTERACTION_ACCENT, 0.78))
+		live_ev_total_bar.add_theme_stylebox_override("background", _make_stylebox(Color(SURFACE_CANVAS, 0.98), Color(BORDER_NEUTRAL, 0.72), 3, 0.0, 0.0))
 		live_ev_total_bar.add_theme_stylebox_override("fill", _make_stylebox(fill_color, fill_color.lightened(0.10), 3, 0.0, 0.0))
 
 
@@ -3581,14 +3587,14 @@ func _make_selector_result_button(title: String, subtitle: String, pressed_callb
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	button.tooltip_text = title if subtitle == "" else "%s · %s" % [title, subtitle]
-	var normal_bg := Color(0.018, 0.029, 0.047, 0.98)
-	var normal_border := Color(0.12, 0.25, 0.38, 0.78)
+	var normal_bg := Color(SURFACE_PANEL, 0.98)
+	var normal_border := Color(BORDER_NEUTRAL, 0.86)
 	if selected:
-		normal_bg = Color(0.045, 0.11, 0.17, 0.99)
-		normal_border = Color(0.31, 0.67, 0.86, 0.94)
+		normal_bg = TAB_ACTIVE_BG
+		normal_border = Color(INTERACTION_ACCENT, 0.94)
 	button.add_theme_stylebox_override("normal", _make_stylebox(normal_bg, normal_border, 5, 7.0, 3.0))
-	button.add_theme_stylebox_override("hover", _make_stylebox(Color(0.035, 0.105, 0.164, 0.99), DROPDOWN_HOVER_BORDER, 5, 7.0, 3.0))
-	button.add_theme_stylebox_override("pressed", _make_stylebox(Color(0.045, 0.137, 0.211, 1.0), TEXT_ACCENT, 5, 7.0, 3.0))
+	button.add_theme_stylebox_override("hover", _make_stylebox(DROPDOWN_HOVER_BG, DROPDOWN_HOVER_BORDER, 5, 7.0, 3.0))
+	button.add_theme_stylebox_override("pressed", _make_stylebox(DROPDOWN_PRESSED_BG, INTERACTION_ACCENT, 5, 7.0, 3.0))
 	button.add_theme_stylebox_override("focus", _make_stylebox(normal_bg, DROPDOWN_FOCUS_BORDER, 5, 7.0, 3.0))
 
 	var row := HBoxContainer.new()
@@ -4040,7 +4046,7 @@ func _apply_calcdex_dropdown_style(selector: OptionButton, minimum_height: float
 	)
 	selector.add_theme_stylebox_override(
 		"disabled",
-		_make_dropdown_button_style(Color(0.014, 0.024, 0.039, 0.76), Color(0.12, 0.19, 0.27, 0.6))
+		_make_dropdown_button_style(Color(SURFACE_PANEL, 0.76), Color(BORDER_NEUTRAL, 0.60))
 	)
 
 	var popup := selector.get_popup()

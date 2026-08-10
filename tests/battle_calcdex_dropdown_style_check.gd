@@ -53,14 +53,23 @@ func _run() -> void:
 	content.add_child(positive_stage_selector)
 	panel._apply_calcdex_dropdown_style(positive_stage_selector, 28.0, 10)
 	panel._apply_boost_stage_style(positive_stage_selector, 1, true, false)
-	if not positive_stage_selector.get_theme_color("font_color").is_equal_approx(Color(0.36, 0.86, 0.53, 1.0)):
+	if not positive_stage_selector.get_theme_color("font_color").is_equal_approx(panel.STAGE_POSITIVE):
 		_fail("Positive public stat stages lack their semantic color")
 	var negative_stage_selector := OptionButton.new()
 	content.add_child(negative_stage_selector)
 	panel._apply_calcdex_dropdown_style(negative_stage_selector, 28.0, 10)
 	panel._apply_boost_stage_style(negative_stage_selector, -1, false, true)
-	if not negative_stage_selector.get_theme_color("font_color").is_equal_approx(Color(0.96, 0.39, 0.39, 1.0)):
+	if not negative_stage_selector.get_theme_color("font_color").is_equal_approx(panel.STAGE_NEGATIVE):
 		_fail("Negative edited stat stages lack their semantic color")
+	if panel.ITEM_LABEL_ACCENT != panel.ABILITY_LABEL_ACCENT \
+			or panel.ITEM_LABEL_ACCENT != panel.NATURE_LABEL_ACCENT:
+		_fail("Default set-field labels must share one quiet neutral color")
+	if panel.TEXT_ACCENT.is_equal_approx(panel.CONDITION_OWN_ACCENT) \
+			or panel.TEXT_ACCENT.is_equal_approx(panel.CONDITION_OPPONENT_ACCENT):
+		_fail("Interaction states must not reuse either team-identity color")
+	if panel.SURFACE_CANVAS.get_luminance() >= panel.SURFACE_PANEL.get_luminance() \
+			or panel.SURFACE_PANEL.get_luminance() >= panel.SURFACE_RAISED.get_luminance():
+		_fail("Calcdex surfaces must retain a visible canvas-panel-raised hierarchy")
 
 	var suggestions_panel := panel._make_selector_suggestions_panel()
 	content.add_child(suggestions_panel)

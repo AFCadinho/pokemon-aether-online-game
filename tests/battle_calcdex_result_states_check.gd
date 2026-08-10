@@ -239,9 +239,9 @@ func _run() -> void:
 		quit(1)
 		return
 	var top_damage_style := panel._make_result_row_style("2HKO", 1, "Water", false, true)
-	if not top_damage_style.border_color.is_equal_approx(panel.TOP_DAMAGE_ACCENT) \
+	if not top_damage_style.border_color.is_equal_approx(Color(0.20, 0.45, 0.80, 1.0)) \
 			or top_damage_style.bg_color.is_equal_approx(water_row_style.bg_color):
-		push_error("The highest-damage move row must use the dedicated gold visual state")
+		push_error("The highest-damage move row must keep its type rail and use a raised neutral surface")
 		quit(1)
 		return
 	var inline_move_input: LineEdit = panel._make_result_move_selector_button(0, "Thunderbolt")

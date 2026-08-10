@@ -145,9 +145,13 @@ func _run() -> void:
 			or panel._get_assumption_visual_palette("default")["border"] == panel._get_assumption_visual_palette("confirmed")["border"]:
 		_fail("Default, manual, and confirmed setup fields must have distinct semantic colors")
 		return
-	if panel._get_assumption_visual_palette("default", "item")["caption"] == panel._get_assumption_visual_palette("default", "ability")["caption"] \
-			or panel._get_assumption_visual_palette("default", "nature")["caption"] == panel._get_assumption_visual_palette("default", "evs")["caption"]:
-		_fail("Default setup labels must retain distinct category colors")
+	var default_item_caption: Color = panel._get_assumption_visual_palette("default", "item")["caption"]
+	if not default_item_caption.is_equal_approx(panel._get_assumption_visual_palette("default", "ability")["caption"]) \
+			or not default_item_caption.is_equal_approx(panel._get_assumption_visual_palette("default", "nature")["caption"]):
+		_fail("Item, ability, and nature labels must share one quiet neutral color")
+		return
+	if default_item_caption.is_equal_approx(panel._get_assumption_visual_palette("default", "evs")["caption"]):
+		_fail("The EV editor may retain its distinct section accent")
 		return
 	panel.show_response(response)
 	await process_frame

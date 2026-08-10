@@ -195,7 +195,7 @@ func _check_scene_structure() -> void:
 	_check_contains(pokemon_info_hud_source, "[node name=\"ExpBar\" type=\"ProgressBar\" parent=\"MarginContainer/VBoxContainer/ExpRow\"", "battle EXP bar is aligned beneath the HP bar")
 	_check_contains(pokemon_info_hud_source, "custom_minimum_size = Vector2(0, 7)", "battle EXP bar remains visually subordinate to HP")
 	_check_contains(battle_script_source, "func _refresh_wild_opponent_owned_icon", "wild battles resolve OT Pokédex ownership")
-	_check_contains(battle_script_source, "CALC_DRAWER_FIELD_WIDTH_RATIO := 0.60", "Calc drawer uses the available player-side field width")
+	_check_contains(battle_script_source, "CALC_DRAWER_FIELD_WIDTH_RATIO := 0.66", "Calc drawer uses the available player-side field width")
 	_check_contains(battle_script_source, "size = target_size", "collapsing the battle log resizes the actual free-positioned battle window")
 	_check_contains(battle_script_source, "previous_center - size * 0.5", "battle log resizing preserves the battle window center")
 	_check_contains(battle_script_source, "battle_drawer_layer.get_global_transform().affine_inverse()", "Calc drawer tracks the battlefield instead of the battle log")
