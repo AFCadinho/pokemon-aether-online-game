@@ -1355,7 +1355,7 @@ func _add_profile_summary(
 
 
 func _make_matchup_side(
-	caption: String,
+	_caption: String,
 	pokemon_name: String,
 	relation: String,
 	details: String,
@@ -1395,9 +1395,6 @@ func _make_matchup_side(
 	side.clip_contents = true
 	side.add_theme_constant_override("separation", 2)
 	card_row.add_child(side)
-	var caption_label := _make_label(caption.to_upper(), 9, Color(relation_accent, 0.92))
-	caption_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	side.add_child(caption_label)
 	if knowledge_snapshot.is_empty():
 		var name_label := _make_label(pokemon_name, 15, TEXT_PRIMARY)
 		name_label.tooltip_text = pokemon_name
