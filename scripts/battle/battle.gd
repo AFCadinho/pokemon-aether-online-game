@@ -5316,6 +5316,8 @@ func _remember_battle_modifier_event(event: Dictionary) -> void:
 			_apply_ability_stat_modifier_event(event)
 		"statChange":
 			_apply_stat_stage_event(event)
+		"statStage":
+			_apply_stat_stage_operation_event(event)
 		"item":
 			_apply_item_modifier_event(event)
 
@@ -5361,6 +5363,87 @@ func _apply_stat_stage_event(event: Dictionary) -> void:
 		stat_stages_by_ident[ident_key] = stages
 
 	_update_stat_stage_panels()
+
+func _apply_stat_stage_operation_event(event: Dictionary) -> void:
+	var operation := str(event.get("operation", "")).strip_edges()
+	if operation == "clearAll":
+		stat_stages_by_ident.clear()
+		_update_stat_stage_panels()
+		return
+
+	var target_key := _normalize_battle_ident(str(event.get("target", "")))
+	if target_key == "":
+		return
+
+	var target_stages := _get_stat_stages_for_ident(target_key)
+	match operation:
+		"clear":
+			stat_stages_by_ident.erase(target_key)
+		"clearPositive":
+			for stat_key: Variant in target_stages.keys():
+				if int(target_stages.get(stat_key, 0)) > 0:
+					target_stages.erase(stat_key)
+			_store_stat_stages_for_ident(target_key, target_stages)
+		"set":
+			var stat_key := _normalize_stat_stage_key(str(event.get("stat", "")))
+			if stat_key == "":
+				return
+			var amount := clampi(int(event.get("amount", 0)), -6, 6)
+			if amount == 0:
+				target_stages.erase(stat_key)
+			else:
+				target_stages[stat_key] = amount
+			_store_stat_stages_for_ident(target_key, target_stages)
+		"invert":
+			for stat_key: Variant in target_stages.keys():
+				var inverted := -int(target_stages.get(stat_key, 0))
+				if inverted == 0:
+					target_stages.erase(stat_key)
+				else:
+					target_stages[stat_key] = inverted
+			_store_stat_stages_for_ident(target_key, target_stages)
+		"swap":
+			var source_key := _normalize_battle_ident(str(event.get("sourceTarget", "")))
+			if source_key == "":
+				return
+			var source_stages := _get_stat_stages_for_ident(source_key)
+			var stats := _stat_stage_operation_stats(str(event.get("stats", "")))
+			for stat_key: String in stats:
+				var target_value := int(target_stages.get(stat_key, 0))
+				var source_value := int(source_stages.get(stat_key, 0))
+				if source_value == 0:
+					target_stages.erase(stat_key)
+				else:
+					target_stages[stat_key] = source_value
+				if target_value == 0:
+					source_stages.erase(stat_key)
+				else:
+					source_stages[stat_key] = target_value
+			_store_stat_stages_for_ident(target_key, target_stages)
+			_store_stat_stages_for_ident(source_key, source_stages)
+		_:
+			return
+	_update_stat_stage_panels()
+
+func _get_stat_stages_for_ident(ident_key: String) -> Dictionary:
+	var stages_value: Variant = stat_stages_by_ident.get(ident_key, {})
+	return (stages_value as Dictionary).duplicate() if stages_value is Dictionary else {}
+
+func _store_stat_stages_for_ident(ident_key: String, stages: Dictionary) -> void:
+	if stages.is_empty():
+		stat_stages_by_ident.erase(ident_key)
+	else:
+		stat_stages_by_ident[ident_key] = stages
+
+func _stat_stage_operation_stats(raw_stats: String) -> Array[String]:
+	var stats: Array[String] = []
+	for raw_stat: String in raw_stats.split(","):
+		var stat_key := _normalize_stat_stage_key(raw_stat)
+		if stat_key != "" and not stats.has(stat_key):
+			stats.append(stat_key)
+	if stats.is_empty():
+		stats = ["atk", "def", "spa", "spd", "spe", "accuracy", "evasion"]
+	return stats
 
 func _clear_stat_stages_for_ident(ident: String) -> void:
 	var ident_key: String = _normalize_battle_ident(ident)
