@@ -3563,7 +3563,9 @@ func _make_field_side_condition_content(relation: String, accent_color: Color) -
 	hazard_label.clip_text = false
 	state_column.add_child(hazard_label)
 	var hazard_grid := GridContainer.new()
-	hazard_grid.columns = 2
+	# Keep hazard labels readable; the spikes selector needs room for its
+	# layer count instead of collapsing to a single clipped character.
+	hazard_grid.columns = 1
 	hazard_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	hazard_grid.add_theme_constant_override("h_separation", 6)
 	hazard_grid.add_theme_constant_override("v_separation", 6)
@@ -3623,6 +3625,7 @@ func _make_field_side_condition_button(relation: String, condition: Dictionary) 
 	var suffix := str(condition.get("suffix", ""))
 	var scenario_key := "%s%s" % [relation, suffix]
 	var public_active := _is_public_side_condition_active(relation, suffix)
+	var accent_color := CONDITION_OWN_ACCENT if relation == "own" else CONDITION_OPPONENT_ACCENT
 	var button := Button.new()
 	button.text = _t(str(condition.get("label_key", "")))
 	button.toggle_mode = true
@@ -3637,7 +3640,10 @@ func _make_field_side_condition_button(relation: String, condition: Dictionary) 
 	button.add_theme_color_override("font_disabled_color", STAGE_POSITIVE)
 	button.add_theme_stylebox_override("normal", _make_stylebox(CHIP_BG, CHIP_BORDER, 5, 6.0, 3.0))
 	button.add_theme_stylebox_override("hover", _make_stylebox(DROPDOWN_HOVER_BG, DROPDOWN_HOVER_BORDER, 5, 6.0, 3.0))
-	button.add_theme_stylebox_override("pressed", _make_stylebox(TAB_ACTIVE_BG, TEXT_ACCENT, 5, 6.0, 3.0))
+	button.add_theme_stylebox_override(
+		"pressed",
+		_make_stylebox(Color(accent_color, 0.22), Color(accent_color, 0.98), 5, 6.0, 3.0)
+	)
 	button.add_theme_stylebox_override("disabled", _make_stylebox(Color(0.025, 0.10, 0.065, 0.92), STAGE_POSITIVE.darkened(0.2), 5, 6.0, 3.0))
 	if public_active:
 		button.tooltip_text = _t("battle.calc.condition_confirmed_tooltip")
@@ -3675,7 +3681,16 @@ func _make_field_side_spikes_selector(relation: String) -> OptionButton:
 		selector.item_selected.connect(_on_field_side_spikes_selected.bind(selector, scenario_key))
 	_apply_calcdex_dropdown_style(selector, 30.0, 10)
 	if selector.disabled:
-		selector.add_theme_color_override("font_disabled_color", TEXT_SECONDARY)
+		selector.add_theme_color_override("font_disabled_color", STAGE_POSITIVE)
+	elif selected_layers > 0:
+		selector.add_theme_stylebox_override(
+			"normal",
+			_make_dropdown_button_style(Color(WARNING_ACCENT, 0.18), Color(WARNING_ACCENT, 0.92))
+		)
+		selector.add_theme_stylebox_override(
+			"hover",
+			_make_dropdown_button_style(Color(WARNING_ACCENT, 0.28), WARNING_ACCENT)
+		)
 	return selector
 
 
