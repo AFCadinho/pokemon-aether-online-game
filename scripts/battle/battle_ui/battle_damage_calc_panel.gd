@@ -431,13 +431,10 @@ func _render_your_damage_response(response: Dictionary) -> void:
 	var results: Array = _as_array(response.get("results", []))
 	if str(response.get("direction", "")) == "opponent-to-own":
 		_add_editable_opponent_move_results_table(results, defender)
-		if not results.is_empty():
-			_add_result_footnotes(response, results)
 	elif results.is_empty():
 		_add_status(_fallback_text(str(response.get("emptyReason", "")), _t("battle.calc.no_results")), TEXT_SECONDARY)
 	else:
 		_add_move_results_table(results, defender)
-		_add_result_footnotes(response, results)
 
 	render_target = inspector
 	_add_inspector_tabs()
