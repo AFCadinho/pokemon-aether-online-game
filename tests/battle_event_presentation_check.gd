@@ -22,6 +22,7 @@ func _init() -> void:
 	_check_damage_after_hazard_logs_mixed_visible_and_exact_conditions()
 	_check_booster_energy_quark_drive_messages()
 	_check_air_balloon_messages()
+	_check_consumable_item_activation_animations()
 	_check_future_sight_lifecycle_messages()
 	_check_solar_beam_prepare_uses_charge_animation()
 	_check_electro_shot_prepare_uses_charge_animation()
@@ -371,6 +372,39 @@ func _check_air_balloon_messages() -> void:
 	_check_equal(str(reveal_result.get("log_message", "")), "Wailord floats in the air with its Air Balloon!", "Air Balloon reveal logs")
 	_check_equal(str(reveal_result.get("battle_message", "")), "Wailord floats in the air with its Air Balloon!", "Air Balloon reveal uses battle text")
 	_check_equal(str(popped_result.get("battle_message", "")), "Wailord's Air Balloon popped!", "Air Balloon end uses battle text")
+
+
+func _check_consumable_item_activation_animations() -> void:
+	var presentation = _make_presentation()
+	var cases := [
+		[{"type": "item", "target": "p1a: Ferrothorn", "item": "Eject Button", "state": "end"}, "use_item", "Eject Button uses the generic consumable animation"],
+		[{"type": "item", "target": "p2a: Alakazam", "item": "Focus Sash", "state": "end"}, "use_item", "Focus Sash uses the generic consumable animation"],
+		[{"type": "item", "target": "p1a: Tapu Fini", "item": "Sitrus Berry", "state": "end"}, "eat_berry", "Sitrus Berry uses the berry animation"],
+	]
+	for test_case: Array in cases:
+		var event_data: Dictionary = test_case[0] as Dictionary
+		var result: Dictionary = presentation.build(event_data)
+		_check_equal(str(result.get("effect_animation_key", "")), str(test_case[1]), str(test_case[2]))
+		_check_equal(str(result.get("effect_animation_target_ident", "")), str(event_data.get("target", "")), "%s targets its holder" % str(test_case[2]))
+		var preload_keys: Dictionary = presentation.get_animation_preload_keys_for_event(event_data)
+		_check_equal((preload_keys.get("effect_keys", []) as Array).has(str(test_case[1])), true, "%s is prewarmed before presentation" % str(test_case[2]))
+
+	var knocked_off := presentation.build({
+		"type": "item",
+		"target": "p1a: Ferrothorn",
+		"item": "Eject Button",
+		"state": "end",
+		"source": "move: Knock Off",
+	})
+	_check_equal(str(knocked_off.get("effect_animation_key", "")), "", "Knock Off does not look like an item activation")
+
+	var balloon := presentation.build({
+		"type": "item",
+		"target": "p2a: Wailord",
+		"item": "Air Balloon",
+		"state": "end",
+	})
+	_check_equal(str(balloon.get("effect_animation_key", "")), "", "Air Balloon pop keeps its dedicated presentation")
 
 
 func _check_future_sight_lifecycle_messages() -> void:

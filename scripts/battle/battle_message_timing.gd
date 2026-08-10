@@ -14,6 +14,7 @@ const EFFECT_MESSAGE_HOLD_SECONDS := 0.32
 const HEAL_MESSAGE_HOLD_SECONDS := 0.35
 const MEGA_MESSAGE_HOLD_SECONDS := 0.60
 const AIR_BALLOON_MESSAGE_HOLD_SECONDS := 0.70
+const ITEM_MESSAGE_HOLD_SECONDS := 0.55
 const RESIDUAL_MESSAGE_HOLD_SECONDS := 0.18
 
 
@@ -41,6 +42,10 @@ func get_battle_message_hold_seconds(event: Dictionary, battle_message: String) 
 		and _normalize_item_key(str(event.get("item", ""))) == "airballoon"
 	):
 		return AIR_BALLOON_MESSAGE_HOLD_SECONDS
+	if _is_consumable_item_activation(event):
+		# Consumable held-item activations have a dedicated effect animation.
+		# Keep their battle text readable too when animations are disabled.
+		return ITEM_MESSAGE_HOLD_SECONDS
 
 	match str(event.get("type", "")):
 		"move":
@@ -61,6 +66,16 @@ func get_battle_message_hold_seconds(event: Dictionary, battle_message: String) 
 
 func _normalize_item_key(item_name: String) -> String:
 	return item_name.strip_edges().to_lower().replace(" ", "").replace("_", "").replace("-", "")
+
+
+func _is_consumable_item_activation(event: Dictionary) -> bool:
+	if str(event.get("type", "")) != "item" or str(event.get("state", "")).strip_edges().to_lower() != "end":
+		return false
+	if _normalize_item_key(str(event.get("item", ""))) == "airballoon":
+		return false
+
+	var source_key := _normalize_item_key(str(event.get("source", "")))
+	return not source_key.begins_with("move")
 
 
 func _is_low_impact_residual_event(event: Dictionary) -> bool:

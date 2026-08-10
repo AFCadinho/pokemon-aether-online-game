@@ -57,6 +57,10 @@ func get_animation_preload_keys_for_event(event_data: Dictionary) -> Dictionary:
 			var field_effect_key: String = _get_field_effect_animation_key(event_data)
 			if field_effect_key != "":
 				effect_keys.append(field_effect_key)
+		"item":
+			var item_effect_key: String = _get_consumable_item_activation_animation_key(event_data)
+			if item_effect_key != "":
+				effect_keys.append(item_effect_key)
 		"heal":
 			if not bool(event_data.get("maxHpIncreaseSync", false)) and not bool(event_data.get("silent", false)):
 				var heal_effect_key: String = _get_heal_effect_animation_key(event_data)
@@ -240,6 +244,8 @@ func build(event_data: Dictionary) -> Dictionary:
 			recent_move_event = false
 			var actor := _format_actor(str(event_data.get("target", "")))
 			var item_name := str(event_data.get("item", "")).strip_edges()
+			presentation["effect_animation_key"] = _get_consumable_item_activation_animation_key(event_data)
+			presentation["effect_animation_target_ident"] = str(event_data.get("target", ""))
 			if actor != "" and item_name != "":
 				presentation["log_message"] = event_text_formatter.format_item_event(
 					event_data,
@@ -531,6 +537,29 @@ func _get_field_effect_animation_key(event: Dictionary) -> String:
 			return "grassy_terrain_start"
 
 	return ""
+
+
+func _get_consumable_item_activation_animation_key(event: Dictionary) -> String:
+	if str(event.get("state", "")).strip_edges().to_lower() != "end":
+		return ""
+	if _is_knock_off_item_end_event(event):
+		return ""
+
+	var item_key := _normalize_item_key(str(event.get("item", "")))
+	# Air Balloon has its own pop message. It is removed rather than activated,
+	# so it must not look like a consumable held-item trigger.
+	if item_key == "" or item_key == "airballoon":
+		return ""
+
+	# A move such as Fling, Bug Bite, or Pluck consumes/removes an item as part
+	# of that move's presentation; do not play a second passive-item animation.
+	var source_key := _normalize_item_key(str(event.get("source", "")))
+	if source_key.begins_with("move"):
+		return ""
+
+	if item_key.ends_with("berry"):
+		return "eat_berry"
+	return "use_item"
 
 
 func _get_heal_effect_animation_key(event: Dictionary) -> String:
