@@ -137,6 +137,7 @@ var pvp_pending_presentation_fence: Dictionary = {}
 var pvp_gateway_epoch := ""
 var pvp_last_connection_server_seq := 0
 var pvp_reconnect_grace_deadline_by_side: Dictionary = {}
+var pvp_forced_switch_diagnostic_keys: Dictionary = {}
 var pvp_presentation_actionable_local_msec := 0
 var pvp_presentation_schedule_token := ""
 var pvp_presentation_acknowledgements_authoritative := false
@@ -6446,6 +6447,7 @@ func _prepare_battle_setup(
 	pvp_gateway_epoch = ""
 	pvp_last_connection_server_seq = 0
 	pvp_reconnect_grace_deadline_by_side.clear()
+	pvp_forced_switch_diagnostic_keys.clear()
 	pvp_presentation_actionable_local_msec = 0
 	pvp_presentation_schedule_token = ""
 	pvp_presentation_acknowledgements_authoritative = false
@@ -9957,10 +9959,15 @@ func _on_party_grid_party_selected(slot: int) -> void:
 	if team_preview_lead_selection_active:
 		return
 
+	var local_force_switch := _is_pvp_battle() and _local_player_needs_force_switch_ui()
 	if battle_input_locked:
+		if local_force_switch:
+			_report_pvp_forced_switch_selection_blocked("input_locked")
 		return
 
 	if _is_pvp_battle() and not _can_submit_pvp_switch_choice():
+		if local_force_switch:
+			_report_pvp_forced_switch_selection_blocked("choice_not_actionable")
 		if _opponent_player_needs_force_switch_ui():
 			_show_pvp_opponent_force_switch_wait()
 		return
@@ -9968,6 +9975,8 @@ func _on_party_grid_party_selected(slot: int) -> void:
 	var selected_pokemon_data := _get_party_grid_selected_pokemon_data(slot)
 	var submit_slot := _get_canonical_switch_submit_slot(slot, selected_pokemon_data)
 	if _is_pvp_battle() and submit_slot <= 0:
+		if local_force_switch:
+			_report_pvp_forced_switch_selection_blocked("canonical_slot_unresolved")
 		current_action_panel.set_message(_t("battle.error.verify_team_slot"))
 		push_warning(
 			"Blocked PvP switch with unresolved canonical party slot visualSlot=%d selected=%s" % [
@@ -9977,6 +9986,8 @@ func _on_party_grid_party_selected(slot: int) -> void:
 		)
 		return
 	if not _can_switch_to_selected_pokemon(slot, selected_pokemon_data):
+		if local_force_switch:
+			_report_pvp_forced_switch_selection_blocked("switch_ineligible")
 		return
 
 	var pvp_switch_context := {
@@ -10073,6 +10084,7 @@ func _show_force_switch_if_needed() -> bool:
 			"Blocked PvP force-switch open",
 			"source=_show_force_switch_if_needed phase=%s next=%s expected=awaiting_force_switch" % [pvp_last_phase, pvp_last_next_phase]
 		)
+		_report_pvp_forced_switch_selection_blocked("phase_not_released")
 		_set_battle_input_locked(true)
 		return false
 
@@ -10092,6 +10104,31 @@ func _can_open_pvp_local_force_switch_ui() -> bool:
 	if pvp_last_phase == "":
 		return true
 	return pvp_last_phase == "rendering_events" and pvp_last_next_phase == "awaiting_force_switch"
+
+
+func _report_pvp_forced_switch_selection_blocked(selection_gate: String) -> void:
+	if not _is_pvp_battle() or not _local_player_needs_force_switch_ui():
+		return
+	var local_player_id := _get_local_state_player_id()
+	var decision := battle_state.get_active_decision(local_player_id)
+	var decision_id := str(decision.get("decisionId", "")).strip_edges()
+	var decision_generation := _get_int_from_variant(decision.get("decisionGeneration", 0), 0)
+	var diagnostic_key := "%s:%d:%s" % [decision_id, decision_generation, selection_gate]
+	if pvp_forced_switch_diagnostic_keys.has(diagnostic_key):
+		return
+	pvp_forced_switch_diagnostic_keys[diagnostic_key] = true
+	PvpBattleRealtimeService.report_diagnostic("pvp.forced_switch_selection_blocked", {
+		"decisionId": decision_id,
+		"decisionGeneration": max(decision_generation, 0),
+		"selectionGate": selection_gate,
+		"displayedPhase": pvp_last_phase if pvp_last_phase != "" else "unknown",
+		"serverSeq": max(pvp_last_applied_server_seq, 0),
+		"phaseSeq": max(pvp_last_phase_update_server_seq, 0),
+		"lastRenderedSeq": max(pvp_event_queue.last_rendered_seq, 0),
+		"inputLocked": battle_input_locked,
+		"pendingAction": pvp_prechoice_buffer.has_pending(),
+		"forceSwitchRequired": true,
+	})
 
 func _clear_force_switch_request_for_player(player_id: String) -> void:
 	var request := battle_state.get_player_request(player_id)
