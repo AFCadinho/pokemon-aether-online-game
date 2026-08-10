@@ -2286,7 +2286,8 @@ func _update_calc_drawer_layout() -> void:
 	if not is_instance_valid(calc_drawer) or not is_instance_valid(battle_frame):
 		return
 	var frame_rect: Rect2 = battle_frame.get_global_rect()
-	var local_top_left: Vector2 = battle_drawer_layer.to_local(frame_rect.position)
+	var drawer_layer_inverse: Transform2D = battle_drawer_layer.get_global_transform().affine_inverse()
+	var local_top_left: Vector2 = drawer_layer_inverse * frame_rect.position
 	# Use the frame's rendered size here. Converting both corners through the
 	# drawer transform expands the width when the battle stage is scaled to fill.
 	var frame_size := frame_rect.size
@@ -2297,7 +2298,7 @@ func _update_calc_drawer_layout() -> void:
 		maxf(0.0, frame_size.x - CALC_DRAWER_OPPONENT_RAIL_RESERVE)
 	)
 	if is_instance_valid(opponent_stage_party_rail):
-		var opponent_rail_left: Vector2 = battle_drawer_layer.to_local(opponent_stage_party_rail.get_global_rect().position)
+		var opponent_rail_left: Vector2 = drawer_layer_inverse * opponent_stage_party_rail.get_global_rect().position
 		var opponent_safe_width: float = opponent_rail_left.x - drawer_position.x - CALC_DRAWER_OPPONENT_RAIL_CLEARANCE
 		if opponent_safe_width > 0.0:
 			drawer_width = minf(drawer_width, opponent_safe_width)

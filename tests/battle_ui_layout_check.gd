@@ -201,7 +201,7 @@ func _check_scene_structure() -> void:
 	_check_contains(battle_script_source, "CALC_DRAWER_OPPONENT_RAIL_RESERVE := 78.0", "Calc drawer reserves a stable opponent preview strip during stage layout")
 	_check_contains(battle_script_source, "size = target_size", "collapsing the battle log resizes the actual free-positioned battle window")
 	_check_contains(battle_script_source, "previous_center - size * 0.5", "battle log resizing preserves the battle window center")
-	_check_contains(battle_script_source, "battle_drawer_layer.to_local(frame_rect.position)", "Calc drawer tracks the battlefield instead of the battle log")
+	_check_contains(battle_script_source, "battle_drawer_layer.get_global_transform().affine_inverse()", "Calc drawer tracks the battlefield instead of the battle log")
 	_check_contains(battle_script_source, "var frame_size := frame_rect.size", "Calc drawer uses the rendered battlefield width")
 	_check_contains(battle_script_source, "opponent_stage_party_rail.get_global_rect().position", "Calc drawer measures the hoverable opponent preview rail boundary")
 	_check_contains(battle_script_source, "if not calcdex_active and hover_state.should_poll_sprite_hover()", "Calcdex suppresses active battlefield sprite hover polling")
