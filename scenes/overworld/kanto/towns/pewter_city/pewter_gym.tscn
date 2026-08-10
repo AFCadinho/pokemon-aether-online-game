@@ -14,9 +14,14 @@
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="12_dialogue"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="12_wgakp"]
 [ext_resource type="SpriteFrames" uid="uid://bxh5nxs12bywr" path="res://assets/npcs/gym_guide_frames.tres" id="13_gym_guide"]
+[ext_resource type="Texture2D" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_102.png" id="14_gym_guide_mugshot"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gym_exit"]
 size = Vector2(96, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gym_guide_mugshot"]
+atlas = ExtResource("14_gym_guide_mugshot")
+region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_64hg5"]
 texture = ExtResource("4_v7g22")
@@ -190,7 +195,7 @@ position = Vector2(592, 784)
 npc_id = "kanto_pewter_city_gym_guide_rocky"
 npc_definition_id = ""
 display_name = "Gym Guide Rocky"
-portrait_id = "showdown_schoolboy"
+mugshot = SubResource("AtlasTexture_gym_guide_mugshot")
 npc_sprite_frames = ExtResource("13_gym_guide")
 
 [node name="GymLeaderBrock" parent="Entities/NPCs" unique_id=488623026 instance=ExtResource("7_gym_leader")]
