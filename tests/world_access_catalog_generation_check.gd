@@ -100,10 +100,28 @@ func _init() -> void:
 		"Pewter Gym is registered as an open scene-backed area"
 	)
 	_expect(
-		bool((areas.get("kanto_pewter_city_museum", {}) as Dictionary).get("accessOnly", false))
-			and bool((areas.get("kanto_pewter_city_house_1", {}) as Dictionary).get("accessOnly", false))
-			and bool((areas.get("kanto_pewter_city_house_2", {}) as Dictionary).get("accessOnly", false)),
-		"Future Pewter doors remain open access-only areas"
+		bool((areas.get("kanto_pewter_city_museum", {}) as Dictionary).get("accessOnly", false)),
+		"Future Pewter Museum remains an open access-only area"
+	)
+	_expect(
+		not bool((areas.get("kanto_pewter_city_house_1", {}) as Dictionary).get("accessOnly", false))
+			and (areas.get("kanto_pewter_city_house_1", {}) as Dictionary).get("scenePath", "")
+			== "res://scenes/overworld/kanto/towns/pewter_city/house1.tscn"
+			and (areas.get("kanto_pewter_city_house_1", {}) as Dictionary).get("defaultMode", "")
+			== "open"
+			and not bool((areas.get("kanto_pewter_city_house_2", {}) as Dictionary).get("accessOnly", false))
+			and (areas.get("kanto_pewter_city_house_2", {}) as Dictionary).get("scenePath", "")
+			== "res://scenes/overworld/kanto/towns/pewter_city/house2.tscn"
+			and (areas.get("kanto_pewter_city_house_2", {}) as Dictionary).get("defaultMode", "")
+			== "open",
+		"Pewter houses are registered as open scene-backed areas"
+	)
+	_expect(
+		transitions.has("kanto_pewter_city__to_house_1")
+			and transitions.has("kanto_pewter_city__to_house_2")
+			and transitions.has("kanto_pewter_city_house_1__to_pewter_city")
+			and transitions.has("kanto_pewter_city_house_2__to_pewter_city"),
+		"Pewter houses expose connected entrance and exit transitions"
 	)
 	_expect(
 		(areas.get("kanto_oaks_lab", {}) as Dictionary).get("locationGroupId", "")
