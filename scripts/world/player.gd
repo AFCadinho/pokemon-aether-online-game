@@ -641,6 +641,26 @@ func reset_movement_state() -> void:
 	if pokemon_follower != null:
 		pokemon_follower.reset_follow_position()
 
+
+func teleport_within_current_map(world_position: Vector2, facing_direction := Vector2.ZERO) -> void:
+	_finish_fishing_activity()
+	_finish_surf_activity()
+	is_moving = false
+	story_path_movement_active = false
+	global_position = _snap_world_position(world_position)
+	target_position = global_position
+	move_start_position = global_position
+	move_elapsed = 0.0
+	move_duration = _get_current_tile_move_duration()
+	_clear_input_buffer()
+	_clear_held_direction()
+	if facing_direction != Vector2.ZERO:
+		last_direction = facing_direction.normalized()
+	set_idle_frame()
+	refresh_map_layers()
+	if pokemon_follower != null:
+		pokemon_follower.reset_follow_position()
+
 func face_world_position(world_position: Vector2) -> void:
 	var delta := world_position - get_feet_position()
 	if delta == Vector2.ZERO:

@@ -19,6 +19,11 @@
 [ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="28_hiker"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="29_pokemon"]
 [ext_resource type="Script" uid="uid://rsoytxgppfk0" path="res://scripts/world/kanto/towns/catching_mentor_gideon.gd" id="30_gideon_quest"]
+[ext_resource type="Script" path="res://scripts/world/npcs/ev_training_gate_npc.gd" id="31_ev_training_gate"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/ace_trainer_m_frames.tres" id="32_ace_trainer_m"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/ace_trainer_f_frames.tres" id="33_ace_trainer_f"]
+[ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/expert-gen6.png" id="34_ev_expert_portrait"]
+[ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/acetrainerf-gen6.png" id="35_ev_assistant_portrait"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route1"]
 size = Vector2(208, 34)
@@ -472,6 +477,28 @@ position = Vector2(1552, 912)
 [node name="ViridianJail" type="Marker2D" parent="Spawns" unique_id=-1936226265]
 position = Vector2(1552, 1392)
 
+[node name="EVTrainingNorthOutside" type="Marker2D" parent="Spawns"]
+position = Vector2(432, 464)
+
+[node name="EVTrainingNorthInside" type="Marker2D" parent="Spawns"]
+position = Vector2(432, 528)
+
+[node name="EVTrainingSouthInside" type="Marker2D" parent="Spawns"]
+position = Vector2(432, 1008)
+
+[node name="EVTrainingSouthOutside" type="Marker2D" parent="Spawns"]
+position = Vector2(432, 1072)
+
+[node name="EncounterRegions" type="Node2D" parent="."]
+
+[node name="EVTrainingField" type="Node2D" parent="EncounterRegions"]
+metadata/pao_placeholder_type = "encounter_region"
+metadata/pao_resource_id = "viridian_ev_training_field"
+metadata/pao_encounter_area_id = "kanto_viridian_city_ev_training"
+metadata/pao_encounter_type = "grass"
+metadata/pao_encounter_chance = 0.18
+metadata/pao_region_rect = Rect2(352, 512, 96, 512)
+
 [node name="Exits" type="Node2D" parent="." unique_id=1188707532]
 
 [node name="ToRoute1" type="Area2D" parent="Exits" unique_id=1702409658]
@@ -607,6 +634,32 @@ preload_quest_markers = true
 pickpocket_enabled = true
 pickpocket_npc_type = "veteran"
 pickpocket_required_level = 20
+
+[node name="EVExpertMateo" parent="Entities/NPCs" instance=ExtResource("24_dialogue")]
+position = Vector2(1088, 576)
+script = ExtResource("31_ev_training_gate")
+npc_id = "kanto_viridian_city_ev_expert_mateo"
+npc_definition_id = "trainer_class_expert"
+display_name = "EV Expert Mateo"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("32_ace_trainer_m")
+mugshot = ExtResource("34_ev_expert_portrait")
+inside_marker_path = NodePath("../../../Spawns/EVTrainingNorthInside")
+outside_marker_path = NodePath("../../../Spawns/EVTrainingNorthOutside")
+inside_direction = Vector2(0, 1)
+
+[node name="EVAssistantRina" parent="Entities/NPCs" instance=ExtResource("24_dialogue")]
+position = Vector2(1088, 1120)
+script = ExtResource("31_ev_training_gate")
+npc_id = "kanto_viridian_city_ev_assistant_rina"
+npc_definition_id = "trainer_class_ace_trainer_f"
+display_name = "EV Assistant Rina"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("33_ace_trainer_f")
+mugshot = ExtResource("35_ev_assistant_portrait")
+inside_marker_path = NodePath("../../../Spawns/EVTrainingSouthInside")
+outside_marker_path = NodePath("../../../Spawns/EVTrainingSouthOutside")
+inside_direction = Vector2(0, -1)
 
 [node name="RouteGuards" type="Node2D" parent="Entities/NPCs" unique_id=286755846]
 
