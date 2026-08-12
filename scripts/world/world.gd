@@ -2177,7 +2177,7 @@ func _set_origin_text_value(origin: Dictionary, key: String, value: String) -> v
 	if cleaned != "":
 		origin[key] = cleaned
 
-func create_trainer_battle_response(trainer_id: String) -> Dictionary:
+func create_trainer_battle_response(trainer_id: String, is_rematch := false) -> Dictionary:
 	var battle_request := HTTPRequest.new()
 	add_child(battle_request)
 	var player_payload: Dictionary = BattleApiPayloads.from_player_save(PlayerSave)
@@ -2185,7 +2185,8 @@ func create_trainer_battle_response(trainer_id: String) -> Dictionary:
 	var response: Dictionary = await BattleApiClient.create_trainer_battle(
 		battle_request,
 		player_payload,
-		trainer_id
+		trainer_id,
+		is_rematch
 	)
 
 	battle_request.queue_free()
@@ -2385,7 +2386,10 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 	_lock_overworld_for_battle()
 	var transition_started_at_msec := _begin_trainer_battle_transition(battle_trainer_data)
 
-	var response: Dictionary = await create_trainer_battle_response(trainer_id)
+	var response: Dictionary = await create_trainer_battle_response(
+		trainer_id,
+		active_trainer_is_rematch
+	)
 	if not response.get("success", false):
 		push_warning("World.start_trainer_battle failed: %s" % str(response.get("error", "Unknown error")))
 		await _cancel_wild_encounter_transition()

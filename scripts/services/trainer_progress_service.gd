@@ -3,6 +3,7 @@ extends Node
 class_name TrainerProgressServiceNode
 
 const TRAINER_PROGRESS_ENDPOINT := "/game/trainers/%s/progress"
+const TRAINER_REMATCH_ENDPOINT := "/game/trainers/%s/rematch"
 const REQUEST_TIMEOUT_SECONDS := 5.0
 
 
@@ -35,7 +36,7 @@ func _request_progress(trainer_id: String, begin_daily_rematch: bool) -> Diction
 	var method := HTTPClient.METHOD_GET
 	var headers := GatewayApiConfig.get_accept_headers()
 	if begin_daily_rematch:
-		url += "/rematch"
+		url = base_url + TRAINER_REMATCH_ENDPOINT % normalized_id.uri_encode()
 		method = HTTPClient.METHOD_POST
 		headers = GatewayApiConfig.get_json_headers()
 	var error := request.request(url, headers, method, "{}" if begin_daily_rematch else "")

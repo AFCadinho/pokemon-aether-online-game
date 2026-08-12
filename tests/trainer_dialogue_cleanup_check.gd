@@ -2,6 +2,8 @@ extends SceneTree
 
 const TRAINER_NPC_SCRIPT := "res://scripts/world/npcs/trainer_npc.gd"
 const TRAINER_METADATA_SERVICE_SCRIPT := "res://scripts/services/trainer_metadata_service.gd"
+const TRAINER_PROGRESS_SERVICE_SCRIPT := "res://scripts/services/trainer_progress_service.gd"
+const BATTLE_API_CLIENT_SCRIPT := "res://scripts/battle/battle_api/battle_api_client.gd"
 
 var failed := false
 
@@ -75,6 +77,8 @@ func _check_rematch_state_contract() -> void:
 	var trainer_text := _read_text(TRAINER_NPC_SCRIPT)
 	var gym_text := _read_text("res://scripts/world/npcs/gym_leader_npc.gd")
 	var world_text := _read_text("res://scripts/world/world.gd")
+	var progress_service_text := _read_text(TRAINER_PROGRESS_SERVICE_SCRIPT)
+	var battle_api_text := _read_text(BATTLE_API_CLIENT_SCRIPT)
 	_check_true(trainer_text.contains('const STATE_READY := "ready"'), "TrainerNPC has an explicit rematch-ready state")
 	_check_true(trainer_text.contains('const STATE_SLEEPING := "sleeping"'), "TrainerNPC has an explicit daily sleeping state")
 	_check_true(trainer_text.contains("TrainerProgressService.begin_rematch(trainer_id)"), "rematches reserve the daily attempt before battle")
@@ -84,6 +88,9 @@ func _check_rematch_state_contract() -> void:
 	_check_true(gym_text.contains("func supports_trainer_rematches() -> bool:\n\treturn false"), "Gym Leaders explicitly opt out of rematches")
 	_check_true(trainer_text.contains('battle_metadata["_is_rematch"]'), "trainer battle metadata distinguishes rematches")
 	_check_true(world_text.contains("and not trainer_is_rematch"), "rematches do not replay unique outro dialogue")
+	_check_true(progress_service_text.contains('TRAINER_REMATCH_ENDPOINT := "/game/trainers/%s/rematch"'), "rematches use the account-service rematch route")
+	_check_true(battle_api_text.contains('"isRematch": is_rematch'), "trainer battle requests identify rematches for server scaling")
+	_check_true(world_text.contains("active_trainer_is_rematch\n\t)"), "world forwards rematch identity to the battle API")
 
 
 func _read_text(path: String) -> String:

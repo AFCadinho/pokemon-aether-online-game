@@ -46,7 +46,12 @@ func create_dev_wild_battle(
 		payload
 	)
 
-func create_trainer_battle(request_node: HTTPRequest, player: Dictionary, trainer_id: String) -> Dictionary:
+func create_trainer_battle(
+	request_node: HTTPRequest,
+	player: Dictionary,
+	trainer_id: String,
+	is_rematch := false
+) -> Dictionary:
 	return await send_post_request(
 		request_node,
 		"/battle/trainer",
@@ -54,6 +59,7 @@ func create_trainer_battle(request_node: HTTPRequest, player: Dictionary, traine
 			"player": player,
 			"trainerId": trainer_id,
 			"formatId": FORMAT_ID,
+			"isRematch": is_rematch,
 		}
 	)
 
