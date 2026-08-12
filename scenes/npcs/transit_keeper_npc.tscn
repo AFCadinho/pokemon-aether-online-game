@@ -8,5 +8,5 @@
 script = ExtResource("2_script")
 display_name = "Aethernet Keeper"
 npc_sprite_frames = ExtResource("3_frames")
-sprite_offset = Vector2(0, -32)
+sprite_offset = Vector2(0, -16)
 movement_behavior = "idle"
