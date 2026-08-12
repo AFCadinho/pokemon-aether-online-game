@@ -3293,5 +3293,6 @@
   "world.aether_beacon.dormant": "This Aether Beacon is dormant.",
   "world.aether_beacon.attuned": "The crystal resonates with your Aether signature.",
   "world.aether_beacon.keeper_hint": "This destination is now available through the Aethernet.",
-  "world.aether_beacon.already_attuned": "You are already attuned to this Aether Beacon."
+  "world.aether_beacon.already_attuned": "You are already attuned to this Aether Beacon.",
+  "ui.transit.attuned_system": "Aethernet attunement complete: {name} unlocked."
 }

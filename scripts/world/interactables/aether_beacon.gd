@@ -60,15 +60,54 @@ func interact_with_player(_player: Node2D) -> void:
 	var body := result.get("body", {}) as Dictionary
 	_apply_activation_state(true)
 	if bool(body.get("newlyAttuned", false)):
-		await show_dialogue([
-			LocalizationManager.text("world.aether_beacon.attuned"),
-			LocalizationManager.text("world.aether_beacon.keeper_hint"),
-		], display_name)
+		var network := body.get("network", {}) as Dictionary
+		var destination_name := _destination_name_from_network(network)
+		get_tree().call_group(
+			"ui_overlay",
+			"add_system_message",
+			LocalizationManager.text(
+				"ui.transit.attuned_system",
+				{"name": destination_name}
+			)
+		)
+		await _show_keeper_dialogue([
+			LocalizationManager.text("npc.transit.attuned"),
+			LocalizationManager.text("npc.transit.return_hint"),
+		])
 		return
-	await show_dialogue(
-		[LocalizationManager.text("world.aether_beacon.already_attuned")],
-		display_name
-	)
+	await _show_keeper_dialogue([
+		LocalizationManager.text("world.aether_beacon.already_attuned"),
+	])
+
+
+func _show_keeper_dialogue(lines: Array[String]) -> bool:
+	var keeper := _find_local_keeper()
+	if keeper != null:
+		var shown_value: Variant = await keeper.call("show_dialogue", lines)
+		return bool(shown_value)
+
+	var portrait: Texture2D
+	var catalog := get_node_or_null("/root/TrainerPortraitCatalog")
+	if catalog != null and catalog.has_method("get_texture"):
+		portrait = catalog.call("get_texture", "showdown_psychic_gen6") as Texture2D
+	return await show_dialogue(lines, "Aethernet Keeper", portrait)
+
+
+func _find_local_keeper() -> Node:
+	for candidate: Node in get_tree().get_nodes_in_group("aethernet_keeper"):
+		if str(candidate.get("local_destination_id")) == destination_id:
+			return candidate
+	return null
+
+
+func _destination_name_from_network(network: Dictionary) -> String:
+	for destination_value: Variant in network.get("destinations", []):
+		if not destination_value is Dictionary:
+			continue
+		var destination := destination_value as Dictionary
+		if str(destination.get("destinationId", "")) == destination_id:
+			return str(destination.get("name", destination_id))
+	return destination_id.replace("_", " ").capitalize()
 
 
 func _refresh_activation_state() -> void:

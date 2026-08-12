@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://scripts/world/npcs/transit_keeper_npc.gd" id="2_script"]
 [ext_resource type="SpriteFrames" path="res://assets/npcs/classes/transit_keeper_frames.tres" id="3_frames"]
 
-[node name="TransitKeeperNPC" instance=ExtResource("1_base")]
+[node name="TransitKeeperNPC" groups=["aethernet_keeper"] instance=ExtResource("1_base")]
 script = ExtResource("2_script")
 display_name = "Aethernet Keeper"
 npc_sprite_frames = ExtResource("3_frames")

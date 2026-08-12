@@ -3293,5 +3293,6 @@
   "world.aether_beacon.dormant": "Deze Aether Beacon is inactief.",
   "world.aether_beacon.attuned": "Het kristal resoneert met je Aether-signatuur.",
   "world.aether_beacon.keeper_hint": "Deze bestemming is nu beschikbaar via het Aethernet.",
-  "world.aether_beacon.already_attuned": "Je bent al op deze Aether Beacon afgestemd."
+  "world.aether_beacon.already_attuned": "Je bent al op deze Aether Beacon afgestemd.",
+  "ui.transit.attuned_system": "Aethernet-afstemming voltooid: {name} ontgrendeld."
 }

@@ -3256,5 +3256,6 @@
   "battle.voice.switch.your_turn": "É sua vez, {to}!",
   "battle.voice.switch.change_plan": "Mudança de plano. Vai, {to}!",
   "battle.voice.switch.go": "Vai, {to}!",
-  "battle.voice.switch.youre_up": "É sua vez, {to}!"
+  "battle.voice.switch.youre_up": "É sua vez, {to}!",
+  "ui.transit.attuned_system": "Sintonia com a Aethernet concluída: {name} desbloqueada."
 }

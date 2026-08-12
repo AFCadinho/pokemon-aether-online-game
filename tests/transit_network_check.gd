@@ -84,6 +84,7 @@ func _init() -> void:
 	_check(keeper_scene_source.contains('display_name = "Aethernet Keeper"'), "Transit NPC uses the Aethernet name")
 	_check(keeper_scene_source.contains('sprite_offset = Vector2(0, -16)'), "Aethernet Keeper sprite aligns with its collision")
 	_check(keeper_scene_source.contains('portrait_id = "showdown_psychic_gen6"'), "Aethernet Keeper uses the Psychic catalog portrait")
+	_check(keeper_scene_source.contains('groups=["aethernet_keeper"]'), "Aethernet Keepers are centrally discoverable by Beacons")
 	_check(not keeper_source.contains("TransitService.attune"), "Transit Keeper does not attune players automatically")
 	_check(keeper_source.contains("TransitService.load_network"), "Transit Keeper loads the travel network")
 	_check(keeper_source.contains("npc.transit.attune_beacon_hint"), "Transit Keeper explains that the local Beacon must be attuned")
@@ -95,6 +96,7 @@ func _init() -> void:
 	var transit_service_source := FileAccess.get_file_as_string(
 		"res://scripts/services/transit_service.gd"
 	)
+	var english_localization := FileAccess.get_file_as_string("res://localization/en.json")
 	_check(beacon_source.contains("TransitService.attune"), "Aether Beacon attunes through the server")
 	_check(beacon_source.contains("destination_id, global_position"), "Aether Beacon supplies its placed world position")
 	_check(transit_service_source.contains("save_current_player_state_now"), "Attunement synchronizes the player's current position first")
@@ -104,6 +106,9 @@ func _init() -> void:
 	_check(beacon_source.contains("interaction_shape_size = Vector2(80, 80)"), "Aether Beacon enforces its local interaction radius at runtime")
 	_check(beacon_source.contains("_refresh_activation_state"), "Aether Beacon restores its attuned visual state")
 	_check(beacon_source.contains("_apply_activation_state(true)"), "Aether Beacon activates after attunement")
+	_check(beacon_source.contains('_find_local_keeper()'), "Aether Beacon delegates its dialogue to the local Keeper")
+	_check(beacon_source.contains('"add_system_message"'), "Aether Beacon announces a new attunement in system chat")
+	_check(english_localization.contains('"ui.transit.attuned_system"'), "Aethernet attunement has a localized system message")
 	var placeholder_source := FileAccess.get_file_as_string(
 		"res://scenes/world/interactables/aether_beacon_placeholder.tscn"
 	)
@@ -113,7 +118,6 @@ func _init() -> void:
 	_check(placeholder_source.contains("requires_facing = false"), "Aether Beacon can be attuned from every side")
 	_check(placeholder_source.contains("interaction_shape_size = Vector2(80, 80)"), "Aether Beacon interaction stays local to the crystal")
 	var menu_source := FileAccess.get_file_as_string("res://scripts/ui/transit_menu.gd")
-	var english_localization := FileAccess.get_file_as_string("res://localization/en.json")
 	_check(english_localization.contains('"ui.transit.title": "Aethernet"'), "Transit UI is branded as Aethernet")
 	_check(menu_source.contains("_destinations_by_region"), "Transit UI groups destinations by region")
 	_check(menu_source.contains("ScrollContainer.new()"), "Transit UI remains scrollable as towns are added")
