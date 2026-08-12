@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="3_7psnb"]
 [ext_resource type="Script" path="res://scripts/world/map_metadata.gd" id="4_map_meta"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="5_transit_keeper"]
+[ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="6_o8e3w"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_t1icv"]
 texture = ExtResource("2_tauxp")
@@ -124,7 +125,7 @@ world_access_area_type = "interior"
 location_id = "aether_clash.lobby"
 location_name = "Aether Clash Lobby"
 region_id = "aether_clash"
-lighting_profile = "indoor"
+lighting_profile = "outdoor"
 weather_profile = "disabled"
 music_track_id = "login.lugia_theme_lofi"
 
@@ -169,3 +170,65 @@ tile_set = SubResource("TileSet_4afb1")
 
 [node name="BlockRight" type="TileMapLayer" parent="BlockDirection" unique_id=1482984538]
 tile_set = SubResource("TileSet_4afb1")
+
+[node name="NightLights" type="Node2D" parent="." unique_id=139384661]
+
+[node name="NightLight" parent="NightLights" unique_id=2055548466 instance=ExtResource("6_o8e3w")]
+position = Vector2(976, 48)
+
+[node name="NightLight2" parent="NightLights" unique_id=205513492 instance=ExtResource("6_o8e3w")]
+position = Vector2(784, 144)
+
+[node name="NightLight3" parent="NightLights" unique_id=2011983048 instance=ExtResource("6_o8e3w")]
+position = Vector2(1168, 144)
+
+[node name="NightLight4" parent="NightLights" unique_id=1181576006 instance=ExtResource("6_o8e3w")]
+position = Vector2(784, 432)
+
+[node name="NightLight5" parent="NightLights" unique_id=239923759 instance=ExtResource("6_o8e3w")]
+position = Vector2(1168, 432)
+
+[node name="NightLight6" parent="NightLights" unique_id=1080721827 instance=ExtResource("6_o8e3w")]
+position = Vector2(976, 624)
+
+[node name="NightLight7" parent="NightLights" unique_id=602815998 instance=ExtResource("6_o8e3w")]
+position = Vector2(464, 720)
+
+[node name="NightLight8" parent="NightLights" unique_id=730421537 instance=ExtResource("6_o8e3w")]
+position = Vector2(592, 720)
+
+[node name="NightLight9" parent="NightLights" unique_id=1891710700 instance=ExtResource("6_o8e3w")]
+position = Vector2(1360, 720)
+
+[node name="NightLight10" parent="NightLights" unique_id=1838185272 instance=ExtResource("6_o8e3w")]
+position = Vector2(1488, 720)
+
+[node name="NightLight11" parent="NightLights" unique_id=1175146895 instance=ExtResource("6_o8e3w")]
+position = Vector2(816, 912)
+
+[node name="NightLight12" parent="NightLights" unique_id=679610540 instance=ExtResource("6_o8e3w")]
+position = Vector2(1136, 912)
+
+[node name="NightLight13" parent="NightLights" unique_id=994522241 instance=ExtResource("6_o8e3w")]
+position = Vector2(464, 1200)
+
+[node name="NightLight14" parent="NightLights" unique_id=1376787675 instance=ExtResource("6_o8e3w")]
+position = Vector2(592, 1200)
+
+[node name="NightLight15" parent="NightLights" unique_id=700708142 instance=ExtResource("6_o8e3w")]
+position = Vector2(1360, 1200)
+
+[node name="NightLight16" parent="NightLights" unique_id=1485325045 instance=ExtResource("6_o8e3w")]
+position = Vector2(1488, 1200)
+
+[node name="NightLight17" parent="NightLights" unique_id=2071651952 instance=ExtResource("6_o8e3w")]
+position = Vector2(880, 1264)
+
+[node name="NightLight18" parent="NightLights" unique_id=92288974 instance=ExtResource("6_o8e3w")]
+position = Vector2(1072, 1264)
+
+[node name="NightLight19" parent="NightLights" unique_id=74620009 instance=ExtResource("6_o8e3w")]
+position = Vector2(880, 1456)
+
+[node name="NightLight20" parent="NightLights" unique_id=841796611 instance=ExtResource("6_o8e3w")]
+position = Vector2(1072, 1456)

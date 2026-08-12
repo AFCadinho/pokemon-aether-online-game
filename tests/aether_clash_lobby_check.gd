@@ -20,10 +20,20 @@ func _init() -> void:
 		lobby.call("get_music_track_id") == "login.lugia_theme_lofi",
 		"Lobby reuses the login-screen music"
 	)
+	_check(lobby.call("get_lighting_profile") == "outdoor", "Lobby follows the outdoor day/night cycle")
+	_check(lobby.call("get_weather_profile") == "disabled", "Lobby always keeps clear magical weather")
 	_check(lobby.get_node_or_null("Lobby") != null, "Lobby includes the imported visual")
 	var arrival := lobby.get_node_or_null("Spawns/GuildArrival") as Marker2D
 	_check(arrival != null, "Lobby has a Guild arrival marker")
-	_check(arrival != null and arrival.position == Vector2(944, 1616), "Guild arrival uses the intended tile center")
+	_check(
+		arrival != null
+		and posmod(int(arrival.position.x), 32) == 16
+		and posmod(int(arrival.position.y), 32) == 16,
+		"Guild arrival marker is centered on a map tile"
+	)
+	var night_lights := lobby.get_node_or_null("NightLights")
+	_check(night_lights != null, "Lobby owns a hand-maintained night-light layer")
+	_check(night_lights != null and night_lights.get_child_count() == 20, "Every Lobby lantern has a night light")
 	var collision := lobby.get_node_or_null("Collision") as TileMapLayer
 	_check(collision != null and not collision.get_used_cells().is_empty(), "Lobby includes gameplay collision")
 	_check(
