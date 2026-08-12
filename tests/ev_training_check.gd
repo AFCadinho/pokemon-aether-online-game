@@ -17,6 +17,7 @@ func _init() -> void:
 		"res://scripts/world/kanto/towns/ev_training_expert_mateo.gd"
 	)
 	_assert(scene_source.contains("EVExpertMateo"), "EV expert Mateo is missing")
+	_assert(scene_source.contains("ev_expert_f_frames.tres"), "Mateo's overworld sprite does not match the Expert portrait")
 	_assert(scene_source.contains("EVAssistantRina"), "north EV assistant is missing")
 	_assert(scene_source.contains("EVAssistantEli"), "south EV assistant is missing")
 	_assert(scene_source.contains("kanto_viridian_city_ev_training"), "EV encounter region is missing")

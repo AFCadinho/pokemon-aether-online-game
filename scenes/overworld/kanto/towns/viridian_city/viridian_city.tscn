@@ -26,6 +26,7 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/acetrainerf-gen6.png" id="35_ev_assistant_portrait"]
 [ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/acetrainer-gen6.png" id="36_ev_assistant_m_portrait"]
 [ext_resource type="Script" path="res://scripts/world/kanto/towns/ev_training_expert_mateo.gd" id="37_ev_expert_mateo"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/ev_expert_f_frames.tres" id="38_ev_expert_f"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route1"]
 size = Vector2(208, 34)
@@ -670,7 +671,7 @@ npc_id = "kanto_viridian_city_ev_expert_mateo"
 npc_definition_id = "trainer_class_expert"
 display_name = "EV Expert Mateo"
 facing_direction = Vector2(1, 0)
-npc_sprite_frames = ExtResource("32_ace_trainer_m")
+npc_sprite_frames = ExtResource("38_ev_expert_f")
 mugshot = ExtResource("34_ev_expert_portrait")
 preload_quest_markers = true
 
