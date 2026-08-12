@@ -14,7 +14,7 @@ extends Node2D
 @export_range(0.0, 1.0, 0.01) var old_rod_encounter_chance := 1.0
 @export_range(0.0, 1.0, 0.01) var good_rod_encounter_chance := 1.0
 @export_range(0.0, 1.0, 0.01) var super_rod_encounter_chance := 1.0
-@export_file("*.ogg") var music_track_path := "res://assets/music/overworld/kanto/towns/pallet_town.ogg"
+@export var music_track_id := "overworld.kanto.pallet_town"
 
 const TILE_SIZE := 32.0
 const TREE_TOP_VISUAL_LAYERS := [
@@ -48,8 +48,8 @@ func get_location_metadata() -> Dictionary:
 	}
 
 
-func get_music_track_path() -> String:
-	return music_track_path
+func get_music_track_id() -> String:
+	return music_track_id
 
 
 func _configure_visual_layer_order() -> void:

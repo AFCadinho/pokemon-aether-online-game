@@ -10,7 +10,7 @@ extends Node2D
 @export var location_name := "Viridian City"
 @export var region_id := "kanto"
 @export var encounter_area_id := "kanto_viridian_city"
-@export_file("*.ogg") var music_track_path := "res://assets/music/overworld/kanto/towns/viridian_city.ogg"
+@export var music_track_id := "overworld.kanto.viridian_city"
 
 const VISUALS_NODE_NAME := "ViridianCity"
 const DOOR_LAYER_NAME := "Door"
@@ -59,8 +59,8 @@ func get_location_metadata() -> Dictionary:
 	}
 
 
-func get_music_track_path() -> String:
-	return music_track_path
+func get_music_track_id() -> String:
+	return music_track_id
 
 
 func get_wild_encounter_area_id() -> String:

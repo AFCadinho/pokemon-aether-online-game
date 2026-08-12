@@ -11,7 +11,7 @@ extends Node2D
 @export var region_id := "kanto"
 @export var encounter_area_id := "kanto_route_1"
 @export_range(0.0, 1.0, 0.01) var grass_encounter_chance := 0.1
-@export_file("*.ogg") var music_track_path := "res://assets/music/overworld/kanto/routes/route1.ogg"
+@export var music_track_id := "overworld.kanto.route.1"
 
 func _ready() -> void:
 	await _load_encounter_area_metadata()
@@ -37,8 +37,8 @@ func get_location_metadata() -> Dictionary:
 func get_wild_encounter_area_id() -> String:
 	return encounter_area_id
 
-func get_music_track_path() -> String:
-	return music_track_path
+func get_music_track_id() -> String:
+	return music_track_id
 
 func should_trigger_wild_encounter(encounter_type: String = "grass") -> bool:
 	if encounter_type != "grass":

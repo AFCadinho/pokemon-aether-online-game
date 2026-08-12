@@ -142,7 +142,7 @@ world_access_group_label = "Pewter City"
 location_id = "kanto.pewter_city"
 location_name = "Pewter City"
 region_id = "kanto"
-music_track_path = "res://assets/music/overworld/kanto/towns/viridian_city.ogg"
+music_track_id = "overworld.kanto.viridian_city"
 
 [node name="PewterCity" parent="." unique_id=1507076430 instance=ExtResource("1_kr88e")]
 

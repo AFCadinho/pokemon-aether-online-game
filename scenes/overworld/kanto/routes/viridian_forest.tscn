@@ -407,7 +407,7 @@ location_name = "Viridian Forest"
 region_id = "kanto"
 encounter_area_id = "kanto_viridian_forest"
 grass_encounter_chance = 0.21
-music_track_path = "res://assets/music/overworld/kanto/routes/viridian_forest.ogg"
+music_track_id = "overworld.kanto.viridian_forest"
 
 [node name="ViridianForest" parent="." unique_id=576859052 instance=ExtResource("1_rlpuh")]
 

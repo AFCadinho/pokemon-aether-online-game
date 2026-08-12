@@ -8,7 +8,7 @@
   <property name="region_name" value="Test Region"/>
   <property name="location_id" value="test.phase2a"/>
   <property name="location_name" value="Phase 2A"/>
-  <property name="music_track_path" value="res://assets/music/overworld/kanto/routes/route1.ogg"/>
+  <property name="music_track_id" value="overworld.kanto.route.1"/>
   <property name="default_spawn" value="Start"/>
  </properties>
  <tileset firstgid="1" name="floors" tilewidth="32" tileheight="32" tilecount="30" columns="5">
