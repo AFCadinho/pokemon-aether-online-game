@@ -63,6 +63,8 @@ func _init() -> void:
 	)
 	_check(beacon_source.contains("TransitService.attune"), "Aether Beacon attunes through the server")
 	_check(beacon_source.contains("await super._process(delta)"), "Aether Beacon awaits the shared interaction coroutine")
+	_check(beacon_source.contains("requires_facing = false"), "Aether Beacon enforces omnidirectional interaction at runtime")
+	_check(beacon_source.contains("interaction_shape_size = Vector2(80, 80)"), "Aether Beacon enforces its local interaction radius at runtime")
 	_check(beacon_source.contains("_refresh_activation_state"), "Aether Beacon restores its attuned visual state")
 	_check(beacon_source.contains("_apply_activation_state(true)"), "Aether Beacon activates after attunement")
 	var placeholder_source := FileAccess.get_file_as_string(

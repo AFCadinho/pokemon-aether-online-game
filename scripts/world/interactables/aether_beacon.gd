@@ -23,6 +23,10 @@ var _activated := false
 
 func _ready() -> void:
 	interactable_kind = "aether_beacon"
+	# Beacons are intentionally usable from every side. Keep this invariant in
+	# code so stale inherited-scene overrides cannot silently disable attuning.
+	requires_facing = false
+	interaction_shape_size = Vector2(80, 80)
 	display_name = LocalizationManager.text("world.aether_beacon.name")
 	if floating_visual != null:
 		_base_visual_position = floating_visual.position
