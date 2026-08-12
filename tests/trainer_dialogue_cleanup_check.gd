@@ -83,6 +83,8 @@ func _check_rematch_state_contract() -> void:
 	_check_true(trainer_text.contains('const STATE_SLEEPING := "sleeping"'), "TrainerNPC has an explicit daily sleeping state")
 	_check_true(trainer_text.contains("TrainerProgressService.begin_rematch(trainer_id)"), "rematches reserve the daily attempt before battle")
 	_check_true(trainer_text.contains('rematch_marker_sleep_label.text = "Zzz"'), "spent rematches display a sleeping marker")
+	_check_true(trainer_text.contains('add_theme_font_size_override("font_size", 22)'), "sleeping marker remains readable at overworld scale")
+	_check_true(trainer_text.contains('_sleeping_marker_style()'), "sleeping marker has a dedicated high-contrast badge")
 	_check_true(trainer_text.contains('res://assets/ui/icons/trainer_challenge.png'), "ready rematches display the battle-challenge emblem")
 	_check_true(trainer_text.contains("_update_rematch_marker_animation()"), "the ready challenge emblem has active movement")
 	_check_true(gym_text.contains("func supports_trainer_rematches() -> bool:\n\treturn false"), "Gym Leaders explicitly opt out of rematches")

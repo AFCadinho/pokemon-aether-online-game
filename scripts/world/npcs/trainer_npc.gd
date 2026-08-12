@@ -458,10 +458,15 @@ func _setup_rematch_marker() -> void:
 	rematch_marker_sleep_label.text = "Zzz"
 	rematch_marker_sleep_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	rematch_marker_sleep_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	rematch_marker_sleep_label.add_theme_font_size_override("font_size", 15)
-	rematch_marker_sleep_label.add_theme_constant_override("outline_size", 4)
-	rematch_marker_sleep_label.add_theme_color_override("font_color", Color("#9ed9ffff"))
-	rematch_marker_sleep_label.add_theme_color_override("font_outline_color", Color("#07111cff"))
+	rematch_marker_sleep_label.add_theme_font_size_override("font_size", 22)
+	rematch_marker_sleep_label.add_theme_constant_override("outline_size", 5)
+	rematch_marker_sleep_label.add_theme_constant_override("shadow_offset_x", 1)
+	rematch_marker_sleep_label.add_theme_constant_override("shadow_offset_y", 2)
+	rematch_marker_sleep_label.add_theme_constant_override("shadow_outline_size", 2)
+	rematch_marker_sleep_label.add_theme_color_override("font_color", Color("#e8f8ffff"))
+	rematch_marker_sleep_label.add_theme_color_override("font_outline_color", Color("#123b63ff"))
+	rematch_marker_sleep_label.add_theme_color_override("font_shadow_color", Color("#020811cc"))
+	rematch_marker_sleep_label.add_theme_stylebox_override("normal", _sleeping_marker_style())
 	rematch_marker_sleep_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	rematch_marker.add_child(rematch_marker_sleep_label)
 	_refresh_rematch_marker()
@@ -483,8 +488,14 @@ func _update_rematch_marker_animation() -> void:
 	if trainer_progress_state == STATE_READY and rematch_marker.visible:
 		var bob := sin(float(Time.get_ticks_msec()) * 0.006) * 2.5
 		rematch_marker.position = REMATCH_MARKER_BASE_POSITION + Vector2(0.0, bob)
+		rematch_marker.modulate = Color.WHITE
+	elif trainer_progress_state == STATE_SLEEPING and rematch_marker.visible:
+		var pulse := (sin(float(Time.get_ticks_msec()) * 0.004) + 1.0) * 0.5
+		rematch_marker.position = REMATCH_MARKER_BASE_POSITION + Vector2(0.0, -pulse * 2.0)
+		rematch_marker.modulate = Color(1.0, 1.0, 1.0, lerpf(0.82, 1.0, pulse))
 	else:
 		rematch_marker.position = REMATCH_MARKER_BASE_POSITION
+		rematch_marker.modulate = Color.WHITE
 
 
 func _rematch_marker_style() -> StyleBoxFlat:
@@ -494,6 +505,19 @@ func _rematch_marker_style() -> StyleBoxFlat:
 	style.content_margin_top = 0.0
 	style.content_margin_right = 0.0
 	style.content_margin_bottom = 0.0
+	return style
+
+
+func _sleeping_marker_style() -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color("#071827e6")
+	style.border_color = Color("#69d5ffff")
+	style.set_border_width_all(2)
+	style.set_corner_radius_all(10)
+	style.content_margin_left = 5.0
+	style.content_margin_top = 1.0
+	style.content_margin_right = 5.0
+	style.content_margin_bottom = 2.0
 	return style
 
 
