@@ -317,7 +317,7 @@ display_name = "Pewter Resident Nora"
 npc_sprite_frames = ExtResource("23_poke_fan_f")
 
 [node name="TransitKeeper" parent="Entities/NPCs" instance=ExtResource("26_transit_keeper")]
-position = Vector2(1488, 1552)
+position = Vector2(1328, 1040)
 npc_id = "kanto_pewter_city_transit_keeper"
 local_destination_id = "kanto_pewter_city"
 facing_direction = Vector2(0, 1)
@@ -351,7 +351,7 @@ movement_speed_pixels = 48.0
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1638978152]
 
 [node name="AetherBeacon" parent="Entities/Interactables" instance=ExtResource("27_aether_beacon")]
-position = Vector2(1552, 1552)
+position = Vector2(1424, 1040)
 interactable_id = "kanto_pewter_city_aether_beacon"
 destination_id = "kanto_pewter_city"
 

@@ -18,10 +18,18 @@ const MAP_CONTRACTS := {
 	"res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn": [
 		'position = Vector2(1488, 1584)',
 		'local_destination_id = "kanto_pewter_city"',
-		'position = Vector2(1552, 1552)',
+		'position = Vector2(1328, 1040)',
+		'position = Vector2(1424, 1040)',
 		'interactable_id = "kanto_pewter_city_aether_beacon"',
 		'destination_id = "kanto_pewter_city"',
 	],
+}
+
+const TILE_CENTER_CONTRACTS := {
+	"res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn": {
+		"TransitKeeper": Vector2i(1328, 1040),
+		"AetherBeacon": Vector2i(1424, 1040),
+	},
 }
 
 var failures := 0
@@ -35,6 +43,22 @@ func _init() -> void:
 		_check(source.contains('[node name="AetherBeacon"'), "%s has an Aether Beacon" % scene_path)
 		for expected: String in MAP_CONTRACTS[scene_path]:
 			_check(source.contains(expected), "%s contains %s" % [scene_path, expected])
+
+	for scene_path: String in TILE_CENTER_CONTRACTS:
+		var source := FileAccess.get_file_as_string(scene_path)
+		for node_name: String in TILE_CENTER_CONTRACTS[scene_path]:
+			var expected_position: Vector2i = TILE_CENTER_CONTRACTS[scene_path][node_name]
+			var node_source := _node_block(source, node_name)
+			_check(
+				node_source.contains(
+					"position = Vector2(%d, %d)" % [expected_position.x, expected_position.y]
+				),
+				"%s %s is at %s" % [scene_path, node_name, expected_position]
+			)
+			_check(
+				posmod(expected_position.x, 32) == 16 and posmod(expected_position.y, 32) == 16,
+				"%s %s is centered on the 32px tile grid" % [scene_path, node_name]
+			)
 
 	var lobby_source := FileAccess.get_file_as_string(
 		"res://scenes/overworld/aether_clash/aether_clash_lobby.tscn"
@@ -93,3 +117,13 @@ func _check(condition: bool, label: String) -> void:
 		return
 	failures += 1
 	push_error("FAIL: %s" % label)
+
+
+func _node_block(source: String, node_name: String) -> String:
+	var start := source.find('[node name="%s"' % node_name)
+	if start < 0:
+		return ""
+	var end := source.find("\n[node ", start + 1)
+	if end < 0:
+		return source.substr(start)
+	return source.substr(start, end - start)
