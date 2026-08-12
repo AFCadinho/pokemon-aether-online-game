@@ -4,10 +4,11 @@ extends BaseNPC
 class_name TrainerNPC
 
 const TrainerDefinitionResource := preload("res://scripts/world/npcs/trainer_definition.gd")
-const REMATCH_MARKER_TEXTURE := preload("res://assets/items/icons/POKEBALL.png")
+const REMATCH_MARKER_TEXTURE := preload("res://assets/ui/icons/trainer_challenge.png")
 const INTRO_DIALOGUE_DELAY_SECONDS := 0.2
 const BATTLE_TRANSITION_DELAY_SECONDS := 0.35
 const SLEEPING_REFRESH_INTERVAL_MSEC := 60_000
+const REMATCH_MARKER_BASE_POSITION := Vector2(-24.0, -132.0)
 
 const STATE_FIRST_ENCOUNTER := "first_encounter"
 const STATE_DEFEATED := "defeated"
@@ -269,6 +270,7 @@ func _process(_delta: float) -> void:
 	await _process_base_npc()
 	if Engine.is_editor_hint():
 		return
+	_update_rematch_marker_animation()
 	await _refresh_sleeping_progress_if_due()
 
 	if vision_candidate != null and _can_auto_challenge():
@@ -437,15 +439,15 @@ func _setup_rematch_marker() -> void:
 	rematch_marker.visible = false
 	rematch_marker.z_index = 514
 	rematch_marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	rematch_marker.position = Vector2(-19.0, -120.0)
-	rematch_marker.custom_minimum_size = Vector2(38.0, 38.0)
+	rematch_marker.position = REMATCH_MARKER_BASE_POSITION
+	rematch_marker.custom_minimum_size = Vector2(48.0, 48.0)
 	rematch_marker.add_theme_stylebox_override("panel", _rematch_marker_style())
 	add_child(rematch_marker)
 
 	rematch_marker_icon = TextureRect.new()
 	rematch_marker_icon.name = "PokeBall"
 	rematch_marker_icon.texture = REMATCH_MARKER_TEXTURE
-	rematch_marker_icon.custom_minimum_size = Vector2(30.0, 30.0)
+	rematch_marker_icon.custom_minimum_size = Vector2(48.0, 48.0)
 	rematch_marker_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	rematch_marker_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	rematch_marker_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -475,16 +477,23 @@ func _refresh_rematch_marker() -> void:
 	rematch_marker_sleep_label.visible = show_sleeping
 
 
+func _update_rematch_marker_animation() -> void:
+	if rematch_marker == null:
+		return
+	if trainer_progress_state == STATE_READY and rematch_marker.visible:
+		var bob := sin(float(Time.get_ticks_msec()) * 0.006) * 2.5
+		rematch_marker.position = REMATCH_MARKER_BASE_POSITION + Vector2(0.0, bob)
+	else:
+		rematch_marker.position = REMATCH_MARKER_BASE_POSITION
+
+
 func _rematch_marker_style() -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color("#07111ee6")
-	style.border_color = Color("#d9b84aff")
-	style.set_border_width_all(2)
-	style.set_corner_radius_all(9)
-	style.content_margin_left = 4.0
-	style.content_margin_top = 4.0
-	style.content_margin_right = 4.0
-	style.content_margin_bottom = 4.0
+	style.bg_color = Color.TRANSPARENT
+	style.content_margin_left = 0.0
+	style.content_margin_top = 0.0
+	style.content_margin_right = 0.0
+	style.content_margin_bottom = 0.0
 	return style
 
 
