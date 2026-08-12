@@ -1,0 +1,75 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/interactables/aether_beacon.gd" id="1_script"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_beacon"]
+size = Vector2(64, 80)
+
+[node name="AetherBeacon" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_script")
+interactable_kind = "aether_beacon"
+blocks_movement = true
+interaction_shape_size = Vector2(96, 96)
+
+[node name="Shadow" type="Polygon2D" parent="."]
+position = Vector2(0, 4)
+polygon = PackedVector2Array(-17, -5, 17, -5, 23, 0, 17, 5, -17, 5, -23, 0)
+color = Color(0.01, 0.035, 0.06, 0.62)
+
+[node name="PedestalBack" type="Polygon2D" parent="."]
+position = Vector2(0, -9)
+polygon = PackedVector2Array(-20, -8, 20, -8, 16, 7, -16, 7)
+color = Color(0.12, 0.2, 0.29, 1)
+
+[node name="PedestalFront" type="Polygon2D" parent="."]
+position = Vector2(0, 2)
+polygon = PackedVector2Array(-16, -4, 16, -4, 12, 7, -12, 7)
+color = Color(0.065, 0.12, 0.2, 1)
+
+[node name="PedestalLine" type="Line2D" parent="."]
+position = Vector2(0, -8)
+points = PackedVector2Array(-18, 0, 18, 0)
+width = 2.0
+default_color = Color(0.25, 0.74, 0.88, 0.8)
+
+[node name="FloatingVisual" type="Node2D" parent="."]
+position = Vector2(0, -43)
+
+[node name="Glow" type="Polygon2D" parent="FloatingVisual"]
+polygon = PackedVector2Array(0, -35, 23, -4, 15, 28, 0, 38, -15, 28, -23, -4)
+color = Color(0.18, 0.85, 1, 0.34)
+
+[node name="CrystalDark" type="Polygon2D" parent="FloatingVisual"]
+polygon = PackedVector2Array(0, -28, 16, -2, 10, 25, 0, 32, -12, 22, -17, -3)
+color = Color(0.08, 0.47, 0.72, 1)
+
+[node name="CrystalLight" type="Polygon2D" parent="FloatingVisual"]
+polygon = PackedVector2Array(0, -28, 2, 25, -10, 18, -15, -3)
+color = Color(0.48, 0.94, 1, 1)
+
+[node name="CrystalFacet" type="Polygon2D" parent="FloatingVisual"]
+polygon = PackedVector2Array(0, -28, 16, -2, 2, 25)
+color = Color(0.18, 0.7, 0.92, 1)
+
+[node name="Core" type="Polygon2D" parent="FloatingVisual"]
+polygon = PackedVector2Array(0, -10, 7, 0, 0, 12, -7, 0)
+color = Color(0.82, 1, 1, 1)
+
+[node name="Ring" type="Node2D" parent="FloatingVisual"]
+
+[node name="ArcTop" type="Line2D" parent="FloatingVisual/Ring"]
+points = PackedVector2Array(-25, 0, -18, -14, 0, -20, 18, -14, 25, 0)
+width = 2.0
+default_color = Color(0.48, 0.93, 1, 0.8)
+
+[node name="ArcBottom" type="Line2D" parent="FloatingVisual/Ring"]
+points = PackedVector2Array(25, 0, 18, 14, 0, 20, -18, 14, -25, 0)
+width = 2.0
+default_color = Color(0.25, 0.68, 0.95, 0.7)
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(0, -24)
+shape = SubResource("RectangleShape_beacon")

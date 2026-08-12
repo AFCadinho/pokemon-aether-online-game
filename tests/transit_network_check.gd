@@ -4,14 +4,23 @@ const MAP_CONTRACTS := {
 	"res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn": [
 		'position = Vector2(720, 560)',
 		'local_destination_id = "kanto_pallet_town"',
+		'position = Vector2(784, 528)',
+		'interactable_id = "kanto_pallet_town_aether_beacon"',
+		'destination_id = "kanto_pallet_town"',
 	],
 	"res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn": [
 		'position = Vector2(1200, 1488)',
 		'local_destination_id = "kanto_viridian_city"',
+		'position = Vector2(1264, 1456)',
+		'interactable_id = "kanto_viridian_city_aether_beacon"',
+		'destination_id = "kanto_viridian_city"',
 	],
 	"res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn": [
 		'position = Vector2(1488, 1584)',
 		'local_destination_id = "kanto_pewter_city"',
+		'position = Vector2(1552, 1552)',
+		'interactable_id = "kanto_pewter_city_aether_beacon"',
+		'destination_id = "kanto_pewter_city"',
 	],
 }
 
@@ -23,6 +32,7 @@ func _init() -> void:
 		var source := FileAccess.get_file_as_string(scene_path)
 		_check(source.contains('[node name="TransitArrival"'), "%s has TransitArrival" % scene_path)
 		_check(source.contains('[node name="TransitKeeper"'), "%s has TransitKeeper" % scene_path)
+		_check(source.contains('[node name="AetherBeacon"'), "%s has an Aether Beacon" % scene_path)
 		for expected: String in MAP_CONTRACTS[scene_path]:
 			_check(source.contains(expected), "%s contains %s" % [scene_path, expected])
 
@@ -38,9 +48,19 @@ func _init() -> void:
 	var keeper_source := FileAccess.get_file_as_string(
 		"res://scripts/world/npcs/transit_keeper_npc.gd"
 	)
-	_check(keeper_source.contains("TransitService.attune"), "Transit Keeper attunes through the server")
+	_check(not keeper_source.contains("TransitService.attune"), "Transit Keeper does not attune players automatically")
+	_check(keeper_source.contains("TransitService.load_network"), "Transit Keeper loads the travel network")
 	_check(keeper_source.contains("begin_authorized_teleport"), "Transit Keeper uses the authorized teleport flow")
 	_check(keeper_source.contains("PlayerWalletService.apply_wallet_result"), "Transit travel updates the local wallet projection")
+	var beacon_source := FileAccess.get_file_as_string(
+		"res://scripts/world/interactables/aether_beacon.gd"
+	)
+	_check(beacon_source.contains("TransitService.attune"), "Aether Beacon attunes through the server")
+	var placeholder_source := FileAccess.get_file_as_string(
+		"res://scenes/world/interactables/aether_beacon_placeholder.tscn"
+	)
+	_check(placeholder_source.contains('type="Polygon2D"'), "Aether Beacon has a code-native crystal placeholder")
+	_check(placeholder_source.contains('[node name="Ring"'), "Aether Beacon placeholder has an animated ring")
 	var menu_source := FileAccess.get_file_as_string("res://scripts/ui/transit_menu.gd")
 	_check(menu_source.contains("_destinations_by_region"), "Transit UI groups destinations by region")
 	_check(menu_source.contains("ScrollContainer.new()"), "Transit UI remains scrollable as towns are added")

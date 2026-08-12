@@ -3285,5 +3285,10 @@
   "ui.transit.current": "Here",
   "ui.transit.locked": "Locked",
   "ui.transit.travel": "Travel  ₽{fare}",
-  "world.region.kanto": "Kanto"
+  "world.region.kanto": "Kanto",
+  "world.aether_beacon.name": "Aether Beacon",
+  "world.aether_beacon.dormant": "This Aether Beacon is dormant.",
+  "world.aether_beacon.attuned": "The crystal resonates with your Aether signature.",
+  "world.aether_beacon.keeper_hint": "This destination is now available through the Transit network.",
+  "world.aether_beacon.already_attuned": "You are already attuned to this Aether Beacon."
 }

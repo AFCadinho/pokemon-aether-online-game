@@ -3285,5 +3285,10 @@
   "ui.transit.current": "Hier",
   "ui.transit.locked": "Vergrendeld",
   "ui.transit.travel": "Reis  ₽{fare}",
-  "world.region.kanto": "Kanto"
+  "world.region.kanto": "Kanto",
+  "world.aether_beacon.name": "Aether Beacon",
+  "world.aether_beacon.dormant": "Deze Aether Beacon is inactief.",
+  "world.aether_beacon.attuned": "Het kristal resoneert met je Aether-signatuur.",
+  "world.aether_beacon.keeper_hint": "Deze bestemming is nu beschikbaar via het Transit-netwerk.",
+  "world.aether_beacon.already_attuned": "Je bent al op deze Aether Beacon afgestemd."
 }

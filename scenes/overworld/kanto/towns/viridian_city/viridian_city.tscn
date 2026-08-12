@@ -28,6 +28,7 @@
 [ext_resource type="Script" path="res://scripts/world/kanto/towns/ev_training_expert_mateo.gd" id="37_ev_expert_mateo"]
 [ext_resource type="SpriteFrames" uid="uid://cf4j1u0alxcad" path="res://assets/npcs/classes/ev_expert_f_frames.tres" id="38_ev_expert_f"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="39_transit_keeper"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_beacon_placeholder.tscn" id="40_aether_beacon"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route1"]
 size = Vector2(208, 34)
@@ -748,6 +749,11 @@ movement_wait_seconds = 1.5
 movement_speed_pixels = 48.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=841850023]
+
+[node name="AetherBeacon" parent="Entities/Interactables" instance=ExtResource("40_aether_beacon")]
+position = Vector2(1264, 1456)
+interactable_id = "kanto_viridian_city_aether_beacon"
+destination_id = "kanto_viridian_city"
 
 [node name="Signs" type="Node2D" parent="Entities/Interactables" unique_id=521022578]
 

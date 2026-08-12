@@ -19,6 +19,7 @@
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="24_pokemon"]
 [ext_resource type="PackedScene" uid="uid://csmsqlujka4ma" path="res://scenes/world/interactables/locked_door_interactable.tscn" id="25_locked_door"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="26_transit_keeper"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_beacon_placeholder.tscn" id="27_aether_beacon"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2mtwu"]
 size = Vector2(32, 16)
@@ -348,6 +349,11 @@ movement_wait_seconds = 1.5
 movement_speed_pixels = 48.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1638978152]
+
+[node name="AetherBeacon" parent="Entities/Interactables" instance=ExtResource("27_aether_beacon")]
+position = Vector2(1552, 1552)
+interactable_id = "kanto_pewter_city_aether_beacon"
+destination_id = "kanto_pewter_city"
 
 [node name="PokemonCenterDoorLock" parent="Entities/Interactables" unique_id=1082600175 instance=ExtResource("25_locked_door")]
 position = Vector2(1424, 1504)

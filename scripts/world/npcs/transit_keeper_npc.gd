@@ -9,25 +9,11 @@ const TransitMenuScript := preload("res://scripts/ui/transit_menu.gd")
 
 
 func interact_with_player(_player: Node2D) -> void:
-	var network: Dictionary
-	if not local_destination_id.is_empty():
-		var attune_result: Dictionary = await TransitService.attune(local_destination_id)
-		if not bool(attune_result.get("success", false)):
-			await GameErrorDialogService.show_response(attune_result, "backend.error.transit_unavailable")
-			return
-		var attune_body := attune_result.get("body", {}) as Dictionary
-		if bool(attune_body.get("newlyAttuned", false)):
-			await show_dialogue([
-				LocalizationManager.text("npc.transit.attuned"),
-				LocalizationManager.text("npc.transit.return_hint"),
-			])
-		network = attune_body.get("network", {}) as Dictionary
-	else:
-		var network_result: Dictionary = await TransitService.load_network()
-		if not bool(network_result.get("success", false)):
-			await GameErrorDialogService.show_response(network_result, "backend.error.transit_unavailable")
-			return
-		network = network_result.get("body", {}) as Dictionary
+	var network_result: Dictionary = await TransitService.load_network()
+	if not bool(network_result.get("success", false)):
+		await GameErrorDialogService.show_response(network_result, "backend.error.transit_unavailable")
+		return
+	var network := network_result.get("body", {}) as Dictionary
 
 	var menu := TransitMenuScript.new() as TransitMenu
 	get_tree().current_scene.add_child(menu)
