@@ -27,6 +27,7 @@
 [ext_resource type="SpriteFrames" path="res://assets/npcs/classes/poke_fan_m_frames.tres" id="32_poke_fan_m"]
 [ext_resource type="SpriteFrames" path="res://assets/npcs/classes/school_kid_m_frames.tres" id="33_school_kid_m"]
 [ext_resource type="Script" path="res://scripts/world/npcs/synchronized_playmate_npc.gd" id="34_playmate"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="36_transit_keeper"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6lp0i"]
 atlas = ExtResource("4_3oirl")
@@ -2309,6 +2310,12 @@ npc_sprite_frames = ExtResource("33_school_kid_m")
 movement_target_path = NodePath("../../Pokemon/Pikachu")
 movement_offset = Vector2(0, -64)
 
+[node name="TransitKeeper" parent="Entities/NPCs" instance=ExtResource("36_transit_keeper")]
+position = Vector2(720, 528)
+npc_id = "kanto_pallet_town_transit_keeper"
+local_destination_id = "kanto_pallet_town"
+facing_direction = Vector2(0, 1)
+
 [node name="Players" type="Node2D" parent="Entities" unique_id=245092271]
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=689328441]
@@ -2394,6 +2401,9 @@ position = Vector2(656, 560)
 
 [node name="FromRivalsHouse" type="Marker2D" parent="Spawns" unique_id=737384273]
 position = Vector2(1136, 432)
+
+[node name="TransitArrival" type="Marker2D" parent="Spawns"]
+position = Vector2(720, 560)
 
 [node name="Exits" type="Node2D" parent="." unique_id=1482608450]
 

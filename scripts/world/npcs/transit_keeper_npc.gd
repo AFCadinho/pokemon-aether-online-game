@@ -1,0 +1,55 @@
+@tool
+extends DialogueNPC
+
+class_name TransitKeeperNPC
+
+const TransitMenuScript := preload("res://scripts/ui/transit_menu.gd")
+
+@export var local_destination_id := ""
+
+
+func interact_with_player(_player: Node2D) -> void:
+	var network: Dictionary
+	if not local_destination_id.is_empty():
+		var attune_result: Dictionary = await TransitService.attune(local_destination_id)
+		if not bool(attune_result.get("success", false)):
+			await GameErrorDialogService.show_response(attune_result, "backend.error.transit_unavailable")
+			return
+		var attune_body := attune_result.get("body", {}) as Dictionary
+		if bool(attune_body.get("newlyAttuned", false)):
+			await show_dialogue([
+				LocalizationManager.text("npc.transit.attuned"),
+				LocalizationManager.text("npc.transit.return_hint"),
+			])
+		network = attune_body.get("network", {}) as Dictionary
+	else:
+		var network_result: Dictionary = await TransitService.load_network()
+		if not bool(network_result.get("success", false)):
+			await GameErrorDialogService.show_response(network_result, "backend.error.transit_unavailable")
+			return
+		network = network_result.get("body", {}) as Dictionary
+
+	var menu := TransitMenuScript.new() as TransitMenu
+	get_tree().current_scene.add_child(menu)
+	menu.open(network)
+	var destination_id: String = await menu.resolved
+	if destination_id.is_empty():
+		return
+	var world := get_tree().current_scene
+	if world == null or not world.has_method("begin_authorized_teleport") or not world.has_method("apply_authorized_teleport_state"):
+		await show_dialogue([LocalizationManager.text("npc.transit.unavailable")])
+		return
+	var begin_result: Dictionary = await world.call("begin_authorized_teleport", true, true)
+	if not bool(begin_result.get("success", false)):
+		await GameErrorDialogService.show_response(begin_result, "backend.error.transit_unavailable")
+		return
+	var travel_result: Dictionary = await TransitService.travel(destination_id)
+	if not bool(travel_result.get("success", false)):
+		world.call("cancel_authorized_teleport")
+		await GameErrorDialogService.show_response(travel_result, "backend.error.transit_unavailable")
+		return
+	var body := travel_result.get("body", {}) as Dictionary
+	PlayerWalletService.apply_wallet_result({"success": true, "wallet": body.get("wallet", {})})
+	var apply_result: Dictionary = await world.call("apply_authorized_teleport_state", body.get("state", {}))
+	if not bool(apply_result.get("success", false)):
+		await GameErrorDialogService.show_response(apply_result, "backend.error.transit_unavailable")

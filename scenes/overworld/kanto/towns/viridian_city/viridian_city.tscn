@@ -27,6 +27,7 @@
 [ext_resource type="Texture2D" uid="uid://dwsfb8bgfvnmo" path="res://assets/sprites/trainer_cards/showdown/acetrainer-gen6.png" id="36_ev_assistant_m_portrait"]
 [ext_resource type="Script" path="res://scripts/world/kanto/towns/ev_training_expert_mateo.gd" id="37_ev_expert_mateo"]
 [ext_resource type="SpriteFrames" uid="uid://cf4j1u0alxcad" path="res://assets/npcs/classes/ev_expert_f_frames.tres" id="38_ev_expert_f"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="39_transit_keeper"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route1"]
 size = Vector2(208, 34)
@@ -492,6 +493,9 @@ position = Vector2(432, 1008)
 [node name="EVTrainingSouthOutside" type="Marker2D" parent="Spawns" unique_id=1994447459]
 position = Vector2(432, 1072)
 
+[node name="TransitArrival" type="Marker2D" parent="Spawns"]
+position = Vector2(1200, 1488)
+
 [node name="EncounterRegions" type="Node2D" parent="." unique_id=124010091]
 
 [node name="EVTrainingField" type="Node2D" parent="EncounterRegions" unique_id=452201869]
@@ -672,6 +676,12 @@ display_name = "EV Expert Mateo"
 npc_sprite_frames = ExtResource("38_ev_expert_f")
 mugshot = ExtResource("34_ev_expert_portrait")
 preload_quest_markers = true
+
+[node name="TransitKeeper" parent="Entities/NPCs" instance=ExtResource("39_transit_keeper")]
+position = Vector2(1856, 1536)
+npc_id = "kanto_viridian_city_transit_keeper"
+local_destination_id = "kanto_viridian_city"
+facing_direction = Vector2(0, 1)
 
 [node name="RouteGuards" type="Node2D" parent="Entities/NPCs" unique_id=286755846]
 

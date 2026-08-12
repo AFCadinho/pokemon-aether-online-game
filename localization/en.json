@@ -3256,5 +3256,19 @@
   "battle.voice.switch.your_turn": "Your turn, {to}!",
   "battle.voice.switch.change_plan": "Change of plan. Go, {to}!",
   "battle.voice.switch.go": "Go, {to}!",
-  "battle.voice.switch.youre_up": "You're up, {to}!"
+  "battle.voice.switch.youre_up": "You're up, {to}!",
+  "ui.transit.title": "Aether Transit",
+  "ui.transit.summary": "{tier}  •  Balance: ₽{money}",
+  "ui.transit.tier.standard": "Standard fare",
+  "ui.transit.tier.blessing": "Aether Blessing fare",
+  "ui.transit.destination.fare": "{name}  —  ₽{fare}",
+  "ui.transit.destination.unattuned": "{name}  —  Not attuned",
+  "ui.transit.destination.current": "{name}  —  Current location",
+  "ui.transit.close": "Close",
+  "ui.transit.confirm_title": "Confirm Aether Transit",
+  "ui.transit.confirm": "Travel to {name} for ₽{fare}?",
+  "npc.transit.attuned": "Your Aether signature is now attuned to this town.",
+  "npc.transit.return_hint": "You may return here through any Transit Keeper in this region.",
+  "npc.transit.unavailable": "The Aether current cannot be reached right now.",
+  "backend.error.transit_unavailable": "Aether Transit is unavailable right now."
 }

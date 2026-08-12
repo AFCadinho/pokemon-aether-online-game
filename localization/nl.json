@@ -3256,5 +3256,19 @@
   "battle.voice.switch.your_turn": "Jouw beurt, {to}!",
   "battle.voice.switch.change_plan": "Ander plan. Ga, {to}!",
   "battle.voice.switch.go": "Ga, {to}!",
-  "battle.voice.switch.youre_up": "Jouw beurt, {to}!"
+  "battle.voice.switch.youre_up": "Jouw beurt, {to}!",
+  "ui.transit.title": "Aether Transit",
+  "ui.transit.summary": "{tier}  •  Saldo: ₽{money}",
+  "ui.transit.tier.standard": "Standaardtarief",
+  "ui.transit.tier.blessing": "Aether Blessing-tarief",
+  "ui.transit.destination.fare": "{name}  —  ₽{fare}",
+  "ui.transit.destination.unattuned": "{name}  —  Niet afgestemd",
+  "ui.transit.destination.current": "{name}  —  Huidige locatie",
+  "ui.transit.close": "Sluiten",
+  "ui.transit.confirm_title": "Aether Transit bevestigen",
+  "ui.transit.confirm": "Voor ₽{fare} naar {name} reizen?",
+  "npc.transit.attuned": "Je Aether-signatuur is nu op deze stad afgestemd.",
+  "npc.transit.return_hint": "Je kunt hier terugkeren via iedere Transit Keeper in deze regio.",
+  "npc.transit.unavailable": "De Aether-stroom is momenteel niet bereikbaar.",
+  "backend.error.transit_unavailable": "Aether Transit is momenteel niet beschikbaar."
 }

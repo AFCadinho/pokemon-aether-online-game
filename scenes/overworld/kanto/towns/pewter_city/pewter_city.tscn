@@ -18,6 +18,7 @@
 [ext_resource type="SpriteFrames" uid="uid://yaxkjlx3spjb" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="23_poke_fan_f"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="24_pokemon"]
 [ext_resource type="PackedScene" uid="uid://csmsqlujka4ma" path="res://scenes/world/interactables/locked_door_interactable.tscn" id="25_locked_door"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="26_transit_keeper"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2mtwu"]
 size = Vector2(32, 16)
@@ -182,6 +183,9 @@ position = Vector2(1104, 1008)
 [node name="FromHouse2" type="Marker2D" parent="Spawns" unique_id=1272194160]
 position = Vector2(464, 1584)
 
+[node name="TransitArrival" type="Marker2D" parent="Spawns"]
+position = Vector2(1488, 1584)
+
 [node name="Exits" type="Node2D" parent="." unique_id=109747091]
 
 [node name="ToRoute2" type="Area2D" parent="Exits" unique_id=1956639696]
@@ -310,6 +314,12 @@ npc_id = "kanto_pewter_city_resident_nora"
 npc_definition_id = "trainer_class_poke_fan_f"
 display_name = "Pewter Resident Nora"
 npc_sprite_frames = ExtResource("23_poke_fan_f")
+
+[node name="TransitKeeper" parent="Entities/NPCs" instance=ExtResource("26_transit_keeper")]
+position = Vector2(1488, 1552)
+npc_id = "kanto_pewter_city_transit_keeper"
+local_destination_id = "kanto_pewter_city"
+facing_direction = Vector2(0, 1)
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=913732015]
 

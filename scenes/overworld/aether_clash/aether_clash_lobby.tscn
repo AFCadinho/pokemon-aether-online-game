@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="2_tauxp"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="3_7psnb"]
 [ext_resource type="Script" path="res://scripts/world/map_metadata.gd" id="4_map_meta"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="5_transit_keeper"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_t1icv"]
 texture = ExtResource("2_tauxp")
@@ -133,6 +134,16 @@ music_track_id = "login.lugia_theme_lofi"
 
 [node name="GuildArrival" type="Marker2D" parent="Spawns"]
 position = Vector2(944, 1616)
+
+[node name="Entities" type="Node2D" parent="."]
+z_index = 5
+
+[node name="NPCs" type="Node2D" parent="Entities"]
+
+[node name="TransitKeeper" parent="Entities/NPCs" instance=ExtResource("5_transit_keeper")]
+position = Vector2(1040, 1424)
+npc_id = "aether_clash_lobby_transit_keeper"
+facing_direction = Vector2(0, 1)
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=1428557043]
 visible = false
