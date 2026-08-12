@@ -69,6 +69,11 @@ func _init() -> void:
 		"Transition previews are cached for synchronous NPC collision checks"
 	)
 	_expect(
+		service_source.contains('body.get("story", {})')
+		and service_source.contains("StoryService.apply_story_if_not_stale(story)"),
+		"Authorized transitions immediately apply their authoritative story projection"
+	)
+	_expect(
 		auth_service_source.contains("WorldTransitionService.clear_cache()"),
 		"Account switches clear transition access cached for the previous player"
 	)
