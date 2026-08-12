@@ -85,7 +85,11 @@ func _init() -> void:
 	var beacon_source := FileAccess.get_file_as_string(
 		"res://scripts/world/interactables/aether_beacon.gd"
 	)
+	var transit_service_source := FileAccess.get_file_as_string(
+		"res://scripts/services/transit_service.gd"
+	)
 	_check(beacon_source.contains("TransitService.attune"), "Aether Beacon attunes through the server")
+	_check(transit_service_source.contains("save_current_player_state_now"), "Attunement synchronizes the player's current position first")
 	_check(beacon_source.contains("await super._process(delta)"), "Aether Beacon awaits the shared interaction coroutine")
 	_check(beacon_source.contains("requires_facing = false"), "Aether Beacon enforces omnidirectional interaction at runtime")
 	_check(beacon_source.contains("interaction_shape_size = Vector2(80, 80)"), "Aether Beacon enforces its local interaction radius at runtime")

@@ -13,6 +13,9 @@ func load_network() -> Dictionary:
 
 
 func attune(destination_id: String) -> Dictionary:
+	var position_save := await _save_current_player_position()
+	if not bool(position_save.get("success", false)):
+		return position_save
 	return await _request_json(
 		TRANSIT_ENDPOINT + "/attune",
 		HTTPClient.METHOD_POST,
@@ -33,6 +36,22 @@ func travel(destination_id: String) -> Dictionary:
 	if bool(result.get("success", false)):
 		pending_request_ids.erase(destination_id)
 	return result
+
+
+func _save_current_player_position() -> Dictionary:
+	var world := GameState.get_world()
+	if world == null or not world.has_method("save_current_player_state_now"):
+		return {
+			"success": false,
+			"error": "World is not ready.",
+		}
+	var result_value: Variant = await world.call("save_current_player_state_now")
+	if result_value is Dictionary:
+		return result_value as Dictionary
+	return {
+		"success": false,
+		"error": "Invalid position save response.",
+	}
 
 
 func _request_json(path: String, method: HTTPClient.Method, body: String) -> Dictionary:
