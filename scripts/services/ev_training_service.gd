@@ -4,6 +4,8 @@ class_name EvTrainingServiceNode
 
 const SESSION_ENDPOINT := "/game/ev-training/session"
 const END_SESSION_ENDPOINT := "/game/ev-training/session/end"
+const FOCUS_ENDPOINT := "/game/ev-training/tutorial/focus"
+const TUTORIAL_SESSION_ENDPOINT := "/game/ev-training/tutorial/session"
 const REQUEST_TIMEOUT_SECONDS := 5.0
 
 
@@ -20,6 +22,21 @@ func start_session(stat: String) -> Dictionary:
 			"requestId": _new_request_id(),
 		})
 	)
+
+
+func select_focus_pokemon(pokemon_id: int) -> Dictionary:
+	return await _request_json(
+		FOCUS_ENDPOINT,
+		HTTPClient.METHOD_POST,
+		JSON.stringify({
+			"pokemonId": pokemon_id,
+			"requestId": _new_request_id(),
+		})
+	)
+
+
+func start_tutorial_session() -> Dictionary:
+	return await _request_json(TUTORIAL_SESSION_ENDPOINT, HTTPClient.METHOD_POST, "{}")
 
 
 func end_session() -> Dictionary:
@@ -55,11 +72,16 @@ func _request_json(endpoint: String, method: HTTPClient.Method, body: String) ->
 			"body": response_body,
 		}
 	_apply_wallet(response_body)
+	var story := _dictionary(response_body.get("story", {}))
+	if not story.is_empty():
+		StoryService.apply_story_if_not_stale(story)
 	return {
 		"success": true,
 		"status": status,
 		"session": _dictionary(response_body.get("session", {})),
 		"wallet": _dictionary(response_body.get("wallet", {})),
+		"tutorial": _dictionary(response_body.get("tutorial", {})),
+		"story": story,
 	}
 
 

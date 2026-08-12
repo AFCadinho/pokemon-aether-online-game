@@ -13,8 +13,12 @@ func _init() -> void:
 	var service_source := FileAccess.get_file_as_string(
 		"res://scripts/services/ev_training_service.gd"
 	)
-	_assert(scene_source.contains("EVExpertMateo"), "north EV expert is missing")
-	_assert(scene_source.contains("EVAssistantRina"), "south EV assistant is missing")
+	var expert_source := FileAccess.get_file_as_string(
+		"res://scripts/world/kanto/towns/ev_training_expert_mateo.gd"
+	)
+	_assert(scene_source.contains("EVExpertMateo"), "EV expert Mateo is missing")
+	_assert(scene_source.contains("EVAssistantRina"), "north EV assistant is missing")
+	_assert(scene_source.contains("EVAssistantEli"), "south EV assistant is missing")
 	_assert(scene_source.contains("kanto_viridian_city_ev_training"), "EV encounter region is missing")
 	_assert(scene_source.contains("EVTrainingNorthInside"), "north teleport markers are missing")
 	_assert(scene_source.contains("EVTrainingSouthInside"), "south teleport markers are missing")
@@ -22,6 +26,8 @@ func _init() -> void:
 	for stat: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
 		_assert(gate_source.contains('"id": "%s"' % stat), "missing EV stat choice: %s" % stat)
 	_assert(service_source.contains("/game/ev-training/session"), "EV session endpoint is missing")
+	_assert(service_source.contains("/game/ev-training/tutorial/focus"), "EV tutorial focus endpoint is missing")
+	_assert(expert_source.contains("allocate_training_evs"), "Mateo's EV allocation lesson is missing")
 	print("EV training checks passed.")
 	quit(0)
 

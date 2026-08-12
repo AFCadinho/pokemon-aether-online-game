@@ -719,6 +719,7 @@ func _pokemon_ev_allocation_result_from_response(response: Dictionary) -> Dictio
 		"party": _array_from_value(party.get("party", [])),
 		"hasParty": bool(party.get("hasParty", false)),
 		"allocation": _dictionary_from_value(body.get("allocation", {})),
+		"evTrainingTutorial": _dictionary_from_value(body.get("evTrainingTutorial", {})),
 	}
 
 

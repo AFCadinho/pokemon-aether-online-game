@@ -2783,6 +2783,23 @@ func _award_wild_battle_money(battle_id: String, pokemon_species: String) -> voi
 		_notify_reward_effort_gains(reward)
 		_notify_reward_level_ups(reward)
 		await _notify_fishing_experience_award(reward.get("fishingProgression", {}))
+		var tutorial := _dictionary_from_value(reward.get("evTrainingTutorial", {}))
+		if not tutorial.is_empty():
+			var story_result: Dictionary = await PlayerGameStateService.refresh_story()
+			if not bool(story_result.get("success", false)):
+				push_warning("World: EV tutorial story refresh failed.")
+			if str(tutorial.get("stepId", "")) == "allocate_training_evs":
+				get_tree().call_group(
+					"ui_overlay",
+					"add_system_message",
+					"You collected four %s EVs. Open the EV tab and allocate them to %s." % [str(tutorial.get("stat", "")).to_upper(), str(tutorial.get("pokemonName", "your Pokemon"))]
+				)
+				get_tree().call_group(
+					"ui_overlay",
+					"open_ev_training_allocation",
+					int(tutorial.get("pokemonId", 0)),
+					str(tutorial.get("stat", ""))
+				)
 	else:
 		push_warning("World: wild battle money reward failed: %s" % str(wallet_result.get("error", "Unknown error")))
 

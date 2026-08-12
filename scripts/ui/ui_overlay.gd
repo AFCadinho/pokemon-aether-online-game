@@ -18522,6 +18522,18 @@ func _show_pokemon_summary(slot_index: int) -> void:
 	if _trade_workspace_is_visible():
 		_promote_trade_summary_to_window(card_key)
 
+func open_ev_training_allocation(pokemon_id: int, stat_id: String) -> bool:
+	for slot_index in range(PlayerSave.party.size()):
+		var pokemon: Pokemon = PlayerSave.party[slot_index]
+		if pokemon == null or pokemon.owned_pokemon_id != pokemon_id:
+			continue
+		_show_pokemon_summary(slot_index)
+		var card_key := _get_pokemon_summary_card_key(pokemon, slot_index, "interactive")
+		_on_pokemon_summary_tab_selected("evs", card_key)
+		_on_summary_allocated_ev_pressed(stat_id, _summary_stat_label(stat_id), card_key)
+		return true
+	return false
+
 func _trade_workspace_is_visible() -> bool:
 	var workspace := get_node_or_null("/root/TradeWorkspace")
 	return workspace != null and workspace.visible
@@ -19759,6 +19771,13 @@ func _on_summary_ev_allocate_confirm_pressed() -> void:
 	}))
 	_hide_pokemon_summary_ev_allocate_popup()
 	_refresh_open_pokemon_summary_cards()
+	var tutorial := _staff_dictionary_from_variant(result.get("evTrainingTutorial", {}))
+	if not tutorial.is_empty():
+		var story_result: Dictionary = await PlayerGameStateService.refresh_story()
+		if not bool(story_result.get("success", false)):
+			push_warning("UIOverlay: EV tutorial story refresh failed.")
+		if str(tutorial.get("stepId", "")) == "return_to_mateo":
+			_add_chat_message("EV lesson complete. Return to Mateo for your reward.")
 
 func _refresh_summary_ev_allocate_status() -> void:
 	if pokemon_summary_ev_allocate_popup == null or not pokemon_summary_ev_allocate_popup.visible:

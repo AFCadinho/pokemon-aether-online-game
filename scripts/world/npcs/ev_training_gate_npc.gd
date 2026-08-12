@@ -35,10 +35,29 @@ func _enter_training_area(player: Node2D) -> void:
 		await GameErrorDialogService.show_response(status, "EV training is currently unavailable.")
 		return
 	var session: Dictionary = status.get("session", {})
+	var tutorial: Dictionary = status.get("tutorial", {})
 	if bool(session.get("active", false)):
 		var stat_label := _stat_label(str(session.get("stat", "")))
 		await show_dialogue([
 			"Your %s training session is still active. Head back in whenever you're ready." % stat_label,
+		], display_name)
+		_teleport_player(player, inside_marker_path, -inside_direction)
+		return
+	if not bool(tutorial.get("unlocked", false)):
+		if str(tutorial.get("stepId", "")) != "defeat_training_targets":
+			await show_dialogue([
+				"The focused training field requires Mateo's authorization.",
+				"You can find him beside the field. Complete his lesson first.",
+			], display_name)
+			return
+		var tutorial_response: Dictionary = await EvTrainingService.start_tutorial_session()
+		if not bool(tutorial_response.get("success", false)):
+			await GameErrorDialogService.show_response(tutorial_response, "Could not start the EV lesson.")
+			return
+		var active_tutorial: Dictionary = tutorial_response.get("tutorial", {})
+		await show_dialogue([
+			"Mateo's practice field is ready. Only %s will appear." % str(active_tutorial.get("targetSpeciesName", "your training target")),
+			"Make sure %s takes part in all four battles so it receives the Effort Values." % str(active_tutorial.get("pokemonName", "your chosen Pokemon")),
 		], display_name)
 		_teleport_player(player, inside_marker_path, -inside_direction)
 		return
@@ -66,9 +85,15 @@ func _leave_training_area(player: Node2D) -> void:
 	if not bool(response.get("success", false)):
 		await GameErrorDialogService.show_response(response, "Could not end EV training.")
 		return
-	await show_dialogue([
-		"Training session complete. Come back whenever you want to focus on another stat.",
-	], display_name)
+	var tutorial: Dictionary = response.get("tutorial", {})
+	if str(tutorial.get("stepId", "")) == "defeat_training_targets":
+		await show_dialogue([
+			"Lesson paused. You have defeated %d of %d %s." % [int(tutorial.get("defeated", 0)), int(tutorial.get("requiredDefeats", 4)), str(tutorial.get("targetSpeciesName", "targets"))],
+		], display_name)
+	else:
+		await show_dialogue([
+			"Training session complete. Come back whenever you want to focus on another stat.",
+		], display_name)
 	_teleport_player(player, outside_marker_path, inside_direction)
 
 
