@@ -636,30 +636,30 @@ pickpocket_npc_type = "veteran"
 pickpocket_required_level = 20
 
 [node name="EVExpertMateo" parent="Entities/NPCs" instance=ExtResource("24_dialogue")]
-position = Vector2(1088, 576)
+position = Vector2(1088, 1120)
 script = ExtResource("31_ev_training_gate")
 npc_id = "kanto_viridian_city_ev_expert_mateo"
 npc_definition_id = "trainer_class_expert"
 display_name = "EV Expert Mateo"
-facing_direction = Vector2(0, -1)
+facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("32_ace_trainer_m")
 mugshot = ExtResource("34_ev_expert_portrait")
-inside_marker_path = NodePath("../../../Spawns/EVTrainingNorthInside")
-outside_marker_path = NodePath("../../../Spawns/EVTrainingNorthOutside")
-inside_direction = Vector2(0, 1)
+inside_marker_path = NodePath("../../../Spawns/EVTrainingSouthInside")
+outside_marker_path = NodePath("../../../Spawns/EVTrainingSouthOutside")
+inside_direction = Vector2(0, -1)
 
 [node name="EVAssistantRina" parent="Entities/NPCs" instance=ExtResource("24_dialogue")]
-position = Vector2(1088, 1120)
+position = Vector2(1088, 576)
 script = ExtResource("31_ev_training_gate")
 npc_id = "kanto_viridian_city_ev_assistant_rina"
 npc_definition_id = "trainer_class_ace_trainer_f"
 display_name = "EV Assistant Rina"
-facing_direction = Vector2(0, 1)
+facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("33_ace_trainer_f")
 mugshot = ExtResource("35_ev_assistant_portrait")
-inside_marker_path = NodePath("../../../Spawns/EVTrainingSouthInside")
-outside_marker_path = NodePath("../../../Spawns/EVTrainingSouthOutside")
-inside_direction = Vector2(0, -1)
+inside_marker_path = NodePath("../../../Spawns/EVTrainingNorthInside")
+outside_marker_path = NodePath("../../../Spawns/EVTrainingNorthOutside")
+inside_direction = Vector2(0, 1)
 
 [node name="RouteGuards" type="Node2D" parent="Entities/NPCs" unique_id=286755846]
 
