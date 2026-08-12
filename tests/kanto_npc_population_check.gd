@@ -135,6 +135,13 @@ func _check_trainer_school_dadinho_story_hook() -> void:
 	var dadinho := map.get_node_or_null("Entities/NPCs/Dadinho")
 	var hook := map.get_node_or_null("Entities/NPCs/Dadinho/MeetDadinhoStoryHook")
 	var exit := map.get_node_or_null("Exits/ToViridianCity")
+	var collision := map.get_node_or_null("Collision") as TileMapLayer
+	var school_npcs := {
+		"InstructorCelia": "kanto_viridian_city_trainer_school_instructor_celia",
+		"SchoolKidMilo": "kanto_viridian_city_trainer_school_kid_milo",
+		"SchoolKidRina": "kanto_viridian_city_trainer_school_kid_rina",
+		"YoungsterFinn": "kanto_viridian_city_trainer_school_youngster_finn",
+	}
 	_check(
 		dadinho != null
 		and str(dadinho.get("npc_id")) == "kanto_viridian_city_trainer_school_dadinho",
@@ -157,6 +164,15 @@ func _check_trainer_school_dadinho_story_hook() -> void:
 	if hook != null:
 		_check(str(hook.get("interaction_id")) == "trainer_school_meet_dadinho", "Dadinho uses the Trainer School meeting interaction")
 		_check(str(hook.get("entity_id")) == "kanto_viridian_city_trainer_school_dadinho", "Dadinho's story hook uses his school identity")
+	for node_name: String in school_npcs:
+		var school_npc := map.get_node_or_null("Entities/NPCs/%s" % node_name) as Node2D
+		_check(school_npc != null, "Trainer School places %s" % node_name)
+		if school_npc == null:
+			continue
+		_check(str(school_npc.get("npc_id")) == school_npcs[node_name], "%s uses its school dialogue identity" % node_name)
+		if collision != null:
+			var cell := collision.local_to_map(collision.to_local(school_npc.global_position))
+			_check(collision.get_cell_source_id(cell) == -1, "%s stands on a walkable classroom tile" % node_name)
 	_check(
 		exit != null
 		and str(exit.get("transition_id")) == "kanto_viridian_city_trainer_school__to_viridian_city",

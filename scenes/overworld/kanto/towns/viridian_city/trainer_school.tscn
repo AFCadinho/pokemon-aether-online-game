@@ -8,6 +8,10 @@
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="6_dialogue_npc"]
 [ext_resource type="SpriteFrames" uid="uid://cqxh37chx4v8a" path="res://assets/npcs/custom/adinho_dad_frames.tres" id="7_dadinho_frames"]
 [ext_resource type="Texture2D" uid="uid://cxbfneavbrouo" path="res://assets/sprites/mugshots/dadinho_mugshot.png" id="8_dadinho_mugshot"]
+[ext_resource type="SpriteFrames" uid="uid://ckxh3g37blbkj" path="res://assets/npcs/classes/scientist_f_frames.tres" id="10_instructor_frames"]
+[ext_resource type="SpriteFrames" uid="uid://b8fh81or510qb" path="res://assets/npcs/classes/school_kid_m_frames.tres" id="11_school_kid_m_frames"]
+[ext_resource type="SpriteFrames" uid="uid://ddpjpv44v1bjn" path="res://assets/npcs/classes/school_kid_f_frames.tres" id="12_school_kid_f_frames"]
+[ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="13_youngster_frames"]
 [ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="9_story_hook"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_school_exit"]
@@ -118,6 +122,38 @@ entity_id = "kanto_viridian_city_trainer_school_dadinho"
 position = Vector2(400, 608)
 
 [node name="Exits" type="Node2D" parent="." unique_id=1933461154]
+[node name="InstructorCelia" parent="Entities/NPCs" instance=ExtResource("6_dialogue_npc")]
+position = Vector2(624, 368)
+npc_id = "kanto_viridian_city_trainer_school_instructor_celia"
+npc_definition_id = "trainer_class_scientist_f"
+display_name = "Instructor Celia"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("10_instructor_frames")
+
+[node name="SchoolKidMilo" parent="Entities/NPCs" instance=ExtResource("6_dialogue_npc")]
+position = Vector2(176, 432)
+npc_id = "kanto_viridian_city_trainer_school_kid_milo"
+npc_definition_id = "trainer_class_school_kid_m"
+display_name = "School Kid Milo"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("11_school_kid_m_frames")
+
+[node name="SchoolKidRina" parent="Entities/NPCs" instance=ExtResource("6_dialogue_npc")]
+position = Vector2(368, 496)
+npc_id = "kanto_viridian_city_trainer_school_kid_rina"
+npc_definition_id = "trainer_class_school_kid_f"
+display_name = "School Kid Rina"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("12_school_kid_f_frames")
+
+[node name="YoungsterFinn" parent="Entities/NPCs" instance=ExtResource("6_dialogue_npc")]
+position = Vector2(528, 432)
+npc_id = "kanto_viridian_city_trainer_school_youngster_finn"
+npc_definition_id = "trainer_class_youngster"
+display_name = "Youngster Finn"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("13_youngster_frames")
+
 
 [node name="ToViridianCity" type="Area2D" parent="Exits" unique_id=2062189003]
 position = Vector2(400, 640)
