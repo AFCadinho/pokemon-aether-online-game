@@ -751,7 +751,7 @@ movement_speed_pixels = 48.0
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=841850023]
 
 [node name="AetherBeacon" parent="Entities/Interactables" instance=ExtResource("40_aether_beacon")]
-position = Vector2(1264, 1456)
+position = Vector2(1072, 1136)
 interactable_id = "kanto_viridian_city_aether_beacon"
 destination_id = "kanto_viridian_city"
 

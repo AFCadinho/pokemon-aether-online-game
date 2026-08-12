@@ -11,7 +11,7 @@ const MAP_CONTRACTS := {
 	"res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn": [
 		'position = Vector2(1200, 1488)',
 		'local_destination_id = "kanto_viridian_city"',
-		'position = Vector2(1264, 1456)',
+		'position = Vector2(1072, 1136)',
 		'interactable_id = "kanto_viridian_city_aether_beacon"',
 		'destination_id = "kanto_viridian_city"',
 	],
@@ -26,6 +26,12 @@ const MAP_CONTRACTS := {
 }
 
 const TILE_CENTER_CONTRACTS := {
+	"res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn": {
+		"AetherBeacon": Vector2i(784, 208),
+	},
+	"res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn": {
+		"AetherBeacon": Vector2i(1072, 1136),
+	},
 	"res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn": {
 		"TransitKeeper": Vector2i(1328, 1040),
 		"AetherBeacon": Vector2i(1424, 1040),
@@ -90,7 +96,9 @@ func _init() -> void:
 		"res://scripts/services/transit_service.gd"
 	)
 	_check(beacon_source.contains("TransitService.attune"), "Aether Beacon attunes through the server")
+	_check(beacon_source.contains("destination_id, global_position"), "Aether Beacon supplies its placed world position")
 	_check(transit_service_source.contains("save_current_player_state_now"), "Attunement synchronizes the player's current position first")
+	_check(transit_service_source.contains('"beaconPosition"'), "Attunement sends the placed Beacon position")
 	_check(beacon_source.contains("await super._process(delta)"), "Aether Beacon awaits the shared interaction coroutine")
 	_check(beacon_source.contains("requires_facing = false"), "Aether Beacon enforces omnidirectional interaction at runtime")
 	_check(beacon_source.contains("interaction_shape_size = Vector2(80, 80)"), "Aether Beacon enforces its local interaction radius at runtime")

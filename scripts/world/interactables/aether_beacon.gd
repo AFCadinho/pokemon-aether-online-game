@@ -53,7 +53,7 @@ func interact_with_player(_player: Node2D) -> void:
 			display_name
 		)
 		return
-	var result: Dictionary = await TransitService.attune(destination_id)
+	var result: Dictionary = await TransitService.attune(destination_id, global_position)
 	if not bool(result.get("success", false)):
 		await GameErrorDialogService.show_response(result, "backend.error.transit_unavailable")
 		return
