@@ -460,7 +460,8 @@ func _setup_nameplate() -> void:
 	nameplate = Control.new()
 	nameplate.name = "Nameplate"
 	nameplate.visible = false
-	nameplate.z_index = 512
+	nameplate.z_as_relative = false
+	nameplate.z_index = RenderingServer.CANVAS_ITEM_Z_MAX
 	nameplate.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	nameplate.offset_left = -82.0
 	nameplate.offset_top = -80.0
