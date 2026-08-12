@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bnch2l51wuwbh"]
+[gd_scene format=3 uid="uid://bnch2l51wuwbh"]
 
 [ext_resource type="PackedScene" uid="uid://ogt7khne5kw1" path="res://scenes/overworld/kanto/reusable_interiors/house/brown_house_template.tscn" id="1_gc5v0"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_map_meta"]
@@ -24,7 +24,7 @@ music_profile_id = "kanto.pewter_city"
 
 [node name="BrownHouseTemplate" parent="." unique_id=877325221 instance=ExtResource("1_gc5v0")]
 
-[node name="FloorVisibilityMask" type="Node2D" parent="."]
+[node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=707424136]
 z_index = 4096
 z_as_relative = false
 script = ExtResource("3_floor_mask")
@@ -32,28 +32,28 @@ floor_regions = {
 &"ground_floor": Rect2(96, 160, 448, 384)
 }
 
-[node name="Top" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask" unique_id=431575180]
 
-[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1985507653]
 
-[node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1555492739]
 
-[node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=122729292]
 
-[node name="Spawns" type="Node2D" parent="."]
+[node name="Spawns" type="Node2D" parent="." unique_id=1330610002]
 
-[node name="FromPewterCity" type="Marker2D" parent="Spawns"]
+[node name="FromPewterCity" type="Marker2D" parent="Spawns" unique_id=397983092]
 position = Vector2(304, 464)
 
-[node name="Exits" type="Node2D" parent="."]
+[node name="Exits" type="Node2D" parent="." unique_id=1362221090]
 
-[node name="ToPewterCity" type="Area2D" parent="Exits"]
+[node name="ToPewterCity" type="Area2D" parent="Exits" unique_id=1985528488]
 position = Vector2(320, 480)
 script = ExtResource("4_map_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn"
 target_spawn_name = "FromHouse2"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPewterCity"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPewterCity" unique_id=1640872052]
 position = Vector2(-16, 16)
 shape = SubResource("RectangleShape2D_house_exit")
 

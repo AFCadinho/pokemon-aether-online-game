@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://xxsavfefcm4h"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/pewter_city/assets/5GEN_TILESET_2109830053_000.texture.res" id="1_qdc3a"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/pewter_city/assets/5GEN_TILESET_2109830053_005.texture.res" id="2_1irqm"]

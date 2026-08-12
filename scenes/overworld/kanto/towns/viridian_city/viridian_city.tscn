@@ -467,7 +467,7 @@ position = Vector2(1328, 432)
 position = Vector2(1904, 912)
 
 [node name="FromHouse1" type="Marker2D" parent="Spawns" unique_id=1613464911]
-position = Vector2(592, 1488)
+position = Vector2(1552, 912)
 
 [node name="ViridianJail" type="Marker2D" parent="Spawns" unique_id=-1936226265]
 position = Vector2(1552, 1392)
