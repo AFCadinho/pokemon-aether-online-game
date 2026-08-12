@@ -48,6 +48,10 @@ func _init() -> void:
 	var keeper_source := FileAccess.get_file_as_string(
 		"res://scripts/world/npcs/transit_keeper_npc.gd"
 	)
+	var keeper_scene_source := FileAccess.get_file_as_string(
+		"res://scenes/npcs/transit_keeper_npc.tscn"
+	)
+	_check(keeper_scene_source.contains('display_name = "Aethernet Keeper"'), "Transit NPC uses the Aethernet name")
 	_check(not keeper_source.contains("TransitService.attune"), "Transit Keeper does not attune players automatically")
 	_check(keeper_source.contains("TransitService.load_network"), "Transit Keeper loads the travel network")
 	_check(keeper_source.contains("begin_authorized_teleport"), "Transit Keeper uses the authorized teleport flow")
@@ -62,6 +66,8 @@ func _init() -> void:
 	_check(placeholder_source.contains('type="Polygon2D"'), "Aether Beacon has a code-native crystal placeholder")
 	_check(placeholder_source.contains('[node name="Ring"'), "Aether Beacon placeholder has an animated ring")
 	var menu_source := FileAccess.get_file_as_string("res://scripts/ui/transit_menu.gd")
+	var english_localization := FileAccess.get_file_as_string("res://localization/en.json")
+	_check(english_localization.contains('"ui.transit.title": "Aethernet"'), "Transit UI is branded as Aethernet")
 	_check(menu_source.contains("_destinations_by_region"), "Transit UI groups destinations by region")
 	_check(menu_source.contains("ScrollContainer.new()"), "Transit UI remains scrollable as towns are added")
 	_check(menu_source.contains("sourceRegionId") and menu_source.contains('== "all"'), "Only the Lobby exposes cross-region selection")

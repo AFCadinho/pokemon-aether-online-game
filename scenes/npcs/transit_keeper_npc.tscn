@@ -6,7 +6,7 @@
 
 [node name="TransitKeeperNPC" instance=ExtResource("1_base")]
 script = ExtResource("2_script")
-display_name = "Transit Keeper"
+display_name = "Aethernet Keeper"
 npc_sprite_frames = ExtResource("3_frames")
 sprite_offset = Vector2(0, -32)
 movement_behavior = "idle"
