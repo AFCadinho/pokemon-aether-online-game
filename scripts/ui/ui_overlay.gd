@@ -494,6 +494,7 @@ var donator_store_popup: DonatorStorePopup
 @onready var socials_close_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/Header/CloseButton
 var friendlist_popup: FriendlistPopup
 var guild_popup: GuildPopup
+var guild_lobby_teleport_in_flight := false
 var player_interaction_coordinator: PlayerInteractionCoordinator
 var quest_journal_view
 @onready var mail_popup: PanelContainer = $Control/MailPopup
@@ -32828,12 +32829,59 @@ func _open_guild_popup() -> void:
 		$Control.add_child(guild_popup)
 		if not guild_popup.closed.is_connected(_on_guild_popup_closed):
 			guild_popup.closed.connect(_on_guild_popup_closed)
+		if not guild_popup.lobby_teleport_requested.is_connected(_on_guild_lobby_teleport_requested):
+			guild_popup.lobby_teleport_requested.connect(_on_guild_lobby_teleport_requested)
 	guild_popup.open()
 	_activate_ui_panel(guild_popup)
 
 func _on_guild_popup_closed() -> void:
 	if guild_popup != null:
 		_deactivate_ui_panel(guild_popup)
+
+
+func _on_guild_lobby_teleport_requested() -> void:
+	if guild_lobby_teleport_in_flight:
+		return
+	if guild_popup != null and guild_popup.visible:
+		guild_popup.close()
+	await get_tree().process_frame
+	var world := GameState.get_world()
+	if (
+		world == null
+		or not world.has_method("begin_authorized_teleport")
+		or not world.has_method("apply_authorized_teleport_state")
+	):
+		_add_chat_message(LocalizationManager.text("ui.guild.lobby.error.world_not_ready"))
+		return
+
+	guild_lobby_teleport_in_flight = true
+	var begin_result: Dictionary = await world.call("begin_authorized_teleport")
+	if not bool(begin_result.get("success", false)):
+		guild_lobby_teleport_in_flight = false
+		_add_chat_message(str(begin_result.get(
+			"error",
+			LocalizationManager.text("ui.guild.lobby.error.unavailable")
+		)))
+		return
+
+	var response: Dictionary = await GuildService.teleport_to_lobby()
+	if not bool(response.get("success", false)):
+		if world.has_method("cancel_authorized_teleport"):
+			world.call("cancel_authorized_teleport")
+		guild_lobby_teleport_in_flight = false
+		_add_chat_message(str(response.get(
+			"error",
+			LocalizationManager.text("ui.guild.lobby.error.failed")
+		)))
+		return
+
+	var state := _staff_dictionary_from_variant(response.get("state", {}))
+	var apply_result: Dictionary = await world.call("apply_authorized_teleport_state", state)
+	guild_lobby_teleport_in_flight = false
+	if not bool(apply_result.get("success", false)):
+		_add_chat_message(LocalizationManager.text("ui.guild.lobby.error.apply_failed"))
+		return
+	_add_chat_message(LocalizationManager.text("ui.guild.lobby.success"))
 
 func _on_aether_exchange_button_pressed() -> void:
 	_add_chat_message("Aether Exchange is not implemented yet.")

@@ -4,6 +4,7 @@
 
 **Added**
 
+- Guild members can now travel to the shared Aether Clash Lobby for free from their Guild overview.
 - The battle damage calculator now has more room and keeps the battlefield and both teams in view.
 - While using the calculator, you can hover over your own Pokémon and revealed opposing Pokémon to view their known information.
 - You can adjust HP, status conditions, moves, abilities, items, stats, and field effects to explore different battle situations.

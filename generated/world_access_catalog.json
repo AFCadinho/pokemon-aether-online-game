@@ -1,5 +1,27 @@
 {
 	"areas": {
+		"aether_clash_lobby": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Aether Clash Lobby",
+			"locationGroupId": "aether_clash",
+			"locationGroupLabel": "Aether Clash",
+			"regionName": "Aether Clash",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/aether_clash/aether_clash_lobby.tscn",
+			"spawnPoints": {
+				"guild_arrival": {
+					"facingDirection": "down",
+					"label": "Guild Arrival",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "GuildArrival",
+					"tile": {
+						"x": 29,
+						"y": 50
+					}
+				}
+			}
+		},
 		"kanto_oaks_lab": {
 			"areaType": "interior",
 			"defaultMode": "open",
@@ -706,6 +728,46 @@
 			],
 			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
 			"spawnPoints": {
+				"ev_training_north_inside": {
+					"facingDirection": "down",
+					"label": "Ev Training North Inside",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "EVTrainingNorthInside",
+					"tile": {
+						"x": 13,
+						"y": 16
+					}
+				},
+				"ev_training_north_outside": {
+					"facingDirection": "down",
+					"label": "Ev Training North Outside",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "EVTrainingNorthOutside",
+					"tile": {
+						"x": 13,
+						"y": 14
+					}
+				},
+				"ev_training_south_inside": {
+					"facingDirection": "down",
+					"label": "Ev Training South Inside",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "EVTrainingSouthInside",
+					"tile": {
+						"x": 13,
+						"y": 31
+					}
+				},
+				"ev_training_south_outside": {
+					"facingDirection": "down",
+					"label": "Ev Training South Outside",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "EVTrainingSouthOutside",
+					"tile": {
+						"x": 13,
+						"y": 33
+					}
+				},
 				"from_gym": {
 					"facingDirection": "down",
 					"label": "Gym",

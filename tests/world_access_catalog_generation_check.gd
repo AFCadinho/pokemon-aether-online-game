@@ -30,6 +30,13 @@ func _init() -> void:
 	_expect(transitions.size() >= 28, "All configured map exits are registered")
 	_expect(areas.has("kanto_pallet_town"), "Pallet Town is registered")
 	_expect(
+		areas.has("aether_clash_lobby")
+			and (areas.get("aether_clash_lobby", {}) as Dictionary)
+				.get("spawnPoints", {})
+				.has("guild_arrival"),
+		"Aether Clash Lobby and its Guild arrival point are registered"
+	)
+	_expect(
 		areas.has("kanto_pewter_city_pokemon_center"),
 		"Inherited Pokémon Center scene metadata is registered"
 	)

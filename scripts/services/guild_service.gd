@@ -8,6 +8,7 @@ signal guild_changed(guild: Dictionary)
 const GUILDS_ENDPOINT := "/game/guilds"
 const GUILD_HOME_ENDPOINT := "/game/guilds/me"
 const GUILD_INVITATIONS_ENDPOINT := "/game/guild-invitations"
+const GUILD_LOBBY_TELEPORT_ENDPOINT := "/game/guilds/me/lobby/teleport"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 var pending_creation_request_id := ""
@@ -68,6 +69,26 @@ func load_home() -> Dictionary:
 		_set_current_membership({})
 		_set_current_guild({})
 	return response if not bool(response.get("success", false)) else _home_result(response.get("body", {}))
+
+
+func teleport_to_lobby() -> Dictionary:
+	var response := await _authenticated_request(
+		GUILD_LOBBY_TELEPORT_ENDPOINT,
+		HTTPClient.METHOD_POST,
+		"{}"
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var body := _dictionary(response.get("body", {}))
+	var state := _dictionary(body.get("state", {}))
+	if state.is_empty():
+		return {"success": false, "error": "Guild Lobby teleport response was empty."}
+	return {
+		"success": true,
+		"accepted": bool(body.get("accepted", false)),
+		"cost": int(body.get("cost", 0)),
+		"state": state,
+	}
 
 
 func load_invitations() -> Dictionary:
