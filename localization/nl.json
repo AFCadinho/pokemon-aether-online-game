@@ -3270,6 +3270,7 @@
   "npc.transit.attuned": "Je Aether-signatuur is nu op deze stad afgestemd.",
   "npc.transit.return_hint": "Je kunt hier terugkeren via iedere Aethernet Keeper in deze regio.",
   "npc.transit.unavailable": "De Aether-stroom is momenteel niet bereikbaar.",
+  "npc.transit.attune_beacon_hint": "Raak eerst de Aether Beacon hiernaast aan. Zodra die je Aether-signatuur herkent, kan ik het Aethernet voor je openen.",
   "backend.error.transit_unavailable": "Het Aethernet is momenteel niet beschikbaar.",
   "backend.error.transit_wrong_location": "Je moet in de bijbehorende stad zijn om op deze Aether Beacon af te stemmen.",
   "backend.error.transit_too_far": "Ga dichter bij de Aether Beacon staan om af te stemmen.",

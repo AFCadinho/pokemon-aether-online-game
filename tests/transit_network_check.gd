@@ -55,6 +55,7 @@ func _init() -> void:
 	_check(keeper_scene_source.contains('sprite_offset = Vector2(0, -16)'), "Aethernet Keeper sprite aligns with its collision")
 	_check(not keeper_source.contains("TransitService.attune"), "Transit Keeper does not attune players automatically")
 	_check(keeper_source.contains("TransitService.load_network"), "Transit Keeper loads the travel network")
+	_check(keeper_source.contains("npc.transit.attune_beacon_hint"), "Transit Keeper explains that the local Beacon must be attuned")
 	_check(keeper_source.contains("begin_authorized_teleport"), "Transit Keeper uses the authorized teleport flow")
 	_check(keeper_source.contains("PlayerWalletService.apply_wallet_result"), "Transit travel updates the local wallet projection")
 	var beacon_source := FileAccess.get_file_as_string(

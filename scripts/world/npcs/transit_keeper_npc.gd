@@ -14,6 +14,13 @@ func interact_with_player(_player: Node2D) -> void:
 		await GameErrorDialogService.show_response(network_result, "backend.error.transit_unavailable")
 		return
 	var network := network_result.get("body", {}) as Dictionary
+	if (
+		not local_destination_id.is_empty()
+		and str(network.get("localDestinationId", "")) == local_destination_id
+		and not bool(network.get("localAttuned", false))
+	):
+		await show_dialogue([LocalizationManager.text("npc.transit.attune_beacon_hint")])
+		return
 
 	var menu := TransitMenuScript.new() as TransitMenu
 	get_tree().current_scene.add_child(menu)

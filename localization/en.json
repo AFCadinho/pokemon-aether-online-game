@@ -3270,6 +3270,7 @@
   "npc.transit.attuned": "Your Aether signature is now attuned to this town.",
   "npc.transit.return_hint": "You may return here through any Aethernet Keeper in this region.",
   "npc.transit.unavailable": "The Aether current cannot be reached right now.",
+  "npc.transit.attune_beacon_hint": "Touch the nearby Aether Beacon first. Once it recognizes your Aether signature, I can open the Aethernet for you.",
   "backend.error.transit_unavailable": "The Aethernet is unavailable right now.",
   "backend.error.transit_wrong_location": "You must be in the matching town to attune this Aether Beacon.",
   "backend.error.transit_too_far": "Move closer to the Aether Beacon to attune.",
