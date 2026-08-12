@@ -10,7 +10,8 @@ y_sort_enabled = true
 script = ExtResource("1_script")
 interactable_kind = "aether_beacon"
 blocks_movement = true
-interaction_shape_size = Vector2(96, 96)
+requires_facing = false
+interaction_shape_size = Vector2(80, 80)
 
 [node name="Shadow" type="Polygon2D" parent="."]
 position = Vector2(0, 3)

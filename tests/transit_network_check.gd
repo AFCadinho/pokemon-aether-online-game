@@ -71,6 +71,8 @@ func _init() -> void:
 	_check(placeholder_source.contains('type="Polygon2D"'), "Aether Beacon has a code-native crystal placeholder")
 	_check(placeholder_source.contains('[node name="Ring"'), "Aether Beacon placeholder has an animated ring")
 	_check(placeholder_source.contains('[node name="Sparks"'), "Activated Aether Beacon has particle-like sparks")
+	_check(placeholder_source.contains("requires_facing = false"), "Aether Beacon can be attuned from every side")
+	_check(placeholder_source.contains("interaction_shape_size = Vector2(80, 80)"), "Aether Beacon interaction stays local to the crystal")
 	var menu_source := FileAccess.get_file_as_string("res://scripts/ui/transit_menu.gd")
 	var english_localization := FileAccess.get_file_as_string("res://localization/en.json")
 	_check(english_localization.contains('"ui.transit.title": "Aethernet"'), "Transit UI is branded as Aethernet")
