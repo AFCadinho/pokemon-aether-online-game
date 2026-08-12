@@ -36,6 +36,14 @@ func _apply_npc_profile() -> void:
 	required_badge_ids = gym_profile.required_badge_ids.duplicate()
 
 
+func supports_trainer_rematches() -> bool:
+	return false
+
+
+func has_existing_trainer_completion() -> bool:
+	return _has_own_badge()
+
+
 func show_intro_dialogue() -> void:
 	var missing_badges := _missing_required_badges()
 	if missing_badges.is_empty():
@@ -102,6 +110,8 @@ func _refresh_badge_marker() -> void:
 		return
 	badge_marker.visible = badge_icon_texture != null
 	badge_marker.modulate = Color.WHITE if _has_own_badge() else Color("#8490a6b8")
+	if _has_own_badge():
+		mark_trainer_completed()
 
 
 func _string_array(value: Variant) -> Array[String]:

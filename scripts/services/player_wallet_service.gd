@@ -213,6 +213,7 @@ func _reward_claim_result_from_response(response: Dictionary) -> Dictionary:
 		"party": _array_from_value(_dictionary_from_value(body.get("party", {})).get("party", [])),
 		"badges": _dictionary_from_value(body.get("badges", {})),
 		"gymBadgeAward": _dictionary_from_value(body.get("gymBadgeAward", {})),
+		"trainerProgress": _dictionary_from_value(body.get("trainerProgress", {})),
 	}
 
 

@@ -86,9 +86,11 @@ var active_battle_kind := ""
 var pvp_battle_transition_started_at_msec := -1
 var active_battle_id := ""
 var active_wild_pokemon_species := ""
+var active_trainer_id := ""
 var active_trainer_name := ""
 var active_trainer_outro_dialogue_id := ""
 var active_trainer_mugshot: Texture2D
+var active_trainer_is_rematch := false
 var map_transition_layer: CanvasLayer
 var map_transition_rect: ColorRect
 var map_transition_content: Control
@@ -2375,9 +2377,11 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 	active_battle_kind = "trainer"
 	active_battle_id = ""
 	active_wild_pokemon_species = ""
+	active_trainer_id = trainer_id
 	active_trainer_name = str(trainer_data.get("name", "Trainer"))
 	active_trainer_outro_dialogue_id = str(trainer_data.get("outroDialogueId", "")).strip_edges()
 	active_trainer_mugshot = trainer_data.get("_battle_mugshot") as Texture2D
+	active_trainer_is_rematch = bool(trainer_data.get("_is_rematch", false))
 	_lock_overworld_for_battle()
 	var transition_started_at_msec := _begin_trainer_battle_transition(battle_trainer_data)
 
@@ -2432,9 +2436,11 @@ func start_pvp_battle_from_response(response: Dictionary) -> bool:
 	active_battle_kind = "pvp"
 	active_battle_id = str(response.get("battleId", ""))
 	active_wild_pokemon_species = ""
+	active_trainer_id = ""
 	active_trainer_name = ""
 	active_trainer_outro_dialogue_id = ""
 	active_trainer_mugshot = null
+	active_trainer_is_rematch = false
 	_save_player_activity_state_deferred("battle", _get_current_activity_context())
 	_lock_overworld_for_battle()
 
@@ -2504,9 +2510,11 @@ func end_wild_battle(keep_overworld_locked := false) -> void:
 	active_battle_kind = ""
 	active_battle_id = ""
 	active_wild_pokemon_species = ""
+	active_trainer_id = ""
 	active_trainer_name = ""
 	active_trainer_outro_dialogue_id = ""
 	active_trainer_mugshot = null
+	active_trainer_is_rematch = false
 	_save_player_activity_state_deferred("idle")
 	if keep_overworld_locked:
 		if player.has_method("reset_movement_state"):
@@ -2524,13 +2532,26 @@ func _on_battle_ended(result: Dictionary) -> void:
 	var should_respawn_after_loss := _should_respawn_after_battle_loss(result, active_battle_kind)
 	var reward_battle_id := active_battle_id
 	var reward_species := active_wild_pokemon_species
+	var reward_trainer_id := active_trainer_id
 	var reward_trainer_name := active_trainer_name
 	var trainer_outro_dialogue_id := active_trainer_outro_dialogue_id
 	var trainer_mugshot := active_trainer_mugshot
-	var keep_locked_for_outro := should_claim_trainer_reward and not trainer_outro_dialogue_id.is_empty()
+	var trainer_is_rematch := active_trainer_is_rematch
+	var keep_locked_for_outro := (
+		should_claim_trainer_reward
+		and not trainer_is_rematch
+		and not trainer_outro_dialogue_id.is_empty()
+	)
 	if should_respawn_after_loss:
 		_begin_blackout_respawn_transition()
 	end_wild_battle(should_respawn_after_loss)
+	if not reward_trainer_id.is_empty():
+		get_tree().call_group(
+			"trainer_npcs",
+			"finish_trainer_battle",
+			reward_trainer_id,
+			should_claim_trainer_reward
+		)
 	if keep_locked_for_outro:
 		_lock_overworld_for_battle()
 	_notify_caught_pokemon_if_needed(result)
@@ -2540,7 +2561,11 @@ func _on_battle_ended(result: Dictionary) -> void:
 	if should_claim_wild_reward and reward_battle_id != "":
 		await _award_wild_battle_money(reward_battle_id, reward_species)
 	if should_claim_trainer_reward and reward_battle_id != "":
-		var reward_claimed := await _award_trainer_battle_rewards(reward_battle_id, reward_trainer_name)
+		var reward_claimed := await _award_trainer_battle_rewards(
+			reward_battle_id,
+			reward_trainer_id,
+			reward_trainer_name
+		)
 		if reward_claimed and keep_locked_for_outro:
 			await _show_trainer_outro_dialogue(trainer_outro_dialogue_id, trainer_mugshot)
 	if keep_locked_for_outro:
@@ -2757,7 +2782,11 @@ func _award_wild_battle_money(battle_id: String, pokemon_species: String) -> voi
 	else:
 		push_warning("World: wild battle money reward failed: %s" % str(wallet_result.get("error", "Unknown error")))
 
-func _award_trainer_battle_rewards(battle_id: String, trainer_name: String) -> bool:
+func _award_trainer_battle_rewards(
+	battle_id: String,
+	trainer_id: String,
+	trainer_name: String
+) -> bool:
 	var previous_money: int = max(int(PlayerSave.money), 0)
 	var reward_result: Dictionary = await PlayerWalletService.award_trainer_battle_rewards(battle_id)
 	if bool(reward_result.get("success", false)):
@@ -2769,6 +2798,14 @@ func _award_trainer_battle_rewards(battle_id: String, trainer_name: String) -> b
 		_notify_reward_effort_gains(reward)
 		_notify_reward_level_ups(reward)
 		_notify_gym_badge_award(reward_result.get("gymBadgeAward", {}))
+		var trainer_progress := _dictionary_from_value(reward_result.get("trainerProgress", {}))
+		if not trainer_id.is_empty() and not trainer_progress.is_empty():
+			get_tree().call_group(
+				"trainer_npcs",
+				"apply_battle_victory_progress",
+				trainer_id,
+				trainer_progress
+			)
 		var gym_badge_award := _dictionary_from_value(reward_result.get("gymBadgeAward", {}))
 		if bool(gym_badge_award.get("awarded", false)):
 			await _refresh_fishing_progression()
@@ -3204,9 +3241,11 @@ func _abort_battle_start() -> void:
 	active_battle_kind = ""
 	active_battle_id = ""
 	active_wild_pokemon_species = ""
+	active_trainer_id = ""
 	active_trainer_name = ""
 	active_trainer_outro_dialogue_id = ""
 	active_trainer_mugshot = null
+	active_trainer_is_rematch = false
 	_save_player_activity_state_deferred("idle")
 	_unlock_overworld_after_battle()
 	MusicManager.play_overworld_music()

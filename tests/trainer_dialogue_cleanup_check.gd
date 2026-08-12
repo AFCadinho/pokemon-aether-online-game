@@ -13,6 +13,7 @@ func _init() -> void:
 	_check_missing_dialogue_id_falls_back_safely()
 	_check_existing_dialogue_before_battle_still_works()
 	_check_battle_start_behavior_is_unchanged()
+	_check_rematch_state_contract()
 
 	quit(1 if failed else 0)
 
@@ -67,7 +68,21 @@ func _check_battle_start_behavior_is_unchanged() -> void:
 	var text := _read_text(TRAINER_NPC_SCRIPT)
 	_check_true(text.contains("dialogue_box.start_dialogue(dialogue_lines, speaker_name, mugshot)"), "TrainerNPC still starts intro dialogue in dialogue box")
 	_check_true(text.contains("await dialogue_box.dialogue_finished"), "TrainerNPC still waits for intro dialogue")
-	_check_true(text.contains("await start_trainer_battle(trainer_metadata)"), "TrainerNPC still starts battle after dialogue")
+	_check_true(text.contains("await start_trainer_battle(battle_metadata)"), "TrainerNPC still starts battle after dialogue")
+
+
+func _check_rematch_state_contract() -> void:
+	var trainer_text := _read_text(TRAINER_NPC_SCRIPT)
+	var gym_text := _read_text("res://scripts/world/npcs/gym_leader_npc.gd")
+	var world_text := _read_text("res://scripts/world/world.gd")
+	_check_true(trainer_text.contains('const STATE_READY := "ready"'), "TrainerNPC has an explicit rematch-ready state")
+	_check_true(trainer_text.contains('const STATE_SLEEPING := "sleeping"'), "TrainerNPC has an explicit daily sleeping state")
+	_check_true(trainer_text.contains("TrainerProgressService.begin_rematch(trainer_id)"), "rematches reserve the daily attempt before battle")
+	_check_true(trainer_text.contains('rematch_marker_sleep_label.text = "Zzz"'), "spent rematches display a sleeping marker")
+	_check_true(trainer_text.contains("REMATCH_MARKER_TEXTURE"), "ready rematches display the Poke Ball marker")
+	_check_true(gym_text.contains("func supports_trainer_rematches() -> bool:\n\treturn false"), "Gym Leaders explicitly opt out of rematches")
+	_check_true(trainer_text.contains('battle_metadata["_is_rematch"]'), "trainer battle metadata distinguishes rematches")
+	_check_true(world_text.contains("and not trainer_is_rematch"), "rematches do not replay unique outro dialogue")
 
 
 func _read_text(path: String) -> String:
