@@ -4040,6 +4040,8 @@ func _queue_evolution_prompt(prompt_value: Dictionary) -> bool:
 	var target_species_id := _evolution_prompt_target_species_id(prompt)
 	if pokemon_id <= 0 or target_species_id == "":
 		return false
+	if _has_pending_evolution_prompt(pokemon_id, target_species_id):
+		return false
 
 	var from_species := _evolution_prompt_from_species(prompt)
 	var to_species := _evolution_prompt_to_species(prompt)
@@ -4049,6 +4051,27 @@ func _queue_evolution_prompt(prompt_value: Dictionary) -> bool:
 	prompt["toSpecies"] = to_species
 	evolution_prompt_queue.append(prompt)
 	return true
+
+func _has_pending_evolution_prompt(pokemon_id: int, target_species_id: String) -> bool:
+	var target_key := _normalize_evolution_species_key(target_species_id)
+	if pokemon_id <= 0 or target_key == "":
+		return false
+	if (
+		int(evolution_active_prompt.get("pokemonId", 0)) == pokemon_id
+		and _normalize_evolution_species_key(
+			_evolution_prompt_target_species_id(evolution_active_prompt)
+		) == target_key
+	):
+		return true
+	for queued_prompt: Dictionary in evolution_prompt_queue:
+		if (
+			int(queued_prompt.get("pokemonId", 0)) == pokemon_id
+			and _normalize_evolution_species_key(
+				_evolution_prompt_target_species_id(queued_prompt)
+			) == target_key
+		):
+			return true
+	return false
 
 func _extend_evolution_review_count(queued_count: int) -> void:
 	if queued_count <= 0:
@@ -4089,6 +4112,8 @@ func _show_next_evolution_prompt() -> void:
 				{"pokemon": _localized_species_name(source_species, source_species)}
 			))
 			continue
+		if not _evolution_prompt_matches_current_species(prompt, pokemon):
+			continue
 
 		evolution_prompt_review_index += 1
 		evolution_active_prompt = prompt
@@ -4096,6 +4121,19 @@ func _show_next_evolution_prompt() -> void:
 		return
 
 	_finish_evolution_review_queue()
+
+func _evolution_prompt_matches_current_species(prompt: Dictionary, pokemon: Pokemon) -> bool:
+	if pokemon == null:
+		return false
+	var expected_species := _normalize_evolution_species_key(
+		_evolution_prompt_from_species(prompt)
+	)
+	if expected_species == "" or expected_species == "pokemon":
+		return true
+	return _normalize_evolution_species_key(pokemon.species) == expected_species
+
+func _normalize_evolution_species_key(species: String) -> String:
+	return species.strip_edges().to_lower().replace("_", "-").replace(" ", "-")
 
 func _render_evolution_prompt(prompt: Dictionary) -> void:
 	if evolution_prompt_popup == null:
