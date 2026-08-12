@@ -20,7 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://csmsqlujka4ma" path="res://scenes/world/interactables/locked_door_interactable.tscn" id="25_locked_door"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2mtwu"]
-size = Vector2(192, 32)
+size = Vector2(32, 16)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route3_exit"]
 size = Vector2(32, 160)
@@ -250,7 +250,7 @@ target_scene_path = "res://scenes/overworld/kanto/towns/pewter_city/house1.tscn"
 target_spawn_name = "FromPewterCity"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse1" unique_id=1866582334]
-position = Vector2(-96, -96)
+position = Vector2(-96, -104)
 shape = SubResource("RectangleShape2D_2mtwu")
 
 [node name="DoorTransitionHint" parent="Exits/ToHouse1" unique_id=100386195 instance=ExtResource("6_frcun")]
@@ -263,6 +263,7 @@ target_scene_path = "res://scenes/overworld/kanto/towns/pewter_city/house2.tscn"
 target_spawn_name = "FromPewterCity"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse2" unique_id=1165082321]
+position = Vector2(0, -8)
 shape = SubResource("RectangleShape2D_2mtwu")
 
 [node name="DoorTransitionHint" parent="Exits/ToHouse2" unique_id=1293932138 instance=ExtResource("6_frcun")]

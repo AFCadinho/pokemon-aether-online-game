@@ -5,8 +5,6 @@
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="6_ykhnd"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="8_lmnv3"]
 [ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="13_8kkc8"]
-[ext_resource type="Texture2D" uid="uid://c5801ltimr4ed" path="res://assets/npcs/gen4-ow-sprites/trchar101.png" id="13_cd607"]
-[ext_resource type="Texture2D" uid="uid://dgvhjpghervgq" path="res://assets/sprites/mugshots/ace_trainer.png" id="15_4m8jl"]
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="15_khy7p"]
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="16_bnyo4"]
 [ext_resource type="Texture2D" uid="uid://cugmmwml7tr6y" path="res://assets/followers/PIDGEY.png" id="16_cd607"]
@@ -23,56 +21,7 @@
 [ext_resource type="SpriteFrames" uid="uid://gy0k4ju8k6vq" path="res://assets/npcs/classes/camper_frames.tres" id="31_camper"]
 [ext_resource type="SpriteFrames" uid="uid://cqxh37chx4v8a" path="res://assets/npcs/custom/adinho_dad_frames.tres" id="32_dad_frames"]
 [ext_resource type="Texture2D" uid="uid://cxbfneavbrouo" path="res://assets/sprites/mugshots/dadinho_mugshot.png" id="33_dad_mugshot"]
-[ext_resource type="Script" path="res://scripts/world/kanto/routes/dadinho_training_npc.gd" id="34_dadinho_training"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_oup8f"]
-atlas = ExtResource("13_cd607")
-region = Rect2(0, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_f4p1b"]
-atlas = ExtResource("13_cd607")
-region = Rect2(0, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_7vy6h"]
-atlas = ExtResource("13_cd607")
-region = Rect2(64, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_pjyn3"]
-atlas = ExtResource("13_cd607")
-region = Rect2(128, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_r2de8"]
-atlas = ExtResource("13_cd607")
-region = Rect2(192, 0, 64, 64)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_cd607"]
-resource_local_to_scene = true
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_oup8f")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_f4p1b")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_7vy6h")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_pjyn3")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_r2de8")
-}],
-"loop": true,
-"name": &"walk_down",
-"speed": 5.0
-}]
+[ext_resource type="Script" uid="uid://t7l41ryfx0rj" path="res://scripts/world/kanto/routes/dadinho_training_npc.gd" id="34_dadinho_training"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1tegq"]
 atlas = ExtResource("16_qefnj")
@@ -522,61 +471,6 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_4m8jl")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gd1nu"]
-texture = ExtResource("2_4urj5")
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-1:0/0 = 0
-2:0/0 = 0
-3:0/0 = 0
-4:0/0 = 0
-5:0/0 = 0
-6:0/0 = 0
-7:0/0 = 0
-8:0/0 = 0
-0:1/0 = 0
-1:1/0 = 0
-2:1/0 = 0
-3:1/0 = 0
-4:1/0 = 0
-5:1/0 = 0
-6:1/0 = 0
-7:1/0 = 0
-8:1/0 = 0
-0:2/0 = 0
-1:2/0 = 0
-2:2/0 = 0
-3:2/0 = 0
-4:2/0 = 0
-0:3/0 = 0
-1:3/0 = 0
-2:3/0 = 0
-3:3/0 = 0
-4:3/0 = 0
-5:3/0 = 0
-6:3/0 = 0
-7:3/0 = 0
-0:4/0 = 0
-1:4/0 = 0
-2:4/0 = 0
-3:4/0 = 0
-4:4/0 = 0
-5:4/0 = 0
-6:4/0 = 0
-7:4/0 = 0
-0:5/0 = 0
-1:5/0 = 0
-2:5/0 = 0
-3:5/0 = 0
-4:5/0 = 0
-5:5/0 = 0
-6:5/0 = 0
-7:5/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_bc3mu"]
-tile_size = Vector2i(32, 32)
-sources/0 = SubResource("TileSetAtlasSource_gd1nu")
-
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bc3mu"]
 texture = ExtResource("22_qefnj")
 texture_region_size = Vector2i(32, 32)
@@ -645,23 +539,20 @@ npc_sprite_frames = ExtResource("29_lass")
 
 [node name="Dialogue" type="Node2D" parent="Entities/NPCs" unique_id=1893184129]
 
-[node name="Dadinho" parent="Entities/NPCs/Dialogue" instance=ExtResource("16_bnyo4")]
-position = Vector2(896, 2288)
+[node name="Dadinho" parent="Entities/NPCs/Dialogue" unique_id=628964348 instance=ExtResource("16_bnyo4")]
+position = Vector2(880, 2192)
 script = ExtResource("34_dadinho_training")
 npc_id = "kanto_route_1_dadinho"
 npc_definition_id = "kanto_players_house_father"
+visibility_required_quest_id = "get_town_map"
+visibility_required_quest_step_id = "visit_father"
+visibility_hidden_quest_id = "train_starter_to_level_10"
+defer_story_hide_until_reload = true
 display_name = "Dadinho"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("32_dad_frames")
-sprite_offset = Vector2(0, -16)
 mugshot = ExtResource("33_dad_mugshot")
 preload_quest_markers = true
-visibility_required_quest_id = "get_town_map"
-visibility_required_quest_step_id = "visit_father"
-visibility_required_quest_status = "completed"
-visibility_hidden_quest_id = "train_starter_to_level_10"
-visibility_hidden_quest_status = "completed"
-defer_story_hide_until_reload = true
 
 [node name="MartEmployee" parent="Entities/NPCs/Dialogue" unique_id=149252873 instance=ExtResource("16_bnyo4")]
 position = Vector2(944, 560)
