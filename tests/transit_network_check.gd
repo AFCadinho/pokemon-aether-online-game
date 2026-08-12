@@ -77,6 +77,7 @@ func _init() -> void:
 	)
 	_check(keeper_scene_source.contains('display_name = "Aethernet Keeper"'), "Transit NPC uses the Aethernet name")
 	_check(keeper_scene_source.contains('sprite_offset = Vector2(0, -16)'), "Aethernet Keeper sprite aligns with its collision")
+	_check(keeper_scene_source.contains('portrait_id = "showdown_psychic_gen6"'), "Aethernet Keeper uses the Psychic catalog portrait")
 	_check(not keeper_source.contains("TransitService.attune"), "Transit Keeper does not attune players automatically")
 	_check(keeper_source.contains("TransitService.load_network"), "Transit Keeper loads the travel network")
 	_check(keeper_source.contains("npc.transit.attune_beacon_hint"), "Transit Keeper explains that the local Beacon must be attuned")
