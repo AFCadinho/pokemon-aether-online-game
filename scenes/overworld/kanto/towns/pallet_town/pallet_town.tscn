@@ -2312,7 +2312,7 @@ movement_target_path = NodePath("../../Pokemon/Pikachu")
 movement_offset = Vector2(0, -64)
 
 [node name="TransitKeeper" parent="Entities/NPCs" instance=ExtResource("36_transit_keeper")]
-position = Vector2(720, 528)
+position = Vector2(720, 240)
 npc_id = "kanto_pallet_town_transit_keeper"
 local_destination_id = "kanto_pallet_town"
 facing_direction = Vector2(0, 1)
@@ -2353,7 +2353,7 @@ movement_speed_pixels = 48.0
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1829912001]
 
 [node name="AetherBeacon" parent="Entities/Interactables" instance=ExtResource("37_aether_beacon")]
-position = Vector2(784, 528)
+position = Vector2(784, 208)
 interactable_id = "kanto_pallet_town_aether_beacon"
 destination_id = "kanto_pallet_town"
 

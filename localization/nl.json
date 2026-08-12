@@ -3271,6 +3271,8 @@
   "npc.transit.return_hint": "Je kunt hier terugkeren via iedere Aethernet Keeper in deze regio.",
   "npc.transit.unavailable": "De Aether-stroom is momenteel niet bereikbaar.",
   "backend.error.transit_unavailable": "Het Aethernet is momenteel niet beschikbaar.",
+  "backend.error.transit_wrong_location": "Je moet in de bijbehorende stad zijn om op deze Aether Beacon af te stemmen.",
+  "backend.error.transit_too_far": "Ga dichter bij de Aether Beacon staan om af te stemmen.",
   "ui.transit.hub_hint": "Kies een regio en daarna een afgestemde bestemming.",
   "ui.transit.region_hint": "Je kunt alleen binnen je huidige regio reizen.",
   "ui.transit.balance": "Saldo  ₽{money}",

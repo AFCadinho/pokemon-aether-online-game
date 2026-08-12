@@ -3,15 +3,22 @@ extends WorldInteractable
 
 class_name AetherBeacon
 
+signal activation_state_changed(activated: bool)
+
 @export var destination_id := ""
 @export_range(0.5, 4.0, 0.1) var animation_speed := 1.4
 
 @onready var floating_visual: Node2D = get_node_or_null("FloatingVisual")
 @onready var glow: CanvasItem = get_node_or_null("FloatingVisual/Glow")
 @onready var ring: Node2D = get_node_or_null("FloatingVisual/Ring")
+@onready var crystal: CanvasItem = get_node_or_null("FloatingVisual/Crystal")
+@onready var core: CanvasItem = get_node_or_null("FloatingVisual/Crystal/Core")
+@onready var sparks: Node2D = get_node_or_null("FloatingVisual/Sparks")
+@onready var pedestal_rune: CanvasItem = get_node_or_null("Pedestal/Rune")
 
 var _animation_time := 0.0
 var _base_visual_position := Vector2.ZERO
+var _activated := false
 
 
 func _ready() -> void:
@@ -20,12 +27,19 @@ func _ready() -> void:
 	if floating_visual != null:
 		_base_visual_position = floating_visual.position
 	super._ready()
+	_apply_activation_state(false)
+	if not Engine.is_editor_hint():
+		_refresh_activation_state.call_deferred()
 
 
 func _process(delta: float) -> void:
 	_animate_placeholder(delta)
 	if not Engine.is_editor_hint():
-		await super._process(delta)
+		super._process(delta)
+
+
+func is_activated() -> bool:
+	return _activated
 
 
 func interact_with_player(_player: Node2D) -> void:
@@ -40,6 +54,7 @@ func interact_with_player(_player: Node2D) -> void:
 		await GameErrorDialogService.show_response(result, "backend.error.transit_unavailable")
 		return
 	var body := result.get("body", {}) as Dictionary
+	_apply_activation_state(true)
 	if bool(body.get("newlyAttuned", false)):
 		await show_dialogue([
 			LocalizationManager.text("world.aether_beacon.attuned"),
@@ -52,11 +67,48 @@ func interact_with_player(_player: Node2D) -> void:
 	)
 
 
+func _refresh_activation_state() -> void:
+	var result: Dictionary = await TransitService.load_network()
+	if not bool(result.get("success", false)):
+		return
+	var network := result.get("body", {}) as Dictionary
+	if str(network.get("localDestinationId", "")) == destination_id:
+		_apply_activation_state(bool(network.get("localAttuned", false)))
+		return
+	for destination_value: Variant in network.get("destinations", []):
+		if not destination_value is Dictionary:
+			continue
+		var destination := destination_value as Dictionary
+		if str(destination.get("destinationId", "")) == destination_id:
+			_apply_activation_state(bool(destination.get("attuned", false)))
+			return
+
+
+func _apply_activation_state(activated: bool) -> void:
+	var changed := _activated != activated
+	_activated = activated
+	if glow != null:
+		glow.visible = activated
+	if ring != null:
+		ring.visible = activated
+	if sparks != null:
+		sparks.visible = activated
+	if crystal != null:
+		crystal.modulate = Color.WHITE if activated else Color(0.48, 0.61, 0.65, 1.0)
+	if core != null:
+		core.modulate = Color.WHITE if activated else Color(0.3, 0.43, 0.46, 0.75)
+	if pedestal_rune != null:
+		pedestal_rune.modulate = Color(0.45, 1.0, 1.0, 1.0) if activated else Color(0.22, 0.34, 0.36, 0.7)
+	if changed:
+		activation_state_changed.emit(activated)
+
+
 func _animate_placeholder(delta: float) -> void:
 	_animation_time += delta * animation_speed
 	if floating_visual != null:
-		floating_visual.position = _base_visual_position + Vector2(0.0, sin(_animation_time) * 3.0)
-	if ring != null:
-		ring.rotation = _animation_time * 0.42
-	if glow != null:
-		glow.modulate.a = 0.34 + (sin(_animation_time * 1.7) + 1.0) * 0.13
+		var bob_height := 2.0 if _activated else 0.75
+		floating_visual.position = _base_visual_position + Vector2(0.0, round(sin(_animation_time) * bob_height))
+	if _activated and ring != null:
+		ring.rotation = _animation_time * 0.5
+	if _activated and glow != null:
+		glow.modulate.a = 0.28 + (sin(_animation_time * 1.7) + 1.0) * 0.1

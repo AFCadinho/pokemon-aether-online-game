@@ -4,7 +4,7 @@ const MAP_CONTRACTS := {
 	"res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn": [
 		'position = Vector2(720, 560)',
 		'local_destination_id = "kanto_pallet_town"',
-		'position = Vector2(784, 528)',
+		'position = Vector2(784, 208)',
 		'interactable_id = "kanto_pallet_town_aether_beacon"',
 		'destination_id = "kanto_pallet_town"',
 	],
@@ -61,11 +61,14 @@ func _init() -> void:
 		"res://scripts/world/interactables/aether_beacon.gd"
 	)
 	_check(beacon_source.contains("TransitService.attune"), "Aether Beacon attunes through the server")
+	_check(beacon_source.contains("_refresh_activation_state"), "Aether Beacon restores its attuned visual state")
+	_check(beacon_source.contains("_apply_activation_state(true)"), "Aether Beacon activates after attunement")
 	var placeholder_source := FileAccess.get_file_as_string(
 		"res://scenes/world/interactables/aether_beacon_placeholder.tscn"
 	)
 	_check(placeholder_source.contains('type="Polygon2D"'), "Aether Beacon has a code-native crystal placeholder")
 	_check(placeholder_source.contains('[node name="Ring"'), "Aether Beacon placeholder has an animated ring")
+	_check(placeholder_source.contains('[node name="Sparks"'), "Activated Aether Beacon has particle-like sparks")
 	var menu_source := FileAccess.get_file_as_string("res://scripts/ui/transit_menu.gd")
 	var english_localization := FileAccess.get_file_as_string("res://localization/en.json")
 	_check(english_localization.contains('"ui.transit.title": "Aethernet"'), "Transit UI is branded as Aethernet")
