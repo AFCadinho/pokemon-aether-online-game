@@ -81,6 +81,12 @@ func _run() -> void:
 		var catalog: Dictionary = localization_manager.get_catalog(locale)
 		for key: String in QUEST_LOCALIZATION_KEYS:
 			_expect(catalog.has(key), "%s quest catalog contains %s" % [locale, key])
+	var english_catalog: Dictionary = localization_manager.get_catalog("en")
+	_expect(
+		str(english_catalog.get("story.kanto.trainer_school.meet_dadinho", ""))
+		== "Go to the Trainer School in Viridian City and see if you can learn something new.",
+		"Trainer School objective invites exploration without revealing Dadinho"
+	)
 	story_service.apply_story({
 		"revision": 1,
 		"quests": [{

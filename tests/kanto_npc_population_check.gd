@@ -142,6 +142,10 @@ func _check_trainer_school_dadinho_story_hook() -> void:
 	)
 	_check(dadinho != null and bool(dadinho.get("preload_quest_markers")), "Trainer School Dadinho preloads his quest marker")
 	_check(
+		dadinho != null and dadinho.get("sprite_offset") == Vector2(0, -16),
+		"Trainer School Dadinho's sprite is centered over his collision origin"
+	)
+	_check(
 		dadinho != null
 		and str(dadinho.get("visibility_required_quest_id")) == "learn_at_trainer_school"
 		and str(dadinho.get("visibility_required_quest_status")) == "active"
