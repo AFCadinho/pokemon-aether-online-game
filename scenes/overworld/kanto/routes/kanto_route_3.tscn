@@ -260,7 +260,7 @@ location_name = "Route 3"
 region_id = "kanto"
 encounter_area_id = "kanto_route_3"
 grass_encounter_chance = 0.21
-music_track_id = "overworld.kanto.route.1"
+music_profile_id = "kanto.routes_3_10_16_22"
 
 [node name="Route3" parent="." unique_id=349371493 instance=ExtResource("1_8pife")]
 

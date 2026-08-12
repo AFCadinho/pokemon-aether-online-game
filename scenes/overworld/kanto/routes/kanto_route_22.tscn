@@ -297,6 +297,7 @@ location_id = "kanto.route_22"
 location_name = "Route 22"
 region_id = "kanto"
 encounter_area_id = "kanto_route_22"
+music_profile_id = "kanto.routes_3_10_16_22"
 grass_encounter_chance = 0.21
 
 [node name="Visual" parent="." unique_id=618531668 instance=ExtResource("1_hodeu")]

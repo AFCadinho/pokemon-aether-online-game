@@ -5,12 +5,17 @@ const MUSIC_CATALOG_PATH := "res://data/music_catalog.json"
 const PLAYERS_HOUSE_SCENE_PATH := "res://scenes/overworld/kanto/towns/pallet_town/players_house.tscn"
 const OAKS_LAB_SCENE_PATH := "res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn"
 const POKEMON_CENTER_TEMPLATE_PATH := "res://scenes/overworld/kanto/reusable_interiors/pokemon_center_template.tscn"
+const ROUTE_3_SCENE_PATH := "res://scenes/overworld/kanto/routes/kanto_route_3.tscn"
+const ROUTE_22_SCENE_PATH := "res://scenes/overworld/kanto/routes/kanto_route_22.tscn"
 const PALLET_TOWN_TRACK_ID := "overworld.kanto.pallet_town"
 const OAKS_LAB_TRACK_ID := "overworld.kanto.interior.oaks_lab"
 const POKEMON_CENTER_TRACK_ID := "overworld.kanto.interior.pokemon_center"
+const KANTO_ROUTE_GROUP_PROFILE_ID := "kanto.routes_3_10_16_22"
+const KANTO_ROUTE_GROUP_TRACK_ID := "overworld.kanto.routes_3_10_16_22"
 const PALLET_TOWN_TRACK := "res://assets/music/overworld/kanto/towns/pallet_town.ogg"
 const OAKS_LAB_TRACK := "res://assets/music/overworld/kanto/interiors/oaks_lab.ogg"
 const POKEMON_CENTER_TRACK := "res://assets/music/overworld/kanto/interiors/pokemon_center.ogg"
+const KANTO_ROUTE_GROUP_TRACK := "res://assets/music/overworld/kanto/routes/kanto_routes_3_10_16_22.ogg"
 
 var failed := false
 
@@ -26,12 +31,16 @@ func _init() -> void:
 	var profiles: Dictionary = catalog.get("map_profiles", {}) as Dictionary
 	_check_equal(str(profiles.get("kanto.pallet_town", "")), PALLET_TOWN_TRACK_ID, "Pallet Town profile resolves to its catalog track")
 	_check_equal(str((tracks.get(PALLET_TOWN_TRACK_ID, {}) as Dictionary).get("path", "")), PALLET_TOWN_TRACK, "Pallet Town catalog track has the expected path")
+	_check_equal(str(profiles.get(KANTO_ROUTE_GROUP_PROFILE_ID, "")), KANTO_ROUTE_GROUP_TRACK_ID, "Kanto route group profile resolves to its catalog track")
+	_check_equal(str((tracks.get(KANTO_ROUTE_GROUP_TRACK_ID, {}) as Dictionary).get("path", "")), KANTO_ROUTE_GROUP_TRACK, "Kanto route group catalog track has the expected path")
 	inherited_interior.music_track_id = OAKS_LAB_TRACK_ID
 	_check_equal(inherited_interior.get_music_track_id(), OAKS_LAB_TRACK_ID, "An explicit interior catalog track is exposed")
 
 	_check_scene_track(PLAYERS_HOUSE_SCENE_PATH, 'music_profile_id = "kanto.pallet_town"', "Player's House inherits Pallet Town music")
 	_check_scene_track(OAKS_LAB_SCENE_PATH, 'music_track_id = "%s"' % OAKS_LAB_TRACK_ID, "Oak's Lab uses its dedicated catalog track")
 	_check_scene_track(POKEMON_CENTER_TEMPLATE_PATH, 'music_track_id = "%s"' % POKEMON_CENTER_TRACK_ID, "Pokémon Centers use their dedicated catalog track")
+	_check_scene_track(ROUTE_3_SCENE_PATH, 'music_profile_id = "%s"' % KANTO_ROUTE_GROUP_PROFILE_ID, "Route 3 uses the shared Kanto route group profile")
+	_check_scene_track(ROUTE_22_SCENE_PATH, 'music_profile_id = "%s"' % KANTO_ROUTE_GROUP_PROFILE_ID, "Route 22 uses the shared Kanto route group profile")
 	_check(FileAccess.file_exists(OAKS_LAB_TRACK), "Oak's Lab OGG is included in the project")
 	_check(FileAccess.file_exists(POKEMON_CENTER_TRACK), "Pokémon Center OGG is included in the project")
 

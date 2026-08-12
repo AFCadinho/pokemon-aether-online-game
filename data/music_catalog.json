@@ -17,6 +17,10 @@
       "label": "Kanto Route 1",
       "path": "res://assets/music/overworld/kanto/routes/route1.ogg"
     },
+    "overworld.kanto.routes_3_10_16_22": {
+      "label": "Kanto Routes 3–10 & 16–22",
+      "path": "res://assets/music/overworld/kanto/routes/kanto_routes_3_10_16_22.ogg"
+    },
     "overworld.kanto.viridian_forest": {
       "label": "Viridian Forest",
       "path": "res://assets/music/overworld/kanto/routes/viridian_forest.ogg"
@@ -45,6 +49,7 @@
   "map_profiles": {
     "kanto.pallet_town": "overworld.kanto.pallet_town",
     "kanto.viridian_city": "overworld.kanto.viridian_city",
-    "kanto.pewter_city": "overworld.kanto.viridian_city"
+    "kanto.pewter_city": "overworld.kanto.viridian_city",
+    "kanto.routes_3_10_16_22": "overworld.kanto.routes_3_10_16_22"
   }
 }
