@@ -59,7 +59,6 @@ const QUEST_LOCALIZATION_KEYS: Array[String] = [
 	"story.kanto.trainer_school.title",
 	"story.kanto.trainer_school.summary",
 	"story.kanto.trainer_school.meet_dadinho",
-	"story.kanto.trainer_school.continue_to_pewter",
 	"story.kanto.challenge_pewter_gym.title",
 	"story.kanto.challenge_pewter_gym.summary",
 	"story.kanto.challenge_pewter_gym.challenge_brock",
