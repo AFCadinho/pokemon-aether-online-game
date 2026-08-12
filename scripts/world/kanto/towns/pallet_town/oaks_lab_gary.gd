@@ -5,6 +5,7 @@ const SELECTED_DIALOGUE_ID := "kanto_oaks_lab_gary_selected_starter"
 const STARTER_DEPARTURE_DIALOGUE_ID := "kanto_oaks_lab_gary_starter_departure"
 const PARCEL_WAITING_DIALOGUE_ID := "kanto_oaks_lab_gary_parcel_waiting"
 const ROUTE_22_DEPARTURE_DIALOGUE_ID := "kanto_oaks_lab_gary_route_22_departure"
+const STARTER_SEQUENCE_INPUT_LOCK := &"oaks_lab_gary_starter_sequence"
 const PATH_DIRECTIONS: Array[Vector2i] = [Vector2i.UP, Vector2i.LEFT, Vector2i.RIGHT, Vector2i.DOWN]
 
 var starter_sequence_running := false
@@ -20,6 +21,10 @@ func _ready() -> void:
 	if story_service != null and not story_service.story_changed.is_connected(_on_gary_story_changed):
 		story_service.story_changed.connect(_on_gary_story_changed)
 	_sync_persisted_starter_choice.call_deferred()
+
+
+func _exit_tree() -> void:
+	GameState.release_overworld_input_lock(STARTER_SEQUENCE_INPUT_LOCK)
 
 
 func interact_with_player(player: Node2D) -> void:
@@ -54,11 +59,11 @@ func begin_starter_sequence(
 
 	starter_sequence_running = true
 	_set_story_presence(true)
-	GameState.lock_overworld_input()
+	GameState.acquire_overworld_input_lock(STARTER_SEQUENCE_INPUT_LOCK)
 	var selected_ball := _starter_ball_for_species(species_id)
 	if selected_ball == null:
 		starter_sequence_running = false
-		GameState.unlock_overworld_input()
+		GameState.release_overworld_input_lock(STARTER_SEQUENCE_INPUT_LOCK)
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
 
@@ -68,7 +73,7 @@ func begin_starter_sequence(
 		)
 		if not reached_ball:
 			starter_sequence_running = false
-			GameState.unlock_overworld_input()
+			GameState.release_overworld_input_lock(STARTER_SEQUENCE_INPUT_LOCK)
 			await GameErrorDialogService.show_report_to_staff_message()
 			return
 		face_world_position(selected_ball.global_position)
@@ -87,7 +92,7 @@ func begin_starter_sequence(
 	await _show_catalogue_dialogue(STARTER_DEPARTURE_DIALOGUE_ID)
 	starter_sequence_running = false
 	_set_story_presence(false)
-	GameState.unlock_overworld_input()
+	GameState.release_overworld_input_lock(STARTER_SEQUENCE_INPUT_LOCK)
 
 
 func prepare_starter_sequence() -> void:
@@ -98,6 +103,10 @@ func prepare_starter_sequence() -> void:
 func cancel_pending_starter_sequence() -> void:
 	starter_sequence_pending = false
 	_sync_story_presence()
+
+
+func is_starter_sequence_active() -> bool:
+	return starter_sequence_pending or starter_sequence_running
 
 
 func _sync_persisted_starter_choice() -> void:

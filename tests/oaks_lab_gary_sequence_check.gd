@@ -80,6 +80,22 @@ func _init() -> void:
 		"Gary stays visible while the starter claim hands off to his turn"
 	)
 	_check_true(
+		gary_text.contains("func is_starter_sequence_active() -> bool:")
+		and gary_text.contains("return starter_sequence_pending or starter_sequence_running"),
+		"Gary exposes the complete pending and running starter sequence window"
+	)
+	_check_true(
+		gary_text.contains("GameState.acquire_overworld_input_lock(STARTER_SEQUENCE_INPUT_LOCK)")
+		and gary_text.contains("GameState.release_overworld_input_lock(STARTER_SEQUENCE_INPUT_LOCK)"),
+		"Gary owns the overworld input lock throughout his starter walk and dialogue"
+	)
+	_check_true(
+		oak_text.contains("func _run_story_or_legacy_interaction(body: Node2D, trigger: String)")
+		and oak_text.contains('"status": "gary_starter_sequence_active"')
+		and oak_text.contains("return await super._run_story_or_legacy_interaction(body, trigger)"),
+		"Oak blocks both parcel story hooks and normal dialogue until Gary has left"
+	)
+	_check_true(
 		gary_text.contains('if parcel_status == "active":')
 		and gary_text.contains('_set_story_presence(_is_parcel_return_active())'),
 		"Active parcel progress keeps Gary hidden until the return step"
