@@ -41,6 +41,10 @@ func _init() -> void:
 	_check(keeper_source.contains("TransitService.attune"), "Transit Keeper attunes through the server")
 	_check(keeper_source.contains("begin_authorized_teleport"), "Transit Keeper uses the authorized teleport flow")
 	_check(keeper_source.contains("PlayerWalletService.apply_wallet_result"), "Transit travel updates the local wallet projection")
+	var menu_source := FileAccess.get_file_as_string("res://scripts/ui/transit_menu.gd")
+	_check(menu_source.contains("_destinations_by_region"), "Transit UI groups destinations by region")
+	_check(menu_source.contains("ScrollContainer.new()"), "Transit UI remains scrollable as towns are added")
+	_check(menu_source.contains("sourceRegionId") and menu_source.contains('== "all"'), "Only the Lobby exposes cross-region selection")
 
 	if failures == 0:
 		print("Transit network checks passed.")

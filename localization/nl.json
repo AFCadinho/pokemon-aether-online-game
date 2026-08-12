@@ -3270,5 +3270,20 @@
   "npc.transit.attuned": "Je Aether-signatuur is nu op deze stad afgestemd.",
   "npc.transit.return_hint": "Je kunt hier terugkeren via iedere Transit Keeper in deze regio.",
   "npc.transit.unavailable": "De Aether-stroom is momenteel niet bereikbaar.",
-  "backend.error.transit_unavailable": "Aether Transit is momenteel niet beschikbaar."
+  "backend.error.transit_unavailable": "Aether Transit is momenteel niet beschikbaar.",
+  "ui.transit.hub_hint": "Kies een regio en daarna een afgestemde bestemming.",
+  "ui.transit.region_hint": "Je kunt alleen binnen je huidige regio reizen.",
+  "ui.transit.balance": "Saldo  ₽{money}",
+  "ui.transit.region": "Regio",
+  "ui.transit.fare": "{tier}  •  ₽{fare}",
+  "ui.transit.destinations": "Bestemmingen in {region}",
+  "ui.transit.empty_region": "In deze regio zijn nog geen reisbestemmingen beschikbaar.",
+  "ui.transit.attunement_hint": "◇ Bezoek de Aether Beacon van een stad om af te stemmen   ◆ Afgestemd",
+  "ui.transit.status.current": "Huidige locatie",
+  "ui.transit.status.ready": "Afgestemd en beschikbaar",
+  "ui.transit.status.locked": "Beacon niet afgestemd",
+  "ui.transit.current": "Hier",
+  "ui.transit.locked": "Vergrendeld",
+  "ui.transit.travel": "Reis  ₽{fare}",
+  "world.region.kanto": "Kanto"
 }

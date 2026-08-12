@@ -3270,5 +3270,20 @@
   "npc.transit.attuned": "Your Aether signature is now attuned to this town.",
   "npc.transit.return_hint": "You may return here through any Transit Keeper in this region.",
   "npc.transit.unavailable": "The Aether current cannot be reached right now.",
-  "backend.error.transit_unavailable": "Aether Transit is unavailable right now."
+  "backend.error.transit_unavailable": "Aether Transit is unavailable right now.",
+  "ui.transit.hub_hint": "Choose a region, then an attuned destination.",
+  "ui.transit.region_hint": "Travel is limited to destinations in your current region.",
+  "ui.transit.balance": "Balance  ₽{money}",
+  "ui.transit.region": "Region",
+  "ui.transit.fare": "{tier}  •  ₽{fare}",
+  "ui.transit.destinations": "{region} destinations",
+  "ui.transit.empty_region": "No transit destinations are available in this region yet.",
+  "ui.transit.attunement_hint": "◇ Visit a town's Aether Beacon to attune it   ◆ Attuned",
+  "ui.transit.status.current": "Current location",
+  "ui.transit.status.ready": "Attuned and ready",
+  "ui.transit.status.locked": "Beacon not attuned",
+  "ui.transit.current": "Here",
+  "ui.transit.locked": "Locked",
+  "ui.transit.travel": "Travel  ₽{fare}",
+  "world.region.kanto": "Kanto"
 }
