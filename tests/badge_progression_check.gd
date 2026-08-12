@@ -9,6 +9,7 @@ const GUILD_PATH := "res://scripts/ui/guild_popup.gd"
 const WALLET_SERVICE_PATH := "res://scripts/services/player_wallet_service.gd"
 const WORLD_PATH := "res://scripts/world/world.gd"
 const POPUP_SCENE_PATH := "res://scenes/interface/dev_badge_progress_popup.tscn"
+const POPUP_SCRIPT_PATH := "res://scripts/ui/dev_badge_progress_popup.gd"
 
 var failed := false
 
@@ -22,6 +23,7 @@ func _init() -> void:
 	var guild := FileAccess.get_file_as_string(GUILD_PATH)
 	var wallet_service := FileAccess.get_file_as_string(WALLET_SERVICE_PATH)
 	var world := FileAccess.get_file_as_string(WORLD_PATH)
+	var popup_script := FileAccess.get_file_as_string(POPUP_SCRIPT_PATH)
 
 	_check(ProjectSettings.has_setting("autoload/BadgeProgressionService"), "badge service is registered as an autoload")
 	_check(ResourceLoader.exists(POPUP_SCENE_PATH), "developer badge popup scene exists")
@@ -30,6 +32,10 @@ func _init() -> void:
 	_check_contains(player_data, "func apply_gym_badge_state", "PlayerSave can apply the canonical badge projection")
 	_check_contains(player_data, "func has_gym_badge", "PlayerSave exposes badge ownership")
 	_check_contains(profile_service, '"badges": badges', "profile service preserves badge progress")
+	_check_contains(profile_service, 'DEV_STORY_CHECKPOINT_ENDPOINT := "/game/dev/progression/story-checkpoint"', "trainer progress can update the authoritative story checkpoint")
+	_check_contains(profile_service, "StoryService.apply_story(story)", "story checkpoints immediately refresh local story state")
+	_check_contains(popup_script, '"trainer_school"', "trainer progress exposes the Trainer School checkpoint")
+	_check_contains(popup_script, '"pewter_gym"', "trainer progress exposes the Pewter Gym checkpoint")
 	_check_contains(loading, "PlayerSave.apply_gym_badge_state", "login applies server badge progress")
 	_check_contains(overlay, "PlayerSave.has_gym_badge(region, badge_id)", "Trainer Card renders actual badge ownership")
 	_check_contains(overlay, "PlayerSave.gym_badges_changed.connect(_refresh_trainer_card_gym_badges)", "Trainer Card reacts immediately when badge progress changes")
