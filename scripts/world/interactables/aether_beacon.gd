@@ -35,7 +35,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	_animate_placeholder(delta)
 	if not Engine.is_editor_hint():
-		super._process(delta)
+		await super._process(delta)
 
 
 func is_activated() -> bool:
