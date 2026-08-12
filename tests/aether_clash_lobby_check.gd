@@ -16,6 +16,10 @@ func _init() -> void:
 	root.add_child(lobby)
 	_check(lobby.has_method("get_map_id"), "Lobby exposes overworld map metadata")
 	_check(lobby.call("get_map_id") == "aether_clash_lobby", "Lobby has its canonical map id")
+	_check(
+		lobby.call("get_music_track_id") == "login.lugia_theme_lofi",
+		"Lobby reuses the login-screen music"
+	)
 	_check(lobby.get_node_or_null("Lobby") != null, "Lobby includes the imported visual")
 	var arrival := lobby.get_node_or_null("Spawns/GuildArrival") as Marker2D
 	_check(arrival != null, "Lobby has a Guild arrival marker")

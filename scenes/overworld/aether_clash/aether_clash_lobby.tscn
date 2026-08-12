@@ -125,7 +125,7 @@ location_name = "Aether Clash Lobby"
 region_id = "aether_clash"
 lighting_profile = "indoor"
 weather_profile = "disabled"
-music_profile_id = "aether_clash.lobby"
+music_track_id = "login.lugia_theme_lofi"
 
 [node name="Lobby" parent="." unique_id=260047060 instance=ExtResource("1_stnl8")]
 
