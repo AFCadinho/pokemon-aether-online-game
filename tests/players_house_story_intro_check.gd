@@ -37,6 +37,10 @@ func _run() -> void:
 		_expect(father.position == Vector2(448, 896), "Dadinho starts beside the downstairs door")
 		_expect(father.get("npc_sprite_frames") == load(DAD_FRAMES_PATH), "Dadinho keeps his custom sprite")
 		_expect(
+			father.get("sprite_offset") == Vector2(16, -16),
+			"Player's House Dadinho aligns his sprite with the downstairs collision tile"
+		)
+		_expect(
 			str(father.get("visibility_hidden_quest_id")) == "oaks_parcel"
 			and str(father.get("visibility_hidden_quest_step_id")) == "return_to_oak",
 			"Dadinho is tied to the Parcel hand-in"
