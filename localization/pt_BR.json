@@ -3257,5 +3257,13 @@
   "battle.voice.switch.change_plan": "Mudança de plano. Vai, {to}!",
   "battle.voice.switch.go": "Vai, {to}!",
   "battle.voice.switch.youre_up": "É sua vez, {to}!",
-  "ui.transit.attuned_system": "Sintonia com a Aethernet concluída: {name} desbloqueada."
+  "ui.transit.attuned_system": "Sintonia com a Aethernet concluída: {name} desbloqueada.",
+  "ui.transit.status.anchor": "Âncora de Aether · Destino gratuito",
+  "ui.transit.travel_free": "Viajar · Grátis",
+  "ui.transit.confirm_free": "Viajar gratuitamente para {name}?",
+  "ui.transit.anchor.confirm_title": "Definir Âncora de Aether",
+  "ui.transit.anchor.confirm": "Definir {name} como sua Âncora de Aether? As viagens da Aethernet para este destino serão gratuitas.",
+  "ui.transit.anchor.system": "Âncora de Aether definida: viajar para {name} agora é grátis.",
+  "npc.transit.anchor_set": "{name} agora é sua Âncora de Aether. Viajar pela Aethernet até aqui é grátis.",
+  "npc.transit.anchor_current": "Esta é sua Âncora de Aether atual, então retornar para cá é grátis."
 }

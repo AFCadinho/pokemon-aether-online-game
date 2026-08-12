@@ -29,6 +29,23 @@ func attune(destination_id: String, beacon_position: Vector2) -> Dictionary:
 	)
 
 
+func set_anchor(destination_id: String, beacon_position: Vector2) -> Dictionary:
+	var position_save := await _save_current_player_position()
+	if not bool(position_save.get("success", false)):
+		return position_save
+	return await _request_json(
+		TRANSIT_ENDPOINT + "/anchor",
+		HTTPClient.METHOD_POST,
+		JSON.stringify({
+			"destinationId": destination_id,
+			"beaconPosition": {
+				"x": beacon_position.x,
+				"y": beacon_position.y,
+			},
+		})
+	)
+
+
 func travel(destination_id: String) -> Dictionary:
 	var request_id := str(pending_request_ids.get(destination_id, ""))
 	if request_id.is_empty():

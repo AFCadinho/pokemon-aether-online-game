@@ -4,6 +4,7 @@ extends WorldInteractable
 class_name AetherBeacon
 
 signal activation_state_changed(activated: bool)
+signal anchor_confirmation_resolved(accepted: bool)
 
 @export var destination_id := ""
 @export_range(0.5, 4.0, 0.1) var animation_speed := 1.4
@@ -58,10 +59,10 @@ func interact_with_player(_player: Node2D) -> void:
 		await GameErrorDialogService.show_response(result, "backend.error.transit_unavailable")
 		return
 	var body := result.get("body", {}) as Dictionary
+	var network := body.get("network", {}) as Dictionary
+	var destination_name := _destination_name_from_network(network)
 	_apply_activation_state(true)
 	if bool(body.get("newlyAttuned", false)):
-		var network := body.get("network", {}) as Dictionary
-		var destination_name := _destination_name_from_network(network)
 		get_tree().call_group(
 			"ui_overlay",
 			"add_system_message",
@@ -70,14 +71,66 @@ func interact_with_player(_player: Node2D) -> void:
 				{"name": destination_name}
 			)
 		)
-		await _show_keeper_dialogue([
+		var lines: Array[String] = [
 			LocalizationManager.text("npc.transit.attuned"),
 			LocalizationManager.text("npc.transit.return_hint"),
+		]
+		await _show_keeper_dialogue(lines)
+		await _offer_anchor_change(network, destination_name)
+		return
+	if str(network.get("anchorDestinationId", "")) == destination_id:
+		await _show_keeper_dialogue([
+			LocalizationManager.text("world.aether_beacon.already_attuned"),
+			LocalizationManager.text("npc.transit.anchor_current"),
 		])
 		return
 	await _show_keeper_dialogue([
 		LocalizationManager.text("world.aether_beacon.already_attuned"),
 	])
+	await _offer_anchor_change(network, destination_name)
+
+
+func _offer_anchor_change(network: Dictionary, destination_name: String) -> void:
+	if str(network.get("anchorDestinationId", "")) == destination_id:
+		return
+	var confirmation := ConfirmationDialog.new()
+	confirmation.title = LocalizationManager.text("ui.transit.anchor.confirm_title")
+	confirmation.dialog_text = LocalizationManager.text(
+		"ui.transit.anchor.confirm",
+		{"name": destination_name}
+	)
+	confirmation.ok_button_text = LocalizationManager.text("common.confirm")
+	confirmation.get_cancel_button().text = LocalizationManager.text("common.cancel")
+	confirmation.confirmed.connect(_resolve_anchor_confirmation.bind(true), CONNECT_ONE_SHOT)
+	confirmation.canceled.connect(_resolve_anchor_confirmation.bind(false), CONNECT_ONE_SHOT)
+	get_tree().current_scene.add_child(confirmation)
+	confirmation.popup_centered(Vector2i(520, 220))
+	var accepted: bool = await anchor_confirmation_resolved
+	confirmation.queue_free()
+	if not accepted:
+		return
+	var result: Dictionary = await TransitService.set_anchor(destination_id, global_position)
+	if not bool(result.get("success", false)):
+		await GameErrorDialogService.show_response(result, "backend.error.transit_unavailable")
+		return
+	var body := result.get("body", {}) as Dictionary
+	if bool(body.get("changed", false)):
+		_announce_anchor_set(destination_name)
+	await _show_keeper_dialogue([
+		LocalizationManager.text("npc.transit.anchor_set", {"name": destination_name}),
+	])
+
+
+func _resolve_anchor_confirmation(accepted: bool) -> void:
+	anchor_confirmation_resolved.emit(accepted)
+
+
+func _announce_anchor_set(destination_name: String) -> void:
+	get_tree().call_group(
+		"ui_overlay",
+		"add_system_message",
+		LocalizationManager.text("ui.transit.anchor.system", {"name": destination_name})
+	)
 
 
 func _show_keeper_dialogue(lines: Array[String]) -> bool:

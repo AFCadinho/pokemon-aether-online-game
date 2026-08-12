@@ -3294,5 +3294,13 @@
   "world.aether_beacon.attuned": "The crystal resonates with your Aether signature.",
   "world.aether_beacon.keeper_hint": "This destination is now available through the Aethernet.",
   "world.aether_beacon.already_attuned": "You are already attuned to this Aether Beacon.",
-  "ui.transit.attuned_system": "Aethernet attunement complete: {name} unlocked."
+  "ui.transit.attuned_system": "Aethernet attunement complete: {name} unlocked.",
+  "ui.transit.status.anchor": "Aether Anchor · Free destination",
+  "ui.transit.travel_free": "Travel · Free",
+  "ui.transit.confirm_free": "Travel to {name} for free?",
+  "ui.transit.anchor.confirm_title": "Set Aether Anchor",
+  "ui.transit.anchor.confirm": "Set {name} as your Aether Anchor? Aethernet travel to this destination will be free.",
+  "ui.transit.anchor.system": "Aether Anchor set: travel to {name} is now free.",
+  "npc.transit.anchor_set": "{name} is now your Aether Anchor. Aethernet travel here is free.",
+  "npc.transit.anchor_current": "This is your current Aether Anchor, so returning here is free."
 }

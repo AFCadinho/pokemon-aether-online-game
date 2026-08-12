@@ -199,6 +199,7 @@ func _show_region(index: int) -> void:
 func _destination_card(destination: Dictionary) -> Control:
 	var destination_id := str(destination.get("destinationId", ""))
 	var attuned := bool(destination.get("attuned", false))
+	var is_anchor := bool(destination.get("isAnchor", false))
 	var current := destination_id == str(_network.get("sourceMapId", ""))
 	var card := PanelContainer.new()
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -211,9 +212,9 @@ func _destination_card(destination: Dictionary) -> Control:
 	row.add_theme_constant_override("separation", 12)
 	margin.add_child(row)
 	var marker := Label.new()
-	marker.text = "◆" if attuned else "◇"
+	marker.text = "✦" if is_anchor else ("◆" if attuned else "◇")
 	marker.add_theme_font_size_override("font_size", 25)
-	marker.add_theme_color_override("font_color", COLOR_ACCENT if attuned else COLOR_LOCKED)
+	marker.add_theme_color_override("font_color", COLOR_ACCENT if attuned or is_anchor else COLOR_LOCKED)
 	row.add_child(marker)
 	var details := VBoxContainer.new()
 	details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -222,10 +223,13 @@ func _destination_card(destination: Dictionary) -> Control:
 	var name_label := Label.new()
 	name_label.text = str(destination.get("name", destination_id))
 	name_label.add_theme_font_size_override("font_size", 17)
-	name_label.add_theme_color_override("font_color", COLOR_TEXT if attuned else COLOR_LOCKED)
+	name_label.add_theme_color_override("font_color", COLOR_TEXT if attuned or is_anchor else COLOR_LOCKED)
 	details.add_child(name_label)
 	var status_label := Label.new()
-	if current:
+	if is_anchor:
+		status_label.text = LocalizationManager.text("ui.transit.status.anchor")
+		status_label.add_theme_color_override("font_color", COLOR_SUCCESS)
+	elif current:
 		status_label.text = LocalizationManager.text("ui.transit.status.current")
 		status_label.add_theme_color_override("font_color", COLOR_SUCCESS)
 	elif attuned:
@@ -239,9 +243,11 @@ func _destination_card(destination: Dictionary) -> Control:
 	var action := Button.new()
 	action.custom_minimum_size = Vector2(112, 44)
 	action.text = LocalizationManager.text("ui.transit.current") if current else (
-		LocalizationManager.text("ui.transit.locked") if not attuned else LocalizationManager.text("ui.transit.travel", {"fare": int(destination.get("fare", 0))})
+		LocalizationManager.text("ui.transit.locked") if not attuned and not is_anchor else (
+			LocalizationManager.text("ui.transit.travel_free") if is_anchor else LocalizationManager.text("ui.transit.travel", {"fare": int(destination.get("fare", 0))})
+		)
 	)
-	action.disabled = not attuned or current
+	action.disabled = (not attuned and not is_anchor) or current
 	if not action.disabled:
 		action.add_theme_stylebox_override("normal", _style(Color("174458"), Color("4fc6d8"), 1, 9))
 		action.add_theme_stylebox_override("hover", _style(COLOR_CARD_HOVER, COLOR_ACCENT, 2, 9))
@@ -285,10 +291,13 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _request_confirmation(destination: Dictionary) -> void:
 	_pending_destination_id = str(destination.get("destinationId", ""))
-	_confirmation.dialog_text = LocalizationManager.text("ui.transit.confirm", {
-		"name": str(destination.get("name", "")),
-		"fare": int(destination.get("fare", 0)),
-	})
+	_confirmation.dialog_text = LocalizationManager.text(
+		"ui.transit.confirm_free" if bool(destination.get("isAnchor", false)) else "ui.transit.confirm",
+		{
+			"name": str(destination.get("name", "")),
+			"fare": int(destination.get("fare", 0)),
+		}
+	)
 	_confirmation.popup_centered()
 
 

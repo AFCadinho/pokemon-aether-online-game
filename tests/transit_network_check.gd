@@ -101,6 +101,7 @@ func _init() -> void:
 	_check(beacon_source.contains("destination_id, global_position"), "Aether Beacon supplies its placed world position")
 	_check(transit_service_source.contains("save_current_player_state_now"), "Attunement synchronizes the player's current position first")
 	_check(transit_service_source.contains('"beaconPosition"'), "Attunement sends the placed Beacon position")
+	_check(transit_service_source.contains('TRANSIT_ENDPOINT + "/anchor"'), "Aether Anchor changes use the transit service")
 	_check(beacon_source.contains("await super._process(delta)"), "Aether Beacon awaits the shared interaction coroutine")
 	_check(beacon_source.contains("requires_facing = false"), "Aether Beacon enforces omnidirectional interaction at runtime")
 	_check(beacon_source.contains("interaction_shape_size = Vector2(80, 80)"), "Aether Beacon enforces its local interaction radius at runtime")
@@ -108,6 +109,8 @@ func _init() -> void:
 	_check(beacon_source.contains("_apply_activation_state(true)"), "Aether Beacon activates after attunement")
 	_check(beacon_source.contains('_find_local_keeper()'), "Aether Beacon delegates its dialogue to the local Keeper")
 	_check(beacon_source.contains('"add_system_message"'), "Aether Beacon announces a new attunement in system chat")
+	_check(beacon_source.contains("ConfirmationDialog.new()"), "Aether Beacon confirms Anchor changes")
+	_check(beacon_source.contains("TransitService.set_anchor"), "Aether Beacon owns Anchor selection")
 	_check(english_localization.contains('"ui.transit.attuned_system"'), "Aethernet attunement has a localized system message")
 	var placeholder_source := FileAccess.get_file_as_string(
 		"res://scenes/world/interactables/aether_beacon_placeholder.tscn"
@@ -121,6 +124,8 @@ func _init() -> void:
 	_check(english_localization.contains('"ui.transit.title": "Aethernet"'), "Transit UI is branded as Aethernet")
 	_check(menu_source.contains("_destinations_by_region"), "Transit UI groups destinations by region")
 	_check(menu_source.contains("ScrollContainer.new()"), "Transit UI remains scrollable as towns are added")
+	_check(menu_source.contains('destination.get("isAnchor"'), "Transit UI identifies the Aether Anchor")
+	_check(menu_source.contains('ui.transit.travel_free'), "Transit UI labels Anchor travel as free without a price")
 	_check(menu_source.contains("sourceRegionId") and menu_source.contains('== "all"'), "Only the Lobby exposes cross-region selection")
 
 	if failures == 0:

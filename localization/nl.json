@@ -3294,5 +3294,13 @@
   "world.aether_beacon.attuned": "Het kristal resoneert met je Aether-signatuur.",
   "world.aether_beacon.keeper_hint": "Deze bestemming is nu beschikbaar via het Aethernet.",
   "world.aether_beacon.already_attuned": "Je bent al op deze Aether Beacon afgestemd.",
-  "ui.transit.attuned_system": "Aethernet-afstemming voltooid: {name} ontgrendeld."
+  "ui.transit.attuned_system": "Aethernet-afstemming voltooid: {name} ontgrendeld.",
+  "ui.transit.status.anchor": "Aether Anchor · Gratis bestemming",
+  "ui.transit.travel_free": "Reis · Gratis",
+  "ui.transit.confirm_free": "Gratis naar {name} reizen?",
+  "ui.transit.anchor.confirm_title": "Aether Anchor instellen",
+  "ui.transit.anchor.confirm": "Wil je {name} als je Aether Anchor instellen? Aethernet-reizen naar deze bestemming worden gratis.",
+  "ui.transit.anchor.system": "Aether Anchor ingesteld: reizen naar {name} is nu gratis.",
+  "npc.transit.anchor_set": "{name} is nu je Aether Anchor. Aethernet-reizen hiernaartoe zijn gratis.",
+  "npc.transit.anchor_current": "Dit is je huidige Aether Anchor, dus terugreizen hiernaartoe is gratis."
 }
