@@ -34,6 +34,18 @@ func _init() -> void:
 	var night_lights := lobby.get_node_or_null("NightLights")
 	_check(night_lights != null, "Lobby owns a hand-maintained night-light layer")
 	_check(night_lights != null and night_lights.get_child_count() == 20, "Every Lobby lantern has a night light")
+	var purple_portal := lobby.get_node_or_null("Entities/Interactables/PurpleClashPortal")
+	var red_portal := lobby.get_node_or_null("Entities/Interactables/RedClashPortal")
+	_check(purple_portal != null and purple_portal.position == Vector2(864, 624), "Purple portal fills the west portal bay")
+	_check(red_portal != null and red_portal.position == Vector2(1088, 624), "Red portal fills the east portal bay")
+	_check(purple_portal != null and purple_portal.get("team_id") == "purple", "West portal represents purple")
+	_check(red_portal != null and red_portal.get("team_id") == "red", "East portal represents red")
+	var red_portal_sprite := red_portal.get_node_or_null("PortalSprite") as Sprite2D if red_portal != null else null
+	_check(
+		red_portal_sprite != null
+		and red_portal_sprite.texture.resource_path.ends_with("clash_portal_red.png"),
+		"East portal uses the red portal art"
+	)
 	var collision := lobby.get_node_or_null("Collision") as TileMapLayer
 	_check(collision != null and not collision.get_used_cells().is_empty(), "Lobby includes gameplay collision")
 	_check(

@@ -6,6 +6,8 @@
 [ext_resource type="Script" path="res://scripts/world/map_metadata.gd" id="4_map_meta"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="5_transit_keeper"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="6_o8e3w"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_clash_portal.tscn" id="7_clash_portal"]
+[ext_resource type="Texture2D" path="res://assets/world/aether_clash/clash_portal_red.png" id="8_red_portal"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_t1icv"]
 texture = ExtResource("2_tauxp")
@@ -145,6 +147,22 @@ z_index = 5
 position = Vector2(1040, 1424)
 npc_id = "aether_clash_lobby_transit_keeper"
 facing_direction = Vector2(0, 1)
+
+[node name="Interactables" type="Node2D" parent="Entities"]
+
+[node name="PurpleClashPortal" parent="Entities/Interactables" instance=ExtResource("7_clash_portal")]
+position = Vector2(864, 624)
+team_id = "purple"
+
+[node name="RedClashPortal" parent="Entities/Interactables" instance=ExtResource("7_clash_portal")]
+position = Vector2(1088, 624)
+team_id = "red"
+
+[node name="PortalSprite" parent="Entities/Interactables/RedClashPortal" index="0"]
+texture = ExtResource("8_red_portal")
+
+[node name="PortalLight" parent="Entities/Interactables/RedClashPortal" index="1"]
+color = Color(1, 0.22, 0.12, 1)
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=1428557043]
 visible = false
