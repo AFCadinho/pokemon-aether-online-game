@@ -306,7 +306,7 @@ func _get_battle_log_event_player_id(event: Dictionary) -> String:
 			return _get_player_id_from_ident(str(event.get("target", "")))
 		"ability":
 			return _get_ability_event_player_id(event)
-		"statChange":
+		"statChange", "statStage":
 			return _get_stat_change_event_player_id(event)
 		"status":
 			return _get_player_id_from_ident(str(event.get("target", event.get("pokemon", ""))))

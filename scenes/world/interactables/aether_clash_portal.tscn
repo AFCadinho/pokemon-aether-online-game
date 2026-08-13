@@ -1,0 +1,44 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/interactables/aether_clash_portal.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/world/aether_clash/clash_portal_purple.png" id="2_portal"]
+
+[sub_resource type="Gradient" id="Gradient_portal"]
+offsets = PackedFloat32Array(0, 0.42, 1)
+colors = PackedColorArray(0.63, 0.22, 1, 0.56, 0.48, 0.12, 0.9, 0.18, 0.3, 0.08, 0.75, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_portal"]
+gradient = SubResource("Gradient_portal")
+width = 96
+height = 96
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_portal"]
+size = Vector2(104, 104)
+
+[node name="AetherClashPortal" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_script")
+interactable_kind = "aether_clash_portal"
+blocks_movement = true
+requires_facing = false
+interaction_shape_size = Vector2(104, 104)
+
+[node name="PortalSprite" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_portal")
+
+[node name="PortalLight" type="PointLight2D" parent="."]
+enabled = false
+position = Vector2(0, -4)
+color = Color(0.65, 0.28, 1, 1)
+energy = 0.8
+texture = SubResource("GradientTexture2D_portal")
+texture_scale = 1.4
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+shape = SubResource("RectangleShape_portal")

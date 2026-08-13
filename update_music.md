@@ -8,6 +8,14 @@ assets/music/
 
 Use `.ogg` files for music. The upload script rejects other packaged music formats so MP3s do not accidentally end up in launcher asset packs.
 
+## Register A Track
+
+After adding an overworld, login, or default battle track, register it in
+`data/music_catalog.json` with a stable ID, label, and `res://assets/music/...`
+path. Maps refer to `music_track_id` (or a reusable `music_profile_id`), never
+directly to an audio file path. Add a profile under `map_profiles` when several
+maps should share the same background track.
+
 ## One-Time Setup
 
 Create `.env` in the repository root:

@@ -28,7 +28,6 @@ const BATTLE_SUPREME_OVERLORD_EFFECT := preload("res://scripts/battle/battle_sup
 const BATTLE_PUBLIC_POKEMON_KNOWLEDGE := preload("res://scripts/battle/battle_public_pokemon_knowledge.gd")
 const BATTLE_VOICE_TIMING := preload("res://scripts/battle/battle_voice_timing.gd")
 const BATTLE_ENVIRONMENT_CATALOG := preload("res://scripts/battle/battle_environment_catalog.gd")
-const CALC_DRAWER_FIELD_WIDTH_RATIO := 0.55
 const CALC_DRAWER_FIELD_MARGIN := 8.0
 const MEGA_EVOLUTION_EFFECT_KEY := "mega_evolution"
 const PVP_FORCE_SWITCH_ACK_RETRY_MSEC := 1000
@@ -137,6 +136,8 @@ var pvp_opponent_force_switch_required := false
 var pvp_pending_presentation_fence: Dictionary = {}
 var pvp_gateway_epoch := ""
 var pvp_last_connection_server_seq := 0
+var pvp_reconnect_grace_deadline_by_side: Dictionary = {}
+var pvp_forced_switch_diagnostic_keys: Dictionary = {}
 var pvp_presentation_actionable_local_msec := 0
 var pvp_presentation_schedule_token := ""
 var pvp_presentation_acknowledgements_authoritative := false
@@ -194,11 +195,17 @@ var damage_calc_request_token := 0
 var damage_calc_request_in_flight := false
 var damage_calc_refresh_queued := false
 var damage_calc_catalog_request_token := 0
+var damage_calc_sample_set_request_token := 0
+var damage_calc_default_ability_request_token := 0
+var damage_calc_forme_request_tokens: Dictionary = {}
 var damage_calc_matchup_key := ""
 var damage_calc_defender_species_key := ""
 var damage_calc_defender_assumptions: Dictionary = {}
 var damage_calc_assumption_edited_fields: Dictionary = {}
 var damage_calc_saved_assumptions: Dictionary = {}
+var damage_calc_knowledge_snapshot: Dictionary = {}
+var damage_calc_snapshot_battle_id := ""
+var damage_calc_snapshot_disabled_for_battle := false
 var bag_inventory_request_token := 0
 var capture_target_visibility_tween: Tween
 var summon_target_visibility_tween: Tween
@@ -236,7 +243,8 @@ const STAT_STAGE_BADGE_LINE_MODIFIER := "modifier"
 const ABILITY_STAT_MODIFIER_SOURCE_FIELD_CONDITION := "field_condition"
 const ABILITY_STAT_MODIFIER_SOURCE_BOOSTER_ENERGY := "booster_energy"
 const DAMAGE_CALC_ASSUMPTIONS_PATH := "user://damage_calc_assumptions.json"
-const DAMAGE_CALC_ASSUMPTIONS_VERSION := 1
+const DAMAGE_CALC_ASSUMPTIONS_VERSION := 2
+const DAMAGE_CALC_DEFAULT_SCOPE := "gen9nationaldex"
 const BATTLE_LOG_RESPONSIVE_COLLAPSE_WIDTH := 1200
 const BATTLE_LOG_MEMORY_UNSET := -1
 const BATTLE_WINDOW_OPEN_SIZE := Vector2(1500.0, 780.0)
@@ -273,6 +281,8 @@ var wild_owned_request_id := 0
 @onready var battle_drawer_layer: Control = %BattleDrawerLayer
 @onready var bag_drawer: Control = %BagDrawer
 @onready var calc_drawer: Control = %CalcDrawer
+@onready var calc_timer_dock: BattleVsPanelContainer = %CalcTimerDock
+@onready var calc_turn_label: Label = %CalcTurnLabel
 @onready var bag_drawer_close_button: Button = %BagDrawerCloseButton
 @onready var calc_drawer_close_button: Button = %CalcDrawerCloseButton
 @onready var context_hint: Label = %ContextHint
@@ -300,6 +310,7 @@ var wild_owned_request_id := 0
 
 # Battle Sprites
 @onready var battle_frame: Control = %BattleFrame
+@onready var opponent_stage_party_rail: Control = %OpponentStagePartyRail
 @onready var player_battle_platform: Control = %BattlePlatform
 @onready var enemy_battle_platform: Control = %BattlePlatform2
 @onready var battle_stage_viewport: Control = %BattleStageViewport
@@ -370,6 +381,7 @@ func _ready() -> void:
 	# GUI hit-testing follows sibling order even when a Control draws at a higher
 	# z-index. Keep drawers last so stage controls cannot intercept their clicks.
 	battle_drawer_layer.move_to_front()
+	calc_timer_dock.configure_compact_timer_mode(true)
 	_setup_battle_focus_surfaces()
 	# The action buttons are declared before the instanced log in the scene file;
 	# keep the log visually above the compact Bag/Run row.
@@ -415,6 +427,22 @@ func _ready() -> void:
 		calc_panel.defender_assumptions_changed.connect(_on_calc_panel_defender_assumptions_changed)
 	if not calc_panel.assumption_catalog_requested.is_connected(_on_calc_panel_assumption_catalog_requested):
 		calc_panel.assumption_catalog_requested.connect(_on_calc_panel_assumption_catalog_requested)
+	if not calc_panel.sample_set_catalog_requested.is_connected(_on_calc_panel_sample_set_catalog_requested):
+		calc_panel.sample_set_catalog_requested.connect(_on_calc_panel_sample_set_catalog_requested)
+	if not calc_panel.forme_catalog_requested.is_connected(_on_calc_panel_forme_catalog_requested):
+		calc_panel.forme_catalog_requested.connect(_on_calc_panel_forme_catalog_requested)
+	if not calc_panel.default_ability_requested.is_connected(_on_calc_panel_default_ability_requested):
+		calc_panel.default_ability_requested.connect(_on_calc_panel_default_ability_requested)
+	if not calc_panel.viewer_ability_catalog_requested.is_connected(_on_calc_panel_viewer_ability_catalog_requested):
+		calc_panel.viewer_ability_catalog_requested.connect(_on_calc_panel_viewer_ability_catalog_requested)
+	if not calc_panel.matchup_selection_changed.is_connected(_on_calc_panel_matchup_selection_changed):
+		calc_panel.matchup_selection_changed.connect(_on_calc_panel_matchup_selection_changed)
+	if not calc_panel.move_scenarios_changed.is_connected(_on_calc_panel_move_scenarios_changed):
+		calc_panel.move_scenarios_changed.connect(_on_calc_panel_move_scenarios_changed)
+	if not calc_panel.team_pokemon_hovered.is_connected(_on_calc_panel_team_pokemon_hovered):
+		calc_panel.team_pokemon_hovered.connect(_on_calc_panel_team_pokemon_hovered)
+	if not calc_panel.team_pokemon_unhovered.is_connected(_on_calc_panel_team_pokemon_unhovered):
+		calc_panel.team_pokemon_unhovered.connect(_on_calc_panel_team_pokemon_unhovered)
 	if not bag_grid.item_selected.is_connected(_on_bag_grid_item_selected):
 		bag_grid.item_selected.connect(_on_bag_grid_item_selected)
 	if player_hud_panel.has_method("set_experience_bar_enabled"):
@@ -695,7 +723,8 @@ func _on_settings_changed() -> void:
 	_update_active_sprites("settings_sprite_refresh")
 
 func _process(delta: float) -> void:
-	if hover_state.should_poll_sprite_hover():
+	var calcdex_active := current_action_panel_mode == BattleActionsPanelMode.CALC
+	if not calcdex_active and hover_state.should_poll_sprite_hover():
 		_update_sprite_hover()
 	if pokemon_hover_card.visible:
 		_position_pokemon_hover_card()
@@ -743,6 +772,48 @@ func _connect_party_hover_signals() -> void:
 
 func _show_public_party_hover(pokemon_data: Dictionary, _slot_rect: Rect2) -> void:
 	_show_hud_pokemon_hover(pokemon_data)
+
+func _on_calc_panel_team_pokemon_hovered(relation: String, pokemon_data: Dictionary, slot_rect: Rect2) -> void:
+	var pokemon_ref := str(pokemon_data.get("pokemonRef", ""))
+	var slot_index: int = int(pokemon_ref.get_slice("-", 2)) if pokemon_ref.begins_with(relation + ":public-slot-") else 0
+	if slot_index < 1 or slot_index > 6:
+		return
+	var hover_data := _prepare_calcdex_hover_data(pokemon_data)
+	hover_data["ident"] = ("p1" if relation == "viewer" else "p2") + ":slot:" + str(slot_index)
+	hover_data["metadataSlot"] = slot_index
+	if relation == "viewer":
+		_show_party_hover(hover_data, slot_rect)
+	else:
+		# Resolve the compact Calcdex reference back to the battle's public
+		# team record so the normal public-info hover card can enrich it.
+		var public_team_data: Dictionary = _get_team_pokemon_data_for_hover("p2", hover_data)
+		if not public_team_data.is_empty():
+			hover_data = public_team_data
+		_show_public_party_hover(hover_data, slot_rect)
+
+func _prepare_calcdex_hover_data(pokemon_data: Dictionary) -> Dictionary:
+	var hover_data: Dictionary = pokemon_data.duplicate(true)
+	var identity_value: Variant = hover_data.get("identity", {})
+	var identity: Dictionary = identity_value as Dictionary if identity_value is Dictionary else {}
+	var species := str(identity.get("value", "")).strip_edges()
+	if species != "":
+		hover_data["species"] = species
+		hover_data["displaySpecies"] = species
+	var hp_value: Variant = hover_data.get("hp")
+	if hp_value is Dictionary:
+		var display_value: Variant = (hp_value as Dictionary).get("display", {})
+		var display_hp: Dictionary = display_value as Dictionary if display_value is Dictionary else {}
+		if display_hp.has("current"):
+			hover_data["hp"] = int(display_hp.get("current", 0))
+		if display_hp.has("maximum"):
+			hover_data["maxHp"] = int(display_hp.get("maximum", 1))
+	return hover_data
+
+func _on_calc_panel_team_pokemon_unhovered(relation: String) -> void:
+	if relation == "viewer":
+		_hide_party_hover()
+	else:
+		_hide_hud_pokemon_hover()
 
 func _connect_forfeit_confirm_dialog_signals() -> void:
 	if forfeit_confirm_dialog.has_signal("confirmed"):
@@ -832,7 +903,13 @@ func _get_owned_party_hover_data(pokemon_data: Dictionary) -> Dictionary:
 
 	_apply_temporary_form_party_hover_data(hover_data, display_data, saved_pokemon)
 	if display_data.has("item"):
-		hover_data["item"] = display_data.get("item")
+		var display_item: Variant = display_data.get("item")
+		if display_item is String:
+			hover_data["item"] = display_item
+		elif display_item is Dictionary:
+			var item_knowledge := display_item as Dictionary
+			if str(item_knowledge.get("state", "")) == "known":
+				hover_data["item"] = str(item_knowledge.get("value", ""))
 	_apply_held_item_stat_hover_data(hover_data)
 
 	var stat_stages := _get_active_stat_stages_for_party_hover(display_data)
@@ -2139,6 +2216,8 @@ func _set_action_panel_mode(mode: BattleActionsPanelMode) -> void:
 	if previous_mode == BattleActionsPanelMode.CALC and mode != BattleActionsPanelMode.CALC:
 		damage_calc_request_token += 1
 		damage_calc_catalog_request_token += 1
+		for relation: String in ["viewer", "opponent"]:
+			damage_calc_forme_request_tokens[relation] = int(damage_calc_forme_request_tokens.get(relation, 0)) + 1
 		calc_panel.close_assumption_popover()
 	_sync_action_panel_mode_visibility()
 	if mode == BattleActionsPanelMode.CALC:
@@ -2156,6 +2235,7 @@ func _sync_action_panel_mode_visibility() -> void:
 	calc_log_button.button_pressed = is_calc_mode
 	calc_panel.visible = is_calc_mode
 	calc_drawer.visible = is_calc_mode
+	_sync_calc_timer_dock_visibility()
 	var show_pvp_switch_confirmation := (
 		_is_pvp_battle()
 		and pvp_switch_confirmation_active
@@ -2172,6 +2252,7 @@ func _sync_action_panel_mode_visibility() -> void:
 	if is_calc_mode:
 		moves_grid.visible = false
 		context_hint.visible = false
+		_hide_pokemon_hover()
 		_hide_party_hover()
 		_hide_move_hover()
 		_sync_party_rail_interaction()
@@ -2246,8 +2327,7 @@ func _get_move_confirmation_name(move_data: Dictionary) -> String:
 			return value
 	return _t("battle.fallback.selected_move")
 
-## Houdt de calculator boven uitsluitend de spelershelft van het battlefield.
-## Daardoor blijven de battle log, tegenstander en move-informatie bereikbaar.
+## Vult het battlefield met de volledige Calcdex werkruimte.
 func _queue_calc_drawer_layout_update() -> void:
 	call_deferred("_update_calc_drawer_layout")
 
@@ -2257,12 +2337,47 @@ func _update_calc_drawer_layout() -> void:
 	var frame_rect: Rect2 = battle_frame.get_global_rect()
 	var drawer_layer_inverse: Transform2D = battle_drawer_layer.get_global_transform().affine_inverse()
 	var local_top_left: Vector2 = drawer_layer_inverse * frame_rect.position
-	var local_bottom_right: Vector2 = drawer_layer_inverse * frame_rect.end
-	var frame_size: Vector2 = local_bottom_right - local_top_left
-	calc_drawer.position = local_top_left + Vector2(CALC_DRAWER_FIELD_MARGIN, CALC_DRAWER_FIELD_MARGIN)
+	# Use the frame's rendered size here so tab changes keep the same full-width
+	# workspace even while the battle stage is scaled to fill.
+	var frame_size := frame_rect.size
+	var drawer_position: Vector2 = local_top_left + Vector2(CALC_DRAWER_FIELD_MARGIN, CALC_DRAWER_FIELD_MARGIN)
+	var drawer_width: float = frame_size.x - CALC_DRAWER_FIELD_MARGIN * 2.0
+	calc_drawer.position = drawer_position
 	calc_drawer.size = Vector2(
-		frame_size.x * CALC_DRAWER_FIELD_WIDTH_RATIO - CALC_DRAWER_FIELD_MARGIN * 2.0,
+		drawer_width,
 		frame_size.y - CALC_DRAWER_FIELD_MARGIN * 2.0
+	)
+	_update_calc_timer_dock_layout()
+
+
+func _update_calc_timer_dock_layout() -> void:
+	if not is_instance_valid(calc_timer_dock):
+		return
+	calc_timer_dock.configure_compact_timer_mode(true, true)
+	_update_calc_turn_label(_get_battle_presentation_turn())
+
+
+func _update_calc_turn_label(turn: int) -> void:
+	if not is_instance_valid(calc_turn_label):
+		return
+	calc_turn_label.text = _t("battle.status.turn", {"turn": turn}) if turn > 0 else _t("common.waiting")
+
+
+func _sync_calc_timer_dock_visibility() -> void:
+	if not is_instance_valid(calc_timer_dock):
+		return
+	var reconnect_active := (
+		_vs_panel_has_method("has_active_reconnect_timer")
+		and bool(vs_panel_container.call("has_active_reconnect_timer"))
+	)
+	var dock_has_content := (
+		calc_timer_dock.has_method("has_presented_timer")
+		and bool(calc_timer_dock.call("has_presented_timer"))
+	)
+	calc_timer_dock.visible = (
+		current_action_panel_mode == BattleActionsPanelMode.CALC
+		and dock_has_content
+		and (_should_show_bank_timer_projection() or reconnect_active)
 	)
 
 func _sync_party_rail_interaction() -> void:
@@ -2271,7 +2386,9 @@ func _sync_party_rail_interaction() -> void:
 
 	var was_selectable := player_party_grid.is_selection_enabled()
 	var party_selection_active := _is_party_rail_selection_allowed()
+	player_party_grid.set_hover_enabled(true)
 	player_party_grid.set_selection_enabled(party_selection_active)
+	opponent_party_grid.set_hover_enabled(false)
 	opponent_party_grid.set_selection_enabled(false)
 
 	if party_selection_active:
@@ -2311,7 +2428,6 @@ func _refresh_damage_calc_results() -> void:
 	if current_action_panel_mode != BattleActionsPanelMode.CALC:
 		return
 	_sync_damage_calc_matchup_assumptions()
-	_apply_known_damage_calc_defender_info()
 	if battle_finished:
 		calc_panel.show_error(_t("battle.error.ended"))
 		return
@@ -2322,7 +2438,7 @@ func _refresh_damage_calc_results() -> void:
 	if damage_calc_request_in_flight:
 		damage_calc_refresh_queued = true
 		calc_panel.set_defender_assumptions(damage_calc_defender_assumptions, damage_calc_assumption_edited_fields)
-		calc_panel.show_loading(_get_active_display_species("p1"), _get_active_display_species("p2"))
+		_show_damage_calc_loading()
 		return
 
 	damage_calc_request_token += 1
@@ -2330,14 +2446,62 @@ func _refresh_damage_calc_results() -> void:
 	damage_calc_request_in_flight = true
 	damage_calc_refresh_queued = false
 	calc_panel.set_defender_assumptions(damage_calc_defender_assumptions, damage_calc_assumption_edited_fields)
-	calc_panel.show_loading(_get_active_display_species("p1"), _get_active_display_species("p2"))
+	_show_damage_calc_loading()
 
-	var response: Dictionary = await BattleApiClient.calculate_battle_damage(
-		damage_calc_request,
-		battle_state.battle_id,
-		"own-to-opponent",
-		_get_damage_calc_defender_assumptions_payload()
-	)
+	var projection_revision := battle_state.get_calcdex_projection_revision()
+	if projection_revision.is_empty() and _is_pvp_battle():
+		# PvP realtime packets can arrive before the participant projection fence
+		# has been seeded locally. Recover the canonical room snapshot before
+		# refusing the calculator, instead of leaving the user on a generic wait
+		# message indefinitely.
+		await _reconcile_pvp_battle_from_room("calcdex_projection_recovery")
+		if request_token != damage_calc_request_token or current_action_panel_mode != BattleActionsPanelMode.CALC:
+			damage_calc_request_in_flight = false
+			return
+		projection_revision = battle_state.get_calcdex_projection_revision()
+	var use_safe_matchup := false
+	if not damage_calc_snapshot_disabled_for_battle and not projection_revision.is_empty():
+		var snapshot_response: Dictionary = await BattleApiClient.get_calcdex_snapshot(
+			damage_calc_request,
+			battle_state.battle_id,
+			projection_revision
+		)
+		if request_token != damage_calc_request_token:
+			damage_calc_request_in_flight = false
+			if damage_calc_refresh_queued and current_action_panel_mode == BattleActionsPanelMode.CALC:
+				_refresh_damage_calc_results()
+			return
+		if bool(snapshot_response.get("success", false)):
+			damage_calc_knowledge_snapshot = _damage_calc_as_dictionary(snapshot_response.get("snapshot", {})).duplicate(true)
+			calc_panel.set_viewer_stats_by_ref(_get_damage_calc_viewer_stats_by_ref(damage_calc_knowledge_snapshot))
+			calc_panel.set_knowledge_snapshot(damage_calc_knowledge_snapshot)
+			use_safe_matchup = true
+		else:
+			damage_calc_knowledge_snapshot.clear()
+			calc_panel.set_knowledge_snapshot({})
+			var snapshot_error_code := _get_damage_calc_error_code(snapshot_response)
+			if snapshot_error_code == "CALC_UNSUPPORTED_MECHANIC":
+				damage_calc_snapshot_disabled_for_battle = true
+
+	var response: Dictionary
+	if use_safe_matchup:
+		var selection: Dictionary = calc_panel.get_matchup_selection()
+		if str(selection.get("attackerRef", "")) == "" or str(selection.get("defenderRef", "")) == "":
+			response = {"success": false, "error": _t("battle.calc.error.selection")}
+		else:
+			response = await BattleApiClient.calculate_calcdex_matchup(
+				damage_calc_request, battle_state.battle_id, projection_revision,
+				str(selection.get("direction", "own-to-opponent")),
+				str(selection.get("attackerRef", "")), str(selection.get("defenderRef", "")),
+				_get_damage_calc_defender_assumptions_payload(), calc_panel.get_field_scenario(),
+				calc_panel.get_species_scenario(), calc_panel.get_move_scenarios(),
+				calc_panel.get_viewer_scenario(), calc_panel.get_battle_state_scenario()
+			)
+	else:
+		response = {
+			"success": false,
+			"error": _t("battle.calc.error.safe_snapshot_required"),
+		}
 
 	damage_calc_request_in_flight = false
 	if request_token != damage_calc_request_token:
@@ -2355,11 +2519,55 @@ func _refresh_damage_calc_results() -> void:
 	else:
 		calc_panel.show_error(str(response.get("error", _t("battle.calc.error.failed"))))
 
+func _show_damage_calc_loading() -> void:
+	calc_panel.show_loading(_get_active_display_species("p1"), _get_active_display_species("p2"))
+
+
+func _get_damage_calc_viewer_stats_by_ref(snapshot: Dictionary) -> Dictionary:
+	var result: Dictionary = {}
+	var viewer_entries := _damage_calc_as_array(snapshot.get("viewerPokemon", []))
+	var display_team := _get_display_team_data("p1")
+	for viewer_value: Variant in viewer_entries:
+		var viewer := _damage_calc_as_dictionary(viewer_value)
+		var pokemon_ref := str(viewer.get("pokemonRef", ""))
+		var slot_text := pokemon_ref.trim_prefix("viewer:public-slot-")
+		var slot_index := int(slot_text) - 1
+		if pokemon_ref == "" or str(slot_index + 1) != slot_text or slot_index < 0 or slot_index >= display_team.size():
+			continue
+		var display_data := _damage_calc_as_dictionary(display_team[slot_index])
+		if display_data.is_empty():
+			continue
+		var stats := _damage_calc_as_dictionary(display_data.get("stats", {}))
+		if stats.is_empty():
+			var saved_pokemon := _get_player_save_pokemon_for_battle_display_data(display_data, slot_index)
+			if saved_pokemon != null:
+				stats = saved_pokemon.stats.duplicate(true)
+		var safe_stats: Dictionary = {}
+		for stat_key: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
+			if stats.has(stat_key) and int(stats.get(stat_key, 0)) > 0:
+				safe_stats[stat_key] = int(stats.get(stat_key, 0))
+		if not safe_stats.is_empty():
+			result[pokemon_ref] = safe_stats
+	return result
+
 func _on_calc_panel_defender_assumptions_changed(assumptions: Dictionary, edited_fields: Dictionary) -> void:
 	_sync_damage_calc_matchup_assumptions()
 	damage_calc_defender_assumptions = assumptions.duplicate(true)
 	damage_calc_assumption_edited_fields = edited_fields.duplicate(true)
 	_persist_current_damage_calc_assumptions()
+	if damage_calc_request_in_flight:
+		damage_calc_request_token += 1
+	if current_action_panel_mode == BattleActionsPanelMode.CALC:
+		_refresh_damage_calc_results()
+
+func _on_calc_panel_matchup_selection_changed() -> void:
+	if damage_calc_request_in_flight:
+		damage_calc_request_token += 1
+	if current_action_panel_mode == BattleActionsPanelMode.CALC:
+		_refresh_damage_calc_results()
+
+
+func _on_calc_panel_move_scenarios_changed(_move_scenarios: Array) -> void:
 	if damage_calc_request_in_flight:
 		damage_calc_request_token += 1
 	if current_action_panel_mode == BattleActionsPanelMode.CALC:
@@ -2384,6 +2592,8 @@ func _on_calc_panel_assumption_catalog_requested(kind: String, query: String, sp
 			response = await PokemonDataApiClient.search_damage_calc_abilities(request_node, query, species, 30)
 		"nature":
 			response = await PokemonDataApiClient.search_damage_calc_natures(request_node, query, 30)
+		"move":
+			response = await PokemonDataApiClient.search_damage_calc_moves(request_node, query, species, 30)
 		_:
 			response = {
 				"success": false,
@@ -2403,12 +2613,83 @@ func _on_calc_panel_assumption_catalog_requested(kind: String, query: String, sp
 	else:
 		calc_panel.show_assumption_catalog_error(kind, str(response.get("error", "Could not load assumptions.")))
 
+
+func _on_calc_panel_viewer_ability_catalog_requested(species: String) -> void:
+	if current_action_panel_mode != BattleActionsPanelMode.CALC:
+		return
+	var request_node := HTTPRequest.new()
+	add_child(request_node)
+	var response := await PokemonDataApiClient.search_damage_calc_abilities(request_node, "", species, 10)
+	request_node.queue_free()
+	if current_action_panel_mode == BattleActionsPanelMode.CALC:
+		calc_panel.show_viewer_ability_catalog_response(species, response)
+
+func _on_calc_panel_sample_set_catalog_requested(species: String, format_id: String) -> void:
+	if current_action_panel_mode != BattleActionsPanelMode.CALC:
+		return
+	damage_calc_sample_set_request_token += 1
+	var request_token := damage_calc_sample_set_request_token
+	var request_node := HTTPRequest.new()
+	add_child(request_node)
+	var response := await PokemonDataApiClient.get_calcdex_sample_sets(
+		request_node,
+		format_id,
+		species
+	)
+	request_node.queue_free()
+	if request_token != damage_calc_sample_set_request_token or current_action_panel_mode != BattleActionsPanelMode.CALC:
+		return
+	if bool(response.get("success", true)):
+		calc_panel.show_sample_set_catalog_response(species, response)
+	else:
+		calc_panel.show_sample_set_catalog_error(species, str(response.get("error", "Could not load sample sets.")))
+
+func _on_calc_panel_forme_catalog_requested(relation: String, species: String, format_id: String) -> void:
+	if current_action_panel_mode != BattleActionsPanelMode.CALC:
+		return
+	var request_token := int(damage_calc_forme_request_tokens.get(relation, 0)) + 1
+	damage_calc_forme_request_tokens[relation] = request_token
+	var request_node := HTTPRequest.new()
+	add_child(request_node)
+	var response := await PokemonDataApiClient.get_damage_calc_formes(request_node, species, format_id)
+	request_node.queue_free()
+	if request_token != int(damage_calc_forme_request_tokens.get(relation, 0)) or current_action_panel_mode != BattleActionsPanelMode.CALC:
+		return
+	if bool(response.get("success", false)):
+		calc_panel.show_forme_catalog_response(relation, species, response)
+	else:
+		calc_panel.show_forme_catalog_error(relation, species, str(response.get("error", "Could not load formes.")))
+
+func _on_calc_panel_default_ability_requested(species: String) -> void:
+	if current_action_panel_mode != BattleActionsPanelMode.CALC:
+		return
+	damage_calc_default_ability_request_token += 1
+	var request_token := damage_calc_default_ability_request_token
+	var request_node := HTTPRequest.new()
+	add_child(request_node)
+	var response := await PokemonDataApiClient.search_damage_calc_abilities(request_node, "", species, 30)
+	request_node.queue_free()
+	if request_token != damage_calc_default_ability_request_token or current_action_panel_mode != BattleActionsPanelMode.CALC:
+		return
+	if bool(response.get("success", false)):
+		calc_panel.show_default_ability_response(species, response)
+	else:
+		calc_panel.show_default_ability_error(species)
+
 func _sync_damage_calc_matchup_assumptions() -> void:
+	var current_battle_id := battle_state.battle_id.strip_edges()
+	if current_battle_id != damage_calc_snapshot_battle_id:
+		damage_calc_snapshot_battle_id = current_battle_id
+		damage_calc_snapshot_disabled_for_battle = false
+		damage_calc_knowledge_snapshot.clear()
+		calc_panel.set_knowledge_snapshot({})
 	var matchup_key := _get_damage_calc_matchup_key()
 	if matchup_key == damage_calc_matchup_key:
 		return
 
 	damage_calc_matchup_key = matchup_key
+	damage_calc_knowledge_snapshot.clear()
+	calc_panel.set_knowledge_snapshot({})
 	damage_calc_defender_species_key = _get_damage_calc_defender_species_key()
 	_load_damage_calc_assumptions_for_current_defender()
 
@@ -2428,27 +2709,7 @@ func _load_damage_calc_assumptions_for_current_defender() -> void:
 	if not saved_entry.is_empty():
 		damage_calc_defender_assumptions = _sanitize_damage_calc_assumptions(saved_entry)
 		damage_calc_assumption_edited_fields = _build_damage_calc_edited_fields(damage_calc_defender_assumptions)
-	_apply_known_damage_calc_defender_info(false)
 	calc_panel.set_defender_assumptions(damage_calc_defender_assumptions, damage_calc_assumption_edited_fields)
-
-func _apply_known_damage_calc_defender_info(update_panel: bool = true) -> void:
-	var changed: bool = false
-	if not bool(damage_calc_assumption_edited_fields.get("item", false)):
-		var known_item: String = _get_known_damage_calc_defender_item()
-		var current_item: String = str(damage_calc_defender_assumptions.get("item", "")).strip_edges()
-		if known_item != "" and current_item != known_item:
-			damage_calc_defender_assumptions["item"] = known_item
-			changed = true
-
-	if not bool(damage_calc_assumption_edited_fields.get("ability", false)):
-		var known_ability: String = _get_known_damage_calc_defender_ability()
-		var current_ability: String = str(damage_calc_defender_assumptions.get("ability", "")).strip_edges()
-		if known_ability != "" and current_ability != known_ability:
-			damage_calc_defender_assumptions["ability"] = known_ability
-			changed = true
-
-	if changed and update_panel:
-		calc_panel.set_defender_assumptions(damage_calc_defender_assumptions, damage_calc_assumption_edited_fields)
 
 func _persist_current_damage_calc_assumptions() -> void:
 	if damage_calc_defender_species_key == "":
@@ -2475,7 +2736,13 @@ func _load_damage_calc_saved_assumptions() -> void:
 		return
 
 	var data: Dictionary = parsed_data as Dictionary
-	var species_data: Dictionary = _damage_calc_as_dictionary(data.get("species", data))
+	var scopes: Dictionary = _damage_calc_as_dictionary(data.get("scopes", {}))
+	var scoped_data: Dictionary = _damage_calc_as_dictionary(scopes.get(DAMAGE_CALC_DEFAULT_SCOPE, {}))
+	# V1 stored `species` at the root. Keep it backward-readable while all new
+	# writes are explicitly scoped to the enabled engine format.
+	var species_data: Dictionary = _damage_calc_as_dictionary(
+		scoped_data.get("species", data.get("species", data))
+	)
 	for key_value: Variant in species_data.keys():
 		var species_key: String = str(key_value).strip_edges()
 		if species_key == "":
@@ -2492,7 +2759,11 @@ func _save_damage_calc_saved_assumptions() -> void:
 
 	file.store_string(JSON.stringify({
 		"version": DAMAGE_CALC_ASSUMPTIONS_VERSION,
-		"species": damage_calc_saved_assumptions,
+		"scopes": {
+			DAMAGE_CALC_DEFAULT_SCOPE: {
+				"species": damage_calc_saved_assumptions,
+			},
+		},
 	}, "\t"))
 
 func _sanitize_damage_calc_assumptions(assumptions: Dictionary) -> Dictionary:
@@ -2509,6 +2780,10 @@ func _sanitize_damage_calc_assumptions(assumptions: Dictionary) -> Dictionary:
 	if nature != "" and nature != "<null>":
 		sanitized["nature"] = nature
 
+	var status: String = str(assumptions.get("status", "")).strip_edges().to_lower()
+	if status in ["brn", "par", "psn", "tox", "slp", "frz"]:
+		sanitized["status"] = status
+
 	var evs: Dictionary = _sanitize_damage_calc_stat_table(_damage_calc_as_dictionary(assumptions.get("evs", {})), false)
 	if not evs.is_empty():
 		sanitized["evs"] = evs
@@ -2517,11 +2792,27 @@ func _sanitize_damage_calc_assumptions(assumptions: Dictionary) -> Dictionary:
 	if not ivs.is_empty():
 		sanitized["ivs"] = ivs
 
+	var boosts: Dictionary = _sanitize_damage_calc_boost_table(_damage_calc_as_dictionary(assumptions.get("boosts", {})))
+	if not boosts.is_empty():
+		sanitized["boosts"] = boosts
+
+	var assumed_moves: Array[String] = []
+	for move_value: Variant in _damage_calc_as_array(assumptions.get("assumedMoves", [])):
+		var move_name := str(move_value).strip_edges()
+		if move_name != "" and move_name.length() <= 100 and move_name not in assumed_moves and assumed_moves.size() < 4:
+			assumed_moves.append(move_name)
+	if not assumed_moves.is_empty():
+		sanitized["assumedMoves"] = assumed_moves
+	if bool(assumptions.get("replaceMoves", false)):
+		sanitized["replaceMoves"] = true
+	if bool(assumptions.get("exactStats", false)):
+		sanitized["exactStats"] = true
+
 	return sanitized
 
 func _get_persistable_damage_calc_assumptions(assumptions: Dictionary, edited_fields: Dictionary) -> Dictionary:
 	var edited_assumptions: Dictionary = {}
-	for key: String in ["item", "ability", "nature", "evs", "ivs"]:
+	for key: String in ["item", "ability", "nature", "status", "evs", "ivs", "boosts", "assumedMoves", "replaceMoves", "exactStats"]:
 		if bool(edited_fields.get(key, false)) and assumptions.has(key):
 			edited_assumptions[key] = assumptions.get(key)
 	return _sanitize_damage_calc_assumptions(edited_assumptions)
@@ -2539,9 +2830,16 @@ func _sanitize_damage_calc_stat_table(stats: Dictionary, omit_default_ivs: bool)
 		sanitized[stat_key] = value
 	return sanitized
 
+func _sanitize_damage_calc_boost_table(boosts: Dictionary) -> Dictionary:
+	var sanitized: Dictionary = {}
+	for stat_key: String in ["atk", "def", "spa", "spd", "spe"]:
+		if boosts.has(stat_key):
+			sanitized[stat_key] = clampi(int(boosts.get(stat_key, 0)), -6, 6)
+	return sanitized
+
 func _build_damage_calc_edited_fields(assumptions: Dictionary) -> Dictionary:
 	var edited: Dictionary = {}
-	for key: String in ["item", "ability", "nature", "evs", "ivs"]:
+	for key: String in ["item", "ability", "nature", "status", "evs", "ivs", "boosts", "assumedMoves", "replaceMoves", "exactStats"]:
 		if not assumptions.has(key):
 			continue
 		var value: Variant = assumptions.get(key)
@@ -2553,7 +2851,7 @@ func _build_damage_calc_edited_fields(assumptions: Dictionary) -> Dictionary:
 	return edited
 
 func _should_store_damage_calc_assumptions(assumptions: Dictionary, edited_fields: Dictionary) -> bool:
-	for key: String in ["item", "ability", "nature", "evs", "ivs"]:
+	for key: String in ["item", "ability", "nature", "status", "evs", "ivs", "boosts", "assumedMoves", "replaceMoves"]:
 		if not bool(edited_fields.get(key, false)):
 			continue
 		if not assumptions.has(key):
@@ -2561,6 +2859,9 @@ func _should_store_damage_calc_assumptions(assumptions: Dictionary, edited_field
 		var value: Variant = assumptions.get(key)
 		if value is Dictionary:
 			if not (value as Dictionary).is_empty():
+				return true
+		elif value is Array:
+			if not (value as Array).is_empty():
 				return true
 		elif str(value).strip_edges() != "":
 			return true
@@ -2576,38 +2877,15 @@ func _get_damage_calc_defender_species_key() -> String:
 func _slugify_damage_calc_species(species: String) -> String:
 	return species.strip_edges().to_lower().replace(" ", "").replace("-", "").replace("_", "").replace("'", "").replace(".", "")
 
-func _get_known_damage_calc_defender_item() -> String:
-	var active_pokemon: Dictionary = battle_state.get_active_player_pokemon("p2")
-	var ident_key: String = _normalize_battle_ident(str(active_pokemon.get("ident", "")))
-	if ident_key != "" and public_confirmed_items_by_ident.has(ident_key):
-		var confirmed_item: String = str(public_confirmed_items_by_ident.get(ident_key, "")).strip_edges()
-		if confirmed_item != "":
-			return confirmed_item
-
-	for key: String in ["confirmedItem", "confirmed_item", "revealedItem", "revealed_item", "publicItem", "public_item"]:
-		var value: String = str(active_pokemon.get(key, "")).strip_edges()
-		if value != "":
-			return value
-	return ""
-
-func _get_known_damage_calc_defender_ability() -> String:
-	var active_pokemon: Dictionary = battle_state.get_active_player_pokemon("p2")
-	var ident_key: String = _normalize_battle_ident(str(active_pokemon.get("ident", "")))
-	if ident_key != "" and public_confirmed_abilities_by_ident.has(ident_key):
-		var confirmed_ability: String = str(public_confirmed_abilities_by_ident.get(ident_key, "")).strip_edges()
-		if confirmed_ability != "":
-			return confirmed_ability
-
-	for key: String in ["confirmedAbility", "confirmed_ability", "revealedAbility", "revealed_ability", "publicAbility", "public_ability"]:
-		var value: String = str(active_pokemon.get(key, "")).strip_edges()
-		if value != "":
-			return value
-	return ""
-
 func _damage_calc_as_dictionary(value: Variant) -> Dictionary:
 	if value is Dictionary:
 		return value as Dictionary
 	return {}
+
+func _damage_calc_as_array(value: Variant) -> Array:
+	if value is Array:
+		return value as Array
+	return []
 
 func _get_damage_calc_matchup_key() -> String:
 	return "%s|%s|%s|%s" % [
@@ -2633,7 +2911,18 @@ func _get_damage_calc_defender_assumptions_payload() -> Dictionary:
 	for key: String in ["item", "ability"]:
 		if str(payload.get(key, "")).strip_edges() == "":
 			payload.erase(key)
+	payload["exactStats"] = bool(damage_calc_defender_assumptions.get("exactStats", false)) or (
+		bool(damage_calc_assumption_edited_fields.get("nature", false))
+		and bool(damage_calc_assumption_edited_fields.get("evs", false))
+	)
 	return payload
+
+func _get_damage_calc_error_code(response: Dictionary) -> String:
+	var code := str(response.get("code", "")).strip_edges()
+	var detail: Variant = response.get("detail")
+	if detail is Dictionary:
+		code = str((detail as Dictionary).get("code", code)).strip_edges()
+	return code
 
 ## Handelt de gekozen hoofdactie af.
 func _on_action_selected(action: String) -> void:
@@ -4906,7 +5195,7 @@ func _debug_trainer_team_display(stage: String, payload: Dictionary) -> void:
 ## Reset de battle status UI naar een lege beginstand.
 func _reset_battle_status_panel() -> void:
 	battle_status_panel.reset_status()
-	_vs_panel_call("hide_decision_timers", [true])
+	_timer_panels_call("hide_decision_timers", [true])
 	field_timers_panel.reset_timers()
 	_update_side_condition_ui([])
 
@@ -5027,6 +5316,8 @@ func _remember_battle_modifier_event(event: Dictionary) -> void:
 			_apply_ability_stat_modifier_event(event)
 		"statChange":
 			_apply_stat_stage_event(event)
+		"statStage":
+			_apply_stat_stage_operation_event(event)
 		"item":
 			_apply_item_modifier_event(event)
 
@@ -5072,6 +5363,87 @@ func _apply_stat_stage_event(event: Dictionary) -> void:
 		stat_stages_by_ident[ident_key] = stages
 
 	_update_stat_stage_panels()
+
+func _apply_stat_stage_operation_event(event: Dictionary) -> void:
+	var operation := str(event.get("operation", "")).strip_edges()
+	if operation == "clearAll":
+		stat_stages_by_ident.clear()
+		_update_stat_stage_panels()
+		return
+
+	var target_key := _normalize_battle_ident(str(event.get("target", "")))
+	if target_key == "":
+		return
+
+	var target_stages := _get_stat_stages_for_ident(target_key)
+	match operation:
+		"clear":
+			stat_stages_by_ident.erase(target_key)
+		"clearPositive":
+			for stat_key: Variant in target_stages.keys():
+				if int(target_stages.get(stat_key, 0)) > 0:
+					target_stages.erase(stat_key)
+			_store_stat_stages_for_ident(target_key, target_stages)
+		"set":
+			var stat_key := _normalize_stat_stage_key(str(event.get("stat", "")))
+			if stat_key == "":
+				return
+			var amount := clampi(int(event.get("amount", 0)), -6, 6)
+			if amount == 0:
+				target_stages.erase(stat_key)
+			else:
+				target_stages[stat_key] = amount
+			_store_stat_stages_for_ident(target_key, target_stages)
+		"invert":
+			for stat_key: Variant in target_stages.keys():
+				var inverted := -int(target_stages.get(stat_key, 0))
+				if inverted == 0:
+					target_stages.erase(stat_key)
+				else:
+					target_stages[stat_key] = inverted
+			_store_stat_stages_for_ident(target_key, target_stages)
+		"swap":
+			var source_key := _normalize_battle_ident(str(event.get("sourceTarget", "")))
+			if source_key == "":
+				return
+			var source_stages := _get_stat_stages_for_ident(source_key)
+			var stats := _stat_stage_operation_stats(str(event.get("stats", "")))
+			for stat_key: String in stats:
+				var target_value := int(target_stages.get(stat_key, 0))
+				var source_value := int(source_stages.get(stat_key, 0))
+				if source_value == 0:
+					target_stages.erase(stat_key)
+				else:
+					target_stages[stat_key] = source_value
+				if target_value == 0:
+					source_stages.erase(stat_key)
+				else:
+					source_stages[stat_key] = target_value
+			_store_stat_stages_for_ident(target_key, target_stages)
+			_store_stat_stages_for_ident(source_key, source_stages)
+		_:
+			return
+	_update_stat_stage_panels()
+
+func _get_stat_stages_for_ident(ident_key: String) -> Dictionary:
+	var stages_value: Variant = stat_stages_by_ident.get(ident_key, {})
+	return (stages_value as Dictionary).duplicate() if stages_value is Dictionary else {}
+
+func _store_stat_stages_for_ident(ident_key: String, stages: Dictionary) -> void:
+	if stages.is_empty():
+		stat_stages_by_ident.erase(ident_key)
+	else:
+		stat_stages_by_ident[ident_key] = stages
+
+func _stat_stage_operation_stats(raw_stats: String) -> Array[String]:
+	var stats: Array[String] = []
+	for raw_stat: String in raw_stats.split(","):
+		var stat_key := _normalize_stat_stage_key(raw_stat)
+		if stat_key != "" and not stats.has(stat_key):
+			stats.append(stat_key)
+	if stats.is_empty():
+		stats = ["atk", "def", "spa", "spd", "spe", "accuracy", "evasion"]
+	return stats
 
 func _clear_stat_stages_for_ident(ident: String) -> void:
 	var ident_key: String = _normalize_battle_ident(ident)
@@ -5537,10 +5909,12 @@ func _get_ability_name_from_source(source: String) -> String:
 func _update_battle_status_panels() -> void:
 	var display_turn := _get_battle_presentation_turn()
 	battle_status_panel.set_turn(display_turn)
+	_update_calc_turn_label(display_turn)
 	battle_status_panel.hide_timer()
-	_vs_panel_call("hide_decision_timers")
+	_timer_panels_call("hide_decision_timers")
 	if _should_show_bank_timer_projection():
 		_show_pvp_decision_timers()
+	_sync_calc_timer_dock_visibility()
 	var field_effects := _get_display_field_effects()
 	_prune_inactive_field_condition_ability_modifiers(field_effects)
 	field_timers_panel.set_effects(field_effects, display_turn)
@@ -5556,9 +5930,11 @@ func _should_show_bank_timer_projection() -> bool:
 	)
 
 func _show_pvp_decision_timers() -> void:
-	_vs_panel_call("show_decision_timers", [
-		PvpBattleRealtimeService.timer_projection.participant_display_for_local_player("p1", action_flow.local_player_id),
-		PvpBattleRealtimeService.timer_projection.participant_display_for_local_player("p2", action_flow.local_player_id),
+	var local_timer := PvpBattleRealtimeService.timer_projection.participant_display_for_local_player("p1", action_flow.local_player_id)
+	var opponent_timer := PvpBattleRealtimeService.timer_projection.participant_display_for_local_player("p2", action_flow.local_player_id)
+	_timer_panels_call("show_decision_timers", [
+		local_timer,
+		opponent_timer,
 		"TEAM_PREVIEW" if team_preview_lead_selection_active else "",
 	])
 
@@ -6153,6 +6529,8 @@ func _prepare_battle_setup(
 	_clear_pvp_presentation_fence_recovery_state()
 	pvp_gateway_epoch = ""
 	pvp_last_connection_server_seq = 0
+	pvp_reconnect_grace_deadline_by_side.clear()
+	pvp_forced_switch_diagnostic_keys.clear()
 	pvp_presentation_actionable_local_msec = 0
 	pvp_presentation_schedule_token = ""
 	pvp_presentation_acknowledgements_authoritative = false
@@ -9664,10 +10042,15 @@ func _on_party_grid_party_selected(slot: int) -> void:
 	if team_preview_lead_selection_active:
 		return
 
+	var local_force_switch := _is_pvp_battle() and _local_player_needs_force_switch_ui()
 	if battle_input_locked:
+		if local_force_switch:
+			_report_pvp_forced_switch_selection_blocked("input_locked")
 		return
 
 	if _is_pvp_battle() and not _can_submit_pvp_switch_choice():
+		if local_force_switch:
+			_report_pvp_forced_switch_selection_blocked("choice_not_actionable")
 		if _opponent_player_needs_force_switch_ui():
 			_show_pvp_opponent_force_switch_wait()
 		return
@@ -9675,6 +10058,8 @@ func _on_party_grid_party_selected(slot: int) -> void:
 	var selected_pokemon_data := _get_party_grid_selected_pokemon_data(slot)
 	var submit_slot := _get_canonical_switch_submit_slot(slot, selected_pokemon_data)
 	if _is_pvp_battle() and submit_slot <= 0:
+		if local_force_switch:
+			_report_pvp_forced_switch_selection_blocked("canonical_slot_unresolved")
 		current_action_panel.set_message(_t("battle.error.verify_team_slot"))
 		push_warning(
 			"Blocked PvP switch with unresolved canonical party slot visualSlot=%d selected=%s" % [
@@ -9684,6 +10069,8 @@ func _on_party_grid_party_selected(slot: int) -> void:
 		)
 		return
 	if not _can_switch_to_selected_pokemon(slot, selected_pokemon_data):
+		if local_force_switch:
+			_report_pvp_forced_switch_selection_blocked("switch_ineligible")
 		return
 
 	var pvp_switch_context := {
@@ -9780,6 +10167,7 @@ func _show_force_switch_if_needed() -> bool:
 			"Blocked PvP force-switch open",
 			"source=_show_force_switch_if_needed phase=%s next=%s expected=awaiting_force_switch" % [pvp_last_phase, pvp_last_next_phase]
 		)
+		_report_pvp_forced_switch_selection_blocked("phase_not_released")
 		_set_battle_input_locked(true)
 		return false
 
@@ -9799,6 +10187,31 @@ func _can_open_pvp_local_force_switch_ui() -> bool:
 	if pvp_last_phase == "":
 		return true
 	return pvp_last_phase == "rendering_events" and pvp_last_next_phase == "awaiting_force_switch"
+
+
+func _report_pvp_forced_switch_selection_blocked(selection_gate: String) -> void:
+	if not _is_pvp_battle() or not _local_player_needs_force_switch_ui():
+		return
+	var local_player_id := _get_local_state_player_id()
+	var decision := battle_state.get_active_decision(local_player_id)
+	var decision_id := str(decision.get("decisionId", "")).strip_edges()
+	var decision_generation := _get_int_from_variant(decision.get("decisionGeneration", 0), 0)
+	var diagnostic_key := "%s:%d:%s" % [decision_id, decision_generation, selection_gate]
+	if pvp_forced_switch_diagnostic_keys.has(diagnostic_key):
+		return
+	pvp_forced_switch_diagnostic_keys[diagnostic_key] = true
+	PvpBattleRealtimeService.report_diagnostic("pvp.forced_switch_selection_blocked", {
+		"decisionId": decision_id,
+		"decisionGeneration": max(decision_generation, 0),
+		"selectionGate": selection_gate,
+		"displayedPhase": pvp_last_phase if pvp_last_phase != "" else "unknown",
+		"serverSeq": max(pvp_last_applied_server_seq, 0),
+		"phaseSeq": max(pvp_last_phase_update_server_seq, 0),
+		"lastRenderedSeq": max(pvp_event_queue.last_rendered_seq, 0),
+		"inputLocked": battle_input_locked,
+		"pendingAction": pvp_prechoice_buffer.has_pending(),
+		"forceSwitchRequired": true,
+	})
 
 func _clear_force_switch_request_for_player(player_id: String) -> void:
 	var request := battle_state.get_player_request(player_id)
@@ -10682,18 +11095,27 @@ func _apply_pvp_connection_log_event(message_type: String, message: Dictionary) 
 
 	var log_message := ""
 	var player_name := _get_pvp_connection_event_display_name(message)
+	var event_side := _get_pvp_connection_event_display_side(message)
 	match message_type:
 		"pvp.opponent_disconnected":
 			log_message = _t("battle.connection.disconnected", {"player": player_name})
 		"pvp.reconnect_grace_started":
 			var grace_seconds := _get_int_from_variant(message.get("disconnectGraceSeconds", 0), 0)
-			_vs_panel_call("show_reconnect_timer", [
-				_get_pvp_connection_event_display_side(message),
-				str(message.get("reconnectDeadlineAt", "")),
+			var reconnect_deadline := str(message.get("reconnectDeadlineAt", ""))
+			var duplicate_grace: bool = reconnect_deadline != "" \
+				and pvp_reconnect_grace_deadline_by_side.get(event_side, "") == reconnect_deadline
+			_timer_panels_call("show_reconnect_timer", [
+				event_side,
+				reconnect_deadline,
 				grace_seconds,
 				str(message.get("serverNow", ""))
 			])
+			_sync_calc_timer_dock_visibility()
 			_sync_pvp_reconnect_timer_pause()
+			if reconnect_deadline != "":
+				pvp_reconnect_grace_deadline_by_side[event_side] = reconnect_deadline
+			if duplicate_grace:
+				return true
 			if grace_seconds > 0:
 				log_message = _t("battle.connection.reconnect_seconds", {
 					"player": player_name,
@@ -10702,7 +11124,9 @@ func _apply_pvp_connection_log_event(message_type: String, message: Dictionary) 
 			else:
 				log_message = _t("battle.connection.waiting_reconnect", {"player": player_name})
 		"pvp.opponent_reconnected":
-			_vs_panel_call("clear_reconnect_timer", [_get_pvp_connection_event_display_side(message)])
+			pvp_reconnect_grace_deadline_by_side.erase(event_side)
+			_timer_panels_call("clear_reconnect_timer", [event_side])
+			_sync_calc_timer_dock_visibility()
 			_sync_pvp_reconnect_timer_pause()
 			log_message = _t("battle.connection.reconnected", {"player": player_name})
 		_:
@@ -10729,6 +11153,7 @@ func _observe_pvp_gateway_epoch(message: Dictionary) -> void:
 	pvp_last_applied_snapshot_server_seq = 0
 	pvp_last_phase_update_server_seq = 0
 	pvp_last_connection_server_seq = 0
+	pvp_reconnect_grace_deadline_by_side.clear()
 	pvp_response_order.reset_transport_cursor()
 	# Render barriers and their ACK retries live in Gateway process memory. A new
 	# epoch cannot release a fence created by the old process, so retaining it
@@ -14491,6 +14916,12 @@ func _vs_panel_call(method_name: String, arguments: Array = []) -> Variant:
 	if not _vs_panel_has_method(method_name):
 		return null
 	return vs_panel_container.callv(method_name, arguments)
+
+
+func _timer_panels_call(method_name: String, arguments: Array = []) -> void:
+	_vs_panel_call(method_name, arguments)
+	if calc_timer_dock != null and calc_timer_dock.has_method(method_name):
+		calc_timer_dock.callv(method_name, arguments)
 
 
 func _get_vs_player_appearance(player_id: String) -> Dictionary:

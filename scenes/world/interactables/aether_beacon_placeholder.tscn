@@ -1,0 +1,118 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/interactables/aether_beacon.gd" id="1_script"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_beacon"]
+size = Vector2(80, 80)
+
+[node name="AetherBeacon" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_script")
+interactable_kind = "aether_beacon"
+blocks_movement = true
+requires_facing = false
+interaction_shape_size = Vector2(80, 80)
+
+[node name="Shadow" type="Polygon2D" parent="."]
+position = Vector2(0, 3)
+polygon = PackedVector2Array(-20, -4, 20, -4, 24, 0, 20, 4, -20, 4, -24, 0)
+color = Color(0.055, 0.075, 0.09, 0.68)
+
+[node name="Pedestal" type="Node2D" parent="."]
+
+[node name="Outline" type="Polygon2D" parent="Pedestal"]
+polygon = PackedVector2Array(-18, -13, 18, -13, 22, -8, 18, 7, 13, 12, -13, 12, -18, 7, -22, -8)
+color = Color(0.075, 0.105, 0.12, 1)
+
+[node name="Stone" type="Polygon2D" parent="Pedestal"]
+polygon = PackedVector2Array(-15, -10, 15, -10, 18, -6, 15, 5, 11, 9, -11, 9, -15, 5, -18, -6)
+color = Color(0.27, 0.35, 0.36, 1)
+
+[node name="StoneLight" type="Polygon2D" parent="Pedestal"]
+polygon = PackedVector2Array(-15, -10, 15, -10, 11, -5, -11, -5)
+color = Color(0.42, 0.5, 0.48, 1)
+
+[node name="StoneShade" type="Polygon2D" parent="Pedestal"]
+polygon = PackedVector2Array(-15, -4, -9, 0, -9, 7, -13, 7, -16, 4)
+color = Color(0.17, 0.23, 0.25, 1)
+
+[node name="Rune" type="Polygon2D" parent="Pedestal"]
+position = Vector2(0, 1)
+polygon = PackedVector2Array(-8, -3, -3, -3, 0, 0, 3, -3, 8, -3, 4, 1, 8, 5, 3, 5, 0, 2, -3, 5, -8, 5, -4, 1)
+color = Color(0.42, 0.94, 0.91, 1)
+
+[node name="FloatingVisual" type="Node2D" parent="."]
+position = Vector2(0, -42)
+
+[node name="Glow" type="Polygon2D" parent="FloatingVisual"]
+visible = false
+polygon = PackedVector2Array(0, -31, 20, -20, 27, 0, 19, 22, 0, 31, -19, 22, -27, 0, -20, -20)
+color = Color(0.2, 0.95, 1, 0.38)
+
+[node name="Ring" type="Node2D" parent="FloatingVisual"]
+visible = false
+
+[node name="North" type="Polygon2D" parent="FloatingVisual/Ring"]
+position = Vector2(0, -29)
+polygon = PackedVector2Array(-2, -4, 2, -4, 3, 4, -3, 4)
+color = Color(0.56, 1, 1, 0.9)
+
+[node name="East" type="Polygon2D" parent="FloatingVisual/Ring"]
+position = Vector2(29, 0)
+polygon = PackedVector2Array(-4, -2, 4, -2, 4, 2, -4, 2)
+color = Color(0.25, 0.78, 0.88, 0.9)
+
+[node name="South" type="Polygon2D" parent="FloatingVisual/Ring"]
+position = Vector2(0, 29)
+polygon = PackedVector2Array(-3, -4, 3, -4, 2, 4, -2, 4)
+color = Color(0.25, 0.78, 0.88, 0.9)
+
+[node name="West" type="Polygon2D" parent="FloatingVisual/Ring"]
+position = Vector2(-29, 0)
+polygon = PackedVector2Array(-4, -2, 4, -2, 4, 2, -4, 2)
+color = Color(0.56, 1, 1, 0.9)
+
+[node name="Crystal" type="Node2D" parent="FloatingVisual"]
+
+[node name="Outline" type="Polygon2D" parent="FloatingVisual/Crystal"]
+polygon = PackedVector2Array(0, -28, 14, -11, 11, 20, 0, 28, -12, 19, -15, -11)
+color = Color(0.035, 0.12, 0.17, 1)
+
+[node name="DarkFacet" type="Polygon2D" parent="FloatingVisual/Crystal"]
+polygon = PackedVector2Array(0, -24, 11, -9, 8, 17, 0, 24, -2, 2)
+color = Color(0.08, 0.48, 0.61, 1)
+
+[node name="MidFacet" type="Polygon2D" parent="FloatingVisual/Crystal"]
+polygon = PackedVector2Array(0, -24, -2, 2, 0, 24, -9, 16, -12, -9)
+color = Color(0.18, 0.69, 0.72, 1)
+
+[node name="LightFacet" type="Polygon2D" parent="FloatingVisual/Crystal"]
+polygon = PackedVector2Array(0, -24, 3, -10, -2, 2, -9, 16, -12, -9)
+color = Color(0.52, 0.94, 0.86, 1)
+
+[node name="Highlight" type="Polygon2D" parent="FloatingVisual/Crystal"]
+polygon = PackedVector2Array(-2, -18, 1, -14, -3, -3, -7, 3, -8, -8)
+color = Color(0.84, 1, 0.94, 1)
+
+[node name="Core" type="Polygon2D" parent="FloatingVisual/Crystal"]
+polygon = PackedVector2Array(0, -7, 5, 0, 0, 8, -5, 0)
+color = Color(0.88, 1, 0.96, 1)
+
+[node name="Sparks" type="Node2D" parent="FloatingVisual"]
+visible = false
+
+[node name="SparkLeft" type="Polygon2D" parent="FloatingVisual/Sparks"]
+position = Vector2(-22, -10)
+polygon = PackedVector2Array(0, -4, 2, -1, 5, 0, 2, 1, 0, 4, -1, 1, -4, 0, -1, -1)
+color = Color(0.7, 1, 0.96, 0.9)
+
+[node name="SparkRight" type="Polygon2D" parent="FloatingVisual/Sparks"]
+position = Vector2(21, 10)
+scale = Vector2(0.75, 0.75)
+polygon = PackedVector2Array(0, -4, 2, -1, 5, 0, 2, 1, 0, 4, -1, 1, -4, 0, -1, -1)
+color = Color(0.45, 0.94, 1, 0.9)
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+shape = SubResource("RectangleShape_beacon")

@@ -375,6 +375,8 @@ const TRAINER_CARD_ACCENT := Color("#d8b767")
 const TRAINER_CARD_ACCENT_SOFT := Color("#d8b76766")
 const TRAINER_CARD_SECTION_BORDER := Color("#2d4b66b3")
 const UTC_TIME_REFRESH_INTERVAL_SECONDS := 1.0
+const AETHER_CLASH_CHAMPION_REFRESH_INTERVAL_SECONDS := 30.0
+const AETHER_CLASH_LOBBY_MAP_ID := "aether_clash_lobby"
 const UI_SURFACE_BASE := Color("#050b14ed")
 const UI_SURFACE_RAISED := Color("#081522eb")
 const UI_SURFACE_INTERACTIVE := Color("#0b1a2bea")
@@ -440,6 +442,7 @@ var donator_store_popup: DonatorStorePopup
 @onready var global_buff_contribute_button: Button = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow/ContributeButton
 @onready var region_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/StatusRow/RegionBadge/RegionLabel
 @onready var location_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/HeaderRow/LocationLabel
+@onready var aether_clash_champion_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/AetherClashChampionLabel
 @onready var time_of_day_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/StatusRow/TimeOfDayLabel
 @onready var weather_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/StatusRow/WeatherLabel
 @onready var time_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/StatusRow/TimeLabel
@@ -494,6 +497,7 @@ var donator_store_popup: DonatorStorePopup
 @onready var socials_close_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/Header/CloseButton
 var friendlist_popup: FriendlistPopup
 var guild_popup: GuildPopup
+var guild_lobby_teleport_in_flight := false
 var player_interaction_coordinator: PlayerInteractionCoordinator
 var quest_journal_view
 @onready var mail_popup: PanelContainer = $Control/MailPopup
@@ -714,6 +718,7 @@ var pvp_ranked_queue_availability_in_flight := false
 var pvp_ranked_queue_availability_elapsed := RANKED_QUEUE_AVAILABILITY_POLL_INTERVAL_SECONDS
 var pvp_ranked_queue_has_waiting_player := false
 var pvp_queue_auto_open_in_flight := false
+var pvp_queue_join_in_flight := false
 var pvp_queue_leave_in_flight := false
 var pvp_queue_compact_minimized := false
 var pvp_queue_wait_started_msec := 0
@@ -1237,6 +1242,9 @@ var wild_pokemon_button_tween: Tween
 var displayed_money: int = -1
 var displayed_location_map: Node
 var displayed_location_name := ""
+var aether_clash_champion_name := ""
+var aether_clash_champion_refresh_elapsed := 0.0
+var aether_clash_champion_request_active := false
 var utc_time_refresh_elapsed := UTC_TIME_REFRESH_INTERVAL_SECONDS
 var selected_global_buff: Dictionary = {}
 var selected_global_buff_contribution := 10000
@@ -4039,6 +4047,8 @@ func _queue_evolution_prompt(prompt_value: Dictionary) -> bool:
 	var target_species_id := _evolution_prompt_target_species_id(prompt)
 	if pokemon_id <= 0 or target_species_id == "":
 		return false
+	if _has_pending_evolution_prompt(pokemon_id, target_species_id):
+		return false
 
 	var from_species := _evolution_prompt_from_species(prompt)
 	var to_species := _evolution_prompt_to_species(prompt)
@@ -4048,6 +4058,27 @@ func _queue_evolution_prompt(prompt_value: Dictionary) -> bool:
 	prompt["toSpecies"] = to_species
 	evolution_prompt_queue.append(prompt)
 	return true
+
+func _has_pending_evolution_prompt(pokemon_id: int, target_species_id: String) -> bool:
+	var target_key := _normalize_evolution_species_key(target_species_id)
+	if pokemon_id <= 0 or target_key == "":
+		return false
+	if (
+		int(evolution_active_prompt.get("pokemonId", 0)) == pokemon_id
+		and _normalize_evolution_species_key(
+			_evolution_prompt_target_species_id(evolution_active_prompt)
+		) == target_key
+	):
+		return true
+	for queued_prompt: Dictionary in evolution_prompt_queue:
+		if (
+			int(queued_prompt.get("pokemonId", 0)) == pokemon_id
+			and _normalize_evolution_species_key(
+				_evolution_prompt_target_species_id(queued_prompt)
+			) == target_key
+		):
+			return true
+	return false
 
 func _extend_evolution_review_count(queued_count: int) -> void:
 	if queued_count <= 0:
@@ -4088,6 +4119,8 @@ func _show_next_evolution_prompt() -> void:
 				{"pokemon": _localized_species_name(source_species, source_species)}
 			))
 			continue
+		if not _evolution_prompt_matches_current_species(prompt, pokemon):
+			continue
 
 		evolution_prompt_review_index += 1
 		evolution_active_prompt = prompt
@@ -4095,6 +4128,19 @@ func _show_next_evolution_prompt() -> void:
 		return
 
 	_finish_evolution_review_queue()
+
+func _evolution_prompt_matches_current_species(prompt: Dictionary, pokemon: Pokemon) -> bool:
+	if pokemon == null:
+		return false
+	var expected_species := _normalize_evolution_species_key(
+		_evolution_prompt_from_species(prompt)
+	)
+	if expected_species == "" or expected_species == "pokemon":
+		return true
+	return _normalize_evolution_species_key(pokemon.species) == expected_species
+
+func _normalize_evolution_species_key(species: String) -> String:
+	return species.strip_edges().to_lower().replace("_", "-").replace(" ", "-")
 
 func _render_evolution_prompt(prompt: Dictionary) -> void:
 	if evolution_prompt_popup == null:
@@ -9354,6 +9400,7 @@ func _process(delta: float) -> void:
 	_refresh_player_status_card_if_needed()
 	_refresh_trainer_card_playtime_if_needed()
 	_refresh_location_label_if_needed()
+	_refresh_aether_clash_champion_if_needed(delta)
 	_refresh_utc_time_label(delta)
 	_refresh_personal_buffs_if_needed(delta)
 	_refresh_staff_tools_visibility_if_needed()
@@ -9410,6 +9457,7 @@ func _refresh_location_label() -> void:
 		var display_name := displayed_location_name
 		location_label.text = display_name
 		location_label.tooltip_text = display_name
+	_refresh_aether_clash_champion_visibility()
 	var has_wild_pokemon := _get_current_encounter_area_id() != ""
 	if wild_pokemon_button != null:
 		wild_pokemon_button.visible = has_wild_pokemon
@@ -9417,6 +9465,62 @@ func _refresh_location_label() -> void:
 	_position_collapsible_button("location")
 	if wild_pokemon_popup != null and wild_pokemon_popup.visible:
 		_hide_wild_pokemon_popup()
+
+
+func _refresh_aether_clash_champion_visibility() -> void:
+	if aether_clash_champion_label == null:
+		return
+	var in_lobby := _is_in_aether_clash_lobby()
+	aether_clash_champion_label.visible = in_lobby
+	if not in_lobby:
+		aether_clash_champion_refresh_elapsed = 0.0
+		return
+	_render_aether_clash_champion()
+	aether_clash_champion_refresh_elapsed = 0.0
+
+
+func _refresh_aether_clash_champion_if_needed(delta: float) -> void:
+	if not _is_in_aether_clash_lobby() or aether_clash_champion_request_active:
+		return
+	aether_clash_champion_refresh_elapsed -= delta
+	if aether_clash_champion_refresh_elapsed > 0.0:
+		return
+	aether_clash_champion_refresh_elapsed = AETHER_CLASH_CHAMPION_REFRESH_INTERVAL_SECONDS
+	_load_aether_clash_champion.call_deferred()
+
+
+func _load_aether_clash_champion() -> void:
+	if aether_clash_champion_request_active or not _is_in_aether_clash_lobby():
+		return
+	aether_clash_champion_request_active = true
+	var result: Dictionary = await GuildService.load_aether_clash_champion()
+	aether_clash_champion_request_active = false
+	if not _is_in_aether_clash_lobby() or not bool(result.get("success", false)):
+		return
+	aether_clash_champion_name = str(result.get("guildName", "")).strip_edges()
+	_render_aether_clash_champion()
+
+
+func _render_aether_clash_champion() -> void:
+	if aether_clash_champion_label == null:
+		return
+	var guild_name := aether_clash_champion_name
+	if guild_name.is_empty():
+		guild_name = LocalizationManager.text("ui.aether_clash.reigning_guild.none")
+	aether_clash_champion_label.text = LocalizationManager.text(
+		"ui.aether_clash.reigning_guild",
+		{"guild": guild_name}
+	)
+	aether_clash_champion_label.tooltip_text = aether_clash_champion_label.text
+
+
+func _is_in_aether_clash_lobby() -> bool:
+	var current_map := GameState.current_map as Node
+	return (
+		current_map != null
+		and current_map.has_method("get_map_id")
+		and str(current_map.call("get_map_id")) == AETHER_CLASH_LOBBY_MAP_ID
+	)
 
 func _on_location_weather_changed(weather_state: Dictionary) -> void:
 	_refresh_location_weather(weather_state)
@@ -18483,6 +18587,18 @@ func _show_pokemon_summary(slot_index: int) -> void:
 	if _trade_workspace_is_visible():
 		_promote_trade_summary_to_window(card_key)
 
+func open_ev_training_allocation(pokemon_id: int, stat_id: String) -> bool:
+	for slot_index in range(PlayerSave.party.size()):
+		var pokemon: Pokemon = PlayerSave.party[slot_index]
+		if pokemon == null or pokemon.owned_pokemon_id != pokemon_id:
+			continue
+		_show_pokemon_summary(slot_index)
+		var card_key := _get_pokemon_summary_card_key(pokemon, slot_index, "interactive")
+		_on_pokemon_summary_tab_selected("evs", card_key)
+		_on_summary_allocated_ev_pressed(stat_id, _summary_stat_label(stat_id), card_key)
+		return true
+	return false
+
 func _trade_workspace_is_visible() -> bool:
 	var workspace := get_node_or_null("/root/TradeWorkspace")
 	return workspace != null and workspace.visible
@@ -19720,6 +19836,13 @@ func _on_summary_ev_allocate_confirm_pressed() -> void:
 	}))
 	_hide_pokemon_summary_ev_allocate_popup()
 	_refresh_open_pokemon_summary_cards()
+	var tutorial := _staff_dictionary_from_variant(result.get("evTrainingTutorial", {}))
+	if not tutorial.is_empty():
+		var story_result: Dictionary = await PlayerGameStateService.refresh_story()
+		if not bool(story_result.get("success", false)):
+			push_warning("UIOverlay: EV tutorial story refresh failed.")
+		if str(tutorial.get("stepId", "")) == "return_to_mateo":
+			_add_chat_message("EV lesson complete. Return to Mateo for your reward.")
 
 func _refresh_summary_ev_allocate_status() -> void:
 	if pokemon_summary_ev_allocate_popup == null or not pokemon_summary_ev_allocate_popup.visible:
@@ -32770,12 +32893,59 @@ func _open_guild_popup() -> void:
 		$Control.add_child(guild_popup)
 		if not guild_popup.closed.is_connected(_on_guild_popup_closed):
 			guild_popup.closed.connect(_on_guild_popup_closed)
+		if not guild_popup.lobby_teleport_requested.is_connected(_on_guild_lobby_teleport_requested):
+			guild_popup.lobby_teleport_requested.connect(_on_guild_lobby_teleport_requested)
 	guild_popup.open()
 	_activate_ui_panel(guild_popup)
 
 func _on_guild_popup_closed() -> void:
 	if guild_popup != null:
 		_deactivate_ui_panel(guild_popup)
+
+
+func _on_guild_lobby_teleport_requested() -> void:
+	if guild_lobby_teleport_in_flight:
+		return
+	if guild_popup != null and guild_popup.visible:
+		guild_popup.close()
+	await get_tree().process_frame
+	var world := GameState.get_world()
+	if (
+		world == null
+		or not world.has_method("begin_authorized_teleport")
+		or not world.has_method("apply_authorized_teleport_state")
+	):
+		_add_chat_message(LocalizationManager.text("ui.guild.lobby.error.world_not_ready"))
+		return
+
+	guild_lobby_teleport_in_flight = true
+	var begin_result: Dictionary = await world.call("begin_authorized_teleport")
+	if not bool(begin_result.get("success", false)):
+		guild_lobby_teleport_in_flight = false
+		_add_chat_message(str(begin_result.get(
+			"error",
+			LocalizationManager.text("ui.guild.lobby.error.unavailable")
+		)))
+		return
+
+	var response: Dictionary = await GuildService.teleport_to_lobby()
+	if not bool(response.get("success", false)):
+		if world.has_method("cancel_authorized_teleport"):
+			world.call("cancel_authorized_teleport")
+		guild_lobby_teleport_in_flight = false
+		_add_chat_message(str(response.get(
+			"error",
+			LocalizationManager.text("ui.guild.lobby.error.failed")
+		)))
+		return
+
+	var state := _staff_dictionary_from_variant(response.get("state", {}))
+	var apply_result: Dictionary = await world.call("apply_authorized_teleport_state", state)
+	guild_lobby_teleport_in_flight = false
+	if not bool(apply_result.get("success", false)):
+		_add_chat_message(LocalizationManager.text("ui.guild.lobby.error.apply_failed"))
+		return
+	_add_chat_message(LocalizationManager.text("ui.guild.lobby.success"))
 
 func _on_aether_exchange_button_pressed() -> void:
 	_add_chat_message("Aether Exchange is not implemented yet.")
@@ -33632,19 +33802,22 @@ func _spectator_response_has_public_teams(response: Dictionary) -> bool:
 
 
 func _on_pvp_join_queue_pressed() -> void:
-	if pvp_battle_starting:
+	if pvp_battle_starting or pvp_queue_join_in_flight or pvp_ranked_queue_join_preparing:
 		return
+	pvp_queue_join_in_flight = true
+	_set_pvp_room_busy(true)
 	pvp_ranked_queue_join_preparing = true
 	if _is_selected_pvp_queue_ranked():
 		pvp_ranked_team_validation_party_signature = ""
 		await _refresh_pvp_ranked_team_validation(true)
 		if not PvpRankedTeamValidation.allows_ranked_join(pvp_ranked_team_validation_result):
 			pvp_ranked_queue_join_preparing = false
+			pvp_queue_join_in_flight = false
+			_set_pvp_room_busy(false)
 			_set_pvp_queue_status_key("ui.pvp.queue.validation_failed")
 			_refresh_pvp_team_validator()
 			return
 	pvp_ranked_queue_join_preparing = false
-	_set_pvp_room_busy(true)
 	_set_pvp_queue_status_key("ui.pvp.queue.joining")
 	var request := _create_pvp_request_node()
 	var response: Dictionary = await BattleApiClient.join_pvp_queue(
@@ -33653,6 +33826,7 @@ func _on_pvp_join_queue_pressed() -> void:
 		BattleApiPayloads.from_player_save(PlayerSave)
 	)
 	request.queue_free()
+	pvp_queue_join_in_flight = false
 	_set_pvp_room_busy(false)
 
 	if not bool(response.get("success", false)):
@@ -33662,6 +33836,11 @@ func _on_pvp_join_queue_pressed() -> void:
 		if validation_value is Dictionary:
 			pvp_ranked_team_validation_result = PvpRankedTeamValidation.normalize_response(validation_value as Dictionary)
 			_refresh_pvp_team_validator()
+		return
+
+	var active_match := _pvp_active_queue_match_from_response(response)
+	if not active_match.is_empty():
+		await _resume_pvp_queue_active_match(active_match)
 		return
 
 	var entry: Dictionary = _pvp_queue_entry_from_response(response)
@@ -35401,6 +35580,11 @@ func _poll_pvp_queue_status() -> void:
 		push_warning("UIOverlay: PVP queue status check failed: %s" % str(response.get("error", "Unknown error")))
 		return
 
+	var active_match := _pvp_active_queue_match_from_response(response)
+	if not active_match.is_empty():
+		await _resume_pvp_queue_active_match(active_match)
+		return
+
 	var entry: Dictionary = _latest_relevant_pvp_queue_entry(response)
 	if entry.is_empty():
 		pvp_queue_polling_active = false
@@ -35427,6 +35611,31 @@ func _pvp_queue_entry_from_response(response: Dictionary) -> Dictionary:
 	if entry_value is Dictionary:
 		return (entry_value as Dictionary).duplicate(true)
 	return {}
+
+func _pvp_active_queue_match_from_response(response: Dictionary) -> Dictionary:
+	var active_match_value: Variant = response.get("activeMatch", {})
+	if active_match_value is Dictionary:
+		var active_match: Dictionary = active_match_value as Dictionary
+		if _pvp_optional_id(active_match.get("matchId", "")) != "":
+			return active_match.duplicate(true)
+	return {}
+
+func _resume_pvp_queue_active_match(active_match: Dictionary) -> void:
+	var match_id := _pvp_optional_id(active_match.get("matchId", ""))
+	if match_id == "":
+		return
+	var status := str(active_match.get("status", "")).strip_edges().to_lower()
+	pvp_active_queue_match_id = match_id
+	pvp_active_queue_status = status
+	pvp_active_queue_starts_at = str(active_match.get("startsAt", "")).strip_edges()
+	pvp_queue_polling_active = false
+	if pvp_poll_timer != null:
+		pvp_poll_timer.stop()
+	_refresh_pvp_queue_buttons("matched")
+	if status == "matched":
+		_begin_pvp_match_countdown(match_id, pvp_active_queue_starts_at)
+		return
+	await _open_pvp_queue_match(true)
 
 func _latest_relevant_pvp_queue_entry(response: Dictionary) -> Dictionary:
 	var entries_value: Variant = response.get("entries", [])
@@ -35637,6 +35846,7 @@ func _start_pvp_battle_from_response(response: Dictionary) -> void:
 	pvp_queue_polling_active = false
 	pvp_queue_poll_in_flight = false
 	pvp_queue_auto_open_in_flight = false
+	pvp_queue_join_in_flight = false
 	pvp_polling_active = false
 	pvp_poll_elapsed = 0.0
 	pvp_room_code_label.text = LocalizationManager.text("ui.pvp.room.code", {"code": "-"})

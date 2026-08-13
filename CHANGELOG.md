@@ -1,5 +1,52 @@
 # Changelog
 
+## 0.3.53 - 2026-08-13
+
+**Added**
+
+- Added the Aether Clash Lobby. Guild members can travel there for free, and the name of the reigning Guild is shown below the location name.
+- The Aether Clash Lobby now contains animated purple and red portals for Guild wars.
+- Added Aethernet fast travel. Attune to a town's crystal to unlock it, then ask an Aethernet Keeper to take you to another unlocked town in the same region. You can also choose one Aether Anchor that is always free to reach.
+- Added daily Trainer rematches. Their teams become stronger and can evolve as you progress.
+- Added an EV training field in Viridian City. Its battles teach EV training without damaging your Pokémon.
+- Added the Viridian Trainer School story, the first Pewter Gym challenge, and new houses to explore in Viridian City and Pewter City.
+- The battle damage calculator now has more room and keeps the battlefield and both teams in view.
+- While using the calculator, you can hover over your own Pokémon and revealed opposing Pokémon to view their known information.
+- You can adjust HP, status conditions, moves, abilities, items, stats, and field effects to explore different battle situations.
+- The calculator now supports Z-Moves and critical hits.
+- Haze now has its own mist animation and sound, and clearly shows when stat changes are removed.
+
+**Changed**
+
+- Wild Pokémon now choose moves randomly, while Trainer opponents try to use the move that will deal the most damage.
+- Regular Trainer battles no longer show Team Preview; it remains available for important battles.
+- The Aether Clash Lobby now stays clear, follows the day-and-night cycle, and uses the login-screen music.
+- Improved Aethernet travel points and nighttime lighting in Pallet Town, Viridian City, Pewter City, and the Aether Clash Lobby.
+- Damage results and battle-log percentages are now shown more precisely.
+- The calculator makes your Pokémon's stats, stat changes, move suggestions, KO chances, and field effects easier to read and adjust.
+- Weather, terrain, screens, hazards, and Spikes are easier to recognize and set for the correct side.
+- The calculator now follows the Pokémon you have sent out when you switch.
+
+**Fixed**
+
+- Fixed evolution choices sometimes appearing twice.
+- Fixed being able to move too early while choosing a starter from Professor Oak.
+- Fixed Aethernet crystals sometimes failing to respond, asking you to move closer while you were already beside them, or showing the wrong portrait.
+- Fixed the position of Aethernet Keepers and objects incorrectly covering players or nameplates in the Aether Clash Lobby.
+- The Aether Clash Lobby now works correctly when no Guild has won yet.
+- Fixed calculator results sometimes failing to load after switching Pokémon or changing battle tabs.
+- Fixed fainted Pokémon being unavailable in the calculator.
+- Fixed HP and HP percentage fields interfering with each other.
+- Fixed incomplete or incorrectly sized team information cards in the calculator.
+- Fixed the calculator occasionally showing the wrong Pokémon after a switch.
+- Consumable held items such as Eject Button, Focus Sash, and Berries now show the correct battle message and animation.
+- Fixed some active PvP players being incorrectly shown as disconnected.
+- Weather and terrain timers now show the correct remaining range after a faint or a pivot move, without revealing duration-extending items.
+- Fixed Terapagos's Tera Shift being shown as restoring health in PvP battles.
+- Fixed Team Preview occasionally opening without showing either team's Pokémon for one player.
+- Fixed some ranked matches leaving a player behind in the queue instead of bringing both players into the battle.
+- Fixed moves such as Haze and Clear Smog not clearly showing when they reset stat changes.
+
 ## 0.3.52 - 2026-08-08
 
 **Added**

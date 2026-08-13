@@ -1,30 +1,28 @@
 extends Node
 
-const DEFAULT_OVERWORLD_MUSIC_PATH := "res://assets/music/overworld/kanto/routes/route1.ogg"
-const LOGIN_MUSIC_PATH := "res://assets/music/login/lugia_theme_lofi.ogg"
-const DEFAULT_WILD_BATTLE_MUSIC_PATH := "res://assets/music/battle/wild/Kanto Wild Battle.ogg"
-const DEFAULT_TRAINER_BATTLE_MUSIC_PATH := "res://assets/music/battle/trainer/Kalos Trainer Battle.ogg"
-const DEFAULT_PVP_BATTLE_MUSIC_PATH := "res://assets/music/battle/pvp/lysandre_remix_pokemon_legends_z_a_zame.ogg"
+const MUSIC_CATALOG_PATH := "res://data/music_catalog.json"
+const DEFAULT_OVERWORLD_MUSIC_ID := "overworld.kanto.route.1"
+const LOGIN_MUSIC_ID := "login.lugia_theme_lofi"
+const DEFAULT_WILD_BATTLE_MUSIC_ID := "battle.wild.kanto"
+const DEFAULT_TRAINER_BATTLE_MUSIC_ID := "battle.trainer.kalos"
+const DEFAULT_PVP_BATTLE_MUSIC_ID := "battle.pvp.lysandre_remix_pokemon_legends_z_a_zame"
 const PVP_BATTLE_MUSIC_RES_DIR := "res://assets/music/battle/pvp"
 const PVP_BATTLE_MUSIC_RELATIVE_DIR := "battle/pvp"
 const MUSIC_RES_ROOT := "res://assets/music"
 const MUSIC_RELATIVE_ROOT := "assets/music"
 const DEFAULT_BATTLE_MUSIC_ID := "lysandre_remix_pokemon_legends_z_a_zame"
 const FADE_SECONDS := 0.35
-const MAP_MUSIC_PROFILE_TRACKS := {
-	"kanto.pallet_town": "res://assets/music/overworld/kanto/towns/pallet_town.ogg",
-	"kanto.viridian_city": "res://assets/music/overworld/kanto/towns/viridian_city.ogg",
-	"kanto.pewter_city": "res://assets/music/overworld/kanto/towns/viridian_city.ogg",
-}
 
 var music_player: AudioStreamPlayer
 var current_track_path := ""
-var current_map_music_path := DEFAULT_OVERWORLD_MUSIC_PATH
+var current_map_music_path := ""
 var current_tween: Tween
 var external_music_root := ""
+var music_catalog: Dictionary = {}
 
 
 func _ready() -> void:
+	_load_music_catalog()
 	music_player = AudioStreamPlayer.new()
 	music_player.name = "MusicPlayer"
 	music_player.bus = SettingsManager.MUSIC_BUS
@@ -33,11 +31,13 @@ func _ready() -> void:
 
 
 func play_overworld_music() -> void:
+	if current_map_music_path == "":
+		current_map_music_path = get_music_track_path(DEFAULT_OVERWORLD_MUSIC_ID)
 	play_music(current_map_music_path)
 
 
 func play_login_music() -> void:
-	play_music(LOGIN_MUSIC_PATH)
+	play_music(get_music_track_path(LOGIN_MUSIC_ID))
 
 
 func play_map_music(map_node: Node) -> void:
@@ -50,10 +50,10 @@ func play_battle_music() -> void:
 	play_music(get_battle_music_path(SettingsManager.battle_music_track))
 
 func play_wild_battle_music() -> void:
-	play_music(DEFAULT_WILD_BATTLE_MUSIC_PATH)
+	play_music(get_music_track_path(DEFAULT_WILD_BATTLE_MUSIC_ID))
 
 func play_trainer_battle_music() -> void:
-	play_music(DEFAULT_TRAINER_BATTLE_MUSIC_PATH)
+	play_music(get_music_track_path(DEFAULT_TRAINER_BATTLE_MUSIC_ID))
 
 
 func play_pvp_battle_music() -> void:
@@ -61,30 +61,48 @@ func play_pvp_battle_music() -> void:
 
 
 func get_map_music_path(map_node: Node) -> String:
-	if map_node != null and map_node.has_method("get_music_track_path"):
-		var map_track_path: String = str(map_node.call("get_music_track_path")).strip_edges()
-		if map_track_path != "":
-			return map_track_path
+	var map_track_path := _get_node_music_track_path(map_node)
+	if map_track_path != "":
+		return map_track_path
 
-		var map_profile_track_path := get_music_profile_track_path(_get_map_music_profile_id(map_node))
-		if map_profile_track_path != "":
-			return map_profile_track_path
+	var map_profile_track_path := get_music_profile_track_path(_get_map_music_profile_id(map_node))
+	if map_profile_track_path != "":
+		return map_profile_track_path
 
 	if map_node != null:
 		var map_music_node: Node = map_node.get_node_or_null("MapMusic")
-		if map_music_node != null and map_music_node.has_method("get_music_track_path"):
-			var component_track_path: String = str(map_music_node.call("get_music_track_path")).strip_edges()
-			if component_track_path != "":
-				return component_track_path
-			var component_profile_track_path := get_music_profile_track_path(_get_map_music_profile_id(map_music_node))
-			if component_profile_track_path != "":
-				return component_profile_track_path
+		var component_track_path := _get_node_music_track_path(map_music_node)
+		if component_track_path != "":
+			return component_track_path
+		var component_profile_track_path := get_music_profile_track_path(_get_map_music_profile_id(map_music_node))
+		if component_profile_track_path != "":
+			return component_profile_track_path
 
-	return DEFAULT_OVERWORLD_MUSIC_PATH
+	return get_music_track_path(DEFAULT_OVERWORLD_MUSIC_ID)
 
 
 func get_music_profile_track_path(profile_id: String) -> String:
-	return str(MAP_MUSIC_PROFILE_TRACKS.get(profile_id.strip_edges(), ""))
+	var profiles: Dictionary = _get_music_catalog_section("map_profiles")
+	return get_music_track_path(str(profiles.get(profile_id.strip_edges(), "")))
+
+
+func get_music_track_path(track_id: String) -> String:
+	var tracks: Dictionary = _get_music_catalog_section("tracks")
+	var track_data: Dictionary = tracks.get(track_id.strip_edges(), {}) as Dictionary
+	return str(track_data.get("path", "")).strip_edges()
+
+
+func _get_node_music_track_path(map_node: Node) -> String:
+	if map_node == null:
+		return ""
+	if map_node.has_method("get_music_track_id"):
+		var catalog_track_path := get_music_track_path(str(map_node.call("get_music_track_id")))
+		if catalog_track_path != "":
+			return catalog_track_path
+	# Compatibility for maps created before music_track_id was introduced.
+	if map_node.has_method("get_music_track_path"):
+		return str(map_node.call("get_music_track_path")).strip_edges()
+	return ""
 
 
 func _get_map_music_profile_id(map_node: Node) -> String:
@@ -107,7 +125,7 @@ func get_battle_music_path(track_id: String) -> String:
 		fallback_track_ids.sort()
 		track_data = tracks[str(fallback_track_ids[0])] as Dictionary
 	if track_data.is_empty():
-		return DEFAULT_PVP_BATTLE_MUSIC_PATH
+		return get_music_track_path(DEFAULT_PVP_BATTLE_MUSIC_ID)
 
 	return str(track_data.get("path", ""))
 
@@ -175,6 +193,25 @@ func _on_music_finished() -> void:
 	music_player.play()
 
 
+func _load_music_catalog() -> void:
+	music_catalog = {}
+	var catalog_source := FileAccess.get_file_as_string(MUSIC_CATALOG_PATH)
+	if catalog_source == "":
+		push_error("Music catalog is missing or empty: %s" % MUSIC_CATALOG_PATH)
+		return
+	var parsed_catalog = JSON.parse_string(catalog_source)
+	if parsed_catalog is Dictionary:
+		music_catalog = parsed_catalog as Dictionary
+	else:
+		push_error("Music catalog is invalid JSON: %s" % MUSIC_CATALOG_PATH)
+
+
+func _get_music_catalog_section(section_name: String) -> Dictionary:
+	if music_catalog.is_empty():
+		_load_music_catalog()
+	return music_catalog.get(section_name, {}) as Dictionary
+
+
 func _load_music_stream(track_path: String) -> AudioStream:
 	for candidate_path: String in _build_music_track_paths(track_path):
 		var stream: AudioStream = _load_music_stream_from_path(candidate_path)
@@ -226,8 +263,8 @@ func _get_pvp_battle_music_tracks() -> Dictionary:
 
 	if tracks.is_empty() or not tracks.has(DEFAULT_BATTLE_MUSIC_ID):
 		tracks[DEFAULT_BATTLE_MUSIC_ID] = {
-			"label": _get_music_track_label_from_path(DEFAULT_PVP_BATTLE_MUSIC_PATH),
-			"path": DEFAULT_PVP_BATTLE_MUSIC_PATH,
+			"label": "Lysandre Remix Pokémon Legends Z-A Zame",
+			"path": get_music_track_path(DEFAULT_PVP_BATTLE_MUSIC_ID),
 		}
 
 	return tracks

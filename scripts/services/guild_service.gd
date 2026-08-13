@@ -8,6 +8,8 @@ signal guild_changed(guild: Dictionary)
 const GUILDS_ENDPOINT := "/game/guilds"
 const GUILD_HOME_ENDPOINT := "/game/guilds/me"
 const GUILD_INVITATIONS_ENDPOINT := "/game/guild-invitations"
+const GUILD_LOBBY_TELEPORT_ENDPOINT := "/game/guilds/me/lobby/teleport"
+const AETHER_CLASH_CHAMPION_ENDPOINT := "/game/aether-clash/champion"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 var pending_creation_request_id := ""
@@ -68,6 +70,49 @@ func load_home() -> Dictionary:
 		_set_current_membership({})
 		_set_current_guild({})
 	return response if not bool(response.get("success", false)) else _home_result(response.get("body", {}))
+
+
+func teleport_to_lobby() -> Dictionary:
+	var response := await _authenticated_request(
+		GUILD_LOBBY_TELEPORT_ENDPOINT,
+		HTTPClient.METHOD_POST,
+		"{}"
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var body := _dictionary(response.get("body", {}))
+	var state := _dictionary(body.get("state", {}))
+	if state.is_empty():
+		return {"success": false, "error": "Guild Lobby teleport response was empty."}
+	return {
+		"success": true,
+		"accepted": bool(body.get("accepted", false)),
+		"cost": int(body.get("cost", 0)),
+		"state": state,
+	}
+
+
+func load_aether_clash_champion() -> Dictionary:
+	var response := await _authenticated_request(
+		AETHER_CLASH_CHAMPION_ENDPOINT,
+		HTTPClient.METHOD_GET,
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+	return normalize_aether_clash_champion(response.get("body", {}))
+
+
+static func normalize_aether_clash_champion(value: Variant) -> Dictionary:
+	var body := value as Dictionary if value is Dictionary else {}
+	var guild_id_value: Variant = body.get("guildId")
+	var won_at_value: Variant = body.get("wonAt")
+	return {
+		"success": true,
+		"guildId": int(guild_id_value) if guild_id_value != null else 0,
+		"guildName": str(body.get("guildName", "")).strip_edges(),
+		"wonAt": str(won_at_value) if won_at_value != null else "",
+	}
 
 
 func load_invitations() -> Dictionary:

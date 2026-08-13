@@ -13,7 +13,7 @@ const MAP_PROPERTY_REGION_ID := "region_id"
 const MAP_PROPERTY_REGION_NAME := "region_name"
 const MAP_PROPERTY_LOCATION_ID := "location_id"
 const MAP_PROPERTY_LOCATION_NAME := "location_name"
-const MAP_PROPERTY_MUSIC_TRACK_PATH := "music_track_path"
+const MAP_PROPERTY_MUSIC_TRACK_ID := "music_track_id"
 const MAP_PROPERTY_DEFAULT_SPAWN := "default_spawn"
 const MAP_PROPERTY_ENCOUNTER_AREA_ID := "encounter_area_id"
 

@@ -1,5 +1,27 @@
 {
 	"areas": {
+		"aether_clash_lobby": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Aether Clash Lobby",
+			"locationGroupId": "aether_clash",
+			"locationGroupLabel": "Aether Clash",
+			"regionName": "Aether Clash",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/aether_clash/aether_clash_lobby.tscn",
+			"spawnPoints": {
+				"guild_arrival": {
+					"facingDirection": "down",
+					"label": "Guild Arrival",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "GuildArrival",
+					"tile": {
+						"x": 29,
+						"y": 50
+					}
+				}
+			}
+		},
 		"kanto_oaks_lab": {
 			"areaType": "interior",
 			"defaultMode": "open",
@@ -107,7 +129,7 @@
 					"spawnMarker": "FromGym",
 					"tile": {
 						"x": 18,
-						"y": 18
+						"y": 17
 					}
 				},
 				"from_house_1": {
@@ -173,45 +195,75 @@
 			}
 		},
 		"kanto_pewter_city_gym": {
-			"accessOnly": true,
 			"areaType": "interior",
 			"defaultMode": "open",
 			"label": "Pewter City Gym",
 			"locationGroupId": "kanto_pewter_city",
 			"locationGroupLabel": "Pewter City",
 			"regionName": "Kanto",
-			"sceneAliases": [],
-			"scenePath": "",
+			"sceneAliases": [
+				"uid://c8ldtdneumywx"
+			],
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_gym.tscn",
 			"spawnPoints": {
-
+				"from_pewter_city": {
+					"facingDirection": "down",
+					"label": "Pewter City",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromPewterCity",
+					"tile": {
+						"x": 16,
+						"y": 28
+					}
+				}
 			}
 		},
 		"kanto_pewter_city_house_1": {
-			"accessOnly": true,
 			"areaType": "interior",
 			"defaultMode": "open",
 			"label": "Pewter City House 1",
 			"locationGroupId": "kanto_pewter_city",
 			"locationGroupLabel": "Pewter City",
 			"regionName": "Kanto",
-			"sceneAliases": [],
-			"scenePath": "",
+			"sceneAliases": [
+				"uid://dd5re2mpmfhvf"
+			],
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/house1.tscn",
 			"spawnPoints": {
-
+				"from_pewter_city": {
+					"facingDirection": "down",
+					"label": "Pewter City",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromPewterCity",
+					"tile": {
+						"x": 9,
+						"y": 14
+					}
+				}
 			}
 		},
 		"kanto_pewter_city_house_2": {
-			"accessOnly": true,
 			"areaType": "interior",
 			"defaultMode": "open",
 			"label": "Pewter City House 2",
 			"locationGroupId": "kanto_pewter_city",
 			"locationGroupLabel": "Pewter City",
 			"regionName": "Kanto",
-			"sceneAliases": [],
-			"scenePath": "",
+			"sceneAliases": [
+				"uid://bnch2l51wuwbh"
+			],
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/house2.tscn",
 			"spawnPoints": {
-
+				"from_pewter_city": {
+					"facingDirection": "down",
+					"label": "Pewter City",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromPewterCity",
+					"tile": {
+						"x": 9,
+						"y": 14
+					}
+				}
 			}
 		},
 		"kanto_pewter_city_museum": {
@@ -676,14 +728,54 @@
 			],
 			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
 			"spawnPoints": {
+				"ev_training_north_inside": {
+					"facingDirection": "down",
+					"label": "Ev Training North Inside",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "EVTrainingNorthInside",
+					"tile": {
+						"x": 13,
+						"y": 16
+					}
+				},
+				"ev_training_north_outside": {
+					"facingDirection": "down",
+					"label": "Ev Training North Outside",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "EVTrainingNorthOutside",
+					"tile": {
+						"x": 13,
+						"y": 14
+					}
+				},
+				"ev_training_south_inside": {
+					"facingDirection": "down",
+					"label": "Ev Training South Inside",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "EVTrainingSouthInside",
+					"tile": {
+						"x": 13,
+						"y": 31
+					}
+				},
+				"ev_training_south_outside": {
+					"facingDirection": "down",
+					"label": "Ev Training South Outside",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "EVTrainingSouthOutside",
+					"tile": {
+						"x": 13,
+						"y": 33
+					}
+				},
 				"from_gym": {
 					"facingDirection": "down",
 					"label": "Gym",
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromGym",
 					"tile": {
-						"x": 56,
-						"y": 15
+						"x": 41,
+						"y": 13
 					}
 				},
 				"from_house_1": {
@@ -692,8 +784,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromHouse1",
 					"tile": {
-						"x": 18,
-						"y": 46
+						"x": 48,
+						"y": 28
 					}
 				},
 				"from_pokecenter": {
@@ -722,8 +814,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromTrainerSchool",
 					"tile": {
-						"x": 57,
-						"y": 29
+						"x": 59,
+						"y": 28
 					}
 				},
 				"route_1_entrance": {
@@ -773,17 +865,27 @@
 			}
 		},
 		"kanto_viridian_city_house_1": {
-			"accessOnly": true,
 			"areaType": "interior",
 			"defaultMode": "open",
 			"label": "Viridian City House 1",
 			"locationGroupId": "kanto_viridian_city",
 			"locationGroupLabel": "Viridian City",
 			"regionName": "Kanto",
-			"sceneAliases": [],
-			"scenePath": "",
+			"sceneAliases": [
+				"uid://c518t3j64b286"
+			],
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/house1.tscn",
 			"spawnPoints": {
-
+				"from_viridian_city": {
+					"facingDirection": "down",
+					"label": "Viridian City",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromViridianCity",
+					"tile": {
+						"x": 9,
+						"y": 14
+					}
+				}
 			}
 		},
 		"kanto_viridian_city_pokemon_center": {
@@ -819,17 +921,27 @@
 			}
 		},
 		"kanto_viridian_city_trainer_school": {
-			"accessOnly": true,
 			"areaType": "interior",
 			"defaultMode": "open",
 			"label": "Viridian City Trainer School",
 			"locationGroupId": "kanto_viridian_city",
 			"locationGroupLabel": "Viridian City",
 			"regionName": "Kanto",
-			"sceneAliases": [],
-			"scenePath": "",
+			"sceneAliases": [
+				"uid://dv0aevldj7iyb"
+			],
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/trainer_school.tscn",
 			"spawnPoints": {
-
+				"from_viridian_city": {
+					"facingDirection": "down",
+					"label": "Viridian City",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromViridianCity",
+					"tile": {
+						"x": 12,
+						"y": 19
+					}
+				}
 			}
 		},
 		"kanto_viridian_forest": {
@@ -949,6 +1061,54 @@
 			"destinationAreaId": "kanto_route_1",
 			"sourceMapId": "kanto_pallet_town"
 		},
+		"kanto_pewter_city__to_gym": {
+			"destination": {
+				"mapId": "kanto_pewter_city_gym",
+				"mapSceneAliases": [
+					"uid://c8ldtdneumywx"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_gym.tscn",
+				"position": {
+					"x": 528.0,
+					"y": 912.0
+				},
+				"spawnMarker": "FromPewterCity"
+			},
+			"destinationAreaId": "kanto_pewter_city_gym",
+			"sourceMapId": "kanto_pewter_city"
+		},
+		"kanto_pewter_city__to_house_1": {
+			"destination": {
+				"mapId": "kanto_pewter_city_house_1",
+				"mapSceneAliases": [
+					"uid://dd5re2mpmfhvf"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/pewter_city/house1.tscn",
+				"position": {
+					"x": 304.0,
+					"y": 464.0
+				},
+				"spawnMarker": "FromPewterCity"
+			},
+			"destinationAreaId": "kanto_pewter_city_house_1",
+			"sourceMapId": "kanto_pewter_city"
+		},
+		"kanto_pewter_city__to_house_2": {
+			"destination": {
+				"mapId": "kanto_pewter_city_house_2",
+				"mapSceneAliases": [
+					"uid://bnch2l51wuwbh"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/pewter_city/house2.tscn",
+				"position": {
+					"x": 304.0,
+					"y": 464.0
+				},
+				"spawnMarker": "FromPewterCity"
+			},
+			"destinationAreaId": "kanto_pewter_city_house_2",
+			"sourceMapId": "kanto_pewter_city"
+		},
 		"kanto_pewter_city__to_pokecenter": {
 			"destination": {
 				"mapId": "kanto_pewter_city_pokemon_center",
@@ -996,6 +1156,54 @@
 			},
 			"destinationAreaId": "kanto_route_3",
 			"sourceMapId": "kanto_pewter_city"
+		},
+		"kanto_pewter_city_gym__to_pewter_city": {
+			"destination": {
+				"mapId": "kanto_pewter_city",
+				"mapSceneAliases": [
+					"uid://b63qp0afy4rpd"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn",
+				"position": {
+					"x": 592.0,
+					"y": 560.0
+				},
+				"spawnMarker": "FromGym"
+			},
+			"destinationAreaId": "kanto_pewter_city",
+			"sourceMapId": "kanto_pewter_city_gym"
+		},
+		"kanto_pewter_city_house_1__to_pewter_city": {
+			"destination": {
+				"mapId": "kanto_pewter_city",
+				"mapSceneAliases": [
+					"uid://b63qp0afy4rpd"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn",
+				"position": {
+					"x": 1104.0,
+					"y": 1008.0
+				},
+				"spawnMarker": "FromHouse1"
+			},
+			"destinationAreaId": "kanto_pewter_city",
+			"sourceMapId": "kanto_pewter_city_house_1"
+		},
+		"kanto_pewter_city_house_2__to_pewter_city": {
+			"destination": {
+				"mapId": "kanto_pewter_city",
+				"mapSceneAliases": [
+					"uid://b63qp0afy4rpd"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn",
+				"position": {
+					"x": 464.0,
+					"y": 1584.0
+				},
+				"spawnMarker": "FromHouse2"
+			},
+			"destinationAreaId": "kanto_pewter_city",
+			"sourceMapId": "kanto_pewter_city_house_2"
 		},
 		"kanto_pewter_city_pokemon_center__to_outside": {
 			"destination": {
@@ -1307,6 +1515,22 @@
 			"destinationAreaId": "kanto_route_3",
 			"sourceMapId": "kanto_route_3_pokemon_center"
 		},
+		"kanto_viridian_city__to_house_1": {
+			"destination": {
+				"mapId": "kanto_viridian_city_house_1",
+				"mapSceneAliases": [
+					"uid://c518t3j64b286"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/viridian_city/house1.tscn",
+				"position": {
+					"x": 304.0,
+					"y": 464.0
+				},
+				"spawnMarker": "FromViridianCity"
+			},
+			"destinationAreaId": "kanto_viridian_city_house_1",
+			"sourceMapId": "kanto_viridian_city"
+		},
 		"kanto_viridian_city__to_pokecenter": {
 			"destination": {
 				"mapId": "kanto_viridian_city_pokemon_center",
@@ -1369,6 +1593,38 @@
 			"destinationAreaId": "kanto_route_22",
 			"sourceMapId": "kanto_viridian_city"
 		},
+		"kanto_viridian_city__to_trainer_school": {
+			"destination": {
+				"mapId": "kanto_viridian_city_trainer_school",
+				"mapSceneAliases": [
+					"uid://dv0aevldj7iyb"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/viridian_city/trainer_school.tscn",
+				"position": {
+					"x": 400.0,
+					"y": 608.0
+				},
+				"spawnMarker": "FromViridianCity"
+			},
+			"destinationAreaId": "kanto_viridian_city_trainer_school",
+			"sourceMapId": "kanto_viridian_city"
+		},
+		"kanto_viridian_city_house_1__to_viridian_city": {
+			"destination": {
+				"mapId": "kanto_viridian_city",
+				"mapSceneAliases": [
+					"uid://b8tl17hk3yovn"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
+				"position": {
+					"x": 1552.0,
+					"y": 912.0
+				},
+				"spawnMarker": "FromHouse1"
+			},
+			"destinationAreaId": "kanto_viridian_city",
+			"sourceMapId": "kanto_viridian_city_house_1"
+		},
 		"kanto_viridian_city_pokemon_center__to_outside": {
 			"destination": {
 				"mapId": "kanto_viridian_city",
@@ -1384,6 +1640,22 @@
 			},
 			"destinationAreaId": "kanto_viridian_city",
 			"sourceMapId": "kanto_viridian_city_pokemon_center"
+		},
+		"kanto_viridian_city_trainer_school__to_viridian_city": {
+			"destination": {
+				"mapId": "kanto_viridian_city",
+				"mapSceneAliases": [
+					"uid://b8tl17hk3yovn"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
+				"position": {
+					"x": 1904.0,
+					"y": 912.0
+				},
+				"spawnMarker": "FromTrainerSchool"
+			},
+			"destinationAreaId": "kanto_viridian_city",
+			"sourceMapId": "kanto_viridian_city_trainer_school"
 		},
 		"kanto_viridian_forest__to_route_2_north": {
 			"destination": {

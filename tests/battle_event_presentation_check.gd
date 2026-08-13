@@ -15,11 +15,17 @@ func _init() -> void:
 	_check_legitimate_full_hp_rewind_is_preserved()
 	_check_full_hp_reveal_damage_has_no_damage_target()
 	_check_real_damage_keeps_damage_target()
+	_check_direct_damage_logs_one_decimal_precision()
+	_check_public_damage_percent_is_preferred_over_quantized_hp_delta()
 	_check_damage_after_hazard_uses_numeric_delta_when_previous_condition_is_stale()
 	_check_damage_after_hazard_logs_when_conditions_repeat()
 	_check_damage_after_hazard_logs_mixed_visible_and_exact_conditions()
 	_check_booster_energy_quark_drive_messages()
 	_check_air_balloon_messages()
+	_check_consumable_item_activation_animations()
+	_check_tera_shift_max_hp_sync_is_silent()
+	_check_eat_berry_sheet_tile_size()
+	_check_eat_berry_sheet_presentation_tuning()
 	_check_future_sight_lifecycle_messages()
 	_check_solar_beam_prepare_uses_charge_animation()
 	_check_electro_shot_prepare_uses_charge_animation()
@@ -43,6 +49,7 @@ func _init() -> void:
 	_check_badly_poisoned_damage_replays_status_effect_animation()
 	_check_burn_damage_replays_status_effect_animation()
 	_check_z_power_event_has_visible_message()
+	_check_stat_reset_events_have_visible_messages()
 	_check_semantic_battle_log_colors()
 	_check_supreme_overlord_fallen_counter_protocol()
 	quit(1 if failed else 0)
@@ -70,6 +77,24 @@ func _check_z_power_event_has_visible_message() -> void:
 		str(result.get("battle_message", "")),
 		"Pikachu surrounded itself with Z-Power!",
 		"Z-Power event receives visible battle presentation"
+	)
+
+
+func _check_stat_reset_events_have_visible_messages() -> void:
+	var presentation = _make_presentation()
+	var result: Dictionary = presentation.build({
+		"type": "statStage",
+		"operation": "clearAll",
+	})
+	_check_equal(
+		str(result.get("battle_message", "")),
+		"All stat changes were eliminated!",
+		"Haze receives a visible all-stat reset presentation"
+	)
+	_check_equal(
+		str(result.get("log_message", "")),
+		"All stat changes were eliminated!",
+		"Haze receives a battle-log all-stat reset presentation"
 	)
 
 
@@ -103,6 +128,21 @@ func _check_semantic_battle_log_colors() -> void:
 		"semantic battle-log colors do not depend on English message text"
 	)
 	panel.free()
+
+
+func _check_tera_shift_max_hp_sync_is_silent() -> void:
+	var presentation = _make_presentation()
+	var result: Dictionary = presentation.build({
+		"type": "heal",
+		"target": "p1a: Terapagos",
+		"previousCondition": "100/100",
+		"condition": "100/100",
+		"maxHpIncreaseSync": true,
+		"silent": true,
+	})
+	_check_equal(str(result.get("log_message", "")), "", "Tera Shift max-HP sync has no battle-log heal")
+	_check_equal(str(result.get("effect_animation_key", "")), "", "Tera Shift max-HP sync has no heal animation")
+	_check_equal(str(result.get("heal_target_ident", "")), "", "Tera Shift max-HP sync has no heal target")
 
 
 func _check_supreme_overlord_fallen_counter_protocol() -> void:
@@ -218,6 +258,50 @@ func _check_real_damage_keeps_damage_target() -> void:
 	_check_equal(str(result.get("damage_target_ident", "")), "p2a: Garchomp", "real damage still animates")
 
 
+func _check_direct_damage_logs_one_decimal_precision() -> void:
+	var presentation = _make_presentation()
+	presentation.build({
+		"type": "move",
+		"actor": "p1a: Samurott",
+		"move": "Ceaseless Edge",
+		"target": "p2a: Dragonite",
+	})
+	var result: Dictionary = presentation.build({
+		"type": "damage",
+		"target": "p2a: Dragonite",
+		"previousCondition": "400/400",
+		"condition": "222/400",
+		"previousHp": 400,
+		"hp": 222,
+		"maxHp": 400,
+		"amount": 178,
+	})
+
+	_check_equal(str(result.get("log_message", "")), "(Dragonite lost 44.5% of its health!)", "direct damage logs one decimal when exact HP is available")
+
+
+func _check_public_damage_percent_is_preferred_over_quantized_hp_delta() -> void:
+	var presentation = _make_presentation()
+	presentation.build({
+		"type": "move",
+		"actor": "p1a: Samurott",
+		"move": "Knock Off",
+		"target": "p2a: Heatran",
+	})
+	var result: Dictionary = presentation.build({
+		"type": "damage",
+		"target": "p2a: Heatran",
+		"previousCondition": "100/100",
+		"condition": "73/100",
+		"previousHp": 100,
+		"hp": 73,
+		"maxHp": 100,
+		"damagePercent": 27.9,
+	})
+
+	_check_equal(str(result.get("log_message", "")), "(Heatran lost 27.9% of its health!)", "public exact damage percent overrides quantized HP delta")
+
+
 func _check_damage_after_hazard_uses_numeric_delta_when_previous_condition_is_stale() -> void:
 	var presentation = _make_presentation()
 	presentation.build({
@@ -237,7 +321,7 @@ func _check_damage_after_hazard_uses_numeric_delta_when_previous_condition_is_st
 		"amount": 120,
 	})
 
-	_check_equal(str(result.get("log_message", "")), "(Charizard lost 30% of its health!)", "damage after hazard ignores stale previous condition")
+	_check_equal(str(result.get("log_message", "")), "(Charizard lost 30.0% of its health!)", "damage after hazard ignores stale previous condition")
 
 
 func _check_damage_after_hazard_logs_when_conditions_repeat() -> void:
@@ -259,7 +343,7 @@ func _check_damage_after_hazard_logs_when_conditions_repeat() -> void:
 		"amount": 120,
 	})
 
-	_check_equal(str(result.get("log_message", "")), "(Charizard lost 30% of its health!)", "damage after hazard logs repeated-condition numeric loss")
+	_check_equal(str(result.get("log_message", "")), "(Charizard lost 30.0% of its health!)", "damage after hazard logs repeated-condition numeric loss")
 
 
 func _check_damage_after_hazard_logs_mixed_visible_and_exact_conditions() -> void:
@@ -281,7 +365,7 @@ func _check_damage_after_hazard_logs_mixed_visible_and_exact_conditions() -> voi
 		"amount": 189,
 	})
 
-	_check_equal(str(result.get("log_message", "")), "(Alomomola lost 34% of its health!)", "damage after hazard logs visible delta before exact HP reveal")
+	_check_equal(str(result.get("log_message", "")), "(Alomomola lost 34.0% of its health!)", "damage after hazard logs visible delta before exact HP reveal")
 
 
 func _check_booster_energy_quark_drive_messages() -> void:
@@ -325,6 +409,72 @@ func _check_air_balloon_messages() -> void:
 	_check_equal(str(reveal_result.get("log_message", "")), "Wailord floats in the air with its Air Balloon!", "Air Balloon reveal logs")
 	_check_equal(str(reveal_result.get("battle_message", "")), "Wailord floats in the air with its Air Balloon!", "Air Balloon reveal uses battle text")
 	_check_equal(str(popped_result.get("battle_message", "")), "Wailord's Air Balloon popped!", "Air Balloon end uses battle text")
+
+
+func _check_consumable_item_activation_animations() -> void:
+	var presentation = _make_presentation()
+	var cases := [
+		[{"type": "item", "target": "p1a: Ferrothorn", "item": "Eject Button", "state": "end"}, "use_item", "Eject Button uses the generic consumable animation"],
+		[{"type": "item", "target": "p2a: Alakazam", "item": "Focus Sash", "state": "end"}, "use_item", "Focus Sash uses the generic consumable animation"],
+		[{"type": "item", "target": "p1a: Tapu Fini", "item": "Sitrus Berry", "state": "end"}, "eat_berry", "Sitrus Berry uses the berry animation"],
+		[{"type": "item", "target": "p1a: Garchomp", "item": "Shuca Berry", "state": "end"}, "eat_berry", "Shuca Berry uses the berry animation"],
+	]
+	for test_case: Array in cases:
+		var event_data: Dictionary = test_case[0] as Dictionary
+		var result: Dictionary = presentation.build(event_data)
+		_check_equal(str(result.get("effect_animation_key", "")), str(test_case[1]), str(test_case[2]))
+		_check_equal(str(result.get("effect_animation_target_ident", "")), str(event_data.get("target", "")), "%s targets its holder" % str(test_case[2]))
+		var preload_keys: Dictionary = presentation.get_animation_preload_keys_for_event(event_data)
+		_check_equal((preload_keys.get("effect_keys", []) as Array).has(str(test_case[1])), true, "%s is prewarmed before presentation" % str(test_case[2]))
+
+	var knocked_off := presentation.build({
+		"type": "item",
+		"target": "p1a: Ferrothorn",
+		"item": "Eject Button",
+		"state": "end",
+		"source": "move: Knock Off",
+	})
+	_check_equal(str(knocked_off.get("effect_animation_key", "")), "", "Knock Off does not look like an item activation")
+
+	var balloon := presentation.build({
+		"type": "item",
+		"target": "p2a: Wailord",
+		"item": "Air Balloon",
+		"state": "end",
+	})
+	_check_equal(str(balloon.get("effect_animation_key", "")), "", "Air Balloon pop keeps its dedicated presentation")
+
+
+func _check_eat_berry_sheet_tile_size() -> void:
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(
+		"res://assets/battles/animations/common/eatberry/eatberry.json"
+	))
+	_check_equal(parsed is Dictionary, true, "Eat Berry animation data is readable")
+	if not parsed is Dictionary:
+		return
+	var tile_size: Variant = (parsed as Dictionary).get("tile_size", [])
+	_check_equal(tile_size, [192.0, 192.0], "GEN8 Eat Berry sheet uses complete 192px cells")
+
+
+func _check_eat_berry_sheet_presentation_tuning() -> void:
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(
+		"res://data/battle_effect_animations.json"
+	))
+	_check_equal(parsed is Dictionary, true, "battle effect animation catalog is readable")
+	if not parsed is Dictionary:
+		return
+	var effects: Variant = (parsed as Dictionary).get("effects", {})
+	_check_equal(effects is Dictionary, true, "battle effect animation catalog has effects")
+	if not effects is Dictionary:
+		return
+	var berry_effect: Variant = (effects as Dictionary).get("eat_berry", {})
+	_check_equal(berry_effect is Dictionary, true, "Eat Berry has a catalog entry")
+	if not berry_effect is Dictionary:
+		return
+	var config: Dictionary = berry_effect as Dictionary
+	_check_equal(float(config.get("sprite_zoom_multiplier", 0.0)), 0.6, "Eat Berry scales its imported 150 percent source down for battle presentation")
+	_check_equal(config.get("sheet_visual_offset", []), [-104.0, 19.0], "Eat Berry centers its fixed source coordinates on the holder")
+	_check_equal(int(config.get("animation_end_frame", -1)), 9, "Eat Berry presents one bite cycle instead of replaying the imported sequence")
 
 
 func _check_future_sight_lifecycle_messages() -> void:

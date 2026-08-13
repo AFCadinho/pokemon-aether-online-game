@@ -51,6 +51,7 @@ func _run() -> void:
 	for scene_path: String in MAP_NPCS:
 		_check_map(scene_path, MAP_NPCS[scene_path])
 	_check_route_22_gary_story_hook()
+	_check_trainer_school_dadinho_story_hook()
 	_check_viridian_gideon_quest_hook()
 	for scene_path: String in TRANSITION_ATTENDANTS:
 		_check_transition_attendant(scene_path, TRANSITION_ATTENDANTS[scene_path])
@@ -122,6 +123,61 @@ func _check_route_22_gary_story_hook() -> void:
 	if hook != null:
 		_check(str(hook.get("interaction_id")) == "route_22_meet_gary", "Gary uses the Route 22 meeting interaction")
 		_check(str(hook.get("entity_id")) == "kanto_route_22_gary_oak", "Gary's story hook uses his NPC identity")
+	map.free()
+
+
+func _check_trainer_school_dadinho_story_hook() -> void:
+	var packed := load("res://scenes/overworld/kanto/towns/viridian_city/trainer_school.tscn") as PackedScene
+	_check(packed != null, "Trainer School loads for Dadinho story contract")
+	if packed == null:
+		return
+	var map := packed.instantiate()
+	var dadinho := map.get_node_or_null("Entities/NPCs/Dadinho")
+	var hook := map.get_node_or_null("Entities/NPCs/Dadinho/MeetDadinhoStoryHook")
+	var exit := map.get_node_or_null("Exits/ToViridianCity")
+	var collision := map.get_node_or_null("Collision") as TileMapLayer
+	var school_npcs := {
+		"InstructorCelia": "kanto_viridian_city_trainer_school_instructor_celia",
+		"SchoolKidMilo": "kanto_viridian_city_trainer_school_kid_milo",
+		"SchoolKidRina": "kanto_viridian_city_trainer_school_kid_rina",
+		"YoungsterFinn": "kanto_viridian_city_trainer_school_youngster_finn",
+	}
+	_check(
+		dadinho != null
+		and str(dadinho.get("npc_id")) == "kanto_viridian_city_trainer_school_dadinho",
+		"Trainer School places Dadinho with his school identity"
+	)
+	_check(dadinho != null and bool(dadinho.get("preload_quest_markers")), "Trainer School Dadinho preloads his quest marker")
+	_check(
+		dadinho != null and dadinho.get("sprite_offset") == Vector2(0, -16),
+		"Trainer School Dadinho's sprite is centered over his collision origin"
+	)
+	_check(
+		dadinho != null
+		and str(dadinho.get("visibility_required_quest_id")) == "learn_at_trainer_school"
+		and str(dadinho.get("visibility_required_quest_status")) == "active"
+		and str(dadinho.get("visibility_hidden_quest_id")) == "learn_at_trainer_school"
+		and bool(dadinho.get("defer_story_hide_until_reload")),
+		"Dadinho appears for the lesson and leaves after the completed school visit"
+	)
+	_check(hook != null, "Dadinho owns the Trainer School story hook")
+	if hook != null:
+		_check(str(hook.get("interaction_id")) == "trainer_school_meet_dadinho", "Dadinho uses the Trainer School meeting interaction")
+		_check(str(hook.get("entity_id")) == "kanto_viridian_city_trainer_school_dadinho", "Dadinho's story hook uses his school identity")
+	for node_name: String in school_npcs:
+		var school_npc := map.get_node_or_null("Entities/NPCs/%s" % node_name) as Node2D
+		_check(school_npc != null, "Trainer School places %s" % node_name)
+		if school_npc == null:
+			continue
+		_check(str(school_npc.get("npc_id")) == school_npcs[node_name], "%s uses its school dialogue identity" % node_name)
+		if collision != null:
+			var cell := collision.local_to_map(collision.to_local(school_npc.global_position))
+			_check(collision.get_cell_source_id(cell) == -1, "%s stands on a walkable classroom tile" % node_name)
+	_check(
+		exit != null
+		and str(exit.get("transition_id")) == "kanto_viridian_city_trainer_school__to_viridian_city",
+		"Leaving the Trainer School completes Dadinho's lesson quest"
+	)
 	map.free()
 
 

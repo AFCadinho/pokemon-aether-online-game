@@ -35,8 +35,18 @@ func _process(_delta: float) -> void:
 	await _process_base_npc()
 
 
+func _run_story_or_legacy_interaction(body: Node2D, trigger: String) -> Dictionary:
+	if _is_gary_starter_sequence_active():
+		return {
+			"success": true,
+			"handled": true,
+			"status": "gary_starter_sequence_active",
+		}
+	return await super._run_story_or_legacy_interaction(body, trigger)
+
+
 func interact_with_player(player: Node2D) -> void:
-	if is_creating_starter:
+	if is_creating_starter or _is_gary_starter_sequence_active():
 		return
 
 	is_creating_starter = true
@@ -139,6 +149,15 @@ func _cancel_gary_starter_sequence() -> void:
 	var gary := get_parent().get_node_or_null("Gary")
 	if gary != null and gary.has_method("cancel_pending_starter_sequence"):
 		gary.call("cancel_pending_starter_sequence")
+
+
+func _is_gary_starter_sequence_active() -> bool:
+	var gary := get_parent().get_node_or_null("Gary")
+	return (
+		gary != null
+		and gary.has_method("is_starter_sequence_active")
+		and bool(gary.call("is_starter_sequence_active"))
+	)
 
 
 func _apply_npc_metadata(metadata: Dictionary) -> void:

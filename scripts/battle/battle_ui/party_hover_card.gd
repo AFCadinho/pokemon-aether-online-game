@@ -133,6 +133,7 @@ func position_near_mouse(mouse_position: Vector2, viewport_size: Vector2) -> voi
 	custom_minimum_size.y = 0.0
 	size.y = 0.0
 	reset_size()
+	size.x = minf(CARD_WIDTH, maxf(1.0, viewport_size.x - padding * 2.0))
 	var card_size: Vector2 = size
 	var target_position := mouse_position + Vector2(padding, padding)
 
@@ -150,6 +151,9 @@ func position_near_rect(anchor_rect: Rect2, viewport_size: Vector2) -> void:
 	custom_minimum_size.y = 0.0
 	size.y = 0.0
 	reset_size()
+	# Long move/item labels can otherwise expand this root-level card to the
+	# width of the calculator behind it.
+	size.x = minf(CARD_WIDTH, maxf(1.0, viewport_size.x - padding * 2.0))
 	var card_size: Vector2 = size
 	var target_position: Vector2
 	if anchor_rect.get_center().x > viewport_size.x * 0.65:

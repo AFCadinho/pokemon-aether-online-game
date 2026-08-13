@@ -95,6 +95,12 @@ func _normalize_trainer_metadata(trainer_id: String, metadata: Dictionary) -> Di
 	trainer_metadata["dialogue_before_battle"] = _get_string_array(
 		trainer_metadata.get("dialogue_before_battle", [])
 	)
+	trainer_metadata["dialogue_after_battle"] = _get_string_array(
+		trainer_metadata.get("dialogue_after_battle", [])
+	)
+	trainer_metadata["dialogue_rematch"] = _get_string_array(
+		trainer_metadata.get("dialogue_rematch", [])
+	)
 	var battle_banter_value: Variant = trainer_metadata.get(
 		"battle_banter",
 		trainer_metadata.get("battleBanter", {})

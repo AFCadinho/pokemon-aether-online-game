@@ -79,6 +79,38 @@ func search_damage_calc_natures(request_node: HTTPRequest, q: String = "", limit
 		"/damage-calc/catalog/natures%s" % query
 	)
 
+func search_damage_calc_moves(request_node: HTTPRequest, q: String, species: String = "", limit: int = 30) -> Dictionary:
+	var normalized_limit: int = max(1, min(int(limit), 100))
+	var query: String = "?q=%s&species=%s&limit=%s" % [
+		q.uri_encode(),
+		str(species).uri_encode(),
+		str(normalized_limit).uri_encode(),
+	]
+	return await send_get_request(
+		request_node,
+		"/damage-calc/catalog/moves%s" % query
+	)
+
+func get_damage_calc_formes(request_node: HTTPRequest, species: String, format_id: String = "gen9nationaldex") -> Dictionary:
+	var normalized_species := species.strip_edges()
+	var normalized_format := format_id.strip_edges().to_lower()
+	if normalized_species == "" or normalized_format == "":
+		return {"success": false, "error": "A format and species are required."}
+	return await send_get_request(
+		request_node,
+		"/damage-calc/catalog/formes/%s?formatId=%s" % [normalized_species.uri_encode(), normalized_format.uri_encode()]
+	)
+
+func get_calcdex_sample_sets(request_node: HTTPRequest, format_id: String, species: String) -> Dictionary:
+	var normalized_format := format_id.strip_edges().to_lower()
+	var normalized_species := species.strip_edges()
+	if normalized_format == "" or normalized_species == "":
+		return {"success": false, "error": "A format and species are required."}
+	return await send_get_request(
+		request_node,
+		"/calcdex/v1/sample-sets/%s/%s" % [normalized_format.uri_encode(), normalized_species.uri_encode()]
+	)
+
 func send_get_request(request_node: HTTPRequest, path: String) -> Dictionary:
 	var api_base_url: String = await GatewayApiConfig.get_base_url()
 

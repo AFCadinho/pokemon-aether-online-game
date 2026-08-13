@@ -67,6 +67,21 @@ shadow_color = Color(0.019607844, 0.18039216, 0.4, 0.3)
 shadow_size = 14
 shadow_offset = Vector2(0, 6)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_calcdex_drawer"]
+bg_color = Color(0.019607844, 0.039215688, 0.0627451, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.14901961, 0.22352941, 0.3019608, 0.96)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0, 0, 0, 0.42)
+shadow_size = 14
+shadow_offset = Vector2(0, 6)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_battle_tab_normal"]
 content_margin_left = 8.0
 content_margin_top = 3.0
@@ -599,9 +614,9 @@ script = ExtResource("41_bag")
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
-offset_right = 620.0
+offset_right = 680.0
 offset_bottom = 568.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_kd6yx")
+theme_override_styles/panel = SubResource("StyleBoxFlat_calcdex_drawer")
 
 [node name="CalcDrawerContent" type="VBoxContainer" parent="BattleDrawerLayer/CalcDrawer" unique_id=1208413657]
 layout_mode = 2
@@ -610,7 +625,7 @@ size_flags_vertical = 3
 theme_override_constants/separation = 4
 
 [node name="CalcDrawerHeader" type="MarginContainer" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent" unique_id=124943495]
-custom_minimum_size = Vector2(0, 42)
+custom_minimum_size = Vector2(0, 58)
 layout_mode = 2
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 6
@@ -624,10 +639,28 @@ theme_override_constants/separation = 8
 [node name="Title" type="Label" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcDrawerHeader/HeaderRow" unique_id=1261325089]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
+theme_override_colors/font_color = Color(0.54901963, 0.79607844, 0.9098039, 1)
 theme_override_font_sizes/font_size = 18
 text = "battle.ui.damage_calculator"
 vertical_alignment = 1
+
+[node name="CalcTurnLabel" type="Label" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcDrawerHeader/HeaderRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(88, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0.65882355, 0.7058824, 0.7607843, 1)
+theme_override_font_sizes/font_size = 12
+text = "common.waiting"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CalcTimerDock" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcDrawerHeader/HeaderRow" instance=ExtResource("9_pyfix")]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(348, 50)
+layout_mode = 2
+size_flags_horizontal = 0
 
 [node name="CalcDrawerCloseButton" type="Button" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcDrawerHeader/HeaderRow" unique_id=2014048764]
 unique_name_in_owner = true
@@ -654,10 +687,18 @@ theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 8
 script = ExtResource("40_calc")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcPanel" unique_id=500652918]
+[node name="CalcScroll" type="ScrollContainer" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcPanel/CalcScroll" unique_id=500652918]
 clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_override_constants/separation = 4
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1662798329]

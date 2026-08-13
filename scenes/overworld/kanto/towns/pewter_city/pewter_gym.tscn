@@ -1,0 +1,236 @@
+[gd_scene format=4 uid="uid://c8ldtdneumywx"]
+
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/pewter_gym/pewter_gym.visual.tscn" id="1_1d7kq"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="2_map_exit"]
+[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="3_map_meta"]
+[ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="4_v7g22"]
+[ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="5_floor_mask"]
+[ext_resource type="SpriteFrames" uid="uid://dlh8wgpn7hn78" path="res://assets/npcs/gym_leaders/alpha_brock_frames.tres" id="6_brock_frames"]
+[ext_resource type="PackedScene" uid="uid://ds0lg7oj5khbm" path="res://scenes/npcs/gym_leader_npc.tscn" id="7_gym_leader"]
+[ext_resource type="Resource" uid="uid://bnjoxn7rvxpam" path="res://resources/npcs/gym_leaders/alpha_brock.tres" id="8_brock_profile"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="9_trainer"]
+[ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="10_hiker"]
+[ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="11_youngster"]
+[ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="12_dialogue"]
+[ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="12_wgakp"]
+[ext_resource type="SpriteFrames" uid="uid://bxh5nxs12bywr" path="res://assets/npcs/gym_guide_frames.tres" id="13_gym_guide"]
+[ext_resource type="Texture2D" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_102.png" id="14_gym_guide_mugshot"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gym_exit"]
+size = Vector2(96, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gym_guide_mugshot"]
+atlas = ExtResource("14_gym_guide_mugshot")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_64hg5"]
+texture = ExtResource("4_v7g22")
+texture_region_size = Vector2i(32, 32)
+1:0/0 = 0
+4:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+1:2/0 = 0
+4:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_4vj68"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_64hg5")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8i8tt"]
+texture = ExtResource("12_wgakp")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_cnr75"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_8i8tt")
+
+[node name="PewterGym" type="Node2D" unique_id=488623017]
+script = ExtResource("3_map_meta")
+map_id = "kanto_pewter_city_gym"
+map_region_name = "Kanto"
+map_display_name = "Pewter City Gym"
+world_access_group_id = "kanto_pewter_city"
+world_access_group_label = "Pewter City"
+world_access_area_type = "interior"
+location_id = "kanto.pewter_city.gym"
+location_name = "Pewter City Gym"
+lighting_profile = "indoor"
+weather_profile = "disabled"
+music_profile_id = "kanto.pewter_city"
+
+[node name="Visuals" parent="." unique_id=1388065419 instance=ExtResource("1_1d7kq")]
+
+[node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=488623023]
+z_index = 4096
+z_as_relative = false
+script = ExtResource("5_floor_mask")
+floor_regions = {
+&"ground_floor": Rect2(256, 128, 544, 832)
+}
+
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask" unique_id=362819570]
+
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask" unique_id=714826702]
+
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1993153120]
+
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=87330906]
+
+[node name="Spawns" type="Node2D" parent="." unique_id=488623018]
+
+[node name="FromPewterCity" type="Marker2D" parent="Spawns" unique_id=488623019]
+position = Vector2(528, 912)
+
+[node name="Exits" type="Node2D" parent="." unique_id=488623020]
+
+[node name="ToPewterCity" type="Area2D" parent="Exits" unique_id=488623021]
+z_index = 1
+position = Vector2(528, 944)
+script = ExtResource("2_map_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn"
+target_spawn_name = "FromGym"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPewterCity" unique_id=488623022]
+shape = SubResource("RectangleShape2D_gym_exit")
+
+[node name="Collision" type="TileMapLayer" parent="." unique_id=193974576]
+visible = false
+z_index = 100
+tile_map_data = PackedByteArray("AAAHAAUAAAABAAEAAAAHAAYAAAABAAEAAAAHAAcAAAABAAEAAAAHAAgAAAABAAEAAAAHAAkAAAABAAEAAAAHAAoAAAABAAEAAAAHAAsAAAABAAEAAAAHAAwAAAABAAEAAAAHAA0AAAABAAEAAAAHAA4AAAABAAEAAAAHAA8AAAABAAEAAAAHABAAAAABAAEAAAAHABEAAAABAAEAAAAHABIAAAABAAEAAAAHABMAAAABAAEAAAAHABQAAAABAAEAAAAHABUAAAABAAEAAAAHABYAAAABAAEAAAAHABcAAAABAAEAAAAHABgAAAABAAEAAAAHABkAAAABAAEAAAAHABoAAAABAAEAAAAHABsAAAABAAEAAAAHABwAAAABAAEAAAAIABwAAAABAAEAAAAIAB0AAAABAAEAAAAJAB0AAAABAAEAAAAKAB0AAAABAAEAAAALAB0AAAABAAEAAAAMAB0AAAABAAEAAAANAB0AAAABAAEAAAAOAB0AAAABAAEAAAAOAB4AAAABAAEAAAAPAB4AAAABAAEAAAAQAB4AAAABAAEAAAARAB4AAAABAAEAAAASAB4AAAABAAEAAAASAB0AAAABAAEAAAATAB0AAAABAAEAAAAUAB0AAAABAAEAAAAVAB0AAAABAAEAAAAWAB0AAAABAAEAAAAXAB0AAAABAAEAAAAYAB0AAAABAAEAAAAYABwAAAABAAEAAAAZAAUAAAABAAEAAAAZAAYAAAABAAEAAAAZAAcAAAABAAEAAAAZAAgAAAABAAEAAAAZAAkAAAABAAEAAAAZAAoAAAABAAEAAAAZAAsAAAABAAEAAAAZAAwAAAABAAEAAAAZAA0AAAABAAEAAAAZAA4AAAABAAEAAAAZAA8AAAABAAEAAAAZABAAAAABAAEAAAAZABEAAAABAAEAAAAZABIAAAABAAEAAAAZABMAAAABAAEAAAAZABQAAAABAAEAAAAZABUAAAABAAEAAAAZABYAAAABAAEAAAAZABcAAAABAAEAAAAZABgAAAABAAEAAAAZABkAAAABAAEAAAAZABoAAAABAAEAAAAZABsAAAABAAEAAAAZABwAAAABAAEAAAAYAAUAAAABAAEAAAAYAAQAAAABAAEAAAAIAAQAAAABAAEAAAAIAAUAAAABAAEAAAAJAAQAAAABAAEAAAAJAAUAAAABAAEAAAAKAAQAAAABAAEAAAAKAAUAAAABAAEAAAALAAQAAAABAAEAAAALAAUAAAABAAEAAAAMAAQAAAABAAEAAAAMAAUAAAABAAEAAAANAAQAAAABAAEAAAANAAUAAAABAAEAAAAOAAQAAAABAAEAAAAOAAUAAAABAAEAAAAPAAQAAAABAAEAAAAPAAUAAAABAAEAAAAQAAQAAAABAAEAAAAQAAUAAAABAAEAAAARAAQAAAABAAEAAAARAAUAAAABAAEAAAASAAQAAAABAAEAAAASAAUAAAABAAEAAAATAAQAAAABAAEAAAATAAUAAAABAAEAAAAUAAQAAAABAAEAAAAUAAUAAAABAAEAAAAVAAQAAAABAAEAAAAVAAUAAAABAAEAAAAWAAQAAAABAAEAAAAWAAUAAAABAAEAAAAXAAQAAAABAAEAAAAXAAUAAAABAAEAAAAIAAYAAAABAAEAAAAIAAcAAAABAAEAAAAJAAYAAAABAAEAAAAJAAcAAAABAAEAAAAKAAYAAAABAAEAAAAKAAcAAAABAAEAAAALAAYAAAABAAEAAAALAAcAAAABAAEAAAAMAAYAAAABAAEAAAAMAAcAAAABAAEAAAANAAYAAAABAAEAAAANAAcAAAABAAEAAAAOAAYAAAABAAEAAAAOAAcAAAABAAEAAAAPAAYAAAABAAEAAAAPAAcAAAABAAEAAAAQAAYAAAABAAEAAAAQAAcAAAABAAEAAAARAAYAAAABAAEAAAARAAcAAAABAAEAAAASAAYAAAABAAEAAAASAAcAAAABAAEAAAATAAYAAAABAAEAAAATAAcAAAABAAEAAAAUAAYAAAABAAEAAAAUAAcAAAABAAEAAAAVAAYAAAABAAEAAAAVAAcAAAABAAEAAAAWAAYAAAABAAEAAAAWAAcAAAABAAEAAAAXAAYAAAABAAEAAAAXAAcAAAABAAEAAAAYAAYAAAABAAEAAAAYAAcAAAABAAEAAAAIAAgAAAABAAEAAAAYAAgAAAABAAEAAAAXAAkAAAABAAEAAAAXAAgAAAABAAEAAAANAAgAAAABAAEAAAATAAgAAAABAAEAAAAJAAgAAAABAAEAAAAJAAkAAAABAAEAAAAIAAoAAAABAAEAAAAIAAsAAAABAAEAAAAIAAwAAAABAAEAAAAIAA0AAAABAAEAAAAIAA4AAAABAAEAAAAIAA8AAAABAAEAAAAIABAAAAABAAEAAAAIABEAAAABAAEAAAAIABIAAAABAAEAAAAIABMAAAABAAEAAAAIABQAAAABAAEAAAAIABUAAAABAAEAAAAIABYAAAABAAEAAAAYAAoAAAABAAEAAAAYAAsAAAABAAEAAAAYAAwAAAABAAEAAAAYAA0AAAABAAEAAAAYAA4AAAABAAEAAAAYAA8AAAABAAEAAAAYABAAAAABAAEAAAAYABEAAAABAAEAAAAYABIAAAABAAEAAAAYABMAAAABAAEAAAAYABQAAAABAAEAAAAYABUAAAABAAEAAAAYABYAAAABAAEAAAATABoAAAABAAEAAAATABsAAAABAAEAAAANABoAAAABAAEAAAANABsAAAABAAEAAAAKABgAAAABAAEAAAAWABgAAAABAAEAAAANABYAAAABAAEAAAANABcAAAABAAEAAAAOABYAAAABAAEAAAAOABcAAAABAAEAAAAMABYAAAABAAEAAAASABcAAAABAAEAAAATABQAAAABAAEAAAATABUAAAABAAEAAAAUABQAAAABAAEAAAAUABUAAAABAAEAAAATABMAAAABAAEAAAASABIAAAABAAEAAAASABMAAAABAAEAAAATABIAAAABAAEAAAARABIAAAABAAEAAAANABIAAAABAAEAAAAJABQAAAABAAEAAAAKABUAAAABAAEAAAAKABYAAAABAAEAAAALABUAAAABAAEAAAALABYAAAABAAEAAAAWABYAAAABAAEAAAAWABcAAAABAAEAAAAXABYAAAABAAEAAAAXABcAAAABAAEAAAAXABUAAAABAAEAAAAVABUAAAABAAEAAAAWABMAAAABAAEAAAAWABQAAAABAAEAAAAXABMAAAABAAEAAAAXABQAAAABAAEAAAAVABIAAAABAAEAAAAXAA8AAAABAAEAAAAXAAwAAAABAAEAAAATAA4AAAABAAEAAAARAA4AAAABAAEAAAASAA4AAAABAAEAAAAPAA4AAAABAAEAAAAQAA4AAAABAAEAAAAOAAwAAAABAAEAAAALAA0AAAABAAEAAAALAA4AAAABAAEAAAAMAA0AAAABAAEAAAAMAA4AAAABAAEAAAAKAA4AAAABAAEAAAAJABAAAAABAAEAAAAJAAsAAAABAAEAAAAKAAoAAAABAAEAAAAKAAsAAAABAAEAAAALAAoAAAABAAEAAAALAAsAAAABAAEAAAAMAAsAAAABAAEAAAAMAAwAAAABAAEAAAANAAsAAAABAAEAAAANAAwAAAABAAEAAAANAAoAAAABAAEAAAAOAAkAAAABAAEAAAAOAAoAAAABAAEAAAAOAAgAAAABAAEAAAASAAgAAAABAAEAAAASAAkAAAABAAEAAAASAAoAAAABAAEAAAAUAAkAAAABAAEAAAAUAAoAAAABAAEAAAAVAAkAAAABAAEAAAAVAAoAAAABAAEAAAAWAAoAAAABAAEAAAASAA0AAAABAAEAAAARAA0AAAABAAEAAAAQAA0AAAABAAEAAAAPAA0AAAABAAEAAAA=")
+tile_set = SubResource("TileSet_4vj68")
+
+[node name="Entities" type="Node2D" parent="." unique_id=488623024]
+z_index = 5
+
+[node name="NPCs" type="Node2D" parent="Entities" unique_id=488623025]
+
+[node name="GymGuideRocky" parent="Entities/NPCs" unique_id=488623029 instance=ExtResource("12_dialogue")]
+position = Vector2(592, 784)
+npc_id = "kanto_pewter_city_gym_guide_rocky"
+npc_definition_id = ""
+display_name = "Gym Guide Rocky"
+mugshot = SubResource("AtlasTexture_gym_guide_mugshot")
+npc_sprite_frames = ExtResource("13_gym_guide")
+
+[node name="GymLeaderBrock" parent="Entities/NPCs" unique_id=488623026 instance=ExtResource("7_gym_leader")]
+position = Vector2(528, 272)
+trainer_id = "kanto_alpha_gym_brock"
+npc_profile = ExtResource("8_brock_profile")
+npc_id = "kanto_alpha_gym_brock"
+display_name = "Alpha Trial · Brock"
+npc_sprite_frames = ExtResource("6_brock_frames")
+
+[node name="HikerFlint" parent="Entities/NPCs" unique_id=488623027 instance=ExtResource("9_trainer")]
+position = Vector2(304, 624)
+trainer_id = "kanto_pewter_city_gym_hiker_flint"
+sight_range_tiles = 3
+npc_id = "kanto_pewter_city_gym_hiker_flint"
+npc_definition_id = "trainer_class_hiker"
+display_name = "Hiker Flint"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("10_hiker")
+
+[node name="YoungsterStone" parent="Entities/NPCs" unique_id=488623028 instance=ExtResource("9_trainer")]
+position = Vector2(752, 464)
+trainer_id = "kanto_pewter_city_gym_youngster_stone"
+sight_range_tiles = 3
+npc_id = "kanto_pewter_city_gym_youngster_stone"
+npc_definition_id = "trainer_class_youngster"
+display_name = "Youngster Stone"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("11_youngster")
+
+[node name="Ledges" type="Node2D" parent="." unique_id=1949694265]
+visible = false
+
+[node name="LedgeDown" type="TileMapLayer" parent="Ledges" unique_id=1045755633]
+tile_map_data = PackedByteArray("AAAPABIAAAABAAEAAAAQABIAAAABAAEAAAAOABIAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_cnr75")
+
+[connection signal="body_entered" from="Exits/ToPewterCity" to="Exits/ToPewterCity" method="_on_body_entered"]

@@ -30,6 +30,13 @@ func _init() -> void:
 	_expect(transitions.size() >= 28, "All configured map exits are registered")
 	_expect(areas.has("kanto_pallet_town"), "Pallet Town is registered")
 	_expect(
+		areas.has("aether_clash_lobby")
+			and (areas.get("aether_clash_lobby", {}) as Dictionary)
+				.get("spawnPoints", {})
+				.has("guild_arrival"),
+		"Aether Clash Lobby and its Guild arrival point are registered"
+	)
+	_expect(
 		areas.has("kanto_pewter_city_pokemon_center"),
 		"Inherited Pokémon Center scene metadata is registered"
 	)
@@ -93,9 +100,35 @@ func _init() -> void:
 	_expect(areas.has("kanto_route_2_gate"), "Inherited transition building is registered")
 	_expect(
 		areas.has("kanto_pewter_city_gym")
-			and bool((areas.get("kanto_pewter_city_gym", {}) as Dictionary).get("accessOnly", false))
+			and not bool((areas.get("kanto_pewter_city_gym", {}) as Dictionary).get("accessOnly", false))
+			and (areas.get("kanto_pewter_city_gym", {}) as Dictionary).get("scenePath", "")
+			== "res://scenes/overworld/kanto/towns/pewter_city/pewter_gym.tscn"
 			and (areas.get("kanto_pewter_city_gym", {}) as Dictionary).get("defaultMode", "") == "open",
-		"Future Pewter doors are registered as open access-only areas"
+		"Pewter Gym is registered as an open scene-backed area"
+	)
+	_expect(
+		bool((areas.get("kanto_pewter_city_museum", {}) as Dictionary).get("accessOnly", false)),
+		"Future Pewter Museum remains an open access-only area"
+	)
+	_expect(
+		not bool((areas.get("kanto_pewter_city_house_1", {}) as Dictionary).get("accessOnly", false))
+			and (areas.get("kanto_pewter_city_house_1", {}) as Dictionary).get("scenePath", "")
+			== "res://scenes/overworld/kanto/towns/pewter_city/house1.tscn"
+			and (areas.get("kanto_pewter_city_house_1", {}) as Dictionary).get("defaultMode", "")
+			== "open"
+			and not bool((areas.get("kanto_pewter_city_house_2", {}) as Dictionary).get("accessOnly", false))
+			and (areas.get("kanto_pewter_city_house_2", {}) as Dictionary).get("scenePath", "")
+			== "res://scenes/overworld/kanto/towns/pewter_city/house2.tscn"
+			and (areas.get("kanto_pewter_city_house_2", {}) as Dictionary).get("defaultMode", "")
+			== "open",
+		"Pewter houses are registered as open scene-backed areas"
+	)
+	_expect(
+		transitions.has("kanto_pewter_city__to_house_1")
+			and transitions.has("kanto_pewter_city__to_house_2")
+			and transitions.has("kanto_pewter_city_house_1__to_pewter_city")
+			and transitions.has("kanto_pewter_city_house_2__to_pewter_city"),
+		"Pewter houses expose connected entrance and exit transitions"
 	)
 	_expect(
 		(areas.get("kanto_oaks_lab", {}) as Dictionary).get("locationGroupId", "")

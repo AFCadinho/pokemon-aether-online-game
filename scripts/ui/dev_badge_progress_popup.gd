@@ -28,6 +28,15 @@ const KEY_ITEMS: Array[Dictionary] = [
 		"texture": "res://assets/ui/town_map_navigation.svg",
 	},
 ]
+const STORY_CHECKPOINTS: Array[Dictionary] = [
+	{"id": "journey_start", "label_key": "ui.staff.story_checkpoint.journey_start"},
+	{"id": "choose_starter", "label_key": "ui.staff.story_checkpoint.choose_starter"},
+	{"id": "oaks_parcel", "label_key": "ui.staff.story_checkpoint.oaks_parcel"},
+	{"id": "route_22_gary", "label_key": "ui.staff.story_checkpoint.route_22_gary"},
+	{"id": "trainer_school", "label_key": "ui.staff.story_checkpoint.trainer_school"},
+	{"id": "after_dadinho", "label_key": "ui.staff.story_checkpoint.after_dadinho"},
+	{"id": "pewter_gym", "label_key": "ui.staff.story_checkpoint.pewter_gym"},
+]
 
 const UI_BG := Color("#050b14fa")
 const UI_SURFACE := Color("#0a1726f5")
@@ -45,6 +54,10 @@ var badge_content: VBoxContainer
 var key_item_content: VBoxContainer
 var badge_tab_button: Button
 var key_item_tab_button: Button
+var story_tab_button: Button
+var story_content: VBoxContainer
+var story_checkpoint_select: OptionButton
+var story_status_label: Label
 var badge_buttons: Dictionary = {}
 var badge_icon_rects: Dictionary = {}
 var badge_status_labels: Dictionary = {}
@@ -171,6 +184,15 @@ func _build_ui() -> void:
 	key_item_tab_button.pressed.connect(_show_tab.bind("key_items"))
 	tabs.add_child(key_item_tab_button)
 
+	story_tab_button = Button.new()
+	story_tab_button.name = "StoryTabButton"
+	story_tab_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	story_tab_button.custom_minimum_size = Vector2(0, 38)
+	story_tab_button.focus_mode = Control.FOCUS_NONE
+	_set_localized_property(story_tab_button, "text", "ui.staff.trainer_progress.story")
+	story_tab_button.pressed.connect(_show_tab.bind("story"))
+	tabs.add_child(story_tab_button)
+
 	badge_content = VBoxContainer.new()
 	badge_content.name = "BadgesContent"
 	badge_content.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -277,6 +299,7 @@ func _build_ui() -> void:
 	footer.add_child(status_label)
 
 	_build_key_items_ui(layout)
+	_build_story_ui(layout)
 	_show_tab(active_tab)
 	_render_badges()
 	_render_key_items()
@@ -372,6 +395,55 @@ func _build_key_items_ui(layout: VBoxContainer) -> void:
 	footer.add_child(key_item_status_label)
 
 
+func _build_story_ui(layout: VBoxContainer) -> void:
+	story_content = VBoxContainer.new()
+	story_content.name = "StoryContent"
+	story_content.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	story_content.add_theme_constant_override("separation", 16)
+	layout.add_child(story_content)
+
+	var notice := PanelContainer.new()
+	notice.add_theme_stylebox_override("panel", _panel_style(Color("#112033e8"), Color("#486888aa"), 9, 1))
+	story_content.add_child(notice)
+	var notice_margin := MarginContainer.new()
+	_set_margins(notice_margin, 14, 12, 14, 12)
+	notice.add_child(notice_margin)
+	var notice_label := _localized_label("ui.staff.story_checkpoint.notice", 12, UI_MUTED)
+	notice_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	notice_margin.add_child(notice_label)
+
+	var form := VBoxContainer.new()
+	form.add_theme_constant_override("separation", 8)
+	story_content.add_child(form)
+	form.add_child(_localized_label("ui.staff.story_checkpoint.select", 13, UI_TEXT))
+	story_checkpoint_select = OptionButton.new()
+	story_checkpoint_select.name = "StoryCheckpointSelect"
+	story_checkpoint_select.custom_minimum_size = Vector2(0, 46)
+	story_checkpoint_select.focus_mode = Control.FOCUS_NONE
+	form.add_child(story_checkpoint_select)
+	_refresh_story_checkpoint_options()
+
+	var spacer := Control.new()
+	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	story_content.add_child(spacer)
+
+	var footer := HBoxContainer.new()
+	footer.add_theme_constant_override("separation", 10)
+	story_content.add_child(footer)
+	var apply_button := Button.new()
+	apply_button.name = "ApplyStoryCheckpointButton"
+	apply_button.custom_minimum_size = Vector2(210, 40)
+	_set_localized_property(apply_button, "text", "ui.staff.story_checkpoint.apply")
+	apply_button.pressed.connect(_apply_story_checkpoint)
+	_apply_button_style(apply_button, true)
+	footer.add_child(apply_button)
+	story_status_label = _label("", 11, UI_MUTED)
+	story_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	story_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	story_status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	footer.add_child(story_status_label)
+
+
 func _toggle_badge(badge_id: String) -> void:
 	if busy:
 		return
@@ -411,15 +483,54 @@ func _submit_badges(badge_ids: Array[String], earned: bool) -> void:
 
 
 func _show_tab(tab_id: String) -> void:
-	active_tab = "key_items" if tab_id == "key_items" else "badges"
+	active_tab = tab_id if tab_id in ["badges", "key_items", "story"] else "badges"
 	if badge_content != null:
 		badge_content.visible = active_tab == "badges"
 	if key_item_content != null:
 		key_item_content.visible = active_tab == "key_items"
+	if story_content != null:
+		story_content.visible = active_tab == "story"
 	if badge_tab_button != null:
 		_apply_button_style(badge_tab_button, active_tab == "badges")
 	if key_item_tab_button != null:
 		_apply_button_style(key_item_tab_button, active_tab == "key_items")
+	if story_tab_button != null:
+		_apply_button_style(story_tab_button, active_tab == "story")
+
+
+func _refresh_story_checkpoint_options() -> void:
+	if story_checkpoint_select == null:
+		return
+	var selected_id := ""
+	if story_checkpoint_select.selected >= 0:
+		selected_id = str(story_checkpoint_select.get_item_metadata(story_checkpoint_select.selected))
+	story_checkpoint_select.clear()
+	for checkpoint: Dictionary in STORY_CHECKPOINTS:
+		story_checkpoint_select.add_item(_t(str(checkpoint.get("label_key", ""))))
+		var index := story_checkpoint_select.item_count - 1
+		var checkpoint_id := str(checkpoint.get("id", ""))
+		story_checkpoint_select.set_item_metadata(index, checkpoint_id)
+		if checkpoint_id == selected_id:
+			story_checkpoint_select.select(index)
+
+
+func _apply_story_checkpoint() -> void:
+	if busy or story_checkpoint_select == null or story_checkpoint_select.selected < 0:
+		return
+	var checkpoint_id := str(story_checkpoint_select.get_item_metadata(story_checkpoint_select.selected))
+	var service := get_node_or_null("/root/PlayerGameStateService")
+	if service == null or not service.has_method("dev_set_story_checkpoint"):
+		_set_story_status(_t("ui.staff.story_checkpoint.unavailable"), true)
+		return
+	_set_busy(true)
+	_set_story_status(_t("ui.staff.story_checkpoint.applying"), false)
+	var result: Dictionary = await service.call("dev_set_story_checkpoint", checkpoint_id)
+	_set_busy(false)
+	if not bool(result.get("success", false)):
+		_set_story_status(str(result.get("error", _t("ui.staff.story_checkpoint.failed"))), true)
+		return
+	_set_story_status(_t("ui.staff.story_checkpoint.applied"), false)
+	_load_key_items.call_deferred()
 
 
 func _load_key_items() -> void:
@@ -600,6 +711,13 @@ func _set_key_item_status(message: String, is_error: bool) -> void:
 	key_item_status_label.add_theme_color_override("font_color", UI_ERROR if is_error else UI_MUTED)
 
 
+func _set_story_status(message: String, is_error: bool) -> void:
+	if story_status_label == null:
+		return
+	story_status_label.text = message
+	story_status_label.add_theme_color_override("font_color", UI_ERROR if is_error else UI_MUTED)
+
+
 func _t(key: String, replacements: Dictionary = {}) -> String:
 	var localization_manager := get_node_or_null("/root/LocalizationManager")
 	if localization_manager == null:
@@ -624,6 +742,7 @@ func _on_locale_changed(_locale: String) -> void:
 		localization_manager.call("localize_tree", self)
 	_render_badges()
 	_render_key_items()
+	_refresh_story_checkpoint_options()
 
 
 func _on_header_gui_input(event: InputEvent) -> void:

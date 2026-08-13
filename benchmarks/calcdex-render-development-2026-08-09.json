@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "benchmarkRevision": "calc2.4-2026-08-09",
+  "runtime": {
+    "godotVersion": "4.6.2-stable (official)",
+    "renderer": "vulkan",
+    "mode": "headless"
+  },
+  "iterations": 300,
+  "rows": 8,
+  "latencyMs": {"p50": 4.325, "p95": 4.739, "p99": 5.319, "max": 7.027},
+  "peakStaticMemoryBytes": 64087842,
+  "budgets": {"p99Ms": 16.0, "maxStaticMemoryBytes": 536870912}
+}

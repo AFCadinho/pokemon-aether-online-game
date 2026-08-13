@@ -44,7 +44,11 @@ func interact_with_player(_player: Node2D) -> void:
 	await show_dialogue()
 
 
-func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> bool:
+func show_dialogue(
+	lines: Array[String] = [],
+	speaker_name_override := "",
+	mugshot_override: Texture2D = null
+) -> bool:
 	var dialogue_box := _get_dialogue_box()
 	if dialogue_box == null:
 		push_warning("%s: DialogueBox/Box not found." % name)
@@ -62,7 +66,7 @@ func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> bo
 	if speaker_name.is_empty():
 		speaker_name = "Sign" if interactable_kind == "road_sign" else name
 
-	dialogue_box.start_dialogue(valid_dialogue_lines, speaker_name)
+	dialogue_box.start_dialogue(valid_dialogue_lines, speaker_name, mugshot_override)
 	await dialogue_box.dialogue_finished
 	return true
 

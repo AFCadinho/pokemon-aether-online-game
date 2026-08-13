@@ -14,8 +14,8 @@
 [ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="10_story_hook"]
 [ext_resource type="Script" uid="uid://cpot2cgdah8f3" path="res://scripts/world/story/story_step_scene_variant.gd" id="11_house_story_state"]
 [ext_resource type="PackedScene" uid="uid://br7n6hywfrl2a" path="res://scenes/npcs/heal_npc.tscn" id="12_mom_npc"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/named/mom_frames.tres" id="13_mom_frames"]
-[ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/mom-johto.png" id="14_mom_portrait"]
+[ext_resource type="SpriteFrames" uid="uid://dk2np722tlccq" path="res://assets/npcs/named/mom_frames.tres" id="13_mom_frames"]
+[ext_resource type="Texture2D" uid="uid://b1g1wahd62ck6" path="res://assets/sprites/trainer_cards/showdown/mom-johto.png" id="14_mom_portrait"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_father_intro"]
 size = Vector2(160, 32)
@@ -94,6 +94,8 @@ npc_profile = ExtResource("8_father_profile")
 npc_id = "kanto_players_house_father"
 npc_definition_id = "kanto_players_house_father"
 required_quest_status = ""
+visibility_hidden_quest_id = "oaks_parcel"
+visibility_hidden_quest_step_id = "return_to_oak"
 display_name = "Dadinho"
 facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("8_father_frames")
@@ -102,28 +104,23 @@ mugshot = ExtResource("6_rs6s5")
 movement_behavior = ""
 movement_tiles = 0
 movement_speed_pixels = 0.0
-visibility_hidden_quest_id = "oaks_parcel"
-visibility_hidden_quest_step_id = "return_to_oak"
-visibility_hidden_quest_status = "completed"
 
-[node name="Mom" parent="Entities/NPCs" instance=ExtResource("12_mom_npc")]
+[node name="Mom" parent="Entities/NPCs" unique_id=127649550 instance=ExtResource("12_mom_npc")]
 position = Vector2(336, 880)
-npc_id = "kanto_players_house_mom"
-npc_definition_id = "kanto_players_house_mom"
-display_name = "Mom"
-facing_direction = Vector2(0, 1)
-npc_sprite_frames = ExtResource("13_mom_frames")
-mugshot = ExtResource("14_mom_portrait")
-preload_quest_markers = true
-visibility_required_quest_id = "oaks_parcel"
-visibility_required_quest_step_id = "return_to_oak"
-visibility_required_quest_status = "completed"
 respawn_point_id = "kanto_players_house_mom"
 respawn_spawn_marker = "MomHeal"
 respawn_facing_direction = "up"
 public_service = false
+npc_id = "kanto_players_house_mom"
+npc_definition_id = "kanto_players_house_mom"
+visibility_required_quest_id = "oaks_parcel"
+visibility_required_quest_step_id = "return_to_oak"
+display_name = "Mom"
+npc_sprite_frames = ExtResource("13_mom_frames")
+mugshot = ExtResource("14_mom_portrait")
+preload_quest_markers = true
 
-[node name="BeforeJourneyStoryHook" type="Node" parent="Entities/NPCs/Mom"]
+[node name="BeforeJourneyStoryHook" type="Node" parent="Entities/NPCs/Mom" unique_id=2087144034]
 script = ExtResource("10_story_hook")
 interaction_id = "players_house_mom_before_journey"
 entity_id = "kanto_players_house_mom"
@@ -171,7 +168,7 @@ position = Vector2(304, 336)
 [node name="FromPalletTown" type="Marker2D" parent="Spawns" unique_id=1017066124]
 position = Vector2(432, 976)
 
-[node name="MomHeal" type="Marker2D" parent="Spawns"]
+[node name="MomHeal" type="Marker2D" parent="Spawns" unique_id=2104183881]
 position = Vector2(336, 912)
 
 [node name="GroundFloorStairs" type="Marker2D" parent="Spawns" unique_id=880081472]

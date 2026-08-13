@@ -29,6 +29,8 @@ func _init() -> void:
 	_check_contains(popup_source, '_show_page("member" if not membership.is_empty() else "browse")', "guild members land on their own dashboard")
 	_check_contains(popup_source, "has_explicit_page_selection", "explicit guild navigation is preserved")
 	_check_contains(popup_source, "GuildOverviewTab", "guild dashboard separates its overview")
+	_check_contains(popup_source, "GuildLobbyTeleportButton", "guild overview exposes Lobby travel")
+	_check_contains(popup_source, '"ui.guild.lobby.teleport"', "Lobby travel action is localized")
 	_check_contains(popup_source, "GuildMembersTab", "guild dashboard separates its member roster")
 	_check_contains(popup_source, "GuildManagementTab", "guild dashboard separates management controls")
 	_check_contains(popup_source, '"ui.guild.roster"', "guild dashboard renders its localized member roster")
@@ -43,6 +45,7 @@ func _init() -> void:
 	_check_contains(popup_source, "func _on_accept_invitation", "guildless trainers can accept invitations")
 	_check_contains(overlay_source, "GUILD_POPUP_SCENE", "main overlay loads the guild popup")
 	_check_contains(overlay_source, "_open_guild_popup()", "existing guild button opens the new interface")
+	_check_contains(overlay_source, "_on_guild_lobby_teleport_requested", "main overlay applies the authorized Lobby teleport")
 
 	quit(1 if failed else 0)
 

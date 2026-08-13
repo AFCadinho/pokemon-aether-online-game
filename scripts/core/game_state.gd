@@ -9,6 +9,7 @@ var prepared_world_state: Dictionary = {}
 
 var input_locked := false
 var overworld_input_locked := false
+var overworld_input_lock_owners: Dictionary = {}
 var ui_input_locked := false
 var world_debug_enabled := false
 var repel_enabled := false
@@ -57,6 +58,7 @@ func reset_gameplay_runtime_state() -> void:
 	fishing_region_badge_count = 0
 	fishing_rods = []
 	surf_unlocked = true
+	overworld_input_lock_owners.clear()
 
 func finish_gameplay_reset() -> void:
 	gameplay_reset_in_progress = false
@@ -69,12 +71,13 @@ func lock_input() -> void:
 	
 func unlock_input() -> void:
 	input_locked = false
-	overworld_input_locked = false
+	overworld_input_locked = not overworld_input_lock_owners.is_empty()
 	ui_input_locked = false
 
 func clear_world_runtime_state() -> void:
 	current_map = null
 	prepared_world_state = {}
+	overworld_input_lock_owners.clear()
 	if not gameplay_reset_in_progress:
 		unlock_input()
 
@@ -93,7 +96,19 @@ func lock_overworld_input() -> void:
 	overworld_input_locked = true
 
 func unlock_overworld_input() -> void:
-	overworld_input_locked = false
+	overworld_input_locked = not overworld_input_lock_owners.is_empty()
+
+func acquire_overworld_input_lock(owner_id: StringName) -> void:
+	if owner_id.is_empty():
+		return
+	overworld_input_lock_owners[owner_id] = true
+	overworld_input_locked = true
+
+func release_overworld_input_lock(owner_id: StringName) -> void:
+	if owner_id.is_empty():
+		return
+	overworld_input_lock_owners.erase(owner_id)
+	overworld_input_locked = not overworld_input_lock_owners.is_empty()
 
 func lock_ui_input() -> void:
 	ui_input_locked = true
