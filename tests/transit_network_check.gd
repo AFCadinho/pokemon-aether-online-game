@@ -2,24 +2,24 @@ extends SceneTree
 
 const MAP_CONTRACTS := {
 	"res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn": [
-		'position = Vector2(720, 560)',
+		'position = Vector2(784, 240)',
 		'local_destination_id = "kanto_pallet_town"',
 		'position = Vector2(784, 208)',
 		'interactable_id = "kanto_pallet_town_aether_beacon"',
 		'destination_id = "kanto_pallet_town"',
 	],
 	"res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn": [
-		'position = Vector2(1200, 1488)',
-		'local_destination_id = "kanto_viridian_city"',
 		'position = Vector2(1072, 1136)',
+		'local_destination_id = "kanto_viridian_city"',
+		'position = Vector2(1072, 1104)',
 		'interactable_id = "kanto_viridian_city_aether_beacon"',
 		'destination_id = "kanto_viridian_city"',
 	],
 	"res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn": [
-		'position = Vector2(1488, 1584)',
+		'position = Vector2(1520, 976)',
 		'local_destination_id = "kanto_pewter_city"',
-		'position = Vector2(1328, 1040)',
-		'position = Vector2(1424, 1040)',
+		'position = Vector2(1488, 976)',
+		'position = Vector2(1520, 944)',
 		'interactable_id = "kanto_pewter_city_aether_beacon"',
 		'destination_id = "kanto_pewter_city"',
 	],
@@ -27,14 +27,18 @@ const MAP_CONTRACTS := {
 
 const TILE_CENTER_CONTRACTS := {
 	"res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn": {
+		"TransitArrival": Vector2i(784, 240),
+		"TransitKeeper": Vector2i(720, 240),
 		"AetherBeacon": Vector2i(784, 208),
 	},
 	"res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn": {
-		"AetherBeacon": Vector2i(1072, 1136),
+		"TransitArrival": Vector2i(1072, 1136),
+		"AetherBeacon": Vector2i(1072, 1104),
 	},
 	"res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn": {
-		"TransitKeeper": Vector2i(1328, 1040),
-		"AetherBeacon": Vector2i(1424, 1040),
+		"TransitArrival": Vector2i(1520, 976),
+		"TransitKeeper": Vector2i(1488, 976),
+		"AetherBeacon": Vector2i(1520, 944),
 	},
 }
 

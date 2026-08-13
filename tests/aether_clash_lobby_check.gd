@@ -33,7 +33,7 @@ func _init() -> void:
 	)
 	var night_lights := lobby.get_node_or_null("NightLights")
 	_check(night_lights != null, "Lobby owns a hand-maintained night-light layer")
-	_check(night_lights != null and night_lights.get_child_count() == 20, "Every Lobby lantern has a night light")
+	_check(night_lights != null and night_lights.get_child_count() == 22, "Lobby lanterns and portals have night lights")
 	var purple_portal := lobby.get_node_or_null("Entities/Interactables/PurpleClashPortal")
 	var red_portal := lobby.get_node_or_null("Entities/Interactables/RedClashPortal")
 	_check(purple_portal != null and purple_portal.position == Vector2(864, 624), "Purple portal fills the west portal bay")

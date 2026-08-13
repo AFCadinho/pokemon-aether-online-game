@@ -25,7 +25,7 @@
 [ext_resource type="Texture2D" uid="uid://nhk4lrc6pmb6" path="res://assets/sprites/trainer_cards/showdown/expert-gen6.png" id="34_ev_expert_portrait"]
 [ext_resource type="Texture2D" uid="uid://dc4jh2wexewae" path="res://assets/sprites/trainer_cards/showdown/acetrainerf-gen6.png" id="35_ev_assistant_portrait"]
 [ext_resource type="Texture2D" uid="uid://dwsfb8bgfvnmo" path="res://assets/sprites/trainer_cards/showdown/acetrainer-gen6.png" id="36_ev_assistant_m_portrait"]
-[ext_resource type="Script" path="res://scripts/world/kanto/towns/ev_training_expert_mateo.gd" id="37_ev_expert_mateo"]
+[ext_resource type="Script" uid="uid://dfoiudvkcljpc" path="res://scripts/world/kanto/towns/ev_training_expert_mateo.gd" id="37_ev_expert_mateo"]
 [ext_resource type="SpriteFrames" uid="uid://cf4j1u0alxcad" path="res://assets/npcs/classes/ev_expert_f_frames.tres" id="38_ev_expert_f"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="39_transit_keeper"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_beacon_placeholder.tscn" id="40_aether_beacon"]
@@ -440,20 +440,116 @@ script = ExtResource("2_meta")
 
 [node name="NightLights" type="Node2D" parent="." unique_id=1056282238]
 
-[node name="NorthWestStreetLight" parent="NightLights" unique_id=1894143865 instance=ExtResource("21_night_light")]
-position = Vector2(272, 224)
-light_color = Color(0.78, 0.9, 1, 1)
-max_energy = 0.75
-light_texture_scale = 0.65
-
-[node name="NorthEastStreetLight" parent="NightLights" unique_id=585414437 instance=ExtResource("21_night_light")]
-position = Vector2(368, 224)
-light_color = Color(0.78, 0.9, 1, 1)
-max_energy = 0.75
-light_texture_scale = 0.65
-
 [node name="CentralLantern" parent="NightLights" unique_id=138144653 instance=ExtResource("21_night_light")]
-position = Vector2(592, 480)
+position = Vector2(816, 304)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="CentralLantern2" parent="NightLights" unique_id=550387184 instance=ExtResource("21_night_light")]
+position = Vector2(976, 304)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="CentralLantern3" parent="NightLights" unique_id=496695809 instance=ExtResource("21_night_light")]
+position = Vector2(1168, 368)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="CentralLantern4" parent="NightLights" unique_id=2722287 instance=ExtResource("21_night_light")]
+position = Vector2(2000, 368)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="CentralLantern5" parent="NightLights" unique_id=531124749 instance=ExtResource("21_night_light")]
+position = Vector2(816, 624)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="CentralLantern6" parent="NightLights" unique_id=12786796 instance=ExtResource("21_night_light")]
+position = Vector2(976, 624)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="CentralLantern7" parent="NightLights" unique_id=882051971 instance=ExtResource("21_night_light")]
+position = Vector2(816, 944)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="CentralLantern8" parent="NightLights" unique_id=472656542 instance=ExtResource("21_night_light")]
+position = Vector2(976, 944)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="CentralLantern9" parent="NightLights" unique_id=1802986168 instance=ExtResource("21_night_light")]
+position = Vector2(1648, 560)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="CentralLantern10" parent="NightLights" unique_id=392116974 instance=ExtResource("21_night_light")]
+position = Vector2(1808, 560)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="CentralLantern11" parent="NightLights" unique_id=1479837164 instance=ExtResource("21_night_light")]
+position = Vector2(1296, 1040)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="CentralLantern12" parent="NightLights" unique_id=1448038669 instance=ExtResource("21_night_light")]
+position = Vector2(1456, 1040)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="CentralLantern13" parent="NightLights" unique_id=2033999529 instance=ExtResource("21_night_light")]
+position = Vector2(1680, 1040)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="CentralLantern14" parent="NightLights" unique_id=637384686 instance=ExtResource("21_night_light")]
+position = Vector2(1840, 1040)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="CentralLantern15" parent="NightLights" unique_id=426003540 instance=ExtResource("21_night_light")]
+position = Vector2(976, 1328)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="CentralLantern16" parent="NightLights" unique_id=1781618277 instance=ExtResource("21_night_light")]
+position = Vector2(1296, 1328)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="CentralLantern17" parent="NightLights" unique_id=1980934051 instance=ExtResource("21_night_light")]
+position = Vector2(1456, 1328)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="CentralLantern18" parent="NightLights" unique_id=1675946249 instance=ExtResource("21_night_light")]
+position = Vector2(1680, 1328)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="CentralLantern19" parent="NightLights" unique_id=1221996786 instance=ExtResource("21_night_light")]
+position = Vector2(1360, 848)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="CentralLantern20" parent="NightLights" unique_id=464291404 instance=ExtResource("21_night_light")]
+position = Vector2(1392, 848)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="CentralLantern21" parent="NightLights" unique_id=1625098847 instance=ExtResource("21_night_light")]
+position = Vector2(1424, 848)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="CentralLantern22" parent="NightLights" unique_id=1544875745 instance=ExtResource("21_night_light")]
+position = Vector2(1520, 848)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="CentralLantern23" parent="NightLights" unique_id=938669798 instance=ExtResource("21_night_light")]
+position = Vector2(1584, 848)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="CentralLantern24" parent="NightLights" unique_id=1098557947 instance=ExtResource("21_night_light")]
+position = Vector2(1840, 848)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="CentralLantern25" parent="NightLights" unique_id=2127913799 instance=ExtResource("21_night_light")]
+position = Vector2(1968, 848)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="CentralLantern26" parent="NightLights" unique_id=224839776 instance=ExtResource("21_night_light")]
+position = Vector2(1040, 1424)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="CentralLantern27" parent="NightLights" unique_id=1143633626 instance=ExtResource("21_night_light")]
+position = Vector2(1232, 1424)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="CentralLantern28" parent="NightLights" unique_id=654681249 instance=ExtResource("21_night_light")]
+position = Vector2(1072, 1136)
 light_color = Color(1, 0.72, 0.38, 1)
 
 [node name="Spawns" type="Node2D" parent="." unique_id=2084573961]
@@ -494,8 +590,8 @@ position = Vector2(432, 1008)
 [node name="EVTrainingSouthOutside" type="Marker2D" parent="Spawns" unique_id=1994447459]
 position = Vector2(432, 1072)
 
-[node name="TransitArrival" type="Marker2D" parent="Spawns"]
-position = Vector2(1200, 1488)
+[node name="TransitArrival" type="Marker2D" parent="Spawns" unique_id=1909803286]
+position = Vector2(1072, 1136)
 
 [node name="EncounterRegions" type="Node2D" parent="." unique_id=124010091]
 
@@ -678,11 +774,10 @@ npc_sprite_frames = ExtResource("38_ev_expert_f")
 mugshot = ExtResource("34_ev_expert_portrait")
 preload_quest_markers = true
 
-[node name="TransitKeeper" parent="Entities/NPCs" instance=ExtResource("39_transit_keeper")]
-position = Vector2(1856, 1536)
-npc_id = "kanto_viridian_city_transit_keeper"
+[node name="TransitKeeper" parent="Entities/NPCs" unique_id=1992978105 instance=ExtResource("39_transit_keeper")]
+position = Vector2(1664, 1216)
 local_destination_id = "kanto_viridian_city"
-facing_direction = Vector2(0, 1)
+npc_id = "kanto_viridian_city_transit_keeper"
 
 [node name="RouteGuards" type="Node2D" parent="Entities/NPCs" unique_id=286755846]
 
@@ -750,10 +845,10 @@ movement_speed_pixels = 48.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=841850023]
 
-[node name="AetherBeacon" parent="Entities/Interactables" instance=ExtResource("40_aether_beacon")]
-position = Vector2(1072, 1136)
-interactable_id = "kanto_viridian_city_aether_beacon"
+[node name="AetherBeacon" parent="Entities/Interactables" unique_id=208069804 instance=ExtResource("40_aether_beacon")]
+position = Vector2(1072, 1104)
 destination_id = "kanto_viridian_city"
+interactable_id = "kanto_viridian_city_aether_beacon"
 
 [node name="Signs" type="Node2D" parent="Entities/Interactables" unique_id=521022578]
 

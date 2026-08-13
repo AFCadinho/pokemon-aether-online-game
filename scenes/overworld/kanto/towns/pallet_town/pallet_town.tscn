@@ -1,10 +1,8 @@
 [gd_scene format=4 uid="uid://cbb7318supm5h"]
 
 [ext_resource type="Script" uid="uid://dgwpkenum0n5a" path="res://scripts/world/kanto/towns/pallet_town.gd" id="1_f4ndu"]
-[ext_resource type="Texture2D" uid="uid://c5801ltimr4ed" path="res://assets/npcs/gen4-ow-sprites/trchar101.png" id="4_3oirl"]
 [ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="5_n6c5k"]
 [ext_resource type="Texture2D" uid="uid://ba8f0l65uv4cv" path="res://assets/tilesets/overworld/JohtoFX.png" id="5_uujun"]
-[ext_resource type="Texture2D" uid="uid://dwsfb8bgfvnmo" path="res://assets/sprites/trainer_cards/showdown/acetrainer-gen6.png" id="7_66okb"]
 [ext_resource type="Texture2D" uid="uid://b6drbo1a67h55" path="res://assets/tilesets/overworld/nature/ledges/ledges.png" id="7_fiq1l"]
 [ext_resource type="Texture2D" uid="uid://cnixsmivuhykq" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_068_Fisherman.png" id="9_q27eu"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="12_h1bkg"]
@@ -18,32 +16,18 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="23_route_hint"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="24_door_hint"]
 [ext_resource type="PackedScene" uid="uid://b8s7eihsl5ikf" path="res://scenes/world/interactables/sign_interactable.tscn" id="25_sign"]
-[ext_resource type="PackedScene" path="res://scenes/world/interactables/locked_door_interactable.tscn" id="35_locked_door"]
 [ext_resource type="PackedScene" uid="uid://rnbee61xiftm" path="res://scenes/npcs/item_gift_npc.tscn" id="26_item_gift"]
 [ext_resource type="Texture2D" uid="uid://e2ksljyggppg" path="res://assets/tilesets/fiver/tiles_env2_floors32.png" id="27_q27eu"]
+[ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="28_wfrmf"]
 [ext_resource type="Texture2D" uid="uid://l4jsju4s8v3a" path="res://assets/sprites/trainer_cards/showdown/fisherman-gen6.png" id="29_fisherman_card"]
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="30_dialogue_npc"]
 [ext_resource type="SpriteFrames" uid="uid://yaxkjlx3spjb" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="31_poke_fan_f"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/poke_fan_m_frames.tres" id="32_poke_fan_m"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/school_kid_m_frames.tres" id="33_school_kid_m"]
-[ext_resource type="Script" path="res://scripts/world/npcs/synchronized_playmate_npc.gd" id="34_playmate"]
+[ext_resource type="SpriteFrames" uid="uid://yluab5wp1usc" path="res://assets/npcs/classes/poke_fan_m_frames.tres" id="32_poke_fan_m"]
+[ext_resource type="SpriteFrames" uid="uid://b8fh81or510qb" path="res://assets/npcs/classes/school_kid_m_frames.tres" id="33_school_kid_m"]
+[ext_resource type="Script" uid="uid://c1l8itjx2usge" path="res://scripts/world/npcs/synchronized_playmate_npc.gd" id="34_playmate"]
+[ext_resource type="PackedScene" uid="uid://csmsqlujka4ma" path="res://scenes/world/interactables/locked_door_interactable.tscn" id="35_locked_door"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="36_transit_keeper"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_beacon_placeholder.tscn" id="37_aether_beacon"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_6lp0i"]
-atlas = ExtResource("4_3oirl")
-region = Rect2(0, 0, 64, 64)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_0ke4d"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_6lp0i")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ih4yo"]
 atlas = ExtResource("9_q27eu")
@@ -2284,38 +2268,34 @@ display_name = "Pallet Resident Mara"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("31_poke_fan_f")
 
-[node name="PlayFamilyFather" parent="Entities/NPCs" instance=ExtResource("30_dialogue_npc")]
+[node name="PlayFamilyFather" parent="Entities/NPCs" unique_id=712268937 instance=ExtResource("30_dialogue_npc")]
 position = Vector2(272, 240)
 npc_id = "kanto_pallet_town_play_family_father"
 npc_definition_id = "trainer_class_poke_fan_m"
 display_name = "Pallet Parent Aaron"
-facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("32_poke_fan_m")
 
-[node name="PlayFamilyMother" parent="Entities/NPCs" instance=ExtResource("30_dialogue_npc")]
+[node name="PlayFamilyMother" parent="Entities/NPCs" unique_id=1015512739 instance=ExtResource("30_dialogue_npc")]
 position = Vector2(368, 240)
 npc_id = "kanto_pallet_town_play_family_mother"
 npc_definition_id = "trainer_class_poke_fan_f"
 display_name = "Pallet Parent Mina"
-facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("31_poke_fan_f")
 
-[node name="PlayFamilyChild" parent="Entities/NPCs" instance=ExtResource("30_dialogue_npc")]
+[node name="PlayFamilyChild" parent="Entities/NPCs" unique_id=1749425590 instance=ExtResource("30_dialogue_npc")]
 position = Vector2(240, 400)
 script = ExtResource("34_playmate")
+movement_target_path = NodePath("../../Pokemon/Pikachu")
+movement_offset = Vector2(0, -64)
 npc_id = "kanto_pallet_town_play_family_child"
 npc_definition_id = "trainer_class_school_kid_m"
 display_name = "Pallet Kid Leo"
-facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("33_school_kid_m")
-movement_target_path = NodePath("../../Pokemon/Pikachu")
-movement_offset = Vector2(0, -64)
 
-[node name="TransitKeeper" parent="Entities/NPCs" instance=ExtResource("36_transit_keeper")]
+[node name="TransitKeeper" parent="Entities/NPCs" unique_id=933255436 instance=ExtResource("36_transit_keeper")]
 position = Vector2(720, 240)
-npc_id = "kanto_pallet_town_transit_keeper"
 local_destination_id = "kanto_pallet_town"
-facing_direction = Vector2(0, 1)
+npc_id = "kanto_pallet_town_transit_keeper"
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=245092271]
 
@@ -2352,10 +2332,10 @@ movement_speed_pixels = 48.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1829912001]
 
-[node name="AetherBeacon" parent="Entities/Interactables" instance=ExtResource("37_aether_beacon")]
+[node name="AetherBeacon" parent="Entities/Interactables" unique_id=506136302 instance=ExtResource("37_aether_beacon")]
 position = Vector2(784, 208)
-interactable_id = "kanto_pallet_town_aether_beacon"
 destination_id = "kanto_pallet_town"
+interactable_id = "kanto_pallet_town_aether_beacon"
 
 [node name="TownSign" parent="Entities/Interactables" unique_id=1776127209 instance=ExtResource("19_3oirl")]
 position = Vector2(1056, 304)
@@ -2366,20 +2346,20 @@ sign_type = "town"
 position = Vector2(1200, 880)
 sign_id = "kanto_pallet_town_oaks_lab"
 
-[node name="OaksLabDoorLock" parent="Entities/Interactables" instance=ExtResource("35_locked_door")]
+[node name="OaksLabDoorLock" parent="Entities/Interactables" unique_id=394391496 instance=ExtResource("35_locked_door")]
 position = Vector2(1296, 816)
-display_name = "Oak's Lab"
 area_id = "kanto_oaks_lab"
+display_name = "Oak's Lab"
 
-[node name="PlayersHouseDoorLock" parent="Entities/Interactables" instance=ExtResource("35_locked_door")]
+[node name="PlayersHouseDoorLock" parent="Entities/Interactables" unique_id=1758695486 instance=ExtResource("35_locked_door")]
 position = Vector2(656, 528)
-display_name = "Player's House"
 area_id = "kanto_players_house"
+display_name = "Player's House"
 
-[node name="RivalsHouseDoorLock" parent="Entities/Interactables" instance=ExtResource("35_locked_door")]
+[node name="RivalsHouseDoorLock" parent="Entities/Interactables" unique_id=1601062581 instance=ExtResource("35_locked_door")]
 position = Vector2(1136, 400)
-display_name = "Rival's House"
 area_id = "kanto_rivals_house"
+display_name = "Rival's House"
 
 [node name="Water" type="TileMapLayer" parent="." unique_id=1009891667]
 visible = false
@@ -2408,8 +2388,8 @@ position = Vector2(656, 560)
 [node name="FromRivalsHouse" type="Marker2D" parent="Spawns" unique_id=737384273]
 position = Vector2(1136, 432)
 
-[node name="TransitArrival" type="Marker2D" parent="Spawns"]
-position = Vector2(720, 560)
+[node name="TransitArrival" type="Marker2D" parent="Spawns" unique_id=1714989263]
+position = Vector2(784, 240)
 
 [node name="Exits" type="Node2D" parent="." unique_id=1482608450]
 
@@ -2478,6 +2458,38 @@ tile_set = SubResource("TileSet_n6c5k")
 visible = false
 tile_map_data = PackedByteArray("AAAkAB4AAAABAAEAAAAjAB4AAAABAAEAAAAiAB4AAAABAAEAAAAcAB4AAAABAAEAAAAcAB0AAAABAAEAAAAcABwAAAABAAEAAAAcABsAAAABAAEAAAAcABoAAAABAAEAAAAYAAwAAAABAAEAAAAIABIAAAABAAEAAAAIABEAAAABAAEAAAAIABAAAAABAAEAAAAIAA8AAAABAAEAAAAIAA4AAAABAAEAAAAeAAoAAAABAAEAAAAeAAkAAAABAAEAAAAeAAgAAAABAAEAAAAeAAcAAAABAAEAAAA=")
 tile_set = SubResource("TileSet_6wa66")
+
+[node name="NightLights" type="Node2D" parent="." unique_id=733080833]
+
+[node name="NightLight" parent="NightLights" unique_id=501049116 instance=ExtResource("28_wfrmf")]
+position = Vector2(784, 208)
+
+[node name="NightLight2" parent="NightLights" unique_id=1056014654 instance=ExtResource("28_wfrmf")]
+position = Vector2(592, 400)
+
+[node name="NightLight3" parent="NightLights" unique_id=2071260948 instance=ExtResource("28_wfrmf")]
+position = Vector2(592, 496)
+
+[node name="NightLight4" parent="NightLights" unique_id=1657966342 instance=ExtResource("28_wfrmf")]
+position = Vector2(1200, 272)
+
+[node name="NightLight5" parent="NightLights" unique_id=2104326109 instance=ExtResource("28_wfrmf")]
+position = Vector2(1200, 368)
+
+[node name="NightLight6" parent="NightLights" unique_id=149229525 instance=ExtResource("28_wfrmf")]
+position = Vector2(1296, 752)
+
+[node name="NightLight7" parent="NightLights" unique_id=1355261927 instance=ExtResource("28_wfrmf")]
+position = Vector2(1200, 752)
+
+[node name="NightLight8" parent="NightLights" unique_id=762233668 instance=ExtResource("28_wfrmf")]
+position = Vector2(1392, 752)
+
+[node name="NightLight9" parent="NightLights" unique_id=1102070898 instance=ExtResource("28_wfrmf")]
+position = Vector2(1328, 816)
+
+[node name="NightLight10" parent="NightLights" unique_id=308292932 instance=ExtResource("28_wfrmf")]
+position = Vector2(1264, 816)
 
 [connection signal="body_entered" from="Exits/ToRoute1" to="Exits/ToRoute1" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToOaksLab" to="Exits/ToOaksLab" method="_on_body_entered"]
