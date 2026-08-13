@@ -28,6 +28,12 @@ func _init() -> void:
 	_check(scene_source.contains('[node name="AetherClashChampionLabel"'), "location card owns a persistent Aether Clash champion line")
 	_check(script_source.contains('AETHER_CLASH_LOBBY_MAP_ID := "aether_clash_lobby"'), "champion line is restricted to the Aether Clash Lobby")
 	_check(script_source.contains("GuildService.load_aether_clash_champion()"), "champion line uses the authoritative backend result")
+	var guild_service_source := FileAccess.get_file_as_string("res://scripts/services/guild_service.gd")
+	_check(
+		guild_service_source.contains("guild_id_value != null")
+		and guild_service_source.contains("won_at_value != null"),
+		"empty Aether Clash champion fields are normalized without nullable constructors"
+	)
 	_check(script_source.contains("WorldPresenceService.weather_changed.connect(_on_location_weather_changed)"), "weather changes refresh the card")
 	_check(
 		script_source.contains("weather_controller.set_server_weather")

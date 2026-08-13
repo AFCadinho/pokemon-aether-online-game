@@ -100,12 +100,18 @@ func load_aether_clash_champion() -> Dictionary:
 	)
 	if not bool(response.get("success", false)):
 		return response
-	var body := _dictionary(response.get("body", {}))
+	return normalize_aether_clash_champion(response.get("body", {}))
+
+
+static func normalize_aether_clash_champion(value: Variant) -> Dictionary:
+	var body := value as Dictionary if value is Dictionary else {}
+	var guild_id_value: Variant = body.get("guildId")
+	var won_at_value: Variant = body.get("wonAt")
 	return {
 		"success": true,
-		"guildId": int(body.get("guildId", 0)),
+		"guildId": int(guild_id_value) if guild_id_value != null else 0,
 		"guildName": str(body.get("guildName", "")).strip_edges(),
-		"wonAt": str(body.get("wonAt", "")),
+		"wonAt": str(won_at_value) if won_at_value != null else "",
 	}
 
 
