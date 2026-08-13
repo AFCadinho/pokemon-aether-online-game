@@ -187,6 +187,8 @@
   "ui.navigation.developer_tools": "Abrir ferramentas de desenvolvedor",
   "ui.world.location.unknown": "Localização desconhecida",
   "ui.world.location.unknown_region": "Desconhecido",
+  "ui.aether_clash.reigning_guild": "Guilda reinante: {guild}",
+  "ui.aether_clash.reigning_guild.none": "Nenhuma",
   "ui.world.time.morning": "Manhã",
   "ui.world.time.afternoon": "Tarde",
   "ui.world.time.evening": "Anoitecer",

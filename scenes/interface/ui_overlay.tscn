@@ -897,14 +897,14 @@ custom_minimum_size = Vector2(108, 36)
 text = "ui.staff.dev.add"
 
 [node name="LocationPanel" type="PanelContainer" parent="Control" unique_id=907156867]
-custom_minimum_size = Vector2(332, 66)
+custom_minimum_size = Vector2(332, 82)
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -166.0
 offset_right = 166.0
-offset_bottom = 66.0
+offset_bottom = 82.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8bipm")
 
@@ -940,6 +940,14 @@ mouse_default_cursor_shape = 2
 texture_normal = ExtResource("21_wild_radar")
 ignore_texture_size = true
 stretch_mode = 5
+
+[node name="AetherClashChampionLabel" type="Label" parent="Control/LocationPanel/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 0.7176471, 0.40392157, 1)
+theme_override_font_sizes/font_size = 11
+text = "ui.aether_clash.reigning_guild"
+text_overrun_behavior = 3
 
 [node name="StatusRow" type="HBoxContainer" parent="Control/LocationPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2

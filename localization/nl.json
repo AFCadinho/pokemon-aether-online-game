@@ -187,6 +187,8 @@
   "ui.navigation.developer_tools": "Ontwikkelaarstools openen",
   "ui.world.location.unknown": "Onbekende locatie",
   "ui.world.location.unknown_region": "Onbekend",
+  "ui.aether_clash.reigning_guild": "Regerende guild: {guild}",
+  "ui.aether_clash.reigning_guild.none": "Geen",
   "ui.world.time.morning": "Ochtend",
   "ui.world.time.afternoon": "Middag",
   "ui.world.time.evening": "Avond",

@@ -9,6 +9,7 @@ const GUILDS_ENDPOINT := "/game/guilds"
 const GUILD_HOME_ENDPOINT := "/game/guilds/me"
 const GUILD_INVITATIONS_ENDPOINT := "/game/guild-invitations"
 const GUILD_LOBBY_TELEPORT_ENDPOINT := "/game/guilds/me/lobby/teleport"
+const AETHER_CLASH_CHAMPION_ENDPOINT := "/game/aether-clash/champion"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 var pending_creation_request_id := ""
@@ -88,6 +89,23 @@ func teleport_to_lobby() -> Dictionary:
 		"accepted": bool(body.get("accepted", false)),
 		"cost": int(body.get("cost", 0)),
 		"state": state,
+	}
+
+
+func load_aether_clash_champion() -> Dictionary:
+	var response := await _authenticated_request(
+		AETHER_CLASH_CHAMPION_ENDPOINT,
+		HTTPClient.METHOD_GET,
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var body := _dictionary(response.get("body", {}))
+	return {
+		"success": true,
+		"guildId": int(body.get("guildId", 0)),
+		"guildName": str(body.get("guildName", "")).strip_edges(),
+		"wonAt": str(body.get("wonAt", "")),
 	}
 
 
