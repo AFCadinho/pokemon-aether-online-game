@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://dc87fdx313qm4" path="res://scripts/world/kanto/towns/pallet_town/oak.gd" id="6_m2ga1"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="8_rguhm"]
-[ext_resource type="Texture2D" uid="uid://coa5lp430b8p8" path="res://assets/npcs/gen4-ow-sprites/phone001.png" id="8_ywtjb"]
-[ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="9_10jo1"]
+[ext_resource type="Texture2D" path="res://assets/npcs/gen4-ow-sprites/phone001.png" id="8_ywtjb"]
+[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="9_10jo1"]
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="10_7ad88"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="11_map_meta"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/pokemon_pc_interactable.tscn" id="12_pc_interactable"]

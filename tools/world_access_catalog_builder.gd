@@ -195,9 +195,9 @@ func _load_scene_record(scene_path: String, staff_teleport_overrides: Dictionary
 		}
 
 	var scene_aliases: Array[String] = []
-	var resource_uid := ResourceLoader.get_resource_uid(scene_path)
-	if resource_uid != ResourceUID.INVALID_ID:
-		scene_aliases.append(ResourceUID.id_to_text(resource_uid))
+	var scene_uid := _read_scene_uid(scene_path)
+	if not scene_uid.is_empty():
+		scene_aliases.append(scene_uid)
 
 	var spawns: Dictionary = {}
 	var spawn_points: Dictionary = {}
@@ -323,6 +323,24 @@ func _canonical_scene_path(scene_reference: String) -> String:
 	if not resource_value is PackedScene:
 		return normalized
 	return str((resource_value as PackedScene).resource_path).strip_edges()
+
+
+func _read_scene_uid(scene_path: String) -> String:
+	var file := FileAccess.open(scene_path, FileAccess.READ)
+	if file == null:
+		return ""
+	var header := file.get_line()
+	file.close()
+	var marker := 'uid="'
+	var uid_start := header.find(marker)
+	if uid_start < 0:
+		return ""
+	uid_start += marker.length()
+	var uid_end := header.find('"', uid_start)
+	if uid_end < 0:
+		return ""
+	var scene_uid := header.substr(uid_start, uid_end - uid_start).strip_edges()
+	return scene_uid if scene_uid.begins_with("uid://") else ""
 
 
 func _load_staff_teleport_overrides(path: String) -> Dictionary:

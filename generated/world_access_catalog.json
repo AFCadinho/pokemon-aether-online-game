@@ -7,7 +7,9 @@
 			"locationGroupId": "aether_clash",
 			"locationGroupLabel": "Aether Clash",
 			"regionName": "Aether Clash",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://is25lssna4ae"
+			],
 			"scenePath": "res://scenes/overworld/aether_clash/aether_clash_lobby.tscn",
 			"spawnPoints": {
 				"guild_arrival": {
@@ -16,8 +18,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "GuildArrival",
 					"tile": {
-						"x": 29,
-						"y": 50
+						"x": 30,
+						"y": 45
 					}
 				}
 			}
@@ -107,6 +109,16 @@
 						"x": 20,
 						"y": 17
 					}
+				},
+				"transit_arrival": {
+					"facingDirection": "down",
+					"label": "Transit Arrival",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "TransitArrival",
+					"tile": {
+						"x": 24,
+						"y": 7
+					}
 				}
 			}
 		},
@@ -190,6 +202,16 @@
 					"tile": {
 						"x": 58,
 						"y": 33
+					}
+				},
+				"transit_arrival": {
+					"facingDirection": "down",
+					"label": "Transit Arrival",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "TransitArrival",
+					"tile": {
+						"x": 47,
+						"y": 30
 					}
 				}
 			}
@@ -836,6 +858,16 @@
 					"tile": {
 						"x": 2,
 						"y": 38
+					}
+				},
+				"transit_arrival": {
+					"facingDirection": "down",
+					"label": "Transit Arrival",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "TransitArrival",
+					"tile": {
+						"x": 33,
+						"y": 35
 					}
 				},
 				"viridian_jail": {

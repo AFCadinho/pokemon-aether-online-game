@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://ogt7khne5kw1"]
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/pewter_house/pewter_house.visual.tscn" id="1_dtuqo"]
-[ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="2_wwrb6"]
+[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="2_wwrb6"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_otrcm"]
 texture = ExtResource("2_wwrb6")

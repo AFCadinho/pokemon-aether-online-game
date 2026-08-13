@@ -37,6 +37,11 @@ func _init() -> void:
 		"Aether Clash Lobby and its Guild arrival point are registered"
 	)
 	_expect(
+		(areas.get("aether_clash_lobby", {}) as Dictionary).get("sceneAliases", [])
+			== ["uid://is25lssna4ae"],
+		"Aether Clash Lobby exposes its scene UID independently of the local cache"
+	)
+	_expect(
 		areas.has("kanto_pewter_city_pokemon_center"),
 		"Inherited Pokémon Center scene metadata is registered"
 	)

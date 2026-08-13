@@ -1,6 +1,6 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://4eo6w720h0sh"]
 
-[ext_resource type="Texture2D" uid="uid://b2g77kqrosfqw" path="res://assets/npcs/gen5-g4-ow-sprites/OW PACK/trPsychic_M.png" id="1_texture"]
+[ext_resource type="Texture2D" path="res://assets/npcs/gen5-g4-ow-sprites/OW PACK/trPsychic_M.png" id="1_texture"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_default"]
 atlas = ExtResource("1_texture")
