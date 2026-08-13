@@ -6,6 +6,8 @@ class_name AetherBeacon
 signal activation_state_changed(activated: bool)
 signal anchor_confirmation_resolved(accepted: bool)
 
+const AetherConfirmationDialogScene := preload("res://scenes/interface/aether_confirmation_dialog.tscn")
+
 @export var destination_id := ""
 @export_range(0.5, 4.0, 0.1) var animation_speed := 1.4
 
@@ -93,17 +95,19 @@ func interact_with_player(_player: Node2D) -> void:
 func _offer_anchor_change(network: Dictionary, destination_name: String) -> void:
 	if str(network.get("anchorDestinationId", "")) == destination_id:
 		return
-	var confirmation := ConfirmationDialog.new()
-	confirmation.title = LocalizationManager.text("ui.transit.anchor.confirm_title")
-	confirmation.dialog_text = LocalizationManager.text(
-		"ui.transit.anchor.confirm",
-		{"name": destination_name}
+	var confirmation := AetherConfirmationDialogScene.instantiate() as AetherConfirmationDialog
+	get_tree().current_scene.add_child(confirmation)
+	confirmation.configure(
+		LocalizationManager.text("ui.transit.anchor.confirm_title"),
+		LocalizationManager.text(
+			"ui.transit.anchor.confirm",
+			{"name": destination_name}
+		),
+		LocalizationManager.text("common.confirm"),
+		LocalizationManager.text("common.cancel")
 	)
-	confirmation.ok_button_text = LocalizationManager.text("common.confirm")
-	confirmation.get_cancel_button().text = LocalizationManager.text("common.cancel")
 	confirmation.confirmed.connect(_resolve_anchor_confirmation.bind(true), CONNECT_ONE_SHOT)
 	confirmation.canceled.connect(_resolve_anchor_confirmation.bind(false), CONNECT_ONE_SHOT)
-	get_tree().current_scene.add_child(confirmation)
 	confirmation.popup_centered(Vector2i(520, 220))
 	var accepted: bool = await anchor_confirmation_resolved
 	confirmation.queue_free()

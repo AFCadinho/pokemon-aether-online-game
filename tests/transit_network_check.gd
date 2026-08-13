@@ -109,7 +109,10 @@ func _init() -> void:
 	_check(beacon_source.contains("_apply_activation_state(true)"), "Aether Beacon activates after attunement")
 	_check(beacon_source.contains('_find_local_keeper()'), "Aether Beacon delegates its dialogue to the local Keeper")
 	_check(beacon_source.contains('"add_system_message"'), "Aether Beacon announces a new attunement in system chat")
-	_check(beacon_source.contains("ConfirmationDialog.new()"), "Aether Beacon confirms Anchor changes")
+	_check(
+		beacon_source.contains("AetherConfirmationDialogScene.instantiate()"),
+		"Aether Beacon uses the styled Aethernet confirmation dialog"
+	)
 	_check(beacon_source.contains("TransitService.set_anchor"), "Aether Beacon owns Anchor selection")
 	_check(english_localization.contains('"ui.transit.attuned_system"'), "Aethernet attunement has a localized system message")
 	var placeholder_source := FileAccess.get_file_as_string(
@@ -126,6 +129,10 @@ func _init() -> void:
 	_check(menu_source.contains("ScrollContainer.new()"), "Transit UI remains scrollable as towns are added")
 	_check(menu_source.contains('destination.get("isAnchor"'), "Transit UI identifies the Aether Anchor")
 	_check(menu_source.contains('ui.transit.travel_free'), "Transit UI labels Anchor travel as free without a price")
+	_check(
+		menu_source.contains("AetherConfirmationDialogScene.instantiate()"),
+		"Transit travel uses the shared styled confirmation dialog"
+	)
 	_check(menu_source.contains("sourceRegionId") and menu_source.contains('== "all"'), "Only the Lobby exposes cross-region selection")
 
 	if failures == 0:

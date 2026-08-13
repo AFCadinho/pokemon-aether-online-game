@@ -4,6 +4,7 @@ class_name TransitMenu
 
 signal resolved(destination_id: String)
 
+const AetherConfirmationDialogScene := preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 const PANEL_MAX_WIDTH := 780.0
 const PANEL_MAX_HEIGHT := 650.0
 const PANEL_VIEWPORT_MARGIN := 48.0
@@ -19,7 +20,7 @@ const COLOR_SUCCESS := Color("78e0a3")
 const COLOR_WARNING := Color("efc56a")
 
 var _resolved := false
-var _confirmation: ConfirmationDialog
+var _confirmation: AetherConfirmationDialog
 var _pending_destination_id := ""
 var _network: Dictionary = {}
 var _destinations_by_region: Dictionary = {}
@@ -62,8 +63,7 @@ func open(network: Dictionary) -> void:
 	_build_destination_area(content, viewport_size)
 	_build_footer(content)
 
-	_confirmation = ConfirmationDialog.new()
-	_confirmation.title = LocalizationManager.text("ui.transit.confirm_title")
+	_confirmation = AetherConfirmationDialogScene.instantiate() as AetherConfirmationDialog
 	_confirmation.confirmed.connect(_confirm_travel)
 	add_child(_confirmation)
 	_show_region(0)
@@ -284,6 +284,8 @@ func _region_name(region_id: String) -> String:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if _confirmation != null and _confirmation.visible:
+		return
 	if event.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()
 		_finish("")
@@ -291,12 +293,17 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _request_confirmation(destination: Dictionary) -> void:
 	_pending_destination_id = str(destination.get("destinationId", ""))
-	_confirmation.dialog_text = LocalizationManager.text(
-		"ui.transit.confirm_free" if bool(destination.get("isAnchor", false)) else "ui.transit.confirm",
-		{
-			"name": str(destination.get("name", "")),
-			"fare": int(destination.get("fare", 0)),
-		}
+	_confirmation.configure(
+		LocalizationManager.text("ui.transit.confirm_title"),
+		LocalizationManager.text(
+			"ui.transit.confirm_free" if bool(destination.get("isAnchor", false)) else "ui.transit.confirm",
+			{
+				"name": str(destination.get("name", "")),
+				"fare": int(destination.get("fare", 0)),
+			}
+		),
+		LocalizationManager.text("common.confirm"),
+		LocalizationManager.text("common.cancel")
 	)
 	_confirmation.popup_centered()
 
