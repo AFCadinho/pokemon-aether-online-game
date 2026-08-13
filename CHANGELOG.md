@@ -4,12 +4,12 @@
 
 **Added**
 
-- Added the shared Aether Clash Lobby. Guild members can travel there for free from their Guild overview, and the lobby shows the reigning Guild below the location name.
-- Added permanently animated purple and red Aether Clash portals for future Guild wars.
-- Added Aethernet fast travel between attuned towns. Each town has an Aethernet Keeper and crystal, destinations are grouped by region, and players can choose one Aether Anchor that is always free to reach.
-- Added daily Trainer rematches that scale to your party and can use evolved teams as they become stronger.
-- Added a guided EV training field in Viridian City with focused, non-damaging training encounters and lessons based on a Pokémon's final evolution.
-- Added the Viridian Trainer School story chapter, the first Pewter Gym challenge, and explorable houses in Viridian City and Pewter City.
+- Added the Aether Clash Lobby. Guild members can travel there for free, and the name of the reigning Guild is shown below the location name.
+- The Aether Clash Lobby now contains animated purple and red portals for Guild wars.
+- Added Aethernet fast travel. Attune to a town's crystal to unlock it, then ask an Aethernet Keeper to take you to another unlocked town in the same region. You can also choose one Aether Anchor that is always free to reach.
+- Added daily Trainer rematches. Their teams become stronger and can evolve as you progress.
+- Added an EV training field in Viridian City. Its battles teach EV training without damaging your Pokémon.
+- Added the Viridian Trainer School story, the first Pewter Gym challenge, and new houses to explore in Viridian City and Pewter City.
 - The battle damage calculator now has more room and keeps the battlefield and both teams in view.
 - While using the calculator, you can hover over your own Pokémon and revealed opposing Pokémon to view their known information.
 - You can adjust HP, status conditions, moves, abilities, items, stats, and field effects to explore different battle situations.
@@ -18,10 +18,10 @@
 
 **Changed**
 
-- Wild Pokémon now select moves randomly, while supported Trainers can prioritize the move expected to deal the most damage.
+- Wild Pokémon now choose moves randomly, while Trainer opponents try to use the move that will deal the most damage.
 - Regular Trainer battles no longer show Team Preview; it remains available for important battles.
-- Aether Clash Lobby now has permanent clear weather, follows the day-and-night cycle, and uses the login-screen music.
-- Updated Aethernet placements, arrival points, collision, and nighttime lighting across Pallet Town, Viridian City, Pewter City, and the Aether Clash Lobby.
+- The Aether Clash Lobby now stays clear, follows the day-and-night cycle, and uses the login-screen music.
+- Improved Aethernet travel points and nighttime lighting in Pallet Town, Viridian City, Pewter City, and the Aether Clash Lobby.
 - Damage results and battle-log percentages are now shown more precisely.
 - The calculator makes your Pokémon's stats, stat changes, move suggestions, KO chances, and field effects easier to read and adjust.
 - Weather, terrain, screens, hazards, and Spikes are easier to recognize and set for the correct side.
@@ -29,10 +29,11 @@
 
 **Fixed**
 
-- Fixed duplicate evolution prompts and input becoming available during Oak's starter sequence.
-- Fixed Aethernet crystals sometimes failing to respond, requiring the player to move closer despite standing beside them, or using an unrelated portrait for dialogue.
-- Fixed Aethernet Keeper sprite alignment and entity/nameplate depth ordering in the Aether Clash Lobby.
-- Fixed the empty reigning-Guild state causing an error before the first Aether Clash result exists.
+- Fixed evolution choices sometimes appearing twice.
+- Fixed being able to move too early while choosing a starter from Professor Oak.
+- Fixed Aethernet crystals sometimes failing to respond, asking you to move closer while you were already beside them, or showing the wrong portrait.
+- Fixed the position of Aethernet Keepers and objects incorrectly covering players or nameplates in the Aether Clash Lobby.
+- The Aether Clash Lobby now works correctly when no Guild has won yet.
 - Fixed calculator results sometimes failing to load after switching Pokémon or changing battle tabs.
 - Fixed fainted Pokémon being unavailable in the calculator.
 - Fixed HP and HP percentage fields interfering with each other.
