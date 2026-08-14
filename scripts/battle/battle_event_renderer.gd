@@ -68,6 +68,7 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 	var move_animation_target_ident := str(presentation.get("move_animation_target_ident", ""))
 	var move_animation_result := str(presentation.get("move_animation_result", ""))
 	var damage_target_ident := str(presentation.get("damage_target_ident", ""))
+	var damage_sound_variant := str(presentation.get("damage_sound_variant", "normal"))
 	var heal_target_ident := str(presentation.get("heal_target_ident", ""))
 	var heal_followup_effect_animation_key := str(presentation.get("heal_followup_effect_animation_key", ""))
 	var faint_target_ident := str(presentation.get("faint_target_ident", ""))
@@ -150,7 +151,10 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 	if damage_target_ident != "":
 		_set_active_hud_hp_from_event(damage_target_ident, event_data, true)
 		if animations_allowed:
-			await animation_router.play_damage_tween_for_target(damage_target_ident)
+			await animation_router.play_damage_tween_for_target(
+				damage_target_ident,
+				damage_sound_variant
+			)
 		_set_active_hud_hp_from_event(damage_target_ident, event_data, false)
 		var damage_hold_seconds := message_timing.get_damage_animation_hold_seconds()
 		artificial_hold_seconds += damage_hold_seconds

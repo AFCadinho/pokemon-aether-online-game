@@ -4,6 +4,7 @@
 
 **Added**
 
+- Super-effective attacks now use a distinct hit sound when they deal damage.
 - Item discoveries and NPC item rewards now play their own acquisition jingles.
 - Added the Aether Clash Lobby. Guild members can travel there for free, and the name of the reigning Guild is shown below the location name.
 - The Aether Clash Lobby now contains animated purple and red portals for Guild wars.

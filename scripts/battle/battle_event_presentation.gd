@@ -10,6 +10,7 @@ var recent_field_effect_source := ""
 var recent_ability_event := false
 var recent_move_event := false
 var active_residual_pokemon_effects := {}
+var pending_damage_effectiveness_by_target := {}
 
 
 func setup(
@@ -33,6 +34,7 @@ func reset_recent_context() -> void:
 	recent_field_effect_source = ""
 	recent_ability_event = false
 	recent_move_event = false
+	pending_damage_effectiveness_by_target.clear()
 
 
 func get_animation_preload_keys_for_event(event_data: Dictionary) -> Dictionary:
@@ -130,6 +132,7 @@ func build(event_data: Dictionary) -> Dictionary:
 			recent_field_effect_source = ""
 			recent_ability_event = false
 			recent_move_event = true
+			pending_damage_effectiveness_by_target.clear()
 			presentation["attack_actor_ident"] = str(event_data.get("actor", ""))
 			var actor := _format_actor(str(event_data.get("actor", "")))
 			var move_name := str(event_data.get("move", ""))
@@ -347,6 +350,11 @@ func build(event_data: Dictionary) -> Dictionary:
 
 		"effectiveness":
 			recent_ability_event = false
+			var effectiveness_target := str(event_data.get("target", ""))
+			if str(event_data.get("effectiveness", "")) == "super" and not effectiveness_target.is_empty():
+				pending_damage_effectiveness_by_target[effectiveness_target] = "super_effective"
+			else:
+				pending_damage_effectiveness_by_target.erase(effectiveness_target)
 			presentation["log_message"] = event_text_formatter.format_effectiveness_event(event_data)
 			presentation["battle_message"] = str(presentation["log_message"])
 			presentation["add_blank_after"] = str(presentation["log_message"]) != ""
@@ -372,6 +380,10 @@ func build(event_data: Dictionary) -> Dictionary:
 		"damage":
 			recent_ability_event = false
 			var damage_target_ident := str(event_data.get("target", ""))
+			presentation["damage_sound_variant"] = str(
+				pending_damage_effectiveness_by_target.get(damage_target_ident, "normal")
+			)
+			pending_damage_effectiveness_by_target.erase(damage_target_ident)
 			var has_hp_loss: bool = hp_event_helper.event_has_hp_loss(event_data)
 			var has_sub_percent_hp_loss: bool = hp_event_helper.event_has_sub_percent_hp_loss(event_data)
 			var damage_percent: float = hp_event_helper.get_event_damage_percent(event_data)
@@ -506,6 +518,7 @@ func _new_presentation() -> Dictionary:
 		"move_animation_target_ident": "",
 		"move_animation_result": "",
 		"damage_target_ident": "",
+		"damage_sound_variant": "normal",
 		"heal_target_ident": "",
 		"heal_followup_effect_animation_key": "",
 		"faint_target_ident": "",
