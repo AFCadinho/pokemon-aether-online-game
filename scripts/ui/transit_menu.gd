@@ -18,12 +18,17 @@ const COLOR_MUTED := Color("9eb3c5")
 const COLOR_LOCKED := Color("768897")
 const COLOR_SUCCESS := Color("78e0a3")
 const COLOR_WARNING := Color("efc56a")
+const COLOR_HUB := Color("a98cff")
+const COLOR_HUB_ACCENT := Color("72e4f2")
+const COLOR_HUB_CARD := Color("1b1b3df5")
+const COLOR_HUB_CARD_HOVER := Color("292453fa")
 
 var _resolved := false
 var _confirmation: AetherConfirmationDialog
 var _pending_destination_id := ""
 var _network: Dictionary = {}
 var _destinations_by_region: Dictionary = {}
+var _global_hubs: Array[Dictionary] = []
 var _region_ids: Array[String] = []
 var _region_select: OptionButton
 var _region_heading: Label
@@ -140,20 +145,50 @@ func _build_region_navigation(parent: VBoxContainer) -> void:
 
 
 func _build_destination_area(parent: VBoxContainer, viewport_size: Vector2) -> void:
-	_region_heading = Label.new()
-	_region_heading.add_theme_font_size_override("font_size", 18)
-	_region_heading.add_theme_color_override("font_color", COLOR_TEXT)
-	parent.add_child(_region_heading)
 	var scroll := ScrollContainer.new()
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	parent.add_child(scroll)
+	var destination_stack := VBoxContainer.new()
+	destination_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	destination_stack.add_theme_constant_override("separation", 10)
+	scroll.add_child(destination_stack)
+	_region_heading = Label.new()
+	_region_heading.add_theme_font_size_override("font_size", 18)
+	_region_heading.add_theme_color_override("font_color", COLOR_TEXT)
+	destination_stack.add_child(_region_heading)
 	_destination_grid = GridContainer.new()
 	_destination_grid.columns = 2 if viewport_size.x >= 900.0 else 1
 	_destination_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_destination_grid.add_theme_constant_override("h_separation", 10)
 	_destination_grid.add_theme_constant_override("v_separation", 10)
-	scroll.add_child(_destination_grid)
+	destination_stack.add_child(_destination_grid)
+	_build_global_hub_section(destination_stack)
+
+
+func _build_global_hub_section(parent: VBoxContainer) -> void:
+	if _global_hubs.is_empty():
+		return
+	var separator := HSeparator.new()
+	separator.add_theme_constant_override("separation", 6)
+	parent.add_child(separator)
+	var heading_row := HBoxContainer.new()
+	heading_row.add_theme_constant_override("separation", 9)
+	parent.add_child(heading_row)
+	var heading := Label.new()
+	heading.text = LocalizationManager.text("ui.transit.hubs")
+	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.add_theme_font_size_override("font_size", 18)
+	heading.add_theme_color_override("font_color", COLOR_TEXT)
+	heading_row.add_child(heading)
+	var global_badge := Label.new()
+	global_badge.text = LocalizationManager.text("ui.transit.hub.badge")
+	global_badge.add_theme_font_size_override("font_size", 10)
+	global_badge.add_theme_color_override("font_color", COLOR_HUB_ACCENT)
+	global_badge.add_theme_stylebox_override("normal", _style(Color("152d45"), Color("4aa6bd"), 1, 8))
+	heading_row.add_child(global_badge)
+	for destination: Dictionary in _global_hubs:
+		parent.add_child(_global_hub_card(destination))
 
 
 func _build_footer(parent: VBoxContainer) -> void:
@@ -256,13 +291,81 @@ func _destination_card(destination: Dictionary) -> Control:
 	return card
 
 
+func _global_hub_card(destination: Dictionary) -> Control:
+	var destination_id := str(destination.get("destinationId", ""))
+	var current := destination_id == str(_network.get("sourceMapId", ""))
+	var guild_benefit := bool(destination.get("guildBenefitActive", false))
+	var fare := int(destination.get("fare", 0))
+	var wallet := _network.get("wallet", {}) as Dictionary
+	var can_afford := int(wallet.get("money", 0)) >= fare
+	var card := PanelContainer.new()
+	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	card.custom_minimum_size = Vector2(0, 112)
+	card.tooltip_text = LocalizationManager.text("ui.transit.hub.tooltip")
+	card.add_theme_stylebox_override("panel", _style(COLOR_HUB_CARD, COLOR_HUB, 2, 14))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 17, 17, 13, 13)
+	card.add_child(margin)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 14)
+	margin.add_child(row)
+	var marker := Label.new()
+	marker.text = "✦"
+	marker.add_theme_font_size_override("font_size", 30)
+	marker.add_theme_color_override("font_color", COLOR_HUB_ACCENT)
+	row.add_child(marker)
+	var details := VBoxContainer.new()
+	details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	details.add_theme_constant_override("separation", 3)
+	row.add_child(details)
+	var name_label := Label.new()
+	name_label.text = str(destination.get("name", destination_id))
+	name_label.add_theme_font_size_override("font_size", 18)
+	name_label.add_theme_color_override("font_color", COLOR_TEXT)
+	details.add_child(name_label)
+	var description := Label.new()
+	description.text = LocalizationManager.text("ui.transit.hub.description")
+	description.add_theme_font_size_override("font_size", 12)
+	description.add_theme_color_override("font_color", COLOR_MUTED)
+	details.add_child(description)
+	var status := Label.new()
+	status.text = LocalizationManager.text(
+		"ui.transit.hub.guild_free" if guild_benefit else "ui.transit.hub.public_fare",
+		{"fare": fare}
+	)
+	status.add_theme_font_size_override("font_size", 12)
+	status.add_theme_color_override("font_color", COLOR_SUCCESS if guild_benefit else COLOR_WARNING)
+	details.add_child(status)
+	var action := Button.new()
+	action.custom_minimum_size = Vector2(150, 48)
+	if current:
+		action.text = LocalizationManager.text("ui.transit.current")
+	elif not can_afford:
+		action.text = LocalizationManager.text("ui.transit.insufficient_funds")
+	elif fare == 0:
+		action.text = LocalizationManager.text("ui.transit.travel_free")
+	else:
+		action.text = LocalizationManager.text("ui.transit.travel", {"fare": fare})
+	action.disabled = current or not can_afford
+	if not action.disabled:
+		action.add_theme_stylebox_override("normal", _style(Color("28305b"), COLOR_HUB, 1, 10))
+		action.add_theme_stylebox_override("hover", _style(COLOR_HUB_CARD_HOVER, COLOR_HUB_ACCENT, 2, 10))
+		action.pressed.connect(_request_confirmation.bind(destination))
+	row.add_child(action)
+	return card
+
+
 func _index_destinations() -> void:
 	_destinations_by_region.clear()
+	_global_hubs.clear()
 	_region_ids.clear()
 	for value: Variant in _network.get("destinations", []):
 		if not value is Dictionary:
 			continue
 		var destination := value as Dictionary
+		if bool(destination.get("isGlobalHub", false)):
+			_global_hubs.append(destination)
+			continue
 		var region_id := str(destination.get("regionId", "unknown"))
 		if not _destinations_by_region.has(region_id):
 			_destinations_by_region[region_id] = []
@@ -273,6 +376,9 @@ func _index_destinations() -> void:
 		(_destinations_by_region[region_id] as Array).sort_custom(
 			func(a: Dictionary, b: Dictionary) -> bool: return str(a.get("name", "")) < str(b.get("name", ""))
 		)
+	_global_hubs.sort_custom(
+		func(a: Dictionary, b: Dictionary) -> bool: return str(a.get("name", "")) < str(b.get("name", ""))
+	)
 
 
 func _region_name(region_id: String) -> String:
@@ -296,7 +402,7 @@ func _request_confirmation(destination: Dictionary) -> void:
 	_confirmation.configure(
 		LocalizationManager.text("ui.transit.confirm_title"),
 		LocalizationManager.text(
-			"ui.transit.confirm_free" if bool(destination.get("isAnchor", false)) else "ui.transit.confirm",
+			"ui.transit.confirm_free" if int(destination.get("fare", 0)) == 0 else "ui.transit.confirm",
 			{
 				"name": str(destination.get("name", "")),
 				"fare": int(destination.get("fare", 0)),
