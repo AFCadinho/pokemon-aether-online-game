@@ -1024,7 +1024,6 @@ func _create_target_row(target: Dictionary) -> Control:
 func _stats_text(skill_id: String, stats: Dictionary) -> String:
 	if skill_id == "thieving":
 		return _text("ui.skills.thieving.stats", {
-			"currency": maxi(int(stats.get("currency", 0)), 0),
 			"reward": snappedf(float(stats.get("rewardBonusPercent", 0.0)), 0.1),
 			"risk": snappedf(float(stats.get("maximumCatchReductionPercent", 0.0)), 0.1),
 			"heat": snappedf(float(stats.get("wantedReductionPercent", 0.0)), 0.1),

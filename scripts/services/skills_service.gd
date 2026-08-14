@@ -109,7 +109,6 @@ func _on_thieving_state_changed(thieving_state: Dictionary) -> void:
 			100.0
 		)
 		var stats := _dictionary_from_value(skill.get("stats", {}))
-		stats["currency"] = maxi(int(thieving_state.get("currency", 0)), 0)
 		stats["wanted"] = clampi(int(thieving_state.get("wanted", 0)), 0, 100)
 		stats["rewardBonusPercent"] = mini(maxi(level - 1, 0), 100)
 		stats["wantedReductionPercent"] = minf(float(maxi(level - 1, 0)) * 0.5, 40.0)

@@ -36356,6 +36356,12 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 	if message_type == "system.force_logout":
 		_force_session_logout(str(message.get("message", "")))
 		return
+	if message_type == "system.thieving_arrest":
+		add_system_message(LocalizationManager.text(
+			"ui.thieving.global_arrest",
+			{"player": str(message.get("displayName", "Trainer"))}
+		))
+		return
 	if message_type == "chat_error":
 		var error_text: String = str(message.get("message", "Chat message could not be sent."))
 		var error_channel := str(message.get("channel", "")).strip_edges().to_lower()

@@ -79,7 +79,7 @@ func _run() -> void:
 			"experienceIntoLevel": 0,
 			"experienceForNextLevel": 1000,
 			"progressPercent": 0.0,
-			"stats": {"currency": 42, "wanted": 65, "rewardBonusPercent": 19, "wantedReductionPercent": 9.5, "maximumCatchReductionPercent": 3.8},
+			"stats": {"wanted": 65, "rewardBonusPercent": 19, "wantedReductionPercent": 9.5, "maximumCatchReductionPercent": 3.8},
 			"unlocks": [
 				{"id": "child", "requiredLevel": 1, "unlocked": true, "labelKey": "ui.skills.unlock.child"},
 				{"id": "elderly", "requiredLevel": 1, "unlocked": true, "labelKey": "ui.skills.unlock.elderly"},
@@ -140,7 +140,7 @@ func _run() -> void:
 	_check((panel.get("detail_panel") as PanelContainer).visible, "Selecting Thieving opens its dedicated interface")
 	_check((panel.get("detail_name") as Label).text == "Thieving", "Thieving is the selected detailed skill")
 	_check((panel.get("detail_level") as Label).text.contains("20"), "the detail view shows the server level")
-	_check((panel.get("stats_label") as Label).text.contains("42"), "Thieving currency and modifiers are visible")
+	_check((panel.get("stats_label") as Label).text.contains("19"), "Thieving reward and risk modifiers are visible")
 	_check((panel.get("wanted_section") as VBoxContainer).visible, "Thieving shows a dedicated Wanted meter")
 	_check((panel.get("wanted_title_label") as Label).text == "WANTED LEVEL", "Wanted meter has an explicit title")
 	_check(is_equal_approx((panel.get("wanted_bar") as ProgressBar).value, 65.0), "Wanted meter reflects the server percentage")
@@ -190,7 +190,6 @@ func _run() -> void:
 		"totalExperience": 9500,
 		"experienceIntoLevel": 0,
 		"experienceForNextLevel": 1000,
-		"currency": 50,
 		"wanted": 70,
 		"attemptedNpcIds": [
 			"kanto_viridian_city_league_fan_dorian",
@@ -244,8 +243,9 @@ func _run() -> void:
 		_check(parsed is Dictionary and (parsed as Dictionary).has("ui.skills.thieving.name"), "%s contains Skills translations" % locale_path)
 		_check(
 			parsed is Dictionary
-			and "Loot:" in str((parsed as Dictionary).get("ui.skills.thieving.stats", "")),
-			"%s presents the Thieving balance as countable Loot" % locale_path
+			and "{currency}" not in str((parsed as Dictionary).get("ui.skills.thieving.stats", ""))
+			and "{reward}" in str((parsed as Dictionary).get("ui.skills.thieving.stats", "")),
+			"%s presents reward modifiers without a separate Loot currency" % locale_path
 		)
 		_check(
 			parsed is Dictionary

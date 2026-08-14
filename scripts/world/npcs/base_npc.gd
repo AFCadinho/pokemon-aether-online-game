@@ -1129,13 +1129,16 @@ func _start_pickpocket(body: Node2D) -> void:
 					{"experience": experience_awarded}
 				))
 			if str(result.get("outcome", "")) == "success":
-				_add_system_message(LocalizationManager.text(
-					"ui.thieving.success",
-					{
-						"amount": int(result.get("rewardCurrency", 0)),
-						"wanted": int((result.get("state", {}) as Dictionary).get("wanted", 0)),
-					}
-				))
+				var reward_item: Dictionary = {}
+				var reward_item_value: Variant = result.get("rewardItem", {})
+				if reward_item_value is Dictionary:
+					reward_item = reward_item_value as Dictionary
+				var message_key := "ui.thieving.success_item" if not reward_item.is_empty() else "ui.thieving.success"
+				_add_system_message(LocalizationManager.text(message_key, {
+					"amount": int(result.get("rewardMoney", 0)),
+					"item": ItemLocalization.display_name(str(reward_item.get("itemId", ""))),
+					"wanted": int((result.get("state", {}) as Dictionary).get("wanted", 0)),
+				}))
 		else:
 			_add_system_warning(str(result.get("error", LocalizationManager.text("ui.thieving.unavailable"))))
 
