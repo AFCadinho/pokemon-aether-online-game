@@ -14369,7 +14369,8 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	sprite_backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
 	var sprite_viewport_container := SubViewportContainer.new()
-	sprite_viewport_container.stretch = true
+	sprite_viewport_container.stretch = false
+	sprite_viewport_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	sprite_viewport_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	sprite_frame.add_child(sprite_viewport_container)
 	sprite_viewport_container.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
