@@ -158,7 +158,7 @@ func _get_metadata_dialogue_id(
 	return metadata_dialogue_id
 
 
-func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Array[String]) -> Array[String]:
+func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Array) -> Array[String]:
 	return await NpcDialogueService.resolve_lines(
 		dialogue_reference_id,
 		fallback_lines,

@@ -260,7 +260,7 @@ func _get_metadata_dialogue_id(metadata: Dictionary, camel_key: String, snake_ke
 	return metadata_dialogue_id
 
 
-func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Array[String]) -> Array[String]:
+func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Array) -> Array[String]:
 	var resolved_dialogue_id := dialogue_reference_id.strip_edges()
 	if resolved_dialogue_id.is_empty():
 		return fallback_lines

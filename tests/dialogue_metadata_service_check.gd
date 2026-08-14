@@ -52,6 +52,10 @@ func _check_service_api() -> void:
 		and resolver_text.contains("func resolve_lines("),
 		"NpcDialogueService exposes selection and resolution APIs"
 	)
+	_check_true(
+		resolver_text.contains("fallback_lines: Array = []"),
+		"NpcDialogueService accepts inferred fallback arrays before normalizing their lines"
+	)
 
 
 func _check_service_normalization() -> void:

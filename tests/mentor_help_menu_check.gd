@@ -48,12 +48,14 @@ func _init() -> void:
 	_check(mateo_source.contains('"allocating"') and mateo_source.contains('"limits"'), "Mateo covers allocation and EV limits")
 	_check(mateo_source.contains("while true:"), "Mateo returns to the topic menu after an explanation")
 	_check(mateo_source.contains("var greeting: Array[String]"), "Mateo passes a typed greeting array to dialogue resolution")
+	_check(mateo_source.contains("func _resolve_lines(dialogue_id: String, fallback: Array)"), "Mateo accepts inline fallback dialogue arrays")
 
 	var gideon_source := FileAccess.get_file_as_string(GIDEON_PATH)
 	_check(gideon_source.contains("await _show_completed_help()"), "completed Gideon quest opens reusable help")
 	_check(gideon_source.contains('"finding"') and gideon_source.contains('"catching"'), "Gideon covers finding and catching Pokemon")
 	_check(gideon_source.contains("while true:"), "Gideon returns to the topic menu after an explanation")
 	_check(gideon_source.contains("var greeting: Array[String]"), "Gideon passes a typed greeting array to dialogue resolution")
+	_check(gideon_source.contains("func _resolve_dialogue_lines(dialogue_id: String, fallback: Array)"), "Gideon accepts inline fallback dialogue arrays")
 
 	for locale: String in ["en", "nl", "pt_BR"]:
 		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://localization/%s.json" % locale))

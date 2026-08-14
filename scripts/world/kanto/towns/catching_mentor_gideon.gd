@@ -128,7 +128,7 @@ func _choose_help_topic(title: String, prompt: String, topics: Array[Dictionary]
 	return topic_id
 
 
-func _resolve_dialogue_lines(dialogue_id: String, fallback: Array[String]) -> Array[String]:
+func _resolve_dialogue_lines(dialogue_id: String, fallback: Array) -> Array[String]:
 	return await NpcDialogueService.resolve_lines(
 		dialogue_id,
 		fallback,
