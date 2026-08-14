@@ -17,7 +17,9 @@ const STATE_SLEEPING := "sleeping"
 const STATE_COMPLETED := "completed"
 
 @export var trainer_id := "kanto_route_1_bug_catcher_1"
-@export var sight_range_tiles := 5
+## Number of tiles directly ahead that can trigger this trainer. After spotting
+## the player, the trainer walks along that line until they are one tile away.
+@export_range(0, 12, 1) var sight_range_tiles := 5
 
 @onready var vision_collision_shape: CollisionShape2D = $VisionArea/CollisionShape2D
 

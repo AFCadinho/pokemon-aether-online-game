@@ -55,9 +55,57 @@ func _run() -> void:
 	_check_route_22_gary_story_hook()
 	_check_trainer_school_dadinho_story_hook()
 	_check_viridian_gideon_quest_hook()
+	_check_viridian_forest_trainer_vision()
 	for scene_path: String in TRANSITION_ATTENDANTS:
 		_check_transition_attendant(scene_path, TRANSITION_ATTENDANTS[scene_path])
 	quit(1 if failed else 0)
+
+
+func _check_viridian_forest_trainer_vision() -> void:
+	var packed := load("res://scenes/overworld/kanto/routes/viridian_forest.tscn") as PackedScene
+	_check(packed != null, "Viridian Forest loads for trainer vision contract")
+	if packed == null:
+		return
+	var map := packed.instantiate()
+	var collision := map.get_node_or_null("Collision") as TileMapLayer
+	var expected_ranges := {
+		"BugCatcherDoug": 4,
+		"BugCatcherAnthony": 4,
+	}
+	for trainer_name: String in expected_ranges:
+		var trainer := map.get_node_or_null("Entities/NPCs/%s" % trainer_name) as Node2D
+		_check(trainer != null, "Viridian Forest places %s for its sight line" % trainer_name)
+		if trainer == null or collision == null:
+			continue
+		var sight_range := int(expected_ranges[trainer_name])
+		_check(
+			int(trainer.get("sight_range_tiles")) == sight_range,
+			"%s watches all four open tiles in its facing direction" % trainer_name
+		)
+		_check(
+			str(trainer.get("movement_behavior")) == "idle",
+			"%s uses trainer sight instead of autonomous pacing" % trainer_name
+		)
+		var direction := Vector2(trainer.get("facing_direction"))
+		var trainer_cell := collision.local_to_map(collision.to_local(trainer.global_position))
+		for step: int in range(1, sight_range + 1):
+			var target_cell := trainer_cell + Vector2i(direction) * step
+			_check(
+				collision.get_cell_source_id(target_cell) == -1,
+				"%s sight step %d remains walkable" % [trainer_name, step]
+			)
+		var player_cell := trainer_cell + Vector2i(direction) * sight_range
+		var stop_cell: Vector2i = trainer.call(
+			"_get_straight_line_stop_tile",
+			trainer_cell,
+			player_cell,
+			direction
+		)
+		_check(
+			stop_cell == player_cell - Vector2i(direction),
+			"%s walks the correct number of steps and stops beside the player" % trainer_name
+		)
+	map.free()
 
 
 func _check_removed_placeholders() -> void:
