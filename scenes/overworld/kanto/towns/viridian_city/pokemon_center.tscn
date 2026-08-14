@@ -1,6 +1,10 @@
 [gd_scene format=3]
 
 [ext_resource type="PackedScene" uid="uid://bfy37wf81vi6g" path="res://scenes/overworld/kanto/reusable_interiors/pokemon_center_template.tscn" id="1_template"]
+[ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="2_dialogue_npc"]
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="3_overworld_pokemon"]
+[ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="4_youngster"]
+[ext_resource type="SpriteFrames" uid="uid://uqldn2vhcla4" path="res://assets/npcs/classes/lass_frames.tres" id="5_lass"]
 
 [node name="PokemonCenter" instance=ExtResource("1_template")]
 map_id = "kanto_viridian_city_pokemon_center"
@@ -22,6 +26,48 @@ preload_quest_markers = true
 
 [node name="Clerk2" parent="Entities/NPCs" index="3"]
 npc_id = "kanto_viridian_city_pokemon_center_clerk_2"
+
+[node name="YoungsterBenji" parent="Entities/NPCs" instance=ExtResource("2_dialogue_npc")]
+position = Vector2(352, 800)
+npc_id = "kanto_viridian_city_pokemon_center_youngster_benji"
+npc_definition_id = "trainer_class_youngster"
+display_name = "Youngster Benji"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("4_youngster")
+
+[node name="LassHolly" parent="Entities/NPCs" instance=ExtResource("2_dialogue_npc")]
+position = Vector2(544, 768)
+npc_id = "kanto_viridian_city_pokemon_center_lass_holly"
+npc_definition_id = "trainer_class_lass"
+display_name = "Lass Holly"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("5_lass")
+
+[node name="Pokemon" type="Node2D" parent="Entities"]
+
+[node name="Pikachu" parent="Entities/Pokemon" instance=ExtResource("3_overworld_pokemon")]
+position = Vector2(416, 800)
+overworld_pokemon_id = "kanto_viridian_city_pokemon_center_pikachu_1"
+species_id = "pikachu"
+level = 6
+display_name = "Pikachu"
+facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.5
+movement_speed_pixels = 44.0
+
+[node name="Oddish" parent="Entities/Pokemon" instance=ExtResource("3_overworld_pokemon")]
+position = Vector2(608, 768)
+overworld_pokemon_id = "kanto_viridian_city_pokemon_center_oddish_1"
+species_id = "oddish"
+level = 5
+display_name = "Oddish"
+facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 2.0
+movement_speed_pixels = 38.0
 
 [node name="ToOutside" parent="Exits" index="0"]
 target_scene_path = "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn"

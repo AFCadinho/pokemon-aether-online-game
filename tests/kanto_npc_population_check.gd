@@ -14,6 +14,15 @@ const MAP_NPCS := {
 	"res://scenes/overworld/kanto/towns/pewter_city/house1.tscn": ["Entities/NPCs/FossilFanPetra", "Entities/NPCs/SchoolKidTessa"],
 	"res://scenes/overworld/kanto/towns/pewter_city/house2.tscn": ["Entities/NPCs/HikerAmos", "Entities/NPCs/PokeFanMira"],
 	"res://scenes/overworld/kanto/towns/viridian_city/house1.tscn": ["Entities/NPCs/PokeFanRowan", "Entities/NPCs/SchoolKidSam"],
+	"res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn": ["Entities/NPCs/YoungsterBenji", "Entities/NPCs/LassHolly"],
+	"res://scenes/overworld/kanto/towns/pewter_city/pokemon_center.tscn": ["Entities/NPCs/HikerFlint", "Entities/NPCs/LassCeleste"],
+	"res://scenes/overworld/kanto/routes/route_3_pokemon_center.tscn": ["Entities/NPCs/CamperIris", "Entities/NPCs/HikerDax"],
+}
+
+const CENTER_POKEMON := {
+	"res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn": ["Entities/Pokemon/Pikachu", "Entities/Pokemon/Oddish"],
+	"res://scenes/overworld/kanto/towns/pewter_city/pokemon_center.tscn": ["Entities/Pokemon/Machop", "Entities/Pokemon/Clefairy"],
+	"res://scenes/overworld/kanto/routes/route_3_pokemon_center.tscn": ["Entities/Pokemon/Paras", "Entities/Pokemon/Zubat"],
 }
 
 const CLASS_FRAME_PATHS := [
@@ -55,6 +64,8 @@ func _run() -> void:
 	_check_class_frames()
 	for scene_path: String in MAP_NPCS:
 		_check_map(scene_path, MAP_NPCS[scene_path])
+	for scene_path: String in CENTER_POKEMON:
+		_check_center_pokemon(scene_path, CENTER_POKEMON[scene_path])
 	_check_route_22_gary_story_hook()
 	_check_trainer_school_dadinho_story_hook()
 	_check_viridian_gideon_quest_hook()
@@ -156,6 +167,37 @@ func _check_map(scene_path: String, npc_paths: Array) -> void:
 			)
 		var cell := collision.local_to_map(collision.to_local(npc.global_position))
 		_check(collision.get_cell_source_id(cell) == -1, "%s stands on a walkable tile" % npc_path.get_file())
+	map.free()
+
+
+func _check_center_pokemon(scene_path: String, pokemon_paths: Array) -> void:
+	var packed := load(scene_path) as PackedScene
+	_check(packed != null, "%s loads for its companion Pokemon" % scene_path.get_file())
+	if packed == null:
+		return
+	var map := packed.instantiate()
+	var collision := map.get_node_or_null("Collision") as TileMapLayer
+	_check(collision != null, "%s has collision data for companion movement" % scene_path.get_file())
+	for pokemon_path_value: Variant in pokemon_paths:
+		var pokemon_path := str(pokemon_path_value)
+		var pokemon := map.get_node_or_null(pokemon_path) as Node2D
+		_check(pokemon != null, "%s places %s" % [scene_path.get_file(), pokemon_path.get_file()])
+		if pokemon == null or collision == null:
+			continue
+		_check(
+			not str(pokemon.get("overworld_pokemon_id")).is_empty(),
+			"%s has a content identity" % pokemon_path.get_file()
+		)
+		_check(
+			not str(pokemon.get("species_id")).is_empty(),
+			"%s has a species" % pokemon_path.get_file()
+		)
+		var cell := collision.local_to_map(collision.to_local(pokemon.global_position))
+		for offset_y: int in range(-1, 2):
+			_check(
+				collision.get_cell_source_id(cell + Vector2i(0, offset_y)) == -1,
+				"%s vertical pacing tile %d stays walkable" % [pokemon_path.get_file(), offset_y]
+			)
 	map.free()
 
 
