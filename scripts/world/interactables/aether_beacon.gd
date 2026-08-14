@@ -7,6 +7,8 @@ signal activation_state_changed(activated: bool)
 signal anchor_confirmation_resolved(accepted: bool)
 
 const AetherConfirmationDialogScene := preload("res://scenes/interface/aether_confirmation_dialog.tscn")
+const SORT_Z_MIN := -4096
+const SORT_Z_MAX := 4096
 
 @export var destination_id := ""
 @export_range(0.5, 4.0, 0.1) var animation_speed := 1.4
@@ -25,6 +27,11 @@ var _activated := false
 
 
 func _ready() -> void:
+	# The pedestal is the beacon's depth anchor. Players north of this point
+	# must render behind the complete crystal, while players south render in
+	# front of it, matching the feet-based sorting used by characters.
+	z_as_relative = false
+	_update_sort_z()
 	interactable_kind = "aether_beacon"
 	# Beacons are intentionally usable from every side. Keep this invariant in
 	# code so stale inherited-scene overrides cannot silently disable attuning.
@@ -37,6 +44,10 @@ func _ready() -> void:
 	_apply_activation_state(false)
 	if not Engine.is_editor_hint():
 		_refresh_activation_state.call_deferred()
+
+
+func _update_sort_z() -> void:
+	z_index = clampi(floori(global_position.y), SORT_Z_MIN, SORT_Z_MAX)
 
 
 func _process(delta: float) -> void:

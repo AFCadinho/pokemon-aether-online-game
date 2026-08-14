@@ -7,6 +7,7 @@ size = Vector2(80, 80)
 
 [node name="AetherBeacon" type="Node2D"]
 y_sort_enabled = true
+z_as_relative = false
 script = ExtResource("1_script")
 interactable_kind = "aether_beacon"
 blocks_movement = true
