@@ -14458,14 +14458,33 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_hidden_ability_badge.offset_top = -30.0
 	pokemon_summary_hidden_ability_badge.offset_right = 50.0
 	pokemon_summary_hidden_ability_badge.offset_bottom = -6.0
-	pokemon_summary_hidden_ability_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pokemon_summary_hidden_ability_badge.mouse_filter = Control.MOUSE_FILTER_PASS
+	pokemon_summary_hidden_ability_badge.mouse_default_cursor_shape = Control.CURSOR_HELP
 	var hidden_ability_badge_style := _make_panel_style(Color("#071c33f2"), Color("#8cecff"), 8, 1)
 	hidden_ability_badge_style.border_width_top = 1
 	hidden_ability_badge_style.border_width_bottom = 2
 	hidden_ability_badge_style.shadow_color = Color("#42d9ff66")
 	hidden_ability_badge_style.shadow_size = 4
 	hidden_ability_badge_style.shadow_offset = Vector2.ZERO
+	var hidden_ability_badge_hover_style := _make_panel_style(Color("#123b5af7"), Color("#d2f9ff"), 8, 1)
+	hidden_ability_badge_hover_style.border_width_top = 1
+	hidden_ability_badge_hover_style.border_width_bottom = 2
+	hidden_ability_badge_hover_style.shadow_color = Color("#62e4ffff")
+	hidden_ability_badge_hover_style.shadow_size = 7
+	hidden_ability_badge_hover_style.shadow_offset = Vector2.ZERO
 	pokemon_summary_hidden_ability_badge.add_theme_stylebox_override("panel", hidden_ability_badge_style)
+	pokemon_summary_hidden_ability_badge.mouse_entered.connect(
+		_set_pokemon_summary_hidden_ability_badge_hover.bind(
+			pokemon_summary_hidden_ability_badge,
+			hidden_ability_badge_hover_style
+		)
+	)
+	pokemon_summary_hidden_ability_badge.mouse_exited.connect(
+		_set_pokemon_summary_hidden_ability_badge_hover.bind(
+			pokemon_summary_hidden_ability_badge,
+			hidden_ability_badge_style
+		)
+	)
 	_set_localized_control_property(pokemon_summary_hidden_ability_badge, "tooltip_text", "ui.pokemon_summary.hidden_ability")
 
 	var hidden_ability_badge_label := Label.new()
@@ -18580,6 +18599,11 @@ func _position_new_pokemon_summary_card() -> void:
 	var offset_index: int = pokemon_summary_next_card_offset_index % 8
 	pokemon_summary_next_card_offset_index += 1
 	_move_pokemon_summary_to_global_position(base_position + (offset_step * float(offset_index)))
+
+func _set_pokemon_summary_hidden_ability_badge_hover(badge: PanelContainer, style: StyleBoxFlat) -> void:
+	if badge == null or not is_instance_valid(badge):
+		return
+	badge.add_theme_stylebox_override("panel", style)
 
 func _refresh_open_pokemon_summary_cards() -> void:
 	var keys: Array = pokemon_summary_open_cards.keys()
