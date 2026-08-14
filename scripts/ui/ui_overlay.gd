@@ -1083,7 +1083,7 @@ var pokemon_summary_ball_list: VBoxContainer
 var pokemon_summary_pending_ball_item_id := ""
 var pokemon_summary_pending_ball_card_key := ""
 var pokemon_summary_type_icon_row: HBoxContainer
-var pokemon_summary_hidden_ability_badge: Label
+var pokemon_summary_hidden_ability_badge: PanelContainer
 var pokemon_summary_title_label: Label
 var pokemon_summary_id_label: Label
 var pokemon_summary_meta_label: Label
@@ -14448,25 +14448,31 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_type_icon_row.offset_bottom = 28.0
 	sprite_frame.add_child(pokemon_summary_type_icon_row)
 
-	pokemon_summary_hidden_ability_badge = Label.new()
-	pokemon_summary_hidden_ability_badge.text = "◆"
-	pokemon_summary_hidden_ability_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	pokemon_summary_hidden_ability_badge.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	pokemon_summary_hidden_ability_badge.anchor_left = 1.0
-	pokemon_summary_hidden_ability_badge.anchor_top = 0.0
-	pokemon_summary_hidden_ability_badge.anchor_right = 1.0
-	pokemon_summary_hidden_ability_badge.anchor_bottom = 0.0
-	pokemon_summary_hidden_ability_badge.offset_left = -34.0
-	pokemon_summary_hidden_ability_badge.offset_top = 30.0
-	pokemon_summary_hidden_ability_badge.offset_right = -6.0
-	pokemon_summary_hidden_ability_badge.offset_bottom = 54.0
+	pokemon_summary_hidden_ability_badge = PanelContainer.new()
+	pokemon_summary_hidden_ability_badge.custom_minimum_size = Vector2(34, 24)
+	pokemon_summary_hidden_ability_badge.anchor_left = 0.0
+	pokemon_summary_hidden_ability_badge.anchor_top = 1.0
+	pokemon_summary_hidden_ability_badge.anchor_right = 0.0
+	pokemon_summary_hidden_ability_badge.anchor_bottom = 1.0
+	pokemon_summary_hidden_ability_badge.offset_left = 6.0
+	pokemon_summary_hidden_ability_badge.offset_top = -30.0
+	pokemon_summary_hidden_ability_badge.offset_right = 40.0
+	pokemon_summary_hidden_ability_badge.offset_bottom = -6.0
 	pokemon_summary_hidden_ability_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	pokemon_summary_hidden_ability_badge.add_theme_font_size_override("font_size", 16)
-	pokemon_summary_hidden_ability_badge.add_theme_color_override("font_color", Color("#9be8ff"))
-	pokemon_summary_hidden_ability_badge.add_theme_color_override("font_shadow_color", Color("#062238"))
-	pokemon_summary_hidden_ability_badge.add_theme_constant_override("shadow_offset_x", 1)
-	pokemon_summary_hidden_ability_badge.add_theme_constant_override("shadow_offset_y", 1)
+	pokemon_summary_hidden_ability_badge.add_theme_stylebox_override("panel", _make_panel_style(Color("#329fc4e8"), Color("#b9f2ff"), 6, 1))
 	_set_localized_control_property(pokemon_summary_hidden_ability_badge, "tooltip_text", "ui.pokemon_summary.hidden_ability")
+
+	var hidden_ability_badge_label := Label.new()
+	hidden_ability_badge_label.text = "HA"
+	hidden_ability_badge_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hidden_ability_badge_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	hidden_ability_badge_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hidden_ability_badge_label.add_theme_font_size_override("font_size", 11)
+	hidden_ability_badge_label.add_theme_color_override("font_color", Color("#f2fcff"))
+	hidden_ability_badge_label.add_theme_color_override("font_shadow_color", Color("#062238"))
+	hidden_ability_badge_label.add_theme_constant_override("shadow_offset_x", 1)
+	hidden_ability_badge_label.add_theme_constant_override("shadow_offset_y", 1)
+	pokemon_summary_hidden_ability_badge.add_child(hidden_ability_badge_label)
 	pokemon_summary_hidden_ability_badge.visible = false
 	sprite_frame.add_child(pokemon_summary_hidden_ability_badge)
 
