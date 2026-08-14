@@ -1,8 +1,8 @@
 [gd_scene format=4 uid="uid://is25lssna4ae"]
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/lobby/lobby.visual.tscn" id="1_stnl8"]
-[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="2_tauxp"]
-[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="3_7psnb"]
+[ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="2_tauxp"]
+[ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="3_7psnb"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="4_map_meta"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="5_transit_keeper"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="6_o8e3w"]
