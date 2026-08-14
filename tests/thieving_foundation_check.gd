@@ -12,6 +12,7 @@ func _init() -> void:
 	var party_heal := FileAccess.get_file_as_string("res://scripts/services/party_heal_service.gd")
 	var status_hud := FileAccess.get_file_as_string("res://scripts/ui/thieving_status_hud.gd")
 	var mentor := FileAccess.get_file_as_string("res://scripts/world/kanto/towns/thieving_mentor_rook.gd")
+	var rook_help_locales: Array[String] = ["en", "nl", "pt_BR"]
 	var viridian := FileAccess.get_file_as_string(
 		"res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn"
 	)
@@ -27,6 +28,28 @@ func _init() -> void:
 	_check("ui.thieving.locked" in npc and "is_unlocked" in service, "Pickpocket remains locked until Rook's lesson")
 	_check("learn_to_pickpocket" in mentor and "pickpocket_hotkey" in mentor, "Rook teaches the configurable pickpocket input")
 	_check("return_to_rook" in mentor and "claim_npc_item_reward" in mentor, "Rook completes the lesson and grants rewards only after the return step")
+	for locale: String in rook_help_locales:
+		var locale_data: Variant = JSON.parse_string(
+			FileAccess.get_file_as_string("res://localization/%s.json" % locale)
+		)
+		_check(locale_data is Dictionary, "Rook help localization parses for %s" % locale)
+		if not locale_data is Dictionary:
+			continue
+		var help_text := " ".join([
+			str(locale_data.get("mentor.rocket_rook.help.basics.2", "")),
+			str(locale_data.get("mentor.rocket_rook.help.risk.2", "")),
+			str(locale_data.get("mentor.rocket_rook.help.progression.1", "")),
+			str(locale_data.get("mentor.rocket_rook.help.progression.2", "")),
+		])
+		_check("Loot" not in help_text, "Rook no longer describes a separate Loot currency in %s" % locale)
+		_check(
+			"Pokédollars" in help_text and "25%" in help_text and "1%" in help_text,
+			"Rook explains direct cash and exact XP and level bonuses in %s" % locale
+		)
+		_check(
+			"₽5" in help_text and "₽25" in help_text,
+			"Rook explains the bail range in %s" % locale
+		)
 	_check("BODY_MOVEMENT_PICKPOCKET" in npc and "create_timer(0.55)" in npc, "NPC interaction plays the one-shot pose")
 	_check("ui.thieving.experience" in npc and "experienceAwarded" in npc, "Pickpocket attempts report awarded Thieving XP")
 	_check("rewardMoney" in service and "lostMoney" in service, "Thieving rewards and fines use the shared wallet")
