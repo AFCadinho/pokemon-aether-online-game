@@ -972,7 +972,9 @@ func _start_pickpocket(body: Node2D) -> void:
 		body.face_world_position(get_feet_position())
 
 	var target_id := _get_npc_metadata_id().strip_edges().to_lower()
-	if ThievingService.state_loaded and ThievingService.get_level() < pickpocket_required_level:
+	if ThievingService.state_loaded and not ThievingService.is_unlocked():
+		_add_system_warning(LocalizationManager.text("ui.thieving.locked"))
+	elif ThievingService.state_loaded and ThievingService.get_level() < pickpocket_required_level:
 		_add_system_warning(LocalizationManager.text(
 			"ui.thieving.level_required",
 			{"level": pickpocket_required_level}
@@ -989,6 +991,7 @@ func _start_pickpocket(body: Node2D) -> void:
 			body.call("clear_activity_style")
 		var result: Dictionary = await ThievingService.attempt_pickpocket(target_id)
 		if bool(result.get("success", false)):
+			await PlayerGameStateService.refresh_story()
 			if str(result.get("outcome", "")) == "success":
 				_add_system_message(LocalizationManager.text(
 					"ui.thieving.success",

@@ -95,6 +95,8 @@ func _on_thieving_state_changed(thieving_state: Dictionary) -> void:
 		if str(skill.get("id", "")) != "thieving":
 			continue
 		var level := maxi(int(thieving_state.get("level", 1)), 1)
+		var skill_unlocked := bool(thieving_state.get("unlocked", false))
+		skill["unlocked"] = skill_unlocked
 		var experience_into_level := maxi(int(thieving_state.get("experienceIntoLevel", 0)), 0)
 		var experience_for_next_level := maxi(int(thieving_state.get("experienceForNextLevel", 0)), 0)
 		skill["level"] = level
@@ -118,7 +120,7 @@ func _on_thieving_state_changed(thieving_state: Dictionary) -> void:
 			var unlocks: Array = unlocks_value as Array
 			for unlock_index in range(unlocks.size()):
 				var unlock := _dictionary_from_value(unlocks[unlock_index])
-				unlock["unlocked"] = level >= int(unlock.get("requiredLevel", 1))
+				unlock["unlocked"] = skill_unlocked and level >= int(unlock.get("requiredLevel", 1))
 				unlocks[unlock_index] = unlock
 			skill["unlocks"] = unlocks
 		var targets_value: Variant = skill.get("targets", [])
@@ -130,7 +132,7 @@ func _on_thieving_state_changed(thieving_state: Dictionary) -> void:
 			for target_index in range(targets.size()):
 				var target := _dictionary_from_value(targets[target_index])
 				var attempted_today := str(target.get("npcId", "")) in attempted_ids
-				var unlocked := level >= int(target.get("requiredLevel", 1))
+				var unlocked := skill_unlocked and level >= int(target.get("requiredLevel", 1))
 				target["unlocked"] = unlocked
 				target["attemptedToday"] = attempted_today
 				target["availableToday"] = unlocked and not attempted_today and not jailed

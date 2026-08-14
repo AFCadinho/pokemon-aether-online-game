@@ -29,6 +29,8 @@
 [ext_resource type="SpriteFrames" uid="uid://cf4j1u0alxcad" path="res://assets/npcs/classes/ev_expert_f_frames.tres" id="38_ev_expert_f"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="39_transit_keeper"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_beacon_placeholder.tscn" id="40_aether_beacon"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/rocket_grunt_m_frames.tres" id="41_rocket_grunt_m"]
+[ext_resource type="Script" path="res://scripts/world/kanto/towns/thieving_mentor_rook.gd" id="42_thieving_mentor"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route1"]
 size = Vector2(208, 34)
@@ -778,6 +780,15 @@ preload_quest_markers = true
 position = Vector2(1664, 1216)
 local_destination_id = "kanto_viridian_city"
 npc_id = "kanto_viridian_city_transit_keeper"
+
+[node name="RocketGruntRook" parent="Entities/NPCs" instance=ExtResource("24_dialogue")]
+position = Vector2(1984, 1408)
+script = ExtResource("42_thieving_mentor")
+npc_id = "kanto_viridian_city_rocket_grunt_rook"
+display_name = "Rocket Grunt Rook"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("41_rocket_grunt_m")
+preload_quest_markers = true
 
 [node name="RouteGuards" type="Node2D" parent="Entities/NPCs" unique_id=286755846]
 

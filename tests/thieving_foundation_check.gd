@@ -11,6 +11,7 @@ func _init() -> void:
 	var market := FileAccess.get_file_as_string("res://scripts/world/npcs/market_attendant_npc.gd")
 	var party_heal := FileAccess.get_file_as_string("res://scripts/services/party_heal_service.gd")
 	var status_hud := FileAccess.get_file_as_string("res://scripts/ui/thieving_status_hud.gd")
+	var mentor := FileAccess.get_file_as_string("res://scripts/world/kanto/towns/thieving_mentor_rook.gd")
 	var viridian := FileAccess.get_file_as_string(
 		"res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn"
 	)
@@ -23,6 +24,8 @@ func _init() -> void:
 
 	_check("ThievingService=" in project and "pickpocket={" in project, "Thieving service and T input are registered")
 	_check("/game/thieving/pickpocket" in service, "Pickpocket uses the server endpoint")
+	_check("ui.thieving.locked" in npc and "is_unlocked" in service, "Pickpocket remains locked until Rook's lesson")
+	_check("learn_to_pickpocket" in mentor and "pickpocket_hotkey" in mentor, "Rook teaches the configurable pickpocket input")
 	_check("BODY_MOVEMENT_PICKPOCKET" in npc and "create_timer(0.55)" in npc, "NPC interaction plays the one-shot pose")
 	_check(viridian.count("pickpocket_enabled = true") == 3, "Exactly three Viridian targets are enabled")
 	_check("pickpocket_enabled = true" not in pallet, "Pallet Town has no pickpocket targets")

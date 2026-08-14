@@ -69,6 +69,8 @@ func _run() -> void:
 		},
 		{
 			"id": "thieving",
+			"unlocked": true,
+			"unlockHintKey": "ui.skills.thieving.unlock_hint",
 			"nameKey": "ui.skills.thieving.name",
 			"descriptionKey": "ui.skills.thieving.description",
 			"level": 20,
@@ -138,6 +140,7 @@ func _run() -> void:
 	var first_target_status := first_target_content.get_child(1) as Label
 	_check(first_target_status.text == "Attempted today", "attempted targets have a clear daily status")
 	skills_service.call("_on_thieving_state_changed", {
+		"unlocked": true,
 		"level": 20,
 		"totalExperience": 9500,
 		"experienceIntoLevel": 0,

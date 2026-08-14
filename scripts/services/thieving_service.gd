@@ -115,6 +115,10 @@ func get_level() -> int:
 	return max(int(state.get("level", 1)), 1)
 
 
+func is_unlocked() -> bool:
+	return bool(state.get("unlocked", false))
+
+
 func is_most_wanted() -> bool:
 	return int(state.get("wanted", 0)) >= 100
 
