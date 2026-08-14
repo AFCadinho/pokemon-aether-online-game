@@ -43,6 +43,7 @@
 
 **Fixed**
 
+- Fixed Mateo's and Gideon's completed-quest help failing when localized greeting lines were passed to typed dialogue helpers.
 - Regular Trainer battles no longer briefly flash the lead-selection phase while automatic leads are being chosen.
 - Gary now waits to appear on Route 22 until Oak's Parcel has been delivered.
 - Fixed evolution choices sometimes appearing twice.

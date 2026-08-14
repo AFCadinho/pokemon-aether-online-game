@@ -77,7 +77,7 @@ func _claim_catching_reward() -> void:
 
 
 func _show_completed_help() -> void:
-	var greeting := [LocalizationManager.text("mentor.gideon.help.greeting")]
+	var greeting: Array[String] = [LocalizationManager.text("mentor.gideon.help.greeting")]
 	if (
 		not quest_reward_completed_dialogue_id.is_empty()
 		and quest_reward_completed_dialogue_id != quest_reward_received_dialogue_id
