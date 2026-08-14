@@ -50,13 +50,14 @@ func _run() -> void:
 	host.add_child(party_slot)
 	await process_frame
 	party_slot.call("set_pokemon_data", {"species": "pikachu", "level": 5, "maxHp": 20, "hp": 20})
-	_check(not party_slot.call("_can_drop_data", Vector2.ZERO, drag_data), "read-only party projections reject held-item drops")
-	party_slot.set("held_item_drop_enabled", true)
+	var party_click_button := party_slot.get_node("ClickButton") as Button
+	_check(not party_click_button.call("_can_drop_data", Vector2.ZERO, drag_data), "read-only party hitboxes reject held-item drops")
+	party_slot.call("_set_held_item_drop_enabled", true)
 	var party_drops: Array = []
 	party_slot.connect("held_item_dropped", func(slot_index: int, item: Dictionary) -> void: party_drops.append([slot_index, item]))
 	party_slot.set("slot_index", 2)
-	_check(party_slot.call("_can_drop_data", Vector2.ZERO, drag_data), "owned party slots accept held-item drops")
-	party_slot.call("_drop_data", Vector2.ZERO, drag_data)
+	_check(party_click_button.call("_can_drop_data", Vector2.ZERO, drag_data), "owned party hitboxes accept held-item drops")
+	party_click_button.call("_drop_data", Vector2.ZERO, drag_data)
 	_check(
 		party_drops.size() == 1 and int(party_drops[0][0]) == 2 and str(party_drops[0][1].get("id", "")) == "leftovers",
 		"party held-item drops retain the exact party slot and item"

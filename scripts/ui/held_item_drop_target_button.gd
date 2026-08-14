@@ -5,6 +5,8 @@ class_name HeldItemDropTargetButton
 signal held_item_dropped(item: Dictionary)
 signal drop_highlight_changed(highlighted: bool)
 
+var held_item_drop_enabled := true
+
 
 static func can_accept_drag_data(data: Variant) -> bool:
 	return not item_from_drag_data(data).is_empty()
@@ -39,14 +41,14 @@ static func _is_holdable_item(item: Dictionary) -> bool:
 
 
 func _can_drop_data(_position: Vector2, data: Variant) -> bool:
-	var accepted := not disabled and can_accept_drag_data(data)
+	var accepted := held_item_drop_enabled and not disabled and can_accept_drag_data(data)
 	drop_highlight_changed.emit(accepted)
 	return accepted
 
 
 func _drop_data(_position: Vector2, data: Variant) -> void:
 	var item := item_from_drag_data(data)
-	if disabled or item.is_empty():
+	if not held_item_drop_enabled or disabled or item.is_empty():
 		return
 	drop_highlight_changed.emit(false)
 	held_item_dropped.emit(item.duplicate(true))

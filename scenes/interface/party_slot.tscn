@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bqj3ifxyy7gdh"]
 
 [ext_resource type="Script" uid="uid://dmbromlkpmfd" path="res://scripts/ui/party_slot.gd" id="1_kmnus"]
+[ext_resource type="Script" path="res://scripts/ui/held_item_drop_target_button.gd" id="2_held_item_drop"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kmnus"]
 bg_color = Color(0.03137255, 0.08235294, 0.13333334, 0.92156863)
@@ -175,6 +176,7 @@ theme_override_styles/hover = SubResource("StyleBoxEmpty_rmfdk")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_ohghb")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_jup6d")
 flat = true
+script = ExtResource("2_held_item_drop")
 
 [node name="LeadAccent" type="Panel" parent="ClickButton"]
 visible = false

@@ -79,6 +79,11 @@ func _ready() -> void:
 		click_button.mouse_entered.connect(_on_click_button_mouse_entered)
 	if not click_button.mouse_exited.is_connected(_on_click_button_mouse_exited):
 		click_button.mouse_exited.connect(_on_click_button_mouse_exited)
+	if click_button.has_signal("held_item_dropped") and not click_button.is_connected("held_item_dropped", _on_click_button_held_item_dropped):
+		click_button.connect("held_item_dropped", _on_click_button_held_item_dropped)
+	if click_button.has_signal("drop_highlight_changed") and not click_button.is_connected("drop_highlight_changed", _on_click_button_drop_highlight_changed):
+		click_button.connect("drop_highlight_changed", _on_click_button_drop_highlight_changed)
+	click_button.set("held_item_drop_enabled", held_item_drop_enabled)
 	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
 		LocalizationManager.locale_changed.connect(_on_locale_changed)
 	_setup_held_item_marker()
@@ -93,7 +98,7 @@ func set_pokemon(pokemon: Pokemon) -> void:
 	current_level = pokemon.level
 	current_species_id = pokemon.species
 	current_species_source_name = pokemon.species
-	held_item_drop_enabled = pokemon.owned_pokemon_id > 0
+	_set_held_item_drop_enabled(pokemon.owned_pokemon_id > 0)
 	_refresh_species_name()
 	shiny_badge.visible = pokemon.shiny
 	_refresh_level_label()
@@ -117,7 +122,7 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 		pokemon_data.get("species_id", pokemon_data.get("species", species))
 	))
 	current_species_source_name = species
-	held_item_drop_enabled = false
+	_set_held_item_drop_enabled(false)
 	var is_shiny := bool(pokemon_data.get("shiny", false))
 	var level := int(pokemon_data.get("level", 0))
 	var max_hp: int = maxi(int(pokemon_data.get("maxHp", pokemon_data.get("max_hp", 1))), 1)
@@ -144,7 +149,7 @@ func set_empty() -> void:
 	current_level = 0
 	current_species_id = ""
 	current_species_source_name = ""
-	held_item_drop_enabled = false
+	_set_held_item_drop_enabled(false)
 	is_hovered = false
 	is_pressed = false
 	is_dragging = false
@@ -177,6 +182,21 @@ func set_drop_target(value: bool) -> void:
 		return
 	is_drop_target = value
 	_apply_slot_style()
+
+
+func _set_held_item_drop_enabled(value: bool) -> void:
+	held_item_drop_enabled = value
+	if click_button != null:
+		click_button.set("held_item_drop_enabled", value)
+
+
+func _on_click_button_held_item_dropped(item: Dictionary) -> void:
+	if held_item_drop_enabled:
+		held_item_dropped.emit(slot_index, item.duplicate(true))
+
+
+func _on_click_button_drop_highlight_changed(highlighted: bool) -> void:
+	set_drop_target(highlighted and held_item_drop_enabled)
 
 
 func _can_drop_data(_position: Vector2, data: Variant) -> bool:
