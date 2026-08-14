@@ -2599,13 +2599,16 @@ func _on_battle_ended(result: Dictionary) -> void:
 	if should_claim_wild_reward and reward_battle_id != "":
 		await _award_wild_battle_money(reward_battle_id, reward_species)
 	if should_claim_trainer_reward and reward_battle_id != "":
-		var reward_claimed := await _award_trainer_battle_rewards(
+		var trainer_reward_result := await _award_trainer_battle_rewards(
 			reward_battle_id,
 			reward_trainer_id,
 			reward_trainer_name
 		)
+		var reward_claimed := bool(trainer_reward_result.get("success", false))
 		if reward_claimed and keep_locked_for_outro:
 			await _show_trainer_outro_dialogue(trainer_outro_dialogue_id, trainer_mugshot)
+		if reward_claimed and bool(trainer_reward_result.get("playItemReceivedSfx", false)):
+			SfxManager.play("item_received")
 	if keep_locked_for_outro:
 		_unlock_overworld_after_battle()
 
@@ -2846,11 +2849,12 @@ func _award_trainer_battle_rewards(
 	battle_id: String,
 	trainer_id: String,
 	trainer_name: String
-) -> bool:
+) -> Dictionary:
 	var previous_money: int = max(int(PlayerSave.money), 0)
 	var reward_result: Dictionary = await PlayerWalletService.award_trainer_battle_rewards(battle_id)
 	if bool(reward_result.get("success", false)):
 		PlayerWalletService.apply_wallet_result(reward_result)
+		InventoryService.apply_inventory_state(reward_result.get("inventory", {}))
 		var reward: Dictionary = reward_result.get("reward", {}) as Dictionary
 		var money_awarded: int = max(int(reward.get("money", max(int(PlayerSave.money), 0) - previous_money)), 0)
 		_notify_trainer_battle_rewards_awarded(trainer_name, money_awarded)
@@ -2872,10 +2876,13 @@ func _award_trainer_battle_rewards(
 		var story_result: Dictionary = await PlayerGameStateService.refresh_story()
 		if not bool(story_result.get("success", false)):
 			push_warning("World: trainer reward story refresh failed: %s" % str(story_result.get("error", "Unknown error")))
-		return true
+		return {
+			"success": true,
+			"playItemReceivedSfx": bool(gym_badge_award.get("awarded", false)),
+		}
 	else:
 		push_warning("World: trainer battle reward failed: %s" % str(reward_result.get("error", "Unknown error")))
-	return false
+	return {"success": false}
 
 
 func _show_trainer_outro_dialogue(dialogue_id: String, mugshot: Texture2D) -> void:

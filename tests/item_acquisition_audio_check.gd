@@ -11,6 +11,7 @@ const GIDEON_NPC := "res://scripts/world/kanto/towns/catching_mentor_gideon.gd"
 const DADINHO_NPC := "res://scripts/world/kanto/routes/dadinho_training_npc.gd"
 const UI_OVERLAY := "res://scripts/ui/ui_overlay.gd"
 const OAK_SCRIPT := "res://scripts/world/kanto/towns/pallet_town/oak.gd"
+const WORLD_SCRIPT := "res://scripts/world/world.gd"
 
 var failed := false
 
@@ -27,6 +28,7 @@ func _init() -> void:
 	var dadinho_source := FileAccess.get_file_as_string(DADINHO_NPC)
 	var overlay_source := FileAccess.get_file_as_string(UI_OVERLAY)
 	var oak_source := FileAccess.get_file_as_string(OAK_SCRIPT)
+	var world_source := FileAccess.get_file_as_string(WORLD_SCRIPT)
 
 	_check(found_stream != null, "trimmed item-found OGG loads as an audio stream")
 	_check(received_stream != null, "trimmed item-received OGG loads as an audio stream")
@@ -50,6 +52,18 @@ func _init() -> void:
 	_check_received_sound_after(gideon_source, "quest_reward_received_dialogue_id", "Gideon's quest reward")
 	_check_received_sound_after(dadinho_source, "quest_reward_received_dialogue_id", "Dadinho's quest reward")
 	_check_received_sound_after(oak_source, "quest_turn_in_completed_dialogue_id", "Oak's Pokedex reward")
+	var brock_outro_index := world_source.find("await _show_trainer_outro_dialogue")
+	var brock_sound_index := world_source.find('SfxManager.play("item_received")', brock_outro_index)
+	_check(
+		brock_outro_index >= 0
+		and brock_sound_index > brock_outro_index
+		and world_source.contains('trainer_reward_result.get("playItemReceivedSfx", false)'),
+		"a newly earned Gym Badge plays the received-item jingle after the Leader's reward dialogue"
+	)
+	_check(
+		world_source.contains('InventoryService.apply_inventory_state(reward_result.get("inventory", {}))'),
+		"trainer battle item rewards immediately refresh the local Bag"
+	)
 	var bundle_message_index := overlay_source.find('LocalizationManager.text("ui.bag.message.box_opened"')
 	var found_sound_index := overlay_source.find('SfxManager.play("item_found")', bundle_message_index)
 	_check(
