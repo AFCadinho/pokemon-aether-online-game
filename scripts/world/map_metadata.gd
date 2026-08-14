@@ -44,6 +44,10 @@ func get_map_region_name() -> String:
 	return map_region_name
 
 
+func get_world_access_area_type() -> String:
+	return world_access_area_type
+
+
 func get_location_metadata() -> Dictionary:
 	return {
 		"locationId": location_id if location_id.strip_edges() != "" else map_id,

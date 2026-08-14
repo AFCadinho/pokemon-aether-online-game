@@ -857,11 +857,27 @@ func _on_render_viewport_size_changed() -> void:
 func _apply_world_pixel_scale() -> void:
 	if world_camera == null:
 		return
+	var effective_scale := PixelPerfectRenderingScript.resolve_world_scale_for_area(
+		SettingsManager.world_pixel_scale,
+		_get_current_map_world_access_area_type()
+	)
 	PixelPerfectRenderingScript.apply_to_camera(
 		world_camera,
-		SettingsManager.world_pixel_scale,
+		effective_scale,
 		get_window().size
 	)
+
+
+func _get_current_map_world_access_area_type() -> String:
+	var current_map := _resolve_current_map()
+	if current_map == null:
+		return ""
+	if current_map.has_method("get_world_access_area_type"):
+		return str(current_map.call("get_world_access_area_type")).strip_edges().to_lower()
+	for property: Dictionary in current_map.get_property_list():
+		if str(property.get("name", "")) == "world_access_area_type":
+			return str(current_map.get("world_access_area_type")).strip_edges().to_lower()
+	return ""
 
 func _exit_tree() -> void:
 	var had_activity := fishing_activity_active or surf_activity_active
@@ -2064,6 +2080,7 @@ func refresh_map_layers() -> void:
 
 	if collision_tilemap == null:
 		push_warning("Player.refresh_map_layers: Collision layer missing on %s." % current_map.name)
+	_apply_world_pixel_scale()
 
 func _find_tilemap_layer(parent: Node, layer_names: Array[String]) -> TileMapLayer:
 	return MapLayerResolverScript.find_tilemap_layer(parent, layer_names)
