@@ -256,6 +256,13 @@ func _init() -> void:
 		and world_source.contains('"ui.world.reward.fishing_level"'),
 		"world refreshes regional progression and reports localized Fishing XP levels"
 	)
+	_check(
+		world_source.contains('reason == "caught"')
+		and world_source.contains('active_wild_encounter_type in ["old_rod", "good_rod", "super_rod"]')
+		and world_source.contains('_notify_fishing_treasure_award(reward.get("items", []))')
+		and world_source.contains('SfxManager.play("item_found")'),
+		"completed Fishing wins and catches report authoritative treasure rewards"
+	)
 	quit(1 if failed else 0)
 
 

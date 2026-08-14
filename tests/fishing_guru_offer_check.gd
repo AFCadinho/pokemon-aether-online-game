@@ -50,6 +50,13 @@ func _run() -> void:
 		and help_lines[2].contains("!"),
 		"Fishing Guru help explains casting and reeling with the configured hotkey"
 	)
+	var treasure_lines: Array[String] = guru.call("_help_lines", "treasure")
+	_expect(
+		treasure_lines.size() == 2
+		and treasure_lines[0].contains("Heart Scale")
+		and treasure_lines[1].contains("one treasure"),
+		"Fishing Guru help explains Fishing treasure rewards"
+	)
 	guru.call("_apply_npc_metadata", {
 		"offeredQuestId": "learn_to_fish",
 		"offeredQuestRequiredQuestId": "oaks_parcel",

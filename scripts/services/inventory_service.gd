@@ -46,14 +46,10 @@ func load_inventory() -> Dictionary:
 		return response
 
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
-	var items := _array_from_value(body.get("items", []))
-	cached_inventory_items = items.duplicate(true)
-	cached_inventory_user_id = int(AuthService.current_user.get("id", 0))
-	inventory_loaded = true
-	inventory_changed.emit(cached_inventory_items.duplicate(true))
+	apply_inventory_state(body)
 	return {
 		"success": true,
-		"items": items,
+		"items": cached_inventory_items.duplicate(true),
 	}
 
 
@@ -75,6 +71,20 @@ func has_item(item_id: String) -> bool:
 		):
 			return true
 	return false
+
+
+func apply_inventory_state(value: Variant) -> bool:
+	if value is not Dictionary:
+		return false
+	var inventory := value as Dictionary
+	if inventory.get("items", null) is not Array:
+		return false
+	var items := _array_from_value(inventory.get("items", []))
+	cached_inventory_items = items.duplicate(true)
+	cached_inventory_user_id = int(AuthService.current_user.get("id", 0))
+	inventory_loaded = true
+	inventory_changed.emit(cached_inventory_items.duplicate(true))
+	return true
 
 
 func _clear_inventory_cache() -> void:

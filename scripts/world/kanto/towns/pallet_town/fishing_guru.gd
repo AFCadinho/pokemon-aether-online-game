@@ -140,6 +140,7 @@ func _show_completed_help() -> void:
 			{"id": "starting", "label": LocalizationManager.text("mentor.fishing_guru.help.topic.starting")},
 			{"id": "catching", "label": LocalizationManager.text("mentor.fishing_guru.help.topic.catching")},
 			{"id": "progression", "label": LocalizationManager.text("mentor.fishing_guru.help.topic.progression")},
+			{"id": "treasure", "label": LocalizationManager.text("mentor.fishing_guru.help.topic.treasure")},
 		])
 		if topic_id.is_empty():
 			return
@@ -174,6 +175,8 @@ func _help_lines(topic_id: String) -> Array[String]:
 			keys = ["mentor.fishing_guru.help.catching.1", "mentor.fishing_guru.help.catching.2"]
 		"progression":
 			keys = ["mentor.fishing_guru.help.progression.1", "mentor.fishing_guru.help.progression.2"]
+		"treasure":
+			keys = ["mentor.fishing_guru.help.treasure.1", "mentor.fishing_guru.help.treasure.2"]
 	var lines: Array[String] = []
 	var values := {"fishing_hotkey": SettingsManager.get_input_binding_label("fish")}
 	for key: String in keys:

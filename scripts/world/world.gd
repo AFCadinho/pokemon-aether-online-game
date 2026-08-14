@@ -88,6 +88,7 @@ var active_battle_kind := ""
 var pvp_battle_transition_started_at_msec := -1
 var active_battle_id := ""
 var active_wild_pokemon_species := ""
+var active_wild_encounter_type := ""
 var active_trainer_id := ""
 var active_trainer_name := ""
 var active_trainer_outro_dialogue_id := ""
@@ -2283,6 +2284,7 @@ func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
 	active_battle_kind = "wild"
 	active_battle_id = ""
 	active_wild_pokemon_species = wild_pokemon.species if wild_pokemon != null else "wild Pokemon"
+	active_wild_encounter_type = ""
 	_lock_overworld_for_battle()
 	
 	var response: Dictionary = await create_dev_wild_battle_response(wild_pokemon)
@@ -2316,6 +2318,7 @@ func start_triggered_wild_battle_for_area(area_id: String, encounter_type: Strin
 	active_battle_kind = "wild"
 	active_battle_id = ""
 	active_wild_pokemon_species = "wild Pokemon"
+	active_wild_encounter_type = ""
 	_lock_overworld_for_battle()
 	var transition_started_at_msec := _begin_wild_encounter_transition()
 
@@ -2327,6 +2330,7 @@ func start_triggered_wild_battle_for_area(area_id: String, encounter_type: Strin
 		await _show_wild_encounter_start_error(response)
 		return
 	active_battle_id = str(response.get("battleId", ""))
+	active_wild_encounter_type = str(response.get("encounterType", encounter_type)).strip_edges().to_lower()
 	_save_player_activity_state_deferred("battle", _get_current_activity_context())
 
 	var wild_pokemon_data: Dictionary = response.get("wildPokemon", {})
@@ -2405,6 +2409,7 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 	active_battle_kind = "trainer"
 	active_battle_id = ""
 	active_wild_pokemon_species = ""
+	active_wild_encounter_type = ""
 	active_trainer_id = trainer_id
 	active_trainer_name = str(trainer_data.get("name", "Trainer"))
 	active_trainer_outro_dialogue_id = str(trainer_data.get("outroDialogueId", "")).strip_edges()
@@ -2467,6 +2472,7 @@ func start_pvp_battle_from_response(response: Dictionary) -> bool:
 	active_battle_kind = "pvp"
 	active_battle_id = str(response.get("battleId", ""))
 	active_wild_pokemon_species = ""
+	active_wild_encounter_type = ""
 	active_trainer_id = ""
 	active_trainer_name = ""
 	active_trainer_outro_dialogue_id = ""
@@ -2541,6 +2547,7 @@ func end_wild_battle(keep_overworld_locked := false) -> void:
 	active_battle_kind = ""
 	active_battle_id = ""
 	active_wild_pokemon_species = ""
+	active_wild_encounter_type = ""
 	active_trainer_id = ""
 	active_trainer_name = ""
 	active_trainer_outro_dialogue_id = ""
@@ -2782,7 +2789,10 @@ func _extract_caught_pokemon_chat_payload(value: Variant) -> Dictionary:
 func _should_claim_wild_battle_reward(result: Dictionary) -> bool:
 	if active_battle_kind != "wild":
 		return false
-	if str(result.get("reason", "")) != "win":
+	var reason := str(result.get("reason", "")).strip_edges().to_lower()
+	if reason == "caught":
+		return active_wild_encounter_type in ["old_rod", "good_rod", "super_rod"]
+	if reason != "win":
 		return false
 	if not _is_player_battle_winner(str(result.get("winner", ""))):
 		return false
@@ -2804,11 +2814,13 @@ func _award_wild_battle_money(battle_id: String, pokemon_species: String) -> voi
 	var wallet_result: Dictionary = await PlayerWalletService.award_wild_battle_money(battle_id)
 	if bool(wallet_result.get("success", false)):
 		PlayerWalletService.apply_wallet_result(wallet_result)
+		InventoryService.apply_inventory_state(wallet_result.get("inventory", {}))
 		var reward: Dictionary = wallet_result.get("reward", {}) as Dictionary
 		_notify_wild_battle_money_awarded(pokemon_species, max(int(PlayerSave.money), 0) - previous_money)
 		_notify_reward_experience_gains(reward)
 		_notify_reward_effort_gains(reward)
 		_notify_reward_level_ups(reward)
+		_notify_fishing_treasure_award(reward.get("items", []))
 		await _notify_fishing_experience_award(reward.get("fishingProgression", {}))
 		var tutorial := _dictionary_from_value(reward.get("evTrainingTutorial", {}))
 		if not tutorial.is_empty():
@@ -2946,6 +2958,29 @@ func _notify_fishing_experience_award(value: Variant) -> void:
 				{"level": int(progression_award.get("level", GameState.fishing_level))}
 			)
 		)
+
+
+func _notify_fishing_treasure_award(value: Variant) -> void:
+	if value is not Array:
+		return
+	for item_value: Variant in value as Array:
+		if item_value is not Dictionary:
+			continue
+		var item := item_value as Dictionary
+		if str(item.get("source", "")).strip_edges().to_lower() != "fishing_treasure":
+			continue
+		var item_id := str(item.get("itemId", item.get("id", ""))).strip_edges().to_lower()
+		if item_id.is_empty():
+			continue
+		get_tree().call_group(
+			"ui_overlay",
+			"add_system_message",
+			LocalizationManager.text("ui.world.reward.fishing_treasure", {
+				"item": ItemLocalization.display_name(item_id),
+			})
+		)
+		SfxManager.play("item_found")
+		return
 
 func _notify_wild_battle_money_awarded(pokemon_species: String, money_awarded: int) -> void:
 	if money_awarded <= 0:
@@ -3289,6 +3324,7 @@ func _abort_battle_start() -> void:
 	active_battle_kind = ""
 	active_battle_id = ""
 	active_wild_pokemon_species = ""
+	active_wild_encounter_type = ""
 	active_trainer_id = ""
 	active_trainer_name = ""
 	active_trainer_outro_dialogue_id = ""
