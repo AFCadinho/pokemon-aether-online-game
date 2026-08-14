@@ -6167,7 +6167,7 @@ func setup_trainer_battle_from_response(
 		await _notify_trainer_entry_ready(entry_ready_callback)
 		return
 
-	if not _should_show_team_preview(api_response):
+	if not _trainer_team_preview_enabled(api_response):
 		_show_default_trainer_leads_before_selection(player_pokemon, api_response)
 
 	await _notify_trainer_entry_ready(entry_ready_callback)
@@ -7153,7 +7153,7 @@ func _get_saved_pokemon_for_active_data(active_pokemon: Dictionary) -> Pokemon:
 	return null
 
 func _run_trainer_lead_selection(api_response: Dictionary) -> Dictionary:
-	if _should_show_team_preview(api_response):
+	if _trainer_team_preview_enabled(api_response):
 		return await _run_trainer_team_preview_lead_selection()
 
 	return await _run_default_trainer_lead_selection()
@@ -7163,12 +7163,10 @@ func _should_show_team_preview(api_response: Dictionary) -> bool:
 
 
 func _trainer_team_preview_enabled(api_response: Dictionary) -> bool:
-	var options_value: Variant = api_response.get("battleOptions", {})
-	if options_value is Dictionary:
-		var options := options_value as Dictionary
-		if options.has("teamPreview"):
-			return bool(options.get("teamPreview", false))
-	return _should_show_team_preview(api_response)
+	return OPPONENT_PARTY_REVEAL_POLICY.is_team_preview_enabled(
+		api_response,
+		_should_show_team_preview(api_response)
+	)
 
 func _run_default_trainer_lead_selection() -> Dictionary:
 	_set_battle_input_locked(true)

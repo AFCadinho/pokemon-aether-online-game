@@ -12,6 +12,25 @@ func _init() -> void:
 
 
 func _run() -> void:
+	_check(
+		not RevealPolicy.is_team_preview_enabled(
+			{"battleOptions": {"teamPreview": false}, "phase": "team_preview"},
+			true
+		),
+		"an explicit NPC preview opt-out overrides Showdown's mechanical preview phase"
+	)
+	_check(
+		RevealPolicy.is_team_preview_enabled(
+			{"battleOptions": {"teamPreview": true}},
+			false
+		),
+		"a configured special NPC battle can enable Team Preview"
+	)
+	_check(
+		RevealPolicy.is_team_preview_enabled({}, true),
+		"legacy responses can fall back to the mechanical preview marker"
+	)
+
 	var team := [
 		{"species": "Pidgey", "metadataSlot": 1, "active": false},
 		{"species": "Nidoran-F", "metadataSlot": 2, "active": true},

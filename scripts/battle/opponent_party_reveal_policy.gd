@@ -6,6 +6,15 @@ var team_preview_enabled := false
 var revealed_slots: Dictionary = {}
 
 
+static func is_team_preview_enabled(api_response: Dictionary, mechanical_preview_active: bool) -> bool:
+	var options_value: Variant = api_response.get("battleOptions", {})
+	if options_value is Dictionary:
+		var options := options_value as Dictionary
+		if options.has("teamPreview"):
+			return bool(options.get("teamPreview", false))
+	return mechanical_preview_active
+
+
 func reset(show_full_team: bool = false) -> void:
 	team_preview_enabled = show_full_team
 	revealed_slots.clear()
