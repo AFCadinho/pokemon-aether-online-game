@@ -2259,6 +2259,7 @@ position = Vector2(368, 816)
 script = ExtResource("26_fishing_guru")
 reward_id = "kanto_pallet_town_old_rod"
 npc_id = "kanto_pallet_town_fishing_guru"
+preload_quest_markers = true
 facing_direction = Vector2(0, 1)
 npc_sprite_frames = SubResource("SpriteFrames_27c3h")
 mugshot = ExtResource("29_fisherman_card")

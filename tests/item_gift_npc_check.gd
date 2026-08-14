@@ -27,6 +27,7 @@ func _init() -> void:
 	_check_true(pallet_source.contains('reward_id = "kanto_pallet_town_old_rod"'), "Fishing Guru grants the Old Rod reward")
 	_check_true(pallet_source.contains('res://scripts/world/kanto/towns/pallet_town/fishing_guru.gd'), "Fishing Guru uses the lesson flow")
 	_check_true(pallet_source.contains('interaction_id = "pallet_town_fishing_guru_lesson_complete"'), "Fishing Guru completes the return step through a story hook")
+	_check_true(pallet_source.contains("preload_quest_markers = true"), "Fishing Guru preloads the available side-quest marker")
 	_check_true(fishing_guru_source.contains('const QUEST_ID := "learn_to_fish"'), "Fishing Guru owns the fishing lesson quest flow")
 	_check_true(fishing_guru_source.contains("_show_completed_help"), "Fishing Guru remains available as a permanent help NPC")
 	_check_true(rivals_house_source.contains('npc_id = "kanto_rivals_house_daisy"'), "Rival's House places Daisy Oak")
