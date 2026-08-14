@@ -93,6 +93,7 @@ const PvpRankedTeamValidation := preload("res://scripts/services/pvp_ranked_team
 const PC_POKEMON_SLOT_BUTTON_SCRIPT := preload("res://scripts/ui/pc_pokemon_slot_button.gd")
 const PC_PARTY_HOVER_CARD_SCENE: PackedScene = preload("res://scenes/battle/party_hover_card.tscn")
 const POKEMON_SUMMARY_MOVE_REORDER_SLOT_SCRIPT := preload("res://scripts/ui/pokemon_summary_move_reorder_slot.gd")
+const HELD_ITEM_DROP_TARGET_BUTTON_SCRIPT := preload("res://scripts/ui/held_item_drop_target_button.gd")
 const TOWN_MAP_POPUP_SCRIPT := preload("res://scripts/ui/town_map_popup.gd")
 const MOUNT_LOADOUT_PANEL_SCENE: PackedScene = preload("res://scenes/interface/mount_loadout_panel.tscn")
 const SKILLS_PANEL_SCENE: PackedScene = preload("res://scenes/interface/skills_panel.tscn")
@@ -14716,9 +14717,17 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	held_item_slot_icon_center.add_child(pokemon_summary_held_item_slot_icon)
 	held_item_slot_row.add_child(held_item_slot_icon_panel)
 
-	pokemon_summary_held_item_slot_button = Button.new()
+	pokemon_summary_held_item_slot_button = HELD_ITEM_DROP_TARGET_BUTTON_SCRIPT.new() as Button
 	pokemon_summary_held_item_slot_button.text = ""
 	pokemon_summary_held_item_slot_button.pressed.connect(_on_pokemon_summary_held_item_slot_pressed.bind(card_key))
+	pokemon_summary_held_item_slot_button.connect(
+		"held_item_dropped",
+		Callable(self, "_on_pokemon_summary_held_item_dropped").bind(card_key)
+	)
+	pokemon_summary_held_item_slot_button.connect(
+		"drop_highlight_changed",
+		Callable(self, "_on_pokemon_summary_held_item_drop_highlight_changed").bind(pokemon_summary_held_item_slot)
+	)
 	_set_localized_control_property(pokemon_summary_held_item_slot_button, "tooltip_text", "ui.pokemon_summary.held_item.manage_tooltip")
 	pokemon_summary_held_item_slot_button.focus_mode = Control.FOCUS_NONE
 	pokemon_summary_held_item_slot_button.flat = true
@@ -20640,6 +20649,49 @@ func _on_pokemon_summary_held_item_slot_pressed(card_key: String = "") -> void:
 		pokemon_summary_item_search_input.grab_focus.call_deferred()
 	_store_active_pokemon_summary_card_context()
 
+
+func _on_pokemon_summary_held_item_dropped(item: Dictionary, card_key: String = "") -> void:
+	_apply_pokemon_summary_card_context(card_key)
+	if _is_pokemon_summary_readonly():
+		return
+	var pokemon_value: Variant = _get_selected_summary_pokemon()
+	if not pokemon_value is Pokemon:
+		return
+	await _give_dropped_held_item(pokemon_value as Pokemon, item)
+
+
+func _on_pokemon_summary_held_item_drop_highlight_changed(highlighted: bool, slot: PanelContainer) -> void:
+	if slot == null or not is_instance_valid(slot):
+		return
+	var style := _make_pokemon_summary_held_item_slot_style()
+	if highlighted:
+		style.bg_color = Color("#12312ff5")
+		style.border_color = Color("#65e6c9")
+		style.set_border_width_all(2)
+	slot.add_theme_stylebox_override("panel", style)
+
+
+func _give_dropped_held_item(pokemon: Pokemon, item: Dictionary) -> void:
+	if pokemon.owned_pokemon_id <= 0 or not _is_holdable_bag_item(item):
+		return
+	var item_id := _normalize_item_id(str(item.get("id", "")))
+	if item_id == "":
+		return
+	var result: Dictionary = await PlayerPartyStateService.give_pokemon_held_item(
+		pokemon.owned_pokemon_id,
+		item_id
+	)
+	if not bool(result.get("success", false)):
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.held_item.give_failed", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
+		return
+	bag_inventory_items = _normalize_bag_inventory_items(result.get("inventory", []))
+	bag_inventory_loaded = true
+	_refresh_open_pokemon_summary_cards()
+	if bag_popup != null and bag_popup.visible:
+		_refresh_bag_items()
+
 func _set_pokemon_summary_held_item_slot(pokemon: Pokemon) -> void:
 	if pokemon_summary_held_item_slot == null or pokemon_summary_held_item_slot_name_label == null or pokemon_summary_held_item_slot_icon == null:
 		return
@@ -22670,12 +22722,24 @@ func _register_party_slot_drag_handlers(slot: Node, slot_index: int) -> void:
 	var drag_started_callable := Callable(self, "_on_party_slot_drag_started")
 	var drag_released_callable := Callable(self, "_on_party_slot_drag_released")
 	var clicked_callable := Callable(self, "_on_party_slot_clicked")
+	var held_item_dropped_callable := Callable(self, "_on_party_slot_held_item_dropped")
 	if slot.has_signal("drag_started") and not slot.is_connected("drag_started", drag_started_callable):
 		slot.connect("drag_started", drag_started_callable)
 	if slot.has_signal("drag_released") and not slot.is_connected("drag_released", drag_released_callable):
 		slot.connect("drag_released", drag_released_callable)
 	if slot.has_signal("clicked") and not slot.is_connected("clicked", clicked_callable):
 		slot.connect("clicked", clicked_callable)
+	if slot.has_signal("held_item_dropped") and not slot.is_connected("held_item_dropped", held_item_dropped_callable):
+		slot.connect("held_item_dropped", held_item_dropped_callable)
+
+
+func _on_party_slot_held_item_dropped(slot_index: int, item: Dictionary) -> void:
+	if not party_display_override.is_empty() or slot_index < 0 or slot_index >= PlayerSave.party.size():
+		return
+	var pokemon_value: Variant = PlayerSave.party[slot_index]
+	if not pokemon_value is Pokemon:
+		return
+	await _give_dropped_held_item(pokemon_value as Pokemon, item)
 
 func _on_party_slot_clicked(slot_index: int) -> void:
 	_focus_normal_ui_group(party_panel)

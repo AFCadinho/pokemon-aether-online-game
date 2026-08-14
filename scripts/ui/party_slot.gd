@@ -3,6 +3,9 @@ extends PanelContainer
 signal drag_started(slot_index: int)
 signal drag_released(slot_index: int, global_position: Vector2)
 signal clicked(slot_index: int)
+signal held_item_dropped(slot_index: int, item: Dictionary)
+
+const HeldItemDropTarget := preload("res://scripts/ui/held_item_drop_target_button.gd")
 
 const SLOT_BG := Color("#081522eb")
 const SLOT_BORDER := Color("#2d4b66b3")
@@ -63,6 +66,7 @@ var current_species_id: String = ""
 var current_species_source_name: String = ""
 var held_item_marker: Control
 var status_icon_texture_cache: Dictionary = {}
+var held_item_drop_enabled := false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -89,6 +93,7 @@ func set_pokemon(pokemon: Pokemon) -> void:
 	current_level = pokemon.level
 	current_species_id = pokemon.species
 	current_species_source_name = pokemon.species
+	held_item_drop_enabled = pokemon.owned_pokemon_id > 0
 	_refresh_species_name()
 	shiny_badge.visible = pokemon.shiny
 	_refresh_level_label()
@@ -112,6 +117,7 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 		pokemon_data.get("species_id", pokemon_data.get("species", species))
 	))
 	current_species_source_name = species
+	held_item_drop_enabled = false
 	var is_shiny := bool(pokemon_data.get("shiny", false))
 	var level := int(pokemon_data.get("level", 0))
 	var max_hp: int = maxi(int(pokemon_data.get("maxHp", pokemon_data.get("max_hp", 1))), 1)
@@ -138,6 +144,7 @@ func set_empty() -> void:
 	current_level = 0
 	current_species_id = ""
 	current_species_source_name = ""
+	held_item_drop_enabled = false
 	is_hovered = false
 	is_pressed = false
 	is_dragging = false
@@ -170,6 +177,29 @@ func set_drop_target(value: bool) -> void:
 		return
 	is_drop_target = value
 	_apply_slot_style()
+
+
+func _can_drop_data(_position: Vector2, data: Variant) -> bool:
+	var accepted := held_item_drop_enabled and HeldItemDropTarget.can_accept_drag_data(data)
+	set_drop_target(accepted)
+	return accepted
+
+
+func _drop_data(_position: Vector2, data: Variant) -> void:
+	var item: Dictionary = HeldItemDropTarget.item_from_drag_data(data)
+	if not held_item_drop_enabled or item.is_empty():
+		return
+	set_drop_target(false)
+	held_item_dropped.emit(slot_index, item.duplicate(true))
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_DRAG_END or (
+		what == NOTIFICATION_MOUSE_EXIT
+		and get_viewport() != null
+		and get_viewport().gui_is_dragging()
+	):
+		set_drop_target(false)
 
 func _refresh_lead_accent() -> void:
 	if lead_accent != null:

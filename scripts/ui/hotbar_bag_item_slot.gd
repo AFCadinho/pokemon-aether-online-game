@@ -2,6 +2,8 @@ extends PanelContainer
 
 class_name HotbarBagItemSlot
 
+const HeldItemDropTarget := preload("res://scripts/ui/held_item_drop_target_button.gd")
+
 var hotbar_item: Dictionary = {}
 var icon_texture: Texture2D
 
@@ -12,7 +14,16 @@ func _get_drag_data(_position: Vector2) -> Variant:
 	var item_id := str(hotbar_item.get("id", ""))
 	var gameplay: Variant = hotbar_item.get("gameplay", {})
 	var field_move_id := str(hotbar_item.get("fieldMove", "")).strip_edges()
-	if item_id != "escape-rope-action" and field_move_id == "" and (not gameplay is Dictionary or (gameplay as Dictionary).is_empty()):
+	var hotbar_eligible := (
+		item_id == "escape-rope-action"
+		or field_move_id != ""
+		or (gameplay is Dictionary and not (gameplay as Dictionary).is_empty())
+	)
+	var held_item_eligible := HeldItemDropTarget.can_accept_drag_data({
+		"kind": "bag_held_item",
+		"item": hotbar_item,
+	})
+	if not hotbar_eligible and not held_item_eligible:
 		return null
 	var preview := TextureRect.new()
 	preview.custom_minimum_size = Vector2(42, 42)
@@ -28,7 +39,11 @@ func _get_drag_data(_position: Vector2) -> Variant:
 	else:
 		preview.queue_free()
 	return {
-		"kind": "bag_hotbar_field_move" if field_move_id != "" else "bag_hotbar_item",
+		"kind": (
+			"bag_hotbar_field_move" if field_move_id != ""
+			else "bag_hotbar_item" if hotbar_eligible
+			else "bag_held_item"
+		),
 		"item": hotbar_item.duplicate(true),
 		"moveId": field_move_id,
 		"moveName": field_move_id.replace("_", "-").replace("-", " ").capitalize(),
