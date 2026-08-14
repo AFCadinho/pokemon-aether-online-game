@@ -81,14 +81,21 @@ func _run() -> void:
 			"progressPercent": 0.0,
 			"stats": {"currency": 42, "wanted": 65, "rewardBonusPercent": 19, "wantedReductionPercent": 9.5, "maximumCatchReductionPercent": 3.8},
 			"unlocks": [
-				{"id": "civilian", "requiredLevel": 1, "unlocked": true, "labelKey": "ui.skills.unlock.civilian"},
-				{"id": "trainer", "requiredLevel": 10, "unlocked": true, "labelKey": "ui.skills.unlock.trainer"},
-				{"id": "veteran", "requiredLevel": 20, "unlocked": true, "labelKey": "ui.skills.unlock.veteran"},
+				{"id": "child", "requiredLevel": 1, "unlocked": true, "labelKey": "ui.skills.unlock.child"},
+				{"id": "elderly", "requiredLevel": 1, "unlocked": true, "labelKey": "ui.skills.unlock.elderly"},
+				{"id": "civilian", "requiredLevel": 5, "unlocked": true, "labelKey": "ui.skills.unlock.civilian"},
+				{"id": "bug_catcher", "requiredLevel": 10, "unlocked": true, "labelKey": "ui.skills.unlock.bug_catcher"},
+				{"id": "worker", "requiredLevel": 15, "unlocked": true, "labelKey": "ui.skills.unlock.worker"},
+				{"id": "hiker", "requiredLevel": 20, "unlocked": true, "labelKey": "ui.skills.unlock.hiker"},
+				{"id": "trainer", "requiredLevel": 25, "unlocked": false, "labelKey": "ui.skills.unlock.trainer"},
+				{"id": "scientist", "requiredLevel": 30, "unlocked": false, "labelKey": "ui.skills.unlock.scientist"},
+				{"id": "ace_trainer", "requiredLevel": 40, "unlocked": false, "labelKey": "ui.skills.unlock.ace_trainer"},
+				{"id": "veteran_trainer", "requiredLevel": 60, "unlocked": false, "labelKey": "ui.skills.unlock.veteran_trainer"},
 			],
 			"targets": [
-				{"npcId": "kanto_viridian_city_league_fan_dorian", "npcType": "civilian", "nameKey": "ui.skills.thieving.target.dorian", "locationKey": "ui.skills.thieving.location.viridian_city", "requiredLevel": 1, "unlocked": true, "attemptedToday": true, "availableToday": false},
-				{"npcId": "kanto_viridian_city_forest_scout_nico", "npcType": "trainer", "nameKey": "ui.skills.thieving.target.nico", "locationKey": "ui.skills.thieving.location.viridian_city", "requiredLevel": 10, "unlocked": true, "attemptedToday": false, "availableToday": true},
-				{"npcId": "kanto_viridian_city_catching_mentor_gideon", "npcType": "veteran", "nameKey": "ui.skills.thieving.target.gideon", "locationKey": "ui.skills.thieving.location.viridian_city", "requiredLevel": 20, "unlocked": true, "attemptedToday": false, "availableToday": true},
+				{"npcId": "kanto_viridian_city_league_fan_dorian", "npcType": "elderly", "nameKey": "ui.skills.thieving.target.dorian", "locationKey": "ui.skills.thieving.location.viridian_city", "requiredLevel": 1, "unlocked": true, "attemptedToday": true, "availableToday": false},
+				{"npcId": "kanto_viridian_city_school_kid_june", "npcType": "child", "nameKey": "ui.skills.thieving.target.june", "locationKey": "ui.skills.thieving.location.viridian_city", "requiredLevel": 1, "unlocked": true, "attemptedToday": false, "availableToday": true},
+				{"npcId": "kanto_viridian_city_forest_scout_nico", "npcType": "bug_catcher", "nameKey": "ui.skills.thieving.target.nico", "locationKey": "ui.skills.thieving.location.viridian_city", "requiredLevel": 10, "unlocked": true, "attemptedToday": false, "availableToday": true},
 			],
 		},
 	]
@@ -132,7 +139,7 @@ func _run() -> void:
 	_check((panel.get("detail_name") as Label).text == "Thieving", "Thieving is the selected detailed skill")
 	_check((panel.get("detail_level") as Label).text.contains("20"), "the detail view shows the server level")
 	_check((panel.get("stats_label") as Label).text.contains("42"), "Thieving currency and modifiers are visible")
-	_check((panel.get("unlocks_container") as VBoxContainer).get_child_count() == 3, "level-gated target unlocks are listed")
+	_check((panel.get("unlocks_container") as VBoxContainer).get_child_count() == 10, "class-based target unlocks are listed")
 	_check((panel.get("targets_container") as VBoxContainer).get_child_count() == 3, "daily pickpocket targets are listed")
 	_check((panel.get("targets_summary_label") as Label).text.contains("2") and (panel.get("targets_summary_label") as Label).text.contains("1/3"), "target summary shows available and attempted counts")
 	var first_target := (panel.get("targets_container") as VBoxContainer).get_child(0) as PanelContainer
@@ -149,7 +156,7 @@ func _run() -> void:
 		"wanted": 70,
 		"attemptedNpcIds": [
 			"kanto_viridian_city_league_fan_dorian",
-			"kanto_viridian_city_forest_scout_nico",
+			"kanto_viridian_city_school_kid_june",
 		],
 		"jailed": false,
 	})

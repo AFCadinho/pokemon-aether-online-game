@@ -790,8 +790,8 @@ func _process_base_npc() -> void:
 
 	_update_sort_z()
 	await _process_npc_movement()
-	if _can_start_pickpocket():
-		await _start_pickpocket(nearby_player)
+	if _can_request_pickpocket():
+		await _try_start_pickpocket(nearby_player)
 		_after_base_npc_process()
 		_base_npc_process_active = false
 		return
@@ -951,8 +951,8 @@ func _can_start_manual_interaction() -> bool:
 	return true
 
 
-func _can_start_pickpocket() -> bool:
-	if not pickpocket_enabled or not story_visibility_active or is_interacting:
+func _can_request_pickpocket() -> bool:
+	if not story_visibility_active or is_interacting:
 		return false
 	if not player_nearby or nearby_player == null:
 		return false
@@ -962,6 +962,17 @@ func _can_start_pickpocket() -> bool:
 		return false
 	var dialogue_box := _get_dialogue_box()
 	return dialogue_box == null or not dialogue_box.is_open
+
+
+func _try_start_pickpocket(body: Node2D) -> void:
+	if not npc_metadata_loaded and not _get_npc_metadata_id().is_empty():
+		var metadata_response: Dictionary = await _load_npc_metadata()
+		if not bool(metadata_response.get("success", false)):
+			return
+	if not pickpocket_enabled:
+		_add_system_warning(LocalizationManager.text("ui.thieving.invalid_target"))
+		return
+	await _start_pickpocket(body)
 
 
 func _start_pickpocket(body: Node2D) -> void:

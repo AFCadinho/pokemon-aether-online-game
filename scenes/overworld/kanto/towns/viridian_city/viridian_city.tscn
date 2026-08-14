@@ -703,11 +703,9 @@ position = Vector2(-656, -80)
 [node name="LeagueFanDorian" parent="Entities/NPCs" unique_id=224334671 instance=ExtResource("24_dialogue")]
 position = Vector2(2048, 1024)
 npc_id = "kanto_viridian_city_league_fan_dorian"
-npc_definition_id = "trainer_class_hiker"
+npc_definition_id = "trainer_class_elder"
 display_name = "League Fan Dorian"
-npc_sprite_frames = ExtResource("28_hiker")
-pickpocket_enabled = true
-pickpocket_npc_type = "civilian"
+npc_sprite_frames = ExtResource("25_elder")
 
 [node name="ForestScoutNico" parent="Entities/NPCs" unique_id=636499515 instance=ExtResource("24_dialogue")]
 position = Vector2(1408, 640)
@@ -716,9 +714,6 @@ npc_definition_id = "trainer_class_bug_catcher"
 display_name = "Bug Catcher Nico"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("27_bug_catcher")
-pickpocket_enabled = true
-pickpocket_npc_type = "trainer"
-pickpocket_required_level = 10
 
 [node name="SchoolKidJune" parent="Entities/NPCs" unique_id=1310082468 instance=ExtResource("24_dialogue")]
 position = Vector2(2624, 992)
@@ -737,9 +732,6 @@ display_name = "Catching Mentor Gideon"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("25_elder")
 preload_quest_markers = true
-pickpocket_enabled = true
-pickpocket_npc_type = "veteran"
-pickpocket_required_level = 20
 
 [node name="EVAssistantEli" parent="Entities/NPCs" unique_id=950958255 instance=ExtResource("24_dialogue")]
 position = Vector2(1088, 1216)
