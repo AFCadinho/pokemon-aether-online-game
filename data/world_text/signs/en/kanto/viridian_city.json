@@ -1,0 +1,33 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_viridian_city",
+  "signs": [
+    {
+      "id": "kanto_viridian_city_jail",
+      "type": "building",
+      "title": "Viridian City Jail",
+      "lines": [
+        "Viridian City Jail",
+        "Trainers caught thieving serve their sentence here. Bail for eligible detainees can be paid inside."
+      ]
+    },
+    {
+      "id": "kanto_viridian_city_trainer_school",
+      "type": "building",
+      "title": "Viridian Trainer School",
+      "lines": [
+        "Viridian Trainer School",
+        "Learn the basics of battling and how Effort Values strengthen your Pokémon."
+      ]
+    },
+    {
+      "id": "kanto_viridian_city_gym",
+      "type": "building",
+      "title": "Viridian City Pokémon Gym",
+      "lines": [
+        "Viridian City Pokémon Gym",
+        "The Gym Leader is currently away."
+      ]
+    }
+  ]
+}

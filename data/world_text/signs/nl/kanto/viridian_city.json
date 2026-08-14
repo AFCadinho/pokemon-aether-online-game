@@ -1,0 +1,33 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_viridian_city",
+  "signs": [
+    {
+      "id": "kanto_viridian_city_jail",
+      "type": "building",
+      "title": "Gevangenis van Viridian City",
+      "lines": [
+        "Gevangenis van Viridian City",
+        "Trainers die op diefstal worden betrapt, zitten hier hun straf uit. Voor Trainers die daarvoor in aanmerking komen, kan binnen borgtocht worden betaald."
+      ]
+    },
+    {
+      "id": "kanto_viridian_city_trainer_school",
+      "type": "building",
+      "title": "Trainerschool van Viridian",
+      "lines": [
+        "Trainerschool van Viridian",
+        "Leer hier de basis van Pokémon-gevechten en hoe Effort Values je Pokémon sterker maken."
+      ]
+    },
+    {
+      "id": "kanto_viridian_city_gym",
+      "type": "building",
+      "title": "Pokémon Gym van Viridian City",
+      "lines": [
+        "Pokémon Gym van Viridian City",
+        "De Gym Leader is momenteel afwezig."
+      ]
+    }
+  ]
+}

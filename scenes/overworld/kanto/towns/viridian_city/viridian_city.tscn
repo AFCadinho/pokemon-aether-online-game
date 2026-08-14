@@ -854,9 +854,18 @@ interactable_id = "kanto_viridian_city_aether_beacon"
 
 [node name="JailSign" parent="Entities/Interactables/Signs" unique_id=1449815395 instance=ExtResource("16_vofo1")]
 position = Vector2(1680, 1456)
+sign_id = "kanto_viridian_city_jail"
+sign_type = "building"
 
 [node name="TrainerSchoolSign" parent="Entities/Interactables/Signs" unique_id=1013177921 instance=ExtResource("16_vofo1")]
 position = Vector2(1840, 912)
+sign_id = "kanto_viridian_city_trainer_school"
+sign_type = "building"
+
+[node name="GymSign" parent="Entities/Interactables/Signs" unique_id=1302012627 instance=ExtResource("16_vofo1")]
+position = Vector2(1392, 432)
+sign_id = "kanto_viridian_city_gym"
+sign_type = "building"
 
 [node name="Locks" type="Node2D" parent="Entities/Interactables" unique_id=1310467494]
 
