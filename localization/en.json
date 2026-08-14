@@ -91,6 +91,8 @@
   "ui.quest.log_subtitle": "Track the main story, take on side quests, and revisit completed adventures.",
   "ui.quest.main_story": "Main Story",
   "ui.quest.side_quest": "Side Quest",
+  "ui.quest.previous_side": "Show previous side quest",
+  "ui.quest.next_side": "Show next side quest",
   "ui.quest.objectives": "Objectives",
   "ui.quest.rewards": "Rewards",
   "ui.quest.list_heading": "Quest Journal",

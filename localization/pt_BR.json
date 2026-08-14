@@ -91,6 +91,8 @@
   "ui.quest.log_subtitle": "Acompanhe a história principal, aceite missões secundárias e reveja suas aventuras concluídas.",
   "ui.quest.main_story": "História Principal",
   "ui.quest.side_quest": "Missão Secundária",
+  "ui.quest.previous_side": "Mostrar missão secundária anterior",
+  "ui.quest.next_side": "Mostrar próxima missão secundária",
   "ui.quest.objectives": "Objetivos",
   "ui.quest.rewards": "Recompensa",
   "ui.quest.list_heading": "Diário de Missões",

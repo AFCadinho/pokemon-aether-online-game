@@ -4,6 +4,7 @@
 
 **Added**
 
+- The HUD quest tracker can now cycle between multiple active side quests.
 - Successful NPC heals now play a dedicated Pokémon recovery jingle.
 - Super-effective attacks now use a distinct hit sound when they deal damage.
 - Item discoveries and NPC item rewards now play their own acquisition jingles.

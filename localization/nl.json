@@ -91,6 +91,8 @@
   "ui.quest.log_subtitle": "Volg het hoofdverhaal, pak side quests op en bekijk je voltooide avonturen.",
   "ui.quest.main_story": "Hoofdverhaal",
   "ui.quest.side_quest": "Side quest",
+  "ui.quest.previous_side": "Vorige side quest tonen",
+  "ui.quest.next_side": "Volgende side quest tonen",
   "ui.quest.objectives": "Doelen",
   "ui.quest.rewards": "Beloning",
   "ui.quest.list_heading": "Questoverzicht",

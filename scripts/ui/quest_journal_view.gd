@@ -30,11 +30,16 @@ var side_tracker_type_label: Label
 var side_tracker_title_label: Label
 var side_tracker_objective_label: Label
 var side_tracker_progress_label: Label
+var side_tracker_previous_button: Button
+var side_tracker_next_button: Button
+var side_tracker_position_label: Label
 var tracker_collapse_button: Button
 var tracker_top_offset := 76.0
 var tracker_collapsed := false
 var has_main_tracker := false
 var has_side_tracker := false
+var side_tracker_entries: Array[Dictionary] = []
+var tracked_side_quest_id := ""
 
 var modal_layer: Control
 var journal_panel: PanelContainer
@@ -209,11 +214,24 @@ func _build_tracker() -> void:
 	side_stack.add_theme_constant_override("separation", 2)
 	side_row.add_child(side_stack)
 	var side_header := HBoxContainer.new()
-	side_header.add_theme_constant_override("separation", 8)
+	side_header.add_theme_constant_override("separation", 4)
 	side_stack.add_child(side_header)
 	side_tracker_type_label = _label(10, SIDE_QUEST_ACCENT)
 	side_tracker_type_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	side_header.add_child(side_tracker_type_label)
+	side_tracker_previous_button = _side_tracker_navigation_button("‹")
+	side_tracker_previous_button.name = "PreviousSideQuestButton"
+	side_tracker_previous_button.pressed.connect(_on_previous_side_quest_pressed)
+	side_header.add_child(side_tracker_previous_button)
+	side_tracker_position_label = _label(9, MUTED_TEXT)
+	side_tracker_position_label.custom_minimum_size = Vector2(25, 0)
+	side_tracker_position_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	side_tracker_position_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	side_header.add_child(side_tracker_position_label)
+	side_tracker_next_button = _side_tracker_navigation_button("›")
+	side_tracker_next_button.name = "NextSideQuestButton"
+	side_tracker_next_button.pressed.connect(_on_next_side_quest_pressed)
+	side_header.add_child(side_tracker_next_button)
 	side_tracker_progress_label = _label(10, MUTED_TEXT)
 	side_tracker_progress_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	side_header.add_child(side_tracker_progress_label)
@@ -442,19 +460,40 @@ func _refresh_tracker() -> void:
 	var objective: Dictionary = journal_service.get_active_objective(quest) if journal_service != null else {}
 	var side_quest: Dictionary = {}
 	var side_objective: Dictionary = {}
+	side_tracker_entries.clear()
 	if journal_service != null:
 		for side_quest_value: Variant in journal_service.get_active_side_quests():
 			var candidate: Dictionary = side_quest_value as Dictionary
 			var candidate_objective: Dictionary = journal_service.get_active_objective(candidate)
-			if not candidate_objective.is_empty():
-				side_quest = candidate
-				side_objective = candidate_objective
-				break
+			if candidate_objective.is_empty():
+				continue
+			side_tracker_entries.append({
+				"quest": candidate,
+				"objective": candidate_objective,
+			})
+	var side_tracker_index := _tracked_side_quest_index()
+	if side_tracker_index >= 0:
+		var selected_entry: Dictionary = side_tracker_entries[side_tracker_index]
+		side_quest = selected_entry.get("quest", {}) as Dictionary
+		side_objective = selected_entry.get("objective", {}) as Dictionary
+		tracked_side_quest_id = str(side_quest.get("questId", ""))
+	else:
+		tracked_side_quest_id = ""
 
 	has_main_tracker = not quest.is_empty() and not objective.is_empty()
 	has_side_tracker = not side_quest.is_empty() and not side_objective.is_empty()
 	tracker_panel.tooltip_text = localization_manager.text("ui.quest.open_log")
 	side_tracker_panel.tooltip_text = localization_manager.text("ui.quest.open_log")
+	var can_cycle_side_quests := side_tracker_entries.size() > 1
+	side_tracker_previous_button.visible = can_cycle_side_quests
+	side_tracker_next_button.visible = can_cycle_side_quests
+	side_tracker_position_label.visible = can_cycle_side_quests
+	side_tracker_previous_button.tooltip_text = localization_manager.text("ui.quest.previous_side")
+	side_tracker_next_button.tooltip_text = localization_manager.text("ui.quest.next_side")
+	side_tracker_position_label.text = (
+		"%d/%d" % [side_tracker_index + 1, side_tracker_entries.size()]
+		if can_cycle_side_quests else ""
+	)
 	if has_main_tracker:
 		tracker_type_label.text = localization_manager.text("ui.quest.main_story").to_upper()
 		tracker_title_label.text = _localized_definition(
@@ -523,6 +562,34 @@ func _on_tracker_collapse_pressed() -> void:
 	tracker_collapsed = not tracker_collapsed
 	_layout_trackers()
 	tracker_layout_changed.emit()
+
+
+func _on_previous_side_quest_pressed() -> void:
+	_cycle_side_quest(-1)
+
+
+func _on_next_side_quest_pressed() -> void:
+	_cycle_side_quest(1)
+
+
+func _cycle_side_quest(direction: int) -> void:
+	if side_tracker_entries.size() <= 1:
+		return
+	var current_index := _tracked_side_quest_index()
+	var next_index := posmod(current_index + direction, side_tracker_entries.size())
+	var next_entry: Dictionary = side_tracker_entries[next_index]
+	var next_quest: Dictionary = next_entry.get("quest", {}) as Dictionary
+	tracked_side_quest_id = str(next_quest.get("questId", ""))
+	_refresh_tracker()
+
+
+func _tracked_side_quest_index() -> int:
+	for index: int in range(side_tracker_entries.size()):
+		var entry: Dictionary = side_tracker_entries[index]
+		var quest: Dictionary = entry.get("quest", {}) as Dictionary
+		if str(quest.get("questId", "")) == tracked_side_quest_id:
+			return index
+	return 0 if not side_tracker_entries.is_empty() else -1
 
 
 func _refresh_journal() -> void:
@@ -880,6 +947,21 @@ func _label(font_size: int, color: Color) -> Label:
 	result.add_theme_font_size_override("font_size", font_size)
 	result.add_theme_color_override("font_color", color)
 	return result
+
+
+func _side_tracker_navigation_button(label: String) -> Button:
+	var button := Button.new()
+	button.text = label
+	button.custom_minimum_size = Vector2(20, 18)
+	button.focus_mode = Control.FOCUS_NONE
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.add_theme_font_size_override("font_size", 13)
+	button.add_theme_color_override("font_color", SIDE_QUEST_ACCENT)
+	button.add_theme_color_override("font_hover_color", TEXT)
+	button.add_theme_stylebox_override("normal", _style(SURFACE_INSET, Color("#8a7045"), 4, 1))
+	button.add_theme_stylebox_override("hover", _style(SURFACE_RAISED, SIDE_QUEST_ACCENT, 4, 1))
+	button.add_theme_stylebox_override("pressed", _style(TRACKER_SURFACE, SIDE_QUEST_ACCENT, 4, 1))
+	return button
 
 
 func _clear_children_except(container: Node, preserved: Node = null) -> void:

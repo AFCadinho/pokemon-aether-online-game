@@ -7,6 +7,8 @@ const QUEST_LOCALIZATION_KEYS: Array[String] = [
 	"ui.quest.log_subtitle",
 	"ui.quest.main_story",
 	"ui.quest.side_quest",
+	"ui.quest.previous_side",
+	"ui.quest.next_side",
 	"ui.quest.list_heading",
 	"ui.quest.objectives",
 	"ui.quest.rewards",
@@ -128,6 +130,21 @@ func _run() -> void:
 				"targetValue": 1,
 			}],
 		}, {
+			"questId": "find_friend",
+			"storylineId": "pallet_side_two",
+			"definitionVersion": 1,
+			"questType": "side",
+			"titleKey": "",
+			"summaryKey": "",
+			"status": "active",
+			"steps": [{
+				"stepId": "ask_around",
+				"objectiveKey": "",
+				"status": "active",
+				"currentValue": 0,
+				"targetValue": 1,
+			}],
+		}, {
 			"questId": "lost_keepsake",
 			"storylineId": "pallet_side_offer",
 			"definitionVersion": 1,
@@ -149,11 +166,11 @@ func _run() -> void:
 	var active_objective: Dictionary = journal_service.get_active_objective(active_quest)
 	_expect(active_quest.get("questId", "") == "choose_starter", "journal selects the active MSQ")
 	_expect(
-		journal_service.get_active_side_quests().size() == 1,
+		journal_service.get_active_side_quests().size() == 2,
 		"journal exposes active side quests without replacing the active MSQ"
 	)
 	_expect(
-		journal_service.get_entries().size() == 2,
+		journal_service.get_entries().size() == 3,
 		"available side-quest offers stay hidden until the player accepts them"
 	)
 	_expect(
@@ -199,6 +216,30 @@ func _run() -> void:
 		and view.side_tracker_title_label.text == "Help Neighbor"
 		and view.side_tracker_objective_label.text == "› Find Parcel",
 		"HUD renders active side-quest data below the main story"
+	)
+	_expect(
+		view.side_tracker_previous_button.visible
+		and view.side_tracker_next_button.visible
+		and view.side_tracker_position_label.text == "1/2",
+		"multiple active side quests expose compact tracker navigation"
+	)
+	view.side_tracker_next_button.pressed.emit()
+	_expect(
+		view.side_tracker_title_label.text == "Find Friend"
+		and view.side_tracker_objective_label.text == "› Ask Around"
+		and view.side_tracker_position_label.text == "2/2",
+		"next side-quest navigation updates the visible tracker card"
+	)
+	view.refresh()
+	_expect(
+		view.side_tracker_title_label.text == "Find Friend",
+		"the selected side quest remains stable across tracker refreshes"
+	)
+	view.side_tracker_previous_button.pressed.emit()
+	_expect(
+		view.side_tracker_title_label.text == "Help Neighbor"
+		and view.side_tracker_position_label.text == "1/2",
+		"previous side-quest navigation wraps back through active quests"
 	)
 	_expect(view.get_visible_tracker_count() == 2, "HUD reports both active quest trackers")
 	view.tracker_collapse_button.pressed.emit()
@@ -247,9 +288,9 @@ func _run() -> void:
 	localization_manager.set_locale("en")
 	await process_frame
 	_expect(view.detail_steps.get_child_count() == 1, "journal renders only revealed objectives")
-	_expect(view.filter_buttons["all"].text == "All  2", "all filter includes accepted quests only")
+	_expect(view.filter_buttons["all"].text == "All  3", "all filter includes accepted quests only")
 	_expect(view.filter_buttons["main"].text == "Main  1", "main filter reports its quest count")
-	_expect(view.filter_buttons["side"].text == "Side  1", "side filter includes accepted side quests")
+	_expect(view.filter_buttons["side"].text == "Side  2", "side filter includes accepted side quests")
 	_expect(
 		view.filter_buttons["completed"].text == "Completed  0",
 		"completed filter reports its quest count"
@@ -322,6 +363,8 @@ func _run() -> void:
 	_expect(
 		view.tracker_panel.visible
 		and not view.side_tracker_panel.visible
+		and not view.side_tracker_previous_button.visible
+		and not view.side_tracker_next_button.visible
 		and view.get_visible_tracker_count() == 1,
 		"side tracker disappears when no active side quest remains"
 	)
@@ -350,6 +393,8 @@ func _run() -> void:
 	_expect(
 		not view.tracker_panel.visible
 		and view.side_tracker_panel.visible
+		and not view.side_tracker_previous_button.visible
+		and not view.side_tracker_next_button.visible
 		and view.side_tracker_panel.get_global_rect().position.y == 76.0
 		and view.get_visible_tracker_count() == 1,
 		"side quests occupy the first tracker position when no main quest is active"
