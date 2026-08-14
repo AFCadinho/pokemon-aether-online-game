@@ -21,7 +21,10 @@ func interact_with_player(player: Node2D) -> void:
 	var quest := StoryService.get_quest(QUEST_ID)
 	var quest_status := str(quest.get("status", "")).strip_edges().to_lower()
 	if quest_status == "available":
-		await show_dialogue()
+		if _is_lesson_offer_unlocked():
+			await _show_available_quest_offer(display_name)
+		else:
+			await show_dialogue()
 		return
 	if StoryService.is_requirement_met(QUEST_ID, RECEIVE_ROD_STEP_ID, "active"):
 		await super.interact_with_player(player)
@@ -33,6 +36,17 @@ func interact_with_player(player: Node2D) -> void:
 		await _show_completed_help()
 		return
 	await show_dialogue()
+
+
+func _is_lesson_offer_unlocked() -> bool:
+	return (
+		offered_quest_required_quest_id.is_empty()
+		or StoryService.is_requirement_met(
+			offered_quest_required_quest_id,
+			offered_quest_required_quest_step_id,
+			offered_quest_required_quest_status
+		)
+	)
 
 
 func _apply_npc_metadata(metadata: Dictionary) -> void:
