@@ -1122,6 +1122,12 @@ func _start_pickpocket(body: Node2D) -> void:
 			if str(result.get("outcome", "")) == "caught":
 				_face_body(body)
 			await PlayerGameStateService.refresh_story()
+			var experience_awarded := maxi(int(result.get("experienceAwarded", 0)), 0)
+			if experience_awarded > 0:
+				_add_system_message(LocalizationManager.text(
+					"ui.thieving.experience",
+					{"experience": experience_awarded}
+				))
 			if str(result.get("outcome", "")) == "success":
 				_add_system_message(LocalizationManager.text(
 					"ui.thieving.success",
