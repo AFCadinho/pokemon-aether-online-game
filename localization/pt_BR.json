@@ -722,6 +722,7 @@
   "ui.town_map.location.route_3.description": "Uma rota montanhosa a leste de Pewter City, rumo ao Mt. Moon.",
   "ui.key_item.received_pokedex": "Você recebeu a Pokédex! Ela foi colocada no bolso de Itens-Chave.",
   "ui.key_item.received_town_map": "Você recebeu o Mapa da Cidade! Ele foi colocado no bolso de Itens-Chave.",
+  "ui.oaks_lab.starter_received": "Você recebeu {pokemon} do Professor Oak!",
   "ui.pokedex.subtitle": "Pesquisa de espécies e dados de habitat",
   "ui.pokedex.header_hint": "Buscar · inspecionar · comparar",
   "ui.pokedex.species_index": "ÍNDICE DE ESPÉCIES",

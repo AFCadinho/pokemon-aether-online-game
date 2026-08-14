@@ -107,6 +107,14 @@ func interact_with_player(player: Node2D) -> void:
 		selected_species_name = claimed_name
 	PlayerSave.flags["received_starter"] = true
 	PlayerSave.flags["starter_species"] = selected_species_id
+	get_tree().call_group(
+		"ui_overlay",
+		"add_system_message",
+		LocalizationManager.text(
+			"ui.oaks_lab.starter_received",
+			{"pokemon": selected_species_name}
+		)
+	)
 	if last_starter_claim_already_completed:
 		_cancel_gary_starter_sequence()
 		await show_dialogue(
