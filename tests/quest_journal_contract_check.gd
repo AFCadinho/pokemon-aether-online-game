@@ -59,6 +59,7 @@ const QUEST_LOCALIZATION_KEYS: Array[String] = [
 	"story.kanto.learn_to_pickpocket.summary",
 	"story.kanto.learn_to_pickpocket.elderly",
 	"story.kanto.learn_to_pickpocket.child",
+	"story.kanto.learn_to_pickpocket.return_to_rook",
 	"story.kanto.catch_mankey.title",
 	"story.kanto.catch_mankey.summary",
 	"story.kanto.catch_mankey.catch",

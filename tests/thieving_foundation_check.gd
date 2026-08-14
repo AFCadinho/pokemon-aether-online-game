@@ -26,6 +26,7 @@ func _init() -> void:
 	_check("/game/thieving/pickpocket" in service, "Pickpocket uses the server endpoint")
 	_check("ui.thieving.locked" in npc and "is_unlocked" in service, "Pickpocket remains locked until Rook's lesson")
 	_check("learn_to_pickpocket" in mentor and "pickpocket_hotkey" in mentor, "Rook teaches the configurable pickpocket input")
+	_check("return_to_rook" in mentor and "claim_npc_item_reward" in mentor, "Rook completes the lesson and grants rewards only after the return step")
 	_check("BODY_MOVEMENT_PICKPOCKET" in npc and "create_timer(0.55)" in npc, "NPC interaction plays the one-shot pose")
 	_check("_try_start_pickpocket" in npc and "pickpocketProfile" in npc, "Pickpocket targets load their class from NPC metadata on demand")
 	_check("_is_player_behind_npc" in npc and "behind_direction" in npc, "Pickpocket attempts require the player to stand behind the target")
