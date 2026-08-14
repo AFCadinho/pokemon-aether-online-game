@@ -236,6 +236,7 @@ const POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE := Vector2i(263, 180)
 const POKEMON_SUMMARY_SPRITE_MAX_SIZE := Vector2(235, 155)
 const POKEMON_SUMMARY_SPRITE_MIN_SCALE := 0.72
 const POKEMON_SUMMARY_SPRITE_MAX_SCALE := 2.2
+const POKEMON_SUMMARY_SPRITE_SCALE_STEP := 0.25
 const POKEMON_SUMMARY_STATUS_ICON_WIDTH := 44
 const POKEMON_SUMMARY_STATUS_ICON_HEIGHT := 16
 const POKEMON_SUMMARY_STATUS_ICON_ROWS := {
@@ -14381,7 +14382,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	sprite_viewport_container.add_child(pokemon_summary_sprite_viewport)
 
 	pokemon_summary_animated_sprite = AnimatedSprite2D.new()
-	pokemon_summary_animated_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	pokemon_summary_animated_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	pokemon_summary_animated_sprite.position = Vector2(
 		float(POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE.x) * 0.5,
 		float(POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE.y) * 0.52
@@ -14391,6 +14392,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_sprite = TextureRect.new()
 	pokemon_summary_sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	pokemon_summary_sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	pokemon_summary_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	pokemon_summary_sprite.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	sprite_frame.add_child(pokemon_summary_sprite)
 	pokemon_summary_sprite.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -18958,7 +18960,17 @@ func _get_pokemon_summary_sprite_scale(frames: SpriteFrames) -> Vector2:
 		POKEMON_SUMMARY_SPRITE_MAX_SIZE.x / max(normalized_frame_size.x, 1.0),
 		POKEMON_SUMMARY_SPRITE_MAX_SIZE.y / max(normalized_frame_size.y, 1.0)
 	)
-	var scale_value: float = clamp(fit_scale * display_scale_multiplier, POKEMON_SUMMARY_SPRITE_MIN_SCALE, POKEMON_SUMMARY_SPRITE_MAX_SCALE)
+	# Preserve the size differences encoded in the source artwork. Fully fitting every
+	# small sprite made Pokémon such as Froakie fill the stage and exposed blurry pixels.
+	# A square-root enlargement keeps small species readable without normalizing every
+	# Pokémon to the same visual size; oversized species still shrink enough to fit.
+	var proportional_scale: float = fit_scale if fit_scale <= 1.0 else sqrt(fit_scale)
+	var scale_value: float = proportional_scale * display_scale_multiplier
+	scale_value = clamp(scale_value, POKEMON_SUMMARY_SPRITE_MIN_SCALE, POKEMON_SUMMARY_SPRITE_MAX_SCALE)
+	scale_value = min(scale_value, fit_scale)
+	if scale_value >= 1.0:
+		scale_value = round(scale_value / POKEMON_SUMMARY_SPRITE_SCALE_STEP) * POKEMON_SUMMARY_SPRITE_SCALE_STEP
+		scale_value = min(scale_value, fit_scale)
 	var texture_scale: float = scale_value / max(render_scale, 1.0)
 	return Vector2(texture_scale, texture_scale)
 
