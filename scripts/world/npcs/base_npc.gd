@@ -4,6 +4,7 @@ extends Node2D
 class_name BaseNPC
 
 const NpcDefinitionResource := preload("res://scripts/world/npcs/npc_definition.gd")
+const THIEVING_PROMPT_ICON: Texture2D = preload("res://assets/ui/thieving.svg")
 
 const MISSING_DIALOGUE_LINES: Array[String] = [
 	"This NPC has no dialogue.",
@@ -86,6 +87,8 @@ const NAMEPLATE_CENTER_X := NAMEPLATE_WIDTH * 0.5
 const NAMEPLATE_TEXT_PADDING := 10.0
 const NAMEPLATE_MIN_NAME_WIDTH := 44.0
 const NAMEPLATE_MAX_NAME_WIDTH := 132.0
+const THIEVING_PROMPT_SIZE := Vector2(30.0, 30.0)
+const THIEVING_PROMPT_POSITION := Vector2(43.0, -91.0)
 const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.gd")
 
 @onready var sprite: AnimatedSprite2D = $Look/AnimatedSprite2D
@@ -102,6 +105,7 @@ var metadata_display_name := ""
 var nameplate: Control
 var nameplate_background: Panel
 var nameplate_label: Label
+var thieving_prompt_button: Button
 var quest_marker_bindings: Array[Dictionary] = []
 var quest_marker: PanelContainer
 var quest_marker_label: Label
@@ -138,6 +142,7 @@ func _ready_base_npc() -> void:
 	_schedule_next_npc_movement_step()
 	_update_sort_z()
 	_setup_nameplate()
+	_setup_thieving_prompt()
 	var story_service := get_node_or_null("/root/StoryService")
 	if story_service != null and not story_service.story_changed.is_connected(_on_story_changed):
 		story_service.story_changed.connect(_on_story_changed)
@@ -598,8 +603,6 @@ func _sync_nameplate() -> void:
 		return
 
 	var name_text := display_name.strip_edges()
-	if pickpocket_enabled and player_nearby:
-		name_text += "  [T]"
 	nameplate_label.text = name_text
 	nameplate.visible = name_text != ""
 	nameplate_label.visible = name_text != ""
@@ -629,6 +632,65 @@ func _make_nameplate_background_style() -> StyleBoxFlat:
 	style.set_corner_radius_all(6)
 	style.shadow_color = Color(0.0, 0.0, 0.0, 0.35)
 	style.shadow_size = 2
+	return style
+
+
+func _setup_thieving_prompt() -> void:
+	if thieving_prompt_button != null:
+		return
+
+	thieving_prompt_button = Button.new()
+	thieving_prompt_button.name = "ThievingPromptButton"
+	thieving_prompt_button.visible = false
+	thieving_prompt_button.text = ""
+	thieving_prompt_button.icon = THIEVING_PROMPT_ICON
+	thieving_prompt_button.expand_icon = true
+	thieving_prompt_button.focus_mode = Control.FOCUS_NONE
+	thieving_prompt_button.mouse_filter = Control.MOUSE_FILTER_STOP
+	thieving_prompt_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	thieving_prompt_button.custom_minimum_size = THIEVING_PROMPT_SIZE
+	thieving_prompt_button.size = THIEVING_PROMPT_SIZE
+	thieving_prompt_button.position = THIEVING_PROMPT_POSITION
+	thieving_prompt_button.z_as_relative = false
+	thieving_prompt_button.z_index = RenderingServer.CANVAS_ITEM_Z_MAX
+	thieving_prompt_button.tooltip_text = _get_thieving_prompt_tooltip()
+	_apply_thieving_prompt_style(thieving_prompt_button)
+	thieving_prompt_button.pressed.connect(Callable(self, "_on_thieving_prompt_pressed"))
+	add_child(thieving_prompt_button)
+
+
+func _apply_thieving_prompt_style(button: Button) -> void:
+	button.add_theme_stylebox_override(
+		"normal",
+		_make_thieving_prompt_style(Color("#111127f2"), Color("#b67afff2"))
+	)
+	button.add_theme_stylebox_override(
+		"hover",
+		_make_thieving_prompt_style(Color("#211542fa"), Color("#e2b6ffff"))
+	)
+	button.add_theme_stylebox_override(
+		"pressed",
+		_make_thieving_prompt_style(Color("#0b0a1dfc"), Color("#8758cfff"))
+	)
+	button.add_theme_color_override("icon_normal_color", Color.WHITE)
+	button.add_theme_color_override("icon_hover_color", Color.WHITE)
+	button.add_theme_color_override("icon_pressed_color", Color("#ddd2eaff"))
+	button.add_theme_constant_override("h_separation", 0)
+	button.add_theme_constant_override("icon_max_width", 22)
+
+
+func _make_thieving_prompt_style(background_color: Color, border_color: Color) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = background_color
+	style.border_color = border_color
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(9)
+	style.content_margin_left = 4.0
+	style.content_margin_top = 4.0
+	style.content_margin_right = 4.0
+	style.content_margin_bottom = 4.0
+	style.shadow_color = Color(0.0, 0.0, 0.0, 0.5)
+	style.shadow_size = 3
 	return style
 
 
@@ -790,6 +852,7 @@ func _process_base_npc() -> void:
 
 	_update_sort_z()
 	await _process_npc_movement()
+	_sync_thieving_prompt()
 	if _can_request_pickpocket():
 		await _try_start_pickpocket(nearby_player)
 		_after_base_npc_process()
@@ -958,10 +1021,65 @@ func _can_request_pickpocket() -> bool:
 		return false
 	if GameState.is_overworld_input_locked() or _is_ui_typing():
 		return false
-	if not Input.is_action_just_pressed("pickpocket") or not _is_player_facing_npc(nearby_player):
+	if not Input.is_action_just_pressed("pickpocket"):
+		return false
+	if not _is_player_in_pickpocket_position(nearby_player):
+		return false
+	if not npc_metadata_loaded and not _get_npc_metadata_id().is_empty():
 		return false
 	var dialogue_box := _get_dialogue_box()
 	return dialogue_box == null or not dialogue_box.is_open
+
+
+func _is_player_in_pickpocket_position(body: Node2D) -> bool:
+	return _is_player_behind_npc(body) and _is_player_facing_npc(body)
+
+
+func _is_player_behind_npc(body: Node2D) -> bool:
+	if body == null:
+		return false
+	var npc_direction := _get_cardinal_direction(facing_direction)
+	var behind_direction := Vector2i(-roundi(npc_direction.x), -roundi(npc_direction.y))
+	var npc_tile := _to_tile(get_feet_position())
+	var player_tile := _to_tile(_get_body_feet_position(body))
+	for distance: int in range(1, manual_interaction_reach_tiles + 1):
+		if npc_tile + behind_direction * distance == player_tile:
+			return true
+	return false
+
+
+func _sync_thieving_prompt() -> void:
+	if thieving_prompt_button == null:
+		return
+	thieving_prompt_button.tooltip_text = _get_thieving_prompt_tooltip()
+	thieving_prompt_button.visible = (
+		story_visibility_active
+		and not is_interacting
+		and player_nearby
+		and nearby_player != null
+		and npc_metadata_loaded
+		and pickpocket_enabled
+		and ThievingService.state_loaded
+		and ThievingService.is_unlocked()
+		and ThievingService.get_level() >= pickpocket_required_level
+		and not ThievingService.is_npc_attempted_today(_get_npc_metadata_id())
+		and not GameState.is_overworld_input_locked()
+		and _is_player_in_pickpocket_position(nearby_player)
+	)
+
+
+func _get_thieving_prompt_tooltip() -> String:
+	return LocalizationManager.text(
+		"ui.thieving.prompt.pickpocket",
+		{"hotkey": SettingsManager.get_input_binding_label("pickpocket")}
+	)
+
+
+func _on_thieving_prompt_pressed() -> void:
+	if thieving_prompt_button == null or not thieving_prompt_button.visible:
+		return
+	await _try_start_pickpocket(nearby_player)
+	_sync_thieving_prompt()
 
 
 func _try_start_pickpocket(body: Node2D) -> void:
@@ -978,7 +1096,6 @@ func _try_start_pickpocket(body: Node2D) -> void:
 func _start_pickpocket(body: Node2D) -> void:
 	is_interacting = true
 	GameState.lock_overworld_input()
-	_face_body(body)
 	if body.has_method("face_world_position"):
 		body.face_world_position(get_feet_position())
 
@@ -1002,6 +1119,8 @@ func _start_pickpocket(body: Node2D) -> void:
 			body.call("clear_activity_style")
 		var result: Dictionary = await ThievingService.attempt_pickpocket(target_id)
 		if bool(result.get("success", false)):
+			if str(result.get("outcome", "")) == "caught":
+				_face_body(body)
 			await PlayerGameStateService.refresh_story()
 			if str(result.get("outcome", "")) == "success":
 				_add_system_message(LocalizationManager.text(
@@ -1223,6 +1342,7 @@ func _apply_npc_metadata(metadata: Dictionary) -> void:
 		pickpocket_enabled = not profile.is_empty()
 		pickpocket_npc_type = str(profile.get("npcType", "")).strip_edges().to_lower()
 		pickpocket_required_level = clampi(int(profile.get("requiredLevel", 1)), 1, 100)
+	_sync_thieving_prompt()
 
 	quest_marker_bindings.clear()
 	var marker_values: Variant = metadata.get("questMarkers", [])
@@ -1239,8 +1359,11 @@ func _on_locale_changed(_locale: String) -> void:
 	metadata_dialogue_id = ""
 	quest_marker_bindings.clear()
 	_refresh_quest_marker()
+	_sync_thieving_prompt()
 	if preload_quest_markers:
 		_initialize_quest_markers.call_deferred()
+	elif player_nearby:
+		_refresh_nearby_pickpocket_metadata.call_deferred()
 
 
 func _on_story_changed(_revision: int) -> void:
@@ -1267,6 +1390,7 @@ func _apply_story_visibility(allow_deferred_hide := false) -> void:
 		nearby_player = null
 		if quest_marker != null:
 			quest_marker.visible = false
+	_sync_thieving_prompt()
 
 
 func _is_story_visibility_active() -> bool:
@@ -1327,6 +1451,8 @@ func _on_interaction_area_body_entered(body: Node2D) -> void:
 		player_nearby = true
 		nearby_player = body
 		_sync_nameplate()
+		_refresh_nearby_pickpocket_metadata.call_deferred()
+		_sync_thieving_prompt()
 
 
 func _on_interaction_area_body_exited(body: Node2D) -> void:
@@ -1335,6 +1461,15 @@ func _on_interaction_area_body_exited(body: Node2D) -> void:
 		if body == nearby_player:
 			nearby_player = null
 		_sync_nameplate()
+		_sync_thieving_prompt()
+
+
+func _refresh_nearby_pickpocket_metadata() -> void:
+	if not player_nearby or nearby_player == null:
+		return
+	if not npc_metadata_loaded and not _get_npc_metadata_id().is_empty():
+		await _load_npc_metadata()
+	_sync_thieving_prompt()
 
 
 func _wait_for_body_tile_movement(body: Node2D) -> void:

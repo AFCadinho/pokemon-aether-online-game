@@ -16,7 +16,7 @@ const SUCCESS_COLOR := Color("#79d99b")
 const LOCKED_COLOR := Color("#738092")
 const COMPLETE_COLOR := Color("#84a0b8")
 const FISHING_ICON: Texture2D = preload("res://assets/ui/fishing_rod.svg")
-const THIEVING_ICON: Texture2D = preload("res://assets/ui/skills.svg")
+const THIEVING_ICON: Texture2D = preload("res://assets/ui/thieving.svg")
 
 var main_panel: PanelContainer
 var title_label: Label
