@@ -131,6 +131,7 @@ func select_fishing_rod(item_id: String, area_id := "") -> Dictionary:
 
 
 func apply_fishing_progression(progression: Dictionary) -> void:
+	GameState.fishing_skill_unlocked = bool(progression.get("unlocked", false))
 	GameState.fishing_level = maxi(int(progression.get("level", 1)), 1)
 	GameState.fishing_total_experience = maxi(int(progression.get("totalExperience", 0)), 0)
 	GameState.fishing_experience_into_level = maxi(int(progression.get("experienceIntoLevel", 0)), 0)

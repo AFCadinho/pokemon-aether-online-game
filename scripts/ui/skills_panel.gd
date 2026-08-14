@@ -323,6 +323,7 @@ func _render_skills(skills: Array) -> void:
 	for skill_value: Variant in skills:
 		var skill := skill_value as Dictionary
 		var skill_id := str(skill.get("id", ""))
+		var skill_unlocked := bool(skill.get("unlocked", true))
 		var button := Button.new()
 		button.custom_minimum_size = Vector2(0, 96)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -338,9 +339,16 @@ func _render_skills(skills: Array) -> void:
 		button.add_theme_font_size_override("font_size", 12)
 		button.text = "%s\n%s" % [
 			_text(str(skill.get("nameKey", "ui.skills.%s.name" % skill_id))),
-			_text("ui.skills.level_short", {"level": maxi(int(skill.get("level", 1)), 1)}),
+			(
+				_text("ui.skills.level_short", {"level": maxi(int(skill.get("level", 1)), 1)})
+				if skill_unlocked
+				else "🔒 %s" % _text("ui.skills.locked")
+			),
 		]
-		button.add_theme_stylebox_override("normal", _make_panel_style(CARD_BACKGROUND, PANEL_BORDER, 9, 1))
+		button.add_theme_stylebox_override(
+			"normal",
+			_make_panel_style(CARD_BACKGROUND, PANEL_BORDER if skill_unlocked else Color("#35404c"), 9, 1)
+		)
 		button.add_theme_stylebox_override("hover", _make_panel_style(CARD_HOVER, CARD_SELECTED_BORDER, 9, 1))
 		button.add_theme_stylebox_override("pressed", _make_panel_style(CARD_SELECTED, CARD_SELECTED_BORDER, 9, 1))
 		button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
@@ -366,10 +374,26 @@ func _render_detail(skill: Dictionary) -> void:
 	var skill_id := str(skill.get("id", ""))
 	var level := maxi(int(skill.get("level", 1)), 1)
 	var max_level := maxi(int(skill.get("maxLevel", 100)), level)
+	var skill_unlocked := bool(skill.get("unlocked", true))
 	detail_icon.texture = _skill_icon(skill_id)
+	detail_icon.modulate = Color.WHITE if skill_unlocked else Color("#788492")
 	detail_name.text = _text(str(skill.get("nameKey", "ui.skills.%s.name" % skill_id)))
 	detail_description.text = _text(str(skill.get("descriptionKey", "ui.skills.%s.description" % skill_id)))
-	detail_level.text = _text("ui.skills.level", {"level": level})
+	detail_level.text = (
+		_text("ui.skills.level", {"level": level})
+		if skill_unlocked
+		else "🔒 %s" % _text("ui.skills.locked")
+	)
+	experience_bar.visible = skill_unlocked
+	experience_label.visible = skill_unlocked
+	var unlock_title := main_panel.find_child("UnlockTitle", true, false) as Label
+	if unlock_title != null:
+		unlock_title.visible = skill_unlocked
+	unlocks_container.visible = skill_unlocked
+	if not skill_unlocked:
+		stats_label.text = _text(str(skill.get("unlockHintKey", "ui.skills.%s.unlock_hint" % skill_id)))
+		targets_section.visible = false
+		return
 	experience_bar.value = clampf(float(skill.get("progressPercent", 0.0)), 0.0, 100.0)
 	if level >= max_level:
 		experience_label.text = _text("ui.skills.max_level")

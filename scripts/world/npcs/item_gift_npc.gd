@@ -70,6 +70,12 @@ func interact_with_player(_player: Node2D) -> void:
 				"add_system_message",
 				LocalizationManager.text("ui.key_item.received_town_map")
 			)
+		elif str(result.get("itemId", "")).strip_edges().to_lower() == "old-rod":
+			get_tree().call_group(
+				"ui_overlay",
+				"add_system_message",
+				LocalizationManager.text("ui.skill.fishing.unlocked")
+			)
 		SfxManager.play("item_received")
 	else:
 		reward_resolved = true

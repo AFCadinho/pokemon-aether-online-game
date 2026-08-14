@@ -50,6 +50,8 @@ func _run() -> void:
 	var test_skills: Array = [
 		{
 			"id": "fishing",
+			"unlocked": false,
+			"unlockHintKey": "ui.skills.fishing.unlock_hint",
 			"nameKey": "ui.skills.fishing.name",
 			"descriptionKey": "ui.skills.fishing.description",
 			"level": 10,
@@ -94,6 +96,13 @@ func _run() -> void:
 	_check((panel.get("skill_cards") as GridContainer).get_child_count() == 2, "Fishing and Thieving receive separate overview cards")
 	_check((panel.get("overview_panel") as VBoxContainer).visible, "Skills opens on the level overview")
 	_check(not (panel.get("detail_panel") as PanelContainer).visible, "Skill details stay hidden until a skill is selected")
+	panel.call("_select_skill", "fishing")
+	_check((panel.get("detail_level") as Label).text.contains("Locked"), "locked Fishing is clearly identified")
+	_check(not (panel.get("experience_bar") as ProgressBar).visible, "locked Fishing hides unavailable progression")
+	_check((panel.get("stats_label") as Label).text.contains("Fishing Guru"), "locked Fishing explains where it is learned")
+	test_skills[0]["unlocked"] = true
+	skills_service.set("skills", test_skills)
+	panel.call("_show_overview")
 	panel.call("_select_skill", "thieving")
 	_check(not (panel.get("overview_panel") as VBoxContainer).visible, "Selecting Thieving leaves the overview")
 	_check((panel.get("detail_panel") as PanelContainer).visible, "Selecting Thieving opens its dedicated interface")

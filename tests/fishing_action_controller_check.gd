@@ -51,6 +51,10 @@ func _init() -> void:
 		"action bar exposes a clickable rod selector"
 	)
 	_check(
+		controller_source.contains("action_slot.visible = GameState.fishing_skill_unlocked"),
+		"the fishing action remains hidden until the Guru unlocks the skill"
+	)
+	_check(
 		controller_source.contains('const FISHING_ACTION_ICON := preload("res://assets/ui/fishing_rod.svg")')
 		and controller_source.contains("action_button.texture_normal = FISHING_ACTION_ICON")
 		and controller_source.contains("header_icon.texture = FISHING_ACTION_ICON"),
