@@ -151,16 +151,35 @@ func _run() -> void:
 	_check((panel.get("catalog_tab_button") as Button).text == "Targets", "the secondary Thieving tab is labelled for targets")
 	_check(panel.get("targets_scroll") is ScrollContainer, "daily targets use an internal scroll area")
 	_check(panel.get_combined_minimum_size().y <= 600.0, "the target catalog does not lengthen the Skills window")
-	_check((panel.get("targets_container") as VBoxContainer).get_child_count() == 6, "daily targets are grouped beneath town headers")
-	var viridian_header := (panel.get("targets_container") as VBoxContainer).get_child(0) as HBoxContainer
-	var pewter_header := (panel.get("targets_container") as VBoxContainer).get_child(4) as HBoxContainer
-	_check((viridian_header.get_child(0) as Label).text == "Viridian City", "Viridian targets share one town section")
-	_check((pewter_header.get_child(0) as Label).text == "Pewter City", "Pewter targets share one town section")
+	_check((panel.get("target_town_tabs") as HBoxContainer).get_child_count() == 2, "each available town receives a target tab")
+	_check(not (panel.get("target_town_previous_button") as Button).visible and not (panel.get("target_town_next_button") as Button).visible, "town arrows stay hidden while all tabs fit")
+	_check(str(panel.get("selected_target_town_key")) == "ui.skills.thieving.location.viridian_city", "the first target town is selected initially")
+	_check((panel.get("targets_container") as VBoxContainer).get_child_count() == 3, "only the selected town's targets are listed")
 	_check((panel.get("targets_summary_label") as Label).text.contains("3") and (panel.get("targets_summary_label") as Label).text.contains("1/4"), "target summary shows available and attempted counts")
-	var first_target := (panel.get("targets_container") as VBoxContainer).get_child(1) as PanelContainer
+	var first_target := (panel.get("targets_container") as VBoxContainer).get_child(0) as PanelContainer
 	var first_target_content := first_target.get_child(0) as HBoxContainer
 	var first_target_status := first_target_content.get_child(1) as Label
 	_check(first_target_status.text == "Attempted today", "attempted targets have a clear daily status")
+	panel.call("_select_target_town", "ui.skills.thieving.location.pewter_city")
+	_check((panel.get("targets_container") as VBoxContainer).get_child_count() == 1, "selecting Pewter shows only Pewter targets")
+	panel.call("_select_target_town", "ui.skills.thieving.location.viridian_city")
+	var expanded_town_order: Array[String] = [
+		"ui.skills.thieving.location.viridian_city",
+		"ui.skills.thieving.location.pewter_city",
+		"test.town.cerulean",
+		"test.town.saffron",
+	]
+	var expanded_town_targets: Dictionary = (panel.get("targets_by_town") as Dictionary).duplicate(true)
+	expanded_town_targets["test.town.cerulean"] = []
+	expanded_town_targets["test.town.saffron"] = []
+	panel.set("target_town_order", expanded_town_order)
+	panel.set("targets_by_town", expanded_town_targets)
+	panel.call("_render_target_town_tabs")
+	_check((panel.get("target_town_previous_button") as Button).visible and (panel.get("target_town_next_button") as Button).visible, "town arrows appear when tabs overflow")
+	_check((panel.get("target_town_tabs") as HBoxContainer).get_child_count() == 3, "only one page of town tabs is rendered at once")
+	panel.call("_change_target_town_page", 1)
+	_check(str(panel.get("selected_target_town_key")) == "test.town.saffron", "the next arrow selects the first town on the next page")
+	panel.call("_render_targets", test_skills[1]["targets"] as Array)
 	skills_service.call("_on_thieving_state_changed", {
 		"unlocked": true,
 		"level": 20,
@@ -175,7 +194,7 @@ func _run() -> void:
 		],
 		"jailed": false,
 	})
-	var refreshed_second_target := (panel.get("targets_container") as VBoxContainer).get_child(2) as PanelContainer
+	var refreshed_second_target := (panel.get("targets_container") as VBoxContainer).get_child(1) as PanelContainer
 	var refreshed_second_content := refreshed_second_target.get_child(0) as HBoxContainer
 	_check((refreshed_second_content.get_child(1) as Label).text == "Attempted today", "a successful pickpocket refreshes the daily target status immediately")
 	panel.call("_select_skill", "fishing")

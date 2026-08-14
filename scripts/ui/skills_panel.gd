@@ -17,6 +17,7 @@ const LOCKED_COLOR := Color("#738092")
 const COMPLETE_COLOR := Color("#84a0b8")
 const FISHING_ICON: Texture2D = preload("res://assets/ui/fishing_rod.svg")
 const THIEVING_ICON: Texture2D = preload("res://assets/ui/thieving.svg")
+const TARGET_TOWN_TABS_PER_PAGE := 3
 
 var main_panel: PanelContainer
 var window_header: HBoxContainer
@@ -43,6 +44,9 @@ var unlocks_container: VBoxContainer
 var targets_section: VBoxContainer
 var targets_summary_label: Label
 var targets_reset_label: Label
+var target_town_previous_button: Button
+var target_town_tabs: HBoxContainer
+var target_town_next_button: Button
 var targets_scroll: ScrollContainer
 var targets_container: VBoxContainer
 var fishing_catalog_section: VBoxContainer
@@ -53,6 +57,10 @@ var skill_buttons: Dictionary = {}
 var selected_skill_id := "thieving"
 var selected_detail_tab := "progression"
 var selected_rod_id := "old_rod"
+var selected_target_town_key := ""
+var target_town_page := 0
+var target_town_order: Array[String] = []
+var targets_by_town: Dictionary = {}
 var showing_detail := false
 var loading := false
 var window_dragging := false
@@ -355,6 +363,25 @@ func _build_interface() -> void:
 	targets_reset_label.add_theme_color_override("font_color", MUTED_TEXT_COLOR)
 	targets_reset_label.add_theme_font_size_override("font_size", 9)
 	targets_section.add_child(targets_reset_label)
+
+	var target_town_navigation := HBoxContainer.new()
+	target_town_navigation.name = "TargetTownNavigation"
+	target_town_navigation.add_theme_constant_override("separation", 5)
+	targets_section.add_child(target_town_navigation)
+
+	target_town_previous_button = _create_target_town_arrow("‹")
+	target_town_previous_button.pressed.connect(_change_target_town_page.bind(-1))
+	target_town_navigation.add_child(target_town_previous_button)
+
+	target_town_tabs = HBoxContainer.new()
+	target_town_tabs.name = "TargetTownTabs"
+	target_town_tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	target_town_tabs.add_theme_constant_override("separation", 5)
+	target_town_navigation.add_child(target_town_tabs)
+
+	target_town_next_button = _create_target_town_arrow("›")
+	target_town_next_button.pressed.connect(_change_target_town_page.bind(1))
+	target_town_navigation.add_child(target_town_next_button)
 
 	targets_scroll = ScrollContainer.new()
 	targets_scroll.name = "TargetsScroll"
@@ -770,13 +797,10 @@ func _render_unlocks(unlocks: Array) -> void:
 
 
 func _render_targets(targets: Array) -> void:
-	for child: Node in targets_container.get_children():
-		targets_container.remove_child(child)
-		child.queue_free()
 	var available_count := 0
 	var completed_count := 0
-	var town_order: Array[String] = []
-	var targets_by_town: Dictionary = {}
+	target_town_order.clear()
+	targets_by_town.clear()
 	for target_value: Variant in targets:
 		var target := target_value as Dictionary
 		if bool(target.get("availableToday", false)):
@@ -785,15 +809,16 @@ func _render_targets(targets: Array) -> void:
 			completed_count += 1
 		var town_key := str(target.get("townKey", target.get("locationKey", "")))
 		if not targets_by_town.has(town_key):
-			town_order.append(town_key)
+			target_town_order.append(town_key)
 			targets_by_town[town_key] = []
 		var town_targets: Array = targets_by_town[town_key] as Array
 		town_targets.append(target)
-	for town_key: String in town_order:
-		var town_targets: Array = targets_by_town.get(town_key, []) as Array
-		targets_container.add_child(_create_target_town_header(town_key, town_targets))
-		for target_value: Variant in town_targets:
-			targets_container.add_child(_create_target_row(target_value as Dictionary))
+	if selected_target_town_key not in target_town_order:
+		selected_target_town_key = target_town_order[0] if not target_town_order.is_empty() else ""
+	var selected_index := target_town_order.find(selected_target_town_key)
+	target_town_page = floori(float(maxi(selected_index, 0)) / TARGET_TOWN_TABS_PER_PAGE)
+	_render_target_town_tabs()
+	_render_selected_target_town()
 	targets_summary_label.text = _text("ui.skills.thieving.targets.summary", {
 		"available": available_count,
 		"completed": completed_count,
@@ -802,34 +827,102 @@ func _render_targets(targets: Array) -> void:
 	targets_reset_label.text = _text("ui.skills.thieving.targets.reset")
 
 
-func _create_target_town_header(town_key: String, targets: Array) -> Control:
-	var header := HBoxContainer.new()
-	header.name = "TargetTownHeader_%s" % town_key.get_file().to_pascal_case()
-	header.custom_minimum_size.y = 30.0
-	header.add_theme_constant_override("separation", 8)
+func _render_target_town_tabs() -> void:
+	for child: Node in target_town_tabs.get_children():
+		target_town_tabs.remove_child(child)
+		child.queue_free()
+	var page_count := maxi(ceili(float(target_town_order.size()) / TARGET_TOWN_TABS_PER_PAGE), 1)
+	target_town_page = clampi(target_town_page, 0, page_count - 1)
+	var start_index := target_town_page * TARGET_TOWN_TABS_PER_PAGE
+	var end_index := mini(start_index + TARGET_TOWN_TABS_PER_PAGE, target_town_order.size())
+	for index in range(start_index, end_index):
+		var town_key := target_town_order[index]
+		target_town_tabs.add_child(_create_target_town_tab(town_key))
+	var has_overflow := target_town_order.size() > TARGET_TOWN_TABS_PER_PAGE
+	target_town_previous_button.visible = has_overflow
+	target_town_next_button.visible = has_overflow
+	target_town_previous_button.disabled = target_town_page <= 0
+	target_town_next_button.disabled = target_town_page >= page_count - 1
 
-	var town_label := Label.new()
-	town_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	town_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	town_label.add_theme_color_override("font_color", GOLD_COLOR)
-	town_label.add_theme_font_size_override("font_size", 12)
-	town_label.text = _text(town_key)
-	header.add_child(town_label)
 
+func _render_selected_target_town() -> void:
+	for child: Node in targets_container.get_children():
+		targets_container.remove_child(child)
+		child.queue_free()
+	var town_targets: Array = targets_by_town.get(selected_target_town_key, []) as Array
+	for target_value: Variant in town_targets:
+		targets_container.add_child(_create_target_row(target_value as Dictionary))
+	targets_scroll.scroll_vertical = 0
+
+
+func _create_target_town_tab(town_key: String) -> Button:
+	var town_targets: Array = targets_by_town.get(town_key, []) as Array
 	var available_count := 0
-	for target_value: Variant in targets:
+	for target_value: Variant in town_targets:
 		if bool((target_value as Dictionary).get("availableToday", false)):
 			available_count += 1
-	var count_label := Label.new()
-	count_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	count_label.add_theme_color_override("font_color", MUTED_TEXT_COLOR)
-	count_label.add_theme_font_size_override("font_size", 9)
-	count_label.text = _text("ui.skills.thieving.targets.town_summary", {
+	var selected := town_key == selected_target_town_key
+	var button := Button.new()
+	button.custom_minimum_size = Vector2(0, 34)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.focus_mode = Control.FOCUS_NONE
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.text = _text(town_key)
+	button.tooltip_text = _text("ui.skills.thieving.targets.town_summary", {
 		"available": available_count,
-		"total": targets.size(),
+		"total": town_targets.size(),
 	})
-	header.add_child(count_label)
-	return header
+	button.add_theme_font_size_override("font_size", 10)
+	button.add_theme_color_override("font_color", TEXT_COLOR if selected else MUTED_TEXT_COLOR)
+	button.add_theme_color_override("font_hover_color", TEXT_COLOR)
+	button.add_theme_stylebox_override(
+		"normal",
+		_make_panel_style(CARD_SELECTED if selected else Color("#07111c"), CARD_SELECTED_BORDER if selected else PANEL_BORDER, 7, 1)
+	)
+	button.add_theme_stylebox_override("hover", _make_panel_style(CARD_HOVER, CARD_SELECTED_BORDER, 7, 1))
+	button.add_theme_stylebox_override("pressed", _make_panel_style(CARD_SELECTED, CARD_SELECTED_BORDER, 7, 1))
+	button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	button.pressed.connect(_select_target_town.bind(town_key))
+	return button
+
+
+func _create_target_town_arrow(label: String) -> Button:
+	var button := Button.new()
+	button.custom_minimum_size = Vector2(34, 34)
+	button.focus_mode = Control.FOCUS_NONE
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.text = label
+	button.add_theme_font_size_override("font_size", 18)
+	button.add_theme_color_override("font_color", ACCENT_COLOR)
+	button.add_theme_color_override("font_disabled_color", LOCKED_COLOR)
+	button.add_theme_stylebox_override("normal", _make_panel_style(Color("#07111c"), PANEL_BORDER, 7, 1))
+	button.add_theme_stylebox_override("hover", _make_panel_style(CARD_HOVER, CARD_SELECTED_BORDER, 7, 1))
+	button.add_theme_stylebox_override("pressed", _make_panel_style(CARD_SELECTED, CARD_SELECTED_BORDER, 7, 1))
+	button.add_theme_stylebox_override("disabled", _make_panel_style(Color("#070c12"), Color("#25313d"), 7, 1))
+	button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	return button
+
+
+func _select_target_town(town_key: String) -> void:
+	if town_key not in target_town_order:
+		return
+	selected_target_town_key = town_key
+	target_town_page = floori(float(target_town_order.find(town_key)) / TARGET_TOWN_TABS_PER_PAGE)
+	_render_target_town_tabs()
+	_render_selected_target_town()
+
+
+func _change_target_town_page(direction: int) -> void:
+	var page_count := maxi(ceili(float(target_town_order.size()) / TARGET_TOWN_TABS_PER_PAGE), 1)
+	var next_page := clampi(target_town_page + direction, 0, page_count - 1)
+	if next_page == target_town_page:
+		return
+	target_town_page = next_page
+	var first_town_index := target_town_page * TARGET_TOWN_TABS_PER_PAGE
+	if first_town_index < target_town_order.size():
+		selected_target_town_key = target_town_order[first_town_index]
+	_render_target_town_tabs()
+	_render_selected_target_town()
 
 
 func _create_target_row(target: Dictionary) -> Control:
