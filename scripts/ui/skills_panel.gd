@@ -36,6 +36,9 @@ var detail_level: Label
 var experience_bar: ProgressBar
 var experience_label: Label
 var stats_label: Label
+var wanted_section: VBoxContainer
+var wanted_value_label: Label
+var wanted_bar: ProgressBar
 var detail_tabs: HBoxContainer
 var progression_tab_button: Button
 var catalog_tab_button: Button
@@ -328,6 +331,35 @@ func _build_interface() -> void:
 	stats_label.add_theme_font_size_override("font_size", 11)
 	progression_section.add_child(stats_label)
 
+	wanted_section = VBoxContainer.new()
+	wanted_section.name = "WantedSection"
+	wanted_section.add_theme_constant_override("separation", 4)
+	progression_section.add_child(wanted_section)
+
+	var wanted_header := HBoxContainer.new()
+	wanted_section.add_child(wanted_header)
+
+	var wanted_title := Label.new()
+	wanted_title.name = "WantedTitle"
+	wanted_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	wanted_title.add_theme_color_override("font_color", MUTED_TEXT_COLOR)
+	wanted_title.add_theme_font_size_override("font_size", 10)
+	wanted_header.add_child(wanted_title)
+
+	wanted_value_label = Label.new()
+	wanted_value_label.name = "WantedValue"
+	wanted_value_label.add_theme_font_size_override("font_size", 11)
+	wanted_header.add_child(wanted_value_label)
+
+	wanted_bar = ProgressBar.new()
+	wanted_bar.name = "WantedBar"
+	wanted_bar.custom_minimum_size.y = 16.0
+	wanted_bar.show_percentage = false
+	wanted_bar.min_value = 0.0
+	wanted_bar.max_value = 100.0
+	wanted_bar.add_theme_stylebox_override("background", _make_panel_style(Color("#030810"), Color("#263b50"), 5, 1))
+	wanted_section.add_child(wanted_bar)
+
 	var unlock_title := Label.new()
 	unlock_title.name = "UnlockTitle"
 	unlock_title.add_theme_color_override("font_color", ACCENT_COLOR)
@@ -515,6 +547,7 @@ func _render_detail(skill: Dictionary) -> void:
 	unlocks_container.visible = skill_unlocked
 	if not skill_unlocked:
 		stats_label.text = _text(str(skill.get("unlockHintKey", "ui.skills.%s.unlock_hint" % skill_id)))
+		wanted_section.visible = false
 		targets_section.visible = false
 		detail_tabs.visible = false
 		progression_section.visible = true
@@ -529,7 +562,11 @@ func _render_detail(skill: Dictionary) -> void:
 			"required": maxi(int(skill.get("experienceForNextLevel", 0)), 0),
 			"total": maxi(int(skill.get("totalExperience", 0)), 0),
 		})
-	stats_label.text = _stats_text(skill_id, skill.get("stats", {}) as Dictionary)
+	var stats := skill.get("stats", {}) as Dictionary
+	stats_label.text = _stats_text(skill_id, stats)
+	wanted_section.visible = skill_id == "thieving"
+	if wanted_section.visible:
+		_render_wanted_meter(stats)
 	_render_unlocks(skill.get("unlocks", []) as Array)
 	if skill_id == "thieving":
 		_render_targets(skill.get("targets", []) as Array)
@@ -987,7 +1024,6 @@ func _stats_text(skill_id: String, stats: Dictionary) -> String:
 	if skill_id == "thieving":
 		return _text("ui.skills.thieving.stats", {
 			"currency": maxi(int(stats.get("currency", 0)), 0),
-			"wanted": clampi(int(stats.get("wanted", 0)), 0, 100),
 			"reward": snappedf(float(stats.get("rewardBonusPercent", 0.0)), 0.1),
 			"risk": snappedf(float(stats.get("maximumCatchReductionPercent", 0.0)), 0.1),
 			"heat": snappedf(float(stats.get("wantedReductionPercent", 0.0)), 0.1),
@@ -996,6 +1032,32 @@ func _stats_text(skill_id: String, stats: Dictionary) -> String:
 		"tier": maxi(int(stats.get("activeTier", 0)), 0),
 		"badges": maxi(int(stats.get("badgeCount", 0)), 0),
 	})
+
+
+func _render_wanted_meter(stats: Dictionary) -> void:
+	var wanted := clampi(int(stats.get("wanted", 0)), 0, 100)
+	var wanted_color := _wanted_meter_color(wanted)
+	wanted_bar.value = wanted
+	wanted_bar.tooltip_text = _text("ui.skills.thieving.wanted.tooltip")
+	wanted_bar.add_theme_stylebox_override(
+		"fill",
+		_make_panel_style(wanted_color.darkened(0.35), wanted_color, 5, 1)
+	)
+	wanted_value_label.text = _text("ui.skills.thieving.wanted.value", {"wanted": wanted})
+	wanted_value_label.add_theme_color_override("font_color", wanted_color)
+	var wanted_title := wanted_section.find_child("WantedTitle", false, false) as Label
+	if wanted_title != null:
+		wanted_title.text = _text("ui.skills.thieving.wanted")
+
+
+func _wanted_meter_color(wanted: int) -> Color:
+	if wanted >= 75:
+		return Color("#f0606c")
+	if wanted >= 50:
+		return Color("#f39a52")
+	if wanted >= 25:
+		return GOLD_COLOR
+	return ACCENT_COLOR
 
 
 func _select_skill(skill_id: String) -> void:
