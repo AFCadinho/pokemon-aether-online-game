@@ -26,6 +26,7 @@ const BATTLE_PARTY_SLOT_RESOLVER := preload("res://scripts/battle/battle_party_s
 const BATTLE_DISGUISE_EVENT_ORDER := preload("res://scripts/battle/battle_disguise_event_order.gd")
 const BATTLE_SUPREME_OVERLORD_EFFECT := preload("res://scripts/battle/battle_supreme_overlord_effect.gd")
 const BATTLE_PUBLIC_POKEMON_KNOWLEDGE := preload("res://scripts/battle/battle_public_pokemon_knowledge.gd")
+const OPPONENT_PARTY_REVEAL_POLICY := preload("res://scripts/battle/opponent_party_reveal_policy.gd")
 const BATTLE_VOICE_TIMING := preload("res://scripts/battle/battle_voice_timing.gd")
 const BATTLE_ENVIRONMENT_CATALOG := preload("res://scripts/battle/battle_environment_catalog.gd")
 const CALC_DRAWER_FIELD_MARGIN := 8.0
@@ -155,6 +156,7 @@ var battle_end_signal_emitted := false
 var last_rendered_event_seq := -1
 var ordered_response_display_species_hold: Dictionary = {}
 var rendered_non_pvp_event_keys: Dictionary = {}
+var opponent_party_reveal_policy := OPPONENT_PARTY_REVEAL_POLICY.new()
 var pvp_event_queue := preload("res://scripts/battle/battle_event_queue.gd").new()
 var pvp_response_order := preload("res://scripts/battle/battle_response_order.gd").new()
 var pvp_prechoice_buffer := preload("res://scripts/battle/pvp_prechoice_buffer.gd").new()
@@ -3668,7 +3670,13 @@ func _set_display_party_grids(player_display_team: Array, opponent_display_team:
 	# depend on deferred signal delivery.
 	player_party_grid.set_party(player_display_team)
 	player_stage_party_grid.set_party(player_display_team)
-	opponent_party_grid.set_party(opponent_display_team)
+	opponent_party_grid.set_party(_get_opponent_party_rail_data(opponent_display_team))
+
+
+func _get_opponent_party_rail_data(opponent_display_team: Array) -> Array:
+	if battle_type != BattleType.TRAINER or _is_pvp_battle():
+		return opponent_display_team
+	return opponent_party_reveal_policy.mask_team(opponent_display_team)
 
 func _mark_active_party_slot(display_team: Array, player_id: String) -> void:
 	var active_slot := _get_active_canonical_party_slot(player_id)
@@ -6148,6 +6156,7 @@ func setup_trainer_battle_from_response(
 	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
 ) -> void:
 	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null, environment_id)
+	opponent_party_reveal_policy.reset(_trainer_team_preview_enabled(api_response))
 	battle_banter_presenter.configure(trainer_data)
 	battle_voice_director.configure(str(api_response.get("battleId", "")), "trainer", trainer_data)
 	_show_local_player_trainer()
@@ -6505,6 +6514,7 @@ func _prepare_battle_setup(
 	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
 ) -> void:
 	battle_type = type
+	opponent_party_reveal_policy.reset(false)
 	_apply_battle_environment(environment_id)
 	_clear_battle_trainer_sprites()
 	wild_owned_request_id += 1
@@ -7150,6 +7160,15 @@ func _run_trainer_lead_selection(api_response: Dictionary) -> Dictionary:
 
 func _should_show_team_preview(api_response: Dictionary) -> bool:
 	return PvpBattleRealtimeService.is_team_preview_response(api_response)
+
+
+func _trainer_team_preview_enabled(api_response: Dictionary) -> bool:
+	var options_value: Variant = api_response.get("battleOptions", {})
+	if options_value is Dictionary:
+		var options := options_value as Dictionary
+		if options.has("teamPreview"):
+			return bool(options.get("teamPreview", false))
+	return _should_show_team_preview(api_response)
 
 func _run_default_trainer_lead_selection() -> Dictionary:
 	_set_battle_input_locked(true)
@@ -8394,6 +8413,8 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 				await _play_switch_recall_for_event(event_data, switch_player_id)
 			_release_ordered_response_display_species_for_player(switch_player_id)
 			battle_state.apply_event_conditions([event_data])
+			if switch_player_id == "p2" and not _is_pvp_battle():
+				opponent_party_reveal_policy.reveal_active(_get_display_team_data("p2"))
 			_update_hud_panels()
 			_show_switch_event_active_pokemon(event_data)
 			if should_play_switch_ball_animations:
@@ -10643,6 +10664,7 @@ func _submit_npc_lead() -> Dictionary:
 
 	if not _apply_api_response(response, false):
 		return response
+	opponent_party_reveal_policy.reveal_active(_get_display_team_data("p2"))
 
 	return response
 

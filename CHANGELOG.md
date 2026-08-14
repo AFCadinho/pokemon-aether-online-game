@@ -11,6 +11,7 @@
 - Held items can now be dragged directly from the Bag onto an owned party slot or the held-item slot on a Pokémon Summary Card.
 - Party slots now have a right-click menu for opening the Summary Card, managing held items, and setting the lead Pokémon.
 - Fixed Route 1 Trainers starting overlapping dialogue and battle flows when spoken to as their sight challenge triggered.
+- Regular Trainer battles now conceal unrevealed opposing Pokémon behind Pokéball icons in the party rail. Configured important battles can still use Team Preview.
 - Added daily Trainer rematches. Their teams become stronger and can evolve as you progress.
 - Added an EV training field in Viridian City. Its battles teach EV training without damaging your Pokémon.
 - Added the Viridian Trainer School story, the first Pewter Gym challenge, and new houses to explore in Viridian City and Pewter City.

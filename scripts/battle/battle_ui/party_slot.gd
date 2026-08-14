@@ -15,6 +15,7 @@ const NORMAL_MODULATE := Color(1.0, 1.0, 1.0, 1.0)
 const FAINTED_MODULATE := Color(0.62, 0.62, 0.62, 1.0)
 const ICON_FAINTED_MODULATE := Color(0.38, 0.38, 0.38, 0.84)
 const POISON_STATUS_TEXTURE: Texture2D = preload("res://assets/battles/status/poisoned.png")
+const UNREVEALED_POKEMON_TEXTURE: Texture2D = preload("res://assets/items/icons/POKEBALL.png")
 const POISON_STATUS_MODULATE := Color(1.0, 1.0, 1.0, 1.0)
 const TOXIC_STATUS_MODULATE := Color("#8c58ff")
 const NAME_FONT_SIZE := 14
@@ -117,6 +118,9 @@ func set_pokemon(pokemon: Pokemon) -> void:
 
 func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	current_pokemon_data = pokemon_data.duplicate(true)
+	if bool(pokemon_data.get("unrevealed", false)):
+		_set_unrevealed()
+		return
 	var species := _get_species_from_data(pokemon_data)
 	var types := _get_types_from_data(pokemon_data)
 	var is_active := bool(pokemon_data.get("active", false))
@@ -140,6 +144,24 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	var status := str(pokemon_data.get("status", ""))
 	_set_status_icon(status)
 	_apply_icon_only_condition_badge(status, is_fainted)
+
+
+func _set_unrevealed() -> void:
+	pokemon_unhovered.emit()
+	_apply_slot_style("", false, false)
+	visible = true
+	disabled = true
+	modulate = NORMAL_MODULATE
+	tooltip_text = ""
+
+	_set_species_name("", false)
+	hp_bar.max_value = 1
+	hp_bar.value = 0
+	pokemon_icon.texture = UNREVEALED_POKEMON_TEXTURE
+	pokemon_icon.self_modulate = NORMAL_MODULATE
+	_set_status_icon("")
+	icon_status_badge.visible = false
+	icon_status_badge.text = ""
 
 func _get_species_from_data(pokemon_data: Dictionary) -> String:
 	var display_species := str(pokemon_data.get("displaySpecies", ""))
@@ -412,7 +434,7 @@ func _on_pressed() -> void:
 	selected.emit()
 
 func _on_mouse_entered() -> void:
-	if current_pokemon_data.is_empty():
+	if current_pokemon_data.is_empty() or bool(current_pokemon_data.get("unrevealed", false)):
 		return
 
 	pokemon_hovered.emit(current_pokemon_data, Rect2(global_position, size))
