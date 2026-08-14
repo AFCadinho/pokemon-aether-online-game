@@ -93,9 +93,10 @@ func _run() -> void:
 				{"id": "veteran_trainer", "requiredLevel": 60, "unlocked": false, "labelKey": "ui.skills.unlock.veteran_trainer"},
 			],
 			"targets": [
-				{"npcId": "kanto_viridian_city_league_fan_dorian", "npcType": "elderly", "nameKey": "ui.skills.thieving.target.dorian", "locationKey": "ui.skills.thieving.location.viridian_city", "requiredLevel": 1, "unlocked": true, "attemptedToday": true, "availableToday": false},
-				{"npcId": "kanto_viridian_city_school_kid_june", "npcType": "child", "nameKey": "ui.skills.thieving.target.june", "locationKey": "ui.skills.thieving.location.viridian_city", "requiredLevel": 1, "unlocked": true, "attemptedToday": false, "availableToday": true},
-				{"npcId": "kanto_viridian_city_forest_scout_nico", "npcType": "bug_catcher", "nameKey": "ui.skills.thieving.target.nico", "locationKey": "ui.skills.thieving.location.viridian_city", "requiredLevel": 10, "unlocked": true, "attemptedToday": false, "availableToday": true},
+				{"npcId": "kanto_viridian_city_league_fan_dorian", "npcType": "elderly", "nameKey": "ui.skills.thieving.target.dorian", "townKey": "ui.skills.thieving.location.viridian_city", "locationKey": "ui.skills.thieving.location.viridian_city", "requiredLevel": 1, "unlocked": true, "attemptedToday": true, "availableToday": false},
+				{"npcId": "kanto_viridian_city_school_kid_june", "npcType": "child", "nameKey": "ui.skills.thieving.target.june", "townKey": "ui.skills.thieving.location.viridian_city", "locationKey": "ui.skills.thieving.location.viridian_city", "requiredLevel": 1, "unlocked": true, "attemptedToday": false, "availableToday": true},
+				{"npcId": "kanto_viridian_city_forest_scout_nico", "npcType": "bug_catcher", "nameKey": "ui.skills.thieving.target.nico", "townKey": "ui.skills.thieving.location.viridian_city", "locationKey": "ui.skills.thieving.location.viridian_city", "requiredLevel": 10, "unlocked": true, "attemptedToday": false, "availableToday": true},
+				{"npcId": "kanto_pewter_city_gym_fan_max", "npcType": "child", "nameKey": "ui.skills.thieving.target.max", "townKey": "ui.skills.thieving.location.pewter_city", "locationKey": "ui.skills.thieving.location.pewter_city", "requiredLevel": 1, "unlocked": true, "attemptedToday": false, "availableToday": true},
 			],
 		},
 	]
@@ -134,15 +135,29 @@ func _run() -> void:
 	skills_service.set("skills", test_skills)
 	panel.call("_show_overview")
 	panel.call("_select_skill", "thieving")
+	await process_frame
 	_check(not (panel.get("overview_panel") as VBoxContainer).visible, "Selecting Thieving leaves the overview")
 	_check((panel.get("detail_panel") as PanelContainer).visible, "Selecting Thieving opens its dedicated interface")
 	_check((panel.get("detail_name") as Label).text == "Thieving", "Thieving is the selected detailed skill")
 	_check((panel.get("detail_level") as Label).text.contains("20"), "the detail view shows the server level")
 	_check((panel.get("stats_label") as Label).text.contains("42"), "Thieving currency and modifiers are visible")
 	_check((panel.get("unlocks_container") as VBoxContainer).get_child_count() == 10, "class-based target unlocks are listed")
-	_check((panel.get("targets_container") as VBoxContainer).get_child_count() == 3, "daily pickpocket targets are listed")
-	_check((panel.get("targets_summary_label") as Label).text.contains("2") and (panel.get("targets_summary_label") as Label).text.contains("1/3"), "target summary shows available and attempted counts")
-	var first_target := (panel.get("targets_container") as VBoxContainer).get_child(0) as PanelContainer
+	_check(not (panel.get("targets_section") as VBoxContainer).visible, "Thieving opens on its compact progression tab")
+	_check(panel.get_combined_minimum_size().y <= 600.0, "Thieving progression fits the fixed Skills window")
+	panel.call("_select_detail_tab", "catalog")
+	await process_frame
+	_check((panel.get("targets_section") as VBoxContainer).visible, "Thieving has a dedicated target tab")
+	_check(not (panel.get("progression_section") as VBoxContainer).visible, "the target tab hides level unlocks")
+	_check((panel.get("catalog_tab_button") as Button).text == "Targets", "the secondary Thieving tab is labelled for targets")
+	_check(panel.get("targets_scroll") is ScrollContainer, "daily targets use an internal scroll area")
+	_check(panel.get_combined_minimum_size().y <= 600.0, "the target catalog does not lengthen the Skills window")
+	_check((panel.get("targets_container") as VBoxContainer).get_child_count() == 6, "daily targets are grouped beneath town headers")
+	var viridian_header := (panel.get("targets_container") as VBoxContainer).get_child(0) as HBoxContainer
+	var pewter_header := (panel.get("targets_container") as VBoxContainer).get_child(4) as HBoxContainer
+	_check((viridian_header.get_child(0) as Label).text == "Viridian City", "Viridian targets share one town section")
+	_check((pewter_header.get_child(0) as Label).text == "Pewter City", "Pewter targets share one town section")
+	_check((panel.get("targets_summary_label") as Label).text.contains("3") and (panel.get("targets_summary_label") as Label).text.contains("1/4"), "target summary shows available and attempted counts")
+	var first_target := (panel.get("targets_container") as VBoxContainer).get_child(1) as PanelContainer
 	var first_target_content := first_target.get_child(0) as HBoxContainer
 	var first_target_status := first_target_content.get_child(1) as Label
 	_check(first_target_status.text == "Attempted today", "attempted targets have a clear daily status")
@@ -160,7 +175,7 @@ func _run() -> void:
 		],
 		"jailed": false,
 	})
-	var refreshed_second_target := (panel.get("targets_container") as VBoxContainer).get_child(1) as PanelContainer
+	var refreshed_second_target := (panel.get("targets_container") as VBoxContainer).get_child(2) as PanelContainer
 	var refreshed_second_content := refreshed_second_target.get_child(0) as HBoxContainer
 	_check((refreshed_second_content.get_child(1) as Label).text == "Attempted today", "a successful pickpocket refreshes the daily target status immediately")
 	panel.call("_select_skill", "fishing")
@@ -181,6 +196,20 @@ func _run() -> void:
 	panel.call("_show_overview")
 	_check((panel.get("overview_panel") as VBoxContainer).visible, "the detail back action returns to all skill levels")
 	_check(not (panel.get("detail_panel") as PanelContainer).visible, "returning to the overview hides skill-specific content")
+	panel.position = Vector2.ZERO
+	var drag_press := InputEventMouseButton.new()
+	drag_press.button_index = MOUSE_BUTTON_LEFT
+	drag_press.pressed = true
+	panel.call("_on_window_header_gui_input", drag_press)
+	var drag_motion := InputEventMouseMotion.new()
+	drag_motion.relative = Vector2(24, 20)
+	panel.call("_input", drag_motion)
+	_check(panel.position == Vector2(24, 20), "the Skills header drags the window within its parent")
+	var drag_release := InputEventMouseButton.new()
+	drag_release.button_index = MOUSE_BUTTON_LEFT
+	drag_release.pressed = false
+	panel.call("_input", drag_release)
+	_check(not bool(panel.get("window_dragging")), "releasing the mouse stops Skills window dragging")
 
 	for locale_path: String in [
 		"res://localization/en.json",
@@ -193,6 +222,12 @@ func _run() -> void:
 			parsed is Dictionary
 			and "Loot:" in str((parsed as Dictionary).get("ui.skills.thieving.stats", "")),
 			"%s presents the Thieving balance as countable Loot" % locale_path
+		)
+		_check(
+			parsed is Dictionary
+			and (parsed as Dictionary).has("ui.skills.thieving.targets.tab")
+			and (parsed as Dictionary).has("ui.skills.thieving.targets.town_summary"),
+			"%s contains the grouped target interface translations" % locale_path
 		)
 
 	panel.queue_free()

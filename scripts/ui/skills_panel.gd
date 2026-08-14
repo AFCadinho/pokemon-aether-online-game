@@ -19,6 +19,7 @@ const FISHING_ICON: Texture2D = preload("res://assets/ui/fishing_rod.svg")
 const THIEVING_ICON: Texture2D = preload("res://assets/ui/thieving.svg")
 
 var main_panel: PanelContainer
+var window_header: HBoxContainer
 var title_label: Label
 var subtitle_label: Label
 var back_button: Button
@@ -42,6 +43,7 @@ var unlocks_container: VBoxContainer
 var targets_section: VBoxContainer
 var targets_summary_label: Label
 var targets_reset_label: Label
+var targets_scroll: ScrollContainer
 var targets_container: VBoxContainer
 var fishing_catalog_section: VBoxContainer
 var fishing_catalog_summary: Label
@@ -53,6 +55,7 @@ var selected_detail_tab := "progression"
 var selected_rod_id := "old_rod"
 var showing_detail := false
 var loading := false
+var window_dragging := false
 
 
 func _ready() -> void:
@@ -75,6 +78,21 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 
+func _input(event: InputEvent) -> void:
+	if not window_dragging:
+		return
+	if event is InputEventMouseButton:
+		var mouse_button := event as InputEventMouseButton
+		if mouse_button.button_index == MOUSE_BUTTON_LEFT and not mouse_button.pressed:
+			window_dragging = false
+			get_viewport().set_input_as_handled()
+		return
+	if event is InputEventMouseMotion:
+		position += (event as InputEventMouseMotion).relative
+		_clamp_window_to_parent()
+		get_viewport().set_input_as_handled()
+
+
 func toggle_manager() -> void:
 	if visible:
 		close_manager()
@@ -90,6 +108,7 @@ func open_manager() -> void:
 
 
 func close_manager() -> void:
+	window_dragging = false
 	visible = false
 
 
@@ -137,9 +156,12 @@ func _build_interface() -> void:
 	content.add_theme_constant_override("separation", 10)
 	margin.add_child(content)
 
-	var header := HBoxContainer.new()
-	header.add_theme_constant_override("separation", 10)
-	content.add_child(header)
+	window_header = HBoxContainer.new()
+	window_header.name = "WindowHeader"
+	window_header.add_theme_constant_override("separation", 10)
+	window_header.mouse_default_cursor_shape = Control.CURSOR_MOVE
+	window_header.gui_input.connect(_on_window_header_gui_input)
+	content.add_child(window_header)
 
 	back_button = Button.new()
 	back_button.visible = false
@@ -153,12 +175,15 @@ func _build_interface() -> void:
 	back_button.add_theme_stylebox_override("pressed", _make_panel_style(CARD_SELECTED, CARD_SELECTED_BORDER, 7, 1))
 	back_button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 	back_button.pressed.connect(_show_overview)
-	header.add_child(back_button)
+	window_header.add_child(back_button)
 
 	var heading := VBoxContainer.new()
 	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	heading.add_theme_constant_override("separation", 1)
-	header.add_child(heading)
+	heading.mouse_filter = Control.MOUSE_FILTER_STOP
+	heading.mouse_default_cursor_shape = Control.CURSOR_MOVE
+	heading.gui_input.connect(_on_window_header_gui_input)
+	window_header.add_child(heading)
 
 	title_label = Label.new()
 	title_label.add_theme_color_override("font_color", TEXT_COLOR)
@@ -183,7 +208,7 @@ func _build_interface() -> void:
 	close_button.add_theme_stylebox_override("pressed", StyleBoxEmpty.new())
 	close_button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 	close_button.pressed.connect(close_manager)
-	header.add_child(close_button)
+	window_header.add_child(close_button)
 
 	status_label = Label.new()
 	status_label.visible = false
@@ -307,8 +332,9 @@ func _build_interface() -> void:
 
 	targets_section = VBoxContainer.new()
 	targets_section.name = "TargetsSection"
+	targets_section.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	targets_section.add_theme_constant_override("separation", 5)
-	progression_section.add_child(targets_section)
+	detail_content.add_child(targets_section)
 
 	var targets_header := HBoxContainer.new()
 	targets_section.add_child(targets_header)
@@ -330,10 +356,18 @@ func _build_interface() -> void:
 	targets_reset_label.add_theme_font_size_override("font_size", 9)
 	targets_section.add_child(targets_reset_label)
 
+	targets_scroll = ScrollContainer.new()
+	targets_scroll.name = "TargetsScroll"
+	targets_scroll.custom_minimum_size.y = 220.0
+	targets_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	targets_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	targets_section.add_child(targets_scroll)
+
 	targets_container = VBoxContainer.new()
 	targets_container.name = "TargetsContainer"
+	targets_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	targets_container.add_theme_constant_override("separation", 5)
-	targets_section.add_child(targets_container)
+	targets_scroll.add_child(targets_container)
 
 	fishing_catalog_section = VBoxContainer.new()
 	fishing_catalog_section.visible = false
@@ -470,10 +504,14 @@ func _render_detail(skill: Dictionary) -> void:
 		})
 	stats_label.text = _stats_text(skill_id, skill.get("stats", {}) as Dictionary)
 	_render_unlocks(skill.get("unlocks", []) as Array)
-	targets_section.visible = skill_id == "thieving"
-	if targets_section.visible:
+	if skill_id == "thieving":
 		_render_targets(skill.get("targets", []) as Array)
-	detail_tabs.visible = skill_id == "fishing"
+	detail_tabs.visible = skill_id in ["fishing", "thieving"]
+	catalog_tab_button.text = (
+		_text("ui.skills.thieving.targets.tab")
+		if skill_id == "thieving"
+		else _text("ui.skills.fishing.catalog.title")
+	)
 	_render_detail_tab(skill)
 
 
@@ -495,11 +533,14 @@ func _select_detail_tab(tab_id: String) -> void:
 
 
 func _render_detail_tab(skill: Dictionary) -> void:
-	var show_catalog := str(skill.get("id", "")) == "fishing" and selected_detail_tab == "catalog"
-	progression_section.visible = not show_catalog
+	var skill_id := str(skill.get("id", ""))
+	var show_catalog := skill_id == "fishing" and selected_detail_tab == "catalog"
+	var show_targets := skill_id == "thieving" and selected_detail_tab == "catalog"
+	progression_section.visible = not show_catalog and not show_targets
 	fishing_catalog_section.visible = show_catalog
-	_style_detail_tab(progression_tab_button, not show_catalog)
-	_style_detail_tab(catalog_tab_button, show_catalog)
+	targets_section.visible = show_targets
+	_style_detail_tab(progression_tab_button, not show_catalog and not show_targets)
+	_style_detail_tab(catalog_tab_button, show_catalog or show_targets)
 	if show_catalog:
 		_render_fishing_catalog(skill)
 
@@ -734,19 +775,61 @@ func _render_targets(targets: Array) -> void:
 		child.queue_free()
 	var available_count := 0
 	var completed_count := 0
+	var town_order: Array[String] = []
+	var targets_by_town: Dictionary = {}
 	for target_value: Variant in targets:
 		var target := target_value as Dictionary
 		if bool(target.get("availableToday", false)):
 			available_count += 1
 		if bool(target.get("attemptedToday", false)):
 			completed_count += 1
-		targets_container.add_child(_create_target_row(target))
+		var town_key := str(target.get("townKey", target.get("locationKey", "")))
+		if not targets_by_town.has(town_key):
+			town_order.append(town_key)
+			targets_by_town[town_key] = []
+		var town_targets: Array = targets_by_town[town_key] as Array
+		town_targets.append(target)
+	for town_key: String in town_order:
+		var town_targets: Array = targets_by_town.get(town_key, []) as Array
+		targets_container.add_child(_create_target_town_header(town_key, town_targets))
+		for target_value: Variant in town_targets:
+			targets_container.add_child(_create_target_row(target_value as Dictionary))
 	targets_summary_label.text = _text("ui.skills.thieving.targets.summary", {
 		"available": available_count,
 		"completed": completed_count,
 		"total": targets.size(),
 	})
 	targets_reset_label.text = _text("ui.skills.thieving.targets.reset")
+
+
+func _create_target_town_header(town_key: String, targets: Array) -> Control:
+	var header := HBoxContainer.new()
+	header.name = "TargetTownHeader_%s" % town_key.get_file().to_pascal_case()
+	header.custom_minimum_size.y = 30.0
+	header.add_theme_constant_override("separation", 8)
+
+	var town_label := Label.new()
+	town_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	town_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	town_label.add_theme_color_override("font_color", GOLD_COLOR)
+	town_label.add_theme_font_size_override("font_size", 12)
+	town_label.text = _text(town_key)
+	header.add_child(town_label)
+
+	var available_count := 0
+	for target_value: Variant in targets:
+		if bool((target_value as Dictionary).get("availableToday", false)):
+			available_count += 1
+	var count_label := Label.new()
+	count_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	count_label.add_theme_color_override("font_color", MUTED_TEXT_COLOR)
+	count_label.add_theme_font_size_override("font_size", 9)
+	count_label.text = _text("ui.skills.thieving.targets.town_summary", {
+		"available": available_count,
+		"total": targets.size(),
+	})
+	header.add_child(count_label)
+	return header
 
 
 func _create_target_row(target: Dictionary) -> Control:
@@ -832,6 +915,29 @@ func _select_skill(skill_id: String) -> void:
 func _show_overview() -> void:
 	showing_detail = false
 	_render_skills(SkillsService.get_skills())
+
+
+func _on_window_header_gui_input(event: InputEvent) -> void:
+	if not event is InputEventMouseButton:
+		return
+	var mouse_button := event as InputEventMouseButton
+	if mouse_button.button_index != MOUSE_BUTTON_LEFT:
+		return
+	window_dragging = mouse_button.pressed
+	if window_dragging:
+		move_to_front()
+	accept_event()
+
+
+func _clamp_window_to_parent() -> void:
+	var parent_control := get_parent_control()
+	if parent_control == null:
+		return
+	var available := parent_control.size
+	position = Vector2(
+		clampf(position.x, 8.0, maxf(available.x - size.x - 8.0, 8.0)),
+		clampf(position.y, 8.0, maxf(available.y - size.y - 8.0, 8.0))
+	)
 
 
 func _on_skills_changed(skills: Array) -> void:
