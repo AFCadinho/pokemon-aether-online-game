@@ -23,8 +23,7 @@ signal quest_offer_resolved(accepted: bool)
 @onready var quest_offer_objective_heading: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/ObjectiveHeading
 @onready var quest_offer_objective_label: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/ObjectiveLabel
 @onready var quest_offer_reward_heading: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardHeading
-@onready var quest_offer_reward_icon: TextureRect = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardCard/RewardMargin/RewardRow/RewardIcon
-@onready var quest_offer_reward_label: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardCard/RewardMargin/RewardRow/RewardLabel
+@onready var quest_offer_reward_entries: HFlowContainer = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardCard/RewardMargin/RewardEntries
 @onready var quest_offer_status_label: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferStatus
 @onready var quest_offer_actions: HBoxContainer = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferActions
 @onready var quest_offer_decline_button: Button = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferActions/DeclineButton
@@ -267,9 +266,56 @@ func _populate_quest_offer(quest: Dictionary) -> void:
 				break
 	quest_offer_objective_label.text = objective
 	var rewards_value: Variant = quest.get("rewardPreviews", [])
-	quest_offer_reward_label.text = _quest_reward_text(rewards_value)
-	quest_offer_reward_icon.texture = _quest_reward_icon(rewards_value)
-	quest_offer_reward_icon.visible = quest_offer_reward_icon.texture != null
+	_populate_quest_reward_entries(rewards_value)
+
+
+func _populate_quest_reward_entries(rewards_value: Variant) -> void:
+	for child: Node in quest_offer_reward_entries.get_children():
+		quest_offer_reward_entries.remove_child(child)
+		child.queue_free()
+	var added_count := 0
+	if rewards_value is Array:
+		for reward_value: Variant in rewards_value as Array:
+			if reward_value is not Dictionary:
+				continue
+			var reward := reward_value as Dictionary
+			var reward_text := _quest_reward_text([reward])
+			if reward_text == "—":
+				continue
+			quest_offer_reward_entries.add_child(_create_quest_reward_entry(reward, reward_text))
+			added_count += 1
+	if added_count == 0:
+		quest_offer_reward_entries.add_child(_create_quest_reward_label("—"))
+
+
+func _create_quest_reward_entry(reward: Dictionary, reward_text: String) -> HBoxContainer:
+	var entry := HBoxContainer.new()
+	entry.add_theme_constant_override("separation", 5)
+	entry.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if str(reward.get("type", "")) == "item":
+		var item_id := str(reward.get("itemId", "")).strip_edges()
+		var icon_texture := _quest_reward_item_icon(item_id)
+		if icon_texture != null:
+			var icon := TextureRect.new()
+			icon.custom_minimum_size = Vector2(28, 28)
+			icon.texture = icon_texture
+			icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+			icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			entry.add_child(icon)
+	entry.add_child(_create_quest_reward_label(reward_text))
+	return entry
+
+
+func _create_quest_reward_label(reward_text: String) -> Label:
+	var label := Label.new()
+	label.text = reward_text
+	label.add_theme_color_override("font_color", Color(1.0, 0.87, 0.48, 1.0))
+	label.add_theme_font_size_override("font_size", 16)
+	label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return label
 
 
 func _quest_reward_text(rewards_value: Variant) -> String:
@@ -306,29 +352,20 @@ func _quest_reward_text(rewards_value: Variant) -> String:
 	return ", ".join(reward_parts) if not reward_parts.is_empty() else "—"
 
 
-func _quest_reward_icon(rewards_value: Variant) -> Texture2D:
-	if rewards_value is not Array:
+func _quest_reward_item_icon(item_id: String) -> Texture2D:
+	if item_id.is_empty():
 		return null
-	for reward_value: Variant in rewards_value as Array:
-		if reward_value is not Dictionary:
-			continue
-		var reward := reward_value as Dictionary
-		if str(reward.get("type", "")) != "item":
-			continue
-		var item_id := str(reward.get("itemId", "")).strip_edges()
-		if item_id.is_empty():
-			continue
-		var normalized := item_id.to_upper().replace("-", "").replace("_", "").replace(" ", "")
-		var icon_paths: Array[String] = [
-			ITEM_ICON_ROOT + normalized + ".png",
-			ITEM_ICON_ROOT + item_id + ".png",
-		]
-		var machine_icon_path := _quest_reward_machine_icon_path(item_id)
-		if not machine_icon_path.is_empty():
-			icon_paths.append(machine_icon_path)
-		for icon_path: String in icon_paths:
-			if ResourceLoader.exists(icon_path):
-				return load(icon_path) as Texture2D
+	var normalized := item_id.to_upper().replace("-", "").replace("_", "").replace(" ", "")
+	var icon_paths: Array[String] = [
+		ITEM_ICON_ROOT + normalized + ".png",
+		ITEM_ICON_ROOT + item_id + ".png",
+	]
+	var machine_icon_path := _quest_reward_machine_icon_path(item_id)
+	if not machine_icon_path.is_empty():
+		icon_paths.append(machine_icon_path)
+	for icon_path: String in icon_paths:
+		if ResourceLoader.exists(icon_path):
+			return load(icon_path) as Texture2D
 	var fallback_path := ITEM_ICON_ROOT + "000.png"
 	return load(fallback_path) as Texture2D if ResourceLoader.exists(fallback_path) else null
 
