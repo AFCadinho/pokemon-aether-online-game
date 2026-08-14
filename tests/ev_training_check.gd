@@ -16,6 +16,9 @@ func _init() -> void:
 	var expert_source := FileAccess.get_file_as_string(
 		"res://scripts/world/kanto/towns/ev_training_expert_mateo.gd"
 	)
+	var world_source := FileAccess.get_file_as_string(
+		"res://scripts/world/world.gd"
+	)
 	_assert(scene_source.contains("EVExpertMateo"), "EV expert Mateo is missing")
 	_assert(scene_source.contains("ev_expert_f_frames.tres"), "Mateo's overworld sprite does not match the Expert portrait")
 	_assert(scene_source.contains("EVAssistantRina"), "north EV assistant is missing")
@@ -41,6 +44,12 @@ func _init() -> void:
 	_assert(service_source.contains("/game/ev-training/session"), "EV session endpoint is missing")
 	_assert(service_source.contains("/game/ev-training/tutorial/focus"), "EV tutorial focus endpoint is missing")
 	_assert(expert_source.contains("allocate_training_evs"), "Mateo's EV allocation lesson is missing")
+	_assert(
+		world_source.contains('const EV_TRAINING_MAP_ID := "kanto_viridian_city"')
+		and world_source.contains("func _end_ev_training_session_for_map_exit")
+		and world_source.count("await _end_ev_training_session_for_map_exit(") == 2,
+		"EV sessions must end for regular and authorized map exits"
+	)
 	print("EV training checks passed.")
 	quit(0)
 

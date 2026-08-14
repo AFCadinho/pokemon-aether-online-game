@@ -41,6 +41,7 @@ const MAP_FADE_OUT_SECONDS := 0.16
 const MAP_FADE_IN_SECONDS := 0.20
 const WILD_ENCOUNTER_MINIMUM_COVER_SECONDS := 0.46
 const WILD_BATTLE_REVEAL_SECONDS := 0.20
+const EV_TRAINING_MAP_ID := "kanto_viridian_city"
 
 @export var initial_spawn_name := "InitialSpawn"
 
@@ -379,6 +380,11 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 				"error": "Could not load teleport map: %s" % target_scene_path,
 			}
 		target_map = target_scene.instantiate()
+		await _end_ev_training_session_for_map_exit(
+			_get_map_id(GameState.current_map),
+			current_scene_path,
+			target_scene_path
+		)
 		_clear_current_map()
 		$CurrentMap.add_child(target_map)
 		GameState.current_map = target_map
@@ -630,6 +636,12 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 		GameState.unlock_overworld_input()
 		return
 
+	await _end_ev_training_session_for_map_exit(
+		_get_map_id(GameState.current_map),
+		_get_map_scene_path(GameState.current_map),
+		target_scene_path
+	)
+
 	if player.get_parent() != null:
 		player.get_parent().remove_child(player)
 
@@ -660,6 +672,20 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 
 func is_map_transition_in_progress() -> bool:
 	return is_loading_map
+
+
+func _end_ev_training_session_for_map_exit(
+	source_map_id: String,
+	source_scene_path: String,
+	target_scene_path: String
+) -> void:
+	if source_map_id != EV_TRAINING_MAP_ID or source_scene_path == target_scene_path:
+		return
+	var result: Dictionary = await EvTrainingService.end_session()
+	if not bool(result.get("success", false)):
+		push_warning("World: EV training session could not be ended during map exit: %s" % str(
+			result.get("error", "Unknown error")
+		))
 
 
 func _fade_map_transition(target_alpha: float, duration: float) -> void:
