@@ -71,7 +71,7 @@ func _init() -> void:
 	_check_equal(
 		catalog.resolve_portrait_id("", "kanto_viridian_city_rocket_grunt_rook", ""),
 		"showdown_rainbowrocketgrunt",
-		"Rocket Grunt Rook resolves the male Team Rocket portrait"
+		"Master Thief Rook resolves the male Team Rocket portrait"
 	)
 	_check_equal(
 		catalog.resolve_portrait_id("", "unlisted_nurse", "pokemon_center_nurse"),
