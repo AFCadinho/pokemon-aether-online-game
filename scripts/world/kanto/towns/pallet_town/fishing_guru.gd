@@ -12,6 +12,7 @@ const MENTOR_TOPIC_MENU := preload("res://scripts/ui/mentor_topic_menu.gd")
 
 var quest_reward_id := ""
 var quest_reward_received_dialogue_id := ""
+var quest_reward_completed_dialogue_id := ""
 
 
 func interact_with_player(player: Node2D) -> void:
@@ -78,6 +79,9 @@ func _apply_npc_metadata(metadata: Dictionary) -> void:
 	quest_reward_received_dialogue_id = str(
 		metadata.get("questRewardReceivedDialogueId", "")
 	).strip_edges()
+	quest_reward_completed_dialogue_id = str(
+		metadata.get("questRewardCompletedDialogueId", "")
+	).strip_edges()
 
 
 func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Array) -> Array[String]:
@@ -124,7 +128,13 @@ func _claim_lesson_reward() -> void:
 
 
 func _show_completed_help() -> void:
-	await show_dialogue([LocalizationManager.text("mentor.fishing_guru.help.greeting")])
+	var greeting: Array[String] = [LocalizationManager.text("mentor.fishing_guru.help.greeting")]
+	if (
+		not quest_reward_completed_dialogue_id.is_empty()
+		and quest_reward_completed_dialogue_id != quest_reward_received_dialogue_id
+	):
+		greeting = await _resolve_dialogue_lines(quest_reward_completed_dialogue_id, greeting)
+	await show_dialogue(greeting)
 	while true:
 		var topic_id := await _choose_help_topic([
 			{"id": "starting", "label": LocalizationManager.text("mentor.fishing_guru.help.topic.starting")},

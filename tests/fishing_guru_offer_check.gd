@@ -58,7 +58,13 @@ func _run() -> void:
 		"requiredQuestId": "learn_to_fish",
 		"requiredQuestStepId": "receive_old_rod",
 		"requiredQuestStatus": "active",
+		"questRewardCompletedDialogueId": "kanto_pallet_town_fishing_guru_completed",
 	})
+	_expect(
+		str(guru.get("quest_reward_completed_dialogue_id"))
+		== "kanto_pallet_town_fishing_guru_completed",
+		"Fishing Guru loads his post-quest mentor greeting"
+	)
 	root.get_node("StoryService").call("apply_story", _available_fishing_story())
 
 	guru.call("interact_with_player", null)
@@ -77,6 +83,40 @@ func _run() -> void:
 	_expect(dialogue_box.get("quest_offer_open") == false, "Fishing quest choice stays locked before Oak's Parcel")
 	dialogue_box.call("hide_dialogue")
 	await process_frame
+
+	root.get_node("StoryService").call("apply_story", _completed_fishing_story())
+	_expect(
+		root.get_node("StoryService").call(
+			"is_requirement_met",
+			"learn_to_fish",
+			"",
+			"completed"
+		),
+		"Fishing lesson test state is completed"
+	)
+	guru.call("interact_with_player", null)
+	for _frame: int in range(30):
+		if dialogue_box.get("is_open") == true:
+			break
+		await process_frame
+	_expect(
+		dialogue_box.get("is_open") == true,
+		"Completed Fishing quest opens the Guru's mentor greeting"
+	)
+	dialogue_box.call("hide_dialogue")
+	var mentor_menu_root: Node = null
+	for _frame: int in range(30):
+		mentor_menu_root = guru.find_child("MentorTopicMenu", true, false)
+		if mentor_menu_root != null:
+			break
+		await process_frame
+	_expect(
+		mentor_menu_root != null,
+		"Completed Fishing quest exposes the reusable help-topic menu"
+	)
+	if mentor_menu_root != null:
+		mentor_menu_root.get_parent().call("_finish", "")
+		await process_frame
 	test_scene.queue_free()
 	await process_frame
 	quit(1 if failed else 0)
@@ -106,6 +146,23 @@ func _available_fishing_story(parcel_completed := true) -> Dictionary:
 				"stepId": "receive_old_rod",
 				"status": "inactive",
 				"objectiveKey": "story.kanto.learn_to_fish.receive_old_rod",
+			}],
+		}],
+	}
+
+
+func _completed_fishing_story() -> Dictionary:
+	return {
+		"revision": 8,
+		"quests": [{
+			"questId": "learn_to_fish",
+			"storylineId": "kanto_main",
+			"definitionVersion": 3,
+			"questType": "side",
+			"status": "completed",
+			"steps": [{
+				"stepId": "return_to_fishing_guru",
+				"status": "completed",
 			}],
 		}],
 	}
