@@ -38,6 +38,7 @@ var tracker_top_offset := 76.0
 var tracker_collapsed := false
 var has_main_tracker := false
 var has_side_tracker := false
+var tracked_main_quest_id := ""
 var side_tracker_entries: Array[Dictionary] = []
 var tracked_side_quest_id := ""
 
@@ -84,8 +85,10 @@ func _ready() -> void:
 	refresh()
 
 
-func open_journal() -> void:
+func open_journal(quest_id: String = "") -> void:
+	_select_requested_quest(quest_id)
 	if modal_layer.visible:
+		refresh()
 		return
 	modal_layer.visible = true
 	refresh()
@@ -140,7 +143,7 @@ func _build_tracker() -> void:
 	tracker_panel.tooltip_text = localization_manager.text("ui.quest.open_log")
 	tracker_panel.z_index = 100
 	tracker_panel.add_theme_stylebox_override("panel", _style(TRACKER_SURFACE, BORDER_SOFT, 10, 1))
-	tracker_panel.gui_input.connect(_on_tracker_gui_input)
+	tracker_panel.gui_input.connect(_on_tracker_gui_input.bind("main"))
 	add_child(tracker_panel)
 
 	var margin := MarginContainer.new()
@@ -195,7 +198,7 @@ func _build_tracker() -> void:
 		"panel",
 		_style(TRACKER_SURFACE, Color("#8a7045"), 10, 1)
 	)
-	side_tracker_panel.gui_input.connect(_on_tracker_gui_input)
+	side_tracker_panel.gui_input.connect(_on_tracker_gui_input.bind("side"))
 	add_child(side_tracker_panel)
 
 	var side_margin := MarginContainer.new()
@@ -458,6 +461,7 @@ func _refresh_tracker() -> void:
 	var journal_service := _journal_service()
 	var quest: Dictionary = journal_service.get_active_main_quest() if journal_service != null else {}
 	var objective: Dictionary = journal_service.get_active_objective(quest) if journal_service != null else {}
+	tracked_main_quest_id = str(quest.get("questId", ""))
 	var side_quest: Dictionary = {}
 	var side_objective: Dictionary = {}
 	side_tracker_entries.clear()
@@ -797,12 +801,33 @@ func _on_side_offer_accepted() -> void:
 	detail_offer_status_label.visible = true
 
 
-func _on_tracker_gui_input(event: InputEvent) -> void:
+func _on_tracker_gui_input(event: InputEvent, tracker_type: String) -> void:
 	if event is InputEventMouseButton:
 		var mouse_event := event as InputEventMouseButton
 		if mouse_event.button_index == MOUSE_BUTTON_LEFT and mouse_event.pressed:
-			open_journal()
+			var quest_id := (
+				tracked_side_quest_id
+				if tracker_type == "side"
+				else tracked_main_quest_id
+			)
+			open_journal(quest_id)
 			accept_event()
+
+
+func _select_requested_quest(quest_id: String) -> void:
+	var normalized_quest_id := quest_id.strip_edges()
+	if normalized_quest_id.is_empty():
+		return
+	var journal_service := _journal_service()
+	var quest := _find_entry(
+		journal_service.get_entries() if journal_service != null else [],
+		normalized_quest_id
+	)
+	if quest.is_empty():
+		return
+	if not _entry_matches_filter(quest):
+		selected_filter = "all"
+	selected_quest_id = normalized_quest_id
 
 
 func _on_journal_changed() -> void:

@@ -266,6 +266,29 @@ func _run() -> void:
 		and view.get_visible_tracker_count() == 2,
 		"quest tracker group expands with its data-driven contents intact"
 	)
+	var tracker_click := InputEventMouseButton.new()
+	tracker_click.button_index = MOUSE_BUTTON_LEFT
+	tracker_click.pressed = true
+	view.set_filter("main")
+	view.side_tracker_panel.gui_input.emit(tracker_click)
+	await process_frame
+	_expect(
+		view.is_journal_open()
+		and view.selected_quest_id == "help_neighbor"
+		and view.selected_filter == "all"
+		and view.detail_title_label.text == "Help Neighbor",
+		"clicking the side tracker opens that side quest even from an incompatible filter"
+	)
+	view.close_journal()
+	view.tracker_panel.gui_input.emit(tracker_click)
+	await process_frame
+	_expect(
+		view.is_journal_open()
+		and view.selected_quest_id == "choose_starter"
+		and view.detail_title_label.text == "A Journey Begins",
+		"clicking the main tracker opens the active main quest in the journal"
+	)
+	view.close_journal()
 	view.set_tracker_top_offset(152.0)
 	_expect(
 		view.tracker_panel.get_global_rect().position.y == 152.0
