@@ -1,6 +1,7 @@
 extends SceneTree
 
 const ITEM_GIFT_NPC_SCENE_PATH := "res://scenes/npcs/item_gift_npc.tscn"
+const FISHING_GURU_SCRIPT_PATH := "res://scripts/world/kanto/towns/pallet_town/fishing_guru.gd"
 
 var failed := false
 
@@ -18,34 +19,26 @@ func _run() -> void:
 		quit(1)
 		return
 	var guru := item_gift_npc_scene.instantiate()
+	guru.set_script(load(FISHING_GURU_SCRIPT_PATH))
+	guru.set("npc_id", "")
 	get_root().add_child(guru)
 	await process_frame
-	guru.call("_apply_npc_metadata", {
-		"requiredQuestId": "learn_to_fish",
-		"requiredQuestStepId": "receive_old_rod",
-		"requiredQuestStatus": "active",
-		"questMarkers": [{
-			"questId": "learn_to_fish",
-			"statuses": ["available"],
-			"visibilityQuestId": "oaks_parcel",
-			"visibilityQuestStepId": "return_to_oak",
-			"visibilityQuestStatus": "completed",
-		}],
-	})
 	# Existing accounts can already own an Old Rod. That must not suppress the
-	# offer marker before the lesson quest has been accepted.
+	# offer marker before the lesson quest has been accepted. The Guru keeps an
+	# explicit marker fallback so cached or delayed NPC metadata cannot hide it.
 	guru.set("reward_resolved", true)
 
 	story_service.apply_story(_story_with_parcel_status("active"))
 	await process_frame
 	guru.call("_refresh_quest_marker")
-	var marker := guru.get("quest_marker") as PanelContainer
-	_expect(marker != null and not marker.visible, "Fishing marker stays hidden before Oak's Parcel is complete")
+	var marker := guru.get_node_or_null("QuestMarker") as PanelContainer
+	_expect(marker == null or not marker.visible, "Fishing marker stays hidden before Oak's Parcel is complete")
 
 	story_service.apply_story(_story_with_parcel_status("completed"))
 	await process_frame
 	guru.call("_refresh_quest_marker")
-	var marker_label := guru.get("quest_marker_label") as Label
+	marker = guru.get_node_or_null("QuestMarker") as PanelContainer
+	var marker_label := marker.get_node_or_null("Icon") as Label if marker != null else null
 	_expect(marker != null and marker.visible, "Fishing marker appears after Oak's Parcel is complete")
 	_expect(marker_label != null and marker_label.text == "✦", "Fishing offer uses the side-quest marker")
 

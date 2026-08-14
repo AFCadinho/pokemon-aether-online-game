@@ -6,6 +6,8 @@ class_name FishingGuru
 const QUEST_ID := "learn_to_fish"
 const RECEIVE_ROD_STEP_ID := "receive_old_rod"
 const RETURN_STEP_ID := "return_to_fishing_guru"
+const OFFER_PREREQUISITE_QUEST_ID := "oaks_parcel"
+const OFFER_PREREQUISITE_STEP_ID := "return_to_oak"
 const MENTOR_TOPIC_MENU := preload("res://scripts/ui/mentor_topic_menu.gd")
 
 var quest_reward_id := ""
@@ -39,14 +41,35 @@ func interact_with_player(player: Node2D) -> void:
 
 
 func _is_lesson_offer_unlocked() -> bool:
-	return (
-		offered_quest_required_quest_id.is_empty()
-		or StoryService.is_requirement_met(
-			offered_quest_required_quest_id,
-			offered_quest_required_quest_step_id,
-			offered_quest_required_quest_status
-		)
+	return StoryService.is_requirement_met(
+		OFFER_PREREQUISITE_QUEST_ID,
+		OFFER_PREREQUISITE_STEP_ID,
+		"completed"
 	)
+
+
+func _refresh_quest_marker() -> void:
+	super._refresh_quest_marker()
+	if quest_marker != null and quest_marker.visible:
+		return
+	if not _should_show_lesson_marker():
+		return
+	_setup_quest_marker()
+	quest_marker.visible = true
+	quest_marker_label.text = "✦"
+	quest_marker_label.add_theme_color_override("font_color", Color("#75ddffff"))
+	quest_marker.add_theme_stylebox_override("panel", _quest_marker_style(Color("#176b8fff")))
+
+
+func _should_show_lesson_marker() -> bool:
+	var story_service := get_node_or_null("/root/StoryService")
+	if story_service == null:
+		return false
+	var quest: Dictionary = story_service.get_quest(QUEST_ID)
+	var quest_status := str(quest.get("status", "")).strip_edges().to_lower()
+	if quest_status == "active":
+		return true
+	return quest_status == "available" and _is_lesson_offer_unlocked()
 
 
 func _apply_npc_metadata(metadata: Dictionary) -> void:
