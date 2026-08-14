@@ -16023,10 +16023,16 @@ func open_market(market: Dictionary, requested_mode: String = "player_buys", inv
 		"name": str(market.get("name", "")).strip_edges(),
 		"location": str(market.get("locationName", "")).strip_edges(),
 		"region": str(market.get("region", "")).strip_edges(),
+		"badge_count": int(market.get("badgeCount", -1)),
+		"next_unlock_badge": int(market.get("nextUnlockBadge", -1)),
 	}
 	_apply_market_context_copy()
 	var catalog_items := _normalize_market_items(market.get("items", []))
-	market_items = _market_sell_items(catalog_items, inventory_items) if player_is_selling else catalog_items
+	market_items = (
+		_market_sell_items(catalog_items, inventory_items)
+		if player_is_selling
+		else _market_available_buy_items(catalog_items)
+	)
 	market_selected_item = market_items[0].duplicate(true) if not market_items.is_empty() else {}
 	market_quantity_spinbox.max_value = max(int(market_selected_item.get("quantity", 1)), 1) if player_is_selling else 99
 	market_quantity_spinbox.value = 1
@@ -16151,8 +16157,16 @@ func _normalize_market_items(items_value: Variant) -> Array[Dictionary]:
 			"shortDesc": str(item.get("shortDesc", "")),
 			"price": _market_item_money_price(item),
 			"sellPrice": max(int(item.get("sellPrice", 0)), 0),
+			"requiredBadges": max(int(item.get("requiredBadges", 0)), 0),
+			"available": bool(item.get("available", true)),
 		}))
 	return normalized_items
+
+
+func _market_available_buy_items(catalog_items: Array[Dictionary]) -> Array[Dictionary]:
+	return catalog_items.filter(func(item: Dictionary) -> bool:
+		return bool(item.get("available", true))
+	)
 
 
 func _refresh_market_localized_item_data() -> void:
@@ -16213,9 +16227,23 @@ func _apply_market_context_copy() -> void:
 		if not place.is_empty()
 		else activity
 	)
-	market_catalog_caption_label.text = LocalizationManager.text(
+	var catalog_caption := LocalizationManager.text(
 		"ui.market.catalog.sell" if player_is_selling else "ui.market.catalog.buy"
 	)
+	if not player_is_selling:
+		var badge_count := int(market_context.get("badge_count", -1))
+		var next_unlock_badge := int(market_context.get("next_unlock_badge", -1))
+		if badge_count >= 0 and next_unlock_badge >= 0:
+			catalog_caption = LocalizationManager.text(
+				"ui.market.catalog.next.one" if next_unlock_badge == 1 else "ui.market.catalog.next.many",
+				{"catalog": catalog_caption, "count": next_unlock_badge}
+			)
+		elif badge_count >= 0:
+			catalog_caption = LocalizationManager.text(
+				"ui.market.catalog.complete",
+				{"catalog": catalog_caption}
+			)
+	market_catalog_caption_label.text = catalog_caption
 	market_action_caption_label.text = LocalizationManager.text(
 		"ui.market.action.sale" if player_is_selling else "ui.market.action.purchase"
 	)
