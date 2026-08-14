@@ -19,6 +19,9 @@ func _init() -> void:
 	var world_source := FileAccess.get_file_as_string(
 		"res://scripts/world/world.gd"
 	)
+	var battle_source := FileAccess.get_file_as_string(
+		"res://scripts/battle/battle.gd"
+	)
 	_assert(scene_source.contains("EVExpertMateo"), "EV expert Mateo is missing")
 	_assert(scene_source.contains("ev_expert_f_frames.tres"), "Mateo's overworld sprite does not match the Expert portrait")
 	_assert(scene_source.contains("EVAssistantRina"), "north EV assistant is missing")
@@ -49,6 +52,11 @@ func _init() -> void:
 		and world_source.contains("func _end_ev_training_session_for_map_exit")
 		and world_source.count("await _end_ev_training_session_for_map_exit(") == 2,
 		"EV sessions must end for regular and authorized map exits"
+	)
+	_assert(
+		battle_source.contains('api_response.get("captureAllowed", true)')
+		and battle_source.contains("battle_type == BattleType.WILD and wild_capture_allowed"),
+		"EV training battles must be able to hide and reject the Bag"
 	)
 	print("EV training checks passed.")
 	quit(0)

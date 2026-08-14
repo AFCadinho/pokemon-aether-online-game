@@ -81,6 +81,7 @@ const SIGNATURE_Z_MOVE_NAMES := {
 }
 
 var battle_type: BattleType = BattleType.WILD
+var wild_capture_allowed := true
 var current_action_view: ActionView = ActionView.NONE
 var current_action_panel_mode: BattleActionsPanelMode = BattleActionsPanelMode.BATTLE
 var battle_finished := false
@@ -3324,7 +3325,7 @@ func _open_bag() -> void:
 	_refresh_bag_inventory()
 
 func _can_use_bag_in_current_battle() -> bool:
-	return battle_type == BattleType.WILD and not _is_pvp_battle()
+	return battle_type == BattleType.WILD and wild_capture_allowed and not _is_pvp_battle()
 
 func _refresh_bag_action_disabled() -> void:
 	action_buttons.set_action_disabled("bag", not _can_use_bag_in_current_battle())
@@ -6100,6 +6101,7 @@ func prepare_wild_battle_from_response(
 	api_response: Dictionary,
 	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
 ) -> bool:
+	wild_capture_allowed = bool(api_response.get("captureAllowed", true))
 	_prepare_battle_setup(BattleType.WILD, player_pokemon, enemy_pokemon, environment_id)
 	_show_local_player_trainer()
 
@@ -6534,7 +6536,10 @@ func _prepare_battle_setup(
 	if enemy_hud_panel != null and enemy_hud_panel.has_method("set_owned_icon_visible"):
 		enemy_hud_panel.set_owned_icon_visible(false)
 	if action_buttons.has_method("set_action_visible"):
-		action_buttons.set_action_visible("bag", battle_type == BattleType.WILD)
+		action_buttons.set_action_visible(
+			"bag",
+			battle_type == BattleType.WILD and wild_capture_allowed
+		)
 		action_buttons.set_action_visible("run", true)
 	if action_buttons.has_method("set_action_label"):
 		action_buttons.set_action_label("run", "Run" if battle_type == BattleType.WILD else "Forfeit")
