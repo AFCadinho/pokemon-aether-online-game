@@ -1,6 +1,6 @@
 extends SceneTree
 
-const DIALOGUE_NPC_SCENE_PATH := "res://scenes/npcs/dialogue_npc.tscn"
+const ITEM_GIFT_NPC_SCENE_PATH := "res://scenes/npcs/item_gift_npc.tscn"
 
 var failed := false
 
@@ -12,15 +12,18 @@ func _init() -> void:
 func _run() -> void:
 	var story_service := get_root().get_node("StoryService")
 	story_service.reset_story()
-	var dialogue_npc_scene := load(DIALOGUE_NPC_SCENE_PATH) as PackedScene
-	_expect(dialogue_npc_scene != null, "Dialogue NPC scene loads for the Fishing Guru marker contract")
-	if dialogue_npc_scene == null:
+	var item_gift_npc_scene := load(ITEM_GIFT_NPC_SCENE_PATH) as PackedScene
+	_expect(item_gift_npc_scene != null, "ItemGiftNPC scene loads for the Fishing Guru marker contract")
+	if item_gift_npc_scene == null:
 		quit(1)
 		return
-	var guru := dialogue_npc_scene.instantiate()
+	var guru := item_gift_npc_scene.instantiate()
 	get_root().add_child(guru)
 	await process_frame
 	guru.call("_apply_npc_metadata", {
+		"requiredQuestId": "learn_to_fish",
+		"requiredQuestStepId": "receive_old_rod",
+		"requiredQuestStatus": "active",
 		"questMarkers": [{
 			"questId": "learn_to_fish",
 			"statuses": ["available"],
@@ -29,6 +32,9 @@ func _run() -> void:
 			"visibilityQuestStatus": "completed",
 		}],
 	})
+	# Existing accounts can already own an Old Rod. That must not suppress the
+	# offer marker before the lesson quest has been accepted.
+	guru.set("reward_resolved", true)
 
 	story_service.apply_story(_story_with_parcel_status("active"))
 	await process_frame

@@ -146,12 +146,6 @@ func _refresh_reward_resolution() -> void:
 	_refresh_quest_marker()
 
 
-func _refresh_quest_marker() -> void:
-	super._refresh_quest_marker()
-	if reward_resolved and not is_story_requirement_met() and quest_marker != null:
-		quest_marker.visible = false
-
-
 func _get_metadata_dialogue_id(
 	metadata: Dictionary,
 	camel_key: String,
