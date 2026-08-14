@@ -16,7 +16,7 @@ const MAP_NPCS := {
 	"res://scenes/overworld/kanto/towns/viridian_city/house1.tscn": ["Entities/NPCs/PokeFanRowan", "Entities/NPCs/SchoolKidSam"],
 	"res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn": ["Entities/NPCs/YoungsterBenji", "Entities/NPCs/LassHolly"],
 	"res://scenes/overworld/kanto/towns/pewter_city/pokemon_center.tscn": ["Entities/NPCs/HikerFlint", "Entities/NPCs/LassCeleste"],
-	"res://scenes/overworld/kanto/routes/route_3_pokemon_center.tscn": ["Entities/NPCs/CamperIris", "Entities/NPCs/HikerDax"],
+	"res://scenes/overworld/kanto/routes/route_3_pokemon_center.tscn": ["Entities/NPCs/CamperIris", "Entities/NPCs/HikerDax", "Entities/NPCs/MagikarpSalesman"],
 }
 
 const CENTER_POKEMON := {

@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="3_overworld_pokemon"]
 [ext_resource type="SpriteFrames" uid="uid://gy0k4ju8k6vq" path="res://assets/npcs/classes/camper_frames.tres" id="4_camper"]
 [ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="5_hiker"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/magikarp_salesman_npc.tscn" id="6_salesman"]
 
 [node name="PokemonCenter" instance=ExtResource("1_template")]
 map_id = "kanto_route_3_pokemon_center"
@@ -42,6 +43,12 @@ npc_definition_id = "trainer_class_hiker"
 display_name = "Hiker Dax"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("5_hiker")
+
+[node name="MagikarpSalesman" parent="Entities/NPCs" instance=ExtResource("6_salesman")]
+position = Vector2(400, 928)
+npc_id = "kanto_route_3_pokemon_center_magikarp_salesman"
+display_name = "Magikarp Salesman"
+facing_direction = Vector2(1, 0)
 
 [node name="Pokemon" type="Node2D" parent="Entities"]
 

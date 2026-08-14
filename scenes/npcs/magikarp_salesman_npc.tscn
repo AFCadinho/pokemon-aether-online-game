@@ -1,0 +1,11 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="1_base"]
+[ext_resource type="Script" path="res://scripts/world/npcs/magikarp_salesman_npc.gd" id="2_script"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/poke_fan_m_frames.tres" id="3_frames"]
+
+[node name="MagikarpSalesmanNPC" instance=ExtResource("1_base")]
+script = ExtResource("2_script")
+display_name = "Magikarp Salesman"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("3_frames")
