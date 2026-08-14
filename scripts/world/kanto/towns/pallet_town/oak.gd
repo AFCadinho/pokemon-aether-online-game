@@ -236,6 +236,7 @@ func _turn_in_quest_item(player: Node2D) -> void:
 		]
 	))
 	if bool(result.get("turnedIn", false)):
+		SfxManager.play("item_received")
 		get_tree().call_group(
 			"ui_overlay",
 			"add_system_message",

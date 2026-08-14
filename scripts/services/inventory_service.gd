@@ -166,6 +166,8 @@ func claim_npc_item_reward(reward_id: String) -> Dictionary:
 	var inventory_result: Dictionary = await load_inventory()
 	var progression_result: Dictionary = await load_fishing_progression("")
 	var story_result: Dictionary = await PlayerGameStateService.refresh_story()
+	if bool(body.get("claimed", false)):
+		SfxManager.play("item_received")
 	return {
 		"success": true,
 		"rewardId": str(body.get("rewardId", normalized_reward_id)),
