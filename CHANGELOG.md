@@ -35,6 +35,7 @@
 
 **Fixed**
 
+- Gary now waits to appear on Route 22 until Oak's Parcel has been delivered.
 - Fixed evolution choices sometimes appearing twice.
 - Fixed being able to move too early while choosing a starter from Professor Oak.
 - Fixed Aethernet crystals sometimes failing to respond, asking you to move closer while you were already beside them, or showing the wrong portrait.

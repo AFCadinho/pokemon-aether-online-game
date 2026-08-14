@@ -115,6 +115,12 @@ func _check_route_22_gary_story_hook() -> void:
 	_check(gary != null and bool(gary.get("preload_quest_markers")), "Gary preloads his quest marker")
 	_check(
 		gary != null
+		and str(gary.get("visibility_required_quest_id")) == "oaks_parcel"
+		and str(gary.get("visibility_required_quest_status")) == "completed",
+		"Gary only appears on Route 22 after Oak's Parcel is delivered"
+	)
+	_check(
+		gary != null
 		and str(gary.get("visibility_hidden_quest_id")) == "reach_viridian_city"
 		and bool(gary.get("defer_story_hide_until_reload")),
 		"Gary leaves Route 22 after the completed battle and the player leaves the map"
