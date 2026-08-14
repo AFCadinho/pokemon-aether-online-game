@@ -62,6 +62,10 @@ func _init() -> void:
 		var catalog := parsed as Dictionary if parsed is Dictionary else {}
 		for key: String in REQUIRED_KEYS:
 			_check(catalog.has(key), "%s contains mentor help key %s" % [locale, key])
+		var finding_specific := str(catalog.get("mentor.gideon.help.finding.1", ""))
+		var finding_map := str(catalog.get("mentor.gideon.help.finding.2", ""))
+		_check(finding_specific.contains("Pokedex"), "%s directs specific Pokemon searches to the Pokedex" % locale)
+		_check(finding_map.to_lower().contains("radar"), "%s directs current-map encounter searches to the Radar" % locale)
 
 	quit(1 if failed else 0)
 

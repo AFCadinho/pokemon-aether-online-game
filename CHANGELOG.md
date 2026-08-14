@@ -30,6 +30,7 @@
 
 **Changed**
 
+- Gideon now clearly directs searches for a specific Pokémon to the Pokédex and current-map encounter checks to the Radar.
 - The focused EV training stat picker now uses a compact themed interface with distinct stat colours.
 - Item-reward and recovery jingles now wait until their dialogue closes or their result message is shown.
 - Wild Pokémon now choose moves randomly, while Trainer opponents try to use the move that will deal the most damage.
