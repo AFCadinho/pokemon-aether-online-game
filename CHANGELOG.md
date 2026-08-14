@@ -4,6 +4,7 @@
 
 **Added**
 
+- EV Expert Mateo and Catching Mentor Gideon now offer permanent topic menus after their quests, so their training instructions can be reviewed at any time.
 - The HUD quest tracker can now cycle between multiple active side quests.
 - Successful NPC heals now play a dedicated Pokémon recovery jingle.
 - Super-effective attacks now use a distinct hit sound when they deal damage.

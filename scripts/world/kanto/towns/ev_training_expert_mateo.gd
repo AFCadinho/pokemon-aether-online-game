@@ -6,6 +6,7 @@ class_name EvTrainingExpertMateo
 signal pokemon_selected(pokemon_id: int)
 
 const QUEST_ID := "viridian_ev_training"
+const MENTOR_TOPIC_MENU := preload("res://scripts/ui/mentor_topic_menu.gd")
 
 var quest_reward_id := ""
 var quest_reward_received_dialogue_id := ""
@@ -32,10 +33,7 @@ func interact_with_player(_player: Node2D) -> void:
 		await _choose_focus()
 		return
 	if StoryService.is_requirement_met(QUEST_ID, "", "completed"):
-		await show_dialogue(await _resolve_lines(
-			quest_reward_completed_dialogue_id,
-			["Choose a role before you train, then focus your Effort Values on that role."]
-		))
+		await _show_completed_help()
 		return
 	await show_dialogue()
 
@@ -117,6 +115,61 @@ func _claim_reward() -> void:
 	)
 	if bool(result.get("claimed", false)):
 		SfxManager.play("item_received")
+
+
+func _show_completed_help() -> void:
+	var greeting := [LocalizationManager.text("mentor.mateo.help.greeting")]
+	if (
+		not quest_reward_completed_dialogue_id.is_empty()
+		and quest_reward_completed_dialogue_id != quest_reward_received_dialogue_id
+	):
+		greeting = await _resolve_lines(quest_reward_completed_dialogue_id, greeting)
+	await show_dialogue(greeting)
+	while true:
+		var topic_id := await _choose_help_topic(
+			LocalizationManager.text("mentor.mateo.help.title"),
+			LocalizationManager.text("mentor.mateo.help.prompt"),
+			[
+				{"id": "basics", "label": LocalizationManager.text("mentor.mateo.help.topic.basics")},
+				{"id": "earning", "label": LocalizationManager.text("mentor.mateo.help.topic.earning")},
+				{"id": "allocating", "label": LocalizationManager.text("mentor.mateo.help.topic.allocating")},
+				{"id": "limits", "label": LocalizationManager.text("mentor.mateo.help.topic.limits")},
+			]
+		)
+		if topic_id.is_empty():
+			return
+		await show_dialogue(_mateo_help_lines(topic_id), display_name)
+
+
+func _mateo_help_lines(topic_id: String) -> Array[String]:
+	var keys: Array[String] = []
+	match topic_id:
+		"basics":
+			keys = ["mentor.mateo.help.basics.1", "mentor.mateo.help.basics.2"]
+		"earning":
+			keys = ["mentor.mateo.help.earning.1", "mentor.mateo.help.earning.2"]
+		"allocating":
+			keys = ["mentor.mateo.help.allocating.1", "mentor.mateo.help.allocating.2"]
+		"limits":
+			keys = ["mentor.mateo.help.limits.1", "mentor.mateo.help.limits.2"]
+	var lines: Array[String] = []
+	for key: String in keys:
+		lines.append(LocalizationManager.text(key))
+	return lines
+
+
+func _choose_help_topic(title: String, prompt: String, topics: Array[Dictionary]) -> String:
+	var menu := MENTOR_TOPIC_MENU.new()
+	add_child(menu)
+	var topic_id: String = await menu.choose_topic(
+		title,
+		prompt,
+		topics,
+		LocalizationManager.text("ui.mentor_help.eyebrow"),
+		LocalizationManager.text("common.close")
+	)
+	menu.queue_free()
+	return topic_id
 
 
 func _show_party_prompt(party: Array) -> int:
