@@ -26,6 +26,18 @@ func _init() -> void:
 	_assert(map_script_source.contains("_setup_ev_training_grass"), "EV grass mask setup is missing")
 	for stat: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
 		_assert(gate_source.contains('"id": "%s"' % stat), "missing EV stat choice: %s" % stat)
+	_assert(
+		gate_source.contains('backdrop.name = "EvTrainingChoiceBackdrop"')
+		and gate_source.contains('fee_badge.name = "EvTrainingFeeBadge"')
+		and gate_source.contains('grid_panel.name = "EvTrainingStatGridPanel"'),
+		"EV stat choice uses layered themed surfaces"
+	)
+	_assert(
+		gate_source.contains("func _apply_stat_button_style")
+		and gate_source.contains("func _apply_cancel_button_style")
+		and gate_source.contains('"hover"'),
+		"EV stat choice replaces default Godot buttons with interactive styles"
+	)
 	_assert(service_source.contains("/game/ev-training/session"), "EV session endpoint is missing")
 	_assert(service_source.contains("/game/ev-training/tutorial/focus"), "EV tutorial focus endpoint is missing")
 	_assert(expert_source.contains("allocate_training_evs"), "Mateo's EV allocation lesson is missing")

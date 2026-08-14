@@ -28,6 +28,7 @@
 
 **Changed**
 
+- The focused EV training stat picker now uses a compact themed interface with distinct stat colours.
 - Item-reward and recovery jingles now wait until their dialogue closes or their result message is shown.
 - Wild Pokémon now choose moves randomly, while Trainer opponents try to use the move that will deal the most damage.
 - Regular Trainer battles no longer show Team Preview; it remains available for important battles.
