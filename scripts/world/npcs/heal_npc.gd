@@ -79,6 +79,7 @@ func _run_heal_interaction(show_intro := true) -> void:
 		return
 
 	if bool(result.get("changed", false)):
+		SfxManager.play("pokemon_recovery")
 		await _play_heal_animation(_get_player_party().size())
 		_add_system_message(healed_system_message)
 		await _save_respawn_point()

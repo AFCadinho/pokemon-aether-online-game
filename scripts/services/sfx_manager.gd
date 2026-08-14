@@ -48,6 +48,10 @@ const SOUND_DATA := {
 		"path": "res://assets/audio/sfx/overworld/item_received.ogg",
 		"volume_db": -3.0,
 	},
+	"pokemon_recovery": {
+		"path": "res://assets/audio/sfx/overworld/pokemon_recovery.ogg",
+		"volume_db": 0.0,
+	},
 }
 
 var stream_cache: Dictionary = {}
