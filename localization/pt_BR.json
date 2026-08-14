@@ -3340,7 +3340,7 @@
   "ui.skills.thieving.description": "Furte Loot de NPCs enquanto equilibra recompensa e nível de procurado.",
   "ui.skills.thieving.unlock_hint": "Conclua Oak's Parcel e fale com Mestre Ladrão Rook em Viridian City para desbloquear Thieving.",
   "ui.skills.thieving.stats": "Loot: {currency}\nBônus de Loot: +{reward}%  •  Redução de detecção: até {risk}%\nMenos procurado: {heat}%",
-  "ui.skills.thieving.wanted": "PROCURADO",
+  "ui.skills.thieving.wanted": "NÍVEL DE PROCURADO",
   "ui.skills.thieving.wanted.value": "{wanted}%",
   "ui.skills.thieving.wanted.tooltip": "Wanted aumenta sua chance de ser pego. Em 100%, serviços públicos podem denunciar você.",
   "ui.skills.unlock.old_rod": "Vara Velha",

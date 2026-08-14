@@ -142,6 +142,7 @@ func _run() -> void:
 	_check((panel.get("detail_level") as Label).text.contains("20"), "the detail view shows the server level")
 	_check((panel.get("stats_label") as Label).text.contains("42"), "Thieving currency and modifiers are visible")
 	_check((panel.get("wanted_section") as VBoxContainer).visible, "Thieving shows a dedicated Wanted meter")
+	_check((panel.get("wanted_title_label") as Label).text == "WANTED LEVEL", "Wanted meter has an explicit title")
 	_check(is_equal_approx((panel.get("wanted_bar") as ProgressBar).value, 65.0), "Wanted meter reflects the server percentage")
 	_check((panel.get("wanted_value_label") as Label).text == "65%", "Wanted meter keeps an exact percentage label")
 	_check((panel.get("unlocks_container") as VBoxContainer).get_child_count() == 10, "class-based target unlocks are listed")

@@ -37,6 +37,7 @@ var experience_bar: ProgressBar
 var experience_label: Label
 var stats_label: Label
 var wanted_section: VBoxContainer
+var wanted_title_label: Label
 var wanted_value_label: Label
 var wanted_bar: ProgressBar
 var detail_tabs: HBoxContainer
@@ -339,12 +340,12 @@ func _build_interface() -> void:
 	var wanted_header := HBoxContainer.new()
 	wanted_section.add_child(wanted_header)
 
-	var wanted_title := Label.new()
-	wanted_title.name = "WantedTitle"
-	wanted_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	wanted_title.add_theme_color_override("font_color", MUTED_TEXT_COLOR)
-	wanted_title.add_theme_font_size_override("font_size", 10)
-	wanted_header.add_child(wanted_title)
+	wanted_title_label = Label.new()
+	wanted_title_label.name = "WantedTitle"
+	wanted_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	wanted_title_label.add_theme_color_override("font_color", GOLD_COLOR)
+	wanted_title_label.add_theme_font_size_override("font_size", 10)
+	wanted_header.add_child(wanted_title_label)
 
 	wanted_value_label = Label.new()
 	wanted_value_label.name = "WantedValue"
@@ -1045,9 +1046,7 @@ func _render_wanted_meter(stats: Dictionary) -> void:
 	)
 	wanted_value_label.text = _text("ui.skills.thieving.wanted.value", {"wanted": wanted})
 	wanted_value_label.add_theme_color_override("font_color", wanted_color)
-	var wanted_title := wanted_section.find_child("WantedTitle", false, false) as Label
-	if wanted_title != null:
-		wanted_title.text = _text("ui.skills.thieving.wanted")
+	wanted_title_label.text = _text("ui.skills.thieving.wanted")
 
 
 func _wanted_meter_color(wanted: int) -> Color:
@@ -1057,7 +1056,7 @@ func _wanted_meter_color(wanted: int) -> Color:
 		return Color("#f39a52")
 	if wanted >= 25:
 		return GOLD_COLOR
-	return ACCENT_COLOR
+	return Color("#c9a94f")
 
 
 func _select_skill(skill_id: String) -> void:
