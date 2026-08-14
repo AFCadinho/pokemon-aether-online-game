@@ -117,6 +117,10 @@ func _init() -> void:
 		beacon_source.contains("AetherConfirmationDialogScene.instantiate()"),
 		"Aether Beacon uses the styled Aethernet confirmation dialog"
 	)
+	_check(
+		beacon_source.contains("var confirmation_layer := CanvasLayer.new()"),
+		"Aether Beacon opens Anchor confirmation in screen space"
+	)
 	_check(beacon_source.contains("TransitService.set_anchor"), "Aether Beacon owns Anchor selection")
 	_check(english_localization.contains('"ui.transit.attuned_system"'), "Aethernet attunement has a localized system message")
 	var placeholder_source := FileAccess.get_file_as_string(

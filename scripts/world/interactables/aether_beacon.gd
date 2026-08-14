@@ -95,8 +95,11 @@ func interact_with_player(_player: Node2D) -> void:
 func _offer_anchor_change(network: Dictionary, destination_name: String) -> void:
 	if str(network.get("anchorDestinationId", "")) == destination_id:
 		return
+	var confirmation_layer := CanvasLayer.new()
+	confirmation_layer.layer = 120
+	get_tree().current_scene.add_child(confirmation_layer)
 	var confirmation := AetherConfirmationDialogScene.instantiate() as AetherConfirmationDialog
-	get_tree().current_scene.add_child(confirmation)
+	confirmation_layer.add_child(confirmation)
 	confirmation.configure(
 		LocalizationManager.text("ui.transit.anchor.confirm_title"),
 		LocalizationManager.text(
@@ -110,7 +113,7 @@ func _offer_anchor_change(network: Dictionary, destination_name: String) -> void
 	confirmation.canceled.connect(_resolve_anchor_confirmation.bind(false), CONNECT_ONE_SHOT)
 	confirmation.popup_centered(Vector2i(520, 220))
 	var accepted: bool = await anchor_confirmation_resolved
-	confirmation.queue_free()
+	confirmation_layer.queue_free()
 	if not accepted:
 		return
 	var result: Dictionary = await TransitService.set_anchor(destination_id, global_position)
