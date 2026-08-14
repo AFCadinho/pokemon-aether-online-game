@@ -11,6 +11,9 @@ const MAP_NPCS := {
 	"res://scenes/overworld/kanto/routes/kanto_route_3.tscn": ["Entities/NPCs/YoungsterWarren", "Entities/NPCs/HikerBruce", "Entities/NPCs/FirebreatherOtis"],
 	"res://scenes/overworld/kanto/routes/viridian_forest.tscn": ["Entities/NPCs/BugCatcherRick", "Entities/NPCs/BugCatcherDoug", "Entities/NPCs/BugCatcherAnthony", "Entities/NPCs/BugCatcherSammy", "Entities/NPCs/LostCamperDana", "Entities/NPCs/ForestResearcherLeah"],
 	"res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn": ["Entities/NPCs/MuseumGuideTheo", "Entities/NPCs/HikerBruno", "Entities/NPCs/GymFanMax", "Entities/NPCs/DigSiteWorkerCole", "Entities/NPCs/PewterResidentNora"],
+	"res://scenes/overworld/kanto/towns/pewter_city/house1.tscn": ["Entities/NPCs/FossilFanPetra", "Entities/NPCs/SchoolKidTessa"],
+	"res://scenes/overworld/kanto/towns/pewter_city/house2.tscn": ["Entities/NPCs/HikerAmos", "Entities/NPCs/PokeFanMira"],
+	"res://scenes/overworld/kanto/towns/viridian_city/house1.tscn": ["Entities/NPCs/PokeFanRowan", "Entities/NPCs/SchoolKidSam"],
 }
 
 const CLASS_FRAME_PATHS := [
@@ -137,6 +140,8 @@ func _check_map(scene_path: String, npc_paths: Array) -> void:
 		return
 	var map := packed.instantiate()
 	var collision := map.get_node_or_null("Collision") as TileMapLayer
+	if collision == null:
+		collision = map.get_node_or_null("BrownHouseTemplate/Collision") as TileMapLayer
 	_check(collision != null, "%s has collision data" % scene_path.get_file())
 	for npc_path_value: Variant in npc_paths:
 		var npc_path := str(npc_path_value)

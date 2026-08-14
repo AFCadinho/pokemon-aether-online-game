@@ -1,9 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://dd5re2mpmfhvf"]
+[gd_scene load_steps=8 format=3 uid="uid://dd5re2mpmfhvf"]
 
 [ext_resource type="PackedScene" uid="uid://ogt7khne5kw1" path="res://scenes/overworld/kanto/reusable_interiors/house/brown_house_template.tscn" id="1_patn8"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_map_meta"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="3_floor_mask"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="4_map_exit"]
+[ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="5_dialogue_npc"]
+[ext_resource type="SpriteFrames" uid="uid://yaxkjlx3spjb" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="6_poke_fan_f"]
+[ext_resource type="SpriteFrames" uid="uid://ddpjpv44v1bjn" path="res://assets/npcs/classes/school_kid_f_frames.tres" id="7_school_kid_f"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_house_exit"]
 size = Vector2(96, 32)
@@ -39,6 +42,26 @@ floor_regions = {
 [node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
 
 [node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Entities" type="Node2D" parent="."]
+z_index = 5
+
+[node name="NPCs" type="Node2D" parent="Entities"]
+
+[node name="FossilFanPetra" parent="Entities/NPCs" instance=ExtResource("5_dialogue_npc")]
+position = Vector2(272, 336)
+npc_id = "kanto_pewter_city_house_1_fossil_fan_petra"
+npc_definition_id = "trainer_class_poke_fan_f"
+display_name = "Fossil Fan Petra"
+npc_sprite_frames = ExtResource("6_poke_fan_f")
+
+[node name="SchoolKidTessa" parent="Entities/NPCs" instance=ExtResource("5_dialogue_npc")]
+position = Vector2(400, 368)
+npc_id = "kanto_pewter_city_house_1_school_kid_tessa"
+npc_definition_id = "trainer_class_school_kid_f"
+display_name = "School Kid Tessa"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("7_school_kid_f")
 
 [node name="Spawns" type="Node2D" parent="."]
 
