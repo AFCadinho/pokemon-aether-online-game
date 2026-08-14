@@ -47,6 +47,8 @@ var language_options_button: OptionButton
 var terminology_label: Label
 var terminology_options_button: OptionButton
 var terminology_hint_label: Label
+var input_binding_buttons: Dictionary = {}
+var input_binding_capture_action := ""
 @onready var sprite_style_options_button: OptionButton = $MarginContainer/VBoxContainer/SpriteStyleOptionsButton
 @onready var sprite_style_status_label: Label = $MarginContainer/VBoxContainer/SpriteStyleStatusLabel
 @onready var fullscreen_check_box: CheckBox = $MarginContainer/VBoxContainer/FullscreenCheckBox
@@ -200,7 +202,25 @@ func close() -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if not visible or not event.is_action_pressed("ui_cancel"):
+	if not visible:
+		return
+	if not input_binding_capture_action.is_empty() and event is InputEventKey:
+		var key_event := event as InputEventKey
+		if not key_event.pressed or key_event.echo:
+			return
+		if key_event.keycode == KEY_ESCAPE or key_event.physical_keycode == KEY_ESCAPE:
+			_cancel_input_binding_capture()
+		else:
+			var keycode := key_event.physical_keycode
+			if keycode == KEY_NONE:
+				keycode = key_event.keycode
+			if keycode != KEY_NONE:
+				SettingsManager.set_input_binding(input_binding_capture_action, keycode)
+				input_binding_capture_action = ""
+				_refresh_input_binding_buttons()
+		get_viewport().set_input_as_handled()
+		return
+	if not event.is_action_pressed("ui_cancel"):
 		return
 
 	if privacy_dialog != null and privacy_dialog.visible:
@@ -244,6 +264,7 @@ func _apply_settings_to_controls() -> void:
 	_set_volume_control(pokemon_cry_volume_slider, pokemon_cry_volume_value_label, SettingsManager.pokemon_cry_volume)
 	_set_volume_control(ui_volume_slider, ui_volume_value_label, SettingsManager.ui_volume)
 	_set_volume_control(notification_volume_slider, notification_volume_value_label, SettingsManager.notification_volume)
+	_refresh_input_binding_buttons()
 
 	loading_controls = false
 
@@ -300,6 +321,7 @@ func _setup_tabs() -> void:
 	var language_tab: VBoxContainer = _create_tab_content("Language", "ui.settings.tab.language")
 	var graphics_tab: VBoxContainer = _create_tab_content("Graphics", "ui.settings.tab.graphics")
 	var sound_tab: VBoxContainer = _create_tab_content("Sound", "ui.settings.tab.sound")
+	var controls_tab: VBoxContainer = _create_tab_content("Controls", "ui.settings.tab.controls")
 	var account_tab: VBoxContainer = _create_tab_content("Account", "ui.settings.tab.account")
 	var about_tab: VBoxContainer = _create_tab_content("About", "ui.settings.tab.about")
 	account_tab_root = account_tab.get_parent().get_parent() as Control
@@ -394,6 +416,7 @@ func _setup_tabs() -> void:
 		"ui.settings.section.audio_mix_subtitle",
 		sound_tab.get_children()
 	)
+	_build_controls_tab(controls_tab)
 	_build_account_tab(account_tab)
 	_build_about_tab(about_tab)
 
@@ -541,6 +564,81 @@ func _create_cursor_scale_control() -> void:
 	cursor_scale_value_label.custom_minimum_size = Vector2(48, 0)
 	cursor_scale_value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	row.add_child(cursor_scale_value_label)
+
+
+func _build_controls_tab(controls_tab: VBoxContainer) -> void:
+	var fishing_row := HBoxContainer.new()
+	fishing_row.name = "FishingBindingRow"
+	fishing_row.add_theme_constant_override("separation", 12)
+
+	var fishing_copy := VBoxContainer.new()
+	fishing_copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	fishing_copy.add_theme_constant_override("separation", 2)
+	fishing_row.add_child(fishing_copy)
+
+	var fishing_label := Label.new()
+	_set_localized_text(fishing_label, "ui.settings.controls.fishing")
+	fishing_label.add_theme_color_override("font_color", UI_TEXT)
+	fishing_copy.add_child(fishing_label)
+
+	var fishing_hint := Label.new()
+	_set_localized_text(fishing_hint, "ui.settings.controls.fishing_hint")
+	fishing_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	fishing_hint.add_theme_font_size_override("font_size", 11)
+	fishing_hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	fishing_copy.add_child(fishing_hint)
+
+	var fishing_button := Button.new()
+	fishing_button.name = "FishingBindingButton"
+	fishing_button.custom_minimum_size = Vector2(112, 38)
+	fishing_button.focus_mode = Control.FOCUS_ALL
+	fishing_button.pressed.connect(_start_input_binding_capture.bind("fish"))
+	fishing_row.add_child(fishing_button)
+	input_binding_buttons["fish"] = fishing_button
+
+	var reset_button := Button.new()
+	reset_button.name = "ResetFishingBindingButton"
+	_set_localized_text(reset_button, "ui.settings.controls.reset")
+	reset_button.focus_mode = Control.FOCUS_ALL
+	reset_button.pressed.connect(_reset_input_binding.bind("fish"))
+
+	controls_tab.add_child(fishing_row)
+	controls_tab.add_child(reset_button)
+	_wrap_settings_section(
+		controls_tab,
+		"ui.settings.section.controls",
+		"ui.settings.section.controls_subtitle",
+		controls_tab.get_children()
+	)
+
+
+func _start_input_binding_capture(action: String) -> void:
+	input_binding_capture_action = action
+	_refresh_input_binding_buttons()
+
+
+func _cancel_input_binding_capture() -> void:
+	input_binding_capture_action = ""
+	_refresh_input_binding_buttons()
+
+
+func _reset_input_binding(action: String) -> void:
+	input_binding_capture_action = ""
+	SettingsManager.reset_input_binding(action)
+	_refresh_input_binding_buttons()
+
+
+func _refresh_input_binding_buttons() -> void:
+	for action_value: Variant in input_binding_buttons:
+		var action := str(action_value)
+		var button := input_binding_buttons.get(action) as Button
+		if button == null:
+			continue
+		button.text = (
+			LocalizationManager.text("ui.settings.controls.press_key")
+			if input_binding_capture_action == action
+			else SettingsManager.get_input_binding_label(action)
+		)
 
 
 func _move_nodes_to_container(container: VBoxContainer, nodes: Array) -> void:

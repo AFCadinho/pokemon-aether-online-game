@@ -28,6 +28,28 @@ func _run() -> void:
 	guru.set("dialogue_lines", introduction_lines)
 	test_scene.add_child(guru)
 	await process_frame
+	var instruction_lines: Array[String] = await guru.call(
+		"_resolve_dialogue_lines",
+		"",
+		["Click the icon or press {fishing_hotkey}."]
+	)
+	_expect(
+		instruction_lines == [
+			"Click the icon or press %s."
+			% str(root.get_node("SettingsManager").call("get_input_binding_label", "fish"))
+		],
+		"Fishing Guru inserts the player's configured Fishing hotkey"
+	)
+	var help_lines: Array[String] = guru.call("_help_lines", "starting")
+	_expect(
+		help_lines.size() == 4
+		and help_lines[1].contains(str(root.get_node("SettingsManager").call(
+			"get_input_binding_label",
+			"fish"
+		)))
+		and help_lines[2].contains("!"),
+		"Fishing Guru help explains casting and reeling with the configured hotkey"
+	)
 	guru.call("_apply_npc_metadata", {
 		"offeredQuestId": "learn_to_fish",
 		"offeredQuestRequiredQuestId": "oaks_parcel",

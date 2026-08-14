@@ -80,6 +80,22 @@ func _apply_npc_metadata(metadata: Dictionary) -> void:
 	).strip_edges()
 
 
+func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Array) -> Array[String]:
+	var lines: Array[String] = await super._resolve_dialogue_lines(
+		dialogue_reference_id,
+		fallback_lines
+	)
+	return _format_fishing_instructions(lines)
+
+
+func _format_fishing_instructions(lines: Array[String]) -> Array[String]:
+	var formatted_lines: Array[String] = []
+	var values := {"fishing_hotkey": SettingsManager.get_input_binding_label("fish")}
+	for line: String in lines:
+		formatted_lines.append(line.format(values))
+	return formatted_lines
+
+
 func _claim_lesson_reward() -> void:
 	if quest_reward_id.is_empty():
 		await _show_report_to_staff_message()
@@ -138,12 +154,18 @@ func _help_lines(topic_id: String) -> Array[String]:
 	var keys: Array[String] = []
 	match topic_id:
 		"starting":
-			keys = ["mentor.fishing_guru.help.starting.1", "mentor.fishing_guru.help.starting.2"]
+			keys = [
+				"mentor.fishing_guru.help.starting.1",
+				"mentor.fishing_guru.help.starting.2",
+				"mentor.fishing_guru.help.starting.3",
+				"mentor.fishing_guru.help.starting.4",
+			]
 		"catching":
 			keys = ["mentor.fishing_guru.help.catching.1", "mentor.fishing_guru.help.catching.2"]
 		"progression":
 			keys = ["mentor.fishing_guru.help.progression.1", "mentor.fishing_guru.help.progression.2"]
 	var lines: Array[String] = []
+	var values := {"fishing_hotkey": SettingsManager.get_input_binding_label("fish")}
 	for key: String in keys:
-		lines.append(LocalizationManager.text(key))
+		lines.append(LocalizationManager.text(key, values))
 	return lines
