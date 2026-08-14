@@ -17271,12 +17271,12 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 		bag_selected_item = {}
 		_refresh_bag_items()
 		_refresh_bag_detail()
-		if granted_count > 0:
-			SfxManager.play("item_found")
 		_add_chat_message(LocalizationManager.text("ui.bag.message.box_opened", {
 			"item": str(item.get("name", _item_name_from_id(item_id))),
 			"count": granted_count,
 		}))
+		if granted_count > 0:
+			SfxManager.play("item_found")
 		return
 	if use_action == "unlock_appearance":
 		var unlock_result: Dictionary = await InventoryService.use_inventory_item(item_id)

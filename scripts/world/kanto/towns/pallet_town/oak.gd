@@ -236,12 +236,12 @@ func _turn_in_quest_item(player: Node2D) -> void:
 		]
 	))
 	if bool(result.get("turnedIn", false)):
-		SfxManager.play("item_received")
 		get_tree().call_group(
 			"ui_overlay",
 			"add_system_message",
 			LocalizationManager.text("ui.key_item.received_pokedex")
 		)
+		SfxManager.play("item_received")
 	if gary != null and gary.has_method("play_parcel_return_departure"):
 		await gary.call("play_parcel_return_departure", player)
 	else:

@@ -229,13 +229,15 @@ func _check_existing_npc_behavior_entrypoints() -> void:
 		"SfxManager registers the Pokemon recovery jingle"
 	)
 	var changed_heal_index := heal_text.find('if bool(result.get("changed", false)):')
+	var healed_message_index := heal_text.find("_add_system_message(healed_system_message)", changed_heal_index)
 	var recovery_sound_index := heal_text.find('SfxManager.play("pokemon_recovery")')
 	var unchanged_heal_index := heal_text.find("\n\telse:", recovery_sound_index)
 	_check_true(
 		changed_heal_index >= 0
-		and recovery_sound_index > changed_heal_index
+		and healed_message_index > changed_heal_index
+		and recovery_sound_index > healed_message_index
 		and unchanged_heal_index > recovery_sound_index,
-		"HealNPC plays the recovery jingle only after a changed party heal"
+		"HealNPC plays the recovery jingle after a changed party heal result is shown"
 	)
 	_check_true(
 		heal_text.contains("func _get_animation_duration_seconds(animation_name: StringName) -> float:"),

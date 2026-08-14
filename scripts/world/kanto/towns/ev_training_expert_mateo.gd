@@ -115,6 +115,8 @@ func _claim_reward() -> void:
 		"add_system_message",
 		"EV training unlocked · Received Macho Brace"
 	)
+	if bool(result.get("claimed", false)):
+		SfxManager.play("item_received")
 
 
 func _show_party_prompt(party: Array) -> int:

@@ -74,6 +74,8 @@ func _claim_catching_reward() -> void:
 			"reward": "10 %s" % ItemLocalization.display_name("great-ball", "Great Balls"),
 		})
 	)
+	if bool(result.get("claimed", false)):
+		SfxManager.play("item_received")
 
 
 func _resolve_dialogue_lines(dialogue_id: String, fallback: Array[String]) -> Array[String]:

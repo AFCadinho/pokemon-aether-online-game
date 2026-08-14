@@ -155,6 +155,8 @@ func _claim_quest_reward() -> void:
 		quest_reward_received_dialogue_id,
 		["You received Oak's Parcel!", "Please deliver it to Professor Oak."]
 	))
+	if bool(result.get("claimed", false)):
+		SfxManager.play("item_received")
 
 
 func _get_metadata_dialogue_id(metadata: Dictionary, camel_key: String, snake_key: String, current_value: String) -> String:

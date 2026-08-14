@@ -78,6 +78,8 @@ func _claim_training_reward() -> void:
 		]
 	))
 	_notify_training_completed(str(result.get("itemId", "exp-share")))
+	if bool(result.get("claimed", false)):
+		SfxManager.play("item_received")
 
 
 func _notify_training_completed(item_id: String) -> void:

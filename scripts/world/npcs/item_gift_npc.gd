@@ -70,6 +70,7 @@ func interact_with_player(_player: Node2D) -> void:
 				"add_system_message",
 				LocalizationManager.text("ui.key_item.received_town_map")
 			)
+		SfxManager.play("item_received")
 	else:
 		reward_resolved = true
 		_refresh_quest_marker()
