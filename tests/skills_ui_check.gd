@@ -92,6 +92,26 @@ func _run() -> void:
 	]
 	skills_service.set("skills", test_skills)
 	skills_service.set("state_loaded", true)
+	skills_service.set("fishing_catalog", {
+		"speciesCount": 3,
+		"rods": [
+			{
+				"id": "old_rod",
+				"name": "Old Rod",
+				"entries": [{"species": "Magikarp", "requiredFishingLevel": 1, "minPokemonLevel": 5, "maxPokemonLevel": 10, "regions": ["kanto"], "areaIds": ["kanto_pallet_town"], "locationCount": 1}],
+			},
+			{
+				"id": "good_rod",
+				"name": "Good Rod",
+				"entries": [{"species": "Horsea", "requiredFishingLevel": 18, "minPokemonLevel": 5, "maxPokemonLevel": 15, "regions": ["kanto"], "areaIds": ["kanto_pallet_town"], "locationCount": 1}],
+			},
+			{
+				"id": "super_rod",
+				"name": "Super Rod",
+				"entries": [{"species": "Dragonair", "requiredFishingLevel": 45, "minPokemonLevel": 25, "maxPokemonLevel": 35, "regions": ["kanto"], "areaIds": ["kanto_safari_zone"], "locationCount": 1}],
+			},
+		],
+	})
 	panel.call("_render_skills", test_skills)
 	panel.visible = true
 	_check((panel.get("skill_cards") as GridContainer).get_child_count() == 2, "Fishing and Thieving receive separate overview cards")
@@ -137,6 +157,17 @@ func _run() -> void:
 	_check((panel.get("detail_name") as Label).text == "Fishing", "Fishing opens its own detailed interface")
 	_check(not (panel.get("targets_section") as VBoxContainer).visible, "the target catalog only appears for Thieving")
 	_check(is_equal_approx((panel.get("experience_bar") as ProgressBar).value, 42.86), "XP progress uses the server percentage")
+	panel.call("_select_detail_tab", "catalog")
+	_check((panel.get("fishing_catalog_section") as VBoxContainer).visible, "Fishing has a dedicated catch catalog tab")
+	_check((panel.get("fishing_rod_filters") as HBoxContainer).get_child_count() == 3, "the catch catalog can be filtered by all three rods")
+	_check((panel.get("fishing_catalog_container") as VBoxContainer).get_child_count() == 1, "the selected rod lists its fishable Pokémon")
+	var old_rod_row := (panel.get("fishing_catalog_container") as VBoxContainer).get_child(0) as PanelContainer
+	var old_rod_status := ((old_rod_row.get_child(0) as HBoxContainer).get_child(2) as Label)
+	_check(old_rod_status.text == "Available", "catalog entries reflect the player's Fishing level and active rod")
+	panel.call("_select_fishing_rod", "good_rod")
+	var good_rod_row := (panel.get("fishing_catalog_container") as VBoxContainer).get_child(0) as PanelContainer
+	var good_rod_status := ((good_rod_row.get_child(0) as HBoxContainer).get_child(2) as Label)
+	_check(good_rod_status.text.contains("18"), "species above the player's Fishing level remain visibly locked")
 	panel.call("_show_overview")
 	_check((panel.get("overview_panel") as VBoxContainer).visible, "the detail back action returns to all skill levels")
 	_check(not (panel.get("detail_panel") as PanelContainer).visible, "returning to the overview hides skill-specific content")

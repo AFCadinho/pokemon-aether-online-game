@@ -34,13 +34,23 @@ var detail_level: Label
 var experience_bar: ProgressBar
 var experience_label: Label
 var stats_label: Label
+var detail_tabs: HBoxContainer
+var progression_tab_button: Button
+var catalog_tab_button: Button
+var progression_section: VBoxContainer
 var unlocks_container: VBoxContainer
 var targets_section: VBoxContainer
 var targets_summary_label: Label
 var targets_reset_label: Label
 var targets_container: VBoxContainer
+var fishing_catalog_section: VBoxContainer
+var fishing_catalog_summary: Label
+var fishing_rod_filters: HBoxContainer
+var fishing_catalog_container: VBoxContainer
 var skill_buttons: Dictionary = {}
 var selected_skill_id := "thieving"
+var selected_detail_tab := "progression"
+var selected_rod_id := "old_rod"
 var showing_detail := false
 var loading := false
 
@@ -51,6 +61,8 @@ func _ready() -> void:
 		LocalizationManager.locale_changed.connect(_on_locale_changed)
 	if not SkillsService.state_changed.is_connected(_on_skills_changed):
 		SkillsService.state_changed.connect(_on_skills_changed)
+	if not SkillsService.fishing_catalog_changed.is_connected(_on_fishing_catalog_changed):
+		SkillsService.fishing_catalog_changed.connect(_on_fishing_catalog_changed)
 	_refresh_localized_content()
 
 
@@ -206,6 +218,7 @@ func _build_interface() -> void:
 
 	var detail_content := VBoxContainer.new()
 	detail_content.add_theme_constant_override("separation", 8)
+	detail_content.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	detail_margin.add_child(detail_content)
 
 	var detail_header := HBoxContainer.new()
@@ -259,26 +272,43 @@ func _build_interface() -> void:
 	experience_label.add_theme_font_size_override("font_size", 10)
 	detail_content.add_child(experience_label)
 
+	detail_tabs = HBoxContainer.new()
+	detail_tabs.add_theme_constant_override("separation", 6)
+	detail_content.add_child(detail_tabs)
+
+	progression_tab_button = _create_detail_tab_button("progression")
+	progression_tab_button.pressed.connect(_select_detail_tab.bind("progression"))
+	detail_tabs.add_child(progression_tab_button)
+
+	catalog_tab_button = _create_detail_tab_button("catalog")
+	catalog_tab_button.pressed.connect(_select_detail_tab.bind("catalog"))
+	detail_tabs.add_child(catalog_tab_button)
+
+	progression_section = VBoxContainer.new()
+	progression_section.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	progression_section.add_theme_constant_override("separation", 8)
+	detail_content.add_child(progression_section)
+
 	stats_label = Label.new()
 	stats_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	stats_label.add_theme_color_override("font_color", TEXT_COLOR)
 	stats_label.add_theme_font_size_override("font_size", 11)
-	detail_content.add_child(stats_label)
+	progression_section.add_child(stats_label)
 
 	var unlock_title := Label.new()
 	unlock_title.name = "UnlockTitle"
 	unlock_title.add_theme_color_override("font_color", ACCENT_COLOR)
 	unlock_title.add_theme_font_size_override("font_size", 12)
-	detail_content.add_child(unlock_title)
+	progression_section.add_child(unlock_title)
 
 	unlocks_container = VBoxContainer.new()
 	unlocks_container.add_theme_constant_override("separation", 4)
-	detail_content.add_child(unlocks_container)
+	progression_section.add_child(unlocks_container)
 
 	targets_section = VBoxContainer.new()
 	targets_section.name = "TargetsSection"
 	targets_section.add_theme_constant_override("separation", 5)
-	detail_content.add_child(targets_section)
+	progression_section.add_child(targets_section)
 
 	var targets_header := HBoxContainer.new()
 	targets_section.add_child(targets_header)
@@ -304,6 +334,38 @@ func _build_interface() -> void:
 	targets_container.name = "TargetsContainer"
 	targets_container.add_theme_constant_override("separation", 5)
 	targets_section.add_child(targets_container)
+
+	fishing_catalog_section = VBoxContainer.new()
+	fishing_catalog_section.visible = false
+	fishing_catalog_section.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	fishing_catalog_section.add_theme_constant_override("separation", 7)
+	detail_content.add_child(fishing_catalog_section)
+
+	var catalog_header := HBoxContainer.new()
+	catalog_header.add_theme_constant_override("separation", 8)
+	fishing_catalog_section.add_child(catalog_header)
+
+	fishing_catalog_summary = Label.new()
+	fishing_catalog_summary.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	fishing_catalog_summary.add_theme_color_override("font_color", MUTED_TEXT_COLOR)
+	fishing_catalog_summary.add_theme_font_size_override("font_size", 10)
+	catalog_header.add_child(fishing_catalog_summary)
+
+	fishing_rod_filters = HBoxContainer.new()
+	fishing_rod_filters.add_theme_constant_override("separation", 5)
+	fishing_catalog_section.add_child(fishing_rod_filters)
+
+	var catalog_scroll := ScrollContainer.new()
+	catalog_scroll.name = "FishingCatalogScroll"
+	catalog_scroll.custom_minimum_size.y = 220.0
+	catalog_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	catalog_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	fishing_catalog_section.add_child(catalog_scroll)
+
+	fishing_catalog_container = VBoxContainer.new()
+	fishing_catalog_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	fishing_catalog_container.add_theme_constant_override("separation", 5)
+	catalog_scroll.add_child(fishing_catalog_container)
 
 	_render_skills([])
 
@@ -393,6 +455,9 @@ func _render_detail(skill: Dictionary) -> void:
 	if not skill_unlocked:
 		stats_label.text = _text(str(skill.get("unlockHintKey", "ui.skills.%s.unlock_hint" % skill_id)))
 		targets_section.visible = false
+		detail_tabs.visible = false
+		progression_section.visible = true
+		fishing_catalog_section.visible = false
 		return
 	experience_bar.value = clampf(float(skill.get("progressPercent", 0.0)), 0.0, 100.0)
 	if level >= max_level:
@@ -408,6 +473,237 @@ func _render_detail(skill: Dictionary) -> void:
 	targets_section.visible = skill_id == "thieving"
 	if targets_section.visible:
 		_render_targets(skill.get("targets", []) as Array)
+	detail_tabs.visible = skill_id == "fishing"
+	_render_detail_tab(skill)
+
+
+func _create_detail_tab_button(tab_id: String) -> Button:
+	var button := Button.new()
+	button.name = "%sTab" % tab_id.capitalize()
+	button.custom_minimum_size = Vector2(150, 31)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.focus_mode = Control.FOCUS_NONE
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.add_theme_font_size_override("font_size", 11)
+	button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	return button
+
+
+func _select_detail_tab(tab_id: String) -> void:
+	selected_detail_tab = tab_id
+	_render_detail(SkillsService.get_skill(selected_skill_id))
+
+
+func _render_detail_tab(skill: Dictionary) -> void:
+	var show_catalog := str(skill.get("id", "")) == "fishing" and selected_detail_tab == "catalog"
+	progression_section.visible = not show_catalog
+	fishing_catalog_section.visible = show_catalog
+	_style_detail_tab(progression_tab_button, not show_catalog)
+	_style_detail_tab(catalog_tab_button, show_catalog)
+	if show_catalog:
+		_render_fishing_catalog(skill)
+
+
+func _style_detail_tab(button: Button, selected: bool) -> void:
+	button.add_theme_color_override("font_color", TEXT_COLOR if selected else MUTED_TEXT_COLOR)
+	button.add_theme_color_override("font_hover_color", TEXT_COLOR)
+	button.add_theme_stylebox_override(
+		"normal",
+		_make_panel_style(CARD_SELECTED if selected else Color("#07111c"), CARD_SELECTED_BORDER if selected else PANEL_BORDER, 7, 1)
+	)
+	button.add_theme_stylebox_override("hover", _make_panel_style(CARD_HOVER, CARD_SELECTED_BORDER, 7, 1))
+	button.add_theme_stylebox_override("pressed", _make_panel_style(CARD_SELECTED, CARD_SELECTED_BORDER, 7, 1))
+
+
+func _render_fishing_catalog(skill: Dictionary) -> void:
+	for child: Node in fishing_rod_filters.get_children():
+		fishing_rod_filters.remove_child(child)
+		child.queue_free()
+	for child: Node in fishing_catalog_container.get_children():
+		fishing_catalog_container.remove_child(child)
+		child.queue_free()
+
+	var catalog := SkillsService.get_fishing_catalog()
+	var rods_value: Variant = catalog.get("rods", [])
+	var rods: Array = rods_value as Array if rods_value is Array else []
+	var fishing_level := maxi(int(skill.get("level", 1)), 1)
+	fishing_catalog_summary.text = _text("ui.skills.fishing.catalog.summary", {
+		"count": maxi(int(catalog.get("speciesCount", 0)), 0),
+		"level": fishing_level,
+	})
+	if rods.is_empty():
+		var empty_label := Label.new()
+		empty_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		empty_label.add_theme_color_override("font_color", MUTED_TEXT_COLOR)
+		empty_label.text = _text("ui.skills.fishing.catalog.unavailable")
+		fishing_catalog_container.add_child(empty_label)
+		return
+
+	if not _catalog_has_rod(rods, selected_rod_id):
+		selected_rod_id = str((rods[0] as Dictionary).get("id", "old_rod"))
+	var selected_rod: Dictionary = {}
+	for rod_index in range(rods.size()):
+		var rod := rods[rod_index] as Dictionary
+		var rod_id := str(rod.get("id", ""))
+		var rod_available := int((skill.get("stats", {}) as Dictionary).get("activeTier", 0)) >= rod_index + 1
+		var filter := Button.new()
+		filter.custom_minimum_size = Vector2(0, 30)
+		filter.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		filter.focus_mode = Control.FOCUS_NONE
+		filter.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		filter.text = "%s%s" % ["" if rod_available else "🔒  ", _rod_name(rod_id, str(rod.get("name", rod_id)))]
+		filter.add_theme_font_size_override("font_size", 10)
+		filter.add_theme_color_override("font_color", TEXT_COLOR if rod_id == selected_rod_id else MUTED_TEXT_COLOR)
+		filter.add_theme_stylebox_override(
+			"normal",
+			_make_panel_style(CARD_SELECTED if rod_id == selected_rod_id else Color("#07111c"), CARD_SELECTED_BORDER if rod_id == selected_rod_id else PANEL_BORDER, 7, 1)
+		)
+		filter.add_theme_stylebox_override("hover", _make_panel_style(CARD_HOVER, CARD_SELECTED_BORDER, 7, 1))
+		filter.add_theme_stylebox_override("pressed", _make_panel_style(CARD_SELECTED, CARD_SELECTED_BORDER, 7, 1))
+		filter.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+		filter.pressed.connect(_select_fishing_rod.bind(rod_id))
+		fishing_rod_filters.add_child(filter)
+		if rod_id == selected_rod_id:
+			selected_rod = rod
+
+	var entries_value: Variant = selected_rod.get("entries", [])
+	var entries: Array = entries_value as Array if entries_value is Array else []
+	var selected_rod_tier := _catalog_rod_tier(rods, selected_rod_id)
+	var active_tier := maxi(int((skill.get("stats", {}) as Dictionary).get("activeTier", 0)), 0)
+	for entry_value: Variant in entries:
+		if entry_value is Dictionary:
+			fishing_catalog_container.add_child(
+				_create_fishing_catalog_row(entry_value as Dictionary, fishing_level, active_tier >= selected_rod_tier)
+			)
+
+
+func _create_fishing_catalog_row(entry: Dictionary, fishing_level: int, rod_available: bool) -> Control:
+	var required_level := maxi(int(entry.get("requiredFishingLevel", 1)), 1)
+	var available := rod_available and fishing_level >= required_level
+	var row := PanelContainer.new()
+	row.custom_minimum_size.y = 58.0
+	row.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#07111ceb"), Color("#326b74") if available else Color("#263746"), 8, 1)
+	)
+	row.tooltip_text = _catalog_locations_tooltip(entry)
+
+	var content := HBoxContainer.new()
+	content.add_theme_constant_override("separation", 9)
+	row.add_child(content)
+
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(46, 46)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon.texture = PokemonAssets.load_party_icon(str(entry.get("species", "")))
+	icon.modulate = Color.WHITE if available else Color("#8793a0a8")
+	content.add_child(icon)
+
+	var identity := VBoxContainer.new()
+	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	identity.add_theme_constant_override("separation", 1)
+	content.add_child(identity)
+
+	var name_label := Label.new()
+	name_label.add_theme_color_override("font_color", TEXT_COLOR if available else COMPLETE_COLOR)
+	name_label.add_theme_font_size_override("font_size", 12)
+	name_label.text = str(entry.get("species", "Unknown"))
+	identity.add_child(name_label)
+
+	var level_label := Label.new()
+	level_label.add_theme_color_override("font_color", MUTED_TEXT_COLOR)
+	level_label.add_theme_font_size_override("font_size", 9)
+	level_label.text = _text("ui.skills.fishing.catalog.levels", {
+		"fishing": required_level,
+		"pokemon": _pokemon_level_range(entry),
+	})
+	identity.add_child(level_label)
+
+	var location_label := Label.new()
+	location_label.add_theme_color_override("font_color", MUTED_TEXT_COLOR)
+	location_label.add_theme_font_size_override("font_size", 9)
+	location_label.text = _text(
+		"ui.skills.fishing.catalog.location" if int(entry.get("locationCount", 0)) == 1 else "ui.skills.fishing.catalog.locations",
+		{
+		"region": _catalog_regions(entry),
+		"count": maxi(int(entry.get("locationCount", 0)), 0),
+		}
+	)
+	identity.add_child(location_label)
+
+	var status := Label.new()
+	status.custom_minimum_size = Vector2(108, 28)
+	status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	status.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	status.add_theme_font_size_override("font_size", 9)
+	if available:
+		status.text = _text("ui.skills.fishing.catalog.available")
+		status.add_theme_color_override("font_color", SUCCESS_COLOR)
+		status.add_theme_stylebox_override("normal", _make_panel_style(Color("#0b241a"), Color("#397858"), 7, 1))
+	elif not rod_available:
+		status.text = _text("ui.skills.fishing.catalog.rod_locked")
+		status.add_theme_color_override("font_color", LOCKED_COLOR)
+		status.add_theme_stylebox_override("normal", _make_panel_style(Color("#10151c"), Color("#2c3540"), 7, 1))
+	else:
+		status.text = _text("ui.skills.fishing.catalog.level_required", {"level": required_level})
+		status.add_theme_color_override("font_color", GOLD_COLOR)
+		status.add_theme_stylebox_override("normal", _make_panel_style(Color("#211c0d"), Color("#6f5d31"), 7, 1))
+	content.add_child(status)
+	return row
+
+
+func _select_fishing_rod(rod_id: String) -> void:
+	selected_rod_id = rod_id
+	_render_fishing_catalog(SkillsService.get_skill("fishing"))
+
+
+func _catalog_has_rod(rods: Array, rod_id: String) -> bool:
+	return _catalog_rod_tier(rods, rod_id) > 0
+
+
+func _catalog_rod_tier(rods: Array, rod_id: String) -> int:
+	for index in range(rods.size()):
+		if str((rods[index] as Dictionary).get("id", "")) == rod_id:
+			return index + 1
+	return 0
+
+
+func _rod_name(rod_id: String, fallback: String) -> String:
+	var key := "ui.skills.fishing.rod.%s" % rod_id
+	var translated := _text(key)
+	return fallback if translated == key else translated
+
+
+func _pokemon_level_range(entry: Dictionary) -> String:
+	var min_level := maxi(int(entry.get("minPokemonLevel", 1)), 1)
+	var max_level := maxi(int(entry.get("maxPokemonLevel", min_level)), min_level)
+	return str(min_level) if min_level == max_level else "%d–%d" % [min_level, max_level]
+
+
+func _catalog_regions(entry: Dictionary) -> String:
+	var regions_value: Variant = entry.get("regions", [])
+	if not regions_value is Array:
+		return _text("ui.skills.fishing.catalog.unknown_region")
+	var names: Array[String] = []
+	for region_value: Variant in regions_value as Array:
+		var region := str(region_value).strip_edges()
+		if region != "":
+			names.append(region.capitalize())
+	return ", ".join(names) if not names.is_empty() else _text("ui.skills.fishing.catalog.unknown_region")
+
+
+func _catalog_locations_tooltip(entry: Dictionary) -> String:
+	var area_ids_value: Variant = entry.get("areaIds", [])
+	if not area_ids_value is Array:
+		return ""
+	var names: Array[String] = []
+	for area_id_value: Variant in area_ids_value as Array:
+		var area_name := str(area_id_value).trim_prefix("kanto_").replace("_", " ").capitalize()
+		if area_name != "":
+			names.append(area_name)
+	return ", ".join(names)
 
 
 func _render_unlocks(unlocks: Array) -> void:
@@ -528,6 +824,7 @@ func _stats_text(skill_id: String, stats: Dictionary) -> String:
 
 func _select_skill(skill_id: String) -> void:
 	selected_skill_id = skill_id
+	selected_detail_tab = "progression"
 	showing_detail = true
 	_render_skills(SkillsService.get_skills())
 
@@ -542,6 +839,11 @@ func _on_skills_changed(skills: Array) -> void:
 		_render_skills(skills)
 
 
+func _on_fishing_catalog_changed(_catalog: Dictionary) -> void:
+	if visible and showing_detail and selected_skill_id == "fishing" and selected_detail_tab == "catalog":
+		_render_detail(SkillsService.get_skill("fishing"))
+
+
 func _on_locale_changed(_locale: String) -> void:
 	_refresh_localized_content()
 	if visible:
@@ -554,6 +856,8 @@ func _refresh_localized_content() -> void:
 	title_label.text = _text("ui.skills.title")
 	subtitle_label.text = _text("ui.skills.subtitle")
 	back_button.text = "←  %s" % _text("ui.skills.back")
+	progression_tab_button.text = _text("ui.skills.progression")
+	catalog_tab_button.text = _text("ui.skills.fishing.catalog.title")
 	close_button.tooltip_text = _text("common.close")
 	var unlock_title := main_panel.find_child("UnlockTitle", true, false) as Label
 	if unlock_title != null:
