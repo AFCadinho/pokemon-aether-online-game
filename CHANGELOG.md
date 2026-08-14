@@ -35,6 +35,7 @@
 
 **Fixed**
 
+- Regular Trainer battles no longer briefly flash the lead-selection phase while automatic leads are being chosen.
 - Gary now waits to appear on Route 22 until Oak's Parcel has been delivered.
 - Fixed evolution choices sometimes appearing twice.
 - Fixed being able to move too early while choosing a starter from Professor Oak.

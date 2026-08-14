@@ -6156,7 +6156,8 @@ func setup_trainer_battle_from_response(
 	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
 ) -> void:
 	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null, environment_id)
-	opponent_party_reveal_policy.reset(_trainer_team_preview_enabled(api_response))
+	var team_preview_enabled := _trainer_team_preview_enabled(api_response)
+	opponent_party_reveal_policy.reset(team_preview_enabled)
 	battle_banter_presenter.configure(trainer_data)
 	battle_voice_director.configure(str(api_response.get("battleId", "")), "trainer", trainer_data)
 	_show_local_player_trainer()
@@ -6167,12 +6168,20 @@ func setup_trainer_battle_from_response(
 		await _notify_trainer_entry_ready(entry_ready_callback)
 		return
 
-	if not _trainer_team_preview_enabled(api_response):
+	if not team_preview_enabled:
 		_show_default_trainer_leads_before_selection(player_pokemon, api_response)
 
-	await _notify_trainer_entry_ready(entry_ready_callback)
+	# Interactive Team Preview must be revealed before the player can choose.
+	# Regular NPC battles stay covered while both automatic lead requests finish,
+	# preventing the server's mechanical preview phase from flashing on screen.
+	if team_preview_enabled:
+		await _notify_trainer_entry_ready(entry_ready_callback)
 
 	var lead_response := await _run_trainer_lead_selection(api_response)
+	if not team_preview_enabled:
+		if not lead_response.is_empty():
+			await _prepare_team_preview_lead_summon_transition()
+		await _notify_trainer_entry_ready(entry_ready_callback)
 	if lead_response.is_empty():
 		return
 
@@ -6189,7 +6198,8 @@ func setup_trainer_battle_from_response(
 	# Team Preview owns the field until both preview layers have been cleared.
 	# Keep the real lead containers hidden while their sprites are populated so
 	# they can only become visible at the Pokeball release frame.
-	await _prepare_team_preview_lead_summon_transition()
+	if team_preview_enabled:
+		await _prepare_team_preview_lead_summon_transition()
 	await _present_special_npc_battle_opening(trainer_data)
 	_show_original_player_lead_before_initial_events(player_species, player_pokemon)
 	_show_original_active_pokemon_for_player("p2", opponent_species)
