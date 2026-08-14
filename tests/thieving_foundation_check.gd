@@ -33,6 +33,13 @@ func _init() -> void:
 	_check("ThievingPromptButton" in npc and "assets/ui/thieving.svg" in npc, "Eligible targets show a clickable Thieving action")
 	_check("[T]" not in npc, "NPC nameplates no longer use a hard-coded Thieving key prompt")
 	_check("pickpocket_enabled = true" not in viridian, "Viridian targets are data-driven instead of scene overrides")
+	_check(
+		"kanto_viridian_city_gardener_mabel" in viridian
+		and "kanto_viridian_city_ace_trainer_victor" in viridian
+		and 'npc_sprite_frames = ExtResource("25_elder_f")' in viridian
+		and 'npc_sprite_frames = ExtResource("32_ace_trainer_m")' in viridian,
+		"Viridian has outdoor elderly and Ace Trainer targets with class sprites"
+	)
 	_check("pickpocket_enabled = true" not in pallet, "Pallet Town has no pickpocket targets")
 	_check("pickpocket_enabled = true" not in players_house, "Player house has no pickpocket targets")
 	_check("public_service = false" in players_house, "Mom remains a private heal service")

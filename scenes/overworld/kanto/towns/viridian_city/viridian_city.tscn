@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="23_gate_npc"]
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="24_dialogue"]
 [ext_resource type="SpriteFrames" uid="uid://ctgjk0yaqmm8o" path="res://assets/npcs/classes/elder_frames.tres" id="25_elder"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/elder_f_frames.tres" id="25_elder_f"]
 [ext_resource type="SpriteFrames" uid="uid://ddpjpv44v1bjn" path="res://assets/npcs/classes/school_kid_f_frames.tres" id="26_school_kid_f"]
 [ext_resource type="SpriteFrames" uid="uid://57e7bp514fh2" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="27_bug_catcher"]
 [ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="28_hiker"]
@@ -699,6 +700,22 @@ z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1385361605]
 position = Vector2(-656, -80)
+
+[node name="GardenerMabel" parent="Entities/NPCs" instance=ExtResource("24_dialogue")]
+position = Vector2(1952, 1120)
+npc_id = "kanto_viridian_city_gardener_mabel"
+npc_definition_id = "trainer_class_elder"
+display_name = "Gardener Mabel"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("25_elder_f")
+
+[node name="AceTrainerVictor" parent="Entities/NPCs" instance=ExtResource("24_dialogue")]
+position = Vector2(2304, 768)
+npc_id = "kanto_viridian_city_ace_trainer_victor"
+npc_definition_id = "trainer_class_ace_trainer_m"
+display_name = "Ace Trainer Victor"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("32_ace_trainer_m")
 
 [node name="LeagueFanDorian" parent="Entities/NPCs" unique_id=224334671 instance=ExtResource("24_dialogue")]
 position = Vector2(2048, 1024)

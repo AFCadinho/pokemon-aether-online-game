@@ -3359,6 +3359,8 @@
   "ui.skills.thieving.targets.town_summary": "{available}/{total} beschikbaar",
   "ui.skills.thieving.targets.reset": "Elk doelwit kun je eenmaal per dag proberen. Reset om 00:00 UTC.",
   "ui.skills.thieving.target.dorian": "League-fan Dorian",
+  "ui.skills.thieving.target.mabel": "Tuinier Mabel",
+  "ui.skills.thieving.target.victor": "Ace Trainer Victor",
   "ui.skills.thieving.target.june": "School Kid June",
   "ui.skills.thieving.target.milo": "School Kid Milo",
   "ui.skills.thieving.target.rina": "School Kid Rina",

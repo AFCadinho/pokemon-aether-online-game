@@ -3359,6 +3359,8 @@
   "ui.skills.thieving.targets.town_summary": "{available}/{total} disponíveis",
   "ui.skills.thieving.targets.reset": "Cada alvo pode ser tentado uma vez por dia. Reinicia às 00:00 UTC.",
   "ui.skills.thieving.target.dorian": "Fã da Liga Dorian",
+  "ui.skills.thieving.target.mabel": "Jardineira Mabel",
+  "ui.skills.thieving.target.victor": "Ace Trainer Victor",
   "ui.skills.thieving.target.june": "School Kid June",
   "ui.skills.thieving.target.milo": "School Kid Milo",
   "ui.skills.thieving.target.rina": "School Kid Rina",

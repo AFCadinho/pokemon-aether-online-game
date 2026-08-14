@@ -245,7 +245,9 @@ func _run() -> void:
 		_check(
 			parsed is Dictionary
 			and (parsed as Dictionary).has("ui.skills.thieving.targets.tab")
-			and (parsed as Dictionary).has("ui.skills.thieving.targets.town_summary"),
+			and (parsed as Dictionary).has("ui.skills.thieving.targets.town_summary")
+			and (parsed as Dictionary).has("ui.skills.thieving.target.mabel")
+			and (parsed as Dictionary).has("ui.skills.thieving.target.victor"),
 			"%s contains the grouped target interface translations" % locale_path
 		)
 
