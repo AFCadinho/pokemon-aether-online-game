@@ -18,7 +18,6 @@
 [ext_resource type="PackedScene" uid="uid://b8s7eihsl5ikf" path="res://scenes/world/interactables/sign_interactable.tscn" id="25_sign"]
 [ext_resource type="PackedScene" uid="uid://rnbee61xiftm" path="res://scenes/npcs/item_gift_npc.tscn" id="26_item_gift"]
 [ext_resource type="Script" uid="uid://b0etnt1wy21yr" path="res://scripts/world/kanto/towns/pallet_town/fishing_guru.gd" id="26_fishing_guru"]
-[ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="26_fishing_story_hook"]
 [ext_resource type="Texture2D" uid="uid://e2ksljyggppg" path="res://assets/tilesets/fiver/tiles_env2_floors32.png" id="27_q27eu"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="28_wfrmf"]
 [ext_resource type="Texture2D" uid="uid://l4jsju4s8v3a" path="res://assets/sprites/trainer_cards/showdown/fisherman-gen6.png" id="29_fisherman_card"]
@@ -2263,11 +2262,6 @@ preload_quest_markers = true
 facing_direction = Vector2(0, 1)
 npc_sprite_frames = SubResource("SpriteFrames_27c3h")
 mugshot = ExtResource("29_fisherman_card")
-
-[node name="StoryHook" type="Node" parent="Entities/NPCs/FishingGuru"]
-script = ExtResource("26_fishing_story_hook")
-interaction_id = "pallet_town_fishing_guru_lesson_complete"
-entity_id = "kanto_pallet_town_fishing_guru"
 
 [node name="PalletResident" parent="Entities/NPCs" unique_id=346251658 instance=ExtResource("30_dialogue_npc")]
 position = Vector2(784, 1008)

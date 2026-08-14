@@ -63,6 +63,7 @@ func _run() -> void:
 			"stats": {"activeTier": 2, "badgeCount": 3},
 			"unlocks": [
 				{"id": "old_rod", "requiredLevel": 1, "unlocked": true, "labelKey": "ui.skills.unlock.old_rod"},
+				{"id": "old_rod_tentacool", "requiredLevel": 5, "unlocked": true, "labelKey": "ui.skills.unlock.old_rod_tentacool"},
 				{"id": "good_rod", "requiredLevel": 10, "unlocked": true, "labelKey": "ui.skills.unlock.good_rod"},
 			],
 		},

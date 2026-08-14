@@ -286,10 +286,19 @@ func _quest_reward_text(rewards_value: Variant) -> String:
 						var quantity := maxi(int(reward.get("quantity", 1)), 1)
 						reward_parts.append("%s  ×%d" % [item_name, quantity])
 				"currency":
-					var currency := str(reward.get("currency", "")).replace("_", " ").capitalize()
 					var amount := maxi(int(reward.get("amount", 1)), 1)
-					if not currency.is_empty():
-						reward_parts.append("%s  ×%d" % [currency, amount])
+					var currency_id := str(reward.get("currency", "")).strip_edges().to_lower()
+					if currency_id == "money":
+						reward_parts.append("₽%d" % amount)
+					elif not currency_id.is_empty():
+						reward_parts.append("%s  ×%d" % [currency_id.replace("_", " ").capitalize(), amount])
+				"skill_experience":
+					var skill_id := str(reward.get("skillId", "")).strip_edges().to_lower()
+					var experience := maxi(int(reward.get("experience", 1)), 1)
+					if not skill_id.is_empty():
+						var skill_key := "ui.skills.%s.name" % skill_id
+						var skill_name := _localized_text(skill_key, skill_id.capitalize())
+						reward_parts.append("%s  +%d XP" % [skill_name, experience])
 	return ", ".join(reward_parts) if not reward_parts.is_empty() else "—"
 
 

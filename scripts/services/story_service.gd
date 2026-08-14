@@ -150,6 +150,14 @@ func _project_reward_previews(source: Variant) -> Array:
 						"currency": currency,
 						"amount": maxi(int(reward.get("amount", 1)), 1),
 					})
+			"skill_experience":
+				var skill_id := str(reward.get("skillId", "")).strip_edges().to_lower()
+				if not skill_id.is_empty():
+					projected.append({
+						"type": "skill_experience",
+						"skillId": skill_id,
+						"experience": maxi(int(reward.get("experience", 1)), 1),
+					})
 	return projected
 
 

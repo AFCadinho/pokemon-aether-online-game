@@ -166,6 +166,8 @@ func claim_npc_item_reward(reward_id: String) -> Dictionary:
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
 	var inventory_result: Dictionary = await load_inventory()
 	var progression_result: Dictionary = await load_fishing_progression("")
+	var wallet_result: Dictionary = await PlayerWalletService.load_wallet()
+	PlayerWalletService.apply_wallet_result(wallet_result)
 	var story_result: Dictionary = await PlayerGameStateService.refresh_story()
 	return {
 		"success": true,
@@ -176,6 +178,7 @@ func claim_npc_item_reward(reward_id: String) -> Dictionary:
 		"alreadyOwned": bool(body.get("alreadyOwned", false)),
 		"inventoryRefreshSuccess": bool(inventory_result.get("success", false)),
 		"fishingProgressionRefreshSuccess": bool(progression_result.get("success", false)),
+		"walletRefreshSuccess": bool(wallet_result.get("success", false)),
 		"storyRefreshSuccess": bool(story_result.get("success", false)),
 	}
 
