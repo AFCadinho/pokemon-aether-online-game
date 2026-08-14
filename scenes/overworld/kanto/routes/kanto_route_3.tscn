@@ -247,6 +247,9 @@ size = Vector2(64, 176)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route3_pokecenter"]
 size = Vector2(32, 56)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mt_moon_exit"]
+size = Vector2(64, 32)
+
 [node name="KantoRoute3" type="Node2D" unique_id=685382640]
 script = ExtResource("5_metadata")
 map_id = "kanto_route_3"
@@ -354,6 +357,9 @@ position = Vector2(416, 864)
 [node name="FromPokecenter" type="Marker2D" parent="Spawns" unique_id=120000007]
 position = Vector2(2864, 1104)
 
+[node name="FromMtMoon" type="Marker2D" parent="Spawns" unique_id=1517203120]
+position = Vector2(2640, 720)
+
 [node name="Exits" type="Node2D" parent="." unique_id=120000003]
 
 [node name="ToPewterCity" type="Area2D" parent="Exits" unique_id=120000004]
@@ -383,6 +389,18 @@ position = Vector2(0, -20)
 shape = SubResource("RectangleShape2D_route3_pokecenter")
 
 [node name="DoorTransitionHint" parent="Exits/ToPokecenter" unique_id=856094939 instance=ExtResource("12_pokecenter_hint")]
+
+[node name="ToMtMoon" type="Area2D" parent="Exits" unique_id=1945368174]
+position = Vector2(2640, 672)
+monitoring = false
+monitorable = false
+script = ExtResource("6_exit")
+transition_id = "kanto_route_3__to_mt_moon"
+metadata/pao_pending_target_map_id = "kanto_mt_moon"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToMtMoon" unique_id=1866146210]
+disabled = true
+shape = SubResource("RectangleShape2D_mt_moon_exit")
 
 [connection signal="body_entered" from="Exits/ToPewterCity" to="Exits/ToPewterCity" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToPokecenter" to="Exits/ToPokecenter" method="_on_body_entered"]

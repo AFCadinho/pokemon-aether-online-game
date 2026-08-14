@@ -662,14 +662,24 @@
 			],
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_3.tscn",
 			"spawnPoints": {
+				"from_mt_moon": {
+					"facingDirection": "down",
+					"label": "Mt Moon",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromMtMoon",
+					"tile": {
+						"x": 82,
+						"y": 22
+					}
+				},
 				"from_pewter_city": {
 					"facingDirection": "down",
 					"label": "Pewter City",
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromPewterCity",
 					"tile": {
-						"x": 1,
-						"y": 20
+						"x": 13,
+						"y": 27
 					}
 				},
 				"from_pokecenter": {
@@ -678,8 +688,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromPokecenter",
 					"tile": {
-						"x": 55,
-						"y": 21
+						"x": 89,
+						"y": 34
 					}
 				}
 			}
@@ -1149,8 +1159,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_3.tscn",
 				"position": {
-					"x": 48.0,
-					"y": 656.0
+					"x": 416.0,
+					"y": 864.0
 				},
 				"spawnMarker": "FromPewterCity"
 			},
@@ -1507,8 +1517,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_3.tscn",
 				"position": {
-					"x": 1760.0,
-					"y": 688.0
+					"x": 2864.0,
+					"y": 1104.0
 				},
 				"spawnMarker": "FromPokecenter"
 			},
