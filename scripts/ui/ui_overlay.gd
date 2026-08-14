@@ -1083,6 +1083,7 @@ var pokemon_summary_ball_list: VBoxContainer
 var pokemon_summary_pending_ball_item_id := ""
 var pokemon_summary_pending_ball_card_key := ""
 var pokemon_summary_type_icon_row: HBoxContainer
+var pokemon_summary_hidden_ability_badge: Label
 var pokemon_summary_title_label: Label
 var pokemon_summary_id_label: Label
 var pokemon_summary_meta_label: Label
@@ -14447,6 +14448,28 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_type_icon_row.offset_bottom = 28.0
 	sprite_frame.add_child(pokemon_summary_type_icon_row)
 
+	pokemon_summary_hidden_ability_badge = Label.new()
+	pokemon_summary_hidden_ability_badge.text = "◆"
+	pokemon_summary_hidden_ability_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	pokemon_summary_hidden_ability_badge.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	pokemon_summary_hidden_ability_badge.anchor_left = 1.0
+	pokemon_summary_hidden_ability_badge.anchor_top = 0.0
+	pokemon_summary_hidden_ability_badge.anchor_right = 1.0
+	pokemon_summary_hidden_ability_badge.anchor_bottom = 0.0
+	pokemon_summary_hidden_ability_badge.offset_left = -34.0
+	pokemon_summary_hidden_ability_badge.offset_top = 30.0
+	pokemon_summary_hidden_ability_badge.offset_right = -6.0
+	pokemon_summary_hidden_ability_badge.offset_bottom = 54.0
+	pokemon_summary_hidden_ability_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pokemon_summary_hidden_ability_badge.add_theme_font_size_override("font_size", 16)
+	pokemon_summary_hidden_ability_badge.add_theme_color_override("font_color", Color("#9be8ff"))
+	pokemon_summary_hidden_ability_badge.add_theme_color_override("font_shadow_color", Color("#062238"))
+	pokemon_summary_hidden_ability_badge.add_theme_constant_override("shadow_offset_x", 1)
+	pokemon_summary_hidden_ability_badge.add_theme_constant_override("shadow_offset_y", 1)
+	_set_localized_control_property(pokemon_summary_hidden_ability_badge, "tooltip_text", "ui.pokemon_summary.hidden_ability")
+	pokemon_summary_hidden_ability_badge.visible = false
+	sprite_frame.add_child(pokemon_summary_hidden_ability_badge)
+
 	pokemon_summary_level_badge_panel = PanelContainer.new()
 	pokemon_summary_level_badge_panel.custom_minimum_size = Vector2(54, 24)
 	pokemon_summary_level_badge_panel.anchor_left = 1.0
@@ -18652,6 +18675,8 @@ func _refresh_pokemon_summary() -> void:
 	)
 	pokemon_summary_id_label.tooltip_text = pokemon_summary_id_label.text
 	pokemon_summary_shiny_badge.visible = pokemon.shiny
+	if pokemon_summary_hidden_ability_badge != null:
+		pokemon_summary_hidden_ability_badge.visible = pokemon.hidden_ability
 	if pokemon_summary_shiny_badge_label != null:
 		pokemon_summary_shiny_badge_label.text = "*"
 	pokemon_summary_trainer_label.text = _get_pokemon_summary_current_trainer_title_text(pokemon)

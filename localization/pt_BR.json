@@ -367,6 +367,7 @@
   "pokemon.stat.special_defense": "DEF. ESP.",
   "pokemon.stat.speed": "VELOCIDADE",
   "ui.party.shiny": "Pokémon Brilhante",
+  "ui.pokemon_summary.hidden_ability": "Habilidade oculta desbloqueada",
   "ui.party.level": "Nv. {level}",
   "ui.party.holding_item": "Segurando {item}",
   "ui.pokemon_summary.title": "Resumo do Pokémon",

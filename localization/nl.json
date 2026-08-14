@@ -367,6 +367,7 @@
   "pokemon.stat.special_defense": "SP. VERD.",
   "pokemon.stat.speed": "SNELHEID",
   "ui.party.shiny": "Shiny Pokémon",
+  "ui.pokemon_summary.hidden_ability": "Hidden Ability ontgrendeld",
   "ui.party.level": "Lv. {level}",
   "ui.party.holding_item": "Draagt {item}",
   "ui.pokemon_summary.title": "Pokémon-overzicht",

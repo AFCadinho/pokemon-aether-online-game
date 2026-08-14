@@ -367,6 +367,7 @@
   "pokemon.stat.special_defense": "SP. DEF",
   "pokemon.stat.speed": "SPEED",
   "ui.party.shiny": "Shiny Pokémon",
+  "ui.pokemon_summary.hidden_ability": "Hidden Ability unlocked",
   "ui.party.level": "Lv. {level}",
   "ui.party.holding_item": "Holding {item}",
   "ui.pokemon_summary.title": "Pokémon Summary",

@@ -6,6 +6,7 @@ var species: String
 var level: int
 var item: String
 var ability: String
+var hidden_ability: bool
 var nature: String
 var location: String
 var origin: Dictionary
@@ -71,6 +72,7 @@ func _init(
 	level = _level
 	item = _item
 	ability = _ability
+	hidden_ability = false
 	nature = _nature
 	location = _location
 	origin = _normalize_origin(_origin, location)
@@ -139,6 +141,7 @@ func to_battle_dict() -> Dictionary:
 		"level": level,
 		"item": item,
 		"ability": ability,
+		"hiddenAbility": hidden_ability,
 		"nature": nature,
 		"happiness": happiness,
 		"evs": evs,

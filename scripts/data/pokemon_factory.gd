@@ -52,6 +52,7 @@ static func create_pokemon_from_backend_payload(data: Dictionary) -> Pokemon:
 
 	_apply_payload_hp_state(pokemon, data)
 	pokemon.can_evolve = bool(data.get("canEvolve", data.get("can_evolve", false)))
+	pokemon.hidden_ability = _get_bool_option(data, ["hiddenAbility", "hidden_ability"])
 	return pokemon
 
 
