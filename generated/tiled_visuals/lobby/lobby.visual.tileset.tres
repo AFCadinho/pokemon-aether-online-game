@@ -1,14 +1,14 @@
 [gd_resource type="TileSet" format=3 uid="uid://c8m5mldbyeny2"]
 
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lobby/assets/5GEN_TILESET_2109830053_000.texture.res" id="1_l80ei"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lobby/assets/5GEN_TILESET_2109830053_005.texture.res" id="2_w4e2b"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lobby/assets/5GEN_INTERIOR_TILESET_1354810058_000.texture.res" id="3_fcf67"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lobby/assets/5GEN_INTERIOR_TILESET_1354810058_001.texture.res" id="4_5drqx"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lobby/assets/5GEN_INTERIOR_TILESET_1354810058_002.texture.res" id="5_dy2yo"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lobby/assets/5GEN_TILESET_2109830053_001.texture.res" id="6_id3sq"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lobby/assets/5GEN_TILESET_2109830053_002.texture.res" id="7_j2rua"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lobby/assets/5GEN_TILESET_2109830053_003.texture.res" id="8_e4ae3"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lobby/assets/5GEN_TILESET_2109830053_004.texture.res" id="9_kbcyc"]
+[ext_resource type="Texture2D" uid="uid://ddl81dpssygac" path="res://generated/tiled_visuals/lobby/assets/5GEN_TILESET_2109830053_000.texture.res" id="1_l80ei"]
+[ext_resource type="Texture2D" uid="uid://co11onegm270n" path="res://generated/tiled_visuals/lobby/assets/5GEN_TILESET_2109830053_005.texture.res" id="2_w4e2b"]
+[ext_resource type="Texture2D" uid="uid://bj1empysxdywk" path="res://generated/tiled_visuals/lobby/assets/5GEN_INTERIOR_TILESET_1354810058_000.texture.res" id="3_fcf67"]
+[ext_resource type="Texture2D" uid="uid://enl2ysonl2ie" path="res://generated/tiled_visuals/lobby/assets/5GEN_INTERIOR_TILESET_1354810058_001.texture.res" id="4_5drqx"]
+[ext_resource type="Texture2D" uid="uid://tarxb1iho6ok" path="res://generated/tiled_visuals/lobby/assets/5GEN_INTERIOR_TILESET_1354810058_002.texture.res" id="5_dy2yo"]
+[ext_resource type="Texture2D" uid="uid://7fb7xs8n8dy6" path="res://generated/tiled_visuals/lobby/assets/5GEN_TILESET_2109830053_001.texture.res" id="6_id3sq"]
+[ext_resource type="Texture2D" uid="uid://cdruvdfxdk67x" path="res://generated/tiled_visuals/lobby/assets/5GEN_TILESET_2109830053_002.texture.res" id="7_j2rua"]
+[ext_resource type="Texture2D" uid="uid://67a6o1qfqmeh" path="res://generated/tiled_visuals/lobby/assets/5GEN_TILESET_2109830053_003.texture.res" id="8_e4ae3"]
+[ext_resource type="Texture2D" uid="uid://cfwli18186hcj" path="res://generated/tiled_visuals/lobby/assets/5GEN_TILESET_2109830053_004.texture.res" id="9_kbcyc"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vatsd"]
 texture = ExtResource("1_l80ei")
