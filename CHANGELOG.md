@@ -12,6 +12,7 @@
 - Party slots now have a right-click menu for opening the Summary Card, managing held items, and setting the lead Pokémon.
 - Fixed Route 1 Trainers starting overlapping dialogue and battle flows when spoken to as their sight challenge triggered.
 - Regular Trainer battles now select the player's first healthy lead automatically and conceal unrevealed opposing Pokémon behind Pokéball icons. Configured important battles can still use Team Preview.
+- PvE and PvP Trainer battles now keep all six battlefield party slots visible, with empty positions shown as disabled grey slots.
 - Added daily Trainer rematches. Their teams become stronger and can evolve as you progress.
 - Added an EV training field in Viridian City. Its battles teach EV training without damaging your Pokémon.
 - Added the Viridian Trainer School story, the first Pewter Gym challenge, and new houses to explore in Viridian City and Pewter City.

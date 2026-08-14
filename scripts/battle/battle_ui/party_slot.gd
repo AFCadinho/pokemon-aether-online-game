@@ -11,6 +11,8 @@ const ACTIVE_BORDER := Color("#62d7ff")
 const PARTY_BACKGROUND := Color("#081321f2")
 const PARTY_BORDER := Color("#315070")
 const ICON_PARTY_BORDER := Color("#223b55")
+const EMPTY_BACKGROUND := Color("#101722d9")
+const EMPTY_BORDER := Color("#2a3747")
 const NORMAL_MODULATE := Color(1.0, 1.0, 1.0, 1.0)
 const FAINTED_MODULATE := Color(0.62, 0.62, 0.62, 1.0)
 const ICON_FAINTED_MODULATE := Color(0.38, 0.38, 0.38, 0.84)
@@ -38,6 +40,7 @@ const VERY_LONG_NAME_FONT_SIZE := 11
 @onready var status_icon: TextureRect = $MarginContainer/HBoxContainer/VBoxContainer/BottomRowContainer/StatusIcon
 
 var current_pokemon_data: Dictionary = {}
+var empty_visible := false
 var localization_manager: Node
 
 func _ready() -> void:
@@ -336,9 +339,7 @@ func _get_status_modulate(status: String) -> Color:
 
 func set_empty() -> void:
 	current_pokemon_data = {}
-	# Battlefield icon rails should only occupy space for actual team members.
-	# Interactive switch rows keep their empty positions for stable navigation.
-	visible = not icon_only_mode
+	visible = not icon_only_mode or empty_visible
 	disabled = true
 	modulate = NORMAL_MODULATE
 
@@ -354,10 +355,19 @@ func set_empty() -> void:
 	_set_status_icon("")
 	tooltip_text = ""
 
-	remove_theme_stylebox_override("normal")
-	remove_theme_stylebox_override("hover")
-	remove_theme_stylebox_override("pressed")
-	remove_theme_stylebox_override("disabled")
+	if visible:
+		_set_color(EMPTY_BACKGROUND, EMPTY_BORDER, false)
+	else:
+		remove_theme_stylebox_override("normal")
+		remove_theme_stylebox_override("hover")
+		remove_theme_stylebox_override("pressed")
+		remove_theme_stylebox_override("disabled")
+
+
+func set_empty_visible(is_visible: bool) -> void:
+	empty_visible = is_visible
+	if current_pokemon_data.is_empty():
+		set_empty()
 
 func _apply_slot_style(species: String, is_fainted: bool, is_active: bool, types: Array = []) -> void:
 	if is_fainted:

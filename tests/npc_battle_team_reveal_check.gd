@@ -71,6 +71,12 @@ func _run() -> void:
 	slot.call("_on_mouse_entered")
 	_check(hover_count == 0, "an unrevealed party slot cannot expose hover details")
 
+	slot.call("set_empty_visible", true)
+	slot.call("set_empty")
+	_check(slot.visible, "trainer battle rails keep an empty icon slot visible")
+	_check(slot.disabled, "an empty trainer battle slot remains disabled")
+	_check(icon.texture == null, "an empty trainer battle slot has no Pokeball or Pokemon icon")
+
 	slot.queue_free()
 	await process_frame
 	if failures == 0:

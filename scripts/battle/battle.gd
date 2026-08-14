@@ -6515,6 +6515,9 @@ func _prepare_battle_setup(
 ) -> void:
 	battle_type = type
 	opponent_party_reveal_policy.reset(false)
+	var show_full_trainer_rails := battle_type == BattleType.TRAINER
+	player_stage_party_grid.set_empty_slots_visible(show_full_trainer_rails)
+	opponent_party_grid.set_empty_slots_visible(show_full_trainer_rails)
 	_apply_battle_environment(environment_id)
 	_clear_battle_trainer_sprites()
 	wild_owned_request_id += 1
