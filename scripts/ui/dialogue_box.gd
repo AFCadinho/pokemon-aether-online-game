@@ -2,6 +2,10 @@ extends Control
 
 const ITEM_ICON_ROOT := "res://assets/items/icons/"
 const TRAINER_CARD_TEXTURE_ROOT := "res://assets/sprites/trainer_cards/"
+const MOVE_TYPE_INDEX_PATH := "res://data/move_type_index.json"
+
+static var reward_move_type_index: Dictionary = {}
+static var reward_move_type_index_loaded := false
 
 signal dialogue_finished
 signal quest_offer_resolved(accepted: bool)
@@ -315,14 +319,53 @@ func _quest_reward_icon(rewards_value: Variant) -> Texture2D:
 		if item_id.is_empty():
 			continue
 		var normalized := item_id.to_upper().replace("-", "").replace("_", "").replace(" ", "")
-		for icon_path: String in [
+		var icon_paths: Array[String] = [
 			ITEM_ICON_ROOT + normalized + ".png",
 			ITEM_ICON_ROOT + item_id + ".png",
-			ITEM_ICON_ROOT + "000.png",
-		]:
+		]
+		var machine_icon_path := _quest_reward_machine_icon_path(item_id)
+		if not machine_icon_path.is_empty():
+			icon_paths.append(machine_icon_path)
+		for icon_path: String in icon_paths:
 			if ResourceLoader.exists(icon_path):
 				return load(icon_path) as Texture2D
-	return null
+	var fallback_path := ITEM_ICON_ROOT + "000.png"
+	return load(fallback_path) as Texture2D if ResourceLoader.exists(fallback_path) else null
+
+
+func _quest_reward_machine_icon_path(item_id: String) -> String:
+	var normalized_id := item_id.strip_edges().to_lower().replace("_", "-").replace(" ", "-")
+	var machine_kind := ""
+	if normalized_id.begins_with("tm-"):
+		machine_kind = "tm"
+	elif normalized_id.begins_with("hm-"):
+		machine_kind = "hm"
+	else:
+		return ""
+	var move_id := normalized_id.trim_prefix("%s-" % machine_kind)
+	_ensure_reward_move_type_index_loaded()
+	var move_type := str(reward_move_type_index.get(move_id, "")).strip_edges().to_upper()
+	if move_type.is_empty():
+		return ""
+	var icon_prefix := "machine_tr_" if machine_kind == "hm" else "machine_"
+	return ITEM_ICON_ROOT + icon_prefix + move_type + ".png"
+
+
+func _ensure_reward_move_type_index_loaded() -> void:
+	if reward_move_type_index_loaded:
+		return
+	reward_move_type_index_loaded = true
+	reward_move_type_index.clear()
+	if not FileAccess.file_exists(MOVE_TYPE_INDEX_PATH):
+		return
+	var parsed_value: Variant = JSON.parse_string(FileAccess.get_file_as_string(MOVE_TYPE_INDEX_PATH))
+	if parsed_value is not Dictionary:
+		return
+	for move_key_value: Variant in (parsed_value as Dictionary).keys():
+		var move_key := str(move_key_value).strip_edges().to_lower().replace("_", "-").replace(" ", "-")
+		var move_type := str((parsed_value as Dictionary).get(move_key_value, "")).strip_edges().to_lower()
+		if not move_key.is_empty() and not move_type.is_empty():
+			reward_move_type_index[move_key] = move_type
 
 
 func _localized_definition(key: String, fallback_id: String) -> String:

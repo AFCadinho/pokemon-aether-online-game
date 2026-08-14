@@ -126,6 +126,12 @@ func _check_dialogue_box_side_quest_offer() -> void:
 	_check_true(text.contains("ItemLocalization.display_name("), "item rewards use localized item names")
 	_check_true(text.contains('"skill_experience"'), "quest choice renders skill experience rewards")
 	_check_true(text.contains("func _quest_reward_icon("), "item rewards resolve their catalog icon")
+	_check_true(
+		text.contains("func _quest_reward_machine_icon_path(")
+		and text.contains("MOVE_TYPE_INDEX_PATH")
+		and text.contains('ITEM_ICON_ROOT + "000.png"'),
+		"TM quest rewards use type icons before the generic missing-item fallback"
+	)
 	_check_true(scene_text.contains('name="RewardIcon" type="TextureRect"'), "quest rewards render an item icon")
 	_check_true(scene_text.contains('name="RewardCard" type="PanelContainer"'), "quest rewards render as a compact card")
 	_check_true(scene_text.contains('name="QuestOfferCloseButton" type="Button"'), "quest offer has a top-right close button")
