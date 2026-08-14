@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://babnhtwtaiewv" path="res://scripts/world/map_door_animator.gd" id="7_door_animator"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="12_vw642"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/building_window_light.tscn" id="13_4hm78"]
+[ext_resource type="PackedScene" uid="uid://b8s7eihsl5ikf" path="res://scenes/world/interactables/sign_interactable.tscn" id="17_cisdr"]
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="18_dialogue"]
 [ext_resource type="SpriteFrames" uid="uid://caas815hh7buy" path="res://assets/npcs/classes/scientist_m_frames.tres" id="19_scientist"]
 [ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="20_hiker"]
@@ -294,7 +295,7 @@ facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("20_hiker")
 
 [node name="GymFanMax" parent="Entities/NPCs" unique_id=399681030 instance=ExtResource("18_dialogue")]
-position = Vector2(688, 560)
+position = Vector2(496, 560)
 npc_id = "kanto_pewter_city_gym_fan_max"
 npc_definition_id = "trainer_class_youngster"
 display_name = "Gym Fan Max"
@@ -378,6 +379,13 @@ display_name = "Pewter City House 1"
 position = Vector2(464, 1504)
 area_id = "kanto_pewter_city_house_2"
 display_name = "Pewter City House 2"
+
+[node name="Signs" type="Node2D" parent="Entities/Interactables" unique_id=1083765197]
+
+[node name="GymSign" parent="Entities/Interactables/Signs" unique_id=1449815395 instance=ExtResource("17_cisdr")]
+position = Vector2(656, 560)
+sign_id = "kanto_pewter_city_gym"
+sign_type = "building"
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=1977913234]
 visible = false

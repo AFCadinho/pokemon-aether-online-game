@@ -9,6 +9,10 @@ const PALLET_TOWN_SCENE := "res://scenes/overworld/kanto/towns/pallet_town/palle
 const PALLET_TOWN_SIGN_DATA := "res://data/world_text/signs/en/kanto/pallet_town.json"
 const VIRIDIAN_CITY_SCENE := "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn"
 const VIRIDIAN_CITY_SIGN_DATA := "res://data/world_text/signs/en/kanto/viridian_city.json"
+const PEWTER_CITY_SCENE := "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn"
+const PEWTER_CITY_SIGN_DATA := "res://data/world_text/signs/en/kanto/pewter_city.json"
+const ROUTE_3_SCENE := "res://scenes/overworld/kanto/routes/kanto_route_3.tscn"
+const ROUTE_SIGN_DATA := "res://data/world_text/signs/en/kanto/routes.json"
 
 const SignTextServiceScript := preload(SIGN_TEXT_SERVICE_SCRIPT)
 const SignInteractableScript := preload(SIGN_INTERACTABLE_SCRIPT)
@@ -29,6 +33,7 @@ func _run() -> void:
 	_check_sign_scene_contract()
 	_check_pallet_town_sign_markers()
 	_check_viridian_city_sign_markers()
+	_check_pewter_city_and_route_3_sign_markers()
 
 	quit(1 if failed else 0)
 
@@ -164,6 +169,30 @@ func _check_viridian_city_sign_markers() -> void:
 	_check_true(data_text.contains("\"kanto_viridian_city_jail\""), "Viridian City sign data includes jail sign")
 	_check_true(data_text.contains("\"kanto_viridian_city_trainer_school\""), "Viridian City sign data includes Trainer School sign")
 	_check_true(data_text.contains("\"kanto_viridian_city_gym\""), "Viridian City sign data includes Gym sign")
+
+
+func _check_pewter_city_and_route_3_sign_markers() -> void:
+	var pewter_scene_text := _read_text(PEWTER_CITY_SCENE)
+	_check_true(
+		pewter_scene_text.contains('sign_id = "kanto_pewter_city_gym"'),
+		"Pewter City has its Gym sign marker"
+	)
+	var pewter_data_text := _read_text(PEWTER_CITY_SIGN_DATA)
+	_check_true(
+		pewter_data_text.contains('"kanto_pewter_city_gym"'),
+		"Pewter City sign data includes its Gym sign"
+	)
+
+	var route_3_scene_text := _read_text(ROUTE_3_SCENE)
+	_check_true(
+		route_3_scene_text.contains('sign_id = "kanto_route_3_mt_moon_sign"'),
+		"Route 3 has its Mt. Moon sign marker"
+	)
+	var route_data_text := _read_text(ROUTE_SIGN_DATA)
+	_check_true(
+		route_data_text.contains('"kanto_route_3_mt_moon_sign"'),
+		"Route sign data includes the Mt. Moon sign"
+	)
 
 
 func _read_text(path: String) -> String:
