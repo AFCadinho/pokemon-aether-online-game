@@ -4,6 +4,7 @@ signal drag_started(slot_index: int)
 signal drag_released(slot_index: int, global_position: Vector2)
 signal clicked(slot_index: int)
 signal held_item_dropped(slot_index: int, item: Dictionary)
+signal context_requested(slot_index: int, global_position: Vector2)
 
 const HeldItemDropTarget := preload("res://scripts/ui/held_item_drop_target_button.gd")
 
@@ -389,6 +390,10 @@ func _on_click_button_gui_input(event: InputEvent) -> void:
 		return
 
 	var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+	if mouse_event.button_index == MOUSE_BUTTON_RIGHT and mouse_event.pressed:
+		context_requested.emit(slot_index, mouse_event.global_position)
+		get_viewport().set_input_as_handled()
+		return
 	if mouse_event.button_index != MOUSE_BUTTON_LEFT:
 		return
 

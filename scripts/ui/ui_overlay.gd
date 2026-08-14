@@ -60,6 +60,10 @@ const CHAT_TAB_DEFAULT_ORDER: Array[String] = [
 	CHAT_TAB_PM,
 	CHAT_TAB_GUILD,
 ]
+const PARTY_CONTEXT_SUMMARY := 0
+const PARTY_CONTEXT_GIVE_ITEM := 1
+const PARTY_CONTEXT_TAKE_ITEM := 2
+const PARTY_CONTEXT_SET_LEAD := 3
 const CHAT_TAB_LABELS := {
 	CHAT_TAB_ALL: "ui.chat.tab.all",
 	CHAT_TAB_GENERAL: "ui.chat.tab.general",
@@ -570,6 +574,8 @@ var skills_panel: Control
 
 var party_slots: Array = []
 var party_display_override: Array = []
+var party_slot_context_menu: PopupMenu
+var party_slot_context_index := -1
 var escape_rope_status: Dictionary = {}
 var escape_rope_remaining_seconds: float = 0.0
 var player_action_status_refresh_seconds: float = 0.0
@@ -1271,6 +1277,7 @@ func _ready() -> void:
 	_setup_donator_store_popup()
 	_setup_bag_popup()
 	_setup_bag_item_context_menu()
+	_setup_party_slot_context_menu()
 	_setup_market_popup()
 	_setup_aether_atelier_popup()
 	_setup_bag_item_use_popup()
@@ -20624,30 +20631,43 @@ func _on_pokemon_summary_held_item_slot_pressed(card_key: String = "") -> void:
 
 	var held_item_id: String = _get_pokemon_held_item_id(pokemon)
 	if held_item_id != "":
-		var result: Dictionary = await PlayerPartyStateService.take_pokemon_held_item(pokemon.owned_pokemon_id)
-		if not bool(result.get("success", false)):
-			_add_chat_message(LocalizationManager.text("ui.pokemon_summary.held_item.take_failed", {
-				"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
-			}))
-			return
-		bag_inventory_items = _normalize_bag_inventory_items(result.get("inventory", []))
-		bag_inventory_loaded = true
-		_refresh_open_pokemon_summary_cards()
-		if bag_popup != null and bag_popup.visible:
-			_refresh_bag_items()
+		await _take_pokemon_held_item(pokemon)
 		return
 
+	await _open_pokemon_summary_held_item_picker(card_key)
+
+
+func _open_pokemon_summary_held_item_picker(card_key: String = "", force_open := false) -> void:
 	await _ensure_bag_inventory_loaded()
 	_apply_pokemon_summary_card_context(card_key)
+	if _is_pokemon_summary_readonly() or pokemon_summary_item_picker == null:
+		return
+	var picker_was_visible := pokemon_summary_item_picker.visible
 	if pokemon_summary_item_search_input != null:
 		pokemon_summary_item_search_input.text = ""
 	_refresh_pokemon_summary_item_picker()
-	pokemon_summary_item_picker.visible = not pokemon_summary_item_picker.visible
+	pokemon_summary_item_picker.visible = true if force_open else not picker_was_visible
 	if pokemon_summary_ball_picker != null:
 		pokemon_summary_ball_picker.visible = false
 	if pokemon_summary_item_picker.visible and pokemon_summary_item_search_input != null:
 		pokemon_summary_item_search_input.grab_focus.call_deferred()
 	_store_active_pokemon_summary_card_context()
+
+
+func _take_pokemon_held_item(pokemon: Pokemon) -> void:
+	if pokemon.owned_pokemon_id <= 0 or _get_pokemon_held_item_id(pokemon) == "":
+		return
+	var result: Dictionary = await PlayerPartyStateService.take_pokemon_held_item(pokemon.owned_pokemon_id)
+	if not bool(result.get("success", false)):
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.held_item.take_failed", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
+		return
+	bag_inventory_items = _normalize_bag_inventory_items(result.get("inventory", []))
+	bag_inventory_loaded = true
+	_refresh_open_pokemon_summary_cards()
+	if bag_popup != null and bag_popup.visible:
+		_refresh_bag_items()
 
 
 func _on_pokemon_summary_held_item_dropped(item: Dictionary, card_key: String = "") -> void:
@@ -22723,6 +22743,7 @@ func _register_party_slot_drag_handlers(slot: Node, slot_index: int) -> void:
 	var drag_released_callable := Callable(self, "_on_party_slot_drag_released")
 	var clicked_callable := Callable(self, "_on_party_slot_clicked")
 	var held_item_dropped_callable := Callable(self, "_on_party_slot_held_item_dropped")
+	var context_requested_callable := Callable(self, "_on_party_slot_context_requested")
 	if slot.has_signal("drag_started") and not slot.is_connected("drag_started", drag_started_callable):
 		slot.connect("drag_started", drag_started_callable)
 	if slot.has_signal("drag_released") and not slot.is_connected("drag_released", drag_released_callable):
@@ -22731,6 +22752,8 @@ func _register_party_slot_drag_handlers(slot: Node, slot_index: int) -> void:
 		slot.connect("clicked", clicked_callable)
 	if slot.has_signal("held_item_dropped") and not slot.is_connected("held_item_dropped", held_item_dropped_callable):
 		slot.connect("held_item_dropped", held_item_dropped_callable)
+	if slot.has_signal("context_requested") and not slot.is_connected("context_requested", context_requested_callable):
+		slot.connect("context_requested", context_requested_callable)
 
 
 func _on_party_slot_held_item_dropped(slot_index: int, item: Dictionary) -> void:
@@ -22740,6 +22763,77 @@ func _on_party_slot_held_item_dropped(slot_index: int, item: Dictionary) -> void
 	if not pokemon_value is Pokemon:
 		return
 	await _give_dropped_held_item(pokemon_value as Pokemon, item)
+
+
+func _setup_party_slot_context_menu() -> void:
+	party_slot_context_menu = PopupMenu.new()
+	party_slot_context_menu.name = "PartySlotContextMenu"
+	party_slot_context_menu.min_size = Vector2i(210, 0)
+	party_slot_context_menu.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_RAISED, UI_BORDER_FOCUS, 8, 1)
+	)
+	party_slot_context_menu.id_pressed.connect(_on_party_slot_context_action)
+	root_control.add_child(party_slot_context_menu)
+
+
+func _on_party_slot_context_requested(slot_index: int, global_position: Vector2) -> void:
+	if not party_display_override.is_empty() or slot_index < 0 or slot_index >= PlayerSave.party.size():
+		return
+	var pokemon_value: Variant = PlayerSave.party[slot_index]
+	if not pokemon_value is Pokemon:
+		return
+	var pokemon := pokemon_value as Pokemon
+	party_slot_context_index = slot_index
+	party_slot_context_menu.clear()
+	party_slot_context_menu.add_item(LocalizationManager.text("ui.party.context.summary"), PARTY_CONTEXT_SUMMARY)
+	party_slot_context_menu.add_item(
+		LocalizationManager.text(
+			"ui.party.context.change_item" if _get_pokemon_held_item_id(pokemon) != "" else "ui.party.context.give_item"
+		),
+		PARTY_CONTEXT_GIVE_ITEM
+	)
+	if _get_pokemon_held_item_id(pokemon) != "":
+		party_slot_context_menu.add_item(LocalizationManager.text("ui.party.context.take_item"), PARTY_CONTEXT_TAKE_ITEM)
+	if slot_index > 0:
+		party_slot_context_menu.add_separator()
+		party_slot_context_menu.add_item(LocalizationManager.text("ui.party.context.set_lead"), PARTY_CONTEXT_SET_LEAD)
+	var viewport_size := get_viewport().get_visible_rect().size
+	var menu_position := global_position
+	menu_position.x = minf(menu_position.x, viewport_size.x - 230.0)
+	menu_position.y = minf(menu_position.y, viewport_size.y - 180.0)
+	party_slot_context_menu.position = Vector2i(menu_position.max(Vector2.ZERO))
+	party_slot_context_menu.popup()
+
+
+func _on_party_slot_context_action(action_id: int) -> void:
+	var slot_index := party_slot_context_index
+	party_slot_context_index = -1
+	if slot_index < 0 or slot_index >= PlayerSave.party.size():
+		return
+	var pokemon_value: Variant = PlayerSave.party[slot_index]
+	if not pokemon_value is Pokemon:
+		return
+	var pokemon := pokemon_value as Pokemon
+	match action_id:
+		PARTY_CONTEXT_SUMMARY:
+			_show_pokemon_summary(slot_index)
+		PARTY_CONTEXT_GIVE_ITEM:
+			_show_pokemon_summary(slot_index)
+			var card_key := _get_pokemon_summary_card_key(pokemon, slot_index, "interactive")
+			await _open_pokemon_summary_held_item_picker(card_key, true)
+		PARTY_CONTEXT_TAKE_ITEM:
+			await _take_pokemon_held_item(pokemon)
+		PARTY_CONTEXT_SET_LEAD:
+			await _set_party_slot_as_lead(slot_index)
+
+
+func _set_party_slot_as_lead(slot_index: int) -> void:
+	if slot_index <= 0 or slot_index >= PlayerSave.party.size():
+		return
+	var result: Dictionary = await PlayerPartyStateService.swap_party_slots(slot_index, 0)
+	if not bool(result.get("success", false)):
+		_add_chat_message(LocalizationManager.text("ui.chat.error.party_order"))
 
 func _on_party_slot_clicked(slot_index: int) -> void:
 	_focus_normal_ui_group(party_panel)
