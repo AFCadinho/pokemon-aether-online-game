@@ -119,6 +119,7 @@ func _check_scene_structure() -> void:
 	var sprite_box_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/sprite_box.gd")
 	_check_contains(sprite_box_source, "func anchor_stat_stage_panel_below", "stat badges support a HUD-relative anchor")
 	_check_contains(sprite_box_source, '"mimikyu-disguised": ["mimikyu"]', "Mimikyu Disguised resolves to its battle-sheet asset before the HOME-icon fallback")
+	_check_contains(sprite_box_source, '"pikachu-rock-star": ["pikachu-rockstar"]', "Pikachu Rock Star resolves to the existing Showdown battle-sheet directory")
 	var battle_modifier_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
 	_check_contains(
 		battle_modifier_source,
