@@ -14,7 +14,10 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 @export var dialogue_lines: Array[String] = []
 @export var blocks_movement := true
 @export var requires_facing := true
+# The offset selects the top-left tile of the blocked footprint relative to
+# this node. A 1x1 footprint preserves the original single-tile behaviour.
 @export var blocked_tile_offset := Vector2i.ZERO
+@export var blocked_tile_footprint := Vector2i.ONE
 @export var interaction_shape_size := Vector2(96, 96)
 
 var player_nearby := false
@@ -37,7 +40,7 @@ func blocks_world_position(world_position: Vector2) -> bool:
 	if not blocks_movement:
 		return false
 
-	return _to_tile(global_position + _blocked_tile_offset_pixels()) == _to_tile(world_position)
+	return _is_tile_in_blocked_footprint(_to_tile(world_position))
 
 
 func interact_with_player(_player: Node2D) -> void:
@@ -162,8 +165,22 @@ func _is_player_facing_interactable(player: Node2D) -> bool:
 		player_feet_position = player.call("get_feet_position") as Vector2
 
 	var facing_tile := _to_tile(_snap_world_position(player_feet_position) + player_direction * TILE_SIZE)
-	var interactable_tile := _to_tile(global_position + _blocked_tile_offset_pixels())
-	return facing_tile == interactable_tile
+	return _is_tile_in_blocked_footprint(facing_tile)
+
+
+func _is_tile_in_blocked_footprint(tile: Vector2i) -> bool:
+	var origin := _to_tile(global_position + _blocked_tile_offset_pixels())
+	var footprint := Vector2i(
+		maxi(1, blocked_tile_footprint.x),
+		maxi(1, blocked_tile_footprint.y)
+	)
+	var relative := tile - origin
+	return (
+		relative.x >= 0
+		and relative.y >= 0
+		and relative.x < footprint.x
+		and relative.y < footprint.y
+	)
 
 
 func _blocked_tile_offset_pixels() -> Vector2:

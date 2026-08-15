@@ -350,10 +350,12 @@ position = Vector2(2512, 976)
 sign_id = "kanto_route_3_mt_moon_sign"
 sign_type = "road"
 
-[node name="MtMoonCaveLock" parent="Entities/Interactables" instance=ExtResource("13_mt_moon_lock")]
-position = Vector2(2640, 688)
-display_name = "Mt. Moon"
+[node name="MtMoonCaveLock" parent="Entities/Interactables" unique_id=3248758 instance=ExtResource("13_mt_moon_lock")]
+position = Vector2(2640, 656)
+blocked_tile_offset = Vector2i(-1, 0)
+blocked_tile_footprint = Vector2i(2, 1)
 fallback_locked_dialogue_lines = Array[String](["Mt. Moon is closed for now.", "The cave will become accessible in a future update."])
+display_name = "Mt. Moon"
 
 [node name="Spawns" type="Node2D" parent="." unique_id=120000001]
 
