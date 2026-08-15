@@ -29,6 +29,7 @@ var fishing_region_badge_count := 0
 var fishing_rods: Array = []
 var surf_unlocked := true
 var pokemon_level_cap := 100
+var pokemon_trade_level_cap := 100
 var pokemon_level_cap_region := "kanto"
 var pokemon_level_cap_stage := ""
 var pokemon_level_cap_badge_count := 0
@@ -38,6 +39,7 @@ func apply_pokemon_level_cap_state(state: Dictionary) -> void:
 	if state.is_empty():
 		return
 	pokemon_level_cap = clampi(int(state.get("levelCap", pokemon_level_cap)), 1, 100)
+	pokemon_trade_level_cap = clampi(int(state.get("tradeLevelCap", pokemon_trade_level_cap)), 1, 100)
 	pokemon_level_cap_region = str(state.get("region", pokemon_level_cap_region))
 	pokemon_level_cap_stage = str(state.get("stageId", pokemon_level_cap_stage))
 	pokemon_level_cap_badge_count = max(int(state.get("badgeCount", pokemon_level_cap_badge_count)), 0)
@@ -73,6 +75,7 @@ func reset_gameplay_runtime_state() -> void:
 	fishing_rods = []
 	surf_unlocked = true
 	pokemon_level_cap = 100
+	pokemon_trade_level_cap = 100
 	pokemon_level_cap_region = "kanto"
 	pokemon_level_cap_stage = ""
 	pokemon_level_cap_badge_count = 0

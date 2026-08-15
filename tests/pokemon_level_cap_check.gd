@@ -21,10 +21,13 @@ func _run() -> void:
 			"stageId": "before-first-gym",
 			"badgeCount": 0,
 			"levelCap": 18,
+			"tradeLevelCap": 5,
 		})
 		_check(int(game_state.get("pokemon_level_cap")) == 18, "GameState applies the server level cap")
+		_check(int(game_state.get("pokemon_trade_level_cap")) == 5, "GameState applies the server trade level cap")
 		game_state.call("reset_gameplay_runtime_state")
 		_check(int(game_state.get("pokemon_level_cap")) == 100, "Gameplay reset clears the cached level cap")
+		_check(int(game_state.get("pokemon_trade_level_cap")) == 100, "Gameplay reset clears the cached trade level cap")
 
 	var party_service := FileAccess.get_file_as_string(PARTY_SERVICE_PATH)
 	_check(
@@ -44,6 +47,12 @@ func _run() -> void:
 		overlay.contains("GameState.pokemon_level_cap")
 		and overlay.contains("player_level_cap - current_level"),
 		"Bag EXP previews use the current player level cap"
+	)
+	_check(
+		overlay.contains("func _create_trainer_card_caps_panel()")
+		and overlay.contains("GameState.pokemon_trade_level_cap")
+		and overlay.contains("_pokemon_exp_for_level(growth_rate, player_level_cap + 1) - 1"),
+		"Trainer Card displays both progression caps"
 	)
 
 	var error_localization := FileAccess.get_file_as_string(ERROR_LOCALIZATION_PATH)
