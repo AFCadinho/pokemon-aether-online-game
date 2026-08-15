@@ -54,6 +54,12 @@ func _run() -> void:
 		and overlay.contains("_pokemon_exp_for_level(growth_rate, player_level_cap + 1) - 1"),
 		"Trainer Card displays both progression caps"
 	)
+	_check(
+		overlay.contains('LocalizationManager.text("ui.bag.use.cannot_use_reason"')
+		and overlay.contains("icon.modulate = Color(1.0, 1.0, 1.0, 0.45)")
+		and overlay.contains("UI_MUTED_TEXT if can_apply else UI_DANGER"),
+		"Bag item targets show a clear inline reason when disabled"
+	)
 
 	var error_localization := FileAccess.get_file_as_string(ERROR_LOCALIZATION_PATH)
 	_check(

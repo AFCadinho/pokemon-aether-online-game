@@ -658,6 +658,8 @@
   "ui.bag.use.no_compatible_pokemon": "Geen geschikte Pokémon in je team.",
   "ui.bag.use.pokemon_level": "{pokemon}  Lv. {level}",
   "ui.bag.use.pokemon_unavailable": "{pokemon} kan dit item nu niet gebruiken.",
+  "ui.bag.use.unavailable": "Niet beschikbaar",
+  "ui.bag.use.cannot_use_reason": "Niet bruikbaar · {reason}",
   "ui.bag.use.already_knows": "Kent {move} al",
   "ui.bag.use.already_knows_tooltip": "{pokemon} kent {move} al.",
   "ui.bag.use.teach_move": "{move} leren",
