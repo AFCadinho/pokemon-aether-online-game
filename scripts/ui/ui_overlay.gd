@@ -1928,8 +1928,11 @@ func _apply_mail_ui_styles() -> void:
 	_apply_line_edit_style(mail_money_amount.get_line_edit())
 	_apply_button_style(mail_pokemon_option)
 	_apply_text_edit_style(mail_compose_body_input)
-	var selected_attachments_scroll: ScrollContainer = $Control/MailComposePopup/MarginContainer/VBoxContainer/SelectedAttachmentsScroll
-	selected_attachments_scroll.add_theme_stylebox_override("panel", _make_mail_attachment_area_style())
+	# The compose form is moved below ComposeScroll while its workspace is built.
+	# Resolve the scroll from the stable attachment-list reference after that move.
+	var selected_attachments_scroll := mail_selected_attachments_list.get_parent() as ScrollContainer
+	if selected_attachments_scroll != null:
+		selected_attachments_scroll.add_theme_stylebox_override("panel", _make_mail_attachment_area_style())
 
 func _setup_mail_workspace_structure() -> void:
 	if bool(mail_popup.get_meta("workspace_structure_ready", false)):
