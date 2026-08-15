@@ -9387,16 +9387,122 @@
       }
     },
     "hiddenpower": {
-      "template": "imported_sheet",
+      "template": "custom_godot_effect",
       "category": "special_projectile",
-      "speed_scale": 1.0,
+      "speed_scale": 1.08,
       "show_timing_backgrounds": false,
       "show_timing_foregrounds": false,
       "show_pink_visual": false,
-      "show_sheet_sprites": true,
+      "show_sheet_sprites": false,
       "overlay_fill_enabled": false,
       "overlay_peak_alpha": 0.0,
-      "sprite_zoom_multiplier": 1.0,
+      "render_below_sprites": true,
+      "orb_barrage": {
+        "enabled": true,
+        "visible_start": 0.02,
+        "visible_end": 0.98,
+        "fade_in": 0.06,
+        "fade_out": 0.12,
+        "launch_start": 0.25,
+        "impact_start": 0.7,
+        "orb_count": 6,
+        "orb_radius": 8.5,
+        "orb_spread": 38.0,
+        "charge_radius": 34.0,
+        "trail_length": 20.0,
+        "impact_radius": 56.0,
+        "impact_ray_count": 14,
+        "impact_offset": [
+          0,
+          -8
+        ],
+        "green": [
+          0.36,
+          1.0,
+          0.34,
+          1.0
+        ],
+        "cyan": [
+          0.22,
+          0.9,
+          1.0,
+          1.0
+        ],
+        "pink": [
+          1.0,
+          0.34,
+          0.76,
+          1.0
+        ],
+        "gold": [
+          1.0,
+          0.72,
+          0.18,
+          1.0
+        ],
+        "violet": [
+          0.68,
+          0.34,
+          1.0,
+          1.0
+        ],
+        "mint": [
+          0.28,
+          1.0,
+          0.76,
+          1.0
+        ],
+        "core_color": [
+          1.0,
+          0.96,
+          0.8,
+          1.0
+        ],
+        "impact_color": [
+          0.72,
+          0.34,
+          1.0,
+          1.0
+        ],
+        "path": [
+          {
+            "at": 0,
+            "position": [
+              128,
+              196
+            ],
+            "scale": 0.9
+          },
+          {
+            "at": 1,
+            "position": [
+              384,
+              94
+            ],
+            "scale": 1.0,
+            "ease": "ease_out_quad"
+          }
+        ],
+        "reverse_path": [
+          {
+            "at": 0,
+            "position": [
+              384,
+              94
+            ],
+            "scale": 0.9
+          },
+          {
+            "at": 1,
+            "position": [
+              128,
+              196
+            ],
+            "scale": 1.0,
+            "ease": "ease_out_quad"
+          }
+        ]
+      },
       "data_path": "res://assets/battles/animations/hiddenpower/hiddenpower.json",
       "sheet_path": "res://assets/battles/animations/hiddenpower/PRAS- Hidden Power.png",
       "background_path": "",
@@ -9417,7 +9523,7 @@
       "overlay_fill_enabled": false,
       "overlay_peak_alpha": 0.0,
       "render_below_sprites": true,
-      "sound_wave": {
+      "solar_beam": {
         "enabled": true,
         "visible_start": 0.03,
         "visible_end": 0.97,
@@ -9434,6 +9540,28 @@
         ],
         "impact_ray_count": 14,
         "impact_bolt_count": 6,
+        "beam_start": 0.24,
+        "beam_fade_in": 0.08,
+        "outer_width": 30.0,
+        "middle_width": 15.0,
+        "core_width": 4.5,
+        "ribbon_count": 4,
+        "segments": 28,
+        "curve_amplitude": 12.0,
+        "source_radius": 28.0,
+        "impact_alpha": 0.92,
+        "outer_color": [
+          0.38,
+          0.08,
+          0.86,
+          1.0
+        ],
+        "middle_color": [
+          0.48,
+          0.2,
+          1.0,
+          1.0
+        ],
         "wave_color": [
           0.48,
           0.2,
