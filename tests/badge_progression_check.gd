@@ -47,6 +47,7 @@ func _init() -> void:
 	_check_contains(wallet_service, '"gymBadgeAward"', "trainer reward response preserves Gym Badge awards")
 	_check_contains(wallet_service, "PlayerSave.apply_gym_badge_state", "trainer rewards refresh canonical badge progress")
 	_check_contains(world, "func _notify_gym_badge_award", "Gym victory announces the awarded badge")
+	_check_contains(world, '"playItemReceivedSfx": bool(gym_badge_award.get("awarded", false))', "new Gym Badges schedule the received-item jingle")
 
 	quit(1 if failed else 0)
 

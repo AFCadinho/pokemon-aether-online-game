@@ -109,6 +109,11 @@ func _init() -> void:
 	_check(beacon_source.contains("await super._process(delta)"), "Aether Beacon awaits the shared interaction coroutine")
 	_check(beacon_source.contains("requires_facing = false"), "Aether Beacon enforces omnidirectional interaction at runtime")
 	_check(beacon_source.contains("interaction_shape_size = Vector2(80, 80)"), "Aether Beacon enforces its local interaction radius at runtime")
+	_check(
+		beacon_source.contains("z_as_relative = false")
+		and beacon_source.contains("floori(global_position.y)"),
+		"Aether Beacon sorts its complete visual from the pedestal depth"
+	)
 	_check(beacon_source.contains("_refresh_activation_state"), "Aether Beacon restores its attuned visual state")
 	_check(beacon_source.contains("_apply_activation_state(true)"), "Aether Beacon activates after attunement")
 	_check(beacon_source.contains('_find_local_keeper()'), "Aether Beacon delegates its dialogue to the local Keeper")
@@ -116,6 +121,10 @@ func _init() -> void:
 	_check(
 		beacon_source.contains("AetherConfirmationDialogScene.instantiate()"),
 		"Aether Beacon uses the styled Aethernet confirmation dialog"
+	)
+	_check(
+		beacon_source.contains("var confirmation_layer := CanvasLayer.new()"),
+		"Aether Beacon opens Anchor confirmation in screen space"
 	)
 	_check(beacon_source.contains("TransitService.set_anchor"), "Aether Beacon owns Anchor selection")
 	_check(english_localization.contains('"ui.transit.attuned_system"'), "Aethernet attunement has a localized system message")
@@ -127,9 +136,14 @@ func _init() -> void:
 	_check(placeholder_source.contains('[node name="Sparks"'), "Activated Aether Beacon has particle-like sparks")
 	_check(placeholder_source.contains("requires_facing = false"), "Aether Beacon can be attuned from every side")
 	_check(placeholder_source.contains("interaction_shape_size = Vector2(80, 80)"), "Aether Beacon interaction stays local to the crystal")
+	_check(placeholder_source.contains("z_as_relative = false"), "Aether Beacon uses absolute character-compatible depth sorting")
 	var menu_source := FileAccess.get_file_as_string("res://scripts/ui/transit_menu.gd")
 	_check(english_localization.contains('"ui.transit.title": "Aethernet"'), "Transit UI is branded as Aethernet")
 	_check(menu_source.contains("_destinations_by_region"), "Transit UI groups destinations by region")
+	_check(menu_source.contains("_global_hubs"), "Transit UI separates worldwide hubs from regional destinations")
+	_check(menu_source.contains("_global_hub_card"), "Transit UI gives worldwide hubs their own visual treatment")
+	_check(menu_source.contains('destination.get("guildBenefitActive"'), "Transit UI displays the free Guild Lobby benefit")
+	_check(english_localization.contains('"ui.transit.hubs": "Aethernet hubs"'), "Transit UI labels its worldwide hub section")
 	_check(menu_source.contains("ScrollContainer.new()"), "Transit UI remains scrollable as towns are added")
 	_check(menu_source.contains('destination.get("isAnchor"'), "Transit UI identifies the Aether Anchor")
 	_check(menu_source.contains('ui.transit.travel_free'), "Transit UI labels Anchor travel as free without a price")

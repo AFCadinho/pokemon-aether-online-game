@@ -3,6 +3,7 @@ extends Node
 signal settings_changed
 signal world_pixel_scale_changed(scale: float)
 signal mount_loadout_changed(movement_mode: String, mount_id: String)
+signal input_binding_changed(action: String, keycode: Key)
 
 const PixelPerfectRendering := preload("res://scripts/services/pixel_perfect_rendering.gd")
 const MountServiceScript := preload("res://scripts/services/mount_service.gd")
@@ -45,6 +46,10 @@ const MOUNT_MODE_SURF := MountServiceScript.MOVEMENT_MODE_SURF
 const DEFAULT_CURSOR_SCALE := 75.0
 const MIN_CURSOR_SCALE := 50.0
 const MAX_CURSOR_SCALE := 150.0
+const CONFIGURABLE_INPUT_ACTIONS: Array[String] = ["fish"]
+const DEFAULT_INPUT_BINDINGS: Dictionary = {
+	"fish": KEY_F,
+}
 const AVAILABLE_WINDOW_RESOLUTIONS: Array[Vector2i] = [
 	Vector2i(1280, 720),
 	Vector2i(1600, 900),
@@ -81,6 +86,7 @@ var chat_tab_visibility: Dictionary = {
 	CHAT_TAB_GUILD: true,
 }
 var chat_tab_order: Array[String] = DEFAULT_CHAT_TAB_ORDER.duplicate()
+var input_bindings: Dictionary = DEFAULT_INPUT_BINDINGS.duplicate()
 
 
 func _ready() -> void:
@@ -145,6 +151,7 @@ func load_settings() -> void:
 	)
 	chat_tab_visibility = _validated_chat_tab_visibility(data.get("chat_tab_visibility", chat_tab_visibility))
 	chat_tab_order = _validated_chat_tab_order(data.get("chat_tab_order", chat_tab_order))
+	input_bindings = _validated_input_bindings(data.get("input_bindings", input_bindings))
 	var launcher_changed := _apply_launcher_locale_argument()
 	if not has_content_name_language:
 		content_name_language = _default_content_name_language(locale)
@@ -191,6 +198,7 @@ func save_settings() -> void:
 		"content_name_language": content_name_language,
 		"chat_tab_visibility": chat_tab_visibility,
 		"chat_tab_order": chat_tab_order,
+		"input_bindings": input_bindings,
 	}
 
 	var file: FileAccess = FileAccess.open(SETTINGS_PATH, FileAccess.WRITE)
@@ -300,6 +308,43 @@ func get_selected_mount_id(movement_mode: String) -> String:
 		MOUNT_MODE_SURF:
 			return selected_surf_mount_id
 	return ""
+
+
+func set_input_binding(action: String, keycode: Key) -> bool:
+	var normalized_action := action.strip_edges().to_lower()
+	if normalized_action not in CONFIGURABLE_INPUT_ACTIONS or keycode == KEY_NONE:
+		return false
+	if int(input_bindings.get(normalized_action, KEY_NONE)) == int(keycode):
+		_apply_input_binding(normalized_action, keycode)
+		return true
+	input_bindings[normalized_action] = int(keycode)
+	_apply_input_binding(normalized_action, keycode)
+	input_binding_changed.emit(normalized_action, keycode)
+	_save_and_emit()
+	return true
+
+
+func reset_input_binding(action: String) -> bool:
+	var normalized_action := action.strip_edges().to_lower()
+	if normalized_action not in CONFIGURABLE_INPUT_ACTIONS:
+		return false
+	var default_keycode: Key = int(DEFAULT_INPUT_BINDINGS.get(normalized_action, KEY_NONE))
+	return set_input_binding(normalized_action, default_keycode)
+
+
+func get_input_binding_keycode(action: String) -> Key:
+	var normalized_action := action.strip_edges().to_lower()
+	var keycode: Key = int(input_bindings.get(
+		normalized_action,
+		DEFAULT_INPUT_BINDINGS.get(normalized_action, KEY_NONE)
+	))
+	return keycode
+
+
+func get_input_binding_label(action: String) -> String:
+	var keycode := get_input_binding_keycode(action)
+	var label := OS.get_keycode_string(keycode).strip_edges()
+	return label if not label.is_empty() else "?"
 
 
 func set_selected_mount_id(movement_mode: String, mount_id: String) -> bool:
@@ -533,6 +578,16 @@ func _validated_chat_tab_order(value: Variant) -> Array[String]:
 	return order
 
 
+func _validated_input_bindings(value: Variant) -> Dictionary:
+	var source: Dictionary = value as Dictionary if value is Dictionary else {}
+	var bindings := DEFAULT_INPUT_BINDINGS.duplicate()
+	for action: String in CONFIGURABLE_INPUT_ACTIONS:
+		var keycode := int(source.get(action, bindings.get(action, KEY_NONE)))
+		if keycode != int(KEY_NONE):
+			bindings[action] = keycode
+	return bindings
+
+
 func _validated_window_resolution(resolution: Variant) -> Vector2i:
 	if resolution is Vector2i:
 		return _closest_available_resolution(resolution as Vector2i)
@@ -584,10 +639,25 @@ func _ensure_audio_bus(bus_name: String) -> void:
 
 func _apply_runtime_settings() -> void:
 	_apply_pixel_rendering_defaults()
+	_apply_input_bindings()
 	LocalizationManager.set_locale(locale)
 	CursorThemeManager.set_cursor_scale(cursor_scale)
 	_apply_audio_settings()
 	_apply_display_settings()
+
+
+func _apply_input_bindings() -> void:
+	for action: String in CONFIGURABLE_INPUT_ACTIONS:
+		_apply_input_binding(action, get_input_binding_keycode(action))
+
+
+func _apply_input_binding(action: String, keycode: Key) -> void:
+	if not InputMap.has_action(action) or keycode == KEY_NONE:
+		return
+	InputMap.action_erase_events(action)
+	var event := InputEventKey.new()
+	event.physical_keycode = keycode
+	InputMap.action_add_event(action, event)
 
 
 func _apply_pixel_rendering_defaults() -> void:

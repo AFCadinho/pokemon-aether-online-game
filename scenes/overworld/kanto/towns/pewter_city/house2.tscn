@@ -4,6 +4,10 @@
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_map_meta"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="3_floor_mask"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="4_map_exit"]
+[ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="5_dialogue_npc"]
+[ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="6_hiker"]
+[ext_resource type="SpriteFrames" uid="uid://yaxkjlx3spjb" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="7_poke_fan_f"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="8_transition_hint"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_house_exit"]
 size = Vector2(96, 32)
@@ -40,6 +44,26 @@ floor_regions = {
 
 [node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=122729292]
 
+[node name="Entities" type="Node2D" parent="."]
+z_index = 5
+
+[node name="NPCs" type="Node2D" parent="Entities"]
+
+[node name="HikerAmos" parent="Entities/NPCs" instance=ExtResource("5_dialogue_npc")]
+position = Vector2(272, 336)
+npc_id = "kanto_pewter_city_house_2_hiker_amos"
+npc_definition_id = "trainer_class_hiker"
+display_name = "Hiker Amos"
+npc_sprite_frames = ExtResource("6_hiker")
+
+[node name="PokeFanMira" parent="Entities/NPCs" instance=ExtResource("5_dialogue_npc")]
+position = Vector2(400, 368)
+npc_id = "kanto_pewter_city_house_2_poke_fan_mira"
+npc_definition_id = "trainer_class_poke_fan_f"
+display_name = "Poke Fan Mira"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("7_poke_fan_f")
+
 [node name="Spawns" type="Node2D" parent="." unique_id=1330610002]
 
 [node name="FromPewterCity" type="Marker2D" parent="Spawns" unique_id=397983092]
@@ -56,5 +80,10 @@ target_spawn_name = "FromHouse2"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPewterCity" unique_id=1640872052]
 position = Vector2(-16, 16)
 shape = SubResource("RectangleShape2D_house_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToPewterCity" instance=ExtResource("8_transition_hint")]
+position = Vector2(-16, 16)
+tile_footprint = Vector2i(3, 1)
+flow_direction = "down"
 
 [connection signal="body_entered" from="Exits/ToPewterCity" to="Exits/ToPewterCity" method="_on_body_entered"]

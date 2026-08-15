@@ -4,6 +4,7 @@ const HOUSE_PATH := "res://scenes/overworld/kanto/towns/pallet_town/players_hous
 const ROUTE_1_PATH := "res://scenes/overworld/kanto/routes/kanto_route_1.tscn"
 const DAD_FRAMES_PATH := "res://assets/npcs/custom/adinho_dad_frames.tres"
 const MOM_FRAMES_PATH := "res://assets/npcs/named/mom_frames.tres"
+const MOM_SPRITE_PATH := "res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_127_Mom.png"
 const TRAINING_SCRIPT_PATH := "res://scripts/world/kanto/routes/dadinho_training_npc.gd"
 
 var failed := false
@@ -46,7 +47,15 @@ func _run() -> void:
 			"Dadinho is tied to the Parcel hand-in"
 		)
 	if mom != null:
-		_expect(mom.get("npc_sprite_frames") == load(MOM_FRAMES_PATH), "Mom uses her dedicated overworld sprite")
+		var mom_frames := load(MOM_FRAMES_PATH) as SpriteFrames
+		_expect(mom.get("npc_sprite_frames") == mom_frames, "Mom uses her dedicated overworld sprite")
+		var mom_default_frame := mom_frames.get_frame_texture("default", 0) as AtlasTexture
+		_expect(
+			mom_default_frame != null
+			and mom_default_frame.atlas != null
+			and mom_default_frame.atlas.resource_path == MOM_SPRITE_PATH,
+			"Mom uses the requested NPC 127 overworld sheet"
+		)
 		_expect(str(mom.get("respawn_spawn_marker")) == "MomHeal", "Mom owns the house heal spawn")
 		var mom_hook := mom.get_node_or_null("BeforeJourneyStoryHook")
 		_expect(

@@ -69,6 +69,8 @@ func _check_catalog_response_parsing() -> void:
 				"type": "pokemart",
 				"locationId": "standard_pokemart",
 				"locationName": "Pokemarts",
+				"badgeCount": 5,
+				"nextUnlockBadge": 6,
 				"items": [
 					{
 						"itemId": "poke-ball",
@@ -76,6 +78,8 @@ func _check_catalog_response_parsing() -> void:
 						"category": "poke-balls",
 						"shortDesc": "A device for catching Pokemon.",
 						"sellPrice": 100,
+						"requiredBadges": 0,
+						"available": true,
 						"costs": [{"currency": "money", "amount": 200}],
 					},
 				],
@@ -86,11 +90,15 @@ func _check_catalog_response_parsing() -> void:
 	_check_equal(result.get("success", false), true, "catalog parse success")
 	var market: Dictionary = result.get("market", {})
 	_check_equal(market.get("id", ""), "standard_pokemart", "catalog market id")
+	_check_equal(market.get("badgeCount", -1), 5, "catalog badge count")
+	_check_equal(market.get("nextUnlockBadge", -1), 6, "catalog next unlock badge")
 	var items: Array = market.get("items", [])
 	_check_equal(items.size(), 1, "catalog item count")
 	var first_item: Dictionary = items[0]
 	_check_equal(first_item.get("itemId", ""), "poke-ball", "catalog item id")
 	_check_equal(first_item.get("sellPrice", 0), 100, "catalog item sale price")
+	_check_equal(first_item.get("requiredBadges", -1), 0, "catalog item badge requirement")
+	_check_equal(first_item.get("available", false), true, "catalog item availability")
 	_check_equal(((first_item.get("costs", []) as Array)[0] as Dictionary).get("amount", 0), 200, "catalog item price")
 
 
@@ -140,9 +148,9 @@ func _check_sale_response_parsing() -> void:
 
 func _check_error_detail_extraction() -> void:
 	_check_equal(
-		service._extract_error({"detail": {"message": "Not enough money."}}, 400),
-		"Not enough money.",
-		"dictionary detail message"
+		service._extract_error({"detail": {"code": "not_enough_money", "message": "Private detail."}}, 400),
+		"You do not have enough money.",
+		"coded errors use the safe localized message"
 	)
 
 

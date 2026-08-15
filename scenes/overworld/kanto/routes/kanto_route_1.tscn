@@ -534,7 +534,6 @@ sight_range_tiles = 2
 npc_id = "kanto_route_1_lass_zoe"
 npc_definition_id = "trainer_class_lass"
 display_name = "Lass Zoe"
-facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("29_lass")
 
 [node name="Dialogue" type="Node2D" parent="Entities/NPCs" unique_id=1893184129]
@@ -641,6 +640,7 @@ target_spawn_name = "FromRoute1"
 shape = SubResource("RectangleShape2D_7kpb1")
 
 [node name="RouteTransitionHint" parent="Exits/ToPalletTown" unique_id=1220080167 instance=ExtResource("17_bnyo4")]
+flow_direction = "down"
 
 [node name="ToViridianCity" type="Area2D" parent="Exits" unique_id=185773419]
 position = Vector2(1136, -16)
@@ -652,6 +652,11 @@ transition_id = "route_1_to_viridian_city"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToViridianCity" unique_id=297572459]
 position = Vector2(0, 16)
 shape = SubResource("RectangleShape2D_7kpb1")
+
+[node name="RouteTransitionHint" parent="Exits/ToViridianCity" instance=ExtResource("17_bnyo4")]
+position = Vector2(0, 16)
+tile_footprint = Vector2i(6, 2)
+flow_direction = "up"
 
 [node name="Spawns" type="Node2D" parent="." unique_id=1226721215]
 

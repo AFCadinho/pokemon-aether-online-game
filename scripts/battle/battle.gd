@@ -26,6 +26,7 @@ const BATTLE_PARTY_SLOT_RESOLVER := preload("res://scripts/battle/battle_party_s
 const BATTLE_DISGUISE_EVENT_ORDER := preload("res://scripts/battle/battle_disguise_event_order.gd")
 const BATTLE_SUPREME_OVERLORD_EFFECT := preload("res://scripts/battle/battle_supreme_overlord_effect.gd")
 const BATTLE_PUBLIC_POKEMON_KNOWLEDGE := preload("res://scripts/battle/battle_public_pokemon_knowledge.gd")
+const OPPONENT_PARTY_REVEAL_POLICY := preload("res://scripts/battle/opponent_party_reveal_policy.gd")
 const BATTLE_VOICE_TIMING := preload("res://scripts/battle/battle_voice_timing.gd")
 const BATTLE_ENVIRONMENT_CATALOG := preload("res://scripts/battle/battle_environment_catalog.gd")
 const CALC_DRAWER_FIELD_MARGIN := 8.0
@@ -80,6 +81,7 @@ const SIGNATURE_Z_MOVE_NAMES := {
 }
 
 var battle_type: BattleType = BattleType.WILD
+var wild_capture_allowed := true
 var current_action_view: ActionView = ActionView.NONE
 var current_action_panel_mode: BattleActionsPanelMode = BattleActionsPanelMode.BATTLE
 var battle_finished := false
@@ -155,6 +157,7 @@ var battle_end_signal_emitted := false
 var last_rendered_event_seq := -1
 var ordered_response_display_species_hold: Dictionary = {}
 var rendered_non_pvp_event_keys: Dictionary = {}
+var opponent_party_reveal_policy := OPPONENT_PARTY_REVEAL_POLICY.new()
 var pvp_event_queue := preload("res://scripts/battle/battle_event_queue.gd").new()
 var pvp_response_order := preload("res://scripts/battle/battle_response_order.gd").new()
 var pvp_prechoice_buffer := preload("res://scripts/battle/pvp_prechoice_buffer.gd").new()
@@ -3322,7 +3325,7 @@ func _open_bag() -> void:
 	_refresh_bag_inventory()
 
 func _can_use_bag_in_current_battle() -> bool:
-	return battle_type == BattleType.WILD and not _is_pvp_battle()
+	return battle_type == BattleType.WILD and wild_capture_allowed and not _is_pvp_battle()
 
 func _refresh_bag_action_disabled() -> void:
 	action_buttons.set_action_disabled("bag", not _can_use_bag_in_current_battle())
@@ -3668,7 +3671,13 @@ func _set_display_party_grids(player_display_team: Array, opponent_display_team:
 	# depend on deferred signal delivery.
 	player_party_grid.set_party(player_display_team)
 	player_stage_party_grid.set_party(player_display_team)
-	opponent_party_grid.set_party(opponent_display_team)
+	opponent_party_grid.set_party(_get_opponent_party_rail_data(opponent_display_team))
+
+
+func _get_opponent_party_rail_data(opponent_display_team: Array) -> Array:
+	if battle_type != BattleType.TRAINER or _is_pvp_battle():
+		return opponent_display_team
+	return opponent_party_reveal_policy.mask_team(opponent_display_team)
 
 func _mark_active_party_slot(display_team: Array, player_id: String) -> void:
 	var active_slot := _get_active_canonical_party_slot(player_id)
@@ -6092,6 +6101,7 @@ func prepare_wild_battle_from_response(
 	api_response: Dictionary,
 	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
 ) -> bool:
+	wild_capture_allowed = bool(api_response.get("captureAllowed", true))
 	_prepare_battle_setup(BattleType.WILD, player_pokemon, enemy_pokemon, environment_id)
 	_show_local_player_trainer()
 
@@ -6148,6 +6158,8 @@ func setup_trainer_battle_from_response(
 	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
 ) -> void:
 	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null, environment_id)
+	var team_preview_enabled := _trainer_team_preview_enabled(api_response)
+	opponent_party_reveal_policy.reset(team_preview_enabled)
 	battle_banter_presenter.configure(trainer_data)
 	battle_voice_director.configure(str(api_response.get("battleId", "")), "trainer", trainer_data)
 	_show_local_player_trainer()
@@ -6158,12 +6170,20 @@ func setup_trainer_battle_from_response(
 		await _notify_trainer_entry_ready(entry_ready_callback)
 		return
 
-	if not _should_show_team_preview(api_response):
+	if not team_preview_enabled:
 		_show_default_trainer_leads_before_selection(player_pokemon, api_response)
 
-	await _notify_trainer_entry_ready(entry_ready_callback)
+	# Interactive Team Preview must be revealed before the player can choose.
+	# Regular NPC battles stay covered while both automatic lead requests finish,
+	# preventing the server's mechanical preview phase from flashing on screen.
+	if team_preview_enabled:
+		await _notify_trainer_entry_ready(entry_ready_callback)
 
 	var lead_response := await _run_trainer_lead_selection(api_response)
+	if not team_preview_enabled:
+		if not lead_response.is_empty():
+			await _prepare_team_preview_lead_summon_transition()
+		await _notify_trainer_entry_ready(entry_ready_callback)
 	if lead_response.is_empty():
 		return
 
@@ -6180,7 +6200,8 @@ func setup_trainer_battle_from_response(
 	# Team Preview owns the field until both preview layers have been cleared.
 	# Keep the real lead containers hidden while their sprites are populated so
 	# they can only become visible at the Pokeball release frame.
-	await _prepare_team_preview_lead_summon_transition()
+	if team_preview_enabled:
+		await _prepare_team_preview_lead_summon_transition()
 	await _present_special_npc_battle_opening(trainer_data)
 	_show_original_player_lead_before_initial_events(player_species, player_pokemon)
 	_show_original_active_pokemon_for_player("p2", opponent_species)
@@ -6505,13 +6526,20 @@ func _prepare_battle_setup(
 	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
 ) -> void:
 	battle_type = type
+	opponent_party_reveal_policy.reset(false)
+	var show_full_trainer_rails := battle_type == BattleType.TRAINER
+	player_stage_party_grid.set_empty_slots_visible(show_full_trainer_rails)
+	opponent_party_grid.set_empty_slots_visible(show_full_trainer_rails)
 	_apply_battle_environment(environment_id)
 	_clear_battle_trainer_sprites()
 	wild_owned_request_id += 1
 	if enemy_hud_panel != null and enemy_hud_panel.has_method("set_owned_icon_visible"):
 		enemy_hud_panel.set_owned_icon_visible(false)
 	if action_buttons.has_method("set_action_visible"):
-		action_buttons.set_action_visible("bag", battle_type == BattleType.WILD)
+		action_buttons.set_action_visible(
+			"bag",
+			battle_type == BattleType.WILD and wild_capture_allowed
+		)
 		action_buttons.set_action_visible("run", true)
 	if action_buttons.has_method("set_action_label"):
 		action_buttons.set_action_label("run", "Run" if battle_type == BattleType.WILD else "Forfeit")
@@ -7143,13 +7171,20 @@ func _get_saved_pokemon_for_active_data(active_pokemon: Dictionary) -> Pokemon:
 	return null
 
 func _run_trainer_lead_selection(api_response: Dictionary) -> Dictionary:
-	if _should_show_team_preview(api_response):
+	if _trainer_team_preview_enabled(api_response):
 		return await _run_trainer_team_preview_lead_selection()
 
 	return await _run_default_trainer_lead_selection()
 
 func _should_show_team_preview(api_response: Dictionary) -> bool:
 	return PvpBattleRealtimeService.is_team_preview_response(api_response)
+
+
+func _trainer_team_preview_enabled(api_response: Dictionary) -> bool:
+	return OPPONENT_PARTY_REVEAL_POLICY.is_team_preview_enabled(
+		api_response,
+		_should_show_team_preview(api_response)
+	)
 
 func _run_default_trainer_lead_selection() -> Dictionary:
 	_set_battle_input_locked(true)
@@ -8394,6 +8429,8 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 				await _play_switch_recall_for_event(event_data, switch_player_id)
 			_release_ordered_response_display_species_for_player(switch_player_id)
 			battle_state.apply_event_conditions([event_data])
+			if switch_player_id == "p2" and not _is_pvp_battle():
+				opponent_party_reveal_policy.reveal_active(_get_display_team_data("p2"))
 			_update_hud_panels()
 			_show_switch_event_active_pokemon(event_data)
 			if should_play_switch_ball_animations:
@@ -10643,6 +10680,7 @@ func _submit_npc_lead() -> Dictionary:
 
 	if not _apply_api_response(response, false):
 		return response
+	opponent_party_reveal_policy.reveal_active(_get_display_team_data("p2"))
 
 	return response
 

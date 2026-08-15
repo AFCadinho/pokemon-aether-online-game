@@ -5,12 +5,24 @@ const MAP_NPCS := {
 	"res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn": ["Entities/NPCs/ResearchAideNoah", "Entities/NPCs/ResearchAideEmma"],
 	"res://scenes/overworld/kanto/towns/pallet_town/rivals_house.tscn": ["Entities/NPCs/DaisyOak"],
 	"res://scenes/overworld/kanto/routes/kanto_route_1.tscn": ["Entities/NPCs/YoungsterLiam", "Entities/NPCs/LassZoe", "Entities/NPCs/Dialogue/Dadinho", "Entities/NPCs/Dialogue/MartEmployee", "Entities/NPCs/Dialogue/CamperQuinn"],
-	"res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn": ["Entities/NPCs/LeagueFanDorian", "Entities/NPCs/ForestScoutNico", "Entities/NPCs/SchoolKidJune", "Entities/NPCs/CatchingMentorGideon"],
+	"res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn": ["Entities/NPCs/GardenerMabel", "Entities/NPCs/AceTrainerVictor", "Entities/NPCs/LeagueFanDorian", "Entities/NPCs/ForestScoutNico", "Entities/NPCs/SchoolKidJune", "Entities/NPCs/CatchingMentorGideon", "Entities/NPCs/RocketGruntRook"],
 	"res://scenes/overworld/kanto/routes/kanto_route_22.tscn": ["Entities/NPCs/GaryOak", "Entities/NPCs/LeagueHikerGrant", "Entities/NPCs/YoungsterCaleb", "Entities/NPCs/LassPaige"],
 	"res://scenes/overworld/kanto/routes/kanto_route_2.tscn": ["Entities/NPCs/CaveResearcherOwen", "Entities/NPCs/ForestWatcherIvy", "Entities/NPCs/YoungsterMason", "Entities/NPCs/BugCatcherCale"],
 	"res://scenes/overworld/kanto/routes/kanto_route_3.tscn": ["Entities/NPCs/YoungsterWarren", "Entities/NPCs/HikerBruce", "Entities/NPCs/FirebreatherOtis"],
 	"res://scenes/overworld/kanto/routes/viridian_forest.tscn": ["Entities/NPCs/BugCatcherRick", "Entities/NPCs/BugCatcherDoug", "Entities/NPCs/BugCatcherAnthony", "Entities/NPCs/BugCatcherSammy", "Entities/NPCs/LostCamperDana", "Entities/NPCs/ForestResearcherLeah"],
 	"res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn": ["Entities/NPCs/MuseumGuideTheo", "Entities/NPCs/HikerBruno", "Entities/NPCs/GymFanMax", "Entities/NPCs/DigSiteWorkerCole", "Entities/NPCs/PewterResidentNora"],
+	"res://scenes/overworld/kanto/towns/pewter_city/house1.tscn": ["Entities/NPCs/FossilFanPetra", "Entities/NPCs/SchoolKidTessa"],
+	"res://scenes/overworld/kanto/towns/pewter_city/house2.tscn": ["Entities/NPCs/HikerAmos", "Entities/NPCs/PokeFanMira"],
+	"res://scenes/overworld/kanto/towns/viridian_city/house1.tscn": ["Entities/NPCs/PokeFanRowan", "Entities/NPCs/SchoolKidSam"],
+	"res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn": ["Entities/NPCs/YoungsterBenji", "Entities/NPCs/LassHolly"],
+	"res://scenes/overworld/kanto/towns/pewter_city/pokemon_center.tscn": ["Entities/NPCs/HikerFlint", "Entities/NPCs/LassCeleste"],
+	"res://scenes/overworld/kanto/routes/route_3_pokemon_center.tscn": ["Entities/NPCs/CamperIris", "Entities/NPCs/HikerDax", "Entities/NPCs/MagikarpSalesman"],
+}
+
+const CENTER_POKEMON := {
+	"res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn": ["Entities/Pokemon/Pikachu", "Entities/Pokemon/Oddish"],
+	"res://scenes/overworld/kanto/towns/pewter_city/pokemon_center.tscn": ["Entities/Pokemon/Machop", "Entities/Pokemon/Clefairy"],
+	"res://scenes/overworld/kanto/routes/route_3_pokemon_center.tscn": ["Entities/Pokemon/Paras", "Entities/Pokemon/Zubat"],
 }
 
 const CLASS_FRAME_PATHS := [
@@ -18,12 +30,14 @@ const CLASS_FRAME_PATHS := [
 	"res://assets/npcs/classes/bug_catcher_frames.tres",
 	"res://assets/npcs/classes/camper_frames.tres",
 	"res://assets/npcs/classes/elder_frames.tres",
+	"res://assets/npcs/classes/elder_f_frames.tres",
 	"res://assets/npcs/classes/firebreather_frames.tres",
 	"res://assets/npcs/classes/hiker_frames.tres",
 	"res://assets/npcs/classes/lass_frames.tres",
 	"res://assets/npcs/classes/mart_m_frames.tres",
 	"res://assets/npcs/classes/poke_fan_f_frames.tres",
 	"res://assets/npcs/classes/poke_fan_m_frames.tres",
+	"res://assets/npcs/classes/rocket_grunt_m_frames.tres",
 	"res://assets/npcs/classes/school_kid_f_frames.tres",
 	"res://assets/npcs/classes/school_kid_m_frames.tres",
 	"res://assets/npcs/classes/scientist_f_frames.tres",
@@ -50,12 +64,62 @@ func _run() -> void:
 	_check_class_frames()
 	for scene_path: String in MAP_NPCS:
 		_check_map(scene_path, MAP_NPCS[scene_path])
+	for scene_path: String in CENTER_POKEMON:
+		_check_center_pokemon(scene_path, CENTER_POKEMON[scene_path])
 	_check_route_22_gary_story_hook()
 	_check_trainer_school_dadinho_story_hook()
 	_check_viridian_gideon_quest_hook()
+	_check_viridian_forest_trainer_vision()
 	for scene_path: String in TRANSITION_ATTENDANTS:
 		_check_transition_attendant(scene_path, TRANSITION_ATTENDANTS[scene_path])
 	quit(1 if failed else 0)
+
+
+func _check_viridian_forest_trainer_vision() -> void:
+	var packed := load("res://scenes/overworld/kanto/routes/viridian_forest.tscn") as PackedScene
+	_check(packed != null, "Viridian Forest loads for trainer vision contract")
+	if packed == null:
+		return
+	var map := packed.instantiate()
+	var collision := map.get_node_or_null("Collision") as TileMapLayer
+	var expected_ranges := {
+		"BugCatcherDoug": 4,
+		"BugCatcherAnthony": 4,
+	}
+	for trainer_name: String in expected_ranges:
+		var trainer := map.get_node_or_null("Entities/NPCs/%s" % trainer_name) as Node2D
+		_check(trainer != null, "Viridian Forest places %s for its sight line" % trainer_name)
+		if trainer == null or collision == null:
+			continue
+		var sight_range := int(expected_ranges[trainer_name])
+		_check(
+			int(trainer.get("sight_range_tiles")) == sight_range,
+			"%s watches all four open tiles in its facing direction" % trainer_name
+		)
+		_check(
+			str(trainer.get("movement_behavior")) == "idle",
+			"%s uses trainer sight instead of autonomous pacing" % trainer_name
+		)
+		var direction := Vector2(trainer.get("facing_direction"))
+		var trainer_cell := collision.local_to_map(collision.to_local(trainer.global_position))
+		for step: int in range(1, sight_range + 1):
+			var target_cell := trainer_cell + Vector2i(direction) * step
+			_check(
+				collision.get_cell_source_id(target_cell) == -1,
+				"%s sight step %d remains walkable" % [trainer_name, step]
+			)
+		var player_cell := trainer_cell + Vector2i(direction) * sight_range
+		var stop_cell: Vector2i = trainer.call(
+			"_get_straight_line_stop_tile",
+			trainer_cell,
+			player_cell,
+			direction
+		)
+		_check(
+			stop_cell == player_cell - Vector2i(direction),
+			"%s walks the correct number of steps and stops beside the player" % trainer_name
+		)
+	map.free()
 
 
 func _check_removed_placeholders() -> void:
@@ -87,6 +151,8 @@ func _check_map(scene_path: String, npc_paths: Array) -> void:
 		return
 	var map := packed.instantiate()
 	var collision := map.get_node_or_null("Collision") as TileMapLayer
+	if collision == null:
+		collision = map.get_node_or_null("BrownHouseTemplate/Collision") as TileMapLayer
 	_check(collision != null, "%s has collision data" % scene_path.get_file())
 	for npc_path_value: Variant in npc_paths:
 		var npc_path := str(npc_path_value)
@@ -104,6 +170,37 @@ func _check_map(scene_path: String, npc_paths: Array) -> void:
 	map.free()
 
 
+func _check_center_pokemon(scene_path: String, pokemon_paths: Array) -> void:
+	var packed := load(scene_path) as PackedScene
+	_check(packed != null, "%s loads for its companion Pokemon" % scene_path.get_file())
+	if packed == null:
+		return
+	var map := packed.instantiate()
+	var collision := map.get_node_or_null("Collision") as TileMapLayer
+	_check(collision != null, "%s has collision data for companion movement" % scene_path.get_file())
+	for pokemon_path_value: Variant in pokemon_paths:
+		var pokemon_path := str(pokemon_path_value)
+		var pokemon := map.get_node_or_null(pokemon_path) as Node2D
+		_check(pokemon != null, "%s places %s" % [scene_path.get_file(), pokemon_path.get_file()])
+		if pokemon == null or collision == null:
+			continue
+		_check(
+			not str(pokemon.get("overworld_pokemon_id")).is_empty(),
+			"%s has a content identity" % pokemon_path.get_file()
+		)
+		_check(
+			not str(pokemon.get("species_id")).is_empty(),
+			"%s has a species" % pokemon_path.get_file()
+		)
+		var cell := collision.local_to_map(collision.to_local(pokemon.global_position))
+		for offset_y: int in range(-1, 2):
+			_check(
+				collision.get_cell_source_id(cell + Vector2i(0, offset_y)) == -1,
+				"%s vertical pacing tile %d stays walkable" % [pokemon_path.get_file(), offset_y]
+			)
+	map.free()
+
+
 func _check_route_22_gary_story_hook() -> void:
 	var packed := load("res://scenes/overworld/kanto/routes/kanto_route_22.tscn") as PackedScene
 	_check(packed != null, "Route 22 loads for Gary story contract")
@@ -113,6 +210,12 @@ func _check_route_22_gary_story_hook() -> void:
 	var gary := map.get_node_or_null("Entities/NPCs/GaryOak")
 	var hook := map.get_node_or_null("Entities/NPCs/GaryOak/MeetGaryStoryHook")
 	_check(gary != null and bool(gary.get("preload_quest_markers")), "Gary preloads his quest marker")
+	_check(
+		gary != null
+		and str(gary.get("visibility_required_quest_id")) == "oaks_parcel"
+		and str(gary.get("visibility_required_quest_status")) == "completed",
+		"Gary only appears on Route 22 after Oak's Parcel is delivered"
+	)
 	_check(
 		gary != null
 		and str(gary.get("visibility_hidden_quest_id")) == "reach_viridian_city"

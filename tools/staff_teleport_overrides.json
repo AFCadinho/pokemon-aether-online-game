@@ -67,6 +67,12 @@
     },
     "kanto_route_22": {
       "points": {
+        "from_victory_road_post": {
+          "facingDirection": "down",
+          "id": "victory_road_post",
+          "label": "Victory Road Post",
+          "safe": true
+        },
         "from_viridian_city": {
           "facingDirection": "left",
           "id": "viridian_city_entrance",

@@ -13,6 +13,7 @@
 [ext_resource type="SpriteFrames" uid="uid://b8fh81or510qb" path="res://assets/npcs/classes/school_kid_m_frames.tres" id="11_school_kid_m_frames"]
 [ext_resource type="SpriteFrames" uid="uid://ddpjpv44v1bjn" path="res://assets/npcs/classes/school_kid_f_frames.tres" id="12_school_kid_f_frames"]
 [ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="13_youngster_frames"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="14_transition_hint"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_school_exit"]
 size = Vector2(96, 32)
@@ -163,6 +164,11 @@ transition_id = "kanto_viridian_city_trainer_school__to_viridian_city"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToViridianCity" unique_id=1500349078]
 position = Vector2(0, 16)
 shape = SubResource("RectangleShape2D_school_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToViridianCity" instance=ExtResource("14_transition_hint")]
+position = Vector2(0, 16)
+tile_footprint = Vector2i(3, 1)
+flow_direction = "down"
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=2071031986]
 visible = false

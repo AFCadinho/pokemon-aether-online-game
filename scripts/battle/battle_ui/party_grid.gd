@@ -10,6 +10,7 @@ signal party_changed(party: Array)
 var input_disabled := false
 var selection_enabled := false
 var hover_enabled := false
+var empty_slots_visible := false
 var intrinsic_disabled_by_slot: Dictionary = {}
 var current_party_data: Array = []
 
@@ -63,6 +64,13 @@ func clear_party() -> void:
 	_capture_intrinsic_disabled_states()
 	_apply_interaction_state()
 	party_changed.emit([])
+
+
+func set_empty_slots_visible(is_visible: bool) -> void:
+	empty_slots_visible = is_visible
+	for slot: Node in get_children():
+		if slot.has_method("set_empty_visible"):
+			slot.call("set_empty_visible", empty_slots_visible)
 
 func get_pokemon_data_for_visual_slot(slot: int) -> Dictionary:
 	var index := slot - 1

@@ -63,6 +63,10 @@ func attempt_pickpocket(npc_id: String) -> Dictionary:
 		return response
 	var body := _dictionary_from_value(response.get("body", {}))
 	_apply_state(_dictionary_from_value(body.get("state", {})))
+	var reward_item := _dictionary_from_value(body.get("rewardItem", {}))
+	await _refresh_wallet()
+	if not reward_item.is_empty():
+		await InventoryService.load_inventory()
 	var arrest := _dictionary_from_value(body.get("arrest", {}))
 	if not arrest.is_empty():
 		_apply_arrest(arrest)
@@ -71,7 +75,8 @@ func attempt_pickpocket(npc_id: String) -> Dictionary:
 		"outcome": str(body.get("outcome", "")),
 		"npcId": str(body.get("npcId", normalized_npc_id)),
 		"npcType": str(body.get("npcType", "civilian")),
-		"rewardCurrency": max(int(body.get("rewardCurrency", 0)), 0),
+		"rewardMoney": max(int(body.get("rewardMoney", 0)), 0),
+		"rewardItem": reward_item,
 		"experienceAwarded": max(int(body.get("experienceAwarded", 0)), 0),
 		"catchChance": clampf(float(body.get("catchChance", 0.0)), 0.0, 1.0),
 		"arrest": arrest,
@@ -95,6 +100,7 @@ func use_public_service(service_type: String) -> Dictionary:
 		return response
 	var body := _dictionary_from_value(response.get("body", {}))
 	_apply_state(_dictionary_from_value(body.get("state", {})))
+	await _refresh_wallet()
 	var arrest := _dictionary_from_value(body.get("arrest", {}))
 	if not arrest.is_empty():
 		_apply_arrest(arrest)
@@ -113,6 +119,10 @@ func is_npc_attempted_today(npc_id: String) -> bool:
 
 func get_level() -> int:
 	return max(int(state.get("level", 1)), 1)
+
+
+func is_unlocked() -> bool:
+	return bool(state.get("unlocked", false))
 
 
 func is_most_wanted() -> bool:
@@ -168,13 +178,22 @@ func _apply_state(next_state: Dictionary) -> void:
 
 func _apply_arrest(arrest: Dictionary) -> void:
 	arrested.emit(arrest.duplicate(true))
-	var lost_currency: int = maxi(int(arrest.get("lostCurrency", 0)), 0)
+	var lost_money: int = maxi(int(arrest.get("lostMoney", 0)), 0)
 	_add_system_message(LocalizationManager.text(
 		"ui.thieving.arrested",
-		{"amount": lost_currency}
+		{"amount": lost_money}
 	), true)
 	_teleport_to_destination(_dictionary_from_value(arrest.get("destination", {})))
 	_schedule_jail_release(max(int(arrest.get("sentenceSeconds", 0)), 0))
+
+
+func _refresh_wallet() -> bool:
+	var result: Dictionary = await PlayerWalletService.load_wallet()
+	if not bool(result.get("success", false)):
+		return false
+	PlayerWalletService.apply_wallet_result(result)
+	get_tree().call_group("ui_overlay", "refresh_money_display")
+	return true
 
 
 func _schedule_jail_release(seconds: int) -> void:

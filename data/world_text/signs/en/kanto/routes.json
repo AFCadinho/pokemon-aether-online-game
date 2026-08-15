@@ -7,6 +7,6 @@
     {"id": "kanto_route_2_route_sign", "type": "road", "mapId": "kanto_route_2", "title": "Route 2", "lines": ["Route 2", "Viridian City ↔ Pewter City."]},
     {"id": "kanto_route_2_digletts_cave", "type": "road", "mapId": "kanto_route_2", "title": "Diglett's Cave", "lines": ["Diglett's Cave", "A tunnel connecting Route 2 and Vermilion City."]},
     {"id": "kanto_route_22_route_sign", "type": "road", "mapId": "kanto_route_22", "title": "Route 22", "lines": ["Route 22", "Viridian City ↔ Indigo Plateau."]},
-    {"id": "kanto_route_3_mt_moon_sign", "type": "road", "mapId": "kanto_route_3", "title": "Mt. Moon", "lines": ["Mt. Moon", "A cave connecting Route 3 with Route 4 and Cerulean City."]}
+    {"id": "kanto_route_3_mt_moon_sign", "type": "road", "mapId": "kanto_route_3", "title": "Mt. Moon Entrance", "lines": ["Mt. Moon Entrance", "Cerulean City lies beyond the cave. Travelers should heal at the nearby Pokémon Center before entering."]}
   ]
 }

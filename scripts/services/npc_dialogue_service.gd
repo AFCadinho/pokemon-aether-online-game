@@ -7,7 +7,7 @@ func resolve_default_dialogue(
 	metadata_dialogue_id: String,
 	dialogue_override_id: String,
 	legacy_dialogue_id: String,
-	fallback_lines: Array[String],
+	fallback_lines: Array,
 	context := "NPC"
 ) -> Dictionary:
 	var selection := select_dialogue_reference(
@@ -61,7 +61,7 @@ func select_dialogue_reference(
 
 func resolve_dialogue(
 	dialogue_id: String,
-	fallback_lines: Array[String] = [],
+	fallback_lines: Array = [],
 	context := "NPC"
 ) -> Dictionary:
 	var normalized_fallback := _get_string_array(fallback_lines)
@@ -137,7 +137,7 @@ func resolve_dialogue(
 
 func resolve_lines(
 	dialogue_id: String,
-	fallback_lines: Array[String] = [],
+	fallback_lines: Array = [],
 	context := "NPC"
 ) -> Array[String]:
 	var result := await resolve_dialogue(dialogue_id, fallback_lines, context)

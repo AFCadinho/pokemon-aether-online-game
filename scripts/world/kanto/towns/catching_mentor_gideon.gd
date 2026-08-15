@@ -5,6 +5,7 @@ class_name CatchingMentorGideon
 
 const CATCHING_QUEST_ID := "catch_route_22_mankey"
 const CATCHING_TURN_IN_STEP_ID := "return_to_gideon"
+const MENTOR_TOPIC_MENU := preload("res://scripts/ui/mentor_topic_menu.gd")
 
 var quest_reward_id := ""
 var quest_reward_received_dialogue_id := ""
@@ -20,10 +21,7 @@ func interact_with_player(_player: Node2D) -> void:
 		await _claim_catching_reward()
 		return
 	if StoryService.is_requirement_met(CATCHING_QUEST_ID, "", "completed"):
-		await show_dialogue(await _resolve_dialogue_lines(
-			quest_reward_completed_dialogue_id,
-			["Every successful catch begins with patience and preparation."]
-		))
+		await _show_completed_help()
 		return
 	await show_dialogue()
 
@@ -74,9 +72,63 @@ func _claim_catching_reward() -> void:
 			"reward": "10 %s" % ItemLocalization.display_name("great-ball", "Great Balls"),
 		})
 	)
+	if bool(result.get("claimed", false)):
+		SfxManager.play("item_received")
 
 
-func _resolve_dialogue_lines(dialogue_id: String, fallback: Array[String]) -> Array[String]:
+func _show_completed_help() -> void:
+	var greeting: Array[String] = [LocalizationManager.text("mentor.gideon.help.greeting")]
+	if (
+		not quest_reward_completed_dialogue_id.is_empty()
+		and quest_reward_completed_dialogue_id != quest_reward_received_dialogue_id
+	):
+		greeting = await _resolve_dialogue_lines(quest_reward_completed_dialogue_id, greeting)
+	await show_dialogue(greeting)
+	while true:
+		var topic_id := await _choose_help_topic(
+			LocalizationManager.text("mentor.gideon.help.title"),
+			LocalizationManager.text("mentor.gideon.help.prompt"),
+			[
+				{"id": "finding", "label": LocalizationManager.text("mentor.gideon.help.topic.finding")},
+				{"id": "catching", "label": LocalizationManager.text("mentor.gideon.help.topic.catching")},
+				{"id": "odds", "label": LocalizationManager.text("mentor.gideon.help.topic.odds")},
+			]
+		)
+		if topic_id.is_empty():
+			return
+		await show_dialogue(_gideon_help_lines(topic_id), display_name)
+
+
+func _gideon_help_lines(topic_id: String) -> Array[String]:
+	var keys: Array[String] = []
+	match topic_id:
+		"finding":
+			keys = ["mentor.gideon.help.finding.1", "mentor.gideon.help.finding.2"]
+		"catching":
+			keys = ["mentor.gideon.help.catching.1", "mentor.gideon.help.catching.2"]
+		"odds":
+			keys = ["mentor.gideon.help.odds.1", "mentor.gideon.help.odds.2"]
+	var lines: Array[String] = []
+	for key: String in keys:
+		lines.append(LocalizationManager.text(key))
+	return lines
+
+
+func _choose_help_topic(title: String, prompt: String, topics: Array[Dictionary]) -> String:
+	var menu := MENTOR_TOPIC_MENU.new()
+	add_child(menu)
+	var topic_id: String = await menu.choose_topic(
+		title,
+		prompt,
+		topics,
+		LocalizationManager.text("ui.mentor_help.eyebrow"),
+		LocalizationManager.text("common.close")
+	)
+	menu.queue_free()
+	return topic_id
+
+
+func _resolve_dialogue_lines(dialogue_id: String, fallback: Array) -> Array[String]:
 	return await NpcDialogueService.resolve_lines(
 		dialogue_id,
 		fallback,

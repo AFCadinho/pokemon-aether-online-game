@@ -210,6 +210,7 @@ func _reward_claim_result_from_response(response: Dictionary) -> Dictionary:
 		"success": true,
 		"wallet": _dictionary_from_value(body.get("wallet", {})),
 		"reward": _dictionary_from_value(body.get("reward", {})),
+		"inventory": _dictionary_from_value(body.get("inventory", {})),
 		"party": _array_from_value(_dictionary_from_value(body.get("party", {})).get("party", [])),
 		"badges": _dictionary_from_value(body.get("badges", {})),
 		"gymBadgeAward": _dictionary_from_value(body.get("gymBadgeAward", {})),

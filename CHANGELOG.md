@@ -4,9 +4,21 @@
 
 **Added**
 
+- Added localized text to all interactive signs in Viridian City.
+- EV Expert Mateo and Catching Mentor Gideon now offer permanent topic menus after their quests, so their training instructions can be reviewed at any time.
+- The HUD quest tracker can now cycle between multiple active side quests.
+- Successful NPC heals now play a dedicated Pokémon recovery jingle.
+- Super-effective attacks now use a distinct hit sound when they deal damage.
+- Item discoveries and NPC item rewards now play their own acquisition jingles.
 - Added the Aether Clash Lobby. Guild members can travel there for free, and the name of the reigning Guild is shown below the location name.
 - The Aether Clash Lobby now contains animated purple and red portals for Guild wars.
 - Added Aethernet fast travel. Attune to a town's crystal to unlock it, then ask an Aethernet Keeper to take you to another unlocked town in the same region. You can also choose one Aether Anchor that is always free to reach.
+- The Aether Clash Lobby is now shown as a worldwide Aethernet hub. Public travel costs ₽1,000, while Guild members travel there for free.
+- Held items can now be dragged directly from the Bag onto an owned party slot or the held-item slot on a Pokémon Summary Card.
+- Party slots now have a right-click menu for opening the Summary Card, managing held items, and setting the lead Pokémon.
+- Fixed Route 1 Trainers starting overlapping dialogue and battle flows when spoken to as their sight challenge triggered.
+- Regular Trainer battles now select the player's first healthy lead automatically and conceal unrevealed opposing Pokémon behind Pokéball icons. Configured important battles can still use Team Preview.
+- PvE and PvP Trainer battles now keep all six battlefield party slots visible, with empty positions shown as disabled grey slots.
 - Added daily Trainer rematches. Their teams become stronger and can evolve as you progress.
 - Added an EV training field in Viridian City. Its battles teach EV training without damaging your Pokémon.
 - Added the Viridian Trainer School story, the first Pewter Gym challenge, and new houses to explore in Viridian City and Pewter City.
@@ -18,6 +30,9 @@
 
 **Changed**
 
+- Gideon now clearly directs searches for a specific Pokémon to the Pokédex and current-map encounter checks to the Radar.
+- The focused EV training stat picker now uses a compact themed interface with distinct stat colours.
+- Item-reward and recovery jingles now wait until their dialogue closes or their result message is shown.
 - Wild Pokémon now choose moves randomly, while Trainer opponents try to use the move that will deal the most damage.
 - Regular Trainer battles no longer show Team Preview; it remains available for important battles.
 - The Aether Clash Lobby now stays clear, follows the day-and-night cycle, and uses the login-screen music.
@@ -29,6 +44,9 @@
 
 **Fixed**
 
+- Fixed NPC dialogue helpers rejecting inline or localized fallback lines because Godot inferred them as untyped arrays.
+- Regular Trainer battles no longer briefly flash the lead-selection phase while automatic leads are being chosen.
+- Gary now waits to appear on Route 22 until Oak's Parcel has been delivered.
 - Fixed evolution choices sometimes appearing twice.
 - Fixed being able to move too early while choosing a starter from Professor Oak.
 - Fixed Aethernet crystals sometimes failing to respond, asking you to move closer while you were already beside them, or showing the wrong portrait.

@@ -25,6 +25,7 @@ const CODE_TO_KEY: Dictionary = {
 	"request_failed": "backend.error.generic",
 	"service_error": "backend.error.generic",
 	"not_enough_money": "backend.error.not_enough_money",
+	"market_badges_required": "backend.error.market_badges_required",
 	"not_enough_gems": "backend.error.not_enough_gems",
 	"transit_attunement_location_invalid": "backend.error.transit_wrong_location",
 	"transit_attunement_distance_invalid": "backend.error.transit_too_far",

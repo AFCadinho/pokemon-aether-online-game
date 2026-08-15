@@ -5,6 +5,9 @@ const BattleEventTextFormatterScript := preload("res://scripts/battle/battle_eve
 const BattleHpEventHelperScript := preload("res://scripts/battle/battle_hp_event_helper.gd")
 const SupremeOverlordEffectScript := preload("res://scripts/battle/battle_supreme_overlord_effect.gd")
 const BattleLogPanelScript := preload("res://scripts/battle/battle_ui/battle_log_panel.gd")
+const SUPER_EFFECTIVE_DAMAGE_SOUND := "res://assets/audio/sfx/battle/hit_super_effective.ogg"
+const BATTLE_ANIMATION_ROUTER := "res://scripts/battle/battle_animation_router.gd"
+const BATTLE_EVENT_RENDERER := "res://scripts/battle/battle_event_renderer.gd"
 
 var failed := false
 
@@ -45,6 +48,7 @@ func _init() -> void:
 	_check_confusion_pokemon_effect_uses_status_effect_animation()
 	_check_confusion_activate_replays_status_effect_animation()
 	_check_direct_damage_on_statused_target_does_not_replay_status_effect()
+	_check_super_effective_damage_uses_distinct_sound()
 	_check_poison_damage_replays_status_effect_animation()
 	_check_badly_poisoned_damage_replays_status_effect_animation()
 	_check_burn_damage_replays_status_effect_animation()
@@ -64,6 +68,66 @@ func _make_presentation():
 		Callable(self, "_get_player_display_name")
 	)
 	return presentation
+
+
+func _check_super_effective_damage_uses_distinct_sound() -> void:
+	var sound_stream := load(SUPER_EFFECTIVE_DAMAGE_SOUND) as AudioStream
+	var router_source := FileAccess.get_file_as_string(BATTLE_ANIMATION_ROUTER)
+	var renderer_source := FileAccess.get_file_as_string(BATTLE_EVENT_RENDERER)
+	_check_equal(sound_stream != null, true, "trimmed super-effective hit OGG loads")
+	_check_equal(
+		router_source.contains('const SUPER_EFFECTIVE_DAMAGE_SOUND_PATH := "%s"' % SUPER_EFFECTIVE_DAMAGE_SOUND)
+		and router_source.contains("get_damage_sound_path(sound_variant)"),
+		true,
+		"battle animation router resolves the super-effective hit sound"
+	)
+	_check_equal(
+		renderer_source.contains("damage_sound_variant")
+		and renderer_source.contains("play_damage_tween_for_target("),
+		true,
+		"damage presentation forwards its sound variant to the hit tween"
+	)
+	var presentation = _make_presentation()
+	presentation.build({
+		"type": "move",
+		"actor": "p1a: Pikachu",
+		"move": "Thunderbolt",
+		"target": "p2a: Blastoise",
+	})
+	presentation.build({
+		"type": "effectiveness",
+		"target": "p2a: Blastoise",
+		"effectiveness": "super",
+	})
+	var super_damage: Dictionary = presentation.build({
+		"type": "damage",
+		"target": "p2a: Blastoise",
+		"previousCondition": "100/100",
+		"condition": "40/100",
+	})
+	_check_equal(
+		str(super_damage.get("damage_sound_variant", "")),
+		"super_effective",
+		"super-effective damage replaces the normal hit sound"
+	)
+
+	presentation.build({
+		"type": "move",
+		"actor": "p1a: Pikachu",
+		"move": "Quick Attack",
+		"target": "p2a: Blastoise",
+	})
+	var normal_damage: Dictionary = presentation.build({
+		"type": "damage",
+		"target": "p2a: Blastoise",
+		"previousCondition": "40/100",
+		"condition": "30/100",
+	})
+	_check_equal(
+		str(normal_damage.get("damage_sound_variant", "")),
+		"normal",
+		"ordinary damage keeps the normal hit sound"
+	)
 
 
 func _check_z_power_event_has_visible_message() -> void:

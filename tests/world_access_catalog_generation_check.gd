@@ -156,6 +156,16 @@ func _init() -> void:
 			and transitions.has("kanto_route_22__to_viridian_city"),
 		"Viridian City exposes guarded route transitions including Route 22"
 	)
+	var route_22_points := (
+		(areas.get("kanto_route_22", {}) as Dictionary).get("spawnPoints", {}) as Dictionary
+	)
+	_expect(
+		route_22_points.has("victory_road_post")
+			and (route_22_points.get("victory_road_post", {}) as Dictionary).get(
+				"spawnMarker", ""
+			) == "FromVictoryRoadPost",
+		"Route 22 exposes the Victory Road Post staff destination"
+	)
 	_expect(
 		transitions.has("kanto_viridian_city__to_pokecenter")
 			and transitions.has("kanto_viridian_city_pokemon_center__to_outside"),

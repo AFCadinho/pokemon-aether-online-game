@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://br7n6hywfrl2a" path="res://scenes/npcs/heal_npc.tscn" id="12_mom_npc"]
 [ext_resource type="SpriteFrames" uid="uid://dk2np722tlccq" path="res://assets/npcs/named/mom_frames.tres" id="13_mom_frames"]
 [ext_resource type="Texture2D" uid="uid://b1g1wahd62ck6" path="res://assets/sprites/trainer_cards/showdown/mom-johto.png" id="14_mom_portrait"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="15_transition_hint"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_father_intro"]
 size = Vector2(160, 32)
@@ -187,6 +188,10 @@ target_spawn_name = "FromPlayersHouse"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPalletTown" unique_id=732909904]
 position = Vector2(432, 1008)
 shape = SubResource("RectangleShape2D_house_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToPalletTown" instance=ExtResource("15_transition_hint")]
+position = Vector2(432, 1008)
+flow_direction = "down"
 
 [node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=1789801119]
 z_index = 4096

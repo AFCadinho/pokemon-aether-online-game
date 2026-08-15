@@ -6,6 +6,8 @@ const DIALOGUE_NPC_SCRIPT := "res://scripts/world/npcs/dialogue_npc.gd"
 const TRAINER_NPC_SCRIPT := "res://scripts/world/npcs/trainer_npc.gd"
 const GATE_NPC_SCRIPT := "res://scripts/world/npcs/gate_npc.gd"
 const HEAL_NPC_SCRIPT := "res://scripts/world/npcs/heal_npc.gd"
+const SFX_MANAGER_SCRIPT := "res://scripts/services/sfx_manager.gd"
+const POKEMON_RECOVERY_SOUND := "res://assets/audio/sfx/overworld/pokemon_recovery.ogg"
 const DEFINITION_FALLBACK_SCENES: Dictionary = {
 	"res://scenes/npcs/heal_npc.tscn": "pokemon_center_nurse",
 	"res://scenes/npcs/market_seller_npc.tscn": "pokemart_seller",
@@ -204,6 +206,7 @@ func _check_existing_npc_behavior_entrypoints() -> void:
 	)
 
 	var heal_text := _read_text(HEAL_NPC_SCRIPT)
+	var sfx_text := _read_text(SFX_MANAGER_SCRIPT)
 	_check_true(heal_text.contains("extends DialogueNPC"), "HealNPC still extends DialogueNPC")
 	_check_true(heal_text.contains("func interact_with_player"), "HealNPC interaction entrypoint remains")
 	_check_true(
@@ -215,6 +218,26 @@ func _check_existing_npc_behavior_entrypoints() -> void:
 		heal_text.contains("signal heal_sequence_started(duration_seconds: float, pokemon_count: int)")
 		and heal_text.contains("heal_sequence_started.emit(duration_seconds, clampi(pokemon_count, 0, 6))"),
 		"HealNPC announces party size with its visual heal sequence"
+	)
+	_check_true(
+		load(POKEMON_RECOVERY_SOUND) is AudioStream,
+		"trimmed Pokemon recovery OGG loads as an audio stream"
+	)
+	_check_true(
+		sfx_text.contains('"pokemon_recovery"')
+		and sfx_text.contains('"path": "%s"' % POKEMON_RECOVERY_SOUND),
+		"SfxManager registers the Pokemon recovery jingle"
+	)
+	var changed_heal_index := heal_text.find('if bool(result.get("changed", false)):')
+	var healed_message_index := heal_text.find("_add_system_message(healed_system_message)", changed_heal_index)
+	var recovery_sound_index := heal_text.find('SfxManager.play("pokemon_recovery")')
+	var unchanged_heal_index := heal_text.find("\n\telse:", recovery_sound_index)
+	_check_true(
+		changed_heal_index >= 0
+		and healed_message_index > changed_heal_index
+		and recovery_sound_index > healed_message_index
+		and unchanged_heal_index > recovery_sound_index,
+		"HealNPC plays the recovery jingle after a changed party heal result is shown"
 	)
 	_check_true(
 		heal_text.contains("func _get_animation_duration_seconds(animation_name: StringName) -> float:"),

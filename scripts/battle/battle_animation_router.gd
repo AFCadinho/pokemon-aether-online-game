@@ -6,6 +6,7 @@ const BattleRenderLayers := preload("res://scripts/battle/battle_render_layers.g
 const MOVE_ANIMATION_CATALOG_PATH := "res://data/battle_move_animations.json"
 const EFFECT_ANIMATION_CATALOG_PATH := "res://data/battle_effect_animations.json"
 const TAKE_DAMAGE_SOUND_PATH := "res://assets/battles/animations/common/damage/normaldamage.ogg"
+const SUPER_EFFECTIVE_DAMAGE_SOUND_PATH := "res://assets/audio/sfx/battle/hit_super_effective.ogg"
 const EFFECT_SOURCE_PLAYER_POSITION := Vector2(128, 224)
 const EFFECT_SOURCE_ENEMY_POSITION := Vector2(384, 96)
 const REVERSED_BATTLEFIELD_AXIS := Vector2(512, 320)
@@ -275,6 +276,7 @@ func prewarm_common_battle_sounds() -> void:
 		return
 
 	_request_threaded_resource(TAKE_DAMAGE_SOUND_PATH)
+	_request_threaded_resource(SUPER_EFFECTIVE_DAMAGE_SOUND_PATH)
 
 
 func has_move_animation(move_name: String) -> bool:
@@ -1406,18 +1408,25 @@ func _wait_for_animation_node(animation_node: Node2D, parent_node: Node) -> void
 		animation_node.queue_free()
 
 
-func play_damage_tween_for_target(target_ident: String) -> void:
+func play_damage_tween_for_target(target_ident: String, sound_variant: String = "normal") -> void:
 	if not SettingsManager.battle_animations:
 		return
 	if not _can_start_battle_animation("router.damage_tween", {"target": target_ident}):
 		return
 
-	_play_one_shot_sound(TAKE_DAMAGE_SOUND_PATH)
+	var sound_path := get_damage_sound_path(sound_variant)
+	_play_one_shot_sound(sound_path)
 	match _get_player_id_from_ident(target_ident):
 		"p1":
 			await player_sprite_box.play_damage_tween()
 		"p2":
 			await enemy_sprite_box.play_damage_tween()
+
+
+static func get_damage_sound_path(sound_variant: String) -> String:
+	if sound_variant == "super_effective":
+		return SUPER_EFFECTIVE_DAMAGE_SOUND_PATH
+	return TAKE_DAMAGE_SOUND_PATH
 
 
 func _play_one_shot_sound(sound_path: String) -> void:

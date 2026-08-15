@@ -107,6 +107,14 @@ func interact_with_player(player: Node2D) -> void:
 		selected_species_name = claimed_name
 	PlayerSave.flags["received_starter"] = true
 	PlayerSave.flags["starter_species"] = selected_species_id
+	get_tree().call_group(
+		"ui_overlay",
+		"add_system_message",
+		LocalizationManager.text(
+			"ui.oaks_lab.starter_received",
+			{"pokemon": selected_species_name}
+		)
+	)
 	if last_starter_claim_already_completed:
 		_cancel_gary_starter_sequence()
 		await show_dialogue(
@@ -233,6 +241,7 @@ func _turn_in_quest_item(player: Node2D) -> void:
 			"add_system_message",
 			LocalizationManager.text("ui.key_item.received_pokedex")
 		)
+		SfxManager.play("item_received")
 	if gary != null and gary.has_method("play_parcel_return_departure"):
 		await gary.call("play_parcel_return_departure", player)
 	else:
@@ -251,7 +260,7 @@ func _get_metadata_dialogue_id(metadata: Dictionary, camel_key: String, snake_ke
 	return metadata_dialogue_id
 
 
-func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Array[String]) -> Array[String]:
+func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Array) -> Array[String]:
 	var resolved_dialogue_id := dialogue_reference_id.strip_edges()
 	if resolved_dialogue_id.is_empty():
 		return fallback_lines

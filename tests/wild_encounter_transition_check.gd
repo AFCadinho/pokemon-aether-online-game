@@ -81,11 +81,36 @@ func _run_checks() -> void:
 		"NPC transition covers trainer loading before the battle scene mounts"
 	)
 	var trainer_setup_index := battle_source.find("func setup_trainer_battle_from_response")
-	var trainer_ready_index := battle_source.find("await _notify_trainer_entry_ready(entry_ready_callback)", trainer_setup_index)
 	var trainer_lead_index := battle_source.find("var lead_response := await _run_trainer_lead_selection", trainer_setup_index)
+	var trainer_preview_gate_index := battle_source.find("if team_preview_enabled:", trainer_setup_index)
+	var trainer_preview_ready_index := battle_source.find(
+		"await _notify_trainer_entry_ready(entry_ready_callback)",
+		trainer_preview_gate_index
+	)
+	var trainer_default_gate_index := battle_source.find("if not team_preview_enabled:", trainer_lead_index)
+	var trainer_default_ready_index := battle_source.find(
+		"await _notify_trainer_entry_ready(entry_ready_callback)",
+		trainer_default_gate_index
+	)
+	var trainer_default_field_clear_index := battle_source.find(
+		"await _prepare_team_preview_lead_summon_transition()",
+		trainer_default_gate_index
+	)
 	_check_true(
-		trainer_ready_index > trainer_setup_index and trainer_ready_index < trainer_lead_index,
-		"NPC transition reveals before trainer lead selection begins"
+		trainer_preview_gate_index > trainer_setup_index
+		and trainer_preview_ready_index > trainer_preview_gate_index
+		and trainer_preview_ready_index < trainer_lead_index,
+		"configured NPC Team Preview reveals before interactive lead selection"
+	)
+	_check_true(
+		trainer_default_gate_index > trainer_lead_index
+		and trainer_default_field_clear_index > trainer_default_gate_index
+		and trainer_default_ready_index > trainer_default_gate_index,
+		"regular NPC transition stays covered until automatic leads and the empty summon field are ready"
+	)
+	_check_true(
+		trainer_default_field_clear_index < trainer_default_ready_index,
+		"regular NPC transition reveals the empty field before either lead is summoned"
 	)
 
 	transition.queue_free()

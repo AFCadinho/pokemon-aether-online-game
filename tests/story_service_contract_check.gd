@@ -27,7 +27,10 @@ func _run() -> void:
 				"questType": "main",
 				"titleKey": "story.kanto.choose_starter.title",
 				"summaryKey": "story.kanto.choose_starter.summary",
-				"rewardPreviews": [{"type": "item", "itemId": "exp-share", "quantity": 1, "private": true}],
+				"rewardPreviews": [
+					{"type": "item", "itemId": "exp-share", "quantity": 1, "private": true},
+					{"type": "skill_experience", "skillId": "fishing", "experience": 130, "private": true},
+				],
 				"status": "active",
 				"steps": [
 					{
@@ -67,7 +70,10 @@ func _run() -> void:
 		)
 		_expect(not quest.has("serverOnly"), "projection only keeps quest contract fields")
 		_expect(
-			quest.get("rewardPreviews", []) == [{"type": "item", "itemId": "exp-share", "quantity": 1}],
+			quest.get("rewardPreviews", []) == [
+				{"type": "item", "itemId": "exp-share", "quantity": 1},
+				{"type": "skill_experience", "skillId": "fishing", "experience": 130},
+			],
 			"quest reward previews are safely projected"
 		)
 		_expect(quest.get("completedAt", "unexpected") == null, "nullable quest timestamps remain null")

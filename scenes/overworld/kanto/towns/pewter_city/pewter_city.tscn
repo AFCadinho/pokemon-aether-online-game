@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://babnhtwtaiewv" path="res://scripts/world/map_door_animator.gd" id="7_door_animator"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="12_vw642"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/building_window_light.tscn" id="13_4hm78"]
+[ext_resource type="PackedScene" uid="uid://b8s7eihsl5ikf" path="res://scenes/world/interactables/sign_interactable.tscn" id="17_cisdr"]
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="18_dialogue"]
 [ext_resource type="SpriteFrames" uid="uid://caas815hh7buy" path="res://assets/npcs/classes/scientist_m_frames.tres" id="19_scientist"]
 [ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="20_hiker"]
@@ -22,10 +23,10 @@
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_beacon_placeholder.tscn" id="27_aether_beacon"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2mtwu"]
-size = Vector2(32, 16)
+size = Vector2(192, 40)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route3_exit"]
-size = Vector2(32, 160)
+size = Vector2(48, 192)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kp2ru"]
 texture = ExtResource("5_2mtwu")
@@ -196,11 +197,13 @@ target_scene_path = "uid://cnbfksossjfg7"
 target_spawn_name = "FromPewterCity"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute2" unique_id=56126881]
+position = Vector2(0, 12)
 shape = SubResource("RectangleShape2D_2mtwu")
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute2" unique_id=359876710 instance=ExtResource("3_2hpv6")]
-position = Vector2(-16, 0)
-width = 194.0
+z_as_relative = false
+tile_footprint = Vector2i(5, 1)
+flow_direction = "down"
 
 [node name="ToRoute3" type="Area2D" parent="Exits" unique_id=755761727]
 position = Vector2(1920, 1056)
@@ -210,13 +213,14 @@ target_spawn_name = "FromPewterCity"
 transition_id = "kanto_pewter_city__to_route_3"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute3" unique_id=1591807988]
-position = Vector2(-16, 16)
+position = Vector2(-8, 16)
 shape = SubResource("RectangleShape2D_route3_exit")
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute3" unique_id=755761728 instance=ExtResource("3_2hpv6")]
+z_as_relative = false
 position = Vector2(-16, 16)
-width = 32.0
-height = 160.0
+tile_footprint = Vector2i(1, 5)
+flow_direction = "right"
 
 [node name="ToPokecenter" type="Area2D" parent="Exits" unique_id=1851330212]
 position = Vector2(1424, 1520)
@@ -229,6 +233,7 @@ position = Vector2(0, -16)
 shape = SubResource("RectangleShape2D_2mtwu")
 
 [node name="DoorTransitionHint" parent="Exits/ToPokecenter" unique_id=43017231 instance=ExtResource("6_frcun")]
+z_as_relative = false
 position = Vector2(0, -16)
 
 [node name="ToGym" type="Area2D" parent="Exits" unique_id=1528691859]
@@ -241,12 +246,19 @@ target_spawn_name = "FromPewterCity"
 position = Vector2(0, -16)
 shape = SubResource("RectangleShape2D_2mtwu")
 
+[node name="DoorTransitionHint" parent="Exits/ToGym" unique_id=1666455636 instance=ExtResource("6_frcun")]
+z_as_relative = false
+tile_footprint = Vector2i(1, 2)
+
 [node name="ToMuseum" type="Area2D" parent="Exits" unique_id=1789742615]
 position = Vector2(1392, 368)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToMuseum" unique_id=501270336]
 position = Vector2(0, -16)
 shape = SubResource("RectangleShape2D_2mtwu")
+
+[node name="DoorTransitionHint" parent="Exits/ToMuseum" unique_id=2136780485 instance=ExtResource("6_frcun")]
+z_as_relative = false
 
 [node name="ToHouse1" type="Area2D" parent="Exits" unique_id=2138960520]
 position = Vector2(1200, 1040)
@@ -259,6 +271,7 @@ position = Vector2(-96, -104)
 shape = SubResource("RectangleShape2D_2mtwu")
 
 [node name="DoorTransitionHint" parent="Exits/ToHouse1" unique_id=100386195 instance=ExtResource("6_frcun")]
+z_as_relative = false
 position = Vector2(-96, -96)
 
 [node name="ToHouse2" type="Area2D" parent="Exits" unique_id=321825155]
@@ -272,6 +285,7 @@ position = Vector2(0, -8)
 shape = SubResource("RectangleShape2D_2mtwu")
 
 [node name="DoorTransitionHint" parent="Exits/ToHouse2" unique_id=1293932138 instance=ExtResource("6_frcun")]
+z_as_relative = false
 
 [node name="Entities" type="Node2D" parent="." unique_id=1394205860]
 z_index = 5
@@ -294,7 +308,7 @@ facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("20_hiker")
 
 [node name="GymFanMax" parent="Entities/NPCs" unique_id=399681030 instance=ExtResource("18_dialogue")]
-position = Vector2(688, 560)
+position = Vector2(496, 560)
 npc_id = "kanto_pewter_city_gym_fan_max"
 npc_definition_id = "trainer_class_youngster"
 display_name = "Gym Fan Max"
@@ -350,8 +364,8 @@ movement_speed_pixels = 48.0
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1638978152]
 
 [node name="AetherBeacon" parent="Entities/Interactables" unique_id=697101251 instance=ExtResource("27_aether_beacon")]
+z_index = 944
 position = Vector2(1520, 944)
-destination_id = "kanto_pewter_city"
 interactable_id = "kanto_pewter_city_aether_beacon"
 
 [node name="PokemonCenterDoorLock" parent="Entities/Interactables" unique_id=1082600175 instance=ExtResource("25_locked_door")]
@@ -378,6 +392,13 @@ display_name = "Pewter City House 1"
 position = Vector2(464, 1504)
 area_id = "kanto_pewter_city_house_2"
 display_name = "Pewter City House 2"
+
+[node name="Signs" type="Node2D" parent="Entities/Interactables" unique_id=1083765197]
+
+[node name="GymSign" parent="Entities/Interactables/Signs" unique_id=1449815395 instance=ExtResource("17_cisdr")]
+position = Vector2(656, 560)
+sign_id = "kanto_pewter_city_gym"
+sign_type = "building"
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=1977913234]
 visible = false
@@ -479,6 +500,15 @@ position = Vector2(1520, 1488)
 
 [node name="BuildingWindowLight10" parent="NightLights/Window" unique_id=1544342927 instance=ExtResource("13_4hm78")]
 position = Vector2(1424, 1488)
+
+[node name="BuildingWindowLight11" parent="NightLights/Window" unique_id=1497693357 instance=ExtResource("13_4hm78")]
+position = Vector2(496, 496)
+
+[node name="BuildingWindowLight12" parent="NightLights/Window" unique_id=1997209179 instance=ExtResource("13_4hm78")]
+position = Vector2(688, 496)
+
+[node name="BuildingWindowLight13" parent="NightLights/Window" unique_id=104097313 instance=ExtResource("13_4hm78")]
+position = Vector2(592, 528)
 
 [connection signal="body_entered" from="Exits/ToRoute2" to="Exits/ToRoute2" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute3" to="Exits/ToRoute3" method="_on_body_entered"]

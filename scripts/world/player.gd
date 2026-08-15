@@ -782,6 +782,8 @@ func _ready() -> void:
 		SettingsManager.world_pixel_scale_changed.connect(_on_world_pixel_scale_changed)
 	if not SettingsManager.mount_loadout_changed.is_connected(_on_mount_loadout_changed):
 		SettingsManager.mount_loadout_changed.connect(_on_mount_loadout_changed)
+	if not SettingsManager.input_binding_changed.is_connected(_on_input_binding_changed):
+		SettingsManager.input_binding_changed.connect(_on_input_binding_changed)
 	if not get_viewport().size_changed.is_connected(_on_render_viewport_size_changed):
 		get_viewport().size_changed.connect(_on_render_viewport_size_changed)
 	_apply_world_pixel_scale()
@@ -857,11 +859,27 @@ func _on_render_viewport_size_changed() -> void:
 func _apply_world_pixel_scale() -> void:
 	if world_camera == null:
 		return
+	var effective_scale := PixelPerfectRenderingScript.resolve_world_scale_for_area(
+		SettingsManager.world_pixel_scale,
+		_get_current_map_world_access_area_type()
+	)
 	PixelPerfectRenderingScript.apply_to_camera(
 		world_camera,
-		SettingsManager.world_pixel_scale,
+		effective_scale,
 		get_window().size
 	)
+
+
+func _get_current_map_world_access_area_type() -> String:
+	var current_map := _resolve_current_map()
+	if current_map == null:
+		return ""
+	if current_map.has_method("get_world_access_area_type"):
+		return str(current_map.call("get_world_access_area_type")).strip_edges().to_lower()
+	for property: Dictionary in current_map.get_property_list():
+		if str(property.get("name", "")) == "world_access_area_type":
+			return str(current_map.get("world_access_area_type")).strip_edges().to_lower()
+	return ""
 
 func _exit_tree() -> void:
 	var had_activity := fishing_activity_active or surf_activity_active
@@ -1137,7 +1155,7 @@ func _setup_fishing_prompt() -> void:
 	fishing_prompt_button.size = FISHING_PROMPT_SIZE
 	fishing_prompt_button.position = FISHING_PROMPT_POSITION
 	fishing_prompt_button.z_index = 560
-	fishing_prompt_button.tooltip_text = LocalizationManager.text("ui.fishing.prompt.fish")
+	fishing_prompt_button.tooltip_text = _fishing_prompt_tooltip("ui.fishing.prompt.fish")
 	_apply_fishing_prompt_style(fishing_prompt_button)
 	fishing_prompt_button.pressed.connect(Callable(self, "_on_fishing_prompt_pressed"))
 	add_child(fishing_prompt_button)
@@ -1158,7 +1176,7 @@ func _setup_fishing_bite_prompt() -> void:
 	fishing_bite_prompt_button.size = FISHING_BITE_PROMPT_SIZE
 	fishing_bite_prompt_button.position = FISHING_BITE_PROMPT_POSITION
 	fishing_bite_prompt_button.z_index = 570
-	fishing_bite_prompt_button.tooltip_text = LocalizationManager.text("ui.fishing.prompt.reel")
+	fishing_bite_prompt_button.tooltip_text = _fishing_prompt_tooltip("ui.fishing.prompt.reel")
 	_apply_fishing_bite_prompt_style(fishing_bite_prompt_button)
 	fishing_bite_prompt_button.button_down.connect(Callable(self, "_on_fishing_bite_prompt_button_down"))
 	fishing_bite_prompt_button.gui_input.connect(Callable(self, "_on_fishing_bite_prompt_gui_input"))
@@ -1557,11 +1575,26 @@ func _show_field_move_system_message(move_id: String) -> void:
 
 func _on_locale_changed(_locale: String) -> void:
 	if fishing_prompt_button != null:
-		fishing_prompt_button.tooltip_text = LocalizationManager.text("ui.fishing.prompt.fish")
+		fishing_prompt_button.tooltip_text = _fishing_prompt_tooltip("ui.fishing.prompt.fish")
 	if fishing_bite_prompt_button != null:
-		fishing_bite_prompt_button.tooltip_text = LocalizationManager.text("ui.fishing.prompt.reel")
+		fishing_bite_prompt_button.tooltip_text = _fishing_prompt_tooltip("ui.fishing.prompt.reel")
 	if surf_prompt_button != null:
 		surf_prompt_button.tooltip_text = LocalizationManager.text("ui.field_move.surf")
+
+
+func _on_input_binding_changed(action: String, _keycode: Key) -> void:
+	if action != "fish":
+		return
+	if fishing_prompt_button != null:
+		fishing_prompt_button.tooltip_text = _fishing_prompt_tooltip("ui.fishing.prompt.fish")
+	if fishing_bite_prompt_button != null:
+		fishing_bite_prompt_button.tooltip_text = _fishing_prompt_tooltip("ui.fishing.prompt.reel")
+
+
+func _fishing_prompt_tooltip(translation_key: String) -> String:
+	return LocalizationManager.text(translation_key, {
+		"hotkey": SettingsManager.get_input_binding_label("fish"),
+	})
 
 func _start_surf_activity(clear_input := true) -> void:
 	surf_activity_active = true
@@ -2064,6 +2097,7 @@ func refresh_map_layers() -> void:
 
 	if collision_tilemap == null:
 		push_warning("Player.refresh_map_layers: Collision layer missing on %s." % current_map.name)
+	_apply_world_pixel_scale()
 
 func _find_tilemap_layer(parent: Node, layer_names: Array[String]) -> TileMapLayer:
 	return MapLayerResolverScript.find_tilemap_layer(parent, layer_names)

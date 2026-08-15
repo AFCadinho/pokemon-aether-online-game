@@ -21,6 +21,12 @@ static func resolve_scale(configured_scale: Variant, _viewport_size: Vector2i) -
 	return validate_scale(configured_scale)
 
 
+static func resolve_world_scale_for_area(configured_scale: Variant, area_type: String) -> float:
+	if area_type.strip_edges().to_lower() == "interior":
+		return SCALE_BALANCED
+	return validate_scale(configured_scale)
+
+
 static func camera_zoom_for_output_scale(output_scale: float, canvas_scale: Vector2) -> Vector2:
 	var safe_canvas_scale := Vector2(
 		canvas_scale.x if canvas_scale.x > 0.0 else 1.0,

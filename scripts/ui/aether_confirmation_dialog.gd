@@ -28,6 +28,10 @@ func _ready() -> void:
 	visible = false
 	top_level = true
 	z_index = 4096
+	_fit_to_viewport()
+	var viewport := get_viewport()
+	if viewport != null:
+		viewport.size_changed.connect(_fit_to_viewport)
 	_apply_styles()
 	close_button.pressed.connect(_cancel)
 	cancel_button.pressed.connect(_cancel)
@@ -47,10 +51,11 @@ func configure(
 
 
 func popup_centered(requested_size: Vector2i = Vector2i.ZERO) -> void:
+	_fit_to_viewport()
 	var target_size := Vector2(requested_size)
 	if target_size == Vector2.ZERO:
 		target_size = DEFAULT_SIZE
-	var viewport_size := get_viewport_rect().size
+	var viewport_size := get_viewport().get_visible_rect().size
 	panel.custom_minimum_size = Vector2(
 		minf(target_size.x, maxf(viewport_size.x - 32.0, 300.0)),
 		minf(target_size.y, maxf(viewport_size.y - 32.0, 190.0))
@@ -63,6 +68,16 @@ func popup_centered(requested_size: Vector2i = Vector2i.ZERO) -> void:
 func hide_dialog() -> void:
 	visible = false
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+
+func _fit_to_viewport() -> void:
+	var viewport := get_viewport()
+	if viewport == null:
+		return
+	var viewport_size := viewport.get_visible_rect().size
+	set_anchors_preset(Control.PRESET_TOP_LEFT)
+	global_position = Vector2.ZERO
+	size = viewport_size
 
 
 func _unhandled_input(event: InputEvent) -> void:

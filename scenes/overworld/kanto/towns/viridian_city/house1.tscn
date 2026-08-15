@@ -5,6 +5,10 @@
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="3_map_meta"]
 [ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="4_8nq3v"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="5_floor_mask"]
+[ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="6_dialogue_npc"]
+[ext_resource type="SpriteFrames" uid="uid://yluab5wp1usc" path="res://assets/npcs/classes/poke_fan_m_frames.tres" id="7_poke_fan_m"]
+[ext_resource type="SpriteFrames" uid="uid://b8fh81or510qb" path="res://assets/npcs/classes/school_kid_m_frames.tres" id="8_school_kid_m"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="9_transition_hint"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_house_exit"]
 size = Vector2(96, 32)
@@ -83,6 +87,26 @@ floor_regions = {
 
 [node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1151018465]
 
+[node name="Entities" type="Node2D" parent="."]
+z_index = 5
+
+[node name="NPCs" type="Node2D" parent="Entities"]
+
+[node name="PokeFanRowan" parent="Entities/NPCs" instance=ExtResource("6_dialogue_npc")]
+position = Vector2(272, 336)
+npc_id = "kanto_viridian_city_house_1_poke_fan_rowan"
+npc_definition_id = "trainer_class_poke_fan_m"
+display_name = "Poke Fan Rowan"
+npc_sprite_frames = ExtResource("7_poke_fan_m")
+
+[node name="SchoolKidSam" parent="Entities/NPCs" instance=ExtResource("6_dialogue_npc")]
+position = Vector2(400, 368)
+npc_id = "kanto_viridian_city_house_1_school_kid_sam"
+npc_definition_id = "trainer_class_school_kid_m"
+display_name = "School Kid Sam"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("8_school_kid_m")
+
 [node name="Spawns" type="Node2D" parent="." unique_id=710550243]
 
 [node name="FromViridianCity" type="Marker2D" parent="Spawns" unique_id=1797584352]
@@ -99,6 +123,11 @@ target_spawn_name = "FromHouse1"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToViridianCity" unique_id=664444253]
 position = Vector2(-16, 16)
 shape = SubResource("RectangleShape2D_house_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToViridianCity" instance=ExtResource("9_transition_hint")]
+position = Vector2(-16, 16)
+tile_footprint = Vector2i(3, 1)
+flow_direction = "down"
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=1448815856]
 visible = false

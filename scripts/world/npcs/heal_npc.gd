@@ -81,6 +81,7 @@ func _run_heal_interaction(show_intro := true) -> void:
 	if bool(result.get("changed", false)):
 		await _play_heal_animation(_get_player_party().size())
 		_add_system_message(healed_system_message)
+		SfxManager.play("pokemon_recovery")
 		await _save_respawn_point()
 	else:
 		await _save_respawn_point()
@@ -172,7 +173,7 @@ func _get_metadata_dialogue_id(metadata: Dictionary, camel_key: String, snake_ke
 	return metadata_dialogue_id
 
 
-func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Array[String]) -> Array[String]:
+func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Array) -> Array[String]:
 	return await NpcDialogueService.resolve_lines(
 		dialogue_reference_id,
 		fallback_lines,

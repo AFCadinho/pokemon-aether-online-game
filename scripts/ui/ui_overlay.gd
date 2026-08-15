@@ -60,6 +60,10 @@ const CHAT_TAB_DEFAULT_ORDER: Array[String] = [
 	CHAT_TAB_PM,
 	CHAT_TAB_GUILD,
 ]
+const PARTY_CONTEXT_SUMMARY := 0
+const PARTY_CONTEXT_GIVE_ITEM := 1
+const PARTY_CONTEXT_TAKE_ITEM := 2
+const PARTY_CONTEXT_SET_LEAD := 3
 const CHAT_TAB_LABELS := {
 	CHAT_TAB_ALL: "ui.chat.tab.all",
 	CHAT_TAB_GENERAL: "ui.chat.tab.general",
@@ -93,6 +97,7 @@ const PvpRankedTeamValidation := preload("res://scripts/services/pvp_ranked_team
 const PC_POKEMON_SLOT_BUTTON_SCRIPT := preload("res://scripts/ui/pc_pokemon_slot_button.gd")
 const PC_PARTY_HOVER_CARD_SCENE: PackedScene = preload("res://scenes/battle/party_hover_card.tscn")
 const POKEMON_SUMMARY_MOVE_REORDER_SLOT_SCRIPT := preload("res://scripts/ui/pokemon_summary_move_reorder_slot.gd")
+const HELD_ITEM_DROP_TARGET_BUTTON_SCRIPT := preload("res://scripts/ui/held_item_drop_target_button.gd")
 const TOWN_MAP_POPUP_SCRIPT := preload("res://scripts/ui/town_map_popup.gd")
 const MOUNT_LOADOUT_PANEL_SCENE: PackedScene = preload("res://scenes/interface/mount_loadout_panel.tscn")
 const SKILLS_PANEL_SCENE: PackedScene = preload("res://scenes/interface/skills_panel.tscn")
@@ -234,8 +239,7 @@ const POKEMON_SUMMARY_ACCENT_FAINT := Color("#62d7ff66")
 const POKEMON_SUMMARY_ACCENT_DARK := Color("#063447")
 const POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE := Vector2i(263, 180)
 const POKEMON_SUMMARY_SPRITE_MAX_SIZE := Vector2(235, 155)
-const POKEMON_SUMMARY_SPRITE_MIN_SCALE := 0.72
-const POKEMON_SUMMARY_SPRITE_MAX_SCALE := 2.2
+const POKEMON_SUMMARY_SPRITE_BASE_SCALE := 1.7
 const POKEMON_SUMMARY_STATUS_ICON_WIDTH := 44
 const POKEMON_SUMMARY_STATUS_ICON_HEIGHT := 16
 const POKEMON_SUMMARY_STATUS_ICON_ROWS := {
@@ -570,6 +574,8 @@ var skills_panel: Control
 
 var party_slots: Array = []
 var party_display_override: Array = []
+var party_slot_context_menu: PopupMenu
+var party_slot_context_index := -1
 var escape_rope_status: Dictionary = {}
 var escape_rope_remaining_seconds: float = 0.0
 var player_action_status_refresh_seconds: float = 0.0
@@ -1083,6 +1089,7 @@ var pokemon_summary_ball_list: VBoxContainer
 var pokemon_summary_pending_ball_item_id := ""
 var pokemon_summary_pending_ball_card_key := ""
 var pokemon_summary_type_icon_row: HBoxContainer
+var pokemon_summary_hidden_ability_badge: PanelContainer
 var pokemon_summary_title_label: Label
 var pokemon_summary_id_label: Label
 var pokemon_summary_meta_label: Label
@@ -1270,6 +1277,7 @@ func _ready() -> void:
 	_setup_donator_store_popup()
 	_setup_bag_popup()
 	_setup_bag_item_context_menu()
+	_setup_party_slot_context_menu()
 	_setup_market_popup()
 	_setup_aether_atelier_popup()
 	_setup_bag_item_use_popup()
@@ -14367,7 +14375,8 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	sprite_backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
 	var sprite_viewport_container := SubViewportContainer.new()
-	sprite_viewport_container.stretch = true
+	sprite_viewport_container.stretch = false
+	sprite_viewport_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	sprite_viewport_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	sprite_frame.add_child(sprite_viewport_container)
 	sprite_viewport_container.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -14390,6 +14399,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_sprite = TextureRect.new()
 	pokemon_summary_sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	pokemon_summary_sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	pokemon_summary_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	pokemon_summary_sprite.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	sprite_frame.add_child(pokemon_summary_sprite)
 	pokemon_summary_sprite.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -14446,6 +14456,61 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_type_icon_row.offset_right = -6.0
 	pokemon_summary_type_icon_row.offset_bottom = 28.0
 	sprite_frame.add_child(pokemon_summary_type_icon_row)
+
+	pokemon_summary_hidden_ability_badge = PanelContainer.new()
+	pokemon_summary_hidden_ability_badge.custom_minimum_size = Vector2(44, 24)
+	pokemon_summary_hidden_ability_badge.anchor_left = 0.0
+	pokemon_summary_hidden_ability_badge.anchor_top = 1.0
+	pokemon_summary_hidden_ability_badge.anchor_right = 0.0
+	pokemon_summary_hidden_ability_badge.anchor_bottom = 1.0
+	pokemon_summary_hidden_ability_badge.offset_left = 6.0
+	pokemon_summary_hidden_ability_badge.offset_top = -30.0
+	pokemon_summary_hidden_ability_badge.offset_right = 50.0
+	pokemon_summary_hidden_ability_badge.offset_bottom = -6.0
+	pokemon_summary_hidden_ability_badge.mouse_filter = Control.MOUSE_FILTER_PASS
+	pokemon_summary_hidden_ability_badge.mouse_default_cursor_shape = Control.CURSOR_HELP
+	var hidden_ability_badge_style := _make_panel_style(Color("#071c33f2"), Color("#8cecff"), 8, 1)
+	hidden_ability_badge_style.border_width_top = 1
+	hidden_ability_badge_style.border_width_bottom = 2
+	hidden_ability_badge_style.shadow_color = Color("#42d9ff66")
+	hidden_ability_badge_style.shadow_size = 4
+	hidden_ability_badge_style.shadow_offset = Vector2.ZERO
+	var hidden_ability_badge_hover_style := _make_panel_style(Color("#123b5af7"), Color("#d2f9ff"), 8, 1)
+	hidden_ability_badge_hover_style.border_width_top = 1
+	hidden_ability_badge_hover_style.border_width_bottom = 2
+	hidden_ability_badge_hover_style.shadow_color = Color("#62e4ffff")
+	hidden_ability_badge_hover_style.shadow_size = 7
+	hidden_ability_badge_hover_style.shadow_offset = Vector2.ZERO
+	pokemon_summary_hidden_ability_badge.add_theme_stylebox_override("panel", hidden_ability_badge_style)
+	pokemon_summary_hidden_ability_badge.mouse_entered.connect(
+		_set_pokemon_summary_hidden_ability_badge_hover.bind(
+			pokemon_summary_hidden_ability_badge,
+			hidden_ability_badge_hover_style
+		)
+	)
+	pokemon_summary_hidden_ability_badge.mouse_exited.connect(
+		_set_pokemon_summary_hidden_ability_badge_hover.bind(
+			pokemon_summary_hidden_ability_badge,
+			hidden_ability_badge_style
+		)
+	)
+	_set_localized_control_property(pokemon_summary_hidden_ability_badge, "tooltip_text", "ui.pokemon_summary.hidden_ability")
+
+	var hidden_ability_badge_label := Label.new()
+	hidden_ability_badge_label.text = "✦ HA"
+	hidden_ability_badge_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hidden_ability_badge_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	hidden_ability_badge_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hidden_ability_badge_label.add_theme_font_size_override("font_size", 10)
+	hidden_ability_badge_label.add_theme_color_override("font_color", Color("#e9fbff"))
+	hidden_ability_badge_label.add_theme_color_override("font_outline_color", Color("#0b6382"))
+	hidden_ability_badge_label.add_theme_color_override("font_shadow_color", Color("#00111f"))
+	hidden_ability_badge_label.add_theme_constant_override("outline_size", 1)
+	hidden_ability_badge_label.add_theme_constant_override("shadow_offset_x", 1)
+	hidden_ability_badge_label.add_theme_constant_override("shadow_offset_y", 1)
+	pokemon_summary_hidden_ability_badge.add_child(hidden_ability_badge_label)
+	pokemon_summary_hidden_ability_badge.visible = false
+	sprite_frame.add_child(pokemon_summary_hidden_ability_badge)
 
 	pokemon_summary_level_badge_panel = PanelContainer.new()
 	pokemon_summary_level_badge_panel.custom_minimum_size = Vector2(54, 24)
@@ -14659,9 +14724,17 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	held_item_slot_icon_center.add_child(pokemon_summary_held_item_slot_icon)
 	held_item_slot_row.add_child(held_item_slot_icon_panel)
 
-	pokemon_summary_held_item_slot_button = Button.new()
+	pokemon_summary_held_item_slot_button = HELD_ITEM_DROP_TARGET_BUTTON_SCRIPT.new() as Button
 	pokemon_summary_held_item_slot_button.text = ""
 	pokemon_summary_held_item_slot_button.pressed.connect(_on_pokemon_summary_held_item_slot_pressed.bind(card_key))
+	pokemon_summary_held_item_slot_button.connect(
+		"held_item_dropped",
+		Callable(self, "_on_pokemon_summary_held_item_dropped").bind(card_key)
+	)
+	pokemon_summary_held_item_slot_button.connect(
+		"drop_highlight_changed",
+		Callable(self, "_on_pokemon_summary_held_item_drop_highlight_changed").bind(pokemon_summary_held_item_slot)
+	)
 	_set_localized_control_property(pokemon_summary_held_item_slot_button, "tooltip_text", "ui.pokemon_summary.held_item.manage_tooltip")
 	pokemon_summary_held_item_slot_button.focus_mode = Control.FOCUS_NONE
 	pokemon_summary_held_item_slot_button.flat = true
@@ -15950,10 +16023,16 @@ func open_market(market: Dictionary, requested_mode: String = "player_buys", inv
 		"name": str(market.get("name", "")).strip_edges(),
 		"location": str(market.get("locationName", "")).strip_edges(),
 		"region": str(market.get("region", "")).strip_edges(),
+		"badge_count": int(market.get("badgeCount", -1)),
+		"next_unlock_badge": int(market.get("nextUnlockBadge", -1)),
 	}
 	_apply_market_context_copy()
 	var catalog_items := _normalize_market_items(market.get("items", []))
-	market_items = _market_sell_items(catalog_items, inventory_items) if player_is_selling else catalog_items
+	market_items = (
+		_market_sell_items(catalog_items, inventory_items)
+		if player_is_selling
+		else _market_available_buy_items(catalog_items)
+	)
 	market_selected_item = market_items[0].duplicate(true) if not market_items.is_empty() else {}
 	market_quantity_spinbox.max_value = max(int(market_selected_item.get("quantity", 1)), 1) if player_is_selling else 99
 	market_quantity_spinbox.value = 1
@@ -16078,8 +16157,16 @@ func _normalize_market_items(items_value: Variant) -> Array[Dictionary]:
 			"shortDesc": str(item.get("shortDesc", "")),
 			"price": _market_item_money_price(item),
 			"sellPrice": max(int(item.get("sellPrice", 0)), 0),
+			"requiredBadges": max(int(item.get("requiredBadges", 0)), 0),
+			"available": bool(item.get("available", true)),
 		}))
 	return normalized_items
+
+
+func _market_available_buy_items(catalog_items: Array[Dictionary]) -> Array[Dictionary]:
+	return catalog_items.filter(func(item: Dictionary) -> bool:
+		return bool(item.get("available", true))
+	)
 
 
 func _refresh_market_localized_item_data() -> void:
@@ -16140,9 +16227,23 @@ func _apply_market_context_copy() -> void:
 		if not place.is_empty()
 		else activity
 	)
-	market_catalog_caption_label.text = LocalizationManager.text(
+	var catalog_caption := LocalizationManager.text(
 		"ui.market.catalog.sell" if player_is_selling else "ui.market.catalog.buy"
 	)
+	if not player_is_selling:
+		var badge_count := int(market_context.get("badge_count", -1))
+		var next_unlock_badge := int(market_context.get("next_unlock_badge", -1))
+		if badge_count >= 0 and next_unlock_badge >= 0:
+			catalog_caption = LocalizationManager.text(
+				"ui.market.catalog.next.one" if next_unlock_badge == 1 else "ui.market.catalog.next.many",
+				{"catalog": catalog_caption, "count": next_unlock_badge}
+			)
+		elif badge_count >= 0:
+			catalog_caption = LocalizationManager.text(
+				"ui.market.catalog.complete",
+				{"catalog": catalog_caption}
+			)
+	market_catalog_caption_label.text = catalog_caption
 	market_action_caption_label.text = LocalizationManager.text(
 		"ui.market.action.sale" if player_is_selling else "ui.market.action.purchase"
 	)
@@ -17202,6 +17303,8 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 			"item": str(item.get("name", _item_name_from_id(item_id))),
 			"count": granted_count,
 		}))
+		if granted_count > 0:
+			SfxManager.play("item_found")
 		return
 	if use_action == "unlock_appearance":
 		var unlock_result: Dictionary = await InventoryService.use_inventory_item(item_id)
@@ -18544,6 +18647,11 @@ func _position_new_pokemon_summary_card() -> void:
 	pokemon_summary_next_card_offset_index += 1
 	_move_pokemon_summary_to_global_position(base_position + (offset_step * float(offset_index)))
 
+func _set_pokemon_summary_hidden_ability_badge_hover(badge: PanelContainer, style: StyleBoxFlat) -> void:
+	if badge == null or not is_instance_valid(badge):
+		return
+	badge.add_theme_stylebox_override("panel", style)
+
 func _refresh_open_pokemon_summary_cards() -> void:
 	var keys: Array = pokemon_summary_open_cards.keys()
 	for key_value: Variant in keys:
@@ -18652,6 +18760,8 @@ func _refresh_pokemon_summary() -> void:
 	)
 	pokemon_summary_id_label.tooltip_text = pokemon_summary_id_label.text
 	pokemon_summary_shiny_badge.visible = pokemon.shiny
+	if pokemon_summary_hidden_ability_badge != null:
+		pokemon_summary_hidden_ability_badge.visible = pokemon.hidden_ability
 	if pokemon_summary_shiny_badge_label != null:
 		pokemon_summary_shiny_badge_label.text = "*"
 	pokemon_summary_trainer_label.text = _get_pokemon_summary_current_trainer_title_text(pokemon)
@@ -18895,7 +19005,12 @@ func _get_pokemon_summary_sprite_scale(frames: SpriteFrames) -> Vector2:
 		POKEMON_SUMMARY_SPRITE_MAX_SIZE.x / max(normalized_frame_size.x, 1.0),
 		POKEMON_SUMMARY_SPRITE_MAX_SIZE.y / max(normalized_frame_size.y, 1.0)
 	)
-	var scale_value: float = clamp(fit_scale * display_scale_multiplier, POKEMON_SUMMARY_SPRITE_MIN_SCALE, POKEMON_SUMMARY_SPRITE_MAX_SCALE)
+	# Match the battle presentation for normal-sized sprites. Only scale down when a
+	# species would exceed the summary stage, preserving the artwork's size differences.
+	var scale_value: float = min(
+		POKEMON_SUMMARY_SPRITE_BASE_SCALE * display_scale_multiplier,
+		fit_scale
+	)
 	var texture_scale: float = scale_value / max(render_scale, 1.0)
 	return Vector2(texture_scale, texture_scale)
 
@@ -20546,30 +20661,86 @@ func _on_pokemon_summary_held_item_slot_pressed(card_key: String = "") -> void:
 
 	var held_item_id: String = _get_pokemon_held_item_id(pokemon)
 	if held_item_id != "":
-		var result: Dictionary = await PlayerPartyStateService.take_pokemon_held_item(pokemon.owned_pokemon_id)
-		if not bool(result.get("success", false)):
-			_add_chat_message(LocalizationManager.text("ui.pokemon_summary.held_item.take_failed", {
-				"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
-			}))
-			return
-		bag_inventory_items = _normalize_bag_inventory_items(result.get("inventory", []))
-		bag_inventory_loaded = true
-		_refresh_open_pokemon_summary_cards()
-		if bag_popup != null and bag_popup.visible:
-			_refresh_bag_items()
+		await _take_pokemon_held_item(pokemon)
 		return
 
+	await _open_pokemon_summary_held_item_picker(card_key)
+
+
+func _open_pokemon_summary_held_item_picker(card_key: String = "", force_open := false) -> void:
 	await _ensure_bag_inventory_loaded()
 	_apply_pokemon_summary_card_context(card_key)
+	if _is_pokemon_summary_readonly() or pokemon_summary_item_picker == null:
+		return
+	var picker_was_visible := pokemon_summary_item_picker.visible
 	if pokemon_summary_item_search_input != null:
 		pokemon_summary_item_search_input.text = ""
 	_refresh_pokemon_summary_item_picker()
-	pokemon_summary_item_picker.visible = not pokemon_summary_item_picker.visible
+	pokemon_summary_item_picker.visible = true if force_open else not picker_was_visible
 	if pokemon_summary_ball_picker != null:
 		pokemon_summary_ball_picker.visible = false
 	if pokemon_summary_item_picker.visible and pokemon_summary_item_search_input != null:
 		pokemon_summary_item_search_input.grab_focus.call_deferred()
 	_store_active_pokemon_summary_card_context()
+
+
+func _take_pokemon_held_item(pokemon: Pokemon) -> void:
+	if pokemon.owned_pokemon_id <= 0 or _get_pokemon_held_item_id(pokemon) == "":
+		return
+	var result: Dictionary = await PlayerPartyStateService.take_pokemon_held_item(pokemon.owned_pokemon_id)
+	if not bool(result.get("success", false)):
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.held_item.take_failed", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
+		return
+	bag_inventory_items = _normalize_bag_inventory_items(result.get("inventory", []))
+	bag_inventory_loaded = true
+	_refresh_open_pokemon_summary_cards()
+	if bag_popup != null and bag_popup.visible:
+		_refresh_bag_items()
+
+
+func _on_pokemon_summary_held_item_dropped(item: Dictionary, card_key: String = "") -> void:
+	_apply_pokemon_summary_card_context(card_key)
+	if _is_pokemon_summary_readonly():
+		return
+	var pokemon_value: Variant = _get_selected_summary_pokemon()
+	if not pokemon_value is Pokemon:
+		return
+	await _give_dropped_held_item(pokemon_value as Pokemon, item)
+
+
+func _on_pokemon_summary_held_item_drop_highlight_changed(highlighted: bool, slot: PanelContainer) -> void:
+	if slot == null or not is_instance_valid(slot):
+		return
+	var style := _make_pokemon_summary_held_item_slot_style()
+	if highlighted:
+		style.bg_color = Color("#12312ff5")
+		style.border_color = Color("#65e6c9")
+		style.set_border_width_all(2)
+	slot.add_theme_stylebox_override("panel", style)
+
+
+func _give_dropped_held_item(pokemon: Pokemon, item: Dictionary) -> void:
+	if pokemon.owned_pokemon_id <= 0 or not _is_holdable_bag_item(item):
+		return
+	var item_id := _normalize_item_id(str(item.get("id", "")))
+	if item_id == "":
+		return
+	var result: Dictionary = await PlayerPartyStateService.give_pokemon_held_item(
+		pokemon.owned_pokemon_id,
+		item_id
+	)
+	if not bool(result.get("success", false)):
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.held_item.give_failed", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
+		return
+	bag_inventory_items = _normalize_bag_inventory_items(result.get("inventory", []))
+	bag_inventory_loaded = true
+	_refresh_open_pokemon_summary_cards()
+	if bag_popup != null and bag_popup.visible:
+		_refresh_bag_items()
 
 func _set_pokemon_summary_held_item_slot(pokemon: Pokemon) -> void:
 	if pokemon_summary_held_item_slot == null or pokemon_summary_held_item_slot_name_label == null or pokemon_summary_held_item_slot_icon == null:
@@ -22601,12 +22772,98 @@ func _register_party_slot_drag_handlers(slot: Node, slot_index: int) -> void:
 	var drag_started_callable := Callable(self, "_on_party_slot_drag_started")
 	var drag_released_callable := Callable(self, "_on_party_slot_drag_released")
 	var clicked_callable := Callable(self, "_on_party_slot_clicked")
+	var held_item_dropped_callable := Callable(self, "_on_party_slot_held_item_dropped")
+	var context_requested_callable := Callable(self, "_on_party_slot_context_requested")
 	if slot.has_signal("drag_started") and not slot.is_connected("drag_started", drag_started_callable):
 		slot.connect("drag_started", drag_started_callable)
 	if slot.has_signal("drag_released") and not slot.is_connected("drag_released", drag_released_callable):
 		slot.connect("drag_released", drag_released_callable)
 	if slot.has_signal("clicked") and not slot.is_connected("clicked", clicked_callable):
 		slot.connect("clicked", clicked_callable)
+	if slot.has_signal("held_item_dropped") and not slot.is_connected("held_item_dropped", held_item_dropped_callable):
+		slot.connect("held_item_dropped", held_item_dropped_callable)
+	if slot.has_signal("context_requested") and not slot.is_connected("context_requested", context_requested_callable):
+		slot.connect("context_requested", context_requested_callable)
+
+
+func _on_party_slot_held_item_dropped(slot_index: int, item: Dictionary) -> void:
+	if not party_display_override.is_empty() or slot_index < 0 or slot_index >= PlayerSave.party.size():
+		return
+	var pokemon_value: Variant = PlayerSave.party[slot_index]
+	if not pokemon_value is Pokemon:
+		return
+	await _give_dropped_held_item(pokemon_value as Pokemon, item)
+
+
+func _setup_party_slot_context_menu() -> void:
+	party_slot_context_menu = PopupMenu.new()
+	party_slot_context_menu.name = "PartySlotContextMenu"
+	party_slot_context_menu.min_size = Vector2i(210, 0)
+	party_slot_context_menu.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_RAISED, UI_BORDER_FOCUS, 8, 1)
+	)
+	party_slot_context_menu.id_pressed.connect(_on_party_slot_context_action)
+	root_control.add_child(party_slot_context_menu)
+
+
+func _on_party_slot_context_requested(slot_index: int, global_position: Vector2) -> void:
+	if not party_display_override.is_empty() or slot_index < 0 or slot_index >= PlayerSave.party.size():
+		return
+	var pokemon_value: Variant = PlayerSave.party[slot_index]
+	if not pokemon_value is Pokemon:
+		return
+	var pokemon := pokemon_value as Pokemon
+	party_slot_context_index = slot_index
+	party_slot_context_menu.clear()
+	party_slot_context_menu.add_item(LocalizationManager.text("ui.party.context.summary"), PARTY_CONTEXT_SUMMARY)
+	party_slot_context_menu.add_item(
+		LocalizationManager.text(
+			"ui.party.context.change_item" if _get_pokemon_held_item_id(pokemon) != "" else "ui.party.context.give_item"
+		),
+		PARTY_CONTEXT_GIVE_ITEM
+	)
+	if _get_pokemon_held_item_id(pokemon) != "":
+		party_slot_context_menu.add_item(LocalizationManager.text("ui.party.context.take_item"), PARTY_CONTEXT_TAKE_ITEM)
+	if slot_index > 0:
+		party_slot_context_menu.add_separator()
+		party_slot_context_menu.add_item(LocalizationManager.text("ui.party.context.set_lead"), PARTY_CONTEXT_SET_LEAD)
+	var viewport_size := get_viewport().get_visible_rect().size
+	var menu_position := global_position
+	menu_position.x = minf(menu_position.x, viewport_size.x - 230.0)
+	menu_position.y = minf(menu_position.y, viewport_size.y - 180.0)
+	party_slot_context_menu.position = Vector2i(menu_position.max(Vector2.ZERO))
+	party_slot_context_menu.popup()
+
+
+func _on_party_slot_context_action(action_id: int) -> void:
+	var slot_index := party_slot_context_index
+	party_slot_context_index = -1
+	if slot_index < 0 or slot_index >= PlayerSave.party.size():
+		return
+	var pokemon_value: Variant = PlayerSave.party[slot_index]
+	if not pokemon_value is Pokemon:
+		return
+	var pokemon := pokemon_value as Pokemon
+	match action_id:
+		PARTY_CONTEXT_SUMMARY:
+			_show_pokemon_summary(slot_index)
+		PARTY_CONTEXT_GIVE_ITEM:
+			_show_pokemon_summary(slot_index)
+			var card_key := _get_pokemon_summary_card_key(pokemon, slot_index, "interactive")
+			await _open_pokemon_summary_held_item_picker(card_key, true)
+		PARTY_CONTEXT_TAKE_ITEM:
+			await _take_pokemon_held_item(pokemon)
+		PARTY_CONTEXT_SET_LEAD:
+			await _set_party_slot_as_lead(slot_index)
+
+
+func _set_party_slot_as_lead(slot_index: int) -> void:
+	if slot_index <= 0 or slot_index >= PlayerSave.party.size():
+		return
+	var result: Dictionary = await PlayerPartyStateService.swap_party_slots(slot_index, 0)
+	if not bool(result.get("success", false)):
+		_add_chat_message(LocalizationManager.text("ui.chat.error.party_order"))
 
 func _on_party_slot_clicked(slot_index: int) -> void:
 	_focus_normal_ui_group(party_panel)
@@ -36098,6 +36355,12 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 		return
 	if message_type == "system.force_logout":
 		_force_session_logout(str(message.get("message", "")))
+		return
+	if message_type == "system.thieving_arrest":
+		add_system_message(LocalizationManager.text(
+			"ui.thieving.global_arrest",
+			{"player": str(message.get("displayName", "Trainer"))}
+		))
 		return
 	if message_type == "chat_error":
 		var error_text: String = str(message.get("message", "Chat message could not be sent."))

@@ -17,7 +17,9 @@ const STATE_SLEEPING := "sleeping"
 const STATE_COMPLETED := "completed"
 
 @export var trainer_id := "kanto_route_1_bug_catcher_1"
-@export var sight_range_tiles := 5
+## Number of tiles directly ahead that can trigger this trainer. After spotting
+## the player, the trainer walks along that line until they are one tile away.
+@export_range(0, 12, 1) var sight_range_tiles := 5
 
 @onready var vision_collision_shape: CollisionShape2D = $VisionArea/CollisionShape2D
 
@@ -246,9 +248,10 @@ func _try_trigger_vision(body: Node2D) -> void:
 	
 	if not _is_body_in_sight_range(body):
 		return
-	
+	if not _claim_battle_interaction():
+		return
+
 	triggered = true
-	battle_in_progress = true
 	GameState.lock_overworld_input()
 	await _wait_for_body_tile_movement(body)
 	if not _is_body_in_sight_range(body):
@@ -287,8 +290,9 @@ func _can_start_manual_interaction() -> bool:
 func interact_with_player(_player: Node2D) -> void:
 	match trainer_progress_state:
 		STATE_FIRST_ENCOUNTER:
+			if not _claim_battle_interaction():
+				return
 			triggered = true
-			battle_in_progress = true
 			await show_intro_dialogue()
 		STATE_READY:
 			await _begin_rematch_interaction()
@@ -310,8 +314,16 @@ func has_existing_trainer_completion() -> bool:
 
 
 func _begin_rematch_interaction() -> void:
-	battle_in_progress = true
+	if not _claim_battle_interaction():
+		return
 	await _show_battle_dialogue(true)
+
+
+func _claim_battle_interaction() -> bool:
+	if battle_in_progress:
+		return false
+	battle_in_progress = true
+	return true
 
 
 func _reserve_daily_rematch(dialogue_box: Node) -> bool:
@@ -413,6 +425,7 @@ func _can_auto_challenge() -> bool:
 	return (
 		trainer_progress_loaded
 		and trainer_progress_state == STATE_FIRST_ENCOUNTER
+		and not is_interacting
 		and not triggered
 		and not battle_in_progress
 		and not auto_trigger_failed
