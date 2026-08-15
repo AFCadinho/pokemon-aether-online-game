@@ -7,7 +7,9 @@
 			"locationGroupId": "aether_clash",
 			"locationGroupLabel": "Aether Clash",
 			"regionName": "Aether Clash",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://is25lssna4ae"
+			],
 			"scenePath": "res://scenes/overworld/aether_clash/aether_clash_lobby.tscn",
 			"spawnPoints": {
 				"guild_arrival": {
@@ -16,8 +18,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "GuildArrival",
 					"tile": {
-						"x": 29,
-						"y": 50
+						"x": 30,
+						"y": 45
 					}
 				}
 			}
@@ -107,6 +109,16 @@
 						"x": 20,
 						"y": 17
 					}
+				},
+				"transit_arrival": {
+					"facingDirection": "down",
+					"label": "Transit Arrival",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "TransitArrival",
+					"tile": {
+						"x": 24,
+						"y": 7
+					}
 				}
 			}
 		},
@@ -190,6 +202,16 @@
 					"tile": {
 						"x": 58,
 						"y": 33
+					}
+				},
+				"transit_arrival": {
+					"facingDirection": "down",
+					"label": "Transit Arrival",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "TransitArrival",
+					"tile": {
+						"x": 47,
+						"y": 30
 					}
 				}
 			}
@@ -711,7 +733,9 @@
 			"locationGroupId": "kanto_route_3",
 			"locationGroupLabel": "Route 3",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://dl5ioebfcun4f"
+			],
 			"scenePath": "res://scenes/overworld/kanto/routes/route_3_pokemon_center.tscn",
 			"spawnPoints": {
 				"from_outside": {
@@ -755,7 +779,7 @@
 					"spawnMarker": "EVTrainingNorthInside",
 					"tile": {
 						"x": 13,
-						"y": 16
+						"y": 15
 					}
 				},
 				"ev_training_north_outside": {
@@ -765,7 +789,7 @@
 					"spawnMarker": "EVTrainingNorthOutside",
 					"tile": {
 						"x": 13,
-						"y": 14
+						"y": 11
 					}
 				},
 				"ev_training_south_inside": {
@@ -775,7 +799,7 @@
 					"spawnMarker": "EVTrainingSouthInside",
 					"tile": {
 						"x": 13,
-						"y": 31
+						"y": 32
 					}
 				},
 				"ev_training_south_outside": {
@@ -785,7 +809,7 @@
 					"spawnMarker": "EVTrainingSouthOutside",
 					"tile": {
 						"x": 13,
-						"y": 33
+						"y": 36
 					}
 				},
 				"from_gym": {
@@ -858,6 +882,16 @@
 						"y": 38
 					}
 				},
+				"transit_arrival": {
+					"facingDirection": "down",
+					"label": "Transit Arrival",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "TransitArrival",
+					"tile": {
+						"x": 33,
+						"y": 35
+					}
+				},
 				"viridian_jail": {
 					"facingDirection": "down",
 					"label": "Viridian Jail",
@@ -915,7 +949,9 @@
 			"locationGroupId": "kanto_viridian_city",
 			"locationGroupLabel": "Viridian City",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://cjdjdlmhov8ss"
+			],
 			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn",
 			"spawnPoints": {
 				"from_outside": {
@@ -1508,7 +1544,9 @@
 		"kanto_route_3__to_pokecenter": {
 			"destination": {
 				"mapId": "kanto_route_3_pokemon_center",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://dl5ioebfcun4f"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/route_3_pokemon_center.tscn",
 				"position": {
 					"x": 464.0,
@@ -1554,7 +1592,9 @@
 		"kanto_viridian_city__to_pokecenter": {
 			"destination": {
 				"mapId": "kanto_viridian_city_pokemon_center",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://cjdjdlmhov8ss"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn",
 				"position": {
 					"x": 464.0,

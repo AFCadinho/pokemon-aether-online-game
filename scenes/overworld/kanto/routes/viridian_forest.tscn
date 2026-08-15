@@ -528,25 +528,21 @@ target_spawn_name = "FromSouth"
 position = Vector2(-16, -16)
 shape = SubResource("RectangleShape2D_route2_exit")
 
-[node name="RouteTransitionHint" parent="Exits/ToRoute2North" instance=ExtResource("14_route_hint")]
-position = Vector2(-16, -16)
-tile_footprint = Vector2i(5, 2)
-flow_direction = "up"
+[node name="RouteTransitionHint" parent="Exits/ToRoute2North" unique_id=461872100 instance=ExtResource("14_route_hint")]
+z_as_relative = false
+position = Vector2(-16, -48)
+tile_footprint = Vector2i(3, 2)
 
 [node name="ToRoute2South" type="Area2D" parent="Exits" unique_id=495619208]
 position = Vector2(1232, 2256)
 script = ExtResource("6_exit")
 target_scene_path = "res://scenes/overworld/kanto/transition_buildings/route_2_viridian_forest_south_gate.tscn"
 target_spawn_name = "FromNorth"
+metadata/pao_transition_hint_hidden = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute2South" unique_id=1108389756]
 position = Vector2(-16, 16)
 shape = SubResource("RectangleShape2D_route2_exit")
-
-[node name="RouteTransitionHint" parent="Exits/ToRoute2South" instance=ExtResource("14_route_hint")]
-position = Vector2(-16, 16)
-tile_footprint = Vector2i(5, 2)
-flow_direction = "down"
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=1867046597]
 visible = false

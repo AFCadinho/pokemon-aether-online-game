@@ -11,7 +11,7 @@
 atlas = ExtResource("2_6j24v")
 region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_jxxh7"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_bjo2c"]
 resource_local_to_scene = true
 animations = [{
 "frames": [{
@@ -43,28 +43,28 @@ npc_id = "kanto_pewter_city_pokemon_center_clerk"
 npc_id = "kanto_pewter_city_pokemon_center_clerk_2"
 
 [node name="AetherAtelier" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="4" unique_id=1024286238]
-npc_sprite_frames = SubResource("SpriteFrames_jxxh7")
+npc_sprite_frames = SubResource("SpriteFrames_bjo2c")
 
-[node name="HikerFlint" parent="Entities/NPCs" instance=ExtResource("3_dialogue_npc")]
-position = Vector2(352, 800)
+[node name="HikerFlint" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="5" unique_id=1561729301 instance=ExtResource("3_dialogue_npc")]
+position = Vector2(272, 496)
 npc_id = "kanto_pewter_city_pokemon_center_hiker_flint"
 npc_definition_id = "trainer_class_hiker"
 display_name = "Hiker Flint"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("5_hiker")
 
-[node name="LassCeleste" parent="Entities/NPCs" instance=ExtResource("3_dialogue_npc")]
-position = Vector2(544, 768)
+[node name="LassCeleste" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="6" unique_id=14382031 instance=ExtResource("3_dialogue_npc")]
+position = Vector2(544, 784)
 npc_id = "kanto_pewter_city_pokemon_center_lass_celeste"
 npc_definition_id = "trainer_class_lass"
 display_name = "Lass Celeste"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("6_lass")
 
-[node name="Pokemon" type="Node2D" parent="Entities"]
+[node name="Pokemon" type="Node2D" parent="Entities" parent_id_path=PackedInt32Array(1761485951) index="3" unique_id=286777602]
 
-[node name="Machop" parent="Entities/Pokemon" instance=ExtResource("4_overworld_pokemon")]
-position = Vector2(416, 800)
+[node name="Machop" parent="Entities/Pokemon" index="0" unique_id=211576873 instance=ExtResource("4_overworld_pokemon")]
+position = Vector2(288, 752)
 overworld_pokemon_id = "kanto_pewter_city_pokemon_center_machop_1"
 species_id = "machop"
 level = 10
@@ -75,8 +75,8 @@ movement_tiles = 1
 movement_wait_seconds = 1.5
 movement_speed_pixels = 44.0
 
-[node name="Clefairy" parent="Entities/Pokemon" instance=ExtResource("4_overworld_pokemon")]
-position = Vector2(608, 768)
+[node name="Clefairy" parent="Entities/Pokemon" index="1" unique_id=85891741 instance=ExtResource("4_overworld_pokemon")]
+position = Vector2(608, 784)
 overworld_pokemon_id = "kanto_pewter_city_pokemon_center_clefairy_1"
 species_id = "clefairy"
 level = 9

@@ -3,6 +3,15 @@
   "mapId": "kanto_viridian_city",
   "signs": [
     {
+      "id": "kanto_viridian_city_town_sign",
+      "type": "town",
+      "title": "Viridian City",
+      "lines": [
+        "Viridian City",
+        "The Eternally Green Paradise"
+      ]
+    },
+    {
       "id": "kanto_viridian_city_jail",
       "type": "building",
       "title": "Viridian City Jail",

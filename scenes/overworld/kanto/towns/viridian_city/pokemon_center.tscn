@@ -1,12 +1,29 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://cjdjdlmhov8ss"]
 
 [ext_resource type="PackedScene" uid="uid://bfy37wf81vi6g" path="res://scenes/overworld/kanto/reusable_interiors/pokemon_center_template.tscn" id="1_template"]
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="2_dialogue_npc"]
+[ext_resource type="Texture2D" uid="uid://bb62an6t47c7m" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_044_Beauty.png" id="2_n1lj5"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="3_overworld_pokemon"]
 [ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="4_youngster"]
 [ext_resource type="SpriteFrames" uid="uid://uqldn2vhcla4" path="res://assets/npcs/classes/lass_frames.tres" id="5_lass"]
 
-[node name="PokemonCenter" instance=ExtResource("1_template")]
+[sub_resource type="AtlasTexture" id="AtlasTexture_tailor"]
+atlas = ExtResource("2_n1lj5")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5vbsp"]
+resource_local_to_scene = true
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tailor")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="PokemonCenter" unique_id=177131418 instance=ExtResource("1_template")]
 map_id = "kanto_viridian_city_pokemon_center"
 map_display_name = "Viridian City Pokémon Center"
 world_access_group_id = "kanto_viridian_city"
@@ -15,38 +32,41 @@ world_access_area_type = "interior"
 location_id = "kanto.viridian_city.pokemon_center"
 location_name = "Viridian City Pokémon Center"
 
-[node name="NurseJoy" parent="Entities/NPCs" index="0"]
+[node name="NurseJoy" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="0" unique_id=1839105410]
 respawn_point_id = "kanto_viridian_city_pokemon_center"
 npc_id = "kanto_viridian_city_pokemon_center_nurse_joy"
 
-[node name="Clerk" parent="Entities/NPCs" index="2"]
+[node name="Clerk" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="2" unique_id=554856490]
 npc_id = "kanto_viridian_city_pokemon_center_clerk"
 npc_definition_id = "kanto_viridian_city_pokemon_center_clerk"
 preload_quest_markers = true
 
-[node name="Clerk2" parent="Entities/NPCs" index="3"]
+[node name="Clerk2" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="3" unique_id=854794050]
 npc_id = "kanto_viridian_city_pokemon_center_clerk_2"
 
-[node name="YoungsterBenji" parent="Entities/NPCs" instance=ExtResource("2_dialogue_npc")]
-position = Vector2(352, 800)
+[node name="AetherAtelier" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="4" unique_id=1024286238]
+npc_sprite_frames = SubResource("SpriteFrames_5vbsp")
+
+[node name="YoungsterBenji" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="5" unique_id=615938200 instance=ExtResource("2_dialogue_npc")]
+position = Vector2(336, 816)
 npc_id = "kanto_viridian_city_pokemon_center_youngster_benji"
 npc_definition_id = "trainer_class_youngster"
 display_name = "Youngster Benji"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("4_youngster")
 
-[node name="LassHolly" parent="Entities/NPCs" instance=ExtResource("2_dialogue_npc")]
-position = Vector2(544, 768)
+[node name="LassHolly" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="6" unique_id=187787029 instance=ExtResource("2_dialogue_npc")]
+position = Vector2(560, 784)
 npc_id = "kanto_viridian_city_pokemon_center_lass_holly"
 npc_definition_id = "trainer_class_lass"
 display_name = "Lass Holly"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("5_lass")
 
-[node name="Pokemon" type="Node2D" parent="Entities"]
+[node name="Pokemon" type="Node2D" parent="Entities" parent_id_path=PackedInt32Array(1761485951) index="3" unique_id=606322928]
 
-[node name="Pikachu" parent="Entities/Pokemon" instance=ExtResource("3_overworld_pokemon")]
-position = Vector2(416, 800)
+[node name="Pikachu" parent="Entities/Pokemon" index="0" unique_id=1783890446 instance=ExtResource("3_overworld_pokemon")]
+position = Vector2(400, 816)
 overworld_pokemon_id = "kanto_viridian_city_pokemon_center_pikachu_1"
 species_id = "pikachu"
 level = 6
@@ -57,11 +77,10 @@ movement_tiles = 1
 movement_wait_seconds = 1.5
 movement_speed_pixels = 44.0
 
-[node name="Oddish" parent="Entities/Pokemon" instance=ExtResource("3_overworld_pokemon")]
-position = Vector2(608, 768)
+[node name="Oddish" parent="Entities/Pokemon" index="1" unique_id=655562556 instance=ExtResource("3_overworld_pokemon")]
+position = Vector2(624, 784)
 overworld_pokemon_id = "kanto_viridian_city_pokemon_center_oddish_1"
 species_id = "oddish"
-level = 5
 display_name = "Oddish"
 facing_direction = Vector2(-1, 0)
 movement_behavior = "pace_vertical"
@@ -69,6 +88,6 @@ movement_tiles = 1
 movement_wait_seconds = 2.0
 movement_speed_pixels = 38.0
 
-[node name="ToOutside" parent="Exits" index="0"]
+[node name="ToOutside" parent="Exits" parent_id_path=PackedInt32Array(1112148501) index="0" unique_id=1126740257]
 target_scene_path = "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn"
 target_spawn_name = "FromPokecenter"

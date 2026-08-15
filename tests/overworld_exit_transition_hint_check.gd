@@ -53,19 +53,25 @@ func _check_scene(scene_path: String) -> void:
 
 	var exit_names: Array[String] = []
 	var hinted_exits: Dictionary = {}
+	var intentionally_hidden_exits: Dictionary = {}
+	var current_exit_name := ""
 	for line: String in source.split("\n"):
 		if not line.begins_with("[node "):
+			if current_exit_name != "" and line == "metadata/pao_transition_hint_hidden = true":
+				intentionally_hidden_exits[current_exit_name] = true
 			continue
+		current_exit_name = ""
 		var node_name := _extract_attribute(line, "name")
 		var parent_path := _extract_attribute(line, "parent")
 		if line.contains('type="Area2D"') and parent_path == "Exits":
 			exit_names.append(node_name)
+			current_exit_name = node_name
 		elif node_name in ["RouteTransitionHint", "DoorTransitionHint"] and parent_path.begins_with("Exits/"):
 			hinted_exits[parent_path.trim_prefix("Exits/")] = true
 
 	for exit_name: String in exit_names:
 		checked_exits += 1
-		if not hinted_exits.has(exit_name):
+		if not hinted_exits.has(exit_name) and not intentionally_hidden_exits.has(exit_name):
 			failed = true
 			printerr("MISSING %s :: Exits/%s" % [scene_path, exit_name])
 
