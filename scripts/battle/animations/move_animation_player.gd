@@ -1202,7 +1202,7 @@ func _draw_afterimage_visual() -> void:
 
 	var streak_alpha := alpha * ghost_alpha * 0.52
 	for streak_index: int in range(image_count - 1):
-		var streak_offset := offsets[streak_index] if streak_index < offsets.size() and offsets[streak_index] is Array else [0.0, 0.0]
+		var streak_offset: Variant = offsets[streak_index] if streak_index < offsets.size() and offsets[streak_index] is Array else [0.0, 0.0]
 		var streak_start := center + _vector2_from_value(streak_offset) + Vector2(0.0, body_height * 0.46)
 		var streak_end := center + _vector2_from_value(streak_offset) + Vector2(0.0, body_height * 0.7)
 		draw_line(streak_start, streak_end, _color_with_alpha(body_color, streak_alpha), 1.6, true)
