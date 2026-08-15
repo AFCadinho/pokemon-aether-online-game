@@ -8860,16 +8860,128 @@
       "category": "projectile",
       "speed_scale": 1.0,
       "sprite_zoom_multiplier": 0.55,
-      "sprite_position_offset": [
-        0,
-        -24
-      ],
       "show_timing_backgrounds": false,
       "show_timing_foregrounds": false,
       "show_pink_visual": false,
+      "show_sheet_sprites": false,
       "overlay_fill_enabled": false,
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
+      "visual_color": [
+        0.36,
+        0.82,
+        1.0,
+        1.0
+      ],
+      "energy_blast": {
+        "enabled": true,
+        "actor_offset": [
+          0.0,
+          -42.0
+        ],
+        "target_offset": [
+          0.0,
+          -22.0
+        ],
+        "visible_start": 0.05,
+        "visible_end": 0.93,
+        "travel_start": 0.08,
+        "travel_end": 0.7,
+        "fade_in": 0.06,
+        "fade_out": 0.14,
+        "radius": 13.0,
+        "trail_count": 5,
+        "trail_spacing": 0.035,
+        "ray_count": 8,
+        "particle_count": 10,
+        "impact_start": 0.7,
+        "impact_radius": 48.0,
+        "impact_alpha": 0.9,
+        "impact_ray_count": 14,
+        "aura_color": [
+          0.12,
+          0.56,
+          0.94,
+          1.0
+        ],
+        "core_color": [
+          0.88,
+          0.98,
+          1.0,
+          1.0
+        ],
+        "ring_color": [
+          0.48,
+          0.9,
+          1.0,
+          1.0
+        ],
+        "shadow_color": [
+          0.04,
+          0.16,
+          0.3,
+          1.0
+        ],
+        "particle_color": [
+          0.72,
+          0.96,
+          1.0,
+          1.0
+        ],
+        "impact_core_color": [
+          0.96,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "path": [
+          {
+            "at": 0.0,
+            "position": [
+              128.0,
+              204.0
+            ],
+            "scale": 0.48
+          },
+          {
+            "at": 0.46,
+            "position": [
+              244.0,
+              146.0
+            ],
+            "scale": 1.0
+          },
+          {
+            "at": 1.0,
+            "position": [
+              384.0,
+              86.0
+            ],
+            "scale": 0.82
+          }
+        ],
+        "launch_ring": {
+          "enabled": true,
+          "start": 0.08,
+          "end": 0.3,
+          "radius": 24.0,
+          "alpha": 0.55,
+          "spin_speed": 0.34,
+          "ember_count": 6,
+          "color": [
+            0.48,
+            0.9,
+            1.0,
+            1.0
+          ],
+          "core_color": [
+            0.9,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      },
       "data_path": "res://assets/battles/animations/iceshard/iceshard.json",
       "sheet_path": "res://assets/battles/animations/iceshard/PRAS- Ice.png",
       "background_path": "",
@@ -9097,7 +9209,7 @@
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "focus_aura": {
-        "enabled": true,
+        "enabled": false,
         "visible_start": 0.02,
         "visible_end": 0.94,
         "fade_in": 0.08,
@@ -9150,6 +9262,43 @@
         "ring_color_gold": [
           0.85,
           0.95,
+          1.0,
+          1.0
+        ]
+      },
+      "afterimage": {
+        "enabled": true,
+        "visible_start": 0.04,
+        "visible_end": 0.94,
+        "fade_in": 0.08,
+        "fade_out": 0.18,
+        "image_count": 3,
+        "body_width": 30.0,
+        "body_height": 54.0,
+        "ghost_alpha": 0.42,
+        "offsets": [
+          [
+            -42.0,
+            2.0
+          ],
+          [
+            0.0,
+            -4.0
+          ],
+          [
+            42.0,
+            2.0
+          ]
+        ],
+        "body_color": [
+          0.42,
+          0.72,
+          1.0,
+          1.0
+        ],
+        "core_color": [
+          0.9,
+          0.98,
           1.0,
           1.0
         ]
