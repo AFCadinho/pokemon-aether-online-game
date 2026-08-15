@@ -382,8 +382,8 @@ position = Vector2(16, 0)
 shape = SubResource("RectangleShape2D_route3_exit")
 
 [node name="RouteTransitionHint" parent="Exits/ToPewterCity" unique_id=120000006 instance=ExtResource("7_route_hint")]
-rotation = -1.5708
-tile_footprint = Vector2i(4, 2)
+tile_footprint = Vector2i(2, 6)
+flow_direction = "left"
 
 [node name="ToPokecenter" type="Area2D" parent="Exits" unique_id=120000008]
 position = Vector2(2864, 1072)

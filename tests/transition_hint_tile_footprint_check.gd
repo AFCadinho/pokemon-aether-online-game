@@ -30,10 +30,16 @@ func _run() -> void:
 
 	_check(route_hint.get("tile_footprint") == Vector2i(4, 2), "route hints default to a 4x2 tile footprint")
 	_check(route_hint.call("get_footprint_size") == Vector2(128, 64), "route footprint converts tiles to world size")
+	_check(route_hint.call("get_flow_vector") == Vector2.UP, "route hints expose an upward default flow")
 	route_hint.set("tile_footprint", Vector2i(6, 2))
 	_check(route_hint.call("get_footprint_size") == Vector2(192, 64), "route footprints scale without pixel dimensions")
+	route_hint.set("flow_direction", "right")
+	_check(route_hint.call("get_flow_vector") == Vector2.RIGHT, "route hint arrows can flow right")
 	_check(door_hint.get("tile_footprint") == Vector2i.ONE, "door hints default to one tile")
 	_check(door_hint.call("get_footprint_size") == Vector2(32, 32), "door footprint converts to one world tile")
+	door_hint.set("flow_direction", "down")
+	_check(door_hint.call("get_flow_vector") == Vector2.DOWN, "door hint arrows have a configurable direction")
+	await process_frame
 
 	var route_source := FileAccess.get_file_as_string(ROUTE_HINT_SCRIPT)
 	var door_source := FileAccess.get_file_as_string(DOOR_HINT_SCRIPT)

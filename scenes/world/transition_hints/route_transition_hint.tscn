@@ -6,3 +6,4 @@
 z_index = 1200
 script = ExtResource("1_route_hint")
 tile_footprint = Vector2i(4, 2)
+flow_direction = "up"

@@ -640,6 +640,7 @@ target_spawn_name = "FromRoute1"
 shape = SubResource("RectangleShape2D_7kpb1")
 
 [node name="RouteTransitionHint" parent="Exits/ToPalletTown" unique_id=1220080167 instance=ExtResource("17_bnyo4")]
+flow_direction = "down"
 
 [node name="ToViridianCity" type="Area2D" parent="Exits" unique_id=185773419]
 position = Vector2(1136, -16)

@@ -4,6 +4,7 @@ extends Node2D
 const TILE_SIZE := 32.0
 
 @export var tile_footprint := Vector2i.ONE
+@export_enum("up", "down", "left", "right") var flow_direction := "up"
 @export var particle_count := 16
 @export var cycle_seconds := 1.7
 @export var particle_radius := 2.3
@@ -32,6 +33,18 @@ func get_footprint_size() -> Vector2:
 	)
 
 
+func get_flow_vector() -> Vector2:
+	match flow_direction:
+		"down":
+			return Vector2.DOWN
+		"left":
+			return Vector2.LEFT
+		"right":
+			return Vector2.RIGHT
+		_:
+			return Vector2.UP
+
+
 func _draw() -> void:
 	if particle_count <= 0:
 		return
@@ -41,6 +54,10 @@ func _draw() -> void:
 	var size := get_footprint_size()
 	var half_size := size * 0.5
 	var safe_cycle := maxf(cycle_seconds, 0.01)
+	var flow_vector := get_flow_vector()
+	var cross_vector := Vector2(-flow_vector.y, flow_vector.x)
+	var flow_extent := absf(flow_vector.x) * half_size.x + absf(flow_vector.y) * half_size.y
+	var cross_extent := absf(cross_vector.x) * half_size.x + absf(cross_vector.y) * half_size.y
 	var orbit_phase := (_elapsed / safe_cycle) * TAU
 	var glow_radius := minf(size.x, size.y) * 0.34
 	draw_circle(Vector2.ZERO, glow_radius * 1.25, Color(tint.r, tint.g, tint.b, 0.07))
@@ -61,13 +78,16 @@ func _draw() -> void:
 
 	for chevron_index in range(3):
 		var progress := fmod((_elapsed / safe_cycle) + float(chevron_index) / 3.0, 1.0)
-		var y := lerpf(half_size.y - 6.0, -half_size.y + 6.0, progress)
+		var center := (
+			-flow_vector * (flow_extent - 6.0)
+			+ flow_vector * ((flow_extent - 6.0) * 2.0 * progress)
+		)
 		var alpha := sin(progress * PI) * tint.a
 		draw_polyline(
 			PackedVector2Array([
-				Vector2(-6.0, y + 4.0),
-				Vector2(0.0, y - 2.0),
-				Vector2(6.0, y + 4.0),
+				center - flow_vector * 4.0 - cross_vector * 6.0,
+				center + flow_vector * 2.0,
+				center - flow_vector * 4.0 + cross_vector * 6.0,
 			]),
 			Color(tint.r, tint.g, tint.b, alpha),
 			2.5,
@@ -76,10 +96,14 @@ func _draw() -> void:
 
 	for particle: Dictionary in _particles:
 		var progress := fmod((_elapsed / safe_cycle) + float(particle["phase"]), 1.0)
-		var x_offset := float(particle["x_anchor"]) * (size.x - 10.0) - (size.x - 10.0) * 0.5
+		var cross_offset := lerpf(-cross_extent + 5.0, cross_extent - 5.0, float(particle["x_anchor"]))
 		var sway := sin((_elapsed * float(particle["sway_speed"])) + float(particle["sway_phase"])) * float(particle["sway_width"])
 		var pulse := 0.82 + 0.18 * sin((progress * TAU) + float(particle["phase"]) * TAU)
-		var center := Vector2(x_offset + sway, lerpf(half_size.y - 4.0, -half_size.y + 4.0, progress))
+		var center := (
+			-flow_vector * (flow_extent - 4.0)
+			+ flow_vector * ((flow_extent - 4.0) * 2.0 * progress)
+			+ cross_vector * (cross_offset + sway)
+		)
 		var alpha := sin(progress * PI) * pulse * tint.a
 		var radius := particle_radius * float(particle["scale"]) * pulse
 		draw_circle(center, radius * 2.8, Color(tint.r, tint.g, tint.b, alpha * 0.20))

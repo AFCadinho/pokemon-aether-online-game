@@ -6,3 +6,4 @@
 z_index = 1200
 script = ExtResource("1_door_hint")
 tile_footprint = Vector2i(1, 1)
+flow_direction = "up"
