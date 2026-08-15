@@ -17,6 +17,7 @@
 [ext_resource type="SpriteFrames" uid="uid://uqldn2vhcla4" path="res://assets/npcs/classes/lass_frames.tres" id="14_lass"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="15_pokemon"]
 [ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="16_story_hook"]
+[ext_resource type="PackedScene" uid="uid://csmsqlujka4ma" path="res://scenes/world/interactables/locked_door_interactable.tscn" id="17_victory_road_lock"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_viridian"]
 size = Vector2(64, 176)
@@ -387,6 +388,14 @@ movement_speed_pixels = 52.0
 position = Vector2(2416, 432)
 sign_id = "kanto_route_22_route_sign"
 sign_type = "road"
+
+[node name="VictoryRoadPostLock" parent="Entities/Interactables" instance=ExtResource("17_victory_road_lock")]
+position = Vector2(352, 304)
+interactable_id = "kanto_route_22_victory_road_post_lock"
+fallback_locked_dialogue_lines = Array[String](["The Victory Road checkpoint is closed for now.", "Victory Road will become accessible in a future update."])
+display_name = "Victory Road"
+blocked_tile_offset = Vector2i(-1, 0)
+blocked_tile_footprint = Vector2i(3, 1)
 
 [node name="Spawns" type="Node2D" parent="." unique_id=1642080505]
 
