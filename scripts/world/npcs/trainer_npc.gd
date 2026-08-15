@@ -45,6 +45,11 @@ func _ready() -> void:
 	_load_trainer_progress.call_deferred()
 
 
+func _loads_pickpocket_profile_from_npc_metadata() -> bool:
+	# Battle Orchestrator owns trainer names, dialogue, teams, and progression.
+	return false
+
+
 func _apply_npc_profile() -> void:
 	super._apply_npc_profile()
 	var trainer_profile := npc_profile as TrainerDefinitionResource

@@ -1476,9 +1476,18 @@ func _on_interaction_area_body_exited(body: Node2D) -> void:
 func _refresh_nearby_pickpocket_metadata() -> void:
 	if not player_nearby or nearby_player == null:
 		return
+	if not _loads_pickpocket_profile_from_npc_metadata():
+		return
 	if not npc_metadata_loaded and not _get_npc_metadata_id().is_empty():
 		await _load_npc_metadata()
 	_sync_thieving_prompt()
+
+
+## Ordinary dialogue NPCs can receive their pickpocket profile from the content
+## catalog. Specialized NPC roles override this when another service owns their
+## metadata or their interaction never supports pickpocketing.
+func _loads_pickpocket_profile_from_npc_metadata() -> bool:
+	return true
 
 
 func _wait_for_body_tile_movement(body: Node2D) -> void:

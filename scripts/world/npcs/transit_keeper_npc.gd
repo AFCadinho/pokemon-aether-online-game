@@ -8,6 +8,11 @@ const TransitMenuScript := preload("res://scripts/ui/transit_menu.gd")
 @export var local_destination_id := ""
 
 
+func _loads_pickpocket_profile_from_npc_metadata() -> bool:
+	# Transit Keepers use localized client copy and the transit network service.
+	return false
+
+
 func interact_with_player(_player: Node2D) -> void:
 	var network_result: Dictionary = await TransitService.load_network()
 	if not bool(network_result.get("success", false)):

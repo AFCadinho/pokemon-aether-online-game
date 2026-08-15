@@ -180,6 +180,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/world_presence_roster_check.gd",
 	"res://tests/player_interaction_coordinator_check.gd",
 	"res://tests/npc_identity_check.gd",
+	"res://tests/npc_metadata_role_boundary_check.gd",
 	"res://tests/npc_dialogue_metadata_check.gd",
 	"res://tests/npc_dialogue_resolver_check.gd",
 	"res://tests/dialogue_metadata_service_check.gd",
