@@ -9407,16 +9407,106 @@
       }
     },
     "psychic": {
-      "template": "imported_sheet",
+      "template": "custom_godot_effect",
       "category": "special_projectile",
-      "speed_scale": 1.0,
-      "show_timing_backgrounds": true,
-      "timing_background_fill_canvas": true,
+      "speed_scale": 1.08,
+      "show_timing_backgrounds": false,
       "show_timing_foregrounds": false,
       "show_pink_visual": false,
       "show_sheet_sprites": false,
       "overlay_fill_enabled": false,
       "overlay_peak_alpha": 0.0,
+      "render_below_sprites": true,
+      "sound_wave": {
+        "enabled": true,
+        "visible_start": 0.03,
+        "visible_end": 0.97,
+        "launch_start": 0.08,
+        "impact_start": 0.68,
+        "ring_count": 4,
+        "front_radius": 15,
+        "rear_radius": 42,
+        "ring_depth": 0.42,
+        "impact_radius": 66,
+        "impact_offset": [
+          0,
+          -10
+        ],
+        "impact_ray_count": 14,
+        "impact_bolt_count": 6,
+        "wave_color": [
+          0.48,
+          0.2,
+          1.0,
+          1.0
+        ],
+        "core_color": [
+          0.96,
+          0.88,
+          1.0,
+          1.0
+        ],
+        "aura_color": [
+          0.38,
+          0.08,
+          0.86,
+          1.0
+        ],
+        "impact_color": [
+          0.82,
+          0.14,
+          1.0,
+          1.0
+        ],
+        "impact_core_color": [
+          0.2,
+          0.02,
+          0.42,
+          1.0
+        ],
+        "lightning_color": [
+          1.0,
+          0.74,
+          1.0,
+          1.0
+        ],
+        "path": [
+          {
+            "at": 0,
+            "position": [
+              128,
+              204
+            ],
+            "scale": 0.9
+          },
+          {
+            "at": 1,
+            "position": [
+              384,
+              86
+            ],
+            "scale": 1.0
+          }
+        ],
+        "reverse_path": [
+          {
+            "at": 0,
+            "position": [
+              384,
+              86
+            ],
+            "scale": 0.9
+          },
+          {
+            "at": 1,
+            "position": [
+              128,
+              204
+            ],
+            "scale": 1.0
+          }
+        ]
+      },
       "data_path": "res://assets/battles/animations/psychic/psychic.json",
       "sheet_path": "res://assets/battles/animations/psychic/PRAS- Psycho Boost.png",
       "background_path": "res://assets/battles/animations/psychic/PRAS- Psychic BG.png",
