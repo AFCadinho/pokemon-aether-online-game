@@ -1,6 +1,7 @@
 extends SceneTree
 
 const PARTY_SERVICE_PATH := "res://scripts/services/player_party_state_service.gd"
+const BADGE_SERVICE_PATH := "res://scripts/services/badge_progression_service.gd"
 const UI_OVERLAY_PATH := "res://scripts/ui/ui_overlay.gd"
 const ERROR_LOCALIZATION_PATH := "res://scripts/services/backend_error_localization_service.gd"
 const WALLET_SERVICE_PATH := "res://scripts/services/player_wallet_service.gd"
@@ -16,6 +17,8 @@ func _run() -> void:
 	var game_state := root.get_node_or_null("GameState")
 	_check(game_state != null, "Level-cap check can access GameState")
 	if game_state != null:
+		var cap_changes: Array[bool] = []
+		game_state.pokemon_level_caps_changed.connect(func() -> void: cap_changes.append(true), CONNECT_ONE_SHOT)
 		game_state.call("apply_pokemon_level_cap_state", {
 			"region": "kanto",
 			"stageId": "before-first-gym",
@@ -25,6 +28,7 @@ func _run() -> void:
 		})
 		_check(int(game_state.get("pokemon_level_cap")) == 18, "GameState applies the server level cap")
 		_check(int(game_state.get("pokemon_trade_level_cap")) == 5, "GameState applies the server trade level cap")
+		_check(cap_changes.size() == 1, "GameState announces changed level caps")
 		game_state.call("reset_gameplay_runtime_state")
 		_check(int(game_state.get("pokemon_level_cap")) == 100, "Gameplay reset clears the cached level cap")
 		_check(int(game_state.get("pokemon_trade_level_cap")) == 100, "Gameplay reset clears the cached trade level cap")
@@ -40,6 +44,13 @@ func _run() -> void:
 		wallet_service.contains('party.get("pokemonLevelCap", {})')
 		and wallet_service.contains("GameState.apply_pokemon_level_cap_state"),
 		"Battle rewards immediately apply a newly unlocked badge cap"
+	)
+	var badge_service := FileAccess.get_file_as_string(BADGE_SERVICE_PATH)
+	_check(
+		badge_service.contains("await PlayerPartyStateService.load_party()")
+		and badge_service.count("return await _result_with_refreshed_level_caps(result)") == 2
+		and badge_service.contains('result["pokemonLevelCap"]'),
+		"Developer badge changes immediately refresh both level caps"
 	)
 
 	var overlay := FileAccess.get_file_as_string(UI_OVERLAY_PATH)
@@ -59,6 +70,11 @@ func _run() -> void:
 		and overlay.contains("icon.modulate = Color(1.0, 1.0, 1.0, 0.45)")
 		and overlay.contains("UI_MUTED_TEXT if can_apply else UI_DANGER"),
 		"Bag item targets show a clear inline reason when disabled"
+	)
+	_check(
+		overlay.contains("GameState.pokemon_level_caps_changed.connect(_on_pokemon_level_caps_changed)")
+		and overlay.contains("func _on_pokemon_level_caps_changed()"),
+		"Trainer Card and Bag react to refreshed level caps"
 	)
 
 	var error_localization := FileAccess.get_file_as_string(ERROR_LOCALIZATION_PATH)

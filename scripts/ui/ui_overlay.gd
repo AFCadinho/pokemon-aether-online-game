@@ -1343,6 +1343,8 @@ func _ready() -> void:
 		PlayerSave.party_changed.connect(_on_pvp_party_changed)
 	if not PlayerSave.gym_badges_changed.is_connected(_refresh_trainer_card_gym_badges):
 		PlayerSave.gym_badges_changed.connect(_refresh_trainer_card_gym_badges)
+	if not GameState.pokemon_level_caps_changed.is_connected(_on_pokemon_level_caps_changed):
+		GameState.pokemon_level_caps_changed.connect(_on_pokemon_level_caps_changed)
 	if not ChatRealtimeService.message_received.is_connected(_on_chat_realtime_message_received):
 		ChatRealtimeService.message_received.connect(_on_chat_realtime_message_received)
 	if not ChatRealtimeService.mail_received.is_connected(_on_realtime_mail_received):
@@ -12438,6 +12440,12 @@ func _refresh_trainer_card_caps() -> void:
 		trainer_card_level_cap_label.text = str(GameState.pokemon_level_cap)
 	if trainer_card_trade_level_cap_label != null:
 		trainer_card_trade_level_cap_label.text = str(GameState.pokemon_trade_level_cap)
+
+func _on_pokemon_level_caps_changed() -> void:
+	_refresh_trainer_card_caps()
+	if bag_item_use_popup != null and bag_item_use_popup.visible:
+		_refresh_bag_item_use_party_list()
+		_refresh_bag_item_use_selected_preview()
 
 func _create_trainer_card_badge_row() -> Control:
 	var row := HBoxContainer.new()
