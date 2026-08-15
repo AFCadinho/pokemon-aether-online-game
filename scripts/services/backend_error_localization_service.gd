@@ -262,6 +262,9 @@ static func _format_values(response: Dictionary) -> Dictionary:
 			"requiredFishingLevel",
 			values.get("required_level", 1)
 		))
+	for integer_level_key: String in ["pokemonLevel", "tradeLevelCap"]:
+		if values.has(integer_level_key):
+			values[integer_level_key] = int(values.get(integer_level_key, 0))
 	return values
 
 
