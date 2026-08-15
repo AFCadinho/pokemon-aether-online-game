@@ -1084,6 +1084,11 @@ func _apply_move_projectile_endpoint_anchors(
 		target_anchor,
 		animation_node.reverse_battlefield
 	)
+	animation_node.stat_change_config = _with_target_effect_anchor(
+		animation_node.stat_change_config,
+		target_anchor,
+		animation_node.reverse_battlefield
+	)
 	animation_node.celestial_charge_config = _with_self_effect_anchor(
 		animation_node.celestial_charge_config,
 		actor_anchor,
