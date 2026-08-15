@@ -37,6 +37,7 @@ signal animation_finished
 @export var solar_charge_config: Dictionary = {}
 @export var celestial_charge_config: Dictionary = {}
 @export var focus_aura_config: Dictionary = {}
+@export var afterimage_config: Dictionary = {}
 @export var stat_change_config: Dictionary = {}
 @export var heal_energy_config: Dictionary = {}
 @export var dragon_dance_config: Dictionary = {}
@@ -348,6 +349,7 @@ func _draw() -> void:
 	_draw_solar_charge_visual()
 	_draw_celestial_charge_visual()
 	_draw_focus_aura_visual()
+	_draw_afterimage_visual()
 	_draw_stat_change_visual()
 	_draw_heal_energy_visual()
 	_draw_dragon_dance_visual()
@@ -1151,6 +1153,59 @@ func _draw_focus_aura_sparkle(position: Vector2, size: float, color: Color, core
 	draw_line(position + Vector2(0.0, -size * 2.4), position + Vector2(0.0, size * 2.4), core, 1.1, true)
 	draw_line(position + Vector2(-size, -size), position + Vector2(size, size), outer, 0.8, true)
 	draw_line(position + Vector2(-size, size), position + Vector2(size, -size), outer, 0.8, true)
+
+
+func _draw_afterimage_visual() -> void:
+	if not bool(afterimage_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var progress := clampf(float(frame_index) / float(maxi(frames.size() - 1, 1)), 0.0, 1.0)
+	var visible_start := clampf(float(afterimage_config.get("visible_start", 0.02)), 0.0, 1.0)
+	var visible_end := clampf(float(afterimage_config.get("visible_end", 0.94)), visible_start, 1.0)
+	if progress < visible_start or progress > visible_end:
+		return
+
+	var alpha := _get_timed_alpha(progress, visible_start, visible_end, afterimage_config)
+	if alpha <= 0.02:
+		return
+
+	var center := _battlefield_position(_vector2_from_value(afterimage_config.get("center", [128.0, 224.0])))
+	var image_count := clampi(int(afterimage_config.get("image_count", 3)), 2, 5)
+	var body_width := maxf(float(afterimage_config.get("body_width", 30.0)), 10.0)
+	var body_height := maxf(float(afterimage_config.get("body_height", 54.0)), 16.0)
+	var ghost_alpha := clampf(float(afterimage_config.get("ghost_alpha", 0.34)), 0.05, 0.8)
+	var body_color := _color_from_value(afterimage_config.get("body_color", [0.5, 0.78, 1.0, 1.0]), Color(0.5, 0.78, 1.0, 1.0))
+	var core_color := _color_from_value(afterimage_config.get("core_color", [0.9, 0.98, 1.0, 1.0]), Color(0.9, 0.98, 1.0, 1.0))
+	var offsets_value: Variant = afterimage_config.get("offsets", [])
+	var offsets: Array = offsets_value as Array if offsets_value is Array else []
+
+	for image_index: int in range(image_count):
+		var offset := Vector2(
+			(float(image_index) - float(image_count - 1) * 0.5) * 34.0,
+			-10.0 - absf(float(image_index) - float(image_count - 1) * 0.5) * 4.0
+		)
+		if image_index < offsets.size() and offsets[image_index] is Array:
+			offset = _vector2_from_value(offsets[image_index])
+		var ghost_center := center + offset
+		var ghost_fade := ghost_alpha * (0.72 + 0.18 * sin(float(frame_index) * 0.34 + float(image_index)))
+		var ghost_color := _color_with_alpha(body_color, alpha * ghost_fade)
+		var ghost_core := _color_with_alpha(core_color, alpha * ghost_fade * 0.9)
+
+		draw_set_transform(ghost_center, 0.0, Vector2(1.0, 0.78))
+		draw_arc(Vector2.ZERO, body_width, 0.0, TAU, 32, ghost_color, 3.0, true)
+		draw_arc(Vector2(0.0, -body_height * 0.52), body_width * 0.42, 0.0, TAU, 24, ghost_core, 2.4, true)
+		draw_line(Vector2(-body_width * 0.52, -body_height * 0.18), Vector2(body_width * 0.52, -body_height * 0.18), ghost_core, 2.0, true)
+		draw_line(Vector2(-body_width * 0.4, body_height * 0.24), Vector2(-body_width * 0.58, body_height * 0.58), ghost_color, 2.2, true)
+		draw_line(Vector2(body_width * 0.4, body_height * 0.24), Vector2(body_width * 0.58, body_height * 0.58), ghost_color, 2.2, true)
+		draw_set_transform(Vector2.ZERO)
+
+	var streak_alpha := alpha * ghost_alpha * 0.52
+	for streak_index: int in range(image_count - 1):
+		var streak_offset := offsets[streak_index] if streak_index < offsets.size() and offsets[streak_index] is Array else [0.0, 0.0]
+		var streak_start := center + _vector2_from_value(streak_offset) + Vector2(0.0, body_height * 0.46)
+		var streak_end := center + _vector2_from_value(streak_offset) + Vector2(0.0, body_height * 0.7)
+		draw_line(streak_start, streak_end, _color_with_alpha(body_color, streak_alpha), 1.6, true)
 
 
 func _draw_stat_change_visual() -> void:

@@ -482,6 +482,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.solar_charge_config = (config.get("solar_charge", {}) as Dictionary).duplicate(true)
 	animation_node.celestial_charge_config = (config.get("celestial_charge", {}) as Dictionary).duplicate(true)
 	animation_node.focus_aura_config = (config.get("focus_aura", {}) as Dictionary).duplicate(true)
+	animation_node.afterimage_config = (config.get("afterimage", {}) as Dictionary).duplicate(true)
 	animation_node.stat_change_config = (config.get("stat_change", {}) as Dictionary).duplicate(true)
 	animation_node.heal_energy_config = (config.get("heal_energy", {}) as Dictionary).duplicate(true)
 	animation_node.dragon_dance_config = (config.get("dragon_dance", {}) as Dictionary).duplicate(true)
@@ -1096,6 +1097,11 @@ func _apply_move_projectile_endpoint_anchors(
 	)
 	animation_node.focus_aura_config = _with_self_effect_anchor(
 		animation_node.focus_aura_config,
+		actor_anchor,
+		animation_node.reverse_battlefield
+	)
+	animation_node.afterimage_config = _with_self_effect_anchor(
+		animation_node.afterimage_config,
 		actor_anchor,
 		animation_node.reverse_battlefield
 	)
