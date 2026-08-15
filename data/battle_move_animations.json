@@ -8024,10 +8024,6 @@
       "category": "status_buff",
       "speed_scale": 1.05,
       "sprite_zoom_multiplier": 0.68,
-      "sprite_position_offset": [
-        0,
-        -64
-      ],
       "show_timing_backgrounds": false,
       "show_timing_foregrounds": false,
       "show_pink_visual": false,
@@ -8070,6 +8066,10 @@
       "category": "physical_contact",
       "speed_scale": 1.0,
       "sprite_zoom_multiplier": 0.58,
+      "sprite_position_offset": [
+        0,
+        -40
+      ],
       "show_timing_backgrounds": false,
       "show_timing_foregrounds": false,
       "show_pink_visual": false,
@@ -8109,6 +8109,10 @@
       "category": "special_projectile",
       "speed_scale": 1.0,
       "sprite_zoom_multiplier": 0.68,
+      "sprite_position_offset": [
+        0,
+        -42
+      ],
       "show_timing_backgrounds": false,
       "show_timing_foregrounds": false,
       "show_pink_visual": false,
@@ -8128,6 +8132,10 @@
       "category": "special_projectile",
       "speed_scale": 1.0,
       "sprite_zoom_multiplier": 0.62,
+      "sprite_position_offset": [
+        0,
+        -48
+      ],
       "show_timing_backgrounds": false,
       "show_timing_foregrounds": false,
       "show_pink_visual": false,
@@ -8326,6 +8334,10 @@
       "category": "projectile",
       "speed_scale": 1.0,
       "sprite_zoom_multiplier": 0.64,
+      "sprite_position_offset": [
+        0,
+        -56
+      ],
       "show_timing_backgrounds": false,
       "show_timing_foregrounds": false,
       "show_pink_visual": false,
