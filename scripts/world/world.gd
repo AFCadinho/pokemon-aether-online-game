@@ -63,6 +63,7 @@ var unflushed_playtime_seconds := 0
 var is_flushing_playtime := false
 var is_saving_player_position := false
 var has_pending_player_position_save := false
+var pending_happiness_walk_steps := 0
 var authorized_teleport_in_progress := false
 var authorized_teleport_locked_overworld := false
 var authorized_teleport_apply_failed_autosave_blocked := false
@@ -106,6 +107,9 @@ func _exit_tree() -> void:
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	add_to_group("world")
+	var step_callback := Callable(self, "_on_player_overworld_steps_completed")
+	if player.has_signal("overworld_steps_completed") and not player.is_connected("overworld_steps_completed", step_callback):
+		player.connect("overworld_steps_completed", step_callback)
 	if not PlayerSave.party_changed.is_connected(_validate_active_flash_source):
 		PlayerSave.party_changed.connect(_validate_active_flash_source)
 	if not FieldMoveService.owned_charms_changed.is_connected(_validate_active_flash_source):
@@ -121,6 +125,10 @@ func _ready() -> void:
 	_normalize_map_depth_layer_z_indices(GameState.current_map)
 	if GameState.gameplay_reset_in_progress:
 		GameState.finish_gameplay_reset()
+
+
+func _on_player_overworld_steps_completed(step_count: int) -> void:
+	pending_happiness_walk_steps += maxi(step_count, 0)
 
 
 func _refresh_fishing_progression() -> void:
@@ -1862,6 +1870,7 @@ func _save_current_player_position(
 			"error": _get_player_position_save_block_reason(allow_gameplay_reset),
 		}
 	var state: Dictionary = _build_current_player_position_state(spawn_marker, use_confirmed_appearance)
+	var happiness_walk_steps_sent: int = int(state.get("walkSteps", 0))
 	if _is_player_position_save_blocked_by_teleport(allow_gameplay_reset):
 		is_saving_player_position = false
 		return {
@@ -1870,6 +1879,7 @@ func _save_current_player_position(
 		}
 	var result: Dictionary = await PlayerGameStateService.save_player_position(state)
 	if bool(result.get("success", false)):
+		pending_happiness_walk_steps = maxi(pending_happiness_walk_steps - happiness_walk_steps_sent, 0)
 		var response_state: Dictionary = _dictionary_from_value(result.get("state", {}))
 		current_teleport_revision = int(response_state.get("teleportRevision", current_teleport_revision))
 		last_saved_position_signature = signature
@@ -1879,6 +1889,10 @@ func _save_current_player_position(
 			var appearance_value: Variant = state.get("appearance", {})
 			if appearance_value is Dictionary:
 				confirmed_appearance_state = (appearance_value as Dictionary).duplicate(true)
+		if bool(result.get("happinessUpdated", false)):
+			var updated_party: Array = result.get("party", []) as Array
+			if not updated_party.is_empty():
+				PlayerSave.replace_party_from_state(updated_party)
 	else:
 		if str(result.get("error", "")) == "FORCED_TELEPORT_PENDING":
 			_mark_authorized_teleport_apply_failed()
@@ -1921,6 +1935,7 @@ func _build_current_player_position_state(spawn_marker: String, use_confirmed_ap
 		"activityState": "battle" if is_in_battle else "idle",
 		"activityContext": _get_current_activity_context(),
 		"teleportRevision": current_teleport_revision,
+		"walkSteps": mini(pending_happiness_walk_steps, 512),
 	}
 	if player.has_method("get_network_movement_state"):
 		state["movement"] = player.call("get_network_movement_state")

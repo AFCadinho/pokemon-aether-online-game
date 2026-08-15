@@ -552,8 +552,11 @@ func save_current_party_deferred() -> void:
 		push_warning("PlayerPartyStateService: party save failed: %s" % str(result.get("error", "Unknown error")))
 
 
-func save_current_battle_party_state_deferred() -> void:
-	var result: Dictionary = await save_battle_state(PlayerSave.to_battle_state())
+func save_current_battle_party_state_deferred(context: Dictionary = {}) -> void:
+	var battle_payload: Dictionary = PlayerSave.to_battle_state()
+	for key: Variant in context:
+		battle_payload[key] = context[key]
+	var result: Dictionary = await save_battle_state(battle_payload)
 	if not bool(result.get("success", false)):
 		push_warning("PlayerPartyStateService: battle party save failed: %s" % str(result.get("error", "Unknown error")))
 		return

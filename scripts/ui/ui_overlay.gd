@@ -347,6 +347,14 @@ const EV_ITEM_EFFECTS := {
 	"clever-wing": {"stat": "spd", "potency": 1},
 	"swift-wing": {"stat": "spe", "potency": 1},
 }
+const EV_REDUCING_BERRY_STATS := {
+	"pomeg-berry": "hp",
+	"kelpsy-berry": "atk",
+	"qualot-berry": "def",
+	"hondew-berry": "spa",
+	"grepa-berry": "spd",
+	"tamato-berry": "spe",
+}
 const MOVE_TYPE_INDEX_PATH := "res://data/move_type_index.json"
 const MOVE_SUMMARY_INDEX_PATH := "res://data/move_summary_index.json"
 const ABILITY_SUMMARY_INDEX_PATH := "res://data/ability_summary_index.json"
@@ -17691,6 +17699,8 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 		return BAG_ITEM_EFFECT_PREVIEW.preview(pokemon, gameplay, requested_quantity)
 	if _is_ev_item_id(item_id):
 		return _bag_ev_item_use_preview_for_pokemon(pokemon, item_id, requested_quantity)
+	if _is_ev_reducing_berry_id(item_id):
+		return _bag_ev_reducing_berry_preview_for_pokemon(pokemon, item_id, requested_quantity)
 	if not _is_exp_item_id(item_id):
 		return {}
 
@@ -17807,6 +17817,27 @@ func _bag_ev_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, req
 			"allocated": allocated_total,
 			"total_max": POKEMON_EV_TOTAL_LIMIT,
 		}),
+	}
+
+
+func _bag_ev_reducing_berry_preview_for_pokemon(pokemon: Pokemon, item_id: String, requested_quantity: int) -> Dictionary:
+	var stat_id := str(EV_REDUCING_BERRY_STATS.get(item_id, ""))
+	var current_value := clampi(int(pokemon.evs.get(stat_id, 0)), 0, POKEMON_EV_STAT_LIMIT)
+	var stat_label := _summary_stat_label(stat_id)
+	if current_value <= 0:
+		return {
+			"canApply": false,
+			"label": "%s EV is already 0" % stat_label,
+			"tooltip": "%s has no allocated %s EVs to reduce." % [_pokemon_display_name(pokemon), stat_label],
+		}
+	var quantity := max(requested_quantity, 1)
+	var used_quantity := min(quantity, int(ceil(float(current_value) / 10.0)))
+	var new_value := maxi(current_value - used_quantity * 10, 0)
+	var berry_count_text := "1 berry" if used_quantity == 1 else "%s berries" % used_quantity
+	return {
+		"canApply": true,
+		"label": "%s EV: %s -> %s" % [stat_label, current_value, new_value],
+		"tooltip": "Uses %s and raises happiness." % berry_count_text,
 	}
 
 func _bag_item_can_affect_pokemon(pokemon: Pokemon, item_id: String) -> bool:
@@ -18058,8 +18089,11 @@ func _is_exp_item_id(item_id: String) -> bool:
 func _is_ev_item_id(item_id: String) -> bool:
 	return EV_ITEM_EFFECTS.has(_normalize_item_id(item_id))
 
+func _is_ev_reducing_berry_id(item_id: String) -> bool:
+	return EV_REDUCING_BERRY_STATS.has(_normalize_item_id(item_id))
+
 func _is_pokemon_usable_item_id(item_id: String) -> bool:
-	return _bag_machine_move_id(item_id) != "" or _is_exp_item_id(item_id) or _is_ev_item_id(item_id) or BAG_ITEM_EFFECT_PREVIEW.supports(_bag_gameplay_definition_for_item_id(item_id))
+	return _bag_machine_move_id(item_id) != "" or _is_exp_item_id(item_id) or _is_ev_item_id(item_id) or _is_ev_reducing_berry_id(item_id) or BAG_ITEM_EFFECT_PREVIEW.supports(_bag_gameplay_definition_for_item_id(item_id))
 
 func _bag_machine_move_id(item_id: String) -> String:
 	var normalized_id := _normalize_item_id(item_id)
