@@ -89,8 +89,8 @@ func _run() -> void:
 		errors.call("message", {
 			"detail": {
 				"code": "trade_pokemon_level_cap_exceeded",
-				"pokemonLevel": 20,
-				"tradeLevelCap": 5,
+				"pokemonLevel": 20.0,
+				"tradeLevelCap": 5.0,
 			}
 		}) == "Deze Pokémon is level 20 en komt boven de trade-levellimiet van de ontvanger (5).",
 		"trade level cap errors include the relevant levels"
