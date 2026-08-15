@@ -408,7 +408,7 @@ shape = SubResource("RectangleShape2D_viridian")
 
 [node name="RouteTransitionHint" parent="Exits/ToViridianCity" unique_id=694042665 instance=ExtResource("4_route_hint")]
 rotation = 1.5708
-height = 64.0
+tile_footprint = Vector2i(4, 2)
 
 [node name="ToVictoryRoadPost" type="Area2D" parent="Exits" unique_id=287530800]
 position = Vector2(336, 304)

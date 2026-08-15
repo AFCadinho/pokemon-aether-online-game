@@ -5,7 +5,4 @@
 [node name="DoorTransitionHint" type="Node2D"]
 z_index = 1200
 script = ExtResource("1_door_hint")
-particle_count = 14
-cycle_seconds = 2.0
-particle_radius = 1.7
-tint = Color(0.88, 0.68, 1, 0.68)
+tile_footprint = Vector2i(1, 1)

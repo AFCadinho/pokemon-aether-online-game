@@ -621,8 +621,7 @@ shape = SubResource("RectangleShape2D_route1")
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute1" unique_id=1012273570 instance=ExtResource("4_340ux")]
 position = Vector2(48, 16)
-width = 196.0
-height = 64.0
+tile_footprint = Vector2i(6, 2)
 
 [node name="ToRoute2" type="Area2D" parent="Exits" unique_id=56275373]
 position = Vector2(864, 32)
@@ -637,8 +636,7 @@ shape = SubResource("RectangleShape2D_route1")
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute2" unique_id=841526242 instance=ExtResource("4_340ux")]
 position = Vector2(48, -16)
-width = 196.0
-height = 64.0
+tile_footprint = Vector2i(6, 2)
 
 [node name="ToRoute22" type="Area2D" parent="Exits" unique_id=1877206293]
 position = Vector2(16, 1232)
@@ -652,8 +650,7 @@ shape = SubResource("RectangleShape2D_route22")
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute22" unique_id=386408081 instance=ExtResource("4_340ux")]
 rotation = 1.5708
-width = 192.0
-height = 64.0
+tile_footprint = Vector2i(6, 2)
 
 [node name="ToPokecenter" type="Area2D" parent="Exits" unique_id=815958159]
 position = Vector2(1136, 1456)

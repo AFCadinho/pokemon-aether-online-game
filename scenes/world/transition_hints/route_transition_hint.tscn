@@ -5,10 +5,4 @@
 [node name="RouteTransitionHint" type="Node2D"]
 z_index = 1200
 script = ExtResource("1_route_hint")
-width = 128.0
-height = 56.0
-cycle_seconds = 2.8
-band_color = Color(0.78, 1, 0.56, 0.3)
-edge_color = Color(0.96, 1, 0.78, 0.72)
-wisp_color = Color(1, 0.96, 0.54, 0.58)
-wisp_count = 14
+tile_footprint = Vector2i(4, 2)

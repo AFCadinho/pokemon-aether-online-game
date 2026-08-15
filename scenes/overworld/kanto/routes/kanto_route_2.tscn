@@ -331,7 +331,7 @@ shape = SubResource("RectangleShape2D_gac6d")
 
 [node name="RouteTransitionHint" parent="Exits/ToViridianCity" unique_id=868490827 instance=ExtResource("7_f8n3h")]
 position = Vector2(-16, 0)
-width = 194.0
+tile_footprint = Vector2i(6, 2)
 
 [node name="ToPewterCity" type="Area2D" parent="Exits" unique_id=1328365275]
 position = Vector2(1488, 16)
@@ -344,7 +344,7 @@ shape = SubResource("RectangleShape2D_gac6d")
 
 [node name="RouteTransitionHint" parent="Exits/ToPewterCity" unique_id=968794573 instance=ExtResource("7_f8n3h")]
 position = Vector2(-16, 0)
-width = 194.0
+tile_footprint = Vector2i(6, 2)
 
 [node name="ToViridianForestNorth" type="Area2D" parent="Exits" unique_id=418307891]
 position = Vector2(368, 592)
