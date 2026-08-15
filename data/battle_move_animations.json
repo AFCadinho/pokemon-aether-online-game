@@ -7616,6 +7616,45 @@
       "sound_paths": {
         "PRSFX- Haze.wav": "res://assets/battles/animations/haze/PRSFX- Haze.wav"
       }
+    },
+  "hiddenpower": {
+    "template": "imported_sheet",
+    "category": "special_projectile",
+    "speed_scale": 1.0,
+    "show_timing_backgrounds": false,
+    "show_timing_foregrounds": false,
+    "show_pink_visual": false,
+    "show_sheet_sprites": true,
+    "overlay_fill_enabled": false,
+    "overlay_peak_alpha": 0.0,
+    "sprite_zoom_multiplier": 1.0,
+    "data_path": "res://assets/battles/animations/hiddenpower/hiddenpower.json",
+      "sheet_path": "res://assets/battles/animations/hiddenpower/PRAS- Hidden Power.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Hidden Power1.wav": "res://assets/battles/animations/hiddenpower/PRSFX- Hidden Power1.wav",
+        "PRSFX- Hidden Power2.wav": "res://assets/battles/animations/hiddenpower/PRSFX- Hidden Power2.wav"
+      }
+    },
+  "psychic": {
+    "template": "imported_sheet",
+    "category": "special_projectile",
+    "speed_scale": 1.0,
+    "show_timing_backgrounds": true,
+    "timing_background_fill_canvas": true,
+    "show_timing_foregrounds": false,
+    "show_pink_visual": false,
+    "show_sheet_sprites": false,
+    "overlay_fill_enabled": false,
+    "overlay_peak_alpha": 0.0,
+    "data_path": "res://assets/battles/animations/psychic/psychic.json",
+      "sheet_path": "res://assets/battles/animations/psychic/PRAS- Psycho Boost.png",
+      "background_path": "res://assets/battles/animations/psychic/PRAS- Psychic BG.png",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Psychic.wav": "res://assets/battles/animations/psychic/PRSFX- Psychic.wav"
+      }
     }
   }
 }
