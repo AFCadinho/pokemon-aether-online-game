@@ -74,6 +74,9 @@ const QUEST_LOCALIZATION_KEYS: Array[String] = [
 	"story.kanto.challenge_pewter_gym.title",
 	"story.kanto.challenge_pewter_gym.summary",
 	"story.kanto.challenge_pewter_gym.challenge_brock",
+	"story.kanto.travel_through_mt_moon.title",
+	"story.kanto.travel_through_mt_moon.summary",
+	"story.kanto.travel_through_mt_moon.cross_mt_moon",
 ]
 
 var failed := false
@@ -97,6 +100,16 @@ func _run() -> void:
 		str(english_catalog.get("story.kanto.trainer_school.meet_dadinho", ""))
 		== "Go to the Trainer School in Viridian City and see if you can learn something new.",
 		"Trainer School objective invites exploration without revealing Dadinho"
+	)
+	_expect(
+		str(english_catalog.get("story.kanto.travel_through_mt_moon.title", ""))
+		== "Travel through Mt. Moon",
+		"post-Brock main quest is framed around Mt. Moon"
+	)
+	_expect(
+		str(english_catalog.get("story.kanto.travel_through_mt_moon.cross_mt_moon", ""))
+		== "Travel through Mt. Moon.",
+		"post-Brock objective does not skip ahead to Cerulean City"
 	)
 	story_service.apply_story({
 		"revision": 1,
