@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://b6sun8ubp3uia" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="10_pprsw"]
 [ext_resource type="SpriteFrames" uid="uid://dlaxxerx14l3u" path="res://assets/npcs/classes/firebreather_frames.tres" id="11_firebreather"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="12_pokecenter_hint"]
+[ext_resource type="PackedScene" uid="uid://csmsqlujka4ma" path="res://scenes/world/interactables/locked_door_interactable.tscn" id="13_mt_moon_lock"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nuuyr"]
 texture = ExtResource("2_jmvwp")
@@ -348,6 +349,11 @@ npc_sprite_frames = ExtResource("11_firebreather")
 position = Vector2(2512, 976)
 sign_id = "kanto_route_3_mt_moon_sign"
 sign_type = "road"
+
+[node name="MtMoonCaveLock" parent="Entities/Interactables" instance=ExtResource("13_mt_moon_lock")]
+position = Vector2(2640, 688)
+display_name = "Mt. Moon"
+fallback_locked_dialogue_lines = Array[String](["Mt. Moon is closed for now.", "The cave will become accessible in a future update."])
 
 [node name="Spawns" type="Node2D" parent="." unique_id=120000001]
 
