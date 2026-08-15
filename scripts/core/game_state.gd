@@ -1,5 +1,7 @@
 extends Node
 
+signal pokemon_level_caps_changed
+
 var player_position: Vector2 = Vector2.ZERO
 var has_player_position := false
 var player_direction: Vector2 = Vector2.DOWN
@@ -38,11 +40,27 @@ var gameplay_reset_in_progress := false
 func apply_pokemon_level_cap_state(state: Dictionary) -> void:
 	if state.is_empty():
 		return
+	var previous_state := [
+		pokemon_level_cap,
+		pokemon_trade_level_cap,
+		pokemon_level_cap_region,
+		pokemon_level_cap_stage,
+		pokemon_level_cap_badge_count,
+	]
 	pokemon_level_cap = clampi(int(state.get("levelCap", pokemon_level_cap)), 1, 100)
 	pokemon_trade_level_cap = clampi(int(state.get("tradeLevelCap", pokemon_trade_level_cap)), 1, 100)
 	pokemon_level_cap_region = str(state.get("region", pokemon_level_cap_region))
 	pokemon_level_cap_stage = str(state.get("stageId", pokemon_level_cap_stage))
 	pokemon_level_cap_badge_count = max(int(state.get("badgeCount", pokemon_level_cap_badge_count)), 0)
+	var current_state := [
+		pokemon_level_cap,
+		pokemon_trade_level_cap,
+		pokemon_level_cap_region,
+		pokemon_level_cap_stage,
+		pokemon_level_cap_badge_count,
+	]
+	if current_state != previous_state:
+		pokemon_level_caps_changed.emit()
 
 func begin_gameplay_reset() -> void:
 	gameplay_reset_in_progress = true

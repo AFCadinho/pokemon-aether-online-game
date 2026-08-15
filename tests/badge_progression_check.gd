@@ -29,6 +29,7 @@ func _init() -> void:
 	_check(ResourceLoader.exists(POPUP_SCENE_PATH), "developer badge popup scene exists")
 	_check_contains(service, 'BADGES_ENDPOINT := "/game/progression/gym-badges"', "client reads server badge progression")
 	_check_contains(service, 'DEV_BADGES_ENDPOINT := "/game/dev/progression/gym-badges"', "developer controls use the protected server endpoint")
+	_check_contains(service, "await PlayerPartyStateService.load_party()", "developer badge changes refresh authoritative level caps")
 	_check_contains(player_data, "func apply_gym_badge_state", "PlayerSave can apply the canonical badge projection")
 	_check_contains(player_data, "func has_gym_badge", "PlayerSave exposes badge ownership")
 	_check_contains(profile_service, '"badges": badges', "profile service preserves badge progress")
