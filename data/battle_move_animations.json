@@ -8473,6 +8473,32 @@
         0,
         -20
       ],
+      "sheet_frame_offsets": [
+        {
+          "start_frame": 0,
+          "end_frame": 3,
+          "offset": [
+            0,
+            -64
+          ]
+        },
+        {
+          "start_frame": 4,
+          "end_frame": 7,
+          "offset": [
+            0,
+            -40
+          ]
+        },
+        {
+          "start_frame": 8,
+          "end_frame": 9,
+          "offset": [
+            0,
+            -20
+          ]
+        }
+      ],
       "show_timing_backgrounds": false,
       "show_timing_foregrounds": false,
       "show_pink_visual": false,
@@ -8512,6 +8538,32 @@
       "category": "projectile",
       "speed_scale": 1.0,
       "sprite_zoom_multiplier": 0.58,
+      "sheet_frame_offsets": [
+        {
+          "start_frame": 0,
+          "end_frame": 2,
+          "offset": [
+            0,
+            -64
+          ]
+        },
+        {
+          "start_frame": 3,
+          "end_frame": 5,
+          "offset": [
+            0,
+            -40
+          ]
+        },
+        {
+          "start_frame": 6,
+          "end_frame": 8,
+          "offset": [
+            0,
+            -20
+          ]
+        }
+      ],
       "show_timing_backgrounds": false,
       "show_timing_foregrounds": false,
       "show_pink_visual": false,
@@ -8632,6 +8684,32 @@
       "category": "physical_contact",
       "speed_scale": 1.0,
       "sprite_zoom_multiplier": 0.6,
+      "sheet_frame_offsets": [
+        {
+          "start_frame": 0,
+          "end_frame": 3,
+          "offset": [
+            0,
+            -64
+          ]
+        },
+        {
+          "start_frame": 4,
+          "end_frame": 7,
+          "offset": [
+            0,
+            -40
+          ]
+        },
+        {
+          "start_frame": 8,
+          "end_frame": 10,
+          "offset": [
+            0,
+            -20
+          ]
+        }
+      ],
       "show_timing_backgrounds": false,
       "show_timing_foregrounds": false,
       "show_pink_visual": false,
