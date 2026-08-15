@@ -38,8 +38,8 @@ func _check_friendship_alias_and_bounds() -> void:
 func _check_default_happiness() -> void:
 	var pokemon = PokemonFactoryScript.create_pokemon_from_backend_payload({"species": "Eevee"})
 
-	_check_equal(pokemon.happiness, 255, "legacy payload default happiness")
-	_check_equal(pokemon.to_battle_dict().get("happiness", -1), 255, "default battle happiness")
+	_check_equal(pokemon.happiness, 50, "modern default happiness")
+	_check_equal(pokemon.to_battle_dict().get("happiness", -1), 50, "default battle happiness")
 
 
 func _check_equal(actual: Variant, expected: Variant, label: String) -> void:
