@@ -15109,7 +15109,7 @@ func _setup_pokemon_summary_ev_allocate_popup() -> void:
 	pokemon_summary_ev_allocate_popup.visible = false
 	pokemon_summary_ev_allocate_popup.custom_minimum_size = Vector2(300, 210)
 	pokemon_summary_ev_allocate_popup.mouse_filter = Control.MOUSE_FILTER_STOP
-	pokemon_summary_ev_allocate_popup.z_index = UI_BASE_Z_INDEX + 2
+	pokemon_summary_ev_allocate_popup.z_index = UI_MODAL_Z_INDEX + 1
 	pokemon_summary_ev_allocate_popup.anchor_left = 0.5
 	pokemon_summary_ev_allocate_popup.anchor_top = 0.5
 	pokemon_summary_ev_allocate_popup.anchor_right = 0.5
@@ -19892,6 +19892,9 @@ func _on_summary_allocated_ev_pressed(stat_id: String, label_text: String, card_
 	pokemon_summary_ev_allocate_input.value = current_value
 	pokemon_summary_ev_allocate_popup.visible = true
 	_activate_ui_panel(pokemon_summary_ev_allocate_popup)
+	# Summary cards use the modal layer, while regular active windows use the
+	# lower window layer. Keep this child dialog above its originating card.
+	pokemon_summary_ev_allocate_popup.z_index = UI_MODAL_Z_INDEX + 1
 	_store_active_pokemon_summary_card_context()
 	_refresh_summary_ev_allocate_status()
 
