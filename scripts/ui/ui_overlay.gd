@@ -17700,10 +17700,15 @@ func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> C
 	var requested_quantity := 1
 	if bag_item_use_quantity_spinbox != null:
 		requested_quantity = clampi(int(bag_item_use_quantity_spinbox.value), 1, int(bag_item_use_quantity_spinbox.max_value))
-	var preview: Dictionary = {}
+	var preview: Dictionary = _bag_item_use_preview_for_pokemon(pokemon, item_id, requested_quantity)
+	var can_apply := bool(preview.get("canApply", not preview.is_empty()))
+	if pokemon.owned_pokemon_id <= 0:
+		can_apply = false
 	var preview_text := ""
-	if slot_index == bag_item_use_selected_slot:
-		preview = _bag_item_use_preview_for_pokemon(pokemon, item_id, requested_quantity)
+	if not can_apply:
+		var reason := str(preview.get("label", LocalizationManager.text("ui.bag.use.unavailable")))
+		preview_text = LocalizationManager.text("ui.bag.use.cannot_use_reason", {"reason": reason})
+	elif slot_index == bag_item_use_selected_slot:
 		preview_text = str(preview.get("label", ""))
 	var row := HBoxContainer.new()
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -17718,6 +17723,8 @@ func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> C
 	icon.texture = PokemonAssets.load_home_sprite(pokemon.species, pokemon.shiny)
 	if icon.texture == null:
 		icon.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
+	if not can_apply:
+		icon.modulate = Color(1.0, 1.0, 1.0, 0.45)
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(icon)
 
@@ -17734,22 +17741,19 @@ func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> C
 	})
 	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	name_label.add_theme_font_size_override("font_size", 15)
-	name_label.add_theme_color_override("font_color", UI_TEXT)
+	name_label.add_theme_color_override("font_color", UI_TEXT if can_apply else UI_MUTED_TEXT)
 	details.add_child(name_label)
 	if preview_text != "":
 		var preview_label := Label.new()
 		preview_label.text = preview_text
 		preview_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		preview_label.add_theme_font_size_override("font_size", 11)
-		preview_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		preview_label.add_theme_color_override("font_color", UI_MUTED_TEXT if can_apply else UI_DANGER)
 		details.add_child(preview_label)
 	button.tooltip_text = str(preview.get("tooltip", button.text))
-	button.disabled = bag_item_use_in_progress or pokemon.owned_pokemon_id <= 0 or not _bag_item_can_affect_pokemon(pokemon, item_id)
+	button.disabled = bag_item_use_in_progress or not can_apply
 	if pokemon.owned_pokemon_id <= 0:
 		button.tooltip_text = LocalizationManager.text("ui.bag.use.pokemon_unavailable", {"pokemon": _pokemon_display_name(pokemon)})
-	elif button.disabled and not bag_item_use_in_progress:
-		var disabled_preview := _bag_item_use_preview_for_pokemon(pokemon, item_id, requested_quantity)
-		button.tooltip_text = str(disabled_preview.get("tooltip", button.tooltip_text))
 	button.pressed.connect(_on_bag_item_use_pokemon_selected.bind(slot_index))
 	_apply_button_style(button, "primary" if slot_index == bag_item_use_selected_slot else "default")
 	return button
@@ -17796,6 +17800,12 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 		else _pokemon_exp_for_level(growth_rate, POKEMON_MAX_LEVEL)
 	)
 	var remaining_exp: int = max(max_exp - current_exp, 0)
+	if current_level >= POKEMON_MAX_LEVEL:
+		return {
+			"label": LocalizationManager.text("ui.bag.use.max_level"),
+			"tooltip": LocalizationManager.text("ui.bag.use.already_level_100", {"pokemon": _pokemon_display_name(pokemon)}),
+			"canApply": false,
+		}
 	if current_level > player_level_cap or (item_id == "rare-candy" and current_level >= player_level_cap) or remaining_exp <= 0:
 		return {
 			"label": LocalizationManager.text("ui.bag.use.level_cap", {"levelCap": player_level_cap}),
