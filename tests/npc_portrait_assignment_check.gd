@@ -18,6 +18,7 @@ const REQUIRED_NPC_IDS: Array[String] = [
 	"kanto_route_1_dadinho",
 	"kanto_rivals_house_daisy",
 	"kanto_route_1_north_guard",
+	"kanto_route_3_pokemon_center_magikarp_salesman",
 	"kanto_viridian_city_north_route_guard",
 	"kanto_viridian_city_pokemon_center_clerk",
 	"kanto_viridian_city_pokemon_center_clerk_2",
@@ -67,6 +68,15 @@ func _init() -> void:
 		catalog.resolve_portrait_id("", "kanto_route_1_north_guard", ""),
 		"showdown_policeman_gen7",
 		"Route 1 route guard resolves the shared police portrait"
+	)
+	_check_equal(
+		catalog.resolve_portrait_id(
+			"",
+			"kanto_route_3_pokemon_center_magikarp_salesman",
+			""
+		),
+		"showdown_pokefan_gen6",
+		"Magikarp Salesman uses the male Poke Fan portrait"
 	)
 	_check_equal(
 		catalog.resolve_portrait_id("", "kanto_viridian_city_rocket_grunt_rook", ""),
