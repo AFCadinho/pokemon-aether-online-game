@@ -188,6 +188,9 @@ func apply_wallet_result(result: Dictionary) -> void:
 	var badges: Dictionary = _dictionary_from_value(result.get("badges", {}))
 	if not badges.is_empty():
 		PlayerSave.apply_gym_badge_state(badges)
+	var level_cap: Dictionary = _dictionary_from_value(result.get("pokemonLevelCap", {}))
+	if not level_cap.is_empty():
+		GameState.apply_pokemon_level_cap_state(level_cap)
 
 
 func _wallet_result_from_response(response: Dictionary) -> Dictionary:
@@ -206,12 +209,14 @@ func _reward_claim_result_from_response(response: Dictionary) -> Dictionary:
 		return response
 
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	var party: Dictionary = _dictionary_from_value(body.get("party", {}))
 	return {
 		"success": true,
 		"wallet": _dictionary_from_value(body.get("wallet", {})),
 		"reward": _dictionary_from_value(body.get("reward", {})),
 		"inventory": _dictionary_from_value(body.get("inventory", {})),
-		"party": _array_from_value(_dictionary_from_value(body.get("party", {})).get("party", [])),
+		"party": _array_from_value(party.get("party", [])),
+		"pokemonLevelCap": _dictionary_from_value(party.get("pokemonLevelCap", {})),
 		"badges": _dictionary_from_value(body.get("badges", {})),
 		"gymBadgeAward": _dictionary_from_value(body.get("gymBadgeAward", {})),
 		"trainerProgress": _dictionary_from_value(body.get("trainerProgress", {})),
