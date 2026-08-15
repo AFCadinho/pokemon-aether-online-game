@@ -39,25 +39,6 @@ func _draw() -> void:
 		_rebuild_wisps()
 
 	var half_size := size * 0.5
-	var footprint_rect := Rect2(-half_size, size)
-	var dark_backing := Color(0.015, 0.075, 0.13, 0.28)
-	draw_rect(footprint_rect, dark_backing, true)
-	draw_rect(
-		footprint_rect.grow(-2.0),
-		Color(band_color.r, band_color.g, band_color.b, band_color.a * 0.34),
-		true
-	)
-
-	for edge_index in range(3):
-		var inset := 2.0 + float(edge_index) * 2.0
-		var alpha := edge_color.a * (1.0 - float(edge_index) * 0.26)
-		draw_rect(
-			footprint_rect.grow(-inset),
-			Color(edge_color.r, edge_color.g, edge_color.b, alpha),
-			false,
-			2.2 - float(edge_index) * 0.45
-		)
-
 	var safe_cycle := maxf(cycle_seconds, 0.01)
 	var lane_count := clampi(maxi(1, tile_footprint.x), 1, 8)
 	for lane_index in range(lane_count):

@@ -40,13 +40,25 @@ func _draw() -> void:
 
 	var size := get_footprint_size()
 	var half_size := size * 0.5
-	var footprint_rect := Rect2(-half_size, size)
-	draw_rect(footprint_rect, Color(0.055, 0.025, 0.11, 0.34), true)
-	draw_rect(footprint_rect.grow(-2.0), Color(tint.r, tint.g, tint.b, 0.22), true)
-	draw_rect(footprint_rect.grow(-2.0), Color(tint.r, tint.g, tint.b, tint.a), false, 2.2)
-	draw_rect(footprint_rect.grow(-5.0), Color(0.88, 0.95, 1.0, 0.46), false, 1.0)
-
 	var safe_cycle := maxf(cycle_seconds, 0.01)
+	var orbit_phase := (_elapsed / safe_cycle) * TAU
+	var glow_radius := minf(size.x, size.y) * 0.34
+	draw_circle(Vector2.ZERO, glow_radius * 1.25, Color(tint.r, tint.g, tint.b, 0.07))
+	draw_circle(Vector2.ZERO, glow_radius * 0.72, Color(tint.r, tint.g, tint.b, 0.09))
+	for arc_index in range(3):
+		var arc_start := orbit_phase * (1.0 if arc_index % 2 == 0 else -0.8) + float(arc_index) * TAU / 3.0
+		var arc_radius := glow_radius * (0.62 + float(arc_index) * 0.18)
+		draw_arc(
+			Vector2.ZERO,
+			arc_radius,
+			arc_start,
+			arc_start + PI * 0.72,
+			20,
+			Color(tint.r, tint.g, tint.b, 0.36 + float(arc_index) * 0.12),
+			1.4 + float(arc_index) * 0.35,
+			true
+		)
+
 	for chevron_index in range(3):
 		var progress := fmod((_elapsed / safe_cycle) + float(chevron_index) / 3.0, 1.0)
 		var y := lerpf(half_size.y - 6.0, -half_size.y + 6.0, progress)
