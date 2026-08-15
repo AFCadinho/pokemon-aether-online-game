@@ -902,6 +902,8 @@ var trainer_card_aether_gems_label: Label
 var trainer_card_aetherite_label: Label
 var trainer_card_battle_points_label: Label
 var trainer_card_playtime_label: Label
+var trainer_card_level_cap_label: Label
+var trainer_card_trade_level_cap_label: Label
 var trainer_card_name_label: Label
 var trainer_card_body_buttons: Dictionary = {}
 var trainer_card_part_buttons: Dictionary = {}
@@ -11418,6 +11420,7 @@ func _refresh_player_status_card() -> void:
 		trainer_card_battle_points_label.text = _format_money(PlayerSave.battle_points)
 	if trainer_card_playtime_label != null:
 		trainer_card_playtime_label.text = _format_playtime(PlayerSave.playtime_seconds)
+	_refresh_trainer_card_caps()
 
 func _make_trainer_card_outer_style() -> StyleBoxFlat:
 	var style := _make_panel_style(UI_SURFACE_BASE, UI_BORDER_SUBTLE, 14, 1)
@@ -11500,6 +11503,7 @@ func _refresh_trainer_card_localized_ui() -> void:
 			{"id": _get_trainer_id_text()}
 		)
 	_refresh_trainer_card_tab_titles()
+	_refresh_trainer_card_caps()
 	_populate_trainer_card_badge_option()
 	_refresh_trainer_card_gym_badges()
 	_refresh_trainer_card_body_buttons()
@@ -11964,7 +11968,13 @@ func _create_trainer_card_stats_tab() -> Control:
 	layout.add_child(top_row)
 
 	top_row.add_child(_create_trainer_card_avatar_panel())
-	top_row.add_child(_create_trainer_card_identity_panel())
+	var profile_stack := VBoxContainer.new()
+	profile_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	profile_stack.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	profile_stack.add_theme_constant_override("separation", 8)
+	profile_stack.add_child(_create_trainer_card_identity_panel())
+	profile_stack.add_child(_create_trainer_card_caps_panel())
+	top_row.add_child(profile_stack)
 
 	var stats_row := HBoxContainer.new()
 	stats_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -12356,6 +12366,78 @@ func _create_trainer_card_identity_panel() -> Control:
 	rows.add_child(_create_trainer_card_stat_row("ui.trainer_card.field.guild", _get_trainer_stat_text("guild", "-"), 104, 15, UI_TEXT))
 	rows.add_child(_create_trainer_card_badge_row())
 	return panel
+
+func _create_trainer_card_caps_panel() -> Control:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_trainer_card_section_style())
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_top", 7)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_bottom", 7)
+	panel.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 4)
+	margin.add_child(layout)
+
+	var heading := Label.new()
+	_set_localized_control_property(heading, "text", "ui.trainer_card.caps.title")
+	heading.add_theme_font_size_override("font_size", 10)
+	heading.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
+	layout.add_child(heading)
+
+	var cap_row := HBoxContainer.new()
+	cap_row.add_theme_constant_override("separation", 8)
+	layout.add_child(cap_row)
+	trainer_card_level_cap_label = _create_trainer_card_cap_value(
+		cap_row,
+		"ui.trainer_card.caps.level",
+		GameState.pokemon_level_cap
+	)
+	trainer_card_trade_level_cap_label = _create_trainer_card_cap_value(
+		cap_row,
+		"ui.trainer_card.caps.trade",
+		GameState.pokemon_trade_level_cap
+	)
+	return panel
+
+func _create_trainer_card_cap_value(parent: HBoxContainer, label_key: String, value: int) -> Label:
+	var card := PanelContainer.new()
+	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	card.add_theme_stylebox_override("panel", _make_trainer_card_inset_style())
+	parent.add_child(card)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 9)
+	margin.add_theme_constant_override("margin_top", 3)
+	margin.add_theme_constant_override("margin_right", 9)
+	margin.add_theme_constant_override("margin_bottom", 3)
+	card.add_child(margin)
+
+	var row := HBoxContainer.new()
+	margin.add_child(row)
+	var label := Label.new()
+	_set_localized_control_property(label, "text", label_key)
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.add_theme_font_size_override("font_size", 12)
+	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	row.add_child(label)
+	var value_label := Label.new()
+	value_label.text = str(value)
+	value_label.add_theme_font_size_override("font_size", 17)
+	value_label.add_theme_color_override("font_color", TRAINER_CARD_CYAN)
+	row.add_child(value_label)
+	return value_label
+
+func _refresh_trainer_card_caps() -> void:
+	if trainer_card_level_cap_label != null:
+		trainer_card_level_cap_label.text = str(GameState.pokemon_level_cap)
+	if trainer_card_trade_level_cap_label != null:
+		trainer_card_trade_level_cap_label.text = str(GameState.pokemon_trade_level_cap)
 
 func _create_trainer_card_badge_row() -> Control:
 	var row := HBoxContainer.new()
@@ -17706,24 +17788,21 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 
 	var player_level_cap: int = clampi(GameState.pokemon_level_cap, 1, POKEMON_MAX_LEVEL)
 	var current_level: int = clampi(max(pokemon.level, 1), 1, POKEMON_MAX_LEVEL)
-	if current_level >= player_level_cap:
+	var growth_rate := _normalize_exp_growth_rate(pokemon.growth_rate)
+	var current_exp := _pokemon_preview_current_experience(pokemon, growth_rate)
+	var max_exp := (
+		_pokemon_exp_for_level(growth_rate, player_level_cap + 1) - 1
+		if player_level_cap < POKEMON_MAX_LEVEL
+		else _pokemon_exp_for_level(growth_rate, POKEMON_MAX_LEVEL)
+	)
+	var remaining_exp: int = max(max_exp - current_exp, 0)
+	if current_level > player_level_cap or (item_id == "rare-candy" and current_level >= player_level_cap) or remaining_exp <= 0:
 		return {
 			"label": LocalizationManager.text("ui.bag.use.level_cap", {"levelCap": player_level_cap}),
 			"tooltip": LocalizationManager.text("ui.bag.use.current_level_cap", {
 				"pokemon": _pokemon_display_name(pokemon),
 				"levelCap": player_level_cap,
 			}),
-			"canApply": false,
-		}
-
-	var growth_rate := _normalize_exp_growth_rate(pokemon.growth_rate)
-	var current_exp := _pokemon_preview_current_experience(pokemon, growth_rate)
-	var max_exp := _pokemon_exp_for_level(growth_rate, player_level_cap)
-	var remaining_exp: int = max(max_exp - current_exp, 0)
-	if remaining_exp <= 0:
-		return {
-			"label": LocalizationManager.text("ui.bag.use.max_level"),
-			"tooltip": LocalizationManager.text("ui.bag.use.already_level_cap", {"pokemon": _pokemon_display_name(pokemon)}),
 			"canApply": false,
 		}
 
@@ -26703,6 +26782,8 @@ func _rebuild_trainer_card_popup(keep_visible: bool) -> void:
 	trainer_card_aetherite_label = null
 	trainer_card_battle_points_label = null
 	trainer_card_playtime_label = null
+	trainer_card_level_cap_label = null
+	trainer_card_trade_level_cap_label = null
 	trainer_card_name_label = null
 	_setup_trainer_card_popup()
 	trainer_card_popup.offset_left = old_offset_left

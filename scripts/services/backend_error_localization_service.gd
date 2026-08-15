@@ -74,6 +74,7 @@ const CODE_TO_KEY: Dictionary = {
 	"trade_party_capacity_invalid": "ui.trade.error.party_space",
 	"trade_party_space_required": "ui.trade.error.party_space",
 	"trade_offer_required": "ui.trade.error.offer_required",
+	"trade_pokemon_level_cap_exceeded": "backend.error.trade_pokemon_level_cap_exceeded",
 	"trade_review_mismatch": "ui.trade.error.review_changed",
 	"trade_review_not_locked": "ui.trade.error.review_not_locked",
 	"trade_settlement_invalidated": "ui.trade.error.settlement_invalidated",

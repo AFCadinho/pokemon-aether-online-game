@@ -85,6 +85,16 @@ func _run() -> void:
 		== "Het huidige wachtwoord is onjuist.",
 		"privacy password errors explain how identity verification failed"
 	)
+	_check(
+		errors.call("message", {
+			"detail": {
+				"code": "trade_pokemon_level_cap_exceeded",
+				"pokemonLevel": 20,
+				"tradeLevelCap": 5,
+			}
+		}) == "Deze Pokémon is level 20 en komt boven de trade-levellimiet van de ontvanger (5).",
+		"trade level cap errors include the relevant levels"
+	)
 	var unknown_response := {
 		"detail": {
 			"code": "future_sensitive_failure",
