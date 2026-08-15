@@ -3729,11 +3729,23 @@ func _finish_battle(result: Dictionary) -> void:
 	var skip_party_battle_sync := bool(result.get("skipPartyBattleSync", false)) or _should_skip_party_battle_sync_for_blackout(result)
 	if not skip_party_battle_sync:
 		_sync_player_save_from_battle_state()
-		PlayerPartyStateService.save_current_battle_party_state_deferred()
+		PlayerPartyStateService.save_current_battle_party_state_deferred(_battle_happiness_context())
 	if _should_present_pvp_battle_result(result):
 		_show_pvp_battle_result(result)
 		return
 	_emit_battle_ended(result)
+
+
+func _battle_happiness_context() -> Dictionary:
+	var opponent_max_level := 1
+	if battle_state != null:
+		for pokemon_value: Variant in battle_state.get_player_team("p2"):
+			if pokemon_value is Dictionary:
+				opponent_max_level = maxi(opponent_max_level, int((pokemon_value as Dictionary).get("level", 1)))
+	return {
+		"battleType": "trainer" if battle_type == BattleType.TRAINER else "wild",
+		"opponentMaxLevel": clampi(opponent_max_level, 1, 100),
+	}
 
 
 func _should_present_pvp_battle_result(result: Dictionary) -> bool:

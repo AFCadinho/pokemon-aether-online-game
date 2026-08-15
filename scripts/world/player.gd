@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+signal overworld_steps_completed(step_count: int)
+
 const TILE_SIZE := 32
 const TILE_MOVE_DURATION := 0.22
 const RUN_TILE_MOVE_DURATION := 0.14
@@ -1389,6 +1391,8 @@ func _process(delta: float) -> void:
 			is_moving = false
 
 			if not story_path_movement_active:
+				var completed_tiles := maxi(int(round(move_start_position.distance_to(target_position) / float(TILE_SIZE))), 1)
+				overworld_steps_completed.emit(completed_tiles)
 				if check_for_map_exit():
 					return
 

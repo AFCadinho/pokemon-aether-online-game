@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/world/transition_hint.gd" id="1_door_hint"]
 
 [node name="DoorTransitionHint" type="Node2D"]
-z_index = 1200
+z_index = 7
 script = ExtResource("1_door_hint")
 tile_footprint = Vector2i(1, 1)
 flow_direction = "up"

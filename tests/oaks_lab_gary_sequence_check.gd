@@ -14,6 +14,10 @@ var failed := false
 
 
 func _init() -> void:
+	call_deferred("_run")
+
+
+func _run() -> void:
 	var lab_resource := load(LAB_SCENE) as PackedScene
 	_check_true(lab_resource != null, "Oak's Lab scene loads with starter balls")
 	_check_true(load(GARY_SCENE) is PackedScene, "Oak's Lab Gary scene loads")

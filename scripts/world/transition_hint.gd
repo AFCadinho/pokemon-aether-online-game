@@ -2,6 +2,7 @@
 extends Node2D
 
 const TILE_SIZE := 32.0
+const GROUND_OVERLAY_Z_INDEX := 7
 
 @export var tile_footprint := Vector2i.ONE
 @export_enum("up", "down", "left", "right") var flow_direction := "up"
@@ -13,6 +14,7 @@ var _elapsed := 0.0
 
 func _ready() -> void:
 	z_as_relative = false
+	z_index = GROUND_OVERLAY_Z_INDEX
 	set_process(true)
 
 

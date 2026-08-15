@@ -2,6 +2,8 @@ extends RefCounted
 
 class_name Pokemon
 
+const DEFAULT_HAPPINESS := 50
+
 var species: String
 var level: int
 var item: String
@@ -66,7 +68,7 @@ func _init(
 	_growth_rate: String = "",
 	_base_experience: int = 0,
 	_status: String = "",
-	_happiness: int = 255
+	_happiness: int = DEFAULT_HAPPINESS
 	) -> void:
 	species = _species
 	level = _level

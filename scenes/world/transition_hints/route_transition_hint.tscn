@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/world/route_transition_hint.gd" id="1_route_hint"]
 
 [node name="RouteTransitionHint" type="Node2D"]
-z_index = 1200
+z_index = 7
 script = ExtResource("1_route_hint")
 tile_footprint = Vector2i(4, 2)
 flow_direction = "up"

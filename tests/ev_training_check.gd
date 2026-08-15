@@ -22,6 +22,9 @@ func _init() -> void:
 	var battle_source := FileAccess.get_file_as_string(
 		"res://scripts/battle/battle.gd"
 	)
+	var ui_overlay_source := FileAccess.get_file_as_string(
+		"res://scripts/ui/ui_overlay.gd"
+	)
 	_assert(scene_source.contains("EVExpertMateo"), "EV expert Mateo is missing")
 	_assert(scene_source.contains("ev_expert_f_frames.tres"), "Mateo's overworld sprite does not match the Expert portrait")
 	_assert(scene_source.contains("EVAssistantRina"), "north EV assistant is missing")
@@ -57,6 +60,11 @@ func _init() -> void:
 		battle_source.contains('api_response.get("captureAllowed", true)')
 		and battle_source.contains("battle_type == BattleType.WILD and wild_capture_allowed"),
 		"EV training battles must be able to hide and reject the Bag"
+	)
+	_assert(
+		ui_overlay_source.count("pokemon_summary_ev_allocate_popup.z_index = UI_MODAL_Z_INDEX + 1") >= 2
+		and ui_overlay_source.contains("_activate_ui_panel(pokemon_summary_ev_allocate_popup)\n\t# Summary cards use the modal layer"),
+		"EV allocation must remain visible above the Pokemon summary card"
 	)
 	print("EV training checks passed.")
 	quit(0)

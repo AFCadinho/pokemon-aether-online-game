@@ -9,7 +9,7 @@ func _init() -> void:
 	var source := FileAccess.get_file_as_string(OVERLAY_SCRIPT_PATH)
 
 	_check(source.contains("const MAIL_POPUP_SIZE := Vector2(920, 600)"), "Mailbox uses a readable two-panel workspace")
-	_check(source.contains("const MAIL_COMPOSE_POPUP_SIZE := Vector2(720, 650)"), "Mail composer has room for message and attachment controls")
+	_check(source.contains("const MAIL_COMPOSE_POPUP_SIZE := Vector2(720, 680)"), "Mail composer has room for message and attachment controls")
 	_check(source.contains("func _setup_mail_workspace_structure()"), "Mailbox builds a dedicated visual hierarchy")
 	_check(source.contains('"ui.mail.title"'), "Mailbox has a clear localized player-facing title")
 	_check(source.contains("icon.texture = SOCIALS_MAIL_ICON"), "Mailbox header reuses the dedicated mail icon")
@@ -24,6 +24,7 @@ func _init() -> void:
 	_check(source.contains('"aetherite":\n\t\t\treturn TRAINER_WALLET_AETHERITE_ICON'), "Aetherite attachments use the Aetherite icon")
 	_check(source.contains('"battle_points":\n\t\t\treturn TRAINER_WALLET_BATTLE_POINTS_ICON'), "Battle Point attachments use the Battle Point icon")
 	_check(source.contains("func _setup_mail_compose_workspace_structure()"), "Composer uses the refreshed workspace language")
+	_check(source.contains("mail_selected_attachments_list.get_parent() as ScrollContainer"), "Composer styling follows its reparented attachment workspace")
 	_check(source.contains('"ui.mail.compose.title"'), "Composer has a clear localized task title")
 	_check(source.contains('"ui.mail.compose.send"'), "Composer primary action is localized and unambiguous")
 	_check(source.contains("func _create_mail_compose_attachment_row("), "Selected attachments render as structured rows")

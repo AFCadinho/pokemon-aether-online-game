@@ -201,7 +201,7 @@ const TRAINER_CARD_APPEARANCE_AVATAR_SCALE := Vector2(2.05, 2.05)
 const BAG_SIZE := Vector2(1120, 660)
 const MARKET_SIZE := Vector2(930, 610)
 const MAIL_POPUP_SIZE := Vector2(920, 600)
-const MAIL_COMPOSE_POPUP_SIZE := Vector2(720, 650)
+const MAIL_COMPOSE_POPUP_SIZE := Vector2(720, 680)
 const PC_POPUP_SIZE := Vector2(1160, 720)
 const PC_BOX_SLOTS_PER_ROW := 6
 const PC_BOX_SLOT_SIZE := Vector2(118, 80)
@@ -346,6 +346,14 @@ const EV_ITEM_EFFECTS := {
 	"genius-wing": {"stat": "spa", "potency": 1},
 	"clever-wing": {"stat": "spd", "potency": 1},
 	"swift-wing": {"stat": "spe", "potency": 1},
+}
+const EV_REDUCING_BERRY_STATS := {
+	"pomeg-berry": "hp",
+	"kelpsy-berry": "atk",
+	"qualot-berry": "def",
+	"hondew-berry": "spa",
+	"grepa-berry": "spd",
+	"tamato-berry": "spe",
 }
 const MOVE_TYPE_INDEX_PATH := "res://data/move_type_index.json"
 const MOVE_SUMMARY_INDEX_PATH := "res://data/move_summary_index.json"
@@ -1928,8 +1936,11 @@ func _apply_mail_ui_styles() -> void:
 	_apply_line_edit_style(mail_money_amount.get_line_edit())
 	_apply_button_style(mail_pokemon_option)
 	_apply_text_edit_style(mail_compose_body_input)
-	var selected_attachments_scroll: ScrollContainer = $Control/MailComposePopup/MarginContainer/VBoxContainer/SelectedAttachmentsScroll
-	selected_attachments_scroll.add_theme_stylebox_override("panel", _make_mail_attachment_area_style())
+	# The compose form is moved below ComposeScroll while its workspace is built.
+	# Resolve the scroll from the stable attachment-list reference after that move.
+	var selected_attachments_scroll := mail_selected_attachments_list.get_parent() as ScrollContainer
+	if selected_attachments_scroll != null:
+		selected_attachments_scroll.add_theme_stylebox_override("panel", _make_mail_attachment_area_style())
 
 func _setup_mail_workspace_structure() -> void:
 	if bool(mail_popup.get_meta("workspace_structure_ready", false)):
@@ -2232,6 +2243,19 @@ func _setup_mail_compose_workspace_structure() -> void:
 	button_row.add_theme_constant_override("separation", 8)
 	_set_localized_control_property(mail_compose_send_button, "text", "ui.mail.compose.send")
 	mail_compose_send_button.custom_minimum_size = Vector2(136, 40)
+
+	# Keep the full composer usable at the supported 720p minimum. The scroll
+	# viewport owns the popup minimum while the form retains comfortable fields.
+	var compose_scroll := ScrollContainer.new()
+	compose_scroll.name = "ComposeScroll"
+	compose_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	compose_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	compose_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	compose_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	mail_compose_popup.add_child(compose_scroll)
+	outer_margin.reparent(compose_scroll)
+	outer_margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	outer_margin.size_flags_vertical = Control.SIZE_EXPAND_FILL
 
 func _add_mail_compose_field_caption(layout: VBoxContainer, target: Control, caption_key: String) -> void:
 	var caption := Label.new()
@@ -15093,7 +15117,7 @@ func _setup_pokemon_summary_ev_allocate_popup() -> void:
 	pokemon_summary_ev_allocate_popup.visible = false
 	pokemon_summary_ev_allocate_popup.custom_minimum_size = Vector2(300, 210)
 	pokemon_summary_ev_allocate_popup.mouse_filter = Control.MOUSE_FILTER_STOP
-	pokemon_summary_ev_allocate_popup.z_index = UI_BASE_Z_INDEX + 2
+	pokemon_summary_ev_allocate_popup.z_index = UI_MODAL_Z_INDEX + 1
 	pokemon_summary_ev_allocate_popup.anchor_left = 0.5
 	pokemon_summary_ev_allocate_popup.anchor_top = 0.5
 	pokemon_summary_ev_allocate_popup.anchor_right = 0.5
@@ -17675,6 +17699,8 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 		return BAG_ITEM_EFFECT_PREVIEW.preview(pokemon, gameplay, requested_quantity)
 	if _is_ev_item_id(item_id):
 		return _bag_ev_item_use_preview_for_pokemon(pokemon, item_id, requested_quantity)
+	if _is_ev_reducing_berry_id(item_id):
+		return _bag_ev_reducing_berry_preview_for_pokemon(pokemon, item_id, requested_quantity)
 	if not _is_exp_item_id(item_id):
 		return {}
 
@@ -17791,6 +17817,27 @@ func _bag_ev_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, req
 			"allocated": allocated_total,
 			"total_max": POKEMON_EV_TOTAL_LIMIT,
 		}),
+	}
+
+
+func _bag_ev_reducing_berry_preview_for_pokemon(pokemon: Pokemon, item_id: String, requested_quantity: int) -> Dictionary:
+	var stat_id := str(EV_REDUCING_BERRY_STATS.get(item_id, ""))
+	var current_value := clampi(int(pokemon.evs.get(stat_id, 0)), 0, POKEMON_EV_STAT_LIMIT)
+	var stat_label := _summary_stat_label(stat_id)
+	if current_value <= 0:
+		return {
+			"canApply": false,
+			"label": "%s EV is already 0" % stat_label,
+			"tooltip": "%s has no allocated %s EVs to reduce." % [_pokemon_display_name(pokemon), stat_label],
+		}
+	var quantity := max(requested_quantity, 1)
+	var used_quantity := min(quantity, int(ceil(float(current_value) / 10.0)))
+	var new_value := maxi(current_value - used_quantity * 10, 0)
+	var berry_count_text := "1 berry" if used_quantity == 1 else "%s berries" % used_quantity
+	return {
+		"canApply": true,
+		"label": "%s EV: %s -> %s" % [stat_label, current_value, new_value],
+		"tooltip": "Uses %s and raises happiness." % berry_count_text,
 	}
 
 func _bag_item_can_affect_pokemon(pokemon: Pokemon, item_id: String) -> bool:
@@ -18042,8 +18089,11 @@ func _is_exp_item_id(item_id: String) -> bool:
 func _is_ev_item_id(item_id: String) -> bool:
 	return EV_ITEM_EFFECTS.has(_normalize_item_id(item_id))
 
+func _is_ev_reducing_berry_id(item_id: String) -> bool:
+	return EV_REDUCING_BERRY_STATS.has(_normalize_item_id(item_id))
+
 func _is_pokemon_usable_item_id(item_id: String) -> bool:
-	return _bag_machine_move_id(item_id) != "" or _is_exp_item_id(item_id) or _is_ev_item_id(item_id) or BAG_ITEM_EFFECT_PREVIEW.supports(_bag_gameplay_definition_for_item_id(item_id))
+	return _bag_machine_move_id(item_id) != "" or _is_exp_item_id(item_id) or _is_ev_item_id(item_id) or _is_ev_reducing_berry_id(item_id) or BAG_ITEM_EFFECT_PREVIEW.supports(_bag_gameplay_definition_for_item_id(item_id))
 
 func _bag_machine_move_id(item_id: String) -> String:
 	var normalized_id := _normalize_item_id(item_id)
@@ -19876,6 +19926,9 @@ func _on_summary_allocated_ev_pressed(stat_id: String, label_text: String, card_
 	pokemon_summary_ev_allocate_input.value = current_value
 	pokemon_summary_ev_allocate_popup.visible = true
 	_activate_ui_panel(pokemon_summary_ev_allocate_popup)
+	# Summary cards use the modal layer, while regular active windows use the
+	# lower window layer. Keep this child dialog above its originating card.
+	pokemon_summary_ev_allocate_popup.z_index = UI_MODAL_Z_INDEX + 1
 	_store_active_pokemon_summary_card_context()
 	_refresh_summary_ev_allocate_status()
 
