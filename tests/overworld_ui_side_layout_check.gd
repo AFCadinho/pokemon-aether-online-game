@@ -115,7 +115,7 @@ func _init() -> void:
 		"Mount management joins the bottom-right character utility rail"
 	)
 	_check(
-		my_powers_button_block.contains("offset_top = -290.0"),
+		my_powers_button_block.contains("offset_top = -338.0"),
 		"My Powers moves up one slot to keep the character utility rail evenly spaced"
 	)
 	_check(quest_slot_block.contains("custom_minimum_size = Vector2(52, 52)") and quest_button_block.contains('texture_normal = ExtResource("27_quest_log")'), "Quest Log replaces Settings in the primary navigation bar")
@@ -207,7 +207,7 @@ func _init() -> void:
 
 	_check(script_source.contains('_register_collapsible_panel("hotkey_sidebar", hotkey_sidebar_panel, "left_center")'), "hotbar collapse control sits on its inner edge")
 	_check(script_source.contains('_register_collapsible_panel("chat", chat_panel, "right")'), "chat controls sit on its inner edge")
-	_check(script_source.contains("[personal_buffs_panel, settings_button, mount_button, donator_store_button, my_powers_button]"), "trainer collapse includes personal buffs, mount management, utilities, and My Powers")
+	_check(script_source.contains("[personal_buffs_panel, settings_button, mount_button, skills_button, donator_store_button, my_powers_button]"), "trainer collapse includes personal buffs, mount management, Skills, utilities, and My Powers")
 	_check(script_source.contains("func _set_my_powers_available") and script_source.contains("func _hide_my_powers_menu"), "My Powers only appears for accounts with available privileged tools")
 	_check(script_source.contains('_register_collapsible_panel("party", party_panel, "right")'), "party collapse control sits on its inner edge")
 	_check(script_source.contains('_register_collapsible_panel("location", location_panel, "right_center", null, [global_buffs_panel])'), "location collapse includes global buffs")

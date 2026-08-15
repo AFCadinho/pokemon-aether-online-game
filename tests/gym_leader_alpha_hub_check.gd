@@ -1,6 +1,6 @@
 extends SceneTree
 
-const PEWTER_SCENE := "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn"
+const PEWTER_SCENE := "res://scenes/overworld/kanto/towns/pewter_city/pewter_gym.tscn"
 const GYM_LEADER_SCENE := "res://scenes/npcs/gym_leader_npc.tscn"
 const GYM_LEADER_SCRIPT := "res://scripts/world/npcs/gym_leader_npc.gd"
 const GYM_LEADER_DEFINITION_SCRIPT := "res://scripts/world/npcs/gym_leader_definition.gd"
@@ -31,7 +31,7 @@ func _run() -> void:
 	_check(leader_source.contains("dialogue_rematch"), "Gym Leader supports badge-aware rematch dialogue")
 
 	var packed := load(PEWTER_SCENE) as PackedScene
-	_check(packed != null, "Pewter City alpha hub scene loads")
+	_check(packed != null, "Pewter Gym scene loads")
 	if packed == null:
 		quit(1)
 		return
@@ -41,14 +41,14 @@ func _run() -> void:
 	await process_frame
 
 	var expected := {
-		"AlphaGymBrock": ["kanto_alpha_gym_brock", "boulder"],
+		"GymLeaderBrock": ["kanto_alpha_gym_brock", "boulder"],
 	}
 	var leaders: Dictionary = {}
 	var collision := map.get_node_or_null("Collision") as TileMapLayer
 	_check(collision != null, "Pewter City collision layer is available")
 	for node_name: String in expected:
 		var leader := map.get_node_or_null("Entities/NPCs/%s" % node_name)
-		_check(leader != null, "%s is placed in the alpha hub" % node_name)
+		_check(leader != null, "%s is placed in Pewter Gym" % node_name)
 		if leader == null:
 			continue
 		leaders[node_name] = leader

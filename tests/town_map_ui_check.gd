@@ -43,9 +43,11 @@ func _run() -> void:
 	_check((layout_points.get("kanto_map_point_16", {}) as Dictionary).get("kind") == "special", "The northern Diglett's Cave entrance is a special location")
 	_check((layout_points.get("kanto_map_point_17", {}) as Dictionary).get("kind") == "special", "Viridian Forest Gate is a special location")
 	var route_names: Dictionary = {}
+	var route_layout_points: Dictionary = {}
 	for route_point_value: Variant in route_points:
 		var route_point := route_point_value as Dictionary
 		route_names[str(route_point.get("name", ""))] = true
+		route_layout_points[str(route_point.get("id", ""))] = route_point
 	_check(route_names.has("Route 3") and route_names.has("Route 25"), "Named routes cover the remaining classic Kanto route range")
 	_check(route_names.has("Route 22"), "Route 22 uses its yellow path west of Viridian City")
 	var areas := world_access.get("areas", {}) as Dictionary
@@ -53,11 +55,11 @@ func _run() -> void:
 	for area_value: Variant in areas.values():
 		if area_value is Dictionary:
 			location_groups[str((area_value as Dictionary).get("locationGroupId", ""))] = true
-	_check(locations.size() == 6, "Town Map contains the currently playable Kanto location groups")
+	_check(locations.size() == 7, "Town Map contains the currently playable Kanto location groups")
 	for location_id_value: Variant in locations.keys():
 		var location_id := str(location_id_value)
 		_check(location_groups.has(location_id), "%s is backed by a playable world location" % location_id)
-		var point := layout_points.get(location_id, {}) as Dictionary
+		var point := layout_points.get(location_id, route_layout_points.get(location_id, {})) as Dictionary
 		_check(
 			float(point.get("x", -1.0)) >= 0.0
 			and float(point.get("x", layout_width + 1.0)) <= layout_width
@@ -99,8 +101,8 @@ func _run() -> void:
 		if str(location_id_value).begins_with("kanto_route_segment_"):
 			planned_route_count += 1
 	_check(popup_locations.size() == 46, "Town Map registers every configured point")
-	_check(planned_location_count == 40, "Future settlements, special locations, and routes are planned points")
-	_check(planned_route_count == 23, "Named future routes are available alongside map points")
+	_check(planned_location_count == 39, "Future settlements, special locations, and routes are planned points")
+	_check(planned_route_count == 22, "Named future routes are available alongside map points")
 	var towns_without_interiors := 0
 	for town_value: Variant in popup_locations.values():
 		if town_value is Dictionary and str((town_value as Dictionary).get("kind", "")) in ["town", "city", "settlement"]:
@@ -126,7 +128,7 @@ func _run() -> void:
 	_check(popup.detail_interiors_container.get_child_count() == 3, "Pallet Town interiors come from the world access catalog")
 	_check(popup.detail_interiors_container.get_child(0) is Label, "Interiors are displayed separately from route navigation")
 	popup._refresh_details("kanto_pewter_city")
-	_check(popup.detail_interiors_container.get_child_count() == 1, "Pewter City only lists its accessible interior")
+	_check(popup.detail_interiors_container.get_child_count() == 4, "Pewter City lists all accessible interiors")
 	var pewter_connections: Array[String] = []
 	for connection_control: Control in popup.detail_connections_container.get_children():
 		if connection_control is Button:

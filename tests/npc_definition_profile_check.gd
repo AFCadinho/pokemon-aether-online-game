@@ -8,7 +8,7 @@ const TRAINER_RED_PROFILE := "res://resources/npcs/trainers/trainer_red_boss.tre
 const BOSS_BATTLE_SCENE := "res://scenes/npcs/boss_battle_npc.tscn"
 const PALLET_TOWN_SCENE := "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn"
 const VIRIDIAN_CITY_SCENE := "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn"
-const PEWTER_CITY_SCENE := "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn"
+const PEWTER_GYM_SCENE := "res://scenes/overworld/kanto/towns/pewter_city/pewter_gym.tscn"
 
 var failed := false
 
@@ -92,7 +92,7 @@ func _check_test_bosses_are_not_placed() -> void:
 
 
 func _check_gym_scene_has_no_fallback_copies() -> void:
-	var source := FileAccess.get_file_as_string(PEWTER_CITY_SCENE)
+	var source := FileAccess.get_file_as_string(PEWTER_GYM_SCENE)
 	_check(source.count("npc_profile = ExtResource") >= 1, "Pewter's Gym Leader uses a shared NPC profile")
 	_check(
 		not source.contains("AtlasTexture_fallback"),

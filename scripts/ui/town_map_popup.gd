@@ -637,6 +637,10 @@ func _catalog_interiors_for_location(location_id: String) -> Array:
 			continue
 		if str(area.get("areaType", "")) != "interior":
 			continue
+		# Access-only placeholders describe future doors and locks, but are not
+		# destinations the player can currently enter from the Town Map location.
+		if bool(area.get("accessOnly", false)) or str(area.get("scenePath", "")).is_empty():
+			continue
 		var label := str(area.get("label", area_id)).strip_edges()
 		var group_label := str(area.get("locationGroupLabel", "")).strip_edges()
 		if group_label != "" and label.begins_with("%s " % group_label):

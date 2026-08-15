@@ -201,7 +201,7 @@ const TRAINER_CARD_APPEARANCE_AVATAR_SCALE := Vector2(2.05, 2.05)
 const BAG_SIZE := Vector2(1120, 660)
 const MARKET_SIZE := Vector2(930, 610)
 const MAIL_POPUP_SIZE := Vector2(920, 600)
-const MAIL_COMPOSE_POPUP_SIZE := Vector2(720, 650)
+const MAIL_COMPOSE_POPUP_SIZE := Vector2(720, 680)
 const PC_POPUP_SIZE := Vector2(1160, 720)
 const PC_BOX_SLOTS_PER_ROW := 6
 const PC_BOX_SLOT_SIZE := Vector2(118, 80)
@@ -2232,6 +2232,19 @@ func _setup_mail_compose_workspace_structure() -> void:
 	button_row.add_theme_constant_override("separation", 8)
 	_set_localized_control_property(mail_compose_send_button, "text", "ui.mail.compose.send")
 	mail_compose_send_button.custom_minimum_size = Vector2(136, 40)
+
+	# Keep the full composer usable at the supported 720p minimum. The scroll
+	# viewport owns the popup minimum while the form retains comfortable fields.
+	var compose_scroll := ScrollContainer.new()
+	compose_scroll.name = "ComposeScroll"
+	compose_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	compose_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	compose_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	compose_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	mail_compose_popup.add_child(compose_scroll)
+	outer_margin.reparent(compose_scroll)
+	outer_margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	outer_margin.size_flags_vertical = Control.SIZE_EXPAND_FILL
 
 func _add_mail_compose_field_caption(layout: VBoxContainer, target: Control, caption_key: String) -> void:
 	var caption := Label.new()

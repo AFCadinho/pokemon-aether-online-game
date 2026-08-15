@@ -178,6 +178,7 @@ size = Vector2(64, 64)
 script = ExtResource("1_script")
 npc_id = "kanto_oaks_lab_gary"
 display_name = "Gary Oak"
+facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("2_frames")
 mugshot = SubResource("gary_mugshot_crop")
 preload_quest_markers = true
@@ -187,7 +188,7 @@ preload_quest_markers = true
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Look" unique_id=1386231639]
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_ns0bt")
-animation = &"walk_left"
+animation = &"idle_down"
 
 [node name="InteractionArea" type="Area2D" parent="." unique_id=490625677]
 
