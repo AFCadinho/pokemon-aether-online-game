@@ -17830,8 +17830,8 @@ func _bag_ev_reducing_berry_preview_for_pokemon(pokemon: Pokemon, item_id: Strin
 			"label": "%s EV is already 0" % stat_label,
 			"tooltip": "%s has no allocated %s EVs to reduce." % [_pokemon_display_name(pokemon), stat_label],
 		}
-	var quantity := max(requested_quantity, 1)
-	var used_quantity := min(quantity, int(ceil(float(current_value) / 10.0)))
+	var quantity: int = max(requested_quantity, 1)
+	var used_quantity: int = min(quantity, int(ceil(float(current_value) / 10.0)))
 	var new_value := maxi(current_value - used_quantity * 10, 0)
 	var berry_count_text := "1 berry" if used_quantity == 1 else "%s berries" % used_quantity
 	return {
