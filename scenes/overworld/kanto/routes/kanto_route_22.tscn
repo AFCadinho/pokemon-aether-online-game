@@ -402,6 +402,9 @@ blocked_tile_footprint = Vector2i(3, 1)
 [node name="FromViridianCity" type="Marker2D" parent="Spawns" unique_id=317183969]
 position = Vector2(2656, 480)
 
+[node name="FromVictoryRoadPost" type="Marker2D" parent="Spawns"]
+position = Vector2(352, 352)
+
 [node name="Exits" type="Node2D" parent="." unique_id=1557337054]
 
 [node name="ToViridianCity" type="Area2D" parent="Exits" unique_id=1939957445]

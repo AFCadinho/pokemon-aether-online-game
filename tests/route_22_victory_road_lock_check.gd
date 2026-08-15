@@ -14,6 +14,9 @@ func _run() -> void:
 	var lock_start := source.find('[node name="VictoryRoadPostLock"')
 	var lock_end := source.find("\n[node ", lock_start + 1) if lock_start >= 0 else -1
 	var lock_block := source.substr(lock_start, lock_end - lock_start) if lock_start >= 0 and lock_end > lock_start else ""
+	var spawn_start := source.find('[node name="FromVictoryRoadPost"')
+	var spawn_end := source.find("\n[node ", spawn_start + 1) if spawn_start >= 0 else -1
+	var spawn_block := source.substr(spawn_start, spawn_end - spawn_start) if spawn_start >= 0 and spawn_end > spawn_start else ""
 
 	_check(
 		source.contains("res://scenes/world/interactables/locked_door_interactable.tscn"),
@@ -29,6 +32,11 @@ func _run() -> void:
 	_check(
 		lock_block.contains("The Victory Road checkpoint is closed for now."),
 		"Victory Road lock explains why the checkpoint is closed"
+	)
+	_check(
+		spawn_block.contains('type="Marker2D" parent="Spawns"')
+		and spawn_block.contains('position = Vector2(352, 352)'),
+		"Route 22 has a safe return spawn for the Victory Road Post"
 	)
 
 	quit(1 if failed else 0)
