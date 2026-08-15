@@ -8808,6 +8808,434 @@
       "sound_paths": {
         "PRSFX- Heal Order2.wav": "res://assets/battles/animations/sweetscent/PRSFX- Heal Order2.wav"
       }
+    },
+    "mudslap": {
+      "template": "imported_sheet",
+      "category": "projectile",
+      "speed_scale": 1.0,
+      "sprite_zoom_multiplier": 0.6,
+      "sprite_position_offset": [
+        0,
+        -24
+      ],
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/mudslap/mudslap.json",
+      "sheet_path": "res://assets/battles/animations/mudslap/PRAS- Mud Slap.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Mud Slap.wav": "res://assets/battles/animations/mudslap/PRSFX- Mud Slap.wav"
+      }
+    },
+    "powdersnow": {
+      "template": "imported_sheet",
+      "category": "special_projectile",
+      "speed_scale": 1.0,
+      "sprite_zoom_multiplier": 0.62,
+      "sprite_position_offset": [
+        0,
+        -24
+      ],
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/powdersnow/powdersnow.json",
+      "sheet_path": "res://assets/battles/animations/powdersnow/PRAS- Powder Snow.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Powder Snow1.wav": "res://assets/battles/animations/powdersnow/PRSFX- Powder Snow1.wav"
+      }
+    },
+    "iceshard": {
+      "template": "imported_sheet",
+      "category": "projectile",
+      "speed_scale": 1.0,
+      "sprite_zoom_multiplier": 0.55,
+      "sprite_position_offset": [
+        0,
+        -24
+      ],
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/iceshard/iceshard.json",
+      "sheet_path": "res://assets/battles/animations/iceshard/PRAS- Ice.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Ice Shard.wav": "res://assets/battles/animations/iceshard/PRSFX- Ice Shard.wav"
+      }
+    },
+    "leechseed": {
+      "template": "imported_sheet",
+      "category": "status_projectile",
+      "speed_scale": 1.0,
+      "sprite_zoom_multiplier": 0.6,
+      "sprite_position_offset": [
+        0,
+        -16
+      ],
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/leechseed/leechseed.json",
+      "sheet_path": "res://assets/battles/animations/leechseed/PRAS- Leech Seed.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Leech Seed2.wav": "res://assets/battles/animations/leechseed/PRSFX- Leech Seed2.wav"
+      }
+    },
+    "harden": {
+      "template": "imported_sheet",
+      "category": "status_buff",
+      "speed_scale": 1.0,
+      "sprite_zoom_multiplier": 0.6,
+      "sprite_position_offset": [
+        0,
+        -48
+      ],
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/harden/harden.json",
+      "sheet_path": "res://assets/battles/animations/harden/PRAS- Clear Smog.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Harden.wav": "res://assets/battles/animations/harden/PRSFX- Harden.wav"
+      }
+    },
+    "howl": {
+      "template": "imported_sheet",
+      "category": "status_buff",
+      "speed_scale": 1.0,
+      "sprite_zoom_multiplier": 0.66,
+      "sprite_position_offset": [
+        0,
+        -48
+      ],
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/howl/howl.json",
+      "sheet_path": "res://assets/battles/animations/howl/PRAS- Howl.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {}
+    },
+    "charm": {
+      "template": "imported_sheet",
+      "category": "status_projectile",
+      "speed_scale": 1.0,
+      "sprite_zoom_multiplier": 0.62,
+      "sprite_position_offset": [
+        0,
+        -36
+      ],
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/charm/charm.json",
+      "sheet_path": "res://assets/battles/animations/charm/PRAS- Love.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Charm.wav": "res://assets/battles/animations/charm/PRSFX- Charm.wav"
+      }
+    },
+    "babydolleyes": {
+      "template": "imported_sheet",
+      "category": "status_projectile",
+      "speed_scale": 1.0,
+      "sprite_zoom_multiplier": 0.62,
+      "sprite_position_offset": [
+        0,
+        -24
+      ],
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/babydolleyes/babydolleyes.json",
+      "sheet_path": "res://assets/battles/animations/babydolleyes/PRAS- Baby Doll Eyes.png",
+      "background_path": "res://assets/battles/animations/babydolleyes/PRAS- Baby Doll Eyes BG.png",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Baby Doll Eyes.wav": "res://assets/battles/animations/babydolleyes/PRSFX- Baby Doll Eyes.wav"
+      }
+    },
+    "rocksmash": {
+      "template": "imported_sheet",
+      "category": "physical_contact",
+      "speed_scale": 1.0,
+      "sprite_zoom_multiplier": 0.6,
+      "sprite_position_offset": [
+        0,
+        -30
+      ],
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/rocksmash/rocksmash.json",
+      "sheet_path": "res://assets/battles/animations/rocksmash/PRAS- Rock Smash.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Rock Smash.wav": "res://assets/battles/animations/rocksmash/PRSFX- Rock Smash.wav"
+      }
+    },
+    "lowkick": {
+      "template": "imported_sheet",
+      "category": "physical_contact",
+      "speed_scale": 1.0,
+      "sprite_zoom_multiplier": 0.62,
+      "sprite_position_offset": [
+        0,
+        -24
+      ],
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/lowkick/lowkick.json",
+      "sheet_path": "res://assets/battles/animations/lowkick/PRAS- Strike.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Low Kick.wav": "res://assets/battles/animations/lowkick/PRSFX- Low Kick.wav"
+      }
+    },
+    "spark": {
+      "template": "imported_sheet",
+      "category": "special_projectile",
+      "speed_scale": 1.0,
+      "sprite_zoom_multiplier": 0.32,
+      "sprite_position_offset": [
+        0,
+        -32
+      ],
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/spark/spark.json",
+      "sheet_path": "res://assets/battles/animations/spark/PRAS- Electric.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Spark1.wav": "res://assets/battles/animations/spark/PRSFX- Spark1.wav",
+        "PRSFX- Spark2.wav": "res://assets/battles/animations/spark/PRSFX- Spark2.wav"
+      }
+    },
+    "swift": {
+      "template": "imported_sheet",
+      "category": "projectile",
+      "speed_scale": 1.0,
+      "sprite_zoom_multiplier": 0.62,
+      "sprite_position_offset": [
+        0,
+        -24
+      ],
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/swift/swift.json",
+      "sheet_path": "res://assets/battles/animations/swift/PRAS- Swift.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Swift1.wav": "res://assets/battles/animations/swift/PRSFX- Swift1.wav",
+        "PRSFX- Swift2.wav": "res://assets/battles/animations/swift/PRSFX- Swift2.wav"
+      }
+    },
+    "doubleteam": {
+      "template": "imported_sheet",
+      "category": "status_buff",
+      "show_sheet_sprites": false,
+      "speed_scale": 1.0,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "focus_aura": {
+        "enabled": true,
+        "visible_start": 0.02,
+        "visible_end": 0.94,
+        "fade_in": 0.08,
+        "fade_out": 0.16,
+        "center": [
+          128.0,
+          224.0
+        ],
+        "center_offset": [
+          0.0,
+          -8.0
+        ],
+        "radius": 48.0,
+        "ring_count": 3,
+        "ring_squash": 0.52,
+        "rotation_speed": -0.22,
+        "sparkle_count": 14,
+        "sparkle_radius_min": 30.0,
+        "sparkle_radius_max": 68.0,
+        "glow_color": [
+          0.38,
+          0.82,
+          1.0,
+          1.0
+        ],
+        "core_color": [
+          0.92,
+          0.98,
+          1.0,
+          1.0
+        ],
+        "ring_color_green": [
+          0.3,
+          0.8,
+          1.0,
+          1.0
+        ],
+        "ring_color_cyan": [
+          0.65,
+          0.9,
+          1.0,
+          1.0
+        ],
+        "ring_color_pink": [
+          0.7,
+          0.55,
+          1.0,
+          1.0
+        ],
+        "ring_color_gold": [
+          0.85,
+          0.95,
+          1.0,
+          1.0
+        ]
+      },
+      "data_path": "res://assets/battles/animations/doubleteam/doubleteam.json",
+      "sheet_path": "res://assets/battles/animations/doubleteam/PRAS- Stats.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Double Team.wav": "res://assets/battles/animations/doubleteam/PRSFX- Double Team.wav"
+      }
+    },
+    "agility": {
+      "template": "imported_sheet",
+      "category": "status_buff",
+      "show_sheet_sprites": false,
+      "speed_scale": 1.1,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "dragon_dance": {
+        "enabled": true,
+        "visible_start": 0.02,
+        "visible_end": 0.94,
+        "fade_in": 0.08,
+        "fade_out": 0.16,
+        "center": [
+          128.0,
+          224.0
+        ],
+        "center_offset": [
+          0.0,
+          -8.0
+        ],
+        "radius": 46.0,
+        "ring_count": 3,
+        "rotation_speed": 0.42,
+        "spark_count": 12,
+        "spark_height": 72.0,
+        "spark_spread": 48.0,
+        "ribbon_color": [
+          0.34,
+          0.92,
+          1.0,
+          1.0
+        ],
+        "core_color": [
+          0.88,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "data_path": "res://assets/battles/animations/agility/agility.json",
+      "sheet_path": "res://assets/battles/animations/agility/mixed.png",
+      "background_path": "res://assets/battles/animations/agility/PRAS- Speed BG.png",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Agility.wav": "res://assets/battles/animations/agility/PRSFX- Agility.wav"
+      }
+    },
+    "withdraw": {
+      "template": "imported_sheet",
+      "category": "status_buff",
+      "speed_scale": 1.0,
+      "sprite_zoom_multiplier": 0.56,
+      "sprite_position_offset": [
+        0,
+        -64
+      ],
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/withdraw/withdraw.json",
+      "sheet_path": "res://assets/battles/animations/withdraw/PRAS- Withdraw.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Withdraw.wav": "res://assets/battles/animations/withdraw/PRSFX- Withdraw.wav"
+      }
     }
   }
 }
