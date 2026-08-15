@@ -77,6 +77,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/localization_release_candidates_check.gd",
 	"res://tests/pokemon_happiness_payload_check.gd",
 	"res://tests/pokemon_experience_payload_check.gd",
+	"res://tests/pokemon_level_cap_check.gd",
 	"res://tests/pokemon_factory_hp_snapshot_check.gd",
 	"res://tests/pokemon_pc_interactable_check.gd",
 	"res://tests/new_player_spawn_check.gd",

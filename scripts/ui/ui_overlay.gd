@@ -17704,17 +17704,21 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 	if not _is_exp_item_id(item_id):
 		return {}
 
+	var player_level_cap: int = clampi(GameState.pokemon_level_cap, 1, POKEMON_MAX_LEVEL)
 	var current_level: int = clampi(max(pokemon.level, 1), 1, POKEMON_MAX_LEVEL)
-	if current_level >= POKEMON_MAX_LEVEL:
+	if current_level >= player_level_cap:
 		return {
-			"label": LocalizationManager.text("ui.bag.use.max_level"),
-			"tooltip": LocalizationManager.text("ui.bag.use.already_level_100", {"pokemon": _pokemon_display_name(pokemon)}),
+			"label": LocalizationManager.text("ui.bag.use.level_cap", {"levelCap": player_level_cap}),
+			"tooltip": LocalizationManager.text("ui.bag.use.current_level_cap", {
+				"pokemon": _pokemon_display_name(pokemon),
+				"levelCap": player_level_cap,
+			}),
 			"canApply": false,
 		}
 
 	var growth_rate := _normalize_exp_growth_rate(pokemon.growth_rate)
 	var current_exp := _pokemon_preview_current_experience(pokemon, growth_rate)
-	var max_exp := _pokemon_exp_for_level(growth_rate, POKEMON_MAX_LEVEL)
+	var max_exp := _pokemon_exp_for_level(growth_rate, player_level_cap)
 	var remaining_exp: int = max(max_exp - current_exp, 0)
 	if remaining_exp <= 0:
 		return {
@@ -17728,8 +17732,8 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 	var gained_exp := 0
 	var target_level := current_level
 	if item_id == "rare-candy":
-		used_quantity = min(quantity, POKEMON_MAX_LEVEL - current_level)
-		target_level = min(current_level + used_quantity, POKEMON_MAX_LEVEL)
+		used_quantity = min(quantity, player_level_cap - current_level)
+		target_level = min(current_level + used_quantity, player_level_cap)
 		var target_exp: int = _pokemon_exp_for_level(growth_rate, target_level)
 		gained_exp = min(max(target_exp - current_exp, 0), remaining_exp)
 	else:
