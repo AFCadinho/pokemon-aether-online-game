@@ -542,6 +542,16 @@
 			],
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_22.tscn",
 			"spawnPoints": {
+				"victory_road_post": {
+					"facingDirection": "down",
+					"label": "Victory Road Post",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromVictoryRoadPost",
+					"tile": {
+						"x": 11,
+						"y": 11
+					}
+				},
 				"viridian_city_entrance": {
 					"facingDirection": "left",
 					"label": "Viridian City Entrance",
