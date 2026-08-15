@@ -43,8 +43,8 @@ func _run() -> void:
 
 	var route_source := FileAccess.get_file_as_string(ROUTE_HINT_SCRIPT)
 	var door_source := FileAccess.get_file_as_string(DOOR_HINT_SCRIPT)
-	_check(route_source.contains("draw_polyline") and route_source.contains("radius * 2.6"), "route hints use bright directional chevrons and particle halos")
-	_check(door_source.contains("draw_polyline") and door_source.contains("radius * 2.8") and door_source.contains("draw_arc"), "door hints use bright directional chevrons, open arcs, and particle halos")
+	_check(route_source.contains("draw_polyline") and not route_source.contains("draw_circle") and not route_source.contains("draw_arc"), "route hints only draw directional chevrons")
+	_check(door_source.contains("draw_polyline") and not door_source.contains("draw_circle") and not door_source.contains("draw_arc"), "door hints only draw directional chevrons")
 	_check(not route_source.contains("draw_rect(") and not door_source.contains("draw_rect("), "transition hints blend into the world without hard rectangular frames")
 	_check(not route_source.contains("@export_range(16.0, 512.0") and not door_source.contains("@export_range(8.0, 256.0"), "transition hint sizing no longer exposes pixel width fields")
 
