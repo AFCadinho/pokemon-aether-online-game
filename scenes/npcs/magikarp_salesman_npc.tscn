@@ -8,4 +8,5 @@
 script = ExtResource("2_script")
 display_name = "Magikarp Salesman"
 facing_direction = Vector2(1, 0)
+dialogue_lines = Array[String](["Step right up! I can recognize a future Champion—and this is the Pokemon that will take you there!", "This is no ordinary Magikarp. Beneath those scales sleeps the potential to become one of the most fearsome Pokemon ever!", "A treasure like this should cost a fortune. But for you? Just ₽5,000. A once-in-a-lifetime price!"])
 npc_sprite_frames = ExtResource("3_frames")

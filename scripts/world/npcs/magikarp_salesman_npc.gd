@@ -35,7 +35,7 @@ func interact_with_player(_player: Node2D) -> void:
 		await PlayerPartyStateService.refresh_party()
 		await show_dialogue(await _resolve_lines(
 			already_purchased_dialogue_id,
-			["One exceptional Magikarp per customer. You already bought mine."]
+			["You already bought my only future legend. Rare potential like that cannot be found twice!"]
 		))
 		_interaction_active = false
 		return
@@ -50,7 +50,7 @@ func interact_with_player(_player: Node2D) -> void:
 		if _error_code(result) == "npc_pokemon_purchase_insufficient_funds":
 			await show_dialogue(await _resolve_lines(
 				insufficient_funds_dialogue_id,
-				["This premium Magikarp costs ₽5,000. Come back when your wallet is ready."]
+				["Future Champions know when to invest. Come back with ₽5,000 and secure your destiny!"]
 			))
 		else:
 			await GameErrorDialogService.show_response(result, "backend.error.npc_pokemon_sale")
@@ -60,7 +60,7 @@ func interact_with_player(_player: Node2D) -> void:
 	if bool(result.get("purchased", false)):
 		await show_dialogue(await _resolve_lines(
 			success_dialogue_id,
-			["A brilliant investment! Treat Magikarp well and one day it may surprise you."]
+			["Excellent choice! When it becomes unstoppable, remember who saw its potential first. No refunds!"]
 		))
 		get_tree().call_group(
 			"ui_overlay",
@@ -71,7 +71,7 @@ func interact_with_player(_player: Node2D) -> void:
 	else:
 		await show_dialogue(await _resolve_lines(
 			already_purchased_dialogue_id,
-			["One exceptional Magikarp per customer. You already bought mine."]
+			["You already bought my only future legend. Rare potential like that cannot be found twice!"]
 		))
 	_interaction_active = false
 
