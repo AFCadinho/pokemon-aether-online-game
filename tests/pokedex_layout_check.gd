@@ -39,6 +39,7 @@ func _init() -> void:
 	_check(source.contains("func _create_pokedex_dossier_card") and source.contains("func _create_pokedex_profile_fact"), "General data is grouped into calm dossier cards")
 	_check(source.contains('"ui.pokedex.profile.title"'), "Localized profile facts no longer render as disconnected boxes")
 	_check(source.contains("PokedexService.search_species") and source.contains("PokedexService.get_species_detail"), "Existing Pokédex data loading remains connected")
+	_check(source.contains('{"key": "evolution", "i18n": "evolution"'), "Pokédex has a dedicated evolution move section")
 	_check(source.contains("_on_pokedex_sprite_panel_gui_input"), "Front and back sprite interaction remains available")
 
 	quit(1 if failures > 0 else 0)

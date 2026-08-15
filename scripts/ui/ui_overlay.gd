@@ -4270,6 +4270,7 @@ func _submit_evolution_choice(confirm: bool) -> void:
 				"to": _localized_species_name(target_species_id, to_species),
 			}
 		))
+		_announce_evolution_moves(result, pokemon_id, target_species_id, to_species)
 	else:
 		if evolution_prompt_popup != null:
 			evolution_prompt_popup.visible = false
@@ -4282,7 +4283,43 @@ func _submit_evolution_choice(confirm: bool) -> void:
 	_refresh_party()
 	_refresh_open_pokemon_summary_cards()
 	_refresh_hotbar_ui()
+	_show_next_move_learn_prompt()
 	_show_next_evolution_prompt()
+
+func _announce_evolution_moves(
+	result: Dictionary,
+	pokemon_id: int,
+	target_species_id: String,
+	target_species_name: String
+) -> void:
+	var species_name := _localized_species_name(target_species_id, target_species_name)
+	var learned_value: Variant = result.get("learnedMoves", [])
+	if learned_value is Array:
+		for learned_move_value: Variant in learned_value as Array:
+			if not (learned_move_value is Dictionary):
+				continue
+			var learned_move := learned_move_value as Dictionary
+			var move_name := str(learned_move.get("name", learned_move.get("moveId", ""))).strip_edges()
+			if move_name != "":
+				add_system_message(LocalizationManager.text(
+					"ui.move_learning.result.learned",
+					{"pokemon": species_name, "move": move_name}
+				))
+
+	var candidates_value: Variant = result.get("moveLearnCandidates", [])
+	if not (candidates_value is Array):
+		return
+	var queued_before := _move_learn_pending_prompt_count()
+	var queued_count := 0
+	for candidate_value: Variant in candidates_value as Array:
+		if not (candidate_value is Dictionary):
+			continue
+		var prompt := (candidate_value as Dictionary).duplicate(true)
+		prompt["pokemonId"] = pokemon_id
+		prompt["species"] = species_name
+		if _queue_move_learn_prompt(prompt):
+			queued_count += 1
+	_extend_move_learn_review_count(queued_count, queued_before)
 
 func _set_evolution_prompt_controls_disabled(disabled: bool) -> void:
 	if evolution_prompt_confirm_button != null:
@@ -28032,6 +28069,7 @@ func _build_pokedex_moves_tab() -> void:
 
 	var sections := [
 		{"key": "levelUp", "i18n": "level_up", "column": "ui.pokedex.moves.level", "source": ""},
+		{"key": "evolution", "i18n": "evolution", "column": "ui.pokedex.moves.learn", "source": "ui.pokedex.moves.source.evolution"},
 		{"key": "egg", "i18n": "egg", "column": "ui.pokedex.moves.learn", "source": "ui.pokedex.moves.source.egg"},
 		{"key": "tm", "i18n": "tm", "column": "ui.pokedex.moves.learn", "source": "ui.pokedex.moves.source.tm"},
 		{"key": "tutor", "i18n": "tutor", "column": "ui.pokedex.moves.learn", "source": "ui.pokedex.moves.source.tutor"},

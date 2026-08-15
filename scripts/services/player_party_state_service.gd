@@ -706,6 +706,8 @@ func _pokemon_evolution_result_from_response(response: Dictionary) -> Dictionary
 		"party": _array_from_value(party.get("party", [])),
 		"hasParty": bool(party.get("hasParty", false)),
 		"evolution": _dictionary_from_value(body.get("evolution", {})),
+		"learnedMoves": _array_from_value(body.get("learnedMoves", [])),
+		"moveLearnCandidates": _array_from_value(body.get("moveLearnCandidates", [])),
 		"skipped": bool(body.get("skipped", false)),
 	}
 
