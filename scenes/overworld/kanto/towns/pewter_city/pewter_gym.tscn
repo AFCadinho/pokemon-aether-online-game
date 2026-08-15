@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="12_wgakp"]
 [ext_resource type="SpriteFrames" uid="uid://bxh5nxs12bywr" path="res://assets/npcs/gym_guide_frames.tres" id="13_gym_guide"]
 [ext_resource type="Texture2D" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_102.png" id="14_gym_guide_mugshot"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="15_transition_hint"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gym_exit"]
 size = Vector2(96, 32)
@@ -178,6 +179,10 @@ target_spawn_name = "FromGym"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPewterCity" unique_id=488623022]
 shape = SubResource("RectangleShape2D_gym_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToPewterCity" instance=ExtResource("15_transition_hint")]
+tile_footprint = Vector2i(3, 1)
+flow_direction = "down"
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=193974576]
 visible = false

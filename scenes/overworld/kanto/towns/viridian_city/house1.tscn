@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="6_dialogue_npc"]
 [ext_resource type="SpriteFrames" uid="uid://yluab5wp1usc" path="res://assets/npcs/classes/poke_fan_m_frames.tres" id="7_poke_fan_m"]
 [ext_resource type="SpriteFrames" uid="uid://b8fh81or510qb" path="res://assets/npcs/classes/school_kid_m_frames.tres" id="8_school_kid_m"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="9_transition_hint"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_house_exit"]
 size = Vector2(96, 32)
@@ -122,6 +123,11 @@ target_spawn_name = "FromHouse1"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToViridianCity" unique_id=664444253]
 position = Vector2(-16, 16)
 shape = SubResource("RectangleShape2D_house_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToViridianCity" instance=ExtResource("9_transition_hint")]
+position = Vector2(-16, 16)
+tile_footprint = Vector2i(3, 1)
+flow_direction = "down"
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=1448815856]
 visible = false

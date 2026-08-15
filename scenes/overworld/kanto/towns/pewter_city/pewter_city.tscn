@@ -243,12 +243,20 @@ target_spawn_name = "FromPewterCity"
 position = Vector2(0, -16)
 shape = SubResource("RectangleShape2D_2mtwu")
 
+[node name="DoorTransitionHint" parent="Exits/ToGym" instance=ExtResource("6_frcun")]
+position = Vector2(0, -16)
+flow_direction = "up"
+
 [node name="ToMuseum" type="Area2D" parent="Exits" unique_id=1789742615]
 position = Vector2(1392, 368)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToMuseum" unique_id=501270336]
 position = Vector2(0, -16)
 shape = SubResource("RectangleShape2D_2mtwu")
+
+[node name="DoorTransitionHint" parent="Exits/ToMuseum" instance=ExtResource("6_frcun")]
+position = Vector2(0, -16)
+flow_direction = "up"
 
 [node name="ToHouse1" type="Area2D" parent="Exits" unique_id=2138960520]
 position = Vector2(1200, 1040)

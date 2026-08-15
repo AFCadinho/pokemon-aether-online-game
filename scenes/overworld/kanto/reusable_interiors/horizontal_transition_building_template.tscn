@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://dl6evgbok52k2"]
+[gd_scene load_steps=11 format=3 uid="uid://dl6evgbok52k2"]
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/transition_building_horizontal/transition_building_horizontal.visual.tscn" id="1_visual"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_map_meta"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_map_exit"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="4_floor_mask"]
 [ext_resource type="TileSet" path="res://resources/world/collision_marker_tileset.tres" id="5_collision_tiles"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="6_route_hint"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
 size = Vector2(32, 96)
@@ -103,12 +104,20 @@ script = ExtResource("3_map_exit")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToWest"]
 shape = SubResource("RectangleShape2D_exit")
 
+[node name="RouteTransitionHint" parent="Exits/ToWest" instance=ExtResource("6_route_hint")]
+tile_footprint = Vector2i(1, 3)
+flow_direction = "left"
+
 [node name="ToEast" type="Area2D" parent="Exits"]
 position = Vector2(560, 336)
 script = ExtResource("3_map_exit")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToEast"]
 shape = SubResource("RectangleShape2D_exit")
+
+[node name="RouteTransitionHint" parent="Exits/ToEast" instance=ExtResource("6_route_hint")]
+tile_footprint = Vector2i(1, 3)
+flow_direction = "right"
 
 [connection signal="body_entered" from="Exits/ToWest" to="Exits/ToWest" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToEast" to="Exits/ToEast" method="_on_body_entered"]

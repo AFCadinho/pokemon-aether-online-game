@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dd5re2mpmfhvf"]
+[gd_scene load_steps=9 format=3 uid="uid://dd5re2mpmfhvf"]
 
 [ext_resource type="PackedScene" uid="uid://ogt7khne5kw1" path="res://scenes/overworld/kanto/reusable_interiors/house/brown_house_template.tscn" id="1_patn8"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_map_meta"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="5_dialogue_npc"]
 [ext_resource type="SpriteFrames" uid="uid://yaxkjlx3spjb" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="6_poke_fan_f"]
 [ext_resource type="SpriteFrames" uid="uid://ddpjpv44v1bjn" path="res://assets/npcs/classes/school_kid_f_frames.tres" id="7_school_kid_f"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="8_transition_hint"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_house_exit"]
 size = Vector2(96, 32)
@@ -79,5 +80,10 @@ target_spawn_name = "FromHouse1"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPewterCity"]
 position = Vector2(-16, 16)
 shape = SubResource("RectangleShape2D_house_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToPewterCity" instance=ExtResource("8_transition_hint")]
+position = Vector2(-16, 16)
+tile_footprint = Vector2i(3, 1)
+flow_direction = "down"
 
 [connection signal="body_entered" from="Exits/ToPewterCity" to="Exits/ToPewterCity" method="_on_body_entered"]

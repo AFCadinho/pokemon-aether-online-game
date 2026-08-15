@@ -653,6 +653,11 @@ transition_id = "route_1_to_viridian_city"
 position = Vector2(0, 16)
 shape = SubResource("RectangleShape2D_7kpb1")
 
+[node name="RouteTransitionHint" parent="Exits/ToViridianCity" instance=ExtResource("17_bnyo4")]
+position = Vector2(0, 16)
+tile_footprint = Vector2i(6, 2)
+flow_direction = "up"
+
 [node name="Spawns" type="Node2D" parent="." unique_id=1226721215]
 
 [node name="FromPalletTown" type="Marker2D" parent="Spawns" unique_id=609805199]

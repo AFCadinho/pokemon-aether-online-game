@@ -410,5 +410,9 @@ metadata/pao_pending_target_map_id = "kanto_mt_moon"
 disabled = true
 shape = SubResource("RectangleShape2D_mt_moon_exit")
 
+[node name="RouteTransitionHint" parent="Exits/ToMtMoon" instance=ExtResource("7_route_hint")]
+tile_footprint = Vector2i(2, 1)
+flow_direction = "up"
+
 [connection signal="body_entered" from="Exits/ToPewterCity" to="Exits/ToPewterCity" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToPokecenter" to="Exits/ToPokecenter" method="_on_body_entered"]

@@ -674,6 +674,10 @@ position = Vector2(1328, 400)
 position = Vector2(0, -16)
 shape = SubResource("RectangleShape2D_pokecenter")
 
+[node name="DoorTransitionHint" parent="Exits/ToGym" instance=ExtResource("5_pokecenter_hint")]
+position = Vector2(0, -16)
+flow_direction = "up"
+
 [node name="ToTrainerSchool" type="Area2D" parent="Exits" unique_id=560727093]
 position = Vector2(1904, 880)
 script = ExtResource("3_route1")
@@ -684,6 +688,10 @@ target_spawn_name = "FromViridianCity"
 position = Vector2(0, -16)
 shape = SubResource("RectangleShape2D_pokecenter")
 
+[node name="DoorTransitionHint" parent="Exits/ToTrainerSchool" instance=ExtResource("5_pokecenter_hint")]
+position = Vector2(0, -16)
+flow_direction = "up"
+
 [node name="ToHouse1" type="Area2D" parent="Exits" unique_id=107727932]
 position = Vector2(1552, 880)
 script = ExtResource("3_route1")
@@ -693,6 +701,10 @@ target_spawn_name = "FromViridianCity"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse1" unique_id=1913481857]
 position = Vector2(0, -8)
 shape = SubResource("RectangleShape2D_pokecenter")
+
+[node name="DoorTransitionHint" parent="Exits/ToHouse1" instance=ExtResource("5_pokecenter_hint")]
+position = Vector2(0, -8)
+flow_direction = "up"
 
 [node name="Entities" type="Node2D" parent="." unique_id=1429917979]
 z_index = 5

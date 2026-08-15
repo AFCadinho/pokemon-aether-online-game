@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="6_estsk"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/item_gift_npc.tscn" id="7_gift_npc"]
 [ext_resource type="Resource" path="res://resources/npcs/story/daisy_oak.tres" id="8_daisy_profile"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="9_transition_hint"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_house_exit"]
 size = Vector2(32, 32)
@@ -110,6 +111,9 @@ target_spawn_name = "FromRivalsHouse"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPalletTown" unique_id=1051296460]
 shape = SubResource("RectangleShape2D_house_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToPalletTown" instance=ExtResource("9_transition_hint")]
+flow_direction = "down"
 
 [node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=1591845095]
 z_index = 4096

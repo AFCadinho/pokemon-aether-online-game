@@ -417,6 +417,11 @@ position = Vector2(336, 304)
 position = Vector2(16, 11)
 shape = SubResource("RectangleShape2D_0ycmc")
 
+[node name="RouteTransitionHint" parent="Exits/ToVictoryRoadPost" instance=ExtResource("4_route_hint")]
+position = Vector2(16, 11)
+tile_footprint = Vector2i(5, 2)
+flow_direction = "up"
+
 [node name="Collision" type="TileMapLayer" parent="." unique_id=1113342710]
 visible = false
 z_index = 100

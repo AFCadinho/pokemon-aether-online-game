@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/starter_poke_ball.tscn" id="18_ball"]
 [ext_resource type="SpriteFrames" uid="uid://caas815hh7buy" path="res://assets/npcs/classes/scientist_m_frames.tres" id="19_scientist_m"]
 [ext_resource type="SpriteFrames" uid="uid://ckxh3g37blbkj" path="res://assets/npcs/classes/scientist_f_frames.tres" id="20_scientist_f"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="21_transition_hint"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jksq5"]
 atlas = ExtResource("8_ywtjb")
@@ -224,6 +225,11 @@ target_spawn_name = "FromOaksLab"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPalletTown" unique_id=1515532203]
 position = Vector2(0, 8)
 shape = SubResource("RectangleShape2D_10jo1")
+
+[node name="DoorTransitionHint" parent="Exits/ToPalletTown" instance=ExtResource("21_transition_hint")]
+position = Vector2(0, 8)
+tile_footprint = Vector2i(3, 1)
+flow_direction = "down"
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=420087276]
 visible = false

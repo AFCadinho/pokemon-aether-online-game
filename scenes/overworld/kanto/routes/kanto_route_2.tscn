@@ -358,6 +358,11 @@ target_spawn_name = "FromNorth"
 position = Vector2(-16, 16)
 shape = SubResource("RectangleShape2D_gac6d")
 
+[node name="RouteTransitionHint" parent="Exits/ToViridianForestNorth" instance=ExtResource("7_f8n3h")]
+position = Vector2(-16, 16)
+tile_footprint = Vector2i(6, 2)
+flow_direction = "down"
+
 [node name="ToViridianForestSouth" type="Area2D" parent="Exits" unique_id=1400118060]
 position = Vector2(368, 1200)
 script = ExtResource("6_3mgn4")
@@ -368,6 +373,11 @@ target_spawn_name = "FromSouth"
 position = Vector2(-16, 16)
 shape = SubResource("RectangleShape2D_gac6d")
 
+[node name="RouteTransitionHint" parent="Exits/ToViridianForestSouth" instance=ExtResource("7_f8n3h")]
+position = Vector2(-16, 16)
+tile_footprint = Vector2i(6, 2)
+flow_direction = "up"
+
 [node name="ToRoute2GateNorth" type="Area2D" parent="Exits" unique_id=1207811318]
 position = Vector2(1376, 848)
 script = ExtResource("6_3mgn4")
@@ -377,6 +387,10 @@ target_spawn_name = "FromNorth"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute2GateNorth" unique_id=139787917]
 shape = SubResource("RectangleShape2D_gac6d")
 
+[node name="RouteTransitionHint" parent="Exits/ToRoute2GateNorth" instance=ExtResource("7_f8n3h")]
+tile_footprint = Vector2i(6, 2)
+flow_direction = "down"
+
 [node name="ToRoute2GateSouth" type="Area2D" parent="Exits" unique_id=2132258533]
 position = Vector2(1376, 1040)
 script = ExtResource("6_3mgn4")
@@ -385,6 +399,10 @@ target_spawn_name = "FromSouth"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute2GateSouth" unique_id=2132130911]
 shape = SubResource("RectangleShape2D_gac6d")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute2GateSouth" instance=ExtResource("7_f8n3h")]
+tile_footprint = Vector2i(6, 2)
+flow_direction = "up"
 
 [node name="SandTiles" type="Node2D" parent="." unique_id=597055844]
 
