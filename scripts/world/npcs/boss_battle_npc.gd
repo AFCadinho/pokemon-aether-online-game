@@ -228,4 +228,4 @@ func _show_report_to_staff_message() -> void:
 		await error_dialog_service.call("show_report_to_staff_message")
 		return
 
-	await show_dialogue(["This boss battle is not available right now."])
+	await show_dialogue([LocalizationManager.text("npc.error.boss_battle")])

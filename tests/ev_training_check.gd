@@ -46,6 +46,11 @@ func _init() -> void:
 		"ui.ev_training.assistant.title",
 		"ui.ev_training.assistant.stat_prompt",
 		"ui.ev_training.assistant.session_fee",
+		"ui.ev_training.mateo.lesson_intro.evs",
+		"ui.ev_training.mateo.focus_targets",
+		"ui.ev_training.mateo.battle_progress",
+		"ui.ev_training.mateo.allocation_instructions",
+		"ui.ev_training.mateo.choose_pokemon",
 	]
 	for locale: String in ["en", "nl", "pt_BR"]:
 		var locale_data: Variant = JSON.parse_string(
@@ -63,6 +68,11 @@ func _init() -> void:
 		not gate_source.contains("This is Viridian City's focused EV training field.")
 		and not gate_source.contains("Training session complete."),
 		"EV assistant runtime dialogue must not be hardcoded in English"
+	)
+	_assert(
+		expert_source.contains('LocalizationManager.text("ui.ev_training.mateo.lesson_intro.evs")')
+		and not expert_source.contains("EV means Effort Value. A Pokemon that participates"),
+		"Mateo's runtime lesson must use the localization catalog"
 	)
 	_assert(
 		gate_source.contains('backdrop.name = "EvTrainingChoiceBackdrop"')

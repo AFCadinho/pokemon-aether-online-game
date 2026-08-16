@@ -36,8 +36,13 @@ func _check_post_battle_dialogue_contract() -> void:
 	var metadata_text := _read_text(TRAINER_METADATA_SERVICE_SCRIPT)
 	var world_text := _read_text("res://scripts/world/world.gd")
 	_check_true(metadata_text.contains('trainer_metadata["outroDialogueId"]'), "TrainerMetadataService normalizes outroDialogueId")
+	_check_true(metadata_text.contains('trainer_metadata["rematchDialogueId"]'), "TrainerMetadataService normalizes rematchDialogueId")
 	_check_true(world_text.contains("await _show_trainer_outro_dialogue"), "trainer wins present configured outro dialogue")
 	_check_true(world_text.contains("keep_locked_for_outro"), "overworld remains locked until trainer outro dialogue finishes")
+	var trainer_text := _read_text(TRAINER_NPC_SCRIPT)
+	_check_true(trainer_text.contains("NpcDialogueService.resolve_dialogue("), "trainer dialogue resolves localized lines and speaker names")
+	_check_true(trainer_text.contains('metadata.get("outroDialogueId"'), "repeat interactions resolve the localized defeated dialogue")
+	_check_true(trainer_text.contains("resolved_battle_dialogue_speaker_name"), "trainer intro uses the localized speaker name")
 
 
 func _check_fallback_order() -> void:
@@ -55,7 +60,7 @@ func _check_missing_dialogue_id_falls_back_safely() -> void:
 	_check_true(text.contains("if not configured_lines.is_empty():"), "TrainerNPC only uses configured dialogue lookup when lines exist")
 	_check_true(text.contains("if not metadata_lines.is_empty():"), "TrainerNPC only uses metadata dialogue lookup when lines exist")
 	_check_true(
-		text.contains("NpcDialogueService.resolve_lines("),
+		text.contains("NpcDialogueService.resolve_dialogue("),
 		"TrainerNPC delegates empty dialogue lookup handling to the central resolver"
 	)
 

@@ -34,6 +34,7 @@ var next_progress_refresh_at_msec := 0
 var rematch_marker: PanelContainer
 var rematch_marker_icon: TextureRect
 var rematch_marker_sleep_label: Label
+var resolved_battle_dialogue_speaker_name := ""
 
 func _ready() -> void:
 	_ready_base_npc()
@@ -120,6 +121,7 @@ func _show_battle_dialogue(is_rematch: bool) -> void:
 		return
 
 	var dialogue_lines: Array[String] = []
+	resolved_battle_dialogue_speaker_name = ""
 	if is_rematch:
 		dialogue_lines = _resolve_rematch_dialogue_lines(trainer_metadata)
 	else:
@@ -130,6 +132,8 @@ func _show_battle_dialogue(is_rematch: bool) -> void:
 			"Trainer metadata for %s is missing battle dialogue." % trainer_id
 		)
 		return
+	if not resolved_battle_dialogue_speaker_name.is_empty():
+		speaker_name = resolved_battle_dialogue_speaker_name
 
 	await get_tree().create_timer(INTRO_DIALOGUE_DELAY_SECONDS).timeout
 	
@@ -213,11 +217,15 @@ func _get_intro_dialogue_id_from_trainer_metadata(trainer_metadata: Dictionary) 
 	return ""
 
 func _get_dialogue_metadata_lines(intro_dialogue_id: String) -> Array[String]:
-	return await NpcDialogueService.resolve_lines(
+	var result := await NpcDialogueService.resolve_dialogue(
 		intro_dialogue_id,
 		[],
 		"TrainerNPC"
 	)
+	var speaker_name := str(result.get("speakerName", "")).strip_edges()
+	if not speaker_name.is_empty():
+		resolved_battle_dialogue_speaker_name = speaker_name
+	return _string_array(result.get("lines", []))
 
 func _fail_trainer_metadata(dialogue_box: Node, message: String) -> void:
 	push_error("TrainerNPC: %s" % message)
@@ -443,10 +451,25 @@ func _show_post_battle_dialogue() -> void:
 		await GameErrorDialogService.show_response(metadata_response)
 		return
 	var metadata: Dictionary = metadata_response.get("metadata", {}) as Dictionary
-	var lines := _string_array(metadata.get("dialogue_after_battle", []))
+	var fallback_lines := _string_array(metadata.get("dialogue_after_battle", []))
+	var lines: Array[String] = []
+	var speaker_name := str(metadata.get("name", display_name))
+	var outro_dialogue_id := str(metadata.get("outroDialogueId", "")).strip_edges()
+	if not outro_dialogue_id.is_empty():
+		var dialogue := await NpcDialogueService.resolve_dialogue(
+			outro_dialogue_id,
+			fallback_lines,
+			"TrainerNPC"
+		)
+		lines = _string_array(dialogue.get("lines", []))
+		var localized_speaker_name := str(dialogue.get("speakerName", "")).strip_edges()
+		if not localized_speaker_name.is_empty():
+			speaker_name = localized_speaker_name
+	else:
+		lines = fallback_lines
 	if lines.is_empty():
 		lines = [LocalizationManager.text("npc.trainer.rematch.defeated")]
-	await show_dialogue(lines, str(metadata.get("name", display_name)))
+	await show_dialogue(lines, speaker_name)
 
 
 func _setup_rematch_marker() -> void:
