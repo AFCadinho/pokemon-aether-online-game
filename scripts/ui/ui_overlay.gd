@@ -37286,17 +37286,87 @@ func _add_user_chat_message(
 	_scroll_chat_to_bottom.call_deferred()
 
 
-func _create_chat_shiny_hunt_button(attachment: Dictionary) -> Button:
+func _create_chat_shiny_hunt_button(attachment: Dictionary) -> Control:
 	var button := Button.new()
-	button.text = "✨ %s · %s" % [
-		str(attachment.get("evolutionLineName", attachment.get("targetSpeciesName", "Pokémon"))),
-		_format_money(maxi(int(attachment.get("encounterCount", 0)), 0)),
-	]
+	var target_species := str(attachment.get("targetSpeciesName", "Pokémon"))
+	var evolution_line := str(attachment.get("evolutionLineName", target_species))
+	var encounter_count := maxi(int(attachment.get("encounterCount", 0)), 0)
+	button.text = ""
 	button.tooltip_text = LocalizationManager.text("ui.shiny_tracker.chat_tooltip")
-	button.custom_minimum_size = Vector2(150, 24)
+	button.custom_minimum_size = Vector2(248, 54)
+	button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	button.focus_mode = Control.FOCUS_NONE
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	_apply_button_style(button, "secondary")
+	var normal_style := _make_button_style(Color("#0a1626e8"), Color("#6f4f91cc"), 8, 1)
+	var hover_style := _make_button_style(Color("#162842f2"), Color("#a77bd8"), 8, 1)
+	var pressed_style := _make_button_style(Color("#09121fe8"), Color("#c694ff"), 8, 1)
+	button.add_theme_stylebox_override("normal", normal_style)
+	button.add_theme_stylebox_override("hover", hover_style)
+	button.add_theme_stylebox_override("pressed", pressed_style)
+	button.add_theme_stylebox_override("focus", hover_style)
+	var margin := MarginContainer.new()
+	for side in ["left", "top", "right", "bottom"]:
+		margin.add_theme_constant_override("margin_%s" % side, 6)
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	button.add_child(margin)
+	var layout := HBoxContainer.new()
+	layout.add_theme_constant_override("separation", 7)
+	layout.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	margin.add_child(layout)
+	var sprite := TextureRect.new()
+	sprite.custom_minimum_size = Vector2(40, 40)
+	sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	sprite.texture = PokemonAssets.load_home_sprite(target_species)
+	sprite.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	layout.add_child(sprite)
+	var details := VBoxContainer.new()
+	details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	details.alignment = BoxContainer.ALIGNMENT_CENTER
+	details.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	layout.add_child(details)
+	var title := Label.new()
+	title.text = LocalizationManager.text("ui.shiny_tracker.chat_card_title")
+	title.add_theme_font_size_override("font_size", 9)
+	title.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	details.add_child(title)
+	var name := Label.new()
+	name.text = target_species
+	name.add_theme_font_size_override("font_size", 13)
+	name.add_theme_color_override("font_color", UI_TEXT)
+	name.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	details.add_child(name)
+	var line := Label.new()
+	line.text = evolution_line
+	line.add_theme_font_size_override("font_size", 9)
+	line.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	line.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	details.add_child(line)
+	var badge := PanelContainer.new()
+	badge.custom_minimum_size = Vector2(54, 40)
+	badge.add_theme_stylebox_override("panel", _make_panel_style(Color("#132c43"), Color("#4b88ad"), 6, 1))
+	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	layout.add_child(badge)
+	var badge_stack := VBoxContainer.new()
+	badge_stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	badge_stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	badge.add_child(badge_stack)
+	var count := Label.new()
+	count.text = _format_money(encounter_count)
+	count.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	count.add_theme_font_size_override("font_size", 13)
+	count.add_theme_color_override("font_color", UI_CYAN)
+	count.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	badge_stack.add_child(count)
+	var count_label := Label.new()
+	count_label.text = LocalizationManager.text("ui.shiny_tracker.chat_card_encounters")
+	count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	count_label.add_theme_font_size_override("font_size", 8)
+	count_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	count_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	badge_stack.add_child(count_label)
 	button.pressed.connect(_on_chat_shiny_hunt_pressed.bind(str(attachment.get("shareId", ""))))
 	return button
 
