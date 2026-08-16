@@ -55,7 +55,7 @@ func _init() -> void:
 		"action bar exposes a clickable rod selector"
 	)
 	_check(
-		settings_manager_source.contains('CONFIGURABLE_INPUT_ACTIONS: Array[String] = ["fish"]')
+		settings_manager_source.contains('CONFIGURABLE_INPUT_ACTIONS: Array[String] = ["fish", "pickpocket"]')
 		and settings_manager_source.contains('"input_bindings": input_bindings')
 		and settings_manager_source.contains("InputMap.action_erase_events(action)")
 		and settings_manager_source.contains("func get_input_binding_label(action: String)"),
@@ -63,7 +63,7 @@ func _init() -> void:
 	)
 	_check(
 		settings_menu_source.contains('_create_tab_content("Controls", "ui.settings.tab.controls")')
-		and settings_menu_source.contains('fishing_button.name = "FishingBindingButton"')
+		and settings_menu_source.contains('binding_button.name = "%sBindingButton" % control_name')
 		and settings_menu_source.contains("SettingsManager.set_input_binding"),
 		"Settings expose a Fishing hotkey capture control"
 	)
