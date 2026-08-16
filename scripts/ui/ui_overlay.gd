@@ -449,7 +449,7 @@ var donator_store_popup: DonatorStorePopup
 @onready var global_buff_details_active_label: Label = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/ActiveLabel
 @onready var global_buff_donation_section: VBoxContainer = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection
 @onready var global_buff_amount_input: LineEdit = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow/AmountInput
-@onready var global_buff_fill_remaining_button: Button = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow/FillRemainingButton
+@onready var global_buff_fill_remaining_button: Button = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/FillRemainingButton
 @onready var global_buff_contribute_button: Button = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow/ContributeButton
 @onready var region_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/StatusRow/RegionBadge/RegionLabel
 @onready var location_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/HeaderRow/LocationLabel
@@ -10285,7 +10285,6 @@ func _setup_status_docks() -> void:
 			{"minimum": _format_money(MINIMUM_GLOBAL_BUFF_CONTRIBUTION)}
 		)
 	_set_localized_control_property(global_buff_contribute_button, "text", "ui.buff.contribute")
-	_set_localized_control_property(global_buff_fill_remaining_button, "text", "ui.buff.fill_remaining")
 	for child: Node in global_buff_slots.get_children():
 		var button := child as Button
 		if button == null:
@@ -10887,6 +10886,10 @@ func _refresh_global_buff_contribution_input() -> void:
 	)
 	global_buff_contribute_button.disabled = not valid
 	global_buff_fill_remaining_button.disabled = remaining <= 0
+	global_buff_fill_remaining_button.text = LocalizationManager.text(
+		"ui.buff.fill_remaining",
+		{"amount": _format_money(remaining)}
+	)
 	global_buff_fill_remaining_button.tooltip_text = LocalizationManager.text(
 		"ui.buff.fill_remaining_tooltip",
 		{"amount": _format_money(remaining)}
@@ -10896,7 +10899,7 @@ func _refresh_global_buff_contribution_input() -> void:
 		{"minimum": _format_money(MINIMUM_GLOBAL_BUFF_CONTRIBUTION)}
 	)
 	_apply_button_style(global_buff_contribute_button, "primary" if valid else "default")
-	_apply_button_style(global_buff_fill_remaining_button)
+	_apply_global_buff_fill_remaining_button_style()
 
 func _on_global_buff_contribute_pressed() -> void:
 	if selected_global_buff.is_empty() or str(selected_global_buff.get("state", "funding")) == "active":
@@ -22370,6 +22373,28 @@ func _apply_button_style(button: Button, variant: String = "default") -> void:
 	button.add_theme_stylebox_override("focus", _make_button_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, 8, 1))
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
+
+func _apply_global_buff_fill_remaining_button_style() -> void:
+	var button := global_buff_fill_remaining_button
+	if button == null:
+		return
+	var transparent_style := _make_button_style(Color.TRANSPARENT, Color.TRANSPARENT, 6, 0)
+	transparent_style.content_margin_top = 2
+	transparent_style.content_margin_bottom = 2
+	var hover_style := _make_button_style(Color("#173b5688"), Color.TRANSPARENT, 6, 0)
+	hover_style.content_margin_top = 2
+	hover_style.content_margin_bottom = 2
+	button.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	button.add_theme_color_override("font_hover_color", Color("#72d8ff"))
+	button.add_theme_color_override("font_pressed_color", Color("#b5eaff"))
+	button.add_theme_color_override("font_disabled_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.42))
+	button.add_theme_font_size_override("font_size", 11)
+	button.add_theme_stylebox_override("normal", transparent_style)
+	button.add_theme_stylebox_override("hover", hover_style)
+	button.add_theme_stylebox_override("pressed", hover_style)
+	button.add_theme_stylebox_override("focus", hover_style)
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+
 func _apply_line_edit_style(line_edit: LineEdit) -> void:
 	line_edit.add_theme_color_override("font_color", UI_TEXT)
 	line_edit.add_theme_color_override("font_placeholder_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.68))
@@ -22521,7 +22546,7 @@ func _apply_premium_overlay_styles() -> void:
 	_apply_button_style(system_chat_tab_button, "primary")
 	_apply_chat_dock_button_style(send_button, true)
 	_apply_button_style(global_buff_details_close_button)
-	_apply_button_style(global_buff_fill_remaining_button)
+	_apply_global_buff_fill_remaining_button_style()
 	_apply_button_style(global_buff_contribute_button, "primary")
 	_apply_line_edit_style(global_buff_amount_input)
 	_refresh_global_buff_contribution_input()

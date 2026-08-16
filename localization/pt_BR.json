@@ -3273,7 +3273,7 @@
   "ui.buff.server_remaining": "Ativo em todo o servidor · {remaining} restantes",
   "ui.buff.contribution_hint": "Informe um valor (mínimo de ₽{minimum}, ou o restante da meta).",
   "ui.buff.contribution_minimum": "A contribuição mínima é ₽{minimum}.",
-  "ui.buff.fill_remaining": "Restante",
+  "ui.buff.fill_remaining": "Usar os ₽{amount} restantes",
   "ui.buff.fill_remaining_tooltip": "Preencher o valor restante de ₽{amount}.",
   "ui.buff.contribute": "Contribuir",
   "ui.buff.contribution_unavailable": "As contribuições da comunidade ainda não estão conectadas. Contribuição selecionada: ${amount}.",

@@ -3273,7 +3273,7 @@
   "ui.buff.server_remaining": "Serverbreed actief · nog {remaining}",
   "ui.buff.contribution_hint": "Vul een bedrag in (minimaal ₽{minimum}, of het resterende doelbedrag).",
   "ui.buff.contribution_minimum": "De minimale bijdrage is ₽{minimum}.",
-  "ui.buff.fill_remaining": "Restant",
+  "ui.buff.fill_remaining": "Gebruik resterende ₽{amount}",
   "ui.buff.fill_remaining_tooltip": "Vul het resterende bedrag van ₽{amount} in.",
   "ui.buff.contribute": "Bijdragen",
   "ui.buff.contribution_unavailable": "Communitybijdragen zijn nog niet aangesloten. Geselecteerde bijdrage: ${amount}.",
