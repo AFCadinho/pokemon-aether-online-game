@@ -91,15 +91,15 @@ func open_shared_hunt(summary: Dictionary) -> void:
 	shared_mode = true
 	visible = true
 	selector_panel.visible = false
-	stats_title.visible = false
-	stats_grid.visible = false
+	stats_title.visible = true
+	stats_grid.visible = true
 	history_title.visible = false
 	history_scroll.visible = false
 	overview_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	stop_button.visible = false
 	share_button.visible = false
 	tracker_state = {
-		"stats": {},
+		"stats": _as_dictionary(summary.get("stats")),
 		"activeHunt": _as_dictionary(summary.get("hunt")),
 		"recentHunts": [],
 	}
