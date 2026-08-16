@@ -362,6 +362,8 @@
   "ui.settings.section.controls_subtitle": "Escolha as teclas usadas nas ações do mundo",
   "ui.settings.controls.fishing": "Pesca — lançar ou recolher",
   "ui.settings.controls.fishing_hint": "A mesma tecla lança perto de águas pescáveis e recolhe quando o ! aparece.",
+  "ui.settings.controls.thieving": "Thieving — bater carteira",
+  "ui.settings.controls.thieving_hint": "Use esta tecla atrás de um alvo elegível para tentar bater a carteira.",
   "ui.settings.controls.press_key": "Pressione uma tecla…",
   "ui.settings.controls.reset": "Restaurar padrão",
   "ui.settings.language": "Idioma",

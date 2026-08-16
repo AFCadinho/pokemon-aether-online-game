@@ -362,6 +362,8 @@
   "ui.settings.section.controls_subtitle": "Choose the keys used for overworld actions",
   "ui.settings.controls.fishing": "Fishing — cast or reel",
   "ui.settings.controls.fishing_hint": "The same key casts beside fishable water and reels in when the ! appears.",
+  "ui.settings.controls.thieving": "Thieving — pickpocket",
+  "ui.settings.controls.thieving_hint": "Use this key behind an eligible target to attempt a pickpocket.",
   "ui.settings.controls.press_key": "Press a key…",
   "ui.settings.controls.reset": "Reset to default",
   "ui.settings.language": "Language",

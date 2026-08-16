@@ -362,6 +362,8 @@
   "ui.settings.section.controls_subtitle": "Kies de toetsen voor acties in de spelwereld",
   "ui.settings.controls.fishing": "Fishing — uitwerpen of binnenhalen",
   "ui.settings.controls.fishing_hint": "Dezelfde toets werpt uit naast visbaar water en haalt binnen wanneer het ! verschijnt.",
+  "ui.settings.controls.thieving": "Thieving — zakkenrollen",
+  "ui.settings.controls.thieving_hint": "Gebruik deze toets achter een geschikt doelwit om te proberen diens zakken te rollen.",
   "ui.settings.controls.press_key": "Druk op een toets…",
   "ui.settings.controls.reset": "Standaard herstellen",
   "ui.settings.language": "Taal",
