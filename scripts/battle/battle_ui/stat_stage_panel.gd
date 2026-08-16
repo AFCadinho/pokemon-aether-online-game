@@ -154,9 +154,9 @@ func _format_stat_stage_name(stat_key: String) -> String:
 
 func _format_stat_stage_value(stage_value: int) -> String:
 	if stage_value > 0:
-		return "+%s" % stage_value
+		return "▲ %s" % stage_value
 
-	return str(stage_value)
+	return "▼ %s" % abs(stage_value)
 
 
 func _on_locale_changed(_locale: String) -> void:

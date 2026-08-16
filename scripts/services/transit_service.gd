@@ -29,7 +29,7 @@ func attune(destination_id: String, beacon_position: Vector2) -> Dictionary:
 	)
 
 
-func set_anchor(destination_id: String, beacon_position: Vector2) -> Dictionary:
+func set_anchor(destination_id: String, beacon_position: Vector2, anchor_slot: int = 1) -> Dictionary:
 	var position_save := await _save_current_player_position()
 	if not bool(position_save.get("success", false)):
 		return position_save
@@ -38,6 +38,7 @@ func set_anchor(destination_id: String, beacon_position: Vector2) -> Dictionary:
 		HTTPClient.METHOD_POST,
 		JSON.stringify({
 			"destinationId": destination_id,
+			"anchorSlot": anchor_slot,
 			"beaconPosition": {
 				"x": beacon_position.x,
 				"y": beacon_position.y,
