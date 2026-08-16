@@ -13,6 +13,7 @@
 - Abra and Bounsweet starters now receive a Water-, Fire-, or Grass-type Hidden Power, giving them reliable early-game coverage.
 - Protean and similar type-changing effects now show the Pokémon's current type in a coloured battle indicator.
 - Brock's Onix is now Shiny.
+- The permanent Shiny Tracker is now included in every Trainer's Bag and defaults to hotbar slot 2.
 
 **Changed**
 
