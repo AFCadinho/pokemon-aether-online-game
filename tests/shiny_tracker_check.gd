@@ -27,6 +27,18 @@ func _run() -> void:
 	popup.call("_render_tracker")
 	_check(popup.stop_button.disabled, "Tracker accepts an API null when there is no active hunt")
 	_check(popup.share_button.disabled, "Tracker disables sharing when the active hunt is null")
+	popup.tracker_state = {
+		"stats": {},
+		"activeHunt": {
+			"targetSpeciesName": "Pidgey",
+			"evolutionLineName": "Pidgey",
+			"evolutionLineMembers": [],
+			"encounterCount": 0,
+		},
+		"recentHunts": [],
+	}
+	popup.call("_render_tracker")
+	_check(popup.hunt_sprite.texture != null, "Active hunts show the target Pokémon sprite")
 	popup.queue_free()
 	await process_frame
 
