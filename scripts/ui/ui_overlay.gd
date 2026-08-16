@@ -118,6 +118,7 @@ const SOCIALS_NEARBY_ICON: Texture2D = preload("res://assets/ui/socials_nearby.s
 const SOCIALS_MAIL_ICON: Texture2D = preload("res://assets/ui/socials_mail.svg")
 const POKEMON_STORAGE_ICON: Texture2D = preload("res://assets/ui/pokemon_storage.svg")
 const POKEDEX_OWNED_ICON: Texture2D = preload("res://assets/items/icons/POKEBALL.png")
+const SHINY_TRACKER_ICON: Texture2D = preload("res://assets/items/icons/SHINYTRACKER.png")
 const DEV_CREATE_POKEMON_ICON: Texture2D = preload("res://assets/ui/pokedex.svg")
 const DEV_SPAWN_ENCOUNTER_ICON: Texture2D = preload("res://assets/ui/wild_encounter_radar.svg")
 const DEV_ADD_RESOURCES_ICON: Texture2D = preload("res://assets/ui/bag-icon.svg")
@@ -37288,12 +37289,9 @@ func _add_user_chat_message(
 
 func _create_chat_shiny_hunt_button(attachment: Dictionary) -> Control:
 	var button := Button.new()
-	var target_species := str(attachment.get("targetSpeciesName", "Pokémon"))
-	var evolution_line := str(attachment.get("evolutionLineName", target_species))
-	var encounter_count := maxi(int(attachment.get("encounterCount", 0)), 0)
 	button.text = ""
 	button.tooltip_text = LocalizationManager.text("ui.shiny_tracker.chat_tooltip")
-	button.custom_minimum_size = Vector2(226, 58)
+	button.custom_minimum_size = Vector2(144, 42)
 	button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	button.focus_mode = Control.FOCUS_NONE
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -37305,71 +37303,39 @@ func _create_chat_shiny_hunt_button(attachment: Dictionary) -> Control:
 	button.add_theme_stylebox_override("pressed", pressed_style)
 	button.add_theme_stylebox_override("focus", hover_style)
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 8)
-	margin.add_theme_constant_override("margin_right", 8)
-	margin.add_theme_constant_override("margin_top", 7)
-	margin.add_theme_constant_override("margin_bottom", 7)
+	margin.add_theme_constant_override("margin_left", 7)
+	margin.add_theme_constant_override("margin_right", 7)
+	margin.add_theme_constant_override("margin_top", 6)
+	margin.add_theme_constant_override("margin_bottom", 6)
 	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	button.add_child(margin)
 	var layout := HBoxContainer.new()
-	layout.add_theme_constant_override("separation", 8)
+	layout.add_theme_constant_override("separation", 6)
 	layout.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	margin.add_child(layout)
-	var sprite := TextureRect.new()
-	sprite.custom_minimum_size = Vector2(38, 38)
-	sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	sprite.texture = PokemonAssets.load_home_sprite(target_species)
-	sprite.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	layout.add_child(sprite)
-	var details := VBoxContainer.new()
-	details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	details.alignment = BoxContainer.ALIGNMENT_CENTER
-	details.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	layout.add_child(details)
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(28, 28)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon.texture = SHINY_TRACKER_ICON
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	layout.add_child(icon)
 	var title := Label.new()
 	title.text = LocalizationManager.text("ui.shiny_tracker.chat_card_title")
-	title.add_theme_font_size_override("font_size", 8)
-	title.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 10)
+	title.add_theme_color_override("font_color", UI_TEXT)
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	details.add_child(title)
-	var name := Label.new()
-	name.text = target_species
-	name.add_theme_font_size_override("font_size", 14)
-	name.add_theme_color_override("font_color", UI_TEXT)
-	name.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	details.add_child(name)
-	if evolution_line.to_lower() != target_species.to_lower():
-		var line := Label.new()
-		line.text = evolution_line
-		line.add_theme_font_size_override("font_size", 8)
-		line.add_theme_color_override("font_color", UI_MUTED_TEXT)
-		line.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		details.add_child(line)
-	var badge := PanelContainer.new()
-	badge.custom_minimum_size = Vector2(58, 34)
-	badge.add_theme_stylebox_override("panel", _make_panel_style(Color("#132c43"), Color("#4b88ad"), 6, 1))
-	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	layout.add_child(badge)
-	var badge_stack := VBoxContainer.new()
-	badge_stack.alignment = BoxContainer.ALIGNMENT_CENTER
-	badge_stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	badge.add_child(badge_stack)
-	var count := Label.new()
-	count.text = _format_money(encounter_count)
-	count.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	count.add_theme_font_size_override("font_size", 13)
-	count.add_theme_color_override("font_color", PC_ACCENT)
-	count.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	badge_stack.add_child(count)
-	var count_label := Label.new()
-	count_label.text = LocalizationManager.text("ui.shiny_tracker.chat_card_encounters")
-	count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	count_label.add_theme_font_size_override("font_size", 8)
-	count_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	count_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	badge_stack.add_child(count_label)
+	layout.add_child(title)
+	var arrow := Label.new()
+	arrow.text = "›"
+	arrow.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	arrow.add_theme_font_size_override("font_size", 18)
+	arrow.add_theme_color_override("font_color", PC_ACCENT)
+	arrow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	layout.add_child(arrow)
 	button.pressed.connect(_on_chat_shiny_hunt_pressed.bind(str(attachment.get("shareId", ""))))
 	return button
 
