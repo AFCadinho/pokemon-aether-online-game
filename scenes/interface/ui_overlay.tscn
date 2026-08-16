@@ -1265,30 +1265,28 @@ text = "ui.buff.contribution_hint"
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="Amount1000Button" type="Button" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow"]
-custom_minimum_size = Vector2(48, 32)
-layout_mode = 2
-mouse_default_cursor_shape = 2
-text = "1K"
-
-[node name="Amount10000Button" type="Button" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow"]
-custom_minimum_size = Vector2(48, 32)
-layout_mode = 2
-mouse_default_cursor_shape = 2
-text = "10K"
-
-[node name="Amount25000Button" type="Button" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow"]
-custom_minimum_size = Vector2(48, 32)
-layout_mode = 2
-mouse_default_cursor_shape = 2
-text = "25K"
-
-[node name="ContributeButton" type="Button" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow"]
-custom_minimum_size = Vector2(0, 32)
+[node name="AmountInput" type="LineEdit" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow"]
+custom_minimum_size = Vector2(128, 32)
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_default_cursor_shape = 2
+placeholder_text = "10.000"
+alignment = 2
+virtual_keyboard_type = 2
+
+[node name="ContributeButton" type="Button" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow"]
+custom_minimum_size = Vector2(112, 32)
+layout_mode = 2
+mouse_default_cursor_shape = 2
 text = "ui.buff.contribute"
+
+[node name="FillRemainingButton" type="Button" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection"]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_default_cursor_shape = 2
+text = "ui.buff.fill_remaining"
+alignment = 2
 
 [node name="OptionsPanel" type="PanelContainer" parent="Control" unique_id=1882847732]
 custom_minimum_size = Vector2(368, 0)

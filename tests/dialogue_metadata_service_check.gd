@@ -156,7 +156,7 @@ func _check_trainer_npc_uses_intro_dialogue_lookup() -> void:
 	_check_true(text.contains("func _resolve_intro_dialogue_lines(trainer_metadata: Dictionary) -> Array[String]:"), "TrainerNPC resolves intro dialogue")
 	_check_true(text.contains("var configured_dialogue_id := _get_dialogue_override_id()"), "TrainerNPC prefers an explicit scene override")
 	_check_true(text.contains("func _get_intro_dialogue_id_from_trainer_metadata(trainer_metadata: Dictionary) -> String:"), "TrainerNPC supports trainer metadata dialogue id")
-	_check_true(text.contains("NpcDialogueService.resolve_lines("), "TrainerNPC uses NpcDialogueService for intro dialogue")
+	_check_true(text.contains("NpcDialogueService.resolve_dialogue("), "TrainerNPC uses NpcDialogueService for localized intro dialogue and speaker name")
 
 
 func _check_trainer_npc_fallback_behavior() -> void:
