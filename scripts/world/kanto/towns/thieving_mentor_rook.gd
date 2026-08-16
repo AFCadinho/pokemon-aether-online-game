@@ -160,4 +160,4 @@ func _show_report_to_staff_message() -> void:
 	if error_service != null and error_service.has_method("show_report_to_staff_message"):
 		await error_service.call("show_report_to_staff_message")
 		return
-	await show_dialogue(["I cannot finish the Thieving lesson right now."], display_name)
+	await show_dialogue([LocalizationManager.text("npc.error.thieving_lesson")], display_name)

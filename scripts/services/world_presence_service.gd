@@ -34,6 +34,7 @@ var roster_revision := 0
 var has_authoritative_roster_revision := false
 var last_sent_map_id := ""
 var current_weather_state: Dictionary = {}
+var connection_attempt_id := 0
 
 
 func _process(delta: float) -> void:
@@ -65,7 +66,8 @@ func _process(delta: float) -> void:
 	if ready_state == WebSocketPeer.STATE_CONNECTING:
 		return
 
-	connecting = false
+	if connecting:
+		return
 	if not should_reconnect or not _is_authenticated():
 		return
 
@@ -83,19 +85,22 @@ func connect_presence() -> void:
 
 	should_reconnect = true
 	connecting = true
+	connection_attempt_id += 1
 	session_invalid_handled = false
 	session_check_timer = SESSION_CHECK_INTERVAL_SECONDS
-	_connect_presence_async.call_deferred()
+	_connect_presence_async.call_deferred(connection_attempt_id)
 
 
-func _connect_presence_async() -> void:
+func _connect_presence_async(attempt_id: int) -> void:
 	var gateway := _gateway_api_config()
 	if gateway == null:
 		connecting = false
 		return
 	var base_url: String = await gateway.call("get_base_url")
-	if not _is_authenticated():
+	if attempt_id != connection_attempt_id or not _is_authenticated():
 		connecting = false
+		return
+	if websocket.get_ready_state() != WebSocketPeer.STATE_CLOSED:
 		return
 
 	var websocket_url := ClientBuild.append_websocket_query(
@@ -113,6 +118,7 @@ func _connect_presence_async() -> void:
 func disconnect_presence() -> void:
 	should_reconnect = false
 	connecting = false
+	connection_attempt_id += 1
 	last_position_payload.clear()
 	_reset_weather(last_sent_map_id)
 	last_sent_map_id = ""
