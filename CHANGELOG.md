@@ -10,6 +10,7 @@
 - Evolution Stones and all trade-evolution items can now be used directly from the Bag. Linking Cords evolve trade Pokémon without trading and are sold at standard PokéMarts for ₽1,000.
 - Added a configurable Thieving hotkey in Control Settings.
 - Added an Aethernet Beacon menu with a clear explanation of the travel network and Aether Anchor management. Members can set a second Anchor.
+- Abra and Bounsweet starters now receive a Water-, Fire-, or Grass-type Hidden Power, giving them reliable early-game coverage.
 
 **Changed**
 
