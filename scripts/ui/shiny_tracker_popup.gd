@@ -25,6 +25,7 @@ var shared_mode := false
 
 var hunt_name_label: Label
 var hunt_count_label: Label
+var hunt_count_context_label: Label
 var hunt_detail_label: Label
 var hunt_sprite: TextureRect
 var stop_button: Button
@@ -215,6 +216,11 @@ func _build_overview_panel() -> Control:
 	hunt_count_label.add_theme_font_size_override("font_size", 32)
 	hunt_count_label.add_theme_color_override("font_color", UI_CYAN)
 	hunt_details.add_child(hunt_count_label)
+	hunt_count_context_label = Label.new()
+	hunt_count_context_label.text = _t("ui.shiny_tracker.hunt_encounters")
+	hunt_count_context_label.add_theme_font_size_override("font_size", 9)
+	hunt_count_context_label.add_theme_color_override("font_color", UI_CYAN)
+	hunt_details.add_child(hunt_count_context_label)
 	hunt_detail_label = Label.new()
 	hunt_detail_label.add_theme_font_size_override("font_size", 10)
 	hunt_detail_label.add_theme_color_override("font_color", UI_MUTED)
@@ -358,7 +364,8 @@ func _render_tracker() -> void:
 	if has_active:
 		var target_species := str(active.get("targetSpeciesName", ""))
 		hunt_name_label.text = str(active.get("evolutionLineName", target_species if not target_species.is_empty() else "Pokémon"))
-		hunt_count_label.text = _t("ui.shiny_tracker.encounters", {"count": _format_number(int(active.get("encounterCount", 0)))})
+		hunt_count_label.text = _format_number(int(active.get("encounterCount", 0)))
+		hunt_count_context_label.visible = true
 		hunt_sprite.texture = PokemonAssets.load_home_sprite(target_species)
 		hunt_sprite.visible = hunt_sprite.texture != null
 		var member_names: Array[String] = []
@@ -369,6 +376,7 @@ func _render_tracker() -> void:
 	else:
 		hunt_name_label.text = _t("ui.shiny_tracker.no_active")
 		hunt_count_label.text = "—"
+		hunt_count_context_label.visible = false
 		hunt_detail_label.text = _t("ui.shiny_tracker.no_active_hint")
 		hunt_sprite.texture = null
 		hunt_sprite.visible = false

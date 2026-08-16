@@ -3596,7 +3596,7 @@
   "ui.shiny_tracker.no_active_hint": "Kies rechts een doelwit om de teller te starten.",
   "ui.shiny_tracker.no_history": "Nog geen afgeronde of gestopte hunts.",
   "ui.shiny_tracker.no_results": "Geen Pokémon gevonden.",
-  "ui.shiny_tracker.encounters": "{count} encounters",
+  "ui.shiny_tracker.hunt_encounters": "ENCOUNTERS IN DEZE HUNT",
   "ui.shiny_tracker.confirm_replace": "Druk nogmaals om je huidige hunt te stoppen en te vervangen.",
   "ui.shiny_tracker.status.loading": "Tracker laden...",
   "ui.shiny_tracker.status.ready": "Alleen normale wilde en fishing-encounters tellen mee. Er is geen pity.",
