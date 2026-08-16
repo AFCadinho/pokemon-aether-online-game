@@ -38,7 +38,7 @@ func _run() -> void:
 		"recentHunts": [],
 	}
 	popup.call("_render_tracker")
-	_check(popup.hunt_sprite.texture != null, "Active hunts show the target Pokémon sprite")
+	_check(popup.hunt_sprite.texture != null, "Active hunts show the target's Shiny Pokémon sprite")
 	_check(popup.hunt_count_label.text == "0", "Active hunt count renders as a standalone number")
 	_check(popup.hunt_count_context_label.visible, "Active hunt count shows its hunt context")
 	popup.open_shared_hunt({
@@ -61,6 +61,8 @@ func _run() -> void:
 	_check(service_source.contains("func share_hunt") and service_source.contains("func load_shared_hunt"), "Tracker supports live share summaries")
 
 	var overlay_source := FileAccess.get_file_as_string(OVERLAY_PATH)
+	var tracker_source := FileAccess.get_file_as_string("res://scripts/ui/shiny_tracker_popup.gd")
+	_check(tracker_source.contains("load_home_sprite(target_species, true)"), "Tracker prefers Shiny Pokémon sprites")
 	_check(overlay_source.contains('entry_type == "key_item_action" and entry_id == "shiny-tracker"'), "Tracker can be launched from the hotbar")
 	_check(overlay_source.contains("_create_chat_shiny_hunt_button"), "Chat renders clickable Shiny hunt cards")
 	_check(overlay_source.contains("SHINY_TRACKER_ICON"), "Chat hunt cards show the Shiny Tracker icon")
