@@ -10920,6 +10920,12 @@ func _on_global_buff_contribute_pressed() -> void:
 		return
 	var body := response.get("body", {}) as Dictionary
 	PlayerWalletService.apply_wallet_result({"success": true, "wallet": body.get("wallet", {})})
+	var aetherite_reward := maxi(int(body.get("aetheriteReward", 0)), 0)
+	if aetherite_reward > 0:
+		add_system_message(LocalizationManager.text(
+			"ui.buff.aetherite_reward",
+			{"amount": _format_money(aetherite_reward)}
+		))
 	_apply_global_exp_boost_state(body)
 	_render_global_buff_details()
 

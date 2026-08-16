@@ -305,6 +305,7 @@ func _init() -> void:
 	_check(not script_source.contains('GameErrorDialogService.show_response(response, "backend.error.transit_unavailable")'), "global EXP contribution errors stay inside the boost flow")
 	_check(script_source.contains("const MINIMUM_GLOBAL_BUFF_CONTRIBUTION := 10_000"), "global buff contributions enforce the 10,000 Pokédollar minimum")
 	_check(script_source.contains("selected_global_buff_contribution = mini(requested, remaining)"), "global buff contribution input is capped to the remaining goal")
+	_check(script_source.contains('"aetheriteReward"'), "global EXP contributions display their personal Aetherite reward")
 	_check(script_source.contains("name_label.text = _localized_buff_name(buff)"), "personal buff rows receive localized readable names")
 	_check(donator_store_scene_source.contains("custom_minimum_size = Vector2(1120, 680)"), "Donator Store opens as a full catalog and character-preview interface")
 	_check(donator_store_script_source.contains('"membership",') and donator_store_script_source.contains('"cosmetics",') and donator_store_script_source.contains('"mounts",') and donator_store_script_source.contains('"charms",') and donator_store_script_source.contains('"services",'), "Aether Store separates its six scalable catalog categories")
