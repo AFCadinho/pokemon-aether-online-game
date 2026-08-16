@@ -37357,7 +37357,7 @@ func _create_chat_shiny_hunt_button(attachment: Dictionary) -> Control:
 	count.text = _format_money(encounter_count)
 	count.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	count.add_theme_font_size_override("font_size", 13)
-	count.add_theme_color_override("font_color", UI_CYAN)
+	count.add_theme_color_override("font_color", PC_ACCENT)
 	count.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	badge_stack.add_child(count)
 	var count_label := Label.new()
