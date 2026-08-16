@@ -3284,6 +3284,7 @@
   "ui.buff.global_ev.name": "Bônus global de EV",
   "ui.buff.global_ev.description": "Todo o servidor recebe o dobro de Effort Values enquanto este bônus estiver ativo.",
   "ui.buff.global_ev.contribution_message": "{player} contribuiu com ₽{amount} para o Bônus global de EV!",
+  "ui.buff.global_shiny.contribution_message": "{player} contribuiu com ₽{amount} para o Bônus global de Shiny!",
   "ui.buff.global_shiny.name": "Bônus global de Shiny",
   "ui.buff.global_shiny.description": "Quando financiado, todo o servidor recebe mais chances de encontrar Pokémon Shiny.",
   "ui.buff.global_rare.name": "Bônus de encontros raros",
