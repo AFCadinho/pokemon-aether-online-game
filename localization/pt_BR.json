@@ -661,6 +661,8 @@
   "ui.bag.description.default": "Este item está guardado com segurança na sua Bolsa.",
   "ui.bag.action.inspect": "Examinar",
   "ui.bag.action.use": "Usar",
+
+  "ui.bag.action.activate": "Ativar",
   "ui.bag.action.use_escape_rope": "Usar Escape Rope",
   "ui.bag.action.use_charm": "Usar Amuleto",
   "ui.bag.action.change_name": "Alterar nome",
@@ -682,6 +684,10 @@
   "ui.bag.message.cosmetic_failed": "Não foi possível mover este cosmético para a Personalização de Personagem.",
   "ui.bag.message.cosmetic_added": "{item} foi adicionado à Personalização de Personagem.",
   "ui.bag.message.voucher_failed": "Não foi possível resgatar este vale.",
+
+  "ui.bag.message.shiny_charm_failed": "Não foi possível ativar o Amuleto Brilhante.",
+
+  "ui.bag.message.shiny_charm_activated": "Amuleto Brilhante ativado por {days} dias.",
   "ui.bag.message.blessing_extended": "A Bênção do Aether foi prolongada por {days} dias.",
   "ui.bag.message.guild_emblem_failed": "Não foi possível aplicar este emblema de Guilda.",
   "ui.bag.message.guild_emblem_applied": "{item} foi consumido, desbloqueado e aplicado a {guild}.",

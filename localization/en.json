@@ -661,6 +661,8 @@
   "ui.bag.description.default": "This item is stored safely in your Bag.",
   "ui.bag.action.inspect": "Inspect",
   "ui.bag.action.use": "Use",
+
+  "ui.bag.action.activate": "Activate",
   "ui.bag.action.use_escape_rope": "Use Escape Rope",
   "ui.bag.action.use_charm": "Use Charm",
   "ui.bag.action.change_name": "Change Name",
@@ -682,6 +684,10 @@
   "ui.bag.message.cosmetic_failed": "That cosmetic could not be moved to Character Customization.",
   "ui.bag.message.cosmetic_added": "{item} was added to Character Customization.",
   "ui.bag.message.voucher_failed": "That voucher could not be redeemed.",
+
+  "ui.bag.message.shiny_charm_failed": "The Shiny Charm could not be activated.",
+
+  "ui.bag.message.shiny_charm_activated": "Shiny Charm activated for {days} days.",
   "ui.bag.message.blessing_extended": "Aether Blessing extended by {days} days.",
   "ui.bag.message.guild_emblem_failed": "That Guild emblem could not be applied.",
   "ui.bag.message.guild_emblem_applied": "{item} was consumed, unlocked and applied to {guild}.",
