@@ -36681,6 +36681,9 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 			{"player": str(message.get("displayName", "Trainer"))}
 		))
 		return
+	if message_type == "system.global_exp_boost_contribution":
+		add_system_message(_global_exp_boost_contribution_message(message))
+		return
 	if message_type == "chat_error":
 		var error_text: String = str(message.get("message", "Chat message could not be sent."))
 		var error_channel := str(message.get("channel", "")).strip_edges().to_lower()
@@ -36714,6 +36717,16 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 		_refresh_guild_chat_attention_badge()
 	if channel == CHAT_CHANNEL_MAP and text != "":
 		_show_map_chat_bubble(user, text, str(message.get("mapId", "")))
+
+
+func _global_exp_boost_contribution_message(message: Dictionary) -> String:
+	return LocalizationManager.text(
+		"ui.buff.global_exp.contribution_message",
+		{
+			"player": str(message.get("displayName", "Trainer")),
+			"amount": _format_money(max(int(message.get("amount", 0)), 0)),
+		}
+	)
 
 
 func _with_local_chat_role_state(user: Dictionary, display_name: String) -> Dictionary:

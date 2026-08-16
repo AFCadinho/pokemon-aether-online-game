@@ -43,6 +43,13 @@ func _check_localized_helpers() -> void:
 		overlay.call("_localized_buff_description", {"description_key": "ui.buff.global_exp.description"}).begins_with("Na financiering"),
 		"Global buff description renders in Dutch"
 	)
+	_check(
+		overlay.call("_global_exp_boost_contribution_message", {
+			"displayName": "Misty",
+			"amount": 25_000,
+		}) == "Misty heeft ₽25,000 bijgedragen aan de Wereldwijde EXP-boost!",
+		"Global EXP contributions render as localized Dutch system messages"
+	)
 
 	var map_prefix := overlay.call("_create_chat_channel_prefix", "map") as Button
 	_check(map_prefix != null and map_prefix.text == "[Kaart]", "All-chat channel prefix renders in Dutch")
@@ -55,6 +62,13 @@ func _check_localized_helpers() -> void:
 	_check(
 		overlay.call("_localized_buff_name", {"name_key": "ui.buff.global_exp.name"}) == "Bônus global de EXP",
 		"Global buff name updates to Portuguese"
+	)
+	_check(
+		overlay.call("_global_exp_boost_contribution_message", {
+			"displayName": "Misty",
+			"amount": 25_000,
+		}) == "Misty contribuiu com ₽25,000 para o Bônus global de EXP!",
+		"Global EXP contribution system messages update to Portuguese"
 	)
 	_check(map_prefix != null and map_prefix.text == "[Mapa]", "Existing channel prefix updates to Portuguese")
 	_check(map_prefix != null and map_prefix.tooltip_text == "Abrir o chat do Mapa", "Existing channel tooltip updates to Portuguese")

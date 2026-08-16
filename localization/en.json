@@ -3276,6 +3276,7 @@
   "ui.buff.contribution_unavailable": "Community contributions are not connected yet. Selected contribution: ${amount}.",
   "ui.buff.global_exp.name": "Global EXP Boost",
   "ui.buff.global_exp.description": "When funded, the entire server earns double Pokémon experience.",
+  "ui.buff.global_exp.contribution_message": "{player} contributed ₽{amount} to the Global EXP Boost!",
   "ui.buff.global_ev.name": "Global EV Boost",
   "ui.buff.global_ev.description": "The entire server earns double Effort Values while this boost is active.",
   "ui.buff.global_shiny.name": "Global Shiny Boost",
