@@ -3353,7 +3353,11 @@
   },
   "shiny-charm": {
     "name": "Shiny Charm",
-    "shortDesc": "Raises the chance of finding a shiny Pokemon."
+    "shortDesc": "Use to raise Shiny encounter odds by 10% for 7 days."
+  },
+  "shiny-tracker": {
+    "name": "Shiny Tracker",
+    "shortDesc": "Open your Shiny hunts and encounter statistics."
   },
   "shiny-stone": {
     "name": "Shiny Stone",

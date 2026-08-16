@@ -3353,7 +3353,11 @@
   },
   "shiny-charm": {
     "name": "Glanzende bedel",
-    "shortDesc": "Vergroot de kans op het vinden van een glanzende Pokemon."
+    "shortDesc": "Gebruik om de Shiny-kans 7 dagen lang met 10% te verhogen."
+  },
+  "shiny-tracker": {
+    "name": "Shiny Tracker",
+    "shortDesc": "Open je Shiny hunts en encounterstatistieken."
   },
   "shiny-stone": {
     "name": "Glanzende steen",
