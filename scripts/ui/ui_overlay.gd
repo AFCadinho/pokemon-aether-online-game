@@ -1263,6 +1263,7 @@ var aether_clash_champion_request_active := false
 var utc_time_refresh_elapsed := UTC_TIME_REFRESH_INTERVAL_SECONDS
 var ui_input_mouse_blocker: Control
 var selected_global_buff: Dictionary = {}
+var global_buffs_data: Array = []
 const MINIMUM_GLOBAL_BUFF_CONTRIBUTION := 10_000
 
 var selected_global_buff_contribution := MINIMUM_GLOBAL_BUFF_CONTRIBUTION
@@ -10339,8 +10340,10 @@ func _setup_status_docks() -> void:
 		},
 	])
 	set_personal_buffs([])
+	_load_global_exp_boost.call_deferred()
 
 func set_global_buffs(buffs: Array) -> void:
+	global_buffs_data = buffs.duplicate(true)
 	var tray_available := not buffs.is_empty()
 	global_buffs_panel.set_meta("group_available", tray_available)
 	_apply_buff_tray_group_visibility(global_buffs_panel, tray_available)
@@ -10812,12 +10815,38 @@ func _on_global_buff_contribute_pressed() -> void:
 			{"minimum": _format_money(MINIMUM_GLOBAL_BUFF_CONTRIBUTION)}
 		))
 		return
-	_add_chat_message(
-		LocalizationManager.text(
-			"ui.buff.contribution_unavailable",
-			{"amount": _format_money(selected_global_buff_contribution)}
-		)
-	)
+	global_buff_contribute_button.disabled = true
+	var response: Dictionary = await PlayerWalletService.contribute_to_global_exp_boost(selected_global_buff_contribution)
+	if not bool(response.get("success", false)):
+		_refresh_global_buff_contribution_input()
+		await GameErrorDialogService.show_response(response, "backend.error.transit_unavailable")
+		return
+	var body := response.get("body", {}) as Dictionary
+	PlayerWalletService.apply_wallet_result({"success": true, "wallet": body.get("wallet", {})})
+	_apply_global_exp_boost_state(body)
+	_render_global_buff_details()
+
+
+func _load_global_exp_boost() -> void:
+	var response: Dictionary = await PlayerWalletService.load_global_exp_boost()
+	if bool(response.get("success", false)):
+		_apply_global_exp_boost_state(response.get("body", {}) as Dictionary)
+
+
+func _apply_global_exp_boost_state(state: Dictionary) -> void:
+	for index: int in range(global_buffs_data.size()):
+		var buff := global_buffs_data[index] as Dictionary
+		if str(buff.get("id", "")) != "global_exp":
+			continue
+		buff["current"] = int(state.get("current", 0))
+		buff["goal"] = int(state.get("goal", 100000))
+		buff["state"] = "active" if bool(state.get("active", false)) else "funding"
+		buff["remaining"] = "1h" if bool(state.get("active", false)) else ""
+		global_buffs_data[index] = buff
+		if str(selected_global_buff.get("id", "")) == "global_exp":
+			selected_global_buff = buff.duplicate(true)
+		set_global_buffs(global_buffs_data)
+		return
 
 func _hide_global_buff_details() -> void:
 	global_buff_details_panel.visible = false

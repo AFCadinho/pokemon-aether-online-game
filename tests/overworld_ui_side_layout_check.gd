@@ -296,7 +296,7 @@ func _init() -> void:
 	_check(script_source.contains('str(buff.get("state", "funding")) == "active"'), "global buff icons distinguish active and funding states")
 	_check(script_source.contains('"id": "global_shiny"'), "global buff data includes Shiny encounters")
 	_check(script_source.contains('"id": "global_rare_encounter"'), "global buff data includes rarer Pokémon encounters")
-	_check(script_source.contains('"ui.buff.contribution_unavailable"'), "localized community contribution placeholder cannot silently spend currency")
+	_check(script_source.contains("PlayerWalletService.contribute_to_global_exp_boost"), "global EXP contributions use the authoritative wallet service")
 	_check(script_source.contains("const MINIMUM_GLOBAL_BUFF_CONTRIBUTION := 10_000"), "global buff contributions enforce the 10,000 Pokédollar minimum")
 	_check(script_source.contains("name_label.text = _localized_buff_name(buff)"), "personal buff rows receive localized readable names")
 	_check(donator_store_scene_source.contains("custom_minimum_size = Vector2(1120, 680)"), "Donator Store opens as a full catalog and character-preview interface")
