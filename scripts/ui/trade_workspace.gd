@@ -47,6 +47,7 @@ var opponent_ready_indicator: Label
 var phase_label: Label
 var status_label: Label
 var status_panel: PanelContainer
+var persistent_offer_error := ""
 var local_offer_title_label: Label
 var opponent_offer_title_label: Label
 var ready_button: Button
@@ -99,6 +100,7 @@ func clear_account_state() -> void:
 	money_draft_dirty = false
 	inventory_items.clear()
 	mutation_in_flight = false
+	persistent_offer_error = ""
 	notified_completed_trade_ids.clear()
 	if item_selector_popup != null:
 		item_selector_popup.hide()
@@ -975,18 +977,22 @@ func _on_trade_changed(value: Dictionary) -> void:
 		str(trade.get("tradeId", "")),
 		str(value.get("tradeId", ""))
 	)
+	if center_window:
+		persistent_offer_error = ""
 	if status == "cancelled":
+		persistent_offer_error = ""
 		trade = value.duplicate(true)
 		phase_label.text = _t("ui.trade.phase.cancelled")
 		editable_root.visible = false
 		review_root.visible = false
 		if str(trade.get("cancellationReason", "")) == "reconnect_timeout":
-			_set_status(_t("ui.trade.status.reconnect_expired"))
+			_set_status(_t("ui.trade.status.reconnect_expired"), true)
 			popup_centered()
 		else:
 			hide()
 		return
 	if status == "completed":
+		persistent_offer_error = ""
 		trade = value.duplicate(true)
 		_notify_trade_completion(trade)
 		hide()
@@ -1081,6 +1087,7 @@ func _replace_offer(pokemon_ids: Array[int], item_offers: Array[Dictionary] = []
 	var resolved_money := selected_money if money_offer < 0 else int(money_offer)
 	if mutation_in_flight or (pokemon_ids.is_empty() and item_offers.is_empty() and resolved_money == 0) or _local_participant_ready() or str(trade.get("status", "")) == "locked" or _connection_state_unresolved():
 		return
+	_clear_persistent_offer_error()
 	mutation_in_flight = true
 	_render_offers()
 	var service := get_node_or_null("/root/TradeService")
@@ -1094,7 +1101,7 @@ func _replace_offer(pokemon_ids: Array[int], item_offers: Array[Dictionary] = []
 			result = await _retry_offer_after_stale_revision(service, trade_id, pokemon_ids, item_offers, resolved_money)
 	mutation_in_flight = false
 	if not bool(result.get("success", false)):
-		_show_error(_friendly_error(result))
+		_show_error(_friendly_error(result), true)
 		_render_offers()
 		return
 	trade = result.get("trade", {}).duplicate(true)
@@ -1133,6 +1140,7 @@ static func _is_stale_revision_error(result: Dictionary) -> bool:
 func _set_ready(ready: bool) -> void:
 	if mutation_in_flight or _connection_state_unresolved():
 		return
+	_clear_persistent_offer_error()
 	mutation_in_flight = true
 	var service := get_node_or_null("/root/TradeService")
 	var result: Dictionary
@@ -2024,7 +2032,7 @@ func _render_connection_status() -> void:
 		return
 	var deadline := str(disconnected.get("reconnectDeadlineAt", ""))
 	var remaining := reconnect_seconds_remaining(deadline, Time.get_unix_time_from_system())
-	_set_status(_t("ui.trade.status.disconnected", {"seconds": remaining}))
+	_set_status(_t("ui.trade.status.disconnected", {"seconds": remaining}), true)
 
 
 static func reconnect_seconds_remaining(deadline: String, now_unix: float) -> int:
@@ -2230,13 +2238,24 @@ func _friendly_error(result: Dictionary) -> String:
 	return _t("ui.trade.error.update_offer")
 
 
-func _show_error(message: String) -> void:
+func _show_error(message: String, persist_for_offer: bool = false) -> void:
+	if persist_for_offer:
+		persistent_offer_error = message
 	_set_status(message)
 
 
-func _set_status(message: String) -> void:
-	status_label.text = message
-	status_panel.visible = message.strip_edges() != ""
+func _clear_persistent_offer_error() -> void:
+	persistent_offer_error = ""
+
+
+func _set_status(message: String, override_persistent_error: bool = false) -> void:
+	var visible_message := (
+		persistent_offer_error
+		if not override_persistent_error and not persistent_offer_error.is_empty()
+		else message
+	)
+	status_label.text = visible_message
+	status_panel.visible = visible_message.strip_edges() != ""
 
 
 func _item_display_name(item: Dictionary) -> String:

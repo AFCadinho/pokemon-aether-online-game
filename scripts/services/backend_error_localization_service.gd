@@ -74,6 +74,7 @@ const CODE_TO_KEY: Dictionary = {
 	"trade_party_capacity_invalid": "ui.trade.error.party_space",
 	"trade_party_space_required": "ui.trade.error.party_space",
 	"trade_offer_required": "ui.trade.error.offer_required",
+	"trade_pokemon_level_cap_exceeded": "backend.error.trade_pokemon_level_cap_exceeded",
 	"trade_review_mismatch": "ui.trade.error.review_changed",
 	"trade_review_not_locked": "ui.trade.error.review_not_locked",
 	"trade_settlement_invalidated": "ui.trade.error.settlement_invalidated",
@@ -117,6 +118,10 @@ const CODE_TO_KEY: Dictionary = {
 	"fishing_level_required": "backend.error.fishing_level_required",
 	"fishing_badges_required": "backend.error.fishing_badges_required",
 	"no_usable_pokemon": "backend.error.no_usable_pokemon",
+	"pokemon_level_cap_reached": "backend.error.pokemon_level_cap_reached",
+	"pokemon_level_cap_party_ineligible": "backend.error.pokemon_level_cap_party_ineligible",
+	"pokemon_level_cap_authentication_required": "backend.error.auth_required",
+	"pokemon_level_cap_validation_unavailable": "backend.error.unavailable",
 	"npc_reward_not_found": "backend.error.reward_unavailable",
 	"field_move_charm_not_owned": "backend.error.item_not_owned",
 	"field_move_not_known": "backend.error.field_move_unavailable",
@@ -257,6 +262,9 @@ static func _format_values(response: Dictionary) -> Dictionary:
 			"requiredFishingLevel",
 			values.get("required_level", 1)
 		))
+	for integer_level_key: String in ["pokemonLevel", "tradeLevelCap"]:
+		if values.has(integer_level_key):
+			values[integer_level_key] = int(values.get(integer_level_key, 0))
 	return values
 
 

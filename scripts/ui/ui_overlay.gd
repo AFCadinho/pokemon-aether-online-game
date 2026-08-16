@@ -902,6 +902,8 @@ var trainer_card_aether_gems_label: Label
 var trainer_card_aetherite_label: Label
 var trainer_card_battle_points_label: Label
 var trainer_card_playtime_label: Label
+var trainer_card_level_cap_label: Label
+var trainer_card_trade_level_cap_label: Label
 var trainer_card_name_label: Label
 var trainer_card_body_buttons: Dictionary = {}
 var trainer_card_part_buttons: Dictionary = {}
@@ -1261,6 +1263,7 @@ var aether_clash_champion_name := ""
 var aether_clash_champion_refresh_elapsed := 0.0
 var aether_clash_champion_request_active := false
 var utc_time_refresh_elapsed := UTC_TIME_REFRESH_INTERVAL_SECONDS
+var ui_input_mouse_blocker: Control
 var selected_global_buff: Dictionary = {}
 var selected_global_buff_contribution := 10000
 var active_personal_buffs: Array = []
@@ -1307,6 +1310,7 @@ func _ready() -> void:
 	_setup_pvp_queue_compact_panel()
 	_setup_pvp_match_countdown_overlay()
 	_setup_session_logout_banner()
+	_setup_ui_input_mouse_blocker()
 	_setup_pvp_mode_menu()
 	_setup_dev_add_item_tools()
 	_setup_dev_tools_menu_surface()
@@ -1341,6 +1345,8 @@ func _ready() -> void:
 		PlayerSave.party_changed.connect(_on_pvp_party_changed)
 	if not PlayerSave.gym_badges_changed.is_connected(_refresh_trainer_card_gym_badges):
 		PlayerSave.gym_badges_changed.connect(_refresh_trainer_card_gym_badges)
+	if not GameState.pokemon_level_caps_changed.is_connected(_on_pokemon_level_caps_changed):
+		GameState.pokemon_level_caps_changed.connect(_on_pokemon_level_caps_changed)
 	if not ChatRealtimeService.message_received.is_connected(_on_chat_realtime_message_received):
 		ChatRealtimeService.message_received.connect(_on_chat_realtime_message_received)
 	if not ChatRealtimeService.mail_received.is_connected(_on_realtime_mail_received):
@@ -4270,6 +4276,7 @@ func _submit_evolution_choice(confirm: bool) -> void:
 				"to": _localized_species_name(target_species_id, to_species),
 			}
 		))
+		_announce_evolution_moves(result, pokemon_id, target_species_id, to_species)
 	else:
 		if evolution_prompt_popup != null:
 			evolution_prompt_popup.visible = false
@@ -4282,7 +4289,43 @@ func _submit_evolution_choice(confirm: bool) -> void:
 	_refresh_party()
 	_refresh_open_pokemon_summary_cards()
 	_refresh_hotbar_ui()
+	_show_next_move_learn_prompt()
 	_show_next_evolution_prompt()
+
+func _announce_evolution_moves(
+	result: Dictionary,
+	pokemon_id: int,
+	target_species_id: String,
+	target_species_name: String
+) -> void:
+	var species_name := _localized_species_name(target_species_id, target_species_name)
+	var learned_value: Variant = result.get("learnedMoves", [])
+	if learned_value is Array:
+		for learned_move_value: Variant in learned_value as Array:
+			if not (learned_move_value is Dictionary):
+				continue
+			var learned_move := learned_move_value as Dictionary
+			var move_name := str(learned_move.get("name", learned_move.get("moveId", ""))).strip_edges()
+			if move_name != "":
+				add_system_message(LocalizationManager.text(
+					"ui.move_learning.result.learned",
+					{"pokemon": species_name, "move": move_name}
+				))
+
+	var candidates_value: Variant = result.get("moveLearnCandidates", [])
+	if not (candidates_value is Array):
+		return
+	var queued_before := _move_learn_pending_prompt_count()
+	var queued_count := 0
+	for candidate_value: Variant in candidates_value as Array:
+		if not (candidate_value is Dictionary):
+			continue
+		var prompt := (candidate_value as Dictionary).duplicate(true)
+		prompt["pokemonId"] = pokemon_id
+		prompt["species"] = species_name
+		if _queue_move_learn_prompt(prompt):
+			queued_count += 1
+	_extend_move_learn_review_count(queued_count, queued_before)
 
 func _set_evolution_prompt_controls_disabled(disabled: bool) -> void:
 	if evolution_prompt_confirm_button != null:
@@ -9423,6 +9466,7 @@ func _position_pokedex_popup() -> void:
 	pokedex_popup.offset_bottom = popup_size.y * 0.5
 
 func _process(delta: float) -> void:
+	_refresh_ui_input_mouse_blocker()
 	_position_collapsible_buttons()
 	_refresh_pvp_queue_compact_panel(delta)
 	_refresh_pvp_queue_button_animation(delta)
@@ -9439,6 +9483,26 @@ func _process(delta: float) -> void:
 	_refresh_pvp_room_polling(delta)
 	_refresh_pvp_room_wait_spinner(delta)
 	_refresh_player_action_cooldown(delta)
+
+func _setup_ui_input_mouse_blocker() -> void:
+	ui_input_mouse_blocker = Control.new()
+	ui_input_mouse_blocker.name = "UIInputMouseBlocker"
+	ui_input_mouse_blocker.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	ui_input_mouse_blocker.mouse_filter = Control.MOUSE_FILTER_STOP
+	ui_input_mouse_blocker.focus_mode = Control.FOCUS_NONE
+	ui_input_mouse_blocker.z_index = UI_MODAL_Z_INDEX + 1
+	ui_input_mouse_blocker.visible = false
+	root_control.add_child(ui_input_mouse_blocker)
+
+func _refresh_ui_input_mouse_blocker() -> void:
+	if ui_input_mouse_blocker == null:
+		return
+	var should_block := GameState.is_ui_input_locked()
+	if ui_input_mouse_blocker.visible == should_block:
+		return
+	ui_input_mouse_blocker.visible = should_block
+	if should_block:
+		ui_input_mouse_blocker.move_to_front()
 
 func _refresh_pvp_room_polling(delta: float) -> void:
 	if not pvp_polling_active or pvp_active_room_code == "" or pvp_battle_starting:
@@ -11418,6 +11482,7 @@ func _refresh_player_status_card() -> void:
 		trainer_card_battle_points_label.text = _format_money(PlayerSave.battle_points)
 	if trainer_card_playtime_label != null:
 		trainer_card_playtime_label.text = _format_playtime(PlayerSave.playtime_seconds)
+	_refresh_trainer_card_caps()
 
 func _make_trainer_card_outer_style() -> StyleBoxFlat:
 	var style := _make_panel_style(UI_SURFACE_BASE, UI_BORDER_SUBTLE, 14, 1)
@@ -11500,6 +11565,7 @@ func _refresh_trainer_card_localized_ui() -> void:
 			{"id": _get_trainer_id_text()}
 		)
 	_refresh_trainer_card_tab_titles()
+	_refresh_trainer_card_caps()
 	_populate_trainer_card_badge_option()
 	_refresh_trainer_card_gym_badges()
 	_refresh_trainer_card_body_buttons()
@@ -11964,7 +12030,13 @@ func _create_trainer_card_stats_tab() -> Control:
 	layout.add_child(top_row)
 
 	top_row.add_child(_create_trainer_card_avatar_panel())
-	top_row.add_child(_create_trainer_card_identity_panel())
+	var profile_stack := VBoxContainer.new()
+	profile_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	profile_stack.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	profile_stack.add_theme_constant_override("separation", 8)
+	profile_stack.add_child(_create_trainer_card_identity_panel())
+	profile_stack.add_child(_create_trainer_card_caps_panel())
+	top_row.add_child(profile_stack)
 
 	var stats_row := HBoxContainer.new()
 	stats_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -12356,6 +12428,84 @@ func _create_trainer_card_identity_panel() -> Control:
 	rows.add_child(_create_trainer_card_stat_row("ui.trainer_card.field.guild", _get_trainer_stat_text("guild", "-"), 104, 15, UI_TEXT))
 	rows.add_child(_create_trainer_card_badge_row())
 	return panel
+
+func _create_trainer_card_caps_panel() -> Control:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_trainer_card_section_style())
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_top", 7)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_bottom", 7)
+	panel.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 4)
+	margin.add_child(layout)
+
+	var heading := Label.new()
+	_set_localized_control_property(heading, "text", "ui.trainer_card.caps.title")
+	heading.add_theme_font_size_override("font_size", 10)
+	heading.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
+	layout.add_child(heading)
+
+	var cap_row := HBoxContainer.new()
+	cap_row.add_theme_constant_override("separation", 8)
+	layout.add_child(cap_row)
+	trainer_card_level_cap_label = _create_trainer_card_cap_value(
+		cap_row,
+		"ui.trainer_card.caps.level",
+		GameState.pokemon_level_cap
+	)
+	trainer_card_trade_level_cap_label = _create_trainer_card_cap_value(
+		cap_row,
+		"ui.trainer_card.caps.trade",
+		GameState.pokemon_trade_level_cap
+	)
+	return panel
+
+func _create_trainer_card_cap_value(parent: HBoxContainer, label_key: String, value: int) -> Label:
+	var card := PanelContainer.new()
+	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	card.add_theme_stylebox_override("panel", _make_trainer_card_inset_style())
+	parent.add_child(card)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 9)
+	margin.add_theme_constant_override("margin_top", 3)
+	margin.add_theme_constant_override("margin_right", 9)
+	margin.add_theme_constant_override("margin_bottom", 3)
+	card.add_child(margin)
+
+	var row := HBoxContainer.new()
+	margin.add_child(row)
+	var label := Label.new()
+	_set_localized_control_property(label, "text", label_key)
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.add_theme_font_size_override("font_size", 12)
+	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	row.add_child(label)
+	var value_label := Label.new()
+	value_label.text = str(value)
+	value_label.add_theme_font_size_override("font_size", 17)
+	value_label.add_theme_color_override("font_color", TRAINER_CARD_CYAN)
+	row.add_child(value_label)
+	return value_label
+
+func _refresh_trainer_card_caps() -> void:
+	if trainer_card_level_cap_label != null:
+		trainer_card_level_cap_label.text = str(GameState.pokemon_level_cap)
+	if trainer_card_trade_level_cap_label != null:
+		trainer_card_trade_level_cap_label.text = str(GameState.pokemon_trade_level_cap)
+
+func _on_pokemon_level_caps_changed() -> void:
+	_refresh_trainer_card_caps()
+	if bag_item_use_popup != null and bag_item_use_popup.visible:
+		_refresh_bag_item_use_party_list()
+		_refresh_bag_item_use_selected_preview()
 
 func _create_trainer_card_badge_row() -> Control:
 	var row := HBoxContainer.new()
@@ -17618,10 +17768,15 @@ func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> C
 	var requested_quantity := 1
 	if bag_item_use_quantity_spinbox != null:
 		requested_quantity = clampi(int(bag_item_use_quantity_spinbox.value), 1, int(bag_item_use_quantity_spinbox.max_value))
-	var preview: Dictionary = {}
+	var preview: Dictionary = _bag_item_use_preview_for_pokemon(pokemon, item_id, requested_quantity)
+	var can_apply := bool(preview.get("canApply", not preview.is_empty()))
+	if pokemon.owned_pokemon_id <= 0:
+		can_apply = false
 	var preview_text := ""
-	if slot_index == bag_item_use_selected_slot:
-		preview = _bag_item_use_preview_for_pokemon(pokemon, item_id, requested_quantity)
+	if not can_apply:
+		var reason := str(preview.get("label", LocalizationManager.text("ui.bag.use.unavailable")))
+		preview_text = LocalizationManager.text("ui.bag.use.cannot_use_reason", {"reason": reason})
+	elif slot_index == bag_item_use_selected_slot:
 		preview_text = str(preview.get("label", ""))
 	var row := HBoxContainer.new()
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -17636,6 +17791,8 @@ func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> C
 	icon.texture = PokemonAssets.load_home_sprite(pokemon.species, pokemon.shiny)
 	if icon.texture == null:
 		icon.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
+	if not can_apply:
+		icon.modulate = Color(1.0, 1.0, 1.0, 0.45)
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(icon)
 
@@ -17652,22 +17809,19 @@ func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> C
 	})
 	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	name_label.add_theme_font_size_override("font_size", 15)
-	name_label.add_theme_color_override("font_color", UI_TEXT)
+	name_label.add_theme_color_override("font_color", UI_TEXT if can_apply else UI_MUTED_TEXT)
 	details.add_child(name_label)
 	if preview_text != "":
 		var preview_label := Label.new()
 		preview_label.text = preview_text
 		preview_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		preview_label.add_theme_font_size_override("font_size", 11)
-		preview_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		preview_label.add_theme_color_override("font_color", UI_MUTED_TEXT if can_apply else UI_DANGER)
 		details.add_child(preview_label)
 	button.tooltip_text = str(preview.get("tooltip", button.text))
-	button.disabled = bag_item_use_in_progress or pokemon.owned_pokemon_id <= 0 or not _bag_item_can_affect_pokemon(pokemon, item_id)
+	button.disabled = bag_item_use_in_progress or not can_apply
 	if pokemon.owned_pokemon_id <= 0:
 		button.tooltip_text = LocalizationManager.text("ui.bag.use.pokemon_unavailable", {"pokemon": _pokemon_display_name(pokemon)})
-	elif button.disabled and not bag_item_use_in_progress:
-		var disabled_preview := _bag_item_use_preview_for_pokemon(pokemon, item_id, requested_quantity)
-		button.tooltip_text = str(disabled_preview.get("tooltip", button.tooltip_text))
 	button.pressed.connect(_on_bag_item_use_pokemon_selected.bind(slot_index))
 	_apply_button_style(button, "primary" if slot_index == bag_item_use_selected_slot else "default")
 	return button
@@ -17704,22 +17858,29 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 	if not _is_exp_item_id(item_id):
 		return {}
 
+	var player_level_cap: int = clampi(GameState.pokemon_level_cap, 1, POKEMON_MAX_LEVEL)
 	var current_level: int = clampi(max(pokemon.level, 1), 1, POKEMON_MAX_LEVEL)
+	var growth_rate := _normalize_exp_growth_rate(pokemon.growth_rate)
+	var current_exp := _pokemon_preview_current_experience(pokemon, growth_rate)
+	var max_exp := (
+		_pokemon_exp_for_level(growth_rate, player_level_cap + 1) - 1
+		if player_level_cap < POKEMON_MAX_LEVEL
+		else _pokemon_exp_for_level(growth_rate, POKEMON_MAX_LEVEL)
+	)
+	var remaining_exp: int = max(max_exp - current_exp, 0)
 	if current_level >= POKEMON_MAX_LEVEL:
 		return {
 			"label": LocalizationManager.text("ui.bag.use.max_level"),
 			"tooltip": LocalizationManager.text("ui.bag.use.already_level_100", {"pokemon": _pokemon_display_name(pokemon)}),
 			"canApply": false,
 		}
-
-	var growth_rate := _normalize_exp_growth_rate(pokemon.growth_rate)
-	var current_exp := _pokemon_preview_current_experience(pokemon, growth_rate)
-	var max_exp := _pokemon_exp_for_level(growth_rate, POKEMON_MAX_LEVEL)
-	var remaining_exp: int = max(max_exp - current_exp, 0)
-	if remaining_exp <= 0:
+	if current_level > player_level_cap or (item_id == "rare-candy" and current_level >= player_level_cap) or remaining_exp <= 0:
 		return {
-			"label": LocalizationManager.text("ui.bag.use.max_level"),
-			"tooltip": LocalizationManager.text("ui.bag.use.already_level_cap", {"pokemon": _pokemon_display_name(pokemon)}),
+			"label": LocalizationManager.text("ui.bag.use.level_cap", {"levelCap": player_level_cap}),
+			"tooltip": LocalizationManager.text("ui.bag.use.current_level_cap", {
+				"pokemon": _pokemon_display_name(pokemon),
+				"levelCap": player_level_cap,
+			}),
 			"canApply": false,
 		}
 
@@ -17728,8 +17889,8 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 	var gained_exp := 0
 	var target_level := current_level
 	if item_id == "rare-candy":
-		used_quantity = min(quantity, POKEMON_MAX_LEVEL - current_level)
-		target_level = min(current_level + used_quantity, POKEMON_MAX_LEVEL)
+		used_quantity = min(quantity, player_level_cap - current_level)
+		target_level = min(current_level + used_quantity, player_level_cap)
 		var target_exp: int = _pokemon_exp_for_level(growth_rate, target_level)
 		gained_exp = min(max(target_exp - current_exp, 0), remaining_exp)
 	else:
@@ -17830,8 +17991,8 @@ func _bag_ev_reducing_berry_preview_for_pokemon(pokemon: Pokemon, item_id: Strin
 			"label": "%s EV is already 0" % stat_label,
 			"tooltip": "%s has no allocated %s EVs to reduce." % [_pokemon_display_name(pokemon), stat_label],
 		}
-	var quantity := max(requested_quantity, 1)
-	var used_quantity := min(quantity, int(ceil(float(current_value) / 10.0)))
+	var quantity: int = max(requested_quantity, 1)
+	var used_quantity: int = min(quantity, int(ceil(float(current_value) / 10.0)))
 	var new_value := maxi(current_value - used_quantity * 10, 0)
 	var berry_count_text := "1 berry" if used_quantity == 1 else "%s berries" % used_quantity
 	return {
@@ -26699,6 +26860,8 @@ func _rebuild_trainer_card_popup(keep_visible: bool) -> void:
 	trainer_card_aetherite_label = null
 	trainer_card_battle_points_label = null
 	trainer_card_playtime_label = null
+	trainer_card_level_cap_label = null
+	trainer_card_trade_level_cap_label = null
 	trainer_card_name_label = null
 	_setup_trainer_card_popup()
 	trainer_card_popup.offset_left = old_offset_left
@@ -28032,6 +28195,7 @@ func _build_pokedex_moves_tab() -> void:
 
 	var sections := [
 		{"key": "levelUp", "i18n": "level_up", "column": "ui.pokedex.moves.level", "source": ""},
+		{"key": "evolution", "i18n": "evolution", "column": "ui.pokedex.moves.learn", "source": "ui.pokedex.moves.source.evolution"},
 		{"key": "egg", "i18n": "egg", "column": "ui.pokedex.moves.learn", "source": "ui.pokedex.moves.source.egg"},
 		{"key": "tm", "i18n": "tm", "column": "ui.pokedex.moves.learn", "source": "ui.pokedex.moves.source.tm"},
 		{"key": "tutor", "i18n": "tutor", "column": "ui.pokedex.moves.learn", "source": "ui.pokedex.moves.source.tutor"},

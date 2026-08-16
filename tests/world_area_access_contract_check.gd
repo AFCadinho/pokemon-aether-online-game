@@ -95,6 +95,12 @@ func _init() -> void:
 		"Denied transitions release the teleport lock and route presentation to the guard"
 	)
 	_expect(
+		map_exit_source.contains("func _is_route_gate_interaction_active")
+		and map_exit_source.count("_is_route_gate_interaction_active(") == 3
+		and map_exit_source.contains('player.get("route_gate_interaction_in_progress")'),
+		"Map exits silently yield before and during deferred entry when a route guard owns the interaction"
+	)
+	_expect(
 		world_source.contains("ignore_player_movement := false,")
 		and world_source.contains("not ignore_player_movement"),
 		"Boundary transitions can authorize while a tile movement is finishing"
@@ -128,16 +134,18 @@ func _init() -> void:
 	_expect(
 		gate_source.contains("transition_access_resolved")
 		and gate_source.contains("func _sync_guard_presence()")
+		and gate_source.contains('Callable(self, "_refresh_transition_access").call_deferred(true)')
 		and gate_source.contains("guard_role != GUARD_ROLE_TRANSITION")
 		and gate_source.contains("not _are_local_gate_requirements_met()")
 		and gate_source.contains("guard_role == GUARD_ROLE_TRANSITION and not guard_present")
 		and gate_source.contains("return super.blocks_world_position(world_position)"),
-		"Exterior transition guards appear only while server or local access is blocked"
+		"Exterior transition guards refresh and appear only while authoritative access is blocked"
 	)
 	_expect(
 		gate_scene_source.contains("NPC_088_Policeman.png")
-		and gate_scene_source.contains("trainer_cards/showdown/policeman-gen7.png"),
-		"All route guards share the police overworld sprite and Showdown police portrait"
+		and gate_scene_source.contains("trainer_cards/showdown/policeman-gen8.png")
+		and not gate_scene_source.contains("trainer_cards/showdown/policeman-gen7.png"),
+		"All route guards share the police overworld sprite and fuller Showdown police portrait"
 	)
 	_expect(
 		map_exit_source.contains("func handles_transition")
@@ -183,6 +191,14 @@ func _init() -> void:
 		and viridian_city_source.contains('transition_id = "kanto_viridian_city__to_route_22"')
 		and viridian_city_source.contains('npc_id = "kanto_viridian_city_west_route_guard"'),
 		"Viridian City west guard protects the Route 22 transition"
+	)
+	_expect(
+		pewter_city_source.contains('[node name="Route3Guard"')
+		and pewter_city_source.contains('guarded_transition_id = "kanto_pewter_city__to_route_3"')
+		and pewter_city_source.contains('transition_id = "kanto_pewter_city__to_route_3"')
+		and pewter_city_source.contains('npc_id = "kanto_pewter_city_route_3_guard"')
+		and not pewter_city_source.contains('required_quest_id = "challenge_pewter_gym"'),
+		"Pewter Route 3 guard derives its Brock gate from authoritative transition access"
 	)
 	_expect(
 		route_22_source.contains('map_id = "kanto_route_22"')

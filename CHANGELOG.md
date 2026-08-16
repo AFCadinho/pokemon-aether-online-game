@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.3.55 - 2026-08-16
+
+**Added**
+
+- Gym Badge progress now determines separate Pokémon level and trade caps. Your current caps are shown on the Trainer Card, Pokémon cannot level past the current cap, and trades cannot offer Pokémon above the recipient's trade cap.
+- Added battle animations for 63 more early-game moves, including Water Gun, Ember, Tackle, Vine Whip, Razor Leaf, Psychic, Hidden Power, Ice Shard, Double Team, and Teleport. Sound effects play where available.
+- Defeating Brock now begins the next main-story objective, which leads east through Route 3 and Mt. Moon toward Cerulean City.
+- Pokémon can now learn evolution moves immediately after evolving. These moves also have their own section in the Pokédex.
+- Abra and Bounsweet chosen as starters now begin with Hidden Power.
+
+**Changed**
+
+- Pewter Gym Trainers and Brock now have stronger teams and use more tactical strategies. They can switch out of poor matchups, use moves that change stats or status conditions at useful moments, and plan combinations across multiple turns.
+- The Bag now dims Pokémon that cannot use the selected item and explains why that target is unavailable.
+- New Pokémon now start with 50 friendship unless they already have a specific friendship value.
+
+**Fixed**
+
+- Route 3 now remains blocked until Brock is defeated, opens reliably afterward, and places Trainers at the correct entrance when arriving from Pewter City.
+- Fixed the battle damage calculator sometimes keeping outdated information after an NPC Trainer acted.
+- Fixed mouse clicks reaching the HUD during Gary's starter-selection cutscene.
+- Fixed missing Pokédex battle sprites for Pikachu Rock Star, Mega Raichu X, and Mega Raichu Y.
+- Trade errors now remain visible long enough to explain when a Pokémon exceeds the recipient's trade cap.
+- Move visuals no longer disappear when a sound effect is missing.
+
 ## 0.3.53 - 2026-08-13
 
 **Added**

@@ -420,6 +420,8 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.foreground_path = str(config.get("foreground_path", ""))
 	var sound_paths: Dictionary = (config.get("sound_paths", {}) as Dictionary).duplicate(true)
 	animation_node.sound_paths = sound_paths
+	animation_node.custom_sound_events = (config.get("custom_sound_events", []) as Array).duplicate(true)
+	animation_node.disable_data_sound_events = bool(config.get("disable_data_sound_events", false))
 	if not resources.is_empty():
 		animation_node.data_override = resources.get("data", {}) as Dictionary
 		animation_node.sheet_texture_override = resources.get("sheet_texture", null) as Texture2D
@@ -460,6 +462,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.show_timing_backgrounds = bool(config.get("show_timing_backgrounds", false))
 	animation_node.timing_background_fill_canvas = bool(config.get("timing_background_fill_canvas", false))
 	animation_node.timing_background_persist_until_clear = bool(config.get("timing_background_persist_until_clear", false))
+	animation_node.background_motion_config = (config.get("background_motion", {}) as Dictionary).duplicate(true)
 	animation_node.show_timing_foregrounds = bool(config.get("show_timing_foregrounds", false))
 	animation_node.timing_foreground_scale = _vector2_from_config_value(config.get("timing_foreground_scale", [1.0, 1.0]), Vector2.ONE)
 	animation_node.foreground_opacity_multiplier = clampf(float(config.get("foreground_opacity_multiplier", 1.0)), 0.0, 1.0)
@@ -470,6 +473,8 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.projectile_config = (config.get("projectile", {}) as Dictionary).duplicate(true)
 	animation_node.orb_config = (config.get("orb", {}) as Dictionary).duplicate(true)
 	animation_node.orb_projectile_config = (config.get("orb_projectile", {}) as Dictionary).duplicate(true)
+	animation_node.orb_barrage_config = (config.get("orb_barrage", {}) as Dictionary).duplicate(true)
+	animation_node.psychic_pulse_config = (config.get("psychic_pulse", {}) as Dictionary).duplicate(true)
 	animation_node.energy_blast_config = (config.get("energy_blast", {}) as Dictionary).duplicate(true)
 	animation_node.water_splash_config = (config.get("water_splash", {}) as Dictionary).duplicate(true)
 	animation_node.electric_switch_config = (config.get("electric_switch", {}) as Dictionary).duplicate(true)
@@ -482,6 +487,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.solar_charge_config = (config.get("solar_charge", {}) as Dictionary).duplicate(true)
 	animation_node.celestial_charge_config = (config.get("celestial_charge", {}) as Dictionary).duplicate(true)
 	animation_node.focus_aura_config = (config.get("focus_aura", {}) as Dictionary).duplicate(true)
+	animation_node.afterimage_config = (config.get("afterimage", {}) as Dictionary).duplicate(true)
 	animation_node.stat_change_config = (config.get("stat_change", {}) as Dictionary).duplicate(true)
 	animation_node.heal_energy_config = (config.get("heal_energy", {}) as Dictionary).duplicate(true)
 	animation_node.dragon_dance_config = (config.get("dragon_dance", {}) as Dictionary).duplicate(true)
@@ -693,8 +699,9 @@ func _get_animation_resources(config: Dictionary) -> Dictionary:
 		var sound_path: String = str(sound_path_value)
 		if sound_path != "":
 			var stream: AudioStream = _get_cached_sound_stream(sound_path)
-			if stream == null:
-				return {}
+			# A sound is an optional layer of an animation.  Do not discard the
+			# complete visual animation when an imported sound is unavailable (for
+			# example while Godot is still importing a newly added asset).
 			if stream != null:
 				sound_streams[_sound_name_for_path(sound_paths, sound_path)] = stream
 	resources["sound_streams"] = sound_streams
@@ -920,6 +927,9 @@ func _move_timing_background_below_sprites(animation_node: MoveAnimationPlayer, 
 		return
 
 	var sibling_index: int = parent_node.get_child_count()
+	var animation_overlay := animation_node.get_parent()
+	if animation_overlay != null and animation_overlay.get_parent() == parent_node:
+		sibling_index = animation_overlay.get_index()
 	for sprite_box: Node in [player_sprite_box, enemy_sprite_box]:
 		if sprite_box != null and sprite_box.get_parent() == parent_node:
 			sibling_index = mini(sibling_index, sprite_box.get_index())
@@ -1037,6 +1047,18 @@ func _apply_move_projectile_endpoint_anchors(
 		target_anchor,
 		animation_node.reverse_battlefield
 	)
+	animation_node.orb_barrage_config = _with_projectile_endpoint_anchors(
+		animation_node.orb_barrage_config,
+		actor_anchor,
+		target_anchor,
+		animation_node.reverse_battlefield
+	)
+	animation_node.psychic_pulse_config = _with_projectile_endpoint_anchors(
+		animation_node.psychic_pulse_config,
+		actor_anchor,
+		target_anchor,
+		animation_node.reverse_battlefield
+	)
 	animation_node.energy_blast_config = _with_projectile_endpoint_anchors(
 		animation_node.energy_blast_config,
 		actor_anchor,
@@ -1084,6 +1106,11 @@ func _apply_move_projectile_endpoint_anchors(
 		target_anchor,
 		animation_node.reverse_battlefield
 	)
+	animation_node.stat_change_config = _with_target_effect_anchor(
+		animation_node.stat_change_config,
+		target_anchor,
+		animation_node.reverse_battlefield
+	)
 	animation_node.celestial_charge_config = _with_self_effect_anchor(
 		animation_node.celestial_charge_config,
 		actor_anchor,
@@ -1091,6 +1118,11 @@ func _apply_move_projectile_endpoint_anchors(
 	)
 	animation_node.focus_aura_config = _with_self_effect_anchor(
 		animation_node.focus_aura_config,
+		actor_anchor,
+		animation_node.reverse_battlefield
+	)
+	animation_node.afterimage_config = _with_self_effect_anchor(
+		animation_node.afterimage_config,
 		actor_anchor,
 		animation_node.reverse_battlefield
 	)

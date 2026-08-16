@@ -13,6 +13,9 @@ const MAP_GUARDS := {
 		{"guard": "Entities/NPCs/RouteGuards/SouthRouteGuard", "exit": "Exits/ToRoute1"},
 		{"guard": "Entities/NPCs/RouteGuards/WestRouteGuard", "exit": "Exits/ToRoute22"},
 	],
+	"res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn": [
+		{"guard": "Entities/NPCs/Route3Guard", "exit": "Exits/ToRoute3"},
+	],
 }
 const ATTENDANT_SCENE := "res://scenes/overworld/kanto/transition_buildings/route_2_gate.tscn"
 

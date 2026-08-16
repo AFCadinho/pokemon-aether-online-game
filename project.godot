@@ -83,15 +83,15 @@ TradeService="*res://scripts/services/trade_service.gd"
 TradeRealtimeService="*res://scripts/services/trade_realtime_service.gd"
 TradeWorkspace="*res://scripts/ui/trade_workspace.gd"
 
-[internationalization]
-
-locale/fallback="en"
-
 [display]
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/stretch/mode="canvas_items"
+
+[internationalization]
+
+locale/fallback="en"
 
 [input]
 

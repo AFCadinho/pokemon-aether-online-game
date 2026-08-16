@@ -25,10 +25,12 @@ func load_party() -> Dictionary:
 		return response
 
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	GameState.apply_pokemon_level_cap_state(_dictionary_from_value(body.get("pokemonLevelCap", {})))
 	return {
 		"success": true,
 		"hasParty": bool(body.get("hasParty", false)),
 		"party": _array_from_value(body.get("party", [])),
+		"pokemonLevelCap": _dictionary_from_value(body.get("pokemonLevelCap", {})),
 	}
 
 
@@ -60,6 +62,7 @@ func save_party(party_state: Dictionary) -> Dictionary:
 		"success": true,
 		"hasParty": bool(body.get("hasParty", false)),
 		"party": _array_from_value(body.get("party", [])),
+		"pokemonLevelCap": _dictionary_from_value(body.get("pokemonLevelCap", {})),
 	}
 
 
@@ -85,6 +88,7 @@ func save_battle_state(battle_state: Dictionary) -> Dictionary:
 		"success": true,
 		"hasParty": bool(body.get("hasParty", false)),
 		"party": _array_from_value(body.get("party", [])),
+		"pokemonLevelCap": _dictionary_from_value(body.get("pokemonLevelCap", {})),
 	}
 
 
@@ -623,6 +627,7 @@ func _party_result_from_response(response: Dictionary) -> Dictionary:
 		"success": true,
 		"hasParty": bool(body.get("hasParty", false)),
 		"party": _array_from_value(body.get("party", [])),
+		"pokemonLevelCap": _dictionary_from_value(body.get("pokemonLevelCap", {})),
 	}
 
 
@@ -639,6 +644,7 @@ func _pokemon_item_result_from_response(response: Dictionary) -> Dictionary:
 		"inventory": _array_from_value(inventory.get("items", [])),
 		"hasParty": bool(party.get("hasParty", false)),
 		"party": _array_from_value(party.get("party", [])),
+		"pokemonLevelCap": _dictionary_from_value(party.get("pokemonLevelCap", {})),
 	}
 
 
@@ -654,6 +660,7 @@ func _pokemon_create_result_from_response(response: Dictionary) -> Dictionary:
 		"pokemon": pokemon,
 		"hasParty": bool(party.get("hasParty", false)),
 		"party": _array_from_value(party.get("party", [])),
+		"pokemonLevelCap": _dictionary_from_value(party.get("pokemonLevelCap", {})),
 		"storageLocation": PokemonStorageService.normalize_storage_location(body.get("storageLocation", {})),
 		"alreadyClaimed": bool(body.get("alreadyClaimed", false)),
 		"rivalStarterSpeciesId": str(body.get("rivalStarterSpeciesId", "")),
@@ -673,6 +680,7 @@ func _pokemon_move_learn_result_from_response(response: Dictionary) -> Dictionar
 		"pokemon": _dictionary_from_value(body.get("pokemon", {})),
 		"party": _array_from_value(party.get("party", [])),
 		"hasParty": bool(party.get("hasParty", false)),
+		"pokemonLevelCap": _dictionary_from_value(party.get("pokemonLevelCap", {})),
 		"learnedMove": _dictionary_from_value(body.get("learnedMove", {})),
 		"replacedMove": _dictionary_from_value(body.get("replacedMove", {})),
 		"skipped": bool(body.get("skipped", false)),
@@ -690,6 +698,7 @@ func _pokemon_move_reorder_result_from_response(response: Dictionary) -> Diction
 		"pokemon": _dictionary_from_value(body.get("pokemon", {})),
 		"party": _array_from_value(party.get("party", [])),
 		"hasParty": bool(party.get("hasParty", false)),
+		"pokemonLevelCap": _dictionary_from_value(party.get("pokemonLevelCap", {})),
 		"moveIds": _array_from_value(body.get("moveIds", [])),
 	}
 
@@ -705,7 +714,10 @@ func _pokemon_evolution_result_from_response(response: Dictionary) -> Dictionary
 		"pokemon": _dictionary_from_value(body.get("pokemon", {})),
 		"party": _array_from_value(party.get("party", [])),
 		"hasParty": bool(party.get("hasParty", false)),
+		"pokemonLevelCap": _dictionary_from_value(party.get("pokemonLevelCap", {})),
 		"evolution": _dictionary_from_value(body.get("evolution", {})),
+		"learnedMoves": _array_from_value(body.get("learnedMoves", [])),
+		"moveLearnCandidates": _array_from_value(body.get("moveLearnCandidates", [])),
 		"skipped": bool(body.get("skipped", false)),
 	}
 
@@ -733,6 +745,9 @@ func _apply_party_response(result: Dictionary) -> void:
 	var party_value: Variant = result.get("party", [])
 	if party_value is Array:
 		PlayerSave.replace_party_from_state(party_value as Array)
+	var level_cap_value: Variant = result.get("pokemonLevelCap", {})
+	if level_cap_value is Dictionary:
+		GameState.apply_pokemon_level_cap_state(level_cap_value as Dictionary)
 
 
 func _extract_error(body: Dictionary, response_code: int) -> String:
