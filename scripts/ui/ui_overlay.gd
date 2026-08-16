@@ -10819,8 +10819,8 @@ func _on_global_buff_contribute_pressed() -> void:
 	global_buff_contribute_button.disabled = true
 	var response: Dictionary = await PlayerWalletService.contribute_to_global_exp_boost(selected_global_buff_contribution)
 	if not bool(response.get("success", false)):
+		_add_chat_message(str(response.get("error", LocalizationManager.text("backend.error.not_enough_money"))))
 		_refresh_global_buff_contribution_input()
-		await GameErrorDialogService.show_response(response, "backend.error.transit_unavailable")
 		return
 	var body := response.get("body", {}) as Dictionary
 	PlayerWalletService.apply_wallet_result({"success": true, "wallet": body.get("wallet", {})})
