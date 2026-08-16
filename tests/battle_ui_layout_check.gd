@@ -376,6 +376,8 @@ func _check_mimikyu_disguise_indicator_contract() -> void:
 	var battle_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
 	_check_contains(battle_source, "BattleState.get_mimikyu_disguise_state_for_species", "battle derives Mimikyu's Disguise badge from its rendered form")
 	_check_contains(battle_source, '"line": STAT_STAGE_BADGE_LINE_MODIFIER', "Disguise uses the badge row below the HP HUD alongside stat modifiers")
+	_check_contains(battle_source, 'return "▲ %s" % stage_value', "stat boosts use an unambiguous upward indicator")
+	_check_contains(battle_source, 'return "▼ %s" % abs(stage_value)', "stat drops use an unambiguous downward indicator")
 	_check_contains(battle_source, '_t("battle.hud.disguise_active"', "active Disguise badge is localized")
 	_check_contains(battle_source, '"battle.hud.disguise_inactive"', "inactive Disguise badge is localized")
 

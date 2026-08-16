@@ -151,7 +151,7 @@ func build(event_data: Dictionary) -> Dictionary:
 			recent_field_effect_source = ""
 			recent_ability_event = false
 			recent_move_event = false
-			var player_id := str(event_data.get("playerId", ""))
+			var player_id := _get_switch_player_id(event_data)
 			var from_name := str(event_data.get("from", ""))
 			var to_name := str(event_data.get("to", ""))
 			var forced_switch := bool(event_data.get("forced", false)) or str(event_data.get("type", "")) == "drag"
@@ -763,6 +763,27 @@ func _get_player_display_name(player_id: String) -> String:
 		return str(get_player_display_name.call(player_id))
 
 	return player_id
+
+
+func _get_switch_player_id(event: Dictionary) -> String:
+	# The destination ident is the authoritative side for a switch. Some
+	# recovery/synthetic projections omit playerId, and a stale playerId must not
+	# turn the local player's replacement into an opponent switch in the log.
+	for key in ["toIdent", "target", "pokemon", "ident"]:
+		var player_id := _get_player_id_from_battle_ident(str(event.get(key, "")))
+		if player_id != "":
+			return player_id
+	var declared_player_id := str(event.get("playerId", "")).strip_edges()
+	return declared_player_id if declared_player_id in ["p1", "p2"] else ""
+
+
+func _get_player_id_from_battle_ident(ident: String) -> String:
+	var normalized := ident.strip_edges().to_lower()
+	if normalized.begins_with("p1"):
+		return "p1"
+	if normalized.begins_with("p2"):
+		return "p2"
+	return ""
 
 
 func _get_first_event_text_value(event: Dictionary, keys: Array) -> String:
