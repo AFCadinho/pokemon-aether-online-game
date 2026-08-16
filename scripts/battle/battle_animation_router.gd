@@ -420,6 +420,8 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.foreground_path = str(config.get("foreground_path", ""))
 	var sound_paths: Dictionary = (config.get("sound_paths", {}) as Dictionary).duplicate(true)
 	animation_node.sound_paths = sound_paths
+	animation_node.custom_sound_events = (config.get("custom_sound_events", []) as Array).duplicate(true)
+	animation_node.disable_data_sound_events = bool(config.get("disable_data_sound_events", false))
 	if not resources.is_empty():
 		animation_node.data_override = resources.get("data", {}) as Dictionary
 		animation_node.sheet_texture_override = resources.get("sheet_texture", null) as Texture2D

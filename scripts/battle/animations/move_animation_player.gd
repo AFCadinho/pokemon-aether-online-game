@@ -9,6 +9,8 @@ signal animation_finished
 @export_file("*.png") var background_path := ""
 @export_file("*.png") var foreground_path := ""
 @export var sound_paths: Dictionary = {}
+@export var custom_sound_events: Array = []
+@export var disable_data_sound_events: bool = false
 @export var autoplay: bool = true
 @export var loop: bool = false
 @export var free_on_finish: bool = false
@@ -3053,6 +3055,8 @@ func _apply_timing_events(index: int) -> void:
 
 		match int(event["type"]):
 			0:
+				if disable_data_sound_events:
+					continue
 				_play_sound_event(event)
 			1:
 				if show_timing_backgrounds:
@@ -3074,6 +3078,28 @@ func _apply_timing_events(index: int) -> void:
 				if show_timing_foregrounds:
 					fg.modulate.a = float(event["opacity"]) / 255.0 * foreground_opacity_multiplier if event["opacity"] != null else fg.modulate.a
 					fg_hide_frame = _timing_hide_frame(index, event) if fg.modulate.a > 0.0 else -1
+	_apply_custom_sound_events(index)
+
+
+func _apply_custom_sound_events(index: int) -> void:
+	for event_value: Variant in custom_sound_events:
+		if not event_value is Dictionary:
+			continue
+		var event := event_value as Dictionary
+		if int(event.get("frame", -1)) != index:
+			continue
+		var sound_name := str(event.get("name", "")).strip_edges()
+		if sound_name == "":
+			continue
+		var event_key := "custom:%s:%s" % [index, sound_name]
+		if played_events.has(event_key):
+			continue
+		played_events[event_key] = true
+		_play_sound_event({
+			"name": sound_name,
+			"volume": float(event.get("volume", 100.0)),
+			"pitch": float(event.get("pitch", 100.0)),
+		})
 
 
 func _expire_timing_layers(index: int) -> void:
