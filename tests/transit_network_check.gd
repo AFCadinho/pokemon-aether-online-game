@@ -92,6 +92,8 @@ func _init() -> void:
 	_check(not keeper_source.contains("TransitService.attune"), "Transit Keeper does not attune players automatically")
 	_check(keeper_source.contains("TransitService.load_network"), "Transit Keeper loads the travel network")
 	_check(keeper_source.contains("npc.transit.attune_beacon_hint"), "Transit Keeper explains that the local Beacon must be attuned")
+	_check(keeper_source.contains("TransitMenuScript"), "Transit Keeper opens the Aethernet destination catalog")
+	_check(keeper_source.contains("menu.open(network)"), "Transit Keeper passes the complete network to the destination catalog")
 	_check(keeper_source.contains("begin_authorized_teleport"), "Transit Keeper uses the authorized teleport flow")
 	_check(keeper_source.contains("PlayerWalletService.apply_wallet_result"), "Transit travel updates the local wallet projection")
 	var beacon_source := FileAccess.get_file_as_string(
@@ -118,14 +120,9 @@ func _init() -> void:
 	_check(beacon_source.contains("_apply_activation_state(true)"), "Aether Beacon activates after attunement")
 	_check(beacon_source.contains('_find_local_keeper()'), "Aether Beacon delegates its dialogue to the local Keeper")
 	_check(beacon_source.contains('"add_system_message"'), "Aether Beacon announces a new attunement in system chat")
-	_check(
-		beacon_source.contains("AetherConfirmationDialogScene.instantiate()"),
-		"Aether Beacon uses the styled Aethernet confirmation dialog"
-	)
-	_check(
-		beacon_source.contains("var confirmation_layer := CanvasLayer.new()"),
-		"Aether Beacon opens Anchor confirmation in screen space"
-	)
+	_check(beacon_source.contains("AetherBeaconMenuScript"), "Aether Beacon owns the attuned Beacon action menu")
+	_check(beacon_source.contains("AetherBeaconMenu.ACTION_EXPLAIN"), "Aether Beacon offers Aethernet explanation on demand")
+	_check(not beacon_source.contains("_offer_anchor_change"), "New attunements do not force an Anchor choice")
 	_check(beacon_source.contains("TransitService.set_anchor"), "Aether Beacon owns Anchor selection")
 	_check(english_localization.contains('"ui.transit.attuned_system"'), "Aethernet attunement has a localized system message")
 	var placeholder_source := FileAccess.get_file_as_string(

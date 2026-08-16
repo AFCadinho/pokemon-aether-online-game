@@ -35,6 +35,45 @@ func _init() -> void:
 	_assert(map_script_source.contains("_setup_ev_training_grass"), "EV grass mask setup is missing")
 	for stat: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
 		_assert(gate_source.contains('"id": "%s"' % stat), "missing EV stat choice: %s" % stat)
+	var localized_gate_keys: Array[String] = [
+		"ui.ev_training.assistant.session_active",
+		"ui.ev_training.assistant.authorization_required",
+		"ui.ev_training.assistant.tutorial_ready",
+		"ui.ev_training.assistant.introduction",
+		"ui.ev_training.assistant.session_started",
+		"ui.ev_training.assistant.lesson_paused",
+		"ui.ev_training.assistant.session_complete",
+		"ui.ev_training.assistant.title",
+		"ui.ev_training.assistant.stat_prompt",
+		"ui.ev_training.assistant.session_fee",
+		"ui.ev_training.mateo.lesson_intro.evs",
+		"ui.ev_training.mateo.focus_targets",
+		"ui.ev_training.mateo.battle_progress",
+		"ui.ev_training.mateo.allocation_instructions",
+		"ui.ev_training.mateo.choose_pokemon",
+	]
+	for locale: String in ["en", "nl", "pt_BR"]:
+		var locale_data: Variant = JSON.parse_string(
+			FileAccess.get_file_as_string("res://localization/%s.json" % locale)
+		)
+		_assert(locale_data is Dictionary, "EV assistant localization parses for %s" % locale)
+		if not locale_data is Dictionary:
+			continue
+		for key: String in localized_gate_keys:
+			_assert(
+				str((locale_data as Dictionary).get(key, "")).strip_edges() != "",
+				"missing %s in %s" % [key, locale]
+			)
+	_assert(
+		not gate_source.contains("This is Viridian City's focused EV training field.")
+		and not gate_source.contains("Training session complete."),
+		"EV assistant runtime dialogue must not be hardcoded in English"
+	)
+	_assert(
+		expert_source.contains('LocalizationManager.text("ui.ev_training.mateo.lesson_intro.evs")')
+		and not expert_source.contains("EV means Effort Value. A Pokemon that participates"),
+		"Mateo's runtime lesson must use the localization catalog"
+	)
 	_assert(
 		gate_source.contains('backdrop.name = "EvTrainingChoiceBackdrop"')
 		and gate_source.contains('fee_badge.name = "EvTrainingFeeBadge"')
