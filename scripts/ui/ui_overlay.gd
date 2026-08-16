@@ -17518,7 +17518,7 @@ func _bag_item_can_use_from_bag(item: Dictionary) -> bool:
 	var use_action := str(item.get("useAction", "")).strip_edges()
 	if use_action == "unlock_appearance" and not _bag_item_matches_player_gender(item):
 		return false
-	if use_action in ["unlock_appearance", "open_item_bundle", "redeem_aether_blessing", "trainer_name_change", "trainer_gender_change", "apply_guild_emblem_template"]:
+	if use_action in ["activate_shiny_charm", "unlock_appearance", "open_item_bundle", "redeem_aether_blessing", "trainer_name_change", "trainer_gender_change", "apply_guild_emblem_template"]:
 		return true
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	return FieldMoveService.is_direct_field_move(field_move_id) or _is_pokemon_usable_item_id(item_id)
@@ -17551,6 +17551,8 @@ func _bag_item_use_action_label(item: Dictionary) -> String:
 		return LocalizationManager.text("ui.bag.action.move_to_customization")
 	if use_action == "redeem_aether_blessing":
 		return LocalizationManager.text("ui.bag.action.redeem_voucher")
+	if use_action == "activate_shiny_charm":
+		return LocalizationManager.text("ui.bag.action.activate")
 	if use_action == "apply_guild_emblem_template":
 		return LocalizationManager.text("ui.bag.action.unlock_for_guild")
 	if _bag_machine_move_id(item_id) != "":
@@ -17713,6 +17715,19 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 		_refresh_bag_detail()
 		_add_chat_message(LocalizationManager.text("ui.bag.message.blessing_extended", {
 			"days": int(redeem_result.get("durationDays", 0)),
+		}))
+		return
+	if use_action == "activate_shiny_charm":
+		var activate_result: Dictionary = await InventoryService.use_inventory_item(item_id)
+		if not bool(activate_result.get("success", false)):
+			_add_chat_message(str(activate_result.get("error", LocalizationManager.text("ui.bag.message.shiny_charm_failed"))))
+			return
+		bag_inventory_items = _normalize_bag_inventory_items(activate_result.get("inventory", []))
+		bag_selected_item = {}
+		_refresh_bag_items()
+		_refresh_bag_detail()
+		_add_chat_message(LocalizationManager.text("ui.bag.message.shiny_charm_activated", {
+			"days": int(activate_result.get("durationDays", 0)),
 		}))
 		return
 	if use_action == "apply_guild_emblem_template":

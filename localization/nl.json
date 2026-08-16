@@ -661,6 +661,8 @@
   "ui.bag.description.default": "Dit item wordt veilig in je Bag bewaard.",
   "ui.bag.action.inspect": "Bekijken",
   "ui.bag.action.use": "Gebruiken",
+
+  "ui.bag.action.activate": "Activeren",
   "ui.bag.action.use_escape_rope": "Escape Rope gebruiken",
   "ui.bag.action.use_charm": "Charm gebruiken",
   "ui.bag.action.change_name": "Naam wijzigen",
@@ -682,6 +684,10 @@
   "ui.bag.message.cosmetic_failed": "Dit cosmetische item kon niet naar Personage aanpassen worden verplaatst.",
   "ui.bag.message.cosmetic_added": "{item} is toegevoegd aan Personage aanpassen.",
   "ui.bag.message.voucher_failed": "Deze voucher kon niet worden ingewisseld.",
+
+  "ui.bag.message.shiny_charm_failed": "De Shiny Charm kon niet worden geactiveerd.",
+
+  "ui.bag.message.shiny_charm_activated": "Shiny Charm is voor {days} dagen geactiveerd.",
   "ui.bag.message.blessing_extended": "Aether Blessing is met {days} dagen verlengd.",
   "ui.bag.message.guild_emblem_failed": "Dit Guild-embleem kon niet worden toegepast.",
   "ui.bag.message.guild_emblem_applied": "{item} is verbruikt, ontgrendeld en toegepast op {guild}.",

@@ -298,6 +298,8 @@ func _init() -> void:
 	_check(script_source.contains('str(buff.get("state", "funding")) == "active"'), "global buff icons distinguish active and funding states")
 	_check(script_source.contains('"id": "global_shiny"'), "global buff data includes Shiny encounters")
 	_check(script_source.contains('["global_exp", "global_ev", "global_shiny", "global_rare_encounter"]'), "Shiny global boost accepts community contributions")
+	_check(script_source.contains('"activate_shiny_charm"'), "Shiny Charm can be activated from the Bag")
+	_check(script_source.contains('"ui.bag.message.shiny_charm_activated"'), "Shiny Charm activation gives the player clear feedback")
 	_check(script_source.contains('"id": "global_rare_encounter"'), "global buff data includes rarer Pokémon encounters")
 	_check(script_source.contains("PlayerWalletService.contribute_to_global_exp_boost"), "global EXP contributions use the authoritative wallet service")
 	_check(script_source.contains("PlayerWalletService.contribute_to_global_ev_boost"), "global EV contributions use the authoritative wallet service")
