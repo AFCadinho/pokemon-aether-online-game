@@ -54,6 +54,7 @@ func _init() -> void:
 	_check_burn_damage_replays_status_effect_animation()
 	_check_z_power_event_has_visible_message()
 	_check_stat_reset_events_have_visible_messages()
+	_check_switch_log_uses_destination_side()
 	_check_semantic_battle_log_colors()
 	_check_supreme_overlord_fallen_counter_protocol()
 	quit(1 if failed else 0)
@@ -159,6 +160,22 @@ func _check_stat_reset_events_have_visible_messages() -> void:
 		str(result.get("log_message", "")),
 		"All stat changes were eliminated!",
 		"Haze receives a battle-log all-stat reset presentation"
+	)
+
+
+func _check_switch_log_uses_destination_side() -> void:
+	var presentation = _make_presentation()
+	var result: Dictionary = presentation.build({
+		"type": "switch",
+		"playerId": "p2",
+		"from": "Pikipek",
+		"to": "Furret",
+		"toIdent": "p1a: Furret",
+	})
+	_check_equal(
+		str(result.get("log_message", "")),
+		"Pikipek, come back!\nGo! Furret!",
+		"switch logs use the destination ident side when playerId is stale"
 	)
 
 

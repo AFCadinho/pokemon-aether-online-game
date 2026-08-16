@@ -20,6 +20,7 @@ func _init() -> void:
 	_check_hp_hud_structure()
 	_check_mimikyu_disguise_indicator_contract()
 	_check_kingambit_fallen_indicator_contract()
+	_check_type_change_indicator_contract()
 	_check_mimikyu_back_sprite_grounding_contract()
 	await _check_stage_scaling()
 	await _check_party_rail_interaction()
@@ -376,6 +377,8 @@ func _check_mimikyu_disguise_indicator_contract() -> void:
 	var battle_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
 	_check_contains(battle_source, "BattleState.get_mimikyu_disguise_state_for_species", "battle derives Mimikyu's Disguise badge from its rendered form")
 	_check_contains(battle_source, '"line": STAT_STAGE_BADGE_LINE_MODIFIER', "Disguise uses the badge row below the HP HUD alongside stat modifiers")
+	_check_contains(battle_source, 'return "▲ %s" % stage_value', "stat boosts use an unambiguous upward indicator")
+	_check_contains(battle_source, 'return "▼ %s" % abs(stage_value)', "stat drops use an unambiguous downward indicator")
 	_check_contains(battle_source, '_t("battle.hud.disguise_active"', "active Disguise badge is localized")
 	_check_contains(battle_source, '"battle.hud.disguise_inactive"', "inactive Disguise badge is localized")
 
@@ -386,6 +389,15 @@ func _check_kingambit_fallen_indicator_contract() -> void:
 	_check_contains(battle_source, 'canonical_species_key == "kingambit"', "Fallen indicator is scoped to canonical Kingambit")
 	_check_contains(battle_source, '_t("battle.hud.fallen")', "Fallen indicator label is localized")
 	_check_contains(battle_source, '"line": STAT_STAGE_BADGE_LINE_MODIFIER', "Fallen indicator uses the badge row above the sprite")
+
+
+func _check_type_change_indicator_contract() -> void:
+	var battle_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	_check_contains(battle_source, "type_changes_by_ident", "battle tracks temporary Pokémon type changes")
+	_check_contains(battle_source, "func _apply_type_change_event", "battle handles Showdown type-change events")
+	_check_contains(battle_source, '"label": "%s:" % ability', "type-change badge identifies the triggering ability")
+	_check_contains(battle_source, '"value": pokemon_type.capitalize()', "type-change badge displays the current type")
+	_check_contains(battle_source, "_clear_type_change_for_ident", "type-change badge clears when a Pokémon leaves battle")
 
 
 func _check_mimikyu_back_sprite_grounding_contract() -> void:

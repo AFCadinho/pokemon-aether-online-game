@@ -448,9 +448,8 @@ var donator_store_popup: DonatorStorePopup
 @onready var global_buff_details_percent_label: Label = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/GoalPanel/MarginContainer/Content/ProgressRow/PercentLabel
 @onready var global_buff_details_active_label: Label = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/ActiveLabel
 @onready var global_buff_donation_section: VBoxContainer = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection
-@onready var global_buff_amount_1000_button: Button = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow/Amount1000Button
-@onready var global_buff_amount_10000_button: Button = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow/Amount10000Button
-@onready var global_buff_amount_25000_button: Button = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow/Amount25000Button
+@onready var global_buff_amount_input: LineEdit = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow/AmountInput
+@onready var global_buff_fill_remaining_button: Button = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/FillRemainingButton
 @onready var global_buff_contribute_button: Button = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow/ContributeButton
 @onready var region_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/StatusRow/RegionBadge/RegionLabel
 @onready var location_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/HeaderRow/LocationLabel
@@ -1265,11 +1264,15 @@ var aether_clash_champion_request_active := false
 var utc_time_refresh_elapsed := UTC_TIME_REFRESH_INTERVAL_SECONDS
 var ui_input_mouse_blocker: Control
 var selected_global_buff: Dictionary = {}
-var selected_global_buff_contribution := 10000
+var global_buffs_data: Array = []
+const MINIMUM_GLOBAL_BUFF_CONTRIBUTION := 10_000
+
+var selected_global_buff_contribution := MINIMUM_GLOBAL_BUFF_CONTRIBUTION
 var active_personal_buffs: Array = []
 var personal_buff_source_buffs: Array = []
 var personal_buffs_expanded := false
 var personal_buffs_refresh_elapsed := 0.0
+var global_buffs_refresh_elapsed := 0.0
 var staff_tools_visibility_key := ""
 
 # Called when the node enters the scene tree for the first time.
@@ -9478,6 +9481,7 @@ func _process(delta: float) -> void:
 	_refresh_location_label_if_needed()
 	_refresh_aether_clash_champion_if_needed(delta)
 	_refresh_utc_time_label(delta)
+	_refresh_global_buffs_if_needed(delta)
 	_refresh_personal_buffs_if_needed(delta)
 	_refresh_staff_tools_visibility_if_needed()
 	_refresh_pvp_room_polling(delta)
@@ -10269,15 +10273,17 @@ func _setup_status_docks() -> void:
 	donator_store_button.focus_mode = Control.FOCUS_NONE
 	settings_button.focus_mode = Control.FOCUS_NONE
 	global_buff_details_close_button.pressed.connect(_hide_global_buff_details)
-	global_buff_amount_1000_button.pressed.connect(_select_global_buff_contribution.bind(1000))
-	global_buff_amount_10000_button.pressed.connect(_select_global_buff_contribution.bind(10000))
-	global_buff_amount_25000_button.pressed.connect(_select_global_buff_contribution.bind(25000))
+	global_buff_amount_input.text_changed.connect(_on_global_buff_amount_changed)
+	global_buff_fill_remaining_button.pressed.connect(_on_global_buff_fill_remaining_pressed)
 	global_buff_contribute_button.pressed.connect(_on_global_buff_contribute_pressed)
 	_set_localized_control_property(personal_buffs_empty_label, "text", "ui.buff.none")
 	_set_localized_control_property(global_buff_details_close_button, "tooltip_text", "common.close")
 	var contribution_hint := global_buff_donation_section.get_node_or_null("HintLabel") as Label
 	if contribution_hint != null:
-		_set_localized_control_property(contribution_hint, "text", "ui.buff.contribution_hint")
+		contribution_hint.text = LocalizationManager.text(
+			"ui.buff.contribution_hint",
+			{"minimum": _format_money(MINIMUM_GLOBAL_BUFF_CONTRIBUTION)}
+		)
 	_set_localized_control_property(global_buff_contribute_button, "text", "ui.buff.contribute")
 	for child: Node in global_buff_slots.get_children():
 		var button := child as Button
@@ -10313,7 +10319,7 @@ func _setup_status_docks() -> void:
 			"description_key": "ui.buff.global_ev.description",
 			"state": "funding",
 			"current": 0,
-			"goal": 100000,
+			"goal": 50000,
 			"active_duration": "1h",
 		},
 		{
@@ -10323,8 +10329,8 @@ func _setup_status_docks() -> void:
 			"description_key": "ui.buff.global_shiny.description",
 			"state": "funding",
 			"current": 0,
-			"goal": 100000,
-			"active_duration": "1h",
+			"goal": 1000000,
+			"active_duration": "7d",
 		},
 		{
 			"id": "global_rare_encounter",
@@ -10333,13 +10339,18 @@ func _setup_status_docks() -> void:
 			"description_key": "ui.buff.global_rare.description",
 			"state": "funding",
 			"current": 0,
-			"goal": 100000,
+			"goal": 200000,
 			"active_duration": "1h",
 		},
 	])
 	set_personal_buffs([])
+	_load_global_exp_boost.call_deferred()
+	_load_global_ev_boost.call_deferred()
+	_load_global_shiny_boost.call_deferred()
+	_load_global_rare_encounter_boost.call_deferred()
 
 func set_global_buffs(buffs: Array) -> void:
+	global_buffs_data = buffs.duplicate(true)
 	var tray_available := not buffs.is_empty()
 	global_buffs_panel.set_meta("group_available", tray_available)
 	_apply_buff_tray_group_visibility(global_buffs_panel, tray_available)
@@ -10378,6 +10389,52 @@ func set_global_buffs(buffs: Array) -> void:
 func set_personal_buffs(buffs: Array) -> void:
 	personal_buff_source_buffs = buffs.duplicate(true)
 	_refresh_personal_buffs_from_entitlements()
+
+
+func _refresh_global_buffs_if_needed(delta: float) -> void:
+	global_buffs_refresh_elapsed -= delta
+	if global_buffs_refresh_elapsed > 0.0:
+		return
+	global_buffs_refresh_elapsed = 1.0
+	var changed := false
+	for index: int in range(global_buffs_data.size()):
+		var buff := global_buffs_data[index] as Dictionary
+		if str(buff.get("state", "funding")) != "active":
+			continue
+		var expires_at := str(buff.get("activeUntil", "")).strip_edges()
+		if expires_at == "":
+			continue
+		var remaining_seconds := _global_buff_remaining_seconds(expires_at)
+		if remaining_seconds <= 0:
+			buff["state"] = "funding"
+			buff["current"] = 0
+			buff["activeUntil"] = ""
+			buff["remaining"] = ""
+		elif str(buff.get("remaining", "")) != _format_global_buff_remaining(remaining_seconds):
+			buff["remaining"] = _format_global_buff_remaining(remaining_seconds)
+		else:
+			continue
+		global_buffs_data[index] = buff
+		if str(selected_global_buff.get("id", "")) == str(buff.get("id", "")):
+			selected_global_buff = buff.duplicate(true)
+		changed = true
+	if not changed:
+		return
+	set_global_buffs(global_buffs_data)
+	if not selected_global_buff.is_empty():
+		_render_global_buff_details()
+
+
+func _global_buff_remaining_seconds(expires_at: String) -> int:
+	var expires_unix := _pvp_iso_timestamp_to_unix_time(expires_at.replace("+00:00", "Z"))
+	if expires_unix <= 0.0:
+		return 0
+	return maxi(int(ceil(expires_unix - Time.get_unix_time_from_system())), 0)
+
+
+func _format_global_buff_remaining(total_seconds: int) -> String:
+	var minutes := maxi(int(ceil(float(maxi(total_seconds, 0)) / 60.0)), 1)
+	return LocalizationManager.text("ui.buff.minutes", {"count": minutes})
 
 
 func _refresh_personal_buffs_if_needed(delta: float) -> void:
@@ -10734,8 +10791,9 @@ func _on_global_buff_button_pressed(button: Button) -> void:
 		return
 	selected_global_buff = buff.duplicate(true)
 	_render_global_buff_details()
-	global_buff_details_panel.reset_size()
 	global_buff_details_panel.visible = true
+	await get_tree().process_frame
+	global_buff_details_panel.size = global_buff_details_panel.get_combined_minimum_size()
 	_position_action_slot_popup(global_buff_details_panel, button)
 	_activate_ui_panel(global_buff_details_panel)
 
@@ -10774,35 +10832,173 @@ func _render_global_buff_details() -> void:
 		"ui.buff.server_remaining",
 		{"remaining": str(selected_global_buff.get("remaining", ""))}
 	)
-	global_buff_donation_section.visible = not active
-	_refresh_global_buff_contribution_buttons()
+	global_buff_donation_section.visible = not active and _global_buff_accepts_contributions(selected_global_buff)
+	_refresh_global_buff_contribution_input()
 	if global_buff_details_panel != null:
 		global_buff_details_panel.reset_size()
 
-func _select_global_buff_contribution(amount: int) -> void:
-	selected_global_buff_contribution = amount
-	_refresh_global_buff_contribution_buttons()
+func _on_global_buff_amount_changed(value: String) -> void:
+	var digits := ""
+	for character: String in value:
+		if character >= "0" and character <= "9":
+			digits += character
+	var remaining := _global_buff_remaining_contribution()
+	var requested := 0
+	if not digits.is_empty():
+		requested = remaining if digits.length() > 9 else int(digits)
+	selected_global_buff_contribution = mini(requested, remaining)
+	var normalized_text := str(selected_global_buff_contribution) if not digits.is_empty() else ""
+	if global_buff_amount_input.text != normalized_text:
+		global_buff_amount_input.set_block_signals(true)
+		global_buff_amount_input.text = normalized_text
+		global_buff_amount_input.caret_column = normalized_text.length()
+		global_buff_amount_input.set_block_signals(false)
+	_refresh_global_buff_contribution_input()
 
-func _refresh_global_buff_contribution_buttons() -> void:
-	var amount_buttons: Dictionary = {
-		1000: global_buff_amount_1000_button,
-		10000: global_buff_amount_10000_button,
-		25000: global_buff_amount_25000_button,
-	}
-	for amount_value: Variant in amount_buttons:
-		var amount := int(amount_value)
-		var button: Button = amount_buttons[amount] as Button
-		_apply_button_style(button, "primary" if amount == selected_global_buff_contribution else "default")
+
+func _on_global_buff_fill_remaining_pressed() -> void:
+	var remaining := _global_buff_remaining_contribution()
+	if remaining <= 0:
+		return
+	selected_global_buff_contribution = remaining
+	global_buff_amount_input.set_block_signals(true)
+	global_buff_amount_input.text = str(remaining)
+	global_buff_amount_input.caret_column = global_buff_amount_input.text.length()
+	global_buff_amount_input.set_block_signals(false)
+	_refresh_global_buff_contribution_input()
+
+
+func _global_buff_remaining_contribution() -> int:
+	if selected_global_buff.is_empty() or str(selected_global_buff.get("state", "funding")) == "active":
+		return 0
+	var current := maxi(int(selected_global_buff.get("current", 0)), 0)
+	var goal := maxi(int(selected_global_buff.get("goal", 100000)), 1)
+	return maxi(goal - current, 0)
+
+
+func _refresh_global_buff_contribution_input() -> void:
+	var remaining := _global_buff_remaining_contribution()
+	var minimum := mini(MINIMUM_GLOBAL_BUFF_CONTRIBUTION, remaining)
+	selected_global_buff_contribution = mini(selected_global_buff_contribution, remaining)
+	if global_buff_amount_input.text.is_empty() and selected_global_buff_contribution >= minimum and selected_global_buff_contribution > 0:
+		global_buff_amount_input.text = str(selected_global_buff_contribution)
+	var valid := (
+		remaining > 0
+		and selected_global_buff_contribution >= minimum
+		and selected_global_buff_contribution <= remaining
+	)
+	global_buff_contribute_button.disabled = not valid
+	global_buff_fill_remaining_button.disabled = remaining <= 0
+	global_buff_fill_remaining_button.text = LocalizationManager.text(
+		"ui.buff.fill_remaining",
+		{"amount": _format_money(remaining)}
+	)
+	global_buff_fill_remaining_button.tooltip_text = LocalizationManager.text(
+		"ui.buff.fill_remaining_tooltip",
+		{"amount": _format_money(remaining)}
+	)
+	global_buff_amount_input.tooltip_text = LocalizationManager.text(
+		"ui.buff.contribution_minimum",
+		{"minimum": _format_money(MINIMUM_GLOBAL_BUFF_CONTRIBUTION)}
+	)
+	_apply_button_style(global_buff_contribute_button, "primary" if valid else "default")
+	_apply_global_buff_fill_remaining_button_style()
 
 func _on_global_buff_contribute_pressed() -> void:
-	if selected_global_buff.is_empty() or str(selected_global_buff.get("state", "funding")) == "active":
+	if (
+		selected_global_buff.is_empty()
+		or str(selected_global_buff.get("state", "funding")) == "active"
+		or not _global_buff_accepts_contributions(selected_global_buff)
+	):
 		return
-	_add_chat_message(
-		LocalizationManager.text(
-			"ui.buff.contribution_unavailable",
-			{"amount": _format_money(selected_global_buff_contribution)}
+	var remaining := _global_buff_remaining_contribution()
+	var minimum := mini(MINIMUM_GLOBAL_BUFF_CONTRIBUTION, remaining)
+	if selected_global_buff_contribution < minimum:
+		_add_chat_message(LocalizationManager.text(
+			"ui.buff.contribution_minimum",
+			{"minimum": _format_money(MINIMUM_GLOBAL_BUFF_CONTRIBUTION)}
+		))
+		return
+	global_buff_contribute_button.disabled = true
+	var selected_boost_id := str(selected_global_buff.get("id", ""))
+	var response: Dictionary = {}
+	if selected_boost_id == "global_exp":
+		response = await PlayerWalletService.contribute_to_global_exp_boost(selected_global_buff_contribution)
+	elif selected_boost_id == "global_ev":
+		response = await PlayerWalletService.contribute_to_global_ev_boost(selected_global_buff_contribution)
+	elif selected_boost_id == "global_shiny":
+		response = await PlayerWalletService.contribute_to_global_shiny_boost(selected_global_buff_contribution)
+	elif selected_boost_id == "global_rare_encounter":
+		response = await PlayerWalletService.contribute_to_global_rare_encounter_boost(selected_global_buff_contribution)
+	else:
+		return
+	if not bool(response.get("success", false)):
+		_add_chat_message(str(response.get("error", LocalizationManager.text("backend.error.not_enough_money"))))
+		_refresh_global_buff_contribution_input()
+		return
+	var body := response.get("body", {}) as Dictionary
+	PlayerWalletService.apply_wallet_result({"success": true, "wallet": body.get("wallet", {})})
+	var aetherite_reward := maxi(int(body.get("aetheriteReward", 0)), 0)
+	if aetherite_reward > 0:
+		add_system_message(LocalizationManager.text(
+			"ui.buff.aetherite_reward",
+		{
+			"amount": _format_money(aetherite_reward),
+			"boost": _localized_buff_name(selected_global_buff),
+		}
+		))
+	_apply_global_boost_state(body, selected_boost_id)
+	_render_global_buff_details()
+
+
+func _load_global_exp_boost() -> void:
+	var response: Dictionary = await PlayerWalletService.load_global_exp_boost()
+	if bool(response.get("success", false)):
+		_apply_global_boost_state(response.get("body", {}) as Dictionary, "global_exp")
+
+
+func _load_global_ev_boost() -> void:
+	var response: Dictionary = await PlayerWalletService.load_global_ev_boost()
+	if bool(response.get("success", false)):
+		_apply_global_boost_state(response.get("body", {}) as Dictionary, "global_ev")
+
+
+func _load_global_shiny_boost() -> void:
+	var response: Dictionary = await PlayerWalletService.load_global_shiny_boost()
+	if bool(response.get("success", false)):
+		_apply_global_boost_state(response.get("body", {}) as Dictionary, "global_shiny")
+
+
+func _load_global_rare_encounter_boost() -> void:
+	var response: Dictionary = await PlayerWalletService.load_global_rare_encounter_boost()
+	if bool(response.get("success", false)):
+		_apply_global_boost_state(response.get("body", {}) as Dictionary, "global_rare_encounter")
+
+
+func _apply_global_boost_state(state: Dictionary, boost_id: String) -> void:
+	for index: int in range(global_buffs_data.size()):
+		var buff := global_buffs_data[index] as Dictionary
+		if str(buff.get("id", "")) != boost_id:
+			continue
+		buff["current"] = int(state.get("current", 0))
+		buff["goal"] = int(state.get("goal", 100000))
+		buff["state"] = "active" if bool(state.get("active", false)) else "funding"
+		buff["activeUntil"] = str(state.get("activeUntil", "")) if bool(state.get("active", false)) else ""
+		var remaining_seconds := _global_buff_remaining_seconds(str(buff.get("activeUntil", "")))
+		buff["remaining"] = (
+			_format_global_buff_remaining(remaining_seconds)
+			if bool(state.get("active", false)) and remaining_seconds > 0
+			else ""
 		)
-	)
+		global_buffs_data[index] = buff
+		if str(selected_global_buff.get("id", "")) == boost_id:
+			selected_global_buff = buff.duplicate(true)
+		set_global_buffs(global_buffs_data)
+		return
+
+
+func _global_buff_accepts_contributions(buff: Dictionary) -> bool:
+	return str(buff.get("id", "")) in ["global_exp", "global_ev", "global_shiny", "global_rare_encounter"]
 
 func _hide_global_buff_details() -> void:
 	global_buff_details_panel.visible = false
@@ -17322,7 +17518,7 @@ func _bag_item_can_use_from_bag(item: Dictionary) -> bool:
 	var use_action := str(item.get("useAction", "")).strip_edges()
 	if use_action == "unlock_appearance" and not _bag_item_matches_player_gender(item):
 		return false
-	if use_action in ["unlock_appearance", "open_item_bundle", "redeem_aether_blessing", "trainer_name_change", "trainer_gender_change", "apply_guild_emblem_template"]:
+	if use_action in ["activate_shiny_charm", "unlock_appearance", "open_item_bundle", "redeem_aether_blessing", "trainer_name_change", "trainer_gender_change", "apply_guild_emblem_template"]:
 		return true
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	return FieldMoveService.is_direct_field_move(field_move_id) or _is_pokemon_usable_item_id(item_id)
@@ -17355,6 +17551,8 @@ func _bag_item_use_action_label(item: Dictionary) -> String:
 		return LocalizationManager.text("ui.bag.action.move_to_customization")
 	if use_action == "redeem_aether_blessing":
 		return LocalizationManager.text("ui.bag.action.redeem_voucher")
+	if use_action == "activate_shiny_charm":
+		return LocalizationManager.text("ui.bag.action.activate")
 	if use_action == "apply_guild_emblem_template":
 		return LocalizationManager.text("ui.bag.action.unlock_for_guild")
 	if _bag_machine_move_id(item_id) != "":
@@ -17517,6 +17715,19 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 		_refresh_bag_detail()
 		_add_chat_message(LocalizationManager.text("ui.bag.message.blessing_extended", {
 			"days": int(redeem_result.get("durationDays", 0)),
+		}))
+		return
+	if use_action == "activate_shiny_charm":
+		var activate_result: Dictionary = await InventoryService.use_inventory_item(item_id)
+		if not bool(activate_result.get("success", false)):
+			_add_chat_message(str(activate_result.get("error", LocalizationManager.text("ui.bag.message.shiny_charm_failed"))))
+			return
+		bag_inventory_items = _normalize_bag_inventory_items(activate_result.get("inventory", []))
+		bag_selected_item = {}
+		_refresh_bag_items()
+		_refresh_bag_detail()
+		_add_chat_message(LocalizationManager.text("ui.bag.message.shiny_charm_activated", {
+			"days": int(activate_result.get("durationDays", 0)),
 		}))
 		return
 	if use_action == "apply_guild_emblem_template":
@@ -17848,6 +18059,14 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 			}),
 			"canApply": true,
 		}
+	if _is_evolution_item_id(item_id):
+		return {
+			"label": LocalizationManager.text("ui.bag.use.evolution"),
+			"tooltip": LocalizationManager.text("ui.bag.use.evolution_tooltip", {
+				"pokemon": _pokemon_display_name(pokemon),
+			}),
+			"canApply": true,
+		}
 	var gameplay := _bag_gameplay_definition_for_item_id(item_id)
 	if BAG_ITEM_EFFECT_PREVIEW.supports(gameplay):
 		return BAG_ITEM_EFFECT_PREVIEW.preview(pokemon, gameplay, requested_quantity)
@@ -18172,6 +18391,7 @@ func _on_bag_item_use_confirm_pressed() -> void:
 	_refresh_open_pokemon_summary_cards()
 	_refresh_player_status_card()
 	var reward: Dictionary = _staff_dictionary_from_variant(result.get("reward", {}))
+	await _present_item_trade_evolution(reward)
 	_add_bag_item_use_success_message(item_id, reward)
 	_notify_progression_reward(reward)
 	_hide_bag_item_use_popup()
@@ -18234,6 +18454,41 @@ func _add_bag_item_use_success_message(item_id: String, reward: Dictionary) -> v
 	else:
 		_add_chat_message(LocalizationManager.text("ui.bag.use.success", {"quantity": quantity, "item": item_name}))
 
+func _present_item_trade_evolution(reward: Dictionary) -> void:
+	var item_effects_value: Variant = reward.get("itemEffects", [])
+	if not (item_effects_value is Array):
+		return
+	for item_effect_value: Variant in item_effects_value as Array:
+		if not (item_effect_value is Dictionary):
+			continue
+		var executions_value: Variant = (item_effect_value as Dictionary).get("effects", [])
+		if not (executions_value is Array):
+			continue
+		for execution_value: Variant in executions_value as Array:
+			if not (execution_value is Dictionary):
+				continue
+			var execution: Dictionary = execution_value as Dictionary
+			if str(execution.get("type", "")) not in ["evolve_trade", "evolve_item"] or not bool(execution.get("applied", false)):
+				continue
+			var details := _staff_dictionary_from_variant(execution.get("details", {}))
+			var evolution := _staff_dictionary_from_variant(details.get("evolution", {}))
+			if evolution.is_empty():
+				return
+			await play_evolution_overlay(evolution)
+			var from_species := _evolution_prompt_from_species(evolution)
+			var target_species_id := _evolution_prompt_target_species_id(evolution)
+			var to_species := _evolution_prompt_to_species(evolution)
+			add_system_message(LocalizationManager.text(
+				"ui.evolution.result.evolved",
+				{
+					"from": _localized_species_name(from_species, from_species),
+					"to": _localized_species_name(target_species_id, to_species),
+				}
+			))
+			_announce_evolution_moves(details, int(evolution.get("pokemonId", 0)), target_species_id, to_species)
+			_show_next_move_learn_prompt()
+			return
+
 func _notify_progression_reward(reward: Dictionary) -> void:
 	if reward.is_empty():
 		return
@@ -18253,8 +18508,20 @@ func _is_ev_item_id(item_id: String) -> bool:
 func _is_ev_reducing_berry_id(item_id: String) -> bool:
 	return EV_REDUCING_BERRY_STATS.has(_normalize_item_id(item_id))
 
+func _is_evolution_item_id(item_id: String) -> bool:
+	var gameplay := _bag_gameplay_definition_for_item_id(item_id)
+	var effects_value: Variant = gameplay.get("effects", [])
+	if not (effects_value is Array):
+		return false
+	for effect_value: Variant in effects_value as Array:
+		if not (effect_value is Dictionary):
+			continue
+		if str((effect_value as Dictionary).get("type", "")) in ["evolve_trade", "evolve_item"]:
+			return true
+	return false
+
 func _is_pokemon_usable_item_id(item_id: String) -> bool:
-	return _bag_machine_move_id(item_id) != "" or _is_exp_item_id(item_id) or _is_ev_item_id(item_id) or _is_ev_reducing_berry_id(item_id) or BAG_ITEM_EFFECT_PREVIEW.supports(_bag_gameplay_definition_for_item_id(item_id))
+	return _bag_machine_move_id(item_id) != "" or _is_exp_item_id(item_id) or _is_ev_item_id(item_id) or _is_ev_reducing_berry_id(item_id) or _is_evolution_item_id(item_id) or BAG_ITEM_EFFECT_PREVIEW.supports(_bag_gameplay_definition_for_item_id(item_id))
 
 func _bag_machine_move_id(item_id: String) -> String:
 	var normalized_id := _normalize_item_id(item_id)
@@ -22170,6 +22437,28 @@ func _apply_button_style(button: Button, variant: String = "default") -> void:
 	button.add_theme_stylebox_override("focus", _make_button_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, 8, 1))
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
+
+func _apply_global_buff_fill_remaining_button_style() -> void:
+	var button := global_buff_fill_remaining_button
+	if button == null:
+		return
+	var transparent_style := _make_button_style(Color.TRANSPARENT, Color.TRANSPARENT, 6, 0)
+	transparent_style.content_margin_top = 2
+	transparent_style.content_margin_bottom = 2
+	var hover_style := _make_button_style(Color("#173b5688"), Color.TRANSPARENT, 6, 0)
+	hover_style.content_margin_top = 2
+	hover_style.content_margin_bottom = 2
+	button.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	button.add_theme_color_override("font_hover_color", Color("#72d8ff"))
+	button.add_theme_color_override("font_pressed_color", Color("#b5eaff"))
+	button.add_theme_color_override("font_disabled_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.42))
+	button.add_theme_font_size_override("font_size", 11)
+	button.add_theme_stylebox_override("normal", transparent_style)
+	button.add_theme_stylebox_override("hover", hover_style)
+	button.add_theme_stylebox_override("pressed", hover_style)
+	button.add_theme_stylebox_override("focus", hover_style)
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+
 func _apply_line_edit_style(line_edit: LineEdit) -> void:
 	line_edit.add_theme_color_override("font_color", UI_TEXT)
 	line_edit.add_theme_color_override("font_placeholder_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.68))
@@ -22321,8 +22610,10 @@ func _apply_premium_overlay_styles() -> void:
 	_apply_button_style(system_chat_tab_button, "primary")
 	_apply_chat_dock_button_style(send_button, true)
 	_apply_button_style(global_buff_details_close_button)
+	_apply_global_buff_fill_remaining_button_style()
 	_apply_button_style(global_buff_contribute_button, "primary")
-	_refresh_global_buff_contribution_buttons()
+	_apply_line_edit_style(global_buff_amount_input)
+	_refresh_global_buff_contribution_input()
 	_apply_button_style(dev_pokemon_add_button, "primary")
 	_apply_button_style(dev_pokemon_close_button)
 	_apply_button_style(dev_world_time_select)
@@ -36579,6 +36870,18 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 			{"player": str(message.get("displayName", "Trainer"))}
 		))
 		return
+	if message_type == "system.global_exp_boost_contribution":
+		add_system_message(_global_exp_boost_contribution_message(message))
+		return
+	if message_type == "system.global_ev_boost_contribution":
+		add_system_message(_global_ev_boost_contribution_message(message))
+		return
+	if message_type == "system.global_rare_encounter_boost_contribution":
+		add_system_message(_global_rare_encounter_boost_contribution_message(message))
+		return
+	if message_type == "system.global_shiny_boost_contribution":
+		add_system_message(_global_shiny_boost_contribution_message(message))
+		return
 	if message_type == "chat_error":
 		var error_text: String = str(message.get("message", "Chat message could not be sent."))
 		var error_channel := str(message.get("channel", "")).strip_edges().to_lower()
@@ -36612,6 +36915,32 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 		_refresh_guild_chat_attention_badge()
 	if channel == CHAT_CHANNEL_MAP and text != "":
 		_show_map_chat_bubble(user, text, str(message.get("mapId", "")))
+
+
+func _global_exp_boost_contribution_message(message: Dictionary) -> String:
+	return _global_boost_contribution_message(message, "ui.buff.global_exp.contribution_message")
+
+
+func _global_ev_boost_contribution_message(message: Dictionary) -> String:
+	return _global_boost_contribution_message(message, "ui.buff.global_ev.contribution_message")
+
+
+func _global_rare_encounter_boost_contribution_message(message: Dictionary) -> String:
+	return _global_boost_contribution_message(message, "ui.buff.global_rare.contribution_message")
+
+
+func _global_shiny_boost_contribution_message(message: Dictionary) -> String:
+	return _global_boost_contribution_message(message, "ui.buff.global_shiny.contribution_message")
+
+
+func _global_boost_contribution_message(message: Dictionary, localization_key: String) -> String:
+	return LocalizationManager.text(
+		localization_key,
+		{
+			"player": str(message.get("displayName", "Trainer")),
+			"amount": _format_money(max(int(message.get("amount", 0)), 0)),
+		}
+	)
 
 
 func _with_local_chat_role_state(user: Dictionary, display_name: String) -> Dictionary:

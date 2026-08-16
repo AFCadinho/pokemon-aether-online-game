@@ -18,7 +18,7 @@ var choice_root: Control
 func interact_with_player(_player: Node2D) -> void:
 	var metadata_response: Dictionary = await _load_npc_metadata()
 	if not bool(metadata_response.get("success", false)):
-		await show_dialogue(["I cannot begin the lesson right now."], display_name)
+		await show_dialogue([LocalizationManager.text("ui.ev_training.mateo.error.begin")], display_name)
 		return
 	if StoryService.is_requirement_met(QUEST_ID, "return_to_mateo", "active"):
 		await _claim_reward()
@@ -48,30 +48,37 @@ func _apply_npc_metadata(metadata: Dictionary) -> void:
 func _choose_focus() -> void:
 	var response: Dictionary = await EvTrainingService.get_session()
 	if not bool(response.get("success", false)):
-		await GameErrorDialogService.show_response(response, "Could not prepare the EV lesson.")
+		await GameErrorDialogService.show_response(response, "ui.ev_training.mateo.error.prepare")
 		return
 	var tutorial: Dictionary = response.get("tutorial", {})
 	var party: Array = tutorial.get("party", []) as Array
 	if party.is_empty():
-		await show_dialogue(["Bring at least one Pokemon in your party and return to me."], display_name)
+		await show_dialogue([LocalizationManager.text("ui.ev_training.mateo.party_required")], display_name)
 		return
 	await show_dialogue([
-		"EV means Effort Value. A Pokemon that participates in a victory stores the Effort Values granted by the defeated species.",
-		"First choose one Pokemon to focus on. I will look at its natural strengths and select a useful stat for this lesson.",
-		"After four victories, I will show you how to apply those stored points through Party, Summary, and the EVs tab.",
+		LocalizationManager.text("ui.ev_training.mateo.lesson_intro.evs"),
+		LocalizationManager.text("ui.ev_training.mateo.lesson_intro.choose"),
+		LocalizationManager.text("ui.ev_training.mateo.lesson_intro.allocate"),
 	], display_name)
 	var pokemon_id := await _show_party_prompt(party)
 	if pokemon_id <= 0:
 		return
 	var focus_response: Dictionary = await EvTrainingService.select_focus_pokemon(pokemon_id)
 	if not bool(focus_response.get("success", false)):
-		await GameErrorDialogService.show_response(focus_response, "Could not select that Pokemon for the lesson.")
+		await GameErrorDialogService.show_response(focus_response, "ui.ev_training.mateo.error.select")
 		return
 	var focus: Dictionary = focus_response.get("tutorial", {})
 	await show_dialogue([
-		"%s's final evolution, %s, is especially strong in %s. That will be our focus." % [str(focus.get("pokemonName", "Your Pokemon")), str(focus.get("trainingSpeciesName", focus.get("pokemonName", "its final evolution"))), _stat_label(str(focus.get("stat", "")))],
-		"Defeat four %s in the practice field. %s must take part in each battle to earn the Effort Values." % [str(focus.get("targetSpeciesName", "targets")), str(focus.get("pokemonName", "Your Pokemon"))],
-		"My assistants at either entrance will let you in free while the lesson is active.",
+		LocalizationManager.text("ui.ev_training.mateo.focus_evolution", {
+			"pokemon": str(focus.get("pokemonName", "Pokemon")),
+			"evolution": str(focus.get("trainingSpeciesName", focus.get("pokemonName", "Pokemon"))),
+			"stat": _stat_label(str(focus.get("stat", ""))),
+		}),
+		LocalizationManager.text("ui.ev_training.mateo.focus_targets", {
+			"target": str(focus.get("targetSpeciesName", "Pokemon")),
+			"pokemon": str(focus.get("pokemonName", "Pokemon")),
+		}),
+		LocalizationManager.text("ui.ev_training.mateo.assistant_access"),
 	], display_name)
 
 
@@ -79,8 +86,13 @@ func _show_battle_progress() -> void:
 	var response: Dictionary = await EvTrainingService.get_session()
 	var tutorial: Dictionary = response.get("tutorial", {})
 	await show_dialogue([
-		"%s has participated in %d of %d victories over %s." % [str(tutorial.get("pokemonName", "Your Pokemon")), int(tutorial.get("defeated", 0)), int(tutorial.get("requiredDefeats", 4)), str(tutorial.get("targetSpeciesName", "the target"))],
-		"Use either assistant to enter the practice field. The selected Pokemon must participate for the victory to count.",
+		LocalizationManager.text("ui.ev_training.mateo.battle_progress", {
+			"pokemon": str(tutorial.get("pokemonName", "Pokemon")),
+			"defeated": int(tutorial.get("defeated", 0)),
+			"required": int(tutorial.get("requiredDefeats", 4)),
+			"target": str(tutorial.get("targetSpeciesName", "Pokemon")),
+		}),
+		LocalizationManager.text("ui.ev_training.mateo.battle_hint"),
 	], display_name)
 
 
@@ -88,8 +100,13 @@ func _guide_allocation() -> void:
 	var response: Dictionary = await EvTrainingService.get_session()
 	var tutorial: Dictionary = response.get("tutorial", {})
 	await show_dialogue([
-		"The four %s Effort Values are now stored on %s. They do not improve its stats until you assign them." % [_stat_label(str(tutorial.get("stat", ""))), str(tutorial.get("pokemonName", "your Pokemon"))],
-		"Open Party, inspect its Summary, choose the EVs tab, and select %s. Allocate all four stored points there." % _stat_label(str(tutorial.get("stat", ""))),
+		LocalizationManager.text("ui.ev_training.mateo.allocation_stored", {
+			"stat": _stat_label(str(tutorial.get("stat", ""))),
+			"pokemon": str(tutorial.get("pokemonName", "Pokemon")),
+		}),
+		LocalizationManager.text("ui.ev_training.mateo.allocation_instructions", {
+			"stat": _stat_label(str(tutorial.get("stat", ""))),
+		}),
 	], display_name)
 	get_tree().call_group(
 		"ui_overlay",
@@ -102,16 +119,16 @@ func _guide_allocation() -> void:
 func _claim_reward() -> void:
 	var result: Dictionary = await InventoryService.claim_npc_item_reward(quest_reward_id)
 	if not bool(result.get("success", false)):
-		await GameErrorDialogService.show_response(result, "Could not claim Mateo's reward.")
+		await GameErrorDialogService.show_response(result, "ui.ev_training.mateo.error.reward")
 		return
 	await show_dialogue(await _resolve_lines(
 		quest_reward_received_dialogue_id,
-		["Well done. Take this Macho Brace and keep training with a purpose."]
+		[LocalizationManager.text("ui.ev_training.mateo.reward_fallback")]
 	))
 	get_tree().call_group(
 		"ui_overlay",
 		"add_system_message",
-		"EV training unlocked · Received Macho Brace"
+		LocalizationManager.text("ui.ev_training.mateo.unlocked")
 	)
 	if bool(result.get("claimed", false)):
 		SfxManager.play("item_received")
@@ -199,7 +216,15 @@ func _show_party_prompt(party: Array) -> int:
 		button.add_theme_stylebox_override("pressed", _choice_button_style(Color("#091521"), Color("#e3bd68")))
 		button.add_theme_stylebox_override("disabled", _choice_button_style(Color("#101722d9"), Color("#283b4d")))
 		button.disabled = not is_eligible
-		button.tooltip_text = "This Pokemon has no room for four more EVs." if button.disabled else "%s is recommended for %s based on %s's final evolution." % [str(candidate.get("name", "This Pokemon")), _stat_label(str(candidate.get("stat", ""))), training_species_name]
+		button.tooltip_text = (
+			LocalizationManager.text("ui.ev_training.mateo.no_ev_room")
+			if button.disabled
+			else LocalizationManager.text("ui.ev_training.mateo.recommended", {
+				"pokemon": str(candidate.get("name", "Pokemon")),
+				"stat": _stat_label(str(candidate.get("stat", ""))),
+				"evolution": training_species_name,
+			})
+		)
 		button.pressed.connect(_select_pokemon.bind(int(candidate.get("pokemonId", 0))))
 		list.add_child(button)
 	var cancel := Button.new()
@@ -249,12 +274,12 @@ func _ensure_choice_panel() -> void:
 	layout.add_theme_constant_override("separation", 10)
 	margin.add_child(layout)
 	var title := Label.new()
-	title.text = "Choose a Pokémon to train"
+	title.text = LocalizationManager.text("ui.ev_training.mateo.choose_pokemon")
 	title.add_theme_font_size_override("font_size", 21)
 	title.add_theme_color_override("font_color", Color("#f4f0de"))
 	layout.add_child(title)
 	var description := Label.new()
-	description.text = "Mateo will choose the most useful stat for this EV lesson."
+	description.text = LocalizationManager.text("ui.ev_training.mateo.choose_pokemon_hint")
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	description.add_theme_font_size_override("font_size", 13)
 	description.add_theme_color_override("font_color", Color("#afbdca"))

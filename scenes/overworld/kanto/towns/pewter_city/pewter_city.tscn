@@ -377,6 +377,7 @@ movement_speed_pixels = 48.0
 z_index = 944
 position = Vector2(1520, 944)
 interactable_id = "kanto_pewter_city_aether_beacon"
+destination_id = "kanto_pewter_city"
 
 [node name="PokemonCenterDoorLock" parent="Entities/Interactables" unique_id=1082600175 instance=ExtResource("25_locked_door")]
 position = Vector2(1424, 1504)

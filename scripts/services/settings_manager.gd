@@ -46,9 +46,10 @@ const MOUNT_MODE_SURF := MountServiceScript.MOVEMENT_MODE_SURF
 const DEFAULT_CURSOR_SCALE := 75.0
 const MIN_CURSOR_SCALE := 50.0
 const MAX_CURSOR_SCALE := 150.0
-const CONFIGURABLE_INPUT_ACTIONS: Array[String] = ["fish"]
+const CONFIGURABLE_INPUT_ACTIONS: Array[String] = ["fish", "pickpocket"]
 const DEFAULT_INPUT_BINDINGS: Dictionary = {
 	"fish": KEY_F,
+	"pickpocket": KEY_T,
 }
 const AVAILABLE_WINDOW_RESOLUTIONS: Array[Vector2i] = [
 	Vector2i(1280, 720),
