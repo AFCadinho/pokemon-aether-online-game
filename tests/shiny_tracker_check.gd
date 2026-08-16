@@ -41,6 +41,18 @@ func _run() -> void:
 	_check(popup.hunt_sprite.texture != null, "Active hunts show the target Pokémon sprite")
 	_check(popup.hunt_count_label.text == "0", "Active hunt count renders as a standalone number")
 	_check(popup.hunt_count_context_label.visible, "Active hunt count shows its hunt context")
+	popup.open_shared_hunt({
+		"ownerDisplayName": "Trainer",
+		"stats": {"lifetimeEligibleEncounters": 12},
+		"hunt": {
+			"targetSpeciesName": "Pidgey",
+			"evolutionLineName": "Pidgey",
+			"evolutionLineMembers": [],
+			"encounterCount": 3,
+		},
+	})
+	_check(popup.stats_title.visible, "Shared hunts show overall encounter stats")
+	_check(int(popup.stat_labels["lifetimeEligibleEncounters"].text) == 12, "Shared hunts render the owner's overall encounter count")
 	popup.queue_free()
 	await process_frame
 
