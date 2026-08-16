@@ -137,8 +137,9 @@ func _init() -> void:
 	)
 	_expect(
 		gate_scene_source.contains("NPC_088_Policeman.png")
-		and gate_scene_source.contains("trainer_cards/showdown/policeman-gen7.png"),
-		"All route guards share the police overworld sprite and Showdown police portrait"
+		and gate_scene_source.contains("trainer_cards/showdown/policeman-gen8.png")
+		and not gate_scene_source.contains("trainer_cards/showdown/policeman-gen7.png"),
+		"All route guards share the police overworld sprite and fuller Showdown police portrait"
 	)
 	_expect(
 		map_exit_source.contains("func handles_transition")
