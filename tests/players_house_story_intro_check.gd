@@ -32,7 +32,7 @@ func _run() -> void:
 	var mom := house.get_node_or_null("Entities/NPCs/Mom") as Node2D
 	var intro_trigger := house.get_node_or_null("StoryTriggers/FatherIntro") as Area2D
 	_expect(father != null and father.visible, "Dadinho is present for the opening")
-	_expect(mom != null and not mom.visible, "Mom is hidden before Oak's Parcel is returned")
+	_expect(mom != null and not mom.visible, "Mom is hidden before the player receives a starter")
 	_expect(intro_trigger != null and intro_trigger.monitoring, "Dadinho's opening trigger remains active")
 	if father != null:
 		_expect(father.position == Vector2(448, 896), "Dadinho starts beside the downstairs door")
@@ -42,11 +42,16 @@ func _run() -> void:
 			"Player's House Dadinho aligns his sprite with the downstairs collision tile"
 		)
 		_expect(
-			str(father.get("visibility_hidden_quest_id")) == "oaks_parcel"
-			and str(father.get("visibility_hidden_quest_step_id")) == "return_to_oak",
-			"Dadinho is tied to the Parcel hand-in"
+			str(father.get("visibility_hidden_quest_id")) == "choose_starter"
+			and str(father.get("visibility_hidden_quest_step_id")) == "choose_starter",
+			"Dadinho leaves when the player receives a starter"
 		)
 	if mom != null:
+		_expect(
+			str(mom.get("visibility_required_quest_id")) == "choose_starter"
+			and str(mom.get("visibility_required_quest_step_id")) == "choose_starter",
+			"Mom arrives when the player receives a starter"
+		)
 		var mom_frames := load(MOM_FRAMES_PATH) as SpriteFrames
 		_expect(mom.get("npc_sprite_frames") == mom_frames, "Mom uses her dedicated overworld sprite")
 		var mom_default_frame := mom_frames.get_frame_texture("default", 0) as AtlasTexture
@@ -66,13 +71,19 @@ func _run() -> void:
 		)
 	_expect(house.get_node_or_null("Spawns/MomHeal") != null, "Player's House exposes Mom's stable respawn marker")
 
+	story_service.apply_story(_story_after_starter())
+	await process_frame
+	await process_frame
+	_expect(father != null and not father.visible, "Dadinho leaves home after the player receives a starter")
+	_expect(mom != null and mom.visible, "Mom appears after the player receives a starter")
+	if father != null:
+		_expect(not father.call("blocks_world_position", father.global_position), "Hidden Dadinho no longer blocks his old tile")
+
 	story_service.apply_story(_story_after_parcel("available"))
 	await process_frame
 	await process_frame
-	_expect(father != null and not father.visible, "Dadinho leaves home after Oak returns the Parcel")
-	_expect(mom != null and mom.visible, "Mom appears after Oak returns the Parcel")
-	if father != null:
-		_expect(not father.call("blocks_world_position", father.global_position), "Hidden Dadinho no longer blocks his old tile")
+	_expect(father != null and not father.visible, "Dadinho remains away after Oak returns the Parcel")
+	_expect(mom != null and mom.visible, "Mom remains home after Oak returns the Parcel")
 	if mom != null:
 		mom.call("_apply_npc_metadata", {
 			"questMarkers": [{
@@ -143,6 +154,18 @@ func _run() -> void:
 	quit(1 if failed else 0)
 
 
+func _story_after_starter() -> Dictionary:
+	return {
+		"revision": 4,
+		"quests": [{
+			"questId": "choose_starter",
+			"questType": "main",
+			"status": "completed",
+			"steps": [{"stepId": "choose_starter", "status": "completed"}],
+		}],
+	}
+
+
 func _story_after_parcel(
 	training_status: String,
 	family_visit_status := "active",
@@ -151,6 +174,11 @@ func _story_after_parcel(
 	return {
 		"revision": 5,
 		"quests": [{
+			"questId": "choose_starter",
+			"questType": "main",
+			"status": "completed",
+			"steps": [{"stepId": "choose_starter", "status": "completed"}],
+		}, {
 			"questId": "oaks_parcel",
 			"questType": "main",
 			"status": "completed",
