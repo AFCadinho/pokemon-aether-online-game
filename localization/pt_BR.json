@@ -3505,7 +3505,7 @@
   "ui.transit.confirm_title": "Confirmar viagem pela Aethernet",
   "ui.transit.confirm": "Viajar para {name} por ₽{fare}?",
   "npc.transit.attuned": "Sua assinatura de Aether agora está sintonizada com esta cidade.",
-  "npc.transit.return_hint": "Você pode voltar para cá por qualquer Guardião da Aethernet nesta região.",
+  "npc.transit.return_hint": "Fale com um Guardião da Aethernet para viajar direto até sua Âncora de Aether escolhida.",
   "npc.transit.unavailable": "A corrente de Aether não pode ser alcançada agora.",
   "npc.transit.attune_beacon_hint": "Toque primeiro no Beacon de Aether próximo. Quando ele reconhecer sua assinatura de Aether, poderei abrir a Aethernet para você.",
   "backend.error.transit_unavailable": "A Aethernet está indisponível no momento.",
@@ -3546,5 +3546,13 @@
   "ui.transit.anchor.confirm": "Definir {name} como sua Âncora de Aether? As viagens da Aethernet para este destino serão gratuitas.",
   "ui.transit.anchor.system": "Âncora de Aether definida: viajar para {name} agora é grátis.",
   "npc.transit.anchor_set": "{name} agora é sua Âncora de Aether. Viajar pela Aethernet até aqui é grátis.",
-  "npc.transit.anchor_current": "Esta é sua Âncora de Aether atual, então retornar para cá é grátis."
+  "npc.transit.anchor_current": "Esta é sua Âncora de Aether atual, então retornar para cá é grátis.",
+  "ui.transit.beacon_menu.title": "Beacon de Aether",
+  "ui.transit.beacon_menu.message": "{name} está sintonizada com sua assinatura de Aether. O que você gostaria de fazer?",
+  "ui.transit.beacon_menu.anchor": "Definir como Âncora de Aether",
+  "ui.transit.beacon_menu.anchor_current": "Âncora de Aether atual",
+  "ui.transit.beacon_menu.explain": "Como funciona a Aethernet?",
+  "npc.transit.explain.anchor": "Você só pode ter uma Âncora de Aether por vez. A Âncora escolhida é sempre um destino gratuito.",
+  "npc.transit.explain.keeper": "Fale com qualquer Guardião da Aethernet e ele levará você diretamente até sua Âncora de Aether.",
+  "npc.transit.explain.change": "Volte a qualquer Beacon de Aether sintonizado quando quiser escolher outra Âncora."
 }

@@ -3505,7 +3505,7 @@
   "ui.transit.confirm_title": "Confirm Aethernet travel",
   "ui.transit.confirm": "Travel to {name} for ₽{fare}?",
   "npc.transit.attuned": "Your Aether signature is now attuned to this town.",
-  "npc.transit.return_hint": "You may return here through any Aethernet Keeper in this region.",
+  "npc.transit.return_hint": "Speak to an Aethernet Keeper to travel straight to your selected Aether Anchor.",
   "npc.transit.unavailable": "The Aether current cannot be reached right now.",
   "npc.transit.attune_beacon_hint": "Touch the nearby Aether Beacon first. Once it recognizes your Aether signature, I can open the Aethernet for you.",
   "backend.error.transit_unavailable": "The Aethernet is unavailable right now.",
@@ -3546,5 +3546,13 @@
   "ui.transit.anchor.confirm": "Set {name} as your Aether Anchor? Aethernet travel to this destination will be free.",
   "ui.transit.anchor.system": "Aether Anchor set: travel to {name} is now free.",
   "npc.transit.anchor_set": "{name} is now your Aether Anchor. Aethernet travel here is free.",
-  "npc.transit.anchor_current": "This is your current Aether Anchor, so returning here is free."
+  "npc.transit.anchor_current": "This is your current Aether Anchor, so returning here is free.",
+  "ui.transit.beacon_menu.title": "Aether Beacon",
+  "ui.transit.beacon_menu.message": "{name} is attuned to your Aether signature. What would you like to do?",
+  "ui.transit.beacon_menu.anchor": "Set as Aether Anchor",
+  "ui.transit.beacon_menu.anchor_current": "Current Aether Anchor",
+  "ui.transit.beacon_menu.explain": "How does Aethernet work?",
+  "npc.transit.explain.anchor": "You may have one Aether Anchor at a time. Your selected Anchor is always a free destination.",
+  "npc.transit.explain.keeper": "Speak to any Aethernet Keeper and they will take you directly to your Aether Anchor.",
+  "npc.transit.explain.change": "Return to any attuned Aether Beacon whenever you want to choose a different Anchor."
 }

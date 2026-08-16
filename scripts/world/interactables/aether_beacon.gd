@@ -4,9 +4,7 @@ extends WorldInteractable
 class_name AetherBeacon
 
 signal activation_state_changed(activated: bool)
-signal anchor_confirmation_resolved(accepted: bool)
-
-const AetherConfirmationDialogScene := preload("res://scenes/interface/aether_confirmation_dialog.tscn")
+const AetherBeaconMenuScript := preload("res://scripts/ui/aether_beacon_menu.gd")
 const SORT_Z_MIN := -4096
 const SORT_Z_MAX := 4096
 
@@ -89,43 +87,23 @@ func interact_with_player(_player: Node2D) -> void:
 			LocalizationManager.text("npc.transit.return_hint"),
 		]
 		await _show_keeper_dialogue(lines)
-		await _offer_anchor_change(network, destination_name)
 		return
-	if str(network.get("anchorDestinationId", "")) == destination_id:
+	await _show_attuned_beacon_menu(network, destination_name)
+
+
+func _show_attuned_beacon_menu(network: Dictionary, destination_name: String) -> void:
+	var menu := AetherBeaconMenuScript.new() as AetherBeaconMenu
+	get_tree().current_scene.add_child(menu)
+	menu.open(destination_name, str(network.get("anchorDestinationId", "")) == destination_id)
+	var action: String = await menu.resolved
+	if action == AetherBeaconMenu.ACTION_EXPLAIN:
 		await _show_keeper_dialogue([
-			LocalizationManager.text("world.aether_beacon.already_attuned"),
-			LocalizationManager.text("npc.transit.anchor_current"),
+			LocalizationManager.text("npc.transit.explain.anchor"),
+			LocalizationManager.text("npc.transit.explain.keeper"),
+			LocalizationManager.text("npc.transit.explain.change"),
 		])
 		return
-	await _show_keeper_dialogue([
-		LocalizationManager.text("world.aether_beacon.already_attuned"),
-	])
-	await _offer_anchor_change(network, destination_name)
-
-
-func _offer_anchor_change(network: Dictionary, destination_name: String) -> void:
-	if str(network.get("anchorDestinationId", "")) == destination_id:
-		return
-	var confirmation_layer := CanvasLayer.new()
-	confirmation_layer.layer = 120
-	get_tree().current_scene.add_child(confirmation_layer)
-	var confirmation := AetherConfirmationDialogScene.instantiate() as AetherConfirmationDialog
-	confirmation_layer.add_child(confirmation)
-	confirmation.configure(
-		LocalizationManager.text("ui.transit.anchor.confirm_title"),
-		LocalizationManager.text(
-			"ui.transit.anchor.confirm",
-			{"name": destination_name}
-		),
-		LocalizationManager.text("common.confirm"),
-		LocalizationManager.text("common.cancel")
-	)
-	confirmation.confirmed.connect(_resolve_anchor_confirmation.bind(true), CONNECT_ONE_SHOT)
-	confirmation.canceled.connect(_resolve_anchor_confirmation.bind(false), CONNECT_ONE_SHOT)
-	confirmation.popup_centered(Vector2i(520, 220))
-	var accepted: bool = await anchor_confirmation_resolved
-	confirmation_layer.queue_free()
-	if not accepted:
+	if action != AetherBeaconMenu.ACTION_SET_ANCHOR:
 		return
 	var result: Dictionary = await TransitService.set_anchor(destination_id, global_position)
 	if not bool(result.get("success", false)):
@@ -137,10 +115,6 @@ func _offer_anchor_change(network: Dictionary, destination_name: String) -> void
 	await _show_keeper_dialogue([
 		LocalizationManager.text("npc.transit.anchor_set", {"name": destination_name}),
 	])
-
-
-func _resolve_anchor_confirmation(accepted: bool) -> void:
-	anchor_confirmation_resolved.emit(accepted)
 
 
 func _announce_anchor_set(destination_name: String) -> void:

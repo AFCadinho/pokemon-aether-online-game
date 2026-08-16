@@ -3,8 +3,6 @@ extends DialogueNPC
 
 class_name TransitKeeperNPC
 
-const TransitMenuScript := preload("res://scripts/ui/transit_menu.gd")
-
 @export var local_destination_id := ""
 
 
@@ -27,11 +25,12 @@ func interact_with_player(_player: Node2D) -> void:
 		await show_dialogue([LocalizationManager.text("npc.transit.attune_beacon_hint")])
 		return
 
-	var menu := TransitMenuScript.new() as TransitMenu
-	get_tree().current_scene.add_child(menu)
-	menu.open(network)
-	var destination_id: String = await menu.resolved
+	var destination_id := str(network.get("anchorDestinationId", "")).strip_edges()
 	if destination_id.is_empty():
+		await show_dialogue([LocalizationManager.text("npc.transit.unavailable")])
+		return
+	if str(network.get("sourceMapId", "")) == destination_id:
+		await show_dialogue([LocalizationManager.text("npc.transit.anchor_current")])
 		return
 	var world := get_tree().current_scene
 	if world == null or not world.has_method("begin_authorized_teleport") or not world.has_method("apply_authorized_teleport_state"):

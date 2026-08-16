@@ -3505,7 +3505,7 @@
   "ui.transit.confirm_title": "Aethernet-reis bevestigen",
   "ui.transit.confirm": "Voor ₽{fare} naar {name} reizen?",
   "npc.transit.attuned": "Je Aether-signatuur is nu op deze stad afgestemd.",
-  "npc.transit.return_hint": "Je kunt hier terugkeren via iedere Aethernet Keeper in deze regio.",
+  "npc.transit.return_hint": "Praat met een Aethernet Keeper om direct naar je gekozen Aether Anchor te reizen.",
   "npc.transit.unavailable": "De Aether-stroom is momenteel niet bereikbaar.",
   "npc.transit.attune_beacon_hint": "Raak eerst de Aether Beacon hiernaast aan. Zodra die je Aether-signatuur herkent, kan ik het Aethernet voor je openen.",
   "backend.error.transit_unavailable": "Het Aethernet is momenteel niet beschikbaar.",
@@ -3546,5 +3546,13 @@
   "ui.transit.anchor.confirm": "Wil je {name} als je Aether Anchor instellen? Aethernet-reizen naar deze bestemming worden gratis.",
   "ui.transit.anchor.system": "Aether Anchor ingesteld: reizen naar {name} is nu gratis.",
   "npc.transit.anchor_set": "{name} is nu je Aether Anchor. Aethernet-reizen hiernaartoe zijn gratis.",
-  "npc.transit.anchor_current": "Dit is je huidige Aether Anchor, dus terugreizen hiernaartoe is gratis."
+  "npc.transit.anchor_current": "Dit is je huidige Aether Anchor, dus terugreizen hiernaartoe is gratis.",
+  "ui.transit.beacon_menu.title": "Aether Beacon",
+  "ui.transit.beacon_menu.message": "{name} is afgestemd op je Aether-signatuur. Wat wil je doen?",
+  "ui.transit.beacon_menu.anchor": "Instellen als Aether Anchor",
+  "ui.transit.beacon_menu.anchor_current": "Huidige Aether Anchor",
+  "ui.transit.beacon_menu.explain": "Hoe werkt het Aethernet?",
+  "npc.transit.explain.anchor": "Je kunt maar één Aether Anchor tegelijk hebben. Je gekozen Anchor is altijd een gratis bestemming.",
+  "npc.transit.explain.keeper": "Praat met een Aethernet Keeper; die brengt je direct naar je Aether Anchor.",
+  "npc.transit.explain.change": "Kom terug bij een afgestemde Aether Beacon wanneer je een andere Anchor wilt kiezen."
 }
