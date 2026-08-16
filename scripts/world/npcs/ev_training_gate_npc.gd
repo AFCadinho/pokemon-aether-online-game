@@ -42,50 +42,65 @@ func interact_with_player(player: Node2D) -> void:
 func _enter_training_area(player: Node2D) -> void:
 	var status: Dictionary = await EvTrainingService.get_session()
 	if not bool(status.get("success", false)):
-		await GameErrorDialogService.show_response(status, "EV training is currently unavailable.")
+		await GameErrorDialogService.show_response(status, "ui.ev_training.assistant.error.unavailable")
 		return
 	var session: Dictionary = status.get("session", {})
 	var tutorial: Dictionary = status.get("tutorial", {})
 	if bool(session.get("active", false)):
 		var stat_label := _stat_label(str(session.get("stat", "")))
 		await show_dialogue([
-			"Your %s training session is still active. Head back in whenever you're ready." % stat_label,
+			LocalizationManager.text("ui.ev_training.assistant.session_active", {"stat": stat_label}),
 		], display_name)
 		_teleport_player(player, inside_marker_path, -inside_direction)
 		return
 	if not bool(tutorial.get("unlocked", false)):
 		if str(tutorial.get("stepId", "")) != "defeat_training_targets":
 			await show_dialogue([
-				"The focused training field requires Mateo's authorization.",
-				"You can find him beside the field. Complete his lesson first.",
+				LocalizationManager.text("ui.ev_training.assistant.authorization_required"),
+				LocalizationManager.text("ui.ev_training.assistant.authorization_hint"),
 			], display_name)
 			return
 		var tutorial_response: Dictionary = await EvTrainingService.start_tutorial_session()
 		if not bool(tutorial_response.get("success", false)):
-			await GameErrorDialogService.show_response(tutorial_response, "Could not start the EV lesson.")
+			await GameErrorDialogService.show_response(
+				tutorial_response,
+				"ui.ev_training.assistant.error.tutorial_start"
+			)
 			return
 		var active_tutorial: Dictionary = tutorial_response.get("tutorial", {})
 		await show_dialogue([
-			"Mateo's practice field is ready. Only %s will appear." % str(active_tutorial.get("targetSpeciesName", "your training target")),
-			"Make sure %s takes part in all four battles so it receives the Effort Values." % str(active_tutorial.get("pokemonName", "your chosen Pokemon")),
+			LocalizationManager.text(
+				"ui.ev_training.assistant.tutorial_ready",
+				{"target": str(active_tutorial.get("targetSpeciesName", "Pokemon"))}
+			),
+			LocalizationManager.text(
+				"ui.ev_training.assistant.tutorial_participation",
+				{"pokemon": str(active_tutorial.get("pokemonName", "Pokemon"))}
+			),
 		], display_name)
 		_teleport_player(player, inside_marker_path, -inside_direction)
 		return
 
 	await show_dialogue([
-		"This is Viridian City's focused EV training field.",
-		"For ₽%d, every wild Pokémon you meet during this visit will train one stat of your choice." % int(session.get("fee", 500)),
-		"Your session ends when you leave through either entrance. Which stat do you want to train?",
+		LocalizationManager.text("ui.ev_training.assistant.introduction"),
+		LocalizationManager.text(
+			"ui.ev_training.assistant.fee_explanation",
+			{"fee": int(session.get("fee", 500))}
+		),
+		LocalizationManager.text("ui.ev_training.assistant.choose_stat"),
 	], display_name)
 	var selected_stat := await _show_stat_prompt(int(session.get("fee", 500)))
 	if selected_stat.is_empty():
 		return
 	var response: Dictionary = await EvTrainingService.start_session(selected_stat)
 	if not bool(response.get("success", false)):
-		await GameErrorDialogService.show_response(response, "Could not start EV training.")
+		await GameErrorDialogService.show_response(response, "ui.ev_training.assistant.error.session_start")
 		return
 	await show_dialogue([
-		"All set. The field is now prepared for %s training. Good luck!" % _stat_label(selected_stat),
+		LocalizationManager.text(
+			"ui.ev_training.assistant.session_started",
+			{"stat": _stat_label(selected_stat)}
+		),
 	], display_name)
 	_teleport_player(player, inside_marker_path, -inside_direction)
 
@@ -93,16 +108,23 @@ func _enter_training_area(player: Node2D) -> void:
 func _leave_training_area(player: Node2D) -> void:
 	var response: Dictionary = await EvTrainingService.end_session()
 	if not bool(response.get("success", false)):
-		await GameErrorDialogService.show_response(response, "Could not end EV training.")
+		await GameErrorDialogService.show_response(response, "ui.ev_training.assistant.error.session_end")
 		return
 	var tutorial: Dictionary = response.get("tutorial", {})
 	if str(tutorial.get("stepId", "")) == "defeat_training_targets":
 		await show_dialogue([
-			"Lesson paused. You have defeated %d of %d %s." % [int(tutorial.get("defeated", 0)), int(tutorial.get("requiredDefeats", 4)), str(tutorial.get("targetSpeciesName", "targets"))],
+			LocalizationManager.text(
+				"ui.ev_training.assistant.lesson_paused",
+				{
+					"defeated": int(tutorial.get("defeated", 0)),
+					"required": int(tutorial.get("requiredDefeats", 4)),
+					"target": str(tutorial.get("targetSpeciesName", "Pokemon")),
+				}
+			),
 		], display_name)
 	else:
 		await show_dialogue([
-			"Training session complete. Come back whenever you want to focus on another stat.",
+			LocalizationManager.text("ui.ev_training.assistant.session_complete"),
 		], display_name)
 	_teleport_player(player, outside_marker_path, inside_direction)
 
@@ -172,7 +194,7 @@ func _ensure_choice_panel(fee: int) -> void:
 	layout.add_theme_constant_override("separation", 9)
 	margin.add_child(layout)
 	var title := Label.new()
-	title.text = "Focused EV Training"
+	title.text = LocalizationManager.text("ui.ev_training.assistant.title")
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 19)
 	title.add_theme_color_override("font_color", UI_GOLD_BRIGHT)
@@ -189,7 +211,7 @@ func _ensure_choice_panel(fee: int) -> void:
 	prompt_row.add_theme_constant_override("separation", 10)
 	layout.add_child(prompt_row)
 	var prompt := Label.new()
-	prompt.text = "Choose one stat to focus"
+	prompt.text = LocalizationManager.text("ui.ev_training.assistant.stat_prompt")
 	prompt.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	prompt.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	prompt.add_theme_font_size_override("font_size", 13)
@@ -200,7 +222,7 @@ func _ensure_choice_panel(fee: int) -> void:
 	fee_badge.add_theme_stylebox_override("panel", _fee_badge_style())
 	prompt_row.add_child(fee_badge)
 	var fee_label := Label.new()
-	fee_label.text = "SESSION FEE  ·  ₽%d" % fee
+	fee_label.text = LocalizationManager.text("ui.ev_training.assistant.session_fee", {"fee": fee})
 	fee_label.add_theme_font_size_override("font_size", 10)
 	fee_label.add_theme_color_override("font_color", UI_GOLD_BRIGHT)
 	fee_badge.add_child(fee_label)

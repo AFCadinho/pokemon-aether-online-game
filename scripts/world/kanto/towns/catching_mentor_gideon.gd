@@ -141,4 +141,4 @@ func _show_report_to_staff_message() -> void:
 	if error_service != null and error_service.has_method("show_report_to_staff_message"):
 		await error_service.call("show_report_to_staff_message")
 		return
-	await show_dialogue(["I cannot finish the catching lesson right now."])
+	await show_dialogue([LocalizationManager.text("npc.error.catching_lesson")])

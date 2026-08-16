@@ -21,6 +21,10 @@ func _run() -> void:
 	game_state.lock_overworld_input()
 	dialogue_box.start_dialogue(["First", "Second"], "Oak")
 	_check(bool(game_state.input_locked), "open dialogue locks all input")
+	_check(
+		dialogue_box.has_method("_input"),
+		"dialogue box listens for left mouse input alongside the interaction key"
+	)
 	dialogue_box.hide_dialogue()
 	_check(
 		not bool(game_state.input_locked)

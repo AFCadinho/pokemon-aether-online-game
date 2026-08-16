@@ -1,5 +1,36 @@
 # Changelog
 
+## Unreleased
+
+**Added**
+
+- Added community-funded Global Boosts. Trainers can work together to activate double battle EXP (₽100,000), double EVs (₽50,000), and double encounter weight for Rare Pokémon and higher (₽200,000) for the whole server.
+- Added custom Global Boost contributions. Contributions are at least ₽10,000, never exceed the remaining goal, award 10 Aetherite for every full ₽10,000 contributed, and are announced to the server.
+- Exp. Share now grants battle experience to eligible party Pokémon.
+- Evolution Stones and all trade-evolution items can now be used directly from the Bag. Linking Cords evolve trade Pokémon without trading and are sold at standard PokéMarts for ₽1,000.
+- Added a configurable Thieving hotkey in Control Settings.
+- Added an Aethernet Beacon menu with a clear explanation of the travel network and Aether Anchor management. Members can set a second Anchor.
+- Abra and Bounsweet starters now receive a Water-, Fire-, or Grass-type Hidden Power, giving them reliable early-game coverage.
+- Protean and similar type-changing effects now show the Pokémon's current type in a coloured battle indicator.
+- Brock's Onix is now Shiny.
+- The permanent Shiny Tracker is now included in every Trainer's Bag and defaults to hotbar slot 2.
+
+**Changed**
+
+- Aethernet travel now uses a destination catalogue: Aether Anchor destinations are free, while other attuned destinations cost ₽500.
+- Mom remains available to heal your Pokémon after you receive your starter; her story conversation now waits until you receive the Pokédex.
+- The Viridian EV Training Assistants, Youngster Caleb, and other placed Trainers now use localized dialogue.
+- Global Boost panels now show accurate goals, a live minute countdown during an active boost, clearer contribution controls, and inline payment errors.
+
+**Fixed**
+
+- Trainer rematches now only start their cooldown after you win.
+- Battle logs now correctly identify your Pokémon during switches and retain NPC Trainer names.
+- Fixed blackout recovery and overworld presence reconnects that could leave a Trainer unable to resume normally.
+- Fixed the inactive Pewter City Aether Beacon and restored encounters for main Kanto caves and landmark areas.
+- Fixed unclear battle stat-stage labels, removed unnecessary EV reward messages, and made a left mouse click advance dialogue like Space.
+- Fixed Global Boost panels occasionally opening at the wrong height or trapping a Trainer after an insufficient-funds message.
+
 ## 0.3.55 - 2026-08-16
 
 **Added**
