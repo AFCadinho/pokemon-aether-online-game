@@ -3353,7 +3353,11 @@
   },
   "shiny-charm": {
     "name": "Amuleto Brilhante",
-    "shortDesc": "Aumenta a chance de encontrar um Pokémon brilhante."
+    "shortDesc": "Use para aumentar em 10% a chance de encontrar Shiny por 7 dias."
+  },
+  "shiny-tracker": {
+    "name": "Rastreador Shiny",
+    "shortDesc": "Abra suas caçadas Shiny e estatísticas de encontros."
   },
   "shiny-stone": {
     "name": "Pedra Brilhante",

@@ -4,7 +4,8 @@ class_name BattleWeatherPresentation
 
 var weather_particles: GPUParticles2D
 var weather_tint: ColorRect
-var battle_background: TextureRect
+var battle_background: CanvasItem
+var alternate_battle_background: CanvasItem
 var sun_rays: Control
 var sun_sparkles: GPUParticles2D
 var desolate_land_layer: Control
@@ -33,7 +34,7 @@ var active_terrain_effect := ""
 func setup(
 	weather_particles_node: GPUParticles2D,
 	weather_tint_node: ColorRect,
-	battle_background_node: TextureRect,
+	battle_background_node: CanvasItem,
 	sun_rays_node: Control,
 	sun_sparkles_node: GPUParticles2D,
 	desolate_land_layer_node: Control,
@@ -48,11 +49,13 @@ func setup(
 	psychic_terrain_layer_node: Control,
 	electric_terrain_layer_node: Control,
 	trick_room_layer_node: Control,
-	snow_particles_node: GPUParticles2D = null
+	snow_particles_node: GPUParticles2D = null,
+	alternate_battle_background_node: CanvasItem = null
 ) -> void:
 	weather_particles = weather_particles_node
 	weather_tint = weather_tint_node
 	battle_background = battle_background_node
+	alternate_battle_background = alternate_battle_background_node
 	sun_rays = sun_rays_node
 	sun_sparkles = sun_sparkles_node
 	desolate_land_layer = desolate_land_layer_node
@@ -205,7 +208,7 @@ func update_trick_room(is_active: bool) -> void:
 		trick_room_time = 0.0
 
 func _update_weather_tint(weather_effect: String) -> void:
-	if weather_tint == null and battle_background == null:
+	if weather_tint == null and battle_background == null and alternate_battle_background == null:
 		return
 
 	var tint_color := Color.TRANSPARENT
@@ -233,14 +236,12 @@ func _update_weather_tint(weather_effect: String) -> void:
 		weather_tint.visible = should_show_tint
 		if should_show_tint:
 			weather_tint.color = tint_color
-	if battle_background != null:
-		battle_background.modulate = _get_weather_background_modulate(weather_key)
+	_set_battle_background_modulate(_get_weather_background_modulate(weather_key))
 
 func _hide_weather_effects() -> void:
 	if weather_tint != null:
 		weather_tint.visible = false
-	if battle_background != null:
-		battle_background.modulate = Color.WHITE
+	_set_battle_background_modulate(Color.WHITE)
 	if weather_particles != null:
 		weather_particles.visible = false
 		weather_particles.emitting = false
@@ -283,6 +284,12 @@ func _hide_weather_effects() -> void:
 	primordial_sea_time = 0.0
 	delta_stream_time = 0.0
 	sandstorm_weather_time = 0.0
+
+func _set_battle_background_modulate(color: Color) -> void:
+	if battle_background != null:
+		battle_background.modulate = color
+	if alternate_battle_background != null:
+		alternate_battle_background.modulate = color
 
 func _hide_terrain_effects() -> void:
 	if terrain_tint != null:

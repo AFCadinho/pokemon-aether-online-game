@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bvytrj5oo6ldo" path="res://scripts/world/kanto/towns/pallet_town/oaks_lab_gary.gd" id="1_script"]
 [ext_resource type="SpriteFrames" uid="uid://3v3l6agblhvi" path="res://assets/npcs/gary_sprite_frames.tres" id="2_frames"]
-[ext_resource type="Texture2D" uid="uid://d4c0skpe6wmsw" path="res://assets/sprites/mugshots/gary.png" id="3_mugshot"]
+[ext_resource type="Texture2D" path="res://assets/sprites/mugshots/gary.png" id="3_mugshot"]
 [ext_resource type="Texture2D" uid="uid://ckdqd660dbvca" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_179_Champion_Blue_Oak.png" id="4_ojqm4"]
 
 [sub_resource type="AtlasTexture" id="gary_mugshot_crop"]
@@ -178,6 +178,7 @@ size = Vector2(64, 64)
 script = ExtResource("1_script")
 npc_id = "kanto_oaks_lab_gary"
 display_name = "Gary Oak"
+facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("2_frames")
 mugshot = SubResource("gary_mugshot_crop")
 preload_quest_markers = true
@@ -187,7 +188,7 @@ preload_quest_markers = true
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Look" unique_id=1386231639]
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_ns0bt")
-animation = &"walk_left"
+animation = &"idle_down"
 
 [node name="InteractionArea" type="Area2D" parent="." unique_id=490625677]
 

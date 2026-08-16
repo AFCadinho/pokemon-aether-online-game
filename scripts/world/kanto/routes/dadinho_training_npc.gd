@@ -78,6 +78,8 @@ func _claim_training_reward() -> void:
 		]
 	))
 	_notify_training_completed(str(result.get("itemId", "exp-share")))
+	if bool(result.get("claimed", false)):
+		SfxManager.play("item_received")
 
 
 func _notify_training_completed(item_id: String) -> void:
@@ -91,7 +93,7 @@ func _notify_training_completed(item_id: String) -> void:
 	)
 
 
-func _resolve_dialogue_lines(dialogue_id: String, fallback: Array[String]) -> Array[String]:
+func _resolve_dialogue_lines(dialogue_id: String, fallback: Array) -> Array[String]:
 	return await NpcDialogueService.resolve_lines(
 		dialogue_id,
 		fallback,
@@ -104,4 +106,4 @@ func _show_report_to_staff_message() -> void:
 	if error_service != null and error_service.has_method("show_report_to_staff_message"):
 		await error_service.call("show_report_to_staff_message")
 		return
-	await show_dialogue(["I cannot finish the training challenge right now."])
+	await show_dialogue([LocalizationManager.text("npc.error.training_challenge")])

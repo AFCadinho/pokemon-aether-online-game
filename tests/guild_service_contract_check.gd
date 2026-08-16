@@ -17,6 +17,8 @@ func _init() -> void:
 	_check_contains(service_source, 'GUILD_INVITATIONS_ENDPOINT := "/game/guild-invitations"', "guild invitation polling avoids loading the directory")
 	_check_contains(service_source, "func create_guild", "guild service exposes creation")
 	_check_contains(service_source, "func load_home", "guild service loads the member dashboard")
+	_check_contains(service_source, "func teleport_to_lobby", "guild service exposes the free Lobby teleport")
+	_check_contains(service_source, 'GUILD_LOBBY_TELEPORT_ENDPOINT := "/game/guilds/me/lobby/teleport"', "guild service uses the dedicated Lobby endpoint")
 	_check_contains(service_source, "func update_settings", "guild service updates leader settings")
 	_check_contains(service_source, "func update_emblem", "guild service updates the emblem")
 	_check_contains(service_source, "func apply_emblem_template", "guild service reapplies Guild-owned emblem templates")

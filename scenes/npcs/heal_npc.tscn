@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dp5ajvsmrdk31" path="res://scripts/world/npcs/heal_npc.gd" id="1_0hryh"]
 [ext_resource type="Texture2D" uid="uid://37bkd5m5mh8f" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_115_Nurse_2.png" id="2_ok64d"]
-[ext_resource type="Texture2D" uid="uid://dvw4u17xvuce4" path="res://assets/sprites/mugshots/nurse_joy_mugshot.png" id="3_71rpj"]
+[ext_resource type="Texture2D" path="res://assets/sprites/mugshots/nurse_joy_mugshot.png" id="3_71rpj"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_71rpj"]
 atlas = ExtResource("2_ok64d")

@@ -1,6 +1,6 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://dk2np722tlccq"]
 
-[ext_resource type="Texture2D" uid="uid://cnolni4s2bnws" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_126_Mom.png" id="1_texture"]
+[ext_resource type="Texture2D" uid="uid://ctg2356ocx0gs" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_127_Mom.png" id="1_texture"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_default"]
 atlas = ExtResource("1_texture")

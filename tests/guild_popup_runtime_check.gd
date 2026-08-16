@@ -62,6 +62,7 @@ func _run() -> void:
 	_check(popup.find_child("GuildMembersTab", true, false) != null, "guild members tab renders")
 	_check(popup.find_child("GuildManagementTab", true, false) != null, "guild management tab renders for leaders")
 	_check(popup.find_child("GuildOverviewSection", true, false) != null, "guild dashboard opens on its overview")
+	_check(popup.find_child("GuildLobbyTeleportButton", true, false) != null, "guild overview renders free Lobby travel")
 	_check(popup.find_child("GuildSettingsDescription", true, false) == null, "settings stay out of the guild overview")
 	var members_tab := popup.find_child("GuildMembersTab", true, false) as Button
 	if members_tab != null:

@@ -14,6 +14,7 @@ const PLAYER_STORY_ENDPOINT := "/game/story"
 const STORY_BOOTSTRAP_ENDPOINT := "/game/story/bootstrap"
 const STORY_INTERACTION_ENDPOINT := "/game/story/interactions/%s"
 const STORY_QUEST_ACCEPT_ENDPOINT := "/game/story/quests/%s/accept"
+const DEV_STORY_CHECKPOINT_ENDPOINT := "/game/dev/progression/story-checkpoint"
 const PUBLIC_TRAINER_CARD_ENDPOINT := "/game/trainers/%s/card"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
@@ -122,6 +123,33 @@ func bootstrap_story() -> Dictionary:
 		"success": true,
 		"story": StoryService.get_story(),
 	}
+
+
+func dev_set_story_checkpoint(checkpoint_id: String) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {"success": false, "status": 401, "error": "Not authenticated."}
+	var normalized_checkpoint_id := checkpoint_id.strip_edges().to_lower()
+	if normalized_checkpoint_id.is_empty():
+		return {"success": false, "status": 0, "error": "Choose a story checkpoint."}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + DEV_STORY_CHECKPOINT_ENDPOINT,
+		HTTPClient.METHOD_PUT,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({"checkpointId": normalized_checkpoint_id})
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var story: Dictionary = _dictionary_from_value(response.get("body", {}))
+	if not _is_valid_story_projection_body(story):
+		return {
+			"success": false,
+			"status": int(response.get("status", 0)),
+			"error": "Story checkpoint response was invalid.",
+		}
+	StoryService.apply_story(story)
+	return {"success": true, "story": StoryService.get_story()}
 
 
 func accept_side_quest(quest_id: String, expected_revision: int) -> Dictionary:
@@ -406,6 +434,8 @@ func load_player_position() -> Dictionary:
 		"success": true,
 		"hasState": bool(body.get("hasState", false)),
 		"state": _dictionary_from_value(body.get("state", {})),
+		"happinessUpdated": bool(body.get("happinessUpdated", false)),
+		"party": _array_from_value(body.get("party", [])),
 	}
 
 
@@ -431,6 +461,8 @@ func save_player_position(state: Dictionary) -> Dictionary:
 		"success": true,
 		"hasState": bool(body.get("hasState", false)),
 		"state": _dictionary_from_value(body.get("state", {})),
+		"happinessUpdated": bool(body.get("happinessUpdated", false)),
+		"party": _array_from_value(body.get("party", [])),
 	}
 
 

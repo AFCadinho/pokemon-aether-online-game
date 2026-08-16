@@ -10,6 +10,13 @@ const COLOR_FIELD := Color("#9fd0ee")
 const COLOR_WARNING := Color("#e6b779")
 const COLOR_DAMAGE := Color("#e78b8b")
 const COLOR_HEAL := Color("#93d99b")
+const COLOR_MOVE := Color("#86dcff")
+const COLOR_SWITCH := Color("#a9bad4")
+const COLOR_EFFECT := Color("#c5b3ff")
+const COLOR_STATUS := Color("#f2c879")
+const COLOR_FAINT := Color("#ff7f91")
+const COLOR_RESULT := Color("#ffe08a")
+const COLOR_DETAIL := Color("#b8c9e3")
 const FILTERED_MESSAGE_KEYS: Array[String] = [
 	"battle.prompt.waiting_opponent",
 	"battle.prompt.waiting_other_player",
@@ -100,6 +107,29 @@ func _get_line_color(entry: Dictionary, index: int) -> Color:
 	var kind: String = str(entry.get("kind", ""))
 	if kind == "turn":
 		return COLOR_TURN
+	match kind:
+		"move":
+			return COLOR_MOVE
+		"switch":
+			return COLOR_SWITCH
+		"damage":
+			return COLOR_DAMAGE
+		"heal":
+			return COLOR_HEAL
+		"field":
+			return COLOR_FIELD
+		"effect":
+			return COLOR_EFFECT
+		"status":
+			return COLOR_STATUS
+		"warning":
+			return COLOR_WARNING
+		"faint":
+			return COLOR_FAINT
+		"result":
+			return COLOR_RESULT
+		"detail":
+			return COLOR_DETAIL
 
 	var lower: String = text.to_lower()
 	if _is_damage_line(lower):

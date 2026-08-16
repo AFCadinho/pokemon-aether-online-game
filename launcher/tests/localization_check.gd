@@ -34,6 +34,7 @@ func _run() -> void:
 		var diagnostics_button := launcher.find_child("DiagnosticsButton", true, false) as Button
 		var diagnostics_card := launcher.find_child("DiagnosticsCard", true, false) as PanelContainer
 		var language_options := launcher.find_child("LanguageOptionsButton", true, false) as OptionButton
+		var last_check := launcher.find_child("LastCheckLabel", true, false) as Label
 		_check(play != null and play.text == "Spelen", "launcher action renders in Dutch")
 		_check(
 			news_title != null and news_title.text == "LAATSTE NIEUWS VAN AETHER",
@@ -44,6 +45,7 @@ func _run() -> void:
 			"launcher diagnostics navigation renders in Dutch"
 		)
 		_check(diagnostics_card != null, "launcher includes the diagnostics view")
+		_check(last_check != null and last_check.text == "Nooit", "launcher localizes an empty last-check value")
 		var sanitized_url := str(launcher.call(
 			"_sanitize_diagnostic_message",
 			"request url=https://updates.example/game.zip?token=private"
@@ -72,6 +74,22 @@ func _run() -> void:
 			"launcher diagnostics sanitize historical multiline logs before display and copying"
 		)
 		_check(language_options != null, "launcher language selector exists")
+		launcher.set("last_check_datetime", {
+			"day": 16,
+			"month": 8,
+			"year": 2026,
+			"hour": 14,
+			"minute": 37,
+		})
+		manager.set_locale("en")
+		var english_last_check := str(launcher.call("_get_last_check_display_text"))
+		manager.set_locale("nl")
+		var dutch_last_check := str(launcher.call("_get_last_check_display_text"))
+		_check(
+			english_last_check == "16-08-2026 14:37"
+			and dutch_last_check == english_last_check,
+			"changing launcher language preserves the last update-check timestamp"
+		)
 		launcher.free()
 
 	var localized_news := NewsLocalizationService.resolve_items({

@@ -301,6 +301,7 @@ func report_diagnostic(event_type: String, context: Dictionary = {}) -> bool:
 		"pvp.invalid_realtime_response",
 		"pvp.realtime_response_timeout",
 		"pvp.resync_required_received",
+		"pvp.forced_switch_selection_blocked",
 	]:
 		return false
 	var payload := {
@@ -310,7 +311,8 @@ func report_diagnostic(event_type: String, context: Dictionary = {}) -> bool:
 	for key: String in [
 		"requestId", "eventBatchId", "displayedPhase", "reasonCode",
 		"serverSeq", "phaseSeq", "lastRenderedSeq", "observedDurationMs",
-		"inputLocked", "pendingAction",
+		"decisionGeneration", "inputLocked", "pendingAction", "forceSwitchRequired",
+		"decisionId", "selectionGate",
 	]:
 		if context.has(key):
 			payload[key] = context[key]

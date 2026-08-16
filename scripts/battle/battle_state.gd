@@ -2,6 +2,7 @@ extends RefCounted
 
 class_name BattleState
 
+const CALCDEX_SNAPSHOT := preload("res://scripts/battle/battle_calcdex_snapshot.gd")
 const DEBUG_PAO_BATTLE_IDENTITY := false
 const DEBUG_PREFIX := "[PAO Battle Identity Debug]"
 
@@ -22,6 +23,13 @@ var operational_state: Dictionary = {}
 var decisions: Dictionary = {}
 var timer_contract_version := 0
 var battle_event_seq := 0
+var visibility_contract_version := 0
+var snapshot_fingerprint := ""
+var event_seq := -1
+var batch_seq := -1
+var mechanical_revision := -1
+var aggregate_revision := -1
+var calcdex_battle_event_seq := -2
 
 
 static func get_mimikyu_disguise_state_for_species(species: String) -> String:
@@ -53,6 +61,7 @@ func load_from_api_response(
 		mega_species_by_ident.clear()
 		hp_snapshot_by_ident.clear()
 		field.clear()
+		_reset_calcdex_projection_revision()
 
 	battle_id = next_battle_id
 	format_id = str(response.get("formatId", ""))
@@ -103,6 +112,7 @@ func load_from_api_response(
 			operational_state = (next_operational_state as Dictionary).duplicate(true)
 	decisions = (response.get("decisions", {}) as Dictionary).duplicate(true) if response.get("decisions", {}) is Dictionary else {}
 	battle_event_seq = max(battle_event_seq, int(response.get("battleEventSeq", 0)))
+	_update_calcdex_projection_revision(response)
 	if apply_event_conditions:
 		_apply_mega_species_to_requests()
 		_apply_transformed_species_to_requests()
@@ -114,6 +124,43 @@ func load_from_api_response(
 	_remember_hp_fields_from_requests(requests)
 	if DEBUG_PAO_BATTLE_IDENTITY:
 		_debug_print_requests_snapshot("load_from_api_response final state")
+
+func get_calcdex_projection_revision() -> Dictionary:
+	var revision := {
+		"visibilityContractVersion": visibility_contract_version,
+		"snapshotFingerprint": snapshot_fingerprint,
+		"eventSeq": event_seq,
+		"batchSeq": batch_seq,
+		"mechanicalRevision": mechanical_revision,
+		"aggregateRevision": aggregate_revision,
+		"battleEventSeq": calcdex_battle_event_seq,
+	}
+	return revision if CALCDEX_SNAPSHOT.is_valid_projection_revision(revision) else {}
+
+func _update_calcdex_projection_revision(response: Dictionary) -> void:
+	var required_fields := [
+		"visibilityContractVersion", "snapshotFingerprint", "eventSeq", "batchSeq",
+		"mechanicalRevision", "aggregateRevision", "battleEventSeq",
+	]
+	for field_name: String in required_fields:
+		if not response.has(field_name):
+			return
+	visibility_contract_version = int(response.get("visibilityContractVersion"))
+	snapshot_fingerprint = str(response.get("snapshotFingerprint", ""))
+	event_seq = int(response.get("eventSeq"))
+	batch_seq = int(response.get("batchSeq"))
+	mechanical_revision = int(response.get("mechanicalRevision"))
+	aggregate_revision = int(response.get("aggregateRevision"))
+	calcdex_battle_event_seq = int(response.get("battleEventSeq"))
+
+func _reset_calcdex_projection_revision() -> void:
+	visibility_contract_version = 0
+	snapshot_fingerprint = ""
+	event_seq = -1
+	batch_seq = -1
+	mechanical_revision = -1
+	aggregate_revision = -1
+	calcdex_battle_event_seq = -2
 
 func _get_response_events_after_cursor(response: Dictionary, since_event_seq: int) -> Array:
 	var events_value: Variant = response.get("events", [])
@@ -473,6 +520,7 @@ func _normalize_public_species_base_key(species: String) -> String:
 	for suffix in [
 		"-alola", "-galar", "-hisui", "-paldea",
 		"-therian", "-incarnate", "-origin", "-altered",
+		"-terastal",
 		"-wash", "-heat", "-frost", "-fan", "-mow",
 		"-sky", "-land", "-blade", "-shield",
 		"-disguised", "-busted",
@@ -541,6 +589,14 @@ func _apply_event_conditions_to_requests(events_value: Variant, allow_historical
 
 		if event_type == "formeChange":
 			_apply_forme_change_event_to_requests(event)
+			continue
+
+		if event_type == "ability":
+			_apply_ability_event_to_requests(event)
+			continue
+
+		if event_type == "pokemonEffect":
+			_apply_pokemon_effect_event_to_requests(event)
 			continue
 
 		if event_type == "mega" or event_type == "primal":
@@ -913,6 +969,42 @@ func _apply_forme_change_event_to_requests(event: Dictionary) -> void:
 		return
 
 	pokemon_data["displaySpecies"] = species
+
+func _apply_ability_event_to_requests(event: Dictionary) -> void:
+	var ability := str(event.get("ability", event.get("abilityName", ""))).strip_edges().to_lower().replace(" ", "-")
+	if ability != "tera-shift":
+		return
+	_apply_tera_shift_form_to_target(event)
+
+func _apply_pokemon_effect_event_to_requests(event: Dictionary) -> void:
+	var effect := str(event.get("effect", "")).strip_edges().to_lower().replace(" ", "-")
+	var state := str(event.get("state", "")).strip_edges().to_lower()
+	if effect != "ability:-tera-shift" or state != "activate":
+		return
+	_apply_tera_shift_form_to_target(event)
+
+func _apply_tera_shift_form_to_target(event: Dictionary) -> void:
+
+	var target_ident := str(event.get("target", ""))
+	if target_ident == "":
+		return
+
+	var pokemon_data: Dictionary = _get_side_pokemon_by_ident(target_ident)
+	if pokemon_data.is_empty():
+		pokemon_data = _get_active_side_pokemon(_get_player_id_from_ident(target_ident))
+	if pokemon_data.is_empty():
+		return
+
+	var species := get_species_from_pokemon_data(pokemon_data).strip_edges()
+	if _normalize_public_species_base_key(species) != "terapagos":
+		return
+
+	var transformed_species := "Terapagos-Terastal"
+	var transform_key := _get_transform_key_from_ident(target_ident)
+	if transform_key != "":
+		transformed_species_by_ident[transform_key] = transformed_species
+	pokemon_data["displaySpecies"] = transformed_species
+	pokemon_data["transformedSpecies"] = transformed_species
 
 func _apply_mega_event_to_requests(event: Dictionary) -> void:
 	var target_ident := str(event.get("target", ""))

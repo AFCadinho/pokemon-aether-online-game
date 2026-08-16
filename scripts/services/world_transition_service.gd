@@ -94,12 +94,16 @@ func enter_transition(transition_id: String, facing_direction: String) -> Dictio
 	var access := _dictionary_from_value(body.get("access", {}))
 	if not access.is_empty():
 		transition_access_cache[normalized_transition_id] = access
+	var story := _dictionary_from_value(body.get("story", {}))
+	if not story.is_empty():
+		StoryService.apply_story_if_not_stale(story)
 	return {
 		"success": true,
 		"allowed": bool(body.get("allowed", false)),
 		"transitionId": str(body.get("transitionId", normalized_transition_id)),
 		"access": access,
 		"state": _dictionary_from_value(body.get("state", {})),
+		"story": story,
 	}
 
 

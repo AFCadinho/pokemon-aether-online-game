@@ -78,6 +78,20 @@ func _check_bag_and_hotbar_runtime_translation() -> void:
 		"Escape Rope confirmation renders in Dutch"
 	)
 
+	var max_level_pokemon := Pokemon.new("Blastoise", 100)
+	max_level_pokemon.owned_pokemon_id = 42
+	max_level_pokemon.experience = 1_000_000
+	max_level_pokemon.growth_rate = "medium"
+	overlay.set("bag_item_use_pending_item", {"id": "exp-candy-l"})
+	var disabled_target := overlay.call("_create_bag_item_use_pokemon_button", max_level_pokemon, 0) as Button
+	_check(disabled_target != null and disabled_target.disabled, "max-level Bag target is disabled")
+	_check(
+		_find_label(disabled_target, "Niet bruikbaar · Maximaal niveau") != null,
+		"disabled Bag target explains the reason inline"
+	)
+	if disabled_target != null:
+		disabled_target.free()
+
 	var external_item := {
 		"id": "potion",
 		"name": "Potion",
@@ -156,6 +170,18 @@ func _check_item_effect_preview_translation() -> void:
 		str(PREVIEW.preview(pokemon, antidote, 1).get("label")) == "Envenenado → Saudável",
 		"item-effect preview updates to Portuguese"
 	)
+
+
+func _find_label(node: Node, text: String) -> Label:
+	if node == null:
+		return null
+	if node is Label and (node as Label).text == text:
+		return node as Label
+	for child: Node in node.get_children():
+		var result := _find_label(child, text)
+		if result != null:
+			return result
+	return null
 
 
 func _check(condition: bool, label: String) -> void:

@@ -3,6 +3,10 @@ extends PanelContainer
 signal drag_started(slot_index: int)
 signal drag_released(slot_index: int, global_position: Vector2)
 signal clicked(slot_index: int)
+signal held_item_dropped(slot_index: int, item: Dictionary)
+signal context_requested(slot_index: int, global_position: Vector2)
+
+const HeldItemDropTarget := preload("res://scripts/ui/held_item_drop_target_button.gd")
 
 const SLOT_BG := Color("#081522eb")
 const SLOT_BORDER := Color("#2d4b66b3")
@@ -63,6 +67,7 @@ var current_species_id: String = ""
 var current_species_source_name: String = ""
 var held_item_marker: Control
 var status_icon_texture_cache: Dictionary = {}
+var held_item_drop_enabled := false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -75,6 +80,11 @@ func _ready() -> void:
 		click_button.mouse_entered.connect(_on_click_button_mouse_entered)
 	if not click_button.mouse_exited.is_connected(_on_click_button_mouse_exited):
 		click_button.mouse_exited.connect(_on_click_button_mouse_exited)
+	if click_button.has_signal("held_item_dropped") and not click_button.is_connected("held_item_dropped", _on_click_button_held_item_dropped):
+		click_button.connect("held_item_dropped", _on_click_button_held_item_dropped)
+	if click_button.has_signal("drop_highlight_changed") and not click_button.is_connected("drop_highlight_changed", _on_click_button_drop_highlight_changed):
+		click_button.connect("drop_highlight_changed", _on_click_button_drop_highlight_changed)
+	click_button.set("held_item_drop_enabled", held_item_drop_enabled)
 	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
 		LocalizationManager.locale_changed.connect(_on_locale_changed)
 	_setup_held_item_marker()
@@ -89,6 +99,7 @@ func set_pokemon(pokemon: Pokemon) -> void:
 	current_level = pokemon.level
 	current_species_id = pokemon.species
 	current_species_source_name = pokemon.species
+	_set_held_item_drop_enabled(pokemon.owned_pokemon_id > 0)
 	_refresh_species_name()
 	shiny_badge.visible = pokemon.shiny
 	_refresh_level_label()
@@ -112,6 +123,7 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 		pokemon_data.get("species_id", pokemon_data.get("species", species))
 	))
 	current_species_source_name = species
+	_set_held_item_drop_enabled(false)
 	var is_shiny := bool(pokemon_data.get("shiny", false))
 	var level := int(pokemon_data.get("level", 0))
 	var max_hp: int = maxi(int(pokemon_data.get("maxHp", pokemon_data.get("max_hp", 1))), 1)
@@ -138,6 +150,7 @@ func set_empty() -> void:
 	current_level = 0
 	current_species_id = ""
 	current_species_source_name = ""
+	_set_held_item_drop_enabled(false)
 	is_hovered = false
 	is_pressed = false
 	is_dragging = false
@@ -170,6 +183,44 @@ func set_drop_target(value: bool) -> void:
 		return
 	is_drop_target = value
 	_apply_slot_style()
+
+
+func _set_held_item_drop_enabled(value: bool) -> void:
+	held_item_drop_enabled = value
+	if click_button != null:
+		click_button.set("held_item_drop_enabled", value)
+
+
+func _on_click_button_held_item_dropped(item: Dictionary) -> void:
+	if held_item_drop_enabled:
+		held_item_dropped.emit(slot_index, item.duplicate(true))
+
+
+func _on_click_button_drop_highlight_changed(highlighted: bool) -> void:
+	set_drop_target(highlighted and held_item_drop_enabled)
+
+
+func _can_drop_data(_position: Vector2, data: Variant) -> bool:
+	var accepted := held_item_drop_enabled and HeldItemDropTarget.can_accept_drag_data(data)
+	set_drop_target(accepted)
+	return accepted
+
+
+func _drop_data(_position: Vector2, data: Variant) -> void:
+	var item: Dictionary = HeldItemDropTarget.item_from_drag_data(data)
+	if not held_item_drop_enabled or item.is_empty():
+		return
+	set_drop_target(false)
+	held_item_dropped.emit(slot_index, item.duplicate(true))
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_DRAG_END or (
+		what == NOTIFICATION_MOUSE_EXIT
+		and get_viewport() != null
+		and get_viewport().gui_is_dragging()
+	):
+		set_drop_target(false)
 
 func _refresh_lead_accent() -> void:
 	if lead_accent != null:
@@ -339,6 +390,10 @@ func _on_click_button_gui_input(event: InputEvent) -> void:
 		return
 
 	var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+	if mouse_event.button_index == MOUSE_BUTTON_RIGHT and mouse_event.pressed:
+		context_requested.emit(slot_index, mouse_event.global_position)
+		get_viewport().set_input_as_handled()
+		return
 	if mouse_event.button_index != MOUSE_BUTTON_LEFT:
 		return
 

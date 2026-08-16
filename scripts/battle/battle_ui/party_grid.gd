@@ -9,6 +9,8 @@ signal party_changed(party: Array)
 
 var input_disabled := false
 var selection_enabled := false
+var hover_enabled := false
+var empty_slots_visible := false
 var intrinsic_disabled_by_slot: Dictionary = {}
 var current_party_data: Array = []
 
@@ -63,6 +65,13 @@ func clear_party() -> void:
 	_apply_interaction_state()
 	party_changed.emit([])
 
+
+func set_empty_slots_visible(is_visible: bool) -> void:
+	empty_slots_visible = is_visible
+	for slot: Node in get_children():
+		if slot.has_method("set_empty_visible"):
+			slot.call("set_empty_visible", empty_slots_visible)
+
 func get_pokemon_data_for_visual_slot(slot: int) -> Dictionary:
 	var index := slot - 1
 	if index < 0 or index >= current_party_data.size():
@@ -82,10 +91,16 @@ func set_selection_enabled(is_enabled: bool) -> void:
 	selection_enabled = is_enabled
 	_apply_interaction_state()
 
+func set_hover_enabled(is_enabled: bool) -> void:
+	hover_enabled = is_enabled
+	_apply_interaction_state()
+
 func is_selection_enabled() -> bool:
 	return selection_enabled and not input_disabled
 
 func is_slot_selectable(slot: int) -> bool:
+	if not is_selection_enabled():
+		return false
 	var index := slot - 1
 	if index < 0 or index >= get_child_count():
 		return false
@@ -113,7 +128,7 @@ func _apply_interaction_state() -> void:
 			var button: Button = slot as Button
 			var key := str(button.get_path())
 			var intrinsically_disabled := bool(intrinsic_disabled_by_slot.get(key, true))
-			button.disabled = input_disabled or not selection_enabled or intrinsically_disabled
+			button.disabled = input_disabled or ((not selection_enabled) and not hover_enabled) or intrinsically_disabled
 
 func _on_party_selected(slot: int) -> void:
 	if input_disabled or not selection_enabled:

@@ -46,14 +46,10 @@ func load_inventory() -> Dictionary:
 		return response
 
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
-	var items := _array_from_value(body.get("items", []))
-	cached_inventory_items = items.duplicate(true)
-	cached_inventory_user_id = int(AuthService.current_user.get("id", 0))
-	inventory_loaded = true
-	inventory_changed.emit(cached_inventory_items.duplicate(true))
+	apply_inventory_state(body)
 	return {
 		"success": true,
-		"items": items,
+		"items": cached_inventory_items.duplicate(true),
 	}
 
 
@@ -75,6 +71,20 @@ func has_item(item_id: String) -> bool:
 		):
 			return true
 	return false
+
+
+func apply_inventory_state(value: Variant) -> bool:
+	if value is not Dictionary:
+		return false
+	var inventory := value as Dictionary
+	if inventory.get("items", null) is not Array:
+		return false
+	var items := _array_from_value(inventory.get("items", []))
+	cached_inventory_items = items.duplicate(true)
+	cached_inventory_user_id = int(AuthService.current_user.get("id", 0))
+	inventory_loaded = true
+	inventory_changed.emit(cached_inventory_items.duplicate(true))
+	return true
 
 
 func _clear_inventory_cache() -> void:
@@ -131,6 +141,7 @@ func select_fishing_rod(item_id: String, area_id := "") -> Dictionary:
 
 
 func apply_fishing_progression(progression: Dictionary) -> void:
+	GameState.fishing_skill_unlocked = bool(progression.get("unlocked", false))
 	GameState.fishing_level = maxi(int(progression.get("level", 1)), 1)
 	GameState.fishing_total_experience = maxi(int(progression.get("totalExperience", 0)), 0)
 	GameState.fishing_experience_into_level = maxi(int(progression.get("experienceIntoLevel", 0)), 0)
@@ -165,6 +176,8 @@ func claim_npc_item_reward(reward_id: String) -> Dictionary:
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
 	var inventory_result: Dictionary = await load_inventory()
 	var progression_result: Dictionary = await load_fishing_progression("")
+	var wallet_result: Dictionary = await PlayerWalletService.load_wallet()
+	PlayerWalletService.apply_wallet_result(wallet_result)
 	var story_result: Dictionary = await PlayerGameStateService.refresh_story()
 	return {
 		"success": true,
@@ -175,6 +188,7 @@ func claim_npc_item_reward(reward_id: String) -> Dictionary:
 		"alreadyOwned": bool(body.get("alreadyOwned", false)),
 		"inventoryRefreshSuccess": bool(inventory_result.get("success", false)),
 		"fishingProgressionRefreshSuccess": bool(progression_result.get("success", false)),
+		"walletRefreshSuccess": bool(wallet_result.get("success", false)),
 		"storyRefreshSuccess": bool(story_result.get("success", false)),
 	}
 

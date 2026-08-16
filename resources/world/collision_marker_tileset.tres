@@ -1,6 +1,6 @@
 [gd_resource type="TileSet" format=3 uid="uid://bw4ggkfn67bev"]
 
-[ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="1_texture"]
+[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="1_texture"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_collision"]
 texture = ExtResource("1_texture")

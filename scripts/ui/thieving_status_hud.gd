@@ -78,4 +78,9 @@ func _jail_label(seconds: int) -> String:
 		return "Staff detention • Permanent"
 	if str(current_state.get("jailType", "")) == "staff":
 		return "Staff detention • %ds remaining" % seconds
-	return LocalizationManager.text("ui.thieving.jailed", {"seconds": seconds})
+	return LocalizationManager.text("ui.thieving.jailed", {"time": _format_remaining_time(seconds)})
+
+
+func _format_remaining_time(seconds: int) -> String:
+	var normalized := maxi(seconds, 0)
+	return "%02d:%02d" % [normalized / 60, normalized % 60]

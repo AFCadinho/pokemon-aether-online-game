@@ -1,5 +1,7 @@
 extends Node
 
+signal pokemon_level_caps_changed
+
 var player_position: Vector2 = Vector2.ZERO
 var has_player_position := false
 var player_direction: Vector2 = Vector2.DOWN
@@ -9,12 +11,15 @@ var prepared_world_state: Dictionary = {}
 
 var input_locked := false
 var overworld_input_locked := false
+var overworld_input_lock_owners: Dictionary = {}
 var ui_input_locked := false
+var ui_input_lock_owners: Dictionary = {}
 var world_debug_enabled := false
 var repel_enabled := false
 var show_follower := true
 var running_shoes_enabled := false
 var selected_role_badge := ""
+var fishing_skill_unlocked := false
 var fishing_unlocked := false
 var fishing_tier := 0
 var fishing_level := 1
@@ -26,7 +31,37 @@ var fishing_region := "kanto"
 var fishing_region_badge_count := 0
 var fishing_rods: Array = []
 var surf_unlocked := true
+var pokemon_level_cap := 100
+var pokemon_trade_level_cap := 100
+var pokemon_level_cap_region := "kanto"
+var pokemon_level_cap_stage := ""
+var pokemon_level_cap_badge_count := 0
 var gameplay_reset_in_progress := false
+
+func apply_pokemon_level_cap_state(state: Dictionary) -> void:
+	if state.is_empty():
+		return
+	var previous_state := [
+		pokemon_level_cap,
+		pokemon_trade_level_cap,
+		pokemon_level_cap_region,
+		pokemon_level_cap_stage,
+		pokemon_level_cap_badge_count,
+	]
+	pokemon_level_cap = clampi(int(state.get("levelCap", pokemon_level_cap)), 1, 100)
+	pokemon_trade_level_cap = clampi(int(state.get("tradeLevelCap", pokemon_trade_level_cap)), 1, 100)
+	pokemon_level_cap_region = str(state.get("region", pokemon_level_cap_region))
+	pokemon_level_cap_stage = str(state.get("stageId", pokemon_level_cap_stage))
+	pokemon_level_cap_badge_count = max(int(state.get("badgeCount", pokemon_level_cap_badge_count)), 0)
+	var current_state := [
+		pokemon_level_cap,
+		pokemon_trade_level_cap,
+		pokemon_level_cap_region,
+		pokemon_level_cap_stage,
+		pokemon_level_cap_badge_count,
+	]
+	if current_state != previous_state:
+		pokemon_level_caps_changed.emit()
 
 func begin_gameplay_reset() -> void:
 	gameplay_reset_in_progress = true
@@ -46,6 +81,7 @@ func reset_gameplay_runtime_state() -> void:
 	show_follower = true
 	running_shoes_enabled = false
 	selected_role_badge = ""
+	fishing_skill_unlocked = false
 	fishing_unlocked = false
 	fishing_tier = 0
 	fishing_level = 1
@@ -57,6 +93,13 @@ func reset_gameplay_runtime_state() -> void:
 	fishing_region_badge_count = 0
 	fishing_rods = []
 	surf_unlocked = true
+	pokemon_level_cap = 100
+	pokemon_trade_level_cap = 100
+	pokemon_level_cap_region = "kanto"
+	pokemon_level_cap_stage = ""
+	pokemon_level_cap_badge_count = 0
+	overworld_input_lock_owners.clear()
+	ui_input_lock_owners.clear()
 
 func finish_gameplay_reset() -> void:
 	gameplay_reset_in_progress = false
@@ -69,12 +112,14 @@ func lock_input() -> void:
 	
 func unlock_input() -> void:
 	input_locked = false
-	overworld_input_locked = false
-	ui_input_locked = false
+	overworld_input_locked = not overworld_input_lock_owners.is_empty()
+	ui_input_locked = not ui_input_lock_owners.is_empty()
 
 func clear_world_runtime_state() -> void:
 	current_map = null
 	prepared_world_state = {}
+	overworld_input_lock_owners.clear()
+	ui_input_lock_owners.clear()
 	if not gameplay_reset_in_progress:
 		unlock_input()
 
@@ -93,13 +138,37 @@ func lock_overworld_input() -> void:
 	overworld_input_locked = true
 
 func unlock_overworld_input() -> void:
-	overworld_input_locked = false
+	overworld_input_locked = not overworld_input_lock_owners.is_empty()
+
+func acquire_overworld_input_lock(owner_id: StringName) -> void:
+	if owner_id.is_empty():
+		return
+	overworld_input_lock_owners[owner_id] = true
+	overworld_input_locked = true
+
+func release_overworld_input_lock(owner_id: StringName) -> void:
+	if owner_id.is_empty():
+		return
+	overworld_input_lock_owners.erase(owner_id)
+	overworld_input_locked = not overworld_input_lock_owners.is_empty()
 
 func lock_ui_input() -> void:
 	ui_input_locked = true
 
 func unlock_ui_input() -> void:
-	ui_input_locked = false
+	ui_input_locked = not ui_input_lock_owners.is_empty()
+
+func acquire_ui_input_lock(owner_id: StringName) -> void:
+	if owner_id.is_empty():
+		return
+	ui_input_lock_owners[owner_id] = true
+	ui_input_locked = true
+
+func release_ui_input_lock(owner_id: StringName) -> void:
+	if owner_id.is_empty():
+		return
+	ui_input_lock_owners.erase(owner_id)
+	ui_input_locked = not ui_input_lock_owners.is_empty()
 
 func is_overworld_input_locked() -> bool:
 	return input_locked or overworld_input_locked

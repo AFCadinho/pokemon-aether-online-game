@@ -21,6 +21,10 @@ func _run() -> void:
 	game_state.lock_overworld_input()
 	dialogue_box.start_dialogue(["First", "Second"], "Oak")
 	_check(bool(game_state.input_locked), "open dialogue locks all input")
+	_check(
+		dialogue_box.has_method("_input"),
+		"dialogue box listens for left mouse input alongside the interaction key"
+	)
 	dialogue_box.hide_dialogue()
 	_check(
 		not bool(game_state.input_locked)
@@ -44,6 +48,21 @@ func _run() -> void:
 		and bool(game_state.overworld_input_locked)
 		and bool(game_state.ui_input_locked),
 		"closing dialogue preserves a full story-sequence lock"
+	)
+
+	game_state.unlock_input()
+	game_state.acquire_ui_input_lock(&"story_sequence")
+	dialogue_box.start_dialogue(["Owned UI lock"], "Oak")
+	dialogue_box.hide_dialogue()
+	_check(
+		not bool(game_state.input_locked)
+		and bool(game_state.ui_input_locked),
+		"closing dialogue preserves an owner-based UI lock"
+	)
+	game_state.release_ui_input_lock(&"story_sequence")
+	_check(
+		not bool(game_state.ui_input_locked),
+		"releasing the final UI lock owner restores mouse input"
 	)
 
 	game_state.unlock_input()

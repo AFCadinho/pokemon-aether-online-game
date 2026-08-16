@@ -23,7 +23,7 @@ func build_map_data(map_data: Dictionary) -> Resource:
 	resource.region_name = _property_text(properties, Schema.MAP_PROPERTY_REGION_NAME)
 	resource.location_id = _property_text(properties, Schema.MAP_PROPERTY_LOCATION_ID)
 	resource.location_name = _property_text(properties, Schema.MAP_PROPERTY_LOCATION_NAME)
-	resource.music_track_path = _property_text(properties, Schema.MAP_PROPERTY_MUSIC_TRACK_PATH)
+	resource.music_track_id = _property_text(properties, Schema.MAP_PROPERTY_MUSIC_TRACK_ID)
 	resource.default_spawn = _property_text(properties, Schema.MAP_PROPERTY_DEFAULT_SPAWN)
 	resource.encounter_area_id = _property_text(properties, Schema.MAP_PROPERTY_ENCOUNTER_AREA_ID)
 	resource.map_size_tiles = Vector2i(int(map_data.get("width", 0)), int(map_data.get("height", 0)))

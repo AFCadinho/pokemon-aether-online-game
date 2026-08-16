@@ -28,6 +28,8 @@ WindowFit="*res://scripts/core/window_fit.gd"
 CursorThemeManager="*res://scripts/services/cursor_theme_manager.gd"
 GatewayApiConfig="*res://scripts/services/gateway_api_config.gd"
 TrainerMetadataService="*res://scripts/services/trainer_metadata_service.gd"
+TrainerProgressService="*res://scripts/services/trainer_progress_service.gd"
+EvTrainingService="*res://scripts/services/ev_training_service.gd"
 NpcMetadataService="*res://scripts/services/npc_metadata_service.gd"
 DialogueMetadataService="*res://scripts/services/dialogue_metadata_service.gd"
 NpcDialogueService="*res://scripts/services/npc_dialogue_service.gd"
@@ -53,10 +55,12 @@ StorySequenceRunner="*res://scripts/services/story_sequence_runner.gd"
 WorldTransitionService="*res://scripts/services/world_transition_service.gd"
 BadgeProgressionService="*res://scripts/services/badge_progression_service.gd"
 GuildService="*res://scripts/services/guild_service.gd"
+TransitService="*res://scripts/services/transit_service.gd"
 PlayerPartyStateService="*res://scripts/services/player_party_state_service.gd"
 PlayerGameplayResetService="*res://scripts/services/player_gameplay_reset_service.gd"
 FieldMoveService="*res://scripts/services/field_move_service.gd"
 PlayerWalletService="*res://scripts/services/player_wallet_service.gd"
+NpcPokemonSaleService="*res://scripts/services/npc_pokemon_sale_service.gd"
 ThievingService="*res://scripts/services/thieving_service.gd"
 SkillsService="*res://scripts/services/skills_service.gd"
 ThievingStatusHud="*res://scripts/ui/thieving_status_hud.gd"
@@ -68,6 +72,7 @@ DonatorStoreService="*res://scripts/services/donator_store_service.gd"
 GiftCodeService="*res://scripts/services/gift_code_service.gd"
 PlayerStatsService="*res://scripts/services/player_stats_service.gd"
 PokedexService="*res://scripts/services/pokedex_service.gd"
+ShinyTrackerService="*res://scripts/services/shiny_tracker_service.gd"
 ChatRealtimeService="*res://scripts/services/chat_realtime_service.gd"
 WorldPresenceService="*res://scripts/services/world_presence_service.gd"
 ModeratorTeleportService="*res://scripts/services/moderator_teleport_service.gd"
@@ -84,6 +89,10 @@ TradeWorkspace="*res://scripts/ui/trade_workspace.gd"
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/stretch/mode="canvas_items"
+
+[internationalization]
+
+locale/fallback="en"
 
 [input]
 

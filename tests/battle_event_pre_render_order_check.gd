@@ -300,6 +300,18 @@ func _check_initial_setup_keeps_specific_form_species() -> void:
 		true,
 		"specific battle form helper treats spaced form names as form species"
 	)
+	_check_equal(
+		form_check_source.contains("\"-terastal\""),
+		true,
+		"PvP identity correction preserves Terapagos Terastal form"
+	)
+
+	var metadata_source := FileAccess.get_file_as_string("res://scripts/battle/battle_display_metadata.gd")
+	_check_equal(
+		metadata_source.contains("\"-terastal\""),
+		true,
+		"battle display metadata preserves Terapagos Terastal form"
+	)
 
 
 func _check_wild_player_lead_waits_for_summon_reveal() -> void:
@@ -701,7 +713,7 @@ func _check_pvp_restore_keeps_rendered_hp_and_field_events() -> void:
 
 	_check_equal(restore_source.contains("_reapply_rendered_condition_events(rendered_events)"), true, "canonical restore retains rendered hazard HP")
 	_check_equal(restore_source.contains("_reapply_rendered_field_effect_events(rendered_events)"), false, "canonical restore cannot replay field starts against a future turn")
-	_check_equal(condition_source.contains('"damage", "heal", "faint", "status":'), true, "restore replays condition-changing events")
+	_check_equal(condition_source.contains('"damage", "heal", "faint", "status", "ability", "pokemonEffect":'), true, "restore replays condition and form-changing events")
 	_check_equal(condition_source.contains('"switch", "drag":'), true, "restore recognizes public spectator switch events")
 	_check_equal(condition_source.contains("if _is_spectator_battle():"), true, "only spectators replay switches over a request-free public batch")
 	_check_equal(condition_source.contains("Participant switch events deliberately remain canonical"), true, "participant Pursuit presentation keeps canonical switch state")

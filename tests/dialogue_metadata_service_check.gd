@@ -52,6 +52,10 @@ func _check_service_api() -> void:
 		and resolver_text.contains("func resolve_lines("),
 		"NpcDialogueService exposes selection and resolution APIs"
 	)
+	_check_true(
+		resolver_text.contains("fallback_lines: Array = []"),
+		"NpcDialogueService accepts inferred fallback arrays before normalizing their lines"
+	)
 
 
 func _check_service_normalization() -> void:
@@ -120,8 +124,20 @@ func _check_dialogue_box_side_quest_offer() -> void:
 	_check_true(text.contains('step.get("objectiveKey"'), "quest choice shows its objective")
 	_check_true(text.contains('quest.get("rewardPreviews"'), "quest choice shows its server-projected rewards")
 	_check_true(text.contains("ItemLocalization.display_name("), "item rewards use localized item names")
-	_check_true(text.contains("func _quest_reward_icon("), "item rewards resolve their catalog icon")
-	_check_true(scene_text.contains('name="RewardIcon" type="TextureRect"'), "quest rewards render an item icon")
+	_check_true(text.contains('"skill_experience"'), "quest choice renders skill experience rewards")
+	_check_true(text.contains("func _quest_reward_item_icon("), "item rewards resolve their catalog icon")
+	_check_true(
+		text.contains("func _quest_reward_machine_icon_path(")
+		and text.contains("MOVE_TYPE_INDEX_PATH")
+		and text.contains('ITEM_ICON_ROOT + "000.png"'),
+		"TM quest rewards use type icons before the generic missing-item fallback"
+	)
+	_check_true(
+		text.contains("func _populate_quest_reward_entries(")
+		and text.contains("func _create_quest_reward_entry(")
+		and scene_text.contains('name="RewardEntries" type="HFlowContainer"'),
+		"quest rewards render each item with its own icon and label"
+	)
 	_check_true(scene_text.contains('name="RewardCard" type="PanelContainer"'), "quest rewards render as a compact card")
 	_check_true(scene_text.contains('name="QuestOfferCloseButton" type="Button"'), "quest offer has a top-right close button")
 	_check_true(scene_text.count("mouse_default_cursor_shape = 2") >= 3, "quest offer actions use the pointing-hand cursor")
@@ -140,7 +156,7 @@ func _check_trainer_npc_uses_intro_dialogue_lookup() -> void:
 	_check_true(text.contains("func _resolve_intro_dialogue_lines(trainer_metadata: Dictionary) -> Array[String]:"), "TrainerNPC resolves intro dialogue")
 	_check_true(text.contains("var configured_dialogue_id := _get_dialogue_override_id()"), "TrainerNPC prefers an explicit scene override")
 	_check_true(text.contains("func _get_intro_dialogue_id_from_trainer_metadata(trainer_metadata: Dictionary) -> String:"), "TrainerNPC supports trainer metadata dialogue id")
-	_check_true(text.contains("NpcDialogueService.resolve_lines("), "TrainerNPC uses NpcDialogueService for intro dialogue")
+	_check_true(text.contains("NpcDialogueService.resolve_dialogue("), "TrainerNPC uses NpcDialogueService for localized intro dialogue and speaker name")
 
 
 func _check_trainer_npc_fallback_behavior() -> void:
@@ -158,7 +174,10 @@ func _check_trainer_npc_fallback_behavior() -> void:
 func _check_trainer_battle_behavior_unchanged() -> void:
 	var text := _read_text(TRAINER_NPC_SCRIPT)
 	_check_true(text.contains("TrainerMetadataService.get_trainer_metadata(trainer_id)"), "TrainerNPC still uses trainer metadata by trainer_id")
-	_check_true(text.contains("await start_trainer_battle(trainer_metadata)"), "TrainerNPC still starts battle after intro dialogue")
+	_check_true(
+		text.contains("await start_trainer_battle(battle_metadata)"),
+		"TrainerNPC still starts battle after intro dialogue"
+	)
 	_check_true(text.contains("func start_trainer_battle(trainer_metadata: Dictionary) -> Dictionary:"), "TrainerNPC returns structured battle start errors")
 	_check_true(
 		text.contains("INTRO_DIALOGUE_DELAY_SECONDS")

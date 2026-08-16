@@ -2,10 +2,13 @@ extends RefCounted
 
 class_name Pokemon
 
+const DEFAULT_HAPPINESS := 50
+
 var species: String
 var level: int
 var item: String
 var ability: String
+var hidden_ability: bool
 var nature: String
 var location: String
 var origin: Dictionary
@@ -21,6 +24,7 @@ var stats: Dictionary
 var moves: Array
 var types: Array
 var possible_abilities: Array
+var can_evolve: bool
 var tradable: bool
 var experience: int
 var current_level_exp: int
@@ -29,6 +33,7 @@ var experience_to_next_level: int
 var growth_rate: String
 var base_experience: int
 var status: String
+var happiness: int
 
 var current_hp: int
 var max_hp: int
@@ -62,12 +67,14 @@ func _init(
 	_experience_to_next_level: int = 0,
 	_growth_rate: String = "",
 	_base_experience: int = 0,
-	_status: String = ""
+	_status: String = "",
+	_happiness: int = DEFAULT_HAPPINESS
 	) -> void:
 	species = _species
 	level = _level
 	item = _item
 	ability = _ability
+	hidden_ability = false
 	nature = _nature
 	location = _location
 	origin = _normalize_origin(_origin, location)
@@ -105,6 +112,7 @@ func _init(
 	moves = _moves
 	types = _normalize_types(_types)
 	possible_abilities = _normalize_string_array(_possible_abilities)
+	can_evolve = false
 	tradable = _tradable
 	experience = max(_experience, 0)
 	current_level_exp = max(_current_level_exp, 0)
@@ -113,6 +121,7 @@ func _init(
 	growth_rate = _growth_rate.strip_edges()
 	base_experience = max(_base_experience, 0)
 	status = _normalize_status(_status)
+	happiness = clampi(_happiness, 0, 255)
 
 	max_hp = 20
 	current_hp = max_hp
@@ -134,7 +143,9 @@ func to_battle_dict() -> Dictionary:
 		"level": level,
 		"item": item,
 		"ability": ability,
+		"hiddenAbility": hidden_ability,
 		"nature": nature,
+		"happiness": happiness,
 		"evs": evs,
 		"storedEvs": stored_evs,
 		"ivs": ivs,
@@ -143,6 +154,7 @@ func to_battle_dict() -> Dictionary:
 		"savedMoves": _moves_to_persistence_list(),
 		"types": types,
 		"possibleAbilities": possible_abilities,
+		"canEvolve": can_evolve,
 		"instanceId": instance_id,
 		"ballItemId": ball_item_id,
 		"shiny": shiny,

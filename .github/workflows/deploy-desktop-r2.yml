@@ -23,6 +23,11 @@ on:
         required: false
         type: boolean
         default: false
+      cleanup_r2:
+        description: Remove obsolete immutable game and asset objects after publication.
+        required: false
+        type: boolean
+        default: true
       release_notes:
         description: Optional release notes for the Discord announcement.
         required: false
@@ -52,10 +57,10 @@ env:
   POKEMON_HOME_ASSET_VERSION: pokemon-home-f2c6fa7b95a7
 
   POKEMON_HOME_SHINY_ASSET_VERSION: pokemon-home-shiny-dac02a2f4694
-  POKEMON_FRONT_ASSET_VERSION: pokemon-front-scale1-128-a6578f59db64
-  POKEMON_BACK_ASSET_VERSION: pokemon-back-scale1-128-5b9d3e32779d
-  POKEMON_SHINY_FRONT_ASSET_VERSION: pokemon-shiny-front-scale1-128-d51a21f2f09f
-  POKEMON_SHINY_BACK_ASSET_VERSION: pokemon-shiny-back-scale1-128-02c03e08d6fb
+  POKEMON_FRONT_ASSET_VERSION: pokemon-front-scale1-128-2a3a4fbda143
+  POKEMON_BACK_ASSET_VERSION: pokemon-back-scale1-128-f3ae81ef1738
+  POKEMON_SHINY_FRONT_ASSET_VERSION: pokemon-shiny-front-scale1-128-f944f936f88d
+  POKEMON_SHINY_BACK_ASSET_VERSION: pokemon-shiny-back-scale1-128-d3efb1e01674
   POKEMON_GEN5_FRONT_ASSET_VERSION: pokemon-gen5-front-14ff66f7c2b7
   POKEMON_GEN5_BACK_ASSET_VERSION: pokemon-gen5-back-6f374c1fb42b
   POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION: pokemon-gen5-shiny-front-b999587c7d07
@@ -63,10 +68,10 @@ env:
   POKEMON_HOME_ASSET_SIZE: 60806092
 
   POKEMON_HOME_SHINY_ASSET_SIZE: 33131877
-  POKEMON_FRONT_ASSET_SIZE: 97000116
-  POKEMON_BACK_ASSET_SIZE: 78790844
-  POKEMON_SHINY_FRONT_ASSET_SIZE: 94341450
-  POKEMON_SHINY_BACK_ASSET_SIZE: 72817932
+  POKEMON_FRONT_ASSET_SIZE: 97005176
+  POKEMON_BACK_ASSET_SIZE: 78796293
+  POKEMON_SHINY_FRONT_ASSET_SIZE: 94346548
+  POKEMON_SHINY_BACK_ASSET_SIZE: 72823470
   POKEMON_GEN5_FRONT_ASSET_SIZE: 314551982
   POKEMON_GEN5_BACK_ASSET_SIZE: 248412184
   POKEMON_GEN5_SHINY_FRONT_ASSET_SIZE: 317541005
@@ -75,6 +80,8 @@ env:
   MUSIC_ASSET_SIZE: 29709745
   UPDATE_BASE_URL: https://updates.pokeaether.com
   MAX_LAUNCHER_GAME_ZIP_BYTES: 1000000000
+  R2_RELEASE_RETENTION_PREVIOUS: 1
+  R2_RELEASE_MINIMUM_AGE_HOURS: 24
 
 jobs:
   deploy:
@@ -483,6 +490,9 @@ jobs:
             fi
           done
 
+      - name: Test R2 cleanup safeguards
+        run: python3 tools/test_prune_r2_release_objects.py
+
       - name: Upload launcher release to R2
         id: upload_r2
         env:
@@ -561,6 +571,21 @@ jobs:
           fi
           python3 tools/upload_launcher_release.py builds/launcher "${manifest_upload_args[@]}"
           echo "published=true" >> "${GITHUB_OUTPUT}"
+
+      - name: Prune obsolete R2 game and asset objects
+        if: steps.upload_r2.outputs.published == 'true' && inputs.cleanup_r2
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          python3 tools/prune_r2_release_objects.py builds/launcher \
+            --public-base-url "${UPDATE_BASE_URL}" \
+            --retain-previous "${R2_RELEASE_RETENTION_PREVIOUS}" \
+            --minimum-age-hours "${R2_RELEASE_MINIMUM_AGE_HOURS}" \
+            --max-delete 200 \
+            --apply
 
       - name: Post release announcement to Discord
         if: steps.upload_r2.outputs.published == 'true' && inputs.announce_discord

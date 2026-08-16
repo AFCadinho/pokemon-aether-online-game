@@ -3,6 +3,8 @@ extends SceneTree
 const UI_OVERLAY_SCENE_PATH := "res://scenes/interface/ui_overlay.tscn"
 const UI_OVERLAY_SCRIPT_PATH := "res://scripts/ui/ui_overlay.gd"
 const WORLD_TIME_SERVICE_PATH := "res://scripts/services/world_time_service.gd"
+const WORLD_SCRIPT_PATH := "res://scripts/world/world.gd"
+const BATTLE_API_CLIENT_PATH := "res://scripts/battle/battle_api/battle_api_client.gd"
 
 var failed := false
 
@@ -11,6 +13,8 @@ func _init() -> void:
 	var scene_source := FileAccess.get_file_as_string(UI_OVERLAY_SCENE_PATH)
 	var ui_source := FileAccess.get_file_as_string(UI_OVERLAY_SCRIPT_PATH)
 	var service_source := FileAccess.get_file_as_string(WORLD_TIME_SERVICE_PATH)
+	var world_source := FileAccess.get_file_as_string(WORLD_SCRIPT_PATH)
+	var battle_api_source := FileAccess.get_file_as_string(BATTLE_API_CLIENT_PATH)
 
 	_check_true(scene_source.contains('[node name="WorldTimeSelect" type="OptionButton"'), "developer menu contains a world-time selector")
 	_check_true(scene_source.contains('popup/item_0/text = "Default (Server UTC)"'), "default server UTC is the first selector option")
@@ -24,6 +28,9 @@ func _init() -> void:
 	_check_true(ui_source.contains("WorldTimeService.set_debug_time(selected_hour)"), "preview selections update the shared time source")
 	_check_true(ui_source.contains("_refresh_utc_time_label(UTC_TIME_REFRESH_INTERVAL_SECONDS, true)"), "location clock refreshes immediately after selection")
 	_check_true(not service_source.contains("user://") and not service_source.contains("SettingsManager"), "debug time is never persisted")
+	_check_true(service_source.contains("func get_encounter_time_of_day"), "shared world time exposes the current encounter period")
+	_check_true(world_source.contains("WorldTimeService.is_debug_time_active()") and world_source.contains("WorldTimeService.get_encounter_time_of_day()"), "debug encounter time is forwarded only while the preview is active")
+	_check_true(battle_api_source.contains('payload["debugTimeOfDay"] = debug_time_of_day'), "wild battle request carries the developer encounter-time override")
 	_check_true(scene_source.contains('[node name="WorldWeatherSelect" type="OptionButton"'), "developer menu contains a world-weather selector")
 	_check_true(scene_source.contains('popup/item_0/text = "Server / Default"'), "weather selector can return to server/default")
 	_check_true(scene_source.contains('popup/item_2/text = "Rain"'), "rain preview is available")

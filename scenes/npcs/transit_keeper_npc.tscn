@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="1_base"]
+[ext_resource type="Script" path="res://scripts/world/npcs/transit_keeper_npc.gd" id="2_script"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/transit_keeper_frames.tres" id="3_frames"]
+
+[node name="TransitKeeperNPC" groups=["aethernet_keeper"] instance=ExtResource("1_base")]
+script = ExtResource("2_script")
+display_name = "Aethernet Keeper"
+npc_sprite_frames = ExtResource("3_frames")
+sprite_offset = Vector2(0, -16)
+portrait_id = "showdown_psychic_gen6"
+movement_behavior = "idle"

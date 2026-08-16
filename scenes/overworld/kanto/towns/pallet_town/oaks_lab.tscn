@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://dc87fdx313qm4" path="res://scripts/world/kanto/towns/pallet_town/oak.gd" id="6_m2ga1"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="8_rguhm"]
-[ext_resource type="Texture2D" uid="uid://coa5lp430b8p8" path="res://assets/npcs/gen4-ow-sprites/phone001.png" id="8_ywtjb"]
-[ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="9_10jo1"]
+[ext_resource type="Texture2D" path="res://assets/npcs/gen4-ow-sprites/phone001.png" id="8_ywtjb"]
+[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="9_10jo1"]
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="10_7ad88"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="11_map_meta"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/pokemon_pc_interactable.tscn" id="12_pc_interactable"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/starter_poke_ball.tscn" id="18_ball"]
 [ext_resource type="SpriteFrames" uid="uid://caas815hh7buy" path="res://assets/npcs/classes/scientist_m_frames.tres" id="19_scientist_m"]
 [ext_resource type="SpriteFrames" uid="uid://ckxh3g37blbkj" path="res://assets/npcs/classes/scientist_f_frames.tres" id="20_scientist_f"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="21_transition_hint"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jksq5"]
 atlas = ExtResource("8_ywtjb")
@@ -121,7 +122,7 @@ world_access_group_label = "Pallet Town"
 world_access_area_type = "interior"
 lighting_profile = "indoor"
 weather_profile = "disabled"
-music_track_path = "res://assets/music/overworld/kanto/interiors/oaks_lab.ogg"
+music_track_id = "overworld.kanto.interior.oaks_lab"
 
 [node name="PokémonLaboratory" parent="." unique_id=202378194 instance=ExtResource("14_fkl8t")]
 
@@ -224,6 +225,11 @@ target_spawn_name = "FromOaksLab"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPalletTown" unique_id=1515532203]
 position = Vector2(0, 8)
 shape = SubResource("RectangleShape2D_10jo1")
+
+[node name="DoorTransitionHint" parent="Exits/ToPalletTown" instance=ExtResource("21_transition_hint")]
+position = Vector2(0, 8)
+tile_footprint = Vector2i(3, 1)
+flow_direction = "down"
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=420087276]
 visible = false

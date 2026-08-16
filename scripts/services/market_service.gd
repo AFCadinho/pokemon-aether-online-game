@@ -138,6 +138,8 @@ func normalize_market(value: Variant) -> Dictionary:
 		"region": str(market.get("region", "")),
 		"locationId": str(market.get("locationId", "")),
 		"locationName": str(market.get("locationName", "")),
+		"badgeCount": _optional_nonnegative_int(market.get("badgeCount"), -1),
+		"nextUnlockBadge": _optional_nonnegative_int(market.get("nextUnlockBadge"), -1),
 		"items": normalized_items,
 	}
 
@@ -150,6 +152,8 @@ func normalize_market_item(value: Variant) -> Dictionary:
 		"category": str(item.get("category", "")),
 		"shortDesc": str(item.get("shortDesc", "")),
 		"sellPrice": max(int(item.get("sellPrice", 0)), 0),
+		"requiredBadges": max(int(item.get("requiredBadges", 0)), 0),
+		"available": bool(item.get("available", true)),
 		"costs": normalize_costs(item.get("costs", [])),
 	}
 
@@ -261,6 +265,12 @@ func _array_from_value(value: Variant) -> Array:
 		return []
 	var array: Array = value
 	return array
+
+
+func _optional_nonnegative_int(value: Variant, fallback: int) -> int:
+	if value == null or typeof(value) not in [TYPE_INT, TYPE_FLOAT]:
+		return fallback
+	return max(int(value), 0)
 
 
 func _request_result_message(result: int) -> String:

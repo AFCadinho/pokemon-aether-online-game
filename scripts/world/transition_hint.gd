@@ -1,60 +1,69 @@
+@tool
 extends Node2D
 
-@export var particle_count := 8
-@export_range(8.0, 256.0, 1.0, "or_greater") var width := 24.0
-@export var height := 18.0
-@export var cycle_seconds := 1.4
-@export var particle_radius := 2.0
-@export var tint := Color(0.78, 0.95, 1.0, 0.65)
+const TILE_SIZE := 32.0
+const GROUND_OVERLAY_Z_INDEX := 7
+
+@export var tile_footprint := Vector2i.ONE
+@export_enum("up", "down", "left", "right") var flow_direction := "up"
+@export var cycle_seconds := 1.7
+@export var tint := Color(0.82, 0.64, 1.0, 0.94)
 
 var _elapsed := 0.0
-var _particles: Array[Dictionary] = []
 
 
 func _ready() -> void:
 	z_as_relative = false
-	_rebuild_particles()
+	z_index = GROUND_OVERLAY_Z_INDEX
 	set_process(true)
 
 
 func _process(delta: float) -> void:
-	_elapsed = fmod(_elapsed + delta, cycle_seconds)
+	_elapsed = fmod(_elapsed + delta, maxf(cycle_seconds, 0.01))
 	queue_redraw()
 
 
+func get_footprint_size() -> Vector2:
+	return Vector2(
+		float(maxi(1, tile_footprint.x)) * TILE_SIZE,
+		float(maxi(1, tile_footprint.y)) * TILE_SIZE
+	)
+
+
+func get_flow_vector() -> Vector2:
+	match flow_direction:
+		"down":
+			return Vector2.DOWN
+		"left":
+			return Vector2.LEFT
+		"right":
+			return Vector2.RIGHT
+		_:
+			return Vector2.UP
+
+
 func _draw() -> void:
-	if particle_count <= 0 or cycle_seconds <= 0.0:
-		return
+	var size := get_footprint_size()
+	var half_size := size * 0.5
+	var safe_cycle := maxf(cycle_seconds, 0.01)
+	var flow_vector := get_flow_vector()
+	var cross_vector := Vector2(-flow_vector.y, flow_vector.x)
+	var flow_extent := absf(flow_vector.x) * half_size.x + absf(flow_vector.y) * half_size.y
 
-	if _particles.size() != particle_count:
-		_rebuild_particles()
-
-	for particle in _particles:
-		var progress := fmod((_elapsed / cycle_seconds) + float(particle["phase"]), 1.0)
-		var x_offset := float(particle["x_offset"])
-		var sway := sin((_elapsed * float(particle["sway_speed"])) + float(particle["sway_phase"])) * float(particle["sway_width"])
-		var pulse := 0.78 + 0.22 * sin((progress * TAU) + float(particle["phase"]) * TAU)
-		var position := Vector2(x_offset + sway, (0.5 - progress) * height + float(particle["y_offset"]))
-		var alpha := pulse * tint.a
-		var color := Color(tint.r, tint.g, tint.b, alpha)
-		var radius := particle_radius * float(particle["scale"]) * pulse
-		draw_circle(position, radius, color)
-
-
-func _rebuild_particles() -> void:
-	_particles.clear()
-	var count: int = maxi(particle_count, 0)
-	if count == 0:
-		return
-
-	for index in range(count):
-		var seed: float = float(index + 1)
-		_particles.append({
-			"phase": fmod(seed * 0.61803398875, 1.0),
-			"x_offset": (fmod(seed * 37.31, 1.0) - 0.5) * width,
-			"y_offset": (fmod(seed * 19.73, 1.0) - 0.5) * height,
-			"sway_phase": seed * 2.41,
-			"sway_speed": 2.0 + fmod(seed * 1.37, 1.0) * 2.0,
-			"sway_width": 1.5 + fmod(seed * 2.13, 1.0) * 3.5,
-			"scale": 0.7 + fmod(seed * 5.17, 1.0) * 0.65,
-		})
+	for chevron_index in range(3):
+		var progress := fmod((_elapsed / safe_cycle) + float(chevron_index) / 3.0, 1.0)
+		var center := (
+			-flow_vector * (flow_extent - 6.0)
+			+ flow_vector * ((flow_extent - 6.0) * 2.0 * progress)
+		)
+		var alpha := sin(progress * PI) * tint.a
+		draw_polyline(
+			PackedVector2Array([
+				center - flow_vector * 4.0 - cross_vector * 6.0,
+				center + flow_vector * 2.0,
+				center - flow_vector * 4.0 + cross_vector * 6.0,
+			]),
+			Color(tint.r, tint.g, tint.b, alpha),
+			2.5,
+			true
+		)

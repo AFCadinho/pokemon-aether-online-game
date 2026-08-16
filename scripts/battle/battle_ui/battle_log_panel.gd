@@ -4,16 +4,20 @@ class_name BattleLogPanel
 
 @onready var log_text: RichTextLabel = $MarginContainer/VBoxContainer/BattleLogText
 
-const COLOR_TEXT := "#dfeafa"
-const COLOR_MUTED := "#91a6c8"
+const COLOR_TEXT := "#e6eefb"
+const COLOR_MUTED := "#a9bad4"
 const COLOR_TURN := "#62d7ff"
-const COLOR_FIELD := "#9fd7ff"
+const COLOR_FIELD := "#8fc5ff"
 const COLOR_DETAIL := "#b8c9e3"
-const COLOR_WARNING := "#ffcf8a"
+const COLOR_WARNING := "#ffd080"
 const COLOR_DIVIDER := "#2468b5"
-const COLOR_MOVE := "#c9edff"
-const COLOR_DAMAGE := "#ff8f8f"
-const COLOR_HEAL := "#8ff0a4"
+const COLOR_MOVE := "#86dcff"
+const COLOR_DAMAGE := "#ff929f"
+const COLOR_HEAL := "#8ee6a5"
+const COLOR_EFFECT := "#c5b3ff"
+const COLOR_STATUS := "#f2c879"
+const COLOR_FAINT := "#ff7f91"
+const COLOR_RESULT := "#ffe08a"
 
 var log_buffer := ""
 
@@ -25,9 +29,9 @@ func clear_log() -> void:
 	log_buffer = ""
 	_sync_log_text()
 	
-func add_message(message: String) -> void:
+func add_message(message: String, kind := "") -> void:
 	_append_spacing()
-	log_buffer += _format_message(message)
+	log_buffer += _format_message(message, kind)
 	_sync_log_text()
 	_scroll_to_bottom.call_deferred()
 		
@@ -74,20 +78,23 @@ func _append_spacing() -> void:
 func _sync_log_text() -> void:
 	log_text.text = log_buffer
 
-func _format_message(message: String) -> String:
+func _format_message(message: String, kind := "") -> String:
 	var lines := PackedStringArray()
 	for raw_line in message.split("\n"):
 		var line := str(raw_line).strip_edges()
 		if line == "":
 			continue
 
-		lines.append(_format_line(line))
+		lines.append(_format_line(line, kind))
 
 	return "\n".join(lines)
 
-func _format_line(line: String) -> String:
+func _format_line(line: String, kind := "") -> String:
 	var escaped := _escape_bbcode(line)
 	var lower := line.to_lower()
+	var explicit_color := _get_kind_color(kind)
+	if explicit_color != "":
+		return "[color=%s]%s[/color]" % [explicit_color, escaped]
 
 	if line.begins_with("(") and line.ends_with(")"):
 		if _is_damage_line(lower):
@@ -127,6 +134,32 @@ func _format_line(line: String) -> String:
 		return "[color=%s]%s[/color]" % [COLOR_MUTED, escaped]
 
 	return "[color=%s]%s[/color]" % [COLOR_TEXT, escaped]
+
+func _get_kind_color(kind: String) -> String:
+	match kind:
+		"move":
+			return COLOR_MOVE
+		"switch":
+			return COLOR_MUTED
+		"damage":
+			return COLOR_DAMAGE
+		"heal":
+			return COLOR_HEAL
+		"field":
+			return COLOR_FIELD
+		"effect":
+			return COLOR_EFFECT
+		"status":
+			return COLOR_STATUS
+		"warning":
+			return COLOR_WARNING
+		"faint":
+			return COLOR_FAINT
+		"result":
+			return COLOR_RESULT
+		"detail":
+			return COLOR_DETAIL
+	return ""
 
 func _is_damage_line(lower: String) -> bool:
 	return (

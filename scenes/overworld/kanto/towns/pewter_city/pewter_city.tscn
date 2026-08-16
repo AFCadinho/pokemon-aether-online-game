@@ -6,14 +6,11 @@
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="4_metadata"]
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="5_2mtwu"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="6_frcun"]
-[ext_resource type="PackedScene" path="res://scenes/world/interactables/locked_door_interactable.tscn" id="25_locked_door"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="6_kp2ru"]
 [ext_resource type="Script" uid="uid://babnhtwtaiewv" path="res://scripts/world/map_door_animator.gd" id="7_door_animator"]
-[ext_resource type="SpriteFrames" uid="uid://dlh8wgpn7hn78" path="res://assets/npcs/gym_leaders/alpha_brock_frames.tres" id="11_yr2ka"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="12_vw642"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/building_window_light.tscn" id="13_4hm78"]
-[ext_resource type="PackedScene" uid="uid://ds0lg7oj5khbm" path="res://scenes/npcs/gym_leader_npc.tscn" id="14_gym_leader"]
-[ext_resource type="Resource" uid="uid://bnjoxn7rvxpam" path="res://resources/npcs/gym_leaders/alpha_brock.tres" id="15_brock"]
+[ext_resource type="PackedScene" uid="uid://b8s7eihsl5ikf" path="res://scenes/world/interactables/sign_interactable.tscn" id="17_cisdr"]
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="18_dialogue"]
 [ext_resource type="SpriteFrames" uid="uid://caas815hh7buy" path="res://assets/npcs/classes/scientist_m_frames.tres" id="19_scientist"]
 [ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="20_hiker"]
@@ -21,12 +18,16 @@
 [ext_resource type="SpriteFrames" uid="uid://itfidf78jmm5" path="res://assets/npcs/classes/worker_frames.tres" id="22_worker"]
 [ext_resource type="SpriteFrames" uid="uid://yaxkjlx3spjb" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="23_poke_fan_f"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="24_pokemon"]
+[ext_resource type="PackedScene" uid="uid://csmsqlujka4ma" path="res://scenes/world/interactables/locked_door_interactable.tscn" id="25_locked_door"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="26_transit_keeper"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_beacon_placeholder.tscn" id="27_aether_beacon"]
+[ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="28_gate_npc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2mtwu"]
-size = Vector2(192, 32)
+size = Vector2(192, 40)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route3_exit"]
-size = Vector2(32, 160)
+size = Vector2(48, 192)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kp2ru"]
 texture = ExtResource("5_2mtwu")
@@ -145,7 +146,7 @@ world_access_group_label = "Pewter City"
 location_id = "kanto.pewter_city"
 location_name = "Pewter City"
 region_id = "kanto"
-music_track_path = "res://assets/music/overworld/kanto/towns/viridian_city.ogg"
+music_track_id = "overworld.kanto.viridian_city"
 
 [node name="PewterCity" parent="." unique_id=1507076430 instance=ExtResource("1_kr88e")]
 
@@ -171,7 +172,7 @@ position = Vector2(848, 1872)
 position = Vector2(1872, 1072)
 
 [node name="FromGym" type="Marker2D" parent="Spawns" unique_id=700914719]
-position = Vector2(592, 592)
+position = Vector2(592, 560)
 
 [node name="FromMuseum" type="Marker2D" parent="Spawns" unique_id=776891898]
 position = Vector2(1392, 432)
@@ -185,6 +186,9 @@ position = Vector2(1104, 1008)
 [node name="FromHouse2" type="Marker2D" parent="Spawns" unique_id=1272194160]
 position = Vector2(464, 1584)
 
+[node name="TransitArrival" type="Marker2D" parent="Spawns" unique_id=581578039]
+position = Vector2(1520, 976)
+
 [node name="Exits" type="Node2D" parent="." unique_id=109747091]
 
 [node name="ToRoute2" type="Area2D" parent="Exits" unique_id=1956639696]
@@ -194,11 +198,13 @@ target_scene_path = "uid://cnbfksossjfg7"
 target_spawn_name = "FromPewterCity"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute2" unique_id=56126881]
+position = Vector2(0, 12)
 shape = SubResource("RectangleShape2D_2mtwu")
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute2" unique_id=359876710 instance=ExtResource("3_2hpv6")]
-position = Vector2(-16, 0)
-width = 194.0
+z_as_relative = false
+tile_footprint = Vector2i(5, 1)
+flow_direction = "down"
 
 [node name="ToRoute3" type="Area2D" parent="Exits" unique_id=755761727]
 position = Vector2(1920, 1056)
@@ -208,13 +214,14 @@ target_spawn_name = "FromPewterCity"
 transition_id = "kanto_pewter_city__to_route_3"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute3" unique_id=1591807988]
-position = Vector2(-16, 16)
+position = Vector2(-8, 16)
 shape = SubResource("RectangleShape2D_route3_exit")
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute3" unique_id=755761728 instance=ExtResource("3_2hpv6")]
+z_as_relative = false
 position = Vector2(-16, 16)
-width = 32.0
-height = 160.0
+tile_footprint = Vector2i(1, 5)
+flow_direction = "right"
 
 [node name="ToPokecenter" type="Area2D" parent="Exits" unique_id=1851330212]
 position = Vector2(1424, 1520)
@@ -227,14 +234,22 @@ position = Vector2(0, -16)
 shape = SubResource("RectangleShape2D_2mtwu")
 
 [node name="DoorTransitionHint" parent="Exits/ToPokecenter" unique_id=43017231 instance=ExtResource("6_frcun")]
+z_as_relative = false
 position = Vector2(0, -16)
 
 [node name="ToGym" type="Area2D" parent="Exits" unique_id=1528691859]
 position = Vector2(592, 528)
+script = ExtResource("2_jtxgn")
+target_scene_path = "res://scenes/overworld/kanto/towns/pewter_city/pewter_gym.tscn"
+target_spawn_name = "FromPewterCity"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToGym" unique_id=1730913991]
 position = Vector2(0, -16)
 shape = SubResource("RectangleShape2D_2mtwu")
+
+[node name="DoorTransitionHint" parent="Exits/ToGym" unique_id=1666455636 instance=ExtResource("6_frcun")]
+z_as_relative = false
+tile_footprint = Vector2i(1, 2)
 
 [node name="ToMuseum" type="Area2D" parent="Exits" unique_id=1789742615]
 position = Vector2(1392, 368)
@@ -243,37 +258,49 @@ position = Vector2(1392, 368)
 position = Vector2(0, -16)
 shape = SubResource("RectangleShape2D_2mtwu")
 
+[node name="DoorTransitionHint" parent="Exits/ToMuseum" unique_id=2136780485 instance=ExtResource("6_frcun")]
+z_as_relative = false
+
 [node name="ToHouse1" type="Area2D" parent="Exits" unique_id=2138960520]
 position = Vector2(1200, 1040)
+script = ExtResource("2_jtxgn")
+target_scene_path = "res://scenes/overworld/kanto/towns/pewter_city/house1.tscn"
+target_spawn_name = "FromPewterCity"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse1" unique_id=1866582334]
-position = Vector2(-96, -96)
+position = Vector2(-96, -104)
 shape = SubResource("RectangleShape2D_2mtwu")
 
 [node name="DoorTransitionHint" parent="Exits/ToHouse1" unique_id=100386195 instance=ExtResource("6_frcun")]
-position = Vector2(-736, 480)
+z_as_relative = false
+position = Vector2(-96, -96)
 
 [node name="ToHouse2" type="Area2D" parent="Exits" unique_id=321825155]
 position = Vector2(464, 1520)
+script = ExtResource("2_jtxgn")
+target_scene_path = "res://scenes/overworld/kanto/towns/pewter_city/house2.tscn"
+target_spawn_name = "FromPewterCity"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse2" unique_id=1165082321]
+position = Vector2(0, -8)
 shape = SubResource("RectangleShape2D_2mtwu")
 
 [node name="DoorTransitionHint" parent="Exits/ToHouse2" unique_id=1293932138 instance=ExtResource("6_frcun")]
-position = Vector2(640, -576)
+z_as_relative = false
 
 [node name="Entities" type="Node2D" parent="." unique_id=1394205860]
 z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1616337549]
 
-[node name="AlphaGymBrock" parent="Entities/NPCs" unique_id=101151216 instance=ExtResource("14_gym_leader")]
-position = Vector2(592, 560)
-trainer_id = "kanto_alpha_gym_brock"
-npc_profile = ExtResource("15_brock")
-npc_id = "kanto_alpha_gym_brock"
-display_name = "Alpha Trial · Brock"
-npc_sprite_frames = ExtResource("11_yr2ka")
+[node name="Route3Guard" parent="Entities/NPCs" unique_id=1988861091 instance=ExtResource("28_gate_npc")]
+position = Vector2(1872, 1008)
+guard_role = "transition_guard"
+guarded_transition_id = "kanto_pewter_city__to_route_3"
+requires_party_pokemon = false
+npc_id = "kanto_pewter_city_route_3_guard"
+display_name = "Pewter Route Guard"
+facing_direction = Vector2(-1, 0)
 
 [node name="MuseumGuideTheo" parent="Entities/NPCs" unique_id=1013507065 instance=ExtResource("18_dialogue")]
 position = Vector2(1456, 560)
@@ -291,7 +318,7 @@ facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("20_hiker")
 
 [node name="GymFanMax" parent="Entities/NPCs" unique_id=399681030 instance=ExtResource("18_dialogue")]
-position = Vector2(688, 560)
+position = Vector2(496, 560)
 npc_id = "kanto_pewter_city_gym_fan_max"
 npc_definition_id = "trainer_class_youngster"
 display_name = "Gym Fan Max"
@@ -312,6 +339,11 @@ npc_id = "kanto_pewter_city_resident_nora"
 npc_definition_id = "trainer_class_poke_fan_f"
 display_name = "Pewter Resident Nora"
 npc_sprite_frames = ExtResource("23_poke_fan_f")
+
+[node name="TransitKeeper" parent="Entities/NPCs" unique_id=309936657 instance=ExtResource("26_transit_keeper")]
+position = Vector2(1488, 976)
+local_destination_id = "kanto_pewter_city"
+npc_id = "kanto_pewter_city_transit_keeper"
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=913732015]
 
@@ -341,30 +373,43 @@ movement_speed_pixels = 48.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1638978152]
 
-[node name="PokemonCenterDoorLock" parent="Entities/Interactables" instance=ExtResource("25_locked_door")]
+[node name="AetherBeacon" parent="Entities/Interactables" unique_id=697101251 instance=ExtResource("27_aether_beacon")]
+z_index = 944
+position = Vector2(1520, 944)
+interactable_id = "kanto_pewter_city_aether_beacon"
+destination_id = "kanto_pewter_city"
+
+[node name="PokemonCenterDoorLock" parent="Entities/Interactables" unique_id=1082600175 instance=ExtResource("25_locked_door")]
 position = Vector2(1424, 1504)
-display_name = "Pewter City Pokémon Center"
 area_id = "kanto_pewter_city_pokemon_center"
+display_name = "Pewter City Pokémon Center"
 
-[node name="GymDoorLock" parent="Entities/Interactables" instance=ExtResource("25_locked_door")]
+[node name="GymDoorLock" parent="Entities/Interactables" unique_id=1170623881 instance=ExtResource("25_locked_door")]
 position = Vector2(592, 512)
-display_name = "Pewter City Gym"
 area_id = "kanto_pewter_city_gym"
+display_name = "Pewter City Gym"
 
-[node name="MuseumDoorLock" parent="Entities/Interactables" instance=ExtResource("25_locked_door")]
+[node name="MuseumDoorLock" parent="Entities/Interactables" unique_id=870728684 instance=ExtResource("25_locked_door")]
 position = Vector2(1392, 352)
-display_name = "Pewter City Museum"
 area_id = "kanto_pewter_city_museum"
+display_name = "Pewter City Museum"
 
-[node name="House1DoorLock" parent="Entities/Interactables" instance=ExtResource("25_locked_door")]
-position = Vector2(1200, 1024)
-display_name = "Pewter City House 1"
+[node name="House1DoorLock" parent="Entities/Interactables" unique_id=1209458347 instance=ExtResource("25_locked_door")]
+position = Vector2(1104, 928)
 area_id = "kanto_pewter_city_house_1"
+display_name = "Pewter City House 1"
 
-[node name="House2DoorLock" parent="Entities/Interactables" instance=ExtResource("25_locked_door")]
+[node name="House2DoorLock" parent="Entities/Interactables" unique_id=83824855 instance=ExtResource("25_locked_door")]
 position = Vector2(464, 1504)
-display_name = "Pewter City House 2"
 area_id = "kanto_pewter_city_house_2"
+display_name = "Pewter City House 2"
+
+[node name="Signs" type="Node2D" parent="Entities/Interactables" unique_id=1083765197]
+
+[node name="GymSign" parent="Entities/Interactables/Signs" unique_id=1449815395 instance=ExtResource("17_cisdr")]
+position = Vector2(656, 560)
+sign_id = "kanto_pewter_city_gym"
+sign_type = "building"
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=1977913234]
 visible = false
@@ -467,6 +512,18 @@ position = Vector2(1520, 1488)
 [node name="BuildingWindowLight10" parent="NightLights/Window" unique_id=1544342927 instance=ExtResource("13_4hm78")]
 position = Vector2(1424, 1488)
 
+[node name="BuildingWindowLight11" parent="NightLights/Window" unique_id=1497693357 instance=ExtResource("13_4hm78")]
+position = Vector2(496, 496)
+
+[node name="BuildingWindowLight12" parent="NightLights/Window" unique_id=1997209179 instance=ExtResource("13_4hm78")]
+position = Vector2(688, 496)
+
+[node name="BuildingWindowLight13" parent="NightLights/Window" unique_id=104097313 instance=ExtResource("13_4hm78")]
+position = Vector2(592, 528)
+
 [connection signal="body_entered" from="Exits/ToRoute2" to="Exits/ToRoute2" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute3" to="Exits/ToRoute3" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToPokecenter" to="Exits/ToPokecenter" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToGym" to="Exits/ToGym" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToHouse1" to="Exits/ToHouse1" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToHouse2" to="Exits/ToHouse2" method="_on_body_entered"]

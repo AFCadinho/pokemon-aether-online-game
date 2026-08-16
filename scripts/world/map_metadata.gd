@@ -10,12 +10,15 @@ extends Node2D
 @export var location_name := ""
 @export var region_id := ""
 @export var encounter_area_id := ""
+@export_group("Battle")
+@export_enum("grass", "water", "cave") var battle_environment_id := "grass"
+@export_group("")
 @export_enum("outdoor", "indoor", "dark") var lighting_profile := "outdoor"
 @export_enum("outdoor", "disabled") var weather_profile := "outdoor"
 @export_range(0.0, 1.0, 0.01) var grass_encounter_chance := 0.0
-# An explicit track always wins. Leave this empty for a regular interior that
-# should inherit the track associated with its town or city music profile.
-@export_file("*.ogg") var music_track_path := ""
+# An explicit track ID always wins. Leave this empty for a regular interior
+# that should inherit the track associated with its town or city music profile.
+@export var music_track_id := ""
 @export var music_profile_id := ""
 
 
@@ -41,6 +44,10 @@ func get_map_region_name() -> String:
 	return map_region_name
 
 
+func get_world_access_area_type() -> String:
+	return world_access_area_type
+
+
 func get_location_metadata() -> Dictionary:
 	return {
 		"locationId": location_id if location_id.strip_edges() != "" else map_id,
@@ -48,11 +55,16 @@ func get_location_metadata() -> Dictionary:
 		"regionId": region_id if region_id.strip_edges() != "" else map_region_name.to_lower().replace(" ", "_"),
 		"regionName": map_region_name,
 		"mapId": map_id,
+		"battleEnvironmentId": battle_environment_id,
 	}
 
 
-func get_music_track_path() -> String:
-	return music_track_path
+func get_battle_environment_id() -> String:
+	return battle_environment_id
+
+
+func get_music_track_id() -> String:
+	return music_track_id
 
 
 func get_music_profile_id() -> String:

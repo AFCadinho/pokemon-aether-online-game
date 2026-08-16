@@ -7,6 +7,8 @@ const QUEST_LOCALIZATION_KEYS: Array[String] = [
 	"ui.quest.log_subtitle",
 	"ui.quest.main_story",
 	"ui.quest.side_quest",
+	"ui.quest.previous_side",
+	"ui.quest.next_side",
 	"ui.quest.list_heading",
 	"ui.quest.objectives",
 	"ui.quest.rewards",
@@ -48,6 +50,16 @@ const QUEST_LOCALIZATION_KEYS: Array[String] = [
 	"story.kanto.get_town_map.summary",
 	"story.kanto.get_town_map.visit_father",
 	"story.kanto.get_town_map.receive_town_map",
+	"story.kanto.learn_to_fish.title",
+	"story.kanto.learn_to_fish.summary",
+	"story.kanto.learn_to_fish.receive_old_rod",
+	"story.kanto.learn_to_fish.catch_fishing_pokemon",
+	"story.kanto.learn_to_fish.return_to_fishing_guru",
+	"story.kanto.learn_to_pickpocket.title",
+	"story.kanto.learn_to_pickpocket.summary",
+	"story.kanto.learn_to_pickpocket.elderly",
+	"story.kanto.learn_to_pickpocket.child",
+	"story.kanto.learn_to_pickpocket.return_to_rook",
 	"story.kanto.catch_mankey.title",
 	"story.kanto.catch_mankey.summary",
 	"story.kanto.catch_mankey.catch",
@@ -56,9 +68,15 @@ const QUEST_LOCALIZATION_KEYS: Array[String] = [
 	"story.kanto.reach_viridian_city.summary",
 	"story.kanto.reach_viridian_city.travel",
 	"story.kanto.reach_viridian_city.return",
+	"story.kanto.trainer_school.title",
+	"story.kanto.trainer_school.summary",
+	"story.kanto.trainer_school.meet_dadinho",
 	"story.kanto.challenge_pewter_gym.title",
 	"story.kanto.challenge_pewter_gym.summary",
 	"story.kanto.challenge_pewter_gym.challenge_brock",
+	"story.kanto.travel_through_mt_moon.title",
+	"story.kanto.travel_through_mt_moon.summary",
+	"story.kanto.travel_through_mt_moon.cross_mt_moon",
 ]
 
 var failed := false
@@ -77,6 +95,22 @@ func _run() -> void:
 		var catalog: Dictionary = localization_manager.get_catalog(locale)
 		for key: String in QUEST_LOCALIZATION_KEYS:
 			_expect(catalog.has(key), "%s quest catalog contains %s" % [locale, key])
+	var english_catalog: Dictionary = localization_manager.get_catalog("en")
+	_expect(
+		str(english_catalog.get("story.kanto.trainer_school.meet_dadinho", ""))
+		== "Go to the Trainer School in Viridian City and see if you can learn something new.",
+		"Trainer School objective invites exploration without revealing Dadinho"
+	)
+	_expect(
+		str(english_catalog.get("story.kanto.travel_through_mt_moon.title", ""))
+		== "Travel through Mt. Moon",
+		"post-Brock main quest is framed around Mt. Moon"
+	)
+	_expect(
+		str(english_catalog.get("story.kanto.travel_through_mt_moon.cross_mt_moon", ""))
+		== "Travel through Mt. Moon.",
+		"post-Brock objective does not skip ahead to Cerulean City"
+	)
 	story_service.apply_story({
 		"revision": 1,
 		"quests": [{
@@ -119,6 +153,21 @@ func _run() -> void:
 				"targetValue": 1,
 			}],
 		}, {
+			"questId": "find_friend",
+			"storylineId": "pallet_side_two",
+			"definitionVersion": 1,
+			"questType": "side",
+			"titleKey": "",
+			"summaryKey": "",
+			"status": "active",
+			"steps": [{
+				"stepId": "ask_around",
+				"objectiveKey": "",
+				"status": "active",
+				"currentValue": 0,
+				"targetValue": 1,
+			}],
+		}, {
 			"questId": "lost_keepsake",
 			"storylineId": "pallet_side_offer",
 			"definitionVersion": 1,
@@ -140,11 +189,11 @@ func _run() -> void:
 	var active_objective: Dictionary = journal_service.get_active_objective(active_quest)
 	_expect(active_quest.get("questId", "") == "choose_starter", "journal selects the active MSQ")
 	_expect(
-		journal_service.get_active_side_quests().size() == 1,
+		journal_service.get_active_side_quests().size() == 2,
 		"journal exposes active side quests without replacing the active MSQ"
 	)
 	_expect(
-		journal_service.get_entries().size() == 2,
+		journal_service.get_entries().size() == 3,
 		"available side-quest offers stay hidden until the player accepts them"
 	)
 	_expect(
@@ -191,6 +240,30 @@ func _run() -> void:
 		and view.side_tracker_objective_label.text == "› Find Parcel",
 		"HUD renders active side-quest data below the main story"
 	)
+	_expect(
+		view.side_tracker_previous_button.visible
+		and view.side_tracker_next_button.visible
+		and view.side_tracker_position_label.text == "1/2",
+		"multiple active side quests expose compact tracker navigation"
+	)
+	view.side_tracker_next_button.pressed.emit()
+	_expect(
+		view.side_tracker_title_label.text == "Find Friend"
+		and view.side_tracker_objective_label.text == "› Ask Around"
+		and view.side_tracker_position_label.text == "2/2",
+		"next side-quest navigation updates the visible tracker card"
+	)
+	view.refresh()
+	_expect(
+		view.side_tracker_title_label.text == "Find Friend",
+		"the selected side quest remains stable across tracker refreshes"
+	)
+	view.side_tracker_previous_button.pressed.emit()
+	_expect(
+		view.side_tracker_title_label.text == "Help Neighbor"
+		and view.side_tracker_position_label.text == "1/2",
+		"previous side-quest navigation wraps back through active quests"
+	)
 	_expect(view.get_visible_tracker_count() == 2, "HUD reports both active quest trackers")
 	view.tracker_collapse_button.pressed.emit()
 	_expect(
@@ -207,6 +280,29 @@ func _run() -> void:
 		and view.get_visible_tracker_count() == 2,
 		"quest tracker group expands with its data-driven contents intact"
 	)
+	var tracker_click := InputEventMouseButton.new()
+	tracker_click.button_index = MOUSE_BUTTON_LEFT
+	tracker_click.pressed = true
+	view.set_filter("main")
+	view.side_tracker_panel.gui_input.emit(tracker_click)
+	await process_frame
+	_expect(
+		view.is_journal_open()
+		and view.selected_quest_id == "help_neighbor"
+		and view.selected_filter == "all"
+		and view.detail_title_label.text == "Help Neighbor",
+		"clicking the side tracker opens that side quest even from an incompatible filter"
+	)
+	view.close_journal()
+	view.tracker_panel.gui_input.emit(tracker_click)
+	await process_frame
+	_expect(
+		view.is_journal_open()
+		and view.selected_quest_id == "choose_starter"
+		and view.detail_title_label.text == "A Journey Begins",
+		"clicking the main tracker opens the active main quest in the journal"
+	)
+	view.close_journal()
 	view.set_tracker_top_offset(152.0)
 	_expect(
 		view.tracker_panel.get_global_rect().position.y == 152.0
@@ -238,9 +334,9 @@ func _run() -> void:
 	localization_manager.set_locale("en")
 	await process_frame
 	_expect(view.detail_steps.get_child_count() == 1, "journal renders only revealed objectives")
-	_expect(view.filter_buttons["all"].text == "All  2", "all filter includes accepted quests only")
+	_expect(view.filter_buttons["all"].text == "All  3", "all filter includes accepted quests only")
 	_expect(view.filter_buttons["main"].text == "Main  1", "main filter reports its quest count")
-	_expect(view.filter_buttons["side"].text == "Side  1", "side filter includes accepted side quests")
+	_expect(view.filter_buttons["side"].text == "Side  2", "side filter includes accepted side quests")
 	_expect(
 		view.filter_buttons["completed"].text == "Completed  0",
 		"completed filter reports its quest count"
@@ -313,6 +409,8 @@ func _run() -> void:
 	_expect(
 		view.tracker_panel.visible
 		and not view.side_tracker_panel.visible
+		and not view.side_tracker_previous_button.visible
+		and not view.side_tracker_next_button.visible
 		and view.get_visible_tracker_count() == 1,
 		"side tracker disappears when no active side quest remains"
 	)
@@ -341,6 +439,8 @@ func _run() -> void:
 	_expect(
 		not view.tracker_panel.visible
 		and view.side_tracker_panel.visible
+		and not view.side_tracker_previous_button.visible
+		and not view.side_tracker_next_button.visible
 		and view.side_tracker_panel.get_global_rect().position.y == 76.0
 		and view.get_visible_tracker_count() == 1,
 		"side quests occupy the first tracker position when no main quest is active"

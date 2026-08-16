@@ -88,7 +88,7 @@ func _check_catalogs() -> void:
 		_check(parsed is Dictionary, "generated %s item catalog is valid JSON" % locale)
 		var catalog: Dictionary = parsed as Dictionary if parsed is Dictionary else {}
 		generated_catalogs[locale] = catalog
-		_check(catalog.size() == 1395, "generated %s item catalog covers the complete source index" % locale)
+		_check(catalog.size() == 1396, "generated %s item catalog covers the complete source index" % locale)
 		for item_id_value: Variant in catalog.keys():
 			var item_id := str(item_id_value)
 			var entry: Dictionary = catalog.get(item_id, {})
@@ -112,7 +112,7 @@ func _check_catalogs() -> void:
 		localized_ids.sort()
 		_check(localized_ids == expected_generated_ids, "generated %s item IDs match English" % locale)
 		_check(
-			(item_localization.call("get_catalog", locale) as Dictionary).size() == 1396,
+			(item_localization.call("get_catalog", locale) as Dictionary).size() == 1397,
 			"%s complete item catalog plus virtual Escape Rope action loads into the runtime resolver" % locale
 		)
 
@@ -220,10 +220,24 @@ func _check_overlay_integration() -> void:
 		"category": "medicine",
 		"shortDesc": "Restores 20 HP.",
 		"costs": [{"currency": "money", "amount": 300}],
+		"available": true,
+	}, {
+		"itemId": "ultra-ball",
+		"name": "Ultra Ball",
+		"category": "poke-balls",
+		"costs": [{"currency": "money", "amount": 1200}],
+		"requiredBadges": 6,
+		"available": false,
 	}])
 	_check(
-		market_items.size() == 1 and (market_items[0] as Dictionary).get("shortDesc") == "Herstelt 20 HP.",
+		market_items.size() == 2 and (market_items[0] as Dictionary).get("shortDesc") == "Herstelt 20 HP.",
 		"Market normalization reuses the item resolver"
+	)
+	var available_market_items: Array = overlay.call("_market_available_buy_items", market_items)
+	_check(
+		available_market_items.size() == 1
+		and (available_market_items[0] as Dictionary).get("id") == "potion",
+		"Market purchase stock hides items above the player's badge tier"
 	)
 
 	for loader_property: String in ["pokemon_summary_sprite_loader", "pokedex_sprite_loader"]:

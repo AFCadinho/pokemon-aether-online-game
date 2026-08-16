@@ -176,6 +176,7 @@ func normalize_species_base_for_compare(species: String) -> String:
 	for suffix in [
 		"-alola", "-galar", "-hisui", "-paldea",
 		"-therian", "-incarnate", "-origin", "-altered",
+		"-terastal",
 		"-wash", "-heat", "-frost", "-fan", "-mow",
 		"-sky", "-land", "-blade", "-shield",
 	]:

@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="4_floor_mask"]
 [ext_resource type="Texture2D" uid="uid://clkvciqjhtjin" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_088_Policeman.png" id="5_c8c1k"]
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="6_qigtg"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="7_route_hint"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_side_wall"]
 size = Vector2(32, 416)
@@ -194,12 +195,20 @@ script = ExtResource("3_map_exit")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToNorth" unique_id=160937999]
 shape = SubResource("RectangleShape2D_exit")
 
+[node name="RouteTransitionHint" parent="Exits/ToNorth" instance=ExtResource("7_route_hint")]
+tile_footprint = Vector2i(3, 1)
+flow_direction = "up"
+
 [node name="ToSouth" type="Area2D" parent="Exits" unique_id=983895870]
 position = Vector2(336, 624)
 script = ExtResource("3_map_exit")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToSouth" unique_id=609280875]
 shape = SubResource("RectangleShape2D_exit")
+
+[node name="RouteTransitionHint" parent="Exits/ToSouth" instance=ExtResource("7_route_hint")]
+tile_footprint = Vector2i(3, 1)
+flow_direction = "down"
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=607925241]
 visible = false

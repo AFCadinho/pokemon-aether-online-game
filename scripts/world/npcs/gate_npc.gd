@@ -229,7 +229,7 @@ func _get_metadata_dialogue_id(metadata: Dictionary, camel_key: String, snake_ke
 	return metadata_dialogue_id
 
 
-func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Array[String]) -> Array[String]:
+func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Array) -> Array[String]:
 	return await NpcDialogueService.resolve_lines(
 		dialogue_reference_id,
 		fallback_lines,
@@ -267,6 +267,8 @@ func _on_guard_party_changed() -> void:
 
 func _on_guard_story_changed(_revision: int) -> void:
 	_sync_guard_presence()
+	if not guarded_transition_id.strip_edges().is_empty():
+		Callable(self, "_refresh_transition_access").call_deferred(true)
 
 
 func _sync_guard_presence() -> void:

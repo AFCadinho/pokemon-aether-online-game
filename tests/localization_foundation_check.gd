@@ -153,6 +153,7 @@ func _check_settings_scene_translation() -> void:
 	var tabs := menu.find_child("SettingsTabs", true, false) as TabContainer
 	var workspace := menu.find_child("SettingsWorkspace", true, false) as HBoxContainer
 	var navigation := menu.find_child("SettingsNavigation", true, false) as VBoxContainer
+	var fishing_binding_button := menu.find_child("FishingBindingButton", true, false) as Button
 	_check(
 		title != null and title.text == "Instellingen",
 		"static settings text renders in Dutch (received %s)" % str(title.text if title != null else "<missing>")
@@ -178,6 +179,11 @@ func _check_settings_scene_translation() -> void:
 	)
 	_check(tabs != null and tabs.get_tab_title(0) == "Algemeen", "dynamic tab title renders in Dutch")
 	_check(tabs != null and tabs.get_tab_title(1) == "Taal", "language settings use a dedicated localized tab")
+	_check(tabs != null and tabs.get_tab_title(4) == "Besturing", "Fishing hotkeys use a dedicated Controls tab")
+	_check(
+		fishing_binding_button != null and not fishing_binding_button.text.is_empty(),
+		"Fishing hotkey control displays the active binding"
+	)
 	_check(
 		language_options != null
 		and language_options.find_parent("LanguageContent") != null

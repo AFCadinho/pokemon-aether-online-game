@@ -10,7 +10,7 @@ extends Node2D
 @export var location_name := "Viridian City"
 @export var region_id := "kanto"
 @export var encounter_area_id := "kanto_viridian_city"
-@export_file("*.ogg") var music_track_path := "res://assets/music/overworld/kanto/towns/viridian_city.ogg"
+@export var music_track_id := "overworld.kanto.viridian_city"
 
 const VISUALS_NODE_NAME := "ViridianCity"
 const DOOR_LAYER_NAME := "Door"
@@ -30,6 +30,7 @@ var door_tweens: Dictionary = {}
 
 
 func _ready() -> void:
+	_setup_ev_training_grass()
 	_setup_door_animation_groups()
 
 
@@ -59,8 +60,8 @@ func get_location_metadata() -> Dictionary:
 	}
 
 
-func get_music_track_path() -> String:
-	return music_track_path
+func get_music_track_id() -> String:
+	return music_track_id
 
 
 func get_wild_encounter_area_id() -> String:
@@ -69,6 +70,31 @@ func get_wild_encounter_area_id() -> String:
 
 func should_trigger_wild_encounter(encounter_type: String = "grass") -> bool:
 	return false
+
+
+func _setup_ev_training_grass() -> void:
+	if get_node_or_null("TallGrass") != null:
+		return
+	var visuals := get_node_or_null(VISUALS_NODE_NAME)
+	if visuals == null:
+		return
+	var visual_grass := visuals.get_node_or_null("Grass") as TileMapLayer
+	if visual_grass == null:
+		push_warning("Viridian City EV training grass layer was not found.")
+		return
+	var encounter_grass := TileMapLayer.new()
+	encounter_grass.name = "TallGrass"
+	encounter_grass.visible = false
+	encounter_grass.tile_set = visual_grass.tile_set
+	encounter_grass.position = visual_grass.position
+	add_child(encounter_grass)
+	for cell: Vector2i in visual_grass.get_used_cells():
+		encounter_grass.set_cell(
+			cell,
+			visual_grass.get_cell_source_id(cell),
+			visual_grass.get_cell_atlas_coords(cell),
+			visual_grass.get_cell_alternative_tile(cell)
+		)
 
 
 func is_position_blocked_by_character(world_position: Vector2) -> bool:

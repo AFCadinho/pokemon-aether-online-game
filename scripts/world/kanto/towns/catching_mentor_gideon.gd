@@ -5,6 +5,7 @@ class_name CatchingMentorGideon
 
 const CATCHING_QUEST_ID := "catch_route_22_mankey"
 const CATCHING_TURN_IN_STEP_ID := "return_to_gideon"
+const MENTOR_TOPIC_MENU := preload("res://scripts/ui/mentor_topic_menu.gd")
 
 var quest_reward_id := ""
 var quest_reward_received_dialogue_id := ""
@@ -20,10 +21,7 @@ func interact_with_player(_player: Node2D) -> void:
 		await _claim_catching_reward()
 		return
 	if StoryService.is_requirement_met(CATCHING_QUEST_ID, "", "completed"):
-		await show_dialogue(await _resolve_dialogue_lines(
-			quest_reward_completed_dialogue_id,
-			["Every successful catch begins with patience and preparation."]
-		))
+		await _show_completed_help()
 		return
 	await show_dialogue()
 
@@ -63,6 +61,9 @@ func _claim_catching_reward() -> void:
 		[
 			"Well done! You proved your potential as a Trainer.",
 			"Take these ten Great Balls. Better Poke Balls increase your catch rate.",
+			"A newly caught Pokemon may not immediately be as strong as the partners you have already trained. Give it time.",
+			"With enough training, every new partner can become a valuable member of your team.",
+			"Take this Lucky Egg too. A Pokemon holding it earns 50% more EXP from battle. I hope it serves you well.",
 			"Visit the Market Seller in any Pokemon Center when you need more.",
 		]
 	))
@@ -71,12 +72,69 @@ func _claim_catching_reward() -> void:
 		"add_system_message",
 		LocalizationManager.text("ui.quest.completed_reward", {
 			"quest": LocalizationManager.text("story.kanto.catch_mankey.title"),
-			"reward": "10 %s" % ItemLocalization.display_name("great-ball", "Great Balls"),
+			"reward": "10 %s + %s" % [
+				ItemLocalization.display_name("great-ball", "Great Balls"),
+				ItemLocalization.display_name("lucky-egg", "Lucky Egg"),
+			],
 		})
 	)
+	if bool(result.get("claimed", false)):
+		SfxManager.play("item_received")
 
 
-func _resolve_dialogue_lines(dialogue_id: String, fallback: Array[String]) -> Array[String]:
+func _show_completed_help() -> void:
+	var greeting: Array[String] = [LocalizationManager.text("mentor.gideon.help.greeting")]
+	if (
+		not quest_reward_completed_dialogue_id.is_empty()
+		and quest_reward_completed_dialogue_id != quest_reward_received_dialogue_id
+	):
+		greeting = await _resolve_dialogue_lines(quest_reward_completed_dialogue_id, greeting)
+	await show_dialogue(greeting)
+	while true:
+		var topic_id := await _choose_help_topic(
+			LocalizationManager.text("mentor.gideon.help.title"),
+			LocalizationManager.text("mentor.gideon.help.prompt"),
+			[
+				{"id": "finding", "label": LocalizationManager.text("mentor.gideon.help.topic.finding")},
+				{"id": "catching", "label": LocalizationManager.text("mentor.gideon.help.topic.catching")},
+				{"id": "odds", "label": LocalizationManager.text("mentor.gideon.help.topic.odds")},
+			]
+		)
+		if topic_id.is_empty():
+			return
+		await show_dialogue(_gideon_help_lines(topic_id), display_name)
+
+
+func _gideon_help_lines(topic_id: String) -> Array[String]:
+	var keys: Array[String] = []
+	match topic_id:
+		"finding":
+			keys = ["mentor.gideon.help.finding.1", "mentor.gideon.help.finding.2"]
+		"catching":
+			keys = ["mentor.gideon.help.catching.1", "mentor.gideon.help.catching.2"]
+		"odds":
+			keys = ["mentor.gideon.help.odds.1", "mentor.gideon.help.odds.2"]
+	var lines: Array[String] = []
+	for key: String in keys:
+		lines.append(LocalizationManager.text(key))
+	return lines
+
+
+func _choose_help_topic(title: String, prompt: String, topics: Array[Dictionary]) -> String:
+	var menu := MENTOR_TOPIC_MENU.new()
+	add_child(menu)
+	var topic_id: String = await menu.choose_topic(
+		title,
+		prompt,
+		topics,
+		LocalizationManager.text("ui.mentor_help.eyebrow"),
+		LocalizationManager.text("common.close")
+	)
+	menu.queue_free()
+	return topic_id
+
+
+func _resolve_dialogue_lines(dialogue_id: String, fallback: Array) -> Array[String]:
 	return await NpcDialogueService.resolve_lines(
 		dialogue_id,
 		fallback,
@@ -89,4 +147,4 @@ func _show_report_to_staff_message() -> void:
 	if error_service != null and error_service.has_method("show_report_to_staff_message"):
 		await error_service.call("show_report_to_staff_message")
 		return
-	await show_dialogue(["I cannot finish the catching lesson right now."])
+	await show_dialogue([LocalizationManager.text("npc.error.catching_lesson")])

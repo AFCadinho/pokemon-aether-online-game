@@ -25,7 +25,10 @@ const CODE_TO_KEY: Dictionary = {
 	"request_failed": "backend.error.generic",
 	"service_error": "backend.error.generic",
 	"not_enough_money": "backend.error.not_enough_money",
+	"market_badges_required": "backend.error.market_badges_required",
 	"not_enough_gems": "backend.error.not_enough_gems",
+	"transit_attunement_location_invalid": "backend.error.transit_wrong_location",
+	"transit_attunement_distance_invalid": "backend.error.transit_too_far",
 	"item_not_found": "backend.error.item_not_found",
 	"item_not_owned": "backend.error.item_not_owned",
 	"item_not_usable": "backend.error.item_not_usable",
@@ -47,6 +50,7 @@ const CODE_TO_KEY: Dictionary = {
 	"guild_invitation_resolved": "backend.error.guild_invitation_unavailable",
 	"guild_invitation_expired": "backend.error.guild_invitation_expired",
 	"guild_membership_not_found": "backend.error.guild_membership_not_found",
+	"guild_lobby_transit_attunement_required": "ui.guild.lobby.error.attunement_required",
 	"guild_not_found": "backend.error.guild_not_found",
 	"guild_leader_required": "backend.error.guild_leader_required",
 	"guild_emblem_template_not_found": "backend.error.guild_emblem_unavailable",
@@ -71,6 +75,7 @@ const CODE_TO_KEY: Dictionary = {
 	"trade_party_capacity_invalid": "ui.trade.error.party_space",
 	"trade_party_space_required": "ui.trade.error.party_space",
 	"trade_offer_required": "ui.trade.error.offer_required",
+	"trade_pokemon_level_cap_exceeded": "backend.error.trade_pokemon_level_cap_exceeded",
 	"trade_review_mismatch": "ui.trade.error.review_changed",
 	"trade_review_not_locked": "ui.trade.error.review_not_locked",
 	"trade_settlement_invalidated": "ui.trade.error.settlement_invalidated",
@@ -114,6 +119,10 @@ const CODE_TO_KEY: Dictionary = {
 	"fishing_level_required": "backend.error.fishing_level_required",
 	"fishing_badges_required": "backend.error.fishing_badges_required",
 	"no_usable_pokemon": "backend.error.no_usable_pokemon",
+	"pokemon_level_cap_reached": "backend.error.pokemon_level_cap_reached",
+	"pokemon_level_cap_party_ineligible": "backend.error.pokemon_level_cap_party_ineligible",
+	"pokemon_level_cap_authentication_required": "backend.error.auth_required",
+	"pokemon_level_cap_validation_unavailable": "backend.error.unavailable",
 	"npc_reward_not_found": "backend.error.reward_unavailable",
 	"field_move_charm_not_owned": "backend.error.item_not_owned",
 	"field_move_not_known": "backend.error.field_move_unavailable",
@@ -254,6 +263,9 @@ static func _format_values(response: Dictionary) -> Dictionary:
 			"requiredFishingLevel",
 			values.get("required_level", 1)
 		))
+	for integer_level_key: String in ["pokemonLevel", "tradeLevelCap"]:
+		if values.has(integer_level_key):
+			values[integer_level_key] = int(values.get(integer_level_key, 0))
 	return values
 
 

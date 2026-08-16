@@ -3,6 +3,7 @@ extends PanelContainer
 class_name GuildPopup
 
 signal closed
+signal lobby_teleport_requested
 
 const POPUP_SIZE := Vector2(1040, 700)
 const GUILD_ICON: Texture2D = preload("res://assets/ui/guild.svg")
@@ -761,8 +762,32 @@ func _build_guild_overview(guild: Dictionary) -> Control:
 		11,
 		UI_MUTED
 	))
+	var lobby_row := HBoxContainer.new()
+	lobby_row.name = "GuildLobbyTravelRow"
+	lobby_row.add_theme_constant_override("separation", 12)
+	copy.add_child(lobby_row)
+	var lobby_copy := VBoxContainer.new()
+	lobby_copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	lobby_copy.add_theme_constant_override("separation", 2)
+	lobby_row.add_child(lobby_copy)
+	lobby_copy.add_child(_localized_label("ui.guild.lobby.title", 12, UI_GOLD))
+	var lobby_hint := _localized_label("ui.guild.lobby.description", 10, UI_MUTED)
+	lobby_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	lobby_copy.add_child(lobby_hint)
+	var lobby_button := Button.new()
+	lobby_button.name = "GuildLobbyTeleportButton"
+	_set_localized_property(lobby_button, "text", "ui.guild.lobby.teleport")
+	_set_localized_property(lobby_button, "tooltip_text", "ui.guild.lobby.tooltip")
+	lobby_button.custom_minimum_size = Vector2(170, 42)
+	lobby_button.pressed.connect(_on_guild_lobby_pressed)
+	_apply_button_style(lobby_button, "primary")
+	lobby_row.add_child(lobby_button)
 	overview.add_child(welcome)
 	return overview
+
+
+func _on_guild_lobby_pressed() -> void:
+	lobby_teleport_requested.emit()
 
 
 func _build_member_roster() -> Control:

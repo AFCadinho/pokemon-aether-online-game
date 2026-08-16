@@ -8,7 +8,7 @@
   <property name="region_name" value="Template Region"/>
   <property name="location_id" value="template.minimal_example"/>
   <property name="location_name" value="Minimal Example"/>
-  <property name="music_track_path" value="res://assets/music/overworld/kanto/routes/route1.ogg"/>
+  <property name="music_track_id" value="overworld.kanto.route.1"/>
   <property name="default_spawn" value="Start"/>
   <property name="encounter_area_id" value="template_grass"/>
  </properties>

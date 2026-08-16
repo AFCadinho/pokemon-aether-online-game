@@ -20,6 +20,8 @@ const BATTLE_SPRITE_ASSET_ALIASES := {
 	# the base species. Without the alias the loader falls through to the HOME
 	# icon, then gets refreshed to the real battle sprite by later state data.
 	"mimikyu-disguised": ["mimikyu"],
+	# Showdown's animated sprite pack omits the separator between Rock and Star.
+	"pikachu-rock-star": ["pikachu-rockstar"],
 }
 const SPECIES_POSITION_OFFSETS := {
 	"back:charizard": Vector2(-46, -10),

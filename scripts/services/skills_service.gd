@@ -3,11 +3,14 @@ extends Node
 class_name SkillsServiceNode
 
 signal state_changed(skills: Array)
+signal fishing_catalog_changed(catalog: Dictionary)
 
 const SKILLS_ENDPOINT := "/game/skills"
+const FISHING_CATALOG_ENDPOINT := "/encounters/fishing-catalog"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 var skills: Array = []
+var fishing_catalog: Dictionary = {}
 var state_loaded := false
 var was_authenticated := false
 
@@ -22,8 +25,10 @@ func _process(_delta: float) -> void:
 	var authenticated := AuthService.is_authenticated()
 	if not authenticated and was_authenticated:
 		skills.clear()
+		fishing_catalog.clear()
 		state_loaded = false
 		state_changed.emit([])
+		fishing_catalog_changed.emit({})
 	was_authenticated = authenticated
 
 
@@ -42,11 +47,35 @@ func load_skills(area_id := "") -> Dictionary:
 	skills = (next_skills as Array).duplicate(true) if next_skills is Array else []
 	state_loaded = true
 	state_changed.emit(skills.duplicate(true))
-	return {"success": true, "skills": skills.duplicate(true)}
+	var catalog_result := await load_fishing_catalog()
+	return {
+		"success": true,
+		"skills": skills.duplicate(true),
+		"fishingCatalogLoaded": bool(catalog_result.get("success", false)),
+	}
+
+
+func load_fishing_catalog(force_refresh := false) -> Dictionary:
+	if not force_refresh and not fishing_catalog.is_empty():
+		return {"success": true, "catalog": fishing_catalog.duplicate(true)}
+	var response := await _request_json(FISHING_CATALOG_ENDPOINT)
+	if not bool(response.get("success", false)):
+		return response
+	var body := _dictionary_from_value(response.get("body", {}))
+	var catalog := _dictionary_from_value(body.get("catalog", {}))
+	if catalog.is_empty():
+		return {"success": false, "error": "Fishing catalog response was empty."}
+	fishing_catalog = catalog.duplicate(true)
+	fishing_catalog_changed.emit(fishing_catalog.duplicate(true))
+	return {"success": true, "catalog": fishing_catalog.duplicate(true)}
 
 
 func get_skills() -> Array:
 	return skills.duplicate(true)
+
+
+func get_fishing_catalog() -> Dictionary:
+	return fishing_catalog.duplicate(true)
 
 
 func get_skill(skill_id: String) -> Dictionary:
@@ -66,6 +95,8 @@ func _on_thieving_state_changed(thieving_state: Dictionary) -> void:
 		if str(skill.get("id", "")) != "thieving":
 			continue
 		var level := maxi(int(thieving_state.get("level", 1)), 1)
+		var skill_unlocked := bool(thieving_state.get("unlocked", false))
+		skill["unlocked"] = skill_unlocked
 		var experience_into_level := maxi(int(thieving_state.get("experienceIntoLevel", 0)), 0)
 		var experience_for_next_level := maxi(int(thieving_state.get("experienceForNextLevel", 0)), 0)
 		skill["level"] = level
@@ -78,7 +109,6 @@ func _on_thieving_state_changed(thieving_state: Dictionary) -> void:
 			100.0
 		)
 		var stats := _dictionary_from_value(skill.get("stats", {}))
-		stats["currency"] = maxi(int(thieving_state.get("currency", 0)), 0)
 		stats["wanted"] = clampi(int(thieving_state.get("wanted", 0)), 0, 100)
 		stats["rewardBonusPercent"] = mini(maxi(level - 1, 0), 100)
 		stats["wantedReductionPercent"] = minf(float(maxi(level - 1, 0)) * 0.5, 40.0)
@@ -89,7 +119,7 @@ func _on_thieving_state_changed(thieving_state: Dictionary) -> void:
 			var unlocks: Array = unlocks_value as Array
 			for unlock_index in range(unlocks.size()):
 				var unlock := _dictionary_from_value(unlocks[unlock_index])
-				unlock["unlocked"] = level >= int(unlock.get("requiredLevel", 1))
+				unlock["unlocked"] = skill_unlocked and level >= int(unlock.get("requiredLevel", 1))
 				unlocks[unlock_index] = unlock
 			skill["unlocks"] = unlocks
 		var targets_value: Variant = skill.get("targets", [])
@@ -101,7 +131,7 @@ func _on_thieving_state_changed(thieving_state: Dictionary) -> void:
 			for target_index in range(targets.size()):
 				var target := _dictionary_from_value(targets[target_index])
 				var attempted_today := str(target.get("npcId", "")) in attempted_ids
-				var unlocked := level >= int(target.get("requiredLevel", 1))
+				var unlocked := skill_unlocked and level >= int(target.get("requiredLevel", 1))
 				target["unlocked"] = unlocked
 				target["attemptedToday"] = attempted_today
 				target["availableToday"] = unlocked and not attempted_today and not jailed

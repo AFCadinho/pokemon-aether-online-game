@@ -15,6 +15,11 @@ func _init() -> void:
 		"fishing progression and selection use dedicated server endpoints"
 	)
 	_check(
+		inventory_source.contains('GameState.fishing_skill_unlocked = bool(progression.get("unlocked", false))')
+		and game_state_source.contains("var fishing_skill_unlocked := false"),
+		"Fishing skill unlock is tracked separately from the selected rod"
+	)
+	_check(
 		inventory_source.contains("GameState.fishing_unlocked = bool(progression.get(\"selectedRodUsable\", false))")
 		and inventory_source.contains('GameState.fishing_rods = _array_from_value(progression.get("rods", []))')
 		and inventory_source.contains('get_tree().call_group("player", "refresh_fishing_prompt")')
