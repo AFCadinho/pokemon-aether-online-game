@@ -47,6 +47,21 @@ func _run() -> void:
 	)
 
 	game_state.unlock_input()
+	game_state.acquire_ui_input_lock(&"story_sequence")
+	dialogue_box.start_dialogue(["Owned UI lock"], "Oak")
+	dialogue_box.hide_dialogue()
+	_check(
+		not bool(game_state.input_locked)
+		and bool(game_state.ui_input_locked),
+		"closing dialogue preserves an owner-based UI lock"
+	)
+	game_state.release_ui_input_lock(&"story_sequence")
+	_check(
+		not bool(game_state.ui_input_locked),
+		"releasing the final UI lock owner restores mouse input"
+	)
+
+	game_state.unlock_input()
 	dialogue_layer.queue_free()
 	quit(1 if failed else 0)
 

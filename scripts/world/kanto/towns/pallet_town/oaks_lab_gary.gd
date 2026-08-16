@@ -25,6 +25,7 @@ func _ready() -> void:
 
 func _exit_tree() -> void:
 	GameState.release_overworld_input_lock(STARTER_SEQUENCE_INPUT_LOCK)
+	GameState.release_ui_input_lock(STARTER_SEQUENCE_INPUT_LOCK)
 
 
 func interact_with_player(player: Node2D) -> void:
@@ -60,10 +61,12 @@ func begin_starter_sequence(
 	starter_sequence_running = true
 	_set_story_presence(true)
 	GameState.acquire_overworld_input_lock(STARTER_SEQUENCE_INPUT_LOCK)
+	GameState.acquire_ui_input_lock(STARTER_SEQUENCE_INPUT_LOCK)
 	var selected_ball := _starter_ball_for_species(species_id)
 	if selected_ball == null:
 		starter_sequence_running = false
 		GameState.release_overworld_input_lock(STARTER_SEQUENCE_INPUT_LOCK)
+		GameState.release_ui_input_lock(STARTER_SEQUENCE_INPUT_LOCK)
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
 
@@ -74,6 +77,7 @@ func begin_starter_sequence(
 		if not reached_ball:
 			starter_sequence_running = false
 			GameState.release_overworld_input_lock(STARTER_SEQUENCE_INPUT_LOCK)
+			GameState.release_ui_input_lock(STARTER_SEQUENCE_INPUT_LOCK)
 			await GameErrorDialogService.show_report_to_staff_message()
 			return
 		face_world_position(selected_ball.global_position)
@@ -93,6 +97,7 @@ func begin_starter_sequence(
 	starter_sequence_running = false
 	_set_story_presence(false)
 	GameState.release_overworld_input_lock(STARTER_SEQUENCE_INPUT_LOCK)
+	GameState.release_ui_input_lock(STARTER_SEQUENCE_INPUT_LOCK)
 
 
 func prepare_starter_sequence() -> void:
