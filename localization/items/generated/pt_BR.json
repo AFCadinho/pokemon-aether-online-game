@@ -3355,6 +3355,10 @@
     "name": "Amuleto Brilhante",
     "shortDesc": "Use para aumentar em 10% a chance de encontrar Shiny por 7 dias."
   },
+  "shiny-tracker": {
+    "name": "Rastreador Shiny",
+    "shortDesc": "Abra suas caçadas Shiny e estatísticas de encontros."
+  },
   "shiny-stone": {
     "name": "Pedra Brilhante",
     "shortDesc": "Evolui um Minccino para Cinccino, uma Roselia para Roserade ou um Togetic para Togekiss."
