@@ -11,6 +11,7 @@
 - Added a configurable Thieving hotkey in Control Settings.
 - Added an Aethernet Beacon menu with a clear explanation of the travel network and Aether Anchor management. Members can set a second Anchor.
 - Abra and Bounsweet starters now receive a Water-, Fire-, or Grass-type Hidden Power, giving them reliable early-game coverage.
+- Protean and similar type-changing effects now show the Pokémon's current type in a coloured battle indicator.
 
 **Changed**
 
