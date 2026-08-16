@@ -21,6 +21,7 @@
 [ext_resource type="PackedScene" uid="uid://csmsqlujka4ma" path="res://scenes/world/interactables/locked_door_interactable.tscn" id="25_locked_door"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="26_transit_keeper"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_beacon_placeholder.tscn" id="27_aether_beacon"]
+[ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="28_gate_npc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2mtwu"]
 size = Vector2(192, 40)
@@ -291,6 +292,15 @@ z_as_relative = false
 z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1616337549]
+
+[node name="Route3Guard" parent="Entities/NPCs" unique_id=1988861091 instance=ExtResource("28_gate_npc")]
+position = Vector2(1856, 1056)
+guard_role = "transition_guard"
+guarded_transition_id = "kanto_pewter_city__to_route_3"
+requires_party_pokemon = false
+npc_id = "kanto_pewter_city_route_3_guard"
+display_name = "Pewter Route Guard"
+facing_direction = Vector2(-1, 0)
 
 [node name="MuseumGuideTheo" parent="Entities/NPCs" unique_id=1013507065 instance=ExtResource("18_dialogue")]
 position = Vector2(1456, 560)

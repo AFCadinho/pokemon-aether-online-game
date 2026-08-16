@@ -267,6 +267,8 @@ func _on_guard_party_changed() -> void:
 
 func _on_guard_story_changed(_revision: int) -> void:
 	_sync_guard_presence()
+	if not guarded_transition_id.strip_edges().is_empty():
+		Callable(self, "_refresh_transition_access").call_deferred(true)
 
 
 func _sync_guard_presence() -> void:
