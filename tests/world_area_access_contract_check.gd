@@ -176,8 +176,9 @@ func _init() -> void:
 	_expect(
 		viridian_city_source.contains('[node name="NorthRouteGuard"')
 		and viridian_city_source.contains('guarded_transition_id = "kanto_viridian_city__to_route_2"')
+		and viridian_city_source.contains('blocked_dialogue_id = "kanto_viridian_city_route_2_trainer_school_required"')
 		and viridian_city_source.contains('transition_id = "kanto_viridian_city__to_route_2"'),
-		"Viridian City north guard protects the Route 2 transition"
+		"Viridian City north guard protects Route 2 until Dadinho's Trainer School lesson"
 	)
 	_expect(
 		viridian_city_source.contains('[node name="SouthRouteGuard"')
