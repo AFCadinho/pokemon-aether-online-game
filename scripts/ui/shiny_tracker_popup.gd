@@ -26,6 +26,7 @@ var shared_mode := false
 var hunt_name_label: Label
 var hunt_count_label: Label
 var hunt_detail_label: Label
+var hunt_sprite: TextureRect
 var stop_button: Button
 var share_button: Button
 var stat_labels: Dictionary = {}
@@ -199,18 +200,32 @@ func _build_overview_panel() -> Control:
 	var hunt_stack := VBoxContainer.new()
 	hunt_stack.add_theme_constant_override("separation", 5)
 	hunt_margin.add_child(hunt_stack)
+	var hunt_header := HBoxContainer.new()
+	hunt_header.add_theme_constant_override("separation", 8)
+	hunt_stack.add_child(hunt_header)
+	var hunt_details := VBoxContainer.new()
+	hunt_details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hunt_details.add_theme_constant_override("separation", 5)
+	hunt_header.add_child(hunt_details)
 	hunt_name_label = Label.new()
 	hunt_name_label.add_theme_font_size_override("font_size", 18)
 	hunt_name_label.add_theme_color_override("font_color", UI_TEXT)
-	hunt_stack.add_child(hunt_name_label)
+	hunt_details.add_child(hunt_name_label)
 	hunt_count_label = Label.new()
 	hunt_count_label.add_theme_font_size_override("font_size", 32)
 	hunt_count_label.add_theme_color_override("font_color", UI_CYAN)
-	hunt_stack.add_child(hunt_count_label)
+	hunt_details.add_child(hunt_count_label)
 	hunt_detail_label = Label.new()
 	hunt_detail_label.add_theme_font_size_override("font_size", 10)
 	hunt_detail_label.add_theme_color_override("font_color", UI_MUTED)
-	hunt_stack.add_child(hunt_detail_label)
+	hunt_details.add_child(hunt_detail_label)
+	hunt_sprite = TextureRect.new()
+	hunt_sprite.custom_minimum_size = Vector2(76, 76)
+	hunt_sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	hunt_sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	hunt_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	hunt_sprite.visible = false
+	hunt_header.add_child(hunt_sprite)
 	var actions := HBoxContainer.new()
 	actions.add_theme_constant_override("separation", 8)
 	hunt_stack.add_child(actions)
@@ -341,8 +356,11 @@ func _render_tracker() -> void:
 	var active := _active_hunt()
 	var has_active := not active.is_empty()
 	if has_active:
-		hunt_name_label.text = str(active.get("evolutionLineName", active.get("targetSpeciesName", "Pokémon")))
+		var target_species := str(active.get("targetSpeciesName", ""))
+		hunt_name_label.text = str(active.get("evolutionLineName", target_species if not target_species.is_empty() else "Pokémon"))
 		hunt_count_label.text = _t("ui.shiny_tracker.encounters", {"count": _format_number(int(active.get("encounterCount", 0)))})
+		hunt_sprite.texture = PokemonAssets.load_home_sprite(target_species)
+		hunt_sprite.visible = hunt_sprite.texture != null
 		var member_names: Array[String] = []
 		for member_value: Variant in active.get("evolutionLineMembers", []):
 			if member_value is Dictionary:
@@ -352,6 +370,8 @@ func _render_tracker() -> void:
 		hunt_name_label.text = _t("ui.shiny_tracker.no_active")
 		hunt_count_label.text = "—"
 		hunt_detail_label.text = _t("ui.shiny_tracker.no_active_hint")
+		hunt_sprite.texture = null
+		hunt_sprite.visible = false
 	for child: Node in history_list.get_children():
 		child.queue_free()
 	var recent := _as_array(tracker_state.get("recentHunts"))
