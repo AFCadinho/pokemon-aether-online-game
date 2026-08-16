@@ -9,6 +9,10 @@ const DEV_ADD_AETHERITE_ENDPOINT := "/game/dev/wallet/aetherite"
 const DEV_ADD_BATTLE_POINTS_ENDPOINT := "/game/dev/wallet/battle-points"
 const WILD_BATTLE_REWARD_ENDPOINT := "/game/wallet/rewards/wild-battle"
 const TRAINER_BATTLE_REWARD_ENDPOINT := "/game/wallet/rewards/trainer-battle"
+const GLOBAL_EXP_BOOST_ENDPOINT := "/game/global-boosts/exp"
+const GLOBAL_EV_BOOST_ENDPOINT := "/game/global-boosts/ev"
+const GLOBAL_RARE_ENCOUNTER_BOOST_ENDPOINT := "/game/global-boosts/rare-encounter"
+const GLOBAL_SHINY_BOOST_ENDPOINT := "/game/global-boosts/shiny"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 
@@ -27,6 +31,78 @@ func load_wallet() -> Dictionary:
 		""
 	)
 	return _wallet_result_from_response(response)
+
+
+func load_global_exp_boost() -> Dictionary:
+	return await _request_json(
+		(await GatewayApiConfig.get_base_url()) + GLOBAL_EXP_BOOST_ENDPOINT,
+		HTTPClient.METHOD_GET,
+		GatewayApiConfig.get_accept_headers(),
+		""
+	)
+
+
+func contribute_to_global_exp_boost(amount: int) -> Dictionary:
+	return await _request_json(
+		(await GatewayApiConfig.get_base_url()) + GLOBAL_EXP_BOOST_ENDPOINT + "/contributions",
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({"amount": amount})
+	)
+
+
+func load_global_ev_boost() -> Dictionary:
+	return await _request_json(
+		(await GatewayApiConfig.get_base_url()) + GLOBAL_EV_BOOST_ENDPOINT,
+		HTTPClient.METHOD_GET,
+		GatewayApiConfig.get_accept_headers(),
+		""
+	)
+
+
+func contribute_to_global_ev_boost(amount: int) -> Dictionary:
+	return await _request_json(
+		(await GatewayApiConfig.get_base_url()) + GLOBAL_EV_BOOST_ENDPOINT + "/contributions",
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({"amount": amount})
+	)
+
+
+func load_global_rare_encounter_boost() -> Dictionary:
+	return await _request_json(
+		(await GatewayApiConfig.get_base_url()) + GLOBAL_RARE_ENCOUNTER_BOOST_ENDPOINT,
+		HTTPClient.METHOD_GET,
+		GatewayApiConfig.get_accept_headers(),
+		""
+	)
+
+
+func contribute_to_global_rare_encounter_boost(amount: int) -> Dictionary:
+	return await _request_json(
+		(await GatewayApiConfig.get_base_url()) + GLOBAL_RARE_ENCOUNTER_BOOST_ENDPOINT + "/contributions",
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({"amount": amount})
+	)
+
+
+func load_global_shiny_boost() -> Dictionary:
+	return await _request_json(
+		(await GatewayApiConfig.get_base_url()) + GLOBAL_SHINY_BOOST_ENDPOINT,
+		HTTPClient.METHOD_GET,
+		GatewayApiConfig.get_accept_headers(),
+		""
+	)
+
+
+func contribute_to_global_shiny_boost(amount: int) -> Dictionary:
+	return await _request_json(
+		(await GatewayApiConfig.get_base_url()) + GLOBAL_SHINY_BOOST_ENDPOINT + "/contributions",
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({"amount": amount})
+	)
 
 
 func dev_add_money(amount: int) -> Dictionary:

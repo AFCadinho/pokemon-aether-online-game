@@ -19,6 +19,8 @@ const REQUIRED_NPC_IDS: Array[String] = [
 	"kanto_rivals_house_daisy",
 	"kanto_route_1_north_guard",
 	"kanto_route_3_pokemon_center_magikarp_salesman",
+	"kanto_viridian_city_ace_trainer_victor",
+	"kanto_viridian_city_gardener_mabel",
 	"kanto_viridian_city_north_route_guard",
 	"kanto_viridian_city_pokemon_center_clerk",
 	"kanto_viridian_city_pokemon_center_clerk_2",
@@ -82,6 +84,16 @@ func _init() -> void:
 		catalog.resolve_portrait_id("", "kanto_viridian_city_rocket_grunt_rook", ""),
 		"showdown_rainbowrocketgrunt",
 		"Master Thief Rook resolves the male Team Rocket portrait"
+	)
+	_check_equal(
+		catalog.resolve_portrait_id("", "kanto_viridian_city_gardener_mabel", "trainer_class_elder"),
+		"showdown_agatha_lgpe",
+		"Gardener Mabel resolves her elderly female portrait instead of the generic elder portrait"
+	)
+	_check_equal(
+		catalog.resolve_portrait_id("", "kanto_viridian_city_ace_trainer_victor", "trainer_class_ace_trainer_m"),
+		"showdown_acetrainer_gen6",
+		"Ace Trainer Victor resolves his Showdown Ace Trainer portrait instead of the default portrait"
 	)
 	_check_equal(
 		catalog.resolve_portrait_id("", "unlisted_nurse", "pokemon_center_nurse"),
