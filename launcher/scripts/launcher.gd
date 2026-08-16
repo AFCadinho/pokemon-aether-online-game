@@ -129,6 +129,7 @@ var progress_is_indeterminate := false
 var asset_pack_download_total := 0
 var current_asset_pack_download_index := 0
 var has_unseen_diagnostics_error := false
+var last_check_datetime: Dictionary = {}
 
 
 func _draw() -> void:
@@ -248,6 +249,7 @@ func _ready() -> void:
 
 func _apply_locale() -> void:
 	LauncherLocalization.localize_tree(self)
+	_refresh_last_check_label()
 	install_folder_dialog.title = _t("Open a Directory")
 	uninstall_confirm_dialog.title = _t("Uninstall Game")
 	uninstall_confirm_dialog.ok_button_text = _t("Uninstall")
@@ -917,7 +919,8 @@ func _handle_manifest_response(body: PackedByteArray) -> void:
 		return
 
 	manifest = parsed_json
-	last_check_label.text = _format_last_check_time()
+	last_check_datetime = Time.get_datetime_dict_from_system()
+	_refresh_last_check_label()
 	launcher_update_info = _get_launcher_update_info()
 	_build_download_queue()
 	update_required = not pending_downloads.is_empty()
@@ -2183,8 +2186,19 @@ func _get_platform_manifest_url(manifest_urls: Dictionary) -> String:
 	return ""
 
 
-func _format_last_check_time() -> String:
-	var datetime := Time.get_datetime_dict_from_system()
+func _refresh_last_check_label() -> void:
+	if last_check_label == null:
+		return
+	last_check_label.text = _get_last_check_display_text()
+
+
+func _get_last_check_display_text() -> String:
+	if last_check_datetime.is_empty():
+		return _t("Never")
+	return _format_last_check_time(last_check_datetime)
+
+
+func _format_last_check_time(datetime: Dictionary) -> String:
 	return "%02d-%02d-%04d %02d:%02d" % [
 		int(datetime.get("day", 0)),
 		int(datetime.get("month", 0)),

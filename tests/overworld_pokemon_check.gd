@@ -13,9 +13,14 @@ var failed := false
 
 
 func _init() -> void:
+	_run.call_deferred()
+
+
+func _run() -> void:
 	_check_metadata_service()
 	_check_overworld_pokemon_script()
 	_check_overworld_pokemon_scene()
+	_check_runtime_home_mugshot()
 	_check_pokemon_blocking_container()
 	_check_route_1_example_placement()
 	_check_town_placements()
@@ -48,8 +53,12 @@ func _check_overworld_pokemon_script() -> void:
 	_check_true(text.contains("sprite.sprite_frames = follower_sprite_frames"), "OverworldPokemon applies resolved follower sprite frames")
 	_check_true(text.contains("sprite.animation != animation_name or not sprite.is_playing()"), "OverworldPokemon does not restart active walk loops")
 	_check_true(text.contains("_should_keep_walk_animation_after_step(direction)"), "OverworldPokemon keeps walk loops between continuous steps")
-	_check_true(text.contains("HOME_ICON_DIR := \"res://assets/sprites/pokemon/pokemon_home\""), "OverworldPokemon knows HOME icon directory")
-	_check_true(text.contains("func _load_home_icon(raw_species_id: String) -> Texture2D:"), "OverworldPokemon can resolve HOME icons")
+	_check_true(text.contains("func _resolve_home_mugshot() -> void:"), "OverworldPokemon can resolve HOME mugshots")
+	_check_true(text.contains("PokemonAssets.load_home_sprite(species_id)"), "OverworldPokemon uses the central HOME sprite resolver")
+	_check_true(
+		text.find("_ready_base_npc()") < text.find("_resolve_home_mugshot()"),
+		"OverworldPokemon applies its HOME mugshot after generic NPC portrait resolution"
+	)
 	_check_true(text.contains("await _process_base_npc()"), "OverworldPokemon reuses BaseNPC movement")
 	_check_true(text.contains("\"%s cries out!\" % _get_pokemon_display_name()"), "OverworldPokemon derives fallback cry text from Pokemon name")
 
@@ -60,6 +69,28 @@ func _check_overworld_pokemon_scene() -> void:
 	_check_true(text.contains("assets/followers/LILLIPUP.png"), "OverworldPokemon scene has placeholder Pokemon sprite")
 	_check_true(text.contains("species_id = \"lillipup\""), "OverworldPokemon scene defines species_id")
 	_check_true(text.contains("npc_sprite_frames = SubResource"), "OverworldPokemon scene defines sprite frames")
+
+
+func _check_runtime_home_mugshot() -> void:
+	var packed_scene := load(OVERWORLD_POKEMON_SCENE) as PackedScene
+	var pokemon := packed_scene.instantiate()
+	get_root().add_child(pokemon)
+	var initial_mugshot := pokemon.get("mugshot") as Texture2D
+	_check_true(
+		initial_mugshot != null and initial_mugshot.resource_path.ends_with("/Lillipup.png"),
+		"OverworldPokemon replaces the dialogue fallback with its HOME icon at runtime"
+	)
+
+	pokemon.call("_apply_overworld_pokemon_metadata", {
+		"speciesId": "pikachu",
+		"name": "Pikachu",
+	})
+	var metadata_mugshot := pokemon.get("mugshot") as Texture2D
+	_check_true(
+		metadata_mugshot != null and metadata_mugshot.resource_path.ends_with("/Pikachu.png"),
+		"OverworldPokemon refreshes its HOME icon from authoritative species metadata"
+	)
+	pokemon.free()
 
 
 func _check_pokemon_blocking_container() -> void:
