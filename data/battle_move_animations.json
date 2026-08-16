@@ -9555,7 +9555,7 @@
         "visible_end": 0.97,
         "launch_start": 0.08,
         "impact_start": 0.68,
-        "ring_count": 4,
+        "ring_count": 5,
         "front_radius": 15,
         "rear_radius": 42,
         "ring_depth": 0.42,
@@ -9569,7 +9569,6 @@
         "charge_end": 0.28,
         "wave_start": 0.22,
         "charge_ring_count": 3,
-        "ring_count": 5,
         "ring_spacing": 0.14,
         "ring_radius": 24.0,
         "ring_squash": 0.46,
@@ -9688,6 +9687,26 @@
       "foreground_path": "",
       "sound_paths": {
         "PRSFX- Psychic.wav": "res://assets/battles/animations/psychic/PRSFX- Psychic.wav"
+      }
+    },
+    "teleport": {
+      "template": "imported_sheet",
+      "category": "status_buff",
+      "speed_scale": 1.05,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "sprite_zoom_multiplier": 0.82,
+      "data_path": "res://assets/battles/animations/teleport/teleport.json",
+      "sheet_path": "res://assets/battles/animations/teleport/PRAS- Teleport.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Teleport.wav": "res://assets/battles/animations/teleport/PRSFX- Teleport.wav"
       }
     }
   }
