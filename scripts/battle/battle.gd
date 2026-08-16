@@ -29,6 +29,14 @@ const BATTLE_PUBLIC_POKEMON_KNOWLEDGE := preload("res://scripts/battle/battle_pu
 const OPPONENT_PARTY_REVEAL_POLICY := preload("res://scripts/battle/opponent_party_reveal_policy.gd")
 const BATTLE_VOICE_TIMING := preload("res://scripts/battle/battle_voice_timing.gd")
 const BATTLE_ENVIRONMENT_CATALOG := preload("res://scripts/battle/battle_environment_catalog.gd")
+const TYPE_CHANGE_BADGE_COLORS := {
+	"bug": Color("#85a114"), "dark": Color("#403847"), "dragon": Color("#4d52c4"),
+	"electric": Color("#e0ad14"), "fairy": Color("#d163a3"), "fighting": Color("#b83338"),
+	"fire": Color("#e6402e"), "flying": Color("#6b94d1"), "ghost": Color("#5e4f99"),
+	"grass": Color("#3d9c40"), "ground": Color("#a87d33"), "ice": Color("#40adb8"),
+	"normal": Color("#7a7a73"), "poison": Color("#9440a6"), "psychic": Color("#db4f82"),
+	"rock": Color("#947d30"), "steel": Color("#667a8f"), "water": Color("#3373cc"),
+}
 const CALC_DRAWER_FIELD_MARGIN := 8.0
 const MEGA_EVOLUTION_EFFECT_KEY := "mega_evolution"
 const PVP_FORCE_SWITCH_ACK_RETRY_MSEC := 1000
@@ -164,6 +172,7 @@ var pvp_prechoice_buffer := preload("res://scripts/battle/pvp_prechoice_buffer.g
 
 #Battle State
 var battle_state := BattleState.new()
+var npc_trainer_display_name := ""
 var pokemon_hover_service := preload("res://scripts/battle/battle_pokemon_hover_service.gd").new()
 var hover_state := preload("res://scripts/battle/battle_hover_state.gd").new()
 var event_text_formatter := preload("res://scripts/battle/battle_event_text_formatter.gd").new()
@@ -193,6 +202,7 @@ var pending_knock_off_targets_by_ident := {}
 var pending_booster_energy_modifier_targets_by_ident := {}
 var stat_stages_by_ident: Dictionary = {}
 var ability_stat_modifiers_by_ident: Dictionary = {}
+var type_changes_by_ident: Dictionary = {}
 var player_party_moves_by_key: Dictionary = {}
 var damage_calc_request_token := 0
 var damage_calc_request_in_flight := false
@@ -5230,6 +5240,7 @@ func _reset_battle_effect_tracking() -> void:
 	pending_booster_energy_modifier_targets_by_ident.clear()
 	stat_stages_by_ident.clear()
 	ability_stat_modifiers_by_ident.clear()
+	type_changes_by_ident.clear()
 	animation_router.clear_all_substitutes()
 	player_party_moves_by_key.clear()
 	_update_stat_stage_panels()
@@ -5311,6 +5322,8 @@ func _remember_battle_modifier_event(event: Dictionary) -> void:
 			_clear_stat_stages_for_ident(str(event.get("toIdent", event.get("pokemon", ""))))
 			_clear_ability_stat_modifier_for_ident(str(event.get("fromIdent", "")))
 			_clear_ability_stat_modifier_for_ident(str(event.get("toIdent", event.get("pokemon", ""))))
+			_clear_type_change_for_ident(str(event.get("fromIdent", "")))
+			_clear_type_change_for_ident(str(event.get("toIdent", event.get("pokemon", ""))))
 			_clear_pending_booster_energy_modifier_for_ident(str(event.get("fromIdent", "")))
 			_clear_pending_booster_energy_modifier_for_ident(str(event.get("toIdent", event.get("pokemon", ""))))
 			tera_shell_consumed_by_ident.erase(_normalize_battle_ident(str(event.get("fromIdent", ""))))
@@ -5321,6 +5334,7 @@ func _remember_battle_modifier_event(event: Dictionary) -> void:
 			_clear_supreme_overlord_fallen_for_ident(str(event.get("target", "")))
 			_clear_stat_stages_for_ident(str(event.get("target", "")))
 			_clear_ability_stat_modifier_for_ident(str(event.get("target", "")))
+			_clear_type_change_for_ident(str(event.get("target", "")))
 			_clear_pending_booster_energy_modifier_for_ident(str(event.get("target", "")))
 			tera_shell_consumed_by_ident.erase(_normalize_battle_ident(str(event.get("target", ""))))
 		"heal":
@@ -5332,6 +5346,7 @@ func _remember_battle_modifier_event(event: Dictionary) -> void:
 		"pokemonEffect":
 			_apply_supreme_overlord_fallen_event(event)
 			_apply_pokemon_effect_modifier_event(event)
+			_apply_type_change_event(event)
 			_apply_tera_shell_event(event)
 		"ability":
 			_apply_ability_stat_modifier_event(event)
@@ -5516,6 +5531,36 @@ func _apply_pokemon_effect_modifier_event(event: Dictionary) -> void:
 	if state == "end":
 		_clear_ability_stat_modifier_for_ident(str(event.get("target", "")))
 
+func _apply_type_change_event(event: Dictionary) -> void:
+	if str(event.get("effect", "")).strip_edges().to_lower() != "typechange":
+		return
+
+	var ident_key := _normalize_battle_ident(str(event.get("target", event.get("pokemon", ""))))
+	if ident_key == "":
+		return
+
+	if str(event.get("state", "")).strip_edges().to_lower() == "end":
+		type_changes_by_ident.erase(ident_key)
+		_update_stat_stage_panels()
+		return
+
+	var pokemon_type := str(event.get("pokemonType", "")).strip_edges().to_lower()
+	if not TYPE_CHANGE_BADGE_COLORS.has(pokemon_type):
+		return
+
+	var source := str(event.get("source", "")).strip_edges()
+	var ability := source.substr("ability:".length()).strip_edges() if source.to_lower().begins_with("ability:") else ""
+	type_changes_by_ident[ident_key] = {"type": pokemon_type, "ability": ability}
+	_update_stat_stage_panels()
+
+func _clear_type_change_for_ident(ident: String) -> void:
+	var ident_key := _normalize_battle_ident(ident)
+	if ident_key == "":
+		return
+
+	type_changes_by_ident.erase(ident_key)
+	_update_stat_stage_panels()
+
 func _apply_tera_shell_event(event: Dictionary) -> void:
 	var effect := str(event.get("effect", "")).strip_edges().to_lower().replace(" ", "").replace("-", "").replace("_", "")
 	if str(event.get("state", "")).strip_edges().to_lower() != "activate" or not effect.ends_with("terashell"):
@@ -5616,6 +5661,18 @@ func _set_sprite_box_stat_stage_badges(sprite_box: Node, badges: Array) -> void:
 
 func _get_stat_stage_badges_for_ident(ident_key: String, player_id: String) -> Array:
 	var badges: Array[Dictionary] = []
+	var type_change_value: Variant = type_changes_by_ident.get(ident_key, {})
+	if type_change_value is Dictionary:
+		var type_change: Dictionary = type_change_value as Dictionary
+		var pokemon_type := str(type_change.get("type", "")).strip_edges().to_lower()
+		if TYPE_CHANGE_BADGE_COLORS.has(pokemon_type):
+			var ability := str(type_change.get("ability", "")).strip_edges()
+			badges.append({
+				"label": "%s:" % ability if ability != "" else "Type:",
+				"value": pokemon_type.capitalize(),
+				"color": TYPE_CHANGE_BADGE_COLORS[pokemon_type],
+				"line": STAT_STAGE_BADGE_LINE_MODIFIER,
+			})
 	var stages_value: Variant = stat_stages_by_ident.get(ident_key, {})
 	if stages_value is Dictionary:
 		var stages: Dictionary = stages_value as Dictionary
@@ -5765,9 +5822,9 @@ func _format_stat_badge_name(stat_key: String) -> String:
 
 func _format_stat_stage_badge_value(stage_value: int) -> String:
 	if stage_value > 0:
-		return "+%s" % stage_value
+		return "▲ %s" % stage_value
 
-	return str(stage_value)
+	return "▼ %s" % abs(stage_value)
 
 func _is_ability_stat_modifier_name(ability_name: String) -> bool:
 	match ability_name.to_lower().replace(" ", "").replace("-", ""):
@@ -6170,6 +6227,7 @@ func setup_trainer_battle_from_response(
 	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
 ) -> void:
 	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null, environment_id)
+	npc_trainer_display_name = setup_flow.get_trainer_name(trainer_data, "")
 	var team_preview_enabled := _trainer_team_preview_enabled(api_response)
 	opponent_party_reveal_policy.reset(team_preview_enabled)
 	battle_banter_presenter.configure(trainer_data)
@@ -6538,6 +6596,7 @@ func _prepare_battle_setup(
 	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
 ) -> void:
 	battle_type = type
+	npc_trainer_display_name = ""
 	opponent_party_reveal_policy.reset(false)
 	var show_full_trainer_rails := battle_type == BattleType.TRAINER
 	player_stage_party_grid.set_empty_slots_visible(show_full_trainer_rails)
@@ -15153,6 +15212,8 @@ func _get_player_display_name(player_id: String) -> String:
 		return player_name
 	if player_id == "p1":
 		return _t("battle.player.generic")
+	if player_id == "p2" and battle_type == BattleType.TRAINER and npc_trainer_display_name != "":
+		return npc_trainer_display_name
 
 	return _t("battle.player.opponent")
 

@@ -61,6 +61,7 @@ func _claim_catching_reward() -> void:
 		[
 			"Well done! You proved your potential as a Trainer.",
 			"Take these ten Great Balls. Better Poke Balls increase your catch rate.",
+			"I am also giving you a Shiny Tracker. It records eligible wild encounters and opens from your Bag or hotbar.",
 			"Visit the Market Seller in any Pokemon Center when you need more.",
 		]
 	))
@@ -69,7 +70,10 @@ func _claim_catching_reward() -> void:
 		"add_system_message",
 		LocalizationManager.text("ui.quest.completed_reward", {
 			"quest": LocalizationManager.text("story.kanto.catch_mankey.title"),
-			"reward": "10 %s" % ItemLocalization.display_name("great-ball", "Great Balls"),
+			"reward": "10 %s + %s" % [
+				ItemLocalization.display_name("great-ball", "Great Balls"),
+				ItemLocalization.display_name("shiny-tracker", "Shiny Tracker"),
+			],
 		})
 	)
 	if bool(result.get("claimed", false)):
@@ -141,4 +145,4 @@ func _show_report_to_staff_message() -> void:
 	if error_service != null and error_service.has_method("show_report_to_staff_message"):
 		await error_service.call("show_report_to_staff_message")
 		return
-	await show_dialogue(["I cannot finish the catching lesson right now."])
+	await show_dialogue([LocalizationManager.text("npc.error.catching_lesson")])

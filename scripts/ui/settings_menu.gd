@@ -567,49 +567,72 @@ func _create_cursor_scale_control() -> void:
 
 
 func _build_controls_tab(controls_tab: VBoxContainer) -> void:
-	var fishing_row := HBoxContainer.new()
-	fishing_row.name = "FishingBindingRow"
-	fishing_row.add_theme_constant_override("separation", 12)
-
-	var fishing_copy := VBoxContainer.new()
-	fishing_copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	fishing_copy.add_theme_constant_override("separation", 2)
-	fishing_row.add_child(fishing_copy)
-
-	var fishing_label := Label.new()
-	_set_localized_text(fishing_label, "ui.settings.controls.fishing")
-	fishing_label.add_theme_color_override("font_color", UI_TEXT)
-	fishing_copy.add_child(fishing_label)
-
-	var fishing_hint := Label.new()
-	_set_localized_text(fishing_hint, "ui.settings.controls.fishing_hint")
-	fishing_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	fishing_hint.add_theme_font_size_override("font_size", 11)
-	fishing_hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	fishing_copy.add_child(fishing_hint)
-
-	var fishing_button := Button.new()
-	fishing_button.name = "FishingBindingButton"
-	fishing_button.custom_minimum_size = Vector2(112, 38)
-	fishing_button.focus_mode = Control.FOCUS_ALL
-	fishing_button.pressed.connect(_start_input_binding_capture.bind("fish"))
-	fishing_row.add_child(fishing_button)
-	input_binding_buttons["fish"] = fishing_button
-
-	var reset_button := Button.new()
-	reset_button.name = "ResetFishingBindingButton"
-	_set_localized_text(reset_button, "ui.settings.controls.reset")
-	reset_button.focus_mode = Control.FOCUS_ALL
-	reset_button.pressed.connect(_reset_input_binding.bind("fish"))
-
-	controls_tab.add_child(fishing_row)
-	controls_tab.add_child(reset_button)
+	_add_input_binding_control(
+		controls_tab,
+		"fish",
+		"Fishing",
+		"ui.settings.controls.fishing",
+		"ui.settings.controls.fishing_hint"
+	)
+	_add_input_binding_control(
+		controls_tab,
+		"pickpocket",
+		"Thieving",
+		"ui.settings.controls.thieving",
+		"ui.settings.controls.thieving_hint"
+	)
 	_wrap_settings_section(
 		controls_tab,
 		"ui.settings.section.controls",
 		"ui.settings.section.controls_subtitle",
 		controls_tab.get_children()
 	)
+
+
+func _add_input_binding_control(
+	controls_tab: VBoxContainer,
+	action: String,
+	control_name: String,
+	label_key: String,
+	hint_key: String
+) -> void:
+	var row := HBoxContainer.new()
+	row.name = "%sBindingRow" % control_name
+	row.add_theme_constant_override("separation", 12)
+
+	var copy := VBoxContainer.new()
+	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	copy.add_theme_constant_override("separation", 2)
+	row.add_child(copy)
+
+	var label := Label.new()
+	_set_localized_text(label, label_key)
+	label.add_theme_color_override("font_color", UI_TEXT)
+	copy.add_child(label)
+
+	var hint := Label.new()
+	_set_localized_text(hint, hint_key)
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	hint.add_theme_font_size_override("font_size", 11)
+	hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	copy.add_child(hint)
+
+	var binding_button := Button.new()
+	binding_button.name = "%sBindingButton" % control_name
+	binding_button.custom_minimum_size = Vector2(112, 38)
+	binding_button.focus_mode = Control.FOCUS_ALL
+	binding_button.pressed.connect(_start_input_binding_capture.bind(action))
+	row.add_child(binding_button)
+	input_binding_buttons[action] = binding_button
+
+	var reset_button := Button.new()
+	reset_button.name = "Reset%sBindingButton" % control_name
+	_set_localized_text(reset_button, "ui.settings.controls.reset")
+	reset_button.focus_mode = Control.FOCUS_ALL
+	reset_button.pressed.connect(_reset_input_binding.bind(action))
+
+	controls_tab.add_child(row)
+	controls_tab.add_child(reset_button)
 
 
 func _start_input_binding_capture(action: String) -> void:

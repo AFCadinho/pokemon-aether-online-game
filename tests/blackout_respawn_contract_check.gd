@@ -31,6 +31,10 @@ func _init() -> void:
 		"Blackout respawn waits for an in-flight position save before changing the server destination"
 	)
 	_expect(
+		world_source.contains('SfxManager.play("pokemon_recovery")'),
+		"Blackout recovery plays the Pokémon healing sound"
+	)
+	_expect(
 		heal_npc_source.contains('@export var respawn_spawn_marker := "HealNPC"')
 		and heal_npc_source.contains('"spawnMarker": respawn_spawn_marker.strip_edges()'),
 		"Heal NPCs persist a stable scene spawn marker with the numeric fallback position"
