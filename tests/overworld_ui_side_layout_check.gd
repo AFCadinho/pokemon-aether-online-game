@@ -243,6 +243,7 @@ func _init() -> void:
 	_check(script_source.contains("trade_chat_tab_button.visible = false") and script_source.contains("help_chat_tab_button.visible = false"), "Trade and Help no longer consume top-tab space")
 	_check(script_source.contains('"ui.chat.context.selector"'), "bottom-left selector localizes the active General channel")
 	_check(script_source.contains('_add_chat_context_option(LocalizationManager.text("ui.chat.channel.global"), CHAT_TAB_GENERAL'), "General selector exposes localized Global")
+	_check(script_source.contains('_add_chat_context_option(LocalizationManager.text("ui.chat.tab.map"), CHAT_TAB_MAP'), "General selector exposes localized Map")
 	_check(script_source.contains('_add_chat_context_option(LocalizationManager.text("ui.chat.tab.trade"), CHAT_TAB_TRADE'), "General selector exposes localized Trade")
 	_check(script_source.contains('_add_chat_context_option(LocalizationManager.text("ui.chat.tab.help"), CHAT_TAB_HELP'), "General selector exposes localized Help")
 	_check(script_source.contains("pm_context_selector_attention_badge = _create_attention_badge_for_button"), "PM selector button has a red unread indicator")

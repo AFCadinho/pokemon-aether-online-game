@@ -56,7 +56,6 @@ const CHAT_TAB_DEFAULT_ORDER: Array[String] = [
 	CHAT_TAB_ALL,
 	CHAT_TAB_GENERAL,
 	CHAT_TAB_SYSTEM,
-	CHAT_TAB_MAP,
 	CHAT_TAB_PM,
 	CHAT_TAB_GUILD,
 ]
@@ -67,7 +66,6 @@ const PARTY_CONTEXT_SET_LEAD := 3
 const CHAT_TAB_LABELS := {
 	CHAT_TAB_ALL: "ui.chat.tab.all",
 	CHAT_TAB_GENERAL: "ui.chat.tab.general",
-	CHAT_TAB_MAP: "ui.chat.tab.map",
 	CHAT_TAB_SYSTEM: "ui.chat.tab.system",
 	CHAT_TAB_PM: "ui.chat.tab.pm",
 	CHAT_TAB_GUILD: "ui.chat.tab.guild",
@@ -863,7 +861,6 @@ var chat_tab_visibility: Dictionary = {}
 var chat_tab_order: Array[String] = []
 var selected_general_chat_tab := CHAT_TAB_GENERAL
 var all_chat_tab_button: Button
-var map_chat_tab_button: Button
 var guild_chat_tab_button: Button
 var guild_chat_attention_badge: Panel
 var guild_chat_has_unread := false
@@ -1379,7 +1376,6 @@ func _ready() -> void:
 	system_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_SYSTEM))
 	_setup_all_chat_tab()
 	_setup_help_chat_tab()
-	_setup_map_chat_tab()
 	_setup_pm_chat_ui()
 	_setup_guild_chat_ui()
 	_setup_chat_context_selector_ui()
@@ -1389,7 +1385,6 @@ func _ready() -> void:
 	system_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	all_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	help_chat_tab_button.focus_mode = Control.FOCUS_NONE
-	map_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	guild_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	if not GuildService.membership_changed.is_connected(_on_guild_chat_membership_changed):
 		GuildService.membership_changed.connect(_on_guild_chat_membership_changed)
@@ -23887,6 +23882,7 @@ func _rebuild_chat_context_options() -> void:
 	var primary_tab := _active_primary_chat_tab_id()
 	if primary_tab == CHAT_TAB_GENERAL:
 		_add_chat_context_option(LocalizationManager.text("ui.chat.channel.global"), CHAT_TAB_GENERAL, active_chat_tab == CHAT_TAB_GENERAL)
+		_add_chat_context_option(LocalizationManager.text("ui.chat.tab.map"), CHAT_TAB_MAP, active_chat_tab == CHAT_TAB_MAP)
 		_add_chat_context_option(LocalizationManager.text("ui.chat.tab.trade"), CHAT_TAB_TRADE, active_chat_tab == CHAT_TAB_TRADE)
 		_add_chat_context_option(LocalizationManager.text("ui.chat.tab.help"), CHAT_TAB_HELP, active_chat_tab == CHAT_TAB_HELP)
 		_refresh_chat_context_scroll_size()
@@ -23943,7 +23939,7 @@ func _create_chat_context_option_button(label_text: String, selected: bool) -> B
 
 
 func _on_general_chat_context_selected(channel_tab_id: String) -> void:
-	if channel_tab_id not in [CHAT_TAB_GENERAL, CHAT_TAB_TRADE, CHAT_TAB_HELP]:
+	if channel_tab_id not in [CHAT_TAB_GENERAL, CHAT_TAB_MAP, CHAT_TAB_TRADE, CHAT_TAB_HELP]:
 		return
 	selected_general_chat_tab = channel_tab_id
 	active_chat_tab = channel_tab_id
@@ -23965,7 +23961,7 @@ func _hide_chat_context_popup() -> void:
 
 
 func _active_primary_chat_tab_id() -> String:
-	if active_chat_tab in [CHAT_TAB_GENERAL, CHAT_TAB_TRADE, CHAT_TAB_HELP]:
+	if active_chat_tab in [CHAT_TAB_GENERAL, CHAT_TAB_MAP, CHAT_TAB_TRADE, CHAT_TAB_HELP]:
 		return CHAT_TAB_GENERAL
 	return active_chat_tab
 
@@ -23984,7 +23980,9 @@ func _refresh_chat_context_selector() -> void:
 			chat_context_selector_button.tooltip_text = LocalizationManager.text("ui.chat.context.all_tooltip")
 		CHAT_TAB_GENERAL:
 			var channel_label := LocalizationManager.text("ui.chat.channel.global")
-			if active_chat_tab == CHAT_TAB_TRADE:
+			if active_chat_tab == CHAT_TAB_MAP:
+				channel_label = LocalizationManager.text("ui.chat.tab.map")
+			elif active_chat_tab == CHAT_TAB_TRADE:
 				channel_label = LocalizationManager.text("ui.chat.tab.trade")
 			elif active_chat_tab == CHAT_TAB_HELP:
 				channel_label = LocalizationManager.text("ui.chat.tab.help")
@@ -23993,10 +23991,6 @@ func _refresh_chat_context_selector() -> void:
 				{"channel": channel_label}
 			)
 			chat_context_selector_button.tooltip_text = LocalizationManager.text("ui.chat.context.choose_channel")
-		CHAT_TAB_MAP:
-			chat_context_selector_button.text = LocalizationManager.text("ui.chat.tab.map")
-			chat_context_selector_button.disabled = true
-			chat_context_selector_button.tooltip_text = LocalizationManager.text("ui.chat.map.visibility")
 		CHAT_TAB_PM:
 			if active_pm_user_id != 0 and pm_conversations_by_user_id.has(active_pm_user_id):
 				var conversation := _dictionary_from_value(pm_conversations_by_user_id.get(active_pm_user_id, {}))
@@ -24033,22 +24027,6 @@ func _setup_all_chat_tab() -> void:
 	all_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_ALL))
 	$Control/ChatTabsPanel/TabRow.add_child(all_chat_tab_button)
 	_apply_button_style(all_chat_tab_button, "primary")
-	_reorder_chat_tab_buttons()
-
-
-func _setup_map_chat_tab() -> void:
-	if map_chat_tab_button != null:
-		return
-
-	map_chat_tab_button = Button.new()
-	map_chat_tab_button.name = "MapButton"
-	map_chat_tab_button.custom_minimum_size = Vector2(70, 28)
-	_set_localized_control_property(map_chat_tab_button, "text", "ui.chat.tab.map")
-	map_chat_tab_button.focus_mode = Control.FOCUS_NONE
-	_set_localized_control_property(map_chat_tab_button, "tooltip_text", "ui.chat.map.tooltip")
-	map_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_MAP))
-	$Control/ChatTabsPanel/TabRow.add_child(map_chat_tab_button)
-	_apply_button_style(map_chat_tab_button, "primary")
 	_reorder_chat_tab_buttons()
 
 
@@ -24346,8 +24324,6 @@ func _apply_chat_tab_preferences() -> void:
 	if all_chat_tab_button != null:
 		all_chat_tab_button.visible = true
 	general_chat_tab_button.visible = true
-	if map_chat_tab_button != null:
-		map_chat_tab_button.visible = bool(chat_tab_visibility.get(CHAT_TAB_MAP, true))
 	system_chat_tab_button.visible = bool(chat_tab_visibility.get(CHAT_TAB_SYSTEM, true))
 	trade_chat_tab_button.visible = false
 	if help_chat_tab_button != null:
@@ -24374,8 +24350,6 @@ func _chat_tab_button_for_id(tab_id: String) -> Button:
 			return all_chat_tab_button
 		CHAT_TAB_GENERAL:
 			return general_chat_tab_button
-		CHAT_TAB_MAP:
-			return map_chat_tab_button
 		CHAT_TAB_SYSTEM:
 			return system_chat_tab_button
 		CHAT_TAB_PM:
@@ -24680,7 +24654,6 @@ func _apply_chat_tab_state() -> void:
 	var general_active: bool = primary_tab == CHAT_TAB_GENERAL
 	_apply_chat_main_tab_style(all_chat_tab_button, active_chat_tab == CHAT_TAB_ALL)
 	_apply_chat_main_tab_style(general_chat_tab_button, general_active)
-	_apply_chat_main_tab_style(map_chat_tab_button, active_chat_tab == CHAT_TAB_MAP)
 	_apply_chat_main_tab_style(system_chat_tab_button, active_chat_tab == CHAT_TAB_SYSTEM)
 	_apply_chat_main_tab_style(pm_tab_button, active_chat_tab == CHAT_TAB_PM)
 	_apply_chat_main_tab_style(guild_chat_tab_button, active_chat_tab == CHAT_TAB_GUILD)
@@ -37405,6 +37378,7 @@ func _create_chat_channel_prefix(channel: String, target_user_id: int = 0) -> Bu
 func _on_all_channel_badge_pressed(channel: String) -> void:
 	match channel:
 		CHAT_CHANNEL_MAP:
+			selected_general_chat_tab = CHAT_TAB_MAP
 			active_chat_tab = CHAT_TAB_MAP
 		CHAT_CHANNEL_TRADE:
 			selected_general_chat_tab = CHAT_TAB_TRADE

@@ -22,7 +22,6 @@ const UI_BUS := "UI"
 const NOTIFICATION_BUS := "Notifications"
 const CHAT_TAB_ALL := "all"
 const CHAT_TAB_GENERAL := "general"
-const CHAT_TAB_MAP := "map"
 const CHAT_TAB_SYSTEM := "system"
 const CHAT_TAB_PM := "pm"
 const CHAT_TAB_GUILD := "guild"
@@ -34,7 +33,6 @@ const DEFAULT_CHAT_TAB_ORDER: Array[String] = [
 	CHAT_TAB_ALL,
 	CHAT_TAB_GENERAL,
 	CHAT_TAB_SYSTEM,
-	CHAT_TAB_MAP,
 	CHAT_TAB_PM,
 	CHAT_TAB_GUILD,
 ]
@@ -81,7 +79,6 @@ var content_name_language := CONTENT_NAME_LANGUAGE_ENGLISH
 var chat_tab_visibility: Dictionary = {
 	CHAT_TAB_ALL: true,
 	CHAT_TAB_GENERAL: true,
-	CHAT_TAB_MAP: true,
 	CHAT_TAB_SYSTEM: true,
 	CHAT_TAB_PM: true,
 	CHAT_TAB_GUILD: true,
@@ -495,7 +492,6 @@ func reset_chat_tab_preferences() -> void:
 	set_chat_tab_preferences({
 		CHAT_TAB_ALL: true,
 		CHAT_TAB_GENERAL: true,
-		CHAT_TAB_MAP: true,
 		CHAT_TAB_SYSTEM: true,
 		CHAT_TAB_PM: true,
 		CHAT_TAB_GUILD: true,
@@ -569,10 +565,6 @@ func _validated_chat_tab_order(value: Variant) -> Array[String]:
 				order.append(tab_id)
 	if not order.has(CHAT_TAB_ALL):
 		order.push_front(CHAT_TAB_ALL)
-	if not order.has(CHAT_TAB_MAP):
-		var system_index := order.find(CHAT_TAB_SYSTEM)
-		if system_index >= 0:
-			order.insert(system_index + 1, CHAT_TAB_MAP)
 	for tab_id: String in DEFAULT_CHAT_TAB_ORDER:
 		if not order.has(tab_id):
 			order.append(tab_id)
