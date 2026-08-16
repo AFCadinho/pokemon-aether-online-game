@@ -3,8 +3,6 @@ extends BaseNPC
 
 class_name OverworldPokemon
 
-const HOME_ICON_DIR := "res://assets/sprites/pokemon/pokemon_home"
-
 @export var overworld_pokemon_id := ""
 @export var species_id := ""
 @export var level := 5
@@ -19,10 +17,9 @@ func _ready() -> void:
 		return
 	if display_name.strip_edges().is_empty():
 		display_name = _format_species_display_name(species_id)
-	if mugshot == null and auto_resolve_home_icon:
-		mugshot = _load_home_icon(species_id)
 	_apply_follower_sprite_frames()
 	_ready_base_npc()
+	_resolve_home_mugshot()
 	Callable(self, "_load_overworld_pokemon_metadata_if_needed").call_deferred()
 
 
@@ -118,8 +115,7 @@ func _apply_overworld_pokemon_metadata(metadata: Dictionary) -> void:
 		display_name = _format_species_display_name(species_id)
 	_sync_nameplate()
 
-	if auto_resolve_home_icon:
-		mugshot = _load_home_icon(species_id)
+	_resolve_home_mugshot()
 	_apply_follower_sprite_frames()
 
 
@@ -130,13 +126,14 @@ func _get_pokemon_display_name() -> String:
 	return pokemon_name
 
 
-func _load_home_icon(raw_species_id: String) -> Texture2D:
-	var icon_name := _format_species_display_name(raw_species_id).replace(" ", "-")
-	var icon_path := "%s/%s.png" % [HOME_ICON_DIR, icon_name]
-	if not ResourceLoader.exists(icon_path):
-		return null
+func _resolve_home_mugshot() -> void:
+	if not auto_resolve_home_icon:
+		return
 
-	return load(icon_path) as Texture2D
+	var home_icon := PokemonAssets.load_home_sprite(species_id)
+	if home_icon == null:
+		home_icon = PokemonAssets.load_unknown_icon()
+	mugshot = home_icon
 
 
 func _apply_follower_sprite_frames() -> void:
