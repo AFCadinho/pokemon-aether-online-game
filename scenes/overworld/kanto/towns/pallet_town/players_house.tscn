@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_map_exit"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="4_floor_mask"]
 [ext_resource type="Script" uid="uid://dcir531aqivcy" path="res://scripts/world/internal_floor_transition.gd" id="5_floor_transition"]
-[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="6_ikli7"]
+[ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="6_ikli7"]
 [ext_resource type="Texture2D" uid="uid://cxbfneavbrouo" path="res://assets/sprites/mugshots/dadinho_mugshot.png" id="6_rs6s5"]
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="7_father_npc"]
 [ext_resource type="SpriteFrames" uid="uid://cqxh37chx4v8a" path="res://assets/npcs/custom/adinho_dad_frames.tres" id="8_father_frames"]
@@ -173,10 +173,10 @@ position = Vector2(432, 976)
 position = Vector2(336, 912)
 
 [node name="GroundFloorStairs" type="Marker2D" parent="Spawns" unique_id=880081472]
-position = Vector2(496, 736)
+position = Vector2(496, 720)
 
 [node name="UpperFloorStairs" type="Marker2D" parent="Spawns" unique_id=136482848]
-position = Vector2(368, 272)
+position = Vector2(368, 240)
 
 [node name="Exits" type="Node2D" parent="." unique_id=642094233]
 
@@ -189,7 +189,8 @@ target_spawn_name = "FromPlayersHouse"
 position = Vector2(432, 1008)
 shape = SubResource("RectangleShape2D_house_exit")
 
-[node name="DoorTransitionHint" parent="Exits/ToPalletTown" instance=ExtResource("15_transition_hint")]
+[node name="DoorTransitionHint" parent="Exits/ToPalletTown" unique_id=1227322389 instance=ExtResource("15_transition_hint")]
+z_as_relative = false
 position = Vector2(432, 1008)
 flow_direction = "down"
 
