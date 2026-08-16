@@ -366,7 +366,8 @@ func _render_tracker() -> void:
 		hunt_name_label.text = str(active.get("evolutionLineName", target_species if not target_species.is_empty() else "Pokémon"))
 		hunt_count_label.text = _format_number(int(active.get("encounterCount", 0)))
 		hunt_count_context_label.visible = true
-		hunt_sprite.texture = PokemonAssets.load_home_sprite(target_species)
+		var shiny_texture := PokemonAssets.load_home_sprite(target_species, true)
+		hunt_sprite.texture = shiny_texture if shiny_texture != null else PokemonAssets.load_home_sprite(target_species)
 		hunt_sprite.visible = hunt_sprite.texture != null
 		var member_names: Array[String] = []
 		for member_value: Variant in active.get("evolutionLineMembers", []):
