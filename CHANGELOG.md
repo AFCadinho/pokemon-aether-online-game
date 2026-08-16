@@ -17,6 +17,7 @@
 - Brock's Onix is now Shiny.
 - The permanent Shiny Tracker is now included in every Trainer's Bag and defaults to hotbar slot 2.
 - Shared Shiny Tracker hunts now also show the owner's overall encounter statistics.
+- Shared Shiny Tracker hunts can now be posted in chat and opened through a compact Shiny Tracker card.
 - Gideon's catching lesson now rewards a Lucky Egg alongside ten Great Balls; its holder earns 50% more battle EXP.
 
 **Changed**
