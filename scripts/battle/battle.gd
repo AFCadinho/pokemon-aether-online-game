@@ -164,6 +164,7 @@ var pvp_prechoice_buffer := preload("res://scripts/battle/pvp_prechoice_buffer.g
 
 #Battle State
 var battle_state := BattleState.new()
+var npc_trainer_display_name := ""
 var pokemon_hover_service := preload("res://scripts/battle/battle_pokemon_hover_service.gd").new()
 var hover_state := preload("res://scripts/battle/battle_hover_state.gd").new()
 var event_text_formatter := preload("res://scripts/battle/battle_event_text_formatter.gd").new()
@@ -6170,6 +6171,7 @@ func setup_trainer_battle_from_response(
 	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
 ) -> void:
 	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null, environment_id)
+	npc_trainer_display_name = setup_flow.get_trainer_name(trainer_data, "")
 	var team_preview_enabled := _trainer_team_preview_enabled(api_response)
 	opponent_party_reveal_policy.reset(team_preview_enabled)
 	battle_banter_presenter.configure(trainer_data)
@@ -6538,6 +6540,7 @@ func _prepare_battle_setup(
 	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
 ) -> void:
 	battle_type = type
+	npc_trainer_display_name = ""
 	opponent_party_reveal_policy.reset(false)
 	var show_full_trainer_rails := battle_type == BattleType.TRAINER
 	player_stage_party_grid.set_empty_slots_visible(show_full_trainer_rails)
@@ -15153,6 +15156,8 @@ func _get_player_display_name(player_id: String) -> String:
 		return player_name
 	if player_id == "p1":
 		return _t("battle.player.generic")
+	if player_id == "p2" and battle_type == BattleType.TRAINER and npc_trainer_display_name != "":
+		return npc_trainer_display_name
 
 	return _t("battle.player.opponent")
 
