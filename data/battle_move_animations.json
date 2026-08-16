@@ -9523,6 +9523,21 @@
       "overlay_fill_enabled": false,
       "overlay_peak_alpha": 0.0,
       "render_below_sprites": true,
+      "disable_data_sound_events": true,
+      "custom_sound_events": [
+        {
+          "frame": 0,
+          "name": "PRSFX- Psychic.wav",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "frame": 9,
+          "name": "PRSFX- Psychic.wav",
+          "volume": 100,
+          "pitch": 80
+        }
+      ],
       "psychic_pulse": {
         "enabled": true,
         "visible_start": 0.03,
