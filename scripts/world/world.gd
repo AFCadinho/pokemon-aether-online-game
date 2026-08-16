@@ -1026,6 +1026,10 @@ func _setup_initial_world_state() -> void:
 
 	_apply_camera_limits_for_map(initial_map)
 	player.refresh_map_layers()
+	# A battle can be interrupted by a crash or process restart before its
+	# deferred idle update reaches the backend. Entering a fresh overworld is
+	# the authoritative client boundary that clears that stale activity lock.
+	await _save_player_activity_state("idle")
 	WorldPresenceService.connect_presence.call_deferred()
 	_publish_world_presence.call_deferred(true)
 

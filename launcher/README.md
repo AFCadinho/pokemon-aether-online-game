@@ -167,6 +167,23 @@ artifacts first, verifies their public sizes, and publishes the stable manifest
 URLs last. R2 prefixes are object names rather than folders, so no bucket
 directory setup or migration is required.
 
+After the stable manifests are published, the workflow also prunes obsolete
+immutable objects under `game/` and `assets/`. The cleanup reads both the newly
+generated and live manifests, retains every referenced object plus one previous
+version per game platform or asset pack, and never deletes objects younger than
+24 hours. Unknown object names and stable aliases such as `game/latest/` are
+outside the deletion allowlist. Set the workflow's `cleanup_r2` input to false
+to skip cleanup for an exceptional release.
+
+The cleanup tool defaults to a dry-run when used locally:
+
+```bash
+python3 tools/prune_r2_release_objects.py builds/launcher
+```
+
+Actual deletion additionally requires `--apply`; use the workflow for normal
+production cleanup so publication and pruning retain their safe ordering.
+
 ## Upload Sprite Asset Packs
 
 Pokemon sprite packs are intentionally kept out of git. When sprite files change, package and upload them from a local checkout that has `assets/sprites/pokemon` populated:
