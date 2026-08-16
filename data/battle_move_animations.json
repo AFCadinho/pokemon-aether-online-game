@@ -9525,6 +9525,15 @@
       "overlay_fill_enabled": false,
       "overlay_peak_alpha": 0.0,
       "render_below_sprites": true,
+      "timing_background_persist_until_clear": true,
+      "background_motion": {
+        "enabled": true,
+        "speed": 0.9,
+        "drift_x": 5.0,
+        "drift_y": 3.0,
+        "rotation": 0.004,
+        "pulse": 0.012
+      },
       "disable_data_sound_events": true,
       "custom_sound_events": [
         {

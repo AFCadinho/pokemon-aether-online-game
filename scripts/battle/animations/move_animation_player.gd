@@ -17,6 +17,7 @@ signal animation_finished
 @export var show_timing_backgrounds: bool = false
 @export var timing_background_fill_canvas: bool = false
 @export var timing_background_persist_until_clear: bool = false
+@export var background_motion_config: Dictionary = {}
 @export var show_timing_foregrounds: bool = false
 @export var timing_foreground_scale: Vector2 = Vector2.ONE
 @export_range(0.0, 1.0, 0.01) var foreground_opacity_multiplier: float = 1.0
@@ -104,6 +105,9 @@ var base_position := Vector2.ZERO
 var base_position_active := false
 var shake_applied := false
 var timing_background_detached := false
+var timing_background_base_position := Vector2.ZERO
+var timing_background_base_scale := Vector2.ONE
+var timing_background_motion_time := 0.0
 
 @onready var bg: Sprite2D = Sprite2D.new()
 @onready var fg: Sprite2D = Sprite2D.new()
@@ -149,6 +153,11 @@ func stop() -> void:
 	bg_hide_frame = -1
 	fg_hide_frame = -1
 	pink_overlay_alpha = 0.0
+	timing_background_motion_time = 0.0
+	if is_instance_valid(bg):
+		bg.position = timing_background_base_position
+		bg.scale = timing_background_base_scale
+		bg.rotation = 0.0
 	_restore_base_position()
 	_dispose_detached_timing_background()
 	queue_redraw()
@@ -158,6 +167,7 @@ func _process(delta: float) -> void:
 	if not is_playing or data.is_empty():
 		return
 
+	_update_timing_background_motion(delta)
 	pink_overlay_alpha = maxf(0.0, pink_overlay_alpha - delta * 0.42)
 	queue_redraw()
 
@@ -299,6 +309,8 @@ func _fit_timing_background_to_canvas() -> void:
 	)
 	bg.scale = Vector2(cover_scale, cover_scale)
 	bg.position = (ANIMATION_CANVAS_SIZE - texture_size * cover_scale) * 0.5
+	timing_background_base_position = bg.position
+	timing_background_base_scale = bg.scale
 
 
 func move_timing_background_to(parent_node: Node, sibling_index: int) -> void:
@@ -307,7 +319,26 @@ func move_timing_background_to(parent_node: Node, sibling_index: int) -> void:
 
 	bg.reparent(parent_node, true)
 	parent_node.move_child(bg, clampi(sibling_index, 0, parent_node.get_child_count() - 1))
+	timing_background_base_position = bg.position
+	timing_background_base_scale = bg.scale
 	timing_background_detached = true
+
+
+func _update_timing_background_motion(delta: float) -> void:
+	if bg.texture == null or not bool(background_motion_config.get("enabled", false)):
+		return
+
+	timing_background_motion_time += delta
+	var speed := float(background_motion_config.get("speed", 0.8))
+	var time := timing_background_motion_time * speed
+	var drift_x := float(background_motion_config.get("drift_x", 4.0))
+	var drift_y := float(background_motion_config.get("drift_y", 3.0))
+	var rotation_amount := float(background_motion_config.get("rotation", 0.004))
+	var pulse := float(background_motion_config.get("pulse", 0.012))
+	bg.position = timing_background_base_position + Vector2(sin(time) * drift_x, cos(time * 0.82) * drift_y)
+	bg.rotation = sin(time * 0.7) * rotation_amount
+	var scale_pulse := 1.0 + sin(time * 0.58) * pulse
+	bg.scale = timing_background_base_scale * scale_pulse
 
 
 func _dispose_detached_timing_background() -> void:
