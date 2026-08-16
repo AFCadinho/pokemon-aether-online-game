@@ -5765,9 +5765,9 @@ func _format_stat_badge_name(stat_key: String) -> String:
 
 func _format_stat_stage_badge_value(stage_value: int) -> String:
 	if stage_value > 0:
-		return "+%s" % stage_value
+		return "▲ %s" % stage_value
 
-	return str(stage_value)
+	return "▼ %s" % abs(stage_value)
 
 func _is_ability_stat_modifier_name(ability_name: String) -> bool:
 	match ability_name.to_lower().replace(" ", "").replace("-", ""):
