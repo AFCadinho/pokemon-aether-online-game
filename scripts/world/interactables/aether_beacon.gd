@@ -94,34 +94,37 @@ func interact_with_player(_player: Node2D) -> void:
 func _show_attuned_beacon_menu(network: Dictionary, destination_name: String) -> void:
 	var menu := AetherBeaconMenuScript.new() as AetherBeaconMenu
 	get_tree().current_scene.add_child(menu)
-	menu.open(destination_name, str(network.get("anchorDestinationId", "")) == destination_id)
+	menu.open(destination_name, destination_id, _anchor_destination_ids(network), int(network.get("anchorLimit", 1)))
 	var action: String = await menu.resolved
 	if action == AetherBeaconMenu.ACTION_EXPLAIN:
 		await _show_keeper_dialogue([
 			LocalizationManager.text("npc.transit.explain.anchor"),
 			LocalizationManager.text("npc.transit.explain.keeper"),
+			LocalizationManager.text("npc.transit.explain.fare"),
+			LocalizationManager.text("npc.transit.explain.membership"),
 			LocalizationManager.text("npc.transit.explain.change"),
 		])
 		return
-	if action != AetherBeaconMenu.ACTION_SET_ANCHOR:
+	if action != AetherBeaconMenu.ACTION_SET_ANCHOR_1 and action != AetherBeaconMenu.ACTION_SET_ANCHOR_2:
 		return
-	var result: Dictionary = await TransitService.set_anchor(destination_id, global_position)
+	var anchor_slot := AetherBeaconMenu.anchor_slot_for_action(action)
+	var result: Dictionary = await TransitService.set_anchor(destination_id, global_position, anchor_slot)
 	if not bool(result.get("success", false)):
 		await GameErrorDialogService.show_response(result, "backend.error.transit_unavailable")
 		return
 	var body := result.get("body", {}) as Dictionary
 	if bool(body.get("changed", false)):
-		_announce_anchor_set(destination_name)
+		_announce_anchor_set(destination_name, anchor_slot)
 	await _show_keeper_dialogue([
-		LocalizationManager.text("npc.transit.anchor_set", {"name": destination_name}),
+		LocalizationManager.text("npc.transit.anchor_set", {"name": destination_name, "slot": anchor_slot}),
 	])
 
 
-func _announce_anchor_set(destination_name: String) -> void:
+func _announce_anchor_set(destination_name: String, anchor_slot: int) -> void:
 	get_tree().call_group(
 		"ui_overlay",
 		"add_system_message",
-		LocalizationManager.text("ui.transit.anchor.system", {"name": destination_name})
+		LocalizationManager.text("ui.transit.anchor.system", {"name": destination_name, "slot": anchor_slot})
 	)
 
 
@@ -153,6 +156,19 @@ func _destination_name_from_network(network: Dictionary) -> String:
 		if str(destination.get("destinationId", "")) == destination_id:
 			return str(destination.get("name", destination_id))
 	return destination_id.replace("_", " ").capitalize()
+
+
+func _anchor_destination_ids(network: Dictionary) -> Array[String]:
+	var ids: Array[String] = []
+	for value: Variant in network.get("anchorDestinationIds", []):
+		var anchor_id := str(value).strip_edges()
+		if not anchor_id.is_empty():
+			ids.append(anchor_id)
+	if ids.is_empty():
+		var primary := str(network.get("anchorDestinationId", "")).strip_edges()
+		if not primary.is_empty():
+			ids.append(primary)
+	return ids
 
 
 func _refresh_activation_state() -> void:

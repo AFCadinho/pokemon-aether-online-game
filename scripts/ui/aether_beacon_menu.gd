@@ -4,7 +4,8 @@ class_name AetherBeaconMenu
 
 signal resolved(action: String)
 
-const ACTION_SET_ANCHOR := "set_anchor"
+const ACTION_SET_ANCHOR_1 := "set_anchor_1"
+const ACTION_SET_ANCHOR_2 := "set_anchor_2"
 const ACTION_EXPLAIN := "explain"
 const COLOR_PANEL := Color("07101cf7")
 const COLOR_SURFACE := Color("0e1b2af8")
@@ -15,9 +16,11 @@ const COLOR_TEXT := Color("eef8ff")
 const COLOR_MUTED := Color("9eb3c5")
 
 var _resolved := false
+var _destination_id := ""
 
 
-func open(destination_name: String, is_anchor: bool) -> void:
+func open(destination_name: String, destination_id: String, anchor_destination_ids: Array[String], anchor_limit: int) -> void:
+	_destination_id = destination_id
 	layer = 120
 	var root := Control.new()
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -55,14 +58,24 @@ func open(destination_name: String, is_anchor: bool) -> void:
 	message.add_theme_font_size_override("font_size", 15)
 	content.add_child(message)
 
+	var is_anchor := _destination_id in anchor_destination_ids
 	var anchor_button := _button(
-		LocalizationManager.text("ui.transit.beacon_menu.anchor_current") if is_anchor else LocalizationManager.text("ui.transit.beacon_menu.anchor"),
+		_anchor_button_text(1, anchor_destination_ids, is_anchor),
 		not is_anchor,
 		true
 	)
 	if not is_anchor:
-		anchor_button.pressed.connect(_finish.bind(ACTION_SET_ANCHOR))
+		anchor_button.pressed.connect(_finish.bind(ACTION_SET_ANCHOR_1))
 	content.add_child(anchor_button)
+	if anchor_limit >= 2:
+		var second_anchor_button := _button(
+			_anchor_button_text(2, anchor_destination_ids, is_anchor),
+			not is_anchor,
+			false
+		)
+		if not is_anchor:
+			second_anchor_button.pressed.connect(_finish.bind(ACTION_SET_ANCHOR_2))
+		content.add_child(second_anchor_button)
 	var explain_button := _button(LocalizationManager.text("ui.transit.beacon_menu.explain"), true, false)
 	explain_button.pressed.connect(_finish.bind(ACTION_EXPLAIN))
 	content.add_child(explain_button)
@@ -70,6 +83,17 @@ func open(destination_name: String, is_anchor: bool) -> void:
 	close_button.pressed.connect(_finish.bind(""))
 	content.add_child(close_button)
 	(anchor_button if not is_anchor else explain_button).grab_focus.call_deferred()
+
+
+static func anchor_slot_for_action(action: String) -> int:
+	return 2 if action == ACTION_SET_ANCHOR_2 else 1
+
+
+func _anchor_button_text(slot: int, anchor_destination_ids: Array[String], is_anchor: bool) -> String:
+	if is_anchor:
+		var current_slot := anchor_destination_ids.find(_destination_id) + 1
+		return LocalizationManager.text("ui.transit.beacon_menu.anchor_current_slot", {"slot": current_slot})
+	return LocalizationManager.text("ui.transit.beacon_menu.anchor_slot", {"slot": slot})
 
 
 func _unhandled_input(event: InputEvent) -> void:
