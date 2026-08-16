@@ -10309,7 +10309,7 @@ func _setup_status_docks() -> void:
 			"description_key": "ui.buff.global_exp.description",
 			"state": "funding",
 			"current": 0,
-			"goal": 100000,
+			"goal": 50000,
 			"active_duration": "1h",
 		},
 		{
@@ -10345,6 +10345,7 @@ func _setup_status_docks() -> void:
 	])
 	set_personal_buffs([])
 	_load_global_exp_boost.call_deferred()
+	_load_global_ev_boost.call_deferred()
 
 func set_global_buffs(buffs: Array) -> void:
 	global_buffs_data = buffs.duplicate(true)
@@ -10829,7 +10830,7 @@ func _render_global_buff_details() -> void:
 		"ui.buff.server_remaining",
 		{"remaining": str(selected_global_buff.get("remaining", ""))}
 	)
-	global_buff_donation_section.visible = not active
+	global_buff_donation_section.visible = not active and _global_buff_accepts_contributions(selected_global_buff)
 	_refresh_global_buff_contribution_input()
 	if global_buff_details_panel != null:
 		global_buff_details_panel.reset_size()
@@ -10902,7 +10903,11 @@ func _refresh_global_buff_contribution_input() -> void:
 	_apply_global_buff_fill_remaining_button_style()
 
 func _on_global_buff_contribute_pressed() -> void:
-	if selected_global_buff.is_empty() or str(selected_global_buff.get("state", "funding")) == "active":
+	if (
+		selected_global_buff.is_empty()
+		or str(selected_global_buff.get("state", "funding")) == "active"
+		or not _global_buff_accepts_contributions(selected_global_buff)
+	):
 		return
 	var remaining := _global_buff_remaining_contribution()
 	var minimum := mini(MINIMUM_GLOBAL_BUFF_CONTRIBUTION, remaining)
@@ -10913,7 +10918,14 @@ func _on_global_buff_contribute_pressed() -> void:
 		))
 		return
 	global_buff_contribute_button.disabled = true
-	var response: Dictionary = await PlayerWalletService.contribute_to_global_exp_boost(selected_global_buff_contribution)
+	var selected_boost_id := str(selected_global_buff.get("id", ""))
+	var response: Dictionary = {}
+	if selected_boost_id == "global_exp":
+		response = await PlayerWalletService.contribute_to_global_exp_boost(selected_global_buff_contribution)
+	elif selected_boost_id == "global_ev":
+		response = await PlayerWalletService.contribute_to_global_ev_boost(selected_global_buff_contribution)
+	else:
+		return
 	if not bool(response.get("success", false)):
 		_add_chat_message(str(response.get("error", LocalizationManager.text("backend.error.not_enough_money"))))
 		_refresh_global_buff_contribution_input()
@@ -10924,22 +10936,31 @@ func _on_global_buff_contribute_pressed() -> void:
 	if aetherite_reward > 0:
 		add_system_message(LocalizationManager.text(
 			"ui.buff.aetherite_reward",
-			{"amount": _format_money(aetherite_reward)}
+		{
+			"amount": _format_money(aetherite_reward),
+			"boost": _localized_buff_name(selected_global_buff),
+		}
 		))
-	_apply_global_exp_boost_state(body)
+	_apply_global_boost_state(body, selected_boost_id)
 	_render_global_buff_details()
 
 
 func _load_global_exp_boost() -> void:
 	var response: Dictionary = await PlayerWalletService.load_global_exp_boost()
 	if bool(response.get("success", false)):
-		_apply_global_exp_boost_state(response.get("body", {}) as Dictionary)
+		_apply_global_boost_state(response.get("body", {}) as Dictionary, "global_exp")
 
 
-func _apply_global_exp_boost_state(state: Dictionary) -> void:
+func _load_global_ev_boost() -> void:
+	var response: Dictionary = await PlayerWalletService.load_global_ev_boost()
+	if bool(response.get("success", false)):
+		_apply_global_boost_state(response.get("body", {}) as Dictionary, "global_ev")
+
+
+func _apply_global_boost_state(state: Dictionary, boost_id: String) -> void:
 	for index: int in range(global_buffs_data.size()):
 		var buff := global_buffs_data[index] as Dictionary
-		if str(buff.get("id", "")) != "global_exp":
+		if str(buff.get("id", "")) != boost_id:
 			continue
 		buff["current"] = int(state.get("current", 0))
 		buff["goal"] = int(state.get("goal", 100000))
@@ -10952,10 +10973,14 @@ func _apply_global_exp_boost_state(state: Dictionary) -> void:
 			else ""
 		)
 		global_buffs_data[index] = buff
-		if str(selected_global_buff.get("id", "")) == "global_exp":
+		if str(selected_global_buff.get("id", "")) == boost_id:
 			selected_global_buff = buff.duplicate(true)
 		set_global_buffs(global_buffs_data)
 		return
+
+
+func _global_buff_accepts_contributions(buff: Dictionary) -> bool:
+	return str(buff.get("id", "")) in ["global_exp", "global_ev"]
 
 func _hide_global_buff_details() -> void:
 	global_buff_details_panel.visible = false
@@ -36815,6 +36840,9 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 	if message_type == "system.global_exp_boost_contribution":
 		add_system_message(_global_exp_boost_contribution_message(message))
 		return
+	if message_type == "system.global_ev_boost_contribution":
+		add_system_message(_global_ev_boost_contribution_message(message))
+		return
 	if message_type == "chat_error":
 		var error_text: String = str(message.get("message", "Chat message could not be sent."))
 		var error_channel := str(message.get("channel", "")).strip_edges().to_lower()
@@ -36851,8 +36879,16 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 
 
 func _global_exp_boost_contribution_message(message: Dictionary) -> String:
+	return _global_boost_contribution_message(message, "ui.buff.global_exp.contribution_message")
+
+
+func _global_ev_boost_contribution_message(message: Dictionary) -> String:
+	return _global_boost_contribution_message(message, "ui.buff.global_ev.contribution_message")
+
+
+func _global_boost_contribution_message(message: Dictionary, localization_key: String) -> String:
 	return LocalizationManager.text(
-		"ui.buff.global_exp.contribution_message",
+		localization_key,
 		{
 			"player": str(message.get("displayName", "Trainer")),
 			"amount": _format_money(max(int(message.get("amount", 0)), 0)),
