@@ -10998,7 +10998,7 @@ func _apply_global_boost_state(state: Dictionary, boost_id: String) -> void:
 
 
 func _global_buff_accepts_contributions(buff: Dictionary) -> bool:
-	return str(buff.get("id", "")) in ["global_exp", "global_ev", "global_rare_encounter"]
+	return str(buff.get("id", "")) in ["global_exp", "global_ev", "global_shiny", "global_rare_encounter"]
 
 func _hide_global_buff_details() -> void:
 	global_buff_details_panel.visible = false
