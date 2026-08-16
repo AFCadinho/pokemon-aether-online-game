@@ -379,7 +379,6 @@ const BAG_CATEGORIES := [
 	{"id": "power_stones", "labelKey": "ui.bag.category.power_stones", "iconItemId": "charizardite-x"},
 	{"id": "cosmetics", "labelKey": "ui.bag.category.cosmetics", "iconItemId": "blue-canari-plush-lv-1"},
 	{"id": "vouchers", "labelKey": "ui.bag.category.vouchers", "iconItemId": "aether-blessing-voucher-3-days"},
-	{"id": "currency", "labelKey": "ui.bag.category.currency", "iconItemId": "coin-case"},
 	{"id": "general", "labelKey": "ui.bag.category.other", "iconItemId": "ability-capsule"},
 ]
 const TRAINER_CARD_CYAN := Color("#8bd8f4")

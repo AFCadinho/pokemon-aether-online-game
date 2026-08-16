@@ -17,6 +17,7 @@
 
 **Changed**
 
+- Removed the redundant Currency tab from the Bag; account balances remain available in the Trainer Card wallet.
 - Aethernet travel now uses a destination catalogue: Aether Anchor destinations are free, while other attuned destinations cost ₽500.
 - Mom remains available to heal your Pokémon after you receive your starter; her story conversation now waits until you receive the Pokédex.
 - The Viridian EV Training Assistants, Youngster Caleb, and other placed Trainers now use localized dialogue.
