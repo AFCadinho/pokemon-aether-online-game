@@ -63,6 +63,8 @@ var unflushed_playtime_seconds := 0
 var is_flushing_playtime := false
 var is_saving_player_position := false
 var has_pending_player_position_save := false
+var activity_state_save_in_progress := false
+var pending_activity_state_save: Dictionary = {}
 var pending_happiness_walk_steps := 0
 var authorized_teleport_in_progress := false
 var authorized_teleport_locked_overworld := false
@@ -1957,13 +1959,40 @@ func _get_current_activity_context() -> Dictionary:
 
 
 func _save_player_activity_state_deferred(activity_state: String, activity_context: Dictionary = {}) -> void:
-	_save_player_activity_state.call_deferred(activity_state, activity_context)
+	pending_activity_state_save = {
+		"state": activity_state,
+		"context": activity_context.duplicate(true),
+	}
+	if not activity_state_save_in_progress:
+		_save_player_activity_state.call_deferred(activity_state, activity_context)
 
 
 func _save_player_activity_state(activity_state: String, activity_context: Dictionary = {}) -> void:
-	var result: Dictionary = await PlayerGameStateService.save_player_activity_state(activity_state, activity_context)
-	if not bool(result.get("success", false)):
-		push_warning("World: activity state save failed: %s" % str(result.get("error", "Unknown error")))
+	pending_activity_state_save = {
+		"state": activity_state,
+		"context": activity_context.duplicate(true),
+	}
+	if activity_state_save_in_progress:
+		return
+
+	activity_state_save_in_progress = true
+	while not pending_activity_state_save.is_empty():
+		var request := pending_activity_state_save
+		pending_activity_state_save = {}
+		var result: Dictionary = await PlayerGameStateService.save_player_activity_state(
+			str(request.get("state", "idle")),
+			_dictionary_from_value(request.get("context", {})),
+		)
+		if bool(result.get("success", false)) or not pending_activity_state_save.is_empty():
+			continue
+		await get_tree().create_timer(0.5).timeout
+		result = await PlayerGameStateService.save_player_activity_state(
+			str(request.get("state", "idle")),
+			_dictionary_from_value(request.get("context", {})),
+		)
+		if not bool(result.get("success", false)):
+			push_warning("World: activity state save failed after retry: %s" % str(result.get("error", "Unknown error")))
+	activity_state_save_in_progress = false
 
 
 func _get_current_appearance_presence_state() -> Dictionary:
@@ -2669,6 +2698,7 @@ func _respawn_after_battle_loss() -> void:
 		return
 
 	_apply_respawn_party_response(_dictionary_from_value(result.get("party", {})))
+	SfxManager.play("pokemon_recovery")
 	var position_state := _dictionary_from_value(result.get("position", {}))
 	if position_state.is_empty():
 		push_warning("World: respawn response did not include a position.")
@@ -2691,7 +2721,9 @@ func _fallback_respawn_after_battle_loss() -> void:
 	var default_respawn_state := _get_default_healer_respawn_state()
 	var party_heal_service := get_node_or_null("/root/PartyHealService")
 	if party_heal_service != null and party_heal_service.has_method("heal_current_party_and_save"):
-		await party_heal_service.call("heal_current_party_and_save")
+		var heal_result: Dictionary = await party_heal_service.call("heal_current_party_and_save")
+		if bool(heal_result.get("success", false)) and bool(heal_result.get("changed", false)):
+			SfxManager.play("pokemon_recovery")
 
 	var apply_result: Dictionary = await apply_authorized_teleport_state(default_respawn_state)
 	if not bool(apply_result.get("success", false)):
