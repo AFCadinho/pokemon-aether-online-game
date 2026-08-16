@@ -710,8 +710,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromPewterCity",
 					"tile": {
-						"x": 13,
-						"y": 27
+						"x": 2,
+						"y": 21
 					}
 				},
 				"from_pokecenter": {
@@ -1205,8 +1205,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_3.tscn",
 				"position": {
-					"x": 416.0,
-					"y": 864.0
+					"x": 80.0,
+					"y": 688.0
 				},
 				"spawnMarker": "FromPewterCity"
 			},
