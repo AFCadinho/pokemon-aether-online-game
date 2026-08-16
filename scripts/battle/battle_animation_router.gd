@@ -926,6 +926,9 @@ func _move_timing_background_below_sprites(animation_node: MoveAnimationPlayer, 
 		return
 
 	var sibling_index: int = parent_node.get_child_count()
+	var animation_overlay := animation_node.get_parent()
+	if animation_overlay != null and animation_overlay.get_parent() == parent_node:
+		sibling_index = animation_overlay.get_index()
 	for sprite_box: Node in [player_sprite_box, enemy_sprite_box]:
 		if sprite_box != null and sprite_box.get_parent() == parent_node:
 			sibling_index = mini(sibling_index, sprite_box.get_index())
