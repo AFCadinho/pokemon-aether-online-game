@@ -115,9 +115,14 @@ func disconnect_chat() -> void:
 		connection_changed.emit(false)
 
 
-func send_chat_message(text: String, channel: String = "global", pokemon_attachments: Array = []) -> bool:
+func send_chat_message(
+	text: String,
+	channel: String = "global",
+	pokemon_attachments: Array = [],
+	shiny_hunt_share_id: String = ""
+) -> bool:
 	var cleaned_text: String = text.strip_edges()
-	if cleaned_text.is_empty() and pokemon_attachments.is_empty():
+	if cleaned_text.is_empty() and pokemon_attachments.is_empty() and shiny_hunt_share_id.is_empty():
 		return true
 	if cleaned_text.length() > MAX_MESSAGE_LENGTH:
 		cleaned_text = cleaned_text.substr(0, MAX_MESSAGE_LENGTH)
@@ -133,6 +138,8 @@ func send_chat_message(text: String, channel: String = "global", pokemon_attachm
 	}
 	if not pokemon_attachments.is_empty():
 		payload["pokemonAttachments"] = pokemon_attachments
+	if not shiny_hunt_share_id.is_empty():
+		payload["shinyHuntShareId"] = shiny_hunt_share_id
 	var error: Error = websocket.send_text(JSON.stringify(payload))
 	return error == OK
 
