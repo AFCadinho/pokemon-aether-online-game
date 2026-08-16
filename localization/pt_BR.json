@@ -721,6 +721,8 @@
   "ui.bag.use.teach_move_tooltip": "Ensine {move} a {pokemon}. Se um Pokémon puder aprender este movimento, a máquina poderá ser usada novamente.",
   "ui.bag.use.trade_evolution": "Ativar evolução por troca",
   "ui.bag.use.trade_evolution_tooltip": "Use o Linking Cord em {pokemon}. Ele só será consumido se este Pokémon puder evoluir por troca.",
+  "ui.bag.use.evolution": "Ativar evolução",
+  "ui.bag.use.evolution_tooltip": "Use este item de evolução em {pokemon}. Ele só será consumido se puder desencadear uma evolução.",
   "ui.bag.use.max_level": "Nível máximo",
   "ui.bag.use.level_cap": "Limite de nível {levelCap}",
   "ui.bag.use.current_level_cap": "{pokemon} atingiu seu limite de nível atual de {levelCap}.",

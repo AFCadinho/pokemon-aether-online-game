@@ -78,7 +78,7 @@ func _check_overlay_contract() -> void:
 	_check(source.contains("BAG_ITEM_EFFECT_PREVIEW.preview"), "Bag delegates medicine previews")
 	_check(source.contains("PlayerSave.replace_party_from_state(party_value as Array)"), "successful use applies authoritative server party")
 	_check(source.contains('"gameplay": gameplay'), "inventory normalization preserves gameplay metadata")
-	_check(source.contains('func _is_trade_evolution_item_id'), "Bag recognizes the Linking Cord as a Pokemon item")
+	_check(source.contains('func _is_evolution_item_id'), "Bag recognizes evolution items as Pokemon items")
 	_check(source.contains('func _present_item_trade_evolution'), "Bag presents an item-triggered evolution")
 	_check(source.contains('await play_evolution_overlay(evolution)'), "item-triggered evolution uses the evolution overlay")
 	_check(not source.contains("Restores 60 HP to one Pokemon."), "conflicting Super Potion 60 HP fallback is removed")

@@ -17848,10 +17848,10 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 			}),
 			"canApply": true,
 		}
-	if _is_trade_evolution_item_id(item_id):
+	if _is_evolution_item_id(item_id):
 		return {
-			"label": LocalizationManager.text("ui.bag.use.trade_evolution"),
-			"tooltip": LocalizationManager.text("ui.bag.use.trade_evolution_tooltip", {
+			"label": LocalizationManager.text("ui.bag.use.evolution"),
+			"tooltip": LocalizationManager.text("ui.bag.use.evolution_tooltip", {
 				"pokemon": _pokemon_display_name(pokemon),
 			}),
 			"canApply": true,
@@ -18257,7 +18257,7 @@ func _present_item_trade_evolution(reward: Dictionary) -> void:
 			if not (execution_value is Dictionary):
 				continue
 			var execution: Dictionary = execution_value as Dictionary
-			if str(execution.get("type", "")) != "evolve_trade" or not bool(execution.get("applied", false)):
+			if str(execution.get("type", "")) not in ["evolve_trade", "evolve_item"] or not bool(execution.get("applied", false)):
 				continue
 			var details := _staff_dictionary_from_variant(execution.get("details", {}))
 			var evolution := _staff_dictionary_from_variant(details.get("evolution", {}))
@@ -18297,11 +18297,20 @@ func _is_ev_item_id(item_id: String) -> bool:
 func _is_ev_reducing_berry_id(item_id: String) -> bool:
 	return EV_REDUCING_BERRY_STATS.has(_normalize_item_id(item_id))
 
-func _is_trade_evolution_item_id(item_id: String) -> bool:
-	return _normalize_item_id(item_id) == "linking-cord"
+func _is_evolution_item_id(item_id: String) -> bool:
+	var gameplay := _bag_gameplay_definition_for_item_id(item_id)
+	var effects_value: Variant = gameplay.get("effects", [])
+	if not (effects_value is Array):
+		return false
+	for effect_value: Variant in effects_value as Array:
+		if not (effect_value is Dictionary):
+			continue
+		if str((effect_value as Dictionary).get("type", "")) in ["evolve_trade", "evolve_item"]:
+			return true
+	return false
 
 func _is_pokemon_usable_item_id(item_id: String) -> bool:
-	return _bag_machine_move_id(item_id) != "" or _is_exp_item_id(item_id) or _is_ev_item_id(item_id) or _is_ev_reducing_berry_id(item_id) or _is_trade_evolution_item_id(item_id) or BAG_ITEM_EFFECT_PREVIEW.supports(_bag_gameplay_definition_for_item_id(item_id))
+	return _bag_machine_move_id(item_id) != "" or _is_exp_item_id(item_id) or _is_ev_item_id(item_id) or _is_ev_reducing_berry_id(item_id) or _is_evolution_item_id(item_id) or BAG_ITEM_EFFECT_PREVIEW.supports(_bag_gameplay_definition_for_item_id(item_id))
 
 func _bag_machine_move_id(item_id: String) -> String:
 	var normalized_id := _normalize_item_id(item_id)
