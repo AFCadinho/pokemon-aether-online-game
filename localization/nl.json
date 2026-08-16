@@ -3611,5 +3611,7 @@
   "ui.shiny_tracker.error.share": "Deze Shiny-hunt kon niet worden gedeeld.",
   "ui.shiny_tracker.error.shared_load": "Deze gedeelde Shiny-hunt is niet meer beschikbaar.",
   "ui.shiny_tracker.chat_tooltip": "Open het live Shiny-huntoverzicht van deze Trainer",
+  "ui.shiny_tracker.chat_card_title": "SHINY-HUNT",
+  "ui.shiny_tracker.chat_card_encounters": "encounters",
   "ui.shiny_tracker.shared_by": "Live hunt gedeeld door {player}."
 }
