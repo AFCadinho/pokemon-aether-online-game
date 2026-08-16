@@ -1263,6 +1263,7 @@ var aether_clash_champion_name := ""
 var aether_clash_champion_refresh_elapsed := 0.0
 var aether_clash_champion_request_active := false
 var utc_time_refresh_elapsed := UTC_TIME_REFRESH_INTERVAL_SECONDS
+var ui_input_mouse_blocker: Control
 var selected_global_buff: Dictionary = {}
 var selected_global_buff_contribution := 10000
 var active_personal_buffs: Array = []
@@ -1309,6 +1310,7 @@ func _ready() -> void:
 	_setup_pvp_queue_compact_panel()
 	_setup_pvp_match_countdown_overlay()
 	_setup_session_logout_banner()
+	_setup_ui_input_mouse_blocker()
 	_setup_pvp_mode_menu()
 	_setup_dev_add_item_tools()
 	_setup_dev_tools_menu_surface()
@@ -9464,6 +9466,7 @@ func _position_pokedex_popup() -> void:
 	pokedex_popup.offset_bottom = popup_size.y * 0.5
 
 func _process(delta: float) -> void:
+	_refresh_ui_input_mouse_blocker()
 	_position_collapsible_buttons()
 	_refresh_pvp_queue_compact_panel(delta)
 	_refresh_pvp_queue_button_animation(delta)
@@ -9480,6 +9483,26 @@ func _process(delta: float) -> void:
 	_refresh_pvp_room_polling(delta)
 	_refresh_pvp_room_wait_spinner(delta)
 	_refresh_player_action_cooldown(delta)
+
+func _setup_ui_input_mouse_blocker() -> void:
+	ui_input_mouse_blocker = Control.new()
+	ui_input_mouse_blocker.name = "UIInputMouseBlocker"
+	ui_input_mouse_blocker.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	ui_input_mouse_blocker.mouse_filter = Control.MOUSE_FILTER_STOP
+	ui_input_mouse_blocker.focus_mode = Control.FOCUS_NONE
+	ui_input_mouse_blocker.z_index = UI_MODAL_Z_INDEX + 1
+	ui_input_mouse_blocker.visible = false
+	root_control.add_child(ui_input_mouse_blocker)
+
+func _refresh_ui_input_mouse_blocker() -> void:
+	if ui_input_mouse_blocker == null:
+		return
+	var should_block := GameState.is_ui_input_locked()
+	if ui_input_mouse_blocker.visible == should_block:
+		return
+	ui_input_mouse_blocker.visible = should_block
+	if should_block:
+		ui_input_mouse_blocker.move_to_front()
 
 func _refresh_pvp_room_polling(delta: float) -> void:
 	if not pvp_polling_active or pvp_active_room_code == "" or pvp_battle_starting:

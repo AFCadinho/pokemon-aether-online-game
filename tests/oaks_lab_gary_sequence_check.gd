@@ -9,6 +9,8 @@ const OAK_SCRIPT := "res://scripts/world/kanto/towns/pallet_town/oak.gd"
 const STARTER_BALL_SCRIPT := "res://scripts/world/interactables/starter_poke_ball.gd"
 const WORLD_SCRIPT := "res://scripts/world/world.gd"
 const BASE_NPC_SCRIPT := "res://scripts/world/npcs/base_npc.gd"
+const GAME_STATE_SCRIPT := "res://scripts/core/game_state.gd"
+const UI_OVERLAY_SCRIPT := "res://scripts/ui/ui_overlay.gd"
 
 var failed := false
 
@@ -90,8 +92,23 @@ func _run() -> void:
 	)
 	_check_true(
 		gary_text.contains("GameState.acquire_overworld_input_lock(STARTER_SEQUENCE_INPUT_LOCK)")
-		and gary_text.contains("GameState.release_overworld_input_lock(STARTER_SEQUENCE_INPUT_LOCK)"),
-		"Gary owns the overworld input lock throughout his starter walk and dialogue"
+		and gary_text.contains("GameState.release_overworld_input_lock(STARTER_SEQUENCE_INPUT_LOCK)")
+		and gary_text.contains("GameState.acquire_ui_input_lock(STARTER_SEQUENCE_INPUT_LOCK)")
+		and gary_text.contains("GameState.release_ui_input_lock(STARTER_SEQUENCE_INPUT_LOCK)"),
+		"Gary owns the overworld and UI input locks throughout his starter walk and dialogue"
+	)
+	var game_state_text := _read_text(GAME_STATE_SCRIPT)
+	_check_true(
+		game_state_text.contains("func acquire_ui_input_lock(owner_id: StringName) -> void:")
+		and game_state_text.contains("func release_ui_input_lock(owner_id: StringName) -> void:"),
+		"UI input locks preserve independent owners during nested dialogue"
+	)
+	var ui_overlay_text := _read_text(UI_OVERLAY_SCRIPT)
+	_check_true(
+		ui_overlay_text.contains('ui_input_mouse_blocker.name = "UIInputMouseBlocker"')
+		and ui_overlay_text.contains("ui_input_mouse_blocker.mouse_filter = Control.MOUSE_FILTER_STOP")
+		and ui_overlay_text.contains("var should_block := GameState.is_ui_input_locked()"),
+		"The HUD consumes mouse clicks while story UI input is locked"
 	)
 	_check_true(
 		oak_text.contains("func _run_story_or_legacy_interaction(body: Node2D, trigger: String)")
