@@ -699,8 +699,9 @@ func _get_animation_resources(config: Dictionary) -> Dictionary:
 		var sound_path: String = str(sound_path_value)
 		if sound_path != "":
 			var stream: AudioStream = _get_cached_sound_stream(sound_path)
-			if stream == null:
-				return {}
+			# A sound is an optional layer of an animation.  Do not discard the
+			# complete visual animation when an imported sound is unavailable (for
+			# example while Godot is still importing a newly added asset).
 			if stream != null:
 				sound_streams[_sound_name_for_path(sound_paths, sound_path)] = stream
 	resources["sound_streams"] = sound_streams
