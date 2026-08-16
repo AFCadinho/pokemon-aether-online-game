@@ -86,7 +86,7 @@ func _check_rematch_state_contract() -> void:
 	var battle_api_text := _read_text(BATTLE_API_CLIENT_SCRIPT)
 	_check_true(trainer_text.contains('const STATE_READY := "ready"'), "TrainerNPC has an explicit rematch-ready state")
 	_check_true(trainer_text.contains('const STATE_SLEEPING := "sleeping"'), "TrainerNPC has an explicit daily sleeping state")
-	_check_true(trainer_text.contains("TrainerProgressService.begin_rematch(trainer_id)"), "rematches reserve the daily attempt before battle")
+	_check_true(not trainer_text.contains("TrainerProgressService.begin_rematch(trainer_id)"), "rematches do not reserve a cooldown before battle")
 	_check_true(trainer_text.contains('rematch_marker_sleep_label.text = "Zzz"'), "spent rematches display a sleeping marker")
 	_check_true(trainer_text.contains('add_theme_font_size_override("font_size", 22)'), "sleeping marker remains readable at overworld scale")
 	_check_true(trainer_text.contains('_sleeping_marker_style()'), "sleeping marker has a dedicated high-contrast badge")

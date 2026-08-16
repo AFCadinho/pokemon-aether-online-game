@@ -140,9 +140,6 @@ func _show_battle_dialogue(is_rematch: bool) -> void:
 	dialogue_box.start_dialogue(dialogue_lines, speaker_name, mugshot)
 	await dialogue_box.dialogue_finished
 	await get_tree().create_timer(BATTLE_TRANSITION_DELAY_SECONDS).timeout
-	if is_rematch and not await _reserve_daily_rematch(dialogue_box):
-		return
-	
 	var battle_metadata := trainer_metadata.duplicate(true)
 	battle_metadata["_is_rematch"] = is_rematch
 	var battle_result: Dictionary = await start_trainer_battle(battle_metadata)
@@ -336,22 +333,6 @@ func _claim_battle_interaction() -> bool:
 	if battle_in_progress:
 		return false
 	battle_in_progress = true
-	return true
-
-
-func _reserve_daily_rematch(dialogue_box: Node) -> bool:
-	trainer_progress_request_active = true
-	var result: Dictionary = await TrainerProgressService.begin_rematch(trainer_id)
-	trainer_progress_request_active = false
-	if not bool(result.get("success", false)):
-		battle_in_progress = false
-		await GameErrorDialogService.show_response(result, "", dialogue_box)
-		await _load_trainer_progress()
-		return false
-	trainer_progress_state = STATE_SLEEPING
-	next_progress_refresh_at_msec = Time.get_ticks_msec() + SLEEPING_REFRESH_INTERVAL_MSEC
-	_refresh_rematch_marker()
-	_configure_vision_area()
 	return true
 
 
