@@ -4881,6 +4881,8 @@ func _submit_move_learn_choice(replace_slot: int, skip: bool) -> void:
 	move_learn_popup.visible = false
 	_hide_move_learn_hover_panel()
 	move_learn_active_prompt.clear()
+	if source_item_id != "":
+		await _load_bag_inventory()
 	_refresh_party()
 	_refresh_open_pokemon_summary_cards()
 	_show_next_move_learn_prompt()

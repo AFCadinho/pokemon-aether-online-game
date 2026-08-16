@@ -33,6 +33,7 @@
 - Fixed unclear battle stat-stage labels, removed unnecessary EV reward messages, and made a left mouse click advance dialogue like Space.
 - Fixed Global Boost panels occasionally opening at the wrong height or trapping a Trainer after an insufficient-funds message.
 - Developer world-time previews now also control time-based wild encounters.
+- Technical Machines are now consumed after successfully teaching their move; HMs remain reusable.
 - Fixed the Shiny Tracker failing to open before a Trainer had started their first hunt.
 - Active Shiny Tracker hunts now show the target Pokémon sprite.
 
