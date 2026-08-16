@@ -81,6 +81,12 @@ func _run() -> void:
 		"known backend code displays in Dutch"
 	)
 	_check(
+		errors.call("message", {
+			"detail": {"code": "GUILD_LOBBY_TRANSIT_ATTUNEMENT_REQUIRED"}
+		}) == "Stem eerst af op een Aethernet Crystal voordat je naar de Aether Clash Lobby reist.",
+		"Guild Lobby attunement requirement displays in Dutch"
+	)
+	_check(
 		errors.call("message", {"detail": {"code": "current_password_incorrect"}})
 		== "Het huidige wachtwoord is onjuist.",
 		"privacy password errors explain how identity verification failed"

@@ -50,6 +50,7 @@ const CODE_TO_KEY: Dictionary = {
 	"guild_invitation_resolved": "backend.error.guild_invitation_unavailable",
 	"guild_invitation_expired": "backend.error.guild_invitation_expired",
 	"guild_membership_not_found": "backend.error.guild_membership_not_found",
+	"guild_lobby_transit_attunement_required": "ui.guild.lobby.error.attunement_required",
 	"guild_not_found": "backend.error.guild_not_found",
 	"guild_leader_required": "backend.error.guild_leader_required",
 	"guild_emblem_template_not_found": "backend.error.guild_emblem_unavailable",
