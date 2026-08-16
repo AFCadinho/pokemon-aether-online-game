@@ -32,9 +32,14 @@ func _init() -> void:
 			"func _save_player_activity_state(activity_state: String, activity_context: Dictionary = {})"
 		)
 		and world_source.contains(
-			"await PlayerGameStateService.save_player_activity_state(activity_state, activity_context)"
+			"await PlayerGameStateService.save_player_activity_state("
 		),
 		"Overworld activity recovery uses the authenticated player activity endpoint"
+	)
+	_expect(
+		world_source.contains("activity_state_save_in_progress")
+		and world_source.contains("activity state save failed after retry"),
+		"Overworld activity saves are serialized and retry transient failures"
 	)
 
 	quit(1 if failed else 0)

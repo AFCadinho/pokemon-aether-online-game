@@ -16,6 +16,7 @@ func _init() -> void:
 	_check_stale_and_duplicate_revisions_are_ignored()
 	_check_roster_resets_for_reconnect_or_map_change()
 	_check_presence_payload_includes_activity_state()
+	_check_connection_attempt_guard()
 	_check_authoritative_weather_messages()
 
 	service.free()
@@ -82,6 +83,13 @@ func _check_roster_resets_for_reconnect_or_map_change() -> void:
 func _check_presence_payload_includes_activity_state() -> void:
 	var source := FileAccess.get_file_as_string("res://scripts/services/world_presence_service.gd")
 	_check_equal(source.contains("\"activityState\": str(state.get(\"activityState\", \"idle\"))"), true, "activity state payload")
+
+
+func _check_connection_attempt_guard() -> void:
+	var source := FileAccess.get_file_as_string("res://scripts/services/world_presence_service.gd")
+	_check_equal(source.contains("var connection_attempt_id := 0"), true, "presence tracks connection attempts")
+	_check_equal(source.contains("func _connect_presence_async(attempt_id: int)"), true, "presence validates asynchronous connection attempts")
+	_check_equal(source.contains("if connecting:\n\t\treturn"), true, "presence does not reconnect while a connection is pending")
 
 
 func _check_authoritative_weather_messages() -> void:
