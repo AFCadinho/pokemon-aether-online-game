@@ -59,8 +59,11 @@ func show_intro_dialogue() -> void:
 		requirement_names.append("%s Badge" % missing_badge.capitalize())
 	dialogue_box.start_dialogue(
 		[
-			"This Alpha League trial is not open to you yet.",
-			"First earn the %s." % ", ".join(requirement_names),
+			LocalizationManager.text("npc.gym_leader.trial_locked"),
+			LocalizationManager.text(
+				"npc.gym_leader.badges_required",
+				{"badges": ", ".join(requirement_names)}
+			),
 		],
 		display_name,
 		mugshot
@@ -70,6 +73,11 @@ func show_intro_dialogue() -> void:
 
 func _resolve_intro_dialogue_lines(trainer_metadata: Dictionary) -> Array[String]:
 	if _has_own_badge():
+		var rematch_dialogue_id := str(trainer_metadata.get("rematchDialogueId", "")).strip_edges()
+		if not rematch_dialogue_id.is_empty():
+			var localized_lines := await _get_dialogue_metadata_lines(rematch_dialogue_id)
+			if not localized_lines.is_empty():
+				return localized_lines
 		var rematch_lines := _string_array(trainer_metadata.get("dialogue_rematch", []))
 		if not rematch_lines.is_empty():
 			return rematch_lines

@@ -63,12 +63,25 @@ func _process(_delta: float) -> void:
 		return
 		
 	if Input.is_action_just_pressed("interact"):
-		current_line_index += 1
-		
-		if current_line_index >= lines.size():
-			hide_dialogue()
-		else:
-			show_current_line()
+		_advance_dialogue()
+
+
+func _input(event: InputEvent) -> void:
+	if not is_open or quest_offer_open or just_started:
+		return
+	if event is InputEventMouseButton:
+		var mouse_event := event as InputEventMouseButton
+		if mouse_event.button_index == MOUSE_BUTTON_LEFT and mouse_event.pressed:
+			_advance_dialogue()
+			get_viewport().set_input_as_handled()
+
+
+func _advance_dialogue() -> void:
+	current_line_index += 1
+	if current_line_index >= lines.size():
+		hide_dialogue()
+	else:
+		show_current_line()
 	
 func start_dialogue(new_lines: Array, speaker_name := "", mugshot: Texture2D = null, show_mugshot := true) -> void:
 	_capture_input_state_before_open()
