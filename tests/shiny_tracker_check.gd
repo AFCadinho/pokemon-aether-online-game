@@ -9,11 +9,26 @@ var failures := 0
 
 
 func _init() -> void:
+	call_deferred("_run")
+
+
+func _run() -> void:
 	var popup := TRACKER_SCENE.instantiate()
+	root.add_child(popup)
+	await process_frame
 	_check(popup is ShinyTrackerPopup, "Tracker scene uses the dedicated Shiny Tracker interface")
 	_check(popup.custom_minimum_size == Vector2(900, 610), "Tracker has a full searchable workspace")
 	_check(TRACKER_ICON != null and TRACKER_ICON.get_width() == 48, "Tracker has a 48px pixel-art item icon")
-	popup.free()
+	popup.tracker_state = {
+		"stats": null,
+		"activeHunt": null,
+		"recentHunts": null,
+	}
+	popup.call("_render_tracker")
+	_check(popup.stop_button.disabled, "Tracker accepts an API null when there is no active hunt")
+	_check(popup.share_button.disabled, "Tracker disables sharing when the active hunt is null")
+	popup.queue_free()
+	await process_frame
 
 	var service_source := FileAccess.get_file_as_string(SERVICE_PATH)
 	_check(service_source.contains('const TRACKER_ENDPOINT := "/game/shiny-tracker"'), "Tracker uses its server-authoritative API")

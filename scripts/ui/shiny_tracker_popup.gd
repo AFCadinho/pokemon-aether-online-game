@@ -79,7 +79,7 @@ func open_tracker() -> void:
 		_set_status(str(result.get("error", _t("ui.shiny_tracker.error.load"))), UI_DANGER)
 		_refresh_actions()
 		return
-	tracker_state = result.get("tracker", {}) as Dictionary
+	tracker_state = _as_dictionary(result.get("tracker"))
 	_render_tracker()
 	_set_status(_t("ui.shiny_tracker.status.ready"), UI_MUTED)
 	await _refresh_search()
@@ -98,7 +98,7 @@ func open_shared_hunt(summary: Dictionary) -> void:
 	share_button.visible = false
 	tracker_state = {
 		"stats": {},
-		"activeHunt": summary.get("hunt", {}),
+		"activeHunt": _as_dictionary(summary.get("hunt")),
 		"recentHunts": [],
 	}
 	_render_tracker()
@@ -335,10 +335,10 @@ func _build_stat_card(title_text: String) -> Array:
 
 
 func _render_tracker() -> void:
-	var stats := tracker_state.get("stats", {}) as Dictionary
+	var stats := _as_dictionary(tracker_state.get("stats"))
 	for key: String in stat_labels:
 		(stat_labels[key] as Label).text = _format_number(int(stats.get(key, 0)))
-	var active := tracker_state.get("activeHunt", {}) as Dictionary
+	var active := _active_hunt()
 	var has_active := not active.is_empty()
 	if has_active:
 		hunt_name_label.text = str(active.get("evolutionLineName", active.get("targetSpeciesName", "Pokémon")))
@@ -354,7 +354,7 @@ func _render_tracker() -> void:
 		hunt_detail_label.text = _t("ui.shiny_tracker.no_active_hint")
 	for child: Node in history_list.get_children():
 		child.queue_free()
-	var recent: Array = tracker_state.get("recentHunts", []) as Array
+	var recent := _as_array(tracker_state.get("recentHunts"))
 	for hunt_value: Variant in recent:
 		if hunt_value is Dictionary:
 			history_list.add_child(_build_history_row(hunt_value as Dictionary))
@@ -430,7 +430,7 @@ func _select_species(species: Dictionary) -> void:
 func _on_start_pressed() -> void:
 	if selected_species.is_empty() or request_busy:
 		return
-	var has_active := not (tracker_state.get("activeHunt", {}) as Dictionary).is_empty()
+	var has_active := not _active_hunt().is_empty()
 	if has_active and not replace_confirmation:
 		replace_confirmation = true
 		_set_status(_t("ui.shiny_tracker.confirm_replace"), UI_GOLD)
@@ -449,14 +449,14 @@ func _on_start_pressed() -> void:
 		_set_status(str(result.get("error", _t("ui.shiny_tracker.error.start"))), UI_DANGER)
 		_refresh_actions()
 		return
-	tracker_state = result.get("tracker", {}) as Dictionary
+	tracker_state = _as_dictionary(result.get("tracker"))
 	replace_confirmation = false
 	_render_tracker()
 	_set_status(_t("ui.shiny_tracker.status.started"), UI_GREEN)
 
 
 func _on_stop_pressed() -> void:
-	var active := tracker_state.get("activeHunt", {}) as Dictionary
+	var active := _active_hunt()
 	if active.is_empty() or request_busy:
 		return
 	request_busy = true
@@ -472,19 +472,19 @@ func _on_stop_pressed() -> void:
 		_set_status(str(result.get("error", _t("ui.shiny_tracker.error.stop"))), UI_DANGER)
 		_refresh_actions()
 		return
-	tracker_state = result.get("tracker", {}) as Dictionary
+	tracker_state = _as_dictionary(result.get("tracker"))
 	_render_tracker()
 	_set_status(_t("ui.shiny_tracker.status.stopped"), UI_MUTED)
 
 
 func _on_share_pressed() -> void:
-	var active := tracker_state.get("activeHunt", {}) as Dictionary
+	var active := _active_hunt()
 	if not active.is_empty() and not request_busy:
 		share_requested.emit(active.duplicate(true))
 
 
 func _refresh_actions() -> void:
-	var has_active := not (tracker_state.get("activeHunt", {}) as Dictionary).is_empty()
+	var has_active := not _active_hunt().is_empty()
 	stop_button.disabled = request_busy or not has_active
 	share_button.disabled = request_busy or not has_active
 	start_button.disabled = request_busy or selected_species.is_empty()
@@ -497,6 +497,18 @@ func _refresh_actions() -> void:
 		start_button.text = _t("ui.shiny_tracker.replace")
 	else:
 		start_button.text = _t("ui.shiny_tracker.start")
+
+
+func _active_hunt() -> Dictionary:
+	return _as_dictionary(tracker_state.get("activeHunt"))
+
+
+func _as_dictionary(value: Variant) -> Dictionary:
+	return value as Dictionary if value is Dictionary else {}
+
+
+func _as_array(value: Variant) -> Array:
+	return value as Array if value is Array else []
 
 
 func _add_result_message(text: String, color: Color) -> void:
