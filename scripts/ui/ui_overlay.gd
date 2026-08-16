@@ -37293,7 +37293,7 @@ func _create_chat_shiny_hunt_button(attachment: Dictionary) -> Control:
 	var encounter_count := maxi(int(attachment.get("encounterCount", 0)), 0)
 	button.text = ""
 	button.tooltip_text = LocalizationManager.text("ui.shiny_tracker.chat_tooltip")
-	button.custom_minimum_size = Vector2(248, 54)
+	button.custom_minimum_size = Vector2(226, 58)
 	button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	button.focus_mode = Control.FOCUS_NONE
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -37305,16 +37305,18 @@ func _create_chat_shiny_hunt_button(attachment: Dictionary) -> Control:
 	button.add_theme_stylebox_override("pressed", pressed_style)
 	button.add_theme_stylebox_override("focus", hover_style)
 	var margin := MarginContainer.new()
-	for side in ["left", "top", "right", "bottom"]:
-		margin.add_theme_constant_override("margin_%s" % side, 6)
+	margin.add_theme_constant_override("margin_left", 8)
+	margin.add_theme_constant_override("margin_right", 8)
+	margin.add_theme_constant_override("margin_top", 7)
+	margin.add_theme_constant_override("margin_bottom", 7)
 	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	button.add_child(margin)
 	var layout := HBoxContainer.new()
-	layout.add_theme_constant_override("separation", 7)
+	layout.add_theme_constant_override("separation", 8)
 	layout.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	margin.add_child(layout)
 	var sprite := TextureRect.new()
-	sprite.custom_minimum_size = Vector2(40, 40)
+	sprite.custom_minimum_size = Vector2(38, 38)
 	sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -37328,24 +37330,25 @@ func _create_chat_shiny_hunt_button(attachment: Dictionary) -> Control:
 	layout.add_child(details)
 	var title := Label.new()
 	title.text = LocalizationManager.text("ui.shiny_tracker.chat_card_title")
-	title.add_theme_font_size_override("font_size", 9)
+	title.add_theme_font_size_override("font_size", 8)
 	title.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	details.add_child(title)
 	var name := Label.new()
 	name.text = target_species
-	name.add_theme_font_size_override("font_size", 13)
+	name.add_theme_font_size_override("font_size", 14)
 	name.add_theme_color_override("font_color", UI_TEXT)
 	name.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	details.add_child(name)
-	var line := Label.new()
-	line.text = evolution_line
-	line.add_theme_font_size_override("font_size", 9)
-	line.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	line.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	details.add_child(line)
+	if evolution_line.to_lower() != target_species.to_lower():
+		var line := Label.new()
+		line.text = evolution_line
+		line.add_theme_font_size_override("font_size", 8)
+		line.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		line.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		details.add_child(line)
 	var badge := PanelContainer.new()
-	badge.custom_minimum_size = Vector2(54, 40)
+	badge.custom_minimum_size = Vector2(58, 34)
 	badge.add_theme_stylebox_override("panel", _make_panel_style(Color("#132c43"), Color("#4b88ad"), 6, 1))
 	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	layout.add_child(badge)
