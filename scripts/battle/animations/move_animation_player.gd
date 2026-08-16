@@ -247,6 +247,7 @@ func _build_nodes() -> void:
 	bg.centered = false
 	if timing_background_fill_canvas:
 		_fit_timing_background_to_canvas()
+	bg.z_index = -1
 	bg.modulate.a = 0.0
 	add_child(bg)
 
@@ -319,6 +320,9 @@ func move_timing_background_to(parent_node: Node, sibling_index: int) -> void:
 
 	bg.reparent(parent_node, true)
 	parent_node.move_child(bg, clampi(sibling_index, 0, parent_node.get_child_count() - 1))
+	# Keep the detached texture under the procedural animation overlay. Sibling
+	# order alone is not enough because both nodes share the FIELD z-index.
+	bg.z_index = -1
 	timing_background_base_position = bg.position
 	timing_background_base_scale = bg.scale
 	timing_background_detached = true
