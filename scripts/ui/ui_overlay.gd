@@ -366,6 +366,7 @@ const BAG_ICON_ROOT := "res://assets/items/icons/"
 const BAG_INTERFACE_ICON: Texture2D = preload("res://assets/ui/bag-icon.svg")
 const MARKET_INTERFACE_ICON: Texture2D = preload("res://assets/ui/market_shop.svg")
 const AETHER_ATELIER_POPUP_SCENE := preload("res://scenes/interface/aether_atelier_popup.tscn")
+const SHINY_TRACKER_POPUP_SCENE := preload("res://scenes/interface/shiny_tracker_popup.tscn")
 const ITEM_DEX_ICON := preload("res://assets/ui/item_dex.svg")
 const BAG_CATEGORIES := [
 	{"id": "all", "labelKey": "ui.bag.category.all", "iconItemId": ""},
@@ -974,6 +975,7 @@ var trainer_name_change_status_label: Label
 var trainer_name_change_confirm_button: Button
 var trainer_name_change_in_progress := false
 var aether_atelier_popup: AetherAtelierPopup
+var shiny_tracker_popup: ShinyTrackerPopup
 var market_popup: PanelContainer
 var market_title_label: Label
 var market_subtitle_label: Label
@@ -1294,6 +1296,7 @@ func _ready() -> void:
 	_setup_party_slot_context_menu()
 	_setup_market_popup()
 	_setup_aether_atelier_popup()
+	_setup_shiny_tracker_popup()
 	_setup_bag_item_use_popup()
 	_setup_pokemon_summary_ev_allocate_popup()
 	_build_party_slots()
@@ -16437,6 +16440,41 @@ func _setup_aether_atelier_popup() -> void:
 	aether_atelier_popup.bundle_created.connect(_on_aether_atelier_bundle_created)
 	aether_atelier_popup.chroma_dyed.connect(_on_aether_atelier_chroma_dyed)
 
+func _setup_shiny_tracker_popup() -> void:
+	shiny_tracker_popup = SHINY_TRACKER_POPUP_SCENE.instantiate() as ShinyTrackerPopup
+	if shiny_tracker_popup == null:
+		return
+	root_control.add_child(shiny_tracker_popup)
+	shiny_tracker_popup.closed.connect(_hide_shiny_tracker)
+	shiny_tracker_popup.share_requested.connect(_on_shiny_tracker_share_requested)
+
+func _show_shiny_tracker() -> void:
+	if shiny_tracker_popup == null:
+		return
+	shiny_tracker_popup.visible = true
+	_activate_ui_panel(shiny_tracker_popup)
+	shiny_tracker_popup.open_tracker()
+
+func _hide_shiny_tracker() -> void:
+	if shiny_tracker_popup == null:
+		return
+	shiny_tracker_popup.visible = false
+	_deactivate_ui_panel(shiny_tracker_popup)
+
+func _on_shiny_tracker_share_requested(hunt: Dictionary) -> void:
+	var channel := _get_active_chat_channel()
+	if active_chat_tab in [CHAT_TAB_SYSTEM, CHAT_TAB_PM]:
+		_add_chat_message(LocalizationManager.text("ui.shiny_tracker.share_channel_required"))
+		return
+	var result: Dictionary = await ShinyTrackerService.share_hunt(str(hunt.get("id", "")))
+	if not bool(result.get("success", false)):
+		_add_chat_message(str(result.get("error", LocalizationManager.text("ui.shiny_tracker.error.share"))))
+		return
+	var payload := result.get("tracker", {}) as Dictionary
+	var share_id := str(payload.get("shareId", ""))
+	if share_id == "" or not ChatRealtimeService.send_chat_message("", channel, [], share_id):
+		_add_chat_message(LocalizationManager.text("ui.chat.error.reconnecting"))
+
 func open_aether_atelier() -> void:
 	if aether_atelier_popup == null:
 		return
@@ -17518,7 +17556,7 @@ func _bag_item_can_use_from_bag(item: Dictionary) -> bool:
 	var use_action := str(item.get("useAction", "")).strip_edges()
 	if use_action == "unlock_appearance" and not _bag_item_matches_player_gender(item):
 		return false
-	if use_action in ["activate_shiny_charm", "unlock_appearance", "open_item_bundle", "redeem_aether_blessing", "trainer_name_change", "trainer_gender_change", "apply_guild_emblem_template"]:
+	if use_action in ["activate_shiny_charm", "open_shiny_tracker", "unlock_appearance", "open_item_bundle", "redeem_aether_blessing", "trainer_name_change", "trainer_gender_change", "apply_guild_emblem_template"]:
 		return true
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	return FieldMoveService.is_direct_field_move(field_move_id) or _is_pokemon_usable_item_id(item_id)
@@ -17526,6 +17564,8 @@ func _bag_item_can_use_from_bag(item: Dictionary) -> bool:
 func _bag_item_can_assign_to_hotbar(item: Dictionary) -> bool:
 	var item_id := _normalize_item_id(str(item.get("id", "")))
 	if item_id == "escape-rope-action":
+		return true
+	if str(item.get("useAction", "")).strip_edges() == "open_shiny_tracker":
 		return true
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	return FieldMoveService.is_direct_field_move(field_move_id) or _is_pokemon_usable_item_id(item_id)
@@ -17553,6 +17593,8 @@ func _bag_item_use_action_label(item: Dictionary) -> String:
 		return LocalizationManager.text("ui.bag.action.redeem_voucher")
 	if use_action == "activate_shiny_charm":
 		return LocalizationManager.text("ui.bag.action.activate")
+	if use_action == "open_shiny_tracker":
+		return LocalizationManager.text("ui.bag.action.open_tracker")
 	if use_action == "apply_guild_emblem_template":
 		return LocalizationManager.text("ui.bag.action.unlock_for_guild")
 	if _bag_machine_move_id(item_id) != "":
@@ -17729,6 +17771,9 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 		_add_chat_message(LocalizationManager.text("ui.bag.message.shiny_charm_activated", {
 			"days": int(activate_result.get("durationDays", 0)),
 		}))
+		return
+	if use_action == "open_shiny_tracker":
+		_show_shiny_tracker()
 		return
 	if use_action == "apply_guild_emblem_template":
 		var emblem_result: Dictionary = await InventoryService.use_inventory_item(item_id)
@@ -23093,6 +23138,7 @@ func _get_escape_close_candidates() -> Array[Dictionary]:
 		{"panel": pokemon_summary_item_picker, "close": Callable(self, "_hide_pokemon_summary_item_picker_for_escape")},
 		{"panel": bag_item_use_popup, "close": Callable(self, "_hide_bag_item_use_popup_for_escape")},
 		{"panel": donator_store_popup, "close": Callable(self, "_hide_donator_store_popup")},
+		{"panel": shiny_tracker_popup, "close": Callable(self, "_hide_shiny_tracker")},
 		{"panel": mail_compose_popup, "close": Callable(self, "_on_mail_compose_close_button_pressed")},
 		{"panel": staff_impersonate_popup, "close": Callable(self, "_hide_staff_impersonate_popup")},
 		{"panel": staff_teleport_popup, "close": Callable(self, "_hide_staff_teleport_popup")},
@@ -25254,7 +25300,15 @@ func _refresh_hotbar_ui() -> void:
 			continue
 		var entry_type := str(entry.get("entryType", ""))
 		var entry_id := str(entry.get("entryId", ""))
-		if entry_type == "player_action" and entry_id == "escape-rope":
+		if entry_type == "key_item_action" and entry_id == "shiny-tracker":
+			button.texture_normal = _load_item_icon("shiny-tracker")
+			button.preview_texture = button.texture_normal
+			button.modulate = Color.WHITE
+			quantity_label.text = LocalizationManager.text("ui.bag.key_marker")
+			button.tooltip_text = LocalizationManager.text("ui.hotbar.key_item_tooltip", {
+				"item": ItemLocalization.display_name("shiny-tracker", "Shiny Tracker"),
+			})
+		elif entry_type == "player_action" and entry_id == "escape-rope":
 			button.texture_normal = _load_item_icon("escape-rope")
 			button.preview_texture = button.texture_normal
 			button.modulate = Color.WHITE if bool(escape_rope_status.get("available", false)) else Color(1.0, 1.0, 1.0, 0.55)
@@ -25341,6 +25395,9 @@ func _on_hotbar_slot_pressed(slot_index: int) -> void:
 		return
 	var entry_type := str(entry.get("entryType", ""))
 	var entry_id := str(entry.get("entryId", ""))
+	if entry_type == "key_item_action" and entry_id == "shiny-tracker":
+		_show_shiny_tracker()
+		return
 	if entry_type == "player_action" and entry_id == "escape-rope":
 		_on_escape_rope_pressed()
 		return
@@ -25473,6 +25530,9 @@ func _assign_bag_item_to_hotbar_slot(item: Dictionary, target_slot: int) -> void
 	elif item_id == "escape-rope-action":
 		entry_type = "player_action"
 		entry_id = "escape-rope"
+	elif str(item.get("useAction", "")).strip_edges() == "open_shiny_tracker":
+		entry_type = "key_item_action"
+		entry_id = "shiny-tracker"
 	elif not _is_pokemon_usable_item_id(item_id):
 		_add_chat_message(LocalizationManager.text("ui.hotbar.message.item_not_assignable"))
 		return
@@ -36905,11 +36965,12 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 	user = _with_local_chat_role_state(user, display_name)
 	var text: String = str(message.get("text", "")).strip_edges()
 	var pokemon_attachments: Array[Dictionary] = _get_chat_pokemon_attachments(message)
-	if text == "" and pokemon_attachments.is_empty():
+	var shiny_hunt_attachment := _dictionary_from_value(message.get("shinyHuntAttachment", {}))
+	if text == "" and pokemon_attachments.is_empty() and shiny_hunt_attachment.is_empty():
 		return
 
 	var channel: String = str(message.get("channel", CHAT_CHANNEL_GLOBAL)).strip_edges().to_lower()
-	_add_user_chat_message(user, display_name, text, channel, pokemon_attachments)
+	_add_user_chat_message(user, display_name, text, channel, pokemon_attachments, 0, shiny_hunt_attachment)
 	if channel == CHAT_TAB_GUILD and active_chat_tab != CHAT_TAB_GUILD:
 		guild_chat_has_unread = true
 		_refresh_guild_chat_attention_badge()
@@ -37155,7 +37216,8 @@ func _add_user_chat_message(
 	text: String,
 	channel: String = CHAT_CHANNEL_GLOBAL,
 	pokemon_attachments: Array[Dictionary] = [],
-	target_user_id: int = 0
+	target_user_id: int = 0,
+	shiny_hunt_attachment: Dictionary = {}
 ) -> void:
 	var role: Dictionary = _get_primary_visible_chat_role(user)
 	var role_color: String = str(role.get("color", "#d8b767"))
@@ -37203,6 +37265,8 @@ func _add_user_chat_message(
 			display_name,
 			str(user.get("id", user.get("userId", user.get("user_id", ""))))
 		)))
+	if not shiny_hunt_attachment.is_empty():
+		row.add_child(_create_chat_shiny_hunt_button(shiny_hunt_attachment))
 	if text != "":
 		var entry: RichTextLabel = message_entry_template.duplicate() as RichTextLabel
 		entry.name = "MessageText"
@@ -37219,6 +37283,35 @@ func _add_user_chat_message(
 		entry.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_apply_chat_row_emphasis(row)
 	_scroll_chat_to_bottom.call_deferred()
+
+
+func _create_chat_shiny_hunt_button(attachment: Dictionary) -> Button:
+	var button := Button.new()
+	button.text = "✨ %s · %s" % [
+		str(attachment.get("evolutionLineName", attachment.get("targetSpeciesName", "Pokémon"))),
+		_format_money(maxi(int(attachment.get("encounterCount", 0)), 0)),
+	]
+	button.tooltip_text = LocalizationManager.text("ui.shiny_tracker.chat_tooltip")
+	button.custom_minimum_size = Vector2(150, 24)
+	button.focus_mode = Control.FOCUS_NONE
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	_apply_button_style(button, "secondary")
+	button.pressed.connect(_on_chat_shiny_hunt_pressed.bind(str(attachment.get("shareId", ""))))
+	return button
+
+
+func _on_chat_shiny_hunt_pressed(share_id: String) -> void:
+	if share_id == "":
+		return
+	var result: Dictionary = await ShinyTrackerService.load_shared_hunt(share_id)
+	if not bool(result.get("success", false)):
+		_add_chat_message(str(result.get("error", LocalizationManager.text("ui.shiny_tracker.error.shared_load"))))
+		return
+	if shiny_tracker_popup == null:
+		return
+	shiny_tracker_popup.visible = true
+	_activate_ui_panel(shiny_tracker_popup)
+	shiny_tracker_popup.open_shared_hunt(result.get("tracker", {}) as Dictionary)
 
 
 func _create_chat_channel_prefix(channel: String, target_user_id: int = 0) -> Button:
