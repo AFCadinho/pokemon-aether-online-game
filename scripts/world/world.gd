@@ -2872,7 +2872,6 @@ func _award_wild_battle_money(battle_id: String, pokemon_species: String) -> voi
 		var reward: Dictionary = wallet_result.get("reward", {}) as Dictionary
 		_notify_wild_battle_money_awarded(pokemon_species, max(int(PlayerSave.money), 0) - previous_money)
 		_notify_reward_experience_gains(reward)
-		_notify_reward_effort_gains(reward)
 		_notify_reward_level_ups(reward)
 		_notify_fishing_treasure_award(reward.get("items", []))
 		await _notify_fishing_experience_award(reward.get("fishingProgression", {}))
@@ -2910,7 +2909,6 @@ func _award_trainer_battle_rewards(
 		var money_awarded: int = max(int(reward.get("money", max(int(PlayerSave.money), 0) - previous_money)), 0)
 		_notify_trainer_battle_rewards_awarded(trainer_name, money_awarded)
 		_notify_reward_experience_gains(reward)
-		_notify_reward_effort_gains(reward)
 		_notify_reward_level_ups(reward)
 		_notify_gym_badge_award(reward_result.get("gymBadgeAward", {}))
 		var trainer_progress := _dictionary_from_value(reward_result.get("trainerProgress", {}))
@@ -3169,42 +3167,6 @@ func _get_current_map_battle_environment_id() -> String:
 		if str(property.get("name", "")) == "battle_environment_id":
 			return str(current_map.get("battle_environment_id")).strip_edges()
 	return ""
-
-func _notify_reward_effort_gains(reward_value: Variant) -> void:
-	if not (reward_value is Dictionary):
-		return
-
-	var reward: Dictionary = reward_value as Dictionary
-	var effort_value: Variant = reward.get("effort", [])
-	if not (effort_value is Array):
-		return
-
-	for effort_entry_value: Variant in effort_value as Array:
-		if not (effort_entry_value is Dictionary):
-			continue
-		var effort_entry: Dictionary = effort_entry_value as Dictionary
-		var changes: Dictionary = _dictionary_from_value(effort_entry.get("storedEvChanges", effort_entry.get("gainedEvs", effort_entry.get("evChanges", {}))))
-		var parts: Array[String] = []
-		for stat_key: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
-			var amount := int(changes.get(stat_key, 0))
-			if amount > 0:
-				parts.append("+%s %s" % [amount, _format_effort_stat_label(stat_key)])
-		if parts.is_empty():
-			continue
-
-		var species := str(effort_entry.get("species", "")).strip_edges()
-		if species == "":
-			species = LocalizationManager.text("pokemon.generic")
-		else:
-			species = _localized_world_species_name(species, species)
-		get_tree().call_group(
-			"ui_overlay",
-			"add_system_message",
-			LocalizationManager.text(
-				"ui.world.reward.evs",
-				{"pokemon": species, "evs": ", ".join(parts)}
-			)
-		)
 
 func _format_effort_stat_label(stat_key: String) -> String:
 	match stat_key.strip_edges().to_lower():
