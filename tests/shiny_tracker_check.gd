@@ -63,8 +63,8 @@ func _run() -> void:
 	var overlay_source := FileAccess.get_file_as_string(OVERLAY_PATH)
 	_check(overlay_source.contains('entry_type == "key_item_action" and entry_id == "shiny-tracker"'), "Tracker can be launched from the hotbar")
 	_check(overlay_source.contains("_create_chat_shiny_hunt_button"), "Chat renders clickable Shiny hunt cards")
-	_check(overlay_source.contains("PokemonAssets.load_home_sprite(target_species)"), "Chat hunt cards show the target Pokémon sprite")
-	_check(overlay_source.contains("chat_card_encounters"), "Chat hunt cards show a dedicated encounter badge")
+	_check(overlay_source.contains("SHINY_TRACKER_ICON"), "Chat hunt cards show the Shiny Tracker icon")
+	_check(overlay_source.contains("chat_card_title"), "Chat hunt cards clearly identify the Shiny Tracker")
 	_check(overlay_source.contains("_on_chat_shiny_hunt_pressed"), "Shared cards load their current server state")
 
 	quit(1 if failures > 0 else 0)

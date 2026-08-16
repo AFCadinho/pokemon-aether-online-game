@@ -3611,7 +3611,7 @@
   "ui.shiny_tracker.error.share": "Não foi possível compartilhar esta caçada Shiny.",
   "ui.shiny_tracker.error.shared_load": "Esta caçada Shiny compartilhada não está mais disponível.",
   "ui.shiny_tracker.chat_tooltip": "Abrir o resumo ao vivo da caçada Shiny deste Treinador",
-  "ui.shiny_tracker.chat_card_title": "CAÇADA SHINY",
+  "ui.shiny_tracker.chat_card_title": "RASTREADOR SHINY",
   "ui.shiny_tracker.chat_card_encounters": "encontros",
   "ui.shiny_tracker.shared_by": "Caçada ao vivo compartilhada por {player}."
 }
