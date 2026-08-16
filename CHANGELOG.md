@@ -6,6 +6,8 @@
 
 - Added community-funded Global Boosts. Trainers can work together to activate double battle EXP (₽100,000), double EVs (₽50,000), and double encounter weight for Rare Pokémon and higher (₽200,000) for the whole server.
 - Added custom Global Boost contributions. Contributions are at least ₽10,000, never exceed the remaining goal, award 10 Aetherite for every full ₽10,000 contributed, and are announced to the server.
+- Added a community-funded Global Shiny Boost. Funding its ₽1,000,000 goal raises Shiny encounter odds for the whole server for seven days.
+- Shiny Charms can now be activated from the Bag. Each Charm raises your Shiny encounter odds by 10% for seven days, and repeated uses extend the duration.
 - Exp. Share now grants battle experience to eligible party Pokémon.
 - Evolution Stones and all trade-evolution items can now be used directly from the Bag. Linking Cords evolve trade Pokémon without trading and are sold at standard PokéMarts for ₽1,000.
 - Added a configurable Thieving hotkey in Control Settings.
@@ -14,6 +16,7 @@
 - Protean and similar type-changing effects now show the Pokémon's current type in a coloured battle indicator.
 - Brock's Onix is now Shiny.
 - The permanent Shiny Tracker is now included in every Trainer's Bag and defaults to hotbar slot 2.
+- Shared Shiny Tracker hunts now also show the owner's overall encounter statistics.
 - Gideon's catching lesson now rewards a Lucky Egg alongside ten Great Balls; its holder earns 50% more battle EXP.
 
 **Changed**
