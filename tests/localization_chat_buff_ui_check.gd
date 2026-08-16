@@ -61,6 +61,13 @@ func _check_localized_helpers() -> void:
 		}) == "Misty heeft ₽10,000 bijgedragen aan de Wereldwijde EV-boost!",
 		"Global EV contributions render as localized Dutch system messages"
 	)
+	_check(
+		overlay.call("_global_rare_encounter_boost_contribution_message", {
+			"displayName": "Misty",
+			"amount": 10_000,
+		}) == "Misty heeft ₽10,000 bijgedragen aan de Zeldzame-ontmoetingsboost!",
+		"Rare encounter contributions render as localized Dutch system messages"
+	)
 
 	var map_prefix := overlay.call("_create_chat_channel_prefix", "map") as Button
 	_check(map_prefix != null and map_prefix.text == "[Kaart]", "All-chat channel prefix renders in Dutch")

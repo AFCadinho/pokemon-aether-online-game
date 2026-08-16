@@ -10309,7 +10309,7 @@ func _setup_status_docks() -> void:
 			"description_key": "ui.buff.global_exp.description",
 			"state": "funding",
 			"current": 0,
-			"goal": 50000,
+			"goal": 100000,
 			"active_duration": "1h",
 		},
 		{
@@ -10319,7 +10319,7 @@ func _setup_status_docks() -> void:
 			"description_key": "ui.buff.global_ev.description",
 			"state": "funding",
 			"current": 0,
-			"goal": 100000,
+			"goal": 50000,
 			"active_duration": "1h",
 		},
 		{
@@ -10339,13 +10339,14 @@ func _setup_status_docks() -> void:
 			"description_key": "ui.buff.global_rare.description",
 			"state": "funding",
 			"current": 0,
-			"goal": 100000,
+			"goal": 200000,
 			"active_duration": "1h",
 		},
 	])
 	set_personal_buffs([])
 	_load_global_exp_boost.call_deferred()
 	_load_global_ev_boost.call_deferred()
+	_load_global_rare_encounter_boost.call_deferred()
 
 func set_global_buffs(buffs: Array) -> void:
 	global_buffs_data = buffs.duplicate(true)
@@ -10924,6 +10925,8 @@ func _on_global_buff_contribute_pressed() -> void:
 		response = await PlayerWalletService.contribute_to_global_exp_boost(selected_global_buff_contribution)
 	elif selected_boost_id == "global_ev":
 		response = await PlayerWalletService.contribute_to_global_ev_boost(selected_global_buff_contribution)
+	elif selected_boost_id == "global_rare_encounter":
+		response = await PlayerWalletService.contribute_to_global_rare_encounter_boost(selected_global_buff_contribution)
 	else:
 		return
 	if not bool(response.get("success", false)):
@@ -10957,6 +10960,12 @@ func _load_global_ev_boost() -> void:
 		_apply_global_boost_state(response.get("body", {}) as Dictionary, "global_ev")
 
 
+func _load_global_rare_encounter_boost() -> void:
+	var response: Dictionary = await PlayerWalletService.load_global_rare_encounter_boost()
+	if bool(response.get("success", false)):
+		_apply_global_boost_state(response.get("body", {}) as Dictionary, "global_rare_encounter")
+
+
 func _apply_global_boost_state(state: Dictionary, boost_id: String) -> void:
 	for index: int in range(global_buffs_data.size()):
 		var buff := global_buffs_data[index] as Dictionary
@@ -10980,7 +10989,7 @@ func _apply_global_boost_state(state: Dictionary, boost_id: String) -> void:
 
 
 func _global_buff_accepts_contributions(buff: Dictionary) -> bool:
-	return str(buff.get("id", "")) in ["global_exp", "global_ev"]
+	return str(buff.get("id", "")) in ["global_exp", "global_ev", "global_rare_encounter"]
 
 func _hide_global_buff_details() -> void:
 	global_buff_details_panel.visible = false
@@ -36843,6 +36852,9 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 	if message_type == "system.global_ev_boost_contribution":
 		add_system_message(_global_ev_boost_contribution_message(message))
 		return
+	if message_type == "system.global_rare_encounter_boost_contribution":
+		add_system_message(_global_rare_encounter_boost_contribution_message(message))
+		return
 	if message_type == "chat_error":
 		var error_text: String = str(message.get("message", "Chat message could not be sent."))
 		var error_channel := str(message.get("channel", "")).strip_edges().to_lower()
@@ -36884,6 +36896,10 @@ func _global_exp_boost_contribution_message(message: Dictionary) -> String:
 
 func _global_ev_boost_contribution_message(message: Dictionary) -> String:
 	return _global_boost_contribution_message(message, "ui.buff.global_ev.contribution_message")
+
+
+func _global_rare_encounter_boost_contribution_message(message: Dictionary) -> String:
+	return _global_boost_contribution_message(message, "ui.buff.global_rare.contribution_message")
 
 
 func _global_boost_contribution_message(message: Dictionary, localization_key: String) -> String:
