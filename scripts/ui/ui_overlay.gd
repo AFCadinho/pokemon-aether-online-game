@@ -1271,6 +1271,7 @@ var active_personal_buffs: Array = []
 var personal_buff_source_buffs: Array = []
 var personal_buffs_expanded := false
 var personal_buffs_refresh_elapsed := 0.0
+var global_buffs_refresh_elapsed := 0.0
 var staff_tools_visibility_key := ""
 
 # Called when the node enters the scene tree for the first time.
@@ -9479,6 +9480,7 @@ func _process(delta: float) -> void:
 	_refresh_location_label_if_needed()
 	_refresh_aether_clash_champion_if_needed(delta)
 	_refresh_utc_time_label(delta)
+	_refresh_global_buffs_if_needed(delta)
 	_refresh_personal_buffs_if_needed(delta)
 	_refresh_staff_tools_visibility_if_needed()
 	_refresh_pvp_room_polling(delta)
@@ -10384,6 +10386,52 @@ func set_personal_buffs(buffs: Array) -> void:
 	_refresh_personal_buffs_from_entitlements()
 
 
+func _refresh_global_buffs_if_needed(delta: float) -> void:
+	global_buffs_refresh_elapsed -= delta
+	if global_buffs_refresh_elapsed > 0.0:
+		return
+	global_buffs_refresh_elapsed = 1.0
+	var changed := false
+	for index: int in range(global_buffs_data.size()):
+		var buff := global_buffs_data[index] as Dictionary
+		if str(buff.get("state", "funding")) != "active":
+			continue
+		var expires_at := str(buff.get("activeUntil", "")).strip_edges()
+		if expires_at == "":
+			continue
+		var remaining_seconds := _global_buff_remaining_seconds(expires_at)
+		if remaining_seconds <= 0:
+			buff["state"] = "funding"
+			buff["current"] = 0
+			buff["activeUntil"] = ""
+			buff["remaining"] = ""
+		elif str(buff.get("remaining", "")) != _format_global_buff_remaining(remaining_seconds):
+			buff["remaining"] = _format_global_buff_remaining(remaining_seconds)
+		else:
+			continue
+		global_buffs_data[index] = buff
+		if str(selected_global_buff.get("id", "")) == str(buff.get("id", "")):
+			selected_global_buff = buff.duplicate(true)
+		changed = true
+	if not changed:
+		return
+	set_global_buffs(global_buffs_data)
+	if not selected_global_buff.is_empty():
+		_render_global_buff_details()
+
+
+func _global_buff_remaining_seconds(expires_at: String) -> int:
+	var expires_unix := _pvp_iso_timestamp_to_unix_time(expires_at.replace("+00:00", "Z"))
+	if expires_unix <= 0.0:
+		return 0
+	return maxi(int(ceil(expires_unix - Time.get_unix_time_from_system())), 0)
+
+
+func _format_global_buff_remaining(total_seconds: int) -> String:
+	var minutes := maxi(int(ceil(float(maxi(total_seconds, 0)) / 60.0)), 1)
+	return LocalizationManager.text("ui.buff.minutes", {"count": minutes})
+
+
 func _refresh_personal_buffs_if_needed(delta: float) -> void:
 	personal_buffs_refresh_elapsed -= delta
 	if personal_buffs_refresh_elapsed > 0.0:
@@ -10842,7 +10890,13 @@ func _apply_global_exp_boost_state(state: Dictionary) -> void:
 		buff["current"] = int(state.get("current", 0))
 		buff["goal"] = int(state.get("goal", 100000))
 		buff["state"] = "active" if bool(state.get("active", false)) else "funding"
-		buff["remaining"] = "1h" if bool(state.get("active", false)) else ""
+		buff["activeUntil"] = str(state.get("activeUntil", "")) if bool(state.get("active", false)) else ""
+		var remaining_seconds := _global_buff_remaining_seconds(str(buff.get("activeUntil", "")))
+		buff["remaining"] = (
+			_format_global_buff_remaining(remaining_seconds)
+			if bool(state.get("active", false)) and remaining_seconds > 0
+			else ""
+		)
 		global_buffs_data[index] = buff
 		if str(selected_global_buff.get("id", "")) == "global_exp":
 			selected_global_buff = buff.duplicate(true)

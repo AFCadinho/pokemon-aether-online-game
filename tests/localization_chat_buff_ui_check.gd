@@ -44,6 +44,10 @@ func _check_localized_helpers() -> void:
 		"Global buff description renders in Dutch"
 	)
 	_check(
+		overlay.call("_format_global_buff_remaining", 3_541) == "60 min",
+		"Global buff countdown rounds remaining time up to whole minutes"
+	)
+	_check(
 		overlay.call("_global_exp_boost_contribution_message", {
 			"displayName": "Misty",
 			"amount": 25_000,
