@@ -17848,6 +17848,14 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 			}),
 			"canApply": true,
 		}
+	if _is_trade_evolution_item_id(item_id):
+		return {
+			"label": LocalizationManager.text("ui.bag.use.trade_evolution"),
+			"tooltip": LocalizationManager.text("ui.bag.use.trade_evolution_tooltip", {
+				"pokemon": _pokemon_display_name(pokemon),
+			}),
+			"canApply": true,
+		}
 	var gameplay := _bag_gameplay_definition_for_item_id(item_id)
 	if BAG_ITEM_EFFECT_PREVIEW.supports(gameplay):
 		return BAG_ITEM_EFFECT_PREVIEW.preview(pokemon, gameplay, requested_quantity)
@@ -18172,6 +18180,7 @@ func _on_bag_item_use_confirm_pressed() -> void:
 	_refresh_open_pokemon_summary_cards()
 	_refresh_player_status_card()
 	var reward: Dictionary = _staff_dictionary_from_variant(result.get("reward", {}))
+	await _present_item_trade_evolution(reward)
 	_add_bag_item_use_success_message(item_id, reward)
 	_notify_progression_reward(reward)
 	_hide_bag_item_use_popup()
@@ -18234,6 +18243,41 @@ func _add_bag_item_use_success_message(item_id: String, reward: Dictionary) -> v
 	else:
 		_add_chat_message(LocalizationManager.text("ui.bag.use.success", {"quantity": quantity, "item": item_name}))
 
+func _present_item_trade_evolution(reward: Dictionary) -> void:
+	var item_effects_value: Variant = reward.get("itemEffects", [])
+	if not (item_effects_value is Array):
+		return
+	for item_effect_value: Variant in item_effects_value as Array:
+		if not (item_effect_value is Dictionary):
+			continue
+		var executions_value: Variant = (item_effect_value as Dictionary).get("effects", [])
+		if not (executions_value is Array):
+			continue
+		for execution_value: Variant in executions_value as Array:
+			if not (execution_value is Dictionary):
+				continue
+			var execution: Dictionary = execution_value as Dictionary
+			if str(execution.get("type", "")) != "evolve_trade" or not bool(execution.get("applied", false)):
+				continue
+			var details := _staff_dictionary_from_variant(execution.get("details", {}))
+			var evolution := _staff_dictionary_from_variant(details.get("evolution", {}))
+			if evolution.is_empty():
+				return
+			await play_evolution_overlay(evolution)
+			var from_species := _evolution_prompt_from_species(evolution)
+			var target_species_id := _evolution_prompt_target_species_id(evolution)
+			var to_species := _evolution_prompt_to_species(evolution)
+			add_system_message(LocalizationManager.text(
+				"ui.evolution.result.evolved",
+				{
+					"from": _localized_species_name(from_species, from_species),
+					"to": _localized_species_name(target_species_id, to_species),
+				}
+			))
+			_announce_evolution_moves(details, int(evolution.get("pokemonId", 0)), target_species_id, to_species)
+			_show_next_move_learn_prompt()
+			return
+
 func _notify_progression_reward(reward: Dictionary) -> void:
 	if reward.is_empty():
 		return
@@ -18253,8 +18297,11 @@ func _is_ev_item_id(item_id: String) -> bool:
 func _is_ev_reducing_berry_id(item_id: String) -> bool:
 	return EV_REDUCING_BERRY_STATS.has(_normalize_item_id(item_id))
 
+func _is_trade_evolution_item_id(item_id: String) -> bool:
+	return _normalize_item_id(item_id) == "linking-cord"
+
 func _is_pokemon_usable_item_id(item_id: String) -> bool:
-	return _bag_machine_move_id(item_id) != "" or _is_exp_item_id(item_id) or _is_ev_item_id(item_id) or _is_ev_reducing_berry_id(item_id) or BAG_ITEM_EFFECT_PREVIEW.supports(_bag_gameplay_definition_for_item_id(item_id))
+	return _bag_machine_move_id(item_id) != "" or _is_exp_item_id(item_id) or _is_ev_item_id(item_id) or _is_ev_reducing_berry_id(item_id) or _is_trade_evolution_item_id(item_id) or BAG_ITEM_EFFECT_PREVIEW.supports(_bag_gameplay_definition_for_item_id(item_id))
 
 func _bag_machine_move_id(item_id: String) -> String:
 	var normalized_id := _normalize_item_id(item_id)

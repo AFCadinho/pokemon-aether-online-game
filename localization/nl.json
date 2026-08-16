@@ -719,6 +719,8 @@
   "ui.bag.use.already_knows_tooltip": "{pokemon} kent {move} al.",
   "ui.bag.use.teach_move": "{move} leren",
   "ui.bag.use.teach_move_tooltip": "Leer {move} aan {pokemon}. Als een Pokémon deze aanval kan leren, kan de machine opnieuw worden gebruikt.",
+  "ui.bag.use.trade_evolution": "Ruil-evolutie activeren",
+  "ui.bag.use.trade_evolution_tooltip": "Gebruik de Linking Cord op {pokemon}. Hij wordt alleen verbruikt als deze Pokémon via ruilen kan evolueren.",
   "ui.bag.use.max_level": "Maximaal niveau",
   "ui.bag.use.level_cap": "Levellimiet {levelCap}",
   "ui.bag.use.current_level_cap": "{pokemon} heeft je huidige levellimiet van {levelCap} bereikt.",
