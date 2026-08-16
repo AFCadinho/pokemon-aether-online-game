@@ -2207,13 +2207,17 @@ func create_triggered_wild_battle_response(area_id: String, encounter_type: Stri
 	var battle_request := HTTPRequest.new()
 	add_child(battle_request)
 	var player_payload: Dictionary = BattleApiPayloads.from_player_save(PlayerSave)
+	var debug_time_of_day := ""
+	if WorldTimeService.is_debug_time_active():
+		debug_time_of_day = WorldTimeService.get_encounter_time_of_day()
 
 	var response: Dictionary = await BattleApiClient.create_triggered_wild_battle(
 		battle_request,
 		player_payload,
 		area_id,
 		encounter_type,
-		_get_current_wild_battle_origin()
+		_get_current_wild_battle_origin(),
+		debug_time_of_day
 	)
 
 	battle_request.queue_free()

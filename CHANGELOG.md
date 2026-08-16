@@ -32,6 +32,7 @@
 - Fixed the inactive Pewter City Aether Beacon and restored encounters for main Kanto caves and landmark areas.
 - Fixed unclear battle stat-stage labels, removed unnecessary EV reward messages, and made a left mouse click advance dialogue like Space.
 - Fixed Global Boost panels occasionally opening at the wrong height or trapping a Trainer after an insufficient-funds message.
+- Developer world-time previews now also control time-based wild encounters.
 - Fixed the Shiny Tracker failing to open before a Trainer had started their first hunt.
 - Active Shiny Tracker hunts now show the target Pokémon sprite.
 

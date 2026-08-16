@@ -31,8 +31,11 @@ func _init() -> void:
 	_check_equal(int(date_time.get("minute", -1)), 34, "debug minute drives the shared clock")
 	_check_equal(int(date_time.get("second", -1)), 56, "debug second drives the shared clock")
 	_check_approx(service.get_seconds_since_midnight(), 77696.0, "seconds since midnight are deterministic")
+	_check_true(service.get_encounter_time_of_day() == "night", "night preview selects night encounters")
 	_check_approx(service.get_day_fraction(), 77696.0 / 86400.0, "day fraction uses the shared time")
-	_check_equal(time_change_count, 3, "both supported server formats and debug time emit refresh signals")
+	service.set_debug_time(12)
+	_check_true(service.get_encounter_time_of_day() == "day", "day preview selects day encounters")
+	_check_equal(time_change_count, 4, "both supported server formats and debug time emit refresh signals")
 
 	service.set_debug_time(99, -4, 80)
 	date_time = service.get_utc_datetime()
@@ -45,7 +48,7 @@ func _init() -> void:
 
 	service.clear_debug_time()
 	_check_true(not service.is_debug_time_active(), "clearing debug time restores UTC")
-	_check_equal(time_change_count, 6, "clearing debug time emits a refresh signal")
+	_check_equal(time_change_count, 7, "clearing debug time emits a refresh signal")
 	server_date_time = service.get_utc_datetime(2000)
 	_check_equal(int(server_date_time.get("hour", -1)), 13, "clearing debug time restores the latest server anchor")
 	_check_equal(int(server_date_time.get("minute", -1)), 45, "default time retains the latest server minute")

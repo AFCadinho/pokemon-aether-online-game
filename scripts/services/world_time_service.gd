@@ -43,6 +43,11 @@ func get_day_fraction(local_ticks_msec := Time.get_ticks_msec()) -> float:
 	return get_seconds_since_midnight(local_ticks_msec) / float(SECONDS_PER_DAY)
 
 
+func get_encounter_time_of_day(local_ticks_msec := Time.get_ticks_msec()) -> String:
+	var hour := int(get_seconds_since_midnight(local_ticks_msec) / SECONDS_PER_HOUR)
+	return "day" if hour >= 5 and hour < 21 else "night"
+
+
 func sync_server_time(server_time: String, local_ticks_msec := Time.get_ticks_msec()) -> bool:
 	var normalized_time := server_time.strip_edges()
 	if not _is_supported_server_time(normalized_time):
