@@ -449,6 +449,7 @@ var donator_store_popup: DonatorStorePopup
 @onready var global_buff_details_active_label: Label = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/ActiveLabel
 @onready var global_buff_donation_section: VBoxContainer = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection
 @onready var global_buff_amount_input: LineEdit = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow/AmountInput
+@onready var global_buff_fill_remaining_button: Button = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow/FillRemainingButton
 @onready var global_buff_contribute_button: Button = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow/ContributeButton
 @onready var region_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/StatusRow/RegionBadge/RegionLabel
 @onready var location_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/HeaderRow/LocationLabel
@@ -10273,6 +10274,7 @@ func _setup_status_docks() -> void:
 	settings_button.focus_mode = Control.FOCUS_NONE
 	global_buff_details_close_button.pressed.connect(_hide_global_buff_details)
 	global_buff_amount_input.text_changed.connect(_on_global_buff_amount_changed)
+	global_buff_fill_remaining_button.pressed.connect(_on_global_buff_fill_remaining_pressed)
 	global_buff_contribute_button.pressed.connect(_on_global_buff_contribute_pressed)
 	_set_localized_control_property(personal_buffs_empty_label, "text", "ui.buff.none")
 	_set_localized_control_property(global_buff_details_close_button, "tooltip_text", "common.close")
@@ -10283,6 +10285,7 @@ func _setup_status_docks() -> void:
 			{"minimum": _format_money(MINIMUM_GLOBAL_BUFF_CONTRIBUTION)}
 		)
 	_set_localized_control_property(global_buff_contribute_button, "text", "ui.buff.contribute")
+	_set_localized_control_property(global_buff_fill_remaining_button, "text", "ui.buff.fill_remaining")
 	for child: Node in global_buff_slots.get_children():
 		var button := child as Button
 		if button == null:
@@ -10837,28 +10840,70 @@ func _on_global_buff_amount_changed(value: String) -> void:
 	for character: String in value:
 		if character >= "0" and character <= "9":
 			digits += character
-	if digits != value:
-		global_buff_amount_input.text = digits
-		global_buff_amount_input.caret_column = digits.length()
-	selected_global_buff_contribution = int(digits) if not digits.is_empty() else 0
+	var remaining := _global_buff_remaining_contribution()
+	var requested := 0
+	if not digits.is_empty():
+		requested = remaining if digits.length() > 9 else int(digits)
+	selected_global_buff_contribution = mini(requested, remaining)
+	var normalized_text := str(selected_global_buff_contribution) if not digits.is_empty() else ""
+	if global_buff_amount_input.text != normalized_text:
+		global_buff_amount_input.set_block_signals(true)
+		global_buff_amount_input.text = normalized_text
+		global_buff_amount_input.caret_column = normalized_text.length()
+		global_buff_amount_input.set_block_signals(false)
 	_refresh_global_buff_contribution_input()
 
 
+func _on_global_buff_fill_remaining_pressed() -> void:
+	var remaining := _global_buff_remaining_contribution()
+	if remaining <= 0:
+		return
+	selected_global_buff_contribution = remaining
+	global_buff_amount_input.set_block_signals(true)
+	global_buff_amount_input.text = str(remaining)
+	global_buff_amount_input.caret_column = global_buff_amount_input.text.length()
+	global_buff_amount_input.set_block_signals(false)
+	_refresh_global_buff_contribution_input()
+
+
+func _global_buff_remaining_contribution() -> int:
+	if selected_global_buff.is_empty() or str(selected_global_buff.get("state", "funding")) == "active":
+		return 0
+	var current := maxi(int(selected_global_buff.get("current", 0)), 0)
+	var goal := maxi(int(selected_global_buff.get("goal", 100000)), 1)
+	return maxi(goal - current, 0)
+
+
 func _refresh_global_buff_contribution_input() -> void:
-	if global_buff_amount_input.text.is_empty() and selected_global_buff_contribution >= MINIMUM_GLOBAL_BUFF_CONTRIBUTION:
+	var remaining := _global_buff_remaining_contribution()
+	var minimum := mini(MINIMUM_GLOBAL_BUFF_CONTRIBUTION, remaining)
+	selected_global_buff_contribution = mini(selected_global_buff_contribution, remaining)
+	if global_buff_amount_input.text.is_empty() and selected_global_buff_contribution >= minimum and selected_global_buff_contribution > 0:
 		global_buff_amount_input.text = str(selected_global_buff_contribution)
-	var valid := selected_global_buff_contribution >= MINIMUM_GLOBAL_BUFF_CONTRIBUTION
+	var valid := (
+		remaining > 0
+		and selected_global_buff_contribution >= minimum
+		and selected_global_buff_contribution <= remaining
+	)
 	global_buff_contribute_button.disabled = not valid
+	global_buff_fill_remaining_button.disabled = remaining <= 0
+	global_buff_fill_remaining_button.tooltip_text = LocalizationManager.text(
+		"ui.buff.fill_remaining_tooltip",
+		{"amount": _format_money(remaining)}
+	)
 	global_buff_amount_input.tooltip_text = LocalizationManager.text(
 		"ui.buff.contribution_minimum",
 		{"minimum": _format_money(MINIMUM_GLOBAL_BUFF_CONTRIBUTION)}
 	)
 	_apply_button_style(global_buff_contribute_button, "primary" if valid else "default")
+	_apply_button_style(global_buff_fill_remaining_button)
 
 func _on_global_buff_contribute_pressed() -> void:
 	if selected_global_buff.is_empty() or str(selected_global_buff.get("state", "funding")) == "active":
 		return
-	if selected_global_buff_contribution < MINIMUM_GLOBAL_BUFF_CONTRIBUTION:
+	var remaining := _global_buff_remaining_contribution()
+	var minimum := mini(MINIMUM_GLOBAL_BUFF_CONTRIBUTION, remaining)
+	if selected_global_buff_contribution < minimum:
 		_add_chat_message(LocalizationManager.text(
 			"ui.buff.contribution_minimum",
 			{"minimum": _format_money(MINIMUM_GLOBAL_BUFF_CONTRIBUTION)}
@@ -22476,6 +22521,7 @@ func _apply_premium_overlay_styles() -> void:
 	_apply_button_style(system_chat_tab_button, "primary")
 	_apply_chat_dock_button_style(send_button, true)
 	_apply_button_style(global_buff_details_close_button)
+	_apply_button_style(global_buff_fill_remaining_button)
 	_apply_button_style(global_buff_contribute_button, "primary")
 	_apply_line_edit_style(global_buff_amount_input)
 	_refresh_global_buff_contribution_input()
