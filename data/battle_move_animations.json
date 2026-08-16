@@ -9523,7 +9523,7 @@
       "overlay_fill_enabled": false,
       "overlay_peak_alpha": 0.0,
       "render_below_sprites": true,
-      "solar_beam": {
+      "psychic_pulse": {
         "enabled": true,
         "visible_start": 0.03,
         "visible_end": 0.97,
@@ -9540,6 +9540,27 @@
         ],
         "impact_ray_count": 14,
         "impact_bolt_count": 6,
+        "charge_end": 0.28,
+        "wave_start": 0.22,
+        "charge_ring_count": 3,
+        "ring_count": 5,
+        "ring_spacing": 0.14,
+        "ring_radius": 24.0,
+        "ring_squash": 0.46,
+        "particle_count": 16,
+        "particle_spread": 58.0,
+        "ring_color": [
+          0.7,
+          0.22,
+          1.0,
+          1.0
+        ],
+        "glow_color": [
+          0.38,
+          0.08,
+          0.86,
+          1.0
+        ],
         "beam_start": 0.24,
         "beam_fade_in": 0.08,
         "outer_width": 30.0,
