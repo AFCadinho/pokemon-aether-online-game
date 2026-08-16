@@ -61,6 +61,9 @@ func _claim_catching_reward() -> void:
 		[
 			"Well done! You proved your potential as a Trainer.",
 			"Take these ten Great Balls. Better Poke Balls increase your catch rate.",
+			"A newly caught Pokemon may not immediately be as strong as the partners you have already trained. Give it time.",
+			"With enough training, every new partner can become a valuable member of your team.",
+			"Take this Lucky Egg too. A Pokemon holding it earns 50% more EXP from battle. I hope it serves you well.",
 			"Visit the Market Seller in any Pokemon Center when you need more.",
 		]
 	))
@@ -69,7 +72,10 @@ func _claim_catching_reward() -> void:
 		"add_system_message",
 		LocalizationManager.text("ui.quest.completed_reward", {
 			"quest": LocalizationManager.text("story.kanto.catch_mankey.title"),
-			"reward": "10 %s" % ItemLocalization.display_name("great-ball", "Great Balls"),
+			"reward": "10 %s + %s" % [
+				ItemLocalization.display_name("great-ball", "Great Balls"),
+				ItemLocalization.display_name("lucky-egg", "Lucky Egg"),
+			],
 		})
 	)
 	if bool(result.get("claimed", false)):

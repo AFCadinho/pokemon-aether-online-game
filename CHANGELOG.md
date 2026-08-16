@@ -14,6 +14,7 @@
 - Protean and similar type-changing effects now show the Pokémon's current type in a coloured battle indicator.
 - Brock's Onix is now Shiny.
 - The permanent Shiny Tracker is now included in every Trainer's Bag and defaults to hotbar slot 2.
+- Gideon's catching lesson now rewards a Lucky Egg alongside ten Great Balls; its holder earns 50% more battle EXP.
 
 **Changed**
 
