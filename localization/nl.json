@@ -3284,6 +3284,7 @@
   "ui.buff.global_ev.name": "Wereldwijde EV-boost",
   "ui.buff.global_ev.description": "De hele server verdient dubbele Effort Values zolang deze boost actief is.",
   "ui.buff.global_ev.contribution_message": "{player} heeft ₽{amount} bijgedragen aan de Wereldwijde EV-boost!",
+  "ui.buff.global_shiny.contribution_message": "{player} heeft ₽{amount} bijgedragen aan de Wereldwijde Shiny-boost!",
   "ui.buff.global_shiny.name": "Wereldwijde Shiny-boost",
   "ui.buff.global_shiny.description": "Na financiering heeft de hele server meer kans op Shiny-ontmoetingen.",
   "ui.buff.global_rare.name": "Zeldzame-ontmoetingsboost",

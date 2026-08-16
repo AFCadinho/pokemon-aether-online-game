@@ -10329,8 +10329,8 @@ func _setup_status_docks() -> void:
 			"description_key": "ui.buff.global_shiny.description",
 			"state": "funding",
 			"current": 0,
-			"goal": 100000,
-			"active_duration": "1h",
+			"goal": 1000000,
+			"active_duration": "7d",
 		},
 		{
 			"id": "global_rare_encounter",
@@ -10346,6 +10346,7 @@ func _setup_status_docks() -> void:
 	set_personal_buffs([])
 	_load_global_exp_boost.call_deferred()
 	_load_global_ev_boost.call_deferred()
+	_load_global_shiny_boost.call_deferred()
 	_load_global_rare_encounter_boost.call_deferred()
 
 func set_global_buffs(buffs: Array) -> void:
@@ -10925,6 +10926,8 @@ func _on_global_buff_contribute_pressed() -> void:
 		response = await PlayerWalletService.contribute_to_global_exp_boost(selected_global_buff_contribution)
 	elif selected_boost_id == "global_ev":
 		response = await PlayerWalletService.contribute_to_global_ev_boost(selected_global_buff_contribution)
+	elif selected_boost_id == "global_shiny":
+		response = await PlayerWalletService.contribute_to_global_shiny_boost(selected_global_buff_contribution)
 	elif selected_boost_id == "global_rare_encounter":
 		response = await PlayerWalletService.contribute_to_global_rare_encounter_boost(selected_global_buff_contribution)
 	else:
@@ -10958,6 +10961,12 @@ func _load_global_ev_boost() -> void:
 	var response: Dictionary = await PlayerWalletService.load_global_ev_boost()
 	if bool(response.get("success", false)):
 		_apply_global_boost_state(response.get("body", {}) as Dictionary, "global_ev")
+
+
+func _load_global_shiny_boost() -> void:
+	var response: Dictionary = await PlayerWalletService.load_global_shiny_boost()
+	if bool(response.get("success", false)):
+		_apply_global_boost_state(response.get("body", {}) as Dictionary, "global_shiny")
 
 
 func _load_global_rare_encounter_boost() -> void:
@@ -36855,6 +36864,9 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 	if message_type == "system.global_rare_encounter_boost_contribution":
 		add_system_message(_global_rare_encounter_boost_contribution_message(message))
 		return
+	if message_type == "system.global_shiny_boost_contribution":
+		add_system_message(_global_shiny_boost_contribution_message(message))
+		return
 	if message_type == "chat_error":
 		var error_text: String = str(message.get("message", "Chat message could not be sent."))
 		var error_channel := str(message.get("channel", "")).strip_edges().to_lower()
@@ -36900,6 +36912,10 @@ func _global_ev_boost_contribution_message(message: Dictionary) -> String:
 
 func _global_rare_encounter_boost_contribution_message(message: Dictionary) -> String:
 	return _global_boost_contribution_message(message, "ui.buff.global_rare.contribution_message")
+
+
+func _global_shiny_boost_contribution_message(message: Dictionary) -> String:
+	return _global_boost_contribution_message(message, "ui.buff.global_shiny.contribution_message")
 
 
 func _global_boost_contribution_message(message: Dictionary, localization_key: String) -> String:

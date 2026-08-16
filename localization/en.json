@@ -3284,6 +3284,7 @@
   "ui.buff.global_ev.name": "Global EV Boost",
   "ui.buff.global_ev.description": "The entire server earns double Effort Values while this boost is active.",
   "ui.buff.global_ev.contribution_message": "{player} contributed ₽{amount} to the Global EV Boost!",
+  "ui.buff.global_shiny.contribution_message": "{player} contributed ₽{amount} to the Global Shiny Boost!",
   "ui.buff.global_shiny.name": "Global Shiny Boost",
   "ui.buff.global_shiny.description": "When funded, the entire server receives increased Shiny encounter odds.",
   "ui.buff.global_rare.name": "Rare Encounter Boost",
