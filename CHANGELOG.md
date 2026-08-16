@@ -36,6 +36,7 @@
 - Technical Machines are now consumed after successfully teaching their move; HMs remain reusable.
 - Fixed the Shiny Tracker failing to open before a Trainer had started their first hunt.
 - Active Shiny Tracker hunts now show the target Pokémon sprite.
+- The active Shiny Tracker counter now clearly identifies itself as the current hunt count.
 
 ## 0.3.55 - 2026-08-16
 

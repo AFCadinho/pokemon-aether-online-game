@@ -3596,7 +3596,7 @@
   "ui.shiny_tracker.no_active_hint": "Choose a target on the right to start tracking.",
   "ui.shiny_tracker.no_history": "No completed or stopped hunts yet.",
   "ui.shiny_tracker.no_results": "No Pokémon found.",
-  "ui.shiny_tracker.encounters": "{count} encounters",
+  "ui.shiny_tracker.hunt_encounters": "ENCOUNTERS IN THIS HUNT",
   "ui.shiny_tracker.confirm_replace": "Press again to stop your current hunt and replace it.",
   "ui.shiny_tracker.status.loading": "Loading tracker...",
   "ui.shiny_tracker.status.ready": "Only normal wild and fishing encounters count. No pity is applied.",

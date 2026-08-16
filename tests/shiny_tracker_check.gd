@@ -39,6 +39,8 @@ func _run() -> void:
 	}
 	popup.call("_render_tracker")
 	_check(popup.hunt_sprite.texture != null, "Active hunts show the target Pokémon sprite")
+	_check(popup.hunt_count_label.text == "0", "Active hunt count renders as a standalone number")
+	_check(popup.hunt_count_context_label.visible, "Active hunt count shows its hunt context")
 	popup.queue_free()
 	await process_frame
 

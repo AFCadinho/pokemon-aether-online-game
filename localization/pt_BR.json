@@ -3596,7 +3596,7 @@
   "ui.shiny_tracker.no_active_hint": "Escolha um alvo à direita para iniciar o contador.",
   "ui.shiny_tracker.no_history": "Ainda não há caçadas concluídas ou encerradas.",
   "ui.shiny_tracker.no_results": "Nenhum Pokémon encontrado.",
-  "ui.shiny_tracker.encounters": "{count} encontros",
+  "ui.shiny_tracker.hunt_encounters": "ENCONTROS NESTA CAÇADA",
   "ui.shiny_tracker.confirm_replace": "Pressione novamente para encerrar e substituir sua caçada atual.",
   "ui.shiny_tracker.status.loading": "Carregando rastreador...",
   "ui.shiny_tracker.status.ready": "Apenas encontros selvagens e de pesca normais contam. Não há pity.",
