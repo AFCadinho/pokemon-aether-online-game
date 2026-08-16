@@ -293,6 +293,7 @@ func _init() -> void:
 	_check(script_source.contains("func _personal_buffs_summary_tooltip()"), "personal buff count exposes hover details")
 	_check(script_source.contains('LocalizationManager.plural(') and script_source.contains('"ui.buff.active.one"') and script_source.contains('"ui.buff.active.many"'), "personal buff summary localizes the active count")
 	_check(script_source.contains("func _on_global_buff_button_pressed(button: Button)"), "global buff icons open their detail panel")
+	_check(script_source.contains("await get_tree().process_frame") and script_source.contains("get_combined_minimum_size"), "global buff details wait for their first layout before positioning")
 	_check(script_source.contains('str(buff.get("state", "funding")) == "active"'), "global buff icons distinguish active and funding states")
 	_check(script_source.contains('"id": "global_shiny"'), "global buff data includes Shiny encounters")
 	_check(script_source.contains('"id": "global_rare_encounter"'), "global buff data includes rarer Pokémon encounters")

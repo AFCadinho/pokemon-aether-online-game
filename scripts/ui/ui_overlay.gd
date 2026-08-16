@@ -10738,8 +10738,9 @@ func _on_global_buff_button_pressed(button: Button) -> void:
 		return
 	selected_global_buff = buff.duplicate(true)
 	_render_global_buff_details()
-	global_buff_details_panel.reset_size()
 	global_buff_details_panel.visible = true
+	await get_tree().process_frame
+	global_buff_details_panel.size = global_buff_details_panel.get_combined_minimum_size()
 	_position_action_slot_popup(global_buff_details_panel, button)
 	_activate_ui_panel(global_buff_details_panel)
 
