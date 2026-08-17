@@ -117,8 +117,10 @@ func _run() -> void:
 		"evs": {"hp": 4, "atk": 252, "def": 0, "spa": 0, "spd": 0, "spe": 252},
 		"stats": {"hp": 357, "atk": 394, "def": 226, "spa": 176, "spd": 212, "spe": 333},
 		"moves": [
-			{"id": "earthquake", "name": "Earthquake", "pp": 10, "maxPp": 10},
-			{"id": "dragon-claw", "name": "Dragon Claw", "pp": 15, "maxPp": 15},
+			{"id": "ceaseless-edge", "name": "Ceaseless Edge", "pp": 15, "maxPp": 15},
+			{"id": "razor-shell", "name": "Razor Shell", "pp": 10, "maxPp": 10},
+			{"id": "flip-turn", "name": "Flip Turn", "pp": 20, "maxPp": 20},
+			{"id": "knock-off", "name": "Knock Off", "pp": 20, "maxPp": 20},
 		],
 		"types": ["dragon", "ground"],
 		"possibleAbilities": ["sand-veil", "rough-skin"],
@@ -141,13 +143,16 @@ func _run() -> void:
 	_check(str(popup.call("_optional_text", null)) == "", "Null form ids do not become sprite identifiers")
 	var summary_button := popup.find_child("PokemonSummaryButton", true, false) as Button
 	_check(summary_button != null, "Pokémon details expose the full read-only Summary action")
-	var quick_summary := summary_button.get_parent().get_parent() as PanelContainer
+	var current_detail_stack := popup.get("detail_stack") as VBoxContainer
+	var purchase_header := current_detail_stack.get_child(0) as HBoxContainer
+	var quick_summary := current_detail_stack.get_child(1) as PanelContainer
+	_check(purchase_header != null, "Pokémon identity and Summary action share a compact header")
 	_check(quick_summary != null, "Selected Pokémon renders a compact purchase summary")
 	_check(summary_button.get_theme_stylebox("normal") is StyleBoxFlat, "Pokémon Summary action uses Exchange styling")
 	popup.pokemon_summary_requested.connect(_capture_summary_payload)
 	summary_button.pressed.emit()
 	_check(str(requested_summary_payload.get("species", "")) == "garchomp", "Summary payload includes the factory species identifier")
-	_check(_array(requested_summary_payload.get("moves", [])).size() == 2, "Summary payload preserves the listed Pokémon's moves")
+	_check(_array(requested_summary_payload.get("moves", [])).size() == 4, "Summary payload preserves the listed Pokémon's moves")
 	var summary_origin := _dictionary(requested_summary_payload.get("origin", {}))
 	_check(not summary_origin.has("currentTrainerUserId"), "Summary payload removes private trainer ids")
 	_check(str(summary_origin.get("currentTrainerName", "")) != "Private seller", "Summary payload anonymizes the seller name")
@@ -172,14 +177,16 @@ func _run() -> void:
 
 	var browse_entries: Array = []
 	for index: int in range(4):
+		var browse_asset := sellable_garchomp.duplicate(true) if index == 0 else {
+			"pokemonId": 100 + index,
+			"species": "bulbasaur",
+			"speciesName": "Bulbasaur",
+			"level": 12,
+		}
 		browse_entries.append({
 			"id": "browse-%d" % index,
 			"assetType": "pokemon",
-			"asset": {
-				"pokemonId": 100 + index,
-				"speciesName": "Bulbasaur",
-				"level": 12,
-			},
+			"asset": browse_asset,
 			"totalPrice": 5000 + index,
 			"status": "active",
 		})
@@ -193,6 +200,15 @@ func _run() -> void:
 	_check(list_container.get_child_count() == 4, "Browse grid renders every available listing")
 	_check((list_container.get_child(0) as Button).custom_minimum_size.y == 82.0, "Browse cards use the compact listing height")
 	_check((list_container.get_child(0) as Button).size.x < list_container.size.x, "Browse cards do not consume a full listing row")
+	popup.set("wallet_money", 1_000_000)
+	popup.call("_select_entry", browse_entries[0], "listing")
+	await process_frame
+	await process_frame
+	var detail_scroll := popup.find_child("ExchangeDetailScroll", true, false) as ScrollContainer
+	current_detail_stack = popup.get("detail_stack") as VBoxContainer
+	var buy_button := current_detail_stack.get_child(current_detail_stack.get_child_count() - 1) as Button
+	_check(buy_button != null and buy_button.visible, "Browse keeps Buy Now visible with a complete Pokémon summary")
+	_check(not detail_scroll.get_v_scroll_bar().visible, "Complete Pokémon purchase details fit without vertical scrolling")
 	_check(bool(popup.call("_mutation_requires_party_refresh", {"assetType": "pokemon"}, "ui.exchange.status.listed")), "Listing a Pokémon refreshes the persisted party")
 	_check(bool(popup.call("_mutation_requires_party_refresh", {"assetType": "pokemon"}, "ui.exchange.status.cancelled")), "Cancelling a Pokémon listing refreshes the persisted party")
 	_check(not bool(popup.call("_mutation_requires_party_refresh", {"assetType": "item"}, "ui.exchange.status.listed")), "Item listings do not trigger an unnecessary party refresh")
