@@ -348,6 +348,7 @@ func _build_filters() -> Control:
 
 func _build_list_panel() -> Control:
 	var panel := PanelContainer.new()
+	panel.name = "ExchangeListPanel"
 	panel.custom_minimum_size = Vector2(615, 0)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -379,6 +380,7 @@ func _build_list_panel() -> Control:
 
 func _build_detail_panel() -> Control:
 	var panel := PanelContainer.new()
+	panel.name = "ExchangeDetailPanel"
 	panel.custom_minimum_size = Vector2(365, 0)
 	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER, 11, 1))
@@ -551,8 +553,12 @@ func _render_current_list() -> void:
 	if entries.is_empty():
 		list_container.columns = 1
 		var empty := Label.new()
+		empty.name = "ExchangeEmptyState"
 		empty.text = _t("ui.exchange.empty.%s" % active_tab)
+		empty.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		empty.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		empty.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		empty.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		empty.add_theme_color_override("font_color", UI_MUTED)
 		empty.custom_minimum_size = Vector2(0, 120)
 		list_container.add_child(empty)
