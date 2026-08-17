@@ -102,6 +102,9 @@ func _run() -> void:
 	_check(list_container.get_child_count() == 4, "Browse grid renders every available listing")
 	_check((list_container.get_child(0) as Button).custom_minimum_size.y == 82.0, "Browse cards use the compact listing height")
 	_check((list_container.get_child(0) as Button).size.x < list_container.size.x, "Browse cards do not consume a full listing row")
+	_check(bool(popup.call("_mutation_requires_party_refresh", {"assetType": "pokemon"}, "ui.exchange.status.listed")), "Listing a Pokémon refreshes the persisted party")
+	_check(bool(popup.call("_mutation_requires_party_refresh", {"assetType": "pokemon"}, "ui.exchange.status.cancelled")), "Cancelling a Pokémon listing refreshes the persisted party")
+	_check(not bool(popup.call("_mutation_requires_party_refresh", {"assetType": "item"}, "ui.exchange.status.listed")), "Item listings do not trigger an unnecessary party refresh")
 
 	popup.call("_show_confirmation", "Confirm listing", "This asset will be held by the Exchange.", Callable())
 	await process_frame
@@ -125,6 +128,7 @@ func _run() -> void:
 	_check(popup_source.contains("func _load_browse() -> bool:"), "Browse loads report whether they succeeded")
 	_check(popup_source.contains("if portfolio_loaded and browse_loaded:"), "Exchange success states require both requests to succeed")
 	_check(popup_source.contains("if refreshed:\n\t\t_set_status(_t(\"ui.exchange.status.updated\")"), "Refresh errors are not overwritten by a success state")
+	_check(popup_source.contains('party_service.call("refresh_party")'), "Successful Pokémon mutations synchronize the party sidebar")
 
 	popup.queue_free()
 	await process_frame

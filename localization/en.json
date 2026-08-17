@@ -131,6 +131,7 @@
   "ui.exchange.status.cancelled": "Listing cancelled and asset returned.",
   "ui.exchange.error.load": "The Aether Exchange could not be loaded.",
   "ui.exchange.error.action": "The Exchange action could not be completed.",
+  "ui.exchange.error.party_refresh": "The Exchange action completed, but your party could not be refreshed. Please reconnect.",
   "ui.exchange.pokemon": "Pokémon",
   "ui.exchange.item": "Item",
   "ui.exchange.pokemon_summary": "Lv. {level} • {nature}",
