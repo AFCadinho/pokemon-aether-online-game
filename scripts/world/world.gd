@@ -2647,6 +2647,7 @@ func _on_battle_ended(result: Dictionary) -> void:
 	_notify_caught_pokemon_if_needed(result)
 	if should_respawn_after_loss:
 		await _respawn_after_battle_loss()
+		_finish_blackout_respawn_transition()
 		return
 	if should_claim_wild_reward and reward_battle_id != "":
 		await _award_wild_battle_money(reward_battle_id, reward_species)
@@ -2689,6 +2690,19 @@ func _begin_blackout_respawn_transition() -> void:
 	has_pending_player_position_save = false
 	if not GameState.overworld_input_locked:
 		GameState.lock_overworld_input()
+
+
+func _finish_blackout_respawn_transition() -> void:
+	if player != null:
+		if player.has_method("reset_movement_state"):
+			player.reset_movement_state()
+		player.set_process(true)
+		player.set_physics_process(true)
+	# Story-driven trainer battles can hand control to the battle while their
+	# legacy global input lock is still unwinding. A quick forfeit may finish
+	# before that handoff completes. Clear the legacy lock at the blackout
+	# boundary; unlock_input preserves any explicitly owned scoped locks.
+	GameState.unlock_input()
 
 
 func _respawn_after_battle_loss() -> void:
