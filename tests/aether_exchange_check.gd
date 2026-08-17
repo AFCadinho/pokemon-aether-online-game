@@ -60,6 +60,24 @@ func _run() -> void:
 	await process_frame
 	_check(popup.get("quantity_spin") is SpinBox, "Item listings expose quantity input")
 	_check(popup.get("price_spin") is SpinBox, "Listings expose fixed-price input")
+	var sellable_garchomp := {
+		"pokemonId": 25,
+		"speciesId": "Garchomp",
+		"speciesName": "Garchomp",
+		"formId": null,
+		"nickname": null,
+		"level": 100,
+		"nature": "Jolly",
+	}
+	popup.set("sellable_pokemon", [sellable_garchomp])
+	popup.call("_render_current_list")
+	popup.call("_select_entry", sellable_garchomp, "sell")
+	await process_frame
+	var selected_pokemon := popup.get("selected_entry") as Dictionary
+	_check(int(selected_pokemon.get("pokemonId", 0)) == 25, "Sell selection retains the selected Pokémon")
+	_check((popup.get("detail_stack") as VBoxContainer).get_child_count() > 1, "Selected Pokémon renders listing details immediately")
+	_check(str(popup.call("_entry_name", selected_pokemon, "sell")) == "Garchomp", "Null Pokémon nicknames fall back to the species name")
+	_check(str(popup.call("_optional_text", null)) == "", "Null form ids do not become sprite identifiers")
 
 	var project_source := FileAccess.get_file_as_string(PROJECT_PATH)
 	var overlay_source := FileAccess.get_file_as_string(UI_OVERLAY_PATH)
