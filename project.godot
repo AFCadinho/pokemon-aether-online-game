@@ -82,6 +82,7 @@ SocialService="*res://scripts/services/social_service.gd"
 PartyHealService="*res://scripts/services/party_heal_service.gd"
 TradeService="*res://scripts/services/trade_service.gd"
 TradeRealtimeService="*res://scripts/services/trade_realtime_service.gd"
+AetherExchangeService="*res://scripts/services/aether_exchange_service.gd"
 TradeWorkspace="*res://scripts/ui/trade_workspace.gd"
 
 [display]
