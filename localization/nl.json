@@ -131,6 +131,7 @@
   "ui.exchange.status.cancelled": "Advertentie geannuleerd en bezit teruggegeven.",
   "ui.exchange.error.load": "De Aether Exchange kon niet worden geladen.",
   "ui.exchange.error.action": "De Exchange-actie kon niet worden voltooid.",
+  "ui.exchange.error.party_refresh": "De Exchange-actie is voltooid, maar je party kon niet worden vernieuwd. Maak opnieuw verbinding.",
   "ui.exchange.pokemon": "Pokémon",
   "ui.exchange.item": "Item",
   "ui.exchange.pokemon_summary": "Lv. {level} • {nature}",

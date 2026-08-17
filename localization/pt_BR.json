@@ -131,6 +131,7 @@
   "ui.exchange.status.cancelled": "Anúncio cancelado e bem devolvido.",
   "ui.exchange.error.load": "Não foi possível carregar a Aether Exchange.",
   "ui.exchange.error.action": "Não foi possível concluir a ação da Exchange.",
+  "ui.exchange.error.party_refresh": "A ação da Exchange foi concluída, mas sua equipe não pôde ser atualizada. Reconecte-se.",
   "ui.exchange.pokemon": "Pokémon",
   "ui.exchange.item": "Item",
   "ui.exchange.pokemon_summary": "Nv. {level} • {nature}",

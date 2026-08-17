@@ -773,6 +773,16 @@ func _finish_mutation(result: Dictionary, success_key: String) -> void:
 	var inventory_service := get_node_or_null("/root/InventoryService")
 	if inventory_service != null:
 		await inventory_service.call("load_inventory")
+	var party_loaded := true
+	var listing := _dictionary(result.get("listing", {}))
+	if _mutation_requires_party_refresh(listing, success_key):
+		var party_service := get_node_or_null("/root/PlayerPartyStateService")
+		var party_result: Dictionary = (
+			await party_service.call("refresh_party")
+			if party_service != null
+			else {"success": false}
+		)
+		party_loaded = bool(party_result.get("success", false))
 	var portfolio_loaded := await _load_portfolio()
 	var browse_loaded := await _load_browse()
 	request_busy = false
@@ -780,8 +790,17 @@ func _finish_mutation(result: Dictionary, success_key: String) -> void:
 	selected_kind = ""
 	_render_current_list()
 	_refresh_controls()
-	if portfolio_loaded and browse_loaded:
+	if portfolio_loaded and browse_loaded and party_loaded:
 		_set_status(_t(success_key), UI_GREEN)
+	elif portfolio_loaded and browse_loaded and not party_loaded:
+		_set_status(_t("ui.exchange.error.party_refresh"), UI_DANGER)
+
+
+func _mutation_requires_party_refresh(listing: Dictionary, success_key: String) -> bool:
+	return (
+		str(listing.get("assetType", "")) == "pokemon"
+		and success_key in ["ui.exchange.status.listed", "ui.exchange.status.cancelled"]
+	)
 
 
 func _refresh_controls() -> void:
