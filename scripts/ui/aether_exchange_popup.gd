@@ -384,7 +384,10 @@ func _entry_button(entry: Dictionary, kind: String) -> Button:
 func _select_entry(entry: Dictionary, kind: String) -> void:
 	selected_entry = entry.duplicate(true)
 	selected_kind = kind
-	_render_current_list()
+	# Render the detail immediately. Rebuilding the list is deferred so a button
+	# press cannot leave the previous "select an asset" prompt on screen.
+	_render_detail()
+	call_deferred("_render_current_list")
 
 
 func _render_detail() -> void:
@@ -661,10 +664,12 @@ func _entry_name(entry: Dictionary, kind: String) -> String:
 	var asset := _entry_asset(entry, kind)
 	var asset_type := _entry_asset_type(entry, kind)
 	if asset_type == "pokemon":
-		var nickname := str(asset.get("nickname", "")).strip_edges()
-		var species := str(asset.get("speciesName", asset.get("speciesId", _t("ui.exchange.pokemon"))))
+		var nickname := _optional_text(asset.get("nickname"))
+		var species := _optional_text(asset.get("speciesName"))
+		if species.is_empty():
+			species = _optional_text(asset.get("speciesId"), _t("ui.exchange.pokemon"))
 		return "%s (%s)" % [nickname, species] if not nickname.is_empty() else species
-	return str(asset.get("name", asset.get("itemId", _t("ui.exchange.item"))))
+	return _optional_text(asset.get("name"), _optional_text(asset.get("itemId"), _t("ui.exchange.item")))
 
 
 func _entry_subtitle(entry: Dictionary, kind: String) -> String:
@@ -690,7 +695,7 @@ func _entry_asset(entry: Dictionary, kind: String) -> Dictionary:
 func _entry_asset_type(entry: Dictionary, kind: String) -> String:
 	if kind != "sell":
 		return str(entry.get("assetType", "item"))
-	return "pokemon" if entry.has("pokemonId") else "item"
+	return "pokemon" if entry.has("pokemonId") or entry.has("speciesId") or entry.has("speciesName") else "item"
 
 
 func _asset_detail_text(asset: Dictionary, asset_type: String) -> String:
@@ -713,7 +718,9 @@ func _asset_detail_text(asset: Dictionary, asset_type: String) -> String:
 func _entry_texture(entry: Dictionary, kind: String) -> Texture2D:
 	var asset := _entry_asset(entry, kind)
 	if _entry_asset_type(entry, kind) == "pokemon":
-		var species := str(asset.get("formId", asset.get("speciesName", asset.get("speciesId", ""))))
+		var species := _optional_text(asset.get("formId"))
+		if species.is_empty():
+			species = _optional_text(asset.get("speciesName"), _optional_text(asset.get("speciesId")))
 		return PokemonAssets.load_party_icon(species, bool(asset.get("shiny", false)))
 	return _load_item_icon(str(asset.get("itemId", "")))
 
@@ -739,10 +746,7 @@ func _selection_still_visible(entries: Array) -> bool:
 		return false
 	for value: Variant in entries:
 		var entry := _dictionary(value)
-		if selected_kind == "sell":
-			if str(entry.get("itemId", "")) == str(selected_entry.get("itemId", "")) and int(entry.get("pokemonId", 0)) == int(selected_entry.get("pokemonId", 0)):
-				return true
-		elif str(entry.get("id", "")) == str(selected_entry.get("id", "")):
+		if _entry_selection_key(entry, selected_kind) == _entry_selection_key(selected_entry, selected_kind):
 			return true
 	return false
 
@@ -750,9 +754,22 @@ func _selection_still_visible(entries: Array) -> bool:
 func _entry_matches_selection(entry: Dictionary, kind: String) -> bool:
 	if selected_kind != kind:
 		return false
-	if kind == "sell":
-		return str(entry.get("itemId", "")) == str(selected_entry.get("itemId", "")) and int(entry.get("pokemonId", 0)) == int(selected_entry.get("pokemonId", 0))
-	return str(entry.get("id", "")) == str(selected_entry.get("id", ""))
+	return _entry_selection_key(entry, kind) == _entry_selection_key(selected_entry, kind)
+
+
+func _entry_selection_key(entry: Dictionary, kind: String) -> String:
+	if kind != "sell":
+		return "listing:%s" % _optional_text(entry.get("id"))
+	if _entry_asset_type(entry, kind) == "pokemon":
+		return "pokemon:%s" % _optional_text(entry.get("pokemonId"))
+	return "item:%s" % _optional_text(entry.get("itemId"))
+
+
+func _optional_text(value: Variant, fallback := "") -> String:
+	if value == null:
+		return fallback
+	var text := str(value).strip_edges()
+	return fallback if text.is_empty() or text == "<null>" else text
 
 
 func _labeled_control(label_text: String, control: Control) -> Control:
