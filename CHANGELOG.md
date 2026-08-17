@@ -31,6 +31,7 @@
 
 **Fixed**
 
+- Fixed Ranked team-validation reasons disappearing after the server finished checking the selected team.
 - Trainer rematches now only start their cooldown after you win.
 - Battle logs now correctly identify your Pokémon during switches and retain NPC Trainer names.
 - Fixed blackout recovery and overworld presence reconnects that could leave a Trainer unable to resume normally.
