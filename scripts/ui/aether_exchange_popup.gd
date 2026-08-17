@@ -389,6 +389,7 @@ func _build_detail_panel() -> Control:
 		margin.add_theme_constant_override("margin_%s" % side, 15)
 	panel.add_child(margin)
 	var scroll := ScrollContainer.new()
+	scroll.name = "ExchangeDetailScroll"
 	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -637,21 +638,22 @@ func _render_detail() -> void:
 
 	var asset := _entry_asset(selected_entry, selected_kind)
 	var asset_type := _entry_asset_type(selected_entry, selected_kind)
-	var icon := TextureRect.new()
-	icon.custom_minimum_size = Vector2(0, 100 if asset_type == "pokemon" else 132)
-	icon.texture = _entry_texture(selected_entry, selected_kind)
-	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	detail_stack.add_child(icon)
-	var name := Label.new()
-	name.text = _entry_name(selected_entry, selected_kind)
-	name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	name.add_theme_font_size_override("font_size", 20)
-	name.add_theme_color_override("font_color", UI_TEXT)
-	detail_stack.add_child(name)
 	if asset_type == "pokemon":
+		detail_stack.add_child(_build_pokemon_detail_header(asset))
 		detail_stack.add_child(_build_pokemon_quick_summary(asset))
 	else:
+		var icon := TextureRect.new()
+		icon.custom_minimum_size = Vector2(0, 132)
+		icon.texture = _entry_texture(selected_entry, selected_kind)
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		detail_stack.add_child(icon)
+		var name := Label.new()
+		name.text = _entry_name(selected_entry, selected_kind)
+		name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		name.add_theme_font_size_override("font_size", 20)
+		name.add_theme_color_override("font_color", UI_TEXT)
+		detail_stack.add_child(name)
 		var description := Label.new()
 		description.text = _asset_detail_text(asset, asset_type)
 		description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -666,13 +668,30 @@ func _render_detail() -> void:
 		_build_listing_controls()
 
 
-func _build_pokemon_quick_summary(asset: Dictionary) -> Control:
-	var panel := PanelContainer.new()
-	panel.name = "PokemonQuickSummary"
-	panel.add_theme_stylebox_override("panel", _panel_style(Color("#07111dcc"), UI_BORDER, 8, 1))
-	var content := VBoxContainer.new()
-	content.add_theme_constant_override("separation", 6)
-	panel.add_child(content)
+func _build_pokemon_detail_header(asset: Dictionary) -> Control:
+	var header := HBoxContainer.new()
+	header.name = "PokemonPurchaseHeader"
+	header.custom_minimum_size = Vector2(0, 86)
+	header.add_theme_constant_override("separation", 10)
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(92, 86)
+	icon.texture = _entry_texture(selected_entry, selected_kind)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	header.add_child(icon)
+
+	var information := VBoxContainer.new()
+	information.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	information.add_theme_constant_override("separation", 2)
+	header.add_child(information)
+	var name := Label.new()
+	name.text = _entry_name(selected_entry, selected_kind)
+	name.tooltip_text = name.text
+	name.clip_text = true
+	name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	name.add_theme_font_size_override("font_size", 18)
+	name.add_theme_color_override("font_color", UI_TEXT)
+	information.add_child(name)
 
 	var traits: Array[String] = [
 		_t("ui.exchange.summary.level", {"value": int(asset.get("level", 1))}),
@@ -683,44 +702,102 @@ func _build_pokemon_quick_summary(asset: Dictionary) -> Control:
 		traits.append(gender)
 	if bool(asset.get("shiny", false)):
 		traits.append(_t("ui.exchange.summary.shiny"))
-	if bool(asset.get("hiddenAbility", asset.get("hidden_ability", false))):
-		traits.append(_t("ui.exchange.summary.hidden_ability"))
 	var trait_label := Label.new()
-	trait_label.text = "  •  ".join(traits)
-	trait_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	trait_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	trait_label.add_theme_font_size_override("font_size", 12)
+	trait_label.text = " • ".join(traits)
+	trait_label.clip_text = true
+	trait_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	trait_label.add_theme_font_size_override("font_size", 11)
 	trait_label.add_theme_color_override("font_color", UI_CYAN)
-	content.add_child(trait_label)
+	information.add_child(trait_label)
 
-	content.add_child(_quick_summary_row(
-		_t("ui.exchange.summary.ability"),
-		_optional_text(asset.get("ability"), "—")
-	))
-	var ivs := _dictionary(asset.get("ivs", {}))
-	content.add_child(_quick_summary_row(
-		_t("ui.exchange.summary.ivs", {"total": _stat_total(ivs), "maximum": 186}),
-		_stat_spread(ivs)
-	))
-	var evs := _dictionary(asset.get("evs", {}))
-	content.add_child(_quick_summary_row(
-		_t("ui.exchange.summary.evs", {"total": _stat_total(evs), "maximum": 510}),
-		_stat_spread(evs)
-	))
-	content.add_child(_quick_summary_row(
-		_t("ui.exchange.summary.moves"),
-		_move_summary(_array(asset.get("moves", [])))
-	))
+	var identity: Array[String] = []
+	var types: Array[String] = []
+	for value: Variant in _array(asset.get("types", [])):
+		var type_name := _optional_text(value)
+		if not type_name.is_empty():
+			types.append(type_name.capitalize())
+	if not types.is_empty():
+		identity.append(" / ".join(types))
+	identity.append(_optional_text(asset.get("ability"), "—"))
+	if bool(asset.get("hiddenAbility", asset.get("hidden_ability", false))):
+		identity.append(_t("ui.exchange.summary.hidden_ability"))
+	var identity_label := Label.new()
+	identity_label.text = " • ".join(identity)
+	identity_label.tooltip_text = identity_label.text
+	identity_label.clip_text = true
+	identity_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	identity_label.add_theme_font_size_override("font_size", 10)
+	identity_label.add_theme_color_override("font_color", UI_MUTED)
+	information.add_child(identity_label)
 
 	var open_button := Button.new()
 	open_button.name = "PokemonSummaryButton"
 	open_button.text = _t("ui.exchange.action.open_summary")
 	open_button.tooltip_text = _t("ui.exchange.action.open_summary_tooltip")
-	open_button.custom_minimum_size = Vector2(0, 36)
+	open_button.custom_minimum_size = Vector2(0, 28)
 	open_button.pressed.connect(_on_pokemon_summary_pressed.bind(asset.duplicate(true)))
 	_apply_button_style(open_button)
-	content.add_child(open_button)
+	information.add_child(open_button)
+	return header
+
+
+func _build_pokemon_quick_summary(asset: Dictionary) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "PokemonQuickSummary"
+	panel.add_theme_stylebox_override("panel", _panel_style(Color("#07111dcc"), UI_BORDER, 8, 1))
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 4)
+	panel.add_child(content)
+	var ivs := _dictionary(asset.get("ivs", {}))
+	content.add_child(_quick_stat_summary(
+		_t("ui.exchange.summary.ivs", {"total": _stat_total(ivs), "maximum": 186}),
+		ivs
+	))
+	var evs := _dictionary(asset.get("evs", {}))
+	content.add_child(_quick_stat_summary(
+		_t("ui.exchange.summary.evs", {"total": _stat_total(evs), "maximum": 510}),
+		evs
+	))
+	content.add_child(_quick_summary_row(
+		_t("ui.exchange.summary.moves"),
+		_move_summary(_array(asset.get("moves", [])))
+	))
 	return panel
+
+
+func _quick_stat_summary(title_text: String, stats: Dictionary) -> Control:
+	var section := VBoxContainer.new()
+	section.add_theme_constant_override("separation", 1)
+	var title := Label.new()
+	title.text = title_text
+	title.add_theme_font_size_override("font_size", 10)
+	title.add_theme_color_override("font_color", UI_MUTED)
+	section.add_child(title)
+	var values := GridContainer.new()
+	values.columns = 6
+	values.add_theme_constant_override("h_separation", 4)
+	section.add_child(values)
+	for key: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
+		var cell := VBoxContainer.new()
+		cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		cell.add_theme_constant_override("separation", 0)
+		var stat_name := Label.new()
+		stat_name.text = str({
+			"hp": "HP", "atk": "Atk", "def": "Def",
+			"spa": "SpA", "spd": "SpD", "spe": "Spe",
+		}.get(key, key))
+		stat_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		stat_name.add_theme_font_size_override("font_size", 9)
+		stat_name.add_theme_color_override("font_color", UI_MUTED)
+		cell.add_child(stat_name)
+		var stat_value := Label.new()
+		stat_value.text = str(int(stats.get(key, 0)))
+		stat_value.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		stat_value.add_theme_font_size_override("font_size", 11)
+		stat_value.add_theme_color_override("font_color", UI_TEXT)
+		cell.add_child(stat_value)
+		values.add_child(cell)
+	return section
 
 
 func _quick_summary_row(title_text: String, value_text: String) -> Control:
@@ -812,6 +889,7 @@ func _build_listing_controls() -> void:
 	if status != "active":
 		return
 	var action := Button.new()
+	action.name = "ExchangeListingActionButton"
 	action.custom_minimum_size = Vector2(0, 42)
 	if active_tab == "mine" or bool(selected_entry.get("isMine", false)):
 		action.text = _t("ui.exchange.action.cancel") if active_tab == "mine" else _t("ui.exchange.action.owned")
@@ -1214,13 +1292,6 @@ func _stat_total(stats: Dictionary) -> int:
 	for key: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
 		total += maxi(int(stats.get(key, 0)), 0)
 	return total
-
-
-func _stat_spread(stats: Dictionary) -> String:
-	return "HP %d · Atk %d · Def %d\nSpA %d · SpD %d · Spe %d" % [
-		int(stats.get("hp", 0)), int(stats.get("atk", 0)), int(stats.get("def", 0)),
-		int(stats.get("spa", 0)), int(stats.get("spd", 0)), int(stats.get("spe", 0)),
-	]
 
 
 func _move_summary(moves: Array) -> String:
