@@ -5,6 +5,8 @@ class_name Pokemon
 const DEFAULT_HAPPINESS := 50
 
 var species: String
+var nickname: String = ""
+var gender: String = ""
 var level: int
 var item: String
 var ability: String

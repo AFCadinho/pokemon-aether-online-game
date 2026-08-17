@@ -51,9 +51,20 @@ static func create_pokemon_from_backend_payload(data: Dictionary) -> Pokemon:
 	)
 
 	_apply_payload_hp_state(pokemon, data)
+	pokemon.nickname = _get_string_option(data, ["nickname", "nickName", "displayName", "display_name"])
+	pokemon.gender = _normalize_pokemon_gender(_get_string_option(data, ["gender", "sex"]))
 	pokemon.can_evolve = bool(data.get("canEvolve", data.get("can_evolve", false)))
 	pokemon.hidden_ability = _get_bool_option(data, ["hiddenAbility", "hidden_ability"])
 	return pokemon
+
+
+static func _normalize_pokemon_gender(value: String) -> String:
+	match value.strip_edges().to_lower():
+		"m", "male", "masculine":
+			return "male"
+		"f", "female", "feminine":
+			return "female"
+	return ""
 
 
 static func _get_payload_moves(data: Dictionary) -> Array:
