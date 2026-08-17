@@ -148,6 +148,7 @@ const PVP_LEADERBOARD_SCOPES: Array[Dictionary] = [
 ]
 const FRIENDLIST_POPUP_SCENE: PackedScene = preload("res://scenes/interface/friendlist_popup.tscn")
 const GUILD_POPUP_SCENE: PackedScene = preload("res://scenes/interface/guild_popup.tscn")
+const AETHER_EXCHANGE_POPUP_SCENE: PackedScene = preload("res://scenes/interface/aether_exchange_popup.tscn")
 const DEV_BADGE_PROGRESS_POPUP_SCENE: PackedScene = preload("res://scenes/interface/dev_badge_progress_popup.tscn")
 const DONATOR_STORE_POPUP_SCENE: PackedScene = preload("res://scenes/interface/donator_store_popup.tscn")
 const PLAYER_INTERACTION_COORDINATOR_SCRIPT: Script = preload("res://scripts/ui/player_interaction_coordinator.gd")
@@ -507,6 +508,7 @@ var donator_store_popup: DonatorStorePopup
 @onready var socials_close_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/Header/CloseButton
 var friendlist_popup: FriendlistPopup
 var guild_popup: GuildPopup
+var aether_exchange_popup: AetherExchangePopup
 var guild_lobby_teleport_in_flight := false
 var player_interaction_coordinator: PlayerInteractionCoordinator
 var quest_journal_view
@@ -1292,6 +1294,7 @@ func _ready() -> void:
 	_setup_bag_item_context_menu()
 	_setup_party_slot_context_menu()
 	_setup_market_popup()
+	_setup_aether_exchange_popup()
 	_setup_aether_atelier_popup()
 	_setup_shiny_tracker_popup()
 	_setup_bag_item_use_popup()
@@ -16436,6 +16439,23 @@ func _setup_aether_atelier_popup() -> void:
 	aether_atelier_popup.closed.connect(_hide_aether_atelier)
 	aether_atelier_popup.bundle_created.connect(_on_aether_atelier_bundle_created)
 	aether_atelier_popup.chroma_dyed.connect(_on_aether_atelier_chroma_dyed)
+
+func _setup_aether_exchange_popup() -> void:
+	aether_exchange_popup = AETHER_EXCHANGE_POPUP_SCENE.instantiate() as AetherExchangePopup
+	if aether_exchange_popup == null:
+		return
+	root_control.add_child(aether_exchange_popup)
+	aether_exchange_popup.closed.connect(_hide_aether_exchange)
+	aether_exchange_popup.wallet_changed.connect(_on_aether_exchange_wallet_changed)
+
+func _hide_aether_exchange() -> void:
+	if aether_exchange_popup == null:
+		return
+	aether_exchange_popup.visible = false
+	_deactivate_ui_panel(aether_exchange_popup)
+
+func _on_aether_exchange_wallet_changed() -> void:
+	refresh_money_display()
 
 func _setup_shiny_tracker_popup() -> void:
 	shiny_tracker_popup = SHINY_TRACKER_POPUP_SCENE.instantiate() as ShinyTrackerPopup
@@ -33748,7 +33768,11 @@ func _on_guild_lobby_teleport_requested() -> void:
 	_add_chat_message(LocalizationManager.text("ui.guild.lobby.success"))
 
 func _on_aether_exchange_button_pressed() -> void:
-	_add_chat_message("Aether Exchange is not implemented yet.")
+	if aether_exchange_popup == null:
+		return
+	aether_exchange_popup.visible = true
+	_activate_ui_panel(aether_exchange_popup)
+	aether_exchange_popup.open_exchange()
 
 func _on_pvp_button_pressed() -> void:
 	if pvp_mode_menu == null:
