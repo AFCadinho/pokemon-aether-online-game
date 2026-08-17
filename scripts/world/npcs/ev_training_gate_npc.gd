@@ -23,6 +23,7 @@ const UI_TEXT := Color("#f3f5f7")
 const UI_TEXT_MUTED := Color("#a9b8c5")
 const UI_GOLD := Color("#d8b767")
 const UI_GOLD_BRIGHT := Color("#f0d58f")
+const TRAINER_SCHOOL_QUEST_ID := "learn_at_trainer_school"
 
 @export var inside_marker_path: NodePath
 @export var outside_marker_path: NodePath
@@ -33,6 +34,11 @@ var choice_root: Control
 
 
 func interact_with_player(player: Node2D) -> void:
+	if not StoryService.is_requirement_met(TRAINER_SCHOOL_QUEST_ID, "", "completed"):
+		await show_dialogue([
+			LocalizationManager.text("ui.ev_training.assistant.pre_lesson"),
+		], display_name)
+		return
 	if _is_player_inside(player):
 		await _leave_training_area(player)
 	else:
