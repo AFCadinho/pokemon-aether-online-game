@@ -63,8 +63,9 @@ func _init() -> void:
 		player_text.contains("SettingsManager.world_pixel_scale_changed.connect")
 		and player_text.contains("resolve_world_scale_for_area")
 		and player_text.contains("_get_current_map_world_access_area_type")
+		and player_text.contains("apply_camera_baseline_zoom")
 		and player_text.contains("PixelPerfectRenderingScript.apply_to_camera"),
-		"player camera applies settings outdoors and fixed zoom in interiors"
+		"player camera applies map scaling without overwriting active Photo Mode zoom"
 	)
 	_check(_read_text(PLAYER_SCENE).contains("zoom = Vector2(1, 1)"), "player camera scene defaults to 1x")
 	_check(_read_text(WORLD_SCENE).contains("texture_filter = 1"), "overworld uses nearest texture filtering")
