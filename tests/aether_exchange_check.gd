@@ -59,6 +59,13 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	_check(Rect2(popup.position, popup.size) == fixed_popup_rect, "Clicking Sell preserves the complete Exchange window geometry")
+	var list_container := popup.get("list_container") as GridContainer
+	var empty_state := list_container.get_child(0) as Label
+	var list_panel := popup.find_child("ExchangeListPanel", true, false) as PanelContainer
+	var detail_panel := popup.find_child("ExchangeDetailPanel", true, false) as PanelContainer
+	_check(empty_state != null and empty_state.autowrap_mode != TextServer.AUTOWRAP_OFF, "Sell empty-state guidance wraps within its panel")
+	_check(list_panel.size.x <= 635.0, "Sell empty-state text cannot expand the listing panel")
+	_check(detail_panel.position.x + detail_panel.size.x <= popup.size.x - 15.0, "Sell keeps the detail panel inside the Exchange window")
 	((popup.get("tab_buttons") as Dictionary).get("mine") as Button).pressed.emit()
 	await process_frame
 	await process_frame
@@ -83,7 +90,6 @@ func _run() -> void:
 	}])
 	popup.call("_render_current_list")
 	await process_frame
-	var list_container := popup.get("list_container") as GridContainer
 	_check(list_container.get_child_count() == 1, "Sell view renders eligible inventory assets")
 	popup.call("_select_entry", {
 		"itemId": "poke-ball",
