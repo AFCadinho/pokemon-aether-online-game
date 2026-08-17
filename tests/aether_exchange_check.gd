@@ -33,6 +33,7 @@ func _run() -> void:
 
 	var popup := EXCHANGE_POPUP.instantiate() as AetherExchangePopup
 	root.add_child(popup)
+	popup.visible = true
 	await process_frame
 	_check(popup != null, "Exchange popup scene instantiates")
 	_check(popup.custom_minimum_size == Vector2(1040, 660), "Exchange popup uses the production workspace size")
@@ -49,7 +50,7 @@ func _run() -> void:
 	}])
 	popup.call("_render_current_list")
 	await process_frame
-	var list_container := popup.get("list_container") as VBoxContainer
+	var list_container := popup.get("list_container") as GridContainer
 	_check(list_container.get_child_count() == 1, "Sell view renders eligible inventory assets")
 	popup.call("_select_entry", {
 		"itemId": "poke-ball",
@@ -79,6 +80,28 @@ func _run() -> void:
 	_check((popup.get("detail_stack") as VBoxContainer).get_child_count() > 1, "Selected Pokémon renders listing details immediately")
 	_check(str(popup.call("_entry_name", selected_pokemon, "sell")) == "Garchomp", "Null Pokémon nicknames fall back to the species name")
 	_check(str(popup.call("_optional_text", null)) == "", "Null form ids do not become sprite identifiers")
+
+	var browse_entries: Array = []
+	for index: int in range(4):
+		browse_entries.append({
+			"id": "browse-%d" % index,
+			"assetType": "pokemon",
+			"asset": {
+				"pokemonId": 100 + index,
+				"speciesName": "Bulbasaur",
+				"level": 12,
+			},
+			"totalPrice": 5000 + index,
+			"status": "active",
+		})
+	popup.set("active_tab", "browse")
+	popup.set("browse_listings", browse_entries)
+	popup.call("_render_current_list")
+	await process_frame
+	_check(list_container.columns >= 2, "Browse listings render in a multi-column card grid")
+	_check(list_container.get_child_count() == 4, "Browse grid renders every available listing")
+	_check((list_container.get_child(0) as Button).custom_minimum_size.y == 82.0, "Browse cards use the compact listing height")
+	_check((list_container.get_child(0) as Button).size.x < list_container.size.x, "Browse cards do not consume a full listing row")
 
 	popup.call("_show_confirmation", "Confirm listing", "This asset will be held by the Exchange.", Callable())
 	await process_frame

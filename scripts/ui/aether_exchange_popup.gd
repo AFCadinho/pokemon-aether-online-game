@@ -16,6 +16,8 @@ const UI_GOLD := Color("#f3cf70")
 const UI_GREEN := Color("#70d6a1")
 const UI_DANGER := Color("#ef7085")
 const MAX_PRICE := 2_147_483_647
+const BROWSE_CARD_MIN_WIDTH := 245.0
+const BROWSE_GRID_MAX_COLUMNS := 3
 
 var active_tab := "browse"
 var asset_filter := ""
@@ -27,6 +29,7 @@ var selected_entry: Dictionary = {}
 var selected_kind := ""
 var request_busy := false
 var wallet_money := 0
+var rendered_list_entry_count := 0
 var confirmation_action := Callable()
 
 var title_label: Label
@@ -38,7 +41,8 @@ var search_input: LineEdit
 var search_timer: Timer
 var refresh_button: Button
 var list_caption: Label
-var list_container: VBoxContainer
+var list_scroll: ScrollContainer
+var list_container: GridContainer
 var detail_stack: VBoxContainer
 var status_label: Label
 var confirmation_overlay: ColorRect
@@ -309,14 +313,17 @@ func _build_list_panel() -> Control:
 	list_caption.add_theme_font_size_override("font_size", 12)
 	list_caption.add_theme_color_override("font_color", UI_CYAN)
 	layout.add_child(list_caption)
-	var scroll := ScrollContainer.new()
-	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	layout.add_child(scroll)
-	list_container = VBoxContainer.new()
+	list_scroll = ScrollContainer.new()
+	list_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	list_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	list_scroll.resized.connect(_update_list_grid_columns)
+	layout.add_child(list_scroll)
+	list_container = GridContainer.new()
+	list_container.columns = 1
 	list_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	list_container.add_theme_constant_override("separation", 7)
-	scroll.add_child(list_container)
+	list_container.add_theme_constant_override("h_separation", 8)
+	list_container.add_theme_constant_override("v_separation", 8)
+	list_scroll.add_child(list_container)
 	return panel
 
 
@@ -456,8 +463,10 @@ func _render_current_list() -> void:
 			return _entry_name(_dictionary(value), kind).to_lower().contains(query)
 		)
 
+	rendered_list_entry_count = entries.size()
 	list_caption.text = _list_caption(entries.size())
 	if entries.is_empty():
+		list_container.columns = 1
 		var empty := Label.new()
 		empty.text = _t("ui.exchange.empty.%s" % active_tab)
 		empty.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -465,6 +474,7 @@ func _render_current_list() -> void:
 		empty.custom_minimum_size = Vector2(0, 120)
 		list_container.add_child(empty)
 	else:
+		_update_list_grid_columns()
 		for value: Variant in entries:
 			var entry := _dictionary(value)
 			list_container.add_child(_entry_button(entry, kind))
@@ -474,14 +484,37 @@ func _render_current_list() -> void:
 	_render_detail()
 
 
+func _update_list_grid_columns() -> void:
+	if list_container == null:
+		return
+	if active_tab != "browse":
+		list_container.columns = 1
+		return
+	if rendered_list_entry_count == 0:
+		list_container.columns = 1
+		return
+	var available_width := list_scroll.size.x if list_scroll != null else 0.0
+	if available_width <= 0.0:
+		available_width = 560.0
+	var columns := int(floor((available_width + 8.0) / (BROWSE_CARD_MIN_WIDTH + 8.0)))
+	list_container.columns = clampi(columns, 1, BROWSE_GRID_MAX_COLUMNS)
+
+
 func _entry_button(entry: Dictionary, kind: String) -> Button:
 	var button := Button.new()
-	button.custom_minimum_size = Vector2(0, 70)
+	var browse_card := active_tab == "browse" and kind == "listing"
+	button.custom_minimum_size = Vector2(
+		BROWSE_CARD_MIN_WIDTH if browse_card else 0.0,
+		82 if browse_card else 70,
+	)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.expand_icon = true
-	button.add_theme_constant_override("icon_max_width", 52)
+	button.add_theme_constant_override("icon_max_width", 46 if browse_card else 52)
+	if browse_card:
+		button.add_theme_font_size_override("font_size", 13)
+		button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	button.text = "%s\n%s" % [_entry_name(entry, kind), _entry_subtitle(entry, kind)]
 	button.icon = _entry_texture(entry, kind)
 	button.tooltip_text = _entry_name(entry, kind)
