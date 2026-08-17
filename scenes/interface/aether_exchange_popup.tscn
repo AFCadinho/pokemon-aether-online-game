@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/ui/aether_exchange_popup.gd" id="1_exchange"]
 
-[node name="AetherExchangePopup" type="PanelContainer"]
+[node name="AetherExchangePopup" type="Panel"]
 visible = false
 custom_minimum_size = Vector2(1040, 660)
 offset_right = 1040.0

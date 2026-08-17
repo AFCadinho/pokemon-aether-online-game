@@ -39,6 +39,7 @@ func _run() -> void:
 	popup.visible = true
 	await process_frame
 	_check(popup != null, "Exchange popup scene instantiates")
+	_check(popup.get_class() == "Panel", "Exchange outer window cannot be resized by child containers")
 	_check(popup.custom_minimum_size == Vector2(1040, 660), "Exchange popup uses the production workspace size")
 	_check(popup.size == Vector2(1040, 660), "Exchange popup starts at its fixed workspace size")
 	_check(popup.call("_get_minimum_size") == Vector2(1040, 660), "Exchange content cannot increase the popup minimum size")
@@ -52,6 +53,15 @@ func _run() -> void:
 	_check(search_input.get_theme_stylebox("focus") is StyleBoxFlat, "Exchange search field has a styled focus state")
 	_check(refresh_button.get_theme_stylebox("normal") is StyleBoxFlat, "Exchange Refresh action uses the styled button surface")
 	_check(refresh_button.get_theme_stylebox("hover") is StyleBoxFlat, "Exchange Refresh action has a styled hover state")
+	var fixed_popup_rect := Rect2(popup.position, popup.size)
+	((popup.get("tab_buttons") as Dictionary).get("sell") as Button).pressed.emit()
+	await process_frame
+	await process_frame
+	_check(Rect2(popup.position, popup.size) == fixed_popup_rect, "Clicking Sell preserves the complete Exchange window geometry")
+	((popup.get("tab_buttons") as Dictionary).get("mine") as Button).pressed.emit()
+	await process_frame
+	await process_frame
+	_check(Rect2(popup.position, popup.size) == fixed_popup_rect, "Clicking My Listings preserves the complete Exchange window geometry")
 	var drag_handle := popup.find_child("ExchangeDragHandle", true, false) as Control
 	_check(drag_handle != null, "Exchange header exposes a drag handle")
 	_check(drag_handle.mouse_default_cursor_shape == Control.CURSOR_MOVE, "Exchange drag handle uses the move cursor")
