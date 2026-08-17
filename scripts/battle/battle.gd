@@ -2484,6 +2484,36 @@ func _refresh_damage_calc_results() -> void:
 			if damage_calc_refresh_queued and current_action_panel_mode == BattleActionsPanelMode.CALC:
 				_refresh_damage_calc_results()
 			return
+		var snapshot_error_code := _get_damage_calc_error_code(snapshot_response)
+		if (
+			not bool(snapshot_response.get("success", false))
+			and snapshot_error_code == "CALC_STALE_PROJECTION"
+			and _is_pvp_battle()
+		):
+			# The opening realtime packet can be superseded between rendering the
+			# calculator and requesting its privacy-safe snapshot. Refresh the
+			# canonical room projection and retry exactly once with its new fence.
+			await _reconcile_pvp_battle_from_room("calcdex_stale_projection_recovery")
+			if request_token != damage_calc_request_token or current_action_panel_mode != BattleActionsPanelMode.CALC:
+				damage_calc_request_in_flight = false
+				return
+			var refreshed_projection_revision := battle_state.get_calcdex_projection_revision()
+			if (
+				not refreshed_projection_revision.is_empty()
+				and refreshed_projection_revision != projection_revision
+			):
+				projection_revision = refreshed_projection_revision
+				snapshot_response = await BattleApiClient.get_calcdex_snapshot(
+					damage_calc_request,
+					battle_state.battle_id,
+					projection_revision
+				)
+				if request_token != damage_calc_request_token:
+					damage_calc_request_in_flight = false
+					if damage_calc_refresh_queued and current_action_panel_mode == BattleActionsPanelMode.CALC:
+						_refresh_damage_calc_results()
+					return
+				snapshot_error_code = _get_damage_calc_error_code(snapshot_response)
 		if bool(snapshot_response.get("success", false)):
 			damage_calc_knowledge_snapshot = _damage_calc_as_dictionary(snapshot_response.get("snapshot", {})).duplicate(true)
 			calc_panel.set_viewer_stats_by_ref(_get_damage_calc_viewer_stats_by_ref(damage_calc_knowledge_snapshot))
@@ -2492,7 +2522,6 @@ func _refresh_damage_calc_results() -> void:
 		else:
 			damage_calc_knowledge_snapshot.clear()
 			calc_panel.set_knowledge_snapshot({})
-			var snapshot_error_code := _get_damage_calc_error_code(snapshot_response)
 			if snapshot_error_code == "CALC_UNSUPPORTED_MECHANIC":
 				damage_calc_snapshot_disabled_for_battle = true
 
