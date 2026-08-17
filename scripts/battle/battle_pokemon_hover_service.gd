@@ -3,6 +3,7 @@ extends RefCounted
 class_name BattlePokemonHoverService
 
 const PublicPokemonKnowledge := preload("res://scripts/battle/battle_public_pokemon_knowledge.gd")
+const HoverLevel := preload("res://scripts/battle/battle_pokemon_hover_level.gd")
 
 var pokemon_stats_cache: Dictionary = {}
 var debug_enabled := false
@@ -185,13 +186,7 @@ func _pokemon_stats_match_requested_species(pokemon_stats: Dictionary, requested
 	return _normalize_species_for_compare(response_species) == _normalize_species_for_compare(requested_species)
 
 func _get_level_from_pokemon_data(pokemon_data: Dictionary) -> int:
-	var level_value: Variant = pokemon_data.get("level", null)
-	if level_value != null:
-		var parsed_level := int(level_value)
-		if parsed_level > 0:
-			return parsed_level
-
-	return 100
+	return HoverLevel.from_pokemon_data(pokemon_data)
 
 func _get_hover_known_info_viewer_id(ident: String) -> String:
 	match _get_player_id_from_ident(ident):
