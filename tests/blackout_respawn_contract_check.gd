@@ -22,9 +22,18 @@ func _init() -> void:
 		world_source.contains(
 			"if should_respawn_after_loss:\n"
 				+ "\t\tawait _respawn_after_battle_loss()\n"
-				+ "\t\t_finish_blackout_respawn_transition()"
+				+ "\t\t_finish_blackout_respawn_transition()\n"
+				+ "\t\t_finish_trainer_battle_npc(reward_trainer_id, false)"
 		),
-		"Every trainer or wild blackout completes its input-lock cleanup"
+		"Every trainer or wild blackout completes cleanup before releasing its trainer"
+	)
+	_expect(
+		world_source.contains(
+			"if not should_respawn_after_loss:\n"
+				+ "\t\t_finish_trainer_battle_npc("
+				+ "reward_trainer_id, should_claim_trainer_reward)"
+		),
+		"Non-blackout trainer results still release their trainer immediately"
 	)
 	_expect(
 		world_source.contains('if reason in ["forfeit", "loss", "blackout"]:'),
