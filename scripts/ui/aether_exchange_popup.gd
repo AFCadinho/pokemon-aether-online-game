@@ -72,6 +72,7 @@ func _ready() -> void:
 
 func open_exchange() -> void:
 	visible = true
+	_normalize_filter_for_tab()
 	confirmation_action = Callable()
 	if confirmation_overlay != null:
 		confirmation_overlay.visible = false
@@ -346,6 +347,7 @@ func _on_tab_pressed(tab: String) -> void:
 	if request_busy or tab == active_tab:
 		return
 	active_tab = tab
+	_normalize_filter_for_tab()
 	selected_entry.clear()
 	selected_kind = ""
 	if active_tab == "browse":
@@ -356,7 +358,7 @@ func _on_tab_pressed(tab: String) -> void:
 
 
 func _on_filter_pressed(filter_id: String) -> void:
-	if request_busy or filter_id == asset_filter:
+	if request_busy or filter_id == asset_filter or (active_tab == "sell" and filter_id.is_empty()):
 		return
 	asset_filter = filter_id
 	selected_entry.clear()
@@ -804,6 +806,7 @@ func _mutation_requires_party_refresh(listing: Dictionary, success_key: String) 
 
 
 func _refresh_controls() -> void:
+	_normalize_filter_for_tab()
 	for key: Variant in tab_buttons:
 		var button := tab_buttons[key] as Button
 		button.text = _t("ui.exchange.tab.%s" % str(key))
@@ -811,6 +814,7 @@ func _refresh_controls() -> void:
 		_apply_button_style(button, str(key) == active_tab)
 	for key: Variant in filter_buttons:
 		var button := filter_buttons[key] as Button
+		button.visible = not (active_tab == "sell" and str(key).is_empty())
 		var label_key := "all" if str(key).is_empty() else str(key)
 		button.text = _t("ui.exchange.filter.%s" % label_key)
 		button.disabled = request_busy
@@ -820,6 +824,11 @@ func _refresh_controls() -> void:
 		refresh_button.text = _t("ui.exchange.refresh")
 		refresh_button.disabled = request_busy
 	_refresh_money()
+
+
+func _normalize_filter_for_tab() -> void:
+	if active_tab == "sell" and asset_filter.is_empty():
+		asset_filter = "item"
 
 
 func _translate_static_ui() -> void:

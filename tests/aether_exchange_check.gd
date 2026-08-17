@@ -41,6 +41,13 @@ func _run() -> void:
 	_check((popup.get("filter_buttons") as Dictionary).size() == 3, "Exchange popup exposes asset filters")
 
 	popup.set("active_tab", "sell")
+	popup.set("asset_filter", "")
+	popup.call("_refresh_controls")
+	var filter_buttons := popup.get("filter_buttons") as Dictionary
+	_check(not (filter_buttons.get("") as Button).visible, "Sell hides the combined All category")
+	_check((filter_buttons.get("item") as Button).visible, "Sell keeps the Items category visible")
+	_check((filter_buttons.get("pokemon") as Button).visible, "Sell keeps the Pokémon category visible")
+	_check(str(popup.get("asset_filter")) == "item", "Sell defaults to the Items category")
 	popup.set("sellable_items", [{
 		"itemId": "poke-ball",
 		"name": "Poké Ball",
@@ -71,6 +78,7 @@ func _run() -> void:
 		"level": 100,
 		"nature": "Jolly",
 	}
+	popup.set("asset_filter", "pokemon")
 	popup.set("sellable_pokemon", [sellable_garchomp])
 	popup.call("_render_current_list")
 	popup.call("_select_entry", sellable_garchomp, "sell")
