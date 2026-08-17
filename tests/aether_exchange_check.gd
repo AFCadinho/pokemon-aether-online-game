@@ -37,8 +37,13 @@ func _run() -> void:
 	await process_frame
 	_check(popup != null, "Exchange popup scene instantiates")
 	_check(popup.custom_minimum_size == Vector2(1040, 660), "Exchange popup uses the production workspace size")
+	_check(popup.size == Vector2(1040, 660), "Exchange popup starts at its fixed workspace size")
+	_check(popup.call("_get_minimum_size") == Vector2(1040, 660), "Exchange content cannot increase the popup minimum size")
 	_check((popup.get("tab_buttons") as Dictionary).size() == 3, "Exchange popup exposes Browse, Sell, and My Listings")
 	_check((popup.get("filter_buttons") as Dictionary).size() == 3, "Exchange popup exposes asset filters")
+	var drag_handle := popup.find_child("ExchangeDragHandle", true, false) as Control
+	_check(drag_handle != null, "Exchange header exposes a drag handle")
+	_check(drag_handle.mouse_default_cursor_shape == Control.CURSOR_MOVE, "Exchange drag handle uses the move cursor")
 
 	popup.set("active_tab", "sell")
 	popup.set("asset_filter", "")
@@ -83,6 +88,7 @@ func _run() -> void:
 	popup.call("_render_current_list")
 	popup.call("_select_entry", sellable_garchomp, "sell")
 	await process_frame
+	_check(popup.size == Vector2(1040, 660), "Sell details do not resize the Exchange popup")
 	var selected_pokemon := popup.get("selected_entry") as Dictionary
 	_check(int(selected_pokemon.get("pokemonId", 0)) == 25, "Sell selection retains the selected Pokémon")
 	_check((popup.get("detail_stack") as VBoxContainer).get_child_count() > 1, "Selected Pokémon renders listing details immediately")
@@ -125,6 +131,22 @@ func _run() -> void:
 	_check(popup.find_children("*", "ConfirmationDialog", true, false).is_empty(), "Exchange does not fall back to a default Godot confirmation window")
 	popup.call("_on_confirmation_cancelled")
 	_check(not confirmation_overlay.visible, "Exchange confirmation modal closes through its cancel action")
+
+	var drag_press := InputEventMouseButton.new()
+	drag_press.button_index = MOUSE_BUTTON_LEFT
+	drag_press.pressed = true
+	drag_handle.emit_signal("gui_input", drag_press)
+	_check(bool(popup.get("is_dragging_popup")), "Pressing the Exchange header starts dragging")
+	var drag_start := popup.position
+	var drag_motion := InputEventMouseMotion.new()
+	drag_motion.relative = Vector2(12, 8)
+	popup.call("_input", drag_motion)
+	_check(popup.position != drag_start, "Dragging the Exchange header moves the popup")
+	var drag_release := InputEventMouseButton.new()
+	drag_release.button_index = MOUSE_BUTTON_LEFT
+	drag_release.pressed = false
+	popup.call("_input", drag_release)
+	_check(not bool(popup.get("is_dragging_popup")), "Releasing the mouse stops Exchange dragging")
 
 	var project_source := FileAccess.get_file_as_string(PROJECT_PATH)
 	var popup_source := FileAccess.get_file_as_string(EXCHANGE_POPUP_PATH)

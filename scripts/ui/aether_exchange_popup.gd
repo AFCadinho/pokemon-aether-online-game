@@ -15,6 +15,7 @@ const UI_PURPLE := Color("#c694ff")
 const UI_GOLD := Color("#f3cf70")
 const UI_GREEN := Color("#70d6a1")
 const UI_DANGER := Color("#ef7085")
+const EXCHANGE_SIZE := Vector2(1040, 660)
 const MAX_PRICE := 2_147_483_647
 const BROWSE_CARD_MIN_WIDTH := 245.0
 const BROWSE_GRID_MAX_COLUMNS := 3
@@ -31,6 +32,7 @@ var request_busy := false
 var wallet_money := 0
 var rendered_list_entry_count := 0
 var confirmation_action := Callable()
+var is_dragging_popup := false
 
 var title_label: Label
 var subtitle_label: Label
@@ -57,7 +59,15 @@ var total_price_label: Label
 
 
 func _ready() -> void:
-	add_theme_stylebox_override("panel", _panel_style(UI_BG, Color("#5d9ebddd"), 14, 2))
+	custom_minimum_size = EXCHANGE_SIZE
+	size = EXCHANGE_SIZE
+	clip_contents = true
+	var window_style := _panel_style(UI_BG, Color("#5d9ebddd"), 14, 2)
+	window_style.set_content_margin(SIDE_LEFT, 0.0)
+	window_style.set_content_margin(SIDE_TOP, 0.0)
+	window_style.set_content_margin(SIDE_RIGHT, 0.0)
+	window_style.set_content_margin(SIDE_BOTTOM, 0.0)
+	add_theme_stylebox_override("panel", window_style)
 	_build_interface()
 	search_timer = Timer.new()
 	search_timer.one_shot = true
@@ -70,8 +80,31 @@ func _ready() -> void:
 	_translate_static_ui()
 
 
+func _get_minimum_size() -> Vector2:
+	# Container children may have different minimum sizes per tab. Returning the
+	# window size here prevents those content changes from resizing the popup.
+	return EXCHANGE_SIZE
+
+
+func _input(event: InputEvent) -> void:
+	if not visible or not is_dragging_popup:
+		return
+	var mouse_button := event as InputEventMouseButton
+	if mouse_button != null and mouse_button.button_index == MOUSE_BUTTON_LEFT and not mouse_button.pressed:
+		is_dragging_popup = false
+		get_viewport().set_input_as_handled()
+		return
+	var mouse_motion := event as InputEventMouseMotion
+	if mouse_motion != null:
+		position += mouse_motion.relative
+		_clamp_to_parent()
+		get_viewport().set_input_as_handled()
+
+
 func open_exchange() -> void:
 	visible = true
+	size = EXCHANGE_SIZE
+	_clamp_to_parent()
 	_normalize_filter_for_tab()
 	confirmation_action = Callable()
 	if confirmation_overlay != null:
@@ -96,6 +129,7 @@ func close_exchange() -> void:
 	if confirmation_overlay != null and confirmation_overlay.visible:
 		_on_confirmation_cancelled()
 		return
+	is_dragging_popup = false
 	visible = false
 	closed.emit()
 
@@ -222,10 +256,15 @@ func _build_confirmation_overlay() -> void:
 
 func _build_header() -> Control:
 	var header := HBoxContainer.new()
+	header.name = "ExchangeDragHandle"
 	header.custom_minimum_size = Vector2(0, 58)
 	header.add_theme_constant_override("separation", 12)
+	header.mouse_filter = Control.MOUSE_FILTER_STOP
+	header.mouse_default_cursor_shape = Control.CURSOR_MOVE
+	header.gui_input.connect(_on_drag_handle_gui_input)
 	var icon := TextureRect.new()
 	icon.custom_minimum_size = Vector2(50, 50)
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	icon.texture = load("res://assets/ui/aether_exchange_icon.svg")
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -233,17 +272,21 @@ func _build_header() -> Control:
 	var heading := VBoxContainer.new()
 	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	heading.alignment = BoxContainer.ALIGNMENT_CENTER
+	heading.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	header.add_child(heading)
 	title_label = Label.new()
 	title_label.add_theme_font_size_override("font_size", 23)
 	title_label.add_theme_color_override("font_color", UI_TEXT)
+	title_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	heading.add_child(title_label)
 	subtitle_label = Label.new()
 	subtitle_label.add_theme_font_size_override("font_size", 11)
 	subtitle_label.add_theme_color_override("font_color", UI_MUTED)
+	subtitle_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	heading.add_child(subtitle_label)
 	var wallet_panel := PanelContainer.new()
 	wallet_panel.custom_minimum_size = Vector2(165, 40)
+	wallet_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	wallet_panel.add_theme_stylebox_override("panel", _panel_style(UI_INTERACTIVE, Color("#806d34aa"), 9, 1))
 	header.add_child(wallet_panel)
 	money_label = Label.new()
@@ -251,6 +294,7 @@ func _build_header() -> Control:
 	money_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	money_label.add_theme_font_size_override("font_size", 13)
 	money_label.add_theme_color_override("font_color", UI_GOLD)
+	money_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	wallet_panel.add_child(money_label)
 	var close_button := Button.new()
 	close_button.text = "×"
@@ -337,10 +381,42 @@ func _build_detail_panel() -> Control:
 	for side: String in ["left", "top", "right", "bottom"]:
 		margin.add_theme_constant_override("margin_%s" % side, 15)
 	panel.add_child(margin)
+	var scroll := ScrollContainer.new()
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	margin.add_child(scroll)
 	detail_stack = VBoxContainer.new()
+	detail_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	detail_stack.add_theme_constant_override("separation", 10)
-	margin.add_child(detail_stack)
+	scroll.add_child(detail_stack)
 	return panel
+
+
+func _on_drag_handle_gui_input(event: InputEvent) -> void:
+	var mouse_button := event as InputEventMouseButton
+	if mouse_button == null or mouse_button.button_index != MOUSE_BUTTON_LEFT:
+		return
+	is_dragging_popup = mouse_button.pressed
+	if is_dragging_popup:
+		move_to_front()
+	accept_event()
+
+
+func _clamp_to_parent() -> void:
+	var parent_control := get_parent_control()
+	if parent_control == null:
+		return
+	var available := parent_control.size
+	var min_x := minf(0.0, available.x - size.x)
+	var max_x := maxf(0.0, available.x - size.x)
+	var max_y := maxf(0.0, available.y - size.y)
+	# If the viewport is shorter than the popup, pin its header to the top so
+	# the drag handle and close action always remain reachable.
+	position = Vector2(
+		clampf(position.x, min_x, max_x),
+		clampf(position.y, 0.0, max_y),
+	)
 
 
 func _on_tab_pressed(tab: String) -> void:
