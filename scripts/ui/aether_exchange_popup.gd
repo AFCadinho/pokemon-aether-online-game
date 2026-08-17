@@ -68,12 +68,13 @@ func open_exchange() -> void:
 	_set_status(_t("ui.exchange.status.loading"), UI_MUTED)
 	request_busy = true
 	_refresh_controls()
-	await _load_portfolio()
-	await _load_browse()
+	var portfolio_loaded := await _load_portfolio()
+	var browse_loaded := await _load_browse()
 	request_busy = false
 	_render_current_list()
 	_refresh_controls()
-	_set_status(_t("ui.exchange.status.ready"), UI_MUTED)
+	if portfolio_loaded and browse_loaded:
+		_set_status(_t("ui.exchange.status.ready"), UI_MUTED)
 
 
 func close_exchange() -> void:
@@ -272,14 +273,16 @@ func _refresh_current_tab() -> void:
 		return
 	request_busy = true
 	_refresh_controls()
+	var refreshed: bool
 	if active_tab == "browse":
-		await _load_browse()
+		refreshed = await _load_browse()
 	else:
-		await _load_portfolio()
+		refreshed = await _load_portfolio()
 	request_busy = false
 	_render_current_list()
 	_refresh_controls()
-	_set_status(_t("ui.exchange.status.updated"), UI_GREEN)
+	if refreshed:
+		_set_status(_t("ui.exchange.status.updated"), UI_GREEN)
 
 
 func _refresh_browse() -> void:
@@ -293,7 +296,7 @@ func _refresh_browse() -> void:
 	_refresh_controls()
 
 
-func _load_browse() -> void:
+func _load_browse() -> bool:
 	var service := get_node_or_null("/root/AetherExchangeService")
 	var result: Dictionary = (
 		await service.call("load_listings", asset_filter, search_input.text if search_input != null else "")
@@ -301,12 +304,14 @@ func _load_browse() -> void:
 		else {"success": false, "error": _t("ui.exchange.error.load")}
 	)
 	if not bool(result.get("success", false)):
+		browse_listings.clear()
 		_set_status(str(result.get("error", _t("ui.exchange.error.load"))), UI_DANGER)
-		return
+		return false
 	browse_listings = _array(result.get("listings", [])).duplicate(true)
+	return true
 
 
-func _load_portfolio() -> void:
+func _load_portfolio() -> bool:
 	var service := get_node_or_null("/root/AetherExchangeService")
 	var result: Dictionary = (
 		await service.call("load_portfolio")
@@ -314,13 +319,17 @@ func _load_portfolio() -> void:
 		else {"success": false, "error": _t("ui.exchange.error.load")}
 	)
 	if not bool(result.get("success", false)):
+		my_listings.clear()
+		sellable_items.clear()
+		sellable_pokemon.clear()
 		_set_status(str(result.get("error", _t("ui.exchange.error.load"))), UI_DANGER)
-		return
+		return false
 	my_listings = _array(result.get("listings", [])).duplicate(true)
 	sellable_items = _array(result.get("sellableItems", [])).duplicate(true)
 	sellable_pokemon = _array(result.get("sellablePokemon", [])).duplicate(true)
 	wallet_money = maxi(int(_dictionary(result.get("wallet", {})).get("money", 0)), 0)
 	_refresh_money()
+	return true
 
 
 func _render_current_list() -> void:
@@ -605,14 +614,15 @@ func _finish_mutation(result: Dictionary, success_key: String) -> void:
 	var inventory_service := get_node_or_null("/root/InventoryService")
 	if inventory_service != null:
 		await inventory_service.call("load_inventory")
-	await _load_portfolio()
-	await _load_browse()
+	var portfolio_loaded := await _load_portfolio()
+	var browse_loaded := await _load_browse()
 	request_busy = false
 	selected_entry.clear()
 	selected_kind = ""
 	_render_current_list()
 	_refresh_controls()
-	_set_status(_t(success_key), UI_GREEN)
+	if portfolio_loaded and browse_loaded:
+		_set_status(_t(success_key), UI_GREEN)
 
 
 func _refresh_controls() -> void:
