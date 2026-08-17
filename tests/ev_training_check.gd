@@ -37,6 +37,7 @@ func _init() -> void:
 		_assert(gate_source.contains('"id": "%s"' % stat), "missing EV stat choice: %s" % stat)
 	var localized_gate_keys: Array[String] = [
 		"ui.ev_training.assistant.session_active",
+		"ui.ev_training.assistant.pre_lesson",
 		"ui.ev_training.assistant.authorization_required",
 		"ui.ev_training.assistant.tutorial_ready",
 		"ui.ev_training.assistant.introduction",
@@ -64,6 +65,11 @@ func _init() -> void:
 				str((locale_data as Dictionary).get(key, "")).strip_edges() != "",
 				"missing %s in %s" % [key, locale]
 			)
+	_assert(
+		gate_source.contains('const TRAINER_SCHOOL_QUEST_ID := "learn_at_trainer_school"')
+		and gate_source.contains('LocalizationManager.text("ui.ev_training.assistant.pre_lesson")'),
+		"EV assistants must keep their training dialogue hidden before the Trainer School lesson"
+	)
 	_assert(
 		not gate_source.contains("This is Viridian City's focused EV training field.")
 		and not gate_source.contains("Training session complete."),

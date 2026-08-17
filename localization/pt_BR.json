@@ -200,6 +200,7 @@
   "ui.ev_training.assistant.session_active": "Sua sessão de treino de {stat} ainda está ativa. Volte ao campo quando estiver pronto.",
   "ui.ev_training.assistant.authorization_required": "O campo de treino focado exige a autorização de Mateo.",
   "ui.ev_training.assistant.authorization_hint": "Você pode encontrá-lo ao lado do campo. Primeiro, conclua a lição dele.",
+  "ui.ev_training.assistant.pre_lesson": "O campo de treino está sendo cuidado hoje. Dê espaço para a grama crescer.",
   "ui.ev_training.assistant.tutorial_ready": "O campo de prática de Mateo está pronto. Apenas {target} aparecerão.",
   "ui.ev_training.assistant.tutorial_participation": "Garanta que {pokemon} participe das quatro batalhas para receber os Effort Values.",
   "ui.ev_training.assistant.introduction": "Este é o campo de treino focado de EV de Viridian City.",

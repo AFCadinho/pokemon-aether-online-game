@@ -200,6 +200,7 @@
   "ui.ev_training.assistant.session_active": "Je trainingssessie voor {stat} is nog actief. Ga weer naar binnen wanneer je klaar bent.",
   "ui.ev_training.assistant.authorization_required": "Voor het gerichte trainingsveld heb je Mateo's toestemming nodig.",
   "ui.ev_training.assistant.authorization_hint": "Je vindt hem naast het veld. Rond eerst zijn les af.",
+  "ui.ev_training.assistant.pre_lesson": "Het trainingsveld wordt vandaag verzorgd. Geef het gras nog even de ruimte om te groeien.",
   "ui.ev_training.assistant.tutorial_ready": "Mateo's oefenveld is klaar. Je komt er alleen {target} tegen.",
   "ui.ev_training.assistant.tutorial_participation": "Zorg dat {pokemon} aan alle vier gevechten deelneemt, zodat die de Effort Values ontvangt.",
   "ui.ev_training.assistant.introduction": "Dit is het veld voor gerichte EV-training in Viridian City.",
