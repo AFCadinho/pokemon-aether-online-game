@@ -1,5 +1,5 @@
 class_name AetherExchangePopup
-extends PanelContainer
+extends Panel
 
 signal closed
 signal wallet_changed
@@ -140,6 +140,7 @@ func _build_interface() -> void:
 	for side: String in ["left", "top", "right", "bottom"]:
 		margin.add_theme_constant_override("margin_%s" % side, 16)
 	add_child(margin)
+	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var layout := VBoxContainer.new()
 	layout.add_theme_constant_override("separation", 11)
 	margin.add_child(layout)
