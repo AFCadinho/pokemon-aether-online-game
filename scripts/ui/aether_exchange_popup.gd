@@ -669,39 +669,63 @@ func _render_detail() -> void:
 
 
 func _build_pokemon_detail_header(asset: Dictionary) -> Control:
+	var primary_type := _optional_text(_array(asset.get("types", [])).front() if not _array(asset.get("types", [])).is_empty() else "")
+	var type_surface := TypeColors.get_slot_background(primary_type, UI_INTERACTIVE)
+	var type_border := TypeColors.get_slot_border(primary_type, UI_BORDER)
+	var hero := PanelContainer.new()
+	hero.name = "PokemonPurchaseHeader"
+	hero.add_theme_stylebox_override("panel", _compact_panel_style(type_surface.darkened(0.58), type_border, 10, 1, 8, 5))
 	var header := HBoxContainer.new()
-	header.name = "PokemonPurchaseHeader"
 	header.custom_minimum_size = Vector2(0, 86)
 	header.add_theme_constant_override("separation", 10)
+	hero.add_child(header)
+	var icon_frame := PanelContainer.new()
+	icon_frame.custom_minimum_size = Vector2(86, 86)
+	icon_frame.add_theme_stylebox_override("panel", _compact_panel_style(Color(type_surface, 0.34), Color(type_border, 0.7), 9, 1, 4, 4))
+	header.add_child(icon_frame)
 	var icon := TextureRect.new()
-	icon.custom_minimum_size = Vector2(92, 86)
+	icon.custom_minimum_size = Vector2(76, 76)
 	icon.texture = _entry_texture(selected_entry, selected_kind)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	header.add_child(icon)
+	icon_frame.add_child(icon)
 
 	var information := VBoxContainer.new()
 	information.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	information.add_theme_constant_override("separation", 2)
 	header.add_child(information)
+	var name_row := HBoxContainer.new()
+	name_row.add_theme_constant_override("separation", 5)
+	information.add_child(name_row)
 	var name := Label.new()
 	name.text = _entry_name(selected_entry, selected_kind)
 	name.tooltip_text = name.text
+	name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	name.clip_text = true
 	name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	name.add_theme_font_size_override("font_size", 18)
+	name.add_theme_font_size_override("font_size", 19)
 	name.add_theme_color_override("font_color", UI_TEXT)
-	information.add_child(name)
+	name_row.add_child(name)
+	if bool(asset.get("shiny", false)):
+		name_row.add_child(_build_micro_badge("★", UI_GOLD, Color("#493a13e8"), _t("ui.exchange.summary.shiny")))
+	if bool(asset.get("hiddenAbility", asset.get("hidden_ability", false))):
+		name_row.add_child(_build_micro_badge("HA", UI_PURPLE, Color("#35204be8"), _t("ui.exchange.summary.hidden_ability")))
+	var open_button := Button.new()
+	open_button.name = "PokemonSummaryButton"
+	open_button.text = _t("ui.mail.summary")
+	open_button.tooltip_text = _t("ui.exchange.action.open_summary_tooltip")
+	open_button.custom_minimum_size = Vector2(72, 26)
+	open_button.pressed.connect(_on_pokemon_summary_pressed.bind(asset.duplicate(true)))
+	_apply_button_style(open_button)
+	name_row.add_child(open_button)
 
 	var traits: Array[String] = [
 		_t("ui.exchange.summary.level", {"value": int(asset.get("level", 1))}),
-		_optional_text(asset.get("nature"), "—"),
+		_content_name("natures", _optional_text(asset.get("nature")), _optional_text(asset.get("nature"), "—")),
 	]
 	var gender := _optional_text(asset.get("gender"))
 	if not gender.is_empty():
 		traits.append(gender)
-	if bool(asset.get("shiny", false)):
-		traits.append(_t("ui.exchange.summary.shiny"))
 	var trait_label := Label.new()
 	trait_label.text = " • ".join(traits)
 	trait_label.clip_text = true
@@ -710,62 +734,80 @@ func _build_pokemon_detail_header(asset: Dictionary) -> Control:
 	trait_label.add_theme_color_override("font_color", UI_CYAN)
 	information.add_child(trait_label)
 
-	var identity: Array[String] = []
-	var types: Array[String] = []
+	var type_row := HBoxContainer.new()
+	type_row.add_theme_constant_override("separation", 4)
+	information.add_child(type_row)
 	for value: Variant in _array(asset.get("types", [])):
-		var type_name := _optional_text(value)
-		if not type_name.is_empty():
-			types.append(type_name.capitalize())
-	if not types.is_empty():
-		identity.append(" / ".join(types))
-	identity.append(_optional_text(asset.get("ability"), "—"))
-	if bool(asset.get("hiddenAbility", asset.get("hidden_ability", false))):
-		identity.append(_t("ui.exchange.summary.hidden_ability"))
-	var identity_label := Label.new()
-	identity_label.text = " • ".join(identity)
-	identity_label.tooltip_text = identity_label.text
-	identity_label.clip_text = true
-	identity_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	identity_label.add_theme_font_size_override("font_size", 10)
-	identity_label.add_theme_color_override("font_color", UI_MUTED)
-	information.add_child(identity_label)
+		var type_id := _optional_text(value)
+		if not type_id.is_empty():
+			type_row.add_child(_build_type_chip(type_id))
+	var ability_id := _optional_text(asset.get("ability"))
+	var ability_label := Label.new()
+	ability_label.text = "%s  %s" % [
+		_t("ui.exchange.summary.ability"),
+		_content_name("abilities", ability_id, _humanize_identifier(ability_id, "—")),
+	]
+	ability_label.clip_text = true
+	ability_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	ability_label.add_theme_font_size_override("font_size", 10)
+	ability_label.add_theme_color_override("font_color", UI_MUTED)
+	information.add_child(ability_label)
 
-	var open_button := Button.new()
-	open_button.name = "PokemonSummaryButton"
-	open_button.text = _t("ui.exchange.action.open_summary")
-	open_button.tooltip_text = _t("ui.exchange.action.open_summary_tooltip")
-	open_button.custom_minimum_size = Vector2(0, 28)
-	open_button.pressed.connect(_on_pokemon_summary_pressed.bind(asset.duplicate(true)))
-	_apply_button_style(open_button)
-	information.add_child(open_button)
-	return header
+	return hero
+
+
+func _build_micro_badge(text: String, color: Color, background: Color, tooltip: String) -> Control:
+	var badge := PanelContainer.new()
+	badge.tooltip_text = tooltip
+	badge.add_theme_stylebox_override("panel", _compact_panel_style(background, Color(color, 0.7), 6, 1, 4, 1))
+	var label := Label.new()
+	label.text = text
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 9)
+	label.add_theme_color_override("font_color", color)
+	badge.add_child(label)
+	return badge
+
+
+func _build_type_chip(type_id: String) -> Control:
+	var chip := PanelContainer.new()
+	chip.set_meta("exchange_type_chip", true)
+	var background := TypeColors.get_slot_background(type_id, UI_INTERACTIVE)
+	var border := TypeColors.get_slot_border(type_id, UI_BORDER)
+	chip.add_theme_stylebox_override("panel", _compact_panel_style(background.darkened(0.18), border, 6, 1, 6, 2))
+	var label := Label.new()
+	label.text = _content_name("types", type_id, _humanize_identifier(type_id))
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 9)
+	label.add_theme_color_override("font_color", TypeColors.get_slot_accent(type_id, UI_TEXT))
+	chip.add_child(label)
+	return chip
 
 
 func _build_pokemon_quick_summary(asset: Dictionary) -> Control:
 	var panel := PanelContainer.new()
 	panel.name = "PokemonQuickSummary"
-	panel.add_theme_stylebox_override("panel", _panel_style(Color("#07111dcc"), UI_BORDER, 8, 1))
+	panel.add_theme_stylebox_override("panel", _compact_panel_style(Color("#07111dcc"), UI_BORDER, 8, 1, 8, 5))
 	var content := VBoxContainer.new()
 	content.add_theme_constant_override("separation", 4)
 	panel.add_child(content)
 	var ivs := _dictionary(asset.get("ivs", {}))
 	content.add_child(_quick_stat_summary(
 		_t("ui.exchange.summary.ivs", {"total": _stat_total(ivs), "maximum": 186}),
-		ivs
+		ivs,
+		"iv"
 	))
 	var evs := _dictionary(asset.get("evs", {}))
 	content.add_child(_quick_stat_summary(
 		_t("ui.exchange.summary.evs", {"total": _stat_total(evs), "maximum": 510}),
-		evs
+		evs,
+		"ev"
 	))
-	content.add_child(_quick_summary_row(
-		_t("ui.exchange.summary.moves"),
-		_move_summary(_array(asset.get("moves", [])))
-	))
+	content.add_child(_quick_moves_summary(_array(asset.get("moves", []))))
 	return panel
 
 
-func _quick_stat_summary(title_text: String, stats: Dictionary) -> Control:
+func _quick_stat_summary(title_text: String, stats: Dictionary, stat_kind: String) -> Control:
 	var section := VBoxContainer.new()
 	section.add_theme_constant_override("separation", 1)
 	var title := Label.new()
@@ -778,9 +820,21 @@ func _quick_stat_summary(title_text: String, stats: Dictionary) -> Control:
 	values.add_theme_constant_override("h_separation", 4)
 	section.add_child(values)
 	for key: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
-		var cell := VBoxContainer.new()
+		var stat_amount := int(stats.get(key, 0))
+		var highlight := (stat_kind == "iv" and stat_amount == 31) or (stat_kind == "ev" and stat_amount > 0)
+		var cell := PanelContainer.new()
 		cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		cell.add_theme_constant_override("separation", 0)
+		cell.add_theme_stylebox_override("panel", _compact_panel_style(
+			Color("#0d2335dc") if highlight else Color("#091622c4"),
+			Color(UI_CYAN, 0.55) if stat_kind == "iv" and highlight else (Color(UI_GOLD, 0.55) if highlight else Color(UI_BORDER, 0.42)),
+			5,
+			1,
+			3,
+			2
+		))
+		var cell_content := VBoxContainer.new()
+		cell_content.add_theme_constant_override("separation", 0)
+		cell.add_child(cell_content)
 		var stat_name := Label.new()
 		stat_name.text = str({
 			"hp": "HP", "atk": "Atk", "def": "Def",
@@ -789,32 +843,59 @@ func _quick_stat_summary(title_text: String, stats: Dictionary) -> Control:
 		stat_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		stat_name.add_theme_font_size_override("font_size", 9)
 		stat_name.add_theme_color_override("font_color", UI_MUTED)
-		cell.add_child(stat_name)
+		cell_content.add_child(stat_name)
 		var stat_value := Label.new()
-		stat_value.text = str(int(stats.get(key, 0)))
+		stat_value.text = str(stat_amount)
 		stat_value.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		stat_value.add_theme_font_size_override("font_size", 11)
-		stat_value.add_theme_color_override("font_color", UI_TEXT)
-		cell.add_child(stat_value)
+		stat_value.add_theme_font_size_override("font_size", 12)
+		stat_value.add_theme_color_override("font_color", UI_CYAN if stat_kind == "iv" and highlight else (UI_GOLD if highlight else UI_TEXT))
+		cell_content.add_child(stat_value)
 		values.add_child(cell)
 	return section
 
 
-func _quick_summary_row(title_text: String, value_text: String) -> Control:
-	var row := VBoxContainer.new()
-	row.add_theme_constant_override("separation", 1)
+func _quick_moves_summary(moves: Array) -> Control:
+	var section := VBoxContainer.new()
+	section.add_theme_constant_override("separation", 2)
 	var title := Label.new()
-	title.text = title_text
+	title.text = _t("ui.exchange.summary.moves")
 	title.add_theme_font_size_override("font_size", 10)
 	title.add_theme_color_override("font_color", UI_MUTED)
-	row.add_child(title)
-	var value := Label.new()
-	value.text = value_text
-	value.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	value.add_theme_font_size_override("font_size", 11)
-	value.add_theme_color_override("font_color", UI_TEXT)
-	row.add_child(value)
-	return row
+	section.add_child(title)
+	if moves.is_empty():
+		var empty := Label.new()
+		empty.text = _t("ui.exchange.summary.no_moves")
+		empty.add_theme_font_size_override("font_size", 10)
+		empty.add_theme_color_override("font_color", UI_MUTED)
+		section.add_child(empty)
+		return section
+	var grid := GridContainer.new()
+	grid.columns = 2
+	grid.add_theme_constant_override("h_separation", 4)
+	grid.add_theme_constant_override("v_separation", 4)
+	section.add_child(grid)
+	for value: Variant in moves.slice(0, 4):
+		var move := _dictionary(value)
+		var move_id := _optional_text(move.get("id"), _optional_text(move.get("move")))
+		var fallback := _optional_text(move.get("name"), _humanize_identifier(move_id, "—"))
+		var move_type := _optional_text(move.get("type"))
+		var chip := PanelContainer.new()
+		chip.set_meta("exchange_move_chip", true)
+		chip.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		var background := TypeColors.get_slot_background(move_type, UI_INTERACTIVE)
+		var border := TypeColors.get_slot_border(move_type, UI_BORDER)
+		chip.add_theme_stylebox_override("panel", _compact_panel_style(background.darkened(0.45), Color(border, 0.72), 6, 1, 6, 3))
+		var label := Label.new()
+		label.text = _content_name("moves", move_id, fallback)
+		label.tooltip_text = label.text
+		label.clip_text = true
+		label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.add_theme_font_size_override("font_size", 10)
+		label.add_theme_color_override("font_color", UI_TEXT)
+		chip.add_child(label)
+		grid.add_child(chip)
+	return section
 
 
 func _on_pokemon_summary_pressed(asset: Dictionary) -> void:
@@ -875,33 +956,43 @@ func _build_sell_controls(asset: Dictionary) -> void:
 
 func _build_listing_controls() -> void:
 	var status := str(selected_entry.get("status", "active"))
+	var footer := PanelContainer.new()
+	footer.name = "ExchangePurchaseFooter"
+	footer.add_theme_stylebox_override("panel", _compact_panel_style(Color("#07111dcc"), Color("#806d34aa"), 8, 1, 8, 5))
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 5)
+	footer.add_child(content)
+	var price_row := HBoxContainer.new()
+	price_row.add_theme_constant_override("separation", 8)
+	content.add_child(price_row)
 	var price := Label.new()
 	price.text = _t("ui.exchange.total", {"amount": _format_money(int(selected_entry.get("totalPrice", 0)))})
-	price.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	price.add_theme_font_size_override("font_size", 18)
+	price.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	price.add_theme_font_size_override("font_size", 19)
 	price.add_theme_color_override("font_color", UI_GOLD)
-	detail_stack.add_child(price)
+	price_row.add_child(price)
 	var state := Label.new()
-	state.text = _t("ui.exchange.state.%s" % status)
-	state.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	state.add_theme_color_override("font_color", UI_GREEN if status == "sold" else UI_MUTED)
-	detail_stack.add_child(state)
-	if status != "active":
-		return
-	var action := Button.new()
-	action.name = "ExchangeListingActionButton"
-	action.custom_minimum_size = Vector2(0, 42)
-	if active_tab == "mine" or bool(selected_entry.get("isMine", false)):
-		action.text = _t("ui.exchange.action.cancel") if active_tab == "mine" else _t("ui.exchange.action.owned")
-		action.disabled = active_tab != "mine"
-		if active_tab == "mine":
-			action.pressed.connect(_confirm_cancel_selected)
-	else:
-		action.text = _t("ui.exchange.action.buy")
-		action.disabled = wallet_money < int(selected_entry.get("totalPrice", 0))
-		action.pressed.connect(_confirm_buy_selected)
-	_apply_primary_button_style(action)
-	detail_stack.add_child(action)
+	state.text = "●  %s" % _t("ui.exchange.state.%s" % status)
+	state.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	state.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	state.add_theme_color_override("font_color", UI_GREEN if status in ["active", "sold"] else UI_MUTED)
+	price_row.add_child(state)
+	if status == "active":
+		var action := Button.new()
+		action.name = "ExchangeListingActionButton"
+		action.custom_minimum_size = Vector2(0, 40)
+		if active_tab == "mine" or bool(selected_entry.get("isMine", false)):
+			action.text = _t("ui.exchange.action.cancel") if active_tab == "mine" else _t("ui.exchange.action.owned")
+			action.disabled = active_tab != "mine"
+			if active_tab == "mine":
+				action.pressed.connect(_confirm_cancel_selected)
+		else:
+			action.text = _t("ui.exchange.action.buy")
+			action.disabled = wallet_money < int(selected_entry.get("totalPrice", 0))
+			action.pressed.connect(_confirm_buy_selected)
+		_apply_primary_button_style(action)
+		content.add_child(action)
+	detail_stack.add_child(footer)
 
 
 func _confirm_list_selected() -> void:
@@ -1143,9 +1234,12 @@ func _entry_name(entry: Dictionary, kind: String) -> String:
 	var asset_type := _entry_asset_type(entry, kind)
 	if asset_type == "pokemon":
 		var nickname := _optional_text(asset.get("nickname"))
-		var species := _optional_text(asset.get("speciesName"))
-		if species.is_empty():
-			species = _optional_text(asset.get("speciesId"), _t("ui.exchange.pokemon"))
+		var species_id := _optional_text(
+			asset.get("formId"),
+			_optional_text(asset.get("speciesId"), _optional_text(asset.get("species")))
+		)
+		var species_fallback := _optional_text(asset.get("speciesName"), _humanize_identifier(species_id, _t("ui.exchange.pokemon")))
+		var species := _content_name("species", species_id, species_fallback)
 		return "%s (%s)" % [nickname, species] if not nickname.is_empty() else species
 	return _optional_text(asset.get("name"), _optional_text(asset.get("itemId"), _t("ui.exchange.item")))
 
@@ -1250,6 +1344,20 @@ func _optional_text(value: Variant, fallback := "") -> String:
 	return fallback if text.is_empty() or text == "<null>" else text
 
 
+func _humanize_identifier(value: String, fallback := "") -> String:
+	var normalized := value.strip_edges().replace("_", " ").replace("-", " ")
+	return normalized.capitalize() if not normalized.is_empty() else fallback
+
+
+func _content_name(kind: String, content_id: String, fallback: String) -> String:
+	if content_id.is_empty():
+		return fallback
+	var content_localization := get_node_or_null("/root/ContentLocalization")
+	if content_localization == null:
+		return fallback
+	return str(content_localization.call("display_name", kind, content_id, fallback))
+
+
 func _labeled_control(label_text: String, control: Control) -> Control:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 8)
@@ -1292,20 +1400,6 @@ func _stat_total(stats: Dictionary) -> int:
 	for key: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
 		total += maxi(int(stats.get(key, 0)), 0)
 	return total
-
-
-func _move_summary(moves: Array) -> String:
-	var names: Array[String] = []
-	for value: Variant in moves.slice(0, 4):
-		if value is Dictionary:
-			var move := value as Dictionary
-			names.append(_optional_text(
-				move.get("name"),
-				_optional_text(move.get("id"), _optional_text(move.get("move"), "—"))
-			))
-		else:
-			names.append(_optional_text(value, "—"))
-	return " · ".join(names) if not names.is_empty() else _t("ui.exchange.summary.no_moves")
 
 
 func _new_request_id(prefix: String) -> String:
@@ -1370,6 +1464,22 @@ func _panel_style(background: Color, border: Color, radius: int, width: int) -> 
 	style.content_margin_right = 10
 	style.content_margin_top = 7
 	style.content_margin_bottom = 7
+	return style
+
+
+func _compact_panel_style(
+	background: Color,
+	border: Color,
+	radius: int,
+	width: int,
+	horizontal_margin: int,
+	vertical_margin: int
+) -> StyleBoxFlat:
+	var style := _panel_style(background, border, radius, width)
+	style.content_margin_left = horizontal_margin
+	style.content_margin_right = horizontal_margin
+	style.content_margin_top = vertical_margin
+	style.content_margin_bottom = vertical_margin
 	return style
 
 

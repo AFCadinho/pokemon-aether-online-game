@@ -105,7 +105,7 @@ func _run() -> void:
 		"pokemonId": 25,
 		"species": "garchomp",
 		"speciesId": "Garchomp",
-		"speciesName": "Garchomp",
+		"speciesName": "garchomp",
 		"formId": null,
 		"nickname": null,
 		"level": 100,
@@ -117,10 +117,10 @@ func _run() -> void:
 		"evs": {"hp": 4, "atk": 252, "def": 0, "spa": 0, "spd": 0, "spe": 252},
 		"stats": {"hp": 357, "atk": 394, "def": 226, "spa": 176, "spd": 212, "spe": 333},
 		"moves": [
-			{"id": "ceaseless-edge", "name": "Ceaseless Edge", "pp": 15, "maxPp": 15},
-			{"id": "razor-shell", "name": "Razor Shell", "pp": 10, "maxPp": 10},
-			{"id": "flip-turn", "name": "Flip Turn", "pp": 20, "maxPp": 20},
-			{"id": "knock-off", "name": "Knock Off", "pp": 20, "maxPp": 20},
+			{"id": "ceaseless-edge", "name": "Ceaseless Edge", "type": "dark", "pp": 15, "maxPp": 15},
+			{"id": "razor-shell", "name": "Razor Shell", "type": "water", "pp": 10, "maxPp": 10},
+			{"id": "flip-turn", "name": "Flip Turn", "type": "water", "pp": 20, "maxPp": 20},
+			{"id": "knock-off", "name": "Knock Off", "type": "dark", "pp": 20, "maxPp": 20},
 		],
 		"types": ["dragon", "ground"],
 		"possibleAbilities": ["sand-veil", "rough-skin"],
@@ -144,10 +144,12 @@ func _run() -> void:
 	var summary_button := popup.find_child("PokemonSummaryButton", true, false) as Button
 	_check(summary_button != null, "Pokémon details expose the full read-only Summary action")
 	var current_detail_stack := popup.get("detail_stack") as VBoxContainer
-	var purchase_header := current_detail_stack.get_child(0) as HBoxContainer
+	var purchase_header := current_detail_stack.get_child(0) as PanelContainer
 	var quick_summary := current_detail_stack.get_child(1) as PanelContainer
 	_check(purchase_header != null, "Pokémon identity and Summary action share a compact header")
 	_check(quick_summary != null, "Selected Pokémon renders a compact purchase summary")
+	_check(_count_meta_controls(purchase_header, "exchange_type_chip") == 2, "Pokémon header renders both types as styled chips")
+	_check(_count_meta_controls(quick_summary, "exchange_move_chip") == 4, "Pokémon summary renders four styled move chips")
 	_check(summary_button.get_theme_stylebox("normal") is StyleBoxFlat, "Pokémon Summary action uses Exchange styling")
 	popup.pokemon_summary_requested.connect(_capture_summary_payload)
 	summary_button.pressed.emit()
@@ -206,8 +208,11 @@ func _run() -> void:
 	await process_frame
 	var detail_scroll := popup.find_child("ExchangeDetailScroll", true, false) as ScrollContainer
 	current_detail_stack = popup.get("detail_stack") as VBoxContainer
-	var buy_button := current_detail_stack.get_child(current_detail_stack.get_child_count() - 1) as Button
+	var purchase_footer := current_detail_stack.get_child(current_detail_stack.get_child_count() - 1) as PanelContainer
+	var footer_content := purchase_footer.get_child(0) as VBoxContainer
+	var buy_button := footer_content.get_child(footer_content.get_child_count() - 1) as Button
 	_check(buy_button != null and buy_button.visible, "Browse keeps Buy Now visible with a complete Pokémon summary")
+	_check(purchase_footer.get_theme_stylebox("panel") is StyleBoxFlat, "Price and purchase action share a styled footer")
 	_check(not detail_scroll.get_v_scroll_bar().visible, "Complete Pokémon purchase details fit without vertical scrolling")
 	_check(bool(popup.call("_mutation_requires_party_refresh", {"assetType": "pokemon"}, "ui.exchange.status.listed")), "Listing a Pokémon refreshes the persisted party")
 	_check(bool(popup.call("_mutation_requires_party_refresh", {"assetType": "pokemon"}, "ui.exchange.status.cancelled")), "Cancelling a Pokémon listing refreshes the persisted party")
@@ -270,6 +275,13 @@ func _check(condition: bool, label: String) -> void:
 
 func _capture_summary_payload(payload: Dictionary) -> void:
 	requested_summary_payload = payload.duplicate(true)
+
+
+func _count_meta_controls(root_node: Node, meta_key: String) -> int:
+	var count := 1 if root_node.has_meta(meta_key) else 0
+	for child: Node in root_node.get_children():
+		count += _count_meta_controls(child, meta_key)
+	return count
 
 
 func _dictionary(value: Variant) -> Dictionary:
