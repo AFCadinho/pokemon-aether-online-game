@@ -19,9 +19,40 @@ func _init() -> void:
 		"Blackout locking starts before battle cleanup can resume autosaves"
 	)
 	_expect(
+		world_source.contains(
+			"if should_respawn_after_loss:\n"
+				+ "\t\tawait _respawn_after_battle_loss()\n"
+				+ "\t\t_finish_blackout_respawn_transition()\n"
+				+ "\t\t_finish_trainer_battle_npc(reward_trainer_id, false)"
+		),
+		"Every trainer or wild blackout completes cleanup before releasing its trainer"
+	)
+	_expect(
+		world_source.contains(
+			"if not should_respawn_after_loss:\n"
+				+ "\t\t_finish_trainer_battle_npc("
+				+ "reward_trainer_id, should_claim_trainer_reward)"
+		),
+		"Non-blackout trainer results still release their trainer immediately"
+	)
+	_expect(
+		world_source.contains('if reason in ["forfeit", "loss", "blackout"]:'),
+		"Forfeit and defeated-party losses share the blackout recovery path"
+	)
+	_expect(
 		world_source.contains("authorized_teleport_in_progress = true")
 		and world_source.contains("authorized_teleport_locked_overworld = true"),
 		"Blackout respawns use the authorized teleport lock"
+	)
+	_expect(
+		world_source.contains("func _finish_blackout_respawn_transition() -> void:")
+		and world_source.contains(
+			"player.set_process(true)\n"
+				+ "\t\tplayer.set_physics_process(true)\n"
+				+ "\t# Story-driven trainer battles"
+		)
+		and world_source.contains("\tGameState.unlock_input()"),
+		"Blackout completion restores player processing and clears legacy global input locks"
 	)
 	_expect(
 		world_source.contains("while is_saving_player_position:\n\t\tawait get_tree().process_frame")
