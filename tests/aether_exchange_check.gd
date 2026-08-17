@@ -2,6 +2,7 @@ extends SceneTree
 
 const EXCHANGE_SERVICE := preload("res://scripts/services/aether_exchange_service.gd")
 const EXCHANGE_POPUP := preload("res://scenes/interface/aether_exchange_popup.tscn")
+const EXCHANGE_POPUP_PATH := "res://scripts/ui/aether_exchange_popup.gd"
 const UI_OVERLAY_PATH := "res://scripts/ui/ui_overlay.gd"
 const PROJECT_PATH := "res://project.godot"
 
@@ -80,10 +81,15 @@ func _run() -> void:
 	_check(str(popup.call("_optional_text", null)) == "", "Null form ids do not become sprite identifiers")
 
 	var project_source := FileAccess.get_file_as_string(PROJECT_PATH)
+	var popup_source := FileAccess.get_file_as_string(EXCHANGE_POPUP_PATH)
 	var overlay_source := FileAccess.get_file_as_string(UI_OVERLAY_PATH)
 	_check(project_source.contains('AetherExchangeService="*res://scripts/services/aether_exchange_service.gd"'), "Exchange API client is an autoload")
 	_check(overlay_source.contains("aether_exchange_popup.open_exchange()"), "Existing Exchange navigation opens the live popup")
 	_check(not overlay_source.contains("Aether Exchange is not implemented yet."), "Coming-soon behavior was removed")
+	_check(popup_source.contains("func _load_portfolio() -> bool:"), "Portfolio loads report whether they succeeded")
+	_check(popup_source.contains("func _load_browse() -> bool:"), "Browse loads report whether they succeeded")
+	_check(popup_source.contains("if portfolio_loaded and browse_loaded:"), "Exchange success states require both requests to succeed")
+	_check(popup_source.contains("if refreshed:\n\t\t_set_status(_t(\"ui.exchange.status.updated\")"), "Refresh errors are not overwritten by a success state")
 
 	popup.queue_free()
 	await process_frame
