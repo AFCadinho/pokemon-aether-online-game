@@ -31,8 +31,11 @@ func _run() -> void:
 	_check(_dictionary(listing.get("asset", {})).get("speciesName") == "Bulbasaur", "Exchange service retains public Pokémon snapshots")
 	service.free()
 
+	var popup_host := Control.new()
+	popup_host.size = Vector2(1600, 900)
+	root.add_child(popup_host)
 	var popup := EXCHANGE_POPUP.instantiate() as AetherExchangePopup
-	root.add_child(popup)
+	popup_host.add_child(popup)
 	popup.visible = true
 	await process_frame
 	_check(popup != null, "Exchange popup scene instantiates")
@@ -40,7 +43,9 @@ func _run() -> void:
 	_check(popup.size == Vector2(1040, 660), "Exchange popup starts at its fixed workspace size")
 	_check(popup.call("_get_minimum_size") == Vector2(1040, 660), "Exchange content cannot increase the popup minimum size")
 	_check((popup.get("tab_buttons") as Dictionary).size() == 3, "Exchange popup exposes Browse, Sell, and My Listings")
-	_check((popup.get("filter_buttons") as Dictionary).size() == 3, "Exchange popup exposes asset filters")
+	_check((popup.get("filter_buttons") as Dictionary).size() == 2, "Exchange popup exposes only Items and Pokémon filters")
+	_check(not (popup.get("filter_buttons") as Dictionary).has(""), "Browse does not expose a combined All filter")
+	_check(str(popup.get("asset_filter")) == "item", "Browse defaults to the Items category")
 	var drag_handle := popup.find_child("ExchangeDragHandle", true, false) as Control
 	_check(drag_handle != null, "Exchange header exposes a drag handle")
 	_check(drag_handle.mouse_default_cursor_shape == Control.CURSOR_MOVE, "Exchange drag handle uses the move cursor")
@@ -49,7 +54,6 @@ func _run() -> void:
 	popup.set("asset_filter", "")
 	popup.call("_refresh_controls")
 	var filter_buttons := popup.get("filter_buttons") as Dictionary
-	_check(not (filter_buttons.get("") as Button).visible, "Sell hides the combined All category")
 	_check((filter_buttons.get("item") as Button).visible, "Sell keeps the Items category visible")
 	_check((filter_buttons.get("pokemon") as Button).visible, "Sell keeps the Pokémon category visible")
 	_check(str(popup.get("asset_filter")) == "item", "Sell defaults to the Items category")
@@ -94,6 +98,22 @@ func _run() -> void:
 	_check((popup.get("detail_stack") as VBoxContainer).get_child_count() > 1, "Selected Pokémon renders listing details immediately")
 	_check(str(popup.call("_entry_name", selected_pokemon, "sell")) == "Garchomp", "Null Pokémon nicknames fall back to the species name")
 	_check(str(popup.call("_optional_text", null)) == "", "Null form ids do not become sprite identifiers")
+	popup.set("active_tab", "mine")
+	popup.set("my_listings", [{
+		"id": "mine-long-name",
+		"assetType": "pokemon",
+		"asset": {
+			"pokemonId": 27,
+			"speciesName": "A deliberately very long Pokémon listing name that must never resize the popup",
+			"level": 100,
+		},
+		"totalPrice": 999999,
+		"status": "active",
+	}])
+	popup.call("_render_current_list")
+	await process_frame
+	await process_frame
+	_check(popup.size == Vector2(1040, 660), "My Listings content does not resize the Exchange popup")
 
 	var browse_entries: Array = []
 	for index: int in range(4):
@@ -112,6 +132,8 @@ func _run() -> void:
 	popup.set("browse_listings", browse_entries)
 	popup.call("_render_current_list")
 	await process_frame
+	await process_frame
+	_check(popup.size == Vector2(1040, 660), "Browse cards do not resize the Exchange popup")
 	_check(list_container.columns >= 2, "Browse listings render in a multi-column card grid")
 	_check(list_container.get_child_count() == 4, "Browse grid renders every available listing")
 	_check((list_container.get_child(0) as Button).custom_minimum_size.y == 82.0, "Browse cards use the compact listing height")
@@ -160,7 +182,7 @@ func _run() -> void:
 	_check(popup_source.contains("if refreshed:\n\t\t_set_status(_t(\"ui.exchange.status.updated\")"), "Refresh errors are not overwritten by a success state")
 	_check(popup_source.contains('party_service.call("refresh_party")'), "Successful Pokémon mutations synchronize the party sidebar")
 
-	popup.queue_free()
+	popup_host.queue_free()
 	await process_frame
 	quit(1 if failed else 0)
 

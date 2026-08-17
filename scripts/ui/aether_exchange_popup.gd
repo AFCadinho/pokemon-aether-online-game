@@ -21,7 +21,7 @@ const BROWSE_CARD_MIN_WIDTH := 245.0
 const BROWSE_GRID_MAX_COLUMNS := 3
 
 var active_tab := "browse"
-var asset_filter := ""
+var asset_filter := "item"
 var browse_listings: Array = []
 var my_listings: Array = []
 var sellable_items: Array = []
@@ -69,6 +69,7 @@ func _ready() -> void:
 	window_style.set_content_margin(SIDE_BOTTOM, 0.0)
 	add_theme_stylebox_override("panel", window_style)
 	_build_interface()
+	_center_in_parent()
 	search_timer = Timer.new()
 	search_timer.one_shot = true
 	search_timer.wait_time = 0.3
@@ -321,7 +322,7 @@ func _build_tabs() -> Control:
 func _build_filters() -> Control:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 8)
-	for filter_id: String in ["", "item", "pokemon"]:
+	for filter_id: String in ["item", "pokemon"]:
 		var button := Button.new()
 		button.custom_minimum_size = Vector2(110, 34)
 		button.pressed.connect(_on_filter_pressed.bind(filter_id))
@@ -589,10 +590,11 @@ func _entry_button(entry: Dictionary, kind: String) -> Button:
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.expand_icon = true
+	button.clip_text = true
+	button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	button.add_theme_constant_override("icon_max_width", 46 if browse_card else 52)
 	if browse_card:
 		button.add_theme_font_size_override("font_size", 13)
-		button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	button.text = "%s\n%s" % [_entry_name(entry, kind), _entry_subtitle(entry, kind)]
 	button.icon = _entry_texture(entry, kind)
 	button.tooltip_text = _entry_name(entry, kind)
@@ -903,8 +905,17 @@ func _refresh_controls() -> void:
 
 
 func _normalize_filter_for_tab() -> void:
-	if active_tab == "sell" and asset_filter.is_empty():
+	if asset_filter not in ["item", "pokemon"]:
 		asset_filter = "item"
+
+
+func _center_in_parent() -> void:
+	var parent_control := get_parent_control()
+	if parent_control == null:
+		return
+	size = EXCHANGE_SIZE
+	position = (parent_control.size - size) * 0.5
+	_clamp_to_parent()
 
 
 func _translate_static_ui() -> void:
