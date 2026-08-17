@@ -365,7 +365,7 @@
 					"spawnMarker": "GroundFloorStairs",
 					"tile": {
 						"x": 15,
-						"y": 23
+						"y": 22
 					}
 				},
 				"initial_spawn": {
@@ -395,7 +395,7 @@
 					"spawnMarker": "UpperFloorStairs",
 					"tile": {
 						"x": 11,
-						"y": 8
+						"y": 7
 					}
 				}
 			}
