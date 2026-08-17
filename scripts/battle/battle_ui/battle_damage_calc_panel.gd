@@ -186,6 +186,7 @@ var viewer_ability_scenarios: Dictionary = {}
 var viewer_ability_catalogs: Dictionary = {}
 var viewer_ability_catalog_loading := false
 var battle_state_scenarios: Dictionary = {}
+var inferred_opponent_max_hp_by_ref: Dictionary = {}
 var viewer_stats_by_ref: Dictionary = {}
 var advanced_scenario_expanded := true
 var warning_details_expanded := false
@@ -251,6 +252,7 @@ func show_idle() -> void:
 	selected_move_index = 0
 	move_scenarios.clear()
 	viewer_boost_scenarios.clear()
+	inferred_opponent_max_hp_by_ref.clear()
 	pending_move_index = -1
 	_render_current_state()
 
@@ -1598,13 +1600,17 @@ func _get_battle_state_hp_display(relation: String) -> Dictionary:
 
 
 func _get_expected_opponent_max_hp() -> int:
-	for result_value: Variant in _as_array(last_response.get("results", [])):
-		var result := _as_dictionary(result_value)
-		var min_damage: Variant = _get_percent_number(result.get("minDamage"))
-		var min_percent: Variant = _get_percent_number(result.get("minPercent"))
-		if min_damage != null and min_percent != null and min_damage > 0.0 and min_percent > 0.0:
-			return maxi(1, roundi(float(min_damage) * 100.0 / float(min_percent)))
-	return 100
+	if str(last_response.get("direction", "")) == "own-to-opponent":
+		for result_value: Variant in _as_array(last_response.get("results", [])):
+			var result := _as_dictionary(result_value)
+			var min_damage: Variant = _get_percent_number(result.get("minDamage"))
+			var min_percent: Variant = _get_percent_number(result.get("minPercent"))
+			if min_damage != null and min_percent != null and min_damage > 0.0 and min_percent > 0.0:
+				var inferred_maximum := maxi(1, roundi(float(min_damage) * 100.0 / float(min_percent)))
+				if selected_opponent_ref != "":
+					inferred_opponent_max_hp_by_ref[selected_opponent_ref] = inferred_maximum
+				return inferred_maximum
+	return maxi(1, int(inferred_opponent_max_hp_by_ref.get(selected_opponent_ref, 100)))
 
 
 func _on_battle_state_hp_focus_exited(relation: String, input: LineEdit, is_percent: bool) -> void:

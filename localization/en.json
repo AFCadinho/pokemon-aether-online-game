@@ -200,6 +200,7 @@
   "ui.ev_training.assistant.session_active": "Your {stat} training session is still active. Head back in whenever you're ready.",
   "ui.ev_training.assistant.authorization_required": "The focused training field requires Mateo's authorization.",
   "ui.ev_training.assistant.authorization_hint": "You can find him beside the field. Complete his lesson first.",
+  "ui.ev_training.assistant.pre_lesson": "The training field is being tended today. Please give the grass some room to grow.",
   "ui.ev_training.assistant.tutorial_ready": "Mateo's practice field is ready. Only {target} will appear.",
   "ui.ev_training.assistant.tutorial_participation": "Make sure {pokemon} takes part in all four battles so it receives the Effort Values.",
   "ui.ev_training.assistant.introduction": "This is Viridian City's focused EV training field.",
