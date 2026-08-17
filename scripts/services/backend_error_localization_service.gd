@@ -87,6 +87,7 @@ const CODE_TO_KEY: Dictionary = {
 	"exchange_seller_wallet_full": "backend.error.exchange_seller_wallet_full",
 	"exchange_pokemon_not_found": "backend.error.exchange_pokemon_not_found",
 	"exchange_pokemon_must_be_in_party": "backend.error.exchange_pokemon_must_be_in_party",
+	"exchange_party_slot_occupied": "backend.error.exchange_party_slot_occupied",
 	"exchange_asset_changed": "backend.error.exchange_asset_changed",
 	"exchange_pokemon_storage_full": "backend.error.exchange_pokemon_storage_full",
 	"pokemon_listed_on_exchange": "backend.error.pokemon_listed_on_exchange",
