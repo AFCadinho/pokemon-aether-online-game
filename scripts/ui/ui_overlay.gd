@@ -34051,19 +34051,23 @@ func _refresh_pvp_team_validator() -> void:
 			PvpRankedTeamValidation.STATE_INVALID,
 			PvpRankedTeamValidation.STATE_ERROR,
 		]
-		if not server_is_authoritative:
+		# Final server results replace the provisional local rows. Render them even
+		# when the same party also triggered a local check, or the list goes blank.
+		if server_is_authoritative:
+			_render_pvp_ranked_server_validation()
+		else:
 			for issue: String in issues:
 				pvp_team_validator_list.add_child(_create_pvp_validator_row(LocalizationManager.text("ui.pvp.validation.label.issue"), issue, Color("#ff7979")))
 			for warning: String in warnings:
 				pvp_team_validator_list.add_child(_create_pvp_validator_row(LocalizationManager.text("ui.pvp.validation.label.note"), warning, Color("#f5df9a")))
-		if issues.is_empty():
-			_render_pvp_ranked_server_validation()
-		elif pvp_team_validator_status_label != null:
-			pvp_team_validator_status_label.text = LocalizationManager.plural(
-				"ui.pvp.validation.issue.one",
-				"ui.pvp.validation.issue.many",
-				issues.size()
-			)
+			if issues.is_empty():
+				_render_pvp_ranked_server_validation()
+			elif pvp_team_validator_status_label != null:
+				pvp_team_validator_status_label.text = LocalizationManager.plural(
+					"ui.pvp.validation.issue.one",
+					"ui.pvp.validation.issue.many",
+					issues.size()
+				)
 	else:
 		for issue: String in issues:
 			pvp_team_validator_list.add_child(_create_pvp_validator_row(LocalizationManager.text("ui.pvp.validation.label.local"), issue, Color("#f5df9a")))

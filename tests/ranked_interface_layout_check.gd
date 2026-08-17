@@ -31,6 +31,7 @@ func _init() -> void:
 	_check(source.contains('"ui.pvp.validation.issue.one"') and source.contains('"ui.pvp.validation.issue.many"'), "Invalid teams report an actionable issue count")
 	_check(source.contains('"ui.pvp.validation.ranked_ready"'), "Valid teams receive a clear Ranked Ready state")
 	_check(source.contains('PvpRankedTeamValidation.allows_ranked_join(pvp_ranked_team_validation_result)'), "authoritative validation still gates ranked matchmaking")
+	_check(source.contains("if server_is_authoritative:\n\t\t\t_render_pvp_ranked_server_validation()"), "authoritative Ranked validation keeps its detailed reasons visible after local checks")
 	_check(source.contains('pvp_team_validator_panel.add_theme_stylebox_override("panel", _make_pvp_validator_panel_style(state))'), "validator surface reflects checking, valid and invalid states")
 
 	_check(source.contains('"ui.pvp.queue.find"') and source.contains("pvp_join_queue_button.custom_minimum_size = Vector2(0, 46)"), "Find Match is the primary full-width action")
