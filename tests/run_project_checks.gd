@@ -31,6 +31,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/battle_participant_privacy_contract_check.gd",
 	"res://tests/battle_calcdex_snapshot_check.gd",
 	"res://tests/battle_calcdex_inference_check.gd",
+	"res://tests/battle_damage_calc_hp_scale_check.gd",
 	"res://tests/pvp_team_preview_privacy_completion_check.gd",
 	"res://tests/team_preview_layer_lifecycle_check.gd",
 	"res://tests/pvp_privacy_render_resolution_check.gd",
