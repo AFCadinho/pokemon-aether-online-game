@@ -41,7 +41,12 @@ var list_caption: Label
 var list_container: VBoxContainer
 var detail_stack: VBoxContainer
 var status_label: Label
-var confirmation_dialog: ConfirmationDialog
+var confirmation_overlay: ColorRect
+var confirmation_card: PanelContainer
+var confirmation_title_label: Label
+var confirmation_message_label: Label
+var confirmation_confirm_button: Button
+var confirmation_cancel_button: Button
 var quantity_spin: SpinBox
 var price_spin: SpinBox
 var total_price_label: Label
@@ -63,6 +68,9 @@ func _ready() -> void:
 
 func open_exchange() -> void:
 	visible = true
+	confirmation_action = Callable()
+	if confirmation_overlay != null:
+		confirmation_overlay.visible = false
 	selected_entry.clear()
 	selected_kind = ""
 	_set_status(_t("ui.exchange.status.loading"), UI_MUTED)
@@ -79,6 +87,9 @@ func open_exchange() -> void:
 
 func close_exchange() -> void:
 	if request_busy:
+		return
+	if confirmation_overlay != null and confirmation_overlay.visible:
+		_on_confirmation_cancelled()
 		return
 	visible = false
 	closed.emit()
@@ -109,10 +120,99 @@ func _build_interface() -> void:
 	status_label.add_theme_font_size_override("font_size", 11)
 	layout.add_child(status_label)
 
-	confirmation_dialog = ConfirmationDialog.new()
-	confirmation_dialog.min_size = Vector2i(460, 0)
-	confirmation_dialog.confirmed.connect(_on_confirmation_confirmed)
-	add_child(confirmation_dialog)
+	_build_confirmation_overlay()
+
+
+func _build_confirmation_overlay() -> void:
+	confirmation_overlay = ColorRect.new()
+	confirmation_overlay.name = "ExchangeConfirmationOverlay"
+	confirmation_overlay.visible = false
+	confirmation_overlay.color = Color("#01050bc9")
+	confirmation_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	confirmation_overlay.z_index = 20
+	add_child(confirmation_overlay)
+	confirmation_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
+	var center := CenterContainer.new()
+	center.mouse_filter = Control.MOUSE_FILTER_PASS
+	confirmation_overlay.add_child(center)
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
+	confirmation_card = PanelContainer.new()
+	confirmation_card.custom_minimum_size = Vector2(540, 210)
+	confirmation_card.add_theme_stylebox_override(
+		"panel", _panel_style(Color("#071321fc"), Color("#66d7e9e6"), 12, 2)
+	)
+	center.add_child(confirmation_card)
+
+	var margin := MarginContainer.new()
+	for side: String in ["left", "top", "right", "bottom"]:
+		margin.add_theme_constant_override("margin_%s" % side, 18)
+	confirmation_card.add_child(margin)
+
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 14)
+	margin.add_child(stack)
+
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 10)
+	stack.add_child(header)
+
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(34, 34)
+	icon.texture = load("res://assets/ui/aether_exchange_icon.svg")
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	header.add_child(icon)
+
+	confirmation_title_label = Label.new()
+	confirmation_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	confirmation_title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	confirmation_title_label.add_theme_font_size_override("font_size", 19)
+	confirmation_title_label.add_theme_color_override("font_color", UI_TEXT)
+	header.add_child(confirmation_title_label)
+
+	var close_button := Button.new()
+	close_button.text = "×"
+	close_button.tooltip_text = _t("common.close")
+	close_button.custom_minimum_size = Vector2(36, 34)
+	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.pressed.connect(_on_confirmation_cancelled)
+	_apply_button_style(close_button)
+	header.add_child(close_button)
+
+	var accent := PanelContainer.new()
+	accent.custom_minimum_size = Vector2(0, 2)
+	var accent_style := StyleBoxFlat.new()
+	accent_style.bg_color = UI_CYAN
+	accent_style.set_corner_radius_all(1)
+	accent.add_theme_stylebox_override("panel", accent_style)
+	stack.add_child(accent)
+
+	confirmation_message_label = Label.new()
+	confirmation_message_label.custom_minimum_size = Vector2(0, 54)
+	confirmation_message_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	confirmation_message_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	confirmation_message_label.add_theme_font_size_override("font_size", 14)
+	confirmation_message_label.add_theme_color_override("font_color", UI_MUTED)
+	stack.add_child(confirmation_message_label)
+
+	var actions := HBoxContainer.new()
+	actions.alignment = BoxContainer.ALIGNMENT_END
+	actions.add_theme_constant_override("separation", 10)
+	stack.add_child(actions)
+
+	confirmation_cancel_button = Button.new()
+	confirmation_cancel_button.custom_minimum_size = Vector2(120, 38)
+	confirmation_cancel_button.pressed.connect(_on_confirmation_cancelled)
+	_apply_button_style(confirmation_cancel_button)
+	actions.add_child(confirmation_cancel_button)
+
+	confirmation_confirm_button = Button.new()
+	confirmation_confirm_button.custom_minimum_size = Vector2(140, 38)
+	confirmation_confirm_button.pressed.connect(_on_confirmation_confirmed)
+	_apply_primary_button_style(confirmation_confirm_button)
+	actions.add_child(confirmation_confirm_button)
 
 
 func _build_header() -> Control:
@@ -532,22 +632,48 @@ func _confirm_cancel_selected() -> void:
 	_show_confirmation(
 		_t("ui.exchange.confirm.cancel_title"),
 		_t("ui.exchange.confirm.cancel", {"name": _entry_name(selected_entry, selected_kind)}),
-		Callable(self, "_cancel_selected").bind(str(selected_entry.get("id", "")), _new_request_id("cancel"))
+		Callable(self, "_cancel_selected").bind(str(selected_entry.get("id", "")), _new_request_id("cancel")),
+		true
 	)
 
 
-func _show_confirmation(title: String, message: String, action: Callable) -> void:
+func _show_confirmation(title: String, message: String, action: Callable, danger := false) -> void:
 	confirmation_action = action
-	confirmation_dialog.title = title
-	confirmation_dialog.dialog_text = message
-	confirmation_dialog.popup_centered()
+	confirmation_title_label.text = title
+	confirmation_message_label.text = message
+	confirmation_cancel_button.text = _t("common.cancel")
+	confirmation_confirm_button.text = _t("common.confirm")
+	if danger:
+		_apply_danger_button_style(confirmation_confirm_button)
+	else:
+		_apply_primary_button_style(confirmation_confirm_button)
+	confirmation_overlay.visible = true
+	confirmation_confirm_button.grab_focus()
+
+
+func _on_confirmation_cancelled() -> void:
+	confirmation_action = Callable()
+	confirmation_overlay.visible = false
 
 
 func _on_confirmation_confirmed() -> void:
 	var action := confirmation_action
 	confirmation_action = Callable()
+	confirmation_overlay.visible = false
 	if action.is_valid():
 		action.call()
+
+
+func _unhandled_key_input(event: InputEvent) -> void:
+	if confirmation_overlay == null or not confirmation_overlay.visible:
+		return
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_ESCAPE:
+			_on_confirmation_cancelled()
+			get_viewport().set_input_as_handled()
+		elif event.keycode == KEY_ENTER or event.keycode == KEY_KP_ENTER:
+			_on_confirmation_confirmed()
+			get_viewport().set_input_as_handled()
 
 
 func _list_selected(quantity: int, unit_price: int, request_id: String) -> void:
@@ -648,6 +774,10 @@ func _translate_static_ui() -> void:
 	title_label.text = _t("ui.exchange.title")
 	subtitle_label.text = _t("ui.exchange.subtitle")
 	search_input.placeholder_text = _t("ui.exchange.search")
+	if confirmation_cancel_button != null:
+		confirmation_cancel_button.text = _t("common.cancel")
+	if confirmation_confirm_button != null:
+		confirmation_confirm_button.text = _t("common.confirm")
 	_refresh_controls()
 	if list_container != null:
 		_render_current_list()
@@ -837,6 +967,13 @@ func _apply_primary_button_style(button: Button) -> void:
 	button.add_theme_stylebox_override("normal", _panel_style(Color("#15566df5"), UI_CYAN, 8, 1))
 	button.add_theme_stylebox_override("hover", _panel_style(Color("#1c6d87f5"), Color("#b8f6ff"), 8, 1))
 	button.add_theme_stylebox_override("pressed", _panel_style(Color("#0f465bf5"), UI_CYAN, 8, 1))
+	button.add_theme_color_override("font_color", UI_TEXT)
+
+
+func _apply_danger_button_style(button: Button) -> void:
+	button.add_theme_stylebox_override("normal", _panel_style(Color("#5a1e2bf5"), UI_DANGER, 8, 1))
+	button.add_theme_stylebox_override("hover", _panel_style(Color("#78283af5"), Color("#ff9aaa"), 8, 1))
+	button.add_theme_stylebox_override("pressed", _panel_style(Color("#451720f5"), UI_DANGER, 8, 1))
 	button.add_theme_color_override("font_color", UI_TEXT)
 
 

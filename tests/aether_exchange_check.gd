@@ -80,6 +80,18 @@ func _run() -> void:
 	_check(str(popup.call("_entry_name", selected_pokemon, "sell")) == "Garchomp", "Null Pokémon nicknames fall back to the species name")
 	_check(str(popup.call("_optional_text", null)) == "", "Null form ids do not become sprite identifiers")
 
+	popup.call("_show_confirmation", "Confirm listing", "This asset will be held by the Exchange.", Callable())
+	await process_frame
+	var confirmation_overlay := popup.get("confirmation_overlay") as Control
+	var confirmation_card := popup.get("confirmation_card") as PanelContainer
+	_check(confirmation_overlay != null and confirmation_overlay.visible, "Exchange confirmations use an in-interface modal overlay")
+	_check(confirmation_card.get_theme_stylebox("panel") is StyleBoxFlat, "Exchange confirmation modal uses the Exchange panel styling")
+	_check(popup.get("confirmation_confirm_button") is Button, "Exchange confirmation modal provides a styled confirm action")
+	_check(popup.get("confirmation_cancel_button") is Button, "Exchange confirmation modal provides a styled cancel action")
+	_check(popup.find_children("*", "ConfirmationDialog", true, false).is_empty(), "Exchange does not fall back to a default Godot confirmation window")
+	popup.call("_on_confirmation_cancelled")
+	_check(not confirmation_overlay.visible, "Exchange confirmation modal closes through its cancel action")
+
 	var project_source := FileAccess.get_file_as_string(PROJECT_PATH)
 	var popup_source := FileAccess.get_file_as_string(EXCHANGE_POPUP_PATH)
 	var overlay_source := FileAccess.get_file_as_string(UI_OVERLAY_PATH)
