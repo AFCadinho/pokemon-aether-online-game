@@ -46,6 +46,12 @@ func _run() -> void:
 	_check((popup.get("filter_buttons") as Dictionary).size() == 2, "Exchange popup exposes only Items and Pokémon filters")
 	_check(not (popup.get("filter_buttons") as Dictionary).has(""), "Browse does not expose a combined All filter")
 	_check(str(popup.get("asset_filter")) == "item", "Browse defaults to the Items category")
+	var search_input := popup.get("search_input") as LineEdit
+	var refresh_button := popup.get("refresh_button") as Button
+	_check(search_input.get_theme_stylebox("normal") is StyleBoxFlat, "Exchange search field uses the styled input surface")
+	_check(search_input.get_theme_stylebox("focus") is StyleBoxFlat, "Exchange search field has a styled focus state")
+	_check(refresh_button.get_theme_stylebox("normal") is StyleBoxFlat, "Exchange Refresh action uses the styled button surface")
+	_check(refresh_button.get_theme_stylebox("hover") is StyleBoxFlat, "Exchange Refresh action has a styled hover state")
 	var drag_handle := popup.find_child("ExchangeDragHandle", true, false) as Control
 	_check(drag_handle != null, "Exchange header exposes a drag handle")
 	_check(drag_handle.mouse_default_cursor_shape == Control.CURSOR_MOVE, "Exchange drag handle uses the move cursor")

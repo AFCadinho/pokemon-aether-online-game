@@ -333,11 +333,13 @@ func _build_filters() -> Control:
 	search_input.custom_minimum_size = Vector2(300, 34)
 	search_input.clear_button_enabled = true
 	search_input.text_changed.connect(_on_search_changed)
+	_apply_line_edit_style(search_input)
 	row.add_child(search_input)
 	refresh_button = Button.new()
 	refresh_button.custom_minimum_size = Vector2(105, 34)
 	refresh_button.pressed.connect(_refresh_current_tab)
 	refresh_button.name = "RefreshButton"
+	_apply_button_style(refresh_button)
 	row.add_child(refresh_button)
 	return row
 
@@ -1107,8 +1109,32 @@ func _apply_button_style(button: Button, selected := false) -> void:
 	button.add_theme_stylebox_override("normal", _panel_style(bg, border, 8, 1))
 	button.add_theme_stylebox_override("hover", _panel_style(Color("#12324af5"), UI_CYAN, 8, 1))
 	button.add_theme_stylebox_override("pressed", _panel_style(Color("#173e5af5"), UI_CYAN, 8, 1))
+	button.add_theme_stylebox_override("disabled", _panel_style(Color("#07111dcc"), Color("#263b4d99"), 8, 1))
+	button.add_theme_stylebox_override("focus", _panel_style(Color("#12324af5"), UI_CYAN, 8, 2))
 	button.add_theme_color_override("font_color", UI_TEXT)
 	button.add_theme_color_override("font_disabled_color", Color(UI_MUTED, 0.55))
+
+
+func _apply_line_edit_style(input: LineEdit) -> void:
+	input.add_theme_stylebox_override("normal", _input_style(Color("#030812e8"), UI_BORDER))
+	input.add_theme_stylebox_override("focus", _input_style(Color("#071524f5"), UI_CYAN, 2))
+	input.add_theme_stylebox_override("read_only", _input_style(Color("#07111dcc"), Color("#263b4d99")))
+	input.add_theme_color_override("font_color", UI_TEXT)
+	input.add_theme_color_override("font_uneditable_color", Color(UI_MUTED, 0.7))
+	input.add_theme_color_override("font_placeholder_color", Color(UI_MUTED, 0.75))
+	input.add_theme_color_override("caret_color", UI_CYAN)
+	input.add_theme_color_override("selection_color", Color(UI_CYAN, 0.28))
+	input.add_theme_color_override("clear_button_color", UI_MUTED)
+	input.add_theme_color_override("clear_button_color_pressed", UI_TEXT)
+
+
+func _input_style(background: Color, border: Color, border_width := 1) -> StyleBoxFlat:
+	var style := _panel_style(background, border, 8, border_width)
+	style.content_margin_left = 11
+	style.content_margin_top = 6
+	style.content_margin_right = 9
+	style.content_margin_bottom = 6
+	return style
 
 
 func _apply_primary_button_style(button: Button) -> void:
