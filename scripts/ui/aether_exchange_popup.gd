@@ -3,6 +3,7 @@ extends Panel
 
 signal closed
 signal wallet_changed
+signal pokemon_summary_requested(pokemon_payload: Dictionary)
 
 const UI_BG := Color("#050b14fa")
 const UI_RAISED := Color("#081522f5")
@@ -629,8 +630,9 @@ func _render_detail() -> void:
 		return
 
 	var asset := _entry_asset(selected_entry, selected_kind)
+	var asset_type := _entry_asset_type(selected_entry, selected_kind)
 	var icon := TextureRect.new()
-	icon.custom_minimum_size = Vector2(0, 132)
+	icon.custom_minimum_size = Vector2(0, 100 if asset_type == "pokemon" else 132)
 	icon.texture = _entry_texture(selected_entry, selected_kind)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -641,18 +643,119 @@ func _render_detail() -> void:
 	name.add_theme_font_size_override("font_size", 20)
 	name.add_theme_color_override("font_color", UI_TEXT)
 	detail_stack.add_child(name)
-	var description := Label.new()
-	description.text = _asset_detail_text(asset, _entry_asset_type(selected_entry, selected_kind))
-	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	description.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	description.add_theme_font_size_override("font_size", 11)
-	description.add_theme_color_override("font_color", UI_MUTED)
-	detail_stack.add_child(description)
+	if asset_type == "pokemon":
+		detail_stack.add_child(_build_pokemon_quick_summary(asset))
+	else:
+		var description := Label.new()
+		description.text = _asset_detail_text(asset, asset_type)
+		description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		description.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		description.add_theme_font_size_override("font_size", 11)
+		description.add_theme_color_override("font_color", UI_MUTED)
+		detail_stack.add_child(description)
 
 	if selected_kind == "sell":
 		_build_sell_controls(asset)
 	else:
 		_build_listing_controls()
+
+
+func _build_pokemon_quick_summary(asset: Dictionary) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "PokemonQuickSummary"
+	panel.add_theme_stylebox_override("panel", _panel_style(Color("#07111dcc"), UI_BORDER, 8, 1))
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 6)
+	panel.add_child(content)
+
+	var traits: Array[String] = [
+		_t("ui.exchange.summary.level", {"value": int(asset.get("level", 1))}),
+		_optional_text(asset.get("nature"), "—"),
+	]
+	var gender := _optional_text(asset.get("gender"))
+	if not gender.is_empty():
+		traits.append(gender)
+	if bool(asset.get("shiny", false)):
+		traits.append(_t("ui.exchange.summary.shiny"))
+	if bool(asset.get("hiddenAbility", asset.get("hidden_ability", false))):
+		traits.append(_t("ui.exchange.summary.hidden_ability"))
+	var trait_label := Label.new()
+	trait_label.text = "  •  ".join(traits)
+	trait_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	trait_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	trait_label.add_theme_font_size_override("font_size", 12)
+	trait_label.add_theme_color_override("font_color", UI_CYAN)
+	content.add_child(trait_label)
+
+	content.add_child(_quick_summary_row(
+		_t("ui.exchange.summary.ability"),
+		_optional_text(asset.get("ability"), "—")
+	))
+	var ivs := _dictionary(asset.get("ivs", {}))
+	content.add_child(_quick_summary_row(
+		_t("ui.exchange.summary.ivs", {"total": _stat_total(ivs), "maximum": 186}),
+		_stat_spread(ivs)
+	))
+	var evs := _dictionary(asset.get("evs", {}))
+	content.add_child(_quick_summary_row(
+		_t("ui.exchange.summary.evs", {"total": _stat_total(evs), "maximum": 510}),
+		_stat_spread(evs)
+	))
+	content.add_child(_quick_summary_row(
+		_t("ui.exchange.summary.moves"),
+		_move_summary(_array(asset.get("moves", [])))
+	))
+
+	var open_button := Button.new()
+	open_button.name = "PokemonSummaryButton"
+	open_button.text = _t("ui.exchange.action.open_summary")
+	open_button.tooltip_text = _t("ui.exchange.action.open_summary_tooltip")
+	open_button.custom_minimum_size = Vector2(0, 36)
+	open_button.pressed.connect(_on_pokemon_summary_pressed.bind(asset.duplicate(true)))
+	_apply_button_style(open_button)
+	content.add_child(open_button)
+	return panel
+
+
+func _quick_summary_row(title_text: String, value_text: String) -> Control:
+	var row := VBoxContainer.new()
+	row.add_theme_constant_override("separation", 1)
+	var title := Label.new()
+	title.text = title_text
+	title.add_theme_font_size_override("font_size", 10)
+	title.add_theme_color_override("font_color", UI_MUTED)
+	row.add_child(title)
+	var value := Label.new()
+	value.text = value_text
+	value.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	value.add_theme_font_size_override("font_size", 11)
+	value.add_theme_color_override("font_color", UI_TEXT)
+	row.add_child(value)
+	return row
+
+
+func _on_pokemon_summary_pressed(asset: Dictionary) -> void:
+	pokemon_summary_requested.emit(_pokemon_summary_payload(asset))
+
+
+func _pokemon_summary_payload(asset: Dictionary) -> Dictionary:
+	var payload := asset.duplicate(true)
+	if _optional_text(payload.get("species")).is_empty():
+		payload["species"] = _optional_text(
+			payload.get("formId"),
+			_optional_text(payload.get("speciesId"), _optional_text(payload.get("speciesName")))
+		)
+	var origin := _dictionary(payload.get("origin", {})).duplicate(true)
+	for key: String in [
+		"currentTrainerName", "current_trainer_name", "ownerName", "owner_name",
+		"currentTrainerUserId", "current_trainer_user_id", "ownerUserId", "owner_user_id",
+		"originalTrainerName", "original_trainer_name", "otName", "ot_name",
+		"originalTrainerUserId", "original_trainer_user_id", "originalOwnerUserId", "original_owner_user_id",
+	]:
+		origin.erase(key)
+	origin["currentTrainerName"] = _t("ui.exchange.summary.exchange_trainer")
+	payload["origin"] = origin
+	return payload
 
 
 func _build_sell_controls(asset: Dictionary) -> void:
@@ -1098,6 +1201,34 @@ func _iv_summary(ivs: Dictionary) -> String:
 		int(ivs.get("hp", 0)), int(ivs.get("atk", 0)), int(ivs.get("def", 0)),
 		int(ivs.get("spa", 0)), int(ivs.get("spd", 0)), int(ivs.get("spe", 0)),
 	]
+
+
+func _stat_total(stats: Dictionary) -> int:
+	var total := 0
+	for key: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
+		total += maxi(int(stats.get(key, 0)), 0)
+	return total
+
+
+func _stat_spread(stats: Dictionary) -> String:
+	return "HP %d · Atk %d · Def %d\nSpA %d · SpD %d · Spe %d" % [
+		int(stats.get("hp", 0)), int(stats.get("atk", 0)), int(stats.get("def", 0)),
+		int(stats.get("spa", 0)), int(stats.get("spd", 0)), int(stats.get("spe", 0)),
+	]
+
+
+func _move_summary(moves: Array) -> String:
+	var names: Array[String] = []
+	for value: Variant in moves.slice(0, 4):
+		if value is Dictionary:
+			var move := value as Dictionary
+			names.append(_optional_text(
+				move.get("name"),
+				_optional_text(move.get("id"), _optional_text(move.get("move"), "—"))
+			))
+		else:
+			names.append(_optional_text(value, "—"))
+	return " · ".join(names) if not names.is_empty() else _t("ui.exchange.summary.no_moves")
 
 
 func _new_request_id(prefix: String) -> String:

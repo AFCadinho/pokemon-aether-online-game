@@ -7,6 +7,7 @@ const UI_OVERLAY_PATH := "res://scripts/ui/ui_overlay.gd"
 const PROJECT_PATH := "res://project.godot"
 
 var failed := false
+var requested_summary_payload: Dictionary = {}
 
 
 func _init() -> void:
@@ -96,12 +97,30 @@ func _run() -> void:
 	_check(popup.get("price_spin") is SpinBox, "Listings expose fixed-price input")
 	var sellable_garchomp := {
 		"pokemonId": 25,
+		"species": "garchomp",
 		"speciesId": "Garchomp",
 		"speciesName": "Garchomp",
 		"formId": null,
 		"nickname": null,
 		"level": 100,
 		"nature": "Jolly",
+		"ability": "Rough Skin",
+		"hiddenAbility": true,
+		"gender": "Female",
+		"ivs": {"hp": 31, "atk": 31, "def": 20, "spa": 0, "spd": 24, "spe": 31},
+		"evs": {"hp": 4, "atk": 252, "def": 0, "spa": 0, "spd": 0, "spe": 252},
+		"stats": {"hp": 357, "atk": 394, "def": 226, "spa": 176, "spd": 212, "spe": 333},
+		"moves": [
+			{"id": "earthquake", "name": "Earthquake", "pp": 10, "maxPp": 10},
+			{"id": "dragon-claw", "name": "Dragon Claw", "pp": 15, "maxPp": 15},
+		],
+		"types": ["dragon", "ground"],
+		"possibleAbilities": ["sand-veil", "rough-skin"],
+		"origin": {
+			"locationName": "Victory Road",
+			"currentTrainerName": "Private seller",
+			"currentTrainerUserId": 987,
+		},
 	}
 	popup.set("asset_filter", "pokemon")
 	popup.set("sellable_pokemon", [sellable_garchomp])
@@ -114,6 +133,20 @@ func _run() -> void:
 	_check((popup.get("detail_stack") as VBoxContainer).get_child_count() > 1, "Selected Pokémon renders listing details immediately")
 	_check(str(popup.call("_entry_name", selected_pokemon, "sell")) == "Garchomp", "Null Pokémon nicknames fall back to the species name")
 	_check(str(popup.call("_optional_text", null)) == "", "Null form ids do not become sprite identifiers")
+	var summary_button := popup.find_child("PokemonSummaryButton", true, false) as Button
+	_check(summary_button != null, "Pokémon details expose the full read-only Summary action")
+	var quick_summary := summary_button.get_parent().get_parent() as PanelContainer
+	_check(quick_summary != null, "Selected Pokémon renders a compact purchase summary")
+	_check(summary_button.get_theme_stylebox("normal") is StyleBoxFlat, "Pokémon Summary action uses Exchange styling")
+	popup.pokemon_summary_requested.connect(_capture_summary_payload)
+	summary_button.pressed.emit()
+	_check(str(requested_summary_payload.get("species", "")) == "garchomp", "Summary payload includes the factory species identifier")
+	_check(_array(requested_summary_payload.get("moves", [])).size() == 2, "Summary payload preserves the listed Pokémon's moves")
+	var summary_origin := _dictionary(requested_summary_payload.get("origin", {}))
+	_check(not summary_origin.has("currentTrainerUserId"), "Summary payload removes private trainer ids")
+	_check(str(summary_origin.get("currentTrainerName", "")) != "Private seller", "Summary payload anonymizes the seller name")
+	var readonly_pokemon := PokemonFactory.create_pokemon_from_backend_payload(requested_summary_payload)
+	_check(readonly_pokemon != null, "Exchange payload can materialize the existing read-only Pokémon Summary")
 	popup.set("active_tab", "mine")
 	popup.set("my_listings", [{
 		"id": "mine-long-name",
@@ -191,6 +224,8 @@ func _run() -> void:
 	var overlay_source := FileAccess.get_file_as_string(UI_OVERLAY_PATH)
 	_check(project_source.contains('AetherExchangeService="*res://scripts/services/aether_exchange_service.gd"'), "Exchange API client is an autoload")
 	_check(overlay_source.contains("aether_exchange_popup.open_exchange()"), "Existing Exchange navigation opens the live popup")
+	_check(overlay_source.contains("pokemon_summary_requested.connect(_on_aether_exchange_pokemon_summary_requested)"), "Exchange Summary actions are connected to the UI overlay")
+	_check(overlay_source.contains("_open_readonly_pokemon_summary(pokemon_payload)"), "Exchange opens the existing read-only Pokémon Summary")
 	_check(not overlay_source.contains("Aether Exchange is not implemented yet."), "Coming-soon behavior was removed")
 	_check(popup_source.contains("func _load_portfolio() -> bool:"), "Portfolio loads report whether they succeeded")
 	_check(popup_source.contains("func _load_browse() -> bool:"), "Browse loads report whether they succeeded")
@@ -211,5 +246,13 @@ func _check(condition: bool, label: String) -> void:
 	push_error(label)
 
 
+func _capture_summary_payload(payload: Dictionary) -> void:
+	requested_summary_payload = payload.duplicate(true)
+
+
 func _dictionary(value: Variant) -> Dictionary:
 	return value as Dictionary if value is Dictionary else {}
+
+
+func _array(value: Variant) -> Array:
+	return value as Array if value is Array else []

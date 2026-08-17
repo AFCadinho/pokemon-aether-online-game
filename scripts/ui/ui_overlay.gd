@@ -16447,6 +16447,7 @@ func _setup_aether_exchange_popup() -> void:
 	root_control.add_child(aether_exchange_popup)
 	aether_exchange_popup.closed.connect(_hide_aether_exchange)
 	aether_exchange_popup.wallet_changed.connect(_on_aether_exchange_wallet_changed)
+	aether_exchange_popup.pokemon_summary_requested.connect(_on_aether_exchange_pokemon_summary_requested)
 
 func _hide_aether_exchange() -> void:
 	if aether_exchange_popup == null:
@@ -16456,6 +16457,9 @@ func _hide_aether_exchange() -> void:
 
 func _on_aether_exchange_wallet_changed() -> void:
 	refresh_money_display()
+
+func _on_aether_exchange_pokemon_summary_requested(pokemon_payload: Dictionary) -> void:
+	_open_readonly_pokemon_summary(pokemon_payload)
 
 func _setup_shiny_tracker_popup() -> void:
 	shiny_tracker_popup = SHINY_TRACKER_POPUP_SCENE.instantiate() as ShinyTrackerPopup
