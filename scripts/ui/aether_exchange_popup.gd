@@ -21,8 +21,9 @@ const DROPDOWN_RADIO_CHECKED: Texture2D = preload("res://assets/ui/photo_mode_ra
 const DROPDOWN_RADIO_UNCHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_unchecked.svg")
 const EXCHANGE_SIZE := Vector2(1040, 660)
 const MAX_PRICE := 2_147_483_647
-const BROWSE_CARD_MIN_WIDTH := 245.0
-const BROWSE_GRID_MAX_COLUMNS := 3
+const BROWSE_CARD_MIN_WIDTH := 128.0
+const BROWSE_CARD_HEIGHT := 172.0
+const BROWSE_GRID_MAX_COLUMNS := 4
 const POKEMON_TYPES: Array[String] = [
 	"normal", "fire", "water", "electric", "grass", "ice", "fighting", "poison",
 	"ground", "flying", "psychic", "bug", "rock", "ghost", "dragon", "dark",
@@ -1195,23 +1196,88 @@ func _entry_button(entry: Dictionary, kind: String) -> Button:
 	var browse_card := active_tab == "browse" and kind == "listing"
 	button.custom_minimum_size = Vector2(
 		BROWSE_CARD_MIN_WIDTH if browse_card else 0.0,
-		82 if browse_card else 70,
+		BROWSE_CARD_HEIGHT if browse_card else 70,
 	)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-	button.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	button.expand_icon = true
 	button.clip_text = true
-	button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	button.add_theme_constant_override("icon_max_width", 46 if browse_card else 52)
 	if browse_card:
-		button.add_theme_font_size_override("font_size", 13)
-	button.text = "%s\n%s" % [_entry_name(entry, kind), _entry_subtitle(entry, kind)]
-	button.icon = _entry_texture(entry, kind)
+		_build_browse_card_content(button, entry, kind)
+	else:
+		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		button.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		button.expand_icon = true
+		button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		button.add_theme_constant_override("icon_max_width", 52)
+		button.text = "%s\n%s" % [_entry_name(entry, kind), _entry_subtitle(entry, kind)]
+		button.icon = _entry_texture(entry, kind)
 	button.tooltip_text = _entry_name(entry, kind)
 	button.pressed.connect(_select_entry.bind(entry, kind))
 	_apply_button_style(button, _entry_matches_selection(entry, kind))
 	return button
+
+
+func _build_browse_card_content(button: Button, entry: Dictionary, kind: String) -> void:
+	button.text = ""
+	button.icon = null
+	var margin := MarginContainer.new()
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for side: String in ["left", "top", "right", "bottom"]:
+		margin.add_theme_constant_override("margin_%s" % side, 8)
+	button.add_child(margin)
+	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
+	var stack := VBoxContainer.new()
+	stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	stack.add_theme_constant_override("separation", 4)
+	margin.add_child(stack)
+	var icon := TextureRect.new()
+	icon.name = "BrowseCardIcon"
+	icon.custom_minimum_size = Vector2(48, 48)
+	icon.texture = _entry_texture(entry, kind)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	stack.add_child(icon)
+
+	var name := Label.new()
+	name.name = "BrowseCardName"
+	name.text = _entry_name(entry, kind)
+	name.tooltip_text = name.text
+	name.custom_minimum_size = Vector2(0, 34)
+	name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	name.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	name.max_lines_visible = 2
+	name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	name.add_theme_font_size_override("font_size", 12)
+	name.add_theme_color_override("font_color", UI_TEXT)
+	stack.add_child(name)
+
+	var asset := _entry_asset(entry, kind)
+	var metadata_label := Label.new()
+	metadata_label.name = "BrowseCardTrait"
+	metadata_label.text = (
+		_t("ui.exchange.summary.level", {"value": int(asset.get("level", 1))})
+		if _entry_asset_type(entry, kind) == "pokemon"
+		else "×%d" % maxi(int(entry.get("quantity", 1)), 1)
+	)
+	metadata_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	metadata_label.add_theme_font_size_override("font_size", 10)
+	metadata_label.add_theme_color_override("font_color", UI_CYAN)
+	stack.add_child(metadata_label)
+
+	var price := Label.new()
+	price.name = "BrowseCardPrice"
+	price.text = _t(
+		"ui.exchange.total",
+		{"amount": _format_money(int(entry.get("totalPrice", 0)))},
+	)
+	price.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	price.add_theme_font_size_override("font_size", 13)
+	price.add_theme_color_override("font_color", UI_GOLD)
+	stack.add_child(price)
 
 
 func _select_entry(entry: Dictionary, kind: String) -> void:
