@@ -259,10 +259,11 @@ func _init() -> void:
 	_check(script_source.contains('chat_tabs_background.name = "ChatTabsBackground"'), "main tabs sit on a cohesive translucent rail")
 	_check(script_source.contains('message_scroll.add_theme_stylebox_override("panel", _make_chat_message_surface_style())'), "chat messages use a subtle inner surface")
 	_check(
-		script_source.contains("func _create_chat_sender_message_label(")
-		and script_source.contains("if text != \"\" and not has_visual_attachments:")
+		script_source.contains('header.name = "Header"')
+		and script_source.contains('body_margin.name = "Body"')
+		and script_source.contains('body_margin.add_theme_constant_override("margin_left", 8)')
 		and script_source.contains("entry.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART"),
-		"plain chat messages wrap the sender and body as one full-width text block"
+		"chat messages place sender details above an indented full-width message body"
 	)
 	_check(script_source.contains('_apply_chat_main_tab_style(general_chat_tab_button, general_active)'), "active and inactive main tabs receive distinct styling")
 	_check(script_source.contains("style.border_width_bottom = 2"), "selected main tab gets a clear bottom accent")
