@@ -21,6 +21,9 @@ func _run() -> void:
 	var root_control := overlay.get_node_or_null("Control") as Control
 	root_control.size = Vector2(1152, 648)
 	overlay.set("root_control", root_control)
+	var stale_left_panel := PanelContainer.new()
+	overlay.set("pokemon_summary_left_panel", stale_left_panel)
+	stale_left_panel.free()
 	overlay.call("_open_readonly_pokemon_summary", _sample_pokemon())
 	await process_frame
 	await process_frame
@@ -32,6 +35,10 @@ func _run() -> void:
 	_check(popup.size == Vector2(620, 380), "read-only and interactive summaries share the same window geometry")
 	_check(popup.has_meta("readonly_summary_nodes"), "read-only Summary exposes its one-page content")
 	var nodes := popup.get_meta("readonly_summary_nodes", {}) as Dictionary
+	var active_card_key := str(overlay.get("pokemon_summary_active_card_key"))
+	var context := (overlay.get("pokemon_summary_open_cards") as Dictionary).get(active_card_key, {}) as Dictionary
+	_check(context.get("left_panel") == null, "read-only Summary does not retain controls from a closed card")
+	_check(overlay.call("_apply_pokemon_summary_card_context", active_card_key), "read-only Summary context remains safe to reactivate")
 	_check((nodes.get("stat_rows", {}) as Dictionary).size() == 6, "all six stats render at once")
 	_check((nodes.get("move_nodes", []) as Array).size() == 4, "all four moves render at once")
 	_check((nodes.get("type_row") as HBoxContainer).get_child_count() == 2, "both Pokémon types render as chips")
