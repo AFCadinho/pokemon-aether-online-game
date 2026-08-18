@@ -6,6 +6,7 @@ const REMOTE_PLAYER_AVATAR_SCRIPT: Script = preload("res://scripts/world/remote_
 const MAP_TRANSITION_INDICATOR_SCRIPT: Script = preload("res://scripts/ui/map_transition_indicator.gd")
 const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.gd")
 const BattleEnvironmentResolverScript := preload("res://scripts/battle/battle_environment_resolver.gd")
+const TallGrassDepthSortingScript := preload("res://scripts/world/tall_grass_depth_sorting.gd")
 const POSITION_AUTOSAVE_INTERVAL_SECONDS := 12.0
 const POSITION_PRESENCE_UPDATE_INTERVAL_SECONDS := 0.06
 const POSITION_SAVE_EPSILON := 1.0
@@ -33,7 +34,6 @@ const DECORATIVE_DEPTH_ROW_META := "pao_decorative_depth_row"
 const DECORATIVE_DEPTH_ROWS_BUILT_META := "pao_decorative_depth_rows_built"
 const STRUCTURE_TOP_DEPTH_GROUP_META := "pao_structure_top_depth_group"
 const STRUCTURE_TOP_DEPTH_GROUPS_BUILT_META := "pao_structure_top_depth_groups_built"
-const TALL_GRASS_LAYER_Z_OFFSET := 1
 const FOREST_TOP_LAYER_Z_OFFSET := 3
 const TREE_LAYER_Z_MIN := -4096
 const TREE_LAYER_Z_MAX := 4096
@@ -1315,13 +1315,12 @@ func _collect_tall_grass_visual_layers_recursive(node: Node, grass_layers: Array
 		_collect_tall_grass_visual_layers_recursive(child, grass_layers)
 
 func _get_tall_grass_row_z_index(grass_layer: TileMapLayer, row: int) -> int:
-	var tile_size := Vector2(TILE_SIZE, TILE_SIZE)
-	if grass_layer.tile_set != null:
-		tile_size = Vector2(grass_layer.tile_set.tile_size)
-
-	var row_center_local := grass_layer.map_to_local(Vector2i(0, row))
-	var row_bottom_global := grass_layer.to_global(row_center_local + Vector2(0.0, tile_size.y * 0.5)).y
-	return clampi(floori(row_bottom_global) + TALL_GRASS_LAYER_Z_OFFSET, TREE_LAYER_Z_MIN, TREE_LAYER_Z_MAX)
+	return TallGrassDepthSortingScript.get_row_z_index(
+		grass_layer,
+		row,
+		TREE_LAYER_Z_MIN,
+		TREE_LAYER_Z_MAX
+	)
 
 
 func _build_decorative_visual_depth_rows(map: Node) -> void:

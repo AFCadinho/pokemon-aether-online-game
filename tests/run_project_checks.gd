@@ -104,6 +104,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/rivals_house_daisy_check.gd",
 	"res://tests/impersonation_account_switch_check.gd",
 	"res://tests/floor_visibility_mask_camera_check.gd",
+	"res://tests/tall_grass_character_depth_check.gd",
 	"res://tests/players_house_visual_depth_check.gd",
 	"res://tests/players_house_location_label_check.gd",
 	"res://tests/map_music_profile_check.gd",
