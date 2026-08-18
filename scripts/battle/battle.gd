@@ -3681,6 +3681,10 @@ func _set_display_party_grids(player_display_team: Array, opponent_display_team:
 	# depend on deferred signal delivery.
 	player_party_grid.set_party(player_display_team)
 	player_stage_party_grid.set_party(player_display_team)
+	_set_opponent_party_grid(opponent_display_team)
+
+
+func _set_opponent_party_grid(opponent_display_team: Array) -> void:
 	opponent_party_grid.set_party(_get_opponent_party_rail_data(opponent_display_team))
 
 
@@ -9834,7 +9838,7 @@ func _rewind_party_slots_for_events(events: Array) -> void:
 	if not enemy_team.is_empty():
 		_debug_battle_presentation_order("rewind_party_slots.apply p2=%s" % JSON.stringify(_summarize_team_for_order_debug(enemy_team)))
 		_mark_active_party_slot(enemy_team, "p2")
-		opponent_party_grid.set_party(enemy_team)
+		_set_opponent_party_grid(enemy_team)
 		opponent_party_grid.set_selection_enabled(false)
 
 func _debug_battle_hp(message: String) -> void:
