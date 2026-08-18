@@ -1242,30 +1242,64 @@ func _render_detail() -> void:
 		detail_stack.add_child(_build_pokemon_detail_header(asset))
 		detail_stack.add_child(_build_pokemon_quick_summary(asset))
 	else:
-		var icon := TextureRect.new()
-		icon.custom_minimum_size = Vector2(0, 132)
-		icon.texture = _entry_texture(selected_entry, selected_kind)
-		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		detail_stack.add_child(icon)
-		var name := Label.new()
-		name.text = _entry_name(selected_entry, selected_kind)
-		name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		name.add_theme_font_size_override("font_size", 20)
-		name.add_theme_color_override("font_color", UI_TEXT)
-		detail_stack.add_child(name)
-		var description := Label.new()
-		description.text = _asset_detail_text(asset, asset_type)
-		description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		description.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		description.add_theme_font_size_override("font_size", 11)
-		description.add_theme_color_override("font_color", UI_MUTED)
-		detail_stack.add_child(description)
+		detail_stack.add_child(_build_item_detail_header(asset))
 
 	if selected_kind == "sell":
 		_build_sell_controls(asset)
 	else:
 		_build_listing_controls()
+
+
+func _build_item_detail_header(asset: Dictionary) -> Control:
+	var hero := PanelContainer.new()
+	hero.name = "ItemDetailHeader"
+	hero.add_theme_stylebox_override(
+		"panel", _compact_panel_style(Color("#081725ee"), UI_BORDER, 10, 1, 10, 9)
+	)
+	var row := HBoxContainer.new()
+	row.custom_minimum_size = Vector2(0, 72)
+	row.add_theme_constant_override("separation", 12)
+	hero.add_child(row)
+
+	var icon_frame := PanelContainer.new()
+	icon_frame.custom_minimum_size = Vector2(72, 72)
+	icon_frame.add_theme_stylebox_override(
+		"panel", _compact_panel_style(Color("#050d17e8"), Color(UI_GOLD, 0.55), 9, 1, 5, 5)
+	)
+	row.add_child(icon_frame)
+	var icon_center := CenterContainer.new()
+	icon_frame.add_child(icon_center)
+	var icon := TextureRect.new()
+	icon.name = "ItemDetailIcon"
+	icon.custom_minimum_size = Vector2(48, 48)
+	icon.texture = _entry_texture(selected_entry, selected_kind)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon_center.add_child(icon)
+
+	var information := VBoxContainer.new()
+	information.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	information.alignment = BoxContainer.ALIGNMENT_CENTER
+	information.add_theme_constant_override("separation", 5)
+	row.add_child(information)
+	var name := Label.new()
+	name.text = _entry_name(selected_entry, selected_kind)
+	name.tooltip_text = name.text
+	name.clip_text = true
+	name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	name.add_theme_font_size_override("font_size", 19)
+	name.add_theme_color_override("font_color", UI_TEXT)
+	information.add_child(name)
+	var description := Label.new()
+	description.text = _asset_detail_text(asset, "item")
+	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	description.max_lines_visible = 3
+	description.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	description.add_theme_font_size_override("font_size", 11)
+	description.add_theme_color_override("font_color", UI_MUTED)
+	information.add_child(description)
+	return hero
 
 
 func _build_pokemon_detail_header(asset: Dictionary) -> Control:
