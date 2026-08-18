@@ -59,7 +59,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 10
-text = "1"
+text = "Ctrl+1"
 
 [node name="Slot2" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=2061791274]
 custom_minimum_size = Vector2(44, 44)
@@ -73,7 +73,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 10
-text = "2"
+text = "Ctrl+2"
 
 [node name="Slot3" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=2066504344]
 custom_minimum_size = Vector2(44, 44)
@@ -87,7 +87,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 10
-text = "3"
+text = "Ctrl+3"
 
 [node name="Slot4" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=1251088391]
 custom_minimum_size = Vector2(44, 44)
@@ -101,7 +101,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 10
-text = "4"
+text = "Ctrl+4"
 
 [node name="Slot5" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=182856113]
 custom_minimum_size = Vector2(44, 44)
@@ -115,7 +115,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 10
-text = "5"
+text = "Ctrl+5"
 
 [node name="Slot6" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=1240713832]
 custom_minimum_size = Vector2(44, 44)
@@ -129,7 +129,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 10
-text = "6"
+text = "Ctrl+6"
 
 [node name="Slot7" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=238380532]
 custom_minimum_size = Vector2(44, 44)
@@ -143,7 +143,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 10
-text = "7"
+text = "Ctrl+7"
 
 [node name="Slot8" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=298868661]
 custom_minimum_size = Vector2(44, 44)
@@ -157,4 +157,4 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 10
-text = "8"
+text = "Ctrl+8"

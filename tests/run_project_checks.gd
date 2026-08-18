@@ -205,6 +205,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/appearance_color_system_check.gd",
 	"res://tests/donator_store_cosmetic_subtabs_check.gd",
 	"res://tests/blessed_chat_badge_check.gd",
+	"res://tests/hotbar_shortcut_check.gd",
 	"res://tests/player_hotbar_check.gd",
 	"res://tests/player_hotbar_interactive_check.gd",
 	"res://tests/legacy_market_cleanup_check.gd",

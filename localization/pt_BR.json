@@ -902,6 +902,7 @@
   "ui.bag.preview.status": "Status",
   "ui.hotbar.empty_shortcut": "Atalho vazio {slot}",
   "ui.hotbar.empty_tooltip": "Atalho vazio {slot}\nClique com o botão direito em um item utilizável da Bolsa para colocá-lo aqui.",
+  "ui.hotbar.shortcut_hint": "Atalho de teclado: Ctrl+{slot}",
   "ui.hotbar.key_item_tooltip": "{item}\nEste item-chave nunca se esgota.\nClique com o botão direito para remover este atalho.",
   "ui.hotbar.move_marker": "MOV.",
   "ui.hotbar.charm_name": "Amuleto de {move}",

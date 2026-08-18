@@ -22,6 +22,7 @@
 
 **Changed**
 
+- The overworld hotbar now uses Ctrl+1 through Ctrl+8, leaving the plain 1 through 4 keys free for battle moves.
 - Removed the redundant Currency tab from the Bag; account balances remain available in the Trainer Card wallet.
 - Map chat is now available from the General channel selector alongside Global, Trade, and Help.
 - Aethernet travel now uses a destination catalogue: Aether Anchor destinations are free, while other attuned destinations cost ₽500.

@@ -10110,14 +10110,13 @@ func _input(event: InputEvent) -> void:
 
 	if event is InputEventKey:
 		var key_event := event as InputEventKey
-		if key_event.pressed and not key_event.echo and not key_event.ctrl_pressed and not key_event.alt_pressed and not key_event.meta_pressed:
-			var hotbar_index := _hotbar_index_from_keycode(key_event.keycode)
-			var focus_owner := get_viewport().gui_get_focus_owner()
-			var typing := focus_owner is LineEdit or focus_owner is TextEdit
-			if hotbar_index >= 0 and not typing and not _is_world_battle_active():
-				_on_hotbar_slot_pressed(hotbar_index)
-				get_viewport().set_input_as_handled()
-				return
+		var hotbar_index := HotbarShortcut.slot_index_from_event(key_event)
+		var focus_owner := get_viewport().gui_get_focus_owner()
+		var typing := focus_owner is LineEdit or focus_owner is TextEdit
+		if hotbar_index >= 0 and not typing and not _is_world_battle_active():
+			_on_hotbar_slot_pressed(hotbar_index)
+			get_viewport().set_input_as_handled()
+			return
 
 	if not chat_input.has_focus():
 		return
@@ -25911,7 +25910,10 @@ func _setup_player_hotbar() -> void:
 		button.ignore_texture_size = true
 		button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
 		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-		button.tooltip_text = LocalizationManager.text("ui.hotbar.empty_shortcut", {"slot": slot_index + 1})
+		button.tooltip_text = _hotbar_tooltip_with_shortcut(
+			LocalizationManager.text("ui.hotbar.empty_shortcut", {"slot": slot_index + 1}),
+			slot_index
+		)
 		button.pressed.connect(_on_hotbar_slot_pressed.bind(slot_index))
 		button.gui_input.connect(_on_hotbar_slot_gui_input.bind(slot_index))
 		button.bag_item_dropped.connect(_on_hotbar_bag_item_dropped)
@@ -25957,7 +25959,10 @@ func _refresh_hotbar_ui() -> void:
 		button.preview_texture = null
 		button.modulate = Color(1.0, 1.0, 1.0, 0.35)
 		quantity_label.text = ""
-		button.tooltip_text = LocalizationManager.text("ui.hotbar.empty_tooltip", {"slot": slot_index + 1})
+		button.tooltip_text = _hotbar_tooltip_with_shortcut(
+			LocalizationManager.text("ui.hotbar.empty_tooltip", {"slot": slot_index + 1}),
+			slot_index
+		)
 		(hotbar_slot_panels[slot_index] as PanelContainer).tooltip_text = button.tooltip_text
 		_apply_hotbar_slot_style(slot_index)
 		if entry.is_empty():
@@ -26022,6 +26027,7 @@ func _refresh_hotbar_ui() -> void:
 					else LocalizationManager.text("ui.hotbar.item_none")
 				),
 			})
+		button.tooltip_text = _hotbar_tooltip_with_shortcut(button.tooltip_text, slot_index)
 		(hotbar_slot_panels[slot_index] as PanelContainer).tooltip_text = button.tooltip_text
 
 
@@ -26039,17 +26045,11 @@ func _hotbar_entry_for_slot(slot_index: int) -> Dictionary:
 	return {}
 
 
-func _hotbar_index_from_keycode(keycode: Key) -> int:
-	match keycode:
-		KEY_1: return 0
-		KEY_2: return 1
-		KEY_3: return 2
-		KEY_4: return 3
-		KEY_5: return 4
-		KEY_6: return 5
-		KEY_7: return 6
-		KEY_8: return 7
-		_: return -1
+func _hotbar_tooltip_with_shortcut(base_tooltip: String, slot_index: int) -> String:
+	return "%s\n%s" % [
+		base_tooltip,
+		LocalizationManager.text("ui.hotbar.shortcut_hint", {"slot": slot_index + 1}),
+	]
 
 
 func _on_hotbar_slot_pressed(slot_index: int) -> void:

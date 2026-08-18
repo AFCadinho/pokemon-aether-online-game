@@ -902,6 +902,7 @@
   "ui.bag.preview.status": "Status",
   "ui.hotbar.empty_shortcut": "Empty shortcut {slot}",
   "ui.hotbar.empty_tooltip": "Empty shortcut {slot}\nRight-click a usable item in your Bag to place it here.",
+  "ui.hotbar.shortcut_hint": "Keyboard shortcut: Ctrl+{slot}",
   "ui.hotbar.key_item_tooltip": "{item}\nThis key item is never used up.\nRight-click to remove this shortcut.",
   "ui.hotbar.move_marker": "MOVE",
   "ui.hotbar.charm_name": "{move} Charm",
