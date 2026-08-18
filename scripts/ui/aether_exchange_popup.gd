@@ -51,13 +51,16 @@ var browse_filters: Dictionary = {
 		"min_price": 0,
 		"max_price": 0,
 		"category": "",
+		"sort_by": "",
+		"sort_direction": "asc",
 	},
 	"pokemon": {
 		"min_price": 0,
 		"max_price": 0,
 		"min_level": 1,
 		"max_level": 100,
-		"type": "",
+		"primary_type": "",
+		"secondary_type": "",
 		"nature": "",
 		"ability": "",
 		"shiny": -1,
@@ -68,6 +71,8 @@ var browse_filters: Dictionary = {
 		"min_iv_spa": 0,
 		"min_iv_spd": 0,
 		"min_iv_spe": 0,
+		"sort_by": "",
+		"sort_direction": "asc",
 	},
 }
 
@@ -80,12 +85,15 @@ var search_input: LineEdit
 var search_timer: Timer
 var refresh_button: Button
 var advanced_filter_button: Button
+var advanced_filter_overlay: ColorRect
 var advanced_filter_panel: PanelContainer
 var advanced_filter_title: Label
 var advanced_filter_fields: Dictionary = {}
 var advanced_filter_controls: Dictionary = {}
+var advanced_filter_sections: Dictionary = {}
 var advanced_filter_apply_button: Button
 var advanced_filter_clear_button: Button
+var advanced_filter_cancel_button: Button
 var list_caption: Label
 var list_scroll: ScrollContainer
 var list_container: GridContainer
@@ -154,6 +162,10 @@ func open_exchange() -> void:
 	confirmation_action = Callable()
 	if confirmation_overlay != null:
 		confirmation_overlay.visible = false
+	if advanced_filter_overlay != null:
+		advanced_filter_overlay.visible = false
+	if advanced_filter_panel != null:
+		advanced_filter_panel.visible = false
 	selected_entry.clear()
 	selected_kind = ""
 	_set_status(_t("ui.exchange.status.loading"), UI_MUTED)
@@ -173,6 +185,9 @@ func close_exchange() -> void:
 		return
 	if confirmation_overlay != null and confirmation_overlay.visible:
 		_on_confirmation_cancelled()
+		return
+	if advanced_filter_panel != null and advanced_filter_panel.visible:
+		_hide_advanced_filter_panel()
 		return
 	is_dragging_popup = false
 	visible = false
@@ -397,20 +412,28 @@ func _build_filters() -> Control:
 
 
 func _build_advanced_filter_panel() -> void:
+	advanced_filter_overlay = ColorRect.new()
+	advanced_filter_overlay.name = "ExchangeAdvancedFilterOverlay"
+	advanced_filter_overlay.visible = false
+	advanced_filter_overlay.color = Color("#01050bb8")
+	advanced_filter_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	advanced_filter_overlay.z_index = 10
+	add_child(advanced_filter_overlay)
+	advanced_filter_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
+	var center := CenterContainer.new()
+	center.mouse_filter = Control.MOUSE_FILTER_PASS
+	advanced_filter_overlay.add_child(center)
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
 	advanced_filter_panel = PanelContainer.new()
 	advanced_filter_panel.name = "ExchangeAdvancedFilterPanel"
 	advanced_filter_panel.visible = false
-	advanced_filter_panel.z_index = 10
-	advanced_filter_panel.custom_minimum_size = Vector2(600, 264)
+	advanced_filter_panel.custom_minimum_size = Vector2(790, 520)
 	advanced_filter_panel.add_theme_stylebox_override(
 		"panel", _panel_style(Color("#071321fc"), Color("#58cfe2e6"), 11, 2)
 	)
-	add_child(advanced_filter_panel)
-	advanced_filter_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	advanced_filter_panel.offset_left = -616.0
-	advanced_filter_panel.offset_top = 164.0
-	advanced_filter_panel.offset_right = -16.0
-	advanced_filter_panel.offset_bottom = 428.0
+	center.add_child(advanced_filter_panel)
 
 	var margin := MarginContainer.new()
 	for side: String in ["left", "top", "right", "bottom"]:
@@ -425,6 +448,7 @@ func _build_advanced_filter_panel() -> void:
 	stack.add_child(header)
 	advanced_filter_title = Label.new()
 	advanced_filter_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	advanced_filter_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	advanced_filter_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	advanced_filter_title.add_theme_font_size_override("font_size", 17)
 	advanced_filter_title.add_theme_color_override("font_color", UI_CYAN)
@@ -437,25 +461,64 @@ func _build_advanced_filter_panel() -> void:
 	_apply_button_style(close_button)
 	header.add_child(close_button)
 
-	var fields_grid := GridContainer.new()
-	fields_grid.columns = 4
-	fields_grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	fields_grid.add_theme_constant_override("h_separation", 8)
-	fields_grid.add_theme_constant_override("v_separation", 8)
-	stack.add_child(fields_grid)
+	var market_grid := GridContainer.new()
+	market_grid.columns = 2
+	market_grid.add_theme_constant_override("h_separation", 18)
+	market_grid.add_theme_constant_override("v_separation", 7)
+	stack.add_child(market_grid)
 
-	_add_advanced_filter_field(fields_grid, "min_price", _new_filter_spin(0, MAX_PRICE, 0), false)
-	_add_advanced_filter_field(fields_grid, "max_price", _new_filter_spin(0, MAX_PRICE, 0), false)
-	_add_advanced_filter_field(fields_grid, "category", _new_filter_line_edit(), false, true)
-	_add_advanced_filter_field(fields_grid, "min_level", _new_filter_spin(1, 100, 1), true)
-	_add_advanced_filter_field(fields_grid, "max_level", _new_filter_spin(1, 100, 100), true)
-	_add_advanced_filter_field(fields_grid, "type", _new_filter_option(POKEMON_TYPES), true)
-	_add_advanced_filter_field(fields_grid, "nature", _new_filter_option(POKEMON_NATURES), true)
-	_add_advanced_filter_field(fields_grid, "ability", _new_filter_line_edit(), true)
-	_add_advanced_filter_field(fields_grid, "shiny", _new_tristate_filter_option(), true)
-	_add_advanced_filter_field(fields_grid, "hidden_ability", _new_tristate_filter_option(), true)
+	_add_advanced_filter_field(market_grid, "min_price", _new_filter_spin(0, MAX_PRICE, 0), false)
+	_add_advanced_filter_field(market_grid, "max_price", _new_filter_spin(0, MAX_PRICE, 0), false)
+	_add_advanced_filter_field(market_grid, "category", _new_filter_line_edit(), false, true)
+	_add_advanced_filter_field(market_grid, "min_level", _new_filter_spin(1, 100, 1), true)
+	_add_advanced_filter_field(market_grid, "max_level", _new_filter_spin(1, 100, 100), true)
+	_add_advanced_filter_field(market_grid, "primary_type", _new_filter_option(POKEMON_TYPES), true)
+	_add_advanced_filter_field(market_grid, "secondary_type", _new_filter_option(POKEMON_TYPES), true)
+	_add_advanced_filter_field(market_grid, "nature", _new_filter_option(POKEMON_NATURES), true)
+	_add_advanced_filter_field(market_grid, "ability", _new_filter_line_edit(), true)
+	_add_advanced_filter_field(market_grid, "shiny", _new_tristate_filter_option(), true)
+	_add_advanced_filter_field(market_grid, "hidden_ability", _new_tristate_filter_option(), true)
+
+	var iv_section := VBoxContainer.new()
+	iv_section.add_theme_constant_override("separation", 5)
+	stack.add_child(iv_section)
+	advanced_filter_sections["ivs"] = iv_section
+	var iv_title := Label.new()
+	iv_title.name = "AdvancedFilterIvTitle"
+	iv_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	iv_title.add_theme_font_size_override("font_size", 12)
+	iv_title.add_theme_color_override("font_color", UI_CYAN)
+	iv_section.add_child(iv_title)
+	var iv_grid := GridContainer.new()
+	iv_grid.columns = 3
+	iv_grid.add_theme_constant_override("h_separation", 14)
+	iv_grid.add_theme_constant_override("v_separation", 6)
+	iv_section.add_child(iv_grid)
 	for stat_id: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
-		_add_advanced_filter_field(fields_grid, "min_iv_%s" % stat_id, _new_filter_spin(0, 31, 0), true)
+		_add_advanced_filter_field(
+			iv_grid, "min_iv_%s" % stat_id, _new_filter_spin(0, 31, 0), true, false, true
+		)
+
+	var sort_section := VBoxContainer.new()
+	sort_section.add_theme_constant_override("separation", 5)
+	stack.add_child(sort_section)
+	advanced_filter_sections["sort"] = sort_section
+	var sort_title := Label.new()
+	sort_title.name = "AdvancedFilterSortTitle"
+	sort_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	sort_title.add_theme_font_size_override("font_size", 12)
+	sort_title.add_theme_color_override("font_color", UI_CYAN)
+	sort_section.add_child(sort_title)
+	var sort_grid := GridContainer.new()
+	sort_grid.columns = 2
+	sort_grid.add_theme_constant_override("h_separation", 18)
+	sort_section.add_child(sort_grid)
+	_add_advanced_filter_field(
+		sort_grid, "sort_by", _new_filter_option(["price", "level", "newest"]), false
+	)
+	_add_advanced_filter_field(
+		sort_grid, "sort_direction", _new_filter_option(["asc", "desc"], false), false
+	)
 
 	var actions := HBoxContainer.new()
 	actions.alignment = BoxContainer.ALIGNMENT_END
@@ -466,6 +529,11 @@ func _build_advanced_filter_panel() -> void:
 	advanced_filter_clear_button.pressed.connect(_clear_advanced_filters)
 	_apply_button_style(advanced_filter_clear_button)
 	actions.add_child(advanced_filter_clear_button)
+	advanced_filter_cancel_button = Button.new()
+	advanced_filter_cancel_button.custom_minimum_size = Vector2(120, 34)
+	advanced_filter_cancel_button.pressed.connect(_hide_advanced_filter_panel)
+	_apply_button_style(advanced_filter_cancel_button)
+	actions.add_child(advanced_filter_cancel_button)
 	advanced_filter_apply_button = Button.new()
 	advanced_filter_apply_button.custom_minimum_size = Vector2(140, 34)
 	advanced_filter_apply_button.pressed.connect(_apply_advanced_filters)
@@ -474,24 +542,27 @@ func _build_advanced_filter_panel() -> void:
 
 
 func _add_advanced_filter_field(
-	parent: GridContainer,
+	parent: Container,
 	field_id: String,
 	control: Control,
 	pokemon_only: bool,
-	item_only := false
+	item_only := false,
+	compact := false
 ) -> void:
-	var field := VBoxContainer.new()
-	field.custom_minimum_size = Vector2(136, 52)
+	var field := HBoxContainer.new()
+	field.custom_minimum_size = Vector2(238 if compact else 368, 34)
 	field.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	field.set_meta("pokemon_only", pokemon_only)
 	field.set_meta("item_only", item_only)
-	field.add_theme_constant_override("separation", 3)
+	field.add_theme_constant_override("separation", 8)
 	parent.add_child(field)
 	var label := Label.new()
-	label.add_theme_font_size_override("font_size", 10)
+	label.custom_minimum_size = Vector2(54 if compact else 112, 0)
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 11)
 	label.add_theme_color_override("font_color", UI_MUTED)
 	field.add_child(label)
-	control.custom_minimum_size = Vector2(0, 30)
+	control.custom_minimum_size = Vector2(0, 32)
 	control.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	field.add_child(control)
 	advanced_filter_fields[field_id] = {"root": field, "label": label}
@@ -517,10 +588,11 @@ func _new_filter_line_edit() -> LineEdit:
 	return input
 
 
-func _new_filter_option(values: Array[String]) -> OptionButton:
+func _new_filter_option(values: Array[String], include_any := true) -> OptionButton:
 	var option := OptionButton.new()
-	option.add_item(_t("ui.exchange.filters.any"))
-	option.set_item_metadata(0, "")
+	if include_any:
+		option.add_item(_t("ui.exchange.filters.any"))
+		option.set_item_metadata(0, "")
 	for value: String in values:
 		option.add_item(_humanize_identifier(value))
 		option.set_item_metadata(option.item_count - 1, value)
@@ -660,15 +732,19 @@ func _on_search_changed(_value: String) -> void:
 func _toggle_advanced_filter_panel() -> void:
 	if request_busy or active_tab != "browse":
 		return
-	advanced_filter_panel.visible = not advanced_filter_panel.visible
-	if advanced_filter_panel.visible:
+	var show_panel := not advanced_filter_panel.visible
+	advanced_filter_overlay.visible = show_panel
+	advanced_filter_panel.visible = show_panel
+	if show_panel:
 		_refresh_advanced_filter_panel()
 		_sync_advanced_filter_controls()
-		advanced_filter_panel.move_to_front()
+		advanced_filter_overlay.move_to_front()
 	_refresh_controls()
 
 
 func _hide_advanced_filter_panel() -> void:
+	if advanced_filter_overlay != null:
+		advanced_filter_overlay.visible = false
 	if advanced_filter_panel != null:
 		advanced_filter_panel.visible = false
 	_refresh_controls()
@@ -678,10 +754,7 @@ func _refresh_advanced_filter_panel() -> void:
 	if advanced_filter_panel == null:
 		return
 	var is_pokemon := asset_filter == "pokemon"
-	var panel_height := 326.0 if is_pokemon else 182.0
-	advanced_filter_panel.custom_minimum_size = Vector2(600, panel_height)
-	advanced_filter_panel.offset_top = 164.0
-	advanced_filter_panel.offset_bottom = 164.0 + panel_height
+	advanced_filter_panel.custom_minimum_size = Vector2(790, 520) if is_pokemon else Vector2(700, 300)
 	advanced_filter_title.text = _t(
 		"ui.exchange.filters.title_pokemon" if is_pokemon else "ui.exchange.filters.title_item"
 	)
@@ -703,13 +776,25 @@ func _refresh_advanced_filter_panel() -> void:
 	var ability_input := advanced_filter_controls.get("ability") as LineEdit
 	if ability_input != null:
 		ability_input.placeholder_text = _t("ui.exchange.filters.ability_hint")
+	var iv_section := advanced_filter_sections.get("ivs") as VBoxContainer
+	if iv_section != null:
+		iv_section.visible = is_pokemon
+		var iv_title := iv_section.get_node_or_null("AdvancedFilterIvTitle") as Label
+		if iv_title != null:
+			iv_title.text = _t("ui.exchange.filters.iv_section")
+	var sort_section := advanced_filter_sections.get("sort") as VBoxContainer
+	if sort_section != null:
+		var sort_title := sort_section.get_node_or_null("AdvancedFilterSortTitle") as Label
+		if sort_title != null:
+			sort_title.text = _t("ui.exchange.filters.sort_section")
 	_refresh_filter_option_labels()
 	advanced_filter_clear_button.text = _t("ui.exchange.filters.clear")
+	advanced_filter_cancel_button.text = _t("ui.exchange.filters.cancel")
 	advanced_filter_apply_button.text = _t("ui.exchange.filters.apply")
 
 
 func _refresh_filter_option_labels() -> void:
-	for field_id: String in ["type", "nature"]:
+	for field_id: String in ["primary_type", "secondary_type", "nature"]:
 		var option := advanced_filter_controls.get(field_id) as OptionButton
 		if option == null:
 			continue
@@ -727,10 +812,25 @@ func _refresh_filter_option_labels() -> void:
 			var value := int(option.get_item_metadata(index))
 			var key := "any" if value < 0 else ("yes" if value == 1 else "no")
 			option.set_item_text(index, _t("ui.exchange.filters.%s" % key))
+	var sort_by_option := advanced_filter_controls.get("sort_by") as OptionButton
+	if sort_by_option != null:
+		for index in range(sort_by_option.item_count):
+			var value := str(sort_by_option.get_item_metadata(index))
+			sort_by_option.set_item_text(
+				index,
+				_t("ui.exchange.filters.sort_none") if value.is_empty()
+				else _t("ui.exchange.filters.sort_%s" % value),
+			)
+			sort_by_option.set_item_disabled(index, asset_filter == "item" and value == "level")
+	var direction_option := advanced_filter_controls.get("sort_direction") as OptionButton
+	if direction_option != null:
+		for index in range(direction_option.item_count):
+			var value := str(direction_option.get_item_metadata(index))
+			direction_option.set_item_text(index, _t("ui.exchange.filters.sort_%s" % value))
 
 
-func _sync_advanced_filter_controls() -> void:
-	var state := _current_browse_filter_state()
+func _sync_advanced_filter_controls(state_override: Dictionary = {}) -> void:
+	var state := state_override if not state_override.is_empty() else _current_browse_filter_state()
 	for field_id: String in [
 		"min_price", "max_price", "min_level", "max_level",
 		"min_iv_hp", "min_iv_atk", "min_iv_def", "min_iv_spa", "min_iv_spd", "min_iv_spe",
@@ -742,10 +842,13 @@ func _sync_advanced_filter_controls() -> void:
 		var input := advanced_filter_controls.get(field_id) as LineEdit
 		if input != null:
 			input.text = str(state.get(field_id, ""))
-	_select_filter_option("type", str(state.get("type", "")))
+	_select_filter_option("primary_type", str(state.get("primary_type", "")))
+	_select_filter_option("secondary_type", str(state.get("secondary_type", "")))
 	_select_filter_option("nature", str(state.get("nature", "")))
 	_select_filter_option("shiny", int(state.get("shiny", -1)))
 	_select_filter_option("hidden_ability", int(state.get("hidden_ability", -1)))
+	_select_filter_option("sort_by", str(state.get("sort_by", "")))
+	_select_filter_option("sort_direction", str(state.get("sort_direction", "asc")))
 
 
 func _select_filter_option(field_id: String, value: Variant) -> void:
@@ -759,7 +862,7 @@ func _select_filter_option(field_id: String, value: Variant) -> void:
 	option.select(0)
 
 
-func _read_advanced_filter_controls() -> Dictionary:
+func _read_advanced_filter_controls(commit_state := true) -> Dictionary:
 	var state := _current_browse_filter_state().duplicate(true)
 	for field_id: String in [
 		"min_price", "max_price", "min_level", "max_level",
@@ -772,18 +875,22 @@ func _read_advanced_filter_controls() -> Dictionary:
 		var input := advanced_filter_controls.get(field_id) as LineEdit
 		if input != null:
 			state[field_id] = input.text.strip_edges()
-	for field_id: String in ["type", "nature", "shiny", "hidden_ability"]:
+	for field_id: String in [
+		"primary_type", "secondary_type", "nature", "shiny", "hidden_ability",
+		"sort_by", "sort_direction",
+	]:
 		var option := advanced_filter_controls.get(field_id) as OptionButton
 		if option != null:
 			state[field_id] = option.get_item_metadata(option.selected)
-	browse_filters[asset_filter] = state
+	if commit_state:
+		browse_filters[asset_filter] = state
 	return state
 
 
 func _apply_advanced_filters() -> void:
 	if request_busy or active_tab != "browse":
 		return
-	var state := _read_advanced_filter_controls()
+	var state := _read_advanced_filter_controls(false)
 	var min_price := int(state.get("min_price", 0))
 	var max_price := int(state.get("max_price", 0))
 	if min_price > 0 and max_price > 0 and min_price > max_price:
@@ -792,6 +899,7 @@ func _apply_advanced_filters() -> void:
 	if asset_filter == "pokemon" and int(state.get("min_level", 1)) > int(state.get("max_level", 100)):
 		_set_status(_t("ui.exchange.filters.level_range_error"), UI_DANGER)
 		return
+	browse_filters[asset_filter] = state
 	_hide_advanced_filter_panel()
 	await _refresh_browse()
 
@@ -799,21 +907,23 @@ func _apply_advanced_filters() -> void:
 func _clear_advanced_filters() -> void:
 	if request_busy or active_tab != "browse":
 		return
-	browse_filters[asset_filter] = _default_browse_filter_state(asset_filter)
-	_sync_advanced_filter_controls()
-	await _refresh_browse()
+	_sync_advanced_filter_controls(_default_browse_filter_state(asset_filter))
 
 
 func _default_browse_filter_state(filter_id: String) -> Dictionary:
 	if filter_id == "pokemon":
 		return {
 			"min_price": 0, "max_price": 0, "min_level": 1, "max_level": 100,
-			"type": "", "nature": "", "ability": "", "shiny": -1,
+			"primary_type": "", "secondary_type": "", "nature": "", "ability": "", "shiny": -1,
 			"hidden_ability": -1,
 			"min_iv_hp": 0, "min_iv_atk": 0, "min_iv_def": 0,
 			"min_iv_spa": 0, "min_iv_spd": 0, "min_iv_spe": 0,
+			"sort_by": "", "sort_direction": "asc",
 		}
-	return {"min_price": 0, "max_price": 0, "category": ""}
+	return {
+		"min_price": 0, "max_price": 0, "category": "",
+		"sort_by": "", "sort_direction": "asc",
+	}
 
 
 func _current_browse_filter_state() -> Dictionary:
@@ -831,6 +941,10 @@ func _current_browse_filter_params() -> Dictionary:
 		params["minPrice"] = min_price
 	if max_price > 0:
 		params["maxPrice"] = max_price
+	var sort_by := str(state.get("sort_by", "")).strip_edges()
+	if not sort_by.is_empty():
+		params["sortBy"] = sort_by
+		params["sortDirection"] = str(state.get("sort_direction", "asc"))
 	if asset_filter == "item":
 		var category := str(state.get("category", "")).strip_edges()
 		if not category.is_empty():
@@ -842,10 +956,18 @@ func _current_browse_filter_params() -> Dictionary:
 		params["minLevel"] = min_level
 	if max_level < 100:
 		params["maxLevel"] = max_level
-	for field_id: String in ["type", "nature", "ability"]:
+	for field_id: String in ["nature", "ability"]:
 		var value := str(state.get(field_id, "")).strip_edges()
 		if not value.is_empty():
 			params[field_id] = value
+	var type_param_by_field := {
+		"primary_type": "primaryType",
+		"secondary_type": "secondaryType",
+	}
+	for field_id: String in type_param_by_field:
+		var type_value := str(state.get(field_id, "")).strip_edges()
+		if not type_value.is_empty():
+			params[str(type_param_by_field.get(field_id))] = type_value
 	var shiny := int(state.get("shiny", -1))
 	if shiny >= 0:
 		params["shiny"] = shiny == 1
@@ -864,7 +986,8 @@ func _current_browse_filter_params() -> Dictionary:
 
 
 func _active_advanced_filter_count() -> int:
-	return _current_browse_filter_params().size()
+	var params := _current_browse_filter_params()
+	return params.size() - (1 if params.has("sortDirection") else 0)
 
 
 func _refresh_current_tab() -> void:
