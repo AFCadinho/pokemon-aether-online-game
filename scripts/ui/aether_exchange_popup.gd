@@ -62,7 +62,12 @@ var browse_filters: Dictionary = {
 		"ability": "",
 		"shiny": -1,
 		"hidden_ability": -1,
-		"min_iv_total": 0,
+		"min_iv_hp": 0,
+		"min_iv_atk": 0,
+		"min_iv_def": 0,
+		"min_iv_spa": 0,
+		"min_iv_spd": 0,
+		"min_iv_spe": 0,
 	},
 }
 
@@ -449,7 +454,8 @@ func _build_advanced_filter_panel() -> void:
 	_add_advanced_filter_field(fields_grid, "ability", _new_filter_line_edit(), true)
 	_add_advanced_filter_field(fields_grid, "shiny", _new_tristate_filter_option(), true)
 	_add_advanced_filter_field(fields_grid, "hidden_ability", _new_tristate_filter_option(), true)
-	_add_advanced_filter_field(fields_grid, "min_iv_total", _new_filter_spin(0, 186, 0), true)
+	for stat_id: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
+		_add_advanced_filter_field(fields_grid, "min_iv_%s" % stat_id, _new_filter_spin(0, 31, 0), true)
 
 	var actions := HBoxContainer.new()
 	actions.alignment = BoxContainer.ALIGNMENT_END
@@ -672,7 +678,7 @@ func _refresh_advanced_filter_panel() -> void:
 	if advanced_filter_panel == null:
 		return
 	var is_pokemon := asset_filter == "pokemon"
-	var panel_height := 300.0 if is_pokemon else 182.0
+	var panel_height := 326.0 if is_pokemon else 182.0
 	advanced_filter_panel.custom_minimum_size = Vector2(600, panel_height)
 	advanced_filter_panel.offset_top = 164.0
 	advanced_filter_panel.offset_bottom = 164.0 + panel_height
@@ -725,7 +731,10 @@ func _refresh_filter_option_labels() -> void:
 
 func _sync_advanced_filter_controls() -> void:
 	var state := _current_browse_filter_state()
-	for field_id: String in ["min_price", "max_price", "min_level", "max_level", "min_iv_total"]:
+	for field_id: String in [
+		"min_price", "max_price", "min_level", "max_level",
+		"min_iv_hp", "min_iv_atk", "min_iv_def", "min_iv_spa", "min_iv_spd", "min_iv_spe",
+	]:
 		var spin := advanced_filter_controls.get(field_id) as SpinBox
 		if spin != null:
 			spin.value = int(state.get(field_id, 0))
@@ -752,7 +761,10 @@ func _select_filter_option(field_id: String, value: Variant) -> void:
 
 func _read_advanced_filter_controls() -> Dictionary:
 	var state := _current_browse_filter_state().duplicate(true)
-	for field_id: String in ["min_price", "max_price", "min_level", "max_level", "min_iv_total"]:
+	for field_id: String in [
+		"min_price", "max_price", "min_level", "max_level",
+		"min_iv_hp", "min_iv_atk", "min_iv_def", "min_iv_spa", "min_iv_spd", "min_iv_spe",
+	]:
 		var spin := advanced_filter_controls.get(field_id) as SpinBox
 		if spin != null:
 			state[field_id] = int(spin.value)
@@ -797,7 +809,9 @@ func _default_browse_filter_state(filter_id: String) -> Dictionary:
 		return {
 			"min_price": 0, "max_price": 0, "min_level": 1, "max_level": 100,
 			"type": "", "nature": "", "ability": "", "shiny": -1,
-			"hidden_ability": -1, "min_iv_total": 0,
+			"hidden_ability": -1,
+			"min_iv_hp": 0, "min_iv_atk": 0, "min_iv_def": 0,
+			"min_iv_spa": 0, "min_iv_spd": 0, "min_iv_spe": 0,
 		}
 	return {"min_price": 0, "max_price": 0, "category": ""}
 
@@ -838,9 +852,14 @@ func _current_browse_filter_params() -> Dictionary:
 	var hidden_ability := int(state.get("hidden_ability", -1))
 	if hidden_ability >= 0:
 		params["hiddenAbility"] = hidden_ability == 1
-	var min_iv_total := int(state.get("min_iv_total", 0))
-	if min_iv_total > 0:
-		params["minIvTotal"] = min_iv_total
+	var iv_param_by_stat := {
+		"hp": "minHpIv", "atk": "minAtkIv", "def": "minDefIv",
+		"spa": "minSpAtkIv", "spd": "minSpDefIv", "spe": "minSpeedIv",
+	}
+	for stat_id: String in iv_param_by_stat:
+		var minimum_iv := int(state.get("min_iv_%s" % stat_id, 0))
+		if minimum_iv > 0:
+			params[str(iv_param_by_stat.get(stat_id))] = minimum_iv
 	return params
 
 

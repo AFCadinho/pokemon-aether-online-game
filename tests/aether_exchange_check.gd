@@ -74,7 +74,9 @@ func _run() -> void:
 	(advanced_controls.get("min_level") as SpinBox).value = 50
 	(advanced_controls.get("max_level") as SpinBox).value = 80
 	(advanced_controls.get("ability") as LineEdit).text = "Sharpness"
-	(advanced_controls.get("min_iv_total") as SpinBox).value = 170
+	(advanced_controls.get("min_iv_hp") as SpinBox).value = 31
+	(advanced_controls.get("min_iv_atk") as SpinBox).value = 30
+	(advanced_controls.get("min_iv_spe") as SpinBox).value = 29
 	popup.call("_select_filter_option", "type", "water")
 	popup.call("_select_filter_option", "nature", "jolly")
 	popup.call("_select_filter_option", "shiny", 1)
@@ -86,7 +88,12 @@ func _run() -> void:
 	_check(pokemon_filter_params.get("type") == "water" and pokemon_filter_params.get("nature") == "jolly", "Filters retain Pokémon type and nature")
 	_check(pokemon_filter_params.get("ability") == "Sharpness", "Filters retain an ability query")
 	_check(pokemon_filter_params.get("shiny") == true and pokemon_filter_params.get("hiddenAbility") == false, "Filters retain shiny and Hidden Ability choices")
-	_check(pokemon_filter_params.get("minIvTotal") == 170, "Filters retain a minimum IV total")
+	_check(
+		pokemon_filter_params.get("minHpIv") == 31
+		and pokemon_filter_params.get("minAtkIv") == 30
+		and pokemon_filter_params.get("minSpeedIv") == 29,
+		"Filters retain minimum IVs for individual stats"
+	)
 	popup.set("browse_filters", {
 		"item": popup.call("_default_browse_filter_state", "item"),
 		"pokemon": popup.call("_default_browse_filter_state", "pokemon"),
@@ -297,6 +304,7 @@ func _run() -> void:
 	_check(popup_source.contains("func _load_portfolio() -> bool:"), "Portfolio loads report whether they succeeded")
 	_check(popup_source.contains("func _load_browse() -> bool:"), "Browse loads report whether they succeeded")
 	_check(service_source.contains('"minPrice", "maxPrice", "itemCategory", "minLevel", "maxLevel"'), "Exchange API client forwards advanced market filters")
+	_check(service_source.contains('"minHpIv", "minAtkIv", "minDefIv", "minSpAtkIv", "minSpDefIv", "minSpeedIv"'), "Exchange API client forwards per-stat IV filters")
 	_check(popup_source.contains("if portfolio_loaded and browse_loaded:"), "Exchange success states require both requests to succeed")
 	_check(popup_source.contains("if refreshed:\n\t\t_set_status(_t(\"ui.exchange.status.updated\")"), "Refresh errors are not overwritten by a success state")
 	_check(popup_source.contains('party_service.call("refresh_party")'), "Successful Pokémon mutations synchronize the party sidebar")
