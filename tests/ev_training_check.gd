@@ -117,6 +117,11 @@ func _init() -> void:
 		and not ui_overlay_source.contains("POKEMON_EV_TOTAL_LIMIT - allocated_total - stored_total"),
 		"stored EV capacity must be independent from the 510 allocated EV limit"
 	)
+	_assert(
+		ui_overlay_source.contains('LocalizationManager.text("ui.pokemon_summary.evs.stored", {')
+		and not ui_overlay_source.contains('LocalizationManager.text("ui.pokemon_summary.evs.available_capacity"'),
+		"stored EV totals belong in the section title without a duplicate capacity row"
+	)
 	print("EV training checks passed.")
 	quit(0)
 

@@ -20602,7 +20602,11 @@ func _render_pokemon_summary_evs(pokemon: Pokemon) -> void:
 			value,
 			stat.get("color", UI_BORDER_FOCUS) as Color
 		))
-	_add_summary_section_title(LocalizationManager.text("ui.pokemon_summary.evs.stored"), POKEMON_SUMMARY_ACCENT)
+	var stored_total: int = _get_summary_stored_ev_total(pokemon.stored_evs)
+	_add_summary_section_title(LocalizationManager.text("ui.pokemon_summary.evs.stored", {
+		"total": stored_total,
+		"max": POKEMON_EV_STORAGE_TOTAL_LIMIT,
+	}), POKEMON_SUMMARY_ACCENT)
 	pokemon_summary_content_stack.add_child(_create_summary_stored_evs_panel(pokemon.stored_evs))
 
 func _render_pokemon_summary_moves_tab(pokemon: Pokemon) -> void:
@@ -20942,23 +20946,6 @@ func _create_summary_stored_evs_panel(stored_evs: Dictionary) -> Control:
 	var stack := VBoxContainer.new()
 	stack.add_theme_constant_override("separation", 5)
 	margin.add_child(stack)
-
-	var stored_total: int = 0
-	for stat_value: Variant in _summary_stat_order():
-		var stat: Dictionary = stat_value
-		var stat_id: String = str(stat.get("id", ""))
-		stored_total += int(stored_evs.get(stat_id, 0))
-
-	var total_label := Label.new()
-	total_label.text = LocalizationManager.text("ui.pokemon_summary.evs.available_capacity", {
-		"current": stored_total,
-		"max": POKEMON_EV_STORAGE_TOTAL_LIMIT,
-		"stat_max": POKEMON_EV_STAT_LIMIT,
-	})
-	total_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	total_label.add_theme_font_size_override("font_size", 10)
-	total_label.add_theme_color_override("font_color", Color("#f5df9a"))
-	stack.add_child(total_label)
 
 	var grid := GridContainer.new()
 	grid.columns = 3
