@@ -95,6 +95,10 @@ func normalize_damage_event_continuity(events: Array) -> Array:
 	return normalized_events
 
 
+func get_damage_continuity_debug_snapshot() -> Dictionary:
+	return _presentation_hp_cursor_by_target.duplicate(true)
+
+
 func _clamp_damage_rewind_to_cursor(event: Dictionary, cursor_value: Variant) -> void:
 	if not (cursor_value is Dictionary):
 		return
