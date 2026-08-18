@@ -92,14 +92,15 @@ func _init() -> void:
 		"All includes Map, PM, and Guild messages alongside the public channels"
 	)
 	_check(
-		overlay_source.contains("func _chat_channel_prefix_data")
+		overlay_source.contains("func _create_chat_channel_prefix")
+		and overlay_source.contains('_set_localized_control_property(prefix, "text", prefix_key)')
 		and overlay_source.contains('var prefix_key := "ui.chat.prefix.global"')
 		and overlay_source.contains('prefix_color = Color("#d8b767")')
-		and overlay_source.contains('[hint=%s][url=chat-channel|%s|%s]')
-		and overlay_source.contains("func _on_chat_message_meta_clicked")
+		and overlay_source.contains("prefix.flat = true")
+		and overlay_source.contains("StyleBoxEmpty.new()")
 		and overlay_source.contains("func _on_all_channel_badge_pressed")
 		and overlay_source.contains("func _on_all_pm_channel_pressed"),
-		"All messages render a clickable inline channel prefix"
+		"All messages use a muted text channel prefix that can navigate to its chat"
 	)
 	_check(
 		overlay_source.contains("func _apply_chat_row_emphasis")
@@ -107,7 +108,8 @@ func _init() -> void:
 		and overlay_source.contains(
 			'category not in [\n\t\t\tCHAT_CHANNEL_GLOBAL,\n\t\t\tCHAT_CATEGORY_USER,'
 		)
-		and overlay_source.contains('NodePath("MessageText")'),
+		and overlay_source.contains('NodePath("MessageLine/Header/RoleBadge")')
+		and overlay_source.contains('NodePath("MessageLine/MessageText")'),
 		"All keeps Global prominent and softens secondary channel message content"
 	)
 	_check(
