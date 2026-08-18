@@ -560,7 +560,7 @@
   "ui.pokemon_summary.readonly_error": "This Pokémon can’t be changed right now.",
   "ui.pokemon_summary.evs.allocate": "Allocate EVs",
   "ui.pokemon_summary.evs.allocated": "Allocated EVs ({total}/510)",
-  "ui.pokemon_summary.evs.stored": "Stored EVs",
+  "ui.pokemon_summary.evs.stored": "Stored EVs ({total}/{max})",
   "ui.pokemon_summary.evs.assign_to_stat": "Assign training points to {stat}",
   "ui.pokemon_summary.evs.total": "Total",
   "ui.pokemon_summary.evs.training_assigned": "Training points assigned: {current}/{max}",

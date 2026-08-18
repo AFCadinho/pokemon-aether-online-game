@@ -560,7 +560,7 @@
   "ui.pokemon_summary.readonly_error": "Deze Pokémon kan nu niet worden aangepast.",
   "ui.pokemon_summary.evs.allocate": "EV's toewijzen",
   "ui.pokemon_summary.evs.allocated": "Toegewezen EV's ({total}/510)",
-  "ui.pokemon_summary.evs.stored": "Opgeslagen EV's",
+  "ui.pokemon_summary.evs.stored": "Opgeslagen EV's ({total}/{max})",
   "ui.pokemon_summary.evs.assign_to_stat": "Trainingspunten aan {stat} toewijzen",
   "ui.pokemon_summary.evs.total": "Totaal",
   "ui.pokemon_summary.evs.training_assigned": "Toegewezen trainingspunten: {current}/{max}",

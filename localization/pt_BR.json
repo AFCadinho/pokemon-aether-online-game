@@ -560,7 +560,7 @@
   "ui.pokemon_summary.readonly_error": "Este Pokémon não pode ser alterado agora.",
   "ui.pokemon_summary.evs.allocate": "Distribuir EVs",
   "ui.pokemon_summary.evs.allocated": "EVs distribuídos ({total}/510)",
-  "ui.pokemon_summary.evs.stored": "EVs armazenados",
+  "ui.pokemon_summary.evs.stored": "EVs armazenados ({total}/{max})",
   "ui.pokemon_summary.evs.assign_to_stat": "Distribuir pontos de treino em {stat}",
   "ui.pokemon_summary.evs.total": "Total",
   "ui.pokemon_summary.evs.training_assigned": "Pontos de treino distribuídos: {current}/{max}",
