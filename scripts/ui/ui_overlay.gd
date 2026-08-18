@@ -25383,9 +25383,9 @@ func _refresh_chat_message_visibility() -> void:
 
 		var category: String = str(child.get_meta("chat_category", CHAT_CATEGORY_USER))
 		child.visible = _should_show_chat_category(category)
-		var channel_prefix := child.get_node_or_null("Header/ChannelPrefix") as Control
-		if channel_prefix != null:
-			channel_prefix.visible = active_chat_tab == CHAT_TAB_ALL
+		var message_entry := child.get_node_or_null("MessageText") as RichTextLabel
+		if message_entry != null and message_entry.has_meta("chat_display_name"):
+			_render_chat_sender_message_label(message_entry)
 		_apply_chat_row_emphasis(child)
 
 
@@ -25400,10 +25400,7 @@ func _apply_chat_row_emphasis(row: Node) -> void:
 		]
 	)
 	var content_alpha := CHAT_ALL_SECONDARY_CONTENT_ALPHA if is_secondary_in_all else 1.0
-	for node_path: NodePath in [
-		NodePath("Header/RoleBadge"),
-		NodePath("Header/MessageText"),
-	]:
+	for node_path: NodePath in [NodePath("MessageText")]:
 		var content := row.get_node_or_null(node_path) as CanvasItem
 		if content != null:
 			content.modulate = Color(1.0, 1.0, 1.0, content_alpha)
@@ -37899,20 +37896,19 @@ func _add_user_chat_message(
 	row.visible = _should_show_chat_category(chat_category)
 	message_list.add_child(row)
 
-	var header := HBoxContainer.new()
-	header.name = "Header"
-	header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	header.add_theme_constant_override("separation", 4)
-	row.add_child(header)
-
-	header.add_child(_create_chat_channel_prefix(channel, target_user_id))
-
+	var role_name := ""
 	if not role.is_empty():
-		var role_name: String = str(role.get("badge", "")).strip_edges()
-		if not role_name.is_empty():
-			header.add_child(_create_chat_role_badge(role_name, role_color))
+		role_name = str(role.get("badge", "")).strip_edges()
 
-	header.add_child(_create_chat_sender_message_label(display_name, name_color, text))
+	row.add_child(_create_chat_sender_message_label(
+		display_name,
+		name_color,
+		text,
+		channel,
+		target_user_id,
+		role_name,
+		role_color
+	))
 
 	var has_visual_attachments := (
 		not pokemon_attachments.is_empty()
@@ -37940,29 +37936,78 @@ func _add_user_chat_message(
 func _create_chat_sender_message_label(
 	display_name: String,
 	name_color: String,
-	text: String
+	text: String,
+	channel: String = "",
+	target_user_id: int = 0,
+	role_name: String = "",
+	role_color: String = ""
 ) -> RichTextLabel:
 	var entry: RichTextLabel = message_entry_template.duplicate() as RichTextLabel
 	entry.name = "MessageText"
 	entry.visible = true
 	entry.bbcode_enabled = true
-	entry.clear()
-	entry.append_text("[color=%s][b]%s[/b][/color][color=%s]:[/color]" % [
-		_sanitize_hex_color(name_color, "#dfe4f2"),
-		_escape_bbcode(display_name),
-		CHAT_SEPARATOR_COLOR,
-	])
-	if text != "":
-		entry.append_text(" [color=%s]%s[/color]" % [
-			CHAT_MESSAGE_COLOR,
-			_escape_bbcode(text),
-		])
 	entry.fit_content = true
 	entry.scroll_active = false
 	entry.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	entry.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	entry.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	entry.set_meta("chat_display_name", display_name)
+	entry.set_meta("chat_name_color", name_color)
+	entry.set_meta("chat_message_text", text)
+	entry.set_meta("chat_channel", channel)
+	entry.set_meta("chat_target_user_id", target_user_id)
+	entry.set_meta("chat_role_name", role_name)
+	entry.set_meta("chat_role_color", role_color)
+	entry.meta_clicked.connect(_on_chat_message_meta_clicked)
+	_render_chat_sender_message_label(entry)
 	return entry
+
+
+func _render_chat_sender_message_label(entry: RichTextLabel) -> void:
+	entry.clear()
+	var channel := str(entry.get_meta("chat_channel", ""))
+	var target_user_id := int(entry.get_meta("chat_target_user_id", 0))
+	if active_chat_tab == CHAT_TAB_ALL and channel != "":
+		var prefix_data := _chat_channel_prefix_data(channel)
+		entry.append_text("[hint=%s][url=chat-channel|%s|%s][color=%s][font_size=11]%s[/font_size][/color][/url][/hint] " % [
+			_escape_bbcode(str(prefix_data.get("tooltip", ""))),
+			_escape_bbcode(channel),
+			target_user_id,
+			prefix_data.get("color", Color("#70859b")),
+			_escape_bbcode(str(prefix_data.get("text", ""))),
+		])
+
+	var role_name := str(entry.get_meta("chat_role_name", "")).strip_edges()
+	if role_name != "":
+		entry.append_text("[bgcolor=%s][color=%s][font_size=10] %s [/font_size][/color][/bgcolor] " % [
+			_sanitize_hex_color(str(entry.get_meta("chat_role_color", "")), "#d8b767"),
+			CHAT_BADGE_TEXT_COLOR,
+			_escape_bbcode(role_name),
+		])
+
+	entry.append_text("[color=%s][b]%s[/b][/color][color=%s]:[/color]" % [
+		_sanitize_hex_color(str(entry.get_meta("chat_name_color", "")), "#dfe4f2"),
+		_escape_bbcode(str(entry.get_meta("chat_display_name", ""))),
+		CHAT_SEPARATOR_COLOR,
+	])
+	var text := str(entry.get_meta("chat_message_text", ""))
+	if text != "":
+		entry.append_text(" [color=%s]%s[/color]" % [
+			CHAT_MESSAGE_COLOR,
+			_escape_bbcode(text),
+		])
+
+
+func _on_chat_message_meta_clicked(meta: Variant) -> void:
+	var parts := str(meta).split("|", false)
+	if parts.size() != 3 or parts[0] != "chat-channel":
+		return
+	var channel := str(parts[1])
+	var target_user_id := int(parts[2])
+	if channel == CHAT_TAB_PM and target_user_id != 0:
+		_on_all_pm_channel_pressed(target_user_id)
+	else:
+		_on_all_channel_badge_pressed(channel)
 
 
 func _create_chat_shiny_hunt_button(attachment: Dictionary) -> Control:
@@ -38032,16 +38077,7 @@ func _on_chat_shiny_hunt_pressed(share_id: String) -> void:
 	shiny_tracker_popup.open_shared_hunt(result.get("tracker", {}) as Dictionary)
 
 
-func _create_chat_channel_prefix(channel: String, target_user_id: int = 0) -> Button:
-	var prefix := Button.new()
-	prefix.name = "ChannelPrefix"
-	prefix.custom_minimum_size = Vector2(0, 18)
-	prefix.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-	prefix.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	prefix.focus_mode = Control.FOCUS_NONE
-	prefix.flat = true
-	prefix.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	prefix.add_theme_font_size_override("font_size", 11)
+func _chat_channel_prefix_data(channel: String) -> Dictionary:
 	var prefix_color := Color("#70859b")
 	var prefix_key := "ui.chat.prefix.global"
 	var tooltip_key := "ui.chat.open.global"
@@ -38063,21 +38099,11 @@ func _create_chat_channel_prefix(channel: String, target_user_id: int = 0) -> Bu
 			tooltip_key = "ui.chat.open.guild"
 		_:
 			prefix_color = Color("#d8b767")
-	_set_localized_control_property(prefix, "text", prefix_key)
-	var empty_style := StyleBoxEmpty.new()
-	for state: String in ["normal", "hover", "pressed", "focus"]:
-		prefix.add_theme_stylebox_override(state, empty_style)
-	prefix.add_theme_color_override("font_color", prefix_color)
-	prefix.add_theme_color_override("font_hover_color", prefix_color.lightened(0.25))
-	prefix.add_theme_color_override("font_pressed_color", prefix_color.lightened(0.4))
-	prefix.visible = active_chat_tab == CHAT_TAB_ALL
-	if channel == CHAT_TAB_PM and target_user_id != 0:
-		_set_localized_control_property(prefix, "tooltip_text", "ui.chat.open.private")
-		prefix.pressed.connect(_on_all_pm_channel_pressed.bind(target_user_id))
-	else:
-		_set_localized_control_property(prefix, "tooltip_text", tooltip_key)
-		prefix.pressed.connect(_on_all_channel_badge_pressed.bind(channel))
-	return prefix
+	return {
+		"text": LocalizationManager.text(prefix_key),
+		"tooltip": LocalizationManager.text(tooltip_key),
+		"color": prefix_color,
+	}
 
 
 func _on_all_channel_badge_pressed(channel: String) -> void:
@@ -38186,33 +38212,6 @@ func _should_show_chat_category(category: String) -> bool:
 		return category == CHAT_TAB_GUILD
 	return false
 
-
-func _create_chat_role_badge(role_name: String, role_color: String) -> PanelContainer:
-	var badge: PanelContainer = PanelContainer.new()
-	badge.name = "RoleBadge"
-	badge.custom_minimum_size = Vector2(28, 16)
-	badge.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-
-	var style: StyleBoxFlat = StyleBoxFlat.new()
-	style.bg_color = Color(_sanitize_hex_color(role_color, "#d8b767"))
-	style.corner_radius_top_left = 8
-	style.corner_radius_top_right = 8
-	style.corner_radius_bottom_left = 8
-	style.corner_radius_bottom_right = 8
-	style.content_margin_left = 6
-	style.content_margin_right = 6
-	style.content_margin_top = 2
-	style.content_margin_bottom = 2
-	badge.add_theme_stylebox_override("panel", style)
-
-	var label: Label = Label.new()
-	label.text = role_name
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.add_theme_color_override("font_color", CHAT_BADGE_TEXT_COLOR)
-	label.add_theme_font_size_override("font_size", 10)
-	badge.add_child(label)
-	return badge
 
 func _create_chat_pokemon_attachment_button(pokemon_payload: Dictionary) -> Control:
 	var button := Button.new()
