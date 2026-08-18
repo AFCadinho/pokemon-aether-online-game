@@ -16,6 +16,7 @@ func _init() -> void:
 	_check_previous_condition_uses_visible_scale()
 	_check_stale_previous_condition_rewinds_from_authoritative_state()
 	_check_legitimate_full_hp_rewind_is_preserved()
+	_check_multihit_knockout_keeps_rendered_hp_continuity()
 	_check_full_hp_reveal_damage_has_no_damage_target()
 	_check_real_damage_keeps_damage_target()
 	_check_direct_damage_logs_one_decimal_precision()
@@ -306,6 +307,51 @@ func _check_legitimate_full_hp_rewind_is_preserved() -> void:
 	})
 
 	_check_equal(snapshot.get("hp", 0), 100, "a genuine full-to-damaged event still starts at full HP")
+
+
+func _check_multihit_knockout_keeps_rendered_hp_continuity() -> void:
+	var helper = BattleHpEventHelperScript.new()
+	var events: Array = [
+		{
+			"type": "damage", "target": "p2a: Pidgey",
+			"previousCondition": "100/100", "condition": "81/100",
+			"previousHp": 16, "hp": 13, "maxHp": 16,
+		},
+		{
+			"type": "damage", "target": "p2a: Pidgey",
+			"previousCondition": "81/100", "condition": "69/100",
+			"previousHp": 13, "hp": 11, "maxHp": 16,
+		},
+		{
+			"type": "damage", "target": "p2a: Pidgey",
+			"previousCondition": "69/100", "condition": "19/100",
+			"previousHp": 11, "hp": 3, "maxHp": 16,
+		},
+		{
+			"type": "damage", "target": "p2a: Pidgey",
+			"previousCondition": "44/100", "condition": "0 fnt",
+			"previousHp": 7, "hp": 0, "maxHp": 16,
+		},
+		{"type": "faint", "target": "p2a: Pidgey", "condition": "0 fnt"},
+	]
+	var normalized: Array = helper.normalize_damage_event_continuity(events)
+	var knockout_damage: Dictionary = normalized[3] as Dictionary
+
+	_check_equal(
+		str(knockout_damage.get("previousCondition", "")),
+		"19/100",
+		"multi-hit knockout starts from the HP rendered by the preceding hit"
+	)
+	_check_equal(
+		int(knockout_damage.get("previousHp", -1)),
+		3,
+		"multi-hit knockout keeps the exact HP cursor from the preceding hit"
+	)
+	_check_equal(
+		str((events[3] as Dictionary).get("previousCondition", "")),
+		"44/100",
+		"HP continuity normalization does not mutate the response events"
+	)
 
 
 func _check_full_hp_reveal_damage_has_no_damage_target() -> void:
