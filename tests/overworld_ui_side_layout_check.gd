@@ -258,6 +258,12 @@ func _init() -> void:
 	_check(script_source.contains('chat_input_dock.name = "ChatInputDock"'), "selector, input, and Send share a styled input dock")
 	_check(script_source.contains('chat_tabs_background.name = "ChatTabsBackground"'), "main tabs sit on a cohesive translucent rail")
 	_check(script_source.contains('message_scroll.add_theme_stylebox_override("panel", _make_chat_message_surface_style())'), "chat messages use a subtle inner surface")
+	_check(
+		script_source.contains("func _create_chat_sender_message_label(")
+		and script_source.contains("if text != \"\" and not has_visual_attachments:")
+		and script_source.contains("entry.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART"),
+		"plain chat messages wrap the sender and body as one full-width text block"
+	)
 	_check(script_source.contains('_apply_chat_main_tab_style(general_chat_tab_button, general_active)'), "active and inactive main tabs receive distinct styling")
 	_check(script_source.contains("style.border_width_bottom = 2"), "selected main tab gets a clear bottom accent")
 	_check(script_source.contains("_apply_chat_dock_button_style(send_button, true)"), "Send uses the input dock accent treatment")

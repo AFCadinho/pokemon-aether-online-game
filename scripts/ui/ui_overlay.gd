@@ -37224,6 +37224,16 @@ func _add_user_chat_message(
 		if not role_name.is_empty():
 			row.add_child(_create_chat_role_badge(role_name, role_color))
 
+	var has_visual_attachments := (
+		not pokemon_attachments.is_empty()
+		or not shiny_hunt_attachment.is_empty()
+	)
+	if text != "" and not has_visual_attachments:
+		row.add_child(_create_chat_sender_message_label(display_name, name_color, text))
+		_apply_chat_row_emphasis(row)
+		_scroll_chat_to_bottom.call_deferred()
+		return
+
 	var name_label := Label.new()
 	name_label.name = "SenderName"
 	name_label.text = "%s:" % display_name
@@ -37258,6 +37268,31 @@ func _add_user_chat_message(
 		entry.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_apply_chat_row_emphasis(row)
 	_scroll_chat_to_bottom.call_deferred()
+
+
+func _create_chat_sender_message_label(
+	display_name: String,
+	name_color: String,
+	text: String
+) -> RichTextLabel:
+	var entry: RichTextLabel = message_entry_template.duplicate() as RichTextLabel
+	entry.name = "MessageText"
+	entry.visible = true
+	entry.bbcode_enabled = true
+	entry.clear()
+	entry.append_text("[color=%s][b]%s[/b][/color][color=%s]:[/color] [color=%s]%s[/color]" % [
+		_sanitize_hex_color(name_color, "#dfe4f2"),
+		_escape_bbcode(display_name),
+		CHAT_SEPARATOR_COLOR,
+		CHAT_MESSAGE_COLOR,
+		_escape_bbcode(text),
+	])
+	entry.fit_content = true
+	entry.scroll_active = false
+	entry.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	entry.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	entry.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	return entry
 
 
 func _create_chat_shiny_hunt_button(attachment: Dictionary) -> Control:
