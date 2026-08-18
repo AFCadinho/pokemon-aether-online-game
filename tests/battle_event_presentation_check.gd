@@ -21,6 +21,7 @@ func _init() -> void:
 	_check_multihit_knockout_keeps_continuity_across_hp_scales()
 	_check_full_hp_reveal_damage_has_no_damage_target()
 	_check_real_damage_keeps_damage_target()
+	_check_hit_count_adds_showdown_style_battle_log()
 	_check_direct_damage_logs_one_decimal_precision()
 	_check_public_damage_percent_is_preferred_over_quantized_hp_delta()
 	_check_damage_after_hazard_uses_numeric_delta_when_previous_condition_is_stale()
@@ -448,6 +449,31 @@ func _check_real_damage_keeps_damage_target() -> void:
 	})
 
 	_check_equal(str(result.get("damage_target_ident", "")), "p2a: Garchomp", "real damage still animates")
+
+
+func _check_hit_count_adds_showdown_style_battle_log() -> void:
+	var presentation = _make_presentation()
+	var result: Dictionary = presentation.build({
+		"type": "hitCount",
+		"target": "p2a: Doduo",
+		"count": 4,
+	})
+
+	_check_equal(
+		str(result.get("log_message", "")),
+		"Hit 4 times!",
+		"Showdown hit count event is written to the battle log"
+	)
+	_check_equal(
+		str(result.get("battle_message", "")),
+		"Hit 4 times!",
+		"Showdown hit count event is also visible in the current action message"
+	)
+	_check_equal(
+		str(presentation.build({"type": "hitCount", "target": "p2a: Doduo", "count": 1}).get("log_message", "")),
+		"",
+		"single-hit moves do not add a redundant hit count line"
+	)
 
 
 func _check_direct_damage_logs_one_decimal_precision() -> void:

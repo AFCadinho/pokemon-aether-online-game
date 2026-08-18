@@ -147,6 +147,11 @@ func _run() -> void:
 		"Dutch status event localizes battle grammar"
 	)
 	_check_equal(
+		formatter.format_hit_count_event({"count": 4}),
+		"Raakte 4 keer!",
+		"Dutch multi-hit count matches the Showdown battle log"
+	)
+	_check_equal(
 		formatter.format_field_effect_event({"state": "end", "effectType": "weather", "effect": "Snow"}),
 		"De sneeuw stopte.",
 		"Dutch weather end uses canonical event identity after localization"
