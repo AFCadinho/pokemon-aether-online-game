@@ -226,7 +226,7 @@ const POKEDEX_SHINY_ACCENT_FAINT := Color("#f3cc6844")
 const WILD_POKEMON_POPUP_SIZE := Vector2(430, 500)
 const POKEDEX_BASE_STAT_BAR_MAX := 200
 const POKEMON_SUMMARY_SIZE := Vector2(620, 380)
-const POKEMON_READONLY_SUMMARY_SIZE := Vector2(700, 440)
+const POKEMON_READONLY_SUMMARY_SIZE := POKEMON_SUMMARY_SIZE
 const POKEMON_SUMMARY_BODY_HEIGHT := 333.0
 const POKEMON_SUMMARY_LEFT_PANEL_WIDTH := 275.0
 const POKEMON_SUMMARY_RIGHT_AREA_WIDTH := 320.0
@@ -14727,20 +14727,21 @@ func _setup_readonly_pokemon_summary_popup(card_key: String = "") -> void:
 
 	var nodes: Dictionary = {}
 	var outer_margin := MarginContainer.new()
-	outer_margin.add_theme_constant_override("margin_left", 10)
-	outer_margin.add_theme_constant_override("margin_top", 9)
-	outer_margin.add_theme_constant_override("margin_right", 10)
-	outer_margin.add_theme_constant_override("margin_bottom", 10)
+	outer_margin.add_theme_constant_override("margin_left", 9)
+	outer_margin.add_theme_constant_override("margin_top", 8)
+	outer_margin.add_theme_constant_override("margin_right", 9)
+	outer_margin.add_theme_constant_override("margin_bottom", 9)
 	pokemon_summary_popup.add_child(outer_margin)
 
 	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 7)
+	layout.add_theme_constant_override("separation", 4)
 	outer_margin.add_child(layout)
 	layout.add_child(_build_readonly_summary_header(card_key, nodes))
 
 	var body := HBoxContainer.new()
 	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	body.add_theme_constant_override("separation", 8)
+	body.custom_minimum_size = Vector2(0, POKEMON_SUMMARY_BODY_HEIGHT)
+	body.add_theme_constant_override("separation", 7)
 	layout.add_child(body)
 	body.add_child(_build_readonly_summary_profile(nodes))
 	body.add_child(_build_readonly_summary_details(nodes))
@@ -14748,77 +14749,50 @@ func _setup_readonly_pokemon_summary_popup(card_key: String = "") -> void:
 
 func _build_readonly_summary_header(card_key: String, nodes: Dictionary) -> Control:
 	var header := PanelContainer.new()
-	header.custom_minimum_size = Vector2(0, 42)
+	header.custom_minimum_size = Vector2(0, 26)
 	header.mouse_filter = Control.MOUSE_FILTER_STOP
 	header.gui_input.connect(_on_pokemon_summary_header_gui_input.bind(card_key))
 	header.add_theme_stylebox_override("panel", _make_pokemon_summary_header_frame_style())
 
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 10)
-	margin.add_theme_constant_override("margin_top", 4)
-	margin.add_theme_constant_override("margin_right", 5)
-	margin.add_theme_constant_override("margin_bottom", 4)
+	margin.add_theme_constant_override("margin_left", 8)
+	margin.add_theme_constant_override("margin_top", 2)
+	margin.add_theme_constant_override("margin_right", 4)
+	margin.add_theme_constant_override("margin_bottom", 2)
 	margin.mouse_filter = Control.MOUSE_FILTER_STOP
 	margin.gui_input.connect(_on_pokemon_summary_header_gui_input.bind(card_key))
 	header.add_child(margin)
 
 	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 8)
+	row.add_theme_constant_override("separation", 6)
 	row.mouse_filter = Control.MOUSE_FILTER_STOP
 	row.gui_input.connect(_on_pokemon_summary_header_gui_input.bind(card_key))
 	margin.add_child(row)
 
-	var id_label := Label.new()
-	id_label.custom_minimum_size = Vector2(82, 0)
-	id_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	id_label.add_theme_font_size_override("font_size", 17)
-	id_label.add_theme_color_override("font_color", Color("#d9ecff"))
-	row.add_child(id_label)
-	nodes["id_label"] = id_label
-
-	var name_label := Label.new()
-	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_make_label_clip_width(name_label)
-	name_label.add_theme_font_size_override("font_size", 21)
-	name_label.add_theme_color_override("font_color", Color("#f4d36a"))
-	name_label.add_theme_color_override("font_shadow_color", Color("#00111f"))
-	name_label.add_theme_constant_override("shadow_offset_x", 1)
-	name_label.add_theme_constant_override("shadow_offset_y", 1)
-	row.add_child(name_label)
-	nodes["name_label"] = name_label
-
-	var gender_label := Label.new()
-	gender_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	gender_label.add_theme_font_size_override("font_size", 18)
-	row.add_child(gender_label)
-	nodes["gender_label"] = gender_label
-
-	var shiny_label := Label.new()
-	shiny_label.text = "✦ SHINY"
-	shiny_label.visible = false
-	shiny_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	shiny_label.add_theme_font_size_override("font_size", 10)
-	shiny_label.add_theme_color_override("font_color", Color("#f4d36a"))
-	row.add_child(shiny_label)
-	nodes["shiny_label"] = shiny_label
+	var readonly_label := Label.new()
+	readonly_label.custom_minimum_size = Vector2(72, 0)
+	readonly_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	readonly_label.add_theme_font_size_override("font_size", 9)
+	readonly_label.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
+	row.add_child(readonly_label)
+	nodes["readonly_label"] = readonly_label
 
 	var trainer_label := Label.new()
-	trainer_label.custom_minimum_size = Vector2(130, 0)
-	trainer_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	trainer_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	trainer_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	trainer_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_make_label_clip_width(trainer_label)
-	trainer_label.add_theme_font_size_override("font_size", 10)
-	trainer_label.add_theme_color_override("font_color", Color("#9eb7d8"))
+	trainer_label.add_theme_font_size_override("font_size", 12)
+	trainer_label.add_theme_color_override("font_color", Color("#d9ecff"))
 	row.add_child(trainer_label)
 	nodes["trainer_label"] = trainer_label
 
 	var close_button := Button.new()
-	close_button.text = "×"
-	close_button.custom_minimum_size = Vector2(30, 28)
+	close_button.text = "X"
+	close_button.custom_minimum_size = Vector2(26, 24)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_pokemon_summary_popup.bind(card_key))
-	close_button.add_theme_font_size_override("font_size", 17)
+	close_button.add_theme_font_size_override("font_size", 12)
 	close_button.add_theme_stylebox_override("normal", _make_pokemon_summary_button_style(Color("#0e2138f0"), Color("#5a82ad"), true))
 	close_button.add_theme_stylebox_override("hover", _make_pokemon_summary_button_style(Color("#241421f0"), UI_DANGER, true))
 	close_button.add_theme_stylebox_override("pressed", _make_pokemon_summary_button_style(Color("#0b1019f0"), UI_DANGER, true))
@@ -14828,115 +14802,251 @@ func _build_readonly_summary_header(card_key: String, nodes: Dictionary) -> Cont
 
 func _build_readonly_summary_profile(nodes: Dictionary) -> Control:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(238, 0)
+	panel.custom_minimum_size = Vector2(POKEMON_SUMMARY_LEFT_PANEL_WIDTH, POKEMON_SUMMARY_BODY_HEIGHT)
+	panel.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	panel.add_theme_stylebox_override("panel", _make_pokemon_summary_inner_style(Color("#050911f8"), POKEMON_SUMMARY_ACCENT_SOFT))
 
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 8)
-	margin.add_theme_constant_override("margin_top", 8)
-	margin.add_theme_constant_override("margin_right", 8)
-	margin.add_theme_constant_override("margin_bottom", 8)
+	margin.add_theme_constant_override("margin_left", 6)
+	margin.add_theme_constant_override("margin_top", 6)
+	margin.add_theme_constant_override("margin_right", 6)
+	margin.add_theme_constant_override("margin_bottom", 6)
 	panel.add_child(margin)
 
 	var stack := VBoxContainer.new()
-	stack.add_theme_constant_override("separation", 6)
+	stack.add_theme_constant_override("separation", 5)
 	margin.add_child(stack)
 
-	var sprite_stage := PanelContainer.new()
-	sprite_stage.custom_minimum_size = Vector2(0, 205)
-	sprite_stage.add_theme_stylebox_override("panel", _make_panel_style(Color("#07111dea"), Color("#314865"), 5, 1))
+	var sprite_stage := Control.new()
+	sprite_stage.custom_minimum_size = Vector2(
+		float(POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE.x),
+		float(POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE.y)
+	)
 	stack.add_child(sprite_stage)
 	var sprite_background := TextureRect.new()
 	sprite_background.texture = BATTLE_SUMMARY_SLOT_BG_TEXTURE
 	sprite_background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	sprite_background.stretch_mode = TextureRect.STRETCH_SCALE
-	sprite_background.modulate = Color(1, 1, 1, 0.62)
 	sprite_background.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	sprite_background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	sprite_stage.add_child(sprite_background)
-	var sprite := TextureRect.new()
-	sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	sprite.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	sprite.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 18)
-	sprite_stage.add_child(sprite)
-	nodes["sprite"] = sprite
+	sprite_background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
-	var type_row := HBoxContainer.new()
-	type_row.alignment = BoxContainer.ALIGNMENT_CENTER
-	type_row.add_theme_constant_override("separation", 5)
-	stack.add_child(type_row)
-	nodes["type_row"] = type_row
+	var sprite_backdrop := PanelContainer.new()
+	sprite_backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	sprite_backdrop.add_theme_stylebox_override("panel", _make_pokemon_summary_sprite_stage_style())
+	sprite_stage.add_child(sprite_backdrop)
+	sprite_backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
+	var viewport_container := SubViewportContainer.new()
+	viewport_container.stretch = false
+	viewport_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	viewport_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	sprite_stage.add_child(viewport_container)
+	viewport_container.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	pokemon_summary_sprite_viewport = SubViewport.new()
+	pokemon_summary_sprite_viewport.size = POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE
+	pokemon_summary_sprite_viewport.transparent_bg = true
+	pokemon_summary_sprite_viewport.disable_3d = true
+	pokemon_summary_sprite_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	viewport_container.add_child(pokemon_summary_sprite_viewport)
+	pokemon_summary_animated_sprite = AnimatedSprite2D.new()
+	pokemon_summary_animated_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	pokemon_summary_animated_sprite.position = _get_pokemon_summary_sprite_position()
+	pokemon_summary_sprite_viewport.add_child(pokemon_summary_animated_sprite)
+	pokemon_summary_sprite = TextureRect.new()
+	pokemon_summary_sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	pokemon_summary_sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	pokemon_summary_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	pokemon_summary_sprite.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	sprite_stage.add_child(pokemon_summary_sprite)
+	pokemon_summary_sprite.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	nodes["sprite"] = pokemon_summary_sprite
+
+	var ball_panel := PanelContainer.new()
+	ball_panel.custom_minimum_size = Vector2(30, 30)
+	ball_panel.position = Vector2(6, 6)
+	ball_panel.size = Vector2(30, 30)
+	ball_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#06111fe8"), POKEMON_SUMMARY_ACCENT_SOFT, 8, 1))
+	sprite_stage.add_child(ball_panel)
+	var ball_center := CenterContainer.new()
+	ball_panel.add_child(ball_center)
+	pokemon_summary_ball_icon = TextureRect.new()
+	pokemon_summary_ball_icon.custom_minimum_size = Vector2(22, 22)
+	pokemon_summary_ball_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	pokemon_summary_ball_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	pokemon_summary_ball_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ball_center.add_child(pokemon_summary_ball_icon)
+
+	pokemon_summary_type_icon_row = HBoxContainer.new()
+	pokemon_summary_type_icon_row.alignment = BoxContainer.ALIGNMENT_END
+	pokemon_summary_type_icon_row.add_theme_constant_override("separation", 5)
+	pokemon_summary_type_icon_row.anchor_left = 1.0
+	pokemon_summary_type_icon_row.anchor_right = 1.0
+	pokemon_summary_type_icon_row.offset_left = -168.0
+	pokemon_summary_type_icon_row.offset_top = 6.0
+	pokemon_summary_type_icon_row.offset_right = -6.0
+	pokemon_summary_type_icon_row.offset_bottom = 28.0
+	sprite_stage.add_child(pokemon_summary_type_icon_row)
+	nodes["type_row"] = pokemon_summary_type_icon_row
+
+	pokemon_summary_hidden_ability_badge = PanelContainer.new()
+	pokemon_summary_hidden_ability_badge.custom_minimum_size = Vector2(44, 24)
+	pokemon_summary_hidden_ability_badge.anchor_top = 1.0
+	pokemon_summary_hidden_ability_badge.anchor_bottom = 1.0
+	pokemon_summary_hidden_ability_badge.offset_left = 6.0
+	pokemon_summary_hidden_ability_badge.offset_top = -30.0
+	pokemon_summary_hidden_ability_badge.offset_right = 50.0
+	pokemon_summary_hidden_ability_badge.offset_bottom = -6.0
+	pokemon_summary_hidden_ability_badge.add_theme_stylebox_override("panel", _make_panel_style(Color("#071c33f2"), Color("#8cecff"), 8, 1))
+	sprite_stage.add_child(pokemon_summary_hidden_ability_badge)
+	var ha_label := Label.new()
+	ha_label.text = "✦ HA"
+	ha_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	ha_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	ha_label.add_theme_font_size_override("font_size", 10)
+	ha_label.add_theme_color_override("font_color", Color("#e9fbff"))
+	pokemon_summary_hidden_ability_badge.add_child(ha_label)
+
+	pokemon_summary_level_badge_panel = PanelContainer.new()
+	pokemon_summary_level_badge_panel.custom_minimum_size = Vector2(54, 24)
+	pokemon_summary_level_badge_panel.anchor_left = 1.0
+	pokemon_summary_level_badge_panel.anchor_top = 1.0
+	pokemon_summary_level_badge_panel.anchor_right = 1.0
+	pokemon_summary_level_badge_panel.anchor_bottom = 1.0
+	pokemon_summary_level_badge_panel.offset_left = -62.0
+	pokemon_summary_level_badge_panel.offset_top = -30.0
+	pokemon_summary_level_badge_panel.offset_right = -6.0
+	pokemon_summary_level_badge_panel.offset_bottom = -6.0
+	pokemon_summary_level_badge_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#06111fe8"), Color("#f4d78aaa"), 6, 1))
+	sprite_stage.add_child(pokemon_summary_level_badge_panel)
+	pokemon_summary_level_badge_label = Label.new()
+	pokemon_summary_level_badge_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	pokemon_summary_level_badge_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	pokemon_summary_level_badge_label.add_theme_font_size_override("font_size", 12)
+	pokemon_summary_level_badge_label.add_theme_color_override("font_color", Color("#f4d78a"))
+	pokemon_summary_level_badge_panel.add_child(pokemon_summary_level_badge_label)
 
 	var identity_panel := PanelContainer.new()
+	identity_panel.custom_minimum_size = Vector2(0, 72)
 	identity_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	identity_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#091522e8"), Color("#284465"), 5, 1))
+	identity_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#0c1119ee"), Color("#3e4654"), 4, 1))
 	stack.add_child(identity_panel)
 	var identity_margin := MarginContainer.new()
-	identity_margin.add_theme_constant_override("margin_left", 9)
-	identity_margin.add_theme_constant_override("margin_top", 6)
-	identity_margin.add_theme_constant_override("margin_right", 9)
-	identity_margin.add_theme_constant_override("margin_bottom", 6)
+	identity_margin.add_theme_constant_override("margin_left", 7)
+	identity_margin.add_theme_constant_override("margin_top", 4)
+	identity_margin.add_theme_constant_override("margin_right", 7)
+	identity_margin.add_theme_constant_override("margin_bottom", 4)
 	identity_panel.add_child(identity_margin)
 	var identity_stack := VBoxContainer.new()
-	identity_stack.add_theme_constant_override("separation", 4)
+	identity_stack.add_theme_constant_override("separation", 2)
 	identity_margin.add_child(identity_stack)
 
-	var level_nature := Label.new()
-	level_nature.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	level_nature.add_theme_font_size_override("font_size", 12)
-	level_nature.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
-	identity_stack.add_child(level_nature)
-	nodes["level_nature_label"] = level_nature
+	var title_row := HBoxContainer.new()
+	title_row.add_theme_constant_override("separation", 4)
+	identity_stack.add_child(title_row)
+	var shiny_label := Label.new()
+	shiny_label.text = "✦"
+	shiny_label.visible = false
+	shiny_label.add_theme_color_override("font_color", Color("#f4d36a"))
+	title_row.add_child(shiny_label)
+	nodes["shiny_label"] = shiny_label
+	var name_label := Label.new()
+	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_make_label_clip_width(name_label)
+	name_label.add_theme_font_size_override("font_size", 14)
+	name_label.add_theme_color_override("font_color", Color("#f4f7ff"))
+	title_row.add_child(name_label)
+	nodes["name_label"] = name_label
+	var gender_label := Label.new()
+	gender_label.add_theme_font_size_override("font_size", 14)
+	title_row.add_child(gender_label)
+	nodes["gender_label"] = gender_label
+	var id_label := Label.new()
+	id_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	id_label.add_theme_font_size_override("font_size", 9)
+	id_label.add_theme_color_override("font_color", Color("#b8c9e4"))
+	title_row.add_child(id_label)
+	nodes["id_label"] = id_label
 
+	var traits_row := HBoxContainer.new()
+	traits_row.add_theme_constant_override("separation", 8)
+	identity_stack.add_child(traits_row)
+
+	var ability_stack := VBoxContainer.new()
+	ability_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	traits_row.add_child(ability_stack)
 	var ability_caption := Label.new()
-	ability_caption.text = LocalizationManager.text("ui.pokemon_summary.ability").to_upper()
-	ability_caption.add_theme_font_size_override("font_size", 9)
+	ability_caption.add_theme_font_size_override("font_size", 8)
 	ability_caption.add_theme_color_override("font_color", Color("#7187a5"))
-	identity_stack.add_child(ability_caption)
+	ability_stack.add_child(ability_caption)
 	nodes["ability_caption"] = ability_caption
 	var ability_label := Label.new()
 	_make_label_clip_width(ability_label)
-	ability_label.add_theme_font_size_override("font_size", 13)
+	ability_label.add_theme_font_size_override("font_size", 11)
 	ability_label.add_theme_color_override("font_color", Color("#f4f7ff"))
-	identity_stack.add_child(ability_label)
+	ability_stack.add_child(ability_label)
 	nodes["ability_label"] = ability_label
+	var nature_stack := VBoxContainer.new()
+	nature_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	traits_row.add_child(nature_stack)
+	var nature_caption := Label.new()
+	nature_caption.add_theme_font_size_override("font_size", 8)
+	nature_caption.add_theme_color_override("font_color", Color("#7187a5"))
+	nature_stack.add_child(nature_caption)
+	nodes["nature_caption"] = nature_caption
+	var nature_label := Label.new()
+	_make_label_clip_width(nature_label)
+	nature_label.add_theme_font_size_override("font_size", 11)
+	nature_label.add_theme_color_override("font_color", Color("#f2cf78"))
+	nature_stack.add_child(nature_label)
+	nodes["nature_label"] = nature_label
 
+	var held_item_panel := PanelContainer.new()
+	held_item_panel.custom_minimum_size = Vector2(0, 34)
+	held_item_panel.add_theme_stylebox_override("panel", _make_pokemon_summary_held_item_slot_style())
+	stack.add_child(held_item_panel)
+	var held_item_margin := MarginContainer.new()
+	held_item_margin.add_theme_constant_override("margin_left", 8)
+	held_item_margin.add_theme_constant_override("margin_top", 4)
+	held_item_margin.add_theme_constant_override("margin_right", 8)
+	held_item_margin.add_theme_constant_override("margin_bottom", 4)
+	held_item_panel.add_child(held_item_margin)
 	var item_label := Label.new()
 	_make_label_clip_width(item_label)
+	item_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	item_label.add_theme_font_size_override("font_size", 10)
 	item_label.add_theme_color_override("font_color", Color("#f2cf78"))
-	identity_stack.add_child(item_label)
+	held_item_margin.add_child(item_label)
 	nodes["item_label"] = item_label
 	return panel
 
 func _build_readonly_summary_details(nodes: Dictionary) -> Control:
 	var panel := PanelContainer.new()
-	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.custom_minimum_size = Vector2(POKEMON_SUMMARY_RIGHT_AREA_WIDTH, POKEMON_SUMMARY_BODY_HEIGHT)
+	panel.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	panel.add_theme_stylebox_override("panel", _make_pokemon_summary_inner_style(Color("#070b13fa"), POKEMON_SUMMARY_ACCENT_SOFT))
 
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 9)
+	margin.add_theme_constant_override("margin_left", 8)
 	margin.add_theme_constant_override("margin_top", 7)
-	margin.add_theme_constant_override("margin_right", 9)
-	margin.add_theme_constant_override("margin_bottom", 8)
+	margin.add_theme_constant_override("margin_right", 8)
+	margin.add_theme_constant_override("margin_bottom", 7)
 	panel.add_child(margin)
 	var stack := VBoxContainer.new()
-	stack.add_theme_constant_override("separation", 5)
+	stack.add_theme_constant_override("separation", 3)
 	margin.add_child(stack)
 
 	var stats_title := Label.new()
 	stats_title.text = LocalizationManager.text("ui.pokemon_summary.tab.stats").to_upper()
 	stats_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	stats_title.add_theme_font_size_override("font_size", 12)
+	stats_title.add_theme_font_size_override("font_size", 10)
 	stats_title.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
 	stack.add_child(stats_title)
 	nodes["stats_title"] = stats_title
 	var stats_panel := PanelContainer.new()
-	stats_panel.custom_minimum_size = Vector2(0, 191)
+	stats_panel.custom_minimum_size = Vector2(0, 151)
 	stats_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#050a12e8"), Color("#284465"), 5, 1))
 	stack.add_child(stats_panel)
 	var stats_margin := MarginContainer.new()
@@ -14947,14 +15057,14 @@ func _build_readonly_summary_details(nodes: Dictionary) -> Control:
 	stats_panel.add_child(stats_margin)
 	var stats_grid := GridContainer.new()
 	stats_grid.columns = 4
-	stats_grid.add_theme_constant_override("h_separation", 8)
-	stats_grid.add_theme_constant_override("v_separation", 1)
+	stats_grid.add_theme_constant_override("h_separation", 4)
+	stats_grid.add_theme_constant_override("v_separation", 0)
 	stats_margin.add_child(stats_grid)
 	var stats_headings: Array[Label] = []
 	for heading_text: String in ["STAT", "TOTAL", "IV", "EV"]:
 		var heading := Label.new()
 		heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		heading.add_theme_font_size_override("font_size", 9)
+		heading.add_theme_font_size_override("font_size", 8)
 		heading.add_theme_color_override("font_color", Color("#7187a5"))
 		heading.text = heading_text
 		stats_grid.add_child(heading)
@@ -14967,10 +15077,10 @@ func _build_readonly_summary_details(nodes: Dictionary) -> Control:
 		var row_nodes: Dictionary = {}
 		for column: String in ["name", "value", "iv", "ev"]:
 			var label := Label.new()
-			label.custom_minimum_size = Vector2(72 if column == "name" else 62, 20)
+			label.custom_minimum_size = Vector2(66 if column == "name" else 52, 18)
 			label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-			label.add_theme_font_size_override("font_size", 11)
+			label.add_theme_font_size_override("font_size", 9)
 			label.add_theme_color_override("font_color", stat.get("color", UI_TEXT) as Color if column == "name" else UI_TEXT)
 			stats_grid.add_child(label)
 			row_nodes[column] = label
@@ -14980,20 +15090,20 @@ func _build_readonly_summary_details(nodes: Dictionary) -> Control:
 	var moves_title := Label.new()
 	moves_title.text = LocalizationManager.text("ui.pokemon_summary.tab.moves").to_upper()
 	moves_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	moves_title.add_theme_font_size_override("font_size", 12)
+	moves_title.add_theme_font_size_override("font_size", 10)
 	moves_title.add_theme_color_override("font_color", Color("#ff8d67"))
 	stack.add_child(moves_title)
 	nodes["moves_title"] = moves_title
 	var moves_grid := GridContainer.new()
 	moves_grid.columns = 2
 	moves_grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	moves_grid.add_theme_constant_override("h_separation", 6)
-	moves_grid.add_theme_constant_override("v_separation", 6)
+	moves_grid.add_theme_constant_override("h_separation", 4)
+	moves_grid.add_theme_constant_override("v_separation", 4)
 	stack.add_child(moves_grid)
 	var move_nodes: Array[Dictionary] = []
 	for move_index in range(4):
 		var move_panel := PanelContainer.new()
-		move_panel.custom_minimum_size = Vector2(0, 49)
+		move_panel.custom_minimum_size = Vector2(0, 43)
 		move_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		move_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#091622e8"), Color("#284465"), 6, 1))
 		moves_grid.add_child(move_panel)
@@ -15009,12 +15119,12 @@ func _build_readonly_summary_details(nodes: Dictionary) -> Control:
 		var move_name := Label.new()
 		move_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		_make_label_clip_width(move_name)
-		move_name.add_theme_font_size_override("font_size", 12)
+		move_name.add_theme_font_size_override("font_size", 10)
 		move_name.add_theme_color_override("font_color", UI_TEXT)
 		move_stack.add_child(move_name)
 		var move_meta := Label.new()
 		move_meta.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		move_meta.add_theme_font_size_override("font_size", 9)
+		move_meta.add_theme_font_size_override("font_size", 8)
 		move_meta.add_theme_color_override("font_color", Color("#9eb7d8"))
 		move_stack.add_child(move_meta)
 		move_nodes.append({"panel": move_panel, "name": move_name, "meta": move_meta})
@@ -19696,9 +19806,11 @@ func _refresh_readonly_pokemon_summary(pokemon: Pokemon) -> void:
 	shiny_label.visible = pokemon.shiny
 	var trainer_label := nodes.get("trainer_label") as Label
 	var trainer_text := _get_pokemon_summary_current_trainer_title_text(pokemon)
-	trainer_label.text = LocalizationManager.text("ui.pokemon_summary.readonly_badge")
+	trainer_label.text = trainer_text
 	trainer_label.tooltip_text = trainer_text
+	(nodes.get("readonly_label") as Label).text = LocalizationManager.text("ui.pokemon_summary.readonly_badge")
 	(nodes.get("ability_caption") as Label).text = LocalizationManager.text("ui.pokemon_summary.ability").to_upper()
+	(nodes.get("nature_caption") as Label).text = LocalizationManager.text("ui.pokemon_summary.nature").to_upper()
 	(nodes.get("stats_title") as Label).text = LocalizationManager.text("ui.pokemon_summary.tab.stats").to_upper()
 	(nodes.get("moves_title") as Label).text = LocalizationManager.text("ui.pokemon_summary.tab.moves").to_upper()
 	var stats_headings: Array = nodes.get("stats_headings", []) as Array
@@ -19706,29 +19818,19 @@ func _refresh_readonly_pokemon_summary(pokemon: Pokemon) -> void:
 		(stats_headings[0] as Label).text = LocalizationManager.text("ui.pokemon_summary.readonly.stat").to_upper()
 		(stats_headings[1] as Label).text = LocalizationManager.text("ui.pokemon_summary.readonly.total").to_upper()
 
-	var sprite := nodes.get("sprite") as TextureRect
-	sprite.texture = PokemonAssets.load_home_sprite(pokemon.species, pokemon.shiny)
-	if sprite.texture == null:
-		sprite.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
-
-	var type_row := nodes.get("type_row") as HBoxContainer
-	for child: Node in type_row.get_children():
-		child.queue_free()
-	for type_value: Variant in pokemon.types.slice(0, 2):
-		var type_id := str(type_value).strip_edges()
-		if type_id != "":
-			type_row.add_child(_build_readonly_summary_type_chip(type_id))
-
-	var level_nature_label := nodes.get("level_nature_label") as Label
-	var profile_parts: Array[String] = []
-	if display_name != localized_species_name:
-		profile_parts.append(localized_species_name)
-	profile_parts.append(LocalizationManager.text("ui.pokemon_summary.level", {"level": max(pokemon.level, 1)}))
-	profile_parts.append(_localized_nature_name(pokemon.nature))
-	level_nature_label.text = "  •  ".join(profile_parts)
+	_set_pokemon_summary_sprite(pokemon)
+	_refresh_pokemon_summary_type_icons(pokemon)
+	if pokemon_summary_ball_icon != null:
+		pokemon_summary_ball_icon.texture = _load_item_icon(_get_pokemon_ball_item_id(pokemon))
+	if pokemon_summary_hidden_ability_badge != null:
+		pokemon_summary_hidden_ability_badge.visible = pokemon.hidden_ability
+	if pokemon_summary_level_badge_label != null:
+		pokemon_summary_level_badge_label.text = LocalizationManager.text("ui.pokemon_summary.level", {"level": max(pokemon.level, 1)})
 	var ability_label := nodes.get("ability_label") as Label
 	ability_label.text = _get_summary_ability_display_name(pokemon.ability)
 	ability_label.tooltip_text = _get_summary_ability_description_text(pokemon.ability)
+	var nature_label := nodes.get("nature_label") as Label
+	nature_label.text = _localized_nature_name(pokemon.nature)
 	var item_label := nodes.get("item_label") as Label
 	var item_name := (
 		_item_name_from_id(pokemon.item)
@@ -19780,25 +19882,6 @@ func _refresh_readonly_pokemon_summary(pokemon: Pokemon) -> void:
 		var move_background := TypeColors.get_slot_background(move_type, Color("#091622e8")).darkened(0.42)
 		var move_border := TypeColors.get_slot_border(move_type, Color("#284465"))
 		move_panel.add_theme_stylebox_override("panel", _make_panel_style(move_background, Color(move_border, 0.82), 6, 1))
-
-func _build_readonly_summary_type_chip(type_id: String) -> Control:
-	var chip := PanelContainer.new()
-	var background := TypeColors.get_slot_background(type_id, Color("#0c2132"))
-	var border := TypeColors.get_slot_border(type_id, Color("#365777"))
-	chip.add_theme_stylebox_override("panel", _make_panel_style(background.darkened(0.2), border, 6, 1))
-	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 9)
-	margin.add_theme_constant_override("margin_top", 2)
-	margin.add_theme_constant_override("margin_right", 9)
-	margin.add_theme_constant_override("margin_bottom", 2)
-	chip.add_child(margin)
-	var label := Label.new()
-	label.text = _localized_type_name(type_id)
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.add_theme_font_size_override("font_size", 10)
-	label.add_theme_color_override("font_color", TypeColors.get_slot_accent(type_id, UI_TEXT))
-	margin.add_child(label)
-	return chip
 
 func _get_active_pokemon_summary_pokemon() -> Pokemon:
 	if pokemon_summary_preview_pokemon != null:
