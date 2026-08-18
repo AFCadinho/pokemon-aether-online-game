@@ -16,6 +16,9 @@ const UI_PURPLE := Color("#c694ff")
 const UI_GOLD := Color("#f3cf70")
 const UI_GREEN := Color("#70d6a1")
 const UI_DANGER := Color("#ef7085")
+const DROPDOWN_ARROW: Texture2D = preload("res://assets/ui/photo_mode_dropdown_arrow.svg")
+const DROPDOWN_RADIO_CHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_checked.svg")
+const DROPDOWN_RADIO_UNCHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_unchecked.svg")
 const EXCHANGE_SIZE := Vector2(1040, 660)
 const MAX_PRICE := 2_147_483_647
 const BROWSE_CARD_MIN_WIDTH := 245.0
@@ -596,7 +599,7 @@ func _new_filter_option(values: Array[String], include_any := true) -> OptionBut
 	for value: String in values:
 		option.add_item(_humanize_identifier(value))
 		option.set_item_metadata(option.item_count - 1, value)
-	_apply_button_style(option)
+	_apply_filter_option_style(option)
 	return option
 
 
@@ -605,8 +608,69 @@ func _new_tristate_filter_option() -> OptionButton:
 	for value: int in [-1, 1, 0]:
 		option.add_item("")
 		option.set_item_metadata(option.item_count - 1, value)
-	_apply_button_style(option)
+	_apply_filter_option_style(option)
 	return option
+
+
+func _apply_filter_option_style(option: OptionButton) -> void:
+	_apply_button_style(option)
+	option.add_theme_icon_override("arrow", DROPDOWN_ARROW)
+	option.add_theme_constant_override("arrow_margin", 10)
+	var popup := option.get_popup()
+	popup.transparent_bg = true
+	popup.borderless = true
+	popup.max_size = Vector2i(420, 340)
+	popup.add_theme_font_size_override("font_size", 13)
+	popup.add_theme_color_override("font_color", UI_TEXT)
+	popup.add_theme_color_override("font_hover_color", Color.WHITE)
+	popup.add_theme_color_override("font_disabled_color", Color(UI_MUTED, 0.5))
+	popup.add_theme_color_override("font_separator_color", UI_CYAN)
+	popup.add_theme_color_override("font_outline_color", Color("#02070b"))
+	popup.add_theme_constant_override("outline_size", 1)
+	popup.add_theme_constant_override("icon_max_width", 14)
+	popup.add_theme_constant_override("item_start_padding", 10)
+	popup.add_theme_constant_override("item_end_padding", 12)
+	popup.add_theme_constant_override("v_separation", 5)
+	popup.add_theme_stylebox_override("panel", _filter_dropdown_popup_style())
+	popup.add_theme_stylebox_override(
+		"hover", _filter_dropdown_item_style(Color("#12344cf7"), UI_CYAN)
+	)
+	popup.add_theme_stylebox_override(
+		"separator", _filter_dropdown_item_style(Color.TRANSPARENT, Color("#31566b88"), 0)
+	)
+	popup.add_theme_icon_override("radio_checked", DROPDOWN_RADIO_CHECKED)
+	popup.add_theme_icon_override("radio_unchecked", DROPDOWN_RADIO_UNCHECKED)
+	popup.add_theme_icon_override("radio_checked_disabled", DROPDOWN_RADIO_CHECKED)
+	popup.add_theme_icon_override("radio_unchecked_disabled", DROPDOWN_RADIO_UNCHECKED)
+
+
+func _filter_dropdown_popup_style() -> StyleBoxFlat:
+	var style := _filter_dropdown_item_style(Color("#050e18fc"), Color("#4e8caae6"), 9)
+	style.content_margin_left = 5
+	style.content_margin_top = 6
+	style.content_margin_right = 5
+	style.content_margin_bottom = 6
+	style.shadow_color = Color("#00000099")
+	style.shadow_size = 14
+	style.shadow_offset = Vector2(0, 6)
+	return style
+
+
+func _filter_dropdown_item_style(
+	background: Color,
+	border: Color,
+	radius := 6
+) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = background
+	style.border_color = border
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(radius)
+	style.content_margin_left = 8
+	style.content_margin_top = 5
+	style.content_margin_right = 8
+	style.content_margin_bottom = 5
+	return style
 
 
 func _build_list_panel() -> Control:
