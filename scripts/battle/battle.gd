@@ -8403,6 +8403,7 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			_order_form_change_events_before_moves(events)
 		)
 	)
+	ordered_events = hp_event_helper.normalize_damage_event_continuity(ordered_events)
 	_debug_battle_start("render.begin source=%s renderTurns=%s input=%s ordered=%s lastRenderedSeq=%d" % [
 		source,
 		str(render_turn_headers),

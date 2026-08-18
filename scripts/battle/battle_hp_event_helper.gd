@@ -58,6 +58,102 @@ func get_rewind_hp_snapshot(event: Dictionary, state_snapshot: Dictionary) -> Di
 
 	return previous_snapshot
 
+
+func normalize_damage_event_continuity(events: Array) -> Array:
+	var normalized_events: Array = events.duplicate(true)
+	var hp_cursor_by_target: Dictionary = {}
+
+	for event_value: Variant in normalized_events:
+		if not (event_value is Dictionary):
+			continue
+
+		var event: Dictionary = event_value as Dictionary
+		var event_type := str(event.get("type", ""))
+		if event_type == "switch" or event_type == "drag":
+			# Active idents may be reused by the incoming Pokemon. Never carry an
+			# outgoing Pokemon's rendered HP into the next switch target.
+			hp_cursor_by_target.clear()
+			continue
+		if event_type != "damage" and event_type != "heal" and event_type != "faint":
+			continue
+
+		var target_key := _get_hp_event_target_key(event)
+		if target_key == "":
+			continue
+
+		if event_type == "damage" and hp_cursor_by_target.has(target_key):
+			_clamp_damage_rewind_to_cursor(event, hp_cursor_by_target[target_key])
+
+		var current_snapshot := get_event_hp_snapshot(event, false)
+		if current_snapshot.is_empty():
+			continue
+		current_snapshot["condition"] = str(event.get("condition", ""))
+		hp_cursor_by_target[target_key] = current_snapshot
+
+	return normalized_events
+
+
+func _clamp_damage_rewind_to_cursor(event: Dictionary, cursor_value: Variant) -> void:
+	if not (cursor_value is Dictionary):
+		return
+
+	var cursor: Dictionary = cursor_value as Dictionary
+	var previous_snapshot := get_event_hp_snapshot(event, true)
+	var current_snapshot := get_event_hp_snapshot(event, false)
+	if event.has("previousHp") and event.has("hp") and int(event.get("maxHp", 0)) > 0:
+		var numeric_max_hp := int(event.get("maxHp", 0))
+		previous_snapshot = {
+			"hp": int(event.get("previousHp", 0)),
+			"max_hp": numeric_max_hp,
+		}
+		current_snapshot = {
+			"hp": int(event.get("hp", 0)),
+			"max_hp": numeric_max_hp,
+		}
+	if previous_snapshot.is_empty() or current_snapshot.is_empty():
+		return
+
+	var cursor_max_hp := int(cursor.get("max_hp", 0))
+	var previous_max_hp := int(previous_snapshot.get("max_hp", 0))
+	var current_max_hp := int(current_snapshot.get("max_hp", 0))
+	if cursor_max_hp <= 0 or cursor_max_hp != previous_max_hp or cursor_max_hp != current_max_hp:
+		return
+
+	var cursor_hp := int(cursor.get("hp", 0))
+	var previous_hp := int(previous_snapshot.get("hp", 0))
+	var current_hp := int(current_snapshot.get("hp", 0))
+	if previous_hp <= cursor_hp or current_hp > cursor_hp:
+		return
+
+	event["previousHp"] = cursor_hp
+	var cursor_condition := str(cursor.get("condition", ""))
+	if cursor_condition != "":
+		event["previousCondition"] = cursor_condition
+	else:
+		event["previousCondition"] = "%d/%d" % [cursor_hp, cursor_max_hp]
+
+
+func _get_hp_event_target_key(event: Dictionary) -> String:
+	var target := str(event.get("target", "")).strip_edges().to_lower()
+	if target != "":
+		return "target:%s" % target
+
+	for key in ["pokemonKey", "pokemon_key"]:
+		var pokemon_key := str(event.get(key, "")).strip_edges()
+		if pokemon_key != "":
+			return "pokemon:%s" % pokemon_key
+
+	for ref_key in ["targetRef", "target_ref"]:
+		var target_ref_value: Variant = event.get(ref_key, {})
+		if not (target_ref_value is Dictionary):
+			continue
+		var target_ref: Dictionary = target_ref_value as Dictionary
+		var pokemon_key := str(target_ref.get("pokemonKey", target_ref.get("pokemon_key", ""))).strip_edges()
+		if pokemon_key != "":
+			return "pokemon:%s" % pokemon_key
+
+	return ""
+
 func get_event_status(event: Dictionary, use_previous_hp: bool) -> String:
 	var condition_key: String = "previousCondition" if use_previous_hp else "condition"
 	return get_status_from_condition(str(event.get(condition_key, "")))
