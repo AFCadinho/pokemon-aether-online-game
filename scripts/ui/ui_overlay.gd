@@ -15654,15 +15654,27 @@ func _add_pokemon_summary_right_area(content_row: HBoxContainer, card_key: Strin
 	summary_content_panel.custom_minimum_size = Vector2(POKEMON_SUMMARY_CONTENT_PANEL_WIDTH, POKEMON_SUMMARY_CONTENT_PANEL_HEIGHT)
 	summary_content_panel.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	summary_content_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	summary_content_panel.clip_contents = true
 	summary_content_panel.add_theme_stylebox_override("panel", _make_pokemon_summary_inner_style(Color("#070b13fa"), POKEMON_SUMMARY_ACCENT_SOFT))
 	right_area.add_child(summary_content_panel)
+
+	# Keep tab-specific content from contributing a larger minimum size to the
+	# summary card. The viewport is deliberately a plain Control: it receives the
+	# fixed panel size, while the MarginContainer can still lay out each tab inside
+	# that area without resizing the card itself.
+	var summary_content_viewport := Control.new()
+	summary_content_viewport.name = "SummaryContentViewport"
+	summary_content_viewport.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	summary_content_viewport.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	summary_content_panel.add_child(summary_content_viewport)
 
 	var summary_content_margin := MarginContainer.new()
 	summary_content_margin.add_theme_constant_override("margin_left", 8)
 	summary_content_margin.add_theme_constant_override("margin_top", 7)
 	summary_content_margin.add_theme_constant_override("margin_right", 8)
 	summary_content_margin.add_theme_constant_override("margin_bottom", 7)
-	summary_content_panel.add_child(summary_content_margin)
+	summary_content_viewport.add_child(summary_content_margin)
+	summary_content_margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
 	pokemon_summary_content_stack = VBoxContainer.new()
 	pokemon_summary_content_stack.custom_minimum_size = Vector2(0, POKEMON_SUMMARY_CONTENT_STACK_HEIGHT)

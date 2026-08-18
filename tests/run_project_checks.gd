@@ -160,6 +160,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/pokemon_summary_move_reorder_check.gd",
 	"res://tests/pokemon_summary_direct_field_move_check.gd",
 	"res://tests/pokemon_readonly_summary_check.gd",
+	"res://tests/pokemon_summary_fixed_size_check.gd",
 	"res://tests/tmx_visual_importer_check.gd",
 	"res://tests/viridian_visual_jail_check.gd",
 	"res://tests/open_field_visual_check.gd",
