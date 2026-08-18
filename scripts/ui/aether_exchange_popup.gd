@@ -417,6 +417,7 @@ func _build_filters() -> Control:
 		browse_sort_button.set_item_metadata(browse_sort_button.item_count - 1, sort_mode)
 	browse_sort_button.item_selected.connect(_on_browse_sort_selected)
 	_apply_filter_option_style(browse_sort_button)
+	_apply_toolbar_accent_style(browse_sort_button, UI_GOLD)
 	row.add_child(browse_sort_button)
 	refresh_button = Button.new()
 	refresh_button.custom_minimum_size = Vector2(105, 34)
@@ -1916,8 +1917,9 @@ func _refresh_controls() -> void:
 		)
 		advanced_filter_button.visible = active_tab == "browse"
 		advanced_filter_button.disabled = request_busy
-		_apply_button_style(
+		_apply_toolbar_accent_style(
 			advanced_filter_button,
+			UI_PURPLE,
 			filter_count > 0 or (advanced_filter_panel != null and advanced_filter_panel.visible),
 		)
 	if browse_sort_button != null:
@@ -2165,6 +2167,26 @@ func _apply_button_style(button: Button, selected := false) -> void:
 	button.add_theme_stylebox_override("disabled", _panel_style(Color("#07111dcc"), Color("#263b4d99"), 8, 1))
 	button.add_theme_stylebox_override("focus", _panel_style(Color("#12324af5"), UI_CYAN, 8, 2))
 	button.add_theme_color_override("font_color", UI_TEXT)
+	button.add_theme_color_override("font_disabled_color", Color(UI_MUTED, 0.55))
+
+
+func _apply_toolbar_accent_style(button: Button, accent: Color, emphasized := false) -> void:
+	var normal_background := accent.darkened(0.82 if not emphasized else 0.68)
+	normal_background.a = 0.92
+	var normal_border := accent
+	normal_border.a = 0.72 if not emphasized else 1.0
+	var hover_background := accent.darkened(0.70)
+	hover_background.a = 0.96
+	var pressed_background := accent.darkened(0.62)
+	pressed_background.a = 0.98
+	button.add_theme_stylebox_override("normal", _panel_style(normal_background, normal_border, 8, 1))
+	button.add_theme_stylebox_override("hover", _panel_style(hover_background, accent, 8, 1))
+	button.add_theme_stylebox_override("pressed", _panel_style(pressed_background, accent.lightened(0.12), 8, 1))
+	button.add_theme_stylebox_override("disabled", _panel_style(Color("#07111dcc"), Color("#263b4d99"), 8, 1))
+	button.add_theme_stylebox_override("focus", _panel_style(hover_background, accent.lightened(0.12), 8, 2))
+	button.add_theme_color_override("font_color", accent.lightened(0.12))
+	button.add_theme_color_override("font_hover_color", Color.WHITE)
+	button.add_theme_color_override("font_pressed_color", Color.WHITE)
 	button.add_theme_color_override("font_disabled_color", Color(UI_MUTED, 0.55))
 
 
