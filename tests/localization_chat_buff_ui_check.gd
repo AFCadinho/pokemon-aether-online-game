@@ -69,13 +69,11 @@ func _check_localized_helpers() -> void:
 		"Rare encounter contributions render as localized Dutch system messages"
 	)
 
-	var map_prefix := overlay.call("_create_chat_channel_prefix", "map") as Button
-	_check(map_prefix != null and map_prefix.text == "[Kaart]", "All-chat channel prefix renders in Dutch")
-	_check(map_prefix != null and map_prefix.tooltip_text == "Open de Kaart-chat", "Channel prefix tooltip renders in Dutch")
+	var map_prefix := overlay.call("_chat_channel_prefix_data", "map") as Dictionary
+	_check(str(map_prefix.get("text", "")) == "[Kaart]", "All-chat channel prefix renders in Dutch")
+	_check(str(map_prefix.get("tooltip", "")) == "Open de Kaart-chat", "Channel prefix tooltip renders in Dutch")
 
 	localization_manager.call("set_locale", "pt_BR")
-	if map_prefix != null:
-		localization_manager.call("localize_tree", map_prefix)
 	_check(overlay.call("_chat_tab_label", "general") == "Geral", "General chat tab updates to Portuguese")
 	_check(
 		overlay.call("_localized_buff_name", {"name_key": "ui.buff.global_exp.name"}) == "Bônus global de EXP",
@@ -88,11 +86,9 @@ func _check_localized_helpers() -> void:
 		}) == "Misty contribuiu com ₽25,000 para o Bônus global de EXP!",
 		"Global EXP contribution system messages update to Portuguese"
 	)
-	_check(map_prefix != null and map_prefix.text == "[Mapa]", "Existing channel prefix updates to Portuguese")
-	_check(map_prefix != null and map_prefix.tooltip_text == "Abrir o chat do Mapa", "Existing channel tooltip updates to Portuguese")
-
-	if map_prefix != null:
-		map_prefix.free()
+	map_prefix = overlay.call("_chat_channel_prefix_data", "map") as Dictionary
+	_check(str(map_prefix.get("text", "")) == "[Mapa]", "Channel prefix updates to Portuguese")
+	_check(str(map_prefix.get("tooltip", "")) == "Abrir o chat do Mapa", "Channel tooltip updates to Portuguese")
 	overlay.free()
 
 

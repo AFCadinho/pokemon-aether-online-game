@@ -259,11 +259,12 @@ func _init() -> void:
 	_check(script_source.contains('chat_tabs_background.name = "ChatTabsBackground"'), "main tabs sit on a cohesive translucent rail")
 	_check(script_source.contains('message_scroll.add_theme_stylebox_override("panel", _make_chat_message_surface_style())'), "chat messages use a subtle inner surface")
 	_check(
-		script_source.contains('header.name = "Header"')
-		and script_source.contains("func _create_chat_sender_message_label(")
+		script_source.contains("func _create_chat_sender_message_label(")
 		and script_source.contains('entry.append_text(" [color=%s]%s[/color]"')
+		and script_source.contains('entry.append_text("[bgcolor=%s]')
+		and script_source.contains("_render_chat_sender_message_label(entry)")
 		and script_source.contains("entry.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART"),
-		"chat messages keep the badge, sender and body on one wrapping line"
+		"chat prefixes, badges, senders and bodies share one full-width wrapping label"
 	)
 	_check(
 		script_source.contains('message_list.add_theme_constant_override("separation", 5)'),
