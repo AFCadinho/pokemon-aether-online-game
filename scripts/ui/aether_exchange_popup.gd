@@ -55,8 +55,8 @@ var browse_filters: Dictionary = {
 		"min_price": 0,
 		"max_price": 0,
 		"category": "",
-		"sort_by": "",
-		"sort_direction": "asc",
+		"sort_by": "newest",
+		"sort_direction": "desc",
 	},
 	"pokemon": {
 		"min_price": 0,
@@ -75,8 +75,8 @@ var browse_filters: Dictionary = {
 		"min_iv_spa": 0,
 		"min_iv_spd": 0,
 		"min_iv_spe": 0,
-		"sort_by": "",
-		"sort_direction": "asc",
+		"sort_by": "newest",
+		"sort_direction": "desc",
 	},
 }
 
@@ -89,6 +89,7 @@ var search_input: LineEdit
 var search_timer: Timer
 var refresh_button: Button
 var advanced_filter_button: Button
+var browse_sort_button: OptionButton
 var advanced_filter_overlay: ColorRect
 var advanced_filter_panel: PanelContainer
 var advanced_filter_title: Label
@@ -406,6 +407,17 @@ func _build_filters() -> Control:
 	advanced_filter_button.pressed.connect(_toggle_advanced_filter_panel)
 	_apply_button_style(advanced_filter_button)
 	row.add_child(advanced_filter_button)
+	browse_sort_button = OptionButton.new()
+	browse_sort_button.name = "BrowseSortButton"
+	browse_sort_button.custom_minimum_size = Vector2(175, 34)
+	for sort_mode: String in [
+		"newest_desc", "newest_asc", "price_desc", "price_asc", "level_desc", "level_asc",
+	]:
+		browse_sort_button.add_item("")
+		browse_sort_button.set_item_metadata(browse_sort_button.item_count - 1, sort_mode)
+	browse_sort_button.item_selected.connect(_on_browse_sort_selected)
+	_apply_filter_option_style(browse_sort_button)
+	row.add_child(browse_sort_button)
 	refresh_button = Button.new()
 	refresh_button.custom_minimum_size = Vector2(105, 34)
 	refresh_button.pressed.connect(_refresh_current_tab)
@@ -433,7 +445,7 @@ func _build_advanced_filter_panel() -> void:
 	advanced_filter_panel = PanelContainer.new()
 	advanced_filter_panel.name = "ExchangeAdvancedFilterPanel"
 	advanced_filter_panel.visible = false
-	advanced_filter_panel.custom_minimum_size = Vector2(790, 520)
+	advanced_filter_panel.custom_minimum_size = Vector2(790, 460)
 	advanced_filter_panel.add_theme_stylebox_override(
 		"panel", _panel_style(Color("#071321fc"), Color("#58cfe2e6"), 11, 2)
 	)
@@ -502,27 +514,6 @@ func _build_advanced_filter_panel() -> void:
 		_add_advanced_filter_field(
 			iv_grid, "min_iv_%s" % stat_id, _new_filter_spin(0, 31, 0), true, false, true
 		)
-
-	var sort_section := VBoxContainer.new()
-	sort_section.add_theme_constant_override("separation", 5)
-	stack.add_child(sort_section)
-	advanced_filter_sections["sort"] = sort_section
-	var sort_title := Label.new()
-	sort_title.name = "AdvancedFilterSortTitle"
-	sort_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	sort_title.add_theme_font_size_override("font_size", 12)
-	sort_title.add_theme_color_override("font_color", UI_CYAN)
-	sort_section.add_child(sort_title)
-	var sort_grid := GridContainer.new()
-	sort_grid.columns = 2
-	sort_grid.add_theme_constant_override("h_separation", 18)
-	sort_section.add_child(sort_grid)
-	_add_advanced_filter_field(
-		sort_grid, "sort_by", _new_filter_option(["price", "level", "newest"]), false
-	)
-	_add_advanced_filter_field(
-		sort_grid, "sort_direction", _new_filter_option(["asc", "desc"], false), false
-	)
 
 	var actions := HBoxContainer.new()
 	actions.alignment = BoxContainer.ALIGNMENT_END
@@ -787,6 +778,66 @@ func _on_filter_pressed(filter_id: String) -> void:
 	_refresh_controls()
 
 
+func _on_browse_sort_selected(index: int) -> void:
+	if request_busy or active_tab != "browse" or browse_sort_button == null:
+		return
+	var sort_mode := str(browse_sort_button.get_item_metadata(index))
+	if not _apply_browse_sort_mode(sort_mode):
+		_refresh_browse_sort_button()
+		return
+	selected_entry.clear()
+	selected_kind = ""
+	await _refresh_browse()
+
+
+func _apply_browse_sort_mode(sort_mode: String) -> bool:
+	var sort_by := ""
+	var sort_direction := ""
+	match sort_mode:
+		"newest_desc":
+			sort_by = "newest"
+			sort_direction = "desc"
+		"newest_asc":
+			sort_by = "newest"
+			sort_direction = "asc"
+		"price_desc":
+			sort_by = "price"
+			sort_direction = "desc"
+		"price_asc":
+			sort_by = "price"
+			sort_direction = "asc"
+		"level_desc", "level_asc":
+			if asset_filter != "pokemon":
+				return false
+			sort_by = "level"
+			sort_direction = "desc" if sort_mode.ends_with("_desc") else "asc"
+		_:
+			return false
+	var state := _current_browse_filter_state().duplicate(true)
+	state["sort_by"] = sort_by
+	state["sort_direction"] = sort_direction
+	browse_filters[asset_filter] = state
+	return true
+
+
+func _refresh_browse_sort_button() -> void:
+	if browse_sort_button == null:
+		return
+	var state := _current_browse_filter_state()
+	var selected_mode := "%s_%s" % [
+		str(state.get("sort_by", "newest")),
+		str(state.get("sort_direction", "desc")),
+	]
+	var selected_index := 0
+	for index in range(browse_sort_button.item_count):
+		var sort_mode := str(browse_sort_button.get_item_metadata(index))
+		browse_sort_button.set_item_text(index, _t("ui.exchange.sort.%s" % sort_mode))
+		browse_sort_button.set_item_disabled(index, asset_filter == "item" and sort_mode.begins_with("level_"))
+		if sort_mode == selected_mode:
+			selected_index = index
+	browse_sort_button.select(selected_index)
+
+
 func _on_search_changed(_value: String) -> void:
 	if active_tab == "browse":
 		search_timer.start()
@@ -819,7 +870,7 @@ func _refresh_advanced_filter_panel() -> void:
 	if advanced_filter_panel == null:
 		return
 	var is_pokemon := asset_filter == "pokemon"
-	advanced_filter_panel.custom_minimum_size = Vector2(790, 520) if is_pokemon else Vector2(700, 300)
+	advanced_filter_panel.custom_minimum_size = Vector2(790, 460) if is_pokemon else Vector2(700, 230)
 	advanced_filter_title.text = _t(
 		"ui.exchange.filters.title_pokemon" if is_pokemon else "ui.exchange.filters.title_item"
 	)
@@ -847,11 +898,6 @@ func _refresh_advanced_filter_panel() -> void:
 		var iv_title := iv_section.get_node_or_null("AdvancedFilterIvTitle") as Label
 		if iv_title != null:
 			iv_title.text = _t("ui.exchange.filters.iv_section")
-	var sort_section := advanced_filter_sections.get("sort") as VBoxContainer
-	if sort_section != null:
-		var sort_title := sort_section.get_node_or_null("AdvancedFilterSortTitle") as Label
-		if sort_title != null:
-			sort_title.text = _t("ui.exchange.filters.sort_section")
 	_refresh_filter_option_labels()
 	advanced_filter_clear_button.text = _t("ui.exchange.filters.clear")
 	advanced_filter_cancel_button.text = _t("ui.exchange.filters.cancel")
@@ -877,23 +923,6 @@ func _refresh_filter_option_labels() -> void:
 			var value := int(option.get_item_metadata(index))
 			var key := "any" if value < 0 else ("yes" if value == 1 else "no")
 			option.set_item_text(index, _t("ui.exchange.filters.%s" % key))
-	var sort_by_option := advanced_filter_controls.get("sort_by") as OptionButton
-	if sort_by_option != null:
-		for index in range(sort_by_option.item_count):
-			var value := str(sort_by_option.get_item_metadata(index))
-			sort_by_option.set_item_text(
-				index,
-				_t("ui.exchange.filters.sort_none") if value.is_empty()
-				else _t("ui.exchange.filters.sort_%s" % value),
-			)
-			sort_by_option.set_item_disabled(index, asset_filter == "item" and value == "level")
-	var direction_option := advanced_filter_controls.get("sort_direction") as OptionButton
-	if direction_option != null:
-		for index in range(direction_option.item_count):
-			var value := str(direction_option.get_item_metadata(index))
-			direction_option.set_item_text(index, _t("ui.exchange.filters.sort_%s" % value))
-
-
 func _sync_advanced_filter_controls(state_override: Dictionary = {}) -> void:
 	var state := state_override if not state_override.is_empty() else _current_browse_filter_state()
 	for field_id: String in [
@@ -912,8 +941,6 @@ func _sync_advanced_filter_controls(state_override: Dictionary = {}) -> void:
 	_select_filter_option("nature", str(state.get("nature", "")))
 	_select_filter_option("shiny", int(state.get("shiny", -1)))
 	_select_filter_option("hidden_ability", int(state.get("hidden_ability", -1)))
-	_select_filter_option("sort_by", str(state.get("sort_by", "")))
-	_select_filter_option("sort_direction", str(state.get("sort_direction", "asc")))
 
 
 func _select_filter_option(field_id: String, value: Variant) -> void:
@@ -940,10 +967,7 @@ func _read_advanced_filter_controls(commit_state := true) -> Dictionary:
 		var input := advanced_filter_controls.get(field_id) as LineEdit
 		if input != null:
 			state[field_id] = input.text.strip_edges()
-	for field_id: String in [
-		"primary_type", "secondary_type", "nature", "shiny", "hidden_ability",
-		"sort_by", "sort_direction",
-	]:
+	for field_id: String in ["primary_type", "secondary_type", "nature", "shiny", "hidden_ability"]:
 		var option := advanced_filter_controls.get(field_id) as OptionButton
 		if option != null:
 			state[field_id] = option.get_item_metadata(option.selected)
@@ -983,11 +1007,11 @@ func _default_browse_filter_state(filter_id: String) -> Dictionary:
 			"hidden_ability": -1,
 			"min_iv_hp": 0, "min_iv_atk": 0, "min_iv_def": 0,
 			"min_iv_spa": 0, "min_iv_spd": 0, "min_iv_spe": 0,
-			"sort_by": "", "sort_direction": "asc",
+			"sort_by": "newest", "sort_direction": "desc",
 		}
 	return {
 		"min_price": 0, "max_price": 0, "category": "",
-		"sort_by": "", "sort_direction": "asc",
+		"sort_by": "newest", "sort_direction": "desc",
 	}
 
 
@@ -1052,7 +1076,12 @@ func _current_browse_filter_params() -> Dictionary:
 
 func _active_advanced_filter_count() -> int:
 	var params := _current_browse_filter_params()
-	return params.size() - (1 if params.has("sortDirection") else 0)
+	var filter_count := params.size()
+	if params.has("sortBy"):
+		filter_count -= 1
+	if params.has("sortDirection"):
+		filter_count -= 1
+	return maxi(filter_count, 0)
 
 
 func _refresh_current_tab() -> void:
@@ -1891,6 +1920,10 @@ func _refresh_controls() -> void:
 			advanced_filter_button,
 			filter_count > 0 or (advanced_filter_panel != null and advanced_filter_panel.visible),
 		)
+	if browse_sort_button != null:
+		browse_sort_button.visible = active_tab == "browse"
+		browse_sort_button.disabled = request_busy
+		_refresh_browse_sort_button()
 	if advanced_filter_apply_button != null:
 		advanced_filter_apply_button.disabled = request_busy
 	if advanced_filter_clear_button != null:
