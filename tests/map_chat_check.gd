@@ -112,7 +112,7 @@ func _init() -> void:
 			'NodePath("Header/RoleBadge")'
 		)
 		and overlay_source.contains(
-			'NodePath("Body/Content/MessageText")'
+			'NodePath("Header/MessageText")'
 		),
 		"All keeps Global prominent and softens secondary channel message content"
 	)
