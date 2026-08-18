@@ -56,10 +56,16 @@ func _run() -> void:
 	_check(refresh_button.get_theme_stylebox("normal") is StyleBoxFlat, "Exchange Refresh action uses the styled button surface")
 	_check(refresh_button.get_theme_stylebox("hover") is StyleBoxFlat, "Exchange Refresh action has a styled hover state")
 	var advanced_filter_button := popup.get("advanced_filter_button") as Button
+	var browse_sort_button := popup.get("browse_sort_button") as OptionButton
 	var advanced_filter_overlay := popup.get("advanced_filter_overlay") as ColorRect
 	var advanced_filter_panel := popup.get("advanced_filter_panel") as PanelContainer
 	_check(advanced_filter_button != null, "Browse exposes advanced market filters")
 	_check(advanced_filter_button.get_theme_stylebox("normal") is StyleBoxFlat, "Filter action uses the Exchange button styling")
+	_check(browse_sort_button != null and browse_sort_button.item_count == 6, "Browse exposes all date, price, and Pokémon level sort modes")
+	_check(browse_sort_button.get_theme_icon("arrow").resource_path.ends_with("photo_mode_dropdown_arrow.svg"), "Browse sort uses the Aether dropdown styling")
+	_check(browse_sort_button.get_popup().get_theme_stylebox("panel") is StyleBoxFlat, "Browse sort menu uses the Aether popup surface")
+	_check(str(browse_sort_button.get_item_metadata(0)) == "newest_desc", "Browse defaults to newest listings first")
+	_check(browse_sort_button.is_item_disabled(4) and browse_sort_button.is_item_disabled(5), "Item browsing disables Pokémon-only level sorting")
 	advanced_filter_button.pressed.emit()
 	_check(advanced_filter_overlay.visible and advanced_filter_panel.visible, "Filter action opens a centered modal filter panel")
 	var advanced_fields := popup.get("advanced_filter_fields") as Dictionary
@@ -68,8 +74,10 @@ func _run() -> void:
 	popup.set("asset_filter", "pokemon")
 	popup.call("_refresh_advanced_filter_panel")
 	popup.call("_sync_advanced_filter_controls")
+	popup.call("_refresh_browse_sort_button")
 	_check(not (_dictionary(advanced_fields.get("category")).get("root") as Control).visible, "Pokémon filters hide item-only fields")
 	_check((_dictionary(advanced_fields.get("min_level")).get("root") as Control).visible, "Pokémon filters expose level constraints")
+	_check(not browse_sort_button.is_item_disabled(4) and not browse_sort_button.is_item_disabled(5), "Pokémon browsing enables level sorting")
 	_check((popup.get("advanced_filter_sections") as Dictionary).has("ivs"), "Pokémon filters group individual IV values in their own section")
 	_check(popup.get("advanced_filter_cancel_button") is Button, "Filter modal exposes an explicit Cancel action")
 	var advanced_controls := popup.get("advanced_filter_controls") as Dictionary
@@ -84,7 +92,7 @@ func _run() -> void:
 		_check(dropdown_popup.get_theme_stylebox("panel") is StyleBoxFlat, "Filter dropdown menu uses the Aether popup surface")
 		_check(dropdown_popup.get_theme_stylebox("hover") is StyleBoxFlat, "Filter dropdown menu has an Aether hover state")
 		_check(dropdown_popup.get_theme_icon("radio_checked").resource_path.ends_with("photo_mode_radio_checked.svg"), "Filter dropdown menu uses styled selection markers")
-	_check(styled_dropdown_count == 7, "Every filter dropdown receives the shared Aether menu styling")
+	_check(styled_dropdown_count == 5, "Every advanced filter dropdown receives the shared Aether menu styling")
 	(advanced_controls.get("min_price") as SpinBox).value = 1000
 	(advanced_controls.get("min_level") as SpinBox).value = 50
 	(advanced_controls.get("max_level") as SpinBox).value = 80
@@ -97,8 +105,7 @@ func _run() -> void:
 	popup.call("_select_filter_option", "nature", "jolly")
 	popup.call("_select_filter_option", "shiny", 1)
 	popup.call("_select_filter_option", "hidden_ability", 0)
-	popup.call("_select_filter_option", "sort_by", "price")
-	popup.call("_select_filter_option", "sort_direction", "desc")
+	_check(bool(popup.call("_apply_browse_sort_mode", "price_desc")), "Browse accepts expensive-to-cheap sorting")
 	popup.call("_read_advanced_filter_controls")
 	var pokemon_filter_params := popup.call("_current_browse_filter_params") as Dictionary
 	_check(pokemon_filter_params.get("minPrice") == 1000, "Filters retain the minimum market price")
@@ -122,6 +129,15 @@ func _run() -> void:
 		and pokemon_filter_params.get("sortDirection") == "desc",
 		"Filters retain listing sort field and direction"
 	)
+	_check(int(popup.call("_active_advanced_filter_count")) == 12, "Sorting is not counted as an active advanced filter")
+	_check(bool(popup.call("_apply_browse_sort_mode", "newest_asc")), "Browse accepts oldest-to-newest sorting")
+	var oldest_filter_params := popup.call("_current_browse_filter_params") as Dictionary
+	_check(
+		oldest_filter_params.get("sortBy") == "newest"
+		and oldest_filter_params.get("sortDirection") == "asc",
+		"Oldest-first maps to ascending listing date sorting"
+	)
+	_check(bool(popup.call("_apply_browse_sort_mode", "level_desc")), "Pokémon browse accepts highest-level-first sorting")
 	popup.set("browse_filters", {
 		"item": popup.call("_default_browse_filter_state", "item"),
 		"pokemon": popup.call("_default_browse_filter_state", "pokemon"),
