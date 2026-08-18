@@ -40,6 +40,13 @@ func _run() -> void:
 	_check(context.get("left_panel") == null, "read-only Summary does not retain controls from a closed card")
 	_check(overlay.call("_apply_pokemon_summary_card_context", active_card_key), "read-only Summary context remains safe to reactivate")
 	_check((nodes.get("stat_rows", {}) as Dictionary).size() == 6, "all six stats render at once")
+	var stats_grid := nodes.get("stats_grid") as GridContainer
+	var stats_headings := nodes.get("stats_headings") as Array
+	var last_stats_heading := stats_headings.back() as Label
+	_check(
+		last_stats_heading.position.x + last_stats_heading.size.x >= stats_grid.size.x - 1.0,
+		"stat columns use the complete panel width"
+	)
 	_check((nodes.get("move_nodes", []) as Array).size() == 4, "all four moves render at once")
 	_check((nodes.get("type_row") as HBoxContainer).get_child_count() == 2, "both Pokémon types render as chips")
 	_check((nodes.get("name_label") as Label).text == "Garchomp", "localized Pokémon identity renders")

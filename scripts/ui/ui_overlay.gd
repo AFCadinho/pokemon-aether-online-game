@@ -15080,14 +15080,17 @@ func _build_readonly_summary_details(nodes: Dictionary) -> Control:
 	stats_panel.add_child(stats_margin)
 	var stats_grid := GridContainer.new()
 	stats_grid.columns = 4
+	stats_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	stats_grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	stats_grid.add_theme_constant_override("h_separation", 4)
 	stats_grid.add_theme_constant_override("v_separation", 0)
 	stats_margin.add_child(stats_grid)
+	nodes["stats_grid"] = stats_grid
 	var stats_headings: Array[Label] = []
 	for heading_text: String in ["STAT", "TOTAL", "IV", "EV"]:
 		var heading := Label.new()
 		heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		heading.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		heading.add_theme_font_size_override("font_size", 8)
 		heading.add_theme_color_override("font_color", Color("#7187a5"))
@@ -15105,6 +15108,7 @@ func _build_readonly_summary_details(nodes: Dictionary) -> Control:
 			label.custom_minimum_size = Vector2(66 if column == "name" else 52, 18)
 			label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			label.size_flags_vertical = Control.SIZE_EXPAND_FILL
 			label.add_theme_font_size_override("font_size", 10)
 			label.add_theme_color_override("font_color", stat.get("color", UI_TEXT) as Color if column == "name" else UI_TEXT)
