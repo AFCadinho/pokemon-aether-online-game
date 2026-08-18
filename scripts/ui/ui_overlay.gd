@@ -131,6 +131,7 @@ const TOOL_CLEAR_DATA_ICON: Texture2D = preload("res://assets/ui/tool_clear_data
 const TOOL_DROPDOWN_ARROW: Texture2D = preload("res://assets/ui/photo_mode_dropdown_arrow.svg")
 const TOOL_DROPDOWN_RADIO_CHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_checked.svg")
 const TOOL_DROPDOWN_RADIO_UNCHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_unchecked.svg")
+const EV_ALLOCATION_SPINBOX_UPDOWN: Texture2D = preload("res://assets/ui/ev_allocation_spinbox_updown.svg")
 const STAFF_TELEPORT_ICON: Texture2D = preload("res://assets/ui/location_waypoint.svg")
 const STAFF_IMPERSONATE_ICON: Texture2D = preload("res://assets/ui/staff_impersonate.svg")
 const ALPHA_TOOLS_MENU_ICON: Texture2D = preload("res://assets/ui/alpha_tools.svg")
@@ -1129,6 +1130,7 @@ var pokemon_summary_ev_allocate_stat_label: Label
 var pokemon_summary_ev_allocate_current_label: Label
 var pokemon_summary_ev_allocate_input: SpinBox
 var pokemon_summary_ev_allocate_status_label: Label
+var pokemon_summary_ev_allocate_status_panel: PanelContainer
 var pokemon_summary_ev_allocate_confirm_button: Button
 var pokemon_summary_ev_allocate_stat_id := ""
 var pokemon_summary_preview_pokemon: Pokemon
@@ -15938,29 +15940,29 @@ func _setup_pokemon_summary_ev_allocate_popup() -> void:
 	pokemon_summary_ev_allocate_popup = PanelContainer.new()
 	pokemon_summary_ev_allocate_popup.name = "PokemonSummaryEvAllocatePopup"
 	pokemon_summary_ev_allocate_popup.visible = false
-	pokemon_summary_ev_allocate_popup.custom_minimum_size = Vector2(300, 210)
+	pokemon_summary_ev_allocate_popup.custom_minimum_size = Vector2(380, 250)
 	pokemon_summary_ev_allocate_popup.mouse_filter = Control.MOUSE_FILTER_STOP
 	pokemon_summary_ev_allocate_popup.z_index = UI_MODAL_Z_INDEX + 1
 	pokemon_summary_ev_allocate_popup.anchor_left = 0.5
 	pokemon_summary_ev_allocate_popup.anchor_top = 0.5
 	pokemon_summary_ev_allocate_popup.anchor_right = 0.5
 	pokemon_summary_ev_allocate_popup.anchor_bottom = 0.5
-	pokemon_summary_ev_allocate_popup.offset_left = -150
-	pokemon_summary_ev_allocate_popup.offset_top = -105
-	pokemon_summary_ev_allocate_popup.offset_right = 150
-	pokemon_summary_ev_allocate_popup.offset_bottom = 105
+	pokemon_summary_ev_allocate_popup.offset_left = -190
+	pokemon_summary_ev_allocate_popup.offset_top = -125
+	pokemon_summary_ev_allocate_popup.offset_right = 190
+	pokemon_summary_ev_allocate_popup.offset_bottom = 125
 	pokemon_summary_ev_allocate_popup.add_theme_stylebox_override("panel", _make_pokemon_summary_outer_style())
 	root_control.add_child(pokemon_summary_ev_allocate_popup)
 
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 14)
-	margin.add_theme_constant_override("margin_top", 12)
-	margin.add_theme_constant_override("margin_right", 14)
-	margin.add_theme_constant_override("margin_bottom", 12)
+	margin.add_theme_constant_override("margin_left", 16)
+	margin.add_theme_constant_override("margin_top", 14)
+	margin.add_theme_constant_override("margin_right", 16)
+	margin.add_theme_constant_override("margin_bottom", 14)
 	pokemon_summary_ev_allocate_popup.add_child(margin)
 
 	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 8)
+	layout.add_theme_constant_override("separation", 10)
 	margin.add_child(layout)
 
 	var header := HBoxContainer.new()
@@ -15970,7 +15972,7 @@ func _setup_pokemon_summary_ev_allocate_popup() -> void:
 	pokemon_summary_ev_allocate_stat_label = Label.new()
 	pokemon_summary_ev_allocate_stat_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocate")
 	pokemon_summary_ev_allocate_stat_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pokemon_summary_ev_allocate_stat_label.add_theme_font_size_override("font_size", 16)
+	pokemon_summary_ev_allocate_stat_label.add_theme_font_size_override("font_size", 17)
 	pokemon_summary_ev_allocate_stat_label.add_theme_color_override("font_color", Color("#f5df9a"))
 	header.add_child(pokemon_summary_ev_allocate_stat_label)
 
@@ -15983,23 +15985,51 @@ func _setup_pokemon_summary_ev_allocate_popup() -> void:
 	header.add_child(close_button)
 	_apply_button_style(close_button)
 
+	var allocation_overview_panel := PanelContainer.new()
+	allocation_overview_panel.name = "PokemonSummaryEvAllocationOverview"
+	allocation_overview_panel.add_theme_stylebox_override(
+		"panel",
+		_make_button_style(Color("#081321ef"), POKEMON_SUMMARY_ACCENT_FAINT, 7, 1)
+	)
+	layout.add_child(allocation_overview_panel)
+
 	pokemon_summary_ev_allocate_current_label = Label.new()
 	pokemon_summary_ev_allocate_current_label.add_theme_font_size_override("font_size", 12)
-	pokemon_summary_ev_allocate_current_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	layout.add_child(pokemon_summary_ev_allocate_current_label)
+	pokemon_summary_ev_allocate_current_label.add_theme_color_override("font_color", Color("#c8d8e8"))
+	pokemon_summary_ev_allocate_current_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	allocation_overview_panel.add_child(pokemon_summary_ev_allocate_current_label)
 
 	pokemon_summary_ev_allocate_input = SpinBox.new()
+	pokemon_summary_ev_allocate_input.name = "PokemonSummaryEvAllocationInput"
+	pokemon_summary_ev_allocate_input.custom_minimum_size = Vector2(0, 40)
 	pokemon_summary_ev_allocate_input.min_value = 0
 	pokemon_summary_ev_allocate_input.max_value = 252
 	pokemon_summary_ev_allocate_input.step = 1
 	pokemon_summary_ev_allocate_input.value_changed.connect(_on_summary_ev_allocate_value_changed)
+	pokemon_summary_ev_allocate_input.add_theme_icon_override("updown", EV_ALLOCATION_SPINBOX_UPDOWN)
+	var allocation_line_edit := pokemon_summary_ev_allocate_input.get_line_edit()
+	allocation_line_edit.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	allocation_line_edit.add_theme_font_size_override("font_size", 15)
+	_apply_line_edit_style(allocation_line_edit)
+	allocation_line_edit.add_theme_color_override("font_color", Color("#f5df9a"))
 	layout.add_child(pokemon_summary_ev_allocate_input)
+
+	pokemon_summary_ev_allocate_status_panel = PanelContainer.new()
+	pokemon_summary_ev_allocate_status_panel.name = "PokemonSummaryEvAllocationPreview"
+	pokemon_summary_ev_allocate_status_panel.custom_minimum_size = Vector2(0, 40)
+	pokemon_summary_ev_allocate_status_panel.add_theme_stylebox_override(
+		"panel",
+		_make_button_style(Color("#060d17e8"), UI_BORDER_SOFT, 7, 1)
+	)
+	layout.add_child(pokemon_summary_ev_allocate_status_panel)
 
 	pokemon_summary_ev_allocate_status_label = Label.new()
 	pokemon_summary_ev_allocate_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pokemon_summary_ev_allocate_status_label.add_theme_font_size_override("font_size", 11)
 	pokemon_summary_ev_allocate_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	layout.add_child(pokemon_summary_ev_allocate_status_label)
+	pokemon_summary_ev_allocate_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	pokemon_summary_ev_allocate_status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	pokemon_summary_ev_allocate_status_panel.add_child(pokemon_summary_ev_allocate_status_label)
 
 	pokemon_summary_ev_allocate_confirm_button = Button.new()
 	_set_localized_control_property(pokemon_summary_ev_allocate_confirm_button, "text", "common.confirm")
@@ -16008,6 +16038,10 @@ func _setup_pokemon_summary_ev_allocate_popup() -> void:
 	pokemon_summary_ev_allocate_confirm_button.pressed.connect(_on_summary_ev_allocate_confirm_pressed)
 	layout.add_child(pokemon_summary_ev_allocate_confirm_button)
 	_apply_button_style(pokemon_summary_ev_allocate_confirm_button, "primary")
+	pokemon_summary_ev_allocate_confirm_button.add_theme_stylebox_override(
+		"disabled",
+		_make_button_style(Color("#07111dcc"), Color("#29445b99"), 8, 1)
+	)
 
 func _create_pokemon_summary_tab_button(tab_id: String, label_key: String, accent_color: Color, card_key: String = "") -> Button:
 	var button := Button.new()

@@ -21,6 +21,16 @@ func _run() -> void:
 	var root_control := overlay.get_node_or_null("Control") as Control
 	root_control.size = Vector2(1152, 648)
 	overlay.set("root_control", root_control)
+	overlay.call("_setup_pokemon_summary_ev_allocate_popup")
+	var ev_allocate_popup := overlay.get("pokemon_summary_ev_allocate_popup") as PanelContainer
+	var ev_allocate_input := overlay.get("pokemon_summary_ev_allocate_input") as SpinBox
+	var ev_allocate_status_panel := overlay.get("pokemon_summary_ev_allocate_status_panel") as PanelContainer
+	var ev_allocate_confirm := overlay.get("pokemon_summary_ev_allocate_confirm_button") as Button
+	_check(ev_allocate_popup.custom_minimum_size == Vector2(380, 250), "EV allocation uses a spacious Summary dialog")
+	_check(ev_allocate_input.get_line_edit().get_theme_stylebox("normal") is StyleBoxFlat, "EV allocation input replaces the default Godot field")
+	_check(ev_allocate_input.get_theme_icon("updown").resource_path.ends_with("ev_allocation_spinbox_updown.svg"), "EV allocation stepper uses the Summary arrow artwork")
+	_check(ev_allocate_status_panel.get_theme_stylebox("panel") is StyleBoxFlat, "EV allocation preview uses a layered Summary surface")
+	_check(ev_allocate_confirm.get_theme_stylebox("disabled") is StyleBoxFlat, "EV allocation Confirm action has a styled disabled state")
 	var stale_left_panel := PanelContainer.new()
 	overlay.set("pokemon_summary_left_panel", stale_left_panel)
 	stale_left_panel.free()
