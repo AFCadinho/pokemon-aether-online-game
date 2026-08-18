@@ -56,11 +56,12 @@ func _run() -> void:
 	_check(refresh_button.get_theme_stylebox("normal") is StyleBoxFlat, "Exchange Refresh action uses the styled button surface")
 	_check(refresh_button.get_theme_stylebox("hover") is StyleBoxFlat, "Exchange Refresh action has a styled hover state")
 	var advanced_filter_button := popup.get("advanced_filter_button") as Button
+	var advanced_filter_overlay := popup.get("advanced_filter_overlay") as ColorRect
 	var advanced_filter_panel := popup.get("advanced_filter_panel") as PanelContainer
 	_check(advanced_filter_button != null, "Browse exposes advanced market filters")
 	_check(advanced_filter_button.get_theme_stylebox("normal") is StyleBoxFlat, "Filter action uses the Exchange button styling")
 	advanced_filter_button.pressed.emit()
-	_check(advanced_filter_panel.visible, "Filter action opens an in-interface filter panel")
+	_check(advanced_filter_overlay.visible and advanced_filter_panel.visible, "Filter action opens a centered modal filter panel")
 	var advanced_fields := popup.get("advanced_filter_fields") as Dictionary
 	_check((_dictionary(advanced_fields.get("category")).get("root") as Control).visible, "Item filters expose item category")
 	_check(not (_dictionary(advanced_fields.get("min_level")).get("root") as Control).visible, "Item filters hide Pokémon-only fields")
@@ -69,6 +70,8 @@ func _run() -> void:
 	popup.call("_sync_advanced_filter_controls")
 	_check(not (_dictionary(advanced_fields.get("category")).get("root") as Control).visible, "Pokémon filters hide item-only fields")
 	_check((_dictionary(advanced_fields.get("min_level")).get("root") as Control).visible, "Pokémon filters expose level constraints")
+	_check((popup.get("advanced_filter_sections") as Dictionary).has("ivs"), "Pokémon filters group individual IV values in their own section")
+	_check(popup.get("advanced_filter_cancel_button") is Button, "Filter modal exposes an explicit Cancel action")
 	var advanced_controls := popup.get("advanced_filter_controls") as Dictionary
 	(advanced_controls.get("min_price") as SpinBox).value = 1000
 	(advanced_controls.get("min_level") as SpinBox).value = 50
@@ -77,15 +80,23 @@ func _run() -> void:
 	(advanced_controls.get("min_iv_hp") as SpinBox).value = 31
 	(advanced_controls.get("min_iv_atk") as SpinBox).value = 30
 	(advanced_controls.get("min_iv_spe") as SpinBox).value = 29
-	popup.call("_select_filter_option", "type", "water")
+	popup.call("_select_filter_option", "primary_type", "water")
+	popup.call("_select_filter_option", "secondary_type", "dark")
 	popup.call("_select_filter_option", "nature", "jolly")
 	popup.call("_select_filter_option", "shiny", 1)
 	popup.call("_select_filter_option", "hidden_ability", 0)
+	popup.call("_select_filter_option", "sort_by", "price")
+	popup.call("_select_filter_option", "sort_direction", "desc")
 	popup.call("_read_advanced_filter_controls")
 	var pokemon_filter_params := popup.call("_current_browse_filter_params") as Dictionary
 	_check(pokemon_filter_params.get("minPrice") == 1000, "Filters retain the minimum market price")
 	_check(pokemon_filter_params.get("minLevel") == 50 and pokemon_filter_params.get("maxLevel") == 80, "Filters retain the Pokémon level range")
-	_check(pokemon_filter_params.get("type") == "water" and pokemon_filter_params.get("nature") == "jolly", "Filters retain Pokémon type and nature")
+	_check(
+		pokemon_filter_params.get("primaryType") == "water"
+		and pokemon_filter_params.get("secondaryType") == "dark"
+		and pokemon_filter_params.get("nature") == "jolly",
+		"Filters retain both Pokémon types and nature"
+	)
 	_check(pokemon_filter_params.get("ability") == "Sharpness", "Filters retain an ability query")
 	_check(pokemon_filter_params.get("shiny") == true and pokemon_filter_params.get("hiddenAbility") == false, "Filters retain shiny and Hidden Ability choices")
 	_check(
@@ -93,6 +104,11 @@ func _run() -> void:
 		and pokemon_filter_params.get("minAtkIv") == 30
 		and pokemon_filter_params.get("minSpeedIv") == 29,
 		"Filters retain minimum IVs for individual stats"
+	)
+	_check(
+		pokemon_filter_params.get("sortBy") == "price"
+		and pokemon_filter_params.get("sortDirection") == "desc",
+		"Filters retain listing sort field and direction"
 	)
 	popup.set("browse_filters", {
 		"item": popup.call("_default_browse_filter_state", "item"),
@@ -305,6 +321,8 @@ func _run() -> void:
 	_check(popup_source.contains("func _load_browse() -> bool:"), "Browse loads report whether they succeeded")
 	_check(service_source.contains('"minPrice", "maxPrice", "itemCategory", "minLevel", "maxLevel"'), "Exchange API client forwards advanced market filters")
 	_check(service_source.contains('"minHpIv", "minAtkIv", "minDefIv", "minSpAtkIv", "minSpDefIv", "minSpeedIv"'), "Exchange API client forwards per-stat IV filters")
+	_check(service_source.contains('"type", "primaryType", "secondaryType"'), "Exchange API client forwards primary and secondary type filters")
+	_check(service_source.contains('"sortBy", "sortDirection"'), "Exchange API client forwards server-side sorting")
 	_check(popup_source.contains("if portfolio_loaded and browse_loaded:"), "Exchange success states require both requests to succeed")
 	_check(popup_source.contains("if refreshed:\n\t\t_set_status(_t(\"ui.exchange.status.updated\")"), "Refresh errors are not overwritten by a success state")
 	_check(popup_source.contains('party_service.call("refresh_party")'), "Successful Pokémon mutations synchronize the party sidebar")

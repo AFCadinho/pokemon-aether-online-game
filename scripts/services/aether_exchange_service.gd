@@ -19,8 +19,9 @@ func load_listings(asset_type := "", query := "", limit := 50, offset := 0, filt
 		endpoint += "&query=%s" % normalized_query.uri_encode()
 	for filter_key: String in [
 		"minPrice", "maxPrice", "itemCategory", "minLevel", "maxLevel",
-		"type", "nature", "ability", "shiny", "hiddenAbility",
+		"type", "primaryType", "secondaryType", "nature", "ability", "shiny", "hiddenAbility",
 		"minHpIv", "minAtkIv", "minDefIv", "minSpAtkIv", "minSpDefIv", "minSpeedIv",
+		"sortBy", "sortDirection",
 	]:
 		if not filters.has(filter_key):
 			continue
