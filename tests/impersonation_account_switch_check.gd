@@ -99,7 +99,8 @@ func _run() -> void:
 	)
 	_expect(
 		overlay.contains('settings_menu.call("show_impersonation_return_confirmation")')
-		and settings.contains("func show_impersonation_return_confirmation()"),
+		and settings.contains("func show_impersonation_return_confirmation()")
+		and settings.contains("logout_confirm_return_button.focus_mode = Control.FOCUS_ALL"),
 		"visible impersonation action opens the shared secure return confirmation"
 	)
 	_expect(

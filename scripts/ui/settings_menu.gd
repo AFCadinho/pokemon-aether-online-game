@@ -879,7 +879,7 @@ func _setup_logout_confirm_dialog() -> void:
 	logout_confirm_return_button = Button.new()
 	_set_localized_text(logout_confirm_return_button, "common.return")
 	logout_confirm_return_button.custom_minimum_size = Vector2(112, 32)
-	logout_confirm_return_button.focus_mode = Control.FOCUS_NONE
+	logout_confirm_return_button.focus_mode = Control.FOCUS_ALL
 	logout_confirm_return_button.pressed.connect(_logout_confirmed)
 	button_row.add_child(logout_confirm_return_button)
 

@@ -14660,6 +14660,7 @@ func _get_player_money_value() -> int:
 	return max(int(PlayerSave.money), 0)
 
 func _setup_pokemon_summary_popup(card_key: String = "") -> void:
+	_reset_pokemon_summary_card_node_references()
 	pokemon_summary_tab_buttons = {}
 	pokemon_summary_popup = PanelContainer.new()
 	pokemon_summary_popup.name = "PokemonSummaryPopup"
@@ -14704,6 +14705,7 @@ func _setup_pokemon_summary_popup(card_key: String = "") -> void:
 	_add_pokemon_summary_right_area(content_row, card_key)
 
 func _setup_readonly_pokemon_summary_popup(card_key: String = "") -> void:
+	_reset_pokemon_summary_card_node_references()
 	pokemon_summary_tab_buttons = {}
 	pokemon_summary_popup = PanelContainer.new()
 	pokemon_summary_popup.name = "PokemonReadonlySummaryPopup"
@@ -19508,6 +19510,45 @@ func _find_party_slot_for_summary_key(card_key: String) -> int:
 			return slot_index
 	return -1
 
+func _reset_pokemon_summary_card_node_references() -> void:
+	pokemon_summary_popup = null
+	pokemon_summary_left_panel = null
+	pokemon_summary_right_area = null
+	pokemon_summary_content_panel = null
+	pokemon_summary_tab_column = null
+	pokemon_summary_sprite = null
+	pokemon_summary_sprite_viewport = null
+	pokemon_summary_animated_sprite = null
+	pokemon_summary_level_badge_panel = null
+	pokemon_summary_level_badge_label = null
+	pokemon_summary_ball_button = null
+	pokemon_summary_ball_icon = null
+	pokemon_summary_ball_picker = null
+	pokemon_summary_ball_search_input = null
+	pokemon_summary_ball_list = null
+	pokemon_summary_type_icon_row = null
+	pokemon_summary_hidden_ability_badge = null
+	pokemon_summary_title_label = null
+	pokemon_summary_id_label = null
+	pokemon_summary_meta_label = null
+	pokemon_summary_held_item_slot = null
+	pokemon_summary_held_item_slot_button = null
+	pokemon_summary_held_item_slot_icon = null
+	pokemon_summary_held_item_slot_name_label = null
+	pokemon_summary_hp_bar = null
+	pokemon_summary_hp_label = null
+	pokemon_summary_status_icon = null
+	pokemon_summary_content_stack = null
+	pokemon_summary_tab_buttons = {}
+	pokemon_summary_shiny_badge = null
+	pokemon_summary_shiny_badge_label = null
+	pokemon_summary_trainer_label = null
+	pokemon_summary_stats_list = null
+	pokemon_summary_moves_list = null
+	pokemon_summary_item_picker = null
+	pokemon_summary_item_search_input = null
+	pokemon_summary_item_list = null
+
 func _capture_pokemon_summary_card_context(card_key: String, pokemon: Pokemon, mode: String, slot_index: int) -> Dictionary:
 	return {
 		"key": card_key,
@@ -19527,6 +19568,7 @@ func _capture_pokemon_summary_card_context(card_key: String, pokemon: Pokemon, m
 		"ball_search_input": pokemon_summary_ball_search_input,
 		"ball_list": pokemon_summary_ball_list,
 		"type_icon_row": pokemon_summary_type_icon_row,
+		"hidden_ability_badge": pokemon_summary_hidden_ability_badge,
 		"title_label": pokemon_summary_title_label,
 		"id_label": pokemon_summary_id_label,
 		"meta_label": pokemon_summary_meta_label,
@@ -19581,6 +19623,7 @@ func _apply_pokemon_summary_card_context(card_key: String) -> bool:
 	pokemon_summary_ball_search_input = context.get("ball_search_input") as LineEdit
 	pokemon_summary_ball_list = context.get("ball_list") as VBoxContainer
 	pokemon_summary_type_icon_row = context.get("type_icon_row") as HBoxContainer
+	pokemon_summary_hidden_ability_badge = context.get("hidden_ability_badge") as PanelContainer
 	pokemon_summary_title_label = context.get("title_label") as Label
 	pokemon_summary_id_label = context.get("id_label") as Label
 	pokemon_summary_meta_label = context.get("meta_label") as Label
