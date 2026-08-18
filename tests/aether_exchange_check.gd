@@ -176,7 +176,7 @@ func _run() -> void:
 	var sell_detail_stack := popup.get("detail_stack") as VBoxContainer
 	var item_header := sell_detail_stack.get_child(0) as PanelContainer
 	var item_detail_icon := item_header.find_child("ItemDetailIcon", true, false) as TextureRect
-	_check(str(item_header.name).begins_with("ItemDetailHeader"), "Item details use a compact information header")
+	_check(item_header.get_theme_stylebox("panel") is StyleBoxFlat, "Item details use a compact information header")
 	_check(item_detail_icon != null and item_detail_icon.size == Vector2(48, 48), "Item details preserve the native 48-pixel artwork size")
 	_check(item_detail_icon.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST, "Item details render pixel art without smoothing")
 	_check(popup.get("quantity_spin") is SpinBox, "Item listings expose quantity input")
