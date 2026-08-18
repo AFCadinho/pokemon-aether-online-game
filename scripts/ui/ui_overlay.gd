@@ -25172,46 +25172,72 @@ func _show_pm_message_empty_state(title_text: String, hint_text: String) -> void
 
 
 func _create_pm_message_row(message: Dictionary) -> Control:
-	var row := HBoxContainer.new()
+	var row := VBoxContainer.new()
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.alignment = BoxContainer.ALIGNMENT_BEGIN
-	row.add_theme_constant_override("separation", 4)
+	row.add_theme_constant_override("separation", 1)
 
 	var outgoing: bool = bool(message.get("outgoing", false))
 	var label: String = LocalizationManager.text("ui.chat.you") if outgoing else str(message.get("displayName", message.get("username", LocalizationManager.text("ui.trainer_card.trainer"))))
 	var name_color: String = "#7fd6ff" if outgoing else CHAT_DEFAULT_NAME_COLOR
 
+	var header := HBoxContainer.new()
+	header.name = "Header"
+	header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_theme_constant_override("separation", 4)
+	row.add_child(header)
+
 	var name_label := RichTextLabel.new()
+	name_label.name = "SenderName"
 	name_label.bbcode_enabled = true
 	name_label.fit_content = true
 	name_label.scroll_active = false
 	name_label.autowrap_mode = TextServer.AUTOWRAP_OFF
 	name_label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	name_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	name_label.append_text("[color=%s][b]%s[/b][/color][color=%s]:[/color]" % [
+	name_label.append_text("[color=%s][b]%s[/b][/color]" % [
 		name_color,
 		_escape_bbcode(label),
-		CHAT_SEPARATOR_COLOR,
 	])
-	row.add_child(name_label)
+	header.add_child(name_label)
 
-	var pokemon_attachments: Array[Dictionary] = _get_chat_pokemon_attachments(message)
-	for pokemon_payload: Dictionary in pokemon_attachments:
-		row.add_child(_create_chat_pokemon_attachment_button(pokemon_payload))
+	var body_margin := MarginContainer.new()
+	body_margin.name = "Body"
+	body_margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	body_margin.add_theme_constant_override("margin_left", 8)
+	body_margin.add_theme_constant_override("margin_right", 4)
+	body_margin.add_theme_constant_override("margin_bottom", 2)
+	row.add_child(body_margin)
+
+	var body_content := VBoxContainer.new()
+	body_content.name = "Content"
+	body_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	body_content.add_theme_constant_override("separation", 4)
+	body_margin.add_child(body_content)
 
 	var body_text: String = str(message.get("body", "")).strip_edges()
 	if body_text != "":
 		var body_label := RichTextLabel.new()
+		body_label.name = "MessageText"
 		body_label.bbcode_enabled = true
 		body_label.fit_content = true
 		body_label.scroll_active = false
+		body_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		body_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		body_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		body_label.append_text("[color=%s]%s[/color]" % [
 			CHAT_MESSAGE_COLOR,
 			_escape_bbcode(body_text),
 		])
-		row.add_child(body_label)
+		body_content.add_child(body_label)
+
+	var pokemon_attachments: Array[Dictionary] = _get_chat_pokemon_attachments(message)
+	if not pokemon_attachments.is_empty():
+		var attachment_row := HBoxContainer.new()
+		attachment_row.name = "Attachments"
+		attachment_row.add_theme_constant_override("separation", 4)
+		body_content.add_child(attachment_row)
+		for pokemon_payload: Dictionary in pokemon_attachments:
+			attachment_row.add_child(_create_chat_pokemon_attachment_button(pokemon_payload))
 
 	return row
 
@@ -25398,7 +25424,7 @@ func _refresh_chat_message_visibility() -> void:
 
 		var category: String = str(child.get_meta("chat_category", CHAT_CATEGORY_USER))
 		child.visible = _should_show_chat_category(category)
-		var channel_prefix := child.get_node_or_null("ChannelPrefix") as Control
+		var channel_prefix := child.get_node_or_null("Header/ChannelPrefix") as Control
 		if channel_prefix != null:
 			channel_prefix.visible = active_chat_tab == CHAT_TAB_ALL
 		_apply_chat_row_emphasis(child)
@@ -25415,8 +25441,12 @@ func _apply_chat_row_emphasis(row: Node) -> void:
 		]
 	)
 	var content_alpha := CHAT_ALL_SECONDARY_CONTENT_ALPHA if is_secondary_in_all else 1.0
-	for node_name: StringName in [&"RoleBadge", &"SenderName", &"MessageText"]:
-		var content := row.get_node_or_null(NodePath(node_name)) as CanvasItem
+	for node_path: NodePath in [
+		NodePath("Header/RoleBadge"),
+		NodePath("Header/SenderName"),
+		NodePath("Body/Content/MessageText"),
+	]:
+		var content := row.get_node_or_null(node_path) as CanvasItem
 		if content != null:
 			content.modulate = Color(1.0, 1.0, 1.0, content_alpha)
 
@@ -37893,10 +37923,9 @@ func _add_user_chat_message(
 	var role_color: String = str(role.get("color", "#d8b767"))
 	var name_color: String = role_color if not role.is_empty() else CHAT_DEFAULT_NAME_COLOR
 
-	var row: HBoxContainer = HBoxContainer.new()
+	var row := VBoxContainer.new()
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.alignment = BoxContainer.ALIGNMENT_BEGIN
-	row.add_theme_constant_override("separation", 4)
+	row.add_theme_constant_override("separation", 1)
 	var chat_category: String = CHAT_CHANNEL_GLOBAL
 	if channel == CHAT_CHANNEL_MAP:
 		chat_category = CHAT_CHANNEL_MAP
@@ -37912,45 +37941,51 @@ func _add_user_chat_message(
 	row.visible = _should_show_chat_category(chat_category)
 	message_list.add_child(row)
 
-	row.add_child(_create_chat_channel_prefix(channel, target_user_id))
+	var header := HBoxContainer.new()
+	header.name = "Header"
+	header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_theme_constant_override("separation", 4)
+	row.add_child(header)
+
+	header.add_child(_create_chat_channel_prefix(channel, target_user_id))
 
 	if not role.is_empty():
 		var role_name: String = str(role.get("badge", "")).strip_edges()
 		if not role_name.is_empty():
-			row.add_child(_create_chat_role_badge(role_name, role_color))
+			header.add_child(_create_chat_role_badge(role_name, role_color))
 
-	var has_visual_attachments := (
-		not pokemon_attachments.is_empty()
-		or not shiny_hunt_attachment.is_empty()
-	)
-	if text != "" and not has_visual_attachments:
-		row.add_child(_create_chat_sender_message_label(display_name, name_color, text))
-		_apply_chat_row_emphasis(row)
-		_scroll_chat_to_bottom.call_deferred()
-		return
-
-	var name_label := Label.new()
+	var name_label := RichTextLabel.new()
 	name_label.name = "SenderName"
-	name_label.text = "%s:" % display_name
+	name_label.bbcode_enabled = true
+	name_label.fit_content = true
+	name_label.scroll_active = false
 	name_label.autowrap_mode = TextServer.AUTOWRAP_OFF
-	name_label.clip_text = false
 	name_label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	name_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	name_label.add_theme_color_override("font_color", Color(_sanitize_hex_color(name_color, "#dfe4f2")))
-	name_label.add_theme_font_size_override("font_size", 14)
-	row.add_child(name_label)
-	for pokemon_payload: Dictionary in pokemon_attachments:
-		row.add_child(_create_chat_pokemon_attachment_button(_pokemon_preview_payload_with_current_trainer(
-			pokemon_payload,
-			display_name,
-			str(user.get("id", user.get("userId", user.get("user_id", ""))))
-		)))
-	if not shiny_hunt_attachment.is_empty():
-		row.add_child(_create_chat_shiny_hunt_button(shiny_hunt_attachment))
+	name_label.append_text("[color=%s][b]%s[/b][/color]" % [
+		_sanitize_hex_color(name_color, "#dfe4f2"),
+		_escape_bbcode(display_name),
+	])
+	header.add_child(name_label)
+
+	var body_margin := MarginContainer.new()
+	body_margin.name = "Body"
+	body_margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	body_margin.add_theme_constant_override("margin_left", 8)
+	body_margin.add_theme_constant_override("margin_right", 4)
+	body_margin.add_theme_constant_override("margin_bottom", 2)
+	row.add_child(body_margin)
+
+	var body_content := VBoxContainer.new()
+	body_content.name = "Content"
+	body_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	body_content.add_theme_constant_override("separation", 4)
+	body_margin.add_child(body_content)
+
 	if text != "":
 		var entry: RichTextLabel = message_entry_template.duplicate() as RichTextLabel
 		entry.name = "MessageText"
-		row.add_child(entry)
+		body_content.add_child(entry)
 		entry.visible = true
 		entry.bbcode_enabled = true
 		entry.clear()
@@ -37960,34 +37995,30 @@ func _add_user_chat_message(
 		])
 		entry.fit_content = true
 		entry.scroll_active = false
+		entry.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		entry.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+	var has_visual_attachments := (
+		not pokemon_attachments.is_empty()
+		or not shiny_hunt_attachment.is_empty()
+	)
+	if has_visual_attachments:
+		var attachment_row := HBoxContainer.new()
+		attachment_row.name = "Attachments"
+		attachment_row.add_theme_constant_override("separation", 4)
+		body_content.add_child(attachment_row)
+		for pokemon_payload: Dictionary in pokemon_attachments:
+			attachment_row.add_child(_create_chat_pokemon_attachment_button(
+				_pokemon_preview_payload_with_current_trainer(
+					pokemon_payload,
+					display_name,
+					str(user.get("id", user.get("userId", user.get("user_id", ""))))
+				)
+			))
+		if not shiny_hunt_attachment.is_empty():
+			attachment_row.add_child(_create_chat_shiny_hunt_button(shiny_hunt_attachment))
 	_apply_chat_row_emphasis(row)
 	_scroll_chat_to_bottom.call_deferred()
-
-
-func _create_chat_sender_message_label(
-	display_name: String,
-	name_color: String,
-	text: String
-) -> RichTextLabel:
-	var entry: RichTextLabel = message_entry_template.duplicate() as RichTextLabel
-	entry.name = "MessageText"
-	entry.visible = true
-	entry.bbcode_enabled = true
-	entry.clear()
-	entry.append_text("[color=%s][b]%s[/b][/color][color=%s]:[/color] [color=%s]%s[/color]" % [
-		_sanitize_hex_color(name_color, "#dfe4f2"),
-		_escape_bbcode(display_name),
-		CHAT_SEPARATOR_COLOR,
-		CHAT_MESSAGE_COLOR,
-		_escape_bbcode(text),
-	])
-	entry.fit_content = true
-	entry.scroll_active = false
-	entry.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	entry.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	entry.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	return entry
 
 
 func _create_chat_shiny_hunt_button(attachment: Dictionary) -> Control:

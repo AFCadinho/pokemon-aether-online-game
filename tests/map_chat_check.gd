@@ -109,7 +109,10 @@ func _init() -> void:
 			'category not in [\n\t\t\tCHAT_CHANNEL_GLOBAL,\n\t\t\tCHAT_CATEGORY_USER,'
 		)
 		and overlay_source.contains(
-			'for node_name: StringName in [&"RoleBadge", &"SenderName", &"MessageText"]'
+			'NodePath("Header/RoleBadge")'
+		)
+		and overlay_source.contains(
+			'NodePath("Body/Content/MessageText")'
 		),
 		"All keeps Global prominent and softens secondary channel message content"
 	)
