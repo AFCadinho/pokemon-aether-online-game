@@ -19690,9 +19690,8 @@ func _refresh_readonly_pokemon_summary(pokemon: Pokemon) -> void:
 	var gender_label := nodes.get("gender_label") as Label
 	gender_label.text = "♂" if pokemon.gender == "male" else ("♀" if pokemon.gender == "female" else "")
 	gender_label.add_theme_color_override("font_color", Color("#62d7ff") if pokemon.gender == "male" else Color("#ff82ba"))
-	var summary_id: String = str(pokemon.owned_pokemon_id) if pokemon.owned_pokemon_id > 0 else pokemon.instance_id.strip_edges()
 	var id_label := nodes.get("id_label") as Label
-	id_label.text = "#%s" % summary_id if summary_id != "" else "#—"
+	id_label.text = "#%s" % pokemon.national_dex_number if pokemon.national_dex_number > 0 else "#—"
 	var shiny_label := nodes.get("shiny_label") as Label
 	shiny_label.visible = pokemon.shiny
 	var trainer_label := nodes.get("trainer_label") as Label

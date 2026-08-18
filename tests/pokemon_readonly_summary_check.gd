@@ -35,6 +35,7 @@ func _run() -> void:
 	_check((nodes.get("move_nodes", []) as Array).size() == 4, "all four moves render at once")
 	_check((nodes.get("type_row") as HBoxContainer).get_child_count() == 2, "both Pokémon types render as chips")
 	_check((nodes.get("name_label") as Label).text == "Garchomp", "localized Pokémon identity renders")
+	_check((nodes.get("id_label") as Label).text == "#445", "header uses the National Dex number instead of the owned Pokémon id")
 	_check((nodes.get("gender_label") as Label).text == "♀", "gender renders beside the Pokémon name")
 	_check((nodes.get("ability_label") as Label).text != "", "ability renders on the overview")
 	var stat_rows := nodes.get("stat_rows", {}) as Dictionary
@@ -54,8 +55,10 @@ func _run() -> void:
 
 func _sample_pokemon() -> Dictionary:
 	return {
-		"pokemonId": 248,
+		"pokemonId": 3,
+		"nationalDexNumber": 445,
 		"species": "garchomp",
+		"nickname": null,
 		"gender": "Female",
 		"level": 100,
 		"nature": "Jolly",
