@@ -332,6 +332,7 @@ const EXP_CANDY_EXPERIENCE := {
 }
 const POKEMON_EV_TOTAL_LIMIT := 510
 const POKEMON_EV_STAT_LIMIT := 252
+const POKEMON_EV_STORAGE_TOTAL_LIMIT := POKEMON_EV_STAT_LIMIT * 6
 const EV_ITEM_EFFECTS := {
 	"hp-up": {"stat": "hp", "potency": 10},
 	"protein": {"stat": "atk", "potency": 10},
@@ -18187,15 +18188,10 @@ func _bag_ev_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, req
 	if stat_id == "" or potency <= 0:
 		return {}
 
-	var current_evs: Dictionary = pokemon.evs
 	var current_stored_evs: Dictionary = pokemon.stored_evs
 	var current_value: int = clampi(int(current_stored_evs.get(stat_id, 0)), 0, POKEMON_EV_STAT_LIMIT)
-	var allocated_total: int = _get_summary_ev_total(current_evs)
-	var stored_total: int = _get_summary_ev_total(current_stored_evs)
-	var max_gain: int = min(
-		max(POKEMON_EV_STAT_LIMIT - current_value, 0),
-		max(POKEMON_EV_TOTAL_LIMIT - allocated_total - stored_total, 0)
-	)
+	var stored_total: int = _get_summary_stored_ev_total(current_stored_evs)
+	var max_gain: int = max(POKEMON_EV_STAT_LIMIT - current_value, 0)
 	var stat_label := _summary_stat_label(stat_id)
 	if max_gain <= 0:
 		return {
@@ -18205,9 +18201,6 @@ func _bag_ev_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, req
 				"stat": stat_label,
 				"stat_current": current_value,
 				"stat_max": POKEMON_EV_STAT_LIMIT,
-				"allocated": allocated_total,
-				"total_max": POKEMON_EV_TOTAL_LIMIT,
-				"stored": stored_total,
 			}),
 			"canApply": false,
 		}
@@ -18236,8 +18229,6 @@ func _bag_ev_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, req
 			"new": new_value,
 			"stored_total": stored_total,
 			"new_stored_total": new_stored_total,
-			"allocated": allocated_total,
-			"total_max": POKEMON_EV_TOTAL_LIMIT,
 		}),
 	}
 
@@ -19967,7 +19958,7 @@ func _render_pokemon_summary_evs(pokemon: Pokemon) -> void:
 			stat.get("color", UI_BORDER_FOCUS) as Color
 		))
 	_add_summary_section_title(LocalizationManager.text("ui.pokemon_summary.evs.stored"), POKEMON_SUMMARY_ACCENT)
-	pokemon_summary_content_stack.add_child(_create_summary_stored_evs_panel(pokemon.evs, pokemon.stored_evs))
+	pokemon_summary_content_stack.add_child(_create_summary_stored_evs_panel(pokemon.stored_evs))
 
 func _render_pokemon_summary_moves_tab(pokemon: Pokemon) -> void:
 	_add_summary_section_title(LocalizationManager.text("ui.pokemon_summary.tab.moves"), POKEMON_SUMMARY_ACCENT)
@@ -20291,7 +20282,7 @@ func _create_summary_ev_training_row(stat_id: String, label_text: String, value:
 
 	return panel
 
-func _create_summary_stored_evs_panel(allocated_evs: Dictionary, stored_evs: Dictionary) -> Control:
+func _create_summary_stored_evs_panel(stored_evs: Dictionary) -> Control:
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(0, 104)
 	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#081321ef"), POKEMON_SUMMARY_ACCENT_FAINT, 7, 1))
@@ -20307,19 +20298,17 @@ func _create_summary_stored_evs_panel(allocated_evs: Dictionary, stored_evs: Dic
 	stack.add_theme_constant_override("separation", 5)
 	margin.add_child(stack)
 
-	var allocated_total: int = 0
 	var stored_total: int = 0
 	for stat_value: Variant in _summary_stat_order():
 		var stat: Dictionary = stat_value
 		var stat_id: String = str(stat.get("id", ""))
-		allocated_total += int(allocated_evs.get(stat_id, 0))
 		stored_total += int(stored_evs.get(stat_id, 0))
 
 	var total_label := Label.new()
 	total_label.text = LocalizationManager.text("ui.pokemon_summary.evs.available_capacity", {
-		"available": stored_total,
-		"current": allocated_total + stored_total,
-		"max": POKEMON_EV_TOTAL_LIMIT,
+		"current": stored_total,
+		"max": POKEMON_EV_STORAGE_TOTAL_LIMIT,
+		"stat_max": POKEMON_EV_STAT_LIMIT,
 	})
 	total_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	total_label.add_theme_font_size_override("font_size", 10)
@@ -20527,6 +20516,13 @@ func _get_summary_ev_total(evs: Dictionary) -> int:
 		var stat: Dictionary = stat_value
 		total += clampi(int(evs.get(str(stat.get("id", "")), 0)), 0, POKEMON_EV_STAT_LIMIT)
 	return clampi(total, 0, POKEMON_EV_TOTAL_LIMIT)
+
+func _get_summary_stored_ev_total(evs: Dictionary) -> int:
+	var total := 0
+	for stat_value: Variant in _summary_stat_order():
+		var stat: Dictionary = stat_value
+		total += clampi(int(evs.get(str(stat.get("id", "")), 0)), 0, POKEMON_EV_STAT_LIMIT)
+	return clampi(total, 0, POKEMON_EV_STORAGE_TOTAL_LIMIT)
 
 func _create_summary_move_card(
 	pokemon: Pokemon,
