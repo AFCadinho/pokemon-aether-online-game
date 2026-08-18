@@ -17,6 +17,8 @@ func _init() -> void:
 	_check_stale_previous_condition_rewinds_from_authoritative_state()
 	_check_legitimate_full_hp_rewind_is_preserved()
 	_check_multihit_knockout_keeps_rendered_hp_continuity()
+	_check_multihit_knockout_keeps_continuity_across_batches()
+	_check_multihit_knockout_keeps_continuity_across_hp_scales()
 	_check_full_hp_reveal_damage_has_no_damage_target()
 	_check_real_damage_keeps_damage_target()
 	_check_direct_damage_logs_one_decimal_precision()
@@ -351,6 +353,69 @@ func _check_multihit_knockout_keeps_rendered_hp_continuity() -> void:
 		str((events[3] as Dictionary).get("previousCondition", "")),
 		"44/100",
 		"HP continuity normalization does not mutate the response events"
+	)
+
+
+func _check_multihit_knockout_keeps_continuity_across_batches() -> void:
+	var helper = BattleHpEventHelperScript.new()
+	helper.normalize_damage_event_continuity([
+		{
+			"type": "damage", "target": "p2a: Pidgey",
+			"pokemonKey": "p2:slot:1",
+			"previousCondition": "69/100", "condition": "19/100",
+			"previousHp": 11, "hp": 3, "maxHp": 16,
+		},
+	])
+	var final_batch: Array = helper.normalize_damage_event_continuity([
+		{
+			"type": "damage", "target": "p2: Pidgey",
+			"pokemonKey": "p2:slot:1",
+			"previousCondition": "44/100", "condition": "0 fnt",
+			"previousHp": 7, "hp": 0, "maxHp": 16,
+		},
+		{"type": "faint", "target": "p2a: Pidgey", "condition": "0 fnt"},
+	])
+	var knockout_damage: Dictionary = final_batch[0] as Dictionary
+
+	_check_equal(
+		str(knockout_damage.get("previousCondition", "")),
+		"19/100",
+		"a separately delivered final hit uses stable identity and the previously rendered HP"
+	)
+	_check_equal(
+		int(knockout_damage.get("previousHp", -1)),
+		3,
+		"exact HP continuity survives a response batch boundary"
+	)
+
+
+func _check_multihit_knockout_keeps_continuity_across_hp_scales() -> void:
+	var helper = BattleHpEventHelperScript.new()
+	helper.normalize_damage_event_continuity([
+		{
+			"type": "damage", "target": "p2a: Pidgey",
+			"previousCondition": "69/100", "condition": "19/100",
+			"previousHp": 11, "hp": 3, "maxHp": 16,
+		},
+	])
+	var final_batch: Array = helper.normalize_damage_event_continuity([
+		{
+			"type": "damage", "target": "p2a: Pidgey",
+			"previousCondition": "44/100", "condition": "0 fnt",
+			"previousHp": 44, "hp": 0, "maxHp": 100,
+		},
+	])
+	var knockout_damage: Dictionary = final_batch[0] as Dictionary
+
+	_check_equal(
+		str(knockout_damage.get("previousCondition", "")),
+		"19/100",
+		"a public-scale knockout starts from the preceding exact-scale HP"
+	)
+	_check_equal(
+		int(knockout_damage.get("previousHp", -1)),
+		19,
+		"cross-scale knockout rewind preserves the previously rendered percentage"
 	)
 
 

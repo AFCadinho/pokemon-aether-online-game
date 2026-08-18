@@ -2,6 +2,9 @@ extends RefCounted
 
 class_name BattleHpEventHelper
 
+var _presentation_hp_cursor_by_target: Dictionary = {}
+
+
 func get_event_hp_snapshot(event: Dictionary, use_previous_hp: bool) -> Dictionary:
 	var condition_key: String = "previousCondition" if use_previous_hp else "condition"
 	var condition_snapshot := parse_condition_hp_snapshot(str(event.get(condition_key, "")))
@@ -61,7 +64,6 @@ func get_rewind_hp_snapshot(event: Dictionary, state_snapshot: Dictionary) -> Di
 
 func normalize_damage_event_continuity(events: Array) -> Array:
 	var normalized_events: Array = events.duplicate(true)
-	var hp_cursor_by_target: Dictionary = {}
 
 	for event_value: Variant in normalized_events:
 		if not (event_value is Dictionary):
@@ -72,7 +74,7 @@ func normalize_damage_event_continuity(events: Array) -> Array:
 		if event_type == "switch" or event_type == "drag":
 			# Active idents may be reused by the incoming Pokemon. Never carry an
 			# outgoing Pokemon's rendered HP into the next switch target.
-			hp_cursor_by_target.clear()
+			_presentation_hp_cursor_by_target.clear()
 			continue
 		if event_type != "damage" and event_type != "heal" and event_type != "faint":
 			continue
@@ -81,14 +83,14 @@ func normalize_damage_event_continuity(events: Array) -> Array:
 		if target_key == "":
 			continue
 
-		if event_type == "damage" and hp_cursor_by_target.has(target_key):
-			_clamp_damage_rewind_to_cursor(event, hp_cursor_by_target[target_key])
+		if event_type == "damage" and _presentation_hp_cursor_by_target.has(target_key):
+			_clamp_damage_rewind_to_cursor(event, _presentation_hp_cursor_by_target[target_key])
 
 		var current_snapshot := get_event_hp_snapshot(event, false)
 		if current_snapshot.is_empty():
 			continue
 		current_snapshot["condition"] = str(event.get("condition", ""))
-		hp_cursor_by_target[target_key] = current_snapshot
+		_presentation_hp_cursor_by_target[target_key] = current_snapshot
 
 	return normalized_events
 
@@ -116,16 +118,25 @@ func _clamp_damage_rewind_to_cursor(event: Dictionary, cursor_value: Variant) ->
 	var cursor_max_hp := int(cursor.get("max_hp", 0))
 	var previous_max_hp := int(previous_snapshot.get("max_hp", 0))
 	var current_max_hp := int(current_snapshot.get("max_hp", 0))
-	if cursor_max_hp <= 0 or cursor_max_hp != previous_max_hp or cursor_max_hp != current_max_hp:
+	if cursor_max_hp <= 0 or previous_max_hp <= 0 or current_max_hp <= 0:
 		return
 
 	var cursor_hp := int(cursor.get("hp", 0))
 	var previous_hp := int(previous_snapshot.get("hp", 0))
 	var current_hp := int(current_snapshot.get("hp", 0))
-	if previous_hp <= cursor_hp or current_hp > cursor_hp:
+	var cursor_percent := to_visible_hp_percent(cursor_hp, cursor_max_hp)
+	var previous_percent := to_visible_hp_percent(previous_hp, previous_max_hp)
+	var current_percent := to_visible_hp_percent(current_hp, current_max_hp)
+	if previous_percent <= cursor_percent or current_percent > cursor_percent:
 		return
 
-	event["previousHp"] = cursor_hp
+	var event_max_hp := int(event.get("maxHp", 0))
+	if event_max_hp > 0:
+		event["previousHp"] = clamp(
+			roundi((float(cursor_hp) / float(cursor_max_hp)) * float(event_max_hp)),
+			0,
+			event_max_hp
+		)
 	var cursor_condition := str(cursor.get("condition", ""))
 	if cursor_condition != "":
 		event["previousCondition"] = cursor_condition
@@ -134,10 +145,6 @@ func _clamp_damage_rewind_to_cursor(event: Dictionary, cursor_value: Variant) ->
 
 
 func _get_hp_event_target_key(event: Dictionary) -> String:
-	var target := str(event.get("target", "")).strip_edges().to_lower()
-	if target != "":
-		return "target:%s" % target
-
 	for key in ["pokemonKey", "pokemon_key"]:
 		var pokemon_key := str(event.get(key, "")).strip_edges()
 		if pokemon_key != "":
@@ -151,6 +158,10 @@ func _get_hp_event_target_key(event: Dictionary) -> String:
 		var pokemon_key := str(target_ref.get("pokemonKey", target_ref.get("pokemon_key", ""))).strip_edges()
 		if pokemon_key != "":
 			return "pokemon:%s" % pokemon_key
+
+	var target := str(event.get("target", "")).strip_edges().to_lower()
+	if target != "":
+		return "target:%s" % target
 
 	return ""
 

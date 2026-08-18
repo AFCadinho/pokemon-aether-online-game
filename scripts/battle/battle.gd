@@ -8403,7 +8403,6 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			_order_form_change_events_before_moves(events)
 		)
 	)
-	ordered_events = hp_event_helper.normalize_damage_event_continuity(ordered_events)
 	_debug_battle_start("render.begin source=%s renderTurns=%s input=%s ordered=%s lastRenderedSeq=%d" % [
 		source,
 		str(render_turn_headers),
@@ -9836,6 +9835,14 @@ func _get_status_from_event_or_state(event: Dictionary, player_id: String, use_p
 	return battle_state.get_active_pokemon_status(player_id)
 
 func _rewind_active_hud_hp_for_events(events: Array) -> void:
+	var ordered_events: Array = _order_switch_out_heals_before_switches(
+		BATTLE_DISGUISE_EVENT_ORDER.move_busted_form_changes_after_recoil(
+			_order_form_change_events_before_moves(events)
+		)
+	)
+	var normalized_events := hp_event_helper.normalize_damage_event_continuity(ordered_events)
+	events.clear()
+	events.append_array(normalized_events)
 	_debug_battle_presentation_order("rewind_active_hud_hp.begin events=%s" % JSON.stringify(_summarize_events_for_order_debug(events)))
 	var rewound_player_ids: Dictionary = {}
 
