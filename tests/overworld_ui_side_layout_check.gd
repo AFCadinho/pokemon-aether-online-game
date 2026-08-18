@@ -263,8 +263,9 @@ func _init() -> void:
 		and script_source.contains('entry.append_text(" [color=%s]%s[/color]"')
 		and script_source.contains('"\\u00a0".repeat(spacer_count)')
 		and script_source.contains("func _sync_chat_inline_header_spacing(")
+		and script_source.contains("header.get_combined_minimum_size().x + CHAT_INLINE_HEADER_CLEARANCE")
 		and script_source.contains("entry.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART"),
-		"chat metadata floats over first-line spacing while wrapped text returns left"
+		"chat metadata keeps clearance on the first line while wrapped text returns left"
 	)
 	_check(
 		script_source.contains('message_list.add_theme_constant_override("separation", 5)'),
