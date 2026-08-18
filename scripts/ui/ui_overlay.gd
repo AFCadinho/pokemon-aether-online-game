@@ -29094,11 +29094,28 @@ func _get_pokedex_selected_rarity_label() -> String:
 	)
 
 func _build_pokedex_evolutions_tab() -> void:
+	var pre_evolutions := _array_from_variant(pokedex_selected_species.get("preEvolutions", []))
+	var evolutions := _array_from_variant(pokedex_selected_species.get("evolutions", []))
+	if pre_evolutions.is_empty() and evolutions.is_empty():
+		pokedex_detail_stack.add_child(_create_pokedex_muted_message(
+			LocalizationManager.text("ui.pokedex.evolutions.empty")
+		))
+		return
+
+	if not pre_evolutions.is_empty():
+		pokedex_detail_stack.add_child(_create_pokedex_detail_section_title(
+			LocalizationManager.text("ui.pokedex.pre_evolutions.title")
+		))
+		for evolution_value: Variant in pre_evolutions:
+			if typeof(evolution_value) != TYPE_DICTIONARY:
+				continue
+			pokedex_detail_stack.add_child(
+				_create_pokedex_evolution_row(evolution_value as Dictionary, true)
+			)
+
 	pokedex_detail_stack.add_child(_create_pokedex_detail_section_title(
 		LocalizationManager.text("ui.pokedex.evolutions.title")
 	))
-
-	var evolutions := _array_from_variant(pokedex_selected_species.get("evolutions", []))
 	if evolutions.is_empty():
 		pokedex_detail_stack.add_child(_create_pokedex_muted_message(
 			LocalizationManager.text("ui.pokedex.evolutions.empty")
@@ -29110,9 +29127,9 @@ func _build_pokedex_evolutions_tab() -> void:
 			continue
 		pokedex_detail_stack.add_child(_create_pokedex_evolution_row(evolution_value as Dictionary))
 
-func _create_pokedex_evolution_row(evolution: Dictionary) -> Control:
+func _create_pokedex_evolution_row(evolution: Dictionary, is_pre_evolution: bool = false) -> Control:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(0, 54)
+	panel.custom_minimum_size = Vector2(0, 60)
 	panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SURFACE_RAISED, UI_BORDER_SUBTLE, 8, 1))
 
 	var margin := MarginContainer.new()
@@ -29126,17 +29143,30 @@ func _create_pokedex_evolution_row(evolution: Dictionary) -> Control:
 	row.add_theme_constant_override("separation", 12)
 	margin.add_child(row)
 
-	var name_label := Label.new()
-	name_label.text = str(evolution.get(
+	var species_id := str(evolution.get("speciesId", "")).strip_edges()
+	var source_species_name := str(evolution.get(
 		"speciesName",
-		evolution.get("speciesId", LocalizationManager.text("common.unknown"))
+		species_id if species_id != "" else LocalizationManager.text("common.unknown")
 	))
-	name_label.custom_minimum_size = Vector2(180, 0)
-	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	name_label.add_theme_font_size_override("font_size", 14)
-	name_label.add_theme_color_override("font_color", UI_TEXT)
-	row.add_child(name_label)
+	var species_name := _localized_species_name(species_id, source_species_name)
+	var name_button := LinkButton.new()
+	name_button.name = "EvolutionSpeciesLink_%s" % species_id
+	name_button.text = species_name
+	name_button.custom_minimum_size = Vector2(180, 0)
+	name_button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	name_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	name_button.tooltip_text = LocalizationManager.text(
+		"ui.pokedex.evolutions.open_species",
+		{"species": species_name}
+	)
+	name_button.add_theme_font_size_override("font_size", 14)
+	name_button.add_theme_color_override("font_color", POKEDEX_ACCENT)
+	name_button.add_theme_color_override("font_hover_color", POKEDEX_ACCENT.lightened(0.2))
+	name_button.add_theme_color_override("font_pressed_color", POKEDEX_ACCENT.darkened(0.15))
+	name_button.disabled = species_id == ""
+	if species_id != "":
+		name_button.pressed.connect(_on_pokedex_species_selected.bind(species_id))
+	row.add_child(name_button)
 
 	var detail_stack := VBoxContainer.new()
 	detail_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -29145,18 +29175,35 @@ func _create_pokedex_evolution_row(evolution: Dictionary) -> Control:
 
 	var trigger_text := _format_pokedex_evolution_trigger(evolution)
 	var trigger_label := Label.new()
-	trigger_label.text = LocalizationManager.text("ui.pokedex.evolutions.trigger", {
-		"trigger": trigger_text,
-	})
+	if is_pre_evolution:
+		var target_species_id := str(evolution.get("evolvesIntoSpeciesId", "")).strip_edges()
+		var target_species_name := _localized_species_name(
+			target_species_id,
+			str(evolution.get("evolvesIntoSpeciesName", target_species_id))
+		)
+		trigger_label.text = LocalizationManager.text("ui.pokedex.pre_evolutions.target", {
+			"species": target_species_name,
+		})
+	else:
+		trigger_label.text = LocalizationManager.text("ui.pokedex.evolutions.trigger", {
+			"trigger": trigger_text,
+		})
 	trigger_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	trigger_label.add_theme_font_size_override("font_size", 12)
 	trigger_label.add_theme_color_override("font_color", UI_TEXT)
 	detail_stack.add_child(trigger_label)
 
-	var condition_text := str(evolution.get(
-		"condition",
-		LocalizationManager.text("ui.pokedex.evolutions.unknown_condition")
-	)).strip_edges()
+	var condition_parts: Array[String] = []
+	for condition_value: Variant in _array_from_variant(evolution.get("conditions", [])):
+		var condition_part := str(condition_value).strip_edges()
+		if condition_part != "" and not condition_parts.has(condition_part):
+			condition_parts.append(condition_part)
+	var condition_text := " · ".join(condition_parts)
+	if condition_text == "":
+		condition_text = str(evolution.get(
+			"condition",
+			LocalizationManager.text("ui.pokedex.evolutions.unknown_condition")
+		)).strip_edges()
 	if condition_text == "":
 		condition_text = LocalizationManager.text("ui.pokedex.evolutions.unknown_condition")
 	var condition_label := Label.new()
@@ -29168,8 +29215,72 @@ func _create_pokedex_evolution_row(evolution: Dictionary) -> Control:
 	condition_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	detail_stack.add_child(condition_label)
 
+	for item_id: String in _get_pokedex_evolution_item_ids(evolution):
+		var fallback_item_name := _format_identifier_display_name(item_id)
+		var item_name := ItemLocalization.display_name(item_id, fallback_item_name)
+		var item_button := Button.new()
+		item_button.name = "EvolutionItemLink_%s" % item_id
+		item_button.text = item_name
+		item_button.custom_minimum_size = Vector2(116, 32)
+		item_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		item_button.tooltip_text = LocalizationManager.text(
+			"ui.pokedex.evolutions.open_item",
+			{"item": item_name}
+		)
+		item_button.add_theme_font_size_override("font_size", 11)
+		item_button.add_theme_color_override("font_color", ITEM_DEX_ACCENT)
+		item_button.add_theme_color_override("font_hover_color", ITEM_DEX_ACCENT.lightened(0.2))
+		item_button.add_theme_stylebox_override(
+			"normal",
+			_make_button_style(Color("#211b10d9"), ITEM_DEX_ACCENT_FAINT, 7, 1)
+		)
+		item_button.add_theme_stylebox_override(
+			"hover",
+			_make_button_style(Color("#332813ef"), ITEM_DEX_ACCENT_SOFT, 7, 1)
+		)
+		item_button.add_theme_stylebox_override(
+			"pressed",
+			_make_button_style(Color("#171108ef"), ITEM_DEX_ACCENT, 7, 1)
+		)
+		item_button.pressed.connect(_open_item_dex_item_from_pokedex.bind(item_id))
+		row.add_child(item_button)
+
 	panel.tooltip_text = "%s\n%s" % [trigger_label.text, condition_label.text]
 	return panel
+
+func _get_pokedex_evolution_item_ids(evolution: Dictionary) -> Array[String]:
+	var item_ids: Array[String] = []
+	for item_value: Variant in _array_from_variant(evolution.get("items", [])):
+		var listed_item_id := str(item_value).strip_edges()
+		if listed_item_id != "" and not item_ids.has(listed_item_id):
+			item_ids.append(listed_item_id)
+	for key: String in ["item", "heldItem"]:
+		var direct_item_id := str(evolution.get(key, "")).strip_edges()
+		if direct_item_id != "" and not item_ids.has(direct_item_id):
+			item_ids.append(direct_item_id)
+	return item_ids
+
+func _open_item_dex_item_from_pokedex(item_id: String) -> void:
+	var normalized_item_id := item_id.strip_edges().to_lower()
+	if normalized_item_id == "" or item_dex_popup == null or item_dex_search_input == null:
+		return
+
+	item_dex_search_input.set_block_signals(true)
+	item_dex_search_input.text = normalized_item_id
+	item_dex_search_input.set_block_signals(false)
+	await _show_item_dex_popup()
+	if item_dex_results_list == null:
+		return
+	for child: Node in item_dex_results_list.get_children():
+		var button := child as Button
+		if button == null:
+			continue
+		if str(button.get_meta("item_id", "")).strip_edges().to_lower() != normalized_item_id:
+			continue
+		var item_value: Variant = button.get_meta("item_data", {})
+		if typeof(item_value) == TYPE_DICTIONARY:
+			_on_item_dex_result_selected(item_value as Dictionary)
+		return
 
 func _format_pokedex_evolution_trigger(evolution: Dictionary) -> String:
 	var method := str(evolution.get("method", "")).strip_edges()
@@ -29885,6 +29996,7 @@ func _create_item_dex_result_button(item: Dictionary) -> Control:
 	button.tooltip_text = str(localized_item.get("shortDesc", localized_item.get("desc", "")))
 	button.pressed.connect(_on_item_dex_result_selected.bind(localized_item))
 	button.set_meta("item_id", item_id)
+	button.set_meta("item_data", localized_item)
 
 	var row := HBoxContainer.new()
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
