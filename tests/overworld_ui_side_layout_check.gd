@@ -260,10 +260,14 @@ func _init() -> void:
 	_check(script_source.contains('message_scroll.add_theme_stylebox_override("panel", _make_chat_message_surface_style())'), "chat messages use a subtle inner surface")
 	_check(
 		script_source.contains('header.name = "Header"')
-		and script_source.contains('body_margin.name = "Body"')
-		and script_source.contains('body_margin.add_theme_constant_override("margin_left", 8)')
+		and script_source.contains("func _create_chat_sender_message_label(")
+		and script_source.contains('entry.append_text(" [color=%s]%s[/color]"')
 		and script_source.contains("entry.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART"),
-		"chat messages place sender details above an indented full-width message body"
+		"chat messages keep the badge, sender and body on one wrapping line"
+	)
+	_check(
+		script_source.contains('message_list.add_theme_constant_override("separation", 5)'),
+		"separate chat messages keep a small visual gap"
 	)
 	_check(script_source.contains('_apply_chat_main_tab_style(general_chat_tab_button, general_active)'), "active and inactive main tabs receive distinct styling")
 	_check(script_source.contains("style.border_width_bottom = 2"), "selected main tab gets a clear bottom accent")
