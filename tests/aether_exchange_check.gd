@@ -66,8 +66,17 @@ func _run() -> void:
 	_check(browse_sort_button.get_popup().get_theme_stylebox("panel") is StyleBoxFlat, "Browse sort menu uses the Aether popup surface")
 	_check(str(browse_sort_button.get_item_metadata(0)) == "newest_desc", "Browse defaults to newest listings first")
 	_check(browse_sort_button.is_item_disabled(4) and browse_sort_button.is_item_disabled(5), "Item browsing disables Pokémon-only level sorting")
+	var filter_toolbar_style := advanced_filter_button.get_theme_stylebox("normal") as StyleBoxFlat
+	var sort_toolbar_style := browse_sort_button.get_theme_stylebox("normal") as StyleBoxFlat
+	var refresh_toolbar_style := refresh_button.get_theme_stylebox("normal") as StyleBoxFlat
+	_check(filter_toolbar_style.border_color != sort_toolbar_style.border_color, "Filters and sorting use distinct toolbar accents")
+	_check(sort_toolbar_style.border_color != refresh_toolbar_style.border_color, "Sorting remains distinct from the neutral Refresh action")
+	_check(filter_toolbar_style.border_color.b > filter_toolbar_style.border_color.g, "Filters use the purple Exchange accent")
+	_check(sort_toolbar_style.border_color.r > sort_toolbar_style.border_color.b, "Sorting uses the gold Exchange accent")
 	advanced_filter_button.pressed.emit()
 	_check(advanced_filter_overlay.visible and advanced_filter_panel.visible, "Filter action opens a centered modal filter panel")
+	var active_filter_toolbar_style := advanced_filter_button.get_theme_stylebox("normal") as StyleBoxFlat
+	_check(active_filter_toolbar_style.bg_color != filter_toolbar_style.bg_color, "Open or active filters receive a stronger purple surface")
 	var advanced_fields := popup.get("advanced_filter_fields") as Dictionary
 	_check((_dictionary(advanced_fields.get("category")).get("root") as Control).visible, "Item filters expose item category")
 	_check(not (_dictionary(advanced_fields.get("min_level")).get("root") as Control).visible, "Item filters hide Pokémon-only fields")
