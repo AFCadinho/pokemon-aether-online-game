@@ -1257,52 +1257,38 @@ func _build_tall_grass_visual_depth_rows(map: Node) -> void:
 	for grass_layer: TileMapLayer in grass_layers:
 		if bool(grass_layer.get_meta(TALL_GRASS_DEPTH_ROWS_BUILT_META, false)):
 			continue
-
-		var used_cells: Array[Vector2i] = grass_layer.get_used_cells()
-		if used_cells.is_empty():
+		var row_group := TallGrassDepthSortingScript.build_depth_rows(
+			grass_layer,
+			grass_layer.get_used_cells(),
+			TREE_LAYER_Z_MIN,
+			TREE_LAYER_Z_MAX,
+			false,
+			"%sDepthRows" % grass_layer.name
+		)
+		if row_group == null:
 			continue
-
-		var parent := grass_layer.get_parent()
-		if parent == null:
-			continue
-
-		var rows := {}
-		for cell: Vector2i in used_cells:
-			var row := cell.y
-			if not rows.has(row):
-				rows[row] = []
-			rows[row].append(cell)
-
-		var row_group := Node2D.new()
-		row_group.name = "%sDepthRows" % grass_layer.name
-		row_group.set_meta(TALL_GRASS_DEPTH_ROW_META, true)
-		parent.add_child(row_group)
-
-		for row in rows.keys():
-			var row_layer := TileMapLayer.new()
-			row_layer.name = "%sRow%d" % [grass_layer.name, int(row)]
-			row_layer.tile_set = grass_layer.tile_set
-			row_layer.visible = grass_layer.visible
-			row_layer.modulate = grass_layer.modulate
-			row_layer.position = grass_layer.position
-			row_layer.z_as_relative = false
-			row_layer.z_index = _get_tall_grass_row_z_index(grass_layer, int(row))
-			row_layer.set_meta(TALL_GRASS_DEPTH_ROW_META, true)
-			row_group.add_child(row_layer)
-
-			for cell: Vector2i in rows[row]:
-				var source_id := grass_layer.get_cell_source_id(cell)
-				if source_id == -1:
-					continue
-				row_layer.set_cell(
-					cell,
-					source_id,
-					grass_layer.get_cell_atlas_coords(cell),
-					grass_layer.get_cell_alternative_tile(cell)
-				)
-
 		grass_layer.visible = false
 		grass_layer.set_meta(TALL_GRASS_DEPTH_ROWS_BUILT_META, true)
+
+	if not grass_layers.is_empty():
+		return
+	var legacy_match := TallGrassDepthSortingScript.find_legacy_grass_visual_source(map)
+	if legacy_match.is_empty():
+		return
+	var legacy_visual_layer := legacy_match.get("visual_layer") as TileMapLayer
+	if legacy_visual_layer == null:
+		return
+	var legacy_cells: Array[Vector2i] = []
+	for cell: Vector2i in legacy_match.get("cells", []):
+		legacy_cells.append(cell)
+	TallGrassDepthSortingScript.build_depth_rows(
+		legacy_visual_layer,
+		legacy_cells,
+		TREE_LAYER_Z_MIN,
+		TREE_LAYER_Z_MAX,
+		true,
+		"%sTallGrassDepthRows" % legacy_visual_layer.name
+	)
 
 func _collect_tall_grass_visual_layers_recursive(node: Node, grass_layers: Array[TileMapLayer]) -> void:
 	var tile_map_layer := node as TileMapLayer
@@ -1313,15 +1299,6 @@ func _collect_tall_grass_visual_layers_recursive(node: Node, grass_layers: Array
 
 	for child: Node in node.get_children():
 		_collect_tall_grass_visual_layers_recursive(child, grass_layers)
-
-func _get_tall_grass_row_z_index(grass_layer: TileMapLayer, row: int) -> int:
-	return TallGrassDepthSortingScript.get_row_z_index(
-		grass_layer,
-		row,
-		TREE_LAYER_Z_MIN,
-		TREE_LAYER_Z_MAX
-	)
-
 
 func _build_decorative_visual_depth_rows(map: Node) -> void:
 	var decorative_layers: Array[TileMapLayer] = []
