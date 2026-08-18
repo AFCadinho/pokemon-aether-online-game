@@ -265,10 +265,19 @@ func _run() -> void:
 			"speciesName": "Bulbasaur",
 			"level": 12,
 		}
+		var browse_asset_type := "pokemon"
+		if index == 3:
+			browse_asset_type = "item"
+			browse_asset = {
+				"itemId": "air-balloon",
+				"name": "Air Balloon",
+				"shortDesc": "A useful held item.",
+			}
 		browse_entries.append({
 			"id": "browse-%d" % index,
-			"assetType": "pokemon",
+			"assetType": browse_asset_type,
 			"asset": browse_asset,
+			"quantity": 1,
 			"totalPrice": 5000 + index,
 			"status": "active",
 		})
@@ -278,10 +287,18 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	_check(popup.size == Vector2(1040, 660), "Browse cards do not resize the Exchange popup")
-	_check(list_container.columns >= 2, "Browse listings render in a multi-column card grid")
+	_check(list_container.columns == 4, "Browse listings render four portrait cards per row")
 	_check(list_container.get_child_count() == 4, "Browse grid renders every available listing")
-	_check((list_container.get_child(0) as Button).custom_minimum_size.y == 82.0, "Browse cards use the compact listing height")
-	_check((list_container.get_child(0) as Button).size.x < list_container.size.x, "Browse cards do not consume a full listing row")
+	var first_browse_card := list_container.get_child(0) as Button
+	_check(first_browse_card.custom_minimum_size.y == 172.0, "Browse cards use the portrait listing height")
+	_check(first_browse_card.size.y > first_browse_card.size.x, "Pokémon browse cards are taller than they are wide")
+	_check((list_container.get_child(3) as Button).size.y > (list_container.get_child(3) as Button).size.x, "Item browse cards are taller than they are wide")
+	var available_label := str(popup.call("_t", "ui.exchange.state.active"))
+	for card_index: int in [0, 3]:
+		var card_text := ""
+		for label_value: Variant in (list_container.get_child(card_index) as Button).find_children("*", "Label", true, false):
+			card_text += (label_value as Label).text
+		_check(not card_text.contains(available_label), "Browse cards omit the redundant Available status")
 	popup.set("wallet_money", 1_000_000)
 	popup.call("_select_entry", browse_entries[0], "listing")
 	await process_frame
