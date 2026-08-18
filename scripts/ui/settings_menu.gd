@@ -824,6 +824,7 @@ func _setup_logout_confirm_dialog() -> void:
 	logout_confirm_dialog.top_level = true
 	logout_confirm_dialog.z_as_relative = false
 	logout_confirm_dialog.mouse_filter = Control.MOUSE_FILTER_STOP
+	logout_confirm_dialog.set_focus_behavior_recursive(Control.FOCUS_BEHAVIOR_ENABLED)
 	logout_confirm_dialog.z_index = LOGOUT_CONFIRM_Z_INDEX
 	logout_confirm_dialog.custom_minimum_size = LOGOUT_CONFIRM_SIZE
 	logout_confirm_dialog.set_anchors_preset(Control.PRESET_TOP_LEFT)
@@ -1659,11 +1660,24 @@ func _show_logout_confirm_dialog() -> void:
 	_refresh_impersonation_account_controls()
 	if logout_confirm_dialog != null:
 		_position_logout_confirm_dialog()
+		logout_confirm_dialog.set_focus_behavior_recursive(Control.FOCUS_BEHAVIOR_ENABLED)
 		logout_confirm_dialog.visible = true
 		logout_confirm_dialog.z_index = LOGOUT_CONFIRM_Z_INDEX
 		logout_confirm_dialog.move_to_front()
 	if logout_confirm_return_button != null:
-		logout_confirm_return_button.grab_focus()
+		logout_confirm_return_button.focus_mode = Control.FOCUS_ALL
+		call_deferred("_focus_logout_confirm_return_button")
+
+
+func _focus_logout_confirm_return_button() -> void:
+	if (
+		logout_confirm_dialog == null
+		or not logout_confirm_dialog.is_visible_in_tree()
+		or logout_confirm_return_button == null
+		or logout_confirm_return_button.disabled
+	):
+		return
+	logout_confirm_return_button.grab_focus()
 
 
 func _position_logout_confirm_dialog() -> void:

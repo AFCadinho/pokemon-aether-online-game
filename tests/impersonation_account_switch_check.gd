@@ -103,6 +103,14 @@ func _run() -> void:
 		"visible impersonation action opens the shared secure return confirmation"
 	)
 	_expect(
+		settings.contains(
+			"logout_confirm_dialog.set_focus_behavior_recursive(Control.FOCUS_BEHAVIOR_ENABLED)"
+		)
+		and settings.contains("func _focus_logout_confirm_return_button()")
+		and settings.contains("logout_confirm_dialog.is_visible_in_tree()"),
+		"account-return confirmation only grabs focus from an enabled visible popup"
+	)
+	_expect(
 		auth.contains("if session_token == \"\" or is_impersonating():"),
 		"temporary impersonation credentials are never saved locally"
 	)
