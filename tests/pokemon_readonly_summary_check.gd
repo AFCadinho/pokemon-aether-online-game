@@ -1,7 +1,7 @@
 extends SceneTree
 
 const OVERLAY_SCENE_PATH := "res://scenes/interface/ui_overlay.tscn"
-const EXPECTED_SIZE := Vector2(700, 440)
+const EXPECTED_SIZE := Vector2(620, 380)
 
 var failed := false
 
@@ -29,6 +29,7 @@ func _run() -> void:
 	_check(popup != null, "read-only Summary opens a dedicated card")
 	_check(popup.name == "PokemonReadonlySummaryPopup", "read-only Summary uses the compact layout")
 	_check(popup.size == EXPECTED_SIZE, "read-only Summary keeps its fixed production size")
+	_check(popup.size == Vector2(620, 380), "read-only and interactive summaries share the same window geometry")
 	_check(popup.has_meta("readonly_summary_nodes"), "read-only Summary exposes its one-page content")
 	var nodes := popup.get_meta("readonly_summary_nodes", {}) as Dictionary
 	_check((nodes.get("stat_rows", {}) as Dictionary).size() == 6, "all six stats render at once")
@@ -38,6 +39,8 @@ func _run() -> void:
 	_check((nodes.get("id_label") as Label).text == "#445", "header uses the National Dex number instead of the owned Pokémon id")
 	_check((nodes.get("gender_label") as Label).text == "♀", "gender renders beside the Pokémon name")
 	_check((nodes.get("ability_label") as Label).text != "", "ability renders on the overview")
+	_check((nodes.get("trainer_label") as Label).text.contains("Exchange"), "read-only Summary keeps the standard owner bar")
+	_check(overlay.get("pokemon_summary_animated_sprite") is AnimatedSprite2D, "read-only Summary uses the standard animated sprite stage")
 	var stat_rows := nodes.get("stat_rows", {}) as Dictionary
 	_check(((stat_rows.get("atk") as Dictionary).get("iv") as Label).text == "31", "IV values render in the stat table")
 	_check(((stat_rows.get("spe") as Dictionary).get("ev") as Label).text == "252", "EV values render in the stat table")
