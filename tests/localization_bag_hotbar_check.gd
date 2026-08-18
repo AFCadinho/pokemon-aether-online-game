@@ -66,7 +66,9 @@ func _check_bag_and_hotbar_runtime_translation() -> void:
 	_check(search != null and search.placeholder_text == "Items zoeken...", "Bag search renders in Dutch")
 	_check(all_label != null and all_label.text == "Alle items", "Bag category renders in Dutch")
 	_check(
-		first_hotbar_button != null and first_hotbar_button.tooltip_text.begins_with("Lege sneltoets 1"),
+		first_hotbar_button != null
+		and first_hotbar_button.tooltip_text.begins_with("Lege sneltoets 1")
+		and first_hotbar_button.tooltip_text.contains("Ctrl+1"),
 		"hotbar instructions render in Dutch"
 	)
 	_check(
