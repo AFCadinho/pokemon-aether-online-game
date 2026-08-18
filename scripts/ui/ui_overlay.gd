@@ -26,6 +26,7 @@ const CHAT_MAX_SIZE := Vector2(760, 520)
 const CHAT_RESIZE_BUTTON_GAP := 10.0
 const CHAT_TABS_GAP := 8.0
 const CHAT_TABS_LEFT_INSET := 4.0
+const CHAT_INLINE_HEADER_CLEARANCE := 8.0
 const PERSONAL_BUFF_PANEL_COMPACT_HEIGHT := 42.0
 const PERSONAL_BUFF_ROW_HEIGHT := 52.0
 const PERSONAL_BUFF_ROW_GAP := 5.0
@@ -38139,7 +38140,7 @@ func _render_chat_sender_message_label(entry: RichTextLabel) -> void:
 func _sync_chat_inline_header_spacing(header: HBoxContainer, entry: RichTextLabel) -> void:
 	if not is_instance_valid(header) or not is_instance_valid(entry):
 		return
-	var header_width := header.get_combined_minimum_size().x
+	var header_width := header.get_combined_minimum_size().x + CHAT_INLINE_HEADER_CLEARANCE
 	var normal_font := entry.get_theme_font("normal_font")
 	var normal_font_size := entry.get_theme_font_size("normal_font_size")
 	var space_width := normal_font.get_string_size(
