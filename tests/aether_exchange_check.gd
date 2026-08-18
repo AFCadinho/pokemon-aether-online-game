@@ -73,6 +73,18 @@ func _run() -> void:
 	_check((popup.get("advanced_filter_sections") as Dictionary).has("ivs"), "Pokémon filters group individual IV values in their own section")
 	_check(popup.get("advanced_filter_cancel_button") is Button, "Filter modal exposes an explicit Cancel action")
 	var advanced_controls := popup.get("advanced_filter_controls") as Dictionary
+	var styled_dropdown_count := 0
+	for control_value: Variant in advanced_controls.values():
+		var dropdown := control_value as OptionButton
+		if dropdown == null:
+			continue
+		styled_dropdown_count += 1
+		var dropdown_popup := dropdown.get_popup()
+		_check(dropdown.get_theme_icon("arrow").resource_path.ends_with("photo_mode_dropdown_arrow.svg"), "Filter dropdown uses the Aether arrow icon")
+		_check(dropdown_popup.get_theme_stylebox("panel") is StyleBoxFlat, "Filter dropdown menu uses the Aether popup surface")
+		_check(dropdown_popup.get_theme_stylebox("hover") is StyleBoxFlat, "Filter dropdown menu has an Aether hover state")
+		_check(dropdown_popup.get_theme_icon("radio_checked").resource_path.ends_with("photo_mode_radio_checked.svg"), "Filter dropdown menu uses styled selection markers")
+	_check(styled_dropdown_count == 7, "Every filter dropdown receives the shared Aether menu styling")
 	(advanced_controls.get("min_price") as SpinBox).value = 1000
 	(advanced_controls.get("min_level") as SpinBox).value = 50
 	(advanced_controls.get("max_level") as SpinBox).value = 80
