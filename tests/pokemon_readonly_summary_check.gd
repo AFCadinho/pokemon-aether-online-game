@@ -39,6 +39,8 @@ func _run() -> void:
 	_check((nodes.get("id_label") as Label).text == "#445", "header uses the National Dex number instead of the owned Pokémon id")
 	_check((nodes.get("gender_label") as Label).text == "♀", "gender renders beside the Pokémon name")
 	_check((nodes.get("ability_label") as Label).text != "", "ability renders on the overview")
+	_check((nodes.get("iv_total_label") as Label).text.contains("186/186"), "perfect IV quality is summarized in the profile")
+	_check((nodes.get("ev_total_label") as Label).text.contains("508/510"), "allocated EV total is summarized in the profile")
 	_check((nodes.get("trainer_label") as Label).text.contains("Exchange"), "read-only Summary keeps the standard owner bar")
 	_check(overlay.get("pokemon_summary_animated_sprite") is AnimatedSprite2D, "read-only Summary uses the standard animated sprite stage")
 	var stat_rows := nodes.get("stat_rows", {}) as Dictionary

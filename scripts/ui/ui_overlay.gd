@@ -15002,6 +15002,26 @@ func _build_readonly_summary_profile(nodes: Dictionary) -> Control:
 	nature_stack.add_child(nature_label)
 	nodes["nature_label"] = nature_label
 
+	var quality_row := HBoxContainer.new()
+	quality_row.add_theme_constant_override("separation", 5)
+	identity_stack.add_child(quality_row)
+	for quality_spec: Dictionary in [
+		{"key": "iv_total_label", "color": POKEMON_SUMMARY_ACCENT},
+		{"key": "ev_total_label", "color": Color("#f4d36a")},
+	]:
+		var quality_panel := PanelContainer.new()
+		quality_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		var quality_color := quality_spec.get("color", UI_TEXT) as Color
+		quality_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#071827d8"), Color(quality_color, 0.52), 5, 1))
+		quality_row.add_child(quality_panel)
+		var quality_label := Label.new()
+		quality_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		quality_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		quality_label.add_theme_font_size_override("font_size", 9)
+		quality_label.add_theme_color_override("font_color", quality_color)
+		quality_panel.add_child(quality_label)
+		nodes[str(quality_spec.get("key", ""))] = quality_label
+
 	var held_item_panel := PanelContainer.new()
 	held_item_panel.custom_minimum_size = Vector2(0, 34)
 	held_item_panel.add_theme_stylebox_override("panel", _make_pokemon_summary_held_item_slot_style())
@@ -15047,6 +15067,7 @@ func _build_readonly_summary_details(nodes: Dictionary) -> Control:
 	nodes["stats_title"] = stats_title
 	var stats_panel := PanelContainer.new()
 	stats_panel.custom_minimum_size = Vector2(0, 151)
+	stats_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	stats_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#050a12e8"), Color("#284465"), 5, 1))
 	stack.add_child(stats_panel)
 	var stats_margin := MarginContainer.new()
@@ -15057,6 +15078,7 @@ func _build_readonly_summary_details(nodes: Dictionary) -> Control:
 	stats_panel.add_child(stats_margin)
 	var stats_grid := GridContainer.new()
 	stats_grid.columns = 4
+	stats_grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	stats_grid.add_theme_constant_override("h_separation", 4)
 	stats_grid.add_theme_constant_override("v_separation", 0)
 	stats_margin.add_child(stats_grid)
@@ -15064,6 +15086,7 @@ func _build_readonly_summary_details(nodes: Dictionary) -> Control:
 	for heading_text: String in ["STAT", "TOTAL", "IV", "EV"]:
 		var heading := Label.new()
 		heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		heading.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		heading.add_theme_font_size_override("font_size", 8)
 		heading.add_theme_color_override("font_color", Color("#7187a5"))
 		heading.text = heading_text
@@ -15080,7 +15103,8 @@ func _build_readonly_summary_details(nodes: Dictionary) -> Control:
 			label.custom_minimum_size = Vector2(66 if column == "name" else 52, 18)
 			label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-			label.add_theme_font_size_override("font_size", 9)
+			label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+			label.add_theme_font_size_override("font_size", 10)
 			label.add_theme_color_override("font_color", stat.get("color", UI_TEXT) as Color if column == "name" else UI_TEXT)
 			stats_grid.add_child(label)
 			row_nodes[column] = label
@@ -15105,6 +15129,7 @@ func _build_readonly_summary_details(nodes: Dictionary) -> Control:
 		var move_panel := PanelContainer.new()
 		move_panel.custom_minimum_size = Vector2(0, 43)
 		move_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		move_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		move_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#091622e8"), Color("#284465"), 6, 1))
 		moves_grid.add_child(move_panel)
 		var move_margin := MarginContainer.new()
@@ -15114,12 +15139,13 @@ func _build_readonly_summary_details(nodes: Dictionary) -> Control:
 		move_margin.add_theme_constant_override("margin_bottom", 4)
 		move_panel.add_child(move_margin)
 		var move_stack := VBoxContainer.new()
+		move_stack.alignment = BoxContainer.ALIGNMENT_CENTER
 		move_stack.add_theme_constant_override("separation", 0)
 		move_margin.add_child(move_stack)
 		var move_name := Label.new()
 		move_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		_make_label_clip_width(move_name)
-		move_name.add_theme_font_size_override("font_size", 10)
+		move_name.add_theme_font_size_override("font_size", 11)
 		move_name.add_theme_color_override("font_color", UI_TEXT)
 		move_stack.add_child(move_name)
 		var move_meta := Label.new()
@@ -19831,6 +19857,19 @@ func _refresh_readonly_pokemon_summary(pokemon: Pokemon) -> void:
 	ability_label.tooltip_text = _get_summary_ability_description_text(pokemon.ability)
 	var nature_label := nodes.get("nature_label") as Label
 	nature_label.text = _localized_nature_name(pokemon.nature)
+	var iv_total := 0
+	var ev_total := 0
+	for stat_id: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
+		iv_total += int(pokemon.ivs.get(stat_id, 0))
+		ev_total += int(pokemon.evs.get(stat_id, 0))
+	(nodes.get("iv_total_label") as Label).text = "%s  %s/186" % [
+		LocalizationManager.text("ui.pokemon_summary.tab.ivs"),
+		iv_total,
+	]
+	(nodes.get("ev_total_label") as Label).text = "%s  %s/510" % [
+		LocalizationManager.text("ui.pokemon_summary.tab.evs"),
+		ev_total,
+	]
 	var item_label := nodes.get("item_label") as Label
 	var item_name := (
 		_item_name_from_id(pokemon.item)
