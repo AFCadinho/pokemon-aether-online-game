@@ -6,9 +6,6 @@ extends PanelContainer
 ]
 
 var experience_bar_enabled := false
-var hp_trace_write_sequence := 0
-
-const DEBUG_BATTLE_HP_WRITES := true
 
 const STATUS_ICON_SHEET: Texture2D = preload("res://assets/battles/status/icon_statuses.png")
 const STATUS_ICON_WIDTH := 44
@@ -73,7 +70,6 @@ func _clear_active_info_row_data(row_index: int) -> void:
 		return
 
 	var row: Node = active_info_rows[row_index]
-	_trace_active_hp_write(row_index, row, "<clear>", 100, 100)
 	row.remove_meta("battle_hud_data")
 	var name_label: Label = row.get_node_or_null("MarginContainer/VBoxContainer/TopRow/NameContainer/NameLabel") as Label
 	if name_label != null:
@@ -114,7 +110,6 @@ func _set_active_info_row_data(
 		return
 
 	var row: Node = active_info_rows[row_index]
-	_trace_active_hp_write(row_index, row, species, current_hp, max_hp)
 	row.set_meta("battle_hud_data", {
 		"species": species,
 		"level": level,
@@ -145,47 +140,6 @@ func _set_active_info_row_data(
 
 	_set_gender(row, gender)
 	_set_status(row, status)
-
-
-func _trace_active_hp_write(
-	row_index: int,
-	row: Node,
-	species: String,
-	current_hp: int,
-	max_hp: int
-) -> void:
-	if not DEBUG_BATTLE_HP_WRITES or row_index != 0 or name != "EnemyHudPanel":
-		return
-
-	hp_trace_write_sequence += 1
-	var previous_data_value: Variant = row.get_meta("battle_hud_data", {})
-	var previous_data: Dictionary = previous_data_value as Dictionary if previous_data_value is Dictionary else {}
-	var previous_hp := int(previous_data.get("current_hp", -1))
-	var previous_max_hp := int(previous_data.get("max_hp", -1))
-	var call_chain: Array[String] = []
-	for frame_value: Variant in get_stack():
-		if not (frame_value is Dictionary):
-			continue
-		var frame: Dictionary = frame_value as Dictionary
-		var function_name := str(frame.get("function", ""))
-		if function_name in ["_trace_active_hp_write", "_set_active_info_row_data", "set_pokemon_data"]:
-			continue
-		call_chain.append("%s:%s" % [function_name, str(frame.get("line", "?"))])
-		if call_chain.size() >= 6:
-			break
-
-	print("[HP-TRACE][HUD-WRITE] t=%d seq=%d panel=%s species=%s from=%d/%d to=%d/%d visible=%d caller=%s" % [
-		Time.get_ticks_msec(),
-		hp_trace_write_sequence,
-		name,
-		species,
-		previous_hp,
-		previous_max_hp,
-		current_hp,
-		max_hp,
-		_to_visible_hp_percent(current_hp, max_hp),
-		" > ".join(call_chain),
-	])
 
 func _update_experience_bar(row: Node, experience_data: Dictionary) -> void:
 	var exp_row := row.get_node_or_null("MarginContainer/VBoxContainer/ExpRow") as Control

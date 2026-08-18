@@ -235,9 +235,7 @@ const CAPTURE_SUCCESS_RESULT_HOLD_SECONDS := 0.40
 const BATTLE_END_RESULT_HOLD_SECONDS := 0.12
 const DEBUG_PVP_REALTIME := false
 const DEBUG_PVP_FLOW_TRACE := false
-# Temporarily enabled while reproducing the multi-hit knockout HP rebound.
-# Filter the Godot output on "[HP-TRACE]" for the complete presentation chain.
-const DEBUG_BATTLE_HP_EVENTS := true
+const DEBUG_BATTLE_HP_EVENTS := false
 const DEBUG_BATTLE_MOVE_EVENTS := false
 const DEBUG_SIDE_CONDITION_EFFECTS := false
 const DEBUG_BATTLE_PRESENTATION_ORDER := false
@@ -9743,14 +9741,6 @@ func _set_active_hud_hp_from_event(target_ident: String, event: Dictionary, use_
 
 	var hp: int = int(hp_data.get("hp", 0))
 	var max_hp: int = max(int(hp_data.get("max_hp", 1)), 1)
-	_debug_battle_hp("event_hud_write target=%s mode=%s selected=%d/%d state=%s event=%s" % [
-		target_ident,
-		"previous" if use_previous_hp else "current",
-		hp,
-		max_hp,
-		JSON.stringify(_get_active_state_hp_snapshot(player_id)),
-		_summarize_hp_event_for_order_debug(event),
-	])
 	_debug_battle_presentation_order("active_hud_hp_from_event target=%s mode=%s hp=%d/%d event=%s" % [
 		target_ident,
 		"previous" if use_previous_hp else "current",
@@ -9812,7 +9802,6 @@ func _get_status_from_event_or_state(event: Dictionary, player_id: String, use_p
 	return battle_state.get_active_pokemon_status(player_id)
 
 func _rewind_active_hud_hp_for_events(events: Array) -> void:
-	_debug_battle_hp("pre_rewind.input events=%s" % JSON.stringify(_summarize_events_for_order_debug(events)))
 	var ordered_events: Array = _order_switch_out_heals_before_switches(
 		BATTLE_DISGUISE_EVENT_ORDER.move_busted_form_changes_after_recoil(
 			_order_form_change_events_before_moves(events)
@@ -9821,10 +9810,6 @@ func _rewind_active_hud_hp_for_events(events: Array) -> void:
 	var normalized_events := hp_event_helper.normalize_damage_event_continuity(ordered_events)
 	events.clear()
 	events.append_array(normalized_events)
-	_debug_battle_hp("pre_rewind.normalized events=%s cursor=%s" % [
-		JSON.stringify(_summarize_events_for_order_debug(events)),
-		JSON.stringify(hp_event_helper.get_damage_continuity_debug_snapshot()),
-	])
 	_debug_battle_presentation_order("rewind_active_hud_hp.begin events=%s" % JSON.stringify(_summarize_events_for_order_debug(events)))
 	var rewound_player_ids: Dictionary = {}
 
@@ -9862,7 +9847,7 @@ func _rewind_party_slots_for_events(events: Array) -> void:
 
 func _debug_battle_hp(message: String) -> void:
 	if DEBUG_BATTLE_HP_EVENTS:
-		print("[HP-TRACE][BATTLE] t=%d %s" % [Time.get_ticks_msec(), message])
+		print("[battle-hp] " + message)
 
 func _debug_battle_presentation_order(message: String) -> void:
 	if DEBUG_BATTLE_PRESENTATION_ORDER:
@@ -14259,15 +14244,9 @@ func _render_opponent_response(
 	rendered_event_keys: Dictionary = {},
 	pending_player_choice_events: Array = []
 ) -> void:
-	_debug_battle_hp("response.raw events=%s" % JSON.stringify(
-		_summarize_events_for_order_debug(opponent_response.get("events", []))
-	))
 	var response_events: Array = _filter_incremental_non_pvp_response_events(opponent_response)
 	var filtered_events: Array = _filter_already_rendered_events(response_events, rendered_event_keys, opponent_response)
 	var opponent_events: Array = _merge_pending_player_choice_events(pending_player_choice_events, filtered_events)
-	_debug_battle_hp("response.renderable events=%s" % JSON.stringify(
-		_summarize_events_for_order_debug(opponent_events)
-	))
 	_debug_battle_presentation_order("opponent_response.events events=%s" % JSON.stringify(_summarize_events_for_order_debug(opponent_events)))
 	defer_force_switch_active_hide = true
 	_prepare_switch_in_presentation_for_events(opponent_events)

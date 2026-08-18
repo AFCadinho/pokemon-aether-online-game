@@ -2,7 +2,6 @@ extends SceneTree
 
 const BATTLE_SCRIPT_PATH := "res://scripts/battle/battle.gd"
 const BATTLE_ANIMATION_ROUTER_PATH := "res://scripts/battle/battle_animation_router.gd"
-const BATTLE_HUD_PANEL_PATH := "res://scripts/battle/battle_ui/pokemon_hud_panel.gd"
 const DisguiseEventOrderScript := preload("res://scripts/battle/battle_disguise_event_order.gd")
 
 var failed := false
@@ -11,7 +10,6 @@ var failed := false
 func _init() -> void:
 	_check_pre_event_render_skips_final_team_hud_refresh()
 	_check_damage_continuity_is_normalized_before_hud_rewind()
-	_check_multihit_hp_trace_covers_response_and_every_hud_write()
 	_check_non_pvp_switch_events_are_not_deduped_by_species()
 	_check_initial_setup_switch_events_are_filtered_once()
 	_check_initial_event_seq_cursor_tracks_start_event_boundary()
@@ -122,33 +120,6 @@ func _check_damage_continuity_is_normalized_before_hud_rewind() -> void:
 		true,
 		"multi-hit continuity is repaired before stale previous HP can reach the HUD"
 	)
-
-
-func _check_multihit_hp_trace_covers_response_and_every_hud_write() -> void:
-	var battle_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
-	var hud_source := FileAccess.get_file_as_string(BATTLE_HUD_PANEL_PATH)
-
-	_check_equal(
-		battle_source.contains("const DEBUG_BATTLE_HP_EVENTS := true"),
-		true,
-		"temporary HP trace is enabled for the live reproduction"
-	)
-	_check_equal(
-		battle_source.contains('"response.raw events=%s"')
-			and battle_source.contains('"response.renderable events=%s"')
-			and battle_source.contains('"pre_rewind.input events=%s"')
-			and battle_source.contains('"pre_rewind.normalized events=%s cursor=%s"')
-			and battle_source.contains('"event_hud_write target=%s mode=%s selected=%d/%d state=%s event=%s"'),
-		true,
-		"HP trace covers response filtering, normalization and event HUD writes"
-	)
-	_check_equal(
-		hud_source.contains("[HP-TRACE][HUD-WRITE]")
-			and hud_source.contains("get_stack()"),
-		true,
-		"enemy HUD records every HP value and its caller"
-	)
-
 
 func _check_non_pvp_switch_events_are_not_deduped_by_species() -> void:
 	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
