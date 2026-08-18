@@ -7,7 +7,7 @@ const PORTFOLIO_ENDPOINT := "/game/exchange/me"
 const REQUEST_TIMEOUT_SECONDS := 10.0
 
 
-func load_listings(asset_type := "", query := "", limit := 50, offset := 0) -> Dictionary:
+func load_listings(asset_type := "", query := "", limit := 50, offset := 0, filters: Dictionary = {}) -> Dictionary:
 	if not _is_authenticated():
 		return _auth_error()
 	var endpoint := LISTINGS_ENDPOINT + "?limit=%d&offset=%d" % [clampi(limit, 1, 100), maxi(offset, 0)]
@@ -17,6 +17,16 @@ func load_listings(asset_type := "", query := "", limit := 50, offset := 0) -> D
 	var normalized_query := str(query).strip_edges()
 	if not normalized_query.is_empty():
 		endpoint += "&query=%s" % normalized_query.uri_encode()
+	for filter_key: String in [
+		"minPrice", "maxPrice", "itemCategory", "minLevel", "maxLevel",
+		"type", "nature", "ability", "shiny", "hiddenAbility", "minIvTotal",
+	]:
+		if not filters.has(filter_key):
+			continue
+		var filter_value: Variant = filters.get(filter_key)
+		if filter_value == null or str(filter_value).strip_edges().is_empty():
+			continue
+		endpoint += "&%s=%s" % [filter_key.uri_encode(), str(filter_value).uri_encode()]
 	return _parse_listings_response(await _request(endpoint, HTTPClient.METHOD_GET, {}))
 
 

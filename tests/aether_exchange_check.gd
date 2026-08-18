@@ -3,6 +3,7 @@ extends SceneTree
 const EXCHANGE_SERVICE := preload("res://scripts/services/aether_exchange_service.gd")
 const EXCHANGE_POPUP := preload("res://scenes/interface/aether_exchange_popup.tscn")
 const EXCHANGE_POPUP_PATH := "res://scripts/ui/aether_exchange_popup.gd"
+const EXCHANGE_SERVICE_PATH := "res://scripts/services/aether_exchange_service.gd"
 const UI_OVERLAY_PATH := "res://scripts/ui/ui_overlay.gd"
 const PROJECT_PATH := "res://project.godot"
 
@@ -54,6 +55,44 @@ func _run() -> void:
 	_check(search_input.get_theme_stylebox("focus") is StyleBoxFlat, "Exchange search field has a styled focus state")
 	_check(refresh_button.get_theme_stylebox("normal") is StyleBoxFlat, "Exchange Refresh action uses the styled button surface")
 	_check(refresh_button.get_theme_stylebox("hover") is StyleBoxFlat, "Exchange Refresh action has a styled hover state")
+	var advanced_filter_button := popup.get("advanced_filter_button") as Button
+	var advanced_filter_panel := popup.get("advanced_filter_panel") as PanelContainer
+	_check(advanced_filter_button != null, "Browse exposes advanced market filters")
+	_check(advanced_filter_button.get_theme_stylebox("normal") is StyleBoxFlat, "Filter action uses the Exchange button styling")
+	advanced_filter_button.pressed.emit()
+	_check(advanced_filter_panel.visible, "Filter action opens an in-interface filter panel")
+	var advanced_fields := popup.get("advanced_filter_fields") as Dictionary
+	_check((_dictionary(advanced_fields.get("category")).get("root") as Control).visible, "Item filters expose item category")
+	_check(not (_dictionary(advanced_fields.get("min_level")).get("root") as Control).visible, "Item filters hide Pokémon-only fields")
+	popup.set("asset_filter", "pokemon")
+	popup.call("_refresh_advanced_filter_panel")
+	popup.call("_sync_advanced_filter_controls")
+	_check(not (_dictionary(advanced_fields.get("category")).get("root") as Control).visible, "Pokémon filters hide item-only fields")
+	_check((_dictionary(advanced_fields.get("min_level")).get("root") as Control).visible, "Pokémon filters expose level constraints")
+	var advanced_controls := popup.get("advanced_filter_controls") as Dictionary
+	(advanced_controls.get("min_price") as SpinBox).value = 1000
+	(advanced_controls.get("min_level") as SpinBox).value = 50
+	(advanced_controls.get("max_level") as SpinBox).value = 80
+	(advanced_controls.get("ability") as LineEdit).text = "Sharpness"
+	(advanced_controls.get("min_iv_total") as SpinBox).value = 170
+	popup.call("_select_filter_option", "type", "water")
+	popup.call("_select_filter_option", "nature", "jolly")
+	popup.call("_select_filter_option", "shiny", 1)
+	popup.call("_select_filter_option", "hidden_ability", 0)
+	popup.call("_read_advanced_filter_controls")
+	var pokemon_filter_params := popup.call("_current_browse_filter_params") as Dictionary
+	_check(pokemon_filter_params.get("minPrice") == 1000, "Filters retain the minimum market price")
+	_check(pokemon_filter_params.get("minLevel") == 50 and pokemon_filter_params.get("maxLevel") == 80, "Filters retain the Pokémon level range")
+	_check(pokemon_filter_params.get("type") == "water" and pokemon_filter_params.get("nature") == "jolly", "Filters retain Pokémon type and nature")
+	_check(pokemon_filter_params.get("ability") == "Sharpness", "Filters retain an ability query")
+	_check(pokemon_filter_params.get("shiny") == true and pokemon_filter_params.get("hiddenAbility") == false, "Filters retain shiny and Hidden Ability choices")
+	_check(pokemon_filter_params.get("minIvTotal") == 170, "Filters retain a minimum IV total")
+	popup.set("browse_filters", {
+		"item": popup.call("_default_browse_filter_state", "item"),
+		"pokemon": popup.call("_default_browse_filter_state", "pokemon"),
+	})
+	popup.set("asset_filter", "item")
+	popup.call("_hide_advanced_filter_panel")
 	var fixed_popup_rect := Rect2(popup.position, popup.size)
 	((popup.get("tab_buttons") as Dictionary).get("sell") as Button).pressed.emit()
 	await process_frame
@@ -247,6 +286,7 @@ func _run() -> void:
 	_check(not bool(popup.get("is_dragging_popup")), "Releasing the mouse stops Exchange dragging")
 
 	var project_source := FileAccess.get_file_as_string(PROJECT_PATH)
+	var service_source := FileAccess.get_file_as_string(EXCHANGE_SERVICE_PATH)
 	var popup_source := FileAccess.get_file_as_string(EXCHANGE_POPUP_PATH)
 	var overlay_source := FileAccess.get_file_as_string(UI_OVERLAY_PATH)
 	_check(project_source.contains('AetherExchangeService="*res://scripts/services/aether_exchange_service.gd"'), "Exchange API client is an autoload")
@@ -256,6 +296,7 @@ func _run() -> void:
 	_check(not overlay_source.contains("Aether Exchange is not implemented yet."), "Coming-soon behavior was removed")
 	_check(popup_source.contains("func _load_portfolio() -> bool:"), "Portfolio loads report whether they succeeded")
 	_check(popup_source.contains("func _load_browse() -> bool:"), "Browse loads report whether they succeeded")
+	_check(service_source.contains('"minPrice", "maxPrice", "itemCategory", "minLevel", "maxLevel"'), "Exchange API client forwards advanced market filters")
 	_check(popup_source.contains("if portfolio_loaded and browse_loaded:"), "Exchange success states require both requests to succeed")
 	_check(popup_source.contains("if refreshed:\n\t\t_set_status(_t(\"ui.exchange.status.updated\")"), "Refresh errors are not overwritten by a success state")
 	_check(popup_source.contains('party_service.call("refresh_party")'), "Successful Pokémon mutations synchronize the party sidebar")
