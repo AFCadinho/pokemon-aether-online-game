@@ -29271,7 +29271,7 @@ func _build_pokedex_evolutions_tab() -> void:
 
 func _create_pokedex_evolution_row(evolution: Dictionary, is_pre_evolution: bool = false) -> Control:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(0, 60)
+	panel.custom_minimum_size = Vector2(0, 68)
 	panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SURFACE_RAISED, UI_BORDER_SUBTLE, 8, 1))
 
 	var margin := MarginContainer.new()
@@ -29291,10 +29291,23 @@ func _create_pokedex_evolution_row(evolution: Dictionary, is_pre_evolution: bool
 		species_id if species_id != "" else LocalizationManager.text("common.unknown")
 	))
 	var species_name := _localized_species_name(species_id, source_species_name)
+	var species_icon := TextureRect.new()
+	species_icon.name = "EvolutionSpeciesIcon_%s" % species_id
+	species_icon.custom_minimum_size = Vector2(52, 52)
+	species_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	species_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	species_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	species_icon.texture = _load_pokedex_species_texture({
+		"id": species_id,
+		"name": source_species_name,
+	})
+	species_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(species_icon)
+
 	var name_button := LinkButton.new()
 	name_button.name = "EvolutionSpeciesLink_%s" % species_id
 	name_button.text = species_name
-	name_button.custom_minimum_size = Vector2(180, 0)
+	name_button.custom_minimum_size = Vector2(132, 0)
 	name_button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	name_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	name_button.tooltip_text = LocalizationManager.text(
