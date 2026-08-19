@@ -4,6 +4,9 @@ class_name DevBadgeProgressPopup
 
 signal closed
 
+const DROPDOWN_ARROW: Texture2D = preload("res://assets/ui/trainer_progress_dropdown_arrow.svg")
+const DROPDOWN_RADIO_CHECKED: Texture2D = preload("res://assets/ui/trainer_progress_radio_checked.svg")
+const DROPDOWN_RADIO_UNCHECKED: Texture2D = preload("res://assets/ui/trainer_progress_radio_unchecked.svg")
 const POPUP_SIZE := Vector2(720, 540)
 const REGION := "kanto"
 const BADGES: Array[Dictionary] = [
@@ -420,6 +423,7 @@ func _build_story_ui(layout: VBoxContainer) -> void:
 	story_checkpoint_select.name = "StoryCheckpointSelect"
 	story_checkpoint_select.custom_minimum_size = Vector2(0, 46)
 	story_checkpoint_select.focus_mode = Control.FOCUS_NONE
+	_apply_story_checkpoint_dropdown_style(story_checkpoint_select)
 	form.add_child(story_checkpoint_select)
 	_refresh_story_checkpoint_options()
 
@@ -786,6 +790,94 @@ func _apply_button_style(button: Button, primary: bool) -> void:
 	button.add_theme_color_override("font_color", UI_TEXT)
 	button.add_theme_color_override("font_hover_color", UI_TEXT)
 	button.add_theme_color_override("font_disabled_color", Color("#687382"))
+
+
+func _apply_story_checkpoint_dropdown_style(select: OptionButton) -> void:
+	if select == null:
+		return
+	select.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	select.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	select.add_theme_font_size_override("font_size", 14)
+	select.add_theme_color_override("font_color", UI_TEXT)
+	select.add_theme_color_override("font_hover_color", Color.WHITE)
+	select.add_theme_color_override("font_pressed_color", Color.WHITE)
+	select.add_theme_color_override("font_focus_color", Color.WHITE)
+	select.add_theme_color_override("font_disabled_color", Color(UI_MUTED, 0.5))
+	select.add_theme_constant_override("arrow_margin", 12)
+	select.add_theme_icon_override("arrow", DROPDOWN_ARROW)
+	select.add_theme_stylebox_override(
+		"normal",
+		_dropdown_button_style(UI_SURFACE, UI_BORDER)
+	)
+	select.add_theme_stylebox_override(
+		"hover",
+		_dropdown_button_style(UI_SURFACE_HOVER, UI_ACCENT)
+	)
+	select.add_theme_stylebox_override(
+		"pressed",
+		_dropdown_button_style(Color("#172d41"), UI_ACCENT)
+	)
+	select.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	select.add_theme_stylebox_override(
+		"disabled",
+		_dropdown_button_style(Color("#09111c"), Color("#303b4b"))
+	)
+
+	var popup := select.get_popup()
+	popup.transparent_bg = true
+	popup.borderless = true
+	popup.add_theme_font_size_override("font_size", 14)
+	popup.add_theme_color_override("font_color", UI_MUTED)
+	popup.add_theme_color_override("font_hover_color", UI_TEXT)
+	popup.add_theme_color_override("font_disabled_color", Color("#687382"))
+	popup.add_theme_color_override("font_outline_color", Color("#02070b"))
+	popup.add_theme_constant_override("outline_size", 1)
+	popup.add_theme_constant_override("item_start_padding", 10)
+	popup.add_theme_constant_override("item_end_padding", 12)
+	popup.add_theme_constant_override("v_separation", 6)
+	popup.add_theme_stylebox_override("panel", _dropdown_popup_style())
+	popup.add_theme_stylebox_override(
+		"hover",
+		_dropdown_item_style(Color("#17304afa"), UI_ACCENT)
+	)
+	popup.add_theme_icon_override("radio_checked", DROPDOWN_RADIO_CHECKED)
+	popup.add_theme_icon_override("radio_unchecked", DROPDOWN_RADIO_UNCHECKED)
+	popup.add_theme_icon_override("radio_checked_disabled", DROPDOWN_RADIO_CHECKED)
+	popup.add_theme_icon_override("radio_unchecked_disabled", DROPDOWN_RADIO_UNCHECKED)
+
+
+func _dropdown_button_style(background: Color, border: Color) -> StyleBoxFlat:
+	var style := _panel_style(background, border, 8, 1)
+	style.content_margin_left = 12
+	style.content_margin_top = 8
+	style.content_margin_right = 30
+	style.content_margin_bottom = 8
+	return style
+
+
+func _dropdown_popup_style() -> StyleBoxFlat:
+	var style := _dropdown_item_style(UI_BG, UI_BORDER, 9)
+	style.content_margin_left = 5
+	style.content_margin_top = 6
+	style.content_margin_right = 5
+	style.content_margin_bottom = 6
+	style.shadow_color = Color("#00000099")
+	style.shadow_size = 14
+	style.shadow_offset = Vector2(0, 6)
+	return style
+
+
+func _dropdown_item_style(
+	background: Color,
+	border: Color,
+	radius: int = 6
+) -> StyleBoxFlat:
+	var style := _panel_style(background, border, radius, 1)
+	style.content_margin_left = 8
+	style.content_margin_top = 5
+	style.content_margin_right = 8
+	style.content_margin_bottom = 5
+	return style
 
 
 func _panel_style(background: Color, border: Color, radius: int, width: int) -> StyleBoxFlat:
