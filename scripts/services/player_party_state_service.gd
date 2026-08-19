@@ -346,6 +346,30 @@ func _get_current_location_origin(method: String, met_level: int = 0) -> Diction
 	return origin
 
 
+func rename_pokemon(pokemon_id: int, nickname: String) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+	if pokemon_id <= 0:
+		return {
+			"success": false,
+			"error": "Missing Pokemon.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + "/game/pokemon/%s/nickname" % pokemon_id,
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({"nickname": nickname})
+	)
+	var result: Dictionary = _pokemon_nickname_result_from_response(response)
+	_apply_party_response(result)
+	return result
+
+
 func give_pokemon_held_item(pokemon_id: int, item_id: String) -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {
@@ -642,6 +666,25 @@ func _pokemon_item_result_from_response(response: Dictionary) -> Dictionary:
 		"success": true,
 		"pokemon": _dictionary_from_value(body.get("pokemon", {})),
 		"inventory": _array_from_value(inventory.get("items", [])),
+		"hasParty": bool(party.get("hasParty", false)),
+		"party": _array_from_value(party.get("party", [])),
+		"pokemonLevelCap": _dictionary_from_value(party.get("pokemonLevelCap", {})),
+	}
+
+
+func _pokemon_nickname_result_from_response(response: Dictionary) -> Dictionary:
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	var party: Dictionary = _dictionary_from_value(body.get("party", {}))
+	return {
+		"success": true,
+		"pokemon": _dictionary_from_value(body.get("pokemon", {})),
+		"nickname": str(body.get("nickname", "")),
+		"fee": maxi(int(body.get("fee", 0)), 0),
+		"changed": bool(body.get("changed", false)),
+		"wallet": _dictionary_from_value(body.get("wallet", {})),
 		"hasParty": bool(party.get("hasParty", false)),
 		"party": _array_from_value(party.get("party", [])),
 		"pokemonLevelCap": _dictionary_from_value(party.get("pokemonLevelCap", {})),

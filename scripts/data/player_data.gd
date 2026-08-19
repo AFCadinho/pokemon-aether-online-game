@@ -199,6 +199,18 @@ func _party_to_battle_team() -> Array:
 
 	return battle_team
 
+
+func get_first_usable_party_slot() -> int:
+	for index in range(party.size()):
+		var pokemon: Pokemon = party[index] as Pokemon
+		if pokemon == null or pokemon.species.strip_edges() == "":
+			continue
+		if pokemon.has_saved_hp_state and pokemon.current_hp <= 0:
+			continue
+		return index + 1
+
+	return -1
+
 func add_pokemon(pokemon: Pokemon) -> void:
 	if party.size() >= 6:
 		return

@@ -9,6 +9,7 @@ var failed := false
 
 func _init() -> void:
 	_check_pre_event_render_skips_final_team_hud_refresh()
+	_check_damage_continuity_is_normalized_before_hud_rewind()
 	_check_non_pvp_switch_events_are_not_deduped_by_species()
 	_check_initial_setup_switch_events_are_filtered_once()
 	_check_initial_event_seq_cursor_tracks_start_event_boundary()
@@ -103,6 +104,22 @@ func _check_pre_event_render_skips_final_team_hud_refresh() -> void:
 	_check_equal(function_source.contains("_update_hud_panels()"), false, "pre-event presentation does not push final team HUD")
 	_check_equal(function_source.contains("_update_party_slots()"), false, "pre-event presentation does not push final party slots")
 
+
+func _check_damage_continuity_is_normalized_before_hud_rewind() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var function_index := source.find("func _rewind_active_hud_hp_for_events(events: Array) -> void:")
+	var next_function_index := source.find("\nfunc ", function_index + 1)
+	var function_source := source.substr(function_index, next_function_index - function_index)
+	var normalize_index := function_source.find("normalize_damage_event_continuity")
+	var hud_rewind_index := function_source.find("_set_active_hud_hp_from_event")
+
+	_check_equal(function_index >= 0, true, "active HUD rewind function exists")
+	_check_equal(normalize_index >= 0, true, "damage continuity is normalized in the pre-render rewind path")
+	_check_equal(
+		normalize_index < hud_rewind_index,
+		true,
+		"multi-hit continuity is repaired before stale previous HP can reach the HUD"
+	)
 
 func _check_non_pvp_switch_events_are_not_deduped_by_species() -> void:
 	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
@@ -290,9 +307,9 @@ func _check_initial_setup_keeps_specific_form_species() -> void:
 		"initial setup keeps explicit form species before falling back to Showdown ident"
 	)
 	_check_equal(
-		original_species_source.find("_is_specific_battle_form_species(fallback_species)") < original_species_source.find("ident.contains(\": \")"),
+		original_species_source.find("_is_specific_battle_form_species(fallback_species)") < original_species_source.find("battle_state.get_active_pokemon_species(\"p1\")"),
 		true,
-		"initial setup checks explicit form species before ident species"
+		"initial setup checks explicit form species before canonical state species"
 	)
 	_check_equal(form_check_index >= 0, true, "specific battle form helper exists")
 	_check_equal(

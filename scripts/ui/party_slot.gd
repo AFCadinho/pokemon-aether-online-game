@@ -65,6 +65,7 @@ var current_held_item_id: String = ""
 var current_status_key: String = ""
 var current_species_id: String = ""
 var current_species_source_name: String = ""
+var current_nickname: String = ""
 var held_item_marker: Control
 var status_icon_texture_cache: Dictionary = {}
 var held_item_drop_enabled := false
@@ -99,6 +100,7 @@ func set_pokemon(pokemon: Pokemon) -> void:
 	current_level = pokemon.level
 	current_species_id = pokemon.species
 	current_species_source_name = pokemon.species
+	current_nickname = pokemon.nickname.strip_edges()
 	_set_held_item_drop_enabled(pokemon.owned_pokemon_id > 0)
 	_refresh_species_name()
 	shiny_badge.visible = pokemon.shiny
@@ -123,6 +125,7 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 		pokemon_data.get("species_id", pokemon_data.get("species", species))
 	))
 	current_species_source_name = species
+	current_nickname = str(pokemon_data.get("nickname", "")).strip_edges()
 	_set_held_item_drop_enabled(false)
 	var is_shiny := bool(pokemon_data.get("shiny", false))
 	var level := int(pokemon_data.get("level", 0))
@@ -150,6 +153,7 @@ func set_empty() -> void:
 	current_level = 0
 	current_species_id = ""
 	current_species_source_name = ""
+	current_nickname = ""
 	_set_held_item_drop_enabled(false)
 	is_hovered = false
 	is_pressed = false
@@ -368,17 +372,22 @@ func _refresh_localized_text() -> void:
 func _refresh_species_name() -> void:
 	if name_label == null or current_species_id.strip_edges().is_empty():
 		return
-	var display_name := current_species_source_name
+	var species_name := current_species_source_name
 	var content_localization := get_node_or_null("/root/ContentLocalization")
 	if content_localization != null and content_localization.has_method("display_name"):
-		display_name = str(content_localization.call(
+		species_name = str(content_localization.call(
 			"display_name",
 			"species",
 			current_species_id,
 			current_species_source_name
 		))
+	var display_name := current_nickname if current_nickname != "" else species_name
 	name_label.text = display_name
-	name_label.tooltip_text = display_name
+	name_label.tooltip_text = (
+		"%s (%s)" % [current_nickname, species_name]
+		if current_nickname != "" and current_nickname.to_lower() != species_name.to_lower()
+		else display_name
+	)
 
 func _refresh_level_label() -> void:
 	if level_label == null:

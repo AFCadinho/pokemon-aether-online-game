@@ -58,6 +58,7 @@ func _check_pokedex_runtime_translation() -> void:
 		detail_stack != null and _tree_contains_text(detail_stack, "POKÉDEXSTATUS"),
 		"Pokédex empty detail renders in Dutch"
 	)
+	_check_evolution_navigation(overlay, detail_stack)
 
 	localization_manager.call("set_locale", "pt_BR")
 	overlay.call("_on_locale_changed", "pt_BR")
@@ -78,6 +79,46 @@ func _check_pokedex_runtime_translation() -> void:
 		if loader != null:
 			loader.free()
 	overlay.free()
+
+
+func _check_evolution_navigation(overlay: Node, detail_stack: VBoxContainer) -> void:
+	overlay.set("pokedex_active_tab", "evolutions")
+	overlay.set("pokedex_selected_species", {
+		"id": "raichu",
+		"preEvolutions": [
+			{
+				"speciesId": "pikachu",
+				"speciesName": "Pikachu",
+				"evolvesIntoSpeciesId": "raichu",
+				"evolvesIntoSpeciesName": "Raichu",
+				"method": "item",
+				"trigger": "item",
+				"condition": "Thunder Stone",
+				"items": ["thunder-stone"],
+			},
+		],
+		"evolutions": [],
+	})
+	overlay.call("_refresh_pokedex_detail")
+
+	var species_link := overlay.find_child("EvolutionSpeciesLink_pikachu", true, false) as LinkButton
+	var item_link := overlay.find_child("EvolutionItemLink_thunder-stone", true, false) as Button
+	_check(
+		detail_stack != null and _tree_contains_text(detail_stack, "PRE-EVOLUTIES"),
+		"Pokédex shows a localized pre-evolution section"
+	)
+	_check(
+		species_link != null and species_link.text == "Pikachu" and not species_link.pressed.get_connections().is_empty(),
+		"Pre-evolution species renders as a connected Pokédex link"
+	)
+	_check(
+		item_link != null and item_link.text == "Thunder Stone" and not item_link.pressed.get_connections().is_empty(),
+		"Evolution item renders as a connected Item Dex link"
+	)
+	overlay.set("pokedex_selected_species", {})
+	overlay.set("pokedex_active_tab", "general")
+	overlay.call("_set_pokedex_header_from_species", {})
+	overlay.call("_refresh_pokedex_detail")
 
 
 func _tree_contains_text(node: Node, expected: String) -> bool:

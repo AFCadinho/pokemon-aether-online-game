@@ -1,5 +1,39 @@
 # Changelog
 
+## 0.3.58 - 2026-08-19
+
+**Added**
+
+- Added the Aether Exchange, a fixed-price marketplace for buying and selling eligible Pokémon and items. Listings can be searched, filtered and sorted, and Pokémon can be inspected through a complete read-only Summary before purchase.
+- Added a secure Account Portal that opens from Account Settings after signing in through the game. Trainers can change their display name, password or email address and manage personal-data exports and account deletion without a separate browser login.
+- Email changes now require confirmation from the new inbox. The current inbox has 72 hours to approve or cancel the request; approval from both addresses applies the change immediately, while no response from the old address allows the verified change to complete after the review window.
+- Chat messages now have context actions for copying the message or its full details, starting a private conversation and sending a friend request.
+- Owned Pokémon can now be given a nickname from their Summary for ₽5,000. Nicknames may contain up to 18 characters, are checked for disallowed content, and appear with species context in battles and battle logs.
+- Added Global Heal: for ₽25,000, a Trainer can offer every online Trainer an optional full-party heal. Requests wait until battles finish, can be declined or disabled, do not award Aetherite, and the service has a 15-minute cooldown.
+
+**Changed**
+
+- The Aether Exchange now offers detailed Pokémon and item filters, individual IV filters, price, level and date sorting, compact listing cards and clearer confirmations and status feedback.
+- The Pokédex now loads Pokémon progressively while scrolling, opens linked pre-evolutions and evolutions directly, and shows Pokémon HOME artwork in evolution entries.
+- Long chat messages, badges, sender names and shared Pokémon cards now wrap and align more cleanly.
+- The overworld hotbar now uses a paginated two-column layout and stays below the quest tracker when several quests are visible.
+- Exp. Share holders now receive eligible EV rewards as well as battle experience. Stored EVs can continue accumulating per stat after a Pokémon reaches the 510 allocated-EV limit, while allocation itself remains capped.
+- Gym Leader battles now use the stadium battlefield background.
+
+**Fixed**
+
+- Pokémon Summary cards now show each Pokémon's gender. Existing Pokémon without stored gender data are assigned a stable, species-appropriate gender.
+- Multi-hit attacks now keep HP changes continuous through knockouts instead of briefly restoring or rewinding the target's health.
+- NPC reserve Pokémon remain concealed while team-sidebar animations are playing.
+- Fixed fishing encounters being resolved incorrectly on maps that share encounter data.
+- Fixed player and tall-grass depth ordering, including affected grass on Route 22.
+- Fixed Professor Oak's starter objective missing its quest marker.
+- Fixed alternate Pokémon form names failing to resolve the correct sprites in shared cards and other interfaces.
+- Fixed malformed Pokémon levels appearing in battle hover information.
+- Story-driven Trainer battles now clearly explain when the party exceeds the current level cap instead of showing an unexpected error.
+- NPC Trainer battles now select your first healthy Pokémon when the current lead has fainted, preventing the next challenge from failing to start.
+- Fixed opposing NPC Pokémon occasionally appearing at level 100 after simultaneous faint-and-switch sequences, including poison or burn knockouts.
+
 ## 0.3.57 - 2026-08-16
 
 **Added**
@@ -22,6 +56,7 @@
 
 **Changed**
 
+- The overworld hotbar now uses Ctrl+1 through Ctrl+8, leaving the plain 1 through 4 keys free for battle moves.
 - Removed the redundant Currency tab from the Bag; account balances remain available in the Trainer Card wallet.
 - Map chat is now available from the General channel selector alongside Global, Trade, and Help.
 - Aethernet travel now uses a destination catalogue: Aether Anchor destinations are free, while other attuned destinations cost ₽500.
@@ -31,6 +66,9 @@
 
 **Fixed**
 
+- Fixed Ranked team-validation reasons disappearing after the server finished checking the selected team.
+- Fixed the PvP damage calculator getting stuck when its opening privacy-safe battle snapshot became stale.
+- Fixed Photo Mode zoom using an absolute camera scale that prevented reliable zooming on interior maps and canvas-scaled displays.
 - Trainer rematches now only start their cooldown after you win.
 - Battle logs now correctly identify your Pokémon during switches and retain NPC Trainer names.
 - Fixed blackout recovery and overworld presence reconnects that could leave a Trainer unable to resume normally.

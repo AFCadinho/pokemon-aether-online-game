@@ -3,6 +3,7 @@ extends SceneTree
 const RevealPolicy := preload("res://scripts/battle/opponent_party_reveal_policy.gd")
 const PartySlotScene := preload("res://scenes/battle/party_slot.tscn")
 const POKEBALL_TEXTURE := preload("res://assets/items/icons/POKEBALL.png")
+const BATTLE_SCRIPT_PATH := "res://scripts/battle/battle.gd"
 
 var failures := 0
 
@@ -76,6 +77,20 @@ func _run() -> void:
 	_check(slot.visible, "trainer battle rails keep an empty icon slot visible")
 	_check(slot.disabled, "an empty trainer battle slot remains disabled")
 	_check(icon.texture == null, "an empty trainer battle slot has no Pokeball or Pokemon icon")
+
+	var battle_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var rewind_start := battle_source.find("func _rewind_party_slots_for_events(events: Array) -> void:")
+	var rewind_end := battle_source.find("\nfunc ", rewind_start + 1)
+	var rewind_source := battle_source.substr(rewind_start, rewind_end - rewind_start)
+	_check(rewind_start >= 0, "battle animation party rewind exists")
+	_check(
+		rewind_source.contains("_set_opponent_party_grid(enemy_team)"),
+		"battle animations preserve the NPC opponent reveal policy"
+	)
+	_check(
+		not rewind_source.contains("opponent_party_grid.set_party(enemy_team)"),
+		"battle animations never write the private NPC roster directly to the party rail"
+	)
 
 	slot.queue_free()
 	await process_frame
