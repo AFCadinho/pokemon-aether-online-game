@@ -11,6 +11,9 @@ const COLLAPSE_BUTTON_MARGIN := 10.0
 const ACTION_BAR_SLOT_SIZE := 52.0
 const ACTION_BAR_MARGIN_X := 8.0
 const ACTION_BAR_SLOT_GAP := 8.0
+const HOTBAR_GRID_BASE_TOP_OFFSET := -245.0
+const HOTBAR_GRID_HEIGHT := 210.0
+const HOTBAR_TRACKER_GAP := 8.0
 const RANKED_QUEUE_AVAILABILITY_POLL_INTERVAL_SECONDS := 10.0
 const UI_BASE_Z_INDEX := 100
 const UI_ACTIVE_Z_INDEX := 1000
@@ -1328,6 +1331,8 @@ func _ready() -> void:
 	_setup_pokemon_summary_ev_allocate_popup()
 	_build_party_slots()
 	_setup_collapsible_panels()
+	if not root_control.resized.is_connected(_refresh_quest_tracker_layout):
+		root_control.resized.connect(_refresh_quest_tracker_layout)
 	_setup_chat_resize_button()
 	_setup_chat_surface_ui()
 	_setup_chat_message_context_menus()
@@ -1591,8 +1596,17 @@ func _refresh_quest_tracker_layout() -> void:
 		if panel != null:
 			right_action_bar_bottom = maxf(right_action_bar_bottom, panel.position.y + panel.size.y)
 	quest_journal_view.set_tracker_top_offset(right_action_bar_bottom + ACTION_BAR_SLOT_GAP)
-	hotkey_sidebar_panel.offset_top = -245.0
-	hotkey_sidebar_panel.offset_bottom = -35.0
+	var viewport_height: float = root_control.size.y
+	if viewport_height <= 0.0:
+		viewport_height = get_viewport().get_visible_rect().size.y
+	var tracker_bottom_offset: float = (
+		quest_journal_view.get_visible_tracker_bottom()
+		+ HOTBAR_TRACKER_GAP
+		- viewport_height * 0.5
+	)
+	var hotbar_top_offset: float = maxf(HOTBAR_GRID_BASE_TOP_OFFSET, tracker_bottom_offset)
+	hotkey_sidebar_panel.offset_top = hotbar_top_offset
+	hotkey_sidebar_panel.offset_bottom = hotbar_top_offset + HOTBAR_GRID_HEIGHT
 	_position_collapsible_button("hotkey_sidebar")
 
 
