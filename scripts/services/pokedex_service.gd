@@ -22,7 +22,8 @@ func search_species(
 	query: String = "",
 	limit: int = 50,
 	dex_id: String = "national",
-	shiny: bool = false
+	shiny: bool = false,
+	offset: int = 0
 ) -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {
@@ -31,7 +32,8 @@ func search_species(
 		}
 
 	var clamped_limit: int = clampi(limit, 1, 200)
-	var endpoint := SPECIES_ENDPOINT + "?limit=%s" % clamped_limit
+	var normalized_offset := maxi(offset, 0)
+	var endpoint := SPECIES_ENDPOINT + "?limit=%s&offset=%s" % [clamped_limit, normalized_offset]
 	var normalized_dex_id := dex_id.strip_edges().to_lower()
 	if normalized_dex_id != "kanto":
 		normalized_dex_id = "national"
@@ -44,7 +46,8 @@ func search_species(
 		trimmed_query,
 		clamped_limit,
 		normalized_dex_id,
-		shiny
+		shiny,
+		normalized_offset
 	)
 	if trimmed_query == "" and _species_search_cache.has(cache_key):
 		return (_species_search_cache.get(cache_key, {}) as Dictionary).duplicate(true)
@@ -58,7 +61,8 @@ func search_species(
 		cache_key,
 		trimmed_query == "",
 		shiny,
-		_cache_generation
+		_cache_generation,
+		normalized_offset
 	)
 
 
@@ -67,7 +71,8 @@ func _fetch_species_search(
 	cache_key: String,
 	cache_result: bool,
 	shiny: bool,
-	cache_generation: int
+	cache_generation: int,
+	request_offset: int
 ) -> Dictionary:
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
@@ -91,6 +96,8 @@ func _fetch_species_search(
 		"success": true,
 		"species": _array_from_value(body.get("species", [])),
 		"total": int(body.get("total", 0)),
+		"offset": int(body.get("offset", request_offset)),
+		"hasMore": bool(body.get("hasMore", false)),
 		"dexTotal": int(body.get("dexTotal", 0)),
 		"ownedTotal": int(body.get("ownedTotal", 0)),
 		"ownedSpeciesIds": owned_species_ids,
@@ -110,14 +117,15 @@ func warm_up_default_catalog() -> void:
 	_default_catalog_warmup_in_progress = true
 	var endpoint := (
 		SPECIES_ENDPOINT
-		+ "?limit=%s&dex=%s&shiny=false" % [DEFAULT_WARMUP_LIMIT, DEFAULT_WARMUP_DEX_ID]
+		+ "?limit=%s&offset=0&dex=%s&shiny=false" % [DEFAULT_WARMUP_LIMIT, DEFAULT_WARMUP_DEX_ID]
 	)
 	var result := await _fetch_species_search(
 		endpoint,
 		_default_warmup_cache_key(),
 		true,
 		DEFAULT_WARMUP_SHINY,
-		_cache_generation
+		_cache_generation,
+		0
 	)
 	if bool(result.get("success", false)):
 		var species_values := _array_from_value(result.get("species", []))
@@ -206,12 +214,25 @@ func _default_warmup_cache_key() -> String:
 		"",
 		DEFAULT_WARMUP_LIMIT,
 		DEFAULT_WARMUP_DEX_ID,
-		DEFAULT_WARMUP_SHINY
+		DEFAULT_WARMUP_SHINY,
+		0
 	)
 
 
-func _species_search_cache_key(query: String, limit: int, dex_id: String, shiny: bool) -> String:
-	return "%s|%s|%s|%s" % [dex_id, "shiny" if shiny else "normal", limit, query]
+func _species_search_cache_key(
+	query: String,
+	limit: int,
+	dex_id: String,
+	shiny: bool,
+	offset: int
+) -> String:
+	return "%s|%s|%s|%s|%s" % [
+		dex_id,
+		"shiny" if shiny else "normal",
+		limit,
+		offset,
+		query,
+	]
 
 
 func _request_json(url: String, method: HTTPClient.Method, headers: PackedStringArray, body: String) -> Dictionary:

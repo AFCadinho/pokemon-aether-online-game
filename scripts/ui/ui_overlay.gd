@@ -225,6 +225,8 @@ const POKEDEX_ACCENT_FAINT := Color("#ef5a6855")
 const POKEDEX_SHINY_ACCENT := Color("#f3cc68")
 const POKEDEX_SHINY_ACCENT_SOFT := Color("#f3cc68aa")
 const POKEDEX_SHINY_ACCENT_FAINT := Color("#f3cc6844")
+const POKEDEX_PAGE_SIZE := 80
+const POKEDEX_LOAD_MORE_THRESHOLD := 128.0
 const WILD_POKEMON_POPUP_SIZE := Vector2(430, 500)
 const POKEDEX_BASE_STAT_BAR_MAX := 200
 const POKEMON_SUMMARY_SIZE := Vector2(620, 380)
@@ -1221,6 +1223,7 @@ var mount_loadout_panel: Control
 var pokedex_dex_selector: OptionButton
 var pokedex_variant_buttons: Dictionary = {}
 var pokedex_search_input: LineEdit
+var pokedex_results_scroll: ScrollContainer
 var pokedex_results_list: VBoxContainer
 var pokedex_results_count_label: Label
 var pokedex_name_label: Label
@@ -1252,6 +1255,10 @@ var pokedex_warmup_complete := false
 var pokedex_results_state := "idle"
 var pokedex_results_owned_total := 0
 var pokedex_results_dex_total := 0
+var pokedex_results_loaded_count := 0
+var pokedex_results_match_total := 0
+var pokedex_results_has_more := false
+var pokedex_results_loading_more := false
 var pokedex_dragging := false
 var pokedex_drag_offset := Vector2.ZERO
 var wild_pokemon_popup: PanelContainer
@@ -9082,15 +9089,16 @@ func _setup_pokedex_popup() -> void:
 	pokedex_search_debounce_timer.timeout.connect(_refresh_pokedex_results)
 	pokedex_popup.add_child(pokedex_search_debounce_timer)
 
-	var results_scroll := ScrollContainer.new()
-	results_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	results_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	browser_stack.add_child(results_scroll)
+	pokedex_results_scroll = ScrollContainer.new()
+	pokedex_results_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pokedex_results_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	browser_stack.add_child(pokedex_results_scroll)
+	pokedex_results_scroll.get_v_scroll_bar().value_changed.connect(_on_pokedex_results_scrolled)
 
 	pokedex_results_list = VBoxContainer.new()
 	pokedex_results_list.add_theme_constant_override("separation", 7)
 	pokedex_results_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	results_scroll.add_child(pokedex_results_list)
+	pokedex_results_scroll.add_child(pokedex_results_list)
 
 	var detail_panel := PanelContainer.new()
 	detail_panel.custom_minimum_size = Vector2(660, 0)
@@ -28072,8 +28080,14 @@ func _on_pokedex_variant_selected(variant_id: String) -> void:
 func _refresh_pokedex_results() -> void:
 	if pokedex_results_list == null:
 		return
+	pokedex_results_loading_more = false
+	pokedex_results_loaded_count = 0
+	pokedex_results_match_total = 0
+	pokedex_results_has_more = false
 	for child: Node in pokedex_results_list.get_children():
 		child.queue_free()
+	if pokedex_results_scroll != null:
+		pokedex_results_scroll.scroll_vertical = 0
 
 	var query := ""
 	if pokedex_search_input != null:
@@ -28092,12 +28106,12 @@ func _refresh_pokedex_results() -> void:
 
 	pokedex_search_request_id += 1
 	var request_id := pokedex_search_request_id
-	var result_limit := 200 if pokedex_active_dex == "kanto" else 80
 	var search_result: Dictionary = await PokedexService.search_species(
 		query,
-		result_limit,
+		POKEDEX_PAGE_SIZE,
 		pokedex_active_dex,
-		pokedex_shiny_mode
+		pokedex_shiny_mode,
+		0
 	)
 	if request_id != pokedex_search_request_id:
 		return
@@ -28129,6 +28143,11 @@ func _refresh_pokedex_results() -> void:
 			first_species_id = species_id
 		pokedex_results_list.add_child(_create_pokedex_species_button(species))
 		count += 1
+	pokedex_results_loaded_count = count
+	pokedex_results_match_total = int(search_result.get("total", count))
+	pokedex_results_has_more = bool(
+		search_result.get("hasMore", pokedex_results_loaded_count < pokedex_results_match_total)
+	)
 
 	if count == 0:
 		var empty_label := Label.new()
@@ -28149,6 +28168,68 @@ func _refresh_pokedex_results() -> void:
 			"font_color",
 			POKEDEX_SHINY_ACCENT if pokedex_shiny_mode else POKEDEX_ACCENT
 		)
+
+
+func _on_pokedex_results_scrolled(_value: float) -> void:
+	if pokedex_results_scroll == null or not pokedex_results_has_more:
+		return
+	var scroll_bar := pokedex_results_scroll.get_v_scroll_bar()
+	if scroll_bar == null or scroll_bar.max_value <= scroll_bar.page:
+		return
+	if scroll_bar.value >= scroll_bar.max_value - scroll_bar.page - POKEDEX_LOAD_MORE_THRESHOLD:
+		_load_more_pokedex_results.call_deferred()
+
+
+func _load_more_pokedex_results() -> void:
+	if (
+		pokedex_results_loading_more
+		or not pokedex_results_has_more
+		or pokedex_results_list == null
+	):
+		return
+	pokedex_results_loading_more = true
+	var request_id := pokedex_search_request_id
+	var loading_label := Label.new()
+	loading_label.name = "PokedexLoadMoreStatus"
+	loading_label.text = LocalizationManager.text("common.loading")
+	loading_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	loading_label.custom_minimum_size = Vector2(0, 38)
+	loading_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	pokedex_results_list.add_child(loading_label)
+
+	var query := pokedex_search_input.text.strip_edges() if pokedex_search_input != null else ""
+	var search_result: Dictionary = await PokedexService.search_species(
+		query,
+		POKEDEX_PAGE_SIZE,
+		pokedex_active_dex,
+		pokedex_shiny_mode,
+		pokedex_results_loaded_count
+	)
+	if request_id != pokedex_search_request_id:
+		return
+	if is_instance_valid(loading_label):
+		loading_label.queue_free()
+	if not bool(search_result.get("success", false)):
+		pokedex_results_loading_more = false
+		return
+
+	var species_results := _array_from_variant(search_result.get("species", []))
+	var appended_count := 0
+	for species_value: Variant in species_results:
+		if not (species_value is Dictionary):
+			continue
+		pokedex_results_list.add_child(_create_pokedex_species_button(species_value as Dictionary))
+		appended_count += 1
+		if appended_count % 8 == 0:
+			await get_tree().process_frame
+			if request_id != pokedex_search_request_id:
+				return
+	pokedex_results_loaded_count += appended_count
+	pokedex_results_match_total = int(search_result.get("total", pokedex_results_match_total))
+	pokedex_results_has_more = bool(
+		search_result.get("hasMore", pokedex_results_loaded_count < pokedex_results_match_total)
+	)
+	pokedex_results_loading_more = false
 
 func _create_pokedex_species_button(species: Dictionary) -> Control:
 	var species_id := str(species.get("id", "")).strip_edges()

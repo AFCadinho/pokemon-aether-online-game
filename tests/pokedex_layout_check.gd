@@ -48,6 +48,9 @@ func _init() -> void:
 	var service_source := FileAccess.get_file_as_string("res://scripts/services/pokedex_service.gd")
 	_check(service_source.contains("_species_search_cache") and service_source.contains("_species_detail_cache"), "Pokédex warm-up caches the species list and first detail")
 	_check(service_source.contains("await default_catalog_warmup_finished"), "Opening during warm-up reuses the active catalog request")
+	_check(source.contains("func _on_pokedex_results_scrolled") and source.contains("func _load_more_pokedex_results"), "Pokédex loads additional species near the bottom of the list")
+	_check(source.contains("pokedex_results_loaded_count") and source.contains("POKEDEX_PAGE_SIZE"), "Pokédex pagination appends stable result batches")
+	_check(service_source.contains("offset") and service_source.contains("request_offset"), "Pokédex cache and requests keep result pages separate")
 	_check(source.contains('{"key": "evolution", "i18n": "evolution"'), "Pokédex has a dedicated evolution move section")
 	_check(source.contains("_on_pokedex_sprite_panel_gui_input"), "Front and back sprite interaction remains available")
 
