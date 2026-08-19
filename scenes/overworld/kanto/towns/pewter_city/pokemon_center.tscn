@@ -54,7 +54,7 @@ facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("5_hiker")
 
 [node name="LassCeleste" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="6" unique_id=14382031 instance=ExtResource("3_dialogue_npc")]
-position = Vector2(544, 784)
+position = Vector2(528, 816)
 npc_id = "kanto_pewter_city_pokemon_center_lass_celeste"
 npc_definition_id = "trainer_class_lass"
 display_name = "Lass Celeste"
@@ -76,7 +76,7 @@ movement_wait_seconds = 1.5
 movement_speed_pixels = 44.0
 
 [node name="Clefairy" parent="Entities/Pokemon" index="1" unique_id=85891741 instance=ExtResource("4_overworld_pokemon")]
-position = Vector2(608, 784)
+position = Vector2(560, 816)
 overworld_pokemon_id = "kanto_pewter_city_pokemon_center_clefairy_1"
 species_id = "clefairy"
 level = 9
@@ -90,3 +90,6 @@ movement_speed_pixels = 38.0
 [node name="ToOutside" parent="Exits" parent_id_path=PackedInt32Array(1112148501) index="0" unique_id=1126740257]
 target_scene_path = "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn"
 target_spawn_name = "FromPokecenter"
+
+[node name="DoorTransitionHint" parent="Exits/ToOutside" index="1"]
+z_as_relative = false
