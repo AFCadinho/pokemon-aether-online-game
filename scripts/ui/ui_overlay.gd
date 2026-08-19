@@ -14947,7 +14947,6 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_title_label = Label.new()
 	pokemon_summary_title_label.text = LocalizationManager.text("ui.pokemon_summary.title")
 	pokemon_summary_title_label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-	_make_label_clip_width(pokemon_summary_title_label)
 	pokemon_summary_title_label.add_theme_font_size_override("font_size", 14)
 	pokemon_summary_title_label.add_theme_color_override("font_color", Color("#f4f7ff"))
 	pokemon_summary_title_label.add_theme_color_override("font_shadow_color", Color("#00111f"))
