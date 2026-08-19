@@ -26,6 +26,7 @@
 - Fixed Professor Oak's starter objective missing its quest marker.
 - Fixed alternate Pokémon form names failing to resolve the correct sprites in shared cards and other interfaces.
 - Fixed malformed Pokémon levels appearing in battle hover information.
+- Story-driven Trainer battles now clearly explain when the party exceeds the current level cap instead of showing an unexpected error.
 
 ## 0.3.57 - 2026-08-16
 
