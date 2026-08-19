@@ -30,6 +30,16 @@ func _run() -> void:
 		"wild battle start messages"
 	)
 	_check_equal(
+		formatter.format_pokemon_identity("Sparky", "Pikachu"),
+		"Sparky (Pikachu)",
+		"battle-log identity links nickname to species"
+	)
+	_check_equal(
+		formatter.format_pokemon_identity("Pikachu", "Pikachu"),
+		"Pikachu",
+		"battle-log identity does not duplicate the species name"
+	)
+	_check_equal(
 		formatter.format_trainer_battle_start_messages("Pikachu", "Eevee", "Gary Oak"),
 		["Gary Oak wants to battle!", "Gary Oak sent out Eevee!", "Go! Pikachu!"],
 		"trainer battle start messages"

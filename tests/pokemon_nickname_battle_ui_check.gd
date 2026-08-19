@@ -13,6 +13,15 @@ func _run() -> void:
 	pokemon.current_hp = 35
 	pokemon.max_hp = 50
 
+	var overworld_party_scene := load("res://scenes/interface/party_slot.tscn") as PackedScene
+	var overworld_party_slot := overworld_party_scene.instantiate()
+	root.add_child(overworld_party_slot)
+	await process_frame
+	overworld_party_slot.call("set_pokemon", pokemon)
+	var overworld_party_name := overworld_party_slot.get("name_label") as Label
+	_check(overworld_party_name != null and overworld_party_name.text == "Sparky", "Overworld party rail shows nickname")
+	_check(overworld_party_name != null and overworld_party_name.tooltip_text.contains("Pikachu"), "Overworld party nickname tooltip retains species")
+
 	var party_scene := load("res://scenes/battle/party_slot.tscn") as PackedScene
 	var party_slot := party_scene.instantiate()
 	root.add_child(party_slot)
@@ -33,6 +42,7 @@ func _run() -> void:
 	var metadata := rows[0].get_meta("battle_hud_data", {}) as Dictionary
 	_check(str(metadata.get("species", "")) == "Pikachu", "Active battle HUD metadata retains canonical species")
 
+	overworld_party_slot.queue_free()
 	party_slot.queue_free()
 	hud.queue_free()
 	await process_frame

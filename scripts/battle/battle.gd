@@ -6219,7 +6219,7 @@ func prepare_wild_battle_from_response(
 	_debug_battle_start_response("wild.setup.after_apply", api_response)
 	_debug_battle_start_active_snapshot("wild.setup.after_apply")
 
-	_add_battle_log_messages(setup_flow.get_wild_battle_start_messages(_get_active_display_name("p1"), _get_active_display_name("p2")))
+	_add_battle_log_messages(setup_flow.get_wild_battle_start_messages(_get_active_battle_log_identity("p1"), _get_active_battle_log_identity("p2")))
 	_show_original_player_lead_before_initial_events(player_species, player_pokemon)
 	# The lead data must be ready for the summon target, but the player sprite
 	# itself must not flash before the Poké Ball release animation begins.
@@ -6303,8 +6303,8 @@ func setup_trainer_battle_from_response(
 	_debug_battle_start_response("trainer.lead.after_selection", lead_response)
 	_debug_battle_start_active_snapshot("trainer.lead.after_selection")
 	_add_battle_log_messages(setup_flow.get_trainer_battle_start_messages(
-		_get_active_display_name("p1"),
-		_get_active_display_name("p2"),
+		_get_active_battle_log_identity("p1"),
+		_get_active_battle_log_identity("p2"),
 		trainer_data,
 		_get_player_display_name("p2")
 	))
@@ -15123,6 +15123,12 @@ func _get_active_display_species(player_id: String) -> String:
 func _get_active_display_name(player_id: String) -> String:
 	var display_name := display_data_presenter.get_active_display_name(player_id).strip_edges()
 	return display_name if display_name != "" else _get_active_display_species(player_id)
+
+func _get_active_battle_log_identity(player_id: String) -> String:
+	return event_text_formatter.format_pokemon_identity(
+		_get_active_display_name(player_id),
+		_get_active_display_species(player_id)
+	)
 
 func _resolve_active_display_species(player_id: String) -> String:
 	if _is_spectator_battle():
