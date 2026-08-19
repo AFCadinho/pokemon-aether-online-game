@@ -159,14 +159,34 @@ func _check_chat_moderation_context_action() -> void:
 	}
 	coordinator.current_target = {"userId": 7, "username": "misty", "displayName": "Misty"}
 	coordinator.context_more_actions_expanded = true
-	coordinator.chat_moderation_state_loading = false
+	coordinator.social_state_loading = true
+	coordinator.chat_moderation_state_loading = true
 	coordinator.chat_target_is_muted = false
 	coordinator._render_context_menu()
-	_check_equal(
-		_find_player_action("Mute Player") != null,
-		true,
-		"Owner receives the direct-player mute action even with a partial permission projection"
+	var requested_actions: Array[String] = []
+	var requested_players: Array[Dictionary] = []
+	coordinator.chat_moderation_requested.connect(
+		func(action: String, player: Dictionary) -> void:
+			requested_actions.append(action)
+			requested_players.append(player)
 	)
+	var mute_button := _find_player_action("Mute Player")
+	_check_equal(
+		mute_button != null and not mute_button.disabled,
+		true,
+		"Owner can use direct-player mute while unrelated social state is loading"
+	)
+	if mute_button != null:
+		mute_button.pressed.emit()
+	_check_equal(requested_actions, ["mute"], "direct-player mute emits the moderation request")
+	_check_equal(
+		int(requested_players[0].get("userId", 0)) if not requested_players.is_empty() else 0,
+		7,
+		"direct-player mute keeps the selected target"
+	)
+	coordinator.current_target = {"userId": 7, "username": "misty", "displayName": "Misty"}
+	coordinator.context_more_actions_expanded = true
+	coordinator.social_state_loading = false
 	coordinator.chat_target_is_muted = true
 	coordinator._render_context_menu()
 	_check_equal(

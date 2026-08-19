@@ -38872,21 +38872,36 @@ func _open_chat_sender_context_menu(context: Dictionary, global_position: Vector
 	chat_sender_context_menu.set_item_disabled(1, username == "")
 	var target_user_id := _user_id_from_state(user)
 	if _has_user_permission(CHAT_MUTE_PERMISSION) and target_user_id > 0:
-		var mute_state: Dictionary = await ChatModerationService.get_mute_state(target_user_id)
-		if bool(mute_state.get("success", false)):
-			var state := _dictionary_from_value(mute_state.get("body", {}))
-			chat_sender_context_menu.add_separator()
-			if bool(state.get("muted", false)):
-				chat_sender_context_menu.add_item(
-					LocalizationManager.text("ui.chat.sender.unmute"),
-					CHAT_CONTEXT_UNMUTE_PLAYER
-				)
-			else:
-				chat_sender_context_menu.add_item(
-					LocalizationManager.text("ui.chat.sender.mute"),
-					CHAT_CONTEXT_MUTE_PLAYER
-				)
+		# Keep the action available even if the optional state lookup is slow or
+		# unavailable. The authoritative endpoint validates every mutation.
+		chat_sender_context_menu.add_separator()
+		chat_sender_context_menu.add_item(
+			LocalizationManager.text("ui.chat.sender.mute"),
+			CHAT_CONTEXT_MUTE_PLAYER
+		)
 	_popup_chat_context_menu(chat_sender_context_menu, global_position)
+	if _has_user_permission(CHAT_MUTE_PERMISSION) and target_user_id > 0:
+		_refresh_chat_sender_moderation_action.call_deferred(target_user_id)
+
+
+func _refresh_chat_sender_moderation_action(target_user_id: int) -> void:
+	var mute_state: Dictionary = await ChatModerationService.get_mute_state(target_user_id)
+	if not bool(mute_state.get("success", false)):
+		return
+	var active_user := _dictionary_from_value(active_chat_sender_context.get("user", {}))
+	if _user_id_from_state(active_user) != target_user_id:
+		return
+	var state := _dictionary_from_value(mute_state.get("body", {}))
+	if not bool(state.get("muted", false)):
+		return
+	var item_index := chat_sender_context_menu.get_item_index(CHAT_CONTEXT_MUTE_PLAYER)
+	if item_index < 0:
+		return
+	chat_sender_context_menu.set_item_text(
+		item_index,
+		LocalizationManager.text("ui.chat.sender.unmute")
+	)
+	chat_sender_context_menu.set_item_id(item_index, CHAT_CONTEXT_UNMUTE_PLAYER)
 
 
 func _on_chat_message_context_action(action_id: int) -> void:

@@ -540,8 +540,7 @@ func _render_context_menu() -> void:
 					else "ui.nearby.action.mute_player.description"
 				),
 				_on_chat_moderation_pressed,
-				"default" if chat_target_is_muted else "danger",
-				chat_moderation_state_loading
+				"default" if chat_target_is_muted else "danger"
 			)
 	_schedule_context_menu_content_fit()
 
@@ -638,7 +637,13 @@ func _add_context_action(
 	button.disabled = (
 		force_disabled
 		or (
-			label not in ["View Trainer Card", "Message", "Send Mail"]
+			label not in [
+				"View Trainer Card",
+				"Message",
+				"Send Mail",
+				"Mute Player",
+				"Unmute Player",
+			]
 			and (social_action_in_flight or social_state_loading)
 		)
 	)
