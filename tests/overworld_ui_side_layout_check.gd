@@ -49,12 +49,23 @@ func _init() -> void:
 
 	_check(hotbar_block.contains("anchors_preset = 6"), "hotbar is anchored to the right")
 	_check(hotbar_block.contains("offset_right = 0.0"), "hotbar hugs the right screen edge")
-	_check(hotbar_block.contains("offset_top = -245.0") and hotbar_block.contains("offset_bottom = 165.0"), "hotbar keeps its base position when quest trackers are absent")
 	_check(
-		script_source.contains("quest_journal_view.get_visible_tracker_count()")
-		and script_source.contains("var hotbar_shift := 86.0 if tracker_count > 1 else 0.0")
+		hotbar_block.contains("offset_left = -112.0")
+		and hotbar_block.contains("offset_top = -245.0")
+		and hotbar_block.contains("offset_bottom = -35.0"),
+		"two-column hotbar keeps a compact fixed position below the quest trackers"
+	)
+	_check(
+		hotkey_sidebar_scene_source.contains('[node name="SlotStack" type="GridContainer"')
+		and hotkey_sidebar_scene_source.contains("columns = 2")
+		and hotkey_sidebar_scene_source.contains("custom_minimum_size = Vector2(110, 208)"),
+		"hotbar presents all eight shortcuts in a compact two-column grid"
+	)
+	_check(
+		script_source.contains('get_node_or_null("MarginContainer/SlotStack") as GridContainer')
+		and not script_source.contains("var hotbar_shift := 86.0 if tracker_count > 1 else 0.0")
 		and script_source.contains('_position_collapsible_button("hotkey_sidebar")'),
-		"hotbar dynamically clears a second visible quest tracker"
+		"quest tracker updates keep the compact hotbar anchored in place"
 	)
 	_check(party_block.contains("anchors_preset = 0"), "normal party is anchored to the left")
 	_check(party_block.contains("offset_left = 0.0"), "normal party hugs the left screen edge")

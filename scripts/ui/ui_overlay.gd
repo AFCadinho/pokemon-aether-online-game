@@ -1591,10 +1591,8 @@ func _refresh_quest_tracker_layout() -> void:
 		if panel != null:
 			right_action_bar_bottom = maxf(right_action_bar_bottom, panel.position.y + panel.size.y)
 	quest_journal_view.set_tracker_top_offset(right_action_bar_bottom + ACTION_BAR_SLOT_GAP)
-	var tracker_count := int(quest_journal_view.get_visible_tracker_count())
-	var hotbar_shift := 86.0 if tracker_count > 1 else 0.0
-	hotkey_sidebar_panel.offset_top = -245.0 + hotbar_shift
-	hotkey_sidebar_panel.offset_bottom = 165.0 + hotbar_shift
+	hotkey_sidebar_panel.offset_top = -245.0
+	hotkey_sidebar_panel.offset_bottom = -35.0
 	_position_collapsible_button("hotkey_sidebar")
 
 
@@ -25952,7 +25950,7 @@ func _on_repel_toggle_toggled(toggled_on: bool) -> void:
 
 
 func _setup_player_hotbar() -> void:
-	var slot_stack := hotkey_sidebar_panel.get_node_or_null("MarginContainer/SlotStack") as VBoxContainer
+	var slot_stack := hotkey_sidebar_panel.get_node_or_null("MarginContainer/SlotStack") as GridContainer
 	if slot_stack == null:
 		push_error("UIOverlay: HotkeySidebar SlotStack is missing.")
 		return

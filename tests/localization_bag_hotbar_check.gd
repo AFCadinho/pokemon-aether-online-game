@@ -61,6 +61,8 @@ func _check_bag_and_hotbar_runtime_translation() -> void:
 	var category_buttons := overlay.get("bag_category_buttons") as Dictionary
 	var all_button := category_buttons.get("all") as Button
 	var all_label := all_button.find_child("Label", true, false) as Label
+	var hotbar_panel := overlay.get("hotkey_sidebar_panel") as PanelContainer
+	var hotbar_grid := hotbar_panel.get_node_or_null("MarginContainer/SlotStack") as GridContainer
 	var hotbar_buttons := overlay.get("hotbar_buttons") as Array
 	var first_hotbar_button := hotbar_buttons[0] as Control
 	_check(search != null and search.placeholder_text == "Items zoeken...", "Bag search renders in Dutch")
@@ -70,6 +72,12 @@ func _check_bag_and_hotbar_runtime_translation() -> void:
 		and first_hotbar_button.tooltip_text.begins_with("Lege sneltoets 1")
 		and first_hotbar_button.tooltip_text.contains("Ctrl+1"),
 		"hotbar instructions render in Dutch"
+	)
+	_check(
+		hotbar_grid != null
+		and hotbar_grid.columns == 2
+		and hotbar_grid.get_child_count() == 8,
+		"hotbar keeps all eight shortcuts in a two-column grid"
 	)
 	_check(
 		localization_manager.call(

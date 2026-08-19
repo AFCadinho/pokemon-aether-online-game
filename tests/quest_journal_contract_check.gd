@@ -469,9 +469,9 @@ func _verify_integration_contract() -> void:
 		and overlay.contains('for panel_id in ["actions", "dex_actions"]')
 		and overlay.contains("quest_journal_view.set_tracker_top_offset")
 		and overlay.contains("tracker_layout_changed.connect(_refresh_quest_tracker_layout)")
-		and overlay.contains("quest_journal_view.get_visible_tracker_count()")
+		and overlay.contains("hotkey_sidebar_panel.offset_bottom = -35.0")
 		and not overlay.contains("Quest Log is not implemented yet."),
-		"HUD quest integration opens the journal and dynamically clears the right-side UI"
+		"HUD quest integration opens the journal and keeps the compact hotbar clear"
 	)
 
 
