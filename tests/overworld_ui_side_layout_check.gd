@@ -53,7 +53,7 @@ func _init() -> void:
 		hotbar_block.contains("offset_left = -112.0")
 		and hotbar_block.contains("offset_top = -245.0")
 		and hotbar_block.contains("offset_bottom = -35.0"),
-		"two-column hotbar keeps a compact fixed position below the quest trackers"
+		"two-column hotbar starts from a compact right-side position"
 	)
 	_check(
 		hotkey_sidebar_scene_source.contains('[node name="SlotStack" type="GridContainer"')
@@ -63,9 +63,11 @@ func _init() -> void:
 	)
 	_check(
 		script_source.contains('get_node_or_null("MarginContainer/SlotStack") as GridContainer')
-		and not script_source.contains("var hotbar_shift := 86.0 if tracker_count > 1 else 0.0")
+		and script_source.contains("quest_journal_view.get_visible_tracker_bottom()")
+		and script_source.contains("var hotbar_top_offset: float = maxf(HOTBAR_GRID_BASE_TOP_OFFSET, tracker_bottom_offset)")
+		and script_source.contains("root_control.resized.connect(_refresh_quest_tracker_layout)")
 		and script_source.contains('_position_collapsible_button("hotkey_sidebar")'),
-		"quest tracker updates keep the compact hotbar anchored in place"
+		"quest and viewport updates place the compact hotbar below visible quest cards"
 	)
 	_check(party_block.contains("anchors_preset = 0"), "normal party is anchored to the left")
 	_check(party_block.contains("offset_left = 0.0"), "normal party hugs the left screen edge")
