@@ -6,6 +6,16 @@ var failed := false
 
 
 func _init() -> void:
+	var heal_service := PartyHealServiceScript.new()
+	var status_only_pokemon := Pokemon.new("Pikachu", 5)
+	status_only_pokemon.has_saved_hp_state = true
+	status_only_pokemon.status = "psn"
+	_check(
+		heal_service.party_needs_heal([status_only_pokemon]),
+		"A status condition makes an otherwise healthy party eligible for healing"
+	)
+	heal_service.free()
+
 	var pvp_body: Dictionary = PartyHealServiceScript.build_heal_request_body({}, false)
 	_check(
 		pvp_body == {"publicService": false},

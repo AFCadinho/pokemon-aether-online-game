@@ -124,6 +124,15 @@ func get_visible_tracker_count() -> int:
 	return int(has_main_tracker) + int(has_side_tracker)
 
 
+func get_visible_tracker_bottom() -> float:
+	var tracker_bottom := tracker_top_offset
+	if tracker_panel != null and tracker_panel.visible:
+		tracker_bottom = maxf(tracker_bottom, tracker_panel.offset_bottom)
+	if side_tracker_panel != null and side_tracker_panel.visible:
+		tracker_bottom = maxf(tracker_bottom, side_tracker_panel.offset_bottom)
+	return tracker_bottom
+
+
 func refresh() -> void:
 	_refresh_tracker()
 	_refresh_journal()

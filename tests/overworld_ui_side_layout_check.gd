@@ -49,12 +49,27 @@ func _init() -> void:
 
 	_check(hotbar_block.contains("anchors_preset = 6"), "hotbar is anchored to the right")
 	_check(hotbar_block.contains("offset_right = 0.0"), "hotbar hugs the right screen edge")
-	_check(hotbar_block.contains("offset_top = -245.0") and hotbar_block.contains("offset_bottom = 165.0"), "hotbar keeps its base position when quest trackers are absent")
 	_check(
-		script_source.contains("quest_journal_view.get_visible_tracker_count()")
-		and script_source.contains("var hotbar_shift := 86.0 if tracker_count > 1 else 0.0")
+		hotbar_block.contains("offset_left = -60.0")
+		and hotbar_block.contains("offset_top = -245.0")
+		and hotbar_block.contains("offset_bottom = -26.0"),
+		"paginated hotbar starts from a narrow right-edge position"
+	)
+	_check(
+		hotkey_sidebar_scene_source.contains('[node name="SlotStack" type="GridContainer" parent="MarginContainer/Layout"')
+		and hotkey_sidebar_scene_source.contains("columns = 1")
+		and hotkey_sidebar_scene_source.contains("custom_minimum_size = Vector2(58, 219)")
+		and hotkey_sidebar_scene_source.contains('[node name="PageControls" type="HBoxContainer"'),
+		"hotbar presents four shortcuts at a time in a narrow paginated column"
+	)
+	_check(
+		script_source.contains('get_node_or_null("MarginContainer/Layout/SlotStack") as GridContainer')
+		and script_source.contains("func _set_hotbar_page(page_index: int)")
+		and script_source.contains("quest_journal_view.get_visible_tracker_bottom()")
+		and script_source.contains("var hotbar_top_offset: float = maxf(HOTBAR_GRID_BASE_TOP_OFFSET, tracker_bottom_offset)")
+		and script_source.contains("root_control.resized.connect(_refresh_quest_tracker_layout)")
 		and script_source.contains('_position_collapsible_button("hotkey_sidebar")'),
-		"hotbar dynamically clears a second visible quest tracker"
+		"quest and viewport updates place the compact hotbar below visible quest cards"
 	)
 	_check(party_block.contains("anchors_preset = 0"), "normal party is anchored to the left")
 	_check(party_block.contains("offset_left = 0.0"), "normal party hugs the left screen edge")
@@ -97,7 +112,7 @@ func _init() -> void:
 	_check(chat_tabs_block.contains("anchors_preset = 2"), "chat tabs follow the left-side chat")
 	_check(global_buffs_block.contains("anchors_preset = 5"), "global buffs sit beside the top-center location card")
 	_check(global_buffs_block.contains("offset_left = 214.0"), "global buffs clear the location collapse button")
-	_check(global_buffs_block.contains("custom_minimum_size = Vector2(197, 50)"), "global buffs use a compact four-icon tray")
+	_check(global_buffs_block.contains("custom_minimum_size = Vector2(242, 50)"), "global buffs use a compact five-icon tray")
 	_check(personal_buffs_block.contains("anchors_preset = 3"), "personal buffs sit above the bottom-right trainer card")
 	_check(personal_buffs_block.contains("offset_bottom = -104.0"), "personal buffs leave space above the trainer card")
 	_check(personal_buffs_block.contains("custom_minimum_size = Vector2(188, 98)"), "personal buffs have room for readable detail cards")
@@ -145,6 +160,7 @@ func _init() -> void:
 	_check(not script_source.contains("dev_preview_evolution_button") and not script_source.contains("dev_pickpocket_pose_button"), "Developer Tools omits temporary animation preview actions")
 	_check(script_source.contains('staff_tools_popup.custom_minimum_size = Vector2(390, 0)') and script_source.contains('"ui.staff.tools.subtitle"'), "Staff Tools uses the shared compact launcher")
 	_check(script_source.contains('"ui.staff.teleport.action_description"') and script_source.contains('"ui.staff.impersonate.action_description"'), "Staff actions explain Teleport and Impersonate")
+	_check(script_source.contains('"ui.staff.chat.action_description"') and script_source.contains("CHAT_MODERATION_CENTER_SCRIPT.new()"), "Staff Tools opens the compact chat moderation center")
 	_check(script_source.contains('alpha_tools_popup.custom_minimum_size = Vector2(390, 0)') and script_source.contains('"ui.staff.alpha.subtitle"'), "Alpha Tools uses the shared compact launcher")
 	_check(script_source.contains('"ui.staff.alpha.create_description"') and script_source.contains('"ui.staff.alpha.clear_description"'), "Alpha Tools actions explain their scope")
 	_check(scene_source.contains('path="res://assets/ui/alpha_tools.svg" id="15_content_creator"') and script_source.contains('preload("res://assets/ui/alpha_tools.svg")'), "Alpha Tools uses its dedicated validated Alpha icon")
@@ -189,13 +205,15 @@ func _init() -> void:
 	_check(scene_source.count("Color(0.019607844, 0.043137256, 0.078431375, 0.92941177)") >= 5, "major overworld frames share one neutral navy base")
 	_check(scene_source.contains("StyleBoxFlat_personal_buff_slot") and scene_source.contains("Color(0.043137256, 0.101960786, 0.16862746, 0.91764706)"), "buff and action slots use a neutral interactive surface")
 	_check(not scene_source.contains('[node name="ScopeLabel"'), "buff tray context labels are removed")
-	_check(scene_source.count('parent="Control/GlobalBuffsPanel/MarginContainer/Row/BuffSlots"') == 4, "global buff tray exposes four community-goal slots")
+	_check(scene_source.count('parent="Control/GlobalBuffsPanel/MarginContainer/Row/BuffSlots"') == 5, "global buff tray exposes four community goals and Global Heal")
 	_check(scene_source.count('parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots"') == 3, "personal buff tray exposes three placeholder slots")
 	_check(scene_source.contains('icon = ExtResource("23_global_exp")'), "global EXP goal uses its own icon")
 	_check(scene_source.contains('icon = ExtResource("24_global_ev")'), "global EV goal uses its own icon")
 	_check(scene_source.contains('icon = ExtResource("25_global_shiny")'), "global Shiny goal uses its own icon")
 	_check(scene_source.contains('icon = ExtResource("26_global_rare")'), "rare encounter goal uses its own icon")
 	_check(scene_source.count('[node name="ProgressBar" type="ProgressBar" parent="Control/GlobalBuffsPanel') == 4, "each global icon includes compact funding progress")
+	_check(scene_source.contains('[node name="GlobalHealSection" type="VBoxContainer" parent="Control/GlobalBuffDetailsPanel'), "Global Heal has a dedicated action section")
+	_check(scene_source.contains('text = "ui.buff.global_heal.receive_requests"'), "Global Heal exposes its request preference beside the action")
 	_check(global_buff_details_block.contains("visible = false"), "global buff details start closed")
 	_check(scene_source.contains('[node name="DonationSection" type="VBoxContainer" parent="Control/GlobalBuffDetailsPanel'), "global buff details expose contribution controls")
 	_check(scene_source.contains('[node name="AmountInput" type="LineEdit" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow"]'), "global buff contributions use a custom amount input")
@@ -258,6 +276,82 @@ func _init() -> void:
 	_check(script_source.contains('chat_input_dock.name = "ChatInputDock"'), "selector, input, and Send share a styled input dock")
 	_check(script_source.contains('chat_tabs_background.name = "ChatTabsBackground"'), "main tabs sit on a cohesive translucent rail")
 	_check(script_source.contains('message_scroll.add_theme_stylebox_override("panel", _make_chat_message_surface_style())'), "chat messages use a subtle inner surface")
+	_check(
+		script_source.contains("func _create_chat_sender_message_line(")
+		and script_source.contains('entry.append_text(" [color=%s]%s[/color]"')
+		and script_source.contains('"\\u00a0".repeat(spacer_count)')
+		and script_source.contains("func _sync_chat_inline_header_spacing(")
+		and script_source.contains("func _chat_header_prefix_width(")
+		and script_source.contains("const CHAT_INLINE_HEADER_CLEARANCE := 24.0")
+		and script_source.contains("header_prefix_width > 0.0")
+		and script_source.contains("entry.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART"),
+		"visible chat metadata gets first-line clearance while plain names stay left aligned"
+	)
+	_check(
+		script_source.contains("var inline_single_pokemon := (")
+		and script_source.contains('inline_pokemon_attachment.name = "InlinePokemonAttachment"')
+		and script_source.contains('inline_spacer.name = "InlinePokemonSpacer"')
+		and script_source.contains("not inline_single_pokemon and not pokemon_attachments.is_empty()"),
+		"a single Pokemon-only share stays clickable beside the sender instead of using a new row"
+	)
+	_check(
+		script_source.contains('message_list.add_theme_constant_override("separation", 5)'),
+		"separate chat messages keep a small visual gap"
+	)
+	_check(
+		script_source.contains("mouse_event.double_click")
+		and script_source.contains("DisplayServer.clipboard_set(text)")
+		and script_source.contains("CHAT_CONTEXT_COPY_FULL")
+		and script_source.contains("_format_full_chat_message(active_chat_message_context)")
+		and script_source.contains("func _show_chat_copy_confirmation()")
+		and script_source.contains('confirmation.name = "ChatCopyConfirmation"')
+		and script_source.contains('label.text = "✓ %s" % LocalizationManager.text("ui.chat.message.copied")')
+		and script_source.contains("_open_chat_sender_context_menu")
+		and script_source.contains("open_private_message_conversation(user)")
+		and script_source.contains("SocialService.send_friend_request(username)"),
+		"chat supports quick copying and sender or message context actions"
+	)
+	_check(
+		script_source.contains("CHAT_CONTEXT_MUTE_PLAYER")
+		and script_source.contains("CHAT_CONTEXT_UNMUTE_PLAYER")
+		and script_source.contains("ChatModerationService.get_mute_state(target_user_id)")
+		and script_source.contains("ChatModerationService.mute_player(target_user_id, duration_minutes, reason)")
+		and script_source.contains("ChatModerationService.unmute_player(target_user_id, reason)")
+		and script_source.contains("reason.strip_edges().length() < 3")
+		and script_source.contains("_has_user_permission(CHAT_MUTE_PERMISSION)"),
+		"authorized staff can mute or unmute chat senders with a required reason"
+	)
+	_check(
+		script_source.contains("player_interaction_coordinator.chat_moderation_requested.connect")
+		and script_source.contains("func _on_player_interaction_chat_moderation_requested("),
+		"direct player actions share the required-reason chat moderation flow"
+	)
+	_check(
+		script_source.contains("func _refresh_chat_sender_moderation_action(")
+		and script_source.contains("CHAT_CONTEXT_MUTE_PLAYER"),
+		"chat sender moderation remains available while mute state refreshes"
+	)
+	_check(
+		script_source.contains("func _can_use_chat_moderation(")
+		and script_source.contains("player_interaction_coordinator.can_moderate_chat()")
+		and script_source.contains("_activate_ui_panel(chat_moderation_popup)"),
+		"chat and direct player moderation share permission state and an active modal"
+	)
+	_check(
+		script_source.contains("func _user_id_from_state(user: Dictionary) -> int:")
+		and script_source.contains("if value is int or value is float:")
+		and script_source.contains("if text.is_valid_float():"),
+		"chat actions accept numeric user ids decoded from JSON"
+	)
+	_check(
+		script_source.contains("func _chat_mute_remaining_seconds() -> int:")
+		and script_source.contains("func _refresh_chat_mute_countdown() -> void:")
+		and script_source.contains("ui.chat.muted.remaining")
+		and script_source.contains('message_type == "chat.mute.updated"')
+		and script_source.contains("ui.chat.muted.notice")
+		and script_source.contains("chat_input.editable = input_available"),
+		"muted players receive realtime updates and see a countdown in the disabled chat input"
+	)
 	_check(script_source.contains('_apply_chat_main_tab_style(general_chat_tab_button, general_active)'), "active and inactive main tabs receive distinct styling")
 	_check(script_source.contains("style.border_width_bottom = 2"), "selected main tab gets a clear bottom accent")
 	_check(script_source.contains("_apply_chat_dock_button_style(send_button, true)"), "Send uses the input dock accent treatment")
@@ -302,6 +396,9 @@ func _init() -> void:
 	_check(script_source.contains('"activate_shiny_charm"'), "Shiny Charm can be activated from the Bag")
 	_check(script_source.contains('"ui.bag.message.shiny_charm_activated"'), "Shiny Charm activation gives the player clear feedback")
 	_check(script_source.contains('"id": "global_rare_encounter"'), "global buff data includes rarer Pokémon encounters")
+	_check(script_source.contains('"id": "global_heal"') and script_source.contains("PlayerWalletService.activate_global_heal()"), "Global Heal is an authoritative paid global action")
+	_check(script_source.contains("_is_world_battle_active()") and script_source.contains("pending_global_heal_request"), "Global Heal requests wait while a battle is active")
+	_check(script_source.contains("PartyHealService.accept_global_heal") and script_source.contains("globalHealRequestsEnabled"), "Global Heal acceptance and request preference use server-backed services")
 	_check(script_source.contains("PlayerWalletService.contribute_to_global_exp_boost"), "global EXP contributions use the authoritative wallet service")
 	_check(script_source.contains("PlayerWalletService.contribute_to_global_ev_boost"), "global EV contributions use the authoritative wallet service")
 	_check(script_source.contains("PlayerWalletService.contribute_to_global_rare_encounter_boost"), "rare encounter contributions use the authoritative wallet service")

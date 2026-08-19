@@ -30,6 +30,16 @@ func _run() -> void:
 		"wild battle start messages"
 	)
 	_check_equal(
+		formatter.format_pokemon_identity("Sparky", "Pikachu"),
+		"Sparky (Pikachu)",
+		"battle-log identity links nickname to species"
+	)
+	_check_equal(
+		formatter.format_pokemon_identity("Pikachu", "Pikachu"),
+		"Pikachu",
+		"battle-log identity does not duplicate the species name"
+	)
+	_check_equal(
 		formatter.format_trainer_battle_start_messages("Pikachu", "Eevee", "Gary Oak"),
 		["Gary Oak wants to battle!", "Gary Oak sent out Eevee!", "Go! Pikachu!"],
 		"trainer battle start messages"
@@ -145,6 +155,11 @@ func _run() -> void:
 		formatter.format_status_event({"target": "Pikachu", "status": "brn"}),
 		"Pikachu liep een brandwond op!",
 		"Dutch status event localizes battle grammar"
+	)
+	_check_equal(
+		formatter.format_hit_count_event({"count": 4}),
+		"Raakte 4 keer!",
+		"Dutch multi-hit count matches the Showdown battle log"
 	)
 	_check_equal(
 		formatter.format_field_effect_event({"state": "end", "effectType": "weather", "effect": "Snow"}),

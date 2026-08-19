@@ -5,10 +5,10 @@
 [ext_resource type="PackedScene" uid="uid://b6sun8ubp3uia" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="3_3bfoe"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_route_hint"]
-[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="5_0ycmc"]
-[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="6_3bfoe"]
-[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="7_hn4jb"]
-[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="8_sbmso"]
+[ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="5_0ycmc"]
+[ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="6_3bfoe"]
+[ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="7_hn4jb"]
+[ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="8_sbmso"]
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="9_dialogue"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="10_trainer"]
 [ext_resource type="SpriteFrames" uid="uid://bwxa4fpyvnrfx" path="res://assets/npcs/classes/blue_frames.tres" id="11_blue"]
@@ -357,7 +357,7 @@ npc_sprite_frames = ExtResource("14_lass")
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=217716802]
 
 [node name="Mankey" parent="Entities/Pokemon" unique_id=1045697857 instance=ExtResource("15_pokemon")]
-position = Vector2(1744, 720)
+position = Vector2(1680, 624)
 overworld_pokemon_id = "kanto_route_22_mankey_1"
 species_id = "mankey"
 level = 4

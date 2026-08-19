@@ -708,11 +708,14 @@ func _apply_switch_event_to_requests(event: Dictionary, allow_historical_switch_
 		var event_details := str(event.get("details", "")).strip_edges()
 		if event_details != "":
 			pokemon_data["details"] = event_details
+		var event_level := _get_switch_event_level(event)
+		if event_level > 0:
+			pokemon_data["level"] = event_level
 		if event.has("shiny"):
 			pokemon_data["shiny"] = bool(event.get("shiny", false))
 		elif event_details.to_lower().contains(", shiny"):
 			pokemon_data["shiny"] = true
-		for public_field in ["gender", "level"]:
+		for public_field in ["gender"]:
 			if event.has(public_field):
 				pokemon_data[public_field] = event.get(public_field)
 		if condition == "":
@@ -735,6 +738,45 @@ func _apply_switch_event_to_requests(event: Dictionary, allow_historical_switch_
 			"targetIndex": target_index,
 			"teamAfter": _debug_summarize_team(team),
 		})
+
+func _get_switch_event_level(event: Dictionary) -> int:
+	var direct_level := _parse_public_pokemon_level(event.get("level", null))
+	if direct_level > 0:
+		return direct_level
+
+	for ref_key in ["toRef", "to_ref", "targetRef", "target_ref"]:
+		var ref_value: Variant = event.get(ref_key, {})
+		if not (ref_value is Dictionary):
+			continue
+		var ref_level := _parse_public_pokemon_level((ref_value as Dictionary).get("level", null))
+		if ref_level > 0:
+			return ref_level
+
+	var details := str(event.get("details", "")).strip_edges()
+	for detail_value: String in details.split(","):
+		var detail := detail_value.strip_edges()
+		if detail.length() < 2 or detail.substr(0, 1).to_upper() != "L":
+			continue
+		var details_level := _parse_public_pokemon_level(detail.substr(1))
+		if details_level > 0:
+			return details_level
+
+	return -1
+
+func _parse_public_pokemon_level(value: Variant) -> int:
+	var parsed_level := -1
+	if value is int:
+		parsed_level = int(value)
+	elif value is float:
+		var float_level := float(value)
+		if is_finite(float_level) and float_level == floor(float_level):
+			parsed_level = int(float_level)
+	elif value is String:
+		var text := str(value).strip_edges()
+		if text.is_valid_int():
+			parsed_level = text.to_int()
+
+	return parsed_level if parsed_level >= 1 and parsed_level <= 100 else -1
 
 func _get_switch_event_ident(event: Dictionary) -> String:
 	for key in ["toIdent", "target", "pokemon", "ident"]:
