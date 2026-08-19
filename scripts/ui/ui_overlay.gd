@@ -7730,6 +7730,7 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_send_confirmation = ConfirmationDialog.new()
 	staff_teleport_send_confirmation.name = "StaffTeleportSendConfirmation"
 	staff_teleport_send_confirmation.exclusive = true
+	_prepare_confirmation_dialog_focus(staff_teleport_send_confirmation)
 	staff_teleport_send_confirmation.confirmed.connect(
 		_on_staff_teleport_send_player_confirmed
 	)
@@ -11254,6 +11255,7 @@ func _setup_global_heal_request_dialog() -> void:
 	global_heal_request_dialog = ConfirmationDialog.new()
 	global_heal_request_dialog.name = "GlobalHealRequestDialog"
 	global_heal_request_dialog.exclusive = true
+	_prepare_confirmation_dialog_focus(global_heal_request_dialog)
 	global_heal_request_dialog.confirmed.connect(_on_global_heal_request_confirmed)
 	global_heal_request_dialog.canceled.connect(_on_global_heal_request_declined)
 	global_heal_request_disable_checkbox = CheckBox.new()
@@ -11265,6 +11267,19 @@ func _setup_global_heal_request_dialog() -> void:
 	global_heal_request_disable_checkbox.offset_bottom = -48.0
 	global_heal_request_dialog.add_child(global_heal_request_disable_checkbox)
 	root_control.add_child(global_heal_request_dialog)
+
+
+func _prepare_confirmation_dialog_focus(dialog: ConfirmationDialog) -> void:
+	if dialog == null:
+		return
+	var confirm_button := dialog.get_ok_button()
+	if confirm_button != null:
+		confirm_button.set_focus_behavior_recursive(Control.FOCUS_BEHAVIOR_ENABLED)
+		confirm_button.focus_mode = Control.FOCUS_ALL
+	var cancel_button := dialog.get_cancel_button()
+	if cancel_button != null:
+		cancel_button.set_focus_behavior_recursive(Control.FOCUS_BEHAVIOR_ENABLED)
+		cancel_button.focus_mode = Control.FOCUS_ALL
 
 
 func _receive_global_heal_request(message: Dictionary) -> void:
@@ -11311,6 +11326,7 @@ func _try_show_pending_global_heal_request() -> void:
 	global_heal_request_dialog.get_cancel_button().text = LocalizationManager.text("ui.buff.global_heal.decline")
 	global_heal_request_disable_checkbox.text = LocalizationManager.text("ui.buff.global_heal.disable_future")
 	global_heal_request_disable_checkbox.set_pressed_no_signal(false)
+	_prepare_confirmation_dialog_focus(global_heal_request_dialog)
 	global_heal_request_dialog.popup_centered(Vector2i(520, 250))
 
 
@@ -28223,6 +28239,7 @@ func _on_staff_teleport_send_player_pressed() -> void:
 			"safe location"
 		),
 	]
+	_prepare_confirmation_dialog_focus(staff_teleport_send_confirmation)
 	staff_teleport_send_confirmation.popup_centered(Vector2i(520, 240))
 
 
