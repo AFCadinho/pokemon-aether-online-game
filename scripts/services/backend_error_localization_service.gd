@@ -138,6 +138,8 @@ const CODE_TO_KEY: Dictionary = {
 	"pokemon_level_cap_party_ineligible": "backend.error.pokemon_level_cap_party_ineligible",
 	"pokemon_level_cap_authentication_required": "backend.error.auth_required",
 	"pokemon_level_cap_validation_unavailable": "backend.error.unavailable",
+	"pokemon_nickname_insufficient_funds": "ui.pokemon_summary.nickname.insufficient_funds",
+	"pokemon_nickname_locked_for_pvp": "ui.pokemon_summary.nickname.blocked",
 	"npc_reward_not_found": "backend.error.reward_unavailable",
 	"field_move_charm_not_owned": "backend.error.item_not_owned",
 	"field_move_not_known": "backend.error.field_move_unavailable",

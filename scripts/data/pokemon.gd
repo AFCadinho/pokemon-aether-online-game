@@ -167,6 +167,10 @@ func to_battle_dict() -> Dictionary:
 		"nextLevelExp": next_level_exp,
 		"experienceToNextLevel": experience_to_next_level,
 	}
+	if nickname != "":
+		battle_data["nickname"] = nickname
+		# Pokemon Showdown uses `name` for the nickname that appears in idents.
+		battle_data["name"] = nickname
 	if growth_rate != "":
 		battle_data["growthRate"] = growth_rate
 	if base_experience > 0:
@@ -197,6 +201,8 @@ func to_battle_state_dict(metadata_slot: int = -1) -> Dictionary:
 		"moves": _moves_to_persistence_list(),
 		"condition": _to_battle_condition(),
 	}
+	if nickname != "":
+		battle_state["nickname"] = nickname
 	if metadata_slot > 0:
 		battle_state["metadataSlot"] = metadata_slot
 
@@ -204,6 +210,7 @@ func to_battle_state_dict(metadata_slot: int = -1) -> Dictionary:
 
 func to_persistence_dict() -> Dictionary:
 	var pokemon_data := to_battle_dict()
+	pokemon_data.erase("name")
 	pokemon_data.erase("savedMoves")
 	pokemon_data["moves"] = _moves_to_persistence_list()
 	if owned_pokemon_id > 0:
