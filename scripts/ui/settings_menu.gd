@@ -85,6 +85,8 @@ var settings_navigation_buttons: Array[Button] = []
 var account_tab_root: Control
 var account_user_label: Label
 var account_status_label: Label
+var account_portal_button: Button
+var account_portal_note_label: Label
 var edit_account_button: Button
 var logout_button: Button
 var exit_game_button: Button
@@ -156,10 +158,7 @@ func _ready() -> void:
 	notification_volume_slider.value_changed.connect(_on_notification_volume_changed)
 	language_options_button.item_selected.connect(_on_language_selected)
 	terminology_options_button.item_selected.connect(_on_terminology_selected)
-	edit_account_button.pressed.connect(_on_edit_account_button_pressed)
-	privacy_manage_button.pressed.connect(_on_privacy_manage_button_pressed)
-	privacy_export_button.pressed.connect(_on_privacy_export_button_pressed)
-	delete_account_button.pressed.connect(_on_delete_account_button_pressed)
+	account_portal_button.pressed.connect(_on_account_portal_button_pressed)
 	logout_button.pressed.connect(_on_logout_button_pressed)
 	exit_game_button.pressed.connect(_on_exit_game_button_pressed)
 	credits_button.pressed.connect(_on_credits_button_pressed)
@@ -724,27 +723,23 @@ func _build_account_tab(account_tab: VBoxContainer) -> void:
 	account_user_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	account_tab.add_child(account_user_label)
 
-	edit_account_button = Button.new()
-	_set_localized_text(edit_account_button, "ui.settings.account.edit")
-	edit_account_button.focus_mode = Control.FOCUS_NONE
-	account_tab.add_child(edit_account_button)
+	account_portal_note_label = Label.new()
+	_set_localized_text(account_portal_note_label, "ui.settings.account.portal_note")
+	account_portal_note_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	account_portal_note_label.add_theme_font_size_override("font_size", 12)
+	account_portal_note_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	account_tab.add_child(account_portal_note_label)
 
-	_setup_account_details_dialog()
-	account_tab.add_child(account_details_dialog)
+	account_portal_button = Button.new()
+	_set_localized_text(account_portal_button, "ui.settings.account.portal")
+	account_portal_button.focus_mode = Control.FOCUS_NONE
+	account_tab.add_child(account_portal_button)
 
 	account_status_label = Label.new()
 	account_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	account_status_label.add_theme_font_size_override("font_size", 12)
 	account_status_label.visible = false
 	account_tab.add_child(account_status_label)
-
-	privacy_manage_button = Button.new()
-	_set_localized_text(privacy_manage_button, "ui.settings.privacy.manage")
-	privacy_manage_button.focus_mode = Control.FOCUS_NONE
-	account_tab.add_child(privacy_manage_button)
-
-	_setup_privacy_dialog()
-	account_tab.add_child(privacy_dialog)
 
 	account_return_note_label = Label.new()
 	_set_localized_text(account_return_note_label, "ui.settings.account.return_note")
@@ -1434,17 +1429,11 @@ func _refresh_account_tab() -> void:
 	print("[settings] refresh account tab. display=%s username=%s" % [display_name, username])
 	if display_name == "" and username == "":
 		account_user_label.text = LocalizationManager.text("ui.settings.account.no_active")
-		if edit_account_button != null:
-			edit_account_button.disabled = true
-		if privacy_manage_button != null:
-			privacy_manage_button.disabled = true
-		print("[settings] edit account disabled: no active account")
+		if account_portal_button != null:
+			account_portal_button.disabled = true
 		return
-	if edit_account_button != null:
-		edit_account_button.disabled = false
-		print("[settings] edit account enabled")
-	if privacy_manage_button != null:
-		privacy_manage_button.disabled = AuthService.is_impersonating()
+	if account_portal_button != null:
+		account_portal_button.disabled = AuthService.is_impersonating()
 	if username != "" and username != display_name:
 		account_user_label.text = LocalizationManager.text(
 			"ui.settings.account.logged_in_with_username",
@@ -1690,6 +1679,30 @@ func _is_account_tab_active() -> bool:
 	if tab_container == null or account_tab_root == null or not account_tab_root.visible:
 		return false
 	return tab_container.current_tab == account_tab_root.get_index()
+
+
+func _on_account_portal_button_pressed() -> void:
+	if account_portal_button == null or account_portal_button.disabled:
+		return
+	if AuthService.is_impersonating():
+		_set_account_status_key("ui.settings.account.portal_error_impersonation", {}, true)
+		return
+
+	_set_account_controls_disabled(true)
+	_set_account_status_key("ui.settings.account.portal_opening")
+	var result: Dictionary = await AuthService.create_account_portal_launch(
+		LocalizationManager.current_locale
+	)
+	_set_account_controls_disabled(false)
+	if not bool(result.get("success", false)):
+		_set_account_status_key("ui.settings.account.portal_error_request", {}, true)
+		return
+
+	var launch_url := str(result.get("url", ""))
+	if OS.shell_open(launch_url) != OK:
+		_set_account_status_key("ui.settings.account.portal_error_open", {}, true)
+		return
+	_set_account_status_key("ui.settings.account.portal_opened")
 
 
 func _on_edit_account_button_pressed() -> void:
@@ -2015,6 +2028,8 @@ func _set_account_dialog_status_key(key: String, values: Dictionary = {}, is_err
 
 
 func _set_account_controls_disabled(disabled: bool) -> void:
+	if account_portal_button != null:
+		account_portal_button.disabled = disabled or AuthService.is_impersonating()
 	if edit_account_button != null:
 		edit_account_button.disabled = disabled
 	if logout_button != null:
@@ -2173,8 +2188,8 @@ func _refresh_impersonation_account_controls() -> void:
 		_set_localized_text(logout_confirm_title_label, button_key)
 	if logout_confirm_message_label != null:
 		_set_localized_text(logout_confirm_message_label, message_key)
-	if privacy_manage_button != null:
-		privacy_manage_button.disabled = impersonating
+	if account_portal_button != null:
+		account_portal_button.disabled = impersonating
 
 func _leave_ranked_queue_before_logout() -> void:
 	var tree := get_tree()
