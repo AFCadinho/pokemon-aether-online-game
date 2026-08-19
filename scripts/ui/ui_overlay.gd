@@ -11258,7 +11258,12 @@ func _setup_global_heal_request_dialog() -> void:
 	global_heal_request_dialog.canceled.connect(_on_global_heal_request_declined)
 	global_heal_request_disable_checkbox = CheckBox.new()
 	global_heal_request_disable_checkbox.name = "DisableFutureGlobalHealRequests"
-	global_heal_request_dialog.get_vbox().add_child(global_heal_request_disable_checkbox)
+	global_heal_request_disable_checkbox.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
+	global_heal_request_disable_checkbox.offset_left = 18.0
+	global_heal_request_disable_checkbox.offset_top = -78.0
+	global_heal_request_disable_checkbox.offset_right = -18.0
+	global_heal_request_disable_checkbox.offset_bottom = -48.0
+	global_heal_request_dialog.add_child(global_heal_request_disable_checkbox)
 	root_control.add_child(global_heal_request_dialog)
 
 

@@ -32,6 +32,7 @@ func _init() -> void:
 		"battle-blocked acceptance remains pending for a later retry"
 	)
 	_check(overlay.contains('ui.buff.global_heal.disable_future'), "the request dialog can disable future prompts")
+	_check(not overlay.contains("get_vbox()"), "the request dialog uses supported Godot dialog APIs")
 	_check(wallet_service.contains('GLOBAL_HEAL_ENDPOINT := "/game/global-heal"'), "wallet service exposes Global Heal state and activation")
 	_check(heal_service.contains('func accept_global_heal(event_id: String)'), "party heal service accepts an individual event")
 	_check(heal_service.contains('func party_needs_heal(party: Array)'), "full parties do not receive unnecessary prompts")
