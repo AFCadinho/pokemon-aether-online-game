@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.58 - 2026-08-19
+
+**Fixed**
+
+- Pokémon Summary cards now show each Pokémon's gender. Existing Pokémon without stored gender data are assigned a stable, species-appropriate gender.
+
 ## 0.3.57 - 2026-08-16
 
 **Added**

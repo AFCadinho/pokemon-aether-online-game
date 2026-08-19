@@ -1,6 +1,7 @@
 extends SceneTree
 
 const GENDER_DISPLAY := preload("res://scripts/ui/pokemon_gender_display.gd")
+const POKEMON_FACTORY := preload("res://scripts/data/pokemon_factory.gd")
 const UI_OVERLAY_PATH := "res://scripts/ui/ui_overlay.gd"
 const UI_OVERLAY_SCENE_PATH := "res://scenes/interface/ui_overlay.tscn"
 
@@ -18,6 +19,7 @@ func _run() -> void:
 	_check_gender("♀", true, "♀", Color("#ff82ba"), "female symbol input")
 	_check_gender("genderless", false, "", Color.WHITE, "genderless Pokémon")
 	_check_gender("", false, "", Color.WHITE, "missing gender")
+	_check_backend_gender_dataflow()
 	_check_summary_card_wiring()
 	await _check_interactive_name_layout()
 
@@ -57,6 +59,20 @@ func _check_summary_card_wiring() -> void:
 		source.contains('"gender_label": pokemon_summary_gender_label if mode == "interactive" else null'),
 		"multi-card summary context retains its gender label"
 	)
+
+
+func _check_backend_gender_dataflow() -> void:
+	var pokemon := POKEMON_FACTORY.create_pokemon_from_backend_payload({
+		"species": "Alakazam",
+		"gender": "M",
+	})
+	_check(pokemon != null, "backend Pokémon payload materializes")
+	if pokemon == null:
+		return
+	_check(pokemon.gender == "male", "Showdown gender value is normalized for the summary")
+	_check(pokemon.to_battle_dict().get("gender", "") == "male", "gender remains in battle payloads")
+	_check(pokemon.to_persistence_dict().get("gender", "") == "male", "gender remains in persistence payloads")
+	_check(pokemon.to_battle_state_dict().get("gender", "") == "male", "gender remains in battle-state payloads")
 
 
 func _check_interactive_name_layout() -> void:

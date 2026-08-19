@@ -5,6 +5,7 @@ class_name Pokemon
 const DEFAULT_HAPPINESS := 50
 
 var species: String
+var gender: String = ""
 var level: int
 var item: String
 var ability: String
@@ -140,6 +141,7 @@ func to_battle_dict() -> Dictionary:
 
 	var battle_data := {
 		"species": species,
+		"gender": gender,
 		"level": level,
 		"item": item,
 		"ability": ability,
@@ -185,6 +187,7 @@ func to_battle_state_dict(metadata_slot: int = -1) -> Dictionary:
 
 	var battle_state := {
 		"species": species,
+		"gender": gender,
 		"ownedPokemonId": owned_pokemon_id,
 		"instanceId": instance_id,
 		"currentHp": current_hp,
