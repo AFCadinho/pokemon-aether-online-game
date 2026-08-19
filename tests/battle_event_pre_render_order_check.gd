@@ -307,9 +307,9 @@ func _check_initial_setup_keeps_specific_form_species() -> void:
 		"initial setup keeps explicit form species before falling back to Showdown ident"
 	)
 	_check_equal(
-		original_species_source.find("_is_specific_battle_form_species(fallback_species)") < original_species_source.find("ident.contains(\": \")"),
+		original_species_source.find("_is_specific_battle_form_species(fallback_species)") < original_species_source.find("battle_state.get_active_pokemon_species(\"p1\")"),
 		true,
-		"initial setup checks explicit form species before ident species"
+		"initial setup checks explicit form species before canonical state species"
 	)
 	_check_equal(form_check_index >= 0, true, "specific battle form helper exists")
 	_check_equal(
