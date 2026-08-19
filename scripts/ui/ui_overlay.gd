@@ -611,6 +611,8 @@ var chat_message_context_menu: PopupMenu
 var chat_sender_context_menu: PopupMenu
 var active_chat_message_context: Dictionary = {}
 var active_chat_sender_context: Dictionary = {}
+var chat_copy_confirmation: PanelContainer
+var chat_copy_confirmation_token := 0
 var chat_resize_dragging := false
 var chat_resize_drag_start_mouse := Vector2.ZERO
 var chat_resize_drag_start_rect := Rect2()
@@ -38412,6 +38414,7 @@ func _set_chat_copy_feedback(control: Control) -> void:
 	var copy_token := Time.get_ticks_msec()
 	control.set_meta("chat_copy_tooltip_token", copy_token)
 	_reset_chat_copy_tooltip.call_deferred(control, copy_token)
+	_show_chat_copy_confirmation()
 
 
 func _reset_chat_copy_tooltip(control: Control, copy_token: int) -> void:
@@ -38421,6 +38424,78 @@ func _reset_chat_copy_tooltip(control: Control, copy_token: int) -> void:
 		and int(control.get_meta("chat_copy_tooltip_token", -1)) == copy_token
 	):
 		control.tooltip_text = LocalizationManager.text("ui.chat.message.copy_tooltip")
+
+
+func _show_chat_copy_confirmation() -> void:
+	chat_copy_confirmation_token += 1
+	var confirmation_token := chat_copy_confirmation_token
+	if is_instance_valid(chat_copy_confirmation):
+		chat_copy_confirmation.queue_free()
+
+	var confirmation := PanelContainer.new()
+	confirmation.name = "ChatCopyConfirmation"
+	confirmation.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	confirmation.z_index = UI_MODAL_Z_INDEX + 1
+	confirmation.custom_minimum_size = Vector2(152, 36)
+	confirmation.add_theme_stylebox_override("panel", _make_chat_copy_confirmation_style())
+
+	var label := Label.new()
+	label.text = "✓ %s" % LocalizationManager.text("ui.chat.message.copied")
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_color_override("font_color", Color("#eef8ff"))
+	label.add_theme_font_size_override("font_size", 14)
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	confirmation.add_child(label)
+	$Control.add_child(confirmation)
+	chat_copy_confirmation = confirmation
+
+	confirmation.size = confirmation.get_combined_minimum_size()
+	var viewport_rect := get_viewport().get_visible_rect()
+	var mouse_position := get_viewport().get_mouse_position()
+	var desired_position := mouse_position + Vector2(12, 14)
+	if desired_position.y + confirmation.size.y > viewport_rect.end.y - 8.0:
+		desired_position.y = mouse_position.y - confirmation.size.y - 14.0
+	desired_position.x = clampf(
+		desired_position.x,
+		viewport_rect.position.x + 8.0,
+		viewport_rect.end.x - confirmation.size.x - 8.0
+	)
+	desired_position.y = clampf(
+		desired_position.y,
+		viewport_rect.position.y + 8.0,
+		viewport_rect.end.y - confirmation.size.y - 8.0
+	)
+	confirmation.position = desired_position
+	confirmation.modulate.a = 0.0
+
+	var show_tween := create_tween()
+	show_tween.tween_property(confirmation, "modulate:a", 1.0, 0.1)
+	await get_tree().create_timer(1.15).timeout
+	if (
+		confirmation_token != chat_copy_confirmation_token
+		or not is_instance_valid(confirmation)
+	):
+		return
+	var hide_tween := create_tween()
+	hide_tween.tween_property(confirmation, "modulate:a", 0.0, 0.18)
+	await hide_tween.finished
+	if is_instance_valid(confirmation):
+		confirmation.queue_free()
+	if chat_copy_confirmation == confirmation:
+		chat_copy_confirmation = null
+
+
+func _make_chat_copy_confirmation_style() -> StyleBoxFlat:
+	var style := _make_panel_style(Color("#122238f2"), Color("#64d7f0"), 8, 1)
+	style.content_margin_left = 12
+	style.content_margin_right = 12
+	style.content_margin_top = 7
+	style.content_margin_bottom = 7
+	style.shadow_color = Color(0, 0, 0, 0.48)
+	style.shadow_size = 8
+	style.shadow_offset = Vector2(0, 3)
+	return style
 
 
 func _chat_pointer_is_on_sender(
@@ -38482,6 +38557,7 @@ func _on_chat_message_context_action(action_id: int) -> void:
 			DisplayServer.clipboard_set(text)
 		CHAT_CONTEXT_COPY_FULL:
 			DisplayServer.clipboard_set(_format_full_chat_message(active_chat_message_context))
+	_show_chat_copy_confirmation()
 
 
 func _on_chat_sender_context_action(action_id: int) -> void:

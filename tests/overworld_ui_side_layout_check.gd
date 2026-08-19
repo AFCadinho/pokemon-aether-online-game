@@ -285,6 +285,9 @@ func _init() -> void:
 		and script_source.contains("DisplayServer.clipboard_set(text)")
 		and script_source.contains("CHAT_CONTEXT_COPY_FULL")
 		and script_source.contains("_format_full_chat_message(active_chat_message_context)")
+		and script_source.contains("func _show_chat_copy_confirmation()")
+		and script_source.contains('confirmation.name = "ChatCopyConfirmation"')
+		and script_source.contains('label.text = "✓ %s" % LocalizationManager.text("ui.chat.message.copied")')
 		and script_source.contains("_open_chat_sender_context_menu")
 		and script_source.contains("open_private_message_conversation(user)")
 		and script_source.contains("SocialService.send_friend_request(username)"),
