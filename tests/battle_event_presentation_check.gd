@@ -56,6 +56,7 @@ func _init() -> void:
 	_check_stat_reset_events_have_visible_messages()
 	_check_switch_log_uses_destination_side()
 	_check_switch_log_links_nicknames_to_species()
+	_check_move_and_damage_logs_link_nickname_to_species()
 	_check_semantic_battle_log_colors()
 	_check_supreme_overlord_fallen_counter_protocol()
 	quit(1 if failed else 0)
@@ -67,9 +68,46 @@ func _make_presentation():
 		BattleEventTextFormatterScript.new(),
 		BattleHpEventHelperScript.new(),
 		Callable(self, "_format_actor"),
-		Callable(self, "_get_player_display_name")
+		Callable(self, "_get_player_display_name"),
+		Callable(self, "_get_pokemon_species")
 	)
 	return presentation
+
+
+func _check_move_and_damage_logs_link_nickname_to_species() -> void:
+	var presentation = _make_presentation()
+	var move_result: Dictionary = presentation.build({
+		"type": "move",
+		"actor": "p1a: CockSucker",
+		"move": "Hidden Power",
+		"target": "p2a: Pidgey",
+	})
+	_check_equal(
+		str(move_result.get("log_message", "")),
+		"CockSucker (Abra) used Hidden Power!",
+		"move log links nickname to species"
+	)
+	_check_equal(
+		str(move_result.get("battle_message", "")),
+		"CockSucker used Hidden Power!",
+		"compact move battle message keeps nickname only"
+	)
+
+	var damage_result: Dictionary = presentation.build({
+		"type": "damage",
+		"target": "p1a: CockSucker",
+		"previousCondition": "50/50",
+		"condition": "39/50",
+		"previousHp": 50,
+		"hp": 39,
+		"maxHp": 50,
+		"amount": 11,
+	})
+	_check_equal(
+		str(damage_result.get("log_message", "")),
+		"(CockSucker (Abra) lost 22.0% of its health!)",
+		"damage log links nickname to species"
+	)
 
 
 func _check_super_effective_damage_uses_distinct_sound() -> void:
@@ -962,6 +1000,10 @@ func _format_actor(ident: String, _prefer_player_name := true) -> String:
 
 func _get_player_display_name(player_id: String) -> String:
 	return player_id
+
+
+func _get_pokemon_species(ident: String) -> String:
+	return "Abra" if ident == "p1a: CockSucker" else ""
 
 
 func _check_equal(actual: Variant, expected: Variant, label: String) -> void:

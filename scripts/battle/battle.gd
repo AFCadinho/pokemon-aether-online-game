@@ -493,7 +493,8 @@ func _ready() -> void:
 		event_text_formatter,
 		hp_event_helper,
 		Callable(self, "_format_battle_actor"),
-		Callable(self, "_get_player_display_name")
+		Callable(self, "_get_player_display_name"),
+		Callable(self, "_get_battle_log_species_for_ident")
 	)
 	animation_router.setup(
 		player_sprite_box,
@@ -15073,6 +15074,12 @@ func _get_active_battle_log_identity(player_id: String) -> String:
 		_get_active_display_name(player_id),
 		_get_active_display_species(player_id)
 	)
+
+func _get_battle_log_species_for_ident(ident: String) -> String:
+	var player_id := _get_player_id_from_ident(ident)
+	if player_id not in ["p1", "p2"]:
+		return ""
+	return _get_active_display_species(player_id)
 
 func _resolve_active_display_species(player_id: String) -> String:
 	if _is_spectator_battle():
