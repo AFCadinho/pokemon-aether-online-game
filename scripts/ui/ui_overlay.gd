@@ -107,6 +107,7 @@ const PvpRankedBanlists := preload("res://scripts/services/pvp_ranked_banlists.g
 const PvpRankedTeamValidation := preload("res://scripts/services/pvp_ranked_team_validation.gd")
 const PC_POKEMON_SLOT_BUTTON_SCRIPT := preload("res://scripts/ui/pc_pokemon_slot_button.gd")
 const PC_PARTY_HOVER_CARD_SCENE: PackedScene = preload("res://scenes/battle/party_hover_card.tscn")
+const POKEMON_GENDER_DISPLAY := preload("res://scripts/ui/pokemon_gender_display.gd")
 const POKEMON_SUMMARY_MOVE_REORDER_SLOT_SCRIPT := preload("res://scripts/ui/pokemon_summary_move_reorder_slot.gd")
 const HELD_ITEM_DROP_TARGET_BUTTON_SCRIPT := preload("res://scripts/ui/held_item_drop_target_button.gd")
 const TOWN_MAP_POPUP_SCRIPT := preload("res://scripts/ui/town_map_popup.gd")
@@ -1141,6 +1142,7 @@ var pokemon_summary_pending_ball_card_key := ""
 var pokemon_summary_type_icon_row: HBoxContainer
 var pokemon_summary_hidden_ability_badge: PanelContainer
 var pokemon_summary_title_label: Label
+var pokemon_summary_gender_label: Label
 var pokemon_summary_id_label: Label
 var pokemon_summary_meta_label: Label
 var pokemon_summary_held_item_slot: PanelContainer
@@ -15488,7 +15490,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 
 	pokemon_summary_title_label = Label.new()
 	pokemon_summary_title_label.text = LocalizationManager.text("ui.pokemon_summary.title")
-	pokemon_summary_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pokemon_summary_title_label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	_make_label_clip_width(pokemon_summary_title_label)
 	pokemon_summary_title_label.add_theme_font_size_override("font_size", 14)
 	pokemon_summary_title_label.add_theme_color_override("font_color", Color("#f4f7ff"))
@@ -15496,6 +15498,21 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_title_label.add_theme_constant_override("shadow_offset_x", 1)
 	pokemon_summary_title_label.add_theme_constant_override("shadow_offset_y", 1)
 	title_row.add_child(pokemon_summary_title_label)
+
+	pokemon_summary_gender_label = Label.new()
+	pokemon_summary_gender_label.visible = false
+	pokemon_summary_gender_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	pokemon_summary_gender_label.mouse_filter = Control.MOUSE_FILTER_PASS
+	pokemon_summary_gender_label.add_theme_font_size_override("font_size", 14)
+	pokemon_summary_gender_label.add_theme_color_override("font_shadow_color", Color("#00111f"))
+	pokemon_summary_gender_label.add_theme_constant_override("shadow_offset_x", 1)
+	pokemon_summary_gender_label.add_theme_constant_override("shadow_offset_y", 1)
+	title_row.add_child(pokemon_summary_gender_label)
+
+	var title_spacer := Control.new()
+	title_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_spacer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title_row.add_child(title_spacer)
 
 	pokemon_summary_meta_label = Label.new()
 	pokemon_summary_meta_label.text = LocalizationManager.text("ui.pokemon_summary.level_empty")
@@ -19688,6 +19705,7 @@ func _capture_pokemon_summary_card_context(card_key: String, pokemon: Pokemon, m
 		"type_icon_row": pokemon_summary_type_icon_row,
 		"hidden_ability_badge": pokemon_summary_hidden_ability_badge,
 		"title_label": pokemon_summary_title_label,
+		"gender_label": pokemon_summary_gender_label,
 		"id_label": pokemon_summary_id_label,
 		"meta_label": pokemon_summary_meta_label,
 		"held_item_slot": pokemon_summary_held_item_slot,
@@ -19743,6 +19761,7 @@ func _apply_pokemon_summary_card_context(card_key: String) -> bool:
 	pokemon_summary_type_icon_row = context.get("type_icon_row") as HBoxContainer
 	pokemon_summary_hidden_ability_badge = context.get("hidden_ability_badge") as PanelContainer
 	pokemon_summary_title_label = context.get("title_label") as Label
+	pokemon_summary_gender_label = context.get("gender_label") as Label
 	pokemon_summary_id_label = context.get("id_label") as Label
 	pokemon_summary_meta_label = context.get("meta_label") as Label
 	pokemon_summary_held_item_slot = context.get("held_item_slot") as PanelContainer
@@ -19916,6 +19935,7 @@ func _refresh_pokemon_summary() -> void:
 	var localized_species_name := _localized_species_name(pokemon.species, pokemon.species)
 	pokemon_summary_title_label.text = localized_species_name
 	pokemon_summary_title_label.tooltip_text = localized_species_name
+	_apply_pokemon_summary_gender_label(pokemon_summary_gender_label, pokemon.gender)
 	var summary_id: String = str(pokemon.owned_pokemon_id) if pokemon.owned_pokemon_id > 0 else ""
 	if summary_id == "":
 		summary_id = pokemon.instance_id.strip_edges()
@@ -20110,6 +20130,23 @@ func _make_label_clip_width(label: Label) -> void:
 	label.clip_text = true
 	label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	label.custom_minimum_size = Vector2.ZERO
+
+
+func _apply_pokemon_summary_gender_label(label: Label, gender: String) -> void:
+	if label == null:
+		return
+
+	var gender_display: Dictionary = POKEMON_GENDER_DISPLAY.presentation(gender)
+	label.visible = bool(gender_display.get("visible", false))
+	label.text = str(gender_display.get("symbol", ""))
+	label.tooltip_text = ""
+	if not label.visible:
+		return
+
+	label.add_theme_color_override("font_color", gender_display.get("color", Color.WHITE) as Color)
+	var localization_key := str(gender_display.get("localization_key", ""))
+	if localization_key != "":
+		label.tooltip_text = LocalizationManager.text(localization_key)
 
 func _set_pokemon_summary_sprite(pokemon: Pokemon) -> void:
 	if pokemon_summary_animated_sprite == null:
