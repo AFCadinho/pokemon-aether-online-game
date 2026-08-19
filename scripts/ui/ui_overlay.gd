@@ -90,6 +90,7 @@ const CHAT_CHANNEL_MAP := "map"
 const CHAT_CHANNEL_TRADE := "trade"
 const CHAT_CHANNEL_HELP := "help"
 const CHAT_MUTE_PERMISSION := "chat:mute"
+const CHAT_MODERATION_DEBUG_PREFIX := "[ChatModerationDebug][Overlay]"
 const IMPERSONATE_PERMISSION := "accounts:impersonate"
 const DEV_TOOLS_PERMISSION := "generating"
 const STAFF_ACTION_BAR_PERMISSION := "ui:staff:action-bar"
@@ -1819,15 +1820,22 @@ func _has_user_permission(permission: String) -> bool:
 
 
 func _can_use_chat_moderation() -> bool:
-	if _has_user_permission(CHAT_MUTE_PERMISSION):
-		return true
-	# PlayerInteractionCoordinator is also responsible for rendering the direct
-	# player action. Use that same decision for chat and for opening the modal so
-	# the two entry points cannot disagree because of a stale user projection.
-	return (
+	var overlay_allowed := _has_user_permission(CHAT_MUTE_PERMISSION)
+	var coordinator_allowed := (
 		player_interaction_coordinator != null
 		and player_interaction_coordinator.can_moderate_chat()
 	)
+	var allowed := overlay_allowed or coordinator_allowed
+	print(
+		CHAT_MODERATION_DEBUG_PREFIX,
+		" permission overlay=", overlay_allowed,
+		" coordinator=", coordinator_allowed,
+		" allowed=", allowed
+	)
+	# PlayerInteractionCoordinator is also responsible for rendering the direct
+	# player action. Use that same decision for chat and for opening the modal so
+	# the two entry points cannot disagree because of a stale user projection.
+	return allowed
 
 func _refresh_dev_tools_visibility() -> void:
 	var can_show_staff_action_bar: bool = _can_show_staff_action_bar()
@@ -31406,6 +31414,11 @@ func _on_player_interaction_trainer_card_requested(player: Dictionary) -> void:
 
 
 func _on_player_interaction_chat_moderation_requested(action: String, player: Dictionary) -> void:
+	print(
+		CHAT_MODERATION_DEBUG_PREFIX,
+		" direct signal received action=", action,
+		" target_id=", _user_id_from_state(player)
+	)
 	_show_chat_moderation_popup(action, player)
 
 func _on_player_interaction_social_overview_updated(_overview: Dictionary) -> void:
@@ -37980,10 +37993,22 @@ func _setup_chat_moderation_popup() -> void:
 
 
 func _show_chat_moderation_popup(action: String, user: Dictionary) -> void:
-	if not _can_use_chat_moderation():
-		return
+	var allowed := _can_use_chat_moderation()
 	var target_user_id := _user_id_from_state(user)
-	if target_user_id <= 0 or _is_current_auth_user(user):
+	var is_self := _is_current_auth_user(user)
+	print(
+		CHAT_MODERATION_DEBUG_PREFIX,
+		" popup requested action=", action,
+		" target_id=", target_user_id,
+		" allowed=", allowed,
+		" is_self=", is_self,
+		" popup_ready=", chat_moderation_popup != null
+	)
+	if not allowed:
+		print(CHAT_MODERATION_DEBUG_PREFIX, " popup blocked: permission")
+		return
+	if target_user_id <= 0 or is_self:
+		print(CHAT_MODERATION_DEBUG_PREFIX, " popup blocked: invalid target or self")
 		return
 	chat_moderation_action = action
 	chat_moderation_target = user.duplicate(true)
@@ -38007,6 +38032,12 @@ func _show_chat_moderation_popup(action: String, user: Dictionary) -> void:
 	chat_moderation_popup.reset_size()
 	chat_moderation_popup.visible = true
 	_activate_ui_panel(chat_moderation_popup)
+	print(
+		CHAT_MODERATION_DEBUG_PREFIX,
+		" popup opened visible=", chat_moderation_popup.visible,
+		" layer=", layer,
+		" z_index=", chat_moderation_popup.z_index
+	)
 	chat_moderation_reason_input.grab_focus.call_deferred()
 
 
@@ -38031,10 +38062,18 @@ func _on_chat_moderation_reason_submitted(_reason: String) -> void:
 
 func _submit_chat_moderation_action() -> void:
 	if chat_moderation_in_flight:
+		print(CHAT_MODERATION_DEBUG_PREFIX, " submit ignored: request already in flight")
 		return
 	var target_user_id := _user_id_from_state(chat_moderation_target)
 	var reason := chat_moderation_reason_input.text.strip_edges()
+	print(
+		CHAT_MODERATION_DEBUG_PREFIX,
+		" submit action=", chat_moderation_action,
+		" target_id=", target_user_id,
+		" reason_length=", reason.length()
+	)
 	if target_user_id <= 0 or reason.length() < 3:
+		print(CHAT_MODERATION_DEBUG_PREFIX, " submit blocked: target or reason validation")
 		chat_moderation_status_label.text = LocalizationManager.text("ui.chat.moderation.reason_short")
 		return
 	chat_moderation_in_flight = true
@@ -38045,6 +38084,11 @@ func _submit_chat_moderation_action() -> void:
 		result = await ChatModerationService.mute_player(target_user_id, duration_minutes, reason)
 	else:
 		result = await ChatModerationService.unmute_player(target_user_id, reason)
+	print(
+		CHAT_MODERATION_DEBUG_PREFIX,
+		" request completed success=", bool(result.get("success", false)),
+		" status=", int(result.get("status", 0))
+	)
 	chat_moderation_in_flight = false
 	if not bool(result.get("success", false)):
 		chat_moderation_status_label.text = str(result.get("error", "Moderation action failed."))
@@ -38886,7 +38930,14 @@ func _open_chat_sender_context_menu(context: Dictionary, global_position: Vector
 	var username := str(user.get("username", "")).strip_edges()
 	chat_sender_context_menu.set_item_disabled(1, username == "")
 	var target_user_id := _user_id_from_state(user)
-	if _can_use_chat_moderation() and target_user_id > 0:
+	var can_moderate := _can_use_chat_moderation()
+	print(
+		CHAT_MODERATION_DEBUG_PREFIX,
+		" chat sender menu target_id=", target_user_id,
+		" can_moderate=", can_moderate,
+		" user_keys=", user.keys()
+	)
+	if can_moderate and target_user_id > 0:
 		# Keep the action available even if the optional state lookup is slow or
 		# unavailable. The authoritative endpoint validates every mutation.
 		chat_sender_context_menu.add_separator()
@@ -38895,7 +38946,7 @@ func _open_chat_sender_context_menu(context: Dictionary, global_position: Vector
 			CHAT_CONTEXT_MUTE_PLAYER
 		)
 	_popup_chat_context_menu(chat_sender_context_menu, global_position)
-	if _can_use_chat_moderation() and target_user_id > 0:
+	if can_moderate and target_user_id > 0:
 		_refresh_chat_sender_moderation_action.call_deferred(target_user_id)
 
 
@@ -38933,7 +38984,16 @@ func _on_chat_message_context_action(action_id: int) -> void:
 
 func _on_chat_sender_context_action(action_id: int) -> void:
 	var user := _dictionary_from_value(active_chat_sender_context.get("user", {}))
-	if user.is_empty() or _is_current_auth_user(user):
+	var target_user_id := _user_id_from_state(user)
+	var is_self := _is_current_auth_user(user)
+	print(
+		CHAT_MODERATION_DEBUG_PREFIX,
+		" chat sender action id=", action_id,
+		" target_id=", target_user_id,
+		" user_empty=", user.is_empty(),
+		" is_self=", is_self
+	)
+	if user.is_empty() or is_self:
 		return
 	match action_id:
 		CHAT_CONTEXT_OPEN_PM:
