@@ -62,7 +62,16 @@ func _check_bag_and_hotbar_runtime_translation() -> void:
 	var all_button := category_buttons.get("all") as Button
 	var all_label := all_button.find_child("Label", true, false) as Label
 	var hotbar_panel := overlay.get("hotkey_sidebar_panel") as PanelContainer
-	var hotbar_grid := hotbar_panel.get_node_or_null("MarginContainer/SlotStack") as GridContainer
+	var hotbar_grid := hotbar_panel.get_node_or_null("MarginContainer/Layout/SlotStack") as GridContainer
+	var hotbar_page_label := hotbar_panel.get_node_or_null(
+		"MarginContainer/Layout/PageControls/PageLabel"
+	) as Label
+	var hotbar_previous_button := hotbar_panel.get_node_or_null(
+		"MarginContainer/Layout/PageControls/PreviousButton"
+	) as Button
+	var hotbar_next_button := hotbar_panel.get_node_or_null(
+		"MarginContainer/Layout/PageControls/NextButton"
+	) as Button
 	var hotbar_buttons := overlay.get("hotbar_buttons") as Array
 	var first_hotbar_button := hotbar_buttons[0] as Control
 	_check(search != null and search.placeholder_text == "Items zoeken...", "Bag search renders in Dutch")
@@ -75,9 +84,33 @@ func _check_bag_and_hotbar_runtime_translation() -> void:
 	)
 	_check(
 		hotbar_grid != null
-		and hotbar_grid.columns == 2
+		and hotbar_grid.columns == 1
 		and hotbar_grid.get_child_count() == 8,
-		"hotbar keeps all eight shortcuts in a two-column grid"
+		"hotbar keeps all eight shortcuts in one paginated column"
+	)
+	_check(
+		hotbar_grid.get_child(0).visible
+		and hotbar_grid.get_child(3).visible
+		and not hotbar_grid.get_child(4).visible
+		and hotbar_page_label != null
+		and hotbar_page_label.text == "1/2",
+		"hotbar opens on shortcuts one through four"
+	)
+	if hotbar_next_button != null:
+		hotbar_next_button.pressed.emit()
+	_check(
+		not hotbar_grid.get_child(0).visible
+		and hotbar_grid.get_child(4).visible
+		and hotbar_grid.get_child(7).visible
+		and hotbar_page_label.text == "2/2",
+		"hotbar pager reveals shortcuts five through eight"
+	)
+	_check(
+		hotbar_previous_button != null
+		and hotbar_previous_button.tooltip_text == "Vorige hotbarpagina"
+		and hotbar_next_button != null
+		and hotbar_next_button.tooltip_text == "Volgende hotbarpagina",
+		"hotbar pager controls render localized guidance"
 	)
 	_check(
 		localization_manager.call(

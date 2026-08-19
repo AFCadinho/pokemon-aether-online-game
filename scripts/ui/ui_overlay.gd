@@ -12,8 +12,10 @@ const ACTION_BAR_SLOT_SIZE := 52.0
 const ACTION_BAR_MARGIN_X := 8.0
 const ACTION_BAR_SLOT_GAP := 8.0
 const HOTBAR_GRID_BASE_TOP_OFFSET := -245.0
-const HOTBAR_GRID_HEIGHT := 210.0
+const HOTBAR_GRID_HEIGHT := 219.0
 const HOTBAR_TRACKER_GAP := 8.0
+const HOTBAR_PAGE_SIZE := 4
+const HOTBAR_PAGE_COUNT := 2
 const RANKED_QUEUE_AVAILABILITY_POLL_INTERVAL_SECONDS := 10.0
 const UI_BASE_Z_INDEX := 100
 const UI_ACTIVE_Z_INDEX := 1000
@@ -608,6 +610,10 @@ var hotbar_buttons: Array[PlayerHotbarSlotButton] = []
 var hotbar_slot_panels: Array[PanelContainer] = []
 var hotbar_quantity_labels: Array[Label] = []
 var hotbar_slots: Array = []
+var hotbar_current_page := 0
+var hotbar_previous_page_button: Button
+var hotbar_next_page_button: Button
+var hotbar_page_label: Label
 var dev_pokemon_popup_mode: int = DevPokemonPopupMode.POKEMON
 var collapsible_panels: Dictionary = {}
 var chat_resize_button: Button
@@ -25964,10 +25970,23 @@ func _on_repel_toggle_toggled(toggled_on: bool) -> void:
 
 
 func _setup_player_hotbar() -> void:
-	var slot_stack := hotkey_sidebar_panel.get_node_or_null("MarginContainer/SlotStack") as GridContainer
+	var slot_stack := hotkey_sidebar_panel.get_node_or_null("MarginContainer/Layout/SlotStack") as GridContainer
 	if slot_stack == null:
 		push_error("UIOverlay: HotkeySidebar SlotStack is missing.")
 		return
+	hotbar_previous_page_button = hotkey_sidebar_panel.get_node_or_null(
+		"MarginContainer/Layout/PageControls/PreviousButton"
+	) as Button
+	hotbar_next_page_button = hotkey_sidebar_panel.get_node_or_null(
+		"MarginContainer/Layout/PageControls/NextButton"
+	) as Button
+	hotbar_page_label = hotkey_sidebar_panel.get_node_or_null(
+		"MarginContainer/Layout/PageControls/PageLabel"
+	) as Label
+	if hotbar_previous_page_button != null:
+		hotbar_previous_page_button.pressed.connect(_change_hotbar_page.bind(-1))
+	if hotbar_next_page_button != null:
+		hotbar_next_page_button.pressed.connect(_change_hotbar_page.bind(1))
 	for slot_index in range(8):
 		var slot := slot_stack.get_node_or_null("Slot%s" % (slot_index + 1)) as PanelContainer
 		if slot == null:
@@ -26014,6 +26033,31 @@ func _setup_player_hotbar() -> void:
 		slot.set_meta("hotbar_hovered", false)
 		slot.set_meta("hotbar_drop_highlighted", false)
 		_apply_hotbar_slot_style(slot_index)
+	_set_hotbar_page(0)
+
+
+func _change_hotbar_page(direction: int) -> void:
+	_set_hotbar_page(posmod(hotbar_current_page + direction, HOTBAR_PAGE_COUNT))
+
+
+func _set_hotbar_page(page_index: int) -> void:
+	hotbar_current_page = clampi(page_index, 0, HOTBAR_PAGE_COUNT - 1)
+	var first_visible_slot := hotbar_current_page * HOTBAR_PAGE_SIZE
+	var last_visible_slot := first_visible_slot + HOTBAR_PAGE_SIZE
+	for slot_index in range(hotbar_slot_panels.size()):
+		hotbar_slot_panels[slot_index].visible = (
+			slot_index >= first_visible_slot and slot_index < last_visible_slot
+		)
+	_refresh_hotbar_pager_ui()
+
+
+func _refresh_hotbar_pager_ui() -> void:
+	if hotbar_page_label != null:
+		hotbar_page_label.text = "%d/%d" % [hotbar_current_page + 1, HOTBAR_PAGE_COUNT]
+	if hotbar_previous_page_button != null:
+		hotbar_previous_page_button.tooltip_text = LocalizationManager.text("ui.hotbar.previous_page")
+	if hotbar_next_page_button != null:
+		hotbar_next_page_button.tooltip_text = LocalizationManager.text("ui.hotbar.next_page")
 
 
 func _on_hotbar_changed(slots: Array) -> void:
@@ -26022,6 +26066,7 @@ func _on_hotbar_changed(slots: Array) -> void:
 
 
 func _refresh_hotbar_ui() -> void:
+	_refresh_hotbar_pager_ui()
 	for slot_index in range(hotbar_buttons.size()):
 		var button := hotbar_buttons[slot_index]
 		var quantity_label := hotbar_quantity_labels[slot_index]
@@ -26278,6 +26323,7 @@ func _assign_bag_item_to_hotbar_slot(item: Dictionary, target_slot: int) -> void
 			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
 		}))
 		return
+	_set_hotbar_page(target_slot / HOTBAR_PAGE_SIZE)
 	_add_chat_message(LocalizationManager.text("ui.hotbar.message.assigned", {
 		"item": str(item.get("name", _item_name_from_id(item_id))),
 		"slot": target_slot + 1,

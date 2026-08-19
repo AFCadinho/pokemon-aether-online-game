@@ -13,6 +13,12 @@ func _init() -> void:
 	_check(ui.contains("range(8)"), "eight hotbar slots")
 	_check(ui.contains("HotbarShortcut.slot_index_from_event"), "modified number-key activation")
 	_check(sidebar.contains('text = "Ctrl+1"') and sidebar.contains('text = "Ctrl+8"'), "hotbar shows Ctrl shortcuts")
+	_check(
+		ui.contains("const HOTBAR_PAGE_SIZE := 4")
+		and ui.contains("func _change_hotbar_page(direction: int)")
+		and ui.contains("func _set_hotbar_page(page_index: int)"),
+		"four-slot hotbar pages retain all eight bindings"
+	)
 	_check(not ui.contains("hotbar_panel = PanelContainer.new()"), "no duplicate horizontal hotbar")
 	_check(ui.contains("escape-rope-action"), "virtual Escape Rope key item")
 	_check(ui.contains("MOUSE_BUTTON_RIGHT"), "Bag-to-hotbar assignment")
