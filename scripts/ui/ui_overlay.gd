@@ -15520,15 +15520,17 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 
 	pokemon_summary_nickname_button = Button.new()
 	pokemon_summary_nickname_button.text = "✎"
-	pokemon_summary_nickname_button.custom_minimum_size = Vector2(22, 20)
+	pokemon_summary_nickname_button.custom_minimum_size = Vector2(18, 18)
+	pokemon_summary_nickname_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	pokemon_summary_nickname_button.focus_mode = Control.FOCUS_NONE
 	pokemon_summary_nickname_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	pokemon_summary_nickname_button.pressed.connect(_on_pokemon_summary_nickname_pressed.bind(card_key))
 	_set_localized_control_property(pokemon_summary_nickname_button, "tooltip_text", "ui.pokemon_summary.nickname.edit_tooltip")
-	pokemon_summary_nickname_button.add_theme_font_size_override("font_size", 11)
-	pokemon_summary_nickname_button.add_theme_stylebox_override("normal", _make_pokemon_summary_button_style(Color("#0e2138f0"), Color("#5a82ad"), true))
-	pokemon_summary_nickname_button.add_theme_stylebox_override("hover", _make_pokemon_summary_button_style(Color("#12304bf0"), POKEMON_SUMMARY_ACCENT, true))
-	pokemon_summary_nickname_button.add_theme_stylebox_override("pressed", _make_pokemon_summary_button_style(Color("#071421f0"), POKEMON_SUMMARY_ACCENT, true))
+	pokemon_summary_nickname_button.add_theme_font_size_override("font_size", 9)
+	pokemon_summary_nickname_button.add_theme_stylebox_override("normal", _make_pokemon_summary_compact_icon_button_style(Color("#0e2138f0"), Color("#5a82ad")))
+	pokemon_summary_nickname_button.add_theme_stylebox_override("hover", _make_pokemon_summary_compact_icon_button_style(Color("#12304bf0"), POKEMON_SUMMARY_ACCENT))
+	pokemon_summary_nickname_button.add_theme_stylebox_override("pressed", _make_pokemon_summary_compact_icon_button_style(Color("#071421f0"), POKEMON_SUMMARY_ACCENT))
+	pokemon_summary_nickname_button.add_theme_stylebox_override("disabled", _make_pokemon_summary_compact_icon_button_style(Color("#0b1420b8"), Color("#35465a")))
 	title_row.add_child(pokemon_summary_nickname_button)
 
 	var title_spacer := Control.new()
@@ -20261,6 +20263,11 @@ func _show_pokemon_nickname_popup(card_key: String, pokemon: Pokemon) -> void:
 	actions.add_child(pokemon_nickname_confirm_button)
 
 	_activate_ui_panel(pokemon_nickname_popup)
+	# _activate_ui_panel normalizes regular windows to UI_WINDOW_Z_INDEX. This
+	# editor is modal to the Summary card, so restore its layer after activation.
+	pokemon_nickname_popup.z_as_relative = false
+	pokemon_nickname_popup.z_index = UI_MODAL_Z_INDEX + 10
+	pokemon_nickname_popup.move_to_front()
 	pokemon_nickname_input.grab_focus()
 	pokemon_nickname_input.select_all()
 	_update_pokemon_nickname_confirm_state()
@@ -23316,6 +23323,17 @@ func _make_pokemon_summary_button_style(background_color: Color, border_color: C
 		style.shadow_color = Color(border_color.r, border_color.g, border_color.b, 0.22)
 		style.shadow_size = 4
 		style.shadow_offset = Vector2.ZERO
+	return style
+
+func _make_pokemon_summary_compact_icon_button_style(background_color: Color, border_color: Color) -> StyleBoxFlat:
+	var style := _make_button_style(background_color, border_color, 4, 1)
+	style.content_margin_left = 2
+	style.content_margin_right = 2
+	style.content_margin_top = 0
+	style.content_margin_bottom = 0
+	style.shadow_color = Color(border_color.r, border_color.g, border_color.b, 0.16)
+	style.shadow_size = 1
+	style.shadow_offset = Vector2.ZERO
 	return style
 
 func _make_pokemon_summary_held_item_slot_style() -> StyleBoxFlat:

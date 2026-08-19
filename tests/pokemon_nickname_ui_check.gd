@@ -43,6 +43,10 @@ func _run() -> void:
 	overlay.call("_refresh_pokemon_summary")
 
 	var summary_popup := overlay.get("pokemon_summary_popup") as PanelContainer
+	summary_popup.visible = true
+	overlay.call("_activate_ui_panel", summary_popup)
+	summary_popup.z_index = 2000
+	await process_frame
 	var title_label := overlay.get("pokemon_summary_title_label") as Label
 	var id_label := overlay.get("pokemon_summary_id_label") as Label
 	var edit_button := overlay.get("pokemon_summary_nickname_button") as Button
@@ -50,11 +54,15 @@ func _run() -> void:
 	_check(title_label != null and title_label.text == "Sparky", "Summary title shows nickname (got %s)" % str(title_label.text if title_label != null else "<missing>"))
 	_check(id_label != null and id_label.text.contains("Pikachu") and id_label.text.contains("42"), "Summary subtitle keeps species and id (got %s)" % str(id_label.text if id_label != null else "<missing>"))
 	_check(edit_button != null and edit_button.visible, "Owned Summary shows nickname edit button")
+	_check(edit_button != null and not edit_button.disabled, "Nickname edit button is interactive outside battle and trade flows")
+	_check(edit_button != null and edit_button.size.x <= 20.0 and edit_button.size.y <= 20.0, "Nickname edit button stays compact")
 
 	var summary_size_before := summary_popup.size
-	overlay.call("_show_pokemon_nickname_popup", card_key, pokemon)
+	edit_button.emit_signal("pressed")
+	await process_frame
 	var nickname_popup := overlay.get("pokemon_nickname_popup") as PanelContainer
 	_check(nickname_popup != null and nickname_popup.get_parent() != summary_popup, "Nickname editor is a separate overlay")
+	_check(nickname_popup != null and nickname_popup.visible and nickname_popup.z_index > summary_popup.z_index, "Clicking the edit button opens the nickname editor above Summary")
 	_check(summary_popup.size == summary_size_before, "Opening nickname editor does not resize Summary")
 	var nickname_input := overlay.get("pokemon_nickname_input") as LineEdit
 	_check(nickname_input != null and nickname_input.max_length == 18, "Nickname editor enforces the visible length limit")
