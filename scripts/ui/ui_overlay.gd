@@ -1240,6 +1240,8 @@ var pokedex_search_request_id := 0
 var pokedex_detail_request_id := 0
 var pokedex_search_debounce_timer: Timer
 var pokedex_species_list_icon_cache: Dictionary = {}
+var pokedex_warmup_in_progress := false
+var pokedex_warmup_complete := false
 var pokedex_results_state := "idle"
 var pokedex_results_owned_total := 0
 var pokedex_results_dex_total := 0
@@ -8536,6 +8538,8 @@ func _refresh_key_item_unlock_state(_items: Array = []) -> void:
 		pokedex_button.tooltip_text = LocalizationManager.text(
 			"ui.navigation.pokedex" if pokedex_unlocked else "ui.navigation.pokedex_locked"
 		)
+		if pokedex_unlocked:
+			_warm_up_pokedex.call_deferred()
 	if map_button != null:
 		var town_map_unlocked := _is_town_map_unlocked()
 		map_button.disabled = not town_map_unlocked
@@ -8549,6 +8553,30 @@ func _refresh_key_item_inventory() -> void:
 	if inventory_service == null or not inventory_service.has_method("load_inventory"):
 		return
 	await inventory_service.call("load_inventory")
+	_refresh_key_item_unlock_state()
+
+
+func _warm_up_pokedex() -> void:
+	if pokedex_warmup_in_progress or pokedex_warmup_complete or not _is_pokedex_unlocked():
+		return
+	pokedex_warmup_in_progress = true
+	await PokedexService.warm_up_default_catalog()
+	var search_result: Dictionary = await PokedexService.search_species(
+		"",
+		80,
+		"national",
+		false
+	)
+	if bool(search_result.get("success", false)):
+		var species_values := _array_from_variant(search_result.get("species", []))
+		for index in range(species_values.size()):
+			var species_value: Variant = species_values[index]
+			if species_value is Dictionary:
+				_load_pokedex_species_list_icon(species_value as Dictionary)
+			if index > 0 and index % 8 == 0:
+				await get_tree().process_frame
+		pokedex_warmup_complete = true
+	pokedex_warmup_in_progress = false
 
 func _setup_item_dex_popup() -> void:
 	item_dex_popup = PanelContainer.new()
