@@ -219,7 +219,11 @@ func _init() -> void:
 	_check(scene_source.contains('[node name="AmountInput" type="LineEdit" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow"]'), "global buff contributions use a custom amount input")
 	_check(scene_source.contains('[node name="FillRemainingButton" type="Button" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection"]'), "global buff contributions can fill the exact remaining goal without competing with the main action")
 	_check(scene_source.count('[node name="NameLabel" type="Label" parent="Control/PersonalBuffsPanel') == 3, "personal buffs render readable effect names")
-	_check(scene_source.count('[node name="DescriptionLabel" type="Label" parent="Control/PersonalBuffsPanel') == 3, "personal buffs render readable effect descriptions")
+	_check(
+		scene_source.count('[node name="BadgeLabel" type="Label" parent="Control/PersonalBuffsPanel') == 0
+		and scene_source.count('[node name="DescriptionLabel" type="Label" parent="Control/PersonalBuffsPanel') == 0,
+		"personal buff rows avoid duplicate badges and clipped descriptions"
+	)
 	_check(scene_source.count('[node name="TimeLabel" type="Label" parent="Control/PersonalBuffsPanel') == 3, "personal buffs render remaining durations")
 	_check(scene_source.contains('[node name="EmptyLabel" type="Label" parent="Control/PersonalBuffsPanel'), "personal buffs provide an empty-state label")
 	_check(scene_source.contains('text = "ui.buff.none"'), "personal empty state uses its localization key")
@@ -423,7 +427,11 @@ func _init() -> void:
 	_check(script_source.contains("const MINIMUM_GLOBAL_BUFF_CONTRIBUTION := 10_000"), "global buff contributions enforce the 10,000 Pokédollar minimum")
 	_check(script_source.contains("selected_global_buff_contribution = mini(requested, remaining)"), "global buff contribution input is capped to the remaining goal")
 	_check(script_source.contains('"aetheriteReward"'), "global EXP contributions display their personal Aetherite reward")
-	_check(script_source.contains("name_label.text = _localized_buff_name(buff)"), "personal buff rows receive localized readable names")
+	_check(
+		script_source.contains("const PERSONAL_BUFF_ROW_HEIGHT := 38.0")
+		and script_source.contains("name_label.text = _localized_buff_name(buff)"),
+		"personal buff rows use compact localized effect labels"
+	)
 	_check(donator_store_scene_source.contains("custom_minimum_size = Vector2(1120, 680)"), "Donator Store opens as a full catalog and character-preview interface")
 	_check(donator_store_script_source.contains('"membership",') and donator_store_script_source.contains('"cosmetics",') and donator_store_script_source.contains('"mounts",') and donator_store_script_source.contains('"charms",') and donator_store_script_source.contains('"services",'), "Aether Store separates its six scalable catalog categories")
 	_check(donator_store_script_source.contains('"membership": "Blessings"') and donator_store_script_source.contains('"membership": "×1.05 SHINY ODDS"') and donator_store_script_source.contains("5% better Shiny odds"), "Blessings disclose their limited Shiny encounter benefit")

@@ -45,6 +45,11 @@ func _run() -> void:
 	var status_panel := overlay.get("player_status_panel") as PanelContainer
 	var active_buffs: Array = overlay.get("active_personal_buffs") as Array
 	var shiny_bonus := active_buffs[0] as Dictionary if not active_buffs.is_empty() else {}
+	var first_buff_slot := overlay.get_node_or_null(
+		"Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot1"
+	) as Button
+	var displayed_name := first_buff_slot.get_node_or_null("Content/NameLabel") as Label
+	var displayed_time := first_buff_slot.get_node_or_null("Content/TimeLabel") as Label
 	_check(badge != null and badge.visible, "active members see Blessed status in the mini Trainer Card")
 	_check(
 		badge != null
@@ -63,9 +68,17 @@ func _run() -> void:
 	)
 	_check(
 		str(shiny_bonus.get("name_key", "")) == "ui.buff.aether_blessing_shiny.name"
-		and str(shiny_bonus.get("label", "")) == "5%"
 		and str(shiny_bonus.get("compactRemaining", "")) != "",
 		"5% Shiny communicates its effect immediately and keeps the membership countdown"
+	)
+	_check(
+		displayed_name != null
+		and displayed_name.text == str(overlay.call("_localized_buff_name", shiny_bonus))
+		and displayed_time != null
+		and displayed_time.text != ""
+		and first_buff_slot.get_node_or_null("Content/BadgeLabel") == null
+		and first_buff_slot.get_node_or_null("Content/Details/DescriptionLabel") == null,
+		"expanded boost row shows one clean effect label with its remaining duration"
 	)
 
 	auth_service.set("current_user", {
