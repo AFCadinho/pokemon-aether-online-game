@@ -538,6 +538,7 @@
   "ui.pokemon_summary.nickname.failed": "The nickname could not be changed.",
   "ui.pokemon_summary.nickname.blocked": "Nicknames cannot be changed during a battle, trade, or PvP queue.",
   "ui.pokemon_summary.nickname.insufficient_funds": "You need 5,000 money to change a nickname.",
+  "ui.pokemon_summary.nickname.not_allowed": "This nickname is not allowed. Choose another name.",
   "ui.pokemon_summary.hp": "HP {current} / {max}",
   "ui.pokemon_summary.hp_empty": "HP -",
   "ui.pokemon_summary.trainer_fallback": "Trainer",

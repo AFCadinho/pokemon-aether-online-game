@@ -538,6 +538,7 @@
   "ui.pokemon_summary.nickname.failed": "Não foi possível alterar o apelido.",
   "ui.pokemon_summary.nickname.blocked": "Apelidos não podem ser alterados durante uma batalha, troca ou fila PvP.",
   "ui.pokemon_summary.nickname.insufficient_funds": "Você precisa de 5.000 de dinheiro para alterar um apelido.",
+  "ui.pokemon_summary.nickname.not_allowed": "Este apelido não é permitido. Escolha outro nome.",
   "ui.pokemon_summary.hp": "PS {current} / {max}",
   "ui.pokemon_summary.hp_empty": "PS -",
   "ui.pokemon_summary.trainer_fallback": "Treinador",
