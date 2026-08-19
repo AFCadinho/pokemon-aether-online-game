@@ -37,6 +37,18 @@ func _init() -> void:
 	_check(heal_service.contains('func party_needs_heal(party: Array)'), "full parties do not receive unnecessary prompts")
 	_check(game_state.contains("var global_heal_requests_enabled := true"), "Global Heal requests default to enabled")
 	_check(loading_screen.contains('preferences.get("globalHealRequestsEnabled", true)'), "the account preference loads before entering the world")
+	var english_value: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://localization/en.json"))
+	var english: Dictionary = english_value as Dictionary if english_value is Dictionary else {}
+	_check(
+		str(english.get("ui.buff.global_heal.description", ""))
+			== "Every online Trainer can choose to fully heal their party. Players in battle can choose afterwards.",
+		"Global Heal uses simple player-facing copy"
+	)
+	_check(
+		str(english.get("ui.buff.global_heal.no_aetherite", ""))
+			== "You do not get Aetherite for this.",
+		"the Aetherite note uses plain language"
+	)
 
 	for locale_path: String in [
 		"res://localization/en.json",
