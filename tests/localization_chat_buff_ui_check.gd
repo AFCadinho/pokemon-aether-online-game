@@ -44,6 +44,14 @@ func _check_localized_helpers() -> void:
 		"Global buff description renders in Dutch"
 	)
 	_check(
+		overlay.call("_localized_buff_name", {"name_key": "ui.buff.global_heal.name"}) == "Global Heal",
+		"Global Heal name renders in Dutch"
+	)
+	_check(
+		str(localization_manager.call("text", "ui.buff.global_heal.no_aetherite")).contains("geen Aetherite"),
+		"Global Heal clearly states that it does not award Aetherite"
+	)
+	_check(
 		overlay.call("_format_global_buff_remaining", 3_541) == "60 min",
 		"Global buff countdown rounds remaining time up to whole minutes"
 	)
@@ -105,6 +113,7 @@ func _check_scene_uses_semantic_keys() -> void:
 		"ui.chat.send",
 		"ui.buff.none",
 		"ui.buff.global_exp.name",
+		"ui.buff.global_heal.receive_requests",
 		"ui.social.title",
 	]:
 		_check(source.contains('"%s"' % key), "Overlay scene uses semantic key %s" % key)

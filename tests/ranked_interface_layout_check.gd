@@ -14,6 +14,7 @@ func _init() -> void:
 	_check(source.contains('var leaderboard_tab_page := _create_pvp_ranked_tab_page("Leaderboard")'), "Ranked keeps a dedicated Leaderboard destination")
 	_check(source.contains('"ui.pvp.leaderboard.title"'), "Leaderboard clearly names the active ladder")
 	_check(source.contains('"ui.pvp.leaderboard.period"') and source.contains("_apply_pvp_leaderboard_scope_style(pvp_leaderboard_scope_select)"), "Leaderboard period filter is presented as a compact control")
+	_check(source.contains("_apply_pvp_ranked_dropdown_style(pvp_queue_select)"), "Play format uses the shared Ranked dropdown style")
 	_check(source.contains('_create_pvp_leaderboard_header_label("ui.pvp.leaderboard.column.rank", 54') and source.contains('_create_pvp_leaderboard_header_label("ui.pvp.leaderboard.column.record", 104') and source.contains('_create_pvp_leaderboard_header_label("ui.pvp.leaderboard.column.win_rate", 86'), "Leaderboard columns prioritize rank, points, record and win rate")
 	_check(source.contains("func _pvp_leaderboard_rank_color(rank: int)") and source.contains('return Color("#ffd45a")') and source.contains('return Color("#d3deea")') and source.contains('return Color("#e0a06c")'), "Top three ladder ranks have distinct medal colors")
 	_check(source.contains("var is_current_player := _is_current_auth_user(entry)") and source.contains('"ui.pvp.leaderboard.you"'), "Leaderboard highlights the signed-in player")
@@ -31,6 +32,7 @@ func _init() -> void:
 	_check(source.contains('"ui.pvp.validation.issue.one"') and source.contains('"ui.pvp.validation.issue.many"'), "Invalid teams report an actionable issue count")
 	_check(source.contains('"ui.pvp.validation.ranked_ready"'), "Valid teams receive a clear Ranked Ready state")
 	_check(source.contains('PvpRankedTeamValidation.allows_ranked_join(pvp_ranked_team_validation_result)'), "authoritative validation still gates ranked matchmaking")
+	_check(source.contains("if server_is_authoritative:\n\t\t\t_render_pvp_ranked_server_validation()"), "authoritative Ranked validation keeps its detailed reasons visible after local checks")
 	_check(source.contains('pvp_team_validator_panel.add_theme_stylebox_override("panel", _make_pvp_validator_panel_style(state))'), "validator surface reflects checking, valid and invalid states")
 
 	_check(source.contains('"ui.pvp.queue.find"') and source.contains("pvp_join_queue_button.custom_minimum_size = Vector2(0, 46)"), "Find Match is the primary full-width action")

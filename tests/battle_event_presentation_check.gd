@@ -16,8 +16,12 @@ func _init() -> void:
 	_check_previous_condition_uses_visible_scale()
 	_check_stale_previous_condition_rewinds_from_authoritative_state()
 	_check_legitimate_full_hp_rewind_is_preserved()
+	_check_multihit_knockout_keeps_rendered_hp_continuity()
+	_check_multihit_knockout_keeps_continuity_across_batches()
+	_check_multihit_knockout_keeps_continuity_across_hp_scales()
 	_check_full_hp_reveal_damage_has_no_damage_target()
 	_check_real_damage_keeps_damage_target()
+	_check_hit_count_adds_showdown_style_battle_log()
 	_check_direct_damage_logs_one_decimal_precision()
 	_check_public_damage_percent_is_preferred_over_quantized_hp_delta()
 	_check_damage_after_hazard_uses_numeric_delta_when_previous_condition_is_stale()
@@ -55,6 +59,7 @@ func _init() -> void:
 	_check_z_power_event_has_visible_message()
 	_check_stat_reset_events_have_visible_messages()
 	_check_switch_log_uses_destination_side()
+	_check_switch_log_links_nicknames_to_species()
 	_check_semantic_battle_log_colors()
 	_check_supreme_overlord_fallen_counter_protocol()
 	quit(1 if failed else 0)
@@ -176,6 +181,28 @@ func _check_switch_log_uses_destination_side() -> void:
 		str(result.get("log_message", "")),
 		"Pikipek, come back!\nGo! Furret!",
 		"switch logs use the destination ident side when playerId is stale"
+	)
+
+
+func _check_switch_log_links_nicknames_to_species() -> void:
+	var presentation = _make_presentation()
+	var result: Dictionary = presentation.build({
+		"type": "switch",
+		"playerId": "p1",
+		"from": "Sparky",
+		"fromRef": {"species": "Pikachu"},
+		"to": "Blaze",
+		"toRef": {"displaySpecies": "Charizard"},
+	})
+	_check_equal(
+		str(result.get("log_message", "")),
+		"Sparky (Pikachu), come back!\nGo! Blaze (Charizard)!",
+		"switch log links both nicknames to their species"
+	)
+	_check_equal(
+		str(result.get("battle_message", "")),
+		"Go! Blaze!",
+		"large switch message stays concise"
 	)
 
 
@@ -308,6 +335,114 @@ func _check_legitimate_full_hp_rewind_is_preserved() -> void:
 	_check_equal(snapshot.get("hp", 0), 100, "a genuine full-to-damaged event still starts at full HP")
 
 
+func _check_multihit_knockout_keeps_rendered_hp_continuity() -> void:
+	var helper = BattleHpEventHelperScript.new()
+	var events: Array = [
+		{
+			"type": "damage", "target": "p2a: Pidgey",
+			"previousCondition": "100/100", "condition": "81/100",
+			"previousHp": 16, "hp": 13, "maxHp": 16,
+		},
+		{
+			"type": "damage", "target": "p2a: Pidgey",
+			"previousCondition": "81/100", "condition": "69/100",
+			"previousHp": 13, "hp": 11, "maxHp": 16,
+		},
+		{
+			"type": "damage", "target": "p2a: Pidgey",
+			"previousCondition": "69/100", "condition": "19/100",
+			"previousHp": 11, "hp": 3, "maxHp": 16,
+		},
+		{
+			"type": "damage", "target": "p2a: Pidgey",
+			"previousCondition": "44/100", "condition": "0 fnt",
+			"previousHp": 7, "hp": 0, "maxHp": 16,
+		},
+		{"type": "faint", "target": "p2a: Pidgey", "condition": "0 fnt"},
+	]
+	var normalized: Array = helper.normalize_damage_event_continuity(events)
+	var knockout_damage: Dictionary = normalized[3] as Dictionary
+
+	_check_equal(
+		str(knockout_damage.get("previousCondition", "")),
+		"19/100",
+		"multi-hit knockout starts from the HP rendered by the preceding hit"
+	)
+	_check_equal(
+		int(knockout_damage.get("previousHp", -1)),
+		3,
+		"multi-hit knockout keeps the exact HP cursor from the preceding hit"
+	)
+	_check_equal(
+		str((events[3] as Dictionary).get("previousCondition", "")),
+		"44/100",
+		"HP continuity normalization does not mutate the response events"
+	)
+
+
+func _check_multihit_knockout_keeps_continuity_across_batches() -> void:
+	var helper = BattleHpEventHelperScript.new()
+	helper.normalize_damage_event_continuity([
+		{
+			"type": "damage", "target": "p2a: Pidgey",
+			"pokemonKey": "p2:slot:1",
+			"previousCondition": "69/100", "condition": "19/100",
+			"previousHp": 11, "hp": 3, "maxHp": 16,
+		},
+	])
+	var final_batch: Array = helper.normalize_damage_event_continuity([
+		{
+			"type": "damage", "target": "p2: Pidgey",
+			"pokemonKey": "p2:slot:1",
+			"previousCondition": "44/100", "condition": "0 fnt",
+			"previousHp": 7, "hp": 0, "maxHp": 16,
+		},
+		{"type": "faint", "target": "p2a: Pidgey", "condition": "0 fnt"},
+	])
+	var knockout_damage: Dictionary = final_batch[0] as Dictionary
+
+	_check_equal(
+		str(knockout_damage.get("previousCondition", "")),
+		"19/100",
+		"a separately delivered final hit uses stable identity and the previously rendered HP"
+	)
+	_check_equal(
+		int(knockout_damage.get("previousHp", -1)),
+		3,
+		"exact HP continuity survives a response batch boundary"
+	)
+
+
+func _check_multihit_knockout_keeps_continuity_across_hp_scales() -> void:
+	var helper = BattleHpEventHelperScript.new()
+	helper.normalize_damage_event_continuity([
+		{
+			"type": "damage", "target": "p2a: Pidgey",
+			"previousCondition": "69/100", "condition": "19/100",
+			"previousHp": 11, "hp": 3, "maxHp": 16,
+		},
+	])
+	var final_batch: Array = helper.normalize_damage_event_continuity([
+		{
+			"type": "damage", "target": "p2a: Pidgey",
+			"previousCondition": "44/100", "condition": "0 fnt",
+			"previousHp": 44, "hp": 0, "maxHp": 100,
+		},
+	])
+	var knockout_damage: Dictionary = final_batch[0] as Dictionary
+
+	_check_equal(
+		str(knockout_damage.get("previousCondition", "")),
+		"19/100",
+		"a public-scale knockout starts from the preceding exact-scale HP"
+	)
+	_check_equal(
+		int(knockout_damage.get("previousHp", -1)),
+		19,
+		"cross-scale knockout rewind preserves the previously rendered percentage"
+	)
+
+
 func _check_full_hp_reveal_damage_has_no_damage_target() -> void:
 	var presentation = _make_presentation()
 	var result: Dictionary = presentation.build({
@@ -337,6 +472,31 @@ func _check_real_damage_keeps_damage_target() -> void:
 	})
 
 	_check_equal(str(result.get("damage_target_ident", "")), "p2a: Garchomp", "real damage still animates")
+
+
+func _check_hit_count_adds_showdown_style_battle_log() -> void:
+	var presentation = _make_presentation()
+	var result: Dictionary = presentation.build({
+		"type": "hitCount",
+		"target": "p2a: Doduo",
+		"count": 4,
+	})
+
+	_check_equal(
+		str(result.get("log_message", "")),
+		"Hit 4 times!",
+		"Showdown hit count event is written to the battle log"
+	)
+	_check_equal(
+		str(result.get("battle_message", "")),
+		"Hit 4 times!",
+		"Showdown hit count event is also visible in the current action message"
+	)
+	_check_equal(
+		str(presentation.build({"type": "hitCount", "target": "p2a: Doduo", "count": 1}).get("log_message", "")),
+		"",
+		"single-hit moves do not add a redundant hit count line"
+	)
 
 
 func _check_direct_damage_logs_one_decimal_precision() -> void:

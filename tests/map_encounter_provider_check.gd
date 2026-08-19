@@ -7,7 +7,9 @@ var failed := false
 
 func _init() -> void:
 	_check_map_level_encounter()
+	_check_map_level_fishing_encounter()
 	_check_region_encounter()
+	_check_region_fishing_encounter_without_explicit_chance()
 	_check_region_type_filter()
 	_check_fishing_alias()
 	quit(1 if failed else 0)
@@ -22,6 +24,19 @@ func _check_map_level_encounter() -> void:
 	_check_equal(str(encounter.get("encounter_type", "")), "grass", "map encounter type")
 	_check_float_approx(float(encounter.get("chance", 0.0)), 0.35, "map encounter chance")
 	_check_true(bool(encounter.get("use_map_trigger", false)), "map encounter should use map trigger")
+	map.free()
+
+
+func _check_map_level_fishing_encounter() -> void:
+	var map := _GrassOnlyMap.new()
+
+	for encounter_type: String in ["old_rod", "good_rod", "super_rod"]:
+		var encounter := MapEncounterProvider.resolve_wild_encounter(map, Vector2(16.0, 16.0), encounter_type)
+		_check_true(bool(encounter.get("available", false)), "%s map encounter should be available" % encounter_type)
+		_check_equal(str(encounter.get("area_id", "")), "test_water", "%s map area id" % encounter_type)
+		_check_equal(str(encounter.get("encounter_type", "")), encounter_type, "%s map encounter type" % encounter_type)
+		_check_float_approx(float(encounter.get("chance", 0.0)), 1.0, "%s successful reel encounter chance" % encounter_type)
+		_check_true(not bool(encounter.get("use_map_trigger", true)), "%s should not use grass-only map trigger" % encounter_type)
 	map.free()
 
 
@@ -55,16 +70,32 @@ func _check_region_type_filter() -> void:
 	map.free()
 
 
+func _check_region_fishing_encounter_without_explicit_chance() -> void:
+	var map := _GrassOnlyMap.new()
+	var regions := Node2D.new()
+	regions.name = "EncounterRegions"
+	map.add_child(regions)
+	regions.add_child(_make_region("pond", Rect2(64.0, 64.0, 32.0, 32.0), "test_pond", "old_rod", -1.0))
+
+	var encounter := MapEncounterProvider.resolve_wild_encounter(map, Vector2(80.0, 80.0), "old_rod")
+	_check_true(bool(encounter.get("available", false)), "region fishing encounter should be available")
+	_check_equal(str(encounter.get("area_id", "")), "test_pond", "region fishing area id")
+	_check_float_approx(float(encounter.get("chance", 0.0)), 1.0, "region successful reel encounter chance")
+	_check_true(not bool(encounter.get("use_map_trigger", true)), "region fishing should not use grass-only map trigger")
+	map.free()
+
+
 func _check_fishing_alias() -> void:
 	var map := Node2D.new()
 	var regions := Node2D.new()
 	regions.name = "EncounterRegions"
 	map.add_child(regions)
-	regions.add_child(_make_region("fishing_a", Rect2(0.0, 0.0, 32.0, 32.0), "test_fish", "fish", 1.0))
+	regions.add_child(_make_region("fishing_a", Rect2(0.0, 0.0, 32.0, 32.0), "test_fish", "fish", 0.4))
 
 	var encounter := MapEncounterProvider.resolve_wild_encounter(map, Vector2(16.0, 16.0), "fishing")
 	_check_true(bool(encounter.get("available", false)), "fishing should resolve to Old Rod encounter type")
 	_check_equal(str(encounter.get("encounter_type", "")), "old_rod", "fishing alias encounter type")
+	_check_float_approx(float(encounter.get("chance", 0.0)), 0.4, "explicit fishing region chance")
 	map.free()
 
 
@@ -122,3 +153,13 @@ class _MapWithEncounterChance:
 
 	func should_trigger_wild_encounter(_encounter_type: String = "grass") -> bool:
 		return true
+
+
+class _GrassOnlyMap:
+	extends Node2D
+
+	func get_wild_encounter_area_id() -> String:
+		return "test_water"
+
+	func should_trigger_wild_encounter(encounter_type: String = "grass") -> bool:
+		return encounter_type == "grass"

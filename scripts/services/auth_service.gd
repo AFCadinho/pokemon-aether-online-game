@@ -234,6 +234,66 @@ func logout() -> Dictionary:
 	return response
 
 
+func create_account_portal_launch(locale: String) -> Dictionary:
+	if session_token == "":
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+	if is_impersonating():
+		return {
+			"success": false,
+			"error": "Account management is unavailable while impersonating a player.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + "/auth/account-portal/launch",
+		HTTPClient.METHOD_POST,
+		_client_headers(PackedStringArray([
+			USER_AGENT_HEADER,
+			CONTENT_TYPE_HEADER,
+			ACCEPT_HEADER,
+			get_authorization_header(),
+		])),
+		JSON.stringify({"locale": locale})
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var body := _dictionary_from_value(response.get("body", {}))
+	var url := str(body.get("url", "")).strip_edges()
+	if not _is_safe_account_portal_url(url, base_url):
+		return {
+			"success": false,
+			"error": "The account portal returned an invalid address.",
+		}
+	return {
+		"success": true,
+		"url": url,
+		"expiresAt": str(body.get("expiresAt", "")),
+	}
+
+
+func _is_safe_account_portal_url(url: String, gateway_base_url: String) -> bool:
+	if url.length() > 2048 or url.contains("\n") or url.contains("\r"):
+		return false
+	if not url.contains("/launch#ticket=") or url.contains("@"):
+		return false
+	if url.begins_with("https://"):
+		return true
+	if not (
+		gateway_base_url.begins_with("http://localhost")
+		or gateway_base_url.begins_with("http://127.0.0.1")
+	):
+		return false
+	if not url.begins_with("http://"):
+		return false
+	var authority := url.trim_prefix("http://").get_slice("/", 0).to_lower()
+	var host := authority.get_slice(":", 0)
+	return host in ["localhost", "127.0.0.1"] or host.ends_with(".localhost")
+
+
 func update_account_details(display_name: String, current_password: String, new_password: String) -> Dictionary:
 	if session_token == "":
 		return {

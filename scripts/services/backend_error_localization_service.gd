@@ -25,6 +25,11 @@ const CODE_TO_KEY: Dictionary = {
 	"request_failed": "backend.error.generic",
 	"service_error": "backend.error.generic",
 	"not_enough_money": "backend.error.not_enough_money",
+	"global_heal_cooldown_active": "backend.error.global_heal_cooldown",
+	"global_heal_broadcast_failed": "backend.error.global_heal_broadcast",
+	"global_heal_not_found": "backend.error.global_heal_unavailable",
+	"global_heal_expired": "backend.error.global_heal_expired",
+	"global_heal_player_busy": "backend.error.global_heal_busy",
 	"market_badges_required": "backend.error.market_badges_required",
 	"not_enough_gems": "backend.error.not_enough_gems",
 	"transit_attunement_location_invalid": "backend.error.transit_wrong_location",
@@ -76,6 +81,21 @@ const CODE_TO_KEY: Dictionary = {
 	"trade_party_space_required": "ui.trade.error.party_space",
 	"trade_offer_required": "ui.trade.error.offer_required",
 	"trade_pokemon_level_cap_exceeded": "backend.error.trade_pokemon_level_cap_exceeded",
+	"exchange_asset_type_invalid": "backend.error.exchange_asset_type_invalid",
+	"exchange_request_conflict": "backend.error.exchange_request_conflict",
+	"exchange_listing_limit": "backend.error.exchange_listing_limit",
+	"exchange_price_too_high": "backend.error.exchange_price_too_high",
+	"exchange_listing_not_found": "backend.error.exchange_listing_not_found",
+	"exchange_listing_unavailable": "backend.error.exchange_listing_unavailable",
+	"exchange_own_listing": "backend.error.exchange_own_listing",
+	"exchange_seller_unavailable": "backend.error.exchange_seller_unavailable",
+	"exchange_seller_wallet_full": "backend.error.exchange_seller_wallet_full",
+	"exchange_pokemon_not_found": "backend.error.exchange_pokemon_not_found",
+	"exchange_pokemon_must_be_in_party": "backend.error.exchange_pokemon_must_be_in_party",
+	"exchange_party_slot_occupied": "backend.error.exchange_party_slot_occupied",
+	"exchange_asset_changed": "backend.error.exchange_asset_changed",
+	"exchange_pokemon_storage_full": "backend.error.exchange_pokemon_storage_full",
+	"pokemon_listed_on_exchange": "backend.error.pokemon_listed_on_exchange",
 	"trade_review_mismatch": "ui.trade.error.review_changed",
 	"trade_review_not_locked": "ui.trade.error.review_not_locked",
 	"trade_settlement_invalidated": "ui.trade.error.settlement_invalidated",
@@ -123,6 +143,9 @@ const CODE_TO_KEY: Dictionary = {
 	"pokemon_level_cap_party_ineligible": "backend.error.pokemon_level_cap_party_ineligible",
 	"pokemon_level_cap_authentication_required": "backend.error.auth_required",
 	"pokemon_level_cap_validation_unavailable": "backend.error.unavailable",
+	"pokemon_nickname_insufficient_funds": "ui.pokemon_summary.nickname.insufficient_funds",
+	"pokemon_nickname_locked_for_pvp": "ui.pokemon_summary.nickname.blocked",
+	"pokemon_nickname_not_allowed": "ui.pokemon_summary.nickname.not_allowed",
 	"npc_reward_not_found": "backend.error.reward_unavailable",
 	"field_move_charm_not_owned": "backend.error.item_not_owned",
 	"field_move_not_known": "backend.error.field_move_unavailable",
@@ -263,7 +286,7 @@ static func _format_values(response: Dictionary) -> Dictionary:
 			"requiredFishingLevel",
 			values.get("required_level", 1)
 		))
-	for integer_level_key: String in ["pokemonLevel", "tradeLevelCap"]:
+	for integer_level_key: String in ["levelCap", "pokemonLevel", "tradeLevelCap"]:
 		if values.has(integer_level_key):
 			values[integer_level_key] = int(values.get(integer_level_key, 0))
 	return values

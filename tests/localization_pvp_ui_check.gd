@@ -44,6 +44,7 @@ func _check_pvp_runtime_translation() -> void:
 	var ranked_tabs := overlay.get("pvp_ranked_tabs") as TabContainer
 	var room_join_button := overlay.get("pvp_room_join_mode_button") as Button
 	var room_status := overlay.get("pvp_room_status_label") as Label
+	var format_select := overlay.get("pvp_queue_select") as OptionButton
 	var leaderboard_scope := overlay.get("pvp_leaderboard_scope_select") as OptionButton
 	var compact_status := overlay.get("pvp_queue_compact_status_label") as Label
 
@@ -52,6 +53,8 @@ func _check_pvp_runtime_translation() -> void:
 	_check(ranked_tabs != null and ranked_tabs.get_tab_title(0) == "Spelen", "PvP tab title renders in Dutch")
 	_check(room_join_button != null and room_join_button.text == "Deelnemen", "Private room action renders in Dutch")
 	_check(leaderboard_scope != null and leaderboard_scope.get_item_text(0) == "Dagelijks", "Leaderboard period renders in Dutch")
+	_check_ranked_dropdown_style(format_select, "Matchmaking format")
+	_check_ranked_dropdown_style(leaderboard_scope, "Leaderboard period")
 
 	overlay.call("_on_pvp_room_mode_selected", "join")
 	overlay.call("_set_pvp_status_key", "ui.pvp.room.waiting")
@@ -85,6 +88,30 @@ func _check_pvp_runtime_translation() -> void:
 		if loader != null:
 			loader.free()
 	overlay.free()
+
+
+func _check_ranked_dropdown_style(option: OptionButton, label: String) -> void:
+	_check(option != null, "%s dropdown exists" % label)
+	if option == null:
+		return
+	var popup := option.get_popup()
+	_check(option.has_theme_icon_override("arrow"), "%s uses the Ranked dropdown arrow" % label)
+	_check(
+		option.has_theme_stylebox_override("normal")
+		and option.has_theme_stylebox_override("hover")
+		and option.has_theme_stylebox_override("disabled"),
+		"%s uses styled closed states" % label
+	)
+	_check(
+		popup.has_theme_stylebox_override("panel")
+		and popup.has_theme_stylebox_override("hover"),
+		"%s uses styled popup states" % label
+	)
+	_check(
+		popup.has_theme_icon_override("radio_checked")
+		and popup.has_theme_icon_override("radio_unchecked"),
+		"%s uses custom selection indicators" % label
+	)
 
 
 func _check(condition: bool, label: String) -> void:

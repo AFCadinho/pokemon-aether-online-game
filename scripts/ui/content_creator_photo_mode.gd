@@ -4,10 +4,12 @@ extends CanvasLayer
 const DROPDOWN_ARROW: Texture2D = preload("res://assets/ui/photo_mode_dropdown_arrow.svg")
 const DROPDOWN_RADIO_CHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_checked.svg")
 const DROPDOWN_RADIO_UNCHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_unchecked.svg")
+const PhotoZoom := preload("res://scripts/ui/content_creator_photo_zoom.gd")
 const CAMERA_MOVE_SPEED := 360.0
 const CAMERA_FAST_MOVE_MULTIPLIER := 2.25
-const MIN_ZOOM := 0.75
-const MAX_ZOOM := 3.0
+const MIN_ZOOM_FACTOR := PhotoZoom.MIN_FACTOR
+const MAX_ZOOM_FACTOR := PhotoZoom.MAX_FACTOR
+const DEFAULT_ZOOM_FACTOR := PhotoZoom.DEFAULT_FACTOR
 const SCREENSHOT_DIRECTORY := "user://screenshots"
 const LIGHTING_PRESET_HOURS: Array[float] = [-1.0, 6.5, 12.0, 18.5, 0.0]
 const PLAYER_DIRECTIONS: Array[Vector2] = [
@@ -62,6 +64,7 @@ var day_night_controller: Node
 var weather_controller: Node
 var original_camera_position := Vector2.ZERO
 var original_camera_zoom := Vector2.ONE
+var current_zoom_factor := DEFAULT_ZOOM_FACTOR
 var original_player_direction := Vector2.DOWN
 var hud_hidden := true
 var controls_hidden := false
@@ -75,8 +78,8 @@ func _ready() -> void:
 	add_to_group("content_creator_photo_mode")
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	visible = false
-	zoom_slider.min_value = MIN_ZOOM
-	zoom_slider.max_value = MAX_ZOOM
+	zoom_slider.min_value = MIN_ZOOM_FACTOR
+	zoom_slider.max_value = MAX_ZOOM_FACTOR
 	zoom_slider.step = 0.05
 	exposure_slider.min_value = 0.65
 	exposure_slider.max_value = 1.4
@@ -212,10 +215,10 @@ func _unhandled_input(event: InputEvent) -> void:
 				reset_camera()
 				get_viewport().set_input_as_handled()
 			KEY_EQUAL, KEY_KP_ADD:
-				zoom_slider.value = minf(zoom_slider.value + zoom_slider.step, MAX_ZOOM)
+				zoom_slider.value = minf(zoom_slider.value + zoom_slider.step, MAX_ZOOM_FACTOR)
 				get_viewport().set_input_as_handled()
 			KEY_MINUS, KEY_KP_SUBTRACT:
-				zoom_slider.value = maxf(zoom_slider.value - zoom_slider.step, MIN_ZOOM)
+				zoom_slider.value = maxf(zoom_slider.value - zoom_slider.step, MIN_ZOOM_FACTOR)
 				get_viewport().set_input_as_handled()
 
 
@@ -245,11 +248,12 @@ func open_photo_mode() -> void:
 	)
 	active = true
 	visible = true
+	current_zoom_factor = DEFAULT_ZOOM_FACTOR
 	hud_hidden = true
 	controls_hidden = false
 	hud_toggle.set_pressed_no_signal(true)
 	controls_toggle.set_pressed_no_signal(false)
-	zoom_slider.set_value_no_signal(camera.zoom.x)
+	zoom_slider.set_value_no_signal(current_zoom_factor)
 	direction_select.select(0)
 	lighting_preset_select.select(0)
 	exposure_slider.set_value_no_signal(1.0)
@@ -293,8 +297,9 @@ func reset_camera() -> void:
 	if camera == null or not is_instance_valid(camera):
 		return
 	camera.position = original_camera_position
-	camera.zoom = original_camera_zoom
-	zoom_slider.set_value_no_signal(camera.zoom.x)
+	current_zoom_factor = DEFAULT_ZOOM_FACTOR
+	camera.zoom = resolve_zoom_for_baseline(original_camera_zoom, current_zoom_factor)
+	zoom_slider.set_value_no_signal(current_zoom_factor)
 	_refresh_zoom_value()
 	camera.reset_smoothing()
 	camera.force_update_scroll()
@@ -547,14 +552,40 @@ func _dropdown_popup_item_style(
 
 
 func _on_zoom_changed(value: float) -> void:
+	current_zoom_factor = clamp_zoom_factor(value)
 	if camera != null and is_instance_valid(camera):
-		camera.zoom = Vector2(value, value)
+		camera.zoom = resolve_zoom_for_baseline(original_camera_zoom, current_zoom_factor)
 		camera.force_update_scroll()
 	_refresh_zoom_value()
 
 
 func _set_zoom_from_pointer(value: float) -> void:
-	zoom_slider.value = clampf(value, MIN_ZOOM, MAX_ZOOM)
+	zoom_slider.value = clamp_zoom_factor(value)
+
+
+func apply_camera_baseline_zoom(target_camera: Camera2D, baseline_zoom: Vector2) -> bool:
+	if (
+		not active
+		or camera == null
+		or not is_instance_valid(camera)
+		or camera != target_camera
+		or baseline_zoom.x <= 0.0
+		or baseline_zoom.y <= 0.0
+	):
+		return false
+	original_camera_zoom = baseline_zoom
+	camera.zoom = resolve_zoom_for_baseline(original_camera_zoom, current_zoom_factor)
+	camera.reset_smoothing()
+	camera.force_update_scroll()
+	return true
+
+
+static func clamp_zoom_factor(value: float) -> float:
+	return PhotoZoom.clamp_factor(value)
+
+
+static func resolve_zoom_for_baseline(baseline_zoom: Vector2, factor: float) -> Vector2:
+	return PhotoZoom.resolve_zoom(baseline_zoom, factor)
 
 
 func _pointer_over_controls(pointer_position: Vector2) -> bool:
@@ -625,7 +656,7 @@ func _apply_lighting_override() -> void:
 
 func _refresh_zoom_value() -> void:
 	if zoom_value_label != null:
-		zoom_value_label.text = "%.2fx" % zoom_slider.value
+		zoom_value_label.text = "%.2fx" % current_zoom_factor
 
 
 func _refresh_exposure_value() -> void:

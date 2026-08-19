@@ -43,6 +43,20 @@ func format_move_event(actor: String, move_name: String) -> String:
 		"move": _localized_content_name("moves", move_name, move_name),
 	})
 
+func format_pokemon_identity(display_name: String, species: String) -> String:
+	var safe_name := display_name.strip_edges()
+	var safe_species := species.strip_edges()
+	if safe_species != "":
+		safe_species = _localized_content_name("species", safe_species, safe_species)
+	if safe_name == "":
+		return safe_species if safe_species != "" else _t("battle.fallback.pokemon")
+	if safe_species == "" or _normalize_pokemon_identity(safe_name) == _normalize_pokemon_identity(safe_species):
+		return safe_name
+	return _t("battle.event.pokemon_identity", {
+		"nickname": safe_name,
+		"species": safe_species,
+	})
+
 func format_move_source_message(event: Dictionary, actor: String) -> String:
 	var raw_source := str(event.get("source", ""))
 	if raw_source == "" or actor == "":
@@ -725,6 +739,9 @@ func _localized_content_name(kind: String, content_id: String, fallback_name: St
 	if content_localization != null and content_localization.has_method("display_name"):
 		return str(content_localization.call("display_name", kind, content_id, fallback_name))
 	return fallback_name
+
+func _normalize_pokemon_identity(value: String) -> String:
+	return value.to_lower().replace(" ", "").replace("-", "").replace("_", "").replace(".", "").replace("'", "").replace("’", "")
 
 func _is_reflection_effect(raw_effect: String, effect: String) -> bool:
 	var source_kind := ""

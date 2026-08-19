@@ -16,6 +16,7 @@ func _init() -> void:
 	_check_stale_switch_event_does_not_revive_canonical_faint()
 	_check_pursuit_faint_keeps_pending_iron_treads_available()
 	_check_historical_switch_renders_before_its_faint()
+	_check_double_faint_switch_restores_public_opponent_level()
 	_check_entry_hazard_faint_preserves_chained_force_switch()
 	_check_pivot_ko_waiting_player_does_not_infer_force_switch()
 	_check_status_event_normalizes_badly_poisoned()
@@ -474,6 +475,79 @@ func _check_historical_switch_renders_before_its_faint() -> void:
 	var team_after_faint: Array = state.get_player_team("p1")
 	_check_equal(bool((team_after_faint[1] as Dictionary).get("fainted", false)), true, "later faint event re-applies Cinderace faint")
 	_check_equal(int((team_after_faint[1] as Dictionary).get("hp", -1)), 0, "later faint event restores zero HP")
+
+
+func _check_double_faint_switch_restores_public_opponent_level() -> void:
+	var state = BattleStateScript.new()
+	state.load_from_api_response({
+		"success": true,
+		"battleId": "double-faint-npc-switch-level-test",
+		"requests": {
+			"p1": {
+				"side": {
+					"pokemon": [
+						{
+							"ident": "p1: Mankey", "species": "Mankey", "level": 11,
+							"active": true, "condition": "1/28 psn", "hp": 1, "maxHp": 28,
+							"metadataSlot": 1, "pokemonKey": "p1:slot:1",
+						},
+						{
+							"ident": "p1: Pikipek", "species": "Pikipek", "level": 11,
+							"active": false, "condition": "29/29", "hp": 29, "maxHp": 29,
+							"metadataSlot": 2, "pokemonKey": "p1:slot:2",
+						},
+					],
+				},
+			},
+			"p2": {
+				"side": {
+					"pokemon": [
+						{
+							"ident": "p2: Weedle", "species": "Weedle", "level": 6,
+							"active": true, "condition": "1/18", "hp": 1, "maxHp": 18,
+							"metadataSlot": 1, "pokemonKey": "p2:slot:1",
+						},
+						{
+							"ident": "p2: Caterpie", "species": "Caterpie",
+							"active": false, "condition": "18/18", "hp": 18, "maxHp": 18,
+							"metadataSlot": 2, "pokemonKey": "p2:slot:2",
+						},
+					],
+				},
+			},
+		},
+		"events": [],
+	}, true)
+
+	state.apply_event_conditions([
+		{
+			"type": "damage", "target": "p2a: Weedle", "condition": "0 fnt",
+			"hp": 0, "maxHp": 18, "metadataSlot": 1, "pokemonKey": "p2:slot:1",
+		},
+		{
+			"type": "faint", "target": "p2a: Weedle", "condition": "0 fnt",
+			"metadataSlot": 1, "pokemonKey": "p2:slot:1",
+		},
+		{
+			"type": "damage", "target": "p1a: Mankey", "condition": "0 fnt",
+			"hp": 0, "maxHp": 28, "metadataSlot": 1, "pokemonKey": "p1:slot:1",
+		},
+		{
+			"type": "faint", "target": "p1a: Mankey", "condition": "0 fnt",
+			"metadataSlot": 1, "pokemonKey": "p1:slot:1",
+		},
+		{
+			"type": "switch", "pokemon": "p1a: Pikipek", "details": "Pikipek, L11",
+			"condition": "29/29", "metadataSlot": 2, "pokemonKey": "p1:slot:2",
+		},
+		{
+			"type": "switch", "pokemon": "p2a: Caterpie", "details": "Caterpie, L6",
+			"condition": "18/18", "metadataSlot": 2, "pokemonKey": "p2:slot:2",
+		},
+	])
+
+	_check_equal(state.get_active_pokemon_species("p2"), "Caterpie", "double faint activates the NPC replacement")
+	_check_equal(state.get_active_pokemon_level("p2"), 6, "NPC switch details restore the public level before HUD refresh")
 
 func _check_entry_hazard_faint_preserves_chained_force_switch() -> void:
 	_check_equal(

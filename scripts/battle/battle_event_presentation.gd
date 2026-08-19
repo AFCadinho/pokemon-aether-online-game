@@ -162,20 +162,32 @@ func build(event_data: Dictionary) -> Dictionary:
 				to_name = _format_actor(str(event_data.get("pokemon", "")), false)
 			if to_name == "":
 				to_name = ""
+			var from_log_name := (
+				event_text_formatter.format_pokemon_identity(
+					from_name,
+					_get_switch_ref_species(event_data, "fromRef")
+				)
+				if from_name.strip_edges() != ""
+				else ""
+			)
+			var to_log_name := event_text_formatter.format_pokemon_identity(
+				to_name,
+				_get_switch_ref_species(event_data, "toRef")
+			)
 			if player_id == "p1":
 				if forced_switch:
-					presentation["log_message"] = event_text_formatter.format_player_forced_switch_log_message(from_name, to_name)
+					presentation["log_message"] = event_text_formatter.format_player_forced_switch_log_message(from_log_name, to_log_name)
 					presentation["battle_message"] = event_text_formatter.format_player_forced_switch_battle_message(from_name, to_name)
 				else:
-					presentation["log_message"] = event_text_formatter.format_player_switch_log_message(from_name, to_name)
+					presentation["log_message"] = event_text_formatter.format_player_switch_log_message(from_log_name, to_log_name)
 					presentation["battle_message"] = event_text_formatter.format_player_switch_battle_message(from_name, to_name)
 			else:
 				var trainer_name := _get_player_display_name(player_id)
 				if forced_switch:
-					presentation["log_message"] = event_text_formatter.format_opponent_forced_switch_log_message(trainer_name, from_name, to_name)
+					presentation["log_message"] = event_text_formatter.format_opponent_forced_switch_log_message(trainer_name, from_log_name, to_log_name)
 					presentation["battle_message"] = event_text_formatter.format_opponent_forced_switch_battle_message(trainer_name, to_name)
 				else:
-					presentation["log_message"] = event_text_formatter.format_opponent_switch_log_message(trainer_name, from_name, to_name)
+					presentation["log_message"] = event_text_formatter.format_opponent_switch_log_message(trainer_name, from_log_name, to_log_name)
 					presentation["battle_message"] = event_text_formatter.format_opponent_switch_battle_message(trainer_name, to_name)
 			presentation["add_blank_after"] = true
 
@@ -453,6 +465,13 @@ func build(event_data: Dictionary) -> Dictionary:
 
 	_assign_log_kinds(presentation, event_data)
 	return presentation
+
+func _get_switch_ref_species(event_data: Dictionary, ref_key: String) -> String:
+	var ref_value: Variant = event_data.get(ref_key, {})
+	if not (ref_value is Dictionary):
+		return ""
+	var ref: Dictionary = ref_value as Dictionary
+	return str(ref.get("displaySpecies", ref.get("species", ""))).strip_edges()
 
 
 func _assign_log_kinds(presentation: Dictionary, event_data: Dictionary) -> void:

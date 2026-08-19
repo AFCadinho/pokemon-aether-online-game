@@ -4,6 +4,9 @@ class_name StoryHook
 
 const ALLOWED_TRIGGERS: Array[String] = ["interact", "area_enter"]
 const COMPLETE_ATTEMPTS := 2
+const PLAYER_ACTIONABLE_SEQUENCE_ERROR_CODES: Array[String] = [
+	"pokemon_level_cap_party_ineligible",
+]
 
 @export var interaction_id := ""
 @export var entity_id := ""
@@ -77,7 +80,7 @@ func try_handle_interaction(host: Node, player: Node2D, trigger: String) -> Dict
 			"battleId": str(sequence_result.get("battleId", "")),
 		})
 	if not bool(sequence_result.get("success", false)):
-		await _show_generic_error()
+		await _show_sequence_error(sequence_result)
 		return _finish({
 			"success": false,
 			"handled": true,
@@ -190,3 +193,17 @@ func _new_request_id() -> String:
 
 func _show_generic_error() -> void:
 	await GameErrorDialogService.show_report_to_staff_message()
+
+
+func _show_sequence_error(sequence_result: Dictionary) -> void:
+	if _is_player_actionable_sequence_error(sequence_result):
+		await GameErrorDialogService.show_response(sequence_result)
+		return
+	await _show_generic_error()
+
+
+func _is_player_actionable_sequence_error(sequence_result: Dictionary) -> bool:
+	return (
+		BackendErrorLocalizationService.error_code(sequence_result)
+		in PLAYER_ACTIONABLE_SEQUENCE_ERROR_CODES
+	)

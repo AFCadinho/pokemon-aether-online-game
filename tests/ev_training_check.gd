@@ -111,6 +111,17 @@ func _init() -> void:
 		and ui_overlay_source.contains("_activate_ui_panel(pokemon_summary_ev_allocate_popup)\n\t# Summary cards use the modal layer"),
 		"EV allocation must remain visible above the Pokemon summary card"
 	)
+	_assert(
+		ui_overlay_source.contains("const POKEMON_EV_STORAGE_TOTAL_LIMIT := POKEMON_EV_STAT_LIMIT * 6")
+		and ui_overlay_source.contains("var max_gain: int = max(POKEMON_EV_STAT_LIMIT - current_value, 0)")
+		and not ui_overlay_source.contains("POKEMON_EV_TOTAL_LIMIT - allocated_total - stored_total"),
+		"stored EV capacity must be independent from the 510 allocated EV limit"
+	)
+	_assert(
+		ui_overlay_source.contains('LocalizationManager.text("ui.pokemon_summary.evs.stored", {')
+		and not ui_overlay_source.contains('LocalizationManager.text("ui.pokemon_summary.evs.available_capacity"'),
+		"stored EV totals belong in the section title without a duplicate capacity row"
+	)
 	print("EV training checks passed.")
 	quit(0)
 
