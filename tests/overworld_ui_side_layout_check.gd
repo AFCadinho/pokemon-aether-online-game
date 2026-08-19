@@ -288,11 +288,13 @@ func _init() -> void:
 		"visible chat metadata gets first-line clearance while plain names stay left aligned"
 	)
 	_check(
-		script_source.contains("var inline_single_pokemon := (")
-		and script_source.contains('inline_pokemon_attachment.name = "InlinePokemonAttachment"')
+		script_source.contains("var inline_pokemon_share := (")
+		and script_source.contains("and not pokemon_attachments.is_empty()")
+		and script_source.contains('attachment_group.name = "InlinePokemonAttachments"')
+		and script_source.contains("for pokemon_payload: Dictionary in pokemon_attachments:")
 		and script_source.contains('inline_spacer.name = "InlinePokemonSpacer"')
-		and script_source.contains("not inline_single_pokemon and not pokemon_attachments.is_empty()"),
-		"a single Pokemon-only share stays clickable beside the sender instead of using a new row"
+		and script_source.contains("not inline_pokemon_share and not pokemon_attachments.is_empty()"),
+		"Pokemon-only shares keep up to a full party clickable beside the sender"
 	)
 	_check(
 		script_source.contains('message_list.add_theme_constant_override("separation", 5)'),

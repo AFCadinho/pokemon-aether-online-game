@@ -39160,22 +39160,26 @@ func _add_user_chat_message(
 	if not role.is_empty():
 		role_name = str(role.get("badge", "")).strip_edges()
 	var message_context := _chat_message_context(user, display_name, text, sent_at)
-	var inline_single_pokemon := (
+	var inline_pokemon_share := (
 		text.strip_edges() == ""
-		and pokemon_attachments.size() == 1
+		and not pokemon_attachments.is_empty()
 		and shiny_hunt_attachment.is_empty()
 	)
-	var inline_pokemon_attachment: Control = null
-	if inline_single_pokemon:
-		inline_pokemon_attachment = _create_chat_pokemon_attachment_button(
-			_pokemon_preview_payload_with_current_trainer(
-				pokemon_attachments[0],
-				display_name,
-				str(user.get("id", user.get("userId", user.get("user_id", ""))))
-			),
-			true
-		)
-		inline_pokemon_attachment.name = "InlinePokemonAttachment"
+	var inline_pokemon_attachments: Control = null
+	if inline_pokemon_share:
+		var attachment_group := HBoxContainer.new()
+		attachment_group.name = "InlinePokemonAttachments"
+		attachment_group.add_theme_constant_override("separation", 4)
+		for pokemon_payload: Dictionary in pokemon_attachments:
+			attachment_group.add_child(_create_chat_pokemon_attachment_button(
+				_pokemon_preview_payload_with_current_trainer(
+					pokemon_payload,
+					display_name,
+					str(user.get("id", user.get("userId", user.get("user_id", ""))))
+				),
+				true
+			))
+		inline_pokemon_attachments = attachment_group
 
 	row.add_child(_create_chat_sender_message_line(
 		display_name,
@@ -39186,11 +39190,11 @@ func _add_user_chat_message(
 		role_name,
 		role_color,
 		message_context,
-		inline_pokemon_attachment
+		inline_pokemon_attachments
 	))
 
 	var has_visual_attachments := (
-		(not inline_single_pokemon and not pokemon_attachments.is_empty())
+		(not inline_pokemon_share and not pokemon_attachments.is_empty())
 		or not shiny_hunt_attachment.is_empty()
 	)
 	if has_visual_attachments:
@@ -39198,7 +39202,7 @@ func _add_user_chat_message(
 		attachment_row.name = "Attachments"
 		attachment_row.add_theme_constant_override("separation", 4)
 		row.add_child(attachment_row)
-		if not inline_single_pokemon:
+		if not inline_pokemon_share:
 			for pokemon_payload: Dictionary in pokemon_attachments:
 				attachment_row.add_child(_create_chat_pokemon_attachment_button(
 					_pokemon_preview_payload_with_current_trainer(
@@ -39222,7 +39226,7 @@ func _create_chat_sender_message_line(
 	role_name: String,
 	role_color: String,
 	message_context: Dictionary,
-	inline_pokemon_attachment: Control = null
+	inline_pokemon_attachments: Control = null
 ) -> Control:
 	var line := PanelContainer.new()
 	line.name = "MessageLine"
@@ -39244,7 +39248,7 @@ func _create_chat_sender_message_line(
 	var channel_prefix := _create_chat_channel_prefix(channel, target_user_id)
 	channel_prefix.size_flags_vertical = (
 		Control.SIZE_SHRINK_CENTER
-		if inline_pokemon_attachment != null
+		if inline_pokemon_attachments != null
 		else Control.SIZE_SHRINK_BEGIN
 	)
 	header.add_child(channel_prefix)
@@ -39253,17 +39257,17 @@ func _create_chat_sender_message_line(
 		var role_badge := _create_chat_role_badge(role_name, role_color)
 		role_badge.size_flags_vertical = (
 			Control.SIZE_SHRINK_CENTER
-			if inline_pokemon_attachment != null
+			if inline_pokemon_attachments != null
 			else Control.SIZE_SHRINK_BEGIN
 		)
 		header.add_child(role_badge)
 
-	if inline_pokemon_attachment != null:
+	if inline_pokemon_attachments != null:
 		var inline_spacer := Control.new()
 		inline_spacer.name = "InlinePokemonSpacer"
 		inline_spacer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		header.add_child(inline_spacer)
-		header.add_child(inline_pokemon_attachment)
+		header.add_child(inline_pokemon_attachments)
 
 	var header_tail := Control.new()
 	header_tail.name = "HeaderTail"
@@ -39667,7 +39671,7 @@ func _chat_header_prefix_width(header: HBoxContainer) -> float:
 	var visible_controls := 0
 	var separation := float(header.get_theme_constant("separation"))
 	for child: Node in header.get_children():
-		if child.name in [&"InlinePokemonSpacer", &"InlinePokemonAttachment", &"HeaderTail"]:
+		if child.name in [&"InlinePokemonSpacer", &"InlinePokemonAttachments", &"HeaderTail"]:
 			break
 		var control := child as Control
 		if control == null or not control.visible:
