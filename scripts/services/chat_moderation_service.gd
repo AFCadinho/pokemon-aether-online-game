@@ -3,7 +3,7 @@ extends Node
 class_name ChatModerationServiceNode
 
 const MUTES_ENDPOINT := "/game/chat/mutes"
-const OVERVIEW_ENDPOINT := "/game/chat/moderation/overview"
+const OVERVIEW_ENDPOINT := "/game/moderation/overview"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 

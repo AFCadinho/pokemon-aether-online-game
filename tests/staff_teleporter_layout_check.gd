@@ -34,6 +34,7 @@ func _init() -> void:
 	_check(source.contains("_can_ignore_staff_teleporter_overworld_lock()") and source.contains('"get_authorized_teleport_block_reason",'), "Staff teleports may bypass only their own modal movement lock")
 	_check(source.contains("if opening:\n\t\t_hide_staff_tools_popup()"), "Opening Staff Teleporter closes the Staff Tools launcher")
 	_check(source.contains("ModeratorTeleportService.teleport_self") and source.contains("ModeratorTeleportService.teleport_to_player") and source.contains("ModeratorTeleportService.teleport_player"), "Existing authoritative teleport actions remain intact")
+	_check(not source.contains("staff_jail_mode_button") and not source.contains("_submit_staff_jail_action"), "Detention controls no longer live in Staff Teleporter")
 
 	quit(1 if failures > 0 else 0)
 

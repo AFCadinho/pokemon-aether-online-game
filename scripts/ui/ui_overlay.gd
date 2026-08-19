@@ -858,18 +858,10 @@ var staff_teleport_player_results_status_label: Label
 var staff_teleport_player_action_hint: Label
 var staff_teleport_to_player_mode_button: Button
 var staff_teleport_send_player_mode_button: Button
-var staff_jail_mode_button: Button
 var staff_teleport_player_note_caption: Label
 var staff_teleport_player_reason_input: LineEdit
 var staff_teleport_to_player_button: Button
 var staff_teleport_send_section: Control
-var staff_jail_section: Control
-var staff_jail_duration_input: SpinBox
-var staff_jail_permanent_check: CheckBox
-var staff_jail_reason_input: LineEdit
-var staff_jail_status_label: Label
-var staff_jail_detain_button: Button
-var staff_jail_release_button: Button
 var staff_teleport_send_map_select: OptionButton
 var staff_teleport_send_point_select: OptionButton
 var staff_teleport_send_map_search: LineEdit
@@ -1837,6 +1829,9 @@ func _can_use_chat_moderation() -> bool:
 	# the two entry points cannot disagree because of a stale user projection.
 	return allowed
 
+func _can_use_moderation_center() -> bool:
+	return _can_use_chat_moderation() or _can_manage_jail()
+
 func _refresh_dev_tools_visibility() -> void:
 	var can_show_staff_action_bar: bool = _can_show_staff_action_bar()
 	var can_use_dev_tools: bool = _can_use_dev_tools()
@@ -1912,20 +1907,20 @@ func _refresh_dev_tools_visibility() -> void:
 		)
 	_refresh_staff_impersonate_button_copy()
 	if staff_teleport_button != null:
-		staff_teleport_button.visible = can_teleport or can_teleport_to_player or can_teleport_other or _can_manage_jail()
-		staff_teleport_button.disabled = not (can_teleport or can_teleport_to_player or can_teleport_other or _can_manage_jail())
+		staff_teleport_button.visible = can_teleport or can_teleport_to_player or can_teleport_other
+		staff_teleport_button.disabled = not (can_teleport or can_teleport_to_player or can_teleport_other)
 	if staff_chat_moderation_button != null:
-		staff_chat_moderation_button.visible = _can_use_chat_moderation()
-		staff_chat_moderation_button.disabled = not _can_use_chat_moderation()
+		staff_chat_moderation_button.visible = _can_use_moderation_center()
+		staff_chat_moderation_button.disabled = not _can_use_moderation_center()
 	if not has_staff_tool:
 		if staff_tools_popup != null:
 			staff_tools_popup.visible = false
 	if not can_impersonate or can_return_from_impersonation:
 		if staff_impersonate_popup != null:
 			staff_impersonate_popup.visible = false
-	if not (can_teleport or can_teleport_to_player or can_teleport_other or _can_manage_jail()) and staff_teleport_popup != null:
+	if not (can_teleport or can_teleport_to_player or can_teleport_other) and staff_teleport_popup != null:
 		staff_teleport_popup.visible = false
-	if not _can_use_chat_moderation() and staff_chat_moderation_popup != null:
+	if not _can_use_moderation_center() and staff_chat_moderation_popup != null:
 		_hide_staff_chat_moderation_popup()
 	if not can_use_dev_tools:
 		dev_actions_popup.visible = false
@@ -7923,15 +7918,6 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_send_player_mode_button.pressed.connect(_on_staff_teleport_send_player_mode_pressed)
 	player_action_mode_bar.add_child(staff_teleport_send_player_mode_button)
 
-	staff_jail_mode_button = Button.new()
-	staff_jail_mode_button.text = "Jail"
-	staff_jail_mode_button.custom_minimum_size = Vector2(0, 34)
-	staff_jail_mode_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	staff_jail_mode_button.focus_mode = Control.FOCUS_NONE
-	staff_jail_mode_button.toggle_mode = true
-	staff_jail_mode_button.pressed.connect(_on_staff_jail_mode_pressed)
-	player_action_mode_bar.add_child(staff_jail_mode_button)
-
 	staff_teleport_send_section = VBoxContainer.new()
 	staff_teleport_send_section.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_send_section.add_theme_constant_override("separation", 7)
@@ -8004,47 +7990,6 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_send_player_button.pressed.connect(_on_staff_teleport_send_player_pressed)
 	staff_teleport_player_section.add_child(staff_teleport_send_player_button)
 
-	staff_jail_section = VBoxContainer.new()
-	staff_jail_section.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	staff_jail_section.add_theme_constant_override("separation", 7)
-	staff_teleport_player_section.add_child(staff_jail_section)
-	staff_jail_section.add_child(_create_staff_teleport_section_title("Staff detention"))
-	var jail_duration_row := HBoxContainer.new()
-	jail_duration_row.add_theme_constant_override("separation", 10)
-	staff_jail_section.add_child(jail_duration_row)
-	staff_jail_duration_input = SpinBox.new()
-	staff_jail_duration_input.min_value = 1
-	staff_jail_duration_input.max_value = 525600
-	staff_jail_duration_input.value = 60
-	staff_jail_duration_input.suffix = " minutes"
-	staff_jail_duration_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	jail_duration_row.add_child(staff_jail_duration_input)
-	staff_jail_permanent_check = CheckBox.new()
-	staff_jail_permanent_check.text = "Permanent"
-	staff_jail_permanent_check.toggled.connect(_on_staff_jail_permanent_toggled)
-	jail_duration_row.add_child(staff_jail_permanent_check)
-	staff_jail_reason_input = LineEdit.new()
-	staff_jail_reason_input.placeholder_text = "Moderation reason (required)"
-	staff_jail_reason_input.max_length = 255
-	staff_jail_section.add_child(staff_jail_reason_input)
-	var jail_actions := HBoxContainer.new()
-	jail_actions.add_theme_constant_override("separation", 8)
-	staff_jail_section.add_child(jail_actions)
-	staff_jail_detain_button = Button.new()
-	staff_jail_detain_button.text = "Detain player"
-	staff_jail_detain_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	staff_jail_detain_button.pressed.connect(_on_staff_jail_detain_pressed)
-	jail_actions.add_child(staff_jail_detain_button)
-	staff_jail_release_button = Button.new()
-	staff_jail_release_button.text = "Release detention"
-	staff_jail_release_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	staff_jail_release_button.pressed.connect(_on_staff_jail_release_pressed)
-	jail_actions.add_child(staff_jail_release_button)
-	staff_jail_status_label = Label.new()
-	staff_jail_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	staff_jail_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	staff_jail_section.add_child(staff_jail_status_label)
-
 	_apply_button_style(close_button)
 	_apply_line_edit_style(staff_impersonate_token_input)
 	_apply_button_style(impersonate_cancel_button)
@@ -8054,7 +7999,6 @@ func _setup_staff_impersonation_tools() -> void:
 	_apply_button_style(staff_teleport_player_tab_button)
 	_apply_button_style(staff_teleport_to_player_mode_button, "primary")
 	_apply_button_style(staff_teleport_send_player_mode_button)
-	_apply_button_style(staff_jail_mode_button)
 	_apply_line_edit_style(staff_teleport_destination_search)
 	_apply_line_edit_style(staff_teleport_spawn_search)
 	_apply_line_edit_style(staff_teleport_send_map_search)
@@ -8065,9 +8009,6 @@ func _setup_staff_impersonation_tools() -> void:
 	_apply_line_edit_style(staff_teleport_player_search_input)
 	_apply_button_style(staff_teleport_to_player_button, "primary")
 	_apply_button_style(staff_teleport_send_player_button, "danger")
-	_apply_line_edit_style(staff_jail_reason_input)
-	_apply_button_style(staff_jail_detain_button, "danger")
-	_apply_button_style(staff_jail_release_button, "primary")
 	_apply_staff_teleport_revamp(
 		teleport_header,
 		teleport_title,
@@ -8380,9 +8321,6 @@ func _build_staff_teleport_player_workspace() -> void:
 		send_content.reparent(safe_margin)
 		action_layout.add_child(safe_panel)
 		staff_teleport_send_section = safe_panel
-
-	if staff_jail_section != null:
-		staff_jail_section.reparent(action_layout)
 
 	var player_spacer := Control.new()
 	player_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -26770,7 +26708,7 @@ func _hide_staff_tools_popup() -> void:
 
 
 func _on_staff_chat_moderation_button_pressed() -> void:
-	if not _can_use_chat_moderation() or staff_chat_moderation_popup == null:
+	if not _can_use_moderation_center() or staff_chat_moderation_popup == null:
 		return
 	_hide_staff_tools_popup()
 	staff_chat_moderation_popup.call("open_center")
@@ -26875,10 +26813,6 @@ func _on_staff_teleport_send_player_mode_pressed() -> void:
 	_set_staff_teleport_player_action_mode("send_safe")
 
 
-func _on_staff_jail_mode_pressed() -> void:
-	_set_staff_teleport_player_action_mode("jail")
-
-
 func _set_staff_teleport_active_tab(tab_id: String) -> void:
 	staff_teleport_active_tab = tab_id
 	_refresh_staff_teleport_tab_visibility()
@@ -26891,7 +26825,7 @@ func _set_staff_teleport_player_action_mode(mode_id: String) -> void:
 
 func _refresh_staff_teleport_tab_visibility() -> void:
 	var can_self := _can_teleport_self()
-	var can_player := _can_teleport_to_player() or _can_teleport_other_player() or _can_manage_jail()
+	var can_player := _can_teleport_to_player() or _can_teleport_other_player()
 	if staff_teleport_active_tab == "self" and not can_self:
 		staff_teleport_active_tab = "player"
 	if staff_teleport_active_tab == "player" and not can_player:
@@ -26900,15 +26834,12 @@ func _refresh_staff_teleport_tab_visibility() -> void:
 		staff_teleport_player_action_mode = "send_safe"
 	if staff_teleport_player_action_mode == "send_safe" and not _can_teleport_other_player():
 		staff_teleport_player_action_mode = "to_player"
-	if staff_teleport_player_action_mode == "jail" and not _can_manage_jail():
-		staff_teleport_player_action_mode = "to_player"
 	var show_self := staff_teleport_active_tab == "self" and can_self
 	var show_player := staff_teleport_active_tab == "player" and can_player
 	var selected_player := _get_selected_staff_teleport_player()
 	var player_is_selected := staff_teleport_player_selection_confirmed and int(selected_player.get("targetPlayerId", 0)) > 0
 	var show_to_player := show_player and player_is_selected and staff_teleport_player_action_mode == "to_player" and _can_teleport_to_player()
 	var show_send_safe := show_player and player_is_selected and staff_teleport_player_action_mode == "send_safe" and _can_teleport_other_player()
-	var show_jail := show_player and player_is_selected and staff_teleport_player_action_mode == "jail" and _can_manage_jail()
 
 	if staff_teleport_self_tab_button != null:
 		staff_teleport_self_tab_button.visible = can_self
@@ -26928,19 +26859,12 @@ func _refresh_staff_teleport_tab_visibility() -> void:
 		staff_teleport_send_player_mode_button.visible = show_player and player_is_selected and _can_teleport_other_player()
 		staff_teleport_send_player_mode_button.button_pressed = show_send_safe
 		_apply_button_style(staff_teleport_send_player_mode_button, "danger")
-	if staff_jail_mode_button != null:
-		staff_jail_mode_button.visible = show_player and player_is_selected and _can_manage_jail()
-		staff_jail_mode_button.button_pressed = show_jail
-		_apply_button_style(staff_jail_mode_button, "danger")
 	if staff_teleport_player_action_hint != null:
 		if not player_is_selected:
 			staff_teleport_player_action_hint.text = LocalizationManager.text(
 				"ui.staff.teleport.select_player_from_list"
 			)
 			staff_teleport_player_action_hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
-		elif show_jail:
-			staff_teleport_player_action_hint.text = "Detain this player in Viridian City jail or release an active staff detention."
-			staff_teleport_player_action_hint.add_theme_color_override("font_color", UI_DANGER)
 		elif show_send_safe:
 			staff_teleport_player_action_hint.text = LocalizationManager.text(
 				"ui.staff.teleport.move_player_warning"
@@ -26958,8 +26882,6 @@ func _refresh_staff_teleport_tab_visibility() -> void:
 			staff_teleport_player_action_hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	if staff_teleport_send_section != null:
 		staff_teleport_send_section.visible = show_send_safe
-	if staff_jail_section != null:
-		staff_jail_section.visible = show_jail
 	if staff_teleport_player_divider != null:
 		staff_teleport_player_divider.visible = false
 	if staff_teleport_self_reason_input != null:
@@ -26992,64 +26914,8 @@ func _refresh_staff_teleport_tab_visibility() -> void:
 		staff_teleport_send_player_button.visible = show_send_safe
 
 
-func _on_staff_jail_permanent_toggled(permanent: bool) -> void:
-	if staff_jail_duration_input != null:
-		staff_jail_duration_input.editable = not permanent
-
-
-func _on_staff_jail_detain_pressed() -> void:
-	await _submit_staff_jail_action(false)
-
-
-func _on_staff_jail_release_pressed() -> void:
-	await _submit_staff_jail_action(true)
-
-
-func _submit_staff_jail_action(release: bool) -> void:
-	if not _can_manage_jail() or staff_teleport_in_flight:
-		return
-	var selected_player := _get_selected_staff_teleport_player()
-	var target_player_id := int(selected_player.get("targetPlayerId", 0))
-	var reason := staff_jail_reason_input.text.strip_edges() if staff_jail_reason_input != null else ""
-	if target_player_id <= 0:
-		staff_jail_status_label.text = "Select an online player first."
-		return
-	if reason.length() < 3:
-		staff_jail_status_label.text = "Enter a moderation reason of at least 3 characters."
-		staff_jail_reason_input.grab_focus()
-		return
-	staff_teleport_in_flight = true
-	staff_jail_detain_button.disabled = true
-	staff_jail_release_button.disabled = true
-	staff_jail_status_label.text = "Applying moderation action..."
-	var result: Dictionary
-	if release:
-		result = await ModeratorTeleportService.release_player_from_jail(target_player_id, reason)
-	else:
-		result = await ModeratorTeleportService.detain_player(
-			target_player_id,
-			int(staff_jail_duration_input.value),
-			staff_jail_permanent_check.button_pressed,
-			reason
-		)
-	staff_teleport_in_flight = false
-	staff_jail_detain_button.disabled = false
-	staff_jail_release_button.disabled = false
-	if not bool(result.get("success", false)):
-		staff_jail_status_label.text = str(result.get("error", "The jail action failed."))
-		staff_jail_status_label.add_theme_color_override("font_color", UI_DANGER)
-		return
-	staff_jail_status_label.add_theme_color_override("font_color", Color("#79d9f2"))
-	staff_jail_status_label.text = (
-		"Staff detention released."
-		if release
-		else "Player detained in Viridian City jail."
-	)
-	staff_jail_reason_input.clear()
-
-
 func _on_staff_teleport_button_pressed() -> void:
-	if not (_can_teleport_self() or _can_teleport_to_player() or _can_teleport_other_player() or _can_manage_jail()):
+	if not (_can_teleport_self() or _can_teleport_to_player() or _can_teleport_other_player()):
 		_add_chat_message(LocalizationManager.text("ui.staff.error.no_teleport_permission"))
 		return
 	if staff_teleport_popup == null:
@@ -27121,7 +26987,7 @@ func _load_staff_teleport_points_if_needed(force := false) -> void:
 
 
 func _load_staff_teleport_online_players_if_needed(force := false) -> void:
-	if not (_can_teleport_to_player() or _can_teleport_other_player() or _can_manage_jail()):
+	if not (_can_teleport_to_player() or _can_teleport_other_player()):
 		return
 	if (not force and not staff_teleport_online_players.is_empty()) or staff_teleport_players_loading:
 		return

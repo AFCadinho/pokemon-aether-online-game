@@ -15,7 +15,13 @@ const BORDER := Color("#31506aaa")
 const AUTO_REFRESH_SECONDS := 15.0
 
 var active_tab := "online"
-var overview: Dictionary = {"online": [], "muted": [], "recent": []}
+var overview: Dictionary = {
+	"capabilities": {},
+	"online": [],
+	"muted": [],
+	"detained": [],
+	"recent": [],
+}
 var loaded_at_unix := 0.0
 var refresh_in_flight := false
 var countdown_elapsed := 0.0
@@ -24,11 +30,24 @@ var expiry_refresh_requested := false
 
 var online_tab_button: Button
 var muted_tab_button: Button
+var detained_tab_button: Button
 var recent_tab_button: Button
 var search_input: LineEdit
 var rows: VBoxContainer
 var status_label: Label
 var refresh_button: Button
+var detention_overlay: CenterContainer
+var detention_dialog: PanelContainer
+var detention_title: Label
+var detention_duration_row: HBoxContainer
+var detention_duration_input: SpinBox
+var detention_permanent_check: CheckBox
+var detention_reason_input: LineEdit
+var detention_status_label: Label
+var detention_confirm_button: Button
+var detention_target: Dictionary = {}
+var detention_release_mode := false
+var detention_in_flight := false
 
 
 func _ready() -> void:
@@ -52,6 +71,7 @@ func open_center() -> void:
 
 
 func close_center() -> void:
+	_hide_detention_dialog()
 	visible = false
 	set_process(false)
 	closed.emit()
@@ -73,7 +93,9 @@ func refresh_overview() -> void:
 		))
 		return
 	var body_value: Variant = result.get("body", {})
-	overview = body_value if body_value is Dictionary else {"online": [], "muted": [], "recent": []}
+	overview = body_value if body_value is Dictionary else {
+		"capabilities": {}, "online": [], "muted": [], "detained": [], "recent": []
+	}
 	loaded_at_unix = Time.get_unix_time_from_system()
 	auto_refresh_elapsed = 0.0
 	expiry_refresh_requested = false
@@ -93,9 +115,9 @@ func _process(delta: float) -> void:
 	if countdown_elapsed < 1.0:
 		return
 	countdown_elapsed = 0.0
-	if active_tab in ["online", "muted"] and not _array_from_value(overview.get("muted", [])).is_empty():
+	if active_tab in ["online", "muted", "detained"]:
 		_render_active_tab()
-		if not expiry_refresh_requested and _has_expired_mute():
+		if not expiry_refresh_requested and (_has_expired_mute() or _has_expired_detention()):
 			expiry_refresh_requested = true
 			refresh_overview.call_deferred()
 
@@ -144,9 +166,11 @@ func _build_ui() -> void:
 	layout.add_child(tabs)
 	online_tab_button = _create_tab_button("online")
 	muted_tab_button = _create_tab_button("muted")
+	detained_tab_button = _create_tab_button("detained")
 	recent_tab_button = _create_tab_button("recent")
 	tabs.add_child(online_tab_button)
 	tabs.add_child(muted_tab_button)
+	tabs.add_child(detained_tab_button)
 	tabs.add_child(recent_tab_button)
 
 	search_input = LineEdit.new()
@@ -171,6 +195,8 @@ func _build_ui() -> void:
 	status_label.add_theme_font_size_override("font_size", 12)
 	layout.add_child(status_label)
 
+	_build_detention_dialog()
+
 
 func _create_tab_button(tab_id: String) -> Button:
 	var button := Button.new()
@@ -188,12 +214,15 @@ func _select_tab(tab_id: String) -> void:
 func _refresh_tabs() -> void:
 	var online_count := _array_from_value(overview.get("online", [])).size()
 	var muted_count := _array_from_value(overview.get("muted", [])).size()
+	var detained_count := _array_from_value(overview.get("detained", [])).size()
 	var recent_count := _array_from_value(overview.get("recent", [])).size()
 	online_tab_button.text = LocalizationManager.text("ui.staff.chat.online", {"count": online_count})
 	muted_tab_button.text = LocalizationManager.text("ui.staff.chat.muted", {"count": muted_count})
+	detained_tab_button.text = LocalizationManager.text("ui.staff.chat.detained", {"count": detained_count})
 	recent_tab_button.text = LocalizationManager.text("ui.staff.chat.recent", {"count": recent_count})
 	_style_button(online_tab_button, active_tab == "online")
 	_style_button(muted_tab_button, active_tab == "muted")
+	_style_button(detained_tab_button, active_tab == "detained")
 	_style_button(recent_tab_button, active_tab == "recent")
 	search_input.placeholder_text = LocalizationManager.text(
 		"ui.staff.chat.search_actions" if active_tab == "recent" else "ui.staff.chat.search"
@@ -275,15 +304,185 @@ func _create_player_row(entry: Dictionary) -> Control:
 		reason.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		reason.add_theme_color_override("font_color", MUTED_TEXT)
 		copy.add_child(reason)
+	if active_tab == "detained":
+		var detention_detail := Label.new()
+		var detention_time := LocalizationManager.text("ui.staff.chat.permanent")
+		if not bool(entry.get("permanent", false)):
+			detention_time = LocalizationManager.text(
+				"ui.staff.chat.detained_remaining",
+				{"time": _format_duration(_remaining_seconds(entry))}
+			)
+		detention_detail.text = "%s  ·  %s" % [
+			LocalizationManager.text("ui.staff.chat.detention_detail", {
+				"moderator": str(entry.get("detainedByDisplayName", "System")),
+				"reason": str(entry.get("reason", "")),
+			}),
+			detention_time,
+		]
+		detention_detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		detention_detail.add_theme_color_override("font_color", MUTED_TEXT)
+		copy.add_child(detention_detail)
+	var capabilities := _dictionary_from_value(overview.get("capabilities", {}))
 	if bool(entry.get("canModerate", false)):
-		var action := "unmute" if bool(entry.get("muted", false)) else "mute"
-		var action_button := Button.new()
-		action_button.text = LocalizationManager.text("ui.chat.moderation.%s" % action)
-		action_button.custom_minimum_size = Vector2(92, 36)
-		action_button.pressed.connect(_request_moderation.bind(action, entry.duplicate(true)))
-		_style_button(action_button, action == "unmute")
-		row.add_child(action_button)
+		var actions := HBoxContainer.new()
+		actions.add_theme_constant_override("separation", 7)
+		if bool(capabilities.get("chatMute", false)) and active_tab != "detained":
+			var action := "unmute" if bool(entry.get("muted", false)) else "mute"
+			var action_button := Button.new()
+			action_button.text = LocalizationManager.text("ui.chat.moderation.%s" % action)
+			action_button.custom_minimum_size = Vector2(92, 36)
+			action_button.pressed.connect(_request_moderation.bind(action, entry.duplicate(true)))
+			_style_button(action_button, action == "unmute")
+			actions.add_child(action_button)
+		if bool(capabilities.get("detain", false)):
+			var release := bool(entry.get("detained", false)) or active_tab == "detained"
+			var detention_button := Button.new()
+			detention_button.text = LocalizationManager.text(
+				"ui.staff.chat.release" if release else "ui.staff.chat.detain"
+			)
+			detention_button.custom_minimum_size = Vector2(92, 36)
+			detention_button.pressed.connect(_show_detention_dialog.bind(entry.duplicate(true), release))
+			_style_button(detention_button, release)
+			actions.add_child(detention_button)
+		if actions.get_child_count() > 0:
+			row.add_child(actions)
 	return card
+
+
+func _build_detention_dialog() -> void:
+	detention_overlay = CenterContainer.new()
+	detention_overlay.visible = false
+	detention_overlay.z_index = 25
+	detention_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	detention_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(detention_overlay)
+	detention_dialog = PanelContainer.new()
+	detention_dialog.custom_minimum_size = Vector2(500, 310)
+	detention_dialog.add_theme_stylebox_override("panel", _panel_style(Color("#0b1624ff"), PURPLE, 12, 2))
+	detention_overlay.add_child(detention_dialog)
+	var margin := MarginContainer.new()
+	for side in ["margin_left", "margin_top", "margin_right", "margin_bottom"]:
+		margin.add_theme_constant_override(side, 18)
+	detention_dialog.add_child(margin)
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 11)
+	margin.add_child(layout)
+	var header := HBoxContainer.new()
+	layout.add_child(header)
+	detention_title = Label.new()
+	detention_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	detention_title.add_theme_font_size_override("font_size", 20)
+	detention_title.add_theme_color_override("font_color", TEXT)
+	header.add_child(detention_title)
+	var close_button := Button.new()
+	close_button.text = "×"
+	close_button.pressed.connect(_hide_detention_dialog)
+	_style_button(close_button, false)
+	header.add_child(close_button)
+	detention_duration_row = HBoxContainer.new()
+	detention_duration_row.add_theme_constant_override("separation", 10)
+	layout.add_child(detention_duration_row)
+	detention_duration_input = SpinBox.new()
+	detention_duration_input.min_value = 1
+	detention_duration_input.max_value = 525600
+	detention_duration_input.value = 60
+	detention_duration_input.suffix = " minutes"
+	detention_duration_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	detention_duration_row.add_child(detention_duration_input)
+	detention_permanent_check = CheckBox.new()
+	detention_permanent_check.text = LocalizationManager.text("ui.staff.chat.permanent")
+	detention_permanent_check.toggled.connect(_on_detention_permanent_toggled)
+	detention_duration_row.add_child(detention_permanent_check)
+	detention_reason_input = LineEdit.new()
+	detention_reason_input.placeholder_text = LocalizationManager.text("ui.staff.chat.detention_reason")
+	detention_reason_input.max_length = 255
+	detention_reason_input.text_changed.connect(_on_detention_reason_changed)
+	detention_reason_input.add_theme_stylebox_override("normal", _panel_style(Color("#07111ddd"), BORDER, 8, 1))
+	detention_reason_input.add_theme_stylebox_override("focus", _panel_style(Color("#091625f5"), ACCENT, 8, 1))
+	layout.add_child(detention_reason_input)
+	detention_status_label = Label.new()
+	detention_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	detention_status_label.add_theme_color_override("font_color", MUTED_TEXT)
+	layout.add_child(detention_status_label)
+	var actions := HBoxContainer.new()
+	actions.alignment = BoxContainer.ALIGNMENT_END
+	actions.add_theme_constant_override("separation", 8)
+	layout.add_child(actions)
+	var cancel_button := Button.new()
+	cancel_button.text = LocalizationManager.text("common.cancel")
+	cancel_button.pressed.connect(_hide_detention_dialog)
+	_style_button(cancel_button, false)
+	actions.add_child(cancel_button)
+	detention_confirm_button = Button.new()
+	detention_confirm_button.pressed.connect(_submit_detention_action)
+	_style_button(detention_confirm_button, true)
+	actions.add_child(detention_confirm_button)
+
+
+func _show_detention_dialog(player: Dictionary, release: bool) -> void:
+	detention_target = player
+	detention_release_mode = release
+	detention_title.text = LocalizationManager.text(
+		"ui.staff.chat.release_title" if release else "ui.staff.chat.detain_title",
+		{"player": str(player.get("displayName", "Trainer"))}
+	)
+	detention_duration_row.visible = not release
+	detention_permanent_check.button_pressed = false
+	detention_duration_input.editable = true
+	detention_reason_input.clear()
+	detention_status_label.text = LocalizationManager.text("ui.staff.chat.reason_required")
+	detention_confirm_button.text = LocalizationManager.text(
+		"ui.staff.chat.release" if release else "ui.staff.chat.detain"
+	)
+	detention_confirm_button.disabled = true
+	detention_overlay.visible = true
+	detention_reason_input.grab_focus()
+
+
+func _hide_detention_dialog() -> void:
+	if detention_in_flight or detention_overlay == null:
+		return
+	detention_overlay.visible = false
+	detention_target = {}
+
+
+func _on_detention_permanent_toggled(permanent: bool) -> void:
+	detention_duration_input.editable = not permanent
+
+
+func _on_detention_reason_changed(value: String) -> void:
+	detention_confirm_button.disabled = value.strip_edges().length() < 3 or detention_in_flight
+
+
+func _submit_detention_action() -> void:
+	if detention_in_flight:
+		return
+	var target_user_id := int(detention_target.get("userId", 0))
+	var reason := detention_reason_input.text.strip_edges()
+	if target_user_id <= 0 or reason.length() < 3:
+		return
+	detention_in_flight = true
+	detention_confirm_button.disabled = true
+	detention_status_label.text = LocalizationManager.text("ui.staff.chat.applying")
+	var result: Dictionary
+	if detention_release_mode:
+		result = await ModeratorTeleportService.release_player_from_jail(target_user_id, reason)
+	else:
+		result = await ModeratorTeleportService.detain_player(
+			target_user_id,
+			int(detention_duration_input.value),
+			detention_permanent_check.button_pressed,
+			reason
+		)
+	detention_in_flight = false
+	if not bool(result.get("success", false)):
+		detention_status_label.text = str(result.get("error", LocalizationManager.text("ui.staff.chat.detention_failed")))
+		detention_status_label.add_theme_color_override("font_color", Color("#ff8d9f"))
+		detention_confirm_button.disabled = false
+		return
+	detention_overlay.visible = false
+	detention_target = {}
+	await refresh_overview()
 
 
 func _create_recent_row(entry: Dictionary) -> Control:
@@ -355,6 +554,15 @@ func _has_expired_mute() -> bool:
 	return false
 
 
+func _has_expired_detention() -> bool:
+	for entry_value: Variant in _array_from_value(overview.get("detained", [])):
+		if entry_value is Dictionary:
+			var entry := entry_value as Dictionary
+			if not bool(entry.get("permanent", false)) and _remaining_seconds(entry) <= 0:
+				return true
+	return false
+
+
 func _format_duration(total_seconds: int) -> String:
 	var hours := int(total_seconds / 3600)
 	var minutes := int((total_seconds % 3600) / 60)
@@ -382,6 +590,10 @@ func _format_timestamp(value: String) -> String:
 
 func _array_from_value(value: Variant) -> Array:
 	return value as Array if value is Array else []
+
+
+func _dictionary_from_value(value: Variant) -> Dictionary:
+	return value as Dictionary if value is Dictionary else {}
 
 
 func _clear_rows() -> void:
