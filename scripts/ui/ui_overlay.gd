@@ -38986,7 +38986,11 @@ func _sync_chat_inline_header_spacing(header: HBoxContainer, entry: RichTextLabe
 	if not is_instance_valid(header) or not is_instance_valid(entry):
 		return
 	var header_prefix_width := _chat_header_prefix_width(header)
-	var header_width := header_prefix_width + CHAT_INLINE_HEADER_CLEARANCE
+	var header_width := (
+		header_prefix_width + CHAT_INLINE_HEADER_CLEARANCE
+		if header_prefix_width > 0.0
+		else 0.0
+	)
 	var normal_font := entry.get_theme_font("normal_font")
 	var normal_font_size := entry.get_theme_font_size("normal_font_size")
 	var space_width := normal_font.get_string_size(

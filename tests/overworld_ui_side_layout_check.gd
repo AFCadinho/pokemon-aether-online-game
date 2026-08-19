@@ -280,9 +280,9 @@ func _init() -> void:
 		and script_source.contains("func _sync_chat_inline_header_spacing(")
 		and script_source.contains("func _chat_header_prefix_width(")
 		and script_source.contains("const CHAT_INLINE_HEADER_CLEARANCE := 24.0")
-		and script_source.contains("header_prefix_width + CHAT_INLINE_HEADER_CLEARANCE")
+		and script_source.contains("header_prefix_width > 0.0")
 		and script_source.contains("entry.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART"),
-		"chat metadata keeps clearance on the first line while wrapped text returns left"
+		"visible chat metadata gets first-line clearance while plain names stay left aligned"
 	)
 	_check(
 		script_source.contains("var inline_single_pokemon := (")
