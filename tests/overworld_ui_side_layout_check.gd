@@ -387,10 +387,11 @@ func _init() -> void:
 		"the mini Trainer Card keeps membership status and details current"
 	)
 	_check(
-		script_source.contains('if str(buff.get("id", "")).strip_edges().to_lower() == "aether_blessing":')
-		and script_source.contains("continue")
+		script_source.contains('if buff_id in ["aether_blessing", "aether_blessing_shiny_bonus"]:')
+		and script_source.contains("func _current_aether_blessing_shiny_bonus()")
+		and script_source.contains('"name_key": "ui.buff.aether_blessing_shiny.name"')
 		and not script_source.contains('"name_key": "ui.buff.aether_blessing.name"'),
-		"Aether Blessing is excluded from the temporary personal boost tray"
+		"the boost tray shows the membership Shiny effect instead of the membership itself"
 	)
 	_check(script_source.contains('personal_buffs_panel.set_meta("group_available", true)'), "personal empty state remains part of the trainer collapse group")
 	_check(script_source.contains("PERSONAL_BUFF_PANEL_COMPACT_HEIGHT"), "empty and collapsed active states use a compact panel height")

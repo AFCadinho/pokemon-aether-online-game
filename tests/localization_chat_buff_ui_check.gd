@@ -48,6 +48,13 @@ func _check_localized_helpers() -> void:
 		"Global Heal name renders in Dutch"
 	)
 	_check(
+		overlay.call(
+			"_localized_buff_name",
+			{"name_key": "ui.buff.aether_blessing_shiny.name"}
+		) == "Blessed Shiny-bonus",
+		"Aether Blessing's concrete Shiny effect renders as a Dutch personal boost"
+	)
+	_check(
 		str(localization_manager.call("text", "ui.buff.global_heal.no_aetherite")).contains("geen Aetherite"),
 		"Global Heal clearly states that it does not award Aetherite"
 	)

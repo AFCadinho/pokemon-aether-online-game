@@ -44,6 +44,7 @@ func _run() -> void:
 	var badge := overlay.get("player_status_membership_badge") as PanelContainer
 	var status_panel := overlay.get("player_status_panel") as PanelContainer
 	var active_buffs: Array = overlay.get("active_personal_buffs") as Array
+	var shiny_bonus := active_buffs[0] as Dictionary if not active_buffs.is_empty() else {}
 	_check(badge != null and badge.visible, "active members see Blessed status in the mini Trainer Card")
 	_check(
 		badge != null
@@ -55,13 +56,26 @@ func _run() -> void:
 		status_panel != null and bool(status_panel.get_meta("aether_blessing_active", false)),
 		"active membership applies the dedicated Trainer Card presentation"
 	)
-	_check(active_buffs.is_empty(), "Aether Blessing does not count as a personal boost")
+	_check(
+		active_buffs.size() == 1
+		and str(shiny_bonus.get("id", "")) == "aether_blessing_shiny_bonus",
+		"membership exposes only its concrete Shiny effect as a personal boost"
+	)
+	_check(
+		str(shiny_bonus.get("name_key", "")) == "ui.buff.aether_blessing_shiny.name"
+		and str(shiny_bonus.get("compactRemaining", "")) != "",
+		"Blessed Shiny Bonus has transparent copy and the membership countdown"
+	)
 
 	auth_service.set("current_user", {
 		"roles": [{"id": "blessed", "expiresAt": "2020-01-01T00:00:00Z"}],
 	})
-	overlay.call("_refresh_aether_blessing_membership_status")
-	_check(badge != null and not badge.visible, "expired membership disappears from the mini Trainer Card")
+	overlay.call("_refresh_personal_buffs_from_entitlements")
+	active_buffs = overlay.get("active_personal_buffs") as Array
+	_check(
+		badge != null and not badge.visible and active_buffs.is_empty(),
+		"expired membership disappears from both Trainer Card and personal boosts"
+	)
 
 	auth_service.set("current_user", original_user)
 	overlay.queue_free()
