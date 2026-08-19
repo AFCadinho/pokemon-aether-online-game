@@ -10595,9 +10595,13 @@ func _refresh_personal_buffs_from_entitlements() -> void:
 	for buff_value: Variant in personal_buff_source_buffs:
 		if buff_value is Dictionary:
 			var buff := buff_value as Dictionary
-			if str(buff.get("id", "")).strip_edges().to_lower() == "aether_blessing":
+			var buff_id := str(buff.get("id", "")).strip_edges().to_lower()
+			if buff_id in ["aether_blessing", "aether_blessing_shiny_bonus"]:
 				continue
 		buffs.append(buff_value)
+	var blessing_shiny_bonus := _current_aether_blessing_shiny_bonus()
+	if not blessing_shiny_bonus.is_empty():
+		buffs.push_front(blessing_shiny_bonus)
 	_render_personal_buffs(buffs)
 	_refresh_aether_blessing_membership_status()
 
@@ -10627,6 +10631,52 @@ func _current_aether_blessing_membership() -> Dictionary:
 			"expiresAt": expires_at,
 		}
 	return {}
+
+
+func _current_aether_blessing_shiny_bonus() -> Dictionary:
+	var membership := _current_aether_blessing_membership()
+	if membership.is_empty():
+		return {}
+	var expires_at := str(membership.get("expiresAt", "")).strip_edges()
+	var expires_unix := _pvp_iso_timestamp_to_unix_time(expires_at.replace("+00:00", "Z"))
+	var remaining_seconds := maxi(
+		int(ceil(expires_unix - Time.get_unix_time_from_system())),
+		0
+	)
+	if remaining_seconds <= 0:
+		return {}
+	return {
+		"id": "aether_blessing_shiny_bonus",
+		"label": "S+",
+		"name_key": "ui.buff.aether_blessing_shiny.name",
+		"description_key": "ui.buff.aether_blessing_shiny.description",
+		"remaining": _format_aether_blessing_remaining(remaining_seconds),
+		"compactRemaining": _format_aether_blessing_remaining(remaining_seconds, true),
+		"expiresAt": expires_at,
+	}
+
+
+func _format_aether_blessing_remaining(total_seconds: int, compact: bool = false) -> String:
+	var safe_seconds := maxi(total_seconds, 0)
+	var days := safe_seconds / 86400
+	var hours := (safe_seconds % 86400) / 3600
+	var minutes := (safe_seconds % 3600) / 60
+	var seconds := safe_seconds % 60
+	if compact:
+		if days > 0:
+			return "%dd" % days
+		if hours > 0:
+			return "%dh" % hours
+		if minutes > 0:
+			return "%dm" % minutes
+		return "<1m"
+	if days > 0:
+		return "%dd %dh" % [days, hours]
+	if hours > 0:
+		return "%dh %dm" % [hours, minutes]
+	if minutes > 0:
+		return "%dm %ds" % [minutes, seconds]
+	return "%ds" % seconds
 
 
 func _refresh_aether_blessing_membership_status() -> void:
