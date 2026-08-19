@@ -1,10 +1,34 @@
 # Changelog
 
-## Unreleased
+## 0.3.58 - 2026-08-19
 
 **Added**
 
+- Added the Aether Exchange, a fixed-price marketplace for buying and selling eligible Pokémon and items. Listings can be searched, filtered and sorted, and Pokémon can be inspected through a complete read-only Summary before purchase.
+- Added a secure Account Portal that opens from Account Settings after signing in through the game. Trainers can change their display name, password or email address and manage personal-data exports and account deletion without a separate browser login.
+- Email changes now require confirmation from the new inbox. The current inbox has 72 hours to approve or cancel the request; approval from both addresses applies the change immediately, while no response from the old address allows the verified change to complete after the review window.
+- Added SSJMagikarp, an automated community helper that can answer unanswered questions in General and Help chat using official guides and released game information.
+- Added AetherGuard, an automatic public-chat moderator that warns once and can apply a ten-minute mute for clear language, trade-channel and spam violations.
 - Staff with chat-moderation access can now right-click a chat sender to mute or unmute them. Both actions require a reason, and mutes offer ten-minute, thirty-minute, one-hour and twenty-four-hour durations.
+- Chat messages now have context actions for copying the message or its full details, starting a private conversation and sending a friend request.
+
+**Changed**
+
+- The Aether Exchange now offers detailed Pokémon and item filters, individual IV filters, price, level and date sorting, compact listing cards and clearer confirmations and status feedback.
+- The Pokédex now loads Pokémon progressively while scrolling, opens linked pre-evolutions and evolutions directly, and shows Pokémon HOME artwork in evolution entries.
+- Long chat messages, badges, sender names and shared Pokémon cards now wrap and align more cleanly.
+- The overworld hotbar now uses a paginated two-column layout and stays below the quest tracker when several quests are visible.
+- Exp. Share holders now receive eligible EV rewards as well as battle experience. Stored EVs can continue accumulating per stat after a Pokémon reaches the 510 allocated-EV limit, while allocation itself remains capped.
+
+**Fixed**
+
+- Multi-hit attacks now keep HP changes continuous through knockouts instead of briefly restoring or rewinding the target's health.
+- NPC reserve Pokémon remain concealed while team-sidebar animations are playing.
+- Fixed fishing encounters being resolved incorrectly on maps that share encounter data.
+- Fixed player and tall-grass depth ordering, including affected grass on Route 22.
+- Fixed Professor Oak's starter objective missing its quest marker.
+- Fixed alternate Pokémon form names failing to resolve the correct sprites in shared cards and other interfaces.
+- Fixed malformed Pokémon levels appearing in battle hover information.
 
 ## 0.3.57 - 2026-08-16
 
