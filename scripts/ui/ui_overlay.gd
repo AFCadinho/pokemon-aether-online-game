@@ -236,6 +236,8 @@ const POKEMON_SUMMARY_ACCENT := Color("#62d7ff")
 const POKEMON_SUMMARY_ACCENT_SOFT := Color("#62d7ffaa")
 const POKEMON_SUMMARY_ACCENT_FAINT := Color("#62d7ff66")
 const POKEMON_SUMMARY_ACCENT_DARK := Color("#063447")
+const POKEMON_NICKNAME_CHANGE_FEE := 5000
+const POKEMON_NICKNAME_MAX_LENGTH := 18
 const POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE := Vector2i(263, 180)
 const POKEMON_SUMMARY_SPRITE_MAX_SIZE := Vector2(235, 155)
 const POKEMON_SUMMARY_SPRITE_BASE_SCALE := 1.7
@@ -1100,6 +1102,7 @@ var pokemon_summary_type_icon_row: HBoxContainer
 var pokemon_summary_hidden_ability_badge: PanelContainer
 var pokemon_summary_title_label: Label
 var pokemon_summary_id_label: Label
+var pokemon_summary_nickname_button: Button
 var pokemon_summary_meta_label: Label
 var pokemon_summary_held_item_slot: PanelContainer
 var pokemon_summary_held_item_slot_button: Button
@@ -1138,6 +1141,13 @@ var pokemon_summary_active_card_key := ""
 var pokemon_summary_dragging_card_key := ""
 var pokemon_summary_next_card_offset_index := 0
 var pokemon_summary_move_type_index: Dictionary = {}
+var pokemon_nickname_popup: PanelContainer
+var pokemon_nickname_input: LineEdit
+var pokemon_nickname_status_label: Label
+var pokemon_nickname_confirm_button: Button
+var pokemon_nickname_pending := false
+var pokemon_nickname_card_key := ""
+var pokemon_nickname_pokemon_id := 0
 var pokemon_summary_move_type_index_loaded := false
 var pokemon_summary_move_summary_index: Dictionary = {}
 var pokemon_summary_move_summary_index_loaded := false
@@ -14953,6 +14963,19 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_title_label.add_theme_constant_override("shadow_offset_y", 1)
 	title_row.add_child(pokemon_summary_title_label)
 
+	pokemon_summary_nickname_button = Button.new()
+	pokemon_summary_nickname_button.text = "✎"
+	pokemon_summary_nickname_button.custom_minimum_size = Vector2(22, 20)
+	pokemon_summary_nickname_button.focus_mode = Control.FOCUS_NONE
+	pokemon_summary_nickname_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	pokemon_summary_nickname_button.pressed.connect(_on_pokemon_summary_nickname_pressed.bind(card_key))
+	_set_localized_control_property(pokemon_summary_nickname_button, "tooltip_text", "ui.pokemon_summary.nickname.edit_tooltip")
+	pokemon_summary_nickname_button.add_theme_font_size_override("font_size", 11)
+	pokemon_summary_nickname_button.add_theme_stylebox_override("normal", _make_pokemon_summary_button_style(Color("#0e2138f0"), Color("#5a82ad"), true))
+	pokemon_summary_nickname_button.add_theme_stylebox_override("hover", _make_pokemon_summary_button_style(Color("#12304bf0"), POKEMON_SUMMARY_ACCENT, true))
+	pokemon_summary_nickname_button.add_theme_stylebox_override("pressed", _make_pokemon_summary_button_style(Color("#071421f0"), POKEMON_SUMMARY_ACCENT, true))
+	title_row.add_child(pokemon_summary_nickname_button)
+
 	pokemon_summary_meta_label = Label.new()
 	pokemon_summary_meta_label.text = LocalizationManager.text("ui.pokemon_summary.level_empty")
 	pokemon_summary_meta_label.custom_minimum_size = Vector2(38, 0)
@@ -19050,6 +19073,7 @@ func _capture_pokemon_summary_card_context(card_key: String, pokemon: Pokemon, m
 		"type_icon_row": pokemon_summary_type_icon_row,
 		"title_label": pokemon_summary_title_label,
 		"id_label": pokemon_summary_id_label,
+		"nickname_button": pokemon_summary_nickname_button,
 		"meta_label": pokemon_summary_meta_label,
 		"held_item_slot": pokemon_summary_held_item_slot,
 		"held_item_slot_button": pokemon_summary_held_item_slot_button,
@@ -19102,6 +19126,7 @@ func _apply_pokemon_summary_card_context(card_key: String) -> bool:
 	pokemon_summary_type_icon_row = context.get("type_icon_row") as HBoxContainer
 	pokemon_summary_title_label = context.get("title_label") as Label
 	pokemon_summary_id_label = context.get("id_label") as Label
+	pokemon_summary_nickname_button = context.get("nickname_button") as Button
 	pokemon_summary_meta_label = context.get("meta_label") as Label
 	pokemon_summary_held_item_slot = context.get("held_item_slot") as PanelContainer
 	pokemon_summary_held_item_slot_button = context.get("held_item_slot_button") as Button
@@ -19234,12 +19259,14 @@ func _trade_workspace_is_visible() -> bool:
 func _hide_pokemon_summary_popup(card_key: String = "") -> void:
 	if card_key != "":
 		_apply_pokemon_summary_card_context(card_key)
+	if card_key == "":
+		card_key = pokemon_summary_active_card_key
 	if pokemon_summary_popup != null:
 		pokemon_summary_popup.visible = false
 		_deactivate_ui_panel(pokemon_summary_popup)
 		pokemon_summary_popup.queue_free()
-	if card_key == "":
-		card_key = pokemon_summary_active_card_key
+	if pokemon_nickname_card_key == card_key and not pokemon_nickname_pending:
+		_hide_pokemon_nickname_popup()
 	if card_key != "":
 		pokemon_summary_open_cards.erase(card_key)
 		if pokemon_summary_active_card_key == card_key:
@@ -19268,17 +19295,30 @@ func _refresh_pokemon_summary() -> void:
 
 	_set_pokemon_summary_popup_size()
 	var localized_species_name := _localized_species_name(pokemon.species, pokemon.species)
-	pokemon_summary_title_label.text = localized_species_name
-	pokemon_summary_title_label.tooltip_text = localized_species_name
+	var nickname := pokemon.nickname.strip_edges()
+	var display_name := nickname if nickname != "" else localized_species_name
+	pokemon_summary_title_label.text = display_name
+	pokemon_summary_title_label.tooltip_text = (
+		"%s · %s" % [display_name, localized_species_name]
+		if nickname != ""
+		else localized_species_name
+	)
 	var summary_id: String = str(pokemon.owned_pokemon_id) if pokemon.owned_pokemon_id > 0 else ""
 	if summary_id == "":
 		summary_id = pokemon.instance_id.strip_edges()
-	pokemon_summary_id_label.text = (
+	var id_text := (
 		LocalizationManager.text("ui.pokemon_summary.id", {"id": summary_id})
 		if summary_id != ""
 		else LocalizationManager.text("ui.pokemon_summary.id_empty")
 	)
+	pokemon_summary_id_label.text = LocalizationManager.text(
+		"ui.pokemon_summary.species_and_id",
+		{"species": localized_species_name, "id": id_text}
+	)
 	pokemon_summary_id_label.tooltip_text = pokemon_summary_id_label.text
+	if pokemon_summary_nickname_button != null:
+		pokemon_summary_nickname_button.visible = not _is_pokemon_summary_readonly() and pokemon.owned_pokemon_id > 0
+		pokemon_summary_nickname_button.disabled = not _can_change_pokemon_nickname() or pokemon_nickname_pending
 	pokemon_summary_shiny_badge.visible = pokemon.shiny
 	if pokemon_summary_hidden_ability_badge != null:
 		pokemon_summary_hidden_ability_badge.visible = pokemon.hidden_ability
@@ -19333,6 +19373,181 @@ func _get_active_pokemon_summary_pokemon() -> Pokemon:
 	if pokemon_summary_selected_slot < 0 or pokemon_summary_selected_slot >= PlayerSave.party.size():
 		return null
 	return PlayerSave.party[pokemon_summary_selected_slot]
+
+
+func _can_change_pokemon_nickname() -> bool:
+	if _is_pokemon_summary_readonly() or _is_world_battle_active() or _trade_workspace_is_visible():
+		return false
+	if pvp_battle_starting or pvp_active_queue_entry_id.strip_edges() != "" or pvp_active_queue_match_id.strip_edges() != "":
+		return false
+	return str(PvpBattleRealtimeService.active_battle_id).strip_edges() == ""
+
+
+func _on_pokemon_summary_nickname_pressed(card_key: String = "") -> void:
+	if not _apply_pokemon_summary_card_context(card_key):
+		return
+	var pokemon := _get_active_pokemon_summary_pokemon()
+	if pokemon == null or pokemon.owned_pokemon_id <= 0:
+		return
+	if not _can_change_pokemon_nickname():
+		return
+	_show_pokemon_nickname_popup(card_key, pokemon)
+
+
+func _show_pokemon_nickname_popup(card_key: String, pokemon: Pokemon) -> void:
+	_hide_pokemon_nickname_popup()
+	pokemon_nickname_card_key = card_key
+	pokemon_nickname_pokemon_id = pokemon.owned_pokemon_id
+
+	pokemon_nickname_popup = PanelContainer.new()
+	pokemon_nickname_popup.name = "PokemonNicknamePopup"
+	pokemon_nickname_popup.custom_minimum_size = Vector2(360, 245)
+	pokemon_nickname_popup.anchor_left = 0.5
+	pokemon_nickname_popup.anchor_top = 0.5
+	pokemon_nickname_popup.anchor_right = 0.5
+	pokemon_nickname_popup.anchor_bottom = 0.5
+	pokemon_nickname_popup.offset_left = -180
+	pokemon_nickname_popup.offset_top = -122
+	pokemon_nickname_popup.offset_right = 180
+	pokemon_nickname_popup.offset_bottom = 123
+	pokemon_nickname_popup.z_index = UI_MODAL_Z_INDEX + 10
+	pokemon_nickname_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	pokemon_nickname_popup.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912fc"), POKEMON_SUMMARY_ACCENT, 10, 1))
+	root_control.add_child(pokemon_nickname_popup)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 16)
+	margin.add_theme_constant_override("margin_top", 14)
+	margin.add_theme_constant_override("margin_right", 16)
+	margin.add_theme_constant_override("margin_bottom", 14)
+	pokemon_nickname_popup.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 8)
+	margin.add_child(layout)
+
+	var title := Label.new()
+	_set_localized_control_property(title, "text", "ui.pokemon_summary.nickname.title")
+	title.add_theme_font_size_override("font_size", 18)
+	title.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
+	layout.add_child(title)
+
+	var explanation := Label.new()
+	_set_localized_control_property(explanation, "text", "ui.pokemon_summary.nickname.explanation")
+	explanation.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	explanation.add_theme_font_size_override("font_size", 11)
+	explanation.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(explanation)
+
+	pokemon_nickname_input = LineEdit.new()
+	pokemon_nickname_input.max_length = POKEMON_NICKNAME_MAX_LENGTH
+	pokemon_nickname_input.text = pokemon.nickname
+	pokemon_nickname_input.placeholder_text = _localized_species_name(pokemon.species, pokemon.species)
+	pokemon_nickname_input.clear_button_enabled = true
+	pokemon_nickname_input.text_changed.connect(_on_pokemon_nickname_text_changed)
+	pokemon_nickname_input.text_submitted.connect(_on_pokemon_nickname_submitted)
+	_apply_line_edit_style(pokemon_nickname_input)
+	layout.add_child(pokemon_nickname_input)
+
+	var cost_label := Label.new()
+	cost_label.text = LocalizationManager.text("ui.pokemon_summary.nickname.cost", {
+		"cost": POKEMON_NICKNAME_CHANGE_FEE,
+		"balance": max(PlayerSave.money, 0),
+	})
+	cost_label.add_theme_font_size_override("font_size", 11)
+	cost_label.add_theme_color_override("font_color", UI_MONEY)
+	layout.add_child(cost_label)
+
+	pokemon_nickname_status_label = Label.new()
+	pokemon_nickname_status_label.custom_minimum_size = Vector2(0, 18)
+	pokemon_nickname_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pokemon_nickname_status_label.add_theme_font_size_override("font_size", 10)
+	pokemon_nickname_status_label.add_theme_color_override("font_color", UI_DANGER)
+	layout.add_child(pokemon_nickname_status_label)
+
+	var actions := HBoxContainer.new()
+	actions.alignment = BoxContainer.ALIGNMENT_END
+	actions.add_theme_constant_override("separation", 8)
+	layout.add_child(actions)
+
+	var cancel_button := Button.new()
+	_set_localized_control_property(cancel_button, "text", "common.cancel")
+	cancel_button.pressed.connect(_hide_pokemon_nickname_popup)
+	_apply_button_style(cancel_button)
+	actions.add_child(cancel_button)
+
+	pokemon_nickname_confirm_button = Button.new()
+	_set_localized_control_property(pokemon_nickname_confirm_button, "text", "ui.pokemon_summary.nickname.confirm")
+	pokemon_nickname_confirm_button.pressed.connect(_confirm_pokemon_nickname_change)
+	_apply_button_style(pokemon_nickname_confirm_button, "primary")
+	actions.add_child(pokemon_nickname_confirm_button)
+
+	_activate_ui_panel(pokemon_nickname_popup)
+	pokemon_nickname_input.grab_focus()
+	pokemon_nickname_input.select_all()
+	_update_pokemon_nickname_confirm_state()
+
+
+func _on_pokemon_nickname_text_changed(_value: String) -> void:
+	if pokemon_nickname_status_label != null:
+		pokemon_nickname_status_label.text = ""
+	_update_pokemon_nickname_confirm_state()
+
+
+func _on_pokemon_nickname_submitted(_value: String) -> void:
+	if pokemon_nickname_confirm_button != null and not pokemon_nickname_confirm_button.disabled:
+		_confirm_pokemon_nickname_change()
+
+
+func _update_pokemon_nickname_confirm_state() -> void:
+	if pokemon_nickname_confirm_button == null:
+		return
+	var current_nickname := ""
+	if _apply_pokemon_summary_card_context(pokemon_nickname_card_key):
+		var pokemon := _get_active_pokemon_summary_pokemon()
+		if pokemon != null:
+			current_nickname = pokemon.nickname.strip_edges()
+	var requested_nickname := pokemon_nickname_input.text.strip_edges() if pokemon_nickname_input != null else ""
+	pokemon_nickname_confirm_button.disabled = pokemon_nickname_pending or requested_nickname == current_nickname
+
+
+func _confirm_pokemon_nickname_change() -> void:
+	if pokemon_nickname_pending or pokemon_nickname_input == null or pokemon_nickname_pokemon_id <= 0:
+		return
+	if not _can_change_pokemon_nickname():
+		pokemon_nickname_status_label.text = LocalizationManager.text("ui.pokemon_summary.nickname.blocked")
+		return
+	pokemon_nickname_pending = true
+	pokemon_nickname_status_label.text = LocalizationManager.text("ui.pokemon_summary.nickname.saving")
+	_update_pokemon_nickname_confirm_state()
+
+	var result: Dictionary = await PlayerPartyStateService.rename_pokemon(
+		pokemon_nickname_pokemon_id,
+		pokemon_nickname_input.text
+	)
+	pokemon_nickname_pending = false
+	if not bool(result.get("success", false)):
+		pokemon_nickname_status_label.text = str(result.get("error", LocalizationManager.text("ui.pokemon_summary.nickname.failed")))
+		_update_pokemon_nickname_confirm_state()
+		return
+
+	PlayerWalletService.apply_wallet_result({"success": true, "wallet": result.get("wallet", {})})
+	_hide_pokemon_nickname_popup()
+	_refresh_open_pokemon_summary_cards()
+
+
+func _hide_pokemon_nickname_popup() -> void:
+	if pokemon_nickname_pending:
+		return
+	if pokemon_nickname_popup != null and is_instance_valid(pokemon_nickname_popup):
+		_deactivate_ui_panel(pokemon_nickname_popup)
+		pokemon_nickname_popup.queue_free()
+	pokemon_nickname_popup = null
+	pokemon_nickname_input = null
+	pokemon_nickname_status_label = null
+	pokemon_nickname_confirm_button = null
+	pokemon_nickname_card_key = ""
+	pokemon_nickname_pokemon_id = 0
 
 func _on_pokemon_summary_sprite_frame_gui_input(event: InputEvent, card_key: String = "") -> void:
 	if not _apply_pokemon_summary_card_context(card_key):

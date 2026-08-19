@@ -112,7 +112,7 @@ func set_pokemon(pokemon: Pokemon) -> void:
 	modulate = FAINTED_MODULATE if is_fainted and not icon_only_mode else NORMAL_MODULATE
 	tooltip_text = _t("battle.party.active") if is_active else ""
 
-	_set_species_name(pokemon.species, pokemon.shiny)
+	_set_pokemon_name(pokemon.species, pokemon.nickname, pokemon.shiny)
 	hp_bar.max_value = max(pokemon.max_hp, 1)
 	hp_bar.value = clamp(pokemon.current_hp, 0, pokemon.max_hp)
 	pokemon_icon.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
@@ -139,7 +139,7 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	tooltip_text = _t("battle.party.active") if is_active else ""
 
 	var is_shiny := _get_shiny_from_data(pokemon_data)
-	_set_species_name(species, is_shiny)
+	_set_pokemon_name(species, _get_nickname_from_data(pokemon_data), is_shiny)
 
 	hp_bar.max_value = max_hp
 	hp_bar.value = clamp(current_hp, 0, int(hp_bar.max_value))
@@ -179,6 +179,14 @@ func _get_species_from_data(pokemon_data: Dictionary) -> String:
 	if ident.contains(": "):
 		return str(ident.split(": ")[1]).strip_edges()
 
+	return ""
+
+
+func _get_nickname_from_data(pokemon_data: Dictionary) -> String:
+	for key: String in ["nickname", "name", "displayName"]:
+		var nickname := str(pokemon_data.get(key, "")).strip_edges()
+		if nickname != "":
+			return nickname
 	return ""
 
 func _get_shiny_from_data(pokemon_data: Dictionary) -> bool:
@@ -418,6 +426,17 @@ func _set_species_name(species: String, is_shiny: bool) -> void:
 	var content_localization := get_node_or_null("/root/ContentLocalization")
 	if content_localization != null and content_localization.has_method("display_name"):
 		display_name = str(content_localization.call("display_name", "species", species, species))
+	name_label.text = display_name
+	name_label.add_theme_font_size_override("font_size", _get_name_font_size(display_name))
+	shiny_badge.text = "S" if is_shiny else ""
+	shiny_badge.tooltip_text = _t("ui.party.shiny") if is_shiny else ""
+
+
+func _set_pokemon_name(species: String, nickname: String, is_shiny: bool) -> void:
+	if nickname.strip_edges() == "":
+		_set_species_name(species, is_shiny)
+		return
+	var display_name := nickname.strip_edges()
 	name_label.text = display_name
 	name_label.add_theme_font_size_override("font_size", _get_name_font_size(display_name))
 	shiny_badge.text = "S" if is_shiny else ""

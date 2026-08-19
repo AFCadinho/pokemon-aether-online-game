@@ -2327,7 +2327,7 @@ func _clear_pvp_switch_confirmation() -> void:
 	pvp_switch_confirmation_label.visible = false
 
 func _get_switch_confirmation_pokemon_name(pokemon_data: Dictionary) -> String:
-	for key: String in ["displaySpecies", "displayName", "nickname", "name", "species"]:
+	for key: String in ["nickname", "name", "displayName", "displaySpecies", "species"]:
 		var value := str(pokemon_data.get(key, "")).strip_edges()
 		if value != "":
 			return value
@@ -3168,8 +3168,7 @@ func _pvp_local_request_allows_action_recovery(local_state_player_id: String) ->
 	return _pvp_local_request_allows_choice(local_state_player_id) and not available_moves.is_empty()
 
 func _show_current_action_prompt() -> void:
-	var player_species: String = _get_active_display_species("p1")
-	current_action_panel.set_message(event_text_formatter.format_action_prompt(player_species))
+	current_action_panel.set_message(event_text_formatter.format_action_prompt(_get_active_display_name("p1")))
 
 func _set_battle_input_locked(is_locked: bool) -> void:
 	if _is_spectator_battle():
@@ -4955,6 +4954,7 @@ func _update_active_hud_panel(player_id: String, hud_panel: Node) -> void:
 			battle_state.get_active_pokemon_gender(player_id),
 			_get_active_pokemon_is_shiny(player_id),
 			_get_active_player_experience_data(player_id),
+			_get_active_display_name(player_id),
 		)
 		return
 
@@ -4967,6 +4967,7 @@ func _update_active_hud_panel(player_id: String, hud_panel: Node) -> void:
 		battle_state.get_active_pokemon_gender(player_id),
 		_get_active_pokemon_is_shiny(player_id),
 		_get_active_player_experience_data(player_id),
+		_get_active_display_name(player_id),
 	)
 
 func _setup_status_condition_overlays() -> void:
@@ -6185,7 +6186,7 @@ func prepare_wild_battle_from_response(
 	_debug_battle_start_response("wild.setup.after_apply", api_response)
 	_debug_battle_start_active_snapshot("wild.setup.after_apply")
 
-	_add_battle_log_messages(setup_flow.get_wild_battle_start_messages(player_species, opponent_species))
+	_add_battle_log_messages(setup_flow.get_wild_battle_start_messages(_get_active_display_name("p1"), _get_active_display_name("p2")))
 	_show_original_player_lead_before_initial_events(player_species, player_pokemon)
 	# The lead data must be ready for the summon target, but the player sprite
 	# itself must not flash before the Poké Ball release animation begins.
@@ -6262,8 +6263,8 @@ func setup_trainer_battle_from_response(
 	_debug_battle_start_response("trainer.lead.after_selection", lead_response)
 	_debug_battle_start_active_snapshot("trainer.lead.after_selection")
 	_add_battle_log_messages(setup_flow.get_trainer_battle_start_messages(
-		player_species,
-		opponent_species,
+		_get_active_display_name("p1"),
+		_get_active_display_name("p2"),
 		trainer_data,
 		_get_player_display_name("p2")
 	))
@@ -6281,9 +6282,9 @@ func setup_trainer_battle_from_response(
 		opponent_species,
 		last_rendered_event_seq,
 	])
-	await _present_initial_summon_command("p1", player_species)
+	await _present_initial_summon_command("p1", _get_active_display_name("p1"))
 	await _play_lead_summon(_get_active_summon_ball_item_id("p1", player_pokemon.ball_item_id), player_species, player_sprite_box, "back")
-	await _present_initial_summon_command("p2", opponent_species)
+	await _present_initial_summon_command("p2", _get_active_display_name("p2"))
 	await _play_lead_summon(_get_active_summon_ball_item_id("p2", "poke-ball"), opponent_species, enemy_sprite_box, "front")
 	_debug_battle_start("trainer.setup.after_lead_summons lastRenderedSeq=%d" % last_rendered_event_seq)
 	await _render_initial_battle_events(lead_response)
@@ -6349,8 +6350,8 @@ func setup_pvp_battle_from_response(
 	if not restored_history_log:
 		_add_battle_log_messages([
 			"%s wants to battle!" % _get_player_display_name("p2"),
-			"Go! %s!" % _get_active_display_species("p1"),
-			"%s sent out %s!" % [_get_player_display_name("p2"), _get_active_display_species("p2")],
+			"Go! %s!" % _get_active_display_name("p1"),
+			"%s sent out %s!" % [_get_player_display_name("p2"), _get_active_display_name("p2")],
 		])
 	elif _is_spectator_battle():
 		# A spectator entering an active battle needs the canonical state now,
@@ -6373,9 +6374,9 @@ func setup_pvp_battle_from_response(
 	_show_original_player_lead_before_initial_events(player_species, player_pokemon)
 	_show_original_active_pokemon_for_player("p2", opponent_species)
 	await get_tree().process_frame
-	await _present_initial_summon_command("p1", player_species)
+	await _present_initial_summon_command("p1", _get_active_display_name("p1"))
 	await _play_lead_summon(_get_active_summon_ball_item_id("p1", player_pokemon.ball_item_id), player_species, player_sprite_box, "back")
-	await _present_initial_summon_command("p2", opponent_species)
+	await _present_initial_summon_command("p2", _get_active_display_name("p2"))
 	await _play_lead_summon(_get_active_summon_ball_item_id("p2", "poke-ball"), opponent_species, enemy_sprite_box, "front")
 	if not restored_history_log:
 		await _render_initial_battle_events(lead_response)
@@ -6769,7 +6770,8 @@ func _show_default_trainer_leads_before_selection(player_pokemon: Pokemon, api_r
 		"",
 		"",
 		player_pokemon.shiny,
-		_pokemon_experience_data_from_saved_pokemon(player_pokemon)
+		_pokemon_experience_data_from_saved_pokemon(player_pokemon),
+		player_pokemon.nickname,
 	)
 
 	var trainer_team_value: Variant = api_response.get("trainerTeam", [])
@@ -6796,7 +6798,7 @@ func _show_default_trainer_leads_before_selection(player_pokemon: Pokemon, api_r
 	var gender: String = str(lead_data.get("gender", ""))
 	var is_shiny: bool = bool(lead_data.get("shiny", false))
 	_set_single_pokemon_species_with_pvp_warning(enemy_sprite_box, species, "front", is_shiny, "initial_setup")
-	enemy_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny)
+	enemy_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny, {}, _get_switch_confirmation_pokemon_name(lead_data))
 
 func _render_initial_battle_events(api_response: Dictionary) -> void:
 	_debug_battle_start_response("initial.render.enter", api_response)
@@ -6851,7 +6853,7 @@ func _show_original_player_lead_before_initial_events(species: String, fallback_
 	var is_shiny := _get_active_pokemon_is_shiny_for_entrance("p1")
 
 	_set_single_pokemon_species_with_pvp_warning(player_sprite_box, species, "back", is_shiny, "initial_setup")
-	player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny, _get_active_player_experience_data("p1", fallback_pokemon))
+	player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny, _get_active_player_experience_data("p1", fallback_pokemon), _get_active_display_name("p1"))
 
 func _play_lead_summon(ball_item_id: String, cry_species: String, sprite_box: Control, side: String) -> void:
 	if sprite_box == null:
@@ -7177,10 +7179,10 @@ func _show_original_active_pokemon_for_player(player_id: String, species: String
 		var saved_shiny := _get_saved_pokemon_shiny_for_active_data(active_pokemon)
 		is_shiny = saved_shiny
 		_set_single_pokemon_species_with_pvp_warning(player_sprite_box, species, "back", is_shiny, "initial_setup")
-		player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny, _get_active_player_experience_data("p1"))
+		player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny, _get_active_player_experience_data("p1"), _get_active_display_name("p1"))
 	elif player_id == "p2":
 		_set_single_pokemon_species_with_pvp_warning(enemy_sprite_box, species, "front", is_shiny, "initial_setup")
-		enemy_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny)
+		enemy_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny, {}, _get_active_display_name("p2"))
 
 func _get_original_active_player_species(fallback_species: String = "") -> String:
 	var active_pokemon: Dictionary = battle_state.get_active_player_pokemon("p1")
@@ -7191,9 +7193,9 @@ func _get_original_active_player_species(fallback_species: String = "") -> Strin
 	if _is_specific_battle_form_species(fallback_species):
 		return fallback_species
 
-	var ident := str(active_pokemon.get("ident", ""))
-	if ident.contains(": "):
-		return str(ident.split(": ")[1]).strip_edges()
+	var state_species := battle_state.get_active_pokemon_species("p1").strip_edges()
+	if state_species != "":
+		return state_species
 
 	return fallback_species
 
@@ -7961,7 +7963,7 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 	var available_moves := _get_display_moves_for_selected_mechanic()
 	var selected_move_data: Dictionary = available_moves[slot - 1] if slot > 0 and slot <= available_moves.size() and available_moves[slot - 1] is Dictionary else {}
 	var pvp_move_context := {
-		"pokemon_name": _get_active_display_species(local_state_player_id),
+		"pokemon_name": _get_active_display_name(local_state_player_id),
 		"move_name": _get_move_confirmation_name(selected_move_data),
 	}
 	if _remember_pvp_local_prechoice({
@@ -9756,9 +9758,9 @@ func _set_active_hud_hp_from_event(target_ident: String, event: Dictionary, use_
 
 	match player_id:
 		"p1":
-			player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny, _get_active_player_experience_data("p1"))
+			player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny, _get_active_player_experience_data("p1"), _get_active_display_name("p1"))
 		"p2":
-			enemy_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny)
+			enemy_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny, {}, _get_active_display_name("p2"))
 	_sync_status_condition_overlays()
 
 func _get_event_hp_snapshot_with_state_fallback(event: Dictionary, player_id: String, use_previous_hp: bool) -> Dictionary:
@@ -10183,7 +10185,7 @@ func _on_party_grid_party_selected(slot: int) -> void:
 
 	var pvp_switch_context := {
 		"incoming_name": _get_switch_confirmation_pokemon_name(selected_pokemon_data),
-		"replaced_name": _get_active_display_species(_get_local_state_player_id()),
+		"replaced_name": _get_active_display_name(_get_local_state_player_id()),
 	}
 	if _remember_pvp_local_prechoice({
 		"choice_type": "switch",
@@ -15062,19 +15064,31 @@ func _get_active_display_species(player_id: String) -> String:
 		return held_species
 	return _resolve_active_display_species(player_id)
 
+func _get_active_display_name(player_id: String) -> String:
+	var display_name := display_data_presenter.get_active_display_name(player_id).strip_edges()
+	return display_name if display_name != "" else _get_active_display_species(player_id)
+
 func _resolve_active_display_species(player_id: String) -> String:
 	if _is_spectator_battle():
 		return battle_state.get_active_pokemon_species(player_id)
 	var display_species := display_data_presenter.get_active_display_species(player_id)
 	if _is_pvp_battle() and player_id == _get_local_state_player_id():
 		var active_pokemon := battle_state.get_active_player_pokemon(player_id)
-		var ident_species := _get_species_from_battle_ident(str(active_pokemon.get("ident", "")))
-		if ident_species != "":
+		var ident_text := _get_species_from_battle_ident(str(active_pokemon.get("ident", "")))
+		var nickname := str(active_pokemon.get("nickname", active_pokemon.get("name", ""))).strip_edges()
+		var saved_pokemon := _get_saved_pokemon_for_active_data(active_pokemon)
+		if saved_pokemon != null and saved_pokemon.nickname.strip_edges() != "":
+			nickname = saved_pokemon.nickname.strip_edges()
+		# Preserve the legacy PvP species repair only when the ident is not a
+		# known nickname. Showdown idents deliberately use nicknames.
+		if ident_text != "" and _normalize_species_for_compare(ident_text) != _normalize_species_for_compare(nickname):
 			var display_compare := _normalize_species_for_compare(display_species)
-			var ident_compare := _normalize_species_for_compare(ident_species)
+			var ident_compare := _normalize_species_for_compare(ident_text)
 			if display_compare == "" or (display_compare != ident_compare and not _is_specific_battle_form_species(display_species)):
-				return ident_species
-	return display_species
+				return ident_text
+	if display_species != "":
+		return display_species
+	return battle_state.get_active_pokemon_species(player_id)
 
 func _capture_ordered_response_display_species() -> void:
 	if _is_pvp_battle():
