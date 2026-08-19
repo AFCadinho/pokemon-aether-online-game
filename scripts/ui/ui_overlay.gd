@@ -10647,7 +10647,7 @@ func _current_aether_blessing_shiny_bonus() -> Dictionary:
 		return {}
 	return {
 		"id": "aether_blessing_shiny_bonus",
-		"label": "S+",
+		"label": "5%",
 		"name_key": "ui.buff.aether_blessing_shiny.name",
 		"description_key": "ui.buff.aether_blessing_shiny.description",
 		"remaining": _format_aether_blessing_remaining(remaining_seconds),
