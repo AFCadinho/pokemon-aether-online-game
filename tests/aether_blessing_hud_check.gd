@@ -63,8 +63,9 @@ func _run() -> void:
 	)
 	_check(
 		str(shiny_bonus.get("name_key", "")) == "ui.buff.aether_blessing_shiny.name"
+		and str(shiny_bonus.get("label", "")) == "5%"
 		and str(shiny_bonus.get("compactRemaining", "")) != "",
-		"Blessed Shiny Bonus has transparent copy and the membership countdown"
+		"5% Shiny communicates its effect immediately and keeps the membership countdown"
 	)
 
 	auth_service.set("current_user", {
