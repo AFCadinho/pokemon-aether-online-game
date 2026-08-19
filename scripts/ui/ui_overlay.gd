@@ -11109,6 +11109,8 @@ func _on_global_buff_contribute_pressed() -> void:
 		return
 	if not bool(response.get("success", false)):
 		_add_chat_message(str(response.get("error", LocalizationManager.text("backend.error.not_enough_money"))))
+		if int(response.get("status", 0)) == 409:
+			await _load_global_boost_state(selected_boost_id)
 		_refresh_global_buff_contribution_input()
 		return
 	var body := response.get("body", {}) as Dictionary
@@ -11148,6 +11150,18 @@ func _load_global_rare_encounter_boost() -> void:
 	var response: Dictionary = await PlayerWalletService.load_global_rare_encounter_boost()
 	if bool(response.get("success", false)):
 		_apply_global_boost_state(response.get("body", {}) as Dictionary, "global_rare_encounter")
+
+
+func _load_global_boost_state(boost_id: String) -> void:
+	match boost_id:
+		"global_exp":
+			await _load_global_exp_boost()
+		"global_ev":
+			await _load_global_ev_boost()
+		"global_shiny":
+			await _load_global_shiny_boost()
+		"global_rare_encounter":
+			await _load_global_rare_encounter_boost()
 
 
 func _load_global_heal() -> void:
@@ -11384,9 +11398,12 @@ func _apply_global_boost_state(state: Dictionary, boost_id: String) -> void:
 			else ""
 		)
 		global_buffs_data[index] = buff
-		if str(selected_global_buff.get("id", "")) == boost_id:
+		var selected := str(selected_global_buff.get("id", "")) == boost_id
+		if selected:
 			selected_global_buff = buff.duplicate(true)
 		set_global_buffs(global_buffs_data)
+		if selected:
+			_render_global_buff_details()
 		return
 
 
@@ -38790,15 +38807,19 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 		return
 	if message_type == "system.global_exp_boost_contribution":
 		add_system_message(_global_exp_boost_contribution_message(message))
+		_load_global_boost_state.call_deferred("global_exp")
 		return
 	if message_type == "system.global_ev_boost_contribution":
 		add_system_message(_global_ev_boost_contribution_message(message))
+		_load_global_boost_state.call_deferred("global_ev")
 		return
 	if message_type == "system.global_rare_encounter_boost_contribution":
 		add_system_message(_global_rare_encounter_boost_contribution_message(message))
+		_load_global_boost_state.call_deferred("global_rare_encounter")
 		return
 	if message_type == "system.global_shiny_boost_contribution":
 		add_system_message(_global_shiny_boost_contribution_message(message))
+		_load_global_boost_state.call_deferred("global_shiny")
 		return
 	if message_type == "system.global_heal_requested":
 		_receive_global_heal_request(message)
