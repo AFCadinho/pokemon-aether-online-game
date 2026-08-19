@@ -41,6 +41,7 @@ func _init() -> void:
 	_check(source.contains("PokedexService.search_species") and source.contains("PokedexService.get_species_detail"), "Existing Pokédex data loading remains connected")
 	_check(source.contains('get("preEvolutions", [])'), "Evolution tab renders server-owned pre-evolution relationships")
 	_check(source.contains("EvolutionSpeciesLink_") and source.contains("_on_pokedex_species_selected.bind(species_id)"), "Evolution species names link to their Pokédex records")
+	_check(source.contains("EvolutionSpeciesIcon_") and source.contains('species_icon.texture = _load_pokedex_species_texture'), "Evolution relationships show Pokémon HOME artwork")
 	_check(source.contains("EvolutionItemLink_") and source.contains("_open_item_dex_item_from_pokedex"), "Evolution items link to their Item Dex records")
 	_check(source.contains('button.set_meta("item_data", localized_item)'), "Item Dex search rows retain exact item data for cross-Dex navigation")
 	_check(source.contains('{"key": "evolution", "i18n": "evolution"'), "Pokédex has a dedicated evolution move section")
