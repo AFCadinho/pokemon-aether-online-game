@@ -2455,6 +2455,14 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 			"code": "trainer_battle_configuration_invalid",
 		}
 
+	var player_lead_slot := PlayerSave.get_first_usable_party_slot()
+	if player_lead_slot <= 0:
+		return {
+			"success": false,
+			"code": "no_usable_pokemon",
+		}
+	var player_lead_pokemon: Pokemon = PlayerSave.party[player_lead_slot - 1] as Pokemon
+
 	var battle_trainer_data := trainer_data.duplicate(true)
 	battle_trainer_data["battleTransitionStyle"] = _trainer_battle_transition_style(trainer_data)
 	is_in_battle = true
@@ -2498,7 +2506,7 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 	var battle_environment_id := _resolve_battle_environment_id("trainer", battle_trainer_data)
 
 	await battle_instance.setup_trainer_battle_from_response(
-		PlayerSave.party[0],
+		player_lead_pokemon,
 		battle_trainer_data,
 		response,
 		Callable(self, "_reveal_prepared_wild_battle"),
