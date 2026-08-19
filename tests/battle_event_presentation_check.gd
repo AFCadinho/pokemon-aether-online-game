@@ -55,6 +55,7 @@ func _init() -> void:
 	_check_z_power_event_has_visible_message()
 	_check_stat_reset_events_have_visible_messages()
 	_check_switch_log_uses_destination_side()
+	_check_switch_log_links_nicknames_to_species()
 	_check_semantic_battle_log_colors()
 	_check_supreme_overlord_fallen_counter_protocol()
 	quit(1 if failed else 0)
@@ -176,6 +177,28 @@ func _check_switch_log_uses_destination_side() -> void:
 		str(result.get("log_message", "")),
 		"Pikipek, come back!\nGo! Furret!",
 		"switch logs use the destination ident side when playerId is stale"
+	)
+
+
+func _check_switch_log_links_nicknames_to_species() -> void:
+	var presentation = _make_presentation()
+	var result: Dictionary = presentation.build({
+		"type": "switch",
+		"playerId": "p1",
+		"from": "Sparky",
+		"fromRef": {"species": "Pikachu"},
+		"to": "Blaze",
+		"toRef": {"displaySpecies": "Charizard"},
+	})
+	_check_equal(
+		str(result.get("log_message", "")),
+		"Sparky (Pikachu), come back!\nGo! Blaze (Charizard)!",
+		"switch log links both nicknames to their species"
+	)
+	_check_equal(
+		str(result.get("battle_message", "")),
+		"Go! Blaze!",
+		"large switch message stays concise"
 	)
 
 

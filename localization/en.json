@@ -2423,6 +2423,7 @@
   "battle.event.status.poisoned": "{target} was poisoned!",
   "battle.event.status.thawed": "{target} thawed out!",
   "battle.event.switch.go": "Go! {pokemon}!",
+  "battle.event.pokemon_identity": "{nickname} ({species})",
   "battle.event.switch.opponent": "{trainer} withdrew {from}!\n{trainer} sent out {to}!",
   "battle.event.switch.player": "{from}, come back!\nGo! {to}!",
   "battle.event.switch.sent_out": "{trainer} sent out {pokemon}!",

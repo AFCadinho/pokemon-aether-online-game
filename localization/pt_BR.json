@@ -2423,6 +2423,7 @@
   "battle.event.status.poisoned": "{target} foi envenenado!",
   "battle.event.status.thawed": "{target} descongelou!",
   "battle.event.switch.go": "Vai, {pokemon}!",
+  "battle.event.pokemon_identity": "{nickname} ({species})",
   "battle.event.switch.opponent": "{trainer} recolheu {from}!\n{trainer} enviou {to}!",
   "battle.event.switch.player": "{from}, volte!\nVai, {to}!",
   "battle.event.switch.sent_out": "{trainer} enviou {pokemon}!",

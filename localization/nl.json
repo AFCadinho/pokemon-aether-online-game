@@ -2423,6 +2423,7 @@
   "battle.event.status.poisoned": "{target} is vergiftigd!",
   "battle.event.status.thawed": "{target} is ontdooid!",
   "battle.event.switch.go": "Ga ervoor, {pokemon}!",
+  "battle.event.pokemon_identity": "{nickname} ({species})",
   "battle.event.switch.opponent": "{trainer} riep {from} terug!\n{trainer} stuurde {to} het veld in!",
   "battle.event.switch.player": "{from}, kom terug!\nGa ervoor, {to}!",
   "battle.event.switch.sent_out": "{trainer} stuurde {pokemon} het veld in!",
