@@ -995,14 +995,14 @@ theme_override_font_sizes/font_size = 13
 text = "ui.world.weather.clear"
 
 [node name="GlobalBuffsPanel" type="PanelContainer" parent="Control"]
-custom_minimum_size = Vector2(197, 50)
+custom_minimum_size = Vector2(242, 50)
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = 214.0
 offset_top = 6.0
-offset_right = 411.0
+offset_right = 456.0
 offset_bottom = 56.0
 grow_horizontal = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_global_buff_tray")
@@ -1137,6 +1137,18 @@ value = 0.0
 show_percentage = false
 theme_override_styles/background = SubResource("StyleBoxFlat_global_buff_progress_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_global_buff_progress_fill")
+
+[node name="BuffSlot5" type="Button" parent="Control/GlobalBuffsPanel/MarginContainer/Row/BuffSlots"]
+custom_minimum_size = Vector2(42, 40)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+icon = ExtResource("23_global_exp")
+icon_max_width = 30
+expand_icon = true
+theme_override_styles/normal = SubResource("StyleBoxFlat_global_buff_slot")
+theme_override_styles/hover = SubResource("StyleBoxFlat_global_buff_slot_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_global_buff_slot_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_global_buff_slot_hover")
 
 [node name="GlobalBuffDetailsPanel" type="PanelContainer" parent="Control"]
 visible = false
@@ -1287,6 +1299,37 @@ size_flags_horizontal = 8
 mouse_default_cursor_shape = 2
 text = "ui.buff.fill_remaining"
 alignment = 2
+
+[node name="GlobalHealSection" type="VBoxContainer" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 7
+
+[node name="CooldownLabel" type="Label" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/GlobalHealSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.59607846, 0.6509804, 0.7294118, 1)
+theme_override_font_sizes/font_size = 11
+text = "ui.buff.global_heal.available"
+horizontal_alignment = 1
+
+[node name="ActivateButton" type="Button" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/GlobalHealSection"]
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "ui.buff.global_heal.activate"
+
+[node name="AetheriteHint" type="Label" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/GlobalHealSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.59607846, 0.6509804, 0.7294118, 1)
+theme_override_font_sizes/font_size = 11
+text = "ui.buff.global_heal.no_aetherite"
+autowrap_mode = 2
+
+[node name="RequestsToggle" type="CheckButton" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/GlobalHealSection"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+button_pressed = true
+text = "ui.buff.global_heal.receive_requests"
 
 [node name="OptionsPanel" type="PanelContainer" parent="Control" unique_id=1882847732]
 custom_minimum_size = Vector2(368, 0)

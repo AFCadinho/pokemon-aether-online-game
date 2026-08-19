@@ -13,6 +13,7 @@ const GLOBAL_EXP_BOOST_ENDPOINT := "/game/global-boosts/exp"
 const GLOBAL_EV_BOOST_ENDPOINT := "/game/global-boosts/ev"
 const GLOBAL_RARE_ENCOUNTER_BOOST_ENDPOINT := "/game/global-boosts/rare-encounter"
 const GLOBAL_SHINY_BOOST_ENDPOINT := "/game/global-boosts/shiny"
+const GLOBAL_HEAL_ENDPOINT := "/game/global-heal"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 
@@ -102,6 +103,24 @@ func contribute_to_global_shiny_boost(amount: int) -> Dictionary:
 		HTTPClient.METHOD_POST,
 		GatewayApiConfig.get_json_headers(),
 		JSON.stringify({"amount": amount})
+	)
+
+
+func load_global_heal() -> Dictionary:
+	return await _request_json(
+		(await GatewayApiConfig.get_base_url()) + GLOBAL_HEAL_ENDPOINT,
+		HTTPClient.METHOD_GET,
+		GatewayApiConfig.get_accept_headers(),
+		""
+	)
+
+
+func activate_global_heal() -> Dictionary:
+	return await _request_json(
+		(await GatewayApiConfig.get_base_url()) + GLOBAL_HEAL_ENDPOINT + "/activate",
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		"{}"
 	)
 
 

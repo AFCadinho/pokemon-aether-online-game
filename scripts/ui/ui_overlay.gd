@@ -105,6 +105,7 @@ const GLOBAL_EXP_BUFF_ICON: Texture2D = preload("res://assets/ui/global_exp_boos
 const GLOBAL_EV_BUFF_ICON: Texture2D = preload("res://assets/ui/global_ev_boost.svg")
 const GLOBAL_SHINY_BUFF_ICON: Texture2D = preload("res://assets/ui/global_shiny_boost.svg")
 const GLOBAL_RARE_ENCOUNTER_BUFF_ICON: Texture2D = preload("res://assets/ui/global_rare_encounter_boost.svg")
+const GLOBAL_HEAL_ICON: Texture2D = preload("res://assets/ui/tool_heal_party.svg")
 const REDEEM_CODE_ICON: Texture2D = preload("res://assets/ui/redeem_code.svg")
 const PVP_MODE_RANKED_ICON: Texture2D = preload("res://assets/ui/pvp_battles.svg")
 const PVP_MODE_CUSTOM_ICON: Texture2D = preload("res://assets/ui/pvp_custom_battle.svg")
@@ -442,6 +443,7 @@ var donator_store_popup: DonatorStorePopup
 @onready var global_buff_details_status: Label = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/Header/Heading/StatusLabel
 @onready var global_buff_details_close_button: Button = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/Header/CloseButton
 @onready var global_buff_details_description: Label = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DescriptionLabel
+@onready var global_buff_goal_panel: PanelContainer = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/GoalPanel
 @onready var global_buff_details_progress: ProgressBar = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/GoalPanel/MarginContainer/Content/ProgressBar
 @onready var global_buff_details_progress_label: Label = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/GoalPanel/MarginContainer/Content/ProgressRow/ProgressLabel
 @onready var global_buff_details_percent_label: Label = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/GoalPanel/MarginContainer/Content/ProgressRow/PercentLabel
@@ -450,6 +452,10 @@ var donator_store_popup: DonatorStorePopup
 @onready var global_buff_amount_input: LineEdit = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow/AmountInput
 @onready var global_buff_fill_remaining_button: Button = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/FillRemainingButton
 @onready var global_buff_contribute_button: Button = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow/ContributeButton
+@onready var global_heal_section: VBoxContainer = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/GlobalHealSection
+@onready var global_heal_cooldown_label: Label = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/GlobalHealSection/CooldownLabel
+@onready var global_heal_activate_button: Button = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/GlobalHealSection/ActivateButton
+@onready var global_heal_requests_toggle: CheckButton = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/GlobalHealSection/RequestsToggle
 @onready var region_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/StatusRow/RegionBadge/RegionLabel
 @onready var location_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/HeaderRow/LocationLabel
 @onready var aether_clash_champion_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/AetherClashChampionLabel
@@ -1272,6 +1278,10 @@ var personal_buff_source_buffs: Array = []
 var personal_buffs_expanded := false
 var personal_buffs_refresh_elapsed := 0.0
 var global_buffs_refresh_elapsed := 0.0
+var pending_global_heal_request: Dictionary = {}
+var global_heal_request_dialog: ConfirmationDialog
+var global_heal_request_disable_checkbox: CheckBox
+var global_heal_request_busy := false
 var staff_tools_visibility_key := ""
 
 # Called when the node enters the scene tree for the first time.
@@ -9482,6 +9492,7 @@ func _process(delta: float) -> void:
 	_refresh_aether_clash_champion_if_needed(delta)
 	_refresh_utc_time_label(delta)
 	_refresh_global_buffs_if_needed(delta)
+	_try_show_pending_global_heal_request()
 	_refresh_personal_buffs_if_needed(delta)
 	_refresh_staff_tools_visibility_if_needed()
 	_refresh_pvp_room_polling(delta)
@@ -10276,6 +10287,9 @@ func _setup_status_docks() -> void:
 	global_buff_amount_input.text_changed.connect(_on_global_buff_amount_changed)
 	global_buff_fill_remaining_button.pressed.connect(_on_global_buff_fill_remaining_pressed)
 	global_buff_contribute_button.pressed.connect(_on_global_buff_contribute_pressed)
+	global_heal_activate_button.pressed.connect(_on_global_heal_activate_pressed)
+	global_heal_requests_toggle.toggled.connect(_on_global_heal_requests_toggled)
+	_setup_global_heal_request_dialog()
 	_set_localized_control_property(personal_buffs_empty_label, "text", "ui.buff.none")
 	_set_localized_control_property(global_buff_details_close_button, "tooltip_text", "common.close")
 	var contribution_hint := global_buff_donation_section.get_node_or_null("HintLabel") as Label
@@ -10342,12 +10356,22 @@ func _setup_status_docks() -> void:
 			"goal": 200000,
 			"active_duration": "1h",
 		},
+		{
+			"id": "global_heal",
+			"icon": GLOBAL_HEAL_ICON,
+			"name_key": "ui.buff.global_heal.name",
+			"description_key": "ui.buff.global_heal.description",
+			"state": "available",
+			"cost": 25000,
+			"cooldownUntil": "",
+		},
 	])
 	set_personal_buffs([])
 	_load_global_exp_boost.call_deferred()
 	_load_global_ev_boost.call_deferred()
 	_load_global_shiny_boost.call_deferred()
 	_load_global_rare_encounter_boost.call_deferred()
+	_load_global_heal.call_deferred()
 
 func set_global_buffs(buffs: Array) -> void:
 	global_buffs_data = buffs.duplicate(true)
@@ -10399,6 +10423,19 @@ func _refresh_global_buffs_if_needed(delta: float) -> void:
 	var changed := false
 	for index: int in range(global_buffs_data.size()):
 		var buff := global_buffs_data[index] as Dictionary
+		if str(buff.get("id", "")) == "global_heal":
+			var cooldown_until := str(buff.get("cooldownUntil", "")).strip_edges()
+			var cooldown_seconds := _global_buff_remaining_seconds(cooldown_until)
+			var next_state := "cooldown" if cooldown_seconds > 0 else "available"
+			if str(buff.get("state", "")) == next_state and int(buff.get("cooldownSeconds", -1)) == cooldown_seconds:
+				continue
+			buff["state"] = next_state
+			buff["cooldownSeconds"] = cooldown_seconds
+			global_buffs_data[index] = buff
+			if str(selected_global_buff.get("id", "")) == "global_heal":
+				selected_global_buff = buff.duplicate(true)
+			changed = true
+			continue
 		if str(buff.get("state", "funding")) != "active":
 			continue
 		var expires_at := str(buff.get("activeUntil", "")).strip_edges()
@@ -10643,6 +10680,20 @@ func _personal_buffs_summary_tooltip() -> String:
 
 func _global_buff_tooltip(buff: Dictionary) -> String:
 	var lines: Array[String] = [_localized_buff_name(buff)]
+	if str(buff.get("id", "")) == "global_heal":
+		lines.append(LocalizationManager.text(
+			"ui.buff.global_heal.cost",
+			{"amount": _format_money(maxi(int(buff.get("cost", 25000)), 0))}
+		))
+		var cooldown_seconds := maxi(int(buff.get("cooldownSeconds", 0)), 0)
+		lines.append(LocalizationManager.text(
+			"ui.buff.global_heal.cooldown"
+			if cooldown_seconds > 0
+			else "ui.buff.global_heal.available",
+			{"remaining": _format_global_buff_remaining(cooldown_seconds)}
+		))
+		lines.append(LocalizationManager.text("ui.buff.click_details"))
+		return "\n".join(lines)
 	if str(buff.get("state", "funding")) == "active":
 		lines.append(LocalizationManager.text(
 			"ui.buff.active_remaining",
@@ -10669,7 +10720,11 @@ func _on_global_buff_hover_changed(button: Button, hovered: bool) -> void:
 	_apply_global_buff_slot_visual(button, buff, progress_bar)
 
 func _apply_global_buff_slot_visual(button: Button, buff: Dictionary, progress_bar: ProgressBar) -> void:
-	var active := str(buff.get("state", "funding")) == "active"
+	var is_global_heal := str(buff.get("id", "")) == "global_heal"
+	var active := (
+		str(buff.get("state", "funding")) == "active"
+		or (is_global_heal and str(buff.get("state", "available")) == "available")
+	)
 	var current := maxi(int(buff.get("current", 0)), 0)
 	var hovered := bool(button.get_meta("buff_hovered", false))
 	var funded := current > 0
@@ -10698,6 +10753,7 @@ func _apply_global_buff_slot_visual(button: Button, buff: Dictionary, progress_b
 	button.add_theme_stylebox_override("pressed", _make_panel_style(hover_background.darkened(0.08), hover_border, 8, 1))
 	button.add_theme_stylebox_override("focus", _make_panel_style(hover_background, hover_border, 8, 1))
 	if progress_bar != null:
+		progress_bar.visible = not is_global_heal
 		progress_bar.add_theme_stylebox_override(
 			"background",
 			_make_panel_style(Color("#030811d9"), Color.TRANSPARENT, 2, 0)
@@ -10725,6 +10781,8 @@ func _global_buff_icon_for(buff: Dictionary) -> Texture2D:
 			return GLOBAL_SHINY_BUFF_ICON
 		"global_rare_encounter":
 			return GLOBAL_RARE_ENCOUNTER_BUFF_ICON
+		"global_heal":
+			return GLOBAL_HEAL_ICON
 	return GLOBAL_EXP_BUFF_ICON
 
 func _apply_buff_tray_group_visibility(panel: PanelContainer, tray_available: bool) -> void:
@@ -10800,6 +10858,7 @@ func _on_global_buff_button_pressed(button: Button) -> void:
 func _render_global_buff_details() -> void:
 	if selected_global_buff.is_empty():
 		return
+	var is_global_heal := str(selected_global_buff.get("id", "")) == "global_heal"
 	var state := str(selected_global_buff.get("state", "funding"))
 	var active := state == "active"
 	var current := maxi(int(selected_global_buff.get("current", 0)), 0)
@@ -10808,6 +10867,15 @@ func _render_global_buff_details() -> void:
 	global_buff_details_icon.texture = _global_buff_icon_for(selected_global_buff)
 	global_buff_details_title.text = _localized_buff_name(selected_global_buff)
 	global_buff_details_description.text = _localized_buff_description(selected_global_buff)
+	global_buff_goal_panel.visible = not is_global_heal
+	global_heal_section.visible = is_global_heal
+	if is_global_heal:
+		_render_global_heal_details()
+		global_buff_details_active_label.visible = false
+		global_buff_donation_section.visible = false
+		if global_buff_details_panel != null:
+			global_buff_details_panel.reset_size()
+		return
 	global_buff_details_progress.value = 100.0 if active else progress
 	global_buff_details_progress_label.text = "$%s / $%s" % [_format_money(current), _format_money(goal)]
 	global_buff_details_percent_label.text = "%d%%" % roundi(100.0 if active else progress)
@@ -10973,6 +11041,204 @@ func _load_global_rare_encounter_boost() -> void:
 	var response: Dictionary = await PlayerWalletService.load_global_rare_encounter_boost()
 	if bool(response.get("success", false)):
 		_apply_global_boost_state(response.get("body", {}) as Dictionary, "global_rare_encounter")
+
+
+func _load_global_heal() -> void:
+	var response: Dictionary = await PlayerWalletService.load_global_heal()
+	if bool(response.get("success", false)):
+		_apply_global_heal_state(response.get("body", {}) as Dictionary)
+
+
+func _apply_global_heal_state(state: Dictionary) -> void:
+	if bool(state.get("eventActive", false)):
+		_receive_global_heal_request({
+			"eventId": str(state.get("eventId", "")),
+			"displayName": str(state.get("eventDisplayName", "Trainer")),
+			"expiresAt": str(state.get("eventExpiresAt", "")),
+		})
+	for index: int in range(global_buffs_data.size()):
+		var buff := global_buffs_data[index] as Dictionary
+		if str(buff.get("id", "")) != "global_heal":
+			continue
+		buff["cost"] = maxi(int(state.get("cost", 25000)), 1)
+		buff["cooldownUntil"] = str(state.get("cooldownUntil", ""))
+		buff["cooldownSeconds"] = _global_buff_remaining_seconds(str(buff.get("cooldownUntil", "")))
+		buff["state"] = "available" if bool(state.get("available", false)) else "cooldown"
+		global_buffs_data[index] = buff
+		if str(selected_global_buff.get("id", "")) == "global_heal":
+			selected_global_buff = buff.duplicate(true)
+		set_global_buffs(global_buffs_data)
+		if str(selected_global_buff.get("id", "")) == "global_heal":
+			_render_global_buff_details()
+		return
+
+
+func _render_global_heal_details() -> void:
+	var cost := maxi(int(selected_global_buff.get("cost", 25000)), 1)
+	var cooldown_seconds := maxi(int(selected_global_buff.get("cooldownSeconds", 0)), 0)
+	var available := str(selected_global_buff.get("state", "available")) == "available" and cooldown_seconds <= 0
+	global_buff_details_status.text = LocalizationManager.text(
+		"ui.buff.global_heal.service" if available else "ui.buff.global_heal.cooling_down"
+	)
+	global_buff_details_status.add_theme_color_override(
+		"font_color",
+		Color("#85f29c") if available else UI_MUTED_TEXT
+	)
+	global_heal_cooldown_label.text = LocalizationManager.text(
+		"ui.buff.global_heal.available"
+		if available
+		else "ui.buff.global_heal.cooldown",
+		{"remaining": _format_global_buff_remaining(cooldown_seconds)}
+	)
+	global_heal_activate_button.text = LocalizationManager.text(
+		"ui.buff.global_heal.activate",
+		{"amount": _format_money(cost)}
+	)
+	global_heal_activate_button.disabled = not available or global_heal_request_busy
+	global_heal_requests_toggle.set_pressed_no_signal(GameState.global_heal_requests_enabled)
+	_apply_button_style(global_heal_activate_button, "primary" if available else "default")
+
+
+func _on_global_heal_activate_pressed() -> void:
+	if global_heal_request_busy or str(selected_global_buff.get("state", "cooldown")) != "available":
+		return
+	var cost := maxi(int(selected_global_buff.get("cost", 25000)), 1)
+	_show_ui_confirm_popup(
+		LocalizationManager.text("ui.buff.global_heal.confirm_title"),
+		LocalizationManager.text(
+			"ui.buff.global_heal.confirm_message",
+			{"amount": _format_money(cost)}
+		),
+		LocalizationManager.text("ui.buff.global_heal.confirm_button"),
+		Callable(self, "_activate_global_heal"),
+		Vector2i(480, 210)
+	)
+
+
+func _activate_global_heal() -> void:
+	if global_heal_request_busy:
+		return
+	global_heal_request_busy = true
+	_render_global_heal_details()
+	var response: Dictionary = await PlayerWalletService.activate_global_heal()
+	global_heal_request_busy = false
+	if not bool(response.get("success", false)):
+		add_system_warning(str(response.get("error", LocalizationManager.text("ui.buff.global_heal.activation_failed"))))
+		await _load_global_heal()
+		return
+	var body := response.get("body", {}) as Dictionary
+	PlayerWalletService.apply_wallet_result({"success": true, "wallet": body.get("wallet", {})})
+	_apply_global_heal_state(body)
+	refresh_money_display()
+	add_system_message(LocalizationManager.text("ui.buff.global_heal.activated"))
+
+
+func _on_global_heal_requests_toggled(enabled: bool) -> void:
+	GameState.global_heal_requests_enabled = enabled
+	if not enabled:
+		pending_global_heal_request.clear()
+		if global_heal_request_dialog != null:
+			global_heal_request_dialog.hide()
+	await _save_toggle_preferences()
+
+
+func _setup_global_heal_request_dialog() -> void:
+	if global_heal_request_dialog != null:
+		return
+	global_heal_request_dialog = ConfirmationDialog.new()
+	global_heal_request_dialog.name = "GlobalHealRequestDialog"
+	global_heal_request_dialog.exclusive = true
+	global_heal_request_dialog.confirmed.connect(_on_global_heal_request_confirmed)
+	global_heal_request_dialog.canceled.connect(_on_global_heal_request_declined)
+	global_heal_request_disable_checkbox = CheckBox.new()
+	global_heal_request_disable_checkbox.name = "DisableFutureGlobalHealRequests"
+	global_heal_request_dialog.get_vbox().add_child(global_heal_request_disable_checkbox)
+	root_control.add_child(global_heal_request_dialog)
+
+
+func _receive_global_heal_request(message: Dictionary) -> void:
+	if not GameState.global_heal_requests_enabled:
+		return
+	var event_id := str(message.get("eventId", "")).strip_edges()
+	var expires_at := str(message.get("expiresAt", "")).strip_edges()
+	if event_id.is_empty() or _global_buff_remaining_seconds(expires_at) <= 0:
+		return
+	pending_global_heal_request = {
+		"eventId": event_id,
+		"displayName": str(message.get("displayName", "Trainer")).strip_edges(),
+		"expiresAt": expires_at,
+	}
+	_try_show_pending_global_heal_request()
+
+
+func _try_show_pending_global_heal_request() -> void:
+	if pending_global_heal_request.is_empty() or global_heal_request_busy:
+		return
+	if not GameState.global_heal_requests_enabled:
+		pending_global_heal_request.clear()
+		return
+	if _global_buff_remaining_seconds(str(pending_global_heal_request.get("expiresAt", ""))) <= 0:
+		pending_global_heal_request.clear()
+		if global_heal_request_dialog != null:
+			global_heal_request_dialog.hide()
+		return
+	if _is_world_battle_active():
+		if global_heal_request_dialog != null and global_heal_request_dialog.visible:
+			global_heal_request_dialog.hide()
+		return
+	if not PartyHealService.party_needs_heal(PlayerSave.party):
+		pending_global_heal_request.clear()
+		return
+	if global_heal_request_dialog == null or global_heal_request_dialog.visible:
+		return
+	global_heal_request_dialog.title = LocalizationManager.text("ui.buff.global_heal.request_title")
+	global_heal_request_dialog.dialog_text = LocalizationManager.text(
+		"ui.buff.global_heal.request_message",
+		{"player": str(pending_global_heal_request.get("displayName", "Trainer"))}
+	)
+	global_heal_request_dialog.get_ok_button().text = LocalizationManager.text("ui.buff.global_heal.accept")
+	global_heal_request_dialog.get_cancel_button().text = LocalizationManager.text("ui.buff.global_heal.decline")
+	global_heal_request_disable_checkbox.text = LocalizationManager.text("ui.buff.global_heal.disable_future")
+	global_heal_request_disable_checkbox.set_pressed_no_signal(false)
+	global_heal_request_dialog.popup_centered(Vector2i(520, 250))
+
+
+func _on_global_heal_request_confirmed() -> void:
+	if pending_global_heal_request.is_empty():
+		return
+	if _is_world_battle_active():
+		global_heal_request_dialog.hide()
+		return
+	var request := pending_global_heal_request.duplicate(true)
+	pending_global_heal_request.clear()
+	var disable_future := global_heal_request_disable_checkbox.button_pressed
+	global_heal_request_busy = true
+	var response: Dictionary = await PartyHealService.accept_global_heal(str(request.get("eventId", "")))
+	global_heal_request_busy = false
+	if disable_future:
+		GameState.global_heal_requests_enabled = false
+		global_heal_requests_toggle.set_pressed_no_signal(false)
+		await _save_toggle_preferences()
+	if bool(response.get("success", false)):
+		add_system_message(LocalizationManager.text("ui.buff.global_heal.healed"))
+		return
+	if (
+		int(response.get("status", 0)) == 409
+		and _is_world_battle_active()
+		and GameState.global_heal_requests_enabled
+	):
+		pending_global_heal_request = request
+		return
+	add_system_warning(str(response.get("error", LocalizationManager.text("ui.buff.global_heal.heal_failed"))))
+
+
+func _on_global_heal_request_declined() -> void:
+	pending_global_heal_request.clear()
+	if global_heal_request_disable_checkbox == null or not global_heal_request_disable_checkbox.button_pressed:
+		return
+	GameState.global_heal_requests_enabled = false
+	global_heal_requests_toggle.set_pressed_no_signal(false)
+	await _save_toggle_preferences()
 
 
 func _apply_global_boost_state(state: Dictionary, boost_id: String) -> void:
@@ -25723,7 +25989,9 @@ func _load_toggle_preferences() -> void:
 	GameState.show_follower = bool(preferences.get("showFollower", true))
 	GameState.repel_enabled = bool(preferences.get("showRepel", GameState.repel_enabled))
 	GameState.running_shoes_enabled = bool(preferences.get("runningShoes", GameState.running_shoes_enabled))
+	GameState.global_heal_requests_enabled = bool(preferences.get("globalHealRequestsEnabled", true))
 	_apply_selected_role_badge_preference(str(preferences.get("selectedRoleBadge", GameState.selected_role_badge)))
+	global_heal_requests_toggle.set_pressed_no_signal(GameState.global_heal_requests_enabled)
 	running_shoes_button.set_pressed_no_signal(GameState.running_shoes_enabled)
 	_set_icon_slot_active(running_shoes_slot, GameState.running_shoes_enabled)
 	repel_toggle_button.set_pressed_no_signal(GameState.repel_enabled)
@@ -25744,6 +26012,7 @@ func _save_toggle_preferences() -> Dictionary:
 		"showFollower": GameState.show_follower,
 		"showRepel": GameState.repel_enabled,
 		"runningShoes": GameState.running_shoes_enabled,
+		"globalHealRequestsEnabled": GameState.global_heal_requests_enabled,
 		"selectedRoleBadge": GameState.selected_role_badge,
 	})
 	if not bool(result.get("success", false)):
@@ -25757,6 +26026,8 @@ func _save_toggle_preferences() -> Dictionary:
 		GameState.show_follower = bool(preferences.get("showFollower", GameState.show_follower))
 		GameState.repel_enabled = bool(preferences.get("showRepel", GameState.repel_enabled))
 		GameState.running_shoes_enabled = bool(preferences.get("runningShoes", GameState.running_shoes_enabled))
+		GameState.global_heal_requests_enabled = bool(preferences.get("globalHealRequestsEnabled", GameState.global_heal_requests_enabled))
+		global_heal_requests_toggle.set_pressed_no_signal(GameState.global_heal_requests_enabled)
 		_apply_selected_role_badge_preference(str(preferences.get("selectedRoleBadge", GameState.selected_role_badge)))
 	return result
 
@@ -36916,6 +37187,9 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 		return
 	if message_type == "system.global_shiny_boost_contribution":
 		add_system_message(_global_shiny_boost_contribution_message(message))
+		return
+	if message_type == "system.global_heal_requested":
+		_receive_global_heal_request(message)
 		return
 	if message_type == "chat_error":
 		var error_text: String = str(message.get("message", "Chat message could not be sent."))

@@ -196,6 +196,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/overworld_medicine_check.gd",
 	"res://tests/player_action_escape_rope_check.gd",
 	"res://tests/overworld_ui_side_layout_check.gd",
+	"res://tests/global_heal_check.gd",
 	"res://tests/adinho_appearance_unlock_check.gd",
 	"res://tests/base_hair_layer_check.gd",
 	"res://tests/appearance_color_system_check.gd",
