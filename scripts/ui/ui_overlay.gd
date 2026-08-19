@@ -11108,9 +11108,10 @@ func _on_global_buff_contribute_pressed() -> void:
 	else:
 		return
 	if not bool(response.get("success", false)):
-		_add_chat_message(str(response.get("error", LocalizationManager.text("backend.error.not_enough_money"))))
 		if int(response.get("status", 0)) == 409:
 			await _load_global_boost_state(selected_boost_id)
+		else:
+			_add_chat_message(str(response.get("error", LocalizationManager.text("backend.error.not_enough_money"))))
 		_refresh_global_buff_contribution_input()
 		return
 	var body := response.get("body", {}) as Dictionary
