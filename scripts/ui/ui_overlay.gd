@@ -27952,7 +27952,8 @@ func _load_first_pokedex_sprite_frame(species: Dictionary) -> Texture2D:
 			"_load_sprite_frames",
 			candidate,
 			"front",
-			pokedex_shiny_mode
+			pokedex_shiny_mode,
+			false
 		)
 		var frames := frames_value as SpriteFrames
 		if frames == null:
