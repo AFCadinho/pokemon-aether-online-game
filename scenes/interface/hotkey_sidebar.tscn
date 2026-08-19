@@ -28,11 +28,11 @@ corner_radius_bottom_right = 9
 corner_radius_bottom_left = 9
 
 [node name="HotkeySidebar" type="PanelContainer" unique_id=311861686]
-custom_minimum_size = Vector2(60, 408)
+custom_minimum_size = Vector2(110, 208)
 offset_left = 16.0
 offset_top = 104.0
-offset_right = 76.0
-offset_bottom = 512.0
+offset_right = 126.0
+offset_bottom = 312.0
 mouse_default_cursor_shape = 13
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
@@ -43,9 +43,11 @@ theme_override_constants/margin_top = 7
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 7
 
-[node name="SlotStack" type="VBoxContainer" parent="MarginContainer" unique_id=971448359]
+[node name="SlotStack" type="GridContainer" parent="MarginContainer" unique_id=971448359]
 layout_mode = 2
-theme_override_constants/separation = 6
+columns = 2
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
 
 [node name="Slot1" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=1484403079]
 custom_minimum_size = Vector2(44, 44)
