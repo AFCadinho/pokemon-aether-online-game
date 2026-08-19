@@ -19066,7 +19066,7 @@ func _capture_pokemon_summary_card_context(card_key: String, pokemon: Pokemon, m
 		"ball_list": pokemon_summary_ball_list,
 		"type_icon_row": pokemon_summary_type_icon_row,
 		"title_label": pokemon_summary_title_label,
-		"gender_label": pokemon_summary_gender_label,
+		"gender_label": pokemon_summary_gender_label if mode == "interactive" else null,
 		"id_label": pokemon_summary_id_label,
 		"meta_label": pokemon_summary_meta_label,
 		"held_item_slot": pokemon_summary_held_item_slot,

@@ -48,7 +48,7 @@ func _check_summary_card_wiring() -> void:
 		"summary refreshes the gender label"
 	)
 	_check(
-		source.contains('"gender_label": pokemon_summary_gender_label'),
+		source.contains('"gender_label": pokemon_summary_gender_label if mode == "interactive" else null'),
 		"multi-card summary context retains its gender label"
 	)
 
