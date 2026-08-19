@@ -90,7 +90,6 @@ const CHAT_CHANNEL_MAP := "map"
 const CHAT_CHANNEL_TRADE := "trade"
 const CHAT_CHANNEL_HELP := "help"
 const CHAT_MUTE_PERMISSION := "chat:mute"
-const CHAT_MODERATION_DEBUG_PREFIX := "[ChatModerationDebug][Overlay]"
 const IMPERSONATE_PERMISSION := "accounts:impersonate"
 const DEV_TOOLS_PERMISSION := "generating"
 const STAFF_ACTION_BAR_PERMISSION := "ui:staff:action-bar"
@@ -638,6 +637,8 @@ var chat_moderation_confirm_button: Button
 var chat_moderation_action := ""
 var chat_moderation_target: Dictionary = {}
 var chat_moderation_in_flight := false
+var chat_muted_until_unix := 0.0
+var chat_mute_last_remaining_second := -1
 var chat_copy_confirmation: PanelContainer
 var chat_copy_confirmation_token := 0
 var chat_resize_dragging := false
@@ -1447,6 +1448,7 @@ func _ready() -> void:
 	if not GuildService.membership_changed.is_connected(_on_guild_chat_membership_changed):
 		GuildService.membership_changed.connect(_on_guild_chat_membership_changed)
 	_refresh_guild_chat_membership.call_deferred()
+	_sync_chat_mute_from_current_user()
 	_apply_chat_tab_state()
 	dev_pokemon_button.visible = false
 	dev_pokemon_button.disabled = true
@@ -1826,12 +1828,6 @@ func _can_use_chat_moderation() -> bool:
 		and player_interaction_coordinator.can_moderate_chat()
 	)
 	var allowed := overlay_allowed or coordinator_allowed
-	print(
-		CHAT_MODERATION_DEBUG_PREFIX,
-		" permission overlay=", overlay_allowed,
-		" coordinator=", coordinator_allowed,
-		" allowed=", allowed
-	)
 	# PlayerInteractionCoordinator is also responsible for rendering the direct
 	# player action. Use that same decision for chat and for opening the modal so
 	# the two entry points cannot disagree because of a stale user projection.
@@ -9603,6 +9599,7 @@ func _process(delta: float) -> void:
 	_refresh_pvp_room_polling(delta)
 	_refresh_pvp_room_wait_spinner(delta)
 	_refresh_player_action_cooldown(delta)
+	_refresh_chat_mute_countdown()
 
 func _setup_ui_input_mouse_blocker() -> void:
 	ui_input_mouse_blocker = Control.new()
@@ -25430,6 +25427,48 @@ func _on_chat_tab_pressed(tab_id: String) -> void:
 	active_chat_tab = resolved_tab_id
 	_apply_chat_tab_state()
 
+
+func _sync_chat_mute_from_current_user() -> void:
+	var muted_until := str(AuthService.current_user.get("chatMutedUntil", "")).strip_edges()
+	if muted_until == "":
+		chat_muted_until_unix = 0.0
+		chat_mute_last_remaining_second = 0
+		return
+	chat_muted_until_unix = _pvp_iso_timestamp_to_unix_time(muted_until)
+	chat_mute_last_remaining_second = -1
+
+
+func _chat_mute_remaining_seconds() -> int:
+	if chat_muted_until_unix <= 0.0:
+		return 0
+	return maxi(
+		int(ceil(chat_muted_until_unix - Time.get_unix_time_from_system())),
+		0
+	)
+
+
+func _refresh_chat_mute_countdown() -> void:
+	if chat_muted_until_unix <= 0.0:
+		return
+	var remaining := _chat_mute_remaining_seconds()
+	if remaining == chat_mute_last_remaining_second:
+		return
+	chat_mute_last_remaining_second = remaining
+	if remaining <= 0:
+		chat_muted_until_unix = 0.0
+	_apply_chat_tab_state()
+
+
+func _format_chat_mute_remaining(total_seconds: int) -> String:
+	var safe_seconds := maxi(total_seconds, 0)
+	var hours := int(safe_seconds / 3600)
+	var minutes := int((safe_seconds % 3600) / 60)
+	var seconds := safe_seconds % 60
+	if hours > 0:
+		return "%d:%02d:%02d" % [hours, minutes, seconds]
+	return "%02d:%02d" % [minutes, seconds]
+
+
 func _apply_chat_tab_state() -> void:
 	if active_chat_tab == CHAT_TAB_GUILD and guild_chat_has_unread:
 		guild_chat_has_unread = false
@@ -25446,6 +25485,9 @@ func _apply_chat_tab_state() -> void:
 			or (not guild_chat_membership_loading and not guild_chat_membership.is_empty())
 		)
 	)
+	var mute_remaining := _chat_mute_remaining_seconds()
+	var public_chat_muted := mute_remaining > 0 and active_chat_tab != CHAT_TAB_PM
+	var input_available := input_active and not public_chat_muted
 	var primary_tab := _active_primary_chat_tab_id()
 	var general_active: bool = primary_tab == CHAT_TAB_GENERAL
 	_apply_chat_main_tab_style(all_chat_tab_button, active_chat_tab == CHAT_TAB_ALL)
@@ -25461,8 +25503,8 @@ func _apply_chat_tab_state() -> void:
 	send_button.visible = input_active
 	for attachment_button: Button in chat_pokemon_attachment_buttons:
 		if attachment_button != null:
-			attachment_button.visible = input_active
-	chat_input.editable = input_active
+			attachment_button.visible = input_available
+	chat_input.editable = input_available
 	if active_chat_tab == CHAT_TAB_PM:
 		chat_input.placeholder_text = LocalizationManager.text("ui.chat.input.private")
 	elif active_chat_tab == CHAT_TAB_ALL:
@@ -25485,8 +25527,13 @@ func _apply_chat_tab_state() -> void:
 		)
 	else:
 		chat_input.placeholder_text = "" if input_active else LocalizationManager.text("ui.chat.input.system")
-	send_button.disabled = not input_active
-	if not input_active:
+	if public_chat_muted:
+		chat_input.placeholder_text = LocalizationManager.text(
+			"ui.chat.muted.remaining",
+			{"time": _format_chat_mute_remaining(mute_remaining)}
+		)
+	send_button.disabled = not input_available
+	if not input_available:
 		chat_input.release_focus()
 	if message_scroll != null:
 		message_scroll.visible = active_chat_tab != CHAT_TAB_PM
@@ -31414,11 +31461,6 @@ func _on_player_interaction_trainer_card_requested(player: Dictionary) -> void:
 
 
 func _on_player_interaction_chat_moderation_requested(action: String, player: Dictionary) -> void:
-	print(
-		CHAT_MODERATION_DEBUG_PREFIX,
-		" direct signal received action=", action,
-		" target_id=", _user_id_from_state(player)
-	)
 	_show_chat_moderation_popup(action, player)
 
 func _on_player_interaction_social_overview_updated(_overview: Dictionary) -> void:
@@ -37996,19 +38038,9 @@ func _show_chat_moderation_popup(action: String, user: Dictionary) -> void:
 	var allowed := _can_use_chat_moderation()
 	var target_user_id := _user_id_from_state(user)
 	var is_self := _is_current_auth_user(user)
-	print(
-		CHAT_MODERATION_DEBUG_PREFIX,
-		" popup requested action=", action,
-		" target_id=", target_user_id,
-		" allowed=", allowed,
-		" is_self=", is_self,
-		" popup_ready=", chat_moderation_popup != null
-	)
 	if not allowed:
-		print(CHAT_MODERATION_DEBUG_PREFIX, " popup blocked: permission")
 		return
 	if target_user_id <= 0 or is_self:
-		print(CHAT_MODERATION_DEBUG_PREFIX, " popup blocked: invalid target or self")
 		return
 	chat_moderation_action = action
 	chat_moderation_target = user.duplicate(true)
@@ -38032,12 +38064,6 @@ func _show_chat_moderation_popup(action: String, user: Dictionary) -> void:
 	chat_moderation_popup.reset_size()
 	chat_moderation_popup.visible = true
 	_activate_ui_panel(chat_moderation_popup)
-	print(
-		CHAT_MODERATION_DEBUG_PREFIX,
-		" popup opened visible=", chat_moderation_popup.visible,
-		" layer=", layer,
-		" z_index=", chat_moderation_popup.z_index
-	)
 	chat_moderation_reason_input.grab_focus.call_deferred()
 
 
@@ -38062,18 +38088,10 @@ func _on_chat_moderation_reason_submitted(_reason: String) -> void:
 
 func _submit_chat_moderation_action() -> void:
 	if chat_moderation_in_flight:
-		print(CHAT_MODERATION_DEBUG_PREFIX, " submit ignored: request already in flight")
 		return
 	var target_user_id := _user_id_from_state(chat_moderation_target)
 	var reason := chat_moderation_reason_input.text.strip_edges()
-	print(
-		CHAT_MODERATION_DEBUG_PREFIX,
-		" submit action=", chat_moderation_action,
-		" target_id=", target_user_id,
-		" reason_length=", reason.length()
-	)
 	if target_user_id <= 0 or reason.length() < 3:
-		print(CHAT_MODERATION_DEBUG_PREFIX, " submit blocked: target or reason validation")
 		chat_moderation_status_label.text = LocalizationManager.text("ui.chat.moderation.reason_short")
 		return
 	chat_moderation_in_flight = true
@@ -38084,11 +38102,6 @@ func _submit_chat_moderation_action() -> void:
 		result = await ChatModerationService.mute_player(target_user_id, duration_minutes, reason)
 	else:
 		result = await ChatModerationService.unmute_player(target_user_id, reason)
-	print(
-		CHAT_MODERATION_DEBUG_PREFIX,
-		" request completed success=", bool(result.get("success", false)),
-		" status=", int(result.get("status", 0))
-	)
 	chat_moderation_in_flight = false
 	if not bool(result.get("success", false)):
 		chat_moderation_status_label.text = str(result.get("error", "Moderation action failed."))
@@ -38286,8 +38299,41 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 	if message_type == "system.global_shiny_boost_contribution":
 		add_system_message(_global_shiny_boost_contribution_message(message))
 		return
+	if message_type == "chat.mute.updated":
+		var remaining_seconds := maxi(int(message.get("remainingSeconds", 0)), 0)
+		var muted_until := str(message.get("mutedUntil", "")).strip_edges()
+		if remaining_seconds <= 0 and muted_until != "":
+			remaining_seconds = maxi(
+				int(ceil(_pvp_iso_timestamp_to_unix_time(muted_until) - Time.get_unix_time_from_system())),
+				0
+			)
+		if remaining_seconds > 0:
+			chat_muted_until_unix = Time.get_unix_time_from_system() + remaining_seconds
+			chat_mute_last_remaining_second = -1
+			AuthService.current_user["chatMutedUntil"] = muted_until
+			add_system_message(LocalizationManager.text(
+				"ui.chat.muted.notice",
+				{"time": _format_chat_mute_remaining(remaining_seconds)}
+			))
+		else:
+			chat_muted_until_unix = 0.0
+			chat_mute_last_remaining_second = 0
+			AuthService.current_user["chatMutedUntil"] = null
+			add_system_message(LocalizationManager.text("ui.chat.unmuted.notice"))
+		_apply_chat_tab_state()
+		return
 	if message_type == "chat_error":
 		var error_text: String = str(message.get("message", "Chat message could not be sent."))
+		if str(message.get("code", "")).strip_edges().to_lower() == "chat_muted":
+			var remaining_seconds := maxi(int(message.get("cooldownSeconds", 0)), 0)
+			if remaining_seconds > 0:
+				chat_muted_until_unix = Time.get_unix_time_from_system() + remaining_seconds
+				chat_mute_last_remaining_second = -1
+				error_text = LocalizationManager.text(
+					"ui.chat.muted.remaining",
+					{"time": _format_chat_mute_remaining(remaining_seconds)}
+				)
+				_apply_chat_tab_state()
 		var error_channel := str(message.get("channel", "")).strip_edges().to_lower()
 		var error_category := (
 			error_channel
@@ -38940,12 +38986,6 @@ func _open_chat_sender_context_menu(context: Dictionary, global_position: Vector
 	chat_sender_context_menu.set_item_disabled(1, username == "")
 	var target_user_id := _user_id_from_state(user)
 	var can_moderate := _can_use_chat_moderation()
-	print(
-		CHAT_MODERATION_DEBUG_PREFIX,
-		" chat sender menu target_id=", target_user_id,
-		" can_moderate=", can_moderate,
-		" user_keys=", user.keys()
-	)
 	if can_moderate and target_user_id > 0:
 		# Keep the action available even if the optional state lookup is slow or
 		# unavailable. The authoritative endpoint validates every mutation.
@@ -38993,15 +39033,7 @@ func _on_chat_message_context_action(action_id: int) -> void:
 
 func _on_chat_sender_context_action(action_id: int) -> void:
 	var user := _dictionary_from_value(active_chat_sender_context.get("user", {}))
-	var target_user_id := _user_id_from_state(user)
 	var is_self := _is_current_auth_user(user)
-	print(
-		CHAT_MODERATION_DEBUG_PREFIX,
-		" chat sender action id=", action_id,
-		" target_id=", target_user_id,
-		" user_empty=", user.is_empty(),
-		" is_self=", is_self
-	)
 	if user.is_empty() or is_self:
 		return
 	match action_id:

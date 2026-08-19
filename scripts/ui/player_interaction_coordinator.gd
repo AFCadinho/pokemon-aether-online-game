@@ -14,7 +14,6 @@ signal chat_moderation_requested(action: String, player: Dictionary)
 signal social_overview_updated(overview: Dictionary)
 
 const CHAT_MUTE_PERMISSION := "chat:mute"
-const CHAT_MODERATION_DEBUG_PREFIX := "[ChatModerationDebug][PlayerMenu]"
 
 const PANEL_WIDTH := 410.0
 const CONTEXT_MENU_WIDTH := 344.0
@@ -686,20 +685,9 @@ func _on_mail_pressed() -> void:
 
 
 func _on_chat_moderation_pressed() -> void:
-	var target_id := int(current_target.get("userId", 0))
-	var allowed := _can_moderate_chat()
-	print(
-		CHAT_MODERATION_DEBUG_PREFIX,
-		" pressed target_id=", target_id,
-		" target_empty=", current_target.is_empty(),
-		" allowed=", allowed,
-		" signal_connections=", chat_moderation_requested.get_connections().size()
-	)
-	if current_target.is_empty() or not allowed:
-		print(CHAT_MODERATION_DEBUG_PREFIX, " blocked before signal")
+	if current_target.is_empty() or not _can_moderate_chat():
 		return
 	var action := "unmute" if chat_target_is_muted else "mute"
-	print(CHAT_MODERATION_DEBUG_PREFIX, " emitting action=", action)
 	chat_moderation_requested.emit(
 		action,
 		current_target.duplicate(true)

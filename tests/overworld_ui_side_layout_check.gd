@@ -340,6 +340,15 @@ func _init() -> void:
 		and script_source.contains("if text.is_valid_float():"),
 		"chat actions accept numeric user ids decoded from JSON"
 	)
+	_check(
+		script_source.contains("func _chat_mute_remaining_seconds() -> int:")
+		and script_source.contains("func _refresh_chat_mute_countdown() -> void:")
+		and script_source.contains("ui.chat.muted.remaining")
+		and script_source.contains('message_type == "chat.mute.updated"')
+		and script_source.contains("ui.chat.muted.notice")
+		and script_source.contains("chat_input.editable = input_available"),
+		"muted players receive realtime updates and see a countdown in the disabled chat input"
+	)
 	_check(script_source.contains('_apply_chat_main_tab_style(general_chat_tab_button, general_active)'), "active and inactive main tabs receive distinct styling")
 	_check(script_source.contains("style.border_width_bottom = 2"), "selected main tab gets a clear bottom accent")
 	_check(script_source.contains("_apply_chat_dock_button_style(send_button, true)"), "Send uses the input dock accent treatment")
