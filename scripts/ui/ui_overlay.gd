@@ -38214,6 +38214,22 @@ func _add_user_chat_message(
 	if not role.is_empty():
 		role_name = str(role.get("badge", "")).strip_edges()
 	var message_context := _chat_message_context(user, display_name, text, sent_at)
+	var inline_single_pokemon := (
+		text.strip_edges() == ""
+		and pokemon_attachments.size() == 1
+		and shiny_hunt_attachment.is_empty()
+	)
+	var inline_pokemon_attachment: Control = null
+	if inline_single_pokemon:
+		inline_pokemon_attachment = _create_chat_pokemon_attachment_button(
+			_pokemon_preview_payload_with_current_trainer(
+				pokemon_attachments[0],
+				display_name,
+				str(user.get("id", user.get("userId", user.get("user_id", ""))))
+			),
+			true
+		)
+		inline_pokemon_attachment.name = "InlinePokemonAttachment"
 
 	row.add_child(_create_chat_sender_message_line(
 		display_name,
@@ -38223,11 +38239,12 @@ func _add_user_chat_message(
 		target_user_id,
 		role_name,
 		role_color,
-		message_context
+		message_context,
+		inline_pokemon_attachment
 	))
 
 	var has_visual_attachments := (
-		not pokemon_attachments.is_empty()
+		(not inline_single_pokemon and not pokemon_attachments.is_empty())
 		or not shiny_hunt_attachment.is_empty()
 	)
 	if has_visual_attachments:
@@ -38235,14 +38252,15 @@ func _add_user_chat_message(
 		attachment_row.name = "Attachments"
 		attachment_row.add_theme_constant_override("separation", 4)
 		row.add_child(attachment_row)
-		for pokemon_payload: Dictionary in pokemon_attachments:
-			attachment_row.add_child(_create_chat_pokemon_attachment_button(
-				_pokemon_preview_payload_with_current_trainer(
-					pokemon_payload,
-					display_name,
-					str(user.get("id", user.get("userId", user.get("user_id", ""))))
-				)
-			))
+		if not inline_single_pokemon:
+			for pokemon_payload: Dictionary in pokemon_attachments:
+				attachment_row.add_child(_create_chat_pokemon_attachment_button(
+					_pokemon_preview_payload_with_current_trainer(
+						pokemon_payload,
+						display_name,
+						str(user.get("id", user.get("userId", user.get("user_id", ""))))
+					)
+				))
 		if not shiny_hunt_attachment.is_empty():
 			attachment_row.add_child(_create_chat_shiny_hunt_button(shiny_hunt_attachment))
 	_apply_chat_row_emphasis(row)
@@ -38257,7 +38275,8 @@ func _create_chat_sender_message_line(
 	target_user_id: int,
 	role_name: String,
 	role_color: String,
-	message_context: Dictionary
+	message_context: Dictionary,
+	inline_pokemon_attachment: Control = null
 ) -> Control:
 	var line := PanelContainer.new()
 	line.name = "MessageLine"
@@ -38277,15 +38296,31 @@ func _create_chat_sender_message_line(
 	line.add_child(header)
 
 	var channel_prefix := _create_chat_channel_prefix(channel, target_user_id)
-	channel_prefix.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	channel_prefix.size_flags_vertical = (
+		Control.SIZE_SHRINK_CENTER
+		if inline_pokemon_attachment != null
+		else Control.SIZE_SHRINK_BEGIN
+	)
 	header.add_child(channel_prefix)
 
 	if role_name != "":
 		var role_badge := _create_chat_role_badge(role_name, role_color)
-		role_badge.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+		role_badge.size_flags_vertical = (
+			Control.SIZE_SHRINK_CENTER
+			if inline_pokemon_attachment != null
+			else Control.SIZE_SHRINK_BEGIN
+		)
 		header.add_child(role_badge)
 
+	if inline_pokemon_attachment != null:
+		var inline_spacer := Control.new()
+		inline_spacer.name = "InlinePokemonSpacer"
+		inline_spacer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		header.add_child(inline_spacer)
+		header.add_child(inline_pokemon_attachment)
+
 	var header_tail := Control.new()
+	header_tail.name = "HeaderTail"
 	header_tail.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	header_tail.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(header_tail)
@@ -38535,7 +38570,8 @@ func _update_chat_sender_hit_bounds(entry: RichTextLabel) -> void:
 func _sync_chat_inline_header_spacing(header: HBoxContainer, entry: RichTextLabel) -> void:
 	if not is_instance_valid(header) or not is_instance_valid(entry):
 		return
-	var header_width := header.get_combined_minimum_size().x + CHAT_INLINE_HEADER_CLEARANCE
+	var header_prefix_width := _chat_header_prefix_width(header)
+	var header_width := header_prefix_width + CHAT_INLINE_HEADER_CLEARANCE
 	var normal_font := entry.get_theme_font("normal_font")
 	var normal_font_size := entry.get_theme_font_size("normal_font_size")
 	var space_width := normal_font.get_string_size(
@@ -38545,12 +38581,64 @@ func _sync_chat_inline_header_spacing(header: HBoxContainer, entry: RichTextLabe
 		normal_font_size
 	).x
 	var spacer_count := ceili(header_width / maxf(space_width, 1.0))
-	entry.set_meta("chat_sender_start_x", float(spacer_count) * space_width)
+	var sender_start := float(spacer_count) * space_width
+	entry.set_meta("chat_sender_start_x", sender_start)
+	var inline_spacer := header.get_node_or_null("InlinePokemonSpacer") as Control
+	if inline_spacer != null:
+		var separation := float(header.get_theme_constant("separation"))
+		inline_spacer.custom_minimum_size.x = maxf(
+			sender_start
+			+ _chat_sender_label_width(entry)
+			+ 6.0
+			- header_prefix_width
+			- (separation * 2.0),
+			0.0
+		)
 	if spacer_count == int(entry.get_meta("chat_inline_spacer_count", -1)):
 		_update_chat_sender_hit_bounds(entry)
 		return
 	entry.set_meta("chat_inline_spacer_count", spacer_count)
 	_render_chat_sender_message_label(entry)
+
+
+func _chat_header_prefix_width(header: HBoxContainer) -> float:
+	var width := 0.0
+	var visible_controls := 0
+	var separation := float(header.get_theme_constant("separation"))
+	for child: Node in header.get_children():
+		if child.name in [&"InlinePokemonSpacer", &"InlinePokemonAttachment", &"HeaderTail"]:
+			break
+		var control := child as Control
+		if control == null or not control.visible:
+			continue
+		if visible_controls > 0:
+			width += separation
+		width += control.get_combined_minimum_size().x
+		visible_controls += 1
+	return width
+
+
+func _chat_sender_label_width(entry: RichTextLabel) -> float:
+	var bold_font := entry.get_theme_font("bold_font")
+	var bold_font_size := entry.get_theme_font_size("bold_font_size")
+	if bold_font_size <= 0:
+		bold_font_size = entry.get_theme_font_size("normal_font_size")
+	var normal_font := entry.get_theme_font("normal_font")
+	var normal_font_size := entry.get_theme_font_size("normal_font_size")
+	return (
+		bold_font.get_string_size(
+			str(entry.get_meta("chat_display_name", "")),
+			HORIZONTAL_ALIGNMENT_LEFT,
+			-1.0,
+			bold_font_size
+		).x
+		+ normal_font.get_string_size(
+			":",
+			HORIZONTAL_ALIGNMENT_LEFT,
+			-1.0,
+			normal_font_size
+		).x
+	)
 
 
 func _create_chat_shiny_hunt_button(attachment: Dictionary) -> Control:
@@ -38805,12 +38893,16 @@ func _create_chat_role_badge(role_name: String, role_color: String) -> PanelCont
 	return badge
 
 
-func _create_chat_pokemon_attachment_button(pokemon_payload: Dictionary) -> Control:
+func _create_chat_pokemon_attachment_button(
+	pokemon_payload: Dictionary,
+	compact: bool = false
+) -> Control:
 	var button := Button.new()
 	var species: String = str(pokemon_payload.get("species", "Pokemon"))
 	var species_name := _localized_species_name(species, species)
 	var shiny: bool = bool(pokemon_payload.get("shiny", false))
-	button.custom_minimum_size = Vector2(36, 36)
+	var icon_size := 28.0 if compact else 36.0
+	button.custom_minimum_size = Vector2(icon_size, icon_size)
 	button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	button.focus_mode = Control.FOCUS_NONE
@@ -38827,7 +38919,7 @@ func _create_chat_pokemon_attachment_button(pokemon_payload: Dictionary) -> Cont
 	button.add_theme_stylebox_override("focus", transparent_style)
 
 	var icon := TextureRect.new()
-	icon.custom_minimum_size = Vector2(36, 36)
+	icon.custom_minimum_size = Vector2(icon_size, icon_size)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.texture = PokemonAssets.load_party_icon(species, shiny)
