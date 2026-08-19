@@ -675,6 +675,7 @@
   "ui.pokemon_summary.nickname.failed": "De nickname kon niet worden veranderd.",
   "ui.pokemon_summary.nickname.blocked": "Nicknames kunnen niet worden veranderd tijdens een battle, trade of PvP-wachtrij.",
   "ui.pokemon_summary.nickname.insufficient_funds": "Je hebt 5.000 money nodig om een nickname te veranderen.",
+  "ui.pokemon_summary.nickname.not_allowed": "Deze nickname is niet toegestaan. Kies een andere naam.",
   "ui.pokemon_summary.hp": "HP {current} / {max}",
   "ui.pokemon_summary.hp_empty": "HP -",
   "ui.pokemon_summary.trainer_fallback": "Trainer",
