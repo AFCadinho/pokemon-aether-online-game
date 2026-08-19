@@ -137,6 +137,9 @@ const TOOL_DROPDOWN_ARROW: Texture2D = preload("res://assets/ui/photo_mode_dropd
 const TOOL_DROPDOWN_RADIO_CHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_checked.svg")
 const TOOL_DROPDOWN_RADIO_UNCHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_unchecked.svg")
 const EV_ALLOCATION_SPINBOX_UPDOWN: Texture2D = preload("res://assets/ui/ev_allocation_spinbox_updown.svg")
+const RANKED_DROPDOWN_ARROW: Texture2D = preload("res://assets/ui/ranked_dropdown_arrow.svg")
+const RANKED_DROPDOWN_RADIO_CHECKED: Texture2D = preload("res://assets/ui/ranked_dropdown_radio_checked.svg")
+const RANKED_DROPDOWN_RADIO_UNCHECKED: Texture2D = preload("res://assets/ui/ranked_dropdown_radio_unchecked.svg")
 const STAFF_TELEPORT_ICON: Texture2D = preload("res://assets/ui/location_waypoint.svg")
 const STAFF_IMPERSONATE_ICON: Texture2D = preload("res://assets/ui/staff_impersonate.svg")
 const ALPHA_TOOLS_MENU_ICON: Texture2D = preload("res://assets/ui/alpha_tools.svg")
@@ -5382,6 +5385,7 @@ func _setup_pvp_room_popup() -> void:
 	pvp_queue_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_queue_select.focus_mode = Control.FOCUS_NONE
 	pvp_queue_select.item_selected.connect(_on_pvp_queue_selected)
+	_apply_pvp_ranked_dropdown_style(pvp_queue_select)
 	matchmaking_layout.add_child(pvp_queue_select)
 
 	pvp_mode_select = OptionButton.new()
@@ -36097,23 +36101,95 @@ func _pvp_leaderboard_scope_label(scope: String) -> String:
 	return LocalizationManager.text("ui.pvp.leaderboard.scope.all_time")
 
 func _apply_pvp_leaderboard_scope_style(option: OptionButton) -> void:
-	var normal := _make_button_style(UI_SURFACE_INTERACTIVE, UI_BORDER_SUBTLE, 7, 1)
-	normal.content_margin_left = 11
-	normal.content_margin_right = 25
-	var hover := _make_button_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, 7, 1)
-	hover.content_margin_left = 11
-	hover.content_margin_right = 25
-	var pressed := _make_button_style(UI_SURFACE_PRESSED, UI_BORDER_FOCUS, 7, 1)
-	pressed.content_margin_left = 11
-	pressed.content_margin_right = 25
-	option.add_theme_stylebox_override("normal", normal)
-	option.add_theme_stylebox_override("hover", hover)
-	option.add_theme_stylebox_override("pressed", pressed)
-	option.add_theme_stylebox_override("focus", hover)
+	_apply_pvp_ranked_dropdown_style(option, true)
+
+func _apply_pvp_ranked_dropdown_style(option: OptionButton, compact: bool = false) -> void:
+	if option == null:
+		return
+	option.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	option.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	option.add_theme_color_override("font_color", UI_TEXT)
 	option.add_theme_color_override("font_hover_color", UI_TEXT)
 	option.add_theme_color_override("font_pressed_color", UI_TEXT)
+	option.add_theme_color_override("font_focus_color", UI_TEXT)
+	option.add_theme_color_override("font_disabled_color", Color(UI_MUTED_TEXT, 0.5))
 	option.add_theme_font_size_override("font_size", 13)
+	option.add_theme_constant_override("arrow_margin", 11 if compact else 12)
+	option.add_theme_icon_override("arrow", RANKED_DROPDOWN_ARROW)
+	option.add_theme_stylebox_override(
+		"normal",
+		_make_pvp_ranked_dropdown_button_style(UI_SURFACE_INTERACTIVE, UI_BORDER_SUBTLE, compact)
+	)
+	option.add_theme_stylebox_override(
+		"hover",
+		_make_pvp_ranked_dropdown_button_style(UI_SURFACE_HOVER, UI_MONEY, compact)
+	)
+	option.add_theme_stylebox_override(
+		"pressed",
+		_make_pvp_ranked_dropdown_button_style(UI_SURFACE_PRESSED, UI_MONEY, compact)
+	)
+	option.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	option.add_theme_stylebox_override(
+		"disabled",
+		_make_pvp_ranked_dropdown_button_style(Color("#07111bc4"), Color("#263b4999"), compact)
+	)
+
+	var popup := option.get_popup()
+	popup.transparent_bg = true
+	popup.borderless = true
+	popup.add_theme_font_size_override("font_size", 13)
+	popup.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	popup.add_theme_color_override("font_hover_color", UI_TEXT)
+	popup.add_theme_color_override("font_disabled_color", Color("#657487"))
+	popup.add_theme_color_override("font_outline_color", Color("#02070b"))
+	popup.add_theme_constant_override("outline_size", 1)
+	popup.add_theme_constant_override("item_start_padding", 10)
+	popup.add_theme_constant_override("item_end_padding", 12)
+	popup.add_theme_constant_override("v_separation", 6)
+	popup.add_theme_stylebox_override("panel", _make_pvp_ranked_dropdown_popup_style())
+	popup.add_theme_stylebox_override(
+		"hover",
+		_make_pvp_ranked_dropdown_item_style(Color("#17304afa"), UI_MONEY)
+	)
+	popup.add_theme_icon_override("radio_checked", RANKED_DROPDOWN_RADIO_CHECKED)
+	popup.add_theme_icon_override("radio_unchecked", RANKED_DROPDOWN_RADIO_UNCHECKED)
+	popup.add_theme_icon_override("radio_checked_disabled", RANKED_DROPDOWN_RADIO_CHECKED)
+	popup.add_theme_icon_override("radio_unchecked_disabled", RANKED_DROPDOWN_RADIO_UNCHECKED)
+
+func _make_pvp_ranked_dropdown_button_style(
+	background: Color,
+	border: Color,
+	compact: bool
+) -> StyleBoxFlat:
+	var style := _make_button_style(background, border, 7, 1)
+	style.content_margin_left = 11
+	style.content_margin_top = 5 if compact else 7
+	style.content_margin_right = 28
+	style.content_margin_bottom = 5 if compact else 7
+	return style
+
+func _make_pvp_ranked_dropdown_popup_style() -> StyleBoxFlat:
+	var style := _make_pvp_ranked_dropdown_item_style(Color("#050e18fc"), Color("#456784e6"), 9)
+	style.content_margin_left = 5
+	style.content_margin_top = 6
+	style.content_margin_right = 5
+	style.content_margin_bottom = 6
+	style.shadow_color = Color("#00000099")
+	style.shadow_size = 14
+	style.shadow_offset = Vector2(0, 6)
+	return style
+
+func _make_pvp_ranked_dropdown_item_style(
+	background: Color,
+	border: Color,
+	radius: int = 6
+) -> StyleBoxFlat:
+	var style := _make_panel_style(background, border, radius, 1)
+	style.content_margin_left = 8
+	style.content_margin_top = 5
+	style.content_margin_right = 8
+	style.content_margin_bottom = 5
+	return style
 
 func _render_pvp_leaderboard(entries: Array) -> void:
 	pvp_leaderboard_entries = entries.duplicate(true)
