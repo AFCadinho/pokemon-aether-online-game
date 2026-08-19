@@ -43,6 +43,11 @@ func _init() -> void:
 	_check(source.contains("EvolutionSpeciesLink_") and source.contains("_on_pokedex_species_selected.bind(species_id)"), "Evolution species names link to their Pokédex records")
 	_check(source.contains("EvolutionItemLink_") and source.contains("_open_item_dex_item_from_pokedex"), "Evolution items link to their Item Dex records")
 	_check(source.contains('button.set_meta("item_data", localized_item)'), "Item Dex search rows retain exact item data for cross-Dex navigation")
+	_check(source.contains("_warm_up_pokedex.call_deferred()"), "Owning the Pokédex warms its default catalog in the background")
+	_check(source.contains("await PokedexService.warm_up_default_catalog()") and source.contains("index % 8 == 0"), "Pokédex icons warm incrementally without blocking one frame")
+	var service_source := FileAccess.get_file_as_string("res://scripts/services/pokedex_service.gd")
+	_check(service_source.contains("_species_search_cache") and service_source.contains("_species_detail_cache"), "Pokédex warm-up caches the species list and first detail")
+	_check(service_source.contains("await default_catalog_warmup_finished"), "Opening during warm-up reuses the active catalog request")
 	_check(source.contains('{"key": "evolution", "i18n": "evolution"'), "Pokédex has a dedicated evolution move section")
 	_check(source.contains("_on_pokedex_sprite_panel_gui_input"), "Front and back sprite interaction remains available")
 
