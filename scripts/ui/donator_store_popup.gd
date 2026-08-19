@@ -77,7 +77,7 @@ const CATEGORY_LABELS := {
 }
 const CATEGORY_DESCRIPTIONS := {
 	"featured": "A curated mix of supporter items, style and permanent conveniences.",
-	"membership": "Temporary supporter recognition. No battle advantages.",
+	"membership": "Tradeable supporter membership with a second Aether Anchor and 5% better Shiny odds.",
 	"cosmetics": "Outfits and profile details that personalize your trainer without affecting gameplay.",
 	"guilds": "Consumable templates that permanently unlock for your Guild without affecting gameplay.",
 	"mounts": "Travel through the overworld in your own style.",
@@ -86,7 +86,7 @@ const CATEGORY_DESCRIPTIONS := {
 }
 const CATEGORY_PROMISES := {
 	"featured": "FAIR SUPPORT",
-	"membership": "NO BATTLE POWER",
+	"membership": "×1.05 SHINY ODDS",
 	"cosmetics": "COSMETIC",
 	"guilds": "GUILD COSMETIC",
 	"mounts": "TRAVEL STYLE",
@@ -128,7 +128,7 @@ const CATALOG: Array[Dictionary] = [
 	{
 		"id": "aether-blessing-voucher-3-days",
 		"name": "Aether Blessing Voucher · 3 Days",
-		"description": "Tradeable voucher. Use it from the Bag to add three days of Aether Blessing.",
+		"description": "Tradeable voucher. Use it from the Bag to add three days of Aether Blessing membership with ×1.05 Shiny odds.",
 		"price": 75,
 		"icon": AETHER_BLESSING_VOUCHER_3_DAYS_ICON,
 		"categories": ["membership"],
@@ -137,7 +137,7 @@ const CATALOG: Array[Dictionary] = [
 	{
 		"id": "aether-blessing-voucher-7-days",
 		"name": "Aether Blessing Voucher · 7 Days",
-		"description": "Tradeable voucher. Use it from the Bag to add one week of Aether Blessing.",
+		"description": "Tradeable voucher. Use it from the Bag to add one week of Aether Blessing membership with ×1.05 Shiny odds.",
 		"price": 150,
 		"icon": AETHER_BLESSING_VOUCHER_7_DAYS_ICON,
 		"categories": ["membership"],
@@ -146,7 +146,7 @@ const CATALOG: Array[Dictionary] = [
 	{
 		"id": "aether-blessing-voucher-14-days",
 		"name": "Aether Blessing Voucher · 14 Days",
-		"description": "Tradeable voucher. Use it from the Bag to add two weeks of Aether Blessing.",
+		"description": "Tradeable voucher. Use it from the Bag to add two weeks of Aether Blessing membership with ×1.05 Shiny odds.",
 		"price": 275,
 		"icon": AETHER_BLESSING_VOUCHER_14_DAYS_ICON,
 		"categories": ["membership"],
@@ -155,7 +155,7 @@ const CATALOG: Array[Dictionary] = [
 	{
 		"id": "aether-blessing-voucher-30-days",
 		"name": "Aether Blessing Voucher · 30 Days",
-		"description": "Tradeable voucher. Use it from the Bag to add thirty days of Aether Blessing.",
+		"description": "Tradeable voucher. Use it from the Bag to add thirty days of Aether Blessing membership with ×1.05 Shiny odds.",
 		"price": 500,
 		"icon": AETHER_BLESSING_VOUCHER_30_DAYS_ICON,
 		"categories": ["featured", "membership"],

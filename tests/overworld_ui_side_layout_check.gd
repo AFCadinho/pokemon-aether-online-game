@@ -374,15 +374,23 @@ func _init() -> void:
 	_check(script_source.contains("func set_personal_buffs(buffs: Array)"), "personal buff tray accepts future live data")
 	_check(script_source.contains("set_personal_buffs([])"), "personal buffs default to the empty state")
 	_check(
-		script_source.contains("func _current_aether_blessing_buff()")
-		and script_source.contains('"name_key": "ui.buff.aether_blessing.name"')
+		player_status_scene_source.contains('[node name="MembershipBadge"')
+		and player_status_scene_source.contains('text = "ui.membership.aether_blessing.badge"')
+		and script_source.contains("func _current_aether_blessing_membership()")
 		and script_source.contains('"expiresAt": expires_at'),
-		"active Aether Blessings appear in the personal buff tray with their expiry"
+		"active Aether Blessings appear as membership status in the mini Trainer Card"
 	)
 	_check(
 		script_source.contains("func _refresh_personal_buffs_if_needed(delta: float)")
-		and script_source.contains("_format_aether_blessing_remaining"),
-		"the personal buff tray keeps the Blessing countdown current"
+		and script_source.contains("_refresh_aether_blessing_membership_status()")
+		and script_source.contains("_aether_blessing_membership_tooltip"),
+		"the mini Trainer Card keeps membership status and details current"
+	)
+	_check(
+		script_source.contains('if str(buff.get("id", "")).strip_edges().to_lower() == "aether_blessing":')
+		and script_source.contains("continue")
+		and not script_source.contains('"name_key": "ui.buff.aether_blessing.name"'),
+		"Aether Blessing is excluded from the temporary personal boost tray"
 	)
 	_check(script_source.contains('personal_buffs_panel.set_meta("group_available", true)'), "personal empty state remains part of the trainer collapse group")
 	_check(script_source.contains("PERSONAL_BUFF_PANEL_COMPACT_HEIGHT"), "empty and collapsed active states use a compact panel height")
@@ -425,7 +433,7 @@ func _init() -> void:
 	_check(script_source.contains("name_label.text = _localized_buff_name(buff)"), "personal buff rows receive localized readable names")
 	_check(donator_store_scene_source.contains("custom_minimum_size = Vector2(1120, 680)"), "Donator Store opens as a full catalog and character-preview interface")
 	_check(donator_store_script_source.contains('"membership",') and donator_store_script_source.contains('"cosmetics",') and donator_store_script_source.contains('"mounts",') and donator_store_script_source.contains('"charms",') and donator_store_script_source.contains('"services",'), "Aether Store separates its six scalable catalog categories")
-	_check(donator_store_script_source.contains('"membership": "Blessings"') and donator_store_script_source.contains('"membership": "NO BATTLE POWER"') and donator_store_script_source.contains("No battle advantages"), "Blessings establish a fair supporter direction")
+	_check(donator_store_script_source.contains('"membership": "Blessings"') and donator_store_script_source.contains('"membership": "×1.05 SHINY ODDS"') and donator_store_script_source.contains("5% better Shiny odds"), "Blessings disclose their limited Shiny encounter benefit")
 	_check(donator_store_script_source.contains('"name": "Aether Blessing Voucher · 3 Days"') and donator_store_script_source.contains('"badge": "3 DAYS"') and donator_store_script_source.contains('"badge": "7 DAYS"') and donator_store_script_source.contains('"badge": "14 DAYS"') and donator_store_script_source.contains('"badge": "30 DAYS"') and not donator_store_script_source.contains('"badge": "90 DAYS"'), "Aether Blessing offers the intended four tradeable voucher durations")
 	_check(
 		donator_store_script_source.contains("AETHERBLESSINGVOUCHER3DAYS.png")
