@@ -73,6 +73,8 @@ const CHAT_CONTEXT_COPY_TEXT := 100
 const CHAT_CONTEXT_COPY_FULL := 101
 const CHAT_CONTEXT_OPEN_PM := 200
 const CHAT_CONTEXT_ADD_FRIEND := 201
+const CHAT_CONTEXT_MUTE_PLAYER := 202
+const CHAT_CONTEXT_UNMUTE_PLAYER := 203
 const CHAT_TAB_LABELS := {
 	CHAT_TAB_ALL: "ui.chat.tab.all",
 	CHAT_TAB_GENERAL: "ui.chat.tab.general",
@@ -87,6 +89,7 @@ const CHAT_CHANNEL_GLOBAL := "global"
 const CHAT_CHANNEL_MAP := "map"
 const CHAT_CHANNEL_TRADE := "trade"
 const CHAT_CHANNEL_HELP := "help"
+const CHAT_MUTE_PERMISSION := "chat:mute"
 const IMPERSONATE_PERMISSION := "accounts:impersonate"
 const DEV_TOOLS_PERMISSION := "generating"
 const STAFF_ACTION_BAR_PERMISSION := "ui:staff:action-bar"
@@ -623,6 +626,17 @@ var chat_message_context_menu: PopupMenu
 var chat_sender_context_menu: PopupMenu
 var active_chat_message_context: Dictionary = {}
 var active_chat_sender_context: Dictionary = {}
+var chat_moderation_popup: PanelContainer
+var chat_moderation_title_label: Label
+var chat_moderation_target_label: Label
+var chat_moderation_duration_row: Control
+var chat_moderation_duration_select: OptionButton
+var chat_moderation_reason_input: LineEdit
+var chat_moderation_status_label: Label
+var chat_moderation_confirm_button: Button
+var chat_moderation_action := ""
+var chat_moderation_target: Dictionary = {}
+var chat_moderation_in_flight := false
 var chat_copy_confirmation: PanelContainer
 var chat_copy_confirmation_token := 0
 var chat_resize_dragging := false
@@ -1342,6 +1356,7 @@ func _ready() -> void:
 	_setup_chat_resize_button()
 	_setup_chat_surface_ui()
 	_setup_chat_message_context_menus()
+	_setup_chat_moderation_popup()
 	_setup_normal_ui_focus_groups()
 	_setup_chat_pokemon_attachment_preview()
 	_setup_ui_confirm_popup()
@@ -37857,6 +37872,175 @@ func _setup_chat_message_context_menus() -> void:
 	chat_sender_context_menu.id_pressed.connect(_on_chat_sender_context_action)
 
 
+func _setup_chat_moderation_popup() -> void:
+	chat_moderation_popup = PanelContainer.new()
+	chat_moderation_popup.name = "ChatModerationPopup"
+	chat_moderation_popup.visible = false
+	chat_moderation_popup.custom_minimum_size = Vector2(480, 0)
+	chat_moderation_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	chat_moderation_popup.z_index = UI_MODAL_Z_INDEX
+	chat_moderation_popup.set_anchors_preset(Control.PRESET_CENTER)
+	chat_moderation_popup.offset_left = -240
+	chat_moderation_popup.offset_top = -155
+	chat_moderation_popup.offset_right = 240
+	chat_moderation_popup.offset_bottom = 155
+	chat_moderation_popup.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_RAISED, UI_BORDER_FOCUS, 12, 1)
+	)
+	root_control.add_child(chat_moderation_popup)
+
+	var margin := MarginContainer.new()
+	for side in ["margin_left", "margin_top", "margin_right", "margin_bottom"]:
+		margin.add_theme_constant_override(side, 18)
+	chat_moderation_popup.add_child(margin)
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 12)
+	margin.add_child(layout)
+
+	chat_moderation_title_label = Label.new()
+	chat_moderation_title_label.add_theme_font_size_override("font_size", 20)
+	chat_moderation_title_label.add_theme_color_override("font_color", UI_TEXT)
+	layout.add_child(chat_moderation_title_label)
+	chat_moderation_target_label = Label.new()
+	chat_moderation_target_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(chat_moderation_target_label)
+
+	chat_moderation_duration_row = HBoxContainer.new()
+	(chat_moderation_duration_row as HBoxContainer).add_theme_constant_override("separation", 10)
+	layout.add_child(chat_moderation_duration_row)
+	var duration_label := Label.new()
+	duration_label.text = LocalizationManager.text("ui.chat.moderation.duration")
+	duration_label.custom_minimum_size = Vector2(92, 0)
+	chat_moderation_duration_row.add_child(duration_label)
+	chat_moderation_duration_select = OptionButton.new()
+	chat_moderation_duration_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	for duration: Dictionary in [
+		{"minutes": 10, "label": "10 minutes"},
+		{"minutes": 30, "label": "30 minutes"},
+		{"minutes": 60, "label": "1 hour"},
+		{"minutes": 1440, "label": "24 hours"},
+	]:
+		chat_moderation_duration_select.add_item(str(duration["label"]))
+		chat_moderation_duration_select.set_item_metadata(
+			chat_moderation_duration_select.item_count - 1,
+			int(duration["minutes"])
+		)
+	chat_moderation_duration_select.select(1)
+	_apply_pvp_ranked_dropdown_style(chat_moderation_duration_select)
+	chat_moderation_duration_row.add_child(chat_moderation_duration_select)
+
+	chat_moderation_reason_input = LineEdit.new()
+	chat_moderation_reason_input.placeholder_text = LocalizationManager.text("ui.chat.moderation.reason")
+	chat_moderation_reason_input.max_length = 255
+	chat_moderation_reason_input.text_changed.connect(_on_chat_moderation_reason_changed)
+	chat_moderation_reason_input.text_submitted.connect(_on_chat_moderation_reason_submitted)
+	_apply_line_edit_style(chat_moderation_reason_input)
+	layout.add_child(chat_moderation_reason_input)
+
+	chat_moderation_status_label = Label.new()
+	chat_moderation_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	chat_moderation_status_label.add_theme_color_override("font_color", Color("#f1c75b"))
+	layout.add_child(chat_moderation_status_label)
+
+	var actions := HBoxContainer.new()
+	actions.alignment = BoxContainer.ALIGNMENT_END
+	actions.add_theme_constant_override("separation", 10)
+	layout.add_child(actions)
+	var cancel_button := Button.new()
+	cancel_button.text = LocalizationManager.text("common.cancel")
+	cancel_button.pressed.connect(_hide_chat_moderation_popup)
+	_apply_button_style(cancel_button, "secondary")
+	actions.add_child(cancel_button)
+	chat_moderation_confirm_button = Button.new()
+	chat_moderation_confirm_button.pressed.connect(_submit_chat_moderation_action)
+	_apply_button_style(chat_moderation_confirm_button, "danger")
+	actions.add_child(chat_moderation_confirm_button)
+
+
+func _show_chat_moderation_popup(action: String, user: Dictionary) -> void:
+	if not _has_user_permission(CHAT_MUTE_PERMISSION):
+		return
+	var target_user_id := _user_id_from_state(user)
+	if target_user_id <= 0 or _is_current_auth_user(user):
+		return
+	chat_moderation_action = action
+	chat_moderation_target = user.duplicate(true)
+	chat_moderation_in_flight = false
+	chat_moderation_reason_input.clear()
+	chat_moderation_status_label.text = ""
+	var display_name := str(user.get("displayName", user.get("username", "Trainer")))
+	var is_mute := action == "mute"
+	chat_moderation_title_label.text = LocalizationManager.text(
+		"ui.chat.moderation.mute_title" if is_mute else "ui.chat.moderation.unmute_title"
+	)
+	chat_moderation_target_label.text = LocalizationManager.text(
+		"ui.chat.moderation.target",
+		{"player": display_name}
+	)
+	chat_moderation_duration_row.visible = is_mute
+	chat_moderation_confirm_button.text = LocalizationManager.text(
+		"ui.chat.moderation.mute" if is_mute else "ui.chat.moderation.unmute"
+	)
+	chat_moderation_confirm_button.disabled = true
+	chat_moderation_popup.reset_size()
+	chat_moderation_popup.visible = true
+	chat_moderation_popup.move_to_front()
+	chat_moderation_reason_input.grab_focus.call_deferred()
+
+
+func _hide_chat_moderation_popup() -> void:
+	if chat_moderation_popup != null:
+		chat_moderation_popup.visible = false
+	chat_moderation_target.clear()
+	chat_moderation_action = ""
+	chat_moderation_in_flight = false
+
+
+func _on_chat_moderation_reason_changed(reason: String) -> void:
+	if chat_moderation_confirm_button != null:
+		chat_moderation_confirm_button.disabled = chat_moderation_in_flight or reason.strip_edges().length() < 3
+
+
+func _on_chat_moderation_reason_submitted(_reason: String) -> void:
+	if chat_moderation_confirm_button != null and not chat_moderation_confirm_button.disabled:
+		await _submit_chat_moderation_action()
+
+
+func _submit_chat_moderation_action() -> void:
+	if chat_moderation_in_flight:
+		return
+	var target_user_id := _user_id_from_state(chat_moderation_target)
+	var reason := chat_moderation_reason_input.text.strip_edges()
+	if target_user_id <= 0 or reason.length() < 3:
+		chat_moderation_status_label.text = LocalizationManager.text("ui.chat.moderation.reason_short")
+		return
+	chat_moderation_in_flight = true
+	chat_moderation_confirm_button.disabled = true
+	var result: Dictionary
+	if chat_moderation_action == "mute":
+		var duration_minutes := int(chat_moderation_duration_select.get_selected_metadata())
+		result = await ChatModerationService.mute_player(target_user_id, duration_minutes, reason)
+	else:
+		result = await ChatModerationService.unmute_player(target_user_id, reason)
+	chat_moderation_in_flight = false
+	if not bool(result.get("success", false)):
+		chat_moderation_status_label.text = str(result.get("error", "Moderation action failed."))
+		chat_moderation_confirm_button.disabled = false
+		return
+	var display_name := str(chat_moderation_target.get(
+		"displayName",
+		chat_moderation_target.get("username", "Trainer")
+	))
+	var action_key := (
+		"ui.chat.moderation.muted_success"
+		if chat_moderation_action == "mute"
+		else "ui.chat.moderation.unmuted_success"
+	)
+	_hide_chat_moderation_popup()
+	_add_chat_message(LocalizationManager.text(action_key, {"player": display_name}))
+
+
 func _create_chat_popup_menu(menu_name: String) -> PopupMenu:
 	var menu := PopupMenu.new()
 	menu.name = menu_name
@@ -38679,6 +38863,22 @@ func _open_chat_sender_context_menu(context: Dictionary, global_position: Vector
 	var user := _dictionary_from_value(context.get("user", {}))
 	var username := str(user.get("username", "")).strip_edges()
 	chat_sender_context_menu.set_item_disabled(1, username == "")
+	var target_user_id := _user_id_from_state(user)
+	if _has_user_permission(CHAT_MUTE_PERMISSION) and target_user_id > 0:
+		var mute_state: Dictionary = await ChatModerationService.get_mute_state(target_user_id)
+		if bool(mute_state.get("success", false)):
+			var state := _dictionary_from_value(mute_state.get("body", {}))
+			chat_sender_context_menu.add_separator()
+			if bool(state.get("muted", false)):
+				chat_sender_context_menu.add_item(
+					LocalizationManager.text("ui.chat.sender.unmute"),
+					CHAT_CONTEXT_UNMUTE_PLAYER
+				)
+			else:
+				chat_sender_context_menu.add_item(
+					LocalizationManager.text("ui.chat.sender.mute"),
+					CHAT_CONTEXT_MUTE_PLAYER
+				)
 	_popup_chat_context_menu(chat_sender_context_menu, global_position)
 
 
@@ -38705,6 +38905,10 @@ func _on_chat_sender_context_action(action_id: int) -> void:
 			var username := str(user.get("username", "")).strip_edges()
 			if username != "":
 				_send_chat_friend_request.call_deferred(username)
+		CHAT_CONTEXT_MUTE_PLAYER:
+			_show_chat_moderation_popup("mute", user)
+		CHAT_CONTEXT_UNMUTE_PLAYER:
+			_show_chat_moderation_popup("unmute", user)
 
 
 func _send_chat_friend_request(username: String) -> void:

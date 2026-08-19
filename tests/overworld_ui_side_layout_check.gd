@@ -308,6 +308,16 @@ func _init() -> void:
 		and script_source.contains("SocialService.send_friend_request(username)"),
 		"chat supports quick copying and sender or message context actions"
 	)
+	_check(
+		script_source.contains("CHAT_CONTEXT_MUTE_PLAYER")
+		and script_source.contains("CHAT_CONTEXT_UNMUTE_PLAYER")
+		and script_source.contains("ChatModerationService.get_mute_state(target_user_id)")
+		and script_source.contains("ChatModerationService.mute_player(target_user_id, duration_minutes, reason)")
+		and script_source.contains("ChatModerationService.unmute_player(target_user_id, reason)")
+		and script_source.contains("reason.strip_edges().length() < 3")
+		and script_source.contains("_has_user_permission(CHAT_MUTE_PERMISSION)"),
+		"authorized staff can mute or unmute chat senders with a required reason"
+	)
 	_check(script_source.contains('_apply_chat_main_tab_style(general_chat_tab_button, general_active)'), "active and inactive main tabs receive distinct styling")
 	_check(script_source.contains("style.border_width_bottom = 2"), "selected main tab gets a clear bottom accent")
 	_check(script_source.contains("_apply_chat_dock_button_style(send_button, true)"), "Send uses the input dock accent treatment")

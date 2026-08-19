@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+**Added**
+
+- Staff with chat-moderation access can now right-click a chat sender to mute or unmute them. Both actions require a reason, and mutes offer ten-minute, thirty-minute, one-hour and twenty-four-hour durations.
+
 ## 0.3.57 - 2026-08-16
 
 **Added**
