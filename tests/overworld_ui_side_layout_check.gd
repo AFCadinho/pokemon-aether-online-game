@@ -328,6 +328,12 @@ func _init() -> void:
 		and script_source.contains("CHAT_CONTEXT_MUTE_PLAYER"),
 		"chat sender moderation remains available while mute state refreshes"
 	)
+	_check(
+		script_source.contains("func _can_use_chat_moderation(")
+		and script_source.contains("player_interaction_coordinator.can_moderate_chat()")
+		and script_source.contains("_activate_ui_panel(chat_moderation_popup)"),
+		"chat and direct player moderation share permission state and an active modal"
+	)
 	_check(script_source.contains('_apply_chat_main_tab_style(general_chat_tab_button, general_active)'), "active and inactive main tabs receive distinct styling")
 	_check(script_source.contains("style.border_width_bottom = 2"), "selected main tab gets a clear bottom accent")
 	_check(script_source.contains("_apply_chat_dock_button_style(send_button, true)"), "Send uses the input dock accent treatment")

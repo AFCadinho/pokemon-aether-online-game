@@ -1817,6 +1817,18 @@ func _has_user_permission(permission: String) -> bool:
 	# if a partial/stale local user projection temporarily lacks permissions.
 	return _current_user_role_ids().has("owner")
 
+
+func _can_use_chat_moderation() -> bool:
+	if _has_user_permission(CHAT_MUTE_PERMISSION):
+		return true
+	# PlayerInteractionCoordinator is also responsible for rendering the direct
+	# player action. Use that same decision for chat and for opening the modal so
+	# the two entry points cannot disagree because of a stale user projection.
+	return (
+		player_interaction_coordinator != null
+		and player_interaction_coordinator.can_moderate_chat()
+	)
+
 func _refresh_dev_tools_visibility() -> void:
 	var can_show_staff_action_bar: bool = _can_show_staff_action_bar()
 	var can_use_dev_tools: bool = _can_use_dev_tools()
@@ -3001,6 +3013,7 @@ func _apply_ui_z_index_policy() -> void:
 		chat_panel,
 		chat_settings_popup,
 		chat_context_popup,
+		chat_moderation_popup,
 		location_panel,
 		global_buffs_panel,
 		global_buff_details_panel,
@@ -3082,6 +3095,7 @@ func _has_visible_priority_overlay_panel() -> bool:
 		global_buff_details_panel,
 		chat_settings_popup,
 		chat_context_popup,
+		chat_moderation_popup,
 		donator_store_popup,
 		bag_popup,
 		trainer_card_popup,
@@ -37966,7 +37980,7 @@ func _setup_chat_moderation_popup() -> void:
 
 
 func _show_chat_moderation_popup(action: String, user: Dictionary) -> void:
-	if not _has_user_permission(CHAT_MUTE_PERMISSION):
+	if not _can_use_chat_moderation():
 		return
 	var target_user_id := _user_id_from_state(user)
 	if target_user_id <= 0 or _is_current_auth_user(user):
@@ -37992,13 +38006,14 @@ func _show_chat_moderation_popup(action: String, user: Dictionary) -> void:
 	chat_moderation_confirm_button.disabled = true
 	chat_moderation_popup.reset_size()
 	chat_moderation_popup.visible = true
-	chat_moderation_popup.move_to_front()
+	_activate_ui_panel(chat_moderation_popup)
 	chat_moderation_reason_input.grab_focus.call_deferred()
 
 
 func _hide_chat_moderation_popup() -> void:
 	if chat_moderation_popup != null:
 		chat_moderation_popup.visible = false
+		_deactivate_ui_panel(chat_moderation_popup)
 	chat_moderation_target.clear()
 	chat_moderation_action = ""
 	chat_moderation_in_flight = false
@@ -38871,7 +38886,7 @@ func _open_chat_sender_context_menu(context: Dictionary, global_position: Vector
 	var username := str(user.get("username", "")).strip_edges()
 	chat_sender_context_menu.set_item_disabled(1, username == "")
 	var target_user_id := _user_id_from_state(user)
-	if _has_user_permission(CHAT_MUTE_PERMISSION) and target_user_id > 0:
+	if _can_use_chat_moderation() and target_user_id > 0:
 		# Keep the action available even if the optional state lookup is slow or
 		# unavailable. The authoritative endpoint validates every mutation.
 		chat_sender_context_menu.add_separator()
@@ -38880,7 +38895,7 @@ func _open_chat_sender_context_menu(context: Dictionary, global_position: Vector
 			CHAT_CONTEXT_MUTE_PLAYER
 		)
 	_popup_chat_context_menu(chat_sender_context_menu, global_position)
-	if _has_user_permission(CHAT_MUTE_PERMISSION) and target_user_id > 0:
+	if _can_use_chat_moderation() and target_user_id > 0:
 		_refresh_chat_sender_moderation_action.call_deferred(target_user_id)
 
 

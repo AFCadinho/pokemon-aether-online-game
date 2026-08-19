@@ -739,6 +739,10 @@ func _can_moderate_chat() -> bool:
 	return false
 
 
+func can_moderate_chat() -> bool:
+	return _can_moderate_chat()
+
+
 func _on_trade_pressed() -> void:
 	if not bool(trade_capabilities.get("enabled", false)):
 		_refresh_trade_capabilities()
