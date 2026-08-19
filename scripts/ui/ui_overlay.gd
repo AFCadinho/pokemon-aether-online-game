@@ -1,5 +1,6 @@
 extends CanvasLayer
 
+const STAFF_PERMISSION_POLICY := preload("res://scripts/ui/staff_permission_policy.gd")
 const MAX_PARTY_SIZE := 6
 const PARTY_SLOT_HEIGHT := 68.0
 const PARTY_SLOT_GAP := 5.0
@@ -1827,16 +1828,22 @@ func _current_user_requires_teleport_other_reason() -> bool:
 	return _current_user_requires_teleport_to_player_reason()
 
 func _has_user_permission(permission: String) -> bool:
+	var normalized_permission := permission.strip_edges().to_lower()
 	var permissions_value: Variant = AuthService.current_user.get("permissions", [])
 	if permissions_value is Array:
 		var user_permissions: Array = permissions_value as Array
 		for permission_value: Variant in user_permissions:
-			if str(permission_value).strip_edges().to_lower() == permission:
+			if str(permission_value).strip_edges().to_lower() == normalized_permission:
 				return true
 
-	# Owner capabilities are fixed by the backend. Keep their controls visible
-	# if a partial/stale local user projection temporarily lacks permissions.
-	return _current_user_role_ids().has("owner")
+	# Owner and Senior Staff capabilities are fixed by the backend. Keep their
+	# controls visible if a partial/stale local user projection temporarily lacks
+	# permissions, without exposing owner-only controls to Senior Staff.
+	var role_ids := _current_user_role_ids()
+	return STAFF_PERMISSION_POLICY.fixed_role_grants_permission(
+		role_ids,
+		normalized_permission
+	)
 
 
 func _can_use_chat_moderation() -> bool:
