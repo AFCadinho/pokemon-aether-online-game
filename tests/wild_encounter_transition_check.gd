@@ -73,12 +73,26 @@ func _run_checks() -> void:
 	var world_trainer_start_index := world_source.find("func start_trainer_battle")
 	var trainer_transition_index := world_source.find("_begin_trainer_battle_transition(battle_trainer_data)", world_trainer_start_index)
 	var trainer_request_index := world_source.find("await create_trainer_battle_response", world_trainer_start_index)
+	var trainer_expected_rejection_index := world_source.find(
+		"if not _is_expected_trainer_battle_rejection(response):",
+		trainer_request_index
+	)
+	var trainer_failure_warning_index := world_source.find(
+		'push_warning("World.start_trainer_battle failed:',
+		trainer_request_index
+	)
 	var trainer_mount_index := world_source.find("if not _mount_battle_ui():", world_trainer_start_index)
 	_check_true(
 		trainer_transition_index > world_trainer_start_index
 		and trainer_transition_index < trainer_request_index
 		and trainer_request_index < trainer_mount_index,
 		"NPC transition covers trainer loading before the battle scene mounts"
+	)
+	_check_true(
+		trainer_expected_rejection_index > trainer_request_index
+		and trainer_failure_warning_index > trainer_expected_rejection_index
+		and world_source.contains('"pokemon_level_cap_party_ineligible"'),
+		"expected trainer level-cap rejections do not emit failure warnings"
 	)
 	var trainer_setup_index := battle_source.find("func setup_trainer_battle_from_response")
 	var trainer_lead_index := battle_source.find("var lead_response := await _run_trainer_lead_selection", trainer_setup_index)

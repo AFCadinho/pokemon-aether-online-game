@@ -42,6 +42,9 @@ const MAP_FADE_IN_SECONDS := 0.20
 const WILD_ENCOUNTER_MINIMUM_COVER_SECONDS := 0.46
 const WILD_BATTLE_REVEAL_SECONDS := 0.20
 const EV_TRAINING_MAP_ID := "kanto_viridian_city"
+const EXPECTED_TRAINER_BATTLE_REJECTION_CODES: Array[String] = [
+	"pokemon_level_cap_party_ineligible",
+]
 
 @export var initial_spawn_name := "InitialSpawn"
 
@@ -2451,7 +2454,8 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 		active_trainer_is_rematch
 	)
 	if not response.get("success", false):
-		push_warning("World.start_trainer_battle failed: %s" % str(response.get("error", "Unknown error")))
+		if not _is_expected_trainer_battle_rejection(response):
+			push_warning("World.start_trainer_battle failed: %s" % str(response.get("error", "Unknown error")))
 		await _cancel_wild_encounter_transition()
 		_abort_battle_start()
 		return response
@@ -2484,6 +2488,13 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 		await _reveal_prepared_wild_battle()
 
 	return {"success": true, "battleId": active_battle_id}
+
+
+func _is_expected_trainer_battle_rejection(response: Dictionary) -> bool:
+	return (
+		BackendErrorLocalizationService.error_code(response)
+		in EXPECTED_TRAINER_BATTLE_REJECTION_CODES
+	)
 
 func start_pvp_battle_from_response(response: Dictionary) -> bool:
 	if is_in_battle:
