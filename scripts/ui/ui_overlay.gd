@@ -1813,7 +1813,9 @@ func _has_user_permission(permission: String) -> bool:
 			if str(permission_value).strip_edges().to_lower() == permission:
 				return true
 
-	return false
+	# Owner capabilities are fixed by the backend. Keep their controls visible
+	# if a partial/stale local user projection temporarily lacks permissions.
+	return _current_user_role_ids().has("owner")
 
 func _refresh_dev_tools_visibility() -> void:
 	var can_show_staff_action_bar: bool = _can_show_staff_action_bar()
@@ -31364,6 +31366,7 @@ func _ensure_player_interaction_coordinator() -> bool:
 		player_interaction_coordinator.private_message_requested.connect(_on_player_interaction_private_message_requested)
 		player_interaction_coordinator.mail_requested.connect(_on_player_interaction_mail_requested)
 		player_interaction_coordinator.trainer_card_requested.connect(_on_player_interaction_trainer_card_requested)
+		player_interaction_coordinator.chat_moderation_requested.connect(_on_player_interaction_chat_moderation_requested)
 		player_interaction_coordinator.social_overview_updated.connect(_on_player_interaction_social_overview_updated)
 	return true
 
@@ -31386,6 +31389,10 @@ func _on_player_interaction_trainer_card_requested(player: Dictionary) -> void:
 		if not card.has(key):
 			card[key] = player[key]
 	_show_public_trainer_card(card)
+
+
+func _on_player_interaction_chat_moderation_requested(action: String, player: Dictionary) -> void:
+	_show_chat_moderation_popup(action, player)
 
 func _on_player_interaction_social_overview_updated(_overview: Dictionary) -> void:
 	if friendlist_popup != null and friendlist_popup.visible:

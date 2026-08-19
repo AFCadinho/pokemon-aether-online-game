@@ -318,6 +318,11 @@ func _init() -> void:
 		and script_source.contains("_has_user_permission(CHAT_MUTE_PERMISSION)"),
 		"authorized staff can mute or unmute chat senders with a required reason"
 	)
+	_check(
+		script_source.contains("player_interaction_coordinator.chat_moderation_requested.connect")
+		and script_source.contains("func _on_player_interaction_chat_moderation_requested("),
+		"direct player actions share the required-reason chat moderation flow"
+	)
 	_check(script_source.contains('_apply_chat_main_tab_style(general_chat_tab_button, general_active)'), "active and inactive main tabs receive distinct styling")
 	_check(script_source.contains("style.border_width_bottom = 2"), "selected main tab gets a clear bottom accent")
 	_check(script_source.contains("_apply_chat_dock_button_style(send_button, true)"), "Send uses the input dock accent treatment")

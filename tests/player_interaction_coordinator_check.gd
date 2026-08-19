@@ -85,6 +85,7 @@ func _check_trade_context_action() -> void:
 	_check_equal(trade_button != null and trade_button.disabled, true, "authoritatively disabled trading remains visible but cannot start")
 
 	await _check_guild_invite_context_action()
+	_check_chat_moderation_context_action()
 	await _check_live_localization()
 	coordinator.close_context_menu()
 	host.queue_free()
@@ -139,7 +140,6 @@ func _check_guild_invite_context_action() -> void:
 		true,
 		"guild leaders and officers receive the right-click guild invite action"
 	)
-
 	coordinator.guild_membership = {"guildId": 4, "role": "member"}
 	coordinator._render_context_menu()
 	await process_frame
@@ -147,6 +147,32 @@ func _check_guild_invite_context_action() -> void:
 		_find_player_action("Invite to Guild") == null,
 		true,
 		"regular guild members do not receive the invite action"
+	)
+
+
+func _check_chat_moderation_context_action() -> void:
+	auth_service.current_user = {
+		"id": 1,
+		"username": "ash",
+		"roles": [{"id": "owner"}],
+		"permissions": [],
+	}
+	coordinator.current_target = {"userId": 7, "username": "misty", "displayName": "Misty"}
+	coordinator.context_more_actions_expanded = true
+	coordinator.chat_moderation_state_loading = false
+	coordinator.chat_target_is_muted = false
+	coordinator._render_context_menu()
+	_check_equal(
+		_find_player_action("Mute Player") != null,
+		true,
+		"Owner receives the direct-player mute action even with a partial permission projection"
+	)
+	coordinator.chat_target_is_muted = true
+	coordinator._render_context_menu()
+	_check_equal(
+		_find_player_action("Unmute Player") != null,
+		true,
+		"Muted players expose the direct-player unmute action"
 	)
 
 func _check_player_normalization() -> void:

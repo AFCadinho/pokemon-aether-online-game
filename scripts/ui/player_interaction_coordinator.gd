@@ -10,7 +10,10 @@ const GUILD_INVITATION_POLL_SECONDS := 10.0
 signal private_message_requested(user: Dictionary)
 signal mail_requested(username: String)
 signal trainer_card_requested(player: Dictionary)
+signal chat_moderation_requested(action: String, player: Dictionary)
 signal social_overview_updated(overview: Dictionary)
+
+const CHAT_MUTE_PERMISSION := "chat:mute"
 
 const PANEL_WIDTH := 410.0
 const CONTEXT_MENU_WIDTH := 344.0
@@ -66,6 +69,8 @@ var guild_membership_loading := false
 var guild_action_in_flight := false
 var guild_status_message := ""
 var guild_status_is_error := false
+var chat_moderation_state_loading := false
+var chat_target_is_muted := false
 
 
 func setup(host_control: Control) -> void:
@@ -122,6 +127,8 @@ func open_context_for_player(player_state: Dictionary, screen_position: Vector2)
 	social_status_message = ""
 	social_status_is_error = false
 	context_more_actions_expanded = false
+	chat_moderation_state_loading = _can_moderate_chat()
+	chat_target_is_muted = false
 	context_requested_position = screen_position + Vector2(10.0, 10.0)
 	context_menu.visible = true
 	_render_context_menu()
@@ -129,6 +136,8 @@ func open_context_for_player(player_state: Dictionary, screen_position: Vector2)
 	context_menu.move_to_front()
 	_focus_first_context_action()
 	_refresh_social_overview_for_target(normalized)
+	if chat_moderation_state_loading:
+		_refresh_chat_moderation_state.call_deferred(normalized)
 
 
 func close_topmost() -> bool:
@@ -522,6 +531,18 @@ func _render_context_menu() -> void:
 			_on_block_pressed,
 			"default" if _is_blocked(current_target) else "danger"
 		)
+		if _can_moderate_chat():
+			_add_context_action(
+				"Unmute Player" if chat_target_is_muted else "Mute Player",
+				_t(
+					"ui.nearby.action.unmute_player.description"
+					if chat_target_is_muted
+					else "ui.nearby.action.mute_player.description"
+				),
+				_on_chat_moderation_pressed,
+				"default" if chat_target_is_muted else "danger",
+				chat_moderation_state_loading
+			)
 	_schedule_context_menu_content_fit()
 
 
@@ -656,6 +677,61 @@ func _on_mail_pressed() -> void:
 		return
 	mail_requested.emit(username)
 	close_context_menu()
+
+
+func _on_chat_moderation_pressed() -> void:
+	if current_target.is_empty() or not _can_moderate_chat():
+		return
+	chat_moderation_requested.emit(
+		"unmute" if chat_target_is_muted else "mute",
+		current_target.duplicate(true)
+	)
+	close_context_menu()
+
+
+func _refresh_chat_moderation_state(target: Dictionary) -> void:
+	var target_id := int(target.get("userId", 0))
+	if target_id <= 0 or not _can_moderate_chat():
+		chat_moderation_state_loading = false
+		return
+	var moderation_service := get_node_or_null("/root/ChatModerationService")
+	if moderation_service == null or not moderation_service.has_method("get_mute_state"):
+		chat_moderation_state_loading = false
+		_render_context_menu()
+		return
+	var result := _dictionary_from_value(
+		await moderation_service.call("get_mute_state", target_id)
+	)
+	if current_target.is_empty() or int(current_target.get("userId", 0)) != target_id:
+		return
+	chat_moderation_state_loading = false
+	if bool(result.get("success", false)):
+		var state := _dictionary_from_value(result.get("body", {}))
+		chat_target_is_muted = bool(state.get("muted", false))
+	_render_context_menu()
+
+
+func _can_moderate_chat() -> bool:
+	var auth := get_node_or_null("/root/AuthService")
+	if auth == null:
+		return false
+	var current_user := _dictionary_from_value(auth.get("current_user"))
+	var permissions: Variant = current_user.get("permissions", [])
+	if permissions is Array:
+		for value: Variant in permissions:
+			if str(value).strip_edges().to_lower() == CHAT_MUTE_PERMISSION:
+				return true
+	var roles: Variant = current_user.get("roles", [])
+	if roles is Array:
+		for value: Variant in roles:
+			var role_id := (
+				str((value as Dictionary).get("id", ""))
+				if value is Dictionary
+				else str(value)
+			).strip_edges().to_lower()
+			if role_id == "owner":
+				return true
+	return false
 
 
 func _on_trade_pressed() -> void:
@@ -1120,6 +1196,8 @@ func _context_action_label_key(label_text: String) -> String:
 		"Add Friend": "ui.nearby.action.add_friend",
 		"Unblock": "ui.nearby.action.unblock",
 		"Block": "ui.nearby.action.block",
+		"Mute Player": "ui.nearby.action.mute_player",
+		"Unmute Player": "ui.nearby.action.unmute_player",
 	}.get(label_text, label_text))
 
 func _on_locale_changed(_locale: String) -> void:
