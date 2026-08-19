@@ -264,7 +264,11 @@ func _run() -> void:
 		and view.side_tracker_position_label.text == "1/2",
 		"previous side-quest navigation wraps back through active quests"
 	)
-	_expect(view.get_visible_tracker_count() == 2, "HUD reports both active quest trackers")
+	_expect(
+		view.get_visible_tracker_count() == 2
+		and view.get_visible_tracker_bottom() == view.side_tracker_panel.offset_bottom,
+		"HUD reports both active quest trackers and their shared lower edge"
+	)
 	view.tracker_collapse_button.pressed.emit()
 	_expect(
 		not view.tracker_panel.visible
@@ -469,9 +473,10 @@ func _verify_integration_contract() -> void:
 		and overlay.contains('for panel_id in ["actions", "dex_actions"]')
 		and overlay.contains("quest_journal_view.set_tracker_top_offset")
 		and overlay.contains("tracker_layout_changed.connect(_refresh_quest_tracker_layout)")
-		and overlay.contains("quest_journal_view.get_visible_tracker_count()")
+		and overlay.contains("quest_journal_view.get_visible_tracker_bottom()")
+		and overlay.contains("const HOTBAR_TRACKER_GAP := 16.0")
 		and not overlay.contains("Quest Log is not implemented yet."),
-		"HUD quest integration opens the journal and dynamically clears the right-side UI"
+		"HUD quest integration opens the journal and keeps the compact hotbar below quest cards"
 	)
 
 

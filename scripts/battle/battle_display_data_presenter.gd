@@ -60,6 +60,30 @@ func get_active_display_species(player_id: String) -> String:
 	return battle_state.get_active_pokemon_species(player_id)
 
 
+func get_active_display_name(player_id: String) -> String:
+	if battle_state == null:
+		return ""
+
+	var active_pokemon := battle_state.get_active_player_pokemon(player_id)
+	if player_id == "p1":
+		var saved_pokemon: Pokemon = display_metadata.get_player_save_pokemon_for_battle_data(active_pokemon)
+		if saved_pokemon != null and saved_pokemon.nickname.strip_edges() != "":
+			return saved_pokemon.nickname.strip_edges()
+
+	for key: String in ["nickname", "name", "displayName"]:
+		var explicit_name := str(active_pokemon.get(key, "")).strip_edges()
+		if explicit_name != "":
+			return explicit_name
+
+	var ident := str(active_pokemon.get("ident", ""))
+	if ident.contains(": "):
+		var ident_name := ident.substr(ident.find(": ") + 2).strip_edges()
+		if ident_name != "":
+			return ident_name
+
+	return get_active_display_species(player_id)
+
+
 func get_active_pokemon_is_shiny(player_id: String) -> bool:
 	if battle_state == null:
 		return false
@@ -255,6 +279,8 @@ func _enrich_player_display_slot_from_save(display_data: Dictionary, index: int)
 		display_data["shiny"] = saved_pokemon.shiny
 	if not display_data.has("instanceId") and saved_pokemon.instance_id != "":
 		display_data["instanceId"] = saved_pokemon.instance_id
+	if saved_pokemon.nickname.strip_edges() != "":
+		display_data["nickname"] = saved_pokemon.nickname.strip_edges()
 
 func _get_player_save_pokemon_for_display_data(display_data: Dictionary, fallback_index: int) -> Pokemon:
 	var instance_id := str(display_data.get("instanceId", display_data.get("instance_id", ""))).strip_edges()

@@ -26,6 +26,7 @@ func _run() -> void:
 	_test_action_allowlist()
 	await _test_safe_action_execution()
 	_test_movement_helper_contract()
+	_test_story_battle_error_feedback()
 	_test_hook_and_api_integration_contract()
 	quit(1 if failed else 0)
 
@@ -139,6 +140,28 @@ func _test_movement_helper_contract() -> void:
 		and player.contains("direction_name not in STORY_PATH_DIRECTIONS"),
 		"player exposes a bounded cardinal story path"
 	)
+
+
+func _test_story_battle_error_feedback() -> void:
+	var hook_script := load("res://scripts/world/story/story_hook.gd") as GDScript
+	var hook := hook_script.new() as Node
+	_expect(
+		bool(hook.call("_is_player_actionable_sequence_error", {
+			"status": 409,
+			"detail": {
+				"code": "pokemon_level_cap_party_ineligible",
+				"levelCap": 18,
+			},
+		})),
+		"story battles expose an actionable party level-cap rejection"
+	)
+	_expect(
+		not bool(hook.call("_is_player_actionable_sequence_error", {
+			"status": "trainer_identity_mismatch",
+		})),
+		"internal story sequence failures keep the safe generic error"
+	)
+	hook.free()
 
 
 func _test_hook_and_api_integration_contract() -> void:

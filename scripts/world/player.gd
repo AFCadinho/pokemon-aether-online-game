@@ -865,6 +865,18 @@ func _apply_world_pixel_scale() -> void:
 		SettingsManager.world_pixel_scale,
 		_get_current_map_world_access_area_type()
 	)
+	var canvas_scale := world_camera.get_viewport().get_screen_transform().get_scale()
+	var baseline_zoom := PixelPerfectRenderingScript.camera_zoom_for_output_scale(
+		effective_scale,
+		canvas_scale
+	)
+	var photo_mode := get_tree().get_first_node_in_group("content_creator_photo_mode")
+	if (
+		photo_mode != null
+		and photo_mode.has_method("apply_camera_baseline_zoom")
+		and bool(photo_mode.call("apply_camera_baseline_zoom", world_camera, baseline_zoom))
+	):
+		return
 	PixelPerfectRenderingScript.apply_to_camera(
 		world_camera,
 		effective_scale,

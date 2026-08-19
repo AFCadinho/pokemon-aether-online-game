@@ -950,7 +950,12 @@ func prewarm_species(species: String, side: String, is_shiny: bool = false) -> v
 		return
 	_load_sprite_frames(species, side, is_shiny)
 
-func _load_sprite_frames(species: String, side: String, is_shiny: bool = false) -> SpriteFrames:
+func _load_sprite_frames(
+	species: String,
+	side: String,
+	is_shiny: bool = false,
+	report_missing: bool = true
+) -> SpriteFrames:
 	var cache_key := "%s|%s|%s|%s" % [
 		_normalize_species_asset_id(species),
 		side.strip_edges().to_lower(),
@@ -960,12 +965,17 @@ func _load_sprite_frames(species: String, side: String, is_shiny: bool = false) 
 	if sprite_frames_cache.has(cache_key):
 		return sprite_frames_cache[cache_key] as SpriteFrames
 
-	var frames := _load_sprite_frames_uncached(species, side, is_shiny)
+	var frames := _load_sprite_frames_uncached(species, side, is_shiny, report_missing)
 	if frames != null:
 		sprite_frames_cache[cache_key] = frames
 	return frames
 
-func _load_sprite_frames_uncached(species: String, side: String, is_shiny: bool = false) -> SpriteFrames:
+func _load_sprite_frames_uncached(
+	species: String,
+	side: String,
+	is_shiny: bool = false,
+	report_missing: bool = true
+) -> SpriteFrames:
 	for sprite_root in _get_sprite_asset_roots(side, is_shiny):
 		for asset_id in _get_species_asset_id_candidates(species):
 			for sheet_metadata_path in PokemonAssets.build_pokemon_sprite_path("%s/%s/animation.json" % [sprite_root, asset_id]):
@@ -994,7 +1004,8 @@ func _load_sprite_frames_uncached(species: String, side: String, is_shiny: bool 
 		_apply_species_position_offset(home_frames, species, side, is_shiny)
 		return home_frames
 
-	push_error("Pokemon sprite assets are not found for %s/%s" % [side, species])
+	if report_missing:
+		push_error("Pokemon sprite assets are not found for %s/%s" % [side, species])
 	return null
 
 func _apply_sprite_source_display_scale(sprite_frames: SpriteFrames, source_path: String) -> void:
@@ -1053,6 +1064,10 @@ func _get_species_asset_id_candidates(species: String) -> Array[String]:
 	var compact_asset_id: String = asset_id.replace("-", "")
 	if compact_asset_id != asset_id:
 		candidates.append(compact_asset_id)
+	for shared_candidate: String in PokemonAssets.get_battle_sprite_ids(species):
+		var normalized_candidate := _normalize_species_asset_id(shared_candidate)
+		if normalized_candidate != "" and not candidates.has(normalized_candidate):
+			candidates.append(normalized_candidate)
 
 	var aliases_value: Variant = BATTLE_SPRITE_ASSET_ALIASES.get(asset_id, [])
 	if aliases_value is Array:

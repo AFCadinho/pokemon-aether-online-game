@@ -18,6 +18,7 @@ var world_debug_enabled := false
 var repel_enabled := false
 var show_follower := true
 var running_shoes_enabled := false
+var global_heal_requests_enabled := true
 var selected_role_badge := ""
 var fishing_skill_unlocked := false
 var fishing_unlocked := false
@@ -80,6 +81,7 @@ func reset_gameplay_runtime_state() -> void:
 	repel_enabled = false
 	show_follower = true
 	running_shoes_enabled = false
+	global_heal_requests_enabled = true
 	selected_role_badge = ""
 	fishing_skill_unlocked = false
 	fishing_unlocked = false

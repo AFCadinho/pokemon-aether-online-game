@@ -94,6 +94,15 @@ func _run() -> void:
 	_check(
 		errors.call("message", {
 			"detail": {
+				"code": "pokemon_level_cap_party_ineligible",
+				"levelCap": 18.0,
+			}
+		}) == "Je team bevat een Pokémon boven de huidige levellimiet van 18.",
+		"party level cap errors display whole-number caps"
+	)
+	_check(
+		errors.call("message", {
+			"detail": {
 				"code": "trade_pokemon_level_cap_exceeded",
 				"pokemonLevel": 20.0,
 				"tradeLevelCap": 5.0,

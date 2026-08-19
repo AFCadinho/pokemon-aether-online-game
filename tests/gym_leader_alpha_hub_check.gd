@@ -57,6 +57,10 @@ func _run() -> void:
 		_check(str(leader.get("trainer_id")) == str(values[0]), "%s uses its server trainer id" % node_name)
 		_check(str(leader.get("badge_id")) == str(values[1]), "%s advertises its canonical badge" % node_name)
 		_check(int(leader.get("sight_range_tiles")) == 0, "%s starts only through deliberate interaction" % node_name)
+		_check(
+			str(leader.get("battle_environment_id")) == "pvp_stadium",
+			"%s uses the stadium battle environment" % node_name
+		)
 		if collision != null:
 			var cell := collision.local_to_map(collision.to_local(leader.global_position))
 			_check(

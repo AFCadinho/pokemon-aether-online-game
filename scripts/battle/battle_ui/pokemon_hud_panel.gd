@@ -43,9 +43,10 @@ func set_pokemon_data(
 	status: String = "",
 	gender: String = "",
 	is_shiny: bool = false,
-	experience_data: Dictionary = {}
+	experience_data: Dictionary = {},
+	display_name: String = ""
 ) -> void:
-	_set_active_info_row_data(0, species, level, current_hp, max_hp, status, gender, is_shiny, experience_data)
+	_set_active_info_row_data(0, species, level, current_hp, max_hp, status, gender, is_shiny, experience_data, display_name)
 
 func set_experience_bar_enabled(enabled: bool) -> void:
 	experience_bar_enabled = enabled
@@ -104,7 +105,8 @@ func _set_active_info_row_data(
 	status: String = "",
 	gender: String = "",
 	is_shiny: bool = false,
-	experience_data: Dictionary = {}
+	experience_data: Dictionary = {},
+	display_name: String = ""
 ) -> void:
 	if row_index < 0 or row_index >= active_info_rows.size():
 		return
@@ -119,12 +121,13 @@ func _set_active_info_row_data(
 		"gender": gender,
 		"is_shiny": is_shiny,
 		"experience_data": experience_data.duplicate(true),
+		"display_name": display_name,
 	})
 	_set_active_info_row_visible(row_index, true)
 
 	var name_label: Label = row.get_node_or_null("MarginContainer/VBoxContainer/TopRow/NameContainer/NameLabel") as Label
 	if name_label != null:
-		name_label.text = species
+		name_label.text = display_name if display_name.strip_edges() != "" else species
 
 	_set_shiny_badge(row, is_shiny)
 	var level_label: Label = row.get_node_or_null("MarginContainer/VBoxContainer/TopRow/HBoxContainer/LevelLabel") as Label
@@ -284,7 +287,8 @@ func _on_locale_changed(_locale: String) -> void:
 			str(data.get("status", "")),
 			str(data.get("gender", "")),
 			bool(data.get("is_shiny", false)),
-			data.get("experience_data", {}) as Dictionary
+			data.get("experience_data", {}) as Dictionary,
+			str(data.get("display_name", ""))
 		)
 
 func _to_visible_hp_percent(current_hp: int, max_hp: int) -> int:

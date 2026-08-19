@@ -6,6 +6,7 @@ const REMOTE_PLAYER_AVATAR_SCRIPT: Script = preload("res://scripts/world/remote_
 const MAP_TRANSITION_INDICATOR_SCRIPT: Script = preload("res://scripts/ui/map_transition_indicator.gd")
 const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.gd")
 const BattleEnvironmentResolverScript := preload("res://scripts/battle/battle_environment_resolver.gd")
+const TallGrassDepthSortingScript := preload("res://scripts/world/tall_grass_depth_sorting.gd")
 const POSITION_AUTOSAVE_INTERVAL_SECONDS := 12.0
 const POSITION_PRESENCE_UPDATE_INTERVAL_SECONDS := 0.06
 const POSITION_SAVE_EPSILON := 1.0
@@ -33,7 +34,6 @@ const DECORATIVE_DEPTH_ROW_META := "pao_decorative_depth_row"
 const DECORATIVE_DEPTH_ROWS_BUILT_META := "pao_decorative_depth_rows_built"
 const STRUCTURE_TOP_DEPTH_GROUP_META := "pao_structure_top_depth_group"
 const STRUCTURE_TOP_DEPTH_GROUPS_BUILT_META := "pao_structure_top_depth_groups_built"
-const TALL_GRASS_LAYER_Z_OFFSET := 1
 const FOREST_TOP_LAYER_Z_OFFSET := 3
 const TREE_LAYER_Z_MIN := -4096
 const TREE_LAYER_Z_MAX := 4096
@@ -42,6 +42,9 @@ const MAP_FADE_IN_SECONDS := 0.20
 const WILD_ENCOUNTER_MINIMUM_COVER_SECONDS := 0.46
 const WILD_BATTLE_REVEAL_SECONDS := 0.20
 const EV_TRAINING_MAP_ID := "kanto_viridian_city"
+const EXPECTED_TRAINER_BATTLE_REJECTION_CODES: Array[String] = [
+	"pokemon_level_cap_party_ineligible",
+]
 
 @export var initial_spawn_name := "InitialSpawn"
 
@@ -1257,52 +1260,38 @@ func _build_tall_grass_visual_depth_rows(map: Node) -> void:
 	for grass_layer: TileMapLayer in grass_layers:
 		if bool(grass_layer.get_meta(TALL_GRASS_DEPTH_ROWS_BUILT_META, false)):
 			continue
-
-		var used_cells: Array[Vector2i] = grass_layer.get_used_cells()
-		if used_cells.is_empty():
+		var row_group := TallGrassDepthSortingScript.build_depth_rows(
+			grass_layer,
+			grass_layer.get_used_cells(),
+			TREE_LAYER_Z_MIN,
+			TREE_LAYER_Z_MAX,
+			false,
+			"%sDepthRows" % grass_layer.name
+		)
+		if row_group == null:
 			continue
-
-		var parent := grass_layer.get_parent()
-		if parent == null:
-			continue
-
-		var rows := {}
-		for cell: Vector2i in used_cells:
-			var row := cell.y
-			if not rows.has(row):
-				rows[row] = []
-			rows[row].append(cell)
-
-		var row_group := Node2D.new()
-		row_group.name = "%sDepthRows" % grass_layer.name
-		row_group.set_meta(TALL_GRASS_DEPTH_ROW_META, true)
-		parent.add_child(row_group)
-
-		for row in rows.keys():
-			var row_layer := TileMapLayer.new()
-			row_layer.name = "%sRow%d" % [grass_layer.name, int(row)]
-			row_layer.tile_set = grass_layer.tile_set
-			row_layer.visible = grass_layer.visible
-			row_layer.modulate = grass_layer.modulate
-			row_layer.position = grass_layer.position
-			row_layer.z_as_relative = false
-			row_layer.z_index = _get_tall_grass_row_z_index(grass_layer, int(row))
-			row_layer.set_meta(TALL_GRASS_DEPTH_ROW_META, true)
-			row_group.add_child(row_layer)
-
-			for cell: Vector2i in rows[row]:
-				var source_id := grass_layer.get_cell_source_id(cell)
-				if source_id == -1:
-					continue
-				row_layer.set_cell(
-					cell,
-					source_id,
-					grass_layer.get_cell_atlas_coords(cell),
-					grass_layer.get_cell_alternative_tile(cell)
-				)
-
 		grass_layer.visible = false
 		grass_layer.set_meta(TALL_GRASS_DEPTH_ROWS_BUILT_META, true)
+
+	if not grass_layers.is_empty():
+		return
+	var legacy_match := TallGrassDepthSortingScript.find_legacy_grass_visual_source(map)
+	if legacy_match.is_empty():
+		return
+	var legacy_visual_layer := legacy_match.get("visual_layer") as TileMapLayer
+	if legacy_visual_layer == null:
+		return
+	var legacy_cells: Array[Vector2i] = []
+	for cell: Vector2i in legacy_match.get("cells", []):
+		legacy_cells.append(cell)
+	TallGrassDepthSortingScript.build_depth_rows(
+		legacy_visual_layer,
+		legacy_cells,
+		TREE_LAYER_Z_MIN,
+		TREE_LAYER_Z_MAX,
+		true,
+		"%sTallGrassDepthRows" % legacy_visual_layer.name
+	)
 
 func _collect_tall_grass_visual_layers_recursive(node: Node, grass_layers: Array[TileMapLayer]) -> void:
 	var tile_map_layer := node as TileMapLayer
@@ -1313,16 +1302,6 @@ func _collect_tall_grass_visual_layers_recursive(node: Node, grass_layers: Array
 
 	for child: Node in node.get_children():
 		_collect_tall_grass_visual_layers_recursive(child, grass_layers)
-
-func _get_tall_grass_row_z_index(grass_layer: TileMapLayer, row: int) -> int:
-	var tile_size := Vector2(TILE_SIZE, TILE_SIZE)
-	if grass_layer.tile_set != null:
-		tile_size = Vector2(grass_layer.tile_set.tile_size)
-
-	var row_center_local := grass_layer.map_to_local(Vector2i(0, row))
-	var row_bottom_global := grass_layer.to_global(row_center_local + Vector2(0.0, tile_size.y * 0.5)).y
-	return clampi(floori(row_bottom_global) + TALL_GRASS_LAYER_Z_OFFSET, TREE_LAYER_Z_MIN, TREE_LAYER_Z_MAX)
-
 
 func _build_decorative_visual_depth_rows(map: Node) -> void:
 	var decorative_layers: Array[TileMapLayer] = []
@@ -2455,6 +2434,14 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 			"code": "trainer_battle_configuration_invalid",
 		}
 
+	var player_lead_slot := PlayerSave.get_first_usable_party_slot()
+	if player_lead_slot <= 0:
+		return {
+			"success": false,
+			"code": "no_usable_pokemon",
+		}
+	var player_lead_pokemon: Pokemon = PlayerSave.party[player_lead_slot - 1] as Pokemon
+
 	var battle_trainer_data := trainer_data.duplicate(true)
 	battle_trainer_data["battleTransitionStyle"] = _trainer_battle_transition_style(trainer_data)
 	is_in_battle = true
@@ -2475,7 +2462,8 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 		active_trainer_is_rematch
 	)
 	if not response.get("success", false):
-		push_warning("World.start_trainer_battle failed: %s" % str(response.get("error", "Unknown error")))
+		if not _is_expected_trainer_battle_rejection(response):
+			push_warning("World.start_trainer_battle failed: %s" % str(response.get("error", "Unknown error")))
 		await _cancel_wild_encounter_transition()
 		_abort_battle_start()
 		return response
@@ -2498,7 +2486,7 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 	var battle_environment_id := _resolve_battle_environment_id("trainer", battle_trainer_data)
 
 	await battle_instance.setup_trainer_battle_from_response(
-		PlayerSave.party[0],
+		player_lead_pokemon,
 		battle_trainer_data,
 		response,
 		Callable(self, "_reveal_prepared_wild_battle"),
@@ -2508,6 +2496,13 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 		await _reveal_prepared_wild_battle()
 
 	return {"success": true, "battleId": active_battle_id}
+
+
+func _is_expected_trainer_battle_rejection(response: Dictionary) -> bool:
+	return (
+		BackendErrorLocalizationService.error_code(response)
+		in EXPECTED_TRAINER_BATTLE_REJECTION_CODES
+	)
 
 func start_pvp_battle_from_response(response: Dictionary) -> bool:
 	if is_in_battle:

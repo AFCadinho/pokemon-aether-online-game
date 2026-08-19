@@ -64,6 +64,29 @@ func _run() -> void:
 	_check(popup.find_child("ClearAllButton", true, false) != null, "clear-all developer action exists")
 	_check(popup.find_child("BadgesTabButton", true, false) != null, "trainer progress exposes a badges tab")
 	_check(popup.find_child("KeyItemsTabButton", true, false) != null, "trainer progress exposes a key-items tab")
+	var story_checkpoint_select := popup.find_child("StoryCheckpointSelect", true, false) as OptionButton
+	_check(story_checkpoint_select != null, "trainer progress exposes a story checkpoint selector")
+	if story_checkpoint_select != null:
+		var checkpoint_menu := story_checkpoint_select.get_popup()
+		_check(
+			story_checkpoint_select.has_theme_icon_override("arrow"),
+			"story checkpoint selector uses the custom dropdown arrow"
+		)
+		_check(
+			story_checkpoint_select.has_theme_stylebox_override("normal")
+			and story_checkpoint_select.has_theme_stylebox_override("hover"),
+			"story checkpoint selector uses styled closed states"
+		)
+		_check(
+			checkpoint_menu.has_theme_stylebox_override("panel")
+			and checkpoint_menu.has_theme_stylebox_override("hover"),
+			"story checkpoint menu uses styled popup states"
+		)
+		_check(
+			checkpoint_menu.has_theme_icon_override("radio_checked")
+			and checkpoint_menu.has_theme_icon_override("radio_unchecked"),
+			"story checkpoint menu uses custom selection indicators"
+		)
 	popup.call("_set_key_item_state", [
 		{"itemId": "pokedex", "quantity": 1},
 	])
