@@ -64,6 +64,10 @@ const PARTY_CONTEXT_SUMMARY := 0
 const PARTY_CONTEXT_GIVE_ITEM := 1
 const PARTY_CONTEXT_TAKE_ITEM := 2
 const PARTY_CONTEXT_SET_LEAD := 3
+const CHAT_CONTEXT_COPY_TEXT := 100
+const CHAT_CONTEXT_COPY_FULL := 101
+const CHAT_CONTEXT_OPEN_PM := 200
+const CHAT_CONTEXT_ADD_FRIEND := 201
 const CHAT_TAB_LABELS := {
 	CHAT_TAB_ALL: "ui.chat.tab.all",
 	CHAT_TAB_GENERAL: "ui.chat.tab.general",
@@ -603,6 +607,10 @@ var collapsible_panels: Dictionary = {}
 var chat_resize_button: Button
 var chat_input_dock: PanelContainer
 var chat_tabs_background: Panel
+var chat_message_context_menu: PopupMenu
+var chat_sender_context_menu: PopupMenu
+var active_chat_message_context: Dictionary = {}
+var active_chat_sender_context: Dictionary = {}
 var chat_resize_dragging := false
 var chat_resize_drag_start_mouse := Vector2.ZERO
 var chat_resize_drag_start_rect := Rect2()
@@ -1317,6 +1325,7 @@ func _ready() -> void:
 	_setup_collapsible_panels()
 	_setup_chat_resize_button()
 	_setup_chat_surface_ui()
+	_setup_chat_message_context_menus()
 	_setup_normal_ui_focus_groups()
 	_setup_chat_pokemon_attachment_preview()
 	_setup_ui_confirm_popup()
@@ -25224,7 +25233,21 @@ func _create_pm_message_row(message: Dictionary) -> Control:
 	row.add_child(header)
 
 	var body_text: String = str(message.get("body", "")).strip_edges()
-	header.add_child(_create_chat_sender_message_label(label, name_color, body_text))
+	var message_user: Dictionary
+	if outgoing:
+		message_user = AuthService.current_user.duplicate(true)
+	elif str(message.get("username", "")).strip_edges().to_lower() != "system":
+		message_user = {
+			"username": str(message.get("username", "")),
+			"displayName": str(message.get("displayName", message.get("username", ""))),
+		}
+	var message_context := _chat_message_context(
+		message_user,
+		label,
+		body_text,
+		str(message.get("sentAt", ""))
+	)
+	header.add_child(_create_chat_sender_message_label(label, name_color, body_text, message_context))
 
 	var pokemon_attachments: Array[Dictionary] = _get_chat_pokemon_attachments(message)
 	if not pokemon_attachments.is_empty():
@@ -25636,7 +25659,9 @@ func _submit_pm_message_with_attachments(text: String, pokemon_attachments: Arra
 		str(message.get("body", target_body)),
 		CHAT_TAB_PM,
 		response_attachments,
-		target_pm_user_id
+		target_pm_user_id,
+		{},
+		str(message.get("sentAt", ""))
 	)
 	_clear_pending_chat_pokemon_attachments()
 	if active_chat_tab == CHAT_TAB_PM and active_pm_user_id == target_pm_user_id:
@@ -37675,6 +37700,34 @@ func _disable_icon_button_focus() -> void:
 		if button != null:
 			button.focus_mode = Control.FOCUS_NONE
 
+func _setup_chat_message_context_menus() -> void:
+	chat_message_context_menu = _create_chat_popup_menu("ChatMessageContextMenu")
+	chat_message_context_menu.id_pressed.connect(_on_chat_message_context_action)
+	chat_sender_context_menu = _create_chat_popup_menu("ChatSenderContextMenu")
+	chat_sender_context_menu.id_pressed.connect(_on_chat_sender_context_action)
+
+
+func _create_chat_popup_menu(menu_name: String) -> PopupMenu:
+	var menu := PopupMenu.new()
+	menu.name = menu_name
+	menu.min_size = Vector2i(220, 0)
+	menu.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_RAISED, UI_BORDER_FOCUS, 8, 1)
+	)
+	root_control.add_child(menu)
+	return menu
+
+
+func _popup_chat_context_menu(menu: PopupMenu, global_position: Vector2) -> void:
+	var viewport_size := get_viewport().get_visible_rect().size
+	var menu_position := global_position
+	menu_position.x = minf(menu_position.x, viewport_size.x - 240.0)
+	menu_position.y = minf(menu_position.y, viewport_size.y - 120.0)
+	menu.position = Vector2i(menu_position.max(Vector2.ZERO))
+	menu.popup()
+
+
 func _add_chat_message(
 	text: String,
 	use_bbcode: bool = false,
@@ -37694,6 +37747,8 @@ func _add_chat_message(
 		entry.append_text(_format_system_chat_message(text))
 	entry.fit_content = true
 	entry.scroll_active = false
+	entry.set_meta("chat_message_context", _chat_message_context({}, "SYSTEM", text, ""))
+	_enable_chat_message_actions(entry, entry)
 	_scroll_chat_to_bottom.call_deferred()
 
 
@@ -37755,6 +37810,11 @@ func add_system_pokemon_message(text: String, pokemon_attachments: Array = []) -
 		entry.scroll_active = false
 		entry.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		entry.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		entry.set_meta(
+			"chat_message_context",
+			_chat_message_context({}, "SYSTEM", message_text, "")
+		)
+		_enable_chat_message_actions(entry, entry)
 	_scroll_chat_to_bottom.call_deferred()
 
 
@@ -37854,7 +37914,16 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 		return
 
 	var channel: String = str(message.get("channel", CHAT_CHANNEL_GLOBAL)).strip_edges().to_lower()
-	_add_user_chat_message(user, display_name, text, channel, pokemon_attachments, 0, shiny_hunt_attachment)
+	_add_user_chat_message(
+		user,
+		display_name,
+		text,
+		channel,
+		pokemon_attachments,
+		0,
+		shiny_hunt_attachment,
+		str(message.get("sentAt", ""))
+	)
 	if channel == CHAT_TAB_GUILD and active_chat_tab != CHAT_TAB_GUILD:
 		guild_chat_has_unread = true
 		_refresh_guild_chat_attention_badge()
@@ -37996,7 +38065,9 @@ func _on_private_message_received(message: Dictionary) -> void:
 		body,
 		CHAT_TAB_PM,
 		pokemon_attachments,
-		sender_key
+		sender_key,
+		{},
+		str(message.get("sentAt", ""))
 	)
 
 	var conversation_active: bool = active_chat_tab == CHAT_TAB_PM and active_pm_user_id == sender_key
@@ -38101,7 +38172,8 @@ func _add_user_chat_message(
 	channel: String = CHAT_CHANNEL_GLOBAL,
 	pokemon_attachments: Array[Dictionary] = [],
 	target_user_id: int = 0,
-	shiny_hunt_attachment: Dictionary = {}
+	shiny_hunt_attachment: Dictionary = {},
+	sent_at: String = ""
 ) -> void:
 	var role: Dictionary = _get_primary_visible_chat_role(user)
 	var role_color: String = str(role.get("color", "#d8b767"))
@@ -38128,6 +38200,7 @@ func _add_user_chat_message(
 	var role_name := ""
 	if not role.is_empty():
 		role_name = str(role.get("badge", "")).strip_edges()
+	var message_context := _chat_message_context(user, display_name, text, sent_at)
 
 	row.add_child(_create_chat_sender_message_line(
 		display_name,
@@ -38136,7 +38209,8 @@ func _add_user_chat_message(
 		channel,
 		target_user_id,
 		role_name,
-		role_color
+		role_color,
+		message_context
 	))
 
 	var has_visual_attachments := (
@@ -38169,14 +38243,15 @@ func _create_chat_sender_message_line(
 	channel: String,
 	target_user_id: int,
 	role_name: String,
-	role_color: String
+	role_color: String,
+	message_context: Dictionary
 ) -> Control:
 	var line := PanelContainer.new()
 	line.name = "MessageLine"
 	line.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	line.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 
-	var entry := _create_chat_sender_message_label(display_name, name_color, text)
+	var entry := _create_chat_sender_message_label(display_name, name_color, text, message_context)
 	line.add_child(entry)
 
 	var header := HBoxContainer.new()
@@ -38185,6 +38260,7 @@ func _create_chat_sender_message_line(
 	header.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	header.alignment = BoxContainer.ALIGNMENT_BEGIN
 	header.add_theme_constant_override("separation", 4)
+	_enable_chat_message_actions(header, entry)
 	line.add_child(header)
 
 	var channel_prefix := _create_chat_channel_prefix(channel, target_user_id)
@@ -38209,7 +38285,8 @@ func _create_chat_sender_message_line(
 func _create_chat_sender_message_label(
 	display_name: String,
 	name_color: String,
-	text: String
+	text: String,
+	message_context: Dictionary = {}
 ) -> RichTextLabel:
 	var entry: RichTextLabel = message_entry_template.duplicate() as RichTextLabel
 	entry.name = "MessageText"
@@ -38223,8 +38300,186 @@ func _create_chat_sender_message_label(
 	entry.set_meta("chat_display_name", display_name)
 	entry.set_meta("chat_name_color", name_color)
 	entry.set_meta("chat_message_text", text)
+	entry.set_meta("chat_message_context", message_context.duplicate(true))
+	entry.set_meta("chat_sender_start_x", 0.0)
+	_enable_chat_message_actions(entry, entry)
 	_render_chat_sender_message_label(entry)
 	return entry
+
+
+func _chat_message_context(
+	user: Dictionary,
+	display_name: String,
+	text: String,
+	sent_at: String
+) -> Dictionary:
+	var resolved_sent_at := sent_at.strip_edges()
+	if resolved_sent_at == "":
+		resolved_sent_at = Time.get_datetime_string_from_system(true)
+	return {
+		"user": user.duplicate(true),
+		"display_name": display_name,
+		"text": text,
+		"sent_at": resolved_sent_at,
+	}
+
+
+func _enable_chat_message_actions(control: Control, entry: RichTextLabel) -> void:
+	var context := _dictionary_from_value(entry.get_meta("chat_message_context", {}))
+	if str(context.get("text", "")) == "":
+		return
+	control.tooltip_text = LocalizationManager.text("ui.chat.message.copy_tooltip")
+	control.gui_input.connect(_on_chat_message_gui_input.bind(entry, control))
+
+
+func _on_chat_message_gui_input(
+	event: InputEvent,
+	entry: RichTextLabel,
+	control: Control
+) -> void:
+	var mouse_event := event as InputEventMouseButton
+	if mouse_event == null or not mouse_event.pressed:
+		return
+
+	var context := _dictionary_from_value(entry.get_meta("chat_message_context", {}))
+	var text := str(context.get("text", ""))
+	if text == "":
+		return
+	if mouse_event.button_index == MOUSE_BUTTON_LEFT and mouse_event.double_click:
+		DisplayServer.clipboard_set(text)
+		_set_chat_copy_feedback(control)
+	elif mouse_event.button_index == MOUSE_BUTTON_RIGHT:
+		if _chat_pointer_is_on_sender(entry, mouse_event.position, context):
+			_open_chat_sender_context_menu(context, control.get_global_mouse_position())
+		else:
+			_open_chat_message_context_menu(context, control.get_global_mouse_position())
+	else:
+		return
+	get_viewport().set_input_as_handled()
+
+
+func _set_chat_copy_feedback(control: Control) -> void:
+	control.tooltip_text = LocalizationManager.text("ui.chat.message.copied")
+	var copy_token := Time.get_ticks_msec()
+	control.set_meta("chat_copy_tooltip_token", copy_token)
+	_reset_chat_copy_tooltip.call_deferred(control, copy_token)
+
+
+func _reset_chat_copy_tooltip(control: Control, copy_token: int) -> void:
+	await get_tree().create_timer(1.5).timeout
+	if (
+		is_instance_valid(control)
+		and int(control.get_meta("chat_copy_tooltip_token", -1)) == copy_token
+	):
+		control.tooltip_text = LocalizationManager.text("ui.chat.message.copy_tooltip")
+
+
+func _chat_pointer_is_on_sender(
+	entry: RichTextLabel,
+	position: Vector2,
+	context: Dictionary
+) -> bool:
+	var user := _dictionary_from_value(context.get("user", {}))
+	if user.is_empty() or _is_current_auth_user(user):
+		return false
+	var sender_start := float(entry.get_meta("chat_sender_start_x", 0.0))
+	var sender_end := float(entry.get_meta("chat_sender_end_x", sender_start))
+	var first_line_height := float(entry.get_meta("chat_sender_line_height", 0.0))
+	return (
+		position.x >= sender_start
+		and position.x <= sender_end
+		and position.y >= 0.0
+		and position.y <= first_line_height
+	)
+
+
+func _open_chat_message_context_menu(context: Dictionary, global_position: Vector2) -> void:
+	active_chat_message_context = context.duplicate(true)
+	chat_message_context_menu.clear()
+	chat_message_context_menu.add_item(
+		LocalizationManager.text("ui.chat.message.copy_text"),
+		CHAT_CONTEXT_COPY_TEXT
+	)
+	chat_message_context_menu.add_item(
+		LocalizationManager.text("ui.chat.message.copy_full"),
+		CHAT_CONTEXT_COPY_FULL
+	)
+	_popup_chat_context_menu(chat_message_context_menu, global_position)
+
+
+func _open_chat_sender_context_menu(context: Dictionary, global_position: Vector2) -> void:
+	active_chat_sender_context = context.duplicate(true)
+	chat_sender_context_menu.clear()
+	chat_sender_context_menu.add_item(
+		LocalizationManager.text("ui.chat.sender.private_message"),
+		CHAT_CONTEXT_OPEN_PM
+	)
+	chat_sender_context_menu.add_item(
+		LocalizationManager.text("ui.chat.sender.add_friend"),
+		CHAT_CONTEXT_ADD_FRIEND
+	)
+	var user := _dictionary_from_value(context.get("user", {}))
+	var username := str(user.get("username", "")).strip_edges()
+	chat_sender_context_menu.set_item_disabled(1, username == "")
+	_popup_chat_context_menu(chat_sender_context_menu, global_position)
+
+
+func _on_chat_message_context_action(action_id: int) -> void:
+	var text := str(active_chat_message_context.get("text", ""))
+	if text == "":
+		return
+	match action_id:
+		CHAT_CONTEXT_COPY_TEXT:
+			DisplayServer.clipboard_set(text)
+		CHAT_CONTEXT_COPY_FULL:
+			DisplayServer.clipboard_set(_format_full_chat_message(active_chat_message_context))
+
+
+func _on_chat_sender_context_action(action_id: int) -> void:
+	var user := _dictionary_from_value(active_chat_sender_context.get("user", {}))
+	if user.is_empty() or _is_current_auth_user(user):
+		return
+	match action_id:
+		CHAT_CONTEXT_OPEN_PM:
+			open_private_message_conversation(user)
+		CHAT_CONTEXT_ADD_FRIEND:
+			var username := str(user.get("username", "")).strip_edges()
+			if username != "":
+				_send_chat_friend_request.call_deferred(username)
+
+
+func _send_chat_friend_request(username: String) -> void:
+	var result: Dictionary = await SocialService.send_friend_request(username)
+	if bool(result.get("success", false)):
+		_add_chat_message(LocalizationManager.text("ui.friends.success.request_sent"))
+		_refresh_friend_request_attention_from_socials.call_deferred()
+	else:
+		_add_chat_message(str(result.get(
+			"error",
+			LocalizationManager.text("ui.friends.error.action")
+		)))
+
+
+func _format_full_chat_message(context: Dictionary) -> String:
+	return "[%s] %s: %s" % [
+		_format_chat_copy_timestamp(str(context.get("sent_at", ""))),
+		str(context.get("display_name", "Trainer")),
+		str(context.get("text", "")),
+	]
+
+
+func _format_chat_copy_timestamp(sent_at: String) -> String:
+	var timestamp := _pvp_iso_timestamp_to_unix_time(sent_at)
+	if timestamp <= 0.0:
+		timestamp = Time.get_unix_time_from_system()
+	var datetime := Time.get_datetime_dict_from_unix_time(int(timestamp))
+	return "%04d-%02d-%02d %02d:%02d UTC" % [
+		int(datetime.get("year", 0)),
+		int(datetime.get("month", 0)),
+		int(datetime.get("day", 0)),
+		int(datetime.get("hour", 0)),
+		int(datetime.get("minute", 0)),
+	]
 
 
 func _render_chat_sender_message_label(entry: RichTextLabel) -> void:
@@ -38244,6 +38499,24 @@ func _render_chat_sender_message_label(entry: RichTextLabel) -> void:
 			CHAT_MESSAGE_COLOR,
 			_escape_bbcode(text),
 		])
+	_update_chat_sender_hit_bounds(entry)
+
+
+func _update_chat_sender_hit_bounds(entry: RichTextLabel) -> void:
+	var display_name := str(entry.get_meta("chat_display_name", ""))
+	var sender_start := float(entry.get_meta("chat_sender_start_x", 0.0))
+	var bold_font := entry.get_theme_font("bold_font")
+	var bold_font_size := entry.get_theme_font_size("bold_font_size")
+	if bold_font_size <= 0:
+		bold_font_size = entry.get_theme_font_size("normal_font_size")
+	var sender_width := bold_font.get_string_size(
+		"%s:" % display_name,
+		HORIZONTAL_ALIGNMENT_LEFT,
+		-1.0,
+		bold_font_size
+	).x
+	entry.set_meta("chat_sender_end_x", sender_start + sender_width)
+	entry.set_meta("chat_sender_line_height", bold_font.get_height(bold_font_size) + 4.0)
 
 
 func _sync_chat_inline_header_spacing(header: HBoxContainer, entry: RichTextLabel) -> void:
@@ -38259,7 +38532,9 @@ func _sync_chat_inline_header_spacing(header: HBoxContainer, entry: RichTextLabe
 		normal_font_size
 	).x
 	var spacer_count := ceili(header_width / maxf(space_width, 1.0))
+	entry.set_meta("chat_sender_start_x", float(spacer_count) * space_width)
 	if spacer_count == int(entry.get_meta("chat_inline_spacer_count", -1)):
+		_update_chat_sender_hit_bounds(entry)
 		return
 	entry.set_meta("chat_inline_spacer_count", spacer_count)
 	_render_chat_sender_message_label(entry)
@@ -38492,6 +38767,7 @@ func _create_chat_role_badge(role_name: String, role_color: String) -> PanelCont
 	badge.name = "RoleBadge"
 	badge.custom_minimum_size = Vector2(28, 16)
 	badge.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	badge.mouse_filter = Control.MOUSE_FILTER_PASS
 
 	var style: StyleBoxFlat = StyleBoxFlat.new()
 	style.bg_color = Color(_sanitize_hex_color(role_color, "#d8b767"))
@@ -38511,6 +38787,7 @@ func _create_chat_role_badge(role_name: String, role_color: String) -> PanelCont
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.add_theme_color_override("font_color", CHAT_BADGE_TEXT_COLOR)
 	label.add_theme_font_size_override("font_size", 10)
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	badge.add_child(label)
 	return badge
 

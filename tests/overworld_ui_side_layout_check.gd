@@ -272,6 +272,16 @@ func _init() -> void:
 		script_source.contains('message_list.add_theme_constant_override("separation", 5)'),
 		"separate chat messages keep a small visual gap"
 	)
+	_check(
+		script_source.contains("mouse_event.double_click")
+		and script_source.contains("DisplayServer.clipboard_set(text)")
+		and script_source.contains("CHAT_CONTEXT_COPY_FULL")
+		and script_source.contains("_format_full_chat_message(active_chat_message_context)")
+		and script_source.contains("_open_chat_sender_context_menu")
+		and script_source.contains("open_private_message_conversation(user)")
+		and script_source.contains("SocialService.send_friend_request(username)"),
+		"chat supports quick copying and sender or message context actions"
+	)
 	_check(script_source.contains('_apply_chat_main_tab_style(general_chat_tab_button, general_active)'), "active and inactive main tabs receive distinct styling")
 	_check(script_source.contains("style.border_width_bottom = 2"), "selected main tab gets a clear bottom accent")
 	_check(script_source.contains("_apply_chat_dock_button_style(send_button, true)"), "Send uses the input dock accent treatment")
