@@ -150,6 +150,8 @@ const RANKED_DROPDOWN_RADIO_CHECKED: Texture2D = preload("res://assets/ui/ranked
 const RANKED_DROPDOWN_RADIO_UNCHECKED: Texture2D = preload("res://assets/ui/ranked_dropdown_radio_unchecked.svg")
 const STAFF_TELEPORT_ICON: Texture2D = preload("res://assets/ui/location_waypoint.svg")
 const STAFF_IMPERSONATE_ICON: Texture2D = preload("res://assets/ui/staff_impersonate.svg")
+const STAFF_CHAT_MODERATION_ICON: Texture2D = preload("res://assets/ui/staff_tools.svg")
+const CHAT_MODERATION_CENTER_SCRIPT := preload("res://scripts/ui/chat_moderation_center.gd")
 const ALPHA_TOOLS_MENU_ICON: Texture2D = preload("res://assets/ui/alpha_tools.svg")
 const CONTENT_CREATOR_MENU_ICON: Texture2D = preload("res://assets/ui/content_creator.svg")
 const BATTLE_SPRITE_LOADER := preload("res://scripts/battle/battle_ui/sprite_box.gd")
@@ -823,6 +825,8 @@ var staff_impersonate_button: Button
 var staff_impersonate_button_title: Label
 var staff_impersonate_button_subtitle: Label
 var staff_teleport_button: Button
+var staff_chat_moderation_button: Button
+var staff_chat_moderation_popup: PanelContainer
 var staff_impersonate_popup: PanelContainer
 var staff_impersonate_token_input: LineEdit
 var staff_impersonate_confirm_button: Button
@@ -1850,6 +1854,7 @@ func _refresh_dev_tools_visibility() -> void:
 		or can_teleport_to_player
 		or can_teleport_other
 		or _can_manage_jail()
+		or _can_use_chat_moderation()
 	)
 	var has_visible_staff_action: bool = has_staff_tool or can_use_dev_tools or can_use_content_creator_photo_mode or can_use_content_creator_generation
 	PlayerSave.is_staff = _current_player_has_staff_role()
@@ -1909,6 +1914,9 @@ func _refresh_dev_tools_visibility() -> void:
 	if staff_teleport_button != null:
 		staff_teleport_button.visible = can_teleport or can_teleport_to_player or can_teleport_other or _can_manage_jail()
 		staff_teleport_button.disabled = not (can_teleport or can_teleport_to_player or can_teleport_other or _can_manage_jail())
+	if staff_chat_moderation_button != null:
+		staff_chat_moderation_button.visible = _can_use_chat_moderation()
+		staff_chat_moderation_button.disabled = not _can_use_chat_moderation()
 	if not has_staff_tool:
 		if staff_tools_popup != null:
 			staff_tools_popup.visible = false
@@ -1917,6 +1925,8 @@ func _refresh_dev_tools_visibility() -> void:
 			staff_impersonate_popup.visible = false
 	if not (can_teleport or can_teleport_to_player or can_teleport_other or _can_manage_jail()) and staff_teleport_popup != null:
 		staff_teleport_popup.visible = false
+	if not _can_use_chat_moderation() and staff_chat_moderation_popup != null:
+		_hide_staff_chat_moderation_popup()
 	if not can_use_dev_tools:
 		dev_actions_popup.visible = false
 		if dev_pokemon_popup_mode != DevPokemonPopupMode.CONTENT_CREATOR:
@@ -3054,6 +3064,7 @@ func _apply_ui_z_index_policy() -> void:
 		staff_tools_popup,
 		staff_impersonate_popup,
 		staff_teleport_popup,
+		staff_chat_moderation_popup,
 		item_dex_popup,
 		pokedex_popup,
 		wild_pokemon_popup,
@@ -3117,6 +3128,7 @@ func _has_visible_priority_overlay_panel() -> bool:
 		staff_tools_popup,
 		staff_impersonate_popup,
 		staff_teleport_popup,
+		staff_chat_moderation_popup,
 		item_dex_popup,
 		pokedex_popup,
 		town_map_popup,
@@ -7431,6 +7443,27 @@ func _setup_staff_impersonation_tools() -> void:
 		)
 	)
 
+	staff_chat_moderation_button = Button.new()
+	staff_chat_moderation_button.pressed.connect(_on_staff_chat_moderation_button_pressed)
+	tools_layout.add_child(staff_chat_moderation_button)
+	_configure_launcher_card_button(
+		staff_chat_moderation_button,
+		"ui.staff.chat.action",
+		"ui.staff.chat.action_description",
+		STAFF_CHAT_MODERATION_ICON,
+		Color("#60d3ff")
+	)
+
+	staff_chat_moderation_popup = CHAT_MODERATION_CENTER_SCRIPT.new() as PanelContainer
+	staff_chat_moderation_popup.name = "StaffChatModerationPopup"
+	staff_chat_moderation_popup.z_index = UI_BASE_Z_INDEX
+	staff_chat_moderation_popup.connect(
+		"moderation_requested",
+		_on_staff_chat_moderation_requested
+	)
+	staff_chat_moderation_popup.connect("closed", _on_staff_chat_moderation_closed)
+	root_control.add_child(staff_chat_moderation_popup)
+
 	staff_teleport_button = Button.new()
 	staff_teleport_button.pressed.connect(_on_staff_teleport_button_pressed)
 	tools_layout.add_child(staff_teleport_button)
@@ -10302,6 +10335,7 @@ func is_point_over_visible_ui(global_position: Vector2) -> bool:
 		staff_tools_popup,
 		staff_impersonate_popup,
 		staff_teleport_popup,
+		staff_chat_moderation_popup,
 		item_dex_popup,
 		pokedex_popup,
 		town_map_popup,
@@ -23933,6 +23967,7 @@ func _get_escape_close_candidates() -> Array[Dictionary]:
 		{"panel": mail_compose_popup, "close": Callable(self, "_on_mail_compose_close_button_pressed")},
 		{"panel": staff_impersonate_popup, "close": Callable(self, "_hide_staff_impersonate_popup")},
 		{"panel": staff_teleport_popup, "close": Callable(self, "_hide_staff_teleport_popup")},
+		{"panel": staff_chat_moderation_popup, "close": Callable(self, "_hide_staff_chat_moderation_popup")},
 		{"panel": dev_add_item_popup, "close": Callable(self, "_hide_dev_add_item_popup_for_escape")},
 		{"panel": dev_add_money_popup, "close": Callable(self, "_hide_dev_add_money_popup_for_escape")},
 		{"panel": dev_add_menu_popup, "close": Callable(self, "_hide_dev_add_menu_popup")},
@@ -26714,6 +26749,7 @@ func _on_staff_tools_button_pressed() -> void:
 		or _can_teleport_to_player()
 		or _can_teleport_other_player()
 		or _can_manage_jail()
+		or _can_use_chat_moderation()
 	):
 		return
 	if staff_tools_popup == null:
@@ -26731,6 +26767,29 @@ func _hide_staff_tools_popup() -> void:
 	if staff_tools_popup != null:
 		staff_tools_popup.visible = false
 		_deactivate_ui_panel(staff_tools_popup)
+
+
+func _on_staff_chat_moderation_button_pressed() -> void:
+	if not _can_use_chat_moderation() or staff_chat_moderation_popup == null:
+		return
+	_hide_staff_tools_popup()
+	staff_chat_moderation_popup.call("open_center")
+	_activate_ui_panel(staff_chat_moderation_popup)
+
+
+func _hide_staff_chat_moderation_popup() -> void:
+	if staff_chat_moderation_popup == null:
+		return
+	staff_chat_moderation_popup.call("close_center")
+
+
+func _on_staff_chat_moderation_closed() -> void:
+	if staff_chat_moderation_popup != null:
+		_deactivate_ui_panel(staff_chat_moderation_popup)
+
+
+func _on_staff_chat_moderation_requested(action: String, player: Dictionary) -> void:
+	_show_chat_moderation_popup(action, player)
 
 func _on_staff_impersonate_button_pressed() -> void:
 	if AuthService.is_impersonating():
@@ -26750,6 +26809,7 @@ func _on_staff_impersonate_button_pressed() -> void:
 		return
 	if staff_impersonate_popup == null:
 		return
+	_hide_staff_chat_moderation_popup()
 	staff_impersonate_popup.visible = not staff_impersonate_popup.visible
 	if staff_impersonate_popup.visible and staff_impersonate_token_input != null:
 		_activate_ui_panel(staff_impersonate_popup)
@@ -26997,6 +27057,7 @@ func _on_staff_teleport_button_pressed() -> void:
 	var opening := not staff_teleport_popup.visible
 	if opening:
 		_hide_staff_tools_popup()
+		_hide_staff_chat_moderation_popup()
 		staff_teleport_player_selection_confirmed = false
 		staff_teleport_player_action_mode = ""
 		if staff_teleport_player_results != null:
@@ -38117,6 +38178,8 @@ func _submit_chat_moderation_action() -> void:
 		else "ui.chat.moderation.unmuted_success"
 	)
 	_hide_chat_moderation_popup()
+	if staff_chat_moderation_popup != null and staff_chat_moderation_popup.visible:
+		staff_chat_moderation_popup.call("refresh_overview")
 	_add_chat_message(LocalizationManager.text(action_key, {"player": display_name}))
 
 

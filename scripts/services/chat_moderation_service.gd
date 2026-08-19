@@ -3,6 +3,7 @@ extends Node
 class_name ChatModerationServiceNode
 
 const MUTES_ENDPOINT := "/game/chat/mutes"
+const OVERVIEW_ENDPOINT := "/game/chat/moderation/overview"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 
@@ -14,6 +15,10 @@ func get_mute_state(target_user_id: int) -> Dictionary:
 		HTTPClient.METHOD_GET,
 		""
 	)
+
+
+func get_moderation_overview() -> Dictionary:
+	return await _request(OVERVIEW_ENDPOINT, HTTPClient.METHOD_GET, "")
 
 
 func mute_player(target_user_id: int, duration_minutes: int, reason: String) -> Dictionary:
