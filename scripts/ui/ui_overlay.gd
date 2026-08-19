@@ -38498,9 +38498,18 @@ func _append_pm_message(user_id: int, message: Dictionary) -> void:
 func _user_id_from_state(user: Dictionary) -> int:
 	for key: String in ["userId", "id", "user_id"]:
 		var value: Variant = user.get(key, 0)
+		if value is int or value is float:
+			var numeric_user_id := int(value)
+			if numeric_user_id > 0:
+				return numeric_user_id
+			continue
 		var text := str(value).strip_edges()
 		if text.is_valid_int():
 			return int(text)
+		if text.is_valid_float():
+			var parsed_user_id := int(float(text))
+			if parsed_user_id > 0:
+				return parsed_user_id
 	return 0
 
 
