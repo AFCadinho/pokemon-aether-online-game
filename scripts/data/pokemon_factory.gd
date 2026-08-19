@@ -61,10 +61,12 @@ static func create_pokemon_from_backend_payload(data: Dictionary) -> Pokemon:
 
 static func _normalize_pokemon_gender(value: String) -> String:
 	match value.strip_edges().to_lower():
-		"m", "male", "masculine":
+		"m", "male", "masculine", "♂":
 			return "male"
-		"f", "female", "feminine":
+		"f", "female", "feminine", "♀":
 			return "female"
+		"n", "genderless", "none", "neutral":
+			return "genderless"
 	return ""
 
 
