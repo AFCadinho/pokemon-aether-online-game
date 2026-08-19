@@ -34,9 +34,8 @@ const CHAT_TABS_GAP := 8.0
 const CHAT_TABS_LEFT_INSET := 4.0
 const CHAT_INLINE_HEADER_CLEARANCE := 24.0
 const PERSONAL_BUFF_PANEL_COMPACT_HEIGHT := 42.0
-const PERSONAL_BUFF_ROW_HEIGHT := 52.0
+const PERSONAL_BUFF_ROW_HEIGHT := 38.0
 const PERSONAL_BUFF_ROW_GAP := 5.0
-const PERSONAL_BUFF_DEFAULT_BADGE_COLOR := Color("#c2a0ff")
 const PERSONAL_BUFF_DEFAULT_NAME_COLOR := Color("#ece7f8")
 const PERSONAL_BUFF_DEFAULT_TIME_COLOR := Color("#b8a7d6")
 const AETHER_BLESSING_CARD_BORDER := Color("#a97be8")
@@ -10654,7 +10653,6 @@ func _current_aether_blessing_shiny_bonus() -> Dictionary:
 		return {}
 	return {
 		"id": "aether_blessing_shiny_bonus",
-		"label": "5%",
 		"name_key": "ui.buff.aether_blessing_shiny.name",
 		"description_key": "ui.buff.aether_blessing_shiny.description",
 		"remaining": _format_aether_blessing_remaining(remaining_seconds),
@@ -10731,24 +10729,18 @@ func _render_personal_buffs(buffs: Array) -> void:
 			continue
 		button.visible = slot_index < buffs.size()
 		button.set_meta("buff_data", {})
-		var badge_label := button.get_node_or_null("Content/BadgeLabel") as Label
-		var name_label := button.get_node_or_null("Content/Details/NameLabel") as Label
-		var description_label := button.get_node_or_null("Content/Details/DescriptionLabel") as Label
+		var name_label := button.get_node_or_null("Content/NameLabel") as Label
 		var time_label := button.get_node_or_null("Content/TimeLabel") as Label
 		if not button.visible:
 			button.tooltip_text = ""
 			continue
 
 		if slot_index == slot_count - 1 and buffs.size() > slot_count:
-			if badge_label != null:
-				badge_label.text = "+"
 			if name_label != null:
 				name_label.text = LocalizationManager.text(
 					"ui.buff.more",
 					{"count": buffs.size() - slot_count + 1}
 				)
-			if description_label != null:
-				description_label.text = LocalizationManager.text("ui.buff.hover_complete")
 			if time_label != null:
 				time_label.text = ""
 			_apply_personal_buff_row_visual(button, {})
@@ -10756,12 +10748,8 @@ func _render_personal_buffs(buffs: Array) -> void:
 			continue
 
 		var buff: Dictionary = buffs[slot_index] as Dictionary
-		if badge_label != null:
-			badge_label.text = str(buff.get("label", "?")).strip_edges().left(3)
 		if name_label != null:
 			name_label.text = _localized_buff_name(buff)
-		if description_label != null:
-			description_label.text = _localized_buff_description(buff)
 		if time_label != null:
 			time_label.text = str(
 				buff.get("compactRemaining", buff.get("remaining", ""))
@@ -10774,11 +10762,8 @@ func _render_personal_buffs(buffs: Array) -> void:
 func _apply_personal_buff_row_visual(button: Button, _buff: Dictionary) -> void:
 	if button == null:
 		return
-	var badge_label := button.get_node_or_null("Content/BadgeLabel") as Label
-	var name_label := button.get_node_or_null("Content/Details/NameLabel") as Label
+	var name_label := button.get_node_or_null("Content/NameLabel") as Label
 	var time_label := button.get_node_or_null("Content/TimeLabel") as Label
-	if badge_label != null:
-		badge_label.add_theme_color_override("font_color", PERSONAL_BUFF_DEFAULT_BADGE_COLOR)
 	if name_label != null:
 		name_label.add_theme_color_override("font_color", PERSONAL_BUFF_DEFAULT_NAME_COLOR)
 	if time_label != null:
