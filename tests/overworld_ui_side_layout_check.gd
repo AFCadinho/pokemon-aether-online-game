@@ -413,6 +413,7 @@ func _init() -> void:
 	_check(script_source.contains('_load_global_boost_state.call_deferred("global_rare_encounter")'), "rare encounter contribution events refresh authoritative boost state")
 	_check(script_source.contains('_load_global_boost_state.call_deferred("global_shiny")'), "global Shiny contribution events refresh authoritative boost state")
 	_check(script_source.contains('await _load_global_boost_state(selected_boost_id)'), "stale contribution conflicts recover the authoritative boost state")
+	_check(script_source.contains('if int(response.get("status", 0)) == 409:') and script_source.contains('else:\n\t\t\t_add_chat_message'), "stale boost conflicts refresh without showing a misleading payment error")
 	_check(script_source.contains('buff["activeUntil"] = str(state.get("activeUntil", ""))'), "active global buffs retain their authoritative expiry")
 	_check(script_source.contains("_refresh_global_buffs_if_needed(delta)"), "active global buff countdowns refresh while the overlay remains open")
 	_check(not script_source.contains('GameErrorDialogService.show_response(response, "backend.error.transit_unavailable")'), "global EXP contribution errors stay inside the boost flow")
