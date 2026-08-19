@@ -19705,7 +19705,7 @@ func _capture_pokemon_summary_card_context(card_key: String, pokemon: Pokemon, m
 		"type_icon_row": pokemon_summary_type_icon_row,
 		"hidden_ability_badge": pokemon_summary_hidden_ability_badge,
 		"title_label": pokemon_summary_title_label,
-		"gender_label": pokemon_summary_gender_label,
+		"gender_label": pokemon_summary_gender_label if mode == "interactive" else null,
 		"id_label": pokemon_summary_id_label,
 		"meta_label": pokemon_summary_meta_label,
 		"held_item_slot": pokemon_summary_held_item_slot,
