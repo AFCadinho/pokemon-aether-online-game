@@ -6,6 +6,7 @@ var event_text_formatter: BattleEventTextFormatter
 var hp_event_helper: BattleHpEventHelper
 var format_actor: Callable
 var get_player_display_name: Callable
+var get_pokemon_species: Callable
 var recent_field_effect_source := ""
 var recent_ability_event := false
 var recent_move_event := false
@@ -17,12 +18,14 @@ func setup(
 	formatter: BattleEventTextFormatter,
 	hp_helper: BattleHpEventHelper,
 	format_actor_callback: Callable,
-	player_display_name_callback: Callable
+	player_display_name_callback: Callable,
+	pokemon_species_callback: Callable = Callable()
 ) -> void:
 	event_text_formatter = formatter
 	hp_event_helper = hp_helper
 	format_actor = format_actor_callback
 	get_player_display_name = player_display_name_callback
+	get_pokemon_species = pokemon_species_callback
 
 
 func reset() -> void:
@@ -134,18 +137,25 @@ func build(event_data: Dictionary) -> Dictionary:
 			recent_move_event = true
 			pending_damage_effectiveness_by_target.clear()
 			presentation["attack_actor_ident"] = str(event_data.get("actor", ""))
-			var actor := _format_actor(str(event_data.get("actor", "")))
+			var actor_ident := str(event_data.get("actor", ""))
+			var actor := _format_actor(actor_ident)
+			var log_actor := _format_log_pokemon_identity(
+				event_data,
+				actor_ident,
+				["actorRef", "actor_ref"],
+				["actorSpecies"]
+			)
 			var move_name := str(event_data.get("move", ""))
 			presentation["move_animation_name"] = move_name
 			presentation["move_animation_actor_ident"] = str(event_data.get("actor", ""))
 			presentation["move_animation_target_ident"] = str(event_data.get("target", ""))
-			presentation["pre_log_message"] = event_text_formatter.format_move_source_message(event_data, actor)
+			presentation["pre_log_message"] = event_text_formatter.format_move_source_message(event_data, log_actor)
 			if str(presentation["pre_log_message"]) != "":
-				presentation["battle_message"] = str(presentation["pre_log_message"])
+				presentation["battle_message"] = event_text_formatter.format_move_source_message(event_data, actor)
 				presentation["attack_actor_ident"] = ""
 			else:
-				presentation["log_message"] = event_text_formatter.format_move_event(actor, move_name)
-				presentation["battle_message"] = str(presentation["log_message"])
+				presentation["log_message"] = event_text_formatter.format_move_event(log_actor, move_name)
+				presentation["battle_message"] = event_text_formatter.format_move_event(actor, move_name)
 
 		"switch", "drag":
 			recent_field_effect_source = ""
@@ -407,12 +417,18 @@ func build(event_data: Dictionary) -> Dictionary:
 				if str(presentation["effect_animation_key"]) != "":
 					presentation["effect_animation_target_ident"] = damage_target_ident
 				var target := _format_actor(str(presentation["damage_target_ident"]))
+				var log_target := _format_log_pokemon_identity(
+					event_data,
+					str(presentation["damage_target_ident"]),
+					["targetRef", "target_ref"],
+					["targetSpecies", "species"]
+				)
 				var active_effect := ""
 				if not recent_move_event:
 					active_effect = _get_active_residual_pokemon_effect(str(presentation["damage_target_ident"]))
 				var source_message := event_text_formatter.format_indirect_damage_message(
 					event_data,
-					target,
+					log_target,
 					recent_field_effect_source,
 					active_effect,
 					not recent_move_event
@@ -421,10 +437,16 @@ func build(event_data: Dictionary) -> Dictionary:
 				if source_message != "" and (has_hp_loss or has_sub_percent_hp_loss):
 					presentation["log_message"] = source_message
 					if event_text_formatter.should_show_indirect_damage_in_battle_text(event_data):
-						presentation["battle_message"] = source_message
+						presentation["battle_message"] = event_text_formatter.format_indirect_damage_message(
+							event_data,
+							target,
+							recent_field_effect_source,
+							active_effect,
+							not recent_move_event
+						)
 				else:
 					presentation["log_message"] = event_text_formatter.format_direct_damage_message(
-						target,
+						log_target,
 						damage_percent,
 						has_hp_loss,
 						has_sub_percent_hp_loss
@@ -467,11 +489,42 @@ func build(event_data: Dictionary) -> Dictionary:
 	return presentation
 
 func _get_switch_ref_species(event_data: Dictionary, ref_key: String) -> String:
-	var ref_value: Variant = event_data.get(ref_key, {})
-	if not (ref_value is Dictionary):
-		return ""
-	var ref: Dictionary = ref_value as Dictionary
-	return str(ref.get("displaySpecies", ref.get("species", ""))).strip_edges()
+	return _get_event_ref_species(event_data, [ref_key])
+
+
+func _format_log_pokemon_identity(
+	event_data: Dictionary,
+	ident: String,
+	ref_keys: Array,
+	species_keys: Array = []
+	) -> String:
+	var display_name := _format_actor(ident, false)
+	var species := _get_event_ref_species(event_data, ref_keys)
+	if species == "":
+		for key_value: Variant in species_keys:
+			var value := str(event_data.get(str(key_value), "")).strip_edges()
+			if value != "":
+				species = value
+				break
+	if species == "" and get_pokemon_species.is_valid():
+		species = str(get_pokemon_species.call(ident)).strip_edges()
+
+	var identity := event_text_formatter.format_pokemon_identity(display_name, species)
+	if _get_player_id_from_battle_ident(ident) == "p2" and identity != "":
+		return _format_actor("p2a: %s" % identity)
+	return identity
+
+
+func _get_event_ref_species(event_data: Dictionary, ref_keys: Array) -> String:
+	for key_value: Variant in ref_keys:
+		var ref_value: Variant = event_data.get(str(key_value), {})
+		if not (ref_value is Dictionary):
+			continue
+		var ref: Dictionary = ref_value as Dictionary
+		var species := str(ref.get("displaySpecies", ref.get("species", ""))).strip_edges()
+		if species != "":
+			return species
+	return ""
 
 
 func _assign_log_kinds(presentation: Dictionary, event_data: Dictionary) -> void:
