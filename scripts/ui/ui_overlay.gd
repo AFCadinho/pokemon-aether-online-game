@@ -7042,6 +7042,7 @@ func _setup_dev_add_item_tools() -> void:
 	dev_money_confirm_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	dev_money_confirm_button.focus_mode = Control.FOCUS_NONE
 	dev_money_confirm_button.pressed.connect(_on_dev_money_confirm_pressed)
+	_apply_dev_currency_button_icon(dev_money_confirm_button, TRAINER_WALLET_MONEY_ICON)
 	currency_buttons.add_child(dev_money_confirm_button)
 
 	dev_gems_confirm_button = Button.new()
@@ -7050,6 +7051,7 @@ func _setup_dev_add_item_tools() -> void:
 	dev_gems_confirm_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	dev_gems_confirm_button.focus_mode = Control.FOCUS_NONE
 	dev_gems_confirm_button.pressed.connect(_on_dev_gems_confirm_pressed)
+	_apply_dev_currency_button_icon(dev_gems_confirm_button, TRAINER_WALLET_AETHER_GEM_ICON)
 	currency_buttons.add_child(dev_gems_confirm_button)
 
 	dev_aetherite_confirm_button = Button.new()
@@ -7058,6 +7060,7 @@ func _setup_dev_add_item_tools() -> void:
 	dev_aetherite_confirm_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	dev_aetherite_confirm_button.focus_mode = Control.FOCUS_NONE
 	dev_aetherite_confirm_button.pressed.connect(_on_dev_aetherite_confirm_pressed)
+	_apply_dev_currency_button_icon(dev_aetherite_confirm_button, TRAINER_WALLET_AETHERITE_ICON)
 	currency_buttons.add_child(dev_aetherite_confirm_button)
 
 	dev_battle_points_confirm_button = Button.new()
@@ -7066,6 +7069,7 @@ func _setup_dev_add_item_tools() -> void:
 	dev_battle_points_confirm_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	dev_battle_points_confirm_button.focus_mode = Control.FOCUS_NONE
 	dev_battle_points_confirm_button.pressed.connect(_on_dev_battle_points_confirm_pressed)
+	_apply_dev_currency_button_icon(dev_battle_points_confirm_button, TRAINER_WALLET_BATTLE_POINTS_ICON)
 	currency_buttons.add_child(dev_battle_points_confirm_button)
 
 	_apply_button_style(money_close_button)
@@ -7074,6 +7078,12 @@ func _setup_dev_add_item_tools() -> void:
 	_apply_button_style(dev_gems_confirm_button, "primary")
 	_apply_button_style(dev_aetherite_confirm_button, "primary")
 	_apply_button_style(dev_battle_points_confirm_button, "primary")
+
+func _apply_dev_currency_button_icon(button: Button, icon_texture: Texture2D) -> void:
+	button.icon = icon_texture
+	button.expand_icon = true
+	button.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	button.add_theme_constant_override("icon_max_width", 20)
 
 func _setup_dev_tools_menu_surface() -> void:
 	var layout := dev_actions_popup.get_node_or_null("MarginContainer/VBoxContainer") as VBoxContainer

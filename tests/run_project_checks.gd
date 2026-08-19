@@ -71,6 +71,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/localization_storage_ui_check.gd",
 	"res://tests/localization_pvp_ui_check.gd",
 	"res://tests/localization_trainer_card_ui_check.gd",
+	"res://tests/dev_currency_button_icons_check.gd",
 	"res://tests/localization_chat_buff_ui_check.gd",
 	"res://tests/session_logout_warning_check.gd",
 	"res://tests/localization_item_dex_wild_tools_check.gd",
