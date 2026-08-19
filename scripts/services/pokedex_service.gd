@@ -13,7 +13,8 @@ func search_species(
 	query: String = "",
 	limit: int = 50,
 	dex_id: String = "national",
-	shiny: bool = false
+	shiny: bool = false,
+	offset: int = 0
 ) -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {
@@ -22,7 +23,8 @@ func search_species(
 		}
 
 	var clamped_limit: int = clampi(limit, 1, 200)
-	var endpoint := SPECIES_ENDPOINT + "?limit=%s" % clamped_limit
+	var normalized_offset := maxi(offset, 0)
+	var endpoint := SPECIES_ENDPOINT + "?limit=%s&offset=%s" % [clamped_limit, normalized_offset]
 	var normalized_dex_id := dex_id.strip_edges().to_lower()
 	if normalized_dex_id != "kanto":
 		normalized_dex_id = "national"
@@ -49,6 +51,8 @@ func search_species(
 		"success": true,
 		"species": _array_from_value(body.get("species", [])),
 		"total": int(body.get("total", 0)),
+		"offset": int(body.get("offset", normalized_offset)),
+		"hasMore": bool(body.get("hasMore", false)),
 		"dexTotal": int(body.get("dexTotal", 0)),
 		"ownedTotal": int(body.get("ownedTotal", 0)),
 		"ownedSpeciesIds": owned_species_ids,
