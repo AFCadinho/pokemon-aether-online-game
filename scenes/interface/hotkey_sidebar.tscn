@@ -28,33 +28,36 @@ corner_radius_bottom_right = 9
 corner_radius_bottom_left = 9
 
 [node name="HotkeySidebar" type="PanelContainer" unique_id=311861686]
-custom_minimum_size = Vector2(110, 208)
+custom_minimum_size = Vector2(58, 219)
 offset_left = 16.0
 offset_top = 104.0
-offset_right = 126.0
-offset_bottom = 312.0
+offset_right = 74.0
+offset_bottom = 323.0
 mouse_default_cursor_shape = 13
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=461936207]
 layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 7
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 7
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
 
-[node name="SlotStack" type="GridContainer" parent="MarginContainer" unique_id=971448359]
+[node name="Layout" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
-columns = 2
-theme_override_constants/h_separation = 6
-theme_override_constants/v_separation = 6
+theme_override_constants/separation = 4
 
-[node name="Slot1" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=1484403079]
+[node name="SlotStack" type="GridContainer" parent="MarginContainer/Layout" unique_id=971448359]
+layout_mode = 2
+columns = 1
+theme_override_constants/v_separation = 3
+
+[node name="Slot1" type="PanelContainer" parent="MarginContainer/Layout/SlotStack" unique_id=1484403079]
 custom_minimum_size = Vector2(44, 44)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
 
-[node name="KeyLabel" type="Label" parent="MarginContainer/SlotStack/Slot1" unique_id=1178574102]
+[node name="KeyLabel" type="Label" parent="MarginContainer/Layout/SlotStack/Slot1" unique_id=1178574102]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.84705883, 0.7176471, 0.40392157, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
@@ -63,12 +66,12 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 10
 text = "1"
 
-[node name="Slot2" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=2061791274]
+[node name="Slot2" type="PanelContainer" parent="MarginContainer/Layout/SlotStack" unique_id=2061791274]
 custom_minimum_size = Vector2(44, 44)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
 
-[node name="KeyLabel" type="Label" parent="MarginContainer/SlotStack/Slot2" unique_id=48082752]
+[node name="KeyLabel" type="Label" parent="MarginContainer/Layout/SlotStack/Slot2" unique_id=48082752]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.84705883, 0.7176471, 0.40392157, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
@@ -77,12 +80,12 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 10
 text = "2"
 
-[node name="Slot3" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=2066504344]
+[node name="Slot3" type="PanelContainer" parent="MarginContainer/Layout/SlotStack" unique_id=2066504344]
 custom_minimum_size = Vector2(44, 44)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
 
-[node name="KeyLabel" type="Label" parent="MarginContainer/SlotStack/Slot3" unique_id=1002914978]
+[node name="KeyLabel" type="Label" parent="MarginContainer/Layout/SlotStack/Slot3" unique_id=1002914978]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.84705883, 0.7176471, 0.40392157, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
@@ -91,12 +94,12 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 10
 text = "3"
 
-[node name="Slot4" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=1251088391]
+[node name="Slot4" type="PanelContainer" parent="MarginContainer/Layout/SlotStack" unique_id=1251088391]
 custom_minimum_size = Vector2(44, 44)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
 
-[node name="KeyLabel" type="Label" parent="MarginContainer/SlotStack/Slot4" unique_id=1247120994]
+[node name="KeyLabel" type="Label" parent="MarginContainer/Layout/SlotStack/Slot4" unique_id=1247120994]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.84705883, 0.7176471, 0.40392157, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
@@ -105,12 +108,13 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 10
 text = "4"
 
-[node name="Slot5" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=182856113]
+[node name="Slot5" type="PanelContainer" parent="MarginContainer/Layout/SlotStack" unique_id=182856113]
+visible = false
 custom_minimum_size = Vector2(44, 44)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
 
-[node name="KeyLabel" type="Label" parent="MarginContainer/SlotStack/Slot5" unique_id=1094944983]
+[node name="KeyLabel" type="Label" parent="MarginContainer/Layout/SlotStack/Slot5" unique_id=1094944983]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.84705883, 0.7176471, 0.40392157, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
@@ -119,12 +123,13 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 10
 text = "5"
 
-[node name="Slot6" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=1240713832]
+[node name="Slot6" type="PanelContainer" parent="MarginContainer/Layout/SlotStack" unique_id=1240713832]
+visible = false
 custom_minimum_size = Vector2(44, 44)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
 
-[node name="KeyLabel" type="Label" parent="MarginContainer/SlotStack/Slot6" unique_id=389905510]
+[node name="KeyLabel" type="Label" parent="MarginContainer/Layout/SlotStack/Slot6" unique_id=389905510]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.84705883, 0.7176471, 0.40392157, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
@@ -133,12 +138,13 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 10
 text = "6"
 
-[node name="Slot7" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=238380532]
+[node name="Slot7" type="PanelContainer" parent="MarginContainer/Layout/SlotStack" unique_id=238380532]
+visible = false
 custom_minimum_size = Vector2(44, 44)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
 
-[node name="KeyLabel" type="Label" parent="MarginContainer/SlotStack/Slot7" unique_id=761348058]
+[node name="KeyLabel" type="Label" parent="MarginContainer/Layout/SlotStack/Slot7" unique_id=761348058]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.84705883, 0.7176471, 0.40392157, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
@@ -147,12 +153,13 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 10
 text = "7"
 
-[node name="Slot8" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=298868661]
+[node name="Slot8" type="PanelContainer" parent="MarginContainer/Layout/SlotStack" unique_id=298868661]
+visible = false
 custom_minimum_size = Vector2(44, 44)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
 
-[node name="KeyLabel" type="Label" parent="MarginContainer/SlotStack/Slot8" unique_id=466349960]
+[node name="KeyLabel" type="Label" parent="MarginContainer/Layout/SlotStack/Slot8" unique_id=466349960]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.84705883, 0.7176471, 0.40392157, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
@@ -160,3 +167,40 @@ theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 10
 text = "8"
+
+[node name="PageControls" type="HBoxContainer" parent="MarginContainer/Layout"]
+custom_minimum_size = Vector2(48, 20)
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 1
+
+[node name="PreviousButton" type="Button" parent="MarginContainer/Layout/PageControls"]
+custom_minimum_size = Vector2(15, 20)
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.72156864, 0.7764706, 0.84705883, 1)
+theme_override_colors/font_hover_color = Color(0.3764706, 0.827451, 1, 1)
+theme_override_font_sizes/font_size = 13
+text = "‹"
+flat = true
+
+[node name="PageLabel" type="Label" parent="MarginContainer/Layout/PageControls"]
+custom_minimum_size = Vector2(16, 20)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5529412, 0.6117647, 0.69803923, 1)
+theme_override_font_sizes/font_size = 9
+text = "1/2"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NextButton" type="Button" parent="MarginContainer/Layout/PageControls"]
+custom_minimum_size = Vector2(15, 20)
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.72156864, 0.7764706, 0.84705883, 1)
+theme_override_colors/font_hover_color = Color(0.3764706, 0.827451, 1, 1)
+theme_override_font_sizes/font_size = 13
+text = "›"
+flat = true

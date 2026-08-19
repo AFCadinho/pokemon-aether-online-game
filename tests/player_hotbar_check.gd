@@ -10,6 +10,12 @@ func _init() -> void:
 	_check(service.contains("func assign("), "persistent slot assignment")
 	_check(ui.contains("func _setup_player_hotbar"), "existing hotkey sidebar integration")
 	_check(ui.contains("range(8)"), "eight hotbar slots")
+	_check(
+		ui.contains("const HOTBAR_PAGE_SIZE := 4")
+		and ui.contains("func _change_hotbar_page(direction: int)")
+		and ui.contains("func _set_hotbar_page(page_index: int)"),
+		"four-slot hotbar pages retain all eight bindings"
+	)
 	_check(ui.contains("_hotbar_index_from_keycode"), "number-key activation")
 	_check(not ui.contains("hotbar_panel = PanelContainer.new()"), "no duplicate horizontal hotbar")
 	_check(ui.contains("escape-rope-action"), "virtual Escape Rope key item")

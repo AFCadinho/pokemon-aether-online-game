@@ -50,19 +50,21 @@ func _init() -> void:
 	_check(hotbar_block.contains("anchors_preset = 6"), "hotbar is anchored to the right")
 	_check(hotbar_block.contains("offset_right = 0.0"), "hotbar hugs the right screen edge")
 	_check(
-		hotbar_block.contains("offset_left = -112.0")
+		hotbar_block.contains("offset_left = -60.0")
 		and hotbar_block.contains("offset_top = -245.0")
-		and hotbar_block.contains("offset_bottom = -35.0"),
-		"two-column hotbar starts from a compact right-side position"
+		and hotbar_block.contains("offset_bottom = -26.0"),
+		"paginated hotbar starts from a narrow right-edge position"
 	)
 	_check(
-		hotkey_sidebar_scene_source.contains('[node name="SlotStack" type="GridContainer"')
-		and hotkey_sidebar_scene_source.contains("columns = 2")
-		and hotkey_sidebar_scene_source.contains("custom_minimum_size = Vector2(110, 208)"),
-		"hotbar presents all eight shortcuts in a compact two-column grid"
+		hotkey_sidebar_scene_source.contains('[node name="SlotStack" type="GridContainer" parent="MarginContainer/Layout"')
+		and hotkey_sidebar_scene_source.contains("columns = 1")
+		and hotkey_sidebar_scene_source.contains("custom_minimum_size = Vector2(58, 219)")
+		and hotkey_sidebar_scene_source.contains('[node name="PageControls" type="HBoxContainer"'),
+		"hotbar presents four shortcuts at a time in a narrow paginated column"
 	)
 	_check(
-		script_source.contains('get_node_or_null("MarginContainer/SlotStack") as GridContainer')
+		script_source.contains('get_node_or_null("MarginContainer/Layout/SlotStack") as GridContainer')
+		and script_source.contains("func _set_hotbar_page(page_index: int)")
 		and script_source.contains("quest_journal_view.get_visible_tracker_bottom()")
 		and script_source.contains("var hotbar_top_offset: float = maxf(HOTBAR_GRID_BASE_TOP_OFFSET, tracker_bottom_offset)")
 		and script_source.contains("root_control.resized.connect(_refresh_quest_tracker_layout)")

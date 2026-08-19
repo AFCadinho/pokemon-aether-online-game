@@ -767,6 +767,8 @@
   "ui.bag.preview.status": "Status",
   "ui.hotbar.empty_shortcut": "Lege sneltoets {slot}",
   "ui.hotbar.empty_tooltip": "Lege sneltoets {slot}\nKlik rechts op een bruikbaar item in je Bag om het hier te plaatsen.",
+  "ui.hotbar.previous_page": "Vorige hotbarpagina",
+  "ui.hotbar.next_page": "Volgende hotbarpagina",
   "ui.hotbar.key_item_tooltip": "{item}\nDit belangrijke item raakt nooit op.\nKlik rechts om deze sneltoets te verwijderen.",
   "ui.hotbar.move_marker": "ZET",
   "ui.hotbar.charm_name": "{move}-Charm",
