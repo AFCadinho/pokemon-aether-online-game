@@ -4,6 +4,7 @@ extends TrainerNPC
 class_name GymLeaderNPC
 
 const GymLeaderDefinitionResource := preload("res://scripts/world/npcs/gym_leader_definition.gd")
+const DEFAULT_GYM_BATTLE_ENVIRONMENT_ID := "pvp_stadium"
 
 var badge_region := "kanto"
 var badge_id := ""
@@ -28,6 +29,8 @@ func _apply_npc_profile() -> void:
 	var gym_profile := npc_profile as GymLeaderDefinitionResource
 	if gym_profile == null:
 		return
+	if battle_environment_id.strip_edges() in ["", "inherit"]:
+		battle_environment_id = DEFAULT_GYM_BATTLE_ENVIRONMENT_ID
 
 	badge_region = gym_profile.badge_region
 	badge_id = gym_profile.badge_id
