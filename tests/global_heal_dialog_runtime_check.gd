@@ -30,6 +30,11 @@ func _run() -> void:
 			and is_equal_approx(disable_checkbox.anchor_bottom, 1.0),
 		"the request opt-out is anchored above the dialog buttons"
 	)
+	_check(
+		request_dialog.get_ok_button().focus_mode == Control.FOCUS_ALL
+			and request_dialog.get_cancel_button().focus_mode == Control.FOCUS_ALL,
+		"the request dialog enables keyboard and controller focus"
+	)
 	request_dialog.popup_centered(Vector2i(520, 250))
 	await process_frame
 	await process_frame
