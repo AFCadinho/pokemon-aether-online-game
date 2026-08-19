@@ -7,9 +7,6 @@
 - Added the Aether Exchange, a fixed-price marketplace for buying and selling eligible Pokémon and items. Listings can be searched, filtered and sorted, and Pokémon can be inspected through a complete read-only Summary before purchase.
 - Added a secure Account Portal that opens from Account Settings after signing in through the game. Trainers can change their display name, password or email address and manage personal-data exports and account deletion without a separate browser login.
 - Email changes now require confirmation from the new inbox. The current inbox has 72 hours to approve or cancel the request; approval from both addresses applies the change immediately, while no response from the old address allows the verified change to complete after the review window.
-- Added SSJMagikarp, an automated community helper that can answer unanswered questions in General and Help chat using official guides and released game information.
-- Added AetherGuard, an automatic public-chat moderator that warns once and can apply a ten-minute mute for clear language, trade-channel and spam violations.
-- Staff with chat-moderation access can now right-click a chat sender to mute or unmute them. Both actions require a reason, and mutes offer ten-minute, thirty-minute, one-hour and twenty-four-hour durations.
 - Chat messages now have context actions for copying the message or its full details, starting a private conversation and sending a friend request.
 
 **Changed**
