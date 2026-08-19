@@ -474,7 +474,7 @@ func _verify_integration_contract() -> void:
 		and overlay.contains("quest_journal_view.set_tracker_top_offset")
 		and overlay.contains("tracker_layout_changed.connect(_refresh_quest_tracker_layout)")
 		and overlay.contains("quest_journal_view.get_visible_tracker_bottom()")
-		and overlay.contains("HOTBAR_TRACKER_GAP")
+		and overlay.contains("const HOTBAR_TRACKER_GAP := 16.0")
 		and not overlay.contains("Quest Log is not implemented yet."),
 		"HUD quest integration opens the journal and keeps the compact hotbar below quest cards"
 	)
