@@ -6290,6 +6290,13 @@ func setup_trainer_battle_from_response(
 	if lead_response.is_empty():
 		return
 
+	var selected_player_pokemon := _get_player_save_pokemon_for_battle_display_data(
+		battle_state.get_active_player_pokemon("p1")
+	)
+	if selected_player_pokemon != null:
+		player_pokemon = selected_player_pokemon
+		active_player_pokemon = selected_player_pokemon
+
 	var player_species := _get_original_active_player_species(_get_active_display_species("p1"))
 	var opponent_species := _get_active_display_species("p2")
 	_debug_battle_start_response("trainer.lead.after_selection", lead_response)
@@ -7292,7 +7299,15 @@ func _trainer_team_preview_enabled(api_response: Dictionary) -> bool:
 
 func _run_default_trainer_lead_selection() -> Dictionary:
 	_set_battle_input_locked(true)
-	var player_lead_response := await _submit_lead("p1", 1)
+	var player_lead_slot := PlayerSave.get_first_usable_party_slot()
+	if player_lead_slot <= 0:
+		var error_message := _t("backend.error.no_usable_pokemon")
+		current_action_panel.set_message(error_message)
+		_add_battle_log_message(error_message)
+		_set_battle_input_locked(false)
+		return {}
+
+	var player_lead_response := await _submit_lead("p1", player_lead_slot)
 	if not bool(player_lead_response.get("success", false)):
 		var error_message := str(player_lead_response.get("error", _t("battle.error.choose_player_lead")))
 		current_action_panel.set_message(error_message)
