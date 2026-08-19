@@ -22,6 +22,7 @@
 
 **Fixed**
 
+- The Aether Clash Lobby now follows the configured outdoor zoom instead of using the fixed interior zoom.
 - Pokémon Summary cards now show each Pokémon's gender. Existing Pokémon without stored gender data are assigned a stable, species-appropriate gender.
 - Multi-hit attacks now keep HP changes continuous through knockouts instead of briefly restoring or rewinding the target's health.
 - NPC reserve Pokémon remain concealed while team-sidebar animations are playing.
