@@ -11696,6 +11696,26 @@ func _try_show_pending_global_heal_request() -> void:
 		return
 	if global_heal_request_dialog == null or global_heal_request_dialog.visible:
 		return
+	var event_id := str(pending_global_heal_request.get("eventId", ""))
+	global_heal_request_busy = true
+	var acknowledgement: Dictionary = await PartyHealService.acknowledge_global_heal(event_id)
+	global_heal_request_busy = false
+	if str(pending_global_heal_request.get("eventId", "")) != event_id:
+		return
+	if not bool(acknowledgement.get("success", false)):
+		if int(acknowledgement.get("status", 0)) in [404, 410]:
+			pending_global_heal_request.clear()
+		return
+	if bool(acknowledgement.get("alreadyAcknowledged", false)):
+		pending_global_heal_request.clear()
+		return
+	if (
+		not GameState.global_heal_requests_enabled
+		or _global_buff_remaining_seconds(str(pending_global_heal_request.get("expiresAt", ""))) <= 0
+		or _is_world_battle_active()
+		or not PartyHealService.party_needs_heal(PlayerSave.party)
+	):
+		return
 	global_heal_request_dialog.configure(
 		LocalizationManager.text("ui.buff.global_heal.request_title"),
 		LocalizationManager.text(

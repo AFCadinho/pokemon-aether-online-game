@@ -35,6 +35,16 @@ func _init() -> void:
 	_check(not overlay.contains("get_vbox()"), "the request dialog uses supported Godot dialog APIs")
 	_check(wallet_service.contains('GLOBAL_HEAL_ENDPOINT := "/game/global-heal"'), "wallet service exposes Global Heal state and activation")
 	_check(heal_service.contains('func accept_global_heal(event_id: String)'), "party heal service accepts an individual event")
+	_check(
+		heal_service.contains('func acknowledge_global_heal(event_id: String)')
+			and overlay.contains('await PartyHealService.acknowledge_global_heal(event_id)'),
+		"Global Heal is acknowledged before its one-time prompt is shown"
+	)
+	_check(
+		overlay.contains('acknowledgement.get("alreadyAcknowledged", false)')
+			and overlay.contains("pending_global_heal_request.clear()"),
+		"an event already seen on this or another client is not prompted again"
+	)
 	_check(heal_service.contains('func party_needs_heal(party: Array)'), "full parties do not receive unnecessary prompts")
 	_check(game_state.contains("var global_heal_requests_enabled := true"), "Global Heal requests default to enabled")
 	_check(loading_screen.contains('preferences.get("globalHealRequestsEnabled", true)'), "the account preference loads before entering the world")

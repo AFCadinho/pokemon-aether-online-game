@@ -66,6 +66,55 @@ func party_needs_heal(party: Array) -> bool:
 	return _party_needs_heal(party)
 
 
+func acknowledge_global_heal(event_id: String) -> Dictionary:
+	var normalized_event_id := event_id.strip_edges()
+	if normalized_event_id.is_empty():
+		return {"success": false, "error": "Missing Global Heal event id."}
+	var gateway_config := get_node_or_null("/root/GatewayApiConfig")
+	if gateway_config == null:
+		return {"success": false, "error": "Global Heal is unavailable."}
+
+	var request := HTTPRequest.new()
+	request.timeout = REQUEST_TIMEOUT_SECONDS
+	add_child(request)
+	var error := request.request(
+		str(await gateway_config.call("get_base_url"))
+		+ GLOBAL_HEAL_ENDPOINT
+		+ "/%s/acknowledge" % normalized_event_id.uri_encode(),
+		gateway_config.call("get_json_headers"),
+		HTTPClient.METHOD_POST,
+		"{}"
+	)
+	if error != OK:
+		request.queue_free()
+		return {"success": false, "error": "Could not acknowledge Global Heal: %s" % error_string(error)}
+
+	var result: Array = await request.request_completed
+	request.queue_free()
+	var request_result := int(result[0])
+	var response_code := int(result[1])
+	var response_text := (result[3] as PackedByteArray).get_string_from_utf8()
+	var parsed_body: Variant = JSON.parse_string(response_text)
+	var body: Dictionary = parsed_body as Dictionary if parsed_body is Dictionary else {}
+	if request_result != HTTPRequest.RESULT_SUCCESS:
+		return {
+			"success": false,
+			"status": response_code,
+			"error": _request_result_message(request_result),
+		}
+	if response_code < 200 or response_code >= 300:
+		return {
+			"success": false,
+			"status": response_code,
+			"error": _extract_error(body, response_code),
+			"body": body,
+		}
+	return {
+		"success": true,
+		"alreadyAcknowledged": bool(body.get("alreadyAcknowledged", false)),
+	}
+
+
 func accept_global_heal(event_id: String) -> Dictionary:
 	var normalized_event_id := event_id.strip_edges()
 	if normalized_event_id.is_empty():
