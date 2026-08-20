@@ -40067,14 +40067,16 @@ func _add_user_chat_message(
 		var attachment_group := HBoxContainer.new()
 		attachment_group.name = "InlinePokemonAttachments"
 		attachment_group.add_theme_constant_override("separation", 4)
-		for pokemon_payload: Dictionary in pokemon_attachments:
+		for attachment_index: int in range(pokemon_attachments.size()):
+			var pokemon_payload: Dictionary = pokemon_attachments[attachment_index]
 			attachment_group.add_child(_create_chat_pokemon_attachment_button(
 				_pokemon_preview_payload_with_current_trainer(
 					pokemon_payload,
 					display_name,
 					str(user.get("id", user.get("userId", user.get("user_id", ""))))
 				),
-				true
+				true,
+				attachment_index == 0
 			))
 		inline_pokemon_attachments = attachment_group
 
@@ -40857,7 +40859,8 @@ func _create_chat_role_badge(role_name: String, role_color: String) -> PanelCont
 
 func _create_chat_pokemon_attachment_button(
 	pokemon_payload: Dictionary,
-	compact: bool = false
+	compact: bool = false,
+	align_icon_left: bool = false
 ) -> Control:
 	var button := Button.new()
 	var species: String = str(pokemon_payload.get("species", "Pokemon"))
@@ -40883,7 +40886,11 @@ func _create_chat_pokemon_attachment_button(
 	var icon := TextureRect.new()
 	icon.custom_minimum_size = Vector2(icon_size, icon_size)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.stretch_mode = (
+		TextureRect.STRETCH_KEEP_ASPECT
+		if align_icon_left
+		else TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	)
 	icon.texture = PokemonAssets.load_party_icon(species, shiny)
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	button.add_child(icon)

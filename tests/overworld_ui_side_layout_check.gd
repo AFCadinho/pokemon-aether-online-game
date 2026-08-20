@@ -295,10 +295,13 @@ func _init() -> void:
 		script_source.contains("var inline_pokemon_share := (")
 		and script_source.contains("and not pokemon_attachments.is_empty()")
 		and script_source.contains('attachment_group.name = "InlinePokemonAttachments"')
-		and script_source.contains("for pokemon_payload: Dictionary in pokemon_attachments:")
+		and script_source.contains("for attachment_index: int in range(pokemon_attachments.size()):")
+		and script_source.contains("attachment_index == 0")
 		and script_source.contains('inline_spacer.name = "InlinePokemonSpacer"')
+		and script_source.contains("align_icon_left: bool = false")
+		and script_source.contains("TextureRect.STRETCH_KEEP_ASPECT\n\t\tif align_icon_left")
 		and script_source.contains("not inline_pokemon_share and not pokemon_attachments.is_empty()"),
-		"Pokemon-only shares keep up to a full party clickable beside the sender"
+		"Pokemon-only shares keep a full clickable party with the first sprite close to the sender"
 	)
 	_check(
 		script_source.contains('message_list.add_theme_constant_override("separation", 5)'),
