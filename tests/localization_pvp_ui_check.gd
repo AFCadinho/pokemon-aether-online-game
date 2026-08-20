@@ -18,7 +18,7 @@ func _run() -> void:
 		return
 
 	var original_locale := str(localization_manager.get("current_locale"))
-	_check_pvp_runtime_translation()
+	await _check_pvp_runtime_translation()
 	localization_manager.call("set_locale", original_locale)
 	await process_frame
 	quit(1 if failed else 0)
@@ -43,7 +43,10 @@ func _check_pvp_runtime_translation() -> void:
 	var subtitle := overlay.get("pvp_popup_subtitle_label") as Label
 	var ranked_tabs := overlay.get("pvp_ranked_tabs") as TabContainer
 	var room_join_button := overlay.get("pvp_room_join_mode_button") as Button
+	var room_create_button := overlay.get("pvp_room_create_mode_button") as Button
+	var casual_button := overlay.get("pvp_room_casual_type_button") as Button
 	var training_button := overlay.get("pvp_room_training_type_button") as Button
+	var room_type_note := overlay.get("pvp_room_type_note") as Label
 	var training_input := overlay.get("pvp_training_team_input") as TextEdit
 	var room_form_title := overlay.get("pvp_room_form_title") as Label
 	var room_status := overlay.get("pvp_room_status_label") as Label
@@ -56,14 +59,28 @@ func _check_pvp_runtime_translation() -> void:
 	_check(ranked_tabs != null and ranked_tabs.get_tab_title(0) == "Spelen", "PvP tab title renders in Dutch")
 	_check(room_join_button != null and room_join_button.text == "Deelnemen", "Private room action renders in Dutch")
 	_check(training_button != null and training_button.text == "Training Room", "Training room selector renders in Dutch")
+	_check(casual_button != null and casual_button.text.begins_with("✓ "), "Default room type is visibly selected")
 	_check(leaderboard_scope != null and leaderboard_scope.get_item_text(0) == "Dagelijks", "Leaderboard period renders in Dutch")
 	_check_ranked_dropdown_style(format_select, "Matchmaking format")
 	_check_ranked_dropdown_style(leaderboard_scope, "Leaderboard period")
 
-	overlay.call("_on_pvp_room_mode_selected", "join")
-	overlay.call("_on_pvp_room_battle_purpose_selected", "training")
+	training_button.emit_signal("pressed")
+	await process_frame
+	_check(overlay.get("pvp_room_battle_purpose") == "training", "Training button signal selects training mode")
+	_check(training_button.text.begins_with("✓ "), "Training selection is immediately visible on its button")
+	_check(room_type_note != null and room_type_note.text.contains("beide spelers"), "Training selection immediately changes its explanation")
+	_check(room_status != null and room_status.text.begins_with("Training Room geselecteerd"), "Training selection immediately changes room status")
+	_check(room_create_button != null and room_create_button.text == "Training maken", "Training selection changes the create action")
+	room_join_button.emit_signal("pressed")
+	await process_frame
 	_check(training_input != null and training_input.visible, "Training room exposes the paste-only team input")
 	_check(room_form_title != null and room_form_title.text.begins_with("VOER EEN ROOMCODE"), "Training join form explains both required inputs")
+	casual_button.emit_signal("pressed")
+	await process_frame
+	_check(overlay.get("pvp_room_battle_purpose") == "casual", "Custom button signal selects custom mode")
+	_check(not training_input.visible, "Custom selection hides the Pokepaste input")
+	training_button.emit_signal("pressed")
+	await process_frame
 	overlay.call("_set_pvp_status_key", "ui.pvp.room.waiting")
 	overlay.set("pvp_active_queue_entry_id", "queue-entry")
 	overlay.set("pvp_active_queue_status", "waiting")
@@ -81,8 +98,8 @@ func _check_pvp_runtime_translation() -> void:
 	_check(title != null and title.text == "Ranqueada", "PvP ranked title updates to Portuguese")
 	_check(subtitle != null and subtitle.text.begins_with("Pareamento"), "PvP subtitle updates to Portuguese")
 	_check(ranked_tabs != null and ranked_tabs.get_tab_title(0) == "Jogar", "PvP tab title updates to Portuguese")
-	_check(room_join_button != null and room_join_button.text == "Entrar na sala", "Private room action updates to Portuguese")
-	_check(training_button != null and training_button.text == "Sala de treinamento", "Training room selector updates to Portuguese")
+	_check(room_join_button != null and room_join_button.text == "Entrar no treinamento", "Training room action updates to Portuguese")
+	_check(training_button != null and training_button.text == "✓ Sala de treinamento", "Selected training room updates to Portuguese")
 	_check(room_status != null and room_status.text == "Aguardando outro jogador...", "Dynamic room status updates to Portuguese")
 	_check(leaderboard_scope != null and leaderboard_scope.get_item_text(0) == "Diária", "Leaderboard period updates to Portuguese")
 	_check(compact_status != null and compact_status.text == "Fila ranqueada", "Compact queue status updates to Portuguese")
