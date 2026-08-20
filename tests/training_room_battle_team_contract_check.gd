@@ -2,6 +2,7 @@ extends SceneTree
 
 const TRAINING_TEAM_CONTEXT := preload("res://scripts/battle/battle_training_team_context.gd")
 const BATTLE_SCRIPT_PATH := "res://scripts/battle/battle.gd"
+const BATTLE_API_PATH := "res://scripts/battle/battle_api/battle_api_client.gd"
 
 var failed := false
 
@@ -11,6 +12,7 @@ func _init() -> void:
 	_check_private_details_survive_battle_state_updates()
 	_check_duplicate_species_keep_their_declared_slots()
 	_check_battle_controller_isolates_training_from_player_save()
+	_check_room_requests_advertise_durable_timer_contracts()
 	quit(1 if failed else 0)
 
 
@@ -85,6 +87,13 @@ func _check_battle_controller_isolates_training_from_player_save() -> void:
 	_check(source.contains("if _is_training_room_battle():\n\t\treturn null"), "Training Room display cannot fall back to PlayerSave Pokemon")
 	_check(source.contains("and not _is_training_room_battle():\n\t\t\t_heal_local_party_after_pvp_battle()"), "Training Room completion does not heal or persist the account party")
 	_check(source.contains("func _sync_player_save_party_status_from_battle_state() -> void:\n\tif _is_training_room_battle():\n\t\treturn"), "Training Room responses cannot write HP or status into PlayerSave")
+
+
+func _check_room_requests_advertise_durable_timer_contracts() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_API_PATH)
+	_check(source.count("\"timerContractVersions\": [1]") >= 3, "room create, room join, and Ranked advertise timer contract v1")
+	_check(source.count("\"decisionContractVersions\": [1]") >= 3, "room create and join advertise decision contract v1")
+	_check(source.count("\"battleCommandContractVersions\": [1]") >= 3, "room create and join advertise command contract v1")
 
 
 func _check(condition: bool, message: String) -> void:

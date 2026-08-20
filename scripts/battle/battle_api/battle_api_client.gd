@@ -86,6 +86,11 @@ func create_pvp_room(
 			"allowSpectators": allow_spectators,
 			"maxSpectators": clampi(max_spectators, 1, 32),
 			"timerEnabled": timer_enabled,
+			"metadata": {"clientCapabilities": {
+				"timerContractVersions": [1],
+				"decisionContractVersions": [1],
+				"battleCommandContractVersions": [1],
+			}},
 		}
 	)
 
@@ -108,6 +113,11 @@ func join_pvp_room(
 			"player": player,
 			"formatId": FORMAT_ID,
 			"teamText": team_text,
+			"metadata": {"clientCapabilities": {
+				"timerContractVersions": [1],
+				"decisionContractVersions": [1],
+				"battleCommandContractVersions": [1],
+			}},
 		}
 	)
 
