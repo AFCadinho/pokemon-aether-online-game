@@ -87,6 +87,9 @@ func _check_pvp_runtime_translation() -> void:
 	_check(room_type_note != null and room_type_note.text.contains("beide spelers"), "Training selection immediately changes its explanation")
 	_check(room_status != null and room_status.text.begins_with("Training Room geselecteerd"), "Training selection immediately changes room status")
 	_check(room_create_button != null and room_create_button.text == "Training maken", "Training selection changes the create action")
+	room_create_button.emit_signal("pressed")
+	await process_frame
+	_check(room_timer_check != null and room_timer_check.visible, "Training room creation exposes the shared decision timer option")
 	room_join_button.emit_signal("pressed")
 	await process_frame
 	_check(not room_flow_hint.visible, "Choosing a room action replaces guidance with its form")
