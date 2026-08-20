@@ -11,6 +11,9 @@ func _init() -> void:
 		"res://scripts/services/client_crash_report_service.gd"
 	)
 	var settings_source := FileAccess.get_file_as_string("res://scripts/ui/settings_menu.gd")
+	var release_workflow_source := FileAccess.get_file_as_string(
+		"res://.github/workflows/deploy-desktop-r2.yml"
+	)
 
 	_check(
 		project_source.contains(
@@ -38,6 +41,15 @@ func _init() -> void:
 		and settings_source.contains("_on_view_crash_report_pressed")
 		and settings_source.contains("_on_copy_crash_report_pressed"),
 		"Settings keeps the latest report easy to view and copy"
+	)
+	_check(
+		release_workflow_source.contains(
+			"--script res://tests/client_crash_reporting_check.gd"
+		)
+		and release_workflow_source.contains(
+			"verify_client_crash_reporting_release.sh"
+		),
+		"desktop releases are blocked when crash reporting validation fails"
 	)
 
 	var raw_log := "\n".join(PackedStringArray([
