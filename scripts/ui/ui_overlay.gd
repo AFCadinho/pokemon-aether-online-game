@@ -31810,11 +31810,20 @@ func _show_dev_add_money_popup() -> void:
 func _hide_dev_add_money_popup() -> void:
 	dev_add_money_popup.visible = false
 
+func _current_dev_currency_amount() -> int:
+	var amount := clampi(
+		dev_money_amount_spinbox.get_line_edit().text.to_int(),
+		int(dev_money_amount_spinbox.min_value),
+		int(dev_money_amount_spinbox.max_value)
+	)
+	dev_money_amount_spinbox.value = amount
+	return amount
+
 func _on_dev_money_confirm_pressed() -> void:
 	if not _can_use_dev_tools():
 		return
 
-	var amount: int = max(int(dev_money_amount_spinbox.value), 1)
+	var amount := _current_dev_currency_amount()
 	dev_money_confirm_button.disabled = true
 	var result: Dictionary = await PlayerWalletService.dev_add_money(amount)
 	dev_money_confirm_button.disabled = false
@@ -31832,7 +31841,7 @@ func _on_dev_gems_confirm_pressed() -> void:
 	if not _can_use_dev_tools():
 		return
 
-	var amount: int = max(int(dev_money_amount_spinbox.value), 1)
+	var amount := _current_dev_currency_amount()
 	dev_gems_confirm_button.disabled = true
 	var result: Dictionary = await PlayerWalletService.dev_add_gems(amount)
 	dev_gems_confirm_button.disabled = false
@@ -31852,7 +31861,7 @@ func _on_dev_aetherite_confirm_pressed() -> void:
 	if not _can_use_dev_tools():
 		return
 
-	var amount: int = max(int(dev_money_amount_spinbox.value), 1)
+	var amount := _current_dev_currency_amount()
 	dev_aetherite_confirm_button.disabled = true
 	var result: Dictionary = await PlayerWalletService.dev_add_aetherite(amount)
 	dev_aetherite_confirm_button.disabled = false
@@ -31870,7 +31879,7 @@ func _on_dev_battle_points_confirm_pressed() -> void:
 	if not _can_use_dev_tools():
 		return
 
-	var amount: int = max(int(dev_money_amount_spinbox.value), 1)
+	var amount := _current_dev_currency_amount()
 	dev_battle_points_confirm_button.disabled = true
 	var result: Dictionary = await PlayerWalletService.dev_add_battle_points(amount)
 	dev_battle_points_confirm_button.disabled = false

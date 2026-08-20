@@ -19,6 +19,11 @@ func _init() -> void:
 func _run() -> void:
 	var overlay_source := FileAccess.get_file_as_string(OVERLAY_SCRIPT_PATH)
 	_check(
+		overlay_source.contains("func _current_dev_currency_amount()")
+			and overlay_source.count("var amount := _current_dev_currency_amount()") == 4,
+		"Each developer currency action reads the unsubmitted amount field"
+	)
+	_check(
 		overlay_source.contains("dev_money_amount_spinbox.get_line_edit().grab_focus.call_deferred()"),
 		"Developer currency dialog focuses the editable amount field"
 	)
