@@ -685,6 +685,13 @@ func _apply_timer_projection_from_battle_response(message: Dictionary) -> bool:
 		var direct_timer_value: Variant = response.get("pvpTimer", {})
 		if direct_timer_value is Dictionary:
 			applied = timer_projection.apply_legacy_event(direct_timer_value as Dictionary) or applied
+		# A successful participant response also carries the caller's exact
+		# decision state. Treat LOCKED as authoritative confirmation that their
+		# submitted choice stopped this phase clock. This closes the visual race
+		# when a standalone consumed packet is coalesced or arrives late.
+		applied = timer_projection.apply_legacy_decision_projection(
+			response.get("decisions", {})
+		) or applied
 
 	if applied:
 		timer_state_changed.emit(timer_projection)

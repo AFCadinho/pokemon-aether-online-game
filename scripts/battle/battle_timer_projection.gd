@@ -106,6 +106,38 @@ func apply_legacy_event(
 	return _apply_legacy_timer(payload_value as Dictionary, local_monotonic_ms)
 
 
+func apply_legacy_decision_projection(decisions_value: Variant) -> bool:
+	if contract_enabled or not legacy_enabled or not (decisions_value is Dictionary):
+		return false
+	var changed := false
+	var decisions := decisions_value as Dictionary
+	for side in ["p1", "p2"]:
+		var decision_value: Variant = decisions.get(side, {})
+		if not (decision_value is Dictionary):
+			continue
+		var decision := decision_value as Dictionary
+		var incoming_generation := int(decision.get("decisionGeneration", 0))
+		var current_value: Variant = participants.get(side, {})
+		var current := (current_value as Dictionary).duplicate(true) if current_value is Dictionary else {}
+		if incoming_generation < int(current.get("decisionGeneration", 0)):
+			continue
+		var decision_kind := str(decision.get("decisionKind", current.get("decisionKind", ""))).strip_edges().to_upper()
+		var status := str(decision.get("status", "")).strip_edges().to_upper()
+		if status == "LOCKED":
+			participants[side] = {
+				"status": "WAITING",
+				"decisionKind": decision_kind,
+				"decisionGeneration": incoming_generation,
+			}
+			changed = true
+		elif status == "ACTIVE" and not current.is_empty():
+			current["decisionKind"] = decision_kind
+			current["decisionGeneration"] = incoming_generation
+			participants[side] = current
+			changed = true
+	return changed
+
+
 func _apply_legacy_timer(timer: Dictionary, local_monotonic_ms: int) -> bool:
 	var side := str(timer.get("activeSide", timer.get("side", ""))).strip_edges().to_lower()
 	if side not in ["p1", "p2"]:

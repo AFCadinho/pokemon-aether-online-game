@@ -11160,6 +11160,13 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 		return
 
 	var is_snapshot_message := message_type == "pvp.snapshot"
+	var is_immediate_terminal := _should_apply_pvp_realtime_end_immediately(message)
+	# Timeout settlement can reuse the latest mechanical response boundary. It
+	# is still terminal authority and must not disappear behind the generic
+	# stale-response filter merely because no newer render batch was created.
+	if is_immediate_terminal and not is_snapshot_message:
+		_finish_pvp_realtime_battle_from_message.call_deferred(message.duplicate(true))
+		return
 	if is_snapshot_message:
 		var snapshot_response: Dictionary = _response_from_pvp_realtime_message(message)
 		var mapped_snapshot: Dictionary = {}
@@ -11216,7 +11223,7 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 				"message=%s last_seq=%d" % [_describe_pvp_realtime_message(message), pvp_last_applied_server_seq]
 			)
 		return
-	if _should_apply_pvp_realtime_end_immediately(message):
+	if is_immediate_terminal:
 		if DEBUG_PVP_REALTIME and _get_pvp_realtime_message_kind(message) == "snapshot":
 			_log_pvp_realtime(
 				"Explicit ended/forfeit recovery path used",

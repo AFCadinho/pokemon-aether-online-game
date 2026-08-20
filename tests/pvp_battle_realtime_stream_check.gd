@@ -16,7 +16,8 @@ func _init() -> void:
 	var decision_kind_position := battle_source.find('str(decision.get("decisionKind", ""))', action_wait_start)
 	var send_position := battle_source.find("var request_id := PvpBattleRealtimeService.send_action", action_wait_start)
 	var update_handler_start := battle_source.find("func _on_pvp_realtime_battle_update(message: Dictionary) -> void:")
-	var immediate_terminal_position := battle_source.find("if _should_apply_pvp_realtime_end_immediately(message):", update_handler_start)
+	var immediate_terminal_position := battle_source.find("if is_immediate_terminal and not is_snapshot_message:", update_handler_start)
+	var stale_update_position := battle_source.find("elif _is_stale_pvp_realtime_message(message):", update_handler_start)
 	var normal_queue_position := battle_source.find("pvp_realtime_updates.append(message.duplicate(true))", update_handler_start)
 	var opponent_force_wait_start := battle_source.find("func _wait_for_pvp_opponent_force_switch_and_render() -> bool:")
 	var opponent_force_wait_lock_position := battle_source.find("_show_pvp_opponent_force_switch_wait()", opponent_force_wait_start)
@@ -68,9 +69,11 @@ func _init() -> void:
 		"realtime actions include the authoritative decision kind"
 	)
 	_check_equal(
-		immediate_terminal_position >= update_handler_start and immediate_terminal_position < normal_queue_position,
+		immediate_terminal_position >= update_handler_start \
+		and immediate_terminal_position < stale_update_position \
+		and immediate_terminal_position < normal_queue_position,
 		true,
-		"confirmed terminal actions finish before they can fall into the ordinary realtime queue"
+		"confirmed terminal actions finish before stale filtering or the ordinary realtime queue"
 	)
 	_check_equal(
 		opponent_force_wait_lock_position >= opponent_force_wait_start \
@@ -368,6 +371,14 @@ func _init() -> void:
 	}), true, "embedded legacy phase timer events are applied")
 	_check_equal(legacy_service.timer_projection.participants["p1"].get("decisionKind"), "MOVE_SELECTION", "turn one replaces the team preview clock")
 	_check_equal(legacy_service.timer_projection.participants["p1"].get("maxDecisionMs"), 90000, "turn one receives a fresh 90 second clock")
+	_check_equal(legacy_service._apply_timer_projection_from_battle_response({
+		"response": {
+			"decisions": {
+				"p1": {"status": "LOCKED", "decisionGeneration": 2, "decisionKind": "MOVE_SELECTION"},
+			},
+		},
+	}), true, "locked participant response stops a coalesced legacy timer")
+	_check_equal(legacy_service.timer_projection.participant_display("p1").get("state"), "WAITING", "submitted legacy choice no longer keeps counting")
 
 	var gap_service := PvpBattleRealtimeServiceNode.new()
 	gap_service.active_room_code = "ROOM"
