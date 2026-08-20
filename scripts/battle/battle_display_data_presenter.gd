@@ -31,6 +31,15 @@ func get_active_display_species(player_id: String) -> String:
 
 	var active_pokemon := battle_state.get_active_player_pokemon(player_id)
 	var transformed_species := str(active_pokemon.get("transformedSpecies", active_pokemon.get("displaySpecies", "")))
+	var ogerpon_fallback_species := transformed_species
+	if ogerpon_fallback_species == "":
+		ogerpon_fallback_species = str(active_pokemon.get("species", ""))
+	var public_ogerpon_form := _get_public_ogerpon_form_from_details(
+		active_pokemon,
+		ogerpon_fallback_species
+	)
+	if public_ogerpon_form != "":
+		return public_ogerpon_form
 	if transformed_species != "":
 		if player_id == "p1":
 			var saved_for_form: Pokemon = display_metadata.get_player_save_pokemon_for_battle_data(active_pokemon)
@@ -66,6 +75,28 @@ func get_active_display_species(player_id: String) -> String:
 			return OGERPON_BATTLE_FORM.resolve_species(saved_pokemon.species, saved_pokemon.item)
 
 	return battle_state.get_active_pokemon_species(player_id)
+
+
+func _get_public_ogerpon_form_from_details(
+	pokemon_data: Dictionary,
+	fallback_species: String
+) -> String:
+	var fallback_key := display_metadata.normalize_species_for_compare(fallback_species)
+	if fallback_key != "ogerpon":
+		return ""
+
+	var details := str(pokemon_data.get("details", "")).strip_edges()
+	if details == "":
+		return ""
+	var details_species := str(details.split(",", false, 1)[0]).strip_edges()
+	var details_key := display_metadata.normalize_species_for_compare(details_species)
+	if not details_key.begins_with("ogerpon-"):
+		return ""
+
+	# Showdown keeps the ordinary ident/displaySpecies as Ogerpon, but details is
+	# public and carries the mask forme. Normalize it through the same battle-form
+	# resolver used for locally held masks so the HUD consistently uses spaces.
+	return OGERPON_BATTLE_FORM.resolve_species(details_species)
 
 
 func get_active_display_name(player_id: String) -> String:
