@@ -571,6 +571,7 @@ func _new_filter_spin(minimum: int, maximum: int, initial: int) -> SpinBox:
 	spin.max_value = maximum
 	spin.step = 1
 	spin.value = initial
+	spin.update_on_text_changed = true
 	spin.allow_greater = false
 	spin.allow_lesser = false
 	_apply_line_edit_style(spin.get_line_edit())
@@ -1659,6 +1660,7 @@ func _build_sell_controls(asset: Dictionary) -> void:
 		quantity_spin.min_value = 1
 		quantity_spin.max_value = maxi(int(asset.get("quantity", 1)), 1)
 		quantity_spin.value = 1
+		quantity_spin.update_on_text_changed = true
 		quantity_spin.value_changed.connect(_update_sell_total)
 		detail_stack.add_child(_labeled_control(_t("ui.exchange.quantity"), quantity_spin))
 	else:
@@ -1668,6 +1670,7 @@ func _build_sell_controls(asset: Dictionary) -> void:
 	price_spin.max_value = MAX_PRICE
 	price_spin.value = 100
 	price_spin.step = 1
+	price_spin.update_on_text_changed = true
 	price_spin.value_changed.connect(_update_sell_total)
 	detail_stack.add_child(_labeled_control(_t("ui.exchange.unit_price"), price_spin))
 	total_price_label = Label.new()

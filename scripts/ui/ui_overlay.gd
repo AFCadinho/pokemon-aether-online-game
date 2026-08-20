@@ -7029,6 +7029,7 @@ func _setup_dev_add_item_tools() -> void:
 	dev_item_quantity_spinbox.max_value = 999999
 	dev_item_quantity_spinbox.value = 1
 	dev_item_quantity_spinbox.step = 1
+	dev_item_quantity_spinbox.update_on_text_changed = true
 	dev_item_quantity_spinbox.custom_minimum_size = Vector2(130, 0)
 	dev_item_quantity_spinbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	quantity_row.add_child(dev_item_quantity_spinbox)
@@ -7140,6 +7141,7 @@ func _setup_dev_add_item_tools() -> void:
 	dev_money_amount_spinbox.max_value = 999999999
 	dev_money_amount_spinbox.value = 1000
 	dev_money_amount_spinbox.step = 1
+	dev_money_amount_spinbox.update_on_text_changed = true
 	dev_money_amount_spinbox.custom_minimum_size = Vector2(0, 36)
 	dev_money_amount_spinbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	money_row.add_child(dev_money_amount_spinbox)
@@ -16420,6 +16422,7 @@ func _setup_pokemon_summary_ev_allocate_popup() -> void:
 	pokemon_summary_ev_allocate_input.min_value = 0
 	pokemon_summary_ev_allocate_input.max_value = 252
 	pokemon_summary_ev_allocate_input.step = 1
+	pokemon_summary_ev_allocate_input.update_on_text_changed = true
 	pokemon_summary_ev_allocate_input.value_changed.connect(_on_summary_ev_allocate_value_changed)
 	pokemon_summary_ev_allocate_input.add_theme_icon_override("updown", EV_ALLOCATION_SPINBOX_UPDOWN)
 	var allocation_line_edit := pokemon_summary_ev_allocate_input.get_line_edit()
@@ -17286,6 +17289,7 @@ func _setup_market_detail_panel(panel: PanelContainer) -> void:
 	market_quantity_spinbox.max_value = 99
 	market_quantity_spinbox.value = 1
 	market_quantity_spinbox.step = 1
+	market_quantity_spinbox.update_on_text_changed = true
 	market_quantity_spinbox.custom_minimum_size = Vector2(112, 36)
 	market_quantity_spinbox.value_changed.connect(_on_market_quantity_changed)
 	quantity_row.add_child(market_quantity_spinbox)
@@ -18139,6 +18143,7 @@ func _setup_bag_item_use_popup() -> void:
 	bag_item_use_quantity_spinbox.max_value = 1
 	bag_item_use_quantity_spinbox.value = 1
 	bag_item_use_quantity_spinbox.step = 1
+	bag_item_use_quantity_spinbox.update_on_text_changed = true
 	bag_item_use_quantity_spinbox.editable = false
 	bag_item_use_quantity_spinbox.custom_minimum_size = Vector2(116, 0)
 	bag_item_use_quantity_spinbox.value_changed.connect(_on_bag_item_use_quantity_changed)
