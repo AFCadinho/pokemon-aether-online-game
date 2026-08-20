@@ -59,6 +59,14 @@ static func resolve_species(species: String, item: String = "") -> String:
 	return str(form.get("species", species)).strip_edges()
 
 
+static func resolve_hud_display_name(species: String, display_name: String) -> String:
+	var resolved_species := resolve_species(species)
+	var species_key := _normalize_key(resolved_species)
+	if _normalize_key(display_name) == "ogerpon" and species_key in FORM_BY_SPECIES and species_key != "ogerpon":
+		return resolved_species
+	return display_name
+
+
 static func apply_to_display_data(data: Dictionary, species: String, item: String = "") -> void:
 	var form := metadata(species, item)
 	if form.is_empty():
