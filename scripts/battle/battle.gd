@@ -6220,13 +6220,24 @@ func prepare_wild_battle_from_response(
 	_prepare_battle_setup(BattleType.WILD, player_pokemon, enemy_pokemon, environment_id)
 	_show_local_player_trainer()
 
-	player_sprite_box.set_single_pokemon(player_pokemon, "back")
+	var initial_player_species := _get_saved_pokemon_battle_boundary_species(
+		player_pokemon,
+		player_pokemon.species
+	)
+	player_sprite_box.set_single_pokemon_species(
+		initial_player_species,
+		"back",
+		player_pokemon.shiny
+	)
 	enemy_sprite_box.set_single_pokemon(enemy_pokemon, "front")
 
 	if not _apply_initial_battle_response(api_response):
 		return false
 
-	var player_species := _get_original_active_player_species(player_pokemon.species)
+	var player_species := _get_saved_pokemon_battle_boundary_species(
+		player_pokemon,
+		_get_original_active_player_species(player_pokemon.species)
+	)
 	var opponent_species := _get_active_display_species("p2")
 	_debug_battle_start_response("wild.setup.after_apply", api_response)
 	_debug_battle_start_active_snapshot("wild.setup.after_apply")
@@ -6251,7 +6262,10 @@ func _refresh_wild_opponent_owned_icon(species: String, is_shiny: bool, request_
 		enemy_hud_panel.set_owned_icon_visible(PokedexService.is_species_owned(species, is_shiny))
 
 func play_wild_battle_intro(player_pokemon: Pokemon, api_response: Dictionary) -> void:
-	var player_species := _get_original_active_player_species(player_pokemon.species)
+	var player_species := _get_saved_pokemon_battle_boundary_species(
+		player_pokemon,
+		_get_original_active_player_species(player_pokemon.species)
+	)
 	var opponent_species := _get_active_display_species("p2")
 	await get_tree().process_frame
 	_debug_battle_start("wild.setup.before_player_lead_summon playerSpecies=%s opponentSpecies=%s lastRenderedSeq=%d" % [
@@ -6813,9 +6827,13 @@ func _apply_team_preview_battle_response(api_response: Dictionary) -> bool:
 	return true
 
 func _show_default_trainer_leads_before_selection(player_pokemon: Pokemon, api_response: Dictionary) -> void:
-	player_sprite_box.set_single_pokemon(player_pokemon, "back")
+	var player_species := _get_saved_pokemon_battle_boundary_species(
+		player_pokemon,
+		player_pokemon.species
+	)
+	player_sprite_box.set_single_pokemon_species(player_species, "back", player_pokemon.shiny)
 	player_hud_panel.set_pokemon_data(
-		player_pokemon.species,
+		player_species,
 		player_pokemon.level,
 		player_pokemon.current_hp,
 		max(player_pokemon.max_hp, 1),
@@ -7250,6 +7268,19 @@ func _get_original_active_player_species(fallback_species: String = "") -> Strin
 		return state_species
 
 	return fallback_species
+
+
+func _get_saved_pokemon_battle_boundary_species(
+	saved_pokemon: Pokemon,
+	fallback_species: String = ""
+) -> String:
+	if saved_pokemon == null:
+		return fallback_species
+	var battle_species := OGERPON_BATTLE_FORM.resolve_species(
+		saved_pokemon.species,
+		saved_pokemon.item
+	).strip_edges()
+	return battle_species if battle_species != "" else fallback_species
 
 func _get_saved_pokemon_shiny_for_active_data(active_pokemon: Dictionary) -> bool:
 	var saved_pokemon := _get_saved_pokemon_for_active_data(active_pokemon)

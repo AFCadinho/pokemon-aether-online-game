@@ -12,6 +12,7 @@ func _init() -> void:
 	_check_non_ogerpon_is_untouched()
 	_check_ivy_cudgel_type_is_battle_only()
 	_check_mask_battle_sprites_are_available()
+	_check_initial_battle_setup_uses_mask_form()
 	quit(1 if failed else 0)
 
 
@@ -79,6 +80,25 @@ func _check_mask_battle_sprites_are_available() -> void:
 				expected_size,
 				"%s uses the Gen 9 %s battle asset instead of a HOME fallback" % [species, side]
 			)
+
+
+func _check_initial_battle_setup_uses_mask_form() -> void:
+	var battle_source := FileAccess.get_file_as_string("res://scripts/battle/battle.gd")
+	_check_equal(
+		battle_source.contains("func _get_saved_pokemon_battle_boundary_species("),
+		true,
+		"battle setup exposes a held-mask boundary resolver"
+	)
+	_check_equal(
+		battle_source.count("_get_saved_pokemon_battle_boundary_species(") >= 5,
+		true,
+		"wild and trainer setup resolve Ogerpon before their first sprite render"
+	)
+	_check_equal(
+		battle_source.contains('player_sprite_box.set_single_pokemon(player_pokemon, "back")'),
+		false,
+		"initial setup never renders the saved base Ogerpon before resolving its mask"
+	)
 
 
 func _check_equal(actual: Variant, expected: Variant, label: String) -> void:
