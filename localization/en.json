@@ -3171,6 +3171,7 @@
   "ui.pvp.room.allow_spectators": "Allow private spectators  ·  {state}",
   "ui.pvp.room.timer": "Decision timer  ·  {state}",
   "ui.pvp.room.timer_tooltip": "Use the shared authoritative battle timer. Select a speed tier below.",
+  "ui.pvp.room.timer_unavailable": "Timed rooms are temporarily unavailable. Try an untimed room or try again later.",
   "ui.pvp.room.timer_tier.casual": "Casual · Preview 60s · Turns 180s · Switches 45s",
   "ui.pvp.room.timer_tier.relaxed": "Relaxed · 120 seconds",
   "ui.pvp.room.timer_tier.standard": "Standard · 90 seconds",

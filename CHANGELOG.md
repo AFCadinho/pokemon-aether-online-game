@@ -9,6 +9,7 @@
 **Fixed**
 
 - Ogerpon's correct battle sprites are now included in game downloads.
+- Training Rooms no longer blame a valid Poképaste when room timers are temporarily unavailable.
 
 ## 0.3.59 - 2026-08-20
 
