@@ -217,6 +217,9 @@ jobs:
       - name: Import Godot assets
         run: ./godot --headless --import --quit
 
+      - name: Verify client crash reporting
+        run: ./godot --headless --path . --script res://tests/client_crash_reporting_check.gd
+
       - name: Verify generated world access catalog
         run: ./godot --no-header --headless --path . res://tools/generate_world_access_catalog.tscn -- --check
 
@@ -235,6 +238,9 @@ jobs:
         run: |
           mkdir -p builds/linux
           ./godot --headless --export-release "${LINUX_EXPORT_PRESET}" "${LINUX_EXPORT_PATH}"
+
+      - name: Verify crash reporting in Linux release
+        run: bash tools/verify_client_crash_reporting_release.sh "${LINUX_EXPORT_PATH}"
 
       - name: Export macOS build
         if: env.BUILD_MACOS == 'true'
