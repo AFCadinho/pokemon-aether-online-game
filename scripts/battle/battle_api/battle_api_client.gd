@@ -74,7 +74,7 @@ func create_pvp_room(
 	battle_purpose: String = "casual",
 	team_text: String = "",
 	timer_enabled: bool = false,
-	timer_tier_id: String = "standard_v1"
+	timer_tier_id: String = "casual_v1"
 ) -> Dictionary:
 	return await send_post_request(
 		request_node,

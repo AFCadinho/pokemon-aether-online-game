@@ -3146,6 +3146,7 @@
   "ui.pvp.room.allow_spectators": "Permitir espectadores privados  ·  {state}",
   "ui.pvp.room.timer": "Cronômetro de decisão  ·  {state}",
   "ui.pvp.room.timer_tooltip": "Use o cronômetro de batalha autoritativo compartilhado. Escolha uma velocidade abaixo.",
+  "ui.pvp.room.timer_tier.casual": "Casual · Prévia 60s · Turnos 180s · Trocas 45s",
   "ui.pvp.room.timer_tier.relaxed": "Relaxado · 120 segundos",
   "ui.pvp.room.timer_tier.standard": "Padrão · 90 segundos",
   "ui.pvp.room.timer_tier.fast": "Rápido · 30 segundos",
