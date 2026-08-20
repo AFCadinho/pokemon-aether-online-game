@@ -40,6 +40,16 @@ func _run() -> void:
 		"battle-log identity does not duplicate the species name"
 	)
 	_check_equal(
+		formatter.format_pokemon_identity("Ogerpon", "Ogerpon-Wellspring"),
+		"Ogerpon Wellspring",
+		"an unnicknamed Ogerpon battle ident displays its mask forme"
+	)
+	_check_equal(
+		formatter.format_pokemon_identity("Mossy", "Ogerpon-Wellspring"),
+		"Mossy (Ogerpon Wellspring)",
+		"a real Ogerpon nickname remains linked to its mask forme"
+	)
+	_check_equal(
 		formatter.format_trainer_battle_start_messages("Pikachu", "Eevee", "Gary Oak"),
 		["Gary Oak wants to battle!", "Gary Oak sent out Eevee!", "Go! Pikachu!"],
 		"trainer battle start messages"
