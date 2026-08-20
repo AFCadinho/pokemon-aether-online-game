@@ -4,30 +4,28 @@
 
 **Added**
 
-- Active Aether Blessing memberships now grant a 5% Shiny encounter bonus, 50% off regional Aether Transit fares, a second free Aether Anchor, and visible membership benefits in the personal boost tray.
+- An active Aether Blessing now gives 5% better Shiny odds, 5% off at NPC shops, half-price regional Aether Transit, and a second free Aether Anchor. You can see these bonuses in your boost list.
 - Mom now gives you an Ability Capsule from Dadinho when you return home after delivering Oak's Parcel.
-- Added PvP Training Rooms. Trainers can submit a Poképaste team, review it privately, and battle with it without replacing their normal party.
-- Custom and Training Rooms can now use optional battle timers with Casual, Relaxed, Standard, Fast, Blitz, and Lightning presets.
-- The Pokédex can now find Pokémon by Pokédex number as well as by name.
+- Added PvP Training Rooms. Paste a team from Poképaste and battle with it without changing your regular party.
+- Timers can now be turned on in Custom and Training Rooms. You can choose Casual, Relaxed, Standard, Fast, Blitz, or Lightning.
+- You can now search the Pokédex by number as well as by name.
 
 **Changed**
 
-- Ability Patches now permanently unlock and activate a Pokémon's Hidden Ability. Ability Capsules can switch between every unlocked regular and Hidden Ability.
-- Timed Custom and Training Rooms now default to the Casual timer preset, with longer move-selection and reconnect windows.
-- Read-only Pokémon Summaries now make moves easier to inspect and clearly prevent editing actions. Bag item previews also identify which party members are valid targets.
-- Global Heal now has a 5-minute cooldown and uses the shared Aether dialog styling with clearer actions and preferences.
+- An Ability Patch now unlocks and selects a Pokémon's Hidden Ability. An Ability Capsule can switch between all unlocked Abilities.
+- Timed Custom and Training Rooms now use the Casual timer by default.
+- It is now clearer when a Pokémon Summary is only for viewing. Move information is easier to inspect, and the Bag shows which party members can use the selected item.
+- Global Heal now has a 5-minute cooldown. Its window and choices are also clearer.
 
 **Fixed**
 
-- Training Room battles now keep submitted teams isolated from normal parties, preserve the correct Pokémon while switching, and show only the appropriate private Team Preview.
-- Fixed Custom Room timers showing stale phases, continuing incorrectly, or resolving the same timeout more than once. Finished PvP battles now also recover more reliably from a stale final snapshot.
-- Ogerpon's masks, form names, move types, battle sprites, and opponent HUD details now remain consistent throughout battles.
-- Alpha Tools now show clearer errors when a generated party cannot be cleared or a generated Pokémon is invalid.
-- Global Boost panels now refresh immediately when another Trainer contributes or activates a boost, and recover automatically from stale contribution state.
-- Global Heal requests now appear only once per activation, including after reconnecting, and the tray icon correctly shows when the service is active or cooling down.
-- Pokémon-only chat shares now keep complete parties inline and position their first sprite closer to the sender without reducing its clickable area.
-- Senior Staff now retain every non-owner staff control when the local permission display is temporarily incomplete or stale.
-- The Aether Clash Lobby now follows the configured outdoor zoom instead of using the fixed interior zoom.
+- Training Rooms now use the correct pasted team when switching Pokémon. Team Preview is shown only to the correct player.
+- Fixed several Custom Room timer problems. Finished PvP battles also recover more reliably after a connection problem.
+- Ogerpon now keeps the correct mask, name, move type, and sprite during battles.
+- Global Boost panels now update when another player contributes or activates a boost.
+- Global Heal requests now appear only once per use, even after reconnecting. The icon also shows when Global Heal is active or cooling down.
+- Shared Pokémon teams now fit and line up better in chat.
+- The Aether Clash Lobby now uses the correct outdoor zoom setting.
 
 ## 0.3.58 - 2026-08-19
 
