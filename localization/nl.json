@@ -3117,6 +3117,7 @@
   "ui.pvp.training.ephemeral_note": "Tijdelijk team · geen XP, beloningen, rating of wijzigingen aan je huidige party.",
   "ui.pvp.training.paste_required": "Plak eerst een Pokémon Showdown-team.",
   "ui.pvp.training.paste_invalid": "Het trainingsteam kon niet worden geïmporteerd. Controleer de Poképaste en probeer opnieuw.",
+  "ui.pvp.training.team_preview": "JOUW TRAININGSTEAM  ·  {count}/6",
   "ui.pvp.room.allow_spectators": "Privétoeschouwers toestaan  ·  {state}",
   "ui.pvp.state.on": "AAN",
   "ui.pvp.state.off": "UIT",

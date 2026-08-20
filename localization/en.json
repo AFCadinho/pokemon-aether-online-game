@@ -3117,6 +3117,7 @@
   "ui.pvp.training.ephemeral_note": "Temporary team · no XP, rewards, rating or changes to your current party.",
   "ui.pvp.training.paste_required": "Paste a Pokemon Showdown team first.",
   "ui.pvp.training.paste_invalid": "The training team could not be imported. Check the Pokepaste and try again.",
+  "ui.pvp.training.team_preview": "YOUR TRAINING TEAM  ·  {count}/6",
   "ui.pvp.room.allow_spectators": "Allow private spectators  ·  {state}",
   "ui.pvp.state.on": "ON",
   "ui.pvp.state.off": "OFF",

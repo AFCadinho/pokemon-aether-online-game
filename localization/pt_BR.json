@@ -3117,6 +3117,7 @@
   "ui.pvp.training.ephemeral_note": "Equipe temporária · sem XP, recompensas, rating ou mudanças na equipe atual.",
   "ui.pvp.training.paste_required": "Cole primeiro uma equipe do Pokémon Showdown.",
   "ui.pvp.training.paste_invalid": "Não foi possível importar a equipe de treinamento. Verifique o Pokepaste e tente novamente.",
+  "ui.pvp.training.team_preview": "SUA EQUIPE DE TREINO  ·  {count}/6",
   "ui.pvp.room.allow_spectators": "Permitir espectadores privados  ·  {state}",
   "ui.pvp.state.on": "SIM",
   "ui.pvp.state.off": "NÃO",

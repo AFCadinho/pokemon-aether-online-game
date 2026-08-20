@@ -53,6 +53,9 @@ func _check_pvp_runtime_translation() -> void:
 	var room_type_note := overlay.get("pvp_room_type_note") as Label
 	var room_flow_hint := overlay.get("pvp_room_flow_hint") as Label
 	var training_input := overlay.get("pvp_training_team_input") as TextEdit
+	var training_preview := overlay.get("pvp_training_team_preview_section") as VBoxContainer
+	var training_preview_title := overlay.get("pvp_training_team_preview_title") as Label
+	var training_preview_grid := overlay.get("pvp_training_team_preview_grid") as HBoxContainer
 	var room_code_input := overlay.get("pvp_room_code_input") as LineEdit
 	var room_form_title := overlay.get("pvp_room_form_title") as Label
 	var room_status := overlay.get("pvp_room_status_label") as Label
@@ -88,10 +91,20 @@ func _check_pvp_runtime_translation() -> void:
 	_check(training_input != null and training_input.visible, "Training room exposes the paste-only team input")
 	_check(room_code_input.get_index() < training_input.get_index(), "Training join asks for the room code before the team paste")
 	_check(room_form_title != null and room_form_title.text.begins_with("VOER EEN ROOMCODE"), "Training join form explains both required inputs")
+	overlay.call("_set_pvp_training_team_preview", [
+		{"species": "Pikachu", "shiny": true, "moves": ["Thunderbolt"]},
+		{"species": "Staryu", "shiny": false, "item": "Leftovers"},
+	])
+	_check(training_preview != null and training_preview.visible, "Accepted training team exposes its read-only preview")
+	_check(training_preview_title != null and training_preview_title.text == "JOUW TRAININGSTEAM  ·  2/6", "Training preview count renders in Dutch")
+	_check(training_preview_grid != null and training_preview_grid.get_child_count() == 6, "Training preview always renders six team slots")
+	_check(training_preview_grid.get_child(0).tooltip_text == "Pikachu", "Training preview identifies the accepted species")
+	_check(popup.get_combined_minimum_size().y <= 620.0, "Training preview fits inside the room popup")
 	casual_button.emit_signal("pressed")
 	await process_frame
 	_check(overlay.get("pvp_room_battle_purpose") == "casual", "Custom button signal selects custom mode")
 	_check(not training_input.visible, "Custom selection hides the Pokepaste input")
+	_check(not training_preview.visible, "Changing room type clears the submitted training preview")
 	room_spectate_button.emit_signal("pressed")
 	await process_frame
 	_check(room_code_input != null and room_code_input.visible, "Spectate flow keeps the room code field visible")
