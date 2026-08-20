@@ -591,6 +591,10 @@ func _process_packets() -> void:
 			if timer_applied:
 				timer_state_changed.emit(timer_projection)
 			continue
+		if message_type.begins_with("pvp.timer_"):
+			if timer_projection.apply_legacy_event(message):
+				timer_state_changed.emit(timer_projection)
+			continue
 		if message_type == "pvp.opponent_disconnected" or message_type == "pvp.opponent_reconnected" or message_type == "pvp.reconnect_grace_started":
 			battle_update_received.emit(message)
 			continue
@@ -654,13 +658,51 @@ func _apply_timer_projection_from_battle_response(message: Dictionary) -> bool:
 	var response_value: Variant = message.get("response", {})
 	if not (response_value is Dictionary):
 		return false
-	var timer_value: Variant = (response_value as Dictionary).get("timerState", {})
-	if not (timer_value is Dictionary):
-		return false
-	if not timer_projection.apply_snapshot(timer_value as Dictionary):
-		return false
-	timer_state_changed.emit(timer_projection)
-	return true
+	var response := response_value as Dictionary
+	var applied := false
+	var timer_value: Variant = response.get("timerState", {})
+	if timer_value is Dictionary:
+		applied = timer_projection.apply_snapshot(timer_value as Dictionary) or applied
+
+	# Legacy room timers are returned inside the same authoritative action
+	# response. Applying only standalone websocket timer packets leaves the old
+	# phase clock running whenever such a packet is delayed or coalesced.
+	if not timer_projection.contract_enabled:
+		var timer_events_value: Variant = response.get("pvpTimerEvents", [])
+		if timer_events_value is Array:
+			for event_value: Variant in timer_events_value:
+				if not (event_value is Dictionary):
+					continue
+				var event := event_value as Dictionary
+				var timers_value: Variant = event.get("timers", [])
+				if timers_value is Array:
+					for legacy_timer_value: Variant in timers_value:
+						if legacy_timer_value is Dictionary:
+							applied = timer_projection.apply_legacy_event(legacy_timer_value as Dictionary) or applied
+				var legacy_timer_value: Variant = event.get("timer", {})
+				if legacy_timer_value is Dictionary:
+					applied = timer_projection.apply_legacy_event(legacy_timer_value as Dictionary) or applied
+		var direct_timer_value: Variant = response.get("pvpTimer", {})
+		if direct_timer_value is Dictionary:
+			applied = timer_projection.apply_legacy_event(direct_timer_value as Dictionary) or applied
+		# A successful participant response also carries the caller's exact
+		# decision state. Treat LOCKED as authoritative confirmation that their
+		# submitted choice stopped this phase clock. This closes the visual race
+		# when a standalone consumed packet is coalesced or arrives late.
+		applied = timer_projection.apply_legacy_decision_projection(
+			response.get("decisions", {})
+		) or applied
+
+	if applied:
+		timer_state_changed.emit(timer_projection)
+	return applied
+
+
+func apply_initial_timer_response(response: Dictionary) -> void:
+	var timers_value: Variant = response.get("pvpTimers", [])
+	var enabled := bool(response.get("timerEnabled", false))
+	if timer_projection.apply_legacy_snapshot(timers_value, enabled):
+		timer_state_changed.emit(timer_projection)
 
 
 func _remember_spectator_event_cursor(message: Dictionary) -> void:
@@ -1299,6 +1341,8 @@ func _handle_battle_events_message(message: Dictionary) -> void:
 		valid_event_count += 1
 		if str(event.get("type", "")).begins_with("battle.timer_"):
 			timer_projection.apply_event(event)
+		elif str(event.get("type", "")).begins_with("pvp.timer_"):
+			timer_projection.apply_legacy_event(event)
 		else:
 			timer_projection.mark_event_applied(next_event_seq)
 		var terminal_payload_value: Variant = event.get("payload", {})

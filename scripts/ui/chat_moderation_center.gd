@@ -387,6 +387,7 @@ func _build_detention_dialog() -> void:
 	detention_duration_input.max_value = 525600
 	detention_duration_input.value = 60
 	detention_duration_input.suffix = " minutes"
+	detention_duration_input.update_on_text_changed = true
 	detention_duration_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	detention_duration_row.add_child(detention_duration_input)
 	detention_permanent_check = CheckBox.new()

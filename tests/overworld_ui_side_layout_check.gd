@@ -219,7 +219,11 @@ func _init() -> void:
 	_check(scene_source.contains('[node name="AmountInput" type="LineEdit" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow"]'), "global buff contributions use a custom amount input")
 	_check(scene_source.contains('[node name="FillRemainingButton" type="Button" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection"]'), "global buff contributions can fill the exact remaining goal without competing with the main action")
 	_check(scene_source.count('[node name="NameLabel" type="Label" parent="Control/PersonalBuffsPanel') == 3, "personal buffs render readable effect names")
-	_check(scene_source.count('[node name="DescriptionLabel" type="Label" parent="Control/PersonalBuffsPanel') == 3, "personal buffs render readable effect descriptions")
+	_check(
+		scene_source.count('[node name="BadgeLabel" type="Label" parent="Control/PersonalBuffsPanel') == 0
+		and scene_source.count('[node name="DescriptionLabel" type="Label" parent="Control/PersonalBuffsPanel') == 0,
+		"personal buff rows avoid duplicate badges and clipped descriptions"
+	)
 	_check(scene_source.count('[node name="TimeLabel" type="Label" parent="Control/PersonalBuffsPanel') == 3, "personal buffs render remaining durations")
 	_check(scene_source.contains('[node name="EmptyLabel" type="Label" parent="Control/PersonalBuffsPanel'), "personal buffs provide an empty-state label")
 	_check(scene_source.contains('text = "ui.buff.none"'), "personal empty state uses its localization key")
@@ -288,11 +292,16 @@ func _init() -> void:
 		"visible chat metadata gets first-line clearance while plain names stay left aligned"
 	)
 	_check(
-		script_source.contains("var inline_single_pokemon := (")
-		and script_source.contains('inline_pokemon_attachment.name = "InlinePokemonAttachment"')
+		script_source.contains("var inline_pokemon_share := (")
+		and script_source.contains("and not pokemon_attachments.is_empty()")
+		and script_source.contains('attachment_group.name = "InlinePokemonAttachments"')
+		and script_source.contains("for attachment_index: int in range(pokemon_attachments.size()):")
+		and script_source.contains("attachment_index == 0")
 		and script_source.contains('inline_spacer.name = "InlinePokemonSpacer"')
-		and script_source.contains("not inline_single_pokemon and not pokemon_attachments.is_empty()"),
-		"a single Pokemon-only share stays clickable beside the sender instead of using a new row"
+		and script_source.contains("align_icon_left: bool = false")
+		and script_source.contains("TextureRect.STRETCH_KEEP_ASPECT\n\t\tif align_icon_left")
+		and script_source.contains("not inline_pokemon_share and not pokemon_attachments.is_empty()"),
+		"Pokemon-only shares keep a full clickable party with the first sprite close to the sender"
 	)
 	_check(
 		script_source.contains('message_list.add_theme_constant_override("separation", 5)'),
@@ -372,15 +381,29 @@ func _init() -> void:
 	_check(script_source.contains("func set_personal_buffs(buffs: Array)"), "personal buff tray accepts future live data")
 	_check(script_source.contains("set_personal_buffs([])"), "personal buffs default to the empty state")
 	_check(
-		script_source.contains("func _current_aether_blessing_buff()")
-		and script_source.contains('"name_key": "ui.buff.aether_blessing.name"')
+		player_status_scene_source.contains('[node name="MembershipBadge"')
+		and player_status_scene_source.contains('text = "ui.membership.aether_blessing.badge"')
+		and script_source.contains("func _current_aether_blessing_membership()")
 		and script_source.contains('"expiresAt": expires_at'),
-		"active Aether Blessings appear in the personal buff tray with their expiry"
+		"active Aether Blessings appear as membership status in the mini Trainer Card"
 	)
 	_check(
 		script_source.contains("func _refresh_personal_buffs_if_needed(delta: float)")
-		and script_source.contains("_format_aether_blessing_remaining"),
-		"the personal buff tray keeps the Blessing countdown current"
+		and script_source.contains("_refresh_aether_blessing_membership_status()")
+		and script_source.contains("_aether_blessing_membership_tooltip"),
+		"the mini Trainer Card keeps membership status and details current"
+	)
+	_check(
+		script_source.contains('"aether_blessing_travel_discount",')
+		and script_source.contains('"aether_blessing_shop_discount",')
+		and script_source.contains("func _current_aether_blessing_shiny_bonus()")
+		and script_source.contains("func _current_aether_blessing_travel_discount()")
+		and script_source.contains("func _current_aether_blessing_shop_discount()")
+		and script_source.contains('"ui.buff.aether_blessing_shiny.name"')
+		and script_source.contains('"ui.buff.aether_blessing_travel.name"')
+		and script_source.contains('"ui.buff.aether_blessing_shops.name"')
+		and not script_source.contains('"name_key": "ui.buff.aether_blessing.name"'),
+		"the boost tray shows the membership's concrete Shiny, travel, and shop effects"
 	)
 	_check(script_source.contains('personal_buffs_panel.set_meta("group_available", true)'), "personal empty state remains part of the trainer collapse group")
 	_check(script_source.contains("PERSONAL_BUFF_PANEL_COMPACT_HEIGHT"), "empty and collapsed active states use a compact panel height")
@@ -408,16 +431,35 @@ func _init() -> void:
 	_check(script_source.contains('message_type == "system.global_exp_boost_contribution"'), "global EXP contributions appear as realtime system messages")
 	_check(script_source.contains('message_type == "system.global_ev_boost_contribution"'), "global EV contributions appear as realtime system messages")
 	_check(script_source.contains('message_type == "system.global_rare_encounter_boost_contribution"'), "rare encounter contributions appear as realtime system messages")
+	_check(script_source.contains('_load_global_boost_state.call_deferred("global_exp")'), "global EXP contribution events refresh authoritative boost state")
+	_check(script_source.contains('_load_global_boost_state.call_deferred("global_ev")'), "global EV contribution events refresh authoritative boost state")
+	_check(script_source.contains('_load_global_boost_state.call_deferred("global_rare_encounter")'), "rare encounter contribution events refresh authoritative boost state")
+	_check(script_source.contains('_load_global_boost_state.call_deferred("global_shiny")'), "global Shiny contribution events refresh authoritative boost state")
+	_check(script_source.contains('await _load_global_boost_state(selected_boost_id)'), "stale contribution conflicts recover the authoritative boost state")
+	_check(script_source.contains('if int(response.get("status", 0)) == 409:') and script_source.contains('else:\n\t\t\t_add_chat_message'), "stale boost conflicts refresh without showing a misleading payment error")
 	_check(script_source.contains('buff["activeUntil"] = str(state.get("activeUntil", ""))'), "active global buffs retain their authoritative expiry")
 	_check(script_source.contains("_refresh_global_buffs_if_needed(delta)"), "active global buff countdowns refresh while the overlay remains open")
 	_check(not script_source.contains('GameErrorDialogService.show_response(response, "backend.error.transit_unavailable")'), "global EXP contribution errors stay inside the boost flow")
 	_check(script_source.contains("const MINIMUM_GLOBAL_BUFF_CONTRIBUTION := 10_000"), "global buff contributions enforce the 10,000 Pokédollar minimum")
 	_check(script_source.contains("selected_global_buff_contribution = mini(requested, remaining)"), "global buff contribution input is capped to the remaining goal")
 	_check(script_source.contains('"aetheriteReward"'), "global EXP contributions display their personal Aetherite reward")
-	_check(script_source.contains("name_label.text = _localized_buff_name(buff)"), "personal buff rows receive localized readable names")
+	_check(
+		script_source.contains("const PERSONAL_BUFF_ROW_HEIGHT := 38.0")
+		and script_source.contains("name_label.text = _localized_buff_name(buff)"),
+		"personal buff rows use compact localized effect labels"
+	)
 	_check(donator_store_scene_source.contains("custom_minimum_size = Vector2(1120, 680)"), "Donator Store opens as a full catalog and character-preview interface")
 	_check(donator_store_script_source.contains('"membership",') and donator_store_script_source.contains('"cosmetics",') and donator_store_script_source.contains('"mounts",') and donator_store_script_source.contains('"charms",') and donator_store_script_source.contains('"services",'), "Aether Store separates its six scalable catalog categories")
-	_check(donator_store_script_source.contains('"membership": "Blessings"') and donator_store_script_source.contains('"membership": "NO BATTLE POWER"') and donator_store_script_source.contains("No battle advantages"), "Blessings establish a fair supporter direction")
+	_check(
+		donator_store_script_source.contains('"membership": "Blessings"')
+		and donator_store_script_source.contains('"membership": "5% SHINY · TRAVEL · NPC SHOPS"')
+		and donator_store_script_source.contains("5% better Shiny odds")
+		and donator_store_script_source.contains("50% off regional travel")
+		and donator_store_script_source.contains("two free Aether Anchors")
+		and donator_store_script_source.contains("5% off NPC currency shops")
+		and donator_store_script_source.contains("Aether Gems excluded"),
+		"Blessings disclose the complete Shiny, travel, anchor, and NPC shop package"
+	)
 	_check(donator_store_script_source.contains('"name": "Aether Blessing Voucher · 3 Days"') and donator_store_script_source.contains('"badge": "3 DAYS"') and donator_store_script_source.contains('"badge": "7 DAYS"') and donator_store_script_source.contains('"badge": "14 DAYS"') and donator_store_script_source.contains('"badge": "30 DAYS"') and not donator_store_script_source.contains('"badge": "90 DAYS"'), "Aether Blessing offers the intended four tradeable voucher durations")
 	_check(
 		donator_store_script_source.contains("AETHERBLESSINGVOUCHER3DAYS.png")

@@ -16,6 +16,7 @@ var participants: Dictionary = {}
 var server_anchor_ms := 0
 var monotonic_anchor_ms := 0
 var contract_enabled := false
+var legacy_enabled := false
 var mechanically_suspended := false
 var reconnect_paused := false
 var reconnect_frozen_server_ms := 0
@@ -30,13 +31,14 @@ func reset() -> void:
 	server_anchor_ms = 0
 	monotonic_anchor_ms = 0
 	contract_enabled = false
+	legacy_enabled = false
 	mechanically_suspended = false
 	reconnect_paused = false
 	reconnect_frozen_server_ms = 0
 
 
 func should_present(is_pvp_battle: bool, debug_visibility_override: bool = true) -> bool:
-	return is_pvp_battle and contract_enabled and debug_visibility_override
+	return is_pvp_battle and (contract_enabled or legacy_enabled) and debug_visibility_override
 
 
 func has_advanced_beyond_team_preview() -> bool:
@@ -64,6 +66,105 @@ func apply_snapshot(snapshot: Dictionary, local_monotonic_ms: int = Time.get_tic
 	participants = (snapshot.get("participants", {}) as Dictionary).duplicate(true)
 	_sample_server_time(_server_ms(snapshot), local_monotonic_ms, true)
 	contract_enabled = authority in [BATTLE_BANK_V1_SHADOW, BATTLE_BANK_V1_AUTHORITY]
+	if contract_enabled:
+		legacy_enabled = false
+	return true
+
+
+func apply_legacy_snapshot(
+	timers_value: Variant,
+	enabled: bool,
+	local_monotonic_ms: int = Time.get_ticks_msec()
+) -> bool:
+	if contract_enabled:
+		return false
+	legacy_enabled = enabled
+	authority = LEGACY_AUTHORITY
+	participants = {
+		"p1": {"status": "WAITING"},
+		"p2": {"status": "WAITING"},
+	}
+	if not enabled or not (timers_value is Array):
+		return true
+	for timer_value: Variant in timers_value:
+		if timer_value is Dictionary:
+			_apply_legacy_timer(timer_value as Dictionary, local_monotonic_ms)
+	return true
+
+
+func apply_legacy_event(
+	event: Dictionary,
+	local_monotonic_ms: int = Time.get_ticks_msec()
+) -> bool:
+	if contract_enabled:
+		return false
+	var payload_value: Variant = event.get("payload", event)
+	if not (payload_value is Dictionary):
+		return false
+	legacy_enabled = true
+	authority = LEGACY_AUTHORITY
+	return _apply_legacy_timer(payload_value as Dictionary, local_monotonic_ms)
+
+
+func apply_legacy_decision_projection(decisions_value: Variant) -> bool:
+	if contract_enabled or not legacy_enabled or not (decisions_value is Dictionary):
+		return false
+	var changed := false
+	var decisions := decisions_value as Dictionary
+	for side in ["p1", "p2"]:
+		var decision_value: Variant = decisions.get(side, {})
+		if not (decision_value is Dictionary):
+			continue
+		var decision := decision_value as Dictionary
+		var incoming_generation := int(decision.get("decisionGeneration", 0))
+		var current_value: Variant = participants.get(side, {})
+		var current := (current_value as Dictionary).duplicate(true) if current_value is Dictionary else {}
+		if incoming_generation < int(current.get("decisionGeneration", 0)):
+			continue
+		var decision_kind := str(decision.get("decisionKind", current.get("decisionKind", ""))).strip_edges().to_upper()
+		var status := str(decision.get("status", "")).strip_edges().to_upper()
+		if status == "LOCKED":
+			participants[side] = {
+				"status": "WAITING",
+				"decisionKind": decision_kind,
+				"decisionGeneration": incoming_generation,
+			}
+			changed = true
+		elif status == "ACTIVE" and not current.is_empty():
+			current["decisionKind"] = decision_kind
+			current["decisionGeneration"] = incoming_generation
+			participants[side] = current
+			changed = true
+	return changed
+
+
+func _apply_legacy_timer(timer: Dictionary, local_monotonic_ms: int) -> bool:
+	var side := str(timer.get("activeSide", timer.get("side", ""))).strip_edges().to_lower()
+	if side not in ["p1", "p2"]:
+		return false
+	var status := str(timer.get("status", timer.get("timerStatus", "active"))).strip_edges().to_lower()
+	var phase := str(timer.get("phase", "turn")).strip_edges().to_lower()
+	var decision_kind := "TEAM_PREVIEW" if phase in ["team_preview", "team-preview"] else (
+		"FORCED_SWITCH" if phase == "force_switch" else "MOVE_SELECTION"
+	)
+	if status in ["consumed", "cancelled", "stopped"]:
+		participants[side] = {"status": "WAITING", "decisionKind": decision_kind}
+		return true
+	var duration_ms := maxi(int(timer.get("durationSeconds", 90)) * 1000, 1000)
+	var server_ms := _server_ms(timer)
+	var deadline_ms := _timestamp_ms(timer, "deadlineAtMs", "deadlineAt")
+	var remaining_ms := duration_ms
+	if server_ms > 0 and deadline_ms > 0:
+		remaining_ms = clampi(deadline_ms - server_ms, 0, duration_ms)
+	participants[side] = {
+		"status": "EXPIRED" if status == "expired" else "RUNNING",
+		"decisionKind": decision_kind,
+		"deadlineAt": str(timer.get("deadlineAt", "")),
+		"legacyDeadlineTicksMs": local_monotonic_ms + remaining_ms,
+		"maxDecisionMs": duration_ms,
+	}
+	if server_ms > 0:
+		_sample_server_time(server_ms, local_monotonic_ms, server_anchor_ms == 0)
 	return true
 
 
@@ -138,6 +239,7 @@ func participant_display(player_id: String, local_monotonic_ms: int = Time.get_t
 	var cap_at := _timestamp_ms(timer, "decisionCapAtMs", "decisionCapAt")
 	var exhaustion_at := _timestamp_ms(timer, "bankExhaustionAtMs", "bankExhaustionAt")
 	var deadline := _timestamp_ms(timer, "hypotheticalDeadlineAtMs", "deadlineAt")
+	var legacy_deadline_ticks := int(timer.get("legacyDeadlineTicksMs", 0))
 	var raw_status := str(timer.get("status", "IDLE")).to_upper()
 	var bank_anchor := int(timer.get("mainBankRemainingMs", timer.get("bankAtAnchorMs", 0)))
 	var bank := bank_anchor
@@ -152,7 +254,11 @@ func participant_display(player_id: String, local_monotonic_ms: int = Time.get_t
 	var effective_remaining: int = (
 		max(int(timer.get("decisionRemainingMs", 0)), 0)
 		if has_frozen_remaining
-		else (max(deadline - now, 0) if deadline > 0 else 0)
+		else (
+			max(legacy_deadline_ticks - local_monotonic_ms, 0)
+			if legacy_deadline_ticks > 0
+			else (max(deadline - now, 0) if deadline > 0 else 0)
+		)
 	)
 	var decision_maximum := int(timer.get("maxDecisionMs", 0))
 	# The cap and actionable anchors are already public opponent timing data.
@@ -160,7 +266,8 @@ func participant_display(player_id: String, local_monotonic_ms: int = Time.get_t
 	# projections without exposing a decision identity or action.
 	if decision_maximum <= 0 and cap_at > actionable and actionable > 0:
 		decision_maximum = cap_at - actionable
-	var state: String = "PAUSED" if mechanically_suspended else _display_state(timer, now, actionable, deadline)
+	var display_deadline := now + effective_remaining if legacy_deadline_ticks > 0 else deadline
+	var state: String = "PAUSED" if mechanically_suspended else _display_state(timer, now, actionable, display_deadline)
 	return {
 		"playerId": player_id,
 		"state": state,

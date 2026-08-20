@@ -1,5 +1,32 @@
 # Changelog
 
+## 0.3.59 - 2026-08-20
+
+**Added**
+
+- An active Aether Blessing now gives 5% better Shiny odds, 5% off at NPC shops, half-price regional Aether Transit, and a second free Aether Anchor. You can see these bonuses in your boost list.
+- Mom now gives you an Ability Capsule from Dadinho when you return home after delivering Oak's Parcel.
+- Added PvP Training Rooms. Paste a team from Poképaste and battle with it without changing your regular party.
+- Timers can now be turned on in Custom and Training Rooms. You can choose Casual, Relaxed, Standard, Fast, Blitz, or Lightning.
+- You can now search the Pokédex by number as well as by name.
+
+**Changed**
+
+- An Ability Patch now unlocks and selects a Pokémon's Hidden Ability. An Ability Capsule can switch between all unlocked Abilities.
+- Timed Custom and Training Rooms now use the Casual timer by default.
+- It is now clearer when a Pokémon Summary is only for viewing. Move information is easier to inspect, and the Bag shows which party members can use the selected item.
+- Global Heal now has a 5-minute cooldown. Its window and choices are also clearer.
+
+**Fixed**
+
+- Training Rooms now use the correct pasted team when switching Pokémon. Team Preview is shown only to the correct player.
+- Fixed several Custom Room timer problems. Finished PvP battles also recover more reliably after a connection problem.
+- Ogerpon now keeps the correct mask, name, move type, and sprite during battles.
+- Global Boost panels now update when another player contributes or activates a boost.
+- Global Heal requests now appear only once per use, even after reconnecting. The icon also shows when Global Heal is active or cooling down.
+- Shared Pokémon teams now fit and line up better in chat.
+- The Aether Clash Lobby now uses the correct outdoor zoom setting.
+
 ## 0.3.58 - 2026-08-19
 
 **Added**

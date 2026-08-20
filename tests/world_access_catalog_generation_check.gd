@@ -42,6 +42,11 @@ func _init() -> void:
 		"Aether Clash Lobby exposes its scene UID independently of the local cache"
 	)
 	_expect(
+		(areas.get("aether_clash_lobby", {}) as Dictionary).get("areaType", "")
+			== "exterior",
+		"Aether Clash Lobby is categorized as an exterior map"
+	)
+	_expect(
 		areas.has("kanto_pewter_city_pokemon_center"),
 		"Inherited Pokémon Center scene metadata is registered"
 	)

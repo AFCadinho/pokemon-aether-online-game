@@ -1,11 +1,11 @@
 {
   "ability-capsule": {
     "name": "Vaardigheidscapsule",
-    "shortDesc": "Schakelt een Pokemon tussen zijn twee mogelijke (niet-verborgen) vaardigheden."
+    "shortDesc": "Wisselt tussen alle ontgrendelde Abilities van een Pokémon, inclusief de Hidden Ability."
   },
   "ability-patch": {
     "name": "Mogelijkheidspatch",
-    "shortDesc": "Een patch waarmee een Pokemon met een normale vaardigheid een zeldzame vaardigheid kan hebben."
+    "shortDesc": "Ontgrendelt permanent de Hidden Ability van een Pokémon en activeert deze meteen."
   },
   "ability-shield": {
     "name": "Vaardigheidsschild",
@@ -97,19 +97,19 @@
   },
   "aether-blessing-voucher-14-days": {
     "name": "Aether Blessing-voucher · 14 dagen",
-    "shortDesc": "Een verhandelbare voucher die veertien dagen toevoegt aan de Aether Blessing van de ontvanger."
+    "shortDesc": "Een verhandelbare voucher voor veertien dagen Aether Blessing met ×1,05 Shiny-kans, 50% reiskorting en twee gratis Anchors."
   },
   "aether-blessing-voucher-3-days": {
     "name": "Aether Blessing-voucher · 3 dagen",
-    "shortDesc": "Een verhandelbare voucher die drie dagen toevoegt aan de Aether Blessing van de ontvanger."
+    "shortDesc": "Een verhandelbare voucher voor drie dagen Aether Blessing met ×1,05 Shiny-kans, 50% reiskorting en twee gratis Anchors."
   },
   "aether-blessing-voucher-30-days": {
     "name": "Aether Blessing-voucher · 30 dagen",
-    "shortDesc": "Een verhandelbare voucher die dertig dagen toevoegt aan de Aether Blessing van de ontvanger."
+    "shortDesc": "Een verhandelbare voucher voor dertig dagen Aether Blessing met ×1,05 Shiny-kans, 50% reiskorting en twee gratis Anchors."
   },
   "aether-blessing-voucher-7-days": {
     "name": "Aether Blessing-voucher · 7 dagen",
-    "shortDesc": "Een verhandelbare voucher die zeven dagen toevoegt aan de Aether Blessing van de ontvanger."
+    "shortDesc": "Een verhandelbare voucher voor zeven dagen Aether Blessing met ×1,05 Shiny-kans, 50% reiskorting en twee gratis Anchors."
   },
   "aether-blossom-chroma-earrings": {
     "name": "Aether Blossom Chroma Earrings",
