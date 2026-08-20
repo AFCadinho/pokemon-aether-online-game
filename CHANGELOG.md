@@ -1,22 +1,47 @@
 # Changelog
 
+## 0.3.59 - 2026-08-20
+
+**Added**
+
+- Active Aether Blessing memberships now grant a 5% Shiny encounter bonus, 50% off regional Aether Transit fares, a second free Aether Anchor, and visible membership benefits in the personal boost tray.
+- Mom now gives you an Ability Capsule from Dadinho when you return home after delivering Oak's Parcel.
+- Added PvP Training Rooms. Trainers can submit a Poképaste team, review it privately, and battle with it without replacing their normal party.
+- Custom and Training Rooms can now use optional battle timers with Casual, Relaxed, Standard, Fast, Blitz, and Lightning presets.
+- The Pokédex can now find Pokémon by Pokédex number as well as by name.
+
+**Changed**
+
+- Ability Patches now permanently unlock and activate a Pokémon's Hidden Ability. Ability Capsules can switch between every unlocked regular and Hidden Ability.
+- Timed Custom and Training Rooms now default to the Casual timer preset, with longer move-selection and reconnect windows.
+- Read-only Pokémon Summaries now make moves easier to inspect and clearly prevent editing actions. Bag item previews also identify which party members are valid targets.
+- Global Heal now has a 5-minute cooldown and uses the shared Aether dialog styling with clearer actions and preferences.
+
+**Fixed**
+
+- Training Room battles now keep submitted teams isolated from normal parties, preserve the correct Pokémon while switching, and show only the appropriate private Team Preview.
+- Fixed Custom Room timers showing stale phases, continuing incorrectly, or resolving the same timeout more than once. Finished PvP battles now also recover more reliably from a stale final snapshot.
+- Ogerpon's masks, form names, move types, battle sprites, and opponent HUD details now remain consistent throughout battles.
+- Alpha Tools now show clearer errors when a generated party cannot be cleared or a generated Pokémon is invalid.
+- Global Boost panels now refresh immediately when another Trainer contributes or activates a boost, and recover automatically from stale contribution state.
+- Global Heal requests now appear only once per activation, including after reconnecting, and the tray icon correctly shows when the service is active or cooling down.
+- Pokémon-only chat shares now keep complete parties inline and position their first sprite closer to the sender without reducing its clickable area.
+- Senior Staff now retain every non-owner staff control when the local permission display is temporarily incomplete or stale.
+- The Aether Clash Lobby now follows the configured outdoor zoom instead of using the fixed interior zoom.
+
 ## 0.3.58 - 2026-08-19
 
 **Added**
 
-- Active Aether Blessing memberships now grant two free Aether Anchors, 50% off regional Aether Transit fares and ×1.05 Shiny encounter odds. Their 5% Shiny and 50% Travel effects appear separately in the personal boost tray, while Blessed remains a membership status on the mini Trainer Card.
-- Mom now gives you an Ability Capsule from Dadinho when you return home after delivering Oak's Parcel.
 - Added the Aether Exchange, a fixed-price marketplace for buying and selling eligible Pokémon and items. Listings can be searched, filtered and sorted, and Pokémon can be inspected through a complete read-only Summary before purchase.
 - Added a secure Account Portal that opens from Account Settings after signing in through the game. Trainers can change their display name, password or email address and manage personal-data exports and account deletion without a separate browser login.
 - Email changes now require confirmation from the new inbox. The current inbox has 72 hours to approve or cancel the request; approval from both addresses applies the change immediately, while no response from the old address allows the verified change to complete after the review window.
 - Chat messages now have context actions for copying the message or its full details, starting a private conversation and sending a friend request.
 - Owned Pokémon can now be given a nickname from their Summary for ₽5,000. Nicknames may contain up to 18 characters, are checked for disallowed content, and appear with species context in battles and battle logs.
-- Added Global Heal: for ₽25,000, a Trainer can offer every online Trainer an optional full-party heal. Requests wait until battles finish, can be declined or disabled, do not award Aetherite, and the service has a 5-minute cooldown.
+- Added Global Heal: for ₽25,000, a Trainer can offer every online Trainer an optional full-party heal. Requests wait until battles finish, can be declined or disabled, do not award Aetherite, and the service has a 15-minute cooldown.
 
 **Changed**
 
-- Ability Patches now permanently unlock and activate a Pokémon's Hidden Ability. Ability Capsules can switch between every unlocked regular and Hidden Ability.
-- Global Heal requests now use the shared Aether dialog styling, with a dimmed backdrop, clear actions and a matching request-preference checkbox.
 - The Aether Exchange now offers detailed Pokémon and item filters, individual IV filters, price, level and date sorting, compact listing cards and clearer confirmations and status feedback.
 - The Pokédex now loads Pokémon progressively while scrolling, opens linked pre-evolutions and evolutions directly, and shows Pokémon HOME artwork in evolution entries.
 - Long chat messages, badges, sender names and shared Pokémon cards now wrap and align more cleanly.
@@ -26,13 +51,6 @@
 
 **Fixed**
 
-- Global Boost panels now refresh immediately when another Trainer contributes or activates a boost, and recover automatically when a stale panel attempts a contribution.
-- Senior Staff now retain every non-owner staff control, including item generation, when the local permission projection is temporarily incomplete or stale.
-- The Aether Clash Lobby now follows the configured outdoor zoom instead of using the fixed interior zoom.
-- Pokémon-only chat shares now keep an entire party on the same line as the sender.
-- Global Heal requests are now shown only once per Trainer for each activation, including after reconnecting.
-- The Global Heal tray icon now lights up while the service is active and cooling down, and stays subdued while it is available to activate.
-- Pokémon-only chat shares now align their first sprite closer to the sender name without shrinking its clickable area.
 - Pokémon Summary cards now show each Pokémon's gender. Existing Pokémon without stored gender data are assigned a stable, species-appropriate gender.
 - Multi-hit attacks now keep HP changes continuous through knockouts instead of briefly restoring or rewinding the target's health.
 - NPC reserve Pokémon remain concealed while team-sidebar animations are playing.
@@ -56,7 +74,7 @@
 - Exp. Share now grants battle experience to eligible party Pokémon.
 - Evolution Stones and all trade-evolution items can now be used directly from the Bag. Linking Cords evolve trade Pokémon without trading and are sold at standard PokéMarts for ₽1,000.
 - Added a configurable Thieving hotkey in Control Settings.
-- Added an Aethernet Beacon menu with a clear explanation of the travel network and Aether Anchor management. Members can set a second free Anchor.
+- Added an Aethernet Beacon menu with a clear explanation of the travel network and Aether Anchor management. Members can set a second Anchor.
 - Abra and Bounsweet starters now receive a Water-, Fire-, or Grass-type Hidden Power, giving them reliable early-game coverage.
 - Protean and similar type-changing effects now show the Pokémon's current type in a coloured battle indicator.
 - Brock's Onix is now Shiny.
