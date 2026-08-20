@@ -42,12 +42,18 @@ func _check_pvp_runtime_translation() -> void:
 	var title := overlay.get("pvp_popup_title_label") as Label
 	var subtitle := overlay.get("pvp_popup_subtitle_label") as Label
 	var ranked_tabs := overlay.get("pvp_ranked_tabs") as TabContainer
+	var room_workspace := overlay.find_child("RoomWorkspace", true, false) as HBoxContainer
+	var room_type_card := overlay.find_child("BattleTypeCard", true, false) as PanelContainer
+	var room_flow_card := overlay.find_child("RoomFlowCard", true, false) as PanelContainer
 	var room_join_button := overlay.get("pvp_room_join_mode_button") as Button
 	var room_create_button := overlay.get("pvp_room_create_mode_button") as Button
+	var room_spectate_button := overlay.get("pvp_room_spectate_mode_button") as Button
 	var casual_button := overlay.get("pvp_room_casual_type_button") as Button
 	var training_button := overlay.get("pvp_room_training_type_button") as Button
 	var room_type_note := overlay.get("pvp_room_type_note") as Label
+	var room_flow_hint := overlay.get("pvp_room_flow_hint") as Label
 	var training_input := overlay.get("pvp_training_team_input") as TextEdit
+	var room_code_input := overlay.get("pvp_room_code_input") as LineEdit
 	var room_form_title := overlay.get("pvp_room_form_title") as Label
 	var room_status := overlay.get("pvp_room_status_label") as Label
 	var format_select := overlay.get("pvp_queue_select") as OptionButton
@@ -60,6 +66,11 @@ func _check_pvp_runtime_translation() -> void:
 	_check(room_join_button != null and room_join_button.text == "Deelnemen", "Private room action renders in Dutch")
 	_check(training_button != null and training_button.text == "Training Room", "Training room selector renders in Dutch")
 	_check(casual_button != null and casual_button.text.begins_with("✓ "), "Default room type is visibly selected")
+	_check(room_workspace != null and room_workspace.get_child_count() == 2, "Room setup uses a clear two-column workflow")
+	_check(room_type_card != null and room_type_card.custom_minimum_size.x >= 280.0, "Battle type has a dedicated setup card")
+	_check(room_flow_card != null, "Room actions have a dedicated workflow card")
+	_check(casual_button.custom_minimum_size.y >= 48.0 and training_button.custom_minimum_size.y >= 48.0, "Battle type cards have comfortable click targets")
+	_check(room_flow_hint != null and room_flow_hint.visible, "Room action card explains the next step before a choice")
 	_check(leaderboard_scope != null and leaderboard_scope.get_item_text(0) == "Dagelijks", "Leaderboard period renders in Dutch")
 	_check_ranked_dropdown_style(format_select, "Matchmaking format")
 	_check_ranked_dropdown_style(leaderboard_scope, "Leaderboard period")
@@ -73,13 +84,20 @@ func _check_pvp_runtime_translation() -> void:
 	_check(room_create_button != null and room_create_button.text == "Training maken", "Training selection changes the create action")
 	room_join_button.emit_signal("pressed")
 	await process_frame
+	_check(not room_flow_hint.visible, "Choosing a room action replaces guidance with its form")
 	_check(training_input != null and training_input.visible, "Training room exposes the paste-only team input")
+	_check(room_code_input.get_index() < training_input.get_index(), "Training join asks for the room code before the team paste")
 	_check(room_form_title != null and room_form_title.text.begins_with("VOER EEN ROOMCODE"), "Training join form explains both required inputs")
 	casual_button.emit_signal("pressed")
 	await process_frame
 	_check(overlay.get("pvp_room_battle_purpose") == "casual", "Custom button signal selects custom mode")
 	_check(not training_input.visible, "Custom selection hides the Pokepaste input")
+	room_spectate_button.emit_signal("pressed")
+	await process_frame
+	_check(room_code_input != null and room_code_input.visible, "Spectate flow keeps the room code field visible")
+	_check(not training_input.visible, "Spectate flow never asks for a Pokepaste team")
 	training_button.emit_signal("pressed")
+	room_join_button.emit_signal("pressed")
 	await process_frame
 	overlay.call("_set_pvp_status_key", "ui.pvp.room.waiting")
 	overlay.set("pvp_active_queue_entry_id", "queue-entry")

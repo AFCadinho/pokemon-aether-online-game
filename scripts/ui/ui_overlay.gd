@@ -746,6 +746,7 @@ var pvp_room_wait_spinner_label: Label
 var pvp_room_casual_type_button: Button
 var pvp_room_training_type_button: Button
 var pvp_room_type_note: Label
+var pvp_room_flow_hint: Label
 var pvp_room_battle_purpose := "casual"
 var pvp_room_mode_selector: HBoxContainer
 var pvp_room_form: VBoxContainer
@@ -5604,15 +5605,70 @@ func _setup_pvp_room_popup() -> void:
 	room_intro.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	room_layout.add_child(room_intro)
 
-	var room_type_label := Label.new()
-	_set_localized_control_property(room_type_label, "text", "ui.pvp.room.type")
-	room_type_label.add_theme_font_size_override("font_size", 11)
-	room_type_label.add_theme_color_override("font_color", Color("#87bce8"))
-	room_layout.add_child(room_type_label)
+	var room_workspace := HBoxContainer.new()
+	room_workspace.name = "RoomWorkspace"
+	room_workspace.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	room_workspace.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	room_workspace.add_theme_constant_override("separation", 12)
+	room_layout.add_child(room_workspace)
 
-	var room_type_selector := HBoxContainer.new()
+	var room_setup_card := PanelContainer.new()
+	room_setup_card.name = "BattleTypeCard"
+	room_setup_card.custom_minimum_size = Vector2(292, 0)
+	room_setup_card.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	room_setup_card.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#0a1726e8"), Color("#294968"), 9, 1)
+	)
+	room_workspace.add_child(room_setup_card)
+
+	var room_setup_margin := MarginContainer.new()
+	room_setup_margin.add_theme_constant_override("margin_left", 14)
+	room_setup_margin.add_theme_constant_override("margin_top", 14)
+	room_setup_margin.add_theme_constant_override("margin_right", 14)
+	room_setup_margin.add_theme_constant_override("margin_bottom", 14)
+	room_setup_card.add_child(room_setup_margin)
+
+	var room_setup_layout := VBoxContainer.new()
+	room_setup_layout.add_theme_constant_override("separation", 10)
+	room_setup_margin.add_child(room_setup_layout)
+
+	var room_type_step := Label.new()
+	_set_localized_control_property(room_type_step, "text", "ui.pvp.room.step_type")
+	room_type_step.add_theme_font_size_override("font_size", 10)
+	room_type_step.add_theme_color_override("font_color", Color("#79c8ff"))
+	room_setup_layout.add_child(room_type_step)
+
+	var room_type_heading := Label.new()
+	_set_localized_control_property(room_type_heading, "text", "ui.pvp.room.choose_type")
+	room_type_heading.add_theme_font_size_override("font_size", 16)
+	room_type_heading.add_theme_color_override("font_color", UI_TEXT)
+	room_setup_layout.add_child(room_type_heading)
+
+	var room_flow_card := PanelContainer.new()
+	room_flow_card.name = "RoomFlowCard"
+	room_flow_card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	room_flow_card.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	room_flow_card.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#081421ed"), Color("#35597a"), 9, 1)
+	)
+	room_workspace.add_child(room_flow_card)
+
+	var room_flow_margin := MarginContainer.new()
+	room_flow_margin.add_theme_constant_override("margin_left", 14)
+	room_flow_margin.add_theme_constant_override("margin_top", 14)
+	room_flow_margin.add_theme_constant_override("margin_right", 14)
+	room_flow_margin.add_theme_constant_override("margin_bottom", 14)
+	room_flow_card.add_child(room_flow_margin)
+
+	var room_flow_layout := VBoxContainer.new()
+	room_flow_layout.add_theme_constant_override("separation", 10)
+	room_flow_margin.add_child(room_flow_layout)
+
+	var room_type_selector := VBoxContainer.new()
 	room_type_selector.add_theme_constant_override("separation", 8)
-	room_layout.add_child(room_type_selector)
+	room_setup_layout.add_child(room_type_selector)
 	var room_type_group := ButtonGroup.new()
 	room_type_group.allow_unpress = false
 
@@ -5621,6 +5677,7 @@ func _setup_pvp_room_popup() -> void:
 	pvp_room_casual_type_button.toggle_mode = true
 	pvp_room_casual_type_button.button_group = room_type_group
 	pvp_room_casual_type_button.button_pressed = true
+	pvp_room_casual_type_button.custom_minimum_size = Vector2(0, 50)
 	pvp_room_casual_type_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_room_casual_type_button.pressed.connect(_on_pvp_room_battle_purpose_selected.bind("casual"))
 	room_type_selector.add_child(pvp_room_casual_type_button)
@@ -5629,6 +5686,7 @@ func _setup_pvp_room_popup() -> void:
 	_set_localized_control_property(pvp_room_training_type_button, "text", "ui.pvp.room.type.training")
 	pvp_room_training_type_button.toggle_mode = true
 	pvp_room_training_type_button.button_group = room_type_group
+	pvp_room_training_type_button.custom_minimum_size = Vector2(0, 50)
 	pvp_room_training_type_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_room_training_type_button.pressed.connect(_on_pvp_room_battle_purpose_selected.bind("training"))
 	room_type_selector.add_child(pvp_room_training_type_button)
@@ -5638,15 +5696,22 @@ func _setup_pvp_room_popup() -> void:
 	pvp_room_type_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pvp_room_type_note.add_theme_font_size_override("font_size", 11)
 	pvp_room_type_note.add_theme_color_override("font_color", Color("#9be7b1"))
-	room_layout.add_child(pvp_room_type_note)
+	room_setup_layout.add_child(pvp_room_type_note)
 
 	var room_separator := HSeparator.new()
 	room_separator.add_theme_constant_override("separation", 4)
-	room_layout.add_child(room_separator)
+	room_setup_layout.add_child(room_separator)
+
+	var room_private_note := Label.new()
+	_set_localized_control_property(room_private_note, "text", "ui.pvp.room.private_note")
+	room_private_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	room_private_note.add_theme_font_size_override("font_size", 10)
+	room_private_note.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	room_setup_layout.add_child(room_private_note)
 
 	var room_status_card := PanelContainer.new()
-	room_status_card.add_theme_stylebox_override("panel", _make_panel_style(Color("#0b1a2ce8"), Color("#294968"), 7, 1))
-	room_layout.add_child(room_status_card)
+	room_status_card.add_theme_stylebox_override("panel", _make_panel_style(Color("#0c2033e8"), Color("#3d7096"), 8, 1))
+	room_flow_layout.add_child(room_status_card)
 
 	var room_status_margin := MarginContainer.new()
 	room_status_margin.add_theme_constant_override("margin_left", 12)
@@ -5683,40 +5748,58 @@ func _setup_pvp_room_popup() -> void:
 	room_status_row.add_child(pvp_room_wait_spinner_label)
 
 	var room_choice_label := Label.new()
-	_set_localized_control_property(room_choice_label, "text", "ui.pvp.room.choice")
-	room_choice_label.add_theme_font_size_override("font_size", 11)
-	room_choice_label.add_theme_color_override("font_color", Color("#87bce8"))
-	room_layout.add_child(room_choice_label)
+	_set_localized_control_property(room_choice_label, "text", "ui.pvp.room.step_action")
+	room_choice_label.add_theme_font_size_override("font_size", 10)
+	room_choice_label.add_theme_color_override("font_color", Color("#79c8ff"))
+	room_flow_layout.add_child(room_choice_label)
+
+	var room_action_heading := Label.new()
+	_set_localized_control_property(room_action_heading, "text", "ui.pvp.room.choose_action")
+	room_action_heading.add_theme_font_size_override("font_size", 16)
+	room_action_heading.add_theme_color_override("font_color", UI_TEXT)
+	room_flow_layout.add_child(room_action_heading)
 
 	pvp_room_mode_selector = HBoxContainer.new()
 	pvp_room_mode_selector.add_theme_constant_override("separation", 8)
-	room_layout.add_child(pvp_room_mode_selector)
+	room_flow_layout.add_child(pvp_room_mode_selector)
 
 	pvp_room_create_mode_button = Button.new()
 	_set_localized_control_property(pvp_room_create_mode_button, "text", "ui.pvp.room.create")
-	pvp_room_create_mode_button.custom_minimum_size = Vector2(130, 38)
+	pvp_room_create_mode_button.custom_minimum_size = Vector2(0, 42)
+	pvp_room_create_mode_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_room_create_mode_button.focus_mode = Control.FOCUS_NONE
 	pvp_room_create_mode_button.pressed.connect(_on_pvp_room_mode_selected.bind("create"))
 	pvp_room_mode_selector.add_child(pvp_room_create_mode_button)
 
 	pvp_room_join_mode_button = Button.new()
 	_set_localized_control_property(pvp_room_join_mode_button, "text", "ui.pvp.room.join")
-	pvp_room_join_mode_button.custom_minimum_size = Vector2(118, 38)
+	pvp_room_join_mode_button.custom_minimum_size = Vector2(0, 42)
+	pvp_room_join_mode_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_room_join_mode_button.focus_mode = Control.FOCUS_NONE
 	pvp_room_join_mode_button.pressed.connect(_on_pvp_room_mode_selected.bind("join"))
 	pvp_room_mode_selector.add_child(pvp_room_join_mode_button)
 
 	pvp_room_spectate_mode_button = Button.new()
 	_set_localized_control_property(pvp_room_spectate_mode_button, "text", "ui.pvp.room.spectate")
-	pvp_room_spectate_mode_button.custom_minimum_size = Vector2(104, 38)
+	pvp_room_spectate_mode_button.custom_minimum_size = Vector2(106, 42)
 	pvp_room_spectate_mode_button.focus_mode = Control.FOCUS_NONE
 	pvp_room_spectate_mode_button.pressed.connect(_on_pvp_room_mode_selected.bind("spectate"))
 	pvp_room_mode_selector.add_child(pvp_room_spectate_mode_button)
 
+	pvp_room_flow_hint = Label.new()
+	_set_localized_control_property(pvp_room_flow_hint, "text", "ui.pvp.room.flow_hint.casual")
+	pvp_room_flow_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pvp_room_flow_hint.add_theme_font_size_override("font_size", 12)
+	pvp_room_flow_hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	pvp_room_flow_hint.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pvp_room_flow_hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	room_flow_layout.add_child(pvp_room_flow_hint)
+
 	pvp_room_form = VBoxContainer.new()
 	pvp_room_form.add_theme_constant_override("separation", 10)
+	pvp_room_form.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	pvp_room_form.visible = false
-	room_layout.add_child(pvp_room_form)
+	room_flow_layout.add_child(pvp_room_form)
 
 	pvp_room_form_title = Label.new()
 	pvp_room_form_title.add_theme_font_size_override("font_size", 11)
@@ -5767,6 +5850,7 @@ func _setup_pvp_room_popup() -> void:
 	pvp_create_room_button = Button.new()
 	_set_localized_control_property(pvp_create_room_button, "text", "ui.pvp.room.create")
 	pvp_create_room_button.custom_minimum_size = Vector2(112, 34)
+	pvp_create_room_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_set_localized_control_property(pvp_create_room_button, "tooltip_text", "ui.pvp.room.create_tooltip")
 	pvp_create_room_button.focus_mode = Control.FOCUS_NONE
 	pvp_create_room_button.pressed.connect(_on_pvp_create_room_pressed)
@@ -5775,6 +5859,7 @@ func _setup_pvp_room_popup() -> void:
 	pvp_cancel_room_button = Button.new()
 	_set_localized_control_property(pvp_cancel_room_button, "text", "ui.pvp.room.cancel")
 	pvp_cancel_room_button.custom_minimum_size = Vector2(112, 34)
+	pvp_cancel_room_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_cancel_room_button.focus_mode = Control.FOCUS_NONE
 	_set_localized_control_property(pvp_cancel_room_button, "tooltip_text", "ui.pvp.room.cancel_tooltip")
 	pvp_cancel_room_button.visible = false
@@ -5784,6 +5869,7 @@ func _setup_pvp_room_popup() -> void:
 	pvp_join_room_button = Button.new()
 	_set_localized_control_property(pvp_join_room_button, "text", "ui.pvp.room.join")
 	pvp_join_room_button.custom_minimum_size = Vector2(100, 34)
+	pvp_join_room_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_set_localized_control_property(pvp_join_room_button, "tooltip_text", "ui.pvp.room.join_tooltip")
 	pvp_join_room_button.focus_mode = Control.FOCUS_NONE
 	pvp_join_room_button.pressed.connect(_on_pvp_join_room_pressed)
@@ -5792,6 +5878,7 @@ func _setup_pvp_room_popup() -> void:
 	pvp_spectate_room_button = Button.new()
 	_set_localized_control_property(pvp_spectate_room_button, "text", "ui.pvp.room.spectate")
 	pvp_spectate_room_button.custom_minimum_size = Vector2(92, 34)
+	pvp_spectate_room_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_set_localized_control_property(pvp_spectate_room_button, "tooltip_text", "ui.pvp.room.spectate_tooltip")
 	pvp_spectate_room_button.focus_mode = Control.FOCUS_NONE
 	pvp_spectate_room_button.pressed.connect(_on_pvp_spectate_room_pressed)
@@ -5807,7 +5894,7 @@ func _setup_pvp_room_popup() -> void:
 
 	var room_spacer := Control.new()
 	room_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	room_layout.add_child(room_spacer)
+	room_setup_layout.add_child(room_spacer)
 
 	var rules_tab_page := _create_pvp_ranked_tab_page("Rules")
 	ranked_tabs.add_child(rules_tab_page)
@@ -6099,12 +6186,14 @@ func _setup_pvp_room_popup() -> void:
 
 	_apply_button_style(pvp_create_room_button, "primary")
 	_apply_button_style(pvp_cancel_room_button, "danger")
-	_apply_button_style(pvp_join_room_button)
+	_apply_button_style(pvp_join_room_button, "primary")
 	_apply_button_style(pvp_spectate_room_button)
 	_apply_button_style(pvp_copy_code_button)
 	_apply_button_style(pvp_room_create_mode_button, "primary")
 	_apply_button_style(pvp_room_join_mode_button)
 	_apply_button_style(pvp_room_spectate_mode_button)
+	_apply_pvp_room_type_button_style(pvp_room_casual_type_button)
+	_apply_pvp_room_type_button_style(pvp_room_training_type_button)
 	_refresh_pvp_room_battle_purpose_ui()
 	_apply_button_style(pvp_join_queue_button, "primary")
 	_apply_button_style(pvp_leave_queue_button)
@@ -23872,6 +23961,17 @@ func _apply_button_style(button: Button, variant: String = "default") -> void:
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 
+func _apply_pvp_room_type_button_style(button: Button) -> void:
+	if button == null:
+		return
+	_apply_button_style(button)
+	button.add_theme_color_override("font_pressed_color", Color("#f7e6a8"))
+	button.add_theme_stylebox_override(
+		"pressed",
+		_make_button_style(Color("#173247f2"), Color("#79c8ff"), 8, 2)
+	)
+
+
 func _apply_global_buff_fill_remaining_button_style() -> void:
 	var button := global_buff_fill_remaining_button
 	if button == null:
@@ -36059,6 +36159,8 @@ func _heal_party_before_pvp(action_label: String = "PvP") -> bool:
 func _on_pvp_room_mode_selected(mode: String) -> void:
 	pvp_room_selected_mode = mode
 	pvp_room_form.visible = true
+	if pvp_room_flow_hint != null:
+		pvp_room_flow_hint.visible = false
 	_refresh_pvp_room_team_fields()
 	pvp_allow_spectators_check.visible = mode == "create"
 	pvp_create_room_button.visible = mode == "create"
@@ -36110,6 +36212,12 @@ func _refresh_pvp_room_battle_purpose_ui() -> void:
 			"text",
 			"ui.pvp.room.type.training_note" if is_training else "ui.pvp.room.type.casual_note"
 		)
+	if pvp_room_flow_hint != null:
+		_set_localized_control_property(
+			pvp_room_flow_hint,
+			"text",
+			"ui.pvp.room.flow_hint.training" if is_training else "ui.pvp.room.flow_hint.casual"
+		)
 	var create_key := "ui.pvp.training.create" if is_training else "ui.pvp.room.create"
 	var join_key := "ui.pvp.training.join" if is_training else "ui.pvp.room.join"
 	for create_button: Button in [pvp_room_create_mode_button, pvp_create_room_button]:
@@ -36125,8 +36233,12 @@ func _refresh_pvp_room_team_fields() -> void:
 	var is_training := pvp_room_battle_purpose == "training"
 	if pvp_room_code_input != null:
 		pvp_room_code_input.visible = pvp_room_selected_mode != "create"
+		if pvp_room_form != null and pvp_room_selected_mode in ["join", "spectate"]:
+			pvp_room_form.move_child(pvp_room_code_input, 1)
 	if pvp_training_team_input != null:
 		pvp_training_team_input.visible = needs_team and is_training
+		if pvp_room_form != null and pvp_room_selected_mode == "create":
+			pvp_room_form.move_child(pvp_training_team_input, 1)
 	if pvp_training_team_note != null:
 		pvp_training_team_note.visible = needs_team and is_training
 
@@ -36258,6 +36370,8 @@ func _on_pvp_cancel_room_pressed() -> void:
 	pvp_room_mode_selector.visible = true
 	_set_pvp_room_type_locked(false)
 	pvp_room_form.visible = false
+	if pvp_room_flow_hint != null:
+		pvp_room_flow_hint.visible = true
 	pvp_room_selected_mode = ""
 	_set_pvp_status_key("ui.pvp.room.cancelled")
 
@@ -38493,6 +38607,8 @@ func _start_pvp_battle_from_response(response: Dictionary) -> void:
 		pvp_room_mode_selector.visible = true
 	if pvp_room_form != null:
 		pvp_room_form.visible = false
+	if pvp_room_flow_hint != null:
+		pvp_room_flow_hint.visible = true
 	_set_pvp_room_type_locked(false)
 	pvp_room_selected_mode = ""
 	_set_pvp_queue_status_key("ui.pvp.queue.ready")
