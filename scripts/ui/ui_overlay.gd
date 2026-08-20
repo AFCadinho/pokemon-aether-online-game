@@ -109,6 +109,7 @@ const PC_PARTY_HOVER_CARD_SCENE: PackedScene = preload("res://scenes/battle/part
 const POKEMON_GENDER_DISPLAY := preload("res://scripts/ui/pokemon_gender_display.gd")
 const POKEMON_SUMMARY_MOVE_REORDER_SLOT_SCRIPT := preload("res://scripts/ui/pokemon_summary_move_reorder_slot.gd")
 const HELD_ITEM_DROP_TARGET_BUTTON_SCRIPT := preload("res://scripts/ui/held_item_drop_target_button.gd")
+const ALPHA_TOOLS_ERROR_FEEDBACK := preload("res://scripts/services/alpha_tools_error_feedback.gd")
 const TOWN_MAP_POPUP_SCRIPT := preload("res://scripts/ui/town_map_popup.gd")
 const MOUNT_LOADOUT_PANEL_SCENE: PackedScene = preload("res://scenes/interface/mount_loadout_panel.tscn")
 const SKILLS_PANEL_SCENE: PackedScene = preload("res://scenes/interface/skills_panel.tscn")
@@ -26986,7 +26987,12 @@ func _handle_content_creator_add_pokemon_command(pokemon_text: String) -> bool:
 	for pokemon_data: Dictionary in parsed_pokemon_payloads:
 		var create_result: Dictionary = await PlayerPartyStateService.content_creator_create_pokemon(pokemon_data, true)
 		if not bool(create_result.get("success", false)):
-			_add_chat_message("Created %s Pokemon, then failed: %s" % [created_count, str(create_result.get("error", "Unknown error"))])
+			_add_chat_message(ALPHA_TOOLS_ERROR_FEEDBACK.team_creation_failure(
+				created_count,
+				created_count + 1,
+				pokemon_data,
+				create_result
+			))
 			return false
 		created_count += 1
 

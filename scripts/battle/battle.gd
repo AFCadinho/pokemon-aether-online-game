@@ -30,6 +30,7 @@ const BATTLE_PUBLIC_POKEMON_KNOWLEDGE := preload("res://scripts/battle/battle_pu
 const OPPONENT_PARTY_REVEAL_POLICY := preload("res://scripts/battle/opponent_party_reveal_policy.gd")
 const BATTLE_VOICE_TIMING := preload("res://scripts/battle/battle_voice_timing.gd")
 const BATTLE_ENVIRONMENT_CATALOG := preload("res://scripts/battle/battle_environment_catalog.gd")
+const OGERPON_BATTLE_FORM := preload("res://scripts/battle/ogerpon_battle_form.gd")
 const TYPE_CHANGE_BADGE_COLORS := {
 	"bug": Color("#85a114"), "dark": Color("#403847"), "dragon": Color("#4d52c4"),
 	"electric": Color("#e0ad14"), "fairy": Color("#d163a3"), "fighting": Color("#b83338"),
@@ -918,6 +919,11 @@ func _get_owned_party_hover_data(pokemon_data: Dictionary) -> Dictionary:
 		hover_data["maxHp"] = saved_pokemon.max_hp
 
 	_apply_temporary_form_party_hover_data(hover_data, display_data, saved_pokemon)
+	var battle_species := str(display_data.get(
+		"displaySpecies",
+		display_data.get("species", saved_pokemon.species)
+	))
+	OGERPON_BATTLE_FORM.apply_to_display_data(hover_data, battle_species, saved_pokemon.item)
 	if display_data.has("item"):
 		var display_item: Variant = display_data.get("item")
 		if display_item is String:
@@ -3664,6 +3670,11 @@ func _update_move_slots() -> void:
 func _get_display_moves_for_selected_mechanic() -> Array:
 	var local_state_player_id := _get_local_state_player_id()
 	var base_moves: Array = battle_state.get_available_moves(local_state_player_id)
+	base_moves = OGERPON_BATTLE_FORM.apply_ivy_cudgel_type(
+		base_moves,
+		_get_active_display_species(local_state_player_id),
+		active_player_pokemon.item if active_player_pokemon != null else ""
+	)
 	if not z_move_selected:
 		return base_moves
 
