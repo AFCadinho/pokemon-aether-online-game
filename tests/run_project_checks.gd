@@ -9,6 +9,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/party_slot_context_menu_check.gd",
 	"res://tests/trainer_interaction_ownership_check.gd",
 	"res://tests/battle_party_slot_resolver_check.gd",
+	"res://tests/training_room_battle_team_contract_check.gd",
 	"res://tests/battle_event_text_formatter_check.gd",
 	"res://tests/battle_message_timing_check.gd",
 	"res://tests/battle_event_presentation_check.gd",
