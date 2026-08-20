@@ -16,6 +16,7 @@ var participants: Dictionary = {}
 var server_anchor_ms := 0
 var monotonic_anchor_ms := 0
 var contract_enabled := false
+var legacy_enabled := false
 var mechanically_suspended := false
 var reconnect_paused := false
 var reconnect_frozen_server_ms := 0
@@ -30,13 +31,14 @@ func reset() -> void:
 	server_anchor_ms = 0
 	monotonic_anchor_ms = 0
 	contract_enabled = false
+	legacy_enabled = false
 	mechanically_suspended = false
 	reconnect_paused = false
 	reconnect_frozen_server_ms = 0
 
 
 func should_present(is_pvp_battle: bool, debug_visibility_override: bool = true) -> bool:
-	return is_pvp_battle and contract_enabled and debug_visibility_override
+	return is_pvp_battle and (contract_enabled or legacy_enabled) and debug_visibility_override
 
 
 func has_advanced_beyond_team_preview() -> bool:
@@ -64,6 +66,61 @@ func apply_snapshot(snapshot: Dictionary, local_monotonic_ms: int = Time.get_tic
 	participants = (snapshot.get("participants", {}) as Dictionary).duplicate(true)
 	_sample_server_time(_server_ms(snapshot), local_monotonic_ms, true)
 	contract_enabled = authority in [BATTLE_BANK_V1_SHADOW, BATTLE_BANK_V1_AUTHORITY]
+	if contract_enabled:
+		legacy_enabled = false
+	return true
+
+
+func apply_legacy_snapshot(timers_value: Variant, enabled: bool) -> bool:
+	if contract_enabled:
+		return false
+	legacy_enabled = enabled
+	authority = LEGACY_AUTHORITY
+	participants = {
+		"p1": {"status": "WAITING"},
+		"p2": {"status": "WAITING"},
+	}
+	if not enabled or not (timers_value is Array):
+		return true
+	for timer_value: Variant in timers_value:
+		if timer_value is Dictionary:
+			_apply_legacy_timer(timer_value as Dictionary)
+	return true
+
+
+func apply_legacy_event(event: Dictionary) -> bool:
+	if contract_enabled:
+		return false
+	var payload_value: Variant = event.get("payload", event)
+	if not (payload_value is Dictionary):
+		return false
+	legacy_enabled = true
+	authority = LEGACY_AUTHORITY
+	return _apply_legacy_timer(payload_value as Dictionary)
+
+
+func _apply_legacy_timer(timer: Dictionary) -> bool:
+	var side := str(timer.get("activeSide", timer.get("side", ""))).strip_edges().to_lower()
+	if side not in ["p1", "p2"]:
+		return false
+	var status := str(timer.get("status", timer.get("timerStatus", "active"))).strip_edges().to_lower()
+	var phase := str(timer.get("phase", "turn")).strip_edges().to_lower()
+	var decision_kind := "TEAM_PREVIEW" if phase in ["team_preview", "team-preview"] else (
+		"FORCED_SWITCH" if phase == "force_switch" else "MOVE_SELECTION"
+	)
+	if status in ["consumed", "cancelled", "stopped"]:
+		participants[side] = {"status": "WAITING", "decisionKind": decision_kind}
+		return true
+	var duration_ms := maxi(int(timer.get("durationSeconds", 90)) * 1000, 1000)
+	participants[side] = {
+		"status": "EXPIRED" if status == "expired" else "RUNNING",
+		"decisionKind": decision_kind,
+		"deadlineAt": str(timer.get("deadlineAt", "")),
+		"maxDecisionMs": duration_ms,
+	}
+	var server_ms := _server_ms(timer)
+	if server_ms > 0:
+		_sample_server_time(server_ms, Time.get_ticks_msec(), server_anchor_ms == 0)
 	return true
 
 

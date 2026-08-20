@@ -72,7 +72,8 @@ func create_pvp_room(
 	allow_spectators: bool = false,
 	max_spectators: int = 8,
 	battle_purpose: String = "casual",
-	team_text: String = ""
+	team_text: String = "",
+	timer_enabled: bool = false
 ) -> Dictionary:
 	return await send_post_request(
 		request_node,
@@ -84,6 +85,7 @@ func create_pvp_room(
 			"teamText": team_text,
 			"allowSpectators": allow_spectators,
 			"maxSpectators": clampi(max_spectators, 1, 32),
+			"timerEnabled": timer_enabled,
 		}
 	)
 

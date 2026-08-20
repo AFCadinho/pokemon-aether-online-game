@@ -56,6 +56,23 @@ func _init() -> void:
 	projection.reset()
 	_check(not projection.contract_enabled, "reset removes stale projection eligibility")
 	_check(not projection.should_present(true), "battle without a valid projection remains hidden")
+	_check(projection.apply_legacy_snapshot([
+		{
+			"activeSide": "p1",
+			"phase": "team_preview",
+			"status": "active",
+			"durationSeconds": 90,
+			"deadlineAt": "1970-01-01T00:01:40Z",
+			"serverNow": "1970-01-01T00:00:10Z",
+		},
+	], true), "enabled legacy timer snapshot applies")
+	_check(projection.should_present(true), "enabled legacy room timer is presented")
+	_check_equal(projection.participant_display("p1", projection.monotonic_anchor_ms).get("state"), "DECIDING", "legacy timer opens a decision countdown")
+	_check_equal(projection.participant_display("p1", projection.monotonic_anchor_ms).get("effectiveDecisionRemainingMs"), 90000, "legacy timer uses the server deadline")
+	_check(projection.apply_legacy_event({"payload": {"side": "p1", "phase": "team_preview", "timerStatus": "consumed"}}), "legacy consumed event applies")
+	_check_equal(projection.participant_display("p1").get("state"), "WAITING", "consumed legacy timer stops counting")
+	projection.apply_legacy_snapshot([], false)
+	_check(not projection.should_present(true), "disabled legacy room timer stays hidden")
 	print("PASS battle_timer_projection_check")
 	quit(0)
 

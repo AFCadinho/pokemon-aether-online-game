@@ -3144,6 +3144,8 @@
   "ui.pvp.training.paste_invalid": "Het trainingsteam kon niet worden geïmporteerd. Controleer de Poképaste en probeer opnieuw.",
   "ui.pvp.training.team_preview": "JOUW TRAININGSTEAM  ·  {count}/6",
   "ui.pvp.room.allow_spectators": "Privétoeschouwers toestaan  ·  {state}",
+  "ui.pvp.room.timer": "Keuzetimer (90 seconden)  ·  {state}",
+  "ui.pvp.room.timer_tooltip": "Geef iedere speler 90 seconden voor Team Preview, zetten en verplichte wissels.",
   "ui.pvp.state.on": "AAN",
   "ui.pvp.state.off": "UIT",
   "ui.pvp.room.ready": "Klaar.",

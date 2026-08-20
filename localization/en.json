@@ -3144,6 +3144,8 @@
   "ui.pvp.training.paste_invalid": "The training team could not be imported. Check the Pokepaste and try again.",
   "ui.pvp.training.team_preview": "YOUR TRAINING TEAM  ·  {count}/6",
   "ui.pvp.room.allow_spectators": "Allow private spectators  ·  {state}",
+  "ui.pvp.room.timer": "Decision timer (90 seconds)  ·  {state}",
+  "ui.pvp.room.timer_tooltip": "Give each player 90 seconds for Team Preview, move choices, and forced switches.",
   "ui.pvp.state.on": "ON",
   "ui.pvp.state.off": "OFF",
   "ui.pvp.room.ready": "Ready.",
