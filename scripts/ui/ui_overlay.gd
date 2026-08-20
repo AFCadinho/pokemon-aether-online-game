@@ -31271,7 +31271,7 @@ func _show_dev_add_money_popup() -> void:
 	dev_money_amount_spinbox.value = 1000
 	dev_add_money_popup.visible = true
 	_activate_ui_panel(dev_add_money_popup)
-	dev_money_amount_spinbox.grab_focus.call_deferred()
+	dev_money_amount_spinbox.get_line_edit().grab_focus.call_deferred()
 
 func _hide_dev_add_money_popup() -> void:
 	dev_add_money_popup.visible = false
