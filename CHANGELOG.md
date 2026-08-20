@@ -4,7 +4,7 @@
 
 **Added**
 
-- Active Aether Blessing memberships now clearly show their ×1.05 Shiny encounter multiplier in the Store and Bag, as a dedicated Blessed status on the mini Trainer Card, and as a clean, compact 5% Shiny effect in the personal boost tray.
+- Active Aether Blessing memberships now grant two free Aether Anchors, 50% off regional Aether Transit fares and ×1.05 Shiny encounter odds. Their 5% Shiny and 50% Travel effects appear separately in the personal boost tray, while Blessed remains a membership status on the mini Trainer Card.
 - Added the Aether Exchange, a fixed-price marketplace for buying and selling eligible Pokémon and items. Listings can be searched, filtered and sorted, and Pokémon can be inspected through a complete read-only Summary before purchase.
 - Added a secure Account Portal that opens from Account Settings after signing in through the game. Trainers can change their display name, password or email address and manage personal-data exports and account deletion without a separate browser login.
 - Email changes now require confirmation from the new inbox. The current inbox has 72 hours to approve or cancel the request; approval from both addresses applies the change immediately, while no response from the old address allows the verified change to complete after the review window.
@@ -46,7 +46,7 @@
 - Exp. Share now grants battle experience to eligible party Pokémon.
 - Evolution Stones and all trade-evolution items can now be used directly from the Bag. Linking Cords evolve trade Pokémon without trading and are sold at standard PokéMarts for ₽1,000.
 - Added a configurable Thieving hotkey in Control Settings.
-- Added an Aethernet Beacon menu with a clear explanation of the travel network and Aether Anchor management. Members can set a second Anchor.
+- Added an Aethernet Beacon menu with a clear explanation of the travel network and Aether Anchor management. Members can set a second free Anchor.
 - Abra and Bounsweet starters now receive a Water-, Fire-, or Grass-type Hidden Power, giving them reliable early-game coverage.
 - Protean and similar type-changing effects now show the Pokémon's current type in a coloured battle indicator.
 - Brock's Onix is now Shiny.
