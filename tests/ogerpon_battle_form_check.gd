@@ -11,7 +11,8 @@ func _init() -> void:
 	_check_base_form()
 	_check_non_ogerpon_is_untouched()
 	_check_ivy_cudgel_type_is_battle_only()
-	_check_wellspring_sprite_is_available()
+	_check_mask_battle_sprites_are_available()
+	_check_initial_battle_setup_uses_mask_form()
 	quit(1 if failed else 0)
 
 
@@ -55,11 +56,48 @@ func _check_ivy_cudgel_type_is_battle_only() -> void:
 	_check_equal(source_moves[0].get("type"), "grass", "the saved move metadata remains unchanged")
 
 
-func _check_wellspring_sprite_is_available() -> void:
+func _check_mask_battle_sprites_are_available() -> void:
+	var battle_species := {
+		"Ogerpon": "ogerpon",
+		"Ogerpon Wellspring": "ogerpon-wellspring",
+		"Ogerpon Hearthflame": "ogerpon-hearthflame",
+		"Ogerpon Cornerstone": "ogerpon-cornerstone",
+	}
+	for species: String in battle_species:
+		var asset_id := str(battle_species[species])
+		_check_equal(
+			PokemonAssets.get_battle_sprite_ids(species).has(asset_id),
+			true,
+			"%s resolves to its canonical battle asset" % species
+		)
+		for side: String in ["front", "back"]:
+			var texture := PokemonAssets.load_texture(
+				"res://assets/sprites/pokemon/%s/%s/frame_000.png" % [side, asset_id]
+			)
+			var expected_size := Vector2(192, 192) if side == "front" else Vector2(288, 288)
+			_check_equal(
+				texture.get_size() if texture != null else Vector2.ZERO,
+				expected_size,
+				"%s uses the Gen 9 %s battle asset instead of a HOME fallback" % [species, side]
+			)
+
+
+func _check_initial_battle_setup_uses_mask_form() -> void:
+	var battle_source := FileAccess.get_file_as_string("res://scripts/battle/battle.gd")
 	_check_equal(
-		PokemonAssets.load_home_sprite("Ogerpon-Wellspring") != null,
+		battle_source.contains("func _get_saved_pokemon_battle_boundary_species("),
 		true,
-		"Wellspring battle display has a form-specific sprite fallback"
+		"battle setup exposes a held-mask boundary resolver"
+	)
+	_check_equal(
+		battle_source.count("_get_saved_pokemon_battle_boundary_species(") >= 5,
+		true,
+		"wild and trainer setup resolve Ogerpon before their first sprite render"
+	)
+	_check_equal(
+		battle_source.contains('player_sprite_box.set_single_pokemon(player_pokemon, "back")'),
+		false,
+		"initial setup never renders the saved base Ogerpon before resolving its mask"
 	)
 
 
