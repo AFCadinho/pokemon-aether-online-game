@@ -16,6 +16,7 @@
 **Changed**
 
 - Ability Patches now permanently unlock and activate a Pokémon's Hidden Ability. Ability Capsules can switch between every unlocked regular and Hidden Ability.
+- Global Heal requests now use the shared Aether dialog styling, with a dimmed backdrop, clear actions and a matching request-preference checkbox.
 - The Aether Exchange now offers detailed Pokémon and item filters, individual IV filters, price, level and date sorting, compact listing cards and clearer confirmations and status feedback.
 - The Pokédex now loads Pokémon progressively while scrolling, opens linked pre-evolutions and evolutions directly, and shows Pokémon HOME artwork in evolution entries.
 - Long chat messages, badges, sender names and shared Pokémon cards now wrap and align more cleanly.
