@@ -73,7 +73,8 @@ func create_pvp_room(
 	max_spectators: int = 8,
 	battle_purpose: String = "casual",
 	team_text: String = "",
-	timer_enabled: bool = false
+	timer_enabled: bool = false,
+	timer_tier_id: String = "standard_v1"
 ) -> Dictionary:
 	return await send_post_request(
 		request_node,
@@ -86,6 +87,7 @@ func create_pvp_room(
 			"allowSpectators": allow_spectators,
 			"maxSpectators": clampi(max_spectators, 1, 32),
 			"timerEnabled": timer_enabled,
+			"timerTierId": timer_tier_id,
 			"metadata": {"clientCapabilities": {
 				"timerContractVersions": [1],
 				"decisionContractVersions": [1],

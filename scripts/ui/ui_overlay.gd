@@ -126,6 +126,14 @@ const PVP_MODE_CUSTOM_ICON: Texture2D = preload("res://assets/ui/pvp_custom_batt
 const PVP_MODE_TOURNAMENT_ICON: Texture2D = preload("res://assets/ui/pvp_tournament.svg")
 const PVP_QUEUE_BALL_ROTATION_SPEED := 3.4
 const PVP_QUEUE_BALL_SPIN_SHADER: Shader = preload("res://shaders/ui/pvp_queue_ball_spin.gdshader")
+const PVP_TIMER_TIERS: Array[Dictionary] = [
+	{"id": "relaxed_v1", "label": "ui.pvp.room.timer_tier.relaxed"},
+	{"id": "standard_v1", "label": "ui.pvp.room.timer_tier.standard"},
+	{"id": "fast_v1", "label": "ui.pvp.room.timer_tier.fast"},
+	{"id": "blitz_v1", "label": "ui.pvp.room.timer_tier.blitz"},
+	{"id": "lightning_v1", "label": "ui.pvp.room.timer_tier.lightning"},
+]
+const PVP_DEFAULT_TIMER_TIER_ID := "standard_v1"
 const SOCIALS_FRIENDS_ICON: Texture2D = preload("res://assets/ui/friendlist.svg")
 const SOCIALS_NEARBY_ICON: Texture2D = preload("res://assets/ui/socials_nearby.svg")
 const SOCIALS_MAIL_ICON: Texture2D = preload("res://assets/ui/socials_mail.svg")
@@ -770,6 +778,7 @@ var pvp_join_room_button: Button
 var pvp_spectate_room_button: Button
 var pvp_allow_spectators_check: CheckBox
 var pvp_timer_enabled_check: CheckBox
+var pvp_timer_tier_select: OptionButton
 var pvp_copy_code_button: Button
 var pvp_queue_status_spinner_label: Label
 var pvp_queue_status_label: Label
@@ -1749,6 +1758,7 @@ func _refresh_pvp_localized_ui() -> void:
 	_refresh_pvp_timer_enabled_checkbox(
 		pvp_timer_enabled_check != null and pvp_timer_enabled_check.button_pressed
 	)
+	_refresh_pvp_timer_tier_options()
 	_refresh_pvp_queue_buttons(_current_pvp_queue_status_for_buttons())
 	_refresh_pvp_queue_compact_panel(0.0)
 	_refresh_pvp_button_tooltip()
@@ -5893,6 +5903,20 @@ func _setup_pvp_room_popup() -> void:
 	pvp_timer_enabled_check.toggled.connect(_on_pvp_timer_enabled_toggled)
 	_refresh_pvp_timer_enabled_checkbox(false)
 	pvp_room_form.add_child(pvp_timer_enabled_check)
+
+	pvp_timer_tier_select = OptionButton.new()
+	pvp_timer_tier_select.custom_minimum_size = Vector2(0, 36)
+	pvp_timer_tier_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_timer_tier_select.focus_mode = Control.FOCUS_NONE
+	_apply_pvp_ranked_dropdown_style(pvp_timer_tier_select, true)
+	for tier: Dictionary in PVP_TIMER_TIERS:
+		pvp_timer_tier_select.add_item(LocalizationManager.text(str(tier.get("label", ""))))
+		var item_index := pvp_timer_tier_select.item_count - 1
+		pvp_timer_tier_select.set_item_metadata(item_index, str(tier.get("id", "")))
+		if str(tier.get("id", "")) == PVP_DEFAULT_TIMER_TIER_ID:
+			pvp_timer_tier_select.select(item_index)
+	pvp_timer_tier_select.visible = false
+	pvp_room_form.add_child(pvp_timer_tier_select)
 
 	var actions := HBoxContainer.new()
 	actions.add_theme_constant_override("separation", 8)
@@ -36521,6 +36545,12 @@ func _on_pvp_room_mode_selected(mode: String) -> void:
 	_refresh_pvp_room_team_fields()
 	pvp_allow_spectators_check.visible = mode == "create"
 	pvp_timer_enabled_check.visible = mode == "create"
+	if pvp_timer_tier_select != null:
+		pvp_timer_tier_select.visible = (
+			mode == "create"
+			and pvp_timer_enabled_check != null
+			and pvp_timer_enabled_check.button_pressed
+		)
 	pvp_create_room_button.visible = mode == "create"
 	pvp_join_room_button.visible = mode == "join"
 	pvp_spectate_room_button.visible = mode == "spectate"
@@ -36642,7 +36672,8 @@ func _on_pvp_create_room_pressed() -> void:
 		8,
 		pvp_room_battle_purpose,
 		team_text,
-		pvp_timer_enabled_check != null and pvp_timer_enabled_check.button_pressed
+		pvp_timer_enabled_check != null and pvp_timer_enabled_check.button_pressed,
+		_selected_pvp_timer_tier_id()
 	)
 	request.queue_free()
 	_set_pvp_room_busy(false)
@@ -36667,6 +36698,8 @@ func _on_pvp_create_room_pressed() -> void:
 	pvp_training_team_note.visible = false
 	pvp_allow_spectators_check.visible = false
 	pvp_timer_enabled_check.visible = false
+	if pvp_timer_tier_select != null:
+		pvp_timer_tier_select.visible = false
 	pvp_create_room_button.visible = false
 	pvp_join_room_button.visible = false
 	pvp_spectate_room_button.visible = false
@@ -36693,6 +36726,27 @@ func _refresh_pvp_timer_enabled_checkbox(enabled: bool) -> void:
 		"font_color",
 		Color("#9be7b1") if enabled else Color("#f1c3a1")
 	)
+	if pvp_timer_tier_select != null:
+		pvp_timer_tier_select.visible = enabled and pvp_room_selected_mode == "create" and pvp_active_room_code == ""
+
+func _selected_pvp_timer_tier_id() -> String:
+	if pvp_timer_tier_select == null or pvp_timer_tier_select.item_count == 0:
+		return PVP_DEFAULT_TIMER_TIER_ID
+	var selected_id := str(pvp_timer_tier_select.get_selected_metadata()).strip_edges().to_lower()
+	return selected_id if selected_id != "" else PVP_DEFAULT_TIMER_TIER_ID
+
+func _refresh_pvp_timer_tier_options() -> void:
+	if pvp_timer_tier_select == null:
+		return
+	for item_index: int in range(pvp_timer_tier_select.item_count):
+		var tier_id := str(pvp_timer_tier_select.get_item_metadata(item_index))
+		for tier: Dictionary in PVP_TIMER_TIERS:
+			if str(tier.get("id", "")) == tier_id:
+				pvp_timer_tier_select.set_item_text(
+					item_index,
+					LocalizationManager.text(str(tier.get("label", "")))
+				)
+				break
 
 func _refresh_pvp_allow_spectators_checkbox(allowed: bool) -> void:
 	if pvp_allow_spectators_check == null:
@@ -39022,6 +39076,8 @@ func _set_pvp_room_busy(is_busy: bool) -> void:
 		pvp_allow_spectators_check.disabled = is_busy
 	if pvp_timer_enabled_check != null:
 		pvp_timer_enabled_check.disabled = is_busy
+	if pvp_timer_tier_select != null:
+		pvp_timer_tier_select.disabled = is_busy
 	if pvp_join_queue_button != null:
 		var ranked_blocked := _is_selected_pvp_queue_ranked() and not PvpRankedTeamValidation.allows_ranked_join(pvp_ranked_team_validation_result)
 		pvp_join_queue_button.disabled = is_busy or pvp_active_queue_entry_id != "" or pvp_active_queue_match_id != "" or ranked_blocked

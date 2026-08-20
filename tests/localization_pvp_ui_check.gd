@@ -59,6 +59,7 @@ func _check_pvp_runtime_translation() -> void:
 	var room_code_input := overlay.get("pvp_room_code_input") as LineEdit
 	var room_form_title := overlay.get("pvp_room_form_title") as Label
 	var room_timer_check := overlay.get("pvp_timer_enabled_check") as CheckBox
+	var room_timer_tier := overlay.get("pvp_timer_tier_select") as OptionButton
 	var room_status := overlay.get("pvp_room_status_label") as Label
 	var format_select := overlay.get("pvp_queue_select") as OptionButton
 	var leaderboard_scope := overlay.get("pvp_leaderboard_scope_select") as OptionButton
@@ -90,6 +91,12 @@ func _check_pvp_runtime_translation() -> void:
 	room_create_button.emit_signal("pressed")
 	await process_frame
 	_check(room_timer_check != null and room_timer_check.visible, "Training room creation exposes the shared decision timer option")
+	room_timer_check.button_pressed = true
+	room_timer_check.emit_signal("toggled", true)
+	await process_frame
+	_check(room_timer_tier != null and room_timer_tier.visible, "Enabling the timer exposes standard speed tiers")
+	_check(room_timer_tier.item_count == 5, "Room timer offers all five versioned speed tiers")
+	_check(str(room_timer_tier.get_selected_metadata()) == "standard_v1", "Standard is the default room timer tier")
 	room_join_button.emit_signal("pressed")
 	await process_frame
 	_check(not room_flow_hint.visible, "Choosing a room action replaces guidance with its form")
@@ -137,6 +144,7 @@ func _check_pvp_runtime_translation() -> void:
 	_check(room_join_button != null and room_join_button.text == "Entrar no treinamento", "Training room action updates to Portuguese")
 	_check(training_button != null and training_button.text == "✓ Sala de treinamento", "Selected training room updates to Portuguese")
 	_check(room_timer_check != null and room_timer_check.text.begins_with("Cronômetro"), "Private room timer updates to Portuguese")
+	_check(room_timer_tier != null and room_timer_tier.get_item_text(1).begins_with("Padrão"), "Timer tier labels update to Portuguese")
 	_check(room_status != null and room_status.text == "Aguardando outro jogador...", "Dynamic room status updates to Portuguese")
 	_check(leaderboard_scope != null and leaderboard_scope.get_item_text(0) == "Diária", "Leaderboard period updates to Portuguese")
 	_check(compact_status != null and compact_status.text == "Fila ranqueada", "Compact queue status updates to Portuguese")
