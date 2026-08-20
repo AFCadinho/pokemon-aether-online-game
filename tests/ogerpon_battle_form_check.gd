@@ -11,7 +11,7 @@ func _init() -> void:
 	_check_base_form()
 	_check_non_ogerpon_is_untouched()
 	_check_ivy_cudgel_type_is_battle_only()
-	_check_wellspring_sprite_is_available()
+	_check_mask_battle_sprites_are_available()
 	quit(1 if failed else 0)
 
 
@@ -55,12 +55,30 @@ func _check_ivy_cudgel_type_is_battle_only() -> void:
 	_check_equal(source_moves[0].get("type"), "grass", "the saved move metadata remains unchanged")
 
 
-func _check_wellspring_sprite_is_available() -> void:
-	_check_equal(
-		PokemonAssets.load_home_sprite("Ogerpon-Wellspring") != null,
-		true,
-		"Wellspring battle display has a form-specific sprite fallback"
-	)
+func _check_mask_battle_sprites_are_available() -> void:
+	var battle_species := {
+		"Ogerpon": "ogerpon",
+		"Ogerpon Wellspring": "ogerpon-wellspring",
+		"Ogerpon Hearthflame": "ogerpon-hearthflame",
+		"Ogerpon Cornerstone": "ogerpon-cornerstone",
+	}
+	for species: String in battle_species:
+		var asset_id := str(battle_species[species])
+		_check_equal(
+			PokemonAssets.get_battle_sprite_ids(species).has(asset_id),
+			true,
+			"%s resolves to its canonical battle asset" % species
+		)
+		for side: String in ["front", "back"]:
+			var texture := PokemonAssets.load_texture(
+				"res://assets/sprites/pokemon/%s/%s/frame_000.png" % [side, asset_id]
+			)
+			var expected_size := Vector2(192, 192) if side == "front" else Vector2(288, 288)
+			_check_equal(
+				texture.get_size() if texture != null else Vector2.ZERO,
+				expected_size,
+				"%s uses the Gen 9 %s battle asset instead of a HOME fallback" % [species, side]
+			)
 
 
 func _check_equal(actual: Variant, expected: Variant, label: String) -> void:
