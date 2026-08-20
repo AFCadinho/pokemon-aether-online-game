@@ -4,6 +4,7 @@
 
 **Added**
 
+- Mom now gives you an Ability Capsule from Dadinho when you return home after delivering Oak's Parcel.
 - Added the Aether Exchange, a fixed-price marketplace for buying and selling eligible Pokémon and items. Listings can be searched, filtered and sorted, and Pokémon can be inspected through a complete read-only Summary before purchase.
 - Added a secure Account Portal that opens from Account Settings after signing in through the game. Trainers can change their display name, password or email address and manage personal-data exports and account deletion without a separate browser login.
 - Email changes now require confirmation from the new inbox. The current inbox has 72 hours to approve or cancel the request; approval from both addresses applies the change immediately, while no response from the old address allows the verified change to complete after the review window.
@@ -13,6 +14,7 @@
 
 **Changed**
 
+- Ability Patches now permanently unlock and activate a Pokémon's Hidden Ability. Ability Capsules can switch between every unlocked regular and Hidden Ability.
 - The Aether Exchange now offers detailed Pokémon and item filters, individual IV filters, price, level and date sorting, compact listing cards and clearer confirmations and status feedback.
 - The Pokédex now loads Pokémon progressively while scrolling, opens linked pre-evolutions and evolutions directly, and shows Pokémon HOME artwork in evolution entries.
 - Long chat messages, badges, sender names and shared Pokémon cards now wrap and align more cleanly.

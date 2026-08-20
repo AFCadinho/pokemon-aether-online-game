@@ -1,11 +1,11 @@
 {
   "ability-capsule": {
     "name": "Ability Capsule",
-    "shortDesc": "Switches a Pokemon between its two possible (non-Hidden) Abilities."
+    "shortDesc": "Cycles through a Pokémon's available Abilities, including its Hidden Ability when unlocked."
   },
   "ability-patch": {
     "name": "Ability Patch",
-    "shortDesc": "A patch that allows a Pokemon with a regular Ability to have a rare Ability."
+    "shortDesc": "Permanently unlocks a Pokémon's Hidden Ability and activates it."
   },
   "ability-shield": {
     "name": "Ability Shield",

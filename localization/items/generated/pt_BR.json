@@ -1,11 +1,11 @@
 {
   "ability-capsule": {
     "name": "Cápsula de Habilidade",
-    "shortDesc": "Alterna um Pokémon entre suas duas habilidades possíveis (não ocultas)."
+    "shortDesc": "Alterna entre todas as Habilidades desbloqueadas de um Pokémon, incluindo a Habilidade Oculta."
   },
   "ability-patch": {
     "name": "Atualização de habilidade",
-    "shortDesc": "Um patch que permite que um Pokémon com uma habilidade regular tenha uma habilidade rara."
+    "shortDesc": "Desbloqueia permanentemente a Habilidade Oculta de um Pokémon e a ativa imediatamente."
   },
   "ability-shield": {
     "name": "Escudo de Habilidade",
