@@ -9,7 +9,8 @@ on:
         type: string
 
 permissions:
-  contents: read
+  # Draft release assets are hidden from read-only workflow tokens.
+  contents: write
 
 jobs:
   upload:
