@@ -73,11 +73,16 @@ func _check_local_ogerpon_uses_mask_battle_form() -> void:
 	presenter.setup(state)
 	_check_equal(
 		presenter.get_active_display_species("p1"),
-		"Ogerpon-Wellspring",
+		"Ogerpon Wellspring",
 		"local Ogerpon active display species follows its held mask"
 	)
+	_check_equal(
+		presenter.get_active_display_name("p1"),
+		"Ogerpon Wellspring",
+		"an unnicknamed local Ogerpon uses its mask forme on the battle HUD"
+	)
 	var display_team := presenter.get_display_team_data("p1")
-	_check_equal(display_team[0].get("species", ""), "Ogerpon-Wellspring", "party display uses the Wellspring forme")
+	_check_equal(display_team[0].get("species", ""), "Ogerpon Wellspring", "party display uses the Wellspring forme")
 	_check_equal(display_team[0].get("types", []), ["grass", "water"], "party display uses Wellspring types")
 	_check_equal(display_team[0].get("ability", ""), "water-absorb", "party display uses Water Absorb")
 

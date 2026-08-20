@@ -18,7 +18,7 @@ func _init() -> void:
 func _check_wellspring_form() -> void:
 	var data := {"species": "Ogerpon", "types": ["grass"], "ability": "defiant"}
 	Resolver.apply_to_display_data(data, "Ogerpon", "Wellspring Mask")
-	_check_equal(data.get("species"), "Ogerpon-Wellspring", "Wellspring Mask selects the Wellspring battle forme")
+	_check_equal(data.get("species"), "Ogerpon Wellspring", "Wellspring Mask selects the Wellspring battle forme")
 	_check_equal(data.get("types"), ["grass", "water"], "Wellspring battle display has both types")
 	_check_equal(data.get("ability"), "water-absorb", "Wellspring battle display has Water Absorb")
 
@@ -26,12 +26,12 @@ func _check_wellspring_form() -> void:
 func _check_other_masks() -> void:
 	_check_equal(
 		Resolver.resolve_species("Ogerpon", "Hearthflame Mask"),
-		"Ogerpon-Hearthflame",
+		"Ogerpon Hearthflame",
 		"Hearthflame Mask selects the Hearthflame battle forme"
 	)
 	_check_equal(
 		Resolver.resolve_species("Ogerpon", "Cornerstone Mask--held"),
-		"Ogerpon-Cornerstone",
+		"Ogerpon Cornerstone",
 		"held-item storage suffix is accepted for Cornerstone Mask"
 	)
 
