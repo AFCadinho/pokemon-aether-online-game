@@ -10602,10 +10602,17 @@ func _refresh_personal_buffs_from_entitlements() -> void:
 		if buff_value is Dictionary:
 			var buff := buff_value as Dictionary
 			var buff_id := str(buff.get("id", "")).strip_edges().to_lower()
-			if buff_id in ["aether_blessing", "aether_blessing_shiny_bonus"]:
+			if buff_id in [
+				"aether_blessing",
+				"aether_blessing_shiny_bonus",
+				"aether_blessing_travel_discount",
+			]:
 				continue
 		buffs.append(buff_value)
 	var blessing_shiny_bonus := _current_aether_blessing_shiny_bonus()
+	var blessing_travel_discount := _current_aether_blessing_travel_discount()
+	if not blessing_travel_discount.is_empty():
+		buffs.push_front(blessing_travel_discount)
 	if not blessing_shiny_bonus.is_empty():
 		buffs.push_front(blessing_shiny_bonus)
 	_render_personal_buffs(buffs)
@@ -10640,6 +10647,26 @@ func _current_aether_blessing_membership() -> Dictionary:
 
 
 func _current_aether_blessing_shiny_bonus() -> Dictionary:
+	return _current_aether_blessing_personal_buff(
+		"aether_blessing_shiny_bonus",
+		"ui.buff.aether_blessing_shiny.name",
+		"ui.buff.aether_blessing_shiny.description"
+	)
+
+
+func _current_aether_blessing_travel_discount() -> Dictionary:
+	return _current_aether_blessing_personal_buff(
+		"aether_blessing_travel_discount",
+		"ui.buff.aether_blessing_travel.name",
+		"ui.buff.aether_blessing_travel.description"
+	)
+
+
+func _current_aether_blessing_personal_buff(
+	buff_id: String,
+	name_key: String,
+	description_key: String
+) -> Dictionary:
 	var membership := _current_aether_blessing_membership()
 	if membership.is_empty():
 		return {}
@@ -10652,9 +10679,9 @@ func _current_aether_blessing_shiny_bonus() -> Dictionary:
 	if remaining_seconds <= 0:
 		return {}
 	return {
-		"id": "aether_blessing_shiny_bonus",
-		"name_key": "ui.buff.aether_blessing_shiny.name",
-		"description_key": "ui.buff.aether_blessing_shiny.description",
+		"id": buff_id,
+		"name_key": name_key,
+		"description_key": description_key,
 		"remaining": _format_aether_blessing_remaining(remaining_seconds),
 		"compactRemaining": _format_aether_blessing_remaining(remaining_seconds, true),
 		"expiresAt": expires_at,
@@ -10707,6 +10734,7 @@ func _aether_blessing_membership_tooltip(membership: Dictionary) -> String:
 		),
 		"",
 		"• %s" % LocalizationManager.text("ui.membership.aether_blessing.benefit.anchor"),
+		"• %s" % LocalizationManager.text("ui.membership.aether_blessing.benefit.travel"),
 		"• %s" % LocalizationManager.text("ui.membership.aether_blessing.benefit.shiny"),
 		"• %s" % LocalizationManager.text("ui.membership.aether_blessing.benefit.badge"),
 		"",

@@ -133,19 +133,19 @@
   },
   "aether-blessing-voucher-3-days": {
     "name": "Vale da Bênção do Aether · 3 dias",
-    "shortDesc": "Um vale negociável que adiciona três dias de assinatura Bênção do Aether com chance de Shiny ×1,05."
+    "shortDesc": "Um vale negociável para três dias de Bênção Aether com chance Shiny ×1,05, 50% de desconto em viagens e duas Âncoras grátis."
   },
   "aether-blessing-voucher-7-days": {
     "name": "Vale da Bênção do Aether · 7 dias",
-    "shortDesc": "Um vale negociável que adiciona sete dias de assinatura Bênção do Aether com chance de Shiny ×1,05."
+    "shortDesc": "Um vale negociável para sete dias de Bênção Aether com chance Shiny ×1,05, 50% de desconto em viagens e duas Âncoras grátis."
   },
   "aether-blessing-voucher-14-days": {
     "name": "Vale da Bênção do Aether · 14 dias",
-    "shortDesc": "Um vale negociável que adiciona quatorze dias de assinatura Bênção do Aether com chance de Shiny ×1,05."
+    "shortDesc": "Um vale negociável para quatorze dias de Bênção Aether com chance Shiny ×1,05, 50% de desconto em viagens e duas Âncoras grátis."
   },
   "aether-blessing-voucher-30-days": {
     "name": "Vale da Bênção do Aether · 30 dias",
-    "shortDesc": "Um vale negociável que adiciona trinta dias de assinatura Bênção do Aether com chance de Shiny ×1,05."
+    "shortDesc": "Um vale negociável para trinta dias de Bênção Aether com chance Shiny ×1,05, 50% de desconto em viagens e duas Âncoras grátis."
   },
   "name-change-ticket": {
     "name": "Bilhete de Alteração de Nome",

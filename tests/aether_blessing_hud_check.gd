@@ -45,31 +45,44 @@ func _run() -> void:
 	var status_panel := overlay.get("player_status_panel") as PanelContainer
 	var active_buffs: Array = overlay.get("active_personal_buffs") as Array
 	var shiny_bonus := active_buffs[0] as Dictionary if not active_buffs.is_empty() else {}
+	var travel_discount := active_buffs[1] as Dictionary if active_buffs.size() > 1 else {}
 	var first_buff_slot := overlay.get_node_or_null(
 		"Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot1"
 	) as Button
+	var second_buff_slot := overlay.get_node_or_null(
+		"Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot2"
+	) as Button
 	var displayed_name := first_buff_slot.get_node_or_null("Content/NameLabel") as Label
 	var displayed_time := first_buff_slot.get_node_or_null("Content/TimeLabel") as Label
+	var displayed_travel_name := second_buff_slot.get_node_or_null("Content/NameLabel") as Label
+	var displayed_travel_time := second_buff_slot.get_node_or_null("Content/TimeLabel") as Label
 	_check(badge != null and badge.visible, "active members see Blessed status in the mini Trainer Card")
 	_check(
 		badge != null
 		and badge.tooltip_text.contains("Aether Blessing")
-		and badge.tooltip_text.contains("×1.05"),
-		"membership hover details disclose identity, duration, and Shiny benefit"
+		and badge.tooltip_text.contains("×1.05")
+		and badge.tooltip_text.contains("50%"),
+		"membership hover details disclose identity, duration, Shiny, and travel benefits"
 	)
 	_check(
 		status_panel != null and bool(status_panel.get_meta("aether_blessing_active", false)),
 		"active membership applies the dedicated Trainer Card presentation"
 	)
 	_check(
-		active_buffs.size() == 1
-		and str(shiny_bonus.get("id", "")) == "aether_blessing_shiny_bonus",
-		"membership exposes only its concrete Shiny effect as a personal boost"
+		active_buffs.size() == 2
+		and str(shiny_bonus.get("id", "")) == "aether_blessing_shiny_bonus"
+		and str(travel_discount.get("id", "")) == "aether_blessing_travel_discount",
+		"membership exposes its two concrete modifiers as personal boosts"
 	)
 	_check(
 		str(shiny_bonus.get("name_key", "")) == "ui.buff.aether_blessing_shiny.name"
 		and str(shiny_bonus.get("compactRemaining", "")) != "",
 		"5% Shiny communicates its effect immediately and keeps the membership countdown"
+	)
+	_check(
+		str(travel_discount.get("name_key", "")) == "ui.buff.aether_blessing_travel.name"
+		and str(travel_discount.get("compactRemaining", "")) != "",
+		"50% Travel communicates its effect immediately and keeps the membership countdown"
 	)
 	_check(
 		displayed_name != null
@@ -78,7 +91,14 @@ func _run() -> void:
 		and displayed_time.text != ""
 		and first_buff_slot.get_node_or_null("Content/BadgeLabel") == null
 		and first_buff_slot.get_node_or_null("Content/Details/DescriptionLabel") == null,
-		"expanded boost row shows one clean effect label with its remaining duration"
+		"expanded Shiny boost row shows one clean effect label with its remaining duration"
+	)
+	_check(
+		displayed_travel_name != null
+		and displayed_travel_name.text == str(overlay.call("_localized_buff_name", travel_discount))
+		and displayed_travel_time != null
+		and displayed_travel_time.text != "",
+		"expanded Travel boost row shows one clean effect label with its remaining duration"
 	)
 
 	auth_service.set("current_user", {
