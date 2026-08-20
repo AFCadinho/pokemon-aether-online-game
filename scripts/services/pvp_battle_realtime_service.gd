@@ -658,13 +658,37 @@ func _apply_timer_projection_from_battle_response(message: Dictionary) -> bool:
 	var response_value: Variant = message.get("response", {})
 	if not (response_value is Dictionary):
 		return false
-	var timer_value: Variant = (response_value as Dictionary).get("timerState", {})
-	if not (timer_value is Dictionary):
-		return false
-	if not timer_projection.apply_snapshot(timer_value as Dictionary):
-		return false
-	timer_state_changed.emit(timer_projection)
-	return true
+	var response := response_value as Dictionary
+	var applied := false
+	var timer_value: Variant = response.get("timerState", {})
+	if timer_value is Dictionary:
+		applied = timer_projection.apply_snapshot(timer_value as Dictionary) or applied
+
+	# Legacy room timers are returned inside the same authoritative action
+	# response. Applying only standalone websocket timer packets leaves the old
+	# phase clock running whenever such a packet is delayed or coalesced.
+	if not timer_projection.contract_enabled:
+		var timer_events_value: Variant = response.get("pvpTimerEvents", [])
+		if timer_events_value is Array:
+			for event_value: Variant in timer_events_value:
+				if not (event_value is Dictionary):
+					continue
+				var event := event_value as Dictionary
+				var timers_value: Variant = event.get("timers", [])
+				if timers_value is Array:
+					for legacy_timer_value: Variant in timers_value:
+						if legacy_timer_value is Dictionary:
+							applied = timer_projection.apply_legacy_event(legacy_timer_value as Dictionary) or applied
+				var legacy_timer_value: Variant = event.get("timer", {})
+				if legacy_timer_value is Dictionary:
+					applied = timer_projection.apply_legacy_event(legacy_timer_value as Dictionary) or applied
+		var direct_timer_value: Variant = response.get("pvpTimer", {})
+		if direct_timer_value is Dictionary:
+			applied = timer_projection.apply_legacy_event(direct_timer_value as Dictionary) or applied
+
+	if applied:
+		timer_state_changed.emit(timer_projection)
+	return applied
 
 
 func apply_initial_timer_response(response: Dictionary) -> void:

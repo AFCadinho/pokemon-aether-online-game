@@ -353,6 +353,22 @@ func _init() -> void:
 	service._apply_timer_projection_from_battle_response({"response":{"timerState":{"timerContractVersion":1,"authority":"BATTLE_BANK_V1_SHADOW","timerRevision":1,"battleEventSeq":41,"serverNowMs":1,"participants":{}}}})
 	_check_equal(service.last_battle_event_seq, 3, "newer timer snapshot cannot skip unapplied durable terminal events")
 
+	var legacy_service := PvpBattleRealtimeServiceNode.new()
+	legacy_service.timer_projection.apply_legacy_snapshot([{
+		"activeSide": "p1", "phase": "team_preview", "status": "active",
+		"durationSeconds": 90,
+	}], true)
+	_check_equal(legacy_service._apply_timer_projection_from_battle_response({
+		"response": {
+			"pvpTimerEvents": [
+				{"eventType": "pvp.timer_consumed", "timers": [{"activeSide": "p1", "phase": "team_preview", "status": "consumed"}]},
+				{"eventType": "pvp.timer_started", "timer": {"activeSide": "p1", "phase": "turn", "status": "active", "durationSeconds": 90}},
+			],
+		},
+	}), true, "embedded legacy phase timer events are applied")
+	_check_equal(legacy_service.timer_projection.participants["p1"].get("decisionKind"), "MOVE_SELECTION", "turn one replaces the team preview clock")
+	_check_equal(legacy_service.timer_projection.participants["p1"].get("maxDecisionMs"), 90000, "turn one receives a fresh 90 second clock")
+
 	var gap_service := PvpBattleRealtimeServiceNode.new()
 	gap_service.active_room_code = "ROOM"
 	gap_service.should_reconnect = true
