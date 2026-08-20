@@ -38,6 +38,22 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_membership_badge"]
+bg_color = Color(0.13725491, 0.07450981, 0.22352941, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.7137255, 0.5019608, 0.9411765, 0.9)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+content_margin_left = 4.0
+content_margin_top = 1.0
+content_margin_right = 4.0
+content_margin_bottom = 1.0
+
 [node name="PlayerStatusPanel" type="PanelContainer"]
 custom_minimum_size = Vector2(208, 78)
 layout_mode = 1
@@ -88,11 +104,33 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 1
 alignment = 1
 
-[node name="EyebrowLabel" type="Label" parent="MarginContainer/Row/InfoLayout"]
+[node name="HeaderRow" type="HBoxContainer" parent="MarginContainer/Row/InfoLayout"]
 layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="EyebrowLabel" type="Label" parent="MarginContainer/Row/InfoLayout/HeaderRow"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.49019608, 0.654902, 0.8784314, 0.9)
 theme_override_font_sizes/font_size = 9
 text = "ui.trainer_card.trainer"
+
+[node name="MembershipBadge" type="PanelContainer" parent="MarginContainer/Row/InfoLayout/HeaderRow"]
+visible = false
+custom_minimum_size = Vector2(61, 14)
+layout_mode = 2
+mouse_filter = 1
+mouse_default_cursor_shape = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_membership_badge")
+
+[node name="MembershipBadgeLabel" type="Label" parent="MarginContainer/Row/InfoLayout/HeaderRow/MembershipBadge"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.9490196, 0.79607844, 0.4392157, 1)
+theme_override_font_sizes/font_size = 8
+text = "ui.membership.aether_blessing.badge"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="NameLabel" type="Label" parent="MarginContainer/Row/InfoLayout"]
 layout_mode = 2

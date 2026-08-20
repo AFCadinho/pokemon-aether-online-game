@@ -33,14 +33,12 @@ const CHAT_TABS_GAP := 8.0
 const CHAT_TABS_LEFT_INSET := 4.0
 const CHAT_INLINE_HEADER_CLEARANCE := 24.0
 const PERSONAL_BUFF_PANEL_COMPACT_HEIGHT := 42.0
-const PERSONAL_BUFF_ROW_HEIGHT := 52.0
+const PERSONAL_BUFF_ROW_HEIGHT := 38.0
 const PERSONAL_BUFF_ROW_GAP := 5.0
-const PERSONAL_BUFF_DEFAULT_BADGE_COLOR := Color("#c2a0ff")
 const PERSONAL_BUFF_DEFAULT_NAME_COLOR := Color("#ece7f8")
 const PERSONAL_BUFF_DEFAULT_TIME_COLOR := Color("#b8a7d6")
-const AETHER_BLESSING_BADGE_COLOR := Color("#f2cb70")
-const AETHER_BLESSING_NAME_COLOR := Color("#fff0c7")
-const AETHER_BLESSING_TIME_COLOR := Color("#86dcf4")
+const AETHER_BLESSING_CARD_BORDER := Color("#a97be8")
+const AETHER_BLESSING_CARD_HOVER_BORDER := Color("#e7ca73")
 const CHAT_BADGE_TEXT_COLOR: Color = Color("#07101d")
 const CHAT_DEFAULT_NAME_COLOR := "#aeb8c5"
 const CHAT_SEPARATOR_COLOR := "#778194"
@@ -603,6 +601,7 @@ var skills_panel: Control
 @onready var player_status_name_label: Label = $Control/PlayerStatusPanel/MarginContainer/Row/InfoLayout/NameLabel
 @onready var player_status_money_label: Label = $Control/PlayerStatusPanel/MarginContainer/Row/InfoLayout/MoneyPill/MoneyRow/MoneyLabel
 @onready var player_status_avatar_viewport: SubViewport = $Control/PlayerStatusPanel/MarginContainer/Row/AvatarFrame/ViewportContainer/AvatarViewport
+@onready var player_status_membership_badge: PanelContainer = $Control/PlayerStatusPanel/MarginContainer/Row/InfoLayout/HeaderRow/MembershipBadge
 @onready var dev_actions_popup: PanelContainer = $Control/DevActionsPopup
 @onready var dev_add_pokemon_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/AddPokemonButton
 @onready var dev_add_team_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/AddTeamButton
@@ -1323,6 +1322,7 @@ var wild_pokemon_message_color := UI_MUTED_TEXT
 var wild_pokemon_button_hovered := false
 var wild_pokemon_button_tween: Tween
 var displayed_money: int = -1
+var player_status_panel_hovered := false
 var displayed_location_map: Node
 var displayed_location_name := ""
 var aether_clash_champion_name := ""
@@ -10590,14 +10590,22 @@ func _refresh_personal_buffs_if_needed(delta: float) -> void:
 
 
 func _refresh_personal_buffs_from_entitlements() -> void:
-	var buffs := personal_buff_source_buffs.duplicate(true)
-	var blessing_buff := _current_aether_blessing_buff()
-	if not blessing_buff.is_empty():
-		buffs.push_front(blessing_buff)
+	var buffs: Array = []
+	for buff_value: Variant in personal_buff_source_buffs:
+		if buff_value is Dictionary:
+			var buff := buff_value as Dictionary
+			var buff_id := str(buff.get("id", "")).strip_edges().to_lower()
+			if buff_id in ["aether_blessing", "aether_blessing_shiny_bonus"]:
+				continue
+		buffs.append(buff_value)
+	var blessing_shiny_bonus := _current_aether_blessing_shiny_bonus()
+	if not blessing_shiny_bonus.is_empty():
+		buffs.push_front(blessing_shiny_bonus)
 	_render_personal_buffs(buffs)
+	_refresh_aether_blessing_membership_status()
 
 
-func _current_aether_blessing_buff() -> Dictionary:
+func _current_aether_blessing_membership() -> Dictionary:
 	var roles_value: Variant = AuthService.current_user.get("roles", [])
 	if not roles_value is Array:
 		return {}
@@ -10619,14 +10627,31 @@ func _current_aether_blessing_buff() -> Dictionary:
 			return {}
 		return {
 			"id": "aether_blessing",
-			"label": "AE",
-			"name_key": "ui.buff.aether_blessing.name",
-			"description_key": "ui.buff.aether_blessing.description",
-			"remaining": _format_aether_blessing_remaining(remaining_seconds),
-			"compactRemaining": _format_aether_blessing_remaining(remaining_seconds, true),
 			"expiresAt": expires_at,
 		}
 	return {}
+
+
+func _current_aether_blessing_shiny_bonus() -> Dictionary:
+	var membership := _current_aether_blessing_membership()
+	if membership.is_empty():
+		return {}
+	var expires_at := str(membership.get("expiresAt", "")).strip_edges()
+	var expires_unix := _pvp_iso_timestamp_to_unix_time(expires_at.replace("+00:00", "Z"))
+	var remaining_seconds := maxi(
+		int(ceil(expires_unix - Time.get_unix_time_from_system())),
+		0
+	)
+	if remaining_seconds <= 0:
+		return {}
+	return {
+		"id": "aether_blessing_shiny_bonus",
+		"name_key": "ui.buff.aether_blessing_shiny.name",
+		"description_key": "ui.buff.aether_blessing_shiny.description",
+		"remaining": _format_aether_blessing_remaining(remaining_seconds),
+		"compactRemaining": _format_aether_blessing_remaining(remaining_seconds, true),
+		"expiresAt": expires_at,
+	}
 
 
 func _format_aether_blessing_remaining(total_seconds: int, compact: bool = false) -> String:
@@ -10652,6 +10677,36 @@ func _format_aether_blessing_remaining(total_seconds: int, compact: bool = false
 	return "%ds" % seconds
 
 
+func _refresh_aether_blessing_membership_status() -> void:
+	if player_status_panel == null or player_status_membership_badge == null:
+		return
+	var membership := _current_aether_blessing_membership()
+	var is_active := not membership.is_empty()
+	player_status_panel.set_meta("aether_blessing_active", is_active)
+	player_status_membership_badge.visible = is_active
+	player_status_membership_badge.tooltip_text = (
+		_aether_blessing_membership_tooltip(membership) if is_active else ""
+	)
+	_apply_player_status_panel_hover_style(player_status_panel_hovered)
+
+
+func _aether_blessing_membership_tooltip(membership: Dictionary) -> String:
+	var expiry_date := _format_join_date_text(str(membership.get("expiresAt", "")), "-")
+	return "\n".join([
+		LocalizationManager.text("ui.membership.aether_blessing.name"),
+		LocalizationManager.text(
+			"ui.membership.aether_blessing.active_until",
+			{"date": expiry_date}
+		),
+		"",
+		"• %s" % LocalizationManager.text("ui.membership.aether_blessing.benefit.anchor"),
+		"• %s" % LocalizationManager.text("ui.membership.aether_blessing.benefit.shiny"),
+		"• %s" % LocalizationManager.text("ui.membership.aether_blessing.benefit.badge"),
+		"",
+		LocalizationManager.text("ui.membership.aether_blessing.open_card"),
+	])
+
+
 func _render_personal_buffs(buffs: Array) -> void:
 	var had_active_buffs := not active_personal_buffs.is_empty()
 	active_personal_buffs = buffs.duplicate(true)
@@ -10667,24 +10722,18 @@ func _render_personal_buffs(buffs: Array) -> void:
 			continue
 		button.visible = slot_index < buffs.size()
 		button.set_meta("buff_data", {})
-		var badge_label := button.get_node_or_null("Content/BadgeLabel") as Label
-		var name_label := button.get_node_or_null("Content/Details/NameLabel") as Label
-		var description_label := button.get_node_or_null("Content/Details/DescriptionLabel") as Label
+		var name_label := button.get_node_or_null("Content/NameLabel") as Label
 		var time_label := button.get_node_or_null("Content/TimeLabel") as Label
 		if not button.visible:
 			button.tooltip_text = ""
 			continue
 
 		if slot_index == slot_count - 1 and buffs.size() > slot_count:
-			if badge_label != null:
-				badge_label.text = "+"
 			if name_label != null:
 				name_label.text = LocalizationManager.text(
 					"ui.buff.more",
 					{"count": buffs.size() - slot_count + 1}
 				)
-			if description_label != null:
-				description_label.text = LocalizationManager.text("ui.buff.hover_complete")
 			if time_label != null:
 				time_label.text = ""
 			_apply_personal_buff_row_visual(button, {})
@@ -10692,12 +10741,8 @@ func _render_personal_buffs(buffs: Array) -> void:
 			continue
 
 		var buff: Dictionary = buffs[slot_index] as Dictionary
-		if badge_label != null:
-			badge_label.text = str(buff.get("label", "?")).strip_edges().left(3)
 		if name_label != null:
 			name_label.text = _localized_buff_name(buff)
-		if description_label != null:
-			description_label.text = _localized_buff_description(buff)
 		if time_label != null:
 			time_label.text = str(
 				buff.get("compactRemaining", buff.get("remaining", ""))
@@ -10707,28 +10752,15 @@ func _render_personal_buffs(buffs: Array) -> void:
 		button.set_meta("buff_data", buff.duplicate(true))
 	_refresh_personal_buffs_compact_state()
 
-func _apply_personal_buff_row_visual(button: Button, buff: Dictionary) -> void:
+func _apply_personal_buff_row_visual(button: Button, _buff: Dictionary) -> void:
 	if button == null:
 		return
-	var badge_label := button.get_node_or_null("Content/BadgeLabel") as Label
-	var name_label := button.get_node_or_null("Content/Details/NameLabel") as Label
+	var name_label := button.get_node_or_null("Content/NameLabel") as Label
 	var time_label := button.get_node_or_null("Content/TimeLabel") as Label
-	var is_aether_blessing := str(buff.get("id", "")).strip_edges().to_lower() == "aether_blessing"
-	if badge_label != null:
-		badge_label.add_theme_color_override(
-			"font_color",
-			AETHER_BLESSING_BADGE_COLOR if is_aether_blessing else PERSONAL_BUFF_DEFAULT_BADGE_COLOR
-		)
 	if name_label != null:
-		name_label.add_theme_color_override(
-			"font_color",
-			AETHER_BLESSING_NAME_COLOR if is_aether_blessing else PERSONAL_BUFF_DEFAULT_NAME_COLOR
-		)
+		name_label.add_theme_color_override("font_color", PERSONAL_BUFF_DEFAULT_NAME_COLOR)
 	if time_label != null:
-		time_label.add_theme_color_override(
-			"font_color",
-			AETHER_BLESSING_TIME_COLOR if is_aether_blessing else PERSONAL_BUFF_DEFAULT_TIME_COLOR
-		)
+		time_label.add_theme_color_override("font_color", PERSONAL_BUFF_DEFAULT_TIME_COLOR)
 
 func _on_personal_buffs_summary_pressed() -> void:
 	if active_personal_buffs.is_empty():
@@ -12072,6 +12104,7 @@ func _refresh_player_status_card() -> void:
 	if trainer_card_playtime_label != null:
 		trainer_card_playtime_label.text = _format_playtime(PlayerSave.playtime_seconds)
 	_refresh_trainer_card_caps()
+	_refresh_aether_blessing_membership_status()
 
 func _make_trainer_card_outer_style() -> StyleBoxFlat:
 	var style := _make_panel_style(UI_SURFACE_BASE, UI_BORDER_SUBTLE, 14, 1)
@@ -14498,9 +14531,11 @@ func _on_player_status_panel_gui_input(event: InputEvent) -> void:
 	get_viewport().set_input_as_handled()
 
 func _on_player_status_panel_mouse_entered() -> void:
+	player_status_panel_hovered = true
 	_apply_player_status_panel_hover_style(true)
 
 func _on_player_status_panel_mouse_exited() -> void:
+	player_status_panel_hovered = false
 	_apply_player_status_panel_hover_style(false)
 
 func _apply_player_status_panel_hover_style(hovered: bool) -> void:
@@ -23755,10 +23790,22 @@ func _apply_chat_dock_button_style(button: Button, accent: bool = false) -> void
 
 func _make_player_status_panel_style(hovered: bool) -> StyleBoxFlat:
 	var background_color := UI_SURFACE_HOVER if hovered else UI_SURFACE_BASE
+	var has_aether_blessing := (
+		player_status_panel != null
+		and bool(player_status_panel.get_meta("aether_blessing_active", false))
+	)
 	var border_color := UI_BORDER_FOCUS if hovered else PLAYER_STATUS_CARD_BORDER
+	if has_aether_blessing:
+		border_color = (
+			AETHER_BLESSING_CARD_HOVER_BORDER if hovered else AETHER_BLESSING_CARD_BORDER
+		)
 	var style := _make_panel_style(background_color, border_color, 12, 1)
 	style.border_width_left = 3
-	style.shadow_color = Color(border_color.r, border_color.g, border_color.b, 0.18) if hovered else Color(0, 0, 0, 0.36)
+	style.shadow_color = (
+		Color(border_color.r, border_color.g, border_color.b, 0.22)
+		if hovered or has_aether_blessing
+		else Color(0, 0, 0, 0.36)
+	)
 	style.shadow_size = 8 if hovered else 7
 	style.shadow_offset = Vector2(0, 3)
 	return style
