@@ -31,6 +31,7 @@
 - The Aether Clash Lobby now follows the configured outdoor zoom instead of using the fixed interior zoom.
 - Pokémon-only chat shares now keep an entire party on the same line as the sender.
 - Global Heal requests are now shown only once per Trainer for each activation, including after reconnecting.
+- The Global Heal tray icon now lights up while the service is active and cooling down, and stays subdued while it is available to activate.
 - Pokémon Summary cards now show each Pokémon's gender. Existing Pokémon without stored gender data are assigned a stable, species-appropriate gender.
 - Multi-hit attacks now keep HP changes continuous through knockouts instead of briefly restoring or rewinding the target's health.
 - NPC reserve Pokémon remain concealed while team-sidebar animations are playing.
