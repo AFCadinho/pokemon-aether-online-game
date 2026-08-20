@@ -3097,6 +3097,8 @@
   "ui.pvp.room.form_spectate": "ENTER A ROOM CODE TO SPECTATE",
   "ui.pvp.room.form_share": "YOUR ROOM IS READY TO SHARE",
   "ui.pvp.room.allow_spectators": "Allow private spectators  ·  {state}",
+  "ui.pvp.room.timer": "Decision timer (90 seconds)  ·  {state}",
+  "ui.pvp.room.timer_tooltip": "Give each player 90 seconds for Team Preview, move choices, and forced switches.",
   "ui.pvp.state.on": "ON",
   "ui.pvp.state.off": "OFF",
   "ui.pvp.room.ready": "Ready.",

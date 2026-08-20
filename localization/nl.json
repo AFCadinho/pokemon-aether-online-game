@@ -3097,6 +3097,8 @@
   "ui.pvp.room.form_spectate": "VOER EEN ROOMCODE IN OM MEE TE KIJKEN",
   "ui.pvp.room.form_share": "JE ROOM KAN WORDEN GEDEELD",
   "ui.pvp.room.allow_spectators": "Privétoeschouwers toestaan  ·  {state}",
+  "ui.pvp.room.timer": "Keuzetimer (90 seconden)  ·  {state}",
+  "ui.pvp.room.timer_tooltip": "Geef iedere speler 90 seconden voor Team Preview, zetten en verplichte wissels.",
   "ui.pvp.state.on": "AAN",
   "ui.pvp.state.off": "UIT",
   "ui.pvp.room.ready": "Klaar.",

@@ -756,6 +756,7 @@ var pvp_cancel_room_button: Button
 var pvp_join_room_button: Button
 var pvp_spectate_room_button: Button
 var pvp_allow_spectators_check: CheckBox
+var pvp_timer_enabled_check: CheckBox
 var pvp_copy_code_button: Button
 var pvp_queue_status_spinner_label: Label
 var pvp_queue_status_label: Label
@@ -1728,6 +1729,9 @@ func _refresh_pvp_localized_ui() -> void:
 		pvp_match_countdown_status_label.text = LocalizationManager.text("ui.pvp.countdown.soon")
 	_refresh_pvp_allow_spectators_checkbox(
 		pvp_allow_spectators_check != null and pvp_allow_spectators_check.button_pressed
+	)
+	_refresh_pvp_timer_enabled_checkbox(
+		pvp_timer_enabled_check != null and pvp_timer_enabled_check.button_pressed
 	)
 	_refresh_pvp_queue_buttons(_current_pvp_queue_status_for_buttons())
 	_refresh_pvp_queue_compact_panel(0.0)
@@ -5700,6 +5704,20 @@ func _setup_pvp_room_popup() -> void:
 	pvp_allow_spectators_check.toggled.connect(_on_pvp_allow_spectators_toggled)
 	_refresh_pvp_allow_spectators_checkbox(false)
 	pvp_room_form.add_child(pvp_allow_spectators_check)
+
+	pvp_timer_enabled_check = CheckBox.new()
+	pvp_timer_enabled_check.button_pressed = false
+	_set_localized_control_property(pvp_timer_enabled_check, "tooltip_text", "ui.pvp.room.timer_tooltip")
+	pvp_timer_enabled_check.add_theme_constant_override("h_separation", 8)
+	pvp_timer_enabled_check.add_theme_icon_override("unchecked", _pvp_spectators_checkbox_icon(false, false))
+	pvp_timer_enabled_check.add_theme_icon_override("unchecked_hover", _pvp_spectators_checkbox_icon(false, true))
+	pvp_timer_enabled_check.add_theme_icon_override("unchecked_pressed", _pvp_spectators_checkbox_icon(false, true))
+	pvp_timer_enabled_check.add_theme_icon_override("checked", _pvp_spectators_checkbox_icon(true, false))
+	pvp_timer_enabled_check.add_theme_icon_override("checked_hover", _pvp_spectators_checkbox_icon(true, true))
+	pvp_timer_enabled_check.add_theme_icon_override("checked_pressed", _pvp_spectators_checkbox_icon(true, true))
+	pvp_timer_enabled_check.toggled.connect(_on_pvp_timer_enabled_toggled)
+	_refresh_pvp_timer_enabled_checkbox(false)
+	pvp_room_form.add_child(pvp_timer_enabled_check)
 
 	var actions := HBoxContainer.new()
 	actions.add_theme_constant_override("separation", 8)
@@ -36001,6 +36019,7 @@ func _on_pvp_room_mode_selected(mode: String) -> void:
 	pvp_room_form.visible = true
 	pvp_room_code_input.visible = mode != "create"
 	pvp_allow_spectators_check.visible = mode == "create"
+	pvp_timer_enabled_check.visible = mode == "create"
 	pvp_create_room_button.visible = mode == "create"
 	pvp_join_room_button.visible = mode == "join"
 	pvp_spectate_room_button.visible = mode == "spectate"
@@ -36037,7 +36056,9 @@ func _on_pvp_create_room_pressed() -> void:
 	var response: Dictionary = await BattleApiClient.create_pvp_room(
 		request,
 		BattleApiPayloads.from_player_save(PlayerSave),
-		pvp_allow_spectators_check != null and pvp_allow_spectators_check.button_pressed
+		pvp_allow_spectators_check != null and pvp_allow_spectators_check.button_pressed,
+		8,
+		pvp_timer_enabled_check != null and pvp_timer_enabled_check.button_pressed
 	)
 	request.queue_free()
 	_set_pvp_room_busy(false)
@@ -36055,6 +36076,7 @@ func _on_pvp_create_room_pressed() -> void:
 	pvp_room_form_title.text = LocalizationManager.text("ui.pvp.room.form_share")
 	pvp_room_code_input.visible = false
 	pvp_allow_spectators_check.visible = false
+	pvp_timer_enabled_check.visible = false
 	pvp_create_room_button.visible = false
 	pvp_join_room_button.visible = false
 	pvp_spectate_room_button.visible = false
@@ -36066,6 +36088,21 @@ func _on_pvp_create_room_pressed() -> void:
 
 func _on_pvp_allow_spectators_toggled(allowed: bool) -> void:
 	_refresh_pvp_allow_spectators_checkbox(allowed)
+
+func _on_pvp_timer_enabled_toggled(enabled: bool) -> void:
+	_refresh_pvp_timer_enabled_checkbox(enabled)
+
+func _refresh_pvp_timer_enabled_checkbox(enabled: bool) -> void:
+	if pvp_timer_enabled_check == null:
+		return
+	pvp_timer_enabled_check.text = LocalizationManager.text(
+		"ui.pvp.room.timer",
+		{"state": LocalizationManager.text("ui.pvp.state.on" if enabled else "ui.pvp.state.off")}
+	)
+	pvp_timer_enabled_check.add_theme_color_override(
+		"font_color",
+		Color("#9be7b1") if enabled else Color("#f1c3a1")
+	)
 
 func _refresh_pvp_allow_spectators_checkbox(allowed: bool) -> void:
 	if pvp_allow_spectators_check == null:
@@ -38355,6 +38392,8 @@ func _set_pvp_room_busy(is_busy: bool) -> void:
 		pvp_spectate_room_button.disabled = is_busy
 	if pvp_allow_spectators_check != null:
 		pvp_allow_spectators_check.disabled = is_busy
+	if pvp_timer_enabled_check != null:
+		pvp_timer_enabled_check.disabled = is_busy
 	if pvp_join_queue_button != null:
 		var ranked_blocked := _is_selected_pvp_queue_ranked() and not PvpRankedTeamValidation.allows_ranked_join(pvp_ranked_team_validation_result)
 		pvp_join_queue_button.disabled = is_busy or pvp_active_queue_entry_id != "" or pvp_active_queue_match_id != "" or ranked_blocked

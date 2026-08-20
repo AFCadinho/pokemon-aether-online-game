@@ -70,7 +70,8 @@ func create_pvp_room(
 	request_node: HTTPRequest,
 	player: Dictionary,
 	allow_spectators: bool = false,
-	max_spectators: int = 8
+	max_spectators: int = 8,
+	timer_enabled: bool = false
 ) -> Dictionary:
 	return await send_post_request(
 		request_node,
@@ -80,6 +81,7 @@ func create_pvp_room(
 			"formatId": FORMAT_ID,
 			"allowSpectators": allow_spectators,
 			"maxSpectators": clampi(max_spectators, 1, 32),
+			"timerEnabled": timer_enabled,
 		}
 	)
 

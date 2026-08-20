@@ -3097,6 +3097,8 @@
   "ui.pvp.room.form_spectate": "DIGITE UM CÓDIGO PARA ASSISTIR",
   "ui.pvp.room.form_share": "SUA SALA ESTÁ PRONTA PARA COMPARTILHAR",
   "ui.pvp.room.allow_spectators": "Permitir espectadores privados  ·  {state}",
+  "ui.pvp.room.timer": "Cronômetro de decisão (90 segundos)  ·  {state}",
+  "ui.pvp.room.timer_tooltip": "Dê a cada jogador 90 segundos para a prévia, escolhas de jogada e trocas obrigatórias.",
   "ui.pvp.state.on": "SIM",
   "ui.pvp.state.off": "NÃO",
   "ui.pvp.room.ready": "Pronto.",

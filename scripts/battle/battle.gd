@@ -10875,6 +10875,7 @@ func _connect_pvp_realtime(local_player_id: String, battle_id: String, initial_r
 		pvp_match_id,
 		pvp_viewer_role
 	)
+	PvpBattleRealtimeService.apply_initial_timer_response(initial_response)
 	if _is_spectator_battle():
 		# The HTTP bootstrap already supplied and consumed the public history.
 		# Seed its cursor before the deferred websocket join packet is sent so
