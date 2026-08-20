@@ -11,11 +11,12 @@
 - Email changes now require confirmation from the new inbox. The current inbox has 72 hours to approve or cancel the request; approval from both addresses applies the change immediately, while no response from the old address allows the verified change to complete after the review window.
 - Chat messages now have context actions for copying the message or its full details, starting a private conversation and sending a friend request.
 - Owned Pokémon can now be given a nickname from their Summary for ₽5,000. Nicknames may contain up to 18 characters, are checked for disallowed content, and appear with species context in battles and battle logs.
-- Added Global Heal: for ₽25,000, a Trainer can offer every online Trainer an optional full-party heal. Requests wait until battles finish, can be declined or disabled, do not award Aetherite, and the service has a 15-minute cooldown.
+- Added Global Heal: for ₽25,000, a Trainer can offer every online Trainer an optional full-party heal. Requests wait until battles finish, can be declined or disabled, do not award Aetherite, and the service has a 5-minute cooldown.
 
 **Changed**
 
 - Ability Patches now permanently unlock and activate a Pokémon's Hidden Ability. Ability Capsules can switch between every unlocked regular and Hidden Ability.
+- Global Heal requests now use the shared Aether dialog styling, with a dimmed backdrop, clear actions and a matching request-preference checkbox.
 - The Aether Exchange now offers detailed Pokémon and item filters, individual IV filters, price, level and date sorting, compact listing cards and clearer confirmations and status feedback.
 - The Pokédex now loads Pokémon progressively while scrolling, opens linked pre-evolutions and evolutions directly, and shows Pokémon HOME artwork in evolution entries.
 - Long chat messages, badges, sender names and shared Pokémon cards now wrap and align more cleanly.
