@@ -392,12 +392,15 @@ func _init() -> void:
 	)
 	_check(
 		script_source.contains('"aether_blessing_travel_discount",')
+		and script_source.contains('"aether_blessing_shop_discount",')
 		and script_source.contains("func _current_aether_blessing_shiny_bonus()")
 		and script_source.contains("func _current_aether_blessing_travel_discount()")
+		and script_source.contains("func _current_aether_blessing_shop_discount()")
 		and script_source.contains('"ui.buff.aether_blessing_shiny.name"')
 		and script_source.contains('"ui.buff.aether_blessing_travel.name"')
+		and script_source.contains('"ui.buff.aether_blessing_shops.name"')
 		and not script_source.contains('"name_key": "ui.buff.aether_blessing.name"'),
-		"the boost tray shows the membership's concrete Shiny and travel effects"
+		"the boost tray shows the membership's concrete Shiny, travel, and shop effects"
 	)
 	_check(script_source.contains('personal_buffs_panel.set_meta("group_available", true)'), "personal empty state remains part of the trainer collapse group")
 	_check(script_source.contains("PERSONAL_BUFF_PANEL_COMPACT_HEIGHT"), "empty and collapsed active states use a compact panel height")
@@ -446,11 +449,13 @@ func _init() -> void:
 	_check(donator_store_script_source.contains('"membership",') and donator_store_script_source.contains('"cosmetics",') and donator_store_script_source.contains('"mounts",') and donator_store_script_source.contains('"charms",') and donator_store_script_source.contains('"services",'), "Aether Store separates its six scalable catalog categories")
 	_check(
 		donator_store_script_source.contains('"membership": "Blessings"')
-		and donator_store_script_source.contains('"membership": "5% SHINY · 50% TRAVEL"')
+		and donator_store_script_source.contains('"membership": "5% SHINY · TRAVEL · NPC SHOPS"')
 		and donator_store_script_source.contains("5% better Shiny odds")
 		and donator_store_script_source.contains("50% off regional travel")
-		and donator_store_script_source.contains("two free Aether Anchors"),
-		"Blessings disclose the complete current Shiny and travel package"
+		and donator_store_script_source.contains("two free Aether Anchors")
+		and donator_store_script_source.contains("5% off NPC currency shops")
+		and donator_store_script_source.contains("Aether Gems excluded"),
+		"Blessings disclose the complete Shiny, travel, anchor, and NPC shop package"
 	)
 	_check(donator_store_script_source.contains('"name": "Aether Blessing Voucher · 3 Days"') and donator_store_script_source.contains('"badge": "3 DAYS"') and donator_store_script_source.contains('"badge": "7 DAYS"') and donator_store_script_source.contains('"badge": "14 DAYS"') and donator_store_script_source.contains('"badge": "30 DAYS"') and not donator_store_script_source.contains('"badge": "90 DAYS"'), "Aether Blessing offers the intended four tradeable voucher durations")
 	_check(

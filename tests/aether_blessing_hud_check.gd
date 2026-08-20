@@ -46,33 +46,41 @@ func _run() -> void:
 	var active_buffs: Array = overlay.get("active_personal_buffs") as Array
 	var shiny_bonus := active_buffs[0] as Dictionary if not active_buffs.is_empty() else {}
 	var travel_discount := active_buffs[1] as Dictionary if active_buffs.size() > 1 else {}
+	var shop_discount := active_buffs[2] as Dictionary if active_buffs.size() > 2 else {}
 	var first_buff_slot := overlay.get_node_or_null(
 		"Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot1"
 	) as Button
 	var second_buff_slot := overlay.get_node_or_null(
 		"Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot2"
 	) as Button
+	var third_buff_slot := overlay.get_node_or_null(
+		"Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot3"
+	) as Button
 	var displayed_name := first_buff_slot.get_node_or_null("Content/NameLabel") as Label
 	var displayed_time := first_buff_slot.get_node_or_null("Content/TimeLabel") as Label
 	var displayed_travel_name := second_buff_slot.get_node_or_null("Content/NameLabel") as Label
 	var displayed_travel_time := second_buff_slot.get_node_or_null("Content/TimeLabel") as Label
+	var displayed_shop_name := third_buff_slot.get_node_or_null("Content/NameLabel") as Label
+	var displayed_shop_time := third_buff_slot.get_node_or_null("Content/TimeLabel") as Label
 	_check(badge != null and badge.visible, "active members see Blessed status in the mini Trainer Card")
 	_check(
 		badge != null
 		and badge.tooltip_text.contains("Aether Blessing")
 		and badge.tooltip_text.contains("×1.05")
-		and badge.tooltip_text.contains("50%"),
-		"membership hover details disclose identity, duration, Shiny, and travel benefits"
+		and badge.tooltip_text.contains("50%")
+		and badge.tooltip_text.contains("NPC"),
+		"membership hover details disclose identity, duration, Shiny, travel, and shop benefits"
 	)
 	_check(
 		status_panel != null and bool(status_panel.get_meta("aether_blessing_active", false)),
 		"active membership applies the dedicated Trainer Card presentation"
 	)
 	_check(
-		active_buffs.size() == 2
+		active_buffs.size() == 3
 		and str(shiny_bonus.get("id", "")) == "aether_blessing_shiny_bonus"
-		and str(travel_discount.get("id", "")) == "aether_blessing_travel_discount",
-		"membership exposes its two concrete modifiers as personal boosts"
+		and str(travel_discount.get("id", "")) == "aether_blessing_travel_discount"
+		and str(shop_discount.get("id", "")) == "aether_blessing_shop_discount",
+		"membership exposes its three concrete modifiers as personal boosts"
 	)
 	_check(
 		str(shiny_bonus.get("name_key", "")) == "ui.buff.aether_blessing_shiny.name"
@@ -83,6 +91,12 @@ func _run() -> void:
 		str(travel_discount.get("name_key", "")) == "ui.buff.aether_blessing_travel.name"
 		and str(travel_discount.get("compactRemaining", "")) != "",
 		"50% Travel communicates its effect immediately and keeps the membership countdown"
+	)
+	_check(
+		str(shop_discount.get("name_key", "")) == "ui.buff.aether_blessing_shops.name"
+		and str(shop_discount.get("compactRemaining", "")) != ""
+		and str(overlay.call("_localized_buff_description", shop_discount)).contains("Aether Gems"),
+		"5% NPC Shops communicates its eligible currencies, Gem exclusion, and countdown"
 	)
 	_check(
 		displayed_name != null
@@ -99,6 +113,13 @@ func _run() -> void:
 		and displayed_travel_time != null
 		and displayed_travel_time.text != "",
 		"expanded Travel boost row shows one clean effect label with its remaining duration"
+	)
+	_check(
+		displayed_shop_name != null
+		and displayed_shop_name.text == str(overlay.call("_localized_buff_name", shop_discount))
+		and displayed_shop_time != null
+		and displayed_shop_time.text != "",
+		"expanded NPC Shop boost row shows one clean effect label with its remaining duration"
 	)
 
 	auth_service.set("current_user", {

@@ -62,6 +62,13 @@ func _check_localized_helpers() -> void:
 		"Aether Blessing's travel effect is immediately readable in the boost tray"
 	)
 	_check(
+		overlay.call(
+			"_localized_buff_name",
+			{"name_key": "ui.buff.aether_blessing_shops.name"}
+		) == "5% NPC Shops",
+		"Aether Blessing's NPC shop effect is immediately readable in the boost tray"
+	)
+	_check(
 		str(localization_manager.call("text", "ui.buff.global_heal.no_aetherite")).contains("geen Aetherite"),
 		"Global Heal clearly states that it does not award Aetherite"
 	)

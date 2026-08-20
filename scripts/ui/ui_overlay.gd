@@ -10755,11 +10755,15 @@ func _refresh_personal_buffs_from_entitlements() -> void:
 				"aether_blessing",
 				"aether_blessing_shiny_bonus",
 				"aether_blessing_travel_discount",
+				"aether_blessing_shop_discount",
 			]:
 				continue
 		buffs.append(buff_value)
 	var blessing_shiny_bonus := _current_aether_blessing_shiny_bonus()
 	var blessing_travel_discount := _current_aether_blessing_travel_discount()
+	var blessing_shop_discount := _current_aether_blessing_shop_discount()
+	if not blessing_shop_discount.is_empty():
+		buffs.push_front(blessing_shop_discount)
 	if not blessing_travel_discount.is_empty():
 		buffs.push_front(blessing_travel_discount)
 	if not blessing_shiny_bonus.is_empty():
@@ -10808,6 +10812,14 @@ func _current_aether_blessing_travel_discount() -> Dictionary:
 		"aether_blessing_travel_discount",
 		"ui.buff.aether_blessing_travel.name",
 		"ui.buff.aether_blessing_travel.description"
+	)
+
+
+func _current_aether_blessing_shop_discount() -> Dictionary:
+	return _current_aether_blessing_personal_buff(
+		"aether_blessing_shop_discount",
+		"ui.buff.aether_blessing_shops.name",
+		"ui.buff.aether_blessing_shops.description"
 	)
 
 
@@ -10884,6 +10896,7 @@ func _aether_blessing_membership_tooltip(membership: Dictionary) -> String:
 		"",
 		"• %s" % LocalizationManager.text("ui.membership.aether_blessing.benefit.anchor"),
 		"• %s" % LocalizationManager.text("ui.membership.aether_blessing.benefit.travel"),
+		"• %s" % LocalizationManager.text("ui.membership.aether_blessing.benefit.shops"),
 		"• %s" % LocalizationManager.text("ui.membership.aether_blessing.benefit.shiny"),
 		"• %s" % LocalizationManager.text("ui.membership.aether_blessing.benefit.badge"),
 		"",
@@ -17739,12 +17752,18 @@ func _normalize_market_items(items_value: Variant) -> Array[Dictionary]:
 		var item_id := str(item.get("itemId", "")).strip_edges()
 		if item_id == "":
 			continue
+		var purchase_cost := _market_item_purchase_cost(item)
 		normalized_items.append(ItemLocalization.localize_item({
 			"id": item_id,
 			"name": str(item.get("name", _format_item_name_from_id(item_id))),
 			"category": str(item.get("category", "")),
 			"shortDesc": str(item.get("shortDesc", "")),
-			"price": _market_item_money_price(item),
+			"price": int(purchase_cost.get("amount", 0)),
+			"basePrice": int(purchase_cost.get("baseAmount", purchase_cost.get("amount", 0))),
+			"currency": str(purchase_cost.get("currency", "money")),
+			"membershipDiscountPercent": int(
+				purchase_cost.get("membershipDiscountPercent", 0)
+			),
 			"sellPrice": max(int(item.get("sellPrice", 0)), 0),
 			"requiredBadges": max(int(item.get("requiredBadges", 0)), 0),
 			"available": bool(item.get("available", true)),
@@ -17863,22 +17882,27 @@ func _market_sell_items(catalog_items: Array[Dictionary], inventory_items: Array
 			continue
 		var sell_item := catalog_item.duplicate(true)
 		sell_item["price"] = sell_price
+		sell_item["basePrice"] = sell_price
+		sell_item["currency"] = "money"
+		sell_item["membershipDiscountPercent"] = 0
 		sell_item["quantity"] = owned_quantity
 		sell_items.append(sell_item)
 	return sell_items
 
-func _market_item_money_price(item: Dictionary) -> int:
+func _market_item_purchase_cost(item: Dictionary) -> Dictionary:
 	var costs_value: Variant = item.get("costs", [])
 	if typeof(costs_value) != TYPE_ARRAY:
-		return 0
+		return {}
 	var costs: Array = costs_value
 	for cost_value: Variant in costs:
 		if typeof(cost_value) != TYPE_DICTIONARY:
 			continue
 		var cost: Dictionary = cost_value
-		if str(cost.get("currency", "")).strip_edges().to_lower() == "money":
-			return max(int(cost.get("amount", 0)), 0)
-	return 0
+		var currency := str(cost.get("currency", "")).strip_edges().to_lower()
+		if currency not in ["money", "aetherite", "battle_points"]:
+			continue
+		return cost.duplicate(true)
+	return {}
 
 func _refresh_market_items() -> void:
 	if market_item_list == null:
@@ -17943,6 +17967,8 @@ func _create_market_item_button(item: Dictionary) -> Control:
 	var item_id := str(item.get("id", ""))
 	var item_name := str(item.get("name", _item_name_from_id(item_id)))
 	var price: int = int(item.get("price", 0))
+	var currency := str(item.get("currency", "money"))
+	var discount_percent := int(item.get("membershipDiscountPercent", 0))
 	var selected := _is_same_market_item(item, market_selected_item)
 	var row := PanelContainer.new()
 	row.name = "MarketItem_%s" % item_id
@@ -18022,7 +18048,7 @@ func _create_market_item_button(item: Dictionary) -> Control:
 	content.add_child(price_stack)
 
 	var price_label := Label.new()
-	price_label.text = _format_money(price)
+	price_label.text = _format_market_currency_amount(price, currency)
 	price_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	price_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	price_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -18031,10 +18057,18 @@ func _create_market_item_button(item: Dictionary) -> Control:
 	price_stack.add_child(price_label)
 
 	var each_label := Label.new()
-	each_label.text = LocalizationManager.text("ui.market.each")
+	each_label.text = LocalizationManager.text(
+		"ui.market.member_discount" if discount_percent > 0 else "ui.market.each",
+		{"percent": discount_percent}
+	)
 	each_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	each_label.add_theme_font_size_override("font_size", 9)
-	each_label.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.68))
+	each_label.add_theme_color_override(
+		"font_color",
+		TRAINER_CARD_GREEN
+		if discount_percent > 0
+		else Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.68)
+	)
 	price_stack.add_child(each_label)
 
 	return row
@@ -18135,9 +18169,14 @@ func _refresh_market_purchase_state() -> void:
 
 	var quantity: int = max(int(market_quantity_spinbox.value), 1)
 	var price: int = int(market_selected_item.get("price", 0))
+	var currency := str(market_selected_item.get("currency", "money"))
 	var total: int = price * quantity
 	var player_is_selling := market_mode == "player_sells"
-	var allowed := quantity <= int(market_selected_item.get("quantity", 0)) if player_is_selling else total <= PlayerSave.money
+	var allowed := (
+		quantity <= int(market_selected_item.get("quantity", 0))
+		if player_is_selling
+		else total <= _market_currency_balance(currency)
+	)
 	market_buy_button.disabled = market_purchase_in_progress or not allowed
 	if market_purchase_in_progress:
 		market_buy_button.text = LocalizationManager.text(
@@ -18146,7 +18185,7 @@ func _refresh_market_purchase_state() -> void:
 	else:
 		market_buy_button.text = LocalizationManager.text(
 			"ui.market.action.sell_total" if player_is_selling else "ui.market.action.buy_total",
-			{"total": _format_money(total)}
+			{"total": _format_market_currency_amount(total, currency)}
 		)
 	var item_name := str(market_selected_item.get(
 		"name",
@@ -18155,13 +18194,19 @@ func _refresh_market_purchase_state() -> void:
 	var status_text := LocalizationManager.text("ui.market.status.total", {
 		"quantity": quantity,
 		"item": item_name,
-		"total": _format_money(total),
+		"total": _format_market_currency_amount(total, currency),
 	})
 	if not allowed:
+		var insufficient_key := "ui.market.status.not_enough_items"
+		if not player_is_selling:
+			insufficient_key = (
+				"ui.market.status.not_enough_money"
+				if currency == "money"
+				else "ui.market.status.not_enough_currency"
+			)
 		status_text += LocalizationManager.text(
-			"ui.market.status.not_enough_items"
-			if player_is_selling
-			else "ui.market.status.not_enough_money"
+			insufficient_key,
+			{"currency": _market_currency_label(currency)}
 		)
 	_set_market_status(status_text, not allowed)
 
@@ -18185,6 +18230,7 @@ func _refresh_market_detail() -> void:
 	var description := str(market_selected_item.get("shortDesc", "")).strip_edges()
 	var quantity: int = max(int(market_quantity_spinbox.value), 1)
 	var unit_price: int = max(int(market_selected_item.get("price", 0)), 0)
+	var currency := str(market_selected_item.get("currency", "money"))
 	market_detail_icon.texture = _load_item_icon(item_id)
 	market_detail_icon.modulate = Color.WHITE
 	market_detail_name_label.text = item_name
@@ -18194,16 +18240,55 @@ func _refresh_market_detail() -> void:
 		if market_mode == "player_sells"
 		else LocalizationManager.text("ui.market.detail.buy_fallback")
 	)
-	market_unit_price_label.text = _format_money(unit_price)
-	market_total_price_label.text = _format_money(unit_price * quantity)
+	market_unit_price_label.text = _format_market_currency_amount(unit_price, currency)
+	market_total_price_label.text = _format_market_currency_amount(unit_price * quantity, currency)
 	market_quantity_spinbox.max_value = max(int(market_selected_item.get("quantity", 1)), 1) if market_mode == "player_sells" else 99
 	market_quantity_spinbox.editable = not market_purchase_in_progress
 
 func _refresh_market_money() -> void:
 	if market_money_label != null:
-		market_money_label.text = LocalizationManager.text("ui.market.money", {
-			"amount": _format_money(PlayerSave.money),
-		})
+		var currency := (
+			"money"
+			if market_mode == "player_sells" or market_selected_item.is_empty()
+			else str(market_selected_item.get("currency", "money"))
+		)
+		var amount := _market_currency_balance(currency)
+		market_money_label.text = (
+			LocalizationManager.text("ui.market.money", {"amount": _format_money(amount)})
+			if currency == "money"
+			else LocalizationManager.text("ui.market.wallet", {
+				"currency": _market_currency_label(currency),
+				"amount": _format_money(amount),
+			})
+		)
+
+
+func _market_currency_balance(currency: String) -> int:
+	match currency.strip_edges().to_lower():
+		"aetherite":
+			return maxi(PlayerSave.aetherite, 0)
+		"battle_points":
+			return maxi(PlayerSave.battle_points, 0)
+	return maxi(PlayerSave.money, 0)
+
+
+func _market_currency_label(currency: String) -> String:
+	match currency.strip_edges().to_lower():
+		"aetherite":
+			return LocalizationManager.text("ui.trainer_card.wallet.aetherite")
+		"battle_points":
+			return LocalizationManager.text("ui.trainer_card.wallet.battle_points")
+	return LocalizationManager.text("ui.trainer_card.wallet.money")
+
+
+func _format_market_currency_amount(amount: int, currency: String) -> String:
+	var formatted := _format_money(amount)
+	match currency.strip_edges().to_lower():
+		"aetherite":
+			return "%s Aetherite" % formatted
+		"battle_points":
+			return "%s BP" % formatted
+	return "₽%s" % formatted
 
 func _on_market_buy_pressed() -> void:
 	if market_purchase_in_progress or market_selected_item.is_empty():
