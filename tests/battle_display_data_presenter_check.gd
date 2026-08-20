@@ -103,8 +103,9 @@ func _check_opponent_ogerpon_default_ident_uses_mask_form_name() -> void:
 					"pokemon": [{
 						"ident": "p2a: Ogerpon",
 						"name": "Ogerpon",
-						"species": "Ogerpon-Wellspring",
-						"displaySpecies": "Ogerpon-Wellspring",
+						"species": "Ogerpon",
+						"displaySpecies": "Ogerpon",
+						"details": "Ogerpon-Wellspring, F",
 						"active": true,
 					}],
 				},
@@ -115,8 +116,13 @@ func _check_opponent_ogerpon_default_ident_uses_mask_form_name() -> void:
 	var presenter = BattleDisplayDataPresenterScript.new()
 	presenter.setup(state)
 	_check_equal(
+		presenter.get_active_display_species("p2"),
+		"Ogerpon Wellspring",
+		"public switch details repair a generic opponent Ogerpon species"
+	)
+	_check_equal(
 		presenter.get_active_display_name("p2"),
-		"Ogerpon-Wellspring",
+		"Ogerpon Wellspring",
 		"the default Showdown Ogerpon ident does not hide the opponent mask forme"
 	)
 
