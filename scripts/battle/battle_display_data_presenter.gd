@@ -75,8 +75,15 @@ func get_active_display_name(player_id: String) -> String:
 	var active_pokemon := battle_state.get_active_player_pokemon(player_id)
 	if player_id == "p1":
 		var saved_pokemon: Pokemon = display_metadata.get_player_save_pokemon_for_battle_data(active_pokemon)
-		if saved_pokemon != null and saved_pokemon.nickname.strip_edges() != "":
-			return saved_pokemon.nickname.strip_edges()
+		if saved_pokemon != null:
+			if saved_pokemon.nickname.strip_edges() != "":
+				return saved_pokemon.nickname.strip_edges()
+			var mask_form_species := OGERPON_BATTLE_FORM.resolve_species(
+				get_active_display_species(player_id),
+				saved_pokemon.item
+			)
+			if mask_form_species != saved_pokemon.species:
+				return mask_form_species
 
 	for key: String in ["nickname", "name", "displayName"]:
 		var explicit_name := str(active_pokemon.get(key, "")).strip_edges()

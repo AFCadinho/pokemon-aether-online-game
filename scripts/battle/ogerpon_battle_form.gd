@@ -4,19 +4,19 @@ class_name OgerponBattleForm
 
 const FORM_BY_MASK: Dictionary = {
 	"wellspringmask": {
-		"species": "Ogerpon-Wellspring",
+		"species": "Ogerpon Wellspring",
 		"types": ["grass", "water"],
 		"ability": "water-absorb",
 		"ivyCudgelType": "water",
 	},
 	"hearthflamemask": {
-		"species": "Ogerpon-Hearthflame",
+		"species": "Ogerpon Hearthflame",
 		"types": ["grass", "fire"],
 		"ability": "mold-breaker",
 		"ivyCudgelType": "fire",
 	},
 	"cornerstonemask": {
-		"species": "Ogerpon-Cornerstone",
+		"species": "Ogerpon Cornerstone",
 		"types": ["grass", "rock"],
 		"ability": "sturdy",
 		"ivyCudgelType": "rock",
