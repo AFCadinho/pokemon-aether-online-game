@@ -1,0 +1,101 @@
+name: Upload Ogerpon Sprite Packs to R2
+
+on:
+  workflow_dispatch:
+    inputs:
+      staging_release_tag:
+        description: Draft GitHub release containing the validated sprite pack archives.
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  upload:
+    name: Verify and upload sprite packs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Download staged sprite packs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          STAGING_RELEASE_TAG: ${{ inputs.staging_release_tag }}
+        run: |
+          set -euo pipefail
+          if [[ ! "${STAGING_RELEASE_TAG}" =~ ^asset-staging-ogerpon-[0-9]{8}-[0-9]+$ ]]; then
+            echo "::error::Unexpected staging release tag."
+            exit 1
+          fi
+
+          mkdir -p builds/asset-packs
+          for archive_name in \
+            pokemon-front-scale1-128-477ac5c457d1.zip \
+            pokemon-back-scale1-128-98feb5d468fd.zip \
+            pokemon-shiny-front-scale1-128-a60f5d6f9930.zip \
+            pokemon-shiny-back-scale1-128-ab42ca3e62e9.zip; do
+            gh release download "${STAGING_RELEASE_TAG}" \
+              --pattern "${archive_name}" \
+              --dir builds/asset-packs
+          done
+
+      - name: Verify staged sprite packs
+        run: |
+          python3 - <<'PY'
+          import hashlib
+          from pathlib import Path
+          from zipfile import ZipFile
+
+          pack_dir = Path("builds/asset-packs")
+          expected = {
+              "pokemon-front-scale1-128-477ac5c457d1.zip": (97042390, "9a02ca5acfb0b1182b2dbdcb630351717ec6de125ebb985dff061c91e4bebd5a"),
+              "pokemon-back-scale1-128-98feb5d468fd.zip": (78834343, "7d2c5acb0a977c3f506fc9ccc7c14bbac5e5e772445bf4a82d42de4c4ea88699"),
+              "pokemon-shiny-front-scale1-128-a60f5d6f9930.zip": (94383818, "5ceb0b53d6a6a05ce42ab2fd9d0906cec983819e4cccf9a6db2c536804fee70c"),
+              "pokemon-shiny-back-scale1-128-ab42ca3e62e9.zip": (72861695, "ebce23fe7f4ae30f69559c8fe6cdab791e375acbaf91297d3051a9fe69bfa4ed"),
+          }
+          forms = (
+              "ogerpon",
+              "ogerpon-wellspring",
+              "ogerpon-hearthflame",
+              "ogerpon-cornerstone",
+              "ogerpon-teal-tera",
+              "ogerpon-wellspring-tera",
+              "ogerpon-hearthflame-tera",
+              "ogerpon-cornerstone-tera",
+          )
+
+          for archive_name, (expected_size, expected_sha256) in expected.items():
+              archive_path = pack_dir / archive_name
+              if archive_path.stat().st_size != expected_size:
+                  raise SystemExit(f"Unexpected size for {archive_name}")
+              digest = hashlib.sha256(archive_path.read_bytes()).hexdigest()
+              if digest != expected_sha256:
+                  raise SystemExit(f"Unexpected checksum for {archive_name}")
+              sprite_side = archive_name.removeprefix("pokemon-").split("-scale1-128-", 1)[0].replace("-", "_")
+              with ZipFile(archive_path) as archive:
+                  if archive.testzip() is not None:
+                      raise SystemExit(f"Corrupt archive: {archive_name}")
+                  names = set(archive.namelist())
+                  for form in forms:
+                      member = f"assets/sprites/pokemon/{sprite_side}/{form}/frame_000.png"
+                      if member not in names:
+                          raise SystemExit(f"Missing {member} in {archive_name}")
+              print(f"Verified {archive_name}")
+          PY
+
+      - name: Upload sprite packs to R2
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          python3 tools/upload_launcher_release.py builds/asset-packs \
+            --layout updates \
+            --file pokemon-front-scale1-128-477ac5c457d1.zip \
+            --file pokemon-back-scale1-128-98feb5d468fd.zip \
+            --file pokemon-shiny-front-scale1-128-a60f5d6f9930.zip \
+            --file pokemon-shiny-back-scale1-128-ab42ca3e62e9.zip
