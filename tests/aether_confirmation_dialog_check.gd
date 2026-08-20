@@ -36,6 +36,13 @@ func _init() -> void:
 	) as Button
 	var panel := dialog.get_node("Center/Panel") as PanelContainer
 	_check(confirm_button.text == "Confirm", "Aether confirmation dialog renders localized actions")
+	_check(not dialog.option_checkbox.visible, "optional confirmation setting stays hidden by default")
+	dialog.configure_option("Remember this choice")
+	_check(
+		dialog.option_checkbox.visible
+			and dialog.option_checkbox.get_theme_icon("unchecked") is ImageTexture,
+		"optional confirmation setting uses the shared styled checkbox"
+	)
 	_check(
 		confirm_button.get_theme_stylebox("normal") is StyleBoxFlat,
 		"Aether confirmation primary action replaces default Godot styling"

@@ -145,6 +145,12 @@ func _init() -> void:
 	_check(menu_source.contains('destination.get("isAnchor"'), "Transit UI identifies the Aether Anchor")
 	_check(menu_source.contains('ui.transit.travel_free'), "Transit UI labels Anchor travel as free without a price")
 	_check(
+		menu_source.contains('membershipDiscountActive')
+		and menu_source.contains('"membershipFare" if discounted else "standardFare"')
+		and english_localization.contains('"ui.transit.tier.blessing": "Aether Blessing · 50% off"'),
+		"Transit UI clearly presents the active Aether Blessing fare"
+	)
+	_check(
 		menu_source.contains("AetherConfirmationDialogScene.instantiate()"),
 		"Transit travel uses the shared styled confirmation dialog"
 	)

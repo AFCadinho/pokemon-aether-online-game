@@ -1,6 +1,7 @@
 extends SceneTree
 
 const OVERLAY_SCENE_PATH := "res://scenes/interface/ui_overlay.tscn"
+const OVERLAY_SCRIPT_PATH := "res://scripts/ui/ui_overlay.gd"
 const BUTTON_ICONS := {
 	"dev_money_confirm_button": "res://assets/items/icons/COINCASE.png",
 	"dev_gems_confirm_button": "res://assets/ui/donator_gem.svg",
@@ -16,6 +17,17 @@ func _init() -> void:
 
 
 func _run() -> void:
+	var overlay_source := FileAccess.get_file_as_string(OVERLAY_SCRIPT_PATH)
+	_check(
+		overlay_source.contains("func _current_dev_currency_amount()")
+			and overlay_source.count("var amount := _current_dev_currency_amount()") == 4,
+		"Each developer currency action reads the unsubmitted amount field"
+	)
+	_check(
+		overlay_source.contains("dev_money_amount_spinbox.get_line_edit().grab_focus.call_deferred()"),
+		"Developer currency dialog focuses the editable amount field"
+	)
+
 	var packed := load(OVERLAY_SCENE_PATH) as PackedScene
 	_check(packed != null, "Developer currency icon check loads the UI overlay")
 	if packed == null:

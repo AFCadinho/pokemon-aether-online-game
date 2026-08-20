@@ -1413,6 +1413,7 @@ func _rebuild_item_selector_rows() -> void:
 		quantity.max_value = mini(int(item.get("quantity", 1)), 999)
 		quantity.step = 1
 		quantity.value = clampi(int(selected_by_id.get(item_id, 1)), 1, int(quantity.max_value))
+		quantity.update_on_text_changed = true
 		quantity.custom_minimum_size.x = 90
 		row.add_child(quantity)
 		item_selector_rows[item_id] = {
