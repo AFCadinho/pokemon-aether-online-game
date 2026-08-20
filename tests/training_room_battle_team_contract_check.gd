@@ -94,7 +94,7 @@ func _check_room_requests_advertise_durable_timer_contracts() -> void:
 	_check(source.count("\"timerContractVersions\": [1]") >= 3, "room create, room join, and Ranked advertise timer contract v1")
 	_check(source.count("\"decisionContractVersions\": [1]") >= 3, "room create and join advertise decision contract v1")
 	_check(source.count("\"battleCommandContractVersions\": [1]") >= 3, "room create and join advertise command contract v1")
-	_check(source.contains("\"timerTierId\": timer_tier_id"), "room creation sends the selected standard timer tier")
+	_check(source.contains("\"timerTierId\": timer_tier_id"), "room creation sends the selected default timer tier")
 
 
 func _check(condition: bool, message: String) -> void:

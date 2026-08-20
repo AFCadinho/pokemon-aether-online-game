@@ -128,13 +128,14 @@ const PVP_MODE_TOURNAMENT_ICON: Texture2D = preload("res://assets/ui/pvp_tournam
 const PVP_QUEUE_BALL_ROTATION_SPEED := 3.4
 const PVP_QUEUE_BALL_SPIN_SHADER: Shader = preload("res://shaders/ui/pvp_queue_ball_spin.gdshader")
 const PVP_TIMER_TIERS: Array[Dictionary] = [
+	{"id": "casual_v1", "label": "ui.pvp.room.timer_tier.casual"},
 	{"id": "relaxed_v1", "label": "ui.pvp.room.timer_tier.relaxed"},
 	{"id": "standard_v1", "label": "ui.pvp.room.timer_tier.standard"},
 	{"id": "fast_v1", "label": "ui.pvp.room.timer_tier.fast"},
 	{"id": "blitz_v1", "label": "ui.pvp.room.timer_tier.blitz"},
 	{"id": "lightning_v1", "label": "ui.pvp.room.timer_tier.lightning"},
 ]
-const PVP_DEFAULT_TIMER_TIER_ID := "standard_v1"
+const PVP_DEFAULT_TIMER_TIER_ID := "casual_v1"
 const SOCIALS_FRIENDS_ICON: Texture2D = preload("res://assets/ui/friendlist.svg")
 const SOCIALS_NEARBY_ICON: Texture2D = preload("res://assets/ui/socials_nearby.svg")
 const SOCIALS_MAIL_ICON: Texture2D = preload("res://assets/ui/socials_mail.svg")
