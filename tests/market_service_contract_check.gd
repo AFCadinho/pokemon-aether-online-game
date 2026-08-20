@@ -80,7 +80,12 @@ func _check_catalog_response_parsing() -> void:
 						"sellPrice": 100,
 						"requiredBadges": 0,
 						"available": true,
-						"costs": [{"currency": "money", "amount": 200}],
+						"costs": [{
+							"currency": "money",
+							"amount": 190,
+							"baseAmount": 200,
+							"membershipDiscountPercent": 5,
+						}],
 					},
 				],
 			},
@@ -99,7 +104,10 @@ func _check_catalog_response_parsing() -> void:
 	_check_equal(first_item.get("sellPrice", 0), 100, "catalog item sale price")
 	_check_equal(first_item.get("requiredBadges", -1), 0, "catalog item badge requirement")
 	_check_equal(first_item.get("available", false), true, "catalog item availability")
-	_check_equal(((first_item.get("costs", []) as Array)[0] as Dictionary).get("amount", 0), 200, "catalog item price")
+	var first_cost := (first_item.get("costs", []) as Array)[0] as Dictionary
+	_check_equal(first_cost.get("amount", 0), 190, "catalog item discounted price")
+	_check_equal(first_cost.get("baseAmount", 0), 200, "catalog item base price")
+	_check_equal(first_cost.get("membershipDiscountPercent", 0), 5, "catalog membership discount")
 
 
 func _check_purchase_response_parsing() -> void:

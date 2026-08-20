@@ -311,8 +311,80 @@ func _is_valid_story_complete_body(
 	return (
 		body.has("effects")
 		and body.get("effects") is Array
-		and (body.get("effects") as Array).is_empty()
+		and _is_valid_story_effects(body.get("effects"))
 	)
+
+
+func _is_valid_story_effects(value: Variant) -> bool:
+	if not (value is Array):
+		return false
+	var effects: Array = value as Array
+	if effects.size() > 16:
+		return false
+	for effect_value: Variant in effects:
+		if not (effect_value is Dictionary):
+			return false
+		var effect: Dictionary = effect_value as Dictionary
+		if not _has_exact_fields(effect, ["effectId", "rewardId", "alreadyGranted", "grants"]):
+			return false
+		if (
+			not (effect.get("effectId") is String)
+			or not _is_valid_reference(str(effect.get("effectId", "")))
+			or not (effect.get("rewardId") is String)
+			or not _is_valid_reference(str(effect.get("rewardId", "")))
+			or not (effect.get("alreadyGranted") is bool)
+			or not (effect.get("grants") is Array)
+		):
+			return false
+		var grants: Array = effect.get("grants") as Array
+		if grants.is_empty() or grants.size() > 32:
+			return false
+		for grant_value: Variant in grants:
+			if not _is_valid_story_item_grant(grant_value):
+				return false
+	return true
+
+
+func _is_valid_story_item_grant(value: Variant) -> bool:
+	if not (value is Dictionary):
+		return false
+	var grant: Dictionary = value as Dictionary
+	if not _has_exact_fields(grant, ["itemId", "name", "quantity", "quantityAfter"]):
+		return false
+	return (
+		grant.get("itemId") is String
+		and _is_valid_reference(str(grant.get("itemId", "")))
+		and grant.get("name") is String
+		and not str(grant.get("name", "")).is_empty()
+		and str(grant.get("name", "")).length() <= 160
+		and _is_nonnegative_integer(grant.get("quantity"))
+		and int(grant.get("quantity", 0)) > 0
+		and _is_nonnegative_integer(grant.get("quantityAfter"))
+		and int(grant.get("quantityAfter", 0)) >= int(grant.get("quantity", 0))
+	)
+
+
+func _has_exact_fields(value: Dictionary, expected_fields: Array[String]) -> bool:
+	if value.size() != expected_fields.size():
+		return false
+	for field: String in expected_fields:
+		if not value.has(field):
+			return false
+	return true
+
+
+func _is_valid_reference(value: String) -> bool:
+	if value.is_empty() or value.length() > 160 or value != value.strip_edges():
+		return false
+	for index: int in range(value.length()):
+		var character := value.substr(index, 1)
+		var is_lowercase_letter := character >= "a" and character <= "z"
+		var is_digit := character >= "0" and character <= "9"
+		if index == 0 and not (is_lowercase_letter or is_digit):
+			return false
+		if not (is_lowercase_letter or is_digit or character in ["_", ".", ":", "-"]):
+			return false
+	return true
 
 
 func _is_valid_story_projection_body(story: Dictionary) -> bool:

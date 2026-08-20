@@ -591,6 +591,10 @@ func _process_packets() -> void:
 			if timer_applied:
 				timer_state_changed.emit(timer_projection)
 			continue
+		if message_type.begins_with("pvp.timer_"):
+			if timer_projection.apply_legacy_event(message):
+				timer_state_changed.emit(timer_projection)
+			continue
 		if message_type == "pvp.opponent_disconnected" or message_type == "pvp.opponent_reconnected" or message_type == "pvp.reconnect_grace_started":
 			battle_update_received.emit(message)
 			continue
@@ -661,6 +665,13 @@ func _apply_timer_projection_from_battle_response(message: Dictionary) -> bool:
 		return false
 	timer_state_changed.emit(timer_projection)
 	return true
+
+
+func apply_initial_timer_response(response: Dictionary) -> void:
+	var timers_value: Variant = response.get("pvpTimers", [])
+	var enabled := bool(response.get("timerEnabled", false))
+	if timer_projection.apply_legacy_snapshot(timers_value, enabled):
+		timer_state_changed.emit(timer_projection)
 
 
 func _remember_spectator_event_cursor(message: Dictionary) -> void:
@@ -1299,6 +1310,8 @@ func _handle_battle_events_message(message: Dictionary) -> void:
 		valid_event_count += 1
 		if str(event.get("type", "")).begins_with("battle.timer_"):
 			timer_projection.apply_event(event)
+		elif str(event.get("type", "")).begins_with("pvp.timer_"):
+			timer_projection.apply_legacy_event(event)
 		else:
 			timer_projection.mark_event_applied(next_event_seq)
 		var terminal_payload_value: Variant = event.get("payload", {})

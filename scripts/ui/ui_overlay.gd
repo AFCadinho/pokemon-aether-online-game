@@ -1,5 +1,6 @@
 extends CanvasLayer
 
+const STAFF_PERMISSION_POLICY := preload("res://scripts/ui/staff_permission_policy.gd")
 const MAX_PARTY_SIZE := 6
 const PARTY_SLOT_HEIGHT := 68.0
 const PARTY_SLOT_GAP := 5.0
@@ -33,14 +34,12 @@ const CHAT_TABS_GAP := 8.0
 const CHAT_TABS_LEFT_INSET := 4.0
 const CHAT_INLINE_HEADER_CLEARANCE := 24.0
 const PERSONAL_BUFF_PANEL_COMPACT_HEIGHT := 42.0
-const PERSONAL_BUFF_ROW_HEIGHT := 52.0
+const PERSONAL_BUFF_ROW_HEIGHT := 38.0
 const PERSONAL_BUFF_ROW_GAP := 5.0
-const PERSONAL_BUFF_DEFAULT_BADGE_COLOR := Color("#c2a0ff")
 const PERSONAL_BUFF_DEFAULT_NAME_COLOR := Color("#ece7f8")
 const PERSONAL_BUFF_DEFAULT_TIME_COLOR := Color("#b8a7d6")
-const AETHER_BLESSING_BADGE_COLOR := Color("#f2cb70")
-const AETHER_BLESSING_NAME_COLOR := Color("#fff0c7")
-const AETHER_BLESSING_TIME_COLOR := Color("#86dcf4")
+const AETHER_BLESSING_CARD_BORDER := Color("#a97be8")
+const AETHER_BLESSING_CARD_HOVER_BORDER := Color("#e7ca73")
 const CHAT_BADGE_TEXT_COLOR: Color = Color("#07101d")
 const CHAT_DEFAULT_NAME_COLOR := "#aeb8c5"
 const CHAT_SEPARATOR_COLOR := "#778194"
@@ -110,6 +109,7 @@ const PC_PARTY_HOVER_CARD_SCENE: PackedScene = preload("res://scenes/battle/part
 const POKEMON_GENDER_DISPLAY := preload("res://scripts/ui/pokemon_gender_display.gd")
 const POKEMON_SUMMARY_MOVE_REORDER_SLOT_SCRIPT := preload("res://scripts/ui/pokemon_summary_move_reorder_slot.gd")
 const HELD_ITEM_DROP_TARGET_BUTTON_SCRIPT := preload("res://scripts/ui/held_item_drop_target_button.gd")
+const ALPHA_TOOLS_ERROR_FEEDBACK := preload("res://scripts/services/alpha_tools_error_feedback.gd")
 const TOWN_MAP_POPUP_SCRIPT := preload("res://scripts/ui/town_map_popup.gd")
 const MOUNT_LOADOUT_PANEL_SCENE: PackedScene = preload("res://scenes/interface/mount_loadout_panel.tscn")
 const SKILLS_PANEL_SCENE: PackedScene = preload("res://scenes/interface/skills_panel.tscn")
@@ -435,6 +435,7 @@ const UI_TEXT := Color("#f4f0de")
 const UI_MUTED_TEXT := Color("#aeb8c5")
 const UI_MONEY := Color("#ffd45a")
 const UI_PURPLE_HOVER := Color("#b980ff")
+const UI_SUCCESS := Color("#73d98b")
 const UI_DANGER := Color("#ff6b74")
 const UI_DANGER_BG := Color("#2a1015e8")
 const UI_REPEL_BG := Color("#155f2be8")
@@ -603,6 +604,7 @@ var skills_panel: Control
 @onready var player_status_name_label: Label = $Control/PlayerStatusPanel/MarginContainer/Row/InfoLayout/NameLabel
 @onready var player_status_money_label: Label = $Control/PlayerStatusPanel/MarginContainer/Row/InfoLayout/MoneyPill/MoneyRow/MoneyLabel
 @onready var player_status_avatar_viewport: SubViewport = $Control/PlayerStatusPanel/MarginContainer/Row/AvatarFrame/ViewportContainer/AvatarViewport
+@onready var player_status_membership_badge: PanelContainer = $Control/PlayerStatusPanel/MarginContainer/Row/InfoLayout/HeaderRow/MembershipBadge
 @onready var dev_actions_popup: PanelContainer = $Control/DevActionsPopup
 @onready var dev_add_pokemon_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/AddPokemonButton
 @onready var dev_add_team_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/AddTeamButton
@@ -743,6 +745,11 @@ var pvp_history_refresh_button: Button
 var pvp_room_code_label: Label
 var pvp_room_status_label: Label
 var pvp_room_wait_spinner_label: Label
+var pvp_room_casual_type_button: Button
+var pvp_room_training_type_button: Button
+var pvp_room_type_note: Label
+var pvp_room_flow_hint: Label
+var pvp_room_battle_purpose := "casual"
 var pvp_room_mode_selector: HBoxContainer
 var pvp_room_form: VBoxContainer
 var pvp_room_form_title: Label
@@ -751,11 +758,18 @@ var pvp_room_join_mode_button: Button
 var pvp_room_spectate_mode_button: Button
 var pvp_room_selected_mode := ""
 var pvp_room_code_input: LineEdit
+var pvp_training_team_input: TextEdit
+var pvp_training_team_note: Label
+var pvp_training_team_preview_section: VBoxContainer
+var pvp_training_team_preview_title: Label
+var pvp_training_team_preview_grid: HBoxContainer
+var pvp_training_team_preview_entries: Array[Dictionary] = []
 var pvp_create_room_button: Button
 var pvp_cancel_room_button: Button
 var pvp_join_room_button: Button
 var pvp_spectate_room_button: Button
 var pvp_allow_spectators_check: CheckBox
+var pvp_timer_enabled_check: CheckBox
 var pvp_copy_code_button: Button
 var pvp_queue_status_spinner_label: Label
 var pvp_queue_status_label: Label
@@ -823,7 +837,7 @@ var pvp_poll_in_flight := false
 var pvp_polling_active := false
 var pvp_poll_elapsed := 0.0
 var pvp_battle_starting := false
-var pvp_room_status_translation_key := "ui.pvp.room.ready"
+var pvp_room_status_translation_key := "ui.pvp.room.casual_ready"
 var pvp_room_status_translation_values: Dictionary = {}
 var pvp_queue_status_translation_key := "ui.pvp.queue.ready"
 var pvp_queue_status_translation_values: Dictionary = {}
@@ -1323,6 +1337,7 @@ var wild_pokemon_message_color := UI_MUTED_TEXT
 var wild_pokemon_button_hovered := false
 var wild_pokemon_button_tween: Tween
 var displayed_money: int = -1
+var player_status_panel_hovered := false
 var displayed_location_map: Node
 var displayed_location_name := ""
 var aether_clash_champion_name := ""
@@ -1707,12 +1722,14 @@ func _refresh_pvp_localized_ui() -> void:
 		_refresh_pvp_tab_titles(tab_container)
 	_refresh_pvp_leaderboard_scope_options()
 	_render_pvp_team_preview()
+	_render_pvp_training_team_preview()
 	_refresh_pvp_team_validator()
 	_render_pvp_banlists()
 	_render_pvp_live_battles(pvp_live_entries)
 	if not pvp_leaderboard_entries.is_empty():
 		_render_pvp_leaderboard(pvp_leaderboard_entries)
 	_render_pvp_history_matches(pvp_history_matches, pvp_history_user_id)
+	_refresh_pvp_room_battle_purpose_ui()
 	_refresh_pvp_room_form_title()
 	if pvp_room_code_label != null:
 		var room_code := pvp_active_room_code if pvp_active_room_code != "" else "-"
@@ -1728,6 +1745,9 @@ func _refresh_pvp_localized_ui() -> void:
 		pvp_match_countdown_status_label.text = LocalizationManager.text("ui.pvp.countdown.soon")
 	_refresh_pvp_allow_spectators_checkbox(
 		pvp_allow_spectators_check != null and pvp_allow_spectators_check.button_pressed
+	)
+	_refresh_pvp_timer_enabled_checkbox(
+		pvp_timer_enabled_check != null and pvp_timer_enabled_check.button_pressed
 	)
 	_refresh_pvp_queue_buttons(_current_pvp_queue_status_for_buttons())
 	_refresh_pvp_queue_compact_panel(0.0)
@@ -1827,16 +1847,22 @@ func _current_user_requires_teleport_other_reason() -> bool:
 	return _current_user_requires_teleport_to_player_reason()
 
 func _has_user_permission(permission: String) -> bool:
+	var normalized_permission := permission.strip_edges().to_lower()
 	var permissions_value: Variant = AuthService.current_user.get("permissions", [])
 	if permissions_value is Array:
 		var user_permissions: Array = permissions_value as Array
 		for permission_value: Variant in user_permissions:
-			if str(permission_value).strip_edges().to_lower() == permission:
+			if str(permission_value).strip_edges().to_lower() == normalized_permission:
 				return true
 
-	# Owner capabilities are fixed by the backend. Keep their controls visible
-	# if a partial/stale local user projection temporarily lacks permissions.
-	return _current_user_role_ids().has("owner")
+	# Owner and Senior Staff capabilities are fixed by the backend. Keep their
+	# controls visible if a partial/stale local user projection temporarily lacks
+	# permissions, without exposing owner-only controls to Senior Staff.
+	var role_ids := _current_user_role_ids()
+	return STAFF_PERMISSION_POLICY.fixed_role_grants_permission(
+		role_ids,
+		normalized_permission
+	)
 
 
 func _can_use_chat_moderation() -> bool:
@@ -5597,13 +5623,113 @@ func _setup_pvp_room_popup() -> void:
 	room_intro.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	room_layout.add_child(room_intro)
 
+	var room_workspace := HBoxContainer.new()
+	room_workspace.name = "RoomWorkspace"
+	room_workspace.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	room_workspace.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	room_workspace.add_theme_constant_override("separation", 12)
+	room_layout.add_child(room_workspace)
+
+	var room_setup_card := PanelContainer.new()
+	room_setup_card.name = "BattleTypeCard"
+	room_setup_card.custom_minimum_size = Vector2(292, 0)
+	room_setup_card.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	room_setup_card.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#0a1726e8"), Color("#294968"), 9, 1)
+	)
+	room_workspace.add_child(room_setup_card)
+
+	var room_setup_margin := MarginContainer.new()
+	room_setup_margin.add_theme_constant_override("margin_left", 14)
+	room_setup_margin.add_theme_constant_override("margin_top", 14)
+	room_setup_margin.add_theme_constant_override("margin_right", 14)
+	room_setup_margin.add_theme_constant_override("margin_bottom", 14)
+	room_setup_card.add_child(room_setup_margin)
+
+	var room_setup_layout := VBoxContainer.new()
+	room_setup_layout.add_theme_constant_override("separation", 10)
+	room_setup_margin.add_child(room_setup_layout)
+
+	var room_type_step := Label.new()
+	_set_localized_control_property(room_type_step, "text", "ui.pvp.room.step_type")
+	room_type_step.add_theme_font_size_override("font_size", 10)
+	room_type_step.add_theme_color_override("font_color", Color("#79c8ff"))
+	room_setup_layout.add_child(room_type_step)
+
+	var room_type_heading := Label.new()
+	_set_localized_control_property(room_type_heading, "text", "ui.pvp.room.choose_type")
+	room_type_heading.add_theme_font_size_override("font_size", 16)
+	room_type_heading.add_theme_color_override("font_color", UI_TEXT)
+	room_setup_layout.add_child(room_type_heading)
+
+	var room_flow_card := PanelContainer.new()
+	room_flow_card.name = "RoomFlowCard"
+	room_flow_card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	room_flow_card.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	room_flow_card.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#081421ed"), Color("#35597a"), 9, 1)
+	)
+	room_workspace.add_child(room_flow_card)
+
+	var room_flow_margin := MarginContainer.new()
+	room_flow_margin.add_theme_constant_override("margin_left", 14)
+	room_flow_margin.add_theme_constant_override("margin_top", 14)
+	room_flow_margin.add_theme_constant_override("margin_right", 14)
+	room_flow_margin.add_theme_constant_override("margin_bottom", 14)
+	room_flow_card.add_child(room_flow_margin)
+
+	var room_flow_layout := VBoxContainer.new()
+	room_flow_layout.add_theme_constant_override("separation", 10)
+	room_flow_margin.add_child(room_flow_layout)
+
+	var room_type_selector := VBoxContainer.new()
+	room_type_selector.add_theme_constant_override("separation", 8)
+	room_setup_layout.add_child(room_type_selector)
+	var room_type_group := ButtonGroup.new()
+	room_type_group.allow_unpress = false
+
+	pvp_room_casual_type_button = Button.new()
+	_set_localized_control_property(pvp_room_casual_type_button, "text", "ui.pvp.room.type.casual")
+	pvp_room_casual_type_button.toggle_mode = true
+	pvp_room_casual_type_button.button_group = room_type_group
+	pvp_room_casual_type_button.button_pressed = true
+	pvp_room_casual_type_button.custom_minimum_size = Vector2(0, 50)
+	pvp_room_casual_type_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_room_casual_type_button.pressed.connect(_on_pvp_room_battle_purpose_selected.bind("casual"))
+	room_type_selector.add_child(pvp_room_casual_type_button)
+
+	pvp_room_training_type_button = Button.new()
+	_set_localized_control_property(pvp_room_training_type_button, "text", "ui.pvp.room.type.training")
+	pvp_room_training_type_button.toggle_mode = true
+	pvp_room_training_type_button.button_group = room_type_group
+	pvp_room_training_type_button.custom_minimum_size = Vector2(0, 50)
+	pvp_room_training_type_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_room_training_type_button.pressed.connect(_on_pvp_room_battle_purpose_selected.bind("training"))
+	room_type_selector.add_child(pvp_room_training_type_button)
+
+	pvp_room_type_note = Label.new()
+	_set_localized_control_property(pvp_room_type_note, "text", "ui.pvp.room.type.casual_note")
+	pvp_room_type_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pvp_room_type_note.add_theme_font_size_override("font_size", 11)
+	pvp_room_type_note.add_theme_color_override("font_color", Color("#9be7b1"))
+	room_setup_layout.add_child(pvp_room_type_note)
+
 	var room_separator := HSeparator.new()
 	room_separator.add_theme_constant_override("separation", 4)
-	room_layout.add_child(room_separator)
+	room_setup_layout.add_child(room_separator)
+
+	var room_private_note := Label.new()
+	_set_localized_control_property(room_private_note, "text", "ui.pvp.room.private_note")
+	room_private_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	room_private_note.add_theme_font_size_override("font_size", 10)
+	room_private_note.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	room_setup_layout.add_child(room_private_note)
 
 	var room_status_card := PanelContainer.new()
-	room_status_card.add_theme_stylebox_override("panel", _make_panel_style(Color("#0b1a2ce8"), Color("#294968"), 7, 1))
-	room_layout.add_child(room_status_card)
+	room_status_card.add_theme_stylebox_override("panel", _make_panel_style(Color("#0c2033e8"), Color("#3d7096"), 8, 1))
+	room_flow_layout.add_child(room_status_card)
 
 	var room_status_margin := MarginContainer.new()
 	room_status_margin.add_theme_constant_override("margin_left", 12)
@@ -5627,7 +5753,7 @@ func _setup_pvp_room_popup() -> void:
 	room_status_layout.add_child(room_status_row)
 
 	pvp_room_status_label = Label.new()
-	pvp_room_status_label.text = LocalizationManager.text("ui.pvp.room.ready")
+	pvp_room_status_label.text = LocalizationManager.text("ui.pvp.room.casual_ready")
 	pvp_room_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pvp_room_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	pvp_room_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -5639,46 +5765,99 @@ func _setup_pvp_room_popup() -> void:
 	pvp_room_wait_spinner_label.add_theme_color_override("font_color", Color("#79c8ff"))
 	room_status_row.add_child(pvp_room_wait_spinner_label)
 
+	pvp_training_team_preview_section = VBoxContainer.new()
+	pvp_training_team_preview_section.name = "TrainingTeamPreview"
+	pvp_training_team_preview_section.visible = false
+	pvp_training_team_preview_section.add_theme_constant_override("separation", 6)
+	room_status_layout.add_child(pvp_training_team_preview_section)
+
+	var training_preview_separator := HSeparator.new()
+	pvp_training_team_preview_section.add_child(training_preview_separator)
+
+	pvp_training_team_preview_title = Label.new()
+	pvp_training_team_preview_title.add_theme_font_size_override("font_size", 10)
+	pvp_training_team_preview_title.add_theme_color_override("font_color", Color("#9be7b1"))
+	pvp_training_team_preview_section.add_child(pvp_training_team_preview_title)
+
+	pvp_training_team_preview_grid = HBoxContainer.new()
+	pvp_training_team_preview_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_training_team_preview_grid.add_theme_constant_override("separation", 6)
+	pvp_training_team_preview_section.add_child(pvp_training_team_preview_grid)
+
 	var room_choice_label := Label.new()
-	_set_localized_control_property(room_choice_label, "text", "ui.pvp.room.choice")
-	room_choice_label.add_theme_font_size_override("font_size", 11)
-	room_choice_label.add_theme_color_override("font_color", Color("#87bce8"))
-	room_layout.add_child(room_choice_label)
+	_set_localized_control_property(room_choice_label, "text", "ui.pvp.room.step_action")
+	room_choice_label.add_theme_font_size_override("font_size", 10)
+	room_choice_label.add_theme_color_override("font_color", Color("#79c8ff"))
+	room_flow_layout.add_child(room_choice_label)
+
+	var room_action_heading := Label.new()
+	_set_localized_control_property(room_action_heading, "text", "ui.pvp.room.choose_action")
+	room_action_heading.add_theme_font_size_override("font_size", 16)
+	room_action_heading.add_theme_color_override("font_color", UI_TEXT)
+	room_flow_layout.add_child(room_action_heading)
 
 	pvp_room_mode_selector = HBoxContainer.new()
 	pvp_room_mode_selector.add_theme_constant_override("separation", 8)
-	room_layout.add_child(pvp_room_mode_selector)
+	room_flow_layout.add_child(pvp_room_mode_selector)
 
 	pvp_room_create_mode_button = Button.new()
 	_set_localized_control_property(pvp_room_create_mode_button, "text", "ui.pvp.room.create")
-	pvp_room_create_mode_button.custom_minimum_size = Vector2(130, 38)
+	pvp_room_create_mode_button.custom_minimum_size = Vector2(0, 42)
+	pvp_room_create_mode_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_room_create_mode_button.focus_mode = Control.FOCUS_NONE
 	pvp_room_create_mode_button.pressed.connect(_on_pvp_room_mode_selected.bind("create"))
 	pvp_room_mode_selector.add_child(pvp_room_create_mode_button)
 
 	pvp_room_join_mode_button = Button.new()
 	_set_localized_control_property(pvp_room_join_mode_button, "text", "ui.pvp.room.join")
-	pvp_room_join_mode_button.custom_minimum_size = Vector2(118, 38)
+	pvp_room_join_mode_button.custom_minimum_size = Vector2(0, 42)
+	pvp_room_join_mode_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_room_join_mode_button.focus_mode = Control.FOCUS_NONE
 	pvp_room_join_mode_button.pressed.connect(_on_pvp_room_mode_selected.bind("join"))
 	pvp_room_mode_selector.add_child(pvp_room_join_mode_button)
 
 	pvp_room_spectate_mode_button = Button.new()
 	_set_localized_control_property(pvp_room_spectate_mode_button, "text", "ui.pvp.room.spectate")
-	pvp_room_spectate_mode_button.custom_minimum_size = Vector2(104, 38)
+	pvp_room_spectate_mode_button.custom_minimum_size = Vector2(106, 42)
 	pvp_room_spectate_mode_button.focus_mode = Control.FOCUS_NONE
 	pvp_room_spectate_mode_button.pressed.connect(_on_pvp_room_mode_selected.bind("spectate"))
 	pvp_room_mode_selector.add_child(pvp_room_spectate_mode_button)
 
+	pvp_room_flow_hint = Label.new()
+	_set_localized_control_property(pvp_room_flow_hint, "text", "ui.pvp.room.flow_hint.casual")
+	pvp_room_flow_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pvp_room_flow_hint.add_theme_font_size_override("font_size", 12)
+	pvp_room_flow_hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	pvp_room_flow_hint.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pvp_room_flow_hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	room_flow_layout.add_child(pvp_room_flow_hint)
+
 	pvp_room_form = VBoxContainer.new()
 	pvp_room_form.add_theme_constant_override("separation", 10)
+	pvp_room_form.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	pvp_room_form.visible = false
-	room_layout.add_child(pvp_room_form)
+	room_flow_layout.add_child(pvp_room_form)
 
 	pvp_room_form_title = Label.new()
 	pvp_room_form_title.add_theme_font_size_override("font_size", 11)
 	pvp_room_form_title.add_theme_color_override("font_color", Color("#87bce8"))
 	pvp_room_form.add_child(pvp_room_form_title)
+
+	pvp_training_team_input = TextEdit.new()
+	_set_localized_control_property(pvp_training_team_input, "placeholder_text", "ui.pvp.training.paste_placeholder")
+	pvp_training_team_input.custom_minimum_size = Vector2(0, 116)
+	pvp_training_team_input.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
+	pvp_training_team_input.visible = false
+	pvp_room_form.add_child(pvp_training_team_input)
+	_apply_text_edit_style(pvp_training_team_input)
+
+	pvp_training_team_note = Label.new()
+	_set_localized_control_property(pvp_training_team_note, "text", "ui.pvp.training.ephemeral_note")
+	pvp_training_team_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pvp_training_team_note.add_theme_font_size_override("font_size", 11)
+	pvp_training_team_note.add_theme_color_override("font_color", Color("#9be7b1"))
+	pvp_training_team_note.visible = false
+	pvp_room_form.add_child(pvp_training_team_note)
 
 	pvp_room_code_input = LineEdit.new()
 	_set_localized_control_property(pvp_room_code_input, "placeholder_text", "ui.pvp.room.enter_code")
@@ -5701,6 +5880,20 @@ func _setup_pvp_room_popup() -> void:
 	_refresh_pvp_allow_spectators_checkbox(false)
 	pvp_room_form.add_child(pvp_allow_spectators_check)
 
+	pvp_timer_enabled_check = CheckBox.new()
+	pvp_timer_enabled_check.button_pressed = false
+	_set_localized_control_property(pvp_timer_enabled_check, "tooltip_text", "ui.pvp.room.timer_tooltip")
+	pvp_timer_enabled_check.add_theme_constant_override("h_separation", 8)
+	pvp_timer_enabled_check.add_theme_icon_override("unchecked", _pvp_spectators_checkbox_icon(false, false))
+	pvp_timer_enabled_check.add_theme_icon_override("unchecked_hover", _pvp_spectators_checkbox_icon(false, true))
+	pvp_timer_enabled_check.add_theme_icon_override("unchecked_pressed", _pvp_spectators_checkbox_icon(false, true))
+	pvp_timer_enabled_check.add_theme_icon_override("checked", _pvp_spectators_checkbox_icon(true, false))
+	pvp_timer_enabled_check.add_theme_icon_override("checked_hover", _pvp_spectators_checkbox_icon(true, true))
+	pvp_timer_enabled_check.add_theme_icon_override("checked_pressed", _pvp_spectators_checkbox_icon(true, true))
+	pvp_timer_enabled_check.toggled.connect(_on_pvp_timer_enabled_toggled)
+	_refresh_pvp_timer_enabled_checkbox(false)
+	pvp_room_form.add_child(pvp_timer_enabled_check)
+
 	var actions := HBoxContainer.new()
 	actions.add_theme_constant_override("separation", 8)
 	pvp_room_form.add_child(actions)
@@ -5708,6 +5901,7 @@ func _setup_pvp_room_popup() -> void:
 	pvp_create_room_button = Button.new()
 	_set_localized_control_property(pvp_create_room_button, "text", "ui.pvp.room.create")
 	pvp_create_room_button.custom_minimum_size = Vector2(112, 34)
+	pvp_create_room_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_set_localized_control_property(pvp_create_room_button, "tooltip_text", "ui.pvp.room.create_tooltip")
 	pvp_create_room_button.focus_mode = Control.FOCUS_NONE
 	pvp_create_room_button.pressed.connect(_on_pvp_create_room_pressed)
@@ -5716,6 +5910,7 @@ func _setup_pvp_room_popup() -> void:
 	pvp_cancel_room_button = Button.new()
 	_set_localized_control_property(pvp_cancel_room_button, "text", "ui.pvp.room.cancel")
 	pvp_cancel_room_button.custom_minimum_size = Vector2(112, 34)
+	pvp_cancel_room_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_cancel_room_button.focus_mode = Control.FOCUS_NONE
 	_set_localized_control_property(pvp_cancel_room_button, "tooltip_text", "ui.pvp.room.cancel_tooltip")
 	pvp_cancel_room_button.visible = false
@@ -5725,6 +5920,7 @@ func _setup_pvp_room_popup() -> void:
 	pvp_join_room_button = Button.new()
 	_set_localized_control_property(pvp_join_room_button, "text", "ui.pvp.room.join")
 	pvp_join_room_button.custom_minimum_size = Vector2(100, 34)
+	pvp_join_room_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_set_localized_control_property(pvp_join_room_button, "tooltip_text", "ui.pvp.room.join_tooltip")
 	pvp_join_room_button.focus_mode = Control.FOCUS_NONE
 	pvp_join_room_button.pressed.connect(_on_pvp_join_room_pressed)
@@ -5733,6 +5929,7 @@ func _setup_pvp_room_popup() -> void:
 	pvp_spectate_room_button = Button.new()
 	_set_localized_control_property(pvp_spectate_room_button, "text", "ui.pvp.room.spectate")
 	pvp_spectate_room_button.custom_minimum_size = Vector2(92, 34)
+	pvp_spectate_room_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_set_localized_control_property(pvp_spectate_room_button, "tooltip_text", "ui.pvp.room.spectate_tooltip")
 	pvp_spectate_room_button.focus_mode = Control.FOCUS_NONE
 	pvp_spectate_room_button.pressed.connect(_on_pvp_spectate_room_pressed)
@@ -5748,7 +5945,7 @@ func _setup_pvp_room_popup() -> void:
 
 	var room_spacer := Control.new()
 	room_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	room_layout.add_child(room_spacer)
+	room_setup_layout.add_child(room_spacer)
 
 	var rules_tab_page := _create_pvp_ranked_tab_page("Rules")
 	ranked_tabs.add_child(rules_tab_page)
@@ -6040,12 +6237,15 @@ func _setup_pvp_room_popup() -> void:
 
 	_apply_button_style(pvp_create_room_button, "primary")
 	_apply_button_style(pvp_cancel_room_button, "danger")
-	_apply_button_style(pvp_join_room_button)
+	_apply_button_style(pvp_join_room_button, "primary")
 	_apply_button_style(pvp_spectate_room_button)
 	_apply_button_style(pvp_copy_code_button)
 	_apply_button_style(pvp_room_create_mode_button, "primary")
 	_apply_button_style(pvp_room_join_mode_button)
 	_apply_button_style(pvp_room_spectate_mode_button)
+	_apply_pvp_room_type_button_style(pvp_room_casual_type_button)
+	_apply_pvp_room_type_button_style(pvp_room_training_type_button)
+	_refresh_pvp_room_battle_purpose_ui()
 	_apply_button_style(pvp_join_queue_button, "primary")
 	_apply_button_style(pvp_leave_queue_button)
 	_apply_button_style(pvp_reconnect_battle_button)
@@ -6675,6 +6875,80 @@ func _create_pvp_team_preview_slot(pokemon: Pokemon, slot_index: int) -> Control
 	icon.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
 	icon.modulate = Color(1, 1, 1, 1) if icon.texture != null else Color(1, 1, 1, 0.18)
 	panel.tooltip_text = _pokemon_display_name(pokemon)
+	return panel
+
+func _set_pvp_training_team_preview(preview_value: Variant) -> void:
+	pvp_training_team_preview_entries.clear()
+	if preview_value is Array:
+		for entry_value: Variant in preview_value:
+			if not (entry_value is Dictionary) or pvp_training_team_preview_entries.size() >= MAX_PARTY_SIZE:
+				continue
+			var entry := entry_value as Dictionary
+			var species := str(entry.get("species", "")).strip_edges()
+			if species == "":
+				continue
+			pvp_training_team_preview_entries.append({
+				"species": species,
+				"shiny": bool(entry.get("shiny", false)),
+			})
+	_render_pvp_training_team_preview()
+
+func _clear_pvp_training_team_preview() -> void:
+	_set_pvp_training_team_preview([])
+
+func _render_pvp_training_team_preview() -> void:
+	if pvp_training_team_preview_section == null or pvp_training_team_preview_grid == null:
+		return
+	pvp_training_team_preview_section.visible = not pvp_training_team_preview_entries.is_empty()
+	if pvp_training_team_preview_title != null:
+		pvp_training_team_preview_title.text = LocalizationManager.text(
+			"ui.pvp.training.team_preview",
+			{"count": pvp_training_team_preview_entries.size()}
+		)
+	for child in pvp_training_team_preview_grid.get_children():
+		pvp_training_team_preview_grid.remove_child(child)
+		child.queue_free()
+	for slot_index in range(MAX_PARTY_SIZE):
+		var entry: Dictionary = (
+			pvp_training_team_preview_entries[slot_index]
+			if slot_index < pvp_training_team_preview_entries.size()
+			else {}
+		)
+		pvp_training_team_preview_grid.add_child(_create_pvp_training_team_preview_slot(entry, slot_index))
+
+func _create_pvp_training_team_preview_slot(entry: Dictionary, slot_index: int) -> Control:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(58, 58)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#071624e8"), Color("#3d7096"), 8, 1)
+	)
+
+	var center := CenterContainer.new()
+	panel.add_child(center)
+
+	var species := str(entry.get("species", "")).strip_edges()
+	if species == "":
+		var empty_label := Label.new()
+		empty_label.text = str(slot_index + 1)
+		empty_label.add_theme_font_size_override("font_size", 12)
+		empty_label.add_theme_color_override("font_color", Color("#6f879b80"))
+		center.add_child(empty_label)
+		panel.tooltip_text = LocalizationManager.text(
+			"ui.pvp.team.empty_slot",
+			{"number": slot_index + 1}
+		)
+		return panel
+
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(50, 50)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture = PokemonAssets.load_party_icon(species, bool(entry.get("shiny", false)))
+	icon.modulate = Color.WHITE if icon.texture != null else Color(1, 1, 1, 0.2)
+	center.add_child(icon)
+	panel.tooltip_text = species
 	return panel
 
 func _create_pvp_tournaments_placeholder() -> Control:
@@ -10590,14 +10864,33 @@ func _refresh_personal_buffs_if_needed(delta: float) -> void:
 
 
 func _refresh_personal_buffs_from_entitlements() -> void:
-	var buffs := personal_buff_source_buffs.duplicate(true)
-	var blessing_buff := _current_aether_blessing_buff()
-	if not blessing_buff.is_empty():
-		buffs.push_front(blessing_buff)
+	var buffs: Array = []
+	for buff_value: Variant in personal_buff_source_buffs:
+		if buff_value is Dictionary:
+			var buff := buff_value as Dictionary
+			var buff_id := str(buff.get("id", "")).strip_edges().to_lower()
+			if buff_id in [
+				"aether_blessing",
+				"aether_blessing_shiny_bonus",
+				"aether_blessing_travel_discount",
+				"aether_blessing_shop_discount",
+			]:
+				continue
+		buffs.append(buff_value)
+	var blessing_shiny_bonus := _current_aether_blessing_shiny_bonus()
+	var blessing_travel_discount := _current_aether_blessing_travel_discount()
+	var blessing_shop_discount := _current_aether_blessing_shop_discount()
+	if not blessing_shop_discount.is_empty():
+		buffs.push_front(blessing_shop_discount)
+	if not blessing_travel_discount.is_empty():
+		buffs.push_front(blessing_travel_discount)
+	if not blessing_shiny_bonus.is_empty():
+		buffs.push_front(blessing_shiny_bonus)
 	_render_personal_buffs(buffs)
+	_refresh_aether_blessing_membership_status()
 
 
-func _current_aether_blessing_buff() -> Dictionary:
+func _current_aether_blessing_membership() -> Dictionary:
 	var roles_value: Variant = AuthService.current_user.get("roles", [])
 	if not roles_value is Array:
 		return {}
@@ -10619,14 +10912,59 @@ func _current_aether_blessing_buff() -> Dictionary:
 			return {}
 		return {
 			"id": "aether_blessing",
-			"label": "AE",
-			"name_key": "ui.buff.aether_blessing.name",
-			"description_key": "ui.buff.aether_blessing.description",
-			"remaining": _format_aether_blessing_remaining(remaining_seconds),
-			"compactRemaining": _format_aether_blessing_remaining(remaining_seconds, true),
 			"expiresAt": expires_at,
 		}
 	return {}
+
+
+func _current_aether_blessing_shiny_bonus() -> Dictionary:
+	return _current_aether_blessing_personal_buff(
+		"aether_blessing_shiny_bonus",
+		"ui.buff.aether_blessing_shiny.name",
+		"ui.buff.aether_blessing_shiny.description"
+	)
+
+
+func _current_aether_blessing_travel_discount() -> Dictionary:
+	return _current_aether_blessing_personal_buff(
+		"aether_blessing_travel_discount",
+		"ui.buff.aether_blessing_travel.name",
+		"ui.buff.aether_blessing_travel.description"
+	)
+
+
+func _current_aether_blessing_shop_discount() -> Dictionary:
+	return _current_aether_blessing_personal_buff(
+		"aether_blessing_shop_discount",
+		"ui.buff.aether_blessing_shops.name",
+		"ui.buff.aether_blessing_shops.description"
+	)
+
+
+func _current_aether_blessing_personal_buff(
+	buff_id: String,
+	name_key: String,
+	description_key: String
+) -> Dictionary:
+	var membership := _current_aether_blessing_membership()
+	if membership.is_empty():
+		return {}
+	var expires_at := str(membership.get("expiresAt", "")).strip_edges()
+	var expires_unix := _pvp_iso_timestamp_to_unix_time(expires_at.replace("+00:00", "Z"))
+	var remaining_seconds := maxi(
+		int(ceil(expires_unix - Time.get_unix_time_from_system())),
+		0
+	)
+	if remaining_seconds <= 0:
+		return {}
+	return {
+		"id": buff_id,
+		"name_key": name_key,
+		"description_key": description_key,
+		"remaining": _format_aether_blessing_remaining(remaining_seconds),
+		"compactRemaining": _format_aether_blessing_remaining(remaining_seconds, true),
+		"expiresAt": expires_at,
+	}
 
 
 func _format_aether_blessing_remaining(total_seconds: int, compact: bool = false) -> String:
@@ -10652,6 +10990,38 @@ func _format_aether_blessing_remaining(total_seconds: int, compact: bool = false
 	return "%ds" % seconds
 
 
+func _refresh_aether_blessing_membership_status() -> void:
+	if player_status_panel == null or player_status_membership_badge == null:
+		return
+	var membership := _current_aether_blessing_membership()
+	var is_active := not membership.is_empty()
+	player_status_panel.set_meta("aether_blessing_active", is_active)
+	player_status_membership_badge.visible = is_active
+	player_status_membership_badge.tooltip_text = (
+		_aether_blessing_membership_tooltip(membership) if is_active else ""
+	)
+	_apply_player_status_panel_hover_style(player_status_panel_hovered)
+
+
+func _aether_blessing_membership_tooltip(membership: Dictionary) -> String:
+	var expiry_date := _format_join_date_text(str(membership.get("expiresAt", "")), "-")
+	return "\n".join([
+		LocalizationManager.text("ui.membership.aether_blessing.name"),
+		LocalizationManager.text(
+			"ui.membership.aether_blessing.active_until",
+			{"date": expiry_date}
+		),
+		"",
+		"• %s" % LocalizationManager.text("ui.membership.aether_blessing.benefit.anchor"),
+		"• %s" % LocalizationManager.text("ui.membership.aether_blessing.benefit.travel"),
+		"• %s" % LocalizationManager.text("ui.membership.aether_blessing.benefit.shops"),
+		"• %s" % LocalizationManager.text("ui.membership.aether_blessing.benefit.shiny"),
+		"• %s" % LocalizationManager.text("ui.membership.aether_blessing.benefit.badge"),
+		"",
+		LocalizationManager.text("ui.membership.aether_blessing.open_card"),
+	])
+
+
 func _render_personal_buffs(buffs: Array) -> void:
 	var had_active_buffs := not active_personal_buffs.is_empty()
 	active_personal_buffs = buffs.duplicate(true)
@@ -10667,24 +11037,18 @@ func _render_personal_buffs(buffs: Array) -> void:
 			continue
 		button.visible = slot_index < buffs.size()
 		button.set_meta("buff_data", {})
-		var badge_label := button.get_node_or_null("Content/BadgeLabel") as Label
-		var name_label := button.get_node_or_null("Content/Details/NameLabel") as Label
-		var description_label := button.get_node_or_null("Content/Details/DescriptionLabel") as Label
+		var name_label := button.get_node_or_null("Content/NameLabel") as Label
 		var time_label := button.get_node_or_null("Content/TimeLabel") as Label
 		if not button.visible:
 			button.tooltip_text = ""
 			continue
 
 		if slot_index == slot_count - 1 and buffs.size() > slot_count:
-			if badge_label != null:
-				badge_label.text = "+"
 			if name_label != null:
 				name_label.text = LocalizationManager.text(
 					"ui.buff.more",
 					{"count": buffs.size() - slot_count + 1}
 				)
-			if description_label != null:
-				description_label.text = LocalizationManager.text("ui.buff.hover_complete")
 			if time_label != null:
 				time_label.text = ""
 			_apply_personal_buff_row_visual(button, {})
@@ -10692,12 +11056,8 @@ func _render_personal_buffs(buffs: Array) -> void:
 			continue
 
 		var buff: Dictionary = buffs[slot_index] as Dictionary
-		if badge_label != null:
-			badge_label.text = str(buff.get("label", "?")).strip_edges().left(3)
 		if name_label != null:
 			name_label.text = _localized_buff_name(buff)
-		if description_label != null:
-			description_label.text = _localized_buff_description(buff)
 		if time_label != null:
 			time_label.text = str(
 				buff.get("compactRemaining", buff.get("remaining", ""))
@@ -10707,28 +11067,15 @@ func _render_personal_buffs(buffs: Array) -> void:
 		button.set_meta("buff_data", buff.duplicate(true))
 	_refresh_personal_buffs_compact_state()
 
-func _apply_personal_buff_row_visual(button: Button, buff: Dictionary) -> void:
+func _apply_personal_buff_row_visual(button: Button, _buff: Dictionary) -> void:
 	if button == null:
 		return
-	var badge_label := button.get_node_or_null("Content/BadgeLabel") as Label
-	var name_label := button.get_node_or_null("Content/Details/NameLabel") as Label
+	var name_label := button.get_node_or_null("Content/NameLabel") as Label
 	var time_label := button.get_node_or_null("Content/TimeLabel") as Label
-	var is_aether_blessing := str(buff.get("id", "")).strip_edges().to_lower() == "aether_blessing"
-	if badge_label != null:
-		badge_label.add_theme_color_override(
-			"font_color",
-			AETHER_BLESSING_BADGE_COLOR if is_aether_blessing else PERSONAL_BUFF_DEFAULT_BADGE_COLOR
-		)
 	if name_label != null:
-		name_label.add_theme_color_override(
-			"font_color",
-			AETHER_BLESSING_NAME_COLOR if is_aether_blessing else PERSONAL_BUFF_DEFAULT_NAME_COLOR
-		)
+		name_label.add_theme_color_override("font_color", PERSONAL_BUFF_DEFAULT_NAME_COLOR)
 	if time_label != null:
-		time_label.add_theme_color_override(
-			"font_color",
-			AETHER_BLESSING_TIME_COLOR if is_aether_blessing else PERSONAL_BUFF_DEFAULT_TIME_COLOR
-		)
+		time_label.add_theme_color_override("font_color", PERSONAL_BUFF_DEFAULT_TIME_COLOR)
 
 func _on_personal_buffs_summary_pressed() -> void:
 	if active_personal_buffs.is_empty():
@@ -11108,7 +11455,10 @@ func _on_global_buff_contribute_pressed() -> void:
 	else:
 		return
 	if not bool(response.get("success", false)):
-		_add_chat_message(str(response.get("error", LocalizationManager.text("backend.error.not_enough_money"))))
+		if int(response.get("status", 0)) == 409:
+			await _load_global_boost_state(selected_boost_id)
+		else:
+			_add_chat_message(str(response.get("error", LocalizationManager.text("backend.error.not_enough_money"))))
 		_refresh_global_buff_contribution_input()
 		return
 	var body := response.get("body", {}) as Dictionary
@@ -11148,6 +11498,18 @@ func _load_global_rare_encounter_boost() -> void:
 	var response: Dictionary = await PlayerWalletService.load_global_rare_encounter_boost()
 	if bool(response.get("success", false)):
 		_apply_global_boost_state(response.get("body", {}) as Dictionary, "global_rare_encounter")
+
+
+func _load_global_boost_state(boost_id: String) -> void:
+	match boost_id:
+		"global_exp":
+			await _load_global_exp_boost()
+		"global_ev":
+			await _load_global_ev_boost()
+		"global_shiny":
+			await _load_global_shiny_boost()
+		"global_rare_encounter":
+			await _load_global_rare_encounter_boost()
 
 
 func _load_global_heal() -> void:
@@ -11384,9 +11746,12 @@ func _apply_global_boost_state(state: Dictionary, boost_id: String) -> void:
 			else ""
 		)
 		global_buffs_data[index] = buff
-		if str(selected_global_buff.get("id", "")) == boost_id:
+		var selected := str(selected_global_buff.get("id", "")) == boost_id
+		if selected:
 			selected_global_buff = buff.duplicate(true)
 		set_global_buffs(global_buffs_data)
+		if selected:
+			_render_global_buff_details()
 		return
 
 
@@ -12072,6 +12437,7 @@ func _refresh_player_status_card() -> void:
 	if trainer_card_playtime_label != null:
 		trainer_card_playtime_label.text = _format_playtime(PlayerSave.playtime_seconds)
 	_refresh_trainer_card_caps()
+	_refresh_aether_blessing_membership_status()
 
 func _make_trainer_card_outer_style() -> StyleBoxFlat:
 	var style := _make_panel_style(UI_SURFACE_BASE, UI_BORDER_SUBTLE, 14, 1)
@@ -14498,9 +14864,11 @@ func _on_player_status_panel_gui_input(event: InputEvent) -> void:
 	get_viewport().set_input_as_handled()
 
 func _on_player_status_panel_mouse_entered() -> void:
+	player_status_panel_hovered = true
 	_apply_player_status_panel_hover_style(true)
 
 func _on_player_status_panel_mouse_exited() -> void:
+	player_status_panel_hovered = false
 	_apply_player_status_panel_hover_style(false)
 
 func _apply_player_status_panel_hover_style(hovered: bool) -> void:
@@ -17502,12 +17870,18 @@ func _normalize_market_items(items_value: Variant) -> Array[Dictionary]:
 		var item_id := str(item.get("itemId", "")).strip_edges()
 		if item_id == "":
 			continue
+		var purchase_cost := _market_item_purchase_cost(item)
 		normalized_items.append(ItemLocalization.localize_item({
 			"id": item_id,
 			"name": str(item.get("name", _format_item_name_from_id(item_id))),
 			"category": str(item.get("category", "")),
 			"shortDesc": str(item.get("shortDesc", "")),
-			"price": _market_item_money_price(item),
+			"price": int(purchase_cost.get("amount", 0)),
+			"basePrice": int(purchase_cost.get("baseAmount", purchase_cost.get("amount", 0))),
+			"currency": str(purchase_cost.get("currency", "money")),
+			"membershipDiscountPercent": int(
+				purchase_cost.get("membershipDiscountPercent", 0)
+			),
 			"sellPrice": max(int(item.get("sellPrice", 0)), 0),
 			"requiredBadges": max(int(item.get("requiredBadges", 0)), 0),
 			"available": bool(item.get("available", true)),
@@ -17626,22 +18000,27 @@ func _market_sell_items(catalog_items: Array[Dictionary], inventory_items: Array
 			continue
 		var sell_item := catalog_item.duplicate(true)
 		sell_item["price"] = sell_price
+		sell_item["basePrice"] = sell_price
+		sell_item["currency"] = "money"
+		sell_item["membershipDiscountPercent"] = 0
 		sell_item["quantity"] = owned_quantity
 		sell_items.append(sell_item)
 	return sell_items
 
-func _market_item_money_price(item: Dictionary) -> int:
+func _market_item_purchase_cost(item: Dictionary) -> Dictionary:
 	var costs_value: Variant = item.get("costs", [])
 	if typeof(costs_value) != TYPE_ARRAY:
-		return 0
+		return {}
 	var costs: Array = costs_value
 	for cost_value: Variant in costs:
 		if typeof(cost_value) != TYPE_DICTIONARY:
 			continue
 		var cost: Dictionary = cost_value
-		if str(cost.get("currency", "")).strip_edges().to_lower() == "money":
-			return max(int(cost.get("amount", 0)), 0)
-	return 0
+		var currency := str(cost.get("currency", "")).strip_edges().to_lower()
+		if currency not in ["money", "aetherite", "battle_points"]:
+			continue
+		return cost.duplicate(true)
+	return {}
 
 func _refresh_market_items() -> void:
 	if market_item_list == null:
@@ -17706,6 +18085,8 @@ func _create_market_item_button(item: Dictionary) -> Control:
 	var item_id := str(item.get("id", ""))
 	var item_name := str(item.get("name", _item_name_from_id(item_id)))
 	var price: int = int(item.get("price", 0))
+	var currency := str(item.get("currency", "money"))
+	var discount_percent := int(item.get("membershipDiscountPercent", 0))
 	var selected := _is_same_market_item(item, market_selected_item)
 	var row := PanelContainer.new()
 	row.name = "MarketItem_%s" % item_id
@@ -17785,7 +18166,7 @@ func _create_market_item_button(item: Dictionary) -> Control:
 	content.add_child(price_stack)
 
 	var price_label := Label.new()
-	price_label.text = _format_money(price)
+	price_label.text = _format_market_currency_amount(price, currency)
 	price_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	price_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	price_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -17794,10 +18175,18 @@ func _create_market_item_button(item: Dictionary) -> Control:
 	price_stack.add_child(price_label)
 
 	var each_label := Label.new()
-	each_label.text = LocalizationManager.text("ui.market.each")
+	each_label.text = LocalizationManager.text(
+		"ui.market.member_discount" if discount_percent > 0 else "ui.market.each",
+		{"percent": discount_percent}
+	)
 	each_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	each_label.add_theme_font_size_override("font_size", 9)
-	each_label.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.68))
+	each_label.add_theme_color_override(
+		"font_color",
+		TRAINER_CARD_GREEN
+		if discount_percent > 0
+		else Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.68)
+	)
 	price_stack.add_child(each_label)
 
 	return row
@@ -17898,9 +18287,14 @@ func _refresh_market_purchase_state() -> void:
 
 	var quantity: int = max(int(market_quantity_spinbox.value), 1)
 	var price: int = int(market_selected_item.get("price", 0))
+	var currency := str(market_selected_item.get("currency", "money"))
 	var total: int = price * quantity
 	var player_is_selling := market_mode == "player_sells"
-	var allowed := quantity <= int(market_selected_item.get("quantity", 0)) if player_is_selling else total <= PlayerSave.money
+	var allowed := (
+		quantity <= int(market_selected_item.get("quantity", 0))
+		if player_is_selling
+		else total <= _market_currency_balance(currency)
+	)
 	market_buy_button.disabled = market_purchase_in_progress or not allowed
 	if market_purchase_in_progress:
 		market_buy_button.text = LocalizationManager.text(
@@ -17909,7 +18303,7 @@ func _refresh_market_purchase_state() -> void:
 	else:
 		market_buy_button.text = LocalizationManager.text(
 			"ui.market.action.sell_total" if player_is_selling else "ui.market.action.buy_total",
-			{"total": _format_money(total)}
+			{"total": _format_market_currency_amount(total, currency)}
 		)
 	var item_name := str(market_selected_item.get(
 		"name",
@@ -17918,13 +18312,19 @@ func _refresh_market_purchase_state() -> void:
 	var status_text := LocalizationManager.text("ui.market.status.total", {
 		"quantity": quantity,
 		"item": item_name,
-		"total": _format_money(total),
+		"total": _format_market_currency_amount(total, currency),
 	})
 	if not allowed:
+		var insufficient_key := "ui.market.status.not_enough_items"
+		if not player_is_selling:
+			insufficient_key = (
+				"ui.market.status.not_enough_money"
+				if currency == "money"
+				else "ui.market.status.not_enough_currency"
+			)
 		status_text += LocalizationManager.text(
-			"ui.market.status.not_enough_items"
-			if player_is_selling
-			else "ui.market.status.not_enough_money"
+			insufficient_key,
+			{"currency": _market_currency_label(currency)}
 		)
 	_set_market_status(status_text, not allowed)
 
@@ -17948,6 +18348,7 @@ func _refresh_market_detail() -> void:
 	var description := str(market_selected_item.get("shortDesc", "")).strip_edges()
 	var quantity: int = max(int(market_quantity_spinbox.value), 1)
 	var unit_price: int = max(int(market_selected_item.get("price", 0)), 0)
+	var currency := str(market_selected_item.get("currency", "money"))
 	market_detail_icon.texture = _load_item_icon(item_id)
 	market_detail_icon.modulate = Color.WHITE
 	market_detail_name_label.text = item_name
@@ -17957,16 +18358,55 @@ func _refresh_market_detail() -> void:
 		if market_mode == "player_sells"
 		else LocalizationManager.text("ui.market.detail.buy_fallback")
 	)
-	market_unit_price_label.text = _format_money(unit_price)
-	market_total_price_label.text = _format_money(unit_price * quantity)
+	market_unit_price_label.text = _format_market_currency_amount(unit_price, currency)
+	market_total_price_label.text = _format_market_currency_amount(unit_price * quantity, currency)
 	market_quantity_spinbox.max_value = max(int(market_selected_item.get("quantity", 1)), 1) if market_mode == "player_sells" else 99
 	market_quantity_spinbox.editable = not market_purchase_in_progress
 
 func _refresh_market_money() -> void:
 	if market_money_label != null:
-		market_money_label.text = LocalizationManager.text("ui.market.money", {
-			"amount": _format_money(PlayerSave.money),
-		})
+		var currency := (
+			"money"
+			if market_mode == "player_sells" or market_selected_item.is_empty()
+			else str(market_selected_item.get("currency", "money"))
+		)
+		var amount := _market_currency_balance(currency)
+		market_money_label.text = (
+			LocalizationManager.text("ui.market.money", {"amount": _format_money(amount)})
+			if currency == "money"
+			else LocalizationManager.text("ui.market.wallet", {
+				"currency": _market_currency_label(currency),
+				"amount": _format_money(amount),
+			})
+		)
+
+
+func _market_currency_balance(currency: String) -> int:
+	match currency.strip_edges().to_lower():
+		"aetherite":
+			return maxi(PlayerSave.aetherite, 0)
+		"battle_points":
+			return maxi(PlayerSave.battle_points, 0)
+	return maxi(PlayerSave.money, 0)
+
+
+func _market_currency_label(currency: String) -> String:
+	match currency.strip_edges().to_lower():
+		"aetherite":
+			return LocalizationManager.text("ui.trainer_card.wallet.aetherite")
+		"battle_points":
+			return LocalizationManager.text("ui.trainer_card.wallet.battle_points")
+	return LocalizationManager.text("ui.trainer_card.wallet.money")
+
+
+func _format_market_currency_amount(amount: int, currency: String) -> String:
+	var formatted := _format_money(amount)
+	match currency.strip_edges().to_lower():
+		"aetherite":
+			return "%s Aetherite" % formatted
+		"battle_points":
+			return "%s BP" % formatted
+	return "₽%s" % formatted
 
 func _on_market_buy_pressed() -> void:
 	if market_purchase_in_progress or market_selected_item.is_empty():
@@ -18942,10 +19382,6 @@ func _refresh_bag_item_use_party_list() -> void:
 		var pokemon: Pokemon = PlayerSave.party[slot_index]
 		if pokemon == null:
 			continue
-		var machine_move_id := _bag_machine_move_id(str(bag_item_use_pending_item.get("id", "")))
-		var can_teach_machine := _bag_machine_can_teach_pokemon(pokemon)
-		if machine_move_id != "" and not can_teach_machine:
-			continue
 		bag_item_use_party_list.add_child(_create_bag_item_use_pokemon_button(pokemon, slot_index))
 		shown_pokemon_count += 1
 
@@ -18976,8 +19412,9 @@ func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> C
 	if not can_apply:
 		var reason := str(preview.get("label", LocalizationManager.text("ui.bag.use.unavailable")))
 		preview_text = LocalizationManager.text("ui.bag.use.cannot_use_reason", {"reason": reason})
-	elif slot_index == bag_item_use_selected_slot:
-		preview_text = str(preview.get("label", ""))
+	else:
+		var result := str(preview.get("label", LocalizationManager.text("ui.bag.use.available")))
+		preview_text = LocalizationManager.text("ui.bag.use.can_use_reason", {"reason": result})
 	var row := HBoxContainer.new()
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -19016,7 +19453,7 @@ func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> C
 		preview_label.text = preview_text
 		preview_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		preview_label.add_theme_font_size_override("font_size", 11)
-		preview_label.add_theme_color_override("font_color", UI_MUTED_TEXT if can_apply else UI_DANGER)
+		preview_label.add_theme_color_override("font_color", UI_SUCCESS if can_apply else UI_DANGER)
 		details.add_child(preview_label)
 	button.tooltip_text = str(preview.get("tooltip", button.text))
 	button.disabled = bag_item_use_in_progress or not can_apply
@@ -19040,6 +19477,15 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 				}),
 				"canApply": false,
 			}
+		if _bag_item_target_compatibility_known() and not _bag_item_target_is_compatible(pokemon):
+			return {
+				"label": LocalizationManager.text("ui.bag.use.cannot_learn", {"move": _format_move_name(machine_move_id)}),
+				"tooltip": LocalizationManager.text("ui.bag.use.cannot_learn_tooltip", {
+					"pokemon": _pokemon_display_name(pokemon),
+					"move": _format_move_name(machine_move_id),
+				}),
+				"canApply": false,
+			}
 		return {
 			"label": LocalizationManager.text("ui.bag.use.teach_move", {"move": _format_move_name(machine_move_id)}),
 			"tooltip": LocalizationManager.text("ui.bag.use.teach_move_tooltip", {
@@ -19048,7 +19494,34 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 			}),
 			"canApply": true,
 		}
-	if _is_evolution_item_id(item_id):
+	var evolution_effect_type := _bag_evolution_effect_type(item_id)
+	if evolution_effect_type != "":
+		if _bag_item_target_compatibility_known() and not _bag_item_target_is_compatible(pokemon):
+			var unavailable_label_key := (
+				"ui.bag.use.cannot_trade_evolve"
+				if evolution_effect_type == "evolve_trade"
+				else "ui.bag.use.cannot_item_evolve"
+			)
+			var unavailable_tooltip_key := (
+				"ui.bag.use.cannot_trade_evolve_tooltip"
+				if evolution_effect_type == "evolve_trade"
+				else "ui.bag.use.cannot_item_evolve_tooltip"
+			)
+			return {
+				"label": LocalizationManager.text(unavailable_label_key),
+				"tooltip": LocalizationManager.text(unavailable_tooltip_key, {
+					"pokemon": _pokemon_display_name(pokemon),
+				}),
+				"canApply": false,
+			}
+		if evolution_effect_type == "evolve_trade":
+			return {
+				"label": LocalizationManager.text("ui.bag.use.trade_evolution"),
+				"tooltip": LocalizationManager.text("ui.bag.use.trade_evolution_tooltip", {
+					"pokemon": _pokemon_display_name(pokemon),
+				}),
+				"canApply": true,
+			}
 		return {
 			"label": LocalizationManager.text("ui.bag.use.evolution"),
 			"tooltip": LocalizationManager.text("ui.bag.use.evolution_tooltip", {
@@ -19488,16 +19961,20 @@ func _is_ev_reducing_berry_id(item_id: String) -> bool:
 	return EV_REDUCING_BERRY_STATS.has(_normalize_item_id(item_id))
 
 func _is_evolution_item_id(item_id: String) -> bool:
+	return _bag_evolution_effect_type(item_id) != ""
+
+func _bag_evolution_effect_type(item_id: String) -> String:
 	var gameplay := _bag_gameplay_definition_for_item_id(item_id)
 	var effects_value: Variant = gameplay.get("effects", [])
 	if not (effects_value is Array):
-		return false
+		return ""
 	for effect_value: Variant in effects_value as Array:
 		if not (effect_value is Dictionary):
 			continue
-		if str((effect_value as Dictionary).get("type", "")) in ["evolve_trade", "evolve_item"]:
-			return true
-	return false
+		var effect_type := str((effect_value as Dictionary).get("type", ""))
+		if effect_type in ["evolve_trade", "evolve_item"]:
+			return effect_type
+	return ""
 
 func _is_pokemon_usable_item_id(item_id: String) -> bool:
 	return _bag_machine_move_id(item_id) != "" or _is_exp_item_id(item_id) or _is_ev_item_id(item_id) or _is_ev_reducing_berry_id(item_id) or _is_evolution_item_id(item_id) or BAG_ITEM_EFFECT_PREVIEW.supports(_bag_gameplay_definition_for_item_id(item_id))
@@ -19562,16 +20039,24 @@ func _bag_item_icon_gender(item_id: String) -> String:
 	)
 
 
-func _bag_machine_can_teach_pokemon(pokemon: Pokemon) -> bool:
+func _bag_item_target_compatibility_known() -> bool:
+	if bool(bag_item_use_pending_item.get("pokemonCompatibilityKnown", false)):
+		return true
+	# Backward compatibility with inventory payloads from before the generic
+	# target compatibility contract. Machine compatibility was already exact.
+	return _bag_machine_move_id(str(bag_item_use_pending_item.get("id", ""))) != ""
+
+func _bag_item_target_is_compatible(pokemon: Pokemon) -> bool:
 	if pokemon == null or pokemon.owned_pokemon_id <= 0:
 		return false
-	var compatible_ids_value: Variant = bag_item_use_pending_item.get("machineCompatiblePokemonIds", [])
+	var compatible_ids_value: Variant = bag_item_use_pending_item.get("compatiblePokemonIds", [])
+	if not bool(bag_item_use_pending_item.get("pokemonCompatibilityKnown", false)):
+		compatible_ids_value = bag_item_use_pending_item.get("machineCompatiblePokemonIds", [])
 	if not (compatible_ids_value is Array):
 		return false
-	var compatible_ids: Array = compatible_ids_value as Array
-	for compatible_id_value: Variant in compatible_ids:
+	for compatible_id_value: Variant in compatible_ids_value as Array:
 		if int(compatible_id_value) == pokemon.owned_pokemon_id:
-			return not _pokemon_knows_move_id(pokemon, _bag_machine_move_id(str(bag_item_use_pending_item.get("id", ""))))
+			return true
 	return false
 
 func _pokemon_knows_move_id(pokemon: Pokemon, move_id: String) -> bool:
@@ -19722,6 +20207,8 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 			"machineMoveType": str(item.get("machineMoveType", "")).strip_edges().to_lower(),
 			"fieldMove": str(item.get("fieldMove", "")).strip_edges(),
 			"machineCompatiblePokemonIds": item.get("machineCompatiblePokemonIds", []),
+			"pokemonCompatibilityKnown": bool(item.get("pokemonCompatibilityKnown", false)),
+			"compatiblePokemonIds": item.get("compatiblePokemonIds", []),
 			"gameplay": gameplay,
 			"useNotice": use_notice,
 			"useAction": str(item.get("useAction", "")).strip_edges(),
@@ -23755,10 +24242,22 @@ func _apply_chat_dock_button_style(button: Button, accent: bool = false) -> void
 
 func _make_player_status_panel_style(hovered: bool) -> StyleBoxFlat:
 	var background_color := UI_SURFACE_HOVER if hovered else UI_SURFACE_BASE
+	var has_aether_blessing := (
+		player_status_panel != null
+		and bool(player_status_panel.get_meta("aether_blessing_active", false))
+	)
 	var border_color := UI_BORDER_FOCUS if hovered else PLAYER_STATUS_CARD_BORDER
+	if has_aether_blessing:
+		border_color = (
+			AETHER_BLESSING_CARD_HOVER_BORDER if hovered else AETHER_BLESSING_CARD_BORDER
+		)
 	var style := _make_panel_style(background_color, border_color, 12, 1)
 	style.border_width_left = 3
-	style.shadow_color = Color(border_color.r, border_color.g, border_color.b, 0.18) if hovered else Color(0, 0, 0, 0.36)
+	style.shadow_color = (
+		Color(border_color.r, border_color.g, border_color.b, 0.22)
+		if hovered or has_aether_blessing
+		else Color(0, 0, 0, 0.36)
+	)
 	style.shadow_size = 8 if hovered else 7
 	style.shadow_offset = Vector2(0, 3)
 	return style
@@ -23810,6 +24309,17 @@ func _apply_button_style(button: Button, variant: String = "default") -> void:
 	button.add_theme_stylebox_override("pressed", _make_button_style(pressed_bg, hover_border))
 	button.add_theme_stylebox_override("focus", _make_button_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, 8, 1))
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+
+
+func _apply_pvp_room_type_button_style(button: Button) -> void:
+	if button == null:
+		return
+	_apply_button_style(button)
+	button.add_theme_color_override("font_pressed_color", Color("#f7e6a8"))
+	button.add_theme_stylebox_override(
+		"pressed",
+		_make_button_style(Color("#173247f2"), Color("#79c8ff"), 8, 2)
+	)
 
 
 func _apply_global_buff_fill_remaining_button_style() -> void:
@@ -26477,7 +26987,12 @@ func _handle_content_creator_add_pokemon_command(pokemon_text: String) -> bool:
 	for pokemon_data: Dictionary in parsed_pokemon_payloads:
 		var create_result: Dictionary = await PlayerPartyStateService.content_creator_create_pokemon(pokemon_data, true)
 		if not bool(create_result.get("success", false)):
-			_add_chat_message("Created %s Pokemon, then failed: %s" % [created_count, str(create_result.get("error", "Unknown error"))])
+			_add_chat_message(ALPHA_TOOLS_ERROR_FEEDBACK.team_creation_failure(
+				created_count,
+				created_count + 1,
+				pokemon_data,
+				create_result
+			))
 			return false
 		created_count += 1
 
@@ -35997,17 +36512,94 @@ func _heal_party_before_pvp(action_label: String = "PvP") -> bool:
 	return false
 
 func _on_pvp_room_mode_selected(mode: String) -> void:
+	if pvp_active_room_code == "":
+		_clear_pvp_training_team_preview()
 	pvp_room_selected_mode = mode
 	pvp_room_form.visible = true
-	pvp_room_code_input.visible = mode != "create"
+	if pvp_room_flow_hint != null:
+		pvp_room_flow_hint.visible = false
+	_refresh_pvp_room_team_fields()
 	pvp_allow_spectators_check.visible = mode == "create"
+	pvp_timer_enabled_check.visible = mode == "create"
 	pvp_create_room_button.visible = mode == "create"
 	pvp_join_room_button.visible = mode == "join"
 	pvp_spectate_room_button.visible = mode == "spectate"
 	pvp_cancel_room_button.visible = false
 	pvp_copy_code_button.visible = false
 	_refresh_pvp_room_form_title()
-	_set_pvp_status_key("ui.pvp.room.ready")
+	_set_pvp_status_key(
+		"ui.pvp.room.ready" if mode == "spectate" else _pvp_room_ready_status_key()
+	)
+
+
+func _on_pvp_room_battle_purpose_selected(purpose: String) -> void:
+	if pvp_active_room_code != "" or pvp_battle_starting:
+		return
+	pvp_room_battle_purpose = "training" if purpose == "training" else "casual"
+	_clear_pvp_training_team_preview()
+	if pvp_room_casual_type_button != null:
+		pvp_room_casual_type_button.button_pressed = pvp_room_battle_purpose == "casual"
+	if pvp_room_training_type_button != null:
+		pvp_room_training_type_button.button_pressed = pvp_room_battle_purpose == "training"
+	_refresh_pvp_room_team_fields()
+	_refresh_pvp_room_battle_purpose_ui()
+	_refresh_pvp_room_form_title()
+	_set_pvp_status_key(_pvp_room_ready_status_key())
+
+
+func _pvp_room_ready_status_key() -> String:
+	return "ui.pvp.training.ready" if pvp_room_battle_purpose == "training" else "ui.pvp.room.casual_ready"
+
+
+func _refresh_pvp_room_battle_purpose_ui() -> void:
+	var is_training := pvp_room_battle_purpose == "training"
+	if pvp_room_casual_type_button != null:
+		pvp_room_casual_type_button.text = (
+			LocalizationManager.text("ui.pvp.room.type.casual")
+			if is_training
+			else "✓ %s" % LocalizationManager.text("ui.pvp.room.type.casual")
+		)
+	if pvp_room_training_type_button != null:
+		pvp_room_training_type_button.text = (
+			"✓ %s" % LocalizationManager.text("ui.pvp.room.type.training")
+			if is_training
+			else LocalizationManager.text("ui.pvp.room.type.training")
+		)
+	if pvp_room_type_note != null:
+		_set_localized_control_property(
+			pvp_room_type_note,
+			"text",
+			"ui.pvp.room.type.training_note" if is_training else "ui.pvp.room.type.casual_note"
+		)
+	if pvp_room_flow_hint != null:
+		_set_localized_control_property(
+			pvp_room_flow_hint,
+			"text",
+			"ui.pvp.room.flow_hint.training" if is_training else "ui.pvp.room.flow_hint.casual"
+		)
+	var create_key := "ui.pvp.training.create" if is_training else "ui.pvp.room.create"
+	var join_key := "ui.pvp.training.join" if is_training else "ui.pvp.room.join"
+	for create_button: Button in [pvp_room_create_mode_button, pvp_create_room_button]:
+		if create_button != null:
+			create_button.text = LocalizationManager.text(create_key)
+	for join_button: Button in [pvp_room_join_mode_button, pvp_join_room_button]:
+		if join_button != null:
+			join_button.text = LocalizationManager.text(join_key)
+
+
+func _refresh_pvp_room_team_fields() -> void:
+	var needs_team := pvp_room_selected_mode in ["create", "join"]
+	var is_training := pvp_room_battle_purpose == "training"
+	if pvp_room_code_input != null:
+		pvp_room_code_input.visible = pvp_room_selected_mode != "create"
+		if pvp_room_form != null and pvp_room_selected_mode in ["join", "spectate"]:
+			pvp_room_form.move_child(pvp_room_code_input, 1)
+	if pvp_training_team_input != null:
+		pvp_training_team_input.visible = needs_team and is_training
+		if pvp_room_form != null and pvp_room_selected_mode == "create":
+			pvp_room_form.move_child(pvp_training_team_input, 1)
+	if pvp_training_team_note != null:
+		pvp_training_team_note.visible = needs_team and is_training
 
 
 func _refresh_pvp_room_form_title() -> void:
@@ -36018,9 +36610,13 @@ func _refresh_pvp_room_form_title() -> void:
 		return
 	match pvp_room_selected_mode:
 		"create":
-			pvp_room_form_title.text = LocalizationManager.text("ui.pvp.room.form_create")
+			pvp_room_form_title.text = LocalizationManager.text(
+				"ui.pvp.training.form_create" if pvp_room_battle_purpose == "training" else "ui.pvp.room.form_create"
+			)
 		"join":
-			pvp_room_form_title.text = LocalizationManager.text("ui.pvp.room.form_join")
+			pvp_room_form_title.text = LocalizationManager.text(
+				"ui.pvp.training.form_join" if pvp_room_battle_purpose == "training" else "ui.pvp.room.form_join"
+			)
 		"spectate":
 			pvp_room_form_title.text = LocalizationManager.text("ui.pvp.room.form_spectate")
 		_:
@@ -36029,32 +36625,48 @@ func _refresh_pvp_room_form_title() -> void:
 func _on_pvp_create_room_pressed() -> void:
 	if pvp_battle_starting:
 		return
-	if not await _heal_party_before_pvp("PvP room"):
+	var is_training := pvp_room_battle_purpose == "training"
+	var team_text := pvp_training_team_input.text.strip_edges() if pvp_training_team_input != null else ""
+	if is_training and team_text == "":
+		_set_pvp_status_key("ui.pvp.training.paste_required")
+		return
+	if not is_training and not await _heal_party_before_pvp("PvP room"):
 		return
 	_set_pvp_room_busy(true)
 	_set_pvp_status_key("ui.pvp.room.creating")
 	var request := _create_pvp_request_node()
 	var response: Dictionary = await BattleApiClient.create_pvp_room(
 		request,
-		BattleApiPayloads.from_player_save(PlayerSave),
-		pvp_allow_spectators_check != null and pvp_allow_spectators_check.button_pressed
+		_pvp_room_player_payload(),
+		pvp_allow_spectators_check != null and pvp_allow_spectators_check.button_pressed,
+		8,
+		pvp_room_battle_purpose,
+		team_text,
+		pvp_timer_enabled_check != null and pvp_timer_enabled_check.button_pressed
 	)
 	request.queue_free()
 	_set_pvp_room_busy(false)
 
 	if not bool(response.get("success", false)):
-		_set_pvp_status_key("ui.pvp.room.create_failed")
+		_set_pvp_status_key(
+			"ui.pvp.training.paste_invalid" if is_training else "ui.pvp.room.create_failed"
+		)
 		push_warning("UIOverlay: PVP room creation failed: %s" % str(response.get("error", "Unknown error")))
 		return
 
 	pvp_active_room_code = str(response.get("roomCode", "")).strip_edges()
+	_set_pvp_training_team_preview(response.get("teamPreview", []))
 	pvp_room_code_label.text = LocalizationManager.text("ui.pvp.room.code", {"code": pvp_active_room_code})
 	pvp_copy_code_button.disabled = pvp_active_room_code == ""
 	pvp_room_mode_selector.visible = false
+	_set_pvp_room_type_locked(true)
 	pvp_room_form.visible = true
 	pvp_room_form_title.text = LocalizationManager.text("ui.pvp.room.form_share")
 	pvp_room_code_input.visible = false
+	pvp_training_team_input.visible = false
+	pvp_training_team_note.visible = false
 	pvp_allow_spectators_check.visible = false
+	pvp_timer_enabled_check.visible = false
 	pvp_create_room_button.visible = false
 	pvp_join_room_button.visible = false
 	pvp_spectate_room_button.visible = false
@@ -36066,6 +36678,21 @@ func _on_pvp_create_room_pressed() -> void:
 
 func _on_pvp_allow_spectators_toggled(allowed: bool) -> void:
 	_refresh_pvp_allow_spectators_checkbox(allowed)
+
+func _on_pvp_timer_enabled_toggled(enabled: bool) -> void:
+	_refresh_pvp_timer_enabled_checkbox(enabled)
+
+func _refresh_pvp_timer_enabled_checkbox(enabled: bool) -> void:
+	if pvp_timer_enabled_check == null:
+		return
+	pvp_timer_enabled_check.text = LocalizationManager.text(
+		"ui.pvp.room.timer",
+		{"state": LocalizationManager.text("ui.pvp.state.on" if enabled else "ui.pvp.state.off")}
+	)
+	pvp_timer_enabled_check.add_theme_color_override(
+		"font_color",
+		Color("#9be7b1") if enabled else Color("#f1c3a1")
+	)
 
 func _refresh_pvp_allow_spectators_checkbox(allowed: bool) -> void:
 	if pvp_allow_spectators_check == null:
@@ -36115,10 +36742,14 @@ func _on_pvp_cancel_room_pressed() -> void:
 	pvp_poll_in_flight = false
 	pvp_poll_elapsed = 0.0
 	pvp_active_room_code = ""
+	_clear_pvp_training_team_preview()
 	pvp_room_code_label.text = LocalizationManager.text("ui.pvp.room.code", {"code": "-"})
 	pvp_copy_code_button.disabled = true
 	pvp_room_mode_selector.visible = true
+	_set_pvp_room_type_locked(false)
 	pvp_room_form.visible = false
+	if pvp_room_flow_hint != null:
+		pvp_room_flow_hint.visible = true
 	pvp_room_selected_mode = ""
 	_set_pvp_status_key("ui.pvp.room.cancelled")
 
@@ -36129,7 +36760,12 @@ func _on_pvp_join_room_pressed() -> void:
 	if room_code == "":
 		_set_pvp_status_key("ui.pvp.room.enter_code_first")
 		return
-	if not await _heal_party_before_pvp("PvP room"):
+	var is_training := pvp_room_battle_purpose == "training"
+	var team_text := pvp_training_team_input.text.strip_edges() if pvp_training_team_input != null else ""
+	if is_training and team_text == "":
+		_set_pvp_status_key("ui.pvp.training.paste_required")
+		return
+	if not is_training and not await _heal_party_before_pvp("PvP room"):
 		return
 
 	_set_pvp_room_busy(true)
@@ -36138,7 +36774,8 @@ func _on_pvp_join_room_pressed() -> void:
 	var response: Dictionary = await BattleApiClient.join_pvp_room(
 		request,
 		room_code,
-		BattleApiPayloads.from_player_save(PlayerSave)
+		_pvp_room_player_payload(),
+		team_text
 	)
 	request.queue_free()
 	_set_pvp_room_busy(false)
@@ -36152,13 +36789,32 @@ func _on_pvp_join_room_pressed() -> void:
 			await _start_pvp_battle_from_response(_normalize_started_pvp_reconnect_response(response))
 			return
 		_set_pvp_status_key("ui.pvp.room.join_failed")
+		if is_training:
+			_set_pvp_status_key("ui.pvp.training.paste_invalid")
 		push_warning("UIOverlay: PVP room join failed: %s" % str(response.get("error", "Unknown error")))
 		return
 
 	pvp_active_room_code = str(response.get("roomCode", room_code)).strip_edges()
+	pvp_room_battle_purpose = str(response.get("battlePurpose", pvp_room_battle_purpose)).strip_edges().to_lower()
 	pvp_room_code_label.text = LocalizationManager.text("ui.pvp.room.code", {"code": pvp_active_room_code})
 	pvp_copy_code_button.disabled = pvp_active_room_code == ""
 	await _start_pvp_battle_from_response(response)
+
+
+func _pvp_room_player_payload() -> Dictionary:
+	if pvp_room_battle_purpose != "training":
+		return BattleApiPayloads.from_player_save(PlayerSave)
+	return {
+		"playerId": PlayerSave.player_id,
+		"name": PlayerSave.player_name,
+	}
+
+
+func _set_pvp_room_type_locked(locked: bool) -> void:
+	if pvp_room_casual_type_button != null:
+		pvp_room_casual_type_button.disabled = locked
+	if pvp_room_training_type_button != null:
+		pvp_room_training_type_button.disabled = locked
 
 func _on_pvp_spectate_room_pressed() -> void:
 	if pvp_battle_starting:
@@ -38219,6 +38875,8 @@ func _poll_pvp_room() -> void:
 		return
 
 	var status := str(response.get("status", "waiting"))
+	if response.has("teamPreview"):
+		_set_pvp_training_team_preview(response.get("teamPreview", []))
 	if status != "started":
 		_set_pvp_status_key("ui.pvp.room.waiting")
 		return
@@ -38273,6 +38931,8 @@ func _on_pvp_room_poll_completed(
 		return
 
 	var status := str(response.get("status", "waiting"))
+	if response.has("teamPreview"):
+		_set_pvp_training_team_preview(response.get("teamPreview", []))
 	if status != "started":
 		_set_pvp_status_key("ui.pvp.room.waiting")
 		return
@@ -38311,6 +38971,7 @@ func _start_pvp_battle_from_response(response: Dictionary) -> void:
 		return
 
 	pvp_active_room_code = ""
+	_clear_pvp_training_team_preview()
 	pvp_active_queue_entry_id = ""
 	pvp_active_queue_match_id = ""
 	pvp_active_queue_status = ""
@@ -38329,6 +38990,9 @@ func _start_pvp_battle_from_response(response: Dictionary) -> void:
 		pvp_room_mode_selector.visible = true
 	if pvp_room_form != null:
 		pvp_room_form.visible = false
+	if pvp_room_flow_hint != null:
+		pvp_room_flow_hint.visible = true
+	_set_pvp_room_type_locked(false)
 	pvp_room_selected_mode = ""
 	_set_pvp_queue_status_key("ui.pvp.queue.ready")
 	_refresh_pvp_queue_buttons("idle")
@@ -38342,6 +39006,7 @@ func _create_pvp_request_node() -> HTTPRequest:
 
 func _set_pvp_room_busy(is_busy: bool) -> void:
 	pvp_create_room_button.disabled = is_busy
+	_set_pvp_room_type_locked(is_busy or pvp_active_room_code != "")
 	if pvp_room_create_mode_button != null:
 		pvp_room_create_mode_button.disabled = is_busy
 	if pvp_room_join_mode_button != null:
@@ -38355,6 +39020,8 @@ func _set_pvp_room_busy(is_busy: bool) -> void:
 		pvp_spectate_room_button.disabled = is_busy
 	if pvp_allow_spectators_check != null:
 		pvp_allow_spectators_check.disabled = is_busy
+	if pvp_timer_enabled_check != null:
+		pvp_timer_enabled_check.disabled = is_busy
 	if pvp_join_queue_button != null:
 		var ranked_blocked := _is_selected_pvp_queue_ranked() and not PvpRankedTeamValidation.allows_ranked_join(pvp_ranked_team_validation_result)
 		pvp_join_queue_button.disabled = is_busy or pvp_active_queue_entry_id != "" or pvp_active_queue_match_id != "" or ranked_blocked
@@ -38790,15 +39457,19 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 		return
 	if message_type == "system.global_exp_boost_contribution":
 		add_system_message(_global_exp_boost_contribution_message(message))
+		_load_global_boost_state.call_deferred("global_exp")
 		return
 	if message_type == "system.global_ev_boost_contribution":
 		add_system_message(_global_ev_boost_contribution_message(message))
+		_load_global_boost_state.call_deferred("global_ev")
 		return
 	if message_type == "system.global_rare_encounter_boost_contribution":
 		add_system_message(_global_rare_encounter_boost_contribution_message(message))
+		_load_global_boost_state.call_deferred("global_rare_encounter")
 		return
 	if message_type == "system.global_shiny_boost_contribution":
 		add_system_message(_global_shiny_boost_contribution_message(message))
+		_load_global_boost_state.call_deferred("global_shiny")
 		return
 	if message_type == "system.global_heal_requested":
 		_receive_global_heal_request(message)
@@ -39160,22 +39831,26 @@ func _add_user_chat_message(
 	if not role.is_empty():
 		role_name = str(role.get("badge", "")).strip_edges()
 	var message_context := _chat_message_context(user, display_name, text, sent_at)
-	var inline_single_pokemon := (
+	var inline_pokemon_share := (
 		text.strip_edges() == ""
-		and pokemon_attachments.size() == 1
+		and not pokemon_attachments.is_empty()
 		and shiny_hunt_attachment.is_empty()
 	)
-	var inline_pokemon_attachment: Control = null
-	if inline_single_pokemon:
-		inline_pokemon_attachment = _create_chat_pokemon_attachment_button(
-			_pokemon_preview_payload_with_current_trainer(
-				pokemon_attachments[0],
-				display_name,
-				str(user.get("id", user.get("userId", user.get("user_id", ""))))
-			),
-			true
-		)
-		inline_pokemon_attachment.name = "InlinePokemonAttachment"
+	var inline_pokemon_attachments: Control = null
+	if inline_pokemon_share:
+		var attachment_group := HBoxContainer.new()
+		attachment_group.name = "InlinePokemonAttachments"
+		attachment_group.add_theme_constant_override("separation", 4)
+		for pokemon_payload: Dictionary in pokemon_attachments:
+			attachment_group.add_child(_create_chat_pokemon_attachment_button(
+				_pokemon_preview_payload_with_current_trainer(
+					pokemon_payload,
+					display_name,
+					str(user.get("id", user.get("userId", user.get("user_id", ""))))
+				),
+				true
+			))
+		inline_pokemon_attachments = attachment_group
 
 	row.add_child(_create_chat_sender_message_line(
 		display_name,
@@ -39186,11 +39861,11 @@ func _add_user_chat_message(
 		role_name,
 		role_color,
 		message_context,
-		inline_pokemon_attachment
+		inline_pokemon_attachments
 	))
 
 	var has_visual_attachments := (
-		(not inline_single_pokemon and not pokemon_attachments.is_empty())
+		(not inline_pokemon_share and not pokemon_attachments.is_empty())
 		or not shiny_hunt_attachment.is_empty()
 	)
 	if has_visual_attachments:
@@ -39198,7 +39873,7 @@ func _add_user_chat_message(
 		attachment_row.name = "Attachments"
 		attachment_row.add_theme_constant_override("separation", 4)
 		row.add_child(attachment_row)
-		if not inline_single_pokemon:
+		if not inline_pokemon_share:
 			for pokemon_payload: Dictionary in pokemon_attachments:
 				attachment_row.add_child(_create_chat_pokemon_attachment_button(
 					_pokemon_preview_payload_with_current_trainer(
@@ -39222,7 +39897,7 @@ func _create_chat_sender_message_line(
 	role_name: String,
 	role_color: String,
 	message_context: Dictionary,
-	inline_pokemon_attachment: Control = null
+	inline_pokemon_attachments: Control = null
 ) -> Control:
 	var line := PanelContainer.new()
 	line.name = "MessageLine"
@@ -39244,7 +39919,7 @@ func _create_chat_sender_message_line(
 	var channel_prefix := _create_chat_channel_prefix(channel, target_user_id)
 	channel_prefix.size_flags_vertical = (
 		Control.SIZE_SHRINK_CENTER
-		if inline_pokemon_attachment != null
+		if inline_pokemon_attachments != null
 		else Control.SIZE_SHRINK_BEGIN
 	)
 	header.add_child(channel_prefix)
@@ -39253,17 +39928,17 @@ func _create_chat_sender_message_line(
 		var role_badge := _create_chat_role_badge(role_name, role_color)
 		role_badge.size_flags_vertical = (
 			Control.SIZE_SHRINK_CENTER
-			if inline_pokemon_attachment != null
+			if inline_pokemon_attachments != null
 			else Control.SIZE_SHRINK_BEGIN
 		)
 		header.add_child(role_badge)
 
-	if inline_pokemon_attachment != null:
+	if inline_pokemon_attachments != null:
 		var inline_spacer := Control.new()
 		inline_spacer.name = "InlinePokemonSpacer"
 		inline_spacer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		header.add_child(inline_spacer)
-		header.add_child(inline_pokemon_attachment)
+		header.add_child(inline_pokemon_attachments)
 
 	var header_tail := Control.new()
 	header_tail.name = "HeaderTail"
@@ -39667,7 +40342,7 @@ func _chat_header_prefix_width(header: HBoxContainer) -> float:
 	var visible_controls := 0
 	var separation := float(header.get_theme_constant("separation"))
 	for child: Node in header.get_children():
-		if child.name in [&"InlinePokemonSpacer", &"InlinePokemonAttachment", &"HeaderTail"]:
+		if child.name in [&"InlinePokemonSpacer", &"InlinePokemonAttachments", &"HeaderTail"]:
 			break
 		var control := child as Control
 		if control == null or not control.visible:
