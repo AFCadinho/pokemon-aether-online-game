@@ -499,6 +499,9 @@ jobs:
       - name: Test R2 cleanup safeguards
         run: python3 tools/test_prune_r2_release_objects.py
 
+      - name: Test R2 upload retries
+        run: python3 tools/test_upload_launcher_release.py
+
       - name: Upload launcher release to R2
         id: upload_r2
         env:
