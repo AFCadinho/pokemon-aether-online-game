@@ -29,6 +29,8 @@ func _init() -> void:
 	_check_equal(projection.participant_display("p1", 6500).get("bankRemainingMs"), 89500, "bank drains from charge anchor")
 	_check_equal(projection.participant_display("p1", 6500).get("decisionMaximumMs"), 20000, "privacy-safe public anchors recover a missing opponent countdown scale")
 	_check_equal(projection.participant_display("p2", 6500).get("state"), "WAITING", "locked participant waits independently")
+	_check(not projection.apply_legacy_decision_projection({"p1": {"status": "LOCKED", "decisionGeneration": 99, "decisionKind": "MOVE_SELECTION"}}), "legacy decision fallback cannot mutate ranked timer authority")
+	_check_equal(projection.participant_display("p1", 6500).get("state"), "DECIDING", "ranked timer projection remains unchanged by legacy fallback")
 	projection.apply_event({"battleEventSeq":11,"payload":{"timerRevision":3,"playerId":"p2","decisionGeneration":1,"status":"CHOICE_ACCEPTED","decisionKind":"MOVE_SELECTION","maxDecisionMs":20000,"decisionRemainingMs":14500}})
 	_check(projection.has_advanced_beyond_team_preview(), "Move Selection projection proves Team Preview completed")
 	_check_equal(projection.participant_display("p2", 16500).get("effectiveDecisionRemainingMs"), 14500, "accepted choice keeps its trusted frozen decision time")
@@ -56,6 +58,35 @@ func _init() -> void:
 	projection.reset()
 	_check(not projection.contract_enabled, "reset removes stale projection eligibility")
 	_check(not projection.should_present(true), "battle without a valid projection remains hidden")
+	_check(projection.apply_legacy_snapshot([
+		{
+			"activeSide": "p1",
+			"phase": "team_preview",
+			"status": "active",
+			"durationSeconds": 90,
+			"deadlineAt": "1970-01-01T00:01:40Z",
+			"serverNow": "1970-01-01T00:00:10Z",
+		},
+	], true, 5000), "enabled legacy timer snapshot applies")
+	_check(projection.should_present(true), "enabled legacy room timer is presented")
+	_check_equal(projection.participant_display("p1", 5000).get("state"), "DECIDING", "legacy timer opens a decision countdown")
+	_check_equal(projection.participant_display("p1", 5000).get("effectiveDecisionRemainingMs"), 90000, "legacy timer uses the server deadline")
+	# Once sampled, legacy countdowns run exclusively from monotonic time. A
+	# later wall-clock/server-anchor correction must not make the visible room
+	# timer expire before its authoritative 90-second deadline.
+	projection.server_anchor_ms += 60000
+	_check_equal(projection.participant_display("p1", 35000).get("effectiveDecisionRemainingMs"), 60000, "legacy countdown ignores later wall-clock drift")
+	_check_equal(projection.participant_display("p1", 35000).get("state"), "DECIDING", "legacy countdown stays active until its monotonic deadline")
+	_check_equal(projection.participant_display("p1", 95000).get("state"), "EXPIRED", "legacy countdown expires at the authoritative duration")
+	_check(projection.apply_legacy_event({"payload": {"side": "p1", "phase": "team_preview", "timerStatus": "consumed"}}), "legacy consumed event applies")
+	_check_equal(projection.participant_display("p1").get("state"), "WAITING", "consumed legacy timer stops counting")
+	projection.apply_legacy_event({"activeSide": "p1", "phase": "turn", "status": "active", "durationSeconds": 90}, 100000)
+	_check(projection.apply_legacy_decision_projection({"p1": {"status": "ACTIVE", "decisionGeneration": 4, "decisionKind": "MOVE_SELECTION"}}), "legacy active decision generation is remembered")
+	_check(projection.apply_legacy_decision_projection({"p1": {"status": "LOCKED", "decisionGeneration": 4, "decisionKind": "MOVE_SELECTION"}}), "legacy locked decision projection applies")
+	_check_equal(projection.participant_display("p1", 100001).get("state"), "WAITING", "locked legacy choice immediately stops its visible countdown")
+	_check(not projection.apply_legacy_decision_projection({"p1": {"status": "LOCKED", "decisionGeneration": 3, "decisionKind": "MOVE_SELECTION"}}), "stale legacy decision cannot replace a newer timer generation")
+	projection.apply_legacy_snapshot([], false)
+	_check(not projection.should_present(true), "disabled legacy room timer stays hidden")
 	print("PASS battle_timer_projection_check")
 	quit(0)
 

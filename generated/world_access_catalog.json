@@ -1,7 +1,7 @@
 {
 	"areas": {
 		"aether_clash_lobby": {
-			"areaType": "interior",
+			"areaType": "exterior",
 			"defaultMode": "open",
 			"label": "Aether Clash Lobby",
 			"locationGroupId": "aether_clash",

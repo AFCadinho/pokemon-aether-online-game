@@ -476,6 +476,12 @@ func _run() -> void:
 		blessing_item.get("name", "") == "Aether Blessing Voucher · 3 Days",
 		"temporary supporter benefit is sold as a voucher"
 	)
+	_check(
+		str(blessing_item.get("description", "")).contains("5% better Shiny odds")
+		and str(blessing_item.get("description", "")).contains("50% off regional travel")
+		and str(blessing_item.get("description", "")).contains("two free Aether Anchors"),
+		"Blessing Vouchers disclose every current membership benefit before purchase"
+	)
 	_check(not store.purchase_button.disabled, "server-listed Blessing Vouchers can be purchased with Aether Gems")
 	_check(store.selection_price_label.text.contains("75"), "Blessing Vouchers use their authoritative Aether Gem price")
 	_check(store.status_label.text.contains("item goes to your Bag"), "Blessing checkout sends the voucher to the Bag")

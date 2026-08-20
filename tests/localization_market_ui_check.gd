@@ -42,7 +42,12 @@ func _check_market_runtime_translation() -> void:
 			"name": "Potion",
 			"category": "medicine",
 			"shortDesc": "Restores 20 HP.",
-			"costs": [{"currency": "money", "amount": 300}],
+			"costs": [{
+				"currency": "money",
+				"amount": 285,
+				"baseAmount": 300,
+				"membershipDiscountPercent": 5,
+			}],
 		}],
 	})
 	var game_state := root.get_node_or_null("GameState")
@@ -69,6 +74,16 @@ func _check_market_runtime_translation() -> void:
 		"Market uses the Dutch item description"
 	)
 	_check(buy_button != null and buy_button.text.begins_with("Kopen"), "Market purchase action renders in Dutch")
+	var selected_item := overlay.get("market_selected_item") as Dictionary
+	_check(int(selected_item.get("price", 0)) == 285, "Market uses the server-calculated member price")
+	_check(
+		int(selected_item.get("membershipDiscountPercent", 0)) == 5,
+		"Market preserves the active Aether Blessing discount"
+	)
+	_check(
+		overlay.call("_format_market_currency_amount", 38, "battle_points") == "38 BP",
+		"Market formats Battle Point prices"
+	)
 	_check(
 		overlay.call("_market_category_label", "medicine") == "Medicijnen",
 		"Market category reuses localized Bag terminology"

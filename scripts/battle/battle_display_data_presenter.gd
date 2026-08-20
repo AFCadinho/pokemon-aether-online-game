@@ -2,6 +2,7 @@ extends RefCounted
 
 class_name BattleDisplayDataPresenter
 
+const OGERPON_BATTLE_FORM := preload("res://scripts/battle/ogerpon_battle_form.gd")
 const DEBUG_PAO_BATTLE_IDENTITY := false
 const DEBUG_PREFIX := "[PAO Battle Identity Debug]"
 const DEBUG_TRAINER_TEAM_DISPLAY := false
@@ -30,7 +31,23 @@ func get_active_display_species(player_id: String) -> String:
 
 	var active_pokemon := battle_state.get_active_player_pokemon(player_id)
 	var transformed_species := str(active_pokemon.get("transformedSpecies", active_pokemon.get("displaySpecies", "")))
+	var ogerpon_fallback_species := transformed_species
+	if ogerpon_fallback_species == "":
+		ogerpon_fallback_species = str(active_pokemon.get("species", ""))
+	var public_ogerpon_form := _get_public_ogerpon_form_from_details(
+		active_pokemon,
+		ogerpon_fallback_species
+	)
+	if public_ogerpon_form != "":
+		return public_ogerpon_form
 	if transformed_species != "":
+		if player_id == "p1":
+			var saved_for_form: Pokemon = display_metadata.get_player_save_pokemon_for_battle_data(active_pokemon)
+			if saved_for_form != null:
+				return OGERPON_BATTLE_FORM.resolve_species(
+					transformed_species,
+					saved_for_form.item
+				)
 		return transformed_species
 
 	var mega_species := str(active_pokemon.get("megaSpecies", ""))
@@ -55,9 +72,31 @@ func get_active_display_species(player_id: String) -> String:
 	if player_id == "p1":
 		var saved_pokemon: Pokemon = display_metadata.get_player_save_pokemon_for_battle_data(active_pokemon)
 		if saved_pokemon != null:
-			return saved_pokemon.species
+			return OGERPON_BATTLE_FORM.resolve_species(saved_pokemon.species, saved_pokemon.item)
 
 	return battle_state.get_active_pokemon_species(player_id)
+
+
+func _get_public_ogerpon_form_from_details(
+	pokemon_data: Dictionary,
+	fallback_species: String
+) -> String:
+	var fallback_key := display_metadata.normalize_species_for_compare(fallback_species)
+	if fallback_key != "ogerpon":
+		return ""
+
+	var details := str(pokemon_data.get("details", "")).strip_edges()
+	if details == "":
+		return ""
+	var details_species := str(details.split(",", false, 1)[0]).strip_edges()
+	var details_key := display_metadata.normalize_species_for_compare(details_species)
+	if not details_key.begins_with("ogerpon-"):
+		return ""
+
+	# Showdown keeps the ordinary ident/displaySpecies as Ogerpon, but details is
+	# public and carries the mask forme. Normalize it through the same battle-form
+	# resolver used for locally held masks so the HUD consistently uses spaces.
+	return OGERPON_BATTLE_FORM.resolve_species(details_species)
 
 
 func get_active_display_name(player_id: String) -> String:
@@ -67,12 +106,25 @@ func get_active_display_name(player_id: String) -> String:
 	var active_pokemon := battle_state.get_active_player_pokemon(player_id)
 	if player_id == "p1":
 		var saved_pokemon: Pokemon = display_metadata.get_player_save_pokemon_for_battle_data(active_pokemon)
-		if saved_pokemon != null and saved_pokemon.nickname.strip_edges() != "":
-			return saved_pokemon.nickname.strip_edges()
+		if saved_pokemon != null:
+			if saved_pokemon.nickname.strip_edges() != "":
+				return saved_pokemon.nickname.strip_edges()
+			var mask_form_species := OGERPON_BATTLE_FORM.resolve_species(
+				get_active_display_species(player_id),
+				saved_pokemon.item
+			)
+			if mask_form_species != saved_pokemon.species:
+				return mask_form_species
 
 	for key: String in ["nickname", "name", "displayName"]:
 		var explicit_name := str(active_pokemon.get(key, "")).strip_edges()
 		if explicit_name != "":
+			var display_species := get_active_display_species(player_id)
+			if (
+				display_metadata.normalize_species_for_compare(explicit_name) == "ogerpon"
+				and display_metadata.normalize_species_for_compare(display_species).begins_with("ogerpon-")
+			):
+				return display_species
 			return explicit_name
 
 	var ident := str(active_pokemon.get("ident", ""))
@@ -281,6 +333,12 @@ func _enrich_player_display_slot_from_save(display_data: Dictionary, index: int)
 		display_data["instanceId"] = saved_pokemon.instance_id
 	if saved_pokemon.nickname.strip_edges() != "":
 		display_data["nickname"] = saved_pokemon.nickname.strip_edges()
+
+	var battle_species := str(display_data.get(
+		"displaySpecies",
+		display_data.get("species", saved_pokemon.species)
+	))
+	OGERPON_BATTLE_FORM.apply_to_display_data(display_data, battle_species, saved_pokemon.item)
 
 func _get_player_save_pokemon_for_display_data(display_data: Dictionary, fallback_index: int) -> Pokemon:
 	var instance_id := str(display_data.get("instanceId", display_data.get("instance_id", ""))).strip_edges()

@@ -68,7 +68,7 @@ func _run() -> void:
 	_check(
 		overlay.contains('LocalizationManager.text("ui.bag.use.cannot_use_reason"')
 		and overlay.contains("icon.modulate = Color(1.0, 1.0, 1.0, 0.45)")
-		and overlay.contains("UI_MUTED_TEXT if can_apply else UI_DANGER"),
+		and overlay.contains("UI_SUCCESS if can_apply else UI_DANGER"),
 		"Bag item targets show a clear inline reason when disabled"
 	)
 	_check(
