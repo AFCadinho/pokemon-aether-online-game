@@ -116,6 +116,11 @@ func _check_overlay_contract() -> void:
 	_check(source.contains('await play_evolution_overlay(evolution)'), "item-triggered evolution uses the evolution overlay")
 	_check(not source.contains("Restores 60 HP to one Pokemon."), "conflicting Super Potion 60 HP fallback is removed")
 	_check(source.contains("bag_inventory_items = _normalize_bag_inventory_items(inventory_value)"), "successful use refreshes inventory")
+	_check(source.contains('"pokemonCompatibilityKnown": bool(item.get("pokemonCompatibilityKnown", false))'), "Bag preserves authoritative compatibility knowledge")
+	_check(source.contains('"compatiblePokemonIds": item.get("compatiblePokemonIds", [])'), "Bag preserves authoritative compatible Pokemon ids")
+	_check(source.contains("_bag_item_target_is_compatible(pokemon)"), "Bag checks target compatibility before selection")
+	_check(source.contains('LocalizationManager.text("ui.bag.use.can_use_reason"'), "eligible party rows show an Able status")
+	_check(not source.contains("if machine_move_id != \"\" and not can_teach_machine"), "incompatible machine targets stay visible")
 
 
 func _gameplay(quantity_policy: String, effects: Array) -> Dictionary:

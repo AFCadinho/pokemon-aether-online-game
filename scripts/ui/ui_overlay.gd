@@ -434,6 +434,7 @@ const UI_TEXT := Color("#f4f0de")
 const UI_MUTED_TEXT := Color("#aeb8c5")
 const UI_MONEY := Color("#ffd45a")
 const UI_PURPLE_HOVER := Color("#b980ff")
+const UI_SUCCESS := Color("#73d98b")
 const UI_DANGER := Color("#ff6b74")
 const UI_DANGER_BG := Color("#2a1015e8")
 const UI_REPEL_BG := Color("#155f2be8")
@@ -19362,10 +19363,6 @@ func _refresh_bag_item_use_party_list() -> void:
 		var pokemon: Pokemon = PlayerSave.party[slot_index]
 		if pokemon == null:
 			continue
-		var machine_move_id := _bag_machine_move_id(str(bag_item_use_pending_item.get("id", "")))
-		var can_teach_machine := _bag_machine_can_teach_pokemon(pokemon)
-		if machine_move_id != "" and not can_teach_machine:
-			continue
 		bag_item_use_party_list.add_child(_create_bag_item_use_pokemon_button(pokemon, slot_index))
 		shown_pokemon_count += 1
 
@@ -19396,8 +19393,9 @@ func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> C
 	if not can_apply:
 		var reason := str(preview.get("label", LocalizationManager.text("ui.bag.use.unavailable")))
 		preview_text = LocalizationManager.text("ui.bag.use.cannot_use_reason", {"reason": reason})
-	elif slot_index == bag_item_use_selected_slot:
-		preview_text = str(preview.get("label", ""))
+	else:
+		var result := str(preview.get("label", LocalizationManager.text("ui.bag.use.available")))
+		preview_text = LocalizationManager.text("ui.bag.use.can_use_reason", {"reason": result})
 	var row := HBoxContainer.new()
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -19436,7 +19434,7 @@ func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> C
 		preview_label.text = preview_text
 		preview_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		preview_label.add_theme_font_size_override("font_size", 11)
-		preview_label.add_theme_color_override("font_color", UI_MUTED_TEXT if can_apply else UI_DANGER)
+		preview_label.add_theme_color_override("font_color", UI_SUCCESS if can_apply else UI_DANGER)
 		details.add_child(preview_label)
 	button.tooltip_text = str(preview.get("tooltip", button.text))
 	button.disabled = bag_item_use_in_progress or not can_apply
@@ -19460,6 +19458,15 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 				}),
 				"canApply": false,
 			}
+		if _bag_item_target_compatibility_known() and not _bag_item_target_is_compatible(pokemon):
+			return {
+				"label": LocalizationManager.text("ui.bag.use.cannot_learn", {"move": _format_move_name(machine_move_id)}),
+				"tooltip": LocalizationManager.text("ui.bag.use.cannot_learn_tooltip", {
+					"pokemon": _pokemon_display_name(pokemon),
+					"move": _format_move_name(machine_move_id),
+				}),
+				"canApply": false,
+			}
 		return {
 			"label": LocalizationManager.text("ui.bag.use.teach_move", {"move": _format_move_name(machine_move_id)}),
 			"tooltip": LocalizationManager.text("ui.bag.use.teach_move_tooltip", {
@@ -19468,7 +19475,34 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 			}),
 			"canApply": true,
 		}
-	if _is_evolution_item_id(item_id):
+	var evolution_effect_type := _bag_evolution_effect_type(item_id)
+	if evolution_effect_type != "":
+		if _bag_item_target_compatibility_known() and not _bag_item_target_is_compatible(pokemon):
+			var unavailable_label_key := (
+				"ui.bag.use.cannot_trade_evolve"
+				if evolution_effect_type == "evolve_trade"
+				else "ui.bag.use.cannot_item_evolve"
+			)
+			var unavailable_tooltip_key := (
+				"ui.bag.use.cannot_trade_evolve_tooltip"
+				if evolution_effect_type == "evolve_trade"
+				else "ui.bag.use.cannot_item_evolve_tooltip"
+			)
+			return {
+				"label": LocalizationManager.text(unavailable_label_key),
+				"tooltip": LocalizationManager.text(unavailable_tooltip_key, {
+					"pokemon": _pokemon_display_name(pokemon),
+				}),
+				"canApply": false,
+			}
+		if evolution_effect_type == "evolve_trade":
+			return {
+				"label": LocalizationManager.text("ui.bag.use.trade_evolution"),
+				"tooltip": LocalizationManager.text("ui.bag.use.trade_evolution_tooltip", {
+					"pokemon": _pokemon_display_name(pokemon),
+				}),
+				"canApply": true,
+			}
 		return {
 			"label": LocalizationManager.text("ui.bag.use.evolution"),
 			"tooltip": LocalizationManager.text("ui.bag.use.evolution_tooltip", {
@@ -19908,16 +19942,20 @@ func _is_ev_reducing_berry_id(item_id: String) -> bool:
 	return EV_REDUCING_BERRY_STATS.has(_normalize_item_id(item_id))
 
 func _is_evolution_item_id(item_id: String) -> bool:
+	return _bag_evolution_effect_type(item_id) != ""
+
+func _bag_evolution_effect_type(item_id: String) -> String:
 	var gameplay := _bag_gameplay_definition_for_item_id(item_id)
 	var effects_value: Variant = gameplay.get("effects", [])
 	if not (effects_value is Array):
-		return false
+		return ""
 	for effect_value: Variant in effects_value as Array:
 		if not (effect_value is Dictionary):
 			continue
-		if str((effect_value as Dictionary).get("type", "")) in ["evolve_trade", "evolve_item"]:
-			return true
-	return false
+		var effect_type := str((effect_value as Dictionary).get("type", ""))
+		if effect_type in ["evolve_trade", "evolve_item"]:
+			return effect_type
+	return ""
 
 func _is_pokemon_usable_item_id(item_id: String) -> bool:
 	return _bag_machine_move_id(item_id) != "" or _is_exp_item_id(item_id) or _is_ev_item_id(item_id) or _is_ev_reducing_berry_id(item_id) or _is_evolution_item_id(item_id) or BAG_ITEM_EFFECT_PREVIEW.supports(_bag_gameplay_definition_for_item_id(item_id))
@@ -19982,16 +20020,24 @@ func _bag_item_icon_gender(item_id: String) -> String:
 	)
 
 
-func _bag_machine_can_teach_pokemon(pokemon: Pokemon) -> bool:
+func _bag_item_target_compatibility_known() -> bool:
+	if bool(bag_item_use_pending_item.get("pokemonCompatibilityKnown", false)):
+		return true
+	# Backward compatibility with inventory payloads from before the generic
+	# target compatibility contract. Machine compatibility was already exact.
+	return _bag_machine_move_id(str(bag_item_use_pending_item.get("id", ""))) != ""
+
+func _bag_item_target_is_compatible(pokemon: Pokemon) -> bool:
 	if pokemon == null or pokemon.owned_pokemon_id <= 0:
 		return false
-	var compatible_ids_value: Variant = bag_item_use_pending_item.get("machineCompatiblePokemonIds", [])
+	var compatible_ids_value: Variant = bag_item_use_pending_item.get("compatiblePokemonIds", [])
+	if not bool(bag_item_use_pending_item.get("pokemonCompatibilityKnown", false)):
+		compatible_ids_value = bag_item_use_pending_item.get("machineCompatiblePokemonIds", [])
 	if not (compatible_ids_value is Array):
 		return false
-	var compatible_ids: Array = compatible_ids_value as Array
-	for compatible_id_value: Variant in compatible_ids:
+	for compatible_id_value: Variant in compatible_ids_value as Array:
 		if int(compatible_id_value) == pokemon.owned_pokemon_id:
-			return not _pokemon_knows_move_id(pokemon, _bag_machine_move_id(str(bag_item_use_pending_item.get("id", ""))))
+			return true
 	return false
 
 func _pokemon_knows_move_id(pokemon: Pokemon, move_id: String) -> bool:
@@ -20142,6 +20188,8 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 			"machineMoveType": str(item.get("machineMoveType", "")).strip_edges().to_lower(),
 			"fieldMove": str(item.get("fieldMove", "")).strip_edges(),
 			"machineCompatiblePokemonIds": item.get("machineCompatiblePokemonIds", []),
+			"pokemonCompatibilityKnown": bool(item.get("pokemonCompatibilityKnown", false)),
+			"compatiblePokemonIds": item.get("compatiblePokemonIds", []),
 			"gameplay": gameplay,
 			"useNotice": use_notice,
 			"useAction": str(item.get("useAction", "")).strip_edges(),
