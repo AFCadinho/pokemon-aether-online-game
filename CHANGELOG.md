@@ -22,6 +22,7 @@
 
 **Fixed**
 
+- Pokémon-only chat shares now align their first sprite closer to the sender name without shrinking its clickable area.
 - Pokémon Summary cards now show each Pokémon's gender. Existing Pokémon without stored gender data are assigned a stable, species-appropriate gender.
 - Multi-hit attacks now keep HP changes continuous through knockouts instead of briefly restoring or rewinding the target's health.
 - NPC reserve Pokémon remain concealed while team-sidebar animations are playing.

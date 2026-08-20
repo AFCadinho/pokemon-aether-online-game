@@ -291,8 +291,10 @@ func _init() -> void:
 		script_source.contains("var inline_single_pokemon := (")
 		and script_source.contains('inline_pokemon_attachment.name = "InlinePokemonAttachment"')
 		and script_source.contains('inline_spacer.name = "InlinePokemonSpacer"')
+		and script_source.contains("align_icon_left: bool = false")
+		and script_source.contains("TextureRect.STRETCH_KEEP_ASPECT\n\t\tif align_icon_left")
 		and script_source.contains("not inline_single_pokemon and not pokemon_attachments.is_empty()"),
-		"a single Pokemon-only share stays clickable beside the sender instead of using a new row"
+		"a single Pokemon-only share stays clickable and visually close to the sender"
 	)
 	_check(
 		script_source.contains('message_list.add_theme_constant_override("separation", 5)'),
