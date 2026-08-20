@@ -47,6 +47,12 @@ func _run() -> void:
 	var nodes := popup.get_meta("readonly_summary_nodes", {}) as Dictionary
 	var active_card_key := str(overlay.get("pokemon_summary_active_card_key"))
 	var context := (overlay.get("pokemon_summary_open_cards") as Dictionary).get(active_card_key, {}) as Dictionary
+	_check(not nodes.has("readonly_label"), "read-only Summary no longer shows a redundant READ ONLY badge")
+	var drag_handle := nodes.get("drag_handle") as PanelContainer
+	_check(drag_handle != null, "read-only Summary exposes its header as a drag handle")
+	_check(drag_handle.mouse_default_cursor_shape == Control.CURSOR_MOVE, "drag handle advertises that the card can move")
+	_check(drag_handle.tooltip_text != "", "drag handle explains its interaction on hover")
+	_check(drag_handle.gui_input.has_connections(), "read-only header is connected to the shared drag handler")
 	_check(context.get("left_panel") == null, "read-only Summary does not retain controls from a closed card")
 	_check(overlay.call("_apply_pokemon_summary_card_context", active_card_key), "read-only Summary context remains safe to reactivate")
 	_check((nodes.get("stat_rows", {}) as Dictionary).size() == 6, "all six stats render at once")
@@ -63,8 +69,14 @@ func _run() -> void:
 	_check((nodes.get("id_label") as Label).text == "#445", "header uses the National Dex number instead of the owned Pokémon id")
 	_check((nodes.get("gender_label") as Label).text == "♀", "gender renders beside the Pokémon name")
 	_check((nodes.get("ability_label") as Label).text != "", "ability renders on the overview")
+	_check((nodes.get("ability_stack") as VBoxContainer).tooltip_text != "", "ability hover shows its effect")
+	_check((nodes.get("nature_stack") as VBoxContainer).tooltip_text.contains("ATK"), "nature hover explains its stat effect")
 	_check((nodes.get("iv_total_label") as Label).text.contains("186/186"), "perfect IV quality is summarized in the profile")
 	_check((nodes.get("ev_total_label") as Label).text.contains("508/510"), "allocated EV total is summarized in the profile")
+	_check((nodes.get("iv_total_label_panel") as PanelContainer).tooltip_text != "", "IV quality explains its range on hover")
+	_check((nodes.get("ev_total_label_panel") as PanelContainer).tooltip_text != "", "EV quality explains its limits on hover")
+	_check((nodes.get("item_icon") as TextureRect).texture != null, "held item renders its icon")
+	_check((nodes.get("item_panel") as PanelContainer).tooltip_text.contains("Life Orb"), "held item hover identifies the item")
 	_check((nodes.get("trainer_label") as Label).text.contains("Exchange"), "read-only Summary keeps the standard owner bar")
 	_check(overlay.get("pokemon_summary_animated_sprite") is AnimatedSprite2D, "read-only Summary uses the standard animated sprite stage")
 	var stat_rows := nodes.get("stat_rows", {}) as Dictionary
@@ -72,6 +84,8 @@ func _run() -> void:
 	_check(((stat_rows.get("spe") as Dictionary).get("ev") as Label).text == "252", "EV values render in the stat table")
 	var move_nodes := nodes.get("move_nodes", []) as Array
 	_check(((move_nodes[0] as Dictionary).get("name") as Label).text == "Earthquake", "move names render in the move grid")
+	_check(((move_nodes[0] as Dictionary).get("panel") as PanelContainer).tooltip_text.contains("Power"), "move hover shows battle details")
+	_check(((move_nodes[0] as Dictionary).get("panel") as PanelContainer).tooltip_text.split("\n").size() >= 3, "move hover groups identity, values, and description")
 	_check(not popup.find_children("*", "ScrollContainer", true, false).size(), "read-only Summary needs no scrolling")
 
 	for loader_property: String in ["pokemon_summary_sprite_loader", "pokedex_sprite_loader"]:
