@@ -9,6 +9,7 @@
 **Fixed**
 
 - Ogerpon's correct battle sprites are now included in game downloads.
+- Wild battles now immediately show the first Pokémon that can battle when an earlier party member has fainted.
 
 ## 0.3.59 - 2026-08-20
 
