@@ -84,8 +84,22 @@ func _run() -> void:
 	_check(((stat_rows.get("spe") as Dictionary).get("ev") as Label).text == "252", "EV values render in the stat table")
 	var move_nodes := nodes.get("move_nodes", []) as Array
 	_check(((move_nodes[0] as Dictionary).get("name") as Label).text == "Earthquake", "move names render in the move grid")
-	_check(((move_nodes[0] as Dictionary).get("panel") as PanelContainer).tooltip_text.contains("Power"), "move hover shows battle details")
-	_check(((move_nodes[0] as Dictionary).get("panel") as PanelContainer).tooltip_text.split("\n").size() >= 3, "move hover groups identity, values, and description")
+	var first_move_panel := (move_nodes[0] as Dictionary).get("panel") as PanelContainer
+	var second_move_panel := (move_nodes[1] as Dictionary).get("panel") as PanelContainer
+	var move_hover_panel := nodes.get("move_hover_panel") as PanelContainer
+	_check(first_move_panel.tooltip_text == "", "moves do not use the unbounded native text tooltip")
+	_check(first_move_panel.mouse_entered.has_connections(), "move tiles open the compact hover card")
+	overlay.call("_show_readonly_summary_move_hover", first_move_panel, nodes)
+	_check(move_hover_panel.visible, "move hover opens a dedicated detail card")
+	_check(move_hover_panel.size == Vector2(254, 156), "move hover uses a consistent compact size")
+	_check(not move_hover_panel.get_global_rect().intersects(popup.get_global_rect()), "move hover stays beside the Summary instead of covering it")
+	var first_hover_position := move_hover_panel.position
+	var hover_labels := move_hover_panel.find_children("*", "Label", true, false)
+	_check(not hover_labels.is_empty() and (hover_labels[0] as Label).text == "Earthquake", "move hover shows the selected move details")
+	overlay.call("_hide_readonly_summary_move_hover", first_move_panel, nodes)
+	_check(not move_hover_panel.visible, "move hover closes when leaving a tile")
+	overlay.call("_show_readonly_summary_move_hover", second_move_panel, nodes)
+	_check(move_hover_panel.position == first_hover_position, "every move uses the same hover position")
 	_check(not popup.find_children("*", "ScrollContainer", true, false).size(), "read-only Summary needs no scrolling")
 
 	for loader_property: String in ["pokemon_summary_sprite_loader", "pokedex_sprite_loader"]:

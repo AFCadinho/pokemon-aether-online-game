@@ -260,6 +260,8 @@ const WILD_POKEMON_POPUP_SIZE := Vector2(430, 500)
 const POKEDEX_BASE_STAT_BAR_MAX := 200
 const POKEMON_SUMMARY_SIZE := Vector2(620, 380)
 const POKEMON_READONLY_SUMMARY_SIZE := POKEMON_SUMMARY_SIZE
+const POKEMON_READONLY_MOVE_HOVER_SIZE := Vector2(254, 156)
+const POKEMON_READONLY_MOVE_HOVER_GAP := 6.0
 const POKEMON_SUMMARY_BODY_HEIGHT := 333.0
 const POKEMON_SUMMARY_LEFT_PANEL_WIDTH := 275.0
 const POKEMON_SUMMARY_RIGHT_AREA_WIDTH := 320.0
@@ -15526,7 +15528,7 @@ func _setup_readonly_pokemon_summary_popup(card_key: String = "") -> void:
 	pokemon_summary_popup.gui_input.connect(_on_pokemon_summary_card_gui_input.bind(card_key))
 	root_control.add_child(pokemon_summary_popup)
 
-	var nodes: Dictionary = {}
+	var nodes: Dictionary = {"popup": pokemon_summary_popup}
 	var outer_margin := MarginContainer.new()
 	outer_margin.add_theme_constant_override("margin_left", 9)
 	outer_margin.add_theme_constant_override("margin_top", 8)
@@ -15546,6 +15548,7 @@ func _setup_readonly_pokemon_summary_popup(card_key: String = "") -> void:
 	layout.add_child(body)
 	body.add_child(_build_readonly_summary_profile(nodes))
 	body.add_child(_build_readonly_summary_details(nodes))
+	pokemon_summary_popup.add_child(_build_readonly_summary_move_hover_panel(nodes))
 	pokemon_summary_popup.set_meta("readonly_summary_nodes", nodes)
 
 func _build_readonly_summary_header(card_key: String, nodes: Dictionary) -> Control:
@@ -15984,6 +15987,8 @@ func _build_readonly_summary_details(nodes: Dictionary) -> Control:
 		move_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		move_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 		move_panel.mouse_default_cursor_shape = Control.CURSOR_HELP
+		move_panel.mouse_entered.connect(_show_readonly_summary_move_hover.bind(move_panel, nodes))
+		move_panel.mouse_exited.connect(_hide_readonly_summary_move_hover.bind(move_panel, nodes))
 		move_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#091622e8"), Color("#284465"), 6, 1))
 		moves_grid.add_child(move_panel)
 		var move_margin := MarginContainer.new()
@@ -15991,24 +15996,206 @@ func _build_readonly_summary_details(nodes: Dictionary) -> Control:
 		move_margin.add_theme_constant_override("margin_top", 4)
 		move_margin.add_theme_constant_override("margin_right", 7)
 		move_margin.add_theme_constant_override("margin_bottom", 4)
+		move_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		move_panel.add_child(move_margin)
 		var move_stack := VBoxContainer.new()
 		move_stack.alignment = BoxContainer.ALIGNMENT_CENTER
 		move_stack.add_theme_constant_override("separation", 0)
+		move_stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		move_margin.add_child(move_stack)
 		var move_name := Label.new()
 		move_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		_make_label_clip_width(move_name)
 		move_name.add_theme_font_size_override("font_size", 11)
 		move_name.add_theme_color_override("font_color", UI_TEXT)
+		move_name.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		move_stack.add_child(move_name)
 		var move_meta := Label.new()
 		move_meta.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		move_meta.add_theme_font_size_override("font_size", 8)
 		move_meta.add_theme_color_override("font_color", Color("#9eb7d8"))
+		move_meta.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		move_stack.add_child(move_meta)
 		move_nodes.append({"panel": move_panel, "name": move_name, "meta": move_meta})
 	nodes["move_nodes"] = move_nodes
+	return panel
+
+func _build_readonly_summary_move_hover_panel(nodes: Dictionary) -> Control:
+	var hover_layer := Control.new()
+	hover_layer.name = "ReadonlySummaryMoveHoverLayer"
+	hover_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hover_layer.clip_contents = false
+	hover_layer.z_index = UI_MODAL_Z_INDEX + 2
+	hover_layer.z_as_relative = false
+	var hover_panel := PanelContainer.new()
+	hover_panel.name = "ReadonlySummaryMoveHoverPanel"
+	hover_panel.visible = false
+	hover_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hover_panel.custom_minimum_size = POKEMON_READONLY_MOVE_HOVER_SIZE
+	hover_panel.size = POKEMON_READONLY_MOVE_HOVER_SIZE
+	hover_panel.add_theme_stylebox_override("panel", _make_panel_style(
+		Color("#07101af8"),
+		Color("#5f83a8"),
+		7,
+		1
+	))
+	hover_layer.add_child(hover_panel)
+	nodes["move_hover_layer"] = hover_layer
+	nodes["move_hover_panel"] = hover_panel
+	return hover_layer
+
+func _show_readonly_summary_move_hover(move_panel: PanelContainer, nodes: Dictionary) -> void:
+	if move_panel == null or not is_instance_valid(move_panel):
+		return
+	if not move_panel.has_meta("readonly_move_value"):
+		return
+	var hover_panel := nodes.get("move_hover_panel") as PanelContainer
+	var popup := nodes.get("popup") as PanelContainer
+	if hover_panel == null or popup == null or not is_instance_valid(hover_panel) or not is_instance_valid(popup):
+		return
+
+	for child: Node in hover_panel.get_children():
+		child.free()
+
+	var move_value: Variant = move_panel.get_meta("readonly_move_value")
+	var move_type := _get_summary_move_type(move_value).strip_edges().to_lower()
+	var move_background := TypeColors.get_slot_background(move_type, Color("#091622e8")).darkened(0.52)
+	var move_border := TypeColors.get_slot_border(move_type, Color("#5f83a8"))
+	hover_panel.add_theme_stylebox_override("panel", _make_panel_style(
+		Color(move_background, 0.98),
+		Color(move_border, 0.95),
+		7,
+		1
+	))
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 11)
+	margin.add_theme_constant_override("margin_top", 9)
+	margin.add_theme_constant_override("margin_right", 11)
+	margin.add_theme_constant_override("margin_bottom", 9)
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hover_panel.add_child(margin)
+
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 5)
+	stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	margin.add_child(stack)
+
+	var name_label := Label.new()
+	name_label.text = _get_summary_move_name(move_value)
+	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	name_label.add_theme_font_size_override("font_size", 14)
+	name_label.add_theme_color_override("font_color", UI_TEXT)
+	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stack.add_child(name_label)
+
+	var chip_row := HBoxContainer.new()
+	chip_row.add_theme_constant_override("separation", 6)
+	chip_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stack.add_child(chip_row)
+	if move_type != "":
+		chip_row.add_child(_create_move_learn_type_label(move_type))
+	var category := _get_summary_move_category_text(move_value)
+	if category != "":
+		chip_row.add_child(_create_move_learn_category_label(category))
+
+	var meta_row := HBoxContainer.new()
+	meta_row.add_theme_constant_override("separation", 5)
+	meta_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stack.add_child(meta_row)
+	meta_row.add_child(_create_readonly_summary_move_hover_stat(
+		LocalizationManager.text("ui.move_learning.power"),
+		_get_summary_move_power_text(move_value),
+		Color("#f2cf78")
+	))
+	meta_row.add_child(_create_readonly_summary_move_hover_stat(
+		LocalizationManager.text("ui.move_learning.accuracy"),
+		_get_summary_move_accuracy_text(move_value),
+		Color("#d9ecff")
+	))
+	meta_row.add_child(_create_readonly_summary_move_hover_stat(
+		"PP",
+		_get_summary_move_pp_text(move_value),
+		Color("#7df2e8")
+	))
+
+	var description_label := Label.new()
+	description_label.text = _get_summary_move_description_text(move_value)
+	description_label.custom_minimum_size = Vector2(0, 39)
+	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	description_label.max_lines_visible = 3
+	description_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	description_label.add_theme_font_size_override("font_size", 11)
+	description_label.add_theme_color_override("font_color", Color("#d9e3f0"))
+	description_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stack.add_child(description_label)
+
+	_position_readonly_summary_move_hover(hover_panel, popup)
+	hover_panel.visible = true
+	hover_panel.move_to_front()
+	var hover_style := move_panel.get_meta("readonly_hover_style", null) as StyleBoxFlat
+	if hover_style != null:
+		move_panel.add_theme_stylebox_override("panel", hover_style)
+
+func _hide_readonly_summary_move_hover(move_panel: PanelContainer, nodes: Dictionary) -> void:
+	var hover_panel := nodes.get("move_hover_panel") as PanelContainer
+	if hover_panel != null and is_instance_valid(hover_panel):
+		hover_panel.visible = false
+	if move_panel == null or not is_instance_valid(move_panel):
+		return
+	var base_style := move_panel.get_meta("readonly_base_style", null) as StyleBoxFlat
+	if base_style != null:
+		move_panel.add_theme_stylebox_override("panel", base_style)
+
+func _position_readonly_summary_move_hover(hover_panel: PanelContainer, popup: PanelContainer) -> void:
+	var root_rect := root_control.get_global_rect()
+	var popup_rect := popup.get_global_rect()
+	var panel_size := POKEMON_READONLY_MOVE_HOVER_SIZE
+	var safe_left := root_rect.position.x + 8.0
+	var safe_right := root_rect.end.x - 8.0
+	var right_x := popup_rect.end.x + POKEMON_READONLY_MOVE_HOVER_GAP
+	var left_x := popup_rect.position.x - panel_size.x - POKEMON_READONLY_MOVE_HOVER_GAP
+	var global_x := right_x
+	if right_x + panel_size.x > safe_right:
+		global_x = left_x
+	if global_x < safe_left:
+		var right_space := safe_right - right_x
+		var left_space := left_x + panel_size.x - safe_left
+		global_x = right_x if right_space >= left_space else left_x
+		global_x = clampf(global_x, safe_left, safe_right - panel_size.x)
+	var global_y := clampf(
+		popup_rect.end.y - panel_size.y,
+		root_rect.position.y + 8.0,
+		root_rect.end.y - panel_size.y - 8.0
+	)
+	hover_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	var hover_parent := hover_panel.get_parent_control()
+	if hover_parent == null:
+		return
+	hover_panel.position = hover_parent.get_global_transform().affine_inverse() * Vector2(global_x, global_y)
+	hover_panel.size = panel_size
+	hover_panel.custom_minimum_size = panel_size
+
+func _create_readonly_summary_move_hover_stat(label_text: String, value_text: String, color: Color) -> Control:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(74, 21)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_theme_stylebox_override("panel", _make_panel_style(
+		Color("#101923e8"),
+		Color(color.r, color.g, color.b, 0.5),
+		3,
+		1
+	))
+	var label := Label.new()
+	label.text = "%s %s" % [label_text, value_text]
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	label.add_theme_font_size_override("font_size", 9)
+	label.add_theme_color_override("font_color", color)
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_child(label)
 	return panel
 
 func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: String) -> void:
@@ -21051,6 +21238,9 @@ func _refresh_readonly_pokemon_summary(pokemon: Pokemon) -> void:
 		ev_label.add_theme_color_override("font_color", Color("#f4d36a") if int(pokemon.evs.get(stat_id, 0)) > 0 else Color("#b8c9e4"))
 
 	var move_nodes: Array = nodes.get("move_nodes", []) as Array
+	var move_hover_panel := nodes.get("move_hover_panel") as PanelContainer
+	if move_hover_panel != null:
+		move_hover_panel.visible = false
 	for move_index in range(move_nodes.size()):
 		var move_node: Dictionary = move_nodes[move_index] as Dictionary
 		var move_panel := move_node.get("panel") as PanelContainer
@@ -21059,6 +21249,9 @@ func _refresh_readonly_pokemon_summary(pokemon: Pokemon) -> void:
 		if move_index >= pokemon.moves.size():
 			move_name.text = "—"
 			move_meta.text = ""
+			move_panel.remove_meta("readonly_move_value")
+			move_panel.remove_meta("readonly_base_style")
+			move_panel.remove_meta("readonly_hover_style")
 			move_panel.tooltip_text = ""
 			move_name.tooltip_text = ""
 			move_meta.tooltip_text = ""
@@ -21067,15 +21260,19 @@ func _refresh_readonly_pokemon_summary(pokemon: Pokemon) -> void:
 		var move_value: Variant = pokemon.moves[move_index]
 		var move_type := _get_summary_move_type(move_value).strip_edges().to_lower()
 		move_name.text = _get_summary_move_name(move_value)
-		var move_tooltip := _get_readonly_summary_move_tooltip(move_value)
-		move_panel.tooltip_text = move_tooltip
-		move_name.tooltip_text = move_tooltip
-		move_meta.tooltip_text = move_tooltip
+		move_panel.set_meta("readonly_move_value", move_value)
+		move_panel.tooltip_text = ""
+		move_name.tooltip_text = ""
+		move_meta.tooltip_text = ""
 		var localized_type := _localized_type_name(move_type) if move_type != "" else "—"
 		move_meta.text = "%s  •  PP %s" % [localized_type, _get_summary_move_pp_text(move_value)]
 		var move_background := TypeColors.get_slot_background(move_type, Color("#091622e8")).darkened(0.42)
 		var move_border := TypeColors.get_slot_border(move_type, Color("#284465"))
-		move_panel.add_theme_stylebox_override("panel", _make_panel_style(move_background, Color(move_border, 0.82), 6, 1))
+		var base_style := _make_panel_style(move_background, Color(move_border, 0.82), 6, 1)
+		var hover_style := _make_panel_style(move_background.lightened(0.08), move_border.lightened(0.18), 6, 1)
+		move_panel.set_meta("readonly_base_style", base_style)
+		move_panel.set_meta("readonly_hover_style", hover_style)
+		move_panel.add_theme_stylebox_override("panel", base_style)
 
 func _get_active_pokemon_summary_pokemon() -> Pokemon:
 	if pokemon_summary_preview_pokemon != null:
@@ -23692,26 +23889,6 @@ func _get_summary_move_description_text(move_value: Variant) -> String:
 	if description == "":
 		description = str(_get_summary_move_data_value(move_value, ["desc", "description"], "")).strip_edges()
 	return _localized_content_description("moves", _get_summary_move_id(move_value), description)
-
-func _get_readonly_summary_move_tooltip(move_value: Variant) -> String:
-	var move_name := _get_summary_move_name(move_value)
-	var move_type := _get_summary_move_type(move_value).strip_edges()
-	var localized_type := _localized_type_name(move_type) if move_type != "" else "—"
-	var category := _get_summary_move_category_text(move_value)
-	var identity_line := localized_type
-	if category != "":
-		identity_line += " • %s" % category
-	var details_line := "%s %s • ACC %s • PP %s" % [
-		LocalizationManager.text("ui.pokemon_summary.moves.power"),
-		_get_summary_move_power_text(move_value),
-		_get_summary_move_accuracy_text(move_value),
-		_get_summary_move_pp_text(move_value),
-	]
-	var tooltip_lines: Array[String] = [move_name, identity_line, details_line]
-	var description := _get_summary_move_description_text(move_value).strip_edges()
-	if description != "":
-		tooltip_lines.append(description)
-	return "\n".join(tooltip_lines)
 
 func _get_summary_move_data_value(move_value: Variant, keys: Array[String], fallback: Variant) -> Variant:
 	if not (move_value is Dictionary):
