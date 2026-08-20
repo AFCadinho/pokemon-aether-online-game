@@ -30,6 +30,7 @@ func _run_checks() -> void:
 	_check_prejoin_battle_event_paging()
 	_check_private_action_resync_resolves_only_the_correlated_waiter()
 	_check_idle_wait_watchdog_recovers_canonical_snapshot()
+	_check_canonical_ended_snapshot_recovers_lost_terminal_event()
 
 	if failures > 0:
 		quit(1)
@@ -663,6 +664,23 @@ func _check_idle_wait_watchdog_recovers_canonical_snapshot() -> void:
 		recovery.contains('"pvp_idle_wait_watchdog"')
 			and recovery.contains("_recover_pvp_idle_wait_ui_after_update"),
 		"idle recovery applies the canonical snapshot and reopens only authoritative controls"
+	)
+
+
+func _check_canonical_ended_snapshot_recovers_lost_terminal_event() -> void:
+	var battle_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var reconciliation := _function_source(battle_source, "_apply_pvp_snapshot_reconciliation")
+	var finish_recovery := _function_source(battle_source, "_finish_reconciled_pvp_terminal")
+	_check(
+		reconciliation.contains("_pvp_response_state_ended(reconciliation)")
+			and reconciliation.contains("_finish_reconciled_pvp_terminal.call_deferred"),
+		"an ended canonical snapshot recovers a lost standalone terminal event"
+	)
+	_check(
+		finish_recovery.contains("battle_state.is_battle_ended()")
+			and finish_recovery.contains("await _finish_if_battle_ended")
+			and finish_recovery.contains("_get_pvp_recovery_end_reason(response)"),
+		"snapshot terminal recovery finishes only from canonical ended state and preserves its reason"
 	)
 
 

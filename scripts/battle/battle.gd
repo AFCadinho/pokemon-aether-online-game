@@ -12304,7 +12304,7 @@ func _recover_pvp_realtime_action_timeout(action: String, player_id: String, sub
 		)
 
 	if recovery_status == PvpBattleRealtimeService.ACTION_TIMEOUT_RECOVERY_TERMINAL:
-		await _finish_if_battle_ended({"reason": _get_pvp_timeout_recovery_end_reason(response)})
+		await _finish_if_battle_ended({"reason": _get_pvp_recovery_end_reason(response)})
 		return {
 			"success": true,
 			"terminalConfirmed": true,
@@ -12330,7 +12330,7 @@ func _build_pvp_action_timeout_recovery_response(response: Dictionary, recovery_
 	recovered_response["pvpActionTimeoutRecovery"] = recovery_status
 	return recovered_response
 
-func _get_pvp_timeout_recovery_end_reason(response: Dictionary) -> String:
+func _get_pvp_recovery_end_reason(response: Dictionary) -> String:
 	var match_end_value: Variant = response.get("pvpMatchEnd", {})
 	if match_end_value is Dictionary:
 		var match_end := match_end_value as Dictionary
@@ -13688,7 +13688,18 @@ func _apply_pvp_snapshot_reconciliation(message: Dictionary, mapped_update: Dict
 			]
 		)
 	_retry_pending_pvp_authoritative_terminal.call_deferred()
+	if _pvp_response_state_ended(reconciliation):
+		_finish_reconciled_pvp_terminal.call_deferred(reconciliation.duplicate(true))
 	return true
+
+func _finish_reconciled_pvp_terminal(response: Dictionary) -> void:
+	if battle_finished or not battle_state.is_battle_ended():
+		return
+	# The canonical room snapshot is the recovery authority when the standalone
+	# durable terminal notification was lost in transit. Reconciliation only
+	# reaches this point once every event through the snapshot cursor has already
+	# rendered, so finishing here cannot skip the final move or faint animation.
+	await _finish_if_battle_ended({"reason": _get_pvp_recovery_end_reason(response)})
 
 func _buffer_pvp_reconciliation_snapshot(message: Dictionary, mapped_update: Dictionary, snapshot_event_seq: int, last_rendered_seq: int) -> void:
 	var existing_response_value: Variant = pvp_pending_reconciliation_snapshot.get("mapped_update", {})
