@@ -10830,7 +10830,7 @@ func _apply_global_buff_slot_visual(button: Button, buff: Dictionary, progress_b
 	var is_global_heal := str(buff.get("id", "")) == "global_heal"
 	var active := (
 		str(buff.get("state", "funding")) == "active"
-		or (is_global_heal and str(buff.get("state", "available")) == "available")
+		or (is_global_heal and str(buff.get("state", "available")) == "cooldown")
 	)
 	var current := maxi(int(buff.get("current", 0)), 0)
 	var hovered := bool(button.get_meta("buff_hovered", false))
