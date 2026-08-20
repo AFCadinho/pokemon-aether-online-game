@@ -16,6 +16,7 @@ func _run() -> void:
 		localization_manager.call("set_locale", "en")
 	_check_preview_and_eligibility()
 	_check_status_and_revive_previews()
+	_check_ability_item_previews()
 	_check_overlay_contract()
 	quit(1 if failed else 0)
 
@@ -70,6 +71,38 @@ func _check_status_and_revive_previews() -> void:
 	var revive_preview: Dictionary = Preview.preview(pokemon, revive, 5)
 	_check_equal(revive_preview.get("label"), "Fainted -> 45/90", "Revive preview uses floor half HP")
 	_check_equal(Preview.preview(pokemon, antidote, 1).get("canApply"), false, "status cure cannot target fainted Pokemon")
+
+
+func _check_ability_item_previews() -> void:
+	var pokemon := Pokemon.new("Rookidee", 10)
+	pokemon.owned_pokemon_id = 1
+	pokemon.ability = "keen-eye"
+	pokemon.possible_abilities = ["keen-eye", "unnerve", "big-pecks"]
+	var capsule := _gameplay("single", [{"type":"change_ability", "mode":"regular"}])
+	var patch := _gameplay("single", [{"type":"change_ability", "mode":"hidden"}])
+
+	_check(Preview.supports(capsule), "Ability Capsule gameplay is recognized")
+	var capsule_preview: Dictionary = Preview.preview(pokemon, capsule, 1)
+	_check_equal(capsule_preview.get("canApply"), true, "Capsule can target a Pokemon with another regular Ability")
+	_check_equal(capsule_preview.get("label"), "Keen Eye → Unnerve", "Capsule previews the next regular Ability")
+
+	pokemon.ability = "unnerve"
+	_check_equal(Preview.preview(pokemon, capsule, 1).get("label"), "Unnerve → Keen Eye", "locked Hidden Ability is excluded from Capsule cycle")
+	pokemon.hidden_ability = true
+	_check_equal(Preview.preview(pokemon, capsule, 1).get("label"), "Unnerve → Big Pecks", "unlocked Hidden Ability joins Capsule cycle")
+
+	pokemon.hidden_ability = false
+	pokemon.ability = "keen-eye"
+	_check_equal(Preview.preview(pokemon, patch, 1).get("label"), "Keen Eye → Big Pecks", "Ability Patch previews the Hidden Ability")
+	pokemon.hidden_ability = true
+	pokemon.ability = "big-pecks"
+	_check_equal(Preview.preview(pokemon, patch, 1).get("canApply"), false, "active Hidden Ability cannot consume another Patch")
+
+	var single_ability := Pokemon.new("Mew", 10)
+	single_ability.ability = "synchronize"
+	single_ability.possible_abilities = ["synchronize"]
+	_check_equal(Preview.preview(single_ability, capsule, 1).get("canApply"), false, "Capsule rejects a Pokemon with no alternative Ability")
+	_check_equal(Preview.preview(single_ability, patch, 1).get("canApply"), false, "Patch rejects a Pokemon without a Hidden Ability")
 
 
 func _check_overlay_contract() -> void:
