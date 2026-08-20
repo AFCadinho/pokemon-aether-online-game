@@ -1,11 +1,11 @@
 {
   "ability-capsule": {
     "name": "Vaardigheidscapsule",
-    "shortDesc": "Schakelt een Pokemon tussen zijn twee mogelijke (niet-verborgen) vaardigheden."
+    "shortDesc": "Wisselt tussen alle ontgrendelde Abilities van een Pokémon, inclusief de Hidden Ability."
   },
   "ability-patch": {
     "name": "Mogelijkheidspatch",
-    "shortDesc": "Een patch waarmee een Pokemon met een normale vaardigheid een zeldzame vaardigheid kan hebben."
+    "shortDesc": "Ontgrendelt permanent de Hidden Ability van een Pokémon en activeert deze meteen."
   },
   "ability-shield": {
     "name": "Vaardigheidsschild",

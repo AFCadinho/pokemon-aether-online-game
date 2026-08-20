@@ -231,8 +231,23 @@ func _test_hook_and_api_integration_contract() -> void:
 	missing_effects.erase("effects")
 	var invalid_effects := roundtrip_complete.duplicate(true)
 	invalid_effects["effects"] = {}
-	var unexpected_effects := roundtrip_complete.duplicate(true)
-	unexpected_effects["effects"] = [{"effectId": "unexpected"}]
+	var item_reward_effects := roundtrip_complete.duplicate(true)
+	item_reward_effects["effects"] = [{
+		"effectId": "grant_mom_ability_capsule",
+		"rewardId": "mom_ability_capsule_reward",
+		"alreadyGranted": false,
+		"grants": [{
+			"itemId": "ability-capsule",
+			"name": "ability-capsule",
+			"quantity": 1,
+			"quantityAfter": 1,
+		}],
+	}]
+	var malformed_effects := item_reward_effects.duplicate(true)
+	((malformed_effects["effects"] as Array)[0] as Dictionary)["grants"] = [{
+		"itemId": "ability-capsule",
+		"quantity": 1,
+	}]
 	_expect(
 		not bool(game_state_service.call("_is_valid_story_complete_body", mismatched_complete, request_id, 4))
 		and not bool(game_state_service.call("_is_valid_story_complete_body", noncanonical_complete, str(noncanonical_complete["requestId"]), 4))
@@ -243,8 +258,9 @@ func _test_hook_and_api_integration_contract() -> void:
 	)
 	_expect(
 		not bool(game_state_service.call("_is_valid_story_complete_body", invalid_effects, request_id, 4))
-		and not bool(game_state_service.call("_is_valid_story_complete_body", unexpected_effects, request_id, 4)),
-		"client completion requires an empty effects array"
+		and bool(game_state_service.call("_is_valid_story_complete_body", item_reward_effects, request_id, 4))
+		and not bool(game_state_service.call("_is_valid_story_complete_body", malformed_effects, request_id, 4)),
+		"client completion accepts only the trusted item-reward effect contract"
 	)
 	var stale_revision := roundtrip_complete.duplicate(true)
 	(stale_revision["story"] as Dictionary)["revision"] = 4
@@ -301,7 +317,8 @@ func _test_hook_and_api_integration_contract() -> void:
 	_expect(
 		hook.contains("for attempt: int in range(COMPLETE_ATTEMPTS):")
 		and hook.contains("request_id,")
-		and hook.contains("_is_retryable_completion_failure"),
+		and hook.contains("_is_retryable_completion_failure")
+		and hook.contains("await InventoryService.load_inventory()"),
 		"completion retries reuse one UUID inside a single hook call"
 	)
 	_expect(
