@@ -93,6 +93,9 @@ var exit_game_button: Button
 var credits_button: Button
 var credits_status_label: Label
 var about_version_label: Label
+var support_report_status_label: Label
+var support_view_report_button: Button
+var support_copy_report_button: Button
 var logout_confirm_dialog: PanelContainer
 var logout_confirm_return_button: Button
 var logout_confirm_cancel_button: Button
@@ -162,6 +165,8 @@ func _ready() -> void:
 	logout_button.pressed.connect(_on_logout_button_pressed)
 	exit_game_button.pressed.connect(_on_exit_game_button_pressed)
 	credits_button.pressed.connect(_on_credits_button_pressed)
+	support_view_report_button.pressed.connect(_on_view_crash_report_pressed)
+	support_copy_report_button.pressed.connect(_on_copy_crash_report_pressed)
 	close_button.pressed.connect(close)
 	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
 		LocalizationManager.locale_changed.connect(_on_locale_changed)
@@ -174,6 +179,7 @@ func open(context: String = "game") -> void:
 	_apply_settings_to_controls()
 	_apply_context(context)
 	_refresh_impersonation_account_controls()
+	_refresh_support_report_state()
 	visible = true
 	_focus_active_navigation_button()
 
@@ -322,6 +328,7 @@ func _setup_tabs() -> void:
 	var sound_tab: VBoxContainer = _create_tab_content("Sound", "ui.settings.tab.sound")
 	var controls_tab: VBoxContainer = _create_tab_content("Controls", "ui.settings.tab.controls")
 	var account_tab: VBoxContainer = _create_tab_content("Account", "ui.settings.tab.account")
+	var support_tab: VBoxContainer = _create_tab_content("Support", "ui.settings.tab.support")
 	var about_tab: VBoxContainer = _create_tab_content("About", "ui.settings.tab.about")
 	account_tab_root = account_tab.get_parent().get_parent() as Control
 	_build_navigation()
@@ -417,6 +424,7 @@ func _setup_tabs() -> void:
 	)
 	_build_controls_tab(controls_tab)
 	_build_account_tab(account_tab)
+	_build_support_tab(support_tab)
 	_build_about_tab(about_tab)
 
 
@@ -798,6 +806,50 @@ func _build_about_tab(about_tab: VBoxContainer) -> void:
 	about_tab.add_child(legal_note)
 
 
+func _build_support_tab(support_tab: VBoxContainer) -> void:
+	var title := Label.new()
+	_set_localized_text(title, "ui.settings.support.title")
+	title.add_theme_font_size_override("font_size", 18)
+	title.add_theme_color_override("font_color", UI_TEXT)
+	support_tab.add_child(title)
+
+	var explanation := Label.new()
+	_set_localized_text(explanation, "ui.settings.support.description")
+	explanation.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	explanation.add_theme_font_size_override("font_size", 13)
+	support_tab.add_child(explanation)
+
+	var privacy_note := Label.new()
+	_set_localized_text(privacy_note, "ui.settings.support.privacy")
+	privacy_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	privacy_note.add_theme_font_size_override("font_size", 12)
+	privacy_note.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	support_tab.add_child(privacy_note)
+
+	var button_row := HBoxContainer.new()
+	button_row.add_theme_constant_override("separation", 10)
+	support_tab.add_child(button_row)
+
+	support_view_report_button = Button.new()
+	support_view_report_button.name = "ViewCrashReportButton"
+	_set_localized_text(support_view_report_button, "ui.settings.support.view_report")
+	support_view_report_button.focus_mode = Control.FOCUS_ALL
+	button_row.add_child(support_view_report_button)
+
+	support_copy_report_button = Button.new()
+	support_copy_report_button.name = "CopyCrashReportButton"
+	_set_localized_text(support_copy_report_button, "ui.settings.support.copy_report")
+	support_copy_report_button.focus_mode = Control.FOCUS_ALL
+	button_row.add_child(support_copy_report_button)
+
+	support_report_status_label = Label.new()
+	support_report_status_label.name = "CrashReportStatusLabel"
+	support_report_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	support_report_status_label.add_theme_font_size_override("font_size", 12)
+	support_tab.add_child(support_report_status_label)
+	_refresh_support_report_state()
+
+
 func _create_display_own_name_check_box() -> CheckBox:
 	display_own_name_check_box = CheckBox.new()
 	_set_localized_text(display_own_name_check_box, "ui.settings.display_own_name")
@@ -1129,6 +1181,7 @@ func _refresh_localized_content() -> void:
 		)
 	if privacy_dialog != null and privacy_dialog.visible:
 		_refresh_privacy_dialog_copy()
+	_refresh_support_report_state()
 
 
 func _update_about_version_label() -> void:
@@ -1642,6 +1695,43 @@ func _on_credits_button_pressed() -> void:
 		credits_status_label.text = LocalizationManager.text("ui.settings.account.error.credits")
 		credits_status_label.add_theme_color_override("font_color", UI_DANGER)
 		credits_status_label.visible = true
+
+
+func _on_view_crash_report_pressed() -> void:
+	if not ClientCrashReportService.has_report():
+		_refresh_support_report_state()
+		return
+	ClientCrashReportService.show_report_dialog(false)
+
+
+func _on_copy_crash_report_pressed() -> void:
+	var copied := ClientCrashReportService.copy_latest_report()
+	if support_report_status_label == null:
+		return
+	support_report_status_label.text = LocalizationManager.text(
+		"ui.settings.support.copied" if copied else "ui.settings.support.no_report"
+	)
+	support_report_status_label.add_theme_color_override(
+		"font_color",
+		Color("#75d69c") if copied else UI_MUTED_TEXT
+	)
+
+
+func _refresh_support_report_state() -> void:
+	if support_report_status_label == null:
+		return
+	var report_available := ClientCrashReportService.has_report()
+	if support_view_report_button != null:
+		support_view_report_button.disabled = not report_available
+	if support_copy_report_button != null:
+		support_copy_report_button.disabled = not report_available
+	support_report_status_label.text = LocalizationManager.text(
+		"ui.settings.support.report_available" if report_available else "ui.settings.support.no_report"
+	)
+	support_report_status_label.add_theme_color_override(
+		"font_color",
+		UI_TEXT if report_available else UI_MUTED_TEXT
+	)
 
 
 func _show_logout_confirm_dialog() -> void:

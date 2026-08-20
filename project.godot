@@ -40,6 +40,7 @@ EncounterMetadataService="*res://scripts/services/encounter_metadata_service.gd"
 GameErrorDialogService="*res://scripts/services/game_error_dialog_service.gd"
 PokemonDataApiClient="*res://scripts/battle/battle_api/pokemon_data_api_client.gd"
 LocalizationManager="*res://scripts/services/localization_manager.gd"
+ClientCrashReportService="*res://scripts/services/client_crash_report_service.gd"
 ItemLocalization="*res://scripts/services/item_localization_service.gd"
 ContentLocalization="*res://scripts/services/content_localization_service.gd"
 BackendErrorLocalization="*res://scripts/services/backend_error_localization_service.gd"
@@ -91,6 +92,13 @@ TradeWorkspace="*res://scripts/ui/trade_workspace.gd"
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/stretch/mode="canvas_items"
+
+[debug]
+
+file_logging/enable_file_logging=true
+file_logging/log_path="user://logs/godot.log"
+file_logging/max_log_files=5
+settings/gdscript/always_track_call_stacks=true
 
 [internationalization]
 
