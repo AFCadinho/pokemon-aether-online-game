@@ -745,6 +745,7 @@ var pvp_room_status_label: Label
 var pvp_room_wait_spinner_label: Label
 var pvp_room_casual_type_button: Button
 var pvp_room_training_type_button: Button
+var pvp_room_type_note: Label
 var pvp_room_battle_purpose := "casual"
 var pvp_room_mode_selector: HBoxContainer
 var pvp_room_form: VBoxContainer
@@ -828,7 +829,7 @@ var pvp_poll_in_flight := false
 var pvp_polling_active := false
 var pvp_poll_elapsed := 0.0
 var pvp_battle_starting := false
-var pvp_room_status_translation_key := "ui.pvp.room.ready"
+var pvp_room_status_translation_key := "ui.pvp.room.casual_ready"
 var pvp_room_status_translation_values: Dictionary = {}
 var pvp_queue_status_translation_key := "ui.pvp.queue.ready"
 var pvp_queue_status_translation_values: Dictionary = {}
@@ -1719,6 +1720,7 @@ func _refresh_pvp_localized_ui() -> void:
 	if not pvp_leaderboard_entries.is_empty():
 		_render_pvp_leaderboard(pvp_leaderboard_entries)
 	_render_pvp_history_matches(pvp_history_matches, pvp_history_user_id)
+	_refresh_pvp_room_battle_purpose_ui()
 	_refresh_pvp_room_form_title()
 	if pvp_room_code_label != null:
 		var room_code := pvp_active_room_code if pvp_active_room_code != "" else "-"
@@ -5638,12 +5640,12 @@ func _setup_pvp_room_popup() -> void:
 	pvp_room_training_type_button.pressed.connect(_on_pvp_room_battle_purpose_selected.bind("training"))
 	room_type_selector.add_child(pvp_room_training_type_button)
 
-	var room_type_note := Label.new()
-	_set_localized_control_property(room_type_note, "text", "ui.pvp.room.type.note")
-	room_type_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	room_type_note.add_theme_font_size_override("font_size", 11)
-	room_type_note.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	room_layout.add_child(room_type_note)
+	pvp_room_type_note = Label.new()
+	_set_localized_control_property(pvp_room_type_note, "text", "ui.pvp.room.type.casual_note")
+	pvp_room_type_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pvp_room_type_note.add_theme_font_size_override("font_size", 11)
+	pvp_room_type_note.add_theme_color_override("font_color", Color("#9be7b1"))
+	room_layout.add_child(pvp_room_type_note)
 
 	var room_separator := HSeparator.new()
 	room_separator.add_theme_constant_override("separation", 4)
@@ -5675,7 +5677,7 @@ func _setup_pvp_room_popup() -> void:
 	room_status_layout.add_child(room_status_row)
 
 	pvp_room_status_label = Label.new()
-	pvp_room_status_label.text = LocalizationManager.text("ui.pvp.room.ready")
+	pvp_room_status_label.text = LocalizationManager.text("ui.pvp.room.casual_ready")
 	pvp_room_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pvp_room_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	pvp_room_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -6110,6 +6112,7 @@ func _setup_pvp_room_popup() -> void:
 	_apply_button_style(pvp_room_create_mode_button, "primary")
 	_apply_button_style(pvp_room_join_mode_button)
 	_apply_button_style(pvp_room_spectate_mode_button)
+	_refresh_pvp_room_battle_purpose_ui()
 	_apply_button_style(pvp_join_queue_button, "primary")
 	_apply_button_style(pvp_leave_queue_button)
 	_apply_button_style(pvp_reconnect_battle_button)
@@ -36164,7 +36167,9 @@ func _on_pvp_room_mode_selected(mode: String) -> void:
 	pvp_cancel_room_button.visible = false
 	pvp_copy_code_button.visible = false
 	_refresh_pvp_room_form_title()
-	_set_pvp_status_key("ui.pvp.room.ready")
+	_set_pvp_status_key(
+		"ui.pvp.room.ready" if mode == "spectate" else _pvp_room_ready_status_key()
+	)
 
 
 func _on_pvp_room_battle_purpose_selected(purpose: String) -> void:
@@ -36176,8 +36181,43 @@ func _on_pvp_room_battle_purpose_selected(purpose: String) -> void:
 	if pvp_room_training_type_button != null:
 		pvp_room_training_type_button.button_pressed = pvp_room_battle_purpose == "training"
 	_refresh_pvp_room_team_fields()
+	_refresh_pvp_room_battle_purpose_ui()
 	_refresh_pvp_room_form_title()
-	_set_pvp_status_key("ui.pvp.room.ready")
+	_set_pvp_status_key(_pvp_room_ready_status_key())
+
+
+func _pvp_room_ready_status_key() -> String:
+	return "ui.pvp.training.ready" if pvp_room_battle_purpose == "training" else "ui.pvp.room.casual_ready"
+
+
+func _refresh_pvp_room_battle_purpose_ui() -> void:
+	var is_training := pvp_room_battle_purpose == "training"
+	if pvp_room_casual_type_button != null:
+		pvp_room_casual_type_button.text = (
+			LocalizationManager.text("ui.pvp.room.type.casual")
+			if is_training
+			else "✓ %s" % LocalizationManager.text("ui.pvp.room.type.casual")
+		)
+	if pvp_room_training_type_button != null:
+		pvp_room_training_type_button.text = (
+			"✓ %s" % LocalizationManager.text("ui.pvp.room.type.training")
+			if is_training
+			else LocalizationManager.text("ui.pvp.room.type.training")
+		)
+	if pvp_room_type_note != null:
+		_set_localized_control_property(
+			pvp_room_type_note,
+			"text",
+			"ui.pvp.room.type.training_note" if is_training else "ui.pvp.room.type.casual_note"
+		)
+	var create_key := "ui.pvp.training.create" if is_training else "ui.pvp.room.create"
+	var join_key := "ui.pvp.training.join" if is_training else "ui.pvp.room.join"
+	for create_button: Button in [pvp_room_create_mode_button, pvp_create_room_button]:
+		if create_button != null:
+			create_button.text = LocalizationManager.text(create_key)
+	for join_button: Button in [pvp_room_join_mode_button, pvp_join_room_button]:
+		if join_button != null:
+			join_button.text = LocalizationManager.text(join_key)
 
 
 func _refresh_pvp_room_team_fields() -> void:
