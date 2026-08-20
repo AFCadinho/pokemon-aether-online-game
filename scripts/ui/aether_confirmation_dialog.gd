@@ -20,6 +20,7 @@ const COLOR_MUTED := Color("9eb3c5")
 @onready var title_label: Label = $Center/Panel/Margin/Content/Header/Title
 @onready var close_button: Button = $Center/Panel/Margin/Content/Header/CloseButton
 @onready var message_label: Label = $Center/Panel/Margin/Content/MessagePanel/MessageMargin/Message
+@onready var option_checkbox: CheckBox = $Center/Panel/Margin/Content/OptionCheckBox
 @onready var cancel_button: Button = $Center/Panel/Margin/Content/Actions/CancelButton
 @onready var confirm_button: Button = $Center/Panel/Margin/Content/Actions/ConfirmButton
 
@@ -48,6 +49,12 @@ func configure(
 	message_label.text = message
 	confirm_button.text = confirm_text
 	cancel_button.text = cancel_text
+
+
+func configure_option(option_text: String, pressed := false) -> void:
+	option_checkbox.text = option_text
+	option_checkbox.set_pressed_no_signal(pressed)
+	option_checkbox.visible = not option_text.strip_edges().is_empty()
 
 
 func popup_centered(requested_size: Vector2i = Vector2i.ZERO) -> void:
@@ -107,6 +114,7 @@ func _apply_styles() -> void:
 	title_label.add_theme_font_size_override("font_size", 20)
 	message_label.add_theme_color_override("font_color", COLOR_MUTED)
 	message_label.add_theme_font_size_override("font_size", 15)
+	_style_checkbox(option_checkbox)
 	_style_button(close_button, "quiet")
 	_style_button(cancel_button, "secondary")
 	_style_button(confirm_button, "primary")
@@ -136,6 +144,41 @@ func _style_button(button: Button, variant: String) -> void:
 	button.add_theme_stylebox_override("hover", _button_style(hover_background, hover_border))
 	button.add_theme_stylebox_override("pressed", _button_style(COLOR_SURFACE, COLOR_ACCENT))
 	button.add_theme_stylebox_override("focus", _button_style(normal_background, COLOR_ACCENT))
+
+
+func _style_checkbox(checkbox: CheckBox) -> void:
+	checkbox.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	checkbox.add_theme_color_override("font_color", COLOR_TEXT)
+	checkbox.add_theme_color_override("font_hover_color", COLOR_TEXT)
+	checkbox.add_theme_color_override("font_pressed_color", COLOR_TEXT)
+	checkbox.add_theme_font_size_override("font_size", 14)
+	checkbox.add_theme_icon_override("unchecked", _checkbox_icon(false, false))
+	checkbox.add_theme_icon_override("unchecked_hover", _checkbox_icon(false, true))
+	checkbox.add_theme_icon_override("unchecked_pressed", _checkbox_icon(false, true))
+	checkbox.add_theme_icon_override("checked", _checkbox_icon(true, false))
+	checkbox.add_theme_icon_override("checked_hover", _checkbox_icon(true, true))
+	checkbox.add_theme_icon_override("checked_pressed", _checkbox_icon(true, true))
+
+
+func _checkbox_icon(checked: bool, highlighted: bool) -> ImageTexture:
+	var image := Image.create(20, 20, false, Image.FORMAT_RGBA8)
+	var border := COLOR_ACCENT if highlighted or checked else COLOR_BORDER
+	var fill := COLOR_ACCENT_DARK if checked else COLOR_SURFACE
+	for y: int in range(20):
+		for x: int in range(20):
+			var is_border := x < 2 or x > 17 or y < 2 or y > 17
+			image.set_pixel(x, y, border if is_border else fill)
+	if checked:
+		var check_pixels := [
+			Vector2i(5, 10), Vector2i(6, 11), Vector2i(7, 12), Vector2i(8, 13),
+			Vector2i(9, 12), Vector2i(10, 11), Vector2i(11, 10), Vector2i(12, 9),
+			Vector2i(13, 8), Vector2i(14, 7),
+		]
+		for point: Vector2i in check_pixels:
+			image.set_pixelv(point, COLOR_TEXT)
+			if point.y + 1 < 18:
+				image.set_pixel(point.x, point.y + 1, COLOR_TEXT)
+	return ImageTexture.create_from_image(image)
 
 
 func _button_style(background: Color, border: Color) -> StyleBoxFlat:

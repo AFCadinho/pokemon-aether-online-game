@@ -113,6 +113,7 @@ const HELD_ITEM_DROP_TARGET_BUTTON_SCRIPT := preload("res://scripts/ui/held_item
 const TOWN_MAP_POPUP_SCRIPT := preload("res://scripts/ui/town_map_popup.gd")
 const MOUNT_LOADOUT_PANEL_SCENE: PackedScene = preload("res://scenes/interface/mount_loadout_panel.tscn")
 const SKILLS_PANEL_SCENE: PackedScene = preload("res://scenes/interface/skills_panel.tscn")
+const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 const OVERWORLD_MOVE_ACTION_ICON := preload("res://assets/ui/icons/overworld_move_action.svg")
 const CHAT_RESIZE_ICON: Texture2D = preload("res://assets/ui/chat_resize.svg")
 const GLOBAL_EXP_BUFF_ICON: Texture2D = preload("res://assets/ui/global_exp_boost.svg")
@@ -1341,7 +1342,7 @@ var personal_buffs_expanded := false
 var personal_buffs_refresh_elapsed := 0.0
 var global_buffs_refresh_elapsed := 0.0
 var pending_global_heal_request: Dictionary = {}
-var global_heal_request_dialog: ConfirmationDialog
+var global_heal_request_dialog: AetherConfirmationDialog
 var global_heal_request_disable_checkbox: CheckBox
 var global_heal_request_busy := false
 var staff_tools_visibility_key := ""
@@ -11245,28 +11246,20 @@ func _on_global_heal_requests_toggled(enabled: bool) -> void:
 	if not enabled:
 		pending_global_heal_request.clear()
 		if global_heal_request_dialog != null:
-			global_heal_request_dialog.hide()
+			global_heal_request_dialog.hide_dialog()
 	await _save_toggle_preferences()
 
 
 func _setup_global_heal_request_dialog() -> void:
 	if global_heal_request_dialog != null:
 		return
-	global_heal_request_dialog = ConfirmationDialog.new()
+	global_heal_request_dialog = AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
 	global_heal_request_dialog.name = "GlobalHealRequestDialog"
-	global_heal_request_dialog.exclusive = true
-	_prepare_confirmation_dialog_focus(global_heal_request_dialog)
+	root_control.add_child(global_heal_request_dialog)
 	global_heal_request_dialog.confirmed.connect(_on_global_heal_request_confirmed)
 	global_heal_request_dialog.canceled.connect(_on_global_heal_request_declined)
-	global_heal_request_disable_checkbox = CheckBox.new()
+	global_heal_request_disable_checkbox = global_heal_request_dialog.option_checkbox
 	global_heal_request_disable_checkbox.name = "DisableFutureGlobalHealRequests"
-	global_heal_request_disable_checkbox.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-	global_heal_request_disable_checkbox.offset_left = 18.0
-	global_heal_request_disable_checkbox.offset_top = -78.0
-	global_heal_request_disable_checkbox.offset_right = -18.0
-	global_heal_request_disable_checkbox.offset_bottom = -48.0
-	global_heal_request_dialog.add_child(global_heal_request_disable_checkbox)
-	root_control.add_child(global_heal_request_dialog)
 
 
 func _prepare_confirmation_dialog_focus(dialog: ConfirmationDialog) -> void:
@@ -11306,35 +11299,37 @@ func _try_show_pending_global_heal_request() -> void:
 	if _global_buff_remaining_seconds(str(pending_global_heal_request.get("expiresAt", ""))) <= 0:
 		pending_global_heal_request.clear()
 		if global_heal_request_dialog != null:
-			global_heal_request_dialog.hide()
+			global_heal_request_dialog.hide_dialog()
 		return
 	if _is_world_battle_active():
 		if global_heal_request_dialog != null and global_heal_request_dialog.visible:
-			global_heal_request_dialog.hide()
+			global_heal_request_dialog.hide_dialog()
 		return
 	if not PartyHealService.party_needs_heal(PlayerSave.party):
 		pending_global_heal_request.clear()
 		return
 	if global_heal_request_dialog == null or global_heal_request_dialog.visible:
 		return
-	global_heal_request_dialog.title = LocalizationManager.text("ui.buff.global_heal.request_title")
-	global_heal_request_dialog.dialog_text = LocalizationManager.text(
-		"ui.buff.global_heal.request_message",
-		{"player": str(pending_global_heal_request.get("displayName", "Trainer"))}
+	global_heal_request_dialog.configure(
+		LocalizationManager.text("ui.buff.global_heal.request_title"),
+		LocalizationManager.text(
+			"ui.buff.global_heal.request_message",
+			{"player": str(pending_global_heal_request.get("displayName", "Trainer"))}
+		),
+		LocalizationManager.text("ui.buff.global_heal.accept"),
+		LocalizationManager.text("ui.buff.global_heal.decline")
 	)
-	global_heal_request_dialog.get_ok_button().text = LocalizationManager.text("ui.buff.global_heal.accept")
-	global_heal_request_dialog.get_cancel_button().text = LocalizationManager.text("ui.buff.global_heal.decline")
-	global_heal_request_disable_checkbox.text = LocalizationManager.text("ui.buff.global_heal.disable_future")
-	global_heal_request_disable_checkbox.set_pressed_no_signal(false)
-	_prepare_confirmation_dialog_focus(global_heal_request_dialog)
-	global_heal_request_dialog.popup_centered(Vector2i(520, 250))
+	global_heal_request_dialog.configure_option(
+		LocalizationManager.text("ui.buff.global_heal.disable_future")
+	)
+	global_heal_request_dialog.popup_centered(Vector2i(540, 280))
 
 
 func _on_global_heal_request_confirmed() -> void:
 	if pending_global_heal_request.is_empty():
 		return
 	if _is_world_battle_active():
-		global_heal_request_dialog.hide()
+		global_heal_request_dialog.hide_dialog()
 		return
 	var request := pending_global_heal_request.duplicate(true)
 	pending_global_heal_request.clear()
