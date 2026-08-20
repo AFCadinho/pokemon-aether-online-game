@@ -743,6 +743,10 @@ var pvp_history_refresh_button: Button
 var pvp_room_code_label: Label
 var pvp_room_status_label: Label
 var pvp_room_wait_spinner_label: Label
+var pvp_room_casual_type_button: Button
+var pvp_room_training_type_button: Button
+var pvp_room_type_note: Label
+var pvp_room_battle_purpose := "casual"
 var pvp_room_mode_selector: HBoxContainer
 var pvp_room_form: VBoxContainer
 var pvp_room_form_title: Label
@@ -751,6 +755,8 @@ var pvp_room_join_mode_button: Button
 var pvp_room_spectate_mode_button: Button
 var pvp_room_selected_mode := ""
 var pvp_room_code_input: LineEdit
+var pvp_training_team_input: TextEdit
+var pvp_training_team_note: Label
 var pvp_create_room_button: Button
 var pvp_cancel_room_button: Button
 var pvp_join_room_button: Button
@@ -823,7 +829,7 @@ var pvp_poll_in_flight := false
 var pvp_polling_active := false
 var pvp_poll_elapsed := 0.0
 var pvp_battle_starting := false
-var pvp_room_status_translation_key := "ui.pvp.room.ready"
+var pvp_room_status_translation_key := "ui.pvp.room.casual_ready"
 var pvp_room_status_translation_values: Dictionary = {}
 var pvp_queue_status_translation_key := "ui.pvp.queue.ready"
 var pvp_queue_status_translation_values: Dictionary = {}
@@ -1713,6 +1719,7 @@ func _refresh_pvp_localized_ui() -> void:
 	if not pvp_leaderboard_entries.is_empty():
 		_render_pvp_leaderboard(pvp_leaderboard_entries)
 	_render_pvp_history_matches(pvp_history_matches, pvp_history_user_id)
+	_refresh_pvp_room_battle_purpose_ui()
 	_refresh_pvp_room_form_title()
 	if pvp_room_code_label != null:
 		var room_code := pvp_active_room_code if pvp_active_room_code != "" else "-"
@@ -5597,6 +5604,42 @@ func _setup_pvp_room_popup() -> void:
 	room_intro.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	room_layout.add_child(room_intro)
 
+	var room_type_label := Label.new()
+	_set_localized_control_property(room_type_label, "text", "ui.pvp.room.type")
+	room_type_label.add_theme_font_size_override("font_size", 11)
+	room_type_label.add_theme_color_override("font_color", Color("#87bce8"))
+	room_layout.add_child(room_type_label)
+
+	var room_type_selector := HBoxContainer.new()
+	room_type_selector.add_theme_constant_override("separation", 8)
+	room_layout.add_child(room_type_selector)
+	var room_type_group := ButtonGroup.new()
+	room_type_group.allow_unpress = false
+
+	pvp_room_casual_type_button = Button.new()
+	_set_localized_control_property(pvp_room_casual_type_button, "text", "ui.pvp.room.type.casual")
+	pvp_room_casual_type_button.toggle_mode = true
+	pvp_room_casual_type_button.button_group = room_type_group
+	pvp_room_casual_type_button.button_pressed = true
+	pvp_room_casual_type_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_room_casual_type_button.pressed.connect(_on_pvp_room_battle_purpose_selected.bind("casual"))
+	room_type_selector.add_child(pvp_room_casual_type_button)
+
+	pvp_room_training_type_button = Button.new()
+	_set_localized_control_property(pvp_room_training_type_button, "text", "ui.pvp.room.type.training")
+	pvp_room_training_type_button.toggle_mode = true
+	pvp_room_training_type_button.button_group = room_type_group
+	pvp_room_training_type_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_room_training_type_button.pressed.connect(_on_pvp_room_battle_purpose_selected.bind("training"))
+	room_type_selector.add_child(pvp_room_training_type_button)
+
+	pvp_room_type_note = Label.new()
+	_set_localized_control_property(pvp_room_type_note, "text", "ui.pvp.room.type.casual_note")
+	pvp_room_type_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pvp_room_type_note.add_theme_font_size_override("font_size", 11)
+	pvp_room_type_note.add_theme_color_override("font_color", Color("#9be7b1"))
+	room_layout.add_child(pvp_room_type_note)
+
 	var room_separator := HSeparator.new()
 	room_separator.add_theme_constant_override("separation", 4)
 	room_layout.add_child(room_separator)
@@ -5627,7 +5670,7 @@ func _setup_pvp_room_popup() -> void:
 	room_status_layout.add_child(room_status_row)
 
 	pvp_room_status_label = Label.new()
-	pvp_room_status_label.text = LocalizationManager.text("ui.pvp.room.ready")
+	pvp_room_status_label.text = LocalizationManager.text("ui.pvp.room.casual_ready")
 	pvp_room_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pvp_room_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	pvp_room_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -5679,6 +5722,22 @@ func _setup_pvp_room_popup() -> void:
 	pvp_room_form_title.add_theme_font_size_override("font_size", 11)
 	pvp_room_form_title.add_theme_color_override("font_color", Color("#87bce8"))
 	pvp_room_form.add_child(pvp_room_form_title)
+
+	pvp_training_team_input = TextEdit.new()
+	_set_localized_control_property(pvp_training_team_input, "placeholder_text", "ui.pvp.training.paste_placeholder")
+	pvp_training_team_input.custom_minimum_size = Vector2(0, 116)
+	pvp_training_team_input.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
+	pvp_training_team_input.visible = false
+	pvp_room_form.add_child(pvp_training_team_input)
+	_apply_text_edit_style(pvp_training_team_input)
+
+	pvp_training_team_note = Label.new()
+	_set_localized_control_property(pvp_training_team_note, "text", "ui.pvp.training.ephemeral_note")
+	pvp_training_team_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pvp_training_team_note.add_theme_font_size_override("font_size", 11)
+	pvp_training_team_note.add_theme_color_override("font_color", Color("#9be7b1"))
+	pvp_training_team_note.visible = false
+	pvp_room_form.add_child(pvp_training_team_note)
 
 	pvp_room_code_input = LineEdit.new()
 	_set_localized_control_property(pvp_room_code_input, "placeholder_text", "ui.pvp.room.enter_code")
@@ -6046,6 +6105,7 @@ func _setup_pvp_room_popup() -> void:
 	_apply_button_style(pvp_room_create_mode_button, "primary")
 	_apply_button_style(pvp_room_join_mode_button)
 	_apply_button_style(pvp_room_spectate_mode_button)
+	_refresh_pvp_room_battle_purpose_ui()
 	_apply_button_style(pvp_join_queue_button, "primary")
 	_apply_button_style(pvp_leave_queue_button)
 	_apply_button_style(pvp_reconnect_battle_button)
@@ -35999,7 +36059,7 @@ func _heal_party_before_pvp(action_label: String = "PvP") -> bool:
 func _on_pvp_room_mode_selected(mode: String) -> void:
 	pvp_room_selected_mode = mode
 	pvp_room_form.visible = true
-	pvp_room_code_input.visible = mode != "create"
+	_refresh_pvp_room_team_fields()
 	pvp_allow_spectators_check.visible = mode == "create"
 	pvp_create_room_button.visible = mode == "create"
 	pvp_join_room_button.visible = mode == "join"
@@ -36007,7 +36067,68 @@ func _on_pvp_room_mode_selected(mode: String) -> void:
 	pvp_cancel_room_button.visible = false
 	pvp_copy_code_button.visible = false
 	_refresh_pvp_room_form_title()
-	_set_pvp_status_key("ui.pvp.room.ready")
+	_set_pvp_status_key(
+		"ui.pvp.room.ready" if mode == "spectate" else _pvp_room_ready_status_key()
+	)
+
+
+func _on_pvp_room_battle_purpose_selected(purpose: String) -> void:
+	if pvp_active_room_code != "" or pvp_battle_starting:
+		return
+	pvp_room_battle_purpose = "training" if purpose == "training" else "casual"
+	if pvp_room_casual_type_button != null:
+		pvp_room_casual_type_button.button_pressed = pvp_room_battle_purpose == "casual"
+	if pvp_room_training_type_button != null:
+		pvp_room_training_type_button.button_pressed = pvp_room_battle_purpose == "training"
+	_refresh_pvp_room_team_fields()
+	_refresh_pvp_room_battle_purpose_ui()
+	_refresh_pvp_room_form_title()
+	_set_pvp_status_key(_pvp_room_ready_status_key())
+
+
+func _pvp_room_ready_status_key() -> String:
+	return "ui.pvp.training.ready" if pvp_room_battle_purpose == "training" else "ui.pvp.room.casual_ready"
+
+
+func _refresh_pvp_room_battle_purpose_ui() -> void:
+	var is_training := pvp_room_battle_purpose == "training"
+	if pvp_room_casual_type_button != null:
+		pvp_room_casual_type_button.text = (
+			LocalizationManager.text("ui.pvp.room.type.casual")
+			if is_training
+			else "✓ %s" % LocalizationManager.text("ui.pvp.room.type.casual")
+		)
+	if pvp_room_training_type_button != null:
+		pvp_room_training_type_button.text = (
+			"✓ %s" % LocalizationManager.text("ui.pvp.room.type.training")
+			if is_training
+			else LocalizationManager.text("ui.pvp.room.type.training")
+		)
+	if pvp_room_type_note != null:
+		_set_localized_control_property(
+			pvp_room_type_note,
+			"text",
+			"ui.pvp.room.type.training_note" if is_training else "ui.pvp.room.type.casual_note"
+		)
+	var create_key := "ui.pvp.training.create" if is_training else "ui.pvp.room.create"
+	var join_key := "ui.pvp.training.join" if is_training else "ui.pvp.room.join"
+	for create_button: Button in [pvp_room_create_mode_button, pvp_create_room_button]:
+		if create_button != null:
+			create_button.text = LocalizationManager.text(create_key)
+	for join_button: Button in [pvp_room_join_mode_button, pvp_join_room_button]:
+		if join_button != null:
+			join_button.text = LocalizationManager.text(join_key)
+
+
+func _refresh_pvp_room_team_fields() -> void:
+	var needs_team := pvp_room_selected_mode in ["create", "join"]
+	var is_training := pvp_room_battle_purpose == "training"
+	if pvp_room_code_input != null:
+		pvp_room_code_input.visible = pvp_room_selected_mode != "create"
+	if pvp_training_team_input != null:
+		pvp_training_team_input.visible = needs_team and is_training
+	if pvp_training_team_note != null:
+		pvp_training_team_note.visible = needs_team and is_training
 
 
 func _refresh_pvp_room_form_title() -> void:
@@ -36018,9 +36139,13 @@ func _refresh_pvp_room_form_title() -> void:
 		return
 	match pvp_room_selected_mode:
 		"create":
-			pvp_room_form_title.text = LocalizationManager.text("ui.pvp.room.form_create")
+			pvp_room_form_title.text = LocalizationManager.text(
+				"ui.pvp.training.form_create" if pvp_room_battle_purpose == "training" else "ui.pvp.room.form_create"
+			)
 		"join":
-			pvp_room_form_title.text = LocalizationManager.text("ui.pvp.room.form_join")
+			pvp_room_form_title.text = LocalizationManager.text(
+				"ui.pvp.training.form_join" if pvp_room_battle_purpose == "training" else "ui.pvp.room.form_join"
+			)
 		"spectate":
 			pvp_room_form_title.text = LocalizationManager.text("ui.pvp.room.form_spectate")
 		_:
@@ -36029,21 +36154,31 @@ func _refresh_pvp_room_form_title() -> void:
 func _on_pvp_create_room_pressed() -> void:
 	if pvp_battle_starting:
 		return
-	if not await _heal_party_before_pvp("PvP room"):
+	var is_training := pvp_room_battle_purpose == "training"
+	var team_text := pvp_training_team_input.text.strip_edges() if pvp_training_team_input != null else ""
+	if is_training and team_text == "":
+		_set_pvp_status_key("ui.pvp.training.paste_required")
+		return
+	if not is_training and not await _heal_party_before_pvp("PvP room"):
 		return
 	_set_pvp_room_busy(true)
 	_set_pvp_status_key("ui.pvp.room.creating")
 	var request := _create_pvp_request_node()
 	var response: Dictionary = await BattleApiClient.create_pvp_room(
 		request,
-		BattleApiPayloads.from_player_save(PlayerSave),
-		pvp_allow_spectators_check != null and pvp_allow_spectators_check.button_pressed
+		_pvp_room_player_payload(),
+		pvp_allow_spectators_check != null and pvp_allow_spectators_check.button_pressed,
+		8,
+		pvp_room_battle_purpose,
+		team_text
 	)
 	request.queue_free()
 	_set_pvp_room_busy(false)
 
 	if not bool(response.get("success", false)):
-		_set_pvp_status_key("ui.pvp.room.create_failed")
+		_set_pvp_status_key(
+			"ui.pvp.training.paste_invalid" if is_training else "ui.pvp.room.create_failed"
+		)
 		push_warning("UIOverlay: PVP room creation failed: %s" % str(response.get("error", "Unknown error")))
 		return
 
@@ -36051,9 +36186,12 @@ func _on_pvp_create_room_pressed() -> void:
 	pvp_room_code_label.text = LocalizationManager.text("ui.pvp.room.code", {"code": pvp_active_room_code})
 	pvp_copy_code_button.disabled = pvp_active_room_code == ""
 	pvp_room_mode_selector.visible = false
+	_set_pvp_room_type_locked(true)
 	pvp_room_form.visible = true
 	pvp_room_form_title.text = LocalizationManager.text("ui.pvp.room.form_share")
 	pvp_room_code_input.visible = false
+	pvp_training_team_input.visible = false
+	pvp_training_team_note.visible = false
 	pvp_allow_spectators_check.visible = false
 	pvp_create_room_button.visible = false
 	pvp_join_room_button.visible = false
@@ -36118,6 +36256,7 @@ func _on_pvp_cancel_room_pressed() -> void:
 	pvp_room_code_label.text = LocalizationManager.text("ui.pvp.room.code", {"code": "-"})
 	pvp_copy_code_button.disabled = true
 	pvp_room_mode_selector.visible = true
+	_set_pvp_room_type_locked(false)
 	pvp_room_form.visible = false
 	pvp_room_selected_mode = ""
 	_set_pvp_status_key("ui.pvp.room.cancelled")
@@ -36129,7 +36268,12 @@ func _on_pvp_join_room_pressed() -> void:
 	if room_code == "":
 		_set_pvp_status_key("ui.pvp.room.enter_code_first")
 		return
-	if not await _heal_party_before_pvp("PvP room"):
+	var is_training := pvp_room_battle_purpose == "training"
+	var team_text := pvp_training_team_input.text.strip_edges() if pvp_training_team_input != null else ""
+	if is_training and team_text == "":
+		_set_pvp_status_key("ui.pvp.training.paste_required")
+		return
+	if not is_training and not await _heal_party_before_pvp("PvP room"):
 		return
 
 	_set_pvp_room_busy(true)
@@ -36138,7 +36282,8 @@ func _on_pvp_join_room_pressed() -> void:
 	var response: Dictionary = await BattleApiClient.join_pvp_room(
 		request,
 		room_code,
-		BattleApiPayloads.from_player_save(PlayerSave)
+		_pvp_room_player_payload(),
+		team_text
 	)
 	request.queue_free()
 	_set_pvp_room_busy(false)
@@ -36152,13 +36297,32 @@ func _on_pvp_join_room_pressed() -> void:
 			await _start_pvp_battle_from_response(_normalize_started_pvp_reconnect_response(response))
 			return
 		_set_pvp_status_key("ui.pvp.room.join_failed")
+		if is_training:
+			_set_pvp_status_key("ui.pvp.training.paste_invalid")
 		push_warning("UIOverlay: PVP room join failed: %s" % str(response.get("error", "Unknown error")))
 		return
 
 	pvp_active_room_code = str(response.get("roomCode", room_code)).strip_edges()
+	pvp_room_battle_purpose = str(response.get("battlePurpose", pvp_room_battle_purpose)).strip_edges().to_lower()
 	pvp_room_code_label.text = LocalizationManager.text("ui.pvp.room.code", {"code": pvp_active_room_code})
 	pvp_copy_code_button.disabled = pvp_active_room_code == ""
 	await _start_pvp_battle_from_response(response)
+
+
+func _pvp_room_player_payload() -> Dictionary:
+	if pvp_room_battle_purpose != "training":
+		return BattleApiPayloads.from_player_save(PlayerSave)
+	return {
+		"playerId": PlayerSave.player_id,
+		"name": PlayerSave.player_name,
+	}
+
+
+func _set_pvp_room_type_locked(locked: bool) -> void:
+	if pvp_room_casual_type_button != null:
+		pvp_room_casual_type_button.disabled = locked
+	if pvp_room_training_type_button != null:
+		pvp_room_training_type_button.disabled = locked
 
 func _on_pvp_spectate_room_pressed() -> void:
 	if pvp_battle_starting:
@@ -38329,6 +38493,7 @@ func _start_pvp_battle_from_response(response: Dictionary) -> void:
 		pvp_room_mode_selector.visible = true
 	if pvp_room_form != null:
 		pvp_room_form.visible = false
+	_set_pvp_room_type_locked(false)
 	pvp_room_selected_mode = ""
 	_set_pvp_queue_status_key("ui.pvp.queue.ready")
 	_refresh_pvp_queue_buttons("idle")
@@ -38342,6 +38507,7 @@ func _create_pvp_request_node() -> HTTPRequest:
 
 func _set_pvp_room_busy(is_busy: bool) -> void:
 	pvp_create_room_button.disabled = is_busy
+	_set_pvp_room_type_locked(is_busy or pvp_active_room_code != "")
 	if pvp_room_create_mode_button != null:
 		pvp_room_create_mode_button.disabled = is_busy
 	if pvp_room_join_mode_button != null:
