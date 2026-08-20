@@ -758,6 +758,10 @@ var pvp_room_selected_mode := ""
 var pvp_room_code_input: LineEdit
 var pvp_training_team_input: TextEdit
 var pvp_training_team_note: Label
+var pvp_training_team_preview_section: VBoxContainer
+var pvp_training_team_preview_title: Label
+var pvp_training_team_preview_grid: HBoxContainer
+var pvp_training_team_preview_entries: Array[Dictionary] = []
 var pvp_create_room_button: Button
 var pvp_cancel_room_button: Button
 var pvp_join_room_button: Button
@@ -1715,6 +1719,7 @@ func _refresh_pvp_localized_ui() -> void:
 		_refresh_pvp_tab_titles(tab_container)
 	_refresh_pvp_leaderboard_scope_options()
 	_render_pvp_team_preview()
+	_render_pvp_training_team_preview()
 	_refresh_pvp_team_validator()
 	_render_pvp_banlists()
 	_render_pvp_live_battles(pvp_live_entries)
@@ -5754,6 +5759,25 @@ func _setup_pvp_room_popup() -> void:
 	pvp_room_wait_spinner_label.add_theme_color_override("font_color", Color("#79c8ff"))
 	room_status_row.add_child(pvp_room_wait_spinner_label)
 
+	pvp_training_team_preview_section = VBoxContainer.new()
+	pvp_training_team_preview_section.name = "TrainingTeamPreview"
+	pvp_training_team_preview_section.visible = false
+	pvp_training_team_preview_section.add_theme_constant_override("separation", 6)
+	room_status_layout.add_child(pvp_training_team_preview_section)
+
+	var training_preview_separator := HSeparator.new()
+	pvp_training_team_preview_section.add_child(training_preview_separator)
+
+	pvp_training_team_preview_title = Label.new()
+	pvp_training_team_preview_title.add_theme_font_size_override("font_size", 10)
+	pvp_training_team_preview_title.add_theme_color_override("font_color", Color("#9be7b1"))
+	pvp_training_team_preview_section.add_child(pvp_training_team_preview_title)
+
+	pvp_training_team_preview_grid = HBoxContainer.new()
+	pvp_training_team_preview_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_training_team_preview_grid.add_theme_constant_override("separation", 6)
+	pvp_training_team_preview_section.add_child(pvp_training_team_preview_grid)
+
 	var room_choice_label := Label.new()
 	_set_localized_control_property(room_choice_label, "text", "ui.pvp.room.step_action")
 	room_choice_label.add_theme_font_size_override("font_size", 10)
@@ -6831,6 +6855,80 @@ func _create_pvp_team_preview_slot(pokemon: Pokemon, slot_index: int) -> Control
 	icon.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
 	icon.modulate = Color(1, 1, 1, 1) if icon.texture != null else Color(1, 1, 1, 0.18)
 	panel.tooltip_text = _pokemon_display_name(pokemon)
+	return panel
+
+func _set_pvp_training_team_preview(preview_value: Variant) -> void:
+	pvp_training_team_preview_entries.clear()
+	if preview_value is Array:
+		for entry_value: Variant in preview_value:
+			if not (entry_value is Dictionary) or pvp_training_team_preview_entries.size() >= MAX_PARTY_SIZE:
+				continue
+			var entry := entry_value as Dictionary
+			var species := str(entry.get("species", "")).strip_edges()
+			if species == "":
+				continue
+			pvp_training_team_preview_entries.append({
+				"species": species,
+				"shiny": bool(entry.get("shiny", false)),
+			})
+	_render_pvp_training_team_preview()
+
+func _clear_pvp_training_team_preview() -> void:
+	_set_pvp_training_team_preview([])
+
+func _render_pvp_training_team_preview() -> void:
+	if pvp_training_team_preview_section == null or pvp_training_team_preview_grid == null:
+		return
+	pvp_training_team_preview_section.visible = not pvp_training_team_preview_entries.is_empty()
+	if pvp_training_team_preview_title != null:
+		pvp_training_team_preview_title.text = LocalizationManager.text(
+			"ui.pvp.training.team_preview",
+			{"count": pvp_training_team_preview_entries.size()}
+		)
+	for child in pvp_training_team_preview_grid.get_children():
+		pvp_training_team_preview_grid.remove_child(child)
+		child.queue_free()
+	for slot_index in range(MAX_PARTY_SIZE):
+		var entry: Dictionary = (
+			pvp_training_team_preview_entries[slot_index]
+			if slot_index < pvp_training_team_preview_entries.size()
+			else {}
+		)
+		pvp_training_team_preview_grid.add_child(_create_pvp_training_team_preview_slot(entry, slot_index))
+
+func _create_pvp_training_team_preview_slot(entry: Dictionary, slot_index: int) -> Control:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(58, 58)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#071624e8"), Color("#3d7096"), 8, 1)
+	)
+
+	var center := CenterContainer.new()
+	panel.add_child(center)
+
+	var species := str(entry.get("species", "")).strip_edges()
+	if species == "":
+		var empty_label := Label.new()
+		empty_label.text = str(slot_index + 1)
+		empty_label.add_theme_font_size_override("font_size", 12)
+		empty_label.add_theme_color_override("font_color", Color("#6f879b80"))
+		center.add_child(empty_label)
+		panel.tooltip_text = LocalizationManager.text(
+			"ui.pvp.team.empty_slot",
+			{"number": slot_index + 1}
+		)
+		return panel
+
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(50, 50)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture = PokemonAssets.load_party_icon(species, bool(entry.get("shiny", false)))
+	icon.modulate = Color.WHITE if icon.texture != null else Color(1, 1, 1, 0.2)
+	center.add_child(icon)
+	panel.tooltip_text = species
 	return panel
 
 func _create_pvp_tournaments_placeholder() -> Control:
@@ -36342,6 +36440,8 @@ func _heal_party_before_pvp(action_label: String = "PvP") -> bool:
 	return false
 
 func _on_pvp_room_mode_selected(mode: String) -> void:
+	if pvp_active_room_code == "":
+		_clear_pvp_training_team_preview()
 	pvp_room_selected_mode = mode
 	pvp_room_form.visible = true
 	if pvp_room_flow_hint != null:
@@ -36363,6 +36463,7 @@ func _on_pvp_room_battle_purpose_selected(purpose: String) -> void:
 	if pvp_active_room_code != "" or pvp_battle_starting:
 		return
 	pvp_room_battle_purpose = "training" if purpose == "training" else "casual"
+	_clear_pvp_training_team_preview()
 	if pvp_room_casual_type_button != null:
 		pvp_room_casual_type_button.button_pressed = pvp_room_battle_purpose == "casual"
 	if pvp_room_training_type_button != null:
@@ -36480,6 +36581,7 @@ func _on_pvp_create_room_pressed() -> void:
 		return
 
 	pvp_active_room_code = str(response.get("roomCode", "")).strip_edges()
+	_set_pvp_training_team_preview(response.get("teamPreview", []))
 	pvp_room_code_label.text = LocalizationManager.text("ui.pvp.room.code", {"code": pvp_active_room_code})
 	pvp_copy_code_button.disabled = pvp_active_room_code == ""
 	pvp_room_mode_selector.visible = false
@@ -36550,6 +36652,7 @@ func _on_pvp_cancel_room_pressed() -> void:
 	pvp_poll_in_flight = false
 	pvp_poll_elapsed = 0.0
 	pvp_active_room_code = ""
+	_clear_pvp_training_team_preview()
 	pvp_room_code_label.text = LocalizationManager.text("ui.pvp.room.code", {"code": "-"})
 	pvp_copy_code_button.disabled = true
 	pvp_room_mode_selector.visible = true
@@ -38682,6 +38785,8 @@ func _poll_pvp_room() -> void:
 		return
 
 	var status := str(response.get("status", "waiting"))
+	if response.has("teamPreview"):
+		_set_pvp_training_team_preview(response.get("teamPreview", []))
 	if status != "started":
 		_set_pvp_status_key("ui.pvp.room.waiting")
 		return
@@ -38736,6 +38841,8 @@ func _on_pvp_room_poll_completed(
 		return
 
 	var status := str(response.get("status", "waiting"))
+	if response.has("teamPreview"):
+		_set_pvp_training_team_preview(response.get("teamPreview", []))
 	if status != "started":
 		_set_pvp_status_key("ui.pvp.room.waiting")
 		return
@@ -38774,6 +38881,7 @@ func _start_pvp_battle_from_response(response: Dictionary) -> void:
 		return
 
 	pvp_active_room_code = ""
+	_clear_pvp_training_team_preview()
 	pvp_active_queue_entry_id = ""
 	pvp_active_queue_match_id = ""
 	pvp_active_queue_status = ""
