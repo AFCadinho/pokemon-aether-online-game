@@ -168,6 +168,11 @@ func normalize_costs(value: Variant) -> Array:
 		normalized_costs.append({
 			"currency": currency,
 			"amount": max(int(cost.get("amount", 0)), 0),
+			"baseAmount": max(int(cost.get("baseAmount", cost.get("amount", 0))), 0),
+			"membershipDiscountPercent": max(
+				int(cost.get("membershipDiscountPercent", 0)),
+				0
+			),
 		})
 	return normalized_costs
 

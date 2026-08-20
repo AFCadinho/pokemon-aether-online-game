@@ -17,6 +17,10 @@ func _init() -> void:
 	_check(lobby.has_method("get_map_id"), "Lobby exposes overworld map metadata")
 	_check(lobby.call("get_map_id") == "aether_clash_lobby", "Lobby has its canonical map id")
 	_check(
+		lobby.call("get_world_access_area_type") == "exterior",
+		"Lobby follows the configured outdoor zoom"
+	)
+	_check(
 		lobby.call("get_music_track_id") == "login.lugia_theme_lofi",
 		"Lobby reuses the login-screen music"
 	)

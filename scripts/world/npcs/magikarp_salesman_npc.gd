@@ -58,6 +58,7 @@ func interact_with_player(_player: Node2D) -> void:
 		return
 
 	if bool(result.get("purchased", false)):
+		var paid_price := int(result.get("price", sale.get("price", 5000)))
 		await show_dialogue(await _resolve_lines(
 			success_dialogue_id,
 			["Excellent choice! When it becomes unstoppable, remember who saw its potential first. No refunds!"]
@@ -65,7 +66,10 @@ func interact_with_player(_player: Node2D) -> void:
 		get_tree().call_group(
 			"ui_overlay",
 			"add_system_message",
-			LocalizationManager.text("ui.magikarp_sale.received")
+			LocalizationManager.text(
+				"ui.magikarp_sale.received",
+				{"price": _format_money(paid_price)}
+			)
 		)
 		SfxManager.play("item_received")
 	else:

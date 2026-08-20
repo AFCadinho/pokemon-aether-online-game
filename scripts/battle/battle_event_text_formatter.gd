@@ -52,6 +52,14 @@ func format_pokemon_identity(display_name: String, species: String) -> String:
 		return safe_species if safe_species != "" else _t("battle.fallback.pokemon")
 	if safe_species == "" or _normalize_pokemon_identity(safe_name) == _normalize_pokemon_identity(safe_species):
 		return safe_name
+	# Showdown keeps the base species in an unnicknamed Ogerpon ident while its
+	# details expose the mask-selected battle forme. That base name is not a
+	# nickname, so present the effective forme instead of adding parentheses.
+	if (
+		_normalize_pokemon_identity(safe_name) == "ogerpon"
+		and _normalize_pokemon_identity(safe_species).begins_with("ogerpon")
+	):
+		return safe_species
 	return _t("battle.event.pokemon_identity", {
 		"nickname": safe_name,
 		"species": safe_species,

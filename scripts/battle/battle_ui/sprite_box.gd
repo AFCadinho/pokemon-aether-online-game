@@ -967,8 +967,21 @@ func _load_sprite_frames(
 
 	var frames := _load_sprite_frames_uncached(species, side, is_shiny, report_missing)
 	if frames != null:
+		_apply_species_render_scale_override(frames, species, side)
 		sprite_frames_cache[cache_key] = frames
 	return frames
+
+func _apply_species_render_scale_override(sprite_frames: SpriteFrames, species: String, side: String) -> void:
+	# The Gen 9 Ogerpon front sheets use a 192 px canvas for artwork authored at
+	# 2x battle resolution. Unlike the 288 px back sheets, those static folders
+	# do not carry animation metadata, so the generic folder loader otherwise
+	# displays them at twice their intended size. HOME fallbacks already use the
+	# same render scale, making this override safe while an external pack loads.
+	if side.strip_edges().to_lower() != "front":
+		return
+	if not _normalize_species_asset_id(species).begins_with("ogerpon"):
+		return
+	_set_sprite_frames_render_scale(sprite_frames, 2.0)
 
 func _load_sprite_frames_uncached(
 	species: String,

@@ -70,7 +70,10 @@ func create_pvp_room(
 	request_node: HTTPRequest,
 	player: Dictionary,
 	allow_spectators: bool = false,
-	max_spectators: int = 8
+	max_spectators: int = 8,
+	battle_purpose: String = "casual",
+	team_text: String = "",
+	timer_enabled: bool = false
 ) -> Dictionary:
 	return await send_post_request(
 		request_node,
@@ -78,8 +81,11 @@ func create_pvp_room(
 		{
 			"player": player,
 			"formatId": FORMAT_ID,
+			"battlePurpose": battle_purpose,
+			"teamText": team_text,
 			"allowSpectators": allow_spectators,
 			"maxSpectators": clampi(max_spectators, 1, 32),
+			"timerEnabled": timer_enabled,
 		}
 	)
 
@@ -89,13 +95,19 @@ func get_pvp_room(request_node: HTTPRequest, room_code: String) -> Dictionary:
 		"/battle/pvp/rooms/%s" % room_code.strip_edges().uri_encode()
 	)
 
-func join_pvp_room(request_node: HTTPRequest, room_code: String, player: Dictionary) -> Dictionary:
+func join_pvp_room(
+	request_node: HTTPRequest,
+	room_code: String,
+	player: Dictionary,
+	team_text: String = ""
+) -> Dictionary:
 	return await send_post_request(
 		request_node,
 		"/battle/pvp/rooms/%s/join" % room_code.strip_edges().uri_encode(),
 		{
 			"player": player,
 			"formatId": FORMAT_ID,
+			"teamText": team_text,
 		}
 	)
 
