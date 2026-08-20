@@ -6244,16 +6244,25 @@ func prepare_wild_battle_from_response(
 	if not _apply_initial_battle_response(api_response):
 		return false
 
+	# Wild battles auto-select the first usable party member. The caller can still
+	# hold slot 1 here, even when that Pokemon fainted before the battle started,
+	# so adopt the authoritative active entry before preparing the lead intro.
+	var response_player_pokemon := _get_player_save_pokemon_for_battle_display_data(
+		battle_state.get_active_player_pokemon("p1")
+	)
+	if response_player_pokemon != null:
+		active_player_pokemon = response_player_pokemon
+	var player_lead_pokemon := active_player_pokemon if active_player_pokemon != null else player_pokemon
 	var player_species := _get_saved_pokemon_battle_boundary_species(
-		player_pokemon,
-		_get_original_active_player_species(player_pokemon.species)
+		player_lead_pokemon,
+		_get_original_active_player_species(player_lead_pokemon.species)
 	)
 	var opponent_species := _get_active_display_species("p2")
 	_debug_battle_start_response("wild.setup.after_apply", api_response)
 	_debug_battle_start_active_snapshot("wild.setup.after_apply")
 
 	_add_battle_log_messages(setup_flow.get_wild_battle_start_messages(_get_active_battle_log_identity("p1"), _get_active_battle_log_identity("p2")))
-	_show_original_player_lead_before_initial_events(player_species, player_pokemon)
+	_show_original_player_lead_before_initial_events(player_species, player_lead_pokemon)
 	# The lead data must be ready for the summon target, but the player sprite
 	# itself must not flash before the Poké Ball release animation begins.
 	player_sprite_box.visible = false
@@ -6272,9 +6281,10 @@ func _refresh_wild_opponent_owned_icon(species: String, is_shiny: bool, request_
 		enemy_hud_panel.set_owned_icon_visible(PokedexService.is_species_owned(species, is_shiny))
 
 func play_wild_battle_intro(player_pokemon: Pokemon, api_response: Dictionary) -> void:
+	var player_lead_pokemon := active_player_pokemon if active_player_pokemon != null else player_pokemon
 	var player_species := _get_saved_pokemon_battle_boundary_species(
-		player_pokemon,
-		_get_original_active_player_species(player_pokemon.species)
+		player_lead_pokemon,
+		_get_original_active_player_species(player_lead_pokemon.species)
 	)
 	var opponent_species := _get_active_display_species("p2")
 	await get_tree().process_frame
@@ -6283,7 +6293,7 @@ func play_wild_battle_intro(player_pokemon: Pokemon, api_response: Dictionary) -
 		opponent_species,
 		last_rendered_event_seq,
 	])
-	await _play_lead_summon(_get_active_summon_ball_item_id("p1", player_pokemon.ball_item_id), player_species, player_sprite_box, "back")
+	await _play_lead_summon(_get_active_summon_ball_item_id("p1", player_lead_pokemon.ball_item_id), player_species, player_sprite_box, "back")
 	_debug_battle_start("wild.setup.after_player_lead_summon lastRenderedSeq=%d" % last_rendered_event_seq)
 	await _render_initial_battle_events(api_response)
 	_show_battle_controls_after_initial_events()

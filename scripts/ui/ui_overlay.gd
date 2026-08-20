@@ -37026,9 +37026,11 @@ func _on_pvp_create_room_pressed() -> void:
 	_set_pvp_room_busy(false)
 
 	if not bool(response.get("success", false)):
-		_set_pvp_status_key(
-			"ui.pvp.training.paste_invalid" if is_training else "ui.pvp.room.create_failed"
-		)
+		_set_pvp_status_key(_pvp_room_failure_status_key(
+			response,
+			is_training,
+			"ui.pvp.room.create_failed"
+		))
 		push_warning("UIOverlay: PVP room creation failed: %s" % str(response.get("error", "Unknown error")))
 		return
 
@@ -37189,9 +37191,11 @@ func _on_pvp_join_room_pressed() -> void:
 			_set_pvp_status_key("ui.pvp.room.reconnecting")
 			await _start_pvp_battle_from_response(_normalize_started_pvp_reconnect_response(response))
 			return
-		_set_pvp_status_key("ui.pvp.room.join_failed")
-		if is_training:
-			_set_pvp_status_key("ui.pvp.training.paste_invalid")
+		_set_pvp_status_key(_pvp_room_failure_status_key(
+			response,
+			is_training,
+			"ui.pvp.room.join_failed"
+		))
 		push_warning("UIOverlay: PVP room join failed: %s" % str(response.get("error", "Unknown error")))
 		return
 
@@ -37200,6 +37204,25 @@ func _on_pvp_join_room_pressed() -> void:
 	pvp_room_code_label.text = LocalizationManager.text("ui.pvp.room.code", {"code": pvp_active_room_code})
 	pvp_copy_code_button.disabled = pvp_active_room_code == ""
 	await _start_pvp_battle_from_response(response)
+
+func _pvp_room_failure_status_key(
+	response: Dictionary,
+	is_training: bool,
+	fallback_key: String
+) -> String:
+	var error_code := BackendErrorLocalizationService.error_code(response)
+	if error_code in [
+		"room_timer_authority_disabled",
+		"room_timer_authority_unavailable",
+		"room_timer_client_contract_required",
+		"room_timer_participant_not_eligible",
+		"unsupported_timer_tier",
+		"unsupported_room_timer_tier",
+	]:
+		return "ui.pvp.room.timer_unavailable"
+	if is_training and error_code in ["training_team_required", "training_team_invalid"]:
+		return "ui.pvp.training.paste_invalid"
+	return fallback_key
 
 
 func _pvp_room_player_payload() -> Dictionary:

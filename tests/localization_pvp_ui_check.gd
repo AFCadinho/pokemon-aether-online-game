@@ -77,6 +77,33 @@ func _check_pvp_runtime_translation() -> void:
 	_check(casual_button.custom_minimum_size.y >= 48.0 and training_button.custom_minimum_size.y >= 48.0, "Battle type cards have comfortable click targets")
 	_check(room_flow_hint != null and room_flow_hint.visible, "Room action card explains the next step before a choice")
 	_check(room_timer_check != null and room_timer_check.text.begins_with("Keuzetimer"), "Private room timer renders in Dutch")
+	_check(
+		overlay.call(
+			"_pvp_room_failure_status_key",
+			{"code": "room_timer_authority_disabled"},
+			true,
+			"ui.pvp.room.create_failed"
+		) == "ui.pvp.room.timer_unavailable",
+		"Unavailable room timers are not presented as an invalid Pokepaste"
+	)
+	_check(
+		overlay.call(
+			"_pvp_room_failure_status_key",
+			{"detail": {"code": "TRAINING_TEAM_INVALID"}},
+			true,
+			"ui.pvp.room.create_failed"
+		) == "ui.pvp.training.paste_invalid",
+		"Invalid Training Room teams keep the Pokepaste guidance"
+	)
+	_check(
+		overlay.call(
+			"_pvp_room_failure_status_key",
+			{"code": "service_error"},
+			true,
+			"ui.pvp.room.create_failed"
+		) == "ui.pvp.room.create_failed",
+		"Unrelated Training Room failures use the room fallback"
+	)
 	_check(leaderboard_scope != null and leaderboard_scope.get_item_text(0) == "Dagelijks", "Leaderboard period renders in Dutch")
 	_check_ranked_dropdown_style(format_select, "Matchmaking format")
 	_check_ranked_dropdown_style(leaderboard_scope, "Leaderboard period")

@@ -3171,6 +3171,7 @@
   "ui.pvp.room.allow_spectators": "Privétoeschouwers toestaan  ·  {state}",
   "ui.pvp.room.timer": "Keuzetimer  ·  {state}",
   "ui.pvp.room.timer_tooltip": "Gebruik de gedeelde server-authoritatieve battletimer. Kies hieronder een snelheid.",
+  "ui.pvp.room.timer_unavailable": "Rooms met een timer zijn tijdelijk niet beschikbaar. Probeer een room zonder timer of probeer het later opnieuw.",
   "ui.pvp.room.timer_tier.casual": "Casual · Preview 60s · Beurten 180s · Wissels 45s",
   "ui.pvp.room.timer_tier.relaxed": "Relaxed · 120 seconden",
   "ui.pvp.room.timer_tier.standard": "Standard · 90 seconden",
