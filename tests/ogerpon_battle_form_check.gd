@@ -14,6 +14,7 @@ func _init() -> void:
 	_check_mask_battle_sprites_are_available()
 	_check_front_battle_sprite_scale()
 	_check_initial_battle_setup_uses_mask_form()
+	_check_active_hud_keeps_public_mask_form()
 	quit(1 if failed else 0)
 
 
@@ -118,6 +119,41 @@ func _check_initial_battle_setup_uses_mask_form() -> void:
 		battle_source.count('"-wellspring", "-hearthflame", "-cornerstone"') >= 2,
 		true,
 		"PvP ident repair preserves Ogerpon mask formes for the active back sprite"
+	)
+
+
+func _check_active_hud_keeps_public_mask_form() -> void:
+	_check_equal(
+		Resolver.resolve_hud_display_name("Ogerpon Wellspring", "Ogerpon"),
+		"Ogerpon Wellspring",
+		"the generic HP name is upgraded to the publicly revealed mask forme"
+	)
+	_check_equal(
+		Resolver.resolve_hud_display_name("Ogerpon Wellspring", "Ponnie"),
+		"Ponnie",
+		"a real nickname remains unchanged"
+	)
+	_check_equal(
+		Resolver.resolve_hud_display_name("Ogerpon", "Ogerpon"),
+		"Ogerpon",
+		"base Ogerpon keeps its base HP name"
+	)
+
+	var battle_source := FileAccess.get_file_as_string("res://scripts/battle/battle.gd")
+	_check_equal(
+		battle_source.contains("_remember_publicly_revealed_ogerpon_species(player_id, species)"),
+		true,
+		"every rendered switch remembers its public Ogerpon forme"
+	)
+	_check_equal(
+		battle_source.contains("publicly_revealed_ogerpon_species_by_player.get(player_id"),
+		true,
+		"wild, NPC and PvP active HUD resolution share the public forme memory"
+	)
+	_check_equal(
+		battle_source.count("OGERPON_BATTLE_FORM.resolve_hud_display_name(") >= 2,
+		true,
+		"initial trainer leads and regular active HUD refreshes normalize the Ogerpon name"
 	)
 
 
