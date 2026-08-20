@@ -12,6 +12,7 @@ func _init() -> void:
 	_check_non_ogerpon_is_untouched()
 	_check_ivy_cudgel_type_is_battle_only()
 	_check_mask_battle_sprites_are_available()
+	_check_front_battle_sprite_scale()
 	_check_initial_battle_setup_uses_mask_form()
 	quit(1 if failed else 0)
 
@@ -82,6 +83,20 @@ func _check_mask_battle_sprites_are_available() -> void:
 			)
 
 
+func _check_front_battle_sprite_scale() -> void:
+	var sprite_box_source := FileAccess.get_file_as_string(
+		"res://scripts/battle/battle_ui/sprite_box.gd"
+	)
+	_check_equal(
+		sprite_box_source.contains("func _apply_species_render_scale_override(")
+		and sprite_box_source.contains('side.strip_edges().to_lower() != "front"')
+		and sprite_box_source.contains('_normalize_species_asset_id(species).begins_with("ogerpon")')
+		and sprite_box_source.contains("_set_sprite_frames_render_scale(sprite_frames, 2.0)"),
+		true,
+		"the 192 px Ogerpon front sheet renders at its authored 2x scale"
+	)
+
+
 func _check_initial_battle_setup_uses_mask_form() -> void:
 	var battle_source := FileAccess.get_file_as_string("res://scripts/battle/battle.gd")
 	_check_equal(
@@ -98,6 +113,11 @@ func _check_initial_battle_setup_uses_mask_form() -> void:
 		battle_source.contains('player_sprite_box.set_single_pokemon(player_pokemon, "back")'),
 		false,
 		"initial setup never renders the saved base Ogerpon before resolving its mask"
+	)
+	_check_equal(
+		battle_source.count('"-wellspring", "-hearthflame", "-cornerstone"') >= 2,
+		true,
+		"PvP ident repair preserves Ogerpon mask formes for the active back sprite"
 	)
 
 

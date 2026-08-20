@@ -88,6 +88,12 @@ func get_active_display_name(player_id: String) -> String:
 	for key: String in ["nickname", "name", "displayName"]:
 		var explicit_name := str(active_pokemon.get(key, "")).strip_edges()
 		if explicit_name != "":
+			var display_species := get_active_display_species(player_id)
+			if (
+				display_metadata.normalize_species_for_compare(explicit_name) == "ogerpon"
+				and display_metadata.normalize_species_for_compare(display_species).begins_with("ogerpon-")
+			):
+				return display_species
 			return explicit_name
 
 	var ident := str(active_pokemon.get("ident", ""))

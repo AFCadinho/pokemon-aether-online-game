@@ -65,10 +65,17 @@ func _init() -> void:
 			"deadlineAt": "1970-01-01T00:01:40Z",
 			"serverNow": "1970-01-01T00:00:10Z",
 		},
-	], true), "enabled legacy timer snapshot applies")
+	], true, 5000), "enabled legacy timer snapshot applies")
 	_check(projection.should_present(true), "enabled legacy room timer is presented")
-	_check_equal(projection.participant_display("p1", projection.monotonic_anchor_ms).get("state"), "DECIDING", "legacy timer opens a decision countdown")
-	_check_equal(projection.participant_display("p1", projection.monotonic_anchor_ms).get("effectiveDecisionRemainingMs"), 90000, "legacy timer uses the server deadline")
+	_check_equal(projection.participant_display("p1", 5000).get("state"), "DECIDING", "legacy timer opens a decision countdown")
+	_check_equal(projection.participant_display("p1", 5000).get("effectiveDecisionRemainingMs"), 90000, "legacy timer uses the server deadline")
+	# Once sampled, legacy countdowns run exclusively from monotonic time. A
+	# later wall-clock/server-anchor correction must not make the visible room
+	# timer expire before its authoritative 90-second deadline.
+	projection.server_anchor_ms += 60000
+	_check_equal(projection.participant_display("p1", 35000).get("effectiveDecisionRemainingMs"), 60000, "legacy countdown ignores later wall-clock drift")
+	_check_equal(projection.participant_display("p1", 35000).get("state"), "DECIDING", "legacy countdown stays active until its monotonic deadline")
+	_check_equal(projection.participant_display("p1", 95000).get("state"), "EXPIRED", "legacy countdown expires at the authoritative duration")
 	_check(projection.apply_legacy_event({"payload": {"side": "p1", "phase": "team_preview", "timerStatus": "consumed"}}), "legacy consumed event applies")
 	_check_equal(projection.participant_display("p1").get("state"), "WAITING", "consumed legacy timer stops counting")
 	projection.apply_legacy_snapshot([], false)
