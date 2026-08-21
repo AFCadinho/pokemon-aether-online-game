@@ -24,6 +24,7 @@ func _check_directional_markers() -> void:
 		HorizontalStairElevationScript.elevation_for_stair_exit(
 			map_root,
 			up_left_position,
+			up_left_position + Vector2.LEFT * 32.0,
 			Vector2.LEFT
 		) == HorizontalStairElevationScript.ELEVATION_UP,
 		"StairUpLeft climbs while walking left"
@@ -32,6 +33,7 @@ func _check_directional_markers() -> void:
 		HorizontalStairElevationScript.elevation_for_stair_exit(
 			map_root,
 			up_left_position,
+			up_left_position + Vector2.RIGHT * 32.0,
 			Vector2.RIGHT
 		) == HorizontalStairElevationScript.ELEVATION_DOWN,
 		"StairUpLeft descends while walking right"
@@ -40,6 +42,7 @@ func _check_directional_markers() -> void:
 		HorizontalStairElevationScript.elevation_for_stair_exit(
 			map_root,
 			up_left_position,
+			up_left_position + Vector2.UP * 32.0,
 			Vector2.UP
 		) == HorizontalStairElevationScript.ELEVATION_NONE,
 		"vertical movement never receives a horizontal stair effect"
@@ -48,9 +51,29 @@ func _check_directional_markers() -> void:
 		HorizontalStairElevationScript.elevation_for_stair_exit(
 			map_root,
 			up_left_position + Vector2.RIGHT * 32.0,
+			up_left_position + Vector2.RIGHT * 64.0,
 			Vector2.RIGHT
 		) == HorizontalStairElevationScript.ELEVATION_NONE,
 		"the unmarked landing tile does not need a duplicate stair marker"
+	)
+	up_left.set_cell(Vector2i(3, 3), 0, Vector2i.ZERO)
+	_check(
+		HorizontalStairElevationScript.elevation_for_stair_exit(
+			map_root,
+			up_left_position,
+			up_left_position + Vector2.RIGHT * 32.0,
+			Vector2.RIGHT
+		) == HorizontalStairElevationScript.ELEVATION_NONE,
+		"moving between marked tiles on a wide stair does not repeat the exit effect"
+	)
+	_check(
+		HorizontalStairElevationScript.elevation_for_stair_exit(
+			map_root,
+			up_left_position + Vector2.RIGHT * 32.0,
+			up_left_position + Vector2.RIGHT * 64.0,
+			Vector2.RIGHT
+		) == HorizontalStairElevationScript.ELEVATION_DOWN,
+		"a wide stair plays the effect only when stepping onto its landing"
 	)
 
 	up_left.name = "UnusedMarker"
@@ -61,6 +84,7 @@ func _check_directional_markers() -> void:
 		HorizontalStairElevationScript.elevation_for_stair_exit(
 			map_root,
 			up_right_position,
+			up_right_position + Vector2.RIGHT * 32.0,
 			Vector2.RIGHT
 		) == HorizontalStairElevationScript.ELEVATION_UP,
 		"StairsUpRight alias climbs while walking right"
@@ -69,6 +93,7 @@ func _check_directional_markers() -> void:
 		HorizontalStairElevationScript.elevation_for_stair_exit(
 			map_root,
 			up_right_position,
+			up_right_position + Vector2.LEFT * 32.0,
 			Vector2.LEFT
 		) == HorizontalStairElevationScript.ELEVATION_DOWN,
 		"StairsUpRight alias descends while walking left"

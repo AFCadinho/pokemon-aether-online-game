@@ -714,6 +714,7 @@ func story_move_path(path: Array[String]) -> bool:
 		stair_elevation = HorizontalStairElevationScript.elevation_for_stair_exit(
 			_resolve_current_map(),
 			move_start_position,
+			target_position,
 			direction
 		)
 		is_moving = true
@@ -1942,6 +1943,7 @@ func _try_start_move(direction: Vector2) -> bool:
 	stair_elevation = HorizontalStairElevationScript.elevation_for_stair_exit(
 		_resolve_current_map(),
 		move_start_position,
+		target_position,
 		direction
 	)
 	is_moving = true

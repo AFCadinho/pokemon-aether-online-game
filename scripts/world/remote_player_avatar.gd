@@ -517,6 +517,7 @@ func _start_next_pending_tile_move() -> void:
 	stair_elevation = HorizontalStairElevationScript.elevation_for_stair_exit(
 		GameState.current_map,
 		tile_move_start_position,
+		tile_move_target_position,
 		move_direction
 	)
 	_sync_body_frames_for_move_duration(tile_move_duration)
