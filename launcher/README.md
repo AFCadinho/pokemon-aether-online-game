@@ -28,12 +28,14 @@ in `config/launcher_config.json`. The expected shape is documented in
 `config/news.example.json`.
 
 The production feed at `data/news.json` is generated from public topics in the
-Discourse `Official Announcements` category (category ID 17). The
-`sync-forum-news.yml` workflow polls the category hourly, validates
-the compatibility feed, preserves the previous valid object as
-`data/news.previous.json`, and publishes only when the content changed. The
-workflow fails without replacing the current feed if Discourse is unavailable,
-the category is private, or no valid announcement remains.
+Discourse `Official Announcements` category (category ID 17). A signed
+Discourse topic webhook asks the Cloudflare Worker in
+`infrastructure/forum-news-worker` to rebuild the feed immediately. The Worker
+uses its direct R2 binding, preserves the previous valid object as
+`data/news.previous.json`, and publishes only when the content changed. A daily
+Cloudflare Cron Trigger reconciles missed webhook deliveries; there is no
+scheduled GitHub Actions polling job. Invalid, private, or empty category data
+fails without replacing the current feed.
 
 ## Configure
 

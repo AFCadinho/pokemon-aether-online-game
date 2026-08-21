@@ -1,0 +1,31 @@
+{
+  "$schema": "https://raw.githubusercontent.com/cloudflare/workers-sdk/main/packages/wrangler/config-schema.json",
+  "name": "pokeaether-forum-news",
+  "main": "src/index.mjs",
+  "compatibility_date": "2026-08-21",
+  "workers_dev": true,
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "triggers": {
+    "crons": ["17 3 * * *"]
+  },
+  "secrets": {
+    "required": ["DISCOURSE_WEBHOOK_SECRET"]
+  },
+  "r2_buckets": [
+    {
+      "binding": "UPDATES_BUCKET",
+      "bucket_name": "pokeaether-updates"
+    }
+  ],
+  "vars": {
+    "FORUM_BASE_URL": "https://forums.pokeaether.com",
+    "FORUM_CATEGORY_ID": "17",
+    "MAX_ARTICLES": "5",
+    "SUMMARY_LENGTH": "180",
+    "NEWS_OBJECT_KEY": "data/news.json",
+    "PREVIOUS_NEWS_OBJECT_KEY": "data/news.previous.json"
+  }
+}
