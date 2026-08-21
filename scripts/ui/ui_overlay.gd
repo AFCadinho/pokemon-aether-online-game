@@ -277,6 +277,7 @@ const POKEMON_READONLY_DETAIL_HOVER_MIN_WIDTH := 132.0
 const POKEMON_READONLY_DETAIL_HOVER_MAX_WIDTH := 210.0
 const POKEMON_READONLY_DETAIL_HOVER_HORIZONTAL_PADDING := 22.0
 const POKEMON_READONLY_DETAIL_HOVER_VERTICAL_PADDING := 18.0
+const POKEMON_READONLY_DETAIL_HOVER_DEBUG := true
 const POKEMON_SUMMARY_BODY_HEIGHT := 333.0
 const POKEMON_SUMMARY_LEFT_PANEL_WIDTH := 275.0
 const POKEMON_SUMMARY_RIGHT_AREA_WIDTH := 320.0
@@ -16260,6 +16261,19 @@ func _show_readonly_summary_detail_hover(source: Control, nodes: Dictionary) -> 
 	var accent := source.get_meta("readonly_hover_accent", POKEMON_SUMMARY_ACCENT) as Color
 	var title_text := str(source.get_meta("readonly_hover_title", ""))
 	var description_text := str(source.get_meta("readonly_hover_description", ""))
+	if POKEMON_READONLY_DETAIL_HOVER_DEBUG:
+		var debug_viewport := get_viewport()
+		var mouse_viewport := debug_viewport.get_mouse_position() if debug_viewport != null else Vector2.ZERO
+		var mouse_local := source.get_local_mouse_position() if debug_viewport != null else Vector2.ZERO
+		print("[ReadonlySummaryHover] show source=%s class=%s mouse_viewport=%s mouse_local=%s source_rect=%s title=%s description_chars=%d" % [
+			source.name,
+			source.get_class(),
+			mouse_viewport,
+			mouse_local,
+			source.get_global_rect(),
+			title_text,
+			description_text.length(),
+		])
 	hover_panel.add_theme_stylebox_override("panel", _make_panel_style(
 		Color("#07101af8"),
 		Color(accent, 0.95),
@@ -16315,11 +16329,22 @@ func _show_readonly_summary_detail_hover(source: Control, nodes: Dictionary) -> 
 		ceilf(content_width + POKEMON_READONLY_DETAIL_HOVER_HORIZONTAL_PADDING),
 		ceilf(title_height + 5.0 + description_size.y + POKEMON_READONLY_DETAIL_HOVER_VERTICAL_PADDING)
 	)
+	if POKEMON_READONLY_DETAIL_HOVER_DEBUG:
+		print("[ReadonlySummaryHover] measure title_width=%.2f description_width=%.2f content_width=%.2f title_height=%.2f description_size=%s requested_panel_size=%s" % [
+			title_width,
+			description_width,
+			content_width,
+			title_height,
+			description_size,
+			panel_size,
+		])
 	hover_panel.custom_minimum_size = panel_size
 	hover_panel.size = panel_size
 	_position_readonly_summary_detail_hover(hover_panel, popup, source, panel_size)
 	hover_panel.visible = true
 	hover_panel.move_to_front()
+	if POKEMON_READONLY_DETAIL_HOVER_DEBUG:
+		_debug_readonly_summary_detail_hover_after_layout(hover_panel, source, panel_size)
 
 func _hide_readonly_summary_detail_hover(nodes: Dictionary) -> void:
 	var hover_panel := nodes.get("detail_hover_panel") as PanelContainer
@@ -16356,9 +16381,12 @@ func _position_readonly_summary_detail_hover(hover_panel: PanelContainer, popup:
 		popup_rect.size - Vector2(POKEMON_READONLY_MOVE_HOVER_INSET * 2.0, POKEMON_READONLY_MOVE_HOVER_INSET * 2.0)
 	)
 	var global_x := clampf(source_rect.position.x, safe_rect.position.x, safe_rect.end.x - panel_size.x)
-	var global_y := source_rect.position.y - panel_size.y - 4.0
+	var preferred_above_y := source_rect.position.y - panel_size.y - 4.0
+	var global_y := preferred_above_y
+	var placement := "above"
 	if global_y < safe_rect.position.y:
 		global_y = source_rect.end.y + 4.0
+		placement = "below"
 	global_y = clampf(global_y, safe_rect.position.y, safe_rect.end.y - panel_size.y)
 	hover_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	var hover_parent := hover_panel.get_parent_control()
@@ -16368,6 +16396,37 @@ func _position_readonly_summary_detail_hover(hover_panel: PanelContainer, popup:
 	hover_panel.size = panel_size
 	hover_panel.custom_minimum_size = panel_size
 	hover_panel.reset_size()
+	if POKEMON_READONLY_DETAIL_HOVER_DEBUG:
+		print("[ReadonlySummaryHover] position source_rect=%s popup_rect=%s safe_rect=%s requested_panel_size=%s preferred_above_y=%.2f placement=%s final_global_position=%s immediate_size=%s combined_minimum=%s" % [
+			source_rect,
+			popup_rect,
+			safe_rect,
+			panel_size,
+			preferred_above_y,
+			placement,
+			Vector2(global_x, global_y),
+			hover_panel.size,
+			hover_panel.get_combined_minimum_size(),
+		])
+
+func _debug_readonly_summary_detail_hover_after_layout(hover_panel: PanelContainer, source: Control, requested_size: Vector2) -> void:
+	if not is_inside_tree():
+		print("[ReadonlySummaryHover] after_layout skipped: overlay is not inside a SceneTree")
+		return
+	var scene_tree := get_tree()
+	await scene_tree.process_frame
+	if not is_instance_valid(hover_panel) or not is_instance_valid(source):
+		return
+	print("[ReadonlySummaryHover] after_layout source=%s source_rect=%s requested_size=%s actual_rect=%s actual_size=%s custom_minimum=%s combined_minimum=%s visible=%s" % [
+		source.name,
+		source.get_global_rect(),
+		requested_size,
+		hover_panel.get_global_rect(),
+		hover_panel.size,
+		hover_panel.custom_minimum_size,
+		hover_panel.get_combined_minimum_size(),
+		hover_panel.visible,
+	])
 
 func _create_readonly_summary_move_hover_stat(label_text: String, value_text: String, color: Color) -> Control:
 	var panel := PanelContainer.new()
