@@ -6,9 +6,13 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_route_hint"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_8jk2d"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="6_idblv"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="7_door_hint"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_3_exit"]
 size = Vector2(64, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ladder_exit"]
+size = Vector2(32, 32)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_idblv"]
 texture = ExtResource("5_8jk2d")
@@ -261,6 +265,15 @@ weather_profile = "disabled"
 [node name="FromRoute3" type="Marker2D" parent="Spawns" unique_id=1706453174]
 position = Vector2(944, 2448)
 
+[node name="FromB1F1" type="Marker2D" parent="Spawns"]
+position = Vector2(2032, 912)
+
+[node name="FromB1F3" type="Marker2D" parent="Spawns"]
+position = Vector2(1328, 816)
+
+[node name="FromB1F5" type="Marker2D" parent="Spawns"]
+position = Vector2(688, 496)
+
 [node name="Exits" type="Node2D" parent="." unique_id=1671758864]
 
 [node name="ToRoute3" type="Area2D" parent="Exits" unique_id=2084334651]
@@ -278,6 +291,45 @@ shape = SubResource("RectangleShape2D_route_3_exit")
 z_as_relative = false
 tile_footprint = Vector2i(2, 1)
 flow_direction = "down"
+
+[node name="ToB1F1" type="Area2D" parent="Exits"]
+position = Vector2(2032, 880)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn"
+target_spawn_name = "From1F1"
+transition_id = "kanto_mt_moon_1f__to_b1f_1"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1F1"]
+shape = SubResource("RectangleShape2D_ladder_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToB1F1" instance=ExtResource("7_door_hint")]
+
+[node name="ToB1F3" type="Area2D" parent="Exits"]
+position = Vector2(1328, 784)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn"
+target_spawn_name = "From1F3"
+transition_id = "kanto_mt_moon_1f__to_b1f_3"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1F3"]
+shape = SubResource("RectangleShape2D_ladder_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToB1F3" instance=ExtResource("7_door_hint")]
+
+[node name="ToB1F5" type="Area2D" parent="Exits"]
+position = Vector2(688, 464)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn"
+target_spawn_name = "From1F5"
+transition_id = "kanto_mt_moon_1f__to_b1f_5"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1F5"]
+shape = SubResource("RectangleShape2D_ladder_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToB1F5" instance=ExtResource("7_door_hint")]
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=1223318942]
 visible = false
@@ -317,3 +369,6 @@ tile_map_data = PackedByteArray("AAAkAEkAAAABAAEAAAAkAEoAAAABAAEAAAAjAEkAAAABAAE
 tile_set = SubResource("TileSet_6pg4b")
 
 [connection signal="body_entered" from="Exits/ToRoute3" to="Exits/ToRoute3" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToB1F1" to="Exits/ToB1F1" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToB1F3" to="Exits/ToB1F3" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToB1F5" to="Exits/ToB1F5" method="_on_body_entered"]
