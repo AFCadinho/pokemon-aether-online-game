@@ -8,6 +8,7 @@
 
 **Fixed**
 
+- Read-only Pokémon Summaries now fill in a missing National Dex number instead of leaving the number blank.
 - Ogerpon's correct battle sprites are now included in game downloads.
 - Training Rooms no longer blame a valid Poképaste when room timers are temporarily unavailable.
 - Wild battles now immediately show the first Pokémon that can battle when an earlier party member has fainted.

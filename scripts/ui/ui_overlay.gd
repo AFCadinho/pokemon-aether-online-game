@@ -21114,7 +21114,7 @@ func _refresh_readonly_pokemon_summary(pokemon: Pokemon) -> void:
 	gender_label.text = "♂" if pokemon.gender == "male" else ("♀" if pokemon.gender == "female" else "")
 	gender_label.add_theme_color_override("font_color", Color("#62d7ff") if pokemon.gender == "male" else Color("#ff82ba"))
 	var id_label := nodes.get("id_label") as Label
-	id_label.text = "#%s" % pokemon.national_dex_number if pokemon.national_dex_number > 0 else "#—"
+	_set_readonly_summary_dex_number(id_label, pokemon)
 	var shiny_label := nodes.get("shiny_label") as Label
 	shiny_label.visible = pokemon.shiny
 	var trainer_label := nodes.get("trainer_label") as Label
@@ -21273,6 +21273,45 @@ func _refresh_readonly_pokemon_summary(pokemon: Pokemon) -> void:
 		move_panel.set_meta("readonly_base_style", base_style)
 		move_panel.set_meta("readonly_hover_style", hover_style)
 		move_panel.add_theme_stylebox_override("panel", base_style)
+
+func _set_readonly_summary_dex_number(id_label: Label, pokemon: Pokemon) -> void:
+	if id_label == null or pokemon == null:
+		return
+	if pokemon.national_dex_number > 0:
+		id_label.text = "#%03d" % pokemon.national_dex_number
+		return
+	var species_id := pokemon.species.strip_edges()
+	id_label.text = "#—"
+	id_label.set_meta("readonly_dex_species", species_id)
+	_resolve_readonly_summary_dex_number(id_label, pokemon, species_id)
+
+func _resolve_readonly_summary_dex_number(id_label: Label, pokemon: Pokemon, species_id: String) -> void:
+	if species_id == "":
+		return
+	var result: Dictionary = await PokedexService.get_species_detail(species_id)
+	if not bool(result.get("success", false)):
+		return
+	var species_value: Variant = result.get("species", {})
+	if not (species_value is Dictionary):
+		return
+	_apply_readonly_summary_dex_number_from_species(id_label, pokemon, species_id, species_value as Dictionary)
+
+func _apply_readonly_summary_dex_number_from_species(
+	id_label: Label,
+	pokemon: Pokemon,
+	species_id: String,
+	species_data: Dictionary
+) -> bool:
+	if id_label == null or not is_instance_valid(id_label) or pokemon == null:
+		return false
+	if str(id_label.get_meta("readonly_dex_species", "")) != species_id:
+		return false
+	var national_dex_number := int(species_data.get("nationalDexNumber", 0))
+	if national_dex_number <= 0:
+		return false
+	pokemon.national_dex_number = national_dex_number
+	id_label.text = "#%03d" % national_dex_number
+	return true
 
 func _get_active_pokemon_summary_pokemon() -> Pokemon:
 	if pokemon_summary_preview_pokemon != null:
