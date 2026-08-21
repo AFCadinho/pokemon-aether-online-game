@@ -39,6 +39,11 @@ const STORY_CHECKPOINTS: Array[Dictionary] = [
 	{"id": "trainer_school", "label_key": "ui.staff.story_checkpoint.trainer_school"},
 	{"id": "after_dadinho", "label_key": "ui.staff.story_checkpoint.after_dadinho"},
 	{"id": "pewter_gym", "label_key": "ui.staff.story_checkpoint.pewter_gym"},
+	{"id": "mt_moon_warning", "label_key": "ui.staff.story_checkpoint.mt_moon_warning"},
+	{"id": "mt_moon_grunts", "label_key": "ui.staff.story_checkpoint.mt_moon_grunts"},
+	{"id": "mt_moon_miguel", "label_key": "ui.staff.story_checkpoint.mt_moon_miguel"},
+	{"id": "mt_moon_fossil", "label_key": "ui.staff.story_checkpoint.mt_moon_fossil"},
+	{"id": "mt_moon_rescue", "label_key": "ui.staff.story_checkpoint.mt_moon_rescue"},
 ]
 
 const UI_BG := Color("#050b14fa")

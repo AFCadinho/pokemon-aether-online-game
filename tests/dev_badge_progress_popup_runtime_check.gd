@@ -67,6 +67,12 @@ func _run() -> void:
 	var story_checkpoint_select := popup.find_child("StoryCheckpointSelect", true, false) as OptionButton
 	_check(story_checkpoint_select != null, "trainer progress exposes a story checkpoint selector")
 	if story_checkpoint_select != null:
+		_check(story_checkpoint_select.item_count == 12, "story checkpoint selector includes all five Mt. Moon phases")
+		var checkpoint_ids: Array[String] = []
+		for checkpoint_index in story_checkpoint_select.item_count:
+			checkpoint_ids.append(str(story_checkpoint_select.get_item_metadata(checkpoint_index)))
+		for checkpoint_id in ["mt_moon_warning", "mt_moon_grunts", "mt_moon_miguel", "mt_moon_fossil", "mt_moon_rescue"]:
+			_check(checkpoint_id in checkpoint_ids, "story checkpoint selector includes %s" % checkpoint_id)
 		var checkpoint_menu := story_checkpoint_select.get_popup()
 		_check(
 			story_checkpoint_select.has_theme_icon_override("arrow"),
