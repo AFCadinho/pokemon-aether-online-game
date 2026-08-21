@@ -14,9 +14,9 @@ const ELEVATION_DOWN := 1
 const DEFAULT_VISUAL_HEIGHT := 8.0
 
 
-static func elevation_for_move(
+static func elevation_for_stair_exit(
 	map_root: Node,
-	target_world_position: Vector2,
+	stair_world_position: Vector2,
 	movement_direction: Vector2
 ) -> int:
 	if map_root == null or not is_instance_valid(map_root):
@@ -28,14 +28,14 @@ static func elevation_for_move(
 		map_root,
 		UP_LEFT_LAYER_NAMES
 	)
-	if _tilemap_has_tile_at(up_left_layer, target_world_position):
+	if _tilemap_has_tile_at(up_left_layer, stair_world_position):
 		return ELEVATION_UP if movement_direction == Vector2.LEFT else ELEVATION_DOWN
 
 	var up_right_layer := MapLayerResolverScript.find_tilemap_layer(
 		map_root,
 		UP_RIGHT_LAYER_NAMES
 	)
-	if _tilemap_has_tile_at(up_right_layer, target_world_position):
+	if _tilemap_has_tile_at(up_right_layer, stair_world_position):
 		return ELEVATION_UP if movement_direction == Vector2.RIGHT else ELEVATION_DOWN
 
 	return ELEVATION_NONE

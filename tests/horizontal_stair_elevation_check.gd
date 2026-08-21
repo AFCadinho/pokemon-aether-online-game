@@ -21,7 +21,7 @@ func _check_directional_markers() -> void:
 	var up_left_position := up_left.to_global(up_left.map_to_local(Vector2i(2, 3)))
 
 	_check(
-		HorizontalStairElevationScript.elevation_for_move(
+		HorizontalStairElevationScript.elevation_for_stair_exit(
 			map_root,
 			up_left_position,
 			Vector2.LEFT
@@ -29,7 +29,7 @@ func _check_directional_markers() -> void:
 		"StairUpLeft climbs while walking left"
 	)
 	_check(
-		HorizontalStairElevationScript.elevation_for_move(
+		HorizontalStairElevationScript.elevation_for_stair_exit(
 			map_root,
 			up_left_position,
 			Vector2.RIGHT
@@ -37,12 +37,20 @@ func _check_directional_markers() -> void:
 		"StairUpLeft descends while walking right"
 	)
 	_check(
-		HorizontalStairElevationScript.elevation_for_move(
+		HorizontalStairElevationScript.elevation_for_stair_exit(
 			map_root,
 			up_left_position,
 			Vector2.UP
 		) == HorizontalStairElevationScript.ELEVATION_NONE,
 		"vertical movement never receives a horizontal stair effect"
+	)
+	_check(
+		HorizontalStairElevationScript.elevation_for_stair_exit(
+			map_root,
+			up_left_position + Vector2.RIGHT * 32.0,
+			Vector2.RIGHT
+		) == HorizontalStairElevationScript.ELEVATION_NONE,
+		"the unmarked landing tile does not need a duplicate stair marker"
 	)
 
 	up_left.name = "UnusedMarker"
@@ -50,7 +58,7 @@ func _check_directional_markers() -> void:
 	map_root.add_child(up_right)
 	var up_right_position := up_right.to_global(up_right.map_to_local(Vector2i(4, 1)))
 	_check(
-		HorizontalStairElevationScript.elevation_for_move(
+		HorizontalStairElevationScript.elevation_for_stair_exit(
 			map_root,
 			up_right_position,
 			Vector2.RIGHT
@@ -58,7 +66,7 @@ func _check_directional_markers() -> void:
 		"StairsUpRight alias climbs while walking right"
 	)
 	_check(
-		HorizontalStairElevationScript.elevation_for_move(
+		HorizontalStairElevationScript.elevation_for_stair_exit(
 			map_root,
 			up_right_position,
 			Vector2.LEFT

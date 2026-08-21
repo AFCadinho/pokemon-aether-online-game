@@ -711,9 +711,9 @@ func story_move_path(path: Array[String]) -> bool:
 		global_position = current_position
 		move_elapsed = 0.0
 		move_duration = _get_current_tile_move_duration()
-		stair_elevation = HorizontalStairElevationScript.elevation_for_move(
+		stair_elevation = HorizontalStairElevationScript.elevation_for_stair_exit(
 			_resolve_current_map(),
-			target_position,
+			move_start_position,
 			direction
 		)
 		is_moving = true
@@ -1939,9 +1939,9 @@ func _try_start_move(direction: Vector2) -> bool:
 	global_position = move_start_position
 	move_elapsed = 0.0
 	move_duration = _get_current_tile_move_duration()
-	stair_elevation = HorizontalStairElevationScript.elevation_for_move(
+	stair_elevation = HorizontalStairElevationScript.elevation_for_stair_exit(
 		_resolve_current_map(),
-		target_position,
+		move_start_position,
 		direction
 	)
 	is_moving = true
