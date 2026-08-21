@@ -3873,6 +3873,7 @@ func _finish_battle(result: Dictionary) -> void:
 	if allows_gameplay_persistence or _is_spectator_battle():
 		_add_pvp_victory_message_if_needed(result)
 	battle_finished = true
+	_close_battle_drawers_for_terminal_result()
 	_sync_party_rail_interaction()
 	pending_mega_species_by_ident.clear()
 	_reset_damage_calc_assumptions()
@@ -3893,6 +3894,14 @@ func _finish_battle(result: Dictionary) -> void:
 		_show_pvp_battle_result(result)
 		return
 	_emit_battle_ended(result)
+
+
+func _close_battle_drawers_for_terminal_result() -> void:
+	# Drawers live above the stage in the root UI hierarchy. Close them before a
+	# terminal result is presented so they cannot intercept the Continue action.
+	bag_inventory_request_token += 1
+	current_action_view = ActionView.NONE
+	_set_action_panel_mode(BattleActionsPanelMode.BATTLE)
 
 
 func _battle_happiness_context() -> Dictionary:

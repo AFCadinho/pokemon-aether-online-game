@@ -32,6 +32,7 @@
 **Fixed**
 
 - Missing translated text now reliably falls back to English.
+- Finished battles now close the Damage Calculator automatically so the battle result can be closed immediately.
 - Champions ZA's battle HUD, Damage Calc, and party hover cards now use the active Mega form, ability, and current battle stats.
 - Opponent names now update to their revealed Mega form in the battle HUD and battle log.
 - Static front sprites for the new Champions ZA Mega Evolutions now appear at the correct battle size.
