@@ -262,9 +262,9 @@ const POKEMON_SUMMARY_SIZE := Vector2(620, 380)
 const POKEMON_READONLY_SUMMARY_SIZE := POKEMON_SUMMARY_SIZE
 const POKEMON_READONLY_MOVE_HOVER_SIZE := Vector2(254, 156)
 const POKEMON_READONLY_MOVE_HOVER_INSET := 12.0
-const POKEMON_READONLY_DETAIL_HOVER_WIDTH := 230.0
-const POKEMON_READONLY_DETAIL_HOVER_MIN_HEIGHT := 72.0
-const POKEMON_READONLY_DETAIL_HOVER_MAX_HEIGHT := 120.0
+const POKEMON_READONLY_DETAIL_HOVER_WIDTH := 190.0
+const POKEMON_READONLY_DETAIL_HOVER_MIN_HEIGHT := 64.0
+const POKEMON_READONLY_DETAIL_HOVER_MAX_HEIGHT := 105.0
 const POKEMON_SUMMARY_BODY_HEIGHT := 333.0
 const POKEMON_SUMMARY_LEFT_PANEL_WIDTH := 275.0
 const POKEMON_SUMMARY_RIGHT_AREA_WIDTH := 320.0
@@ -15794,8 +15794,6 @@ func _build_readonly_summary_profile(nodes: Dictionary) -> Control:
 	ability_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	ability_stack.mouse_filter = Control.MOUSE_FILTER_STOP
 	ability_stack.mouse_default_cursor_shape = Control.CURSOR_HELP
-	ability_stack.mouse_entered.connect(_show_readonly_summary_detail_hover.bind(ability_stack, nodes))
-	ability_stack.mouse_exited.connect(_hide_readonly_summary_detail_hover.bind(nodes))
 	traits_row.add_child(ability_stack)
 	nodes["ability_stack"] = ability_stack
 	var ability_caption := Label.new()
@@ -15807,14 +15805,16 @@ func _build_readonly_summary_profile(nodes: Dictionary) -> Control:
 	_make_label_clip_width(ability_label)
 	ability_label.add_theme_font_size_override("font_size", 11)
 	ability_label.add_theme_color_override("font_color", Color("#f4f7ff"))
+	ability_label.mouse_filter = Control.MOUSE_FILTER_STOP
+	ability_label.mouse_default_cursor_shape = Control.CURSOR_HELP
+	ability_label.mouse_entered.connect(_show_readonly_summary_detail_hover.bind(ability_label, nodes))
+	ability_label.mouse_exited.connect(_hide_readonly_summary_detail_hover.bind(nodes))
 	ability_stack.add_child(ability_label)
 	nodes["ability_label"] = ability_label
 	var nature_stack := VBoxContainer.new()
 	nature_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	nature_stack.mouse_filter = Control.MOUSE_FILTER_STOP
 	nature_stack.mouse_default_cursor_shape = Control.CURSOR_HELP
-	nature_stack.mouse_entered.connect(_show_readonly_summary_detail_hover.bind(nature_stack, nodes))
-	nature_stack.mouse_exited.connect(_hide_readonly_summary_detail_hover.bind(nodes))
 	traits_row.add_child(nature_stack)
 	nodes["nature_stack"] = nature_stack
 	var nature_caption := Label.new()
@@ -15826,6 +15826,10 @@ func _build_readonly_summary_profile(nodes: Dictionary) -> Control:
 	_make_label_clip_width(nature_label)
 	nature_label.add_theme_font_size_override("font_size", 11)
 	nature_label.add_theme_color_override("font_color", Color("#f2cf78"))
+	nature_label.mouse_filter = Control.MOUSE_FILTER_STOP
+	nature_label.mouse_default_cursor_shape = Control.CURSOR_HELP
+	nature_label.mouse_entered.connect(_show_readonly_summary_detail_hover.bind(nature_label, nodes))
+	nature_label.mouse_exited.connect(_hide_readonly_summary_detail_hover.bind(nodes))
 	nature_stack.add_child(nature_label)
 	nodes["nature_label"] = nature_label
 
@@ -16180,10 +16184,10 @@ func _show_readonly_summary_detail_hover(source: Control, nodes: Dictionary) -> 
 		child.free()
 	var accent := source.get_meta("readonly_hover_accent", POKEMON_SUMMARY_ACCENT) as Color
 	var description_text := str(source.get_meta("readonly_hover_description", ""))
-	var description_lines: int = max(1, ceili(float(description_text.length()) / 34.0))
+	var description_lines: int = max(1, ceili(float(description_text.length()) / 28.0))
 	var panel_size := Vector2(
 		POKEMON_READONLY_DETAIL_HOVER_WIDTH,
-		clampf(42.0 + float(description_lines) * 15.0, POKEMON_READONLY_DETAIL_HOVER_MIN_HEIGHT, POKEMON_READONLY_DETAIL_HOVER_MAX_HEIGHT)
+		clampf(38.0 + float(description_lines) * 14.0, POKEMON_READONLY_DETAIL_HOVER_MIN_HEIGHT, POKEMON_READONLY_DETAIL_HOVER_MAX_HEIGHT)
 	)
 	hover_panel.custom_minimum_size = panel_size
 	hover_panel.size = panel_size
@@ -16213,7 +16217,7 @@ func _show_readonly_summary_detail_hover(source: Control, nodes: Dictionary) -> 
 	stack.add_child(title_label)
 	var description_label := Label.new()
 	description_label.text = description_text
-	description_label.custom_minimum_size = Vector2(0, panel_size.y - 42.0)
+	description_label.custom_minimum_size = Vector2(0, panel_size.y - 38.0)
 	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	description_label.max_lines_visible = 5
 	description_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -21250,14 +21254,14 @@ func _refresh_readonly_pokemon_summary(pokemon: Pokemon) -> void:
 	ability_label.tooltip_text = ability_tooltip
 	var ability_stack := nodes.get("ability_stack") as VBoxContainer
 	if ability_stack != null:
-		_set_readonly_summary_detail_hover(ability_stack, ability_label.text, ability_tooltip, POKEMON_SUMMARY_ACCENT)
+		_set_readonly_summary_detail_hover(ability_label, ability_label.text, ability_tooltip, POKEMON_SUMMARY_ACCENT)
 	var nature_label := nodes.get("nature_label") as Label
 	nature_label.text = _localized_nature_name(pokemon.nature)
 	var nature_tooltip := _get_pokemon_summary_nature_tooltip(pokemon.nature)
 	nature_label.tooltip_text = nature_tooltip
 	var nature_stack := nodes.get("nature_stack") as VBoxContainer
 	if nature_stack != null:
-		_set_readonly_summary_detail_hover(nature_stack, nature_label.text, nature_tooltip, Color("#f2cf78"))
+		_set_readonly_summary_detail_hover(nature_label, nature_label.text, nature_tooltip, Color("#f2cf78"))
 	var iv_total := 0
 	var ev_total := 0
 	for stat_id: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
