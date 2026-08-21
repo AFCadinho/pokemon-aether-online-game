@@ -31,6 +31,7 @@
 - Players now face away from the entrance after using a Mt. Moon ladder or tunnel.
 - NPC dialogue now opens promptly by preparing nearby dialogue and avoiding duplicate content requests.
 - Move, ability, nature, EXP, Happiness, held item, and Poké Ball details now use compact hover cards across their full fields in every Pokémon Summary; read-only Summaries also show IV and EV details this way.
+- Champions ZA now explains the exact Mega compatibility problem instead of showing a generic room-creation error.
 - Private battle rooms now explain when the battle server is recovering instead of showing a generic creation error.
 - Read-only Pokémon Summaries now fill in a missing National Dex number instead of leaving the number blank.
 - Ogerpon's correct battle sprites are now included in game downloads.
