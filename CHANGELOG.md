@@ -8,7 +8,7 @@
 
 **Fixed**
 
-- Move, ability, nature, held item, and Poké Ball details now use compact hover cards in every Pokémon Summary; read-only Summaries also show IV and EV details this way.
+- Move, ability, nature, EXP, Happiness, held item, and Poké Ball details now use compact hover cards across their full fields in every Pokémon Summary; read-only Summaries also show IV and EV details this way.
 - Ogerpon's correct battle sprites are now included in game downloads.
 - Training Rooms no longer blame a valid Poképaste when room timers are temporarily unavailable.
 - Wild battles now immediately show the first Pokémon that can battle when an earlier party member has fainted.

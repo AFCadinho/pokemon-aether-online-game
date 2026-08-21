@@ -43,6 +43,7 @@ func _run() -> void:
 	(overlay.get("pokemon_summary_content_stack") as VBoxContainer).add_child(ability_card)
 	_check(ability_card.tooltip_text == "", "normal Summary ability no longer opens a native tooltip")
 	_check(ability_card.mouse_entered.has_connections(), "normal Summary ability opens the shared hover card")
+	_check(_descendants_ignore_mouse(ability_card), "ability value controls leave hover handling to the complete card")
 	overlay.call("_show_readonly_summary_detail_hover", ability_card, nodes)
 	_check(detail_hover.visible, "normal Summary ability hover is visible")
 	_check((detail_hover.find_children("*", "Label", true, false)[0] as Label).text == "Volt Absorb", "normal Summary ability hover shows the selected value")
@@ -53,6 +54,30 @@ func _run() -> void:
 		{"hp": 186, "atk": 180, "def": 140, "spa": 160, "spd": 140, "spe": 220},
 		[], "life-orb", 7, false, false, ["electric"], ["volt-absorb"], "Route 1", {}
 	)
+	var happiness_card := overlay.call(
+		"_create_summary_metric_card",
+		"Happiness",
+		"Happiness: 180 / 255",
+		180,
+		255,
+		Color("#f2cf78"),
+		148.0
+	) as Control
+	(overlay.get("pokemon_summary_content_stack") as VBoxContainer).add_child(happiness_card)
+	_check(happiness_card.tooltip_text == "" and happiness_card.mouse_entered.has_connections(), "Happiness uses the compact hover card")
+	_check(_descendants_ignore_mouse(happiness_card), "the complete Happiness metric is hoverable")
+	overlay.call("_show_readonly_summary_detail_hover", happiness_card, nodes)
+	_check((detail_hover.find_children("*", "Label", true, false)[0] as Label).text == "Happiness", "Happiness hover has a clear title")
+	overlay.call("_hide_readonly_summary_detail_hover", nodes)
+
+	var experience_card := overlay.call("_create_summary_experience_metric_card", pokemon, Color("#62d7ff"), 148.0) as Control
+	(overlay.get("pokemon_summary_content_stack") as VBoxContainer).add_child(experience_card)
+	_check(experience_card.tooltip_text == "" and experience_card.mouse_entered.has_connections(), "EXP uses the compact hover card")
+	_check(_descendants_ignore_mouse(experience_card), "the complete EXP metric is hoverable")
+	overlay.call("_show_readonly_summary_detail_hover", experience_card, nodes)
+	_check((detail_hover.find_children("*", "Label", true, false)[0] as Label).text == "EXP", "EXP hover has a clear title")
+	overlay.call("_hide_readonly_summary_detail_hover", nodes)
+
 	var move_value := {
 		"id": "plasma-fists",
 		"name": "Plasma Fists",
@@ -105,3 +130,12 @@ func _check(condition: bool, label: String) -> void:
 		return
 	failed = true
 	push_error(label)
+
+
+func _descendants_ignore_mouse(source: Control) -> bool:
+	for child: Node in source.get_children():
+		if child is Control and (child as Control).mouse_filter != Control.MOUSE_FILTER_IGNORE:
+			return false
+		if child is Control and not _descendants_ignore_mouse(child as Control):
+			return false
+	return true
