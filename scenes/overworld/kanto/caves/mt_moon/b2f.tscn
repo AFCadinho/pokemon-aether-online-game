@@ -284,6 +284,7 @@ display_name = "Super Nerd Miguel"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("7_scientist")
 cleared_position_marker = NodePath("../../StoryMarkers/MiguelCleared")
+blocked_side_recovery_marker = NodePath("../../StoryMarkers/MiguelBlockedSide")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=812933119]
 
@@ -293,6 +294,9 @@ cleared_position_marker = NodePath("../../StoryMarkers/MiguelCleared")
 
 [node name="MiguelCleared" type="Marker2D" parent="Entities/StoryMarkers"]
 position = Vector2(720, 720)
+
+[node name="MiguelBlockedSide" type="Marker2D" parent="Entities/StoryMarkers"]
+position = Vector2(752, 688)
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=976601731]
 
