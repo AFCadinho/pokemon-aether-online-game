@@ -220,6 +220,10 @@ func load_collected_world_pickups(force_refresh := false) -> Dictionary:
 		}
 	if world_pickup_request_active:
 		await world_pickup_state_changed
+		if force_refresh:
+			# The completed request may have started before a developer checkpoint
+			# replaced pickup receipts. A forced caller must issue a fresh request.
+			return await load_collected_world_pickups(true)
 		return {
 			"success": collected_world_pickups_loaded and collected_world_pickups_user_id == current_user_id,
 			"collectedPickupIds": collected_world_pickup_ids.keys(),
