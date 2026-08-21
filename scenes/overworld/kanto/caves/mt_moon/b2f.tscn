@@ -13,6 +13,7 @@ script = ExtResource("2_metadata")
 map_id = "kanto_mt_moon_b2f"
 map_region_name = "Kanto"
 map_display_name = "Mt. Moon B2F"
+music_track_id = "overworld.kanto.cave.mt_moon"
 world_access_group_id = "kanto_mt_moon"
 world_access_group_label = "Mt. Moon"
 world_access_area_type = "wilderness"
