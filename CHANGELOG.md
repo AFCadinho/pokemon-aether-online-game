@@ -30,6 +30,7 @@
 **Fixed**
 
 - Missing translated text now reliably falls back to English.
+- Opponent names now update to their revealed Mega form in the battle HUD and battle log.
 - Static front sprites for the new Champions ZA Mega Evolutions now appear at the correct battle size.
 - Launcher downloads now recover from slow or interrupted connections, resume after restarting the launcher, and show clearer speed and connection details.
 - Foreground cave walls on Mt. Moon B1F and B2F now pass in front of or behind characters correctly.
