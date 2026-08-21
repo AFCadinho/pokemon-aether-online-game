@@ -4,4 +4,4 @@
 
 [node name="B1f" type="Node2D" unique_id=555040763]
 
-[node name="MtMoonB1FVisual" parent="." instance=ExtResource("1_visual")]
+[node name="MtMoonB1FVisual" parent="." unique_id=376262231 instance=ExtResource("1_visual")]
