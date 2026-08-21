@@ -144,7 +144,7 @@ const PVP_ROOM_TIER_MEGA_Z_TEST := "pokeaether-mega-z-test"
 const PVP_ROOM_TIERS: Array[Dictionary] = [
 	{"id": PVP_ROOM_TIER_NONE, "format_id": "gen9nationaldex", "label": "ui.pvp.room.tier.none"},
 	{"id": "aether-ou", "format_id": "gen9nationaldex", "label": "ui.pvp.room.tier.aether_ou"},
-	{"id": PVP_ROOM_TIER_MEGA_Z_TEST, "format_id": "pokeaether-mega-z-test-v1", "label": "ui.pvp.room.tier.mega_z_test", "developer_only": true},
+	{"id": PVP_ROOM_TIER_MEGA_Z_TEST, "format_id": "pokeaether-mega-z-test-v1", "label": "ui.pvp.room.tier.mega_z_test"},
 ]
 const SOCIALS_FRIENDS_ICON: Texture2D = preload("res://assets/ui/friendlist.svg")
 const SOCIALS_NEARBY_ICON: Texture2D = preload("res://assets/ui/socials_nearby.svg")
@@ -37275,8 +37275,6 @@ func _refresh_pvp_room_tier_options() -> void:
 	var previous_id := _selected_pvp_room_tier_id()
 	pvp_room_tier_select.clear()
 	for tier: Dictionary in PVP_ROOM_TIERS:
-		if bool(tier.get("developer_only", false)) and not _can_generate_dev_pokemon():
-			continue
 		pvp_room_tier_select.add_item(LocalizationManager.text(str(tier.get("label", ""))))
 		pvp_room_tier_select.set_item_metadata(
 			pvp_room_tier_select.item_count - 1,
@@ -37426,7 +37424,6 @@ func _pvp_room_failure_status_key(
 	if error_code == "pvp_room_team_invalid":
 		return "ui.pvp.room.tier_team_invalid"
 	if error_code in [
-		"mega_test_room_permission_required",
 		"mega_catalog_disabled",
 		"mega_format_disabled",
 		"unsupported_room_tier",

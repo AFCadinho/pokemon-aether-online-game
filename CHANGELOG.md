@@ -10,6 +10,7 @@
 
 **Changed**
 
+- Mega + Z is now available to every player as an unrated private-room tier. It does not give players Pokémon or items and does not affect Ranked Battles.
 - The game now shows clear localized messages when a new Mega Evolution is not ready or allowed for an action.
 - Testers can use every Developer Tools action except unrestricted Pokémon creation. They can still create normalized Pokémon through Alpha Tools.
 
