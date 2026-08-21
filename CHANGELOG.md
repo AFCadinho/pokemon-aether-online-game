@@ -29,6 +29,7 @@
 
 **Fixed**
 
+- Foreground cave walls on Mt. Moon B1F and B2F now pass in front of or behind characters correctly.
 - Ground Poké Balls and other overworld objects can now be interacted with correctly on offset map grids.
 - Updated the Mt. Moon B2F scenery to match the latest map artwork.
 - Players now face away from the entrance after using a Mt. Moon ladder or tunnel.
