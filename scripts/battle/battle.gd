@@ -8674,6 +8674,17 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 				_update_active_pokemon_presentation_for_ident(ability_target)
 
 		var presentation: Dictionary = event_presentation.build(event_data)
+		var apply_forme_change_after_render := event_type == "formeChange"
+		if (
+			event_type == "formeChange"
+			and str(presentation.get("effect_animation_key", "")) != ""
+		):
+			# Transformation effects reveal the new presentation at the end of the
+			# animation. Prepare that visual form first, matching Mega Evolution.
+			_release_ordered_response_display_species_for_ident(str(event_data.get("target", "")))
+			battle_state.apply_event_conditions([event_data])
+			_update_active_pokemon_presentation_for_ident(str(event_data.get("target", "")))
+			apply_forme_change_after_render = false
 		if event_type == "move":
 			var starts_charge_turn := _move_event_starts_a_charge_turn(ordered_events, event_index)
 			if starts_charge_turn:
@@ -8761,7 +8772,7 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			battle_state.apply_event_conditions([event_data])
 			_update_hud_panels()
 			_update_active_sprites()
-		if event_type == "formeChange":
+		if apply_forme_change_after_render:
 			_release_ordered_response_display_species_for_ident(str(event_data.get("target", "")))
 			battle_state.apply_event_conditions([event_data])
 			_update_active_pokemon_presentation_for_ident(str(event_data.get("target", "")))
