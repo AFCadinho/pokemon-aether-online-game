@@ -3216,6 +3216,7 @@
   "ui.pvp.room.spectator_failed": "Deze room kon niet worden bekeken.",
   "ui.pvp.room.preview_unavailable": "De openbare teamweergave is nog niet beschikbaar. Probeer het zo opnieuw.",
   "ui.pvp.room.create_failed": "De room kon niet worden gemaakt.",
+  "ui.pvp.room.battle_server_recovering": "De gevechtsserver wordt hersteld. Probeer het zo opnieuw.",
   "ui.pvp.room.cancel_failed": "De room kon niet worden geannuleerd.",
   "ui.pvp.room.join_failed": "Deelnemen aan de room is mislukt.",
   "ui.pvp.room.check_failed": "De room kon niet worden gecontroleerd.",

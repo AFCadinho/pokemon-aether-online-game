@@ -37523,6 +37523,8 @@ func _pvp_room_failure_status_key(
 		"unsupported_room_timer_tier",
 	]:
 		return "ui.pvp.room.timer_unavailable"
+	if error_code == "circuit_breaker_open":
+		return "ui.pvp.room.battle_server_recovering"
 	if error_code == "pvp_room_team_invalid":
 		return "ui.pvp.room.tier_team_invalid"
 	if error_code in [
