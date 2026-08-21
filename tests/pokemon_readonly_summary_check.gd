@@ -104,8 +104,20 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	_check(detail_hover_panel.visible, "ability opens the compact hover card")
-	_check(detail_hover_panel.size.y < 156.0, "short ability details use a compact hover card")
-	_check(not detail_hover_panel.get_global_rect().intersects(ability_label.get_global_rect()), "ability hover is positioned above the hovered ability")
+	_check(detail_hover_panel.size.y <= 100.0, "short ability details use a content-sized hover card")
+	var detail_labels := detail_hover_panel.find_children("*", "Label", true, false)
+	var detail_title := detail_labels.front() as Label
+	var detail_description := detail_labels.back() as Label
+	var expected_detail_height := detail_title.custom_minimum_size.y + 5.0 + detail_description.custom_minimum_size.y + 18.0
+	_check(is_equal_approx(detail_hover_panel.size.y, expected_detail_height), "detail hover height follows its content without unused space")
+	var position_source := Control.new()
+	position_source.position = Vector2(300, 250)
+	position_source.size = Vector2(80, 20)
+	(nodes.get("move_hover_layer") as Control).add_child(position_source)
+	overlay.call("_position_readonly_summary_detail_hover", detail_hover_panel, popup, position_source, detail_hover_panel.size)
+	_check(not detail_hover_panel.get_global_rect().intersects(position_source.get_global_rect()), "ability hover is positioned above the hovered ability")
+	_check(absf(detail_hover_panel.get_global_rect().end.y - position_source.get_global_rect().position.y) <= 5.0, "ability hover sits directly above the hovered text")
+	position_source.free()
 	_check((detail_hover_panel.find_children("*", "Label", true, false)[0] as Label).text == "Rough Skin", "ability hover shows its name")
 	overlay.call("_hide_readonly_summary_detail_hover", nodes)
 	var item_panel := nodes.get("item_panel") as PanelContainer
