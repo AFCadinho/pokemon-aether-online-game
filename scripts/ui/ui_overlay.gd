@@ -15717,6 +15717,8 @@ func _build_readonly_summary_profile(nodes: Dictionary) -> Control:
 	ball_panel.size = Vector2(30, 30)
 	ball_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	ball_panel.mouse_default_cursor_shape = Control.CURSOR_HELP
+	ball_panel.mouse_entered.connect(_show_readonly_summary_detail_hover.bind(ball_panel, nodes))
+	ball_panel.mouse_exited.connect(_hide_readonly_summary_detail_hover.bind(nodes))
 	ball_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#06111fe8"), POKEMON_SUMMARY_ACCENT_SOFT, 8, 1))
 	sprite_stage.add_child(ball_panel)
 	nodes["ball_panel"] = ball_panel
@@ -15833,6 +15835,8 @@ func _build_readonly_summary_profile(nodes: Dictionary) -> Control:
 	ability_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	ability_stack.mouse_filter = Control.MOUSE_FILTER_STOP
 	ability_stack.mouse_default_cursor_shape = Control.CURSOR_HELP
+	ability_stack.mouse_entered.connect(_show_readonly_summary_detail_hover.bind(ability_stack, nodes))
+	ability_stack.mouse_exited.connect(_hide_readonly_summary_detail_hover.bind(nodes))
 	traits_row.add_child(ability_stack)
 	nodes["ability_stack"] = ability_stack
 	var ability_caption := Label.new()
@@ -15850,6 +15854,8 @@ func _build_readonly_summary_profile(nodes: Dictionary) -> Control:
 	nature_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	nature_stack.mouse_filter = Control.MOUSE_FILTER_STOP
 	nature_stack.mouse_default_cursor_shape = Control.CURSOR_HELP
+	nature_stack.mouse_entered.connect(_show_readonly_summary_detail_hover.bind(nature_stack, nodes))
+	nature_stack.mouse_exited.connect(_hide_readonly_summary_detail_hover.bind(nodes))
 	traits_row.add_child(nature_stack)
 	nodes["nature_stack"] = nature_stack
 	var nature_caption := Label.new()
@@ -15875,6 +15881,8 @@ func _build_readonly_summary_profile(nodes: Dictionary) -> Control:
 		quality_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		quality_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 		quality_panel.mouse_default_cursor_shape = Control.CURSOR_HELP
+		quality_panel.mouse_entered.connect(_show_readonly_summary_detail_hover.bind(quality_panel, nodes))
+		quality_panel.mouse_exited.connect(_hide_readonly_summary_detail_hover.bind(nodes))
 		var quality_color := quality_spec.get("color", UI_TEXT) as Color
 		quality_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#071827d8"), Color(quality_color, 0.52), 5, 1))
 		quality_row.add_child(quality_panel)
@@ -15891,6 +15899,8 @@ func _build_readonly_summary_profile(nodes: Dictionary) -> Control:
 	held_item_panel.custom_minimum_size = Vector2(0, 34)
 	held_item_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	held_item_panel.mouse_default_cursor_shape = Control.CURSOR_HELP
+	held_item_panel.mouse_entered.connect(_show_readonly_summary_detail_hover.bind(held_item_panel, nodes))
+	held_item_panel.mouse_exited.connect(_hide_readonly_summary_detail_hover.bind(nodes))
 	held_item_panel.add_theme_stylebox_override("panel", _make_pokemon_summary_held_item_slot_style())
 	stack.add_child(held_item_panel)
 	nodes["item_panel"] = held_item_panel
@@ -16191,6 +16201,67 @@ func _hide_readonly_summary_move_hover(move_panel: PanelContainer, nodes: Dictio
 	var base_style := move_panel.get_meta("readonly_base_style", null) as StyleBoxFlat
 	if base_style != null:
 		move_panel.add_theme_stylebox_override("panel", base_style)
+
+func _show_readonly_summary_detail_hover(source: Control, nodes: Dictionary) -> void:
+	if source == null or not is_instance_valid(source) or not source.has_meta("readonly_hover_title"):
+		return
+	var hover_panel := nodes.get("move_hover_panel") as PanelContainer
+	var popup := nodes.get("popup") as PanelContainer
+	if hover_panel == null or popup == null or not is_instance_valid(hover_panel) or not is_instance_valid(popup):
+		return
+	for child: Node in hover_panel.get_children():
+		child.free()
+	var accent := source.get_meta("readonly_hover_accent", POKEMON_SUMMARY_ACCENT) as Color
+	hover_panel.add_theme_stylebox_override("panel", _make_panel_style(
+		Color("#07101af8"),
+		Color(accent, 0.95),
+		7,
+		1
+	))
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 11)
+	margin.add_theme_constant_override("margin_top", 9)
+	margin.add_theme_constant_override("margin_right", 11)
+	margin.add_theme_constant_override("margin_bottom", 9)
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hover_panel.add_child(margin)
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 5)
+	stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	margin.add_child(stack)
+	var title_label := Label.new()
+	title_label.text = str(source.get_meta("readonly_hover_title", ""))
+	title_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	title_label.add_theme_font_size_override("font_size", 14)
+	title_label.add_theme_color_override("font_color", accent)
+	title_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stack.add_child(title_label)
+	var description_label := Label.new()
+	description_label.text = str(source.get_meta("readonly_hover_description", ""))
+	description_label.custom_minimum_size = Vector2(0, 74)
+	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	description_label.max_lines_visible = 5
+	description_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	description_label.add_theme_font_size_override("font_size", 11)
+	description_label.add_theme_color_override("font_color", Color("#d9e3f0"))
+	description_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stack.add_child(description_label)
+	_position_readonly_summary_move_hover(hover_panel, popup)
+	hover_panel.visible = true
+	hover_panel.move_to_front()
+
+func _hide_readonly_summary_detail_hover(nodes: Dictionary) -> void:
+	var hover_panel := nodes.get("move_hover_panel") as PanelContainer
+	if hover_panel != null and is_instance_valid(hover_panel):
+		hover_panel.visible = false
+
+func _set_readonly_summary_detail_hover(source: Control, title: String, description: String, accent: Color) -> void:
+	if source == null or not is_instance_valid(source):
+		return
+	source.tooltip_text = ""
+	source.set_meta("readonly_hover_title", title)
+	source.set_meta("readonly_hover_description", description)
+	source.set_meta("readonly_hover_accent", accent)
 
 func _position_readonly_summary_move_hover(hover_panel: PanelContainer, popup: PanelContainer) -> void:
 	var popup_rect := popup.get_global_rect()
@@ -21169,9 +21240,9 @@ func _refresh_readonly_pokemon_summary(pokemon: Pokemon) -> void:
 		pokemon_summary_ball_icon.texture = _load_item_icon(ball_item_id)
 	var ball_panel := nodes.get("ball_panel") as PanelContainer
 	if ball_panel != null:
-		ball_panel.tooltip_text = LocalizationManager.text("ui.pokemon_summary.tooltip.ball", {
+		_set_readonly_summary_detail_hover(ball_panel, _item_name_from_id(ball_item_id), LocalizationManager.text("ui.pokemon_summary.tooltip.ball", {
 			"ball": _item_name_from_id(ball_item_id),
-		})
+		}), POKEMON_SUMMARY_ACCENT)
 	if pokemon_summary_hidden_ability_badge != null:
 		pokemon_summary_hidden_ability_badge.visible = pokemon.hidden_ability
 	if pokemon_summary_level_badge_label != null:
@@ -21182,14 +21253,14 @@ func _refresh_readonly_pokemon_summary(pokemon: Pokemon) -> void:
 	ability_label.tooltip_text = ability_tooltip
 	var ability_stack := nodes.get("ability_stack") as VBoxContainer
 	if ability_stack != null:
-		ability_stack.tooltip_text = ability_tooltip
+		_set_readonly_summary_detail_hover(ability_stack, ability_label.text, ability_tooltip, POKEMON_SUMMARY_ACCENT)
 	var nature_label := nodes.get("nature_label") as Label
 	nature_label.text = _localized_nature_name(pokemon.nature)
 	var nature_tooltip := _get_pokemon_summary_nature_tooltip(pokemon.nature)
 	nature_label.tooltip_text = nature_tooltip
 	var nature_stack := nodes.get("nature_stack") as VBoxContainer
 	if nature_stack != null:
-		nature_stack.tooltip_text = nature_tooltip
+		_set_readonly_summary_detail_hover(nature_stack, nature_label.text, nature_tooltip, Color("#f2cf78"))
 	var iv_total := 0
 	var ev_total := 0
 	for stat_id: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
@@ -21206,7 +21277,7 @@ func _refresh_readonly_pokemon_summary(pokemon: Pokemon) -> void:
 	iv_total_label.tooltip_text = iv_tooltip
 	var iv_total_panel := nodes.get("iv_total_label_panel") as PanelContainer
 	if iv_total_panel != null:
-		iv_total_panel.tooltip_text = iv_tooltip
+		_set_readonly_summary_detail_hover(iv_total_panel, iv_total_label.text, iv_tooltip, POKEMON_SUMMARY_ACCENT)
 	var ev_total_label := nodes.get("ev_total_label") as Label
 	ev_total_label.text = "%s  %s/510" % [
 		LocalizationManager.text("ui.pokemon_summary.tab.evs"),
@@ -21215,7 +21286,7 @@ func _refresh_readonly_pokemon_summary(pokemon: Pokemon) -> void:
 	ev_total_label.tooltip_text = ev_tooltip
 	var ev_total_panel := nodes.get("ev_total_label_panel") as PanelContainer
 	if ev_total_panel != null:
-		ev_total_panel.tooltip_text = ev_tooltip
+		_set_readonly_summary_detail_hover(ev_total_panel, ev_total_label.text, ev_tooltip, Color("#f4d36a"))
 	var item_label := nodes.get("item_label") as Label
 	var has_item := pokemon.item.strip_edges() != ""
 	var item_name := (
@@ -21232,7 +21303,7 @@ func _refresh_readonly_pokemon_summary(pokemon: Pokemon) -> void:
 	item_label.tooltip_text = item_tooltip
 	var item_panel := nodes.get("item_panel") as PanelContainer
 	if item_panel != null:
-		item_panel.tooltip_text = item_tooltip
+		_set_readonly_summary_detail_hover(item_panel, item_name, item_tooltip, Color("#f2cf78"))
 	var item_icon := nodes.get("item_icon") as TextureRect
 	var item_icon_panel := nodes.get("item_icon_panel") as PanelContainer
 	if item_icon != null:
