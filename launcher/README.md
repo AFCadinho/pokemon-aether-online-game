@@ -159,7 +159,7 @@ Set R2 credentials in your shell:
 
 ```bash
 export R2_ACCOUNT_ID="64ea7ddcb5e97df8500c33b8cb48f921"
-export R2_BUCKET="pokeaether-updates"
+export R2_BUCKET="pokemon-aether-updates"
 export R2_ACCESS_KEY_ID="..."
 export R2_SECRET_ACCESS_KEY="..."
 ```
