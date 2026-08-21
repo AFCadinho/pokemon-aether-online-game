@@ -280,6 +280,7 @@ func claim_world_pickup(pickup_id: String) -> Dictionary:
 		return response
 
 	var body := _dictionary_from_value(response.get("body", {}))
+	var story_value: Variant = body.get("story", null)
 	var collected_pickup_ids := _array_from_value(body.get("collectedPickupIds", [normalized_pickup_id]))
 	if collected_pickup_ids.is_empty():
 		collected_pickup_ids = [normalized_pickup_id]
@@ -291,6 +292,8 @@ func claim_world_pickup(pickup_id: String) -> Dictionary:
 	collected_world_pickups_loaded = true
 	world_pickup_state_changed.emit()
 	var inventory_result := await load_inventory()
+	if story_value is Dictionary:
+		StoryService.apply_story_if_not_stale(story_value)
 	return {
 		"success": true,
 		"pickupId": str(body.get("pickupId", normalized_pickup_id)),

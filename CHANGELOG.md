@@ -4,6 +4,7 @@
 
 **Added**
 
+- The story now continues into Mt. Moon: investigate four suspicious people, face Miguel for a fossil, and survive Team Rocket's ambush.
 - Mt. Moon now contains its visible FireRed and LeafGreen item pickups, plus optional rocks that can be cleared with Rock Smash.
 - Ground Poké Balls can hold one-time item rewards, and Strength boulders can be pushed one tile at a time.
 - Mt. Moon now has its FireRed and LeafGreen battle Trainers on 1F and B2F.
