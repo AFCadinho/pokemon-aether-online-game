@@ -168,6 +168,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/day_night_system_check.gd",
 	"res://tests/night_light_check.gd",
 	"res://tests/field_move_flash_light_check.gd",
+	"res://tests/overworld_field_interactables_check.gd",
 	"res://tests/building_window_light_check.gd",
 	"res://tests/developer_world_time_selector_check.gd",
 	"res://tests/overworld_weather_controller_check.gd",

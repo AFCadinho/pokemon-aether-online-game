@@ -4,6 +4,7 @@
 
 **Added**
 
+- Ground Poké Balls can hold one-time item rewards, and Strength boulders can be pushed one tile at a time.
 - Mt. Moon now has its FireRed and LeafGreen battle Trainers on 1F and B2F.
 - Private battle room hosts can choose no tier or Aether OU when creating a room.
 - Authorized developers can keep a direct Mega battle form for a clearly marked test Pokémon and clean up those test Pokémon from Developer Tools.

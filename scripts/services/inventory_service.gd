@@ -3,12 +3,15 @@ extends Node
 class_name InventoryServiceNode
 
 signal inventory_changed(items: Array)
+signal world_pickup_state_changed
 
 const INVENTORY_ENDPOINT := "/game/inventory"
 const FISHING_PROGRESSION_ENDPOINT := "/game/fishing/progression"
 const FISHING_SELECTION_ENDPOINT := "/game/fishing/selection"
 const NPC_ITEM_REWARD_ENDPOINT := "/game/npc-rewards/%s/claim"
 const NPC_QUEST_ITEM_TURN_IN_ENDPOINT := "/game/npc-quest-item-turn-ins/%s/claim"
+const WORLD_PICKUPS_ENDPOINT := "/game/world-pickups"
+const WORLD_PICKUP_CLAIM_ENDPOINT := "/game/world-pickups/%s/claim"
 const APPEARANCE_INVENTORY_ENDPOINT := "/game/appearance/inventory"
 const INVENTORY_ITEM_USE_ENDPOINT := "/game/inventory/items/%s/use"
 const APPEARANCE_ITEM_RETURN_ENDPOINT := "/game/appearance/inventory/items/%s/return"
@@ -25,6 +28,10 @@ const REQUEST_TIMEOUT_SECONDS := 8.0
 var cached_inventory_items: Array = []
 var cached_inventory_user_id := 0
 var inventory_loaded := false
+var collected_world_pickup_ids: Dictionary = {}
+var collected_world_pickups_user_id := 0
+var collected_world_pickups_loaded := false
+var world_pickup_request_active := false
 
 
 func load_inventory() -> Dictionary:
@@ -91,7 +98,12 @@ func _clear_inventory_cache() -> void:
 	cached_inventory_items.clear()
 	cached_inventory_user_id = 0
 	inventory_loaded = false
+	collected_world_pickup_ids.clear()
+	collected_world_pickups_user_id = 0
+	collected_world_pickups_loaded = false
+	world_pickup_request_active = false
 	inventory_changed.emit([])
+	world_pickup_state_changed.emit()
 
 
 func load_fishing_progression(area_id := "") -> Dictionary:
@@ -190,6 +202,97 @@ func claim_npc_item_reward(reward_id: String) -> Dictionary:
 		"fishingProgressionRefreshSuccess": bool(progression_result.get("success", false)),
 		"walletRefreshSuccess": bool(wallet_result.get("success", false)),
 		"storyRefreshSuccess": bool(story_result.get("success", false)),
+	}
+
+
+func load_collected_world_pickups(force_refresh := false) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {"success": false, "error": "Not authenticated."}
+	var current_user_id := int(AuthService.current_user.get("id", 0))
+	if (
+		not force_refresh
+		and collected_world_pickups_loaded
+		and collected_world_pickups_user_id == current_user_id
+	):
+		return {
+			"success": true,
+			"collectedPickupIds": collected_world_pickup_ids.keys(),
+		}
+	if world_pickup_request_active:
+		await world_pickup_state_changed
+		return {
+			"success": collected_world_pickups_loaded and collected_world_pickups_user_id == current_user_id,
+			"collectedPickupIds": collected_world_pickup_ids.keys(),
+		}
+
+	world_pickup_request_active = true
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + WORLD_PICKUPS_ENDPOINT,
+		HTTPClient.METHOD_GET,
+		GatewayApiConfig.get_accept_headers(),
+		""
+	)
+	world_pickup_request_active = false
+	if not bool(response.get("success", false)):
+		world_pickup_state_changed.emit()
+		return response
+
+	var body := _dictionary_from_value(response.get("body", {}))
+	collected_world_pickup_ids.clear()
+	for pickup_id_value: Variant in _array_from_value(body.get("collectedPickupIds", [])):
+		var normalized_pickup_id := str(pickup_id_value).strip_edges().to_lower()
+		if normalized_pickup_id != "":
+			collected_world_pickup_ids[normalized_pickup_id] = true
+	collected_world_pickups_user_id = current_user_id
+	collected_world_pickups_loaded = true
+	world_pickup_state_changed.emit()
+	return {
+		"success": true,
+		"collectedPickupIds": collected_world_pickup_ids.keys(),
+	}
+
+
+func is_world_pickup_collected(pickup_id: String) -> bool:
+	var normalized_pickup_id := pickup_id.strip_edges().to_lower()
+	return (
+		collected_world_pickups_loaded
+		and collected_world_pickups_user_id == int(AuthService.current_user.get("id", 0))
+		and collected_world_pickup_ids.has(normalized_pickup_id)
+	)
+
+
+func claim_world_pickup(pickup_id: String) -> Dictionary:
+	var normalized_pickup_id := pickup_id.strip_edges().to_lower()
+	if not AuthService.is_authenticated():
+		return {"success": false, "error": "Not authenticated."}
+	if normalized_pickup_id == "":
+		return {"success": false, "error": "Missing world pickup id."}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + WORLD_PICKUP_CLAIM_ENDPOINT % normalized_pickup_id.uri_encode(),
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var body := _dictionary_from_value(response.get("body", {}))
+	collected_world_pickup_ids[normalized_pickup_id] = true
+	collected_world_pickups_user_id = int(AuthService.current_user.get("id", 0))
+	collected_world_pickups_loaded = true
+	world_pickup_state_changed.emit()
+	var inventory_result := await load_inventory()
+	return {
+		"success": true,
+		"pickupId": str(body.get("pickupId", normalized_pickup_id)),
+		"itemId": str(body.get("itemId", "")),
+		"quantity": maxi(int(body.get("quantity", 1)), 1),
+		"claimed": bool(body.get("claimed", false)),
+		"alreadyCollected": bool(body.get("alreadyCollected", false)),
+		"inventoryRefreshSuccess": bool(inventory_result.get("success", false)),
 	}
 
 
