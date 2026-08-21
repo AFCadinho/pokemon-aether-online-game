@@ -92,7 +92,7 @@ func _run() -> void:
 	overlay.call("_show_readonly_summary_move_hover", first_move_panel, nodes)
 	_check(move_hover_panel.visible, "move hover opens a dedicated detail card")
 	_check(move_hover_panel.size == Vector2(254, 156), "move hover uses a consistent compact size")
-	_check(not move_hover_panel.get_global_rect().intersects(popup.get_global_rect()), "move hover stays beside the Summary instead of covering it")
+	_check(popup.get_global_rect().encloses(move_hover_panel.get_global_rect()), "move hover stays inside the Summary card")
 	var first_hover_position := move_hover_panel.position
 	var hover_labels := move_hover_panel.find_children("*", "Label", true, false)
 	_check(not hover_labels.is_empty() and (hover_labels[0] as Label).text == "Earthquake", "move hover shows the selected move details")
