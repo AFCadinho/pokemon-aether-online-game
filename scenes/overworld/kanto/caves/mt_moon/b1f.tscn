@@ -173,7 +173,7 @@ tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_80emr")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ladder_exit"]
-size = Vector2(32, 32)
+size = Vector2(32, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tunnel_exit"]
 size = Vector2(64, 64)
@@ -255,6 +255,7 @@ transition_id = "kanto_mt_moon_b1f__to_1f_1"
 transition_facing_direction = "left"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/To1F1" unique_id=61230680]
+position = Vector2(-16, 0)
 shape = SubResource("RectangleShape2D_ladder_exit")
 
 [node name="DoorTransitionHint" parent="Exits/To1F1" unique_id=104769243 instance=ExtResource("4_hint")]
@@ -286,6 +287,7 @@ transition_id = "kanto_mt_moon_b1f__to_1f_3"
 transition_facing_direction = "left"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/To1F3" unique_id=377764353]
+position = Vector2(-16, 0)
 shape = SubResource("RectangleShape2D_ladder_exit")
 
 [node name="DoorTransitionHint" parent="Exits/To1F3" unique_id=870058532 instance=ExtResource("4_hint")]
@@ -317,6 +319,7 @@ transition_id = "kanto_mt_moon_b1f__to_1f_5"
 transition_facing_direction = "left"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/To1F5" unique_id=1408437795]
+position = Vector2(16, 0)
 shape = SubResource("RectangleShape2D_ladder_exit")
 
 [node name="DoorTransitionHint" parent="Exits/To1F5" unique_id=653213978 instance=ExtResource("4_hint")]
@@ -348,6 +351,7 @@ transition_id = "kanto_mt_moon_b1f__to_b2f_7"
 transition_facing_direction = "right"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB2F7" unique_id=1269321610]
+position = Vector2(16, 0)
 shape = SubResource("RectangleShape2D_ladder_exit")
 
 [node name="DoorTransitionHint" parent="Exits/ToB2F7" unique_id=2136897327 instance=ExtResource("4_hint")]
