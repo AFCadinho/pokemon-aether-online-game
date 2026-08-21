@@ -32,6 +32,7 @@
 - NPC dialogue now opens promptly by preparing nearby dialogue and avoiding duplicate content requests.
 - Move, ability, nature, EXP, Happiness, held item, and Poké Ball details now use compact hover cards across their full fields in every Pokémon Summary; read-only Summaries also show IV and EV details this way.
 - Private battle rooms now explain when the battle server is recovering instead of showing a generic creation error.
+- Read-only Pokémon Summaries now fill in a missing National Dex number instead of leaving the number blank.
 - Ogerpon's correct battle sprites are now included in game downloads.
 - Training Rooms no longer blame a valid Poképaste when room timers are temporarily unavailable.
 - Wild battles now immediately show the first Pokémon that can battle when an earlier party member has fainted.

@@ -67,6 +67,25 @@ func _run() -> void:
 	_check((nodes.get("type_row") as HBoxContainer).get_child_count() == 2, "both Pokémon types render as chips")
 	_check((nodes.get("name_label") as Label).text == "Garchomp", "localized Pokémon identity renders")
 	_check((nodes.get("id_label") as Label).text == "#445", "header uses the National Dex number instead of the owned Pokémon id")
+	var missing_dex_payload := _sample_pokemon()
+	missing_dex_payload.erase("nationalDexNumber")
+	missing_dex_payload["species"] = "zeraora"
+	var missing_dex_pokemon := PokemonFactory.create_pokemon_from_backend_payload(missing_dex_payload)
+	var fallback_id_label := Label.new()
+	overlay.call("_set_readonly_summary_dex_number", fallback_id_label, missing_dex_pokemon)
+	_check(fallback_id_label.text == "#—", "missing public payload data initially shows an unknown Dex number")
+	_check(
+		overlay.call(
+			"_apply_readonly_summary_dex_number_from_species",
+			fallback_id_label,
+			missing_dex_pokemon,
+			"zeraora",
+			{"nationalDexNumber": 807}
+		),
+		"Pokédex species metadata supplies a missing National Dex number"
+	)
+	_check(fallback_id_label.text == "#807", "Zeraora renders its National Dex number instead of a database id")
+	fallback_id_label.free()
 	_check((nodes.get("gender_label") as Label).text == "♀", "gender renders beside the Pokémon name")
 	_check((nodes.get("ability_label") as Label).text != "", "ability renders on the overview")
 	_check((nodes.get("ability_stack") as VBoxContainer).tooltip_text == "", "ability uses the compact hover card instead of a native tooltip")
