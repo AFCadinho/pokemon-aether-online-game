@@ -190,7 +190,6 @@ func _check_opponent_default_name_follows_snapshot_mega_form() -> void:
 				"side": {
 					"pokemon": [{
 						"ident": "p2a: Zeraora",
-						"name": "Zeraora",
 						"species": "Zeraora",
 						"displaySpecies": "Zeraora-Mega",
 						"active": true,

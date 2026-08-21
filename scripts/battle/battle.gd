@@ -235,6 +235,7 @@ var summon_release_cry_species := ""
 var pvp_team_preview_greeting_shown := false
 var current_move_hover_rect := Rect2()
 var current_party_hover_rect := Rect2()
+var party_hover_request_token := 0
 const OPPONENT_RESPONSE_HOLD_SECONDS := 0.0
 const CAPTURE_SUCCESS_RESULT_HOLD_SECONDS := 0.40
 const BATTLE_END_RESULT_HOLD_SECONDS := 0.12
@@ -866,8 +867,12 @@ func _show_party_hover(pokemon_data: Dictionary, slot_rect: Rect2) -> void:
 		return
 
 	_hide_pokemon_hover()
+	party_hover_request_token += 1
+	var request_token := party_hover_request_token
 	current_party_hover_rect = slot_rect
-	var hover_data := _get_owned_party_hover_data(pokemon_data)
+	var hover_data := await _get_owned_party_hover_data(pokemon_data)
+	if request_token != party_hover_request_token or current_party_hover_rect != slot_rect:
+		return
 	if party_hover_card.has_method("show_for_pokemon"):
 		party_hover_card.call("show_for_pokemon", hover_data)
 	else:
@@ -875,6 +880,7 @@ func _show_party_hover(pokemon_data: Dictionary, slot_rect: Rect2) -> void:
 	_position_party_hover_card()
 
 func _hide_party_hover() -> void:
+	party_hover_request_token += 1
 	current_party_hover_rect = Rect2()
 	if party_hover_card.has_method("hide_card"):
 		party_hover_card.call("hide_card")
@@ -925,7 +931,11 @@ func _get_owned_party_hover_data(pokemon_data: Dictionary) -> Dictionary:
 	if not hover_data.has("maxHp"):
 		hover_data["maxHp"] = saved_pokemon.max_hp
 
-	_apply_temporary_form_party_hover_data(hover_data, display_data, saved_pokemon)
+	var temporary_species := _get_party_hover_temporary_display_species(display_data)
+	var form_data: Dictionary = {}
+	if temporary_species != "":
+		form_data = await _fetch_battle_species_stats(temporary_species, saved_pokemon.level)
+	_apply_temporary_form_party_hover_data(hover_data, display_data, saved_pokemon, form_data)
 	var battle_species := str(display_data.get(
 		"displaySpecies",
 		display_data.get("species", saved_pokemon.species)
@@ -970,7 +980,8 @@ func _apply_held_item_stat_hover_data(hover_data: Dictionary) -> void:
 func _apply_temporary_form_party_hover_data(
 	hover_data: Dictionary,
 	display_data: Dictionary,
-	saved_pokemon: Pokemon
+	saved_pokemon: Pokemon,
+	form_data: Dictionary = {}
 ) -> void:
 	var temporary_species := _get_party_hover_temporary_display_species(display_data)
 	if temporary_species == "":
@@ -981,6 +992,36 @@ func _apply_temporary_form_party_hover_data(
 		display_data,
 		temporary_species
 	)
+	if not form_data.is_empty():
+		var types_value: Variant = form_data.get("types", [])
+		if types_value is Array and not (types_value as Array).is_empty():
+			hover_data["types"] = (types_value as Array).duplicate(true)
+		var possible_abilities_value: Variant = form_data.get("possibleAbilities", [])
+		if possible_abilities_value is Array and not (possible_abilities_value as Array).is_empty():
+			var possible_abilities := (possible_abilities_value as Array).duplicate(true)
+			hover_data["possibleAbilities"] = possible_abilities
+			var live_ability := str(hover_data.get("ability", "")).strip_edges()
+			var live_ability_key := live_ability.to_lower().replace(" ", "").replace("-", "")
+			var live_ability_is_valid := false
+			for possible_ability_value: Variant in possible_abilities:
+				var possible_ability := str(possible_ability_value).strip_edges()
+				var possible_key := possible_ability.to_lower().replace(" ", "").replace("-", "")
+				if live_ability_key != "" and live_ability_key == possible_key:
+					hover_data["ability"] = possible_ability
+					live_ability_is_valid = true
+					break
+			if not live_ability_is_valid:
+				hover_data["ability"] = str(possible_abilities[0])
+		var form_base_stats_value: Variant = form_data.get("baseStats", {})
+		if form_base_stats_value is Dictionary and not (form_base_stats_value as Dictionary).is_empty():
+			hover_data["stats"] = _calculate_battle_stats(
+				form_base_stats_value,
+				int(hover_data.get("level", saved_pokemon.level)),
+				hover_data.get("ivs", saved_pokemon.ivs),
+				hover_data.get("evs", saved_pokemon.evs),
+				str(hover_data.get("nature", saved_pokemon.nature))
+			)
+		return
 
 	var primal_data := _get_primal_species_hover_data(temporary_species)
 	if primal_data.is_empty():
@@ -1054,6 +1095,20 @@ func _get_primal_species_hover_data(species: String) -> Dictionary:
 			}
 
 	return {}
+
+func _fetch_battle_species_stats(species: String, level: int) -> Dictionary:
+	if species.strip_edges() == "" or level <= 0:
+		return {}
+	var request_node := HTTPRequest.new()
+	add_child(request_node)
+	var stats: Dictionary = await pokemon_hover_service.get_species_stats(
+		request_node,
+		species,
+		level
+	)
+	if is_instance_valid(request_node):
+		request_node.queue_free()
+	return stats
 
 func _calculate_battle_stats(
 	base_stats_value: Variant,
@@ -2547,7 +2602,13 @@ func _refresh_damage_calc_results() -> void:
 				snapshot_error_code = _get_damage_calc_error_code(snapshot_response)
 		if bool(snapshot_response.get("success", false)):
 			damage_calc_knowledge_snapshot = _damage_calc_as_dictionary(snapshot_response.get("snapshot", {})).duplicate(true)
-			calc_panel.set_viewer_stats_by_ref(_get_damage_calc_viewer_stats_by_ref(damage_calc_knowledge_snapshot))
+			var viewer_stats_by_ref: Dictionary = await _get_damage_calc_viewer_stats_by_ref(
+				damage_calc_knowledge_snapshot
+			)
+			if request_token != damage_calc_request_token:
+				damage_calc_request_in_flight = false
+				return
+			calc_panel.set_viewer_stats_by_ref(viewer_stats_by_ref)
 			calc_panel.set_knowledge_snapshot(damage_calc_knowledge_snapshot)
 			use_safe_matchup = true
 		else:
@@ -2619,6 +2680,22 @@ func _get_damage_calc_viewer_stats_by_ref(snapshot: Dictionary) -> Dictionary:
 		stats = BATTLE_OWNED_FORM_PROJECTION.merge_stats(stats, current_data.get("stats", {}))
 		var latest_data := _get_latest_owned_request_pokemon_for_canonical_slot(slot_index + 1)
 		stats = BATTLE_OWNED_FORM_PROJECTION.merge_stats(stats, latest_data.get("stats", {}))
+		var identity := _damage_calc_as_dictionary(viewer.get("identity", {}))
+		var battle_species := ""
+		if str(identity.get("state", "")) == "known":
+			battle_species = str(identity.get("value", "")).strip_edges()
+		if _is_mega_or_primal_species(battle_species):
+			var level := int(display_data.get("level", saved_pokemon.level if saved_pokemon != null else 100))
+			var form_data := await _fetch_battle_species_stats(battle_species, level)
+			var base_stats_value: Variant = form_data.get("baseStats", {})
+			if base_stats_value is Dictionary and not (base_stats_value as Dictionary).is_empty():
+				var ivs_value: Variant = saved_pokemon.ivs if saved_pokemon != null else display_data.get("ivs", {})
+				var evs_value: Variant = saved_pokemon.evs if saved_pokemon != null else display_data.get("evs", {})
+				var nature := saved_pokemon.nature if saved_pokemon != null else str(display_data.get("nature", ""))
+				stats = BATTLE_OWNED_FORM_PROJECTION.merge_stats(
+					stats,
+					_calculate_battle_stats(base_stats_value, level, ivs_value, evs_value, nature)
+				)
 		var safe_stats := BATTLE_OWNED_FORM_PROJECTION.merge_stats({}, stats)
 		if not safe_stats.is_empty():
 			result[pokemon_ref] = safe_stats
