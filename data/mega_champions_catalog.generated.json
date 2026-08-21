@@ -49,7 +49,7 @@
       "calculator": {
         "speciesName": "Absol-Mega-Z",
         "itemName": "Absolite Z",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "absol-mega-z",
@@ -96,7 +96,7 @@
       "calculator": {
         "speciesName": "Barbaracle-Mega",
         "itemName": "Barbaracite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "barbaracle-mega",
@@ -143,7 +143,7 @@
       "calculator": {
         "speciesName": "Baxcalibur-Mega",
         "itemName": "Baxcalibrite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "baxcalibur-mega",
@@ -190,7 +190,7 @@
       "calculator": {
         "speciesName": "Chandelure-Mega",
         "itemName": "Chandelurite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "chandelure-mega",
@@ -237,7 +237,7 @@
       "calculator": {
         "speciesName": "Chesnaught-Mega",
         "itemName": "Chesnaughtite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "chesnaught-mega",
@@ -284,7 +284,7 @@
       "calculator": {
         "speciesName": "Chimecho-Mega",
         "itemName": "Chimechite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "chimecho-mega",
@@ -331,7 +331,7 @@
       "calculator": {
         "speciesName": "Clefable-Mega",
         "itemName": "Clefablite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "clefable-mega",
@@ -378,7 +378,7 @@
       "calculator": {
         "speciesName": "Crabominable-Mega",
         "itemName": "Crabominite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "crabominable-mega",
@@ -425,7 +425,7 @@
       "calculator": {
         "speciesName": "Darkrai-Mega",
         "itemName": "Darkranite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "darkrai-mega",
@@ -472,7 +472,7 @@
       "calculator": {
         "speciesName": "Delphox-Mega",
         "itemName": "Delphoxite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "delphox-mega",
@@ -519,7 +519,7 @@
       "calculator": {
         "speciesName": "Dragalge-Mega",
         "itemName": "Dragalgite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "dragalge-mega",
@@ -566,7 +566,7 @@
       "calculator": {
         "speciesName": "Dragonite-Mega",
         "itemName": "Dragoninite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "dragonite-mega",
@@ -613,7 +613,7 @@
       "calculator": {
         "speciesName": "Drampa-Mega",
         "itemName": "Drampanite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "drampa-mega",
@@ -660,7 +660,7 @@
       "calculator": {
         "speciesName": "Eelektross-Mega",
         "itemName": "Eelektrossite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "eelektross-mega",
@@ -707,7 +707,7 @@
       "calculator": {
         "speciesName": "Emboar-Mega",
         "itemName": "Emboarite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "emboar-mega",
@@ -754,7 +754,7 @@
       "calculator": {
         "speciesName": "Excadrill-Mega",
         "itemName": "Excadrite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "excadrill-mega",
@@ -801,7 +801,7 @@
       "calculator": {
         "speciesName": "Falinks-Mega",
         "itemName": "Falinksite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "falinks-mega",
@@ -848,7 +848,7 @@
       "calculator": {
         "speciesName": "Feraligatr-Mega",
         "itemName": "Feraligite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "feraligatr-mega",
@@ -895,7 +895,7 @@
       "calculator": {
         "speciesName": "Floette-Mega",
         "itemName": "Floettite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "floette-mega",
@@ -942,7 +942,7 @@
       "calculator": {
         "speciesName": "Froslass-Mega",
         "itemName": "Froslassite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "froslass-mega",
@@ -989,7 +989,7 @@
       "calculator": {
         "speciesName": "Garchomp-Mega-Z",
         "itemName": "Garchompite Z",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "garchomp-mega-z",
@@ -1036,7 +1036,7 @@
       "calculator": {
         "speciesName": "Glimmora-Mega",
         "itemName": "Glimmoranite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "glimmora-mega",
@@ -1083,7 +1083,7 @@
       "calculator": {
         "speciesName": "Golisopod-Mega",
         "itemName": "Golisopite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "golisopod-mega",
@@ -1130,7 +1130,7 @@
       "calculator": {
         "speciesName": "Golurk-Mega",
         "itemName": "Golurkite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "golurk-mega",
@@ -1177,7 +1177,7 @@
       "calculator": {
         "speciesName": "Greninja-Mega",
         "itemName": "Greninjite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "greninja-mega",
@@ -1224,7 +1224,7 @@
       "calculator": {
         "speciesName": "Hawlucha-Mega",
         "itemName": "Hawluchanite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "hawlucha-mega",
@@ -1271,7 +1271,7 @@
       "calculator": {
         "speciesName": "Heatran-Mega",
         "itemName": "Heatranite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "heatran-mega",
@@ -1318,7 +1318,7 @@
       "calculator": {
         "speciesName": "Lucario-Mega-Z",
         "itemName": "Lucarionite Z",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "lucario-mega-z",
@@ -1365,7 +1365,7 @@
       "calculator": {
         "speciesName": "Magearna-Mega",
         "itemName": "Magearnite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "magearna-mega",
@@ -1412,7 +1412,7 @@
       "calculator": {
         "speciesName": "Magearna-Original-Mega",
         "itemName": "Magearnite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "magearna-original-mega",
@@ -1459,7 +1459,7 @@
       "calculator": {
         "speciesName": "Malamar-Mega",
         "itemName": "Malamarite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "malamar-mega",
@@ -1506,7 +1506,7 @@
       "calculator": {
         "speciesName": "Meganium-Mega",
         "itemName": "Meganiumite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "meganium-mega",
@@ -1553,7 +1553,7 @@
       "calculator": {
         "speciesName": "Meowstic-F-Mega",
         "itemName": "Meowsticite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "meowstic-f-mega",
@@ -1600,7 +1600,7 @@
       "calculator": {
         "speciesName": "Meowstic-M-Mega",
         "itemName": "Meowsticite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "meowstic-m-mega",
@@ -1647,7 +1647,7 @@
       "calculator": {
         "speciesName": "Pyroar-Mega",
         "itemName": "Pyroarite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "pyroar-mega",
@@ -1694,7 +1694,7 @@
       "calculator": {
         "speciesName": "Raichu-Mega-X",
         "itemName": "Raichunite X",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "raichu-mega-x",
@@ -1741,7 +1741,7 @@
       "calculator": {
         "speciesName": "Raichu-Mega-Y",
         "itemName": "Raichunite Y",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "raichu-mega-y",
@@ -1788,7 +1788,7 @@
       "calculator": {
         "speciesName": "Scolipede-Mega",
         "itemName": "Scolipite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "scolipede-mega",
@@ -1835,7 +1835,7 @@
       "calculator": {
         "speciesName": "Scovillain-Mega",
         "itemName": "Scovillainite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "scovillain-mega",
@@ -1882,7 +1882,7 @@
       "calculator": {
         "speciesName": "Scrafty-Mega",
         "itemName": "Scraftinite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "scrafty-mega",
@@ -1929,7 +1929,7 @@
       "calculator": {
         "speciesName": "Skarmory-Mega",
         "itemName": "Skarmorite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "skarmory-mega",
@@ -1976,7 +1976,7 @@
       "calculator": {
         "speciesName": "Staraptor-Mega",
         "itemName": "Staraptite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "staraptor-mega",
@@ -2023,7 +2023,7 @@
       "calculator": {
         "speciesName": "Starmie-Mega",
         "itemName": "Starminite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "starmie-mega",
@@ -2070,7 +2070,7 @@
       "calculator": {
         "speciesName": "Tatsugiri-Curly-Mega",
         "itemName": "Tatsugirinite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "tatsugiri-curly-mega",
@@ -2117,7 +2117,7 @@
       "calculator": {
         "speciesName": "Tatsugiri-Droopy-Mega",
         "itemName": "Tatsugirinite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "tatsugiri-droopy-mega",
@@ -2164,7 +2164,7 @@
       "calculator": {
         "speciesName": "Tatsugiri-Stretchy-Mega",
         "itemName": "Tatsugirinite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "tatsugiri-stretchy-mega",
@@ -2211,7 +2211,7 @@
       "calculator": {
         "speciesName": "Victreebel-Mega",
         "itemName": "Victreebelite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "victreebel-mega",
@@ -2258,7 +2258,7 @@
       "calculator": {
         "speciesName": "Zeraora-Mega",
         "itemName": "Zeraorite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "zeraora-mega",
@@ -2310,7 +2310,7 @@
       "calculator": {
         "speciesName": "Zygarde-Mega",
         "itemName": "Zygardite",
-        "supportStatus": "pending"
+        "supportStatus": "supported"
       },
       "assets": {
         "spriteKey": "zygarde-mega",
@@ -2329,5 +2329,5 @@
       }
     }
   ],
-  "catalogRevision": "sha256:03634104345a483eee412513c5187a01e1dd0101a5d24b90f024d6a64c1db60f"
+  "catalogRevision": "sha256:67e85e71c28a89a3eb60dff35a073821cb51df48ca292513310ccfe9969b2986"
 }

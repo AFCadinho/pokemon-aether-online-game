@@ -21,7 +21,8 @@ func _check_manifest() -> void:
 	_check_equal(manifest.get("pokemonShowdownVersion"), "0.11.11", "Showdown version")
 	_check_equal(manifest.get("formCount"), 49, "form count")
 	_check_equal(manifest.get("activationItemCount"), 45, "activation item count")
-	_check_equal(manifest.get("calculatorPendingCount"), 49, "calculator pending count")
+	_check_equal(manifest.get("calculatorPendingCount"), 0, "calculator pending count")
+	_check_equal(manifest.get("calculatorSupportedCount"), 49, "calculator supported count")
 	_check_equal(manifest.get("publicAvailability"), "disabled", "public availability")
 	_check_equal(
 		(manifest.get("readinessCounts", {}) as Dictionary).get("engine_only"),
@@ -36,6 +37,11 @@ func _check_round_trips() -> void:
 	for entry: Dictionary in CatalogScript.all_entries():
 		var entry_id := str(entry.get("catalogEntryId", ""))
 		_check_equal(entry.get("readiness"), "engine_only", "%s dormant" % entry_id)
+		_check_equal(
+			(entry.get("calculator", {}) as Dictionary).get("supportStatus"),
+			"supported",
+			"%s calculator support" % entry_id
+		)
 		_check_equal(
 			CatalogScript.get_entry_for_mega_species(
 				str(entry.get("showdownSpeciesName", ""))

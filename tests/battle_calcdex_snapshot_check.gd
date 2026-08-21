@@ -15,6 +15,17 @@ func _init() -> void:
 	}
 	var normalized: Dictionary = CalcdexSnapshot.normalize_response(response, revision)
 	_check(bool(normalized.get("success", false)), "accepts the frozen provenance snapshot")
+	var mega_format_response: Dictionary = response.duplicate(true)
+	mega_format_response["snapshot"]["format"] = {
+		"formatKey": "pokeaether-mega-z-test",
+		"engineFormatId": "pokeaether-mega-z-test-v1",
+		"generation": 9,
+		"gameType": "singles",
+	}
+	_check(
+		bool(CalcdexSnapshot.normalize_response(mega_format_response, revision).get("success", false)),
+		"accepts the exact developer Mega + Z calculator format"
+	)
 	var wire_response: Dictionary = JSON.parse_string(JSON.stringify(response))
 	wire_response["status"] = 200.0
 	var wire_revision: Dictionary = JSON.parse_string(JSON.stringify(revision))
@@ -173,9 +184,9 @@ func _revision() -> Dictionary:
 
 func _mechanics_manifest() -> Dictionary:
 	return {
-		"contractRevision": "calc0-2026-08-08",
-		"damageCalcVersion": "0.10.0",
-		"showdownVersion": "0.11.10",
+		"contractRevision": "calc0.1-2026-08-21",
+		"damageCalcVersion": "0.11.0+upstream.636e5b9.pao2",
+		"showdownVersion": "0.11.11",
 		"formatDataFingerprint": CalcdexSnapshot.FORMAT_DATA_FINGERPRINT,
 	}
 

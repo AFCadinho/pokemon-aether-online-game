@@ -35,6 +35,7 @@ static func catalog_manifest() -> Dictionary:
 	for state: Variant in _catalog.get("readinessStates", []):
 		readiness_counts[str(state)] = 0
 	var calculator_pending_count := 0
+	var calculator_supported_count := 0
 	for entry: Dictionary in all_entries():
 		var activation: Dictionary = entry.get("activation", {})
 		item_ids[str(activation.get("showdownItemId", ""))] = true
@@ -43,6 +44,8 @@ static func catalog_manifest() -> Dictionary:
 		var calculator: Dictionary = entry.get("calculator", {})
 		if str(calculator.get("supportStatus", "")) == "pending":
 			calculator_pending_count += 1
+		elif str(calculator.get("supportStatus", "")) == "supported":
+			calculator_supported_count += 1
 	return {
 		"success": true,
 		"catalogId": str(_catalog.get("catalogId", "")),
@@ -54,6 +57,7 @@ static func catalog_manifest() -> Dictionary:
 		"formCount": all_entries().size(),
 		"activationItemCount": item_ids.size(),
 		"calculatorPendingCount": calculator_pending_count,
+		"calculatorSupportedCount": calculator_supported_count,
 		"readinessCounts": readiness_counts,
 		"publicAvailability": "disabled",
 	}

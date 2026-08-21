@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "catalogId": "mega-champions-v1",
-  "catalogRevision": "sha256:03634104345a483eee412513c5187a01e1dd0101a5d24b90f024d6a64c1db60f",
+  "catalogRevision": "sha256:67e85e71c28a89a3eb60dff35a073821cb51df48ca292513310ccfe9969b2986",
   "provenance": {
     "itemIcons": "pre-existing tracked PokeAether item icon corpus",
     "pokemonSprites": "Generation 9 Pack 3.3.6 plus pre-existing PokeAether launcher asset packs",
@@ -458,5 +458,5 @@
       "publicAssetReady": false
     }
   ],
-  "assetManifestRevision": "sha256:f62306f37bffa9c929dc6800db38a906c22bea89ae753aafd258c820cd33ec62"
+  "assetManifestRevision": "sha256:98350442bcfb5c8f911b6e1cef1ebae27cbe369d9cea5ef733d57f63e48e3eea"
 }
