@@ -6,6 +6,9 @@
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="3_45771"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="4_hint"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="5_trainer"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/rocket_grunt_m_frames.tres" id="6_rocket"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/scientist_m_frames.tres" id="7_scientist"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0vl8t"]
 texture = ExtResource("2_4qmrm")
@@ -216,6 +219,67 @@ tile_set = SubResource("TileSet_m46ck")
 z_index = 100
 tile_map_data = PackedByteArray("AAAXACUAAAABAAEAAAAXACYAAAABAAEAAAAYACUAAAABAAEAAAAYACYAAAABAAEAAAA+ACcAAAABAAEAAAA+ACgAAAABAAEAAAA/ACcAAAABAAEAAAA/ACgAAAABAAEAAAA=")
 tile_set = SubResource("TileSet_m46ck")
+
+[node name="Entities" type="Node2D" parent="."]
+z_index = 5
+
+[node name="NPCs" type="Node2D" parent="Entities"]
+
+[node name="RocketGrunt1" parent="Entities/NPCs" instance=ExtResource("5_trainer")]
+position = Vector2(656, 1008)
+trainer_id = "kanto_mt_moon_b2f_rocket_grunt_1"
+sight_range_tiles = 2
+npc_id = "kanto_mt_moon_b2f_rocket_grunt_1"
+npc_definition_id = "trainer_class_rocket_grunt"
+display_name = "Team Rocket Grunt"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("6_rocket")
+
+[node name="RocketGrunt2" parent="Entities/NPCs" instance=ExtResource("5_trainer")]
+position = Vector2(1360, 1776)
+trainer_id = "kanto_mt_moon_b2f_rocket_grunt_2"
+sight_range_tiles = 4
+npc_id = "kanto_mt_moon_b2f_rocket_grunt_2"
+npc_definition_id = "trainer_class_rocket_grunt"
+display_name = "Team Rocket Grunt"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("6_rocket")
+
+[node name="RocketGrunt3" parent="Entities/NPCs" instance=ExtResource("5_trainer")]
+position = Vector2(1872, 528)
+trainer_id = "kanto_mt_moon_b2f_rocket_grunt_3"
+sight_range_tiles = 4
+npc_id = "kanto_mt_moon_b2f_rocket_grunt_3"
+npc_definition_id = "trainer_class_rocket_grunt"
+display_name = "Team Rocket Grunt"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("6_rocket")
+
+[node name="RocketGrunt4" parent="Entities/NPCs" instance=ExtResource("5_trainer")]
+position = Vector2(2416, 1264)
+trainer_id = "kanto_mt_moon_b2f_rocket_grunt_4"
+sight_range_tiles = 3
+npc_id = "kanto_mt_moon_b2f_rocket_grunt_4"
+npc_definition_id = "trainer_class_rocket_grunt"
+display_name = "Team Rocket Grunt"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("6_rocket")
+
+[node name="SuperNerdMiguel" parent="Entities/NPCs" instance=ExtResource("5_trainer")]
+position = Vector2(688, 336)
+trainer_id = "kanto_mt_moon_b2f_super_nerd_miguel"
+sight_range_tiles = 1
+npc_id = "kanto_mt_moon_b2f_super_nerd_miguel"
+npc_definition_id = "trainer_class_scientist_m"
+display_name = "Super Nerd Miguel"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("7_scientist")
+
+[node name="Players" type="Node2D" parent="Entities"]
+
+[node name="Pokemon" type="Node2D" parent="Entities"]
+
+[node name="Interactables" type="Node2D" parent="Entities"]
 
 [node name="Spawns" type="Node2D" parent="." unique_id=158532784]
 
