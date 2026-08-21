@@ -123,6 +123,33 @@ func _init() -> void:
 	_check(hover_data.get("stats", {}).get("atk") == 413, "party hover uses live Mega stats")
 	_check(hover_data.get("ability") == "Volt Absorb", "party hover uses the live battle ability")
 
+	var latest_response := {
+		"requests": {
+			"p1": {
+				"side": {
+					"pokemon": [{
+						"canonicalPartySlot": 1,
+						"species": "Dragonite",
+						"displaySpecies": "Dragonite-Mega",
+						"ability": "Multiscale",
+						"stats": {"atk": 381, "def": 266, "spa": 293, "spd": 286, "spe": 299},
+					}],
+				},
+			},
+		},
+	}
+	var latest_dragonite := OwnedFormProjection.find_request_pokemon(latest_response, "p1", 1)
+	var stale_display := {
+		"species": "Dragonite",
+		"displaySpecies": "Dragonite-Mega",
+		"ability": "Inner Focus",
+		"stats": {"atk": 403, "def": 226, "spa": 212, "spd": 237, "spe": 259},
+	}
+	OwnedFormProjection.apply_live_request_to_display(stale_display, latest_dragonite)
+	_check(stale_display.get("ability") == "Multiscale", "latest owned request replaces the base ability")
+	_check(stale_display.get("stats", {}).get("atk") == 381, "latest owned request replaces base-form stats")
+	_check(stale_display.get("displaySpecies") == "Dragonite-Mega", "latest owned request keeps the Mega label")
+
 	print("PASS battle_calcdex_snapshot_check")
 	quit(0)
 

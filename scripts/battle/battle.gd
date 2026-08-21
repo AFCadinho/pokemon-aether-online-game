@@ -889,6 +889,11 @@ func _position_party_hover_card() -> void:
 
 func _get_owned_party_hover_data(pokemon_data: Dictionary) -> Dictionary:
 	var display_data: Dictionary = _get_display_pokemon_data("p1", pokemon_data).duplicate(true)
+	var canonical_slot := _get_pokemon_data_canonical_party_slot(display_data)
+	if canonical_slot <= 0:
+		canonical_slot = _get_pokemon_data_canonical_party_slot(pokemon_data)
+	var live_data := _get_latest_owned_request_pokemon_for_canonical_slot(canonical_slot)
+	BATTLE_OWNED_FORM_PROJECTION.apply_live_request_to_display(display_data, live_data)
 	var saved_pokemon := _get_player_save_pokemon_for_hover(display_data)
 	if saved_pokemon == null:
 		_apply_held_item_stat_hover_data(display_data)
@@ -2612,6 +2617,8 @@ func _get_damage_calc_viewer_stats_by_ref(snapshot: Dictionary) -> Dictionary:
 		stats = BATTLE_OWNED_FORM_PROJECTION.merge_stats(stats, display_data.get("stats", {}))
 		var current_data := _get_team_pokemon_data_for_canonical_party_slot("p1", slot_index + 1)
 		stats = BATTLE_OWNED_FORM_PROJECTION.merge_stats(stats, current_data.get("stats", {}))
+		var latest_data := _get_latest_owned_request_pokemon_for_canonical_slot(slot_index + 1)
+		stats = BATTLE_OWNED_FORM_PROJECTION.merge_stats(stats, latest_data.get("stats", {}))
 		var safe_stats := BATTLE_OWNED_FORM_PROJECTION.merge_stats({}, stats)
 		if not safe_stats.is_empty():
 			result[pokemon_ref] = safe_stats
@@ -15095,6 +15102,22 @@ func _get_team_pokemon_data_for_canonical_party_slot(player_id: String, canonica
 			return fallback_value as Dictionary
 
 	return {}
+
+func _get_latest_owned_request_pokemon_for_canonical_slot(canonical_slot: int) -> Dictionary:
+	var current_data := _get_team_pokemon_data_for_canonical_party_slot("p1", canonical_slot).duplicate(true)
+	if not _is_pvp_battle() or pvp_response_order == null:
+		return current_data
+
+	var latest_data := BATTLE_OWNED_FORM_PROJECTION.find_request_pokemon(
+		pvp_response_order.latest_response,
+		"p1",
+		canonical_slot
+	)
+	if latest_data.is_empty():
+		return current_data
+
+	current_data.merge(latest_data, true)
+	return current_data
 
 func _capture_pvp_local_canonical_roster(display_response: Dictionary = {}) -> void:
 	pvp_local_canonical_roster.clear()
