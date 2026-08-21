@@ -29,6 +29,7 @@
 
 **Fixed**
 
+- Updated the Mt. Moon B2F scenery to match the latest map artwork.
 - Players now face away from the entrance after using a Mt. Moon ladder or tunnel.
 - NPC dialogue now opens promptly by preparing nearby dialogue and avoiding duplicate content requests.
 - Move, ability, nature, EXP, Happiness, held item, and Poké Ball details now use compact hover cards across their full fields in every Pokémon Summary; read-only Summaries also show IV and EV details this way.
