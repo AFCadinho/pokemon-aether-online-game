@@ -32,18 +32,24 @@ const KEY_ITEMS: Array[Dictionary] = [
 	},
 ]
 const STORY_CHECKPOINTS: Array[Dictionary] = [
-	{"id": "journey_start", "label_key": "ui.staff.story_checkpoint.journey_start"},
-	{"id": "choose_starter", "label_key": "ui.staff.story_checkpoint.choose_starter"},
-	{"id": "oaks_parcel", "label_key": "ui.staff.story_checkpoint.oaks_parcel"},
-	{"id": "route_22_gary", "label_key": "ui.staff.story_checkpoint.route_22_gary"},
-	{"id": "trainer_school", "label_key": "ui.staff.story_checkpoint.trainer_school"},
-	{"id": "after_dadinho", "label_key": "ui.staff.story_checkpoint.after_dadinho"},
-	{"id": "pewter_gym", "label_key": "ui.staff.story_checkpoint.pewter_gym"},
-	{"id": "mt_moon_warning", "label_key": "ui.staff.story_checkpoint.mt_moon_warning"},
-	{"id": "mt_moon_grunts", "label_key": "ui.staff.story_checkpoint.mt_moon_grunts"},
-	{"id": "mt_moon_miguel", "label_key": "ui.staff.story_checkpoint.mt_moon_miguel"},
-	{"id": "mt_moon_fossil", "label_key": "ui.staff.story_checkpoint.mt_moon_fossil"},
-	{"id": "mt_moon_rescue", "label_key": "ui.staff.story_checkpoint.mt_moon_rescue"},
+	{"id": "journey_start", "chapter_id": "pallet", "label_key": "ui.staff.story_checkpoint.journey_start"},
+	{"id": "choose_starter", "chapter_id": "pallet", "label_key": "ui.staff.story_checkpoint.choose_starter"},
+	{"id": "oaks_parcel", "chapter_id": "pallet", "label_key": "ui.staff.story_checkpoint.oaks_parcel"},
+	{"id": "route_22_gary", "chapter_id": "viridian", "label_key": "ui.staff.story_checkpoint.route_22_gary"},
+	{"id": "trainer_school", "chapter_id": "viridian", "label_key": "ui.staff.story_checkpoint.trainer_school"},
+	{"id": "after_dadinho", "chapter_id": "viridian", "label_key": "ui.staff.story_checkpoint.after_dadinho"},
+	{"id": "pewter_gym", "chapter_id": "pewter", "label_key": "ui.staff.story_checkpoint.pewter_gym"},
+	{"id": "mt_moon_warning", "chapter_id": "mt_moon", "label_key": "ui.staff.story_checkpoint.mt_moon_warning"},
+	{"id": "mt_moon_grunts", "chapter_id": "mt_moon", "label_key": "ui.staff.story_checkpoint.mt_moon_grunts"},
+	{"id": "mt_moon_miguel", "chapter_id": "mt_moon", "label_key": "ui.staff.story_checkpoint.mt_moon_miguel"},
+	{"id": "mt_moon_fossil", "chapter_id": "mt_moon", "label_key": "ui.staff.story_checkpoint.mt_moon_fossil"},
+	{"id": "mt_moon_rescue", "chapter_id": "mt_moon", "label_key": "ui.staff.story_checkpoint.mt_moon_rescue"},
+]
+const STORY_CHAPTERS: Array[Dictionary] = [
+	{"id": "pallet", "label_key": "ui.staff.story_chapter.pallet"},
+	{"id": "viridian", "label_key": "ui.staff.story_chapter.viridian"},
+	{"id": "pewter", "label_key": "ui.staff.story_chapter.pewter"},
+	{"id": "mt_moon", "label_key": "ui.staff.story_chapter.mt_moon"},
 ]
 
 const UI_BG := Color("#050b14fa")
@@ -64,6 +70,7 @@ var badge_tab_button: Button
 var key_item_tab_button: Button
 var story_tab_button: Button
 var story_content: VBoxContainer
+var story_chapter_select: OptionButton
 var story_checkpoint_select: OptionButton
 var story_status_label: Label
 var badge_buttons: Dictionary = {}
@@ -423,6 +430,14 @@ func _build_story_ui(layout: VBoxContainer) -> void:
 	var form := VBoxContainer.new()
 	form.add_theme_constant_override("separation", 8)
 	story_content.add_child(form)
+	form.add_child(_localized_label("ui.staff.story_chapter.select", 13, UI_TEXT))
+	story_chapter_select = OptionButton.new()
+	story_chapter_select.name = "StoryChapterSelect"
+	story_chapter_select.custom_minimum_size = Vector2(0, 46)
+	story_chapter_select.focus_mode = Control.FOCUS_NONE
+	_apply_story_checkpoint_dropdown_style(story_chapter_select)
+	story_chapter_select.item_selected.connect(_on_story_chapter_selected)
+	form.add_child(story_chapter_select)
 	form.add_child(_localized_label("ui.staff.story_checkpoint.select", 13, UI_TEXT))
 	story_checkpoint_select = OptionButton.new()
 	story_checkpoint_select.name = "StoryCheckpointSelect"
@@ -430,6 +445,7 @@ func _build_story_ui(layout: VBoxContainer) -> void:
 	story_checkpoint_select.focus_mode = Control.FOCUS_NONE
 	_apply_story_checkpoint_dropdown_style(story_checkpoint_select)
 	form.add_child(story_checkpoint_select)
+	_refresh_story_chapter_options()
 	_refresh_story_checkpoint_options()
 
 	var spacer := Control.new()
@@ -507,20 +523,52 @@ func _show_tab(tab_id: String) -> void:
 		_apply_button_style(story_tab_button, active_tab == "story")
 
 
+func _refresh_story_chapter_options() -> void:
+	if story_chapter_select == null:
+		return
+	var selected_id := _selected_story_chapter_id()
+	story_chapter_select.clear()
+	for chapter: Dictionary in STORY_CHAPTERS:
+		story_chapter_select.add_item(_t(str(chapter.get("label_key", ""))))
+		var index := story_chapter_select.item_count - 1
+		var chapter_id := str(chapter.get("id", ""))
+		story_chapter_select.set_item_metadata(index, chapter_id)
+		if chapter_id == selected_id:
+			story_chapter_select.select(index)
+	if story_chapter_select.selected < 0 and story_chapter_select.item_count > 0:
+		story_chapter_select.select(0)
+
+
 func _refresh_story_checkpoint_options() -> void:
 	if story_checkpoint_select == null:
 		return
+	var chapter_id := _selected_story_chapter_id()
 	var selected_id := ""
 	if story_checkpoint_select.selected >= 0:
 		selected_id = str(story_checkpoint_select.get_item_metadata(story_checkpoint_select.selected))
 	story_checkpoint_select.clear()
 	for checkpoint: Dictionary in STORY_CHECKPOINTS:
+		if str(checkpoint.get("chapter_id", "")) != chapter_id:
+			continue
 		story_checkpoint_select.add_item(_t(str(checkpoint.get("label_key", ""))))
 		var index := story_checkpoint_select.item_count - 1
 		var checkpoint_id := str(checkpoint.get("id", ""))
 		story_checkpoint_select.set_item_metadata(index, checkpoint_id)
 		if checkpoint_id == selected_id:
 			story_checkpoint_select.select(index)
+	if story_checkpoint_select.selected < 0 and story_checkpoint_select.item_count > 0:
+		story_checkpoint_select.select(0)
+
+
+func _selected_story_chapter_id() -> String:
+	if story_chapter_select == null or story_chapter_select.selected < 0:
+		return ""
+	return str(story_chapter_select.get_item_metadata(story_chapter_select.selected))
+
+
+func _on_story_chapter_selected(_index: int) -> void:
+	_refresh_story_checkpoint_options()
+	_set_story_status("", false)
 
 
 func _apply_story_checkpoint() -> void:
@@ -539,6 +587,11 @@ func _apply_story_checkpoint() -> void:
 		_set_story_status(str(result.get("error", _t("ui.staff.story_checkpoint.failed"))), true)
 		return
 	_set_story_status(_t("ui.staff.story_checkpoint.applied"), false)
+	var badge_service := get_node_or_null("/root/BadgeProgressionService")
+	if badge_service != null and badge_service.has_method("load_gym_badges"):
+		var badge_result: Dictionary = await badge_service.call("load_gym_badges")
+		if bool(badge_result.get("success", false)):
+			set_badge_state(badge_result)
 	_load_key_items.call_deferred()
 
 
@@ -751,6 +804,7 @@ func _on_locale_changed(_locale: String) -> void:
 		localization_manager.call("localize_tree", self)
 	_render_badges()
 	_render_key_items()
+	_refresh_story_chapter_options()
 	_refresh_story_checkpoint_options()
 
 
