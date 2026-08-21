@@ -61,6 +61,46 @@ FORM_ASSET_MAPPINGS: tuple[FormAssetMapping, ...] = (
     FormAssetMapping("zygarde-mega", "Zygarde-Mega", "ZYGARDE", 4),
 )
 
+# These forms already have exact normal HOME artwork and complete animated
+# battle sprite sets. Only their direct shiny HOME icon was missing, which made
+# shiny party and Pokedex renders silently fall back to the normal colors.
+SHINY_HOME_BACKFILL_MAPPINGS: tuple[FormAssetMapping, ...] = (
+    FormAssetMapping("barbaracle-mega", "Barbaracle-Mega", "BARBARACLE", 1),
+    FormAssetMapping("baxcalibur-mega", "Baxcalibur-Mega", "BAXCALIBUR", 1),
+    FormAssetMapping("chandelure-mega", "Chandelure-Mega", "CHANDELURE", 1),
+    FormAssetMapping("chesnaught-mega", "Chesnaught-Mega", "CHESNAUGHT", 1),
+    FormAssetMapping("chimecho-mega", "Chimecho-Mega", "CHIMECHO", 1),
+    FormAssetMapping("clefable-mega", "Clefable-Mega", "CLEFABLE", 1),
+    FormAssetMapping("crabominable-mega", "Crabominable-Mega", "CRABOMINABLE", 1),
+    FormAssetMapping("darkrai-mega", "Darkrai-Mega", "DARKRAI", 1),
+    FormAssetMapping("delphox-mega", "Delphox-Mega", "DELPHOX", 1),
+    FormAssetMapping("dragalge-mega", "Dragalge-Mega", "DRAGALGE", 1),
+    FormAssetMapping("dragonite-mega", "Dragonite-Mega", "DRAGONITE", 1),
+    FormAssetMapping("drampa-mega", "Drampa-Mega", "DRAMPA", 1),
+    FormAssetMapping("eelektross-mega", "Eelektross-Mega", "EELEKTROSS", 1),
+    FormAssetMapping("emboar-mega", "Emboar-Mega", "EMBOAR", 1),
+    FormAssetMapping("excadrill-mega", "Excadrill-Mega", "EXCADRILL", 1),
+    FormAssetMapping("falinks-mega", "Falinks-Mega", "FALINKS", 1),
+    FormAssetMapping("feraligatr-mega", "Feraligatr-Mega", "FERALIGATR", 1),
+    FormAssetMapping("froslass-mega", "Froslass-Mega", "FROSLASS", 1),
+    FormAssetMapping("glimmora-mega", "Glimmora-Mega", "GLIMMORA", 1),
+    FormAssetMapping("golisopod-mega", "Golisopod-Mega", "GOLISOPOD", 1),
+    FormAssetMapping("golurk-mega", "Golurk-Mega", "GOLURK", 1),
+    FormAssetMapping("hawlucha-mega", "Hawlucha-Mega", "HAWLUCHA", 1),
+    FormAssetMapping("heatran-mega", "Heatran-Mega", "HEATRAN", 1),
+    FormAssetMapping("malamar-mega", "Malamar-Mega", "MALAMAR", 1),
+    FormAssetMapping("meganium-mega", "Meganium-Mega", "MEGANIUM", 1),
+    FormAssetMapping("pyroar-mega", "Pyroar-Mega", "PYROAR", 1),
+    FormAssetMapping("scolipede-mega", "Scolipede-Mega", "SCOLIPEDE", 1),
+    FormAssetMapping("scovillain-mega", "Scovillain-Mega", "SCOVILLAIN", 1),
+    FormAssetMapping("scrafty-mega", "Scrafty-Mega", "SCRAFTY", 1),
+    FormAssetMapping("skarmory-mega", "Skarmory-Mega", "SKARMORY", 1),
+    FormAssetMapping("staraptor-mega", "Staraptor-Mega", "STARAPTOR", 1),
+    FormAssetMapping("starmie-mega", "Starmie-Mega", "STARMIE", 1),
+    FormAssetMapping("victreebel-mega", "Victreebel-Mega", "VICTREEBEL", 1),
+    FormAssetMapping("zeraora-mega", "Zeraora-Mega", "ZERAORA", 1),
+)
+
 BATTLE_ASSETS: tuple[tuple[str, str], ...] = (
     ("Front", "front"),
     ("Back", "back"),
@@ -160,6 +200,7 @@ def expected_outputs(
     pokemon_root = project_root / "assets" / "sprites" / "pokemon"
     outputs: dict[Path, bytes] = {}
     manifest_forms: list[dict[str, Any]] = []
+    shiny_home_backfills: list[dict[str, Any]] = []
 
     for mapping in FORM_ASSET_MAPPINGS:
         source_assets: dict[str, Any] = {}
@@ -224,6 +265,41 @@ def expected_outputs(
             }
         )
 
+    for mapping in SHINY_HOME_BACKFILL_MAPPINGS:
+        source_folder = "Icons shiny"
+        source_path = graphics_root / source_folder / f"{mapping.source_stem}.png"
+        source_image = load_rgba(source_path)
+        image = icon_frame(source_image, source_path)
+        logical_source = (
+            f"gen9_asset_pack/Graphics/Pokemon/{source_folder}/"
+            f"{mapping.source_stem}.png"
+        )
+        output_path = (
+            pokemon_root
+            / "pokemon_home_shiny"
+            / f"{mapping.showdown_species_name}.png"
+        )
+        outputs[output_path] = png_bytes(image)
+        shiny_home_backfills.append(
+            {
+                "catalogEntryId": mapping.catalog_entry_id,
+                "showdownSpeciesName": mapping.showdown_species_name,
+                "sourcePokemonId": mapping.source_pokemon_id,
+                "sourceFormIndex": mapping.source_form_index,
+                "sourceStem": mapping.source_stem,
+                "sourceAsset": {
+                    "path": logical_source,
+                    "sha256": sha256_file(source_path),
+                    "sourceWidth": source_image.width,
+                    "sourceHeight": source_image.height,
+                    "frameWidth": image.width,
+                    "frameHeight": image.height,
+                    "selectedFrame": 0,
+                },
+                "output": output_path.relative_to(project_root).as_posix(),
+            }
+        )
+
     without_revision = {
         "schemaVersion": 1,
         "source": {
@@ -244,6 +320,8 @@ def expected_outputs(
         },
         "mappingCount": len(FORM_ASSET_MAPPINGS),
         "forms": manifest_forms,
+        "shinyHomeBackfillCount": len(SHINY_HOME_BACKFILL_MAPPINGS),
+        "shinyHomeBackfills": shiny_home_backfills,
     }
     manifest = {
         **without_revision,
@@ -285,14 +363,16 @@ def main() -> None:
     if args.check:
         check_outputs(outputs)
         print(
-            f"VERIFIED {manifest['mappingCount']} Mega Champions sprite mappings, "
+            f"VERIFIED {manifest['mappingCount']} full Mega Champions sprite mappings "
+            f"and {manifest['shinyHomeBackfillCount']} shiny HOME backfills, "
             f"revision={manifest['importManifestRevision']}"
         )
         return
 
     write_outputs(outputs)
     print(
-        f"IMPORTED {manifest['mappingCount']} Mega Champions sprite mappings, "
+        f"IMPORTED {manifest['mappingCount']} full Mega Champions sprite mappings "
+        f"and {manifest['shinyHomeBackfillCount']} shiny HOME backfills, "
         f"revision={manifest['importManifestRevision']}"
     )
 

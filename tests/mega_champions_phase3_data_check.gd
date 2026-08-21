@@ -61,6 +61,7 @@ func _check_sprite_import_manifest() -> bool:
 	var manifest := _read_dictionary(SPRITE_IMPORT_MANIFEST_PATH)
 	_check(int(manifest.get("schemaVersion", 0)) == 1, "sprite import manifest schema loads")
 	_check(int(manifest.get("mappingCount", 0)) == 15, "sprite import manifest covers twelve missing and three corrected mappings")
+	_check(int(manifest.get("shinyHomeBackfillCount", 0)) == 34, "sprite import manifest covers all 34 missing shiny HOME sprites")
 	var source: Dictionary = manifest.get("source", {})
 	_check(source.get("name") == "Generation 9 Pack", "sprite import source name is pinned")
 	_check(source.get("version") == "3.3.6", "sprite import source version is pinned")
@@ -73,7 +74,7 @@ func _check_sprite_import_manifest() -> bool:
 			continue
 		var form := form_value as Dictionary
 		var entry_id := str(form.get("catalogEntryId", ""))
-		mapped_ids[entry_id] = true
+		mapped_ids[entry_id] = str(form.get("sourceStem", ""))
 		for output_value: Variant in form.get("outputs", []):
 			var relative_output_path := str(output_value)
 			_check(
@@ -89,8 +90,30 @@ func _check_sprite_import_manifest() -> bool:
 	_check(mapped_ids.size() == 15, "sprite import mappings are unique")
 	_check(output_paths.size() == 150, "sprite import manifest lists all 150 external outputs")
 	_check(mapped_ids.has("floette-mega"), "Floette's previous wrong form-index mapping is corrected")
+	_check(mapped_ids.get("greninja-mega") == "GRENINJA_3", "Greninja-Mega resolves through its exact GRENINJA_3 import")
 	_check(mapped_ids.has("magearna-mega"), "Magearna's previous wrong form-index mapping is corrected")
 	_check(mapped_ids.has("zygarde-mega"), "Zygarde's previous wrong form-index mapping is corrected")
+	var shiny_backfill_ids: Dictionary = {}
+	for form_value: Variant in manifest.get("shinyHomeBackfills", []):
+		if not (form_value is Dictionary):
+			continue
+		var form := form_value as Dictionary
+		var entry_id := str(form.get("catalogEntryId", ""))
+		shiny_backfill_ids[entry_id] = str(form.get("sourceStem", ""))
+		var relative_output_path := str(form.get("output", ""))
+		_check(
+			relative_output_path.begins_with("assets/sprites/pokemon/pokemon_home_shiny/")
+				and not relative_output_path.contains("/../")
+				and relative_output_path.ends_with(".png"),
+			"%s is a safe shiny HOME output path" % relative_output_path
+		)
+		_check(not output_paths.has(relative_output_path), "%s is listed once" % relative_output_path)
+		output_paths[relative_output_path] = true
+		if FileAccess.file_exists("res://%s" % relative_output_path):
+			existing_output_count += 1
+	_check(shiny_backfill_ids.size() == 34, "shiny HOME backfill mappings are unique")
+	_check(shiny_backfill_ids.get("meganium-mega") == "MEGANIUM_1", "Meganium's shiny HOME sprite uses MEGANIUM_1")
+	_check(output_paths.size() == 184, "sprite import manifest lists all 184 external outputs")
 	var complete_external_set := existing_output_count == output_paths.size()
 	if OS.get_environment(REQUIRE_EXTERNAL_ASSETS_ENV).strip_edges() == "1":
 		_check(
@@ -174,6 +197,8 @@ func _check_sprite_mappings(catalog: Dictionary, readiness: Dictionary) -> void:
 				_check(FileAccess.file_exists(sprite_root + "/animation.json"), "%s %s animation metadata exists" % [entry_id, folder])
 			_check(PokemonAssets.load_home_sprite(species_name, false) != null, "%s has a normal party/storage/Calcdex render" % entry_id)
 			_check(PokemonAssets.load_home_sprite(species_name, true) != null, "%s has a shiny party/storage/Calcdex render" % entry_id)
+			_check(FileAccess.file_exists("res://assets/sprites/pokemon/pokemon_home/%s.png" % species_name), "%s has an exact normal HOME sprite" % entry_id)
+			_check(FileAccess.file_exists("res://assets/sprites/pokemon/pokemon_home_shiny/%s.png" % species_name), "%s has an exact shiny HOME sprite" % entry_id)
 
 	actual_blockers.sort()
 	_check(actual_blockers.is_empty(), "all 49 catalog forms resolve exact sprite sets")

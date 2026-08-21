@@ -36,6 +36,7 @@
 - Miguel now warns you and sends you back when he blocks the fossil corridor, instead of leaving you against an unexplained invisible barrier.
 - Miguel no longer moves into a Mt. Moon wall after his battle.
 - Missing translated text now reliably falls back to English.
+- Shiny Champions ZA Mega Evolutions now use their own colors in the Pokédex, party, storage, and Damage Calculator instead of falling back to their normal sprites.
 - The Pokédex now hides Greninja's technical Bond record, keeps Ash-Greninja visible as a battle-only form, and shows Battle Bond as Greninja's Special Ability. Ability-changing items also explain that this Ability is fixed.
 - Finished battles now close the Damage Calculator automatically so the battle result can be closed immediately.
 - Champions ZA's battle HUD, Damage Calc, and party hover cards now use the active Mega form, ability, and current battle stats.
