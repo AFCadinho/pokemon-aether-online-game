@@ -16,6 +16,7 @@
 
 **Fixed**
 
+- Opponent names now update to their revealed Mega form in the battle HUD and battle log.
 - Static front sprites for the new Champions ZA Mega Evolutions now appear at the correct battle size.
 - Champions ZA now explains the exact Mega compatibility problem instead of showing a generic room-creation error.
 - Private battle rooms now explain when the battle server is recovering instead of showing a generic creation error.

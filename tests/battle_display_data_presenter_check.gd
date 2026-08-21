@@ -17,6 +17,8 @@ func _init() -> void:
 func _run_checks() -> void:
 	_check_local_ogerpon_uses_mask_battle_form()
 	_check_opponent_ogerpon_default_ident_uses_mask_form_name()
+	_check_opponent_default_name_follows_public_mega_form()
+	_check_opponent_custom_nickname_survives_public_mega_form()
 	_check_trainer_active_species_uses_metadata_form()
 	_check_trainer_team_display_keeps_roster_species_during_ambiguous_switch_state()
 	_check_trainer_team_display_ignores_request_slot_identity_for_species_match()
@@ -124,6 +126,57 @@ func _check_opponent_ogerpon_default_ident_uses_mask_form_name() -> void:
 		presenter.get_active_display_name("p2"),
 		"Ogerpon Wellspring",
 		"the default Showdown Ogerpon ident does not hide the opponent mask forme"
+	)
+
+
+func _build_opponent_mega_presenter(display_name: String):
+	var state = BattleStateScript.new()
+	state.load_from_api_response({
+		"battleId": "opponent-mega-display-test",
+		"requests": {
+			"p2": {
+				"side": {
+					"pokemon": [{
+						"ident": "p2a: %s" % display_name,
+						"name": display_name,
+						"species": "Dragonite",
+						"item": "Dragoniteite",
+						"active": true,
+					}],
+				},
+			},
+		},
+	}, false)
+	state.apply_event_conditions([{
+		"type": "mega",
+		"target": "p2a: %s" % display_name,
+		"species": "Dragonite-Mega",
+	}])
+	var presenter = BattleDisplayDataPresenterScript.new()
+	presenter.setup(state)
+	return presenter
+
+
+func _check_opponent_default_name_follows_public_mega_form() -> void:
+	var presenter = _build_opponent_mega_presenter("Dragonite")
+	_check_equal(
+		presenter.get_active_display_species("p2"),
+		"Dragonite-Mega",
+		"the opponent's publicly revealed Mega species is retained"
+	)
+	_check_equal(
+		presenter.get_active_display_name("p2"),
+		"Dragonite-Mega",
+		"an unnicknamed opponent uses its revealed Mega species in the HUD and battle log"
+	)
+
+
+func _check_opponent_custom_nickname_survives_public_mega_form() -> void:
+	var presenter = _build_opponent_mega_presenter("Puff")
+	_check_equal(
+		presenter.get_active_display_name("p2"),
+		"Puff",
+		"a custom opponent nickname remains visible after Mega Evolution"
 	)
 
 
