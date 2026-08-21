@@ -9,6 +9,8 @@
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="5_trainer"]
 [ext_resource type="SpriteFrames" uid="uid://ndd4lyovddgq" path="res://assets/npcs/classes/rocket_grunt_m_frames.tres" id="6_rocket"]
 [ext_resource type="SpriteFrames" uid="uid://caas815hh7buy" path="res://assets/npcs/classes/scientist_m_frames.tres" id="7_scientist"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="8_item"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/smashable_rock.tscn" id="9_rock"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0vl8t"]
 texture = ExtResource("2_4qmrm")
@@ -278,6 +280,45 @@ npc_sprite_frames = ExtResource("7_scientist")
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=494345931]
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=976601731]
+
+[node name="HelixFossil" parent="Entities/Interactables" instance=ExtResource("8_item")]
+position = Vector2(432, 336)
+pickup_id = "kanto_mt_moon_b2f_helix_fossil"
+item_id = "helix-fossil"
+
+[node name="DomeFossil" parent="Entities/Interactables" instance=ExtResource("8_item")]
+position = Vector2(528, 336)
+pickup_id = "kanto_mt_moon_b2f_dome_fossil"
+item_id = "dome-fossil"
+
+[node name="TMThief" parent="Entities/Interactables" instance=ExtResource("8_item")]
+position = Vector2(2096, 464)
+pickup_id = "kanto_mt_moon_b2f_tm_thief"
+item_id = "tm-thief"
+
+[node name="Revive" parent="Entities/Interactables" instance=ExtResource("8_item")]
+position = Vector2(464, 1232)
+pickup_id = "kanto_mt_moon_b2f_revive"
+item_id = "revive"
+
+[node name="StarPiece" parent="Entities/Interactables" instance=ExtResource("8_item")]
+position = Vector2(1712, 1424)
+pickup_id = "kanto_mt_moon_b2f_star_piece"
+item_id = "star-piece"
+
+[node name="Antidote" parent="Entities/Interactables" instance=ExtResource("8_item")]
+position = Vector2(2192, 2160)
+pickup_id = "kanto_mt_moon_b2f_antidote"
+item_id = "antidote"
+
+[node name="RockSmash01" parent="Entities/Interactables" instance=ExtResource("9_rock")]
+position = Vector2(784, 336)
+
+[node name="RockSmash02" parent="Entities/Interactables" instance=ExtResource("9_rock")]
+position = Vector2(1456, 1296)
+
+[node name="RockSmash03" parent="Entities/Interactables" instance=ExtResource("9_rock")]
+position = Vector2(816, 2192)
 
 [node name="Spawns" type="Node2D" parent="." unique_id=158532784]
 
