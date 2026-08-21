@@ -16339,16 +16339,14 @@ func _show_readonly_summary_detail_hover(source: Control, nodes: Dictionary) -> 
 			panel_size,
 		])
 	hover_panel.custom_minimum_size = panel_size
-	hover_panel.size = panel_size
-	_position_readonly_summary_detail_hover(hover_panel, popup, source, panel_size)
-	hover_panel.visible = true
-	hover_panel.move_to_front()
-	if POKEMON_READONLY_DETAIL_HOVER_DEBUG:
-		_debug_readonly_summary_detail_hover_after_layout(hover_panel, source, panel_size)
+	hover_panel.set_meta("readonly_hover_source_id", source.get_instance_id())
+	hover_panel.visible = false
+	_finalize_readonly_summary_detail_hover_layout(hover_panel, popup, source, panel_size)
 
 func _hide_readonly_summary_detail_hover(nodes: Dictionary) -> void:
 	var hover_panel := nodes.get("detail_hover_panel") as PanelContainer
 	if hover_panel != null and is_instance_valid(hover_panel):
+		hover_panel.set_meta("readonly_hover_source_id", 0)
 		hover_panel.visible = false
 
 func _set_readonly_summary_detail_hover(source: Control, title: String, description: String, accent: Color) -> void:
@@ -16409,13 +16407,42 @@ func _position_readonly_summary_detail_hover(hover_panel: PanelContainer, popup:
 			hover_panel.get_combined_minimum_size(),
 		])
 
-func _debug_readonly_summary_detail_hover_after_layout(hover_panel: PanelContainer, source: Control, requested_size: Vector2) -> void:
+func _finalize_readonly_summary_detail_hover_layout(hover_panel: PanelContainer, popup: PanelContainer, source: Control, requested_size: Vector2) -> void:
 	if not is_inside_tree():
-		print("[ReadonlySummaryHover] after_layout skipped: overlay is not inside a SceneTree")
+		hover_panel.size = requested_size
+		_position_readonly_summary_detail_hover(hover_panel, popup, source, requested_size)
+		hover_panel.visible = true
+		hover_panel.move_to_front()
+		if POKEMON_READONLY_DETAIL_HOVER_DEBUG:
+			print("[ReadonlySummaryHover] finalize_layout skipped: overlay is not inside a SceneTree")
 		return
 	var scene_tree := get_tree()
 	await scene_tree.process_frame
+	if not is_instance_valid(hover_panel) or not is_instance_valid(popup) or not is_instance_valid(source):
+		return
+	if int(hover_panel.get_meta("readonly_hover_source_id", 0)) != source.get_instance_id():
+		return
+	var cached_minimum := hover_panel.get_combined_minimum_size()
+	var final_size := Vector2(
+		maxf(requested_size.x, cached_minimum.x),
+		maxf(requested_size.y, cached_minimum.y)
+	)
+	hover_panel.custom_minimum_size = final_size
+	hover_panel.size = final_size
+	_position_readonly_summary_detail_hover(hover_panel, popup, source, final_size)
+	hover_panel.visible = true
+	hover_panel.move_to_front()
+	if POKEMON_READONLY_DETAIL_HOVER_DEBUG:
+		print("[ReadonlySummaryHover] finalize_layout requested_size=%s cached_minimum=%s final_size=%s final_rect=%s" % [
+			requested_size,
+			cached_minimum,
+			final_size,
+			hover_panel.get_global_rect(),
+		])
+	await scene_tree.process_frame
 	if not is_instance_valid(hover_panel) or not is_instance_valid(source):
+		return
+	if int(hover_panel.get_meta("readonly_hover_source_id", 0)) != source.get_instance_id():
 		return
 	print("[ReadonlySummaryHover] after_layout source=%s source_rect=%s requested_size=%s actual_rect=%s actual_size=%s custom_minimum=%s combined_minimum=%s visible=%s" % [
 		source.name,
