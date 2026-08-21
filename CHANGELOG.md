@@ -6,6 +6,7 @@
 
 - If the game closes unexpectedly, PokeAether now prepares a privacy-safe crash report at the next start. The report can be viewed and copied directly from the notification or the new Support page in Settings.
 - Launcher and login news now follow official forum announcements automatically.
+- Players now visibly rise or descend while crossing marked horizontal stairways, without leaving the normal movement grid.
 
 **Changed**
 

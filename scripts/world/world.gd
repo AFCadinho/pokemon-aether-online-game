@@ -2149,7 +2149,16 @@ func _snap_world_position_to_map_tile_center(map: Node, position: Vector2) -> Ve
 func _get_position_reference_tilemap(map: Node) -> TileMapLayer:
 	return MapLayerResolverScript.find_tilemap_layer(
 		map,
-		["Collision", "TallGrass", "LedgeDown", "LedgeUp", "LedgeLeft", "LedgeRight"]
+		[
+			"Collision",
+			"TallGrass",
+			"LedgeDown",
+			"LedgeUp",
+			"LedgeLeft",
+			"LedgeRight",
+			"StairUpLeft",
+			"StairUpRight",
+		]
 	)
 
 

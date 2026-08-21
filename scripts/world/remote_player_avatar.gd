@@ -10,6 +10,7 @@ const MountService := preload("res://scripts/services/mount_service.gd")
 const GuildEmblemTexture := preload("res://scripts/ui/guild_emblem_texture.gd")
 const NameplateLayout := preload("res://scripts/ui/nameplate_layout.gd")
 const MapChatBubbleScript := preload("res://scripts/world/map_chat_bubble.gd")
+const HorizontalStairElevationScript := preload("res://scripts/world/horizontal_stair_elevation.gd")
 const TILE_SIZE := 32
 const TILE_MOVE_DURATION := 0.22
 const SORT_Z_MIN := -4096
@@ -155,6 +156,8 @@ var tile_move_target_position := Vector2.ZERO
 var tile_move_elapsed := 0.0
 var tile_move_duration := 0.22
 var is_replaying_tile_move := false
+var stair_elevation := HorizontalStairElevationScript.ELEVATION_NONE
+var stair_visual_offset := Vector2.ZERO
 var pending_tile_moves: Array[Dictionary] = []
 var last_direction := Vector2.DOWN
 var look_node: Node2D
@@ -511,6 +514,11 @@ func _start_next_pending_tile_move() -> void:
 	tile_move_elapsed = 0.0
 	is_replaying_tile_move = true
 	last_direction = move_direction
+	stair_elevation = HorizontalStairElevationScript.elevation_for_move(
+		GameState.current_map,
+		tile_move_target_position,
+		move_direction
+	)
 	_sync_body_frames_for_move_duration(tile_move_duration)
 	_sync_appearance_animation_speeds(tile_move_duration)
 
@@ -519,10 +527,13 @@ func _update_replayed_tile_move(delta: float) -> void:
 	tile_move_elapsed = minf(tile_move_elapsed + delta, tile_move_duration)
 	var progress := clampf(tile_move_elapsed / tile_move_duration, 0.0, 1.0)
 	global_position = _snap_world_position(tile_move_start_position.lerp(tile_move_target_position, progress))
+	stair_visual_offset = HorizontalStairElevationScript.visual_offset(progress, stair_elevation)
 	if tile_move_elapsed >= tile_move_duration:
 		global_position = tile_move_target_position
 		target_position = tile_move_target_position
 		is_replaying_tile_move = false
+		stair_elevation = HorizontalStairElevationScript.ELEVATION_NONE
+		stair_visual_offset = Vector2.ZERO
 		_sync_body_frames_for_move_duration(TILE_MOVE_DURATION)
 		_reset_position_samples(global_position)
 		if not pending_tile_moves.is_empty():
@@ -1361,7 +1372,7 @@ func _apply_activity_layer_offset(sprite: AnimatedSprite2D, category: String) ->
 func _apply_activity_visual_offset() -> void:
 	if look_node == null:
 		return
-	look_node.position = base_look_position + _get_activity_visual_offset()
+	look_node.position = base_look_position + _get_activity_visual_offset() + stair_visual_offset
 
 
 func _get_activity_visual_offset() -> Vector2:
