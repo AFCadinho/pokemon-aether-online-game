@@ -72,6 +72,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/client_version_contract_check.gd",
 	"res://tests/client_crash_reporting_check.gd",
 	"res://tests/senior_staff_permission_projection_check.gd",
+	"res://tests/tester_tool_permissions_check.gd",
 	"res://tests/localization_launcher_news_check.gd",
 	"res://tests/localization_market_ui_check.gd",
 	"res://tests/localization_pokedex_ui_check.gd",

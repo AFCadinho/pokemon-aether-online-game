@@ -6,6 +6,10 @@
 
 - If the game closes unexpectedly, PokeAether now prepares a privacy-safe crash report at the next start. The report can be viewed and copied directly from the notification or the new Support page in Settings.
 
+**Changed**
+
+- Testers now use Alpha Tools to create Pokémon. Item creation remains available through Developer Tools.
+
 **Fixed**
 
 - Ogerpon's correct battle sprites are now included in game downloads.
