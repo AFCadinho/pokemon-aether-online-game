@@ -7,15 +7,22 @@ const OAKS_LAB_SCENE_PATH := "res://scenes/overworld/kanto/towns/pallet_town/oak
 const POKEMON_CENTER_TEMPLATE_PATH := "res://scenes/overworld/kanto/reusable_interiors/pokemon_center_template.tscn"
 const ROUTE_3_SCENE_PATH := "res://scenes/overworld/kanto/routes/kanto_route_3.tscn"
 const ROUTE_22_SCENE_PATH := "res://scenes/overworld/kanto/routes/kanto_route_22.tscn"
+const MT_MOON_SCENE_PATHS := [
+	"res://scenes/overworld/kanto/caves/mt_moon/1f.tscn",
+	"res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn",
+	"res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn",
+]
 const PALLET_TOWN_TRACK_ID := "overworld.kanto.pallet_town"
 const OAKS_LAB_TRACK_ID := "overworld.kanto.interior.oaks_lab"
 const POKEMON_CENTER_TRACK_ID := "overworld.kanto.interior.pokemon_center"
 const KANTO_ROUTE_GROUP_PROFILE_ID := "kanto.routes_3_10_16_22"
 const KANTO_ROUTE_GROUP_TRACK_ID := "overworld.kanto.routes_3_10_16_22"
+const MT_MOON_TRACK_ID := "overworld.kanto.cave.mt_moon"
 const PALLET_TOWN_TRACK := "res://assets/music/overworld/kanto/towns/pallet_town.ogg"
 const OAKS_LAB_TRACK := "res://assets/music/overworld/kanto/interiors/oaks_lab.ogg"
 const POKEMON_CENTER_TRACK := "res://assets/music/overworld/kanto/interiors/pokemon_center.ogg"
 const KANTO_ROUTE_GROUP_TRACK := "res://assets/music/overworld/kanto/routes/kanto_routes_3_10_16_22.ogg"
+const MT_MOON_TRACK := "res://assets/music/overworld/kanto/caves/mt_moon.ogg"
 
 var failed := false
 
@@ -41,8 +48,12 @@ func _init() -> void:
 	_check_scene_track(POKEMON_CENTER_TEMPLATE_PATH, 'music_track_id = "%s"' % POKEMON_CENTER_TRACK_ID, "Pokémon Centers use their dedicated catalog track")
 	_check_scene_track(ROUTE_3_SCENE_PATH, 'music_profile_id = "%s"' % KANTO_ROUTE_GROUP_PROFILE_ID, "Route 3 uses the shared Kanto route group profile")
 	_check_scene_track(ROUTE_22_SCENE_PATH, 'music_profile_id = "%s"' % KANTO_ROUTE_GROUP_PROFILE_ID, "Route 22 uses the shared Kanto route group profile")
+	_check_equal(str((tracks.get(MT_MOON_TRACK_ID, {}) as Dictionary).get("path", "")), MT_MOON_TRACK, "Mt. Moon catalog track has the expected path")
+	for scene_path: String in MT_MOON_SCENE_PATHS:
+		_check_scene_track(scene_path, 'music_track_id = "%s"' % MT_MOON_TRACK_ID, "%s uses the dedicated Mt. Moon track" % scene_path)
 	_check(FileAccess.file_exists(OAKS_LAB_TRACK), "Oak's Lab OGG is included in the project")
 	_check(FileAccess.file_exists(POKEMON_CENTER_TRACK), "Pokémon Center OGG is included in the project")
+	_check(FileAccess.file_exists(MT_MOON_TRACK), "Mt. Moon OGG is included in the project")
 
 	inherited_interior.free()
 	quit(1 if failed else 0)

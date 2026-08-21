@@ -26,6 +26,7 @@ const STRUCTURE_TOP_VISUAL_LAYER_NAMES: Array[String] = [
 	"TreeTop",
 	"Tree Top",
 	"ObjectTop",
+	"ObjectsTop",
 	"Objects Top",
 ]
 const TALL_GRASS_DEPTH_ROW_META := "pao_tall_grass_depth_row"
@@ -2149,7 +2150,16 @@ func _snap_world_position_to_map_tile_center(map: Node, position: Vector2) -> Ve
 func _get_position_reference_tilemap(map: Node) -> TileMapLayer:
 	return MapLayerResolverScript.find_tilemap_layer(
 		map,
-		["Collision", "TallGrass", "LedgeDown", "LedgeUp", "LedgeLeft", "LedgeRight"]
+		[
+			"Collision",
+			"TallGrass",
+			"LedgeDown",
+			"LedgeUp",
+			"LedgeLeft",
+			"LedgeRight",
+			"StairUpLeft",
+			"StairUpRight",
+		]
 	)
 
 

@@ -120,6 +120,12 @@ func get_active_display_name(player_id: String) -> String:
 		var explicit_name := str(active_pokemon.get(key, "")).strip_edges()
 		if explicit_name != "":
 			var display_species := get_active_display_species(player_id)
+			if _default_name_should_follow_public_mega_species(
+				active_pokemon,
+				explicit_name,
+				display_species
+			):
+				return display_species
 			if (
 				display_metadata.normalize_species_for_compare(explicit_name) == "ogerpon"
 				and display_metadata.normalize_species_for_compare(display_species).begins_with("ogerpon-")
@@ -134,6 +140,25 @@ func get_active_display_name(player_id: String) -> String:
 			return ident_name
 
 	return get_active_display_species(player_id)
+
+
+func _default_name_should_follow_public_mega_species(
+	pokemon_data: Dictionary,
+	explicit_name: String,
+	display_species: String
+) -> bool:
+	var mega_species := str(pokemon_data.get("megaSpecies", "")).strip_edges()
+	var base_species := str(pokemon_data.get("species", "")).strip_edges()
+	if mega_species == "" or base_species == "" or display_species == "":
+		return false
+
+	var normalized_display := display_metadata.normalize_species_for_compare(display_species)
+	return (
+		display_metadata.normalize_species_for_compare(mega_species) == normalized_display
+		and display_metadata.normalize_species_for_compare(explicit_name)
+			== display_metadata.normalize_species_for_compare(base_species)
+		and display_metadata.normalize_species_for_compare(base_species) != normalized_display
+	)
 
 
 func get_active_pokemon_is_shiny(player_id: String) -> bool:

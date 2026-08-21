@@ -4,10 +4,44 @@
 
 **Added**
 
+- Mt. Moon now contains its visible FireRed and LeafGreen item pickups, plus optional rocks that can be cleared with Rock Smash.
+- Ground Poké Balls can hold one-time item rewards, and Strength boulders can be pushed one tile at a time.
+- Mt. Moon now has its FireRed and LeafGreen battle Trainers on 1F and B2F.
+- Private battle room hosts can choose no tier or Aether OU when creating a room.
+- Authorized developers can keep a direct Mega battle form for a clearly marked test Pokémon and clean up those test Pokémon from Developer Tools.
+- Route 3 now connects to Mt. Moon, and all three cave floors connect through their matching ladders and tunnels.
+- Mt. Moon now plays its own cave music on every floor.
+- Mt. Moon B1F now hides its other disconnected passages while you explore.
 - If the game closes unexpectedly, PokeAether now prepares a privacy-safe crash report at the next start. The report can be viewed and copied directly from the notification or the new Support page in Settings.
+- Launcher and login news now follow official forum announcements automatically.
+- Players now visibly rise or descend while crossing marked horizontal stairways, without leaving the normal movement grid.
+
+**Changed**
+
+- PvP now reconnects more quickly after a short connection problem and clearly shows when your battle is being restored.
+- Ranked PvP opens faster, finds ready matches sooner, and keeps the correct queue time after reconnecting.
+
+**Changed**
+
+- Champions ZA is now available to every player as an unrated private-room tier. It does not give players Pokémon or items and does not affect Ranked Battles.
+- The game now shows clear localized messages when a new Mega Evolution is not ready or allowed for an action.
+- Testers can use every Developer Tools action except unrestricted Pokémon creation. They can still create normalized Pokémon through Alpha Tools.
 
 **Fixed**
 
+- Missing translated text now reliably falls back to English.
+- Opponent names now update to their revealed Mega form in the battle HUD and battle log.
+- Static front sprites for the new Champions ZA Mega Evolutions now appear at the correct battle size.
+- Launcher downloads now recover from slow or interrupted connections, resume after restarting the launcher, and show clearer speed and connection details.
+- Foreground cave walls on Mt. Moon B1F and B2F now pass in front of or behind characters correctly.
+- Ground Poké Balls and other overworld objects can now be interacted with correctly on offset map grids.
+- Updated the Mt. Moon B2F scenery to match the latest map artwork.
+- Players now face away from the entrance after using a Mt. Moon ladder or tunnel.
+- NPC dialogue now opens promptly by preparing nearby dialogue and avoiding duplicate content requests.
+- Move, ability, nature, EXP, Happiness, held item, and Poké Ball details now use compact hover cards across their full fields in every Pokémon Summary; read-only Summaries also show IV and EV details this way.
+- Champions ZA now explains the exact Mega compatibility problem instead of showing a generic room-creation error.
+- Private battle rooms now explain when the battle server is recovering instead of showing a generic creation error.
+- Read-only Pokémon Summaries now fill in a missing National Dex number instead of leaving the number blank.
 - Ogerpon's correct battle sprites are now included in game downloads.
 - Training Rooms no longer blame a valid Poképaste when room timers are temporarily unavailable.
 - Wild battles now immediately show the first Pokémon that can battle when an earlier party member has fainted.
