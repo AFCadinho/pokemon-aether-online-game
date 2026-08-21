@@ -134,6 +134,7 @@ var pvp_room_recovery_request_active := false
 var pvp_targeted_render_recovery_active := false
 var pvp_idle_realtime_drain_pending := false
 var pvp_idle_wait_recovery_active := false
+var pvp_local_connection_recovering := false
 var pvp_last_applied_server_seq := 0
 var pvp_last_applied_snapshot_server_seq := 0
 var pvp_last_phase := ""
@@ -3215,6 +3216,8 @@ func _show_current_action_prompt() -> void:
 
 func _set_battle_input_locked(is_locked: bool) -> void:
 	if _is_spectator_battle():
+		is_locked = true
+	if not is_locked and _is_pvp_battle() and pvp_local_connection_recovering:
 		is_locked = true
 	var allows_local_prechoice := _is_pvp_battle() and pvp_prechoice_buffer.is_window_open()
 	if not is_locked and not pvp_pending_presentation_fence.is_empty() and not allows_local_prechoice:
@@ -10948,6 +10951,7 @@ func _connect_pvp_realtime(local_player_id: String, battle_id: String, initial_r
 	pvp_retrying_reconciliation_snapshot = false
 	pvp_idle_realtime_drain_pending = false
 	pvp_idle_wait_recovery_active = false
+	pvp_local_connection_recovering = false
 	pvp_last_applied_server_seq = 0
 	pvp_last_applied_snapshot_server_seq = 0
 	pvp_public_control_contract_version = 0
@@ -10963,6 +10967,10 @@ func _connect_pvp_realtime(local_player_id: String, battle_id: String, initial_r
 	_clear_pvp_switch_confirmation()
 	if not PvpBattleRealtimeService.battle_update_received.is_connected(_on_pvp_realtime_battle_update):
 		PvpBattleRealtimeService.battle_update_received.connect(_on_pvp_realtime_battle_update)
+	if not PvpBattleRealtimeService.connection_changed.is_connected(_on_pvp_realtime_connection_changed):
+		PvpBattleRealtimeService.connection_changed.connect(_on_pvp_realtime_connection_changed)
+	if not PvpBattleRealtimeService.room_ready.is_connected(_on_pvp_realtime_room_ready):
+		PvpBattleRealtimeService.room_ready.connect(_on_pvp_realtime_room_ready)
 	PvpBattleRealtimeService.connect_room(
 		pvp_room_code,
 		local_player_id,
@@ -10976,6 +10984,55 @@ func _connect_pvp_realtime(local_player_id: String, battle_id: String, initial_r
 		# Seed its cursor before the deferred websocket join packet is sent so
 		# reconnect/bootstrap delivery starts after that history.
 		PvpBattleRealtimeService.seed_spectator_event_cursor(initial_response)
+
+
+func _on_pvp_realtime_connection_changed(is_connected: bool) -> void:
+	if not _is_pvp_battle() or battle_finished:
+		return
+	if is_connected:
+		if pvp_local_connection_recovering and current_action_panel != null:
+			current_action_panel.set_message(_t("battle.connection.synchronizing_self"))
+		return
+	if pvp_local_connection_recovering:
+		return
+	pvp_local_connection_recovering = true
+	_set_battle_input_locked(true)
+	if current_action_panel != null:
+		current_action_panel.set_message(_t("battle.connection.restoring_self"))
+
+
+func _on_pvp_realtime_room_ready(room_code: String, battle_id: String) -> void:
+	if not _is_pvp_battle() or battle_finished or not pvp_local_connection_recovering:
+		return
+	if room_code.strip_edges().to_upper() != pvp_room_code.strip_edges().to_upper():
+		return
+	if battle_id.strip_edges() != "" and battle_id.strip_edges() != battle_state.battle_id.strip_edges():
+		return
+	pvp_local_connection_recovering = false
+	_add_battle_log_message(_t("battle.connection.restored_self"))
+	_restore_pvp_ui_after_local_reconnect()
+
+
+func _restore_pvp_ui_after_local_reconnect() -> void:
+	if _is_spectator_battle():
+		_enter_spectator_controls()
+		return
+	if team_preview_lead_selection_active:
+		var preview_player_id := _get_local_state_player_id()
+		if _pvp_local_request_allows_choice(preview_player_id):
+			_set_battle_input_locked(false)
+			_restore_team_preview_lead_selection_ui()
+		else:
+			_set_battle_input_locked(true)
+			current_action_panel.set_message(_t("battle.prompt.waiting_opponent"))
+		return
+	if pvp_event_queue.is_rendering or not pvp_pending_presentation_fence.is_empty():
+		_set_battle_input_locked(true)
+		current_action_panel.set_message(_t("battle.prompt.resynchronizing_events"))
+		return
+	_recover_pvp_idle_wait_ui_after_update({})
+	if battle_input_locked and current_action_panel != null:
+		current_action_panel.set_message(_t("battle.prompt.waiting_opponent"))
 
 func _on_pvp_render_batch_completed(completion: Dictionary) -> void:
 	_trace_pvp_flow("render_completed", {}, "completion=%s" % JSON.stringify(completion))

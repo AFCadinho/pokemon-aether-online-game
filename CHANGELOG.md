@@ -6,6 +6,11 @@
 
 - If the game closes unexpectedly, PokeAether now prepares a privacy-safe crash report at the next start. The report can be viewed and copied directly from the notification or the new Support page in Settings.
 
+**Changed**
+
+- PvP now reconnects more quickly after a short connection problem and clearly shows when your battle is being restored.
+- Ranked PvP opens faster, finds ready matches sooner, and keeps the correct queue time after reconnecting.
+
 **Fixed**
 
 - NPC dialogue now opens promptly by preparing nearby dialogue and avoiding duplicate content requests.

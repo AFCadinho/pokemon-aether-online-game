@@ -18,6 +18,7 @@ const HOTBAR_TRACKER_GAP := 16.0
 const HOTBAR_PAGE_SIZE := 4
 const HOTBAR_PAGE_COUNT := 2
 const RANKED_QUEUE_AVAILABILITY_POLL_INTERVAL_SECONDS := 10.0
+const PVP_QUEUE_POLL_INTERVAL_SECONDS := 1.0
 const UI_BASE_Z_INDEX := 100
 const UI_ACTIVE_Z_INDEX := 1000
 const UI_CHAT_TABS_Z_INDEX := UI_ACTIVE_Z_INDEX + 1
@@ -818,6 +819,7 @@ var pvp_queue_join_in_flight := false
 var pvp_queue_leave_in_flight := false
 var pvp_queue_compact_minimized := false
 var pvp_queue_wait_started_msec := 0
+var pvp_queue_joined_at_unix := 0.0
 var pvp_queue_spinner_elapsed := 0.0
 var pvp_match_countdown_active := false
 var pvp_match_countdown_finishing := false
@@ -833,10 +835,12 @@ var pvp_banlists_result: Dictionary = PvpRankedBanlists.not_loaded()
 var pvp_banlist_category_open: Dictionary = {}
 var pvp_banlist_category_search: Dictionary = {}
 var pvp_leaderboard_in_flight := false
+var pvp_leaderboard_loaded := false
 var pvp_leaderboard_entries: Array = []
 var pvp_leaderboard_scope_select: OptionButton
 var pvp_active_leaderboard_scope := "all_time"
 var pvp_history_in_flight := false
+var pvp_history_loaded := false
 var pvp_history_matches: Array = []
 var pvp_history_user_id := 0
 var pvp_live_entries: Array = []
@@ -6287,7 +6291,7 @@ func _setup_pvp_room_popup() -> void:
 	_refresh_pvp_queue_buttons(_current_pvp_queue_status_for_buttons())
 
 	pvp_poll_timer = Timer.new()
-	pvp_poll_timer.wait_time = 2.0
+	pvp_poll_timer.wait_time = PVP_QUEUE_POLL_INTERVAL_SECONDS
 	pvp_poll_timer.one_shot = false
 	pvp_poll_timer.timeout.connect(_on_pvp_poll_timeout)
 	add_child(pvp_poll_timer)
@@ -36298,9 +36302,6 @@ func _open_pvp_popup_section(section_name: String) -> void:
 		_select_first_pvp_queue_for_mode("ranked")
 		await _poll_pvp_queue_status()
 		await _refresh_pvp_ranked_team_validation(true)
-		await _refresh_pvp_banlists(false)
-		await _refresh_pvp_leaderboard()
-		await _refresh_pvp_match_history()
 
 func _pvp_popup_title_for_section(section_name: String) -> String:
 	match section_name:
@@ -37289,8 +37290,10 @@ func _on_pvp_join_queue_pressed() -> void:
 	pvp_queue_join_in_flight = true
 	_set_pvp_room_busy(true)
 	pvp_ranked_queue_join_preparing = true
-	if _is_selected_pvp_queue_ranked():
-		pvp_ranked_team_validation_party_signature = ""
+	if (
+		_is_selected_pvp_queue_ranked()
+		and not PvpRankedTeamValidation.allows_ranked_join(pvp_ranked_team_validation_result)
+	):
 		await _refresh_pvp_ranked_team_validation(true)
 		if not PvpRankedTeamValidation.allows_ranked_join(pvp_ranked_team_validation_result):
 			pvp_ranked_queue_join_preparing = false
@@ -37462,21 +37465,42 @@ func _pvp_queue_format_name(queue: Dictionary) -> String:
 	return format_name if format_name != "" else PVP_RANKED_DEFAULT_FORMAT_NAME
 
 func _update_pvp_active_format_from_queue_id(queue_id: String) -> void:
+	var previous_format_key := pvp_active_format_key
 	var queue := _pvp_queue_by_id(queue_id)
 	if queue.is_empty():
 		pvp_active_format_key = PVP_RANKED_DEFAULT_FORMAT_KEY
 		pvp_active_format_name = PVP_RANKED_DEFAULT_FORMAT_NAME
+		if pvp_active_format_key != previous_format_key:
+			_invalidate_pvp_ranked_lazy_data()
 		return
 	pvp_active_format_key = _pvp_queue_format_key(queue)
 	pvp_active_format_name = _pvp_queue_format_name(queue)
+	if pvp_active_format_key != previous_format_key:
+		_invalidate_pvp_ranked_lazy_data()
+
+
+func _invalidate_pvp_ranked_lazy_data() -> void:
+	pvp_banlists_loaded = false
+	pvp_banlists_result = PvpRankedBanlists.not_loaded()
+	pvp_leaderboard_loaded = false
+	pvp_leaderboard_entries.clear()
+	pvp_history_loaded = false
+	pvp_history_matches.clear()
+	pvp_history_user_id = 0
 
 func _on_pvp_ranked_tab_changed(tab_index: int) -> void:
 	if pvp_ranked_tabs == null:
 		return
 	var tab := pvp_ranked_tabs.get_child(tab_index)
-	if tab == null or tab.name != "Rules":
+	if tab == null:
 		return
-	_refresh_pvp_banlists_if_selected()
+	match str(tab.name):
+		"Rules":
+			_refresh_pvp_banlists_if_selected()
+		"Leaderboard":
+			_refresh_pvp_leaderboard.call_deferred(false)
+		"My History":
+			_refresh_pvp_match_history.call_deferred(false)
 
 func _on_pvp_ranked_rules_tab_changed(_tab_index: int) -> void:
 	_refresh_pvp_banlists_if_selected()
@@ -37729,10 +37753,10 @@ func _pvp_banlist_updated_label(value: String) -> String:
 	return "%s %d, %d, %02d:%02d UTC" % [month_label, day, year, hour, minute]
 
 func _on_pvp_history_refresh_pressed() -> void:
-	await _refresh_pvp_match_history()
+	await _refresh_pvp_match_history(true)
 
 func _on_pvp_leaderboard_refresh_pressed() -> void:
-	await _refresh_pvp_leaderboard()
+	await _refresh_pvp_leaderboard(true)
 
 func _render_pvp_live_battles(entries: Array) -> void:
 	pvp_live_entries = entries.duplicate(true)
@@ -37758,10 +37782,14 @@ func _on_pvp_leaderboard_scope_selected(index: int) -> void:
 	if scope == "":
 		return
 	pvp_active_leaderboard_scope = scope
-	_refresh_pvp_leaderboard.call_deferred()
+	pvp_leaderboard_loaded = false
+	_refresh_pvp_leaderboard.call_deferred(false)
 
-func _refresh_pvp_leaderboard() -> void:
+func _refresh_pvp_leaderboard(force: bool = false) -> void:
 	if pvp_leaderboard_in_flight:
+		return
+	if pvp_leaderboard_loaded and not force:
+		_render_pvp_leaderboard(pvp_leaderboard_entries)
 		return
 	pvp_leaderboard_in_flight = true
 	if pvp_leaderboard_refresh_button != null:
@@ -37795,6 +37823,7 @@ func _refresh_pvp_leaderboard() -> void:
 
 	var entries_value: Variant = response.get("entries", [])
 	var entries: Array = entries_value as Array if entries_value is Array else []
+	pvp_leaderboard_loaded = true
 	if pvp_leaderboard_status_label != null:
 		scope_label = str(response.get("scopeLabel", scope_label)).strip_edges()
 		var policy_value: Variant = response.get("pointsPolicy", {})
@@ -38206,8 +38235,11 @@ func _pvp_leaderboard_win_rate(value: Variant) -> String:
 		return "%.1f%%" % text.to_float()
 	return "0.0%"
 
-func _refresh_pvp_match_history() -> void:
+func _refresh_pvp_match_history(force: bool = false) -> void:
 	if pvp_history_in_flight:
+		return
+	if pvp_history_loaded and not force:
+		_render_pvp_history_matches(pvp_history_matches, pvp_history_user_id)
 		return
 	pvp_history_in_flight = true
 	if pvp_history_refresh_button != null:
@@ -38230,6 +38262,7 @@ func _refresh_pvp_match_history() -> void:
 	var matches_value: Variant = response.get("matches", [])
 	var matches: Array = matches_value as Array if matches_value is Array else []
 	var user_id := _pvp_history_variant_to_user_id(response.get("userId", 0))
+	pvp_history_loaded = true
 	if pvp_history_status_label != null:
 		pvp_history_status_label.text = LocalizationManager.text("ui.pvp.history.recent")
 	_render_pvp_history_matches(matches, user_id)
@@ -38690,6 +38723,7 @@ func _leave_pvp_queue(queue_id: String, show_status: bool = true) -> bool:
 		pvp_active_queue_starts_at = ""
 		pvp_queue_compact_minimized = false
 		pvp_queue_wait_started_msec = 0
+		pvp_queue_joined_at_unix = 0.0
 		pvp_queue_polling_active = false
 		if pvp_poll_timer != null:
 			pvp_poll_timer.stop()
@@ -39106,6 +39140,8 @@ func _pvp_queue_spinner_frame(index: int) -> String:
 			return "\\"
 
 func _pvp_queue_elapsed_seconds() -> int:
+	if pvp_queue_joined_at_unix > 0.0:
+		return max(0, int(floor(Time.get_unix_time_from_system() - pvp_queue_joined_at_unix)))
 	if pvp_queue_wait_started_msec <= 0:
 		return 0
 	return max(0, int((Time.get_ticks_msec() - pvp_queue_wait_started_msec) / 1000))
@@ -39150,6 +39186,7 @@ func _poll_pvp_queue_status() -> void:
 		pvp_active_queue_starts_at = ""
 		pvp_queue_compact_minimized = false
 		pvp_queue_wait_started_msec = 0
+		pvp_queue_joined_at_unix = 0.0
 		_set_pvp_queue_status_key("ui.pvp.queue.ready")
 		_refresh_pvp_queue_buttons("idle")
 		_refresh_pvp_queue_compact_panel(0.0)
@@ -39220,8 +39257,10 @@ func _update_pvp_queue_state_from_entry(entry: Dictionary) -> void:
 	pvp_active_queue_starts_at = str(entry.get("startsAt", "")).strip_edges()
 	if status == "waiting" and (pvp_queue_wait_started_msec <= 0 or previous_entry_id != pvp_active_queue_entry_id):
 		pvp_queue_wait_started_msec = Time.get_ticks_msec()
+		pvp_queue_joined_at_unix = _pvp_iso_timestamp_to_unix_time(str(entry.get("joinedAt", "")))
 	elif status != "waiting" and pvp_active_queue_match_id == "":
 		pvp_queue_wait_started_msec = 0
+		pvp_queue_joined_at_unix = 0.0
 	if pvp_active_queue_id == "":
 		pvp_active_queue_id = "ranked_queue_v1"
 	_select_pvp_queue_by_id(pvp_active_queue_id)
@@ -39402,6 +39441,7 @@ func _start_pvp_battle_from_response(response: Dictionary) -> void:
 	pvp_active_queue_starts_at = ""
 	pvp_queue_compact_minimized = false
 	pvp_queue_wait_started_msec = 0
+	pvp_queue_joined_at_unix = 0.0
 	pvp_queue_polling_active = false
 	pvp_queue_poll_in_flight = false
 	pvp_queue_auto_open_in_flight = false
