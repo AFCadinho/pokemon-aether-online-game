@@ -34,7 +34,7 @@
 - Miguel now blocks the full fossil corridor until he has been defeated.
 - Miguel no longer moves into a Mt. Moon wall after his battle.
 - Missing translated text now reliably falls back to English.
-- The Pokédex now shows Battle Bond as Greninja's special Ability instead of listing technical Greninja Bond and Ash forms as separate species. Ability-changing items also explain that this special Ability is fixed.
+- The Pokédex now hides Greninja's technical Bond record, keeps Ash-Greninja visible as a battle-only form, and shows Battle Bond as Greninja's Special Ability. Ability-changing items also explain that this Ability is fixed.
 - Finished battles now close the Damage Calculator automatically so the battle result can be closed immediately.
 - Champions ZA's battle HUD, Damage Calc, and party hover cards now use the active Mega form, ability, and current battle stats.
 - Opponent names now update to their revealed Mega form in the battle HUD and battle log.
