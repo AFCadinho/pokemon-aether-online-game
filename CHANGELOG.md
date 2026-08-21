@@ -10,12 +10,14 @@
 
 **Changed**
 
+- Battle Bond Greninja now shows Ash-Greninja after activating its current once-per-battle stat boosts. It returns to its normal appearance permanently for that battle after switching out.
 - Champions ZA is now available to every player as an unrated private-room tier. It does not give players Pokémon or items and does not affect Ranked Battles.
 - The game now shows clear localized messages when a new Mega Evolution is not ready or allowed for an action.
 - Testers can use every Developer Tools action except unrestricted Pokémon creation. They can still create normalized Pokémon through Alpha Tools.
 
 **Fixed**
 
+- The Pokédex now shows Battle Bond as Greninja's special Ability instead of listing technical Greninja Bond and Ash forms as separate species. Ability-changing items also explain that this special Ability is fixed.
 - Finished battles now close the Damage Calculator automatically so the battle result can be closed immediately.
 - Champions ZA's battle HUD, Damage Calc, and party hover cards now use the active Mega form, ability, and current battle stats.
 - Opponent names now update to their revealed Mega form in the battle HUD and battle log.

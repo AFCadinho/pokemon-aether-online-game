@@ -27,6 +27,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/battle_state_deferred_hp_check.gd",
 	"res://tests/battle_state_hp_cursor_check.gd",
 	"res://tests/battle_state_primal_forms_check.gd",
+	"res://tests/battle_state_battle_bond_check.gd",
 	"res://tests/mega_champions_catalog_check.gd",
 	"res://tests/mega_champions_phase3_data_check.gd",
 	"res://tests/mega_champions_phase4_generator_payload_check.gd",
