@@ -262,9 +262,10 @@ const POKEMON_SUMMARY_SIZE := Vector2(620, 380)
 const POKEMON_READONLY_SUMMARY_SIZE := POKEMON_SUMMARY_SIZE
 const POKEMON_READONLY_MOVE_HOVER_SIZE := Vector2(254, 156)
 const POKEMON_READONLY_MOVE_HOVER_INSET := 12.0
-const POKEMON_READONLY_DETAIL_HOVER_WIDTH := 190.0
-const POKEMON_READONLY_DETAIL_HOVER_MIN_HEIGHT := 64.0
-const POKEMON_READONLY_DETAIL_HOVER_MAX_HEIGHT := 105.0
+const POKEMON_READONLY_DETAIL_HOVER_MIN_WIDTH := 132.0
+const POKEMON_READONLY_DETAIL_HOVER_MAX_WIDTH := 210.0
+const POKEMON_READONLY_DETAIL_HOVER_HORIZONTAL_PADDING := 22.0
+const POKEMON_READONLY_DETAIL_HOVER_VERTICAL_PADDING := 18.0
 const POKEMON_SUMMARY_BODY_HEIGHT := 333.0
 const POKEMON_SUMMARY_LEFT_PANEL_WIDTH := 275.0
 const POKEMON_SUMMARY_RIGHT_AREA_WIDTH := 320.0
@@ -16062,7 +16063,7 @@ func _build_readonly_summary_move_hover_panel(nodes: Dictionary) -> Control:
 	detail_hover_panel.name = "ReadonlySummaryDetailHoverPanel"
 	detail_hover_panel.visible = false
 	detail_hover_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	detail_hover_panel.custom_minimum_size = Vector2(POKEMON_READONLY_DETAIL_HOVER_WIDTH, POKEMON_READONLY_DETAIL_HOVER_MIN_HEIGHT)
+	detail_hover_panel.custom_minimum_size = Vector2(POKEMON_READONLY_DETAIL_HOVER_MIN_WIDTH, 0)
 	detail_hover_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#07101af8"), POKEMON_SUMMARY_ACCENT, 7, 1))
 	hover_layer.add_child(detail_hover_panel)
 	nodes["move_hover_layer"] = hover_layer
@@ -16183,14 +16184,8 @@ func _show_readonly_summary_detail_hover(source: Control, nodes: Dictionary) -> 
 	for child: Node in hover_panel.get_children():
 		child.free()
 	var accent := source.get_meta("readonly_hover_accent", POKEMON_SUMMARY_ACCENT) as Color
+	var title_text := str(source.get_meta("readonly_hover_title", ""))
 	var description_text := str(source.get_meta("readonly_hover_description", ""))
-	var description_lines: int = max(1, ceili(float(description_text.length()) / 28.0))
-	var panel_size := Vector2(
-		POKEMON_READONLY_DETAIL_HOVER_WIDTH,
-		clampf(38.0 + float(description_lines) * 14.0, POKEMON_READONLY_DETAIL_HOVER_MIN_HEIGHT, POKEMON_READONLY_DETAIL_HOVER_MAX_HEIGHT)
-	)
-	hover_panel.custom_minimum_size = panel_size
-	hover_panel.size = panel_size
 	hover_panel.add_theme_stylebox_override("panel", _make_panel_style(
 		Color("#07101af8"),
 		Color(accent, 0.95),
@@ -16209,7 +16204,7 @@ func _show_readonly_summary_detail_hover(source: Control, nodes: Dictionary) -> 
 	stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	margin.add_child(stack)
 	var title_label := Label.new()
-	title_label.text = str(source.get_meta("readonly_hover_title", ""))
+	title_label.text = title_text
 	title_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	title_label.add_theme_font_size_override("font_size", 14)
 	title_label.add_theme_color_override("font_color", accent)
@@ -16217,7 +16212,6 @@ func _show_readonly_summary_detail_hover(source: Control, nodes: Dictionary) -> 
 	stack.add_child(title_label)
 	var description_label := Label.new()
 	description_label.text = description_text
-	description_label.custom_minimum_size = Vector2(0, panel_size.y - 38.0)
 	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	description_label.max_lines_visible = 5
 	description_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -16225,6 +16219,30 @@ func _show_readonly_summary_detail_hover(source: Control, nodes: Dictionary) -> 
 	description_label.add_theme_color_override("font_color", Color("#d9e3f0"))
 	description_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stack.add_child(description_label)
+
+	var title_font := title_label.get_theme_font("font")
+	var description_font := description_label.get_theme_font("font")
+	var minimum_content_width := POKEMON_READONLY_DETAIL_HOVER_MIN_WIDTH - POKEMON_READONLY_DETAIL_HOVER_HORIZONTAL_PADDING
+	var maximum_content_width := POKEMON_READONLY_DETAIL_HOVER_MAX_WIDTH - POKEMON_READONLY_DETAIL_HOVER_HORIZONTAL_PADDING
+	var title_width := title_font.get_string_size(title_text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, 14).x
+	var description_width := description_font.get_string_size(description_text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11).x
+	var content_width := clampf(maxf(title_width, minf(description_width, maximum_content_width)), minimum_content_width, maximum_content_width)
+	var description_size := description_font.get_multiline_string_size(
+		description_text,
+		HORIZONTAL_ALIGNMENT_LEFT,
+		content_width,
+		11,
+		5
+	)
+	var title_height := title_font.get_height(14)
+	title_label.custom_minimum_size = Vector2(content_width, title_height)
+	description_label.custom_minimum_size = Vector2(content_width, description_size.y)
+	var panel_size := Vector2(
+		ceilf(content_width + POKEMON_READONLY_DETAIL_HOVER_HORIZONTAL_PADDING),
+		ceilf(title_height + 5.0 + description_size.y + POKEMON_READONLY_DETAIL_HOVER_VERTICAL_PADDING)
+	)
+	hover_panel.custom_minimum_size = panel_size
+	hover_panel.size = panel_size
 	_position_readonly_summary_detail_hover(hover_panel, popup, source, panel_size)
 	hover_panel.visible = true
 	hover_panel.move_to_front()
@@ -16264,9 +16282,9 @@ func _position_readonly_summary_detail_hover(hover_panel: PanelContainer, popup:
 		popup_rect.size - Vector2(POKEMON_READONLY_MOVE_HOVER_INSET * 2.0, POKEMON_READONLY_MOVE_HOVER_INSET * 2.0)
 	)
 	var global_x := clampf(source_rect.position.x, safe_rect.position.x, safe_rect.end.x - panel_size.x)
-	var global_y := source_rect.position.y - panel_size.y - 6.0
+	var global_y := source_rect.position.y - panel_size.y - 4.0
 	if global_y < safe_rect.position.y:
-		global_y = source_rect.end.y + 6.0
+		global_y = source_rect.end.y + 4.0
 	global_y = clampf(global_y, safe_rect.position.y, safe_rect.end.y - panel_size.y)
 	hover_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	var hover_parent := hover_panel.get_parent_control()
