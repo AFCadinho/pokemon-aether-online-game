@@ -165,6 +165,10 @@ battle_move_4={
 ]
 }
 
+[internationalization]
+
+locale/fallback="en"
+
 [physics]
 
 3d/physics_engine="Jolt Physics"

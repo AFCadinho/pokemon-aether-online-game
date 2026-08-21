@@ -5,12 +5,14 @@ const BattleSpriteRenderScale := preload("res://scripts/battle/battle_ui/battle_
 const CATALOG_PATH := "res://data/mega_champions_catalog.generated.json"
 const ASSET_READINESS_PATH := "res://data/mega_champions_asset_readiness.generated.json"
 const SPRITE_IMPORT_MANIFEST_PATH := "res://data/mega_champions_sprite_imports.generated.json"
+const REQUIRE_EXTERNAL_ASSETS_ENV := "POKEAETHER_REQUIRE_EXTERNAL_SPRITE_ASSETS"
 const ITEM_LOCALE_PATHS: Dictionary = {
 	"en": "res://localization/items/generated/en.json",
 	"nl": "res://localization/items/generated/nl.json",
 	"pt_BR": "res://localization/items/generated/pt_BR.json",
 }
 var failed := false
+var external_sprite_assets_available := false
 
 
 func _init() -> void:
@@ -27,7 +29,7 @@ func _run() -> void:
 		return
 
 	_check_manifest(catalog, readiness)
-	_check_sprite_import_manifest()
+	external_sprite_assets_available = _check_sprite_import_manifest()
 	_check_localizations_and_item_icons(catalog)
 	_check_sprite_mappings(catalog, readiness)
 	_check_rendering_consumers()
@@ -55,7 +57,7 @@ func _check_manifest(catalog: Dictionary, readiness: Dictionary) -> void:
 		_check(form.get("publicAssetReady") == false, "%s cannot become public through Phase 3 assets" % form.get("catalogEntryId", "unknown"))
 
 
-func _check_sprite_import_manifest() -> void:
+func _check_sprite_import_manifest() -> bool:
 	var manifest := _read_dictionary(SPRITE_IMPORT_MANIFEST_PATH)
 	_check(int(manifest.get("schemaVersion", 0)) == 1, "sprite import manifest schema loads")
 	_check(int(manifest.get("mappingCount", 0)) == 15, "sprite import manifest covers twelve missing and three corrected mappings")
@@ -64,6 +66,8 @@ func _check_sprite_import_manifest() -> void:
 	_check(source.get("version") == "3.3.6", "sprite import source version is pinned")
 	_check(source.get("licenseStatus") == "not_declared_in_source_bundle", "source bundle's absent license declaration remains explicit")
 	var mapped_ids: Dictionary = {}
+	var output_paths: Dictionary = {}
+	var existing_output_count := 0
 	for form_value: Variant in manifest.get("forms", []):
 		if not (form_value is Dictionary):
 			continue
@@ -71,12 +75,41 @@ func _check_sprite_import_manifest() -> void:
 		var entry_id := str(form.get("catalogEntryId", ""))
 		mapped_ids[entry_id] = true
 		for output_value: Variant in form.get("outputs", []):
-			var output_path := "res://%s" % str(output_value)
-			_check(FileAccess.file_exists(output_path), "%s imported output exists" % output_path)
+			var relative_output_path := str(output_value)
+			_check(
+				relative_output_path.begins_with("assets/sprites/pokemon/")
+				and not relative_output_path.contains("/../")
+				and (relative_output_path.ends_with(".png") or relative_output_path.ends_with(".json")),
+				"%s is a safe external sprite output path" % relative_output_path
+			)
+			_check(not output_paths.has(relative_output_path), "%s is listed once" % relative_output_path)
+			output_paths[relative_output_path] = true
+			if FileAccess.file_exists("res://%s" % relative_output_path):
+				existing_output_count += 1
 	_check(mapped_ids.size() == 15, "sprite import mappings are unique")
+	_check(output_paths.size() == 150, "sprite import manifest lists all 150 external outputs")
 	_check(mapped_ids.has("floette-mega"), "Floette's previous wrong form-index mapping is corrected")
 	_check(mapped_ids.has("magearna-mega"), "Magearna's previous wrong form-index mapping is corrected")
 	_check(mapped_ids.has("zygarde-mega"), "Zygarde's previous wrong form-index mapping is corrected")
+	var complete_external_set := existing_output_count == output_paths.size()
+	if OS.get_environment(REQUIRE_EXTERNAL_ASSETS_ENV).strip_edges() == "1":
+		_check(
+			complete_external_set,
+			"strict external sprite check has all %d imported outputs" % output_paths.size()
+		)
+	elif not complete_external_set:
+		push_warning(
+			(
+				"External Mega Champions sprite packs are incomplete locally (%d/%d outputs); "
+				+ "validated their tracked manifest and skipped binary rendering checks. "
+				+ "Set %s=1 to require every external output."
+			) % [
+				existing_output_count,
+				output_paths.size(),
+				REQUIRE_EXTERNAL_ASSETS_ENV,
+			]
+		)
+	return complete_external_set
 
 
 func _check_localizations_and_item_icons(catalog: Dictionary) -> void:
@@ -134,12 +167,13 @@ func _check_sprite_mappings(catalog: Dictionary, readiness: Dictionary) -> void:
 			continue
 
 		_check(PokemonAssets.get_battle_sprite_ids(species_name).has(sprite_key), "%s battle HUD resolves the exact sprite key" % entry_id)
-		for folder: String in ["front", "back", "shiny_front", "shiny_back"]:
-			var sprite_root := "res://assets/sprites/pokemon/%s/%s" % [folder, sprite_key]
-			_check(FileAccess.file_exists(sprite_root + "/sheet.png"), "%s %s sheet exists" % [entry_id, folder])
-			_check(FileAccess.file_exists(sprite_root + "/animation.json"), "%s %s animation metadata exists" % [entry_id, folder])
-		_check(PokemonAssets.load_home_sprite(species_name, false) != null, "%s has a normal party/storage/Calcdex render" % entry_id)
-		_check(PokemonAssets.load_home_sprite(species_name, true) != null, "%s has a shiny party/storage/Calcdex render" % entry_id)
+		if external_sprite_assets_available:
+			for folder: String in ["front", "back", "shiny_front", "shiny_back"]:
+				var sprite_root := "res://assets/sprites/pokemon/%s/%s" % [folder, sprite_key]
+				_check(FileAccess.file_exists(sprite_root + "/sheet.png"), "%s %s sheet exists" % [entry_id, folder])
+				_check(FileAccess.file_exists(sprite_root + "/animation.json"), "%s %s animation metadata exists" % [entry_id, folder])
+			_check(PokemonAssets.load_home_sprite(species_name, false) != null, "%s has a normal party/storage/Calcdex render" % entry_id)
+			_check(PokemonAssets.load_home_sprite(species_name, true) != null, "%s has a shiny party/storage/Calcdex render" % entry_id)
 
 	actual_blockers.sort()
 	_check(actual_blockers.is_empty(), "all 49 catalog forms resolve exact sprite sets")
