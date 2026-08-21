@@ -16384,6 +16384,15 @@ func _set_pokemon_summary_detail_hover(source: Control, title: String, descripti
 	source.mouse_entered.connect(_show_readonly_summary_detail_hover.bind(source, nodes))
 	source.mouse_exited.connect(_hide_readonly_summary_detail_hover.bind(nodes))
 
+func _configure_pokemon_summary_detail_hover(source: Control, title: String, description: String, accent: Color) -> void:
+	if source == null or description.strip_edges() == "":
+		return
+	_clear_control_tree_tooltips(source)
+	_set_control_tree_mouse_filter(source, Control.MOUSE_FILTER_IGNORE)
+	source.mouse_filter = Control.MOUSE_FILTER_STOP
+	source.mouse_default_cursor_shape = Control.CURSOR_HELP
+	_set_pokemon_summary_detail_hover(source, title, description, accent)
+
 func _set_pokemon_summary_move_hover(source: PanelContainer, move_value: Variant, description: String) -> void:
 	var nodes := _get_pokemon_summary_hover_nodes()
 	if source == null or nodes.is_empty():
@@ -22179,6 +22188,8 @@ func _create_summary_metric_card(
 	))
 	bar.add_theme_stylebox_override("fill", _make_panel_style(accent_color, accent_color, 3, 0))
 	stack.add_child(bar)
+	if tooltip_text != "" and not _get_pokemon_summary_hover_nodes().is_empty():
+		_configure_pokemon_summary_detail_hover(stack, label_text, tooltip_text, accent_color)
 	return stack
 
 func _create_summary_experience_metric_card(pokemon: Pokemon, accent_color: Color, min_width: float = 96.0) -> Control:
@@ -22230,6 +22241,8 @@ func _create_summary_experience_metric_card(pokemon: Pokemon, accent_color: Colo
 	bar.add_theme_stylebox_override("background", _make_panel_style(Color("#06080de8"), Color("#5f829a"), 3, 1))
 	bar.add_theme_stylebox_override("fill", _make_panel_style(accent_color, accent_color, 3, 0))
 	stack.add_child(bar)
+	if not _get_pokemon_summary_hover_nodes().is_empty():
+		_configure_pokemon_summary_detail_hover(stack, "EXP", tooltip_text, accent_color)
 	return stack
 
 func _create_summary_field_card(
@@ -22284,11 +22297,7 @@ func _create_summary_field_card(
 	value.add_theme_color_override("font_color", resolved_value_color)
 	value_margin.add_child(value)
 	if resolved_tooltip != "" and not _get_pokemon_summary_hover_nodes().is_empty():
-		stack.tooltip_text = ""
-		label.tooltip_text = ""
-		value_panel.tooltip_text = ""
-		value.tooltip_text = ""
-		_set_pokemon_summary_detail_hover(stack, _default_text(value_text), resolved_tooltip, accent_color)
+		_configure_pokemon_summary_detail_hover(stack, _default_text(value_text), resolved_tooltip, accent_color)
 	return stack
 
 func _get_pokemon_origin_summary_text(pokemon: Pokemon) -> String:
