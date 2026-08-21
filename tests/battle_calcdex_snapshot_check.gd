@@ -2,6 +2,7 @@ extends SceneTree
 
 const FINGERPRINT := "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 const CalcdexSnapshot := preload("res://scripts/battle/battle_calcdex_snapshot.gd")
+const OwnedFormProjection := preload("res://scripts/battle/battle_owned_form_projection.gd")
 const State := preload("res://scripts/battle/battle_state.gd")
 
 
@@ -91,6 +92,36 @@ func _init() -> void:
 		not CalcdexSnapshot.is_valid_mechanics_manifest(mismatched_manifest),
 		"rejects an unapproved mechanics manifest"
 	)
+
+	var live_mega_stats := OwnedFormProjection.merge_stats(
+		{"hp": 318, "atk": 333, "def": 186, "spa": 216, "spd": 196, "spe": 423},
+		{"atk": 413, "def": 186, "spa": 297, "spd": 196, "spe": 445}
+	)
+	_check(live_mega_stats.get("hp") == 318, "keeps owned HP when the live request omits it")
+	_check(live_mega_stats.get("atk") == 413, "prefers the live Mega Attack stat")
+	_check(live_mega_stats.get("spa") == 297, "prefers the live Mega Special Attack stat")
+	_check(live_mega_stats.get("spe") == 445, "prefers the live Mega Speed stat")
+
+	var hover_data := {
+		"species": "Zeraora",
+		"displaySpecies": "Zeraora",
+		"ability": "Volt Absorb",
+		"possibleAbilities": ["Volt Absorb"],
+		"stats": {"hp": 318, "atk": 333},
+	}
+	OwnedFormProjection.apply_live_form_to_hover(
+		hover_data,
+		{
+			"ability": "Volt Absorb",
+			"stats": {"atk": 413, "def": 186, "spa": 297, "spd": 196, "spe": 445},
+		},
+		"Zeraora-Mega"
+	)
+	_check(hover_data.get("species") == "Zeraora-Mega", "party hover uses the live Mega species")
+	_check(hover_data.get("displaySpecies") == "Zeraora-Mega", "party hover labels the live Mega form")
+	_check(hover_data.get("stats", {}).get("hp") == 318, "party hover retains owned HP")
+	_check(hover_data.get("stats", {}).get("atk") == 413, "party hover uses live Mega stats")
+	_check(hover_data.get("ability") == "Volt Absorb", "party hover uses the live battle ability")
 
 	print("PASS battle_calcdex_snapshot_check")
 	quit(0)
