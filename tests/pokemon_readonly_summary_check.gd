@@ -93,7 +93,6 @@ func _run() -> void:
 	_check(move_hover_panel.visible, "move hover opens a dedicated detail card")
 	_check(move_hover_panel.size == Vector2(254, 156), "move hover uses a consistent compact size")
 	_check(popup.get_global_rect().encloses(move_hover_panel.get_global_rect()), "move hover stays inside the Summary card")
-	var first_hover_position := move_hover_panel.position
 	var hover_labels := move_hover_panel.find_children("*", "Label", true, false)
 	_check(not hover_labels.is_empty() and (hover_labels[0] as Label).text == "Earthquake", "move hover shows the selected move details")
 	overlay.call("_hide_readonly_summary_move_hover", first_move_panel, nodes)
@@ -117,6 +116,9 @@ func _run() -> void:
 	overlay.call("_position_readonly_summary_detail_hover", detail_hover_panel, popup, position_source, detail_hover_panel.size)
 	_check(not detail_hover_panel.get_global_rect().intersects(position_source.get_global_rect()), "ability hover is positioned above the hovered ability")
 	_check(absf(detail_hover_panel.get_global_rect().end.y - position_source.get_global_rect().position.y) <= 5.0, "ability hover sits directly above the hovered text")
+	overlay.call("_position_readonly_summary_move_hover", move_hover_panel, popup, position_source)
+	_check(not move_hover_panel.get_global_rect().intersects(position_source.get_global_rect()), "move hover is positioned above the hovered move")
+	_check(absf(move_hover_panel.get_global_rect().end.y - position_source.get_global_rect().position.y) <= 5.0, "move hover sits directly above the hovered move")
 	position_source.free()
 	_check((detail_hover_panel.find_children("*", "Label", true, false)[0] as Label).text == "Rough Skin", "ability hover shows its name")
 	overlay.call("_hide_readonly_summary_detail_hover", nodes)
@@ -126,7 +128,6 @@ func _run() -> void:
 	_check((detail_hover_panel.find_children("*", "Label", true, false)[0] as Label).text == "Life Orb", "held item hover shows its name")
 	overlay.call("_hide_readonly_summary_detail_hover", nodes)
 	overlay.call("_show_readonly_summary_move_hover", second_move_panel, nodes)
-	_check(move_hover_panel.position == first_hover_position, "every move uses the same hover position")
 	_check(not popup.find_children("*", "ScrollContainer", true, false).size(), "read-only Summary needs no scrolling")
 
 	for loader_property: String in ["pokemon_summary_sprite_loader", "pokedex_sprite_loader"]:

@@ -16158,7 +16158,7 @@ func _show_readonly_summary_move_hover(move_panel: PanelContainer, nodes: Dictio
 	description_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stack.add_child(description_label)
 
-	_position_readonly_summary_move_hover(hover_panel, popup)
+	_position_readonly_summary_move_hover(hover_panel, popup, move_panel)
 	hover_panel.visible = true
 	hover_panel.move_to_front()
 	var hover_style := move_panel.get_meta("readonly_hover_style", null) as StyleBoxFlat
@@ -16266,7 +16266,8 @@ func _show_readonly_summary_detail_hover(source: Control, nodes: Dictionary) -> 
 		])
 	hover_panel.custom_minimum_size = panel_size
 	hover_panel.set_meta("readonly_hover_source_id", source.get_instance_id())
-	hover_panel.visible = false
+	hover_panel.modulate = Color(1, 1, 1, 0)
+	hover_panel.visible = true
 	_finalize_readonly_summary_detail_hover_layout(hover_panel, popup, source, panel_size)
 
 func _hide_readonly_summary_detail_hover(nodes: Dictionary) -> void:
@@ -16283,19 +16284,8 @@ func _set_readonly_summary_detail_hover(source: Control, title: String, descript
 	source.set_meta("readonly_hover_description", description)
 	source.set_meta("readonly_hover_accent", accent)
 
-func _position_readonly_summary_move_hover(hover_panel: PanelContainer, popup: PanelContainer) -> void:
-	var popup_rect := popup.get_global_rect()
-	var panel_size := POKEMON_READONLY_MOVE_HOVER_SIZE
-	var global_x := popup_rect.position.x + POKEMON_READONLY_MOVE_HOVER_INSET
-	var global_y := popup_rect.end.y - panel_size.y - POKEMON_READONLY_MOVE_HOVER_INSET
-	hover_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
-	var hover_parent := hover_panel.get_parent_control()
-	if hover_parent == null:
-		return
-	hover_panel.position = hover_parent.get_global_transform().affine_inverse() * Vector2(global_x, global_y)
-	hover_panel.size = panel_size
-	hover_panel.custom_minimum_size = panel_size
-	hover_panel.reset_size()
+func _position_readonly_summary_move_hover(hover_panel: PanelContainer, popup: PanelContainer, source: Control) -> void:
+	_position_readonly_summary_detail_hover(hover_panel, popup, source, POKEMON_READONLY_MOVE_HOVER_SIZE)
 
 func _position_readonly_summary_detail_hover(hover_panel: PanelContainer, popup: PanelContainer, source: Control, panel_size: Vector2) -> void:
 	var popup_rect := popup.get_global_rect()
@@ -16337,6 +16327,7 @@ func _finalize_readonly_summary_detail_hover_layout(hover_panel: PanelContainer,
 	if not is_inside_tree():
 		hover_panel.size = requested_size
 		_position_readonly_summary_detail_hover(hover_panel, popup, source, requested_size)
+		hover_panel.modulate = Color.WHITE
 		hover_panel.visible = true
 		hover_panel.move_to_front()
 		if POKEMON_READONLY_DETAIL_HOVER_DEBUG:
@@ -16356,6 +16347,7 @@ func _finalize_readonly_summary_detail_hover_layout(hover_panel: PanelContainer,
 	hover_panel.custom_minimum_size = final_size
 	hover_panel.size = final_size
 	_position_readonly_summary_detail_hover(hover_panel, popup, source, final_size)
+	hover_panel.modulate = Color.WHITE
 	hover_panel.visible = true
 	hover_panel.move_to_front()
 	if POKEMON_READONLY_DETAIL_HOVER_DEBUG:
