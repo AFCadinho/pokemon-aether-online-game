@@ -38,3 +38,8 @@ python3 tools/import_mega_champions_sprite_assets.py \
 
 Publish only through `tools/upload_sprite_asset_packs.py`; do not manually
 edit launcher manifest versions or upload individual unpacked sprite files.
+
+The normal project suite validates the tracked import manifest even when these
+external packs are not installed in a checkout. To additionally require every
+imported binary during a strict local asset audit, run the Phase 3 check with
+`POKEAETHER_REQUIRE_EXTERNAL_SPRITE_ASSETS=1`.
