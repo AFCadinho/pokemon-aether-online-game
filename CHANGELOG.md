@@ -29,7 +29,7 @@
 - Players now face away from the entrance after using a Mt. Moon ladder or tunnel.
 - NPC dialogue now opens promptly by preparing nearby dialogue and avoiding duplicate content requests.
 - Move details now stay inside read-only Pokémon Summary cards when you hover a move.
-- Ability, nature, IV, EV, held item, and Poké Ball details in read-only Pokémon Summaries now use the same in-card hover cards as moves.
+- Ability, nature, IV, EV, held item, and Poké Ball details in read-only Pokémon Summaries now appear in compact hover cards directly above the selected detail.
 - Private battle rooms now explain when the battle server is recovering instead of showing a generic creation error.
 - Ogerpon's correct battle sprites are now included in game downloads.
 - Training Rooms no longer blame a valid Poképaste when room timers are temporarily unavailable.
