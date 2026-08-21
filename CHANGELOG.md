@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Mt. Moon rescue now plays as a full cutscene with Team Rocket summoning Pokémon, a mysterious rift, and your future partner's counterattack.
+
 **Added**
 
 - The story now continues into Mt. Moon: investigate four suspicious people, face Miguel for a fossil, and survive Team Rocket's ambush.
