@@ -196,6 +196,13 @@ This writes zip files to `builds/asset-packs`, uploads them to R2 under `assets/
 
 The script uses content hashes for versions and skips packs whose computed version is already in the workflow. That means unchanged packs are not uploaded again and users do not redownload them.
 
+For the Mega Champions Phase 3 audit, the local packs contain complete exact
+battle sprite sets for 37 of the 49 catalog forms. Twelve forms have only a
+fallback or no local mapping. The upstream source and license of these local
+sprite files are not recorded in repository metadata, so their licensing
+review remains pending. This audit does not authorize packaging, uploading, or
+publishing any sprite pack.
+
 To upload only one changed pack:
 
 ```bash
