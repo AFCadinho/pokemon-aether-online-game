@@ -31,6 +31,7 @@
 
 **Fixed**
 
+- Miguel no longer moves into a Mt. Moon wall after his battle.
 - Missing translated text now reliably falls back to English.
 - Finished battles now close the Damage Calculator automatically so the battle result can be closed immediately.
 - Champions ZA's battle HUD, Damage Calc, and party hover cards now use the active Mega form, ability, and current battle stats.

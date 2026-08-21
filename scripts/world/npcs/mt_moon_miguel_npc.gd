@@ -7,7 +7,7 @@ const QUEST_ID := "travel_through_mt_moon"
 const BATTLE_STEP_ID := "defeat_miguel"
 const BLOCKED_DIALOGUE_ID := "kanto_mt_moon_miguel_blocked"
 
-@export var cleared_position := Vector2(656, 656)
+@export var cleared_position_marker: NodePath
 
 var _blocking_position := Vector2.ZERO
 
@@ -59,6 +59,8 @@ func _on_story_changed(_revision: int) -> void:
 
 func _apply_story_position() -> void:
 	if StoryService.is_requirement_met(QUEST_ID, BATTLE_STEP_ID, "completed"):
-		position = cleared_position
+		var marker := get_node_or_null(cleared_position_marker) as Marker2D
+		if marker != null:
+			global_position = marker.global_position
 	else:
 		position = _blocking_position
