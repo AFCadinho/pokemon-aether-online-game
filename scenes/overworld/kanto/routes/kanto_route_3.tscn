@@ -13,7 +13,6 @@
 [ext_resource type="PackedScene" uid="uid://b6sun8ubp3uia" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="10_pprsw"]
 [ext_resource type="SpriteFrames" uid="uid://dlaxxerx14l3u" path="res://assets/npcs/classes/firebreather_frames.tres" id="11_firebreather"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="12_pokecenter_hint"]
-[ext_resource type="PackedScene" uid="uid://csmsqlujka4ma" path="res://scenes/world/interactables/locked_door_interactable.tscn" id="13_mt_moon_lock"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="15_m5ude"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nuuyr"]
@@ -416,13 +415,6 @@ position = Vector2(2512, 976)
 sign_id = "kanto_route_3_mt_moon_sign"
 sign_type = "road"
 
-[node name="MtMoonCaveLock" parent="Entities/Interactables" unique_id=3248758 instance=ExtResource("13_mt_moon_lock")]
-position = Vector2(2640, 656)
-fallback_locked_dialogue_lines = Array[String](["Mt. Moon is closed for now.", "The cave will become accessible in a future update."])
-display_name = "Mt. Moon"
-blocked_tile_offset = Vector2i(-1, 0)
-blocked_tile_footprint = Vector2i(3, 1)
-
 [node name="Spawns" type="Node2D" parent="." unique_id=120000001]
 
 [node name="FromPewterCity" type="Marker2D" parent="Spawns" unique_id=120000002]
@@ -471,15 +463,14 @@ tile_footprint = Vector2i(1, 2)
 
 [node name="ToMtMoon" type="Area2D" parent="Exits" unique_id=1945368174]
 position = Vector2(2640, 672)
-monitoring = false
-monitorable = false
 script = ExtResource("6_exit")
+target_scene_path = "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn"
+target_spawn_name = "FromRoute3"
 transition_id = "kanto_route_3__to_mt_moon"
-metadata/pao_pending_target_map_id = "kanto_mt_moon"
+transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToMtMoon" unique_id=1866146210]
 shape = SubResource("RectangleShape2D_mt_moon_exit")
-disabled = true
 
 [node name="RouteTransitionHint" parent="Exits/ToMtMoon" unique_id=733482622 instance=ExtResource("7_route_hint")]
 z_as_relative = false
@@ -513,3 +504,4 @@ tile_set = SubResource("TileSet_qfrt0")
 
 [connection signal="body_entered" from="Exits/ToPewterCity" to="Exits/ToPewterCity" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToPokecenter" to="Exits/ToPokecenter" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToMtMoon" to="Exits/ToMtMoon" method="_on_body_entered"]

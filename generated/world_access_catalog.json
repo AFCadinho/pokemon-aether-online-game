@@ -24,6 +24,30 @@
 				}
 			}
 		},
+		"kanto_mt_moon_1f": {
+			"areaType": "wilderness",
+			"defaultMode": "open",
+			"label": "Mt. Moon 1F",
+			"locationGroupId": "kanto_mt_moon",
+			"locationGroupLabel": "Mt. Moon",
+			"regionName": "Kanto",
+			"sceneAliases": [
+				"uid://dinyabx52dya6"
+			],
+			"scenePath": "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn",
+			"spawnPoints": {
+				"from_route_3": {
+					"facingDirection": "down",
+					"label": "Route 3",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute3",
+					"tile": {
+						"x": 29,
+						"y": 76
+					}
+				}
+			}
+		},
 		"kanto_oaks_lab": {
 			"areaType": "interior",
 			"defaultMode": "open",
@@ -1037,6 +1061,23 @@
 	},
 	"schemaVersion": 3,
 	"transitions": {
+		"kanto_mt_moon_1f__to_route_3": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_3",
+				"mapSceneAliases": [
+					"uid://bsfma5bbk6lxj"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_3.tscn",
+				"position": {
+					"x": 2640.0,
+					"y": 720.0
+				},
+				"spawnMarker": "FromMtMoon"
+			},
+			"destinationAreaId": "kanto_route_3",
+			"sourceMapId": "kanto_mt_moon_1f"
+		},
 		"kanto_oaks_lab__to_pallet_town": {
 			"destination": {
 				"mapId": "kanto_pallet_town",
@@ -1524,6 +1565,23 @@
 			},
 			"destinationAreaId": "kanto_route_2",
 			"sourceMapId": "kanto_route_2_viridian_forest_south_gate"
+		},
+		"kanto_route_3__to_mt_moon": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_mt_moon_1f",
+				"mapSceneAliases": [
+					"uid://dinyabx52dya6"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn",
+				"position": {
+					"x": 944.0,
+					"y": 2448.0
+				},
+				"spawnMarker": "FromRoute3"
+			},
+			"destinationAreaId": "kanto_mt_moon_1f",
+			"sourceMapId": "kanto_route_3"
 		},
 		"kanto_route_3__to_pewter_city": {
 			"destination": {

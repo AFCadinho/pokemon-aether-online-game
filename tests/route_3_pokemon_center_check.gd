@@ -2,6 +2,7 @@ extends SceneTree
 
 const ROUTE_3_PATH := "res://scenes/overworld/kanto/routes/kanto_route_3.tscn"
 const CENTER_PATH := "res://scenes/overworld/kanto/routes/route_3_pokemon_center.tscn"
+const MT_MOON_1F_PATH := "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn"
 
 var failed := false
 
@@ -13,6 +14,7 @@ func _init() -> void:
 func _run() -> void:
 	var route_source := FileAccess.get_file_as_string(ROUTE_3_PATH)
 	var center_source := FileAccess.get_file_as_string(CENTER_PATH)
+	var mt_moon_source := FileAccess.get_file_as_string(MT_MOON_1F_PATH)
 	_check(center_source.contains('map_id = "kanto_route_3_pokemon_center"'), "center has a unique map id")
 	_check(center_source.contains('npc_id = "kanto_route_3_pokemon_center_nurse_joy"'), "center places Nurse Joy")
 	_check(center_source.contains('npc_id = "kanto_route_3_pokemon_center_magikarp_salesman"'), "center places the Magikarp salesman")
@@ -24,36 +26,28 @@ func _run() -> void:
 	_check(center_spawn.contains('position = Vector2(2864, 1104)'), "route has a center return spawn")
 	var mt_moon_spawn := _node_block(route_source, "FromMtMoon")
 	_check(mt_moon_spawn.contains('position = Vector2(2640, 720)'), "route has a Mt. Moon return spawn")
-	var mt_moon_lock := _node_block(route_source, "MtMoonCaveLock")
-	_check(mt_moon_lock.contains('position = Vector2(2640, 656)'), "Mt. Moon lock is aligned with the cave mouth")
-	_check(mt_moon_lock.contains('display_name = "Mt. Moon"'), "Mt. Moon lock identifies the closed area")
-	_check(mt_moon_lock.contains('blocked_tile_offset = Vector2i(-1, 0)'), "Mt. Moon lock starts at the cave mouth's left tile")
-	_check(mt_moon_lock.contains('blocked_tile_footprint = Vector2i(3, 1)'), "Mt. Moon lock covers all three entrance tiles")
-	_check(mt_moon_lock.contains('fallback_locked_dialogue_lines'), "Mt. Moon lock explains that the map is unavailable")
-	_check(route_source.contains('path="res://scenes/world/interactables/locked_door_interactable.tscn" id="13_mt_moon_lock"'), "Mt. Moon reuses the standard locked entrance scene")
-	_check_lock_footprint()
 	var mt_moon_exit := _node_block(route_source, "ToMtMoon")
 	_check(mt_moon_exit.contains('position = Vector2(2640, 672)'), "Mt. Moon exit covers the cave mouth")
-	_check(mt_moon_exit.contains('monitoring = false'), "Mt. Moon exit stays inactive until its map exists")
+	_check(mt_moon_exit.contains('target_scene_path = "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn"'), "Route 3 exit targets Mt. Moon 1F")
+	_check(mt_moon_exit.contains('target_spawn_name = "FromRoute3"'), "Route 3 exit uses the Mt. Moon entrance spawn")
 	_check(mt_moon_exit.contains('transition_id = "kanto_route_3__to_mt_moon"'), "Mt. Moon exit reserves a stable transition id")
-	_check(mt_moon_exit.contains('metadata/pao_pending_target_map_id = "kanto_mt_moon"'), "Mt. Moon exit records its pending destination")
+	_check(mt_moon_exit.contains('transition_facing_direction = "up"'), "Route 3 entry faces into the cave")
 	var mt_moon_collision := _node_block(route_source, "CollisionShape2D", "Exits/ToMtMoon")
-	_check(mt_moon_collision.contains('disabled = true'), "Mt. Moon exit collision stays disabled until its map exists")
+	_check(not mt_moon_collision.contains('disabled = true'), "Mt. Moon exit collision is enabled")
+	_check(not route_source.contains('[node name="MtMoonCaveLock"'), "the temporary Mt. Moon lock is removed")
+	_check(route_source.contains('[connection signal="body_entered" from="Exits/ToMtMoon"'), "Route 3 listens for Mt. Moon entry")
+	_check(mt_moon_source.contains('map_id = "kanto_mt_moon_1f"'), "Mt. Moon 1F has a unique map id")
+	_check(mt_moon_source.contains('battle_environment_id = "cave"'), "Mt. Moon uses the cave battle environment")
+	var route_3_spawn := _node_block(mt_moon_source, "FromRoute3")
+	_check(route_3_spawn.contains('position = Vector2(944, 2448)'), "Mt. Moon spawn sits above the Route 3 entrance")
+	var route_3_exit := _node_block(mt_moon_source, "ToRoute3")
+	_check(route_3_exit.contains('position = Vector2(960, 2480)'), "Mt. Moon exit covers the visible entrance")
+	_check(route_3_exit.contains('target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_3.tscn"'), "Mt. Moon exit targets Route 3")
+	_check(route_3_exit.contains('target_spawn_name = "FromMtMoon"'), "Mt. Moon exit uses the Route 3 return spawn")
+	_check(route_3_exit.contains('transition_id = "kanto_mt_moon_1f__to_route_3"'), "Mt. Moon return has a stable transition id")
+	_check(route_3_exit.contains('transition_facing_direction = "down"'), "Mt. Moon exit faces the player away from the cave")
+	_check(mt_moon_source.contains('[connection signal="body_entered" from="Exits/ToRoute3"'), "Mt. Moon listens for Route 3 return")
 	quit(1 if failed else 0)
-
-
-func _check_lock_footprint() -> void:
-	var lock_scene := load("res://scenes/world/interactables/locked_door_interactable.tscn") as PackedScene
-	var lock := lock_scene.instantiate()
-	lock.position = Vector2(2640, 656)
-	lock.set("blocked_tile_offset", Vector2i(-1, 0))
-	lock.set("blocked_tile_footprint", Vector2i(3, 1))
-	root.add_child(lock)
-	_check(lock.call("blocks_world_position", Vector2(2608, 656)), "wide lock blocks the entrance's left tile")
-	_check(lock.call("blocks_world_position", Vector2(2640, 656)), "wide lock blocks the entrance's middle tile")
-	_check(lock.call("blocks_world_position", Vector2(2672, 656)), "wide lock blocks the entrance's right tile")
-	_check(not lock.call("blocks_world_position", Vector2(2704, 656)), "wide lock leaves the next tile open")
-	lock.queue_free()
 
 
 func _node_block(source: String, node_name: String, parent := "") -> String:

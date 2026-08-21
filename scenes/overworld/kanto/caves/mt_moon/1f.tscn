@@ -1,7 +1,51 @@
 [gd_scene format=3 uid="uid://dinyabx52dya6"]
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/mt_moon_1f/mt_moon_1f.visual.tscn" id="1_visual"]
+[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_route_hint"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_route_3_exit"]
+size = Vector2(64, 32)
 
 [node name="1f" type="Node2D" unique_id=826640745]
+script = ExtResource("2_metadata")
+map_id = "kanto_mt_moon_1f"
+map_region_name = "Kanto"
+map_display_name = "Mt. Moon 1F"
+world_access_group_id = "kanto_mt_moon"
+world_access_group_label = "Mt. Moon"
+world_access_area_type = "wilderness"
+location_id = "kanto.mt_moon.1f"
+location_name = "Mt. Moon"
+region_id = "kanto"
+battle_environment_id = "cave"
+lighting_profile = "dark"
+weather_profile = "disabled"
 
 [node name="MtMoon1FVisual" parent="." unique_id=1199211580 instance=ExtResource("1_visual")]
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="FromRoute3" type="Marker2D" parent="Spawns"]
+position = Vector2(944, 2448)
+
+[node name="Exits" type="Node2D" parent="."]
+
+[node name="ToRoute3" type="Area2D" parent="Exits"]
+position = Vector2(960, 2480)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_3.tscn"
+target_spawn_name = "FromMtMoon"
+transition_id = "kanto_mt_moon_1f__to_route_3"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute3"]
+shape = SubResource("RectangleShape2D_route_3_exit")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute3" instance=ExtResource("4_route_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(2, 1)
+flow_direction = "down"
+
+[connection signal="body_entered" from="Exits/ToRoute3" to="Exits/ToRoute3" method="_on_body_entered"]
