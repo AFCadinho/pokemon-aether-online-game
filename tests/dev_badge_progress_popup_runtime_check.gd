@@ -64,15 +64,33 @@ func _run() -> void:
 	_check(popup.find_child("ClearAllButton", true, false) != null, "clear-all developer action exists")
 	_check(popup.find_child("BadgesTabButton", true, false) != null, "trainer progress exposes a badges tab")
 	_check(popup.find_child("KeyItemsTabButton", true, false) != null, "trainer progress exposes a key-items tab")
+	var story_chapter_select := popup.find_child("StoryChapterSelect", true, false) as OptionButton
 	var story_checkpoint_select := popup.find_child("StoryCheckpointSelect", true, false) as OptionButton
+	_check(story_chapter_select != null, "trainer progress exposes a story chapter selector")
 	_check(story_checkpoint_select != null, "trainer progress exposes a story checkpoint selector")
-	if story_checkpoint_select != null:
-		_check(story_checkpoint_select.item_count == 12, "story checkpoint selector includes all five Mt. Moon phases")
+	if story_chapter_select != null and story_checkpoint_select != null:
+		_check(story_chapter_select.item_count == 4, "story checkpoints are divided into compact chapters")
+		var largest_chapter_size := 0
+		for chapter_index in story_chapter_select.item_count:
+			story_chapter_select.select(chapter_index)
+			popup.call("_on_story_chapter_selected", chapter_index)
+			largest_chapter_size = maxi(largest_chapter_size, story_checkpoint_select.item_count)
+		_check(largest_chapter_size <= 5, "no story chapter opens an unbounded checkpoint list")
+		var mt_moon_index := -1
+		for chapter_index in story_chapter_select.item_count:
+			if str(story_chapter_select.get_item_metadata(chapter_index)) == "mt_moon":
+				mt_moon_index = chapter_index
+				break
+		_check(mt_moon_index >= 0, "story chapter selector includes Mt. Moon")
+		story_chapter_select.select(mt_moon_index)
+		popup.call("_on_story_chapter_selected", mt_moon_index)
+		_check(story_checkpoint_select.item_count == 5, "Mt. Moon chapter includes all five phases")
 		var checkpoint_ids: Array[String] = []
 		for checkpoint_index in story_checkpoint_select.item_count:
 			checkpoint_ids.append(str(story_checkpoint_select.get_item_metadata(checkpoint_index)))
 		for checkpoint_id in ["mt_moon_warning", "mt_moon_grunts", "mt_moon_miguel", "mt_moon_fossil", "mt_moon_rescue"]:
 			_check(checkpoint_id in checkpoint_ids, "story checkpoint selector includes %s" % checkpoint_id)
+		_check(story_chapter_select.has_theme_icon_override("arrow"), "story chapter selector uses the custom dropdown arrow")
 		var checkpoint_menu := story_checkpoint_select.get_popup()
 		_check(
 			story_checkpoint_select.has_theme_icon_override("arrow"),
