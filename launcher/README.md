@@ -23,7 +23,17 @@ Asset packs marked with `"optional": true` are skipped by the normal update flow
 
 The default install folder is `user://game`. Players can choose a custom install folder from the launcher Game Folder button; that choice is saved in `user://launcher_settings.json`.
 
-Launcher news is loaded separately from the update manifest through `newsUrl` in `config/launcher_config.json`. The expected shape is documented in `config/news.example.json`.
+Launcher news is loaded separately from the update manifest through `newsUrl`
+in `config/launcher_config.json`. The expected shape is documented in
+`config/news.example.json`.
+
+The production feed at `data/news.json` is generated from public topics in the
+Discourse `Official Announcements` category (category ID 17). The
+`sync-forum-news.yml` workflow polls the category hourly, validates
+the compatibility feed, preserves the previous valid object as
+`data/news.previous.json`, and publishes only when the content changed. The
+workflow fails without replacing the current feed if Discourse is unavailable,
+the category is private, or no valid announcement remains.
 
 ## Configure
 
@@ -110,6 +120,8 @@ manifest.json
 manifest-linux.json
 manifest-macos.json
 manifest-windows.json
+data/news.json
+data/news.previous.json
 launcher/latest/PokeAetherLauncher-linux.zip
 launcher/latest/PokeAetherLauncher-macos.zip
 launcher/latest/PokeAetherLauncher-windows.zip
