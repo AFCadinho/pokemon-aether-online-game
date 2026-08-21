@@ -130,6 +130,15 @@ func _check_pvp_runtime_translation() -> void:
 		) == "ui.pvp.room.tier_team_invalid",
 		"Tier validation failures explain that the selected rules were not met"
 	)
+	_check(
+		overlay.call(
+			"_pvp_room_failure_status_key",
+			{"detail": {"code": "MEGA_READINESS_PENDING"}},
+			false,
+			"ui.pvp.room.create_failed"
+		) == "backend.error.mega_readiness_pending",
+		"Mega readiness failures keep their specific localized explanation"
+	)
 	_check(leaderboard_scope != null and leaderboard_scope.get_item_text(0) == "Dagelijks", "Leaderboard period renders in Dutch")
 	_check_ranked_dropdown_style(format_select, "Matchmaking format")
 	_check_ranked_dropdown_style(leaderboard_scope, "Leaderboard period")
