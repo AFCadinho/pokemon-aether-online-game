@@ -66,18 +66,28 @@ env:
   POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION: pokemon-gen5-shiny-front-b999587c7d07
   POKEMON_GEN5_SHINY_BACK_ASSET_VERSION: pokemon-gen5-shiny-back-dbfa78b78986
   POKEMON_HOME_ASSET_SIZE: 60842557
-
+  POKEMON_HOME_ASSET_SHA256: a7ead89ba95443e9a1326080a6ec8cc1270af99ba8d8776c4d184ac6a0916a33
   POKEMON_HOME_SHINY_ASSET_SIZE: 33150367
+  POKEMON_HOME_SHINY_ASSET_SHA256: 638362e1497e9509b721623ecc4769f79ffd991493979d88962d94c289610d27
   POKEMON_FRONT_ASSET_SIZE: 97090350
+  POKEMON_FRONT_ASSET_SHA256: b340302c92f7422e0ac45b21880f7348034ab90aea8b991abfb3474a4dd00ff3
   POKEMON_BACK_ASSET_SIZE: 78877199
+  POKEMON_BACK_ASSET_SHA256: 91083775007db346ddfbf6035c6b0ee4fa5e365b4832d9d37a3d9b314930db8c
   POKEMON_SHINY_FRONT_ASSET_SIZE: 94432214
+  POKEMON_SHINY_FRONT_ASSET_SHA256: af363efed0ee20f8c786aab2a047748ff539a38d5b5b277119133c6fb2f90181
   POKEMON_SHINY_BACK_ASSET_SIZE: 72905146
+  POKEMON_SHINY_BACK_ASSET_SHA256: 8e19b0d1a95bf0d30f73428c72df620e87fa48258da3b77a7e16269090fb9a46
   POKEMON_GEN5_FRONT_ASSET_SIZE: 314551982
+  POKEMON_GEN5_FRONT_ASSET_SHA256: 922076e4845c57752b368aec986b9aebfe1a9d9b22348ac872932e8c1ecb13a9
   POKEMON_GEN5_BACK_ASSET_SIZE: 248412184
+  POKEMON_GEN5_BACK_ASSET_SHA256: d11da9c065d07a79d4a4f1331d977b246326d23a648612951b1cab7eb9f6c935
   POKEMON_GEN5_SHINY_FRONT_ASSET_SIZE: 317541005
+  POKEMON_GEN5_SHINY_FRONT_ASSET_SHA256: 5240c4f6a20c05bc3819845c399869a5834129e0c01297d7c549b5b3ae75edfb
   POKEMON_GEN5_SHINY_BACK_ASSET_SIZE: 251502026
+  POKEMON_GEN5_SHINY_BACK_ASSET_SHA256: 09014aa218b89759167fc5d4413011592fe4d07d7ddac55437d38d469e09532c
   MUSIC_ASSET_VERSION: music-5ac6cea38758
   MUSIC_ASSET_SIZE: 32002758
+  MUSIC_ASSET_SHA256: 9719b285443dae2271675c298784107adc8a5d1cb155d5567e741c92fd11f6ff
   UPDATE_BASE_URL: https://updates.pokeaether.com
   MAX_LAUNCHER_GAME_ZIP_BYTES: 1000000000
   R2_RELEASE_RETENTION_PREVIOUS: 1
@@ -220,6 +230,14 @@ jobs:
       - name: Verify client crash reporting
         run: ./godot --headless --path . --script res://tests/client_crash_reporting_check.gd
 
+      - name: Verify launcher download resilience
+        env:
+          GODOT_BIN: ./godot
+        run: |
+          python3 tools/test_launcher_download_pipeline.py
+          python3 launcher/tests/run_resumable_download_check.py
+          ./godot --headless --path launcher --script res://tests/localization_check.gd
+
       - name: Verify generated world access catalog
         run: ./godot --no-header --headless --path . res://tools/generate_world_access_catalog.tscn -- --check
 
@@ -321,7 +339,8 @@ jobs:
             pack_id="$1"
             pack_version="$2"
             size_bytes="$3"
-            optional="${4:-false}"
+            sha256="$4"
+            optional="${5:-false}"
 
             if [ -z "${pack_id}" ] || [ -z "${pack_version}" ]; then
               echo "Missing external asset pack id or version." >&2
@@ -332,24 +351,29 @@ jobs:
             echo "Verifying external asset pack ${pack_id}: ${asset_url}"
             curl -fsSI "${asset_url}" >/dev/null
 
-            asset_pack_arg="${pack_id}:${pack_version}:${pack_version}.zip:${size_bytes}"
+            if ! [[ "${sha256}" =~ ^[a-f0-9]{64}$ ]]; then
+              echo "Invalid SHA-256 for external asset pack ${pack_id}." >&2
+              return 1
+            fi
+
+            asset_pack_arg="${pack_id}:${pack_version}:${pack_version}.zip:${size_bytes}:${sha256}"
             if [ "${optional}" = "true" ]; then
               asset_pack_arg="${asset_pack_arg}:true"
             fi
             printf '%s\n' "--external-asset-pack" "${asset_pack_arg}" >> /tmp/asset_pack_args.txt
           }
 
-          register_external_pack "pokemon-home" "${POKEMON_HOME_ASSET_VERSION}" "${POKEMON_HOME_ASSET_SIZE}"
-          register_external_pack "pokemon-home-shiny" "${POKEMON_HOME_SHINY_ASSET_VERSION}" "${POKEMON_HOME_SHINY_ASSET_SIZE}"
-          register_external_pack "pokemon-front" "${POKEMON_FRONT_ASSET_VERSION}" "${POKEMON_FRONT_ASSET_SIZE}"
-          register_external_pack "pokemon-back" "${POKEMON_BACK_ASSET_VERSION}" "${POKEMON_BACK_ASSET_SIZE}"
-          register_external_pack "pokemon-shiny-front" "${POKEMON_SHINY_FRONT_ASSET_VERSION}" "${POKEMON_SHINY_FRONT_ASSET_SIZE}"
-          register_external_pack "pokemon-shiny-back" "${POKEMON_SHINY_BACK_ASSET_VERSION}" "${POKEMON_SHINY_BACK_ASSET_SIZE}"
-          register_external_pack "pokemon-gen5-front" "${POKEMON_GEN5_FRONT_ASSET_VERSION}" "${POKEMON_GEN5_FRONT_ASSET_SIZE}" "true"
-          register_external_pack "pokemon-gen5-back" "${POKEMON_GEN5_BACK_ASSET_VERSION}" "${POKEMON_GEN5_BACK_ASSET_SIZE}" "true"
-          register_external_pack "pokemon-gen5-shiny-front" "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION}" "${POKEMON_GEN5_SHINY_FRONT_ASSET_SIZE}" "true"
-          register_external_pack "pokemon-gen5-shiny-back" "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION}" "${POKEMON_GEN5_SHINY_BACK_ASSET_SIZE}" "true"
-          register_external_pack "music" "${MUSIC_ASSET_VERSION}" "${MUSIC_ASSET_SIZE}"
+          register_external_pack "pokemon-home" "${POKEMON_HOME_ASSET_VERSION}" "${POKEMON_HOME_ASSET_SIZE}" "${POKEMON_HOME_ASSET_SHA256}"
+          register_external_pack "pokemon-home-shiny" "${POKEMON_HOME_SHINY_ASSET_VERSION}" "${POKEMON_HOME_SHINY_ASSET_SIZE}" "${POKEMON_HOME_SHINY_ASSET_SHA256}"
+          register_external_pack "pokemon-front" "${POKEMON_FRONT_ASSET_VERSION}" "${POKEMON_FRONT_ASSET_SIZE}" "${POKEMON_FRONT_ASSET_SHA256}"
+          register_external_pack "pokemon-back" "${POKEMON_BACK_ASSET_VERSION}" "${POKEMON_BACK_ASSET_SIZE}" "${POKEMON_BACK_ASSET_SHA256}"
+          register_external_pack "pokemon-shiny-front" "${POKEMON_SHINY_FRONT_ASSET_VERSION}" "${POKEMON_SHINY_FRONT_ASSET_SIZE}" "${POKEMON_SHINY_FRONT_ASSET_SHA256}"
+          register_external_pack "pokemon-shiny-back" "${POKEMON_SHINY_BACK_ASSET_VERSION}" "${POKEMON_SHINY_BACK_ASSET_SIZE}" "${POKEMON_SHINY_BACK_ASSET_SHA256}"
+          register_external_pack "pokemon-gen5-front" "${POKEMON_GEN5_FRONT_ASSET_VERSION}" "${POKEMON_GEN5_FRONT_ASSET_SIZE}" "${POKEMON_GEN5_FRONT_ASSET_SHA256}" "true"
+          register_external_pack "pokemon-gen5-back" "${POKEMON_GEN5_BACK_ASSET_VERSION}" "${POKEMON_GEN5_BACK_ASSET_SIZE}" "${POKEMON_GEN5_BACK_ASSET_SHA256}" "true"
+          register_external_pack "pokemon-gen5-shiny-front" "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION}" "${POKEMON_GEN5_SHINY_FRONT_ASSET_SIZE}" "${POKEMON_GEN5_SHINY_FRONT_ASSET_SHA256}" "true"
+          register_external_pack "pokemon-gen5-shiny-back" "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION}" "${POKEMON_GEN5_SHINY_BACK_ASSET_SIZE}" "${POKEMON_GEN5_SHINY_BACK_ASSET_SHA256}" "true"
+          register_external_pack "music" "${MUSIC_ASSET_VERSION}" "${MUSIC_ASSET_SIZE}" "${MUSIC_ASSET_SHA256}"
 
       - name: Package launcher release
         run: |
@@ -433,6 +457,7 @@ jobs:
 
           required_ids = {
               "pokemon-home",
+              "pokemon-home-shiny",
               "pokemon-front",
               "pokemon-back",
               "pokemon-shiny-front",
@@ -470,13 +495,19 @@ jobs:
 
               for pack_id in sorted(required_ids):
                   pack = by_id[pack_id]
-                  if not pack.get("version") or not pack.get("url"):
+                  if not pack.get("version") or not pack.get("url") or not pack.get("sizeBytes"):
                       raise SystemExit(f"{manifest_path} has incomplete asset pack: {pack_id}")
+                  sha256 = str(pack.get("sha256", ""))
+                  if len(sha256) != 64 or any(character not in "0123456789abcdef" for character in sha256):
+                      raise SystemExit(f"{manifest_path} has no valid SHA-256 for {pack_id}")
                   if pack_id != "music" and not str(pack["url"]).endswith(f"/{pack['version']}.zip"):
                       raise SystemExit(f"{manifest_path} URL does not match version for {pack_id}: {pack['url']}")
 
               for pack_id in sorted(optional_gen5_ids & by_id.keys()):
                   pack = by_id[pack_id]
+                  sha256 = str(pack.get("sha256", ""))
+                  if len(sha256) != 64 or any(character not in "0123456789abcdef" for character in sha256):
+                      raise SystemExit(f"{manifest_path} has no valid SHA-256 for {pack_id}")
                   if pack.get("optional") is not True:
                       raise SystemExit(f"{manifest_path} gen5 pack must be optional: {pack_id}")
                   if pack.get("autoUpdateIfInstalled") is not True:
