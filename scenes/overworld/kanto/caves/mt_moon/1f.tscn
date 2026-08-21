@@ -25,14 +25,14 @@ weather_profile = "disabled"
 
 [node name="MtMoon1FVisual" parent="." instance=ExtResource("1_visual")]
 
-[node name="Spawns" type="Node2D" parent="."]
+[node name="Spawns" type="Node2D" parent="." unique_id=939332491]
 
-[node name="FromRoute3" type="Marker2D" parent="Spawns"]
+[node name="FromRoute3" type="Marker2D" parent="Spawns" unique_id=1706453174]
 position = Vector2(944, 2448)
 
-[node name="Exits" type="Node2D" parent="."]
+[node name="Exits" type="Node2D" parent="." unique_id=1671758864]
 
-[node name="ToRoute3" type="Area2D" parent="Exits"]
+[node name="ToRoute3" type="Area2D" parent="Exits" unique_id=2084334651]
 position = Vector2(960, 2480)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_3.tscn"
@@ -40,10 +40,10 @@ target_spawn_name = "FromMtMoon"
 transition_id = "kanto_mt_moon_1f__to_route_3"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute3"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute3" unique_id=1067196499]
 shape = SubResource("RectangleShape2D_route_3_exit")
 
-[node name="RouteTransitionHint" parent="Exits/ToRoute3" instance=ExtResource("4_route_hint")]
+[node name="RouteTransitionHint" parent="Exits/ToRoute3" unique_id=1176705900 instance=ExtResource("4_route_hint")]
 z_as_relative = false
 tile_footprint = Vector2i(2, 1)
 flow_direction = "down"
