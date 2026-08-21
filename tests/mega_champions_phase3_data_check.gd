@@ -1,6 +1,7 @@
 extends SceneTree
 
 const PokemonAssets := preload("res://scripts/data/pokemon_assets.gd")
+const BattleSpriteRenderScale := preload("res://scripts/battle/battle_ui/battle_sprite_render_scale.gd")
 const CATALOG_PATH := "res://data/mega_champions_catalog.generated.json"
 const ASSET_READINESS_PATH := "res://data/mega_champions_asset_readiness.generated.json"
 const SPRITE_IMPORT_MANIFEST_PATH := "res://data/mega_champions_sprite_imports.generated.json"
@@ -30,6 +31,7 @@ func _run() -> void:
 	_check_localizations_and_item_icons(catalog)
 	_check_sprite_mappings(catalog, readiness)
 	_check_rendering_consumers()
+	_check_static_front_sprite_scale()
 	if not failed:
 		print("PASS mega_champions_phase3_data_check")
 	quit(1 if failed else 0)
@@ -155,6 +157,28 @@ func _check_rendering_consumers() -> void:
 	_check(party_source.contains("PokemonAssets.load_party_icon(species, is_shiny)"), "party rendering uses the shared species sprite resolver")
 	_check(battle_sprite_source.contains("PokemonAssets.get_battle_sprite_ids(species)"), "battle HUD uses the shared battle sprite mapping")
 	_check(calcdex_source.contains("PokemonAssets.load_party_icon(sprite_species)"), "Calcdex renders through the shared species sprite mapping")
+
+
+func _check_static_front_sprite_scale() -> void:
+	var metadata := {
+		"frame_width": 192,
+		"frame_height": 192,
+		"scale": 1,
+		"resample": "static-source",
+	}
+	_check(
+		is_equal_approx(BattleSpriteRenderScale.resolve(metadata, "showdown/front"), 2.0),
+		"192 px static Champions ZA front sprites render at their authored 2x resolution"
+	)
+	_check(
+		is_equal_approx(BattleSpriteRenderScale.resolve(metadata, "showdown/back"), 1.0),
+		"the static front scale rule does not change back sprites"
+	)
+	metadata["resample"] = "lanczos"
+	_check(
+		is_equal_approx(BattleSpriteRenderScale.resolve(metadata, "showdown/front"), 1.0),
+		"animated front sprites keep their existing render scale"
+	)
 
 
 func _read_dictionary(path: String) -> Dictionary:
