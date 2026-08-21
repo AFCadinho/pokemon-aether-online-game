@@ -80,7 +80,6 @@ const STORY_PATH_DIRECTIONS: Array[String] = ["up", "down", "left", "right"]
 const SORT_Z_MIN := -4096
 const SORT_Z_MAX := 4096
 const DEFAULT_PLAYER_VISUAL_SORT_DEPTH := 8
-const MANUAL_INTERACTION_DELAY_SECONDS := 0.15
 const PLAYER_OVERLAP_SORT_Y_EPSILON := 0.1
 const NAMEPLATE_WIDTH := 164.0
 const NAMEPLATE_CENTER_X := NAMEPLATE_WIDTH * 0.5
@@ -1170,7 +1169,9 @@ func _start_manual_interaction(body: Node2D) -> void:
 	_face_body(body)
 	if body.has_method("face_world_position"):
 		body.face_world_position(get_feet_position())
-	await get_tree().create_timer(MANUAL_INTERACTION_DELAY_SECONDS).timeout
+	# Let both characters visibly face each other before opening the UI without
+	# imposing a fixed network-independent pause on every interaction.
+	await get_tree().process_frame
 
 	var result := await _run_story_or_legacy_interaction(body, "interact")
 	if str(result.get("status", "")) != "pending_battle":
@@ -1372,12 +1373,14 @@ func _on_locale_changed(_locale: String) -> void:
 	if preload_quest_markers:
 		_initialize_quest_markers.call_deferred()
 	elif player_nearby:
-		_refresh_nearby_pickpocket_metadata.call_deferred()
+		_prefetch_nearby_npc_content.call_deferred()
 
 
 func _on_story_changed(_revision: int) -> void:
 	_apply_story_visibility(true)
 	_refresh_quest_marker()
+	if player_nearby:
+		_prefetch_nearby_npc_content.call_deferred()
 
 
 func _apply_story_visibility(allow_deferred_hide := false) -> void:
@@ -1460,7 +1463,7 @@ func _on_interaction_area_body_entered(body: Node2D) -> void:
 		player_nearby = true
 		nearby_player = body
 		_sync_nameplate()
-		_refresh_nearby_pickpocket_metadata.call_deferred()
+		_prefetch_nearby_npc_content.call_deferred()
 		_sync_thieving_prompt()
 
 
@@ -1473,14 +1476,35 @@ func _on_interaction_area_body_exited(body: Node2D) -> void:
 		_sync_thieving_prompt()
 
 
-func _refresh_nearby_pickpocket_metadata() -> void:
+func _prefetch_nearby_npc_content() -> void:
 	if not player_nearby or nearby_player == null:
 		return
-	if not _loads_pickpocket_profile_from_npc_metadata():
+	if (
+		not _loads_pickpocket_profile_from_npc_metadata()
+		and not _prefetches_dialogue_metadata_on_approach()
+	):
 		return
-	if not npc_metadata_loaded and not _get_npc_metadata_id().is_empty():
-		await _load_npc_metadata()
+	var metadata_id := _get_npc_metadata_id()
+	if not npc_metadata_loaded and not metadata_id.is_empty():
+		var response: Dictionary = await _load_npc_metadata()
+		if not bool(response.get("success", false)):
+			return
+	if not player_nearby or nearby_player == null:
+		return
+	if (
+		_prefetches_dialogue_metadata_on_approach()
+		and (metadata_id.is_empty() or npc_metadata_loaded)
+	):
+		await _prefetch_nearby_dialogue_metadata()
 	_sync_thieving_prompt()
+
+
+func _prefetches_dialogue_metadata_on_approach() -> bool:
+	return false
+
+
+func _prefetch_nearby_dialogue_metadata() -> void:
+	pass
 
 
 ## Ordinary dialogue NPCs can receive their pickpocket profile from the content
