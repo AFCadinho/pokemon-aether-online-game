@@ -1,3 +1,7 @@
 [gd_scene format=3 uid="uid://k7f42q7h56tv"]
 
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/mt_moon_b2f/mt_moon_b2f.visual.tscn" id="1_visual"]
+
 [node name="B2f" type="Node2D" unique_id=624862661]
+
+[node name="MtMoonB2FVisual" parent="." instance=ExtResource("1_visual")]
