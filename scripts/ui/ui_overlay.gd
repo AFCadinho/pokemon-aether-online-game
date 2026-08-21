@@ -92,6 +92,7 @@ const CHAT_MUTE_PERMISSION := "chat:mute"
 const IMPERSONATE_PERMISSION := "accounts:impersonate"
 const DEV_TOOLS_PERMISSION := "generating"
 const DEV_ITEM_GENERATING_PERMISSION := "items:generating"
+const DIRECT_BATTLE_FORM_GENERATING_PERMISSION := "pokemon:direct-battle-form:generating"
 const STAFF_ACTION_BAR_PERMISSION := "ui:staff:action-bar"
 const WORLD_TELEPORT_SELF_PERMISSION := "world:teleport:self"
 const WORLD_TELEPORT_PLAYER_PERMISSION := "world:teleport:player"
@@ -528,6 +529,8 @@ var donator_store_popup: DonatorStorePopup
 @onready var dev_pokemon_title: Label = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/Title
 @onready var dev_pokemon_subtitle: Label = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/Subtitle
 @onready var dev_pokemon_text: TextEdit = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/PokemonText
+@onready var dev_preserve_direct_form: CheckButton = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/PreserveDirectBattleForm
+@onready var dev_test_purpose: LineEdit = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/TestPurpose
 @onready var dev_pokemon_add_button: Button = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow/AddButton
 @onready var dev_pokemon_close_button: Button = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow/CloseButton
 @onready var aether_exchange_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/AetherExchangeSlot
@@ -623,6 +626,7 @@ var skills_panel: Control
 @onready var dev_add_team_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/AddTeamButton
 @onready var dev_spawn_pokemon_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/SpawnPokemonButton
 @onready var dev_clear_party_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/ClearPartyButton
+@onready var dev_cleanup_test_pokemon_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/CleanupTestPokemonButton
 @onready var dev_world_time_select: OptionButton = $Control/DevActionsPopup/MarginContainer/VBoxContainer/WorldTimeSelect
 @onready var dev_world_weather_select: OptionButton = $Control/DevActionsPopup/MarginContainer/VBoxContainer/WorldWeatherSelect
 @onready var dev_actions_close_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/CloseButton
@@ -1505,6 +1509,7 @@ func _ready() -> void:
 	dev_pokemon_button.disabled = true
 	dev_pokemon_add_button.pressed.connect(_on_dev_pokemon_add_button_pressed)
 	dev_pokemon_close_button.pressed.connect(_on_dev_pokemon_close_button_pressed)
+	dev_preserve_direct_form.toggled.connect(_on_dev_preserve_direct_form_toggled)
 	_setup_icon_slot_hover(aether_exchange_slot, aether_exchange_button)
 	_setup_icon_slot_hover(map_slot, map_button)
 	_setup_icon_slot_hover(running_shoes_slot, running_shoes_button)
@@ -1591,6 +1596,7 @@ func _ready() -> void:
 	dev_add_item_button.pressed.connect(_on_dev_add_item_button_pressed)
 	dev_add_money_button.pressed.connect(_on_dev_add_money_button_pressed)
 	dev_clear_party_button.pressed.connect(_on_dev_clear_party_button_pressed)
+	dev_cleanup_test_pokemon_button.pressed.connect(_on_dev_cleanup_test_pokemon_button_pressed)
 	dev_world_time_select.item_selected.connect(_on_dev_world_time_selected)
 	dev_world_weather_select.item_selected.connect(_on_dev_world_weather_selected)
 	dev_actions_close_button.pressed.connect(_on_dev_actions_close_button_pressed)
@@ -1794,6 +1800,9 @@ func _can_use_dev_tools() -> bool:
 func _can_generate_dev_items() -> bool:
 	return _has_user_permission(DEV_ITEM_GENERATING_PERMISSION)
 
+func _can_generate_direct_battle_forms() -> bool:
+	return _can_use_dev_tools() and _has_user_permission(DIRECT_BATTLE_FORM_GENERATING_PERMISSION)
+
 func _can_open_dev_actions() -> bool:
 	return _can_use_dev_tools() or _can_generate_dev_items()
 
@@ -1976,6 +1985,8 @@ func _refresh_dev_tools_visibility() -> void:
 		dev_badge_progress_button.disabled = not can_use_dev_tools
 	dev_clear_party_button.visible = can_use_dev_tools
 	dev_clear_party_button.disabled = not can_use_dev_tools
+	dev_cleanup_test_pokemon_button.visible = _can_generate_direct_battle_forms()
+	dev_cleanup_test_pokemon_button.disabled = not _can_generate_direct_battle_forms()
 	dev_pokemon_add_button.disabled = not can_use_dev_tools
 	if dev_add_item_button != null:
 		dev_add_item_button.visible = can_generate_dev_items
@@ -24870,6 +24881,7 @@ func _apply_premium_overlay_styles() -> void:
 		player_status_panel.add_theme_stylebox_override("panel", _make_player_status_panel_style(false))
 
 	_apply_line_edit_style(chat_input)
+	_apply_line_edit_style(dev_test_purpose)
 	_apply_text_edit_style(dev_pokemon_text)
 	dev_pokemon_title.add_theme_color_override("font_color", UI_TEXT)
 	if dev_pokemon_subtitle != null:
@@ -24886,6 +24898,7 @@ func _apply_premium_overlay_styles() -> void:
 	_refresh_global_buff_contribution_input()
 	_apply_button_style(dev_pokemon_add_button, "primary")
 	_apply_button_style(dev_pokemon_close_button)
+	_apply_button_style(dev_cleanup_test_pokemon_button)
 	_apply_button_style(dev_world_time_select)
 	_apply_button_style(dev_world_weather_select)
 	_apply_button_style(dev_actions_close_button)
@@ -27266,7 +27279,7 @@ func _handle_start_encounter_command(pokemon_text: String) -> bool:
 		return false
 
 	_add_chat_message("Creating wild Pokemon...")
-	var response: Dictionary = await PokemonDataApiClient.create_pokemon_from_text(parse_pokemon_request, pokemon_text, true)
+	var response: Dictionary = await PokemonDataApiClient.create_pokemon_from_text(parse_pokemon_request, pokemon_text)
 	if not bool(response.get("success", false)):
 		_add_chat_message("Create failed: %s" % str(response.get("error", "Unknown error")))
 		return false
@@ -27291,14 +27304,22 @@ func _handle_start_encounter_command(pokemon_text: String) -> bool:
 	await world.start_dev_wild_battle(pokemon)
 	return true
 
-func _handle_add_pokemon_command(pokemon_text: String) -> bool:
+func _handle_add_pokemon_command(
+	pokemon_text: String,
+	preserve_direct_battle_form: bool = false,
+	test_purpose: String = ""
+) -> bool:
 	pokemon_text = _clean_pokemon_paste_text(pokemon_text)
 	if pokemon_text.strip_edges() == "":
 		_add_chat_message("Paste a Showdown/Pokepaste set first.")
 		return false
 
 	_add_chat_message("Creating Pokemon...")
-	var response: Dictionary = await PokemonDataApiClient.create_pokemon_from_text(parse_pokemon_request, pokemon_text, true)
+	var response: Dictionary = await PokemonDataApiClient.create_pokemon_from_text(
+		parse_pokemon_request,
+		pokemon_text,
+		preserve_direct_battle_form
+	)
 	if not bool(response.get("success", false)):
 		_add_chat_message("Create failed: %s" % str(response.get("error", "Unknown error")))
 		return false
@@ -27319,7 +27340,12 @@ func _handle_add_pokemon_command(pokemon_text: String) -> bool:
 		_add_chat_message("Could not create Pokemon from backend data. Reason: %s" % reason)
 		return false
 
-	var create_result: Dictionary = await PlayerPartyStateService.dev_create_pokemon(parsed_pokemon_data, true)
+	var create_result: Dictionary = await PlayerPartyStateService.dev_create_pokemon(
+		parsed_pokemon_data,
+		true,
+		preserve_direct_battle_form,
+		test_purpose
+	)
 	if not bool(create_result.get("success", false)):
 		_add_chat_message("Could not save Pokemon: %s" % str(create_result.get("error", "Unknown error")))
 		return false
@@ -27385,14 +27411,22 @@ func _handle_content_creator_add_pokemon_command(pokemon_text: String) -> bool:
 	_add_chat_message("Created %s Alpha Pokemon." % created_count)
 	return true
 
-func _handle_add_team_command(team_text: String) -> bool:
+func _handle_add_team_command(
+	team_text: String,
+	preserve_direct_battle_form: bool = false,
+	test_purpose: String = ""
+) -> bool:
 	team_text = _clean_team_paste_text(team_text)
 	if team_text.strip_edges() == "":
 		_add_chat_message("Paste a Showdown/Pokepaste team first.")
 		return false
 
 	_add_chat_message("Creating team...")
-	var response: Dictionary = await PokemonDataApiClient.create_team_from_text(parse_pokemon_request, team_text, true)
+	var response: Dictionary = await PokemonDataApiClient.create_team_from_text(
+		parse_pokemon_request,
+		team_text,
+		preserve_direct_battle_form
+	)
 	if not bool(response.get("success", false)):
 		_add_chat_message("Create failed: %s" % str(response.get("error", "Unknown error")))
 		return false
@@ -27428,7 +27462,12 @@ func _handle_add_team_command(team_text: String) -> bool:
 
 	var created_count := 0
 	for pokemon_data: Dictionary in parsed_pokemon_payloads:
-		var create_result: Dictionary = await PlayerPartyStateService.dev_create_pokemon(pokemon_data, true)
+		var create_result: Dictionary = await PlayerPartyStateService.dev_create_pokemon(
+			pokemon_data,
+			true,
+			preserve_direct_battle_form,
+			test_purpose
+		)
 		if not bool(create_result.get("success", false)):
 			_add_chat_message("Created %s Pokemon, then failed: %s" % [created_count, str(create_result.get("error", "Unknown error"))])
 			return false
@@ -32479,6 +32518,18 @@ func _on_dev_clear_party_button_pressed() -> void:
 	_activate_ui_panel(dev_clear_menu_popup)
 
 
+func _on_dev_cleanup_test_pokemon_button_pressed() -> void:
+	if not _can_generate_direct_battle_forms():
+		return
+	dev_cleanup_test_pokemon_button.disabled = true
+	var result: Dictionary = await PlayerPartyStateService.cleanup_dev_test_pokemon()
+	dev_cleanup_test_pokemon_button.disabled = false
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not clean test Pokemon: %s" % str(result.get("error", "Unknown error")))
+		return
+	_add_chat_message("Cleaned %s testing-only Pokemon." % int(result.get("cleaned", 0)))
+
+
 func _on_dev_world_time_selected(index: int) -> void:
 	if not _can_use_dev_tools():
 		_refresh_dev_world_time_selector()
@@ -32718,6 +32769,8 @@ func _show_dev_pokemon_popup(mode: int) -> void:
 		return
 
 	dev_pokemon_popup_mode = mode
+	dev_preserve_direct_form.set_pressed_no_signal(false)
+	dev_test_purpose.clear()
 	_refresh_dev_pokemon_popup_copy()
 
 	dev_pokemon_add_button.disabled = dev_pokemon_popup_mode == DevPokemonPopupMode.CONTENT_CREATOR and not _can_use_content_creator_generation()
@@ -32727,6 +32780,12 @@ func _show_dev_pokemon_popup(mode: int) -> void:
 
 
 func _refresh_dev_pokemon_popup_copy() -> void:
+	var can_preserve_direct := (
+		dev_pokemon_popup_mode in [DevPokemonPopupMode.POKEMON, DevPokemonPopupMode.TEAM]
+		and _can_generate_direct_battle_forms()
+	)
+	dev_preserve_direct_form.visible = can_preserve_direct
+	dev_test_purpose.visible = can_preserve_direct and dev_preserve_direct_form.button_pressed
 	match dev_pokemon_popup_mode:
 		DevPokemonPopupMode.CONTENT_CREATOR:
 			dev_pokemon_title.text = LocalizationManager.text("ui.staff.dev.pokemon.alpha_title")
@@ -32757,16 +32816,23 @@ func _on_dev_pokemon_add_button_pressed() -> void:
 		if not _can_use_dev_tools():
 			return
 
+	var preserve_direct := dev_preserve_direct_form.visible and dev_preserve_direct_form.button_pressed
+	var test_purpose := dev_test_purpose.text.strip_edges() if preserve_direct else ""
+	if preserve_direct and test_purpose.length() < 8:
+		_add_chat_message(LocalizationManager.text("ui.staff.dev.pokemon.test_purpose_required"))
+		dev_test_purpose.grab_focus()
+		return
+
 	var added: bool = false
 	match dev_pokemon_popup_mode:
 		DevPokemonPopupMode.CONTENT_CREATOR:
 			added = await _handle_content_creator_add_pokemon_command(dev_pokemon_text.text)
 		DevPokemonPopupMode.TEAM:
-			added = await _handle_add_team_command(dev_pokemon_text.text)
+			added = await _handle_add_team_command(dev_pokemon_text.text, preserve_direct, test_purpose)
 		DevPokemonPopupMode.SPAWN:
 			added = await _handle_start_encounter_command(dev_pokemon_text.text)
 		_:
-			added = await _handle_add_pokemon_command(dev_pokemon_text.text)
+			added = await _handle_add_pokemon_command(dev_pokemon_text.text, preserve_direct, test_purpose)
 
 	if added:
 		dev_pokemon_text.clear()
@@ -32774,8 +32840,16 @@ func _on_dev_pokemon_add_button_pressed() -> void:
 
 func _on_dev_pokemon_close_button_pressed() -> void:
 	dev_pokemon_popup.visible = false
+	dev_preserve_direct_form.set_pressed_no_signal(false)
+	dev_test_purpose.clear()
 	dev_pokemon_popup_mode = DevPokemonPopupMode.POKEMON
 	chat_input.grab_focus()
+
+
+func _on_dev_preserve_direct_form_toggled(enabled: bool) -> void:
+	dev_test_purpose.visible = enabled and dev_preserve_direct_form.visible
+	if not enabled:
+		dev_test_purpose.clear()
 
 func _on_settings_button_pressed() -> void:
 	if settings_menu.has_method("open"):

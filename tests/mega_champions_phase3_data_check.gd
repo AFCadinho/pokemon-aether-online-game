@@ -151,7 +151,7 @@ func _check_rendering_consumers() -> void:
 	_check(overlay_source.contains('BAG_ICON_ROOT + normalized + ".png"'), "Bag and summary use the canonical normalized item icon key")
 	_check(overlay_source.contains("_load_item_icon(held_item_id)"), "held-item summary uses the shared icon resolver")
 	_check(overlay_source.contains("_add_pc_held_item_marker(icon, held_item_id)"), "storage renders held-item state from the serialized item id")
-	_check(overlay_source.contains("dev_create_pokemon(parsed_pokemon_data"), "developer generator preserves the serialized Pokemon payload path")
+	_check(overlay_source.contains("PlayerPartyStateService.dev_create_pokemon("), "developer generator preserves the serialized Pokemon payload path")
 	_check(party_source.contains("PokemonAssets.load_party_icon(species, is_shiny)"), "party rendering uses the shared species sprite resolver")
 	_check(battle_sprite_source.contains("PokemonAssets.get_battle_sprite_ids(species)"), "battle HUD uses the shared battle sprite mapping")
 	_check(calcdex_source.contains("PokemonAssets.load_party_icon(sprite_species)"), "Calcdex renders through the shared species sprite mapping")

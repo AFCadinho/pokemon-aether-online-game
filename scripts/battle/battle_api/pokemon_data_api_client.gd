@@ -17,42 +17,42 @@ func parse_team(request_node: HTTPRequest, text: String) -> Dictionary:
 func create_pokemon_from_text(
 	request_node: HTTPRequest,
 	text: String,
-	preserve_direct_standard_mega_form: bool = false
+	preserve_direct_battle_form: bool = false
 ) -> Dictionary:
 	return await send_post_request(
 		request_node,
 		"/pokemon/create-from-text",
 		{
 			"text": text,
-			"preserveDirectStandardMegaForm": preserve_direct_standard_mega_form,
+			"preserveDirectBattleForm": preserve_direct_battle_form,
 		}
 	)
 
 func create_pokemon(
 	request_node: HTTPRequest,
 	pokemon_data: Dictionary,
-	preserve_direct_standard_mega_form: bool = false
+	preserve_direct_battle_form: bool = false
 ) -> Dictionary:
 	return await send_post_request(
 		request_node,
 		"/pokemon/create",
 		{
 			"pokemon": pokemon_data,
-			"preserveDirectStandardMegaForm": preserve_direct_standard_mega_form,
+			"preserveDirectBattleForm": preserve_direct_battle_form,
 		}
 	)
 
 func create_team_from_text(
 	request_node: HTTPRequest,
 	text: String,
-	preserve_direct_standard_mega_form: bool = false
+	preserve_direct_battle_form: bool = false
 ) -> Dictionary:
 	return await send_post_request(
 		request_node,
 		"/team/create-from-text",
 		{
 			"text": text,
-			"preserveDirectStandardMegaForm": preserve_direct_standard_mega_form,
+			"preserveDirectBattleForm": preserve_direct_battle_form,
 		}
 	)
 

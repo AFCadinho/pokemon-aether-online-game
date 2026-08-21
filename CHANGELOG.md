@@ -4,6 +4,7 @@
 
 **Added**
 
+- Authorized developers can keep a direct Mega battle form for a clearly marked test Pokémon and clean up those test Pokémon from Developer Tools.
 - If the game closes unexpectedly, PokeAether now prepares a privacy-safe crash report at the next start. The report can be viewed and copied directly from the notification or the new Support page in Settings.
 
 **Changed**

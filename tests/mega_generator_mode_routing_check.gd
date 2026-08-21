@@ -11,15 +11,15 @@ func _init() -> void:
 
 	_check(
 		overlay_source.contains(
-			"PokemonDataApiClient.create_pokemon_from_text(parse_pokemon_request, pokemon_text, true)"
+			"preserve_direct_battle_form"
 		),
-		"developer single-Pokemon and encounter generators preserve direct Mega forms"
+		"developer Pokemon generator routes the explicit direct-form choice"
 	)
 	_check(
 		overlay_source.contains(
-			"PokemonDataApiClient.create_team_from_text(parse_pokemon_request, team_text, true)"
+			"test_purpose.length() < 8"
 		),
-		"developer team generator preserves direct Mega forms"
+		"developer direct-form generation requires an explicit test purpose"
 	)
 	_check(
 		overlay_source.contains(
@@ -29,9 +29,17 @@ func _init() -> void:
 	)
 	_check(
 		client_source.contains(
-			'"preserveDirectStandardMegaForm": preserve_direct_standard_mega_form'
+			'"preserveDirectBattleForm": preserve_direct_battle_form'
 		),
-		"Pokemon-data client sends the legacy standard-Mega compatibility option"
+		"Pokemon-data client sends the testing-only direct-form option"
+	)
+	_check(
+		overlay_source.contains("dev_preserve_direct_form.set_pressed_no_signal(false)"),
+		"testing-only direct-form option resets instead of being remembered"
+	)
+	_check(
+		overlay_source.contains("_can_generate_direct_battle_forms()"),
+		"direct-form control has its own client permission boundary"
 	)
 
 	if failed:
