@@ -15,12 +15,18 @@
 [ext_resource type="SpriteFrames" uid="uid://57e7bp514fh2" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="13_bug_catcher"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="14_item"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/smashable_rock.tscn" id="15_rock"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="16_dialogue_npc"]
+[ext_resource type="Script" path="res://scripts/world/story/story_trigger.gd" id="17_story_trigger"]
+[ext_resource type="Script" path="res://scripts/world/story/story_hook.gd" id="18_story_hook"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_3_exit"]
 size = Vector2(64, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ladder_exit"]
 size = Vector2(32, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_entrance_warning"]
+size = Vector2(128, 32)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_idblv"]
 texture = ExtResource("5_8jk2d")
@@ -354,6 +360,13 @@ z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1698532802]
 
+[node name="WarningHiker" parent="Entities/NPCs" instance=ExtResource("16_dialogue_npc")]
+position = Vector2(848, 2384)
+npc_id = "mt_moon_warning_hiker"
+display_name = "Hiker"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("9_hiker")
+
 [node name="HikerMarcos" parent="Entities/NPCs" unique_id=855938767 instance=ExtResource("8_trainer")]
 position = Vector2(336, 496)
 trainer_id = "kanto_mt_moon_1f_hiker_marcos"
@@ -421,6 +434,21 @@ npc_sprite_frames = ExtResource("13_bug_catcher")
 [node name="Players" type="Node2D" parent="Entities" unique_id=1226891690]
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=1758895057]
+
+[node name="StoryTriggers" type="Node2D" parent="."]
+
+[node name="EntranceWarning" type="Area2D" parent="StoryTriggers"]
+position = Vector2(944, 2384)
+script = ExtResource("17_story_trigger")
+story_host_path = NodePath("../../Entities/NPCs/WarningHiker")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StoryTriggers/EntranceWarning"]
+shape = SubResource("RectangleShape2D_entrance_warning")
+
+[node name="StoryHook" type="Node" parent="StoryTriggers/EntranceWarning"]
+script = ExtResource("18_story_hook")
+interaction_id = "kanto_mt_moon_entrance_warning"
+entity_id = "mt_moon_warning_hiker"
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=306408256]
 
