@@ -12,6 +12,10 @@
 - PvP now reconnects more quickly after a short connection problem and clearly shows when your battle is being restored.
 - Ranked PvP opens faster, finds ready matches sooner, and keeps the correct queue time after reconnecting.
 
+**Changed**
+
+- Testers now use Alpha Tools to create Pokémon. Item creation remains available through Developer Tools.
+
 **Fixed**
 
 - NPC dialogue now opens promptly by preparing nearby dialogue and avoiding duplicate content requests.

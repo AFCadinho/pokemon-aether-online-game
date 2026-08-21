@@ -1,0 +1,462 @@
+{
+  "schemaVersion": 2,
+  "catalogId": "mega-champions-v1",
+  "catalogRevision": "sha256:03634104345a483eee412513c5187a01e1dd0101a5d24b90f024d6a64c1db60f",
+  "provenance": {
+    "itemIcons": "pre-existing tracked PokeAether item icon corpus",
+    "pokemonSprites": "Generation 9 Pack 3.3.6 plus pre-existing PokeAether launcher asset packs",
+    "pokemonSpriteSourceWebsite": "https://www.eeveeexpo.com/threads/5817/",
+    "pokemonSpriteImportManifestRevision": "sha256:ddcf57b5081f9ffa6c87041ab5e526fe56ccc0b3529d732c5fe6b8cdd3524599",
+    "pokemonSpriteLicenseStatus": "not_declared_in_source_bundle",
+    "licensingReview": "credits_recorded_license_not_declared"
+  },
+  "expectedFormCount": 49,
+  "exactItemIconCount": 45,
+  "exactFormItemIconCount": 49,
+  "exactBattleSpriteCount": 49,
+  "fallbackOnlyOrMissingBattleSpriteCount": 0,
+  "forms": [
+    {
+      "catalogEntryId": "absol-mega-z",
+      "spriteKey": "absol-mega-z",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "absolite-z",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "barbaracle-mega",
+      "spriteKey": "barbaracle-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "barbaracite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "baxcalibur-mega",
+      "spriteKey": "baxcalibur-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "baxcalibrite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "chandelure-mega",
+      "spriteKey": "chandelure-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "chandelurite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "chesnaught-mega",
+      "spriteKey": "chesnaught-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "chesnaughtite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "chimecho-mega",
+      "spriteKey": "chimecho-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "chimechite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "clefable-mega",
+      "spriteKey": "clefable-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "clefablite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "crabominable-mega",
+      "spriteKey": "crabominable-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "crabominite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "darkrai-mega",
+      "spriteKey": "darkrai-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "darkranite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "delphox-mega",
+      "spriteKey": "delphox-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "delphoxite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "dragalge-mega",
+      "spriteKey": "dragalge-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "dragalgite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "dragonite-mega",
+      "spriteKey": "dragonite-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "dragoninite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "drampa-mega",
+      "spriteKey": "drampa-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "drampanite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "eelektross-mega",
+      "spriteKey": "eelektross-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "eelektrossite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "emboar-mega",
+      "spriteKey": "emboar-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "emboarite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "excadrill-mega",
+      "spriteKey": "excadrill-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "excadrite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "falinks-mega",
+      "spriteKey": "falinks-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "falinksite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "feraligatr-mega",
+      "spriteKey": "feraligatr-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "feraligite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "floette-mega",
+      "spriteKey": "floette-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "floettite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "froslass-mega",
+      "spriteKey": "froslass-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "froslassite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "garchomp-mega-z",
+      "spriteKey": "garchomp-mega-z",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "garchompite-z",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "glimmora-mega",
+      "spriteKey": "glimmora-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "glimmoranite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "golisopod-mega",
+      "spriteKey": "golisopod-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "golisopite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "golurk-mega",
+      "spriteKey": "golurk-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "golurkite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "greninja-mega",
+      "spriteKey": "greninja-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "greninjite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "hawlucha-mega",
+      "spriteKey": "hawlucha-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "hawluchanite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "heatran-mega",
+      "spriteKey": "heatran-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "heatranite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "lucario-mega-z",
+      "spriteKey": "lucario-mega-z",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "lucarionite-z",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "magearna-mega",
+      "spriteKey": "magearna-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "magearnite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "magearna-original-mega",
+      "spriteKey": "magearna-original-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "magearnite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "malamar-mega",
+      "spriteKey": "malamar-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "malamarite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "meganium-mega",
+      "spriteKey": "meganium-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "meganiumite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "meowstic-f-mega",
+      "spriteKey": "meowstic-f-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "meowsticite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "meowstic-m-mega",
+      "spriteKey": "meowstic-m-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "meowsticite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "pyroar-mega",
+      "spriteKey": "pyroar-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "pyroarite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "raichu-mega-x",
+      "spriteKey": "raichu-mega-x",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "raichunite-x",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "raichu-mega-y",
+      "spriteKey": "raichu-mega-y",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "raichunite-y",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "scolipede-mega",
+      "spriteKey": "scolipede-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "scolipite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "scovillain-mega",
+      "spriteKey": "scovillain-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "scovillainite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "scrafty-mega",
+      "spriteKey": "scrafty-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "scraftinite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "skarmory-mega",
+      "spriteKey": "skarmory-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "skarmorite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "staraptor-mega",
+      "spriteKey": "staraptor-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "staraptite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "starmie-mega",
+      "spriteKey": "starmie-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "starminite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "tatsugiri-curly-mega",
+      "spriteKey": "tatsugiri-curly-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "tatsugirinite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "tatsugiri-droopy-mega",
+      "spriteKey": "tatsugiri-droopy-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "tatsugirinite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "tatsugiri-stretchy-mega",
+      "spriteKey": "tatsugiri-stretchy-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "tatsugirinite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "victreebel-mega",
+      "spriteKey": "victreebel-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "victreebelite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "zeraora-mega",
+      "spriteKey": "zeraora-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "zeraorite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    },
+    {
+      "catalogEntryId": "zygarde-mega",
+      "spriteKey": "zygarde-mega",
+      "battleSpriteStatus": "exact",
+      "itemIconKey": "zygardite",
+      "itemIconStatus": "exact",
+      "exactLocalAssetsPresent": true,
+      "publicAssetReady": false
+    }
+  ],
+  "assetManifestRevision": "sha256:f62306f37bffa9c929dc6800db38a906c22bea89ae753aafd258c820cd33ec62"
+}

@@ -210,6 +210,13 @@ This writes zip files to `builds/asset-packs`, uploads them to R2 under `assets/
 
 The script uses content hashes for versions and skips packs whose computed version is already in the workflow. That means unchanged packs are not uploaded again and users do not redownload them.
 
+For the Mega Champions Phase 3 audit, all 49 catalog forms have complete exact
+battle sprite sets. Fifteen mappings are pinned to Generation 9 Pack 3.3.6 in
+`data/mega_champions_sprite_imports.generated.json`: the twelve formerly
+missing mappings plus corrected form indexes for Floette, regular Magearna,
+and Zygarde. Credits and source hashes are recorded in
+`assets/sprites/README.md`; the source bundle does not declare a license.
+
 To upload only one changed pack:
 
 ```bash

@@ -92,6 +92,7 @@ const CHAT_CHANNEL_HELP := "help"
 const CHAT_MUTE_PERMISSION := "chat:mute"
 const IMPERSONATE_PERMISSION := "accounts:impersonate"
 const DEV_TOOLS_PERMISSION := "generating"
+const DEV_ITEM_GENERATING_PERMISSION := "items:generating"
 const STAFF_ACTION_BAR_PERMISSION := "ui:staff:action-bar"
 const WORLD_TELEPORT_SELF_PERMISSION := "world:teleport:self"
 const WORLD_TELEPORT_PLAYER_PERMISSION := "world:teleport:player"
@@ -1261,6 +1262,10 @@ var alpha_create_pokemon_button: Button
 var alpha_clear_party_button: Button
 var alpha_tools_close_button: Button
 var dev_add_button: Button
+var dev_quick_actions_label: Label
+var dev_quick_actions_grid: GridContainer
+var dev_world_preview_label: Label
+var dev_world_preview_panel: PanelContainer
 var dev_add_menu_popup: PanelContainer
 var dev_add_menu_close_button: Button
 var dev_add_item_button: Button
@@ -1790,6 +1795,12 @@ func _play_mail_notification_sound() -> void:
 func _can_use_dev_tools() -> bool:
 	return _has_user_permission(DEV_TOOLS_PERMISSION)
 
+func _can_generate_dev_items() -> bool:
+	return _has_user_permission(DEV_ITEM_GENERATING_PERMISSION)
+
+func _can_open_dev_actions() -> bool:
+	return _can_use_dev_tools() or _can_generate_dev_items()
+
 func _can_use_content_creator_photo_mode() -> bool:
 	return _has_user_permission(CONTENT_CREATOR_PHOTO_MODE_PERMISSION)
 
@@ -1901,6 +1912,8 @@ func _can_use_moderation_center() -> bool:
 func _refresh_dev_tools_visibility() -> void:
 	var can_show_staff_action_bar: bool = _can_show_staff_action_bar()
 	var can_use_dev_tools: bool = _can_use_dev_tools()
+	var can_generate_dev_items: bool = _can_generate_dev_items()
+	var can_open_dev_actions: bool = can_use_dev_tools or can_generate_dev_items
 	var can_impersonate: bool = _can_impersonate_accounts()
 	var can_return_from_impersonation := AuthService.is_impersonating()
 	var can_teleport: bool = _can_teleport_self()
@@ -1917,7 +1930,7 @@ func _refresh_dev_tools_visibility() -> void:
 		or _can_manage_jail()
 		or _can_use_chat_moderation()
 	)
-	var has_visible_staff_action: bool = has_staff_tool or can_use_dev_tools or can_use_content_creator_photo_mode or can_use_content_creator_generation
+	var has_visible_staff_action: bool = has_staff_tool or can_open_dev_actions or can_use_content_creator_photo_mode or can_use_content_creator_generation
 	PlayerSave.is_staff = _current_player_has_staff_role()
 	if content_creator_tools_slot != null:
 		content_creator_tools_slot.visible = can_show_staff_action_bar and can_use_content_creator_photo_mode
@@ -1935,9 +1948,9 @@ func _refresh_dev_tools_visibility() -> void:
 	if alpha_clear_party_button != null:
 		alpha_clear_party_button.visible = can_use_content_creator_generation
 		alpha_clear_party_button.disabled = not can_use_content_creator_generation
-	dev_actions_slot.visible = can_show_staff_action_bar and can_use_dev_tools
-	dev_actions_button.visible = can_show_staff_action_bar and can_use_dev_tools
-	dev_actions_button.disabled = not can_use_dev_tools
+	dev_actions_slot.visible = can_show_staff_action_bar and can_open_dev_actions
+	dev_actions_button.visible = can_show_staff_action_bar and can_open_dev_actions
+	dev_actions_button.disabled = not can_open_dev_actions
 	if staff_tools_slot != null:
 		staff_tools_slot.visible = has_staff_tool
 	if staff_tools_button != null:
@@ -1949,8 +1962,16 @@ func _refresh_dev_tools_visibility() -> void:
 	dev_spawn_pokemon_button.visible = can_use_dev_tools
 	dev_spawn_pokemon_button.disabled = not can_use_dev_tools
 	if dev_add_button != null:
-		dev_add_button.visible = can_use_dev_tools
-		dev_add_button.disabled = not can_use_dev_tools
+		dev_add_button.visible = can_open_dev_actions
+		dev_add_button.disabled = not can_open_dev_actions
+	if dev_quick_actions_label != null:
+		dev_quick_actions_label.visible = can_open_dev_actions
+	if dev_quick_actions_grid != null:
+		dev_quick_actions_grid.visible = can_open_dev_actions
+	if dev_world_preview_label != null:
+		dev_world_preview_label.visible = can_use_dev_tools
+	if dev_world_preview_panel != null:
+		dev_world_preview_panel.visible = can_use_dev_tools
 	if dev_heal_party_button != null:
 		dev_heal_party_button.visible = can_use_dev_tools
 		dev_heal_party_button.disabled = not can_use_dev_tools
@@ -1961,8 +1982,8 @@ func _refresh_dev_tools_visibility() -> void:
 	dev_clear_party_button.disabled = not can_use_dev_tools
 	dev_pokemon_add_button.disabled = not can_use_dev_tools
 	if dev_add_item_button != null:
-		dev_add_item_button.visible = can_use_dev_tools
-		dev_add_item_button.disabled = not can_use_dev_tools
+		dev_add_item_button.visible = can_generate_dev_items
+		dev_add_item_button.disabled = not can_generate_dev_items
 	if dev_add_money_button != null:
 		dev_add_money_button.visible = can_use_dev_tools
 		dev_add_money_button.disabled = not can_use_dev_tools
@@ -1988,20 +2009,21 @@ func _refresh_dev_tools_visibility() -> void:
 		staff_teleport_popup.visible = false
 	if not _can_use_moderation_center() and staff_chat_moderation_popup != null:
 		_hide_staff_chat_moderation_popup()
-	if not can_use_dev_tools:
+	if not can_open_dev_actions:
 		dev_actions_popup.visible = false
-		if dev_pokemon_popup_mode != DevPokemonPopupMode.CONTENT_CREATOR:
-			dev_pokemon_popup.visible = false
 		if dev_add_menu_popup != null:
 			dev_add_menu_popup.visible = false
-		if dev_add_item_popup != null:
-			dev_add_item_popup.visible = false
+	if not can_use_dev_tools:
+		if dev_pokemon_popup_mode != DevPokemonPopupMode.CONTENT_CREATOR:
+			dev_pokemon_popup.visible = false
 		if dev_add_money_popup != null:
 			dev_add_money_popup.visible = false
 		if dev_clear_menu_popup != null:
 			dev_clear_menu_popup.visible = false
 		if dev_badge_progress_popup != null:
 			dev_badge_progress_popup.close()
+	if not can_generate_dev_items and dev_add_item_popup != null:
+		dev_add_item_popup.visible = false
 	if not can_use_content_creator_generation and alpha_tools_popup != null:
 		alpha_tools_popup.visible = false
 	if not can_use_content_creator_photo_mode and content_creator_tools_popup != null:
@@ -7527,18 +7549,19 @@ func _setup_dev_tools_menu_surface() -> void:
 	layout.add_child(header)
 	layout.move_child(header, 0)
 
-	var quick_actions_label := _create_tool_section_label("ui.staff.dev.quick_actions", Color("#bda4e8"))
-	layout.add_child(quick_actions_label)
-	layout.move_child(quick_actions_label, 1)
+	dev_quick_actions_label = _create_tool_section_label("ui.staff.dev.quick_actions", Color("#bda4e8"))
+	dev_quick_actions_label.name = "DeveloperQuickActionsLabel"
+	layout.add_child(dev_quick_actions_label)
+	layout.move_child(dev_quick_actions_label, 1)
 
-	var action_grid := GridContainer.new()
-	action_grid.name = "DeveloperQuickActions"
-	action_grid.columns = 2
-	action_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	action_grid.add_theme_constant_override("h_separation", 8)
-	action_grid.add_theme_constant_override("v_separation", 8)
-	layout.add_child(action_grid)
-	layout.move_child(action_grid, 2)
+	dev_quick_actions_grid = GridContainer.new()
+	dev_quick_actions_grid.name = "DeveloperQuickActions"
+	dev_quick_actions_grid.columns = 2
+	dev_quick_actions_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	dev_quick_actions_grid.add_theme_constant_override("h_separation", 8)
+	dev_quick_actions_grid.add_theme_constant_override("v_separation", 8)
+	layout.add_child(dev_quick_actions_grid)
+	layout.move_child(dev_quick_actions_grid, 2)
 
 	for action_button: Button in [
 		dev_add_pokemon_button,
@@ -7549,7 +7572,7 @@ func _setup_dev_tools_menu_surface() -> void:
 		dev_badge_progress_button,
 		dev_clear_party_button,
 	]:
-		_move_tool_menu_control(action_button, action_grid)
+		_move_tool_menu_control(action_button, dev_quick_actions_grid)
 
 	_configure_tool_tile_button(
 		dev_add_pokemon_button,
@@ -7594,23 +7617,24 @@ func _setup_dev_tools_menu_surface() -> void:
 		Color("#ef7085")
 	)
 
-	var world_label := _create_tool_section_label("ui.staff.dev.world_preview", Color("#75d9ed"))
-	layout.add_child(world_label)
+	dev_world_preview_label = _create_tool_section_label("ui.staff.dev.world_preview", Color("#75d9ed"))
+	dev_world_preview_label.name = "DeveloperWorldPreviewLabel"
+	layout.add_child(dev_world_preview_label)
 
-	var world_panel := PanelContainer.new()
-	world_panel.name = "DeveloperWorldPreview"
-	world_panel.add_theme_stylebox_override(
+	dev_world_preview_panel = PanelContainer.new()
+	dev_world_preview_panel.name = "DeveloperWorldPreview"
+	dev_world_preview_panel.add_theme_stylebox_override(
 		"panel",
 		_make_panel_style(UI_SURFACE_RAISED, Color("#3f7890aa"), 9, 1)
 	)
-	layout.add_child(world_panel)
+	layout.add_child(dev_world_preview_panel)
 
 	var world_margin := MarginContainer.new()
 	world_margin.add_theme_constant_override("margin_left", 10)
 	world_margin.add_theme_constant_override("margin_top", 8)
 	world_margin.add_theme_constant_override("margin_right", 10)
 	world_margin.add_theme_constant_override("margin_bottom", 10)
-	world_panel.add_child(world_margin)
+	dev_world_preview_panel.add_child(world_margin)
 
 	var world_layout := VBoxContainer.new()
 	world_layout.add_theme_constant_override("separation", 7)
@@ -28102,7 +28126,7 @@ func _refresh_world_running_shoes_state() -> void:
 		player_node.call("set_running_shoes_enabled", GameState.running_shoes_enabled)
 
 func _on_dev_actions_button_pressed() -> void:
-	if not _can_use_dev_tools():
+	if not _can_open_dev_actions():
 		return
 
 	dev_actions_popup.visible = not dev_actions_popup.visible
@@ -32040,7 +32064,7 @@ func _on_dev_spawn_pokemon_button_pressed() -> void:
 	_show_dev_pokemon_popup(DevPokemonPopupMode.SPAWN)
 
 func _on_dev_add_button_pressed() -> void:
-	if not _can_use_dev_tools():
+	if not _can_open_dev_actions():
 		return
 
 	dev_actions_popup.visible = false
@@ -32091,7 +32115,7 @@ func _hide_dev_add_menu_popup() -> void:
 	_deactivate_ui_panel(dev_add_menu_popup)
 
 func _on_dev_add_item_button_pressed() -> void:
-	if not _can_use_dev_tools():
+	if not _can_generate_dev_items():
 		return
 
 	_hide_dev_add_menu_popup()
@@ -32129,7 +32153,7 @@ func _on_dev_heal_party_button_pressed() -> void:
 	_add_chat_message("Party healed.")
 
 func _show_dev_add_item_popup() -> void:
-	if not _can_use_dev_tools():
+	if not _can_generate_dev_items():
 		return
 
 	dev_selected_item = {}
@@ -32275,7 +32299,7 @@ func _dev_item_id_from_icon_stem(file_stem: String) -> String:
 	return file_stem.strip_edges().to_lower()
 
 func _on_dev_item_search_changed(_text: String) -> void:
-	if not _can_use_dev_tools():
+	if not _can_generate_dev_items():
 		return
 
 	dev_selected_item = {}
@@ -32283,7 +32307,7 @@ func _on_dev_item_search_changed(_text: String) -> void:
 	_refresh_dev_item_results()
 
 func _refresh_dev_item_results() -> void:
-	if not _can_use_dev_tools():
+	if not _can_generate_dev_items():
 		return
 
 	if dev_item_results_list == null:
@@ -32419,7 +32443,7 @@ func _refresh_dev_item_selection_state() -> void:
 			_style_dev_item_result_button(button, str(button.get_meta("item_id", "")) == selected_id)
 
 func _on_dev_item_result_selected(item: Dictionary) -> void:
-	if not _can_use_dev_tools():
+	if not _can_generate_dev_items():
 		return
 
 	dev_selected_item = item.duplicate(true)
@@ -32427,7 +32451,7 @@ func _on_dev_item_result_selected(item: Dictionary) -> void:
 	_refresh_dev_item_selection_state()
 
 func _on_dev_item_confirm_pressed() -> void:
-	if not _can_use_dev_tools():
+	if not _can_generate_dev_items():
 		return
 
 	if dev_selected_item.is_empty():
