@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="4_hint"]
+[ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="5_visibility_mask"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3x5y3"]
 texture = ExtResource("2_w2lc3")
@@ -341,6 +342,27 @@ transition_facing_direction = "left"
 shape = SubResource("RectangleShape2D_ladder_exit")
 
 [node name="DoorTransitionHint" parent="Exits/ToB2F7" instance=ExtResource("4_hint")]
+
+[node name="FloorVisibilityMask" type="Node2D" parent="."]
+z_index = 4096
+z_as_relative = false
+script = ExtResource("5_visibility_mask")
+floor_regions = {
+&"passage_1_2": Rect2(1376, 1088, 1184, 1152),
+&"passage_3_4": Rect2(1920, 0, 640, 416),
+&"passage_5_6": Rect2(0, 0, 1152, 1152),
+&"passage_7_8": Rect2(64, 1824, 768, 640)
+}
+active_floor = &"passage_5_6"
+constrain_camera_to_active_floor = true
+
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
 
 [connection signal="body_entered" from="Exits/To1F1" to="Exits/To1F1" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToB2F2" to="Exits/ToB2F2" method="_on_body_entered"]
