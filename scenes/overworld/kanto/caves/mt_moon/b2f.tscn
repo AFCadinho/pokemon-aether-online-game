@@ -2,8 +2,8 @@
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/mt_moon_b2f/mt_moon_b2f.visual.tscn" id="1_visual"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="2_4qmrm"]
-[ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="3_45771"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
+[ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="3_45771"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="4_hint"]
 
@@ -179,7 +179,6 @@ script = ExtResource("2_metadata")
 map_id = "kanto_mt_moon_b2f"
 map_region_name = "Kanto"
 map_display_name = "Mt. Moon B2F"
-music_track_id = "overworld.kanto.cave.mt_moon"
 world_access_group_id = "kanto_mt_moon"
 world_access_group_label = "Mt. Moon"
 world_access_area_type = "wilderness"
@@ -189,6 +188,7 @@ region_id = "kanto"
 battle_environment_id = "cave"
 lighting_profile = "dark"
 weather_profile = "disabled"
+music_track_id = "overworld.kanto.cave.mt_moon"
 
 [node name="MtMoonB2FVisual" parent="." unique_id=2008896382 instance=ExtResource("1_visual")]
 
@@ -217,23 +217,23 @@ z_index = 100
 tile_map_data = PackedByteArray("AAAXACUAAAABAAEAAAAXACYAAAABAAEAAAAYACUAAAABAAEAAAAYACYAAAABAAEAAAA+ACcAAAABAAEAAAA+ACgAAAABAAEAAAA/ACcAAAABAAEAAAA/ACgAAAABAAEAAAA=")
 tile_set = SubResource("TileSet_m46ck")
 
-[node name="Spawns" type="Node2D" parent="."]
+[node name="Spawns" type="Node2D" parent="." unique_id=158532784]
 
-[node name="FromB1F2" type="Marker2D" parent="Spawns"]
+[node name="FromB1F2" type="Marker2D" parent="Spawns" unique_id=1048509561]
 position = Vector2(1008, 1840)
 
-[node name="FromB1F4" type="Marker2D" parent="Spawns"]
+[node name="FromB1F4" type="Marker2D" parent="Spawns" unique_id=1070811183]
 position = Vector2(1968, 720)
 
-[node name="FromB1F6" type="Marker2D" parent="Spawns"]
+[node name="FromB1F6" type="Marker2D" parent="Spawns" unique_id=73006216]
 position = Vector2(1776, 976)
 
-[node name="FromB1F7" type="Marker2D" parent="Spawns"]
+[node name="FromB1F7" type="Marker2D" parent="Spawns" unique_id=1133795494]
 position = Vector2(304, 688)
 
-[node name="Exits" type="Node2D" parent="."]
+[node name="Exits" type="Node2D" parent="." unique_id=1420985887]
 
-[node name="ToB1F2" type="Area2D" parent="Exits"]
+[node name="ToB1F2" type="Area2D" parent="Exits" unique_id=977292837]
 position = Vector2(912, 1824)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn"
@@ -241,14 +241,15 @@ target_spawn_name = "FromB2F2"
 transition_id = "kanto_mt_moon_b2f__to_b1f_2"
 transition_facing_direction = "left"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1F2"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1F2" unique_id=278929334]
 shape = SubResource("RectangleShape2D_tunnel_exit")
 
-[node name="DoorTransitionHint" parent="Exits/ToB1F2" instance=ExtResource("4_hint")]
+[node name="DoorTransitionHint" parent="Exits/ToB1F2" unique_id=1796670981 instance=ExtResource("4_hint")]
+z_as_relative = false
 tile_footprint = Vector2i(2, 2)
 flow_direction = "left"
 
-[node name="ToB1F4" type="Area2D" parent="Exits"]
+[node name="ToB1F4" type="Area2D" parent="Exits" unique_id=806025308]
 position = Vector2(2048, 704)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn"
@@ -256,14 +257,15 @@ target_spawn_name = "FromB2F4"
 transition_id = "kanto_mt_moon_b2f__to_b1f_4"
 transition_facing_direction = "left"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1F4"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1F4" unique_id=805286065]
 shape = SubResource("RectangleShape2D_tunnel_exit")
 
-[node name="DoorTransitionHint" parent="Exits/ToB1F4" instance=ExtResource("4_hint")]
+[node name="DoorTransitionHint" parent="Exits/ToB1F4" unique_id=547192910 instance=ExtResource("4_hint")]
+z_as_relative = false
 tile_footprint = Vector2i(2, 2)
 flow_direction = "right"
 
-[node name="ToB1F6" type="Area2D" parent="Exits"]
+[node name="ToB1F6" type="Area2D" parent="Exits" unique_id=1284088587]
 position = Vector2(1856, 960)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn"
@@ -271,25 +273,27 @@ target_spawn_name = "FromB2F6"
 transition_id = "kanto_mt_moon_b2f__to_b1f_6"
 transition_facing_direction = "right"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1F6"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1F6" unique_id=801713945]
 shape = SubResource("RectangleShape2D_tunnel_exit")
 
-[node name="DoorTransitionHint" parent="Exits/ToB1F6" instance=ExtResource("4_hint")]
+[node name="DoorTransitionHint" parent="Exits/ToB1F6" unique_id=889272295 instance=ExtResource("4_hint")]
+z_as_relative = false
 tile_footprint = Vector2i(2, 2)
 flow_direction = "right"
 
-[node name="ToB1F7" type="Area2D" parent="Exits"]
-position = Vector2(208, 672)
+[node name="ToB1F7" type="Area2D" parent="Exits" unique_id=875215003]
+position = Vector2(224, 672)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn"
 target_spawn_name = "FromB2F7"
 transition_id = "kanto_mt_moon_b2f__to_b1f_7"
 transition_facing_direction = "right"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1F7"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1F7" unique_id=1740463877]
 shape = SubResource("RectangleShape2D_tunnel_exit")
 
-[node name="DoorTransitionHint" parent="Exits/ToB1F7" instance=ExtResource("4_hint")]
+[node name="DoorTransitionHint" parent="Exits/ToB1F7" unique_id=1414644739 instance=ExtResource("4_hint")]
+z_as_relative = false
 tile_footprint = Vector2i(2, 2)
 flow_direction = "left"
 
