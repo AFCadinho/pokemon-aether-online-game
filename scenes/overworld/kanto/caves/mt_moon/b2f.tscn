@@ -343,7 +343,7 @@ sprite_frames = ExtResource("6_rocket")
 animation = &"default"
 
 [node name="FutureSelf" type="AnimatedSprite2D" parent="Entities/MtMoonAmbush"]
-position = Vector2(-32, 96)
+position = Vector2(0, -32)
 sprite_frames = ExtResource("11_future_frames")
 animation = &"idle_up"
 

@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- The Mt. Moon rescue now surrounds you from both sides and lets Team Rocket, the mysterious Trainer, and your character respond throughout the counterattack.
+- The Mt. Moon rescue now surrounds you from both sides, introduces the mysterious Trainer as a voice before the reveal, and turns both characters toward each other after Team Rocket escapes.
 
 - Rewinding the Mt. Moon story now restores the fossil Poké Balls immediately.
 

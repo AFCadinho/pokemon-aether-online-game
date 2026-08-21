@@ -16,11 +16,13 @@ const ROCKET_POKEMON_POSITIONS: Array[Vector2] = [
 	Vector2(48, -64),
 ]
 const DIALOGUE_STAGE_AMBUSH := 0
-const DIALOGUE_STAGE_ROCKET_QUESTION := 1
-const DIALOGUE_STAGE_ROCKET_FLEE := 2
-const DIALOGUE_STAGE_PLAYER_QUESTION := 4
-const DIALOGUE_STAGE_PLAYER_PROMISE := 6
-const DIALOGUE_STAGE_FAREWELL := 7
+const DIALOGUE_STAGE_FUTURE_VOICE := 1
+const DIALOGUE_STAGE_ROCKET_REVEAL_CHALLENGE := 2
+const DIALOGUE_STAGE_ROCKET_BATTLE_CHALLENGE := 3
+const DIALOGUE_STAGE_ROCKET_FLEE := 4
+const DIALOGUE_STAGE_PLAYER_QUESTION := 5
+const DIALOGUE_STAGE_PLAYER_PROMISE := 7
+const DIALOGUE_STAGE_FAREWELL := 8
 
 @export var miguel_path: NodePath
 @export var helix_fossil_path: NodePath
@@ -45,6 +47,7 @@ var _overlay_layer: CanvasLayer
 var _overlay_root: Control
 var _prepared := false
 var _counterattack_played := false
+var _future_self_spawn_global_position := Vector2.ZERO
 
 
 func _ready() -> void:
@@ -68,8 +71,6 @@ func show_dialogue(lines: Array[String], speaker_name := "") -> bool:
 	match current_stage:
 		DIALOGUE_STAGE_AMBUSH:
 			await _prepare_ambush()
-		DIALOGUE_STAGE_ROCKET_QUESTION:
-			await _reveal_rescuer()
 		DIALOGUE_STAGE_ROCKET_FLEE:
 			await _play_counterattack()
 	_dialogue_stage += 1
@@ -81,8 +82,11 @@ func show_dialogue(lines: Array[String], speaker_name := "") -> bool:
 		resolved_speaker_name = _player_speaker_name()
 	dialogue_box.call("start_dialogue", lines, resolved_speaker_name)
 	await dialogue_box.dialogue_finished
-	if current_stage == DIALOGUE_STAGE_ROCKET_FLEE:
+	if current_stage == DIALOGUE_STAGE_ROCKET_REVEAL_CHALLENGE:
+		await _reveal_rescuer()
+	elif current_stage == DIALOGUE_STAGE_ROCKET_FLEE:
 		await _flee_rockets()
+		_face_future_self_and_player()
 	elif current_stage == DIALOGUE_STAGE_FAREWELL:
 		await _dismiss_rescuer()
 	return true
@@ -109,6 +113,8 @@ func _prepare_ambush() -> void:
 func _show_miguel_takes_other_fossil() -> void:
 	var miguel := get_node_or_null(miguel_path) as Node2D
 	var other_fossil := get_node_or_null(dome_fossil_path) if InventoryService.has_item("helix-fossil") else get_node_or_null(helix_fossil_path)
+	if other_fossil != null:
+		_future_self_spawn_global_position = other_fossil.global_position + Vector2(0, 32)
 	if miguel == null or other_fossil == null:
 		return
 	other_fossil.visible = true
@@ -132,6 +138,12 @@ func _summon_rocket_pokemon() -> void:
 
 
 func _reveal_rescuer() -> void:
+	if _future_self_spawn_global_position != Vector2.ZERO:
+		future_self.global_position = _future_self_spawn_global_position
+	else:
+		var player := get_tree().get_first_node_in_group("player") as Node2D
+		if player != null:
+			future_self.global_position = player.global_position + Vector2(32, 0)
 	await _open_rift()
 	future_self.visible = true
 	future_self.modulate = Color(0.5, 0.65, 1.0, 0.0)
@@ -173,7 +185,8 @@ func _spawn_starter_final_evolution() -> void:
 		push_warning("MtMoonAmbushController: starter final evolution is unavailable.")
 		return
 	_starter_species_id = species_id
-	_starter = _create_cutscene_pokemon(species_id, Vector2(32, 64))
+	var starter_target := future_self.global_position + Vector2(32, 0)
+	_starter = _create_cutscene_pokemon(species_id, to_local(starter_target))
 	var localized_name := ContentLocalization.display_name("species", species_id, species_name)
 	await _show_caption(_text("story.mt_moon.cutscene.go").replace("{pokemon}", localized_name), 0.75)
 	await _play_ball_summon(future_self.global_position + Vector2(12, -16), _starter, "ultra-ball")
@@ -265,6 +278,9 @@ func _create_cutscene_pokemon(species_id: String, local_position: Vector2) -> No
 	pokemon.position = local_position
 	pokemon.visible = false
 	add_child(pokemon)
+	var nameplate := pokemon.get_node_or_null("Nameplate") as Control
+	if nameplate != null:
+		nameplate.visible = false
 	var interaction_shape := pokemon.get_node_or_null("InteractionArea/CollisionShape2D") as CollisionShape2D
 	if interaction_shape != null:
 		interaction_shape.set_deferred("disabled", true)
@@ -351,6 +367,25 @@ func _player_speaker_name() -> String:
 	if not player_name.is_empty():
 		return player_name
 	return _text("story.mt_moon.cutscene.player_speaker")
+
+
+func _face_future_self_and_player() -> void:
+	var player := get_tree().get_first_node_in_group("player") as Node2D
+	if player == null or not future_self.visible:
+		return
+	if player.has_method("face_world_position"):
+		player.call("face_world_position", future_self.global_position)
+
+	var delta := player.global_position - future_self.global_position
+	var direction_name := "down"
+	if abs(delta.x) > abs(delta.y):
+		direction_name = "right" if delta.x > 0.0 else "left"
+	elif delta.y < 0.0:
+		direction_name = "up"
+	var animation_name := StringName("idle_%s" % direction_name)
+	if future_self.sprite_frames != null and future_self.sprite_frames.has_animation(animation_name):
+		future_self.play(animation_name)
+		future_self.stop()
 
 
 func _on_story_changed(_revision: int) -> void:
