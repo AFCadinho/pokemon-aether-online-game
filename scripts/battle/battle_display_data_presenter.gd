@@ -149,12 +149,18 @@ func _default_name_should_follow_public_mega_species(
 ) -> bool:
 	var mega_species := str(pokemon_data.get("megaSpecies", "")).strip_edges()
 	var base_species := str(pokemon_data.get("species", "")).strip_edges()
-	if mega_species == "" or base_species == "" or display_species == "":
+	if base_species == "" or display_species == "":
 		return false
 
 	var normalized_display := display_metadata.normalize_species_for_compare(display_species)
+	var display_is_public_mega := normalized_display.contains("-mega")
+	var mega_matches_display := (
+		mega_species == ""
+		or display_metadata.normalize_species_for_compare(mega_species) == normalized_display
+	)
 	return (
-		display_metadata.normalize_species_for_compare(mega_species) == normalized_display
+		display_is_public_mega
+		and mega_matches_display
 		and display_metadata.normalize_species_for_compare(explicit_name)
 			== display_metadata.normalize_species_for_compare(base_species)
 		and display_metadata.normalize_species_for_compare(base_species) != normalized_display

@@ -18,6 +18,7 @@ func _run_checks() -> void:
 	_check_local_ogerpon_uses_mask_battle_form()
 	_check_opponent_ogerpon_default_ident_uses_mask_form_name()
 	_check_opponent_default_name_follows_public_mega_form()
+	_check_opponent_default_name_follows_snapshot_mega_form()
 	_check_opponent_custom_nickname_survives_public_mega_form()
 	_check_trainer_active_species_uses_metadata_form()
 	_check_trainer_team_display_keeps_roster_species_during_ambiguous_switch_state()
@@ -177,6 +178,33 @@ func _check_opponent_custom_nickname_survives_public_mega_form() -> void:
 		presenter.get_active_display_name("p2"),
 		"Puff",
 		"a custom opponent nickname remains visible after Mega Evolution"
+	)
+
+
+func _check_opponent_default_name_follows_snapshot_mega_form() -> void:
+	var state = BattleStateScript.new()
+	state.load_from_api_response({
+		"battleId": "opponent-mega-snapshot-display-test",
+		"requests": {
+			"p2": {
+				"side": {
+					"pokemon": [{
+						"ident": "p2a: Zeraora",
+						"name": "Zeraora",
+						"species": "Zeraora",
+						"displaySpecies": "Zeraora-Mega",
+						"active": true,
+					}],
+				},
+			},
+		},
+	}, false)
+	var presenter = BattleDisplayDataPresenterScript.new()
+	presenter.setup(state)
+	_check_equal(
+		presenter.get_active_display_name("p2"),
+		"Zeraora-Mega",
+		"a canonical public Mega snapshot updates the ordinary opponent HUD name"
 	)
 
 
