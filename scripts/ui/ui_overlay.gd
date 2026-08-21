@@ -139,6 +139,13 @@ const PVP_TIMER_TIERS: Array[Dictionary] = [
 	{"id": "lightning_v1", "label": "ui.pvp.room.timer_tier.lightning"},
 ]
 const PVP_DEFAULT_TIMER_TIER_ID := "casual_v1"
+const PVP_ROOM_TIER_NONE := "none"
+const PVP_ROOM_TIER_MEGA_Z_TEST := "pokeaether-mega-z-test"
+const PVP_ROOM_TIERS: Array[Dictionary] = [
+	{"id": PVP_ROOM_TIER_NONE, "format_id": "gen9nationaldex", "label": "ui.pvp.room.tier.none"},
+	{"id": "aether-ou", "format_id": "gen9nationaldex", "label": "ui.pvp.room.tier.aether_ou"},
+	{"id": PVP_ROOM_TIER_MEGA_Z_TEST, "format_id": "pokeaether-mega-z-test-v1", "label": "ui.pvp.room.tier.mega_z_test", "developer_only": true},
+]
 const SOCIALS_FRIENDS_ICON: Texture2D = preload("res://assets/ui/friendlist.svg")
 const SOCIALS_NEARBY_ICON: Texture2D = preload("res://assets/ui/socials_nearby.svg")
 const SOCIALS_MAIL_ICON: Texture2D = preload("res://assets/ui/socials_mail.svg")
@@ -771,6 +778,8 @@ var pvp_room_battle_purpose := "casual"
 var pvp_room_mode_selector: HBoxContainer
 var pvp_room_form: VBoxContainer
 var pvp_room_form_title: Label
+var pvp_room_tier_row: HBoxContainer
+var pvp_room_tier_select: OptionButton
 var pvp_room_create_mode_button: Button
 var pvp_room_join_mode_button: Button
 var pvp_room_spectate_mode_button: Button
@@ -1775,6 +1784,7 @@ func _refresh_pvp_localized_ui() -> void:
 		pvp_timer_enabled_check != null and pvp_timer_enabled_check.button_pressed
 	)
 	_refresh_pvp_timer_tier_options()
+	_refresh_pvp_room_tier_options()
 	_refresh_pvp_queue_buttons(_current_pvp_queue_status_for_buttons())
 	_refresh_pvp_queue_compact_panel(0.0)
 	_refresh_pvp_button_tooltip()
@@ -5894,6 +5904,26 @@ func _setup_pvp_room_popup() -> void:
 	pvp_room_form_title.add_theme_font_size_override("font_size", 11)
 	pvp_room_form_title.add_theme_color_override("font_color", Color("#87bce8"))
 	pvp_room_form.add_child(pvp_room_form_title)
+
+	pvp_room_tier_row = HBoxContainer.new()
+	pvp_room_tier_row.add_theme_constant_override("separation", 8)
+	pvp_room_tier_row.visible = false
+	pvp_room_form.add_child(pvp_room_tier_row)
+
+	var room_tier_label := Label.new()
+	_set_localized_control_property(room_tier_label, "text", "ui.pvp.room.tier.label")
+	room_tier_label.custom_minimum_size = Vector2(82, 36)
+	room_tier_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	room_tier_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	pvp_room_tier_row.add_child(room_tier_label)
+
+	pvp_room_tier_select = OptionButton.new()
+	pvp_room_tier_select.custom_minimum_size = Vector2(0, 36)
+	pvp_room_tier_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_room_tier_select.focus_mode = Control.FOCUS_NONE
+	_apply_pvp_ranked_dropdown_style(pvp_room_tier_select, true)
+	pvp_room_tier_row.add_child(pvp_room_tier_select)
+	_refresh_pvp_room_tier_options()
 
 	pvp_training_team_input = TextEdit.new()
 	_set_localized_control_property(pvp_training_team_input, "placeholder_text", "ui.pvp.training.paste_placeholder")
@@ -37006,6 +37036,10 @@ func _on_pvp_room_mode_selected(mode: String) -> void:
 		_clear_pvp_training_team_preview()
 	pvp_room_selected_mode = mode
 	pvp_room_form.visible = true
+	if pvp_room_tier_row != null:
+		pvp_room_tier_row.visible = mode == "create"
+	if mode == "create":
+		_refresh_pvp_room_tier_options()
 	if pvp_room_flow_hint != null:
 		pvp_room_flow_hint.visible = false
 	_refresh_pvp_room_team_fields()
@@ -37139,7 +37173,9 @@ func _on_pvp_create_room_pressed() -> void:
 		pvp_room_battle_purpose,
 		team_text,
 		pvp_timer_enabled_check != null and pvp_timer_enabled_check.button_pressed,
-		_selected_pvp_timer_tier_id()
+		_selected_pvp_timer_tier_id(),
+		_selected_pvp_room_tier_id(),
+		_selected_pvp_room_format_id()
 	)
 	request.queue_free()
 	_set_pvp_room_busy(false)
@@ -37154,6 +37190,7 @@ func _on_pvp_create_room_pressed() -> void:
 		return
 
 	pvp_active_room_code = str(response.get("roomCode", "")).strip_edges()
+	_select_pvp_room_tier(str(response.get("roomTierId", _selected_pvp_room_tier_id())))
 	_set_pvp_training_team_preview(response.get("teamPreview", []))
 	pvp_room_code_label.text = LocalizationManager.text("ui.pvp.room.code", {"code": pvp_active_room_code})
 	pvp_copy_code_button.disabled = pvp_active_room_code == ""
@@ -37164,6 +37201,8 @@ func _on_pvp_create_room_pressed() -> void:
 	pvp_room_code_input.visible = false
 	pvp_training_team_input.visible = false
 	pvp_training_team_note.visible = false
+	if pvp_room_tier_row != null:
+		pvp_room_tier_row.visible = false
 	pvp_allow_spectators_check.visible = false
 	pvp_timer_enabled_check.visible = false
 	if pvp_timer_tier_select != null:
@@ -37202,6 +37241,49 @@ func _selected_pvp_timer_tier_id() -> String:
 		return PVP_DEFAULT_TIMER_TIER_ID
 	var selected_id := str(pvp_timer_tier_select.get_selected_metadata()).strip_edges().to_lower()
 	return selected_id if selected_id != "" else PVP_DEFAULT_TIMER_TIER_ID
+
+
+func _selected_pvp_room_tier_id() -> String:
+	if pvp_room_tier_select == null or pvp_room_tier_select.item_count == 0:
+		return PVP_ROOM_TIER_NONE
+	var selected_id := str(pvp_room_tier_select.get_selected_metadata()).strip_edges().to_lower()
+	return selected_id if selected_id != "" else PVP_ROOM_TIER_NONE
+
+
+func _selected_pvp_room_format_id() -> String:
+	var selected_id := _selected_pvp_room_tier_id()
+	for tier: Dictionary in PVP_ROOM_TIERS:
+		if str(tier.get("id", "")) == selected_id:
+			return str(tier.get("format_id", "gen9nationaldex"))
+	return "gen9nationaldex"
+
+
+func _select_pvp_room_tier(tier_id: String) -> bool:
+	if pvp_room_tier_select == null:
+		return false
+	var normalized := tier_id.strip_edges().to_lower()
+	for item_index: int in range(pvp_room_tier_select.item_count):
+		if str(pvp_room_tier_select.get_item_metadata(item_index)).strip_edges().to_lower() == normalized:
+			pvp_room_tier_select.select(item_index)
+			return true
+	return false
+
+
+func _refresh_pvp_room_tier_options() -> void:
+	if pvp_room_tier_select == null:
+		return
+	var previous_id := _selected_pvp_room_tier_id()
+	pvp_room_tier_select.clear()
+	for tier: Dictionary in PVP_ROOM_TIERS:
+		if bool(tier.get("developer_only", false)) and not _can_generate_dev_pokemon():
+			continue
+		pvp_room_tier_select.add_item(LocalizationManager.text(str(tier.get("label", ""))))
+		pvp_room_tier_select.set_item_metadata(
+			pvp_room_tier_select.item_count - 1,
+			str(tier.get("id", PVP_ROOM_TIER_NONE))
+		)
+	if not _select_pvp_room_tier(previous_id):
+		_select_pvp_room_tier(PVP_ROOM_TIER_NONE)
 
 func _refresh_pvp_timer_tier_options() -> void:
 	if pvp_timer_tier_select == null:
@@ -37339,6 +37421,15 @@ func _pvp_room_failure_status_key(
 		"unsupported_room_timer_tier",
 	]:
 		return "ui.pvp.room.timer_unavailable"
+	if error_code == "pvp_room_team_invalid":
+		return "ui.pvp.room.tier_team_invalid"
+	if error_code in [
+		"mega_test_room_permission_required",
+		"mega_catalog_disabled",
+		"mega_format_disabled",
+		"unsupported_room_tier",
+	]:
+		return "ui.pvp.room.tier_unavailable"
 	if is_training and error_code in ["training_team_required", "training_team_invalid"]:
 		return "ui.pvp.training.paste_invalid"
 	return fallback_key
@@ -37358,6 +37449,8 @@ func _set_pvp_room_type_locked(locked: bool) -> void:
 		pvp_room_casual_type_button.disabled = locked
 	if pvp_room_training_type_button != null:
 		pvp_room_training_type_button.disabled = locked
+	if pvp_room_tier_select != null:
+		pvp_room_tier_select.disabled = locked
 
 func _on_pvp_spectate_room_pressed() -> void:
 	if pvp_battle_starting:
