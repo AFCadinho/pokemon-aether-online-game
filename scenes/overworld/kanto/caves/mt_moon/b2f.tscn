@@ -291,10 +291,10 @@ position = Vector2(752, 560)
 pickup_id = "kanto_mt_moon_b2f_dome_fossil"
 item_id = "dome-fossil"
 
-[node name="TMThief" parent="Entities/Interactables" unique_id=1155255050 instance=ExtResource("8_item")]
+[node name="TMPayback" parent="Entities/Interactables" unique_id=1155255050 instance=ExtResource("8_item")]
 position = Vector2(2096, 464)
 pickup_id = "kanto_mt_moon_b2f_tm_thief"
-item_id = "tm-thief"
+item_id = "tm-payback"
 
 [node name="Revive" parent="Entities/Interactables" unique_id=1810450543 instance=ExtResource("8_item")]
 position = Vector2(464, 1232)
