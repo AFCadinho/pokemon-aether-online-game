@@ -4,6 +4,7 @@
 
 **Added**
 
+- Mt. Moon now has its FireRed and LeafGreen battle Trainers on 1F and B2F.
 - Private battle room hosts can choose no tier or Aether OU when creating a room.
 - Authorized developers can keep a direct Mega battle form for a clearly marked test Pokémon and clean up those test Pokémon from Developer Tools.
 - Route 3 now connects to Mt. Moon, and all three cave floors connect through their matching ladders and tunnels.
