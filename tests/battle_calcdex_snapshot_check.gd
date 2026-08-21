@@ -24,7 +24,7 @@ func _init() -> void:
 	}
 	_check(
 		bool(CalcdexSnapshot.normalize_response(mega_format_response, revision).get("success", false)),
-		"accepts the exact developer Mega + Z calculator format"
+		"accepts the exact Champions ZA calculator format"
 	)
 	var wire_response: Dictionary = JSON.parse_string(JSON.stringify(response))
 	wire_response["status"] = 200.0
