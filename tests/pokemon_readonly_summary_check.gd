@@ -99,14 +99,19 @@ func _run() -> void:
 	overlay.call("_hide_readonly_summary_move_hover", first_move_panel, nodes)
 	_check(not move_hover_panel.visible, "move hover closes when leaving a tile")
 	var ability_stack := nodes.get("ability_stack") as VBoxContainer
+	var detail_hover_panel := nodes.get("detail_hover_panel") as PanelContainer
 	overlay.call("_show_readonly_summary_detail_hover", ability_stack, nodes)
-	_check(move_hover_panel.visible, "ability opens the compact hover card")
-	_check((move_hover_panel.find_children("*", "Label", true, false)[0] as Label).text == "Rough Skin", "ability hover shows its name")
+	await process_frame
+	await process_frame
+	_check(detail_hover_panel.visible, "ability opens the compact hover card")
+	_check(detail_hover_panel.size.y < 156.0, "short ability details use a compact hover card")
+	_check(not detail_hover_panel.get_global_rect().intersects(ability_stack.get_global_rect()), "ability hover is positioned beside the hovered ability")
+	_check((detail_hover_panel.find_children("*", "Label", true, false)[0] as Label).text == "Rough Skin", "ability hover shows its name")
 	overlay.call("_hide_readonly_summary_detail_hover", nodes)
 	var item_panel := nodes.get("item_panel") as PanelContainer
 	overlay.call("_show_readonly_summary_detail_hover", item_panel, nodes)
-	_check(move_hover_panel.visible, "held item opens the compact hover card")
-	_check((move_hover_panel.find_children("*", "Label", true, false)[0] as Label).text == "Life Orb", "held item hover shows its name")
+	_check(detail_hover_panel.visible, "held item opens the compact hover card")
+	_check((detail_hover_panel.find_children("*", "Label", true, false)[0] as Label).text == "Life Orb", "held item hover shows its name")
 	overlay.call("_hide_readonly_summary_detail_hover", nodes)
 	overlay.call("_show_readonly_summary_move_hover", second_move_panel, nodes)
 	_check(move_hover_panel.position == first_hover_position, "every move uses the same hover position")
