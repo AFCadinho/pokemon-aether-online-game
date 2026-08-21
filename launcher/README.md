@@ -6,11 +6,16 @@ Small Godot launcher project for PokeAether.
 
 1. Downloads `manifest.json`.
 2. Compares remote versions with `user://versions.json`.
-3. Downloads missing or outdated zip files.
-4. Extracts the game build into `user://game/game`.
-5. Extracts asset packs into `user://game/assets`.
-6. Replaces `user://game/game` on each game update while keeping unchanged asset packs.
+3. Downloads missing or outdated zip files into persistent `.part` files.
+4. Resumes interrupted downloads with validated HTTP byte ranges and bounded retries.
+5. Verifies every completed zip against its manifest size and SHA-256.
+6. Extracts into a staging folder and only replaces the installed game or asset pack after extraction succeeds.
 7. Starts the configured game executable.
+
+The launcher records periodic speed samples, stalls, reconnects, resume offsets,
+HTTP range responses, and the Cloudflare edge code in its local diagnostics log.
+It never uploads diagnostics automatically. URL query values and local userdata
+paths are redacted before logs are displayed or copied.
 
 Every published game also has an immutable `game.buildId`. CI derives it from
 the Git commit, workflow run, and run attempt, stamps it into the exported game,
@@ -55,6 +60,12 @@ python3 -m http.server 8000
 Then run the launcher scene and click `Check updates`.
 
 If the launcher shows a 404 for `manifest.json`, the server is usually running from the wrong folder.
+
+Run the automated interrupted-download and resume checks with:
+
+```bash
+python3 launcher/tests/run_resumable_download_check.py
+```
 
 The default launcher config points at:
 
@@ -192,9 +203,13 @@ Pokemon sprite packs are intentionally kept out of git. When sprite files change
 python3 tools/upload_sprite_asset_packs.py
 ```
 
-This writes zip files to `builds/asset-packs`, uploads them to R2 under `assets/`, and updates `.github/workflows/deploy-desktop-r2.yml` with the new asset versions and sizes. Commit and push that workflow change so the launcher manifests reference the new packs. The launcher downloads a pack again when its manifest `version` changes, and also redownloads required packs when the local asset folder is missing.
+This writes zip files to `builds/asset-packs`, uploads them to R2 under `assets/`, and updates `.github/workflows/deploy-desktop-r2.yml` with the new asset versions, sizes, and zip SHA-256 values. Commit and push that workflow change so the launcher manifests reference the new packs. The launcher downloads a pack again when its manifest `version` changes, and also redownloads required packs when the local asset folder is missing.
 
 The script uses content hashes for versions and skips packs whose computed version is already in the workflow. That means unchanged packs are not uploaded again and users do not redownload them.
+
+Release publication fails when any artifact is missing a valid SHA-256 or exact
+size, or when its public URL does not return a correct `206 Partial Content`
+response for a one-byte Range request. Stable manifests are still uploaded last.
 
 To upload only one changed pack:
 
