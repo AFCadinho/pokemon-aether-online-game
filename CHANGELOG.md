@@ -6,6 +6,7 @@
 
 - Route 3 now connects to Mt. Moon, and all three cave floors connect through their matching ladders and tunnels.
 - Mt. Moon now plays its own cave music on every floor.
+- Mt. Moon B1F now hides its other disconnected passages while you explore.
 - If the game closes unexpectedly, PokeAether now prepares a privacy-safe crash report at the next start. The report can be viewed and copied directly from the notification or the new Support page in Settings.
 
 **Fixed**
