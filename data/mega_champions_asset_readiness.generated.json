@@ -1,25 +1,28 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "catalogId": "mega-champions-v1",
   "catalogRevision": "sha256:03634104345a483eee412513c5187a01e1dd0101a5d24b90f024d6a64c1db60f",
   "provenance": {
     "itemIcons": "pre-existing tracked PokeAether item icon corpus",
-    "pokemonSprites": "pre-existing local PokeAether launcher asset packs",
-    "licensingReview": "pending"
+    "pokemonSprites": "Generation 9 Pack 3.3.6 plus pre-existing PokeAether launcher asset packs",
+    "pokemonSpriteSourceWebsite": "https://www.eeveeexpo.com/threads/5817/",
+    "pokemonSpriteImportManifestRevision": "sha256:ddcf57b5081f9ffa6c87041ab5e526fe56ccc0b3529d732c5fe6b8cdd3524599",
+    "pokemonSpriteLicenseStatus": "not_declared_in_source_bundle",
+    "licensingReview": "credits_recorded_license_not_declared"
   },
   "expectedFormCount": 49,
   "exactItemIconCount": 45,
   "exactFormItemIconCount": 49,
-  "exactBattleSpriteCount": 37,
-  "fallbackOnlyOrMissingBattleSpriteCount": 12,
+  "exactBattleSpriteCount": 49,
+  "fallbackOnlyOrMissingBattleSpriteCount": 0,
   "forms": [
     {
       "catalogEntryId": "absol-mega-z",
       "spriteKey": "absol-mega-z",
-      "battleSpriteStatus": "fallback_only_or_missing",
+      "battleSpriteStatus": "exact",
       "itemIconKey": "absolite-z",
       "itemIconStatus": "exact",
-      "exactLocalAssetsPresent": false,
+      "exactLocalAssetsPresent": true,
       "publicAssetReady": false
     },
     {
@@ -196,10 +199,10 @@
     {
       "catalogEntryId": "garchomp-mega-z",
       "spriteKey": "garchomp-mega-z",
-      "battleSpriteStatus": "fallback_only_or_missing",
+      "battleSpriteStatus": "exact",
       "itemIconKey": "garchompite-z",
       "itemIconStatus": "exact",
-      "exactLocalAssetsPresent": false,
+      "exactLocalAssetsPresent": true,
       "publicAssetReady": false
     },
     {
@@ -232,10 +235,10 @@
     {
       "catalogEntryId": "greninja-mega",
       "spriteKey": "greninja-mega",
-      "battleSpriteStatus": "fallback_only_or_missing",
+      "battleSpriteStatus": "exact",
       "itemIconKey": "greninjite",
       "itemIconStatus": "exact",
-      "exactLocalAssetsPresent": false,
+      "exactLocalAssetsPresent": true,
       "publicAssetReady": false
     },
     {
@@ -259,10 +262,10 @@
     {
       "catalogEntryId": "lucario-mega-z",
       "spriteKey": "lucario-mega-z",
-      "battleSpriteStatus": "fallback_only_or_missing",
+      "battleSpriteStatus": "exact",
       "itemIconKey": "lucarionite-z",
       "itemIconStatus": "exact",
-      "exactLocalAssetsPresent": false,
+      "exactLocalAssetsPresent": true,
       "publicAssetReady": false
     },
     {
@@ -277,10 +280,10 @@
     {
       "catalogEntryId": "magearna-original-mega",
       "spriteKey": "magearna-original-mega",
-      "battleSpriteStatus": "fallback_only_or_missing",
+      "battleSpriteStatus": "exact",
       "itemIconKey": "magearnite",
       "itemIconStatus": "exact",
-      "exactLocalAssetsPresent": false,
+      "exactLocalAssetsPresent": true,
       "publicAssetReady": false
     },
     {
@@ -304,19 +307,19 @@
     {
       "catalogEntryId": "meowstic-f-mega",
       "spriteKey": "meowstic-f-mega",
-      "battleSpriteStatus": "fallback_only_or_missing",
+      "battleSpriteStatus": "exact",
       "itemIconKey": "meowsticite",
       "itemIconStatus": "exact",
-      "exactLocalAssetsPresent": false,
+      "exactLocalAssetsPresent": true,
       "publicAssetReady": false
     },
     {
       "catalogEntryId": "meowstic-m-mega",
       "spriteKey": "meowstic-m-mega",
-      "battleSpriteStatus": "fallback_only_or_missing",
+      "battleSpriteStatus": "exact",
       "itemIconKey": "meowsticite",
       "itemIconStatus": "exact",
-      "exactLocalAssetsPresent": false,
+      "exactLocalAssetsPresent": true,
       "publicAssetReady": false
     },
     {
@@ -331,19 +334,19 @@
     {
       "catalogEntryId": "raichu-mega-x",
       "spriteKey": "raichu-mega-x",
-      "battleSpriteStatus": "fallback_only_or_missing",
+      "battleSpriteStatus": "exact",
       "itemIconKey": "raichunite-x",
       "itemIconStatus": "exact",
-      "exactLocalAssetsPresent": false,
+      "exactLocalAssetsPresent": true,
       "publicAssetReady": false
     },
     {
       "catalogEntryId": "raichu-mega-y",
       "spriteKey": "raichu-mega-y",
-      "battleSpriteStatus": "fallback_only_or_missing",
+      "battleSpriteStatus": "exact",
       "itemIconKey": "raichunite-y",
       "itemIconStatus": "exact",
-      "exactLocalAssetsPresent": false,
+      "exactLocalAssetsPresent": true,
       "publicAssetReady": false
     },
     {
@@ -403,28 +406,28 @@
     {
       "catalogEntryId": "tatsugiri-curly-mega",
       "spriteKey": "tatsugiri-curly-mega",
-      "battleSpriteStatus": "fallback_only_or_missing",
+      "battleSpriteStatus": "exact",
       "itemIconKey": "tatsugirinite",
       "itemIconStatus": "exact",
-      "exactLocalAssetsPresent": false,
+      "exactLocalAssetsPresent": true,
       "publicAssetReady": false
     },
     {
       "catalogEntryId": "tatsugiri-droopy-mega",
       "spriteKey": "tatsugiri-droopy-mega",
-      "battleSpriteStatus": "fallback_only_or_missing",
+      "battleSpriteStatus": "exact",
       "itemIconKey": "tatsugirinite",
       "itemIconStatus": "exact",
-      "exactLocalAssetsPresent": false,
+      "exactLocalAssetsPresent": true,
       "publicAssetReady": false
     },
     {
       "catalogEntryId": "tatsugiri-stretchy-mega",
       "spriteKey": "tatsugiri-stretchy-mega",
-      "battleSpriteStatus": "fallback_only_or_missing",
+      "battleSpriteStatus": "exact",
       "itemIconKey": "tatsugirinite",
       "itemIconStatus": "exact",
-      "exactLocalAssetsPresent": false,
+      "exactLocalAssetsPresent": true,
       "publicAssetReady": false
     },
     {
@@ -455,5 +458,5 @@
       "publicAssetReady": false
     }
   ],
-  "assetManifestRevision": "sha256:9e76964f4777cf6192923701825c7bf9e977ab2d8747f1ae9ea4a86c80134554"
+  "assetManifestRevision": "sha256:f62306f37bffa9c929dc6800db38a906c22bea89ae753aafd258c820cd33ec62"
 }

@@ -3,26 +3,12 @@ extends SceneTree
 const PokemonAssets := preload("res://scripts/data/pokemon_assets.gd")
 const CATALOG_PATH := "res://data/mega_champions_catalog.generated.json"
 const ASSET_READINESS_PATH := "res://data/mega_champions_asset_readiness.generated.json"
+const SPRITE_IMPORT_MANIFEST_PATH := "res://data/mega_champions_sprite_imports.generated.json"
 const ITEM_LOCALE_PATHS: Dictionary = {
 	"en": "res://localization/items/generated/en.json",
 	"nl": "res://localization/items/generated/nl.json",
 	"pt_BR": "res://localization/items/generated/pt_BR.json",
 }
-const EXPECTED_SPRITE_BLOCKERS: Array[String] = [
-	"absol-mega-z",
-	"garchomp-mega-z",
-	"greninja-mega",
-	"lucario-mega-z",
-	"magearna-original-mega",
-	"meowstic-f-mega",
-	"meowstic-m-mega",
-	"raichu-mega-x",
-	"raichu-mega-y",
-	"tatsugiri-curly-mega",
-	"tatsugiri-droopy-mega",
-	"tatsugiri-stretchy-mega",
-]
-
 var failed := false
 
 
@@ -40,6 +26,7 @@ func _run() -> void:
 		return
 
 	_check_manifest(catalog, readiness)
+	_check_sprite_import_manifest()
 	_check_localizations_and_item_icons(catalog)
 	_check_sprite_mappings(catalog, readiness)
 	_check_rendering_consumers()
@@ -50,18 +37,44 @@ func _run() -> void:
 
 func _check_manifest(catalog: Dictionary, readiness: Dictionary) -> void:
 	_check(catalog.get("catalogRevision") == readiness.get("catalogRevision"), "asset manifest matches the canonical catalog revision")
+	_check(int(readiness.get("schemaVersion", 0)) == 2, "asset manifest uses the provenance-aware schema")
 	_check(int(readiness.get("expectedFormCount", 0)) == 49, "asset manifest covers 49 forms")
 	_check(int(readiness.get("exactItemIconCount", 0)) == 45, "all 45 unique Mega Stone icons are exact")
 	_check(int(readiness.get("exactFormItemIconCount", 0)) == 49, "all 49 form mappings resolve an exact item icon")
-	_check(int(readiness.get("exactBattleSpriteCount", 0)) == 37, "37 forms have complete exact battle sprite sets")
-	_check(int(readiness.get("fallbackOnlyOrMissingBattleSpriteCount", 0)) == 12, "12 forms remain blocked on exact battle sprites")
+	_check(int(readiness.get("exactBattleSpriteCount", 0)) == 49, "all 49 forms have complete exact battle sprite sets")
+	_check(int(readiness.get("fallbackOnlyOrMissingBattleSpriteCount", -1)) == 0, "no form remains blocked on an exact battle sprite")
 	var provenance: Dictionary = readiness.get("provenance", {})
-	_check(provenance.get("licensingReview") == "pending", "asset licensing review remains an explicit release blocker")
+	_check(provenance.get("pokemonSpriteLicenseStatus") == "not_declared_in_source_bundle", "sprite bundle license status is recorded without inventing a license")
+	_check(provenance.get("licensingReview") == "credits_recorded_license_not_declared", "asset provenance records credits and the absent license declaration")
 	for form_value: Variant in readiness.get("forms", []):
 		if not (form_value is Dictionary):
 			continue
 		var form := form_value as Dictionary
 		_check(form.get("publicAssetReady") == false, "%s cannot become public through Phase 3 assets" % form.get("catalogEntryId", "unknown"))
+
+
+func _check_sprite_import_manifest() -> void:
+	var manifest := _read_dictionary(SPRITE_IMPORT_MANIFEST_PATH)
+	_check(int(manifest.get("schemaVersion", 0)) == 1, "sprite import manifest schema loads")
+	_check(int(manifest.get("mappingCount", 0)) == 15, "sprite import manifest covers twelve missing and three corrected mappings")
+	var source: Dictionary = manifest.get("source", {})
+	_check(source.get("name") == "Generation 9 Pack", "sprite import source name is pinned")
+	_check(source.get("version") == "3.3.6", "sprite import source version is pinned")
+	_check(source.get("licenseStatus") == "not_declared_in_source_bundle", "source bundle's absent license declaration remains explicit")
+	var mapped_ids: Dictionary = {}
+	for form_value: Variant in manifest.get("forms", []):
+		if not (form_value is Dictionary):
+			continue
+		var form := form_value as Dictionary
+		var entry_id := str(form.get("catalogEntryId", ""))
+		mapped_ids[entry_id] = true
+		for output_value: Variant in form.get("outputs", []):
+			var output_path := "res://%s" % str(output_value)
+			_check(FileAccess.file_exists(output_path), "%s imported output exists" % output_path)
+	_check(mapped_ids.size() == 15, "sprite import mappings are unique")
+	_check(mapped_ids.has("floette-mega"), "Floette's previous wrong form-index mapping is corrected")
+	_check(mapped_ids.has("magearna-mega"), "Magearna's previous wrong form-index mapping is corrected")
+	_check(mapped_ids.has("zygarde-mega"), "Zygarde's previous wrong form-index mapping is corrected")
 
 
 func _check_localizations_and_item_icons(catalog: Dictionary) -> void:
@@ -127,9 +140,7 @@ func _check_sprite_mappings(catalog: Dictionary, readiness: Dictionary) -> void:
 		_check(PokemonAssets.load_home_sprite(species_name, true) != null, "%s has a shiny party/storage/Calcdex render" % entry_id)
 
 	actual_blockers.sort()
-	var expected_blockers := EXPECTED_SPRITE_BLOCKERS.duplicate()
-	expected_blockers.sort()
-	_check(actual_blockers == expected_blockers, "exact sprite blockers match the reviewed 12-form list")
+	_check(actual_blockers.is_empty(), "all 49 catalog forms resolve exact sprite sets")
 
 
 func _check_rendering_consumers() -> void:
