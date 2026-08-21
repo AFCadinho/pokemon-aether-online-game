@@ -266,7 +266,7 @@ const POKEMON_READONLY_DETAIL_HOVER_MIN_WIDTH := 132.0
 const POKEMON_READONLY_DETAIL_HOVER_MAX_WIDTH := 210.0
 const POKEMON_READONLY_DETAIL_HOVER_HORIZONTAL_PADDING := 22.0
 const POKEMON_READONLY_DETAIL_HOVER_VERTICAL_PADDING := 18.0
-const POKEMON_READONLY_DETAIL_HOVER_DEBUG := true
+const POKEMON_READONLY_DETAIL_HOVER_DEBUG := false
 const POKEMON_SUMMARY_BODY_HEIGHT := 333.0
 const POKEMON_SUMMARY_LEFT_PANEL_WIDTH := 275.0
 const POKEMON_SUMMARY_RIGHT_AREA_WIDTH := 320.0
@@ -15509,6 +15509,9 @@ func _setup_pokemon_summary_popup(card_key: String = "") -> void:
 
 	_add_pokemon_summary_left_panel(content_row, card_key)
 	_add_pokemon_summary_right_area(content_row, card_key)
+	var hover_nodes: Dictionary = {"popup": pokemon_summary_popup}
+	pokemon_summary_popup.add_child(_build_readonly_summary_move_hover_panel(hover_nodes))
+	pokemon_summary_popup.set_meta("summary_hover_nodes", hover_nodes)
 
 func _setup_readonly_pokemon_summary_popup(card_key: String = "") -> void:
 	_reset_pokemon_summary_card_node_references()
@@ -16148,7 +16151,10 @@ func _show_readonly_summary_move_hover(move_panel: PanelContainer, nodes: Dictio
 	))
 
 	var description_label := Label.new()
-	description_label.text = _get_summary_move_description_text(move_value)
+	description_label.text = str(move_panel.get_meta(
+		"summary_move_hover_description",
+		_get_summary_move_description_text(move_value)
+	))
 	description_label.custom_minimum_size = Vector2(0, 39)
 	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	description_label.max_lines_visible = 3
@@ -16161,7 +16167,11 @@ func _show_readonly_summary_move_hover(move_panel: PanelContainer, nodes: Dictio
 	_position_readonly_summary_move_hover(hover_panel, popup, move_panel)
 	hover_panel.visible = true
 	hover_panel.move_to_front()
-	var hover_style := move_panel.get_meta("readonly_hover_style", null) as StyleBoxFlat
+	var hover_style := (
+		move_panel.get_meta("readonly_hover_style") as StyleBoxFlat
+		if move_panel.has_meta("readonly_hover_style")
+		else null
+	)
 	if hover_style != null:
 		move_panel.add_theme_stylebox_override("panel", hover_style)
 
@@ -16284,6 +16294,32 @@ func _set_readonly_summary_detail_hover(source: Control, title: String, descript
 	source.set_meta("readonly_hover_description", description)
 	source.set_meta("readonly_hover_accent", accent)
 
+func _get_pokemon_summary_hover_nodes() -> Dictionary:
+	if pokemon_summary_popup == null or not is_instance_valid(pokemon_summary_popup):
+		return {}
+	return pokemon_summary_popup.get_meta("summary_hover_nodes", {}) as Dictionary
+
+func _set_pokemon_summary_detail_hover(source: Control, title: String, description: String, accent: Color) -> void:
+	var nodes := _get_pokemon_summary_hover_nodes()
+	if source == null or nodes.is_empty():
+		return
+	_set_readonly_summary_detail_hover(source, title, description, accent)
+	if source.has_meta("summary_detail_hover_connected"):
+		return
+	source.set_meta("summary_detail_hover_connected", true)
+	source.mouse_entered.connect(_show_readonly_summary_detail_hover.bind(source, nodes))
+	source.mouse_exited.connect(_hide_readonly_summary_detail_hover.bind(nodes))
+
+func _set_pokemon_summary_move_hover(source: PanelContainer, move_value: Variant, description: String) -> void:
+	var nodes := _get_pokemon_summary_hover_nodes()
+	if source == null or nodes.is_empty():
+		return
+	source.set_meta("readonly_move_value", move_value)
+	source.set_meta("summary_move_hover_description", description)
+	source.tooltip_text = ""
+	source.mouse_entered.connect(_show_readonly_summary_move_hover.bind(source, nodes))
+	source.mouse_exited.connect(_hide_readonly_summary_move_hover.bind(source, nodes))
+
 func _position_readonly_summary_move_hover(hover_panel: PanelContainer, popup: PanelContainer, source: Control) -> void:
 	_position_readonly_summary_detail_hover(hover_panel, popup, source, POKEMON_READONLY_MOVE_HOVER_SIZE)
 
@@ -16357,6 +16393,8 @@ func _finalize_readonly_summary_detail_hover_layout(hover_panel: PanelContainer,
 			final_size,
 			hover_panel.get_global_rect(),
 		])
+	else:
+		return
 	await scene_tree.process_frame
 	if not is_instance_valid(hover_panel) or not is_instance_valid(source):
 		return
@@ -21930,6 +21968,12 @@ func _get_pokemon_summary_sprite_visual_rect(frames: SpriteFrames, animation_nam
 	return combined_rect if has_rect else Rect2()
 
 func _render_pokemon_summary_content(pokemon: Pokemon) -> void:
+	var hover_nodes := _get_pokemon_summary_hover_nodes()
+	if not hover_nodes.is_empty():
+		_hide_readonly_summary_detail_hover(hover_nodes)
+		var move_hover_panel := hover_nodes.get("move_hover_panel") as PanelContainer
+		if move_hover_panel != null:
+			move_hover_panel.visible = false
 	for child: Node in pokemon_summary_content_stack.get_children():
 		child.queue_free()
 
@@ -21980,7 +22024,10 @@ func _render_pokemon_summary_general(pokemon: Pokemon) -> void:
 		_localized_nature_name(pokemon.nature),
 		Color("#f2cf78"),
 		false,
-		148.0
+		148.0,
+		Color(0, 0, 0, 0),
+		Color(0, 0, 0, 0),
+		_get_pokemon_summary_nature_tooltip(pokemon.nature)
 	))
 	info_grid.add_child(_create_summary_field_card(LocalizationManager.text("ui.pokemon_summary.location"), _get_pokemon_summary_location_text(pokemon), Color("#62d7ff"), false, 148.0))
 	info_grid.add_child(_create_summary_field_card(LocalizationManager.text("ui.pokemon_summary.caught_date"), _get_pokemon_summary_caught_date_text(pokemon), Color("#d9ecff"), false, 148.0))
@@ -22162,6 +22209,12 @@ func _create_summary_field_card(
 	var resolved_value_color: Color = value_color if value_color.a > 0.0 else (Color("#f4f7ff") if emphasize_value else Color("#e8f0ff"))
 	value.add_theme_color_override("font_color", resolved_value_color)
 	value_margin.add_child(value)
+	if resolved_tooltip != "" and not _get_pokemon_summary_hover_nodes().is_empty():
+		stack.tooltip_text = ""
+		label.tooltip_text = ""
+		value_panel.tooltip_text = ""
+		value.tooltip_text = ""
+		_set_pokemon_summary_detail_hover(stack, _default_text(value_text), resolved_tooltip, accent_color)
 	return stack
 
 func _get_pokemon_origin_summary_text(pokemon: Pokemon) -> String:
@@ -22904,14 +22957,14 @@ func _create_summary_move_card(
 	panel.connect("reorder_drag_finished", Callable(self, "_on_pokemon_summary_move_reorder_drag_finished"))
 	panel.connect("direct_action_requested", Callable(self, "_on_pokemon_summary_direct_move_requested"))
 	panel.custom_minimum_size = Vector2(0, 50)
+	var hover_description := description_text
 	if can_reorder:
 		var reorder_hint := LocalizationManager.text("ui.pokemon_summary.moves.drag_to_reorder")
-		panel.tooltip_text = "%s\n%s" % [description_text, reorder_hint] if description_text != "" else reorder_hint
+		hover_description = "%s\n%s" % [description_text, reorder_hint] if description_text != "" else reorder_hint
 	elif _is_world_battle_active() and move_id != "":
 		var battle_hint := LocalizationManager.text("ui.pokemon_summary.moves.reorder_during_battle")
-		panel.tooltip_text = "%s\n%s" % [description_text, battle_hint] if description_text != "" else battle_hint
-	else:
-		panel.tooltip_text = description_text
+		hover_description = "%s\n%s" % [description_text, battle_hint] if description_text != "" else battle_hint
+	panel.tooltip_text = hover_description
 	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#081321ef"), POKEMON_SUMMARY_ACCENT_FAINT, 8, 1))
 
 	var margin := MarginContainer.new()
@@ -22992,6 +23045,9 @@ func _create_summary_move_card(
 	_set_control_tree_mouse_filter(margin, Control.MOUSE_FILTER_IGNORE)
 	if direct_action_button != null:
 		direct_action_button.mouse_filter = Control.MOUSE_FILTER_STOP
+	if move_id != "":
+		_clear_control_tree_tooltips(panel, direct_action_button)
+		_set_pokemon_summary_move_hover(panel, move_value, hover_description)
 	return panel
 
 func _on_pokemon_summary_direct_move_requested(card_key: String, pokemon_id: int, move_id: String) -> void:
@@ -23349,10 +23405,16 @@ func _set_pokemon_summary_ball_button(pokemon: Pokemon) -> void:
 	pokemon_summary_ball_icon.modulate = Color(1, 1, 1, 0.45) if ball_texture == null else Color(1, 1, 1, 1)
 	pokemon_summary_ball_button.disabled = _is_pokemon_summary_readonly()
 	pokemon_summary_ball_button.mouse_default_cursor_shape = Control.CURSOR_ARROW if _is_pokemon_summary_readonly() else Control.CURSOR_POINTING_HAND
-	pokemon_summary_ball_button.tooltip_text = (
+	var ball_action_text := (
 		LocalizationManager.text("ui.pokemon_summary.readonly_tooltip")
 		if _is_pokemon_summary_readonly()
 		else LocalizationManager.text("ui.pokemon_summary.ball.current_tooltip", {"ball": _item_name_from_id(ball_item_id)})
+	)
+	_set_pokemon_summary_detail_hover(
+		pokemon_summary_ball_button,
+		_item_name_from_id(ball_item_id),
+		ball_action_text,
+		POKEMON_SUMMARY_ACCENT
 	)
 
 func _on_pokemon_summary_ball_button_pressed(card_key: String = "") -> void:
@@ -23623,10 +23685,15 @@ func _set_pokemon_summary_held_item_slot(pokemon: Pokemon) -> void:
 
 	var held_item_id: String = _get_pokemon_held_item_id(pokemon)
 	var has_item: bool = held_item_id != ""
+	var held_item_name := (
+		_item_name_from_id(held_item_id)
+		if has_item
+		else LocalizationManager.text("ui.pokemon_summary.held_item.none")
+	)
 	var icon_texture: Texture2D = null
 	if has_item:
 		icon_texture = _load_item_icon(held_item_id)
-		pokemon_summary_held_item_slot_name_label.text = _item_name_from_id(held_item_id)
+		pokemon_summary_held_item_slot_name_label.text = held_item_name
 		pokemon_summary_held_item_slot_name_label.tooltip_text = pokemon_summary_held_item_slot_name_label.text
 		if pokemon_summary_held_item_slot_button != null:
 			pokemon_summary_held_item_slot_button.tooltip_text = (
@@ -23646,6 +23713,17 @@ func _set_pokemon_summary_held_item_slot(pokemon: Pokemon) -> void:
 	if pokemon_summary_held_item_slot_button != null:
 		pokemon_summary_held_item_slot_button.disabled = _is_pokemon_summary_readonly()
 		pokemon_summary_held_item_slot_button.mouse_default_cursor_shape = Control.CURSOR_ARROW if _is_pokemon_summary_readonly() else Control.CURSOR_POINTING_HAND
+		var item_description := ItemLocalization.short_description(held_item_id).strip_edges() if has_item else ""
+		var item_action_text := pokemon_summary_held_item_slot_button.tooltip_text
+		var hover_description := item_description
+		if item_action_text != "":
+			hover_description = "%s\n%s" % [item_description, item_action_text] if item_description != "" else item_action_text
+		_set_pokemon_summary_detail_hover(
+			pokemon_summary_held_item_slot_button,
+			held_item_name,
+			hover_description,
+			Color("#f2cf78")
+		)
 
 	pokemon_summary_held_item_slot_icon.texture = icon_texture
 	if icon_texture == null:
@@ -26040,6 +26118,14 @@ func _set_control_tree_mouse_filter(node: Node, mouse_filter_value: int) -> void
 
 	for child: Node in node.get_children():
 		_set_control_tree_mouse_filter(child, mouse_filter_value)
+
+func _clear_control_tree_tooltips(node: Node, excluded_control: Control = null) -> void:
+	if node == excluded_control:
+		return
+	if node is Control:
+		(node as Control).tooltip_text = ""
+	for child: Node in node.get_children():
+		_clear_control_tree_tooltips(child, excluded_control)
 
 
 func _create_chat_empty_state(title_text: String, hint_text: String) -> Dictionary:
