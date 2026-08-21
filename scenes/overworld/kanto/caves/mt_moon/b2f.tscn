@@ -332,6 +332,16 @@ position = Vector2(0, 112)
 sprite_frames = ExtResource("6_rocket")
 animation = &"default"
 
+[node name="RocketUpperLeft" type="AnimatedSprite2D" parent="Entities/MtMoonAmbush"]
+position = Vector2(-64, -96)
+sprite_frames = ExtResource("6_rocket")
+animation = &"default"
+
+[node name="RocketUpperRight" type="AnimatedSprite2D" parent="Entities/MtMoonAmbush"]
+position = Vector2(64, -96)
+sprite_frames = ExtResource("6_rocket")
+animation = &"default"
+
 [node name="FutureSelf" type="AnimatedSprite2D" parent="Entities/MtMoonAmbush"]
 position = Vector2(-32, 96)
 sprite_frames = ExtResource("11_future_frames")

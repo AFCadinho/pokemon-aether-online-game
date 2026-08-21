@@ -42,13 +42,21 @@ func _run() -> void:
 	_expect("_summon_rocket_pokemon" in controller_source, "Ambush summons Team Rocket's Pokémon")
 	_expect("_open_rift" in controller_source, "Ambush opens the future-self rift")
 	_expect("play_overworld_summon" in controller_source, "Ambush uses the shared Poké Ball animation")
+	_expect("DIALOGUE_STAGE_ROCKET_QUESTION" in controller_source, "Rocket questions follow the rescuer's reveal")
+	_expect("DIALOGUE_STAGE_ROCKET_FLEE" in controller_source, "Rocket flight dialogue follows the counterattack")
+	_expect("DIALOGUE_STAGE_PLAYER_QUESTION" in controller_source, "the player answers during the rescue dialogue")
+	_expect("await _play_counterattack()" in controller_source and controller_source.find("await _play_counterattack()") < controller_source.find("await _flee_rockets()"), "the rescuer attacks before Team Rocket flees")
+	var basement_source := _read_text("res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn")
+	_expect('name="RocketUpperLeft"' in basement_source, "a Team Rocket Grunt surrounds the player from upper left")
+	_expect('name="RocketUpperRight"' in basement_source, "a Team Rocket Grunt surrounds the player from upper right")
 	var scene := load("res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn") as PackedScene
 	_expect(scene != null, "Mt. Moon B2F loads with the expanded cinematic")
 
 	for locale: String in ["en", "nl", "pt_BR"]:
 		var catalog := _load_json("res://localization/%s.json" % locale)
 		_expect(catalog.has("story.mt_moon.cutscene.go"), "%s has the summon caption" % locale)
-		_expect(catalog.has("story.mt_moon.cutscene.used_move"), "%s has the attack caption" % locale)
+		_expect(catalog.has("story.mt_moon.cutscene.use_move"), "%s has the attack command" % locale)
+		_expect(catalog.has("story.mt_moon.cutscene.player_speaker"), "%s has the player speaker fallback" % locale)
 
 	quit(1 if failed else 0)
 

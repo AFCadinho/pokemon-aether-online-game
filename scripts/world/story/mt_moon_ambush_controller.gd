@@ -7,14 +7,32 @@ const FINAL_STEP_ID := "cross_mt_moon"
 const OVERWORLD_POKEMON_SCENE := preload("res://scenes/npcs/overworld_pokemon.tscn")
 const RIFT_TEXTURE := preload("res://assets/npcs/Ultimate Gen 4 Overworlds Pack/Animations & Others/DistortionWorld_Portal.png")
 const CINEMATIC_MOVE_CATALOG := preload("res://scripts/world/story/mt_moon_cinematic_move_catalog.gd")
-const ROCKET_SPECIES: Array[String] = ["zubat", "rattata", "ekans"]
-const ROCKET_POKEMON_POSITIONS: Array[Vector2] = [Vector2(-64, -32), Vector2(64, -32), Vector2(0, 64)]
+const ROCKET_SPECIES: Array[String] = ["zubat", "rattata", "ekans", "koffing", "sandshrew"]
+const ROCKET_POKEMON_POSITIONS: Array[Vector2] = [
+	Vector2(-64, 0),
+	Vector2(64, 0),
+	Vector2(0, 72),
+	Vector2(-48, -64),
+	Vector2(48, -64),
+]
+const DIALOGUE_STAGE_AMBUSH := 0
+const DIALOGUE_STAGE_ROCKET_QUESTION := 1
+const DIALOGUE_STAGE_ROCKET_FLEE := 2
+const DIALOGUE_STAGE_PLAYER_QUESTION := 4
+const DIALOGUE_STAGE_PLAYER_PROMISE := 6
+const DIALOGUE_STAGE_FAREWELL := 7
 
 @export var miguel_path: NodePath
 @export var helix_fossil_path: NodePath
 @export var dome_fossil_path: NodePath
 
-@onready var rockets: Array[Node] = [$RocketLeft, $RocketRight, $RocketRear]
+@onready var rockets: Array[Node] = [
+	$RocketLeft,
+	$RocketRight,
+	$RocketRear,
+	$RocketUpperLeft,
+	$RocketUpperRight,
+]
 @onready var future_self: AnimatedSprite2D = $FutureSelf
 
 var _dialogue_stage := 0
@@ -46,18 +64,26 @@ func _exit_tree() -> void:
 
 
 func show_dialogue(lines: Array[String], speaker_name := "") -> bool:
-	if _dialogue_stage == 0:
-		await _prepare_ambush()
-	elif _dialogue_stage == 1:
-		await _reveal_rescuer()
+	var current_stage := _dialogue_stage
+	match current_stage:
+		DIALOGUE_STAGE_AMBUSH:
+			await _prepare_ambush()
+		DIALOGUE_STAGE_ROCKET_QUESTION:
+			await _reveal_rescuer()
+		DIALOGUE_STAGE_ROCKET_FLEE:
+			await _play_counterattack()
 	_dialogue_stage += 1
 	var dialogue_box := get_tree().current_scene.get_node_or_null("DialogueBox/Box")
 	if dialogue_box == null or not dialogue_box.has_method("start_dialogue"):
 		return false
-	dialogue_box.call("start_dialogue", lines, speaker_name)
+	var resolved_speaker_name := speaker_name
+	if current_stage in [DIALOGUE_STAGE_PLAYER_QUESTION, DIALOGUE_STAGE_PLAYER_PROMISE]:
+		resolved_speaker_name = _player_speaker_name()
+	dialogue_box.call("start_dialogue", lines, resolved_speaker_name)
 	await dialogue_box.dialogue_finished
-	if _dialogue_stage == 2:
-		await _play_counterattack()
+	if current_stage == DIALOGUE_STAGE_ROCKET_FLEE:
+		await _flee_rockets()
+	elif current_stage == DIALOGUE_STAGE_FAREWELL:
 		await _dismiss_rescuer()
 	return true
 
@@ -67,11 +93,16 @@ func _prepare_ambush() -> void:
 		return
 	_prepared = true
 	await _show_miguel_takes_other_fossil()
+	var entrance_tween := create_tween().set_parallel(true)
 	for rocket: Node in rockets:
+		var surround_position: Vector2 = rocket.position
+		var approach_offset := Vector2(0, -64 if surround_position.y < 0.0 else 64)
+		rocket.position = surround_position + approach_offset
 		rocket.visible = true
 		rocket.modulate.a = 0.0
-		create_tween().tween_property(rocket, "modulate:a", 1.0, 0.18)
-	await get_tree().create_timer(0.25).timeout
+		entrance_tween.tween_property(rocket, "position", surround_position, 0.42).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		entrance_tween.tween_property(rocket, "modulate:a", 1.0, 0.2)
+	await entrance_tween.finished
 	await _summon_rocket_pokemon()
 
 
@@ -154,13 +185,12 @@ func _play_counterattack() -> void:
 		return
 	_counterattack_played = true
 	if not is_instance_valid(_starter):
-		await _flee_rockets()
 		return
 	var move: Dictionary = CINEMATIC_MOVE_CATALOG.for_types(_starter_types)
 	var move_id := str(move.get("id", "hyper-beam"))
 	var move_name := ContentLocalization.display_name("moves", move_id, str(move.get("name", "Hyper Beam")))
 	var pokemon_name := ContentLocalization.display_name("species", _starter_species_id, _starter_species_id.capitalize())
-	await _show_caption(_text("story.mt_moon.cutscene.used_move").replace("{pokemon}", pokemon_name).replace("{move}", move_name), 0.7)
+	await _show_caption(_text("story.mt_moon.cutscene.use_move").replace("{pokemon}", pokemon_name).replace("{move}", move_name), 0.7)
 	var target_positions: Array[Vector2] = []
 	for pokemon: Node2D in _rocket_pokemon:
 		if is_instance_valid(pokemon):
@@ -173,7 +203,6 @@ func _play_counterattack() -> void:
 		if is_instance_valid(pokemon):
 			create_tween().tween_property(pokemon, "modulate:a", 0.0, 0.18)
 	await get_tree().create_timer(0.2).timeout
-	await _flee_rockets()
 
 
 func _flee_rockets() -> void:
@@ -315,6 +344,13 @@ func _text(key: String) -> String:
 	if localization_manager != null and localization_manager.has_method("text"):
 		return str(localization_manager.call("text", key))
 	return key
+
+
+func _player_speaker_name() -> String:
+	var player_name := str(PlayerSave.player_name).strip_edges()
+	if not player_name.is_empty():
+		return player_name
+	return _text("story.mt_moon.cutscene.player_speaker")
 
 
 func _on_story_changed(_revision: int) -> void:

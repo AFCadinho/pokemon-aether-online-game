@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Mt. Moon rescue now surrounds you from both sides and lets Team Rocket, the mysterious Trainer, and your character respond throughout the counterattack.
+
 - Rewinding the Mt. Moon story now restores the fossil Poké Balls immediately.
 
 - The Mt. Moon rescue now plays as a full cutscene with Team Rocket summoning Pokémon, a mysterious rift, and your future partner's counterattack.
