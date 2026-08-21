@@ -36734,6 +36734,22 @@ func _pvp_ranked_validation_issue_label(issue: Dictionary) -> String:
 
 func _pvp_ranked_validation_issue_message(issue: Dictionary) -> String:
 	var code := str(issue.get("code", "")).strip_edges()
+	if code.to_lower() in [
+		"test_form_not_allowed",
+		"mega_catalog_disabled",
+		"mega_format_disabled",
+		"mega_format_not_allowed",
+		"mega_calculator_pending",
+		"mega_ai_pending",
+		"mega_readiness_pending",
+		"mega_catalog_unavailable",
+		"mega_catalog_revision_mismatch",
+		"mega_capability_data_missing",
+		"mega_capability_conflict",
+		"mega_engine_manifest_stale",
+		"mega_calculator_manifest_stale",
+	]:
+		return BackendErrorLocalizationService.message({"detail": {"code": code}})
 	var slot := int(issue.get("slot", 0))
 	var pokemon_name := _pvp_party_slot_display_name(slot)
 	var value := _pvp_validation_issue_value(issue)
