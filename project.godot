@@ -98,6 +98,10 @@ window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/stretch/mode="canvas_items"
 
+[internationalization]
+
+locale/fallback="en"
+
 [input]
 
 move_up={
