@@ -3213,6 +3213,7 @@
   "ui.pvp.room.spectator_failed": "Could not spectate this room.",
   "ui.pvp.room.preview_unavailable": "The public team preview is not available yet. Try again shortly.",
   "ui.pvp.room.create_failed": "Could not create the room.",
+  "ui.pvp.room.battle_server_recovering": "The battle server is recovering. Please try again shortly.",
   "ui.pvp.room.cancel_failed": "Could not cancel the room.",
   "ui.pvp.room.join_failed": "Could not join the room.",
   "ui.pvp.room.check_failed": "Could not check the room.",

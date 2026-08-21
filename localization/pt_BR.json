@@ -3213,6 +3213,7 @@
   "ui.pvp.room.spectator_failed": "Não foi possível assistir a esta sala.",
   "ui.pvp.room.preview_unavailable": "A prévia pública das equipes ainda não está disponível. Tente novamente em instantes.",
   "ui.pvp.room.create_failed": "Não foi possível criar a sala.",
+  "ui.pvp.room.battle_server_recovering": "O servidor de batalhas está se recuperando. Tente novamente em instantes.",
   "ui.pvp.room.cancel_failed": "Não foi possível cancelar a sala.",
   "ui.pvp.room.join_failed": "Não foi possível entrar na sala.",
   "ui.pvp.room.check_failed": "Não foi possível verificar a sala.",

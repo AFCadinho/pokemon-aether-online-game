@@ -97,6 +97,15 @@ func _check_pvp_runtime_translation() -> void:
 	_check(
 		overlay.call(
 			"_pvp_room_failure_status_key",
+			{"detail": {"code": "CIRCUIT_BREAKER_OPEN"}},
+			false,
+			"ui.pvp.room.create_failed"
+		) == "ui.pvp.room.battle_server_recovering",
+		"Authority recovery is explained instead of shown as a generic room failure"
+	)
+	_check(
+		overlay.call(
+			"_pvp_room_failure_status_key",
 			{"detail": {"code": "TRAINING_TEAM_INVALID"}},
 			true,
 			"ui.pvp.room.create_failed"
