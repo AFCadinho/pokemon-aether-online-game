@@ -31,6 +31,7 @@
 
 **Fixed**
 
+- Miguel now blocks the full fossil corridor until he has been defeated.
 - Miguel no longer moves into a Mt. Moon wall after his battle.
 - Missing translated text now reliably falls back to English.
 - Finished battles now close the Damage Calculator automatically so the battle result can be closed immediately.
