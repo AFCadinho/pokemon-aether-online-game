@@ -33,7 +33,7 @@
 
 **Fixed**
 
-- Miguel now blocks the full fossil corridor until he has been defeated.
+- Miguel now warns you and sends you back when he blocks the fossil corridor, instead of leaving you against an unexplained invisible barrier.
 - Miguel no longer moves into a Mt. Moon wall after his battle.
 - Missing translated text now reliably falls back to English.
 - The Pokédex now hides Greninja's technical Bond record, keeps Ash-Greninja visible as a battle-only form, and shows Battle Bond as Greninja's Special Ability. Ability-changing items also explain that this Ability is fixed.
