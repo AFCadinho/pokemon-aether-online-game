@@ -4,7 +4,7 @@
 
 **Added**
 
-- Route 3 now connects to the first floor of Mt. Moon in both directions.
+- Route 3 now connects to Mt. Moon, and all three cave floors connect through their matching ladders and tunnels.
 - If the game closes unexpectedly, PokeAether now prepares a privacy-safe crash report at the next start. The report can be viewed and copied directly from the notification or the new Support page in Settings.
 
 **Fixed**
