@@ -149,6 +149,7 @@ func dev_set_story_checkpoint(checkpoint_id: String) -> Dictionary:
 			"error": "Story checkpoint response was invalid.",
 		}
 	StoryService.apply_story(story)
+	TrainerProgressService.invalidate_all()
 	return {"success": true, "story": StoryService.get_story()}
 
 
