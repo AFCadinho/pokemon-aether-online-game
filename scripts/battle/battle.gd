@@ -27,6 +27,7 @@ const BATTLE_TRAINING_TEAM_CONTEXT := preload("res://scripts/battle/battle_train
 const BATTLE_DISGUISE_EVENT_ORDER := preload("res://scripts/battle/battle_disguise_event_order.gd")
 const BATTLE_SUPREME_OVERLORD_EFFECT := preload("res://scripts/battle/battle_supreme_overlord_effect.gd")
 const BATTLE_PUBLIC_POKEMON_KNOWLEDGE := preload("res://scripts/battle/battle_public_pokemon_knowledge.gd")
+const BATTLE_OWNED_FORM_PROJECTION := preload("res://scripts/battle/battle_owned_form_projection.gd")
 const OPPONENT_PARTY_REVEAL_POLICY := preload("res://scripts/battle/opponent_party_reveal_policy.gd")
 const BATTLE_VOICE_TIMING := preload("res://scripts/battle/battle_voice_timing.gd")
 const BATTLE_ENVIRONMENT_CATALOG := preload("res://scripts/battle/battle_environment_catalog.gd")
@@ -134,6 +135,7 @@ var pvp_room_recovery_request_active := false
 var pvp_targeted_render_recovery_active := false
 var pvp_idle_realtime_drain_pending := false
 var pvp_idle_wait_recovery_active := false
+var pvp_local_connection_recovering := false
 var pvp_last_applied_server_seq := 0
 var pvp_last_applied_snapshot_server_seq := 0
 var pvp_last_phase := ""
@@ -888,6 +890,11 @@ func _position_party_hover_card() -> void:
 
 func _get_owned_party_hover_data(pokemon_data: Dictionary) -> Dictionary:
 	var display_data: Dictionary = _get_display_pokemon_data("p1", pokemon_data).duplicate(true)
+	var canonical_slot := _get_pokemon_data_canonical_party_slot(display_data)
+	if canonical_slot <= 0:
+		canonical_slot = _get_pokemon_data_canonical_party_slot(pokemon_data)
+	var live_data := _get_latest_owned_request_pokemon_for_canonical_slot(canonical_slot)
+	BATTLE_OWNED_FORM_PROJECTION.apply_live_request_to_display(display_data, live_data)
 	var saved_pokemon := _get_player_save_pokemon_for_hover(display_data)
 	if saved_pokemon == null:
 		_apply_held_item_stat_hover_data(display_data)
@@ -967,45 +974,56 @@ func _apply_temporary_form_party_hover_data(
 	saved_pokemon: Pokemon
 ) -> void:
 	var temporary_species := _get_party_hover_temporary_display_species(display_data)
+	if temporary_species == "":
+		return
+
+	BATTLE_OWNED_FORM_PROJECTION.apply_live_form_to_hover(
+		hover_data,
+		display_data,
+		temporary_species
+	)
+
 	var primal_data := _get_primal_species_hover_data(temporary_species)
 	if primal_data.is_empty():
 		return
 
-	hover_data["species"] = temporary_species
-	hover_data["displaySpecies"] = temporary_species
-	hover_data["types"] = primal_data.get("types", [])
-	hover_data["ability"] = primal_data.get("ability", hover_data.get("ability", ""))
-	hover_data["possibleAbilities"] = [primal_data.get("ability", "")]
-	hover_data["stats"] = _calculate_battle_stats(
-		primal_data.get("baseStats", {}),
-		int(hover_data.get("level", saved_pokemon.level)),
-		hover_data.get("ivs", saved_pokemon.ivs),
-		hover_data.get("evs", saved_pokemon.evs),
-		str(hover_data.get("nature", saved_pokemon.nature))
-	)
+	if not display_data.has("types") or not (display_data.get("types") is Array) \
+			or (display_data.get("types") as Array).is_empty():
+		hover_data["types"] = primal_data.get("types", [])
+	if str(display_data.get("ability", "")).strip_edges() == "":
+		hover_data["ability"] = primal_data.get("ability", hover_data.get("ability", ""))
+		hover_data["possibleAbilities"] = [primal_data.get("ability", "")]
+	if not BATTLE_OWNED_FORM_PROJECTION.has_positive_stats(display_data.get("stats", {})):
+		hover_data["stats"] = _calculate_battle_stats(
+			primal_data.get("baseStats", {}),
+			int(hover_data.get("level", saved_pokemon.level)),
+			hover_data.get("ivs", saved_pokemon.ivs),
+			hover_data.get("evs", saved_pokemon.evs),
+			str(hover_data.get("nature", saved_pokemon.nature))
+		)
 
 func _get_party_hover_temporary_display_species(display_data: Dictionary) -> String:
 	for key in ["megaSpecies", "transformedSpecies", "displaySpecies"]:
 		var species := str(display_data.get(key, "")).strip_edges()
-		if _is_primal_species(species):
+		if _is_mega_or_primal_species(species):
 			return species
 
 	var ident := str(display_data.get("ident", "")).strip_edges()
 	if ident != "" and battle_state != null:
 		var persisted_species := battle_state.resolve_persisted_mega_species_for_ident(ident)
-		if _is_primal_species(persisted_species):
+		if _is_mega_or_primal_species(persisted_species):
 			return persisted_species
 
 	if bool(display_data.get("active", false)):
 		var active_species := _get_active_display_species("p1")
-		if _is_primal_species(active_species):
+		if _is_mega_or_primal_species(active_species):
 			return active_species
 
 	return ""
 
-func _is_primal_species(species: String) -> bool:
+func _is_mega_or_primal_species(species: String) -> bool:
 	var normalized_species := _normalize_species_for_compare(species)
-	return normalized_species == "groudon-primal" or normalized_species == "kyogre-primal"
+	return normalized_species.contains("-mega") or normalized_species.ends_with("-primal")
 
 func _get_primal_species_hover_data(species: String) -> Dictionary:
 	match _normalize_species_for_compare(species):
@@ -2593,15 +2611,16 @@ func _get_damage_calc_viewer_stats_by_ref(snapshot: Dictionary) -> Dictionary:
 		var display_data := _damage_calc_as_dictionary(display_team[slot_index])
 		if display_data.is_empty():
 			continue
-		var stats := _damage_calc_as_dictionary(display_data.get("stats", {}))
-		if stats.is_empty():
-			var saved_pokemon := _get_player_save_pokemon_for_battle_display_data(display_data, slot_index)
-			if saved_pokemon != null:
-				stats = saved_pokemon.stats.duplicate(true)
-		var safe_stats: Dictionary = {}
-		for stat_key: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
-			if stats.has(stat_key) and int(stats.get(stat_key, 0)) > 0:
-				safe_stats[stat_key] = int(stats.get(stat_key, 0))
+		var stats: Dictionary = {}
+		var saved_pokemon := _get_player_save_pokemon_for_battle_display_data(display_data, slot_index)
+		if saved_pokemon != null:
+			stats = BATTLE_OWNED_FORM_PROJECTION.merge_stats(stats, saved_pokemon.stats)
+		stats = BATTLE_OWNED_FORM_PROJECTION.merge_stats(stats, display_data.get("stats", {}))
+		var current_data := _get_team_pokemon_data_for_canonical_party_slot("p1", slot_index + 1)
+		stats = BATTLE_OWNED_FORM_PROJECTION.merge_stats(stats, current_data.get("stats", {}))
+		var latest_data := _get_latest_owned_request_pokemon_for_canonical_slot(slot_index + 1)
+		stats = BATTLE_OWNED_FORM_PROJECTION.merge_stats(stats, latest_data.get("stats", {}))
+		var safe_stats := BATTLE_OWNED_FORM_PROJECTION.merge_stats({}, stats)
 		if not safe_stats.is_empty():
 			result[pokemon_ref] = safe_stats
 	return result
@@ -3215,6 +3234,8 @@ func _show_current_action_prompt() -> void:
 
 func _set_battle_input_locked(is_locked: bool) -> void:
 	if _is_spectator_battle():
+		is_locked = true
+	if not is_locked and _is_pvp_battle() and pvp_local_connection_recovering:
 		is_locked = true
 	var allows_local_prechoice := _is_pvp_battle() and pvp_prechoice_buffer.is_window_open()
 	if not is_locked and not pvp_pending_presentation_fence.is_empty() and not allows_local_prechoice:
@@ -10948,6 +10969,7 @@ func _connect_pvp_realtime(local_player_id: String, battle_id: String, initial_r
 	pvp_retrying_reconciliation_snapshot = false
 	pvp_idle_realtime_drain_pending = false
 	pvp_idle_wait_recovery_active = false
+	pvp_local_connection_recovering = false
 	pvp_last_applied_server_seq = 0
 	pvp_last_applied_snapshot_server_seq = 0
 	pvp_public_control_contract_version = 0
@@ -10963,6 +10985,10 @@ func _connect_pvp_realtime(local_player_id: String, battle_id: String, initial_r
 	_clear_pvp_switch_confirmation()
 	if not PvpBattleRealtimeService.battle_update_received.is_connected(_on_pvp_realtime_battle_update):
 		PvpBattleRealtimeService.battle_update_received.connect(_on_pvp_realtime_battle_update)
+	if not PvpBattleRealtimeService.connection_changed.is_connected(_on_pvp_realtime_connection_changed):
+		PvpBattleRealtimeService.connection_changed.connect(_on_pvp_realtime_connection_changed)
+	if not PvpBattleRealtimeService.room_ready.is_connected(_on_pvp_realtime_room_ready):
+		PvpBattleRealtimeService.room_ready.connect(_on_pvp_realtime_room_ready)
 	PvpBattleRealtimeService.connect_room(
 		pvp_room_code,
 		local_player_id,
@@ -10976,6 +11002,55 @@ func _connect_pvp_realtime(local_player_id: String, battle_id: String, initial_r
 		# Seed its cursor before the deferred websocket join packet is sent so
 		# reconnect/bootstrap delivery starts after that history.
 		PvpBattleRealtimeService.seed_spectator_event_cursor(initial_response)
+
+
+func _on_pvp_realtime_connection_changed(is_connected: bool) -> void:
+	if not _is_pvp_battle() or battle_finished:
+		return
+	if is_connected:
+		if pvp_local_connection_recovering and current_action_panel != null:
+			current_action_panel.set_message(_t("battle.connection.synchronizing_self"))
+		return
+	if pvp_local_connection_recovering:
+		return
+	pvp_local_connection_recovering = true
+	_set_battle_input_locked(true)
+	if current_action_panel != null:
+		current_action_panel.set_message(_t("battle.connection.restoring_self"))
+
+
+func _on_pvp_realtime_room_ready(room_code: String, battle_id: String) -> void:
+	if not _is_pvp_battle() or battle_finished or not pvp_local_connection_recovering:
+		return
+	if room_code.strip_edges().to_upper() != pvp_room_code.strip_edges().to_upper():
+		return
+	if battle_id.strip_edges() != "" and battle_id.strip_edges() != battle_state.battle_id.strip_edges():
+		return
+	pvp_local_connection_recovering = false
+	_add_battle_log_message(_t("battle.connection.restored_self"))
+	_restore_pvp_ui_after_local_reconnect()
+
+
+func _restore_pvp_ui_after_local_reconnect() -> void:
+	if _is_spectator_battle():
+		_enter_spectator_controls()
+		return
+	if team_preview_lead_selection_active:
+		var preview_player_id := _get_local_state_player_id()
+		if _pvp_local_request_allows_choice(preview_player_id):
+			_set_battle_input_locked(false)
+			_restore_team_preview_lead_selection_ui()
+		else:
+			_set_battle_input_locked(true)
+			current_action_panel.set_message(_t("battle.prompt.waiting_opponent"))
+		return
+	if pvp_event_queue.is_rendering or not pvp_pending_presentation_fence.is_empty():
+		_set_battle_input_locked(true)
+		current_action_panel.set_message(_t("battle.prompt.resynchronizing_events"))
+		return
+	_recover_pvp_idle_wait_ui_after_update({})
+	if battle_input_locked and current_action_panel != null:
+		current_action_panel.set_message(_t("battle.prompt.waiting_opponent"))
 
 func _on_pvp_render_batch_completed(completion: Dictionary) -> void:
 	_trace_pvp_flow("render_completed", {}, "completion=%s" % JSON.stringify(completion))
@@ -15084,6 +15159,22 @@ func _get_team_pokemon_data_for_canonical_party_slot(player_id: String, canonica
 			return fallback_value as Dictionary
 
 	return {}
+
+func _get_latest_owned_request_pokemon_for_canonical_slot(canonical_slot: int) -> Dictionary:
+	var current_data := _get_team_pokemon_data_for_canonical_party_slot("p1", canonical_slot).duplicate(true)
+	if not _is_pvp_battle() or pvp_response_order == null:
+		return current_data
+
+	var latest_data := BATTLE_OWNED_FORM_PROJECTION.find_request_pokemon(
+		pvp_response_order.latest_response,
+		"p1",
+		canonical_slot
+	)
+	if latest_data.is_empty():
+		return current_data
+
+	current_data.merge(latest_data, true)
+	return current_data
 
 func _capture_pvp_local_canonical_roster(display_response: Dictionary = {}) -> void:
 	pvp_local_canonical_roster.clear()

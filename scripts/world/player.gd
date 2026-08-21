@@ -39,6 +39,7 @@ const PixelPerfectRenderingScript := preload("res://scripts/services/pixel_perfe
 const WildEncounterProvider := preload("res://scripts/world/map_encounter_provider.gd")
 const MapChatBubbleScript := preload("res://scripts/world/map_chat_bubble.gd")
 const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.gd")
+const HorizontalStairElevationScript := preload("res://scripts/world/horizontal_stair_elevation.gd")
 const GuildEmblemTexture := preload("res://scripts/ui/guild_emblem_texture.gd")
 const NameplateLayout := preload("res://scripts/ui/nameplate_layout.gd")
 const FISHING_PROMPT_ICON: Texture2D = preload("res://assets/items/icons/OLDROD.png")
@@ -240,6 +241,8 @@ var target_position := Vector2.ZERO
 var move_start_position := Vector2.ZERO
 var move_elapsed := 0.0
 var move_duration := TILE_MOVE_DURATION
+var stair_elevation := HorizontalStairElevationScript.ELEVATION_NONE
+var stair_visual_offset := Vector2.ZERO
 
 # Onthoudt de laatste kijkrichting, zodat de idle frame goed blijft staan.
 var last_direction := Vector2.DOWN
@@ -637,6 +640,7 @@ func reset_movement_state() -> void:
 	move_start_position = global_position
 	move_elapsed = 0.0
 	move_duration = _get_current_tile_move_duration()
+	_clear_stair_visual_offset()
 	_clear_input_buffer()
 	_clear_held_direction()
 	set_idle_frame()
@@ -654,6 +658,7 @@ func teleport_within_current_map(world_position: Vector2, facing_direction := Ve
 	move_start_position = global_position
 	move_elapsed = 0.0
 	move_duration = _get_current_tile_move_duration()
+	_clear_stair_visual_offset()
 	_clear_input_buffer()
 	_clear_held_direction()
 	if facing_direction != Vector2.ZERO:
@@ -706,6 +711,12 @@ func story_move_path(path: Array[String]) -> bool:
 		global_position = current_position
 		move_elapsed = 0.0
 		move_duration = _get_current_tile_move_duration()
+		stair_elevation = HorizontalStairElevationScript.elevation_for_stair_exit(
+			_resolve_current_map(),
+			move_start_position,
+			target_position,
+			direction
+		)
 		is_moving = true
 		play_walk_animation(direction)
 		while is_inside_tree() and is_moving:
@@ -1395,12 +1406,14 @@ func _process(delta: float) -> void:
 		var move_progress := move_elapsed / move_duration
 		var interpolated_position: Vector2 = move_start_position.lerp(target_position, _get_move_interpolation(move_progress))
 		global_position = _snap_world_position(interpolated_position)
+		_update_stair_visual_offset(move_progress)
 		_update_sort_z()
 
 		# Als de bestemming is bereikt.
 		if _has_reached_target():
 			global_position = _snap_world_position(target_position)
 			is_moving = false
+			_clear_stair_visual_offset()
 
 			if not story_path_movement_active:
 				var completed_tiles := maxi(int(round(move_start_position.distance_to(target_position) / float(TILE_SIZE))), 1)
@@ -1927,6 +1940,12 @@ func _try_start_move(direction: Vector2) -> bool:
 	global_position = move_start_position
 	move_elapsed = 0.0
 	move_duration = _get_current_tile_move_duration()
+	stair_elevation = HorizontalStairElevationScript.elevation_for_stair_exit(
+		_resolve_current_map(),
+		move_start_position,
+		target_position,
+		direction
+	)
 	is_moving = true
 	play_walk_animation(direction)
 	return true
@@ -2642,12 +2661,26 @@ func _sync_activity_layer_offsets() -> void:
 func _apply_activity_visual_offset() -> void:
 	if look_node == null:
 		return
-	look_node.position = base_look_position + _get_activity_visual_offset()
+	look_node.position = base_look_position + _get_activity_visual_offset() + stair_visual_offset
 
 func _restore_activity_visual_offset() -> void:
 	if look_node == null:
 		return
-	look_node.position = base_look_position
+	look_node.position = base_look_position + stair_visual_offset
+
+
+func _update_stair_visual_offset(progress: float) -> void:
+	stair_visual_offset = HorizontalStairElevationScript.visual_offset(
+		progress,
+		stair_elevation
+	)
+	_apply_activity_visual_offset()
+
+
+func _clear_stair_visual_offset() -> void:
+	stair_elevation = HorizontalStairElevationScript.ELEVATION_NONE
+	stair_visual_offset = Vector2.ZERO
+	_apply_activity_visual_offset()
 
 func _get_activity_visual_offset() -> Vector2:
 	var normalized_style: String = CharacterAppearanceService.normalize_movement_style(activity_style)
