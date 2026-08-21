@@ -28,6 +28,8 @@ func _init() -> void:
 	var initial_render_position := battle_source.rfind("await _render_initial_battle_events(lead_response)", preview_drain_position)
 	var initial_controls_position := battle_source.find("_show_battle_controls_after_initial_events()", preview_drain_position)
 	var connection_log_start := battle_source.find("func _apply_pvp_connection_log_event(message_type: String, message: Dictionary) -> bool:")
+	var local_connection_handler_start := battle_source.find("func _on_pvp_realtime_connection_changed(is_connected: bool) -> void:")
+	var local_room_ready_handler_start := battle_source.find("func _on_pvp_realtime_room_ready(room_code: String, battle_id: String) -> void:")
 	var forced_switch_diagnostic_start := battle_source.find("func _report_pvp_forced_switch_selection_blocked(selection_gate: String) -> void:")
 	_check_equal(action_wait_start >= 0, true, "realtime action wait implementation exists")
 	_check_equal(
@@ -49,6 +51,26 @@ func _init() -> void:
 		true,
 		"duplicate reconnect-grace packets refresh the timer without repeating Battle Text"
 	)
+	_check_equal(
+		local_connection_handler_start >= 0 \
+			and local_room_ready_handler_start > local_connection_handler_start \
+			and battle_source.contains("PvpBattleRealtimeService.connection_changed.connect(_on_pvp_realtime_connection_changed)") \
+			and battle_source.contains("PvpBattleRealtimeService.room_ready.connect(_on_pvp_realtime_room_ready)") \
+			and battle_source.contains("not is_locked and _is_pvp_battle() and pvp_local_connection_recovering") \
+			and battle_source.contains('_t("battle.connection.restoring_self")') \
+			and battle_source.contains('_t("battle.connection.synchronizing_self")'),
+		true,
+		"local connection loss visibly locks controls until the authoritative room is ready"
+	)
+	service.reconnect_retry_count = 0
+	service._schedule_reconnect_retry()
+	_check_equal(service.reconnect_timer, 0.0, "the first reconnect retry is immediate")
+	service._schedule_reconnect_retry()
+	_check_equal(service.reconnect_timer, 1.0, "the second reconnect retry uses a short delay")
+	service._schedule_reconnect_retry()
+	_check_equal(service.reconnect_timer, 3.0, "later reconnect retries use the bounded delay")
+	service._schedule_reconnect_retry()
+	_check_equal(service.reconnect_timer, 3.0, "reconnect retry delay remains bounded")
 	_check_equal(
 		timer_decision_guard >= timer_control_start and timer_decision_guard < request_control_start,
 		true,
