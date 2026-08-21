@@ -130,15 +130,6 @@ func _check_pvp_runtime_translation() -> void:
 		) == "ui.pvp.room.tier_team_invalid",
 		"Tier validation failures explain that the selected rules were not met"
 	)
-	_check(
-		overlay.call(
-			"_pvp_room_failure_status_key",
-			{"detail": {"code": "MEGA_TEST_ROOM_PERMISSION_REQUIRED"}},
-			false,
-			"ui.pvp.room.create_failed"
-		) == "ui.pvp.room.tier_unavailable",
-		"Developer room permission failures do not expose internal details"
-	)
 	_check(leaderboard_scope != null and leaderboard_scope.get_item_text(0) == "Dagelijks", "Leaderboard period renders in Dutch")
 	_check_ranked_dropdown_style(format_select, "Matchmaking format")
 	_check_ranked_dropdown_style(leaderboard_scope, "Leaderboard period")
@@ -153,22 +144,16 @@ func _check_pvp_runtime_translation() -> void:
 	room_create_button.emit_signal("pressed")
 	await process_frame
 	_check(room_tier_row != null and room_tier_row.visible, "Room creation exposes the optional battle tier")
-	_check(room_tier_select != null and room_tier_select.item_count == 2, "Players can choose no tier or Aether OU")
+	_check(room_tier_select != null and room_tier_select.item_count == 3, "Players can choose no tier, Aether OU, or Mega + Z")
 	_check(str(room_tier_select.get_selected_metadata()) == "none", "No tier is selected by default")
 	_check(room_tier_select.get_item_text(0) == "Geen tier", "The default tier is localized in Dutch")
 	_check(room_tier_select.get_item_text(1) == "Aether OU", "Aether OU is available for unrated rooms")
 	room_tier_select.select(1)
 	_check(overlay.call("_selected_pvp_room_format_id") == "gen9nationaldex", "Aether OU resolves to the reviewed National Dex engine")
-	if auth_service != null:
-		auth_service.call("apply_current_user", {"permissions": ["generating", "pokemon:generating"]})
-		overlay.call("_refresh_pvp_room_tier_options")
-		_check(room_tier_select.item_count == 3, "Pokemon developers receive the hidden Mega and Z test tier")
-		room_tier_select.select(2)
-		_check(str(room_tier_select.get_selected_metadata()) == "pokeaether-mega-z-test", "Developer tier uses its bounded room identity")
-		_check(overlay.call("_selected_pvp_room_format_id") == "pokeaether-mega-z-test-v1", "Developer tier maps to the versioned engine format")
-		auth_service.call("apply_current_user", {"permissions": []})
-		overlay.call("_refresh_pvp_room_tier_options")
-		_check(room_tier_select.item_count == 2, "Removing permission removes the developer test tier")
+	room_tier_select.select(2)
+	_check(room_tier_select.get_item_text(2) == "Mega + Z", "Mega + Z is available without a developer label")
+	_check(str(room_tier_select.get_selected_metadata()) == "pokeaether-mega-z-test", "Mega + Z keeps its bounded room identity")
+	_check(overlay.call("_selected_pvp_room_format_id") == "pokeaether-mega-z-test-v1", "Mega + Z maps to the versioned engine format")
 	_check(room_timer_check != null and room_timer_check.visible, "Training room creation exposes the shared decision timer option")
 	room_timer_check.button_pressed = true
 	room_timer_check.emit_signal("toggled", true)
