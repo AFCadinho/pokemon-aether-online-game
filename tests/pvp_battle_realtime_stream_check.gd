@@ -1,5 +1,7 @@
 extends SceneTree
 
+var failed := false
+
 func _init() -> void:
 	var service := PvpBattleRealtimeServiceNode.new()
 	var battle_source := FileAccess.get_file_as_string("res://scripts/battle/battle.gd")
@@ -279,8 +281,8 @@ func _init() -> void:
 	)
 	_check_equal(
 		battle_source.contains("func _is_spectator_battle() -> bool:") \
-			and battle_source.contains('return "Waiting for both players..."') \
-			and battle_source.contains('return "Waiting for players..."') \
+			and battle_source.contains('return _t("battle.prompt.waiting_both_players")') \
+			and battle_source.contains('return _t("battle.spectator.waiting_players")') \
 			and battle_source.contains("action_buttons.visible = false") \
 			and battle_source.contains('action_buttons.set_action_visible("run", false)') \
 			and battle_source.contains("spectator_action_panel.visible = true") \
@@ -311,7 +313,7 @@ func _init() -> void:
 	)
 	_check_equal(
 		battle_source.contains("func _run_pvp_spectator_team_preview() -> Dictionary:") \
-			and battle_source.contains('current_action_panel.set_message("Waiting for both players...")') \
+			and battle_source.contains('current_action_panel.set_message(_t("battle.prompt.waiting_both_players"))') \
 			and battle_source.contains("_seed_spectator_leads_from_team_preview_events(display_response)") \
 			and battle_source.contains("_build_spectator_lead_event_from_public_ident(player_id, public_ident)") \
 			and battle_source.contains('for ident_key in ["target", "actor", "pokemon", "sourceTarget", "fromIdent", "toIdent"]') \
@@ -893,12 +895,13 @@ func _init() -> void:
 
 	normal_terminal_service.free()
 	service.free()
-	print("PASS pvp_battle_realtime_stream_check")
-	quit(0)
+	if not failed:
+		print("PASS pvp_battle_realtime_stream_check")
+	quit(1 if failed else 0)
 
 
 func _check_equal(actual: Variant, expected: Variant, label: String) -> void:
 	if actual == expected:
 		return
+	failed = true
 	push_error("%s: expected %s, got %s" % [label, str(expected), str(actual)])
-	quit(1)
