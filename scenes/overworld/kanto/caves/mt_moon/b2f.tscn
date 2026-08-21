@@ -282,7 +282,7 @@ npc_sprite_frames = ExtResource("7_scientist")
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=976601731]
 
 [node name="HelixFossil" parent="Entities/Interactables" unique_id=37076334 instance=ExtResource("8_item")]
-position = Vector2(720, 560)
+position = Vector2(784, 560)
 pickup_id = "kanto_mt_moon_b2f_helix_fossil"
 item_id = "helix-fossil"
 
