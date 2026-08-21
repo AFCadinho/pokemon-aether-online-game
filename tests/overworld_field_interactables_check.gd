@@ -25,8 +25,10 @@ func _init() -> void:
 	_check(item_script_source.contains("@export var pickup_id"), "overworld items expose a persistent pickup id")
 	_check(item_script_source.contains("claim_world_pickup(pickup_id)"), "overworld item claims through the inventory service")
 	_check(item_script_source.contains("set_claimed(true)"), "collected overworld items are hidden")
+	_check(item_script_source.contains("world_pickup_state_changed.connect"), "exclusive pickup choices hide their counterpart immediately")
 	_check(inventory_source.contains('const WORLD_PICKUPS_ENDPOINT := "/game/world-pickups"'), "inventory service loads collected pickups")
 	_check(inventory_source.contains("func claim_world_pickup"), "inventory service exposes world pickup claims")
+	_check(inventory_source.contains('body.get("collectedPickupIds"'), "inventory service applies every collected id from exclusive choices")
 
 	_check(ResourceLoader.exists("res://scenes/world/interactables/strength_boulder.tscn"), "Strength boulder scene exists")
 	_check(boulder_scene_source.contains("Object boulder.png"), "Strength boulder uses the official boulder sheet")

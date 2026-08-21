@@ -16,6 +16,8 @@ func _ready() -> void:
 	blocks_movement = true
 	requires_facing = true
 	super._ready()
+	if not InventoryService.world_pickup_state_changed.is_connected(_on_world_pickup_state_changed):
+		InventoryService.world_pickup_state_changed.connect(_on_world_pickup_state_changed)
 	_refresh_claimed_state.call_deferred()
 
 
@@ -77,3 +79,9 @@ func _refresh_claimed_state() -> void:
 	var result: Dictionary = await InventoryService.load_collected_world_pickups()
 	if bool(result.get("success", false)) and InventoryService.is_world_pickup_collected(normalized_pickup_id):
 		set_claimed(true)
+
+
+func _on_world_pickup_state_changed() -> void:
+	var normalized_pickup_id := pickup_id.strip_edges().to_lower()
+	if normalized_pickup_id != "":
+		set_claimed(InventoryService.is_world_pickup_collected(normalized_pickup_id))

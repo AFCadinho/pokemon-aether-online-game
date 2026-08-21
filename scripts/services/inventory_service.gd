@@ -280,7 +280,13 @@ func claim_world_pickup(pickup_id: String) -> Dictionary:
 		return response
 
 	var body := _dictionary_from_value(response.get("body", {}))
-	collected_world_pickup_ids[normalized_pickup_id] = true
+	var collected_pickup_ids := _array_from_value(body.get("collectedPickupIds", [normalized_pickup_id]))
+	if collected_pickup_ids.is_empty():
+		collected_pickup_ids = [normalized_pickup_id]
+	for collected_pickup_id_value: Variant in collected_pickup_ids:
+		var collected_pickup_id := str(collected_pickup_id_value).strip_edges().to_lower()
+		if collected_pickup_id != "":
+			collected_world_pickup_ids[collected_pickup_id] = true
 	collected_world_pickups_user_id = int(AuthService.current_user.get("id", 0))
 	collected_world_pickups_loaded = true
 	world_pickup_state_changed.emit()

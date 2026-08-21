@@ -4,6 +4,7 @@
 
 **Added**
 
+- Mt. Moon now contains its visible FireRed and LeafGreen item pickups, plus optional rocks that can be cleared with Rock Smash.
 - Ground Poké Balls can hold one-time item rewards, and Strength boulders can be pushed one tile at a time.
 - Mt. Moon now has its FireRed and LeafGreen battle Trainers on 1F and B2F.
 - Private battle room hosts can choose no tier or Aether OU when creating a room.
