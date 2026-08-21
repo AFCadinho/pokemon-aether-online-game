@@ -29,7 +29,7 @@ const EXPECTED_PICKUPS := [
 	["kanto_mt_moon_1f_rare_candy", "rare-candy"],
 	["kanto_mt_moon_1f_great_ball", "great-ball"],
 	["kanto_mt_moon_1f_moon_stone", "moon-stone"],
-	["kanto_mt_moon_b2f_tm_thief", "tm-thief"],
+	["kanto_mt_moon_b2f_tm_thief", "tm-payback"],
 	["kanto_mt_moon_b2f_revive", "revive"],
 	["kanto_mt_moon_b2f_star_piece", "star-piece"],
 	["kanto_mt_moon_b2f_helix_fossil", "helix-fossil"],
