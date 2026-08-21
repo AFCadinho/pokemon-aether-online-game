@@ -359,25 +359,25 @@ shape = SubResource("RectangleShape2D_ladder_exit")
 z_as_relative = false
 flow_direction = "left"
 
-[node name="Entities" type="Node2D" parent="."]
+[node name="Entities" type="Node2D" parent="." unique_id=1575076732]
 z_index = 5
 
-[node name="NPCs" type="Node2D" parent="Entities"]
+[node name="NPCs" type="Node2D" parent="Entities" unique_id=471950701]
 
-[node name="Players" type="Node2D" parent="Entities"]
+[node name="Players" type="Node2D" parent="Entities" unique_id=295000111]
 
-[node name="Pokemon" type="Node2D" parent="Entities"]
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=868008222]
 
-[node name="Interactables" type="Node2D" parent="Entities"]
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=563296912]
 
-[node name="RockSmash01" parent="Entities/Interactables" instance=ExtResource("6_rock")]
-position = Vector2(560, 544)
+[node name="RockSmash01" parent="Entities/Interactables" unique_id=1034659227 instance=ExtResource("6_rock")]
+position = Vector2(208, 560)
 
-[node name="RockSmash02" parent="Entities/Interactables" instance=ExtResource("6_rock")]
-position = Vector2(2192, 176)
+[node name="RockSmash02" parent="Entities/Interactables" unique_id=200584177 instance=ExtResource("6_rock")]
+position = Vector2(2288, 336)
 
-[node name="RockSmash03" parent="Entities/Interactables" instance=ExtResource("6_rock")]
-position = Vector2(2352, 1584)
+[node name="RockSmash03" parent="Entities/Interactables" unique_id=1088471145 instance=ExtResource("6_rock")]
+position = Vector2(1872, 2128)
 
 [node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=2078555399]
 z_index = 4096

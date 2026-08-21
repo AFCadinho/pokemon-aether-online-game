@@ -424,44 +424,44 @@ npc_sprite_frames = ExtResource("13_bug_catcher")
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=306408256]
 
-[node name="TMBulletSeed" parent="Entities/Interactables" instance=ExtResource("14_item")]
-position = Vector2(208, 240)
+[node name="TMBulletSeed" parent="Entities/Interactables" unique_id=1438863947 instance=ExtResource("14_item")]
+position = Vector2(176, 2192)
 pickup_id = "kanto_mt_moon_1f_tm_bullet_seed"
 item_id = "tm-bullet-seed"
 
-[node name="ParalyzeHeal" parent="Entities/Interactables" instance=ExtResource("14_item")]
-position = Vector2(1424, 208)
+[node name="ParalyzeHeal" parent="Entities/Interactables" unique_id=1803755256 instance=ExtResource("14_item")]
+position = Vector2(400, 1712)
 pickup_id = "kanto_mt_moon_1f_paralyze_heal"
 item_id = "paralyze-heal"
 
-[node name="Potion" parent="Entities/Interactables" instance=ExtResource("14_item")]
-position = Vector2(2608, 208)
+[node name="Potion" parent="Entities/Interactables" unique_id=1093851054 instance=ExtResource("14_item")]
+position = Vector2(1328, 2320)
 pickup_id = "kanto_mt_moon_1f_potion"
 item_id = "potion"
 
-[node name="RareCandy" parent="Entities/Interactables" instance=ExtResource("14_item")]
-position = Vector2(2576, 1296)
+[node name="RareCandy" parent="Entities/Interactables" unique_id=1844018442 instance=ExtResource("14_item")]
+position = Vector2(2672, 1872)
 pickup_id = "kanto_mt_moon_1f_rare_candy"
 item_id = "rare-candy"
 
-[node name="GreatBall" parent="Entities/Interactables" instance=ExtResource("14_item")]
-position = Vector2(272, 2192)
+[node name="GreatBall" parent="Entities/Interactables" unique_id=886485248 instance=ExtResource("14_item")]
+position = Vector2(2160, 912)
 pickup_id = "kanto_mt_moon_1f_great_ball"
 item_id = "great-ball"
 
-[node name="MoonStone" parent="Entities/Interactables" instance=ExtResource("14_item")]
+[node name="MoonStone" parent="Entities/Interactables" unique_id=618258656 instance=ExtResource("14_item")]
 position = Vector2(2608, 2192)
 pickup_id = "kanto_mt_moon_1f_moon_stone"
 item_id = "moon-stone"
 
-[node name="RockSmash01" parent="Entities/Interactables" instance=ExtResource("15_rock")]
+[node name="RockSmash01" parent="Entities/Interactables" unique_id=1155397083 instance=ExtResource("15_rock")]
 position = Vector2(400, 720)
 
-[node name="RockSmash02" parent="Entities/Interactables" instance=ExtResource("15_rock")]
-position = Vector2(720, 1120)
+[node name="RockSmash02" parent="Entities/Interactables" unique_id=1318206778 instance=ExtResource("15_rock")]
+position = Vector2(720, 688)
 
-[node name="RockSmash03" parent="Entities/Interactables" instance=ExtResource("15_rock")]
-position = Vector2(2384, 1104)
+[node name="RockSmash03" parent="Entities/Interactables" unique_id=938321987 instance=ExtResource("15_rock")]
+position = Vector2(2416, 1104)
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=1223318942]
 visible = false

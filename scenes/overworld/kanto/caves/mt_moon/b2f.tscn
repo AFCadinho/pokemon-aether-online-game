@@ -281,43 +281,43 @@ npc_sprite_frames = ExtResource("7_scientist")
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=976601731]
 
-[node name="HelixFossil" parent="Entities/Interactables" instance=ExtResource("8_item")]
-position = Vector2(432, 336)
+[node name="HelixFossil" parent="Entities/Interactables" unique_id=37076334 instance=ExtResource("8_item")]
+position = Vector2(720, 560)
 pickup_id = "kanto_mt_moon_b2f_helix_fossil"
 item_id = "helix-fossil"
 
-[node name="DomeFossil" parent="Entities/Interactables" instance=ExtResource("8_item")]
-position = Vector2(528, 336)
+[node name="DomeFossil" parent="Entities/Interactables" unique_id=1958308657 instance=ExtResource("8_item")]
+position = Vector2(752, 560)
 pickup_id = "kanto_mt_moon_b2f_dome_fossil"
 item_id = "dome-fossil"
 
-[node name="TMThief" parent="Entities/Interactables" instance=ExtResource("8_item")]
+[node name="TMThief" parent="Entities/Interactables" unique_id=1155255050 instance=ExtResource("8_item")]
 position = Vector2(2096, 464)
 pickup_id = "kanto_mt_moon_b2f_tm_thief"
 item_id = "tm-thief"
 
-[node name="Revive" parent="Entities/Interactables" instance=ExtResource("8_item")]
+[node name="Revive" parent="Entities/Interactables" unique_id=1810450543 instance=ExtResource("8_item")]
 position = Vector2(464, 1232)
 pickup_id = "kanto_mt_moon_b2f_revive"
 item_id = "revive"
 
-[node name="StarPiece" parent="Entities/Interactables" instance=ExtResource("8_item")]
+[node name="StarPiece" parent="Entities/Interactables" unique_id=369112402 instance=ExtResource("8_item")]
 position = Vector2(1712, 1424)
 pickup_id = "kanto_mt_moon_b2f_star_piece"
 item_id = "star-piece"
 
-[node name="Antidote" parent="Entities/Interactables" instance=ExtResource("8_item")]
+[node name="Antidote" parent="Entities/Interactables" unique_id=33676360 instance=ExtResource("8_item")]
 position = Vector2(2192, 2160)
 pickup_id = "kanto_mt_moon_b2f_antidote"
 item_id = "antidote"
 
-[node name="RockSmash01" parent="Entities/Interactables" instance=ExtResource("9_rock")]
+[node name="RockSmash01" parent="Entities/Interactables" unique_id=1823731415 instance=ExtResource("9_rock")]
 position = Vector2(784, 336)
 
-[node name="RockSmash02" parent="Entities/Interactables" instance=ExtResource("9_rock")]
+[node name="RockSmash02" parent="Entities/Interactables" unique_id=130650846 instance=ExtResource("9_rock")]
 position = Vector2(1456, 1296)
 
-[node name="RockSmash03" parent="Entities/Interactables" instance=ExtResource("9_rock")]
+[node name="RockSmash03" parent="Entities/Interactables" unique_id=1251392957 instance=ExtResource("9_rock")]
 position = Vector2(816, 2192)
 
 [node name="Spawns" type="Node2D" parent="." unique_id=158532784]
