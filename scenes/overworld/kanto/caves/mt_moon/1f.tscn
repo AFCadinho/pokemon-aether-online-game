@@ -8,11 +8,11 @@
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="6_idblv"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="7_door_hint"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="8_trainer"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/hiker_frames.tres" id="9_hiker"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/youngster_frames.tres" id="10_youngster"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/lass_frames.tres" id="11_lass"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/scientist_m_frames.tres" id="12_scientist"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="13_bug_catcher"]
+[ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="9_hiker"]
+[ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="10_youngster"]
+[ext_resource type="SpriteFrames" uid="uid://uqldn2vhcla4" path="res://assets/npcs/classes/lass_frames.tres" id="11_lass"]
+[ext_resource type="SpriteFrames" uid="uid://caas815hh7buy" path="res://assets/npcs/classes/scientist_m_frames.tres" id="12_scientist"]
+[ext_resource type="SpriteFrames" uid="uid://57e7bp514fh2" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="13_bug_catcher"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_3_exit"]
 size = Vector2(64, 32)
@@ -347,13 +347,13 @@ shape = SubResource("RectangleShape2D_ladder_exit")
 z_as_relative = false
 flow_direction = "right"
 
-[node name="Entities" type="Node2D" parent="."]
+[node name="Entities" type="Node2D" parent="." unique_id=359392365]
 z_index = 5
 
-[node name="NPCs" type="Node2D" parent="Entities"]
+[node name="NPCs" type="Node2D" parent="Entities" unique_id=1698532802]
 
-[node name="HikerMarcos" parent="Entities/NPCs" instance=ExtResource("8_trainer")]
-position = Vector2(272, 400)
+[node name="HikerMarcos" parent="Entities/NPCs" unique_id=855938767 instance=ExtResource("8_trainer")]
+position = Vector2(336, 496)
 trainer_id = "kanto_mt_moon_1f_hiker_marcos"
 sight_range_tiles = 2
 npc_id = "kanto_mt_moon_1f_hiker_marcos"
@@ -361,37 +361,33 @@ npc_definition_id = "trainer_class_hiker"
 display_name = "Hiker Marcos"
 npc_sprite_frames = ExtResource("9_hiker")
 
-[node name="YoungsterJosh" parent="Entities/NPCs" instance=ExtResource("8_trainer")]
-position = Vector2(464, 880)
+[node name="YoungsterJosh" parent="Entities/NPCs" unique_id=900608018 instance=ExtResource("8_trainer")]
+position = Vector2(752, 1104)
 trainer_id = "kanto_mt_moon_1f_youngster_josh"
-sight_range_tiles = 4
 npc_id = "kanto_mt_moon_1f_youngster_josh"
 npc_definition_id = "trainer_class_youngster"
 display_name = "Youngster Josh"
-facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("10_youngster")
 
-[node name="LassMiriam" parent="Entities/NPCs" instance=ExtResource("8_trainer")]
-position = Vector2(2224, 336)
+[node name="LassMiriam" parent="Entities/NPCs" unique_id=685359926 instance=ExtResource("8_trainer")]
+position = Vector2(2256, 240)
 trainer_id = "kanto_mt_moon_1f_lass_miriam"
 sight_range_tiles = 2
 npc_id = "kanto_mt_moon_1f_lass_miriam"
 npc_definition_id = "trainer_class_lass"
 display_name = "Lass Miriam"
-facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("11_lass")
 
-[node name="LassIris" parent="Entities/NPCs" instance=ExtResource("8_trainer")]
-position = Vector2(816, 1776)
+[node name="LassIris" parent="Entities/NPCs" unique_id=1462170453 instance=ExtResource("8_trainer")]
+position = Vector2(976, 1712)
 trainer_id = "kanto_mt_moon_1f_lass_iris"
 sight_range_tiles = 2
 npc_id = "kanto_mt_moon_1f_lass_iris"
 npc_definition_id = "trainer_class_lass"
 display_name = "Lass Iris"
-facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("11_lass")
 
-[node name="SuperNerdJovan" parent="Entities/NPCs" instance=ExtResource("8_trainer")]
+[node name="SuperNerdJovan" parent="Entities/NPCs" unique_id=1652232414 instance=ExtResource("8_trainer")]
 position = Vector2(1712, 2320)
 trainer_id = "kanto_mt_moon_1f_super_nerd_jovan"
 sight_range_tiles = 3
@@ -401,17 +397,16 @@ display_name = "Super Nerd Jovan"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("12_scientist")
 
-[node name="BugCatcherKent" parent="Entities/NPCs" instance=ExtResource("8_trainer")]
+[node name="BugCatcherKent" parent="Entities/NPCs" unique_id=27651775 instance=ExtResource("8_trainer")]
 position = Vector2(272, 1904)
 trainer_id = "kanto_mt_moon_1f_bug_catcher_kent"
 sight_range_tiles = 4
 npc_id = "kanto_mt_moon_1f_bug_catcher_kent"
 npc_definition_id = "trainer_class_bug_catcher"
 display_name = "Bug Catcher Kent"
-facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("13_bug_catcher")
 
-[node name="BugCatcherRobby" parent="Entities/NPCs" instance=ExtResource("8_trainer")]
+[node name="BugCatcherRobby" parent="Entities/NPCs" unique_id=1918466877 instance=ExtResource("8_trainer")]
 position = Vector2(2512, 1872)
 trainer_id = "kanto_mt_moon_1f_bug_catcher_robby"
 sight_range_tiles = 2
@@ -421,11 +416,11 @@ display_name = "Bug Catcher Robby"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("13_bug_catcher")
 
-[node name="Players" type="Node2D" parent="Entities"]
+[node name="Players" type="Node2D" parent="Entities" unique_id=1226891690]
 
-[node name="Pokemon" type="Node2D" parent="Entities"]
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=1758895057]
 
-[node name="Interactables" type="Node2D" parent="Entities"]
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=306408256]
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=1223318942]
 visible = false

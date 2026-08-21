@@ -7,8 +7,8 @@
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="4_hint"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="5_trainer"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/rocket_grunt_m_frames.tres" id="6_rocket"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/scientist_m_frames.tres" id="7_scientist"]
+[ext_resource type="SpriteFrames" uid="uid://ndd4lyovddgq" path="res://assets/npcs/classes/rocket_grunt_m_frames.tres" id="6_rocket"]
+[ext_resource type="SpriteFrames" uid="uid://caas815hh7buy" path="res://assets/npcs/classes/scientist_m_frames.tres" id="7_scientist"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0vl8t"]
 texture = ExtResource("2_4qmrm")
@@ -220,33 +220,31 @@ z_index = 100
 tile_map_data = PackedByteArray("AAAXACUAAAABAAEAAAAXACYAAAABAAEAAAAYACUAAAABAAEAAAAYACYAAAABAAEAAAA+ACcAAAABAAEAAAA+ACgAAAABAAEAAAA/ACcAAAABAAEAAAA/ACgAAAABAAEAAAA=")
 tile_set = SubResource("TileSet_m46ck")
 
-[node name="Entities" type="Node2D" parent="."]
+[node name="Entities" type="Node2D" parent="." unique_id=2043731181]
 z_index = 5
 
-[node name="NPCs" type="Node2D" parent="Entities"]
+[node name="NPCs" type="Node2D" parent="Entities" unique_id=1447121385]
 
-[node name="RocketGrunt1" parent="Entities/NPCs" instance=ExtResource("5_trainer")]
-position = Vector2(656, 1008)
+[node name="RocketGrunt1" parent="Entities/NPCs" unique_id=175053634 instance=ExtResource("5_trainer")]
+position = Vector2(816, 1136)
 trainer_id = "kanto_mt_moon_b2f_rocket_grunt_1"
 sight_range_tiles = 2
 npc_id = "kanto_mt_moon_b2f_rocket_grunt_1"
 npc_definition_id = "trainer_class_rocket_grunt"
 display_name = "Team Rocket Grunt"
-facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("6_rocket")
 
-[node name="RocketGrunt2" parent="Entities/NPCs" instance=ExtResource("5_trainer")]
-position = Vector2(1360, 1776)
+[node name="RocketGrunt2" parent="Entities/NPCs" unique_id=1574589995 instance=ExtResource("5_trainer")]
+position = Vector2(1136, 1840)
 trainer_id = "kanto_mt_moon_b2f_rocket_grunt_2"
 sight_range_tiles = 4
 npc_id = "kanto_mt_moon_b2f_rocket_grunt_2"
 npc_definition_id = "trainer_class_rocket_grunt"
 display_name = "Team Rocket Grunt"
-facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("6_rocket")
 
-[node name="RocketGrunt3" parent="Entities/NPCs" instance=ExtResource("5_trainer")]
-position = Vector2(1872, 528)
+[node name="RocketGrunt3" parent="Entities/NPCs" unique_id=1733373188 instance=ExtResource("5_trainer")]
+position = Vector2(1872, 592)
 trainer_id = "kanto_mt_moon_b2f_rocket_grunt_3"
 sight_range_tiles = 4
 npc_id = "kanto_mt_moon_b2f_rocket_grunt_3"
@@ -255,18 +253,18 @@ display_name = "Team Rocket Grunt"
 facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("6_rocket")
 
-[node name="RocketGrunt4" parent="Entities/NPCs" instance=ExtResource("5_trainer")]
-position = Vector2(2416, 1264)
+[node name="RocketGrunt4" parent="Entities/NPCs" unique_id=1948293188 instance=ExtResource("5_trainer")]
+position = Vector2(1840, 1328)
 trainer_id = "kanto_mt_moon_b2f_rocket_grunt_4"
 sight_range_tiles = 3
 npc_id = "kanto_mt_moon_b2f_rocket_grunt_4"
 npc_definition_id = "trainer_class_rocket_grunt"
 display_name = "Team Rocket Grunt"
-facing_direction = Vector2(-1, 0)
+facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("6_rocket")
 
-[node name="SuperNerdMiguel" parent="Entities/NPCs" instance=ExtResource("5_trainer")]
-position = Vector2(688, 336)
+[node name="SuperNerdMiguel" parent="Entities/NPCs" unique_id=704177549 instance=ExtResource("5_trainer")]
+position = Vector2(720, 656)
 trainer_id = "kanto_mt_moon_b2f_super_nerd_miguel"
 sight_range_tiles = 1
 npc_id = "kanto_mt_moon_b2f_super_nerd_miguel"
@@ -275,11 +273,11 @@ display_name = "Super Nerd Miguel"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("7_scientist")
 
-[node name="Players" type="Node2D" parent="Entities"]
+[node name="Players" type="Node2D" parent="Entities" unique_id=812933119]
 
-[node name="Pokemon" type="Node2D" parent="Entities"]
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=494345931]
 
-[node name="Interactables" type="Node2D" parent="Entities"]
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=976601731]
 
 [node name="Spawns" type="Node2D" parent="." unique_id=158532784]
 
