@@ -265,7 +265,7 @@ const POKEDEX_BASE_STAT_BAR_MAX := 200
 const POKEMON_SUMMARY_SIZE := Vector2(620, 380)
 const POKEMON_READONLY_SUMMARY_SIZE := POKEMON_SUMMARY_SIZE
 const POKEMON_READONLY_MOVE_HOVER_SIZE := Vector2(254, 156)
-const POKEMON_READONLY_MOVE_HOVER_GAP := 6.0
+const POKEMON_READONLY_MOVE_HOVER_INSET := 12.0
 const POKEMON_SUMMARY_BODY_HEIGHT := 333.0
 const POKEMON_SUMMARY_LEFT_PANEL_WIDTH := 275.0
 const POKEMON_SUMMARY_RIGHT_AREA_WIDTH := 320.0
@@ -16068,9 +16068,10 @@ func _build_readonly_summary_move_hover_panel(nodes: Dictionary) -> Control:
 	var hover_layer := Control.new()
 	hover_layer.name = "ReadonlySummaryMoveHoverLayer"
 	hover_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	hover_layer.clip_contents = false
+	hover_layer.clip_contents = true
 	hover_layer.z_index = UI_MODAL_Z_INDEX + 2
 	hover_layer.z_as_relative = false
+	hover_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var hover_panel := PanelContainer.new()
 	hover_panel.name = "ReadonlySummaryMoveHoverPanel"
 	hover_panel.visible = false
@@ -16192,26 +16193,10 @@ func _hide_readonly_summary_move_hover(move_panel: PanelContainer, nodes: Dictio
 		move_panel.add_theme_stylebox_override("panel", base_style)
 
 func _position_readonly_summary_move_hover(hover_panel: PanelContainer, popup: PanelContainer) -> void:
-	var root_rect := root_control.get_global_rect()
 	var popup_rect := popup.get_global_rect()
 	var panel_size := POKEMON_READONLY_MOVE_HOVER_SIZE
-	var safe_left := root_rect.position.x + 8.0
-	var safe_right := root_rect.end.x - 8.0
-	var right_x := popup_rect.end.x + POKEMON_READONLY_MOVE_HOVER_GAP
-	var left_x := popup_rect.position.x - panel_size.x - POKEMON_READONLY_MOVE_HOVER_GAP
-	var global_x := right_x
-	if right_x + panel_size.x > safe_right:
-		global_x = left_x
-	if global_x < safe_left:
-		var right_space := safe_right - right_x
-		var left_space := left_x + panel_size.x - safe_left
-		global_x = right_x if right_space >= left_space else left_x
-		global_x = clampf(global_x, safe_left, safe_right - panel_size.x)
-	var global_y := clampf(
-		popup_rect.end.y - panel_size.y,
-		root_rect.position.y + 8.0,
-		root_rect.end.y - panel_size.y - 8.0
-	)
+	var global_x := popup_rect.position.x + POKEMON_READONLY_MOVE_HOVER_INSET
+	var global_y := popup_rect.end.y - panel_size.y - POKEMON_READONLY_MOVE_HOVER_INSET
 	hover_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	var hover_parent := hover_panel.get_parent_control()
 	if hover_parent == null:

@@ -23,6 +23,7 @@
 **Fixed**
 
 - NPC dialogue now opens promptly by preparing nearby dialogue and avoiding duplicate content requests.
+- Move details now stay inside read-only Pokémon Summary cards when you hover a move.
 - Ogerpon's correct battle sprites are now included in game downloads.
 - Training Rooms no longer blame a valid Poképaste when room timers are temporarily unavailable.
 - Wild battles now immediately show the first Pokémon that can battle when an earlier party member has fainted.
