@@ -16255,7 +16255,11 @@ func _hide_readonly_summary_move_hover(move_panel: PanelContainer, nodes: Dictio
 		hover_panel.visible = false
 	if move_panel == null or not is_instance_valid(move_panel):
 		return
-	var base_style := move_panel.get_meta("readonly_base_style", null) as StyleBoxFlat
+	var base_style := (
+		move_panel.get_meta("readonly_base_style") as StyleBoxFlat
+		if move_panel.has_meta("readonly_base_style")
+		else null
+	)
 	if base_style != null:
 		move_panel.add_theme_stylebox_override("panel", base_style)
 

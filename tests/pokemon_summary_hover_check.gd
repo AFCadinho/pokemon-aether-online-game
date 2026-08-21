@@ -103,6 +103,9 @@ func _run() -> void:
 	overlay.call("_show_readonly_summary_move_hover", move_card, nodes)
 	_check(move_hover.visible, "normal Summary move hover is visible")
 	_check((move_hover.find_children("*", "Label", true, false)[0] as Label).text == "Plasma Fists", "normal Summary move hover shows the selected move")
+	_check(not move_card.has_meta("readonly_base_style"), "normal Summary moves do not require read-only style metadata")
+	overlay.call("_hide_readonly_summary_move_hover", move_card, nodes)
+	_check(not move_hover.visible, "normal Summary move hover closes without read-only style metadata")
 
 	overlay.call("_set_pokemon_summary_ball_button", pokemon)
 	overlay.call("_set_pokemon_summary_held_item_slot", pokemon)
