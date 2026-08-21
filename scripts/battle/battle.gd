@@ -919,6 +919,8 @@ func _get_owned_party_hover_data(pokemon_data: Dictionary) -> Dictionary:
 		"gender",
 		"metadataSlot",
 		"metadata_slot",
+		"cosmeticDisplaySpecies",
+		"battleBondCosmeticActive",
 	]:
 		if display_data.has(key):
 			hover_data[key] = display_data.get(key)

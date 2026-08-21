@@ -30,6 +30,9 @@ func get_active_display_species(player_id: String) -> String:
 		return ""
 
 	var active_pokemon := battle_state.get_active_player_pokemon(player_id)
+	var cosmetic_species := str(active_pokemon.get("cosmeticDisplaySpecies", "")).strip_edges()
+	if cosmetic_species != "":
+		return cosmetic_species
 	var transformed_species := str(active_pokemon.get("transformedSpecies", active_pokemon.get("displaySpecies", "")))
 	var ogerpon_fallback_species := transformed_species
 	if ogerpon_fallback_species == "":
@@ -120,6 +123,8 @@ func get_active_display_name(player_id: String) -> String:
 		var explicit_name := str(active_pokemon.get(key, "")).strip_edges()
 		if explicit_name != "":
 			var display_species := get_active_display_species(player_id)
+			if _default_name_should_follow_cosmetic_species(active_pokemon, explicit_name, display_species):
+				return display_species
 			if _default_name_should_follow_public_mega_species(
 				active_pokemon,
 				explicit_name,
@@ -138,6 +143,8 @@ func get_active_display_name(player_id: String) -> String:
 		var ident_name := ident.substr(ident.find(": ") + 2).strip_edges()
 		if ident_name != "":
 			var display_species := get_active_display_species(player_id)
+			if _default_name_should_follow_cosmetic_species(active_pokemon, ident_name, display_species):
+				return display_species
 			if _default_name_should_follow_public_mega_species(
 				active_pokemon,
 				ident_name,
@@ -147,6 +154,26 @@ func get_active_display_name(player_id: String) -> String:
 			return ident_name
 
 	return get_active_display_species(player_id)
+
+
+func _default_name_should_follow_cosmetic_species(
+	pokemon_data: Dictionary,
+	explicit_name: String,
+	display_species: String
+) -> bool:
+	var cosmetic_species := str(pokemon_data.get("cosmeticDisplaySpecies", "")).strip_edges()
+	if cosmetic_species == "" or cosmetic_species != display_species:
+		return false
+	var base_species := str(pokemon_data.get("species", "")).strip_edges()
+	if base_species == "":
+		base_species = "Greninja"
+	var normalized_base := display_metadata.normalize_species_for_compare(base_species)
+	if normalized_base.ends_with("-bond"):
+		normalized_base = normalized_base.trim_suffix("-bond")
+	return (
+		display_metadata.normalize_species_for_compare(explicit_name)
+		== normalized_base
+	)
 
 
 func _default_name_should_follow_public_mega_species(
@@ -338,7 +365,8 @@ func _apply_request_battle_state_to_trainer_display(display_data: Dictionary, re
 	for key in [
 		"ident", "condition", "hp", "maxHp", "max_hp", "status", "fainted",
 		"active", "activeIdent", "playerId", "level", "gender", "shiny",
-		"isShiny", "is_shiny",
+		"isShiny", "is_shiny", "displaySpecies", "megaSpecies", "transformedSpecies",
+		"cosmeticDisplaySpecies", "battleBondCosmeticActive",
 	]:
 		if request_data.has(key):
 			display_data[key] = request_data.get(key)

@@ -25,7 +25,7 @@ const SPECIES_SPRITE_ALIASES := {
 	"hakamo-o": ["Hakamo-o"],
 	"furfrou-la-reine": ["furfrou-lareine"],
 	"garchomp-mega-z": ["Garchomp-Mega"],
-	"greninja-bond": ["greninja-ash"],
+	"greninja-bond": ["greninja"],
 	"greninja-mega": ["Greninja"],
 	"kommo-o": ["Kommo-o"],
 	"kommo-o-totem": ["kommoo-totem"],

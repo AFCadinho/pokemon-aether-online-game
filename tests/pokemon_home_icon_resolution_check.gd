@@ -41,7 +41,7 @@ const EXPECTED_BATTLE_ALIASES := {
 	"Landorus Incarnate": "landorus",
 	"Keldeo Ordinary": "keldeo",
 	"Meloetta Aria": "meloetta",
-	"Greninja Bond": "greninja-ash",
+	"Greninja Bond": "greninja",
 	"Greninja Mega": "greninja",
 	"Furfrou La Reine": "furfrou-lareine",
 	"Meowstic F Mega": "meowstic-mega",

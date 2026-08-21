@@ -30985,6 +30985,8 @@ func _format_pokedex_ability_slot_label(slot: String) -> String:
 			return LocalizationManager.text("ui.pokedex.ability.secondary")
 		"hidden":
 			return LocalizationManager.text("ui.pokedex.ability.hidden")
+		"special":
+			return LocalizationManager.text("ui.pokedex.ability.special")
 		_:
 			return LocalizationManager.text("ui.pokedex.ability.default")
 
