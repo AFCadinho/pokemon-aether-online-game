@@ -137,6 +137,13 @@ func get_active_display_name(player_id: String) -> String:
 	if ident.contains(": "):
 		var ident_name := ident.substr(ident.find(": ") + 2).strip_edges()
 		if ident_name != "":
+			var display_species := get_active_display_species(player_id)
+			if _default_name_should_follow_public_mega_species(
+				active_pokemon,
+				ident_name,
+				display_species
+			):
+				return display_species
 			return ident_name
 
 	return get_active_display_species(player_id)
@@ -154,16 +161,21 @@ func _default_name_should_follow_public_mega_species(
 
 	var normalized_display := display_metadata.normalize_species_for_compare(display_species)
 	var display_is_public_mega := normalized_display.contains("-mega")
+	var normalized_display_base := normalized_display
+	var mega_marker_index := normalized_display.find("-mega")
+	if mega_marker_index > 0:
+		normalized_display_base = normalized_display.substr(0, mega_marker_index)
 	var mega_matches_display := (
 		mega_species == ""
 		or display_metadata.normalize_species_for_compare(mega_species) == normalized_display
 	)
+	var normalized_explicit := display_metadata.normalize_species_for_compare(explicit_name)
+	var normalized_base := display_metadata.normalize_species_for_compare(base_species)
 	return (
 		display_is_public_mega
 		and mega_matches_display
-		and display_metadata.normalize_species_for_compare(explicit_name)
-			== display_metadata.normalize_species_for_compare(base_species)
-		and display_metadata.normalize_species_for_compare(base_species) != normalized_display
+		and normalized_explicit in [normalized_base, normalized_display_base]
+		and normalized_explicit != normalized_display
 	)
 
 
