@@ -9,13 +9,13 @@ const EXPECTED_PASSAGES := {
 	&"passage_7_8": Rect2(64, 1824, 768, 640),
 }
 const EXPECTED_MARKERS := {
-	"From1F1": {"passage": &"passage_1_2", "position": Vector2(1520, 2032)},
+	"From1F1": {"passage": &"passage_1_2", "position": Vector2(1584, 1968)},
 	"FromB2F2": {"passage": &"passage_1_2", "position": Vector2(2416, 1328)},
-	"From1F3": {"passage": &"passage_3_4", "position": Vector2(2064, 368)},
+	"From1F3": {"passage": &"passage_3_4", "position": Vector2(2128, 304)},
 	"FromB2F4": {"passage": &"passage_3_4", "position": Vector2(2416, 176)},
-	"From1F5": {"passage": &"passage_5_6", "position": Vector2(1008, 1104)},
+	"From1F5": {"passage": &"passage_5_6", "position": Vector2(944, 1040)},
 	"FromB2F6": {"passage": &"passage_5_6", "position": Vector2(144, 240)},
-	"FromB2F7": {"passage": &"passage_7_8", "position": Vector2(272, 2256)},
+	"FromB2F7": {"passage": &"passage_7_8", "position": Vector2(336, 2192)},
 	"Route4Exit8": {"passage": &"passage_7_8", "position": Vector2(512, 2112)},
 }
 
@@ -25,7 +25,7 @@ var failed := false
 func _init() -> void:
 	var scene_source := FileAccess.get_file_as_string(B1F_SCENE_PATH)
 	_check(not scene_source.is_empty(), "Mt. Moon B1F can be read")
-	_check(scene_source.contains('[node name="FloorVisibilityMask" type="Node2D" parent="."]'), "Mt. Moon B1F has a visibility mask")
+	_check(scene_source.contains('[node name="FloorVisibilityMask" type="Node2D" parent="."'), "Mt. Moon B1F has a visibility mask")
 	_check(scene_source.contains("constrain_camera_to_active_floor = true"), "B1F constrains the camera to the active passage")
 
 	for passage_value: Variant in EXPECTED_PASSAGES:
