@@ -92,6 +92,7 @@ const CHAT_MUTE_PERMISSION := "chat:mute"
 const IMPERSONATE_PERMISSION := "accounts:impersonate"
 const DEV_TOOLS_PERMISSION := "generating"
 const DEV_ITEM_GENERATING_PERMISSION := "items:generating"
+const DEV_POKEMON_GENERATING_PERMISSION := "pokemon:generating"
 const DIRECT_BATTLE_FORM_GENERATING_PERMISSION := "pokemon:direct-battle-form:generating"
 const STAFF_ACTION_BAR_PERMISSION := "ui:staff:action-bar"
 const WORLD_TELEPORT_SELF_PERMISSION := "world:teleport:self"
@@ -1800,8 +1801,11 @@ func _can_use_dev_tools() -> bool:
 func _can_generate_dev_items() -> bool:
 	return _has_user_permission(DEV_ITEM_GENERATING_PERMISSION)
 
+func _can_generate_dev_pokemon() -> bool:
+	return _can_use_dev_tools() and _has_user_permission(DEV_POKEMON_GENERATING_PERMISSION)
+
 func _can_generate_direct_battle_forms() -> bool:
-	return _can_use_dev_tools() and _has_user_permission(DIRECT_BATTLE_FORM_GENERATING_PERMISSION)
+	return _can_generate_dev_pokemon() and _has_user_permission(DIRECT_BATTLE_FORM_GENERATING_PERMISSION)
 
 func _can_open_dev_actions() -> bool:
 	return _can_use_dev_tools() or _can_generate_dev_items()
@@ -1918,6 +1922,7 @@ func _refresh_dev_tools_visibility() -> void:
 	var can_show_staff_action_bar: bool = _can_show_staff_action_bar()
 	var can_use_dev_tools: bool = _can_use_dev_tools()
 	var can_generate_dev_items: bool = _can_generate_dev_items()
+	var can_generate_dev_pokemon: bool = _can_generate_dev_pokemon()
 	var can_open_dev_actions: bool = can_use_dev_tools or can_generate_dev_items
 	var can_impersonate: bool = _can_impersonate_accounts()
 	var can_return_from_impersonation := AuthService.is_impersonating()
@@ -1961,8 +1966,8 @@ func _refresh_dev_tools_visibility() -> void:
 	if staff_tools_button != null:
 		staff_tools_button.visible = has_staff_tool
 		staff_tools_button.disabled = not has_staff_tool
-	dev_add_pokemon_button.visible = can_use_dev_tools
-	dev_add_pokemon_button.disabled = not can_use_dev_tools
+	dev_add_pokemon_button.visible = can_generate_dev_pokemon
+	dev_add_pokemon_button.disabled = not can_generate_dev_pokemon
 	dev_add_team_button.disabled = true
 	dev_spawn_pokemon_button.visible = can_use_dev_tools
 	dev_spawn_pokemon_button.disabled = not can_use_dev_tools
@@ -1985,9 +1990,9 @@ func _refresh_dev_tools_visibility() -> void:
 		dev_badge_progress_button.disabled = not can_use_dev_tools
 	dev_clear_party_button.visible = can_use_dev_tools
 	dev_clear_party_button.disabled = not can_use_dev_tools
-	dev_cleanup_test_pokemon_button.visible = _can_generate_direct_battle_forms()
-	dev_cleanup_test_pokemon_button.disabled = not _can_generate_direct_battle_forms()
-	dev_pokemon_add_button.disabled = not can_use_dev_tools
+	dev_cleanup_test_pokemon_button.visible = can_use_dev_tools
+	dev_cleanup_test_pokemon_button.disabled = not can_use_dev_tools
+	dev_pokemon_add_button.disabled = not can_generate_dev_pokemon
 	if dev_add_item_button != null:
 		dev_add_item_button.visible = can_generate_dev_items
 		dev_add_item_button.disabled = not can_generate_dev_items
@@ -32078,14 +32083,14 @@ func _format_item_dex_sources(item: Dictionary) -> String:
 	return "\n".join(lines)
 
 func _on_dev_add_pokemon_button_pressed() -> void:
-	if not _can_use_dev_tools():
+	if not _can_generate_dev_pokemon():
 		return
 
 	dev_actions_popup.visible = false
 	_show_dev_pokemon_popup(DevPokemonPopupMode.TEAM)
 
 func _on_dev_add_team_button_pressed() -> void:
-	if not _can_use_dev_tools():
+	if not _can_generate_dev_pokemon():
 		return
 
 	dev_actions_popup.visible = false
@@ -32519,7 +32524,7 @@ func _on_dev_clear_party_button_pressed() -> void:
 
 
 func _on_dev_cleanup_test_pokemon_button_pressed() -> void:
-	if not _can_generate_direct_battle_forms():
+	if not _can_use_dev_tools():
 		return
 	dev_cleanup_test_pokemon_button.disabled = true
 	var result: Dictionary = await PlayerPartyStateService.cleanup_dev_test_pokemon()

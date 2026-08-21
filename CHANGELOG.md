@@ -9,7 +9,7 @@
 
 **Changed**
 
-- Testers now use Alpha Tools to create Pokémon. Item creation remains available through Developer Tools.
+- Testers can use every Developer Tools action except unrestricted Pokémon creation. They can still create normalized Pokémon through Alpha Tools.
 
 **Fixed**
 
