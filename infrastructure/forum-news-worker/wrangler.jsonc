@@ -17,7 +17,7 @@
   "r2_buckets": [
     {
       "binding": "UPDATES_BUCKET",
-      "bucket_name": "pokeaether-updates"
+      "bucket_name": "pokemon-aether-updates"
     }
   ],
   "vars": {
