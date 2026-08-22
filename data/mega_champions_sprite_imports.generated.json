@@ -1,0 +1,1549 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "name": "Generation 9 Pack",
+    "version": "3.3.6",
+    "website": "https://www.eeveeexpo.com/threads/5817/",
+    "creditsFileSha256": "d9d782f9f01fbc4f33352619ad48dcd3c83eb72591b436e5a551e6bcaebd6b21",
+    "changelogFileSha256": "2e31d1b30906ba0e907d558def8c48a5eb3a260638217fd5cfbfea731de61f50",
+    "plzaSpriteCredits": [
+      "Caruban",
+      "ace_stryfe",
+      "KingOfThe-X-Roads",
+      "camiloveso",
+      "Mak"
+    ],
+    "licenseStatus": "not_declared_in_source_bundle",
+    "approval": "User-approved for PokeAether import and R2 publication on 2026-08-21"
+  },
+  "mappingCount": 15,
+  "forms": [
+    {
+      "catalogEntryId": "absol-mega-z",
+      "showdownSpeciesName": "Absol-Mega-Z",
+      "sourcePokemonId": "ABSOL",
+      "sourceFormIndex": 2,
+      "sourceStem": "ABSOL_2",
+      "sourceAssets": {
+        "front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front/ABSOL_2.png",
+          "sha256": "5d466a84057b9edc012ad76e49259cd9808476092da117462cc215079fde199b",
+          "width": 192,
+          "height": 192
+        },
+        "back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back/ABSOL_2.png",
+          "sha256": "9357cdba4ae5c2d8e146bf5c4a02319804cc6420346d9c5ea843f182570c6eb9",
+          "width": 288,
+          "height": 288
+        },
+        "shiny_front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front shiny/ABSOL_2.png",
+          "sha256": "bc955feffb2da6cecb460847d20c246d8794aa42eb01c296730dd380202dc24e",
+          "width": 192,
+          "height": 192
+        },
+        "shiny_back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back shiny/ABSOL_2.png",
+          "sha256": "e645ce4b3e991de4af80457d1e8584f232001ec63e5e1172f8090234a0ab9c8a",
+          "width": 288,
+          "height": 288
+        },
+        "pokemon_home": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons/ABSOL_2.png",
+          "sha256": "46b3ae363ac72faa3dba9a8fd698fb93c4426594df72ca88951949058e25296c",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        },
+        "pokemon_home_shiny": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/ABSOL_2.png",
+          "sha256": "8f13188498be1c6a3cdc05a36c8f3d755d21f3b476569ce68625588f98643113",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        }
+      },
+      "outputs": [
+        "assets/sprites/pokemon/front/absol-mega-z/sheet.png",
+        "assets/sprites/pokemon/front/absol-mega-z/animation.json",
+        "assets/sprites/pokemon/back/absol-mega-z/sheet.png",
+        "assets/sprites/pokemon/back/absol-mega-z/animation.json",
+        "assets/sprites/pokemon/shiny_front/absol-mega-z/sheet.png",
+        "assets/sprites/pokemon/shiny_front/absol-mega-z/animation.json",
+        "assets/sprites/pokemon/shiny_back/absol-mega-z/sheet.png",
+        "assets/sprites/pokemon/shiny_back/absol-mega-z/animation.json",
+        "assets/sprites/pokemon/pokemon_home/Absol-Mega-Z.png",
+        "assets/sprites/pokemon/pokemon_home_shiny/Absol-Mega-Z.png"
+      ]
+    },
+    {
+      "catalogEntryId": "floette-mega",
+      "showdownSpeciesName": "Floette-Mega",
+      "sourcePokemonId": "FLOETTE",
+      "sourceFormIndex": 6,
+      "sourceStem": "FLOETTE_6",
+      "sourceAssets": {
+        "front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front/FLOETTE_6.png",
+          "sha256": "5940f23239008e1995c6a904d88ea195d68dfa843b15f4599171da72d21220fb",
+          "width": 192,
+          "height": 192
+        },
+        "back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back/FLOETTE_6.png",
+          "sha256": "85d968b6340c9806f7d201064b486faa3d49859e554c3fcece015892409cf0d5",
+          "width": 288,
+          "height": 288
+        },
+        "shiny_front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front shiny/FLOETTE_6.png",
+          "sha256": "104c32c0b3edef41eaf81a00365b841a94c387a5ee1a44e3dbc715790cc27d19",
+          "width": 192,
+          "height": 192
+        },
+        "shiny_back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back shiny/FLOETTE_6.png",
+          "sha256": "9e8aa907c4e76738ff0a813673e1a8b08c1b46cb25cf0acf705e89d74539bd0c",
+          "width": 288,
+          "height": 288
+        },
+        "pokemon_home": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons/FLOETTE_6.png",
+          "sha256": "d44a8462c22a46b36c6bf2ef5d2488d2b1ec2e684a65dac59882de4a3b2c2195",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        },
+        "pokemon_home_shiny": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/FLOETTE_6.png",
+          "sha256": "f0eea19678ca1191c5c4df8e848cbc11b74bdc279451a336246ea388c514c069",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        }
+      },
+      "outputs": [
+        "assets/sprites/pokemon/front/floette-mega/sheet.png",
+        "assets/sprites/pokemon/front/floette-mega/animation.json",
+        "assets/sprites/pokemon/back/floette-mega/sheet.png",
+        "assets/sprites/pokemon/back/floette-mega/animation.json",
+        "assets/sprites/pokemon/shiny_front/floette-mega/sheet.png",
+        "assets/sprites/pokemon/shiny_front/floette-mega/animation.json",
+        "assets/sprites/pokemon/shiny_back/floette-mega/sheet.png",
+        "assets/sprites/pokemon/shiny_back/floette-mega/animation.json",
+        "assets/sprites/pokemon/pokemon_home/Floette-Mega.png",
+        "assets/sprites/pokemon/pokemon_home_shiny/Floette-Mega.png"
+      ]
+    },
+    {
+      "catalogEntryId": "garchomp-mega-z",
+      "showdownSpeciesName": "Garchomp-Mega-Z",
+      "sourcePokemonId": "GARCHOMP",
+      "sourceFormIndex": 2,
+      "sourceStem": "GARCHOMP_2",
+      "sourceAssets": {
+        "front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front/GARCHOMP_2.png",
+          "sha256": "6bc2a2a6076b00b51f498f62780ab27053b8b1c5b55945b291fbe225edea0fdc",
+          "width": 192,
+          "height": 192
+        },
+        "back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back/GARCHOMP_2.png",
+          "sha256": "6dfce80253042d32e9b70292b3435a64639b5e7a7c3d16c73850c55936aff89d",
+          "width": 288,
+          "height": 288
+        },
+        "shiny_front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front shiny/GARCHOMP_2.png",
+          "sha256": "f3f3dd882a320cb6ad8c99a5066fdb999bc65de528cba2c68e7e10cd0f5d8bde",
+          "width": 192,
+          "height": 192
+        },
+        "shiny_back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back shiny/GARCHOMP_2.png",
+          "sha256": "221728abcbead3ed4d21cb4d175d6570cdfef4974fb4c4d36a4ce019f86e2d9e",
+          "width": 288,
+          "height": 288
+        },
+        "pokemon_home": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons/GARCHOMP_2.png",
+          "sha256": "9479ab9d274398c9079ef3ac7a270e5b92e630ebc887c55a4a9702b8b5c28858",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        },
+        "pokemon_home_shiny": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/GARCHOMP_2.png",
+          "sha256": "350ae4fde87d4e0d65c593c4d12a2d943106125288c2b251eec21cc97c5d16bd",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        }
+      },
+      "outputs": [
+        "assets/sprites/pokemon/front/garchomp-mega-z/sheet.png",
+        "assets/sprites/pokemon/front/garchomp-mega-z/animation.json",
+        "assets/sprites/pokemon/back/garchomp-mega-z/sheet.png",
+        "assets/sprites/pokemon/back/garchomp-mega-z/animation.json",
+        "assets/sprites/pokemon/shiny_front/garchomp-mega-z/sheet.png",
+        "assets/sprites/pokemon/shiny_front/garchomp-mega-z/animation.json",
+        "assets/sprites/pokemon/shiny_back/garchomp-mega-z/sheet.png",
+        "assets/sprites/pokemon/shiny_back/garchomp-mega-z/animation.json",
+        "assets/sprites/pokemon/pokemon_home/Garchomp-Mega-Z.png",
+        "assets/sprites/pokemon/pokemon_home_shiny/Garchomp-Mega-Z.png"
+      ]
+    },
+    {
+      "catalogEntryId": "greninja-mega",
+      "showdownSpeciesName": "Greninja-Mega",
+      "sourcePokemonId": "GRENINJA",
+      "sourceFormIndex": 3,
+      "sourceStem": "GRENINJA_3",
+      "sourceAssets": {
+        "front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front/GRENINJA_3.png",
+          "sha256": "78c25bdab27ca8df0f047a2a276387fd77d44306c0821ca6b4980c72a3c3b206",
+          "width": 96,
+          "height": 96
+        },
+        "back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back/GRENINJA_3.png",
+          "sha256": "2ff2568c74cc4c3650afd92d197f5d2fd773cc868cdfc3da5dce20398d0bec2d",
+          "width": 288,
+          "height": 288
+        },
+        "shiny_front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front shiny/GRENINJA_3.png",
+          "sha256": "b023d892c63ae9a57b4c1c77adae301a7bf53777615935cd07494e94d712959b",
+          "width": 96,
+          "height": 96
+        },
+        "shiny_back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back shiny/GRENINJA_3.png",
+          "sha256": "bd5ab9dcbdfdc7b0d302561eb5cd16c0d95a90db778ebc61e79756ff25dd964c",
+          "width": 288,
+          "height": 288
+        },
+        "pokemon_home": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons/GRENINJA_3.png",
+          "sha256": "4ca158b73b9384e4dd06855e6000e8371d6aa14cf44d437808f456366b4fa240",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        },
+        "pokemon_home_shiny": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/GRENINJA_3.png",
+          "sha256": "feb44a6e2da2a3d725d5dae58ab7fb9d6db7290ec430156fa8ca111e82df0e25",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        }
+      },
+      "outputs": [
+        "assets/sprites/pokemon/front/greninja-mega/sheet.png",
+        "assets/sprites/pokemon/front/greninja-mega/animation.json",
+        "assets/sprites/pokemon/back/greninja-mega/sheet.png",
+        "assets/sprites/pokemon/back/greninja-mega/animation.json",
+        "assets/sprites/pokemon/shiny_front/greninja-mega/sheet.png",
+        "assets/sprites/pokemon/shiny_front/greninja-mega/animation.json",
+        "assets/sprites/pokemon/shiny_back/greninja-mega/sheet.png",
+        "assets/sprites/pokemon/shiny_back/greninja-mega/animation.json",
+        "assets/sprites/pokemon/pokemon_home/Greninja-Mega.png",
+        "assets/sprites/pokemon/pokemon_home_shiny/Greninja-Mega.png"
+      ]
+    },
+    {
+      "catalogEntryId": "lucario-mega-z",
+      "showdownSpeciesName": "Lucario-Mega-Z",
+      "sourcePokemonId": "LUCARIO",
+      "sourceFormIndex": 2,
+      "sourceStem": "LUCARIO_2",
+      "sourceAssets": {
+        "front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front/LUCARIO_2.png",
+          "sha256": "48d7594b04b04ce522f55ad056067ddcdf508d92e226496ccfc199429c95b4c7",
+          "width": 192,
+          "height": 192
+        },
+        "back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back/LUCARIO_2.png",
+          "sha256": "0e7758a6dd1ae994b9672ff32c6caa5f4cac6922bc0d06b96f9cc4f673f8e4e4",
+          "width": 288,
+          "height": 288
+        },
+        "shiny_front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front shiny/LUCARIO_2.png",
+          "sha256": "eea6eb872c29c895cec853d32a5347c20a7946ddfe0d85cfacc5c38c2524109c",
+          "width": 192,
+          "height": 192
+        },
+        "shiny_back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back shiny/LUCARIO_2.png",
+          "sha256": "f4a31595037725f0c2337438cf166007c5da5a9f982bdfecbb77161ada46ea04",
+          "width": 288,
+          "height": 288
+        },
+        "pokemon_home": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons/LUCARIO_2.png",
+          "sha256": "12bfae27e0e2499410dcd532ae25e9169d7e5a6ac25d5ba7dba40af45fb71533",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        },
+        "pokemon_home_shiny": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/LUCARIO_2.png",
+          "sha256": "a7a6f5fdc509a36e6d8a5d2899f41434f7d0e00e40d606743c662b90fca9017b",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        }
+      },
+      "outputs": [
+        "assets/sprites/pokemon/front/lucario-mega-z/sheet.png",
+        "assets/sprites/pokemon/front/lucario-mega-z/animation.json",
+        "assets/sprites/pokemon/back/lucario-mega-z/sheet.png",
+        "assets/sprites/pokemon/back/lucario-mega-z/animation.json",
+        "assets/sprites/pokemon/shiny_front/lucario-mega-z/sheet.png",
+        "assets/sprites/pokemon/shiny_front/lucario-mega-z/animation.json",
+        "assets/sprites/pokemon/shiny_back/lucario-mega-z/sheet.png",
+        "assets/sprites/pokemon/shiny_back/lucario-mega-z/animation.json",
+        "assets/sprites/pokemon/pokemon_home/Lucario-Mega-Z.png",
+        "assets/sprites/pokemon/pokemon_home_shiny/Lucario-Mega-Z.png"
+      ]
+    },
+    {
+      "catalogEntryId": "magearna-mega",
+      "showdownSpeciesName": "Magearna-Mega",
+      "sourcePokemonId": "MAGEARNA",
+      "sourceFormIndex": 2,
+      "sourceStem": "MAGEARNA_2",
+      "sourceAssets": {
+        "front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front/MAGEARNA_2.png",
+          "sha256": "7ea47f986b27e83c1f6a48871b8d8bdac3693a97d8bba40190f31d36c9c47df8",
+          "width": 192,
+          "height": 192
+        },
+        "back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back/MAGEARNA_2.png",
+          "sha256": "682be44e26890c793ad1febe474fff4ce69aa271ef2ccb8a4809fce8b34e59e7",
+          "width": 288,
+          "height": 288
+        },
+        "shiny_front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front shiny/MAGEARNA_2.png",
+          "sha256": "c90cd7685a5fb835064ff584818a920704fae4bb55df6838fe6cb594d53dd83c",
+          "width": 192,
+          "height": 192
+        },
+        "shiny_back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back shiny/MAGEARNA_2.png",
+          "sha256": "ebd5295685f11bef6b63b8e88848764db3bbcebceb172612e0e37db529c754c2",
+          "width": 288,
+          "height": 288
+        },
+        "pokemon_home": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons/MAGEARNA_2.png",
+          "sha256": "635b611deaaf38d55940673669482ac7bc2679e204148dc692ff189cdeea6821",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        },
+        "pokemon_home_shiny": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/MAGEARNA_2.png",
+          "sha256": "aa988f185b9a7f60f4d6fe7b89acbf6e46b1a90e81f27abc4314eb4824113fdc",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        }
+      },
+      "outputs": [
+        "assets/sprites/pokemon/front/magearna-mega/sheet.png",
+        "assets/sprites/pokemon/front/magearna-mega/animation.json",
+        "assets/sprites/pokemon/back/magearna-mega/sheet.png",
+        "assets/sprites/pokemon/back/magearna-mega/animation.json",
+        "assets/sprites/pokemon/shiny_front/magearna-mega/sheet.png",
+        "assets/sprites/pokemon/shiny_front/magearna-mega/animation.json",
+        "assets/sprites/pokemon/shiny_back/magearna-mega/sheet.png",
+        "assets/sprites/pokemon/shiny_back/magearna-mega/animation.json",
+        "assets/sprites/pokemon/pokemon_home/Magearna-Mega.png",
+        "assets/sprites/pokemon/pokemon_home_shiny/Magearna-Mega.png"
+      ]
+    },
+    {
+      "catalogEntryId": "magearna-original-mega",
+      "showdownSpeciesName": "Magearna-Original-Mega",
+      "sourcePokemonId": "MAGEARNA",
+      "sourceFormIndex": 3,
+      "sourceStem": "MAGEARNA_3",
+      "sourceAssets": {
+        "front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front/MAGEARNA_3.png",
+          "sha256": "bbbdef2af7cfc83a5afa13098f7b516cc466725b6cd389e5735d6102146ae441",
+          "width": 192,
+          "height": 192
+        },
+        "back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back/MAGEARNA_3.png",
+          "sha256": "507d58e4241cf640d09e2a0e8c2f06566ec67e410063843edf27a388302f02bb",
+          "width": 288,
+          "height": 288
+        },
+        "shiny_front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front shiny/MAGEARNA_3.png",
+          "sha256": "09cc312ba461c44b70fd78b41a5454fe5f517a47e9ecc5a12674a78d574f115f",
+          "width": 192,
+          "height": 192
+        },
+        "shiny_back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back shiny/MAGEARNA_3.png",
+          "sha256": "67d5712b2bc8fb0eec4597fafdd4997dd0ffeacf5a5a43ac0e0897e3a3f6b521",
+          "width": 288,
+          "height": 288
+        },
+        "pokemon_home": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons/MAGEARNA_3.png",
+          "sha256": "6fb67788b9f26ddf450607823933090e0d675508b80c32356c7c49621a2cd09d",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        },
+        "pokemon_home_shiny": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/MAGEARNA_3.png",
+          "sha256": "bd98756149c87c564b49e9f052839cedcc1320b3e7b53ecfd4d086d78c08a942",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        }
+      },
+      "outputs": [
+        "assets/sprites/pokemon/front/magearna-original-mega/sheet.png",
+        "assets/sprites/pokemon/front/magearna-original-mega/animation.json",
+        "assets/sprites/pokemon/back/magearna-original-mega/sheet.png",
+        "assets/sprites/pokemon/back/magearna-original-mega/animation.json",
+        "assets/sprites/pokemon/shiny_front/magearna-original-mega/sheet.png",
+        "assets/sprites/pokemon/shiny_front/magearna-original-mega/animation.json",
+        "assets/sprites/pokemon/shiny_back/magearna-original-mega/sheet.png",
+        "assets/sprites/pokemon/shiny_back/magearna-original-mega/animation.json",
+        "assets/sprites/pokemon/pokemon_home/Magearna-Original-Mega.png",
+        "assets/sprites/pokemon/pokemon_home_shiny/Magearna-Original-Mega.png"
+      ]
+    },
+    {
+      "catalogEntryId": "meowstic-f-mega",
+      "showdownSpeciesName": "Meowstic-F-Mega",
+      "sourcePokemonId": "MEOWSTIC",
+      "sourceFormIndex": 3,
+      "sourceStem": "MEOWSTIC_3",
+      "sourceAssets": {
+        "front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front/MEOWSTIC_3.png",
+          "sha256": "23c5586ed2666a7e07f1f994b42da12d81e177d4e6d91a60f8faf350a181a7d7",
+          "width": 192,
+          "height": 192
+        },
+        "back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back/MEOWSTIC_3.png",
+          "sha256": "1660b27b37f73fb55764ba7b578242bf5333df5d2e78bfda285dfe6eae08d057",
+          "width": 288,
+          "height": 288
+        },
+        "shiny_front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front shiny/MEOWSTIC_3.png",
+          "sha256": "f24e1d6dd0f0382eea44f7d7fbe4ebdcafe81f5ac915e8f2666069af3d229d80",
+          "width": 192,
+          "height": 192
+        },
+        "shiny_back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back shiny/MEOWSTIC_3.png",
+          "sha256": "f36b891ed652fb134a4f5201454f2750aa25c03177e5553f41beae9a3edbe426",
+          "width": 288,
+          "height": 288
+        },
+        "pokemon_home": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons/MEOWSTIC_3.png",
+          "sha256": "d55c4c549e5e71c368140d4667f8f71f972070aa4197e84d38c56b6346e237c7",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        },
+        "pokemon_home_shiny": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/MEOWSTIC_3.png",
+          "sha256": "1a609fb649b6f549f75006d3e205cddf3b4109cf4848dede7068b86db2db04d5",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        }
+      },
+      "outputs": [
+        "assets/sprites/pokemon/front/meowstic-f-mega/sheet.png",
+        "assets/sprites/pokemon/front/meowstic-f-mega/animation.json",
+        "assets/sprites/pokemon/back/meowstic-f-mega/sheet.png",
+        "assets/sprites/pokemon/back/meowstic-f-mega/animation.json",
+        "assets/sprites/pokemon/shiny_front/meowstic-f-mega/sheet.png",
+        "assets/sprites/pokemon/shiny_front/meowstic-f-mega/animation.json",
+        "assets/sprites/pokemon/shiny_back/meowstic-f-mega/sheet.png",
+        "assets/sprites/pokemon/shiny_back/meowstic-f-mega/animation.json",
+        "assets/sprites/pokemon/pokemon_home/Meowstic-F-Mega.png",
+        "assets/sprites/pokemon/pokemon_home_shiny/Meowstic-F-Mega.png"
+      ]
+    },
+    {
+      "catalogEntryId": "meowstic-m-mega",
+      "showdownSpeciesName": "Meowstic-M-Mega",
+      "sourcePokemonId": "MEOWSTIC",
+      "sourceFormIndex": 2,
+      "sourceStem": "MEOWSTIC_2",
+      "sourceAssets": {
+        "front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front/MEOWSTIC_2.png",
+          "sha256": "23c5586ed2666a7e07f1f994b42da12d81e177d4e6d91a60f8faf350a181a7d7",
+          "width": 192,
+          "height": 192
+        },
+        "back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back/MEOWSTIC_2.png",
+          "sha256": "1660b27b37f73fb55764ba7b578242bf5333df5d2e78bfda285dfe6eae08d057",
+          "width": 288,
+          "height": 288
+        },
+        "shiny_front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front shiny/MEOWSTIC_2.png",
+          "sha256": "f24e1d6dd0f0382eea44f7d7fbe4ebdcafe81f5ac915e8f2666069af3d229d80",
+          "width": 192,
+          "height": 192
+        },
+        "shiny_back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back shiny/MEOWSTIC_2.png",
+          "sha256": "f36b891ed652fb134a4f5201454f2750aa25c03177e5553f41beae9a3edbe426",
+          "width": 288,
+          "height": 288
+        },
+        "pokemon_home": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons/MEOWSTIC_2.png",
+          "sha256": "d55c4c549e5e71c368140d4667f8f71f972070aa4197e84d38c56b6346e237c7",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        },
+        "pokemon_home_shiny": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/MEOWSTIC_2.png",
+          "sha256": "1a609fb649b6f549f75006d3e205cddf3b4109cf4848dede7068b86db2db04d5",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        }
+      },
+      "outputs": [
+        "assets/sprites/pokemon/front/meowstic-m-mega/sheet.png",
+        "assets/sprites/pokemon/front/meowstic-m-mega/animation.json",
+        "assets/sprites/pokemon/back/meowstic-m-mega/sheet.png",
+        "assets/sprites/pokemon/back/meowstic-m-mega/animation.json",
+        "assets/sprites/pokemon/shiny_front/meowstic-m-mega/sheet.png",
+        "assets/sprites/pokemon/shiny_front/meowstic-m-mega/animation.json",
+        "assets/sprites/pokemon/shiny_back/meowstic-m-mega/sheet.png",
+        "assets/sprites/pokemon/shiny_back/meowstic-m-mega/animation.json",
+        "assets/sprites/pokemon/pokemon_home/Meowstic-M-Mega.png",
+        "assets/sprites/pokemon/pokemon_home_shiny/Meowstic-M-Mega.png"
+      ]
+    },
+    {
+      "catalogEntryId": "raichu-mega-x",
+      "showdownSpeciesName": "Raichu-Mega-X",
+      "sourcePokemonId": "RAICHU",
+      "sourceFormIndex": 2,
+      "sourceStem": "RAICHU_2",
+      "sourceAssets": {
+        "front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front/RAICHU_2.png",
+          "sha256": "c85e045c942f0e2c7be27be07f7404d692edcbe8a84e546923603e6a4095ba9a",
+          "width": 192,
+          "height": 192
+        },
+        "back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back/RAICHU_2.png",
+          "sha256": "3eeba2ce12f7374e0e15b022cd04a24f53efe5d20b88ca27a339a6f34fbd4b84",
+          "width": 288,
+          "height": 288
+        },
+        "shiny_front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front shiny/RAICHU_2.png",
+          "sha256": "22a0a8f3fbede6f2d44c36cb6f5a778f4d8dd830be743722f2a6f06c1b9f78e4",
+          "width": 192,
+          "height": 192
+        },
+        "shiny_back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back shiny/RAICHU_2.png",
+          "sha256": "d87cb6ddc0fcf242852c1c10ed2205c7632f1d7c95dc3e97c820af0fcbce4fab",
+          "width": 288,
+          "height": 288
+        },
+        "pokemon_home": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons/RAICHU_2.png",
+          "sha256": "d071052f55eaf8c61cdd985e3ad219d79422ac8aed506f458a2003e308b0abee",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        },
+        "pokemon_home_shiny": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/RAICHU_2.png",
+          "sha256": "6cdb12927902caa3f92dd5dc6b6248af7f494605e55360be47183dc7aa1ca0aa",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        }
+      },
+      "outputs": [
+        "assets/sprites/pokemon/front/raichu-mega-x/sheet.png",
+        "assets/sprites/pokemon/front/raichu-mega-x/animation.json",
+        "assets/sprites/pokemon/back/raichu-mega-x/sheet.png",
+        "assets/sprites/pokemon/back/raichu-mega-x/animation.json",
+        "assets/sprites/pokemon/shiny_front/raichu-mega-x/sheet.png",
+        "assets/sprites/pokemon/shiny_front/raichu-mega-x/animation.json",
+        "assets/sprites/pokemon/shiny_back/raichu-mega-x/sheet.png",
+        "assets/sprites/pokemon/shiny_back/raichu-mega-x/animation.json",
+        "assets/sprites/pokemon/pokemon_home/Raichu-Mega-X.png",
+        "assets/sprites/pokemon/pokemon_home_shiny/Raichu-Mega-X.png"
+      ]
+    },
+    {
+      "catalogEntryId": "raichu-mega-y",
+      "showdownSpeciesName": "Raichu-Mega-Y",
+      "sourcePokemonId": "RAICHU",
+      "sourceFormIndex": 3,
+      "sourceStem": "RAICHU_3",
+      "sourceAssets": {
+        "front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front/RAICHU_3.png",
+          "sha256": "25865bb51abd34dffdc582ea9fa0ca12caa4885fba54aebbe31c3bc511539b63",
+          "width": 192,
+          "height": 192
+        },
+        "back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back/RAICHU_3.png",
+          "sha256": "42fdbc1899f107ff6ab128ce71cc42bcab241ab7e5a68f58c49805abd10dd03a",
+          "width": 288,
+          "height": 288
+        },
+        "shiny_front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front shiny/RAICHU_3.png",
+          "sha256": "b90d3822655237fdb3f596e90bfea5b66bc859761076da06da26f32a246ab0b5",
+          "width": 192,
+          "height": 192
+        },
+        "shiny_back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back shiny/RAICHU_3.png",
+          "sha256": "c8198173f972be448b656698dd52287644fc6f6392911cf0f476869887b3af13",
+          "width": 288,
+          "height": 288
+        },
+        "pokemon_home": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons/RAICHU_3.png",
+          "sha256": "50c53aad1ba70977096a274b0b2591b51997b0693dfff1c8b867fcb5fb95adbe",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        },
+        "pokemon_home_shiny": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/RAICHU_3.png",
+          "sha256": "9f892d1c5c5908dd07858143d9c7b3d7285205072a6acd56badf4ebebb936f52",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        }
+      },
+      "outputs": [
+        "assets/sprites/pokemon/front/raichu-mega-y/sheet.png",
+        "assets/sprites/pokemon/front/raichu-mega-y/animation.json",
+        "assets/sprites/pokemon/back/raichu-mega-y/sheet.png",
+        "assets/sprites/pokemon/back/raichu-mega-y/animation.json",
+        "assets/sprites/pokemon/shiny_front/raichu-mega-y/sheet.png",
+        "assets/sprites/pokemon/shiny_front/raichu-mega-y/animation.json",
+        "assets/sprites/pokemon/shiny_back/raichu-mega-y/sheet.png",
+        "assets/sprites/pokemon/shiny_back/raichu-mega-y/animation.json",
+        "assets/sprites/pokemon/pokemon_home/Raichu-Mega-Y.png",
+        "assets/sprites/pokemon/pokemon_home_shiny/Raichu-Mega-Y.png"
+      ]
+    },
+    {
+      "catalogEntryId": "tatsugiri-curly-mega",
+      "showdownSpeciesName": "Tatsugiri-Curly-Mega",
+      "sourcePokemonId": "TATSUGIRI",
+      "sourceFormIndex": 3,
+      "sourceStem": "TATSUGIRI_3",
+      "sourceAssets": {
+        "front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front/TATSUGIRI_3.png",
+          "sha256": "cae8a9775f76c1c1b809de659036e18ae28c66949914e165bb29a6408cf4453f",
+          "width": 192,
+          "height": 192
+        },
+        "back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back/TATSUGIRI_3.png",
+          "sha256": "b0b84152403296a0bdccd2378f7c5b454d3a20a8c6f3806440e7cb50df81a002",
+          "width": 288,
+          "height": 288
+        },
+        "shiny_front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front shiny/TATSUGIRI_3.png",
+          "sha256": "5ee208cc66eb31fe1893858d4417e395a708da0d4cb37b91730bb92041b8f75d",
+          "width": 192,
+          "height": 192
+        },
+        "shiny_back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back shiny/TATSUGIRI_3.png",
+          "sha256": "5c055af6965fead1830fff462d454fc8c424b68ab79da496ecb3c8ccf9fe1a11",
+          "width": 288,
+          "height": 288
+        },
+        "pokemon_home": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons/TATSUGIRI_3.png",
+          "sha256": "7410cbc65a5f20260d0c08208c182851e0e96b1012b2ee5fe7e5ce557e815236",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        },
+        "pokemon_home_shiny": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/TATSUGIRI_3.png",
+          "sha256": "49cace3f95b53bd71ecb5978d96cb2a7927f6d3785cc3d45f5d414fc204571d5",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        }
+      },
+      "outputs": [
+        "assets/sprites/pokemon/front/tatsugiri-curly-mega/sheet.png",
+        "assets/sprites/pokemon/front/tatsugiri-curly-mega/animation.json",
+        "assets/sprites/pokemon/back/tatsugiri-curly-mega/sheet.png",
+        "assets/sprites/pokemon/back/tatsugiri-curly-mega/animation.json",
+        "assets/sprites/pokemon/shiny_front/tatsugiri-curly-mega/sheet.png",
+        "assets/sprites/pokemon/shiny_front/tatsugiri-curly-mega/animation.json",
+        "assets/sprites/pokemon/shiny_back/tatsugiri-curly-mega/sheet.png",
+        "assets/sprites/pokemon/shiny_back/tatsugiri-curly-mega/animation.json",
+        "assets/sprites/pokemon/pokemon_home/Tatsugiri-Curly-Mega.png",
+        "assets/sprites/pokemon/pokemon_home_shiny/Tatsugiri-Curly-Mega.png"
+      ]
+    },
+    {
+      "catalogEntryId": "tatsugiri-droopy-mega",
+      "showdownSpeciesName": "Tatsugiri-Droopy-Mega",
+      "sourcePokemonId": "TATSUGIRI",
+      "sourceFormIndex": 4,
+      "sourceStem": "TATSUGIRI_4",
+      "sourceAssets": {
+        "front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front/TATSUGIRI_4.png",
+          "sha256": "7fe8fe4ade813e5e9c9759068978f8d3c3d0d23ad19df3808bbdcfb635785ac8",
+          "width": 192,
+          "height": 192
+        },
+        "back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back/TATSUGIRI_4.png",
+          "sha256": "9880901d74cf94fbdf549fa70ee202bcf490a1c0a61bc59c8aad5d15e8c58188",
+          "width": 288,
+          "height": 288
+        },
+        "shiny_front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front shiny/TATSUGIRI_4.png",
+          "sha256": "4f31db255e627634a8688f496fe9b497c7a2e7a3435ec1c47d9ceb7fc80e53d5",
+          "width": 192,
+          "height": 192
+        },
+        "shiny_back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back shiny/TATSUGIRI_4.png",
+          "sha256": "198fc519f979a1a9264686d47e0a507742a75b4443db14813c4fda7c35ec29f6",
+          "width": 288,
+          "height": 288
+        },
+        "pokemon_home": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons/TATSUGIRI_4.png",
+          "sha256": "b623423968ec5a19947db4417019ec712f40948a2fde5ce376b69491f0ebed37",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        },
+        "pokemon_home_shiny": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/TATSUGIRI_4.png",
+          "sha256": "65479f2aef663eb29ee01883d0b2610397c2ccea45b03b133235aa64a4992b66",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        }
+      },
+      "outputs": [
+        "assets/sprites/pokemon/front/tatsugiri-droopy-mega/sheet.png",
+        "assets/sprites/pokemon/front/tatsugiri-droopy-mega/animation.json",
+        "assets/sprites/pokemon/back/tatsugiri-droopy-mega/sheet.png",
+        "assets/sprites/pokemon/back/tatsugiri-droopy-mega/animation.json",
+        "assets/sprites/pokemon/shiny_front/tatsugiri-droopy-mega/sheet.png",
+        "assets/sprites/pokemon/shiny_front/tatsugiri-droopy-mega/animation.json",
+        "assets/sprites/pokemon/shiny_back/tatsugiri-droopy-mega/sheet.png",
+        "assets/sprites/pokemon/shiny_back/tatsugiri-droopy-mega/animation.json",
+        "assets/sprites/pokemon/pokemon_home/Tatsugiri-Droopy-Mega.png",
+        "assets/sprites/pokemon/pokemon_home_shiny/Tatsugiri-Droopy-Mega.png"
+      ]
+    },
+    {
+      "catalogEntryId": "tatsugiri-stretchy-mega",
+      "showdownSpeciesName": "Tatsugiri-Stretchy-Mega",
+      "sourcePokemonId": "TATSUGIRI",
+      "sourceFormIndex": 5,
+      "sourceStem": "TATSUGIRI_5",
+      "sourceAssets": {
+        "front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front/TATSUGIRI_5.png",
+          "sha256": "24f5b8e3d4d7ebff311d22b5fa582d8d3dbe061ed1619071a0800d86aecb0a80",
+          "width": 192,
+          "height": 192
+        },
+        "back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back/TATSUGIRI_5.png",
+          "sha256": "559eb24e31a477a168ce85ffa286fb30e05f8df0b77ff5ccbf0b0fc036de4240",
+          "width": 288,
+          "height": 288
+        },
+        "shiny_front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front shiny/TATSUGIRI_5.png",
+          "sha256": "4dd6dfd59ebc5cbd8fa34d5004ff06b0d72128f69bcc2c6e29a3d17b561857df",
+          "width": 192,
+          "height": 192
+        },
+        "shiny_back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back shiny/TATSUGIRI_5.png",
+          "sha256": "858bb874ddabdd08e5cb9932900d9cac8c40de3538d839840fcb3de06da75fa8",
+          "width": 288,
+          "height": 288
+        },
+        "pokemon_home": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons/TATSUGIRI_5.png",
+          "sha256": "b17fca2ccdd7781a276a6019d2fdb1dc4d5a189dca48d09479955fa2a81553b1",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        },
+        "pokemon_home_shiny": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/TATSUGIRI_5.png",
+          "sha256": "006f558bf7d85bc2af98b9390dd313d74e711c766d3a0db56866e8aacae62cc7",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        }
+      },
+      "outputs": [
+        "assets/sprites/pokemon/front/tatsugiri-stretchy-mega/sheet.png",
+        "assets/sprites/pokemon/front/tatsugiri-stretchy-mega/animation.json",
+        "assets/sprites/pokemon/back/tatsugiri-stretchy-mega/sheet.png",
+        "assets/sprites/pokemon/back/tatsugiri-stretchy-mega/animation.json",
+        "assets/sprites/pokemon/shiny_front/tatsugiri-stretchy-mega/sheet.png",
+        "assets/sprites/pokemon/shiny_front/tatsugiri-stretchy-mega/animation.json",
+        "assets/sprites/pokemon/shiny_back/tatsugiri-stretchy-mega/sheet.png",
+        "assets/sprites/pokemon/shiny_back/tatsugiri-stretchy-mega/animation.json",
+        "assets/sprites/pokemon/pokemon_home/Tatsugiri-Stretchy-Mega.png",
+        "assets/sprites/pokemon/pokemon_home_shiny/Tatsugiri-Stretchy-Mega.png"
+      ]
+    },
+    {
+      "catalogEntryId": "zygarde-mega",
+      "showdownSpeciesName": "Zygarde-Mega",
+      "sourcePokemonId": "ZYGARDE",
+      "sourceFormIndex": 4,
+      "sourceStem": "ZYGARDE_4",
+      "sourceAssets": {
+        "front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front/ZYGARDE_4.png",
+          "sha256": "750bf1aefbfde1e760c7cfe3ce58c10b3b4becae2437bc979018a84f487010c9",
+          "width": 192,
+          "height": 192
+        },
+        "back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back/ZYGARDE_4.png",
+          "sha256": "3802ebc02137280865c16d88285b6d297d6230b0eb7985768580de581bf79edc",
+          "width": 288,
+          "height": 288
+        },
+        "shiny_front": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Front shiny/ZYGARDE_4.png",
+          "sha256": "a9f1d5d702695ac3281bee525c4b28d057bc8d84522a3af1cc9d07b6c67a7399",
+          "width": 192,
+          "height": 192
+        },
+        "shiny_back": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Back shiny/ZYGARDE_4.png",
+          "sha256": "9c89a38e4883de7f20a6ced815bb5e0a3b62ec99c5119d55c485c300eb49f001",
+          "width": 288,
+          "height": 288
+        },
+        "pokemon_home": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons/ZYGARDE_4.png",
+          "sha256": "5a262ef36bb12f2bff4bc9b282d2b7170b4eeef82c29dc2976a76dbc6526631f",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        },
+        "pokemon_home_shiny": {
+          "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/ZYGARDE_4.png",
+          "sha256": "afc480520aec488b243604412f6556fada935b307230782c0950a6420a320e55",
+          "sourceWidth": 128,
+          "sourceHeight": 64,
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "selectedFrame": 0
+        }
+      },
+      "outputs": [
+        "assets/sprites/pokemon/front/zygarde-mega/sheet.png",
+        "assets/sprites/pokemon/front/zygarde-mega/animation.json",
+        "assets/sprites/pokemon/back/zygarde-mega/sheet.png",
+        "assets/sprites/pokemon/back/zygarde-mega/animation.json",
+        "assets/sprites/pokemon/shiny_front/zygarde-mega/sheet.png",
+        "assets/sprites/pokemon/shiny_front/zygarde-mega/animation.json",
+        "assets/sprites/pokemon/shiny_back/zygarde-mega/sheet.png",
+        "assets/sprites/pokemon/shiny_back/zygarde-mega/animation.json",
+        "assets/sprites/pokemon/pokemon_home/Zygarde-Mega.png",
+        "assets/sprites/pokemon/pokemon_home_shiny/Zygarde-Mega.png"
+      ]
+    }
+  ],
+  "shinyHomeBackfillCount": 34,
+  "shinyHomeBackfills": [
+    {
+      "catalogEntryId": "barbaracle-mega",
+      "showdownSpeciesName": "Barbaracle-Mega",
+      "sourcePokemonId": "BARBARACLE",
+      "sourceFormIndex": 1,
+      "sourceStem": "BARBARACLE_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/BARBARACLE_1.png",
+        "sha256": "a18f9cf75a82236475563003f44a53636e98b6699669c593eb8ca302deef70a4",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Barbaracle-Mega.png"
+    },
+    {
+      "catalogEntryId": "baxcalibur-mega",
+      "showdownSpeciesName": "Baxcalibur-Mega",
+      "sourcePokemonId": "BAXCALIBUR",
+      "sourceFormIndex": 1,
+      "sourceStem": "BAXCALIBUR_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/BAXCALIBUR_1.png",
+        "sha256": "0b9bcb6ca0518e4f8447576f6226a0c5cb94561e8732d4677eada6074292ac79",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Baxcalibur-Mega.png"
+    },
+    {
+      "catalogEntryId": "chandelure-mega",
+      "showdownSpeciesName": "Chandelure-Mega",
+      "sourcePokemonId": "CHANDELURE",
+      "sourceFormIndex": 1,
+      "sourceStem": "CHANDELURE_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/CHANDELURE_1.png",
+        "sha256": "a77bb97a702b388b90ddfc82dfcbe6ff72680d1d3df7cb79cca3b0c83898b516",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Chandelure-Mega.png"
+    },
+    {
+      "catalogEntryId": "chesnaught-mega",
+      "showdownSpeciesName": "Chesnaught-Mega",
+      "sourcePokemonId": "CHESNAUGHT",
+      "sourceFormIndex": 1,
+      "sourceStem": "CHESNAUGHT_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/CHESNAUGHT_1.png",
+        "sha256": "6cb2600ad9dace466cb67da07faee25438db528f22ae0b4d89f1e42c0dc6e35d",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Chesnaught-Mega.png"
+    },
+    {
+      "catalogEntryId": "chimecho-mega",
+      "showdownSpeciesName": "Chimecho-Mega",
+      "sourcePokemonId": "CHIMECHO",
+      "sourceFormIndex": 1,
+      "sourceStem": "CHIMECHO_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/CHIMECHO_1.png",
+        "sha256": "13dc9022080ce2b395891dfb0468d0126322a5b1a7dd3b0d886d033b7864d485",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Chimecho-Mega.png"
+    },
+    {
+      "catalogEntryId": "clefable-mega",
+      "showdownSpeciesName": "Clefable-Mega",
+      "sourcePokemonId": "CLEFABLE",
+      "sourceFormIndex": 1,
+      "sourceStem": "CLEFABLE_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/CLEFABLE_1.png",
+        "sha256": "e3458a646cee5156b9c494d420f3d5229226e44806569d5887ff6c18dc4e4c34",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Clefable-Mega.png"
+    },
+    {
+      "catalogEntryId": "crabominable-mega",
+      "showdownSpeciesName": "Crabominable-Mega",
+      "sourcePokemonId": "CRABOMINABLE",
+      "sourceFormIndex": 1,
+      "sourceStem": "CRABOMINABLE_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/CRABOMINABLE_1.png",
+        "sha256": "6ea142f6b2bdcef01ce57f21d53b0dc8889e0ae8dea6498533ea95df4c85bc3d",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Crabominable-Mega.png"
+    },
+    {
+      "catalogEntryId": "darkrai-mega",
+      "showdownSpeciesName": "Darkrai-Mega",
+      "sourcePokemonId": "DARKRAI",
+      "sourceFormIndex": 1,
+      "sourceStem": "DARKRAI_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/DARKRAI_1.png",
+        "sha256": "40e3585dca575fb57291436b77652882eabe9940121cefc1a6a78804f8f3eca2",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Darkrai-Mega.png"
+    },
+    {
+      "catalogEntryId": "delphox-mega",
+      "showdownSpeciesName": "Delphox-Mega",
+      "sourcePokemonId": "DELPHOX",
+      "sourceFormIndex": 1,
+      "sourceStem": "DELPHOX_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/DELPHOX_1.png",
+        "sha256": "3e20c346c5d279828141caf832c40da58f3fb69055e534a60eec2bb516374744",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Delphox-Mega.png"
+    },
+    {
+      "catalogEntryId": "dragalge-mega",
+      "showdownSpeciesName": "Dragalge-Mega",
+      "sourcePokemonId": "DRAGALGE",
+      "sourceFormIndex": 1,
+      "sourceStem": "DRAGALGE_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/DRAGALGE_1.png",
+        "sha256": "c68504b9a008627423e741569024e5716a1fc71a7e8bf03d22da158703246489",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Dragalge-Mega.png"
+    },
+    {
+      "catalogEntryId": "dragonite-mega",
+      "showdownSpeciesName": "Dragonite-Mega",
+      "sourcePokemonId": "DRAGONITE",
+      "sourceFormIndex": 1,
+      "sourceStem": "DRAGONITE_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/DRAGONITE_1.png",
+        "sha256": "6b94e9288158169c4c4085442f078aa8d81339056127c6a915d4839c7eec7a75",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Dragonite-Mega.png"
+    },
+    {
+      "catalogEntryId": "drampa-mega",
+      "showdownSpeciesName": "Drampa-Mega",
+      "sourcePokemonId": "DRAMPA",
+      "sourceFormIndex": 1,
+      "sourceStem": "DRAMPA_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/DRAMPA_1.png",
+        "sha256": "e4fce67216cf6570f61728bc9d470209b2918c869558e793746411206ade8656",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Drampa-Mega.png"
+    },
+    {
+      "catalogEntryId": "eelektross-mega",
+      "showdownSpeciesName": "Eelektross-Mega",
+      "sourcePokemonId": "EELEKTROSS",
+      "sourceFormIndex": 1,
+      "sourceStem": "EELEKTROSS_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/EELEKTROSS_1.png",
+        "sha256": "1544f571df0256e92459c7cc3cef6e8d4466d65c614472b6b00f0fef65997a41",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Eelektross-Mega.png"
+    },
+    {
+      "catalogEntryId": "emboar-mega",
+      "showdownSpeciesName": "Emboar-Mega",
+      "sourcePokemonId": "EMBOAR",
+      "sourceFormIndex": 1,
+      "sourceStem": "EMBOAR_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/EMBOAR_1.png",
+        "sha256": "c59348b64820841ff354ddf0dd8b4cd3c1f929e338e085357fe7e92e7af95217",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Emboar-Mega.png"
+    },
+    {
+      "catalogEntryId": "excadrill-mega",
+      "showdownSpeciesName": "Excadrill-Mega",
+      "sourcePokemonId": "EXCADRILL",
+      "sourceFormIndex": 1,
+      "sourceStem": "EXCADRILL_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/EXCADRILL_1.png",
+        "sha256": "8af609727970f23118b7220619d7c298bb621e324de36ca3c2e7b98b3c1d4742",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Excadrill-Mega.png"
+    },
+    {
+      "catalogEntryId": "falinks-mega",
+      "showdownSpeciesName": "Falinks-Mega",
+      "sourcePokemonId": "FALINKS",
+      "sourceFormIndex": 1,
+      "sourceStem": "FALINKS_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/FALINKS_1.png",
+        "sha256": "dbfc240fd5765fddd470ffe3646ddb57cdd916108beccc89564846b1f6d0685b",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Falinks-Mega.png"
+    },
+    {
+      "catalogEntryId": "feraligatr-mega",
+      "showdownSpeciesName": "Feraligatr-Mega",
+      "sourcePokemonId": "FERALIGATR",
+      "sourceFormIndex": 1,
+      "sourceStem": "FERALIGATR_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/FERALIGATR_1.png",
+        "sha256": "8f66cac1513a928467b8052cbc24f6e404ff890545f65cd28cc3104668f1e4d0",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Feraligatr-Mega.png"
+    },
+    {
+      "catalogEntryId": "froslass-mega",
+      "showdownSpeciesName": "Froslass-Mega",
+      "sourcePokemonId": "FROSLASS",
+      "sourceFormIndex": 1,
+      "sourceStem": "FROSLASS_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/FROSLASS_1.png",
+        "sha256": "aaba62a4404e593914a6a14ebfe84f85567faec7e25fbaaa0b41478c2f091d98",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Froslass-Mega.png"
+    },
+    {
+      "catalogEntryId": "glimmora-mega",
+      "showdownSpeciesName": "Glimmora-Mega",
+      "sourcePokemonId": "GLIMMORA",
+      "sourceFormIndex": 1,
+      "sourceStem": "GLIMMORA_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/GLIMMORA_1.png",
+        "sha256": "093f4ce62b151ec116f4b4b6c08bb2406078471721f4d5109ad046ed5113c715",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Glimmora-Mega.png"
+    },
+    {
+      "catalogEntryId": "golisopod-mega",
+      "showdownSpeciesName": "Golisopod-Mega",
+      "sourcePokemonId": "GOLISOPOD",
+      "sourceFormIndex": 1,
+      "sourceStem": "GOLISOPOD_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/GOLISOPOD_1.png",
+        "sha256": "82334cc7154b84a73df6ff67e5e91a70a148bb737abf91b7743ebe39f9e26388",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Golisopod-Mega.png"
+    },
+    {
+      "catalogEntryId": "golurk-mega",
+      "showdownSpeciesName": "Golurk-Mega",
+      "sourcePokemonId": "GOLURK",
+      "sourceFormIndex": 1,
+      "sourceStem": "GOLURK_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/GOLURK_1.png",
+        "sha256": "c6742dd8d2c1e6e78212aba0da1c2a58889cd4ecbe07b89e6f61ea8a84e6a6ed",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Golurk-Mega.png"
+    },
+    {
+      "catalogEntryId": "hawlucha-mega",
+      "showdownSpeciesName": "Hawlucha-Mega",
+      "sourcePokemonId": "HAWLUCHA",
+      "sourceFormIndex": 1,
+      "sourceStem": "HAWLUCHA_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/HAWLUCHA_1.png",
+        "sha256": "659a3f4159169eb40d901510e7f64c001eb52114c771680f37ec4c5808f6b42e",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Hawlucha-Mega.png"
+    },
+    {
+      "catalogEntryId": "heatran-mega",
+      "showdownSpeciesName": "Heatran-Mega",
+      "sourcePokemonId": "HEATRAN",
+      "sourceFormIndex": 1,
+      "sourceStem": "HEATRAN_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/HEATRAN_1.png",
+        "sha256": "dc03743198972ccc42959851fd76b2a883dced3af82b2dc16f65bf0ccfc3850f",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Heatran-Mega.png"
+    },
+    {
+      "catalogEntryId": "malamar-mega",
+      "showdownSpeciesName": "Malamar-Mega",
+      "sourcePokemonId": "MALAMAR",
+      "sourceFormIndex": 1,
+      "sourceStem": "MALAMAR_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/MALAMAR_1.png",
+        "sha256": "62b7008c2691bba5b0de2df09941f1f609b064a5d652a6de49f1bbfe14ec93f9",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Malamar-Mega.png"
+    },
+    {
+      "catalogEntryId": "meganium-mega",
+      "showdownSpeciesName": "Meganium-Mega",
+      "sourcePokemonId": "MEGANIUM",
+      "sourceFormIndex": 1,
+      "sourceStem": "MEGANIUM_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/MEGANIUM_1.png",
+        "sha256": "3a5b5108d016b7271c3259e46cfac459cff6586c603760c24a9a0fa4d957e83c",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Meganium-Mega.png"
+    },
+    {
+      "catalogEntryId": "pyroar-mega",
+      "showdownSpeciesName": "Pyroar-Mega",
+      "sourcePokemonId": "PYROAR",
+      "sourceFormIndex": 1,
+      "sourceStem": "PYROAR_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/PYROAR_1.png",
+        "sha256": "d5517ea59946a333d1ec3f202bbb5dae500332ed093d36371ef364c39c39507d",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Pyroar-Mega.png"
+    },
+    {
+      "catalogEntryId": "scolipede-mega",
+      "showdownSpeciesName": "Scolipede-Mega",
+      "sourcePokemonId": "SCOLIPEDE",
+      "sourceFormIndex": 1,
+      "sourceStem": "SCOLIPEDE_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/SCOLIPEDE_1.png",
+        "sha256": "c21f547efc0dfcb6c23b9728d224507f5fe7c89aa8cca9e846c123f59ad8e38f",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Scolipede-Mega.png"
+    },
+    {
+      "catalogEntryId": "scovillain-mega",
+      "showdownSpeciesName": "Scovillain-Mega",
+      "sourcePokemonId": "SCOVILLAIN",
+      "sourceFormIndex": 1,
+      "sourceStem": "SCOVILLAIN_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/SCOVILLAIN_1.png",
+        "sha256": "b7ae24887b4f2de3947e906f0584e7ac0606e2b0b2a7e869eeafbc143b5ff5aa",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Scovillain-Mega.png"
+    },
+    {
+      "catalogEntryId": "scrafty-mega",
+      "showdownSpeciesName": "Scrafty-Mega",
+      "sourcePokemonId": "SCRAFTY",
+      "sourceFormIndex": 1,
+      "sourceStem": "SCRAFTY_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/SCRAFTY_1.png",
+        "sha256": "98aff4d4bfc9ee482c8b7bf5136fc18cf9b2c7698877073186dfa23eb004c07c",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Scrafty-Mega.png"
+    },
+    {
+      "catalogEntryId": "skarmory-mega",
+      "showdownSpeciesName": "Skarmory-Mega",
+      "sourcePokemonId": "SKARMORY",
+      "sourceFormIndex": 1,
+      "sourceStem": "SKARMORY_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/SKARMORY_1.png",
+        "sha256": "65effe98152ceaaec3b8b6d22f47ff79209273e652c049540fef124bbec99ae2",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Skarmory-Mega.png"
+    },
+    {
+      "catalogEntryId": "staraptor-mega",
+      "showdownSpeciesName": "Staraptor-Mega",
+      "sourcePokemonId": "STARAPTOR",
+      "sourceFormIndex": 1,
+      "sourceStem": "STARAPTOR_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/STARAPTOR_1.png",
+        "sha256": "4bb3fa12ba8d488f23b065481aafd4fc5d3ab79c1262f97b75b2bef072f545ba",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Staraptor-Mega.png"
+    },
+    {
+      "catalogEntryId": "starmie-mega",
+      "showdownSpeciesName": "Starmie-Mega",
+      "sourcePokemonId": "STARMIE",
+      "sourceFormIndex": 1,
+      "sourceStem": "STARMIE_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/STARMIE_1.png",
+        "sha256": "2337800f325f4c52e823d8d5105d3894098705082a2077e15ae2c3515c925c53",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Starmie-Mega.png"
+    },
+    {
+      "catalogEntryId": "victreebel-mega",
+      "showdownSpeciesName": "Victreebel-Mega",
+      "sourcePokemonId": "VICTREEBEL",
+      "sourceFormIndex": 1,
+      "sourceStem": "VICTREEBEL_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/VICTREEBEL_1.png",
+        "sha256": "527df9ef24dfbb7884e0c86877b8c55cbd42c00495b43bfa1d415d6a74621204",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Victreebel-Mega.png"
+    },
+    {
+      "catalogEntryId": "zeraora-mega",
+      "showdownSpeciesName": "Zeraora-Mega",
+      "sourcePokemonId": "ZERAORA",
+      "sourceFormIndex": 1,
+      "sourceStem": "ZERAORA_1",
+      "sourceAsset": {
+        "path": "gen9_asset_pack/Graphics/Pokemon/Icons shiny/ZERAORA_1.png",
+        "sha256": "55130160d39affc6d0a3d13b15f752b0c959e58a9ccdbdd6a5d7e42b1349c986",
+        "sourceWidth": 128,
+        "sourceHeight": 64,
+        "frameWidth": 64,
+        "frameHeight": 64,
+        "selectedFrame": 0
+      },
+      "output": "assets/sprites/pokemon/pokemon_home_shiny/Zeraora-Mega.png"
+    }
+  ],
+  "importManifestRevision": "sha256:bcfeef769bfe6fdfb6ad5823a4245f323352446bb4d9bb16c0182e1439f26f16"
+}

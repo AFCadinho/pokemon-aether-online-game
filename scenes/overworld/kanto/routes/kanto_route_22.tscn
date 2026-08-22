@@ -287,6 +287,71 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_er5h0")
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3uvc6"]
+texture = ExtResource("6_3bfoe")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_er5h0"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_3uvc6")
+
 [node name="KantoRoute22" type="Node2D" unique_id=30173526]
 script = ExtResource("2_metadata")
 map_id = "kanto_route_22"
@@ -494,5 +559,18 @@ position = Vector2(400, 240)
 
 [node name="NightLight2" parent="Nightlights" unique_id=158238422 instance=ExtResource("18_mfvq1")]
 position = Vector2(304, 240)
+
+[node name="Stairs" type="Node2D" parent="." unique_id=611457401]
+visible = false
+
+[node name="StairUpLeft" type="TileMapLayer" parent="Stairs" unique_id=2071791724]
+z_index = 100
+tile_map_data = PackedByteArray("AAAmAA0AAAABAAEAAAAmAA4AAAABAAEAAAAmAA8AAAABAAEAAAAYACgAAAABAAEAAAAYACcAAAABAAEAAAAYACkAAAABAAEAAAARACYAAAABAAEAAAARACcAAAABAAEAAAARACgAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_er5h0")
+
+[node name="StairUpRight" type="TileMapLayer" parent="Stairs" unique_id=1910762911]
+z_index = 100
+tile_map_data = PackedByteArray("AAAeABsAAAABAAEAAAAeABwAAAABAAEAAAAeABoAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_er5h0")
 
 [connection signal="body_entered" from="Exits/ToViridianCity" to="Exits/ToViridianCity" method="_on_body_entered"]
