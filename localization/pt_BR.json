@@ -2410,6 +2410,7 @@
   "ui.world.reward.fishing_treasure": "Tesouro de pesca: você encontrou {item}!",
   "ui.world.reward.wild_money": "Você derrotou {pokemon} e ganhou ${money}.",
   "ui.world.reward.trainer_money": "Você derrotou {trainer} e ganhou ${money}.",
+  "ui.world.reward.story_item": "Você recebeu {quantity} × {item}!",
   "ui.world.reward.exp": "{pokemon} ganhou {experience} EXP.",
   "ui.world.reward.evs": "{pokemon} armazenou {evs} EVs.",
   "ui.world.reward.level_up": "{pokemon} subiu para o Nv. {level}!",

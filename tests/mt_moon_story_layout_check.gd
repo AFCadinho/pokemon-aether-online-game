@@ -18,6 +18,7 @@ func _init() -> void:
 	)
 
 	_check(first_floor.contains('npc_id = "mt_moon_warning_hiker"'), "1F places the warning Hiker")
+	_check(first_floor.contains('portrait_id = "showdown_hiker_gen6"'), "warning Hiker uses the Showdown Hiker portrait")
 	_check(first_floor.contains('interaction_id = "kanto_mt_moon_entrance_warning"'), "1F binds the entrance warning")
 	_check(miguel_script.contains('BATTLE_STEP_ID := "defeat_miguel"'), "Miguel checks the story battle step")
 	_check(miguel_script.contains('BLOCKED_DIALOGUE_ID := "kanto_mt_moon_miguel_blocked"'), "Miguel has blocked dialogue")

@@ -2941,6 +2941,7 @@ func _award_trainer_battle_rewards(
 		_notify_reward_experience_gains(reward)
 		_notify_reward_level_ups(reward)
 		_notify_gym_badge_award(reward_result.get("gymBadgeAward", {}))
+		_notify_story_reward_items(reward_result.get("storyEffects", []))
 		var trainer_progress := _dictionary_from_value(reward_result.get("trainerProgress", {}))
 		if not trainer_id.is_empty() and not trainer_progress.is_empty():
 			get_tree().call_group(
@@ -3099,6 +3100,39 @@ func _notify_trainer_battle_rewards_awarded(trainer_name: String, money_awarded:
 	})
 	get_tree().call_group("ui_overlay", "refresh_money_display")
 	get_tree().call_group("ui_overlay", "add_system_message", message)
+
+func _notify_story_reward_items(value: Variant) -> void:
+	for message: String in _story_reward_item_messages(value):
+		get_tree().call_group("ui_overlay", "add_system_message", message)
+
+func _story_reward_item_messages(value: Variant) -> Array[String]:
+	var messages: Array[String] = []
+	if value is not Array:
+		return messages
+	for effect_value: Variant in value as Array:
+		if effect_value is not Dictionary:
+			continue
+		var effect := effect_value as Dictionary
+		if bool(effect.get("alreadyGranted", false)):
+			continue
+		var grants_value: Variant = effect.get("grants", [])
+		if grants_value is not Array:
+			continue
+		for grant_value: Variant in grants_value as Array:
+			if grant_value is not Dictionary:
+				continue
+			var grant := grant_value as Dictionary
+			var item_id := str(grant.get("itemId", "")).strip_edges().to_lower()
+			var quantity := maxi(int(grant.get("quantity", 0)), 0)
+			if item_id.is_empty() or quantity <= 0:
+				continue
+			messages.append(
+				LocalizationManager.text("ui.world.reward.story_item", {
+					"item": ItemLocalization.display_name(item_id),
+					"quantity": quantity,
+				})
+			)
+	return messages
 
 func notify_progression_reward(reward: Dictionary) -> void:
 	_notify_reward_level_ups(reward)

@@ -15,9 +15,9 @@
 [ext_resource type="SpriteFrames" uid="uid://57e7bp514fh2" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="13_bug_catcher"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="14_item"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/smashable_rock.tscn" id="15_rock"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="16_dialogue_npc"]
-[ext_resource type="Script" path="res://scripts/world/story/story_trigger.gd" id="17_story_trigger"]
-[ext_resource type="Script" path="res://scripts/world/story/story_hook.gd" id="18_story_hook"]
+[ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="16_dialogue_npc"]
+[ext_resource type="Script" uid="uid://c0rvsvb5ckinb" path="res://scripts/world/story/story_trigger.gd" id="17_story_trigger"]
+[ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="18_story_hook"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_3_exit"]
 size = Vector2(64, 32)
@@ -360,10 +360,11 @@ z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1698532802]
 
-[node name="WarningHiker" parent="Entities/NPCs" instance=ExtResource("16_dialogue_npc")]
+[node name="WarningHiker" parent="Entities/NPCs" unique_id=2102304496 instance=ExtResource("16_dialogue_npc")]
 position = Vector2(848, 2384)
 npc_id = "mt_moon_warning_hiker"
 display_name = "Hiker"
+portrait_id = "showdown_hiker_gen6"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("9_hiker")
 
@@ -435,21 +436,6 @@ npc_sprite_frames = ExtResource("13_bug_catcher")
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=1758895057]
 
-[node name="StoryTriggers" type="Node2D" parent="."]
-
-[node name="EntranceWarning" type="Area2D" parent="StoryTriggers"]
-position = Vector2(944, 2384)
-script = ExtResource("17_story_trigger")
-story_host_path = NodePath("../../Entities/NPCs/WarningHiker")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StoryTriggers/EntranceWarning"]
-shape = SubResource("RectangleShape2D_entrance_warning")
-
-[node name="StoryHook" type="Node" parent="StoryTriggers/EntranceWarning"]
-script = ExtResource("18_story_hook")
-interaction_id = "kanto_mt_moon_entrance_warning"
-entity_id = "mt_moon_warning_hiker"
-
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=306408256]
 
 [node name="TMBulletSeed" parent="Entities/Interactables" unique_id=1438863947 instance=ExtResource("14_item")]
@@ -490,6 +476,21 @@ position = Vector2(720, 688)
 
 [node name="RockSmash03" parent="Entities/Interactables" unique_id=938321987 instance=ExtResource("15_rock")]
 position = Vector2(2416, 1104)
+
+[node name="StoryTriggers" type="Node2D" parent="." unique_id=1676346445]
+
+[node name="EntranceWarning" type="Area2D" parent="StoryTriggers" unique_id=1381978694]
+position = Vector2(944, 2384)
+script = ExtResource("17_story_trigger")
+story_host_path = NodePath("../../Entities/NPCs/WarningHiker")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StoryTriggers/EntranceWarning" unique_id=1313188715]
+shape = SubResource("RectangleShape2D_entrance_warning")
+
+[node name="StoryHook" type="Node" parent="StoryTriggers/EntranceWarning" unique_id=668051771]
+script = ExtResource("18_story_hook")
+interaction_id = "kanto_mt_moon_entrance_warning"
+entity_id = "mt_moon_warning_hiker"
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=1223318942]
 visible = false

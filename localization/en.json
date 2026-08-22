@@ -2410,6 +2410,7 @@
   "ui.world.reward.fishing_treasure": "Fishing treasure: You found a {item}!",
   "ui.world.reward.wild_money": "You fainted {pokemon} and earned ${money}.",
   "ui.world.reward.trainer_money": "You defeated {trainer} and earned ${money}.",
+  "ui.world.reward.story_item": "You received {quantity} × {item}!",
   "ui.world.reward.exp": "{pokemon} gained {experience} EXP.",
   "ui.world.reward.evs": "{pokemon} stored {evs} EVs.",
   "ui.world.reward.level_up": "{pokemon} grew to Lv. {level}!",
