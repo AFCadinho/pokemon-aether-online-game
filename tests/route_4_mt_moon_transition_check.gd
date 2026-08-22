@@ -19,6 +19,7 @@ func _init() -> void:
 	_check(route_source.contains('[node name="FromMtMoon" type="Marker2D" parent="Spawns"'), "Route 4 has a Mt. Moon arrival")
 	_check(route_source.contains('transition_id = "kanto_route_4__to_mt_moon"'), "Route 4 returns to Mt. Moon")
 	_check(route_source.contains('target_spawn_name = "FromRoute4"'), "Route 4 targets the cave return spawn")
+	_check(route_source.contains('transition_facing_direction = "down"'), "Route 4 entry faces the player into Mt. Moon")
 	_check(route_source.contains('[connection signal="body_entered" from="Exits/ToMtMoon"'), "Route 4 listens for the cave return")
 	_check(route_script.contains('const MAP_SIZE := Vector2i(24, 18)'), "Route 4 bounds match its placeholder visual")
 	_check(route_script.contains('if x < ROAD_MIN_X or x > ROAD_MAX_X:'), "Route 4 keeps the entrance road open")
