@@ -20,7 +20,7 @@ func _init() -> void:
 		"the loading content has a dedicated short fade-out"
 	)
 	_check(
-		world_source.contains("const MAP_TRANSITION_COVER_ALPHA := 0.88"),
+		world_source.contains("const MAP_TRANSITION_COVER_ALPHA := 0.80"),
 		"the loading screen preserves a faint view of the previous map"
 	)
 	_check(
