@@ -65,12 +65,22 @@ func _run() -> void:
 	_expect("DIALOGUE_STAGE_PLAYER_QUESTION" in controller_source, "the player answers during the rescue dialogue")
 	_expect("DIALOGUE_STAGE_PLAYER_DEFENSE := 7" in controller_source, "the player visibly responds between the rescuer's warning and lesson")
 	_expect("DIALOGUE_STAGE_PLAYER_SURPRISE" in controller_source, "the player reacts after the rescuer disappears")
+	_expect(
+		'const PLAYER_DIALOGUE_STAGES: Array[int] = [\n\tDIALOGUE_STAGE_PLAYER_QUESTION,\n\tDIALOGUE_STAGE_PLAYER_DEFENSE,\n\tDIALOGUE_STAGE_PLAYER_PROMISE,\n\tDIALOGUE_STAGE_PLAYER_SURPRISE,\n]'
+		in controller_source,
+		"every player line shares one dialogue portrait policy"
+	)
+	_expect(
+		"current_stage in ROCKET_DIALOGUE_STAGES or current_stage in PLAYER_DIALOGUE_STAGES" in controller_source,
+		"every player dialogue stage enables its mugshot"
+	)
 	_expect("await _play_counterattack()" in controller_source and controller_source.find("await _play_counterattack()") < controller_source.find("await _flee_rockets()"), "the rescuer attacks before Team Rocket flees")
 	_expect("_play_counterattack_sound(move)\n\tawait attack.play" in controller_source, "the future partner's move sound starts with its attack animation")
 	_expect("audio_player.bus = SettingsManager.SFX_BUS" in controller_source, "the counterattack sound respects the SFX volume setting")
 	_expect("await _wait_for_interact_release()" in controller_source, "dialogue input cannot skip the next story action")
 	_expect('ROCKET_PORTRAIT_ID := "showdown_rainbowrocketgrunt"' in controller_source, "Team Rocket dialogue uses its Showdown portrait")
 	_expect("TrainerHeadPortrait.new()" in controller_source and "PlayerSave.to_appearance_state()" in controller_source, "player dialogue renders the current overworld appearance")
+	_expect("if stage in PLAYER_DIALOGUE_STAGES:\n\t\treturn await _player_mugshot()" in controller_source, "every player dialogue stage loads the current player mugshot")
 	_expect("_player_portrait_renderer.render_scale = 1.25" in controller_source, "player dialogue shows a less tightly zoomed portrait")
 	_expect("_player_portrait_renderer.head_only = false" in controller_source, "player dialogue includes the upper body and current clothing")
 	_expect("dialogue_box.call(\"start_dialogue\", lines, resolved_speaker_name, portrait, show_portrait)" in controller_source, "each cinematic speaker controls its own portrait")

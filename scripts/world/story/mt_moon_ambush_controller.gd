@@ -33,6 +33,18 @@ const DIALOGUE_STAGE_PLAYER_DEFENSE := 7
 const DIALOGUE_STAGE_PLAYER_PROMISE := 9
 const DIALOGUE_STAGE_FAREWELL := 10
 const DIALOGUE_STAGE_PLAYER_SURPRISE := 11
+const ROCKET_DIALOGUE_STAGES: Array[int] = [
+	DIALOGUE_STAGE_AMBUSH,
+	DIALOGUE_STAGE_ROCKET_REVEAL_CHALLENGE,
+	DIALOGUE_STAGE_ROCKET_BATTLE_CHALLENGE,
+	DIALOGUE_STAGE_ROCKET_FLEE,
+]
+const PLAYER_DIALOGUE_STAGES: Array[int] = [
+	DIALOGUE_STAGE_PLAYER_QUESTION,
+	DIALOGUE_STAGE_PLAYER_DEFENSE,
+	DIALOGUE_STAGE_PLAYER_PROMISE,
+	DIALOGUE_STAGE_PLAYER_SURPRISE,
+]
 
 @export var miguel_path: NodePath
 @export var helix_fossil_path: NodePath
@@ -89,17 +101,10 @@ func show_dialogue(lines: Array[String], speaker_name := "") -> bool:
 	if dialogue_box == null or not dialogue_box.has_method("start_dialogue"):
 		return false
 	var resolved_speaker_name := speaker_name
-	if current_stage in [DIALOGUE_STAGE_PLAYER_QUESTION, DIALOGUE_STAGE_PLAYER_DEFENSE, DIALOGUE_STAGE_PLAYER_PROMISE, DIALOGUE_STAGE_PLAYER_SURPRISE]:
+	if current_stage in PLAYER_DIALOGUE_STAGES:
 		resolved_speaker_name = _player_speaker_name()
 	var portrait := await _dialogue_portrait(current_stage)
-	var show_portrait := current_stage in [
-		DIALOGUE_STAGE_AMBUSH,
-		DIALOGUE_STAGE_ROCKET_REVEAL_CHALLENGE,
-		DIALOGUE_STAGE_ROCKET_BATTLE_CHALLENGE,
-		DIALOGUE_STAGE_ROCKET_FLEE,
-		DIALOGUE_STAGE_PLAYER_QUESTION,
-		DIALOGUE_STAGE_PLAYER_PROMISE,
-	]
+	var show_portrait := current_stage in ROCKET_DIALOGUE_STAGES or current_stage in PLAYER_DIALOGUE_STAGES
 	dialogue_box.call("start_dialogue", lines, resolved_speaker_name, portrait, show_portrait)
 	await dialogue_box.dialogue_finished
 	await _wait_for_interact_release()
@@ -533,14 +538,9 @@ func _player_speaker_name() -> String:
 
 
 func _dialogue_portrait(stage: int) -> Texture2D:
-	if stage in [
-		DIALOGUE_STAGE_AMBUSH,
-		DIALOGUE_STAGE_ROCKET_REVEAL_CHALLENGE,
-		DIALOGUE_STAGE_ROCKET_BATTLE_CHALLENGE,
-		DIALOGUE_STAGE_ROCKET_FLEE,
-	]:
+	if stage in ROCKET_DIALOGUE_STAGES:
 		return TrainerPortraitCatalog.get_texture(ROCKET_PORTRAIT_ID)
-	if stage in [DIALOGUE_STAGE_PLAYER_QUESTION, DIALOGUE_STAGE_PLAYER_DEFENSE, DIALOGUE_STAGE_PLAYER_PROMISE, DIALOGUE_STAGE_PLAYER_SURPRISE]:
+	if stage in PLAYER_DIALOGUE_STAGES:
 		return await _player_mugshot()
 	return null
 
