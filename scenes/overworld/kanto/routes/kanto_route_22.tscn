@@ -449,13 +449,13 @@ movement_speed_pixels = 52.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=247094210]
 
-[node name="GreatBall" parent="Entities/Interactables" instance=ExtResource("19_overworld_item")]
-position = Vector2(880, 800)
+[node name="GreatBall" parent="Entities/Interactables" unique_id=950177079 instance=ExtResource("19_overworld_item")]
+position = Vector2(240, 848)
 pickup_id = "kanto_route_22_great_ball"
 item_id = "great-ball"
 
-[node name="SuperPotion" parent="Entities/Interactables" instance=ExtResource("19_overworld_item")]
-position = Vector2(1792, 992)
+[node name="SuperPotion" parent="Entities/Interactables" unique_id=450493982 instance=ExtResource("19_overworld_item")]
+position = Vector2(1104, 880)
 pickup_id = "kanto_route_22_super_potion"
 item_id = "super-potion"
 

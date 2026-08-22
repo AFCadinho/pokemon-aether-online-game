@@ -411,13 +411,13 @@ npc_sprite_frames = ExtResource("11_firebreather")
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=120000017]
 
-[node name="Awakening" parent="Entities/Interactables" instance=ExtResource("16_overworld_item")]
-position = Vector2(1152, 816)
+[node name="Awakening" parent="Entities/Interactables" unique_id=2131154250 instance=ExtResource("16_overworld_item")]
+position = Vector2(1744, 400)
 pickup_id = "kanto_route_3_awakening"
 item_id = "awakening"
 
-[node name="OranBerry" parent="Entities/Interactables" instance=ExtResource("16_overworld_item")]
-position = Vector2(2240, 816)
+[node name="OranBerry" parent="Entities/Interactables" unique_id=1612219391 instance=ExtResource("16_overworld_item")]
+position = Vector2(1520, 1136)
 pickup_id = "kanto_route_3_oran_berry"
 item_id = "oran-berry"
 
