@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Entering Mt. Moon from Route 4 now leaves your character facing into the cave.
+
 - Both upper Team Rocket Grunts now face you correctly during the Mt. Moon ambush, regardless of which fossil you choose.
 
 - Lass Iris in Mt. Moon can now spot you from five tiles away.

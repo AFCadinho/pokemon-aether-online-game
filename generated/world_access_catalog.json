@@ -167,7 +167,7 @@
 					"spawnMarker": "FromRoute4",
 					"tile": {
 						"x": 16,
-						"y": 64
+						"y": 62
 					}
 				}
 			}
@@ -2090,7 +2090,7 @@
 		},
 		"kanto_route_4__to_mt_moon": {
 			"destination": {
-				"facingDirection": "up",
+				"facingDirection": "down",
 				"mapId": "kanto_mt_moon_b1f",
 				"mapSceneAliases": [
 					"uid://dmu7iwolokkl7"
@@ -2098,7 +2098,7 @@
 				"mapScenePath": "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn",
 				"position": {
 					"x": 512.0,
-					"y": 2048.0
+					"y": 1984.0
 				},
 				"spawnMarker": "FromRoute4"
 			},
