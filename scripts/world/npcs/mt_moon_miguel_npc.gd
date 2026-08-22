@@ -7,6 +7,7 @@ const QUEST_ID := "travel_through_mt_moon"
 const BATTLE_STEP_ID := "defeat_miguel"
 const FINAL_STEP_ID := "cross_mt_moon"
 const BLOCKED_DIALOGUE_ID := "kanto_mt_moon_miguel_blocked"
+const PANIC_DIALOGUE_ID := "kanto_mt_moon_miguel_panic"
 const AFTER_AMBUSH_DIALOGUE_ID := "kanto_mt_moon_miguel_after_ambush"
 const POST_AMBUSH_OFFSET := Vector2(0, 192)
 const BLOCKING_TILE_OFFSETS: Array[Vector2i] = [
@@ -20,6 +21,7 @@ const BLOCKING_TILE_OFFSETS: Array[Vector2i] = [
 
 var _blocking_position := Vector2.ZERO
 var _gate_feedback_in_flight := false
+var _has_fled_ambush := false
 
 
 func _ready() -> void:
@@ -115,15 +117,29 @@ func _show_after_ambush_dialogue() -> void:
 
 
 func flee_after_ambush() -> void:
+	await _show_panic_dialogue()
+	_has_fled_ambush = true
 	_set_idle_frame(Vector2.DOWN)
-	var sprite := get_node_or_null("Look/AnimatedSprite2D") as AnimatedSprite2D
 	if sprite != null and sprite.sprite_frames != null and sprite.sprite_frames.has_animation("walk_down"):
 		sprite.play("walk_down")
 	var tween := create_tween().set_parallel(true)
 	tween.tween_property(self, "global_position", global_position + POST_AMBUSH_OFFSET, 0.8).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	tween.tween_property(self, "modulate:a", 0.0, 0.8)
 	await tween.finished
+	_set_idle_frame(Vector2.DOWN)
 	visible = false
+
+
+func _show_panic_dialogue() -> void:
+	var result: Dictionary = await NpcDialogueService.resolve_dialogue(
+		PANIC_DIALOGUE_ID,
+		["Oh no, it's Team Rocket! I'm out of here!"],
+		"MtMoonMiguelNPC"
+	)
+	await show_dialogue(
+		_string_array(result.get("lines", [])),
+		str(result.get("speakerName", display_name)).strip_edges()
+	)
 
 
 func _send_player_back(player: Node2D) -> void:
@@ -147,12 +163,20 @@ func _on_story_changed(_revision: int) -> void:
 
 
 func _apply_story_position() -> void:
+	var final_step_completed := StoryService.is_requirement_met(QUEST_ID, FINAL_STEP_ID, "completed")
+	var final_step_active := StoryService.is_requirement_met(QUEST_ID, FINAL_STEP_ID, "active")
+	if _has_fled_ambush and final_step_active:
+		visible = false
+		return
+	if not final_step_active and not final_step_completed:
+		_has_fled_ambush = false
 	if StoryService.is_requirement_met(QUEST_ID, BATTLE_STEP_ID, "completed"):
 		var marker := get_node_or_null(cleared_position_marker) as Marker2D
 		if marker != null:
-			global_position = marker.global_position + (POST_AMBUSH_OFFSET if StoryService.is_requirement_met(QUEST_ID, FINAL_STEP_ID, "completed") else Vector2.ZERO)
+			global_position = marker.global_position + (POST_AMBUSH_OFFSET if final_step_completed else Vector2.ZERO)
 		visible = true
 		modulate.a = 1.0
+		_set_idle_frame(Vector2.DOWN)
 	else:
 		position = _blocking_position
 		_recover_players_to_blocked_side.call_deferred()

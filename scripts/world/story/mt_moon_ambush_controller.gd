@@ -427,15 +427,15 @@ func _player_mugshot() -> Texture2D:
 func _wait_for_interact_release() -> void:
 	while Input.is_action_pressed("interact") and is_inside_tree():
 		await get_tree().process_frame
+	# Do not let the input frame that closed this dialogue also advance the next action.
+	if is_inside_tree():
+		await get_tree().process_frame
 
 
 func _flee_miguel() -> void:
 	var miguel := get_node_or_null(miguel_path)
 	if miguel != null and miguel.has_method("flee_after_ambush"):
 		await miguel.call("flee_after_ambush")
-	# Do not let the input frame that closed this dialogue also advance the next action.
-	if is_inside_tree():
-		await get_tree().process_frame
 
 
 func _face_rockets_toward_player() -> void:
