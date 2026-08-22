@@ -181,6 +181,20 @@ func save_current_player_state() -> void:
 	_flush_playtime_if_needed.call_deferred(true)
 	_publish_world_presence.call_deferred(true)
 
+
+func sync_player_position_for_world_action() -> Dictionary:
+	if not AuthService.is_authenticated() or player == null:
+		return {"success": false, "error": "The player position is not ready."}
+	if _is_player_position_save_blocked_by_teleport():
+		return {"success": false, "error": _get_player_position_save_block_reason(false)}
+	var deadline_msec := Time.get_ticks_msec() + 3000
+	while is_saving_player_position:
+		if Time.get_ticks_msec() >= deadline_msec:
+			return {"success": false, "error": "The player position is still syncing."}
+		await get_tree().process_frame
+	var signature := _get_current_player_position_signature(true)
+	return await _save_current_player_position(signature, "", true)
+
 func prepare_for_gameplay_reset() -> Dictionary:
 	if is_in_battle:
 		return {"success": false, "error": "Finish the active battle before resetting gameplay."}

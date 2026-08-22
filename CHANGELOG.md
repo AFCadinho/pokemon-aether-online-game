@@ -5,6 +5,8 @@
 **Added**
 
 - If the game closes unexpectedly, PokeAether now prepares a privacy-safe crash report at the next start. The report can be viewed and copied directly from the notification or the new Support page in Settings.
+- Added the first Rock Smash lesson in Pewter City. Karate Master Kenji gives the HM, and his four daily training rocks award Rock Smash XP, valuable items, and later complete fossils.
+- The Skills window now shows Rock Smash levels, fossil odds, unlocks, and which fixed rocks are still available today.
 
 **Fixed**
 
