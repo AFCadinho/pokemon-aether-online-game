@@ -53,8 +53,9 @@ func _run() -> void:
 	_check(
 		'const QUEST_ID := "learn_rock_smash"' in mentor
 		and 'const OFFER_PREREQUISITE_QUEST_ID := "learn_at_trainer_school"' in mentor
+		and "await PlayerGameStateService.refresh_story()" in mentor
 		and "claim_npc_item_reward" in mentor,
-		"Kenji offers the pre-Brock lesson and claims its rewards authoritatively"
+		"Kenji refreshes the pre-Brock lesson offer and claims its rewards authoritatively"
 	)
 	_check(
 		'portrait_id = "showdown_blackbelt_gen6"' in pewter,
