@@ -716,6 +716,16 @@
 			],
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_2.tscn",
 			"spawnPoints": {
+				"from_house": {
+					"facingDirection": "down",
+					"label": "House",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromHouse",
+					"tile": {
+						"x": 44,
+						"y": 17
+					}
+				},
 				"from_route_2_gate_north": {
 					"facingDirection": "down",
 					"label": "Route 2 Gate North",
@@ -840,6 +850,28 @@
 					"tile": {
 						"x": 10,
 						"y": 18
+					}
+				}
+			}
+		},
+		"kanto_route_2_house": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Route 2 House",
+			"locationGroupId": "kanto_route_2",
+			"locationGroupLabel": "Route 2",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/routes/route_2_house.tscn",
+			"spawnPoints": {
+				"from_route_2": {
+					"facingDirection": "down",
+					"label": "Route 2",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute2",
+					"tile": {
+						"x": 9,
+						"y": 14
 					}
 				}
 			}
@@ -1890,6 +1922,21 @@
 			"destinationAreaId": "kanto_viridian_city",
 			"sourceMapId": "kanto_route_22"
 		},
+		"kanto_route_2__to_house": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_route_2_house",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/route_2_house.tscn",
+				"position": {
+					"x": 304.0,
+					"y": 464.0
+				},
+				"spawnMarker": "FromRoute2"
+			},
+			"destinationAreaId": "kanto_route_2_house",
+			"sourceMapId": "kanto_route_2"
+		},
 		"kanto_route_2__to_pewter_city": {
 			"destination": {
 				"mapId": "kanto_pewter_city",
@@ -2009,6 +2056,23 @@
 			},
 			"destinationAreaId": "kanto_route_2",
 			"sourceMapId": "kanto_route_2_gate"
+		},
+		"kanto_route_2_house__to_route_2": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_2",
+				"mapSceneAliases": [
+					"uid://cnbfksossjfg7"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_2.tscn",
+				"position": {
+					"x": 1424.0,
+					"y": 560.0
+				},
+				"spawnMarker": "FromHouse"
+			},
+			"destinationAreaId": "kanto_route_2",
+			"sourceMapId": "kanto_route_2_house"
 		},
 		"kanto_route_2_viridian_forest_north_gate__to_north": {
 			"destination": {
