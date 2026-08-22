@@ -60,6 +60,11 @@ func _run() -> void:
 		'portrait_id = "showdown_blackbelt_gen6"' in pewter,
 		"Kenji uses the Showdown Black Belt mugshot"
 	)
+	_check(
+		'path="res://assets/npcs/classes/black_belt_frames.tres" id="31_black_belt"' in pewter
+		and 'uid="uid://x75gwtrd76d3" path="res://assets/npcs/classes/black_belt_frames.tres"' not in pewter,
+		"Kenji's overworld frames use their stable resource path without a stale UID"
+	)
 
 	var rock_ids: Array[String] = [
 		"kanto_pewter_city_training_rock_north",

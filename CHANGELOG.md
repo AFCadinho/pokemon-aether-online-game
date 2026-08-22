@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pewter City now loads Karate Master Kenji's overworld sprite without an invalid resource warning.
+
 - Regional Aethernet travel now costs ₽200, or ₽100 with an active Aether Blessing. Aether Anchors remain free.
 
 - The Town Map location panel now uses its available width for clearer descriptions, interiors, and route links.
