@@ -5,6 +5,7 @@
 [ext_resource type="TileSet" uid="uid://p6ylhm8hwe2y" path="res://generated/tiled_visuals/open_field/open_field.visual.tileset.tres" id="3_collision"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="4_exit"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="5_hint"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="6_overworld_item"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mt_moon_exit"]
 size = Vector2(128, 32)
@@ -84,6 +85,11 @@ z_index = 5
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=208040011]
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=208040012]
+
+[node name="TM05Roar" parent="Entities/Interactables" instance=ExtResource("6_overworld_item")]
+position = Vector2(576, 160)
+pickup_id = "kanto_route_4_tm_roar"
+item_id = "tm-roar"
 
 [connection signal="body_entered" from="Exits/ToMtMoon" to="Exits/ToMtMoon" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToCerulean" to="Exits/ToCerulean" method="_on_body_entered"]

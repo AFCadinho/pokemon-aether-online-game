@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Early Kanto maps now include their visible FireRed and LeafGreen field items through Route 4.
+
 - Cerulean City now plays its own remastered city theme.
 
 - You can now travel between Route 4 and the first playable version of Cerulean City.
