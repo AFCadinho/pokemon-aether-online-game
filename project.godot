@@ -87,22 +87,16 @@ TradeRealtimeService="*res://scripts/services/trade_realtime_service.gd"
 AetherExchangeService="*res://scripts/services/aether_exchange_service.gd"
 TradeWorkspace="*res://scripts/ui/trade_workspace.gd"
 
+[debug]
+
+file_logging/enable_file_logging=true
+settings/gdscript/always_track_call_stacks=true
+
 [display]
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/stretch/mode="canvas_items"
-
-[debug]
-
-file_logging/enable_file_logging=true
-file_logging/log_path="user://logs/godot.log"
-file_logging/max_log_files=5
-settings/gdscript/always_track_call_stacks=true
-
-[internationalization]
-
-locale/fallback="en"
 
 [input]
 
