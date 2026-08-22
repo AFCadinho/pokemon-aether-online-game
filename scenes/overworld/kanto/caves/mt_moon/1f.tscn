@@ -26,7 +26,7 @@ size = Vector2(64, 32)
 size = Vector2(32, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_entrance_warning"]
-size = Vector2(128, 32)
+size = Vector2(256, 32)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_idblv"]
 texture = ExtResource("5_8jk2d")
@@ -361,7 +361,7 @@ z_index = 5
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1698532802]
 
 [node name="WarningHiker" parent="Entities/NPCs" unique_id=2102304496 instance=ExtResource("16_dialogue_npc")]
-position = Vector2(848, 2384)
+position = Vector2(848, 2416)
 npc_id = "mt_moon_warning_hiker"
 display_name = "Hiker"
 facing_direction = Vector2(1, 0)
@@ -402,7 +402,7 @@ npc_id = "kanto_mt_moon_1f_lass_iris"
 npc_definition_id = "trainer_class_lass"
 display_name = "Lass Iris"
 npc_sprite_frames = ExtResource("11_lass")
-movement_tiles = 4
+movement_tiles = 5
 
 [node name="SuperNerdJovan" parent="Entities/NPCs" unique_id=1652232414 instance=ExtResource("8_trainer")]
 position = Vector2(1712, 2320)
@@ -481,11 +481,12 @@ position = Vector2(2416, 1104)
 [node name="StoryTriggers" type="Node2D" parent="." unique_id=1676346445]
 
 [node name="EntranceWarning" type="Area2D" parent="StoryTriggers" unique_id=1381978694]
-position = Vector2(944, 2384)
+position = Vector2(944, 2416)
 script = ExtResource("17_story_trigger")
 story_host_path = NodePath("../../Entities/NPCs/WarningHiker")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StoryTriggers/EntranceWarning" unique_id=1313188715]
+position = Vector2(64, 0)
 shape = SubResource("RectangleShape2D_entrance_warning")
 
 [node name="StoryHook" type="Node" parent="StoryTriggers/EntranceWarning" unique_id=668051771]
