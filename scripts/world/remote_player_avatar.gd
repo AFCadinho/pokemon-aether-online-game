@@ -168,6 +168,7 @@ var appearance_sprites: Array[AnimatedSprite2D] = []
 var nameplate: Control
 var nameplate_background: Panel
 var nameplate_label: Label
+var guild_emblem_background: Panel
 var guild_emblem: TextureRect
 var role_badge_panel: Panel
 var role_badge_label: Label
@@ -794,6 +795,7 @@ func _create_nameplate_from_player_scene(player_instance: Node) -> void:
 		return
 
 	nameplate_label = nameplate.get_node_or_null("NameLabel") as Label
+	guild_emblem_background = nameplate.get_node_or_null("GuildEmblemBackground") as Panel
 	guild_emblem = nameplate.get_node_or_null("GuildEmblem") as TextureRect
 	nameplate_background = nameplate.get_node_or_null("NameplateBackground") as Panel
 	role_badge_panel = nameplate.get_node_or_null("RoleBadgePanel") as Panel
@@ -859,6 +861,8 @@ func _apply_guild_emblem(emblem: Dictionary) -> void:
 		return
 	guild_emblem.texture = GuildEmblemTexture.create_nameplate_texture(emblem)
 	guild_emblem.visible = guild_emblem.texture != null
+	if guild_emblem_background != null:
+		guild_emblem_background.visible = guild_emblem.visible
 
 
 func _update_role_badge() -> void:
@@ -895,6 +899,7 @@ func _sync_nameplate_layout() -> void:
 	var label_rect: Rect2 = card_layout.get("labelRect", Rect2())
 	var background_rect: Rect2 = card_layout.get("backgroundRect", Rect2())
 	var emblem_rect: Rect2 = card_layout.get("emblemRect", Rect2())
+	var emblem_background_rect: Rect2 = card_layout.get("emblemBackgroundRect", Rect2())
 
 	nameplate_label.offset_left = label_rect.position.x
 	nameplate_label.offset_right = label_rect.end.x
@@ -907,6 +912,11 @@ func _sync_nameplate_layout() -> void:
 		nameplate_background.offset_top = background_rect.position.y
 		nameplate_background.offset_bottom = background_rect.end.y
 	if has_guild_emblem:
+		if guild_emblem_background != null:
+			guild_emblem_background.offset_left = emblem_background_rect.position.x
+			guild_emblem_background.offset_right = emblem_background_rect.end.x
+			guild_emblem_background.offset_top = emblem_background_rect.position.y
+			guild_emblem_background.offset_bottom = emblem_background_rect.end.y
 		guild_emblem.offset_left = emblem_rect.position.x
 		guild_emblem.offset_right = emblem_rect.end.x
 		guild_emblem.offset_top = emblem_rect.position.y

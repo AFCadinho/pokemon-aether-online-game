@@ -9,13 +9,17 @@ var failed := false
 func _init() -> void:
 	var player_scene_source := FileAccess.get_file_as_string("res://scenes/player.tscn")
 	_check(
+		player_scene_source.contains('[node name="GuildEmblemBackground" type="Panel" parent="Nameplate"]'),
+		"player nameplate gives the guild emblem its own badge background"
+	)
+	_check(
 		player_scene_source.contains('[node name="GuildEmblem" type="TextureRect" parent="Nameplate"]'),
 		"player nameplate contains a guild emblem"
 	)
 	_check(
-		player_scene_source.contains("offset_right = 65.0")
-		and player_scene_source.contains("offset_bottom = 60.0"),
-		"guild emblem defaults to the name card's 24 pixel content height"
+		player_scene_source.contains("offset_right = 33.0")
+		and player_scene_source.contains("offset_bottom = 61.0"),
+		"guild emblem defaults to its native 16 pixel display size"
 	)
 	_check(
 		player_scene_source.contains("texture_filter = 1"),
@@ -25,9 +29,9 @@ func _init() -> void:
 	var remote_source := FileAccess.get_file_as_string("res://scripts/world/remote_player_avatar.gd")
 	var npc_source := FileAccess.get_file_as_string("res://scripts/world/npcs/base_npc.gd")
 	_check(
-		_has_inline_guild_emblem(player_source)
-		and _has_inline_guild_emblem(remote_source),
-		"nameplate places the guild emblem inside the same content-sized name card"
+		_has_adjacent_guild_emblem(player_source)
+		and _has_adjacent_guild_emblem(remote_source),
+		"nameplate places the guild emblem in a separate badge beside the name card"
 	)
 	_check(
 		_uses_content_sized_name_card(player_source)
@@ -85,25 +89,35 @@ func _check_inline_nameplate_geometry(_texture: Texture2D) -> void:
 	var background: Rect2 = with_emblem.get("backgroundRect", Rect2())
 	var label: Rect2 = with_emblem.get("labelRect", Rect2())
 	var emblem: Rect2 = with_emblem.get("emblemRect", Rect2())
+	var emblem_background: Rect2 = with_emblem.get("emblemBackgroundRect", Rect2())
 	var background_without_emblem: Rect2 = without_emblem.get("backgroundRect", Rect2())
-	_check(is_equal_approx(background.size.y, 28.0), "guild emblem determines the name card height when present")
 	_check(
-		emblem.size == Vector2(24.0, 24.0),
-		"guild emblem scales to 24 by 24 inside the name card"
+		background == background_without_emblem,
+		"guild emblem does not resize or move the centered name card"
 	)
 	_check(
-		emblem.position.y >= background.position.y
-		and emblem.end.y <= background.end.y,
-		"guild emblem stays within the card's vertical bounds"
+		emblem.size == Vector2(16.0, 16.0),
+		"guild emblem stays at its native 16 by 16 display size"
 	)
-	_check(emblem.end.x < label.position.x, "guild emblem appears left of the Trainer name")
 	_check(
-		is_equal_approx(label.position.x - emblem.end.x, 1.0),
-		"guild emblem keeps a compact one pixel gap before the Trainer name"
+		emblem_background.size == Vector2(20.0, 20.0),
+		"guild emblem has a compact 20 by 20 badge background"
+	)
+	_check(
+		is_equal_approx(background.position.x - emblem_background.end.x, 2.0),
+		"guild emblem badge keeps a two pixel gap before the name card"
+	)
+	_check(
+		is_equal_approx(emblem_background.get_center().y, background.get_center().y),
+		"guild emblem badge is vertically centered beside the name card"
+	)
+	_check(
+		emblem.position == emblem_background.position + Vector2(2.0, 2.0),
+		"guild emblem is centered at native size inside its badge"
 	)
 	_check(
 		is_equal_approx(background.get_center().x, 82.0),
-		"guild emblem and Trainer name remain centered as one card"
+		"Trainer name card remains centered independently of the guild emblem"
 	)
 	_check(
 		is_equal_approx(background_without_emblem.size.y, name_size.y + 4.0),
@@ -117,18 +131,16 @@ func _check_inline_nameplate_geometry(_texture: Texture2D) -> void:
 		is_equal_approx((short_name.get("backgroundRect", Rect2()) as Rect2).size.x, 18.0),
 		"short names are not expanded to a minimum card width"
 	)
-	_check(
-		background_without_emblem.size.x < background.size.x,
-		"name card only grows horizontally for a guild emblem"
-	)
+	_check(label == without_emblem.get("labelRect", Rect2()), "guild emblem does not shift the Trainer name")
 
 
-func _has_inline_guild_emblem(source: String) -> bool:
+func _has_adjacent_guild_emblem(source: String) -> bool:
 	return (
 		source.contains('preload("res://scripts/ui/nameplate_layout.gd")')
 		and source.contains("NameplateLayout.calculate_name_card")
 		and source.contains("create_nameplate_texture")
 		and source.contains("nameplate_background.offset_left = background_rect.position.x")
+		and source.contains("guild_emblem_background.offset_left = emblem_background_rect.position.x")
 		and source.contains("guild_emblem.offset_left = emblem_rect.position.x")
 		and source.contains("role_badge_panel.offset_bottom = next_layer_bottom")
 		and not source.contains("guild_emblem.offset_bottom = next_layer_bottom")

@@ -205,6 +205,7 @@ const FISHING_RIPPLE_DISTANCE := TILE_SIZE * 1.45
 @onready var nameplate: Control = $Nameplate
 @onready var nameplate_background: Panel = $Nameplate/NameplateBackground
 @onready var nameplate_label: Label = $Nameplate/NameLabel
+@onready var guild_emblem_background: Panel = $Nameplate/GuildEmblemBackground
 @onready var guild_emblem: TextureRect = $Nameplate/GuildEmblem
 @onready var role_badge_panel: Panel = $Nameplate/RoleBadgePanel
 @onready var role_badge_label: Label = $Nameplate/RoleBadgePanel/RoleBadge
@@ -578,6 +579,8 @@ func set_guild_emblem(emblem: Dictionary) -> void:
 		return
 	guild_emblem.texture = GuildEmblemTexture.create_nameplate_texture(emblem)
 	guild_emblem.visible = guild_emblem.texture != null
+	if guild_emblem_background != null:
+		guild_emblem_background.visible = guild_emblem.visible
 	_sync_nameplate_visibility(nameplate_label != null and nameplate_label.text != "")
 
 func set_role_badge(role_badge: String, role_color: Color = Color(0.847, 0.718, 0.404), role_id: String = "") -> void:
@@ -963,6 +966,7 @@ func _sync_nameplate_layout() -> void:
 	var label_rect: Rect2 = card_layout.get("labelRect", Rect2())
 	var background_rect: Rect2 = card_layout.get("backgroundRect", Rect2())
 	var emblem_rect: Rect2 = card_layout.get("emblemRect", Rect2())
+	var emblem_background_rect: Rect2 = card_layout.get("emblemBackgroundRect", Rect2())
 
 	nameplate_label.offset_left = label_rect.position.x
 	nameplate_label.offset_right = label_rect.end.x
@@ -975,6 +979,11 @@ func _sync_nameplate_layout() -> void:
 		nameplate_background.offset_top = background_rect.position.y
 		nameplate_background.offset_bottom = background_rect.end.y
 	if has_guild_emblem:
+		if guild_emblem_background != null:
+			guild_emblem_background.offset_left = emblem_background_rect.position.x
+			guild_emblem_background.offset_right = emblem_background_rect.end.x
+			guild_emblem_background.offset_top = emblem_background_rect.position.y
+			guild_emblem_background.offset_bottom = emblem_background_rect.end.y
 		guild_emblem.offset_left = emblem_rect.position.x
 		guild_emblem.offset_right = emblem_rect.end.x
 		guild_emblem.offset_top = emblem_rect.position.y
