@@ -24,6 +24,7 @@ func _init() -> void:
 	_check(miguel_script.contains("cleared_position_marker"), "Miguel uses an explicit safe story marker after battle")
 	_check(miguel_script.contains("BLOCKING_TILE_OFFSETS"), "Miguel blocks the full fossil corridor before his battle")
 	_check(miguel_script.contains("func is_gate_open()"), "Miguel exposes his story corridor as an intentional gate")
+	_check(miguel_script.contains("func blocks_world_position(world_position: Vector2) -> bool:\n\tif is_gate_open():\n\t\treturn super.blocks_world_position(world_position)"), "Miguel releases the extra corridor tiles when his confrontation becomes active")
 	_check(miguel_script.contains("func on_route_gate_blocked(player: Node2D)"), "walking into Miguel's gate starts visible feedback")
 	_check(miguel_script.contains('await _show_blocked_dialogue()\n\tif is_instance_valid(player):\n\t\tawait _send_player_back(player)'), "Miguel speaks before sending the player back")
 	_check(miguel_script.contains('var retreat_path: Array[String] = ["down"]'), "Miguel visibly sends the player one tile back")

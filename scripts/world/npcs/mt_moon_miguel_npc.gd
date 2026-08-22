@@ -79,7 +79,7 @@ func on_route_gate_blocked(player: Node2D) -> void:
 
 
 func blocks_world_position(world_position: Vector2) -> bool:
-	if StoryService.is_requirement_met(QUEST_ID, BATTLE_STEP_ID, "completed"):
+	if is_gate_open():
 		return super.blocks_world_position(world_position)
 	var blocking_tile := _to_tile(feet_marker.global_position)
 	var checked_tile := _to_tile(world_position)
