@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Hiker at Mt. Moon's entrance now reliably stops you with his warning when you first walk past him.
+
 - Guild emblems now appear as clear, compact badges beside player names instead of enlarging the name box.
 
 - Player and NPC name boxes now fit their displayed name instead of keeping an oversized minimum width and height.

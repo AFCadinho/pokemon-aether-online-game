@@ -20,7 +20,7 @@ func _init() -> void:
 	_check(first_floor.contains('npc_id = "mt_moon_warning_hiker"'), "1F places the warning Hiker")
 	_check(first_floor.contains('portrait_id = "showdown_hiker_gen6"'), "warning Hiker uses the Showdown Hiker portrait")
 	_check(first_floor.contains('interaction_id = "kanto_mt_moon_entrance_warning"'), "1F binds the entrance warning")
-	_check(first_floor.contains('npc_id = "kanto_mt_moon_1f_lass_iris"\nnpc_definition_id = "trainer_class_lass"\ndisplay_name = "Lass Iris"\nnpc_sprite_frames = ExtResource("11_lass")\nmovement_tiles = 4'), "Lass Iris patrols four tiles")
+	_check(first_floor.contains('npc_id = "kanto_mt_moon_1f_lass_iris"\nnpc_definition_id = "trainer_class_lass"\ndisplay_name = "Lass Iris"\nnpc_sprite_frames = ExtResource("11_lass")\nmovement_tiles = 5'), "Lass Iris patrols five tiles")
 	_check(first_floor.contains('[node name="MoonStone" parent="Entities/Interactables" unique_id=618258656 instance=ExtResource("14_item")]\nposition = Vector2(208, 208)'), "1F places the Moon Stone in its intended spot")
 	_check(miguel_script.contains('BATTLE_STEP_ID := "defeat_miguel"'), "Miguel checks the story battle step")
 	_check(miguel_script.contains('BLOCKED_DIALOGUE_ID := "kanto_mt_moon_miguel_blocked"'), "Miguel has blocked dialogue")
