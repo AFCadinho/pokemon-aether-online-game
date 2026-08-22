@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The main story now continues after Mt. Moon by directing you to Cerulean Gym and then toward Nugget Bridge while the Gym Leader is away.
+
 - The two tiles beside Miguel are now walkable once his Mt. Moon confrontation becomes available.
 
 - Your character now responds to the mysterious Mt. Moon rescuer before receiving his warning about protecting your Pokémon.

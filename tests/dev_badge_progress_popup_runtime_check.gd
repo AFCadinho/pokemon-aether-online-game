@@ -69,7 +69,7 @@ func _run() -> void:
 	_check(story_chapter_select != null, "trainer progress exposes a story chapter selector")
 	_check(story_checkpoint_select != null, "trainer progress exposes a story checkpoint selector")
 	if story_chapter_select != null and story_checkpoint_select != null:
-		_check(story_chapter_select.item_count == 4, "story checkpoints are divided into compact chapters")
+		_check(story_chapter_select.item_count == 5, "story checkpoints are divided into compact chapters")
 		var largest_chapter_size := 0
 		for chapter_index in story_chapter_select.item_count:
 			story_chapter_select.select(chapter_index)
@@ -90,6 +90,15 @@ func _run() -> void:
 			checkpoint_ids.append(str(story_checkpoint_select.get_item_metadata(checkpoint_index)))
 		for checkpoint_id in ["mt_moon_warning", "mt_moon_grunts", "mt_moon_miguel", "mt_moon_fossil", "mt_moon_rescue"]:
 			_check(checkpoint_id in checkpoint_ids, "story checkpoint selector includes %s" % checkpoint_id)
+		var cerulean_index := -1
+		for chapter_index in story_chapter_select.item_count:
+			if str(story_chapter_select.get_item_metadata(chapter_index)) == "cerulean":
+				cerulean_index = chapter_index
+				break
+		_check(cerulean_index >= 0, "story chapter selector includes Cerulean City")
+		story_chapter_select.select(cerulean_index)
+		popup.call("_on_story_chapter_selected", cerulean_index)
+		_check(story_checkpoint_select.item_count == 2, "Cerulean chapter includes its two planned phases")
 		_check(story_chapter_select.has_theme_icon_override("arrow"), "story chapter selector uses the custom dropdown arrow")
 		var checkpoint_menu := story_checkpoint_select.get_popup()
 		_check(

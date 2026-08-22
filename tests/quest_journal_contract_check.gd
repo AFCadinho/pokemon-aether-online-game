@@ -81,6 +81,12 @@ const QUEST_LOCALIZATION_KEYS: Array[String] = [
 	"story.kanto.travel_through_mt_moon.defeat_miguel",
 	"story.kanto.travel_through_mt_moon.choose_fossil",
 	"story.kanto.travel_through_mt_moon.cross_mt_moon",
+	"story.kanto.reach_cerulean_city.title",
+	"story.kanto.reach_cerulean_city.summary",
+	"story.kanto.reach_cerulean_city.visit_cerulean_gym",
+	"story.kanto.explore_cerulean_city.title",
+	"story.kanto.explore_cerulean_city.summary",
+	"story.kanto.explore_cerulean_city.visit_nugget_bridge",
 ]
 
 var failed := false
@@ -114,6 +120,16 @@ func _run() -> void:
 		str(english_catalog.get("story.kanto.travel_through_mt_moon.cross_mt_moon", ""))
 		== "Survive the Team Rocket ambush.",
 		"Mt. Moon chapter ends with the Team Rocket ambush"
+	)
+	_expect(
+		str(english_catalog.get("story.kanto.reach_cerulean_city.visit_cerulean_gym", ""))
+		== "Leave Mt. Moon and go to the Cerulean City Gym.",
+		"the next main quest directs the player from Mt. Moon to Cerulean Gym"
+	)
+	_expect(
+		str(english_catalog.get("story.kanto.explore_cerulean_city.visit_nugget_bridge", ""))
+		== "Explore Cerulean City. Nugget Bridge to the north is worth visiting.",
+		"the closed Gym points exploration toward Nugget Bridge"
 	)
 	story_service.apply_story({
 		"revision": 1,
