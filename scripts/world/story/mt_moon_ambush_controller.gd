@@ -128,6 +128,7 @@ func _prepare_ambush() -> void:
 		return
 	_prepared = true
 	await _show_miguel_takes_other_fossil()
+	_face_story_player_down()
 	var entrance_tween := create_tween().set_parallel(true)
 	for rocket: Node in rockets:
 		var surround_position: Vector2 = rocket.position
@@ -141,6 +142,18 @@ func _prepare_ambush() -> void:
 	_face_rockets_inward()
 	await _flee_miguel()
 	await _summon_rocket_pokemon()
+
+
+func _face_story_player_down() -> void:
+	var player := _story_player if is_instance_valid(_story_player) else get_tree().get_first_node_in_group("player") as Node2D
+	if player == null or not player.has_method("face_world_position"):
+		return
+	var player_feet := player.global_position
+	if player.has_method("get_feet_position"):
+		var feet_value: Variant = player.call("get_feet_position")
+		if feet_value is Vector2:
+			player_feet = feet_value as Vector2
+	player.call("face_world_position", player_feet + Vector2.DOWN)
 
 
 func _show_miguel_takes_other_fossil() -> void:

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Your character now turns toward Team Rocket as they surround you during the Mt. Moon ambush.
+
 - TMs and HMs found in the overworld now use a distinct golden Poké Ball.
 
 - Ground items now play their pickup sound and appear in System messages without opening a dialogue box.

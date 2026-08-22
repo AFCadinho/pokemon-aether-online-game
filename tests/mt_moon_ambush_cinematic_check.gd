@@ -69,6 +69,8 @@ func _run() -> void:
 	_expect("_player_portrait_renderer.head_only = false" in controller_source, "player dialogue includes the upper body and current clothing")
 	_expect("dialogue_box.call(\"start_dialogue\", lines, resolved_speaker_name, portrait, show_portrait)" in controller_source, "each cinematic speaker controls its own portrait")
 	_expect("_face_rockets_inward()\n\tawait _flee_miguel()\n\tawait _summon_rocket_pokemon()" in controller_source, "Miguel flees as Team Rocket closes in and before their Pokemon appear")
+	_expect("await _show_miguel_takes_other_fossil()\n\t_face_story_player_down()\n\tvar entrance_tween" in controller_source, "the player faces down before Team Rocket appears")
+	_expect('player.call("face_world_position", player_feet + Vector2.DOWN)' in controller_source, "the ambushed player uses the downward idle pose")
 	_expect(
 		'const ROCKET_FACING_ANIMATIONS: Array[StringName] = [\n\t&"idle_right",\n\t&"idle_left",\n\t&"idle_up",\n\t&"idle_down",\n\t&"idle_down",\n]'
 		in controller_source,
