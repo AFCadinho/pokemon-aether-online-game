@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Town Map location panel now uses its available width for clearer descriptions, interiors, and route links.
+
 - Karate Master Kenji now has a Black Belt mugshot during the Rock Smash lesson.
 
 - Route 3 and Route 22 now reward exploration with additional visible field items.

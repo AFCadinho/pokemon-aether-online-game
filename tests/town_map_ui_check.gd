@@ -127,6 +127,13 @@ func _run() -> void:
 	_check(popup.current_location_id == "kanto_pallet_town", "Interior maps resolve to their parent Town Map location")
 	_check(popup.selected_location_id == "kanto_pallet_town", "Current location is selected when the map opens")
 	_check(popup.detail_name_label.size.x > 0.0, "Current location details use the full sidebar width without a duplicate portrait")
+	_check(popup.detail_name_label.get_parent() is HBoxContainer, "Location name and kind badge share one heading row")
+	_check(popup.detail_name_label.size_flags_horizontal == Control.SIZE_EXPAND_FILL, "Location name expands across the available heading width")
+	_check(popup.detail_kind_panel.get_parent() == popup.detail_name_label.get_parent(), "Location kind badge stays beside the location name")
+	_check(popup.detail_description_label.size_flags_horizontal == Control.SIZE_EXPAND_FILL, "Location description fills the detail card width")
+	_check(popup.detail_description_label.size.x >= 220.0, "Location description uses the wide sidebar instead of its minimum text width")
+	_check(popup.detail_interiors_container.columns == 2, "Town Map interiors use a compact two-column grid")
+	_check(popup.detail_connections_container.columns == 2, "Connected locations use a two-column navigation grid")
 	_check(popup.detail_interiors_container.get_child_count() == 3, "Pallet Town interiors come from the world access catalog")
 	_check(popup.detail_interiors_container.get_child(0) is Label, "Interiors are displayed separately from route navigation")
 	popup._refresh_details("kanto_pewter_city")
@@ -168,6 +175,10 @@ func _run() -> void:
 		popup.detail_connections_container.get_child_count() > 0
 		and popup.detail_connections_container.get_child(0) is Button,
 		"Connected locations are directly navigable from the detail card"
+	)
+	_check(
+		(popup.detail_connections_container.get_child(0) as Button).size_flags_horizontal == Control.SIZE_EXPAND_FILL,
+		"Connected-location buttons fill their grid cells"
 	)
 	_check(not popup.map_canvas.show_connection_overlay, "Baked route lines are not drawn a second time")
 	_check(not popup.map_canvas.show_marker_overlay, "Baked map circles use invisible interactive hotspots")
