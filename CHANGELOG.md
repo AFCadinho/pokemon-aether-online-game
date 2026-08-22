@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Several Trainers in Mt. Moon now watch the intended paths from their corrected sight distances and directions.
+
 - Entering Mt. Moon from Route 4 now leaves your character facing into the cave.
 
 - Both upper Team Rocket Grunts now face you correctly during the Mt. Moon ambush, regardless of which fossil you choose.
