@@ -399,12 +399,11 @@ npc_sprite_frames = ExtResource("11_lass")
 [node name="LassIris" parent="Entities/NPCs" unique_id=1462170453 instance=ExtResource("8_trainer")]
 position = Vector2(976, 1712)
 trainer_id = "kanto_mt_moon_1f_lass_iris"
-sight_range_tiles = 2
+sight_range_tiles = 5
 npc_id = "kanto_mt_moon_1f_lass_iris"
 npc_definition_id = "trainer_class_lass"
 display_name = "Lass Iris"
 npc_sprite_frames = ExtResource("11_lass")
-movement_tiles = 5
 
 [node name="SuperNerdJovan" parent="Entities/NPCs" unique_id=1652232414 instance=ExtResource("8_trainer")]
 position = Vector2(1712, 2320)
