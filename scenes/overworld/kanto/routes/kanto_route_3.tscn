@@ -14,6 +14,7 @@
 [ext_resource type="SpriteFrames" uid="uid://dlaxxerx14l3u" path="res://assets/npcs/classes/firebreather_frames.tres" id="11_firebreather"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="12_pokecenter_hint"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="15_m5ude"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="16_overworld_item"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nuuyr"]
 texture = ExtResource("2_jmvwp")
@@ -409,6 +410,16 @@ npc_sprite_frames = ExtResource("11_firebreather")
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=120000016]
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=120000017]
+
+[node name="Awakening" parent="Entities/Interactables" instance=ExtResource("16_overworld_item")]
+position = Vector2(1152, 816)
+pickup_id = "kanto_route_3_awakening"
+item_id = "awakening"
+
+[node name="OranBerry" parent="Entities/Interactables" instance=ExtResource("16_overworld_item")]
+position = Vector2(2240, 816)
+pickup_id = "kanto_route_3_oran_berry"
+item_id = "oran-berry"
 
 [node name="MtMoonSign" parent="Entities/Interactables" unique_id=764906515 instance=ExtResource("10_pprsw")]
 position = Vector2(2512, 976)

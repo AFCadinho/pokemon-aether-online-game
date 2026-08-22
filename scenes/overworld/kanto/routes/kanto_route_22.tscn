@@ -19,6 +19,7 @@
 [ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="16_story_hook"]
 [ext_resource type="PackedScene" uid="uid://csmsqlujka4ma" path="res://scenes/world/interactables/locked_door_interactable.tscn" id="17_victory_road_lock"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="18_mfvq1"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="19_overworld_item"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_viridian"]
 size = Vector2(64, 176)
@@ -447,6 +448,16 @@ movement_speed_pixels = 52.0
 [node name="Players" type="Node2D" parent="Entities" unique_id=206724298]
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=247094210]
+
+[node name="GreatBall" parent="Entities/Interactables" instance=ExtResource("19_overworld_item")]
+position = Vector2(880, 800)
+pickup_id = "kanto_route_22_great_ball"
+item_id = "great-ball"
+
+[node name="SuperPotion" parent="Entities/Interactables" instance=ExtResource("19_overworld_item")]
+position = Vector2(1792, 992)
+pickup_id = "kanto_route_22_super_potion"
+item_id = "super-potion"
 
 [node name="Route22Sign" parent="Entities/Interactables" unique_id=1051348135 instance=ExtResource("3_3bfoe")]
 position = Vector2(2416, 432)
