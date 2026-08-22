@@ -167,6 +167,9 @@ func _set_unrevealed() -> void:
 	icon_status_badge.text = ""
 
 func _get_species_from_data(pokemon_data: Dictionary) -> String:
+	var cosmetic_species := str(pokemon_data.get("cosmeticDisplaySpecies", ""))
+	if cosmetic_species != "":
+		return cosmetic_species
 	var display_species := str(pokemon_data.get("displaySpecies", ""))
 	if display_species != "":
 		return display_species

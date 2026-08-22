@@ -1,14 +1,14 @@
 [gd_scene format=4 uid="uid://cnbfksossjfg7"]
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/kanto_route_2/kanto_route_2.visual.tscn" id="1_htny7"]
-[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="2_yrfmu"]
-[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="3_ddwci"]
-[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="4_vmo04"]
-[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_vmo04"]
+[ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="2_yrfmu"]
+[ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="3_ddwci"]
+[ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="4_vmo04"]
+[ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_vmo04"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="6_3mgn4"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="7_f8n3h"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="8_metadata"]
-[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_floors32.png" id="9_gac6d"]
+[ext_resource type="Texture2D" uid="uid://e2ksljyggppg" path="res://assets/tilesets/fiver/tiles_env2_floors32.png" id="9_gac6d"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/cuttable_tree.tscn" id="10_j62p7"]
 [ext_resource type="PackedScene" uid="uid://b6sun8ubp3uia" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="12_suwgg"]
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="13_dialogue"]
@@ -251,6 +251,71 @@ texture_region_size = Vector2i(32, 32)
 [sub_resource type="TileSet" id="TileSet_bej5m"]
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_j62p7")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ohdj5"]
+texture = ExtResource("5_vmo04")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_ywtea"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_ohdj5")
 
 [node name="KantoRoute2" type="Node2D" unique_id=1334981567]
 script = ExtResource("8_metadata")
@@ -498,6 +563,19 @@ position = Vector2(1360, 752)
 position = Vector2(1104, 624)
 sign_id = "kanto_route_2_digletts_cave"
 sign_type = "road"
+
+[node name="Stairs" type="Node2D" parent="." unique_id=1892561235]
+visible = false
+
+[node name="StairUpLeft" type="TileMapLayer" parent="Stairs" unique_id=739250306]
+visible = false
+z_index = 100
+tile_map_data = PackedByteArray("AAAQADMAAAABAAEAAAAQADIAAAABAAEAAAAQADQAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_ywtea")
+
+[node name="StairUpRight" type="TileMapLayer" parent="Stairs" unique_id=1462988124]
+z_index = 100
+tile_set = SubResource("TileSet_ywtea")
 
 [connection signal="body_entered" from="Exits/ToViridianCity" to="Exits/ToViridianCity" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToPewterCity" to="Exits/ToPewterCity" method="_on_body_entered"]

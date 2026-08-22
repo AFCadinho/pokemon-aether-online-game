@@ -3,6 +3,7 @@ extends Control
 const LauncherServerHealthService := preload("res://scripts/server_health_service.gd")
 const LauncherNewsLocalizationService := preload("res://scripts/news_localization_service.gd")
 const LauncherLanguageSelectorStyle := preload("res://scripts/language_selector_style.gd")
+const LauncherResumableDownloadService := preload("res://scripts/resumable_download_service.gd")
 
 const DEFAULT_MANIFEST_URL := "https://example.com/pokeaether/manifest.json"
 const DEFAULT_NEWS_URL := "https://updates.pokeaether.com/data/news.json"
@@ -20,7 +21,10 @@ const ERROR_LOG_FILE := "user://launcher_error.log"
 const PREVIOUS_ERROR_LOG_FILE := "user://launcher_error.previous.log"
 const MAX_ERROR_LOG_BYTES := 1024 * 1024
 const MAX_CHECKSUM_RETRIES := 1
+const MAX_MANIFEST_RETRIES := 3
+const MANIFEST_RETRY_DELAYS_SECONDS: Array[float] = [1.0, 3.0, 8.0]
 const TEMP_DIR := "user://downloads"
+const INSTALL_STAGING_DIR_NAME := ".launcher-staging"
 const EXTRACT_PROGRESS_BATCH_SIZE := 25
 const USER_AGENT_HEADER := "User-Agent: PokeAetherLauncher/1.0"
 const GEN5_OPTIONAL_ASSET_PACK_PREFIX := "pokemon-gen5"
@@ -42,7 +46,6 @@ const LAUNCHER_UPDATE_TEMP_DIR := "user://launcher_update"
 const LAUNCHER_UPDATE_STAGING_SUBDIR := "staging"
 const LAUNCHER_UPDATE_WINDOWS_SCRIPT := "apply_launcher_update.bat"
 const LAUNCHER_UPDATE_UNIX_SCRIPT := "apply_launcher_update.sh"
-const LAUNCHER_UPDATE_ZIP_NAME_PREFIX := "pokeaether-launcher-update"
 const WINDOWS_LAUNCHER_BINARY := "PokeAether Launcher.exe"
 const LINUX_LAUNCHER_BINARY := "PokeAether Launcher.x86_64"
 const MACOS_LAUNCHER_BINARY := "PokeAether Launcher.app/Contents/MacOS/PokeAether Launcher"
@@ -130,6 +133,11 @@ var asset_pack_download_total := 0
 var current_asset_pack_download_index := 0
 var has_unseen_diagnostics_error := false
 var last_check_datetime: Dictionary = {}
+var download_service: ResumableDownloadService
+var download_progress_snapshot: Dictionary = {}
+var active_resumable_download_kind := ""
+var manifest_retry_count := 0
+var manifest_request_generation := 0
 
 
 func _draw() -> void:
@@ -226,7 +234,15 @@ func _ready() -> void:
 	install_folder_dialog.dir_selected.connect(_on_install_folder_selected)
 	uninstall_confirm_dialog.confirmed.connect(_uninstall_game_folder)
 	http_request.request_completed.connect(_on_request_completed)
+	http_request.timeout = 30.0
+	download_service = LauncherResumableDownloadService.new()
+	add_child(download_service)
+	download_service.progress_changed.connect(_on_download_progress_changed)
+	download_service.diagnostic_event.connect(_on_download_diagnostic_event)
+	download_service.download_completed.connect(_on_resumable_download_completed)
+	download_service.download_failed.connect(_on_resumable_download_failed)
 	if news_request != null:
+		news_request.timeout = 15.0
 		news_request.request_completed.connect(_on_news_request_completed)
 	log_label.meta_clicked.connect(_on_news_meta_clicked)
 	_load_local_versions()
@@ -471,77 +487,49 @@ func _apply_refresh_button_style(button: Button) -> void:
 func _process(_delta: float) -> void:
 	_update_progress_percent()
 	_sync_button_cursors()
-	if http_request.get_http_client_status() == HTTPClient.STATUS_BODY:
-		var downloaded_bytes: int = http_request.get_downloaded_bytes()
-		var expected_bytes: int = 0
-		if not current_download.is_empty():
-			expected_bytes = int(current_download.get("size_bytes", 0))
-
-		var total_bytes: int = expected_bytes
-		if total_bytes <= 0:
-			total_bytes = http_request.get_body_size()
-
-		if total_bytes > 0:
-			var progress_is_reliable := downloaded_bytes >= 0 and downloaded_bytes <= total_bytes
-			if not progress_is_reliable:
-				progress_is_indeterminate = true
-				progress_bar.value = fmod(float(Time.get_ticks_msec()) / 18.0, 100.0)
-				if not current_download.is_empty():
-					_set_status(
-						_t("Downloading {label}... Large download in progress ({total})", {
-							"label": _get_current_download_display_label(),
-							"total": _format_bytes(total_bytes),
-						}),
-						"updating"
-					)
-				return
-
-			progress_is_indeterminate = false
-			var percent: float = minf((float(downloaded_bytes) / float(total_bytes)) * 100.0, 99.0)
-			progress_bar.value = percent
-			if not current_download.is_empty():
-				_set_status(
-					_t("Downloading {label}... {downloaded} / {total} ({percent}%)", {
-						"label": _get_current_download_display_label(),
-						"downloaded": _format_bytes(downloaded_bytes),
-						"total": _format_bytes(total_bytes),
-						"percent": int(percent),
-					}),
-					"updating"
-				)
-		elif not current_download.is_empty():
-			if downloaded_bytes < 0:
-				progress_is_indeterminate = true
-				progress_bar.value = fmod(float(Time.get_ticks_msec()) / 18.0, 100.0)
-				_set_status(
-					_t("Downloading {label}... Large download in progress", {
-						"label": _get_current_download_display_label(),
-					}),
-					"updating"
-				)
-				return
-
-			progress_is_indeterminate = false
-			progress_bar.value = 0.0
-			_set_status(
-				_t("Downloading {label}... {downloaded}", {
-					"label": _get_current_download_display_label(),
-					"downloaded": _format_bytes(maxi(downloaded_bytes, 0)),
-				}),
-				"updating"
-			)
+	if download_progress_snapshot.is_empty():
+		return
+	var downloaded_bytes := int(download_progress_snapshot.get("downloaded_bytes", 0))
+	var total_bytes := int(download_progress_snapshot.get("total_bytes", 0))
+	var recent_speed := float(download_progress_snapshot.get("recent_bytes_per_second", 0.0))
+	var stalled_seconds := float(download_progress_snapshot.get("seconds_without_bytes", 0.0))
+	if total_bytes <= 0:
+		progress_is_indeterminate = true
+		progress_bar.value = fmod(float(Time.get_ticks_msec()) / 18.0, 100.0)
+		return
+	progress_is_indeterminate = false
+	progress_bar.value = minf((float(downloaded_bytes) / float(total_bytes)) * 100.0, 99.9)
+	var speed_text := _format_transfer_speed(recent_speed)
+	var active_label := _get_current_download_display_label() if not current_download.is_empty() else _t("launcher update")
+	var message := _t("Downloading {label}... {downloaded} / {total} — {speed}", {
+		"label": active_label,
+		"downloaded": _format_bytes(downloaded_bytes),
+		"total": _format_bytes(total_bytes),
+		"speed": speed_text,
+	})
+	if stalled_seconds >= LauncherResumableDownloadService.STALL_WARNING_SECONDS:
+		message = _t("Connection stalled for {seconds}s — reconnecting automatically", {
+			"seconds": int(stalled_seconds),
+		})
+	_set_status(message, "updating")
 
 
 func check_for_updates() -> void:
 	_set_busy(true)
 	_set_status("Checking for updates...")
 	_log("Checking for updates.")
+	manifest_retry_count = 0
+	manifest_request_generation += 1
+	_request_manifest(manifest_request_generation)
+
+
+func _request_manifest(request_generation: int) -> void:
+	if request_generation != manifest_request_generation:
+		return
 	http_request.download_file = ""
 	var error_code: Error = http_request.request(manifest_url, _request_headers())
 	if error_code != OK:
-		_set_busy(false)
-		_set_status("Could not request manifest.")
-		_log_error("Manifest request failed: %s" % error_string(error_code))
+		_handle_manifest_request_failure(HTTPRequest.RESULT_CANT_CONNECT, 0, error_string(error_code))
 
 
 func fetch_news() -> void:
@@ -575,7 +563,7 @@ func start_update() -> void:
 
 
 func download_gen5_animated_sprites() -> void:
-	if http_request.get_http_client_status() != HTTPClient.STATUS_DISCONNECTED:
+	if http_request.get_http_client_status() != HTTPClient.STATUS_DISCONNECTED or download_service.is_active():
 		_set_status("Wait until the current launcher task is finished.")
 		return
 
@@ -673,7 +661,7 @@ func _start_launcher_update_download() -> void:
 		_set_status("Launcher update already in progress.")
 		return
 
-	if launcher_update_http_request.get_http_client_status() != HTTPClient.STATUS_DISCONNECTED:
+	if launcher_update_http_request.get_http_client_status() != HTTPClient.STATUS_DISCONNECTED or download_service.is_active():
 		_set_status("Wait until the current launcher task is finished.")
 		return
 
@@ -693,16 +681,22 @@ func _start_launcher_update_download() -> void:
 		_log_error("Could not create launcher update temp folder: %s" % error_string(create_dir_error))
 		return
 
-	var now_suffix := str(Time.get_ticks_msec())
-	var update_file_name := "%s-%s.zip" % [LAUNCHER_UPDATE_ZIP_NAME_PREFIX, now_suffix]
-	var download_path := temp_dir.path_join(update_file_name)
-	launcher_update_http_request.download_file = download_path
 	launcher_update_busy = true
 	launcher_update_in_progress = false
 	_set_busy(true)
 	_set_status("Downloading launcher update...")
-	var error_code: Error = launcher_update_http_request.request(str(launcher_data.get("url", "")), _request_headers())
+	active_resumable_download_kind = "launcher_update"
+	var error_code: Error = download_service.start_download({
+		"type": "launcher_update",
+		"id": "launcher",
+		"version": str(launcher_data.get("version", "")),
+		"url": str(launcher_data.get("url", "")),
+		"sha256": str(launcher_data.get("sha256", "")),
+		"size_bytes": int(launcher_data.get("sizeBytes", launcher_data.get("size_bytes", 0))),
+		"download_dir": LAUNCHER_UPDATE_TEMP_DIR,
+	})
 	if error_code != OK:
+		active_resumable_download_kind = ""
 		launcher_update_busy = false
 		_set_status("Could not start launcher update download.")
 		_log_error("Launcher update request failed: %s" % error_string(error_code))
@@ -710,7 +704,7 @@ func _start_launcher_update_download() -> void:
 
 
 func _on_uninstall_button_pressed() -> void:
-	if http_request.get_http_client_status() != HTTPClient.STATUS_DISCONNECTED:
+	if http_request.get_http_client_status() != HTTPClient.STATUS_DISCONNECTED or download_service.is_active():
 		_set_status("Wait until the current launcher task is finished.")
 		return
 
@@ -817,16 +811,47 @@ func _on_request_completed(result: int, response_code: int, _headers: PackedStri
 	progress_is_indeterminate = false
 	progress_bar.value = 100.0
 	if result != HTTPRequest.RESULT_SUCCESS or response_code < 200 or response_code >= 300:
-		_set_busy(false)
 		var request_failure_message: String = _format_request_failure(result, response_code)
-		_set_status(request_failure_message, "error")
-		_log_error("%s url=%s" % [request_failure_message, _get_active_request_url()])
+		_handle_manifest_request_failure(result, response_code, request_failure_message)
 		return
 
-	if current_download.is_empty():
-		_handle_manifest_response(body)
-	else:
-		_handle_download_response()
+	_handle_manifest_response(body)
+
+
+func _handle_manifest_request_failure(result: int, response_code: int, reason: String) -> void:
+	var retriable := response_code in [0, 408, 425, 429, 500, 502, 503, 504]
+	if result in [HTTPRequest.RESULT_CANT_CONNECT, HTTPRequest.RESULT_CANT_RESOLVE, HTTPRequest.RESULT_CONNECTION_ERROR, HTTPRequest.RESULT_TLS_HANDSHAKE_ERROR, HTTPRequest.RESULT_TIMEOUT]:
+		retriable = true
+	if retriable and manifest_retry_count < MAX_MANIFEST_RETRIES:
+		manifest_retry_count += 1
+		var delay := MANIFEST_RETRY_DELAYS_SECONDS[manifest_retry_count - 1]
+		_set_status(_t("Could not reach the update manifest — retrying ({retry}/{max})", {
+			"retry": manifest_retry_count,
+			"max": MAX_MANIFEST_RETRIES,
+		}), "updating")
+		_log_warning("Manifest request retry=%s/%s delay_seconds=%s result=%s status=%s reason=%s" % [
+			manifest_retry_count,
+			MAX_MANIFEST_RETRIES,
+			delay,
+			result,
+			response_code,
+			reason,
+		])
+		_retry_manifest_after(delay, manifest_request_generation)
+		return
+	_set_busy(false)
+	_set_status(_format_request_failure(result, response_code), "error")
+	_log_error("Manifest request failed after retries. result=%s status=%s reason=%s url=%s" % [
+		result,
+		response_code,
+		reason,
+		manifest_url,
+	])
+
+
+func _retry_manifest_after(delay_seconds: float, request_generation: int) -> void:
+	await get_tree().create_timer(delay_seconds).timeout
+	_request_manifest(request_generation)
 
 
 func _on_news_request_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
@@ -917,6 +942,12 @@ func _handle_manifest_response(body: PackedByteArray) -> void:
 		_set_status("Manifest is invalid.")
 		_log_error("Manifest JSON must be an object.")
 		return
+	var manifest_validation_error := _validate_download_manifest(parsed_json)
+	if not manifest_validation_error.is_empty():
+		_set_busy(false)
+		_set_status("Manifest is invalid.")
+		_log_error("Manifest validation failed: %s" % manifest_validation_error)
+		return
 
 	manifest = parsed_json
 	last_check_datetime = Time.get_datetime_dict_from_system()
@@ -937,6 +968,36 @@ func _handle_manifest_response(body: PackedByteArray) -> void:
 		_log("Update available.")
 	else:
 		_log("Everything is up to date.")
+
+
+func _validate_download_manifest(candidate: Dictionary) -> String:
+	var entries: Array[Dictionary] = []
+	var game_entry: Variant = candidate.get("game", {})
+	if typeof(game_entry) != TYPE_DICTIONARY:
+		return "game entry is missing"
+	entries.append({"label": "game", "value": game_entry})
+	var packs: Variant = candidate.get("assetPacks", [])
+	if typeof(packs) != TYPE_ARRAY:
+		return "assetPacks must be an array"
+	for pack: Variant in packs:
+		if typeof(pack) != TYPE_DICTIONARY:
+			return "assetPacks contains a non-object entry"
+		entries.append({"label": "asset pack %s" % str(pack.get("id", "unknown")), "value": pack})
+	var launcher_entry: Variant = candidate.get("launcher", {})
+	if typeof(launcher_entry) == TYPE_DICTIONARY and not launcher_entry.is_empty():
+		entries.append({"label": "launcher update", "value": launcher_entry})
+
+	for entry: Dictionary in entries:
+		var value: Dictionary = entry["value"]
+		var label := str(entry["label"])
+		if not bool(LauncherResumableDownloadService.parse_http_url(str(value.get("url", ""))).get("valid", false)):
+			return "%s has no valid HTTP URL" % label
+		if int(value.get("sizeBytes", 0)) <= 0:
+			return "%s has no positive size" % label
+		var sha256 := str(value.get("sha256", "")).strip_edges().to_lower()
+		if sha256.length() != 64 or not sha256.is_valid_hex_number():
+			return "%s has no valid SHA-256" % label
+	return ""
 
 
 func _show_launcher_update_prompt() -> void:
@@ -1492,6 +1553,10 @@ func _extract_launcher_update_zip(zip_path: String, target_dir: String) -> Error
 	for packed_file_path: String in packed_file_paths:
 		if packed_file_path.ends_with("/"):
 			continue
+		if not _is_safe_archive_path(packed_file_path):
+			reader.close()
+			_log_error("Launcher update archive contains unsafe path: %s" % packed_file_path)
+			return ERR_INVALID_DATA
 
 		var output_path := target_dir.path_join(packed_file_path)
 		var absolute_output_path := _globalize_storage_path(output_path)
@@ -1585,21 +1650,34 @@ func _handle_download_response() -> void:
 	_log("Extracting %s." % download_label)
 	await get_tree().process_frame
 
-	var extract_target_dir: String = _get_download_extract_dir(current_download)
-	if str(current_download.get("type", "")) == "game":
-		var clear_error: Error = _clear_directory(extract_target_dir)
-		if clear_error != OK:
-			_set_busy(false)
-			_set_status("Could not prepare game folder.")
-			_log_error("Could not clear game folder: %s" % error_string(clear_error))
-			current_download.clear()
-			return
+	var staging_key := "%s-%s" % [
+		str(current_download.get("id", "download")),
+		str(current_download.get("version", "")).sha256_text().substr(0, 12),
+	]
+	var staging_root := install_dir.path_join(INSTALL_STAGING_DIR_NAME).path_join(staging_key)
+	var clear_error: Error = _clear_directory(staging_root)
+	if clear_error != OK:
+		_set_busy(false)
+		_set_status("Could not prepare update staging folder.")
+		_log_error("Could not prepare staging folder: %s" % error_string(clear_error))
+		current_download.clear()
+		return
 
-	var extract_error: Error = await _extract_zip(file_path, extract_target_dir, download_label)
+	var extract_error: Error = await _extract_zip(file_path, staging_root, download_label)
 	if extract_error != OK:
 		_set_busy(false)
 		_set_status("Could not extract update.")
 		_log_error("Extract failed: %s" % error_string(extract_error))
+		_remove_directory_tree(staging_root)
+		current_download.clear()
+		return
+
+	var install_error := _commit_staged_download(current_download, staging_root)
+	if install_error != OK:
+		_set_busy(false)
+		_set_status("Could not install extracted update.")
+		_log_error("Staged install failed: %s" % error_string(install_error))
+		_remove_directory_tree(staging_root)
 		current_download.clear()
 		return
 
@@ -1612,6 +1690,7 @@ func _handle_download_response() -> void:
 func _start_next_download() -> void:
 	if pending_downloads.is_empty():
 		progress_is_indeterminate = false
+		download_progress_snapshot.clear()
 		_reset_download_progress_counters()
 		_save_local_versions()
 		update_required = false
@@ -1628,46 +1707,117 @@ func _start_next_download() -> void:
 
 
 func _start_current_download() -> void:
-	var url := str(current_download.get("url", ""))
-	var file_name := str(current_download.get("file_name", "download.zip"))
-	var unique_file_name := "%s-%s.zip" % [file_name.get_basename(), Time.get_ticks_msec()]
-	var target_path := TEMP_DIR.path_join(unique_file_name)
-	current_download["file_path"] = target_path
 	progress_is_indeterminate = false
 	progress_bar.value = 0.0
+	download_progress_snapshot.clear()
 
-	DirAccess.make_dir_recursive_absolute(_globalize_storage_path(TEMP_DIR))
 	var download_label: String = _get_current_download_display_label()
 	_set_status(_t("Downloading {label}...", {"label": download_label}), "updating")
-	var checksum_retry_count := int(current_download.get("checksum_retry_count", 0))
 	_log(
-		"Downloading %s. type=%s id=%s version=%s build_id=%s expected_size=%s retry=%s" % [
+		"Downloading %s. type=%s id=%s version=%s build_id=%s expected_size=%s resumable=true" % [
 			download_label,
 			str(current_download.get("type", "")),
 			str(current_download.get("id", "")),
 			str(current_download.get("version", "")),
 			str(current_download.get("build_id", "")),
 			int(current_download.get("size_bytes", 0)),
-			checksum_retry_count,
 		]
 	)
-	http_request.download_file = target_path
-	var request_url := url
-	if checksum_retry_count > 0:
-		request_url = "%s%slauncher_retry=%s" % [
-			url,
-			"&" if url.contains("?") else "?",
-			Time.get_unix_time_from_system(),
-		]
-	var error_code: Error = http_request.request(
-		request_url,
-		_request_headers(checksum_retry_count > 0)
-	)
+	current_download["download_dir"] = TEMP_DIR
+	active_resumable_download_kind = "content"
+	var error_code: Error = download_service.start_download(current_download)
 	if error_code != OK:
+		active_resumable_download_kind = ""
 		_set_busy(false)
 		_set_status("Could not start download.")
 		_log_error("Download request failed: %s" % error_string(error_code))
 		current_download.clear()
+
+
+func _on_download_progress_changed(snapshot: Dictionary) -> void:
+	download_progress_snapshot = snapshot.duplicate(true)
+
+
+func _on_download_diagnostic_event(event: Dictionary) -> void:
+	var event_name := str(event.get("event", "download_event"))
+	if event_name == "download_verifying":
+		var verifying_label := _get_current_download_display_label() if not current_download.is_empty() else _t("launcher update")
+		_set_status(_t("Verifying {label}...", {"label": verifying_label}), "updating")
+	var fields := PackedStringArray()
+	var field_names := [
+		"id", "version", "status", "attempt", "retry", "retries", "max_retries", "offset",
+		"resume_offset", "downloaded_bytes", "total_bytes", "recent_bytes_per_second",
+		"average_bytes_per_second", "seconds_without_bytes", "delay_seconds", "reason",
+		"content_range", "accept_ranges", "edge", "duration_seconds", "stalls",
+		"resumed", "resumed_bytes", "expected_size", "actual_size",
+		"time_to_first_byte_seconds", "last_failure",
+	]
+	for field_name: String in field_names:
+		if event.has(field_name) and str(event[field_name]) != "":
+			fields.append("%s=%s" % [field_name, str(event[field_name])])
+	var message := "%s %s" % [event_name, " ".join(fields)]
+	if event_name == "download_failed":
+		_log_error(message)
+	elif event_name in ["download_retry", "download_stall", "partial_reset"]:
+		_log_warning(message)
+	else:
+		_log(message)
+
+
+func _on_resumable_download_completed(file_path: String, summary: Dictionary) -> void:
+	download_progress_snapshot.clear()
+	var completed_kind := active_resumable_download_kind
+	active_resumable_download_kind = ""
+	if completed_kind == "launcher_update":
+		launcher_update_http_request.download_file = file_path
+		_on_launcher_update_request_completed(
+			HTTPRequest.RESULT_SUCCESS,
+			200,
+			PackedStringArray(),
+			PackedByteArray()
+		)
+		return
+	if current_download.is_empty():
+		_delete_existing_download(file_path)
+		return
+	current_download["file_path"] = file_path
+	current_download["download_summary"] = summary
+	progress_is_indeterminate = false
+	progress_bar.value = 100.0
+	_handle_download_response()
+
+
+func _on_resumable_download_failed(message: String, summary: Dictionary) -> void:
+	download_progress_snapshot.clear()
+	progress_is_indeterminate = false
+	var failed_kind := active_resumable_download_kind
+	active_resumable_download_kind = ""
+	_set_busy(false)
+	if failed_kind == "launcher_update":
+		launcher_update_busy = false
+		launcher_update_in_progress = false
+		launcher_update_shown = false
+		_set_status(_t("Download failed: {task} ({reason}). Partial progress was kept.", {
+			"task": _t("launcher update"),
+			"reason": message,
+		}), "error")
+		_log_error("Launcher update download stopped after bounded retries. reason=%s" % message)
+		return
+	var label := _get_current_download_display_label() if not current_download.is_empty() else "download"
+	_set_status(_t("Download failed: {task} ({reason}). Partial progress was kept.", {
+		"task": label,
+		"reason": message,
+	}), "error")
+	_log_error(
+		"Download stopped after bounded retries. id=%s downloaded_bytes=%s retries=%s stalls=%s reason=%s" % [
+			str(summary.get("id", "download")),
+			int(summary.get("downloaded_bytes", 0)),
+			int(summary.get("retries", 0)),
+			int(summary.get("stalls", 0)),
+			message,
+		]
+	)
+	current_download.clear()
 
 
 func _request_headers(force_revalidate: bool = false) -> PackedStringArray:
@@ -1893,6 +2043,10 @@ func _extract_zip(zip_path: String, target_dir: String, label: String) -> Error:
 	for packed_file_path: String in packed_file_paths:
 		if packed_file_path.ends_with("/"):
 			continue
+		if not _is_safe_archive_path(packed_file_path):
+			reader.close()
+			_log_error("Archive contains unsafe path: %s" % packed_file_path)
+			return ERR_INVALID_DATA
 
 		extracted_file_count += 1
 		if extracted_file_count == 1 or extracted_file_count % EXTRACT_PROGRESS_BATCH_SIZE == 0:
@@ -1933,6 +2087,70 @@ func _extract_zip(zip_path: String, target_dir: String, label: String) -> Error:
 	reader.close()
 	progress_bar.value = 100.0
 	return OK
+
+
+func _commit_staged_download(download: Dictionary, staging_root: String) -> Error:
+	var download_type := str(download.get("type", ""))
+	var staged_source := staging_root
+	var target := _get_game_install_dir()
+	if download_type == "game":
+		var game_data := _get_dictionary(manifest, "game")
+		var executable := str(game_data.get("executable", ""))
+		if executable.is_empty():
+			executable = _get_default_game_executable_name()
+		if not FileAccess.file_exists(_globalize_storage_path(staged_source.path_join(executable))):
+			return ERR_FILE_MISSING_DEPENDENCIES
+	else:
+		var required_path := str(ASSET_PACK_REQUIRED_PATHS.get(str(download.get("id", "")), ""))
+		if required_path.is_empty():
+			return ERR_INVALID_DATA
+		staged_source = staging_root.path_join(required_path)
+		target = install_dir.path_join(required_path)
+		if not DirAccess.dir_exists_absolute(_globalize_storage_path(staged_source)):
+			return ERR_FILE_MISSING_DEPENDENCIES
+
+	var absolute_source := _globalize_storage_path(staged_source)
+	var absolute_target := _globalize_storage_path(target)
+	var absolute_backup := "%s.launcher-backup" % absolute_target
+	var parent_error := DirAccess.make_dir_recursive_absolute(absolute_target.get_base_dir())
+	if parent_error != OK:
+		return parent_error
+	if not DirAccess.dir_exists_absolute(absolute_target) and DirAccess.dir_exists_absolute(absolute_backup):
+		var recovery_error := DirAccess.rename_absolute(absolute_backup, absolute_target)
+		if recovery_error != OK:
+			return recovery_error
+	var cleanup_error := _remove_directory_tree(absolute_backup)
+	if cleanup_error != OK:
+		return cleanup_error
+
+	var had_existing_target := DirAccess.dir_exists_absolute(absolute_target)
+	if had_existing_target:
+		var backup_error := DirAccess.rename_absolute(absolute_target, absolute_backup)
+		if backup_error != OK:
+			return backup_error
+
+	var promote_error := DirAccess.rename_absolute(absolute_source, absolute_target)
+	if promote_error != OK:
+		if had_existing_target and DirAccess.dir_exists_absolute(absolute_backup):
+			DirAccess.rename_absolute(absolute_backup, absolute_target)
+		return promote_error
+
+	if had_existing_target:
+		cleanup_error = _remove_directory_tree(absolute_backup)
+		if cleanup_error != OK:
+			_log_warning("Installed update but could not remove backup folder: %s" % error_string(cleanup_error))
+	_remove_directory_tree(staging_root)
+	return OK
+
+
+func _is_safe_archive_path(path: String) -> bool:
+	var normalized := path.replace("\\", "/")
+	if normalized.is_empty() or normalized.begins_with("/") or normalized.contains(":"):
+		return false
+	for segment: String in normalized.split("/", false):
+		if segment in [".", ".."]:
+			return false
+	return true
 
 
 func _clear_directory(target_dir: String) -> Error:
@@ -1976,6 +2194,16 @@ func _remove_directory_contents(absolute_dir: String) -> Error:
 
 	directory.list_dir_end()
 	return OK
+
+
+func _remove_directory_tree(path: String) -> Error:
+	var absolute_path := _globalize_storage_path(path)
+	if not DirAccess.dir_exists_absolute(absolute_path):
+		return OK
+	var remove_contents_error := _remove_directory_contents(absolute_path)
+	if remove_contents_error != OK:
+		return remove_contents_error
+	return DirAccess.remove_absolute(absolute_path)
 
 
 func _delete_existing_download(download_path: String) -> void:
@@ -2520,7 +2748,7 @@ func _update_progress_percent() -> void:
 		progress_percent_label.text = ""
 		return
 
-	progress_percent_label.text = "%d%%" % int(round(progress_bar.value))
+	progress_percent_label.text = "%.1f%%" % progress_bar.value
 
 
 func _format_bytes(byte_count: int) -> String:
@@ -2533,6 +2761,12 @@ func _format_bytes(byte_count: int) -> String:
 		return "%.1f KB" % (byte_count_float / 1024.0)
 
 	return "%d B" % byte_count
+
+
+func _format_transfer_speed(bytes_per_second: float) -> String:
+	if bytes_per_second <= 0.0:
+		return _t("waiting for data")
+	return "%s/s" % _format_bytes(int(bytes_per_second))
 
 
 func _get_file_size(path: String) -> int:
@@ -2608,9 +2842,8 @@ func _append_diagnostic(level: String, message: String) -> void:
 
 func _sanitize_diagnostic_message(message: String) -> String:
 	var sanitized := message.replace("\r", " ").replace("\n", " ")
-	var absolute_user_data := _globalize_storage_path("user://").trim_suffix("/")
-	if not absolute_user_data.is_empty():
-		sanitized = sanitized.replace(absolute_user_data, "<user_data>")
+	for private_path: String in _private_diagnostic_paths():
+		sanitized = sanitized.replace(private_path, "<private_path>")
 
 	var parts := sanitized.split(" ")
 	for index: int in range(parts.size()):
@@ -2624,6 +2857,20 @@ func _sanitize_diagnostic_message(message: String) -> String:
 		if query_start >= 0:
 			parts[index] = "%s?<redacted>" % part.substr(0, query_start)
 	return " ".join(parts)
+
+
+func _private_diagnostic_paths() -> PackedStringArray:
+	var paths := PackedStringArray()
+	var candidates := [
+		_globalize_storage_path("user://").trim_suffix("/").trim_suffix("\\"),
+		_globalize_storage_path(install_dir).trim_suffix("/").trim_suffix("\\"),
+		OS.get_environment("HOME").trim_suffix("/"),
+		OS.get_environment("USERPROFILE").trim_suffix("\\"),
+	]
+	for candidate: String in candidates:
+		if candidate.length() >= 4 and candidate not in paths:
+			paths.append(candidate)
+	return paths
 
 
 func _format_diagnostic_timestamp() -> String:
