@@ -39,7 +39,9 @@ const TREE_LAYER_Z_MIN := -4096
 const TREE_LAYER_Z_MAX := 4096
 const MAP_FADE_OUT_SECONDS := 0.60
 const MAP_LOADING_CONTENT_FADE_OUT_SECONDS := 0.12
+const MAP_SNAPSHOT_FADE_OUT_SECONDS := 0.20
 const MAP_FADE_IN_SECONDS := 0.75
+const MAP_TRANSITION_COVER_ALPHA := 0.88
 const WILD_ENCOUNTER_MINIMUM_COVER_SECONDS := 0.46
 const WILD_BATTLE_REVEAL_SECONDS := 0.20
 const EV_TRAINING_MAP_ID := "kanto_viridian_city"
@@ -102,6 +104,7 @@ var active_trainer_outro_dialogue_id := ""
 var active_trainer_mugshot: Texture2D
 var active_trainer_is_rematch := false
 var map_transition_layer: CanvasLayer
+var map_transition_snapshot: TextureRect
 var map_transition_rect: ColorRect
 var map_transition_content: Control
 
@@ -385,7 +388,7 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 				"success": false,
 				"error": "Teleport map does not exist: %s" % target_scene_path,
 			}
-		await _fade_map_transition(1.0, MAP_FADE_OUT_SECONDS)
+		await _fade_map_transition(MAP_TRANSITION_COVER_ALPHA, MAP_FADE_OUT_SECONDS)
 		var target_scene := await _load_map_scene_threaded(target_scene_path)
 		if target_scene == null:
 			await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
@@ -641,7 +644,7 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 		GameState.unlock_overworld_input()
 		return
 
-	await _fade_map_transition(1.0, MAP_FADE_OUT_SECONDS)
+	await _fade_map_transition(MAP_TRANSITION_COVER_ALPHA, MAP_FADE_OUT_SECONDS)
 
 	var target_scene := await _load_map_scene_threaded(target_scene_path)
 	if target_scene == null:
@@ -705,6 +708,13 @@ func _end_ev_training_session_for_map_exit(
 
 func _fade_map_transition(target_alpha: float, duration: float) -> void:
 	_ensure_map_transition_overlay()
+	var effective_target_alpha := target_alpha
+	if target_alpha > 0.0:
+		# Preserve the fully rendered source map while the real scene is replaced.
+		# If capture is unavailable, fall back to opaque cover so partial scene
+		# initialization can never become visible.
+		if not _capture_map_transition_snapshot():
+			effective_target_alpha = 1.0
 	map_transition_rect.visible = true
 	map_transition_content.visible = true
 	if target_alpha > 0.0:
@@ -721,18 +731,45 @@ func _fade_map_transition(target_alpha: float, duration: float) -> void:
 			MAP_LOADING_CONTENT_FADE_OUT_SECONDS
 		).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		await content_tween.finished
+		if map_transition_snapshot.visible:
+			var snapshot_tween := create_tween()
+			snapshot_tween.tween_property(
+				map_transition_snapshot,
+				"modulate:a",
+				0.0,
+				MAP_SNAPSHOT_FADE_OUT_SECONDS
+			).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+			await snapshot_tween.finished
+			map_transition_snapshot.visible = false
+			map_transition_snapshot.texture = null
 
 	var background_tween := create_tween()
 	background_tween.tween_property(
 		map_transition_rect,
 		"color:a",
-		target_alpha,
+		effective_target_alpha,
 		duration
 	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
 	await background_tween.finished
 	if is_zero_approx(target_alpha):
 		map_transition_rect.visible = false
 		map_transition_content.visible = false
+
+
+func _capture_map_transition_snapshot() -> bool:
+	var viewport := get_viewport()
+	if viewport == null:
+		return false
+	var viewport_texture := viewport.get_texture()
+	if viewport_texture == null:
+		return false
+	var image := viewport_texture.get_image()
+	if image == null or image.is_empty():
+		return false
+	map_transition_snapshot.texture = ImageTexture.create_from_image(image)
+	map_transition_snapshot.modulate.a = 1.0
+	map_transition_snapshot.visible = true
+	return true
 
 
 func _load_map_scene_threaded(scene_path: String) -> PackedScene:
@@ -763,6 +800,15 @@ func _ensure_map_transition_overlay() -> void:
 	map_transition_layer.name = "MapTransitionLayer"
 	map_transition_layer.layer = 1000
 	add_child(map_transition_layer)
+	map_transition_snapshot = TextureRect.new()
+	map_transition_snapshot.name = "MapTransitionSnapshot"
+	map_transition_snapshot.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	map_transition_snapshot.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	map_transition_snapshot.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	map_transition_snapshot.stretch_mode = TextureRect.STRETCH_SCALE
+	map_transition_snapshot.visible = false
+	map_transition_layer.add_child(map_transition_snapshot)
+
 	map_transition_rect = ColorRect.new()
 	map_transition_rect.name = "MapTransitionFade"
 	map_transition_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)

@@ -8,7 +8,7 @@
 
 **Fixed**
 
-- Map changes now fade smoothly into and out of the loading screen, reducing sudden jumps between dark interiors and bright outdoor maps.
+- Map changes now fade smoothly while keeping a dim view of the previous area during loading, reducing sudden dark-to-bright jumps.
 - Ogerpon's correct battle sprites are now included in game downloads.
 - Training Rooms no longer blame a valid Poképaste when room timers are temporarily unavailable.
 - Wild battles now immediately show the first Pokémon that can battle when an earlier party member has fainted.

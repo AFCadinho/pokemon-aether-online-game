@@ -19,13 +19,26 @@ func _init() -> void:
 		world_source.contains("const MAP_LOADING_CONTENT_FADE_OUT_SECONDS := 0.12"),
 		"the loading content has a dedicated short fade-out"
 	)
+	_check(
+		world_source.contains("const MAP_TRANSITION_COVER_ALPHA := 0.88"),
+		"the loading screen preserves a faint view of the previous map"
+	)
+	_check(
+		world_source.contains("func _capture_map_transition_snapshot() -> bool:")
+		and world_source.contains("ImageTexture.create_from_image(image)"),
+		"map transitions freeze the rendered source map before replacing it"
+	)
 
 	var reveal_branch := world_source.find("if is_zero_approx(target_alpha):")
 	var content_fade := world_source.find("await content_tween.finished", reveal_branch)
+	var snapshot_fade := world_source.find("await snapshot_tween.finished", reveal_branch)
 	var background_fade := world_source.find("var background_tween := create_tween()", reveal_branch)
 	_check(
-		reveal_branch >= 0 and content_fade > reveal_branch and background_fade > content_fade,
-		"the loading indicator disappears before the destination map is revealed"
+		reveal_branch >= 0
+		and content_fade > reveal_branch
+		and snapshot_fade > content_fade
+		and background_fade > snapshot_fade,
+		"loading content and the frozen source map clear before the destination brightens"
 	)
 
 	quit(1 if failed else 0)
