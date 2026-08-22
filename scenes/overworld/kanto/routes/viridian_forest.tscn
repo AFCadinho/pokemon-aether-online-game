@@ -583,22 +583,22 @@ movement_speed_pixels = 55.0
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=224807989]
 
 [node name="PokeBall" parent="Entities/Interactables" instance=ExtResource("15_overworld_item")]
-position = Vector2(1808, 1968)
+position = Vector2(672, 1088)
 pickup_id = "kanto_viridian_forest_poke_ball"
 item_id = "poke-ball"
 
 [node name="Antidote" parent="Entities/Interactables" instance=ExtResource("15_overworld_item")]
-position = Vector2(1936, 1136)
+position = Vector2(1280, 1600)
 pickup_id = "kanto_viridian_forest_antidote"
 item_id = "antidote"
 
 [node name="Potion" parent="Entities/Interactables" instance=ExtResource("15_overworld_item")]
-position = Vector2(1136, 976)
+position = Vector2(1568, 1920)
 pickup_id = "kanto_viridian_forest_potion"
 item_id = "potion"
 
 [node name="Potion2" parent="Entities/Interactables" instance=ExtResource("15_overworld_item")]
-position = Vector2(1584, 176)
+position = Vector2(768, 1920)
 pickup_id = "kanto_viridian_forest_potion_2"
 item_id = "potion"
 

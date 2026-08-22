@@ -549,12 +549,12 @@ movement_speed_pixels = 50.0
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=2096619694]
 
 [node name="Ether" parent="Entities/Interactables" instance=ExtResource("19_overworld_item")]
-position = Vector2(944, 592)
+position = Vector2(544, 1728)
 pickup_id = "kanto_route_2_ether"
 item_id = "ether"
 
 [node name="ParalyzeHeal" parent="Entities/Interactables" instance=ExtResource("19_overworld_item")]
-position = Vector2(1008, 1968)
+position = Vector2(672, 2048)
 pickup_id = "kanto_route_2_paralyze_heal"
 item_id = "paralyze-heal"
 
