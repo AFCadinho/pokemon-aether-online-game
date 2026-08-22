@@ -24,7 +24,7 @@
 [ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="28_gate_npc"]
 [ext_resource type="PackedScene" uid="uid://rnbee61xiftm" path="res://scenes/npcs/item_gift_npc.tscn" id="29_item_gift"]
 [ext_resource type="Script" uid="uid://c76onuvbojgfx" path="res://scripts/world/kanto/towns/pewter_city/karate_master_kenji.gd" id="30_karate_master"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/black_belt_frames.tres" id="31_black_belt"]
+[ext_resource type="SpriteFrames" uid="uid://x75gwtrd76d3" path="res://assets/npcs/classes/black_belt_frames.tres" id="31_black_belt"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/daily_smashable_rock.tscn" id="32_daily_rock"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2mtwu"]
@@ -368,9 +368,9 @@ script = ExtResource("30_karate_master")
 reward_id = "kanto_pewter_city_karate_master_rock_smash_hm"
 npc_id = "kanto_pewter_city_karate_master_kenji"
 display_name = "Karate Master Kenji"
-portrait_id = "showdown_blackbelt_gen6"
 facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("31_black_belt")
+portrait_id = "showdown_blackbelt_gen6"
 preload_quest_markers = true
 
 [node name="Route3Guard" parent="Entities/NPCs" unique_id=1988861091 instance=ExtResource("28_gate_npc")]
