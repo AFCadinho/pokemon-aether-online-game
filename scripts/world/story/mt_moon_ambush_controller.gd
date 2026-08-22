@@ -7,6 +7,7 @@ const FINAL_STEP_ID := "cross_mt_moon"
 const OVERWORLD_POKEMON_SCENE := preload("res://scenes/npcs/overworld_pokemon.tscn")
 const RIFT_TEXTURE := preload("res://assets/npcs/Ultimate Gen 4 Overworlds Pack/Animations & Others/DistortionWorld_Portal.png")
 const CINEMATIC_MOVE_CATALOG := preload("res://scripts/world/story/mt_moon_cinematic_move_catalog.gd")
+const ROCKET_PORTRAIT_ID := "showdown_rainbowrocketgrunt"
 const ROCKET_SPECIES: Array[String] = ["zubat", "rattata", "ekans", "koffing", "sandshrew"]
 const ROCKET_POKEMON_POSITIONS: Array[Vector2] = [
 	Vector2(-64, 0),
@@ -45,6 +46,7 @@ var _rocket_pokemon: Array[Node2D] = []
 var _rift: Sprite2D
 var _overlay_layer: CanvasLayer
 var _overlay_root: Control
+var _player_portrait_renderer: TrainerHeadPortrait
 var _prepared := false
 var _counterattack_played := false
 var _future_self_spawn_global_position := Vector2.ZERO
@@ -78,7 +80,16 @@ func show_dialogue(lines: Array[String], speaker_name := "") -> bool:
 	var resolved_speaker_name := speaker_name
 	if current_stage in [DIALOGUE_STAGE_PLAYER_QUESTION, DIALOGUE_STAGE_PLAYER_PROMISE]:
 		resolved_speaker_name = _player_speaker_name()
-	dialogue_box.call("start_dialogue", lines, resolved_speaker_name)
+	var portrait := await _dialogue_portrait(current_stage)
+	var show_portrait := current_stage in [
+		DIALOGUE_STAGE_AMBUSH,
+		DIALOGUE_STAGE_ROCKET_REVEAL_CHALLENGE,
+		DIALOGUE_STAGE_ROCKET_BATTLE_CHALLENGE,
+		DIALOGUE_STAGE_ROCKET_FLEE,
+		DIALOGUE_STAGE_PLAYER_QUESTION,
+		DIALOGUE_STAGE_PLAYER_PROMISE,
+	]
+	dialogue_box.call("start_dialogue", lines, resolved_speaker_name, portrait, show_portrait)
 	await dialogue_box.dialogue_finished
 	await _wait_for_interact_release()
 	if current_stage == DIALOGUE_STAGE_ROCKET_REVEAL_CHALLENGE:
@@ -374,6 +385,35 @@ func _player_speaker_name() -> String:
 	if not player_name.is_empty():
 		return player_name
 	return _text("story.mt_moon.cutscene.player_speaker")
+
+
+func _dialogue_portrait(stage: int) -> Texture2D:
+	if stage in [
+		DIALOGUE_STAGE_AMBUSH,
+		DIALOGUE_STAGE_ROCKET_REVEAL_CHALLENGE,
+		DIALOGUE_STAGE_ROCKET_BATTLE_CHALLENGE,
+		DIALOGUE_STAGE_ROCKET_FLEE,
+	]:
+		return TrainerPortraitCatalog.get_texture(ROCKET_PORTRAIT_ID)
+	if stage in [DIALOGUE_STAGE_PLAYER_QUESTION, DIALOGUE_STAGE_PLAYER_PROMISE]:
+		return await _player_mugshot()
+	return null
+
+
+func _player_mugshot() -> Texture2D:
+	if not is_instance_valid(_player_portrait_renderer):
+		_ensure_overlay()
+		_player_portrait_renderer = TrainerHeadPortrait.new()
+		_player_portrait_renderer.name = "PlayerDialoguePortrait"
+		_player_portrait_renderer.custom_minimum_size = Vector2(64, 64)
+		_player_portrait_renderer.size = Vector2(64, 64)
+		_player_portrait_renderer.position = Vector2(-128, -128)
+		_player_portrait_renderer.appearance_state = PlayerSave.to_appearance_state()
+		_overlay_root.add_child(_player_portrait_renderer)
+		await get_tree().process_frame
+	if _player_portrait_renderer.viewport == null:
+		return null
+	return _player_portrait_renderer.viewport.get_texture()
 
 
 func _wait_for_interact_release() -> void:

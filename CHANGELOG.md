@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- The Mt. Moon rescue now surrounds you from both sides, makes the Grunts face you, plays every summon and attack without skipped dialogue, and turns both characters toward each other after Team Rocket escapes.
+- The Mt. Moon rescue now surrounds you from both sides, gives Team Rocket and your character the correct portraits, plays every summon and attack without skipped dialogue, and turns both characters toward each other after Team Rocket escapes.
 
 - Rewinding the Mt. Moon story now restores the fossil Poké Balls immediately.
 
