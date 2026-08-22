@@ -17,9 +17,10 @@ func _init() -> void:
 		"player nameplate contains a guild emblem"
 	)
 	_check(
-		player_scene_source.contains("offset_right = 33.0")
-		and player_scene_source.contains("offset_bottom = 61.0"),
-		"guild emblem defaults to its native 16 pixel display size"
+		player_scene_source.contains("offset_left = 13.0")
+		and player_scene_source.contains("offset_right = 33.0")
+		and player_scene_source.contains("offset_bottom = 63.0"),
+		"guild emblem defaults to its larger 20 pixel display size"
 	)
 	_check(
 		player_scene_source.contains("texture_filter = 1"),
@@ -96,12 +97,12 @@ func _check_inline_nameplate_geometry(_texture: Texture2D) -> void:
 		"guild emblem does not resize or move the centered name card"
 	)
 	_check(
-		emblem.size == Vector2(16.0, 16.0),
-		"guild emblem stays at its native 16 by 16 display size"
+		emblem.size == Vector2(20.0, 20.0),
+		"guild emblem uses a clear 20 by 20 display size"
 	)
 	_check(
-		emblem_background.size == Vector2(20.0, 20.0),
-		"guild emblem has a compact 20 by 20 badge background"
+		emblem_background.size == Vector2(24.0, 24.0),
+		"guild emblem has a compact 24 by 24 badge background"
 	)
 	_check(
 		is_equal_approx(background.position.x - emblem_background.end.x, 2.0),
@@ -113,7 +114,7 @@ func _check_inline_nameplate_geometry(_texture: Texture2D) -> void:
 	)
 	_check(
 		emblem.position == emblem_background.position + Vector2(2.0, 2.0),
-		"guild emblem is centered at native size inside its badge"
+		"guild emblem is centered inside its badge"
 	)
 	_check(
 		is_equal_approx(background.get_center().x, 82.0),
