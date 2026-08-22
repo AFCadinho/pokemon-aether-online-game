@@ -279,7 +279,7 @@
   "ui.quest.completed_reward": "Missão secundária concluída: {quest}. Você recebeu {reward}!",
   "ui.quest.thieving_lesson_reward": "500 XP de Thieving, {tm} e {glasses}",
   "ui.quest.fishing_lesson_reward": "₽500, 130 XP de Pesca e Água Mística",
-  "ui.quest.rock_smash_lesson_reward": "360 XP de Rock Smash e uma Hard Stone",
+  "ui.quest.rock_smash_lesson_reward": "360 XP de Rock Smash e uma Black Belt",
   "ui.quest.status.failed": "Falhou",
   "story.kanto.choose_starter.title": "Uma jornada começa",
   "story.kanto.choose_starter.summary": "Fale com seu pai e depois visite o Professor Oak no laboratório dele.",
