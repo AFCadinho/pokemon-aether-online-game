@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- TMs and HMs found in the overworld now use a distinct golden Poké Ball.
+
 - Ground items now play their pickup sound and appear in System messages without opening a dialogue box.
 
 - Miguel now blocks the entire fossil-room approach until you have defeated the required Team Rocket Grunts.

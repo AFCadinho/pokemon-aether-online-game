@@ -1,5 +1,8 @@
 extends SceneTree
 
+const REGULAR_BALL_PATH := "res://assets/npcs/gen4-ow-sprites/Object ball.png"
+const MACHINE_BALL_PATH := "res://assets/npcs/gen4-ow-sprites/Object ball gold.png"
+
 var failed := false
 
 
@@ -22,6 +25,9 @@ func _init() -> void:
 
 	_check(ResourceLoader.exists("res://scenes/world/interactables/overworld_item.tscn"), "overworld item scene exists")
 	_check(item_scene_source.contains("Object ball.png"), "overworld item uses the reusable Poké Ball asset")
+	_check(FileAccess.file_exists(MACHINE_BALL_PATH), "TM and HM pickups have a gold Poké Ball asset")
+	_check(item_script_source.contains('begins_with("tm-")') and item_script_source.contains('begins_with("hm-")'), "TM and HM pickups select the gold Poké Ball automatically")
+	_check_machine_ball_geometry()
 	_check(item_script_source.contains("@export var pickup_id"), "overworld items expose a persistent pickup id")
 	_check(item_script_source.contains("claim_world_pickup(pickup_id)"), "overworld item claims through the inventory service")
 	_check(item_script_source.contains("set_claimed(true)"), "collected overworld items are hidden")
@@ -38,6 +44,36 @@ func _init() -> void:
 	_check(boulder_script_source.contains('push_direction * TILE_SIZE'), "Strength boulder moves exactly one tile")
 
 	quit(1 if failed else 0)
+
+
+func _check_machine_ball_geometry() -> void:
+	var regular_image := _load_png(REGULAR_BALL_PATH)
+	var machine_image := _load_png(MACHINE_BALL_PATH)
+	_check(not regular_image.is_empty() and not machine_image.is_empty(), "overworld Poké Ball images can be read")
+	if regular_image.is_empty() or machine_image.is_empty():
+		return
+	_check(machine_image.get_size() == regular_image.get_size(), "gold Poké Ball preserves the original sheet size")
+	if machine_image.get_size() != regular_image.get_size():
+		return
+	var changed_color := false
+	var alpha_matches := true
+	for y in range(regular_image.get_height()):
+		for x in range(regular_image.get_width()):
+			var regular_pixel := regular_image.get_pixel(x, y)
+			var machine_pixel := machine_image.get_pixel(x, y)
+			if not is_equal_approx(regular_pixel.a, machine_pixel.a):
+				alpha_matches = false
+			if regular_pixel != machine_pixel:
+				changed_color = true
+	_check(alpha_matches, "gold Poké Ball preserves every transparent pixel")
+	_check(changed_color, "gold Poké Ball uses a distinct color palette")
+
+
+func _load_png(path: String) -> Image:
+	var image := Image.new()
+	if image.load_png_from_buffer(FileAccess.get_file_as_bytes(path)) != OK:
+		return Image.new()
+	return image
 
 
 func _check(value: bool, label: String) -> void:
