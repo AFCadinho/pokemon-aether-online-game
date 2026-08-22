@@ -140,20 +140,20 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_role_badge")
 [node name="GuildEmblemBackground" type="Panel" parent="Nameplate"]
 visible = false
 layout_mode = 0
-offset_left = 15.0
-offset_top = 43.0
+offset_left = 11.0
+offset_top = 41.0
 offset_right = 35.0
-offset_bottom = 63.0
+offset_bottom = 65.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_guild_emblem_background")
 
 [node name="GuildEmblem" type="TextureRect" parent="Nameplate"]
 visible = false
 layout_mode = 0
-offset_left = 17.0
-offset_top = 45.0
+offset_left = 13.0
+offset_top = 43.0
 offset_right = 33.0
-offset_bottom = 61.0
+offset_bottom = 63.0
 mouse_filter = 2
 texture_filter = 1
 expand_mode = 1

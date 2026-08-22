@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Guild emblems now appear as crisp, compact badges beside player names instead of enlarging the name box.
+- Guild emblems now appear as clear, compact badges beside player names instead of enlarging the name box.
 
 - Player and NPC name boxes now fit their displayed name instead of keeping an oversized minimum width and height.
 
