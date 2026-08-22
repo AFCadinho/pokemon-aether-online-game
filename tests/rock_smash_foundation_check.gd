@@ -33,6 +33,13 @@ func _run() -> void:
 		and "await clear_obstacle()" in obstacle,
 		"A rock only breaks after its position and server reward are authorized"
 	)
+	var field_move_obstacle := FileAccess.get_file_as_string(
+		"res://scripts/world/interactables/field_move_obstacle.gd"
+	)
+	_check(
+		'call_deferred("queue_free")' in field_move_obstacle,
+		"Cleared rocks defer deletion until the interaction unlocks overworld movement"
+	)
 	_check(
 		"badge" not in field_moves.to_lower(),
 		"Generic field-move use does not require a Gym Badge"
