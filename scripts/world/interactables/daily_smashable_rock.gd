@@ -2,20 +2,33 @@ extends FieldMoveObstacle
 
 class_name DailySmashableRock
 
+enum RockVisualStyle {
+	TRAINING,
+	CAVE,
+}
+
 const TRAINING_ROCK_SHEET: Texture2D = preload(
 	"res://assets/world/field_move_obstacles/object_rock_training_pewter.png"
+)
+const CAVE_ROCK_SHEET: Texture2D = preload(
+	"res://assets/world/field_move_obstacles/object_rock.png"
 )
 
 @export var rock_id := ""
 @export_range(0, 3) var rock_variant := 0
+@export var rock_visual_style := RockVisualStyle.TRAINING
 
 var request_pending := false
 
 
 func _ready() -> void:
 	required_field_move = "rock-smash"
-	display_name = "Training Rock"
-	unavailable_message = "This training rock can be smashed with Rock Smash."
+	if rock_visual_style == RockVisualStyle.CAVE:
+		display_name = "Cave Rock"
+		unavailable_message = "This cave rock can be smashed with Rock Smash."
+	else:
+		display_name = "Training Rock"
+		unavailable_message = "This training rock can be smashed with Rock Smash."
 	_configure_variant_frames()
 	super._ready()
 	if not RockSmashService.state_changed.is_connected(_on_rock_smash_state_changed):
@@ -94,7 +107,11 @@ func _configure_variant_frames() -> void:
 
 func _frame_texture(row: int) -> AtlasTexture:
 	var texture := AtlasTexture.new()
-	texture.atlas = TRAINING_ROCK_SHEET
+	texture.atlas = (
+		CAVE_ROCK_SHEET
+		if rock_visual_style == RockVisualStyle.CAVE
+		else TRAINING_ROCK_SHEET
+	)
 	texture.region = Rect2(rock_variant * 32, row * 32, 32, 32)
 	return texture
 

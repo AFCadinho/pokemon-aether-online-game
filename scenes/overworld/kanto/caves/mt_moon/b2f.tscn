@@ -10,7 +10,7 @@
 [ext_resource type="SpriteFrames" uid="uid://ndd4lyovddgq" path="res://assets/npcs/classes/rocket_grunt_m_frames.tres" id="6_rocket"]
 [ext_resource type="SpriteFrames" uid="uid://caas815hh7buy" path="res://assets/npcs/classes/scientist_m_frames.tres" id="7_scientist"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="8_item"]
-[ext_resource type="PackedScene" path="res://scenes/world/interactables/smashable_rock.tscn" id="9_rock"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/daily_smashable_rock.tscn" id="9_rock"]
 [ext_resource type="Script" uid="uid://dpwfw3d3b2ks5" path="res://scripts/world/npcs/mt_moon_miguel_npc.gd" id="10_miguel"]
 [ext_resource type="SpriteFrames" uid="uid://cqxh37chx4v8a" path="res://assets/npcs/custom/adinho_dad_frames.tres" id="11_future_frames"]
 [ext_resource type="Script" uid="uid://cejfjhq3lc1ju" path="res://scripts/world/story/mt_moon_ambush_trigger.gd" id="12_ambush_trigger"]
@@ -334,12 +334,20 @@ item_id = "antidote"
 
 [node name="RockSmash01" parent="Entities/Interactables" unique_id=1823731415 instance=ExtResource("9_rock")]
 position = Vector2(784, 336)
+rock_id = "kanto_mt_moon_b2f_rock_north"
+rock_visual_style = 1
 
 [node name="RockSmash02" parent="Entities/Interactables" unique_id=130650846 instance=ExtResource("9_rock")]
 position = Vector2(1456, 1296)
+rock_id = "kanto_mt_moon_b2f_rock_central"
+rock_variant = 1
+rock_visual_style = 1
 
 [node name="RockSmash03" parent="Entities/Interactables" unique_id=1251392957 instance=ExtResource("9_rock")]
 position = Vector2(816, 2192)
+rock_id = "kanto_mt_moon_b2f_rock_south"
+rock_variant = 2
+rock_visual_style = 1
 
 [node name="MtMoonAmbush" type="Node2D" parent="Entities" unique_id=1721373281]
 position = Vector2(768, 624)

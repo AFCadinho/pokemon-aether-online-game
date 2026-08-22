@@ -14,7 +14,7 @@
 [ext_resource type="SpriteFrames" uid="uid://caas815hh7buy" path="res://assets/npcs/classes/scientist_m_frames.tres" id="12_scientist"]
 [ext_resource type="SpriteFrames" uid="uid://57e7bp514fh2" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="13_bug_catcher"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="14_item"]
-[ext_resource type="PackedScene" path="res://scenes/world/interactables/smashable_rock.tscn" id="15_rock"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/daily_smashable_rock.tscn" id="15_rock"]
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="16_dialogue_npc"]
 [ext_resource type="Script" uid="uid://c0rvsvb5ckinb" path="res://scripts/world/story/story_trigger.gd" id="17_story_trigger"]
 [ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="18_story_hook"]
@@ -469,12 +469,20 @@ item_id = "moon-stone"
 
 [node name="RockSmash01" parent="Entities/Interactables" unique_id=1155397083 instance=ExtResource("15_rock")]
 position = Vector2(400, 720)
+rock_id = "kanto_mt_moon_1f_rock_west"
+rock_visual_style = 1
 
 [node name="RockSmash02" parent="Entities/Interactables" unique_id=1318206778 instance=ExtResource("15_rock")]
 position = Vector2(720, 688)
+rock_id = "kanto_mt_moon_1f_rock_central"
+rock_variant = 1
+rock_visual_style = 1
 
 [node name="RockSmash03" parent="Entities/Interactables" unique_id=938321987 instance=ExtResource("15_rock")]
 position = Vector2(2416, 1104)
+rock_id = "kanto_mt_moon_1f_rock_east"
+rock_variant = 2
+rock_visual_style = 1
 
 [node name="StoryTriggers" type="Node2D" parent="." unique_id=1676346445]
 

@@ -20,6 +20,11 @@ func _run() -> void:
 	var pewter := FileAccess.get_file_as_string(
 		"res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn"
 	)
+	var mt_moon_scenes: Array[String] = [
+		FileAccess.get_file_as_string("res://scenes/overworld/kanto/caves/mt_moon/1f.tscn"),
+		FileAccess.get_file_as_string("res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn"),
+		FileAccess.get_file_as_string("res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn"),
+	]
 
 	_check("RockSmashService=" in project, "Rock Smash state is registered as an autoload")
 	_check(
@@ -72,6 +77,26 @@ func _run() -> void:
 		and "position = Vector2(528, 208)" in pewter,
 		"Kenji and all four lesson rocks retain their reviewed positions"
 	)
+	var mt_moon_rock_ids: Array[String] = [
+		"kanto_mt_moon_1f_rock_west",
+		"kanto_mt_moon_1f_rock_central",
+		"kanto_mt_moon_1f_rock_east",
+		"kanto_mt_moon_b1f_rock_west",
+		"kanto_mt_moon_b1f_rock_east",
+		"kanto_mt_moon_b1f_rock_south",
+		"kanto_mt_moon_b2f_rock_north",
+		"kanto_mt_moon_b2f_rock_central",
+		"kanto_mt_moon_b2f_rock_south",
+	]
+	var combined_mt_moon := "\n".join(mt_moon_scenes)
+	for rock_id: String in mt_moon_rock_ids:
+		_check(combined_mt_moon.count(rock_id) == 1, "Mt. Moon places daily rock %s once" % rock_id)
+	_check(
+		combined_mt_moon.count("daily_smashable_rock.tscn") == 3
+		and combined_mt_moon.count("rock_visual_style = 1") == 9
+		and "smashable_rock.tscn" not in combined_mt_moon.replace("daily_smashable_rock.tscn", ""),
+		"All nine legacy Mt. Moon rocks use the daily cave-rock implementation"
+	)
 
 	var rock_scene := load("res://scenes/world/interactables/daily_smashable_rock.tscn") as PackedScene
 	_check(rock_scene != null, "Daily smashable rock scene loads")
@@ -79,12 +104,25 @@ func _run() -> void:
 		"res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn"
 	) as PackedScene
 	_check(pewter_scene != null, "Pewter City still loads with Kenji and the four rocks")
+	for floor_path: String in [
+		"res://scenes/overworld/kanto/caves/mt_moon/1f.tscn",
+		"res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn",
+		"res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn",
+	]:
+		_check(load(floor_path) is PackedScene, "%s loads with daily cave rocks" % floor_path)
 	var sheet := load(
 		"res://assets/world/field_move_obstacles/object_rock_training_pewter.png"
 	) as Texture2D
 	_check(
 		sheet != null and sheet.get_width() == 128 and sheet.get_height() == 128,
 		"Pewter training rocks use the 4-by-4 32px animation sheet"
+	)
+	var cave_sheet := load(
+		"res://assets/world/field_move_obstacles/object_rock.png"
+	) as Texture2D
+	_check(
+		cave_sheet != null and cave_sheet.get_width() == 128 and cave_sheet.get_height() == 128,
+		"Mt. Moon rocks retain the natural 4-by-4 cave animation sheet"
 	)
 
 	for locale: String in ["en", "nl", "pt_BR"]:
@@ -96,8 +134,9 @@ func _run() -> void:
 			_check(
 				(parsed as Dictionary).has("story.kanto.learn_rock_smash.title")
 				and (parsed as Dictionary).has("ui.skills.rock_smash.rocks.reset")
+				and (parsed as Dictionary).has("ui.skills.rock_smash.location.mt_moon_b2f")
 				and (parsed as Dictionary).has("backend.error.rock_smash_too_far"),
-				"Rock Smash quest, daily reset, and backend errors are translated for %s" % locale
+				"Rock Smash quest, Mt. Moon rocks, daily reset, and errors are translated for %s" % locale
 			)
 
 	quit(1 if failed else 0)
