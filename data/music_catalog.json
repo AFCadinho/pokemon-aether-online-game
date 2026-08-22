@@ -37,6 +37,10 @@
       "label": "Viridian City",
       "path": "res://assets/music/overworld/kanto/towns/viridian_city.ogg"
     },
+    "overworld.kanto.cerulean_city": {
+      "label": "Cerulean City Remastered (Zame)",
+      "path": "res://assets/music/overworld/kanto/towns/cerulean_city.ogg"
+    },
     "battle.wild.kanto": {
       "label": "Kanto Wild Battle",
       "path": "res://assets/music/battle/wild/Kanto Wild Battle.ogg"
