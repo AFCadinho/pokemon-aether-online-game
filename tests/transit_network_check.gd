@@ -136,6 +136,8 @@ func _init() -> void:
 	_check(placeholder_source.contains("z_as_relative = false"), "Aether Beacon uses absolute character-compatible depth sorting")
 	var menu_source := FileAccess.get_file_as_string("res://scripts/ui/transit_menu.gd")
 	_check(english_localization.contains('"ui.transit.title": "Aethernet"'), "Transit UI is branded as Aethernet")
+	_check(english_localization.contains("regional Aether Transit fares (₽200 → ₽100)"), "Aether Blessing explains the reduced regional fares")
+	_check(english_localization.contains("An attuned destination costs ₽200"), "Aethernet Keeper explains the reduced standard fare")
 	_check(menu_source.contains("_destinations_by_region"), "Transit UI groups destinations by region")
 	_check(menu_source.contains("_global_hubs"), "Transit UI separates worldwide hubs from regional destinations")
 	_check(menu_source.contains("_global_hub_card"), "Transit UI gives worldwide hubs their own visual treatment")
