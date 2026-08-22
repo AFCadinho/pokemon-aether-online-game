@@ -364,9 +364,9 @@ z_index = 5
 position = Vector2(848, 2384)
 npc_id = "mt_moon_warning_hiker"
 display_name = "Hiker"
-portrait_id = "showdown_hiker_gen6"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("9_hiker")
+portrait_id = "showdown_hiker_gen6"
 
 [node name="HikerMarcos" parent="Entities/NPCs" unique_id=855938767 instance=ExtResource("8_trainer")]
 position = Vector2(336, 496)
@@ -402,6 +402,7 @@ npc_id = "kanto_mt_moon_1f_lass_iris"
 npc_definition_id = "trainer_class_lass"
 display_name = "Lass Iris"
 npc_sprite_frames = ExtResource("11_lass")
+movement_tiles = 4
 
 [node name="SuperNerdJovan" parent="Entities/NPCs" unique_id=1652232414 instance=ExtResource("8_trainer")]
 position = Vector2(1712, 2320)
@@ -464,7 +465,7 @@ pickup_id = "kanto_mt_moon_1f_great_ball"
 item_id = "great-ball"
 
 [node name="MoonStone" parent="Entities/Interactables" unique_id=618258656 instance=ExtResource("14_item")]
-position = Vector2(2608, 2192)
+position = Vector2(208, 208)
 pickup_id = "kanto_mt_moon_1f_moon_stone"
 item_id = "moon-stone"
 

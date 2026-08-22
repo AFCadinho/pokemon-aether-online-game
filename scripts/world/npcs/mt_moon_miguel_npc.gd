@@ -8,6 +8,7 @@ const BATTLE_STEP_ID := "defeat_miguel"
 const FINAL_STEP_ID := "cross_mt_moon"
 const BLOCKED_DIALOGUE_ID := "kanto_mt_moon_miguel_blocked"
 const PANIC_DIALOGUE_ID := "kanto_mt_moon_miguel_panic"
+const FOSSIL_DIALOGUE_ID := "kanto_mt_moon_miguel_fossil_choice"
 const AFTER_AMBUSH_DIALOGUE_ID := "kanto_mt_moon_miguel_after_ambush"
 const POST_AMBUSH_OFFSET := Vector2(0, 192)
 const BLOCKING_TILE_OFFSETS: Array[Vector2i] = [
@@ -22,6 +23,7 @@ const BLOCKING_TILE_OFFSETS: Array[Vector2i] = [
 var _blocking_position := Vector2.ZERO
 var _gate_feedback_in_flight := false
 var _has_fled_ambush := false
+var _battle_step_was_completed := false
 
 
 func _ready() -> void:
@@ -31,6 +33,11 @@ func _ready() -> void:
 		return
 	if not StoryService.story_changed.is_connected(_on_story_changed):
 		StoryService.story_changed.connect(_on_story_changed)
+	_battle_step_was_completed = StoryService.is_requirement_met(
+		QUEST_ID,
+		BATTLE_STEP_ID,
+		"completed"
+	)
 	_apply_story_position()
 
 
@@ -142,6 +149,18 @@ func _show_panic_dialogue() -> void:
 	)
 
 
+func show_fossil_choice_dialogue() -> void:
+	var result: Dictionary = await NpcDialogueService.resolve_dialogue(
+		FOSSIL_DIALOGUE_ID,
+		["Fine, I'll take this one."],
+		"MtMoonMiguelNPC"
+	)
+	await show_dialogue(
+		_string_array(result.get("lines", [])),
+		str(result.get("speakerName", display_name)).strip_edges()
+	)
+
+
 func _send_player_back(player: Node2D) -> void:
 	if player.has_method("story_move_path"):
 		var retreat_path: Array[String] = ["down"]
@@ -159,10 +178,17 @@ func _send_player_back(player: Node2D) -> void:
 
 
 func _on_story_changed(_revision: int) -> void:
-	_apply_story_position()
+	var battle_step_completed := StoryService.is_requirement_met(
+		QUEST_ID,
+		BATTLE_STEP_ID,
+		"completed"
+	)
+	var rewound_before_battle := _battle_step_was_completed and not battle_step_completed
+	_battle_step_was_completed = battle_step_completed
+	_apply_story_position(rewound_before_battle)
 
 
-func _apply_story_position() -> void:
+func _apply_story_position(recover_blocked_players := false) -> void:
 	var final_step_completed := StoryService.is_requirement_met(QUEST_ID, FINAL_STEP_ID, "completed")
 	var final_step_active := StoryService.is_requirement_met(QUEST_ID, FINAL_STEP_ID, "active")
 	if _has_fled_ambush and final_step_active:
@@ -179,7 +205,8 @@ func _apply_story_position() -> void:
 		_set_idle_frame(Vector2.DOWN)
 	else:
 		position = _blocking_position
-		_recover_players_to_blocked_side.call_deferred()
+		if recover_blocked_players:
+			_recover_players_to_blocked_side.call_deferred()
 
 
 func _recover_players_to_blocked_side() -> void:
