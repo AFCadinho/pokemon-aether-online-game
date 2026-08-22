@@ -42,6 +42,8 @@ func _run() -> void:
 	_expect("_summon_rocket_pokemon" in controller_source, "Ambush summons Team Rocket's Pokémon")
 	_expect("_open_rift" in controller_source, "Ambush opens the future-self rift")
 	_expect("play_overworld_summon" in controller_source, "Ambush uses the shared Poké Ball animation")
+	_expect("add_child(pokemon)\n\t# BaseNPC initialization can restore visibility" in controller_source, "cutscene Pokemon stay hidden after their NPC initialization")
+	_expect("func _play_ball_summon" in controller_source and "pokemon.visible = false\n\t\tpokemon.modulate.a = 1.0" in controller_source, "each summon hides its Pokemon until the release signal")
 	_expect("DIALOGUE_STAGE_FUTURE_VOICE" in controller_source, "the future-self voice is heard before the reveal")
 	_expect("DIALOGUE_STAGE_ROCKET_REVEAL_CHALLENGE" in controller_source, "Team Rocket challenges the unseen voice before the reveal")
 	_expect("current_stage == DIALOGUE_STAGE_ROCKET_REVEAL_CHALLENGE:\n\t\tawait _reveal_rescuer()" in controller_source, "the rescuer appears only after Team Rocket demands it")

@@ -304,6 +304,9 @@ func _create_cutscene_pokemon(species_id: String, local_position: Vector2) -> No
 	pokemon.position = local_position
 	pokemon.visible = false
 	add_child(pokemon)
+	# BaseNPC initialization can restore visibility while the node enters the tree.
+	# Reassert the cinematic state after _ready() has completed.
+	pokemon.visible = false
 	var nameplate := pokemon.get_node_or_null("Nameplate") as Control
 	if nameplate != null:
 		nameplate.visible = false
@@ -315,6 +318,9 @@ func _create_cutscene_pokemon(species_id: String, local_position: Vector2) -> No
 
 func _play_ball_summon(throw_world_position: Vector2, pokemon: Node2D, ball_id: String) -> void:
 	_ensure_overlay()
+	if is_instance_valid(pokemon):
+		pokemon.visible = false
+		pokemon.modulate.a = 1.0
 	var animation := PokeballSummonAnimationPlayer.new()
 	animation.sprite_render_scale = Vector2(1.5, 1.5)
 	_overlay_root.add_child(animation)
