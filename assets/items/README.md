@@ -18,3 +18,14 @@ Reward data should continue to use item ids:
 { "id": "potion", "quantity": 2 }
 ```
 
+## Mega Champions Phase 3 provenance
+
+The 45 Mega Stone icons referenced by `data/mega_champions_catalog.generated.json`
+already existed in the tracked item-icon corpus before the rollout work. Their
+repository introduction is recorded by commit
+`e69fb3c38c2e326fd62e0e0be16465a252ccbf23` (2026-06-20).
+
+The original upstream source and license were not recorded with that import.
+They therefore remain blocked from public Mega Champions release until a
+licensing review identifies and approves their provenance. Phase 3 does not
+import, replace, or publish any item or Pokémon artwork.

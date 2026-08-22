@@ -38,7 +38,7 @@ func _run() -> void:
 	var route_points := layout_data.get("routePoints", []) as Array
 	_check(route_points.size() == 23, "Every Kanto route from Route 3 through Route 25 has a map coordinate")
 	_check((layout_points.get("kanto_map_point_02", {}) as Dictionary).get("kind") == "special", "Light-blue map circles are special locations")
-	_check((layout_points.get("kanto_map_point_08", {}) as Dictionary).get("name") == "Cerulean City", "Named settlement points use the supplied Kanto locations")
+	_check((layout_points.get("kanto_cerulean_city", {}) as Dictionary).get("name") == "Cerulean City", "Cerulean City uses its playable map point")
 	_check((layout_points.get("kanto_map_point_11", {}) as Dictionary).get("name") == "Diglett's Cave (Route 11)", "Named special points use the supplied Kanto locations")
 	_check((layout_points.get("kanto_map_point_16", {}) as Dictionary).get("kind") == "special", "The northern Diglett's Cave entrance is a special location")
 	_check((layout_points.get("kanto_map_point_17", {}) as Dictionary).get("kind") == "special", "Viridian Forest Gate is a special location")
@@ -55,7 +55,7 @@ func _run() -> void:
 	for area_value: Variant in areas.values():
 		if area_value is Dictionary:
 			location_groups[str((area_value as Dictionary).get("locationGroupId", ""))] = true
-	_check(locations.size() == 7, "Town Map contains the currently playable Kanto location groups")
+	_check(locations.size() == 9, "Town Map contains the currently playable Kanto location groups")
 	for location_id_value: Variant in locations.keys():
 		var location_id := str(location_id_value)
 		_check(location_groups.has(location_id), "%s is backed by a playable world location" % location_id)
@@ -101,8 +101,10 @@ func _run() -> void:
 		if str(location_id_value).begins_with("kanto_route_segment_"):
 			planned_route_count += 1
 	_check(popup_locations.size() == 46, "Town Map registers every configured point")
-	_check(planned_location_count == 39, "Future settlements, special locations, and routes are planned points")
-	_check(planned_route_count == 22, "Named future routes are available alongside map points")
+	_check(planned_location_count == 37, "Future settlements, special locations, and routes are planned points")
+	_check(planned_route_count == 21, "Named future routes are available alongside map points")
+	_check(not bool((popup_locations.get("kanto_route_4", {}) as Dictionary).get("planned", false)), "Route 4 is available as a playable route")
+	_check(not bool((popup_locations.get("kanto_cerulean_city", {}) as Dictionary).get("planned", false)), "Cerulean City is available as a playable city")
 	var towns_without_interiors := 0
 	for town_value: Variant in popup_locations.values():
 		if town_value is Dictionary and str((town_value as Dictionary).get("kind", "")) in ["town", "city", "settlement"]:
