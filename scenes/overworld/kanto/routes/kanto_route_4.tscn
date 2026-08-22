@@ -50,6 +50,7 @@ shape = SubResource("RectangleShape2D_mt_moon_exit")
 [node name="RouteTransitionHint" parent="Exits/ToMtMoon" unique_id=208040007 instance=ExtResource("5_hint")]
 z_as_relative = false
 tile_footprint = Vector2i(4, 1)
+flow_direction = "down"
 
 [node name="Entities" type="Node2D" parent="." unique_id=208040008]
 z_index = 5
