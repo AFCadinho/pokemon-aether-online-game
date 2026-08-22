@@ -267,12 +267,28 @@ func _play_counterattack() -> bool:
 	var attack := MtMoonCinematicAttack.new()
 	attack.z_index = 20
 	add_child(attack)
+	_play_counterattack_sound(move)
 	await attack.play(_starter.position, target_positions, str(move.get("type", "normal")))
 	for pokemon: Node2D in _rocket_pokemon:
 		if is_instance_valid(pokemon):
 			create_tween().tween_property(pokemon, "modulate:a", 0.0, 0.18)
 	await get_tree().create_timer(0.2).timeout
 	return true
+
+
+func _play_counterattack_sound(move: Dictionary) -> void:
+	var sound_path := str(move.get("sound", "")).strip_edges()
+	if sound_path.is_empty() or not ResourceLoader.exists(sound_path):
+		return
+	var stream := load(sound_path) as AudioStream
+	if stream == null:
+		return
+	var audio_player := AudioStreamPlayer.new()
+	audio_player.stream = stream
+	audio_player.bus = SettingsManager.SFX_BUS
+	audio_player.finished.connect(audio_player.queue_free)
+	add_child(audio_player)
+	audio_player.play()
 
 
 func _flee_rockets() -> void:
