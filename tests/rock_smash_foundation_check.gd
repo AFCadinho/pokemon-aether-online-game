@@ -30,8 +30,9 @@ func _run() -> void:
 	_check(
 		"sync_player_position_for_world_action" in obstacle
 		and "await RockSmashService.smash_rock" in obstacle
-		and "await clear_obstacle()" in obstacle,
-		"A rock only breaks after its position and server reward are authorized"
+		and "await clear_obstacle()" in obstacle
+		and "if request_pending:" in obstacle,
+		"A rock survives its server state update and only animates after authorization"
 	)
 	var field_move_obstacle := FileAccess.get_file_as_string(
 		"res://scripts/world/interactables/field_move_obstacle.gd"

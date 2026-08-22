@@ -44,7 +44,7 @@ func interact_with_player(_player: Node2D) -> void:
 		request_pending = false
 		set_process(true)
 		if BackendErrorLocalizationService.error_code(result) == "rock_smash_already_smashed":
-			queue_free()
+			call_deferred("queue_free")
 			return
 		await GameErrorDialogService.show_response(result, "backend.error.rock_smash_unavailable")
 		return
@@ -74,8 +74,13 @@ func _on_rock_smash_state_changed(_state: Dictionary) -> void:
 
 
 func _apply_daily_state() -> void:
+	# A successful smash updates RockSmashService before this interaction gets
+	# its response. Keep the node alive so the active interaction can animate,
+	# unlock overworld input, and then remove the rock itself.
+	if request_pending:
+		return
 	if not is_cleared and RockSmashService.is_rock_smashed_today(rock_id):
-		queue_free()
+		call_deferred("queue_free")
 
 
 func _configure_variant_frames() -> void:
