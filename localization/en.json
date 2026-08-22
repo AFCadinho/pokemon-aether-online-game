@@ -1128,6 +1128,8 @@
   "ui.town_map.location.pewter_city.description": "A stone-gray city nestled near the mountains of northwestern Kanto.",
   "ui.town_map.location.route_3.name": "Route 3",
   "ui.town_map.location.route_3.description": "A mountain route east of Pewter City, leading toward Mt. Moon.",
+  "ui.town_map.location.route_4.name": "Route 4",
+  "ui.town_map.location.route_4.description": "A rocky trail leading from Mt. Moon toward Cerulean City.",
   "ui.key_item.received_pokedex": "You received the Pokédex! It was placed in the Key Items pocket.",
   "ui.key_item.received_town_map": "You received the Town Map! It was placed in the Key Items pocket.",
   "ui.oaks_lab.starter_received": "You received {pokemon} from Professor Oak!",
