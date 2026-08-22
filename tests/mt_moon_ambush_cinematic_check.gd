@@ -47,6 +47,14 @@ func _run() -> void:
 	_expect("await _attack_and_faint_follower()" in controller_source, "Team Rocket attacks the player's visible follower before the rescue")
 	_expect("func set_story_player(player: Node2D)" in controller_source and "_resolve_player_follower(player)" in controller_source, "the ambush targets the player that actually entered the trigger")
 	_expect("story.mt_moon.cutscene.follower_fainted" in controller_source, "the player begs their fainted follower to get up")
+	_expect(
+		'await _show_rocket_line(_text("story.mt_moon.cutscene.capture_threat"))' in controller_source,
+		"Team Rocket threatens to take the player's Pokemon after the follower faints"
+	)
+	_expect(
+		controller_source.find('story.mt_moon.cutscene.follower_fainted') < controller_source.find('story.mt_moon.cutscene.capture_threat'),
+		"the player pleads with their follower before Team Rocket responds"
+	)
 	_expect("_show_rocket_attack_command(attacker_name)" in controller_source and "TrainerPortraitCatalog.get_texture(ROCKET_PORTRAIT_ID)" in controller_source, "the Rocket Grunt visibly orders the follower attack in dialogue")
 	_expect("attack.top_level = true" in controller_source and '"poison"' in controller_source, "Zubat's bright attack renders in world coordinates")
 	_expect('tween_property(attacker, "global_position", lunge_target' in controller_source, "Zubat visibly lunges at the follower")
@@ -117,6 +125,7 @@ func _run() -> void:
 		_expect(catalog.has("story.mt_moon.cutscene.player_speaker"), "%s has the player speaker fallback" % locale)
 		_expect(catalog.has("story.mt_moon.cutscene.follower_fainted"), "%s has the follower faint plea" % locale)
 		_expect(catalog.has("story.mt_moon.cutscene.follower_attack"), "%s has the follower attack command" % locale)
+		_expect(catalog.has("story.mt_moon.cutscene.capture_threat"), "%s has the Rocket capture threat" % locale)
 
 	quit(1 if failed else 0)
 

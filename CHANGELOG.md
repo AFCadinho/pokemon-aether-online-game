@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Team Rocket now reacts to your fallen Pokémon before your future self intervenes during the Mt. Moon rescue.
+
 - Your mugshot now appears for every line your character speaks during the Mt. Moon rescue.
 
 - Your future partner's attack during the Mt. Moon rescue now plays a matching move sound.

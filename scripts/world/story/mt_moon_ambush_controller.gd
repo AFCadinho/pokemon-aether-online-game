@@ -372,6 +372,7 @@ func _attack_and_faint_follower() -> bool:
 		dialogue_box.call("start_dialogue", [_text("story.mt_moon.cutscene.follower_fainted").replace("{pokemon}", follower_name)], _player_speaker_name(), await _player_mugshot(), true)
 		await dialogue_box.dialogue_finished
 		await _wait_for_interact_release()
+	await _show_rocket_line(_text("story.mt_moon.cutscene.capture_threat"))
 	return true
 
 
@@ -387,10 +388,14 @@ func _resolve_player_follower(player: Node2D) -> PokemonFollower:
 
 
 func _show_rocket_attack_command(attacker_name: String) -> void:
+	var line := _text("story.mt_moon.cutscene.follower_attack").replace("{pokemon}", attacker_name)
+	await _show_rocket_line(line)
+
+
+func _show_rocket_line(line: String) -> void:
 	var dialogue_box := get_tree().current_scene.get_node_or_null("DialogueBox/Box")
 	if dialogue_box == null:
 		return
-	var line := _text("story.mt_moon.cutscene.follower_attack").replace("{pokemon}", attacker_name)
 	dialogue_box.call("start_dialogue", [line], "Team Rocket Grunt", TrainerPortraitCatalog.get_texture(ROCKET_PORTRAIT_ID), true)
 	await dialogue_box.dialogue_finished
 	await _wait_for_interact_release()
