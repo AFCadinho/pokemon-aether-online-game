@@ -18,7 +18,12 @@ const COMPLETE_COLOR := Color("#84a0b8")
 const FISHING_ICON: Texture2D = preload("res://assets/ui/fishing_rod.svg")
 const THIEVING_ICON: Texture2D = preload("res://assets/ui/thieving.svg")
 const ROCK_SMASH_ICON: Texture2D = preload("res://assets/ui/rock_smash_skill_icon.tres")
-const TARGET_TOWN_TABS_PER_PAGE := 3
+const WINDOW_PREFERRED_SIZE := Vector2(760, 780)
+const WINDOW_MINIMUM_SIZE := Vector2(480, 420)
+const WINDOW_EDGE_MARGIN := 12.0
+const TARGET_TOWN_TAB_MINIMUM_WIDTH := 145.0
+const TARGET_TOWN_TABS_MAXIMUM := 5
+const ROCK_GRID_MINIMUM_WIDTH := 700.0
 
 var main_panel: PanelContainer
 var window_header: HBoxContainer
@@ -53,10 +58,11 @@ var target_town_previous_button: Button
 var target_town_tabs: HBoxContainer
 var target_town_next_button: Button
 var targets_scroll: ScrollContainer
-var targets_container: VBoxContainer
+var targets_container: GridContainer
 var fishing_catalog_section: VBoxContainer
 var fishing_catalog_summary: Label
 var fishing_rod_filters: HBoxContainer
+var fishing_catalog_scroll: ScrollContainer
 var fishing_catalog_container: VBoxContainer
 var skill_buttons: Dictionary = {}
 var selected_skill_id := "thieving"
@@ -73,6 +79,11 @@ var window_dragging := false
 
 func _ready() -> void:
 	_build_interface()
+	resized.connect(_on_window_resized)
+	var parent_control := get_parent_control()
+	if parent_control != null:
+		parent_control.resized.connect(_fit_window_to_parent)
+	_fit_window_to_parent()
 	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
 		LocalizationManager.locale_changed.connect(_on_locale_changed)
 	if not SkillsService.state_changed.is_connected(_on_skills_changed):
@@ -114,6 +125,7 @@ func toggle_manager() -> void:
 
 
 func open_manager() -> void:
+	_fit_window_to_parent()
 	visible = true
 	showing_detail = false
 	_render_skills(SkillsService.get_skills())
@@ -419,15 +431,16 @@ func _build_interface() -> void:
 
 	targets_scroll = ScrollContainer.new()
 	targets_scroll.name = "TargetsScroll"
-	targets_scroll.custom_minimum_size.y = 220.0
+	targets_scroll.custom_minimum_size.y = 120.0
 	targets_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	targets_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	targets_section.add_child(targets_scroll)
 
-	targets_container = VBoxContainer.new()
+	targets_container = GridContainer.new()
 	targets_container.name = "TargetsContainer"
 	targets_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	targets_container.add_theme_constant_override("separation", 5)
+	targets_container.add_theme_constant_override("h_separation", 6)
+	targets_container.add_theme_constant_override("v_separation", 5)
 	targets_scroll.add_child(targets_container)
 
 	fishing_catalog_section = VBoxContainer.new()
@@ -450,17 +463,17 @@ func _build_interface() -> void:
 	fishing_rod_filters.add_theme_constant_override("separation", 5)
 	fishing_catalog_section.add_child(fishing_rod_filters)
 
-	var catalog_scroll := ScrollContainer.new()
-	catalog_scroll.name = "FishingCatalogScroll"
-	catalog_scroll.custom_minimum_size.y = 220.0
-	catalog_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	catalog_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	fishing_catalog_section.add_child(catalog_scroll)
+	fishing_catalog_scroll = ScrollContainer.new()
+	fishing_catalog_scroll.name = "FishingCatalogScroll"
+	fishing_catalog_scroll.custom_minimum_size.y = 120.0
+	fishing_catalog_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	fishing_catalog_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	fishing_catalog_section.add_child(fishing_catalog_scroll)
 
 	fishing_catalog_container = VBoxContainer.new()
 	fishing_catalog_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	fishing_catalog_container.add_theme_constant_override("separation", 5)
-	catalog_scroll.add_child(fishing_catalog_container)
+	fishing_catalog_scroll.add_child(fishing_catalog_container)
 
 	_render_skills([])
 
@@ -581,6 +594,7 @@ func _render_detail(skill: Dictionary) -> void:
 		_render_targets(skill.get("targets", []) as Array)
 	elif skill_id == "rock_smash":
 		_render_rocks(skill.get("rocks", []) as Array)
+	_update_target_grid_columns()
 	detail_tabs.visible = skill_id in ["fishing", "thieving", "rock_smash"]
 	catalog_tab_button.text = (
 		_text("ui.skills.thieving.targets.tab")
@@ -868,7 +882,7 @@ func _render_targets(targets: Array) -> void:
 	if selected_target_town_key not in target_town_order:
 		selected_target_town_key = target_town_order[0] if not target_town_order.is_empty() else ""
 	var selected_index := target_town_order.find(selected_target_town_key)
-	target_town_page = floori(float(maxi(selected_index, 0)) / TARGET_TOWN_TABS_PER_PAGE)
+	target_town_page = floori(float(maxi(selected_index, 0)) / _target_town_tabs_per_page())
 	_render_target_town_tabs()
 	_render_selected_target_town()
 	targets_summary_label.text = _text("ui.skills.thieving.targets.summary", {
@@ -899,7 +913,7 @@ func _render_rocks(rocks: Array) -> void:
 	if selected_target_town_key not in target_town_order:
 		selected_target_town_key = target_town_order[0] if not target_town_order.is_empty() else ""
 	var selected_index := target_town_order.find(selected_target_town_key)
-	target_town_page = floori(float(maxi(selected_index, 0)) / TARGET_TOWN_TABS_PER_PAGE)
+	target_town_page = floori(float(maxi(selected_index, 0)) / _target_town_tabs_per_page())
 	_render_target_town_tabs()
 	_render_selected_target_town()
 	targets_summary_label.text = _text("ui.skills.rock_smash.rocks.summary", {
@@ -914,14 +928,15 @@ func _render_target_town_tabs() -> void:
 	for child: Node in target_town_tabs.get_children():
 		target_town_tabs.remove_child(child)
 		child.queue_free()
-	var page_count := maxi(ceili(float(target_town_order.size()) / TARGET_TOWN_TABS_PER_PAGE), 1)
+	var tabs_per_page := _target_town_tabs_per_page()
+	var page_count := maxi(ceili(float(target_town_order.size()) / tabs_per_page), 1)
 	target_town_page = clampi(target_town_page, 0, page_count - 1)
-	var start_index := target_town_page * TARGET_TOWN_TABS_PER_PAGE
-	var end_index := mini(start_index + TARGET_TOWN_TABS_PER_PAGE, target_town_order.size())
+	var start_index := target_town_page * tabs_per_page
+	var end_index := mini(start_index + tabs_per_page, target_town_order.size())
 	for index in range(start_index, end_index):
 		var town_key := target_town_order[index]
 		target_town_tabs.add_child(_create_target_town_tab(town_key))
-	var has_overflow := target_town_order.size() > TARGET_TOWN_TABS_PER_PAGE
+	var has_overflow := target_town_order.size() > tabs_per_page
 	target_town_previous_button.visible = has_overflow
 	target_town_next_button.visible = has_overflow
 	target_town_previous_button.disabled = target_town_page <= 0
@@ -995,18 +1010,19 @@ func _select_target_town(town_key: String) -> void:
 	if town_key not in target_town_order:
 		return
 	selected_target_town_key = town_key
-	target_town_page = floori(float(target_town_order.find(town_key)) / TARGET_TOWN_TABS_PER_PAGE)
+	target_town_page = floori(float(target_town_order.find(town_key)) / _target_town_tabs_per_page())
 	_render_target_town_tabs()
 	_render_selected_target_town()
 
 
 func _change_target_town_page(direction: int) -> void:
-	var page_count := maxi(ceili(float(target_town_order.size()) / TARGET_TOWN_TABS_PER_PAGE), 1)
+	var tabs_per_page := _target_town_tabs_per_page()
+	var page_count := maxi(ceili(float(target_town_order.size()) / tabs_per_page), 1)
 	var next_page := clampi(target_town_page + direction, 0, page_count - 1)
 	if next_page == target_town_page:
 		return
 	target_town_page = next_page
-	var first_town_index := target_town_page * TARGET_TOWN_TABS_PER_PAGE
+	var first_town_index := target_town_page * tabs_per_page
 	if first_town_index < target_town_order.size():
 		selected_target_town_key = target_town_order[first_town_index]
 	_render_target_town_tabs()
@@ -1016,6 +1032,7 @@ func _change_target_town_page(direction: int) -> void:
 func _create_target_row(target: Dictionary) -> Control:
 	var row := PanelContainer.new()
 	row.custom_minimum_size.y = 47.0
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_theme_stylebox_override("panel", _make_panel_style(Color("#07111ceb"), Color("#233d52"), 7, 1))
 
 	var content := HBoxContainer.new()
@@ -1171,6 +1188,51 @@ func _clamp_window_to_parent() -> void:
 	position = Vector2(
 		clampf(position.x, 8.0, maxf(available.x - size.x - 8.0, 8.0)),
 		clampf(position.y, 8.0, maxf(available.y - size.y - 8.0, 8.0))
+	)
+
+
+func _fit_window_to_parent() -> void:
+	var parent_control := get_parent_control()
+	if parent_control == null:
+		return
+	var available_size := parent_control.size - Vector2.ONE * WINDOW_EDGE_MARGIN * 2.0
+	available_size.x = maxf(available_size.x, 320.0)
+	available_size.y = maxf(available_size.y, 360.0)
+	custom_minimum_size = Vector2(
+		minf(WINDOW_MINIMUM_SIZE.x, available_size.x),
+		minf(WINDOW_MINIMUM_SIZE.y, available_size.y)
+	)
+	size = Vector2(
+		minf(WINDOW_PREFERRED_SIZE.x, available_size.x),
+		minf(WINDOW_PREFERRED_SIZE.y, available_size.y)
+	)
+	_clamp_window_to_parent()
+
+
+func _on_window_resized() -> void:
+	_update_target_grid_columns()
+	if target_town_tabs != null and not target_town_order.is_empty():
+		var selected_index := target_town_order.find(selected_target_town_key)
+		target_town_page = floori(float(maxi(selected_index, 0)) / _target_town_tabs_per_page())
+		_render_target_town_tabs()
+
+
+func _update_target_grid_columns() -> void:
+	if targets_container == null:
+		return
+	targets_container.columns = (
+		2 if selected_skill_id == "rock_smash" and size.x >= ROCK_GRID_MINIMUM_WIDTH else 1
+	)
+
+
+func _target_town_tabs_per_page() -> int:
+	var available_width := size.x - 120.0
+	if target_town_tabs != null:
+		available_width = maxf(available_width, target_town_tabs.size.x)
+	return clampi(
+		floori(maxf(available_width, TARGET_TOWN_TAB_MINIMUM_WIDTH) / TARGET_TOWN_TAB_MINIMUM_WIDTH),
+		1,
+		TARGET_TOWN_TABS_MAXIMUM
 	)
 
 
