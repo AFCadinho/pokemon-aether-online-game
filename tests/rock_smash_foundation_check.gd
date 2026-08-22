@@ -62,9 +62,11 @@ func _run() -> void:
 		"Kenji uses the Showdown Black Belt mugshot"
 	)
 	_check(
-		'path="res://assets/npcs/classes/black_belt_frames.tres" id="31_black_belt"' in pewter
-		and 'uid="uid://x75gwtrd76d3" path="res://assets/npcs/classes/black_belt_frames.tres"' not in pewter,
-		"Kenji's overworld frames use their stable resource path without a stale UID"
+		'uid="uid://bgt5h7r4aixq5" path="res://assets/npcs/classes/black_belt_frames.tres" id="31_black_belt"' in pewter
+		and 'uid="uid://bgt5h7r4aixq5"' in FileAccess.get_file_as_string(
+			"res://assets/npcs/classes/black_belt_frames.tres"
+		),
+		"Kenji's overworld frames and Pewter City share a valid stable resource UID"
 	)
 
 	var rock_ids: Array[String] = [
