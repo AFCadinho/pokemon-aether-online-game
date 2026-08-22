@@ -57,7 +57,7 @@
 
 **Fixed**
 
-- Map changes now fade smoothly into and out of the loading screen, reducing sudden jumps between dark interiors and bright outdoor maps.
+- Map changes now fade smoothly while keeping a dim view of the previous area during loading, reducing sudden dark-to-bright jumps.
 - Miguel now warns you and sends you back when he blocks the fossil corridor, instead of leaving you against an unexplained invisible barrier.
 - Miguel no longer moves into a Mt. Moon wall after his battle.
 - Missing translated text now reliably falls back to English.
