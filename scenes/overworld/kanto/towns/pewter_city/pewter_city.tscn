@@ -24,11 +24,11 @@
 [ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="28_gate_npc"]
 [ext_resource type="PackedScene" uid="uid://rnbee61xiftm" path="res://scenes/npcs/item_gift_npc.tscn" id="29_item_gift"]
 [ext_resource type="Script" uid="uid://c76onuvbojgfx" path="res://scripts/world/kanto/towns/pewter_city/karate_master_kenji.gd" id="30_karate_master"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/black_belt_frames.tres" id="31_black_belt"]
+[ext_resource type="SpriteFrames" uid="uid://x75gwtrd76d3" path="res://assets/npcs/classes/black_belt_frames.tres" id="31_black_belt"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/daily_smashable_rock.tscn" id="32_daily_rock"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2mtwu"]
-size = Vector2(192, 40)
+size = Vector2(64, 36)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route3_exit"]
 size = Vector2(48, 192)
@@ -299,7 +299,7 @@ target_scene_path = "res://scenes/overworld/kanto/towns/pewter_city/pokemon_cent
 target_spawn_name = "FromOutside"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPokecenter" unique_id=170342928]
-position = Vector2(0, -16)
+position = Vector2(0, -18)
 shape = SubResource("RectangleShape2D_2mtwu")
 
 [node name="DoorTransitionHint" parent="Exits/ToPokecenter" unique_id=43017231 instance=ExtResource("6_frcun")]

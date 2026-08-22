@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- The house on Route 2 can now be entered and safely exited back onto the route.
+
+- Graphics dropdowns in Settings now use the complete PokeAether interface style.
+
 - Karate Master Kenji now refreshes his Rock Smash quest offer so it always shows the current reward.
 
 - Pewter City now loads Karate Master Kenji's overworld sprite without an invalid resource warning.

@@ -18,6 +18,7 @@
 [ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="17_youngster"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="18_pokemon"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="19_overworld_item"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="20_door_hint"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_r7yom"]
 texture = ExtResource("2_yrfmu")
@@ -218,6 +219,9 @@ sources/0 = SubResource("TileSetAtlasSource_3mgn4")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gac6d"]
 size = Vector2(192, 32)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_house_door"]
+size = Vector2(48, 16)
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_j62p7"]
 texture = ExtResource("9_gac6d")
 texture_region_size = Vector2i(32, 32)
@@ -383,6 +387,9 @@ position = Vector2(1376, 784)
 [node name="FromRoute2GateSouth" type="Marker2D" parent="Spawns" unique_id=1928536631]
 position = Vector2(1376, 1136)
 
+[node name="FromHouse" type="Marker2D" parent="Spawns" unique_id=1370384655]
+position = Vector2(1424, 560)
+
 [node name="Exits" type="Node2D" parent="." unique_id=1183129315]
 
 [node name="ToViridianCity" type="Area2D" parent="Exits" unique_id=1185183787]
@@ -463,6 +470,20 @@ shape = SubResource("RectangleShape2D_gac6d")
 [node name="RouteTransitionHint" parent="Exits/ToRoute2GateSouth" unique_id=1168923763 instance=ExtResource("7_f8n3h")]
 z_as_relative = false
 tile_footprint = Vector2i(3, 2)
+
+[node name="ToHouse" type="Area2D" parent="Exits" unique_id=2031672591]
+position = Vector2(1424, 528)
+script = ExtResource("6_3mgn4")
+target_scene_path = "res://scenes/overworld/kanto/routes/route_2_house.tscn"
+target_spawn_name = "FromRoute2"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse" unique_id=986702895]
+position = Vector2(8, -8)
+shape = SubResource("RectangleShape2D_house_door")
+
+[node name="DoorTransitionHint" parent="Exits/ToHouse" unique_id=27466854 instance=ExtResource("20_door_hint")]
+z_as_relative = false
 
 [node name="SandTiles" type="Node2D" parent="." unique_id=597055844]
 
@@ -594,3 +615,4 @@ tile_set = SubResource("TileSet_ywtea")
 [connection signal="body_entered" from="Exits/ToViridianForestSouth" to="Exits/ToViridianForestSouth" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute2GateNorth" to="Exits/ToRoute2GateNorth" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute2GateSouth" to="Exits/ToRoute2GateSouth" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToHouse" to="Exits/ToHouse" method="_on_body_entered"]
