@@ -170,6 +170,7 @@ const SAND_FOOTPRINT_LAYER_OFFSETS := {
 	"SandDown": Vector2(0.0, 8.0),
 }
 const ENCOUNTER_TYPE_GRASS := "grass"
+const ENCOUNTER_TYPE_CAVE := "cave"
 const ENCOUNTER_TYPE_SURF := "surf"
 const ENCOUNTER_TYPE_FISH := "fish"
 const FISHING_ENCOUNTER_TYPES := {
@@ -1446,6 +1447,8 @@ func _process(delta: float) -> void:
 					check_for_wild_encounter(ENCOUNTER_TYPE_SURF)
 				elif standing_on_tall_grass:
 					check_for_grass_encounter()
+				elif _is_cave_encounter_map():
+					check_for_wild_encounter(ENCOUNTER_TYPE_CAVE)
 
 			if _can_accept_movement_input():
 				var next_direction := _get_next_movement_direction()
@@ -2188,6 +2191,19 @@ func is_standing_on_water() -> bool:
 		
 func check_for_grass_encounter() -> void:
 	check_for_wild_encounter(ENCOUNTER_TYPE_GRASS)
+
+
+func _is_cave_encounter_map() -> bool:
+	var current_map := _resolve_current_map()
+	if current_map == null:
+		return false
+	if not current_map.has_method("get_battle_environment_id"):
+		return false
+	if str(current_map.call("get_battle_environment_id")).strip_edges().to_lower() != ENCOUNTER_TYPE_CAVE:
+		return false
+	if not current_map.has_method("get_wild_encounter_area_id"):
+		return false
+	return not str(current_map.call("get_wild_encounter_area_id")).strip_edges().is_empty()
 
 func _spawn_tall_grass_rustle_effect() -> void:
 	if grass_visual_tilemap == null:
