@@ -289,12 +289,20 @@ func _attack_and_faint_follower() -> void:
 	_fainted_follower.set_process(false)
 	var attacker_species := ROCKET_SPECIES[0]
 	var attacker_name := ContentLocalization.display_name("species", attacker_species, attacker_species.capitalize())
-	await _show_caption(_text("story.mt_moon.cutscene.follower_attack").replace("{pokemon}", attacker_name), 0.65)
+	await _show_rocket_attack_command(attacker_name)
 	var attack := MtMoonCinematicAttack.new()
 	attack.z_index = 100
+	attack.top_level = true
 	add_child(attack)
-	var attack_source: Vector2 = _rocket_pokemon[0].global_position if not _rocket_pokemon.is_empty() and is_instance_valid(_rocket_pokemon[0]) else rockets[0].global_position
-	await attack.play(to_local(attack_source), [to_local(_fainted_follower.global_position)], "poison")
+	var attacker := _rocket_pokemon[0] if not _rocket_pokemon.is_empty() and is_instance_valid(_rocket_pokemon[0]) else null
+	var attack_source: Vector2 = attacker.global_position if attacker != null else rockets[0].global_position
+	if attacker != null:
+		var attacker_origin: Vector2 = attacker.global_position
+		var lunge_target := _fainted_follower.global_position + (attacker_origin - _fainted_follower.global_position).normalized() * 20.0
+		var lunge := create_tween()
+		lunge.tween_property(attacker, "global_position", lunge_target, 0.18).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		lunge.tween_property(attacker, "global_position", attacker_origin, 0.22).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	await attack.play(attack_source, [_fainted_follower.global_position], "poison")
 	var follower_sprite := _fainted_follower.sprite
 	if follower_sprite != null:
 		var resting_position := follower_sprite.position
@@ -305,7 +313,8 @@ func _attack_and_faint_follower() -> void:
 		hit_tween.parallel().tween_property(follower_sprite, "position", resting_position, 0.12)
 		await hit_tween.finished
 		var faint_tween := create_tween().set_parallel(true)
-		faint_tween.tween_property(follower_sprite, "rotation", PI * 0.5, 0.35)
+		faint_tween.tween_property(follower_sprite, "rotation", PI * 0.18, 0.35)
+		faint_tween.tween_property(follower_sprite, "position:y", resting_position.y + 8.0, 0.35)
 		faint_tween.tween_property(follower_sprite, "modulate", Color(0.55, 0.55, 0.62, 0.9), 0.35)
 		await faint_tween.finished
 	await get_tree().create_timer(0.35).timeout
@@ -315,6 +324,16 @@ func _attack_and_faint_follower() -> void:
 		dialogue_box.call("start_dialogue", [_text("story.mt_moon.cutscene.follower_fainted").replace("{pokemon}", follower_name)], _player_speaker_name(), await _player_mugshot(), true)
 		await dialogue_box.dialogue_finished
 		await _wait_for_interact_release()
+
+
+func _show_rocket_attack_command(attacker_name: String) -> void:
+	var dialogue_box := get_tree().current_scene.get_node_or_null("DialogueBox/Box")
+	if dialogue_box == null:
+		return
+	var line := _text("story.mt_moon.cutscene.follower_attack").replace("{pokemon}", attacker_name)
+	dialogue_box.call("start_dialogue", [line], "Team Rocket Grunt", TrainerPortraitCatalog.get_texture(ROCKET_PORTRAIT_ID), true)
+	await dialogue_box.dialogue_finished
+	await _wait_for_interact_release()
 
 
 func _restore_follower() -> void:

@@ -8,7 +8,7 @@
 
 - Pokémon summoned during the Mt. Moon rescue now remain inside their Poké Balls until the release animation plays.
 
-- Team Rocket now visibly commands Zubat to strike your follower during the Mt. Moon ambush, with a bright attack and hit reaction before your character calls out to their fallen Pokémon.
+- A Rocket Grunt now orders Zubat to attack through a full dialogue message, after which Zubat visibly lunges and strikes your follower before your character calls out to them.
 
 - The Mt. Moon rescue now shows Miguel panicking and fleeing as Team Rocket closes in, without getting stuck in his run animation; the scene ends with your character reacting to the mysterious Trainer's disappearance, and Miguel apologizes when you meet again.
 
