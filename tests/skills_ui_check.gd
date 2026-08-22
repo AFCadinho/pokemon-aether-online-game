@@ -99,6 +99,30 @@ func _run() -> void:
 				{"npcId": "kanto_pewter_city_gym_fan_max", "npcType": "child", "nameKey": "ui.skills.thieving.target.max", "townKey": "ui.skills.thieving.location.pewter_city", "locationKey": "ui.skills.thieving.location.pewter_city", "requiredLevel": 1, "unlocked": true, "attemptedToday": false, "availableToday": true},
 			],
 		},
+		{
+			"id": "rock_smash",
+			"unlocked": true,
+			"unlockHintKey": "ui.skills.rock_smash.unlock_hint",
+			"nameKey": "ui.skills.rock_smash.name",
+			"descriptionKey": "ui.skills.rock_smash.description",
+			"level": 20,
+			"maxLevel": 100,
+			"totalExperience": 9500,
+			"experienceIntoLevel": 0,
+			"experienceForNextLevel": 1000,
+			"progressPercent": 0.0,
+			"stats": {"fossilChancePercent": 0.25, "availableRocks": 3},
+			"unlocks": [
+				{"id": "rock_smash_training", "requiredLevel": 1, "unlocked": true, "labelKey": "ui.skills.unlock.rock_smash_training"},
+				{"id": "rock_smash_fossils", "requiredLevel": 20, "unlocked": true, "labelKey": "ui.skills.unlock.rock_smash_fossils"},
+			],
+			"rocks": [
+				{"rockId": "kanto_pewter_city_training_rock_north", "nameKey": "ui.skills.rock_smash.rock.training_north", "townKey": "ui.skills.rock_smash.location.pewter_city", "locationKey": "ui.skills.rock_smash.location.karate_yard", "requiredLevel": 1, "unlocked": true, "smashedToday": true, "availableToday": false},
+				{"rockId": "kanto_pewter_city_training_rock_east", "nameKey": "ui.skills.rock_smash.rock.training_east", "townKey": "ui.skills.rock_smash.location.pewter_city", "locationKey": "ui.skills.rock_smash.location.karate_yard", "requiredLevel": 1, "unlocked": true, "smashedToday": false, "availableToday": true},
+				{"rockId": "kanto_pewter_city_training_rock_south", "nameKey": "ui.skills.rock_smash.rock.training_south", "townKey": "ui.skills.rock_smash.location.pewter_city", "locationKey": "ui.skills.rock_smash.location.karate_yard", "requiredLevel": 1, "unlocked": true, "smashedToday": false, "availableToday": true},
+				{"rockId": "kanto_pewter_city_training_rock_west", "nameKey": "ui.skills.rock_smash.rock.training_west", "townKey": "ui.skills.rock_smash.location.pewter_city", "locationKey": "ui.skills.rock_smash.location.karate_yard", "requiredLevel": 1, "unlocked": true, "smashedToday": false, "availableToday": true},
+			],
+		},
 	]
 	skills_service.set("skills", test_skills)
 	skills_service.set("state_loaded", true)
@@ -124,7 +148,7 @@ func _run() -> void:
 	})
 	panel.call("_render_skills", test_skills)
 	panel.visible = true
-	_check((panel.get("skill_cards") as GridContainer).get_child_count() == 2, "Fishing and Thieving receive separate overview cards")
+	_check((panel.get("skill_cards") as GridContainer).get_child_count() == 3, "Fishing, Thieving, and Rock Smash receive separate overview cards")
 	_check((panel.get("overview_panel") as VBoxContainer).visible, "Skills opens on the level overview")
 	_check(not (panel.get("detail_panel") as PanelContainer).visible, "Skill details stay hidden until a skill is selected")
 	panel.call("_select_skill", "fishing")
@@ -216,6 +240,33 @@ func _run() -> void:
 	var good_rod_row := (panel.get("fishing_catalog_container") as VBoxContainer).get_child(0) as PanelContainer
 	var good_rod_status := ((good_rod_row.get_child(0) as HBoxContainer).get_child(2) as Label)
 	_check(good_rod_status.text.contains("18"), "species above the player's Fishing level remain visibly locked")
+	panel.call("_select_skill", "rock_smash")
+	_check((panel.get("detail_name") as Label).text == "Rock Smash", "Rock Smash opens its own detailed interface")
+	_check((panel.get("stats_label") as Label).text.contains("0.25") and (panel.get("stats_label") as Label).text.contains("3"), "Rock Smash shows fossil chance and today's availability")
+	_check(not (panel.get("wanted_section") as VBoxContainer).visible, "Rock Smash hides the Thieving Wanted meter")
+	panel.call("_select_detail_tab", "catalog")
+	_check((panel.get("targets_section") as VBoxContainer).visible, "Rock Smash has a dedicated daily Rocks tab")
+	_check((panel.get("catalog_tab_button") as Button).text == "Rocks", "Rock Smash labels its secondary tab for rocks")
+	_check((panel.get("targets_container") as VBoxContainer).get_child_count() == 4, "the Pewter rock list contains all four fixed rocks")
+	_check((panel.get("targets_summary_label") as Label).text.contains("3") and (panel.get("targets_summary_label") as Label).text.contains("1/4"), "the rock summary shows available and smashed counts")
+	var first_rock := (panel.get("targets_container") as VBoxContainer).get_child(0) as PanelContainer
+	var first_rock_status := ((first_rock.get_child(0) as HBoxContainer).get_child(1) as Label)
+	_check(first_rock_status.text == "Smashed today", "a completed rock has a clear daily status")
+	skills_service.call("_on_rock_smash_state_changed", {
+		"unlocked": true,
+		"level": 20,
+		"totalExperience": 9500,
+		"experienceIntoLevel": 0,
+		"experienceForNextLevel": 1000,
+		"fossilChancePercent": 0.25,
+		"smashedRockIds": [
+			"kanto_pewter_city_training_rock_north",
+			"kanto_pewter_city_training_rock_east",
+		],
+	})
+	var refreshed_second_rock := (panel.get("targets_container") as VBoxContainer).get_child(1) as PanelContainer
+	var refreshed_second_rock_status := ((refreshed_second_rock.get_child(0) as HBoxContainer).get_child(1) as Label)
+	_check(refreshed_second_rock_status.text == "Smashed today", "a successful smash refreshes the daily rock status immediately")
 	panel.call("_show_overview")
 	_check((panel.get("overview_panel") as VBoxContainer).visible, "the detail back action returns to all skill levels")
 	_check(not (panel.get("detail_panel") as PanelContainer).visible, "returning to the overview hides skill-specific content")

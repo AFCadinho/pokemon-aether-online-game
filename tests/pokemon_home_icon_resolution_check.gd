@@ -41,7 +41,7 @@ const EXPECTED_BATTLE_ALIASES := {
 	"Landorus Incarnate": "landorus",
 	"Keldeo Ordinary": "keldeo",
 	"Meloetta Aria": "meloetta",
-	"Greninja Bond": "greninja-ash",
+	"Greninja Bond": "greninja",
 	"Greninja Mega": "greninja",
 	"Furfrou La Reine": "furfrou-lareine",
 	"Meowstic F Mega": "meowstic-mega",
@@ -139,7 +139,11 @@ func _init() -> void:
 	if not pokedex_source.contains('"front",\n\t\t\tpokedex_shiny_mode,\n\t\t\tfalse'):
 		failed = true
 		push_error("Pokédex list fallback does not suppress expected missing-form errors")
+	if not pokedex_source.contains('_get_pokedex_sprite_side(),\n\t\t\tpokedex_shiny_mode,\n\t\t\tfalse'):
+		failed = true
+		push_error("Pokédex detail sprite probing does not suppress expected candidate misses")
 	for sprite_root: String in ["front", "back", "shiny_front", "shiny_back"]:
+		_check_battle_sprite_asset("greninja-ash", sprite_root)
 		_check_battle_sprite_asset("pikachu-rockstar", sprite_root)
 		_check_battle_sprite_asset("raichu-megax", sprite_root)
 		_check_battle_sprite_asset("raichu-megay", sprite_root)
