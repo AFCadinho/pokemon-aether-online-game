@@ -207,7 +207,7 @@ func _spawn_starter_final_evolution() -> void:
 		push_warning("MtMoonAmbushController: starter final evolution is unavailable.")
 		return
 	_starter_species_id = species_id
-	var starter_target := future_self.global_position + Vector2(0, 32)
+	var starter_target := future_self.global_position + Vector2(0, 48)
 	_starter = _create_cutscene_pokemon(species_id, to_local(starter_target))
 	var localized_name := ContentLocalization.display_name("species", species_id, species_name)
 	await _show_caption(_text("story.mt_moon.cutscene.go").replace("{pokemon}", localized_name), 0.75)

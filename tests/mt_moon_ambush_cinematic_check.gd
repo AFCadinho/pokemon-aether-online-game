@@ -58,7 +58,7 @@ func _run() -> void:
 	_expect("_face_rockets_toward_player()\n\tawait _flee_miguel()\n\tawait _summon_rocket_pokemon()" in controller_source, "Miguel flees as Team Rocket closes in and before their Pokemon appear")
 	_expect("counterattack cannot start without the future starter" in controller_source, "a missing starter stops the sequence instead of silently skipping the attack")
 	_expect("_future_self_spawn_global_position = player.global_position + Vector2(fossil_side * 32.0, -16)" in controller_source, "the temporary rescuer frames align visually beside the player")
-	_expect("future_self.global_position + Vector2(0, 32)" in controller_source, "the future starter appears one tile below its Trainer")
+	_expect("future_self.global_position + Vector2(0, 48)" in controller_source, "the future starter clears its Trainer's larger temporary sprite")
 	_expect("await _flee_rockets()\n\t\t_face_future_self_and_player()" in controller_source, "Team Rocket disappears before the player-facing conversation")
 	_expect("current_stage == DIALOGUE_STAGE_FAREWELL:\n\t\tawait _dismiss_rescuer()" in controller_source, "the rescuer disappears before the final player reaction")
 	_expect("player.call(\"face_world_position\", future_self.global_position)" in controller_source, "the player faces the rescuer for their conversation")

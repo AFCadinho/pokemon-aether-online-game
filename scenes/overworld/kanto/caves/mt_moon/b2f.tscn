@@ -11,11 +11,11 @@
 [ext_resource type="SpriteFrames" uid="uid://caas815hh7buy" path="res://assets/npcs/classes/scientist_m_frames.tres" id="7_scientist"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="8_item"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/smashable_rock.tscn" id="9_rock"]
-[ext_resource type="Script" path="res://scripts/world/npcs/mt_moon_miguel_npc.gd" id="10_miguel"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/custom/adinho_dad_frames.tres" id="11_future_frames"]
-[ext_resource type="Script" path="res://scripts/world/story/mt_moon_ambush_trigger.gd" id="12_ambush_trigger"]
-[ext_resource type="Script" path="res://scripts/world/story/mt_moon_ambush_controller.gd" id="13_ambush_controller"]
-[ext_resource type="Script" path="res://scripts/world/story/story_hook.gd" id="14_story_hook"]
+[ext_resource type="Script" uid="uid://dpwfw3d3b2ks5" path="res://scripts/world/npcs/mt_moon_miguel_npc.gd" id="10_miguel"]
+[ext_resource type="SpriteFrames" uid="uid://cqxh37chx4v8a" path="res://assets/npcs/custom/adinho_dad_frames.tres" id="11_future_frames"]
+[ext_resource type="Script" uid="uid://cejfjhq3lc1ju" path="res://scripts/world/story/mt_moon_ambush_trigger.gd" id="12_ambush_trigger"]
+[ext_resource type="Script" uid="uid://ds673r25jssgd" path="res://scripts/world/story/mt_moon_ambush_controller.gd" id="13_ambush_controller"]
+[ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="14_story_hook"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0vl8t"]
 texture = ExtResource("2_4qmrm")
@@ -81,9 +81,6 @@ texture_region_size = Vector2i(32, 32)
 [sub_resource type="TileSet" id="TileSet_fbfog"]
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_0vl8t")
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ambush"]
-size = Vector2(160, 128)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ec4qt"]
 texture = ExtResource("3_45771")
@@ -184,6 +181,9 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_bvk47")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ambush"]
+size = Vector2(160, 128)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tunnel_exit"]
 size = Vector2(64, 64)
 
@@ -276,6 +276,8 @@ npc_sprite_frames = ExtResource("6_rocket")
 [node name="SuperNerdMiguel" parent="Entities/NPCs" unique_id=704177549 instance=ExtResource("5_trainer")]
 position = Vector2(720, 656)
 script = ExtResource("10_miguel")
+cleared_position_marker = NodePath("../../StoryMarkers/MiguelCleared")
+blocked_side_recovery_marker = NodePath("../../StoryMarkers/MiguelBlockedSide")
 trainer_id = "kanto_mt_moon_b2f_super_nerd_miguel"
 sight_range_tiles = 1
 npc_id = "kanto_mt_moon_b2f_super_nerd_miguel"
@@ -283,19 +285,17 @@ npc_definition_id = "trainer_class_scientist_m"
 display_name = "Super Nerd Miguel"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("7_scientist")
-cleared_position_marker = NodePath("../../StoryMarkers/MiguelCleared")
-blocked_side_recovery_marker = NodePath("../../StoryMarkers/MiguelBlockedSide")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=812933119]
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=494345931]
 
-[node name="StoryMarkers" type="Node2D" parent="Entities"]
+[node name="StoryMarkers" type="Node2D" parent="Entities" unique_id=680190816]
 
-[node name="MiguelCleared" type="Marker2D" parent="Entities/StoryMarkers"]
+[node name="MiguelCleared" type="Marker2D" parent="Entities/StoryMarkers" unique_id=1849205268]
 position = Vector2(720, 720)
 
-[node name="MiguelBlockedSide" type="Marker2D" parent="Entities/StoryMarkers"]
+[node name="MiguelBlockedSide" type="Marker2D" parent="Entities/StoryMarkers" unique_id=1528003255]
 position = Vector2(752, 688)
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=976601731]
@@ -309,58 +309,6 @@ item_id = "helix-fossil"
 position = Vector2(752, 560)
 pickup_id = "kanto_mt_moon_b2f_dome_fossil"
 item_id = "dome-fossil"
-
-[node name="MtMoonAmbush" type="Node2D" parent="Entities"]
-position = Vector2(768, 624)
-script = ExtResource("13_ambush_controller")
-miguel_path = NodePath("../NPCs/SuperNerdMiguel")
-helix_fossil_path = NodePath("../Interactables/HelixFossil")
-dome_fossil_path = NodePath("../Interactables/DomeFossil")
-
-[node name="RocketLeft" type="AnimatedSprite2D" parent="Entities/MtMoonAmbush"]
-position = Vector2(-96, 32)
-sprite_frames = ExtResource("6_rocket")
-animation = &"default"
-
-[node name="RocketRight" type="AnimatedSprite2D" parent="Entities/MtMoonAmbush"]
-position = Vector2(96, 32)
-sprite_frames = ExtResource("6_rocket")
-animation = &"default"
-
-[node name="RocketRear" type="AnimatedSprite2D" parent="Entities/MtMoonAmbush"]
-position = Vector2(0, 112)
-sprite_frames = ExtResource("6_rocket")
-animation = &"default"
-
-[node name="RocketUpperLeft" type="AnimatedSprite2D" parent="Entities/MtMoonAmbush"]
-position = Vector2(-64, -96)
-sprite_frames = ExtResource("6_rocket")
-animation = &"default"
-
-[node name="RocketUpperRight" type="AnimatedSprite2D" parent="Entities/MtMoonAmbush"]
-position = Vector2(64, -96)
-sprite_frames = ExtResource("6_rocket")
-animation = &"default"
-
-[node name="FutureSelf" type="AnimatedSprite2D" parent="Entities/MtMoonAmbush"]
-position = Vector2(0, -32)
-sprite_frames = ExtResource("11_future_frames")
-animation = &"idle_up"
-
-[node name="StoryTriggers" type="Node2D" parent="."]
-
-[node name="MtMoonAmbush" type="Area2D" parent="StoryTriggers"]
-position = Vector2(768, 624)
-script = ExtResource("12_ambush_trigger")
-story_host_path = NodePath("../../Entities/MtMoonAmbush")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StoryTriggers/MtMoonAmbush"]
-shape = SubResource("RectangleShape2D_ambush")
-
-[node name="StoryHook" type="Node" parent="StoryTriggers/MtMoonAmbush"]
-script = ExtResource("14_story_hook")
-interaction_id = "kanto_mt_moon_ambush_rescue"
-entity_id = "mt_moon_ambush"
 
 [node name="TMPayback" parent="Entities/Interactables" unique_id=1155255050 instance=ExtResource("8_item")]
 position = Vector2(2096, 464)
@@ -390,6 +338,58 @@ position = Vector2(1456, 1296)
 
 [node name="RockSmash03" parent="Entities/Interactables" unique_id=1251392957 instance=ExtResource("9_rock")]
 position = Vector2(816, 2192)
+
+[node name="MtMoonAmbush" type="Node2D" parent="Entities" unique_id=1721373281]
+position = Vector2(768, 624)
+script = ExtResource("13_ambush_controller")
+miguel_path = NodePath("../NPCs/SuperNerdMiguel")
+helix_fossil_path = NodePath("../Interactables/HelixFossil")
+dome_fossil_path = NodePath("../Interactables/DomeFossil")
+
+[node name="RocketLeft" type="AnimatedSprite2D" parent="Entities/MtMoonAmbush" unique_id=775595871]
+position = Vector2(-96, 32)
+sprite_frames = ExtResource("6_rocket")
+animation = &"idle_right"
+
+[node name="RocketRight" type="AnimatedSprite2D" parent="Entities/MtMoonAmbush" unique_id=1659532172]
+position = Vector2(96, 32)
+sprite_frames = ExtResource("6_rocket")
+animation = &"idle_left"
+
+[node name="RocketRear" type="AnimatedSprite2D" parent="Entities/MtMoonAmbush" unique_id=1436408748]
+position = Vector2(0, 112)
+sprite_frames = ExtResource("6_rocket")
+animation = &"idle_up"
+
+[node name="RocketUpperLeft" type="AnimatedSprite2D" parent="Entities/MtMoonAmbush" unique_id=689606547]
+position = Vector2(-64, -96)
+sprite_frames = ExtResource("6_rocket")
+animation = &"idle_down"
+
+[node name="RocketUpperRight" type="AnimatedSprite2D" parent="Entities/MtMoonAmbush" unique_id=746555248]
+position = Vector2(64, -96)
+sprite_frames = ExtResource("6_rocket")
+animation = &"idle_down"
+
+[node name="FutureSelf" type="AnimatedSprite2D" parent="Entities/MtMoonAmbush" unique_id=1245447231]
+position = Vector2(16, -32)
+sprite_frames = ExtResource("11_future_frames")
+animation = &"idle_down"
+
+[node name="StoryTriggers" type="Node2D" parent="." unique_id=1057130112]
+
+[node name="MtMoonAmbush" type="Area2D" parent="StoryTriggers" unique_id=55104348]
+position = Vector2(768, 624)
+script = ExtResource("12_ambush_trigger")
+story_host_path = NodePath("../../Entities/MtMoonAmbush")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StoryTriggers/MtMoonAmbush" unique_id=2026616160]
+shape = SubResource("RectangleShape2D_ambush")
+
+[node name="StoryHook" type="Node" parent="StoryTriggers/MtMoonAmbush" unique_id=1623336805]
+script = ExtResource("14_story_hook")
+interaction_id = "kanto_mt_moon_ambush_rescue"
+entity_id = "mt_moon_ambush"
 
 [node name="Spawns" type="Node2D" parent="." unique_id=158532784]
 
