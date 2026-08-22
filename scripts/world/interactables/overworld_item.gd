@@ -2,9 +2,15 @@ extends WorldInteractable
 
 class_name OverworldItem
 
+const MACHINE_BALL_TEXTURE := preload(
+	"res://assets/npcs/gen4-ow-sprites/Object ball gold.png"
+)
+
 @export var pickup_id := ""
 @export var item_id := ""
 @export_range(1, 999, 1) var quantity := 1
+
+@onready var item_sprite := $Sprite2D as Sprite2D
 
 var claimed := false
 var claim_in_flight := false
@@ -15,10 +21,25 @@ func _ready() -> void:
 	display_name = LocalizationManager.text("ui.overworld_item.name")
 	blocks_movement = true
 	requires_facing = true
+	_apply_item_visual()
 	super._ready()
 	if not InventoryService.world_pickup_state_changed.is_connected(_on_world_pickup_state_changed):
 		InventoryService.world_pickup_state_changed.connect(_on_world_pickup_state_changed)
 	_refresh_claimed_state.call_deferred()
+
+
+func _apply_item_visual() -> void:
+	if item_sprite == null or not _is_machine_item():
+		return
+	var machine_texture := AtlasTexture.new()
+	machine_texture.atlas = MACHINE_BALL_TEXTURE
+	machine_texture.region = Rect2(0, 0, 32, 32)
+	item_sprite.texture = machine_texture
+
+
+func _is_machine_item() -> bool:
+	var normalized_item_id := item_id.strip_edges().to_lower()
+	return normalized_item_id.begins_with("tm-") or normalized_item_id.begins_with("hm-")
 
 
 func interact_with_player(_player: Node2D) -> void:
