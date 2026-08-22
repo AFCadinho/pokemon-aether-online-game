@@ -286,18 +286,29 @@ func _attack_and_faint_follower() -> void:
 	if not is_instance_valid(_fainted_follower) or not _fainted_follower.visible:
 		_fainted_follower = null
 		return
-	var attack := MtMoonCinematicAttack.new()
-	attack.z_index = 30
-	add_child(attack)
-	var attack_source: Vector2 = rockets[0].global_position if not rockets.is_empty() else global_position
-	await attack.play(to_local(attack_source), [to_local(_fainted_follower.global_position)], "dark")
 	_fainted_follower.set_process(false)
+	var attacker_species := ROCKET_SPECIES[0]
+	var attacker_name := ContentLocalization.display_name("species", attacker_species, attacker_species.capitalize())
+	await _show_caption(_text("story.mt_moon.cutscene.follower_attack").replace("{pokemon}", attacker_name), 0.65)
+	var attack := MtMoonCinematicAttack.new()
+	attack.z_index = 100
+	add_child(attack)
+	var attack_source: Vector2 = _rocket_pokemon[0].global_position if not _rocket_pokemon.is_empty() and is_instance_valid(_rocket_pokemon[0]) else rockets[0].global_position
+	await attack.play(to_local(attack_source), [to_local(_fainted_follower.global_position)], "poison")
 	var follower_sprite := _fainted_follower.sprite
 	if follower_sprite != null:
+		var resting_position := follower_sprite.position
+		var hit_tween := create_tween()
+		hit_tween.tween_property(follower_sprite, "modulate", Color(1.0, 0.25, 0.35, 1.0), 0.08)
+		hit_tween.parallel().tween_property(follower_sprite, "position", resting_position + Vector2(10, 0), 0.08)
+		hit_tween.tween_property(follower_sprite, "modulate", Color.WHITE, 0.12)
+		hit_tween.parallel().tween_property(follower_sprite, "position", resting_position, 0.12)
+		await hit_tween.finished
 		var faint_tween := create_tween().set_parallel(true)
-		faint_tween.tween_property(follower_sprite, "rotation", PI * 0.5, 0.25)
-		faint_tween.tween_property(follower_sprite, "modulate", Color(0.55, 0.55, 0.62, 0.9), 0.25)
+		faint_tween.tween_property(follower_sprite, "rotation", PI * 0.5, 0.35)
+		faint_tween.tween_property(follower_sprite, "modulate", Color(0.55, 0.55, 0.62, 0.9), 0.35)
 		await faint_tween.finished
+	await get_tree().create_timer(0.35).timeout
 	var follower_name := ContentLocalization.display_name("species", _fainted_follower.current_species, _fainted_follower.current_species.capitalize())
 	var dialogue_box := get_tree().current_scene.get_node_or_null("DialogueBox/Box")
 	if dialogue_box != null:

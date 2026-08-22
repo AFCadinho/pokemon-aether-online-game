@@ -42,6 +42,8 @@ func _run() -> void:
 	_expect("_summon_rocket_pokemon" in controller_source, "Ambush summons Team Rocket's Pokémon")
 	_expect("await _attack_and_faint_follower()" in controller_source, "Team Rocket attacks the player's visible follower before the rescue")
 	_expect("story.mt_moon.cutscene.follower_fainted" in controller_source, "the player begs their fainted follower to get up")
+	_expect("story.mt_moon.cutscene.follower_attack" in controller_source and '"poison"' in controller_source, "Zubat visibly attacks with a bright cave-readable effect")
+	_expect("Color(1.0, 0.25, 0.35, 1.0)" in controller_source, "the follower visibly flashes when struck")
 	_expect("_restore_follower()" in controller_source, "the cosmetic follower faint is safely restored after the cutscene")
 	_expect("_open_rift" in controller_source, "Ambush opens the future-self rift")
 	_expect("play_overworld_summon" in controller_source, "Ambush uses the shared Poké Ball animation")
@@ -87,6 +89,7 @@ func _run() -> void:
 		_expect(catalog.has("story.mt_moon.cutscene.use_move"), "%s has the attack command" % locale)
 		_expect(catalog.has("story.mt_moon.cutscene.player_speaker"), "%s has the player speaker fallback" % locale)
 		_expect(catalog.has("story.mt_moon.cutscene.follower_fainted"), "%s has the follower faint plea" % locale)
+		_expect(catalog.has("story.mt_moon.cutscene.follower_attack"), "%s has the follower attack command" % locale)
 
 	quit(1 if failed else 0)
 
