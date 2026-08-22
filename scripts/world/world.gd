@@ -39,7 +39,8 @@ const FOREST_TOP_LAYER_Z_OFFSET := 3
 const TREE_LAYER_Z_MIN := -4096
 const TREE_LAYER_Z_MAX := 4096
 const MAP_FADE_OUT_SECONDS := 0.16
-const MAP_FADE_IN_SECONDS := 0.20
+const MAP_LOADING_CONTENT_FADE_OUT_SECONDS := 0.12
+const MAP_FADE_IN_SECONDS := 0.75
 const WILD_ENCOUNTER_MINIMUM_COVER_SECONDS := 0.46
 const WILD_BATTLE_REVEAL_SECONDS := 0.20
 const EV_TRAINING_MAP_ID := "kanto_viridian_city"
@@ -709,11 +710,27 @@ func _fade_map_transition(target_alpha: float, duration: float) -> void:
 	map_transition_content.visible = true
 	if target_alpha > 0.0:
 		map_transition_content.modulate.a = 1.0
-	var tween := create_tween().set_parallel(true)
-	tween.tween_property(map_transition_rect, "color:a", target_alpha, duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
 	if is_zero_approx(target_alpha):
-		tween.tween_property(map_transition_content, "modulate:a", 0.0, duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
-	await tween.finished
+		# Keep the destination covered until the loading indicator is gone. The
+		# longer background reveal then softens the jump from darkness to bright
+		# exterior maps without leaving the spinner floating over the new map.
+		var content_tween := create_tween()
+		content_tween.tween_property(
+			map_transition_content,
+			"modulate:a",
+			0.0,
+			MAP_LOADING_CONTENT_FADE_OUT_SECONDS
+		).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		await content_tween.finished
+
+	var background_tween := create_tween()
+	background_tween.tween_property(
+		map_transition_rect,
+		"color:a",
+		target_alpha,
+		duration
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+	await background_tween.finished
 	if is_zero_approx(target_alpha):
 		map_transition_rect.visible = false
 		map_transition_content.visible = false
