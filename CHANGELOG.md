@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Mt. Moon's nine existing rocks now work with the daily Rock Smash skill and unlock across levels 5, 10, and 20.
+- Mt. Moon's nine existing rocks now work with the daily Rock Smash skill and unlock from level 5 through levels 20, 50, and 75.
 
 - Karate Master Kenji now has a Black Belt mugshot during the Rock Smash lesson.
 
