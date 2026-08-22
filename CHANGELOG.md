@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Regional Aethernet travel now costs ₽200, or ₽100 with an active Aether Blessing. Aether Anchors remain free.
+
 - The Town Map location panel now uses its available width for clearer descriptions, interiors, and route links.
 
 - Mt. Moon's nine existing rocks now work with the daily Rock Smash skill and unlock from level 5 through levels 20, 50, and 75.
