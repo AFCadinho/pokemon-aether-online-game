@@ -3,17 +3,17 @@ extends SceneTree
 const TILE_SIZE := 32
 const MAP_PICKUPS := {
 	"res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn": [
-		["kanto_viridian_city_potion", "potion", Vector2i(2240, 768)],
+		["kanto_viridian_city_potion", "potion", Vector2i(2240, 896)],
 	],
 	"res://scenes/overworld/kanto/routes/kanto_route_2.tscn": [
-		["kanto_route_2_ether", "ether", Vector2i(944, 592)],
-		["kanto_route_2_paralyze_heal", "paralyze-heal", Vector2i(1008, 1968)],
+		["kanto_route_2_ether", "ether", Vector2i(544, 1728)],
+		["kanto_route_2_paralyze_heal", "paralyze-heal", Vector2i(672, 2048)],
 	],
 	"res://scenes/overworld/kanto/routes/viridian_forest.tscn": [
-		["kanto_viridian_forest_poke_ball", "poke-ball", Vector2i(1808, 1968)],
-		["kanto_viridian_forest_antidote", "antidote", Vector2i(1936, 1136)],
-		["kanto_viridian_forest_potion", "potion", Vector2i(1136, 976)],
-		["kanto_viridian_forest_potion_2", "potion", Vector2i(1584, 176)],
+		["kanto_viridian_forest_poke_ball", "poke-ball", Vector2i(672, 1088)],
+		["kanto_viridian_forest_antidote", "antidote", Vector2i(1280, 1600)],
+		["kanto_viridian_forest_potion", "potion", Vector2i(1568, 1920)],
+		["kanto_viridian_forest_potion_2", "potion", Vector2i(768, 1920)],
 	],
 	"res://scenes/overworld/kanto/routes/kanto_route_4.tscn": [
 		["kanto_route_4_tm_roar", "tm-roar", Vector2i(576, 160)],
