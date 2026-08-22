@@ -30544,7 +30544,8 @@ func _set_pokedex_species_sprite(species: Dictionary) -> void:
 			"_load_sprite_frames",
 			candidate,
 			_get_pokedex_sprite_side(),
-			pokedex_shiny_mode
+			pokedex_shiny_mode,
+			false
 		)
 		loaded_frames = frames_value as SpriteFrames
 		if loaded_frames != null:
@@ -30579,9 +30580,9 @@ func _set_pokedex_species_sprite(species: Dictionary) -> void:
 func _pokedex_species_sprite_candidates(species: Dictionary) -> Array[String]:
 	var candidates: Array[String] = []
 	for candidate_value: Variant in [
-		species.get("name", ""),
 		species.get("id", ""),
 		species.get("showdownId", ""),
+		species.get("name", ""),
 	]:
 		var candidate := str(candidate_value).strip_edges()
 		if candidate != "" and not candidates.has(candidate):
