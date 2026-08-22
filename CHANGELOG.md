@@ -85,6 +85,10 @@
 - The game now shows clear localized messages when a new Mega Evolution is not ready or allowed for an action.
 - Testers can use every Developer Tools action except unrestricted Pokémon creation. They can still create normalized Pokémon through Alpha Tools.
 
+**Changed**
+
+- Wild battles now focus on the Pokémon after the opening summon instead of keeping your Trainer behind it. Trainers remain visible in Trainer and PvP battles.
+
 **Fixed**
 
 - Map changes now fade smoothly while keeping a dim view of the previous area during loading, reducing sudden dark-to-bright jumps.
