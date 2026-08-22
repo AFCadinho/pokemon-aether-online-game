@@ -40,6 +40,7 @@
 
 **Added**
 
+- Trainers you have not defeated yet now show an exclamation mark above their head.
 - Wild Clefairy, Zubat, Paras, Geodude, and Onix can now appear throughout Mt. Moon, with Clefable also appearing on B2F.
 - The story now continues into Mt. Moon: investigate four suspicious people, face Miguel for a fossil, and survive Team Rocket's ambush.
 - Mt. Moon now contains its visible FireRed and LeafGreen item pickups, plus optional rocks that can be cleared with Rock Smash.
