@@ -68,7 +68,12 @@ func _run() -> void:
 	_expect("_player_portrait_renderer.render_scale = 1.25" in controller_source, "player dialogue shows a less tightly zoomed portrait")
 	_expect("_player_portrait_renderer.head_only = false" in controller_source, "player dialogue includes the upper body and current clothing")
 	_expect("dialogue_box.call(\"start_dialogue\", lines, resolved_speaker_name, portrait, show_portrait)" in controller_source, "each cinematic speaker controls its own portrait")
-	_expect("_face_rockets_toward_player()\n\tawait _flee_miguel()\n\tawait _summon_rocket_pokemon()" in controller_source, "Miguel flees as Team Rocket closes in and before their Pokemon appear")
+	_expect("_face_rockets_inward()\n\tawait _flee_miguel()\n\tawait _summon_rocket_pokemon()" in controller_source, "Miguel flees as Team Rocket closes in and before their Pokemon appear")
+	_expect(
+		'const ROCKET_FACING_ANIMATIONS: Array[StringName] = [\n\t&"idle_right",\n\t&"idle_left",\n\t&"idle_up",\n\t&"idle_down",\n\t&"idle_down",\n]'
+		in controller_source,
+		"the ambush formation keeps both upper Grunts facing down"
+	)
 	_expect("counterattack cannot start without the future starter" in controller_source, "a missing starter stops the sequence instead of silently skipping the attack")
 	_expect("_future_self_spawn_global_position = player.global_position + Vector2(fossil_side * 32.0, -16)" in controller_source, "the temporary rescuer frames align visually beside the player")
 	_expect("future_self.global_position + Vector2(0, 48)" in controller_source, "the future starter clears its Trainer's larger temporary sprite")

@@ -16,6 +16,13 @@ const ROCKET_POKEMON_POSITIONS: Array[Vector2] = [
 	Vector2(-48, -64),
 	Vector2(48, -64),
 ]
+const ROCKET_FACING_ANIMATIONS: Array[StringName] = [
+	&"idle_right",
+	&"idle_left",
+	&"idle_up",
+	&"idle_down",
+	&"idle_down",
+]
 const DIALOGUE_STAGE_AMBUSH := 0
 const DIALOGUE_STAGE_FUTURE_VOICE := 1
 const DIALOGUE_STAGE_ROCKET_REVEAL_CHALLENGE := 2
@@ -131,7 +138,7 @@ func _prepare_ambush() -> void:
 		entrance_tween.tween_property(rocket, "position", surround_position, 0.42).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		entrance_tween.tween_property(rocket, "modulate:a", 1.0, 0.2)
 	await entrance_tween.finished
-	_face_rockets_toward_player()
+	_face_rockets_inward()
 	await _flee_miguel()
 	await _summon_rocket_pokemon()
 
@@ -541,30 +548,15 @@ func _flee_miguel() -> void:
 		await miguel.call("flee_after_ambush")
 
 
-func _face_rockets_toward_player() -> void:
-	var player := get_tree().get_first_node_in_group("player") as Node2D
-	if player == null:
-		return
-	for rocket: Node in rockets:
-		if rocket.has_method("face_world_position"):
-			rocket.call("face_world_position", player.global_position)
+func _face_rockets_inward() -> void:
+	for index: int in range(mini(rockets.size(), ROCKET_FACING_ANIMATIONS.size())):
+		var sprite := rockets[index] as AnimatedSprite2D
+		if sprite == null:
 			continue
-		var sprite := rocket as AnimatedSprite2D
-		if sprite != null:
-			_face_sprite_toward(sprite, player.global_position)
-
-
-func _face_sprite_toward(sprite: AnimatedSprite2D, world_position: Vector2) -> void:
-	var delta := world_position - sprite.global_position
-	var direction_name := "down"
-	if abs(delta.x) > abs(delta.y):
-		direction_name = "right" if delta.x > 0.0 else "left"
-	elif delta.y < 0.0:
-		direction_name = "up"
-	var animation_name := StringName("idle_%s" % direction_name)
-	if sprite.sprite_frames != null and sprite.sprite_frames.has_animation(animation_name):
-		sprite.play(animation_name)
-		sprite.stop()
+		var animation_name := ROCKET_FACING_ANIMATIONS[index]
+		if sprite.sprite_frames != null and sprite.sprite_frames.has_animation(animation_name):
+			sprite.play(animation_name)
+			sprite.stop()
 
 
 func _face_future_self_and_player() -> void:
