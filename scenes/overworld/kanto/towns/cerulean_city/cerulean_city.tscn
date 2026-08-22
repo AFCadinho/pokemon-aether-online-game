@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://dly1ylygogcj3"]
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/open_field/open_field.visual.tscn" id="1_visual"]
-[ext_resource type="Script" path="res://scripts/world/kanto/towns/cerulean_city.gd" id="2_city"]
+[ext_resource type="Script" uid="uid://q31fuskssd00" path="res://scripts/world/kanto/towns/cerulean_city.gd" id="2_city"]
 [ext_resource type="TileSet" uid="uid://p6ylhm8hwe2y" path="res://generated/tiled_visuals/open_field/open_field.visual.tileset.tres" id="3_collision"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="4_exit"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="5_hint"]
@@ -19,7 +19,7 @@ world_access_group_label = "Cerulean City"
 location_id = "kanto.cerulean_city"
 location_name = "Cerulean City"
 region_id = "kanto"
-music_track_id = "overworld.kanto.viridian_city"
+music_track_id = "overworld.kanto.cerulean_city"
 
 [node name="OpenField" parent="." instance=ExtResource("1_visual")]
 

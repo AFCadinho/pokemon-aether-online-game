@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Cerulean City now plays its own remastered city theme.
+
 - You can now travel between Route 4 and the first playable version of Cerulean City.
 
 - Team Rocket now reacts to your fallen Pokémon before your future self intervenes during the Mt. Moon rescue.
