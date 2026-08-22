@@ -39,6 +39,7 @@ func _init() -> void:
 	_check_instant_prepare_events_render_as_one_action()
 	_check_disguise_form_change_follows_recoil_damage()
 	_check_resolved_response_holds_species_until_ordered_form_event()
+	_check_animated_forme_change_is_prepared_before_render()
 	quit(1 if failed else 0)
 
 
@@ -91,7 +92,31 @@ func _check_resolved_response_holds_species_until_ordered_form_event() -> void:
 	_check_equal(capture_index >= 0 and capture_index < request_index, true, "wild resolution captures visible species before the final response arrives")
 	_check_equal(source.contains("ordered_response_display_species_hold.get(player_id"), true, "pre-event sprite and Disguise badge use the held visible species")
 	_check_equal(source.contains("BattleState.get_mimikyu_disguise_state_for_species(canonical_species) == \"\""), true, "the response display hold is scoped to canonical Mimikyu and cannot delay unrelated forms")
-	_check_equal(source.contains("if event_type == \"formeChange\":\n\t\t\t_release_ordered_response_display_species_for_ident"), true, "formeChange releases the display hold only at its ordered event")
+	_check_equal(
+		source.contains("var apply_forme_change_after_render := event_type == \"formeChange\""),
+		true,
+		"formeChange releases the display hold only at its ordered event"
+	)
+
+
+func _check_animated_forme_change_is_prepared_before_render() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var render_index := source.find("func _render_battle_events(")
+	var next_function_index := source.find("\nfunc ", render_index + 1)
+	var render_source := source.substr(render_index, next_function_index - render_index)
+	var animated_form_index := render_source.find("var apply_forme_change_after_render :=")
+	var render_event_index := render_source.find("await event_renderer.render_event(event_data, presentation)")
+	var deferred_form_index := render_source.find("if apply_forme_change_after_render:", render_event_index)
+	_check_equal(
+		animated_form_index >= 0 and animated_form_index < render_event_index,
+		true,
+		"animated form changes prepare their new visual form before the transformation effect"
+	)
+	_check_equal(
+		deferred_form_index > render_event_index,
+		true,
+		"ordinary form changes keep their existing post-render update order"
+	)
 
 
 func _check_pre_event_render_skips_final_team_hud_refresh() -> void:
