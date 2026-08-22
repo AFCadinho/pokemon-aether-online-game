@@ -130,7 +130,12 @@ func _show_miguel_takes_other_fossil() -> void:
 	var miguel := get_node_or_null(miguel_path) as Node2D
 	var other_fossil := get_node_or_null(dome_fossil_path) if InventoryService.has_item("helix-fossil") else get_node_or_null(helix_fossil_path)
 	if other_fossil != null:
-		_future_self_spawn_global_position = other_fossil.global_position + Vector2(0, 16)
+		var player := get_tree().get_first_node_in_group("player") as Node2D
+		if player != null:
+			var fossil_side := signf(other_fossil.global_position.x - player.global_position.x)
+			if is_zero_approx(fossil_side):
+				fossil_side = -1.0
+			_future_self_spawn_global_position = player.global_position + Vector2(fossil_side * 32.0, 0)
 	if miguel == null or other_fossil == null:
 		return
 	other_fossil.visible = true
@@ -201,7 +206,8 @@ func _spawn_starter_final_evolution() -> void:
 		push_warning("MtMoonAmbushController: starter final evolution is unavailable.")
 		return
 	_starter_species_id = species_id
-	var starter_target := future_self.global_position + Vector2(32, 0)
+	var player := get_tree().get_first_node_in_group("player") as Node2D
+	var starter_target := player.global_position + Vector2(0, 32) if player != null else future_self.global_position + Vector2(0, 32)
 	_starter = _create_cutscene_pokemon(species_id, to_local(starter_target))
 	var localized_name := ContentLocalization.display_name("species", species_id, species_name)
 	await _show_caption(_text("story.mt_moon.cutscene.go").replace("{pokemon}", localized_name), 0.75)
