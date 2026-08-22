@@ -315,6 +315,7 @@ func _reward_claim_result_from_response(response: Dictionary) -> Dictionary:
 		"badges": _dictionary_from_value(body.get("badges", {})),
 		"gymBadgeAward": _dictionary_from_value(body.get("gymBadgeAward", {})),
 		"trainerProgress": _dictionary_from_value(body.get("trainerProgress", {})),
+		"storyEffects": _array_from_value(body.get("storyEffects", [])),
 	}
 
 

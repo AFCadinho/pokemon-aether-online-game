@@ -60,6 +60,8 @@ var sheet_texture: Texture2D
 var sprite: Sprite2D
 var animation_token := 0
 
+@export var sprite_render_scale := SPRITE_SCALE
+
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -72,7 +74,7 @@ func _ready() -> void:
 	sheet_texture = load(SPRITE_SHEET_PATH) as Texture2D
 	sprite = Sprite2D.new()
 	sprite.centered = true
-	sprite.scale = SPRITE_SCALE
+	sprite.scale = sprite_render_scale
 	sprite.top_level = false
 	sprite.z_index = 0
 	sprite.z_as_relative = true
@@ -98,6 +100,35 @@ func play_summon(item_id: String, target_global_rect: Rect2 = Rect2(), side: Str
 		return
 
 	await _play_throw(column, start_position, target_position, side, token)
+	if token != animation_token:
+		return
+
+	await _play_release_frames(column, target_position, token, FRAME_SECONDS)
+	if token != animation_token:
+		return
+
+	await _finish_animation(token, FINISH_HOLD_SECONDS)
+	if token == animation_token:
+		summon_finished.emit()
+
+
+func play_overworld_summon(item_id: String, throw_viewport_position: Vector2, target_viewport_position: Vector2) -> void:
+	animation_token += 1
+	var token := animation_token
+	if not _prepare_animation():
+		return
+
+	var column := _get_ball_column(item_id)
+	var start_position := _global_point_to_local(throw_viewport_position)
+	var target_position := _global_point_to_local(target_viewport_position)
+	sprite.position = start_position
+	_set_frame(column, THROW_START_FRAME)
+	ball_thrown.emit()
+	await get_tree().create_timer(0.06).timeout
+	if token != animation_token:
+		return
+
+	await _play_throw(column, start_position, target_position, "front", token)
 	if token != animation_token:
 		return
 
@@ -171,7 +202,7 @@ func _prepare_animation() -> bool:
 	sprite.visible = true
 	sprite.modulate = Color.WHITE
 	sprite.rotation = 0.0
-	sprite.scale = SPRITE_SCALE
+	sprite.scale = sprite_render_scale
 	return true
 
 
