@@ -9,6 +9,9 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mt_moon_exit"]
 size = Vector2(128, 32)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cerulean_exit"]
+size = Vector2(32, 96)
+
 [node name="KantoRoute4" type="Node2D" unique_id=808849364]
 script = ExtResource("2_route")
 map_id = "kanto_route_4"
@@ -34,6 +37,9 @@ tile_set = ExtResource("3_collision")
 [node name="FromMtMoon" type="Marker2D" parent="Spawns" unique_id=208040003]
 position = Vector2(384, 64)
 
+[node name="FromCerulean" type="Marker2D" parent="Spawns"]
+position = Vector2(704, 288)
+
 [node name="Exits" type="Node2D" parent="." unique_id=208040004]
 
 [node name="ToMtMoon" type="Area2D" parent="Exits" unique_id=208040005]
@@ -52,6 +58,22 @@ z_as_relative = false
 tile_footprint = Vector2i(4, 1)
 flow_direction = "down"
 
+[node name="ToCerulean" type="Area2D" parent="Exits"]
+position = Vector2(752, 288)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
+target_spawn_name = "FromRoute4"
+transition_id = "kanto_route_4__to_cerulean_city"
+transition_facing_direction = "right"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCerulean"]
+shape = SubResource("RectangleShape2D_cerulean_exit")
+
+[node name="RouteTransitionHint" parent="Exits/ToCerulean" instance=ExtResource("5_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(1, 3)
+flow_direction = "right"
+
 [node name="Entities" type="Node2D" parent="." unique_id=208040008]
 z_index = 5
 
@@ -64,3 +86,4 @@ z_index = 5
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=208040012]
 
 [connection signal="body_entered" from="Exits/ToMtMoon" to="Exits/ToMtMoon" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToCerulean" to="Exits/ToCerulean" method="_on_body_entered"]

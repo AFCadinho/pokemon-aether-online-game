@@ -24,6 +24,30 @@
 				}
 			}
 		},
+		"kanto_cerulean_city": {
+			"areaType": "exterior",
+			"defaultMode": "open",
+			"label": "Cerulean City",
+			"locationGroupId": "kanto_cerulean_city",
+			"locationGroupLabel": "Cerulean City",
+			"regionName": "Kanto",
+			"sceneAliases": [
+				"uid://dly1ylygogcj3"
+			],
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
+			"spawnPoints": {
+				"from_route_4": {
+					"facingDirection": "down",
+					"label": "Route 4",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute4",
+					"tile": {
+						"x": 2,
+						"y": 9
+					}
+				}
+			}
+		},
 		"kanto_mt_moon_1f": {
 			"areaType": "wilderness",
 			"defaultMode": "open",
@@ -974,6 +998,16 @@
 			],
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_4.tscn",
 			"spawnPoints": {
+				"from_cerulean": {
+					"facingDirection": "down",
+					"label": "Cerulean",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromCerulean",
+					"tile": {
+						"x": 22,
+						"y": 9
+					}
+				},
 				"from_mt_moon": {
 					"facingDirection": "down",
 					"label": "Mt Moon",
@@ -1263,6 +1297,23 @@
 	},
 	"schemaVersion": 3,
 	"transitions": {
+		"kanto_cerulean_city__to_route_4": {
+			"destination": {
+				"facingDirection": "left",
+				"mapId": "kanto_route_4",
+				"mapSceneAliases": [
+					"uid://c6taahbjj1mnh"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_4.tscn",
+				"position": {
+					"x": 704.0,
+					"y": 288.0
+				},
+				"spawnMarker": "FromCerulean"
+			},
+			"destinationAreaId": "kanto_route_4",
+			"sourceMapId": "kanto_cerulean_city"
+		},
 		"kanto_mt_moon_1f__to_b1f_1": {
 			"destination": {
 				"facingDirection": "right",
@@ -2087,6 +2138,23 @@
 			},
 			"destinationAreaId": "kanto_route_3",
 			"sourceMapId": "kanto_route_3_pokemon_center"
+		},
+		"kanto_route_4__to_cerulean_city": {
+			"destination": {
+				"facingDirection": "right",
+				"mapId": "kanto_cerulean_city",
+				"mapSceneAliases": [
+					"uid://dly1ylygogcj3"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
+				"position": {
+					"x": 64.0,
+					"y": 288.0
+				},
+				"spawnMarker": "FromRoute4"
+			},
+			"destinationAreaId": "kanto_cerulean_city",
+			"sourceMapId": "kanto_route_4"
 		},
 		"kanto_route_4__to_mt_moon": {
 			"destination": {
