@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Karate Master Kenji now has a Black Belt mugshot during the Rock Smash lesson.
+
 - Route 3 and Route 22 now reward exploration with additional visible field items.
 
 - Early Kanto maps now include their visible FireRed and LeafGreen field items through Route 4.
