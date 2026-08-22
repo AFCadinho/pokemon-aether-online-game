@@ -43,6 +43,10 @@ func _run() -> void:
 		and "claim_npc_item_reward" in mentor,
 		"Kenji offers the pre-Brock lesson and claims its rewards authoritatively"
 	)
+	_check(
+		'portrait_id = "showdown_blackbelt_gen6"' in pewter,
+		"Kenji uses the Showdown Black Belt mugshot"
+	)
 
 	var rock_ids: Array[String] = [
 		"kanto_pewter_city_training_rock_north",
