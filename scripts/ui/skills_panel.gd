@@ -17,6 +17,7 @@ const LOCKED_COLOR := Color("#738092")
 const COMPLETE_COLOR := Color("#84a0b8")
 const FISHING_ICON: Texture2D = preload("res://assets/ui/fishing_rod.svg")
 const THIEVING_ICON: Texture2D = preload("res://assets/ui/thieving.svg")
+const ROCK_SMASH_ICON: Texture2D = preload("res://assets/ui/rock_smash_skill_icon.tres")
 const TARGET_TOWN_TABS_PER_PAGE := 3
 
 var main_panel: PanelContainer
@@ -565,17 +566,30 @@ func _render_detail(skill: Dictionary) -> void:
 		})
 	var stats := skill.get("stats", {}) as Dictionary
 	stats_label.text = _stats_text(skill_id, stats)
+	var targets_title := main_panel.find_child("TargetsTitle", true, false) as Label
+	if targets_title != null:
+		targets_title.text = _text(
+			"ui.skills.rock_smash.rocks.title"
+			if skill_id == "rock_smash"
+			else "ui.skills.thieving.targets.title"
+		)
 	wanted_section.visible = skill_id == "thieving"
 	if wanted_section.visible:
 		_render_wanted_meter(stats)
 	_render_unlocks(skill.get("unlocks", []) as Array)
 	if skill_id == "thieving":
 		_render_targets(skill.get("targets", []) as Array)
-	detail_tabs.visible = skill_id in ["fishing", "thieving"]
+	elif skill_id == "rock_smash":
+		_render_rocks(skill.get("rocks", []) as Array)
+	detail_tabs.visible = skill_id in ["fishing", "thieving", "rock_smash"]
 	catalog_tab_button.text = (
 		_text("ui.skills.thieving.targets.tab")
 		if skill_id == "thieving"
-		else _text("ui.skills.fishing.catalog.title")
+		else (
+			_text("ui.skills.rock_smash.rocks.tab")
+			if skill_id == "rock_smash"
+			else _text("ui.skills.fishing.catalog.title")
+		)
 	)
 	_render_detail_tab(skill)
 
@@ -600,7 +614,7 @@ func _select_detail_tab(tab_id: String) -> void:
 func _render_detail_tab(skill: Dictionary) -> void:
 	var skill_id := str(skill.get("id", ""))
 	var show_catalog := skill_id == "fishing" and selected_detail_tab == "catalog"
-	var show_targets := skill_id == "thieving" and selected_detail_tab == "catalog"
+	var show_targets := skill_id in ["thieving", "rock_smash"] and selected_detail_tab == "catalog"
 	progression_section.visible = not show_catalog and not show_targets
 	fishing_catalog_section.visible = show_catalog
 	targets_section.visible = show_targets
@@ -865,6 +879,37 @@ func _render_targets(targets: Array) -> void:
 	targets_reset_label.text = _text("ui.skills.thieving.targets.reset")
 
 
+func _render_rocks(rocks: Array) -> void:
+	var available_count := 0
+	var completed_count := 0
+	target_town_order.clear()
+	targets_by_town.clear()
+	for rock_value: Variant in rocks:
+		var rock := rock_value as Dictionary
+		if bool(rock.get("availableToday", false)):
+			available_count += 1
+		if bool(rock.get("smashedToday", false)):
+			completed_count += 1
+		var town_key := str(rock.get("townKey", rock.get("locationKey", "")))
+		if not targets_by_town.has(town_key):
+			target_town_order.append(town_key)
+			targets_by_town[town_key] = []
+		var town_rocks: Array = targets_by_town[town_key] as Array
+		town_rocks.append(rock)
+	if selected_target_town_key not in target_town_order:
+		selected_target_town_key = target_town_order[0] if not target_town_order.is_empty() else ""
+	var selected_index := target_town_order.find(selected_target_town_key)
+	target_town_page = floori(float(maxi(selected_index, 0)) / TARGET_TOWN_TABS_PER_PAGE)
+	_render_target_town_tabs()
+	_render_selected_target_town()
+	targets_summary_label.text = _text("ui.skills.rock_smash.rocks.summary", {
+		"available": available_count,
+		"completed": completed_count,
+		"total": rocks.size(),
+	})
+	targets_reset_label.text = _text("ui.skills.rock_smash.rocks.reset")
+
+
 func _render_target_town_tabs() -> void:
 	for child: Node in target_town_tabs.get_children():
 		target_town_tabs.remove_child(child)
@@ -906,10 +951,15 @@ func _create_target_town_tab(town_key: String) -> Button:
 	button.focus_mode = Control.FOCUS_NONE
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	button.text = _text(town_key)
-	button.tooltip_text = _text("ui.skills.thieving.targets.town_summary", {
+	button.tooltip_text = _text(
+		"ui.skills.rock_smash.rocks.town_summary"
+		if selected_skill_id == "rock_smash"
+		else "ui.skills.thieving.targets.town_summary",
+		{
 		"available": available_count,
 		"total": town_targets.size(),
-	})
+		}
+	)
 	button.add_theme_font_size_override("font_size", 10)
 	button.add_theme_color_override("font_color", TEXT_COLOR if selected else MUTED_TEXT_COLOR)
 	button.add_theme_color_override("font_hover_color", TEXT_COLOR)
@@ -986,11 +1036,17 @@ func _create_target_row(target: Dictionary) -> Control:
 	var detail_label := Label.new()
 	detail_label.add_theme_color_override("font_color", MUTED_TEXT_COLOR)
 	detail_label.add_theme_font_size_override("font_size", 9)
-	detail_label.text = _text("ui.skills.thieving.target.detail", {
-		"type": _text("ui.skills.thieving.target_type.%s" % str(target.get("npcType", "civilian"))),
-		"location": _text(str(target.get("locationKey", ""))),
-		"level": int(target.get("requiredLevel", 1)),
-	})
+	if selected_skill_id == "rock_smash":
+		detail_label.text = _text("ui.skills.rock_smash.rock.detail", {
+			"location": _text(str(target.get("locationKey", ""))),
+			"level": int(target.get("requiredLevel", 1)),
+		})
+	else:
+		detail_label.text = _text("ui.skills.thieving.target.detail", {
+			"type": _text("ui.skills.thieving.target_type.%s" % str(target.get("npcType", "civilian"))),
+			"location": _text(str(target.get("locationKey", ""))),
+			"level": int(target.get("requiredLevel", 1)),
+		})
 	identity.add_child(detail_label)
 
 	var status := Label.new()
@@ -998,23 +1054,43 @@ func _create_target_row(target: Dictionary) -> Control:
 	status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	status.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	status.add_theme_font_size_override("font_size", 10)
-	var attempted := bool(target.get("attemptedToday", false))
+	var attempted := bool(target.get(
+		"smashedToday" if selected_skill_id == "rock_smash" else "attemptedToday",
+		false
+	))
 	var unlocked := bool(target.get("unlocked", false))
 	var available := bool(target.get("availableToday", false))
 	if attempted:
-		status.text = _text("ui.skills.thieving.target.completed")
+		status.text = _text(
+			"ui.skills.rock_smash.rock.completed"
+			if selected_skill_id == "rock_smash"
+			else "ui.skills.thieving.target.completed"
+		)
 		status.add_theme_color_override("font_color", COMPLETE_COLOR)
 		status.add_theme_stylebox_override("normal", _make_panel_style(Color("#111d28"), Color("#38536a"), 7, 1))
 	elif not unlocked:
-		status.text = _text("ui.skills.thieving.target.level_required", {"level": int(target.get("requiredLevel", 1))})
+		status.text = _text(
+			"ui.skills.rock_smash.rock.level_required"
+			if selected_skill_id == "rock_smash"
+			else "ui.skills.thieving.target.level_required",
+			{"level": int(target.get("requiredLevel", 1))}
+		)
 		status.add_theme_color_override("font_color", LOCKED_COLOR)
 		status.add_theme_stylebox_override("normal", _make_panel_style(Color("#10151c"), Color("#2c3540"), 7, 1))
 	elif available:
-		status.text = _text("ui.skills.thieving.target.available")
+		status.text = _text(
+			"ui.skills.rock_smash.rock.available"
+			if selected_skill_id == "rock_smash"
+			else "ui.skills.thieving.target.available"
+		)
 		status.add_theme_color_override("font_color", SUCCESS_COLOR)
 		status.add_theme_stylebox_override("normal", _make_panel_style(Color("#0b241a"), Color("#397858"), 7, 1))
 	else:
-		status.text = _text("ui.skills.thieving.target.unavailable")
+		status.text = _text(
+			"ui.skills.rock_smash.rock.unavailable"
+			if selected_skill_id == "rock_smash"
+			else "ui.skills.thieving.target.unavailable"
+		)
 		status.add_theme_color_override("font_color", LOCKED_COLOR)
 		status.add_theme_stylebox_override("normal", _make_panel_style(Color("#10151c"), Color("#2c3540"), 7, 1))
 	content.add_child(status)
@@ -1027,6 +1103,11 @@ func _stats_text(skill_id: String, stats: Dictionary) -> String:
 			"reward": snappedf(float(stats.get("rewardBonusPercent", 0.0)), 0.1),
 			"risk": snappedf(float(stats.get("maximumCatchReductionPercent", 0.0)), 0.1),
 			"heat": snappedf(float(stats.get("wantedReductionPercent", 0.0)), 0.1),
+		})
+	if skill_id == "rock_smash":
+		return _text("ui.skills.rock_smash.stats", {
+			"fossil": snappedf(float(stats.get("fossilChancePercent", 0.0)), 0.001),
+			"available": maxi(int(stats.get("availableRocks", 0)), 0),
 		})
 	return _text("ui.skills.fishing.stats", {
 		"tier": maxi(int(stats.get("activeTier", 0)), 0),
@@ -1145,7 +1226,11 @@ func _has_skill(skills: Array, skill_id: String) -> bool:
 
 
 func _skill_icon(skill_id: String) -> Texture2D:
-	return FISHING_ICON if skill_id == "fishing" else THIEVING_ICON
+	if skill_id == "fishing":
+		return FISHING_ICON
+	if skill_id == "rock_smash":
+		return ROCK_SMASH_ICON
+	return THIEVING_ICON
 
 
 func _text(key: String, replacements: Dictionary = {}) -> String:
