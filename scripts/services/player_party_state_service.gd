@@ -225,8 +225,21 @@ func claim_starter(species_id: String) -> Dictionary:
 	return result
 
 
-func dev_create_pokemon(pokemon_data: Dictionary, add_to_party: bool = true) -> Dictionary:
-	return await _create_owned_pokemon("/game/dev/pokemon", _with_current_origin(pokemon_data, "generated"), add_to_party)
+func dev_create_pokemon(
+	pokemon_data: Dictionary,
+	add_to_party: bool = true,
+	preserve_direct_battle_form: bool = false,
+	test_purpose: String = ""
+) -> Dictionary:
+	return await _create_owned_pokemon(
+		"/game/dev/pokemon",
+		_with_current_origin(pokemon_data, "generated"),
+		add_to_party,
+		{
+			"preserveDirectBattleForm": preserve_direct_battle_form,
+			"testPurpose": test_purpose,
+		}
+	)
 
 
 func content_creator_create_pokemon(pokemon_data: Dictionary, add_to_party: bool = true) -> Dictionary:
@@ -271,7 +284,7 @@ func dev_clear_party() -> Dictionary:
 	return result
 
 
-func _create_owned_pokemon(endpoint: String, pokemon_data: Dictionary, add_to_party: bool = true) -> Dictionary:
+func cleanup_dev_test_pokemon() -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {
 			"success": false,
@@ -280,13 +293,50 @@ func _create_owned_pokemon(endpoint: String, pokemon_data: Dictionary, add_to_pa
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
+		base_url + "/game/dev/pokemon/test-fixtures",
+		HTTPClient.METHOD_DELETE,
+		GatewayApiConfig.get_accept_headers(),
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	var party: Dictionary = _dictionary_from_value(body.get("party", {}))
+	var result := {
+		"success": true,
+		"cleaned": maxi(int(body.get("cleaned", 0)), 0),
+		"hasParty": bool(party.get("hasParty", false)),
+		"party": _array_from_value(party.get("party", [])),
+		"pokemonLevelCap": _dictionary_from_value(party.get("pokemonLevelCap", {})),
+	}
+	_apply_party_response(result)
+	return result
+
+
+func _create_owned_pokemon(
+	endpoint: String,
+	pokemon_data: Dictionary,
+	add_to_party: bool = true,
+	extra_fields: Dictionary = {}
+) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var request_body := {
+		"pokemon": pokemon_data,
+		"addToParty": add_to_party,
+	}
+	for key: Variant in extra_fields:
+		request_body[key] = extra_fields[key]
+	var response: Dictionary = await _request_json(
 		base_url + endpoint,
 		HTTPClient.METHOD_POST,
 		GatewayApiConfig.get_json_headers(),
-		JSON.stringify({
-			"pokemon": pokemon_data,
-			"addToParty": add_to_party,
-		})
+		JSON.stringify(request_body)
 	)
 	var result: Dictionary = _pokemon_create_result_from_response(response)
 	_apply_party_response(result)
