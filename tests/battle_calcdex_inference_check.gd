@@ -59,7 +59,7 @@ func _response(revision: Dictionary) -> Dictionary:
 	return {
 		"success": true, "schemaVersion": 1, "routeRevision": "calc5.4-2026-08-09",
 		"safeInputFingerprint": "b".repeat(64), "projectionRevision": revision,
-		"mechanicsManifest": {"contractRevision": "calc0-2026-08-08", "damageCalcVersion": "0.10.0", "showdownVersion": "0.11.10", "formatDataFingerprint": "fd94c49ab26ddf8daff2259dfc2b3857f957e37b166557412c4fe303c87e54b0"},
+		"mechanicsManifest": {"contractRevision": "calc0.1-2026-08-21", "damageCalcVersion": "0.11.0+upstream.636e5b9.pao2", "showdownVersion": "0.11.11", "formatDataFingerprint": "777a20be11687df584af311beb402a19dbab9136f96bc7bc84518c3d43c09054"},
 		"presetRevision": "test-v1", "presetFingerprint": "d".repeat(64),
 		"direction": "own-to-opponent", "rangeMode": "likely", "attacker": pokemon, "defender": opponent,
 		"candidates": [{"candidateId": "curated:bulky", "labelKey": "calcdex.preset.bulky", "source": "curated_prior", "weight": 1.0, "coverage": 1.0, "pinned": false, "effectiveInput": {"nature": "Bold", "evs": {"hp": 252}, "ivs": {"hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31}, "assumedMoves": []}, "explanationKeys": ["calcdex.explain.curated_preset"], "results": [result]}],

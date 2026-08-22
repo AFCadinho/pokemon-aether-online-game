@@ -4,6 +4,7 @@ extends BaseNPC
 class_name TrainerNPC
 
 const TrainerDefinitionResource := preload("res://scripts/world/npcs/trainer_definition.gd")
+const FIRST_ENCOUNTER_MARKER_TEXTURE := preload("res://assets/ui/icons/trainer_first_encounter.png")
 const REMATCH_MARKER_TEXTURE := preload("res://assets/ui/icons/trainer_challenge.png")
 const INTRO_DIALOGUE_DELAY_SECONDS := 0.2
 const BATTLE_TRANSITION_DELAY_SECONDS := 0.35
@@ -43,6 +44,8 @@ func _ready() -> void:
 	add_to_group("trainer_npcs")
 	_configure_vision_area()
 	_setup_rematch_marker()
+	if not TrainerProgressService.progress_invalidated.is_connected(_reload_trainer_progress):
+		TrainerProgressService.progress_invalidated.connect(_reload_trainer_progress)
 	_load_trainer_progress.call_deferred()
 
 
@@ -103,6 +106,7 @@ func _show_battle_dialogue(is_rematch: bool) -> void:
 	if dialogue_box == null:
 		push_warning("TrainerNPC: DialogueBox/Box not found.")
 		battle_in_progress = false
+		_refresh_rematch_marker()
 		GameState.unlock_overworld_input()
 		return
 	
@@ -147,6 +151,7 @@ func _show_battle_dialogue(is_rematch: bool) -> void:
 		battle_in_progress = false
 		if trainer_progress_state == STATE_FIRST_ENCOUNTER:
 			triggered = false
+		_refresh_rematch_marker()
 		await GameErrorDialogService.show_response(
 			battle_result,
 			"backend.error.trainer_battle_start",
@@ -230,6 +235,7 @@ func _fail_trainer_metadata(dialogue_box: Node, message: String) -> void:
 	battle_in_progress = false
 	triggered = false
 	vision_candidate = null
+	_refresh_rematch_marker()
 	await _show_generic_trainer_error_dialogue(dialogue_box)
 
 func _show_generic_trainer_error_dialogue(dialogue_box: Node) -> void:
@@ -267,6 +273,7 @@ func _try_trigger_vision(body: Node2D) -> void:
 	if not _is_body_in_sight_range(body):
 		battle_in_progress = false
 		triggered = false
+		_refresh_rematch_marker()
 		GameState.unlock_overworld_input()
 		return
 
@@ -333,6 +340,7 @@ func _claim_battle_interaction() -> bool:
 	if battle_in_progress:
 		return false
 	battle_in_progress = true
+	_refresh_rematch_marker()
 	return true
 
 
@@ -343,10 +351,10 @@ func finish_trainer_battle(finished_trainer_id: String, player_won: bool) -> voi
 	if trainer_progress_state == STATE_FIRST_ENCOUNTER:
 		if player_won:
 			trainer_progress_state = STATE_DEFEATED
-			_refresh_rematch_marker()
 			_configure_vision_area()
 		else:
 			triggered = false
+	_refresh_rematch_marker()
 
 
 func mark_trainer_completed() -> void:
@@ -388,6 +396,7 @@ func _load_trainer_progress() -> void:
 			STATE_COMPLETED if has_existing_trainer_completion() else STATE_FIRST_ENCOUNTER
 		)
 		trainer_progress_loaded = true
+		_refresh_rematch_marker()
 		_configure_vision_area()
 		return
 
@@ -402,6 +411,21 @@ func _load_trainer_progress() -> void:
 		next_progress_refresh_at_msec = Time.get_ticks_msec() + SLEEPING_REFRESH_INTERVAL_MSEC
 	_refresh_rematch_marker()
 	_configure_vision_area()
+
+
+func _reload_trainer_progress() -> void:
+	if battle_in_progress:
+		return
+	while trainer_progress_request_active:
+		await get_tree().process_frame
+	if not is_inside_tree() or battle_in_progress:
+		return
+	triggered = false
+	auto_trigger_failed = false
+	vision_candidate = null
+	trainer_progress_loaded = false
+	next_progress_refresh_at_msec = 0
+	await _load_trainer_progress()
 
 
 func _refresh_sleeping_progress_if_due() -> void:
@@ -497,17 +521,25 @@ func _setup_rematch_marker() -> void:
 func _refresh_rematch_marker() -> void:
 	if rematch_marker == null:
 		return
+	var show_first_encounter := (
+		trainer_progress_loaded
+		and trainer_progress_state == STATE_FIRST_ENCOUNTER
+		and not battle_in_progress
+	)
 	var show_ready := trainer_progress_state == STATE_READY and supports_trainer_rematches()
 	var show_sleeping := trainer_progress_state == STATE_SLEEPING and supports_trainer_rematches()
-	rematch_marker.visible = show_ready or show_sleeping
-	rematch_marker_icon.visible = show_ready
+	rematch_marker.visible = show_first_encounter or show_ready or show_sleeping
+	rematch_marker_icon.visible = show_first_encounter or show_ready
+	rematch_marker_icon.texture = (
+		FIRST_ENCOUNTER_MARKER_TEXTURE if show_first_encounter else REMATCH_MARKER_TEXTURE
+	)
 	rematch_marker_sleep_label.visible = show_sleeping
 
 
 func _update_rematch_marker_animation() -> void:
 	if rematch_marker == null:
 		return
-	if trainer_progress_state == STATE_READY and rematch_marker.visible:
+	if trainer_progress_state in [STATE_FIRST_ENCOUNTER, STATE_READY] and rematch_marker.visible:
 		var bob := sin(float(Time.get_ticks_msec()) * 0.006) * 2.5
 		rematch_marker.position = REMATCH_MARKER_BASE_POSITION + Vector2(0.0, bob)
 		rematch_marker.modulate = Color.WHITE

@@ -13,6 +13,10 @@
       "label": "Pokémon Center",
       "path": "res://assets/music/overworld/kanto/interiors/pokemon_center.ogg"
     },
+    "overworld.kanto.cave.mt_moon": {
+      "label": "Mt. Moon",
+      "path": "res://assets/music/overworld/kanto/caves/mt_moon.ogg"
+    },
     "overworld.kanto.route.1": {
       "label": "Kanto Route 1",
       "path": "res://assets/music/overworld/kanto/routes/route1.ogg"
