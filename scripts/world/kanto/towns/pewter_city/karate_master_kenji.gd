@@ -19,6 +19,12 @@ func interact_with_player(player: Node2D) -> void:
 	if not bool(metadata_response.get("success", false)):
 		await _show_report_to_staff_message()
 		return
+	var story_result: Dictionary = await PlayerGameStateService.refresh_story()
+	if not bool(story_result.get("success", false)):
+		push_warning(
+			"KarateMasterKenji: could not refresh quest rewards: %s"
+			% str(story_result.get("error", "Unknown error"))
+		)
 	var quest := StoryService.get_quest(QUEST_ID)
 	var quest_status := str(quest.get("status", "")).strip_edges().to_lower()
 	if quest_status == "available":
