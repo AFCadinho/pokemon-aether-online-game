@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Your future partner's attack during the Mt. Moon rescue now plays a matching move sound.
+
 - Your character now turns toward Team Rocket as they surround you during the Mt. Moon ambush.
 
 - TMs and HMs found in the overworld now use a distinct golden Poké Ball.
