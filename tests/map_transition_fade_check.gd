@@ -8,6 +8,10 @@ var failed := false
 func _init() -> void:
 	var world_source := FileAccess.get_file_as_string(WORLD_PATH)
 	_check(
+		world_source.contains("const MAP_FADE_OUT_SECONDS := 0.60"),
+		"the current map fades out gradually while loading begins"
+	)
+	_check(
 		world_source.contains("const MAP_FADE_IN_SECONDS := 0.75"),
 		"loaded maps use a gentle fade-in"
 	)
