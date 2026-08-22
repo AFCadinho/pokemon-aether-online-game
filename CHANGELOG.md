@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Lass Iris in Mt. Moon can now spot you from five tiles away.
+
 - The Hiker at Mt. Moon's entrance now reliably stops you with his warning when you first walk past him.
 
 - Guild emblems now appear as clear, compact badges beside player names instead of enlarging the name box.
@@ -10,7 +12,7 @@
 
 - You can now leave Mt. Moon through its eastern exit and arrive on Route 4, then return through the same cave entrance.
 
-- Mt. Moon no longer moves you to Miguel after a Team Rocket battle. Miguel now speaks before taking the fossil you leave behind, Lass Iris patrols her intended route, and the Moon Stone on 1F appears in its intended spot.
+- Mt. Moon no longer moves you to Miguel after a Team Rocket battle. Miguel now speaks before taking the fossil you leave behind, and the Moon Stone on 1F appears in its intended spot.
 
 - Brock now clearly names Rock Slide when awarding its TM, the reward appears in your System messages, and the Hiker at Mt. Moon uses the correct portrait.
 
