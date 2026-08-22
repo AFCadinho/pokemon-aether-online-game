@@ -1,0 +1,65 @@
+[gd_scene load_steps=7 format=4 uid="uid://c6taahbjj1mnh"]
+
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/open_field/open_field.visual.tscn" id="1_visual"]
+[ext_resource type="Script" path="res://scripts/world/kanto/routes/kanto_route_4.gd" id="2_route"]
+[ext_resource type="TileSet" path="res://generated/tiled_visuals/open_field/open_field.visual.tileset.tres" id="3_collision"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="4_exit"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="5_hint"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mt_moon_exit"]
+size = Vector2(128, 32)
+
+[node name="KantoRoute4" type="Node2D" unique_id=808849364]
+script = ExtResource("2_route")
+map_id = "kanto_route_4"
+map_region_name = "Kanto"
+map_display_name = "Route 4"
+world_access_group_id = "kanto_route_4"
+world_access_group_label = "Route 4"
+world_access_area_type = "route"
+location_id = "kanto.route_4"
+location_name = "Route 4"
+region_id = "kanto"
+music_profile_id = "kanto.routes_3_10_16_22"
+
+[node name="OpenField" parent="." unique_id=618531668 instance=ExtResource("1_visual")]
+
+[node name="Collision" type="TileMapLayer" parent="." unique_id=208040001]
+visible = false
+z_index = 100
+tile_set = ExtResource("3_collision")
+
+[node name="Spawns" type="Node2D" parent="." unique_id=208040002]
+
+[node name="FromMtMoon" type="Marker2D" parent="Spawns" unique_id=208040003]
+position = Vector2(384, 64)
+
+[node name="Exits" type="Node2D" parent="." unique_id=208040004]
+
+[node name="ToMtMoon" type="Area2D" parent="Exits" unique_id=208040005]
+position = Vector2(384, 16)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn"
+target_spawn_name = "FromRoute4"
+transition_id = "kanto_route_4__to_mt_moon"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToMtMoon" unique_id=208040006]
+shape = SubResource("RectangleShape2D_mt_moon_exit")
+
+[node name="RouteTransitionHint" parent="Exits/ToMtMoon" unique_id=208040007 instance=ExtResource("5_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(4, 1)
+
+[node name="Entities" type="Node2D" parent="." unique_id=208040008]
+z_index = 5
+
+[node name="NPCs" type="Node2D" parent="Entities" unique_id=208040009]
+
+[node name="Players" type="Node2D" parent="Entities" unique_id=208040010]
+
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=208040011]
+
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=208040012]
+
+[connection signal="body_entered" from="Exits/ToMtMoon" to="Exits/ToMtMoon" method="_on_body_entered"]

@@ -23,10 +23,19 @@ func _init() -> void:
 	)
 	var player_source := FileAccess.get_file_as_string("res://scripts/world/player.gd")
 	var remote_source := FileAccess.get_file_as_string("res://scripts/world/remote_player_avatar.gd")
+	var npc_source := FileAccess.get_file_as_string("res://scripts/world/npcs/base_npc.gd")
 	_check(
 		_has_inline_guild_emblem(player_source)
 		and _has_inline_guild_emblem(remote_source),
-		"nameplate places the guild emblem inside the name card without changing its height"
+		"nameplate places the guild emblem inside the same content-sized name card"
+	)
+	_check(
+		_uses_content_sized_name_card(player_source)
+		and _uses_content_sized_name_card(remote_source)
+		and npc_source.contains("_get_nameplate_label_text_size")
+		and npc_source.contains("var card_height := name_size.y")
+		and not npc_source.contains("NAMEPLATE_MIN_NAME_WIDTH"),
+		"player and NPC name cards follow their rendered text size"
 	)
 
 	var pixels: Array = []
@@ -69,13 +78,15 @@ func _init() -> void:
 
 
 func _check_inline_nameplate_geometry(_texture: Texture2D) -> void:
-	var with_emblem := NameplateLayout.calculate_name_card(60.0, true)
-	var without_emblem := NameplateLayout.calculate_name_card(60.0, false)
+	var name_size := Vector2(60.0, 14.0)
+	var with_emblem := NameplateLayout.calculate_name_card(name_size, true)
+	var without_emblem := NameplateLayout.calculate_name_card(name_size, false)
+	var short_name := NameplateLayout.calculate_name_card(Vector2(8.0, 14.0), false)
 	var background: Rect2 = with_emblem.get("backgroundRect", Rect2())
 	var label: Rect2 = with_emblem.get("labelRect", Rect2())
 	var emblem: Rect2 = with_emblem.get("emblemRect", Rect2())
 	var background_without_emblem: Rect2 = without_emblem.get("backgroundRect", Rect2())
-	_check(is_equal_approx(background.size.y, 26.0), "guild emblem does not increase the name card height")
+	_check(is_equal_approx(background.size.y, 28.0), "guild emblem determines the name card height when present")
 	_check(
 		emblem.size == Vector2(24.0, 24.0),
 		"guild emblem scales to 24 by 24 inside the name card"
@@ -95,8 +106,16 @@ func _check_inline_nameplate_geometry(_texture: Texture2D) -> void:
 		"guild emblem and Trainer name remain centered as one card"
 	)
 	_check(
-		is_equal_approx(background_without_emblem.size.y, background.size.y),
-		"name card height remains stable without a guild emblem"
+		is_equal_approx(background_without_emblem.size.y, name_size.y + 4.0),
+		"name card height follows the rendered name without a guild emblem"
+	)
+	_check(
+		is_equal_approx(background_without_emblem.size.x, name_size.x + 10.0),
+		"name card width follows the rendered name plus compact padding"
+	)
+	_check(
+		is_equal_approx((short_name.get("backgroundRect", Rect2()) as Rect2).size.x, 18.0),
+		"short names are not expanded to a minimum card width"
 	)
 	_check(
 		background_without_emblem.size.x < background.size.x,
@@ -113,6 +132,15 @@ func _has_inline_guild_emblem(source: String) -> bool:
 		and source.contains("guild_emblem.offset_left = emblem_rect.position.x")
 		and source.contains("role_badge_panel.offset_bottom = next_layer_bottom")
 		and not source.contains("guild_emblem.offset_bottom = next_layer_bottom")
+	)
+
+
+func _uses_content_sized_name_card(source: String) -> bool:
+	return (
+		source.contains("_get_label_text_size")
+		and source.contains("NameplateLayout.calculate_name_card(name_size")
+		and source.contains("label.label_settings.font_size")
+		and not source.contains("NAMEPLATE_MIN_NAME_WIDTH")
 	)
 
 

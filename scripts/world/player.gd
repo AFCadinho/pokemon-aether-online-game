@@ -39,6 +39,7 @@ const PixelPerfectRenderingScript := preload("res://scripts/services/pixel_perfe
 const WildEncounterProvider := preload("res://scripts/world/map_encounter_provider.gd")
 const MapChatBubbleScript := preload("res://scripts/world/map_chat_bubble.gd")
 const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.gd")
+const HorizontalStairElevationScript := preload("res://scripts/world/horizontal_stair_elevation.gd")
 const GuildEmblemTexture := preload("res://scripts/ui/guild_emblem_texture.gd")
 const NameplateLayout := preload("res://scripts/ui/nameplate_layout.gd")
 const FISHING_PROMPT_ICON: Texture2D = preload("res://assets/items/icons/OLDROD.png")
@@ -66,10 +67,8 @@ const STAFF_ROLE_CATEGORY := "staff"
 const LEGACY_STAFF_ROLE_IDS := ["staff", "owner", "senior_staff", "developer", "moderator", "gamemaster"]
 const NAMEPLATE_WIDTH := 164.0
 const NAMEPLATE_CENTER_X := NAMEPLATE_WIDTH * 0.5
-const NAMEPLATE_TEXT_PADDING := 6.0
 const ROLE_BADGE_TEXT_HEIGHT := 13.0
 const ROLE_BADGE_DEFAULT_WIDTH := 30.0
-const NAMEPLATE_MIN_NAME_WIDTH := 44.0
 const NAMEPLATE_MAX_NAME_WIDTH := 132.0
 const NAMEPLATE_LAYER_GAP := 2.0
 const ACTIVITY_LAYER_OFFSETS := {
@@ -240,6 +239,8 @@ var target_position := Vector2.ZERO
 var move_start_position := Vector2.ZERO
 var move_elapsed := 0.0
 var move_duration := TILE_MOVE_DURATION
+var stair_elevation := HorizontalStairElevationScript.ELEVATION_NONE
+var stair_visual_offset := Vector2.ZERO
 
 # Onthoudt de laatste kijkrichting, zodat de idle frame goed blijft staan.
 var last_direction := Vector2.DOWN
@@ -637,6 +638,7 @@ func reset_movement_state() -> void:
 	move_start_position = global_position
 	move_elapsed = 0.0
 	move_duration = _get_current_tile_move_duration()
+	_clear_stair_visual_offset()
 	_clear_input_buffer()
 	_clear_held_direction()
 	set_idle_frame()
@@ -654,6 +656,7 @@ func teleport_within_current_map(world_position: Vector2, facing_direction := Ve
 	move_start_position = global_position
 	move_elapsed = 0.0
 	move_duration = _get_current_tile_move_duration()
+	_clear_stair_visual_offset()
 	_clear_input_buffer()
 	_clear_held_direction()
 	if facing_direction != Vector2.ZERO:
@@ -706,6 +709,12 @@ func story_move_path(path: Array[String]) -> bool:
 		global_position = current_position
 		move_elapsed = 0.0
 		move_duration = _get_current_tile_move_duration()
+		stair_elevation = HorizontalStairElevationScript.elevation_for_stair_exit(
+			_resolve_current_map(),
+			move_start_position,
+			target_position,
+			direction
+		)
 		is_moving = true
 		play_walk_animation(direction)
 		while is_inside_tree() and is_moving:
@@ -948,12 +957,9 @@ func _sync_nameplate_layout() -> void:
 
 	var has_role_badge: bool = role_badge_panel != null and role_badge_label != null and role_badge_label.text.strip_edges() != ""
 	var has_guild_emblem: bool = guild_emblem != null and guild_emblem.texture != null
-	var name_width: float = clampf(
-		_get_label_text_width(nameplate_label) + NAMEPLATE_TEXT_PADDING,
-		NAMEPLATE_MIN_NAME_WIDTH,
-		NAMEPLATE_MAX_NAME_WIDTH
-	)
-	var card_layout := NameplateLayout.calculate_name_card(name_width, has_guild_emblem)
+	var name_size := _get_label_text_size(nameplate_label)
+	name_size.x = minf(name_size.x, NAMEPLATE_MAX_NAME_WIDTH)
+	var card_layout := NameplateLayout.calculate_name_card(name_size, has_guild_emblem)
 	var label_rect: Rect2 = card_layout.get("labelRect", Rect2())
 	var background_rect: Rect2 = card_layout.get("backgroundRect", Rect2())
 	var emblem_rect: Rect2 = card_layout.get("emblemRect", Rect2())
@@ -974,7 +980,7 @@ func _sync_nameplate_layout() -> void:
 		guild_emblem.offset_top = emblem_rect.position.y
 		guild_emblem.offset_bottom = emblem_rect.end.y
 
-	var next_layer_bottom := nameplate_label.offset_top - NAMEPLATE_LAYER_GAP
+	var next_layer_bottom := background_rect.position.y - NAMEPLATE_LAYER_GAP
 	if has_role_badge:
 		var badge_width: float = _get_role_badge_width(role_badge_label.text)
 		var start_x := NAMEPLATE_CENTER_X - (badge_width * 0.5)
@@ -1001,16 +1007,26 @@ func _on_guild_changed(guild: Dictionary) -> void:
 	set_guild_emblem(emblem_value as Dictionary if emblem_value is Dictionary else {})
 
 
-func _get_label_text_width(label: Label) -> float:
+func _get_label_text_size(label: Label) -> Vector2:
 	var text: String = label.text.strip_edges()
 	if text == "":
-		return 0.0
+		return Vector2.ZERO
 
 	var font: Font = label.get_theme_font("font")
 	var font_size: int = label.get_theme_font_size("font_size")
+	if label.label_settings != null:
+		if label.label_settings.font != null:
+			font = label.label_settings.font
+		font_size = label.label_settings.font_size
 	if font == null:
-		return float(text.length() * max(font_size, 10) * 0.6)
-	return font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size).x
+		return Vector2(
+			float(text.length() * max(font_size, 10) * 0.6),
+			float(max(font_size, 10))
+		)
+	return Vector2(
+		font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size).x,
+		font.get_height(font_size)
+	)
 
 func _get_role_badge_width(badge_text: String) -> float:
 	var normalized_badge := badge_text.strip_edges()
@@ -1395,12 +1411,14 @@ func _process(delta: float) -> void:
 		var move_progress := move_elapsed / move_duration
 		var interpolated_position: Vector2 = move_start_position.lerp(target_position, _get_move_interpolation(move_progress))
 		global_position = _snap_world_position(interpolated_position)
+		_update_stair_visual_offset(move_progress)
 		_update_sort_z()
 
 		# Als de bestemming is bereikt.
 		if _has_reached_target():
 			global_position = _snap_world_position(target_position)
 			is_moving = false
+			_clear_stair_visual_offset()
 
 			if not story_path_movement_active:
 				var completed_tiles := maxi(int(round(move_start_position.distance_to(target_position) / float(TILE_SIZE))), 1)
@@ -1927,6 +1945,12 @@ func _try_start_move(direction: Vector2) -> bool:
 	global_position = move_start_position
 	move_elapsed = 0.0
 	move_duration = _get_current_tile_move_duration()
+	stair_elevation = HorizontalStairElevationScript.elevation_for_stair_exit(
+		_resolve_current_map(),
+		move_start_position,
+		target_position,
+		direction
+	)
 	is_moving = true
 	play_walk_animation(direction)
 	return true
@@ -2642,12 +2666,26 @@ func _sync_activity_layer_offsets() -> void:
 func _apply_activity_visual_offset() -> void:
 	if look_node == null:
 		return
-	look_node.position = base_look_position + _get_activity_visual_offset()
+	look_node.position = base_look_position + _get_activity_visual_offset() + stair_visual_offset
 
 func _restore_activity_visual_offset() -> void:
 	if look_node == null:
 		return
-	look_node.position = base_look_position
+	look_node.position = base_look_position + stair_visual_offset
+
+
+func _update_stair_visual_offset(progress: float) -> void:
+	stair_visual_offset = HorizontalStairElevationScript.visual_offset(
+		progress,
+		stair_elevation
+	)
+	_apply_activity_visual_offset()
+
+
+func _clear_stair_visual_offset() -> void:
+	stair_elevation = HorizontalStairElevationScript.ELEVATION_NONE
+	stair_visual_offset = Vector2.ZERO
+	_apply_activity_visual_offset()
 
 func _get_activity_visual_offset() -> Vector2:
 	var normalized_style: String = CharacterAppearanceService.normalize_movement_style(activity_style)

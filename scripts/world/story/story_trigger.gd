@@ -42,6 +42,8 @@ func _on_body_entered(body: Node2D) -> void:
 		_release_owned_overworld_lock()
 		_in_flight = false
 		return
+	if story_host.has_method("set_story_player"):
+		story_host.call("set_story_player", body)
 
 	var result_value: Variant = await story_hook.call(
 		"try_handle_interaction",

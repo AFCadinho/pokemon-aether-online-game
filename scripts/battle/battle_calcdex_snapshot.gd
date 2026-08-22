@@ -5,7 +5,7 @@ class_name BattleCalcdexSnapshot
 const SCHEMA_VERSION := 1
 const ROUTE_REVISION := "calc1.3-2026-08-08"
 const VISIBILITY_CONTRACT_VERSION := 3
-const FORMAT_DATA_FINGERPRINT := "fd94c49ab26ddf8daff2259dfc2b3857f957e37b166557412c4fe303c87e54b0"
+const FORMAT_DATA_FINGERPRINT := "777a20be11687df584af311beb402a19dbab9136f96bc7bc84518c3d43c09054"
 const REVISION_FIELDS := [
 	"visibilityContractVersion",
 	"snapshotFingerprint",
@@ -142,9 +142,9 @@ static func is_valid_mechanics_manifest(value: Variant) -> bool:
 	var manifest: Dictionary = value as Dictionary
 	return (
 		_has_exact_fields(manifest, ["contractRevision", "damageCalcVersion", "showdownVersion", "formatDataFingerprint"])
-		and str(manifest.get("contractRevision", "")) == "calc0-2026-08-08"
-		and str(manifest.get("damageCalcVersion", "")) == "0.10.0"
-		and str(manifest.get("showdownVersion", "")) == "0.11.10"
+		and str(manifest.get("contractRevision", "")) == "calc0.1-2026-08-21"
+		and str(manifest.get("damageCalcVersion", "")) == "0.11.0+upstream.636e5b9.pao2"
+		and str(manifest.get("showdownVersion", "")) == "0.11.11"
 		and str(manifest.get("formatDataFingerprint", "")) == FORMAT_DATA_FINGERPRINT
 	)
 
@@ -366,7 +366,7 @@ static func _validate_contract_containers(snapshot: Dictionary) -> String:
 	var format := _as_dictionary(snapshot.get("format"))
 	if not _has_required_and_allowed_fields(format, ["formatKey", "engineFormatId", "generation", "gameType"], ["formatKey", "engineFormatId", "generation", "gameType", "rulesetRevision", "rulesetHash"]):
 		return "Calcdex format identity is invalid."
-	if str(format.get("formatKey", "")) not in ["aether-ou", "gen9nationaldex-casual", "gen9nationaldex-pve"] or str(format.get("engineFormatId", "")) != "gen9nationaldex" or int(format.get("generation", 0)) != 9 or str(format.get("gameType", "")) != "singles":
+	if str(format.get("formatKey", "")) not in ["aether-ou", "gen9nationaldex-casual", "gen9nationaldex-pve", "pokeaether-mega-z-test"] or str(format.get("engineFormatId", "")) not in ["gen9nationaldex", "pokeaether-mega-z-test-v1"] or int(format.get("generation", 0)) != 9 or str(format.get("gameType", "")) != "singles":
 		return "Calcdex format identity is unsupported."
 	var manifest := _as_dictionary(snapshot.get("mechanicsManifest"))
 	if not is_valid_mechanics_manifest(manifest):
