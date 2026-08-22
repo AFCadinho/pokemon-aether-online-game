@@ -107,11 +107,9 @@ func _check_dialogue_npc_fallback_behavior() -> void:
 	_check_true(text.contains("await super.show_dialogue(dialogue_metadata_lines, resolved_speaker_name)"), "DialogueNPC passes resolved lines to BaseNPC")
 	_check_true(text.contains("resolved_dialogue_speaker_name"), "DialogueNPC keeps the resolved speaker fallback")
 	_check_true(
-		base_npc_text.contains("MANUAL_INTERACTION_DELAY_SECONDS")
-		and base_npc_text.contains(
-			"create_timer(MANUAL_INTERACTION_DELAY_SECONDS)"
-		),
-		"manual NPC dialogue starts after a short interaction pause"
+		base_npc_text.contains("await get_tree().process_frame")
+		and not base_npc_text.contains("MANUAL_INTERACTION_DELAY_SECONDS"),
+		"manual NPC dialogue keeps a facing frame without a fixed interaction pause"
 	)
 
 
