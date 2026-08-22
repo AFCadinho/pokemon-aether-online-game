@@ -26,6 +26,7 @@ const STRUCTURE_TOP_VISUAL_LAYER_NAMES: Array[String] = [
 	"TreeTop",
 	"Tree Top",
 	"ObjectTop",
+	"ObjectsTop",
 	"Objects Top",
 ]
 const TALL_GRASS_DEPTH_ROW_META := "pao_tall_grass_depth_row"
@@ -37,8 +38,11 @@ const STRUCTURE_TOP_DEPTH_GROUPS_BUILT_META := "pao_structure_top_depth_groups_b
 const FOREST_TOP_LAYER_Z_OFFSET := 3
 const TREE_LAYER_Z_MIN := -4096
 const TREE_LAYER_Z_MAX := 4096
-const MAP_FADE_OUT_SECONDS := 0.16
-const MAP_FADE_IN_SECONDS := 0.20
+const MAP_FADE_OUT_SECONDS := 0.60
+const MAP_LOADING_CONTENT_FADE_OUT_SECONDS := 0.12
+const MAP_SNAPSHOT_FADE_OUT_SECONDS := 0.20
+const MAP_FADE_IN_SECONDS := 0.75
+const MAP_TRANSITION_COVER_ALPHA := 0.80
 const WILD_ENCOUNTER_MINIMUM_COVER_SECONDS := 0.46
 const WILD_BATTLE_REVEAL_SECONDS := 0.20
 const EV_TRAINING_MAP_ID := "kanto_viridian_city"
@@ -101,6 +105,7 @@ var active_trainer_outro_dialogue_id := ""
 var active_trainer_mugshot: Texture2D
 var active_trainer_is_rematch := false
 var map_transition_layer: CanvasLayer
+var map_transition_snapshot: TextureRect
 var map_transition_rect: ColorRect
 var map_transition_content: Control
 
@@ -384,7 +389,7 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 				"success": false,
 				"error": "Teleport map does not exist: %s" % target_scene_path,
 			}
-		await _fade_map_transition(1.0, MAP_FADE_OUT_SECONDS)
+		await _fade_map_transition(MAP_TRANSITION_COVER_ALPHA, MAP_FADE_OUT_SECONDS)
 		var target_scene := await _load_map_scene_threaded(target_scene_path)
 		if target_scene == null:
 			await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
@@ -640,7 +645,7 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 		GameState.unlock_overworld_input()
 		return
 
-	await _fade_map_transition(1.0, MAP_FADE_OUT_SECONDS)
+	await _fade_map_transition(MAP_TRANSITION_COVER_ALPHA, MAP_FADE_OUT_SECONDS)
 
 	var target_scene := await _load_map_scene_threaded(target_scene_path)
 	if target_scene == null:
@@ -704,18 +709,68 @@ func _end_ev_training_session_for_map_exit(
 
 func _fade_map_transition(target_alpha: float, duration: float) -> void:
 	_ensure_map_transition_overlay()
+	var effective_target_alpha := target_alpha
+	if target_alpha > 0.0:
+		# Preserve the fully rendered source map while the real scene is replaced.
+		# If capture is unavailable, fall back to opaque cover so partial scene
+		# initialization can never become visible.
+		if not _capture_map_transition_snapshot():
+			effective_target_alpha = 1.0
 	map_transition_rect.visible = true
 	map_transition_content.visible = true
 	if target_alpha > 0.0:
 		map_transition_content.modulate.a = 1.0
-	var tween := create_tween().set_parallel(true)
-	tween.tween_property(map_transition_rect, "color:a", target_alpha, duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
 	if is_zero_approx(target_alpha):
-		tween.tween_property(map_transition_content, "modulate:a", 0.0, duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
-	await tween.finished
+		# Keep the destination covered until the loading indicator is gone. The
+		# longer background reveal then softens the jump from darkness to bright
+		# exterior maps without leaving the spinner floating over the new map.
+		var content_tween := create_tween()
+		content_tween.tween_property(
+			map_transition_content,
+			"modulate:a",
+			0.0,
+			MAP_LOADING_CONTENT_FADE_OUT_SECONDS
+		).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		await content_tween.finished
+		if map_transition_snapshot.visible:
+			var snapshot_tween := create_tween()
+			snapshot_tween.tween_property(
+				map_transition_snapshot,
+				"modulate:a",
+				0.0,
+				MAP_SNAPSHOT_FADE_OUT_SECONDS
+			).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+			await snapshot_tween.finished
+			map_transition_snapshot.visible = false
+			map_transition_snapshot.texture = null
+
+	var background_tween := create_tween()
+	background_tween.tween_property(
+		map_transition_rect,
+		"color:a",
+		effective_target_alpha,
+		duration
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+	await background_tween.finished
 	if is_zero_approx(target_alpha):
 		map_transition_rect.visible = false
 		map_transition_content.visible = false
+
+
+func _capture_map_transition_snapshot() -> bool:
+	var viewport := get_viewport()
+	if viewport == null:
+		return false
+	var viewport_texture := viewport.get_texture()
+	if viewport_texture == null:
+		return false
+	var image := viewport_texture.get_image()
+	if image == null or image.is_empty():
+		return false
+	map_transition_snapshot.texture = ImageTexture.create_from_image(image)
+	map_transition_snapshot.modulate.a = 1.0
+	map_transition_snapshot.visible = true
+	return true
 
 
 func _load_map_scene_threaded(scene_path: String) -> PackedScene:
@@ -746,6 +801,15 @@ func _ensure_map_transition_overlay() -> void:
 	map_transition_layer.name = "MapTransitionLayer"
 	map_transition_layer.layer = 1000
 	add_child(map_transition_layer)
+	map_transition_snapshot = TextureRect.new()
+	map_transition_snapshot.name = "MapTransitionSnapshot"
+	map_transition_snapshot.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	map_transition_snapshot.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	map_transition_snapshot.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	map_transition_snapshot.stretch_mode = TextureRect.STRETCH_SCALE
+	map_transition_snapshot.visible = false
+	map_transition_layer.add_child(map_transition_snapshot)
+
 	map_transition_rect = ColorRect.new()
 	map_transition_rect.name = "MapTransitionFade"
 	map_transition_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -2149,7 +2213,16 @@ func _snap_world_position_to_map_tile_center(map: Node, position: Vector2) -> Ve
 func _get_position_reference_tilemap(map: Node) -> TileMapLayer:
 	return MapLayerResolverScript.find_tilemap_layer(
 		map,
-		["Collision", "TallGrass", "LedgeDown", "LedgeUp", "LedgeLeft", "LedgeRight"]
+		[
+			"Collision",
+			"TallGrass",
+			"LedgeDown",
+			"LedgeUp",
+			"LedgeLeft",
+			"LedgeRight",
+			"StairUpLeft",
+			"StairUpRight",
+		]
 	)
 
 
@@ -2931,6 +3004,7 @@ func _award_trainer_battle_rewards(
 		_notify_reward_experience_gains(reward)
 		_notify_reward_level_ups(reward)
 		_notify_gym_badge_award(reward_result.get("gymBadgeAward", {}))
+		_notify_story_reward_items(reward_result.get("storyEffects", []))
 		var trainer_progress := _dictionary_from_value(reward_result.get("trainerProgress", {}))
 		if not trainer_id.is_empty() and not trainer_progress.is_empty():
 			get_tree().call_group(
@@ -3089,6 +3163,39 @@ func _notify_trainer_battle_rewards_awarded(trainer_name: String, money_awarded:
 	})
 	get_tree().call_group("ui_overlay", "refresh_money_display")
 	get_tree().call_group("ui_overlay", "add_system_message", message)
+
+func _notify_story_reward_items(value: Variant) -> void:
+	for message: String in _story_reward_item_messages(value):
+		get_tree().call_group("ui_overlay", "add_system_message", message)
+
+func _story_reward_item_messages(value: Variant) -> Array[String]:
+	var messages: Array[String] = []
+	if value is not Array:
+		return messages
+	for effect_value: Variant in value as Array:
+		if effect_value is not Dictionary:
+			continue
+		var effect := effect_value as Dictionary
+		if bool(effect.get("alreadyGranted", false)):
+			continue
+		var grants_value: Variant = effect.get("grants", [])
+		if grants_value is not Array:
+			continue
+		for grant_value: Variant in grants_value as Array:
+			if grant_value is not Dictionary:
+				continue
+			var grant := grant_value as Dictionary
+			var item_id := str(grant.get("itemId", "")).strip_edges().to_lower()
+			var quantity := maxi(int(grant.get("quantity", 0)), 0)
+			if item_id.is_empty() or quantity <= 0:
+				continue
+			messages.append(
+				LocalizationManager.text("ui.world.reward.story_item", {
+					"item": ItemLocalization.display_name(item_id),
+					"quantity": quantity,
+				})
+			)
+	return messages
 
 func notify_progression_reward(reward: Dictionary) -> void:
 	_notify_reward_level_ups(reward)

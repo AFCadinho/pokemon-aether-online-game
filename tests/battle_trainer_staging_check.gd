@@ -42,6 +42,40 @@ func _check_scene_staging() -> void:
 func _check_battle_setup_contract() -> void:
 	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
 	_check(source.contains("_show_local_player_trainer()"), "battle setup renders the local overworld appearance")
+	var wild_intro_start := source.find("func play_wild_battle_intro(")
+	var wild_summon_index := source.find("await _play_lead_summon(", wild_intro_start)
+	var wild_hide_index := source.find("_hide_wild_battle_player_trainer()", wild_summon_index)
+	var wild_event_index := source.find("await _render_initial_battle_events(api_response)", wild_hide_index)
+	_check(
+		wild_intro_start >= 0
+		and wild_summon_index > wild_intro_start
+		and wild_hide_index > wild_summon_index
+		and wild_event_index > wild_hide_index,
+		"wild battles hide the player trainer after the opening summon"
+	)
+	var wild_hide_function := source.find("func _hide_wild_battle_player_trainer()")
+	var local_trainer_function := source.find("func _show_local_player_trainer()", wild_hide_function)
+	var wild_hide_block := source.substr(
+		wild_hide_function,
+		local_trainer_function - wild_hide_function
+	)
+	_check(
+		wild_hide_block.contains("battle_type != BattleType.WILD")
+		and wild_hide_block.contains("player_trainer_sprite.clear()"),
+		"wild-only cleanup removes the staged player trainer"
+	)
+	var trainer_setup_start := source.find("func setup_trainer_battle_from_response(")
+	var pvp_setup_start := source.find("func setup_pvp_battle_from_response(")
+	var trainer_show_index := source.find("_show_local_player_trainer()", trainer_setup_start)
+	var pvp_show_index := source.find("_show_pvp_trainers(display_response)", pvp_setup_start)
+	_check(
+		trainer_show_index > trainer_setup_start and trainer_show_index < pvp_setup_start,
+		"NPC and story trainer battles keep the local trainer visible"
+	)
+	_check(
+		pvp_show_index > pvp_setup_start,
+		"PvP battles keep both trainers visible"
+	)
 	_check(source.contains("_show_npc_opponent_trainer(trainer_data)"), "trainer battles render the placed NPC")
 	_check(source.contains('npc_trainer_display_name = setup_flow.get_trainer_name(trainer_data, "")'), "trainer setup retains the NPC display name for later battle events")
 	_check(source.contains('player_id == "p2" and battle_type == BattleType.TRAINER and npc_trainer_display_name != ""'), "NPC switch events prefer the retained trainer name over the generic opponent fallback")
