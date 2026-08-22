@@ -52,6 +52,7 @@ var _prepared := false
 var _counterattack_played := false
 var _future_self_spawn_global_position := Vector2.ZERO
 var _fainted_follower: PokemonFollower
+var _story_player: Node2D
 
 
 func _ready() -> void:
@@ -105,8 +106,13 @@ func show_dialogue(lines: Array[String], speaker_name := "") -> bool:
 	elif current_stage == DIALOGUE_STAGE_FAREWELL:
 		await _dismiss_rescuer()
 	elif current_stage == DIALOGUE_STAGE_AMBUSH:
-		await _attack_and_faint_follower()
+		if not await _attack_and_faint_follower():
+			return false
 	return true
+
+
+func set_story_player(player: Node2D) -> void:
+	_story_player = player
 
 
 func _prepare_ambush() -> void:
@@ -275,17 +281,16 @@ func _dismiss_rescuer() -> void:
 	_restore_follower()
 
 
-func _attack_and_faint_follower() -> void:
-	var player := get_tree().get_first_node_in_group("player") as Node2D
+func _attack_and_faint_follower() -> bool:
+	var player := _story_player if is_instance_valid(_story_player) else get_tree().get_first_node_in_group("player") as Node2D
 	if player == null:
-		return
-	var follower_value: Variant = player.get("pokemon_follower")
-	if not follower_value is PokemonFollower:
-		return
-	_fainted_follower = follower_value as PokemonFollower
-	if not is_instance_valid(_fainted_follower) or not _fainted_follower.visible:
-		_fainted_follower = null
-		return
+		push_warning("MtMoonAmbushController: local story player is unavailable for follower attack.")
+		return false
+	_fainted_follower = _resolve_player_follower(player)
+	if not is_instance_valid(_fainted_follower):
+		push_warning("MtMoonAmbushController: player follower is unavailable for ambush attack.")
+		return false
+	_fainted_follower.visible = true
 	_fainted_follower.set_process(false)
 	var attacker_species := ROCKET_SPECIES[0]
 	var attacker_name := ContentLocalization.display_name("species", attacker_species, attacker_species.capitalize())
@@ -324,6 +329,18 @@ func _attack_and_faint_follower() -> void:
 		dialogue_box.call("start_dialogue", [_text("story.mt_moon.cutscene.follower_fainted").replace("{pokemon}", follower_name)], _player_speaker_name(), await _player_mugshot(), true)
 		await dialogue_box.dialogue_finished
 		await _wait_for_interact_release()
+	return true
+
+
+func _resolve_player_follower(player: Node2D) -> PokemonFollower:
+	var follower_value: Variant = player.get("pokemon_follower")
+	if follower_value is PokemonFollower and is_instance_valid(follower_value):
+		return follower_value as PokemonFollower
+	for candidate: Node in get_tree().current_scene.find_children("*", "PokemonFollower", true, false):
+		var follower := candidate as PokemonFollower
+		if follower != null and follower.player == player:
+			return follower
+	return null
 
 
 func _show_rocket_attack_command(attacker_name: String) -> void:

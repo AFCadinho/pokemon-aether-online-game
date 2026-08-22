@@ -41,6 +41,7 @@ func _run() -> void:
 	var controller_source := _read_text("res://scripts/world/story/mt_moon_ambush_controller.gd")
 	_expect("_summon_rocket_pokemon" in controller_source, "Ambush summons Team Rocket's Pokémon")
 	_expect("await _attack_and_faint_follower()" in controller_source, "Team Rocket attacks the player's visible follower before the rescue")
+	_expect("func set_story_player(player: Node2D)" in controller_source and "_resolve_player_follower(player)" in controller_source, "the ambush targets the player that actually entered the trigger")
 	_expect("story.mt_moon.cutscene.follower_fainted" in controller_source, "the player begs their fainted follower to get up")
 	_expect("_show_rocket_attack_command(attacker_name)" in controller_source and "TrainerPortraitCatalog.get_texture(ROCKET_PORTRAIT_ID)" in controller_source, "the Rocket Grunt visibly orders the follower attack in dialogue")
 	_expect("attack.top_level = true" in controller_source and '"poison"' in controller_source, "Zubat's bright attack renders in world coordinates")
