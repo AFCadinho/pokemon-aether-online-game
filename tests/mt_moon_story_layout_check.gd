@@ -30,6 +30,7 @@ func _init() -> void:
 	_check(miguel_script.contains('FOSSIL_DIALOGUE_ID := "kanto_mt_moon_miguel_fossil_choice"'), "Miguel has fossil-choice dialogue")
 	_check(miguel_script.contains("cleared_position_marker"), "Miguel uses an explicit safe story marker after battle")
 	_check(miguel_script.contains("BLOCKING_TILE_OFFSETS"), "Miguel blocks the full fossil corridor before his battle")
+	_check(miguel_script.contains("Vector2i.RIGHT * 3"), "Miguel blocks the far-right approach tile before his battle")
 	_check(miguel_script.contains("func is_gate_open()"), "Miguel exposes his story corridor as an intentional gate")
 	_check(miguel_script.contains("func blocks_world_position(world_position: Vector2) -> bool:\n\tif is_gate_open():\n\t\treturn super.blocks_world_position(world_position)"), "Miguel releases the extra corridor tiles when his confrontation becomes active")
 	_check(miguel_script.contains("func on_route_gate_blocked(player: Node2D)"), "walking into Miguel's gate starts visible feedback")

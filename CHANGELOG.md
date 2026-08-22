@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Miguel now blocks the entire fossil-room approach until you have defeated the required Team Rocket Grunts.
+
 - Ash-Greninja now loads its Pokédex sprite without showing a false missing-asset error.
 
 - Several Trainers in Mt. Moon now watch the intended paths from their corrected sight distances and directions.
