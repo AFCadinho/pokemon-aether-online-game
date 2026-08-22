@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Guild emblems now appear as crisp, compact badges beside player names instead of enlarging the name box.
+
 - Player and NPC name boxes now fit their displayed name instead of keeping an oversized minimum width and height.
 
 - You can now leave Mt. Moon through its eastern exit and arrive on Route 4, then return through the same cave entrance.
