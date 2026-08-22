@@ -159,6 +159,9 @@ func _apply_story_position() -> void:
 
 
 func _recover_players_to_blocked_side() -> void:
+	# A checkpoint reset can replace the map before this deferred callback runs.
+	if not is_inside_tree():
+		return
 	if StoryService.is_requirement_met(QUEST_ID, BATTLE_STEP_ID, "completed"):
 		return
 	var marker := get_node_or_null(blocked_side_recovery_marker) as Marker2D

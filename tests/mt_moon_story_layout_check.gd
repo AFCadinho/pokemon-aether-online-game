@@ -28,6 +28,7 @@ func _init() -> void:
 	_check(miguel_script.contains('await _show_blocked_dialogue()\n\tif is_instance_valid(player):\n\t\tawait _send_player_back(player)'), "Miguel speaks before sending the player back")
 	_check(miguel_script.contains('var retreat_path: Array[String] = ["down"]'), "Miguel visibly sends the player one tile back")
 	_check(miguel_script.contains("_recover_players_to_blocked_side.call_deferred()"), "rewound checkpoints recover players from behind Miguel")
+	_check(miguel_script.contains("func _recover_players_to_blocked_side() -> void:\n\t# A checkpoint reset can replace the map before this deferred callback runs.\n\tif not is_inside_tree():"), "checkpoint resets cancel Miguel's stale deferred recovery")
 	_check(basement.contains('[node name="MiguelCleared" type="Marker2D" parent="Entities/StoryMarkers"]'), "B2F places Miguel's cleared-position marker")
 	_check(basement.contains('position = Vector2(720, 720)'), "Miguel's cleared marker stays on the open corridor tile")
 	_check(basement.contains('[node name="MiguelBlockedSide" type="Marker2D" parent="Entities/StoryMarkers"]'), "B2F places the safe marker in front of Miguel")
