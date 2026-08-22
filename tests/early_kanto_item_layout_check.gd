@@ -16,15 +16,15 @@ const MAP_PICKUPS := {
 		["kanto_viridian_forest_potion_2", "potion", Vector2i(560, 816)],
 	],
 	"res://scenes/overworld/kanto/routes/kanto_route_3.tscn": [
-		["kanto_route_3_awakening", "awakening", Vector2i(1152, 816)],
-		["kanto_route_3_oran_berry", "oran-berry", Vector2i(2240, 816)],
+		["kanto_route_3_awakening", "awakening", Vector2i(1744, 400)],
+		["kanto_route_3_oran_berry", "oran-berry", Vector2i(1520, 1136)],
 	],
 	"res://scenes/overworld/kanto/routes/kanto_route_4.tscn": [
 		["kanto_route_4_tm_roar", "tm-roar", Vector2i(576, 160)],
 	],
 	"res://scenes/overworld/kanto/routes/kanto_route_22.tscn": [
-		["kanto_route_22_great_ball", "great-ball", Vector2i(880, 800)],
-		["kanto_route_22_super_potion", "super-potion", Vector2i(1792, 992)],
+		["kanto_route_22_great_ball", "great-ball", Vector2i(240, 848)],
+		["kanto_route_22_super_potion", "super-potion", Vector2i(1104, 880)],
 	],
 }
 
