@@ -135,7 +135,8 @@ func _show_miguel_takes_other_fossil() -> void:
 			var fossil_side := signf(other_fossil.global_position.x - player.global_position.x)
 			if is_zero_approx(fossil_side):
 				fossil_side = -1.0
-			_future_self_spawn_global_position = player.global_position + Vector2(fossil_side * 32.0, 0)
+			# Dadinho's temporary frames have a visual baseline 16 px below the player frames.
+			_future_self_spawn_global_position = player.global_position + Vector2(fossil_side * 32.0, -16)
 	if miguel == null or other_fossil == null:
 		return
 	other_fossil.visible = true
@@ -206,8 +207,7 @@ func _spawn_starter_final_evolution() -> void:
 		push_warning("MtMoonAmbushController: starter final evolution is unavailable.")
 		return
 	_starter_species_id = species_id
-	var player := get_tree().get_first_node_in_group("player") as Node2D
-	var starter_target := player.global_position + Vector2(0, 32) if player != null else future_self.global_position + Vector2(0, 32)
+	var starter_target := future_self.global_position + Vector2(0, 32)
 	_starter = _create_cutscene_pokemon(species_id, to_local(starter_target))
 	var localized_name := ContentLocalization.display_name("species", species_id, species_name)
 	await _show_caption(_text("story.mt_moon.cutscene.go").replace("{pokemon}", localized_name), 0.75)
