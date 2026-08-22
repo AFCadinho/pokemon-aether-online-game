@@ -33,10 +33,8 @@ const STAFF_ROLE_CATEGORY := "staff"
 const LEGACY_STAFF_ROLE_IDS := ["staff", "owner", "senior_staff", "developer", "moderator", "gamemaster"]
 const NAMEPLATE_WIDTH := 164.0
 const NAMEPLATE_CENTER_X := NAMEPLATE_WIDTH * 0.5
-const NAMEPLATE_TEXT_PADDING := 6.0
 const ROLE_BADGE_TEXT_HEIGHT := 13.0
 const ROLE_BADGE_DEFAULT_WIDTH := 30.0
-const NAMEPLATE_MIN_NAME_WIDTH := 44.0
 const NAMEPLATE_MAX_NAME_WIDTH := 132.0
 const NAMEPLATE_LAYER_GAP := 2.0
 const BODY_SPRITE_NAME := "BodySprite"
@@ -891,12 +889,9 @@ func _sync_nameplate_layout() -> void:
 
 	var has_role_badge: bool = role_badge_panel != null and role_badge_label != null and role_badge_label.text.strip_edges() != ""
 	var has_guild_emblem: bool = guild_emblem != null and guild_emblem.texture != null
-	var name_width: float = clampf(
-		_get_label_text_width(nameplate_label) + NAMEPLATE_TEXT_PADDING,
-		NAMEPLATE_MIN_NAME_WIDTH,
-		NAMEPLATE_MAX_NAME_WIDTH
-	)
-	var card_layout := NameplateLayout.calculate_name_card(name_width, has_guild_emblem)
+	var name_size := _get_label_text_size(nameplate_label)
+	name_size.x = minf(name_size.x, NAMEPLATE_MAX_NAME_WIDTH)
+	var card_layout := NameplateLayout.calculate_name_card(name_size, has_guild_emblem)
 	var label_rect: Rect2 = card_layout.get("labelRect", Rect2())
 	var background_rect: Rect2 = card_layout.get("backgroundRect", Rect2())
 	var emblem_rect: Rect2 = card_layout.get("emblemRect", Rect2())
@@ -917,7 +912,7 @@ func _sync_nameplate_layout() -> void:
 		guild_emblem.offset_top = emblem_rect.position.y
 		guild_emblem.offset_bottom = emblem_rect.end.y
 
-	var next_layer_bottom := nameplate_label.offset_top - NAMEPLATE_LAYER_GAP
+	var next_layer_bottom := background_rect.position.y - NAMEPLATE_LAYER_GAP
 	if has_role_badge:
 		var badge_width: float = _get_role_badge_width(role_badge_label.text)
 		var start_x := NAMEPLATE_CENTER_X - (badge_width * 0.5)
@@ -931,16 +926,26 @@ func _sync_nameplate_layout() -> void:
 		role_badge_label.offset_bottom = ROLE_BADGE_TEXT_HEIGHT
 
 
-func _get_label_text_width(label: Label) -> float:
+func _get_label_text_size(label: Label) -> Vector2:
 	var text: String = label.text.strip_edges()
 	if text == "":
-		return 0.0
+		return Vector2.ZERO
 
 	var font: Font = label.get_theme_font("font")
 	var font_size: int = label.get_theme_font_size("font_size")
+	if label.label_settings != null:
+		if label.label_settings.font != null:
+			font = label.label_settings.font
+		font_size = label.label_settings.font_size
 	if font == null:
-		return float(text.length() * max(font_size, 10) * 0.6)
-	return font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size).x
+		return Vector2(
+			float(text.length() * max(font_size, 10) * 0.6),
+			float(max(font_size, 10))
+		)
+	return Vector2(
+		font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size).x,
+		font.get_height(font_size)
+	)
 
 
 func _get_role_badge_width(badge_text: String) -> float:

@@ -83,9 +83,10 @@ const DEFAULT_PLAYER_VISUAL_SORT_DEPTH := 8
 const PLAYER_OVERLAP_SORT_Y_EPSILON := 0.1
 const NAMEPLATE_WIDTH := 164.0
 const NAMEPLATE_CENTER_X := NAMEPLATE_WIDTH * 0.5
-const NAMEPLATE_TEXT_PADDING := 10.0
-const NAMEPLATE_MIN_NAME_WIDTH := 44.0
 const NAMEPLATE_MAX_NAME_WIDTH := 132.0
+const NAMEPLATE_HORIZONTAL_PADDING := 5.0
+const NAMEPLATE_VERTICAL_PADDING := 2.0
+const NAMEPLATE_CARD_BOTTOM := 20.0
 const THIEVING_PROMPT_SIZE := Vector2(30.0, 30.0)
 const THIEVING_PROMPT_POSITION := Vector2(43.0, -91.0)
 const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.gd")
@@ -606,21 +607,21 @@ func _sync_nameplate() -> void:
 	nameplate.visible = name_text != ""
 	nameplate_label.visible = name_text != ""
 
-	var name_width := clampf(
-		_get_nameplate_label_text_width(nameplate_label) + NAMEPLATE_TEXT_PADDING,
-		NAMEPLATE_MIN_NAME_WIDTH,
-		NAMEPLATE_MAX_NAME_WIDTH
-	)
+	var name_size := _get_nameplate_label_text_size(nameplate_label)
+	name_size.x = minf(name_size.x, NAMEPLATE_MAX_NAME_WIDTH)
+	var name_width := name_size.x
+	var card_height := name_size.y + (NAMEPLATE_VERTICAL_PADDING * 2.0)
+	var card_top := NAMEPLATE_CARD_BOTTOM - card_height
 	nameplate_label.offset_left = NAMEPLATE_CENTER_X - (name_width * 0.5)
 	nameplate_label.offset_right = nameplate_label.offset_left + name_width
-	nameplate_label.offset_top = 0.0
-	nameplate_label.offset_bottom = 22.0
+	nameplate_label.offset_top = card_top + NAMEPLATE_VERTICAL_PADDING
+	nameplate_label.offset_bottom = nameplate_label.offset_top + name_size.y
 
 	if nameplate_background != null:
-		nameplate_background.offset_left = nameplate_label.offset_left - 5.0
-		nameplate_background.offset_right = nameplate_label.offset_right + 5.0
-		nameplate_background.offset_top = 2.0
-		nameplate_background.offset_bottom = 20.0
+		nameplate_background.offset_left = nameplate_label.offset_left - NAMEPLATE_HORIZONTAL_PADDING
+		nameplate_background.offset_right = nameplate_label.offset_right + NAMEPLATE_HORIZONTAL_PADDING
+		nameplate_background.offset_top = card_top
+		nameplate_background.offset_bottom = NAMEPLATE_CARD_BOTTOM
 
 
 func _make_nameplate_background_style() -> StyleBoxFlat:
@@ -704,18 +705,26 @@ func _make_nameplate_label_settings() -> LabelSettings:
 	return settings
 
 
-func _get_nameplate_label_text_width(label: Label) -> float:
+func _get_nameplate_label_text_size(label: Label) -> Vector2:
 	var text := label.text.strip_edges()
 	if text == "":
-		return 0.0
+		return Vector2.ZERO
 
 	var font := label.get_theme_font("font")
 	var font_size := label.get_theme_font_size("font_size")
 	if label.label_settings != null:
+		if label.label_settings.font != null:
+			font = label.label_settings.font
 		font_size = label.label_settings.font_size
 	if font == null:
-		return float(text.length() * max(font_size, 10) * 0.6)
-	return font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size).x
+		return Vector2(
+			float(text.length() * max(font_size, 10) * 0.6),
+			float(max(font_size, 10))
+		)
+	return Vector2(
+		font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size).x,
+		font.get_height(font_size)
+	)
 
 
 func _get_idle_animation_name(direction: Vector2) -> String:

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Player and NPC name boxes now fit their displayed name instead of keeping an oversized minimum width and height.
+
 - You can now leave Mt. Moon through its eastern exit and arrive on Route 4, then return through the same cave entrance.
 
 - Mt. Moon no longer moves you to Miguel after a Team Rocket battle. Miguel now speaks before taking the fossil you leave behind, Lass Iris patrols her intended route, and the Moon Stone on 1F appears in its intended spot.
