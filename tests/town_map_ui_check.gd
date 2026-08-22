@@ -55,7 +55,7 @@ func _run() -> void:
 	for area_value: Variant in areas.values():
 		if area_value is Dictionary:
 			location_groups[str((area_value as Dictionary).get("locationGroupId", ""))] = true
-	_check(locations.size() == 7, "Town Map contains the currently playable Kanto location groups")
+	_check(locations.size() == 8, "Town Map contains the currently playable Kanto location groups")
 	for location_id_value: Variant in locations.keys():
 		var location_id := str(location_id_value)
 		_check(location_groups.has(location_id), "%s is backed by a playable world location" % location_id)
@@ -101,8 +101,9 @@ func _run() -> void:
 		if str(location_id_value).begins_with("kanto_route_segment_"):
 			planned_route_count += 1
 	_check(popup_locations.size() == 46, "Town Map registers every configured point")
-	_check(planned_location_count == 39, "Future settlements, special locations, and routes are planned points")
-	_check(planned_route_count == 22, "Named future routes are available alongside map points")
+	_check(planned_location_count == 38, "Future settlements, special locations, and routes are planned points")
+	_check(planned_route_count == 21, "Named future routes are available alongside map points")
+	_check(not bool((popup_locations.get("kanto_route_4", {}) as Dictionary).get("planned", false)), "Route 4 is available as a playable route")
 	var towns_without_interiors := 0
 	for town_value: Variant in popup_locations.values():
 		if town_value is Dictionary and str((town_value as Dictionary).get("kind", "")) in ["town", "city", "settlement"]:

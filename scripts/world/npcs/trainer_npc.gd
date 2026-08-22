@@ -43,6 +43,8 @@ func _ready() -> void:
 	add_to_group("trainer_npcs")
 	_configure_vision_area()
 	_setup_rematch_marker()
+	if not TrainerProgressService.progress_invalidated.is_connected(_reload_trainer_progress):
+		TrainerProgressService.progress_invalidated.connect(_reload_trainer_progress)
 	_load_trainer_progress.call_deferred()
 
 
@@ -402,6 +404,21 @@ func _load_trainer_progress() -> void:
 		next_progress_refresh_at_msec = Time.get_ticks_msec() + SLEEPING_REFRESH_INTERVAL_MSEC
 	_refresh_rematch_marker()
 	_configure_vision_area()
+
+
+func _reload_trainer_progress() -> void:
+	if battle_in_progress:
+		return
+	while trainer_progress_request_active:
+		await get_tree().process_frame
+	if not is_inside_tree() or battle_in_progress:
+		return
+	triggered = false
+	auto_trigger_failed = false
+	vision_candidate = null
+	trainer_progress_loaded = false
+	next_progress_refresh_at_msec = 0
+	await _load_trainer_progress()
 
 
 func _refresh_sleeping_progress_if_due() -> void:

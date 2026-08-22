@@ -19,6 +19,22 @@ func _process(_delta: float) -> void:
 	await _process_base_npc()
 
 
+func _prefetches_dialogue_metadata_on_approach() -> bool:
+	return true
+
+
+func _prefetch_nearby_dialogue_metadata() -> void:
+	var selection := NpcDialogueService.select_dialogue_reference(
+		_resolve_story_dialogue_id(),
+		_get_dialogue_override_id(),
+		""
+	)
+	var selected_dialogue_id := str(selection.get("dialogueId", "")).strip_edges()
+	if selected_dialogue_id.is_empty():
+		return
+	await DialogueMetadataService.get_dialogue(selected_dialogue_id)
+
+
 func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> bool:
 	var resolved_speaker_name := speaker_name_override.strip_edges()
 	if resolved_speaker_name.is_empty():
