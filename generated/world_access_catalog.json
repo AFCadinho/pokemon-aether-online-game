@@ -159,6 +159,16 @@
 						"x": 10,
 						"y": 68
 					}
+				},
+				"from_route_4": {
+					"facingDirection": "down",
+					"label": "Route 4",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute4",
+					"tile": {
+						"x": 16,
+						"y": 64
+					}
 				}
 			}
 		},
@@ -952,6 +962,30 @@
 				}
 			}
 		},
+		"kanto_route_4": {
+			"areaType": "route",
+			"defaultMode": "open",
+			"label": "Route 4",
+			"locationGroupId": "kanto_route_4",
+			"locationGroupLabel": "Route 4",
+			"regionName": "Kanto",
+			"sceneAliases": [
+				"uid://c6taahbjj1mnh"
+			],
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_4.tscn",
+			"spawnPoints": {
+				"from_mt_moon": {
+					"facingDirection": "down",
+					"label": "Mt Moon",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromMtMoon",
+					"tile": {
+						"x": 12,
+						"y": 2
+					}
+				}
+			}
+		},
 		"kanto_viridian_city": {
 			"areaType": "exterior",
 			"defaultMode": "open",
@@ -1296,6 +1330,23 @@
 			},
 			"destinationAreaId": "kanto_route_3",
 			"sourceMapId": "kanto_mt_moon_1f"
+		},
+		"kanto_mt_moon__to_route_4": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_4",
+				"mapSceneAliases": [
+					"uid://c6taahbjj1mnh"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_4.tscn",
+				"position": {
+					"x": 384.0,
+					"y": 64.0
+				},
+				"spawnMarker": "FromMtMoon"
+			},
+			"destinationAreaId": "kanto_route_4",
+			"sourceMapId": "kanto_mt_moon_b1f"
 		},
 		"kanto_mt_moon_b1f__to_1f_1": {
 			"destination": {
@@ -2036,6 +2087,23 @@
 			},
 			"destinationAreaId": "kanto_route_3",
 			"sourceMapId": "kanto_route_3_pokemon_center"
+		},
+		"kanto_route_4__to_mt_moon": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_mt_moon_b1f",
+				"mapSceneAliases": [
+					"uid://dmu7iwolokkl7"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn",
+				"position": {
+					"x": 512.0,
+					"y": 2048.0
+				},
+				"spawnMarker": "FromRoute4"
+			},
+			"destinationAreaId": "kanto_mt_moon_b1f",
+			"sourceMapId": "kanto_route_4"
 		},
 		"kanto_viridian_city__to_house_1": {
 			"destination": {

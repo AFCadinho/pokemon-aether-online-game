@@ -13,11 +13,13 @@ const EXPECTED_FACING := {
 	"kanto_mt_moon_b1f__to_b2f_4": "left",
 	"kanto_mt_moon_b1f__to_b2f_6": "left",
 	"kanto_mt_moon_b1f__to_b2f_7": "right",
+	"kanto_mt_moon__to_route_4": "down",
 	"kanto_mt_moon_b2f__to_b1f_2": "left",
 	"kanto_mt_moon_b2f__to_b1f_4": "left",
 	"kanto_mt_moon_b2f__to_b1f_6": "right",
 	"kanto_mt_moon_b2f__to_b1f_7": "right",
 	"kanto_route_3__to_mt_moon": "up",
+	"kanto_route_4__to_mt_moon": "up",
 }
 
 var failed := false

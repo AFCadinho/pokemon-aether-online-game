@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="4_hint"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="5_visibility_mask"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/smashable_rock.tscn" id="6_rock"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="7_route_hint"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3x5y3"]
 texture = ExtResource("2_w2lc3")
@@ -240,10 +241,8 @@ position = Vector2(144, 240)
 [node name="FromB2F7" type="Marker2D" parent="Spawns" unique_id=1015409257]
 position = Vector2(336, 2192)
 
-[node name="ReservedConnections" type="Node2D" parent="." unique_id=1165515777]
-
-[node name="Route4Exit8" type="Marker2D" parent="ReservedConnections" unique_id=604864832]
-position = Vector2(512, 2112)
+[node name="FromRoute4" type="Marker2D" parent="Spawns" unique_id=604864832]
+position = Vector2(512, 2048)
 
 [node name="Exits" type="Node2D" parent="." unique_id=1706055105]
 
@@ -359,6 +358,22 @@ shape = SubResource("RectangleShape2D_ladder_exit")
 z_as_relative = false
 flow_direction = "left"
 
+[node name="ToRoute4" type="Area2D" parent="Exits" unique_id=208040013]
+position = Vector2(512, 2112)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_4.tscn"
+target_spawn_name = "FromMtMoon"
+transition_id = "kanto_mt_moon__to_route_4"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute4" unique_id=208040014]
+shape = SubResource("RectangleShape2D_tunnel_exit")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute4" unique_id=208040015 instance=ExtResource("7_route_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(2, 2)
+flow_direction = "down"
+
 [node name="Entities" type="Node2D" parent="." unique_id=1575076732]
 z_index = 5
 
@@ -407,3 +422,4 @@ constrain_camera_to_active_floor = true
 [connection signal="body_entered" from="Exits/To1F5" to="Exits/To1F5" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToB2F6" to="Exits/ToB2F6" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToB2F7" to="Exits/ToB2F7" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute4" to="Exits/ToRoute4" method="_on_body_entered"]
