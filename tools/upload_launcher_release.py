@@ -255,6 +255,7 @@ def _get_cache_control_for_key(key: str) -> str:
     if (
         key.startswith("launcher/latest/")
         or key.startswith("game/latest/")
+        or key in ("data/news.json", "data/news.previous.json")
         or file_name == "manifest.json"
         or file_name.startswith("manifest-")
     ):

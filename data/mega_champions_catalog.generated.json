@@ -1,0 +1,2333 @@
+{
+  "schemaVersion": 1,
+  "catalogId": "mega-champions-v1",
+  "source": {
+    "pokemonShowdownPackage": "pokemon-showdown",
+    "pokemonShowdownVersion": "0.11.11",
+    "pokemonShowdownGitCommit": "739a5e1fee432ad80ff7136d70cca993be358b59",
+    "dexMod": "gen9",
+    "nonstandardMarker": "Future",
+    "releaseFamily": "pokemon-legends-za-and-pokemon-champions",
+    "capturedDate": "2026-08-21"
+  },
+  "readinessStates": [
+    "engine_only",
+    "calculator_pending",
+    "developer_test",
+    "unranked_ready",
+    "ranked_ready"
+  ],
+  "expectedFormCount": 49,
+  "expectedActivationItemCount": 45,
+  "forms": [
+    {
+      "catalogEntryId": "absol-mega-z",
+      "pokeaetherSpeciesId": "absol-mega-z",
+      "showdownSpeciesId": "absolmegaz",
+      "showdownSpeciesName": "Absol-Mega-Z",
+      "defaultBaseSpeciesId": "absol",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "absol",
+          "showdownSpeciesId": "absol",
+          "showdownSpeciesName": "Absol"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "absolite-z",
+        "showdownItemId": "absolitez",
+        "showdownItemName": "Absolite Z",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "absol",
+            "showdownSpeciesId": "absol",
+            "showdownSpeciesName": "Absol"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Absol-Mega-Z",
+        "itemName": "Absolite Z",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "absol-mega-z",
+        "itemIconKey": "absolite-z"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.absol-mega-z.name",
+        "itemNameKey": "item.absolite-z.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "barbaracle-mega",
+      "pokeaetherSpeciesId": "barbaracle-mega",
+      "showdownSpeciesId": "barbaraclemega",
+      "showdownSpeciesName": "Barbaracle-Mega",
+      "defaultBaseSpeciesId": "barbaracle",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "barbaracle",
+          "showdownSpeciesId": "barbaracle",
+          "showdownSpeciesName": "Barbaracle"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "barbaracite",
+        "showdownItemId": "barbaracite",
+        "showdownItemName": "Barbaracite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "barbaracle",
+            "showdownSpeciesId": "barbaracle",
+            "showdownSpeciesName": "Barbaracle"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Barbaracle-Mega",
+        "itemName": "Barbaracite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "barbaracle-mega",
+        "itemIconKey": "barbaracite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.barbaracle-mega.name",
+        "itemNameKey": "item.barbaracite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "baxcalibur-mega",
+      "pokeaetherSpeciesId": "baxcalibur-mega",
+      "showdownSpeciesId": "baxcaliburmega",
+      "showdownSpeciesName": "Baxcalibur-Mega",
+      "defaultBaseSpeciesId": "baxcalibur",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "baxcalibur",
+          "showdownSpeciesId": "baxcalibur",
+          "showdownSpeciesName": "Baxcalibur"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "baxcalibrite",
+        "showdownItemId": "baxcalibrite",
+        "showdownItemName": "Baxcalibrite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "baxcalibur",
+            "showdownSpeciesId": "baxcalibur",
+            "showdownSpeciesName": "Baxcalibur"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Baxcalibur-Mega",
+        "itemName": "Baxcalibrite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "baxcalibur-mega",
+        "itemIconKey": "baxcalibrite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.baxcalibur-mega.name",
+        "itemNameKey": "item.baxcalibrite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "chandelure-mega",
+      "pokeaetherSpeciesId": "chandelure-mega",
+      "showdownSpeciesId": "chandeluremega",
+      "showdownSpeciesName": "Chandelure-Mega",
+      "defaultBaseSpeciesId": "chandelure",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "chandelure",
+          "showdownSpeciesId": "chandelure",
+          "showdownSpeciesName": "Chandelure"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "chandelurite",
+        "showdownItemId": "chandelurite",
+        "showdownItemName": "Chandelurite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "chandelure",
+            "showdownSpeciesId": "chandelure",
+            "showdownSpeciesName": "Chandelure"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Chandelure-Mega",
+        "itemName": "Chandelurite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "chandelure-mega",
+        "itemIconKey": "chandelurite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.chandelure-mega.name",
+        "itemNameKey": "item.chandelurite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "chesnaught-mega",
+      "pokeaetherSpeciesId": "chesnaught-mega",
+      "showdownSpeciesId": "chesnaughtmega",
+      "showdownSpeciesName": "Chesnaught-Mega",
+      "defaultBaseSpeciesId": "chesnaught",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "chesnaught",
+          "showdownSpeciesId": "chesnaught",
+          "showdownSpeciesName": "Chesnaught"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "chesnaughtite",
+        "showdownItemId": "chesnaughtite",
+        "showdownItemName": "Chesnaughtite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "chesnaught",
+            "showdownSpeciesId": "chesnaught",
+            "showdownSpeciesName": "Chesnaught"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Chesnaught-Mega",
+        "itemName": "Chesnaughtite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "chesnaught-mega",
+        "itemIconKey": "chesnaughtite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.chesnaught-mega.name",
+        "itemNameKey": "item.chesnaughtite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "chimecho-mega",
+      "pokeaetherSpeciesId": "chimecho-mega",
+      "showdownSpeciesId": "chimechomega",
+      "showdownSpeciesName": "Chimecho-Mega",
+      "defaultBaseSpeciesId": "chimecho",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "chimecho",
+          "showdownSpeciesId": "chimecho",
+          "showdownSpeciesName": "Chimecho"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "chimechite",
+        "showdownItemId": "chimechite",
+        "showdownItemName": "Chimechite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "chimecho",
+            "showdownSpeciesId": "chimecho",
+            "showdownSpeciesName": "Chimecho"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Chimecho-Mega",
+        "itemName": "Chimechite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "chimecho-mega",
+        "itemIconKey": "chimechite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.chimecho-mega.name",
+        "itemNameKey": "item.chimechite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "clefable-mega",
+      "pokeaetherSpeciesId": "clefable-mega",
+      "showdownSpeciesId": "clefablemega",
+      "showdownSpeciesName": "Clefable-Mega",
+      "defaultBaseSpeciesId": "clefable",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "clefable",
+          "showdownSpeciesId": "clefable",
+          "showdownSpeciesName": "Clefable"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "clefablite",
+        "showdownItemId": "clefablite",
+        "showdownItemName": "Clefablite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "clefable",
+            "showdownSpeciesId": "clefable",
+            "showdownSpeciesName": "Clefable"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Clefable-Mega",
+        "itemName": "Clefablite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "clefable-mega",
+        "itemIconKey": "clefablite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.clefable-mega.name",
+        "itemNameKey": "item.clefablite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "crabominable-mega",
+      "pokeaetherSpeciesId": "crabominable-mega",
+      "showdownSpeciesId": "crabominablemega",
+      "showdownSpeciesName": "Crabominable-Mega",
+      "defaultBaseSpeciesId": "crabominable",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "crabominable",
+          "showdownSpeciesId": "crabominable",
+          "showdownSpeciesName": "Crabominable"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "crabominite",
+        "showdownItemId": "crabominite",
+        "showdownItemName": "Crabominite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "crabominable",
+            "showdownSpeciesId": "crabominable",
+            "showdownSpeciesName": "Crabominable"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Crabominable-Mega",
+        "itemName": "Crabominite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "crabominable-mega",
+        "itemIconKey": "crabominite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.crabominable-mega.name",
+        "itemNameKey": "item.crabominite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "darkrai-mega",
+      "pokeaetherSpeciesId": "darkrai-mega",
+      "showdownSpeciesId": "darkraimega",
+      "showdownSpeciesName": "Darkrai-Mega",
+      "defaultBaseSpeciesId": "darkrai",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "darkrai",
+          "showdownSpeciesId": "darkrai",
+          "showdownSpeciesName": "Darkrai"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "darkranite",
+        "showdownItemId": "darkranite",
+        "showdownItemName": "Darkranite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "darkrai",
+            "showdownSpeciesId": "darkrai",
+            "showdownSpeciesName": "Darkrai"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Darkrai-Mega",
+        "itemName": "Darkranite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "darkrai-mega",
+        "itemIconKey": "darkranite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.darkrai-mega.name",
+        "itemNameKey": "item.darkranite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "delphox-mega",
+      "pokeaetherSpeciesId": "delphox-mega",
+      "showdownSpeciesId": "delphoxmega",
+      "showdownSpeciesName": "Delphox-Mega",
+      "defaultBaseSpeciesId": "delphox",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "delphox",
+          "showdownSpeciesId": "delphox",
+          "showdownSpeciesName": "Delphox"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "delphoxite",
+        "showdownItemId": "delphoxite",
+        "showdownItemName": "Delphoxite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "delphox",
+            "showdownSpeciesId": "delphox",
+            "showdownSpeciesName": "Delphox"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Delphox-Mega",
+        "itemName": "Delphoxite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "delphox-mega",
+        "itemIconKey": "delphoxite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.delphox-mega.name",
+        "itemNameKey": "item.delphoxite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "dragalge-mega",
+      "pokeaetherSpeciesId": "dragalge-mega",
+      "showdownSpeciesId": "dragalgemega",
+      "showdownSpeciesName": "Dragalge-Mega",
+      "defaultBaseSpeciesId": "dragalge",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "dragalge",
+          "showdownSpeciesId": "dragalge",
+          "showdownSpeciesName": "Dragalge"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "dragalgite",
+        "showdownItemId": "dragalgite",
+        "showdownItemName": "Dragalgite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "dragalge",
+            "showdownSpeciesId": "dragalge",
+            "showdownSpeciesName": "Dragalge"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Dragalge-Mega",
+        "itemName": "Dragalgite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "dragalge-mega",
+        "itemIconKey": "dragalgite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.dragalge-mega.name",
+        "itemNameKey": "item.dragalgite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "dragonite-mega",
+      "pokeaetherSpeciesId": "dragonite-mega",
+      "showdownSpeciesId": "dragonitemega",
+      "showdownSpeciesName": "Dragonite-Mega",
+      "defaultBaseSpeciesId": "dragonite",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "dragonite",
+          "showdownSpeciesId": "dragonite",
+          "showdownSpeciesName": "Dragonite"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "dragoninite",
+        "showdownItemId": "dragoninite",
+        "showdownItemName": "Dragoninite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "dragonite",
+            "showdownSpeciesId": "dragonite",
+            "showdownSpeciesName": "Dragonite"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Dragonite-Mega",
+        "itemName": "Dragoninite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "dragonite-mega",
+        "itemIconKey": "dragoninite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.dragonite-mega.name",
+        "itemNameKey": "item.dragoninite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "drampa-mega",
+      "pokeaetherSpeciesId": "drampa-mega",
+      "showdownSpeciesId": "drampamega",
+      "showdownSpeciesName": "Drampa-Mega",
+      "defaultBaseSpeciesId": "drampa",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "drampa",
+          "showdownSpeciesId": "drampa",
+          "showdownSpeciesName": "Drampa"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "drampanite",
+        "showdownItemId": "drampanite",
+        "showdownItemName": "Drampanite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "drampa",
+            "showdownSpeciesId": "drampa",
+            "showdownSpeciesName": "Drampa"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Drampa-Mega",
+        "itemName": "Drampanite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "drampa-mega",
+        "itemIconKey": "drampanite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.drampa-mega.name",
+        "itemNameKey": "item.drampanite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "eelektross-mega",
+      "pokeaetherSpeciesId": "eelektross-mega",
+      "showdownSpeciesId": "eelektrossmega",
+      "showdownSpeciesName": "Eelektross-Mega",
+      "defaultBaseSpeciesId": "eelektross",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "eelektross",
+          "showdownSpeciesId": "eelektross",
+          "showdownSpeciesName": "Eelektross"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "eelektrossite",
+        "showdownItemId": "eelektrossite",
+        "showdownItemName": "Eelektrossite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "eelektross",
+            "showdownSpeciesId": "eelektross",
+            "showdownSpeciesName": "Eelektross"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Eelektross-Mega",
+        "itemName": "Eelektrossite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "eelektross-mega",
+        "itemIconKey": "eelektrossite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.eelektross-mega.name",
+        "itemNameKey": "item.eelektrossite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "emboar-mega",
+      "pokeaetherSpeciesId": "emboar-mega",
+      "showdownSpeciesId": "emboarmega",
+      "showdownSpeciesName": "Emboar-Mega",
+      "defaultBaseSpeciesId": "emboar",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "emboar",
+          "showdownSpeciesId": "emboar",
+          "showdownSpeciesName": "Emboar"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "emboarite",
+        "showdownItemId": "emboarite",
+        "showdownItemName": "Emboarite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "emboar",
+            "showdownSpeciesId": "emboar",
+            "showdownSpeciesName": "Emboar"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Emboar-Mega",
+        "itemName": "Emboarite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "emboar-mega",
+        "itemIconKey": "emboarite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.emboar-mega.name",
+        "itemNameKey": "item.emboarite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "excadrill-mega",
+      "pokeaetherSpeciesId": "excadrill-mega",
+      "showdownSpeciesId": "excadrillmega",
+      "showdownSpeciesName": "Excadrill-Mega",
+      "defaultBaseSpeciesId": "excadrill",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "excadrill",
+          "showdownSpeciesId": "excadrill",
+          "showdownSpeciesName": "Excadrill"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "excadrite",
+        "showdownItemId": "excadrite",
+        "showdownItemName": "Excadrite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "excadrill",
+            "showdownSpeciesId": "excadrill",
+            "showdownSpeciesName": "Excadrill"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Excadrill-Mega",
+        "itemName": "Excadrite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "excadrill-mega",
+        "itemIconKey": "excadrite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.excadrill-mega.name",
+        "itemNameKey": "item.excadrite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "falinks-mega",
+      "pokeaetherSpeciesId": "falinks-mega",
+      "showdownSpeciesId": "falinksmega",
+      "showdownSpeciesName": "Falinks-Mega",
+      "defaultBaseSpeciesId": "falinks",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "falinks",
+          "showdownSpeciesId": "falinks",
+          "showdownSpeciesName": "Falinks"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "falinksite",
+        "showdownItemId": "falinksite",
+        "showdownItemName": "Falinksite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "falinks",
+            "showdownSpeciesId": "falinks",
+            "showdownSpeciesName": "Falinks"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Falinks-Mega",
+        "itemName": "Falinksite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "falinks-mega",
+        "itemIconKey": "falinksite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.falinks-mega.name",
+        "itemNameKey": "item.falinksite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "feraligatr-mega",
+      "pokeaetherSpeciesId": "feraligatr-mega",
+      "showdownSpeciesId": "feraligatrmega",
+      "showdownSpeciesName": "Feraligatr-Mega",
+      "defaultBaseSpeciesId": "feraligatr",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "feraligatr",
+          "showdownSpeciesId": "feraligatr",
+          "showdownSpeciesName": "Feraligatr"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "feraligite",
+        "showdownItemId": "feraligite",
+        "showdownItemName": "Feraligite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "feraligatr",
+            "showdownSpeciesId": "feraligatr",
+            "showdownSpeciesName": "Feraligatr"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Feraligatr-Mega",
+        "itemName": "Feraligite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "feraligatr-mega",
+        "itemIconKey": "feraligite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.feraligatr-mega.name",
+        "itemNameKey": "item.feraligite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "floette-mega",
+      "pokeaetherSpeciesId": "floette-mega",
+      "showdownSpeciesId": "floettemega",
+      "showdownSpeciesName": "Floette-Mega",
+      "defaultBaseSpeciesId": "floette-eternal",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "floette-eternal",
+          "showdownSpeciesId": "floetteeternal",
+          "showdownSpeciesName": "Floette-Eternal"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "floettite",
+        "showdownItemId": "floettite",
+        "showdownItemName": "Floettite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "floette-eternal",
+            "showdownSpeciesId": "floetteeternal",
+            "showdownSpeciesName": "Floette-Eternal"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Floette-Mega",
+        "itemName": "Floettite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "floette-mega",
+        "itemIconKey": "floettite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.floette-mega.name",
+        "itemNameKey": "item.floettite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "froslass-mega",
+      "pokeaetherSpeciesId": "froslass-mega",
+      "showdownSpeciesId": "froslassmega",
+      "showdownSpeciesName": "Froslass-Mega",
+      "defaultBaseSpeciesId": "froslass",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "froslass",
+          "showdownSpeciesId": "froslass",
+          "showdownSpeciesName": "Froslass"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "froslassite",
+        "showdownItemId": "froslassite",
+        "showdownItemName": "Froslassite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "froslass",
+            "showdownSpeciesId": "froslass",
+            "showdownSpeciesName": "Froslass"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Froslass-Mega",
+        "itemName": "Froslassite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "froslass-mega",
+        "itemIconKey": "froslassite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.froslass-mega.name",
+        "itemNameKey": "item.froslassite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "garchomp-mega-z",
+      "pokeaetherSpeciesId": "garchomp-mega-z",
+      "showdownSpeciesId": "garchompmegaz",
+      "showdownSpeciesName": "Garchomp-Mega-Z",
+      "defaultBaseSpeciesId": "garchomp",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "garchomp",
+          "showdownSpeciesId": "garchomp",
+          "showdownSpeciesName": "Garchomp"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "garchompite-z",
+        "showdownItemId": "garchompitez",
+        "showdownItemName": "Garchompite Z",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "garchomp",
+            "showdownSpeciesId": "garchomp",
+            "showdownSpeciesName": "Garchomp"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Garchomp-Mega-Z",
+        "itemName": "Garchompite Z",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "garchomp-mega-z",
+        "itemIconKey": "garchompite-z"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.garchomp-mega-z.name",
+        "itemNameKey": "item.garchompite-z.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "glimmora-mega",
+      "pokeaetherSpeciesId": "glimmora-mega",
+      "showdownSpeciesId": "glimmoramega",
+      "showdownSpeciesName": "Glimmora-Mega",
+      "defaultBaseSpeciesId": "glimmora",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "glimmora",
+          "showdownSpeciesId": "glimmora",
+          "showdownSpeciesName": "Glimmora"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "glimmoranite",
+        "showdownItemId": "glimmoranite",
+        "showdownItemName": "Glimmoranite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "glimmora",
+            "showdownSpeciesId": "glimmora",
+            "showdownSpeciesName": "Glimmora"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Glimmora-Mega",
+        "itemName": "Glimmoranite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "glimmora-mega",
+        "itemIconKey": "glimmoranite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.glimmora-mega.name",
+        "itemNameKey": "item.glimmoranite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "golisopod-mega",
+      "pokeaetherSpeciesId": "golisopod-mega",
+      "showdownSpeciesId": "golisopodmega",
+      "showdownSpeciesName": "Golisopod-Mega",
+      "defaultBaseSpeciesId": "golisopod",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "golisopod",
+          "showdownSpeciesId": "golisopod",
+          "showdownSpeciesName": "Golisopod"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "golisopite",
+        "showdownItemId": "golisopite",
+        "showdownItemName": "Golisopite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "golisopod",
+            "showdownSpeciesId": "golisopod",
+            "showdownSpeciesName": "Golisopod"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Golisopod-Mega",
+        "itemName": "Golisopite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "golisopod-mega",
+        "itemIconKey": "golisopite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.golisopod-mega.name",
+        "itemNameKey": "item.golisopite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "golurk-mega",
+      "pokeaetherSpeciesId": "golurk-mega",
+      "showdownSpeciesId": "golurkmega",
+      "showdownSpeciesName": "Golurk-Mega",
+      "defaultBaseSpeciesId": "golurk",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "golurk",
+          "showdownSpeciesId": "golurk",
+          "showdownSpeciesName": "Golurk"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "golurkite",
+        "showdownItemId": "golurkite",
+        "showdownItemName": "Golurkite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "golurk",
+            "showdownSpeciesId": "golurk",
+            "showdownSpeciesName": "Golurk"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Golurk-Mega",
+        "itemName": "Golurkite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "golurk-mega",
+        "itemIconKey": "golurkite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.golurk-mega.name",
+        "itemNameKey": "item.golurkite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "greninja-mega",
+      "pokeaetherSpeciesId": "greninja-mega",
+      "showdownSpeciesId": "greninjamega",
+      "showdownSpeciesName": "Greninja-Mega",
+      "defaultBaseSpeciesId": "greninja",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "greninja",
+          "showdownSpeciesId": "greninja",
+          "showdownSpeciesName": "Greninja"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "greninjite",
+        "showdownItemId": "greninjite",
+        "showdownItemName": "Greninjite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "greninja",
+            "showdownSpeciesId": "greninja",
+            "showdownSpeciesName": "Greninja"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Greninja-Mega",
+        "itemName": "Greninjite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "greninja-mega",
+        "itemIconKey": "greninjite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.greninja-mega.name",
+        "itemNameKey": "item.greninjite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "hawlucha-mega",
+      "pokeaetherSpeciesId": "hawlucha-mega",
+      "showdownSpeciesId": "hawluchamega",
+      "showdownSpeciesName": "Hawlucha-Mega",
+      "defaultBaseSpeciesId": "hawlucha",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "hawlucha",
+          "showdownSpeciesId": "hawlucha",
+          "showdownSpeciesName": "Hawlucha"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "hawluchanite",
+        "showdownItemId": "hawluchanite",
+        "showdownItemName": "Hawluchanite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "hawlucha",
+            "showdownSpeciesId": "hawlucha",
+            "showdownSpeciesName": "Hawlucha"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Hawlucha-Mega",
+        "itemName": "Hawluchanite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "hawlucha-mega",
+        "itemIconKey": "hawluchanite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.hawlucha-mega.name",
+        "itemNameKey": "item.hawluchanite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "heatran-mega",
+      "pokeaetherSpeciesId": "heatran-mega",
+      "showdownSpeciesId": "heatranmega",
+      "showdownSpeciesName": "Heatran-Mega",
+      "defaultBaseSpeciesId": "heatran",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "heatran",
+          "showdownSpeciesId": "heatran",
+          "showdownSpeciesName": "Heatran"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "heatranite",
+        "showdownItemId": "heatranite",
+        "showdownItemName": "Heatranite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "heatran",
+            "showdownSpeciesId": "heatran",
+            "showdownSpeciesName": "Heatran"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Heatran-Mega",
+        "itemName": "Heatranite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "heatran-mega",
+        "itemIconKey": "heatranite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.heatran-mega.name",
+        "itemNameKey": "item.heatranite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "lucario-mega-z",
+      "pokeaetherSpeciesId": "lucario-mega-z",
+      "showdownSpeciesId": "lucariomegaz",
+      "showdownSpeciesName": "Lucario-Mega-Z",
+      "defaultBaseSpeciesId": "lucario",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "lucario",
+          "showdownSpeciesId": "lucario",
+          "showdownSpeciesName": "Lucario"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "lucarionite-z",
+        "showdownItemId": "lucarionitez",
+        "showdownItemName": "Lucarionite Z",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "lucario",
+            "showdownSpeciesId": "lucario",
+            "showdownSpeciesName": "Lucario"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Lucario-Mega-Z",
+        "itemName": "Lucarionite Z",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "lucario-mega-z",
+        "itemIconKey": "lucarionite-z"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.lucario-mega-z.name",
+        "itemNameKey": "item.lucarionite-z.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "magearna-mega",
+      "pokeaetherSpeciesId": "magearna-mega",
+      "showdownSpeciesId": "magearnamega",
+      "showdownSpeciesName": "Magearna-Mega",
+      "defaultBaseSpeciesId": "magearna",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "magearna",
+          "showdownSpeciesId": "magearna",
+          "showdownSpeciesName": "Magearna"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "magearnite",
+        "showdownItemId": "magearnite",
+        "showdownItemName": "Magearnite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "magearna",
+            "showdownSpeciesId": "magearna",
+            "showdownSpeciesName": "Magearna"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Magearna-Mega",
+        "itemName": "Magearnite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "magearna-mega",
+        "itemIconKey": "magearnite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.magearna-mega.name",
+        "itemNameKey": "item.magearnite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "magearna-original-mega",
+      "pokeaetherSpeciesId": "magearna-original-mega",
+      "showdownSpeciesId": "magearnaoriginalmega",
+      "showdownSpeciesName": "Magearna-Original-Mega",
+      "defaultBaseSpeciesId": "magearna-original",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "magearna-original",
+          "showdownSpeciesId": "magearnaoriginal",
+          "showdownSpeciesName": "Magearna-Original"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "magearnite",
+        "showdownItemId": "magearnite",
+        "showdownItemName": "Magearnite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "magearna-original",
+            "showdownSpeciesId": "magearnaoriginal",
+            "showdownSpeciesName": "Magearna-Original"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Magearna-Original-Mega",
+        "itemName": "Magearnite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "magearna-original-mega",
+        "itemIconKey": "magearnite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.magearna-original-mega.name",
+        "itemNameKey": "item.magearnite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "malamar-mega",
+      "pokeaetherSpeciesId": "malamar-mega",
+      "showdownSpeciesId": "malamarmega",
+      "showdownSpeciesName": "Malamar-Mega",
+      "defaultBaseSpeciesId": "malamar",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "malamar",
+          "showdownSpeciesId": "malamar",
+          "showdownSpeciesName": "Malamar"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "malamarite",
+        "showdownItemId": "malamarite",
+        "showdownItemName": "Malamarite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "malamar",
+            "showdownSpeciesId": "malamar",
+            "showdownSpeciesName": "Malamar"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Malamar-Mega",
+        "itemName": "Malamarite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "malamar-mega",
+        "itemIconKey": "malamarite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.malamar-mega.name",
+        "itemNameKey": "item.malamarite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "meganium-mega",
+      "pokeaetherSpeciesId": "meganium-mega",
+      "showdownSpeciesId": "meganiummega",
+      "showdownSpeciesName": "Meganium-Mega",
+      "defaultBaseSpeciesId": "meganium",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "meganium",
+          "showdownSpeciesId": "meganium",
+          "showdownSpeciesName": "Meganium"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "meganiumite",
+        "showdownItemId": "meganiumite",
+        "showdownItemName": "Meganiumite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "meganium",
+            "showdownSpeciesId": "meganium",
+            "showdownSpeciesName": "Meganium"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Meganium-Mega",
+        "itemName": "Meganiumite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "meganium-mega",
+        "itemIconKey": "meganiumite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.meganium-mega.name",
+        "itemNameKey": "item.meganiumite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "meowstic-f-mega",
+      "pokeaetherSpeciesId": "meowstic-f-mega",
+      "showdownSpeciesId": "meowsticfmega",
+      "showdownSpeciesName": "Meowstic-F-Mega",
+      "defaultBaseSpeciesId": "meowstic-f",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "meowstic-f",
+          "showdownSpeciesId": "meowsticf",
+          "showdownSpeciesName": "Meowstic-F"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "meowsticite",
+        "showdownItemId": "meowsticite",
+        "showdownItemName": "Meowsticite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "meowstic-f",
+            "showdownSpeciesId": "meowsticf",
+            "showdownSpeciesName": "Meowstic-F"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Meowstic-F-Mega",
+        "itemName": "Meowsticite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "meowstic-f-mega",
+        "itemIconKey": "meowsticite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.meowstic-f-mega.name",
+        "itemNameKey": "item.meowsticite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "meowstic-m-mega",
+      "pokeaetherSpeciesId": "meowstic-m-mega",
+      "showdownSpeciesId": "meowsticmmega",
+      "showdownSpeciesName": "Meowstic-M-Mega",
+      "defaultBaseSpeciesId": "meowstic-male",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "meowstic-male",
+          "showdownSpeciesId": "meowstic",
+          "showdownSpeciesName": "Meowstic"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "meowsticite",
+        "showdownItemId": "meowsticite",
+        "showdownItemName": "Meowsticite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "meowstic-male",
+            "showdownSpeciesId": "meowstic",
+            "showdownSpeciesName": "Meowstic"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Meowstic-M-Mega",
+        "itemName": "Meowsticite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "meowstic-m-mega",
+        "itemIconKey": "meowsticite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.meowstic-m-mega.name",
+        "itemNameKey": "item.meowsticite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "pyroar-mega",
+      "pokeaetherSpeciesId": "pyroar-mega",
+      "showdownSpeciesId": "pyroarmega",
+      "showdownSpeciesName": "Pyroar-Mega",
+      "defaultBaseSpeciesId": "pyroar-male",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "pyroar-male",
+          "showdownSpeciesId": "pyroar",
+          "showdownSpeciesName": "Pyroar"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "pyroarite",
+        "showdownItemId": "pyroarite",
+        "showdownItemName": "Pyroarite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "pyroar-male",
+            "showdownSpeciesId": "pyroar",
+            "showdownSpeciesName": "Pyroar"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Pyroar-Mega",
+        "itemName": "Pyroarite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "pyroar-mega",
+        "itemIconKey": "pyroarite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.pyroar-mega.name",
+        "itemNameKey": "item.pyroarite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "raichu-mega-x",
+      "pokeaetherSpeciesId": "raichu-mega-x",
+      "showdownSpeciesId": "raichumegax",
+      "showdownSpeciesName": "Raichu-Mega-X",
+      "defaultBaseSpeciesId": "raichu",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "raichu",
+          "showdownSpeciesId": "raichu",
+          "showdownSpeciesName": "Raichu"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "raichunite-x",
+        "showdownItemId": "raichunitex",
+        "showdownItemName": "Raichunite X",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "raichu",
+            "showdownSpeciesId": "raichu",
+            "showdownSpeciesName": "Raichu"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Raichu-Mega-X",
+        "itemName": "Raichunite X",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "raichu-mega-x",
+        "itemIconKey": "raichunite-x"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.raichu-mega-x.name",
+        "itemNameKey": "item.raichunite-x.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "raichu-mega-y",
+      "pokeaetherSpeciesId": "raichu-mega-y",
+      "showdownSpeciesId": "raichumegay",
+      "showdownSpeciesName": "Raichu-Mega-Y",
+      "defaultBaseSpeciesId": "raichu",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "raichu",
+          "showdownSpeciesId": "raichu",
+          "showdownSpeciesName": "Raichu"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "raichunite-y",
+        "showdownItemId": "raichunitey",
+        "showdownItemName": "Raichunite Y",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "raichu",
+            "showdownSpeciesId": "raichu",
+            "showdownSpeciesName": "Raichu"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Raichu-Mega-Y",
+        "itemName": "Raichunite Y",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "raichu-mega-y",
+        "itemIconKey": "raichunite-y"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.raichu-mega-y.name",
+        "itemNameKey": "item.raichunite-y.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "scolipede-mega",
+      "pokeaetherSpeciesId": "scolipede-mega",
+      "showdownSpeciesId": "scolipedemega",
+      "showdownSpeciesName": "Scolipede-Mega",
+      "defaultBaseSpeciesId": "scolipede",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "scolipede",
+          "showdownSpeciesId": "scolipede",
+          "showdownSpeciesName": "Scolipede"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "scolipite",
+        "showdownItemId": "scolipite",
+        "showdownItemName": "Scolipite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "scolipede",
+            "showdownSpeciesId": "scolipede",
+            "showdownSpeciesName": "Scolipede"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Scolipede-Mega",
+        "itemName": "Scolipite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "scolipede-mega",
+        "itemIconKey": "scolipite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.scolipede-mega.name",
+        "itemNameKey": "item.scolipite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "scovillain-mega",
+      "pokeaetherSpeciesId": "scovillain-mega",
+      "showdownSpeciesId": "scovillainmega",
+      "showdownSpeciesName": "Scovillain-Mega",
+      "defaultBaseSpeciesId": "scovillain",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "scovillain",
+          "showdownSpeciesId": "scovillain",
+          "showdownSpeciesName": "Scovillain"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "scovillainite",
+        "showdownItemId": "scovillainite",
+        "showdownItemName": "Scovillainite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "scovillain",
+            "showdownSpeciesId": "scovillain",
+            "showdownSpeciesName": "Scovillain"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Scovillain-Mega",
+        "itemName": "Scovillainite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "scovillain-mega",
+        "itemIconKey": "scovillainite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.scovillain-mega.name",
+        "itemNameKey": "item.scovillainite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "scrafty-mega",
+      "pokeaetherSpeciesId": "scrafty-mega",
+      "showdownSpeciesId": "scraftymega",
+      "showdownSpeciesName": "Scrafty-Mega",
+      "defaultBaseSpeciesId": "scrafty",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "scrafty",
+          "showdownSpeciesId": "scrafty",
+          "showdownSpeciesName": "Scrafty"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "scraftinite",
+        "showdownItemId": "scraftinite",
+        "showdownItemName": "Scraftinite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "scrafty",
+            "showdownSpeciesId": "scrafty",
+            "showdownSpeciesName": "Scrafty"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Scrafty-Mega",
+        "itemName": "Scraftinite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "scrafty-mega",
+        "itemIconKey": "scraftinite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.scrafty-mega.name",
+        "itemNameKey": "item.scraftinite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "skarmory-mega",
+      "pokeaetherSpeciesId": "skarmory-mega",
+      "showdownSpeciesId": "skarmorymega",
+      "showdownSpeciesName": "Skarmory-Mega",
+      "defaultBaseSpeciesId": "skarmory",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "skarmory",
+          "showdownSpeciesId": "skarmory",
+          "showdownSpeciesName": "Skarmory"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "skarmorite",
+        "showdownItemId": "skarmorite",
+        "showdownItemName": "Skarmorite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "skarmory",
+            "showdownSpeciesId": "skarmory",
+            "showdownSpeciesName": "Skarmory"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Skarmory-Mega",
+        "itemName": "Skarmorite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "skarmory-mega",
+        "itemIconKey": "skarmorite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.skarmory-mega.name",
+        "itemNameKey": "item.skarmorite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "staraptor-mega",
+      "pokeaetherSpeciesId": "staraptor-mega",
+      "showdownSpeciesId": "staraptormega",
+      "showdownSpeciesName": "Staraptor-Mega",
+      "defaultBaseSpeciesId": "staraptor",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "staraptor",
+          "showdownSpeciesId": "staraptor",
+          "showdownSpeciesName": "Staraptor"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "staraptite",
+        "showdownItemId": "staraptite",
+        "showdownItemName": "Staraptite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "staraptor",
+            "showdownSpeciesId": "staraptor",
+            "showdownSpeciesName": "Staraptor"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Staraptor-Mega",
+        "itemName": "Staraptite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "staraptor-mega",
+        "itemIconKey": "staraptite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.staraptor-mega.name",
+        "itemNameKey": "item.staraptite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "starmie-mega",
+      "pokeaetherSpeciesId": "starmie-mega",
+      "showdownSpeciesId": "starmiemega",
+      "showdownSpeciesName": "Starmie-Mega",
+      "defaultBaseSpeciesId": "starmie",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "starmie",
+          "showdownSpeciesId": "starmie",
+          "showdownSpeciesName": "Starmie"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "starminite",
+        "showdownItemId": "starminite",
+        "showdownItemName": "Starminite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "starmie",
+            "showdownSpeciesId": "starmie",
+            "showdownSpeciesName": "Starmie"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Starmie-Mega",
+        "itemName": "Starminite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "starmie-mega",
+        "itemIconKey": "starminite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.starmie-mega.name",
+        "itemNameKey": "item.starminite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "tatsugiri-curly-mega",
+      "pokeaetherSpeciesId": "tatsugiri-curly-mega",
+      "showdownSpeciesId": "tatsugiricurlymega",
+      "showdownSpeciesName": "Tatsugiri-Curly-Mega",
+      "defaultBaseSpeciesId": "tatsugiri",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "tatsugiri",
+          "showdownSpeciesId": "tatsugiri",
+          "showdownSpeciesName": "Tatsugiri"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "tatsugirinite",
+        "showdownItemId": "tatsugirinite",
+        "showdownItemName": "Tatsugirinite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "tatsugiri",
+            "showdownSpeciesId": "tatsugiri",
+            "showdownSpeciesName": "Tatsugiri"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Tatsugiri-Curly-Mega",
+        "itemName": "Tatsugirinite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "tatsugiri-curly-mega",
+        "itemIconKey": "tatsugirinite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.tatsugiri-curly-mega.name",
+        "itemNameKey": "item.tatsugirinite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "tatsugiri-droopy-mega",
+      "pokeaetherSpeciesId": "tatsugiri-droopy-mega",
+      "showdownSpeciesId": "tatsugiridroopymega",
+      "showdownSpeciesName": "Tatsugiri-Droopy-Mega",
+      "defaultBaseSpeciesId": "tatsugiri-droopy",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "tatsugiri-droopy",
+          "showdownSpeciesId": "tatsugiridroopy",
+          "showdownSpeciesName": "Tatsugiri-Droopy"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "tatsugirinite",
+        "showdownItemId": "tatsugirinite",
+        "showdownItemName": "Tatsugirinite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "tatsugiri-droopy",
+            "showdownSpeciesId": "tatsugiridroopy",
+            "showdownSpeciesName": "Tatsugiri-Droopy"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Tatsugiri-Droopy-Mega",
+        "itemName": "Tatsugirinite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "tatsugiri-droopy-mega",
+        "itemIconKey": "tatsugirinite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.tatsugiri-droopy-mega.name",
+        "itemNameKey": "item.tatsugirinite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "tatsugiri-stretchy-mega",
+      "pokeaetherSpeciesId": "tatsugiri-stretchy-mega",
+      "showdownSpeciesId": "tatsugiristretchymega",
+      "showdownSpeciesName": "Tatsugiri-Stretchy-Mega",
+      "defaultBaseSpeciesId": "tatsugiri-stretchy",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "tatsugiri-stretchy",
+          "showdownSpeciesId": "tatsugiristretchy",
+          "showdownSpeciesName": "Tatsugiri-Stretchy"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "tatsugirinite",
+        "showdownItemId": "tatsugirinite",
+        "showdownItemName": "Tatsugirinite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "tatsugiri-stretchy",
+            "showdownSpeciesId": "tatsugiristretchy",
+            "showdownSpeciesName": "Tatsugiri-Stretchy"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Tatsugiri-Stretchy-Mega",
+        "itemName": "Tatsugirinite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "tatsugiri-stretchy-mega",
+        "itemIconKey": "tatsugirinite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.tatsugiri-stretchy-mega.name",
+        "itemNameKey": "item.tatsugirinite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "victreebel-mega",
+      "pokeaetherSpeciesId": "victreebel-mega",
+      "showdownSpeciesId": "victreebelmega",
+      "showdownSpeciesName": "Victreebel-Mega",
+      "defaultBaseSpeciesId": "victreebel",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "victreebel",
+          "showdownSpeciesId": "victreebel",
+          "showdownSpeciesName": "Victreebel"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "victreebelite",
+        "showdownItemId": "victreebelite",
+        "showdownItemName": "Victreebelite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "victreebel",
+            "showdownSpeciesId": "victreebel",
+            "showdownSpeciesName": "Victreebel"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Victreebel-Mega",
+        "itemName": "Victreebelite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "victreebel-mega",
+        "itemIconKey": "victreebelite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.victreebel-mega.name",
+        "itemNameKey": "item.victreebelite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "zeraora-mega",
+      "pokeaetherSpeciesId": "zeraora-mega",
+      "showdownSpeciesId": "zeraoramega",
+      "showdownSpeciesName": "Zeraora-Mega",
+      "defaultBaseSpeciesId": "zeraora",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "zeraora",
+          "showdownSpeciesId": "zeraora",
+          "showdownSpeciesName": "Zeraora"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "zeraorite",
+        "showdownItemId": "zeraorite",
+        "showdownItemName": "Zeraorite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "zeraora",
+            "showdownSpeciesId": "zeraora",
+            "showdownSpeciesName": "Zeraora"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Zeraora-Mega",
+        "itemName": "Zeraorite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "zeraora-mega",
+        "itemIconKey": "zeraorite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.zeraora-mega.name",
+        "itemNameKey": "item.zeraorite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    },
+    {
+      "catalogEntryId": "zygarde-mega",
+      "pokeaetherSpeciesId": "zygarde-mega",
+      "showdownSpeciesId": "zygardemega",
+      "showdownSpeciesName": "Zygarde-Mega",
+      "defaultBaseSpeciesId": "zygarde-50",
+      "baseForms": [
+        {
+          "pokeaetherSpeciesId": "zygarde-50",
+          "showdownSpeciesId": "zygarde",
+          "showdownSpeciesName": "Zygarde"
+        },
+        {
+          "pokeaetherSpeciesId": "zygarde-10",
+          "showdownSpeciesId": "zygarde10",
+          "showdownSpeciesName": "Zygarde-10%"
+        }
+      ],
+      "activation": {
+        "kind": "mega_stone",
+        "pokeaetherItemId": "zygardite",
+        "showdownItemId": "zygardite",
+        "showdownItemName": "Zygardite",
+        "engineSourceForms": [
+          {
+            "pokeaetherSpeciesId": "zygarde-complete",
+            "showdownSpeciesId": "zygardecomplete",
+            "showdownSpeciesName": "Zygarde-Complete"
+          }
+        ]
+      },
+      "calculator": {
+        "speciesName": "Zygarde-Mega",
+        "itemName": "Zygardite",
+        "supportStatus": "supported"
+      },
+      "assets": {
+        "spriteKey": "zygarde-mega",
+        "itemIconKey": "zygardite"
+      },
+      "localization": {
+        "speciesNameKey": "pokemon.zygarde-mega.name",
+        "itemNameKey": "item.zygardite.name"
+      },
+      "persistencePolicy": "base_form_with_activation_requirement",
+      "readiness": "engine_only",
+      "provenance": {
+        "sourcePackage": "pokemon-showdown",
+        "sourceVersion": "0.11.11",
+        "dexMod": "gen9"
+      }
+    }
+  ],
+  "catalogRevision": "sha256:67e85e71c28a89a3eb60dff35a073821cb51df48ca292513310ccfe9969b2986"
+}
