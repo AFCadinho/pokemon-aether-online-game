@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Route 3 and Route 22 now reward exploration with additional visible field items.
+
 - Early Kanto maps now include their visible FireRed and LeafGreen field items through Route 4.
 
 - Cerulean City now plays its own remastered city theme.

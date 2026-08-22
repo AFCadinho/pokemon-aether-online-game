@@ -3,20 +3,28 @@ extends SceneTree
 const TILE_SIZE := 32
 const MAP_PICKUPS := {
 	"res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn": [
-		["kanto_viridian_city_potion", "potion", Vector2i(2240, 896)],
+		["kanto_viridian_city_potion", "potion", Vector2i(528, 1520)],
 	],
 	"res://scenes/overworld/kanto/routes/kanto_route_2.tscn": [
-		["kanto_route_2_ether", "ether", Vector2i(544, 1728)],
-		["kanto_route_2_paralyze_heal", "paralyze-heal", Vector2i(672, 2048)],
+		["kanto_route_2_ether", "ether", Vector2i(848, 1616)],
+		["kanto_route_2_paralyze_heal", "paralyze-heal", Vector2i(688, 1296)],
 	],
 	"res://scenes/overworld/kanto/routes/viridian_forest.tscn": [
-		["kanto_viridian_forest_poke_ball", "poke-ball", Vector2i(672, 1088)],
-		["kanto_viridian_forest_antidote", "antidote", Vector2i(1280, 1600)],
-		["kanto_viridian_forest_potion", "potion", Vector2i(1568, 1920)],
-		["kanto_viridian_forest_potion_2", "potion", Vector2i(768, 1920)],
+		["kanto_viridian_forest_poke_ball", "poke-ball", Vector2i(1264, 1648)],
+		["kanto_viridian_forest_antidote", "antidote", Vector2i(1264, 1520)],
+		["kanto_viridian_forest_potion", "potion", Vector2i(2064, 1840)],
+		["kanto_viridian_forest_potion_2", "potion", Vector2i(560, 816)],
+	],
+	"res://scenes/overworld/kanto/routes/kanto_route_3.tscn": [
+		["kanto_route_3_awakening", "awakening", Vector2i(1152, 816)],
+		["kanto_route_3_oran_berry", "oran-berry", Vector2i(2240, 816)],
 	],
 	"res://scenes/overworld/kanto/routes/kanto_route_4.tscn": [
 		["kanto_route_4_tm_roar", "tm-roar", Vector2i(576, 160)],
+	],
+	"res://scenes/overworld/kanto/routes/kanto_route_22.tscn": [
+		["kanto_route_22_great_ball", "great-ball", Vector2i(880, 800)],
+		["kanto_route_22_super_potion", "super-potion", Vector2i(1792, 992)],
 	],
 }
 
@@ -34,17 +42,34 @@ func _init() -> void:
 		var blocked_cells := _collision_cells(scene_source)
 		for pickup: Array in MAP_PICKUPS[scene_path]:
 			pickup_count += 1
-			_check(scene_source.contains('pickup_id = "%s"' % pickup[0]), "pickup scene id exists: %s" % pickup[0])
-			_check(scene_source.contains('item_id = "%s"' % pickup[1]), "pickup item exists: %s" % pickup[1])
+			var pickup_block := _pickup_block(scene_source, pickup[0])
+			_check(not pickup_block.is_empty(), "pickup scene id exists: %s" % pickup[0])
+			_check(pickup_block.contains('item_id = "%s"' % pickup[1]), "pickup item exists: %s" % pickup[1])
+			_check(pickup_block.contains("position = Vector2(%d, %d)" % [pickup[2].x, pickup[2].y]), "pickup test tracks its scene position: %s" % pickup[0])
 			var tile := Vector2i(floori(float(pickup[2].x) / TILE_SIZE), floori(float(pickup[2].y) / TILE_SIZE))
 			_check(not blocked_cells.has(tile), "pickup is placed on walkable floor: %s" % pickup[0])
 
-	_check(pickup_count == 8, "all eight early-Kanto pickups are covered")
+	_check(pickup_count == 12, "all twelve early-Kanto pickups are covered")
 	_check(all_source.count('pickup_id = "kanto_viridian_city_potion"') == 1, "Viridian City's Potion id is unique")
 	_check(all_source.count('pickup_id = "kanto_route_2_') == 2, "Route 2 has two unique pickups")
 	_check(all_source.count('pickup_id = "kanto_viridian_forest_') == 4, "Viridian Forest has four unique pickups")
+	_check(all_source.count('pickup_id = "kanto_route_3_') == 2, "Route 3 has two unique pickups")
 	_check(all_source.count('pickup_id = "kanto_route_4_tm_roar"') == 1, "Route 4's TM05 id is unique")
+	_check(all_source.count('pickup_id = "kanto_route_22_') == 2, "Route 22 has two unique pickups")
 	quit(1 if failed else 0)
+
+
+func _pickup_block(scene_source: String, pickup_id: String) -> String:
+	var pickup_index := scene_source.find('pickup_id = "%s"' % pickup_id)
+	if pickup_index < 0:
+		return ""
+	var block_start := scene_source.rfind("\n[node name=", pickup_index)
+	var block_end := scene_source.find("\n[node name=", pickup_index)
+	if block_start < 0:
+		block_start = 0
+	if block_end < 0:
+		block_end = scene_source.length()
+	return scene_source.substr(block_start, block_end - block_start)
 
 
 func _collision_cells(scene_source: String) -> Dictionary:
