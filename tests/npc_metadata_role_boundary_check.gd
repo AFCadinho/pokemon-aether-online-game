@@ -13,7 +13,8 @@ func _init() -> void:
 	var transit_keeper := FileAccess.get_file_as_string(TRANSIT_KEEPER_SCRIPT)
 
 	_check(
-		base_npc.contains("if not _loads_pickpocket_profile_from_npc_metadata():\n\t\treturn"),
+		base_npc.contains("func _loads_pickpocket_profile_from_npc_metadata() -> bool:")
+		and base_npc.contains("not _loads_pickpocket_profile_from_npc_metadata()"),
 		"ordinary dialogue NPCs can load server-owned pickpocket profiles"
 	)
 	_check(

@@ -110,6 +110,16 @@ func _run() -> void:
 		}) == "Deze Pokémon is level 20 en komt boven de trade-levellimiet van de ontvanger (5).",
 		"trade level cap errors include the relevant levels"
 	)
+	_check(
+		errors.call("message", {"detail": {"code": "MEGA_CALCULATOR_PENDING"}})
+		== "De damage calculator is nog niet klaar voor die Mega Evolution.",
+		"Mega calculator readiness errors display in Dutch"
+	)
+	_check(
+		errors.call("message", {"detail": {"code": "TEST_FORM_NOT_ALLOWED"}})
+		== "Pokémon die alleen voor tests zijn, kunnen niet voor deze actie worden gebruikt.",
+		"testing-only Mega errors display in Dutch"
+	)
 	var unknown_response := {
 		"detail": {
 			"code": "future_sensitive_failure",
