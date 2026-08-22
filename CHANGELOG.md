@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Your character now responds to the mysterious Mt. Moon rescuer before receiving his warning about protecting your Pokémon.
+
 - The Mt. Moon rescue now surrounds you from both sides, gives Team Rocket and your character the correct portraits, keeps the mysterious Trainer and partner visibly separated, plays every summon and attack without skipped dialogue, and turns both characters toward each other after Team Rocket escapes.
 
 - Your portrait in the Mt. Moon rescue dialogue now includes your upper body and current clothing instead of zooming tightly into the face.

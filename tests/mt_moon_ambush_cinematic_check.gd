@@ -59,6 +59,7 @@ func _run() -> void:
 	_expect("current_stage == DIALOGUE_STAGE_ROCKET_BATTLE_CHALLENGE:\n\t\tif not await _play_counterattack():" in controller_source, "Bring it on directly triggers the counterattack")
 	_expect("DIALOGUE_STAGE_ROCKET_FLEE" in controller_source, "Rocket flight dialogue follows the counterattack")
 	_expect("DIALOGUE_STAGE_PLAYER_QUESTION" in controller_source, "the player answers during the rescue dialogue")
+	_expect("DIALOGUE_STAGE_PLAYER_DEFENSE := 7" in controller_source, "the player visibly responds between the rescuer's warning and lesson")
 	_expect("DIALOGUE_STAGE_PLAYER_SURPRISE" in controller_source, "the player reacts after the rescuer disappears")
 	_expect("await _play_counterattack()" in controller_source and controller_source.find("await _play_counterattack()") < controller_source.find("await _flee_rockets()"), "the rescuer attacks before Team Rocket flees")
 	_expect("await _wait_for_interact_release()" in controller_source, "dialogue input cannot skip the next story action")
