@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="3_gt0tw"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="4_hint"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="5_visibility_mask"]
-[ext_resource type="PackedScene" path="res://scenes/world/interactables/smashable_rock.tscn" id="6_rock"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/daily_smashable_rock.tscn" id="6_rock"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="7_route_hint"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3x5y3"]
@@ -390,12 +390,20 @@ z_index = 5
 
 [node name="RockSmash01" parent="Entities/Interactables" unique_id=1034659227 instance=ExtResource("6_rock")]
 position = Vector2(208, 560)
+rock_id = "kanto_mt_moon_b1f_rock_west"
+rock_visual_style = 1
 
 [node name="RockSmash02" parent="Entities/Interactables" unique_id=200584177 instance=ExtResource("6_rock")]
 position = Vector2(2288, 336)
+rock_id = "kanto_mt_moon_b1f_rock_east"
+rock_variant = 1
+rock_visual_style = 1
 
 [node name="RockSmash03" parent="Entities/Interactables" unique_id=1088471145 instance=ExtResource("6_rock")]
 position = Vector2(1872, 2128)
+rock_id = "kanto_mt_moon_b1f_rock_south"
+rock_variant = 2
+rock_visual_style = 1
 
 [node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=2078555399]
 z_index = 4096
