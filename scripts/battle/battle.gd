@@ -6294,6 +6294,7 @@ func play_wild_battle_intro(player_pokemon: Pokemon, api_response: Dictionary) -
 		last_rendered_event_seq,
 	])
 	await _play_lead_summon(_get_active_summon_ball_item_id("p1", player_lead_pokemon.ball_item_id), player_species, player_sprite_box, "back")
+	_hide_wild_battle_player_trainer()
 	_debug_battle_start("wild.setup.after_player_lead_summon lastRenderedSeq=%d" % last_rendered_event_seq)
 	await _render_initial_battle_events(api_response)
 	_show_battle_controls_after_initial_events()
@@ -6761,6 +6762,12 @@ func _clear_battle_trainer_sprites() -> void:
 		player_trainer_sprite.clear()
 	if enemy_trainer_sprite != null:
 		enemy_trainer_sprite.clear()
+
+
+func _hide_wild_battle_player_trainer() -> void:
+	if battle_type != BattleType.WILD or player_trainer_sprite == null:
+		return
+	player_trainer_sprite.clear()
 
 
 func _show_local_player_trainer() -> void:
