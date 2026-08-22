@@ -22,6 +22,10 @@
 [ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="26_transit_keeper"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_beacon_placeholder.tscn" id="27_aether_beacon"]
 [ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="28_gate_npc"]
+[ext_resource type="PackedScene" uid="uid://rnbee61xiftm" path="res://scenes/npcs/item_gift_npc.tscn" id="29_item_gift"]
+[ext_resource type="Script" uid="uid://c76onuvbojgfx" path="res://scripts/world/kanto/towns/pewter_city/karate_master_kenji.gd" id="30_karate_master"]
+[ext_resource type="SpriteFrames" uid="uid://x75gwtrd76d3" path="res://assets/npcs/classes/black_belt_frames.tres" id="31_black_belt"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/daily_smashable_rock.tscn" id="32_daily_rock"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2mtwu"]
 size = Vector2(192, 40)
@@ -135,6 +139,71 @@ texture_region_size = Vector2i(32, 32)
 [sub_resource type="TileSet" id="TileSet_2pdw6"]
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_swpx7")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3ghgs"]
+texture = ExtResource("6_kp2ru")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_no66e"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_3ghgs")
 
 [node name="PewterCity2" type="Node2D" unique_id=2051045385]
 script = ExtResource("4_metadata")
@@ -293,6 +362,17 @@ z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1616337549]
 
+[node name="KarateMasterKenji" parent="Entities/NPCs" unique_id=304834579 instance=ExtResource("29_item_gift")]
+position = Vector2(592, 176)
+script = ExtResource("30_karate_master")
+reward_id = "kanto_pewter_city_karate_master_rock_smash_hm"
+npc_id = "kanto_pewter_city_karate_master_kenji"
+display_name = "Karate Master Kenji"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("31_black_belt")
+portrait_id = "showdown_blackbelt_gen6"
+preload_quest_markers = true
+
 [node name="Route3Guard" parent="Entities/NPCs" unique_id=1988861091 instance=ExtResource("28_gate_npc")]
 position = Vector2(1872, 1008)
 guard_role = "transition_guard"
@@ -373,11 +453,30 @@ movement_speed_pixels = 48.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1638978152]
 
+[node name="TrainingRockNorth" parent="Entities/Interactables" unique_id=1250324814 instance=ExtResource("32_daily_rock")]
+position = Vector2(528, 144)
+rock_id = "kanto_pewter_city_training_rock_north"
+
+[node name="TrainingRockEast" parent="Entities/Interactables" unique_id=397845433 instance=ExtResource("32_daily_rock")]
+position = Vector2(656, 144)
+rock_id = "kanto_pewter_city_training_rock_east"
+rock_variant = 1
+
+[node name="TrainingRockSouth" parent="Entities/Interactables" unique_id=1759308269 instance=ExtResource("32_daily_rock")]
+position = Vector2(656, 208)
+rock_id = "kanto_pewter_city_training_rock_south"
+rock_variant = 2
+
+[node name="TrainingRockWest" parent="Entities/Interactables" unique_id=1074151323 instance=ExtResource("32_daily_rock")]
+position = Vector2(528, 208)
+rock_id = "kanto_pewter_city_training_rock_west"
+rock_variant = 3
+
 [node name="AetherBeacon" parent="Entities/Interactables" unique_id=697101251 instance=ExtResource("27_aether_beacon")]
 z_index = 944
 position = Vector2(1520, 944)
-interactable_id = "kanto_pewter_city_aether_beacon"
 destination_id = "kanto_pewter_city"
+interactable_id = "kanto_pewter_city_aether_beacon"
 
 [node name="PokemonCenterDoorLock" parent="Entities/Interactables" unique_id=1082600175 instance=ExtResource("25_locked_door")]
 position = Vector2(1424, 1504)
@@ -520,6 +619,21 @@ position = Vector2(688, 496)
 
 [node name="BuildingWindowLight13" parent="NightLights/Window" unique_id=104097313 instance=ExtResource("13_4hm78")]
 position = Vector2(592, 528)
+
+[node name="Stairs" type="Node2D" parent="." unique_id=170068075]
+visible = false
+
+[node name="StairUpLeft" type="TileMapLayer" parent="Stairs" unique_id=1139384581]
+visible = false
+z_index = 100
+tile_map_data = PackedByteArray("AAAYABEAAAABAAEAAAAYABIAAAABAAEAAAAYABMAAAABAAEAAAAwACAAAAABAAEAAAAwACEAAAABAAEAAAAwACIAAAABAAEAAAASACcAAAABAAEAAAASACgAAAABAAEAAAASACkAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_no66e")
+
+[node name="StairUpRight" type="TileMapLayer" parent="Stairs" unique_id=1882640254]
+visible = false
+z_index = 100
+tile_map_data = PackedByteArray("AAAeABEAAAABAAEAAAAeABIAAAABAAEAAAAeABMAAAABAAEAAAAgABAAAAABAAEAAAAgABEAAAABAAEAAAAgABIAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_no66e")
 
 [connection signal="body_entered" from="Exits/ToRoute2" to="Exits/ToRoute2" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute3" to="Exits/ToRoute3" method="_on_body_entered"]

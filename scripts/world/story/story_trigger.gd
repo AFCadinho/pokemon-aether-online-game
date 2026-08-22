@@ -6,6 +6,7 @@ class_name StoryTrigger
 
 var _in_flight := false
 var _owns_overworld_lock := false
+var _pending_body: Node2D = null
 
 
 func _ready() -> void:
@@ -14,14 +15,34 @@ func _ready() -> void:
 		body_entered.connect(entered)
 
 
-func _on_body_entered(body: Node2D) -> void:
+func _process(_delta: float) -> void:
+	if _pending_body == null:
+		return
+	if not is_instance_valid(_pending_body) or not overlaps_body(_pending_body):
+		_pending_body = null
+		return
 	if (
 		_in_flight
 		or GameState.is_overworld_input_locked()
 		or GameState.is_ui_input_locked()
-		or not _is_player(body)
 	):
 		return
+
+	var body := _pending_body
+	_pending_body = null
+	_on_body_entered(body)
+
+
+func _on_body_entered(body: Node2D) -> void:
+	if _in_flight or not _is_player(body):
+		return
+	if GameState.is_overworld_input_locked() or GameState.is_ui_input_locked():
+		# Map transitions can place the player inside an area before their input
+		# lock is released. Keep that entry pending instead of requiring the
+		# player to leave and walk back into the trigger.
+		_pending_body = body
+		return
+	_pending_body = null
 	var story_hook := _find_story_hook()
 	if story_hook == null or not bool(story_hook.call("is_configured")):
 		return
@@ -42,6 +63,8 @@ func _on_body_entered(body: Node2D) -> void:
 		_release_owned_overworld_lock()
 		_in_flight = false
 		return
+	if story_host.has_method("set_story_player"):
+		story_host.call("set_story_player", body)
 
 	var result_value: Variant = await story_hook.call(
 		"try_handle_interaction",
