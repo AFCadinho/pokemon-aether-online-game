@@ -368,6 +368,7 @@ script = ExtResource("30_karate_master")
 reward_id = "kanto_pewter_city_karate_master_rock_smash_hm"
 npc_id = "kanto_pewter_city_karate_master_kenji"
 display_name = "Karate Master Kenji"
+portrait_id = "showdown_blackbelt_gen6"
 preload_quest_markers = true
 facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("31_black_belt")
