@@ -5,7 +5,10 @@ class_name MtMoonMiguelNPC
 
 const QUEST_ID := "travel_through_mt_moon"
 const BATTLE_STEP_ID := "defeat_miguel"
+const FINAL_STEP_ID := "cross_mt_moon"
 const BLOCKED_DIALOGUE_ID := "kanto_mt_moon_miguel_blocked"
+const AFTER_AMBUSH_DIALOGUE_ID := "kanto_mt_moon_miguel_after_ambush"
+const POST_AMBUSH_OFFSET := Vector2(0, 192)
 const BLOCKING_TILE_OFFSETS: Array[Vector2i] = [
 	Vector2i.ZERO,
 	Vector2i.RIGHT,
@@ -39,6 +42,9 @@ func _can_auto_challenge() -> bool:
 
 
 func interact_with_player(player: Node2D) -> void:
+	if StoryService.is_requirement_met(QUEST_ID, FINAL_STEP_ID, "completed"):
+		await _show_after_ambush_dialogue()
+		return
 	if trainer_progress_state == STATE_FIRST_ENCOUNTER and not _story_allows_battle():
 		await _show_blocked_dialogue()
 		return
@@ -96,6 +102,30 @@ func _show_blocked_dialogue() -> void:
 	await show_dialogue(lines, speaker_name)
 
 
+func _show_after_ambush_dialogue() -> void:
+	var result: Dictionary = await NpcDialogueService.resolve_dialogue(
+		AFTER_AMBUSH_DIALOGUE_ID,
+		["I'm sorry I left you behind. I panicked.", "I've trained since then. Next time, I won't run away."],
+		"MtMoonMiguelNPC"
+	)
+	await show_dialogue(
+		_string_array(result.get("lines", [])),
+		str(result.get("speakerName", display_name)).strip_edges()
+	)
+
+
+func flee_after_ambush() -> void:
+	_set_idle_frame(Vector2.DOWN)
+	var sprite := get_node_or_null("Look/AnimatedSprite2D") as AnimatedSprite2D
+	if sprite != null and sprite.sprite_frames != null and sprite.sprite_frames.has_animation("walk_down"):
+		sprite.play("walk_down")
+	var tween := create_tween().set_parallel(true)
+	tween.tween_property(self, "global_position", global_position + POST_AMBUSH_OFFSET, 0.8).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.tween_property(self, "modulate:a", 0.0, 0.8)
+	await tween.finished
+	visible = false
+
+
 func _send_player_back(player: Node2D) -> void:
 	if player.has_method("story_move_path"):
 		var retreat_path: Array[String] = ["down"]
@@ -120,7 +150,9 @@ func _apply_story_position() -> void:
 	if StoryService.is_requirement_met(QUEST_ID, BATTLE_STEP_ID, "completed"):
 		var marker := get_node_or_null(cleared_position_marker) as Marker2D
 		if marker != null:
-			global_position = marker.global_position
+			global_position = marker.global_position + (POST_AMBUSH_OFFSET if StoryService.is_requirement_met(QUEST_ID, FINAL_STEP_ID, "completed") else Vector2.ZERO)
+		visible = true
+		modulate.a = 1.0
 	else:
 		position = _blocking_position
 		_recover_players_to_blocked_side.call_deferred()

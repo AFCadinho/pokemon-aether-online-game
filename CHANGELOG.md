@@ -4,6 +4,8 @@
 
 - The Mt. Moon rescue now surrounds you from both sides, gives Team Rocket and your character the correct portraits, plays every summon and attack without skipped dialogue, and turns both characters toward each other after Team Rocket escapes.
 
+- The Mt. Moon rescue now shows Miguel fleeing as Team Rocket closes in, then ends with your character reacting to the mysterious Trainer's disappearance; Miguel apologizes when you meet again.
+
 - Rewinding the Mt. Moon story now restores the fossil Poké Balls immediately.
 
 - The Mt. Moon rescue now plays as a full cutscene with Team Rocket summoning Pokémon, a mysterious rift, and your future partner's counterattack.

@@ -24,6 +24,7 @@ const DIALOGUE_STAGE_ROCKET_FLEE := 4
 const DIALOGUE_STAGE_PLAYER_QUESTION := 5
 const DIALOGUE_STAGE_PLAYER_PROMISE := 7
 const DIALOGUE_STAGE_FAREWELL := 8
+const DIALOGUE_STAGE_PLAYER_SURPRISE := 9
 
 @export var miguel_path: NodePath
 @export var helix_fossil_path: NodePath
@@ -78,7 +79,7 @@ func show_dialogue(lines: Array[String], speaker_name := "") -> bool:
 	if dialogue_box == null or not dialogue_box.has_method("start_dialogue"):
 		return false
 	var resolved_speaker_name := speaker_name
-	if current_stage in [DIALOGUE_STAGE_PLAYER_QUESTION, DIALOGUE_STAGE_PLAYER_PROMISE]:
+	if current_stage in [DIALOGUE_STAGE_PLAYER_QUESTION, DIALOGUE_STAGE_PLAYER_PROMISE, DIALOGUE_STAGE_PLAYER_SURPRISE]:
 		resolved_speaker_name = _player_speaker_name()
 	var portrait := await _dialogue_portrait(current_stage)
 	var show_portrait := current_stage in [
@@ -121,6 +122,7 @@ func _prepare_ambush() -> void:
 		entrance_tween.tween_property(rocket, "modulate:a", 1.0, 0.2)
 	await entrance_tween.finished
 	_face_rockets_toward_player()
+	await _flee_miguel()
 	await _summon_rocket_pokemon()
 
 
@@ -395,7 +397,7 @@ func _dialogue_portrait(stage: int) -> Texture2D:
 		DIALOGUE_STAGE_ROCKET_FLEE,
 	]:
 		return TrainerPortraitCatalog.get_texture(ROCKET_PORTRAIT_ID)
-	if stage in [DIALOGUE_STAGE_PLAYER_QUESTION, DIALOGUE_STAGE_PLAYER_PROMISE]:
+	if stage in [DIALOGUE_STAGE_PLAYER_QUESTION, DIALOGUE_STAGE_PLAYER_PROMISE, DIALOGUE_STAGE_PLAYER_SURPRISE]:
 		return await _player_mugshot()
 	return null
 
@@ -419,6 +421,12 @@ func _player_mugshot() -> Texture2D:
 func _wait_for_interact_release() -> void:
 	while Input.is_action_pressed("interact") and is_inside_tree():
 		await get_tree().process_frame
+
+
+func _flee_miguel() -> void:
+	var miguel := get_node_or_null(miguel_path)
+	if miguel != null and miguel.has_method("flee_after_ambush"):
+		await miguel.call("flee_after_ambush")
 	# Do not let the input frame that closed this dialogue also advance the next action.
 	if is_inside_tree():
 		await get_tree().process_frame
