@@ -71,8 +71,6 @@ func show_dialogue(lines: Array[String], speaker_name := "") -> bool:
 	match current_stage:
 		DIALOGUE_STAGE_AMBUSH:
 			await _prepare_ambush()
-		DIALOGUE_STAGE_ROCKET_FLEE:
-			await _play_counterattack()
 	_dialogue_stage += 1
 	var dialogue_box := get_tree().current_scene.get_node_or_null("DialogueBox/Box")
 	if dialogue_box == null or not dialogue_box.has_method("start_dialogue"):
@@ -82,8 +80,12 @@ func show_dialogue(lines: Array[String], speaker_name := "") -> bool:
 		resolved_speaker_name = _player_speaker_name()
 	dialogue_box.call("start_dialogue", lines, resolved_speaker_name)
 	await dialogue_box.dialogue_finished
+	await _wait_for_interact_release()
 	if current_stage == DIALOGUE_STAGE_ROCKET_REVEAL_CHALLENGE:
 		await _reveal_rescuer()
+	elif current_stage == DIALOGUE_STAGE_ROCKET_BATTLE_CHALLENGE:
+		if not await _play_counterattack():
+			return false
 	elif current_stage == DIALOGUE_STAGE_ROCKET_FLEE:
 		await _flee_rockets()
 		_face_future_self_and_player()
@@ -107,6 +109,7 @@ func _prepare_ambush() -> void:
 		entrance_tween.tween_property(rocket, "position", surround_position, 0.42).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		entrance_tween.tween_property(rocket, "modulate:a", 1.0, 0.2)
 	await entrance_tween.finished
+	_face_rockets_toward_player()
 	await _summon_rocket_pokemon()
 
 
@@ -193,12 +196,15 @@ func _spawn_starter_final_evolution() -> void:
 	await get_tree().create_timer(0.25).timeout
 
 
-func _play_counterattack() -> void:
+func _play_counterattack() -> bool:
 	if _counterattack_played:
-		return
-	_counterattack_played = true
+		return true
 	if not is_instance_valid(_starter):
-		return
+		await _spawn_starter_final_evolution()
+	if not is_instance_valid(_starter):
+		push_warning("MtMoonAmbushController: counterattack cannot start without the future starter.")
+		return false
+	_counterattack_played = true
 	var move: Dictionary = CINEMATIC_MOVE_CATALOG.for_types(_starter_types)
 	var move_id := str(move.get("id", "hyper-beam"))
 	var move_name := ContentLocalization.display_name("moves", move_id, str(move.get("name", "Hyper Beam")))
@@ -216,6 +222,7 @@ func _play_counterattack() -> void:
 		if is_instance_valid(pokemon):
 			create_tween().tween_property(pokemon, "modulate:a", 0.0, 0.18)
 	await get_tree().create_timer(0.2).timeout
+	return true
 
 
 func _flee_rockets() -> void:
@@ -367,6 +374,40 @@ func _player_speaker_name() -> String:
 	if not player_name.is_empty():
 		return player_name
 	return _text("story.mt_moon.cutscene.player_speaker")
+
+
+func _wait_for_interact_release() -> void:
+	while Input.is_action_pressed("interact") and is_inside_tree():
+		await get_tree().process_frame
+	# Do not let the input frame that closed this dialogue also advance the next action.
+	if is_inside_tree():
+		await get_tree().process_frame
+
+
+func _face_rockets_toward_player() -> void:
+	var player := get_tree().get_first_node_in_group("player") as Node2D
+	if player == null:
+		return
+	for rocket: Node in rockets:
+		if rocket.has_method("face_world_position"):
+			rocket.call("face_world_position", player.global_position)
+			continue
+		var sprite := rocket as AnimatedSprite2D
+		if sprite != null:
+			_face_sprite_toward(sprite, player.global_position)
+
+
+func _face_sprite_toward(sprite: AnimatedSprite2D, world_position: Vector2) -> void:
+	var delta := world_position - sprite.global_position
+	var direction_name := "down"
+	if abs(delta.x) > abs(delta.y):
+		direction_name = "right" if delta.x > 0.0 else "left"
+	elif delta.y < 0.0:
+		direction_name = "up"
+	var animation_name := StringName("idle_%s" % direction_name)
+	if sprite.sprite_frames != null and sprite.sprite_frames.has_animation(animation_name):
+		sprite.play(animation_name)
+		sprite.stop()
 
 
 func _face_future_self_and_player() -> void:
