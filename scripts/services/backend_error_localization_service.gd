@@ -180,6 +180,21 @@ const CODE_TO_KEY: Dictionary = {
 	"gift_code_rate_limited": "backend.error.rate_limited",
 	"request_timeout": "backend.error.timeout",
 	"service_unavailable": "backend.error.unavailable",
+	"test_form_not_allowed": "backend.error.mega_test_form_not_allowed",
+	"mega_direct_form_not_allowed": "backend.error.mega_direct_form_not_allowed",
+	"mega_catalog_disabled": "backend.error.mega_catalog_disabled",
+	"mega_format_disabled": "backend.error.mega_format_disabled",
+	"mega_format_not_allowed": "backend.error.mega_format_not_allowed",
+	"mega_calculator_pending": "backend.error.mega_calculator_pending",
+	"mega_ai_pending": "backend.error.mega_ai_pending",
+	"mega_readiness_pending": "backend.error.mega_readiness_pending",
+	"mega_catalog_unavailable": "backend.error.mega_compatibility_unavailable",
+	"mega_catalog_revision_mismatch": "backend.error.mega_compatibility_unavailable",
+	"mega_capability_data_missing": "backend.error.mega_compatibility_unavailable",
+	"mega_capability_conflict": "backend.error.mega_compatibility_unavailable",
+	"mega_engine_manifest_stale": "backend.error.mega_compatibility_unavailable",
+	"mega_calculator_manifest_stale": "backend.error.mega_compatibility_unavailable",
+	"mega_context_unknown": "backend.error.mega_compatibility_unavailable",
 }
 
 
