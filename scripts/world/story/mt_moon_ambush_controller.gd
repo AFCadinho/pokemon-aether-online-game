@@ -413,6 +413,7 @@ func _player_mugshot() -> Texture2D:
 		_ensure_overlay()
 		_player_portrait_renderer = TrainerHeadPortrait.new()
 		_player_portrait_renderer.name = "PlayerDialoguePortrait"
+		_player_portrait_renderer.head_only = false
 		_player_portrait_renderer.render_scale = 1.25
 		_player_portrait_renderer.custom_minimum_size = Vector2(64, 64)
 		_player_portrait_renderer.size = Vector2(64, 64)

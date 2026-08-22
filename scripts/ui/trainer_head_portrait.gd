@@ -13,6 +13,7 @@ var viewport: SubViewport
 var avatar: Node2D
 var appearance_state: Dictionary = {}
 var render_scale := DEFAULT_RENDER_SCALE
+var head_only := true
 
 
 func _ready() -> void:
@@ -47,7 +48,8 @@ func set_appearance_state(state: Dictionary) -> void:
 		"position": {"x": 0.0, "y": 0.0},
 		"facingDirection": "down",
 	})
-	_configure_head_only(avatar)
+	if head_only:
+		_configure_head_only(avatar)
 	# The avatar's Look node lives at y=-16 and each 64px frame is centered on
 	# that node. Keep the complete head centered inside the fixed render target.
 	# The TextureRect scales that target to each UI use without changing its crop.

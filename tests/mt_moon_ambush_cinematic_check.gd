@@ -55,6 +55,7 @@ func _run() -> void:
 	_expect('ROCKET_PORTRAIT_ID := "showdown_rainbowrocketgrunt"' in controller_source, "Team Rocket dialogue uses its Showdown portrait")
 	_expect("TrainerHeadPortrait.new()" in controller_source and "PlayerSave.to_appearance_state()" in controller_source, "player dialogue renders the current overworld appearance")
 	_expect("_player_portrait_renderer.render_scale = 1.25" in controller_source, "player dialogue shows a less tightly zoomed portrait")
+	_expect("_player_portrait_renderer.head_only = false" in controller_source, "player dialogue includes the upper body and current clothing")
 	_expect("dialogue_box.call(\"start_dialogue\", lines, resolved_speaker_name, portrait, show_portrait)" in controller_source, "each cinematic speaker controls its own portrait")
 	_expect("_face_rockets_toward_player()\n\tawait _flee_miguel()\n\tawait _summon_rocket_pokemon()" in controller_source, "Miguel flees as Team Rocket closes in and before their Pokemon appear")
 	_expect("counterattack cannot start without the future starter" in controller_source, "a missing starter stops the sequence instead of silently skipping the attack")
