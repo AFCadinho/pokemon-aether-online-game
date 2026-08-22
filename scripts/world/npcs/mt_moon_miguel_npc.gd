@@ -15,6 +15,7 @@ const BLOCKING_TILE_OFFSETS: Array[Vector2i] = [
 	Vector2i.ZERO,
 	Vector2i.RIGHT,
 	Vector2i.RIGHT * 2,
+	Vector2i.RIGHT * 3,
 ]
 
 @export var cleared_position_marker: NodePath
