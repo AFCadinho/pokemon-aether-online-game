@@ -2,12 +2,120 @@
 
 ## Unreleased
 
+- Cerulean City now plays its own remastered city theme.
+
+- You can now travel between Route 4 and the first playable version of Cerulean City.
+
+- Team Rocket now reacts to your fallen Pokémon before your future self intervenes during the Mt. Moon rescue.
+
+- Your mugshot now appears for every line your character speaks during the Mt. Moon rescue.
+
+- Your future partner's attack during the Mt. Moon rescue now plays a matching move sound.
+
+- Your character now turns toward Team Rocket as they surround you during the Mt. Moon ambush.
+
+- TMs and HMs found in the overworld now use a distinct golden Poké Ball.
+
+- Ground items now play their pickup sound and appear in System messages without opening a dialogue box.
+
+- Miguel now blocks the entire fossil-room approach until you have defeated the required Team Rocket Grunts.
+
+- Ash-Greninja now loads its Pokédex sprite without showing a false missing-asset error.
+
+- Several Trainers in Mt. Moon now watch the intended paths from their corrected sight distances and directions.
+
+- Entering Mt. Moon from Route 4 now leaves your character facing into the cave.
+
+- Both upper Team Rocket Grunts now face you correctly during the Mt. Moon ambush, regardless of which fossil you choose.
+
+- Lass Iris in Mt. Moon can now spot you from five tiles away.
+
+- The Hiker at Mt. Moon's entrance now reliably stops you with his warning when you first walk past him.
+
+- Guild emblems now appear as clear, compact badges beside player names instead of enlarging the name box.
+
+- Player and NPC name boxes now fit their displayed name instead of keeping an oversized minimum width and height.
+
+- You can now leave Mt. Moon through its eastern exit and arrive on Route 4, then return through the same cave entrance.
+
+- Mt. Moon no longer moves you to Miguel after a Team Rocket battle. Miguel now speaks before taking the fossil you leave behind, and the Moon Stone on 1F appears in its intended spot.
+
+- Brock now clearly names Rock Slide when awarding its TM, the reward appears in your System messages, and the Hiker at Mt. Moon uses the correct portrait.
+
+- The main story now continues after Mt. Moon by directing you to Cerulean Gym and then toward Nugget Bridge while the Gym Leader is away.
+
+- The two tiles beside Miguel are now walkable once his Mt. Moon confrontation becomes available.
+
+- Your character now responds to the mysterious Mt. Moon rescuer before receiving his warning about protecting your Pokémon.
+
+- The Mt. Moon rescue now surrounds you from both sides, gives Team Rocket and your character the correct portraits, keeps the mysterious Trainer and partner visibly separated, plays every summon and attack without skipped dialogue, and turns both characters toward each other after Team Rocket escapes.
+
+- Your portrait in the Mt. Moon rescue dialogue now includes your upper body and current clothing instead of zooming tightly into the face.
+
+- Pokémon summoned during the Mt. Moon rescue now remain inside their Poké Balls until the release animation plays.
+
+- A Rocket Grunt now orders Zubat to attack through a full dialogue message, after which Zubat visibly lunges and strikes your follower before your character calls out to them.
+
+- The Mt. Moon rescue now shows Miguel panicking and fleeing as Team Rocket closes in, without getting stuck in his run animation; the scene ends with your character reacting to the mysterious Trainer's disappearance, and Miguel apologizes when you meet again.
+
+- Rewinding the Mt. Moon story now restores the fossil Poké Balls immediately.
+
+- The Mt. Moon rescue now plays as a full cutscene with Team Rocket summoning Pokémon, a mysterious rift, and your future partner's counterattack.
+
 **Added**
 
+- Trainers you have not defeated yet now show an exclamation mark above their head.
+- Wild Clefairy, Zubat, Paras, Geodude, and Onix can now appear throughout Mt. Moon, with Clefable also appearing on B2F.
+- The story now continues into Mt. Moon: investigate four suspicious people, face Miguel for a fossil, and survive Team Rocket's ambush.
+- Mt. Moon now contains its visible FireRed and LeafGreen item pickups, plus optional rocks that can be cleared with Rock Smash.
+- Ground Poké Balls can hold one-time item rewards, and Strength boulders can be pushed one tile at a time.
+- Mt. Moon now has its FireRed and LeafGreen battle Trainers on 1F and B2F.
+- Private battle room hosts can choose no tier or Aether OU when creating a room.
+- Authorized developers can keep a direct Mega battle form for a clearly marked test Pokémon and clean up those test Pokémon from Developer Tools.
+- Route 3 now connects to Mt. Moon, and all three cave floors connect through their matching ladders and tunnels.
+- Mt. Moon now plays its own cave music on every floor.
+- Mt. Moon B1F now hides its other disconnected passages while you explore.
 - If the game closes unexpectedly, PokeAether now prepares a privacy-safe crash report at the next start. The report can be viewed and copied directly from the notification or the new Support page in Settings.
+- Launcher and login news now follow official forum announcements automatically.
+- Players now visibly rise or descend while crossing marked horizontal stairways, without leaving the normal movement grid.
+
+**Changed**
+
+- Mt. Moon's TM reward is now TM Payback, because TM Thief is earned through the Thieving quest.
+- PvP now reconnects more quickly after a short connection problem and clearly shows when your battle is being restored.
+- Ranked PvP opens faster, finds ready matches sooner, and keeps the correct queue time after reconnecting.
+- Battle Bond Greninja now shows Ash-Greninja after activating its current once-per-battle stat boosts. It returns to its normal appearance permanently for that battle after switching out.
+- Champions ZA is now available to every player as an unrated private-room tier. It does not give players Pokémon or items and does not affect Ranked Battles.
+- The game now shows clear localized messages when a new Mega Evolution is not ready or allowed for an action.
+- Testers can use every Developer Tools action except unrestricted Pokémon creation. They can still create normalized Pokémon through Alpha Tools.
+
+**Changed**
+
+- Wild battles now focus on the Pokémon after the opening summon instead of keeping your Trainer behind it. Trainers remain visible in Trainer and PvP battles.
 
 **Fixed**
 
+- Map changes now fade smoothly while keeping a dim view of the previous area during loading, reducing sudden dark-to-bright jumps.
+- Miguel now warns you and sends you back when he blocks the fossil corridor, instead of leaving you against an unexplained invisible barrier.
+- Miguel no longer moves into a Mt. Moon wall after his battle.
+- Missing translated text now reliably falls back to English.
+- Battle Bond Greninja now uses the transformation animation when it changes into Ash-Greninja.
+- Shiny Champions ZA Mega Evolutions now use their own colors in the Pokédex, party, storage, and Damage Calculator instead of falling back to their normal sprites.
+- The Pokédex now hides Greninja's technical Bond record, keeps Ash-Greninja visible as a battle-only form, and shows Battle Bond as Greninja's Special Ability. Ability-changing items also explain that this Ability is fixed.
+- Finished battles now close the Damage Calculator automatically so the battle result can be closed immediately.
+- Champions ZA's battle HUD, Damage Calc, and party hover cards now use the active Mega form, ability, and current battle stats.
+- Opponent names now update to their revealed Mega form in the battle HUD and battle log.
+- Static front sprites for the new Champions ZA Mega Evolutions now appear at the correct battle size.
+- Launcher downloads now recover from slow or interrupted connections, resume after restarting the launcher, and show clearer speed and connection details.
+- Foreground cave walls on Mt. Moon B1F and B2F now pass in front of or behind characters correctly.
+- Ground Poké Balls and other overworld objects can now be interacted with correctly on offset map grids.
+- Updated the Mt. Moon B2F scenery to match the latest map artwork.
+- Players now face away from the entrance after using a Mt. Moon ladder or tunnel.
+- NPC dialogue now opens promptly by preparing nearby dialogue and avoiding duplicate content requests.
+- Move, ability, nature, EXP, Happiness, held item, and Poké Ball details now use compact hover cards across their full fields in every Pokémon Summary; read-only Summaries also show IV and EV details this way.
+- Champions ZA now explains the exact Mega compatibility problem instead of showing a generic room-creation error.
+- Private battle rooms now explain when the battle server is recovering instead of showing a generic creation error.
+- Read-only Pokémon Summaries now fill in a missing National Dex number instead of leaving the number blank.
 - Ogerpon's correct battle sprites are now included in game downloads.
 - Training Rooms no longer blame a valid Poképaste when room timers are temporarily unavailable.
 - Wild battles now immediately show the first Pokémon that can battle when an earlier party member has fainted.
