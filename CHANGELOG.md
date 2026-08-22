@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Both upper Team Rocket Grunts now face you correctly during the Mt. Moon ambush, regardless of which fossil you choose.
+
 - Lass Iris in Mt. Moon can now spot you from five tiles away.
 
 - The Hiker at Mt. Moon's entrance now reliably stops you with his warning when you first walk past him.
