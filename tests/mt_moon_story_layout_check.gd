@@ -16,11 +16,14 @@ func _init() -> void:
 	var ambush_script := FileAccess.get_file_as_string(
 		"res://scripts/world/story/mt_moon_ambush_controller.gd"
 	)
+	var trainer_script := FileAccess.get_file_as_string(
+		"res://scripts/world/npcs/trainer_npc.gd"
+	)
 
 	_check(first_floor.contains('npc_id = "mt_moon_warning_hiker"'), "1F places the warning Hiker")
 	_check(first_floor.contains('portrait_id = "showdown_hiker_gen6"'), "warning Hiker uses the Showdown Hiker portrait")
 	_check(first_floor.contains('interaction_id = "kanto_mt_moon_entrance_warning"'), "1F binds the entrance warning")
-	_check(first_floor.contains('trainer_id = "kanto_mt_moon_1f_lass_iris"\nsight_range_tiles = 5\nnpc_id = "kanto_mt_moon_1f_lass_iris"'), "Lass Iris sees five tiles ahead")
+	_check(first_floor.contains('trainer_id = "kanto_mt_moon_1f_lass_iris"\nnpc_id = "kanto_mt_moon_1f_lass_iris"') and trainer_script.contains("var sight_range_tiles := 5"), "Lass Iris inherits the five-tile Trainer sight range")
 	_check(first_floor.contains('[node name="MoonStone" parent="Entities/Interactables" unique_id=618258656 instance=ExtResource("14_item")]\nposition = Vector2(432, 240)'), "1F places the Moon Stone in its intended spot")
 	_check(miguel_script.contains('BATTLE_STEP_ID := "defeat_miguel"'), "Miguel checks the story battle step")
 	_check(miguel_script.contains('BLOCKED_DIALOGUE_ID := "kanto_mt_moon_miguel_blocked"'), "Miguel has blocked dialogue")

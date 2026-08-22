@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Ash-Greninja now loads its Pokédex sprite without showing a false missing-asset error.
+
 - Several Trainers in Mt. Moon now watch the intended paths from their corrected sight distances and directions.
 
 - Entering Mt. Moon from Route 4 now leaves your character facing into the cave.
