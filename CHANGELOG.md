@@ -8,6 +8,8 @@
 
 - Pokémon summoned during the Mt. Moon rescue now remain inside their Poké Balls until the release animation plays.
 
+- Team Rocket now attacks your visible follower during the Mt. Moon ambush, prompting your character to call out to their fallen Pokémon before the rescue begins.
+
 - The Mt. Moon rescue now shows Miguel panicking and fleeing as Team Rocket closes in, without getting stuck in his run animation; the scene ends with your character reacting to the mysterious Trainer's disappearance, and Miguel apologizes when you meet again.
 
 - Rewinding the Mt. Moon story now restores the fossil Poké Balls immediately.

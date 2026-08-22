@@ -51,6 +51,7 @@ var _player_portrait_renderer: TrainerHeadPortrait
 var _prepared := false
 var _counterattack_played := false
 var _future_self_spawn_global_position := Vector2.ZERO
+var _fainted_follower: PokemonFollower
 
 
 func _ready() -> void:
@@ -103,6 +104,8 @@ func show_dialogue(lines: Array[String], speaker_name := "") -> bool:
 		_face_future_self_and_player()
 	elif current_stage == DIALOGUE_STAGE_FAREWELL:
 		await _dismiss_rescuer()
+	elif current_stage == DIALOGUE_STAGE_AMBUSH:
+		await _attack_and_faint_follower()
 	return true
 
 
@@ -269,6 +272,49 @@ func _dismiss_rescuer() -> void:
 	if is_instance_valid(_starter):
 		_starter.queue_free()
 	await _close_rift()
+	_restore_follower()
+
+
+func _attack_and_faint_follower() -> void:
+	var player := get_tree().get_first_node_in_group("player") as Node2D
+	if player == null:
+		return
+	var follower_value: Variant = player.get("pokemon_follower")
+	if not follower_value is PokemonFollower:
+		return
+	_fainted_follower = follower_value as PokemonFollower
+	if not is_instance_valid(_fainted_follower) or not _fainted_follower.visible:
+		_fainted_follower = null
+		return
+	var attack := MtMoonCinematicAttack.new()
+	attack.z_index = 30
+	add_child(attack)
+	var attack_source: Vector2 = rockets[0].global_position if not rockets.is_empty() else global_position
+	await attack.play(to_local(attack_source), [to_local(_fainted_follower.global_position)], "dark")
+	_fainted_follower.set_process(false)
+	var follower_sprite := _fainted_follower.sprite
+	if follower_sprite != null:
+		var faint_tween := create_tween().set_parallel(true)
+		faint_tween.tween_property(follower_sprite, "rotation", PI * 0.5, 0.25)
+		faint_tween.tween_property(follower_sprite, "modulate", Color(0.55, 0.55, 0.62, 0.9), 0.25)
+		await faint_tween.finished
+	var follower_name := ContentLocalization.display_name("species", _fainted_follower.current_species, _fainted_follower.current_species.capitalize())
+	var dialogue_box := get_tree().current_scene.get_node_or_null("DialogueBox/Box")
+	if dialogue_box != null:
+		dialogue_box.call("start_dialogue", [_text("story.mt_moon.cutscene.follower_fainted").replace("{pokemon}", follower_name)], _player_speaker_name(), await _player_mugshot(), true)
+		await dialogue_box.dialogue_finished
+		await _wait_for_interact_release()
+
+
+func _restore_follower() -> void:
+	if not is_instance_valid(_fainted_follower):
+		return
+	_fainted_follower.set_process(true)
+	if _fainted_follower.sprite != null:
+		_fainted_follower.sprite.rotation = 0.0
+		_fainted_follower.sprite.modulate = Color.WHITE
+	_fainted_follower.reset_follow_position()
+	_fainted_follower = null
 
 
 func _open_rift() -> void:
