@@ -178,7 +178,7 @@ sources/0 = SubResource("TileSetAtlasSource_80emr")
 size = Vector2(32, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tunnel_exit"]
-size = Vector2(64, 64)
+size = Vector2(112, 48)
 
 [node name="B1f" type="Node2D" unique_id=555040763]
 script = ExtResource("2_metadata")
@@ -193,9 +193,9 @@ location_name = "Mt. Moon"
 region_id = "kanto"
 encounter_area_id = "kanto_mt_moon_b1f"
 battle_environment_id = "cave"
-cave_encounter_chance = 0.07
 lighting_profile = "dark"
 weather_profile = "disabled"
+cave_encounter_chance = 0.07
 music_track_id = "overworld.kanto.cave.mt_moon"
 
 [node name="MtMoonB1FVisual" parent="." unique_id=376262231 instance=ExtResource("1_visual")]
@@ -244,7 +244,7 @@ position = Vector2(144, 240)
 position = Vector2(336, 2192)
 
 [node name="FromRoute4" type="Marker2D" parent="Spawns" unique_id=604864832]
-position = Vector2(512, 2048)
+position = Vector2(512, 1984)
 
 [node name="Exits" type="Node2D" parent="." unique_id=1706055105]
 
@@ -361,7 +361,7 @@ z_as_relative = false
 flow_direction = "left"
 
 [node name="ToRoute4" type="Area2D" parent="Exits" unique_id=208040013]
-position = Vector2(512, 2112)
+position = Vector2(496, 1936)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_4.tscn"
 target_spawn_name = "FromMtMoon"
@@ -369,12 +369,13 @@ transition_id = "kanto_mt_moon__to_route_4"
 transition_facing_direction = "down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute4" unique_id=208040014]
+position = Vector2(24, -8)
 shape = SubResource("RectangleShape2D_tunnel_exit")
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute4" unique_id=208040015 instance=ExtResource("7_route_hint")]
 z_as_relative = false
-tile_footprint = Vector2i(2, 2)
-flow_direction = "down"
+position = Vector2(16, -16)
+tile_footprint = Vector2i(3, 2)
 
 [node name="Entities" type="Node2D" parent="." unique_id=1575076732]
 z_index = 5

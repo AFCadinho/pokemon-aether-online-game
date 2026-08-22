@@ -270,9 +270,9 @@ location_name = "Mt. Moon"
 region_id = "kanto"
 encounter_area_id = "kanto_mt_moon_1f"
 battle_environment_id = "cave"
-cave_encounter_chance = 0.07
 lighting_profile = "dark"
 weather_profile = "disabled"
+cave_encounter_chance = 0.07
 music_track_id = "overworld.kanto.cave.mt_moon"
 
 [node name="MtMoon1FVisual" parent="." unique_id=1199211580 instance=ExtResource("1_visual")]
