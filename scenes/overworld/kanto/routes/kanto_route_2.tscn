@@ -17,6 +17,7 @@
 [ext_resource type="SpriteFrames" uid="uid://57e7bp514fh2" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="16_bug_catcher"]
 [ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="17_youngster"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="18_pokemon"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="19_overworld_item"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_r7yom"]
 texture = ExtResource("2_yrfmu")
@@ -546,6 +547,16 @@ movement_wait_seconds = 1.5
 movement_speed_pixels = 50.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=2096619694]
+
+[node name="Ether" parent="Entities/Interactables" instance=ExtResource("19_overworld_item")]
+position = Vector2(944, 592)
+pickup_id = "kanto_route_2_ether"
+item_id = "ether"
+
+[node name="ParalyzeHeal" parent="Entities/Interactables" instance=ExtResource("19_overworld_item")]
+position = Vector2(1008, 1968)
+pickup_id = "kanto_route_2_paralyze_heal"
+item_id = "paralyze-heal"
 
 [node name="CuttableTree" parent="Entities/Interactables" unique_id=592280505 instance=ExtResource("10_j62p7")]
 position = Vector2(1584, 432)
