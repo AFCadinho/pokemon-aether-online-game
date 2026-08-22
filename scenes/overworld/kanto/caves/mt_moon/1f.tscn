@@ -463,7 +463,7 @@ pickup_id = "kanto_mt_moon_1f_great_ball"
 item_id = "great-ball"
 
 [node name="MoonStone" parent="Entities/Interactables" unique_id=618258656 instance=ExtResource("14_item")]
-position = Vector2(208, 208)
+position = Vector2(432, 240)
 pickup_id = "kanto_mt_moon_1f_moon_stone"
 item_id = "moon-stone"
 
