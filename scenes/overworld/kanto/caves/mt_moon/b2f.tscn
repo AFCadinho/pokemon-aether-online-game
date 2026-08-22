@@ -346,7 +346,7 @@ rock_visual_style = 1
 [node name="RockSmash03" parent="Entities/Interactables" unique_id=1251392957 instance=ExtResource("9_rock")]
 position = Vector2(816, 2192)
 rock_id = "kanto_mt_moon_b2f_rock_south"
-rock_variant = 2
+rock_variant = 3
 rock_visual_style = 1
 
 [node name="MtMoonAmbush" type="Node2D" parent="Entities" unique_id=1721373281]
