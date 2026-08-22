@@ -1131,6 +1131,8 @@
   "ui.town_map.location.route_3.description": "Uma rota montanhosa a leste de Pewter City, rumo ao Mt. Moon.",
   "ui.town_map.location.route_4.name": "Route 4",
   "ui.town_map.location.route_4.description": "Uma trilha rochosa do Mt. Moon em direção a Cerulean City.",
+  "ui.town_map.location.cerulean_city.name": "Cerulean City",
+  "ui.town_map.location.cerulean_city.description": "Uma cidade luminosa de canais e pontes no norte de Kanto.",
   "ui.key_item.received_pokedex": "Você recebeu a Pokédex! Ela foi colocada no bolso de Itens-Chave.",
   "ui.key_item.received_town_map": "Você recebeu o Mapa da Cidade! Ele foi colocado no bolso de Itens-Chave.",
   "ui.oaks_lab.starter_received": "Você recebeu {pokemon} do Professor Oak!",

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- You can now travel between Route 4 and the first playable version of Cerulean City.
+
 - Team Rocket now reacts to your fallen Pokémon before your future self intervenes during the Mt. Moon rescue.
 
 - Your mugshot now appears for every line your character speaks during the Mt. Moon rescue.
