@@ -56,7 +56,7 @@ func _run() -> void:
 	_expect("dialogue_box.call(\"start_dialogue\", lines, resolved_speaker_name, portrait, show_portrait)" in controller_source, "each cinematic speaker controls its own portrait")
 	_expect("_face_rockets_toward_player()\n\tawait _summon_rocket_pokemon()" in controller_source, "the surrounding Grunts face the player before summoning")
 	_expect("counterattack cannot start without the future starter" in controller_source, "a missing starter stops the sequence instead of silently skipping the attack")
-	_expect("_future_self_spawn_global_position = other_fossil.global_position + Vector2(0, 32)" in controller_source, "the rescuer appears in front of the unchosen fossil")
+	_expect("_future_self_spawn_global_position = other_fossil.global_position + Vector2(0, 16)" in controller_source, "the rescuer appears beside the player at the unchosen fossil")
 	_expect("await _flee_rockets()\n\t\t_face_future_self_and_player()" in controller_source, "Team Rocket disappears before the player-facing conversation")
 	_expect("player.call(\"face_world_position\", future_self.global_position)" in controller_source, "the player faces the rescuer for their conversation")
 	var basement_source := _read_text("res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn")

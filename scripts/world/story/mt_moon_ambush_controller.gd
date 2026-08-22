@@ -128,7 +128,7 @@ func _show_miguel_takes_other_fossil() -> void:
 	var miguel := get_node_or_null(miguel_path) as Node2D
 	var other_fossil := get_node_or_null(dome_fossil_path) if InventoryService.has_item("helix-fossil") else get_node_or_null(helix_fossil_path)
 	if other_fossil != null:
-		_future_self_spawn_global_position = other_fossil.global_position + Vector2(0, 32)
+		_future_self_spawn_global_position = other_fossil.global_position + Vector2(0, 16)
 	if miguel == null or other_fossil == null:
 		return
 	other_fossil.visible = true
