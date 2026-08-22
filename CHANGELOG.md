@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Mt. Moon no longer moves you to Miguel after a Team Rocket battle. Miguel now speaks before taking the fossil you leave behind, Lass Iris patrols her intended route, and the Moon Stone on 1F appears in its intended spot.
+
 - Brock now clearly names Rock Slide when awarding its TM, the reward appears in your System messages, and the Hiker at Mt. Moon uses the correct portrait.
 
 - The main story now continues after Mt. Moon by directing you to Cerulean Gym and then toward Nugget Bridge while the Gym Leader is away.

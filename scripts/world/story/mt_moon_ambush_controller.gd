@@ -137,7 +137,7 @@ func _prepare_ambush() -> void:
 
 
 func _show_miguel_takes_other_fossil() -> void:
-	var miguel := get_node_or_null(miguel_path) as Node2D
+	var miguel := get_node_or_null(miguel_path) as MtMoonMiguelNPC
 	var other_fossil := get_node_or_null(dome_fossil_path) if InventoryService.has_item("helix-fossil") else get_node_or_null(helix_fossil_path)
 	if other_fossil != null:
 		var player := get_tree().get_first_node_in_group("player") as Node2D
@@ -154,6 +154,7 @@ func _show_miguel_takes_other_fossil() -> void:
 	var approach_tween := create_tween()
 	approach_tween.tween_property(miguel, "global_position", other_fossil.global_position + Vector2(0, 32), 0.35)
 	await approach_tween.finished
+	await miguel.show_fossil_choice_dialogue()
 	other_fossil.visible = false
 	var return_tween := create_tween()
 	return_tween.tween_property(miguel, "position", previous_position, 0.3)
