@@ -191,6 +191,7 @@
 
 **Fixed**
 
+- Pokémon Storage hover cards now keep a consistent size and show IVs in a clearer aligned grid.
 - Map changes now fade smoothly while keeping a dim view of the previous area during loading, reducing sudden dark-to-bright jumps.
 - Miguel now warns you and sends you back when he blocks the fossil corridor, instead of leaving you against an unexplained invisible barrier.
 - Miguel no longer moves into a Mt. Moon wall after his battle.

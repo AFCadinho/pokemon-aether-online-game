@@ -4,6 +4,15 @@ class_name PartyHoverCard
 
 const TYPE_ICON_PATH := "res://assets/sprites/types/%s.png"
 const CARD_WIDTH := 300.0
+const STORAGE_CARD_HEIGHT := 315.0
+const IV_STAT_ENTRIES: Array[Array] = [
+	["HP", "hp"],
+	["Atk", "atk"],
+	["Def", "def"],
+	["SpA", "spa"],
+	["SpD", "spd"],
+	["Spe", "spe"],
+]
 const STAT_BOOST_COLOR := Color(0.3882353, 0.83137256, 0.44313726, 1.0)
 const STAT_DROP_COLOR := Color(0.9372549, 0.26666668, 0.26666668, 1.0)
 const NATURE_DROP_COLOR := Color(0.9372549, 0.26666668, 0.26666668, 1.0)
@@ -27,7 +36,8 @@ const NATURE_DROP_COLOR := Color(0.9372549, 0.26666668, 0.26666668, 1.0)
 	$MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer3,
 	$MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer4,
 ]
-var iv_value_label: Label
+var iv_details_container: HBoxContainer
+var iv_value_labels: Dictionary = {}
 var ev_value_label: Label
 var show_ivs := false
 var show_evs := false
@@ -53,11 +63,7 @@ func _ready() -> void:
 	size.x = CARD_WIDTH
 	size.y = 0.0
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	iv_value_label = Label.new()
-	iv_value_label.name = "IVValueLabel"
-	iv_value_label.add_theme_font_size_override("font_size", 11)
-	iv_value_label.add_theme_color_override("font_color", Color(0.55, 0.75, 0.89, 1.0))
-	iv_value_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	iv_details_container = _create_iv_details()
 	ev_value_label = Label.new()
 	ev_value_label.name = "EVValueLabel"
 	ev_value_label.add_theme_font_size_override("font_size", 11)
@@ -65,10 +71,10 @@ func _ready() -> void:
 	ev_value_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	var content := $MarginContainer/VBoxContainer as VBoxContainer
 	content.add_child(ev_value_label)
-	content.add_child(iv_value_label)
+	content.add_child(iv_details_container)
 	var details_index := $MarginContainer/VBoxContainer/SeperationLabel2.get_index() + 1
 	content.move_child(ev_value_label, details_index)
-	content.move_child(iv_value_label, details_index + 1)
+	content.move_child(iv_details_container, details_index + 1)
 	if storage_visuals:
 		_apply_storage_visuals()
 	hide_card()
@@ -81,16 +87,16 @@ func show_for_pokemon(pokemon_data: Dictionary) -> void:
 
 func set_show_ivs(enabled: bool) -> void:
 	show_ivs = enabled
-	if iv_value_label != null:
-		iv_value_label.visible = enabled
+	if iv_details_container != null:
+		iv_details_container.visible = enabled
 
 
 func set_show_storage_details(enabled: bool) -> void:
 	show_ivs = enabled
 	show_evs = enabled
 	storage_visuals = enabled
-	if iv_value_label != null:
-		iv_value_label.visible = enabled
+	if iv_details_container != null:
+		iv_details_container.visible = enabled
 	if ev_value_label != null:
 		ev_value_label.visible = enabled
 	if is_node_ready():
@@ -125,12 +131,60 @@ func _apply_storage_visuals() -> void:
 	add_theme_stylebox_override("panel", style)
 	name_label.add_theme_font_size_override("font_size", 19)
 	($MarginContainer/VBoxContainer as VBoxContainer).add_theme_constant_override("separation", 3)
+	custom_minimum_size.y = STORAGE_CARD_HEIGHT
+	size.y = STORAGE_CARD_HEIGHT
+
+
+func _create_iv_details() -> HBoxContainer:
+	var details := HBoxContainer.new()
+	details.name = "IVDetailsContainer"
+	details.add_theme_constant_override("separation", 5)
+
+	var heading := Label.new()
+	heading.name = "IVHeadingLabel"
+	heading.custom_minimum_size.x = 24.0
+	heading.text = "IVs"
+	heading.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	heading.add_theme_font_size_override("font_size", 10)
+	heading.add_theme_color_override("font_color", Color(0.38431373, 0.84313726, 1.0, 1.0))
+	details.add_child(heading)
+
+	var grid := GridContainer.new()
+	grid.name = "IVGrid"
+	grid.columns = IV_STAT_ENTRIES.size()
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.add_theme_constant_override("h_separation", 2)
+	grid.add_theme_constant_override("v_separation", 0)
+	details.add_child(grid)
+
+	for entry: Array in IV_STAT_ENTRIES:
+		var header := Label.new()
+		header.name = "%sHeader" % str(entry[1]).to_pascal_case()
+		header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		header.text = str(entry[0]).to_upper()
+		header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		header.add_theme_font_size_override("font_size", 9)
+		header.add_theme_color_override("font_color", Color(0.48, 0.61, 0.70, 1.0))
+		grid.add_child(header)
+
+	for entry: Array in IV_STAT_ENTRIES:
+		var value := Label.new()
+		value.name = "%sValue" % str(entry[1]).to_pascal_case()
+		value.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		value.text = "–"
+		value.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		value.add_theme_font_size_override("font_size", 11)
+		value.add_theme_color_override("font_color", Color(0.90, 0.95, 1.0, 1.0))
+		grid.add_child(value)
+		iv_value_labels[str(entry[1])] = value
+
+	return details
 
 
 func position_near_mouse(mouse_position: Vector2, viewport_size: Vector2) -> void:
 	var padding := 12.0
 	custom_minimum_size.x = CARD_WIDTH
-	custom_minimum_size.y = 0.0
+	custom_minimum_size.y = STORAGE_CARD_HEIGHT if storage_visuals else 0.0
 	size.y = 0.0
 	reset_size()
 	size.x = minf(CARD_WIDTH, maxf(1.0, viewport_size.x - padding * 2.0))
@@ -148,7 +202,7 @@ func position_near_mouse(mouse_position: Vector2, viewport_size: Vector2) -> voi
 func position_near_rect(anchor_rect: Rect2, viewport_size: Vector2) -> void:
 	var padding := 10.0
 	custom_minimum_size.x = CARD_WIDTH
-	custom_minimum_size.y = 0.0
+	custom_minimum_size.y = STORAGE_CARD_HEIGHT if storage_visuals else 0.0
 	size.y = 0.0
 	reset_size()
 	# Long move/item labels can otherwise expand this root-level card to the
@@ -330,27 +384,24 @@ func _nature_modifiers(nature_value: String) -> Dictionary:
 
 
 func _set_ivs(ivs_value: Variant) -> void:
-	if iv_value_label == null:
+	if iv_details_container == null:
 		return
 	if not show_ivs or not (ivs_value is Dictionary):
-		iv_value_label.visible = false
+		iv_details_container.visible = false
 		return
 	var ivs: Dictionary = ivs_value as Dictionary
-	var parts: Array[String] = []
-	for entry: Array in [
-		["HP", "hp"],
-		["Atk", "atk"],
-		["Def", "def"],
-		["SpA", "spa"],
-		["SpD", "spd"],
-		["Spe", "spe"],
-	]:
-		if ivs.has(entry[1]):
-			parts.append("%s %d" % [entry[0], int(ivs.get(entry[1]))])
-	iv_value_label.text = _t("battle.hover.ivs", {
-		"values": " · ".join(parts),
-	})
-	iv_value_label.visible = not parts.is_empty()
+	var has_values := false
+	for entry: Array in IV_STAT_ENTRIES:
+		var stat_key := str(entry[1])
+		var value_label := iv_value_labels.get(stat_key) as Label
+		if value_label == null:
+			continue
+		if ivs.has(stat_key):
+			value_label.text = str(int(ivs.get(stat_key)))
+			has_values = true
+		else:
+			value_label.text = "–"
+	iv_details_container.visible = has_values
 
 
 func _set_evs(evs_value: Variant) -> void:
