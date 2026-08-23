@@ -3,6 +3,7 @@ extends SceneTree
 const ServiceScript := preload("res://scripts/services/lending_service.gd")
 const WorkspaceScript := preload("res://scripts/ui/lending_workspace.gd")
 const InvitationScript := preload("res://scripts/ui/loan_invitation_dialog.gd")
+const ReturnsDialogScript := preload("res://scripts/ui/loan_returns_dialog.gd")
 
 var failed := false
 
@@ -15,7 +16,7 @@ func _init() -> void:
 	_check(int(capabilities.get("maxLentItems", 0)) == 30, "lender item cap")
 	_check(bool(capabilities.get("requiresSameMap", false)), "nearby same-map requirement")
 	var source := FileAccess.get_file_as_string("res://scripts/services/lending_service.gd")
-	for contract in ["func create_loan", "func accept_loan", "func decline_loan", "func cancel_loan", "func request_return", "func return_assets", "func attach_item", "func detach_item", "func load_notifications", "func acknowledge_notification"]:
+	for contract in ["func create_loan", "func accept_loan", "func decline_loan", "func cancel_loan", "func request_return", "func return_assets", "func attach_item", "func detach_item", "func load_notifications", "func acknowledge_notification", "func load_return_inbox", "func acknowledge_return"]:
 		_check(source.contains(contract), contract)
 	var workspace_source := FileAccess.get_file_as_string("res://scripts/ui/lending_workspace.gd")
 	_check(workspace_source.contains("_open_attach_menu") and workspace_source.contains("_detach_loan_item"), "borrowed item attach and detach controls")
@@ -46,6 +47,12 @@ func _init() -> void:
 	_check(workspace_source.contains("_selected_item_copy_count") and workspace_source.contains("\"quantity\": int(selected_items.get"), "multiple item copies remain separate loan assets")
 	var box_candidates := workspace._box_candidates([{"boxIndex": 2, "slots": [{"slotIndex": 4, "pokemon": {"id": 9, "pokemon": {"species": "Abra", "level": 8}}}]}])
 	_check(box_candidates.size() == 1 and int(box_candidates[0].get("pokemonId", 0)) == 9 and str(box_candidates[0].get("sourceType", "")) == "box", "PC Box Pokemon are selectable loan candidates")
+	workspace.box_candidates = box_candidates
+	workspace.pokemon_source_mode = 1
+	workspace.pokemon_search_query = "abra"
+	_check(workspace._visible_pokemon_candidates().size() == 1, "loan Box search finds Pokemon across PC Boxes")
+	workspace.pokemon_search_query = "missingno"
+	_check(workspace._visible_pokemon_candidates().is_empty(), "loan Box search filters unmatched Pokemon")
 	workspace.pokemon_boxes = workspace._pokemon_boxes([{"boxIndex": 2, "slots": []}])
 	_check(workspace.pokemon_boxes.size() == 1 and int(workspace.pokemon_boxes[0].get("boxIndex", -1)) == 2, "untyped Box API arrays normalize before typed assignment")
 	_check(source.contains("duration_seconds not in [3600, 10800, 21600, 43200, 86400]"), "loan service rejects long alpha duration windows")
@@ -59,6 +66,8 @@ func _init() -> void:
 	var confirmation_source := FileAccess.get_file_as_string("res://scripts/ui/aether_confirmation_dialog.gd")
 	var confirmation_scene := FileAccess.get_file_as_string("res://scenes/interface/aether_confirmation_dialog.tscn")
 	_check(confirmation_source.contains("func add_custom_control") and confirmation_scene.contains("name=\"CustomContent\""), "Aether confirmation supports a styled loan selector")
+	var returns_source := FileAccess.get_file_as_string("res://scripts/ui/loan_returns_dialog.gd")
+	_check(returns_source.contains("locate_requested") and returns_source.contains("acknowledge_return"), "PC loan return inbox locates and acknowledges returned Pokemon")
 	workspace.free()
 	service.free()
 	quit(1 if failed else 0)

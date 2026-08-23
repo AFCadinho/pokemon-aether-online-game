@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Player Loan offers can now search Pokémon across every PC Box, and the PC has a separate Loan Returns inbox that locates recently returned Pokémon in their real storage position.
+
 - Fixed Player Loans showing an empty Pokémon selection when PC Box data was loaded.
 
 - Player Loans now support Pokémon from Party or PC Boxes, respect the recipient's trade level cap, and offer safer one-to-24-hour durations.
