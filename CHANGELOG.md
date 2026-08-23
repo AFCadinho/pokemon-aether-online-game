@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Player Loan cards now show the names and icons of every item in an offer instead of only an item count.
+
 - Player Loans now offer 48-hour and 72-hour durations, with every duration shown consistently in hours.
 
 - Player Loan offers now use separate Pokémon and item modes, so one offer can never mix both asset types.

@@ -524,7 +524,7 @@ func _render_loans() -> void:
 			if asset is Dictionary and str(asset.get("assetType", "")) == "pokemon": pokemon_count += 1
 			elif asset is Dictionary: item_count += 1
 		var details := Label.new()
-		details.text = _t("ui.lending.card.terms", {"pokemon": pokemon_count, "items": item_count, "fee": int(loan.get("feeAmount", 0)), "duration": _duration_label(int(loan.get("durationSeconds", 0)))})
+		details.text = _loan_terms_text(pokemon_count, item_count, int(loan.get("feeAmount", 0)), int(loan.get("durationSeconds", 0)))
 		details.add_theme_font_size_override("font_size", 10)
 		details.add_theme_color_override("font_color", MUTED)
 		stack.add_child(details)
@@ -536,6 +536,8 @@ func _render_loans() -> void:
 		var asset_stack := VBoxContainer.new()
 		asset_stack.add_theme_constant_override("separation", 4)
 		stack.add_child(asset_stack)
+		if not assets.is_empty():
+			asset_stack.add_child(_section_label(_loan_contents_title(pokemon_count, item_count)))
 		for asset_value: Variant in assets:
 			if asset_value is Dictionary:
 				asset_stack.add_child(_loan_asset_row(asset_value, is_borrower, status, str(loan.get("loanId", ""))))
@@ -598,6 +600,10 @@ func _loan_asset_row(asset: Dictionary, is_borrower: bool, loan_status: String, 
 		var asset_name := _item_display_name(item_id, str(snapshot.get("name", item_id)))
 		var identity := _loan_asset_identity(asset_name, _t(item_meta_key, {"state": _asset_state_label(asset_status)}))
 		row.add_child(identity)
+		var description := str(snapshot.get("short_desc", snapshot.get("description", ""))).strip_edges()
+		if description != "":
+			panel.tooltip_text = description
+			icon.tooltip_text = description
 		if is_borrower and loan_status in ["active", "return_pending"] and asset_status in ["active", "return_pending"]:
 			var action := Button.new()
 			action.text = _t("ui.lending.detach_item") if int(asset.get("heldPokemonId", 0)) > 0 else _t("ui.lending.attach_item")
@@ -610,6 +616,23 @@ func _loan_asset_row(asset: Dictionary, is_borrower: bool, loan_status: String, 
 			row.add_child(action)
 		_add_asset_return_controls(row, asset, asset_name, is_borrower, loan_status, return_requested, loan_id)
 	return panel
+
+
+func _loan_terms_text(pokemon_count: int, item_count: int, fee: int, duration_seconds: int) -> String:
+	var duration := _duration_label(duration_seconds)
+	if item_count > 0 and pokemon_count == 0:
+		return _t("ui.lending.card.item_terms", {"count": item_count, "fee": fee, "duration": duration})
+	if pokemon_count > 0 and item_count == 0:
+		return _t("ui.lending.card.pokemon_terms", {"count": pokemon_count, "fee": fee, "duration": duration})
+	return _t("ui.lending.card.terms", {"pokemon": pokemon_count, "items": item_count, "fee": fee, "duration": duration})
+
+
+func _loan_contents_title(pokemon_count: int, item_count: int) -> String:
+	if item_count > 0 and pokemon_count == 0:
+		return _t("ui.lending.card.item_contents", {"count": item_count})
+	if pokemon_count > 0 and item_count == 0:
+		return _t("ui.lending.card.pokemon_contents", {"count": pokemon_count})
+	return _t("ui.lending.card.asset_contents", {"count": pokemon_count + item_count})
 
 
 func _add_asset_return_controls(row: HBoxContainer, asset: Dictionary, asset_name: String, is_borrower: bool, loan_status: String, return_requested: bool, loan_id: String) -> void:
