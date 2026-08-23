@@ -50,6 +50,16 @@ func _run() -> void:
 		"a real Ogerpon nickname remains linked to its mask forme"
 	)
 	_check_equal(
+		formatter.format_pokemon_identity("Dragonite", "Dragonite-Mega"),
+		"Dragonite Mega",
+		"an unnicknamed opponent uses its revealed Mega species in the battle log"
+	)
+	_check_equal(
+		formatter.format_pokemon_identity("Puff", "Dragonite-Mega"),
+		"Puff (Dragonite Mega)",
+		"a custom nickname remains linked to its revealed Mega species"
+	)
+	_check_equal(
 		formatter.format_trainer_battle_start_messages("Pikachu", "Eevee", "Gary Oak"),
 		["Gary Oak wants to battle!", "Gary Oak sent out Eevee!", "Go! Pikachu!"],
 		"trainer battle start messages"
