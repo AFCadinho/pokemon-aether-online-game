@@ -850,7 +850,7 @@ func _confirm_asset_return(loan_id: String, asset_id: String, asset_name: String
 	dialog.popup_centered(Vector2i(500, 230))
 
 
-func _return_loan_asset(loan_id: String, asset_id: String, asset_name: String) -> void:
+func _return_loan_asset(loan_id: String, asset_id: String, _asset_name: String) -> void:
 	if mutation_in_flight:
 		return
 	mutation_in_flight = true
@@ -860,12 +860,10 @@ func _return_loan_asset(loan_id: String, asset_id: String, asset_name: String) -
 	if not bool(result.get("success", false)):
 		_show_error(str(result.get("error", _t("ui.lending.error.action"))))
 		return
-	var overlay := get_tree().get_first_node_in_group("ui_overlay")
-	if overlay != null and overlay.has_method("add_system_message"):
-		overlay.call("add_system_message", _t("ui.lending.notification.you_returned", {"asset": asset_name}))
 	await _refresh_after_asset_return()
 	await _refresh_assets()
 	await _refresh_loans()
+	await _poll_loan_notifications()
 
 
 func _refresh_after_asset_return() -> void:
@@ -1296,6 +1294,8 @@ func _poll_loan_notifications() -> void:
 				"ui.lending.notification.accepted",
 				"ui.lending.notification.asset_returned",
 				"ui.lending.notification.asset_auto_returned",
+				"ui.lending.notification.you_returned",
+				"ui.lending.notification.asset_auto_returned_from_you",
 			]:
 				custody_changed = true
 			var message_args: Dictionary = _notification_message_args(notification.get("messageArgs", {}))

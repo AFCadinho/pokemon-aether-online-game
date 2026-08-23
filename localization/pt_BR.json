@@ -4464,5 +4464,6 @@
   "ui.lending.notification.you_requested_asset": "Você pediu {asset} de volta.",
   "ui.lending.notification.asset_returned": "@{trainer} devolveu {asset}.",
   "ui.lending.notification.asset_auto_returned": "{asset} foi devolvido automaticamente após o prazo.",
+  "ui.lending.notification.asset_auto_returned_from_you": "Seu empréstimo de {asset} terminou e foi devolvido automaticamente para @{trainer}.",
   "ui.lending.notification.you_returned": "Você devolveu {asset} ao dono."
 }

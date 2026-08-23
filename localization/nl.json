@@ -4464,5 +4464,6 @@
   "ui.lending.notification.you_requested_asset": "Je hebt {asset} teruggevraagd.",
   "ui.lending.notification.asset_returned": "@{trainer} heeft {asset} teruggegeven.",
   "ui.lending.notification.asset_auto_returned": "{asset} is na de deadline automatisch teruggegeven.",
+  "ui.lending.notification.asset_auto_returned_from_you": "Je lening van {asset} is verlopen en automatisch teruggegeven aan @{trainer}.",
   "ui.lending.notification.you_returned": "Je hebt {asset} teruggegeven aan de eigenaar."
 }
