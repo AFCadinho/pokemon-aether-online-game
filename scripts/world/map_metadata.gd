@@ -16,6 +16,7 @@ extends Node2D
 @export_enum("outdoor", "indoor", "dark") var lighting_profile := "outdoor"
 @export_enum("outdoor", "disabled") var weather_profile := "outdoor"
 @export_range(0.0, 1.0, 0.01) var grass_encounter_chance := 0.0
+@export_range(0.0, 1.0, 0.01) var cave_encounter_chance := 0.0
 # An explicit track ID always wins. Leave this empty for a regular interior
 # that should inherit the track associated with its town or city music profile.
 @export var music_track_id := ""
@@ -84,10 +85,13 @@ func get_wild_encounter_area_id() -> String:
 
 
 func should_trigger_wild_encounter(encounter_type: String = "grass") -> bool:
-	if encounter_type != "grass":
-		return false
-
-	return randf() <= grass_encounter_chance
+	match encounter_type.strip_edges().to_lower():
+		"grass":
+			return randf() <= grass_encounter_chance
+		"cave":
+			return randf() <= cave_encounter_chance
+		_:
+			return false
 
 
 func _load_encounter_area_metadata() -> void:
@@ -107,6 +111,8 @@ func _load_encounter_area_metadata() -> void:
 	var encounter_types: Dictionary = metadata.get("encounterTypes", {})
 	var grass_metadata: Dictionary = encounter_types.get("grass", {})
 	grass_encounter_chance = clampf(float(grass_metadata.get("encounterChance", grass_encounter_chance)), 0.0, 1.0)
+	var cave_metadata: Dictionary = encounter_types.get("cave", {})
+	cave_encounter_chance = clampf(float(cave_metadata.get("encounterChance", cave_encounter_chance)), 0.0, 1.0)
 
 
 func is_position_blocked_by_character(world_position: Vector2) -> bool:

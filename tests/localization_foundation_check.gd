@@ -150,6 +150,9 @@ func _check_settings_scene_translation() -> void:
 	var title := menu.get_node_or_null("MarginContainer/VBoxContainer/Header/Heading/TitleLabel") as Label
 	var language_options := menu.find_child("LanguageOptionsButton", true, false) as OptionButton
 	var terminology_options := menu.find_child("TerminologyOptionsButton", true, false) as OptionButton
+	var sprite_style_options := menu.find_child("SpriteStyleOptionsButton", true, false) as OptionButton
+	var resolution_options := menu.find_child("ResolutionOptionsButton", true, false) as OptionButton
+	var world_pixel_scale_options := menu.find_child("WorldPixelScaleOptionsButton", true, false) as OptionButton
 	var tabs := menu.find_child("SettingsTabs", true, false) as TabContainer
 	var workspace := menu.find_child("SettingsWorkspace", true, false) as HBoxContainer
 	var navigation := menu.find_child("SettingsNavigation", true, false) as VBoxContainer
@@ -177,6 +180,20 @@ func _check_settings_scene_translation() -> void:
 		language_options != null and language_options.get_item_icon(0) != null,
 		"settings language selector displays flags"
 	)
+	for styled_dropdown: OptionButton in [
+		sprite_style_options,
+		resolution_options,
+		world_pixel_scale_options,
+	]:
+		_check(styled_dropdown != null, "graphics dropdown exists")
+		if styled_dropdown == null:
+			continue
+		var dropdown_popup := styled_dropdown.get_popup()
+		_check(styled_dropdown.has_theme_icon_override("arrow"), "%s uses the PokeAether dropdown arrow" % styled_dropdown.name)
+		_check(styled_dropdown.has_theme_stylebox_override("normal"), "%s replaces the default button surface" % styled_dropdown.name)
+		_check(dropdown_popup.has_theme_stylebox_override("panel"), "%s popup replaces the default Godot panel" % styled_dropdown.name)
+		_check(dropdown_popup.has_theme_stylebox_override("hover"), "%s popup has a custom hover state" % styled_dropdown.name)
+		_check(dropdown_popup.has_theme_icon_override("radio_checked"), "%s popup uses a custom selection marker" % styled_dropdown.name)
 	_check(tabs != null and tabs.get_tab_title(0) == "Algemeen", "dynamic tab title renders in Dutch")
 	_check(tabs != null and tabs.get_tab_title(1) == "Taal", "language settings use a dedicated localized tab")
 	_check(tabs != null and tabs.get_tab_title(4) == "Besturing", "Fishing hotkeys use a dedicated Controls tab")
