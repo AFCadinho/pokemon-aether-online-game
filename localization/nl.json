@@ -4383,6 +4383,8 @@
   "ui.lending.asset_status.released": "Vrijgegeven",
   "ui.lending.return": "Nu teruggeven",
   "ui.lending.return_asset": "Teruggeven",
+  "ui.lending.accept_return_request": "Accepteren en teruggeven",
+  "ui.lending.decline_return_request": "Afwijzen",
   "ui.lending.return_confirm_title": "Geleend bezit teruggeven",
   "ui.lending.return_confirm_text": "Wil je {asset} teruggeven aan de eigenaar? Je kunt het daarna niet meer gebruiken.",
   "ui.lending.request_return": "Terugvragen",
@@ -4473,5 +4475,6 @@
   "ui.lending.notification.asset_returned": "@{trainer} heeft {asset} teruggegeven.",
   "ui.lending.notification.asset_auto_returned": "{asset} is na de deadline automatisch teruggegeven.",
   "ui.lending.notification.asset_auto_returned_from_you": "Je lening van {asset} is verlopen en automatisch teruggegeven aan @{trainer}.",
-  "ui.lending.notification.you_returned": "Je hebt {asset} teruggegeven aan de eigenaar."
+  "ui.lending.notification.you_returned": "Je hebt {asset} teruggegeven aan de eigenaar.",
+  "ui.lending.notification.asset_return_declined": "@{trainer} heeft je verzoek om {asset} terug te geven afgewezen."
 }
