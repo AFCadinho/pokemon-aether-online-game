@@ -14,6 +14,7 @@ const TEXT := Color("#f4f0de")
 const MUTED := Color("#aeb8c5")
 const GOLD := Color("#d8b767")
 const INCOMING_POLL_SECONDS := 5.0
+const DEADLINE_REFRESH_SECONDS := 30.0
 
 var target_username := ""
 var capabilities: Dictionary = {}
@@ -38,6 +39,7 @@ var loan_asset_mode := "pokemon"
 var loan_overview_asset_type := "pokemon"
 var loan_overview_view := "borrowed"
 var loan_counts: Dictionary = {}
+var loan_timing_rows: Array[Dictionary] = []
 
 var target_display_label: Label
 var duration_select: OptionButton
@@ -65,6 +67,7 @@ func _ready() -> void:
 	borderless = true
 	_build_ui()
 	_setup_incoming_offers()
+	_setup_deadline_refresh()
 	close_requested.connect(hide)
 
 
@@ -500,6 +503,7 @@ func _refresh_loans() -> void:
 
 func _render_loans() -> void:
 	_clear(loans_list)
+	loan_timing_rows.clear()
 	var visible_loans := _loans_for_asset_type(loan_overview_asset_type)
 	if visible_loans.is_empty():
 		var empty := Label.new()
@@ -551,6 +555,7 @@ func _render_loans() -> void:
 		timing.add_theme_font_size_override("font_size", 10)
 		timing.add_theme_color_override("font_color", _status_color(status))
 		stack.add_child(timing)
+		loan_timing_rows.append({"label": timing, "loan": loan.duplicate(true)})
 		var asset_stack := VBoxContainer.new()
 		asset_stack.add_theme_constant_override("separation", 4)
 		stack.add_child(asset_stack)
@@ -921,7 +926,7 @@ func _loan_timing_text(loan: Dictionary) -> String:
 		"pending":
 			return _t("ui.lending.card.offer_expires", {"date": _format_loan_time(_optional_string(loan.get("offerExpiresAt")))})
 		"active":
-			return _t("ui.lending.card.due", {"date": _format_loan_time(_optional_string(loan.get("dueAt")))})
+			return _loan_deadline_text(_optional_string(loan.get("dueAt")))
 		"return_pending":
 			return _t("ui.lending.card.return_requested", {"date": _format_loan_time(_optional_string(loan.get("returnRequestedAt")))})
 		"returned":
@@ -929,6 +934,37 @@ func _loan_timing_text(loan: Dictionary) -> String:
 		"expired":
 			return _t("ui.lending.card.expired", {"date": _format_loan_time(_optional_string(loan.get("offerExpiresAt")))})
 	return _t("ui.lending.card.created", {"date": _format_loan_time(_optional_string(loan.get("createdAt")))})
+
+
+func _loan_deadline_text(deadline: String, now_unix := -1) -> String:
+	var date_text := _format_loan_time(deadline)
+	var remaining := _loan_remaining_text(deadline, now_unix)
+	if remaining == "":
+		return _t("ui.lending.card.due", {"date": date_text})
+	return _t("ui.lending.card.due_with_remaining", {"date": date_text, "remaining": remaining})
+
+
+func _loan_remaining_text(deadline: String, now_unix := -1) -> String:
+	var seconds := _seconds_until_loan_deadline(deadline, now_unix)
+	if seconds < 0 or seconds >= 3600:
+		return ""
+	if seconds == 0:
+		return _t("ui.lending.remaining.due_now")
+	if seconds < 60:
+		return _t("ui.lending.remaining.less_than_minute")
+	var minutes := maxi(int(floor(float(seconds) / 60.0)), 1)
+	return _t("ui.lending.remaining.minute" if minutes == 1 else "ui.lending.remaining.minutes", {"count": minutes})
+
+
+func _seconds_until_loan_deadline(deadline: String, now_unix := -1) -> int:
+	var cleaned := deadline.strip_edges()
+	if cleaned.length() < 19:
+		return -1
+	var deadline_unix := int(Time.get_unix_time_from_datetime_string(cleaned.left(19)))
+	if deadline_unix <= 0:
+		return -1
+	var current_unix := int(Time.get_unix_time_from_system()) if now_unix < 0 else now_unix
+	return maxi(deadline_unix - current_unix, 0)
 
 
 func _format_loan_time(value: String) -> String:
@@ -1168,6 +1204,24 @@ func _setup_incoming_offers() -> void:
 	add_child(timer)
 	_poll_incoming_offers.call_deferred()
 	_poll_loan_notifications.call_deferred()
+
+
+func _setup_deadline_refresh() -> void:
+	var timer := Timer.new()
+	timer.wait_time = DEADLINE_REFRESH_SECONDS
+	timer.autostart = true
+	timer.timeout.connect(_refresh_loan_deadline_labels)
+	add_child(timer)
+
+
+func _refresh_loan_deadline_labels() -> void:
+	if not visible or loans_panel == null or not loans_panel.visible:
+		return
+	for entry: Dictionary in loan_timing_rows:
+		var label := entry.get("label") as Label
+		var loan: Dictionary = entry.get("loan", {}) if entry.get("loan", {}) is Dictionary else {}
+		if is_instance_valid(label):
+			label.text = _loan_timing_text(loan)
 
 
 func _poll_incoming_offers() -> void:

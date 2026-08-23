@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Loan deadlines now count down in minutes during their final hour while keeping the exact UTC deadline visible.
+
 - Item loans now reliably show every individual item and its return action, including items that are currently in the Bag.
 
 - Player Loans now separates borrowed and lent assets, provides Pokémon and Item tabs, and lets each item copy be viewed, returned, or requested back individually.

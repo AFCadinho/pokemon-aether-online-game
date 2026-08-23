@@ -61,6 +61,11 @@ func _init() -> void:
 	]
 	_check(workspace._loans_for_asset_type("pokemon").size() == 1 and workspace._loans_for_asset_type("items").size() == 1, "asset tabs keep each single-type loan in its matching overview")
 	_check(workspace._format_loan_time("2026-08-23T16:45:12+00:00") == "2026-08-23 16:45 UTC", "loan timestamps are player readable")
+	var countdown_now := int(Time.get_unix_time_from_datetime_string("2026-08-23T20:00:00"))
+	_check(workspace._seconds_until_loan_deadline("2026-08-23T20:30:00+00:00", countdown_now) == 1800, "loan deadline countdown parses backend UTC timestamps")
+	_check(workspace._loan_remaining_text("2026-08-23T20:30:00+00:00", countdown_now) == "ui.lending.remaining.minutes", "the final loan hour switches to minute precision")
+	_check(workspace._loan_remaining_text("2026-08-23T21:00:00+00:00", countdown_now) == "", "a full hour remaining keeps the normal deadline display")
+	_check(workspace_source.contains("_setup_deadline_refresh") and workspace_source.contains("_refresh_loan_deadline_labels"), "visible loan minute countdowns refresh while the window stays open")
 	_check(workspace._status_color("pending") == Color("#d8b767") and workspace._status_color("expired").a == 1.0, "loan status colors remain distinct")
 	_check(workspace_source.contains("_loan_terms_text") and workspace_source.contains("ui.lending.card.item_terms"), "item loan terms omit the irrelevant Pokemon count")
 	_check(workspace_source.contains("_loan_contents_title") and workspace_source.contains("ui.lending.card.item_contents"), "item loan cards label their contents and count")
