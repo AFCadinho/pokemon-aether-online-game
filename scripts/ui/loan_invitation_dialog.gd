@@ -229,7 +229,7 @@ func _act(action: String) -> void:
 	var result: Dictionary = await service.accept_loan(loan_id) if action == "accept" else await service.decline_loan(loan_id)
 	action_in_flight = false
 	if not bool(result.get("success", false)):
-		terms_label.text = str(result.get("error", _t("ui.lending.error.action")))
+		terms_label.text = _friendly_error(result)
 		terms_label.add_theme_color_override("font_color", Color("#ff7b82"))
 		accept_button.disabled = false
 		decline_button.disabled = false
@@ -275,6 +275,15 @@ func _notify_resolution(action: String) -> void:
 		return
 	var key := "ui.lending.invitation.accepted" if action == "accept" else "ui.lending.invitation.declined"
 	overlay.call("add_system_message", _t(key))
+
+
+func _friendly_error(result: Dictionary) -> String:
+	var code := str(result.get("code", ""))
+	if code in ["loan_same_map_required", "loan_presence_unavailable"]:
+		var localizer := get_node_or_null("/root/BackendErrorLocalization")
+		if localizer != null:
+			return str(localizer.call("message", result, "ui.lending.error.action"))
+	return str(result.get("error", _t("ui.lending.error.action")))
 
 
 func _open_summary(snapshot: Dictionary) -> void:

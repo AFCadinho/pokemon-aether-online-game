@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Player loan offers now start only from a nearby Trainer on the same map. The Socials Loans window is now focused entirely on reviewing and managing loans.
+
 - Accepting a player loan now immediately refreshes the Party, PC, Bag, and wallet, confirms where the borrowed assets are available, and uses clearly visible selection boxes.
 
 - Incoming player loan offers now appear like trade requests, with a clear asset summary and direct accept or decline actions.

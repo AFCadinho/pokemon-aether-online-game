@@ -13,6 +13,7 @@ func _init() -> void:
 	_check(bool(capabilities.get("enabled", false)), "enabled capability")
 	_check(int(capabilities.get("maxBorrowedPokemon", 0)) == 6, "borrower Pokemon cap")
 	_check(int(capabilities.get("maxLentItems", 0)) == 30, "lender item cap")
+	_check(bool(capabilities.get("requiresSameMap", false)), "nearby same-map requirement")
 	var source := FileAccess.get_file_as_string("res://scripts/services/lending_service.gd")
 	for contract in ["func create_loan", "func accept_loan", "func decline_loan", "func cancel_loan", "func request_return", "func return_assets", "func attach_item", "func detach_item"]:
 		_check(source.contains(contract), contract)
@@ -24,6 +25,8 @@ func _init() -> void:
 	_check(invitation_source.contains("open_trade_pokemon_summary"), "incoming Pokemon can open a read-only summary")
 	_check(invitation_source.contains("_refresh_after_acceptance") and invitation_source.contains("refresh_party") and invitation_source.contains("load_inventory"), "accepted loans refresh visible player state")
 	_check(workspace_source.contains("_apply_checkbox_style") and workspace_source.contains("_checkbox_icon"), "loan asset selection remains clearly visible")
+	_check(workspace_source.contains("_set_workspace_mode(false)") and workspace_source.contains("loans_panel.visible = not is_composing"), "Socials Loans opens as a management-only overview")
+	_check(workspace_source.contains("create_loan(target_username") and not workspace_source.contains("create_loan(target_input"), "nearby target is fixed by player interaction")
 	var workspace := WorkspaceScript.new()
 	var party := workspace._party_candidates([{"id": 7, "pokemon": {"species": "Pikachu", "level": 22, "item": "light-ball"}}])
 	_check(party.size() == 1 and int(party[0].get("pokemonId", 0)) == 7, "party candidate normalization")
