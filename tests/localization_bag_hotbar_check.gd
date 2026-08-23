@@ -28,6 +28,12 @@ func _run() -> void:
 		),
 		"number keys bypass the overworld hotbar during battle"
 	)
+	_check(
+		not overlay_source.contains(
+			'bag_item_context_menu.add_item(LocalizationManager.text("ui.bag.action.inspect")'
+		),
+		"Bag context menu omits the redundant Inspect action"
+	)
 	if localization_manager == null or item_localization == null or settings_manager == null:
 		quit(1)
 		return
