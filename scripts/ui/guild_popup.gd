@@ -116,6 +116,7 @@ var is_debug_preview := false
 var is_loading_guilds := false
 var is_creating_guild := false
 var is_application_action_in_flight := false
+var is_leaving_guild := false
 var directory_request_generation := 0
 var has_explicit_page_selection := false
 var active_guild_section := "overview"
@@ -1139,11 +1140,79 @@ func _build_guild_overview(guild: Dictionary) -> Control:
 	members_button.pressed.connect(_show_guild_section.bind("members"))
 	_apply_button_style(members_button)
 	actions.add_child(members_button)
-	var action_hint := _localized_label("ui.guild.quick_actions.hint", 11, UI_MUTED)
+	var own_membership := _dictionary(guild_home.get("membership", {}))
+	var is_leader := str(own_membership.get("role", "member")) == "leader"
+	var leave_button := Button.new()
+	leave_button.name = "LeaveGuildButton"
+	_set_localized_property(leave_button, "text", "ui.guild.leave.action")
+	leave_button.custom_minimum_size = Vector2(170, 42)
+	leave_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	leave_button.disabled = is_leader or is_leaving_guild
+	_set_localized_property(
+		leave_button,
+		"tooltip_text",
+		"ui.guild.leave.leader_blocked" if is_leader else "ui.guild.leave.tooltip"
+	)
+	leave_button.pressed.connect(_confirm_guild_leave.bind(guild))
+	_apply_button_style(leave_button, "danger")
+	actions.add_child(leave_button)
+	var action_hint := _localized_label(
+		"ui.guild.leave.leader_blocked" if is_leader else "ui.guild.quick_actions.hint",
+		11,
+		UI_MUTED
+	)
 	action_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	copy.add_child(action_hint)
 	overview.add_child(actions_panel)
 	return overview
+
+
+func _confirm_guild_leave(guild: Dictionary) -> void:
+	if is_leaving_guild or str(_dictionary(guild_home.get("membership", {})).get("role", "")) == "leader":
+		return
+	var dialog := ConfirmationDialog.new()
+	dialog.name = "GuildLeaveConfirmationDialog"
+	dialog.title = _t("ui.guild.leave.confirm_title")
+	dialog.dialog_text = _t("ui.guild.leave.confirm", {
+		"guild": str(guild.get("name", _t("ui.guild.fallback.this_guild"))),
+	})
+	dialog.ok_button_text = _t("ui.guild.leave.action")
+	dialog.cancel_button_text = _t("common.cancel")
+	dialog.confirmed.connect(_leave_current_guild.bind(guild), CONNECT_ONE_SHOT)
+	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	add_child(dialog)
+	dialog.popup_centered(Vector2i(460, 190))
+
+
+func _leave_current_guild(guild: Dictionary) -> void:
+	if is_leaving_guild:
+		return
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		_set_member_status(_t("ui.guild.error.service_unavailable"), true)
+		return
+	is_leaving_guild = true
+	_render_guild_home()
+	_set_member_status(_t("ui.guild.leave.status"), false)
+	var response: Variant = await guild_service.call("leave_guild")
+	var result := _dictionary(response)
+	is_leaving_guild = false
+	if not bool(result.get("success", false)):
+		_render_guild_home()
+		_set_member_status(str(result.get("error", _t("ui.guild.leave.error"))), true)
+		return
+	membership.clear()
+	guild_home.clear()
+	guild_bank_state.clear()
+	active_guild_section = "overview"
+	active_guild_bank_category = ""
+	_refresh_membership_state()
+	_show_page("browse")
+	await _refresh_from_server()
+	_set_browse_status(_t("ui.guild.leave.success", {
+		"guild": str(result.get("guildName", guild.get("name", _t("ui.guild.fallback.this_guild")))),
+	}), false)
 
 
 func _build_guild_bank() -> Control:
@@ -3720,6 +3789,12 @@ func _apply_button_style(button: Button, variant: String = "default") -> void:
 		pressed_bg = Color("#071624f2")
 		border = Color("#4b9dc4cc")
 		hover_border = Color("#79d9ff")
+	elif variant == "danger":
+		normal_bg = Color("#35151bf2")
+		hover_bg = Color("#512029f2")
+		pressed_bg = Color("#260d12f2")
+		border = Color("#b84f5dcc")
+		hover_border = Color("#ff8895")
 	button.add_theme_color_override("font_color", UI_TEXT)
 	button.add_theme_color_override("font_hover_color", UI_TEXT)
 	button.add_theme_color_override("font_pressed_color", UI_TEXT)
