@@ -270,16 +270,18 @@ func _run() -> void:
 	_check(rock_area_selector.visible and rock_area_selector.item_count == 2, "Rock Smash offers one compact dropdown entry per area")
 	_check(rock_area_selector.get_item_text(0).contains("Pewter City") and rock_area_selector.get_item_text(0).contains("1/4"), "area options include their daily smash progress")
 	_check((panel.get("targets_container") as GridContainer).get_child_count() == 4, "the Pewter rock list contains all four fixed rocks")
+	await process_frame
+	var pewter_rock_height := ((panel.get("targets_container") as GridContainer).get_child(0) as PanelContainer).size.y
 	rock_area_selector.select(1)
 	panel.call("_select_rock_area", 1)
 	_check(str(panel.get("selected_target_town_key")) == "ui.skills.rock_smash.location.mt_moon", "selecting a dropdown area switches the active rock group")
 	_check((panel.get("targets_container") as GridContainer).get_child_count() == 2, "the dropdown only shows rocks from its selected area")
+	await process_frame
+	var mt_moon_rock_height := ((panel.get("targets_container") as GridContainer).get_child(0) as PanelContainer).size.y
+	_check(is_equal_approx(pewter_rock_height, mt_moon_rock_height) and pewter_rock_height <= 55.0, "Pewter and Mt. Moon use the same compact rock cards")
 	rock_area_selector.select(0)
 	panel.call("_select_rock_area", 0)
 	_check((panel.get("targets_container") as GridContainer).columns == 2, "wide Rock Smash lists use two columns")
-	await process_frame
-	var spacious_first_rock := (panel.get("targets_container") as GridContainer).get_child(0) as PanelContainer
-	_check(spacious_first_rock.size.y >= 100.0, "short Rock Smash lists spread their cards across more of the available height")
 	panel.size.x = 620.0
 	panel.call("_on_window_resized")
 	_check((panel.get("targets_container") as GridContainer).columns == 1, "narrow Rock Smash lists collapse to one readable column")

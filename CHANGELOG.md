@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Short Rock Smash area lists now use more of the available Skills window instead of bunching every rock at the top.
+- Rock Smash now keeps rock cards compact and consistent across every area.
 
 - Rock Smash now groups daily rocks in a compact area dropdown that shows each area's daily progress.
 
