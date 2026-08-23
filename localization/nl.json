@@ -4351,6 +4351,8 @@
   "ui.lending.error.same_map": "Beide Trainers moeten online, beschikbaar en op dezelfde map zijn.",
   "ui.lending.error.presence_unavailable": "De controle van nabije Trainers is tijdelijk niet beschikbaar. Probeer het zo opnieuw.",
   "ui.lending.error.selection_limit": "Kies maximaal zes Pokémon en zes items.",
+  "ui.lending.party_required_hint": "Je moet minimaal één Pokémon in je party houden.",
+  "ui.lending.error.party_required": "Houd bij het uitlenen minimaal één Pokémon in je party.",
   "ui.lending.attach_item": "Item geven",
   "ui.lending.detach_item": "Item losmaken",
   "ui.lending.attach_title": "{item} geven",

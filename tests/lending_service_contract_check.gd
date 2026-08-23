@@ -25,6 +25,7 @@ func _init() -> void:
 	_check(invitation_source.contains("open_trade_pokemon_summary"), "incoming Pokemon can open a read-only summary")
 	_check(invitation_source.contains("_refresh_after_acceptance") and invitation_source.contains("refresh_party") and invitation_source.contains("load_inventory"), "accepted loans refresh visible player state")
 	_check(workspace_source.contains("_apply_checkbox_style") and workspace_source.contains("_checkbox_icon"), "loan asset selection remains clearly visible")
+	_check(workspace_source.contains("_toggle_pokemon_selection") and workspace_source.contains("party_candidates.size() - 1") and workspace_source.contains("ui.lending.error.party_required"), "lender must retain one party Pokemon")
 	_check(workspace_source.contains("_set_workspace_mode(false)") and workspace_source.contains("loans_panel.visible = not is_composing"), "Socials Loans opens as a management-only overview")
 	_check(workspace_source.contains("create_loan(target_username") and not workspace_source.contains("create_loan(target_input"), "nearby target is fixed by player interaction")
 	_check(workspace_source.contains("_loan_asset_row") and workspace_source.contains("_status_badge") and workspace_source.contains("_loan_timing_text"), "loan cards expose assets, status, and timing details")

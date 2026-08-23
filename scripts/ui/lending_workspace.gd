@@ -265,6 +265,12 @@ func _refresh_assets() -> void:
 func _render_assets() -> void:
 	_clear(assets_list)
 	assets_list.add_child(_section_label(_t("ui.lending.assets.pokemon")))
+	var party_hint := Label.new()
+	party_hint.text = _t("ui.lending.party_required_hint")
+	party_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	party_hint.add_theme_color_override("font_color", GOLD)
+	party_hint.add_theme_font_size_override("font_size", 10)
+	assets_list.add_child(party_hint)
 	for candidate: Dictionary in party_candidates:
 		var pokemon_id := int(candidate.get("pokemonId", 0))
 		assets_list.add_child(_pokemon_candidate_row(candidate, pokemon_id))
@@ -573,6 +579,9 @@ func _create_loan() -> void:
 	if pokemon_ids.size() > 6 or items.size() > 6:
 		_show_error(_t("ui.lending.error.selection_limit"))
 		return
+	if not pokemon_ids.is_empty() and pokemon_ids.size() >= party_candidates.size():
+		_show_error(_t("ui.lending.error.party_required"))
+		return
 	mutation_in_flight = true
 	create_button.disabled = true
 	var service := get_node_or_null("/root/LendingService")
@@ -601,7 +610,7 @@ func _set_workspace_mode(is_composing: bool) -> void:
 
 func _friendly_error(result: Dictionary, fallback_key: String) -> String:
 	var code := str(result.get("code", ""))
-	if code in ["loan_same_map_required", "loan_presence_unavailable"]:
+	if code in ["loan_same_map_required", "loan_presence_unavailable", "loan_lender_party_required"]:
 		var localizer := get_node_or_null("/root/BackendErrorLocalization")
 		if localizer != null:
 			return str(localizer.call("message", result, fallback_key))
@@ -866,6 +875,18 @@ func _set_selected(target: Dictionary, key: Variant, enabled: bool) -> void:
 	else: target.erase(key)
 
 
+func _toggle_pokemon_selection(enabled: bool, pokemon_id: int, checkbox: CheckBox) -> void:
+	if not enabled:
+		selected_pokemon.erase(pokemon_id)
+		return
+	var maximum_selection := maxi(party_candidates.size() - 1, 0)
+	if selected_pokemon.size() >= maximum_selection:
+		checkbox.set_pressed_no_signal(false)
+		_show_error(_t("ui.lending.error.party_required"))
+		return
+	selected_pokemon[pokemon_id] = true
+
+
 func _add_action(parent: HBoxContainer, label: String, callback: Callable) -> void:
 	var button := Button.new()
 	button.text = label
@@ -889,7 +910,7 @@ func _pokemon_candidate_row(candidate: Dictionary, pokemon_id: int) -> Control:
 	var box := CheckBox.new()
 	box.focus_mode = Control.FOCUS_NONE
 	_apply_checkbox_style(box)
-	box.toggled.connect(func(enabled: bool): _set_selected(selected_pokemon, pokemon_id, enabled))
+	box.toggled.connect(_toggle_pokemon_selection.bind(pokemon_id, box))
 	row.add_child(box)
 	var payload: Dictionary = candidate.get("pokemon", {})
 	var icon_button := Button.new()
