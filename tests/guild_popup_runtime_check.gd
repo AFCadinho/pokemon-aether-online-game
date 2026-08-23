@@ -204,7 +204,33 @@ func _run() -> void:
 	_check(permission_summary != null and permission_summary.text.contains("allowed"), "Guild Bank shows the leader's transaction rights")
 	if pokemon_action != null:
 		pokemon_action.pressed.emit()
-	_check(popup.member_status_label != null and not popup.member_status_label.text.is_empty(), "opening a bank category gives clear foundation feedback")
+		await process_frame
+	_check(popup.find_child("GuildBankWorkspace", true, false) != null, "a bank category opens a dedicated workspace")
+	_check(popup.find_child("GuildBankPokemonWorkspace", true, false) != null, "Pokémon storage renders its live workspace")
+	_check(popup.find_child("GuildBankPokemonDepositButton_22", true, false) != null, "owned Pokémon can be deposited")
+	_check(popup.find_child("GuildBankPokemonWithdrawButton_21", true, false) != null, "another member's stored Pokémon can be borrowed")
+	var bank_back := popup.find_child("GuildBankBackButton", true, false) as Button
+	if bank_back != null:
+		bank_back.pressed.emit()
+		await process_frame
+	items_action = popup.find_child("GuildBankItemsAction", true, false) as Button
+	if items_action != null:
+		items_action.pressed.emit()
+		await process_frame
+	_check(popup.find_child("GuildBankItemsWorkspace", true, false) != null, "item storage renders Guild and personal inventories")
+	_check(popup.find_child("GuildBankItemWithdrawButton_potion", true, false) != null, "stored items can be withdrawn")
+	_check(popup.find_child("GuildBankItemDepositButton_poke-ball", true, false) != null, "bag items can be deposited")
+	bank_back = popup.find_child("GuildBankBackButton", true, false) as Button
+	if bank_back != null:
+		bank_back.pressed.emit()
+		await process_frame
+	funds_action = popup.find_child("GuildBankFundsAction", true, false) as Button
+	if funds_action != null:
+		funds_action.pressed.emit()
+		await process_frame
+	_check(popup.find_child("GuildBankFundsWorkspace", true, false) != null, "shared funds render Guild and player balances")
+	_check(popup.find_child("GuildBankMoneyDepositButton", true, false) != null, "Guild funds can be deposited")
+	_check(popup.find_child("GuildBankMoneyWithdrawButton", true, false) != null, "Guild funds can be withdrawn")
 	_check(popup.find_child("GuildTravelBar", true, false) != null, "guild travel remains available while viewing the bank")
 	overview_tab = popup.find_child("GuildOverviewTab", true, false) as Button
 	if overview_tab != null:

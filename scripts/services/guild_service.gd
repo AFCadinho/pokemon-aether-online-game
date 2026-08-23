@@ -7,6 +7,7 @@ signal guild_changed(guild: Dictionary)
 
 const GUILDS_ENDPOINT := "/game/guilds"
 const GUILD_HOME_ENDPOINT := "/game/guilds/me"
+const GUILD_BANK_ENDPOINT := "/game/guilds/me/bank"
 const GUILD_INVITATIONS_ENDPOINT := "/game/guild-invitations"
 const GUILD_LOBBY_TELEPORT_ENDPOINT := "/game/guilds/me/lobby/teleport"
 const AETHER_CLASH_CHAMPION_ENDPOINT := "/game/aether-clash/champion"
@@ -97,6 +98,35 @@ func load_home() -> Dictionary:
 		_set_current_membership({})
 		_set_current_guild({})
 	return response if not bool(response.get("success", false)) else _home_result(response.get("body", {}))
+
+
+func load_bank() -> Dictionary:
+	var response := await _authenticated_request(GUILD_BANK_ENDPOINT, HTTPClient.METHOD_GET, "")
+	return response if not bool(response.get("success", false)) else _bank_result(response.get("body", {}))
+
+
+func deposit_bank_money(amount: int) -> Dictionary:
+	return await _bank_action("/money/deposit", {"amount": amount})
+
+
+func withdraw_bank_money(amount: int) -> Dictionary:
+	return await _bank_action("/money/withdraw", {"amount": amount})
+
+
+func deposit_bank_item(item_id: String, quantity: int) -> Dictionary:
+	return await _bank_action("/items/deposit", {"itemId": item_id, "quantity": quantity})
+
+
+func withdraw_bank_item(item_id: String, quantity: int) -> Dictionary:
+	return await _bank_action("/items/withdraw", {"itemId": item_id, "quantity": quantity})
+
+
+func deposit_bank_pokemon(pokemon_id: int) -> Dictionary:
+	return await _bank_action("/pokemon/deposit", {"pokemonId": pokemon_id})
+
+
+func withdraw_bank_pokemon(pokemon_id: int) -> Dictionary:
+	return await _bank_action("/pokemon/withdraw", {"pokemonId": pokemon_id})
 
 
 func teleport_to_lobby() -> Dictionary:
@@ -282,6 +312,31 @@ func _home_result(value: Variant) -> Dictionary:
 		"pendingApplications": _array(body.get("pendingApplications", [])),
 		"emblemTemplates": _array(body.get("emblemTemplates", [])),
 		"rankPermissions": _dictionary(body.get("rankPermissions", {})),
+	}
+
+
+func _bank_action(path: String, payload: Dictionary) -> Dictionary:
+	var response := await _authenticated_request(
+		GUILD_BANK_ENDPOINT + path,
+		HTTPClient.METHOD_POST,
+		JSON.stringify(payload)
+	)
+	return response if not bool(response.get("success", false)) else _bank_result(response.get("body", {}))
+
+
+func _bank_result(value: Variant) -> Dictionary:
+	var body := _dictionary(value)
+	return {
+		"success": true,
+		"guildId": int(body.get("guildId", 0)),
+		"access": _dictionary(body.get("access", {})).duplicate(true),
+		"funds": _dictionary(body.get("funds", {})).duplicate(true),
+		"items": _array(body.get("items", [])).duplicate(true),
+		"inventory": _array(body.get("inventory", [])).duplicate(true),
+		"pokemon": _array(body.get("pokemon", [])).duplicate(true),
+		"depositablePokemon": _array(body.get("depositablePokemon", [])).duplicate(true),
+		"recentActivity": _array(body.get("recentActivity", [])).duplicate(true),
+		"party": _array(_dictionary(body.get("party", {})).get("party", [])).duplicate(true),
 	}
 
 

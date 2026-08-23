@@ -118,6 +118,10 @@ var is_application_action_in_flight := false
 var directory_request_generation := 0
 var has_explicit_page_selection := false
 var active_guild_section := "overview"
+var active_guild_bank_category := ""
+var guild_bank_state: Dictionary = {}
+var is_loading_guild_bank := false
+var is_guild_bank_action_in_flight := false
 var guild_section_buttons: Dictionary = {}
 var directory_recruitment_filter := "all"
 var directory_focus_filter := "all"
@@ -304,6 +308,31 @@ func show_debug_member_preview() -> void:
 			"member": ["bank_deposit", "bank_withdraw", "bank_borrow"],
 			"recruit": [],
 		},
+	}
+	guild_bank_state = {
+		"access": {"canDeposit": true, "canWithdraw": true, "canBorrow": true},
+		"funds": {"balance": 250000, "playerBalance": 87500},
+		"items": [
+			{"itemId": "potion", "name": "Potion", "category": "Medicine", "quantity": 18},
+		],
+		"inventory": [
+			{"itemId": "poke-ball", "name": "Poke Ball", "category": "Poke Balls", "quantity": 12},
+		],
+		"pokemon": [
+			{
+				"pokemonId": 21,
+				"pokemon": {"name": "Blastoise", "level": 50},
+				"ownerUserId": 2,
+				"depositedBy": "Maple",
+				"isBorrowed": false,
+				"canReturn": false,
+			},
+		],
+		"depositablePokemon": [
+			{"pokemonId": 22, "pokemon": {"name": "Venusaur", "level": 48}},
+		],
+		"recentActivity": [],
+		"party": [],
 	}
 	set_guilds([guild])
 	_refresh_membership_state()
@@ -981,7 +1010,11 @@ func _show_guild_section(section: String) -> void:
 	if section not in ["overview", "bank", "members", "management"]:
 		return
 	active_guild_section = section
+	if section != "bank":
+		active_guild_bank_category = ""
 	_render_guild_home()
+	if section == "bank" and not is_debug_preview:
+		_load_guild_bank_async.call_deferred()
 
 
 func _build_guild_travel_bar() -> Control:
@@ -1076,6 +1109,8 @@ func _build_guild_overview(guild: Dictionary) -> Control:
 
 
 func _build_guild_bank() -> Control:
+	if active_guild_bank_category != "":
+		return _build_guild_bank_workspace()
 	var panel := PanelContainer.new()
 	panel.name = "GuildBankSection"
 	panel.custom_minimum_size = Vector2(0, 245)
@@ -1097,7 +1132,11 @@ func _build_guild_bank() -> Control:
 	var description := _localized_label("ui.guild.bank.description", 11, UI_MUTED)
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	title_stack.add_child(description)
-	header.add_child(_status_pill(_t("ui.guild.bank.status")))
+	header.add_child(_status_pill(
+		_t("ui.guild.bank.status.loading")
+		if is_loading_guild_bank
+		else _t("ui.guild.bank.status.ready")
+	))
 	var access_summary := _label(_guild_bank_access_summary(), 10, UI_ACCENT)
 	access_summary.name = "GuildBankPermissionSummary"
 	access_summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -1110,25 +1149,28 @@ func _build_guild_bank() -> Control:
 	vaults.add_child(_build_guild_bank_card(
 		"GuildBankFunds",
 		"ui.guild.bank.funds.title",
-		"ui.guild.bank.funds.description",
+		_guild_bank_card_description("funds"),
 		"ui.guild.bank.funds.action",
+		"funds",
 		UI_GOLD
 	))
 	vaults.add_child(_build_guild_bank_card(
 		"GuildBankPokemon",
 		"ui.guild.bank.pokemon.title",
-		"ui.guild.bank.pokemon.description",
+		_guild_bank_card_description("pokemon"),
 		"ui.guild.bank.pokemon.action",
+		"pokemon",
 		UI_ACCENT
 	))
 	vaults.add_child(_build_guild_bank_card(
 		"GuildBankItems",
 		"ui.guild.bank.items.title",
-		"ui.guild.bank.items.description",
+		_guild_bank_card_description("items"),
 		"ui.guild.bank.items.action",
+		"items",
 		UI_SUCCESS
 	))
-	var hint := _localized_label("ui.guild.bank.preview_hint", 10, UI_WARNING)
+	var hint := _localized_label("ui.guild.bank.access_hint", 10, UI_MUTED)
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	content.add_child(hint)
 	return panel
@@ -1137,8 +1179,9 @@ func _build_guild_bank() -> Control:
 func _build_guild_bank_card(
 	node_prefix: String,
 	title_key: String,
-	description_key: String,
+	description_text: String,
 	action_key: String,
+	category: String,
 	accent: Color
 ) -> Control:
 	var panel := PanelContainer.new()
@@ -1153,36 +1196,484 @@ func _build_guild_bank_card(
 	content.add_theme_constant_override("separation", 5)
 	margin.add_child(content)
 	content.add_child(_localized_label(title_key, 13, accent))
-	var description := _localized_label(description_key, 10, UI_MUTED)
+	var description := _label(description_text, 10, UI_MUTED)
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	description.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	content.add_child(description)
 	var action := Button.new()
 	action.name = "%sAction" % node_prefix
 	_set_localized_property(action, "text", action_key)
-	action.pressed.connect(_on_guild_bank_category_opened.bind(title_key))
+	action.disabled = is_loading_guild_bank
+	action.pressed.connect(_on_guild_bank_category_opened.bind(category))
 	_apply_button_style(action)
 	content.add_child(action)
 	return panel
 
 
 func _guild_bank_access_summary() -> String:
+	var access := _dictionary(guild_bank_state.get("access", {}))
 	var own_membership := _dictionary(guild_home.get("membership", {}))
 	var permissions := _array_from_value(own_membership.get("permissions", []))
 	var states: Array[String] = []
-	for permission: String in ["bank_deposit", "bank_withdraw", "bank_borrow"]:
+	var access_by_permission := {
+		"bank_deposit": bool(access.get("canDeposit", permissions.has("bank_deposit"))),
+		"bank_withdraw": bool(access.get("canWithdraw", permissions.has("bank_withdraw"))),
+		"bank_borrow": bool(access.get("canBorrow", permissions.has("bank_borrow"))),
+	}
+	for permission: String in access_by_permission:
 		states.append(_t(
-			"ui.guild.bank.permission.allowed" if permissions.has(permission) else "ui.guild.bank.permission.locked",
+			"ui.guild.bank.permission.allowed" if bool(access_by_permission[permission]) else "ui.guild.bank.permission.locked",
 			{"permission": _t("ui.guild.permission.%s" % permission)}
 		))
 	return "  ·  ".join(states)
 
 
-func _on_guild_bank_category_opened(title_key: String) -> void:
-	_set_member_status(_t(
-		"ui.guild.bank.category_opened",
-		{"category": _t(title_key)}
-	), false)
+func _guild_bank_card_description(category: String) -> String:
+	match category:
+		"funds":
+			var funds := _dictionary(guild_bank_state.get("funds", {}))
+			return _t("ui.guild.bank.funds.balance", {
+				"amount": _format_number(int(funds.get("balance", 0))),
+			}) if not guild_bank_state.is_empty() else _t("ui.guild.bank.funds.description")
+		"pokemon":
+			return _t("ui.guild.bank.pokemon.count", {
+				"count": _array_from_value(guild_bank_state.get("pokemon", [])).size(),
+			}) if not guild_bank_state.is_empty() else _t("ui.guild.bank.pokemon.description")
+		"items":
+			return _t("ui.guild.bank.items.count", {
+				"count": _array_from_value(guild_bank_state.get("items", [])).size(),
+			}) if not guild_bank_state.is_empty() else _t("ui.guild.bank.items.description")
+	return ""
+
+
+func _on_guild_bank_category_opened(category: String) -> void:
+	active_guild_bank_category = category
+	_render_guild_home()
+	if guild_bank_state.is_empty() and not is_debug_preview:
+		_load_guild_bank_async.call_deferred()
+
+
+func _build_guild_bank_workspace() -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "GuildBankWorkspace"
+	panel.custom_minimum_size = Vector2(0, 310)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER_INNER, 9, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 15, 13, 15, 14)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 10)
+	margin.add_child(content)
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 9)
+	content.add_child(header)
+	var back := Button.new()
+	back.name = "GuildBankBackButton"
+	_set_localized_property(back, "text", "ui.guild.bank.back")
+	back.pressed.connect(_on_guild_bank_back_pressed)
+	_apply_button_style(back)
+	header.add_child(back)
+	var title_key := "ui.guild.bank.%s.title" % active_guild_bank_category
+	var title := _localized_label(title_key, 17, UI_TEXT)
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_child(title)
+	var refresh := Button.new()
+	refresh.name = "GuildBankRefreshButton"
+	_set_localized_property(refresh, "text", "ui.guild.bank.refresh")
+	refresh.disabled = is_loading_guild_bank or is_guild_bank_action_in_flight
+	refresh.pressed.connect(_load_guild_bank_async)
+	_apply_button_style(refresh)
+	header.add_child(refresh)
+	if is_loading_guild_bank and guild_bank_state.is_empty():
+		var loading := _localized_label("ui.guild.bank.loading", 13, UI_MUTED)
+		loading.custom_minimum_size = Vector2(0, 180)
+		loading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		loading.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		content.add_child(loading)
+		return panel
+	match active_guild_bank_category:
+		"funds":
+			content.add_child(_build_guild_funds_workspace())
+		"pokemon":
+			content.add_child(_build_guild_pokemon_workspace())
+		"items":
+			content.add_child(_build_guild_items_workspace())
+	content.add_child(_build_guild_bank_activity())
+	return panel
+
+
+func _build_guild_funds_workspace() -> Control:
+	var content := VBoxContainer.new()
+	content.name = "GuildBankFundsWorkspace"
+	content.add_theme_constant_override("separation", 10)
+	var funds := _dictionary(guild_bank_state.get("funds", {}))
+	var balances := GridContainer.new()
+	balances.columns = 2
+	balances.add_theme_constant_override("h_separation", 10)
+	content.add_child(balances)
+	balances.add_child(_guild_bank_value_card(
+		"ui.guild.bank.funds.guild_balance",
+		"$%s" % _format_number(int(funds.get("balance", 0))),
+		UI_GOLD
+	))
+	balances.add_child(_guild_bank_value_card(
+		"ui.guild.bank.funds.your_balance",
+		"$%s" % _format_number(int(funds.get("playerBalance", 0))),
+		UI_ACCENT
+	))
+	var transfer := HBoxContainer.new()
+	transfer.add_theme_constant_override("separation", 8)
+	content.add_child(transfer)
+	var amount := SpinBox.new()
+	amount.name = "GuildBankMoneyAmount"
+	amount.min_value = 1
+	amount.max_value = 2147483647
+	amount.value = 1000
+	amount.step = 100
+	amount.custom_minimum_size = Vector2(220, 38)
+	_apply_spin_box_style(amount)
+	transfer.add_child(amount)
+	var access := _dictionary(guild_bank_state.get("access", {}))
+	transfer.add_child(_guild_bank_action_button(
+		"GuildBankMoneyDepositButton",
+		"ui.guild.bank.deposit",
+		bool(access.get("canDeposit", false)),
+		_on_guild_bank_money_action.bind("deposit", amount)
+	))
+	transfer.add_child(_guild_bank_action_button(
+		"GuildBankMoneyWithdrawButton",
+		"ui.guild.bank.withdraw",
+		bool(access.get("canWithdraw", false)),
+		_on_guild_bank_money_action.bind("withdraw", amount)
+	))
+	return content
+
+
+func _build_guild_items_workspace() -> Control:
+	var columns := GridContainer.new()
+	columns.name = "GuildBankItemsWorkspace"
+	columns.columns = 2
+	columns.add_theme_constant_override("h_separation", 10)
+	columns.add_child(_build_guild_item_list(
+		"ui.guild.bank.items.stored",
+		_array_from_value(guild_bank_state.get("items", [])),
+		"withdraw"
+	))
+	columns.add_child(_build_guild_item_list(
+		"ui.guild.bank.items.yours",
+		_array_from_value(guild_bank_state.get("inventory", [])),
+		"deposit"
+	))
+	return columns
+
+
+func _build_guild_item_list(title_key: String, items: Array, action: String) -> Control:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(0, 190)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _panel_style(Color("#07131ff2"), UI_BORDER_INNER, 8, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 10, 9, 10, 9)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 6)
+	margin.add_child(content)
+	content.add_child(_localized_label(title_key, 10, UI_ACCENT))
+	if items.is_empty():
+		content.add_child(_localized_label("ui.guild.bank.empty", 11, UI_MUTED))
+		return panel
+	for item_value: Variant in items:
+		if not item_value is Dictionary:
+			continue
+		content.add_child(_build_guild_item_row(item_value as Dictionary, action))
+	return panel
+
+
+func _build_guild_item_row(item: Dictionary, action: String) -> Control:
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 6)
+	var item_id := str(item.get("itemId", ""))
+	var item_name := _guild_bank_item_name(item_id, str(item.get("name", item_id)))
+	var name := _label(
+		"%s  ×%d" % [item_name, int(item.get("quantity", 0))],
+		11,
+		UI_TEXT
+	)
+	name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	row.add_child(name)
+	var quantity := SpinBox.new()
+	quantity.min_value = 1
+	quantity.max_value = maxi(int(item.get("quantity", 1)), 1)
+	quantity.value = 1
+	quantity.custom_minimum_size = Vector2(78, 32)
+	_apply_spin_box_style(quantity)
+	row.add_child(quantity)
+	var access := _dictionary(guild_bank_state.get("access", {}))
+	var allowed := bool(access.get("canDeposit" if action == "deposit" else "canWithdraw", false))
+	row.add_child(_guild_bank_action_button(
+		"GuildBankItem%sButton_%s" % [action.capitalize(), str(item.get("itemId", "item"))],
+		"ui.guild.bank.%s" % action,
+		allowed,
+		_on_guild_bank_item_action.bind(action, str(item.get("itemId", "")), quantity)
+	))
+	return row
+
+
+func _build_guild_pokemon_workspace() -> Control:
+	var columns := GridContainer.new()
+	columns.name = "GuildBankPokemonWorkspace"
+	columns.columns = 2
+	columns.add_theme_constant_override("h_separation", 10)
+	columns.add_child(_build_guild_pokemon_list(
+		"ui.guild.bank.pokemon.stored",
+		_array_from_value(guild_bank_state.get("pokemon", [])),
+		true
+	))
+	columns.add_child(_build_guild_pokemon_list(
+		"ui.guild.bank.pokemon.yours",
+		_array_from_value(guild_bank_state.get("depositablePokemon", [])),
+		false
+	))
+	return columns
+
+
+func _build_guild_pokemon_list(title_key: String, pokemon_values: Array, is_bank: bool) -> Control:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(0, 190)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _panel_style(Color("#07131ff2"), UI_BORDER_INNER, 8, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 10, 9, 10, 9)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 6)
+	margin.add_child(content)
+	content.add_child(_localized_label(title_key, 10, UI_ACCENT))
+	if pokemon_values.is_empty():
+		content.add_child(_localized_label("ui.guild.bank.empty", 11, UI_MUTED))
+		return panel
+	for pokemon_value: Variant in pokemon_values:
+		if not pokemon_value is Dictionary:
+			continue
+		content.add_child(_build_guild_pokemon_row(pokemon_value as Dictionary, is_bank))
+	return panel
+
+
+func _build_guild_pokemon_row(entry: Dictionary, is_bank: bool) -> Control:
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 7)
+	var pokemon := _dictionary(entry.get("pokemon", {}))
+	var identity := VBoxContainer.new()
+	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(identity)
+	identity.add_child(_label(
+		_t("ui.guild.bank.pokemon.identity", {
+			"name": _guild_bank_pokemon_name(pokemon),
+			"level": int(pokemon.get("level", 1)),
+		}),
+		11,
+		UI_TEXT
+	))
+	var pokemon_id := int(entry.get("pokemonId", 0))
+	if not is_bank:
+		identity.add_child(_localized_label("ui.guild.bank.pokemon.ready_to_deposit", 9, UI_MUTED))
+		var can_deposit := bool(_dictionary(guild_bank_state.get("access", {})).get("canDeposit", false))
+		row.add_child(_guild_bank_action_button(
+			"GuildBankPokemonDepositButton_%d" % pokemon_id,
+			"ui.guild.bank.deposit",
+			can_deposit,
+			_on_guild_bank_pokemon_action.bind("deposit", pokemon_id)
+		))
+		return row
+	var is_borrowed := bool(entry.get("isBorrowed", false))
+	if is_borrowed:
+		identity.add_child(_label(
+			_t("ui.guild.bank.pokemon.borrowed_by", {"trainer": str(entry.get("borrowedBy", _t("common.unknown")))}),
+			9,
+			UI_WARNING
+		))
+		if bool(entry.get("canReturn", false)):
+			row.add_child(_guild_bank_action_button(
+				"GuildBankPokemonReturnButton_%d" % pokemon_id,
+				"ui.guild.bank.return",
+				true,
+				_on_guild_bank_pokemon_action.bind("return", pokemon_id)
+			))
+		return row
+	identity.add_child(_label(
+		_t("ui.guild.bank.pokemon.deposited_by", {"trainer": str(entry.get("depositedBy", _t("common.unknown")))}),
+		9,
+		UI_MUTED
+	))
+	var own_user_id := int(_dictionary(guild_home.get("membership", {})).get("userId", 0))
+	var is_owner := int(entry.get("ownerUserId", 0)) == own_user_id
+	var access := _dictionary(guild_bank_state.get("access", {}))
+	var allowed := bool(access.get("canWithdraw" if is_owner else "canBorrow", false))
+	row.add_child(_guild_bank_action_button(
+		"GuildBankPokemonWithdrawButton_%d" % pokemon_id,
+		"ui.guild.bank.withdraw" if is_owner else "ui.guild.bank.borrow",
+		allowed,
+		_on_guild_bank_pokemon_action.bind("withdraw", pokemon_id)
+	))
+	return row
+
+
+func _build_guild_bank_activity() -> Control:
+	var activity := VBoxContainer.new()
+	activity.name = "GuildBankRecentActivity"
+	activity.add_theme_constant_override("separation", 4)
+	activity.add_child(_localized_label("ui.guild.bank.activity", 10, UI_ACCENT))
+	var entries := _array_from_value(guild_bank_state.get("recentActivity", []))
+	if entries.is_empty():
+		activity.add_child(_localized_label("ui.guild.bank.activity.empty", 10, UI_MUTED))
+		return activity
+	for index: int in range(mini(entries.size(), 5)):
+		var entry := _dictionary(entries[index])
+		activity.add_child(_label(_guild_bank_activity_text(entry), 10, UI_MUTED))
+	return activity
+
+
+func _guild_bank_value_card(title_key: String, value: String, accent: Color) -> Control:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _panel_style(Color("#07131ff2"), Color(accent.r, accent.g, accent.b, 0.5), 8, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 12, 9, 12, 9)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	margin.add_child(content)
+	content.add_child(_localized_label(title_key, 9, UI_MUTED))
+	content.add_child(_label(value, 18, accent))
+	return panel
+
+
+func _guild_bank_action_button(
+	node_name: String,
+	text_key: String,
+	allowed: bool,
+	callback: Callable
+) -> Button:
+	var button := Button.new()
+	button.name = node_name
+	_set_localized_property(button, "text", text_key)
+	button.custom_minimum_size = Vector2(92, 32)
+	button.disabled = not allowed or is_guild_bank_action_in_flight
+	button.pressed.connect(callback)
+	_apply_button_style(button, "primary")
+	return button
+
+
+func _on_guild_bank_back_pressed() -> void:
+	active_guild_bank_category = ""
+	_render_guild_home()
+
+
+func _load_guild_bank_async() -> void:
+	if is_loading_guild_bank or is_guild_bank_action_in_flight or is_debug_preview:
+		return
+	is_loading_guild_bank = true
+	_render_guild_home()
+	var service := get_node_or_null("/root/GuildService")
+	var response: Variant = await service.call("load_bank") if service != null else {
+		"success": false, "error": _t("ui.guild.error.service_unavailable"),
+	}
+	is_loading_guild_bank = false
+	var result := _dictionary(response)
+	if not bool(result.get("success", false)):
+		_set_member_status(str(result.get("error", _t("ui.guild.bank.error.load"))), true)
+		_render_guild_home()
+		return
+	_apply_guild_bank_result(result)
+	_render_guild_home()
+
+
+func _on_guild_bank_money_action(action: String, amount_input: SpinBox) -> void:
+	var amount := int(amount_input.value) if amount_input != null else 0
+	if amount <= 0:
+		return
+	await _run_guild_bank_action("%s_bank_money" % action, [amount], "money")
+
+
+func _on_guild_bank_item_action(action: String, item_id: String, quantity_input: SpinBox) -> void:
+	var quantity := int(quantity_input.value) if quantity_input != null else 0
+	if item_id == "" or quantity <= 0:
+		return
+	await _run_guild_bank_action("%s_bank_item" % action, [item_id, quantity], "item")
+
+
+func _on_guild_bank_pokemon_action(action: String, pokemon_id: int) -> void:
+	if pokemon_id <= 0:
+		return
+	var service_method := "deposit_bank_pokemon" if action in ["deposit", "return"] else "withdraw_bank_pokemon"
+	await _run_guild_bank_action(service_method, [pokemon_id], "pokemon")
+
+
+func _run_guild_bank_action(method: String, arguments: Array, asset_type: String) -> void:
+	if is_guild_bank_action_in_flight:
+		return
+	is_guild_bank_action_in_flight = true
+	_render_guild_home()
+	var service := get_node_or_null("/root/GuildService")
+	var response: Variant = await service.callv(method, arguments) if service != null else {
+		"success": false, "error": _t("ui.guild.error.service_unavailable"),
+	}
+	is_guild_bank_action_in_flight = false
+	var result := _dictionary(response)
+	if not bool(result.get("success", false)):
+		_set_member_status(str(result.get("error", _t("ui.guild.bank.error.action"))), true)
+		_render_guild_home()
+		return
+	_apply_guild_bank_result(result)
+	if asset_type == "money":
+		var wallet_service := get_node_or_null("/root/PlayerWalletService")
+		if wallet_service != null:
+			var wallet_result: Variant = await wallet_service.call("load_wallet")
+			if wallet_result is Dictionary:
+				wallet_service.call("apply_wallet_result", wallet_result)
+	elif asset_type == "item":
+		var inventory_service := get_node_or_null("/root/InventoryService")
+		if inventory_service != null:
+			await inventory_service.call("load_inventory")
+	_set_member_status(_t("ui.guild.bank.status.updated"), false)
+	_render_guild_home()
+
+
+func _apply_guild_bank_result(result: Dictionary) -> void:
+	guild_bank_state = result.duplicate(true)
+	var party_value: Variant = result.get("party", [])
+	if party_value is Array:
+		var player_save := get_node_or_null("/root/PlayerSave")
+		if player_save != null and player_save.has_method("replace_party_from_state"):
+			player_save.call("replace_party_from_state", party_value)
+
+
+func _guild_bank_pokemon_name(pokemon: Dictionary) -> String:
+	var nickname := str(pokemon.get("nickname", "")).strip_edges()
+	if nickname != "":
+		return nickname
+	return str(pokemon.get("name", pokemon.get("speciesName", "Pokemon")))
+
+
+func _guild_bank_activity_text(entry: Dictionary) -> String:
+	var asset := str(entry.get("assetReference", entry.get("assetType", "")))
+	if str(entry.get("assetType", "")) == "money":
+		asset = "$%s" % _format_number(int(entry.get("amount", 0)))
+	elif str(entry.get("assetType", "")) == "item":
+		asset = "%s ×%d" % [_guild_bank_item_name(asset, asset), int(entry.get("amount", 1))]
+	return _t("ui.guild.bank.activity.entry", {
+		"trainer": str(entry.get("actor", _t("common.unknown"))),
+		"action": _t("ui.guild.bank.activity.%s" % str(entry.get("action", "deposit"))),
+		"asset": asset,
+	})
+
+
+func _guild_bank_item_name(item_id: String, fallback: String) -> String:
+	var localization := get_node_or_null("/root/ItemLocalization")
+	if localization != null and localization.has_method("display_name"):
+		return str(localization.call("display_name", item_id, fallback))
+	return fallback
 
 
 func _on_guild_lobby_pressed() -> void:
@@ -3173,6 +3664,12 @@ func _apply_line_edit_style(input: LineEdit) -> void:
 	input.add_theme_font_size_override("font_size", 13)
 	input.add_theme_stylebox_override("normal", _input_style(UI_INPUT, UI_BORDER))
 	input.add_theme_stylebox_override("focus", _input_style(Color("#071225f2"), Color("#7aa7f4"), 2))
+
+
+func _apply_spin_box_style(input: SpinBox) -> void:
+	var line_edit := input.get_line_edit()
+	if line_edit != null:
+		_apply_line_edit_style(line_edit)
 
 
 func _apply_text_edit_style(input: TextEdit) -> void:
