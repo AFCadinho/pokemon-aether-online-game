@@ -276,8 +276,14 @@ func _render_assets() -> void:
 		assets_list.add_child(_pokemon_candidate_row(candidate, pokemon_id))
 		var held_item := str(candidate.get("heldItemId", ""))
 		if held_item != "":
-			assets_list.add_child(_item_candidate_row({"itemId": held_item, "name": _item_display_name(held_item, held_item), "quantity": 1}, "held:%d" % pokemon_id, true))
+			assets_list.add_child(_item_candidate_row({"itemId": held_item, "name": _item_display_name(held_item, held_item), "quantity": 1, "holderName": str(candidate.get("name", "Pokémon"))}, "held:%d" % pokemon_id, true))
 	assets_list.add_child(_section_label(_t("ui.lending.assets.items")))
+	var item_hint := Label.new()
+	item_hint.text = _t("ui.lending.items_hint")
+	item_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	item_hint.add_theme_color_override("font_color", GOLD)
+	item_hint.add_theme_font_size_override("font_size", 10)
+	assets_list.add_child(item_hint)
 	for item: Dictionary in inventory_candidates:
 		var item_id := str(item.get("itemId", ""))
 		assets_list.add_child(_item_candidate_row(item, "bag:%s" % item_id))
@@ -623,10 +629,10 @@ func _create_loan() -> void:
 		if key.begins_with("held:"):
 			var pokemon_id := int(key.trim_prefix("held:"))
 			var candidate := _candidate_by_id(pokemon_id)
-			items.append({"itemId": str(candidate.get("heldItemId", "")), "sourcePokemonId": pokemon_id})
+			items.append({"itemId": str(candidate.get("heldItemId", "")), "sourcePokemonId": pokemon_id, "quantity": 1})
 		else:
-			items.append({"itemId": key.trim_prefix("bag:")})
-	if pokemon_ids.size() > 6 or items.size() > 6:
+			items.append({"itemId": key.trim_prefix("bag:"), "quantity": int(selected_items.get(key_value, 1))})
+	if pokemon_ids.size() > 6 or _selected_item_copy_count() > 6:
 		_show_error(_t("ui.lending.error.selection_limit"))
 		return
 	if not pokemon_ids.is_empty() and pokemon_ids.size() >= party_candidates.size():
@@ -908,8 +914,21 @@ func _item_candidates(value: Variant) -> Array[Dictionary]:
 			if not entry is Dictionary: continue
 			var category := str(entry.get("category", "")).to_lower()
 			var item_id := str(entry.get("itemId", "")).strip_edges().to_lower()
-			if item_id == "" or int(entry.get("quantity", 0)) <= 0 or category in ["key-items", "key_items", "important"]: continue
-			result.append({"itemId": item_id, "name": _item_display_name(item_id, str(entry.get("name", item_id))), "quantity": int(entry.get("quantity", 0))})
+			if (
+				item_id == ""
+				or int(entry.get("quantity", 0)) <= 0
+				or not bool(entry.get("isHoldable", false))
+				or not bool(entry.get("tradable", false))
+				or category == "berries"
+			):
+				continue
+			result.append({
+				"itemId": item_id,
+				"name": _item_display_name(item_id, str(entry.get("name", item_id))),
+				"quantity": int(entry.get("quantity", 0)),
+				"category": category,
+				"shortDesc": str(entry.get("shortDesc", "")),
+			})
 	return result
 
 
@@ -919,9 +938,44 @@ func _candidate_by_id(pokemon_id: int) -> Dictionary:
 	return {}
 
 
-func _set_selected(target: Dictionary, key: Variant, enabled: bool) -> void:
-	if enabled: target[key] = true
-	else: target.erase(key)
+func _selected_item_copy_count(except_key := "") -> int:
+	var total := 0
+	for key_value: Variant in selected_items.keys():
+		if str(key_value) == str(except_key):
+			continue
+		total += maxi(int(selected_items.get(key_value, 1)), 1)
+	return total
+
+
+func _toggle_item_selection(enabled: bool, selection_key: String, quantity: SpinBox, checkbox: CheckBox) -> void:
+	if not enabled:
+		selected_items.erase(selection_key)
+		if quantity != null:
+			quantity.editable = false
+		return
+	var remaining := 6 - _selected_item_copy_count(selection_key)
+	if remaining <= 0:
+		checkbox.set_pressed_no_signal(false)
+		_show_error(_t("ui.lending.error.selection_limit"))
+		return
+	if quantity == null:
+		selected_items[selection_key] = 1
+		return
+	quantity.editable = true
+	var accepted := mini(int(quantity.value), remaining)
+	quantity.set_value_no_signal(accepted)
+	selected_items[selection_key] = accepted
+
+
+func _update_item_quantity(value: float, selection_key: String, quantity: SpinBox) -> void:
+	if not selected_items.has(selection_key):
+		return
+	var maximum := maxi(6 - _selected_item_copy_count(selection_key), 1)
+	var accepted := mini(int(value), maximum)
+	if accepted != int(value):
+		quantity.set_value_no_signal(accepted)
+		_show_error(_t("ui.lending.error.selection_limit"))
+	selected_items[selection_key] = accepted
 
 
 func _toggle_pokemon_selection(enabled: bool, pokemon_id: int, checkbox: CheckBox) -> void:
@@ -1008,7 +1062,6 @@ func _item_candidate_row(item: Dictionary, selection_key: String, held := false)
 	var box := CheckBox.new()
 	box.focus_mode = Control.FOCUS_NONE
 	_apply_checkbox_style(box)
-	box.toggled.connect(func(enabled: bool): _set_selected(selected_items, selection_key, enabled))
 	row.add_child(box)
 	var item_id := str(item.get("itemId", ""))
 	var icon := TextureRect.new()
@@ -1017,17 +1070,37 @@ func _item_candidate_row(item: Dictionary, selection_key: String, held := false)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	row.add_child(icon)
+	var identity := VBoxContainer.new()
+	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	identity.alignment = BoxContainer.ALIGNMENT_CENTER
+	row.add_child(identity)
 	var label := Label.new()
-	label.text = "%s%s" % ["↳ " if held else "", str(item.get("name", item_id))]
-	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.text = str(item.get("name", item_id))
 	label.add_theme_color_override("font_color", TEXT)
-	row.add_child(label)
-	var quantity := Label.new()
-	quantity.text = "×%d" % int(item.get("quantity", 1))
-	quantity.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	quantity.add_theme_color_override("font_color", MUTED)
-	row.add_child(quantity)
+	identity.add_child(label)
+	var detail := Label.new()
+	detail.text = _t("ui.lending.item_held_by", {"pokemon": str(item.get("holderName", "Pokémon"))}) if held else _t("ui.lending.item_available", {"count": int(item.get("quantity", 1))})
+	detail.add_theme_color_override("font_color", MUTED)
+	detail.add_theme_font_size_override("font_size", 9)
+	identity.add_child(detail)
+	var quantity: SpinBox = null
+	if held:
+		var single := Label.new()
+		single.text = "×1"
+		single.add_theme_color_override("font_color", MUTED)
+		row.add_child(single)
+	else:
+		quantity = SpinBox.new()
+		quantity.min_value = 1
+		quantity.max_value = mini(int(item.get("quantity", 1)), 6)
+		quantity.value = 1
+		quantity.editable = false
+		quantity.prefix = "×"
+		quantity.custom_minimum_size.x = 72
+		_apply_spinbox_style(quantity)
+		quantity.value_changed.connect(_update_item_quantity.bind(selection_key, quantity))
+		row.add_child(quantity)
+	box.toggled.connect(_toggle_item_selection.bind(selection_key, quantity, box))
 	return panel
 
 

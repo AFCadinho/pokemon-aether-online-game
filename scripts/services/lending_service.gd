@@ -48,17 +48,24 @@ func create_loan(target_username: String, pokemon_ids: Array, items: Array, dura
 	if normalized_pokemon.size() > 6:
 		return _validation_error("Choose no more than six Pokemon.")
 	var normalized_items: Array[Dictionary] = []
+	var item_copy_count := 0
 	for value: Variant in items:
 		if not value is Dictionary:
 			return _validation_error("The item selection is invalid.")
 		var item_id := str(value.get("itemId", "")).strip_edges().to_lower().replace("_", "-").replace(" ", "-")
 		if item_id == "":
 			return _validation_error("The item selection is invalid.")
-		var item := {"itemId": item_id}
+		var quantity := int(value.get("quantity", 1))
+		if quantity < 1 or quantity > 6:
+			return _validation_error("Choose between one and six copies of an item.")
+		var item := {"itemId": item_id, "quantity": quantity}
 		if int(value.get("sourcePokemonId", 0)) > 0:
+			if quantity != 1:
+				return _validation_error("A held Pokémon can provide only one item copy.")
 			item["sourcePokemonId"] = int(value.get("sourcePokemonId", 0))
 		normalized_items.append(item)
-	if normalized_items.size() > 6 or (normalized_items.is_empty() and normalized_pokemon.is_empty()):
+		item_copy_count += quantity
+	if item_copy_count > 6 or (normalized_items.is_empty() and normalized_pokemon.is_empty()):
 		return _validation_error("Choose between one and six Pokemon or items.")
 	if duration_seconds not in [3600, 86400, 259200, 604800]:
 		return _validation_error("Choose a supported loan duration.")
