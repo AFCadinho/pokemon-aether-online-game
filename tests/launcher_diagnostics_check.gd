@@ -5,6 +5,7 @@ var failed := false
 
 func _init() -> void:
 	var source := FileAccess.get_file_as_string("res://launcher/scripts/launcher.gd")
+	var download_source := FileAccess.get_file_as_string("res://launcher/scripts/resumable_download_service.gd")
 	var scene := FileAccess.get_file_as_string("res://launcher/scenes/launcher.tscn")
 	var package_source := FileAccess.get_file_as_string("res://tools/package_launcher_release.py")
 	var workflow := FileAccess.get_file_as_string("res://.github/workflows/deploy-desktop-r2.yml")
@@ -24,18 +25,18 @@ func _init() -> void:
 		"launcher diagnostics are bounded and rotated"
 	)
 	_check(
-		source.contains('sanitized.replace(absolute_user_data, "<user_data>")')
+		source.contains('for private_path: String in _private_diagnostic_paths()')
+		and source.contains('sanitized.replace(private_path, "<private_path>")')
 		and source.contains('part.find("https://")')
 		and source.contains("_sanitize_diagnostics_file(PREVIOUS_ERROR_LOG_FILE)")
 		and source.contains("?<redacted>"),
 		"launcher diagnostics redact current and historical local storage paths and URL queries"
 	)
 	_check(
-		source.contains("const MAX_CHECKSUM_RETRIES := 1")
-		and source.contains("CHK-001 downloaded file checksum mismatch.")
-		and source.contains("_delete_existing_download(file_path)")
-		and source.contains("launcher_retry=")
-		and source.contains('"Cache-Control: no-cache"'),
+		download_source.contains("checksum_retry_count < 1")
+		and download_source.contains('_reset_partial_download("checksum mismatch")')
+		and download_source.contains('headers.append("Cache-Control: no-cache")')
+		and download_source.contains('headers.append("Pragma: no-cache")'),
 		"checksum failures clean up and retry once with cache revalidation"
 	)
 	_check(

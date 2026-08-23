@@ -13,7 +13,7 @@ signal room_ready(room_code: String, battle_id: String)
 signal session_invalid(reason: String)
 signal timer_state_changed(timer_projection: RefCounted)
 
-const RECONNECT_DELAY_SECONDS := 3.0
+const RECONNECT_RETRY_DELAYS_SECONDS: Array[float] = [0.0, 1.0, 3.0]
 const CONNECTION_HEARTBEAT_SECONDS := 5.0
 const CONNECTION_PONG_TIMEOUT_MSEC := 12000
 const JOIN_ACK_TIMEOUT_MSEC := 10000
@@ -34,6 +34,7 @@ var connected := false
 var connecting := false
 var should_reconnect := false
 var reconnect_timer := 0.0
+var reconnect_retry_count := 0
 var connection_heartbeat_timer := 0.0
 var connection_attempt_generation := 0
 var join_sent := false
@@ -81,6 +82,8 @@ func _process(delta: float) -> void:
 	var is_connected := ready_state == WebSocketPeer.STATE_OPEN
 	if connected != is_connected:
 		connected = is_connected
+		if not connected and should_reconnect and reconnect_retry_count == 0:
+			_schedule_reconnect_retry()
 		connection_changed.emit(connected)
 
 	if ready_state == WebSocketPeer.STATE_OPEN:
@@ -118,7 +121,9 @@ func _process(delta: float) -> void:
 
 	reconnect_timer -= delta
 	if reconnect_timer <= 0.0:
-		reconnect_timer = RECONNECT_DELAY_SECONDS
+		# Keep the async connection setup from being scheduled again while this
+		# attempt resolves. A failed attempt installs its next bounded delay.
+		reconnect_timer = RECONNECT_RETRY_DELAYS_SECONDS[-1]
 		connect_room(active_room_code, active_player_id, active_battle_id, active_match_id, active_viewer_role)
 
 
@@ -198,7 +203,7 @@ func _connect_room_async(attempt_generation: int) -> void:
 	if error != OK:
 		connecting = false
 		connected = false
-		reconnect_timer = RECONNECT_DELAY_SECONDS
+		_schedule_reconnect_retry()
 		connection_changed.emit(false)
 		push_warning("PvpBattleRealtimeService: could not connect websocket: %s" % error_string(error))
 		return
@@ -272,6 +277,8 @@ func disconnect_room() -> void:
 	last_spectator_event_seq = 0
 	spectator_cursor_valid = false
 	received_battle_event_count = 0
+	reconnect_retry_count = 0
+	reconnect_timer = 0.0
 	_reset_battle_event_buffer()
 	timer_projection.reset()
 	pending_render_ack_payload.clear()
@@ -525,6 +532,8 @@ func _process_packets() -> void:
 			var message_battle := str(message.get("battleId", active_battle_id)).strip_edges()
 			if message_room == active_room_code and (active_battle_id == "" or message_battle == active_battle_id):
 				room_is_ready = true
+				reconnect_retry_count = 0
+				reconnect_timer = 0.0
 				room_ready.emit(message_room, message_battle)
 			continue
 		if message_type == "pvp.battle_update":
@@ -1283,7 +1292,7 @@ func _restart_stalled_connection(reason: String) -> void:
 	ping_sent_at_msec = 0
 	connection_heartbeat_timer = 0.0
 	connecting = false
-	reconnect_timer = RECONNECT_DELAY_SECONDS
+	_schedule_reconnect_retry()
 	if websocket.get_ready_state() != WebSocketPeer.STATE_CLOSED:
 		websocket.close(1013, reason.left(120))
 	# A peer left in CLOSING can otherwise remain the active object forever and
@@ -1292,6 +1301,12 @@ func _restart_stalled_connection(reason: String) -> void:
 	if connected:
 		connected = false
 		connection_changed.emit(false)
+
+
+func _schedule_reconnect_retry() -> void:
+	var delay_index := mini(reconnect_retry_count, RECONNECT_RETRY_DELAYS_SECONDS.size() - 1)
+	reconnect_timer = RECONNECT_RETRY_DELAYS_SECONDS[delay_index]
+	reconnect_retry_count += 1
 
 
 func _handle_join_error(message: Dictionary) -> void:
