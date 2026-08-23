@@ -4,7 +4,7 @@
 
 - The Bag right-click menu now focuses on usable actions without a redundant Inspect option.
 
-- Guild browsing now uses one filter button and shares its full language list with Guild creation and settings.
+- Guild browsing, creation, and settings now share a broader language list including Spanish, Portuguese, Italian, and Chinese.
 
 - The Skills overview now shows richer full-width cards with level progress, descriptions, status, and clear links to each skill.
 
