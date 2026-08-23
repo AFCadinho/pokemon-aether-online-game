@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Player Loans dropdowns and confirmation windows now match the Aether interface style.
+
 - Reusable held items now have a complete Player Loan flow with eligible Bag filtering, copy quantities, icons, holder details, equipping, and individual return controls.
 
 - Lenders can now request a specific Pokémon or item back, while borrowers can still choose when to return it before the agreed deadline.
