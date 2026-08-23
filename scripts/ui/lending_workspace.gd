@@ -267,7 +267,7 @@ func _refresh_assets() -> void:
 	var boxes_result: Dictionary = await storage_service.load_boxes() if storage_service != null else {"success": false}
 	var inventory_result: Dictionary = await inventory_service.load_inventory() if inventory_service != null else {"success": false}
 	party_candidates = _party_candidates(party_result.get("party", [])) if bool(party_result.get("success", false)) else []
-	pokemon_boxes = boxes_result.get("boxes", []).duplicate(true) if bool(boxes_result.get("success", false)) else []
+	pokemon_boxes = _pokemon_boxes(boxes_result.get("boxes", [])) if bool(boxes_result.get("success", false)) else []
 	box_candidates = _box_candidates(pokemon_boxes)
 	inventory_candidates = _item_candidates(inventory_result.get("items", [])) if bool(inventory_result.get("success", false)) else []
 	_render_assets()
@@ -851,6 +851,16 @@ func _box_candidates(value: Variant) -> Array[Dictionary]:
 			candidate["boxIndex"] = box_index
 			candidate["slotIndex"] = int(slot.get("slotIndex", 0))
 			result.append(candidate)
+	return result
+
+
+func _pokemon_boxes(value: Variant) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	if not value is Array:
+		return result
+	for box_value: Variant in value:
+		if box_value is Dictionary:
+			result.append((box_value as Dictionary).duplicate(true))
 	return result
 
 
