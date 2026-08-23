@@ -4331,5 +4331,7 @@
   "ui.lending.invitation.terms": "{duration} · ₽{fee} fee · The lender remains the owner",
   "ui.lending.invitation.pending_count": "{count} pending offer(s)",
   "ui.lending.invitation.view": "View",
-  "ui.lending.invitation.item": "Reusable loan item"
+  "ui.lending.invitation.item": "Reusable loan item",
+  "ui.lending.invitation.accepted": "Loan accepted. The borrowed assets are now available in your Party, PC, or Bag.",
+  "ui.lending.invitation.declined": "Loan offer declined."
 }

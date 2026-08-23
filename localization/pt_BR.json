@@ -4331,5 +4331,7 @@
   "ui.lending.invitation.terms": "{duration} · taxa de ₽{fee} · O credor continua sendo o dono",
   "ui.lending.invitation.pending_count": "{count} oferta(s) pendente(s)",
   "ui.lending.invitation.view": "Ver",
-  "ui.lending.invitation.item": "Item de empréstimo reutilizável"
+  "ui.lending.invitation.item": "Item de empréstimo reutilizável",
+  "ui.lending.invitation.accepted": "Empréstimo aceito. Os recursos emprestados agora estão na sua equipe, PC ou mochila.",
+  "ui.lending.invitation.declined": "Oferta de empréstimo recusada."
 }

@@ -595,6 +595,7 @@ func _pokemon_candidate_row(candidate: Dictionary, pokemon_id: int) -> Control:
 	margin.add_child(row)
 	var box := CheckBox.new()
 	box.focus_mode = Control.FOCUS_NONE
+	_apply_checkbox_style(box)
 	box.toggled.connect(func(enabled: bool): _set_selected(selected_pokemon, pokemon_id, enabled))
 	row.add_child(box)
 	var payload: Dictionary = candidate.get("pokemon", {})
@@ -643,6 +644,7 @@ func _item_candidate_row(item: Dictionary, selection_key: String, held := false)
 	margin.add_child(row)
 	var box := CheckBox.new()
 	box.focus_mode = Control.FOCUS_NONE
+	_apply_checkbox_style(box)
 	box.toggled.connect(func(enabled: bool): _set_selected(selected_items, selection_key, enabled))
 	row.add_child(box)
 	var item_id := str(item.get("itemId", ""))
@@ -709,6 +711,31 @@ func _apply_button_style(button: Button, kind := "secondary") -> void:
 func _apply_icon_button_style(button: Button) -> void:
 	_apply_button_style(button)
 	button.add_theme_stylebox_override("normal", _style(Color("#00000000"), Color("#00000000"), 5))
+
+
+func _apply_checkbox_style(checkbox: CheckBox) -> void:
+	checkbox.add_theme_icon_override("unchecked", _checkbox_icon(false, false))
+	checkbox.add_theme_icon_override("unchecked_hover", _checkbox_icon(false, true))
+	checkbox.add_theme_icon_override("unchecked_pressed", _checkbox_icon(false, true))
+	checkbox.add_theme_icon_override("checked", _checkbox_icon(true, false))
+	checkbox.add_theme_icon_override("checked_hover", _checkbox_icon(true, true))
+	checkbox.add_theme_icon_override("checked_pressed", _checkbox_icon(true, true))
+
+
+static func _checkbox_icon(checked: bool, hovered: bool) -> ImageTexture:
+	var image := Image.create(18, 18, false, Image.FORMAT_RGBA8)
+	var border := ACCENT if hovered or checked else Color("#527793")
+	var fill := Color("#1685a7") if checked else Color("#071321")
+	for y in range(18):
+		for x in range(18):
+			var is_border := x < 2 or x > 15 or y < 2 or y > 15
+			image.set_pixel(x, y, border if is_border else fill)
+	if checked:
+		for point: Vector2i in [Vector2i(4, 9), Vector2i(5, 10), Vector2i(6, 11), Vector2i(7, 12), Vector2i(8, 11), Vector2i(9, 10), Vector2i(10, 9), Vector2i(11, 8), Vector2i(12, 7), Vector2i(13, 6)]:
+			image.set_pixelv(point, Color.WHITE)
+			if point.y + 1 < 16:
+				image.set_pixel(point.x, point.y + 1, Color.WHITE)
+	return ImageTexture.create_from_image(image)
 
 
 func _apply_line_edit_style(input: LineEdit) -> void:
