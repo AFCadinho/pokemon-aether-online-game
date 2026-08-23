@@ -17,7 +17,11 @@ const LOCKED_COLOR := Color("#738092")
 const COMPLETE_COLOR := Color("#84a0b8")
 const FISHING_ICON: Texture2D = preload("res://assets/ui/fishing_rod.svg")
 const THIEVING_ICON: Texture2D = preload("res://assets/ui/thieving.svg")
-const TARGET_TOWN_TABS_PER_PAGE := 3
+const ROCK_SMASH_ICON: Texture2D = preload("res://assets/ui/rock_smash_skill_icon.tres")
+const WINDOW_PREFERRED_SIZE := Vector2(760, 780)
+const WINDOW_MINIMUM_SIZE := Vector2(480, 420)
+const WINDOW_EDGE_MARGIN := 12.0
+const ROCK_GRID_MINIMUM_WIDTH := 700.0
 
 var main_panel: PanelContainer
 var window_header: HBoxContainer
@@ -48,21 +52,20 @@ var unlocks_container: VBoxContainer
 var targets_section: VBoxContainer
 var targets_summary_label: Label
 var targets_reset_label: Label
-var target_town_previous_button: Button
-var target_town_tabs: HBoxContainer
-var target_town_next_button: Button
+var area_selector: OptionButton
+var area_selector_spacing: Control
 var targets_scroll: ScrollContainer
-var targets_container: VBoxContainer
+var targets_container: GridContainer
 var fishing_catalog_section: VBoxContainer
 var fishing_catalog_summary: Label
 var fishing_rod_filters: HBoxContainer
+var fishing_catalog_scroll: ScrollContainer
 var fishing_catalog_container: VBoxContainer
 var skill_buttons: Dictionary = {}
 var selected_skill_id := "thieving"
 var selected_detail_tab := "progression"
 var selected_rod_id := "old_rod"
 var selected_target_town_key := ""
-var target_town_page := 0
 var target_town_order: Array[String] = []
 var targets_by_town: Dictionary = {}
 var showing_detail := false
@@ -72,6 +75,11 @@ var window_dragging := false
 
 func _ready() -> void:
 	_build_interface()
+	resized.connect(_on_window_resized)
+	var parent_control := get_parent_control()
+	if parent_control != null:
+		parent_control.resized.connect(_fit_window_to_parent)
+	_fit_window_to_parent()
 	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
 		LocalizationManager.locale_changed.connect(_on_locale_changed)
 	if not SkillsService.state_changed.is_connected(_on_skills_changed):
@@ -113,6 +121,7 @@ func toggle_manager() -> void:
 
 
 func open_manager() -> void:
+	_fit_window_to_parent()
 	visible = true
 	showing_detail = false
 	_render_skills(SkillsService.get_skills())
@@ -397,36 +406,35 @@ func _build_interface() -> void:
 	targets_reset_label.add_theme_font_size_override("font_size", 9)
 	targets_section.add_child(targets_reset_label)
 
-	var target_town_navigation := HBoxContainer.new()
-	target_town_navigation.name = "TargetTownNavigation"
-	target_town_navigation.add_theme_constant_override("separation", 5)
-	targets_section.add_child(target_town_navigation)
+	area_selector = OptionButton.new()
+	area_selector.name = "AreaSelector"
+	area_selector.custom_minimum_size.y = 40.0
+	area_selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	area_selector.fit_to_longest_item = false
+	area_selector.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	area_selector.clip_text = true
+	area_selector.item_selected.connect(_select_area)
+	_style_area_selector(area_selector)
+	targets_section.add_child(area_selector)
 
-	target_town_previous_button = _create_target_town_arrow("‹")
-	target_town_previous_button.pressed.connect(_change_target_town_page.bind(-1))
-	target_town_navigation.add_child(target_town_previous_button)
-
-	target_town_tabs = HBoxContainer.new()
-	target_town_tabs.name = "TargetTownTabs"
-	target_town_tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	target_town_tabs.add_theme_constant_override("separation", 5)
-	target_town_navigation.add_child(target_town_tabs)
-
-	target_town_next_button = _create_target_town_arrow("›")
-	target_town_next_button.pressed.connect(_change_target_town_page.bind(1))
-	target_town_navigation.add_child(target_town_next_button)
+	area_selector_spacing = Control.new()
+	area_selector_spacing.name = "AreaSelectorSpacing"
+	area_selector_spacing.custom_minimum_size.y = 6.0
+	area_selector_spacing.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	targets_section.add_child(area_selector_spacing)
 
 	targets_scroll = ScrollContainer.new()
 	targets_scroll.name = "TargetsScroll"
-	targets_scroll.custom_minimum_size.y = 220.0
+	targets_scroll.custom_minimum_size.y = 120.0
 	targets_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	targets_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	targets_section.add_child(targets_scroll)
 
-	targets_container = VBoxContainer.new()
+	targets_container = GridContainer.new()
 	targets_container.name = "TargetsContainer"
 	targets_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	targets_container.add_theme_constant_override("separation", 5)
+	targets_container.add_theme_constant_override("h_separation", 6)
+	targets_container.add_theme_constant_override("v_separation", 5)
 	targets_scroll.add_child(targets_container)
 
 	fishing_catalog_section = VBoxContainer.new()
@@ -449,17 +457,17 @@ func _build_interface() -> void:
 	fishing_rod_filters.add_theme_constant_override("separation", 5)
 	fishing_catalog_section.add_child(fishing_rod_filters)
 
-	var catalog_scroll := ScrollContainer.new()
-	catalog_scroll.name = "FishingCatalogScroll"
-	catalog_scroll.custom_minimum_size.y = 220.0
-	catalog_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	catalog_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	fishing_catalog_section.add_child(catalog_scroll)
+	fishing_catalog_scroll = ScrollContainer.new()
+	fishing_catalog_scroll.name = "FishingCatalogScroll"
+	fishing_catalog_scroll.custom_minimum_size.y = 120.0
+	fishing_catalog_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	fishing_catalog_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	fishing_catalog_section.add_child(fishing_catalog_scroll)
 
 	fishing_catalog_container = VBoxContainer.new()
 	fishing_catalog_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	fishing_catalog_container.add_theme_constant_override("separation", 5)
-	catalog_scroll.add_child(fishing_catalog_container)
+	fishing_catalog_scroll.add_child(fishing_catalog_container)
 
 	_render_skills([])
 
@@ -565,17 +573,31 @@ func _render_detail(skill: Dictionary) -> void:
 		})
 	var stats := skill.get("stats", {}) as Dictionary
 	stats_label.text = _stats_text(skill_id, stats)
+	var targets_title := main_panel.find_child("TargetsTitle", true, false) as Label
+	if targets_title != null:
+		targets_title.text = _text(
+			"ui.skills.rock_smash.rocks.title"
+			if skill_id == "rock_smash"
+			else "ui.skills.thieving.targets.title"
+		)
 	wanted_section.visible = skill_id == "thieving"
 	if wanted_section.visible:
 		_render_wanted_meter(stats)
 	_render_unlocks(skill.get("unlocks", []) as Array)
 	if skill_id == "thieving":
 		_render_targets(skill.get("targets", []) as Array)
-	detail_tabs.visible = skill_id in ["fishing", "thieving"]
+	elif skill_id == "rock_smash":
+		_render_rocks(skill.get("rocks", []) as Array)
+	_update_target_grid_columns()
+	detail_tabs.visible = skill_id in ["fishing", "thieving", "rock_smash"]
 	catalog_tab_button.text = (
 		_text("ui.skills.thieving.targets.tab")
 		if skill_id == "thieving"
-		else _text("ui.skills.fishing.catalog.title")
+		else (
+			_text("ui.skills.rock_smash.rocks.tab")
+			if skill_id == "rock_smash"
+			else _text("ui.skills.fishing.catalog.title")
+		)
 	)
 	_render_detail_tab(skill)
 
@@ -600,7 +622,7 @@ func _select_detail_tab(tab_id: String) -> void:
 func _render_detail_tab(skill: Dictionary) -> void:
 	var skill_id := str(skill.get("id", ""))
 	var show_catalog := skill_id == "fishing" and selected_detail_tab == "catalog"
-	var show_targets := skill_id == "thieving" and selected_detail_tab == "catalog"
+	var show_targets := skill_id in ["thieving", "rock_smash"] and selected_detail_tab == "catalog"
 	progression_section.visible = not show_catalog and not show_targets
 	fishing_catalog_section.visible = show_catalog
 	targets_section.visible = show_targets
@@ -853,9 +875,7 @@ func _render_targets(targets: Array) -> void:
 		town_targets.append(target)
 	if selected_target_town_key not in target_town_order:
 		selected_target_town_key = target_town_order[0] if not target_town_order.is_empty() else ""
-	var selected_index := target_town_order.find(selected_target_town_key)
-	target_town_page = floori(float(maxi(selected_index, 0)) / TARGET_TOWN_TABS_PER_PAGE)
-	_render_target_town_tabs()
+	_render_area_selector()
 	_render_selected_target_town()
 	targets_summary_label.text = _text("ui.skills.thieving.targets.summary", {
 		"available": available_count,
@@ -865,22 +885,72 @@ func _render_targets(targets: Array) -> void:
 	targets_reset_label.text = _text("ui.skills.thieving.targets.reset")
 
 
-func _render_target_town_tabs() -> void:
-	for child: Node in target_town_tabs.get_children():
-		target_town_tabs.remove_child(child)
-		child.queue_free()
-	var page_count := maxi(ceili(float(target_town_order.size()) / TARGET_TOWN_TABS_PER_PAGE), 1)
-	target_town_page = clampi(target_town_page, 0, page_count - 1)
-	var start_index := target_town_page * TARGET_TOWN_TABS_PER_PAGE
-	var end_index := mini(start_index + TARGET_TOWN_TABS_PER_PAGE, target_town_order.size())
-	for index in range(start_index, end_index):
+func _render_rocks(rocks: Array) -> void:
+	var available_count := 0
+	var completed_count := 0
+	target_town_order.clear()
+	targets_by_town.clear()
+	for rock_value: Variant in rocks:
+		var rock := rock_value as Dictionary
+		if bool(rock.get("availableToday", false)):
+			available_count += 1
+		if bool(rock.get("smashedToday", false)):
+			completed_count += 1
+		var town_key := str(rock.get("townKey", rock.get("locationKey", "")))
+		if not targets_by_town.has(town_key):
+			target_town_order.append(town_key)
+			targets_by_town[town_key] = []
+		var town_rocks: Array = targets_by_town[town_key] as Array
+		town_rocks.append(rock)
+	if selected_target_town_key not in target_town_order:
+		selected_target_town_key = target_town_order[0] if not target_town_order.is_empty() else ""
+	_render_area_selector()
+	_render_selected_target_town()
+	targets_summary_label.text = _text("ui.skills.rock_smash.rocks.summary", {
+		"available": available_count,
+		"completed": completed_count,
+		"total": rocks.size(),
+	})
+	targets_reset_label.text = _text("ui.skills.rock_smash.rocks.reset")
+
+
+func _render_area_selector() -> void:
+	area_selector.clear()
+	var selected_index := 0
+	var completion_key := "smashedToday" if selected_skill_id == "rock_smash" else "attemptedToday"
+	var option_key := (
+		"ui.skills.rock_smash.rocks.area_option"
+		if selected_skill_id == "rock_smash"
+		else "ui.skills.thieving.targets.area_option"
+	)
+	for index in range(target_town_order.size()):
 		var town_key := target_town_order[index]
-		target_town_tabs.add_child(_create_target_town_tab(town_key))
-	var has_overflow := target_town_order.size() > TARGET_TOWN_TABS_PER_PAGE
-	target_town_previous_button.visible = has_overflow
-	target_town_next_button.visible = has_overflow
-	target_town_previous_button.disabled = target_town_page <= 0
-	target_town_next_button.disabled = target_town_page >= page_count - 1
+		var area_targets: Array = targets_by_town.get(town_key, []) as Array
+		var completed_count := 0
+		for target_value: Variant in area_targets:
+			if bool((target_value as Dictionary).get(completion_key, false)):
+				completed_count += 1
+		area_selector.add_item(_text(option_key, {
+			"area": _text(town_key),
+			"completed": completed_count,
+			"total": area_targets.size(),
+		}))
+		area_selector.set_item_metadata(index, town_key)
+		if town_key == selected_target_town_key:
+			selected_index = index
+	area_selector.disabled = target_town_order.is_empty()
+	if not target_town_order.is_empty():
+		area_selector.select(selected_index)
+
+
+func _select_area(index: int) -> void:
+	if index < 0 or index >= area_selector.item_count:
+		return
+	var town_key := str(area_selector.get_item_metadata(index))
+	if town_key not in target_town_order:
+		return
+	selected_target_town_key = town_key
+	_render_selected_target_town()
 
 
 func _render_selected_target_town() -> void:
@@ -893,79 +963,45 @@ func _render_selected_target_town() -> void:
 	targets_scroll.scroll_vertical = 0
 
 
-func _create_target_town_tab(town_key: String) -> Button:
-	var town_targets: Array = targets_by_town.get(town_key, []) as Array
-	var available_count := 0
-	for target_value: Variant in town_targets:
-		if bool((target_value as Dictionary).get("availableToday", false)):
-			available_count += 1
-	var selected := town_key == selected_target_town_key
-	var button := Button.new()
-	button.custom_minimum_size = Vector2(0, 34)
-	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.focus_mode = Control.FOCUS_NONE
-	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	button.text = _text(town_key)
-	button.tooltip_text = _text("ui.skills.thieving.targets.town_summary", {
-		"available": available_count,
-		"total": town_targets.size(),
-	})
-	button.add_theme_font_size_override("font_size", 10)
-	button.add_theme_color_override("font_color", TEXT_COLOR if selected else MUTED_TEXT_COLOR)
-	button.add_theme_color_override("font_hover_color", TEXT_COLOR)
-	button.add_theme_stylebox_override(
-		"normal",
-		_make_panel_style(CARD_SELECTED if selected else Color("#07111c"), CARD_SELECTED_BORDER if selected else PANEL_BORDER, 7, 1)
-	)
-	button.add_theme_stylebox_override("hover", _make_panel_style(CARD_HOVER, CARD_SELECTED_BORDER, 7, 1))
-	button.add_theme_stylebox_override("pressed", _make_panel_style(CARD_SELECTED, CARD_SELECTED_BORDER, 7, 1))
-	button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
-	button.pressed.connect(_select_target_town.bind(town_key))
-	return button
+func _style_area_selector(option: OptionButton) -> void:
+	option.focus_mode = Control.FOCUS_ALL
+	option.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	option.add_theme_font_size_override("font_size", 12)
+	option.add_theme_color_override("font_color", TEXT_COLOR)
+	option.add_theme_color_override("font_hover_color", TEXT_COLOR)
+	option.add_theme_color_override("font_pressed_color", TEXT_COLOR)
+	option.add_theme_color_override("font_focus_color", TEXT_COLOR)
+	option.add_theme_constant_override("arrow_margin", 12)
+	option.add_theme_stylebox_override("normal", _make_panel_style(Color("#07111c"), PANEL_BORDER, 7, 1))
+	option.add_theme_stylebox_override("hover", _make_panel_style(CARD_HOVER, CARD_SELECTED_BORDER, 7, 1))
+	option.add_theme_stylebox_override("pressed", _make_panel_style(CARD_SELECTED, CARD_SELECTED_BORDER, 7, 1))
+	option.add_theme_stylebox_override("focus", _make_panel_style(CARD_SELECTED, CARD_SELECTED_BORDER, 7, 1))
+	var popup := option.get_popup()
+	popup.transparent_bg = true
+	popup.borderless = true
+	popup.max_size = Vector2i(760, 360)
+	popup.add_theme_font_size_override("font_size", 13)
+	popup.add_theme_color_override("font_color", TEXT_COLOR)
+	popup.add_theme_color_override("font_hover_color", TEXT_COLOR)
+	popup.add_theme_color_override("font_disabled_color", LOCKED_COLOR)
+	popup.add_theme_constant_override("item_start_padding", 14)
+	popup.add_theme_constant_override("item_end_padding", 14)
+	popup.add_theme_constant_override("v_separation", 12)
+	popup.add_theme_stylebox_override("panel", _make_panel_style(Color("#050e18fc"), CARD_SELECTED_BORDER, 8, 1))
+	popup.add_theme_stylebox_override("hover", _make_panel_style(CARD_HOVER, CARD_SELECTED_BORDER, 5, 1))
+	popup.about_to_popup.connect(_fit_area_popup.bind(option))
 
 
-func _create_target_town_arrow(label: String) -> Button:
-	var button := Button.new()
-	button.custom_minimum_size = Vector2(34, 34)
-	button.focus_mode = Control.FOCUS_NONE
-	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	button.text = label
-	button.add_theme_font_size_override("font_size", 18)
-	button.add_theme_color_override("font_color", ACCENT_COLOR)
-	button.add_theme_color_override("font_disabled_color", LOCKED_COLOR)
-	button.add_theme_stylebox_override("normal", _make_panel_style(Color("#07111c"), PANEL_BORDER, 7, 1))
-	button.add_theme_stylebox_override("hover", _make_panel_style(CARD_HOVER, CARD_SELECTED_BORDER, 7, 1))
-	button.add_theme_stylebox_override("pressed", _make_panel_style(CARD_SELECTED, CARD_SELECTED_BORDER, 7, 1))
-	button.add_theme_stylebox_override("disabled", _make_panel_style(Color("#070c12"), Color("#25313d"), 7, 1))
-	button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
-	return button
-
-
-func _select_target_town(town_key: String) -> void:
-	if town_key not in target_town_order:
-		return
-	selected_target_town_key = town_key
-	target_town_page = floori(float(target_town_order.find(town_key)) / TARGET_TOWN_TABS_PER_PAGE)
-	_render_target_town_tabs()
-	_render_selected_target_town()
-
-
-func _change_target_town_page(direction: int) -> void:
-	var page_count := maxi(ceili(float(target_town_order.size()) / TARGET_TOWN_TABS_PER_PAGE), 1)
-	var next_page := clampi(target_town_page + direction, 0, page_count - 1)
-	if next_page == target_town_page:
-		return
-	target_town_page = next_page
-	var first_town_index := target_town_page * TARGET_TOWN_TABS_PER_PAGE
-	if first_town_index < target_town_order.size():
-		selected_target_town_key = target_town_order[first_town_index]
-	_render_target_town_tabs()
-	_render_selected_target_town()
-
+func _fit_area_popup(option: OptionButton) -> void:
+	var popup := option.get_popup()
+	var popup_width := maxi(roundi(option.size.x), 320)
+	popup.min_size = Vector2i(popup_width, 0)
+	popup.max_size = Vector2i(popup_width, 360)
 
 func _create_target_row(target: Dictionary) -> Control:
 	var row := PanelContainer.new()
 	row.custom_minimum_size.y = 47.0
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_theme_stylebox_override("panel", _make_panel_style(Color("#07111ceb"), Color("#233d52"), 7, 1))
 
 	var content := HBoxContainer.new()
@@ -986,11 +1022,17 @@ func _create_target_row(target: Dictionary) -> Control:
 	var detail_label := Label.new()
 	detail_label.add_theme_color_override("font_color", MUTED_TEXT_COLOR)
 	detail_label.add_theme_font_size_override("font_size", 9)
-	detail_label.text = _text("ui.skills.thieving.target.detail", {
-		"type": _text("ui.skills.thieving.target_type.%s" % str(target.get("npcType", "civilian"))),
-		"location": _text(str(target.get("locationKey", ""))),
-		"level": int(target.get("requiredLevel", 1)),
-	})
+	if selected_skill_id == "rock_smash":
+		detail_label.text = _text("ui.skills.rock_smash.rock.detail", {
+			"location": _text(str(target.get("locationKey", ""))),
+			"level": int(target.get("requiredLevel", 1)),
+		})
+	else:
+		detail_label.text = _text("ui.skills.thieving.target.detail", {
+			"type": _text("ui.skills.thieving.target_type.%s" % str(target.get("npcType", "civilian"))),
+			"location": _text(str(target.get("locationKey", ""))),
+			"level": int(target.get("requiredLevel", 1)),
+		})
 	identity.add_child(detail_label)
 
 	var status := Label.new()
@@ -998,23 +1040,43 @@ func _create_target_row(target: Dictionary) -> Control:
 	status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	status.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	status.add_theme_font_size_override("font_size", 10)
-	var attempted := bool(target.get("attemptedToday", false))
+	var attempted := bool(target.get(
+		"smashedToday" if selected_skill_id == "rock_smash" else "attemptedToday",
+		false
+	))
 	var unlocked := bool(target.get("unlocked", false))
 	var available := bool(target.get("availableToday", false))
 	if attempted:
-		status.text = _text("ui.skills.thieving.target.completed")
+		status.text = _text(
+			"ui.skills.rock_smash.rock.completed"
+			if selected_skill_id == "rock_smash"
+			else "ui.skills.thieving.target.completed"
+		)
 		status.add_theme_color_override("font_color", COMPLETE_COLOR)
 		status.add_theme_stylebox_override("normal", _make_panel_style(Color("#111d28"), Color("#38536a"), 7, 1))
 	elif not unlocked:
-		status.text = _text("ui.skills.thieving.target.level_required", {"level": int(target.get("requiredLevel", 1))})
+		status.text = _text(
+			"ui.skills.rock_smash.rock.level_required"
+			if selected_skill_id == "rock_smash"
+			else "ui.skills.thieving.target.level_required",
+			{"level": int(target.get("requiredLevel", 1))}
+		)
 		status.add_theme_color_override("font_color", LOCKED_COLOR)
 		status.add_theme_stylebox_override("normal", _make_panel_style(Color("#10151c"), Color("#2c3540"), 7, 1))
 	elif available:
-		status.text = _text("ui.skills.thieving.target.available")
+		status.text = _text(
+			"ui.skills.rock_smash.rock.available"
+			if selected_skill_id == "rock_smash"
+			else "ui.skills.thieving.target.available"
+		)
 		status.add_theme_color_override("font_color", SUCCESS_COLOR)
 		status.add_theme_stylebox_override("normal", _make_panel_style(Color("#0b241a"), Color("#397858"), 7, 1))
 	else:
-		status.text = _text("ui.skills.thieving.target.unavailable")
+		status.text = _text(
+			"ui.skills.rock_smash.rock.unavailable"
+			if selected_skill_id == "rock_smash"
+			else "ui.skills.thieving.target.unavailable"
+		)
 		status.add_theme_color_override("font_color", LOCKED_COLOR)
 		status.add_theme_stylebox_override("normal", _make_panel_style(Color("#10151c"), Color("#2c3540"), 7, 1))
 	content.add_child(status)
@@ -1027,6 +1089,11 @@ func _stats_text(skill_id: String, stats: Dictionary) -> String:
 			"reward": snappedf(float(stats.get("rewardBonusPercent", 0.0)), 0.1),
 			"risk": snappedf(float(stats.get("maximumCatchReductionPercent", 0.0)), 0.1),
 			"heat": snappedf(float(stats.get("wantedReductionPercent", 0.0)), 0.1),
+		})
+	if skill_id == "rock_smash":
+		return _text("ui.skills.rock_smash.stats", {
+			"fossil": snappedf(float(stats.get("fossilChancePercent", 0.0)), 0.001),
+			"available": maxi(int(stats.get("availableRocks", 0)), 0),
 		})
 	return _text("ui.skills.fishing.stats", {
 		"tier": maxi(int(stats.get("activeTier", 0)), 0),
@@ -1093,6 +1160,36 @@ func _clamp_window_to_parent() -> void:
 	)
 
 
+func _fit_window_to_parent() -> void:
+	var parent_control := get_parent_control()
+	if parent_control == null:
+		return
+	var available_size := parent_control.size - Vector2.ONE * WINDOW_EDGE_MARGIN * 2.0
+	available_size.x = maxf(available_size.x, 320.0)
+	available_size.y = maxf(available_size.y, 360.0)
+	custom_minimum_size = Vector2(
+		minf(WINDOW_MINIMUM_SIZE.x, available_size.x),
+		minf(WINDOW_MINIMUM_SIZE.y, available_size.y)
+	)
+	size = Vector2(
+		minf(WINDOW_PREFERRED_SIZE.x, available_size.x),
+		minf(WINDOW_PREFERRED_SIZE.y, available_size.y)
+	)
+	_clamp_window_to_parent()
+
+
+func _on_window_resized() -> void:
+	_update_target_grid_columns()
+
+
+func _update_target_grid_columns() -> void:
+	if targets_container == null:
+		return
+	targets_container.columns = (
+		2 if selected_skill_id == "rock_smash" and size.x >= ROCK_GRID_MINIMUM_WIDTH else 1
+	)
+
+
 func _on_skills_changed(skills: Array) -> void:
 	if visible:
 		_render_skills(skills)
@@ -1145,7 +1242,11 @@ func _has_skill(skills: Array, skill_id: String) -> bool:
 
 
 func _skill_icon(skill_id: String) -> Texture2D:
-	return FISHING_ICON if skill_id == "fishing" else THIEVING_ICON
+	if skill_id == "fishing":
+		return FISHING_ICON
+	if skill_id == "rock_smash":
+		return ROCK_SMASH_ICON
+	return THIEVING_ICON
 
 
 func _text(key: String, replacements: Dictionary = {}) -> String:

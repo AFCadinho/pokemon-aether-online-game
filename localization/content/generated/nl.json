@@ -1540,10 +1540,10 @@
       "name": "Greninja"
     },
     "greninja-ash": {
-      "name": "Greninja Ash"
+      "name": "Ash-Greninja"
     },
     "greninja-bond": {
-      "name": "Greninja Bond"
+      "name": "Greninja"
     },
     "greninja-mega": {
       "name": "Greninja Mega"
@@ -8073,8 +8073,8 @@
       "shortDesc": "Beschermt tegen kritieke treffers."
     },
     "battle-bond": {
-      "name": "Vecht tegen Bond",
-      "shortDesc": "Transformeert deze Pokémon in Ash-Greninja nadat hij een tegenstander heeft laten flauwvallen. De kracht van Water Shuriken is 20 en raakt altijd drie keer."
+      "name": "Battle Bond",
+      "shortDesc": "Eén keer per gevecht verhoogt het uitschakelen van een tegenstander Attack, Sp. Atk en Speed met één niveau."
     },
     "beads-of-ruin": {
       "name": "Ruïnekralen",

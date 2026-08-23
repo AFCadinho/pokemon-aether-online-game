@@ -67,16 +67,35 @@ func _run() -> void:
 	_check((nodes.get("type_row") as HBoxContainer).get_child_count() == 2, "both Pokémon types render as chips")
 	_check((nodes.get("name_label") as Label).text == "Garchomp", "localized Pokémon identity renders")
 	_check((nodes.get("id_label") as Label).text == "#445", "header uses the National Dex number instead of the owned Pokémon id")
+	var missing_dex_payload := _sample_pokemon()
+	missing_dex_payload.erase("nationalDexNumber")
+	missing_dex_payload["species"] = "zeraora"
+	var missing_dex_pokemon := PokemonFactory.create_pokemon_from_backend_payload(missing_dex_payload)
+	var fallback_id_label := Label.new()
+	overlay.call("_set_readonly_summary_dex_number", fallback_id_label, missing_dex_pokemon)
+	_check(fallback_id_label.text == "#—", "missing public payload data initially shows an unknown Dex number")
+	_check(
+		overlay.call(
+			"_apply_readonly_summary_dex_number_from_species",
+			fallback_id_label,
+			missing_dex_pokemon,
+			"zeraora",
+			{"nationalDexNumber": 807}
+		),
+		"Pokédex species metadata supplies a missing National Dex number"
+	)
+	_check(fallback_id_label.text == "#807", "Zeraora renders its National Dex number instead of a database id")
+	fallback_id_label.free()
 	_check((nodes.get("gender_label") as Label).text == "♀", "gender renders beside the Pokémon name")
 	_check((nodes.get("ability_label") as Label).text != "", "ability renders on the overview")
-	_check((nodes.get("ability_stack") as VBoxContainer).tooltip_text != "", "ability hover shows its effect")
-	_check((nodes.get("nature_stack") as VBoxContainer).tooltip_text.contains("ATK"), "nature hover explains its stat effect")
+	_check((nodes.get("ability_stack") as VBoxContainer).tooltip_text == "", "ability uses the compact hover card instead of a native tooltip")
+	_check((nodes.get("nature_stack") as VBoxContainer).tooltip_text == "", "nature uses the compact hover card instead of a native tooltip")
 	_check((nodes.get("iv_total_label") as Label).text.contains("186/186"), "perfect IV quality is summarized in the profile")
 	_check((nodes.get("ev_total_label") as Label).text.contains("508/510"), "allocated EV total is summarized in the profile")
-	_check((nodes.get("iv_total_label_panel") as PanelContainer).tooltip_text != "", "IV quality explains its range on hover")
-	_check((nodes.get("ev_total_label_panel") as PanelContainer).tooltip_text != "", "EV quality explains its limits on hover")
+	_check((nodes.get("iv_total_label_panel") as PanelContainer).tooltip_text == "", "IV quality uses the compact hover card")
+	_check((nodes.get("ev_total_label_panel") as PanelContainer).tooltip_text == "", "EV quality uses the compact hover card")
 	_check((nodes.get("item_icon") as TextureRect).texture != null, "held item renders its icon")
-	_check((nodes.get("item_panel") as PanelContainer).tooltip_text.contains("Life Orb"), "held item hover identifies the item")
+	_check((nodes.get("item_panel") as PanelContainer).tooltip_text == "", "held item uses the compact hover card")
 	_check((nodes.get("trainer_label") as Label).text.contains("Exchange"), "read-only Summary keeps the standard owner bar")
 	_check(overlay.get("pokemon_summary_animated_sprite") is AnimatedSprite2D, "read-only Summary uses the standard animated sprite stage")
 	var stat_rows := nodes.get("stat_rows", {}) as Dictionary
@@ -92,14 +111,42 @@ func _run() -> void:
 	overlay.call("_show_readonly_summary_move_hover", first_move_panel, nodes)
 	_check(move_hover_panel.visible, "move hover opens a dedicated detail card")
 	_check(move_hover_panel.size == Vector2(254, 156), "move hover uses a consistent compact size")
-	_check(not move_hover_panel.get_global_rect().intersects(popup.get_global_rect()), "move hover stays beside the Summary instead of covering it")
-	var first_hover_position := move_hover_panel.position
+	_check(popup.get_global_rect().encloses(move_hover_panel.get_global_rect()), "move hover stays inside the Summary card")
 	var hover_labels := move_hover_panel.find_children("*", "Label", true, false)
 	_check(not hover_labels.is_empty() and (hover_labels[0] as Label).text == "Earthquake", "move hover shows the selected move details")
 	overlay.call("_hide_readonly_summary_move_hover", first_move_panel, nodes)
 	_check(not move_hover_panel.visible, "move hover closes when leaving a tile")
+	var ability_label := nodes.get("ability_label") as Label
+	var detail_hover_panel := nodes.get("detail_hover_panel") as PanelContainer
+	overlay.call("_show_readonly_summary_detail_hover", ability_label, nodes)
+	await process_frame
+	await process_frame
+	_check(detail_hover_panel.visible, "ability opens the compact hover card")
+	_check(detail_hover_panel.size.y <= 100.0, "short ability details use a content-sized hover card")
+	var detail_labels := detail_hover_panel.find_children("*", "Label", true, false)
+	var detail_title := detail_labels.front() as Label
+	var detail_description := detail_labels.back() as Label
+	var expected_detail_height := detail_title.custom_minimum_size.y + 5.0 + detail_description.custom_minimum_size.y + 18.0
+	_check(is_equal_approx(detail_hover_panel.size.y, expected_detail_height), "detail hover height follows its content without unused space")
+	var position_source := Control.new()
+	position_source.position = Vector2(300, 250)
+	position_source.size = Vector2(80, 20)
+	(nodes.get("move_hover_layer") as Control).add_child(position_source)
+	overlay.call("_position_readonly_summary_detail_hover", detail_hover_panel, popup, position_source, detail_hover_panel.size)
+	_check(not detail_hover_panel.get_global_rect().intersects(position_source.get_global_rect()), "ability hover is positioned above the hovered ability")
+	_check(absf(detail_hover_panel.get_global_rect().end.y - position_source.get_global_rect().position.y) <= 5.0, "ability hover sits directly above the hovered text")
+	overlay.call("_position_readonly_summary_move_hover", move_hover_panel, popup, position_source)
+	_check(not move_hover_panel.get_global_rect().intersects(position_source.get_global_rect()), "move hover is positioned above the hovered move")
+	_check(absf(move_hover_panel.get_global_rect().end.y - position_source.get_global_rect().position.y) <= 5.0, "move hover sits directly above the hovered move")
+	position_source.free()
+	_check((detail_hover_panel.find_children("*", "Label", true, false)[0] as Label).text == "Rough Skin", "ability hover shows its name")
+	overlay.call("_hide_readonly_summary_detail_hover", nodes)
+	var item_panel := nodes.get("item_panel") as PanelContainer
+	overlay.call("_show_readonly_summary_detail_hover", item_panel, nodes)
+	_check(detail_hover_panel.visible, "held item opens the compact hover card")
+	_check((detail_hover_panel.find_children("*", "Label", true, false)[0] as Label).text == "Life Orb", "held item hover shows its name")
+	overlay.call("_hide_readonly_summary_detail_hover", nodes)
 	overlay.call("_show_readonly_summary_move_hover", second_move_panel, nodes)
-	_check(move_hover_panel.position == first_hover_position, "every move uses the same hover position")
 	_check(not popup.find_children("*", "ScrollContainer", true, false).size(), "read-only Summary needs no scrolling")
 
 	for loader_property: String in ["pokemon_summary_sprite_loader", "pokedex_sprite_loader"]:

@@ -2,6 +2,8 @@ extends Node
 
 class_name TrainerProgressServiceNode
 
+signal progress_invalidated
+
 const TRAINER_PROGRESS_ENDPOINT := "/game/trainers/%s/progress"
 const TRAINER_REMATCH_ENDPOINT := "/game/trainers/%s/rematch"
 const REQUEST_TIMEOUT_SECONDS := 5.0
@@ -13,6 +15,10 @@ func get_progress(trainer_id: String) -> Dictionary:
 
 func begin_rematch(trainer_id: String) -> Dictionary:
 	return await _request_progress(trainer_id, true)
+
+
+func invalidate_all() -> void:
+	progress_invalidated.emit()
 
 
 func _request_progress(trainer_id: String, begin_daily_rematch: bool) -> Dictionary:
