@@ -373,8 +373,6 @@ func _render_loans() -> void:
 			_add_action(actions, _t("common.accept"), _loan_action.bind("accept", str(loan.get("loanId", ""))))
 		elif status == "pending":
 			_add_action(actions, _t("common.cancel"), _loan_action.bind("cancel", str(loan.get("loanId", ""))))
-		elif status == "active" and not is_borrower:
-			_add_action(actions, _t("ui.lending.request_return"), _loan_action.bind("request-return", str(loan.get("loanId", ""))))
 		loans_list.add_child(card)
 
 
@@ -392,6 +390,8 @@ func _loan_asset_row(asset: Dictionary, is_borrower: bool, loan_status: String, 
 	row.add_theme_constant_override("separation", 8)
 	margin.add_child(row)
 	var asset_type := str(asset.get("assetType", ""))
+	var asset_status := str(asset.get("status", ""))
+	var return_requested := str(asset.get("returnRequestedAt", "")) != ""
 	if asset_type == "pokemon":
 		var icon_button := Button.new()
 		icon_button.custom_minimum_size = Vector2(42, 42)
@@ -402,10 +402,10 @@ func _loan_asset_row(asset: Dictionary, is_borrower: bool, loan_status: String, 
 		icon_button.pressed.connect(_open_pokemon_summary.bind(snapshot))
 		_apply_icon_button_style(icon_button)
 		row.add_child(icon_button)
-		var identity := _loan_asset_identity(_pokemon_display_name(snapshot), _t("ui.lending.card.pokemon_meta", {"level": int(snapshot.get("level", 1)), "state": _asset_state_label(str(asset.get("status", "")))}))
+		var asset_name := _pokemon_display_name(snapshot)
+		var identity := _loan_asset_identity(asset_name, _t("ui.lending.card.pokemon_meta", {"level": int(snapshot.get("level", 1)), "state": _asset_state_label(asset_status)}))
 		row.add_child(identity)
-		if is_borrower and loan_status in ["active", "return_pending"] and str(asset.get("status", "")) in ["active", "return_pending"]:
-			row.add_child(_asset_return_button(loan_id, str(asset.get("assetId", "")), _pokemon_display_name(snapshot)))
+		_add_asset_return_controls(row, asset, asset_name, is_borrower, loan_status, return_requested, loan_id)
 		var view := Button.new()
 		view.text = _t("ui.lending.invitation.view")
 		view.pressed.connect(_open_pokemon_summary.bind(snapshot))
@@ -420,9 +420,10 @@ func _loan_asset_row(asset: Dictionary, is_borrower: bool, loan_status: String, 
 		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		row.add_child(icon)
 		var item_meta_key := "ui.lending.card.item_equipped" if int(asset.get("heldPokemonId", 0)) > 0 else "ui.lending.card.item_in_bag"
-		var identity := _loan_asset_identity(_item_display_name(item_id, str(snapshot.get("name", item_id))), _t(item_meta_key, {"state": _asset_state_label(str(asset.get("status", "")))}))
+		var asset_name := _item_display_name(item_id, str(snapshot.get("name", item_id)))
+		var identity := _loan_asset_identity(asset_name, _t(item_meta_key, {"state": _asset_state_label(asset_status)}))
 		row.add_child(identity)
-		if is_borrower and loan_status in ["active", "return_pending"] and str(asset.get("status", "")) in ["active", "return_pending"]:
+		if is_borrower and loan_status in ["active", "return_pending"] and asset_status in ["active", "return_pending"]:
 			var action := Button.new()
 			action.text = _t("ui.lending.detach_item") if int(asset.get("heldPokemonId", 0)) > 0 else _t("ui.lending.attach_item")
 			action.disabled = mutation_in_flight
@@ -432,8 +433,41 @@ func _loan_asset_row(asset: Dictionary, is_borrower: bool, loan_status: String, 
 				action.pressed.connect(_open_attach_menu.bind(str(asset.get("assetId", "")), item_id))
 			_apply_button_style(action)
 			row.add_child(action)
-			row.add_child(_asset_return_button(loan_id, str(asset.get("assetId", "")), _item_display_name(item_id, str(snapshot.get("name", item_id)))))
+		_add_asset_return_controls(row, asset, asset_name, is_borrower, loan_status, return_requested, loan_id)
 	return panel
+
+
+func _add_asset_return_controls(row: HBoxContainer, asset: Dictionary, asset_name: String, is_borrower: bool, loan_status: String, return_requested: bool, loan_id: String) -> void:
+	var asset_status := str(asset.get("status", ""))
+	if loan_status not in ["active", "return_pending"] or asset_status not in ["active", "return_pending"]:
+		return
+	var asset_id := str(asset.get("assetId", ""))
+	if is_borrower:
+		if return_requested:
+			row.add_child(_return_requested_label())
+		row.add_child(_asset_return_button(loan_id, asset_id, asset_name))
+	elif asset_status == "active":
+		if return_requested:
+			row.add_child(_return_requested_label())
+		else:
+			row.add_child(_asset_request_return_button(loan_id, asset_id, asset_name))
+
+
+func _return_requested_label() -> Label:
+	var label := Label.new()
+	label.text = _t("ui.lending.card.asset_return_requested")
+	label.add_theme_color_override("font_color", GOLD)
+	label.add_theme_font_size_override("font_size", 9)
+	return label
+
+
+func _asset_request_return_button(loan_id: String, asset_id: String, asset_name: String) -> Button:
+	var button := Button.new()
+	button.text = _t("ui.lending.request_return_asset")
+	button.disabled = mutation_in_flight
+	button.pressed.connect(_request_loan_asset_return.bind(loan_id, asset_id, asset_name))
+	_apply_button_style(button)
+	return button
 
 
 func _asset_return_button(loan_id: String, asset_id: String, asset_name: String) -> Button:
@@ -443,6 +477,22 @@ func _asset_return_button(loan_id: String, asset_id: String, asset_name: String)
 	button.pressed.connect(_confirm_asset_return.bind(loan_id, asset_id, asset_name))
 	_apply_button_style(button)
 	return button
+
+
+func _request_loan_asset_return(loan_id: String, asset_id: String, asset_name: String) -> void:
+	if mutation_in_flight:
+		return
+	mutation_in_flight = true
+	var service := get_node_or_null("/root/LendingService")
+	var result: Dictionary = await service.request_return(loan_id, asset_id)
+	mutation_in_flight = false
+	if not bool(result.get("success", false)):
+		_show_error(str(result.get("error", _t("ui.lending.error.action"))))
+		return
+	var overlay := get_tree().get_first_node_in_group("ui_overlay")
+	if overlay != null and overlay.has_method("add_system_message"):
+		overlay.call("add_system_message", _t("ui.lending.notification.you_requested_asset", {"asset": asset_name}))
+	await _refresh_loans()
 
 
 func _confirm_asset_return(loan_id: String, asset_id: String, asset_name: String) -> void:
@@ -627,7 +677,6 @@ func _loan_action(action: String, loan_id: String) -> void:
 		"accept": result = await service.accept_loan(loan_id)
 		"decline": result = await service.decline_loan(loan_id)
 		"cancel": result = await service.cancel_loan(loan_id)
-		"request-return": result = await service.request_return(loan_id)
 		_: result = {"success": false, "error": "Unsupported loan action."}
 	mutation_in_flight = false
 	if not bool(result.get("success", false)):

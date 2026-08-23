@@ -4339,6 +4339,8 @@
   "ui.lending.return_confirm_title": "Return loan asset",
   "ui.lending.return_confirm_text": "Return {asset} to its owner? You will no longer be able to use it.",
   "ui.lending.request_return": "Request Return",
+  "ui.lending.request_return_asset": "Request Back",
+  "ui.lending.card.asset_return_requested": "Return requested",
   "ui.lending.duration.hour": "1 hour",
   "ui.lending.duration.day": "24 hours",
   "ui.lending.duration.three_days": "3 days",
@@ -4373,6 +4375,8 @@
   "ui.lending.notification.cancelled": "@{trainer} cancelled the loan offer.",
   "ui.lending.notification.expired": "Your loan offer with @{trainer} expired.",
   "ui.lending.notification.return_requested": "@{trainer} requested the return of their loaned assets.",
+  "ui.lending.notification.asset_return_requested": "@{trainer} requested {asset} back.",
+  "ui.lending.notification.you_requested_asset": "You requested {asset} back.",
   "ui.lending.notification.asset_returned": "@{trainer} returned {asset}.",
   "ui.lending.notification.asset_auto_returned": "{asset} was automatically returned after the loan deadline.",
   "ui.lending.notification.you_returned": "You returned {asset} to its owner."

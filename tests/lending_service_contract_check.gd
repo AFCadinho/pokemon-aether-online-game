@@ -31,6 +31,7 @@ func _init() -> void:
 	_check(workspace_source.contains("_loan_asset_row") and workspace_source.contains("_status_badge") and workspace_source.contains("_loan_timing_text"), "loan cards expose assets, status, and timing details")
 	_check(workspace_source.contains("selected_view < 3") and workspace_source.contains("[\"returned\", \"declined\", \"cancelled\", \"expired\"]"), "terminal loans stay in History")
 	_check(workspace_source.contains("_return_loan_asset") and workspace_source.contains("return_assets(loan_id, [asset_id])"), "borrowed assets return individually")
+	_check(workspace_source.contains("_request_loan_asset_return") and workspace_source.contains("request_return(loan_id, asset_id)") and not workspace_source.contains("_loan_action.bind(\"request-return\""), "lenders request individual assets without a contract-wide recall")
 	_check(workspace_source.contains("_poll_loan_notifications") and workspace_source.contains("acknowledge_notification"), "durable loan notifications become system messages and are acknowledged")
 	_check(workspace_source.contains("custody_changed") and workspace_source.contains("ui.lending.notification.accepted") and workspace_source.contains("await _refresh_after_asset_return()"), "loan custody notifications refresh Party, PC, and Bag state")
 	_check(not workspace_source.contains("service.return_assets(loan_id)"), "loan cards never return every asset implicitly")
