@@ -187,6 +187,9 @@ func _run() -> void:
 		await process_frame
 	_check(popup.find_child("GuildManagementSection", true, false) != null, "management tab opens guild controls")
 	_check(popup.find_child("GuildSettingsDescription", true, false) != null, "leader settings render")
+	_check(popup.find_child("GuildApplicationsInbox", true, false) != null, "Guild applications use a distinct inbox card")
+	var application_count := popup.find_child("GuildApplicationsPendingCount", true, false) as Label
+	_check(application_count != null and application_count.text.contains("1"), "Guild application inbox shows its pending count")
 	_check(popup.find_child("GuildApplicationRow_8", true, false) != null, "pending Guild application renders for staff")
 	_check(popup.find_child("AcceptGuildApplicationButton_8", true, false) != null, "staff can accept a Guild application")
 	_check(popup.find_child("DeclineGuildApplicationButton_8", true, false) != null, "staff can decline a Guild application")
@@ -276,6 +279,12 @@ func _run() -> void:
 		member_minimum_size.x <= GuildPopup.POPUP_SIZE.x and member_minimum_size.y <= GuildPopup.POPUP_SIZE.y,
 		"member dashboard fits inside its popup"
 	)
+	popup.guild_home["pendingApplications"] = []
+	popup._render_guild_home()
+	await process_frame
+	_check(popup.find_child("GuildApplicationsEmptyState", true, false) != null, "empty Guild application inbox remains clearly visible")
+	application_count = popup.find_child("GuildApplicationsPendingCount", true, false) as Label
+	_check(application_count != null and application_count.text.contains("0"), "empty Guild application inbox shows zero waiting")
 	popup.guild_home["membership"] = {"guildId": 1, "role": "member"}
 	popup.membership = {"guildId": 1, "role": "member"}
 	popup._render_guild_home()
