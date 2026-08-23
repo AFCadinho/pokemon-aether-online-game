@@ -4324,5 +4324,12 @@
   "ui.lending.detach_item": "Item losmaken",
   "ui.lending.attach_title": "{item} geven",
   "ui.lending.attach_description": "Kies een Pokémon die nog geen item draagt.",
-  "ui.lending.error.no_attach_target": "Geen Pokémon in je party kan dit item nu dragen."
+  "ui.lending.error.no_attach_target": "Geen Pokémon in je party kan dit item nu dragen.",
+  "ui.lending.invitation.window_title": "Leningsaanbod",
+  "ui.lending.invitation.title": "Inkomend leningsaanbod",
+  "ui.lending.invitation.from": "{trainer} wil deze bezittingen aan je uitlenen",
+  "ui.lending.invitation.terms": "{duration} · ₽{fee} vergoeding · De uitlener blijft eigenaar",
+  "ui.lending.invitation.pending_count": "{count} openstaand(e) aanbod(en)",
+  "ui.lending.invitation.view": "Bekijken",
+  "ui.lending.invitation.item": "Herbruikbaar leenitem"
 }

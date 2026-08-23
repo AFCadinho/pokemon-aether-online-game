@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Incoming player loan offers now appear like trade requests, with a clear asset summary and direct accept or decline actions.
+
 - Guild Bank donations now become Guild property, Pokémon and items show their icons, Shared Funds accept deposits from every member, and separate history windows track membership, rank, funds, item, and Pokémon activity.
 
 - Guild members can now leave their Guild from the overview after safely resolving any Pokémon they own or borrowed in the Guild Vault.

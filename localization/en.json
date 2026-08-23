@@ -4324,5 +4324,12 @@
   "ui.lending.detach_item": "Detach Item",
   "ui.lending.attach_title": "Attach {item}",
   "ui.lending.attach_description": "Choose a Pokémon that is not holding an item.",
-  "ui.lending.error.no_attach_target": "No Pokémon in your party can hold this item right now."
+  "ui.lending.error.no_attach_target": "No Pokémon in your party can hold this item right now.",
+  "ui.lending.invitation.window_title": "Loan Offer",
+  "ui.lending.invitation.title": "Incoming Loan Offer",
+  "ui.lending.invitation.from": "{trainer} wants to lend you these assets",
+  "ui.lending.invitation.terms": "{duration} · ₽{fee} fee · The lender remains the owner",
+  "ui.lending.invitation.pending_count": "{count} pending offer(s)",
+  "ui.lending.invitation.view": "View",
+  "ui.lending.invitation.item": "Reusable loan item"
 }

@@ -4324,5 +4324,12 @@
   "ui.lending.detach_item": "Remover item",
   "ui.lending.attach_title": "Equipar {item}",
   "ui.lending.attach_description": "Escolha um Pokémon que não esteja segurando um item.",
-  "ui.lending.error.no_attach_target": "Nenhum Pokémon da sua equipe pode segurar este item agora."
+  "ui.lending.error.no_attach_target": "Nenhum Pokémon da sua equipe pode segurar este item agora.",
+  "ui.lending.invitation.window_title": "Oferta de empréstimo",
+  "ui.lending.invitation.title": "Oferta de empréstimo recebida",
+  "ui.lending.invitation.from": "{trainer} quer emprestar estes recursos para você",
+  "ui.lending.invitation.terms": "{duration} · taxa de ₽{fee} · O credor continua sendo o dono",
+  "ui.lending.invitation.pending_count": "{count} oferta(s) pendente(s)",
+  "ui.lending.invitation.view": "Ver",
+  "ui.lending.invitation.item": "Item de empréstimo reutilizável"
 }
