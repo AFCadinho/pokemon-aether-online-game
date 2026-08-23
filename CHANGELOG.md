@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Skills overview now shows richer full-width cards with level progress, descriptions, status, and clear links to each skill.
+
 - Every skill now presents level unlocks as a clear, responsive progression roadmap with unlocked, next, and locked states.
 
 - Fishing now has an area dropdown, quick rod filters, and responsive Pokémon cards in its catch catalog.
