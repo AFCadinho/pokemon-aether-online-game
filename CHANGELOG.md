@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Guild management now shows membership applications in a clear inbox card with a pending count and visible empty state.
+
 - The Bag right-click menu now focuses on usable actions without a redundant Inspect option.
 
 - Guild browsing, creation, and settings now share a broader language list including Spanish, Portuguese, Italian, and Chinese.

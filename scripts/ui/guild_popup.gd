@@ -1330,19 +1330,73 @@ func _cancel_emblem_edit() -> void:
 
 func _render_pending_applications(content: VBoxContainer) -> void:
 	var applications := _array_from_value(guild_home.get("pendingApplications", []))
-	content.add_child(_localized_label("ui.guild.application.pending_title", 10, UI_GOLD))
+	var inbox := PanelContainer.new()
+	inbox.name = "GuildApplicationsInbox"
+	inbox.custom_minimum_size = Vector2(0, 126)
+	inbox.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color("#0b1b29f2"), Color(UI_GOLD.r, UI_GOLD.g, UI_GOLD.b, 0.58), 9, 1)
+	)
+	content.add_child(inbox)
+	var inbox_margin := MarginContainer.new()
+	_set_margins(inbox_margin, 13, 11, 13, 12)
+	inbox.add_child(inbox_margin)
+	var inbox_content := VBoxContainer.new()
+	inbox_content.add_theme_constant_override("separation", 7)
+	inbox_margin.add_child(inbox_content)
+
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 8)
+	inbox_content.add_child(header)
+	var title := _localized_label("ui.guild.application.pending_title", 12, UI_GOLD)
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_child(title)
+	var count := Label.new()
+	count.name = "GuildApplicationsPendingCount"
+	count.text = _t("ui.guild.application.pending_count", {"count": applications.size()})
+	count.add_theme_font_size_override("font_size", 10)
+	count.add_theme_color_override("font_color", UI_TEXT)
+	header.add_child(count)
+	var hint := _localized_label("ui.guild.application.review_hint", 10, UI_MUTED)
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	inbox_content.add_child(hint)
+
 	if applications.is_empty():
-		content.add_child(_localized_label("ui.guild.application.pending_empty", 10, UI_MUTED))
+		var empty_state := PanelContainer.new()
+		empty_state.name = "GuildApplicationsEmptyState"
+		empty_state.add_theme_stylebox_override("panel", _panel_style(UI_INPUT, UI_BORDER_INNER, 7, 1))
+		inbox_content.add_child(empty_state)
+		var empty_margin := MarginContainer.new()
+		_set_margins(empty_margin, 11, 9, 11, 9)
+		empty_state.add_child(empty_margin)
+		var empty_row := HBoxContainer.new()
+		empty_row.add_theme_constant_override("separation", 9)
+		empty_margin.add_child(empty_row)
+		var marker := _label("✓", 18, UI_SUCCESS)
+		marker.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		empty_row.add_child(marker)
+		var empty_copy := VBoxContainer.new()
+		empty_copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		empty_copy.add_theme_constant_override("separation", 2)
+		empty_row.add_child(empty_copy)
+		empty_copy.add_child(_localized_label("ui.guild.application.pending_empty_title", 12, UI_TEXT))
+		empty_copy.add_child(_localized_label("ui.guild.application.pending_empty", 10, UI_MUTED))
 		return
 	for application_value: Variant in applications:
 		if not application_value is Dictionary:
 			continue
 		var application := application_value as Dictionary
 		var application_id := int(application.get("id", 0))
+		var application_card := PanelContainer.new()
+		application_card.add_theme_stylebox_override("panel", _panel_style(UI_INPUT, UI_BORDER_INNER, 7, 1))
+		inbox_content.add_child(application_card)
+		var row_margin := MarginContainer.new()
+		_set_margins(row_margin, 11, 8, 9, 8)
+		application_card.add_child(row_margin)
 		var row := HBoxContainer.new()
 		row.name = "GuildApplicationRow_%d" % application_id
 		row.add_theme_constant_override("separation", 7)
-		content.add_child(row)
+		row_margin.add_child(row)
 		var applicant := _label(
 			str(application.get(
 				"applicantDisplayName",
