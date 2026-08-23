@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Guild leaders can edit their emblem by clicking it directly, without a duplicate edit button.
+
 - Guilds now appears before Aether Exchange in the main interface for easier navigation.
 
 - Guild management now shows membership applications in a clear inbox card with a pending count and visible empty state.

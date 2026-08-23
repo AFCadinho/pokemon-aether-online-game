@@ -870,14 +870,6 @@ func _render_guild_home() -> void:
 	)
 	role_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	role_row.add_child(role_label)
-	if is_leader:
-		var edit_emblem_button := Button.new()
-		edit_emblem_button.name = "EditGuildEmblemButton"
-		_set_localized_property(edit_emblem_button, "text", "ui.guild.emblem.edit")
-		edit_emblem_button.custom_minimum_size = Vector2(150, 30)
-		edit_emblem_button.pressed.connect(_open_emblem_editor)
-		_apply_button_style(edit_emblem_button)
-		role_row.add_child(edit_emblem_button)
 	var description := _label(str(guild.get("description", "")), 12, UI_MUTED)
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	heading.add_child(description)

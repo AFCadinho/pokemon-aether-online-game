@@ -42,7 +42,7 @@ func _init() -> void:
 	_check_contains(popup_source, "func _render_pending_applications", "Guild staff can review pending applications")
 	_check_contains(popup_source, '"ui.guild.roster"', "guild dashboard renders its localized member roster")
 	_check_contains(popup_source, "GUILD_EMBLEM_SIZE := 32", "guild emblems use the intended 32 by 32 resolution")
-	_check_contains(popup_source, "EditGuildEmblemButton", "guild dashboard opens the emblem editor on demand")
+	_check_contains(popup_source, "EditGuildEmblemIconButton", "clicking the Guild emblem opens its editor")
 	_check_contains(popup_source, '"ui.guild.emblem.edit"', "editable guild emblem explains its localized action")
 	_check_contains(popup_source, "GuildEmblemEditorPopup", "guild emblem editor uses a dedicated popup")
 	_check_contains(popup_source, "GuildEmblemColorCode", "guild emblem palette accepts exact hex colour codes")
