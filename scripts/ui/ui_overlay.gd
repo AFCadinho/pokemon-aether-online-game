@@ -241,6 +241,8 @@ const TRAINER_CARD_AVATAR_SCALE := Vector2(2.7, 2.7)
 const TRAINER_CARD_APPEARANCE_AVATAR_POSITION := Vector2(80, 100)
 const TRAINER_CARD_APPEARANCE_AVATAR_SCALE := Vector2(2.05, 2.05)
 const BAG_SIZE := Vector2(1120, 660)
+const BAG_ITEM_GRID_ICON_SIZE := Vector2(48, 48)
+const BAG_ITEM_DETAIL_ICON_SIZE := Vector2(72, 72)
 const MARKET_SIZE := Vector2(930, 610)
 const MAIL_POPUP_SIZE := Vector2(920, 600)
 const MAIL_COMPOSE_POPUP_SIZE := Vector2(720, 680)
@@ -17820,7 +17822,9 @@ func _setup_bag_detail_panel(panel: PanelContainer) -> void:
 	icon_frame.add_child(icon_center)
 
 	bag_detail_icon = TextureRect.new()
-	bag_detail_icon.custom_minimum_size = Vector2(82, 82)
+	bag_detail_icon.custom_minimum_size = BAG_ITEM_DETAIL_ICON_SIZE
+	bag_detail_icon.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	bag_detail_icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	bag_detail_icon.texture = BAG_INTERFACE_ICON
 	bag_detail_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	bag_detail_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -19367,11 +19371,20 @@ func _create_bag_item_slot(item: Dictionary) -> Control:
 	icon_wrap.custom_minimum_size = Vector2(90, 64)
 	stack.add_child(icon_wrap)
 
+	var icon_center := CenterContainer.new()
+	icon_center.name = "ItemIconCenter"
+	icon_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	icon_wrap.add_child(icon_center)
+
 	var icon := TextureRect.new()
-	icon.anchor_right = 1.0
-	icon.anchor_bottom = 1.0
+	icon.name = "ItemIcon"
+	icon.custom_minimum_size = BAG_ITEM_GRID_ICON_SIZE
+	icon.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	icon.texture = _load_item_icon(
 		str(item.get("id", "")),
 		str(item.get("machineKind", "")),
@@ -19379,7 +19392,7 @@ func _create_bag_item_slot(item: Dictionary) -> Control:
 	)
 	slot.icon_texture = icon.texture
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	icon_wrap.add_child(icon)
+	icon_center.add_child(icon)
 
 	var quantity_badge := PanelContainer.new()
 	quantity_badge.anchor_left = 1.0

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Bag item icons now use a more compact size that keeps their pixel art sharp.
+
 - The Rock Smash area selector now has clearer spacing before the rock list.
 
 - The Rock Smash area menu is now wider and easier to read and select from.
