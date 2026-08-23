@@ -15,7 +15,7 @@ func _init() -> void:
 	_check(int(capabilities.get("maxLentItems", 0)) == 30, "lender item cap")
 	_check(bool(capabilities.get("requiresSameMap", false)), "nearby same-map requirement")
 	var source := FileAccess.get_file_as_string("res://scripts/services/lending_service.gd")
-	for contract in ["func create_loan", "func accept_loan", "func decline_loan", "func cancel_loan", "func request_return", "func return_assets", "func attach_item", "func detach_item"]:
+	for contract in ["func create_loan", "func accept_loan", "func decline_loan", "func cancel_loan", "func request_return", "func return_assets", "func attach_item", "func detach_item", "func load_notifications", "func acknowledge_notification"]:
 		_check(source.contains(contract), contract)
 	var workspace_source := FileAccess.get_file_as_string("res://scripts/ui/lending_workspace.gd")
 	_check(workspace_source.contains("_open_attach_menu") and workspace_source.contains("_detach_loan_item"), "borrowed item attach and detach controls")
@@ -29,6 +29,9 @@ func _init() -> void:
 	_check(workspace_source.contains("create_loan(target_username") and not workspace_source.contains("create_loan(target_input"), "nearby target is fixed by player interaction")
 	_check(workspace_source.contains("_loan_asset_row") and workspace_source.contains("_status_badge") and workspace_source.contains("_loan_timing_text"), "loan cards expose assets, status, and timing details")
 	_check(workspace_source.contains("selected_view < 3") and workspace_source.contains("[\"returned\", \"declined\", \"cancelled\", \"expired\"]"), "terminal loans stay in History")
+	_check(workspace_source.contains("_return_loan_asset") and workspace_source.contains("return_assets(loan_id, [asset_id])"), "borrowed assets return individually")
+	_check(workspace_source.contains("_poll_loan_notifications") and workspace_source.contains("acknowledge_notification"), "durable loan notifications become system messages and are acknowledged")
+	_check(not workspace_source.contains("service.return_assets(loan_id)"), "loan cards never return every asset implicitly")
 	var workspace := WorkspaceScript.new()
 	_check(workspace._format_loan_time("2026-08-23T16:45:12+00:00") == "2026-08-23 16:45 UTC", "loan timestamps are player readable")
 	_check(workspace._status_color("pending") == Color("#d8b767") and workspace._status_color("expired").a == 1.0, "loan status colors remain distinct")

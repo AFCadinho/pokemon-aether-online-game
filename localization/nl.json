@@ -4335,6 +4335,9 @@
   "ui.lending.asset_status.returned": "Teruggegeven",
   "ui.lending.asset_status.released": "Vrijgegeven",
   "ui.lending.return": "Nu teruggeven",
+  "ui.lending.return_asset": "Teruggeven",
+  "ui.lending.return_confirm_title": "Geleend bezit teruggeven",
+  "ui.lending.return_confirm_text": "Wil je {asset} teruggeven aan de eigenaar? Je kunt het daarna niet meer gebruiken.",
   "ui.lending.request_return": "Terugvragen",
   "ui.lending.duration.hour": "1 uur",
   "ui.lending.duration.day": "24 uur",
@@ -4361,5 +4364,14 @@
   "ui.lending.invitation.view": "Bekijken",
   "ui.lending.invitation.item": "Herbruikbaar leenitem",
   "ui.lending.invitation.accepted": "Lening geaccepteerd. De geleende bezittingen staan nu in je Party, PC of Bag.",
-  "ui.lending.invitation.declined": "Leningsaanbod afgewezen."
+  "ui.lending.invitation.declined": "Leningsaanbod afgewezen.",
+  "ui.lending.notification.offer_received": "@{trainer} heeft je een leningsaanbod gestuurd.",
+  "ui.lending.notification.accepted": "@{trainer} heeft je leningsaanbod geaccepteerd.",
+  "ui.lending.notification.declined": "@{trainer} heeft je leningsaanbod afgewezen.",
+  "ui.lending.notification.cancelled": "@{trainer} heeft het leningsaanbod geannuleerd.",
+  "ui.lending.notification.expired": "Je leningsaanbod met @{trainer} is verlopen.",
+  "ui.lending.notification.return_requested": "@{trainer} heeft de uitgeleende bezittingen teruggevraagd.",
+  "ui.lending.notification.asset_returned": "@{trainer} heeft {asset} teruggegeven.",
+  "ui.lending.notification.asset_auto_returned": "{asset} is na de deadline automatisch teruggegeven.",
+  "ui.lending.notification.you_returned": "Je hebt {asset} teruggegeven aan de eigenaar."
 }
