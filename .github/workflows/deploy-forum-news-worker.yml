@@ -1,0 +1,53 @@
+name: Deploy Forum News Worker
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-forum-news-worker
+  cancel-in-progress: false
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  test-and-deploy:
+    name: Test and deploy Worker
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+
+      - name: Test forum news Worker
+        run: npm test --prefix infrastructure/forum-news-worker
+
+      - name: Deploy forum news Worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          DISCOURSE_WEBHOOK_SECRET: ${{ secrets.DISCOURSE_WEBHOOK_SECRET }}
+        run: |
+          set -Eeuo pipefail
+          if [ "${#DISCOURSE_WEBHOOK_SECRET}" -lt 32 ]; then
+            echo "::error::DISCOURSE_WEBHOOK_SECRET must contain at least 32 characters."
+            exit 1
+          fi
+
+          secrets_file="${RUNNER_TEMP}/forum-news-worker-secrets.json"
+          trap 'rm -f -- "${secrets_file}"' EXIT
+          umask 077
+          node --input-type=module -e \
+            'import { writeFileSync } from "node:fs"; writeFileSync(process.argv[1], JSON.stringify({ DISCOURSE_WEBHOOK_SECRET: process.env.DISCOURSE_WEBHOOK_SECRET }));' \
+            "${secrets_file}"
+          npm run deploy --prefix infrastructure/forum-news-worker -- \
+            --secrets-file "${secrets_file}"

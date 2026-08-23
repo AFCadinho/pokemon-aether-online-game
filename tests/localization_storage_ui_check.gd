@@ -46,7 +46,9 @@ func _check_storage_runtime_translation() -> void:
 
 	_check(popup != null, "Pokémon Storage popup is constructed")
 	_check(release_button != null and release_button.text == "Vrijlaten", "Storage release action renders in Dutch")
+	_check(release_button != null and release_button.get_theme_color("font_color") == Color("#ffd45a"), "Storage release action uses its warning color")
 	_check(close_button != null and close_button.tooltip_text == "Pokémonopslag sluiten", "Storage close tooltip renders in Dutch")
+	_check(close_button != null and close_button.get_theme_color("font_color") == Color("#ff6b74"), "Storage close action uses its danger color")
 	_check(search_input != null and search_input.placeholder_text.begins_with("Doorzoek"), "Storage search renders in Dutch")
 	_check(filter_button != null and filter_button.text == "Filteren", "Storage filter action renders in Dutch")
 	_check(species_filter != null and species_filter.placeholder_text == "Soort", "Storage species filter renders in Dutch")

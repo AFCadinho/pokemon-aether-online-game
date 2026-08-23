@@ -477,6 +477,9 @@ func _reset_account_runtime_state() -> void:
 	var trade_workspace: Object = get_node_or_null("/root/TradeWorkspace")
 	if trade_workspace != null and trade_workspace.has_method("clear_account_state"):
 		trade_workspace.call("clear_account_state")
+	var lending_workspace: Object = get_node_or_null("/root/LendingWorkspace")
+	if lending_workspace != null and lending_workspace.has_method("clear_account_state"):
+		lending_workspace.call("clear_account_state")
 
 
 func _refresh_trade_session() -> void:
