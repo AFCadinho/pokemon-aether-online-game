@@ -19,6 +19,8 @@ func _init() -> void:
 	for contract in ["func create_loan", "func accept_loan", "func decline_loan", "func cancel_loan", "func request_return", "func return_assets", "func attach_item", "func detach_item", "func load_notifications", "func acknowledge_notification", "func load_return_inbox", "func acknowledge_return"]:
 		_check(source.contains(contract), contract)
 	var workspace_source := FileAccess.get_file_as_string("res://scripts/ui/lending_workspace.gd")
+	_check(workspace_source.contains("loan_asset_mode") and workspace_source.contains("_request_asset_mode") and workspace_source.contains("_render_item_offer_assets"), "loan composer separates Pokemon and item offer modes")
+	_check(source.contains("A loan offer must contain only Pokemon or only items."), "loan client rejects mixed asset offers")
 	_check(workspace_source.contains("_open_attach_menu") and workspace_source.contains("_detach_loan_item"), "borrowed item attach and detach controls")
 	_check(workspace_source.contains("_poll_incoming_offers") and workspace_source.contains("load_loans(\"borrowed\")"), "incoming loan offers are polled for the borrower")
 	var invitation_source := FileAccess.get_file_as_string("res://scripts/ui/loan_invitation_dialog.gd")
@@ -55,6 +57,9 @@ func _init() -> void:
 	_check(workspace._visible_pokemon_candidates().is_empty(), "loan Box search filters unmatched Pokemon")
 	workspace.pokemon_boxes = workspace._pokemon_boxes([{"boxIndex": 2, "slots": []}])
 	_check(workspace.pokemon_boxes.size() == 1 and int(workspace.pokemon_boxes[0].get("boxIndex", -1)) == 2, "untyped Box API arrays normalize before typed assignment")
+	workspace.party_candidates = [{"pokemonId": 1, "heldItemId": "leftovers", "name": "Pikachu"}]
+	workspace.box_candidates = [{"pokemonId": 2, "heldItemId": "choice-band", "name": "Machamp"}]
+	_check(workspace._held_item_candidates().size() == 2, "item-only offers include eligible items held by Party and Box Pokemon")
 	_check(source.contains("duration_seconds not in [3600, 10800, 21600, 43200, 86400]"), "loan service rejects long alpha duration windows")
 	_check(workspace_source.contains("[3600, 10800, 21600, 43200, 86400]") and not workspace_source.contains("capabilities.get(\"durationsSeconds\", [3600, 86400, 259200, 604800])"), "loan duration selector uses short alpha windows")
 	_check(workspace_source.contains("select.get_popup()") and workspace_source.contains("_dropdown_popup_style"), "loan dropdown popups use the Aether theme")

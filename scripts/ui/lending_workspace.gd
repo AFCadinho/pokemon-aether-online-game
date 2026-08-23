@@ -34,6 +34,7 @@ var displayed_notification_ids: Dictionary = {}
 var pokemon_source_mode := 0
 var selected_box_index := 0
 var pokemon_search_query := ""
+var loan_asset_mode := "pokemon"
 
 var target_display_label: Label
 var duration_select: OptionButton
@@ -277,6 +278,22 @@ func _refresh_assets() -> void:
 
 func _render_assets() -> void:
 	_clear(assets_list)
+	var type_tabs := HBoxContainer.new()
+	type_tabs.add_theme_constant_override("separation", 6)
+	assets_list.add_child(type_tabs)
+	for mode in ["pokemon", "items"]:
+		var type_button := Button.new()
+		type_button.text = _t("ui.lending.offer_type.%s" % mode)
+		type_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		type_button.custom_minimum_size.y = 38
+		type_button.pressed.connect(_request_asset_mode.bind(mode))
+		_apply_button_style(type_button, "primary" if loan_asset_mode == mode else "secondary")
+		type_tabs.add_child(type_button)
+	if create_button != null:
+		create_button.text = _t("ui.lending.create_%s" % loan_asset_mode)
+	if loan_asset_mode == "items":
+		_render_item_offer_assets()
+		return
 	assets_list.add_child(_section_label(_t("ui.lending.assets.pokemon")))
 	var source_tools := HBoxContainer.new()
 	source_tools.add_theme_constant_override("separation", 6)
@@ -331,6 +348,9 @@ func _render_assets() -> void:
 	pokemon_results_list.add_theme_constant_override("separation", 6)
 	assets_list.add_child(pokemon_results_list)
 	_render_pokemon_candidate_results()
+
+
+func _render_item_offer_assets() -> void:
 	assets_list.add_child(_section_label(_t("ui.lending.assets.items")))
 	var item_hint := Label.new()
 	item_hint.text = _t("ui.lending.items_hint")
@@ -341,6 +361,49 @@ func _render_assets() -> void:
 	for item: Dictionary in inventory_candidates:
 		var item_id := str(item.get("itemId", ""))
 		assets_list.add_child(_item_candidate_row(item, "bag:%s" % item_id))
+	var held_candidates := _held_item_candidates()
+	for held: Dictionary in held_candidates:
+		var pokemon_id := int(held.get("pokemonId", 0))
+		var held_item_id := str(held.get("heldItemId", ""))
+		assets_list.add_child(_item_candidate_row({
+			"itemId": held_item_id,
+			"name": _item_display_name(held_item_id, held_item_id),
+			"quantity": 1,
+			"holderName": str(held.get("name", "Pokémon")),
+		}, "held:%d" % pokemon_id, true))
+	if inventory_candidates.is_empty() and held_candidates.is_empty():
+		var empty := Label.new()
+		empty.text = _t("ui.lending.items_empty")
+		empty.add_theme_color_override("font_color", MUTED)
+		assets_list.add_child(empty)
+
+
+func _request_asset_mode(mode: String) -> void:
+	if mode == loan_asset_mode:
+		return
+	var has_selection := not selected_pokemon.is_empty() if loan_asset_mode == "pokemon" else not selected_items.is_empty()
+	if not has_selection:
+		_set_asset_mode(mode)
+		return
+	var dialog := AetherConfirmationDialogScene.instantiate() as AetherConfirmationDialog
+	add_child(dialog)
+	dialog.configure(
+		_t("ui.lending.offer_type.change_title"),
+		_t("ui.lending.offer_type.change_text"),
+		_t("ui.lending.offer_type.change_confirm"),
+		_t("common.cancel")
+	)
+	dialog.confirmed.connect(_set_asset_mode.bind(mode), CONNECT_ONE_SHOT)
+	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.popup_centered(Vector2i(500, 230))
+
+
+func _set_asset_mode(mode: String) -> void:
+	loan_asset_mode = "items" if mode == "items" else "pokemon"
+	selected_pokemon.clear()
+	selected_items.clear()
+	_render_assets()
 
 
 func _on_pokemon_search_changed(value: String) -> void:
@@ -366,9 +429,6 @@ func _render_pokemon_candidate_results() -> void:
 	for candidate: Dictionary in visible_candidates:
 		var pokemon_id := int(candidate.get("pokemonId", 0))
 		pokemon_results_list.add_child(_pokemon_candidate_row(candidate, pokemon_id))
-		var held_item := str(candidate.get("heldItemId", ""))
-		if held_item != "":
-			pokemon_results_list.add_child(_item_candidate_row({"itemId": held_item, "name": _item_display_name(held_item, held_item), "quantity": 1, "holderName": str(candidate.get("name", "Pokémon"))}, "held:%d" % pokemon_id, true))
 
 
 func _visible_pokemon_candidates() -> Array[Dictionary]:
@@ -382,6 +442,19 @@ func _visible_pokemon_candidates() -> Array[Dictionary]:
 		var searchable := "%s %s" % [str(candidate.get("name", "")), str(candidate.get("speciesId", ""))]
 		if query in searchable.to_lower():
 			result.append(candidate)
+	return result
+
+
+func _held_item_candidates() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	var seen: Dictionary = {}
+	for candidate: Dictionary in party_candidates + box_candidates:
+		var pokemon_id := int(candidate.get("pokemonId", 0))
+		var item_id := str(candidate.get("heldItemId", ""))
+		if pokemon_id <= 0 or item_id == "" or seen.has(pokemon_id):
+			continue
+		seen[pokemon_id] = true
+		result.append(candidate)
 	return result
 
 
@@ -716,17 +789,22 @@ func _create_loan() -> void:
 	if mutation_in_flight:
 		return
 	var pokemon_ids: Array[int] = []
-	for key: Variant in selected_pokemon.keys():
-		pokemon_ids.append(int(key))
+	if loan_asset_mode == "pokemon":
+		for key: Variant in selected_pokemon.keys():
+			pokemon_ids.append(int(key))
 	var items: Array[Dictionary] = []
-	for key_value: Variant in selected_items.keys():
-		var key := str(key_value)
-		if key.begins_with("held:"):
-			var pokemon_id := int(key.trim_prefix("held:"))
-			var candidate := _candidate_by_id(pokemon_id)
-			items.append({"itemId": str(candidate.get("heldItemId", "")), "sourcePokemonId": pokemon_id, "quantity": 1})
-		else:
-			items.append({"itemId": key.trim_prefix("bag:"), "quantity": int(selected_items.get(key_value, 1))})
+	if loan_asset_mode == "items":
+		for key_value: Variant in selected_items.keys():
+			var key := str(key_value)
+			if key.begins_with("held:"):
+				var pokemon_id := int(key.trim_prefix("held:"))
+				var candidate := _candidate_by_id(pokemon_id)
+				items.append({"itemId": str(candidate.get("heldItemId", "")), "sourcePokemonId": pokemon_id, "quantity": 1})
+			else:
+				items.append({"itemId": key.trim_prefix("bag:"), "quantity": int(selected_items.get(key_value, 1))})
+	if pokemon_ids.is_empty() and items.is_empty():
+		_show_error(_t("ui.lending.error.assets_required_%s" % loan_asset_mode))
+		return
 	if pokemon_ids.size() > 6 or _selected_item_copy_count() > 6:
 		_show_error(_t("ui.lending.error.selection_limit"))
 		return
@@ -1139,6 +1217,10 @@ func _toggle_pokemon_selection(enabled: bool, pokemon_id: int, checkbox: CheckBo
 		_show_error(_t("ui.lending.error.selection_limit"))
 		return
 	var candidate := _candidate_by_id(pokemon_id)
+	if str(candidate.get("heldItemId", "")) != "":
+		checkbox.set_pressed_no_signal(false)
+		_show_error(_t("ui.lending.error.remove_held_item"))
+		return
 	if str(candidate.get("sourceType", "party")) == "party" and _selected_party_pokemon_count(pokemon_id) >= maxi(party_candidates.size() - 1, 0):
 		checkbox.set_pressed_no_signal(false)
 		_show_error(_t("ui.lending.error.party_required"))
@@ -1169,6 +1251,10 @@ func _pokemon_candidate_row(candidate: Dictionary, pokemon_id: int) -> Control:
 	var box := CheckBox.new()
 	box.focus_mode = Control.FOCUS_NONE
 	_apply_checkbox_style(box)
+	var held_item_id := str(candidate.get("heldItemId", ""))
+	box.disabled = held_item_id != ""
+	if box.disabled:
+		box.tooltip_text = _t("ui.lending.error.remove_held_item")
 	box.set_pressed_no_signal(selected_pokemon.has(pokemon_id))
 	box.toggled.connect(_toggle_pokemon_selection.bind(pokemon_id, box))
 	row.add_child(box)
@@ -1197,6 +1283,8 @@ func _pokemon_candidate_row(candidate: Dictionary, pokemon_id: int) -> Control:
 			_t("ui.lending.source.box", {"number": int(candidate.get("boxIndex", 0)) + 1}),
 			_t("ui.lending.source.slot", {"number": int(candidate.get("slotIndex", 0)) + 1}),
 		]
+	if held_item_id != "":
+		level_label.text += " · %s" % _t("ui.lending.pokemon_holding_item", {"item": _item_display_name(held_item_id, held_item_id)})
 	level_label.add_theme_color_override("font_color", MUTED)
 	level_label.add_theme_font_size_override("font_size", 10)
 	identity.add_child(level_label)

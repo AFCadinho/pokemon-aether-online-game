@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Player Loan offers now use separate Pokémon and item modes, so one offer can never mix both asset types.
+
 - Pokémon Storage now uses distinct warning colors for releasing Pokémon and closing the window.
 
 - Player Loan offers can now search Pokémon across every PC Box, and the PC has a separate Loan Returns inbox that locates recently returned Pokémon in their real storage position.
