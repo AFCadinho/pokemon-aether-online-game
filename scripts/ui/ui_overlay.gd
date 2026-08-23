@@ -243,6 +243,8 @@ const TRAINER_CARD_APPEARANCE_AVATAR_SCALE := Vector2(2.05, 2.05)
 const BAG_SIZE := Vector2(1120, 660)
 const BAG_ITEM_GRID_ICON_SIZE := Vector2(48, 48)
 const BAG_ITEM_DETAIL_ICON_SIZE := Vector2(72, 72)
+const BAG_CONTEXT_ACTION_USE := 0
+const BAG_CONTEXT_ACTION_HOTBAR := 1
 const MARKET_SIZE := Vector2(930, 610)
 const MAIL_POPUP_SIZE := Vector2(920, 600)
 const MAIL_COMPOSE_POPUP_SIZE := Vector2(720, 680)
@@ -19655,11 +19657,10 @@ func _show_bag_item_context_menu(item: Dictionary) -> void:
 		_setup_bag_item_context_menu()
 	bag_item_context_item = item.duplicate(true)
 	bag_item_context_menu.clear()
-	bag_item_context_menu.add_item(LocalizationManager.text("ui.bag.action.inspect"), 0)
 	if _bag_item_can_use_from_bag(item):
-		bag_item_context_menu.add_item(_bag_item_use_action_label(item), 1)
+		bag_item_context_menu.add_item(_bag_item_use_action_label(item), BAG_CONTEXT_ACTION_USE)
 	if _bag_item_can_assign_to_hotbar(item):
-		bag_item_context_menu.add_item(LocalizationManager.text("ui.bag.assign_hotbar"), 2)
+		bag_item_context_menu.add_item(LocalizationManager.text("ui.bag.assign_hotbar"), BAG_CONTEXT_ACTION_HOTBAR)
 	var viewport_size := get_viewport().get_visible_rect().size
 	var menu_position := get_viewport().get_mouse_position()
 	menu_position.x = minf(menu_position.x, viewport_size.x - 200.0)
@@ -19673,9 +19674,9 @@ func _on_bag_item_context_menu_id_pressed(action_id: int) -> void:
 	var item := bag_item_context_item.duplicate(true)
 	bag_item_context_item = {}
 	match action_id:
-		1:
+		BAG_CONTEXT_ACTION_USE:
 			await _on_bag_item_selected(item)
-		2:
+		BAG_CONTEXT_ACTION_HOTBAR:
 			await _assign_bag_item_to_hotbar(item)
 
 func _set_bag_summary(text: String) -> void:
