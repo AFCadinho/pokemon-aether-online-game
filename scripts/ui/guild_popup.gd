@@ -4,6 +4,7 @@ class_name GuildPopup
 
 signal closed
 signal lobby_teleport_requested
+signal guild_chat_requested
 
 const POPUP_SIZE := Vector2(1040, 700)
 const GUILD_ICON: Texture2D = preload("res://assets/ui/guild.svg")
@@ -14,6 +15,7 @@ const GUILD_EMBLEM_PIXEL_COUNT := GUILD_EMBLEM_SIZE * GUILD_EMBLEM_SIZE
 const LEGACY_GUILD_EMBLEM_SIZE := 8
 const EMBLEM_EDITOR_PIXEL_SIZE := 11
 const EMBLEM_EDITOR_POPUP_SIZE := Vector2i(630, 500)
+const DIRECTORY_FILTER_POPUP_SIZE := Vector2i(420, 390)
 
 const UI_BG := Color("#050b14f5")
 const UI_SURFACE := Color("#081522f2")
@@ -91,16 +93,21 @@ var guilds: Array[Dictionary] = []
 var membership: Dictionary = {}
 var guild_home: Dictionary = {}
 var incoming_invitations: Array = []
+var pending_applications: Array = []
 var selected_guild_id := 0
 var active_page := "browse"
 var is_dragging_popup := false
 var is_debug_preview := false
 var is_loading_guilds := false
 var is_creating_guild := false
+var is_application_action_in_flight := false
 var directory_request_generation := 0
 var has_explicit_page_selection := false
 var active_guild_section := "overview"
 var guild_section_buttons: Dictionary = {}
+var directory_recruitment_filter := "all"
+var directory_focus_filter := "all"
+var directory_language_filter := "all"
 
 var browse_tab_button: Button
 var my_guild_tab_button: Button
@@ -113,6 +120,11 @@ var guild_list: VBoxContainer
 var guild_count_label: Label
 var detail_content: VBoxContainer
 var browse_status_label: Label
+var directory_filter_button: Button
+var directory_filter_popup: PopupPanel
+var directory_recruitment_select: OptionButton
+var directory_focus_select: OptionButton
+var directory_language_select: OptionButton
 var create_status_label: Label
 var guild_name_input: LineEdit
 var guild_description_input: TextEdit
@@ -176,6 +188,8 @@ func close() -> void:
 	is_dragging_popup = false
 	if emblem_editor_popup != null:
 		emblem_editor_popup.hide()
+	if directory_filter_popup != null:
+		directory_filter_popup.hide()
 	visible = false
 	closed.emit()
 
@@ -197,6 +211,7 @@ func set_guilds(entries: Array) -> void:
 func show_debug_preview() -> void:
 	is_debug_preview = true
 	membership = {}
+	pending_applications = []
 	set_guilds(DEBUG_GUILDS)
 	if browse_status_label != null:
 		browse_status_label.text = _t("ui.guild.status.preview")
@@ -234,6 +249,15 @@ func show_debug_member_preview() -> void:
 		],
 		"pendingInvitations": [
 			{"id": 1, "invitedUsername": "leaf", "invitedDisplayName": "Leaf"},
+		],
+		"pendingApplications": [
+			{
+				"id": 8,
+				"guildId": int(guild.get("id", 1)),
+				"applicantUsername": "red",
+				"applicantDisplayName": "Red",
+				"status": "pending",
+			},
 		],
 		"emblemTemplates": [
 			{
@@ -344,13 +368,6 @@ func _build_navigation() -> Control:
 	var navigation := HBoxContainer.new()
 	navigation.add_theme_constant_override("separation", 6)
 
-	browse_tab_button = Button.new()
-	browse_tab_button.name = "BrowseGuildsButton"
-	_set_localized_property(browse_tab_button, "text", "ui.guild.tab.browse")
-	browse_tab_button.custom_minimum_size = Vector2(190, 40)
-	browse_tab_button.pressed.connect(_on_primary_navigation_pressed.bind("browse"))
-	navigation.add_child(browse_tab_button)
-
 	my_guild_tab_button = Button.new()
 	my_guild_tab_button.name = "MyGuildButton"
 	_set_localized_property(my_guild_tab_button, "text", "ui.guild.tab.mine")
@@ -359,10 +376,17 @@ func _build_navigation() -> Control:
 	my_guild_tab_button.visible = false
 	navigation.add_child(my_guild_tab_button)
 
+	browse_tab_button = Button.new()
+	browse_tab_button.name = "BrowseGuildsButton"
+	_set_localized_property(browse_tab_button, "text", "ui.guild.tab.browse")
+	browse_tab_button.custom_minimum_size = Vector2(190, 40)
+	browse_tab_button.pressed.connect(_on_primary_navigation_pressed.bind("browse"))
+	navigation.add_child(browse_tab_button)
+
 	create_tab_button = Button.new()
 	create_tab_button.name = "CreateGuildButton"
 	_set_localized_property(create_tab_button, "text", "ui.guild.tab.create")
-	create_tab_button.custom_minimum_size = Vector2(190, 40)
+	create_tab_button.custom_minimum_size = Vector2(165, 40)
 	create_tab_button.pressed.connect(_on_primary_navigation_pressed.bind("create"))
 	navigation.add_child(create_tab_button)
 
@@ -404,7 +428,12 @@ func _build_browse_page() -> Control:
 	search_input.custom_minimum_size = Vector2(0, 40)
 	search_input.text_changed.connect(_on_search_changed)
 	_apply_line_edit_style(search_input)
-	directory.add_child(search_input)
+	var search_row := HBoxContainer.new()
+	search_row.add_theme_constant_override("separation", 7)
+	search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	search_row.add_child(search_input)
+	search_row.add_child(_build_directory_filters())
+	directory.add_child(search_row)
 
 	guild_list = VBoxContainer.new()
 	guild_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -430,6 +459,177 @@ func _build_browse_page() -> Control:
 	detail_content.add_theme_constant_override("separation", 11)
 	body.add_child(detail_content)
 	return body
+
+
+func _build_directory_filters() -> Control:
+	var filters := HBoxContainer.new()
+	filters.name = "GuildDirectoryFilters"
+	directory_filter_button = Button.new()
+	directory_filter_button.name = "GuildFilterButton"
+	directory_filter_button.custom_minimum_size = Vector2(112, 40)
+	directory_filter_button.pressed.connect(_open_directory_filters)
+	filters.add_child(directory_filter_button)
+	_refresh_directory_filter_button()
+	return filters
+
+
+func _open_directory_filters() -> void:
+	if directory_filter_popup == null:
+		directory_filter_popup = _build_directory_filter_dialog()
+		add_child(directory_filter_popup)
+	_set_directory_filter_select(directory_recruitment_select, directory_recruitment_filter)
+	_set_directory_filter_select(directory_focus_select, directory_focus_filter)
+	_set_directory_filter_select(directory_language_select, directory_language_filter)
+	directory_filter_popup.popup_centered(DIRECTORY_FILTER_POPUP_SIZE)
+
+
+func _build_directory_filter_dialog() -> PopupPanel:
+	var popup := PopupPanel.new()
+	popup.name = "GuildFilterDialog"
+	popup.exclusive = true
+	popup.unresizable = true
+	popup.add_theme_stylebox_override("panel", _panel_style(UI_SURFACE, UI_ACCENT_SOFT, 11, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 18, 16, 18, 18)
+	popup.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 12)
+	margin.add_child(content)
+	content.add_child(_localized_label("ui.guild.filters.title", 19, UI_TEXT))
+
+	directory_recruitment_select = _directory_filter_select(
+		"GuildRecruitmentFilterSelect",
+		[
+			{"id": "all", "key": "ui.guild.filter.all"},
+			{"id": "open", "key": "ui.guild.filter.open"},
+		]
+	)
+	content.add_child(_directory_filter_field(
+		"ui.guild.filters.recruitment",
+		directory_recruitment_select
+	))
+	directory_focus_select = _directory_filter_select(
+		"GuildFocusFilterSelect",
+		[
+			{"id": "all", "key": "ui.guild.filter.all"},
+			{"id": "social", "key": "ui.guild.filter.social"},
+			{"id": "pve", "key": "ui.guild.filter.pve"},
+			{"id": "pvp", "key": "ui.guild.filter.pvp"},
+		]
+	)
+	content.add_child(_directory_filter_field("ui.guild.filters.focus", directory_focus_select))
+	directory_language_select = _directory_filter_select(
+		"GuildLanguageFilterSelect",
+		[
+			{"id": "all", "key": "ui.guild.filter.all"},
+			{"id": "dutch", "key": "ui.guild.filter.dutch"},
+		]
+	)
+	content.add_child(_directory_filter_field("ui.guild.filters.language", directory_language_select))
+
+	var actions := HBoxContainer.new()
+	actions.add_theme_constant_override("separation", 7)
+	content.add_child(actions)
+	var clear_button := Button.new()
+	clear_button.name = "GuildFiltersClearButton"
+	_set_localized_property(clear_button, "text", "ui.guild.filters.clear")
+	clear_button.pressed.connect(_clear_directory_filter_choices)
+	_apply_button_style(clear_button)
+	actions.add_child(clear_button)
+	var spacer := Control.new()
+	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	actions.add_child(spacer)
+	var cancel_button := Button.new()
+	cancel_button.name = "GuildFiltersCancelButton"
+	_set_localized_property(cancel_button, "text", "common.cancel")
+	cancel_button.pressed.connect(popup.hide)
+	_apply_button_style(cancel_button)
+	actions.add_child(cancel_button)
+	var apply_button := Button.new()
+	apply_button.name = "GuildFiltersApplyButton"
+	_set_localized_property(apply_button, "text", "ui.guild.filters.apply")
+	apply_button.pressed.connect(_apply_directory_filter_choices)
+	_apply_button_style(apply_button, "primary")
+	actions.add_child(apply_button)
+	return popup
+
+
+func _directory_filter_select(name_value: String, definitions: Array) -> OptionButton:
+	var select := OptionButton.new()
+	select.name = name_value
+	select.custom_minimum_size = Vector2(0, 40)
+	select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	select.set_meta("guild_filter_definitions", definitions)
+	_populate_directory_filter_select(select, "all")
+	_apply_option_button_style(select)
+	return select
+
+
+func _directory_filter_field(label_key: String, select: OptionButton) -> Control:
+	var field := VBoxContainer.new()
+	field.add_theme_constant_override("separation", 4)
+	field.add_child(_localized_label(label_key, 10, UI_ACCENT))
+	field.add_child(select)
+	return field
+
+
+func _populate_directory_filter_select(select: OptionButton, selected_id: String) -> void:
+	if select == null:
+		return
+	var definitions := _array_from_value(select.get_meta("guild_filter_definitions", []))
+	select.clear()
+	for definition_value: Variant in definitions:
+		var definition := _dictionary(definition_value)
+		var filter_id := str(definition.get("id", "all"))
+		select.add_item(_t(str(definition.get("key", "ui.guild.filter.all"))))
+		select.set_item_metadata(select.item_count - 1, filter_id)
+		if filter_id == selected_id:
+			select.select(select.item_count - 1)
+
+
+func _set_directory_filter_select(select: OptionButton, selected_id: String) -> void:
+	if select == null:
+		return
+	for item_index: int in range(select.item_count):
+		if str(select.get_item_metadata(item_index)) == selected_id:
+			select.select(item_index)
+			return
+	select.select(0)
+
+
+func _clear_directory_filter_choices() -> void:
+	_set_directory_filter_select(directory_recruitment_select, "all")
+	_set_directory_filter_select(directory_focus_select, "all")
+	_set_directory_filter_select(directory_language_select, "all")
+
+
+func _apply_directory_filter_choices() -> void:
+	directory_recruitment_filter = _selected_option_value(directory_recruitment_select)
+	directory_focus_filter = _selected_option_value(directory_focus_select)
+	directory_language_filter = _selected_option_value(directory_language_select)
+	if directory_filter_popup != null:
+		directory_filter_popup.hide()
+	_refresh_directory_filter_button()
+	_render_guild_list()
+
+
+func _refresh_directory_filter_button() -> void:
+	if directory_filter_button == null:
+		return
+	var active_count := 0
+	for filter_value: String in [
+		directory_recruitment_filter,
+		directory_focus_filter,
+		directory_language_filter,
+	]:
+		if filter_value != "all":
+			active_count += 1
+	directory_filter_button.text = (
+		_t("ui.guild.filters.button_active", {"count": active_count})
+		if active_count > 0
+		else _t("ui.guild.filters.button")
+	)
+	_apply_button_style(directory_filter_button, "primary" if active_count > 0 else "default")
 
 
 func _build_member_page() -> Control:
@@ -639,11 +839,24 @@ func _render_guild_home() -> void:
 	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(heading)
 	heading.add_child(_label(str(guild.get("name", "Your Guild")), 25, UI_TEXT))
-	heading.add_child(_label(
+	var role_row := HBoxContainer.new()
+	role_row.add_theme_constant_override("separation", 9)
+	heading.add_child(role_row)
+	var role_label := _label(
 		_t("ui.guild.membership.role", {"role": _membership_role_label(role).to_lower()}),
 		12,
 		UI_ACCENT
-	))
+	)
+	role_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	role_row.add_child(role_label)
+	if is_leader:
+		var edit_emblem_button := Button.new()
+		edit_emblem_button.name = "EditGuildEmblemButton"
+		_set_localized_property(edit_emblem_button, "text", "ui.guild.emblem.edit")
+		edit_emblem_button.custom_minimum_size = Vector2(150, 30)
+		edit_emblem_button.pressed.connect(_open_emblem_editor)
+		_apply_button_style(edit_emblem_button)
+		role_row.add_child(edit_emblem_button)
 	var description := _label(str(guild.get("description", "")), 12, UI_MUTED)
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	heading.add_child(description)
@@ -667,7 +880,7 @@ func _build_guild_header_emblem(guild: Dictionary, is_editable: bool) -> Control
 	if not is_editable:
 		return _guild_emblem(guild, 88, UI_ACCENT)
 	var button := Button.new()
-	button.name = "EditGuildEmblemButton"
+	button.name = "EditGuildEmblemIconButton"
 	_set_localized_property(button, "tooltip_text", "ui.guild.emblem.edit")
 	button.custom_minimum_size = Vector2(88, 88)
 	button.focus_mode = Control.FOCUS_NONE
@@ -743,51 +956,58 @@ func _build_guild_overview(guild: Dictionary) -> Control:
 	))
 	metadata.add_child(_metadata_card(_t("ui.guild.field.language"), _option_display(str(guild.get("language", ""))), UI_GOLD))
 	metadata.add_child(_metadata_card(_t("ui.guild.field.focus"), _option_display(str(guild.get("focus", ""))), UI_ACCENT))
-	var welcome := PanelContainer.new()
-	welcome.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	welcome.custom_minimum_size = Vector2(0, 190)
-	welcome.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER_INNER, 9, 1))
+	var actions_panel := PanelContainer.new()
+	actions_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	actions_panel.custom_minimum_size = Vector2(0, 150)
+	actions_panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER_INNER, 9, 1))
 	var margin := MarginContainer.new()
 	_set_margins(margin, 16, 14, 16, 14)
-	welcome.add_child(margin)
+	actions_panel.add_child(margin)
 	var copy := VBoxContainer.new()
-	copy.add_theme_constant_override("separation", 6)
+	copy.add_theme_constant_override("separation", 10)
 	margin.add_child(copy)
-	copy.add_child(_localized_label("ui.guild.overview", 10, UI_ACCENT))
-	var overview_description := _label(str(guild.get("description", "")), 13, UI_TEXT)
-	overview_description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	copy.add_child(overview_description)
-	copy.add_child(_label(
-		_t("ui.guild.overview.hint"),
-		11,
-		UI_MUTED
-	))
-	var lobby_row := HBoxContainer.new()
-	lobby_row.name = "GuildLobbyTravelRow"
-	lobby_row.add_theme_constant_override("separation", 12)
-	copy.add_child(lobby_row)
-	var lobby_copy := VBoxContainer.new()
-	lobby_copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	lobby_copy.add_theme_constant_override("separation", 2)
-	lobby_row.add_child(lobby_copy)
-	lobby_copy.add_child(_localized_label("ui.guild.lobby.title", 12, UI_GOLD))
-	var lobby_hint := _localized_label("ui.guild.lobby.description", 10, UI_MUTED)
-	lobby_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	lobby_copy.add_child(lobby_hint)
+	copy.add_child(_localized_label("ui.guild.quick_actions", 10, UI_ACCENT))
+	var actions := HBoxContainer.new()
+	actions.add_theme_constant_override("separation", 10)
+	copy.add_child(actions)
+	var chat_button := Button.new()
+	chat_button.name = "GuildChatShortcutButton"
+	_set_localized_property(chat_button, "text", "ui.guild.action.chat")
+	chat_button.custom_minimum_size = Vector2(170, 42)
+	chat_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	chat_button.pressed.connect(_on_guild_chat_pressed)
+	_apply_button_style(chat_button, "primary")
+	actions.add_child(chat_button)
+	var members_button := Button.new()
+	members_button.name = "GuildMembersShortcutButton"
+	_set_localized_property(members_button, "text", "ui.guild.action.members")
+	members_button.custom_minimum_size = Vector2(170, 42)
+	members_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	members_button.pressed.connect(_show_guild_section.bind("members"))
+	_apply_button_style(members_button)
+	actions.add_child(members_button)
 	var lobby_button := Button.new()
 	lobby_button.name = "GuildLobbyTeleportButton"
 	_set_localized_property(lobby_button, "text", "ui.guild.lobby.teleport")
 	_set_localized_property(lobby_button, "tooltip_text", "ui.guild.lobby.tooltip")
 	lobby_button.custom_minimum_size = Vector2(170, 42)
+	lobby_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	lobby_button.pressed.connect(_on_guild_lobby_pressed)
 	_apply_button_style(lobby_button, "primary")
-	lobby_row.add_child(lobby_button)
-	overview.add_child(welcome)
+	actions.add_child(lobby_button)
+	var action_hint := _localized_label("ui.guild.quick_actions.hint", 11, UI_MUTED)
+	action_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	copy.add_child(action_hint)
+	overview.add_child(actions_panel)
 	return overview
 
 
 func _on_guild_lobby_pressed() -> void:
 	lobby_teleport_requested.emit()
+
+
+func _on_guild_chat_pressed() -> void:
+	guild_chat_requested.emit()
 
 
 func _build_member_roster() -> Control:
@@ -857,6 +1077,7 @@ func _build_member_management(guild: Dictionary, is_leader: bool, can_invite: bo
 		content.add_child(save_settings)
 
 	if can_invite:
+		_render_pending_applications(content)
 		content.add_child(_localized_label("ui.guild.invite.title", 10, UI_ACCENT))
 		var invite_row := HBoxContainer.new()
 		content.add_child(invite_row)
@@ -1086,6 +1307,45 @@ func _cancel_emblem_edit() -> void:
 		emblem_editor_popup.hide()
 
 
+func _render_pending_applications(content: VBoxContainer) -> void:
+	var applications := _array_from_value(guild_home.get("pendingApplications", []))
+	content.add_child(_localized_label("ui.guild.application.pending_title", 10, UI_GOLD))
+	if applications.is_empty():
+		content.add_child(_localized_label("ui.guild.application.pending_empty", 10, UI_MUTED))
+		return
+	for application_value: Variant in applications:
+		if not application_value is Dictionary:
+			continue
+		var application := application_value as Dictionary
+		var application_id := int(application.get("id", 0))
+		var row := HBoxContainer.new()
+		row.name = "GuildApplicationRow_%d" % application_id
+		row.add_theme_constant_override("separation", 7)
+		content.add_child(row)
+		var applicant := _label(
+			str(application.get(
+				"applicantDisplayName",
+				application.get("applicantUsername", _t("common.unknown"))
+			)),
+			11,
+			UI_TEXT
+		)
+		applicant.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(applicant)
+		var accept := Button.new()
+		accept.name = "AcceptGuildApplicationButton_%d" % application_id
+		_set_localized_property(accept, "text", "common.accept")
+		accept.pressed.connect(_on_accept_application.bind(application_id))
+		_apply_button_style(accept, "primary")
+		row.add_child(accept)
+		var decline := Button.new()
+		decline.name = "DeclineGuildApplicationButton_%d" % application_id
+		_set_localized_property(decline, "text", "common.decline")
+		decline.pressed.connect(_on_decline_application.bind(application_id))
+		_apply_button_style(decline)
+		row.add_child(decline)
+
+
 func _render_pending_invitations(content: VBoxContainer) -> void:
 	var invitations := _array_from_value(guild_home.get("pendingInvitations", []))
 	if invitations.is_empty():
@@ -1137,7 +1397,7 @@ func _guild_row(guild: Dictionary) -> Control:
 	var button := Button.new()
 	button.name = "GuildRow_%d" % guild_id
 	button.text = ""
-	button.custom_minimum_size = Vector2(0, 76)
+	button.custom_minimum_size = Vector2(0, 92)
 	button.add_theme_stylebox_override("normal", _row_style(accent, selected))
 	button.add_theme_stylebox_override("hover", _row_style(Color("#7edfff"), true))
 	button.add_theme_stylebox_override("pressed", _row_style(UI_ACCENT, true, Color("#071624fa")))
@@ -1166,17 +1426,31 @@ func _guild_row(guild: Dictionary) -> Control:
 	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	info.add_child(name_label)
-	var summary := _label(
-		_t("ui.guild.row.summary", {
-			"level": int(guild.get("level", 1)),
+	var discovery := _label(
+		_t("ui.guild.row.discovery", {
+			"focus": _option_display(str(guild.get("focus", ""))),
+			"language": _option_display(str(guild.get("language", ""))),
+		}),
+		10,
+		UI_ACCENT
+	)
+	discovery.name = "GuildRowDiscovery_%d" % guild_id
+	discovery.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	discovery.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	info.add_child(discovery)
+	var availability := _label(
+		_t("ui.guild.row.availability", {
 			"members": int(guild.get("members", 0)),
 			"capacity": int(guild.get("capacity", 0)),
+			"recruitment": _option_display(str(guild.get("recruitment", "Closed"))),
 		}),
-		11,
+		10,
 		UI_MUTED
 	)
-	summary.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	info.add_child(summary)
+	availability.name = "GuildRowAvailability_%d" % guild_id
+	availability.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	availability.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	info.add_child(availability)
 	var arrow := _label("›", 22, UI_ACCENT if selected else UI_MUTED)
 	arrow.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	arrow.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -1232,29 +1506,38 @@ func _render_selected_guild() -> void:
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	description.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	description_margin.add_child(description)
-	detail_content.add_child(_localized_label("ui.guild.forum.future", 10, UI_MUTED))
 
 	var actions := HBoxContainer.new()
 	actions.alignment = BoxContainer.ALIGNMENT_END
 	actions.add_theme_constant_override("separation", 8)
 	detail_content.add_child(actions)
-	var forum_button := Button.new()
-	forum_button.name = "GuildForumButton"
-	_set_localized_property(forum_button, "text", "ui.guild.forum")
-	_set_localized_property(forum_button, "tooltip_text", "ui.guild.forum.tooltip")
-	forum_button.disabled = true
-	forum_button.custom_minimum_size = Vector2(132, 40)
-	_apply_button_style(forum_button)
-	actions.add_child(forum_button)
 	var apply_button := Button.new()
 	apply_button.name = "GuildApplyButton"
 	var recruitment := str(guild.get("recruitment", "Closed"))
 	var is_own_guild := int(membership.get("guildId", 0)) == int(guild.get("id", 0))
-	apply_button.text = _t("ui.guild.yours") if is_own_guild else _application_button_text(recruitment)
-	apply_button.disabled = is_own_guild or recruitment.to_lower() in ["closed", "invite only"]
+	var pending_application := _pending_application_for_guild(int(guild.get("id", 0)))
+	if not pending_application.is_empty():
+		var pending_label := _localized_label("ui.guild.application.pending", 11, UI_GOLD)
+		pending_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		pending_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		actions.add_child(pending_label)
+	if is_own_guild:
+		apply_button.text = _t("ui.guild.yours")
+	elif not membership.is_empty():
+		apply_button.text = _t("ui.guild.application.already_member")
+	elif not pending_application.is_empty():
+		apply_button.text = _t("ui.guild.application.cancel")
+	else:
+		apply_button.text = _application_button_text(recruitment)
+	apply_button.disabled = (
+		is_application_action_in_flight
+		or is_own_guild
+		or not membership.is_empty()
+		or (pending_application.is_empty() and recruitment.to_lower() in ["closed", "invite only"])
+	)
 	apply_button.custom_minimum_size = Vector2(150, 40)
 	apply_button.pressed.connect(_on_application_pressed.bind(guild))
-	_apply_button_style(apply_button, "primary")
+	_apply_button_style(apply_button, "" if not pending_application.is_empty() else "primary")
 	actions.add_child(apply_button)
 
 
@@ -1465,10 +1748,109 @@ func _on_search_changed(_query: String) -> void:
 
 
 func _on_application_pressed(guild: Dictionary) -> void:
-	browse_status_label.text = _t("ui.guild.application.unavailable", {
+	if is_application_action_in_flight or not membership.is_empty():
+		return
+	var guild_id := int(guild.get("id", 0))
+	if guild_id <= 0:
+		return
+	var pending_application := _pending_application_for_guild(guild_id)
+	if not pending_application.is_empty():
+		_cancel_application(int(pending_application.get("id", 0)), guild)
+		return
+	match str(guild.get("recruitment", "Closed")).to_lower():
+		"open":
+			_confirm_open_guild_join(guild)
+		"applications open":
+			_apply_to_selected_guild(guild)
+
+
+func _confirm_open_guild_join(guild: Dictionary) -> void:
+	var dialog := ConfirmationDialog.new()
+	dialog.name = "GuildJoinConfirmationDialog"
+	dialog.title = _t("ui.guild.application.join_confirm_title")
+	dialog.dialog_text = _t("ui.guild.application.join_confirm", {
 		"guild": str(guild.get("name", _t("ui.guild.fallback.this_guild"))),
 	})
-	browse_status_label.visible = true
+	dialog.ok_button_text = _t("ui.guild.application.join")
+	dialog.cancel_button_text = _t("common.cancel")
+	dialog.confirmed.connect(_join_selected_guild.bind(guild), CONNECT_ONE_SHOT)
+	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	add_child(dialog)
+	dialog.popup_centered(Vector2i(430, 170))
+
+
+func _join_selected_guild(guild: Dictionary) -> void:
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		_set_browse_status(_t("ui.guild.error.service_unavailable"), true)
+		return
+	is_application_action_in_flight = true
+	_render_guild_list()
+	_set_browse_status(_t("ui.guild.status.joining", {
+		"guild": str(guild.get("name", _t("ui.guild.fallback.this_guild"))),
+	}), false)
+	var response: Variant = await guild_service.call("join_guild", int(guild.get("id", 0)))
+	var result := _dictionary(response)
+	is_application_action_in_flight = false
+	if not bool(result.get("success", false)):
+		_render_guild_list()
+		_set_browse_status(str(result.get("error", _t("ui.guild.error.join"))), true)
+		return
+	pending_applications.clear()
+	incoming_invitations.clear()
+	_apply_home_result(result)
+	_show_page("member")
+	_set_member_status(_t("ui.guild.status.joined", {
+		"guild": str(guild.get("name", _t("ui.guild.fallback.this_guild"))),
+	}), false)
+
+
+func _apply_to_selected_guild(guild: Dictionary) -> void:
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		_set_browse_status(_t("ui.guild.error.service_unavailable"), true)
+		return
+	is_application_action_in_flight = true
+	_render_guild_list()
+	_set_browse_status(_t("ui.guild.status.applying", {
+		"guild": str(guild.get("name", _t("ui.guild.fallback.this_guild"))),
+	}), false)
+	var response: Variant = await guild_service.call("apply_to_guild", int(guild.get("id", 0)))
+	var result := _dictionary(response)
+	is_application_action_in_flight = false
+	if not bool(result.get("success", false)):
+		_render_guild_list()
+		_set_browse_status(str(result.get("error", _t("ui.guild.error.apply"))), true)
+		return
+	_upsert_pending_application(_dictionary(result.get("application", {})))
+	_render_guild_list()
+	_set_browse_status(_t("ui.guild.status.application_sent", {
+		"guild": str(guild.get("name", _t("ui.guild.fallback.this_guild"))),
+	}), false)
+
+
+func _cancel_application(application_id: int, guild: Dictionary) -> void:
+	if application_id <= 0:
+		return
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		_set_browse_status(_t("ui.guild.error.service_unavailable"), true)
+		return
+	is_application_action_in_flight = true
+	_render_guild_list()
+	var response: Variant = await guild_service.call("cancel_application", application_id)
+	var result := _dictionary(response)
+	is_application_action_in_flight = false
+	if not bool(result.get("success", false)):
+		_render_guild_list()
+		_set_browse_status(str(result.get("error", _t("ui.guild.error.cancel_application"))), true)
+		return
+	_remove_pending_application(application_id)
+	_render_guild_list()
+	_set_browse_status(_t("ui.guild.status.application_cancelled", {
+		"guild": str(guild.get("name", _t("ui.guild.fallback.this_guild"))),
+	}), false)
 
 
 func _on_create_form_changed(_unused: Variant = null) -> void:
@@ -1564,6 +1946,7 @@ func _refresh_from_server() -> void:
 		return
 	membership = _dictionary(result.get("membership", {})).duplicate(true)
 	incoming_invitations = _array_from_value(result.get("incomingInvitations", [])).duplicate(true)
+	pending_applications = _array_from_value(result.get("pendingApplications", [])).duplicate(true)
 	set_guilds(_array_from_value(result.get("guilds", [])))
 	browse_status_label.visible = false
 	if not membership.is_empty():
@@ -1596,6 +1979,8 @@ func _refresh_home_from_server() -> void:
 func _apply_home_result(result: Dictionary) -> void:
 	guild_home = result.duplicate(true)
 	membership = _dictionary(result.get("membership", {})).duplicate(true)
+	if not membership.is_empty():
+		pending_applications.clear()
 	var home_guild := _dictionary(result.get("guild", {})).duplicate(true)
 	if not home_guild.is_empty():
 		_upsert_guild(home_guild)
@@ -1619,14 +2004,13 @@ func _refresh_membership_state() -> void:
 	var guild_id := int(membership.get("guildId", 0))
 	if guild_id <= 0:
 		membership_label.text = _t("ui.guild.membership.none")
+		membership_label.visible = true
+		create_tab_button.visible = true
 		create_tab_button.disabled = false
 		my_guild_tab_button.visible = false
 		return
-	var guild := _guild_by_id(guild_id)
-	var guild_name := str(guild.get("name", _t("ui.guild.fallback.your_guild")))
-	var role := str(membership.get("role", "member"))
-	membership_label.text = "%s · %s" % [guild_name, _membership_role_label(role)]
-	create_tab_button.disabled = true
+	membership_label.visible = false
+	create_tab_button.visible = false
 	my_guild_tab_button.visible = true
 	if active_page == "create":
 		_show_page("member")
@@ -1740,6 +2124,42 @@ func _on_cancel_invitation(invitation_id: int) -> void:
 		return
 	await _refresh_home_from_server()
 	_set_member_status(_t("ui.guild.status.invitation_cancelled"), false)
+
+
+func _on_accept_application(application_id: int) -> void:
+	if application_id <= 0:
+		return
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		_set_member_status(_t("ui.guild.error.service_unavailable"), true)
+		return
+	var response: Variant = await guild_service.call("accept_application", application_id)
+	var result := _dictionary(response)
+	if not bool(result.get("success", false)):
+		_set_member_status(str(result.get("error", _t("ui.guild.error.accept_application"))), true)
+		return
+	_apply_home_result(result)
+	active_guild_section = "management"
+	_render_guild_home()
+	_set_member_status(_t("ui.guild.status.application_accepted"), false)
+
+
+func _on_decline_application(application_id: int) -> void:
+	if application_id <= 0:
+		return
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		_set_member_status(_t("ui.guild.error.service_unavailable"), true)
+		return
+	var response: Variant = await guild_service.call("decline_application", application_id)
+	var result := _dictionary(response)
+	if not bool(result.get("success", false)):
+		_set_member_status(str(result.get("error", _t("ui.guild.error.decline_application"))), true)
+		return
+	await _refresh_home_from_server()
+	active_guild_section = "management"
+	_render_guild_home()
+	_set_member_status(_t("ui.guild.status.application_declined"), false)
 
 
 func _load_emblem_editor(emblem: Dictionary) -> void:
@@ -1931,6 +2351,17 @@ func _set_member_status(message: String, is_error: bool) -> void:
 	member_status_label.add_theme_color_override("font_color", UI_WARNING if is_error else UI_SUCCESS)
 
 
+func _set_browse_status(message: String, is_error: bool) -> void:
+	if browse_status_label == null:
+		return
+	browse_status_label.text = message
+	browse_status_label.visible = not message.is_empty()
+	browse_status_label.add_theme_color_override(
+		"font_color",
+		UI_WARNING if is_error else UI_SUCCESS
+	)
+
+
 func _refresh_creation_requirements() -> void:
 	if money_requirement_label == null:
 		return
@@ -1957,19 +2388,32 @@ func _set_create_status(message: String, is_error: bool) -> void:
 
 func _filtered_guilds() -> Array[Dictionary]:
 	var query := search_input.text.strip_edges().to_lower() if search_input != null else ""
-	if query == "":
-		return guilds.duplicate()
 	var matches: Array[Dictionary] = []
 	for guild: Dictionary in guilds:
+		if not _matches_directory_filter(guild):
+			continue
 		var searchable := " ".join([
 			str(guild.get("name", "")),
 			str(guild.get("language", "")),
 			str(guild.get("focus", "")),
 			str(guild.get("description", "")),
 		]).to_lower()
-		if searchable.contains(query):
+		if query == "" or searchable.contains(query):
 			matches.append(guild)
 	return matches
+
+
+func _matches_directory_filter(guild: Dictionary) -> bool:
+	var recruitment := str(guild.get("recruitment", "")).to_lower()
+	var focus := str(guild.get("focus", "")).to_lower()
+	var language := str(guild.get("language", "")).to_lower()
+	if directory_recruitment_filter == "open" and recruitment not in ["open", "applications open"]:
+		return false
+	if directory_focus_filter != "all" and not focus.contains(directory_focus_filter):
+		return false
+	if directory_language_filter == "dutch" and not language.contains("dutch"):
+		return false
+	return true
 
 
 func _contains_guild_id(entries: Array[Dictionary], guild_id: int) -> bool:
@@ -1984,6 +2428,42 @@ func _guild_by_id(guild_id: int) -> Dictionary:
 		if int(guild.get("id", 0)) == guild_id:
 			return guild
 	return {}
+
+
+func _pending_application_for_guild(guild_id: int) -> Dictionary:
+	for application_value: Variant in pending_applications:
+		if not application_value is Dictionary:
+			continue
+		var application := application_value as Dictionary
+		if (
+			int(application.get("guildId", 0)) == guild_id
+			and str(application.get("status", "pending")) == "pending"
+		):
+			return application
+	return {}
+
+
+func _upsert_pending_application(application: Dictionary) -> void:
+	var application_id := int(application.get("id", 0))
+	if application_id <= 0:
+		return
+	for index: int in range(pending_applications.size()):
+		var existing := _dictionary(pending_applications[index])
+		if int(existing.get("id", 0)) == application_id:
+			pending_applications[index] = application.duplicate(true)
+			return
+	pending_applications.append(application.duplicate(true))
+
+
+func _remove_pending_application(application_id: int) -> void:
+	var remaining: Array = []
+	for application_value: Variant in pending_applications:
+		if (
+			not application_value is Dictionary
+			or int((application_value as Dictionary).get("id", 0)) != application_id
+		):
+			remaining.append(application_value)
+	pending_applications = remaining
 
 
 func _application_button_text(recruitment: String) -> String:
@@ -2149,6 +2629,20 @@ func _on_locale_changed(_locale: String) -> void:
 	_refresh_option_labels(settings_language_select)
 	_refresh_option_labels(settings_focus_select)
 	_refresh_option_labels(settings_recruitment_select)
+	if directory_filter_popup != null:
+		_populate_directory_filter_select(
+			directory_recruitment_select,
+			_selected_option_value(directory_recruitment_select)
+		)
+		_populate_directory_filter_select(
+			directory_focus_select,
+			_selected_option_value(directory_focus_select)
+		)
+		_populate_directory_filter_select(
+			directory_language_select,
+			_selected_option_value(directory_language_select)
+		)
+	_refresh_directory_filter_button()
 	_refresh_creation_requirements()
 	_refresh_membership_state()
 	_render_guild_list()
