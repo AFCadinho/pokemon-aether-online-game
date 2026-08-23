@@ -28,6 +28,7 @@ const GUILD_LANGUAGE_OPTIONS: Array[String] = [
 	"Dutch / English",
 	"Other",
 ]
+const GUILD_ASSIGNABLE_ROLES: Array[String] = ["recruit", "member", "captain"]
 
 const UI_BG := Color("#050b14f5")
 const UI_SURFACE := Color("#081522f2")
@@ -250,13 +251,20 @@ func show_debug_member_preview() -> void:
 			-1, -1, -1, 0, 0, -1, -1, -1,
 		]),
 	}
-	membership = {"guildId": int(guild.get("id", 1)), "role": "leader"}
+	membership = {
+		"guildId": int(guild.get("id", 1)),
+		"role": "leader",
+		"permissions": [
+			"bank_deposit", "bank_withdraw", "bank_borrow",
+			"manage_members", "manage_guild", "manage_permissions",
+		],
+	}
 	guild_home = {
 		"guild": guild,
 		"membership": membership.duplicate(),
 		"members": [
 			{"userId": 1, "username": "nova", "displayName": "Nova", "role": "leader"},
-			{"userId": 2, "username": "maple", "displayName": "Maple", "role": "officer"},
+			{"userId": 2, "username": "maple", "displayName": "Maple", "role": "captain"},
 			{"userId": 3, "username": "pecha", "displayName": "Pecha", "role": "member"},
 		],
 		"pendingInvitations": [
@@ -278,6 +286,12 @@ func show_debug_member_preview() -> void:
 				"emblem": guild["emblem"],
 			},
 		],
+		"rankPermissions": {
+			"leader": membership["permissions"],
+			"captain": ["bank_deposit", "bank_withdraw", "bank_borrow", "manage_members"],
+			"member": ["bank_deposit", "bank_withdraw", "bank_borrow"],
+			"recruit": [],
+		},
 	}
 	set_guilds([guild])
 	_refresh_membership_state()
@@ -846,9 +860,10 @@ func _render_guild_home() -> void:
 	var guild := _dictionary(guild_home.get("guild", {}))
 	var own_membership := _dictionary(guild_home.get("membership", {}))
 	var role := str(own_membership.get("role", "member"))
+	var permissions := _array_from_value(own_membership.get("permissions", []))
 	var is_leader := role == "leader"
-	var can_invite := role in ["leader", "officer"]
-	var can_manage := is_leader or can_invite
+	var can_invite := permissions.has("manage_members") or role in ["leader", "captain"]
+	var can_manage := is_leader or can_invite or permissions.has("manage_guild")
 	if active_guild_section == "management" and not can_manage:
 		active_guild_section = "overview"
 
@@ -1071,6 +1086,10 @@ func _build_guild_bank() -> Control:
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	title_stack.add_child(description)
 	header.add_child(_status_pill(_t("ui.guild.bank.status")))
+	var access_summary := _label(_guild_bank_access_summary(), 10, UI_ACCENT)
+	access_summary.name = "GuildBankPermissionSummary"
+	access_summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	content.add_child(access_summary)
 	var vaults := GridContainer.new()
 	vaults.name = "GuildBankVaults"
 	vaults.columns = 3
@@ -1129,10 +1148,29 @@ func _build_guild_bank_card(
 	var action := Button.new()
 	action.name = "%sAction" % node_prefix
 	_set_localized_property(action, "text", action_key)
-	action.disabled = true
+	action.pressed.connect(_on_guild_bank_category_opened.bind(title_key))
 	_apply_button_style(action)
 	content.add_child(action)
 	return panel
+
+
+func _guild_bank_access_summary() -> String:
+	var own_membership := _dictionary(guild_home.get("membership", {}))
+	var permissions := _array_from_value(own_membership.get("permissions", []))
+	var states: Array[String] = []
+	for permission: String in ["bank_deposit", "bank_withdraw", "bank_borrow"]:
+		states.append(_t(
+			"ui.guild.bank.permission.allowed" if permissions.has(permission) else "ui.guild.bank.permission.locked",
+			{"permission": _t("ui.guild.permission.%s" % permission)}
+		))
+	return "  ·  ".join(states)
+
+
+func _on_guild_bank_category_opened(title_key: String) -> void:
+	_set_member_status(_t(
+		"ui.guild.bank.category_opened",
+		{"category": _t(title_key)}
+	), false)
 
 
 func _on_guild_lobby_pressed() -> void:
@@ -1156,6 +1194,7 @@ func _build_member_roster() -> Control:
 	content.add_theme_constant_override("separation", 7)
 	margin.add_child(content)
 	content.add_child(_localized_label("ui.guild.roster", 10, UI_ACCENT))
+	var own_role := str(_dictionary(guild_home.get("membership", {})).get("role", "recruit"))
 	for member_value: Variant in _array_from_value(guild_home.get("members", [])):
 		if not member_value is Dictionary:
 			continue
@@ -1165,8 +1204,46 @@ func _build_member_roster() -> Control:
 		var identity := _label(str(member.get("displayName", member.get("username", "Trainer"))), 12, UI_TEXT)
 		identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		row.add_child(identity)
-		row.add_child(_label(_membership_role_label(str(member.get("role", "member"))), 10, UI_GOLD))
+		var member_role := str(member.get("role", "recruit"))
+		if own_role == "leader" and member_role != "leader":
+			row.add_child(_guild_member_role_select(int(member.get("userId", 0)), member_role))
+		else:
+			row.add_child(_label(_membership_role_label(member_role), 10, UI_GOLD))
 	return panel
+
+
+func _guild_member_role_select(user_id: int, current_role: String) -> OptionButton:
+	var select := OptionButton.new()
+	select.name = "GuildMemberRoleSelect_%d" % user_id
+	select.custom_minimum_size = Vector2(125, 30)
+	for role: String in GUILD_ASSIGNABLE_ROLES:
+		select.add_item(_membership_role_label(role))
+		select.set_item_metadata(select.item_count - 1, role)
+		if role == current_role:
+			select.select(select.item_count - 1)
+	_apply_option_button_style(select)
+	select.item_selected.connect(_on_guild_member_role_selected.bind(user_id, select))
+	return select
+
+
+func _on_guild_member_role_selected(index: int, user_id: int, select: OptionButton) -> void:
+	if select == null or index < 0 or index >= select.item_count:
+		return
+	var role := str(select.get_item_metadata(index))
+	select.disabled = true
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		select.disabled = false
+		_set_member_status(_t("ui.guild.error.service_unavailable"), true)
+		return
+	var response: Variant = await guild_service.call("update_member_role", user_id, role)
+	var result := _dictionary(response)
+	if not bool(result.get("success", false)):
+		select.disabled = false
+		_set_member_status(str(result.get("error", _t("ui.guild.error.update_role"))), true)
+		return
+	_apply_home_result(result)
+	_set_member_status(_t("ui.guild.status.role_updated"), false)
 
 
 func _build_member_management(guild: Dictionary, is_leader: bool, can_invite: bool) -> Control:
@@ -2207,10 +2284,12 @@ func _membership_role_label(role: String) -> String:
 	match role.to_lower():
 		"leader":
 			return _t("ui.guild.role.leader")
-		"officer":
-			return _t("ui.guild.role.officer")
-		_:
+		"captain", "officer":
+			return _t("ui.guild.role.captain")
+		"member":
 			return _t("ui.guild.role.member")
+		_:
+			return _t("ui.guild.role.recruit")
 
 
 func _on_save_settings() -> void:

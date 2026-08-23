@@ -23,6 +23,7 @@ func _init() -> void:
 	_check_contains(service_source, "func teleport_to_lobby", "guild service exposes the free Lobby teleport")
 	_check_contains(service_source, 'GUILD_LOBBY_TELEPORT_ENDPOINT := "/game/guilds/me/lobby/teleport"', "guild service uses the dedicated Lobby endpoint")
 	_check_contains(service_source, "func update_settings", "guild service updates leader settings")
+	_check_contains(service_source, "func update_member_role", "guild service updates compact Guild ranks")
 	_check_contains(service_source, "func update_emblem", "guild service updates the emblem")
 	_check_contains(service_source, "func apply_emblem_template", "guild service reapplies Guild-owned emblem templates")
 	_check_contains(service_source, '"emblemTemplates": _array', "guild service preserves Guild-owned emblem templates")
@@ -35,6 +36,7 @@ func _init() -> void:
 	_check_contains(service_source, "func accept_application", "guild service accepts membership applications")
 	_check_contains(service_source, "func decline_application", "guild service declines membership applications")
 	_check_contains(service_source, '"pendingApplications": _array', "guild service preserves pending applications")
+	_check_contains(service_source, '"rankPermissions": _dictionary', "guild service preserves authoritative rank permissions")
 	_check_contains(project_source, 'GuildService="*res://scripts/services/guild_service.gd"', "guild service is available as an autoload")
 
 	quit(1 if failed else 0)
