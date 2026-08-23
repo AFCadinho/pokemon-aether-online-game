@@ -284,7 +284,15 @@ func _refresh_loans() -> void:
 		_show_error(str(result.get("error", _t("ui.lending.error.load"))))
 		return
 	var body: Dictionary = result.get("body", {})
-	loans = body.get("loans", []).duplicate(true)
+	loans = []
+	var selected_view := clampi(view_select.selected, 0, 3)
+	for value: Variant in body.get("loans", []):
+		if not value is Dictionary:
+			continue
+		var loan: Dictionary = value
+		if selected_view < 3 and str(loan.get("status", "")) in ["returned", "declined", "cancelled", "expired"]:
+			continue
+		loans.append(loan.duplicate(true))
 	usage_label.text = _t("ui.lending.usage", {"bp": int(body.get("borrowedPokemon", 0)), "bi": int(body.get("borrowedItems", 0)), "lp": int(body.get("lentPokemon", 0)), "li": int(body.get("lentItems", 0))})
 	_render_loans()
 
@@ -302,36 +310,55 @@ func _render_loans() -> void:
 		if not value is Dictionary:
 			continue
 		var loan: Dictionary = value
+		var status := str(loan.get("status", ""))
+		var is_borrower := int(loan.get("borrowerUserId", 0)) == current_user_id
+		var assets: Array = loan.get("assets", []) if loan.get("assets", []) is Array else []
 		var card := PanelContainer.new()
-		card.add_theme_stylebox_override("panel", _style(Color("#050d18f2"), BORDER, 7))
+		card.add_theme_stylebox_override("panel", _style(Color("#050d18f2"), _status_color(status, true), 8))
 		var margin := MarginContainer.new()
 		for side in ["left", "top", "right", "bottom"]:
-			margin.add_theme_constant_override("margin_%s" % side, 9)
+			margin.add_theme_constant_override("margin_%s" % side, 11)
 		card.add_child(margin)
 		var stack := VBoxContainer.new()
+		stack.add_theme_constant_override("separation", 7)
 		margin.add_child(stack)
 		var lender := str(loan.get("lenderUsername", "Guild"))
 		var borrower := str(loan.get("borrowerUsername", "Trainer"))
+		var header := HBoxContainer.new()
+		header.add_theme_constant_override("separation", 8)
+		stack.add_child(header)
 		var title_label := Label.new()
-		title_label.text = "%s → %s  ·  %s" % [lender, borrower, str(loan.get("status", "")).capitalize()]
+		title_label.text = _t("ui.lending.card.borrowed_from" if is_borrower else "ui.lending.card.lent_to", {"trainer": lender if is_borrower else borrower})
+		title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		title_label.add_theme_color_override("font_color", TEXT)
-		stack.add_child(title_label)
-		var assets: Array = loan.get("assets", []) if loan.get("assets", []) is Array else []
+		title_label.add_theme_font_size_override("font_size", 14)
+		header.add_child(title_label)
+		header.add_child(_status_badge(status))
 		var pokemon_count := 0
 		var item_count := 0
 		for asset: Variant in assets:
 			if asset is Dictionary and str(asset.get("assetType", "")) == "pokemon": pokemon_count += 1
 			elif asset is Dictionary: item_count += 1
 		var details := Label.new()
-		details.text = _t("ui.lending.card.details", {"pokemon": pokemon_count, "items": item_count, "fee": int(loan.get("feeAmount", 0)), "duration": _duration_label(int(loan.get("durationSeconds", 0)))})
+		details.text = _t("ui.lending.card.terms", {"pokemon": pokemon_count, "items": item_count, "fee": int(loan.get("feeAmount", 0)), "duration": _duration_label(int(loan.get("durationSeconds", 0)))})
 		details.add_theme_font_size_override("font_size", 10)
 		details.add_theme_color_override("font_color", MUTED)
 		stack.add_child(details)
+		var timing := Label.new()
+		timing.text = _loan_timing_text(loan)
+		timing.add_theme_font_size_override("font_size", 10)
+		timing.add_theme_color_override("font_color", _status_color(status))
+		stack.add_child(timing)
+		var asset_stack := VBoxContainer.new()
+		asset_stack.add_theme_constant_override("separation", 4)
+		stack.add_child(asset_stack)
+		for asset_value: Variant in assets:
+			if asset_value is Dictionary:
+				asset_stack.add_child(_loan_asset_row(asset_value, is_borrower, status))
 		var actions := HBoxContainer.new()
 		actions.alignment = BoxContainer.ALIGNMENT_END
+		actions.add_theme_constant_override("separation", 6)
 		stack.add_child(actions)
-		var status := str(loan.get("status", ""))
-		var is_borrower := int(loan.get("borrowerUserId", 0)) == current_user_id
 		if status == "pending" and is_borrower:
 			_add_action(actions, _t("common.decline"), _loan_action.bind("decline", str(loan.get("loanId", ""))))
 			_add_action(actions, _t("common.accept"), _loan_action.bind("accept", str(loan.get("loanId", ""))))
@@ -341,16 +368,132 @@ func _render_loans() -> void:
 			_add_action(actions, _t("ui.lending.return"), _loan_action.bind("return", str(loan.get("loanId", ""))))
 		elif status == "active":
 			_add_action(actions, _t("ui.lending.request_return"), _loan_action.bind("request-return", str(loan.get("loanId", ""))))
-		if status in ["active", "return_pending"] and is_borrower:
-			for asset_value: Variant in assets:
-				if not asset_value is Dictionary or str(asset_value.get("assetType", "")) != "item":
-					continue
-				var asset: Dictionary = asset_value
-				if int(asset.get("heldPokemonId", 0)) > 0:
-					_add_action(actions, _t("ui.lending.detach_item"), _detach_loan_item.bind(str(asset.get("assetId", ""))))
-				else:
-					_add_action(actions, _t("ui.lending.attach_item"), _open_attach_menu.bind(str(asset.get("assetId", "")), str(asset.get("itemId", ""))))
 		loans_list.add_child(card)
+
+
+func _loan_asset_row(asset: Dictionary, is_borrower: bool, loan_status: String) -> Control:
+	var snapshot: Dictionary = asset.get("snapshot", {}) if asset.get("snapshot", {}) is Dictionary else {}
+	var panel := PanelContainer.new()
+	panel.add_theme_stylebox_override("panel", _style(Color("#091725e8"), Color("#203b52"), 6))
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 7)
+	margin.add_theme_constant_override("margin_top", 5)
+	margin.add_theme_constant_override("margin_right", 7)
+	margin.add_theme_constant_override("margin_bottom", 5)
+	panel.add_child(margin)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 8)
+	margin.add_child(row)
+	var asset_type := str(asset.get("assetType", ""))
+	if asset_type == "pokemon":
+		var icon_button := Button.new()
+		icon_button.custom_minimum_size = Vector2(42, 42)
+		icon_button.icon = PokemonAssets.load_party_icon(str(snapshot.get("speciesId", snapshot.get("species", ""))), bool(snapshot.get("shiny", false)))
+		icon_button.expand_icon = true
+		icon_button.add_theme_constant_override("icon_max_width", 38)
+		icon_button.tooltip_text = _t("ui.lending.invitation.view")
+		icon_button.pressed.connect(_open_pokemon_summary.bind(snapshot))
+		_apply_icon_button_style(icon_button)
+		row.add_child(icon_button)
+		var identity := _loan_asset_identity(_pokemon_display_name(snapshot), _t("ui.lending.card.pokemon_meta", {"level": int(snapshot.get("level", 1)), "state": _asset_state_label(str(asset.get("status", "")))}))
+		row.add_child(identity)
+		var view := Button.new()
+		view.text = _t("ui.lending.invitation.view")
+		view.pressed.connect(_open_pokemon_summary.bind(snapshot))
+		_apply_button_style(view)
+		row.add_child(view)
+	else:
+		var item_id := str(asset.get("itemId", snapshot.get("id", "")))
+		var icon := TextureRect.new()
+		icon.custom_minimum_size = Vector2(36, 36)
+		icon.texture = _load_item_icon(item_id)
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		row.add_child(icon)
+		var item_meta_key := "ui.lending.card.item_equipped" if int(asset.get("heldPokemonId", 0)) > 0 else "ui.lending.card.item_in_bag"
+		var identity := _loan_asset_identity(_item_display_name(item_id, str(snapshot.get("name", item_id))), _t(item_meta_key, {"state": _asset_state_label(str(asset.get("status", "")))}))
+		row.add_child(identity)
+		if is_borrower and loan_status in ["active", "return_pending"]:
+			var action := Button.new()
+			action.text = _t("ui.lending.detach_item") if int(asset.get("heldPokemonId", 0)) > 0 else _t("ui.lending.attach_item")
+			action.disabled = mutation_in_flight
+			if int(asset.get("heldPokemonId", 0)) > 0:
+				action.pressed.connect(_detach_loan_item.bind(str(asset.get("assetId", ""))))
+			else:
+				action.pressed.connect(_open_attach_menu.bind(str(asset.get("assetId", "")), item_id))
+			_apply_button_style(action)
+			row.add_child(action)
+	return panel
+
+
+func _loan_asset_identity(display_name: String, metadata: String) -> VBoxContainer:
+	var identity := VBoxContainer.new()
+	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	identity.alignment = BoxContainer.ALIGNMENT_CENTER
+	var name_label := Label.new()
+	name_label.text = display_name
+	name_label.add_theme_color_override("font_color", TEXT)
+	name_label.add_theme_font_size_override("font_size", 12)
+	identity.add_child(name_label)
+	var meta_label := Label.new()
+	meta_label.text = metadata
+	meta_label.add_theme_color_override("font_color", MUTED)
+	meta_label.add_theme_font_size_override("font_size", 9)
+	identity.add_child(meta_label)
+	return identity
+
+
+func _status_badge(status: String) -> Label:
+	var badge := Label.new()
+	badge.text = _t("ui.lending.status.%s" % status)
+	badge.add_theme_font_size_override("font_size", 10)
+	badge.add_theme_color_override("font_color", _status_color(status))
+	var badge_style := _style(Color("#07111df5"), _status_color(status, true), 6)
+	badge_style.content_margin_left = 8
+	badge_style.content_margin_right = 8
+	badge_style.content_margin_top = 3
+	badge_style.content_margin_bottom = 3
+	badge.add_theme_stylebox_override("normal", badge_style)
+	return badge
+
+
+func _status_color(status: String, subdued := false) -> Color:
+	var color := Color("#83e2a9")
+	match status:
+		"pending": color = GOLD
+		"return_pending": color = Color("#ffae6d")
+		"returned": color = ACCENT
+		"declined", "cancelled", "expired": color = Color("#8794a3")
+	return Color(color, 0.55) if subdued else color
+
+
+func _loan_timing_text(loan: Dictionary) -> String:
+	var status := str(loan.get("status", ""))
+	match status:
+		"pending":
+			return _t("ui.lending.card.offer_expires", {"date": _format_loan_time(str(loan.get("offerExpiresAt", "")))})
+		"active":
+			return _t("ui.lending.card.due", {"date": _format_loan_time(str(loan.get("dueAt", "")))})
+		"return_pending":
+			return _t("ui.lending.card.return_requested", {"date": _format_loan_time(str(loan.get("returnRequestedAt", "")))})
+		"returned":
+			return _t("ui.lending.card.returned", {"date": _format_loan_time(str(loan.get("returnedAt", "")))})
+		"expired":
+			return _t("ui.lending.card.expired", {"date": _format_loan_time(str(loan.get("offerExpiresAt", "")))})
+	return _t("ui.lending.card.created", {"date": _format_loan_time(str(loan.get("createdAt", "")))})
+
+
+func _format_loan_time(value: String) -> String:
+	var cleaned := value.strip_edges()
+	if cleaned == "":
+		return "—"
+	if cleaned.length() >= 16:
+		return "%s UTC" % cleaned.left(16).replace("T", " ")
+	return cleaned
+
+
+func _asset_state_label(status: String) -> String:
+	return _t("ui.lending.asset_status.%s" % status)
 
 
 func _create_loan() -> void:
