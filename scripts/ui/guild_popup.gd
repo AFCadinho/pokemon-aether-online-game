@@ -875,8 +875,11 @@ func _render_guild_home() -> void:
 	heading.add_child(description)
 	header.add_child(_status_pill(str(guild.get("recruitment", "Closed"))))
 
+	member_content.add_child(_build_guild_travel_bar())
 	member_content.add_child(_build_guild_section_navigation(can_manage))
 	match active_guild_section:
+		"bank":
+			member_content.add_child(_build_guild_bank())
 		"members":
 			member_content.add_child(_build_member_roster())
 		"management":
@@ -918,6 +921,7 @@ func _build_guild_section_navigation(can_manage: bool) -> Control:
 	guild_section_buttons.clear()
 	var sections: Array[Dictionary] = [
 		{"id": "overview", "label_key": "ui.guild.section.overview", "name": "GuildOverviewTab"},
+		{"id": "bank", "label_key": "ui.guild.section.bank", "name": "GuildBankTab"},
 		{"id": "members", "label_key": "ui.guild.section.members", "name": "GuildMembersTab"},
 	]
 	if can_manage:
@@ -935,7 +939,7 @@ func _build_guild_section_navigation(can_manage: bool) -> Control:
 			"text",
 			str(section.get("label_key", "ui.guild.section.overview"))
 		)
-		button.custom_minimum_size = Vector2(145, 36)
+		button.custom_minimum_size = Vector2(138, 36)
 		button.pressed.connect(_show_guild_section.bind(section_id))
 		_apply_tab_style(button, active_guild_section == section_id)
 		navigation.add_child(button)
@@ -947,10 +951,48 @@ func _build_guild_section_navigation(can_manage: bool) -> Control:
 
 
 func _show_guild_section(section: String) -> void:
-	if section not in ["overview", "members", "management"]:
+	if section not in ["overview", "bank", "members", "management"]:
 		return
 	active_guild_section = section
 	_render_guild_home()
+
+
+func _build_guild_travel_bar() -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "GuildTravelBar"
+	panel.custom_minimum_size = Vector2(0, 72)
+	panel.add_theme_stylebox_override("panel", _panel_style(Color("#091827f2"), Color("#4b9dc488"), 9, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 13, 10, 13, 10)
+	panel.add_child(margin)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 9)
+	margin.add_child(row)
+	var copy := VBoxContainer.new()
+	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	copy.add_theme_constant_override("separation", 2)
+	row.add_child(copy)
+	copy.add_child(_localized_label("ui.guild.travel.title", 10, UI_ACCENT))
+	var hint := _localized_label("ui.guild.travel.hint", 11, UI_MUTED)
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	copy.add_child(hint)
+	var lobby_button := Button.new()
+	lobby_button.name = "GuildLobbyTeleportButton"
+	_set_localized_property(lobby_button, "text", "ui.guild.lobby.teleport")
+	_set_localized_property(lobby_button, "tooltip_text", "ui.guild.lobby.tooltip")
+	lobby_button.custom_minimum_size = Vector2(205, 44)
+	lobby_button.pressed.connect(_on_guild_lobby_pressed)
+	_apply_button_style(lobby_button, "primary")
+	row.add_child(lobby_button)
+	var base_button := Button.new()
+	base_button.name = "GuildBaseTeleportButton"
+	_set_localized_property(base_button, "text", "ui.guild.base.teleport")
+	_set_localized_property(base_button, "tooltip_text", "ui.guild.base.tooltip")
+	base_button.custom_minimum_size = Vector2(205, 44)
+	base_button.disabled = true
+	_apply_button_style(base_button)
+	row.add_child(base_button)
+	return panel
 
 
 func _build_guild_overview(guild: Dictionary) -> Control:
@@ -999,20 +1041,98 @@ func _build_guild_overview(guild: Dictionary) -> Control:
 	members_button.pressed.connect(_show_guild_section.bind("members"))
 	_apply_button_style(members_button)
 	actions.add_child(members_button)
-	var lobby_button := Button.new()
-	lobby_button.name = "GuildLobbyTeleportButton"
-	_set_localized_property(lobby_button, "text", "ui.guild.lobby.teleport")
-	_set_localized_property(lobby_button, "tooltip_text", "ui.guild.lobby.tooltip")
-	lobby_button.custom_minimum_size = Vector2(170, 42)
-	lobby_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	lobby_button.pressed.connect(_on_guild_lobby_pressed)
-	_apply_button_style(lobby_button, "primary")
-	actions.add_child(lobby_button)
 	var action_hint := _localized_label("ui.guild.quick_actions.hint", 11, UI_MUTED)
 	action_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	copy.add_child(action_hint)
 	overview.add_child(actions_panel)
 	return overview
+
+
+func _build_guild_bank() -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "GuildBankSection"
+	panel.custom_minimum_size = Vector2(0, 245)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER_INNER, 9, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 15, 13, 15, 14)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 9)
+	margin.add_child(content)
+	var header := HBoxContainer.new()
+	content.add_child(header)
+	var title_stack := VBoxContainer.new()
+	title_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_stack.add_theme_constant_override("separation", 2)
+	header.add_child(title_stack)
+	title_stack.add_child(_localized_label("ui.guild.bank.title", 16, UI_TEXT))
+	var description := _localized_label("ui.guild.bank.description", 11, UI_MUTED)
+	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	title_stack.add_child(description)
+	header.add_child(_status_pill(_t("ui.guild.bank.status")))
+	var vaults := GridContainer.new()
+	vaults.name = "GuildBankVaults"
+	vaults.columns = 3
+	vaults.add_theme_constant_override("h_separation", 9)
+	content.add_child(vaults)
+	vaults.add_child(_build_guild_bank_card(
+		"GuildBankFunds",
+		"ui.guild.bank.funds.title",
+		"ui.guild.bank.funds.description",
+		"ui.guild.bank.funds.action",
+		UI_GOLD
+	))
+	vaults.add_child(_build_guild_bank_card(
+		"GuildBankPokemon",
+		"ui.guild.bank.pokemon.title",
+		"ui.guild.bank.pokemon.description",
+		"ui.guild.bank.pokemon.action",
+		UI_ACCENT
+	))
+	vaults.add_child(_build_guild_bank_card(
+		"GuildBankItems",
+		"ui.guild.bank.items.title",
+		"ui.guild.bank.items.description",
+		"ui.guild.bank.items.action",
+		UI_SUCCESS
+	))
+	var hint := _localized_label("ui.guild.bank.preview_hint", 10, UI_WARNING)
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	content.add_child(hint)
+	return panel
+
+
+func _build_guild_bank_card(
+	node_prefix: String,
+	title_key: String,
+	description_key: String,
+	action_key: String,
+	accent: Color
+) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "%sCard" % node_prefix
+	panel.custom_minimum_size = Vector2(0, 125)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _panel_style(Color("#07131ff2"), Color(accent.r, accent.g, accent.b, 0.48), 8, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 12, 10, 12, 10)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 5)
+	margin.add_child(content)
+	content.add_child(_localized_label(title_key, 13, accent))
+	var description := _localized_label(description_key, 10, UI_MUTED)
+	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	description.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	content.add_child(description)
+	var action := Button.new()
+	action.name = "%sAction" % node_prefix
+	_set_localized_property(action, "text", action_key)
+	action.disabled = true
+	_apply_button_style(action)
+	content.add_child(action)
+	return panel
 
 
 func _on_guild_lobby_pressed() -> void:
