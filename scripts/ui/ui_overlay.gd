@@ -2619,7 +2619,7 @@ func _setup_pc_ui() -> void:
 	pc_release_mode_button.focus_mode = Control.FOCUS_NONE
 	_set_localized_control_property(pc_release_mode_button, "tooltip_text", "ui.storage.release.choose")
 	pc_release_mode_button.pressed.connect(_on_pc_release_mode_button_pressed)
-	_apply_button_style(pc_release_mode_button, "secondary")
+	_apply_button_style(pc_release_mode_button, "warning")
 	header.add_child(pc_release_mode_button)
 
 	pc_close_button = Button.new()
@@ -2628,7 +2628,7 @@ func _setup_pc_ui() -> void:
 	pc_close_button.focus_mode = Control.FOCUS_NONE
 	_set_localized_control_property(pc_close_button, "tooltip_text", "ui.storage.close")
 	pc_close_button.pressed.connect(_on_pc_close_button_pressed)
-	_apply_button_style(pc_close_button)
+	_apply_button_style(pc_close_button, "danger")
 	header.add_child(pc_close_button)
 
 	var body := HBoxContainer.new()
@@ -25125,6 +25125,13 @@ func _apply_button_style(button: Button, variant: String = "default") -> void:
 		border = Color("#7a2b33")
 		hover_border = UI_DANGER
 		font_color = UI_DANGER
+	elif variant == "warning":
+		normal_bg = Color("#2b210de8")
+		hover_bg = Color("#443315f2")
+		pressed_bg = Color("#1d1508f2")
+		border = Color("#8a6a25")
+		hover_border = UI_MONEY
+		font_color = UI_MONEY
 
 	button.add_theme_color_override("font_color", font_color)
 	button.add_theme_color_override("font_hover_color", UI_TEXT)
@@ -25134,7 +25141,7 @@ func _apply_button_style(button: Button, variant: String = "default") -> void:
 	button.add_theme_stylebox_override("normal", _make_button_style(normal_bg, border))
 	button.add_theme_stylebox_override("hover", _make_button_style(hover_bg, hover_border))
 	button.add_theme_stylebox_override("pressed", _make_button_style(pressed_bg, hover_border))
-	button.add_theme_stylebox_override("focus", _make_button_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, 8, 1))
+	button.add_theme_stylebox_override("focus", _make_button_style(hover_bg, hover_border, 8, 1))
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 
