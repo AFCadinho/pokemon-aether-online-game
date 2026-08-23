@@ -86,8 +86,13 @@ func cancel_loan(loan_id: String, request_id := "") -> Dictionary:
 	return await _loan_command(loan_id, "cancel", request_id)
 
 
-func request_return(loan_id: String, request_id := "") -> Dictionary:
-	return await _loan_command(loan_id, "request-return", request_id)
+func request_return(loan_id: String, asset_id: String, request_id := "") -> Dictionary:
+	if asset_id.strip_edges() == "":
+		return _validation_error("Loan asset id is required.")
+	return await _command("/%s/request-return" % loan_id.strip_edges().uri_encode(), {
+		"assetId": asset_id.strip_edges(),
+		"requestId": _request_id(request_id),
+	})
 
 
 func return_assets(loan_id: String, asset_ids: Array = [], request_id := "") -> Dictionary:

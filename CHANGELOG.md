@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Lenders can now request a specific Pokémon or item back, while borrowers can still choose when to return it before the agreed deadline.
+
 - Player Loan offers now require the lender to keep at least one Pokémon in their Party.
 
 - Accepting or returning a Player Loan now refreshes both Trainers' Party, PC, and Bag state, so moved Pokémon no longer remain visible in the lender's Party.

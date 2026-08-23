@@ -4339,6 +4339,8 @@
   "ui.lending.return_confirm_title": "Devolver recurso emprestado",
   "ui.lending.return_confirm_text": "Devolver {asset} ao dono? Você não poderá mais usá-lo.",
   "ui.lending.request_return": "Pedir devolução",
+  "ui.lending.request_return_asset": "Pedir de volta",
+  "ui.lending.card.asset_return_requested": "Devolução solicitada",
   "ui.lending.duration.hour": "1 hora",
   "ui.lending.duration.day": "24 horas",
   "ui.lending.duration.three_days": "3 dias",
@@ -4373,6 +4375,8 @@
   "ui.lending.notification.cancelled": "@{trainer} cancelou a oferta de empréstimo.",
   "ui.lending.notification.expired": "Sua oferta de empréstimo com @{trainer} expirou.",
   "ui.lending.notification.return_requested": "@{trainer} pediu a devolução dos recursos emprestados.",
+  "ui.lending.notification.asset_return_requested": "@{trainer} pediu {asset} de volta.",
+  "ui.lending.notification.you_requested_asset": "Você pediu {asset} de volta.",
   "ui.lending.notification.asset_returned": "@{trainer} devolveu {asset}.",
   "ui.lending.notification.asset_auto_returned": "{asset} foi devolvido automaticamente após o prazo.",
   "ui.lending.notification.you_returned": "Você devolveu {asset} ao dono."
