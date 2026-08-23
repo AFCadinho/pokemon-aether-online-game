@@ -5,6 +5,7 @@
 **Added**
 
 - If the game closes unexpectedly, PokeAether now prepares a privacy-safe crash report at the next start. The report can be viewed and copied directly from the notification or the new Support page in Settings.
+- Players can now join open Guilds directly or apply to Guilds that review new members. Guild leaders and officers can accept or decline applications from Guild Management.
 
 **Changed**
 
