@@ -433,9 +433,11 @@ func _build_interface() -> void:
 
 	rock_area_selector = OptionButton.new()
 	rock_area_selector.name = "RockAreaSelector"
-	rock_area_selector.custom_minimum_size.y = 38.0
+	rock_area_selector.custom_minimum_size.y = 40.0
 	rock_area_selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	rock_area_selector.fit_to_longest_item = false
+	rock_area_selector.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	rock_area_selector.clip_text = true
 	rock_area_selector.item_selected.connect(_select_rock_area)
 	_style_rock_area_selector(rock_area_selector)
 	targets_section.add_child(rock_area_selector)
@@ -1055,7 +1057,7 @@ func _create_target_town_arrow(label: String) -> Button:
 func _style_rock_area_selector(option: OptionButton) -> void:
 	option.focus_mode = Control.FOCUS_ALL
 	option.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	option.add_theme_font_size_override("font_size", 11)
+	option.add_theme_font_size_override("font_size", 12)
 	option.add_theme_color_override("font_color", TEXT_COLOR)
 	option.add_theme_color_override("font_hover_color", TEXT_COLOR)
 	option.add_theme_color_override("font_pressed_color", TEXT_COLOR)
@@ -1068,16 +1070,24 @@ func _style_rock_area_selector(option: OptionButton) -> void:
 	var popup := option.get_popup()
 	popup.transparent_bg = true
 	popup.borderless = true
-	popup.max_size = Vector2i(520, 360)
-	popup.add_theme_font_size_override("font_size", 11)
+	popup.max_size = Vector2i(760, 360)
+	popup.add_theme_font_size_override("font_size", 13)
 	popup.add_theme_color_override("font_color", TEXT_COLOR)
 	popup.add_theme_color_override("font_hover_color", TEXT_COLOR)
 	popup.add_theme_color_override("font_disabled_color", LOCKED_COLOR)
-	popup.add_theme_constant_override("item_start_padding", 10)
-	popup.add_theme_constant_override("item_end_padding", 12)
-	popup.add_theme_constant_override("v_separation", 5)
+	popup.add_theme_constant_override("item_start_padding", 14)
+	popup.add_theme_constant_override("item_end_padding", 14)
+	popup.add_theme_constant_override("v_separation", 12)
 	popup.add_theme_stylebox_override("panel", _make_panel_style(Color("#050e18fc"), CARD_SELECTED_BORDER, 8, 1))
 	popup.add_theme_stylebox_override("hover", _make_panel_style(CARD_HOVER, CARD_SELECTED_BORDER, 5, 1))
+	popup.about_to_popup.connect(_fit_rock_area_popup.bind(option))
+
+
+func _fit_rock_area_popup(option: OptionButton) -> void:
+	var popup := option.get_popup()
+	var popup_width := maxi(roundi(option.size.x), 320)
+	popup.min_size = Vector2i(popup_width, 0)
+	popup.max_size = Vector2i(popup_width, 360)
 
 
 func _select_target_town(town_key: String) -> void:
