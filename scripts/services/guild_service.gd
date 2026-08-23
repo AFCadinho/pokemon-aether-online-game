@@ -100,6 +100,25 @@ func load_home() -> Dictionary:
 	return response if not bool(response.get("success", false)) else _home_result(response.get("body", {}))
 
 
+func leave_guild() -> Dictionary:
+	var response := await _authenticated_request(
+		GUILD_HOME_ENDPOINT + "/leave",
+		HTTPClient.METHOD_POST,
+		"{}"
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var body := _dictionary(response.get("body", {}))
+	_set_current_membership({})
+	_set_current_guild({})
+	return {
+		"success": true,
+		"left": bool(body.get("left", false)),
+		"guildId": int(body.get("guildId", 0)),
+		"guildName": str(body.get("guildName", "")),
+	}
+
+
 func load_bank() -> Dictionary:
 	var response := await _authenticated_request(GUILD_BANK_ENDPOINT, HTTPClient.METHOD_GET, "")
 	return response if not bool(response.get("success", false)) else _bank_result(response.get("body", {}))

@@ -20,6 +20,8 @@ func _init() -> void:
 	_check_contains(service_source, "func apply_to_guild", "guild service submits membership applications")
 	_check_contains(service_source, "func cancel_application", "guild service cancels the player's application")
 	_check_contains(service_source, "func load_home", "guild service loads the member dashboard")
+	_check_contains(service_source, "func leave_guild", "guild service exposes Guild departure")
+	_check_contains(service_source, 'GUILD_HOME_ENDPOINT + "/leave"', "guild departure uses the member endpoint")
 	_check_contains(service_source, "func teleport_to_lobby", "guild service exposes the free Lobby teleport")
 	_check_contains(service_source, "func load_bank", "guild service loads the authoritative Guild Bank")
 	_check_contains(service_source, "func deposit_bank_money", "guild service deposits Guild funds")

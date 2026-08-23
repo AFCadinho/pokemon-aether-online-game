@@ -161,6 +161,8 @@ func _run() -> void:
 	_check(popup.find_child("GuildMembersTab", true, false) != null, "guild members tab renders")
 	_check(popup.find_child("GuildManagementTab", true, false) != null, "guild management tab renders for leaders")
 	_check(popup.find_child("GuildOverviewSection", true, false) != null, "guild dashboard opens on its overview")
+	var leader_leave_button := popup.find_child("LeaveGuildButton", true, false) as Button
+	_check(leader_leave_button != null and leader_leave_button.disabled, "Guild leaders must transfer leadership before leaving")
 	_check(popup.find_child("GuildTravelBar", true, false) != null, "guild travel sits above the dashboard content")
 	var lobby_button := popup.find_child("GuildLobbyTeleportButton", true, false) as Button
 	_check(lobby_button != null and not lobby_button.disabled, "Aether Clash Lobby travel is available")
@@ -402,6 +404,16 @@ func _run() -> void:
 	_check(popup.find_child("EditGuildEmblemButton", true, false) == null, "regular members cannot edit the Guild emblem")
 	_check(popup.find_child("EditGuildEmblemIconButton", true, false) == null, "regular members cannot edit the Guild emblem icon")
 	_check(popup.find_child("GuildOverviewSection", true, false) != null, "regular members return to the overview")
+	var member_leave_button := popup.find_child("LeaveGuildButton", true, false) as Button
+	_check(member_leave_button != null and not member_leave_button.disabled, "regular members can leave their Guild")
+	if member_leave_button != null:
+		member_leave_button.pressed.emit()
+		await process_frame
+	var leave_dialog := popup.find_child("GuildLeaveConfirmationDialog", true, false) as ConfirmationDialog
+	_check(leave_dialog != null and leave_dialog.visible, "leaving a Guild asks for confirmation")
+	if leave_dialog != null:
+		leave_dialog.canceled.emit()
+		await process_frame
 
 	popup.close()
 	await process_frame
