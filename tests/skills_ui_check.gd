@@ -277,6 +277,9 @@ func _run() -> void:
 	rock_area_selector.select(0)
 	panel.call("_select_rock_area", 0)
 	_check((panel.get("targets_container") as GridContainer).columns == 2, "wide Rock Smash lists use two columns")
+	await process_frame
+	var spacious_first_rock := (panel.get("targets_container") as GridContainer).get_child(0) as PanelContainer
+	_check(spacious_first_rock.size.y >= 100.0, "short Rock Smash lists spread their cards across more of the available height")
 	panel.size.x = 620.0
 	panel.call("_on_window_resized")
 	_check((panel.get("targets_container") as GridContainer).columns == 1, "narrow Rock Smash lists collapse to one readable column")

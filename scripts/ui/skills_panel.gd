@@ -24,6 +24,8 @@ const WINDOW_EDGE_MARGIN := 12.0
 const TARGET_TOWN_TAB_MINIMUM_WIDTH := 145.0
 const TARGET_TOWN_TABS_MAXIMUM := 5
 const ROCK_GRID_MINIMUM_WIDTH := 700.0
+const ROCK_CARD_MINIMUM_HEIGHT := 78.0
+const ROCK_GRID_VIEWPORT_FILL := 0.75
 
 var main_panel: PanelContainer
 var window_header: HBoxContainer
@@ -445,6 +447,7 @@ func _build_interface() -> void:
 	targets_scroll.custom_minimum_size.y = 120.0
 	targets_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	targets_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	targets_scroll.resized.connect(_update_target_grid_columns)
 	targets_section.add_child(targets_scroll)
 
 	targets_container = GridContainer.new()
@@ -996,6 +999,7 @@ func _render_selected_target_town() -> void:
 	var town_targets: Array = targets_by_town.get(selected_target_town_key, []) as Array
 	for target_value: Variant in town_targets:
 		targets_container.add_child(_create_target_row(target_value as Dictionary))
+	_update_target_grid_columns()
 	targets_scroll.scroll_vertical = 0
 
 
@@ -1105,8 +1109,10 @@ func _change_target_town_page(direction: int) -> void:
 
 func _create_target_row(target: Dictionary) -> Control:
 	var row := PanelContainer.new()
-	row.custom_minimum_size.y = 47.0
+	var is_rock := selected_skill_id == "rock_smash"
+	row.custom_minimum_size.y = ROCK_CARD_MINIMUM_HEIGHT if is_rock else 47.0
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.size_flags_vertical = Control.SIZE_EXPAND_FILL if is_rock else Control.SIZE_FILL
 	row.add_theme_stylebox_override("panel", _make_panel_style(Color("#07111ceb"), Color("#233d52"), 7, 1))
 
 	var content := HBoxContainer.new()
@@ -1115,6 +1121,7 @@ func _create_target_row(target: Dictionary) -> Control:
 
 	var identity := VBoxContainer.new()
 	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	identity.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	identity.add_theme_constant_override("separation", 1)
 	content.add_child(identity)
 
@@ -1142,6 +1149,7 @@ func _create_target_row(target: Dictionary) -> Control:
 
 	var status := Label.new()
 	status.custom_minimum_size = Vector2(104, 28)
+	status.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	status.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	status.add_theme_font_size_override("font_size", 10)
@@ -1294,8 +1302,20 @@ func _on_window_resized() -> void:
 func _update_target_grid_columns() -> void:
 	if targets_container == null:
 		return
-	targets_container.columns = (
-		2 if selected_skill_id == "rock_smash" and size.x >= ROCK_GRID_MINIMUM_WIDTH else 1
+	var is_rock := selected_skill_id == "rock_smash"
+	targets_container.columns = 2 if is_rock and size.x >= ROCK_GRID_MINIMUM_WIDTH else 1
+	targets_container.size_flags_vertical = Control.SIZE_EXPAND_FILL if is_rock else Control.SIZE_FILL
+	if not is_rock:
+		targets_container.custom_minimum_size.y = 0.0
+		return
+	var row_count := ceili(float(targets_container.get_child_count()) / float(targets_container.columns))
+	var natural_height := (
+		float(row_count) * ROCK_CARD_MINIMUM_HEIGHT
+		+ float(maxi(row_count - 1, 0)) * 5.0
+	)
+	targets_container.custom_minimum_size.y = maxf(
+		natural_height,
+		targets_scroll.size.y * ROCK_GRID_VIEWPORT_FILL
 	)
 
 
