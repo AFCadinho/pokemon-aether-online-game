@@ -2,6 +2,7 @@ extends SceneTree
 
 const FINGERPRINT := "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 const CalcdexSnapshot := preload("res://scripts/battle/battle_calcdex_snapshot.gd")
+const OwnedFormProjection := preload("res://scripts/battle/battle_owned_form_projection.gd")
 const State := preload("res://scripts/battle/battle_state.gd")
 
 
@@ -15,6 +16,17 @@ func _init() -> void:
 	}
 	var normalized: Dictionary = CalcdexSnapshot.normalize_response(response, revision)
 	_check(bool(normalized.get("success", false)), "accepts the frozen provenance snapshot")
+	var mega_format_response: Dictionary = response.duplicate(true)
+	mega_format_response["snapshot"]["format"] = {
+		"formatKey": "pokeaether-mega-z-test",
+		"engineFormatId": "pokeaether-mega-z-test-v1",
+		"generation": 9,
+		"gameType": "singles",
+	}
+	_check(
+		bool(CalcdexSnapshot.normalize_response(mega_format_response, revision).get("success", false)),
+		"accepts the exact Champions ZA calculator format"
+	)
 	var wire_response: Dictionary = JSON.parse_string(JSON.stringify(response))
 	wire_response["status"] = 200.0
 	var wire_revision: Dictionary = JSON.parse_string(JSON.stringify(revision))
@@ -80,6 +92,63 @@ func _init() -> void:
 		not CalcdexSnapshot.is_valid_mechanics_manifest(mismatched_manifest),
 		"rejects an unapproved mechanics manifest"
 	)
+
+	var live_mega_stats := OwnedFormProjection.merge_stats(
+		{"hp": 318, "atk": 333, "def": 186, "spa": 216, "spd": 196, "spe": 423},
+		{"atk": 413, "def": 186, "spa": 297, "spd": 196, "spe": 445}
+	)
+	_check(live_mega_stats.get("hp") == 318, "keeps owned HP when the live request omits it")
+	_check(live_mega_stats.get("atk") == 413, "prefers the live Mega Attack stat")
+	_check(live_mega_stats.get("spa") == 297, "prefers the live Mega Special Attack stat")
+	_check(live_mega_stats.get("spe") == 445, "prefers the live Mega Speed stat")
+
+	var hover_data := {
+		"species": "Zeraora",
+		"displaySpecies": "Zeraora",
+		"ability": "Volt Absorb",
+		"possibleAbilities": ["Volt Absorb"],
+		"stats": {"hp": 318, "atk": 333},
+	}
+	OwnedFormProjection.apply_live_form_to_hover(
+		hover_data,
+		{
+			"ability": "Volt Absorb",
+			"stats": {"atk": 413, "def": 186, "spa": 297, "spd": 196, "spe": 445},
+		},
+		"Zeraora-Mega"
+	)
+	_check(hover_data.get("species") == "Zeraora-Mega", "party hover uses the live Mega species")
+	_check(hover_data.get("displaySpecies") == "Zeraora-Mega", "party hover labels the live Mega form")
+	_check(hover_data.get("stats", {}).get("hp") == 318, "party hover retains owned HP")
+	_check(hover_data.get("stats", {}).get("atk") == 413, "party hover uses live Mega stats")
+	_check(hover_data.get("ability") == "Volt Absorb", "party hover uses the live battle ability")
+
+	var latest_response := {
+		"requests": {
+			"p1": {
+				"side": {
+					"pokemon": [{
+						"canonicalPartySlot": 1,
+						"species": "Dragonite",
+						"displaySpecies": "Dragonite-Mega",
+						"ability": "Multiscale",
+						"stats": {"atk": 381, "def": 266, "spa": 293, "spd": 286, "spe": 299},
+					}],
+				},
+			},
+		},
+	}
+	var latest_dragonite := OwnedFormProjection.find_request_pokemon(latest_response, "p1", 1)
+	var stale_display := {
+		"species": "Dragonite",
+		"displaySpecies": "Dragonite-Mega",
+		"ability": "Inner Focus",
+		"stats": {"atk": 403, "def": 226, "spa": 212, "spd": 237, "spe": 259},
+	}
+	OwnedFormProjection.apply_live_request_to_display(stale_display, latest_dragonite)
+	_check(stale_display.get("ability") == "Multiscale", "latest owned request replaces the base ability")
+	_check(stale_display.get("stats", {}).get("atk") == 381, "latest owned request replaces base-form stats")
+	_check(stale_display.get("displaySpecies") == "Dragonite-Mega", "latest owned request keeps the Mega label")
 
 	print("PASS battle_calcdex_snapshot_check")
 	quit(0)
@@ -173,9 +242,9 @@ func _revision() -> Dictionary:
 
 func _mechanics_manifest() -> Dictionary:
 	return {
-		"contractRevision": "calc0-2026-08-08",
-		"damageCalcVersion": "0.10.0",
-		"showdownVersion": "0.11.10",
+		"contractRevision": "calc0.1-2026-08-21",
+		"damageCalcVersion": "0.11.0+upstream.636e5b9.pao2",
+		"showdownVersion": "0.11.11",
 		"formatDataFingerprint": CalcdexSnapshot.FORMAT_DATA_FINGERPRINT,
 	}
 
