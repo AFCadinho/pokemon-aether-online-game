@@ -23,9 +23,9 @@ var detail_kind_panel: PanelContainer
 var detail_kind_label: Label
 var detail_description_label: Label
 var interiors_title_label: Label
-var detail_interiors_container: VBoxContainer
+var detail_interiors_container: GridContainer
 var connections_title_label: Label
-var detail_connections_container: VBoxContainer
+var detail_connections_container: GridContainer
 var legend_kind_labels: Dictionary = {}
 var selected_location_id := ""
 var current_location_id := ""
@@ -270,9 +270,13 @@ func _build_ui() -> void:
 	detail_margin.add_theme_constant_override("margin_bottom", 16)
 	details.add_child(detail_margin)
 	var detail_column := VBoxContainer.new()
+	detail_column.name = "DetailColumn"
+	detail_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	detail_column.add_theme_constant_override("separation", 11)
 	var detail_scroll := ScrollContainer.new()
+	detail_scroll.name = "DetailScroll"
 	detail_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	detail_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	detail_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	detail_margin.add_child(detail_scroll)
 	detail_scroll.add_child(detail_column)
@@ -282,17 +286,23 @@ func _build_ui() -> void:
 	detail_overline_label.add_theme_color_override("font_color", Color("#ff73e2"))
 	detail_column.add_child(detail_overline_label)
 
-	var detail_heading := VBoxContainer.new()
+	var detail_heading := HBoxContainer.new()
+	detail_heading.name = "DetailHeading"
 	detail_heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	detail_heading.add_theme_constant_override("separation", 7)
+	detail_heading.add_theme_constant_override("separation", 10)
 	detail_column.add_child(detail_heading)
 	detail_name_label = Label.new()
+	detail_name_label.name = "DetailName"
+	detail_name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	detail_name_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	detail_name_label.add_theme_font_size_override("font_size", 24)
 	detail_name_label.add_theme_color_override("font_color", Color("#f0e6ca"))
 	detail_name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	detail_heading.add_child(detail_name_label)
 	detail_kind_panel = PanelContainer.new()
-	detail_kind_panel.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	detail_kind_panel.name = "DetailKind"
+	detail_kind_panel.size_flags_horizontal = Control.SIZE_SHRINK_END
+	detail_kind_panel.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	detail_heading.add_child(detail_kind_panel)
 	var kind_margin := MarginContainer.new()
 	kind_margin.add_theme_constant_override("margin_left", 8)
@@ -304,39 +314,52 @@ func _build_ui() -> void:
 	detail_kind_label.add_theme_font_size_override("font_size", 10)
 	kind_margin.add_child(detail_kind_label)
 
-	var detail_divider := HSeparator.new()
-	detail_divider.add_theme_color_override("separator", Color("#355064"))
-	detail_column.add_child(detail_divider)
-
 	var description_card := PanelContainer.new()
+	description_card.name = "DescriptionCard"
+	description_card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	description_card.add_theme_stylebox_override("panel", _panel_style(Color("#06131f"), Color("#203d50"), 10, 1))
 	detail_column.add_child(description_card)
 	var description_margin := MarginContainer.new()
+	description_margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	description_margin.add_theme_constant_override("margin_left", 11)
 	description_margin.add_theme_constant_override("margin_top", 10)
 	description_margin.add_theme_constant_override("margin_right", 11)
 	description_margin.add_theme_constant_override("margin_bottom", 10)
 	description_card.add_child(description_margin)
 	detail_description_label = Label.new()
+	detail_description_label.name = "DetailDescription"
+	detail_description_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	detail_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	detail_description_label.add_theme_font_size_override("font_size", 14)
 	detail_description_label.add_theme_color_override("font_color", Color("#c0cdd7"))
 	description_margin.add_child(detail_description_label)
 
+	var detail_divider := HSeparator.new()
+	detail_divider.add_theme_color_override("separator", Color("#355064"))
+	detail_column.add_child(detail_divider)
+
 	interiors_title_label = Label.new()
 	interiors_title_label.add_theme_font_size_override("font_size", 10)
 	interiors_title_label.add_theme_color_override("font_color", Color("#65d7f3"))
 	detail_column.add_child(interiors_title_label)
-	detail_interiors_container = VBoxContainer.new()
-	detail_interiors_container.add_theme_constant_override("separation", 6)
+	detail_interiors_container = GridContainer.new()
+	detail_interiors_container.name = "InteriorsGrid"
+	detail_interiors_container.columns = 2
+	detail_interiors_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	detail_interiors_container.add_theme_constant_override("h_separation", 10)
+	detail_interiors_container.add_theme_constant_override("v_separation", 6)
 	detail_column.add_child(detail_interiors_container)
 
 	connections_title_label = Label.new()
 	connections_title_label.add_theme_font_size_override("font_size", 10)
 	connections_title_label.add_theme_color_override("font_color", Color("#65d7f3"))
 	detail_column.add_child(connections_title_label)
-	detail_connections_container = VBoxContainer.new()
-	detail_connections_container.add_theme_constant_override("separation", 7)
+	detail_connections_container = GridContainer.new()
+	detail_connections_container.name = "ConnectionsGrid"
+	detail_connections_container.columns = 2
+	detail_connections_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	detail_connections_container.add_theme_constant_override("h_separation", 8)
+	detail_connections_container.add_theme_constant_override("v_separation", 8)
 	detail_column.add_child(detail_connections_container)
 
 	var spacer := Control.new()
@@ -476,6 +499,9 @@ func _refresh_interior_items(interiors: Array) -> void:
 			continue
 		var item := Label.new()
 		item.text = "◆  %s" % label
+		item.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		item.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		item.tooltip_text = label
 		item.add_theme_font_size_override("font_size", 13)
 		item.add_theme_color_override("font_color", Color("#b8c9d4"))
 		detail_interiors_container.add_child(item)
@@ -497,6 +523,7 @@ func _refresh_connection_buttons(location_ids: Array[String]) -> void:
 	for location_id: String in location_ids:
 		var button := Button.new()
 		button.text = "→  %s" % _location_name(location_id)
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		button.custom_minimum_size = Vector2(0, 38)
 		button.focus_mode = Control.FOCUS_ALL
