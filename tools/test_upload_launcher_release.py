@@ -134,6 +134,20 @@ class R2UploadRetryTests(unittest.TestCase):
         for status in (400, 401, 403, 404, 409):
             self.assertFalse(uploader._is_retryable_http_status(status))
 
+    def test_mutable_news_objects_are_not_cached_as_immutable(self) -> None:
+        self.assertEqual(
+            uploader._get_cache_control_for_key("data/news.json"),
+            "no-cache, max-age=0",
+        )
+        self.assertEqual(
+            uploader._get_cache_control_for_key("data/news.previous.json"),
+            "no-cache, max-age=0",
+        )
+        self.assertEqual(
+            uploader._get_cache_control_for_key("assets/pokemon-front-v1.zip"),
+            "public, max-age=31536000, immutable",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -37,6 +38,20 @@ def main() -> None:
     for manifest_path in manifest_paths:
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         _verify_entry(manifest_path, "game", manifest.get("game"), args.timeout, verified_urls)
+        asset_packs = manifest.get("assetPacks", [])
+        if not isinstance(asset_packs, list):
+            raise SystemExit(f"{manifest_path} assetPacks must be a list")
+        for asset_pack in asset_packs:
+            if not isinstance(asset_pack, dict):
+                raise SystemExit(f"{manifest_path} contains an invalid asset pack")
+            pack_id = str(asset_pack.get("id", "asset-pack"))
+            _verify_entry(
+                manifest_path,
+                f"asset pack {pack_id}",
+                asset_pack,
+                args.timeout,
+                verified_urls,
+            )
         if args.include_launcher:
             _verify_entry(
                 manifest_path,
@@ -59,8 +74,11 @@ def _verify_entry(
 
     url = str(value.get("url", "")).strip()
     expected_size = int(value.get("sizeBytes", 0))
+    expected_sha256 = str(value.get("sha256", "")).strip().lower()
     if not url or expected_size <= 0:
         raise SystemExit(f"{manifest_path} has incomplete {label} publication metadata")
+    if re.fullmatch(r"[a-f0-9]{64}", expected_sha256) is None:
+        raise SystemExit(f"{manifest_path} has no valid SHA-256 for {label}")
     if url in verified_urls:
         return
 
@@ -90,8 +108,37 @@ def _verify_entry(
             f"{label} size mismatch for {url}: expected {expected_size}, got {actual_size}"
         )
 
+    range_request = urllib.request.Request(
+        url,
+        method="GET",
+        headers={
+            "Accept-Encoding": "identity",
+            "Cache-Control": "no-cache",
+            "Range": "bytes=0-0",
+            "User-Agent": "PokeAetherReleaseVerifier/1.0",
+        },
+    )
+    try:
+        with urllib.request.urlopen(range_request, timeout=timeout) as response:
+            range_status = response.status
+            content_range = response.headers.get("Content-Range", "")
+            range_body = response.read(2)
+    except (urllib.error.URLError, TimeoutError) as error:
+        raise SystemExit(f"Could not verify Range support for {label} URL {url}: {error}") from error
+
+    expected_content_range = f"bytes 0-0/{expected_size}"
+    if range_status != 206:
+        raise SystemExit(f"{label} URL does not support byte ranges: HTTP {range_status}: {url}")
+    if content_range.lower() != expected_content_range:
+        raise SystemExit(
+            f"{label} URL returned invalid Content-Range: "
+            f"expected {expected_content_range}, got {content_range!r}"
+        )
+    if len(range_body) != 1:
+        raise SystemExit(f"{label} URL returned {len(range_body)} bytes for bytes=0-0")
+
     verified_urls.add(url)
-    print(f"Verified {label}: {url} ({actual_size} bytes)")
+    print(f"Verified {label}: {url} ({actual_size} bytes, Range OK)")
 
 
 if __name__ == "__main__":
