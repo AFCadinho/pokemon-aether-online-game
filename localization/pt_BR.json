@@ -3945,6 +3945,7 @@
   "ui.skills.rock_smash.rocks.tab": "Rochas",
   "ui.skills.rock_smash.rocks.summary": "{available} disponíveis  •  {completed}/{total} quebradas",
   "ui.skills.rock_smash.rocks.town_summary": "{available}/{total} disponíveis",
+  "ui.skills.rock_smash.rocks.area_option": "{area}  •  {completed}/{total} quebradas",
   "ui.skills.rock_smash.rocks.reset": "Cada rocha fixa pode ser quebrada uma vez por dia. Reinicia às 00:00 UTC.",
   "ui.skills.rock_smash.rock.training_north": "Rocha de treino norte",
   "ui.skills.rock_smash.rock.training_east": "Rocha de treino leste",

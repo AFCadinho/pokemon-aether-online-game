@@ -3945,6 +3945,7 @@
   "ui.skills.rock_smash.rocks.tab": "Rotsen",
   "ui.skills.rock_smash.rocks.summary": "{available} beschikbaar  •  {completed}/{total} gebroken",
   "ui.skills.rock_smash.rocks.town_summary": "{available}/{total} beschikbaar",
+  "ui.skills.rock_smash.rocks.area_option": "{area}  •  {completed}/{total} gebroken",
   "ui.skills.rock_smash.rocks.reset": "Iedere vaste rots kan eenmaal per dag worden gebroken. Reset om 00:00 UTC.",
   "ui.skills.rock_smash.rock.training_north": "Noordelijke trainingsrots",
   "ui.skills.rock_smash.rock.training_east": "Oostelijke trainingsrots",

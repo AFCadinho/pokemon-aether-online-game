@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Rock Smash now groups daily rocks in a compact area dropdown that shows each area's daily progress.
+
 - The Skills window now adapts to the available screen space and shows Rock Smash rocks in two columns when there is enough room.
 
 - The house on Route 2 can now be entered and safely exited back onto the route.

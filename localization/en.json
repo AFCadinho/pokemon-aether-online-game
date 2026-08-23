@@ -3945,6 +3945,7 @@
   "ui.skills.rock_smash.rocks.tab": "Rocks",
   "ui.skills.rock_smash.rocks.summary": "{available} available  •  {completed}/{total} smashed",
   "ui.skills.rock_smash.rocks.town_summary": "{available}/{total} available",
+  "ui.skills.rock_smash.rocks.area_option": "{area}  •  {completed}/{total} smashed",
   "ui.skills.rock_smash.rocks.reset": "Each fixed rock can be smashed once per day. Resets at 00:00 UTC.",
   "ui.skills.rock_smash.rock.training_north": "North Training Rock",
   "ui.skills.rock_smash.rock.training_east": "East Training Rock",
