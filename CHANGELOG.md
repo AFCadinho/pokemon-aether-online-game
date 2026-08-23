@@ -4,6 +4,7 @@
 
 **Added**
 
+- Added player loans beside Trade. You can offer Pokémon or reusable held items, set a duration and optional fee, and review received, borrowed, lent, and completed loans from the Social menu.
 - If the game closes unexpectedly, PokeAether now prepares a privacy-safe crash report at the next start. The report can be viewed and copied directly from the notification or the new Support page in Settings.
 
 **Fixed**

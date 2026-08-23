@@ -139,6 +139,7 @@ const PVP_DEFAULT_TIMER_TIER_ID := "casual_v1"
 const SOCIALS_FRIENDS_ICON: Texture2D = preload("res://assets/ui/friendlist.svg")
 const SOCIALS_NEARBY_ICON: Texture2D = preload("res://assets/ui/socials_nearby.svg")
 const SOCIALS_MAIL_ICON: Texture2D = preload("res://assets/ui/socials_mail.svg")
+const SOCIALS_LOANS_ICON: Texture2D = preload("res://assets/ui/player_trade.svg")
 const POKEMON_STORAGE_ICON: Texture2D = preload("res://assets/ui/pokemon_storage.svg")
 const POKEDEX_OWNED_ICON: Texture2D = preload("res://assets/items/icons/POKEBALL.png")
 const SHINY_TRACKER_ICON: Texture2D = preload("res://assets/items/icons/SHINYTRACKER.png")
@@ -549,6 +550,7 @@ var donator_store_popup: DonatorStorePopup
 @onready var socials_menu: PanelContainer = $Control/SocialsMenu
 @onready var socials_friend_list_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/FriendListButton
 @onready var socials_players_on_map_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/PlayersOnMapButton
+@onready var socials_loans_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/LoansButton
 @onready var socials_mail_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/MailButton
 @onready var socials_close_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/Header/CloseButton
 var friendlist_popup: FriendlistPopup
@@ -1523,6 +1525,7 @@ func _ready() -> void:
 	socials_button.pressed.connect(_on_socials_button_pressed)
 	socials_friend_list_button.pressed.connect(_on_socials_friend_list_button_pressed)
 	socials_players_on_map_button.pressed.connect(_on_socials_players_on_map_button_pressed)
+	socials_loans_button.pressed.connect(_on_socials_loans_button_pressed)
 	socials_mail_button.pressed.connect(_on_socials_mail_button_pressed)
 	socials_close_button.pressed.connect(_on_socials_close_button_pressed)
 	_ensure_player_interaction_coordinator()
@@ -24931,6 +24934,13 @@ func _apply_socials_menu_style() -> void:
 		Color("#60d3ff")
 	)
 	_configure_launcher_card_button(
+		socials_loans_button,
+		"ui.social.loans",
+		"ui.social.loans_description",
+		SOCIALS_LOANS_ICON,
+		Color("#d8b767")
+	)
+	_configure_launcher_card_button(
 		socials_mail_button,
 		"ui.social.mail",
 		"ui.social.mail_description",
@@ -32803,6 +32813,12 @@ func _on_socials_friend_list_button_pressed() -> void:
 func _on_socials_players_on_map_button_pressed() -> void:
 	_hide_socials_menu()
 	_open_players_on_map()
+
+func _on_socials_loans_button_pressed() -> void:
+	_hide_socials_menu()
+	var workspace := get_node_or_null("/root/LendingWorkspace")
+	if workspace != null and workspace.has_method("open_loans"):
+		workspace.call("open_loans")
 
 func _open_players_on_map() -> void:
 	if not _ensure_player_interaction_coordinator():

@@ -495,6 +495,11 @@ func _render_context_menu() -> void:
 		"default",
 		trade_capabilities_loading or (trade_capabilities_loaded and not trade_enabled)
 	)
+	_add_context_action(
+		"Lend",
+		_t("ui.nearby.action.lend.description"),
+		_on_lend_pressed
+	)
 	_add_context_more_actions_toggle()
 	if context_more_actions_expanded:
 		context_actions.add_child(_context_section_label(_t("ui.nearby.more_actions")))
@@ -753,6 +758,15 @@ func _on_trade_pressed() -> void:
 		return
 	close_context_menu()
 	trade_invitation_dialog.send_invitation(username)
+
+
+func _on_lend_pressed() -> void:
+	var username := str(current_target.get("username", "")).strip_edges()
+	var workspace := get_node_or_null("/root/LendingWorkspace")
+	if username == "" or workspace == null or not workspace.has_method("open_for_trainer"):
+		return
+	close_context_menu()
+	workspace.call("open_for_trainer", username)
 
 
 func _setup_trade_invitation_dialog() -> void:
@@ -1199,6 +1213,7 @@ func _context_action_label_key(label_text: String) -> String:
 	return str({
 		"Message": "ui.nearby.action.message",
 		"Trade": "ui.nearby.action.trade",
+		"Lend": "ui.nearby.action.lend",
 		"View Trainer Card": "ui.nearby.action.trainer_card",
 		"Send Mail": "ui.nearby.action.mail",
 		"Invite to Guild": "ui.nearby.action.guild",
