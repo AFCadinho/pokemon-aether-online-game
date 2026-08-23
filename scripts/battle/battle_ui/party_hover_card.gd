@@ -297,16 +297,27 @@ func _get_name_and_level(pokemon_data: Dictionary) -> String:
 
 
 func _get_display_species(pokemon_data: Dictionary) -> String:
+	var nickname := str(pokemon_data.get(
+		"nickname",
+		pokemon_data.get("nickName", pokemon_data.get("displayName", pokemon_data.get("display_name", "")))
+	)).strip_edges()
 	var cosmetic_species := str(pokemon_data.get("cosmeticDisplaySpecies", "")).strip_edges()
-	if cosmetic_species != "":
-		return _localized_content_name("species", cosmetic_species, cosmetic_species)
-	var species := str(pokemon_data.get("displaySpecies", pokemon_data.get("species", "")))
+	var species := (
+		cosmetic_species
+		if cosmetic_species != ""
+		else str(pokemon_data.get("displaySpecies", pokemon_data.get("species", "")))
+	)
 	if species != "":
-		var species_id := str(pokemon_data.get(
-			"speciesId",
-			pokemon_data.get("species_id", pokemon_data.get("species", species))
-		))
-		return _localized_content_name("species", species_id, species)
+		var species_id := (
+			cosmetic_species
+			if cosmetic_species != ""
+			else str(pokemon_data.get(
+				"speciesId",
+				pokemon_data.get("species_id", pokemon_data.get("species", species))
+			))
+		)
+		var localized_species := _localized_content_name("species", species_id, species)
+		return "%s · %s" % [nickname, localized_species] if nickname != "" else localized_species
 
 	var ident := str(pokemon_data.get("ident", ""))
 	if ident.contains(": "):

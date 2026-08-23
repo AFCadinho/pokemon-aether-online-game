@@ -99,6 +99,8 @@ func _check_ui_overlay_wrapper_exists() -> void:
 	_check_equal(source.contains("button.use_native_drag = false"), true, "UIOverlay disables native PC slot drag feedback")
 	_check_equal(source.contains("PokemonAssets.load_party_icon"), true, "UIOverlay uses Pokemon icons in PC slots")
 	_check_equal(source.contains("func _pc_payload_species"), true, "UIOverlay normalizes boxed Pokemon display data")
+	_check_equal(source.contains("func _pc_payload_display_name"), true, "UIOverlay prefers boxed Pokémon nicknames for visible Storage names")
+	_check_equal(source.contains("_pc_payload_display_name(payload)"), true, "Box slots and their hover text use the nickname-aware display name")
 	_check_equal(source.contains("PC_POKEMON_SLOT_BUTTON_SCRIPT"), true, "UIOverlay uses draggable PC slot button")
 	_check_equal(source.contains("button.drag_source"), true, "UIOverlay assigns PC drag sources")
 	_check_equal(source.contains("button.drop_target"), true, "UIOverlay assigns PC drop targets")
