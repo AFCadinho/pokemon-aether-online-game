@@ -127,6 +127,10 @@
 
 - Wild battles now focus on the Pokémon after the opening summon instead of keeping your Trainer behind it. Trainers remain visible in Trainer and PvP battles.
 
+**Changed**
+
+- Guilds are now easier to browse with quick filters and clearer Guild cards. Guild members also get direct shortcuts to chat, the member list and the Aether Clash Lobby.
+
 **Fixed**
 
 - Map changes now fade smoothly while keeping a dim view of the previous area during loading, reducing sudden dark-to-bright jumps.

@@ -36670,12 +36670,30 @@ func _open_guild_popup() -> void:
 			guild_popup.closed.connect(_on_guild_popup_closed)
 		if not guild_popup.lobby_teleport_requested.is_connected(_on_guild_lobby_teleport_requested):
 			guild_popup.lobby_teleport_requested.connect(_on_guild_lobby_teleport_requested)
+		if not guild_popup.guild_chat_requested.is_connected(_on_guild_chat_requested):
+			guild_popup.guild_chat_requested.connect(_on_guild_chat_requested)
 	guild_popup.open()
 	_activate_ui_panel(guild_popup)
 
 func _on_guild_popup_closed() -> void:
 	if guild_popup != null:
 		_deactivate_ui_panel(guild_popup)
+
+
+func _on_guild_chat_requested() -> void:
+	if guild_popup != null and guild_popup.visible:
+		guild_popup.close()
+	var chat_state: Dictionary = collapsible_panels.get("chat", {})
+	if not chat_state.is_empty():
+		chat_state["available"] = true
+		chat_state["collapsed"] = false
+		collapsible_panels["chat"] = chat_state
+		_apply_collapsible_panel_state("chat")
+	active_chat_tab = CHAT_TAB_GUILD
+	_apply_chat_tab_state()
+	_focus_normal_ui_group(chat_panel)
+	if chat_input != null and chat_input.visible and chat_input.editable:
+		chat_input.grab_focus()
 
 
 func _on_guild_lobby_teleport_requested() -> void:

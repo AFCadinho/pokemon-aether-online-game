@@ -1,6 +1,7 @@
 extends SceneTree
 
 var failed := false
+var guild_chat_open_requested := false
 
 
 func _init() -> void:
@@ -31,8 +32,26 @@ func _run() -> void:
 	_check(popup.find_child("BrowseGuildsButton", true, false) != null, "browse action is present")
 	_check(popup.find_child("CreateGuildButton", true, false) != null, "create action is present")
 	_check(popup.find_child("GuildSearchInput", true, false) != null, "guild search is present")
+	_check(popup.find_child("GuildDirectoryFilters", true, false) != null, "guild discovery filters are present")
+	_check(popup.find_child("GuildFilterOpen", true, false) != null, "open Guild filter is present")
 	_check(popup.find_child("GuildRow_1", true, false) != null, "debug directory renders guild rows")
+	var discovery := popup.find_child("GuildRowDiscovery_1", true, false) as Label
+	var availability := popup.find_child("GuildRowAvailability_1", true, false) as Label
+	_check(discovery != null and discovery.text.contains("PvP") and discovery.text.contains("English"), "guild card shows focus and language")
+	_check(availability != null and availability.text.contains("38/50") and availability.text.contains("Applications"), "guild card shows capacity and recruitment")
 	_check(popup.find_child("GuildDetailPanel", true, false) != null, "guild information panel is present")
+	_check(popup.find_child("GuildForumButton", true, false) == null, "unavailable forum action stays out of the Guild profile")
+	var pvp_filter := popup.find_child("GuildFilterPvp", true, false) as Button
+	if pvp_filter != null:
+		pvp_filter.pressed.emit()
+		await process_frame
+	_check(popup.find_child("GuildRow_1", true, false) != null, "PvP filter keeps mixed PvP Guilds")
+	_check(popup.find_child("GuildRow_2", true, false) == null, "PvP filter hides PvE Guilds")
+	_check(popup.find_child("GuildRow_3", true, false) != null, "PvP filter keeps competitive PvP Guilds")
+	var all_filter := popup.find_child("GuildFilterAll", true, false) as Button
+	if all_filter != null:
+		all_filter.pressed.emit()
+		await process_frame
 
 	popup.incoming_invitations = [{"id": 7, "guildName": "Aether Vanguard", "invitedBy": "Nova"}]
 	popup._render_incoming_invitations()
@@ -57,11 +76,29 @@ func _run() -> void:
 	popup.show_debug_member_preview()
 	await process_frame
 	_check(popup.find_child("MyGuildButton", true, false) != null, "member navigation is present")
+	var create_button := popup.find_child("CreateGuildButton", true, false) as Button
+	_check(create_button != null and not create_button.visible, "Guild members do not see the create action")
 	_check(popup.find_child("GuildMemberDashboard", true, false) != null, "member dashboard renders")
 	_check(popup.find_child("GuildOverviewTab", true, false) != null, "guild overview tab renders")
 	_check(popup.find_child("GuildMembersTab", true, false) != null, "guild members tab renders")
 	_check(popup.find_child("GuildManagementTab", true, false) != null, "guild management tab renders for leaders")
 	_check(popup.find_child("GuildOverviewSection", true, false) != null, "guild dashboard opens on its overview")
+	var guild_chat_button := popup.find_child("GuildChatShortcutButton", true, false) as Button
+	_check(guild_chat_button != null, "guild overview renders a Guild chat shortcut")
+	if guild_chat_button != null:
+		popup.guild_chat_requested.connect(_on_guild_chat_requested, CONNECT_ONE_SHOT)
+		guild_chat_button.pressed.emit()
+	_check(guild_chat_open_requested, "Guild chat shortcut requests the Guild channel")
+	var members_shortcut := popup.find_child("GuildMembersShortcutButton", true, false) as Button
+	_check(members_shortcut != null, "guild overview renders a member roster shortcut")
+	if members_shortcut != null:
+		members_shortcut.pressed.emit()
+		await process_frame
+	_check(popup.find_child("GuildMembersSection", true, false) != null, "member roster shortcut opens the roster")
+	var overview_tab := popup.find_child("GuildOverviewTab", true, false) as Button
+	if overview_tab != null:
+		overview_tab.pressed.emit()
+		await process_frame
 	_check(popup.find_child("GuildLobbyTeleportButton", true, false) != null, "guild overview renders free Lobby travel")
 	_check(popup.find_child("GuildSettingsDescription", true, false) == null, "settings stay out of the guild overview")
 	var members_tab := popup.find_child("GuildMembersTab", true, false) as Button
@@ -77,7 +114,7 @@ func _run() -> void:
 	_check(popup.find_child("GuildSettingsDescription", true, false) != null, "leader settings render")
 	_check(popup.find_child("GuildEmblemPreview", true, false) == null, "management keeps emblem controls out of settings")
 	var edit_emblem_button := popup.find_child("EditGuildEmblemButton", true, false) as Button
-	_check(edit_emblem_button != null, "leader can edit the Guild emblem from the header icon")
+	_check(edit_emblem_button != null, "leader has an explicit Guild emblem edit action")
 	if edit_emblem_button != null:
 		edit_emblem_button.pressed.emit()
 		await process_frame
@@ -167,6 +204,7 @@ func _run() -> void:
 	await process_frame
 	_check(popup.find_child("GuildManagementTab", true, false) == null, "regular members do not see management")
 	_check(popup.find_child("EditGuildEmblemButton", true, false) == null, "regular members cannot edit the Guild emblem")
+	_check(popup.find_child("EditGuildEmblemIconButton", true, false) == null, "regular members cannot edit the Guild emblem icon")
 	_check(popup.find_child("GuildOverviewSection", true, false) != null, "regular members return to the overview")
 
 	popup.close()
@@ -196,6 +234,10 @@ func _run() -> void:
 		await process_frame
 	popup.close()
 	quit(1 if failed else 0)
+
+
+func _on_guild_chat_requested() -> void:
+	guild_chat_open_requested = true
 
 
 func _check(condition: bool, label: String) -> void:
